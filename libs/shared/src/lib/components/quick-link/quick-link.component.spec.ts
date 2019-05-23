@@ -64,6 +64,14 @@ describe('QuickLinkComponent', () => {
   let dateMock: MockDate;
   const mockInjectedData = { mode: 'foo' };
 
+  beforeAll(() => {
+    dateMock = new MockDate();
+  });
+
+  afterAll(() => {
+    dateMock.returnRealDate();
+  });
+
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
@@ -100,14 +108,6 @@ describe('QuickLinkComponent', () => {
       }
     });
   }));
-
-  beforeAll(() => {
-    dateMock = new MockDate();
-  });
-
-  afterAll(() => {
-    dateMock.returnRealDate();
-  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(QuickLinkComponent);

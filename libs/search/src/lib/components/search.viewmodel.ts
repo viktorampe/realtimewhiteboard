@@ -1,6 +1,6 @@
 import { Injectable, Injector } from '@angular/core';
-import { BehaviorSubject, Observable, zip } from 'rxjs';
-import { filter, map, startWith, take } from 'rxjs/operators';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { filter, map, share, startWith, take } from 'rxjs/operators';
 import {
   SearchFilterCriteriaInterface,
   SearchFilterCriteriaValuesInterface,
@@ -14,43 +14,151 @@ import {
 
 @Injectable()
 export class SearchViewModel {
-  private searchMode: SearchModeInterface;
-  private filterFactory: SearchFilterFactory;
-
-  // source stream
-  private filters$ = new BehaviorSubject<SearchFilterInterface[]>([]);
-  private results$ = new BehaviorSubject<SearchResultInterface>(null);
-
   public searchState$ = new BehaviorSubject<SearchStateInterface>(null);
   public searchFilters$: Observable<SearchFilterInterface[]>;
+
+  private results$ = new BehaviorSubject<SearchResultInterface>(null);
+
+  // observable that emits when all data is available to construct new SearchFilters
+  private searchFilterData$: BehaviorSubject<{
+    state: SearchStateInterface;
+    predictions: Map<string, Map<string | number, number>>;
+    factoryFilters: SearchFilterInterface[];
+  }> = new BehaviorSubject(null);
+
+  // caches data for searchFilterData$
+  private _predictionsCache: Map<string, Map<string | number, number>>;
+  private _factoryFiltersCache: SearchFilterInterface[];
+
+  private searchMode: SearchModeInterface;
+  private filterFactory: SearchFilterFactory;
 
   constructor(private injector: Injector) {
     this.initiateStreams();
   }
 
+  public reset(
+    mode: SearchModeInterface,
+    state: SearchStateInterface = null
+  ): void {
+    let newSearchState: SearchStateInterface;
+    this.searchMode = mode;
+    this.filterFactory = this.injector.get(this.searchMode.searchFilterFactory); // used by updateFilters()
+
+    if (state) {
+      // we want to update the state
+      newSearchState = state;
+    } else {
+      // we want to reset the state
+      // note: sort mode should stay the same on reset
+      newSearchState = { ...this.searchState$.value };
+      newSearchState.searchTerm = '';
+      newSearchState.from = 0;
+      newSearchState.filterCriteriaSelections = new Map();
+    }
+    this.setFilterCriteria(newSearchState, null);
+    // trigger new search
+    this.searchState$.next(newSearchState);
+    this.clearSearchFilterDataCache();
+
+    // request new filters
+    this.updateFilters();
+  }
+
+  public changeSort(sortMode: SortModeInterface): void {
+    const newValue = {
+      ...this.searchState$.value,
+      sort: sortMode.name,
+      from: 0
+    };
+    this.searchState$.next(newValue);
+  }
+  public getNextPage(): void {
+    const newValue = { ...this.searchState$.value };
+    newValue.from =
+      (this.searchState$.value.from || 0) + this.searchMode.results.pageSize;
+    this.searchState$.next(newValue);
+  }
+
+  public updateFilterCriteria(
+    criteria: SearchFilterCriteriaInterface | SearchFilterCriteriaInterface[]
+  ): void {
+    // update state
+    const searchState: SearchStateInterface = { ...this.searchState$.value };
+    this.setFilterCriteria(searchState, criteria);
+    searchState.from = 0;
+    this.searchState$.next(searchState);
+    this.clearSearchFilterDataCache();
+
+    // update filters
+    if (this.searchMode) {
+      if (this.searchMode.dynamicFilters === true) {
+        // request new filters
+        // response from factory will trigger emit
+        this.updateFilters();
+      }
+    }
+  }
+  public changeSearchTerm(searchTerm: string): void {
+    const newValue = { ...this.searchState$.value };
+    newValue.from = 0;
+    newValue.searchTerm = searchTerm;
+    this.searchState$.next(newValue);
+    this.clearSearchFilterDataCache();
+  }
+
+  public updateResult(result: SearchResultInterface): void {
+    if (!result) return;
+
+    this.results$.next(result);
+    this.setPredictionsCache(result);
+  }
+
+  private setFactoryFilterCache(factoryFilters: SearchFilterInterface[]) {
+    this._factoryFiltersCache = factoryFilters;
+    this.checkSearchFilterDataCache();
+  }
+
+  private setPredictionsCache(results: SearchResultInterface) {
+    if (results.filterCriteriaPredictions.size !== 0) {
+      this._predictionsCache = results.filterCriteriaPredictions;
+    }
+    this.checkSearchFilterDataCache();
+  }
+
+  // check if suffient data is present to emit new SearchFilterData
+  private checkSearchFilterDataCache() {
+    if (this._predictionsCache && this._factoryFiltersCache) {
+      this.searchFilterData$.next({
+        state: this.searchState$.value,
+        predictions: this._predictionsCache,
+        factoryFilters: this._factoryFiltersCache
+      });
+
+      this.clearSearchFilterDataCache();
+    }
+  }
+
+  private clearSearchFilterDataCache() {
+    if (this.searchMode && this.searchMode.dynamicFilters)
+      this._factoryFiltersCache = null;
+    this._predictionsCache = null;
+  }
+
   private initiateStreams(): void {
-    this.searchFilters$ = zip(
-      // skip initial values
-      this.results$.pipe(filter(result => !!result)),
-      this.filters$.pipe(filter(searchFilter => !!searchFilter.length)),
-      this.searchState$.pipe(filter(state => !!state))
-    ).pipe(
-      map(([results, filters, state]) => {
-        const filterCriteriaSelections = !!state
-          ? state.filterCriteriaSelections
-          : new Map<string, (number | string)[]>();
-        const filterCriteriaPredictions = !!results
-          ? results.filterCriteriaPredictions
-          : new Map<string, Map<string | number, number>>();
-        return filters.map(searchFilters =>
+    this.searchFilters$ = this.searchFilterData$.pipe(
+      filter(data => !!data),
+      map(({ predictions, factoryFilters, state }) => {
+        return factoryFilters.map(factoryFilter =>
           this.getUpdatedSearchFilter(
-            searchFilters,
-            filterCriteriaSelections,
-            filterCriteriaPredictions
+            factoryFilter,
+            state.filterCriteriaSelections,
+            predictions
           )
         );
       }),
-      startWith([]) // intial value -> empty array of filters
+      startWith([]), // intial value -> empty array of filters
+      share()
     );
   }
 
@@ -71,7 +179,7 @@ export class SearchViewModel {
   ): SearchFilterInterface {
     if (!searchFilter) return;
 
-    if (Array.isArray(searchFilter.criteria))
+    if (Array.isArray(searchFilter.criteria)) {
       searchFilter.criteria = searchFilter.criteria.map(criterium =>
         this.getUpdatedCriterium(
           criterium,
@@ -79,6 +187,7 @@ export class SearchViewModel {
           resultsFilterCriteriaPredictions
         )
       );
+    }
     //if single get updatedCriterium
     else {
       searchFilter.criteria = this.getUpdatedCriterium(
@@ -214,97 +323,11 @@ export class SearchViewModel {
     return value.prediction === undefined ? 0 : value.prediction;
   }
 
-  public reset(
-    mode: SearchModeInterface,
-    state: SearchStateInterface = null
-  ): void {
-    let newSearchState: SearchStateInterface;
-    this.searchMode = mode;
-    this.filterFactory = this.injector.get(this.searchMode.searchFilterFactory); // used by updateFilters()
-
-    if (state) {
-      // we want to update the state
-      newSearchState = state;
-    } else {
-      // we want to reset the state
-      // note: sort mode should stay the same on reset
-      newSearchState = { ...this.searchState$.value };
-      newSearchState.searchTerm = '';
-      newSearchState.from = 0;
-      newSearchState.filterCriteriaSelections = new Map();
-    }
-    this.setFilterCriteria(newSearchState, null);
-    // trigger new search
-    this.searchState$.next(newSearchState);
-
-    // request new filters
-    this.updateFilters();
-  }
-
-  public changeSort(sortMode: SortModeInterface): void {
-    const newValue = {
-      ...this.searchState$.value,
-      sort: sortMode.name,
-      from: 0
-    };
-    this.searchState$.next(newValue);
-    this.filters$.next(this.filters$.value);
-  }
-  public getNextPage(): void {
-    const newValue = { ...this.searchState$.value };
-    newValue.from =
-      (this.searchState$.value.from || 0) + this.searchMode.results.pageSize;
-    this.searchState$.next(newValue);
-    this.filters$.next(this.filters$.value);
-  }
-
-  public changeFilters(
-    criteria: SearchFilterCriteriaInterface | SearchFilterCriteriaInterface[]
-  ): void {
-    // update state
-    const searchState: SearchStateInterface = { ...this.searchState$.value };
-    this.setFilterCriteria(searchState, criteria);
-    searchState.from = 0;
-    this.searchState$.next(searchState);
-
-    // update filters
-    if (this.searchMode) {
-      if (this.searchMode.dynamicFilters === true) {
-        // request new filters
-        // response from factory will trigger emit
-        this.updateFilters();
-      } else {
-        this.filters$.next(this.filters$.value);
-      }
-    }
-  }
-  public changeSearchTerm(searchTerm: string): void {
-    const newValue = { ...this.searchState$.value };
-    newValue.from = 0;
-    newValue.searchTerm = searchTerm;
-    this.searchState$.next(newValue);
-    this.filters$.next(this.filters$.value);
-  }
-
-  public updateResult(result: SearchResultInterface): void {
-    // check searchState if is a results refresh
-    // -> if so, keep current predictions
-    if (
-      this.searchState$.value &&
-      !!this.searchState$.value.from &&
-      this.results$.value
-    ) {
-      result.filterCriteriaPredictions = this.results$.value.filterCriteriaPredictions;
-    }
-
-    this.results$.next(result);
-  }
-
   private updateFilters(): void {
     this.filterFactory
       .getFilters(this.searchState$.value)
       .pipe(take(1))
-      .subscribe(filters => this.filters$.next(filters));
+      .subscribe(filters => this.setFactoryFilterCache(filters));
   }
 
   private extractSelectedValuesFromCriteria(
