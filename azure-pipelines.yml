@@ -25,7 +25,7 @@ steps:
   #  npm run format:check
   #displayName: 'linting and formatting'
   - script: |
-      CI=1 ng test --configuration=travis
+      CI=1 node ./node_modules/.bin/ng test --configuration=travis
     displayName: 'Run all tests'
   - task: PublishTestResults@2
     inputs:
