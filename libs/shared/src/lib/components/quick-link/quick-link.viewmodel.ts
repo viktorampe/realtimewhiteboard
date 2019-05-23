@@ -196,7 +196,6 @@ export class QuickLinkViewModel {
         actionTypes: [
           favoritesActionTypes.UpdateFavorite,
           favoritesActionTypes.DeleteFavorite,
-          historyActionTypes.UpsertHistory,
           historyActionTypes.DeleteHistory
         ]
       }),
