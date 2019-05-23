@@ -121,7 +121,7 @@ describe('UndoService', () => {
         })
       );
     });
-    it('should return a successMessage if datePersistence has a DeleteEffectFeedback actions without userAction', () => {
+    it('should return a successMessage if datePersistence has a DeleteEffectFeedback actions with userAction', () => {
       jest.spyOn(service, 'undo').mockReturnValue({
         type: 'ngrx-undo/UNDO_ACTION',
         payload: payload.action
