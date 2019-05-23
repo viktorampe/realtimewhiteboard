@@ -1,13 +1,13 @@
 import { Inject, Injectable } from '@angular/core';
 import {
   AlertActions,
+  asEduContent,
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
+  createHistoryFromEduContent,
   DalState,
   EduContentQueries,
-  FavoriteTypesEnum,
   HistoryActions,
-  HistoryInterface,
   LearningAreaInterface,
   LearningAreaQueries,
   LinkedPersonQueries,
@@ -85,15 +85,14 @@ export class TasksViewModel {
       taskEduContent.eduContentId,
       taskEduContent.taskId
     );
-    const history: HistoryInterface = {
-      name: taskEduContent.eduContent.publishedEduContentMetadata.title,
-      type: FavoriteTypesEnum.EDUCONTENT,
-      learningAreaId:
-        taskEduContent.eduContent.publishedEduContentMetadata.learningAreaId,
-      eduContentId: taskEduContent.eduContentId, // opening a book -> contentId = eduContentId
-      created: new Date()
-    };
-    this.store.dispatch(new HistoryActions.StartUpsertHistory({ history }));
+
+    this.store.dispatch(
+      new HistoryActions.StartUpsertHistory({
+        history: createHistoryFromEduContent(
+          asEduContent(taskEduContent.eduContent)
+        )
+      })
+    );
   }
 
   public getTasksByLearningAreaId(

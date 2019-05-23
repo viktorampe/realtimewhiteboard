@@ -72,7 +72,7 @@ export const getById = createSelector(
     asEduContent(state.entities[props.id])
 );
 
-function asEduContent(item: EduContentInterface): EduContent {
+export function asEduContent(item: EduContentInterface): EduContent {
   if (item) {
     return Object.assign<EduContent, EduContentInterface>(
       new EduContent(),

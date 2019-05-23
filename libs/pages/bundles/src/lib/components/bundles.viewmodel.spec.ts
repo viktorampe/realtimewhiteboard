@@ -8,7 +8,6 @@ import {
   BundleFixture,
   BundleInterface,
   BundleReducer,
-  ContentFixture,
   ContentStatusActions,
   ContentStatusFixture,
   ContentStatusInterface,
@@ -21,6 +20,7 @@ import {
   EduContentInterface,
   EduContentReducer,
   HistoryActions,
+  HistoryInterface,
   LearningAreaActions,
   LearningAreaFixture,
   LearningAreaInterface,
@@ -48,8 +48,7 @@ import {
   UnlockedContentInterface,
   UnlockedContentReducer,
   UserContentActions,
-  UserContentReducer,
-  HistoryInterface
+  UserContentReducer
 } from '@campus/dal';
 import {
   OpenStaticContentServiceInterface,
@@ -314,19 +313,21 @@ describe('BundlesViewModel', () => {
     const dispatchSpy = jest.spyOn(store, 'dispatch');
     const spy = jest.spyOn(openStaticContentService, 'open');
 
-    const book = new ContentFixture();
-    const expectedHistory:HistoryInterface = {
-        name: 'foo',
-        type: 'boek-e',
-        learningAreaId: mockLearningAreaId,
-        eduContentId: 1,
-        created: mockDate.mockDate
+    const book: EduContent = new EduContentFixture();
+    const expectedHistory: HistoryInterface = {
+      name: 'foo',
+      type: 'boek-e',
+      learningAreaId: mockLearningAreaId,
+      eduContentId: 1,
+      created: mockDate.mockDate
     };
 
-    bundlesViewModel.getLearningAreaById(mockLearningAreaId);    
+    bundlesViewModel.getLearningAreaById(mockLearningAreaId);
     bundlesViewModel.openBook(book);
     expect(spy).toHaveBeenCalledWith(book);
-    expect(dispatchSpy).toHaveBeenCalledWith(new HistoryActions.StartUpsertHistory({history: expectedHistory}));
+    expect(dispatchSpy).toHaveBeenCalledWith(
+      new HistoryActions.StartUpsertHistory({ history: expectedHistory })
+    );
   });
 
   function loadState() {

@@ -5,15 +5,15 @@ import {
   AUTH_SERVICE_TOKEN,
   BundleInterface,
   BundleQueries,
-  ContentInterface,
   ContentStatusLabel,
   ContentStatusQueries,
+  createHistoryFromContent,
+  createHistoryFromEduContent,
   DalState,
   EduContent,
   EduContentQueries,
-  FavoriteTypesEnum,
   HistoryActions,
-  HistoryInterface,
+  HistoryTypesEnum,
   LearningAreaInterface,
   LearningAreaQueries,
   LinkedPersonQueries,
@@ -142,16 +142,13 @@ export class BundlesViewModel {
   }
 
   openContent(unlockedContent: UnlockedContent): void {
-    const history: HistoryInterface = {
-      name: unlockedContent.eduContent.name,
-      type: FavoriteTypesEnum.EDUCONTENT,
-      learningAreaId:
-        unlockedContent.eduContent.publishedEduContentMetadata.learningAreaId,
-      eduContentId: unlockedContent.eduContent.id,
-      created: new Date()
-    };
-    // not sure if we want to dispatch this, if it is user content?
-    this.store.dispatch(new HistoryActions.StartUpsertHistory({ history }));
+    if (unlockedContent.content instanceof EduContent) {
+      this.store.dispatch(
+        new HistoryActions.StartUpsertHistory({
+          history: createHistoryFromEduContent(unlockedContent.eduContent)
+        })
+      );
+    }
 
     if (unlockedContent.eduContentId) {
       if (unlockedContent.eduContent.type === 'exercise') {
@@ -172,16 +169,21 @@ export class BundlesViewModel {
     this.openStaticContentService.open(unlockedContent.content);
   }
 
-  openBook(content: ContentInterface): void {
+  openBook(content: EduContent): void {
     this.openStaticContentService.open(content);
-    const history: HistoryInterface = {
-      name: content.name,
-      type: FavoriteTypesEnum.BOEKE,
-      learningAreaId: this.currentAreaId,
-      eduContentId: content.id, // opening a book -> contentId = eduContentId
-      created: new Date()
-    };
-    this.store.dispatch(new HistoryActions.StartUpsertHistory({ history }));
+
+    const history = createHistoryFromContent(
+      content,
+      HistoryTypesEnum.BOEKE,
+      this.currentAreaId
+    );
+    if (history) {
+      this.store.dispatch(
+        new HistoryActions.StartUpsertHistory({
+          history
+        })
+      );
+    }
   }
 
   public getStudentContentStatusByUnlockedContentId(

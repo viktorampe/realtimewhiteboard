@@ -412,7 +412,11 @@ describe('TasksViewModel met State', () => {
 
       const scormExerciseService = TestBed.get(SCORM_EXERCISE_SERVICE_TOKEN);
       const mockTaskEduContent: TaskEduContentInterface = new TaskEduContentFixture(
-        { eduContentId: 123, taskId: 456, eduContent: new EduContentFixture() }
+        {
+          eduContentId: 123,
+          taskId: 456,
+          eduContent: new EduContentFixture({ id: 123 })
+        }
       );
       tasksViewModel.startExercise(mockTaskEduContent);
 
