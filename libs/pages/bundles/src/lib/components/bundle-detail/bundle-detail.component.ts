@@ -142,14 +142,14 @@ export class BundleDetailComponent
   private getLearningArea(): Observable<LearningAreaInterface> {
     return this.routeParams$.pipe(
       switchMap(params => {
-        return this.bundlesViewModel.getLearningAreaById(params.area);
+        return this.bundlesViewModel.getLearningAreaById(+params.area);
       })
     );
   }
 
   private getBundle(): Observable<BundleInterface> {
     return this.routeParams$.pipe(
-      switchMap(params => this.bundlesViewModel.getBundleById(params.bundle)),
+      switchMap(params => this.bundlesViewModel.getBundleById(+params.bundle)),
       shareReplay(1)
     );
   }
@@ -157,7 +157,7 @@ export class BundleDetailComponent
   private getBundleContents(): Observable<UnlockedContent[]> {
     return this.routeParams$.pipe(
       switchMap(params =>
-        this.bundlesViewModel.getBundleContents(params.bundle)
+        this.bundlesViewModel.getBundleContents(+params.bundle)
       ),
       shareReplay(1)
     );
