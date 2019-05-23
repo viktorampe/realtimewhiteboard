@@ -12,9 +12,22 @@ import { FavoriteTypesEnum } from '../../+models';
 import { FAVORITE_SERVICE_TOKEN } from '../../favorite/favorite.service.interface';
 import { AUTH_SERVICE_TOKEN } from '../../persons';
 import { UndoService, UNDO_SERVICE_TOKEN } from '../../undo';
-import { EffectFeedback, EffectFeedbackActions, Priority } from '../effect-feedback';
+import {
+  EffectFeedback,
+  EffectFeedbackActions,
+  Priority
+} from '../effect-feedback';
 import { AddEffectFeedback } from '../effect-feedback/effect-feedback.actions';
-import { AddFavorite, DeleteFavorite, FavoritesLoaded, FavoritesLoadError, LoadFavorites, StartAddFavorite, ToggleFavorite, UpdateFavorite } from './favorite.actions';
+import {
+  AddFavorite,
+  DeleteFavorite,
+  FavoritesLoaded,
+  FavoritesLoadError,
+  LoadFavorites,
+  StartAddFavorite,
+  ToggleFavorite,
+  UpdateFavorite
+} from './favorite.actions';
 import { FavoriteEffects } from './favorite.effects';
 
 describe('FavoriteEffects', () => {
@@ -86,7 +99,7 @@ describe('FavoriteEffects', () => {
           useValue: {
             getAllForUser: () => {},
             addFavorite: () => {},
-            deleteFavorite: () => { return 'returnValue'},
+            deleteFavorite: () => 'returnValue',
             updateFavorite: () => {}
           }
         },
@@ -363,8 +376,11 @@ describe('FavoriteEffects', () => {
         effectFeedback: new EffectFeedback({
           id: uuid(),
           triggerAction: deleteAction,
-          message: 'Het is niet gelukt om het item uit jouw favorieten te verwijderen.',
-          userActions: [{ title: 'Opnieuw proberen', userAction: deleteAction }],
+          message:
+            'Het is niet gelukt om het item uit jouw favorieten te verwijderen.',
+          userActions: [
+            { title: 'Opnieuw proberen', userAction: deleteAction }
+          ],
           type: 'error',
           priority: Priority.HIGH
         })

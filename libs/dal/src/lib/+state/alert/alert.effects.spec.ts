@@ -129,9 +129,7 @@ describe('AlertEffects', () => {
               read?: boolean,
               intended?: boolean
             ) => {},
-            deleteAlert: (userId: number, alertId: number) => {
-              return 'returnValue';
-            }
+            deleteAlert: (userId: number, alertId: number) => 'returnValue'
           }
         },
         AlertsEffects,
