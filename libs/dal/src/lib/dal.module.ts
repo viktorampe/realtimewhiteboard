@@ -36,6 +36,7 @@ import {
 } from './+state/edu-content-product-type';
 import { EduNetEffects, EduNetReducer } from './+state/edu-net';
 import { EffectFeedbackReducer } from './+state/effect-feedback';
+import { EffectFeedbackEffects } from './+state/effect-feedback/effect-feedback.effects';
 import { FavoriteEffects, FavoriteReducer } from './+state/favorite';
 import {
   LearningAreaReducer,
@@ -281,6 +282,7 @@ export const DAL_OPTIONS = new InjectionToken('dal-options');
       initialState: YearReducer.initialState
     }),
     EffectsModule.forFeature([
+      EffectFeedbackEffects,
       BundlesEffects,
       UserEffects,
       EduContentsEffects,
