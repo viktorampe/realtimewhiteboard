@@ -7,7 +7,7 @@ pr:
   - develop
 
 pool:
-  vmImage: 'ubuntu-latest'
+  name: 'Campus'
 
 steps:
   - task: NodeTool@0
