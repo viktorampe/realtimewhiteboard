@@ -83,7 +83,7 @@ export class QuickLinkViewModel {
       quickLinksDict$ = this.store.pipe(select(HistoryQueries.historyByType));
     }
 
-    return this.composeQuickLinkCategories$(quickLinksDict$);
+    return this.composeQuickLinkCategories$(quickLinksDict$, mode);
   }
 
   public update(id: number, name: string, mode: QuickLinkTypeEnum): void {
@@ -102,7 +102,8 @@ export class QuickLinkViewModel {
 
         break;
       case QuickLinkTypeEnum.HISTORY:
-        // TODO: dispatch update history action if relevant
+        // dispatch update history action if relevant
+        // no option to rename a history item yet
         throw new Error('no History State yet');
       default:
         return;
@@ -122,8 +123,10 @@ export class QuickLinkViewModel {
         });
         break;
       case QuickLinkTypeEnum.HISTORY:
-        // TODO: dispatch delete history action if relevant
-        throw new Error('no History State yet');
+        action = new HistoryActions.DeleteHistory({
+          id: id
+        });
+        break;
       default:
         return;
     }
@@ -204,7 +207,8 @@ export class QuickLinkViewModel {
   private composeQuickLinkCategories$(
     quickLinksDict$: Observable<{
       [key: string]: FavoriteInterface[] | HistoryInterface[];
-    }>
+    }>,
+    mode: QuickLinkTypeEnum
   ): Observable<QuickLinkCategoryInterface[]> {
     return combineLatest(
       quickLinksDict$,
@@ -229,18 +233,21 @@ export class QuickLinkViewModel {
                 title: this.getCategoryTitle(quickLinkDict[key][0]),
                 order: this.getCategoryOrder(quickLinkDict[key][0]),
                 quickLinks: quickLinkDict[key].map(qL =>
-                  this.convertToQuickLink({
-                    ...qL,
-                    // add relation data
-                    learningArea: qL.learningAreaId
-                      ? learningAreaDict[qL.learningAreaId]
-                      : undefined,
-                    eduContent: qL.eduContentId
-                      ? eduContentDict[qL.eduContentId]
-                      : undefined,
-                    task: qL.taskId ? taskDict[qL.taskId] : undefined,
-                    bundle: qL.bundleId ? bundleDict[qL.bundleId] : undefined
-                  })
+                  this.convertToQuickLink(
+                    {
+                      ...qL,
+                      // add relation data
+                      learningArea: qL.learningAreaId
+                        ? learningAreaDict[qL.learningAreaId]
+                        : undefined,
+                      eduContent: qL.eduContentId
+                        ? eduContentDict[qL.eduContentId]
+                        : undefined,
+                      task: qL.taskId ? taskDict[qL.taskId] : undefined,
+                      bundle: qL.bundleId ? bundleDict[qL.bundleId] : undefined
+                    },
+                    mode
+                  )
                 )
               }
             ],
@@ -252,14 +259,15 @@ export class QuickLinkViewModel {
 
   // adds actions to Favorites and Histories
   private convertToQuickLink(
-    value: FavoriteInterface | HistoryInterface
+    value: FavoriteInterface | HistoryInterface,
+    mode: QuickLinkTypeEnum
   ): QuickLinkInterface {
     return {
       ...value,
       eduContent: value.eduContent as EduContent,
       defaultAction: this.getDefaultAction(value),
       alternativeOpenActions: this.getAlternativeOpenActions(value),
-      manageActions: [this.quickLinkActions.edit, this.quickLinkActions.remove]
+      manageActions: this.getManageActions(mode)
     };
   }
 
