@@ -11,6 +11,9 @@ import {
   DalState,
   EduContent,
   EduContentQueries,
+  FavoriteTypesEnum,
+  HistoryActions,
+  HistoryInterface,
   LearningAreaInterface,
   LearningAreaQueries,
   LinkedPersonQueries,
@@ -48,6 +51,8 @@ import {
   providedIn: 'root'
 })
 export class BundlesViewModel {
+  private currentAreaId: number;
+
   // source streams
   listFormat$: Observable<ListFormat>;
   private learningAreas$: Observable<LearningAreaInterface[]>;
@@ -148,6 +153,21 @@ export class BundlesViewModel {
             unlockedContent.eduContentId,
             unlockedContent.id
           );
+
+          const history: HistoryInterface = {
+            name: unlockedContent.eduContent.name,
+            type: FavoriteTypesEnum.EDUCONTENT,
+            learningAreaId:
+              unlockedContent.eduContent.publishedEduContentMetadata
+                .learningAreaId,
+            eduContentId: unlockedContent.eduContent.id,
+            created: new Date()
+          };
+
+          this.store.dispatch(
+            new HistoryActions.StartUpsertHistory({ history })
+          );
+
           return;
         }
       }
@@ -157,6 +177,14 @@ export class BundlesViewModel {
 
   openBook(content: ContentInterface): void {
     this.openStaticContentService.open(content);
+    const history: HistoryInterface = {
+      name: content.name,
+      type: FavoriteTypesEnum.BOEKE,
+      learningAreaId: this.currentAreaId,
+      eduContentId: content.id, // opening a book -> contentId = eduContentId
+      created: new Date()
+    };
+    this.store.dispatch(new HistoryActions.StartUpsertHistory({ history }));
   }
 
   public getStudentContentStatusByUnlockedContentId(
@@ -185,6 +213,7 @@ export class BundlesViewModel {
   }
 
   getLearningAreaById(areaId: number): Observable<LearningAreaInterface> {
+    this.currentAreaId = areaId;
     return this.store.pipe(select(LearningAreaQueries.getById, { id: areaId }));
   }
 

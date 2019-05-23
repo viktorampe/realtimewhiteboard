@@ -11,7 +11,8 @@ import {
   EduContentBookInterface,
   EduContentTOCInterface,
   FavoriteInterface,
-  FavoriteTypesEnum
+  FavoriteTypesEnum,
+  HistoryInterface
 } from '@campus/dal';
 import { ResultItemBase } from '@campus/search';
 import { EduContentSearchResultInterface } from '@campus/shared';
@@ -99,8 +100,13 @@ export class EduContentSearchResultComponent extends ResultItemBase
 
   public openStatic(stream: boolean = false) {
     this.eduContentSearchResultService.openStatic(this.data.eduContent, stream);
+
     this.eduContentSearchResultService.upsertEduContentToStore(
       this.data.eduContent.minimal
+    );
+
+    this.eduContentSearchResultService.upsertHistoryToStore(
+      this.getHistoryItem()
     );
   }
   public openExercise(answers: boolean) {
@@ -150,6 +156,20 @@ export class EduContentSearchResultComponent extends ResultItemBase
     return {
       books: books,
       booksToc: booksToc
+    };
+  }
+
+  private getHistoryItem(): HistoryInterface {
+    return {
+      name: this.data.eduContent.name,
+      type:
+        this.data.eduContent.type === 'boek-e'
+          ? FavoriteTypesEnum.BOEKE
+          : FavoriteTypesEnum.EDUCONTENT,
+      eduContentId: this.data.eduContent.id,
+      created: new Date(),
+      learningAreaId: this.data.eduContent.publishedEduContentMetadata
+        .learningAreaId
     };
   }
 }

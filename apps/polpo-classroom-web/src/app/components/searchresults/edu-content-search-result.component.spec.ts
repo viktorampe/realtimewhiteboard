@@ -48,6 +48,7 @@ describe('EduContentSearchResultComponent', () => {
             isFavorite$: () => mockIsFavorite,
             toggleFavorite: jest.fn(),
             upsertEduContentToStore: jest.fn(),
+            upsertHistoryToStore: jest.fn(),
             linkTask: jest.fn(),
             linkBundle: jest.fn(),
             openStatic: jest.fn(),

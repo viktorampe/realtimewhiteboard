@@ -5,9 +5,13 @@ import {
   AUTH_SERVICE_TOKEN,
   DalState,
   EduContentQueries,
+  FavoriteTypesEnum,
+  HistoryActions,
+  HistoryInterface,
   LearningAreaInterface,
   LearningAreaQueries,
   LinkedPersonQueries,
+  TaskEduContentInterface,
   TaskEduContentQueries,
   TaskInstanceQueries,
   TaskQueries,
@@ -75,12 +79,21 @@ export class TasksViewModel {
     );
   }
 
-  public startExercise(eduContentId: number, taskId: number): void {
+  public startExercise(taskEduContent: TaskEduContentInterface): void {
     this.scormExerciseService.startExerciseFromTask(
       this.authService.userId,
-      eduContentId,
-      taskId
+      taskEduContent.eduContentId,
+      taskEduContent.taskId
     );
+    const history: HistoryInterface = {
+      name: taskEduContent.eduContent.publishedEduContentMetadata.title,
+      type: FavoriteTypesEnum.EDUCONTENT,
+      learningAreaId:
+        taskEduContent.eduContent.publishedEduContentMetadata.learningAreaId,
+      eduContentId: taskEduContent.eduContentId, // opening a book -> contentId = eduContentId
+      created: new Date()
+    };
+    this.store.dispatch(new HistoryActions.StartUpsertHistory({ history }));
   }
 
   public getTasksByLearningAreaId(

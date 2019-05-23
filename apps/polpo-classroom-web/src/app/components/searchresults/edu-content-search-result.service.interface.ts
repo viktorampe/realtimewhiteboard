@@ -2,7 +2,8 @@ import { InjectionToken } from '@angular/core';
 import {
   EduContent,
   EduContentInterface,
-  FavoriteInterface
+  FavoriteInterface,
+  HistoryInterface
 } from '@campus/dal';
 import { Observable } from 'rxjs';
 
@@ -24,4 +25,5 @@ export interface EduContentSearchResultItemServiceInterface {
   toggleFavorite(favorite: FavoriteInterface): void;
 
   upsertEduContentToStore(eduContent: EduContentInterface): void;
+  upsertHistoryToStore(history: HistoryInterface): void;
 }
