@@ -41,120 +41,15 @@ import {
 } from '../../scorm/scorm-exercise.service.interface';
 import { QuickLinkTypeEnum } from './quick-link-type.enum';
 import {
+  quickLinkActionDictionary,
   QuickLinkActionInterface,
   QuickLinkCategoryInterface,
+  QuickLinkCategoryMap,
   QuickLinkInterface
 } from './quick-link.interface';
 
 @Injectable()
 export class QuickLinkViewModel {
-  private categories = new Map<
-    FavoriteTypesEnum | string,
-    { label: string; order: number }
-  >([
-    // Favorites
-    [FavoriteTypesEnum.BOEKE, { label: 'Bordboeken', order: 0 }],
-    [FavoriteTypesEnum.EDUCONTENT, { label: 'Lesmateriaal', order: 1 }],
-    [FavoriteTypesEnum.SEARCH, { label: 'Zoekopdrachten', order: 2 }],
-    [FavoriteTypesEnum.BUNDLE, { label: 'Bundels', order: 3 }],
-    [FavoriteTypesEnum.TASK, { label: 'Taken', order: 4 }],
-    // History
-    ['boek-e', { label: 'Bordboeken', order: 0 }],
-    ['educontent', { label: 'Lesmateriaal', order: 1 }],
-    ['search', { label: 'Zoekopdrachten', order: 2 }],
-    ['bundle', { label: 'Bundels', order: 3 }],
-    ['task', { label: 'Taken', order: 4 }]
-  ]);
-
-  private quickLinkActions: {
-    [key: string]: QuickLinkActionInterface;
-  } = {
-    openEduContentAsExercise: {
-      actionType: 'open',
-      label: 'Openen',
-      icon: 'exercise:open',
-      tooltip: 'Open oefening zonder oplossingen',
-      handler: 'openEduContentAsExercise'
-    },
-    openEduContentAsSolution: {
-      actionType: 'open',
-      label: 'Toon oplossing',
-      icon: 'exercise:finished',
-      tooltip: 'Open oefening met oplossingen',
-      handler: 'openEduContentAsSolution'
-    },
-    openEduContentAsStream: {
-      actionType: 'open',
-      label: 'Openen',
-      icon: 'lesmateriaal',
-      tooltip: 'Open het lesmateriaal',
-      handler: 'openEduContentAsStream'
-    },
-    openEduContentAsDownload: {
-      actionType: 'open',
-      label: 'Downloaden',
-      icon: 'download',
-      tooltip: 'Download het lesmateriaal',
-      handler: 'openEduContentAsDownload'
-    },
-    openBundle: {
-      actionType: 'open',
-      label: 'Openen',
-      icon: 'bundle',
-      tooltip: 'Navigeer naar de bundel pagina',
-      handler: 'openBundle'
-    },
-    openTask: {
-      actionType: 'open',
-      label: 'Openen',
-      icon: 'task',
-      tooltip: 'Navigeer naar de taken pagina',
-      handler: 'openTask'
-    },
-    openArea: {
-      actionType: 'open',
-      label: 'Openen',
-      icon: 'lesmateriaal',
-      tooltip: 'Navigeer naar de leergebied pagina',
-      handler: 'openArea'
-    },
-    openBoeke: {
-      actionType: 'open',
-      label: 'Openen',
-      icon: 'boeken',
-      tooltip: 'Open het bordboek',
-      handler: 'openBoeke'
-    },
-    openSearch: {
-      actionType: 'open',
-      label: 'Openen',
-      icon: 'magnifier',
-      tooltip: 'Open de zoekopdracht',
-      handler: 'openSearch'
-    },
-    edit: {
-      actionType: 'manage',
-      label: 'Bewerken',
-      icon: 'edit',
-      tooltip: 'Pas de naam van het item aan',
-      handler: 'edit'
-    },
-    remove: {
-      actionType: 'manage',
-      label: 'Verwijderen',
-      icon: 'delete',
-      tooltip: 'Verwijder het item',
-      handler: 'remove'
-    },
-    none: {
-      actionType: 'open',
-      label: '',
-      icon: '',
-      tooltip: '',
-      handler: ''
-    }
-  };
-
   constructor(
     private store: Store<DalState>,
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
@@ -374,31 +269,29 @@ export class QuickLinkViewModel {
     switch (quickLink.type) {
       case FavoriteTypesEnum.AREA:
       case 'area':
-        return this.quickLinkActions.openArea;
+        return quickLinkActionDictionary.openArea;
       case FavoriteTypesEnum.BOEKE:
       case 'boek-e':
-        return this.quickLinkActions.openBoeke;
+        return quickLinkActionDictionary.openBoeke;
       case FavoriteTypesEnum.EDUCONTENT:
       case 'educontent':
         const eduContent = quickLink.eduContent as EduContent;
         if (eduContent.type === 'exercise') {
-          return this.quickLinkActions.openEduContentAsExercise;
+          return quickLinkActionDictionary.openEduContentAsExercise;
         } else if (eduContent.streamable) {
-          return this.quickLinkActions.openEduContentAsStream;
+          return quickLinkActionDictionary.openEduContentAsStream;
         } else {
-          return this.quickLinkActions.openEduContentAsDownload;
+          return quickLinkActionDictionary.openEduContentAsDownload;
         }
       case FavoriteTypesEnum.BUNDLE:
       case 'bundle':
-        return this.quickLinkActions.openBundle;
+        return quickLinkActionDictionary.openBundle;
       case FavoriteTypesEnum.TASK:
       case 'task':
-        return this.quickLinkActions.openTask;
+        return quickLinkActionDictionary.openTask;
       case FavoriteTypesEnum.SEARCH:
       case 'search':
-        return this.quickLinkActions.openSearch;
-      default:
-        return this.quickLinkActions.none;
+        return quickLinkActionDictionary.openSearch;
     }
   }
 
@@ -410,23 +303,38 @@ export class QuickLinkViewModel {
       case 'educontent':
         const eduContent = quickLink.eduContent as EduContent;
         if (eduContent.type === 'exercise') {
-          return [this.quickLinkActions.openEduContentAsSolution];
+          return [quickLinkActionDictionary.openEduContentAsSolution];
         } else if (eduContent.streamable) {
-          return [this.quickLinkActions.openEduContentAsDownload];
+          return [quickLinkActionDictionary.openEduContentAsDownload];
         }
     }
     return [];
   }
 
+  private getManageActions(
+    mode: QuickLinkTypeEnum
+  ): QuickLinkActionInterface[] {
+    switch (mode) {
+      case QuickLinkTypeEnum.FAVORITES:
+        return [
+          quickLinkActionDictionary.edit,
+          quickLinkActionDictionary.remove
+        ];
+      case QuickLinkTypeEnum.HISTORY:
+        return [quickLinkActionDictionary.remove];
+    }
+    return [];
+  }
+
   private getCategoryTitle(quickLink: FavoriteInterface | HistoryInterface) {
-    return this.categories.has(quickLink.type)
-      ? this.categories.get(quickLink.type).label
+    return QuickLinkCategoryMap.has(quickLink.type)
+      ? QuickLinkCategoryMap.get(quickLink.type).label
       : quickLink.type;
   }
 
   private getCategoryOrder(quickLink: FavoriteInterface | HistoryInterface) {
-    return this.categories.has(quickLink.type)
-      ? this.categories.get(quickLink.type).order
+    return QuickLinkCategoryMap.has(quickLink.type)
+      ? QuickLinkCategoryMap.get(quickLink.type).order
       : -1;
   }
 }
