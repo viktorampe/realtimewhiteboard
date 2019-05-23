@@ -593,7 +593,7 @@ describe('AlertEffects', () => {
       const payload = {
         action: deleteAction,
         dataPersistence: effects['dataPersistence'],
-        intendedAction: 'returnValue',
+        intendedSideEffect: 'returnValue',
         undoLabel: 'Melding wordt verwijderd.',
         undoneLabel: 'Melding is niet verwijderd.',
         doneLabel: 'Melding is verwijderd.'

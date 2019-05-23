@@ -356,7 +356,7 @@ describe('FavoriteEffects', () => {
       const payload = {
         action: deleteAction,
         dataPersistence: effects['dataPersistence'],
-        intendedAction: 'returnValue',
+        intendedSideEffect: 'returnValue',
         undoLabel: 'Favoriet wordt verwijderd.',
         undoneLabel: 'Favoriet is niet verwijderd.',
         doneLabel: 'Favoriet is verwijderd.'
