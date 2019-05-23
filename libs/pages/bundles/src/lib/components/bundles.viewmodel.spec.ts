@@ -20,6 +20,7 @@ import {
   EduContentFixture,
   EduContentInterface,
   EduContentReducer,
+  HistoryActions,
   LearningAreaActions,
   LearningAreaFixture,
   LearningAreaInterface,
@@ -47,7 +48,8 @@ import {
   UnlockedContentInterface,
   UnlockedContentReducer,
   UserContentActions,
-  UserContentReducer
+  UserContentReducer,
+  HistoryInterface
 } from '@campus/dal';
 import {
   OpenStaticContentServiceInterface,
@@ -55,7 +57,7 @@ import {
   ScormExerciseServiceInterface,
   SCORM_EXERCISE_SERVICE_TOKEN
 } from '@campus/shared';
-import { MockWindow } from '@campus/testing';
+import { MockDate, MockWindow } from '@campus/testing';
 import { ListFormat } from '@campus/ui';
 import { UnlockedContent } from '@diekeure/polpo-api-angular-sdk';
 import { Store, StoreModule } from '@ngrx/store';
@@ -138,7 +140,10 @@ describe('BundlesViewModel', () => {
     expect(spy).toHaveBeenCalledWith({ listFormat });
   });
   describe('#openContent', () => {
-    it('should call the open static content service for EduContent', () => {
+    it('should call the open static content service for EduContent and dispatch a startUpsertHistory action', () => {
+      const mockDate = new MockDate();
+      const spy = jest.spyOn(store, 'dispatch');
+
       const unlockedContent = new UnlockedContentFixture({
         id: 1,
         eduContent: new EduContentFixture({ type: 'file' })
@@ -148,6 +153,19 @@ describe('BundlesViewModel', () => {
       expect(openStaticContentService.open).toHaveBeenCalledWith(
         unlockedContent.content
       );
+
+      expect(spy).toHaveBeenCalledWith(
+        new HistoryActions.StartUpsertHistory({
+          history: {
+            name: 'foo',
+            type: 'educontent',
+            learningAreaId: 1,
+            eduContentId: 1,
+            created: mockDate.mockDate
+          }
+        })
+      );
+      mockDate.returnRealDate();
     });
 
     it('should call the scormExerciseService for eduContent', () => {
@@ -289,11 +307,26 @@ describe('BundlesViewModel', () => {
     );
   });
 
-  it('openBooks() should call openStaticContentService', () => {
+  it('openBook() should call openStaticContentService and dispatch a startUpsertHistoryAction', () => {
+    const mockDate = new MockDate();
+    const mockLearningAreaId = 25;
+
+    const dispatchSpy = jest.spyOn(store, 'dispatch');
     const spy = jest.spyOn(openStaticContentService, 'open');
+
     const book = new ContentFixture();
+    const expectedHistory:HistoryInterface = {
+        name: 'foo',
+        type: 'boek-e',
+        learningAreaId: mockLearningAreaId,
+        eduContentId: 1,
+        created: mockDate.mockDate
+    };
+
+    bundlesViewModel.getLearningAreaById(mockLearningAreaId);    
     bundlesViewModel.openBook(book);
     expect(spy).toHaveBeenCalledWith(book);
+    expect(dispatchSpy).toHaveBeenCalledWith(new HistoryActions.StartUpsertHistory({history: expectedHistory}));
   });
 
   function loadState() {

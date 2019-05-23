@@ -142,6 +142,17 @@ export class BundlesViewModel {
   }
 
   openContent(unlockedContent: UnlockedContent): void {
+    const history: HistoryInterface = {
+      name: unlockedContent.eduContent.name,
+      type: FavoriteTypesEnum.EDUCONTENT,
+      learningAreaId:
+        unlockedContent.eduContent.publishedEduContentMetadata.learningAreaId,
+      eduContentId: unlockedContent.eduContent.id,
+      created: new Date()
+    };
+    // not sure if we want to dispatch this, if it is user content?
+    this.store.dispatch(new HistoryActions.StartUpsertHistory({ history }));
+
     if (unlockedContent.eduContentId) {
       if (unlockedContent.eduContent.type === 'exercise') {
         if (this.authService.userId === unlockedContent.teacherId) {
@@ -152,20 +163,6 @@ export class BundlesViewModel {
             this.authService.userId,
             unlockedContent.eduContentId,
             unlockedContent.id
-          );
-
-          const history: HistoryInterface = {
-            name: unlockedContent.eduContent.name,
-            type: FavoriteTypesEnum.EDUCONTENT,
-            learningAreaId:
-              unlockedContent.eduContent.publishedEduContentMetadata
-                .learningAreaId,
-            eduContentId: unlockedContent.eduContent.id,
-            created: new Date()
-          };
-
-          this.store.dispatch(
-            new HistoryActions.StartUpsertHistory({ history })
           );
 
           return;

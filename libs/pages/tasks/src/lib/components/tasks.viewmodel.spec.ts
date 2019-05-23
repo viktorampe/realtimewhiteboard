@@ -9,6 +9,8 @@ import {
   EduContentInterface,
   EduContentReducer,
   getStoreModuleForFeatures,
+  HistoryActions,
+  HistoryInterface,
   LearningAreaActions,
   LearningAreaFixture,
   LearningAreaInterface,
@@ -33,6 +35,7 @@ import {
   UiReducer
 } from '@campus/dal';
 import { SCORM_EXERCISE_SERVICE_TOKEN } from '@campus/shared';
+import { MockDate } from '@campus/testing';
 import { ListFormat } from '@campus/ui';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
@@ -395,21 +398,33 @@ describe('TasksViewModel met State', () => {
   });
 
   describe('startExercise', () => {
-    it('should call the scormExerciseService', () => {
+    it('should call the scormExerciseService and dispatch a startUpsertHistory action', () => {
+      const mockDate = new MockDate();
+
+      const spy = jest.spyOn(store, 'dispatch');
+      const expectedHistory: HistoryInterface = {
+        name: 'foo',
+        type: 'educontent',
+        learningAreaId: 1,
+        eduContentId: 123,
+        created: mockDate.mockDate
+      };
+
       const scormExerciseService = TestBed.get(SCORM_EXERCISE_SERVICE_TOKEN);
       const mockTaskEduContent: TaskEduContentInterface = new TaskEduContentFixture(
-        { eduContentId: 123, taskId: 456 }
+        { eduContentId: 123, taskId: 456, eduContent: new EduContentFixture() }
       );
-      tasksViewModel.startExercise(
-        mockTaskEduContent.eduContentId,
-        mockTaskEduContent.taskId
-      );
+      tasksViewModel.startExercise(mockTaskEduContent);
 
       expect(scormExerciseService.startExerciseFromTask).toHaveBeenCalled();
       expect(scormExerciseService.startExerciseFromTask).toHaveBeenCalledWith(
         1, //userId
         mockTaskEduContent.eduContentId,
         mockTaskEduContent.taskId
+      );
+
+      expect(spy).toHaveBeenCalledWith(
+        new HistoryActions.StartUpsertHistory({ history: expectedHistory })
       );
     });
   });
