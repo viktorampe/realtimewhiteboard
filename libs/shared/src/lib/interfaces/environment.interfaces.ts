@@ -15,6 +15,7 @@ export interface EnvironmentInterface {
   };
   sso: EnvironmentSsoInterface;
   searchModes: EnvironmentSearchModesInterface;
+  testing: EnvironmentTestingInterface;
 }
 
 export interface EnvironmentIconMappingInterface {
@@ -86,4 +87,8 @@ export interface EnvironmentWebsiteInterface {
 
 export interface EnvironmentApiInterface {
   APIBase: string;
+}
+
+export interface EnvironmentTestingInterface {
+  removeDataCyAttributes: boolean;
 }

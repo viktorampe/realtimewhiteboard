@@ -33,6 +33,7 @@ import { QuickLinkComponent } from './components/quick-link/quick-link.component
 import { OPEN_STATIC_CONTENT_SERVICE_TOKEN } from './content/open-static-content.interface';
 import { OpenStaticContentService } from './content/open-static-content.service';
 import { CampusRouterlinkDirective } from './directives/campus-routerlink.directive';
+import { DataCyDirective } from './directives/data-cy.directive';
 import { FeedBackService, FEEDBACK_SERVICE_TOKEN } from './feedback';
 import {
   SnackBarDefaultConfig,
@@ -51,6 +52,7 @@ import {
   EnvironmentSearchModesInterface,
   EnvironmentSsoInterface,
   EnvironmentTermPrivacyInterface,
+  EnvironmentTestingInterface,
   EnvironmentWebsiteInterface,
   ENVIRONMENT_ALERTS_FEATURE_TOKEN,
   ENVIRONMENT_API_TOKEN,
@@ -62,6 +64,7 @@ import {
   ENVIRONMENT_SEARCHMODES_TOKEN,
   ENVIRONMENT_SSO_TOKEN,
   ENVIRONMENT_TERM_PRIVACY_TOKEN,
+  ENVIRONMENT_TESTING_TOKEN,
   ENVIRONMENT_WEBSITE_TOKEN
 } from './interfaces';
 import { AlertToNotificationItemPipe } from './pipes/alert-to-notification/alert-to-notification-pipe';
@@ -93,6 +96,7 @@ import { SCORM_EXERCISE_SERVICE_TOKEN } from './scorm/scorm-exercise.service.int
     PersonBadgeFromCredentialPipe,
     MailToByCredentialPipe,
     CampusRouterlinkDirective,
+    DataCyDirective,
     AlertToNotificationItemPipe,
     QuickLinkComponent
   ],
@@ -105,6 +109,7 @@ import { SCORM_EXERCISE_SERVICE_TOKEN } from './scorm/scorm-exercise.service.int
     PersonBadgeFromCredentialPipe,
     MailToByCredentialPipe,
     CampusRouterlinkDirective,
+    DataCyDirective,
     AlertToNotificationItemPipe,
     QuickLinkComponent
   ],
@@ -156,7 +161,8 @@ export class SharedModule {
     environmentTermPrivacy: EnvironmentTermPrivacyInterface,
     environmentApi: EnvironmentApiInterface,
     environmentSsoSettings: EnvironmentSsoInterface,
-    environmentSearchModes: EnvironmentSearchModesInterface
+    environmentSearchModes: EnvironmentSearchModesInterface,
+    environmentTesting: EnvironmentTestingInterface
   ): ModuleWithProviders {
     return {
       ngModule: SharedModule,
@@ -204,6 +210,10 @@ export class SharedModule {
         {
           provide: ENVIRONMENT_SEARCHMODES_TOKEN,
           useValue: environmentSearchModes
+        },
+        {
+          provide: ENVIRONMENT_TESTING_TOKEN,
+          useValue: environmentTesting
         }
       ]
     };
