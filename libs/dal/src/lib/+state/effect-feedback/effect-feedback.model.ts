@@ -13,12 +13,14 @@ export interface FeedbackTriggeringPayload {
   customFeedbackHandlers?: CustomFeedbackHandlersInterface;
 }
 
-export interface CustomFeedbackHandlersInterface {
-  useCustomSuccessHandler?: boolean;
-  useCustomErrorHandler?: boolean;
-}
-
 export type EffectFeedbackType = 'success' | 'error';
+export type NoEffectFeedbackHandler = 'useNoHandler';
+
+export interface CustomFeedbackHandlersInterface {
+  // useNoSuccessHandler?: boolean;
+  useCustomSuccessHandler?: boolean | NoEffectFeedbackHandler;
+  useCustomErrorHandler?: boolean | NoEffectFeedbackHandler;
+}
 
 export interface EffectFeedbackConstructorInterface {
   id: string;
@@ -72,8 +74,19 @@ export class EffectFeedback implements EffectFeedbackInterface {
     if (!payload || !payload.customFeedbackHandlers) return false;
     switch (type) {
       case 'error':
+        if (
+          payload.customFeedbackHandlers.useCustomErrorHandler ===
+          'useNoHandler'
+        )
+          return true;
         return payload.customFeedbackHandlers.useCustomErrorHandler || false;
       case 'success':
+        // if (payload.customFeedbackHandlers.useNoSuccessHandler) return true;
+        if (
+          payload.customFeedbackHandlers.useCustomSuccessHandler ===
+          'useNoHandler'
+        )
+          return true;
         return payload.customFeedbackHandlers.useCustomSuccessHandler || false;
       default:
         return false;

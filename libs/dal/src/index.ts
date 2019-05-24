@@ -50,3 +50,4 @@ export * from './lib/learning-plan';
 export * from './lib/metadata';
 export * from './lib/persons';
 export * from './lib/toc';
+export * from './lib/undo';
