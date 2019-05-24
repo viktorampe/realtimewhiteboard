@@ -106,9 +106,8 @@ export class QuickLinkComponent implements OnInit {
       const results = this.filterService
         .filter(
           //eliminate categories
-          source.reduce(
-            (acc, cat) => [...acc, ...cat.quickLinks],
-            [] as QuickLinkInterface[]
+          ([] as QuickLinkInterface[]).concat(
+            ...source.map(cat => cat.quickLinks)
           ),
           { name: searchText }
         )

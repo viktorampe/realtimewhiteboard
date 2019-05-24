@@ -224,10 +224,9 @@ export class QuickLinkViewModel {
           taskDict,
           bundleDict
         ]) =>
-          Object.keys(quickLinkDict).reduce(
-            (acc, key) => [
-              ...acc,
-              {
+          Object.keys(quickLinkDict).map(
+            key =>
+              ({
                 type: key,
                 title: this.getCategoryTitle(quickLinkDict[key][0]),
                 order: this.getCategoryOrder(quickLinkDict[key][0]),
@@ -248,9 +247,7 @@ export class QuickLinkViewModel {
                     mode
                   )
                 )
-              }
-            ],
-            [] as QuickLinkCategoryInterface[]
+              } as QuickLinkCategoryInterface)
           )
       )
     );
