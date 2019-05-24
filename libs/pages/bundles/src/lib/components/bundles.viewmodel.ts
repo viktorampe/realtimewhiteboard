@@ -5,6 +5,7 @@ import {
   AUTH_SERVICE_TOKEN,
   BundleInterface,
   BundleQueries,
+  ContentInterface,
   ContentStatusLabel,
   ContentStatusQueries,
   createHistoryFromContent,
@@ -166,7 +167,7 @@ export class BundlesViewModel {
     this.openStaticContentService.open(unlockedContent.content);
   }
 
-  openBook(content: EduContent): void {
+  openBook(content: ContentInterface): void {
     this.openStaticContentService.open(content);
 
     const history = createHistoryFromContent(content);
