@@ -13,7 +13,6 @@ import {
   EduContent,
   EduContentQueries,
   HistoryActions,
-  HistoryTypesEnum,
   LearningAreaInterface,
   LearningAreaQueries,
   LinkedPersonQueries,
@@ -51,8 +50,6 @@ import {
   providedIn: 'root'
 })
 export class BundlesViewModel {
-  private currentAreaId: number;
-
   // source streams
   listFormat$: Observable<ListFormat>;
   private learningAreas$: Observable<LearningAreaInterface[]>;
@@ -172,11 +169,7 @@ export class BundlesViewModel {
   openBook(content: EduContent): void {
     this.openStaticContentService.open(content);
 
-    const history = createHistoryFromContent(
-      content,
-      HistoryTypesEnum.BOEKE,
-      this.currentAreaId
-    );
+    const history = createHistoryFromContent(content);
     if (history) {
       this.store.dispatch(
         new HistoryActions.StartUpsertHistory({
@@ -212,7 +205,6 @@ export class BundlesViewModel {
   }
 
   getLearningAreaById(areaId: number): Observable<LearningAreaInterface> {
-    this.currentAreaId = areaId;
     return this.store.pipe(select(LearningAreaQueries.getById, { id: areaId }));
   }
 

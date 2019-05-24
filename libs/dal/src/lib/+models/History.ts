@@ -1,5 +1,6 @@
 import { ContentInterface } from './Content.interface';
 import { EduContent } from './EduContent';
+import { EduContentInterface } from './EduContent.interface';
 import { HistoryInterface } from './History.interface';
 
 export enum HistoryTypesEnum {
@@ -12,10 +13,12 @@ export enum HistoryTypesEnum {
 }
 
 export function createHistoryFromEduContent(
-  eduContent: EduContent
+  eduContent: EduContentInterface
 ): HistoryInterface {
   return {
-    name: eduContent.name,
+    name: eduContent.publishedEduContentMetadata
+      ? eduContent.publishedEduContentMetadata.title
+      : '',
     type:
       eduContent.type === 'boek-e'
         ? HistoryTypesEnum.BOEKE
@@ -25,19 +28,12 @@ export function createHistoryFromEduContent(
     learningAreaId: eduContent.publishedEduContentMetadata.learningAreaId
   };
 }
+
 export function createHistoryFromContent(
-  content: ContentInterface,
-  contentType: HistoryTypesEnum,
-  learningAreaId: number
+  content: ContentInterface
 ): HistoryInterface {
   if (content instanceof EduContent) {
-    return {
-      name: content.name,
-      type: contentType,
-      eduContentId: content.id,
-      created: new Date(),
-      learningAreaId: learningAreaId
-    };
+    return createHistoryFromEduContent(content);
   }
 
   return null;

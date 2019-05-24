@@ -1,7 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
 import {
   AlertActions,
-  asEduContent,
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
   createHistoryFromEduContent,
@@ -88,9 +87,7 @@ export class TasksViewModel {
 
     this.store.dispatch(
       new HistoryActions.StartUpsertHistory({
-        history: createHistoryFromEduContent(
-          asEduContent(taskEduContent.eduContent)
-        )
+        history: createHistoryFromEduContent(taskEduContent.eduContent)
       })
     );
   }

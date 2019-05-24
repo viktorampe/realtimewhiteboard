@@ -308,26 +308,26 @@ describe('BundlesViewModel', () => {
 
   it('openBook() should call openStaticContentService and dispatch a startUpsertHistoryAction', () => {
     const mockDate = new MockDate();
-    const mockLearningAreaId = 25;
 
     const dispatchSpy = jest.spyOn(store, 'dispatch');
     const spy = jest.spyOn(openStaticContentService, 'open');
 
-    const book: EduContent = new EduContentFixture();
+    const book = new EduContentFixture({ type: 'boek-e' });
     const expectedHistory: HistoryInterface = {
-      name: 'foo',
+      name: book.publishedEduContentMetadata.title,
       type: 'boek-e',
-      learningAreaId: mockLearningAreaId,
+      learningAreaId: book.publishedEduContentMetadata.learningAreaId,
       eduContentId: 1,
       created: mockDate.mockDate
     };
 
-    bundlesViewModel.getLearningAreaById(mockLearningAreaId);
     bundlesViewModel.openBook(book);
     expect(spy).toHaveBeenCalledWith(book);
     expect(dispatchSpy).toHaveBeenCalledWith(
       new HistoryActions.StartUpsertHistory({ history: expectedHistory })
     );
+
+    mockDate.returnRealDate();
   });
 
   function loadState() {
