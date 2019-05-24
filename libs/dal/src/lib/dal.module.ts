@@ -38,6 +38,7 @@ import { EduNetEffects, EduNetReducer } from './+state/edu-net';
 import { EffectFeedbackReducer } from './+state/effect-feedback';
 import { EffectFeedbackEffects } from './+state/effect-feedback/effect-feedback.effects';
 import { FavoriteEffects, FavoriteReducer } from './+state/favorite';
+import { HistoryEffects, HistoryReducer } from './+state/history';
 import {
   LearningAreaReducer,
   LearningAreasEffects
@@ -267,6 +268,9 @@ export const DAL_OPTIONS = new InjectionToken('dal-options');
     StoreModule.forFeature(FavoriteReducer.NAME, FavoriteReducer.reducer, {
       initialState: FavoriteReducer.initialState
     }),
+    StoreModule.forFeature(HistoryReducer.NAME, HistoryReducer.reducer, {
+      initialState: HistoryReducer.initialState
+    }),
     StoreModule.forFeature(
       EduContentProductTypeReducer.NAME,
       EduContentProductTypeReducer.reducer,
@@ -306,6 +310,7 @@ export const DAL_OPTIONS = new InjectionToken('dal-options');
       LinkedPersonEffects,
       CredentialEffects,
       FavoriteEffects,
+      HistoryEffects,
       EduContentProductTypeEffects,
       EduNetEffects,
       SchoolTypeEffects,
