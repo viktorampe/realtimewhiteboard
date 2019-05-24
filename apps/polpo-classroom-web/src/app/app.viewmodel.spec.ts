@@ -391,23 +391,25 @@ describe('AppViewModel', () => {
       let mockEvent: { action: Action; feedbackId: string };
       let removeFeedbackAction: Action;
 
-      beforeAll(() => {
-        removeFeedbackAction = new EffectFeedbackActions.DeleteEffectFeedback({
-          id: mockFeedBack.id
-        });
-      });
-
       beforeEach(() => {
         mockEvent = { action: mockAction, feedbackId: mockFeedBack.id };
       });
 
       it('should dispatch a removeFeedback action', () => {
+        removeFeedbackAction = new EffectFeedbackActions.DeleteEffectFeedback({
+          id: mockFeedBack.id,
+          userAction: mockAction
+        });
         viewModel.onFeedbackDismiss(mockEvent);
 
         expect(store.dispatch).toHaveBeenCalledWith(removeFeedbackAction);
       });
 
       it('should dispatch the event action, if available', () => {
+        removeFeedbackAction = new EffectFeedbackActions.DeleteEffectFeedback({
+          id: mockFeedBack.id,
+          userAction: mockAction
+        });
         // with action
         viewModel.onFeedbackDismiss(mockEvent);
         expect(store.dispatch).toHaveBeenCalledTimes(2);
@@ -415,6 +417,9 @@ describe('AppViewModel', () => {
         expect(store.dispatch).toHaveBeenCalledWith(mockEvent.action);
 
         // without action
+        removeFeedbackAction = new EffectFeedbackActions.DeleteEffectFeedback({
+          id: mockFeedBack.id
+        });
         storeSpy.calls.reset();
         const mockEventWithoutAction = {
           action: null,
