@@ -43,7 +43,7 @@ export const QuickLinkCategoryMap: Map<
   // History
   ['boek-e', { label: 'Bordboeken', order: 0 }],
   ['educontent', { label: 'Lesmateriaal', order: 1 }],
-  ['search', { label: 'Zoekopdrachten', order: 2 }],
+  ['history', { label: 'Zoekopdrachten', order: 2 }], // TODO: change history to 'search' in the selectors
   ['bundle', { label: 'Bundels', order: 3 }],
   ['task', { label: 'Taken', order: 4 }]
 ]);
