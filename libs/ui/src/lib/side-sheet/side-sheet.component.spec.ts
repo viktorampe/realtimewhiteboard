@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatSidenavModule } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { configureTestSuite } from 'ng-bullet';
 import { SideSheetBodyDirective } from './directives/side-sheet-body.directive';
 import { SideSheetHeaderDirective } from './directives/side-sheet-header.directive';
 import { SideSheetPageDirective } from './directives/side-sheet-page.directive';
 import { SideSheetComponent } from './side-sheet.component';
-
 @Component({
   selector: 'campus-test-host',
   template: `
@@ -34,7 +34,7 @@ describe('SideSheetComponent', () => {
   let fixture: ComponentFixture<TestHostComponent>;
   let sideSheetComp: SideSheetComponent;
 
-  beforeEach(async(() => {
+  configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [BrowserAnimationsModule, MatSidenavModule],
       declarations: [
@@ -45,7 +45,7 @@ describe('SideSheetComponent', () => {
         SideSheetPageDirective
       ]
     });
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(TestHostComponent);

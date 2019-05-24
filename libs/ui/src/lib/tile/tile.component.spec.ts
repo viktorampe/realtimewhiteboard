@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MockMatIconRegistry } from '@campus/testing';
 import { UtilsModule } from '@campus/utils';
+import { configureTestSuite } from 'ng-bullet';
 import { TileComponent, TileSecondaryActionInterface } from './tile.component';
 
 describe('TileComponent', () => {
@@ -18,7 +19,7 @@ describe('TileComponent', () => {
   };
   let router: Router;
 
-  beforeEach(async(() => {
+  configureTestSuite(() => {
     TestBed.configureTestingModule({
       declarations: [TileComponent],
       imports: [RouterTestingModule, MatIconModule, UtilsModule],
@@ -29,7 +30,7 @@ describe('TileComponent', () => {
     });
 
     router = TestBed.get(Router);
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(TileComponent);

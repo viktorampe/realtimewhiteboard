@@ -6,9 +6,10 @@ import {
   NgModule,
   NO_ERRORS_SCHEMA
 } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { UiModule } from '@campus/ui';
+import { configureTestSuite } from 'ng-bullet';
 import { Subject } from 'rxjs';
 import { HideDesktopDirective } from './hide-desktop.directive';
 
@@ -35,26 +36,34 @@ describe('HideDesktopDirective', () => {
   let testContainerFixture: ComponentFixture<TestContainerComponent>;
   let testContainerComponent: TestContainerComponent;
   let componentDE: DebugElement;
-  const breakpointStream: Subject<{ matches: boolean }> = new Subject();
+  const breakpointStream: Subject<{
+    matches: boolean;
+    breakpoints: {};
+  }> = new Subject();
+  let testbed;
 
-  beforeEach(async(() => {
-    const testbed = TestBed.configureTestingModule({
+  configureTestSuite(() => {
+    testbed = TestBed.configureTestingModule({
       imports: [TestModule],
       schemas: [NO_ERRORS_SCHEMA]
     });
+  });
+
+  beforeEach(() => {
     const breakpointObserver: BreakpointObserver = testbed.get(
       BreakpointObserver
     );
     jest.spyOn(breakpointObserver, 'observe').mockReturnValue(breakpointStream);
-  }));
-
-  beforeEach(() => {
     testContainerFixture = TestBed.createComponent(TestContainerComponent);
     testContainerComponent = testContainerFixture.componentInstance;
     componentDE = testContainerFixture.debugElement.query(By.css('div'));
     component = componentDE.componentInstance;
     testContainerFixture.detectChanges();
     directive = componentDE.injector.get(HideDesktopDirective);
+  });
+
+  afterAll(() => {
+    jest.clearAllMocks();
   });
 
   it('should create the host with the directive attached', () => {
@@ -65,12 +74,12 @@ describe('HideDesktopDirective', () => {
   it('should apply the correct attribute based on the BreakpointObserver', () => {
     const isMobileBreakpoint = true;
 
-    breakpointStream.next({ matches: !isMobileBreakpoint });
+    breakpointStream.next({ matches: !isMobileBreakpoint, breakpoints: {} });
     testContainerFixture.detectChanges();
 
     expect(componentDE.nativeElement.style.display).toBe('none');
 
-    breakpointStream.next({ matches: isMobileBreakpoint });
+    breakpointStream.next({ matches: isMobileBreakpoint, breakpoints: {} });
     testContainerFixture.detectChanges();
 
     expect(componentDE.nativeElement.style.display).not.toBe('none');

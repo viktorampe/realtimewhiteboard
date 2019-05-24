@@ -2,7 +2,6 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { CommonModule } from '@angular/common';
 import { Component, NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import {
-  async,
   ComponentFixture,
   fakeAsync,
   flush,
@@ -10,6 +9,7 @@ import {
 } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { configureTestSuite } from 'ng-bullet';
 import { Subject } from 'rxjs';
 import { UiModule } from '../ui.module';
 import { ShellLeftDirective } from './directives/shell-left.directive';
@@ -45,20 +45,23 @@ describe('ShellComponent', () => {
   let testContainerFixture: ComponentFixture<TestContainerComponent>;
   let testContainerComponent: TestContainerComponent;
   let innerComponent: ShellComponent;
-  const breakpointStream: Subject<{ matches: boolean }> = new Subject();
-
-  beforeEach(async(() => {
-    const testbed = TestBed.configureTestingModule({
+  const breakpointStream: Subject<{
+    matches: boolean;
+    breakpoints: {};
+  }> = new Subject();
+  let testbed;
+  configureTestSuite(() => {
+    testbed = TestBed.configureTestingModule({
       imports: [TestModule],
       schemas: [NO_ERRORS_SCHEMA]
     });
+  });
+
+  beforeEach(() => {
     const breakpointObserver: BreakpointObserver = testbed.get(
       BreakpointObserver
     );
     jest.spyOn(breakpointObserver, 'observe').mockReturnValue(breakpointStream);
-  }));
-
-  beforeEach(() => {
     // regular component
     fixture = TestBed.createComponent(ShellComponent);
     component = fixture.componentInstance;
@@ -73,6 +76,10 @@ describe('ShellComponent', () => {
         .componentInstance
     );
     testContainerFixture.detectChanges();
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   it('should create', () => {
@@ -114,10 +121,11 @@ describe('ShellComponent', () => {
   });
 
   it('should alter sidebar behavior on small screen', () => {
-    breakpointStream.next({ matches: true });
+    console.log('nexting now true');
+    breakpointStream.next({ matches: true, breakpoints: {} });
     expect(fixture.componentInstance.sidebar.mode).toBe('over');
     expect(fixture.componentInstance.sidebar.disableClose).toBe(false);
-    breakpointStream.next({ matches: false });
+    breakpointStream.next({ matches: false, breakpoints: {} });
     expect(fixture.componentInstance.sidebar.mode).toBe('side');
     expect(fixture.componentInstance.sidebar.disableClose).toBe(true);
   });

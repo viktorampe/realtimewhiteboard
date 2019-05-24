@@ -1,12 +1,13 @@
-import { async, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
+import { configureTestSuite } from 'ng-bullet';
 import { UiModule } from './ui.module';
 
 describe('UiModule', () => {
-  beforeEach(async(() => {
+  configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [UiModule]
     });
-  }));
+  });
 
   it('should create', () => {
     expect(UiModule).toBeDefined();

@@ -1,5 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { configureTestSuite } from 'ng-bullet';
 import { PersonBadgeComponent } from './person-badge.component';
 import { PersonInitialsPipe } from './pipes/person-initials.pipe';
 
@@ -9,11 +10,11 @@ describe('PersonBadgeComponent', () => {
 
   let mockData: any;
 
-  beforeEach(async(() => {
+  configureTestSuite(() => {
     TestBed.configureTestingModule({
       declarations: [PersonBadgeComponent, PersonInitialsPipe]
     });
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PersonBadgeComponent);
