@@ -124,5 +124,60 @@ describe('History Selectors', () => {
         expect(result).toEqual(expected);
       });
     });
+
+    describe('historyByType', () => {
+      let mockHistory: HistoryInterface[];
+      beforeEach(() => {
+        // TODO use fixture when merged
+        mockHistory = [
+          { ...createHistory(4), type: 'foo', created: new Date(1) },
+          { ...createHistory(1), type: 'foo', created: new Date(2) },
+          { ...createHistory(2), type: 'bar', created: new Date(2290) },
+          { ...createHistory(3), type: 'baz', created: new Date(1) },
+          { ...createHistory(5), type: 'bar', created: new Date(1140) },
+          { ...createHistory(6), type: 'bar', created: new Date(1160) },
+          { ...createHistory(7), type: 'bar', created: new Date(1170) },
+          { ...createHistory(8), type: 'bar', created: new Date(1180) },
+          { ...createHistory(9), type: 'bar', created: new Date(1190) },
+          { ...createHistory(10), type: 'bar', created: new Date(1200) },
+          { ...createHistory(11), type: 'bar', created: new Date(1210) },
+          { ...createHistory(12), type: 'bar', created: new Date(1220) },
+          { ...createHistory(13), type: 'bar', created: new Date(1230) },
+          { ...createHistory(14), type: 'bar', created: new Date(1240) },
+          { ...createHistory(15), type: 'bar', created: new Date(1250) },
+          { ...createHistory(16), type: 'bar', created: new Date(1260) },
+          { ...createHistory(17), type: 'bar', created: new Date(1270) },
+          { ...createHistory(18), type: 'bar', created: new Date(1280) },
+          { ...createHistory(19), type: 'bar', created: new Date(1290) },
+          { ...createHistory(20), type: 'bar', created: new Date(100) }
+        ];
+
+        historyState = createState(mockHistory, true, 'no error');
+        storeState = { history: historyState };
+      });
+
+      it('should limit the historyitems to 10 per type', () => {
+        const result = HistoryQueries.historyByType(storeState);
+
+        const expected = {
+          bar: [
+            mockHistory[2],
+            mockHistory[18],
+            mockHistory[17],
+            mockHistory[16],
+            mockHistory[15],
+            mockHistory[14],
+            mockHistory[13],
+            mockHistory[12],
+            mockHistory[11],
+            mockHistory[10]
+          ],
+          foo: [mockHistory[1], mockHistory[0]],
+          baz: [mockHistory[3]]
+        };
+
+        expect(result).toEqual(expected);
+      });
+    });
   });
 });
