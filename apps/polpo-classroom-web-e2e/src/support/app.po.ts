@@ -1,5 +1,7 @@
 /// <reference types="cypress" />
 
+import { dataCy } from './commands';
+
 const apiUrl = Cypress.env('apiUrl');
 
 export const login = (username: string, password: string) =>
@@ -21,3 +23,18 @@ export const login = (username: string, password: string) =>
       cy.setCookie('$LoopBackSDK$user', JSON.stringify(resp.body.user));
       cy.setCookie('$LoopBackSDK$userId', resp.body.userId + '');
     });
+
+export const logoutByAPIRequest = () => {
+  cy.getCookie('$LoopBackSDK$id').then(cookie => {
+    if (!cookie) return;
+    cy.request(
+      'POST',
+      `${apiUrl}api/People/logout?access_token=${cookie.value}`
+    );
+  });
+};
+
+export const logoutByUI = () => {
+  cy.visit('dev');
+  dataCy('logoutButton').click();
+};
