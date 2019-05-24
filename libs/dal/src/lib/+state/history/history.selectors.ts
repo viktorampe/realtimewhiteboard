@@ -77,21 +77,23 @@ export const getById = createSelector(
 export const historyByType = createSelector(
   selectHistoryState,
   (state: State) => {
-    const byKey: { [key: string]: HistoryInterface[] } = {};
     // must cast state.ids to number[] (from 'string[] | number[]') or we can't use array functions like forEach
-    (state.ids as number[]).forEach((id: number) => {
+    const sortedIds = (state.ids as number[]).sort((a, b) =>
+      new Date(state.entities[a].created) < new Date(state.entities[b].created)
+        ? 1
+        : -1
+    );
+
+    const byKey: { [key: string]: HistoryInterface[] } = {};
+    sortedIds.forEach((id: number) => {
       const item = state.entities[id];
       if (!byKey[item.type]) {
         byKey[item.type] = [];
       }
-      byKey[item.type].push(item);
+      if (byKey[item.type].length < 10) {
+        byKey[item.type].push(item);
+      }
     });
-
-    Object.keys(byKey).forEach(key =>
-      byKey[key].sort((a, b) =>
-        new Date(a.created) < new Date(b.created) ? 1 : -1
-      )
-    );
 
     return byKey;
   }
