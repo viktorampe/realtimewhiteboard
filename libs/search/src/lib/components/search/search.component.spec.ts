@@ -643,10 +643,10 @@ describe('SearchComponent', () => {
 
     it('should call the vm.changeFilters when filters onFilterSelectionChange', () => {
       const filterCriteria = new SearchFilterCriteriaFixture();
-      searchViewmodel.changeFilters = jest.fn();
+      searchViewmodel.updateFilterCriteria = jest.fn();
       searchComponent.onFilterSelectionChange(filterCriteria);
-      expect(searchViewmodel.changeFilters).toHaveBeenCalledTimes(1);
-      expect(searchViewmodel.changeFilters).toHaveBeenCalledWith(
+      expect(searchViewmodel.updateFilterCriteria).toHaveBeenCalledTimes(1);
+      expect(searchViewmodel.updateFilterCriteria).toHaveBeenCalledWith(
         filterCriteria
       );
     });
