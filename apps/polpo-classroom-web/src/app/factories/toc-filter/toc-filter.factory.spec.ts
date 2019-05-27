@@ -27,12 +27,14 @@ import {
 } from '@campus/search';
 import { Store, StoreModule } from '@ngrx/store';
 import { cold, hot } from 'jasmine-marbles';
+import { configureTestSuite } from 'ng-bullet';
 import { Observable, of } from 'rxjs';
 import { TocFilterFactory } from './toc-filter.factory';
 
 describe('TocFilterFactory', () => {
   let store: Store<DalState>;
   let tocService: TocServiceInterface;
+  let factory: TocFilterFactory;
 
   const expectedOutputFilters = [
     {
@@ -137,7 +139,7 @@ describe('TocFilterFactory', () => {
     [4, [mockTree[1]]]
   ]);
 
-  beforeEach(() => {
+  configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [
         StoreModule.forRoot({}),
@@ -153,24 +155,34 @@ describe('TocFilterFactory', () => {
         {
           provide: TOC_SERVICE_TOKEN,
           useValue: {
-            getBooksByMethodIds: () => of(mockBooks),
-            getTree: () => of(mockTree)
+            getBooksByMethodIds: () => {},
+            getTree: () => {}
           }
         }
       ]
     });
 
     store = TestBed.get(Store);
+
+    loadInStore();
+
     tocService = TestBed.get(TOC_SERVICE_TOKEN);
   });
 
+  beforeEach(() => {
+    factory = new TocFilterFactory(store, tocService);
+
+    jest.spyOn(tocService, 'getTree').mockReturnValue(of(mockTree));
+    jest
+      .spyOn(tocService, 'getBooksByMethodIds')
+      .mockReturnValue(of(mockBooks));
+  });
+
   it('should be created', () => {
-    const factory: TocFilterFactory = TestBed.get(TocFilterFactory);
     expect(factory).toBeTruthy();
   });
 
   describe('getfilters', () => {
-    let factory: TocFilterFactory;
     let expected: SearchFilterCriteriaInterface[];
     let result: Observable<SearchFilterInterface[]>;
 
@@ -179,28 +191,6 @@ describe('TocFilterFactory', () => {
     const mockSelectedMethodId = 6;
     const mockSelectedBookId = 7;
     const mockSelectedTocId = 1;
-
-    beforeEach(() => {
-      factory = TestBed.get(TocFilterFactory);
-
-      store.dispatch(
-        new LearningAreaActions.LearningAreasLoaded({
-          learningAreas: mockLearningAreas
-        })
-      );
-
-      store.dispatch(
-        new YearActions.YearsLoaded({
-          years: mockYears
-        })
-      );
-
-      store.dispatch(
-        new MethodActions.MethodsLoaded({
-          methods: mockMethods
-        })
-      );
-    });
 
     describe('learningAreas', () => {
       beforeEach(() => {
@@ -270,7 +260,7 @@ describe('TocFilterFactory', () => {
 
     describe('TOC tree', () => {
       describe('single selected value', () => {
-        beforeEach(() => {
+        it('should return toc filterCriteria', () => {
           const mockSearchState = getMockSearchState(
             mockSelectedAreaId,
             mockSelectedYearId,
@@ -279,9 +269,7 @@ describe('TocFilterFactory', () => {
             mockSelectedTocId
           );
           result = factory.getFilters(mockSearchState);
-        });
 
-        it('should return toc filterCriteria', () => {
           const expectedYearFilter = getExpectedYearFilterCriterium();
           const expectedMethodFilter = getExpectedMethodFilterCriterium([6, 7]);
           const expectedBookFilter = getExpectedBookFilterCriteria([8, 5]);
@@ -330,6 +318,7 @@ describe('TocFilterFactory', () => {
             expectedTreeFilter,
             expectedTreeFilter_1
           ];
+
           result = factory.getFilters(mockSearchState);
           expect(result).toBeObservable(cold('a', { a: getFilter(expected) }));
         });
@@ -347,7 +336,7 @@ describe('TocFilterFactory', () => {
             );
 
             const newTree = [mockTree[0]];
-            tocService.getTree = jest.fn().mockReturnValue(of(newTree));
+            jest.spyOn(tocService, 'getTree').mockReturnValue(of(newTree));
 
             result = factory.getFilters(newSearchState);
             result.subscribe();
@@ -367,7 +356,7 @@ describe('TocFilterFactory', () => {
             );
 
             const newTree = [mockTree[0]];
-            tocService.getTree = jest.fn().mockReturnValue(of(newTree));
+            jest.spyOn(tocService, 'getTree').mockReturnValue(of(newTree));
 
             result = factory.getFilters(newSearchState);
             result.subscribe();
@@ -387,7 +376,7 @@ describe('TocFilterFactory', () => {
             );
 
             const newTree = [mockTree[0]];
-            tocService.getTree = jest.fn().mockReturnValue(of(newTree));
+            jest.spyOn(tocService, 'getTree').mockReturnValue(of(newTree));
 
             result = factory.getFilters(newSearchState);
             result.subscribe();
@@ -406,7 +395,7 @@ describe('TocFilterFactory', () => {
 
             // service return different value
             // cached value should not return this
-            tocService.getTree = jest.fn().mockReturnValue(of(mockTree[0]));
+            jest.spyOn(tocService, 'getTree').mockReturnValue(of(mockTree[0]));
 
             const newSearchState = getMockSearchState(
               mockSelectedAreaId,
@@ -655,7 +644,6 @@ describe('TocFilterFactory', () => {
 
   describe('getPredictionFilterNames', () => {
     it('should return the filternames', () => {
-      const factory: TocFilterFactory = TestBed.get(TocFilterFactory);
       // the actual values aren't important for the predictions
       // only the amount of values per key matters
 
@@ -847,5 +835,25 @@ describe('TocFilterFactory', () => {
       );
 
     return newSearchState;
+  }
+
+  function loadInStore() {
+    store.dispatch(
+      new LearningAreaActions.LearningAreasLoaded({
+        learningAreas: mockLearningAreas
+      })
+    );
+
+    store.dispatch(
+      new YearActions.YearsLoaded({
+        years: mockYears
+      })
+    );
+
+    store.dispatch(
+      new MethodActions.MethodsLoaded({
+        methods: mockMethods
+      })
+    );
   }
 });
