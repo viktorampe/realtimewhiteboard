@@ -15,7 +15,9 @@ import {
   FavoriteInterface,
   FavoriteQueries,
   FavoriteTypesEnum,
+  HistoryActions,
   HistoryInterface,
+  HistoryQueries,
   LearningAreaInterface,
   LearningAreaQueries,
   TaskInterface,
@@ -38,6 +40,13 @@ import {
   SCORM_EXERCISE_SERVICE_TOKEN
 } from '../../scorm/scorm-exercise.service.interface';
 import { QuickLinkTypeEnum } from './quick-link-type.enum';
+import {
+  quickLinkActionDictionary,
+  QuickLinkActionInterface,
+  QuickLinkCategoryInterface,
+  QuickLinkCategoryMap,
+  QuickLinkInterface
+} from './quick-link.interface';
 
 @Injectable()
 export class QuickLinkViewModel {
@@ -53,25 +62,28 @@ export class QuickLinkViewModel {
     private feedBackService: FeedBackServiceInterface
   ) {}
 
-  public getQuickLinks$(
+  public getQuickLinkCategories$(
     mode: QuickLinkTypeEnum
-  ): Observable<FavoriteInterface[] | HistoryInterface[]> {
+  ): Observable<QuickLinkCategoryInterface[]> {
+    let quickLinksDict$: Observable<{
+      [key: string]: FavoriteInterface[] | HistoryInterface[];
+    }>;
+
     if (mode === QuickLinkTypeEnum.FAVORITES) {
-      return this.composeQuickLink$(
-        this.store.pipe(
-          select(FavoriteQueries.getAll),
-          map(favorites =>
-            favorites.filter(fav => fav.type !== FavoriteTypesEnum.AREA)
-          )
-        )
+      quickLinksDict$ = this.store.pipe(
+        select(FavoriteQueries.favoritesByType),
+        map(favoriteCategories => {
+          delete favoriteCategories['area']; // filter out category learning area
+          return favoriteCategories;
+        })
       );
     }
+
     if (mode === QuickLinkTypeEnum.HISTORY) {
-      throw new Error('no History State yet');
-      // return this.composeQuickLink$(
-      //   this.store.pipe(select(HistoryQueries.getAll))
-      // );
+      quickLinksDict$ = this.store.pipe(select(HistoryQueries.historyByType));
     }
+
+    return this.composeQuickLinkCategories$(quickLinksDict$, mode);
   }
 
   public update(id: number, name: string, mode: QuickLinkTypeEnum): void {
@@ -90,7 +102,8 @@ export class QuickLinkViewModel {
 
         break;
       case QuickLinkTypeEnum.HISTORY:
-        // TODO: dispatch update history action if relevant
+        // dispatch update history action if relevant
+        // no option to rename a history item yet
         throw new Error('no History State yet');
       default:
         return;
@@ -110,8 +123,10 @@ export class QuickLinkViewModel {
         });
         break;
       case QuickLinkTypeEnum.HISTORY:
-        // TODO: dispatch delete history action if relevant
-        throw new Error('no History State yet');
+        action = new HistoryActions.DeleteHistory({
+          id: id
+        });
+        break;
       default:
         return;
     }
@@ -171,11 +186,31 @@ export class QuickLinkViewModel {
       queryParams
     });
   }
-  private composeQuickLink$(
-    quickLinksData$: Observable<FavoriteInterface[] | HistoryInterface[]>
-  ): Observable<FavoriteInterface[] | HistoryInterface[]> {
+
+  public getFeedback$(): Observable<EffectFeedbackInterface> {
+    const favoritesActionTypes = FavoriteActions.FavoritesActionTypes;
+    const historyActionTypes = HistoryActions.HistoryActionTypes;
+
+    return this.store.pipe(
+      select(EffectFeedbackQueries.getNextErrorFeedbackForActions, {
+        actionTypes: [
+          favoritesActionTypes.UpdateFavorite,
+          favoritesActionTypes.DeleteFavorite,
+          historyActionTypes.DeleteHistory
+        ]
+      }),
+      map(feedBack => this.feedBackService.addDefaultCancelButton(feedBack))
+    );
+  }
+
+  private composeQuickLinkCategories$(
+    quickLinksDict$: Observable<{
+      [key: string]: FavoriteInterface[] | HistoryInterface[];
+    }>,
+    mode: QuickLinkTypeEnum
+  ): Observable<QuickLinkCategoryInterface[]> {
     return combineLatest(
-      quickLinksData$,
+      quickLinksDict$,
       this.store.pipe(select(LearningAreaQueries.getAllEntities)),
       this.store.pipe(select(EduContentQueries.getAllEntities)),
       this.store.pipe(select(TaskQueries.getAllEntities)),
@@ -183,38 +218,127 @@ export class QuickLinkViewModel {
     ).pipe(
       map(
         ([
-          quickLinks,
+          quickLinkDict,
           learningAreaDict,
           eduContentDict,
           taskDict,
           bundleDict
         ]) =>
-          quickLinks.map(qL => ({
-            ...qL,
-            // add relation data
-            learningArea: qL.learningAreaId
-              ? learningAreaDict[qL.learningAreaId]
-              : undefined,
-            eduContent: qL.eduContentId
-              ? eduContentDict[qL.eduContentId]
-              : undefined,
-            task: qL.taskId ? taskDict[qL.taskId] : undefined,
-            bundle: qL.bundleId ? bundleDict[qL.bundleId] : undefined
-          }))
+          Object.keys(quickLinkDict).map(
+            key =>
+              ({
+                type: key,
+                title: this.getCategoryTitle(quickLinkDict[key][0]),
+                order: this.getCategoryOrder(quickLinkDict[key][0]),
+                quickLinks: quickLinkDict[key].map(qL =>
+                  this.convertToQuickLink(
+                    {
+                      ...qL,
+                      // add relation data
+                      learningArea: qL.learningAreaId
+                        ? learningAreaDict[qL.learningAreaId]
+                        : undefined,
+                      eduContent: qL.eduContentId
+                        ? eduContentDict[qL.eduContentId]
+                        : undefined,
+                      task: qL.taskId ? taskDict[qL.taskId] : undefined,
+                      bundle: qL.bundleId ? bundleDict[qL.bundleId] : undefined
+                    },
+                    mode
+                  )
+                )
+              } as QuickLinkCategoryInterface)
+          )
       )
     );
   }
 
-  public getFeedback$(): Observable<EffectFeedbackInterface> {
-    const actionTypes = FavoriteActions.FavoritesActionTypes;
-    // TODO once History has actions
-    // const actionTypes = [...FavoriteActions.FavoritesActionTypes,...HistoryActions.HistoryActionTypes]
+  // adds actions to Favorites and Histories
+  private convertToQuickLink(
+    value: FavoriteInterface | HistoryInterface,
+    mode: QuickLinkTypeEnum
+  ): QuickLinkInterface {
+    return {
+      ...value,
+      eduContent: value.eduContent as EduContent,
+      defaultAction: this.getDefaultAction(value),
+      alternativeOpenActions: this.getAlternativeOpenActions(value),
+      manageActions: this.getManageActions(mode)
+    };
+  }
 
-    return this.store.pipe(
-      select(EffectFeedbackQueries.getNextErrorFeedbackForActions, {
-        actionTypes: [actionTypes.UpdateFavorite, actionTypes.DeleteFavorite]
-      }),
-      map(feedBack => this.feedBackService.addDefaultCancelButton(feedBack))
-    );
+  private getDefaultAction(
+    quickLink: FavoriteInterface | HistoryInterface
+  ): QuickLinkActionInterface {
+    switch (quickLink.type) {
+      case FavoriteTypesEnum.AREA:
+      case 'area':
+        return quickLinkActionDictionary.openArea;
+      case FavoriteTypesEnum.BOEKE:
+      case 'boek-e':
+        return quickLinkActionDictionary.openBoeke;
+      case FavoriteTypesEnum.EDUCONTENT:
+      case 'educontent':
+        const eduContent = quickLink.eduContent as EduContent;
+        if (eduContent.type === 'exercise') {
+          return quickLinkActionDictionary.openEduContentAsExercise;
+        } else if (eduContent.streamable) {
+          return quickLinkActionDictionary.openEduContentAsStream;
+        } else {
+          return quickLinkActionDictionary.openEduContentAsDownload;
+        }
+      case FavoriteTypesEnum.BUNDLE:
+      case 'bundle':
+        return quickLinkActionDictionary.openBundle;
+      case FavoriteTypesEnum.TASK:
+      case 'task':
+        return quickLinkActionDictionary.openTask;
+      case FavoriteTypesEnum.SEARCH:
+      case 'search':
+        return quickLinkActionDictionary.openSearch;
+    }
+  }
+
+  private getAlternativeOpenActions(
+    quickLink: FavoriteInterface | HistoryInterface
+  ): QuickLinkActionInterface[] {
+    switch (quickLink.type) {
+      case FavoriteTypesEnum.EDUCONTENT:
+      case 'educontent':
+        const eduContent = quickLink.eduContent as EduContent;
+        if (eduContent.type === 'exercise') {
+          return [quickLinkActionDictionary.openEduContentAsSolution];
+        } else if (eduContent.streamable) {
+          return [quickLinkActionDictionary.openEduContentAsDownload];
+        }
+    }
+    return [];
+  }
+
+  private getManageActions(
+    mode: QuickLinkTypeEnum
+  ): QuickLinkActionInterface[] {
+    switch (mode) {
+      case QuickLinkTypeEnum.FAVORITES:
+        return [
+          quickLinkActionDictionary.edit,
+          quickLinkActionDictionary.remove
+        ];
+      case QuickLinkTypeEnum.HISTORY:
+        return [quickLinkActionDictionary.remove];
+    }
+    return [];
+  }
+
+  private getCategoryTitle(quickLink: FavoriteInterface | HistoryInterface) {
+    return QuickLinkCategoryMap.has(quickLink.type)
+      ? QuickLinkCategoryMap.get(quickLink.type).label
+      : quickLink.type;
+  }
+
+  private getCategoryOrder(quickLink: FavoriteInterface | HistoryInterface) {
+    return QuickLinkCategoryMap.has(quickLink.type)
+      ? QuickLinkCategoryMap.get(quickLink.type).order
+      : -1;
   }
 }

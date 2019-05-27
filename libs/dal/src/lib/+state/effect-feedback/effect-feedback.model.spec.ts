@@ -94,6 +94,18 @@ describe('EffectFeedback model', () => {
           },
           expectedErrorDisplay: false,
           expectedSuccessDisplay: false
+        },
+        {
+          action: {
+            payload: {
+              customFeedbackHandlers: {
+                useCustomErrorHandler: 'useNoHandler',
+                useCustomSuccessHandler: 'useNoHandler'
+              }
+            }
+          },
+          expectedErrorDisplay: false,
+          expectedSuccessDisplay: false
         }
       ];
       assertionData.forEach(data => {
