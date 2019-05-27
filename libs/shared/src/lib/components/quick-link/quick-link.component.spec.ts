@@ -819,7 +819,8 @@ describe('QuickLinkComponent', () => {
 
     describe('quickLinkCategories$', () => {
       describe('sorting', () => {
-        it('should sort the quicklink categories', () => {
+        it('should sort the favorite quicklink categories', () => {
+          component.data.mode = QuickLinkTypeEnum.FAVORITES;
           const mockCategories: QuickLinkCategoryInterface[] = [
             {
               order: 5,
@@ -861,6 +862,87 @@ describe('QuickLinkComponent', () => {
             mockCategories[3],
             mockCategories[4],
             mockCategories[0],
+            mockCategories[2]
+          ];
+
+          expect(component.filterTextInput.result$).toBeObservable(
+            hot('a', { a: expected })
+          );
+        });
+
+        it('should sort the history quicklink categories', () => {
+          component.data.mode = QuickLinkTypeEnum.HISTORY;
+          const mockCategories: QuickLinkCategoryInterface[] = [
+            {
+              order: 5,
+              type: '',
+              title: '0',
+              quickLinks: [
+                {
+                  created: new Date(3000),
+                  learningArea: {},
+                  defaultAction: {}
+                } as QuickLinkInterface
+              ]
+            },
+            {
+              order: 1,
+              type: '',
+              title: '1',
+              quickLinks: [
+                {
+                  created: new Date(2000),
+                  learningArea: {},
+                  defaultAction: {}
+                } as QuickLinkInterface
+              ]
+            },
+            {
+              order: -1,
+              type: '',
+              title: '2',
+              quickLinks: [
+                {
+                  created: new Date(1000),
+                  learningArea: {},
+                  defaultAction: {}
+                } as QuickLinkInterface
+              ]
+            },
+            {
+              order: 2,
+              type: '',
+              title: '3',
+              quickLinks: [
+                {
+                  created: new Date(4000),
+                  learningArea: {},
+                  defaultAction: {}
+                } as QuickLinkInterface
+              ]
+            },
+            {
+              order: 3,
+              type: '',
+              title: '4',
+              quickLinks: [
+                {
+                  created: new Date(5000),
+                  learningArea: {},
+                  defaultAction: {}
+                } as QuickLinkInterface
+              ]
+            }
+          ];
+
+          vmQuickLinkCategories$.next([...mockCategories]);
+          fixture.detectChanges();
+
+          const expected = [
+            mockCategories[4],
+            mockCategories[3],
+            mockCategories[0],
+            mockCategories[1],
             mockCategories[2]
           ];
 
