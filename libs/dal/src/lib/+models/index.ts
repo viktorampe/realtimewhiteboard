@@ -35,6 +35,7 @@ export * from './Favorite.interface';
 export * from './Grade.interface';
 export * from './Group.interface';
 export * from './GroupPerson.interface';
+export * from './History';
 export * from './History.interface';
 export * from './LearningArea.interface';
 export * from './LearningDomain.interface';

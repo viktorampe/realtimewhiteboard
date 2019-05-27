@@ -3,11 +3,14 @@ import {
   AlertActions,
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
+  createHistoryFromEduContent,
   DalState,
   EduContentQueries,
+  HistoryActions,
   LearningAreaInterface,
   LearningAreaQueries,
   LinkedPersonQueries,
+  TaskEduContentInterface,
   TaskEduContentQueries,
   TaskInstanceQueries,
   TaskQueries,
@@ -75,11 +78,17 @@ export class TasksViewModel {
     );
   }
 
-  public startExercise(eduContentId: number, taskId: number): void {
+  public startExercise(taskEduContent: TaskEduContentInterface): void {
     this.scormExerciseService.startExerciseFromTask(
       this.authService.userId,
-      eduContentId,
-      taskId
+      taskEduContent.eduContentId,
+      taskEduContent.taskId
+    );
+
+    this.store.dispatch(
+      new HistoryActions.StartUpsertHistory({
+        history: createHistoryFromEduContent(taskEduContent.eduContent)
+      })
     );
   }
 
