@@ -21,6 +21,7 @@ import {
 } from '@campus/shared';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
+import { configureTestSuite } from 'ng-bullet';
 import { EduContentSearchResultItemService } from './edu-content-search-result.service';
 import { EduContentSearchResultItemServiceInterface } from './edu-content-search-result.service.interface';
 
@@ -31,7 +32,7 @@ describe('EduContentSearchResultItemService', () => {
   let eduContentSearchResultItemService: EduContentSearchResultItemServiceInterface;
   let store: Store<DalState>;
 
-  beforeEach(() => {
+  configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [
         StoreModule.forRoot({}),

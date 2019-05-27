@@ -1,4 +1,5 @@
-import { Entity, AppState } from './app.reducer';
+import { configureTestSuite } from 'ng-bullet';
+import { Entity } from './app.reducer';
 import { appQuery } from './app.selectors';
 
 describe('App Selectors', () => {
@@ -7,7 +8,7 @@ describe('App Selectors', () => {
 
   let storeState;
 
-  beforeEach(() => {
+  configureTestSuite(() => {
     const createApp = (id: string, name = ''): Entity => ({
       id,
       name: name || `name-${id}`

@@ -1,11 +1,12 @@
+import { configureTestSuite } from 'ng-bullet';
 import { AppLoaded } from './app.actions';
-import { AppState, Entity, initialState, appReducer } from './app.reducer';
+import { appReducer, AppState, Entity, initialState } from './app.reducer';
 
 describe('App Reducer', () => {
   const getAppId = it => it['id'];
   let createApp;
 
-  beforeEach(() => {
+  configureTestSuite(() => {
     createApp = (id: string, name = ''): Entity => ({
       id,
       name: name || `name-${id}`
