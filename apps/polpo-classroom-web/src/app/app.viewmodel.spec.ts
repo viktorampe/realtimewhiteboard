@@ -1,6 +1,6 @@
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { Component } from '@angular/core';
-import { async, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import {
@@ -41,6 +41,8 @@ import {
 } from '@ngrx/router-store';
 import { Action, Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
+import { FeedBackService } from 'libs/shared/src/lib/feedback';
+import { configureTestSuite } from 'ng-bullet';
 import { BehaviorSubject, of } from 'rxjs';
 import { AppViewModel } from './app.viewmodel';
 import { NavItemService } from './services/nav-item-service';
@@ -56,11 +58,66 @@ describe('AppViewModel', () => {
   let mockLearningAreas: LearningAreaInterface[];
   let mockFavorites: FavoriteInterface[];
   let mockAction: Action;
-  let storeSpy: jasmine.Spy;
+  let storeSpy: jest.SpyInstance;
   let router: Router;
   let breakpointSubject: BehaviorSubject<BreakpointState>;
+  let feedbackService: FeedBackService;
 
-  beforeEach(async(() => {
+  beforeAll(() => {
+    user = new PersonFixture();
+    mockNavItem = { title: 'mock' };
+    mockProfileMenuItem = { description: 'mock' };
+    mockCredentials = [
+      new CredentialFixture({
+        id: 1,
+        profile: { platform: 'foo.smartschool.be' },
+        provider: 'smartschool'
+      }),
+      new CredentialFixture({
+        id: 2,
+        profile: { platform: 'foo.facebook.com' },
+        provider: 'facebook'
+      })
+    ];
+
+    mockAction = new DalActions.ActionSuccessful({
+      successfulAction: 'test'
+    });
+
+    mockFeedBack = new EffectFeedbackFixture({
+      id: '1',
+      triggerAction: null,
+      message: 'This is a message',
+      type: 'success',
+      userActions: [
+        {
+          title: 'klik',
+          userAction: mockAction
+        }
+      ],
+      timeStamp: 1,
+      display: true,
+      priority: Priority.HIGH,
+      useDefaultCancel: false
+    });
+
+    mockLearningAreas = [
+      new LearningAreaFixture({ id: 1 }),
+      new LearningAreaFixture({ id: 2 })
+    ];
+
+    mockFavorites = [
+      new FavoriteFixture({
+        id: 1,
+        type: 'area', // TODO in selector: filter on type:'area'
+        learningAreaId: 1,
+        learningArea: mockLearningAreas[0],
+        created: new Date(2018, 11 - 1, 30)
+      })
+    ];
+  });
+
+  configureTestSuite(() => {
     breakpointSubject = new BehaviorSubject<BreakpointState>(<BreakpointState>{
       matches: false
     });
@@ -131,7 +188,7 @@ describe('AppViewModel', () => {
 
             snackbarAfterDismiss: () =>
               of({
-                mockAction,
+                actionToDispatch: mockAction,
                 feedback: mockFeedBack
               })
           }
@@ -142,61 +199,8 @@ describe('AppViewModel', () => {
     viewModel = TestBed.get(AppViewModel);
     store = TestBed.get(Store);
     router = TestBed.get(Router);
-    storeSpy = spyOn(store, 'dispatch').and.callThrough();
-  }));
-
-  beforeAll(() => {
-    user = new PersonFixture();
-    mockNavItem = { title: 'mock' };
-    mockProfileMenuItem = { description: 'mock' };
-    mockCredentials = [
-      new CredentialFixture({
-        id: 1,
-        profile: { platform: 'foo.smartschool.be' },
-        provider: 'smartschool'
-      }),
-      new CredentialFixture({
-        id: 2,
-        profile: { platform: 'foo.facebook.com' },
-        provider: 'facebook'
-      })
-    ];
-
-    mockAction = new DalActions.ActionSuccessful({
-      successfulAction: 'test'
-    });
-
-    mockFeedBack = new EffectFeedbackFixture({
-      id: '1',
-      triggerAction: null,
-      message: 'This is a message',
-      type: 'success',
-      userActions: [
-        {
-          title: 'klik',
-          userAction: mockAction
-        }
-      ],
-      timeStamp: 1,
-      display: true,
-      priority: Priority.HIGH,
-      useDefaultCancel: false
-    });
-
-    mockLearningAreas = [
-      new LearningAreaFixture({ id: 1 }),
-      new LearningAreaFixture({ id: 2 })
-    ];
-
-    mockFavorites = [
-      new FavoriteFixture({
-        id: 1,
-        type: 'area', // TODO in selector: filter on type:'area'
-        learningAreaId: 1,
-        learningArea: mockLearningAreas[0],
-        created: new Date(2018, 11 - 1, 30)
-      })
-    ];
+    feedbackService = TestBed.get(FEEDBACK_SERVICE_TOKEN);
+    storeSpy = jest.spyOn(store, 'dispatch');
   });
 
   beforeEach(() => {
@@ -216,7 +220,8 @@ describe('AppViewModel', () => {
         favorites: mockFavorites
       })
     );
-    storeSpy.calls.reset();
+
+    storeSpy.mockClear();
   });
 
   describe('creation', () => {
@@ -263,7 +268,7 @@ describe('AppViewModel', () => {
       it('should hide sidebar on router navigation on mobile', fakeAsync(() => {
         breakpointSubject.next(<BreakpointState>{ matches: true });
 
-        spyOn(viewModel, 'toggleSidebar');
+        jest.spyOn(viewModel, 'toggleSidebar');
         store.dispatch(navigationAction);
         tick();
         expect(viewModel.toggleSidebar).toHaveBeenCalled();
@@ -273,7 +278,7 @@ describe('AppViewModel', () => {
       it('should show sidebar on router navigation on desktop', fakeAsync(() => {
         breakpointSubject.next(<BreakpointState>{ matches: false });
 
-        spyOn(viewModel, 'toggleSidebar');
+        jest.spyOn(viewModel, 'toggleSidebar');
         store.dispatch(navigationAction);
         tick();
         expect(viewModel.toggleSidebar).toHaveBeenCalled();
@@ -281,7 +286,7 @@ describe('AppViewModel', () => {
       }));
 
       it('should hide sidebar on screen size change on mobile', fakeAsync(() => {
-        spyOn(viewModel, 'toggleSidebar');
+        jest.spyOn(viewModel, 'toggleSidebar');
         breakpointSubject.next(<BreakpointState>{ matches: true });
         tick();
         expect(viewModel.toggleSidebar).toHaveBeenCalled();
@@ -289,7 +294,7 @@ describe('AppViewModel', () => {
       }));
 
       it('should show sidebar on screen size change on desktop', fakeAsync(() => {
-        spyOn(viewModel, 'toggleSidebar');
+        jest.spyOn(viewModel, 'toggleSidebar');
         breakpointSubject.next(<BreakpointState>{ matches: false });
         tick();
         expect(viewModel.toggleSidebar).toHaveBeenCalled();
@@ -340,9 +345,11 @@ describe('AppViewModel', () => {
         mockFeedBack.type = 'success';
       });
 
+      beforeEach(() => {});
+
       it('should pass the success feedback to the feedbackService', () => {
         const feedbackService = TestBed.get(FEEDBACK_SERVICE_TOKEN);
-        spyOn(feedbackService, 'openSnackbar');
+        jest.spyOn(feedbackService, 'openSnackbar'); //.and.callThrough();
 
         store.dispatch(
           new EffectFeedbackActions.AddEffectFeedback({
@@ -354,8 +361,8 @@ describe('AppViewModel', () => {
         expect(feedbackService.openSnackbar).toHaveBeenCalledWith(mockFeedBack);
       });
 
-      it('should subscribe to snackbarAfterDismiss', () => {
-        spyOn(viewModel, 'onFeedbackDismiss');
+      it('should subscribe to snackbarAfterDismiss', fakeAsync(() => {
+        jest.spyOn(viewModel, 'onFeedbackDismiss');
 
         store.dispatch(
           new EffectFeedbackActions.AddEffectFeedback({
@@ -366,7 +373,7 @@ describe('AppViewModel', () => {
         // feedbackService.snackbarAfterDismiss is mocked and always emits a value
 
         expect(viewModel.onFeedbackDismiss).toHaveBeenCalled();
-      });
+      }));
     });
 
     describe('error feedback', () => {
@@ -420,7 +427,7 @@ describe('AppViewModel', () => {
         removeFeedbackAction = new EffectFeedbackActions.DeleteEffectFeedback({
           id: mockFeedBack.id
         });
-        storeSpy.calls.reset();
+        storeSpy.mockClear();
         const mockEventWithoutAction = {
           action: null,
           feedbackId: mockFeedBack.id
