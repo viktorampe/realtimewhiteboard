@@ -296,7 +296,7 @@ export class QuickLinkViewModel {
       case 'task':
         return quickLinkActionDictionary.openTask;
       case FavoriteTypesEnum.SEARCH:
-      case 'search':
+      case 'history':
         return quickLinkActionDictionary.openSearch;
     }
   }
