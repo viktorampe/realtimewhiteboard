@@ -59,7 +59,8 @@ describe('UndoService', () => {
     let actions: Actions;
     let payload: UndoableActionInterface;
     let warningFeedback: EffectFeedback;
-    beforeAll(() => {
+
+    beforeEach(() => {
       jest.spyOn(Date, 'now').mockReturnValue(1234567890);
       actions = from([]);
       payload = {
@@ -83,9 +84,7 @@ describe('UndoService', () => {
         priority: Priority.NORM
       });
     });
-    afterAll(() => {
-      jest.resetAllMocks();
-    });
+
     it('should dispatch a AddEffectFeedback with the warning', () => {
       const storeSpy = jest.spyOn(store, 'dispatch');
       service.dispatchActionAsUndoable(payload);
