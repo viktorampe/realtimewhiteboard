@@ -15,7 +15,7 @@ export class AddEffectFeedback implements Action {
 export class DeleteEffectFeedback implements Action {
   readonly type = EffectFeedbackActionTypes.DeleteEffectFeedback;
 
-  constructor(public payload: { id: string }) {}
+  constructor(public payload: { id: string; userAction?: Action }) {}
 }
 
 export type EffectFeedbackActions = AddEffectFeedback | DeleteEffectFeedback;
