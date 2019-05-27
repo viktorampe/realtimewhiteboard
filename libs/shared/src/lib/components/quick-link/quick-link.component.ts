@@ -224,10 +224,20 @@ export class QuickLinkComponent implements OnInit {
     a: QuickLinkCategoryInterface,
     b: QuickLinkCategoryInterface
   ): number {
-    if (a.order === -1) return 1;
-    if (b.order === -1) return -1;
+    if (this.data.mode === QuickLinkTypeEnum.FAVORITES) {
+      if (a.order === -1) return 1;
+      if (b.order === -1) return -1;
 
-    return a.order - b.order;
+      return a.order - b.order;
+    }
+    if (this.data.mode === QuickLinkTypeEnum.HISTORY) {
+      if (!a.quickLinks[0]) return 1;
+      if (!b.quickLinks[0]) return -1;
+
+      return (
+        b.quickLinks[0].created.getTime() - a.quickLinks[0].created.getTime()
+      );
+    }
   }
 
   private quickLinkSorter(
