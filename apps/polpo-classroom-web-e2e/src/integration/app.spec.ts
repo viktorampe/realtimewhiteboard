@@ -1,8 +1,24 @@
 /// <reference types="cypress" />
-import { getGreeting } from '../support/app.po';
-xdescribe('Hello Nx', () => {
-  beforeEach(() => cy.visit('dev'));
-  xit('should display welcome message', () => {
-    getGreeting().contains('Welcome to the dev side');
+
+import { login, logoutByUI } from '../support/commands';
+
+describe('api login example', () => {
+  beforeEach(() => {
+    login();
+    cy.visit('dev');
+  });
+
+  it('should display welcome message', () => {
+    cy.get('h1').contains('Welcome to the dev side');
+  });
+});
+
+describe('exported const as command example', () => {
+  beforeEach(() => {
+    login();
+    cy.visit('');
+  });
+  it('should logout if the logout using the ui command', () => {
+    logoutByUI();
   });
 });
