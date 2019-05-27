@@ -25,7 +25,9 @@ export function createHistoryFromEduContent(
         : HistoryTypesEnum.EDUCONTENT,
     eduContentId: eduContent.id,
     created: new Date(),
-    learningAreaId: eduContent.publishedEduContentMetadata.learningAreaId
+    learningAreaId: eduContent.publishedEduContentMetadata
+      ? eduContent.publishedEduContentMetadata.learningAreaId
+      : null
   };
 }
 
