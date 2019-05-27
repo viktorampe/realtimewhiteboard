@@ -31,7 +31,7 @@ import {
   UserActions,
   UserReducer
 } from '@campus/dal';
-import { FEEDBACK_SERVICE_TOKEN } from '@campus/shared';
+import { FeedBackService, FEEDBACK_SERVICE_TOKEN } from '@campus/shared';
 import { DropdownMenuItemInterface, NavItem } from '@campus/ui';
 import {
   RouterNavigationAction,
@@ -41,7 +41,6 @@ import {
 } from '@ngrx/router-store';
 import { Action, Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
-import { FeedBackService } from 'libs/shared/src/lib/feedback';
 import { configureTestSuite } from 'ng-bullet';
 import { BehaviorSubject, of } from 'rxjs';
 import { AppViewModel } from './app.viewmodel';
@@ -347,8 +346,7 @@ describe('AppViewModel', () => {
       beforeEach(() => {});
 
       it('should pass the success feedback to the feedbackService', () => {
-        const feedbackService = TestBed.get(FEEDBACK_SERVICE_TOKEN);
-        jest.spyOn(feedbackService, 'openSnackbar'); //.and.callThrough();
+        jest.spyOn(feedbackService, 'openSnackbar');
 
         store.dispatch(
           new EffectFeedbackActions.AddEffectFeedback({
