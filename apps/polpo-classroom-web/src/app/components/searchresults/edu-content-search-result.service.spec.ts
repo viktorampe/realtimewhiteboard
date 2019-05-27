@@ -7,7 +7,9 @@ import {
   FavoriteActions,
   FavoriteFixture,
   FavoriteReducer,
-  getStoreModuleForFeatures
+  getStoreModuleForFeatures,
+  HistoryActions,
+  HistoryFixture
 } from '@campus/dal';
 import {
   EduContentCollectionManagerServiceInterface,
@@ -178,6 +180,20 @@ describe('EduContentSearchResultItemService', () => {
       expect(store.dispatch).toHaveBeenCalled();
       expect(store.dispatch).toHaveBeenCalledWith(
         new EduContentActions.UpsertEduContent({ eduContent })
+      );
+    });
+  });
+
+  describe('upsertHistoryToStore', () => {
+    it('should dispatch a StartUpsertHistory action', () => {
+      const spy = jest.spyOn(store, 'dispatch');
+
+      const mockHistory = new HistoryFixture();
+
+      eduContentSearchResultItemService.upsertHistoryToStore(mockHistory);
+
+      expect(spy).toHaveBeenCalledWith(
+        new HistoryActions.StartUpsertHistory({ history: mockHistory })
       );
     });
   });

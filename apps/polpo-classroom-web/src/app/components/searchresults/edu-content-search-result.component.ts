@@ -8,6 +8,7 @@ import {
   SimpleChanges
 } from '@angular/core';
 import {
+  createHistoryFromEduContent,
   EduContentBookInterface,
   EduContentTOCInterface,
   FavoriteInterface,
@@ -99,8 +100,13 @@ export class EduContentSearchResultComponent extends ResultItemBase
 
   public openStatic(stream: boolean = false) {
     this.eduContentSearchResultService.openStatic(this.data.eduContent, stream);
+
     this.eduContentSearchResultService.upsertEduContentToStore(
       this.data.eduContent.minimal
+    );
+
+    this.eduContentSearchResultService.upsertHistoryToStore(
+      createHistoryFromEduContent(this.data.eduContent)
     );
   }
   public openExercise(answers: boolean) {
@@ -110,6 +116,9 @@ export class EduContentSearchResultComponent extends ResultItemBase
     );
     this.eduContentSearchResultService.upsertEduContentToStore(
       this.data.eduContent.minimal
+    );
+    this.eduContentSearchResultService.upsertHistoryToStore(
+      createHistoryFromEduContent(this.data.eduContent)
     );
   }
 

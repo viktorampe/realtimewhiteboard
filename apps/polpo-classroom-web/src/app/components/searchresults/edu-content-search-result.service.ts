@@ -6,7 +6,9 @@ import {
   EduContentInterface,
   FavoriteActions,
   FavoriteInterface,
-  FavoriteQueries
+  FavoriteQueries,
+  HistoryActions,
+  HistoryInterface
 } from '@campus/dal';
 import {
   EduContentCollectionManagerServiceInterface,
@@ -77,5 +79,9 @@ export class EduContentSearchResultItemService
         eduContent
       })
     );
+  }
+
+  upsertHistoryToStore(history: HistoryInterface): void {
+    this.store.dispatch(new HistoryActions.StartUpsertHistory({ history }));
   }
 }

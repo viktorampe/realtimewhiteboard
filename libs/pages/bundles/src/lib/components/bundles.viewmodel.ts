@@ -8,9 +8,12 @@ import {
   ContentInterface,
   ContentStatusLabel,
   ContentStatusQueries,
+  createHistoryFromContent,
+  createHistoryFromEduContent,
   DalState,
   EduContent,
   EduContentQueries,
+  HistoryActions,
   LearningAreaInterface,
   LearningAreaQueries,
   LinkedPersonQueries,
@@ -137,6 +140,14 @@ export class BundlesViewModel {
   }
 
   openContent(unlockedContent: UnlockedContent): void {
+    if (unlockedContent.content instanceof EduContent) {
+      this.store.dispatch(
+        new HistoryActions.StartUpsertHistory({
+          history: createHistoryFromEduContent(unlockedContent.eduContent)
+        })
+      );
+    }
+
     if (unlockedContent.eduContentId) {
       if (unlockedContent.eduContent.type === 'exercise') {
         if (this.authService.userId === unlockedContent.teacherId) {
@@ -148,6 +159,7 @@ export class BundlesViewModel {
             unlockedContent.eduContentId,
             unlockedContent.id
           );
+
           return;
         }
       }
@@ -157,6 +169,15 @@ export class BundlesViewModel {
 
   openBook(content: ContentInterface): void {
     this.openStaticContentService.open(content);
+
+    const history = createHistoryFromContent(content);
+    if (history) {
+      this.store.dispatch(
+        new HistoryActions.StartUpsertHistory({
+          history
+        })
+      );
+    }
   }
 
   public getStudentContentStatusByUnlockedContentId(
