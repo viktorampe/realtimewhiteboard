@@ -200,7 +200,6 @@ describe('AppViewModel', () => {
     store = TestBed.get(Store);
     router = TestBed.get(Router);
     feedbackService = TestBed.get(FEEDBACK_SERVICE_TOKEN);
-    storeSpy = jest.spyOn(store, 'dispatch');
   });
 
   beforeEach(() => {
@@ -221,7 +220,7 @@ describe('AppViewModel', () => {
       })
     );
 
-    storeSpy.mockClear();
+    storeSpy = jest.spyOn(store, 'dispatch');
   });
 
   describe('creation', () => {
