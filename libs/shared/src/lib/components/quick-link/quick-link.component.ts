@@ -244,6 +244,6 @@ export class QuickLinkComponent implements OnInit {
     a: QuickLinkInterface,
     b: QuickLinkInterface
   ): number {
-    return new Date(b.created).getTime() - new Date(a.created).getTime(); // sorting descending
+    return b.created.getTime() - new Date(a.created).getTime(); // sorting descending
   }
 }
