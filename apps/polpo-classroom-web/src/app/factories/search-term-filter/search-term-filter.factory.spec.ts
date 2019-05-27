@@ -94,6 +94,9 @@ describe('SearchTermFilterFactory', () => {
     });
 
     store = TestBed.get(Store);
+
+    loadInStore();
+
     factory = TestBed.get(SearchTermFilterFactory);
   });
 
@@ -108,48 +111,6 @@ describe('SearchTermFilterFactory', () => {
         ['learningArea', [2]]
       ])
     };
-
-    function loadInStore() {
-      store.dispatch(
-        new YearActions.YearsLoaded({
-          years: mockYears
-        })
-      );
-
-      store.dispatch(
-        new EduNetActions.EduNetsLoaded({
-          eduNets: mockEduNets
-        })
-      );
-
-      store.dispatch(
-        new SchoolTypeActions.SchoolTypesLoaded({
-          schoolTypes: mockSchoolTypes
-        })
-      );
-
-      store.dispatch(
-        new MethodActions.MethodsLoaded({
-          methods: mockMethods
-        })
-      );
-
-      store.dispatch(
-        new EduContentProductTypeActions.EduContentProductTypesLoaded({
-          eduContentProductTypes: mockEduContentProductTypes
-        })
-      );
-
-      store.dispatch(
-        new LearningDomainActions.LearningDomainsLoaded({
-          learningDomains: mockLearningDomains
-        })
-      );
-    }
-
-    beforeEach(() => {
-      loadInStore();
-    });
 
     it('should return the right filters, in the correct order', () => {
       const result = factory.getFilters(mockSearchState);
@@ -322,6 +283,44 @@ describe('SearchTermFilterFactory', () => {
       extendedProductTypes,
       CheckboxListFilterComponent,
       5
+    );
+  }
+
+  function loadInStore() {
+    store.dispatch(
+      new YearActions.YearsLoaded({
+        years: mockYears
+      })
+    );
+
+    store.dispatch(
+      new EduNetActions.EduNetsLoaded({
+        eduNets: mockEduNets
+      })
+    );
+
+    store.dispatch(
+      new SchoolTypeActions.SchoolTypesLoaded({
+        schoolTypes: mockSchoolTypes
+      })
+    );
+
+    store.dispatch(
+      new MethodActions.MethodsLoaded({
+        methods: mockMethods
+      })
+    );
+
+    store.dispatch(
+      new EduContentProductTypeActions.EduContentProductTypesLoaded({
+        eduContentProductTypes: mockEduContentProductTypes
+      })
+    );
+
+    store.dispatch(
+      new LearningDomainActions.LearningDomainsLoaded({
+        learningDomains: mockLearningDomains
+      })
     );
   }
 });
