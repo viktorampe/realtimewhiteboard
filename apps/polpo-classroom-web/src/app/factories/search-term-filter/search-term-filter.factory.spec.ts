@@ -30,10 +30,12 @@ import {
 } from '@campus/search';
 import { Store, StoreModule } from '@ngrx/store';
 import { cold } from 'jasmine-marbles';
+import { configureTestSuite } from 'ng-bullet';
 import { SearchTermFilterFactory } from './search-term-filter.factory';
 
 describe('SearchTermFilterFactory', () => {
   let store: Store<DalState>;
+  let factory: SearchTermFilterFactory;
 
   const mockYears = [new YearFixture({ id: 3 }), new YearFixture({ id: 4 })];
   const currentLearningAreaId = 2;
@@ -74,7 +76,7 @@ describe('SearchTermFilterFactory', () => {
     new EduContentProductTypeFixture({ id: 14, parent: 13 })
   ];
 
-  beforeEach(() => {
+  configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [
         StoreModule.forRoot({}),
@@ -88,22 +90,18 @@ describe('SearchTermFilterFactory', () => {
           LearningAreaReducer
         ])
       ],
-      providers: [Store]
+      providers: [Store, SearchTermFilterFactory]
     });
 
     store = TestBed.get(Store);
+    factory = TestBed.get(SearchTermFilterFactory);
   });
 
   it('should be created', () => {
-    const factory: SearchTermFilterFactory = TestBed.get(
-      SearchTermFilterFactory
-    );
     expect(factory).toBeTruthy();
   });
 
   describe('getFilters', () => {
-    let factory: SearchTermFilterFactory;
-
     const mockSearchState: SearchStateInterface = {
       searchTerm: '',
       filterCriteriaSelections: new Map<string, (number | string)[]>([
@@ -150,8 +148,6 @@ describe('SearchTermFilterFactory', () => {
     }
 
     beforeEach(() => {
-      factory = TestBed.get(SearchTermFilterFactory);
-
       loadInStore();
     });
 
