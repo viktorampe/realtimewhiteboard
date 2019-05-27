@@ -43,3 +43,9 @@ export const logoutByUI = () => {
   cy.visit('dev');
   dataCy('logoutButton').click();
 };
+
+export const performStudentSetup = () => {
+  cy.request(`${apiUrl}e2e/setup/studentOpenBundleContent`).then(res => {
+    cy.log(JSON.stringify(res.body));
+  });
+};
