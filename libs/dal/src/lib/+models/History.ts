@@ -38,5 +38,7 @@ export function createHistoryFromContent(
     return createHistoryFromEduContent(content);
   }
 
+  // if it's not an instance of EduContent,
+  // the provided content does not have the required properties for creating a history object
   return null;
 }
