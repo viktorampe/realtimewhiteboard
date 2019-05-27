@@ -1,28 +1,40 @@
 /// <reference types="cypress" />
-// ***********************************************
-// This example commands.js shows you how to
-// create various custom commands and overwrite
-// existing commands.
-//
-// For more comprehensive examples of custom
-// commands please read more here:
-// https://on.cypress.io/custom-commands
-// ***********************************************
-//
-//
-// -- This is a parent command --
-// Cypress.Commands.add("login", (email, password) => { ... })
-//
-//
-// -- This is a child command --
-// Cypress.Commands.add("drag", { prevSubject: 'element'}, (subject, options) => { ... })
-//
-//
-// -- This is a dual command --
-// Cypress.Commands.add("dismiss", { prevSubject: 'optional'}, (subject, options) => { ... })
-//
-//
-// -- This is will overwrite an existing command --
-// Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+
+const apiUrl = Cypress.env('apiUrl');
 
 export const dataCy = (name: string) => cy.get('[data-cy=' + name + ']');
+
+export const login = (username: string, password: string) =>
+  cy
+    .request({
+      method: 'POST',
+      url: `${apiUrl}api/People/login?include=user`,
+      body: {
+        username: username,
+        password: password
+      }
+    })
+    .then(resp => {
+      // set the cookies that the loopback sdk needs
+      cy.setCookie('$LoopBackSDK$created', resp.body.created);
+      cy.setCookie('$LoopBackSDK$id', resp.body.id);
+      cy.setCookie('$LoopBackSDK$rememberMe', 'true');
+      cy.setCookie('$LoopBackSDK$ttl', resp.body.ttl + '');
+      cy.setCookie('$LoopBackSDK$user', JSON.stringify(resp.body.user));
+      cy.setCookie('$LoopBackSDK$userId', resp.body.userId + '');
+    });
+
+export const logoutByAPIRequest = () => {
+  cy.getCookie('$LoopBackSDK$id').then(cookie => {
+    if (!cookie) return;
+    cy.request(
+      'POST',
+      `${apiUrl}api/People/logout?access_token=${cookie.value}`
+    );
+  });
+};
+
+export const logoutByUI = () => {
+  cy.visit('dev');
+  dataCy('logoutButton').click();
+};

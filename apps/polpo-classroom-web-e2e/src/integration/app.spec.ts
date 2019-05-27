@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-import { login, logoutByUI } from '../support/app.po';
+import { login, logoutByUI } from '../support/commands';
 
 describe('api login example', () => {
   beforeEach(() => {
