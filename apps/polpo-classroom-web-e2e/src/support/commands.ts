@@ -1,11 +1,15 @@
 /// <reference types="cypress" />
 
 const apiUrl = Cypress.env('apiUrl');
+const defaultUsername = Cypress.env('username');
+const defaultPassword = Cypress.env('password');
 
 export const dataCy = (name: string) => cy.get('[data-cy=' + name + ']');
 
-export const login = (username: string, password: string) =>
-  cy
+export const login = (username?: string, password?: string) => {
+  if (!username) username = defaultUsername;
+  if (!password) password = defaultPassword;
+  return cy
     .request({
       method: 'POST',
       url: `${apiUrl}api/People/login?include=user`,
@@ -23,6 +27,7 @@ export const login = (username: string, password: string) =>
       cy.setCookie('$LoopBackSDK$user', JSON.stringify(resp.body.user));
       cy.setCookie('$LoopBackSDK$userId', resp.body.userId + '');
     });
+};
 
 export const logoutByAPIRequest = () => {
   cy.getCookie('$LoopBackSDK$id').then(cookie => {

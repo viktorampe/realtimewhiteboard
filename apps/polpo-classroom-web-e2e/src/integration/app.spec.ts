@@ -4,7 +4,7 @@ import { login, logoutByUI } from '../support/commands';
 
 describe('api login example', () => {
   beforeEach(() => {
-    login('teacher1', 'testje');
+    login();
     cy.visit('dev');
   });
 
@@ -15,7 +15,7 @@ describe('api login example', () => {
 
 describe('exported const as command example', () => {
   beforeEach(() => {
-    login('teacher1', 'testje');
+    login();
     cy.visit('');
   });
   it('should logout if the logout using the ui command', () => {
