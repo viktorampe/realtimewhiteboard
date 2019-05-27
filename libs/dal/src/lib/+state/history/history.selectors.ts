@@ -78,7 +78,8 @@ export const historyByType = createSelector(
   selectHistoryState,
   (state: State) => {
     // must cast state.ids to number[] (from 'string[] | number[]') or we can't use array functions like forEach
-    const sortedIds = (state.ids as number[]).sort((a, b) =>
+    const ids = [...(state.ids as number[])];
+    const sortedIds = ids.sort((a, b) =>
       new Date(state.entities[a].created) < new Date(state.entities[b].created)
         ? 1
         : -1
