@@ -55,6 +55,7 @@
 
   <campus-side-sheet-page>
     <campus-page-header
+      data-cy="bundle-header"
       *ngIf="(learningArea$ | async) as learningArea"
       [title]="bundle.name"
       [subtitle]="bundle.description"
@@ -66,7 +67,7 @@
       <ng-container
         *ngIf="(filterTextInput.result$ | async) as filteredUnlockedContents"
       >
-        <div class="itemsAmount">
+        <div class="itemsAmount" data-cy="bundle-count">
           {{ filteredUnlockedContents.length }} van
           <u (click)="filterTextInput.clear()">{{ unlockedContents.length }}</u>
           weergegeven
@@ -76,6 +77,7 @@
           [listFormat]="listFormat$ | async"
           [placeHolderText]="'De toegepaste filter bevat geen resultaten.'"
           [multiSelect]="allowMultiSelect(bundle)"
+          data-cy="contents"
         >
           <campus-content-thumbnail
             *ngFor="let unlockedcontent of filteredUnlockedContents"
