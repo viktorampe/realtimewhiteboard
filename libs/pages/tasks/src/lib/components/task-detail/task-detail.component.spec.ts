@@ -180,8 +180,7 @@ describe('TaskDetailComponent', () => {
 
     expect(tasksViewModel.startExercise).toHaveBeenCalled();
     expect(tasksViewModel.startExercise).toHaveBeenCalledWith(
-      mockTaskEduContent.eduContentId,
-      mockTaskEduContent.taskId
+      mockTaskEduContent
     );
   });
 });
