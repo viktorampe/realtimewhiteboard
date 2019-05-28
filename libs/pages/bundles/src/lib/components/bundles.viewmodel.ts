@@ -164,7 +164,7 @@ export class BundlesViewModel {
       if (history) {
         this.store.dispatch(
           new HistoryActions.StartUpsertHistory({
-            history: createHistoryFromContent(unlockedContent.content)
+            history
           })
         );
       }
