@@ -9,7 +9,6 @@ import {
   ContentStatusLabel,
   ContentStatusQueries,
   createHistoryFromContent,
-  createHistoryFromEduContent,
   DalState,
   EduContent,
   EduContentQueries,
@@ -161,11 +160,14 @@ export class BundlesViewModel {
 
   openContent(unlockedContent: UnlockedContent): void {
     this.hasManageHistoryPermission.subscribe(() => {
-      this.store.dispatch(
-        new HistoryActions.StartUpsertHistory({
-          history: createHistoryFromEduContent(unlockedContent.eduContent)
-        })
-      );
+      const history = createHistoryFromContent(unlockedContent.content);
+      if (history) {
+        this.store.dispatch(
+          new HistoryActions.StartUpsertHistory({
+            history: createHistoryFromContent(unlockedContent.content)
+          })
+        );
+      }
     });
 
     if (unlockedContent.eduContentId) {
