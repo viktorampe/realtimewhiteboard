@@ -32,11 +32,13 @@ export interface StudentOpenBundleContentInterface {
       type: string;
       id: number;
       publishedEduContentMetadataId: number;
+      publishedEduContentMetadata: PublishedEduContentMetadataInterface;
     };
     contentDownloadable: {
       type: string;
       id: number;
       publishedEduContentMetadataId: number;
+      publishedEduContentMetadata: PublishedEduContentMetadataInterface;
     };
     contentUserContent: {
       name: string;
@@ -48,6 +50,48 @@ export interface StudentOpenBundleContentInterface {
       fileExt: string;
       fileLabel: string;
     };
-    boeke: { type: string; id: number; publishedEduContentMetadataId: number };
+    boeke: {
+      type: string;
+      id: number;
+      publishedEduContentMetadataId: number;
+      publishedEduContentMetadata: PublishedEduContentMetadataInterface;
+    };
   };
+}
+
+export interface PublishedEduContentMetadataInterface {
+  version: number;
+  metaVersion: number;
+  language: string;
+  title: string;
+  description: string;
+  created: string;
+  published: string;
+  quotable: boolean;
+  taskAllowed: boolean;
+  standalone: boolean;
+  teacherCanUnlock: boolean;
+  fileName: string;
+  file: string;
+  checksum: string;
+  link: string;
+  commitMessage: string;
+  previewId: number;
+  thumb: string;
+  thumbSmall: string;
+  showCommitMessage: boolean;
+  locked: boolean;
+  sourceRef: string;
+  id: number;
+  publisherId: number;
+  eduContentId: number;
+  editorId: number;
+  learningAreaId: number;
+  eduContentProductTypeId: number;
+  editorStatusId: number;
+  eduContentBookId: number;
+  eduContentSourceId: number;
+  levelId: number;
+  fileExt: string;
+  fileLabel: string;
 }
