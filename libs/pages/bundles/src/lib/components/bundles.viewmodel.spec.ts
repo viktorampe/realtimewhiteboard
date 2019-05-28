@@ -217,7 +217,10 @@ describe('BundlesViewModel', () => {
       intended: false,
       personId: 1,
       read: true,
-      displayResponse: false
+      customFeedbackHandlers: {
+        useCustomErrorHandler: 'useNoHandler',
+        useCustomSuccessHandler: 'useNoHandler'
+      }
     });
     bundlesViewModel.setBundleAlertRead(1);
     expect(store.dispatch).toHaveBeenCalledWith(expectedAction);
