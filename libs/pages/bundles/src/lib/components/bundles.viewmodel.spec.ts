@@ -1,71 +1,14 @@
 import { ModuleWithProviders } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { WINDOW } from '@campus/browser';
-import {
-  AlertActions,
-  AUTH_SERVICE_TOKEN,
-  BundleActions,
-  BundleFixture,
-  BundleInterface,
-  BundleReducer,
-  ContentStatusActions,
-  ContentStatusFixture,
-  ContentStatusInterface,
-  ContentStatusLabel,
-  ContentStatusReducer,
-  DalState,
-  EduContent,
-  EduContentActions,
-  EduContentFixture,
-  EduContentInterface,
-  EduContentReducer,
-  HistoryActions,
-  HistoryInterface,
-  LearningAreaActions,
-  LearningAreaFixture,
-  LearningAreaInterface,
-  LearningAreaReducer,
-  LinkedPersonActions,
-  LinkedPersonReducer,
-  PersonFixture,
-  PersonInterface,
-  StateFeatureBuilder,
-  StudentContentStatusActions,
-  StudentContentStatusFixture,
-  StudentContentStatusInterface,
-  StudentContentStatusReducer,
-  UiActions,
-  UiReducer,
-  UnlockedBoekeGroupActions,
-  UnlockedBoekeGroupFixture,
-  UnlockedBoekeGroupInterface,
-  UnlockedBoekeGroupReducer,
-  UnlockedBoekeStudentActions,
-  UnlockedBoekeStudentInterface,
-  UnlockedBoekeStudentReducer,
-  UnlockedContentActions,
-  UnlockedContentFixture,
-  UnlockedContentInterface,
-  UnlockedContentReducer,
-  UserActions,
-  UserContentActions,
-  UserContentReducer,
-  UserReducer
-} from '@campus/dal';
-import {
-  OpenStaticContentServiceInterface,
-  OPEN_STATIC_CONTENT_SERVICE_TOKEN,
-  PermissionService,
-  PERMISSION_SERVICE_TOKEN,
-  ScormExerciseServiceInterface,
-  SCORM_EXERCISE_SERVICE_TOKEN
-} from '@campus/shared';
+import { AlertActions, AUTH_SERVICE_TOKEN, BundleActions, BundleFixture, BundleInterface, BundleReducer, ContentStatusActions, ContentStatusFixture, ContentStatusInterface, ContentStatusLabel, ContentStatusReducer, DalState, EduContent, EduContentActions, EduContentFixture, EduContentInterface, EduContentReducer, HistoryActions, HistoryInterface, LearningAreaActions, LearningAreaFixture, LearningAreaInterface, LearningAreaReducer, LinkedPersonActions, LinkedPersonReducer, PersonFixture, PersonInterface, StateFeatureBuilder, StudentContentStatusActions, StudentContentStatusFixture, StudentContentStatusInterface, StudentContentStatusReducer, UiActions, UiReducer, UnlockedBoekeGroupActions, UnlockedBoekeGroupFixture, UnlockedBoekeGroupInterface, UnlockedBoekeGroupReducer, UnlockedBoekeStudentActions, UnlockedBoekeStudentInterface, UnlockedBoekeStudentReducer, UnlockedContentActions, UnlockedContentFixture, UnlockedContentInterface, UnlockedContentReducer, UserActions, UserContentActions, UserContentReducer, UserReducer } from '@campus/dal';
+import { OpenStaticContentServiceInterface, OPEN_STATIC_CONTENT_SERVICE_TOKEN, PERMISSION_SERVICE_TOKEN, ScormExerciseServiceInterface, SCORM_EXERCISE_SERVICE_TOKEN } from '@campus/shared';
 import { MockDate, MockWindow } from '@campus/testing';
 import { ListFormat } from '@campus/ui';
 import { UnlockedContent } from '@diekeure/polpo-api-angular-sdk';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
-import { of } from 'rxjs';
+import { BehaviorSubject, of } from 'rxjs';
 import { BundlesViewModel } from './bundles.viewmodel';
 import { LearningAreasWithBundlesInfoInterface } from './bundles.viewmodel.interfaces';
 
@@ -98,6 +41,7 @@ describe('BundlesViewModel', () => {
   let studentContentStatuses: StudentContentStatusInterface[];
   let contentStatuses: ContentStatusInterface[];
   let store: Store<DalState>;
+  const permissions$ = new BehaviorSubject<boolean>(true);
 
   beforeAll(() => {
     loadState();
@@ -124,7 +68,7 @@ describe('BundlesViewModel', () => {
         },
         {
           provide: PERMISSION_SERVICE_TOKEN,
-          useClass: PermissionService
+          useValue: { hasPermission: () => permissions$ }
         }
       ]
     });
@@ -184,7 +128,7 @@ describe('BundlesViewModel', () => {
     });
 
     it('should not dispatch a startUpsertHistory action when the user does not have this permission', () => {
-      store.dispatch(new UserActions.PermissionsLoaded(['foo']));
+      permissions$.next(false);
 
       const spy = jest.spyOn(store, 'dispatch');
 
@@ -341,40 +285,40 @@ describe('BundlesViewModel', () => {
 
       expect(spy).toHaveBeenCalledWith(book);
     });
-  });
 
-  it('should dispatch a startUpsertHistoryAction if the user has the permission', () => {
-    store.dispatch(new UserActions.PermissionsLoaded(['manageHistory']));
+    it('should dispatch a startUpsertHistoryAction if the user has the permission', () => {
+      permissions$.next(true);
 
-    const mockDate = new MockDate();
-    const dispatchSpy = jest.spyOn(store, 'dispatch');
-    const book = new EduContentFixture({ type: 'boek-e' });
-    const expectedHistory: HistoryInterface = {
-      name: book.publishedEduContentMetadata.title,
-      type: 'boek-e',
-      learningAreaId: book.publishedEduContentMetadata.learningAreaId,
-      eduContentId: 1,
-      created: mockDate.mockDate
-    };
+      const mockDate = new MockDate();
+      const dispatchSpy = jest.spyOn(store, 'dispatch');
+      const book = new EduContentFixture({ type: 'boek-e' });
+      const expectedHistory: HistoryInterface = {
+        name: book.publishedEduContentMetadata.title,
+        type: 'boek-e',
+        learningAreaId: book.publishedEduContentMetadata.learningAreaId,
+        eduContentId: 1,
+        created: mockDate.mockDate
+      };
 
-    bundlesViewModel.openBook(book);
+      bundlesViewModel.openBook(book);
 
-    expect(dispatchSpy).toHaveBeenCalledWith(
-      new HistoryActions.StartUpsertHistory({ history: expectedHistory })
-    );
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        new HistoryActions.StartUpsertHistory({ history: expectedHistory })
+      );
 
-    mockDate.returnRealDate();
-  });
+      mockDate.returnRealDate();
+    });
 
-  it('should not dispatch a startUpsertHistoryAction if the user does not have the permission', () => {
-    store.dispatch(new UserActions.PermissionsLoaded(['foo']));
+    it('should not dispatch a startUpsertHistoryAction if the user does not have the permission', () => {
+      permissions$.next(false);
 
-    const dispatchSpy = jest.spyOn(store, 'dispatch');
-    const book = new EduContentFixture({ type: 'boek-e' });
+      const dispatchSpy = jest.spyOn(store, 'dispatch');
+      const book = new EduContentFixture({ type: 'boek-e' });
 
-    bundlesViewModel.openBook(book);
+      bundlesViewModel.openBook(book);
 
-    expect(dispatchSpy).not.toHaveBeenCalled();
+      expect(dispatchSpy).not.toHaveBeenCalled();
+    });
   });
 
   function loadState() {
@@ -587,13 +531,6 @@ describe('BundlesViewModel', () => {
         reducer: ContentStatusReducer.reducer,
         initialState: {
           initialState: contentStatusState
-        }
-      },
-      {
-        NAME: UserReducer.NAME,
-        reducer: UserReducer.reducer,
-        initialState: {
-          initialState: userState
         }
       }
     ]);

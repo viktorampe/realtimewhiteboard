@@ -161,13 +161,11 @@ export class BundlesViewModel {
 
   openContent(unlockedContent: UnlockedContent): void {
     this.hasManageHistoryPermission.subscribe(() => {
-      if (unlockedContent.content instanceof EduContent) {
-        this.store.dispatch(
-          new HistoryActions.StartUpsertHistory({
-            history: createHistoryFromEduContent(unlockedContent.eduContent)
-          })
-        );
-      }
+      this.store.dispatch(
+        new HistoryActions.StartUpsertHistory({
+          history: createHistoryFromEduContent(unlockedContent.eduContent)
+        })
+      );
     });
 
     if (unlockedContent.eduContentId) {
