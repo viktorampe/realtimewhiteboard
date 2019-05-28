@@ -11,6 +11,7 @@ import {
   getStoreModuleForFeatures,
   HistoryActions,
   HistoryInterface,
+  HistoryTypesEnum,
   LearningAreaActions,
   LearningAreaFixture,
   LearningAreaInterface,
@@ -34,11 +35,15 @@ import {
   UiActions,
   UiReducer
 } from '@campus/dal';
-import { SCORM_EXERCISE_SERVICE_TOKEN } from '@campus/shared';
+import {
+  PERMISSION_SERVICE_TOKEN,
+  SCORM_EXERCISE_SERVICE_TOKEN
+} from '@campus/shared';
 import { MockDate } from '@campus/testing';
 import { ListFormat } from '@campus/ui';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
+import { of } from 'rxjs';
 import { TasksResolver } from './tasks.resolver';
 import { TasksViewModel } from './tasks.viewmodel';
 
@@ -72,6 +77,10 @@ describe('TasksViewModel met State', () => {
         {
           provide: SCORM_EXERCISE_SERVICE_TOKEN,
           useValue: { startExerciseFromTask: jest.fn() }
+        },
+        {
+          provide: PERMISSION_SERVICE_TOKEN,
+          useValue: { hasPermission: () => {} }
         },
         Store
       ]
@@ -394,6 +403,55 @@ describe('TasksViewModel met State', () => {
       });
       tasksViewModel.setTaskAlertRead(1);
       expect(store.dispatch).toHaveBeenCalledWith(expectedAction);
+    });
+
+    describe('add task to history', () => {
+      let dateMock: MockDate;
+      beforeEach(() => {
+        setInitialState();
+      });
+
+      beforeAll(() => {
+        dateMock = new MockDate();
+      });
+
+      afterAll(() => {
+        dateMock.returnRealDate();
+      });
+
+      it('should add the task to history, if the user has permission', () => {
+        jest
+          .spyOn(TestBed.get(PERMISSION_SERVICE_TOKEN), 'hasPermission')
+          .mockReturnValue(of(true));
+
+        jest.spyOn(store, 'dispatch');
+
+        tasksViewModel.setTaskHistory(1);
+
+        const expected = new HistoryActions.StartUpsertHistory({
+          history: {
+            name: tasks[0].name,
+            type: HistoryTypesEnum.TASK,
+            created: dateMock.mockDate,
+            learningAreaId: tasks[0].learningAreaId,
+            taskId: 1
+          }
+        });
+
+        expect(store.dispatch).toHaveBeenCalledWith(expected);
+      });
+
+      it('should not add the task to history, if the user does not have permission', () => {
+        jest
+          .spyOn(TestBed.get(PERMISSION_SERVICE_TOKEN), 'hasPermission')
+          .mockReturnValue(of(false));
+
+        jest.spyOn(store, 'dispatch');
+
+        tasksViewModel.setTaskHistory(1);
+
+        expect(store.dispatch).not.toHaveBeenCalled();
+      });
     });
   });
 
