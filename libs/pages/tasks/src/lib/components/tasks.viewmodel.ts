@@ -73,7 +73,10 @@ export class TasksViewModel {
           taskId: taskId
         },
         read: true,
-        displayResponse: false
+        customFeedbackHandlers: {
+          useCustomErrorHandler: 'useNoHandler',
+          useCustomSuccessHandler: 'useNoHandler'
+        }
       })
     );
   }

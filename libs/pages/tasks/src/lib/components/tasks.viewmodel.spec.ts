@@ -390,7 +390,10 @@ describe('TasksViewModel met State', () => {
         intended: false,
         personId: 1,
         read: true,
-        displayResponse: false
+        customFeedbackHandlers: {
+          useCustomErrorHandler: 'useNoHandler',
+          useCustomSuccessHandler: 'useNoHandler'
+        }
       });
       tasksViewModel.setTaskAlertRead(1);
       expect(store.dispatch).toHaveBeenCalledWith(expectedAction);
