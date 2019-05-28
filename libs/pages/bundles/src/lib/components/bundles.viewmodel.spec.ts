@@ -506,6 +506,8 @@ describe('BundlesViewModel', () => {
         contentStatuses
       })
     );
+
+    userState = UserReducer.initialState;
   }
 
   function getModuleWithForFeatureProviders(): ModuleWithProviders[] {
