@@ -107,7 +107,7 @@ export class SetReadAlert implements FeedbackTriggeringAction {
   }
 }
 
-export class SetAlertReadByFilter implements Action {
+export class SetAlertReadByFilter implements FeedbackTriggeringAction {
   readonly type = AlertsActionTypes.SetAlertReadByFilter;
 
   constructor(
@@ -116,7 +116,7 @@ export class SetAlertReadByFilter implements Action {
       filter: NestedPartial<AlertQueueInterface>;
       read?: boolean;
       intended?: boolean;
-      displayResponse?: boolean;
+      customFeedbackHandlers?: CustomFeedbackHandlersInterface;
     }
   ) {}
 }
