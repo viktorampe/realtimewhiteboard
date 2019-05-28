@@ -31,7 +31,10 @@ import {
   UserActions,
   UserReducer
 } from '@campus/dal';
-import { FeedBackService, FEEDBACK_SERVICE_TOKEN } from '@campus/shared';
+import {
+  FeedBackServiceInterface,
+  FEEDBACK_SERVICE_TOKEN
+} from '@campus/shared';
 import { DropdownMenuItemInterface, NavItem } from '@campus/ui';
 import {
   RouterNavigationAction,
@@ -60,7 +63,7 @@ describe('AppViewModel', () => {
   let storeSpy: jest.SpyInstance;
   let router: Router;
   let breakpointSubject: BehaviorSubject<BreakpointState>;
-  let feedbackService: FeedBackService;
+  let feedbackService: FeedBackServiceInterface;
 
   beforeAll(() => {
     user = new PersonFixture();
