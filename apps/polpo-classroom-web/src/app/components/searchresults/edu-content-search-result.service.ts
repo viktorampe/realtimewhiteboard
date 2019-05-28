@@ -23,7 +23,7 @@ import {
 } from '@campus/shared';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { filter, share, tap, take } from 'rxjs/operators';
+import { filter, share, take } from 'rxjs/operators';
 import { EduContentSearchResultItemServiceInterface } from './edu-content-search-result.service.interface';
 
 @Injectable({

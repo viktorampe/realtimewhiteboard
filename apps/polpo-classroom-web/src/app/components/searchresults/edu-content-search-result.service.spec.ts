@@ -16,7 +16,6 @@ import {
   EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN,
   OpenStaticContentServiceInterface,
   OPEN_STATIC_CONTENT_SERVICE_TOKEN,
-  PermissionService,
   PermissionServiceInterface,
   PERMISSION_SERVICE_TOKEN,
   ScormExerciseServiceInterface,
@@ -24,6 +23,7 @@ import {
 } from '@campus/shared';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
+import { BehaviorSubject } from 'rxjs';
 import { EduContentSearchResultItemService } from './edu-content-search-result.service';
 import { EduContentSearchResultItemServiceInterface } from './edu-content-search-result.service.interface';
 
@@ -34,6 +34,7 @@ describe('EduContentSearchResultItemService', () => {
   let eduContentSearchResultItemService: EduContentSearchResultItemServiceInterface;
   let permissionService: PermissionServiceInterface;
   let store: Store<DalState>;
+  const permission$ = new BehaviorSubject<boolean>(true);
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -60,7 +61,7 @@ describe('EduContentSearchResultItemService', () => {
         },
         {
           provide: PERMISSION_SERVICE_TOKEN,
-          useClass: PermissionService
+          useValue: { hasPermission: () => permission$ }
         },
         Store
       ]
@@ -197,25 +198,19 @@ describe('EduContentSearchResultItemService', () => {
     const mockHistory = new HistoryFixture();
 
     it('should dispatch a StartUpsertHistory action if the user has the permission', () => {
-      // TODO: fix test, for some reason these tests won't work ...
-      const spy = jest.spyOn(TestBed.get(Store), 'dispatch');
-      jest
-        .spyOn(permissionService, 'hasPermission')
-        .mockReturnValue(hot('a', { a: true }));
+      jest.spyOn(store, 'dispatch');
+      permission$.next(true);
 
       eduContentSearchResultItemService.upsertHistoryToStore(mockHistory);
 
-      expect(spy).toHaveBeenCalledWith(
+      expect(store.dispatch).toHaveBeenCalledWith(
         new HistoryActions.StartUpsertHistory({ history: mockHistory })
       );
     });
-    it('should not dispatch a StartUpsertHistory action if the user does not have the permission', () => {
-      //  TODO: this test is a false positive! Needs to get fixed
-      const spy = jest.spyOn(store, 'dispatch');
 
-      jest
-        .spyOn(permissionService, 'hasPermission')
-        .mockReturnValue(hot('a', { a: false }));
+    it('should not dispatch a StartUpsertHistory action if the user does not have the permission', () => {
+      const spy = jest.spyOn(store, 'dispatch');
+      permission$.next(false);
 
       eduContentSearchResultItemService.upsertHistoryToStore(mockHistory);
 
