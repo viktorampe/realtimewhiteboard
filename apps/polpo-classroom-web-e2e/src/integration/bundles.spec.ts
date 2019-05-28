@@ -1,5 +1,6 @@
 /// <reference types="cypress" />
 
+import { getContentDisplayData } from '../support/bundles.po';
 import { dataCy, login, performStudentSetup } from '../support/commands';
 import { StudentOpenBundleContentInterface } from '../support/interfaces';
 
@@ -68,8 +69,14 @@ describe('Bundles', () => {
           setup.studentOpenBundleContent.learningArea.name
         }`
       );
-      dataCy('boeke').contains('boek-e');
-      //TODO -- add check for window opening when clicked
+      dataCy('boeke').as('boeke');
+      cy.get('@boeke').contains(
+        setup.studentOpenBundleContent.boeke.publishedEduContentMetadata
+          .fileLabel
+      );
+      cy.get('@boeke').contains(
+        setup.studentOpenBundleContent.boeke.publishedEduContentMetadata.title
+      );
     });
   });
   describe('bundle details page', () => {
@@ -85,20 +92,44 @@ describe('Bundles', () => {
         `${setup.studentOpenBundleContent.bundle.name}`
       );
       dataCy('bundle-count').contains('3 van 3 weergegeven');
-      dataCy('contents')
-        .children() //first child is the ngfor container
-        .children() //container children are the actual content thumbnail elements
+      const contentDisplayData = getContentDisplayData(setup);
+      dataCy('content')
         .should('have.length', 3)
-        .as('contents');
-      cy.get('@contents')
+        .each(($content, index, $list) => {
+          cy.wrap($content).contains(contentDisplayData[index].fileLabel);
+          cy.wrap($content).contains(contentDisplayData[index].name);
+        });
+      dataCy('bundle-info').as('info');
+      cy.get('@info').contains(
+        `${setup.studentOpenBundleContent.teacher.displayName}`
+      );
+      cy.get('@info').contains(`${setup.studentOpenBundleContent.bundle.name}`);
+    });
+    it('should show details if content is clicked', () => {
+      const contentDisplayData = getContentDisplayData(setup);
+      dataCy('content').each(($content, index, $list) => {
+        cy.wrap($content)
+          .contains(contentDisplayData[index].name)
+          .click();
+        dataCy('content-info').contains(contentDisplayData[index].fileLabel);
+        dataCy('content-info').contains(contentDisplayData[index].name);
+      });
+    });
+    it('should change the status', () => {
+      dataCy('content')
         .first()
-        .contains('oefening');
-      cy.get('@contents')
-        .eq(1)
-        .contains('mp4');
-      cy.get('@contents')
+        .click();
+      dataCy('confirmable-select-select').click();
+      dataCy('confirmable-select-option')
+        .should('have.length', 3)
         .last()
-        .contains('link');
+        .then($option => {
+          const lastStatus = $option.text();
+          cy.wrap($option).click();
+          dataCy('confirmable-select-confirm').click();
+          cy.get('.mat-snack-bar-container').contains('Status is aangepast');
+          dataCy('confirmable-select-select').contains(lastStatus);
+        });
     });
   });
 });
