@@ -10,7 +10,6 @@ describe('Bundles', () => {
   before(() => {
     performStudentSetup().then(res => {
       setup = res.body;
-      console.log(JSON.stringify(res.body));
     });
   });
   beforeEach(() => {
