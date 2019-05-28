@@ -124,7 +124,9 @@ export class QuickLinkViewModel {
         break;
       case QuickLinkTypeEnum.HISTORY:
         action = new HistoryActions.DeleteHistory({
-          id: id
+          id: id,
+          userId: this.authService.userId,
+          customFeedbackHandlers: { useCustomErrorHandler: true }
         });
         break;
       default:
