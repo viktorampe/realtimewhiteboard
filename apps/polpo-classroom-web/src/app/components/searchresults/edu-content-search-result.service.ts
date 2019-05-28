@@ -8,18 +8,22 @@ import {
   FavoriteInterface,
   FavoriteQueries,
   HistoryActions,
-  HistoryInterface
+  HistoryInterface,
+  Permissions
 } from '@campus/dal';
 import {
   EduContentCollectionManagerServiceInterface,
   EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN,
   OpenStaticContentServiceInterface,
   OPEN_STATIC_CONTENT_SERVICE_TOKEN,
+  PermissionServiceInterface,
+  PERMISSION_SERVICE_TOKEN,
   ScormExerciseServiceInterface,
   SCORM_EXERCISE_SERVICE_TOKEN
 } from '@campus/shared';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
+import { filter, take } from 'rxjs/operators';
 import { EduContentSearchResultItemServiceInterface } from './edu-content-search-result.service.interface';
 
 @Injectable({
@@ -27,6 +31,13 @@ import { EduContentSearchResultItemServiceInterface } from './edu-content-search
 })
 export class EduContentSearchResultItemService
   implements EduContentSearchResultItemServiceInterface {
+  private hasManageHistoryPermission = this.permissionService
+    .hasPermission(Permissions.settings.MANAGE_HISTORY)
+    .pipe(
+      take(1),
+      filter(hasPermission => hasPermission)
+    );
+
   constructor(
     @Inject(SCORM_EXERCISE_SERVICE_TOKEN)
     private scormExerciseService: ScormExerciseServiceInterface,
@@ -34,7 +45,9 @@ export class EduContentSearchResultItemService
     private openStaticContentService: OpenStaticContentServiceInterface,
     @Inject(EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN)
     private eduContentManagerService: EduContentCollectionManagerServiceInterface,
-    private store: Store<DalState>
+    private store: Store<DalState>,
+    @Inject(PERMISSION_SERVICE_TOKEN)
+    private permissionService: PermissionServiceInterface
   ) {}
 
   isFavorite$(eduContentId: number): Observable<boolean> {
@@ -82,6 +95,8 @@ export class EduContentSearchResultItemService
   }
 
   upsertHistoryToStore(history: HistoryInterface): void {
-    this.store.dispatch(new HistoryActions.StartUpsertHistory({ history }));
+    this.hasManageHistoryPermission.subscribe(() => {
+      this.store.dispatch(new HistoryActions.StartUpsertHistory({ history }));
+    });
   }
 }
