@@ -6,6 +6,8 @@ import { StudentOpenBundleContentInterface } from '../support/interfaces';
 
 describe('Bundles', () => {
   const bundlesPath = 'bundles';
+  const eduContentsApiPath = 'api/eduContents';
+  const apiUrl = Cypress.env('apiUrl');
   let setup: StudentOpenBundleContentInterface;
   before(() => {
     performSetup('studentOpenBundleContent').then(res => {
@@ -45,7 +47,12 @@ describe('Bundles', () => {
   describe('bundles page', () => {
     beforeEach(() => {
       cy.visit(
-        `${bundlesPath}/${setup.studentOpenBundleContent.learningArea.id}`
+        `${bundlesPath}/${setup.studentOpenBundleContent.learningArea.id}`,
+        {
+          onBeforeLoad(win) {
+            cy.stub(win, 'open');
+          }
+        }
       );
     });
     it('should show the bundle', () => {
@@ -76,6 +83,16 @@ describe('Bundles', () => {
       cy.get('@boeke').contains(
         setup.studentOpenBundleContent.boeke.publishedEduContentMetadata.title
       );
+      dataCy('boeke-view-content').click();
+      cy.window()
+        .its('open')
+        .should(
+          'be.calledWithMatch',
+          `${apiUrl}${eduContentsApiPath}/${
+            setup.studentOpenBundleContent.boeke.publishedEduContentMetadata
+              .eduContentId
+          }/redirectURL`
+        );
     });
   });
   describe('bundle details page', () => {
