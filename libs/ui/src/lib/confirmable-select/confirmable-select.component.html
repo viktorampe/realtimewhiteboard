@@ -4,15 +4,20 @@
   <div class="ui-confirmable-select__dropdown">
     <mat-form-field class="ui-confirmable-select__dropdown__form-field">
       <mat-select
+        data-cy="confirmable-select-select"
         class="ui-confirmable-select__dropdown__select"
         [formControl]="selectControl"
       >
-        <mat-option *ngFor="let option of options" [value]="option.value">{{
-          option.viewValue
-        }}</mat-option>
+        <mat-option
+          *ngFor="let option of options"
+          [value]="option.value"
+          data-cy="confirmable-select-option"
+          >{{ option.viewValue }}</mat-option
+        >
       </mat-select>
     </mat-form-field>
     <campus-button
+      data-cy="confirmable-select-confirm"
       *ngIf="selectControl.dirty"
       class="ui-confirmable-select__dropdown__icon"
       [iconClass]="confirmIcon"
