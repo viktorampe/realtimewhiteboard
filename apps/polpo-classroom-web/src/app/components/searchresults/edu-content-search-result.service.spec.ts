@@ -16,12 +16,15 @@ import {
   EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN,
   OpenStaticContentServiceInterface,
   OPEN_STATIC_CONTENT_SERVICE_TOKEN,
+  PermissionServiceInterface,
+  PERMISSION_SERVICE_TOKEN,
   ScormExerciseServiceInterface,
   SCORM_EXERCISE_SERVICE_TOKEN
 } from '@campus/shared';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
 import { configureTestSuite } from 'ng-bullet';
+import { BehaviorSubject } from 'rxjs';
 import { EduContentSearchResultItemService } from './edu-content-search-result.service';
 import { EduContentSearchResultItemServiceInterface } from './edu-content-search-result.service.interface';
 
@@ -30,7 +33,9 @@ describe('EduContentSearchResultItemService', () => {
   let scormExerciseService: ScormExerciseServiceInterface;
   let eduContentManagerService: EduContentCollectionManagerServiceInterface;
   let eduContentSearchResultItemService: EduContentSearchResultItemServiceInterface;
+  let permissionService: PermissionServiceInterface;
   let store: Store<DalState>;
+  const permission$ = new BehaviorSubject<boolean>(true);
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
@@ -55,6 +60,10 @@ describe('EduContentSearchResultItemService', () => {
           provide: SCORM_EXERCISE_SERVICE_TOKEN,
           useValue: { previewExerciseFromUnlockedContent: jest.fn() }
         },
+        {
+          provide: PERMISSION_SERVICE_TOKEN,
+          useValue: { hasPermission: () => permission$ }
+        },
         Store
       ]
     });
@@ -67,6 +76,7 @@ describe('EduContentSearchResultItemService', () => {
     eduContentSearchResultItemService = TestBed.get(
       EduContentSearchResultItemService
     );
+    permissionService = TestBed.get(PERMISSION_SERVICE_TOKEN);
 
     store = TestBed.get(Store);
   });
@@ -99,7 +109,7 @@ describe('EduContentSearchResultItemService', () => {
 
   describe('toggleFavorite', () => {
     it('should dispatch a ToggleFavorite action', () => {
-      store.dispatch = jest.fn();
+      jest.spyOn(store, 'dispatch');
       const favorite = new FavoriteFixture();
 
       eduContentSearchResultItemService.toggleFavorite(favorite);
@@ -173,7 +183,8 @@ describe('EduContentSearchResultItemService', () => {
 
   describe('upsertEduContentToStore', () => {
     it('should dispatch a UpsertEduContent action', () => {
-      store.dispatch = jest.fn();
+      jest.spyOn(store, 'dispatch');
+
       const eduContent: EduContentInterface = new EduContentFixture();
 
       eduContentSearchResultItemService.upsertEduContentToStore(eduContent);
@@ -186,16 +197,26 @@ describe('EduContentSearchResultItemService', () => {
   });
 
   describe('upsertHistoryToStore', () => {
-    it('should dispatch a StartUpsertHistory action', () => {
-      const spy = jest.spyOn(store, 'dispatch');
+    const mockHistory = new HistoryFixture();
 
-      const mockHistory = new HistoryFixture();
+    it('should dispatch a StartUpsertHistory action if the user has the permission', () => {
+      jest.spyOn(store, 'dispatch');
+      permission$.next(true);
 
       eduContentSearchResultItemService.upsertHistoryToStore(mockHistory);
 
-      expect(spy).toHaveBeenCalledWith(
+      expect(store.dispatch).toHaveBeenCalledWith(
         new HistoryActions.StartUpsertHistory({ history: mockHistory })
       );
+    });
+
+    it('should not dispatch a StartUpsertHistory action if the user does not have the permission', () => {
+      const spy = jest.spyOn(store, 'dispatch');
+      permission$.next(false);
+
+      eduContentSearchResultItemService.upsertHistoryToStore(mockHistory);
+
+      expect(spy).not.toHaveBeenCalled();
     });
   });
 });
