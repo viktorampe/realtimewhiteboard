@@ -84,6 +84,7 @@ $ui-list-view-selection-overlay-circle-radius: 22px !default;
           cursor: pointer;
           display: block;
           margin: $ui-list-view_item-margin--list;
+          width: 100%;
 
           &--selected {
             border: none;
