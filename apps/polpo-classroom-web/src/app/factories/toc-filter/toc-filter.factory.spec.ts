@@ -399,8 +399,9 @@ describe('TocFilterFactory', () => {
             // service return different value
             // cached value should not return this
 
-            jest.resetAllMocks();
-            jest.spyOn(tocService, 'getTree').mockReturnValue(of(mockTree[0]));
+            const spy = jest.spyOn(tocService, 'getTree');
+            spy.mockReset();
+            spy.mockReturnValue(of(mockTree[0]));
 
             const newSearchState = getMockSearchState(
               mockSelectedAreaId,
