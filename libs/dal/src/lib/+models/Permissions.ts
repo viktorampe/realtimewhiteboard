@@ -8,7 +8,9 @@ export enum SettingsPermissions {
   ADD_SCHOOLS = 'addSchools',
   REMOVE_SCHOOLS = 'removeSchools',
   LINK_TEACHERS = 'linkTeachers',
-  UNLINK_TEACHERS = 'unlinkTeachers'
+  UNLINK_TEACHERS = 'unlinkTeachers',
+  MANAGE_FAVORITES = 'manageFavorites',
+  MANAGE_HISTORY = 'manageHistory'
 }
 
 export const Permissions = {
