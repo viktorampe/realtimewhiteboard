@@ -1,8 +1,47 @@
+@import 'libs/ui/src/lib/breakpoints.scss';
+
 @mixin ui-manage-collection() {
   $ui-manage-collection-list_filter-font-size: $ui-primary-font-size !default;
   $ui-manage-collection-list_recent-item-color: $ui-form-button-primary-bg-color !default;
+  $ui-manage-collection-list__no-results-padding: 24px !default;
 
   .ui-manage-collection {
+    &__no-results {
+      padding: $ui-manage-collection-list__no-results-padding;
+    }
+
+    &__dialog {
+      .mat-dialog {
+        &-container {
+          padding: 0px;
+          overflow-y: hidden;
+          border-radius: 0px;
+        }
+
+        &-content {
+          padding: 0 !important;
+          margin: 0 !important;
+        }
+
+        &-actions {
+          margin-bottom: 0;
+
+          campus-button {
+            min-width: 95px;
+            font-size: 16px;
+          }
+        }
+      }
+
+      .info-panel {
+        margin: 0px;
+
+        &__body {
+          padding: 0px;
+        }
+      }
+    }
+
     &__filter {
       .ui-filter-text-input {
         font-size: ui-manage-collection-list_filter-font-size;
@@ -22,6 +61,33 @@
       .mat-icon,
       p {
         color: $ui-manage-collection-list_recent-item-color;
+      }
+    }
+  }
+}
+
+@media #{$ui-breakpoint-xsmall} {
+  .ui-manage-collection {
+    &__dialog {
+      max-width: 100vw !important;
+      max-height: 100vh;
+      width: 100%;
+      height: 100%;
+
+      .info-panel {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+      }
+
+      .ui-manage-collection__info-panel {
+        display: flex;
+        flex-direction: column;
+        flex: 1 1 0;
+      }
+
+      .mat-dialog-content {
+        max-height: 100%;
       }
     }
   }
