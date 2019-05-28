@@ -2,7 +2,8 @@
   <div class="app-educontentsearchresult__top">
     <campus-file-extension
       *ngIf="data.eduContent.previewImage === ''"
-      [extensionClass]="data.eduContent.publishedEduContentMetadata.fileExt"
+      [extensionClass]="data.eduContent.fileExtension"
+      [title]="data.eduContent.fileTypeLabel"
     ></campus-file-extension>
     <div
       class="app-educontentsearchresult__top__thumbnail"
@@ -12,12 +13,7 @@
     <div class="app-educontentsearchresult__top__details">
       <header class="app-educontentsearchresult__top__details__header">
         <div class="app-educontentsearchresult__top__details__header__title"
-          ><mat-icon
-            [svgIcon]="
-              data.eduContent.publishedEduContentMetadata.eduContentProductType
-                .icon
-            "
-          ></mat-icon>
+          ><mat-icon [svgIcon]="data.eduContent.productType"></mat-icon>
           <span>{{ data.eduContent.publishedEduContentMetadata.title }}</span>
         </div>
         <div class="app-educontentsearchresult__top__details__header__icons">
@@ -52,7 +48,7 @@
         </div>
       </header>
       <p class="app-educontentsearchresult__top__details__content">{{
-        data.eduContent.publishedEduContentMetadata.description
+        data.eduContent.description
       }}</p>
       <div class="app-educontentsearchresult__top__details__methods">
         <span
