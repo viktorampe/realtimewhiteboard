@@ -1,5 +1,9 @@
 import { Action } from '@ngrx/store';
 import { HistoryInterface } from '../../+models';
+import {
+  CustomFeedbackHandlersInterface,
+  FeedbackTriggeringAction
+} from '../effect-feedback';
 
 export enum HistoryActionTypes {
   HistoryLoaded = '[History] History Loaded',
@@ -36,10 +40,16 @@ export class UpsertHistory implements Action {
   constructor(public payload: { history: HistoryInterface }) {}
 }
 
-export class DeleteHistory implements Action {
+export class DeleteHistory implements FeedbackTriggeringAction {
   readonly type = HistoryActionTypes.DeleteHistory;
 
-  constructor(public payload: { id: number }) {}
+  constructor(
+    public payload: {
+      id: number;
+      userId: number;
+      customFeedbackHandlers?: CustomFeedbackHandlersInterface;
+    }
+  ) {}
 }
 
 export class ClearHistory implements Action {
