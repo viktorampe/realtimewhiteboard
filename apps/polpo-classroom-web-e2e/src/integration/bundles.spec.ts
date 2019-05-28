@@ -110,8 +110,9 @@ describe('Bundles', () => {
         cy.wrap($content)
           .contains(contentDisplayData[index].name)
           .click();
-        dataCy('content-info').contains(contentDisplayData[index].fileLabel);
-        dataCy('content-info').contains(contentDisplayData[index].name);
+        dataCy('content-info').as('contentInfo')
+        cy.get('@contentInfo').contains(contentDisplayData[index].fileLabel);
+        cy.get('@contentInfo').contains(contentDisplayData[index].name);
       });
     });
     it('should change the status', () => {
