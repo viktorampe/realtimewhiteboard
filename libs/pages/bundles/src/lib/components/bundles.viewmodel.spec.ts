@@ -106,7 +106,7 @@ describe('BundlesViewModel', () => {
     });
 
     it('should dispatch a startUpsertHistory action when the user has this permission', () => {
-      store.dispatch(new UserActions.PermissionsLoaded(['manageHistory']));
+      permissions$.next(true);
 
       const mockDate = new MockDate();
       const spy = jest.spyOn(store, 'dispatch');
