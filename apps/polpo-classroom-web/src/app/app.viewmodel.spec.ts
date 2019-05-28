@@ -343,8 +343,6 @@ describe('AppViewModel', () => {
         mockFeedBack.type = 'success';
       });
 
-      beforeEach(() => {});
-
       it('should pass the success feedback to the feedbackService', () => {
         jest.spyOn(feedbackService, 'openSnackbar');
 
@@ -358,7 +356,7 @@ describe('AppViewModel', () => {
         expect(feedbackService.openSnackbar).toHaveBeenCalledWith(mockFeedBack);
       });
 
-      it('should subscribe to snackbarAfterDismiss', fakeAsync(() => {
+      it('should subscribe to snackbarAfterDismiss', () => {
         jest.spyOn(viewModel, 'onFeedbackDismiss');
 
         store.dispatch(
@@ -370,7 +368,7 @@ describe('AppViewModel', () => {
         // feedbackService.snackbarAfterDismiss is mocked and always emits a value
 
         expect(viewModel.onFeedbackDismiss).toHaveBeenCalled();
-      }));
+      });
     });
 
     describe('error feedback', () => {

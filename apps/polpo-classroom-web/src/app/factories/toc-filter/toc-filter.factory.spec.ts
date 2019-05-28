@@ -164,12 +164,12 @@ describe('TocFilterFactory', () => {
 
     store = TestBed.get(Store);
 
-    loadInStore();
-
     tocService = TestBed.get(TOC_SERVICE_TOKEN);
   });
 
   beforeEach(() => {
+    loadInStore();
+
     factory = new TocFilterFactory(store, tocService);
 
     jest.spyOn(tocService, 'getTree').mockReturnValue(of(mockTree));
@@ -260,7 +260,7 @@ describe('TocFilterFactory', () => {
 
     describe('TOC tree', () => {
       describe('single selected value', () => {
-        it('should return toc filterCriteria', () => {
+        beforeEach(() => {
           const mockSearchState = getMockSearchState(
             mockSelectedAreaId,
             mockSelectedYearId,
@@ -268,8 +268,11 @@ describe('TocFilterFactory', () => {
             mockSelectedBookId,
             mockSelectedTocId
           );
-          result = factory.getFilters(mockSearchState);
 
+          result = factory.getFilters(mockSearchState);
+        });
+
+        it('should return toc filterCriteria', () => {
           const expectedYearFilter = getExpectedYearFilterCriterium();
           const expectedMethodFilter = getExpectedMethodFilterCriterium([6, 7]);
           const expectedBookFilter = getExpectedBookFilterCriteria([8, 5]);
@@ -390,11 +393,13 @@ describe('TocFilterFactory', () => {
 
           it('should not update the cached Toc', () => {
             // not subscribing in expects
-            // subscribong manually
+            // subscribing manually
             result.subscribe();
 
             // service return different value
             // cached value should not return this
+
+            jest.resetAllMocks();
             jest.spyOn(tocService, 'getTree').mockReturnValue(of(mockTree[0]));
 
             const newSearchState = getMockSearchState(
@@ -582,7 +587,7 @@ describe('TocFilterFactory', () => {
 
           it('should not update the cached Toc', () => {
             // not subscribing in expects
-            // subscribong manually
+            // subscribing manually
             result.subscribe();
 
             // service return different value

@@ -99,10 +99,12 @@ describe('LearningPlanFilterFactory', () => {
 
     store = TestBed.get(Store);
 
-    loadInStore();
-
     learningPlanFilterFactory = TestBed.get(LearningPlanFilterFactory);
     learningPlanService = TestBed.get(LEARNING_PLAN_SERVICE_TOKEN);
+  });
+
+  beforeEach(() => {
+    loadInStore();
   });
 
   it('should be created', () => {

@@ -63,7 +63,7 @@ describe('ScormExerciseService', () => {
     scormApiService = TestBed.get(ScormApiService);
 
     store = TestBed.get(Store);
-    jest.spyOn(Store.prototype, 'dispatch');
+    jest.spyOn(store, 'dispatch');
   });
 
   it('should be created', () => {

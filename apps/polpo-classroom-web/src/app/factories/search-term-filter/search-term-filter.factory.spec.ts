@@ -95,9 +95,11 @@ describe('SearchTermFilterFactory', () => {
 
     store = TestBed.get(Store);
 
-    loadInStore();
-
     factory = TestBed.get(SearchTermFilterFactory);
+  });
+
+  beforeEach(() => {
+    loadInStore();
   });
 
   it('should be created', () => {

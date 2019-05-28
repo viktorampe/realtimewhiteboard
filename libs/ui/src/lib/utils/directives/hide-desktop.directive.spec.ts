@@ -62,10 +62,6 @@ describe('HideDesktopDirective', () => {
     directive = componentDE.injector.get(HideDesktopDirective);
   });
 
-  afterAll(() => {
-    jest.clearAllMocks();
-  });
-
   it('should create the host with the directive attached', () => {
     expect(component).toBeTruthy();
     expect(directive).toBeTruthy();

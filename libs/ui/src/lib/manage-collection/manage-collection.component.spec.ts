@@ -93,8 +93,6 @@ describe('ManageCollectionComponent', () => {
     });
   });
 
-  beforeAll(() => {});
-
   beforeEach(() => {
     fixture = TestBed.createComponent(ManageCollectionComponent);
     component = fixture.componentInstance;
@@ -192,7 +190,6 @@ describe('ManageCollectionComponent', () => {
           .map(dE => dE.componentInstance.value);
 
         expect(itemsInListIds).toEqual(mockFilteredItemsIds);
-        spy.mockRestore();
       });
       it('should hide the recent items when a filter is active', () => {
         component.filterTextInput.setValue('some value that does not matter');
@@ -242,7 +239,6 @@ describe('ManageCollectionComponent', () => {
         const recentItem = recentListDE.query(By.directive(MatListOption))
           .componentInstance;
         expect(recentItem.selected).toBe(true);
-        spy.mockRestore();
       });
 
       describe('no results', () => {
@@ -254,10 +250,6 @@ describe('ManageCollectionComponent', () => {
             .mockReturnValue(mockFilteredItems);
           component.filterTextInput.setValue('some value that does not matter');
           fixture.detectChanges();
-        });
-
-        afterEach(() => {
-          jest.restoreAllMocks();
         });
 
         it('should show a message', () => {

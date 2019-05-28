@@ -57,10 +57,6 @@ describe('HideMobileDirective', () => {
     directive = componentDE.injector.get(IsMobileDirective);
   });
 
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
-
   it('should create the host with the directive attached', () => {
     expect(component).toBeTruthy();
     expect(directive).toBeTruthy();
