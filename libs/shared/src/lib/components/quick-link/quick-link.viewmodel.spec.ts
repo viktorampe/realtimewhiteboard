@@ -900,7 +900,9 @@ describe('QuickLinkViewModel', () => {
     it('should dispatch a delete history action', () => {
       const spy = jest.spyOn(store, 'dispatch');
       const expectedAction = new HistoryActions.DeleteHistory({
-        id: 1
+        id: 1,
+        userId: 1,
+        customFeedbackHandlers: { useCustomErrorHandler: true }
       });
       quickLinkViewModel.remove(1, QuickLinkTypeEnum.HISTORY);
       expect(spy).toHaveBeenCalledWith(expectedAction);
