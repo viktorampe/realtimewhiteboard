@@ -88,7 +88,8 @@ export class TasksViewModel {
     this.permissionService
       .hasPermission(Permissions.settings.MANAGE_HISTORY)
       .pipe(
-        filter(permission => !!permission),
+        take(1),
+        filter(permission => permission),
         switchMapTo(
           this.store.pipe(
             select(TaskQueries.getById, { id: taskId }),
