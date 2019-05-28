@@ -53,6 +53,7 @@ import {
 import {
   OpenStaticContentServiceInterface,
   OPEN_STATIC_CONTENT_SERVICE_TOKEN,
+  PERMISSION_SERVICE_TOKEN,
   ScormExerciseServiceInterface,
   SCORM_EXERCISE_SERVICE_TOKEN
 } from '@campus/shared';
@@ -61,7 +62,7 @@ import { ListFormat } from '@campus/ui';
 import { UnlockedContent } from '@diekeure/polpo-api-angular-sdk';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
-import { of } from 'rxjs';
+import { BehaviorSubject, of } from 'rxjs';
 import { BundlesViewModel } from './bundles.viewmodel';
 import { LearningAreasWithBundlesInfoInterface } from './bundles.viewmodel.interfaces';
 
@@ -93,6 +94,7 @@ describe('BundlesViewModel', () => {
   let studentContentStatuses: StudentContentStatusInterface[];
   let contentStatuses: ContentStatusInterface[];
   let store: Store<DalState>;
+  const permissions$ = new BehaviorSubject<boolean>(true);
 
   beforeAll(() => {
     loadState();
@@ -116,6 +118,10 @@ describe('BundlesViewModel', () => {
         {
           provide: WINDOW,
           useClass: MockWindow
+        },
+        {
+          provide: PERMISSION_SERVICE_TOKEN,
+          useValue: { hasPermission: () => permissions$ }
         }
       ]
     });
@@ -139,19 +145,26 @@ describe('BundlesViewModel', () => {
     expect(spy).toHaveBeenCalledWith({ listFormat });
   });
   describe('#openContent', () => {
-    it('should call the open static content service for EduContent and dispatch a startUpsertHistory action', () => {
-      const mockDate = new MockDate();
-      const spy = jest.spyOn(store, 'dispatch');
+    const unlockedContent = new UnlockedContentFixture({
+      id: 1,
+      eduContent: new EduContentFixture({ type: 'file' })
+    });
 
-      const unlockedContent = new UnlockedContentFixture({
-        id: 1,
-        eduContent: new EduContentFixture({ type: 'file' })
-      });
+    it('should call the open static content service for EduContent', () => {
       bundlesViewModel.openContent(unlockedContent);
       expect(openStaticContentService.open).toHaveBeenCalledTimes(1);
       expect(openStaticContentService.open).toHaveBeenCalledWith(
         unlockedContent.content
       );
+    });
+
+    it('should dispatch a startUpsertHistory action when the user has this permission', () => {
+      permissions$.next(true);
+
+      const mockDate = new MockDate();
+      const spy = jest.spyOn(store, 'dispatch');
+
+      bundlesViewModel.openContent(unlockedContent);
 
       expect(spy).toHaveBeenCalledWith(
         new HistoryActions.StartUpsertHistory({
@@ -165,6 +178,16 @@ describe('BundlesViewModel', () => {
         })
       );
       mockDate.returnRealDate();
+    });
+
+    it('should not dispatch a startUpsertHistory action when the user does not have this permission', () => {
+      permissions$.next(false);
+
+      const spy = jest.spyOn(store, 'dispatch');
+
+      bundlesViewModel.openContent(unlockedContent);
+
+      expect(spy).not.toHaveBeenCalled();
     });
 
     it('should call the scormExerciseService for eduContent', () => {
@@ -194,7 +217,10 @@ describe('BundlesViewModel', () => {
       intended: false,
       personId: 1,
       read: true,
-      displayResponse: false
+      customFeedbackHandlers: {
+        useCustomErrorHandler: 'useNoHandler',
+        useCustomSuccessHandler: 'useNoHandler'
+      }
     });
     bundlesViewModel.setBundleAlertRead(1);
     expect(store.dispatch).toHaveBeenCalledWith(expectedAction);
@@ -306,28 +332,49 @@ describe('BundlesViewModel', () => {
     );
   });
 
-  it('openBook() should call openStaticContentService and dispatch a startUpsertHistoryAction', () => {
-    const mockDate = new MockDate();
+  describe('#openBook', () => {
+    it('should call openStaticContentService', () => {
+      const spy = jest.spyOn(openStaticContentService, 'open');
+      const book = new EduContentFixture({ type: 'boek-e' });
 
-    const dispatchSpy = jest.spyOn(store, 'dispatch');
-    const spy = jest.spyOn(openStaticContentService, 'open');
+      bundlesViewModel.openBook(book);
 
-    const book = new EduContentFixture({ type: 'boek-e' });
-    const expectedHistory: HistoryInterface = {
-      name: book.publishedEduContentMetadata.title,
-      type: 'boek-e',
-      learningAreaId: book.publishedEduContentMetadata.learningAreaId,
-      eduContentId: 1,
-      created: mockDate.mockDate
-    };
+      expect(spy).toHaveBeenCalledWith(book);
+    });
 
-    bundlesViewModel.openBook(book);
-    expect(spy).toHaveBeenCalledWith(book);
-    expect(dispatchSpy).toHaveBeenCalledWith(
-      new HistoryActions.StartUpsertHistory({ history: expectedHistory })
-    );
+    it('should dispatch a startUpsertHistoryAction if the user has the permission', () => {
+      permissions$.next(true);
 
-    mockDate.returnRealDate();
+      const mockDate = new MockDate();
+      const dispatchSpy = jest.spyOn(store, 'dispatch');
+      const book = new EduContentFixture({ type: 'boek-e' });
+      const expectedHistory: HistoryInterface = {
+        name: book.publishedEduContentMetadata.title,
+        type: 'boek-e',
+        learningAreaId: book.publishedEduContentMetadata.learningAreaId,
+        eduContentId: 1,
+        created: mockDate.mockDate
+      };
+
+      bundlesViewModel.openBook(book);
+
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        new HistoryActions.StartUpsertHistory({ history: expectedHistory })
+      );
+
+      mockDate.returnRealDate();
+    });
+
+    it('should not dispatch a startUpsertHistoryAction if the user does not have the permission', () => {
+      permissions$.next(false);
+
+      const dispatchSpy = jest.spyOn(store, 'dispatch');
+      const book = new EduContentFixture({ type: 'boek-e' });
+
+      bundlesViewModel.openBook(book);
+
+      expect(dispatchSpy).not.toHaveBeenCalled();
+    });
   });
 
   function loadState() {
