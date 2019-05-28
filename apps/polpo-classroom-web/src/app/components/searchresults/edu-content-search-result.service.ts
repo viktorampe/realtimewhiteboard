@@ -23,7 +23,7 @@ import {
 } from '@campus/shared';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { filter, take } from 'rxjs/operators';
+import { filter, share, tap, take } from 'rxjs/operators';
 import { EduContentSearchResultItemServiceInterface } from './edu-content-search-result.service.interface';
 
 @Injectable({
@@ -35,7 +35,8 @@ export class EduContentSearchResultItemService
     .hasPermission(Permissions.settings.MANAGE_HISTORY)
     .pipe(
       take(1),
-      filter(hasPermission => hasPermission)
+      filter(hasPermission => !!hasPermission),
+      share()
     );
 
   constructor(
