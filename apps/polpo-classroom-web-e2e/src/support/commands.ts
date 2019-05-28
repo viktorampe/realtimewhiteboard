@@ -47,5 +47,5 @@ export const logoutByUI = () => {
 };
 
 export const performSetup = (scenarioName: SetupScenarioType) => {
-  return cy.request(`${apiUrl}e2e/setup/${scenarioName}`).then(res => res);
+  return cy.request(`${apiUrl}e2e/setup/${scenarioName}`);
 };
