@@ -18,7 +18,7 @@ describe('Bundles', () => {
       setup.studentOpenBundleContent.login.password
     );
   });
-  describe('leaningarea page', () => {
+  describe('learningarea page', () => {
     beforeEach(() => {
       cy.visit(`${bundlesPath}`);
     });
