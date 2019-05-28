@@ -1,14 +1,14 @@
 /// <reference types="cypress" />
 
 import { getContentDisplayData } from '../support/bundles.po';
-import { dataCy, login, performStudentSetup } from '../support/commands';
+import { dataCy, login, performSetup } from '../support/commands';
 import { StudentOpenBundleContentInterface } from '../support/interfaces';
 
 describe('Bundles', () => {
   const bundlesPath = 'bundles';
   let setup: StudentOpenBundleContentInterface;
   before(() => {
-    performStudentSetup().then(res => {
+    performSetup('studentOpenBundleContent').then(res => {
       setup = res.body;
     });
   });

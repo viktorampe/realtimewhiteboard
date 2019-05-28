@@ -1,5 +1,7 @@
 /// <reference types="cypress" />
 
+import { SetupScenarioType } from './types';
+
 const apiUrl = Cypress.env('apiUrl');
 const defaultUsername = Cypress.env('username');
 const defaultPassword = Cypress.env('password');
@@ -44,8 +46,6 @@ export const logoutByUI = () => {
   dataCy('logoutButton').click();
 };
 
-export const performStudentSetup = () => {
-  return cy
-    .request(`${apiUrl}e2e/setup/studentOpenBundleContent`)
-    .then(res => res);
+export const performSetup = (scenarioName: SetupScenarioType) => {
+  return cy.request(`${apiUrl}e2e/setup/${scenarioName}`).then(res => res);
 };
