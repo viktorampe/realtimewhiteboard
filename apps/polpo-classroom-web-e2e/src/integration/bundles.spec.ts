@@ -7,6 +7,7 @@ import { StudentOpenBundleContentInterface } from '../support/interfaces';
 describe('Bundles', () => {
   const bundlesPath = 'bundles';
   const eduContentsApiPath = 'api/eduContents';
+  const ludoApiPath = 'api/educontent-assets-ludo';
   const apiUrl = Cypress.env('apiUrl');
   let setup: StudentOpenBundleContentInterface;
   before(() => {
@@ -87,7 +88,7 @@ describe('Bundles', () => {
       cy.window()
         .its('open')
         .should(
-          'be.calledWithMatch',
+          'be.calledWithExactly',
           `${apiUrl}${eduContentsApiPath}/${
             setup.studentOpenBundleContent.boeke.publishedEduContentMetadata
               .eduContentId
@@ -100,7 +101,12 @@ describe('Bundles', () => {
       cy.visit(
         `${bundlesPath}/${setup.studentOpenBundleContent.learningArea.id}/${
           setup.studentOpenBundleContent.bundle.id
-        }`
+        }`,
+        {
+          onBeforeLoad(win) {
+            cy.stub(win, 'open');
+          }
+        }
       );
     });
     it('should show the bundle details', () => {
@@ -127,10 +133,46 @@ describe('Bundles', () => {
         cy.wrap($content)
           .contains(contentDisplayData[index].name)
           .click();
-        dataCy('content-info').as('contentInfo')
+        dataCy('content-info').as('contentInfo');
         cy.get('@contentInfo').contains(contentDisplayData[index].fileLabel);
         cy.get('@contentInfo').contains(contentDisplayData[index].name);
       });
+    });
+    it('should open the exercise in an iframe', () => {
+      dataCy('content-view-content')
+        .first()
+        .click();
+      cy.get('iframe')
+        .should('have.attr', 'src')
+        .and(
+          'contain',
+          `${apiUrl}${ludoApiPath}/${
+            setup.studentOpenBundleContent.contentExercise.id
+          }`
+        );
+    });
+    it('should call open with the correct url for non exercise content', () => {
+      dataCy('content-view-content')
+        .eq(1)
+        .click();
+      cy.window()
+        .its('open')
+        .should(
+          'be.calledWithExactly',
+          `${apiUrl}${eduContentsApiPath}/${
+            setup.studentOpenBundleContent.contentDownloadable
+              .publishedEduContentMetadata.eduContentId
+          }/redirectURL`
+        );
+      dataCy('content-view-content')
+        .last()
+        .click();
+      cy.window()
+        .its('open')
+        .should(
+          'be.calledWithExactly',
+          `${setup.studentOpenBundleContent.contentUserContent.link}`
+        );
     });
     it('should change the status', () => {
       dataCy('content')
