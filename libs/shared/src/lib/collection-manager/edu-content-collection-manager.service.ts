@@ -70,7 +70,8 @@ export class EduContentCollectionManagerService
           return bundles.map(
             (bundle): ManageCollectionItemInterface => ({
               id: bundle.id,
-              label: bundle.name
+              label: bundle.name,
+              icon: 'bundle'
             })
           );
         }
@@ -102,7 +103,8 @@ export class EduContentCollectionManagerService
     // subscribe to changeEvent
     const item: ManageCollectionItemInterface = {
       id: content.id,
-      label: content.name
+      label: content.name,
+      icon: 'bundle'
     };
     const itemToggle$ = this.getItemToggleStream(
       '"' + item.label + '" toevoegen aan je bundels',
@@ -143,7 +145,8 @@ export class EduContentCollectionManagerService
   manageTasksForContent(content: EduContentInterface): void {
     const item: ManageCollectionItemInterface = {
       id: content.id,
-      label: content.publishedEduContentMetadata.title
+      label: content.publishedEduContentMetadata.title,
+      icon: 'task'
     };
 
     // prepare streams
@@ -159,7 +162,8 @@ export class EduContentCollectionManagerService
             return tasks.map(
               (task): ManageCollectionItemInterface => ({
                 id: task.id,
-                label: task.name
+                label: task.name,
+                icon: 'task'
               })
             );
           }
