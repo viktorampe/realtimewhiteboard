@@ -1,13 +1,62 @@
 import { Inject, Injectable } from '@angular/core';
-import { AlertActions, AuthServiceInterface, AUTH_SERVICE_TOKEN, BundleInterface, BundleQueries, ContentInterface, ContentStatusLabel, ContentStatusQueries, createHistoryFromBundle, createHistoryFromContent, DalState, EduContent, EduContentQueries, HistoryActions, LearningAreaInterface, LearningAreaQueries, LinkedPersonQueries, Permissions, PersonInterface, StudentContentStatusActions, StudentContentStatusInterface, StudentContentStatusQueries, UiActions, UiQuery, UnlockedBoekeGroupQueries, UnlockedBoekeStudentQueries, UnlockedContent, UnlockedContentInterface, UnlockedContentQueries, UserContentQueries } from '@campus/dal';
-import { OpenStaticContentServiceInterface, OPEN_STATIC_CONTENT_SERVICE_TOKEN, PermissionServiceInterface, PERMISSION_SERVICE_TOKEN, ScormExerciseServiceInterface, SCORM_EXERCISE_SERVICE_TOKEN } from '@campus/shared';
+import {
+  AlertActions,
+  AuthServiceInterface,
+  AUTH_SERVICE_TOKEN,
+  BundleInterface,
+  BundleQueries,
+  ContentInterface,
+  ContentStatusLabel,
+  ContentStatusQueries,
+  createHistoryFromBundle,
+  createHistoryFromContent,
+  DalState,
+  EduContent,
+  EduContentQueries,
+  HistoryActions,
+  LearningAreaInterface,
+  LearningAreaQueries,
+  LinkedPersonQueries,
+  Permissions,
+  PersonInterface,
+  StudentContentStatusActions,
+  StudentContentStatusInterface,
+  StudentContentStatusQueries,
+  UiActions,
+  UiQuery,
+  UnlockedBoekeGroupQueries,
+  UnlockedBoekeStudentQueries,
+  UnlockedContent,
+  UnlockedContentInterface,
+  UnlockedContentQueries,
+  UserContentQueries
+} from '@campus/dal';
+import {
+  OpenStaticContentServiceInterface,
+  OPEN_STATIC_CONTENT_SERVICE_TOKEN,
+  PermissionServiceInterface,
+  PERMISSION_SERVICE_TOKEN,
+  ScormExerciseServiceInterface,
+  SCORM_EXERCISE_SERVICE_TOKEN
+} from '@campus/shared';
 import { ListFormat, SelectOption } from '@campus/ui';
 import { NestedPartial } from '@campus/utils';
 import { Dictionary } from '@ngrx/entity';
 import { select, Store } from '@ngrx/store';
 import { combineLatest, Observable } from 'rxjs';
-import { filter, map, share, shareReplay, switchMap, switchMapTo, take } from 'rxjs/operators';
-import { BundlesWithContentInfoInterface, LearningAreasWithBundlesInfoInterface } from './bundles.viewmodel.interfaces';
+import {
+  filter,
+  map,
+  share,
+  shareReplay,
+  switchMap,
+  switchMapTo,
+  take
+} from 'rxjs/operators';
+import {
+  BundlesWithContentInfoInterface,
+  LearningAreasWithBundlesInfoInterface
+} from './bundles.viewmodel.interfaces';
 
 @Injectable({
   providedIn: 'root'
