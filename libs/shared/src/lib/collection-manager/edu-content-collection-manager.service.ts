@@ -10,6 +10,8 @@ import {
   FavoriteQueries,
   FavoriteTypesEnum,
   HistoryInterface,
+  HistoryQueries,
+  HistoryTypesEnum,
   TaskEduContentActions,
   TaskEduContentInterface,
   TaskEduContentQueries,
@@ -26,7 +28,7 @@ import {
   ManageCollectionItemInterface
 } from '@campus/ui';
 import { Store } from '@ngrx/store';
-import { combineLatest, Observable, of } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { filter, map, shareReplay, switchMap, take } from 'rxjs/operators';
 import { EduContentCollectionManagerServiceInterface } from './edu-content-collection-manager.service.interface';
 
@@ -302,14 +304,12 @@ export class EduContentCollectionManagerService
   }
 
   private getRecentItemsStream(
-    type: FavoriteTypesEnum,
+    type: FavoriteTypesEnum | HistoryTypesEnum,
     key: string
   ): Observable<number[]> {
     return combineLatest(
       this.store.select(FavoriteQueries.getByType, { type }),
-      // TODO: combine with history when state is available
-      // this.store.select(HistoryQueries.getByType, { type })
-      of([])
+      this.store.select(HistoryQueries.getByType, { type })
     ).pipe(
       map(
         ([favorites, histories]: [
