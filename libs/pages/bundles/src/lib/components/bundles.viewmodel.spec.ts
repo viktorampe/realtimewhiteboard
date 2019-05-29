@@ -396,7 +396,7 @@ describe('BundlesViewModel', () => {
 
       jest.spyOn(store, 'dispatch');
 
-      bundlesViewModel.setBundleHistory(1);
+      bundlesViewModel.setBundleHistory(bundles[0].id);
 
       const expected = new HistoryActions.StartUpsertHistory({
         history: {
@@ -404,7 +404,7 @@ describe('BundlesViewModel', () => {
           type: HistoryTypesEnum.BUNDLE,
           created: dateMock.mockDate,
           learningAreaId: bundles[0].learningAreaId,
-          bundleId: 1
+          bundleId: bundles[0].id
         }
       });
 
