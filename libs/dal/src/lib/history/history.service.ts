@@ -21,15 +21,21 @@ export class HistoryService implements HistoryServiceInterface {
   }
 
   upsertHistory(history: HistoryInterface): Observable<HistoryInterface> {
-    return this.historyApi.upsertByInstance(
-      history.name,
-      history.type,
-      history.learningAreaId,
-      history.criteria || '',
-      history.eduContentId || 0,
-      history.bundleId || 0,
-      history.taskId || 0
-    );
+    return this.historyApi
+      .upsertByInstance(
+        history.name,
+        history.type,
+        history.learningAreaId,
+        history.criteria || '',
+        history.eduContentId || 0,
+        history.bundleId || 0,
+        history.taskId || 0
+      )
+      .pipe(
+        map(item => {
+          return { ...item, ...{ created: new Date(item.created) } };
+        })
+      );
   }
 
   deleteHistory(userId: number, historyId: number): Observable<boolean> {
