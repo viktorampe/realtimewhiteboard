@@ -49,8 +49,8 @@ describe('EduContentCollectionManagerService', () => {
     new BundleFixture({ id: 7, learningAreaId: 2 })
   ];
   const bundlesCollection: ManageCollectionItemInterface[] = [
-    { id: 6, label: 'foo' },
-    { id: 7, label: 'foo' }
+    { id: 6, label: 'foo', icon: 'bundle' },
+    { id: 7, label: 'foo', icon: 'bundle' }
   ];
   const selectedBundle = bundles[2];
   const selectedEduContent = new EduContentFixture(
@@ -76,8 +76,8 @@ describe('EduContentCollectionManagerService', () => {
     new TaskFixture({ id: 7, learningAreaId: 2 })
   ];
   const tasksCollection: ManageCollectionItemInterface[] = [
-    { id: 6, label: 'foo' },
-    { id: 7, label: 'foo' }
+    { id: 6, label: 'foo', icon: 'task' },
+    { id: 7, label: 'foo', icon: 'task' }
   ];
   const selectedTask = tasks[2];
   const taskEduContents: TaskEduContentInterface[] = [
@@ -164,7 +164,7 @@ describe('EduContentCollectionManagerService', () => {
       expect(spy).toHaveBeenCalledTimes(1);
       expect(spy).toHaveBeenCalledWith(
         '"foo" toevoegen aan je bundels',
-        { id: 4, label: 'foo' },
+        { id: 4, label: 'foo', icon: 'bundle' },
         bundlesCollection, // bundles[0] has different learningAreaId
         [7],
         []
@@ -274,7 +274,7 @@ describe('EduContentCollectionManagerService', () => {
       expect(spy).toHaveBeenCalledTimes(1);
       expect(spy).toHaveBeenCalledWith(
         '"foo" toevoegen aan je taken',
-        { id: 4, label: 'foo' },
+        { id: 4, label: 'foo', icon: 'task' },
         tasksCollection,
         [7],
         []
