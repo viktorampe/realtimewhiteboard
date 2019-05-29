@@ -282,7 +282,7 @@ export class BundlesViewModel {
 
   private getSharedBundles(): Observable<BundleInterface[]> {
     return this.store.pipe(
-      select(BundleQueries.getOwn, { userId: this.authService.userId })
+      select(BundleQueries.getShared, { userId: this.authService.userId })
     );
   }
 
