@@ -36,7 +36,10 @@
       <ng-container
         *ngIf="(filterTextInput.result$ | async) as filteredBundlesInfo"
       >
-        <div class="pages-bundles__container__bundles-count">
+        <div
+          class="pages-bundles__container__bundles-count"
+          data-cy="bundle-count"
+        >
           {{ filteredBundlesInfo.length }} van
           <u
             class="pages-bundles__container__bundles-count__total"
@@ -59,8 +62,9 @@
               [title]="bundleInfo.bundle.name"
               [backgroundColor]="learningArea.color"
               [icon]="learningArea.icon"
+              data-cy="bundle"
             >
-              <campus-folder-details>
+              <campus-folder-details data-cy="bundle-details">
                 {{ bundleInfo.contentsCount }}
                 {{ bundleInfo.contentsCount === 1 ? 'item' : 'items' }}
               </campus-folder-details>
@@ -77,7 +81,7 @@
         [subtitle]="'Boeken'"
         [iconClass]="learningArea.icon"
       ></campus-page-header>
-      <div class="pages-bundles__container__books-count">
+      <div class="pages-bundles__container__books-count" data-cy="boeke-count">
         Je hebt {{ sharedInfo.books.length }}
         {{ sharedInfo.books.length === 1 ? 'boek' : 'boeken' }} voor
         {{ learningArea.name }}
@@ -85,6 +89,7 @@
       <div class="pages-bundles__container__books">
         <campus-list-view [listFormat]="listFormat$ | async">
           <campus-content-thumbnail
+            data-cy="boeke"
             *ngFor="let book of sharedInfo.books"
             campusListItem
             [selectable]="false"
@@ -94,6 +99,7 @@
             [fileExtensionClass]="book.fileExtension"
           >
             <campus-button
+              data-cy="boeke-view-content"
               circle
               [iconClass]="'view-content'"
               (click)="openBook(book)"
