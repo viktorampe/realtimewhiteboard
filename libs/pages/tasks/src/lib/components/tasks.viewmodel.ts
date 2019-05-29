@@ -4,12 +4,14 @@ import {
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
   createHistoryFromEduContent,
+  createHistoryFromTask,
   DalState,
   EduContentQueries,
   HistoryActions,
   LearningAreaInterface,
   LearningAreaQueries,
   LinkedPersonQueries,
+  Permissions,
   TaskEduContentInterface,
   TaskEduContentQueries,
   TaskInstanceQueries,
@@ -18,6 +20,8 @@ import {
   UiQuery
 } from '@campus/dal';
 import {
+  PermissionServiceInterface,
+  PERMISSION_SERVICE_TOKEN,
   ScormExerciseServiceInterface,
   SCORM_EXERCISE_SERVICE_TOKEN
 } from '@campus/shared';
@@ -25,7 +29,7 @@ import { ListFormat } from '@campus/ui';
 import { select, Store } from '@ngrx/store';
 import { MemoizedSelectorWithProps } from '@ngrx/store/src/selector';
 import { combineLatest, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { filter, map, switchMapTo, take } from 'rxjs/operators';
 import {
   LearningAreasWithTaskInfoInterface,
   TasksWithInfoInterface,
@@ -48,7 +52,9 @@ export class TasksViewModel {
     private store: Store<DalState>,
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
     @Inject(SCORM_EXERCISE_SERVICE_TOKEN)
-    private scormExerciseService: ScormExerciseServiceInterface
+    private scormExerciseService: ScormExerciseServiceInterface,
+    @Inject(PERMISSION_SERVICE_TOKEN)
+    private permissionService: PermissionServiceInterface
   ) {
     this.setSourceStreams();
     this.setPresentationStreams();
@@ -79,6 +85,28 @@ export class TasksViewModel {
         }
       })
     );
+  }
+
+  public setTaskHistory(taskId: number): void {
+    this.permissionService
+      .hasPermission(Permissions.settings.MANAGE_HISTORY)
+      .pipe(
+        take(1),
+        filter(permission => permission),
+        switchMapTo(
+          this.store.pipe(
+            select(TaskQueries.getById, { id: taskId }),
+            take(1)
+          )
+        )
+      )
+      .subscribe(task =>
+        this.store.dispatch(
+          new HistoryActions.StartUpsertHistory({
+            history: createHistoryFromTask(task)
+          })
+        )
+      );
   }
 
   public startExercise(taskEduContent: TaskEduContentInterface): void {
