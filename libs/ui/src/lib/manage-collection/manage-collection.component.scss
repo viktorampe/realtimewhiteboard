@@ -1,11 +1,18 @@
+@import 'libs/ui/src/lib/breakpoints.scss';
+
 :host {
   .mat-dialog-content {
     min-height: 33vh;
-    min-width: 40vw;
+    width: 50vw;
+    max-width: 800px;
   }
 }
 
 .ui-manage-collection {
+  &__info-panel {
+    max-height: 100%;
+  }
+
   &__no-results {
     *:not(:last-child) {
       margin-right: 5px;
@@ -14,6 +21,34 @@
     a {
       text-decoration: underline;
       cursor: pointer;
+    }
+  }
+
+  &__dialog__actions {
+    padding: 15px;
+    display: flex;
+    justify-content: flex-end;
+    align-content: center;
+  }
+}
+
+@media #{$ui-breakpoint-xsmall} {
+  :host {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    .mat-dialog-content {
+      width: 100%;
+      max-width: 100%;
+    }
+  }
+
+  .ui-manage-collection {
+    &__dialog__actions {
+      &__button {
+        width: 100%;
+      }
     }
   }
 }
