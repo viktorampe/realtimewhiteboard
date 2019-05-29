@@ -47,7 +47,6 @@ import { combineLatest, Observable } from 'rxjs';
 import {
   filter,
   map,
-  share,
   shareReplay,
   switchMap,
   switchMapTo,
@@ -83,8 +82,7 @@ export class BundlesViewModel {
     .hasPermission(Permissions.settings.MANAGE_HISTORY)
     .pipe(
       take(1),
-      filter(hasPermission => hasPermission),
-      share()
+      filter(hasPermission => hasPermission)
     );
   // > bundle detail page
 
@@ -284,7 +282,7 @@ export class BundlesViewModel {
 
   private getSharedBundles(): Observable<BundleInterface[]> {
     return this.store.pipe(
-      select(BundleQueries.getShared, { userId: this.authService.userId })
+      select(BundleQueries.getOwn, { userId: this.authService.userId })
     );
   }
 
