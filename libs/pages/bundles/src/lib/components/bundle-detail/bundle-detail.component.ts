@@ -86,6 +86,7 @@ export class BundleDetailComponent
     this.setupAlertsSubscription();
     this.unlockedContents$ = this.getBundleContents();
     this.filterTextInput.setFilterableItem(this);
+    this.setupHistorySubscription();
   }
 
   ngAfterViewInit(): void {
@@ -135,6 +136,15 @@ export class BundleDetailComponent
     this.subscriptions.add(
       this.routeParams$.subscribe(params =>
         this.bundlesViewModel.setBundleAlertRead(+params.bundle)
+      )
+    );
+  }
+
+  private setupHistorySubscription(): void {
+    // check for permissions is done in the viewmodel
+    this.subscriptions.add(
+      this.routeParams$.subscribe(params =>
+        this.bundlesViewModel.setBundleHistory(+params.bundle)
       )
     );
   }
