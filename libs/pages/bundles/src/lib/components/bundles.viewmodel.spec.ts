@@ -21,6 +21,7 @@ import {
   EduContentReducer,
   HistoryActions,
   HistoryInterface,
+  HistoryTypesEnum,
   LearningAreaActions,
   LearningAreaFixture,
   LearningAreaInterface,
@@ -374,6 +375,50 @@ describe('BundlesViewModel', () => {
       bundlesViewModel.openBook(book);
 
       expect(dispatchSpy).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('add bundle to history', () => {
+    let dateMock: MockDate;
+
+    beforeEach(() => {});
+
+    beforeAll(() => {
+      dateMock = new MockDate();
+    });
+
+    afterAll(() => {
+      dateMock.returnRealDate();
+    });
+
+    it('should add a bundle to history, if the user has permission', () => {
+      permissions$.next(true);
+
+      jest.spyOn(store, 'dispatch');
+
+      bundlesViewModel.setBundleHistory(1);
+
+      const expected = new HistoryActions.StartUpsertHistory({
+        history: {
+          name: bundles[0].name,
+          type: HistoryTypesEnum.BUNDLE,
+          created: dateMock.mockDate,
+          learningAreaId: bundles[0].learningAreaId,
+          bundleId: 1
+        }
+      });
+
+      expect(store.dispatch).toHaveBeenCalledWith(expected);
+    });
+
+    it('should not add the bundle to history, if the user does not have permission', () => {
+      permissions$.next(false);
+
+      jest.spyOn(store, 'dispatch');
+
+      bundlesViewModel.setBundleHistory(1);
+
+      expect(store.dispatch).not.toHaveBeenCalled();
     });
   });
 
