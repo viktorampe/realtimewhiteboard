@@ -2,7 +2,11 @@
 
 import { getContentDisplayData } from '../support/bundles.po';
 import { dataCy, login, performSetup } from '../support/commands';
-import { ApiPathsInterface, AppPathsInterface, StudentOpenBundleContentInterface } from '../support/interfaces';
+import {
+  ApiPathsInterface,
+  AppPathsInterface,
+  StudentOpenBundleContentInterface
+} from '../support/interfaces';
 
 describe('Bundles', () => {
   const apiUrl = Cypress.env('apiUrl');
@@ -40,7 +44,9 @@ describe('Bundles', () => {
         .location('pathname')
         .should(
           'be',
-          `${appPaths.bundles}/${setup.studentOpenBundleContent.learningArea.id}`
+          `${appPaths.bundles}/${
+            setup.studentOpenBundleContent.learningArea.id
+          }`
         );
     });
   });
@@ -98,9 +104,9 @@ describe('Bundles', () => {
   describe('bundle details page', () => {
     beforeEach(() => {
       cy.visit(
-        `${appPaths.bundles}/${setup.studentOpenBundleContent.learningArea.id}/${
-          setup.studentOpenBundleContent.bundle.id
-        }`,
+        `${appPaths.bundles}/${
+          setup.studentOpenBundleContent.learningArea.id
+        }/${setup.studentOpenBundleContent.bundle.id}`,
         {
           onBeforeLoad(win) {
             cy.stub(win, 'open');
