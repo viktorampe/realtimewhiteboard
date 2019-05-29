@@ -31,6 +31,7 @@ export class MockTasksViewModel implements ViewModelInterface<TasksViewModel> {
   }
 
   setTaskAlertRead(taskId: number) {}
+  setTaskHistory(taskId: number) {}
   startExercise() {}
 
   getLearningAreaById(areaId: number): Observable<LearningAreaInterface> {
