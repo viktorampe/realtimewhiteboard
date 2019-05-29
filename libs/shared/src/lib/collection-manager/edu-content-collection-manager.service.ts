@@ -68,7 +68,8 @@ export class EduContentCollectionManagerService
           return bundles.map(
             (bundle): ManageCollectionItemInterface => ({
               id: bundle.id,
-              label: bundle.name
+              label: bundle.name,
+              icon: 'bundle'
             })
           );
         }
@@ -159,7 +160,8 @@ export class EduContentCollectionManagerService
             return tasks.map(
               (task): ManageCollectionItemInterface => ({
                 id: task.id,
-                label: task.name
+                label: task.name,
+                icon: 'task'
               })
             );
           }
