@@ -2,13 +2,12 @@
 
 import { getContentDisplayData } from '../support/bundles.po';
 import { dataCy, login, performSetup } from '../support/commands';
-import { StudentOpenBundleContentInterface } from '../support/interfaces';
+import { ApiPathsInterface, AppPathsInterface, StudentOpenBundleContentInterface } from '../support/interfaces';
 
 describe('Bundles', () => {
-  const bundlesPath = 'bundles';
-  const eduContentsApiPath = 'api/eduContents';
-  const ludoApiPath = 'api/educontent-assets-ludo';
   const apiUrl = Cypress.env('apiUrl');
+  const appPaths = Cypress.env('appPaths') as AppPathsInterface;
+  const apiPaths = Cypress.env('apiPaths') as ApiPathsInterface;
   let setup: StudentOpenBundleContentInterface;
   before(() => {
     performSetup('studentOpenBundleContent').then(res => {
@@ -23,7 +22,7 @@ describe('Bundles', () => {
   });
   describe('learningarea page', () => {
     beforeEach(() => {
-      cy.visit(`${bundlesPath}`);
+      cy.visit(`${appPaths.bundles}`);
     });
     it('should show learningAreas', () => {
       dataCy('learningArea-count').contains('1 van 1 weergegeven');
@@ -41,14 +40,14 @@ describe('Bundles', () => {
         .location('pathname')
         .should(
           'be',
-          `${bundlesPath}/${setup.studentOpenBundleContent.learningArea.id}`
+          `${appPaths.bundles}/${setup.studentOpenBundleContent.learningArea.id}`
         );
     });
   });
   describe('bundles page', () => {
     beforeEach(() => {
       cy.visit(
-        `${bundlesPath}/${setup.studentOpenBundleContent.learningArea.id}`,
+        `${appPaths.bundles}/${setup.studentOpenBundleContent.learningArea.id}`,
         {
           onBeforeLoad(win) {
             cy.stub(win, 'open');
@@ -65,7 +64,7 @@ describe('Bundles', () => {
         .location('pathname')
         .should(
           'be',
-          `${bundlesPath}/${
+          `${appPaths.bundles}/${
             setup.studentOpenBundleContent.bundle.learningAreaId
           }/${setup.studentOpenBundleContent.bundle.id}`
         );
@@ -89,7 +88,7 @@ describe('Bundles', () => {
         .its('open')
         .should(
           'be.calledWithExactly',
-          `${apiUrl}${eduContentsApiPath}/${
+          `${apiUrl}${apiPaths.eduContent}/${
             setup.studentOpenBundleContent.boeke.publishedEduContentMetadata
               .eduContentId
           }/redirectURL`
@@ -99,7 +98,7 @@ describe('Bundles', () => {
   describe('bundle details page', () => {
     beforeEach(() => {
       cy.visit(
-        `${bundlesPath}/${setup.studentOpenBundleContent.learningArea.id}/${
+        `${appPaths.bundles}/${setup.studentOpenBundleContent.learningArea.id}/${
           setup.studentOpenBundleContent.bundle.id
         }`,
         {
@@ -146,7 +145,7 @@ describe('Bundles', () => {
         .should('have.attr', 'src')
         .and(
           'contain',
-          `${apiUrl}${ludoApiPath}/${
+          `${apiUrl}${apiPaths.ludoAssets}/${
             setup.studentOpenBundleContent.contentExercise.id
           }`
         );
@@ -159,7 +158,7 @@ describe('Bundles', () => {
         .its('open')
         .should(
           'be.calledWithExactly',
-          `${apiUrl}${eduContentsApiPath}/${
+          `${apiUrl}${apiPaths.eduContent}/${
             setup.studentOpenBundleContent.contentDownloadable
               .publishedEduContentMetadata.eduContentId
           }/redirectURL`
