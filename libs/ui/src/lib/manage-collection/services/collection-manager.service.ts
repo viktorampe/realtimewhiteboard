@@ -66,7 +66,8 @@ export class CollectionManagerService
     // use the ManageCollectionComponent
     // inject the right data
     return this.dialog.open(ManageCollectionComponent, {
-      data: data
+      data: data,
+      panelClass: 'ui-manage-collection__dialog'
     });
   }
 }
