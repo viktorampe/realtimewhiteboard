@@ -1,5 +1,5 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { HistoryInterface } from '../../+models';
+import { HistoryInterface, HistoryTypesEnum } from '../../+models';
 import {
   NAME,
   selectAll,
@@ -65,6 +65,12 @@ export const getByIds = createSelector(
 export const getById = createSelector(
   selectHistoryState,
   (state: State, props: { id: number }) => state.entities[props.id]
+);
+
+export const getByType = createSelector(
+  selectHistoryState,
+  (state: State, props: { type: HistoryTypesEnum }) =>
+    Object.values(state.entities).filter(value => value.type === props.type)
 );
 
 /**
