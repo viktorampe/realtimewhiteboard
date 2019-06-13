@@ -7,8 +7,16 @@ import {
   ContentInterface,
   DalState,
   EduContentFixture,
+  FavoriteActions,
+  FavoriteFixture,
+  FavoriteInterface,
   FavoriteReducer,
+  FavoriteTypesEnum,
   getStoreModuleForFeatures,
+  HistoryActions,
+  HistoryInterface,
+  HistoryReducer,
+  HistoryTypesEnum,
   TaskActions,
   TaskEduContentActions,
   TaskEduContentFixture,
@@ -87,6 +95,30 @@ describe('EduContentCollectionManagerService', () => {
       taskId: selectedTask.id
     })
   ];
+  const favorites: FavoriteInterface[] = [
+    new FavoriteFixture({
+      id: 1,
+      bundleId: 6,
+      type: FavoriteTypesEnum.BUNDLE
+    }),
+    new FavoriteFixture({
+      id: 2,
+      taskId: 7,
+      type: FavoriteTypesEnum.TASK
+    })
+  ];
+  const history: HistoryInterface[] = [
+    new FavoriteFixture({
+      id: 3,
+      bundleId: 5,
+      type: HistoryTypesEnum.BUNDLE
+    }),
+    new FavoriteFixture({
+      id: 4,
+      taskId: 6,
+      type: HistoryTypesEnum.TASK
+    })
+  ];
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -97,7 +129,8 @@ describe('EduContentCollectionManagerService', () => {
           UnlockedContentReducer,
           TaskReducer,
           TaskEduContentReducer,
-          FavoriteReducer
+          FavoriteReducer,
+          HistoryReducer
         ])
       ],
       providers: [
@@ -130,6 +163,8 @@ describe('EduContentCollectionManagerService', () => {
     store.dispatch(
       new TaskEduContentActions.TaskEduContentsLoaded({ taskEduContents })
     );
+    store.dispatch(new FavoriteActions.FavoritesLoaded({ favorites }));
+    store.dispatch(new HistoryActions.HistoryLoaded({ history }));
   });
 
   it('should be created', () => {
@@ -167,7 +202,7 @@ describe('EduContentCollectionManagerService', () => {
         { id: 4, label: 'foo', icon: 'bundle' },
         bundlesCollection, // bundles[0] has different learningAreaId
         [7],
-        []
+        jasmine.arrayContaining([5, 6]) // order doesn't matter
       );
     });
 
@@ -277,7 +312,7 @@ describe('EduContentCollectionManagerService', () => {
         { id: 4, label: 'foo', icon: 'task' },
         tasksCollection,
         [7],
-        []
+        jasmine.arrayContaining([6, 7]) // order doesn't matter
       );
     });
 
