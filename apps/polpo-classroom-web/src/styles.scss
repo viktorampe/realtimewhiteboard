@@ -153,6 +153,12 @@ body {
     border-bottom: 12px solid transparent;
     border-right: 12px solid #e1e5e7;
   }
+
+  @media #{$ui-breakpoint-xsmall}, #{$ui-breakpoint-small} {
+    &:after {
+      display: none;
+    }
+  }
 }
 
 .ui-tool-bar {
