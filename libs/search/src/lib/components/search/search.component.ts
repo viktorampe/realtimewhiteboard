@@ -139,7 +139,7 @@ export class SearchComponent
   public onFilterSelectionChange(
     criteria: SearchFilterCriteriaInterface | SearchFilterCriteriaInterface[]
   ): void {
-    this.searchViewmodel.changeFilters(criteria);
+    this.searchViewmodel.updateFilterCriteria(criteria);
   }
 
   public onSearchTermChange(value: string): void {

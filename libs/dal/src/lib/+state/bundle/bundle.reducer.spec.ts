@@ -226,7 +226,7 @@ describe('Bundles Reducer', () => {
       const action = new TeacherStudentActions.LinkTeacherStudent({
         publicKey: 'foo',
         userId: 1,
-        useCustomErrorHandler: true
+        customFeedbackHandlers: { useCustomErrorHandler: true }
       });
       const result = reducer(startState, action);
       expect(result).toEqual(createState(bundles, false));

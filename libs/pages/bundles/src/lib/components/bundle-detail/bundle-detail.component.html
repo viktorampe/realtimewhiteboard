@@ -34,12 +34,14 @@
         [ngSwitch]="selectedItems.length"
       >
         <campus-info-panel-bundle
+          data-cy="bundle-info"
           *ngSwitchCase="0"
           [bundle]="bundle"
           [teacher]="bundleOwner$ | async"
         >
         </campus-info-panel-bundle>
         <campus-info-panel-content
+          data-cy="content-info"
           *ngSwitchCase="1"
           [content]="selectedItems[0].content"
           [status]="getSelectedUnlockedContentStatus(selectedItems[0]) | async"
@@ -55,10 +57,11 @@
 
   <campus-side-sheet-page>
     <campus-page-header
+      data-cy="bundle-header"
       *ngIf="(learningArea$ | async) as learningArea"
       [title]="bundle.name"
       [subtitle]="bundle.description"
-      [iconClass]="'learning-area:' + learningArea.icon"
+      [iconClass]="learningArea.icon"
     >
     </campus-page-header>
 
@@ -66,7 +69,7 @@
       <ng-container
         *ngIf="(filterTextInput.result$ | async) as filteredUnlockedContents"
       >
-        <div class="itemsAmount">
+        <div class="itemsAmount" data-cy="bundle-count">
           {{ filteredUnlockedContents.length }} van
           <u (click)="filterTextInput.clear()">{{ unlockedContents.length }}</u>
           weergegeven
@@ -78,6 +81,7 @@
           [multiSelect]="allowMultiSelect(bundle)"
         >
           <campus-content-thumbnail
+            data-cy="content"
             *ngFor="let unlockedcontent of filteredUnlockedContents"
             campusListItem
             [dataObject]="unlockedcontent"
@@ -87,6 +91,7 @@
             [contentTypeClass]="unlockedcontent.content.productType"
           >
             <campus-button
+              data-cy="content-view-content"
               (click)="clickOpenContent(unlockedcontent)"
               [iconClass]="
                 unlockedcontent.content.type === 'exercise'

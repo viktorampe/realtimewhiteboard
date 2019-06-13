@@ -29,6 +29,8 @@ import {
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { EduContentSearchResultComponent } from './components/searchresults/edu-content-search-result.component';
+import { EduContentSearchResultItemService } from './components/searchresults/edu-content-search-result.service';
+import { EDUCONTENT_SEARCH_RESULT_ITEM_SERVICE_TOKEN } from './components/searchresults/edu-content-search-result.service.interface';
 import {
   SearchTermFilterFactory,
   SEARCH_TERM_FILTER_FACTORY_TOKEN
@@ -59,7 +61,8 @@ configureBufferSize(150);
       environment.termPrivacy,
       environment.api,
       environment.sso,
-      environment.searchModes
+      environment.searchModes,
+      environment.testing
     ),
     BrowserAnimationsModule,
     NxModule.forRoot(),
@@ -90,6 +93,10 @@ configureBufferSize(150);
     {
       provide: SEARCH_TERM_FILTER_FACTORY_TOKEN,
       useClass: SearchTermFilterFactory
+    },
+    {
+      provide: EDUCONTENT_SEARCH_RESULT_ITEM_SERVICE_TOKEN,
+      useClass: EduContentSearchResultItemService
     }
   ],
   bootstrap: [AppComponent],

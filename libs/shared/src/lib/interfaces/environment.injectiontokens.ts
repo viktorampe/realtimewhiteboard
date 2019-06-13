@@ -37,3 +37,7 @@ export const ENVIRONMENT_SSO_TOKEN = new InjectionToken(
 export const ENVIRONMENT_SEARCHMODES_TOKEN = new InjectionToken(
   'environmentSearchModes'
 );
+
+export const ENVIRONMENT_TESTING_TOKEN = new InjectionToken(
+  'environmentTesting'
+);
