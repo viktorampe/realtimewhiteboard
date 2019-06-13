@@ -36,10 +36,7 @@ export class EduContentLearningAreaOverviewComponent implements OnInit {
   ngOnInit(): void {
     this.learningAreas$ = this.eduContentsViewModel.learningAreas$.pipe(
       map(learningAreas => {
-        return learningAreas.sort((l1, l2) => {
-          if (l1.name === l2.name) return 0;
-          return l1.name > l2.name ? 1 : -1;
-        });
+        return learningAreas.sort((l1, l2) => l1.name.localeCompare(l2.name));
       })
     );
     this.favoriteLearningAreas$ = this.eduContentsViewModel.favoriteLearningAreas$;
