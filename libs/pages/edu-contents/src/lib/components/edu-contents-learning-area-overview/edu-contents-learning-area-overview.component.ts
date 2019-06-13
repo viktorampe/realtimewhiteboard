@@ -4,7 +4,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { LearningAreaInterface } from '@campus/dal';
 import { EnvironmentSearchModesInterface } from '@campus/shared';
 import { Observable, Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import {
+  debounceTime,
+  distinctUntilChanged,
+  map,
+  switchMap
+} from 'rxjs/operators';
 import { EduContentsViewModel } from '../edu-contents.viewmodel';
 
 @Component({
@@ -29,7 +34,11 @@ export class EduContentLearningAreaOverviewComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.learningAreas$ = this.eduContentsViewModel.learningAreas$;
+    this.learningAreas$ = this.eduContentsViewModel.learningAreas$.pipe(
+      map(learningAreas => {
+        return learningAreas.sort((l1, l2) => l1.name.localeCompare(l2.name));
+      })
+    );
     this.favoriteLearningAreas$ = this.eduContentsViewModel.favoriteLearningAreas$;
     this.searchModes = this.eduContentsViewModel.searchModes;
     this.searchTerm$ = new Subject();
