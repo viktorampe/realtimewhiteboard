@@ -35,7 +35,13 @@ steps:
     inputs:
       testResultsFormat: 'JUnit'
       testResultsFiles: 'junit/*.xml'
+  - task: Palmmedia.reportgenerator.reportgenerator-build-release-task.reportgenerator@4
+    displayName: ReportGenerator
+    inputs:
+      reports: $(Build.SourcesDirectory)/coverage/**/cobertura-coverage.xml
+      targetdir: $(Build.SourcesDirectory)/reportgenerator
+      reporttypes: 'Cobertura'
   - task: PublishCodeCoverageResults@1
     inputs:
       codeCoverageTool: 'cobertura'
-      summaryFileLocation: $(Build.SourcesDirectory)/coverage/**/cobertura-coverage.xml
+      summaryFileLocation: $(Build.SourcesDirectory)/reportgenerator/Cobertura.xml
