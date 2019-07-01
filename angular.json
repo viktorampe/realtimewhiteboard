@@ -872,6 +872,123 @@
           }
         }
       }
+    },
+    "kabas-web": {
+      "root": "apps/kabas-web/",
+      "sourceRoot": "apps/kabas-web/src",
+      "projectType": "application",
+      "prefix": "campus",
+      "schematics": {
+        "@schematics/angular:component": {
+          "styleext": "scss"
+        }
+      },
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/apps/kabas-web",
+            "index": "apps/kabas-web/src/index.html",
+            "main": "apps/kabas-web/src/main.ts",
+            "polyfills": "apps/kabas-web/src/polyfills.ts",
+            "tsConfig": "apps/kabas-web/tsconfig.app.json",
+            "assets": [
+              "apps/kabas-web/src/favicon.ico",
+              "apps/kabas-web/src/assets"
+            ],
+            "styles": ["apps/kabas-web/src/styles.scss"],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/kabas-web/src/environments/environment.ts",
+                  "with": "apps/kabas-web/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "kabas-web:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "kabas-web:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "kabas-web:build"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "apps/kabas-web/tsconfig.app.json",
+              "apps/kabas-web/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/builders:jest",
+          "options": {
+            "jestConfig": "apps/kabas-web/jest.config.js",
+            "tsConfig": "apps/kabas-web/tsconfig.spec.json",
+            "setupFile": "apps/kabas-web/src/test-setup.ts"
+          }
+        }
+      }
+    },
+    "kabas-web-e2e": {
+      "root": "apps/kabas-web-e2e",
+      "projectType": "application",
+      "prefix": "",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/builders:cypress",
+          "options": {
+            "cypressConfig": "apps/kabas-web-e2e/cypress.json",
+            "tsConfig": "apps/kabas-web-e2e/tsconfig.e2e.json",
+            "devServerTarget": "kabas-web:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "kabas-web:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": "apps/kabas-web-e2e/tsconfig.e2e.json",
+            "exclude": ["**/node_modules/**"]
+          }
+        }
+      }
     }
   },
   "cli": {
