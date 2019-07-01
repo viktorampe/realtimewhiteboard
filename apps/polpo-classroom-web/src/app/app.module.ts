@@ -21,7 +21,6 @@ import { NxModule } from '@nrwl/nx';
 import { storeFreeze } from 'ngrx-store-freeze';
 import { configureBufferSize, handleUndo } from 'ngrx-undo';
 import { environment } from '../environments/environment';
-import { AppEffects } from './+state/app.effects';
 import {
   appReducer,
   initialState as appInitialState
@@ -71,13 +70,13 @@ configureBufferSize(150);
     StoreModule.forRoot(
       { app: appReducer, router: routerReducer },
       {
-        initialState: { app: appInitialState },
+        initialState: appInitialState,
         metaReducers: !environment.production
           ? [storeFreeze, handleUndo]
           : [handleUndo]
       }
     ),
-    EffectsModule.forRoot([AppEffects]),
+    EffectsModule.forRoot([]),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
     StoreRouterConnectingModule.forRoot({
       navigationActionTiming: NavigationActionTiming.PostActivation,

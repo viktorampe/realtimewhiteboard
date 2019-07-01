@@ -1,41 +1,17 @@
-import { AppAction, AppActionTypes } from './app.actions';
-
-/**
- * Interface for the 'App' data used in
- *  - AppState, and
- *  - appReducer
- *
- *  Note: replace if already defined in another module
- */
+import { Action } from '@ngrx/store';
 
 /* tslint:disable:no-empty-interface */
 export interface Entity {}
 
-export interface AppState {
-  list: Entity[]; // list of App; analogous to a sql normalized table
-  selectedId?: string | number; // which App record has been selected
-  loaded: boolean; // has the App list been loaded
-  error?: any; // last known error (if any)
-}
+export interface AppState {}
 
-export const initialState: AppState = {
-  list: [],
-  loaded: false
-};
+export const initialState: AppState = {};
 
 export function appReducer(
   state: AppState = initialState,
-  action: AppAction
+  action: Action
 ): AppState {
   switch (action.type) {
-    case AppActionTypes.AppLoaded: {
-      state = {
-        ...state,
-        list: action.payload,
-        loaded: true
-      };
-      break;
-    }
   }
   return state;
 }
