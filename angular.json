@@ -948,7 +948,7 @@
           "options": {
             "browserTarget": "kabas-web:build",
             "host": "www.kabas.localhost",
-            "port": 3014
+            "port": 3020
           },
           "configurations": {
             "production": {
