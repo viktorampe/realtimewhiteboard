@@ -900,6 +900,23 @@
             "scripts": []
           },
           "configurations": {
+            "staging": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/kabas-web/src/environments/environment.ts",
+                  "with": "apps/kabas-web/src/environments/environment.staging.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true
+            },
             "production": {
               "fileReplacements": [
                 {
@@ -929,7 +946,9 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "kabas-web:build"
+            "browserTarget": "kabas-web:build",
+            "host": "www.kabas.localhost",
+            "port": 3014
           },
           "configurations": {
             "production": {
