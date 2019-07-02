@@ -5,3 +5,10 @@
  */
 @import 'scss/theme-angular-material';
 @include angular-material-theme($polpo-theme);
+
+// load all variables for your app theme and ui components
+@import 'scss/theme-variables';
+
+// include ui lib scss file
+@import 'libs/ui/src/lib/ui-theme';
+@include ui-theme();
