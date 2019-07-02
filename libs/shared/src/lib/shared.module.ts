@@ -1,7 +1,7 @@
 import { LayoutModule } from '@angular/cdk/layout';
 import { PortalModule } from '@angular/cdk/portal';
 import { CommonModule } from '@angular/common';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Inject, ModuleWithProviders, NgModule } from '@angular/core';
 import {
   MatBadgeModule,
@@ -87,7 +87,8 @@ import { SCORM_EXERCISE_SERVICE_TOKEN } from './scorm/scorm-exercise.service.int
     MatListModule,
     MatTooltipModule,
     UtilsModule,
-    MatMenuModule
+    MatMenuModule,
+    HttpClientModule
   ],
   declarations: [
     HeaderComponent,
