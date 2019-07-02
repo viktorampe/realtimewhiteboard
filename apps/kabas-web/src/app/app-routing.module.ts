@@ -4,12 +4,8 @@ import { RouterModule, Routes } from '@angular/router';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'login',
+    redirectTo: 'error/999',
     pathMatch: 'full'
-  },
-  {
-    path: 'login',
-    redirectTo: 'dev/login'
   },
   {
     path: 'error',
@@ -17,15 +13,6 @@ const routes: Routes = [
     data: {
       breadcrumbText: 'Foutmelding'
     }
-  },
-  {
-    path: 'dev',
-    loadChildren: '@campus/devlib#DevlibModule',
-    data: { breadcrumbText: 'Full retard' }
-  },
-  {
-    path: '**',
-    redirectTo: 'error/404'
   }
 ];
 
