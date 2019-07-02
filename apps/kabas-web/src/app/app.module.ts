@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { MatIconModule } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { UiModule } from '@campus/ui';
 import { EffectsModule } from '@ngrx/effects';
 import { routerReducer } from '@ngrx/router-store';
 import { StoreModule } from '@ngrx/store';
@@ -19,7 +21,9 @@ configureBufferSize(150);
   declarations: [AppComponent],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
+    UiModule,
     MatIconModule,
     SharedModule.forRoot(
       environment.features.alerts,
