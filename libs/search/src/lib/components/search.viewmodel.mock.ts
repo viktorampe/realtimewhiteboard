@@ -37,7 +37,7 @@ export class MockSearchViewModel
   ): void {}
   public changeSort(sortMode: SortModeInterface): void {}
   public getNextPage(): void {}
-  public changeFilters(criteria: SearchFilterCriteriaInterface): void {}
+  public updateFilterCriteria(criteria: SearchFilterCriteriaInterface): void {}
   public changeSearchTerm(searchTerm: string): void {}
   public updateResult(result: SearchResultInterface): void {}
 

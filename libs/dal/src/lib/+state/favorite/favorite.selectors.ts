@@ -115,9 +115,7 @@ export const favoritesByType = createSelector(
     });
 
     Object.keys(byKey).forEach(key =>
-      byKey[key].sort((a, b) =>
-        new Date(a.created) < new Date(b.created) ? 1 : -1
-      )
+      byKey[key].sort((a, b) => (a.created < b.created ? 1 : -1))
     );
 
     return byKey;

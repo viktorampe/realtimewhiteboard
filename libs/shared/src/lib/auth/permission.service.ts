@@ -26,6 +26,7 @@ export class PermissionService implements PermissionServiceInterface {
     requiredPermissions: string | (string | string[])[]
   ): Observable<boolean> {
     let permissions: (string | string[])[];
+
     if (typeof requiredPermissions === 'string') {
       permissions = [requiredPermissions];
     } else {
@@ -35,6 +36,7 @@ export class PermissionService implements PermissionServiceInterface {
       select(UserQueries.getPermissions),
       map(userPermissions => {
         // every permission in the list must match
+
         return permissions.every(permission => {
           if (typeof permission === 'string') {
             return userPermissions.includes(permission);

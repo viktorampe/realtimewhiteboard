@@ -1,5 +1,5 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { HistoryInterface } from '../../+models';
+import { HistoryInterface, HistoryTypesEnum } from '../../+models';
 import {
   NAME,
   selectAll,
@@ -67,6 +67,12 @@ export const getById = createSelector(
   (state: State, props: { id: number }) => state.entities[props.id]
 );
 
+export const getByType = createSelector(
+  selectHistoryState,
+  (state: State, props: { type: HistoryTypesEnum }) =>
+    Object.values(state.entities).filter(value => value.type === props.type)
+);
+
 /**
  * returns an object with history grouped by type, ordered by date descending
  * @example
@@ -77,21 +83,24 @@ export const getById = createSelector(
 export const historyByType = createSelector(
   selectHistoryState,
   (state: State) => {
-    const byKey: { [key: string]: HistoryInterface[] } = {};
     // must cast state.ids to number[] (from 'string[] | number[]') or we can't use array functions like forEach
-    (state.ids as number[]).forEach((id: number) => {
+    const ids = [...(state.ids as number[])];
+    const sortedIds = ids.sort((a, b) =>
+      new Date(state.entities[a].created) < new Date(state.entities[b].created)
+        ? 1
+        : -1
+    );
+
+    const byKey: { [key: string]: HistoryInterface[] } = {};
+    sortedIds.forEach((id: number) => {
       const item = state.entities[id];
       if (!byKey[item.type]) {
         byKey[item.type] = [];
       }
-      byKey[item.type].push(item);
+      if (byKey[item.type].length < 10) {
+        byKey[item.type].push(item);
+      }
     });
-
-    Object.keys(byKey).forEach(key =>
-      byKey[key].sort((a, b) =>
-        new Date(a.created) < new Date(b.created) ? 1 : -1
-      )
-    );
 
     return byKey;
   }

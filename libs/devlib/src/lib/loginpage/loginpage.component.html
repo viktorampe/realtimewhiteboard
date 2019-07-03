@@ -44,7 +44,9 @@
     </div>
   </div>
 
-  <button (click)="loginPageviewModel.logout()">logout</button>
+  <button (click)="loginPageviewModel.logout()" data-cy="logoutButton"
+    >logout</button
+  >
 
   <div>
     <p>{{ loginPageviewModel.response }}</p>

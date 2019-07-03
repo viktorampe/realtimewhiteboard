@@ -1,16 +1,30 @@
 import { TestBed } from '@angular/core/testing';
+import { MockDate } from '@campus/testing';
 import { EffectsModule } from '@ngrx/effects';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
+import { undo } from 'ngrx-undo';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { HistoryEffects, HistoryReducer } from '.';
-import { FavoriteFixture } from '../../+fixtures';
+import { HistoryFixture } from '../../+fixtures';
 import { HistoryInterface } from '../../+models';
 import { HistoryServiceInterface, HISTORY_SERVICE_TOKEN } from '../../history';
 import {
+  UndoService,
+  UndoServiceInterface,
+  UNDO_SERVICE_TOKEN
+} from '../../undo';
+import { DalState } from '../dal.state.interface';
+import {
+  EffectFeedback,
+  EffectFeedbackActions,
+  Priority
+} from '../effect-feedback';
+import {
+  DeleteHistory,
   HistoryLoaded,
   HistoryLoadError,
   LoadHistory,
@@ -23,6 +37,9 @@ describe('HistoryEffects', () => {
   let effects: HistoryEffects;
   let usedState: any;
   let historyService: HistoryServiceInterface;
+  let undoService: UndoServiceInterface;
+  let dataPersistence: DataPersistence<DalState>;
+  let uuid: Function;
 
   const expectInAndOut = (
     effect: Observable<any>,
@@ -76,8 +93,17 @@ describe('HistoryEffects', () => {
           provide: HISTORY_SERVICE_TOKEN,
           useValue: {
             getAllForUser: () => {},
-            upsertHistory: () => {}
+            upsertHistory: () => {},
+            deleteHistory: () => {}
           }
+        },
+        {
+          provide: UNDO_SERVICE_TOKEN,
+          useClass: UndoService
+        },
+        {
+          provide: 'uuid',
+          useValue: () => 'foo'
         },
         HistoryEffects,
         DataPersistence,
@@ -87,6 +113,9 @@ describe('HistoryEffects', () => {
 
     effects = TestBed.get(HistoryEffects);
     historyService = TestBed.get(HISTORY_SERVICE_TOKEN);
+    undoService = TestBed.get(UNDO_SERVICE_TOKEN);
+    dataPersistence = TestBed.get(DataPersistence);
+    uuid = TestBed.get('uuid');
   });
 
   describe('loadHistory$', () => {
@@ -178,8 +207,7 @@ describe('HistoryEffects', () => {
     let upsertAction$: BehaviorSubject<StartUpsertHistory>;
 
     beforeEach(() => {
-      // TODO replace with HistoryFixture when merged
-      mockHistory = new FavoriteFixture();
+      mockHistory = new HistoryFixture();
       mockStartUpsertAction = new StartUpsertHistory({ history: mockHistory });
       upsertAction$ = new BehaviorSubject(null);
       actions = upsertAction$;
@@ -210,6 +238,66 @@ describe('HistoryEffects', () => {
         mockStartUpsertAction,
         expected
       );
+    });
+  });
+
+  describe('deleteHistory$', () => {
+    it('should call the undoService', () => {
+      const mockDeleteAction = new DeleteHistory({
+        id: 1,
+        userId: 2,
+        customFeedbackHandlers: { useCustomErrorHandler: true }
+      });
+
+      const spy = jest
+        .spyOn(undoService, 'dispatchActionAsUndoable')
+        .mockReturnValue('foo');
+
+      expectInAndOut(effects.deleteHistory$, mockDeleteAction, 'foo');
+
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy).toHaveBeenCalledWith({
+        action: mockDeleteAction,
+        dataPersistence: dataPersistence,
+        intendedSideEffect: historyService.deleteHistory(2, 1),
+        undoLabel: 'Geschiedenis wordt verwijderd',
+        doneLabel: 'Geschiedenis is verwijderd',
+        undoneLabel: 'Geschiedenis is niet verwijderd'
+      });
+    });
+
+    it('should return an undoAction and a feedbackAction if an error occured', () => {
+      const mockDate = new MockDate();
+
+      const deleteAction = new DeleteHistory({ id: 0, userId: 1 });
+      const spy = jest
+        .spyOn(undoService, 'dispatchActionAsUndoable')
+        .mockImplementation(() => {
+          throw Error('some error');
+        });
+      const feedbackAction = new EffectFeedbackActions.AddEffectFeedback({
+        effectFeedback: new EffectFeedback({
+          id: uuid(),
+          triggerAction: deleteAction,
+          message:
+            'Het is niet gelukt om het item uit jouw geschiedenis te verwijderen.',
+          userActions: [
+            { title: 'Opnieuw proberen', userAction: deleteAction }
+          ],
+          type: 'error',
+          priority: Priority.HIGH
+        })
+      });
+      actions = hot('-a', { a: deleteAction });
+      expect(effects.deleteHistory$).toBeObservable(
+        hot('-(ab)', {
+          a: undo(deleteAction),
+          b: feedbackAction
+        })
+      );
+      expect(spy).toHaveBeenCalledTimes(1);
+
+      mockDate.returnRealDate();
     });
   });
 });

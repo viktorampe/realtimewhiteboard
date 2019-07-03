@@ -12,6 +12,7 @@ addons:
   hosts:
     - teacher.polpo.localhost
     - student.polpo.localhost
+    - www.kabas.localhost
 branches:
   only:
     - develop

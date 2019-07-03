@@ -7,8 +7,16 @@ import {
   ContentInterface,
   DalState,
   EduContentFixture,
+  FavoriteActions,
+  FavoriteFixture,
+  FavoriteInterface,
   FavoriteReducer,
+  FavoriteTypesEnum,
   getStoreModuleForFeatures,
+  HistoryActions,
+  HistoryInterface,
+  HistoryReducer,
+  HistoryTypesEnum,
   TaskActions,
   TaskEduContentActions,
   TaskEduContentFixture,
@@ -49,8 +57,8 @@ describe('EduContentCollectionManagerService', () => {
     new BundleFixture({ id: 7, learningAreaId: 2 })
   ];
   const bundlesCollection: ManageCollectionItemInterface[] = [
-    { id: 6, label: 'foo' },
-    { id: 7, label: 'foo' }
+    { id: 6, label: 'foo', icon: 'bundle' },
+    { id: 7, label: 'foo', icon: 'bundle' }
   ];
   const selectedBundle = bundles[2];
   const selectedEduContent = new EduContentFixture(
@@ -76,8 +84,8 @@ describe('EduContentCollectionManagerService', () => {
     new TaskFixture({ id: 7, learningAreaId: 2 })
   ];
   const tasksCollection: ManageCollectionItemInterface[] = [
-    { id: 6, label: 'foo' },
-    { id: 7, label: 'foo' }
+    { id: 6, label: 'foo', icon: 'task' },
+    { id: 7, label: 'foo', icon: 'task' }
   ];
   const selectedTask = tasks[2];
   const taskEduContents: TaskEduContentInterface[] = [
@@ -85,6 +93,30 @@ describe('EduContentCollectionManagerService', () => {
       id: 13,
       eduContentId: selectedEduContent.id,
       taskId: selectedTask.id
+    })
+  ];
+  const favorites: FavoriteInterface[] = [
+    new FavoriteFixture({
+      id: 1,
+      bundleId: 6,
+      type: FavoriteTypesEnum.BUNDLE
+    }),
+    new FavoriteFixture({
+      id: 2,
+      taskId: 7,
+      type: FavoriteTypesEnum.TASK
+    })
+  ];
+  const history: HistoryInterface[] = [
+    new FavoriteFixture({
+      id: 3,
+      bundleId: 5,
+      type: HistoryTypesEnum.BUNDLE
+    }),
+    new FavoriteFixture({
+      id: 4,
+      taskId: 6,
+      type: HistoryTypesEnum.TASK
     })
   ];
 
@@ -97,7 +129,8 @@ describe('EduContentCollectionManagerService', () => {
           UnlockedContentReducer,
           TaskReducer,
           TaskEduContentReducer,
-          FavoriteReducer
+          FavoriteReducer,
+          HistoryReducer
         ])
       ],
       providers: [
@@ -130,6 +163,8 @@ describe('EduContentCollectionManagerService', () => {
     store.dispatch(
       new TaskEduContentActions.TaskEduContentsLoaded({ taskEduContents })
     );
+    store.dispatch(new FavoriteActions.FavoritesLoaded({ favorites }));
+    store.dispatch(new HistoryActions.HistoryLoaded({ history }));
   });
 
   it('should be created', () => {
@@ -164,10 +199,10 @@ describe('EduContentCollectionManagerService', () => {
       expect(spy).toHaveBeenCalledTimes(1);
       expect(spy).toHaveBeenCalledWith(
         '"foo" toevoegen aan je bundels',
-        { id: 4, label: 'foo' },
+        { id: 4, label: 'foo', icon: 'bundle' },
         bundlesCollection, // bundles[0] has different learningAreaId
         [7],
-        []
+        jasmine.arrayContaining([5, 6]) // order doesn't matter
       );
     });
 
@@ -274,10 +309,10 @@ describe('EduContentCollectionManagerService', () => {
       expect(spy).toHaveBeenCalledTimes(1);
       expect(spy).toHaveBeenCalledWith(
         '"foo" toevoegen aan je taken',
-        { id: 4, label: 'foo' },
+        { id: 4, label: 'foo', icon: 'task' },
         tasksCollection,
         [7],
-        []
+        jasmine.arrayContaining([6, 7]) // order doesn't matter
       );
     });
 

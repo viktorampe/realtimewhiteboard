@@ -172,5 +172,8 @@ export const environment: EnvironmentInterface = {
         pageSize: 20
       }
     }
+  },
+  testing: {
+    removeDataCyAttributes: false
   }
 };

@@ -74,6 +74,7 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
     this.loadInputParams();
     this.loadOutputStreams();
     this.setupAlertsSubscription();
+    this.setupHistorySubscription();
   }
 
   ngAfterViewInit(): void {
@@ -105,6 +106,15 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
     this.subscriptions.add(
       this.routerParams$.subscribe(params =>
         this.taskViewModel.setTaskAlertRead(+params.task)
+      )
+    );
+  }
+
+  private setupHistorySubscription(): void {
+    // check for permissions is done in the viewmodel
+    this.subscriptions.add(
+      this.routerParams$.subscribe(params =>
+        this.taskViewModel.setTaskHistory(+params.task)
       )
     );
   }
@@ -146,10 +156,7 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   clickOpenContent(taskEduContent: TaskEduContentInterface): void {
-    this.taskViewModel.startExercise(
-      taskEduContent.eduContentId,
-      taskEduContent.taskId
-    );
+    this.taskViewModel.startExercise(taskEduContent);
   }
 
   //filterFunction

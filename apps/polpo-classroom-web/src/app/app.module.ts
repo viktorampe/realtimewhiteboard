@@ -21,11 +21,6 @@ import { NxModule } from '@nrwl/nx';
 import { storeFreeze } from 'ngrx-store-freeze';
 import { configureBufferSize, handleUndo } from 'ngrx-undo';
 import { environment } from '../environments/environment';
-import { AppEffects } from './+state/app.effects';
-import {
-  appReducer,
-  initialState as appInitialState
-} from './+state/app.reducer';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { EduContentSearchResultComponent } from './components/searchresults/edu-content-search-result.component';
@@ -61,22 +56,22 @@ configureBufferSize(150);
       environment.termPrivacy,
       environment.api,
       environment.sso,
-      environment.searchModes
+      environment.searchModes,
+      environment.testing
     ),
     BrowserAnimationsModule,
     NxModule.forRoot(),
     DalModule.forRoot({ apiBaseUrl: environment.api.APIBase }),
     GuardsModule,
     StoreModule.forRoot(
-      { app: appReducer, router: routerReducer },
+      { app: undefined, router: routerReducer },
       {
-        initialState: { app: appInitialState },
         metaReducers: !environment.production
           ? [storeFreeze, handleUndo]
           : [handleUndo]
       }
     ),
-    EffectsModule.forRoot([AppEffects]),
+    EffectsModule.forRoot([]),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
     StoreRouterConnectingModule.forRoot({
       navigationActionTiming: NavigationActionTiming.PostActivation,

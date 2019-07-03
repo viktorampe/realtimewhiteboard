@@ -7,6 +7,7 @@ import {
   BundleFixture,
   EduContentBookFixture,
   EduContentFixture,
+  EduContentMetadataFixture,
   EduContentProductTypeFixture,
   EduContentTOCFixture,
   FavoriteTypesEnum,
@@ -48,6 +49,7 @@ describe('EduContentSearchResultComponent', () => {
             isFavorite$: () => mockIsFavorite,
             toggleFavorite: jest.fn(),
             upsertEduContentToStore: jest.fn(),
+            upsertHistoryToStore: jest.fn(),
             linkTask: jest.fn(),
             linkBundle: jest.fn(),
             openStatic: jest.fn(),
@@ -563,12 +565,46 @@ describe('EduContentSearchResultComponent', () => {
         ).toHaveBeenCalledWith(component.data.eduContent);
       });
 
-      it('should call open on static content service when calling openStatic', () => {
+      it('should call open on static content service when calling openStatic and upsertHistoryToStore', () => {
+        component.data = {
+          eduContent: new EduContentFixture({
+            id: 1,
+            publishedEduContentMetadata: new EduContentMetadataFixture({
+              title: 'foo',
+              learningAreaId: 29
+            }),
+            type: 'boek-e'
+          }),
+          currentBundle: null,
+          currentTask: null,
+          inTask: false,
+          inBundle: false,
+          isFavorite: false,
+          minimal: new EduContentFixture({ id: 1 })
+        } as EduContentSearchResultInterface;
+
+        fixture.detectChanges();
+
+        const mockDate = new MockDate();
+
+        const expectedHistory = {
+          name: 'foo',
+          type: 'boek-e',
+          eduContentId: 1,
+          created: mockDate.mockDate,
+          learningAreaId: 29
+        };
+
         component.openStatic(true);
         expect(eduContentSearchResultItemService.openStatic).toHaveBeenCalled();
         expect(
           eduContentSearchResultItemService.openStatic
         ).toHaveBeenCalledWith(component.data.eduContent, true);
+        expect(
+          eduContentSearchResultItemService.upsertHistoryToStore
+        ).toHaveBeenCalledWith(expectedHistory);
+
+        mockDate.returnRealDate();
       });
 
       it('should call open without solutions on scorm exercise service when calling openExercise(false)', () => {

@@ -85,6 +85,12 @@
     },
     "search": {
       "tags": []
+    },
+    "kabas-web": {
+      "tags": []
+    },
+    "kabas-web-e2e": {
+      "tags": []
     }
   }
 }

@@ -1,5 +1,6 @@
+import { HistoryFixture } from '@campus/dal';
 import { HistoryQueries } from '.';
-import { HistoryInterface } from '../../+models';
+import { HistoryInterface, HistoryTypesEnum } from '../../+models';
 import { State } from './history.reducer';
 
 describe('History Selectors', () => {
@@ -96,16 +97,34 @@ describe('History Selectors', () => {
       expect(results).toBe(undefined);
     });
 
+    it('getByType() should return all history with the provided type', () => {
+      const mockHistory = [
+        new HistoryFixture({ id: 4, type: HistoryTypesEnum.BOEKE }),
+        new HistoryFixture({ id: 1 }),
+        new HistoryFixture({ id: 2, type: HistoryTypesEnum.BOEKE }),
+        new HistoryFixture({ id: 3, type: HistoryTypesEnum.BUNDLE })
+      ];
+
+      historyState = createState(mockHistory, true, 'no error');
+
+      storeState = { history: historyState };
+
+      const results = HistoryQueries.getByType(storeState, {
+        type: HistoryTypesEnum.BOEKE
+      });
+
+      expect(results).toEqual([mockHistory[2], mockHistory[0]]);
+    });
+
     describe('historyByType', () => {
       let mockHistory: HistoryInterface[];
       beforeEach(() => {
-        // TODO use fixture when merged
         mockHistory = [
-          { ...createHistory(4), type: 'foo', created: new Date(1) },
-          { ...createHistory(1), type: 'foo', created: new Date(2) },
-          { ...createHistory(2), type: 'bar', created: new Date(229) },
-          { ...createHistory(3), type: 'baz', created: new Date(1) },
-          { ...createHistory(5), type: 'bar', created: new Date(114) }
+          new HistoryFixture({ id: 4, type: 'foo', created: new Date(1) }),
+          new HistoryFixture({ id: 1, type: 'foo', created: new Date(2) }),
+          new HistoryFixture({ id: 2, type: 'bar', created: new Date(229) }),
+          new HistoryFixture({ id: 3, type: 'baz', created: new Date(1) }),
+          new HistoryFixture({ id: 5, type: 'bar', created: new Date(114) })
         ];
 
         historyState = createState(mockHistory, true, 'no error');
@@ -118,6 +137,60 @@ describe('History Selectors', () => {
         const expected = {
           foo: [mockHistory[1], mockHistory[0]],
           bar: [mockHistory[2], mockHistory[4]],
+          baz: [mockHistory[3]]
+        };
+
+        expect(result).toEqual(expected);
+      });
+    });
+
+    describe('historyByType', () => {
+      let mockHistory: HistoryInterface[];
+      beforeEach(() => {
+        mockHistory = [
+          new HistoryFixture({ id: 4, type: 'foo', created: new Date(1) }),
+          new HistoryFixture({ id: 1, type: 'foo', created: new Date(2) }),
+          new HistoryFixture({ id: 2, type: 'bar', created: new Date(2290) }),
+          new HistoryFixture({ id: 3, type: 'baz', created: new Date(1) }),
+          new HistoryFixture({ id: 5, type: 'bar', created: new Date(1140) }),
+          new HistoryFixture({ id: 6, type: 'bar', created: new Date(1160) }),
+          new HistoryFixture({ id: 7, type: 'bar', created: new Date(1170) }),
+          new HistoryFixture({ id: 8, type: 'bar', created: new Date(1180) }),
+          new HistoryFixture({ id: 9, type: 'bar', created: new Date(1190) }),
+          new HistoryFixture({ id: 10, type: 'bar', created: new Date(1200) }),
+          new HistoryFixture({ id: 11, type: 'bar', created: new Date(1210) }),
+          new HistoryFixture({ id: 12, type: 'bar', created: new Date(1220) }),
+          new HistoryFixture({ id: 13, type: 'bar', created: new Date(1230) }),
+          new HistoryFixture({ id: 14, type: 'bar', created: new Date(1240) }),
+          new HistoryFixture({ id: 15, type: 'bar', created: new Date(1250) }),
+          new HistoryFixture({ id: 16, type: 'bar', created: new Date(1260) }),
+          new HistoryFixture({ id: 17, type: 'bar', created: new Date(1270) }),
+          new HistoryFixture({ id: 18, type: 'bar', created: new Date(1280) }),
+          new HistoryFixture({ id: 19, type: 'bar', created: new Date(1290) }),
+          new HistoryFixture({ id: 20, type: 'bar', created: new Date(100) })
+        ];
+
+        historyState = createState(mockHistory, true, 'no error');
+        storeState = { history: historyState };
+      });
+
+      it('should limit the historyitems to 10 per type', () => {
+        const result = HistoryQueries.historyByType(storeState);
+
+        const expected = {
+          bar: [
+            mockHistory[2],
+            mockHistory[18],
+            mockHistory[17],
+            mockHistory[16],
+            mockHistory[15],
+            mockHistory[14],
+            mockHistory[13],
+            mockHistory[12],
+            mockHistory[11],
+            mockHistory[10]
+          ],
+          foo: [mockHistory[1], mockHistory[0]],
           baz: [mockHistory[3]]
         };
 
