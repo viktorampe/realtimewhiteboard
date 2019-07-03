@@ -37,6 +37,7 @@ jobs:
       - script: |
           node ./node_modules/.bin/ng lint
           npm run format:check
+    dependsOn: prepare_build
   - job: unit_tests
     displayName: 'Run unit tests'
     pool: 'Campus'
@@ -60,6 +61,7 @@ jobs:
         inputs:
           codeCoverageTool: 'cobertura'
           summaryFileLocation: $(Build.SourcesDirectory)/reportgenerator/Cobertura.xml
+    dependsOn: prepare_build
 #steps:
 # - script: |
 #     npm install -g @angular/cli
