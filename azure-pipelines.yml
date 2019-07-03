@@ -65,8 +65,16 @@ steps:
     inputs:
       testResultsFormat: 'JUnit'
       testResultsFiles: 'junit/*.xml'
+  - bash: |
+      if [ -d "coverage" ]; then
+        echo "##vso[task.setVariable variable=dkRunReportGenerator]true"
+      else
+        echo "##vso[task.setVariable variable=dkRunReportGenerator]false"  
+      fi
+    displayName: 'Determine if coverages must be generated'
   - task: Palmmedia.reportgenerator.reportgenerator-build-release-task.reportgenerator@4
     displayName: 'ReportGenerator: combine coverage reports'
+    condition: and(succeeded(), eq(variables['dkRunReportGenerator'], 'true'))
     inputs:
       reports: $(Build.SourcesDirectory)/coverage/**/cobertura-coverage.xml
       targetdir: $(Build.SourcesDirectory)/reportgenerator
@@ -74,7 +82,7 @@ steps:
       verbosity: 'Off'
   - task: PublishCodeCoverageResults@1
     displayName: 'Publish code coverage summary'
-    continueOnError: true # Will fail if affected:test ran no tests and ReportGenerator made nothing
+    condition: and(succeeded(), eq(variables['dkRunReportGenerator'], 'true'))
     inputs:
       codeCoverageTool: 'cobertura'
       summaryFileLocation: $(Build.SourcesDirectory)/reportgenerator/Cobertura.xml
