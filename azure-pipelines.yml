@@ -107,22 +107,20 @@ steps:
     displayName: 'Copy to artifacts: polpo:staging'
     inputs:
       contents: 'dist/polpo-web-staging/**'
-      targetFolder: $(Build.ArtifactStagingDirectory)/polpo-web-staging
+      targetFolder: $(Build.ArtifactStagingDirectory)
       cleanTargetFolder: true
   #todo: polpo production build breaks
   - task: CopyFiles@2
     displayName: 'Copy to artifacts: kabas:staging'
     inputs:
       contents: 'dist/kabas-web-staging/**'
-      targetFolder: $(Build.ArtifactStagingDirectory)/kabas-web-staging
+      targetFolder: $(Build.ArtifactStagingDirectory)
   - task: CopyFiles@2
     displayName: 'Copy to artifacts: kabas:production'
     inputs:
       contents: 'dist/kabas-web-production/**'
-      targetFolder: $(Build.ArtifactStagingDirectory)/kabas-web-production
+      targetFolder: $(Build.ArtifactStagingDirectory)
   - task: PublishBuildArtifacts@1
-    inputs:
-      artifactName: 'dist'
 #steps:
 # - script: |
 #     npm install -g @angular/cli
