@@ -31,6 +31,9 @@ steps:
   - script: |
       CI=1 node ./node_modules/.bin/ng test --configuration=travis
     displayName: 'Run all tests'
+  - script: |
+      npm run e2e:ci
+    displayName: 'Run e2e'
   - task: PublishTestResults@2
     inputs:
       testResultsFormat: 'JUnit'
