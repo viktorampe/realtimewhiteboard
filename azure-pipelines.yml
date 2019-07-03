@@ -68,23 +68,24 @@ steps:
     displayName: 'Run tests affected'
   #todo: e2e
   #todo: System.PullRequest.SourceBranch won't work for pushes -> condition or env var needed (or pipeline variables??)
+  - bash: |
+      if [ -d "coverage" ]; then
+        echo "##vso[task.setVariable variable=dkRanTests]true"
+        echo Tests ran
+      else
+        echo "##vso[task.setVariable variable=dkRanTests]false"  
+        echo Tests didn't run
+      fi
+    displayName: 'If no tests ran -> skip test publish and coverage'
   - task: PublishTestResults@2
     displayName: 'Publish test results'
+    condition: eq(variables['dkRanTests'], 'true')
     inputs:
       testResultsFormat: 'JUnit'
       testResultsFiles: 'junit/*.xml'
-  - bash: |
-      if [ -d "coverage" ]; then
-        echo "##vso[task.setVariable variable=dkRunReportGenerator]true"
-        echo Will run ReportGenerator
-      else
-        echo "##vso[task.setVariable variable=dkRunReportGenerator]false"  
-        echo Not running ReportGenerator
-      fi
-    displayName: 'Determine if coverages must be generated'
   - task: Palmmedia.reportgenerator.reportgenerator-build-release-task.reportgenerator@4
     displayName: 'ReportGenerator: combine coverage reports'
-    condition: eq(variables['dkRunReportGenerator'], 'true')
+    condition: eq(variables['dkRanTests'], 'true')
     inputs:
       reports: $(Build.SourcesDirectory)/coverage/**/cobertura-coverage.xml
       targetdir: $(Build.SourcesDirectory)/reportgenerator
@@ -92,13 +93,10 @@ steps:
       verbosity: 'Off'
   - task: PublishCodeCoverageResults@1
     displayName: 'Publish code coverage summary'
-    condition: eq(variables['dkRunReportGenerator'], 'true')
+    condition: eq(variables['dkRanTests'], 'true')
     inputs:
       codeCoverageTool: 'cobertura'
       summaryFileLocation: $(Build.SourcesDirectory)/reportgenerator/Cobertura.xml
-  - bash: |
-      echo "This should still be run"
-    displayName: 'This should still be run'
 #steps:
 # - script: |
 #     npm install -g @angular/cli
