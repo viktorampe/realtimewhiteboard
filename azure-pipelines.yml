@@ -76,7 +76,7 @@ steps:
     displayName: 'Determine if coverages must be generated'
   - task: Palmmedia.reportgenerator.reportgenerator-build-release-task.reportgenerator@4
     displayName: 'ReportGenerator: combine coverage reports'
-    condition: and(succeeded(), eq(variables['dkRunReportGenerator'], 'true'))
+    condition: eq(variables['dkRunReportGenerator'], 'true')
     inputs:
       reports: $(Build.SourcesDirectory)/coverage/**/cobertura-coverage.xml
       targetdir: $(Build.SourcesDirectory)/reportgenerator
@@ -84,7 +84,7 @@ steps:
       verbosity: 'Off'
   - task: PublishCodeCoverageResults@1
     displayName: 'Publish code coverage summary'
-    condition: and(succeeded(), eq(variables['dkRunReportGenerator'], 'true'))
+    condition: eq(variables['dkRunReportGenerator'], 'true')
     inputs:
       codeCoverageTool: 'cobertura'
       summaryFileLocation: $(Build.SourcesDirectory)/reportgenerator/Cobertura.xml
