@@ -68,8 +68,10 @@ steps:
   - bash: |
       if [ -d "coverage" ]; then
         echo "##vso[task.setVariable variable=dkRunReportGenerator]true"
+        echo Will run ReportGenerator
       else
         echo "##vso[task.setVariable variable=dkRunReportGenerator]false"  
+        echo Not running ReportGenerator
       fi
     displayName: 'Determine if coverages must be generated'
   - task: Palmmedia.reportgenerator.reportgenerator-build-release-task.reportgenerator@4
