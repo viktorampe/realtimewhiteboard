@@ -22,10 +22,10 @@ pool:
 
 steps:
   - script: |
-    echo '##vso[task.setvariable variable=dkEffectiveBranch]$(System.PullRequest.SourceBranch)
+    echo '##vso[task.setvariable variable=dkEffectiveBranch]$(System.PullRequest.SourceBranch)'
     displayName: 'Set dkEffectiveBranch to System.PullRequest.SourceBranch'
   - script: |
-    echo '##vso[task.setvariable variable=dkEffectiveBranch]$(Build.SourceBranch)
+    echo '##vso[task.setvariable variable=dkEffectiveBranch]$(Build.SourceBranch)'
     condition: in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI')
     displayName: 'If not a PR, set dkEffectiveBranch to Build.SourceBranch'
   - script: |
