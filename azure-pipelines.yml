@@ -60,12 +60,14 @@ steps:
       testResultsFiles: 'junit/*.xml'
   - task: Palmmedia.reportgenerator.reportgenerator-build-release-task.reportgenerator@4
     displayName: 'ReportGenerator: combine coverage reports'
+    continueOnError: true # Will fail if affected:test ran no tests
     inputs:
       reports: $(Build.SourcesDirectory)/coverage/**/cobertura-coverage.xml
       targetdir: $(Build.SourcesDirectory)/reportgenerator
       reporttypes: 'Cobertura'
   - task: PublishCodeCoverageResults@1
     displayName: 'Publish code coverage summary'
+    continueOnError: true # Will fail if affected:test ran no tests and ReportGenerator made nothing
     inputs:
       codeCoverageTool: 'cobertura'
       summaryFileLocation: $(Build.SourcesDirectory)/reportgenerator/Cobertura.xml
