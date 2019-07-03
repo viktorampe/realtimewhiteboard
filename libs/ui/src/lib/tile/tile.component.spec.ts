@@ -75,7 +75,6 @@ describe('TileComponent', () => {
     const icon = fixture.debugElement.query(By.css('.ui-tile__content__icon'))
       .componentInstance.svgIcon;
 
-    expect(true).toBe(true);
     expect(icon).toBe(mockData.icon);
   });
 

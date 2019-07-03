@@ -16,16 +16,17 @@ pr:
 trigger:
   - develop
   - master
+  - test/mock-master
 
 pool:
   name: 'Campus'
 
 steps:
   - bash: |
-      echo "##vso[task.setvariable variable=dkEffectiveBranch]$(System.PullRequest.SourceBranch)"
-    displayName: 'Default dkEffectiveBranch to System.PullRequest.SourceBranch'
+      echo "##vso[task.setvariable variable=dkEffectiveBranch]$(System.PullRequest.TargetBranch)"
+    displayName: 'Default dkEffectiveBranch to System.PullRequest.TargetBranch'
   - bash: |
-      echo "##vso[task.setvariable variable=dkEffectiveBranch]$(Build.SourceBranch)""
+      echo "##vso[task.setvariable variable=dkEffectiveBranch]master""
     condition: in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI')
     displayName: 'Override dkEffectiveBranch to Build.SourceBranch if not a pull request'
   - script: |
@@ -33,7 +34,7 @@ steps:
       echo -----------------
       echo Build.Reason = $(Build.Reason)
       echo Build.SourceBranch	= $(Build.SourceBranch)
-      echo System.PullRequest.SourceBranch = $(System.PullRequest.SourceBranch)
+      echo System.PullRequest.TargetBranch = $(System.PullRequest.TargetBranch)
       echo Build.SourcesDirectory = $(Build.SourcesDirectory)
       echo dkEffectiveBranch = $(dkEffectiveBranch)
     displayName: 'Build information'
