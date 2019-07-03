@@ -3,24 +3,66 @@
 # Add steps that analyze code, save build artifacts, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
 
+# Run build on PRs to..
 pr:
   - develop
+  - master
+
+# Run build on push to..
+trigger:
+  - develop
+  - master
 
 pool:
   name: 'Campus'
 
-steps:
-  - task: NodeTool@0
-    inputs:
-      versionSpec: '10.x'
-    displayName: 'Install Node.js'
-  - task: DeleteFiles@1
-    inputs:
-      contents: 'junit'
-    displayName: 'Clear junit reports'
-  - task: Npm@1
-    inputs:
-      customEndpoint: diekeure-registry
+jobs:
+  - job: prepare_build
+    displayName: 'Prepare build'
+    steps:
+      - task: NodeTool@0
+        displayName: 'Install Node.js'
+        inputs:
+          versionSpec: '10.x'
+      - task: DeleteFiles@1
+        displayName: 'Clear junit reports'
+        inputs:
+          contents: 'junit'
+      - task: Npm@1
+        displayName: 'Npm install'
+        inputs:
+          customEndpoint: diekeure-registry
+  - job: linting_and_formatting
+    displayName: 'Linting and formatting'
+    steps:
+      - script: |
+        node ./node_modules/.bin/ng lint
+        npm run format:check
+  - job: unit_tests
+    displayName: 'Run unit tests'
+    steps:
+      - script: |
+          CI=1 node ./node_modules/.bin/ng test --configuration=travis
+        displayName: 'Run all tests'
+      - task: PublishTestResults@2
+        displayName: 'Publish test results'
+        inputs:
+          testResultsFormat: 'JUnit'
+          testResultsFiles: 'junit/*.xml'
+      - task: Palmmedia.reportgenerator.reportgenerator-build-release-task.reportgenerator@4
+        displayName: 'ReportGenerator: combine coverage reports'
+        inputs:
+          reports: $(Build.SourcesDirectory)/coverage/**/cobertura-coverage.xml
+          targetdir: $(Build.SourcesDirectory)/reportgenerator
+          reporttypes: 'Cobertura'
+      - task: PublishCodeCoverageResults@1
+        displayName: 'Publish code coverage summary'
+        inputs:
+          codeCoverageTool: 'cobertura'
+          summaryFileLocation: $(Build.SourcesDirectory)/reportgenerator/Cobertura.xml
+
+
+#steps:
   # - script: |
   #     npm install -g @angular/cli
   #   displayName: 'npm install'
@@ -31,20 +73,6 @@ steps:
   #- script: |
   #    CI=1 node ./node_modules/.bin/ng test --configuration=travis
   #  displayName: 'Run all tests'
-  - script: |
-      npm run e2e:ci
-    displayName: 'Run e2e'
-  - task: PublishTestResults@2
-    inputs:
-      testResultsFormat: 'JUnit'
-      testResultsFiles: 'junit/*.xml'
-  - task: Palmmedia.reportgenerator.reportgenerator-build-release-task.reportgenerator@4
-    displayName: ReportGenerator
-    inputs:
-      reports: $(Build.SourcesDirectory)/coverage/**/cobertura-coverage.xml
-      targetdir: $(Build.SourcesDirectory)/reportgenerator
-      reporttypes: 'Cobertura'
-  - task: PublishCodeCoverageResults@1
-    inputs:
-      codeCoverageTool: 'cobertura'
-      summaryFileLocation: $(Build.SourcesDirectory)/reportgenerator/Cobertura.xml
+  #- script: |
+  #    npm run e2e:ci
+  #  displayName: 'Run e2e'
