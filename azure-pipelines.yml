@@ -58,13 +58,13 @@ steps:
     inputs:
       customEndpoint: diekeure-registry
   - script: |
-      npm run affected:lint -- --base remotes/origin/$(System.PullRequest.SourceBranch) --head HEAD --parallel
+      npm run affected:lint -- --base remotes/origin/$(dkEffectiveBranch) --head HEAD --parallel
     displayName: 'Lint affected'
   - script: |
       npm run format:check
     displayName: 'Format check'
   - script: |
-      npm run affected:test -- --base remotes/origin/$(System.PullRequest.SourceBranch) --head HEAD --parallel --configuration=travis
+      npm run affected:test -- --base remotes/origin/$(dkEffectiveBranch) --head HEAD --parallel --configuration=travis
     displayName: 'Run tests affected'
   #todo: e2e
   #todo: System.PullRequest.SourceBranch won't work for pushes -> condition or env var needed (or pipeline variables??)
