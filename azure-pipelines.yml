@@ -30,13 +30,13 @@ steps:
     inputs:
       customEndpoint: diekeure-registry
   - script: |
-      npm run affected:lint
+      npm run affected:lint -- --base $(Build.SourceBranchName) --head HEAD --parallel
     displayName: 'Lint affected'
   - script: |
       npm run format:check
     displayName: 'Format check'
   - script: |
-      npm run affected:test
+      npm run affected:test -- --base $(Build.SourceBranchName) --head HEAD --parallel --configuration=travis
     displayName: 'Run tests affected'
   #todo: e2e
   - task: PublishTestResults@2
