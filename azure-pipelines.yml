@@ -3,6 +3,10 @@
 # Add steps that analyze code, save build artifacts, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
 
+# Use this combined with conditions to determine the branch name to use (PR or Push, buildreason as condition)
+#- script: |
+#    echo '##vso[task.setvariable variable=sauce]crushed tomatoes'
+
 # Run build on PRs to..
 pr:
   - develop
@@ -19,6 +23,9 @@ pool:
 steps:
   - script: |
       echo Build information
+      echo -----------------
+      echo Build.Reason = $(Build.Reason)
+      echo Build.SourceBranchName	= $(Build.SourceBranchName)
       echo System.PullRequest.SourceBranch = $(System.PullRequest.SourceBranch)
       echo Build.SourcesDirectory = $(Build.SourcesDirectory)
     displayName: 'Build information'
