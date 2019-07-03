@@ -74,9 +74,9 @@ steps:
         echo Tests ran
       else
         echo "##vso[task.setVariable variable=dkRanTests]false"  
-        echo Tests didn't run
+        echo Tests did not run
       fi
-    displayName: 'If no tests ran -> skip test publish and coverage'
+    displayName: 'If no tests ran, skip test publish and coverage'
   - task: PublishTestResults@2
     displayName: 'Publish test results'
     condition: eq(variables['dkRanTests'], 'true')
