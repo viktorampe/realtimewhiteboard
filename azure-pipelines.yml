@@ -30,11 +30,15 @@ steps:
     inputs:
       customEndpoint: diekeure-registry
   - script: |
-      node ./node_modules/.bin/ng lint
-      npm run format:check
+      npm run affected:lint
+    displayName: 'Lint affected'
   - script: |
-      CI=1 node ./node_modules/.bin/ng test --configuration=travis
-    displayName: 'Run all tests'
+      npm run format:check
+    displayName: 'Format check'
+  - script: |
+      npm run affected:test
+    displayName: 'Run tests affected'
+  #todo: e2e
   - task: PublishTestResults@2
     displayName: 'Publish test results'
     inputs:
