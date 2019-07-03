@@ -13,53 +13,53 @@ trigger:
   - develop
   - master
 
-pool:
-  name: 'Campus'
-
 jobs:
-- job: prepare_build
-  displayName: 'Prepare build'
-  steps:
-  - task: NodeTool@0
-    displayName: 'Install Node.js'
-    inputs:
-      versionSpec: '10.x'
-  - task: DeleteFiles@1
-    displayName: 'Clear junit reports'
-    inputs:
-      contents: 'junit'
-  - task: Npm@1
-    displayName: 'Npm install'
-    inputs:
-      customEndpoint: diekeure-registry
-- job: linting_and_formatting
-  displayName: 'Linting and formatting'
-  steps:
-  - script: |
-      node ./node_modules/.bin/ng lint
-      npm run format:check
-- job: unit_tests
-  displayName: 'Run unit tests'
-  steps:
-  - script: |
-      CI=1 node ./node_modules/.bin/ng test --configuration=travis
-    displayName: 'Run all tests'
-  - task: PublishTestResults@2
-    displayName: 'Publish test results'
-    inputs:
-      testResultsFormat: 'JUnit'
-      testResultsFiles: 'junit/*.xml'
-  - task: Palmmedia.reportgenerator.reportgenerator-build-release-task.reportgenerator@4
-    displayName: 'ReportGenerator: combine coverage reports'
-    inputs:
-      reports: $(Build.SourcesDirectory)/coverage/**/cobertura-coverage.xml
-      targetdir: $(Build.SourcesDirectory)/reportgenerator
-      reporttypes: 'Cobertura'
-  - task: PublishCodeCoverageResults@1
-    displayName: 'Publish code coverage summary'
-    inputs:
-      codeCoverageTool: 'cobertura'
-      summaryFileLocation: $(Build.SourcesDirectory)/reportgenerator/Cobertura.xml
+  - job: prepare_build
+    displayName: 'Prepare build'
+    pool: 'Campus'
+    steps:
+      - task: NodeTool@0
+        displayName: 'Install Node.js'
+        inputs:
+          versionSpec: '10.x'
+      - task: DeleteFiles@1
+        displayName: 'Clear junit reports'
+        inputs:
+          contents: 'junit'
+      - task: Npm@1
+        displayName: 'Npm install'
+        inputs:
+          customEndpoint: diekeure-registry
+  - job: linting_and_formatting
+    displayName: 'Linting and formatting'
+    pool: 'Campus'
+    steps:
+      - script: |
+          node ./node_modules/.bin/ng lint
+          npm run format:check
+  - job: unit_tests
+    displayName: 'Run unit tests'
+    pool: 'Campus'
+    steps:
+      - script: |
+          CI=1 node ./node_modules/.bin/ng test --configuration=travis
+        displayName: 'Run all tests'
+      - task: PublishTestResults@2
+        displayName: 'Publish test results'
+        inputs:
+          testResultsFormat: 'JUnit'
+          testResultsFiles: 'junit/*.xml'
+      - task: Palmmedia.reportgenerator.reportgenerator-build-release-task.reportgenerator@4
+        displayName: 'ReportGenerator: combine coverage reports'
+        inputs:
+          reports: $(Build.SourcesDirectory)/coverage/**/cobertura-coverage.xml
+          targetdir: $(Build.SourcesDirectory)/reportgenerator
+          reporttypes: 'Cobertura'
+      - task: PublishCodeCoverageResults@1
+        displayName: 'Publish code coverage summary'
+        inputs:
+          codeCoverageTool: 'cobertura'
+          summaryFileLocation: $(Build.SourcesDirectory)/reportgenerator/Cobertura.xml
 #steps:
 # - script: |
 #     npm install -g @angular/cli
