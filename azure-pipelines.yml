@@ -36,8 +36,8 @@ jobs:
     displayName: 'Linting and formatting'
     steps:
       - script: |
-        node ./node_modules/.bin/ng lint
-        npm run format:check
+          node ./node_modules/.bin/ng lint
+          npm run format:check
   - job: unit_tests
     displayName: 'Run unit tests'
     steps:
@@ -60,19 +60,17 @@ jobs:
         inputs:
           codeCoverageTool: 'cobertura'
           summaryFileLocation: $(Build.SourcesDirectory)/reportgenerator/Cobertura.xml
-
-
 #steps:
-  # - script: |
-  #     npm install -g @angular/cli
-  #   displayName: 'npm install'
-  #- script: |
-  #   ng lint
-  #  npm run format:check
-  #displayName: 'linting and formatting'
-  #- script: |
-  #    CI=1 node ./node_modules/.bin/ng test --configuration=travis
-  #  displayName: 'Run all tests'
-  #- script: |
-  #    npm run e2e:ci
-  #  displayName: 'Run e2e'
+# - script: |
+#     npm install -g @angular/cli
+#   displayName: 'npm install'
+#- script: |
+#   ng lint
+#  npm run format:check
+#displayName: 'linting and formatting'
+#- script: |
+#    CI=1 node ./node_modules/.bin/ng test --configuration=travis
+#  displayName: 'Run all tests'
+#- script: |
+#    npm run e2e:ci
+#  displayName: 'Run e2e'
