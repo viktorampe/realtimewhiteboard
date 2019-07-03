@@ -23,11 +23,11 @@ pool:
 steps:
   - bash: |
       echo "##vso[task.setvariable variable=dkEffectiveBranch]$(System.PullRequest.SourceBranch)"
-    displayName: 'Set dkEffectiveBranch to System.PullRequest.SourceBranch'
+    displayName: 'Default dkEffectiveBranch to System.PullRequest.SourceBranch'
   - bash: |
       echo "##vso[task.setvariable variable=dkEffectiveBranch]$(Build.SourceBranch)""
     condition: in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI')
-    displayName: 'If not a PR, set dkEffectiveBranch to Build.SourceBranch'
+    displayName: 'Override dkEffectiveBranch to Build.SourceBranch if not a pull request'
   - script: |
       echo Build information
       echo -----------------
