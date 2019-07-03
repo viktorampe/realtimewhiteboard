@@ -65,7 +65,7 @@ steps:
     displayName: 'Format check'
   - script: |
       npm run affected:test -- --base remotes/origin/$(dkEffectiveBranch) --head HEAD --parallel --configuration=travis
-    displayName: 'Run tests affected'
+    displayName: 'Run affected tests'
   #todo: e2e
   #todo: System.PullRequest.SourceBranch won't work for pushes -> condition or env var needed (or pipeline variables??)
   - bash: |
