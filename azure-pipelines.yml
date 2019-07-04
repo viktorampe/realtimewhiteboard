@@ -35,12 +35,16 @@ steps:
       echo Build information
       echo -----------------
       echo Build.Reason = $(Build.Reason)
+      echo Build.SourceVersionMessage	= $(Build.SourceVersionMessage)
       echo Build.SourceBranch	= $(Build.SourceBranch)
       echo System.PullRequest.TargetBranch = $(System.PullRequest.TargetBranch)
       echo Build.SourcesDirectory = $(Build.SourcesDirectory)
       echo dkRanTests = $(dkRanTests)
       echo dkLintTestAll = $(dkLintTestAll)
       echo dkBuild = $(dkBuild)
+      echo 
+      echo Environment
+      echo -----------
       env
     displayName: 'Build information'
   - task: NodeTool@0
@@ -78,7 +82,7 @@ steps:
     displayName: 'Test all'
     condition: eq(variables['dkLintTestAll'], 'true')
   - script: |
-      npm run affected:e2e -- --base remotes/origin/$(System.PullReequest.TargetBranch) --head "HEAD" --headless --configuration staging
+      npm run affected:e2e -- --base remotes/origin/$(System.PullRequest.TargetBranch) --head "HEAD" --headless --configuration staging
     displayName: 'End-to-end affected'
     condition: eq(variables['dkLintTestAll'], 'false')
   - script: |
