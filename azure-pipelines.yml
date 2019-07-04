@@ -3,10 +3,6 @@
 # Add steps that analyze code, save build artifacts, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
 
-# Use this combined with conditions to determine the branch name to use (PR or Push, buildreason as condition)
-#- script: |
-#    echo '##vso[task.setvariable variable=sauce]crushed tomatoes'
-
 # Run build on PRs to..
 pr:
   - develop
@@ -63,32 +59,32 @@ steps:
     displayName: 'Npm install'
     inputs:
       customEndpoint: diekeure-registry
-  #- script: |
-  #    npm run affected:lint -- --base remotes/origin/$(System.PullRequest.TargetBranch) --head HEAD
-  #  displayName: 'Lint affected'
-  #  condition: eq(variables['dkLintTestAll'], 'false')
-  #- script: |
-  #    npm run lint
-  #  displayName: 'Lint all'
-  #  condition: eq(variables['dkLintTestAll'], 'true')
-  #- script: |
-  #    npm run format:check
-  #  displayName: 'Format check'
-  #- script: |
-  #    npm run affected:test -- --base remotes/origin/$(System.PullRequest.TargetBranch) --head HEAD --configuration=travis
-  #  displayName: 'Test affected'
-  #  condition: eq(variables['dkLintTestAll'], 'false')
-  #- script: npm run test
-  #  displayName: 'Test all'
-  #  condition: eq(variables['dkLintTestAll'], 'true')
-  #- script: |
-  #  npm run affected:e2e -- --base remotes/origin/$(System.PullReequest.TargetBranch) --head "HEAD" --headless --configuration staging
-  #  displayName: 'End-to-end affected'
-  #  condition: eq(variables['dkLintTestAll'], 'false')
   - script: |
-      node --max_old_space_size=12000 ./node_modules/@angular/cli/bin/ng e2e -- --headless --configuration staging
+      npm run affected:lint -- --base remotes/origin/$(System.PullRequest.TargetBranch) --head HEAD
+    displayName: 'Lint affected'
+    condition: eq(variables['dkLintTestAll'], 'false')
+  - script: |
+      npm run lint
+    displayName: 'Lint all'
+    condition: eq(variables['dkLintTestAll'], 'true')
+  - script: |
+      npm run format:check
+    displayName: 'Format check'
+  - script: |
+      npm run affected:test -- --base remotes/origin/$(System.PullRequest.TargetBranch) --head HEAD --configuration=travis
+    displayName: 'Test affected'
+    condition: eq(variables['dkLintTestAll'], 'false')
+  - script: npm run test
+    displayName: 'Test all'
+   condition: eq(variables['dkLintTestAll'], 'true')
+  - script: |
+      npm run affected:e2e -- --base remotes/origin/$(System.PullReequest.TargetBranch) --head "HEAD" --headless --configuration staging
+    displayName: 'End-to-end affected'
+    condition: eq(variables['dkLintTestAll'], 'false')
+  - script: |
+      node --max_old_space_size=12000 ./node_modules/@angular/cli/bin/ng e2e --project=polpo-classroom-web-e2e --headless --configuration staging
     displayName: 'End-to-end all'
-    #condition: eq(variables['dkLintTestAll'], 'true')
+    condition: eq(variables['dkLintTestAll'], 'true')
   - bash: |
       if [ -d "coverage" ]; then
         echo "##vso[task.setVariable variable=dkRanTests]true"
@@ -119,7 +115,10 @@ steps:
       npm run build:polpo:staging
     displayName: '[Build] polpo:staging'
     condition: eq(variables['dkBuild'], 'true')
-  #todo: polpo production build breaks
+  - script: |
+      npm run build:polpo:production
+    displayName: '[Build] polpo:production'
+    condition: eq(variables['dkBuild'], 'true')
   - script: |
       npm run build:kabas:staging
     displayName: '[Build] kabas:staging'
@@ -136,21 +135,7 @@ steps:
         'dist/kabas-web-staging'
         'dist/kabas-web-production'
         'dist/polpo-web-staging'
-      #       'dist/polpo-web-production'
+        'dist/polpo-web-production'
       targetFolder: $(Build.ArtifactStagingDirectory)
   - task: PublishBuildArtifacts@1
     condition: eq(variables['dkBuild'], 'true')
-#steps:
-# - script: |
-#     npm install -g @angular/cli
-#   displayName: 'npm install'
-#- script: |
-#   ng lint
-#  npm run format:check
-#displayName: 'linting and formatting'
-#- script: |
-#    CI=1 node ./node_modules/.bin/ng test --configuration=travis
-#  displayName: 'Run all tests'
-#- script: |
-#    npm run e2e:ci
-#  displayName: 'Run e2e'
