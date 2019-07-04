@@ -9,7 +9,7 @@ import {
 } from '../support/interfaces';
 
 describe('Bundles', () => {
-  const apiUrl = Cypress.env('apiUrl');
+  const apiUrl = Cypress.env('APIURL');
   const appPaths = Cypress.env('appPaths') as AppPathsInterface;
   const apiPaths = Cypress.env('apiPaths') as ApiPathsInterface;
   let setup: StudentOpenBundleContentInterface;
