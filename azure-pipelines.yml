@@ -74,8 +74,10 @@ steps:
     displayName: 'Test all'
   - script: |
       node --max_old_space_size=12000 ./node_modules/@angular/cli/bin/ng e2e --project=polpo-classroom-web-e2e --headless --configuration staging
+    displayName: 'End-to-end all polpo'
+  - script: |
       node --max_old_space_size=12000 ./node_modules/@angular/cli/bin/ng e2e --project=kabas-web-e2e --headless --configuration staging
-    displayName: 'End-to-end all'
+    displayName: 'End-to-end all kabas'
   - bash: |
       if [ -d "coverage" ]; then
         echo "##vso[task.setVariable variable=dkRanTests]true"
