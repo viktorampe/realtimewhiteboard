@@ -63,26 +63,26 @@ steps:
     displayName: 'Npm install'
     inputs:
       customEndpoint: diekeure-registry
+  #- script: |
+  #    npm run affected:lint -- --base remotes/origin/$(System.PullRequest.TargetBranch) --head HEAD
+  #  displayName: 'Lint affected'
+  #  condition: eq(variables['dkLintTestAll'], 'false')
+  #- script: |
+  #    npm run lint
+  #  displayName: 'Lint all'
+  #  condition: eq(variables['dkLintTestAll'], 'true')
+  #- script: |
+  #    npm run format:check
+  #  displayName: 'Format check'
+  #- script: |
+  #    npm run affected:test -- --base remotes/origin/$(System.PullRequest.TargetBranch) --head HEAD --configuration=travis
+  #  displayName: 'Test affected'
+  #  condition: eq(variables['dkLintTestAll'], 'false')
+  #- script: npm run test
+  #  displayName: 'Test all'
+  #  condition: eq(variables['dkLintTestAll'], 'true')
   - script: |
-      npm run affected:lint -- --base remotes/origin/$(System.PullRequest.TargetBranch) --head HEAD
-    displayName: 'Lint affected'
-    condition: eq(variables['dkLintTestAll'], 'false')
-  - script: |
-      npm run lint
-    displayName: 'Lint all'
-    condition: eq(variables['dkLintTestAll'], 'true')
-  - script: |
-      npm run format:check
-    displayName: 'Format check'
-  - script: |
-      npm run affected:test -- --base remotes/origin/$(System.PullRequest.TargetBranch) --head HEAD --configuration=travis
-    displayName: 'Test affected'
-    condition: eq(variables['dkLintTestAll'], 'false')
-  - script: npm run test
-    displayName: 'Test all'
-    condition: eq(variables['dkLintTestAll'], 'true')
-  - script: |
-      npm run affected:e2e -- --base remotes/origin/$(System.PullRequest.TargetBranch) --head "HEAD" --headless --configuration staging
+      node --max_old_space_size=12000 ./node_modules/.bin/nx affected:e2e -- --base remotes/origin/$(System.PullRequest.TargetBranch) --head "HEAD" --headless --configuration staging
     displayName: 'End-to-end affected'
     condition: eq(variables['dkLintTestAll'], 'false')
   - script: |
