@@ -15,15 +15,9 @@ import { environment } from '../environments/environment';
 import { AppEffectsModule } from './app-effects.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppStoreModule } from './app-store.module';
+import { AppTokenModule } from './app-token.module';
 import { AppComponent } from './app.component';
 import { EduContentSearchResultComponent } from './components/searchresults/edu-content-search-result.component';
-import { EduContentSearchResultItemService } from './components/searchresults/edu-content-search-result.service';
-import { EDUCONTENT_SEARCH_RESULT_ITEM_SERVICE_TOKEN } from './components/searchresults/edu-content-search-result.service.interface';
-import {
-  SearchTermFilterFactory,
-  SEARCH_TERM_FILTER_FACTORY_TOKEN
-} from './factories/search-term-filter/search-term-filter.factory';
-import { FavIconService, FAVICON_SERVICE_TOKEN } from './services/favicons';
 
 // if you want to update the buffer (which defaults to 100)
 configureBufferSize(150);
@@ -56,24 +50,11 @@ configureBufferSize(150);
     DalModule.forRoot({ apiBaseUrl: environment.api.APIBase }),
     GuardsModule,
     AppRoutingModule,
+    AppTokenModule,
     AppEffectsModule,
     AppStoreModule
   ],
-  providers: [
-    Title,
-    {
-      provide: FAVICON_SERVICE_TOKEN,
-      useClass: FavIconService
-    },
-    {
-      provide: SEARCH_TERM_FILTER_FACTORY_TOKEN,
-      useClass: SearchTermFilterFactory
-    },
-    {
-      provide: EDUCONTENT_SEARCH_RESULT_ITEM_SERVICE_TOKEN,
-      useClass: EduContentSearchResultItemService
-    }
-  ],
+  providers: [Title],
   bootstrap: [AppComponent],
   exports: [RouterModule],
   entryComponents: [EduContentSearchResultComponent, ManageCollectionComponent]
