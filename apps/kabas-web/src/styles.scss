@@ -14,10 +14,7 @@ body {
   box-sizing: border-box;
 }
 
-.ui-shell__logo {
-  text-align: center;
-  padding-top: 25px;
-}
+@import 'libs/ui/src/lib/breakpoints.scss';
 
 /*
  * Angular Material theme
@@ -35,3 +32,102 @@ body {
 // include shared lib scss
 @import 'libs/shared/src/lib/shared-theme';
 @include shared-theme();
+
+[ng-reflect-router-link] {
+  cursor: pointer;
+}
+
+/*
+ * App styles
+ */
+body {
+  font-family: $primary-font-family;
+  font-size: $primary-font-size;
+  color: $primary-font-color;
+}
+
+.ui-shell__logo {
+  text-align: center;
+  padding-top: 25px;
+}
+
+.ui-shell__logo {
+  text-align: center;
+  padding-top: 25px;
+}
+
+.ui-tree-nav__node--active {
+  position: relative;
+
+  &:after {
+    content: '';
+    display: block;
+    position: absolute;
+    right: 0;
+    top: 8px;
+    background: 0 0;
+    width: 0;
+    height: 0;
+    border-top: 12px solid transparent;
+    border-bottom: 12px solid transparent;
+    border-right: 12px solid #e1e5e7;
+  }
+
+  @media #{$ui-breakpoint-xsmall}, #{$ui-breakpoint-small} {
+    &:after {
+      display: none;
+    }
+  }
+}
+
+/*
+ * icon fonts
+ */
+@font-face {
+  font-family: FontAwesome;
+  src: url(/assets/fonts/fontawesome-webfont.eot?v=4.4.0);
+  src: url(/assets/fonts/fontawesome-webfont.eot?#iefix&v=4.4.0)
+      format('embedded-opentype'),
+    url(/assets/fonts/fontawesome-webfont.woff2?v=4.4.0) format('woff2'),
+    url(/assets/fonts/fontawesome-webfont.woff?v=4.4.0) format('woff'),
+    url(/assets/fonts/fontawesome-webfont.ttf?v=4.4.0) format('truetype'),
+    url(/assets/fonts/fontawesome-webfont.svg?v=4.4.0#fontawesomeregular)
+      format('svg');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: simple-line-icons;
+  src: url(/assets/fonts/Simple-Line-Icons.eot?v=2.2.2);
+  src: url(/assets/fonts/Simple-Line-Icons.eot?v=2.2.2#iefix)
+      format('embedded-opentype'),
+    url(/assets/fonts/Simple-Line-Icons.ttf?v=2.2.2) format('truetype'),
+    url(/assets/fonts/Simple-Line-Icons.woff2?v=2.2.2) format('woff2'),
+    url(/assets/fonts/Simple-Line-Icons.woff?v=2.2.2) format('woff'),
+    url(/assets/fonts/Simple-Line-Icons.svg?v=2.2.2#simple-line-icons)
+      format('svg');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Glyphicons Halflings';
+  src: url(/assets/fonts/glyphicons-halflings-regular.eot);
+  src: url(/assets/fonts/glyphicons-halflings-regular.eot?#iefix)
+      format('embedded-opentype'),
+    url(/assets/fonts/glyphicons-halflings-regular.woff2) format('woff2'),
+    url(/assets/fonts/glyphicons-halflings-regular.woff) format('woff'),
+    url(/assets/fonts/glyphicons-halflings-regular.ttf) format('truetype'),
+    url(/assets/fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular)
+      format('svg');
+}
+
+@font-face {
+  font-family: polpo;
+  src: url(/assets/fonts/polpo.ttf?xzjs0z) format('truetype'),
+    url(/assets/fonts/polpo.woff?xzjs0z) format('woff'),
+    url(/assets/fonts/polpo.svg?xzjs0z#polpo) format('svg');
+  font-weight: 400;
+  font-style: normal;
+}
