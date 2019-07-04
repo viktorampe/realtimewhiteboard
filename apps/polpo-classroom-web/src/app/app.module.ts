@@ -3,25 +3,18 @@ import { MatIconModule, MatTooltipModule } from '@angular/material';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
-import { CustomSerializer, DalModule } from '@campus/dal';
+import { DalModule } from '@campus/dal';
 import { GuardsModule } from '@campus/guards';
 import { SearchModule } from '@campus/search';
 import { SharedModule } from '@campus/shared';
 import { ManageCollectionComponent, UiModule } from '@campus/ui';
 import { UtilsModule } from '@campus/utils';
 import { EffectsModule } from '@ngrx/effects';
-import {
-  NavigationActionTiming,
-  routerReducer,
-  StoreRouterConnectingModule
-} from '@ngrx/router-store';
-import { StoreModule } from '@ngrx/store';
-import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { NxModule } from '@nrwl/nx';
-import { storeFreeze } from 'ngrx-store-freeze';
-import { configureBufferSize, handleUndo } from 'ngrx-undo';
+import { configureBufferSize } from 'ngrx-undo';
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
+import { AppStoreModule } from './app-store.module';
 import { AppComponent } from './app.component';
 import { EduContentSearchResultComponent } from './components/searchresults/edu-content-search-result.component';
 import { EduContentSearchResultItemService } from './components/searchresults/edu-content-search-result.service';
@@ -44,7 +37,6 @@ configureBufferSize(150);
     MatTooltipModule,
     MatIconModule,
     BrowserModule,
-    AppRoutingModule,
     SharedModule.forRoot(
       environment.features.alerts,
       environment.features.messages,
@@ -63,20 +55,9 @@ configureBufferSize(150);
     NxModule.forRoot(),
     DalModule.forRoot({ apiBaseUrl: environment.api.APIBase }),
     GuardsModule,
-    StoreModule.forRoot(
-      { app: undefined, router: routerReducer },
-      {
-        metaReducers: !environment.production
-          ? [storeFreeze, handleUndo]
-          : [handleUndo]
-      }
-    ),
     EffectsModule.forRoot([]),
-    !environment.production ? StoreDevtoolsModule.instrument() : [],
-    StoreRouterConnectingModule.forRoot({
-      navigationActionTiming: NavigationActionTiming.PostActivation,
-      serializer: CustomSerializer
-    })
+    AppRoutingModule,
+    AppStoreModule
   ],
   providers: [
     Title,

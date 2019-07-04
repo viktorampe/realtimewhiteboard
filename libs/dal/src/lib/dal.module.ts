@@ -1,108 +1,45 @@
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import {
-  Inject,
-  InjectionToken,
-  ModuleWithProviders,
-  NgModule
-} from '@angular/core';
+import { Inject, InjectionToken, ModuleWithProviders, NgModule } from '@angular/core';
 import { MatSnackBarModule } from '@angular/material';
-import {
-  BrowserModule as CampusBrowserModule,
-  BROWSER_STORAGE_SERVICE_TOKEN,
-  StorageService
-} from '@campus/browser';
+import { BrowserModule as CampusBrowserModule, BROWSER_STORAGE_SERVICE_TOKEN, StorageService } from '@campus/browser';
 import { ScormModule } from '@campus/scorm';
-import {
-  LoopBackConfig,
-  SDKBrowserModule
-} from '@diekeure/polpo-api-angular-sdk';
+import { LoopBackConfig, SDKBrowserModule } from '@diekeure/polpo-api-angular-sdk';
 import { EffectsModule } from '@ngrx/effects';
-import { StoreModule } from '@ngrx/store';
 import { v4 as uuid } from 'uuid';
-import { AlertReducer, AlertsEffects } from './+state/alert';
-import { BundleReducer, BundlesEffects } from './+state/bundle';
-import { ContentStatusReducer } from './+state/content-status';
+import { AlertsEffects } from './+state/alert';
+import { BundlesEffects } from './+state/bundle';
 import { ContentStatusesEffects } from './+state/content-status/content-status.effects';
-import { CredentialEffects, CredentialReducer } from './+state/credential';
-import {
-  CurrentExerciseEffects,
-  CurrentExerciseReducer
-} from './+state/current-exercise';
-import { EduContentReducer, EduContentsEffects } from './+state/edu-content';
-import {
-  EduContentProductTypeEffects,
-  EduContentProductTypeReducer
-} from './+state/edu-content-product-type';
-import { EduNetEffects, EduNetReducer } from './+state/edu-net';
-import { EffectFeedbackReducer } from './+state/effect-feedback';
+import { CredentialEffects } from './+state/credential';
+import { CurrentExerciseEffects } from './+state/current-exercise';
+import { EduContentsEffects } from './+state/edu-content';
+import { EduContentProductTypeEffects } from './+state/edu-content-product-type';
+import { EduNetEffects } from './+state/edu-net';
 import { EffectFeedbackEffects } from './+state/effect-feedback/effect-feedback.effects';
-import { FavoriteEffects, FavoriteReducer } from './+state/favorite';
-import { HistoryEffects, HistoryReducer } from './+state/history';
-import {
-  LearningAreaReducer,
-  LearningAreasEffects
-} from './+state/learning-area';
-import {
-  LearningDomainEffects,
-  LearningDomainReducer
-} from './+state/learning-domain';
-import {
-  LinkedPersonEffects,
-  LinkedPersonReducer
-} from './+state/linked-person';
-import { MethodEffects, MethodReducer } from './+state/method';
-import { ResultEffects, ResultReducer } from './+state/result';
-import { SchoolTypeEffects, SchoolTypeReducer } from './+state/school-type';
-import {
-  StudentContentStatusesEffects,
-  StudentContentStatusReducer
-} from './+state/student-content-status';
-import { TaskEffects, TaskReducer } from './+state/task';
-import {
-  TaskEduContentEffects,
-  TaskEduContentReducer
-} from './+state/task-edu-content';
-import {
-  TaskInstanceEffects,
-  TaskInstanceReducer
-} from './+state/task-instance';
-import {
-  TeacherStudentEffects,
-  TeacherStudentReducer
-} from './+state/teacher-student';
-import { UiEffects, UiReducer } from './+state/ui';
-import {
-  UnlockedBoekeGroupReducer,
-  UnlockedBoekeGroupsEffects
-} from './+state/unlocked-boeke-group';
-import {
-  UnlockedBoekeStudentReducer,
-  UnlockedBoekeStudentsEffects
-} from './+state/unlocked-boeke-student';
-import {
-  UnlockedContentReducer,
-  UnlockedContentsEffects
-} from './+state/unlocked-content';
-import { UserEffects, UserReducer } from './+state/user';
-import { UserContentReducer, UserContentsEffects } from './+state/user-content';
-import { YearEffects, YearReducer } from './+state/year';
+import { FavoriteEffects } from './+state/favorite';
+import { HistoryEffects } from './+state/history';
+import { LearningAreasEffects } from './+state/learning-area';
+import { LearningDomainEffects } from './+state/learning-domain';
+import { LinkedPersonEffects } from './+state/linked-person';
+import { MethodEffects } from './+state/method';
+import { ResultEffects } from './+state/result';
+import { SchoolTypeEffects } from './+state/school-type';
+import { StudentContentStatusesEffects } from './+state/student-content-status';
+import { TaskEffects } from './+state/task';
+import { TaskEduContentEffects } from './+state/task-edu-content';
+import { TaskInstanceEffects } from './+state/task-instance';
+import { TeacherStudentEffects } from './+state/teacher-student';
+import { UiEffects } from './+state/ui';
+import { UnlockedBoekeGroupsEffects } from './+state/unlocked-boeke-group';
+import { UnlockedBoekeStudentsEffects } from './+state/unlocked-boeke-student';
+import { UnlockedContentsEffects } from './+state/unlocked-content';
+import { UserEffects } from './+state/user';
+import { UserContentsEffects } from './+state/user-content';
+import { YearEffects } from './+state/year';
 import { AlertService } from './alert/alert.service';
 import { ALERT_SERVICE_TOKEN } from './alert/alert.service.interface';
-import {
-  UnlockedBoekeGroupService,
-  UnlockedBoekeStudentService,
-  UNLOCKED_BOEKE_GROUP_SERVICE_TOKEN,
-  UNLOCKED_BOEKE_STUDENT_SERVICE_TOKEN
-} from './boeke';
-import {
-  BundleService,
-  BUNDLE_SERVICE_TOKEN,
-  UnlockedContentService,
-  UNLOCKED_CONTENT_SERVICE_TOKEN,
-  UserContentService,
-  USER_CONTENT_SERVICE_TOKEN
-} from './bundle';
+import { UnlockedBoekeGroupService, UnlockedBoekeStudentService, UNLOCKED_BOEKE_GROUP_SERVICE_TOKEN, UNLOCKED_BOEKE_STUDENT_SERVICE_TOKEN } from './boeke';
+import { BundleService, BUNDLE_SERVICE_TOKEN, UnlockedContentService, UNLOCKED_CONTENT_SERVICE_TOKEN, UserContentService, USER_CONTENT_SERVICE_TOKEN } from './bundle';
 import { ContentRequestService } from './content-request/content-request.service';
 import { CONTENT_REQUEST_SERVICE_TOKEN } from './content-request/content-request.service.interface';
 import { EduContentService } from './edu-content/edu-content.service';
@@ -131,14 +68,8 @@ import { YearService } from './metadata/year.service';
 import { YEAR_SERVICE_TOKEN } from './metadata/year.service.interface';
 import { AuthService } from './persons/auth-service';
 import { AUTH_SERVICE_TOKEN } from './persons/auth-service.interface';
-import {
-  CredentialService,
-  CREDENTIAL_SERVICE_TOKEN
-} from './persons/credential.service';
-import {
-  LinkedPersonService,
-  LINKED_PERSON_SERVICE_TOKEN
-} from './persons/linked-persons.service';
+import { CredentialService, CREDENTIAL_SERVICE_TOKEN } from './persons/credential.service';
+import { LinkedPersonService, LINKED_PERSON_SERVICE_TOKEN } from './persons/linked-persons.service';
 import { PersonService, PERSON_SERVICE_TOKEN } from './persons/persons.service';
 import { ResultsService } from './results/results.service';
 import { RESULTS_SERVICE_TOKEN } from './results/results.service.interface';
@@ -168,123 +99,6 @@ export const DAL_OPTIONS = new InjectionToken('dal-options');
     HttpClientModule,
     ScormModule,
     MatSnackBarModule,
-    StoreModule.forFeature(
-      LearningAreaReducer.NAME,
-      LearningAreaReducer.reducer,
-      { initialState: LearningAreaReducer.initialState }
-    ),
-    StoreModule.forFeature(
-      LearningDomainReducer.NAME,
-      LearningDomainReducer.reducer,
-      { initialState: LearningDomainReducer.initialState }
-    ),
-    StoreModule.forFeature(MethodReducer.NAME, MethodReducer.reducer, {
-      initialState: MethodReducer.initialState
-    }),
-    StoreModule.forFeature(
-      UserContentReducer.NAME,
-      UserContentReducer.reducer,
-      { initialState: UserContentReducer.initialState }
-    ),
-    StoreModule.forFeature(
-      UnlockedContentReducer.NAME,
-      UnlockedContentReducer.reducer,
-      { initialState: UnlockedContentReducer.initialState }
-    ),
-    StoreModule.forFeature(
-      StudentContentStatusReducer.NAME,
-      StudentContentStatusReducer.reducer,
-      { initialState: StudentContentStatusReducer.initialState }
-    ),
-    StoreModule.forFeature(EduContentReducer.NAME, EduContentReducer.reducer, {
-      initialState: EduContentReducer.initialState
-    }),
-    StoreModule.forFeature(BundleReducer.NAME, BundleReducer.reducer, {
-      initialState: BundleReducer.initialState
-    }),
-    StoreModule.forFeature(UiReducer.NAME, UiReducer.reducer, {
-      initialState: UiReducer.initialState
-    }),
-    StoreModule.forFeature(
-      UnlockedBoekeGroupReducer.NAME,
-      UnlockedBoekeGroupReducer.reducer,
-      { initialState: UnlockedBoekeGroupReducer.initialState }
-    ),
-    StoreModule.forFeature(
-      UnlockedBoekeStudentReducer.NAME,
-      UnlockedBoekeStudentReducer.reducer,
-      { initialState: UnlockedBoekeStudentReducer.initialState }
-    ),
-    StoreModule.forFeature(
-      ContentStatusReducer.NAME,
-      ContentStatusReducer.reducer,
-      { initialState: ContentStatusReducer.initialState }
-    ),
-    StoreModule.forFeature(UserReducer.NAME, UserReducer.reducer, {
-      initialState: UserReducer.initialState
-    }),
-    StoreModule.forFeature(TaskReducer.NAME, TaskReducer.reducer, {
-      initialState: TaskReducer.initialState
-    }),
-    StoreModule.forFeature(AlertReducer.NAME, AlertReducer.reducer, {
-      initialState: AlertReducer.initialState
-    }),
-    StoreModule.forFeature(
-      TaskInstanceReducer.NAME,
-      TaskInstanceReducer.reducer,
-      { initialState: TaskInstanceReducer.initialState }
-    ),
-    StoreModule.forFeature(
-      TaskEduContentReducer.NAME,
-      TaskEduContentReducer.reducer,
-      { initialState: TaskEduContentReducer.initialState }
-    ),
-    StoreModule.forFeature(ResultReducer.NAME, ResultReducer.reducer, {
-      initialState: ResultReducer.initialState
-    }),
-    StoreModule.forFeature(
-      CurrentExerciseReducer.NAME,
-      CurrentExerciseReducer.reducer,
-      { initialState: CurrentExerciseReducer.initialState }
-    ),
-    StoreModule.forFeature(
-      TeacherStudentReducer.NAME,
-      TeacherStudentReducer.reducer,
-      { initialState: TeacherStudentReducer.initialState }
-    ),
-    StoreModule.forFeature(
-      LinkedPersonReducer.NAME,
-      LinkedPersonReducer.reducer,
-      { initialState: LinkedPersonReducer.initialState }
-    ),
-    StoreModule.forFeature(CredentialReducer.NAME, CredentialReducer.reducer, {
-      initialState: CredentialReducer.initialState
-    }),
-    StoreModule.forFeature(
-      EffectFeedbackReducer.NAME,
-      EffectFeedbackReducer.reducer,
-      { initialState: EffectFeedbackReducer.initialState }
-    ),
-    StoreModule.forFeature(FavoriteReducer.NAME, FavoriteReducer.reducer, {
-      initialState: FavoriteReducer.initialState
-    }),
-    StoreModule.forFeature(HistoryReducer.NAME, HistoryReducer.reducer, {
-      initialState: HistoryReducer.initialState
-    }),
-    StoreModule.forFeature(
-      EduContentProductTypeReducer.NAME,
-      EduContentProductTypeReducer.reducer,
-      { initialState: EduContentProductTypeReducer.initialState }
-    ),
-    StoreModule.forFeature(EduNetReducer.NAME, EduNetReducer.reducer, {
-      initialState: EduNetReducer.initialState
-    }),
-    StoreModule.forFeature(SchoolTypeReducer.NAME, SchoolTypeReducer.reducer, {
-      initialState: SchoolTypeReducer.initialState
-    }),
-    StoreModule.forFeature(YearReducer.NAME, YearReducer.reducer, {
-      initialState: YearReducer.initialState
-    }),
     EffectsModule.forFeature([
       EffectFeedbackEffects,
       BundlesEffects,
