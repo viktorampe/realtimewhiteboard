@@ -14,13 +14,13 @@ export const environment: EnvironmentInterface = {
     favicon: 'assets/icons/favicon.ico'
   },
   logout: {
-    url: 'http://www.kabas.localhost:3014/dev'
+    url: 'http://www.kabas.localhost:3020/dev'
   },
   login: {
-    url: 'http://www.kabas.localhost:3014/dev'
+    url: 'http://www.kabas.localhost:3020/dev'
   },
   termPrivacy: {
-    url: 'http://www.kabas.localhost:3014/dev'
+    url: 'http://www.kabas.localhost:3020/dev'
   },
   api: {
     APIBase: 'http://api.polpo.localhost:3000'
