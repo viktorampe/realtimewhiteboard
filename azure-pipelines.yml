@@ -31,7 +31,7 @@ steps:
       echo '##vso[task.setvariable variable=dkLintTestAll]true'
       echo '##vso[task.setvariable variable=dkBuild]true'
     condition: and(eq(variables['Build.SourceBranch'], 'refs/heads/master'), in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI'))
-    displayName: 'On push to master: run all tests and build'
+    displayName: '(Check) Set dkLintTestAll and dkBuild to true if push to master'
   - script: |
       echo Build information
       echo -----------------
@@ -59,14 +59,15 @@ steps:
     displayName: 'Npm install'
     inputs:
       customEndpoint: diekeure-registry
-  - script: |
-      npm run affected:lint -- --base remotes/origin/$(System.PullRequest.TargetBranch) --head HEAD --parallel
-    displayName: 'Lint affected'
-    condition: eq(variables['dkLintTestAll'], 'false')
+  # Lint affected froze the entire agent service, so disabled affected for now
+  #- script: |
+  #    npm run affected:lint -- --base remotes/origin/$(System.PullRequest.TargetBranch) --head HEAD --parallel
+  #  displayName: 'Lint affected'
+  #  condition: eq(variables['dkLintTestAll'], 'false')
   - script: |
       npm run lint
     displayName: 'Lint all'
-    condition: eq(variables['dkLintTestAll'], 'true')
+  #    condition: eq(variables['dkLintTestAll'], 'true')
   - script: |
       npm run format:check
     displayName: 'Format check'
@@ -83,7 +84,7 @@ steps:
         echo "##vso[task.setVariable variable=dkRanTests]true"
         echo Tests ran
       fi
-    displayName: 'Determine if tests ran (for test publish and coverage)'
+    displayName: '(Check) Set dkRanTests to true if coverage folder exists'
   - task: PublishTestResults@2
     displayName: 'Publish test results'
     condition: eq(variables['dkRanTests'], 'true')
