@@ -59,24 +59,24 @@ steps:
     displayName: 'Npm install'
     inputs:
       customEndpoint: diekeure-registry
-  - script: |
-      npm run affected:lint -- --base remotes/origin/$(System.PullRequest.TargetBranch) --head HEAD
-    displayName: 'Lint affected'
-    condition: eq(variables['dkLintTestAll'], 'false')
+  #- script: |
+  #    npm run affected:lint -- --base remotes/origin/$(System.PullRequest.TargetBranch) --head HEAD
+  #  displayName: 'Lint affected'
+  #  condition: eq(variables['dkLintTestAll'], 'false')
   - script: |
       npm run lint
     displayName: 'Lint all'
-    condition: eq(variables['dkLintTestAll'], 'true')
+  #  condition: eq(variables['dkLintTestAll'], 'true')
   - script: |
       npm run format:check
     displayName: 'Format check'
-  - script: |
-      npm run affected:test -- --base remotes/origin/$(System.PullRequest.TargetBranch) --head HEAD --parallel --configuration=travis
-    displayName: 'Test affected'
-    condition: eq(variables['dkLintTestAll'], 'false')
+  #- script: |
+  #    npm run affected:test -- --base remotes/origin/$(System.PullRequest.TargetBranch) --head HEAD --configuration=travis
+  #  displayName: 'Test affected'
+  #  condition: eq(variables['dkLintTestAll'], 'false')
   - script: npm run test
     displayName: 'Test all'
-    condition: eq(variables['dkLintTestAll'], 'true')
+  #  condition: eq(variables['dkLintTestAll'], 'true')
   #todo: e2e
   - bash: |
       if [ -d "coverage" ]; then
