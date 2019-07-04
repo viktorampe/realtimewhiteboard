@@ -27,8 +27,8 @@ pool:
   name: 'Campus'
 
 steps:
-  - bash: |
-      export CYPRESS_apiUrl="https://api.staging.polpo.be/"
+  - script: |
+      echo '##vso[task.setvariable variable=CYPRESS_apiUrl]https://api.staging.polpo.be/'
     displayName: 'Export environment variables'
   - script: |
       echo '##vso[task.setvariable variable=dkLintTestAll]true'
@@ -88,7 +88,7 @@ steps:
   - script: |
       npm run e2e --headless --configuration staging
     displayName: 'End-to-end all'
-    condition: eq(variables['dkLintTestAll'], 'true')
+    #condition: eq(variables['dkLintTestAll'], 'true')
   - bash: |
       if [ -d "coverage" ]; then
         echo "##vso[task.setVariable variable=dkRanTests]true"
