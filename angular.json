@@ -70,6 +70,9 @@
             "port": 3014
           },
           "configurations": {
+            "staging": {
+              "browserTarget": "polpo-classroom-web:build:staging"
+            },
             "production": {
               "browserTarget": "polpo-classroom-web:build:production"
             }
@@ -118,6 +121,9 @@
             "devServerTarget": "polpo-classroom-web:serve"
           },
           "configurations": {
+            "staging": {
+              "devServerTarget": "polpo-classroom-web:serve:staging"
+            },
             "production": {
               "devServerTarget": "polpo-classroom-web:serve:production"
             }
@@ -951,6 +957,9 @@
             "port": 3020
           },
           "configurations": {
+            "staging": {
+              "browserTarget": "kabas-web:build:staging"
+            },
             "production": {
               "browserTarget": "kabas-web:build:production"
             }
@@ -1000,6 +1009,9 @@
             "devServerTarget": "kabas-web:serve"
           },
           "configurations": {
+            "staging": {
+              "devServerTarget": "kabas-web:serve:staging"
+            },
             "production": {
               "devServerTarget": "kabas-web:serve:production"
             }

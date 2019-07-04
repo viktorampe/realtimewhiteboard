@@ -16,3 +16,6 @@
 import './commands';
 import './interfaces';
 import './types';
+
+console.log('Cypress e2e info:');
+console.log(`- apiUrl: ${Cypress.env('apiUrl')}`);

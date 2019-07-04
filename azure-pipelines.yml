@@ -27,6 +27,9 @@ pool:
   name: 'Campus'
 
 steps:
+  - bash: |
+      export CYPRESS_apiUrl="https://api.staging.polpo.be/"
+    displayname: 'Export environment variables'
   - script: |
       echo '##vso[task.setvariable variable=dkLintTestAll]true'
       echo '##vso[task.setvariable variable=dkBuild]true'
@@ -42,6 +45,7 @@ steps:
       echo dkRanTests = $(dkRanTests)
       echo dkLintTestAll = $(dkLintTestAll)
       echo dkBuild = $(dkBuild)
+      env
     displayName: 'Build information'
   - task: NodeTool@0
     displayName: 'Install Node.js'
@@ -63,21 +67,28 @@ steps:
   #    npm run affected:lint -- --base remotes/origin/$(System.PullRequest.TargetBranch) --head HEAD
   #  displayName: 'Lint affected'
   #  condition: eq(variables['dkLintTestAll'], 'false')
-  - script: |
-      npm run lint
-    displayName: 'Lint all'
+  #- script: |
+  #    npm run lint
+  #  displayName: 'Lint all'
   #  condition: eq(variables['dkLintTestAll'], 'true')
-  - script: |
-      npm run format:check
-    displayName: 'Format check'
+  #- script: |
+  #    npm run format:check
+  #  displayName: 'Format check'
   #- script: |
   #    npm run affected:test -- --base remotes/origin/$(System.PullRequest.TargetBranch) --head HEAD --configuration=travis
   #  displayName: 'Test affected'
   #  condition: eq(variables['dkLintTestAll'], 'false')
-  - script: npm run test
-    displayName: 'Test all'
+  #- script: npm run test
+  #  displayName: 'Test all'
   #  condition: eq(variables['dkLintTestAll'], 'true')
-  #todo: e2e
+  #- script: |
+  #  npm run affected:e2e -- --base remotes/origin/$(System.PullReequest.TargetBranch) --head "HEAD" --headless --configuration staging
+  #  displayName: 'End-to-end affected'
+  #  condition: eq(variables['dkLintTestAll'], 'false')
+  - script: |
+    npm run e2e --headless --configuration staging
+    displayName: 'End-to-end all'
+    condition: eq(variables['dkLintTestAll'], 'true')
   - bash: |
       if [ -d "coverage" ]; then
         echo "##vso[task.setVariable variable=dkRanTests]true"
