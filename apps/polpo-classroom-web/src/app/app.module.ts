@@ -9,10 +9,10 @@ import { SearchModule } from '@campus/search';
 import { SharedModule } from '@campus/shared';
 import { ManageCollectionComponent, UiModule } from '@campus/ui';
 import { UtilsModule } from '@campus/utils';
-import { EffectsModule } from '@ngrx/effects';
 import { NxModule } from '@nrwl/nx';
 import { configureBufferSize } from 'ngrx-undo';
 import { environment } from '../environments/environment';
+import { AppEffectsModule } from './app-effects.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppStoreModule } from './app-store.module';
 import { AppComponent } from './app.component';
@@ -55,8 +55,8 @@ configureBufferSize(150);
     NxModule.forRoot(),
     DalModule.forRoot({ apiBaseUrl: environment.api.APIBase }),
     GuardsModule,
-    EffectsModule.forRoot([]),
     AppRoutingModule,
+    AppEffectsModule,
     AppStoreModule
   ],
   providers: [

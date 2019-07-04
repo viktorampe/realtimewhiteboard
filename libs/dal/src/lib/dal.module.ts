@@ -1,45 +1,39 @@
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { Inject, InjectionToken, ModuleWithProviders, NgModule } from '@angular/core';
+import {
+  Inject,
+  InjectionToken,
+  ModuleWithProviders,
+  NgModule
+} from '@angular/core';
 import { MatSnackBarModule } from '@angular/material';
-import { BrowserModule as CampusBrowserModule, BROWSER_STORAGE_SERVICE_TOKEN, StorageService } from '@campus/browser';
+import {
+  BrowserModule as CampusBrowserModule,
+  BROWSER_STORAGE_SERVICE_TOKEN,
+  StorageService
+} from '@campus/browser';
 import { ScormModule } from '@campus/scorm';
-import { LoopBackConfig, SDKBrowserModule } from '@diekeure/polpo-api-angular-sdk';
-import { EffectsModule } from '@ngrx/effects';
+import {
+  LoopBackConfig,
+  SDKBrowserModule
+} from '@diekeure/polpo-api-angular-sdk';
 import { v4 as uuid } from 'uuid';
-import { AlertsEffects } from './+state/alert';
-import { BundlesEffects } from './+state/bundle';
-import { ContentStatusesEffects } from './+state/content-status/content-status.effects';
-import { CredentialEffects } from './+state/credential';
-import { CurrentExerciseEffects } from './+state/current-exercise';
-import { EduContentsEffects } from './+state/edu-content';
-import { EduContentProductTypeEffects } from './+state/edu-content-product-type';
-import { EduNetEffects } from './+state/edu-net';
-import { EffectFeedbackEffects } from './+state/effect-feedback/effect-feedback.effects';
-import { FavoriteEffects } from './+state/favorite';
-import { HistoryEffects } from './+state/history';
-import { LearningAreasEffects } from './+state/learning-area';
-import { LearningDomainEffects } from './+state/learning-domain';
-import { LinkedPersonEffects } from './+state/linked-person';
-import { MethodEffects } from './+state/method';
-import { ResultEffects } from './+state/result';
-import { SchoolTypeEffects } from './+state/school-type';
-import { StudentContentStatusesEffects } from './+state/student-content-status';
-import { TaskEffects } from './+state/task';
-import { TaskEduContentEffects } from './+state/task-edu-content';
-import { TaskInstanceEffects } from './+state/task-instance';
-import { TeacherStudentEffects } from './+state/teacher-student';
-import { UiEffects } from './+state/ui';
-import { UnlockedBoekeGroupsEffects } from './+state/unlocked-boeke-group';
-import { UnlockedBoekeStudentsEffects } from './+state/unlocked-boeke-student';
-import { UnlockedContentsEffects } from './+state/unlocked-content';
-import { UserEffects } from './+state/user';
-import { UserContentsEffects } from './+state/user-content';
-import { YearEffects } from './+state/year';
 import { AlertService } from './alert/alert.service';
 import { ALERT_SERVICE_TOKEN } from './alert/alert.service.interface';
-import { UnlockedBoekeGroupService, UnlockedBoekeStudentService, UNLOCKED_BOEKE_GROUP_SERVICE_TOKEN, UNLOCKED_BOEKE_STUDENT_SERVICE_TOKEN } from './boeke';
-import { BundleService, BUNDLE_SERVICE_TOKEN, UnlockedContentService, UNLOCKED_CONTENT_SERVICE_TOKEN, UserContentService, USER_CONTENT_SERVICE_TOKEN } from './bundle';
+import {
+  UnlockedBoekeGroupService,
+  UnlockedBoekeStudentService,
+  UNLOCKED_BOEKE_GROUP_SERVICE_TOKEN,
+  UNLOCKED_BOEKE_STUDENT_SERVICE_TOKEN
+} from './boeke';
+import {
+  BundleService,
+  BUNDLE_SERVICE_TOKEN,
+  UnlockedContentService,
+  UNLOCKED_CONTENT_SERVICE_TOKEN,
+  UserContentService,
+  USER_CONTENT_SERVICE_TOKEN
+} from './bundle';
 import { ContentRequestService } from './content-request/content-request.service';
 import { CONTENT_REQUEST_SERVICE_TOKEN } from './content-request/content-request.service.interface';
 import { EduContentService } from './edu-content/edu-content.service';
@@ -68,8 +62,14 @@ import { YearService } from './metadata/year.service';
 import { YEAR_SERVICE_TOKEN } from './metadata/year.service.interface';
 import { AuthService } from './persons/auth-service';
 import { AUTH_SERVICE_TOKEN } from './persons/auth-service.interface';
-import { CredentialService, CREDENTIAL_SERVICE_TOKEN } from './persons/credential.service';
-import { LinkedPersonService, LINKED_PERSON_SERVICE_TOKEN } from './persons/linked-persons.service';
+import {
+  CredentialService,
+  CREDENTIAL_SERVICE_TOKEN
+} from './persons/credential.service';
+import {
+  LinkedPersonService,
+  LINKED_PERSON_SERVICE_TOKEN
+} from './persons/linked-persons.service';
 import { PersonService, PERSON_SERVICE_TOKEN } from './persons/persons.service';
 import { ResultsService } from './results/results.service';
 import { RESULTS_SERVICE_TOKEN } from './results/results.service.interface';
@@ -98,38 +98,7 @@ export const DAL_OPTIONS = new InjectionToken('dal-options');
     SDKBrowserModule.forRoot(),
     HttpClientModule,
     ScormModule,
-    MatSnackBarModule,
-    EffectsModule.forFeature([
-      EffectFeedbackEffects,
-      BundlesEffects,
-      UserEffects,
-      EduContentsEffects,
-      UiEffects,
-      LearningAreasEffects,
-      MethodEffects,
-      UserContentsEffects,
-      StudentContentStatusesEffects,
-      UnlockedBoekeGroupsEffects,
-      UnlockedContentsEffects,
-      UnlockedBoekeStudentsEffects,
-      ContentStatusesEffects,
-      TaskEffects,
-      TaskInstanceEffects,
-      AlertsEffects,
-      TaskEduContentEffects,
-      ResultEffects,
-      LearningDomainEffects,
-      CurrentExerciseEffects,
-      TeacherStudentEffects,
-      LinkedPersonEffects,
-      CredentialEffects,
-      FavoriteEffects,
-      HistoryEffects,
-      EduContentProductTypeEffects,
-      EduNetEffects,
-      SchoolTypeEffects,
-      YearEffects
-    ])
+    MatSnackBarModule
   ],
   providers: [
     {
