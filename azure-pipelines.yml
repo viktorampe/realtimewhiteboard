@@ -59,15 +59,14 @@ steps:
     displayName: 'Npm install'
     inputs:
       customEndpoint: diekeure-registry
-  # Lint affected froze the entire agent service, so disabled affected for now
-  #- script: |
-  #    npm run affected:lint -- --base remotes/origin/$(System.PullRequest.TargetBranch) --head HEAD --parallel
-  #  displayName: 'Lint affected'
-  #  condition: eq(variables['dkLintTestAll'], 'false')
   - script: |
-      npm run lint --parallel
+      npm run affected:lint -- --base remotes/origin/$(System.PullRequest.TargetBranch) --head HEAD
+    displayName: 'Lint affected'
+    condition: eq(variables['dkLintTestAll'], 'false')
+  - script: |
+      npm run lint
     displayName: 'Lint all'
-  #    condition: eq(variables['dkLintTestAll'], 'true')
+    condition: eq(variables['dkLintTestAll'], 'true')
   - script: |
       npm run format:check
     displayName: 'Format check'
