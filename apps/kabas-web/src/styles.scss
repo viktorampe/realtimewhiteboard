@@ -31,3 +31,7 @@ body {
 // include ui lib scss file
 @import 'libs/ui/src/lib/ui-theme';
 @include ui-theme();
+
+// include shared lib scss
+@import 'libs/shared/src/lib/shared-theme';
+@include shared-theme();
