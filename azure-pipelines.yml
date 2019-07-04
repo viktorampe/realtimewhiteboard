@@ -86,7 +86,7 @@ steps:
   #  displayName: 'End-to-end affected'
   #  condition: eq(variables['dkLintTestAll'], 'false')
   - script: |
-      npm run e2e polpo-classroom-web-e2e --headless --configuration staging
+      npm run e2e -- --headless --configuration staging
     displayName: 'End-to-end all'
     #condition: eq(variables['dkLintTestAll'], 'true')
   - bash: |
