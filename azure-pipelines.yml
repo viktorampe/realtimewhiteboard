@@ -60,7 +60,7 @@ steps:
     inputs:
       customEndpoint: diekeure-registry
   - script: |
-      npm run affected:lint -- --base remotes/origin/$(dkEffectiveBranch) --head HEAD --parallel
+      npm run affected:lint -- --base remotes/origin/$(System.PullRequest.TargetBranch) --head HEAD --parallel
     displayName: 'Lint affected'
     condition: eq(variables['dkLintTestAll'], 'false')
   - script: |
@@ -71,7 +71,7 @@ steps:
       npm run format:check
     displayName: 'Format check'
   - script: |
-      npm run affected:test -- --base remotes/origin/$(dkEffectiveBranch) --head HEAD --parallel --configuration=travis
+      npm run affected:test -- --base remotes/origin/$(System.PullRequest.TargetBranch) --head HEAD --parallel --configuration=travis
     displayName: 'Test affected'
     condition: eq(variables['dkLintTestAll'], 'false')
   - script: npm run test
