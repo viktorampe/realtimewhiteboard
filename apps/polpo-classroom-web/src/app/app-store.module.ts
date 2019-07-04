@@ -174,7 +174,6 @@ import { environment } from '../environments/environment';
       serializer: CustomSerializer
     }),
     !environment.production ? StoreDevtoolsModule.instrument() : []
-  ],
-  exports: []
+  ]
 })
 export class AppStoreModule {}

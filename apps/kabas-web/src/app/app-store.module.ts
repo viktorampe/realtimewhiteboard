@@ -32,7 +32,6 @@ import { environment } from '../environments/environment';
       initialState: UserReducer.initialState
     }),
     !environment.production ? StoreDevtoolsModule.instrument() : []
-  ],
-  exports: []
+  ]
 })
 export class AppStoreModule {}

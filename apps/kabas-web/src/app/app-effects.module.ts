@@ -3,7 +3,6 @@ import { UiEffects } from '@campus/dal';
 import { EffectsModule } from '@ngrx/effects';
 
 @NgModule({
-  imports: [EffectsModule.forRoot([]), EffectsModule.forFeature([UiEffects])],
-  exports: []
+  imports: [EffectsModule.forRoot([]), EffectsModule.forFeature([UiEffects])]
 })
 export class AppEffectsModule {}

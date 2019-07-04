@@ -66,7 +66,6 @@ import { EffectsModule } from '@ngrx/effects';
       SchoolTypeEffects,
       YearEffects
     ])
-  ],
-  exports: []
+  ]
 })
 export class AppEffectsModule {}
