@@ -76,7 +76,7 @@ steps:
     condition: eq(variables['dkLintTestAll'], 'false')
   - script: npm run test
     displayName: 'Test all'
-   condition: eq(variables['dkLintTestAll'], 'true')
+    condition: eq(variables['dkLintTestAll'], 'true')
   - script: |
       npm run affected:e2e -- --base remotes/origin/$(System.PullReequest.TargetBranch) --head "HEAD" --headless --configuration staging
     displayName: 'End-to-end affected'
