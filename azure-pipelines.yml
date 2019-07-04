@@ -35,17 +35,13 @@ steps:
     inputs:
       versionSpec: '10.x'
   - task: DeleteFiles@1
-    displayName: 'Clear junit reports'
+    displayName: 'Clear junit, coverage reports, build output'
     inputs:
-      contents: 'junit'
-  - task: DeleteFiles@1
-    displayName: 'Clear coverage reports'
-    inputs:
-      contents: 'coverage'
-  - task: DeleteFiles@1
-    displayName: 'Clear coverage summary'
-    inputs:
-      contents: 'reportgenerator'
+      contents: |
+        'junit'
+        'coverage'
+        'reportgenerator'
+        'dist'
   - task: Npm@1
     displayName: 'Npm install'
     inputs:
@@ -72,7 +68,7 @@ steps:
         echo "##vso[task.setVariable variable=dkRanTests]false"  
         echo Tests did not run
       fi
-    displayName: 'If no tests ran, skip test publish and coverage'
+    displayName: 'Determine if tests ran (for test publish and coverage)'
   - task: PublishTestResults@2
     displayName: 'Publish test results'
     condition: eq(variables['dkRanTests'], 'true')
@@ -104,21 +100,9 @@ steps:
       npm run build:kabas:production
     displayName: 'Build kabas:production'
   - task: CopyFiles@2
-    displayName: 'Copy to artifacts: polpo:staging'
+    displayName: 'Copy builds to artifacts'
     inputs:
-      contents: 'dist/polpo-web-staging/**'
-      targetFolder: $(Build.ArtifactStagingDirectory)
-      cleanTargetFolder: true
-  #todo: polpo production build breaks
-  - task: CopyFiles@2
-    displayName: 'Copy to artifacts: kabas:staging'
-    inputs:
-      contents: 'dist/kabas-web-staging/**'
-      targetFolder: $(Build.ArtifactStagingDirectory)
-  - task: CopyFiles@2
-    displayName: 'Copy to artifacts: kabas:production'
-    inputs:
-      contents: 'dist/kabas-web-production/**'
+      contents: 'dist/**'
       targetFolder: $(Build.ArtifactStagingDirectory)
   - task: PublishBuildArtifacts@1
 #steps:
