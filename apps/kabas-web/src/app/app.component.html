@@ -1,6 +1,14 @@
-<campus-shell>
+<campus-shell
+  [sidebarOpen]="sideNavOpen$ | async"
+  (sidebarToggled)="onSideBarToggle($event)"
+>
   <campus-shell-logo> logo </campus-shell-logo>
-  <campus-shell-left> left </campus-shell-left>
-  <campus-shell-top> top </campus-shell-top>
+  <campus-shell-left>
+    <campus-tree-nav
+      [treeNav]="navigationItems$ | async"
+      (navItemChanged)="onNavItemChanged($event)"
+    ></campus-tree-nav
+  ></campus-shell-left>
+  <campus-shell-top> </campus-shell-top>
   <campus-shell-body> <router-outlet></router-outlet> </campus-shell-body>
 </campus-shell>
