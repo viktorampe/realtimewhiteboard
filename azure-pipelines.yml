@@ -18,10 +18,20 @@ trigger:
   - master
   - test/mock-master
 
+variables:
+  dkRanTests: false
+  dkLintTestAll: false
+  dkBuild: false
+
 pool:
   name: 'Campus'
 
 steps:
+  - script: |
+      echo '##vso[task.setvariable variable=dkLintTestAll]true'
+      echo '##vso[task.setvariable variable=dkBuild]true'
+    condition: and(eq(variables['Build.SourceBranch'], 'refs/heads/master'), in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI'))
+    displayName: 'On push to master: run all tests and build'
   - script: |
       echo Build information
       echo -----------------
@@ -29,6 +39,9 @@ steps:
       echo Build.SourceBranch	= $(Build.SourceBranch)
       echo System.PullRequest.TargetBranch = $(System.PullRequest.TargetBranch)
       echo Build.SourcesDirectory = $(Build.SourcesDirectory)
+      echo dkRanTests = $(dkRanTests)
+      echo dkLintTestAll = $(dkLintTestAll)
+      echo dkBuild = $(dkBuild)
     displayName: 'Build information'
   - task: NodeTool@0
     displayName: 'Install Node.js'
@@ -46,27 +59,29 @@ steps:
     displayName: 'Npm install'
     inputs:
       customEndpoint: diekeure-registry
-  #Temporarily disabled, please re-enable later!
-  #- script:
-  #    npm run affected:lint -- --base remotes/origin/$(dkEffectiveBranch) --head HEAD --parallel
-  #  displayName: 'Lint affected'
-  #Temporarily disabled, please re-enable later!
-  #- script: |
-  #    npm run format:check
-  #  displayName: 'Format check'
-  #Temporarily disabled, please re-enable later!
-  #- script: |
-  #    npm run affected:test -- --base remotes/origin/$(dkEffectiveBranch) --head HEAD --parallel --configuration=travis
-  #  displayName: 'Run affected tests'
+  - script: |
+      npm run affected:lint -- --base remotes/origin/$(dkEffectiveBranch) --head HEAD --parallel
+    displayName: 'Lint affected'
+    condition: eq(variables['dkLintTestAll'], 'false')
+  - script: |
+      npm run lint
+    displayName: 'Lint all'
+    condition: eq(variables['dkLintTestAll'], 'true')
+  - script: |
+      npm run format:check
+    displayName: 'Format check'
+  - script: |
+      npm run affected:test -- --base remotes/origin/$(dkEffectiveBranch) --head HEAD --parallel --configuration=travis
+    displayName: 'Test affected'
+    condition: eq(variables['dkLintTestAll'], 'false')
+  - script: npm run test
+    displayName: 'Test all'
+    condition: eq(variables['dkLintTestAll'], 'true')
   #todo: e2e
-  #todo: fix affected for merge pushes, don't use dkEffectiveBranch anymore
   - bash: |
       if [ -d "coverage" ]; then
         echo "##vso[task.setVariable variable=dkRanTests]true"
         echo Tests ran
-      else
-        echo "##vso[task.setVariable variable=dkRanTests]false"  
-        echo Tests did not run
       fi
     displayName: 'Determine if tests ran (for test publish and coverage)'
   - task: PublishTestResults@2
@@ -91,20 +106,29 @@ steps:
       summaryFileLocation: $(Build.SourcesDirectory)/reportgenerator/Cobertura.xml
   - script: |
       npm run build:polpo:staging
-    displayName: 'Build: polpo:staging'
+    displayName: '[Build] polpo:staging'
+    condition: eq(variables['dkBuild'], 'true')
   #todo: polpo production build breaks
   - script: |
       npm run build:kabas:staging
-    displayName: 'Build: kabas:staging'
+    displayName: '[Build] kabas:staging'
+    condition: eq(variables['dkBuild'], 'true')
   - script: |
       npm run build:kabas:production
-    displayName: 'Build kabas:production'
+    displayName: '[Build] kabas:production'
+    condition: eq(variables['dkBuild'], 'true')
   - task: CopyFiles@2
     displayName: 'Copy builds to artifacts'
+    condition: eq(variables['dkBuild'], 'true')
     inputs:
-      contents: 'dist/**'
+      contents: |
+        'dist/kabas-web-staging'
+        'dist/kabas-web-production'
+        'dist/polpo-web-staging'
+      #       'dist/polpo-web-production'
       targetFolder: $(Build.ArtifactStagingDirectory)
   - task: PublishBuildArtifacts@1
+    condition: eq(variables['dkBuild'], 'true')
 #steps:
 # - script: |
 #     npm install -g @angular/cli
