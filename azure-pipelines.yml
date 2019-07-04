@@ -88,7 +88,7 @@ steps:
   - script: |
       node --max_old_space_size=12000 ./node_modules/@angular/cli/bin/ng e2e --project=polpo-classroom-web-e2e --headless --configuration staging
     displayName: 'End-to-end all'
-    condition: eq(variables['dkLintTestAll'], 'true')
+  #  condition: eq(variables['dkLintTestAll'], 'true')
   - bash: |
       if [ -d "coverage" ]; then
         echo "##vso[task.setVariable variable=dkRanTests]true"
