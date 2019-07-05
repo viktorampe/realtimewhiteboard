@@ -1,9 +1,56 @@
+import { EnvironmentInterface } from '@campus/shared';
+import { icons } from './icons';
+
 // This file can be replaced during build by using the `fileReplacements` array.
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
-export const environment = {
-  production: false
+export const environment: EnvironmentInterface = {
+  production: false,
+  iconMapping: icons,
+  website: {
+    url: 'http://www.kabas.localhost',
+    title: 'KABAS',
+    favicon: 'assets/icons/favicon.ico'
+  },
+  logout: {
+    url: 'http://www.kabas.localhost:3020/dev'
+  },
+  login: {
+    url: 'http://www.kabas.localhost:3020/dev'
+  },
+  termPrivacy: {
+    url: 'http://www.kabas.localhost:3020/dev'
+  },
+  api: {
+    APIBase: 'http://api.polpo.localhost:3000'
+  },
+  features: {
+    alerts: {
+      enabled: false,
+      hasAppBarDropDown: false,
+      appBarPollingInterval: 3000
+    },
+    messages: {
+      enabled: false,
+      hasAppBarDropDown: false
+    },
+    errorManagement: {
+      managedStatusCodes: [500, 401, 404, 0],
+      allowedErrors: [
+        {
+          status: 404,
+          statusText: 'Not Found',
+          urlRegex: 'http.*assets\\/icons.*.svg'
+        }
+      ]
+    }
+  },
+  sso: {},
+  searchModes: {},
+  testing: {
+    removeDataCyAttributes: false
+  }
 };
 
 /*

@@ -1,1 +1,33 @@
 /* You can add global styles to this file, and also import other style files */
+
+/*
+ * css reset
+ */
+html,
+body {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.ui-shell__logo {
+  text-align: center;
+  padding-top: 25px;
+}
+
+/*
+ * Angular Material theme
+ */
+@import 'scss/theme-angular-material';
+@include angular-material-theme($polpo-theme);
+
+// load all variables for your app theme and ui components
+@import 'scss/theme-variables';
+
+// include ui lib scss file
+@import 'libs/ui/src/lib/ui-theme';
+@include ui-theme();

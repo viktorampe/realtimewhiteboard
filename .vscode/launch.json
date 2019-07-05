@@ -10,6 +10,13 @@
       "name": "Chrome - polpo web",
       "url": "http://student.polpo.localhost:3014",
       "webRoot": "${workspaceFolder}"
+    },
+    {
+      "type": "chrome",
+      "request": "launch",
+      "name": "Chrome - Kabas web",
+      "url": "http://www.kabas.localhost:3020",
+      "webRoot": "${workspaceFolder}"
     }
   ]
 }
