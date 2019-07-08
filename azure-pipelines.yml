@@ -64,7 +64,7 @@ steps:
       npm run lint
     displayName: 'Lint all'
     condition: eq(variables['dkLintAll'], 'true')
-    - script: |
+  - script: |
       npm run e2e:polpo:staging
     displayName: 'End-to-end all polpo'
   - script: |
