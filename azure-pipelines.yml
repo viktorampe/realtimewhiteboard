@@ -70,7 +70,7 @@ steps:
   - script: |
       npm run e2e:kabas:staging
     displayName: 'End-to-end all kabas'
-    - script: |
+  - script: |
       npm run format:check
     displayName: 'Format check'
   - script: npm run test
