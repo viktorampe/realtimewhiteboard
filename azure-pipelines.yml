@@ -24,9 +24,6 @@ pool:
 
 steps:
   - script: |
-      echo '##vso[task.setvariable variable=CYPRESS_APIURL]https://api.staging.polpo.be/'
-    displayName: 'Export environment variables'
-  - script: |
       echo '##vso[task.setvariable variable=dkLintAll]true'
       echo '##vso[task.setvariable variable=dkBuild]true'
     condition: and(in(variables['Build.SourceBranch'], 'refs/heads/master', 'refs/heads/develop', 'refs/heads/test/mock-master'), in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI'))
@@ -42,7 +39,7 @@ steps:
       echo dkRanTests = $(dkRanTests)
       echo dkLintAll = $(dkLintAll)
       echo dkBuild = $(dkBuild)
-      echo 
+      echo
       echo Environment
       echo -----------
       env
@@ -73,10 +70,10 @@ steps:
   - script: npm run test
     displayName: 'Test all'
   - script: |
-      node --max_old_space_size=12000 ./node_modules/@angular/cli/bin/ng e2e --project=polpo-classroom-web-e2e --headless --configuration staging
+      npm run e2e:polpo:staging
     displayName: 'End-to-end all polpo'
   - script: |
-      node --max_old_space_size=12000 ./node_modules/@angular/cli/bin/ng e2e --project=kabas-web-e2e --headless --configuration staging
+      npm run e2e:kabas:staging
     displayName: 'End-to-end all kabas'
   - bash: |
       if [ -d "coverage" ]; then
