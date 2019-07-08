@@ -59,7 +59,7 @@
             [itemCount]="learningAreaWithInfo.openTasks"
             [title]="learningAreaWithInfo.learningArea.name"
             [backgroundColor]="learningAreaWithInfo.learningArea.color"
-            [icon]="'learning-area:' + learningAreaWithInfo.learningArea.icon"
+            [icon]="learningAreaWithInfo.learningArea.icon"
           >
             <campus-folder-details>
               {{ learningAreaWithInfo.openTasks }}

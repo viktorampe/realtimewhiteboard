@@ -2,7 +2,6 @@ import { Inject, Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Action, select } from '@ngrx/store';
 import { DataPersistence } from '@nrwl/nx';
-import { undo } from 'ngrx-undo';
 import { from, interval, Observable, Subject } from 'rxjs';
 import { map, switchMap, take, takeUntil, tap } from 'rxjs/operators';
 import { AlertActions } from '.';
@@ -11,6 +10,10 @@ import {
   AlertServiceInterface,
   ALERT_SERVICE_TOKEN
 } from '../../alert/alert.service.interface';
+import {
+  UndoServiceInterface,
+  UNDO_SERVICE_TOKEN
+} from '../../undo/undo.service.interface';
 import { EffectFeedbackActions } from '../effect-feedback';
 import {
   EffectFeedback,
@@ -72,7 +75,7 @@ export class AlertsEffects {
               alertIds: ids,
               intended: action.payload.intended,
               read: action.payload.read,
-              displayResponse: action.payload.displayResponse
+              customFeedbackHandlers: action.payload.customFeedbackHandlers
             });
           }),
           take(1)
@@ -147,7 +150,6 @@ export class AlertsEffects {
                 message: action.payload.read
                   ? 'Melding als gelezen gemarkeerd.'
                   : 'Melding als ongelezen gemarkeerd.',
-                display: action.payload.displayResponse,
                 userActions: null,
                 type: 'success'
               });
@@ -159,7 +161,7 @@ export class AlertsEffects {
           );
       },
       undoAction: (action: SetReadAlert, state: any) => {
-        const undoAction = undo(action);
+        const undoAction = this.undoService.undo(action);
 
         const effectFeedback = new EffectFeedback({
           id: this.uuid(),
@@ -167,7 +169,6 @@ export class AlertsEffects {
           message: action.payload.read
             ? 'Het is niet gelukt om de melding als gelezen te markeren.'
             : 'Het is niet gelukt om de melding als ongelezen te markeren.',
-          display: action.payload.displayResponse,
           userActions: [{ title: 'Opnieuw', userAction: action }],
           type: 'error',
           priority: Priority.HIGH
@@ -188,35 +189,26 @@ export class AlertsEffects {
     AlertsActionTypes.DeleteAlert,
     {
       run: (action: AlertActions.DeleteAlert, state: DalState) => {
-        return this.alertService
-          .deleteAlert(action.payload.personId, action.payload.id)
-          .pipe(
-            map(res => {
-              const effectFeedback = new EffectFeedback({
-                id: this.uuid(),
-                triggerAction: action,
-                message: 'Melding is verwijderd.',
-                display: action.payload.displayResponse,
-                userActions: null,
-                type: 'success',
-                priority: Priority.NORM
-              });
-
-              return new EffectFeedbackActions.AddEffectFeedback({
-                effectFeedback
-              });
-            })
-          );
+        return this.undoService.dispatchActionAsUndoable({
+          action: action,
+          dataPersistence: this.dataPersistence,
+          intendedSideEffect: this.alertService.deleteAlert(
+            action.payload.personId,
+            action.payload.id
+          ),
+          undoLabel: 'Melding wordt verwijderd.',
+          undoneLabel: 'Melding is niet verwijderd.',
+          doneLabel: 'Melding is verwijderd.'
+        });
       },
       undoAction: (action: AlertActions.DeleteAlert, error: any) => {
         // Something went wrong: could be a 401 or 404 ...
-        const undoAction = undo(action);
+        const undoAction = this.undoService.undo(action);
 
         const effectFeedback = new EffectFeedback({
           id: this.uuid(),
           triggerAction: action,
           message: 'Het is niet gelukt om de melding te verwijderen.',
-          display: action.payload.displayResponse,
           userActions: [{ title: 'Opnieuw', userAction: action }],
           type: 'error',
           priority: Priority.HIGH
@@ -235,6 +227,7 @@ export class AlertsEffects {
   constructor(
     private actions: Actions,
     private dataPersistence: DataPersistence<DalState>,
+    @Inject(UNDO_SERVICE_TOKEN) private undoService: UndoServiceInterface,
     @Inject(ALERT_SERVICE_TOKEN) private alertService: AlertServiceInterface,
     @Inject('uuid') private uuid: Function
   ) {}

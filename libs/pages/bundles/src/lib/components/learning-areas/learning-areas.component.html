@@ -36,7 +36,10 @@
         (filterTextInput.result$ | async) as filteredSharedLearningAreaInfo
       "
     >
-      <div class="pages-bundles__container__learning-areas-count">
+      <div
+        class="pages-bundles__container__learning-areas-count"
+        data-cy="learningArea-count"
+      >
         {{ filteredSharedLearningAreaInfo.length }} van
         <u
           class="pages-bundles__container__learning-areas-count__total"
@@ -51,6 +54,7 @@
           [placeHolderText]="'De toegepaste filter bevat geen resultaten'"
         >
           <campus-folder
+            data-cy="learningArea"
             *ngFor="let learningAreaInfo of filteredSharedLearningAreaInfo"
             campusListItem
             [routerLink]="[learningAreaInfo.learningArea.id]"
@@ -59,9 +63,9 @@
             "
             [title]="learningAreaInfo.learningArea.name"
             [backgroundColor]="learningAreaInfo.learningArea.color"
-            [icon]="'learning-area:' + learningAreaInfo.learningArea.icon"
+            [icon]="learningAreaInfo.learningArea.icon"
           >
-            <campus-folder-details>
+            <campus-folder-details data-cy="learningArea-details">
               {{ learningAreaInfo.bundleCount }}
               {{ learningAreaInfo.bundleCount === 1 ? 'bundel' : 'bundels' }} |
               {{ learningAreaInfo.bookCount }}

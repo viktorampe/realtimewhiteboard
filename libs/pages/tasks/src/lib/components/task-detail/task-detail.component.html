@@ -45,7 +45,7 @@
     <campus-page-header
       [title]="taskInfo.task.name"
       [subtitle]="taskInfo.task.description"
-      [iconClass]="'learning-area:' + (learningArea$ | async)?.icon"
+      [iconClass]="(learningArea$ | async)?.icon"
     >
     </campus-page-header>
 

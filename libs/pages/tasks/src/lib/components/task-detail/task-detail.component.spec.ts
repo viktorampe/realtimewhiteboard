@@ -22,7 +22,7 @@ import { TaskDetailComponent } from './task-detail.component';
 describe('TaskDetailComponent', () => {
   let component: TaskDetailComponent;
   let fixture: ComponentFixture<TaskDetailComponent>;
-  let tasksViewModel: MockTasksViewModel;
+  let tasksViewModel: TasksViewModel;
   let learningArea$: BehaviorSubject<LearningAreaInterface>;
   let taskInfo$: BehaviorSubject<TaskWithInfoInterface>;
   let listFormat$: BehaviorSubject<ListFormat>;
@@ -31,8 +31,8 @@ describe('TaskDetailComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [UiModule, BrowserAnimationsModule],
-      declarations: [TaskDetailComponent],
       schemas: [NO_ERRORS_SCHEMA],
+      declarations: [TaskDetailComponent],
       providers: [
         { provide: ActivatedRoute, useClass: MockActivatedRoute },
         { provide: FILTER_SERVICE_TOKEN, useClass: FilterService },
@@ -170,6 +170,15 @@ describe('TaskDetailComponent', () => {
     expect(tasksViewModel.setTaskAlertRead).toHaveBeenCalledWith(1);
   });
 
+  it('should add the task to history', () => {
+    tasksViewModel.setTaskHistory = jest.fn();
+
+    component.ngOnInit();
+
+    expect(tasksViewModel.setTaskHistory).toHaveBeenCalled();
+    expect(tasksViewModel.setTaskHistory).toHaveBeenCalledWith(1);
+  });
+
   it('should open an exercise', () => {
     tasksViewModel.startExercise = jest.fn();
     const mockTaskEduContent: TaskEduContentInterface = new TaskEduContentFixture(
@@ -180,8 +189,7 @@ describe('TaskDetailComponent', () => {
 
     expect(tasksViewModel.startExercise).toHaveBeenCalled();
     expect(tasksViewModel.startExercise).toHaveBeenCalledWith(
-      mockTaskEduContent.eduContentId,
-      mockTaskEduContent.taskId
+      mockTaskEduContent
     );
   });
 });

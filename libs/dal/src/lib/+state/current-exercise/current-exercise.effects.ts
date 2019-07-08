@@ -56,20 +56,22 @@ export class CurrentExerciseEffects {
         if (!exercise.saveToApi) return;
 
         return this.exerciseService.saveExercise(state.currentExercise).pipe(
-          switchMap(ex => [
-            new AddEffectFeedback({
-              effectFeedback: new EffectFeedback({
-                id: this.uuid(),
-                triggerAction: action,
-                message: 'Oefening is bewaard.',
-                display: action.payload.displayResponse
+          switchMap(ex => {
+            const effectFeedback = new EffectFeedback({
+              id: this.uuid(),
+              triggerAction: action,
+              message: 'Oefening is bewaard.'
+            });
+            return [
+              new AddEffectFeedback({
+                effectFeedback
+              }),
+              new LoadTaskEduContents({
+                userId: action.payload.userId,
+                force: effectFeedback.display
               })
-            }),
-            new LoadTaskEduContents({
-              userId: action.payload.userId,
-              force: action.payload.displayResponse
-            })
-          ])
+            ];
+          })
         );
       },
       undoAction: (action: SaveCurrentExercise, e: any) => {
@@ -85,7 +87,6 @@ export class CurrentExerciseEffects {
               userAction: action
             }
           ],
-          display: action.payload.displayResponse,
           type: 'error',
           priority: Priority.HIGH
         });

@@ -63,7 +63,6 @@ export class TaskEduContentEffects {
                   triggerAction: action,
                   message: 'Het lesmateriaal werd aan de taak toegevoegd.',
                   type: 'success',
-                  display: true,
                   priority: Priority.NORM
                 })
               }),
@@ -86,7 +85,6 @@ export class TaskEduContentEffects {
                 userAction: action
               }
             ],
-            display: action.payload.displayResponse,
             type: 'error',
             priority: Priority.HIGH
           })

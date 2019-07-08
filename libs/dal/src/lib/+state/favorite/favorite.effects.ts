@@ -11,6 +11,7 @@ import {
   FAVORITE_SERVICE_TOKEN
 } from '../../favorite/favorite.service.interface';
 import { AuthServiceInterface, AUTH_SERVICE_TOKEN } from '../../persons';
+import { UndoServiceInterface, UNDO_SERVICE_TOKEN } from '../../undo';
 import {
   EffectFeedback,
   EffectFeedbackActions,
@@ -24,7 +25,8 @@ import {
   FavoritesLoadError,
   LoadFavorites,
   StartAddFavorite,
-  ToggleFavorite
+  ToggleFavorite,
+  UpdateFavorite
 } from './favorite.actions';
 import { getByTypeAndId } from './favorite.selectors';
 
@@ -63,7 +65,6 @@ export class FavoriteEffects {
             'Het is niet gelukt om het item aan jouw favorieten toe te voegen.',
           type: 'error',
           userActions: [{ title: 'Opnieuw proberen', userAction: action }],
-          display: true,
           priority: Priority.HIGH
         });
         return new EffectFeedbackActions.AddEffectFeedback({ effectFeedback });
@@ -76,36 +77,63 @@ export class FavoriteEffects {
     FavoritesActionTypes.DeleteFavorite,
     {
       run: (action: DeleteFavorite, state: DalState) => {
+        return this.undoService.dispatchActionAsUndoable({
+          action: action,
+          dataPersistence: this.dataPersistence,
+          intendedSideEffect: this.favoriteService.deleteFavorite(
+            action.payload.userId,
+            action.payload.id
+          ),
+          undoLabel: 'Favoriet wordt verwijderd.',
+          doneLabel: 'Favoriet is verwijderd.',
+          undoneLabel: 'Favoriet is niet verwijderd.'
+        });
+      },
+      undoAction: (action: DeleteFavorite, error) => {
+        const undoAction = undo(action);
+        const effectFeedback = EffectFeedback.generateErrorFeedback(
+          this.uuid(),
+          action,
+          'Het is niet gelukt om het item uit jouw favorieten te verwijderen.'
+        );
+        const effectFeedbackAction = new EffectFeedbackActions.AddEffectFeedback(
+          { effectFeedback }
+        );
+        return from([undoAction, effectFeedbackAction]);
+      }
+    }
+  );
+  @Effect()
+  updateFavorite$ = this.dataPersistence.optimisticUpdate(
+    FavoritesActionTypes.UpdateFavorite,
+    {
+      run: (action: UpdateFavorite, state: DalState) => {
         return this.favoriteService
-          .deleteFavorite(action.payload.userId, action.payload.id)
+          .updateFavorite(
+            action.payload.userId,
+            +action.payload.favorite.id,
+            action.payload.favorite.changes
+          )
           .pipe(
             map(() => {
-              const effectFeedback = new EffectFeedback({
-                id: this.uuid(),
-                triggerAction: action,
-                message: 'Het item is uit jouw favorieten verwijderd.',
-                type: 'success',
-                display: true,
-                priority: Priority.NORM
-              });
+              const effectFeedback = EffectFeedback.generateSuccessFeedback(
+                this.uuid(),
+                action,
+                'Je favoriet is gewijzigd.'
+              );
               return new EffectFeedbackActions.AddEffectFeedback({
                 effectFeedback
               });
             })
           );
       },
-      undoAction: (action: DeleteFavorite, error) => {
+      undoAction: (action: UpdateFavorite, error) => {
         const undoAction = undo(action);
-        const effectFeedback = new EffectFeedback({
-          id: this.uuid(),
-          triggerAction: action,
-          message:
-            'Het is niet gelukt om het item uit jouw favorieten te verwijderen.',
-          type: 'error',
-          userActions: [{ title: 'Opnieuw proberen', userAction: action }],
-          display: true,
-          priority: Priority.HIGH
-        });
+        const effectFeedback = EffectFeedback.generateErrorFeedback(
+          this.uuid(),
+          action,
+          'Het is niet gelukt om je favoriet te wijzigen.'
+        );
         const effectFeedbackAction = new EffectFeedbackActions.AddEffectFeedback(
           { effectFeedback }
         );
@@ -156,6 +184,7 @@ export class FavoriteEffects {
     @Inject(FAVORITE_SERVICE_TOKEN)
     private favoriteService: FavoriteServiceInterface,
     @Inject(AUTH_SERVICE_TOKEN)
-    private authService: AuthServiceInterface
+    private authService: AuthServiceInterface,
+    @Inject(UNDO_SERVICE_TOKEN) private undoService: UndoServiceInterface
   ) {}
 }

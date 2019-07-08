@@ -8,12 +8,15 @@ import {
   ContentInterface,
   ContentStatusLabel,
   ContentStatusQueries,
+  createHistoryFromContent,
   DalState,
   EduContent,
   EduContentQueries,
+  HistoryActions,
   LearningAreaInterface,
   LearningAreaQueries,
   LinkedPersonQueries,
+  Permissions,
   PersonInterface,
   StudentContentStatusActions,
   StudentContentStatusInterface,
@@ -30,6 +33,8 @@ import {
 import {
   OpenStaticContentServiceInterface,
   OPEN_STATIC_CONTENT_SERVICE_TOKEN,
+  PermissionServiceInterface,
+  PERMISSION_SERVICE_TOKEN,
   ScormExerciseServiceInterface,
   SCORM_EXERCISE_SERVICE_TOKEN
 } from '@campus/shared';
@@ -38,7 +43,14 @@ import { NestedPartial } from '@campus/utils';
 import { Dictionary } from '@ngrx/entity';
 import { select, Store } from '@ngrx/store';
 import { combineLatest, Observable } from 'rxjs';
-import { map, shareReplay, switchMap } from 'rxjs/operators';
+import {
+  filter,
+  map,
+  share,
+  shareReplay,
+  switchMap,
+  take
+} from 'rxjs/operators';
 import {
   BundlesWithContentInfoInterface,
   LearningAreasWithBundlesInfoInterface
@@ -64,6 +76,14 @@ export class BundlesViewModel {
   private unlockedContentsByBundle$: Observable<
     Dictionary<UnlockedContentInterface[]>
   >;
+
+  private hasManageHistoryPermission = this.permissionService
+    .hasPermission(Permissions.settings.MANAGE_HISTORY)
+    .pipe(
+      take(1),
+      filter(hasPermission => hasPermission),
+      share()
+    );
   // > bundle detail page
 
   // presentation streams
@@ -78,7 +98,9 @@ export class BundlesViewModel {
     @Inject(OPEN_STATIC_CONTENT_SERVICE_TOKEN)
     private openStaticContentService: OpenStaticContentServiceInterface,
     @Inject(SCORM_EXERCISE_SERVICE_TOKEN)
-    private scormExerciseService: ScormExerciseServiceInterface
+    private scormExerciseService: ScormExerciseServiceInterface,
+    @Inject(PERMISSION_SERVICE_TOKEN)
+    private permissionService: PermissionServiceInterface
   ) {
     this.initialize();
   }
@@ -122,7 +144,10 @@ export class BundlesViewModel {
           bundleId: bundleId
         },
         read: true,
-        displayResponse: false
+        customFeedbackHandlers: {
+          useCustomErrorHandler: 'useNoHandler',
+          useCustomSuccessHandler: 'useNoHandler'
+        }
       })
     );
   }
@@ -137,6 +162,17 @@ export class BundlesViewModel {
   }
 
   openContent(unlockedContent: UnlockedContent): void {
+    this.hasManageHistoryPermission.subscribe(() => {
+      const history = createHistoryFromContent(unlockedContent.content);
+      if (history) {
+        this.store.dispatch(
+          new HistoryActions.StartUpsertHistory({
+            history
+          })
+        );
+      }
+    });
+
     if (unlockedContent.eduContentId) {
       if (unlockedContent.eduContent.type === 'exercise') {
         if (this.authService.userId === unlockedContent.teacherId) {
@@ -148,6 +184,7 @@ export class BundlesViewModel {
             unlockedContent.eduContentId,
             unlockedContent.id
           );
+
           return;
         }
       }
@@ -157,6 +194,17 @@ export class BundlesViewModel {
 
   openBook(content: ContentInterface): void {
     this.openStaticContentService.open(content);
+
+    this.hasManageHistoryPermission.subscribe(() => {
+      const history = createHistoryFromContent(content);
+      if (history) {
+        this.store.dispatch(
+          new HistoryActions.StartUpsertHistory({
+            history
+          })
+        );
+      }
+    });
   }
 
   public getStudentContentStatusByUnlockedContentId(

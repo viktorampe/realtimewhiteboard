@@ -6,7 +6,6 @@
     class="breadcrumb-filter--mobile"
     >&lt;</span
   >
-  <a (click)="clickBreadcrumb(i)" [title]="getLabel(value, i)">{{
-    getLabel(value, i)
-  }}</a>
+  <span class="separator"></span>
+  <a (click)="clickBreadcrumb(i)">{{ getLabel(value, i) }}</a>
 </ng-container>

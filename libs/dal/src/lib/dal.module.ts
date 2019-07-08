@@ -36,7 +36,9 @@ import {
 } from './+state/edu-content-product-type';
 import { EduNetEffects, EduNetReducer } from './+state/edu-net';
 import { EffectFeedbackReducer } from './+state/effect-feedback';
+import { EffectFeedbackEffects } from './+state/effect-feedback/effect-feedback.effects';
 import { FavoriteEffects, FavoriteReducer } from './+state/favorite';
+import { HistoryEffects, HistoryReducer } from './+state/history';
 import {
   LearningAreaReducer,
   LearningAreasEffects
@@ -109,6 +111,8 @@ import { ExerciseService } from './exercise/exercise.service';
 import { EXERCISE_SERVICE_TOKEN } from './exercise/exercise.service.interface';
 import { FavoriteService } from './favorite/favorite.service';
 import { FAVORITE_SERVICE_TOKEN } from './favorite/favorite.service.interface';
+import { HistoryService } from './history/history.service';
+import { HISTORY_SERVICE_TOKEN } from './history/history.service.interface';
 import { LearningAreaService } from './learning-area/learning-area.service';
 import { LEARNINGAREA_SERVICE_TOKEN } from './learning-area/learning-area.service.interface';
 import { LearningPlanService } from './learning-plan/learning-plan.service';
@@ -148,6 +152,8 @@ import { TASK_SERVICE_TOKEN } from './tasks/task.service.interface';
 import { TaskService } from './tasks/tasks.service';
 import { TocService } from './toc/toc.service';
 import { TOC_SERVICE_TOKEN } from './toc/toc.service.interface';
+import { UndoService } from './undo/undo.service';
+import { UNDO_SERVICE_TOKEN } from './undo/undo.service.interface';
 
 interface DalOptions {
   apiBaseUrl: string;
@@ -262,6 +268,9 @@ export const DAL_OPTIONS = new InjectionToken('dal-options');
     StoreModule.forFeature(FavoriteReducer.NAME, FavoriteReducer.reducer, {
       initialState: FavoriteReducer.initialState
     }),
+    StoreModule.forFeature(HistoryReducer.NAME, HistoryReducer.reducer, {
+      initialState: HistoryReducer.initialState
+    }),
     StoreModule.forFeature(
       EduContentProductTypeReducer.NAME,
       EduContentProductTypeReducer.reducer,
@@ -277,6 +286,7 @@ export const DAL_OPTIONS = new InjectionToken('dal-options');
       initialState: YearReducer.initialState
     }),
     EffectsModule.forFeature([
+      EffectFeedbackEffects,
       BundlesEffects,
       UserEffects,
       EduContentsEffects,
@@ -300,6 +310,7 @@ export const DAL_OPTIONS = new InjectionToken('dal-options');
       LinkedPersonEffects,
       CredentialEffects,
       FavoriteEffects,
+      HistoryEffects,
       EduContentProductTypeEffects,
       EduNetEffects,
       SchoolTypeEffects,
@@ -311,6 +322,7 @@ export const DAL_OPTIONS = new InjectionToken('dal-options');
       provide: 'uuid',
       useValue: uuid
     },
+    { provide: UNDO_SERVICE_TOKEN, useClass: UndoService },
     { provide: EXERCISE_SERVICE_TOKEN, useClass: ExerciseService },
     { provide: EDU_CONTENT_SERVICE_TOKEN, useClass: EduContentService },
     { provide: USER_CONTENT_SERVICE_TOKEN, useClass: UserContentService },
@@ -360,7 +372,8 @@ export const DAL_OPTIONS = new InjectionToken('dal-options');
     { provide: LEARNING_PLAN_SERVICE_TOKEN, useClass: LearningPlanService },
     { provide: FAVORITE_SERVICE_TOKEN, useClass: FavoriteService },
     { provide: TOC_SERVICE_TOKEN, useClass: TocService },
-    { provide: LEARNING_DOMAIN_SERVICE_TOKEN, useClass: LearningDomainService }
+    { provide: LEARNING_DOMAIN_SERVICE_TOKEN, useClass: LearningDomainService },
+    { provide: HISTORY_SERVICE_TOKEN, useClass: HistoryService }
   ]
 })
 export class DalModule {

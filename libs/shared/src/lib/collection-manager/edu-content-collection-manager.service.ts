@@ -10,6 +10,8 @@ import {
   FavoriteQueries,
   FavoriteTypesEnum,
   HistoryInterface,
+  HistoryQueries,
+  HistoryTypesEnum,
   TaskEduContentActions,
   TaskEduContentInterface,
   TaskEduContentQueries,
@@ -25,8 +27,8 @@ import {
   ItemToggledInCollectionInterface,
   ManageCollectionItemInterface
 } from '@campus/ui';
-import { Store, select } from '@ngrx/store';
-import { combineLatest, Observable, of } from 'rxjs';
+import { select, Store } from '@ngrx/store';
+import { combineLatest, Observable } from 'rxjs';
 import { filter, map, shareReplay, switchMap, take } from 'rxjs/operators';
 import { EduContentCollectionManagerServiceInterface } from './edu-content-collection-manager.service.interface';
 
@@ -70,7 +72,8 @@ export class EduContentCollectionManagerService
           return bundles.map(
             (bundle): ManageCollectionItemInterface => ({
               id: bundle.id,
-              label: bundle.name
+              label: bundle.name,
+              icon: 'bundle'
             })
           );
         }
@@ -99,7 +102,8 @@ export class EduContentCollectionManagerService
     // subscribe to changeEvent
     const item: ManageCollectionItemInterface = {
       id: content.id,
-      label: content.name
+      label: content.name,
+      icon: 'bundle'
     };
     const itemToggle$ = this.getItemToggleStream(
       '"' + item.label + '" toevoegen aan je bundels',
@@ -140,7 +144,8 @@ export class EduContentCollectionManagerService
   manageTasksForContent(content: EduContentInterface): void {
     const item: ManageCollectionItemInterface = {
       id: content.id,
-      label: content.publishedEduContentMetadata.title
+      label: content.publishedEduContentMetadata.title,
+      icon: 'task'
     };
 
     // prepare streams
@@ -155,7 +160,8 @@ export class EduContentCollectionManagerService
           return tasks.map(
             (task): ManageCollectionItemInterface => ({
               id: task.id,
-              label: task.name
+              label: task.name,
+              icon: 'task'
             })
           );
         }
@@ -203,8 +209,7 @@ export class EduContentCollectionManagerService
     this.store.dispatch(
       new TaskEduContentActions.LinkTaskEduContent({
         taskId: task.id,
-        eduContentId: content.id,
-        displayResponse: true
+        eduContentId: content.id
       })
     );
   }
@@ -300,14 +305,12 @@ export class EduContentCollectionManagerService
   }
 
   private getRecentItemsStream(
-    type: FavoriteTypesEnum,
+    type: FavoriteTypesEnum | HistoryTypesEnum,
     key: string
   ): Observable<number[]> {
     return combineLatest(
-      this.store.pipe(select(FavoriteQueries.getByType, { type })),
-      // TODO: combine with history when state is available
-      // this.store.select(HistoryQueries.getByType, { type })
-      of([])
+      this.store.select(FavoriteQueries.getByType, { type }),
+      this.store.select(HistoryQueries.getByType, { type })
     ).pipe(
       map(
         ([favorites, histories]: [

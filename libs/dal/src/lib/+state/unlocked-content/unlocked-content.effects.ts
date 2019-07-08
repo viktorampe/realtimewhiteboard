@@ -57,7 +57,6 @@ export class UnlockedContentsEffects {
                   id: this.uuid(),
                   triggerAction: action,
                   message: 'Het lesmateriaal is uit de bundel verwijderd.',
-                  display: action.payload.displayResponse,
                   userActions: null,
                   type: 'success',
                   priority: Priority.NORM
@@ -75,7 +74,6 @@ export class UnlockedContentsEffects {
             triggerAction: action,
             message:
               'Het is niet gelukt om het lesmateriaal uit de bundel te verwijderen.',
-            display: action.payload.displayResponse,
             userActions: [{ title: 'Opnieuw', userAction: action }],
             type: 'error',
             priority: Priority.HIGH
@@ -100,7 +98,6 @@ export class UnlockedContentsEffects {
                   id: this.uuid(),
                   triggerAction: action,
                   message: 'De lesmaterialen zijn uit de bundel verwijderd.',
-                  display: action.payload.displayResponse,
                   userActions: null,
                   type: 'success',
                   priority: Priority.NORM
@@ -118,7 +115,6 @@ export class UnlockedContentsEffects {
             triggerAction: action,
             message:
               'Het is niet gelukt om de lesmaterialen uit de bundel te verwijderen.',
-            display: action.payload.displayResponse,
             userActions: [{ title: 'Opnieuw', userAction: action }],
             type: 'error',
             priority: Priority.HIGH

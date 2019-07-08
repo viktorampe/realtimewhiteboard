@@ -1,0 +1,46 @@
+import { Injectable } from '@angular/core';
+import { HistoryApi, PersonApi } from '@diekeure/polpo-api-angular-sdk';
+import { Observable } from 'rxjs';
+import { map, mapTo } from 'rxjs/operators';
+import { HistoryInterface } from '../+models';
+import { HistoryServiceInterface } from './history.service.interface';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class HistoryService implements HistoryServiceInterface {
+  constructor(private personApi: PersonApi, private historyApi: HistoryApi) {}
+
+  getAllForUser(userId: number): Observable<HistoryInterface[]> {
+    return this.personApi.getHistory(userId).pipe(
+      map(history => {
+        history.forEach(item => (item.created = new Date(item.created)));
+        return history;
+      })
+    );
+  }
+
+  upsertHistory(history: HistoryInterface): Observable<HistoryInterface> {
+    return this.historyApi
+      .upsertByInstance(
+        history.name,
+        history.type,
+        history.learningAreaId,
+        history.criteria || '',
+        history.eduContentId || 0,
+        history.bundleId || 0,
+        history.taskId || 0
+      )
+      .pipe(
+        map(item => {
+          return { ...item, ...{ created: new Date(item.created) } };
+        })
+      );
+  }
+
+  deleteHistory(userId: number, historyId: number): Observable<boolean> {
+    return this.personApi
+      .destroyByIdHistory(userId, historyId)
+      .pipe(mapTo(true));
+  }
+}

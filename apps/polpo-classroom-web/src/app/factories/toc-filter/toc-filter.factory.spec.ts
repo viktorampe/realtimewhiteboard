@@ -733,7 +733,7 @@ describe('TocFilterFactory', () => {
       name: 'years',
       label: 'Jaren',
       keyProperty: 'id',
-      displayProperty: 'name',
+      displayProperty: 'label',
       values: mockYears.map(year => ({
         data: year,
         hasChild: true

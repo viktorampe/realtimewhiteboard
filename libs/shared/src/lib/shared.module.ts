@@ -1,7 +1,7 @@
 import { LayoutModule } from '@angular/cdk/layout';
 import { PortalModule } from '@angular/cdk/portal';
 import { CommonModule } from '@angular/common';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Inject, ModuleWithProviders, NgModule } from '@angular/core';
 import {
   MatBadgeModule,
@@ -9,7 +9,10 @@ import {
   MatDialogModule,
   MatIconModule,
   MatIconRegistry,
-  MatSnackBarModule
+  MatListModule,
+  MatMenuModule,
+  MatSnackBarModule,
+  MatTooltipModule
 } from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
@@ -17,7 +20,8 @@ import { UiModule } from '@campus/ui';
 import {
   FilterService,
   FILTER_SERVICE_TOKEN,
-  MapObjectConversionService
+  MapObjectConversionService,
+  UtilsModule
 } from '@campus/utils';
 import { HasPermissionDirective } from './auth/has-permission.directive';
 import { PermissionService } from './auth/permission.service';
@@ -25,9 +29,11 @@ import { PERMISSION_SERVICE_TOKEN } from './auth/permission.service.interface';
 import { EduContentCollectionManagerService } from './collection-manager/edu-content-collection-manager.service';
 import { EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN } from './collection-manager/edu-content-collection-manager.service.interface';
 import { PageBarContainerComponent } from './components/page-bar-container/page-bar-container.component';
+import { QuickLinkComponent } from './components/quick-link/quick-link.component';
 import { OPEN_STATIC_CONTENT_SERVICE_TOKEN } from './content/open-static-content.interface';
 import { OpenStaticContentService } from './content/open-static-content.service';
 import { CampusRouterlinkDirective } from './directives/campus-routerlink.directive';
+import { DataCyDirective } from './directives/data-cy.directive';
 import { FeedBackService, FEEDBACK_SERVICE_TOKEN } from './feedback';
 import {
   SnackBarDefaultConfig,
@@ -46,6 +52,7 @@ import {
   EnvironmentSearchModesInterface,
   EnvironmentSsoInterface,
   EnvironmentTermPrivacyInterface,
+  EnvironmentTestingInterface,
   EnvironmentWebsiteInterface,
   ENVIRONMENT_ALERTS_FEATURE_TOKEN,
   ENVIRONMENT_API_TOKEN,
@@ -57,6 +64,7 @@ import {
   ENVIRONMENT_SEARCHMODES_TOKEN,
   ENVIRONMENT_SSO_TOKEN,
   ENVIRONMENT_TERM_PRIVACY_TOKEN,
+  ENVIRONMENT_TESTING_TOKEN,
   ENVIRONMENT_WEBSITE_TOKEN
 } from './interfaces';
 import { AlertToNotificationItemPipe } from './pipes/alert-to-notification/alert-to-notification-pipe';
@@ -75,7 +83,12 @@ import { SCORM_EXERCISE_SERVICE_TOKEN } from './scorm/scorm-exercise.service.int
     MatBadgeModule,
     RouterModule,
     MatSnackBarModule,
-    MatDialogModule
+    MatDialogModule,
+    MatListModule,
+    MatTooltipModule,
+    UtilsModule,
+    MatMenuModule,
+    HttpClientModule
   ],
   declarations: [
     HeaderComponent,
@@ -84,7 +97,9 @@ import { SCORM_EXERCISE_SERVICE_TOKEN } from './scorm/scorm-exercise.service.int
     PersonBadgeFromCredentialPipe,
     MailToByCredentialPipe,
     CampusRouterlinkDirective,
-    AlertToNotificationItemPipe
+    DataCyDirective,
+    AlertToNotificationItemPipe,
+    QuickLinkComponent
   ],
   exports: [
     HeaderComponent,
@@ -95,7 +110,9 @@ import { SCORM_EXERCISE_SERVICE_TOKEN } from './scorm/scorm-exercise.service.int
     PersonBadgeFromCredentialPipe,
     MailToByCredentialPipe,
     CampusRouterlinkDirective,
-    AlertToNotificationItemPipe
+    DataCyDirective,
+    AlertToNotificationItemPipe,
+    QuickLinkComponent
   ],
   providers: [
     MapObjectConversionService,
@@ -122,7 +139,8 @@ import { SCORM_EXERCISE_SERVICE_TOKEN } from './scorm/scorm-exercise.service.int
     },
     AlertToNotificationItemPipe,
     MatDialog
-  ]
+  ],
+  entryComponents: [QuickLinkComponent]
 })
 export class SharedModule {
   constructor(
@@ -144,7 +162,8 @@ export class SharedModule {
     environmentTermPrivacy: EnvironmentTermPrivacyInterface,
     environmentApi: EnvironmentApiInterface,
     environmentSsoSettings: EnvironmentSsoInterface,
-    environmentSearchModes: EnvironmentSearchModesInterface
+    environmentSearchModes: EnvironmentSearchModesInterface,
+    environmentTesting: EnvironmentTestingInterface
   ): ModuleWithProviders {
     return {
       ngModule: SharedModule,
@@ -192,6 +211,10 @@ export class SharedModule {
         {
           provide: ENVIRONMENT_SEARCHMODES_TOKEN,
           useValue: environmentSearchModes
+        },
+        {
+          provide: ENVIRONMENT_TESTING_TOKEN,
+          useValue: environmentTesting
         }
       ]
     };

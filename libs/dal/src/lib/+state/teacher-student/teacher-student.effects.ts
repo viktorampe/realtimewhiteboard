@@ -61,12 +61,12 @@ export class TeacherStudentEffects {
           .linkStudentToTeacher(action.payload.publicKey)
           .pipe(
             switchMap(teachers => {
-              const effectFeedback = new EffectFeedback({
-                id: this.uuid(),
-                triggerAction: action,
-                message: 'Leerkracht is gekoppeld.',
-                type: 'success'
-              });
+              const effectFeedback = EffectFeedback.generateSuccessFeedback(
+                this.uuid(),
+                action,
+                'Leerkracht is gekoppeld.'
+              );
+
               const actions = [].concat(
                 // update state for active page
                 teachers.map(person => new AddLinkedPerson({ person })),
@@ -80,15 +80,11 @@ export class TeacherStudentEffects {
           );
       },
       onError: (action: LinkTeacherStudent, error) => {
-        // display =  false, because the error should be handled by the form
-        const effectFeedback = new EffectFeedback({
-          id: this.uuid(),
-          triggerAction: action,
-          message: error.message,
-          type: 'error',
-          display: action.payload.handleErrorAutomatically,
-          priority: Priority.HIGH
-        });
+        const effectFeedback = EffectFeedback.generateErrorFeedback(
+          this.uuid(),
+          action,
+          error.message
+        );
         return new EffectFeedbackActions.AddEffectFeedback({
           effectFeedback
         });

@@ -1,5 +1,8 @@
-<div mat-dialog-title>{{ data.title }}</div>
-<campus-info-panel [titleText]="data.item.label" [titleIcon]="data.item.icon">
+<campus-info-panel
+  [titleText]="data.title"
+  [titleIcon]="data.item.icon"
+  class="ui-manage-collection__info-panel"
+>
   <campus-filter-text-input
     title__right
     theme="dark"
@@ -39,8 +42,11 @@
     </mat-selection-list>
   </mat-dialog-content>
 </campus-info-panel>
-<mat-dialog-actions align="end">
-  <campus-button primary rounded-corners (click)="onCloseButtonClick()"
+<mat-dialog-actions class="ui-manage-collection__dialog__actions">
+  <campus-button
+    primary
+    class="ui-manage-collection__dialog__actions__button"
+    (click)="onCloseButtonClick()"
     >Sluiten</campus-button
   >
 </mat-dialog-actions>

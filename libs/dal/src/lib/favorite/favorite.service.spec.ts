@@ -26,7 +26,8 @@ describe('FavoriteService', () => {
           useValue: {
             getFavorites: () => {},
             createFavorites: () => {},
-            destroyByIdFavorites: () => {}
+            destroyByIdFavorites: () => {},
+            updateByIdFavorites: () => {}
           }
         }
       ]
@@ -60,6 +61,28 @@ describe('FavoriteService', () => {
         ...mockFavorite,
         id: null // we don't know the id yet
       });
+
+      expect(response).toBeObservable(cold('(a|)', { a: mockFavorite }));
+    });
+  });
+
+  describe('updateFavorite', () => {
+    it('should call the api and return the updated favorite', () => {
+      personApi.updateByIdFavorites = jest
+        .fn()
+        .mockReturnValue(of(mockFavorite));
+
+      const response = favoriteService.updateFavorite(
+        mockUserId,
+        mockFavorite.id,
+        mockFavorite
+      );
+
+      expect(personApi.updateByIdFavorites).toHaveBeenCalledWith(
+        mockUserId,
+        mockFavorite.id,
+        mockFavorite
+      );
 
       expect(response).toBeObservable(cold('(a|)', { a: mockFavorite }));
     });

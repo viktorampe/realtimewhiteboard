@@ -1,0 +1,164 @@
+@import 'libs/ui/src/lib/breakpoints.scss';
+
+:host {
+  .mat-dialog-content {
+    min-height: 33vh;
+    width: 50vw;
+    max-width: 800px;
+  }
+
+  mat-list-item {
+    &.quick-link__item.mat-list-item {
+      // min-height + padding = 56px = angular material default list-item height
+      height: auto;
+      min-height: 38px;
+      padding-top: 9px;
+      padding-bottom: 9px;
+    }
+  }
+}
+
+.quick-link {
+  &__info-panel {
+    max-height: 100%;
+  }
+
+  &__no-results {
+    *:not(:last-child) {
+      margin-right: 5px;
+    }
+
+    a {
+      text-decoration: underline;
+      cursor: pointer;
+    }
+  }
+
+  &__item {
+    text-align: left;
+
+    &__file-extension {
+      margin: 7px 4px 7px 0;
+    }
+
+    &__icon {
+      margin: 3px 0;
+    }
+
+    &__title {
+      height: 100%;
+      margin-left: 4px;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      flex-grow: 1;
+    }
+
+    &__actions {
+      justify-self: flex-end;
+      display: flex;
+      white-space: nowrap;
+
+      &__icon {
+        margin: 8px;
+      }
+
+      &__divider {
+        margin: 0px 8px;
+      }
+
+      &__context-menu {
+        display: none;
+      }
+
+      &--links {
+        padding-left: 8px;
+
+        a {
+          text-decoration: underline;
+          white-space: nowrap;
+        }
+      }
+
+      &--hover {
+        display: none;
+      }
+    }
+
+    &:hover {
+      .quick-link {
+        &__item {
+          &__actions {
+            &--hover {
+              display: flex;
+            }
+          }
+        }
+      }
+    }
+
+    &--multiline {
+      .quick-link {
+        &__item {
+          &__title {
+            margin-top: 0px;
+            margin-bottom: 0px;
+            line-height: initial;
+          }
+
+          &__actions {
+            line-height: initial;
+          }
+        }
+      }
+    }
+  }
+
+  &__dialog__actions {
+    padding: 15px;
+    display: flex;
+    justify-content: flex-end;
+    align-content: center;
+  }
+}
+
+@media #{$ui-breakpoint-xsmall} {
+  :host {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    .mat-dialog-content {
+      width: 100%;
+      max-width: 100%;
+    }
+  }
+
+  .quick-link {
+    &__item {
+      &__actions {
+        &__context-menu {
+          display: block;
+        }
+      }
+
+      &:hover {
+        .quick-link {
+          &__item {
+            &__actions {
+              &--hover {
+                display: none;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    &__dialog__actions {
+      &__button {
+        width: 100%;
+      }
+    }
+  }
+}
