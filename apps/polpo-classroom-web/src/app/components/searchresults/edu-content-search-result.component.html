@@ -218,7 +218,7 @@
         iconClass="favorites"
       >
         <ng-container
-          *ngIf="(isFavorite$ | async) as isFavorite; else: notFavorite"
+          *ngIf="(isFavorite$ | async) as isFavorite; else notFavorite"
         >
           Verwijderen uit favorieten
           <mat-icon class="checkmark" svgIcon="check-on"></mat-icon>
