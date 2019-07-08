@@ -1,17 +1,13 @@
 /// <reference types="cypress" />
 
 import { getContentDisplayData } from '../support/bundles.po';
-import { dataCy, login, performSetup } from '../support/commands';
-import {
-  ApiPathsInterface,
-  AppPathsInterface,
-  StudentOpenBundleContentInterface
-} from '../support/interfaces';
+import { cyEnv, dataCy, login, performSetup } from '../support/commands';
+import { ApiPathsInterface, AppPathsInterface, StudentOpenBundleContentInterface } from '../support/interfaces';
 
 describe('Bundles', () => {
-  const apiUrl = Cypress.env('APIURL');
-  const appPaths = Cypress.env('appPaths') as AppPathsInterface;
-  const apiPaths = Cypress.env('apiPaths') as ApiPathsInterface;
+  const apiUrl = cyEnv('apiUrl');
+  const appPaths = cyEnv('appPaths') as AppPathsInterface;
+  const apiPaths = cyEnv('apiPaths') as ApiPathsInterface;
   let setup: StudentOpenBundleContentInterface;
   before(() => {
     performSetup('studentOpenBundleContent').then(res => {
