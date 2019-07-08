@@ -29,7 +29,7 @@ steps:
   - script: |
       echo '##vso[task.setvariable variable=dkLintAll]true'
       echo '##vso[task.setvariable variable=dkBuild]true'
-    condition: and(eq(variables['Build.SourceBranch'], 'refs/heads/master'), in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI'))
+    condition: and(in(variables['Build.SourceBranch'], 'refs/heads/master', 'refs/heads/develop', 'refs/heads/test/mock-master'), in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI'))
     displayName: '(Check) Set dkLintAll and dkBuild to true if push to master'
   - script: |
       echo Build information
