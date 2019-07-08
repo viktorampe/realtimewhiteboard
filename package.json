@@ -8,8 +8,6 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "./node_modules/.bin/nx lint && ng lint",
-    "e2e": "ng e2e",
-    "e2e:ci": "ng e2e --headless",
     "e2e:polpo:development": "cross-env CYPRESS_ENVIRONMENT=development ng e2e polpo-classroom-web-e2e --watch",
     "e2e:polpo:staging": "node ./node_modules/cross-env/dist/bin/cross-env CYPRESS_ENVIRONMENT=staging node --max_old_space_size=12000 ./node_modules/@angular/cli/bin/ng e2e polpo-classroom-web-e2e --headless --configuration staging",
     "e2e:kabas:development": "cross-env CYPRESS_ENVIRONMENT=development ng e2e kabas-web-e2e --watch",
