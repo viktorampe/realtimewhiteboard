@@ -1,9 +1,9 @@
-import { Type } from '@angular/core';
-import { SearchFilterFactory } from '@campus/search';
 import { EnvironmentInterface } from '@campus/shared';
 import { EduContentSearchResultComponent } from '../app/components/searchresults/edu-content-search-result.component';
 import { GlobalSearchTermFilterFactory } from '../app/factories/global-search-term-filter/global-search-term-filter.factory';
+import { LearningPlanFilterFactory } from '../app/factories/learning-plan-filter/learning-plan-filter.factory';
 import { SearchTermFilterFactory } from '../app/factories/search-term-filter/search-term-filter.factory';
+import { TocFilterFactory } from '../app/factories/toc-filter/toc-filter.factory';
 import { icons } from './icons';
 
 export const environment: EnvironmentInterface = {
@@ -80,9 +80,8 @@ export const environment: EnvironmentInterface = {
     toc: {
       name: 'toc',
       label: 'Zoeken op <b>inhoudstafel</b>',
-      dynamicFilters: false,
-      //TODO: All '{} as Type' must be replaced with actual components
-      searchFilterFactory: {} as Type<SearchFilterFactory>,
+      dynamicFilters: true,
+      searchFilterFactory: TocFilterFactory,
       results: {
         component: EduContentSearchResultComponent,
         sortModes: [
@@ -98,8 +97,8 @@ export const environment: EnvironmentInterface = {
     plan: {
       name: 'plan',
       label: 'Zoeken op <b>leerplan</b>',
-      dynamicFilters: false,
-      searchFilterFactory: {} as Type<SearchFilterFactory>,
+      dynamicFilters: true,
+      searchFilterFactory: LearningPlanFilterFactory,
       results: {
         component: EduContentSearchResultComponent,
         sortModes: [

@@ -2,7 +2,11 @@
 
 import { getContentDisplayData } from '../support/bundles.po';
 import { cyEnv, dataCy, login, performSetup } from '../support/commands';
-import { ApiPathsInterface, AppPathsInterface, StudentOpenBundleContentInterface } from '../support/interfaces';
+import {
+  ApiPathsInterface,
+  AppPathsInterface,
+  StudentOpenBundleContentInterface
+} from '../support/interfaces';
 
 describe('Bundles', () => {
   const apiUrl = cyEnv('apiUrl');
@@ -30,11 +34,6 @@ describe('Bundles', () => {
         .contains('1 bundel')
         .contains('1 boek');
       dataCy('learningArea')
-        .should(
-          'have.attr',
-          'ng-reflect-router-link',
-          `${setup.studentOpenBundleContent.learningArea.id}`
-        )
         .contains(setup.studentOpenBundleContent.learningArea.name)
         .click()
         .location('pathname')
