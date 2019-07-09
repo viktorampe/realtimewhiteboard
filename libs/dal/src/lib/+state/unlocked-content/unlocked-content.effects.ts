@@ -80,7 +80,7 @@ export class UnlockedContentsEffects {
           })
         });
 
-        return from<Action>([undoAction, feedbackAction]);
+        return from<Action[]>([undoAction, feedbackAction]);
       }
     }
   );
@@ -121,7 +121,7 @@ export class UnlockedContentsEffects {
           })
         });
 
-        return from<Action>([undoAction, feedbackAction]);
+        return from<Action[]>([undoAction, feedbackAction]);
       }
     }
   );

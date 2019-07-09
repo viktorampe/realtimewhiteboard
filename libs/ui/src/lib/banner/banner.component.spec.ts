@@ -1,7 +1,8 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconModule } from '@angular/material';
 import { By } from '@angular/platform-browser';
+import { configureTestSuite } from 'ng-bullet';
 import { Subject } from 'rxjs';
 import { UiModule } from '../ui.module';
 import { BannerComponent } from './banner.component';
@@ -15,7 +16,7 @@ describe('BannerComponent', () => {
   let fixture: ComponentFixture<BannerComponent<Action>>;
   const breakpointStream: Subject<{ matches: boolean }> = new Subject();
 
-  beforeEach(async(() => {
+  configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [UiModule, MatIconModule],
       providers: [
@@ -25,7 +26,7 @@ describe('BannerComponent', () => {
         }
       ]
     });
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent<BannerComponent<Action>>(BannerComponent);

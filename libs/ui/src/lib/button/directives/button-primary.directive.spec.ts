@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, DebugElement, NgModule } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { configureTestSuite } from 'ng-bullet';
 import { UiModule } from '../../ui.module';
 import { ButtonComponent } from '../button.component';
 import { PrimaryDirective } from './button-primary.directive';
@@ -29,11 +30,11 @@ describe('PrimaryDirective', () => {
   let testContainerComponent: TestContainerComponent;
   let componentDE: DebugElement;
 
-  beforeEach(async(() => {
+  configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [TestModule]
     });
-  }));
+  });
 
   beforeEach(() => {
     testContainerFixture = TestBed.createComponent(TestContainerComponent);

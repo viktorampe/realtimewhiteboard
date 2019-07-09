@@ -1,11 +1,12 @@
 import { CdkTreeModule } from '@angular/cdk/tree';
 import { DebugElement } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconModule, MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MockMatIconRegistry } from '@campus/testing';
+import { configureTestSuite } from 'ng-bullet';
 import { NavItem, TreeNavComponent } from './tree-nav.component';
 
 describe('TreeNavComponent', () => {
@@ -35,13 +36,13 @@ describe('TreeNavComponent', () => {
     return node;
   };
 
-  beforeEach(async(() => {
+  configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [RouterTestingModule, CdkTreeModule, MatIconModule],
       declarations: [TreeNavComponent],
       providers: [{ provide: MatIconRegistry, useClass: MockMatIconRegistry }]
     });
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(TreeNavComponent);

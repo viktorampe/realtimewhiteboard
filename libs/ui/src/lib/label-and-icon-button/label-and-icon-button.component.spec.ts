@@ -1,7 +1,8 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconModule, MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { MockMatIconRegistry } from '@campus/testing';
+import { configureTestSuite } from 'ng-bullet';
 import { LabelAndIconButtonComponent } from '../label-and-icon-button/label-and-icon-button.component';
 
 describe('LabelAndIconButtonComponent', () => {
@@ -13,13 +14,13 @@ describe('LabelAndIconButtonComponent', () => {
     iconClass: 'warning' | 'default';
   };
 
-  beforeEach(async(() => {
+  configureTestSuite(() => {
     TestBed.configureTestingModule({
       declarations: [LabelAndIconButtonComponent],
       imports: [MatIconModule],
       providers: [{ provide: MatIconRegistry, useClass: MockMatIconRegistry }]
     });
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(LabelAndIconButtonComponent);

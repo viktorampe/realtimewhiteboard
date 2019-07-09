@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { configureTestSuite } from 'ng-bullet';
 import { AppBarComponent } from './app-bar.component';
 
 @Component({
@@ -23,11 +24,11 @@ describe('BasicAppBarComponent', () => {
   let hostComponent: AppBarHostComponent;
   let hostFixture: ComponentFixture<AppBarHostComponent>;
 
-  beforeEach(async(() => {
+  configureTestSuite(() => {
     TestBed.configureTestingModule({
       declarations: [AppBarComponent, AppBarHostComponent]
     });
-  }));
+  });
 
   beforeEach(() => {
     hostFixture = TestBed.createComponent(AppBarHostComponent);

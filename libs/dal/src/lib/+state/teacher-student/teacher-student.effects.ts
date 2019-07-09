@@ -75,7 +75,7 @@ export class TeacherStudentEffects {
                   effectFeedback
                 })
               );
-              return from<Action>(actions);
+              return from<Action[]>(actions);
             })
           );
       },
@@ -121,7 +121,7 @@ export class TeacherStudentEffects {
                   effectFeedback
                 })
               );
-              return from<Action>(actions);
+              return from<Action[]>(actions);
             })
           );
       },
