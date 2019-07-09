@@ -20,21 +20,20 @@ variables:
   dkBuild: false
 
 pool:
-  name: "Campus"
+  name: 'Campus'
 
 steps:
   - script: |
-      echo '##vso[task.setvariable variable=CYPRESS_APIURL]https://api.staging.polpo.be/'
       echo '##vso[task.setvariable variable=CI]1'
-    displayName: "Export environment variables"
+    displayName: 'Export environment variables'
   - script: |
       echo '##vso[task.setvariable variable=dkLintAll]true'
     condition: and(in(variables['Build.SourceBranch'], 'refs/heads/master', 'refs/heads/develop', 'refs/heads/test/mock-master'), in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI'))
-    displayName: "(Check) Enable dkLintAll if pushing to a trigger branch"
+    displayName: '(Check) Enable dkLintAll if pushing to a trigger branch'
   - script: |
       echo '##vso[task.setvariable variable=dkBuild]true'
     condition: and(in(variables['Build.SourceBranch'], 'refs/heads/master', 'refs/heads/test/mock-master'), in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI'))
-    displayName: "(Check) Enable dkBuild (artifacts) if pushing to master"
+    displayName: '(Check) Enable dkBuild (artifacts) if pushing to master'
   - script: |
       echo Build information
       echo -----------------
@@ -46,17 +45,17 @@ steps:
       echo dkRanTests = $(dkRanTests)
       echo dkLintAll = $(dkLintAll)
       echo dkBuild = $(dkBuild)
-      echo 
+      echo
       echo Environment
       echo -----------
       env
-    displayName: "Build information"
+    displayName: 'Build information'
   - task: NodeTool@0
-    displayName: "Install Node.js"
+    displayName: 'Install Node.js'
     inputs:
-      versionSpec: "10.x"
+      versionSpec: '10.x'
   - task: DeleteFiles@1
-    displayName: "Clear junit, coverage reports, build output"
+    displayName: 'Clear junit, coverage reports, build output'
     inputs:
       contents: |
         'junit'
@@ -64,68 +63,70 @@ steps:
         'reportgenerator'
         'dist'
   - task: Npm@1
-    displayName: "Npm install"
+    displayName: 'Npm install'
     inputs:
       customEndpoint: diekeure-registry
   - script: |
       npm run lint
-    displayName: "Lint all"
+    displayName: 'Lint all'
     condition: eq(variables['dkLintAll'], 'true')
   - script: |
       npm run format:check
-    displayName: "Format check"
+    displayName: 'Format check'
   - script: npm run test
-    displayName: "Test all"
+    displayName: 'Test all'
   - script: |
-      node --max_old_space_size=12000 ./node_modules/@angular/cli/bin/ng e2e --project=polpo-classroom-web-e2e --headless --configuration staging
-    displayName: "End-to-end all polpo"
-  - script: |
-      node --max_old_space_size=12000 ./node_modules/@angular/cli/bin/ng e2e --project=kabas-web-e2e --headless --configuration staging
-    displayName: "End-to-end all kabas"
+      npm run e2e:polpo:staging
+    displayName: 'End-to-end all polpo'
+  # Kabas e2e is disabled until it's used, since the Kabas build is broken right now
+  # Enable it again when the time comes to use it, below:
+  #- script: |
+  #    npm run e2e:kabas:staging
+  #  displayName: 'End-to-end all kabas'
   - bash: |
       if [ -d "coverage" ]; then
         echo "##vso[task.setVariable variable=dkRanTests]true"
         echo Tests ran
       fi
-    displayName: "(Check) Set dkRanTests to true if coverage folder exists"
+    displayName: '(Check) Set dkRanTests to true if coverage folder exists'
   - task: PublishTestResults@2
-    displayName: "Publish test results"
+    displayName: 'Publish test results'
     condition: eq(variables['dkRanTests'], 'true')
     inputs:
-      testResultsFormat: "JUnit"
-      testResultsFiles: "junit/*.xml"
+      testResultsFormat: 'JUnit'
+      testResultsFiles: 'junit/*.xml'
   - task: Palmmedia.reportgenerator.reportgenerator-build-release-task.reportgenerator@4
-    displayName: "ReportGenerator: combine coverage reports"
+    displayName: 'ReportGenerator: combine coverage reports'
     condition: eq(variables['dkRanTests'], 'true')
     inputs:
       reports: $(Build.SourcesDirectory)/coverage/**/cobertura-coverage.xml
       targetdir: $(Build.SourcesDirectory)/reportgenerator
-      reporttypes: "Cobertura"
-      verbosity: "Off"
+      reporttypes: 'Cobertura'
+      verbosity: 'Off'
   - task: PublishCodeCoverageResults@1
-    displayName: "Publish code coverage summary"
+    displayName: 'Publish code coverage summary'
     condition: eq(variables['dkRanTests'], 'true')
     inputs:
-      codeCoverageTool: "cobertura"
+      codeCoverageTool: 'cobertura'
       summaryFileLocation: $(Build.SourcesDirectory)/reportgenerator/Cobertura.xml
   - script: |
       npm run build:polpo:staging
-    displayName: "[Build] polpo:staging"
+    displayName: '[Build] polpo:staging'
     condition: eq(variables['dkBuild'], 'true')
   - script: |
       npm run build:polpo:production
-    displayName: "[Build] polpo:production"
+    displayName: '[Build] polpo:production'
     condition: eq(variables['dkBuild'], 'true')
   - script: |
       npm run build:kabas:staging
-    displayName: "[Build] kabas:staging"
+    displayName: '[Build] kabas:staging'
     condition: eq(variables['dkBuild'], 'true')
   - script: |
       npm run build:kabas:production
-    displayName: "[Build] kabas:production"
+    displayName: '[Build] kabas:production'
     condition: eq(variables['dkBuild'], 'true')
   - task: CopyFiles@2
-    displayName: "Copy builds to artifacts"
+    displayName: 'Copy builds to artifacts'
     condition: eq(variables['dkBuild'], 'true')
     inputs:
       contents: |
