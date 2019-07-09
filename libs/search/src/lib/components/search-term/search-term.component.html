@@ -1,7 +1,7 @@
 <div class="search-term">
   <mat-form-field
     [appearance]="'outline'"
-    *ngIf="!autoComplete; else: autoCompleteTemplate"
+    *ngIf="!autoComplete; else autoCompleteTemplate"
   >
     <mat-label>{{ placeholder }}</mat-label>
     <input

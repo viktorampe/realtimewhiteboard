@@ -80,11 +80,11 @@
     <ng-container
       *ngIf="
         (linkedPersons$ | async) as coupledTeachers;
-        else: noCoupledTeachers
+        else noCoupledTeachers
       "
     >
       <ng-container
-        *ngIf="coupledTeachers.length > 0; else: noCoupledTeachers"
+        *ngIf="coupledTeachers.length > 0; else noCoupledTeachers"
       ></ng-container>
       <campus-person-summary
         *ngFor="let coupledTeacher of coupledTeachers"
