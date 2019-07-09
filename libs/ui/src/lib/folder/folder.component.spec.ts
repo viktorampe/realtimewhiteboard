@@ -1,5 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By, HAMMER_LOADER } from '@angular/platform-browser';
+import { configureTestSuite } from 'ng-bullet';
 import { ListFormat } from '../list-view/enums/list-format.enum';
 import { UiModule } from '../ui.module';
 import { FolderComponent } from './folder.component';
@@ -8,7 +9,7 @@ describe('FolderComponent', () => {
   let component: FolderComponent;
   let fixture: ComponentFixture<FolderComponent>;
 
-  beforeEach(async(() => {
+  configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [UiModule],
       providers: [
@@ -18,7 +19,7 @@ describe('FolderComponent', () => {
         }
       ]
     });
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(FolderComponent);

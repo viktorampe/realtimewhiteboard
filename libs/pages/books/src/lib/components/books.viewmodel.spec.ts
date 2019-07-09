@@ -78,11 +78,13 @@ describe('BooksViewModel', () => {
   });
 
   it('changeListFormat() should update uiStore', () => {
-    const spy = jest.spyOn(UiActions, 'SetListFormat');
+    const spy = jest.spyOn(store, 'dispatch');
     const listFormat = ListFormat.GRID;
     booksViewModel.changeListFormat(listFormat);
     expect(spy).toHaveBeenCalledTimes(1);
-    expect(spy).toHaveBeenCalledWith({ listFormat });
+    expect(spy).toHaveBeenCalledWith(
+      new UiActions.SetListFormat({ listFormat })
+    );
   });
 
   it('openBooks() should call openStaticContentService', () => {

@@ -1,5 +1,5 @@
 <div
-  class="ui-folder ui-folder--{{listFormat}}"
+  class="ui-folder ui-folder--{{ listFormat }}"
   [ngStyle]="{
     'border-top-color': backgroundColor | adjustColorBrightness: -20,
     'border-bottom-color': backgroundColor,
@@ -45,7 +45,7 @@
 
   <div class="ui-folder__badge" [ngStyle]="{ 'border-color': backgroundColor }">
     <span
-      *ngIf="!showEmptyError; else: emptyErrorBlock"
+      *ngIf="!showEmptyError; else emptyErrorBlock"
       class="ui-folder__badge-number"
       >{{ itemCount }}</span
     >

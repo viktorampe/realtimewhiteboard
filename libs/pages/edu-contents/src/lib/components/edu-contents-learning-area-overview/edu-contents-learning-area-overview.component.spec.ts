@@ -1,5 +1,5 @@
 import { CdkDragDrop, DragDropModule } from '@angular/cdk/drag-drop';
-import { Component, Input } from '@angular/core';
+import { Component, Input, NgModule } from '@angular/core';
 import {
   async,
   ComponentFixture,
@@ -48,6 +48,12 @@ export class MockAreasListComponent {
   @Input() connectedDropList: string;
 }
 
+@NgModule({
+  declarations: [MockAreasListComponent],
+  exports: [MockAreasListComponent]
+})
+export class TestModule {}
+
 describe('EduContentLearningAreaOverviewComponent', () => {
   let component: EduContentLearningAreaOverviewComponent;
   let fixture: ComponentFixture<EduContentLearningAreaOverviewComponent>;
@@ -59,6 +65,7 @@ describe('EduContentLearningAreaOverviewComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
+        TestModule,
         UiModule,
         RouterTestingModule,
         MatIconModule,
@@ -74,8 +81,7 @@ describe('EduContentLearningAreaOverviewComponent', () => {
       ],
       declarations: [
         EduContentLearningAreaOverviewComponent,
-        FavoriteAreasComponent,
-        MockAreasListComponent
+        FavoriteAreasComponent
       ],
       providers: [
         Store,
@@ -138,8 +144,9 @@ describe('EduContentLearningAreaOverviewComponent', () => {
     );
   }));
 
-  it('should redirect to term search results with searchTerm querystring', () => {
+  it('should redirect to term search results with searchTerm querystring', async () => {
     jest.spyOn(router, 'navigate');
+
     component.openSearchByTerm('foo');
 
     expect(router.navigate).toHaveBeenCalledTimes(1);
