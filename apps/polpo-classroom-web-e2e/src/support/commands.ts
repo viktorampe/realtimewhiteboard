@@ -2,7 +2,7 @@
 
 import { SetupScenarioType } from './types';
 
-const apiUrl = Cypress.env('apiUrl');
+const apiUrl = Cypress.env('APIURL');
 const defaultUsername = Cypress.env('username');
 const defaultPassword = Cypress.env('password');
 
