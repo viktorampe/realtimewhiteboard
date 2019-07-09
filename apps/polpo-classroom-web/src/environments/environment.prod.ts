@@ -1,8 +1,8 @@
-import { Type } from '@angular/core';
-import { SearchFilterFactory } from '@campus/search';
 import { EduContentSearchResultComponent } from '../app/components/searchresults/edu-content-search-result.component';
 import { GlobalSearchTermFilterFactory } from '../app/factories/global-search-term-filter/global-search-term-filter.factory';
+import { LearningPlanFilterFactory } from '../app/factories/learning-plan-filter/learning-plan-filter.factory';
 import { SearchTermFilterFactory } from '../app/factories/search-term-filter/search-term-filter.factory';
+import { TocFilterFactory } from '../app/factories/toc-filter/toc-filter.factory';
 import { icons } from './icons';
 
 export const environment = {
@@ -30,14 +30,14 @@ export const environment = {
     alerts: {
       enabled: true,
       hasAppBarDropDown: true,
-      appBarPollingInterval: 3000
+      appBarPollingInterval: 30000
     },
     messages: {
       enabled: false,
       hasAppBarDropDown: false
     },
     errorManagement: {
-      managedStatusCodes: [500, 401, 404, 0],
+      managedStatusCodes: [500, 401, 404],
       allowedErrors: [
         {
           status: 404,
@@ -79,9 +79,8 @@ export const environment = {
     toc: {
       name: 'toc',
       label: 'Zoeken op <b>inhoudstafel</b>',
-      dynamicFilters: false,
-      //TODO: All '{} as Type' must be replaced with actual components
-      searchFilterFactory: {} as Type<SearchFilterFactory>,
+      dynamicFilters: true,
+      searchFilterFactory: TocFilterFactory,
       results: {
         component: EduContentSearchResultComponent,
         sortModes: [
@@ -97,8 +96,8 @@ export const environment = {
     plan: {
       name: 'plan',
       label: 'Zoeken op <b>leerplan</b>',
-      dynamicFilters: false,
-      searchFilterFactory: {} as Type<SearchFilterFactory>,
+      dynamicFilters: true,
+      searchFilterFactory: LearningPlanFilterFactory,
       results: {
         component: EduContentSearchResultComponent,
         sortModes: [
