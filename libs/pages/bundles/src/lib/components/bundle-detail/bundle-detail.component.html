@@ -21,7 +21,7 @@
 <campus-side-sheet
   #bundleSidesheet
   [isOpenOnInit]="true"
-  *ngIf="(bundle$ | async) as bundle; else noBundle"
+  *ngIf="(bundle$ | async) as bundle; else: noBundle"
 >
   <campus-side-sheet-header
     *ngIf="!(list && (list.selectedItems$ | async)?.length)"

@@ -10,7 +10,7 @@
 
 <div class="campus-page" *ngIf="(favoriteLearningAreas$ | async) as favorites">
   <campus-favorite-areas
-    id="{{ favoritesDropListId }}"
+    id="{{favoritesDropListId}}"
     cdkDropList
     (cdkDropListEntered)="setHoverState(true)"
     (cdkDropListExited)="setHoverState(false)"

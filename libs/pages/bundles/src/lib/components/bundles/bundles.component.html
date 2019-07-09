@@ -32,7 +32,7 @@
     <ng-template #noSharedInfo
       >Er zijn momenteel geen bundels voor jou klaargezet.</ng-template
     >
-    <ng-container *ngIf="sharedInfo.bundles.length > 0; else noSharedInfo">
+    <ng-container *ngIf="sharedInfo.bundles.length > 0; else: noSharedInfo">
       <ng-container
         *ngIf="(filterTextInput.result$ | async) as filteredBundlesInfo"
       >

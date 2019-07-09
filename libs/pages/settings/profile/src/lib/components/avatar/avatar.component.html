@@ -46,7 +46,7 @@
         </ng-template>
 
         <ng-container
-          *ngIf="(selectedImg$ | async) as selectedImg; else selectImg"
+          *ngIf="(selectedImg$ | async) as selectedImg; else: selectImg"
         >
           <div class="pages-settings-profile-avatar__result">
             <img *ngIf="croppedImg" [src]="croppedImg" />

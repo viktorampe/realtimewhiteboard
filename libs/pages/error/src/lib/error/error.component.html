@@ -8,7 +8,7 @@
   <ng-container *ngIf="(statusCode$ | async) as statusCode">
     <div [ngSwitch]="statusCode">
       <ng-container *ngSwitchCase="401">
-        <ng-container *ngIf="(currentUser$ | async) as user; else noUser">
+        <ng-container *ngIf="(currentUser$ | async) as user; else: noUser">
           <p
             >Je hebt niet de juiste bevoegdheden om deze actie uit te voeren. Je
             ben aangemeld als {{ user.displayName }}.</p
@@ -17,8 +17,8 @@
 
         <ng-template #noUser>
           <p
-            >Je bent niet aangemeld. Klik
-            <a href="{{ website.url }}">hier</a> om in te loggen.</p
+            >Je bent niet aangemeld. Klik <a href="{{website.url}}">hier</a> om
+            in te loggen.</p
           >
         </ng-template>
       </ng-container>

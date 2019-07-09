@@ -1,6 +1,6 @@
 <div
   class="column__filter__container"
-  *ngIf="filterCriteria && filterCriteria.length !== 0; else noCriteria"
+  *ngIf="filterCriteria && filterCriteria.length !== 0; else: noCriteria"
   [@slideInOut]="animationState()"
   (@slideInOut.done)="animationDone($event)"
 >

@@ -25,7 +25,7 @@
       >
         <mat-icon
           class="pages-edu-contents-areas-list__area__icon"
-          svgIcon="{{ learningArea.icon }}"
+          svgIcon="{{learningArea.icon}}"
         ></mat-icon>
         <a
           class="pages-edu-contents-areas-list__area__link"
@@ -36,7 +36,7 @@
         <div *cdkDragPlaceholder></div>
         <campus-tile
           *cdkDragPreview
-          icon="{{ learningArea.icon }}"
+          icon="{{learningArea.icon}}"
           [label]="learningArea.name"
         ></campus-tile>
       </div>
