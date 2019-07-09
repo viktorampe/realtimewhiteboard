@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, DebugElement, NgModule } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
+import { configureTestSuite } from 'ng-bullet';
 import { ButtonComponent } from './button.component';
 
 @Component({
@@ -31,12 +32,12 @@ describe('ButtonComponent', () => {
   let testContainerComponent: TestContainerComponent;
   let componentDE: DebugElement;
 
-  beforeEach(async(() => {
+  configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [TestModule],
       providers: [{ provide: MatIconRegistry, useClass: MockMatIconRegistry }]
     });
-  }));
+  });
 
   beforeEach(() => {
     testContainerFixture = TestBed.createComponent(TestContainerComponent);

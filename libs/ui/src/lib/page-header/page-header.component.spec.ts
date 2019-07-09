@@ -1,7 +1,8 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { MockMatIconRegistry } from '@campus/testing';
+import { configureTestSuite } from 'ng-bullet';
 import { UiModule } from '../ui.module';
 import { PageHeaderComponent } from './page-header.component';
 
@@ -11,12 +12,12 @@ describe('PageHeaderComponent', () => {
 
   let mockData: any;
 
-  beforeEach(async(() => {
+  configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [UiModule],
       providers: [{ provide: MatIconRegistry, useClass: MockMatIconRegistry }]
     });
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PageHeaderComponent);

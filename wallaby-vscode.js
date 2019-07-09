@@ -1,11 +1,4 @@
-module.exports = function() {
-  const jestTransform = file =>
-    require('jest-preset-angular/preprocessor').process(
-      file.content,
-      file.path,
-      { globals: { __TRANSFORM_HTML__: true }, rootDir: __dirname }
-    );
-
+module.exports = function(wallaby) {
   var wallabyConfig = require('./.vscode/wallaby/wallaby-used');
 
   return {
@@ -21,19 +14,36 @@ module.exports = function() {
     testFramework: 'jest',
 
     compilers: {
+      '**/*.ts?(x)': wallaby.compilers.typeScript({
+        module: 'commonjs',
+        getCustomTransformers: () => {
+          return {
+            before: [
+              require('jest-preset-angular/InlineHtmlStripStylesTransformer').factory(
+                { compilerModule: require('typescript') }
+              )
+            ]
+          };
+        }
+      }),
       '**/*.html': file => ({
-        code: jestTransform(file),
+        code: require('ts-jest').process(file.content, file.path, {
+          globals: { 'ts-jest': { stringifyContentPathRegex: '\\.html$' } }
+        }),
         map: { version: 3, sources: [], names: [], mappings: [] },
         ranges: []
       })
     },
 
-    preprocessors: {
-      'src/**/*.js': jestTransform
-    },
-
     setup: function(wallaby) {
       var jestConfig = require('./jest.config');
+      jestConfig = Object.assign(
+        require('jest-preset-angular/jest-preset'),
+        jestConfig
+      );
+      delete jestConfig.moduleNameMapper;
+      jestConfig.transformIgnorePatterns.push('instrumented.*.(jsx?|html)$');
+      jestConfig.setupFilesAfterEnv = ['<rootDir>/wallaby-test-setup.js'];
       if (!jestConfig.moduleNameMapper) {
         var paths = require('./tsconfig').compilerOptions.paths;
         var jestModuleMaps = {};
@@ -43,8 +53,7 @@ module.exports = function() {
         });
         jestConfig.moduleNameMapper = jestModuleMaps;
       }
-      jestConfig.setupTestFrameworkScriptFile =
-        '<rootDir>/wallaby-test-setup.js';
+      jestConfig.globals['ts-jest'].tsConfig = '<rootDir>/tsconfig.spec.json';
       wallaby.testFramework.configure(jestConfig);
     }
   };

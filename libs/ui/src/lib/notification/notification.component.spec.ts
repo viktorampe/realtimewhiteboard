@@ -1,8 +1,9 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconModule, MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MockMatIconRegistry } from '@campus/testing';
+import { configureTestSuite } from 'ng-bullet';
 import { PersonBadgeComponent } from '../person-badge/person-badge.component';
 import { PersonInitialsPipe } from '../person-badge/pipes/person-initials.pipe';
 import { HumanDateTimePipe } from '../utils/pipes/human-date-time/human-date-time.pipe';
@@ -12,7 +13,7 @@ describe('NotificationComponent', () => {
   let component: NotificationComponent;
   let fixture: ComponentFixture<NotificationComponent>;
 
-  beforeEach(async(() => {
+  configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [RouterTestingModule, MatIconModule],
       declarations: [
@@ -23,7 +24,7 @@ describe('NotificationComponent', () => {
       ],
       providers: [{ provide: MatIconRegistry, useClass: MockMatIconRegistry }]
     });
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(NotificationComponent);

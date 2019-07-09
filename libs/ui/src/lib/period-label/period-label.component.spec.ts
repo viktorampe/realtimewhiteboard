@@ -1,6 +1,7 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
+import { configureTestSuite } from 'ng-bullet';
 import { PeriodLabelComponent } from './period-label.component';
 
 describe('PeriodLabelComponent', () => {
@@ -13,12 +14,12 @@ describe('PeriodLabelComponent', () => {
     editable?: boolean;
   };
 
-  beforeEach(async(() => {
+  configureTestSuite(() => {
     TestBed.configureTestingModule({
       declarations: [PeriodLabelComponent],
       imports: [ReactiveFormsModule, FormsModule]
     });
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PeriodLabelComponent);

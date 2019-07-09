@@ -22,7 +22,7 @@
 <campus-side-sheet
   #taskInstanceSidesheet
   [isOpenOnInit]="true"
-  *ngIf="(taskInfo$ | async) as taskInfo; else: noTaskInfo"
+  *ngIf="(taskInfo$ | async) as taskInfo; else noTaskInfo"
 >
   <campus-side-sheet-header></campus-side-sheet-header>
   <campus-side-sheet-body>
@@ -50,7 +50,7 @@
     </campus-page-header>
 
     <ng-container *ngIf="(taskInfo$ | async).taskEduContents as contents">
-      <ng-container *ngIf="contents.length > 0; else: noTaskInstanceContents">
+      <ng-container *ngIf="contents.length > 0; else noTaskInstanceContents">
         <ng-container
           *ngIf="(filterTextInput.result$ | async) as filteredContents"
         >
@@ -76,7 +76,7 @@
               [contentTypeClass]="'task'"
             >
               <campus-button
-                *ngIf="!taskEduContent.submitted; else: taskEduContentSubmitted"
+                *ngIf="!taskEduContent.submitted; else taskEduContentSubmitted"
                 circle
                 [iconClass]="'exercise:open'"
                 (click)="clickOpenContent(taskEduContent)"
