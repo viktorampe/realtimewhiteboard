@@ -2,22 +2,16 @@ import { NgModule } from '@angular/core';
 import { MatIconModule } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { CustomSerializer, DalModule } from '@campus/dal';
+import { DalModule } from '@campus/dal';
 import { SharedModule } from '@campus/shared';
 import { UiModule } from '@campus/ui';
-import { EffectsModule } from '@ngrx/effects';
-import {
-  NavigationActionTiming,
-  routerReducer,
-  StoreRouterConnectingModule
-} from '@ngrx/router-store';
-import { StoreModule } from '@ngrx/store';
-import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { NxModule } from '@nrwl/nx';
-import { storeFreeze } from 'ngrx-store-freeze';
-import { configureBufferSize, handleUndo } from 'ngrx-undo';
+import { configureBufferSize } from 'ngrx-undo';
 import { environment } from '../environments/environment';
+import { AppEffectsModule } from './app-effects.module';
 import { AppRoutingModule } from './app-routing.module';
+import { AppStoreModule } from './app-store.module';
+import { AppTokenModule } from './app-token.module';
 import { AppComponent } from './app.component';
 
 configureBufferSize(150);
@@ -46,20 +40,9 @@ configureBufferSize(150);
     ),
     NxModule.forRoot(),
     DalModule.forRoot({ apiBaseUrl: environment.api.APIBase }),
-    EffectsModule.forRoot([]),
-    StoreModule.forRoot(
-      { app: undefined, router: routerReducer },
-      {
-        metaReducers: !environment.production
-          ? [storeFreeze, handleUndo]
-          : [handleUndo]
-      }
-    ),
-    !environment.production ? StoreDevtoolsModule.instrument() : [],
-    StoreRouterConnectingModule.forRoot({
-      navigationActionTiming: NavigationActionTiming.PostActivation,
-      serializer: CustomSerializer
-    })
+    AppTokenModule,
+    AppEffectsModule,
+    AppStoreModule
   ],
   providers: [],
   bootstrap: [AppComponent]
