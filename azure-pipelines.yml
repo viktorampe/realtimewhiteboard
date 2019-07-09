@@ -61,12 +61,6 @@ steps:
     inputs:
       customEndpoint: diekeure-registry
   - script: |
-      npm run e2e:polpo:staging
-    displayName: 'End-to-end all polpo'
-  - script: |
-      npm run e2e:kabas:staging
-    displayName: 'End-to-end all kabas'
-  - script: |
       npm run lint
     displayName: 'Lint all'
     condition: eq(variables['dkLintAll'], 'true')
@@ -75,6 +69,12 @@ steps:
     displayName: 'Format check'
   - script: npm run test
     displayName: 'Test all'
+  - script: |
+      npm run e2e:polpo:staging
+    displayName: 'End-to-end all polpo'
+  - script: |
+      npm run e2e:kabas:staging
+    displayName: 'End-to-end all kabas'
   - bash: |
       if [ -d "coverage" ]; then
         echo "##vso[task.setVariable variable=dkRanTests]true"
