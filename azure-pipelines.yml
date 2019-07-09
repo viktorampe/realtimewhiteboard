@@ -24,10 +24,16 @@ pool:
 
 steps:
   - script: |
+      echo '##vso[task.setvariable variable=CI]1'
+    displayName: 'Export environment variables'
+  - script: |
       echo '##vso[task.setvariable variable=dkLintAll]true'
-      echo '##vso[task.setvariable variable=dkBuild]true'
     condition: and(in(variables['Build.SourceBranch'], 'refs/heads/master', 'refs/heads/develop', 'refs/heads/test/mock-master'), in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI'))
-    displayName: '(Check) Set dkLintAll and dkBuild to true if pushing to a trigger branch'
+    displayName: '(Check) Enable dkLintAll if pushing to a trigger branch'
+  - script: |
+      echo '##vso[task.setvariable variable=dkBuild]true'
+    condition: and(in(variables['Build.SourceBranch'], 'refs/heads/master', 'refs/heads/test/mock-master'), in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI'))
+    displayName: '(Check) Enable dkBuild (artifacts) if pushing to master'
   - script: |
       echo Build information
       echo -----------------

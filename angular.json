@@ -114,11 +114,6 @@
             "jestConfig": "apps/polpo-classroom-web/jest.config.js",
             "tsConfig": "apps/polpo-classroom-web/tsconfig.spec.json",
             "setupFile": "apps/polpo-classroom-web/src/test-setup.ts"
-          },
-          "configurations": {
-            "travis": {
-              "maxWorkers": 2
-            }
           }
         }
       }
@@ -194,11 +189,6 @@
             "jestConfig": "libs/pages/bundles/jest.config.js",
             "tsConfig": "libs/pages/bundles/tsconfig.spec.json",
             "setupFile": "libs/pages/bundles/src/test-setup.ts"
-          },
-          "configurations": {
-            "travis": {
-              "maxWorkers": 2
-            }
           }
         }
       }
@@ -226,11 +216,6 @@
             "jestConfig": "libs/pages/edu-contents/jest.config.js",
             "tsConfig": "libs/pages/edu-contents/tsconfig.spec.json",
             "setupFile": "libs/pages/edu-contents/src/test-setup.ts"
-          },
-          "configurations": {
-            "travis": {
-              "maxWorkers": 2
-            }
           }
         }
       }
@@ -258,11 +243,6 @@
             "jestConfig": "libs/pages/logout/jest.config.js",
             "tsConfig": "libs/pages/logout/tsconfig.spec.json",
             "setupFile": "libs/pages/logout/src/test-setup.ts"
-          },
-          "configurations": {
-            "travis": {
-              "maxWorkers": 2
-            }
           }
         }
       }
@@ -290,11 +270,6 @@
             "jestConfig": "libs/pages/messages/jest.config.js",
             "tsConfig": "libs/pages/messages/tsconfig.spec.json",
             "setupFile": "libs/pages/messages/src/test-setup.ts"
-          },
-          "configurations": {
-            "travis": {
-              "maxWorkers": 2
-            }
           }
         }
       }
@@ -322,11 +297,6 @@
             "jestConfig": "libs/pages/reports/jest.config.js",
             "tsConfig": "libs/pages/reports/tsconfig.spec.json",
             "setupFile": "libs/pages/reports/src/test-setup.ts"
-          },
-          "configurations": {
-            "travis": {
-              "maxWorkers": 2
-            }
           }
         }
       }
@@ -354,11 +324,6 @@
             "jestConfig": "libs/pages/tasks/jest.config.js",
             "tsConfig": "libs/pages/tasks/tsconfig.spec.json",
             "setupFile": "libs/pages/tasks/src/test-setup.ts"
-          },
-          "configurations": {
-            "travis": {
-              "maxWorkers": 2
-            }
           }
         }
       }
@@ -386,11 +351,6 @@
             "jestConfig": "libs/pages/books/jest.config.js",
             "tsConfig": "libs/pages/books/tsconfig.spec.json",
             "setupFile": "libs/pages/books/src/test-setup.ts"
-          },
-          "configurations": {
-            "travis": {
-              "maxWorkers": 2
-            }
           }
         }
       }
@@ -418,11 +378,6 @@
             "jestConfig": "libs/ui/jest.config.js",
             "tsConfig": "libs/ui/tsconfig.spec.json",
             "setupFile": "libs/ui/src/test-setup.ts"
-          },
-          "configurations": {
-            "travis": {
-              "maxWorkers": 2
-            }
           }
         }
       }
@@ -450,11 +405,6 @@
             "jestConfig": "libs/dal/jest.config.js",
             "tsConfig": "libs/dal/tsconfig.spec.json",
             "setupFile": "libs/dal/src/test-setup.ts"
-          },
-          "configurations": {
-            "travis": {
-              "maxWorkers": 2
-            }
           }
         }
       }
@@ -481,11 +431,6 @@
             "jestConfig": "libs/pages/shared/jest.config.js",
             "tsConfig": "libs/pages/shared/tsconfig.spec.json",
             "setupFile": "libs/pages/shared/src/test-setup.ts"
-          },
-          "configurations": {
-            "travis": {
-              "maxWorkers": 2
-            }
           }
         }
       }
@@ -512,11 +457,6 @@
             "jestConfig": "libs/browser/jest.config.js",
             "tsConfig": "libs/browser/tsconfig.spec.json",
             "setupFile": "libs/browser/src/test-setup.ts"
-          },
-          "configurations": {
-            "travis": {
-              "maxWorkers": 2
-            }
           }
         }
       }
@@ -543,11 +483,6 @@
             "jestConfig": "libs/shared/jest.config.js",
             "tsConfig": "libs/shared/tsconfig.spec.json",
             "setupFile": "libs/shared/src/test-setup.ts"
-          },
-          "configurations": {
-            "travis": {
-              "maxWorkers": 2
-            }
           }
         }
       }
@@ -574,11 +509,6 @@
             "jestConfig": "libs/scorm/jest.config.js",
             "tsConfig": "libs/scorm/tsconfig.spec.json",
             "setupFile": "libs/scorm/src/test-setup.ts"
-          },
-          "configurations": {
-            "travis": {
-              "maxWorkers": 2
-            }
           }
         }
       }
@@ -605,11 +535,6 @@
             "jestConfig": "libs/pages/error/jest.config.js",
             "tsConfig": "libs/pages/error/tsconfig.spec.json",
             "setupFile": "libs/pages/error/src/test-setup.ts"
-          },
-          "configurations": {
-            "travis": {
-              "maxWorkers": 2
-            }
           }
         }
       }
@@ -636,11 +561,6 @@
             "jestConfig": "libs/testing/jest.config.js",
             "tsConfig": "libs/testing/tsconfig.spec.json",
             "setupFile": "libs/testing/src/test-setup.ts"
-          },
-          "configurations": {
-            "travis": {
-              "maxWorkers": 2
-            }
           }
         }
       }
@@ -667,11 +587,6 @@
             "jestConfig": "libs/utils/jest.config.js",
             "tsConfig": "libs/utils/tsconfig.spec.json",
             "setupFile": "libs/utils/src/test-setup.ts"
-          },
-          "configurations": {
-            "travis": {
-              "maxWorkers": 2
-            }
           }
         }
       }
@@ -698,11 +613,6 @@
             "jestConfig": "libs/guards/jest.config.js",
             "tsConfig": "libs/guards/tsconfig.spec.json",
             "setupFile": "libs/guards/src/test-setup.ts"
-          },
-          "configurations": {
-            "travis": {
-              "maxWorkers": 2
-            }
           }
         }
       }
@@ -729,11 +639,6 @@
             "jestConfig": "libs/pages/settings/dashboard/jest.config.js",
             "tsConfig": "libs/pages/settings/dashboard/tsconfig.spec.json",
             "setupFile": "libs/pages/settings/dashboard/src/test-setup.ts"
-          },
-          "configurations": {
-            "travis": {
-              "maxWorkers": 2
-            }
           }
         }
       }
@@ -760,11 +665,6 @@
             "jestConfig": "libs/pages/settings/profile/jest.config.js",
             "tsConfig": "libs/pages/settings/profile/tsconfig.spec.json",
             "setupFile": "libs/pages/settings/profile/src/test-setup.ts"
-          },
-          "configurations": {
-            "travis": {
-              "maxWorkers": 2
-            }
           }
         }
       }
@@ -791,11 +691,6 @@
             "jestConfig": "libs/pages/settings/credentials/jest.config.js",
             "tsConfig": "libs/pages/settings/credentials/tsconfig.spec.json",
             "setupFile": "libs/pages/settings/credentials/src/test-setup.ts"
-          },
-          "configurations": {
-            "travis": {
-              "maxWorkers": 2
-            }
           }
         }
       }
@@ -822,11 +717,6 @@
             "jestConfig": "libs/pages/settings/coupled-teachers/jest.config.js",
             "tsConfig": "libs/pages/settings/coupled-teachers/tsconfig.spec.json",
             "setupFile": "libs/pages/settings/coupled-teachers/src/test-setup.ts"
-          },
-          "configurations": {
-            "travis": {
-              "maxWorkers": 2
-            }
           }
         }
       }
@@ -853,11 +743,6 @@
             "jestConfig": "libs/pages/settings/alerts/jest.config.js",
             "tsConfig": "libs/pages/settings/alerts/tsconfig.spec.json",
             "setupFile": "libs/pages/settings/alerts/src/test-setup.ts"
-          },
-          "configurations": {
-            "travis": {
-              "maxWorkers": 2
-            }
           }
         }
       }
@@ -884,11 +769,6 @@
             "jestConfig": "libs/search/jest.config.js",
             "tsConfig": "libs/search/tsconfig.spec.json",
             "setupFile": "libs/search/src/test-setup.ts"
-          },
-          "configurations": {
-            "travis": {
-              "maxWorkers": 2
-            }
           }
         }
       }
