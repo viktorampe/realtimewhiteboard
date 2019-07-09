@@ -888,6 +888,11 @@
             "jestConfig": "apps/kabas-web/jest.config.js",
             "tsConfig": "apps/kabas-web/tsconfig.spec.json",
             "setupFile": "apps/kabas-web/src/test-setup.ts"
+          },
+          "configurations": {
+            "travis": {
+              "maxWorkers": 2
+            }
           }
         }
       }

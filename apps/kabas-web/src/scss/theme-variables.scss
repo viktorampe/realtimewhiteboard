@@ -1,0 +1,135 @@
+// color definitions
+$color-black-1: #32323a;
+$color-black-2: #51515b;
+$color-gray-1: #95a0aa;
+$color-gray-2: #888;
+$color-gray-3: #e1e5e7;
+$color-gray-4: #ecf4f6;
+$color-gray-5: #e1edf2;
+$color-gray-6: #cbced4;
+$color-gray-7: #fafafa;
+
+$color-blue-1: #953575;
+$color-blue-2: #b04495;
+$color-blue-3: #d36ebd;
+$color-orange-1: #09ff00;
+$color-red-1: #00ccff;
+$color-white-1: #fff;
+
+// app > main body
+$primary-bg-color: $color-gray-3;
+$primary-font-color: $color-black-1;
+$primary-color-accent: $color-blue-1; // link, button (borders)
+$primary-font-color-2: $color-gray-1; // subtitle
+$primary-font-family: 'Helvetica', 'Arial', 'Open Sans', sans-serif;
+$primary-font-family-2: 'Lato', sans-serif; // title
+$primary-font-size: 14px;
+// app > nav + site header (shell)
+$secondary-bg-color: $color-black-1;
+$secondary-font-color: $color-gray-1;
+$secondary-bg-color-accent: darken($color-blue-3, 40%); // active buttons
+$secondary-font-color-accent: $color-blue-3; // link, button (borders)
+$secondary-bg-color-badge: $color-red-1; //  badge
+$secondary-font-color-badge: $color-white-1; // badge
+// app > panel headers
+$tertiary-bg-color: $color-white-1;
+$tertiary-font-color: $color-black-1;
+$tertiary-bg-color-2: $color-gray-1;
+$tertiary-font-color-2: $color-white-1;
+
+// ui > main body
+$ui-primary-bg-color: $primary-bg-color;
+$ui-primary-font-color: $primary-font-color;
+$ui-primary-font-size: $primary-font-size;
+$ui-primary-color-accent: $primary-color-accent;
+$ui-primary-font-color-2: $primary-font-color-2;
+$ui-primary-font-family: $primary-font-family;
+$ui-primary-font-family-2: $primary-font-family-2;
+// ui > nav + site header (shell)
+$ui-secondary-bg-color: $secondary-bg-color;
+$ui-secondary-font-color: $secondary-font-color;
+$ui-secondary-bg-color-accent: $secondary-bg-color-accent;
+$ui-secondary-font-color-accent: $secondary-font-color-accent;
+// ui > panel headers
+$ui-tertiary-bg-color: $tertiary-bg-color;
+$ui-tertiary-font-color: $tertiary-font-color;
+$ui-tertiary-bg-color-2: $tertiary-bg-color-2;
+$ui-tertiary-font-color-2: $tertiary-font-color-2;
+
+// ui > app bar
+$ui-app-bar-background-color: $color-black-2;
+// ui > app shell variables
+$ui-shell__left-width: 235px;
+$ui-shell__top-height: 105px;
+$ui-shell__top-height--mobile: 60px;
+$ui-shell__logo-height: 105px;
+$ui-shell__logo-background-color: $color-blue-2;
+
+// ui > person badge > polpo override
+$ui-person-badge-size-large: 72px;
+$ui-person-badge-size-large-font-size: 24px;
+$ui-person-badge-size-medium: 50px;
+$ui-person-badge-size-medium-font-size: 14px;
+
+$ui-page-header_section-subtitle-bg-color: $color-blue-2;
+
+// ui > forms
+$ui-form-button-default-bg-color: $color-gray-3;
+$ui-form-button-primary-bg-color: $color-blue-2;
+$ui-button--large-font-size: 18px;
+
+// ui > tiles
+$ui-tile-background-color: $color-blue-1;
+$ui-tile-background-image: '/assets/images/polpo-overlay-white.png';
+$ui-tile-content-icon-color: $color-gray-6;
+$ui-tile-content-label-color: $color-blue-3;
+$ui-tile-content-label-font-size: 18px;
+$ui-tile-content-icon-show-border: true;
+
+// ui > tile
+$ui-tile-height: 130px !default;
+$ui-tile-width: 280px !default;
+
+// ui > drop area
+$ui-drop-area-border: 2px dashed $color-gray-1;
+$ui-drop-area__icon-container__mat-icon-color: $color-gray-1;
+$ui-drop-area__label-color: $color-gray-1;
+$ui-drop-area__label-font-size: 18px;
+$ui-drop-area__icon-container__mat-icon-size: 41px;
+$ui-drop-area-background: url(/assets/images/polpo-overlay-dark.png) right
+  center no-repeat $color-gray-7;
+
+// social media
+$facebook-button-background-color: #455897;
+$facebook-button-font-color: white;
+$google-button-background-color: #4285f4;
+$google-button-font-color: white;
+$smartschool-button-background-color: #ff520e;
+$smartschool-button-font-color: white;
+
+// alerts
+$pages-settings-alerts__info-panel__notification-bg-color-odd: $color-gray-4;
+$pages-settings-alerts__info-panel__notification-bg-color-even: $color-gray-5;
+$pages-settings-alerts__info-panel__notification-margin-bottom: 5px;
+$pages-settings-alerts__info-panel__notification-border: 1px solid $color-gray-1;
+$pages-settings-alerts__info-panel__notification__actions-bg-color: $color-gray-6;
+$pages-settings-alerts__info-panel__notification__actions-padding: 10px;
+$pages-settings-alerts__info-panel__notification__actions__element-cursor: pointer;
+
+// edu-contents
+$pages-edu-contents-areas-list_favorite-border-color: $color-blue-3;
+$pages-edu-contents-areas-list_grid-border-color: $color-gray-6;
+
+$ui-list-view-selection-overlay-border-color: transparent;
+$ui-list-view-selection-overlay-circle-fg-color: $color-white-1;
+$ui-list-view-selection-overlay-circle-bg-color: $color-blue-1;
+$ui-list-view-selection-overlay-circle--selected-content: '✓' !default;
+
+// mat-overrides
+$campus_search_term--line_height: 28px;
+
+// campus-header
+$shared-bg-color-1: #32323a !default;
+$shared-element-border-color-1: $color-blue-2 !default;
+$shared-button-color-accent: $color-blue-1 !default;
+$shared-color-1: #95a0aa !default;
