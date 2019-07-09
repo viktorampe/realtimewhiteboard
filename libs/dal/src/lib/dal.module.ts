@@ -1,10 +1,22 @@
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { Inject, InjectionToken, ModuleWithProviders, NgModule } from '@angular/core';
+import {
+  Inject,
+  InjectionToken,
+  ModuleWithProviders,
+  NgModule
+} from '@angular/core';
 import { MatSnackBarModule } from '@angular/material';
-import { BrowserModule as CampusBrowserModule, BROWSER_STORAGE_SERVICE_TOKEN, StorageService } from '@campus/browser';
+import {
+  BrowserModule as CampusBrowserModule,
+  BROWSER_STORAGE_SERVICE_TOKEN,
+  StorageService
+} from '@campus/browser';
 import { ScormModule } from '@campus/scorm';
-import { LoopBackConfig, SDKBrowserModule } from '@diekeure/polpo-api-angular-sdk';
+import {
+  LoopBackConfig,
+  SDKBrowserModule
+} from '@diekeure/polpo-api-angular-sdk';
 import { v4 as uuid } from 'uuid';
 
 interface DalOptions {
