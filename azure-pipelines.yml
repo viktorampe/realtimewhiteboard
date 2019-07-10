@@ -124,15 +124,15 @@ steps:
       npm run build:kabas:production
     displayName: '[Build] kabas:production'
     condition: and(succeeded(), eq(variables['dkBuild'], 'true'))
+  - task: DeleteFiles@1
+    displayName: 'Remove e2e screenshots and videos from dist before copying'
+    inputs:
+      contents: 'dist/out-tsc'
   - task: CopyFiles@2
     displayName: 'Copy builds to artifacts'
     condition: and(succeeded(), eq(variables['dkBuild'], 'true'))
     inputs:
-      contents: |
-        'dist/kabas-web-staging/**'
-        'dist/kabas-web-production/**'
-        'dist/polpo-web-staging/**'
-        'dist/polpo-web-production/**'
+      contents: 'dist/**'
       targetFolder: $(Build.ArtifactStagingDirectory)
   - task: PublishBuildArtifacts@1
     condition: and(succeeded(), eq(variables['dkBuild'], 'true'))
