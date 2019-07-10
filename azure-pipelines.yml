@@ -38,7 +38,6 @@ steps:
       echo Build information
       echo -----------------
       echo Build.Reason = $(Build.Reason)
-      echo Build.SourceVersionMessage	= $(Build.SourceVersionMessage)
       echo Build.SourceBranch	= $(Build.SourceBranch)
       echo System.PullRequest.TargetBranch = $(System.PullRequest.TargetBranch)
       echo Build.SourcesDirectory = $(Build.SourcesDirectory)
