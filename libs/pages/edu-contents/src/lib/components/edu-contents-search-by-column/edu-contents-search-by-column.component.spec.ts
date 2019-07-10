@@ -7,13 +7,7 @@ import {
   NgModule,
   Output
 } from '@angular/core';
-import {
-  async,
-  ComponentFixture,
-  fakeAsync,
-  TestBed,
-  tick
-} from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
@@ -131,7 +125,6 @@ describe('EduContentSearchByColumnComponent', () => {
     component.searchComponent = searchComponent;
     component.initialize(); // manually execute initialize -> navigation hasn't triggered yet
     fixture.detectChanges();
-
     router = TestBed.get(Router);
   });
 
@@ -139,11 +132,15 @@ describe('EduContentSearchByColumnComponent', () => {
     expect(component).toBeTruthy();
   });
   describe('initialize', () => {
-    it('should call initialize on navigation', fakeAsync(() => {
+    it('should call initialize on navigation', async(() => {
       component.initialize = jest.fn();
-      router.navigate([]);
-      tick();
-      expect(component.initialize).toHaveBeenCalledTimes(1);
+      fixture.ngZone.run(() => {
+        fixture.whenStable().then(() => {
+          router.navigate([]).then(() => {
+            expect(component.initialize).toHaveBeenCalledTimes(1);
+          });
+        });
+      });
     }));
     it('should call getSearchMode', () => {
       const getSearchModeSpy = jest.spyOn(

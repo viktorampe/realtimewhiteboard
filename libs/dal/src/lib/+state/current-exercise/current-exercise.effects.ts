@@ -92,7 +92,7 @@ export class CurrentExerciseEffects {
         });
         // resetting the state won't help, because ludo won't update
         // todo examine further
-        return from<Action>([
+        return from<Action[]>([
           undoAction,
           new AddEffectFeedback({ effectFeedback }),
           new CurrentExerciseError(new Error('failed'))

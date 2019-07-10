@@ -21,9 +21,9 @@
   ></campus-banner>
   <mat-dialog-content>
     <mat-action-list *ngIf="(filterTextInput.result$ | async) as categories">
-      <ng-container *ngIf="categories.length; else: noContentTemplate">
+      <ng-container *ngIf="categories.length; else noContentTemplate">
         <ng-container
-          *ngIf="categories[0].quickLinks.length; else: noResultsTemplate"
+          *ngIf="categories[0].quickLinks.length; else noResultsTemplate"
         >
           <ng-container *ngFor="let category of categories">
             <h3 mat-subheader>{{ category.title }}</h3>
@@ -33,7 +33,7 @@
               (click)="onActionClick(quickLink.defaultAction, quickLink)"
             >
               <campus-file-extension
-                *ngIf="quickLink.type === 'educontent'; else: notEduContent"
+                *ngIf="quickLink.type === 'educontent'; else notEduContent"
                 [showIcon]="false"
                 [extensionClass]="quickLink.eduContent.fileExtension"
                 class="quick-link__item__file-extension"

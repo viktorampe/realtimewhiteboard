@@ -12,6 +12,7 @@ import { UserReducer } from '.';
 import { PersonInterface } from '../../+models';
 import { DalModule } from '../../dal.module';
 import { FAVORITE_SERVICE_TOKEN } from '../../favorite/favorite.service.interface';
+import { AuthService } from '../../persons';
 import { AUTH_SERVICE_TOKEN } from '../../persons/auth-service.interface';
 import {
   PersonServiceInterface,
@@ -114,6 +115,7 @@ describe('UserEffects', () => {
         provideMockActions(() => actions),
         { provide: PERSON_SERVICE_TOKEN, useValue: {} },
         { provide: FAVORITE_SERVICE_TOKEN, useValue: {} },
+        { provide: AUTH_SERVICE_TOKEN, useClass: AuthService },
         {
           provide: 'uuid',
           useValue: () => 'foo'

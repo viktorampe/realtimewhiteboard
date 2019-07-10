@@ -13,7 +13,7 @@
   >
 
   <div
-    *ngIf="ownResults.length > 0; else: noOwnResults"
+    *ngIf="ownResults.length > 0; else noOwnResults"
     class="page-results__table"
   >
     <div class="page-results__table__header" #header>
@@ -71,7 +71,7 @@
             </td>
 
             <ng-container
-              *ngIf="assignment.type !== 'task'; else: hideInfoForTasks"
+              *ngIf="assignment.type !== 'task'; else hideInfoForTasks"
             >
               <td class="number">{{ exerciseResult.results.length }}</td>
               <td class="number">{{

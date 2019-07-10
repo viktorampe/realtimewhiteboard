@@ -1,6 +1,7 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
+import { configureTestSuite } from 'ng-bullet';
 import { InputLabelComponent } from './input-label.component';
 
 describe('InputLabelComponent', () => {
@@ -9,12 +10,12 @@ describe('InputLabelComponent', () => {
 
   let mockData: { titleText: string; text: string; editable?: boolean };
 
-  beforeEach(async(() => {
+  configureTestSuite(() => {
     TestBed.configureTestingModule({
       declarations: [InputLabelComponent],
       imports: [ReactiveFormsModule, FormsModule]
     });
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(InputLabelComponent);

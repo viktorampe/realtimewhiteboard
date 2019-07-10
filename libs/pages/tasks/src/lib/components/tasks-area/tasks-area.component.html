@@ -34,7 +34,7 @@
     >Er zijn momenteel geen taken voor jou klaargezet.</ng-template
   >
 
-  <ng-container *ngIf="learningAreas.length > 0; else: noLearningAreas">
+  <ng-container *ngIf="learningAreas.length > 0; else noLearningAreas">
     <ng-container
       *ngIf="(filterTextInput.result$ | async) as filteredLearningAreas"
     >
