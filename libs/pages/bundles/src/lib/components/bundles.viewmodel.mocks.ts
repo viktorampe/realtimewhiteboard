@@ -71,6 +71,8 @@ export class MockViewModel implements ViewModelInterface<BundlesViewModel> {
 
   setBundleAlertRead() {}
 
+  setBundleHistory() {}
+
   getStudentContentStatusByUnlockedContentId(): Observable<
     StudentContentStatusInterface
   > {

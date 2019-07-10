@@ -190,4 +190,13 @@ describe('BundleDetailComponent', () => {
 
     expect(bundlesViewModel.saveContentStatus).toHaveBeenCalledWith(10, 3);
   });
+
+  it('should add the bundle to history', () => {
+    jest.spyOn(bundlesViewModel, 'setBundleHistory');
+
+    component.ngOnInit();
+
+    expect(bundlesViewModel.setBundleHistory).toHaveBeenCalled();
+    expect(bundlesViewModel.setBundleHistory).toHaveBeenCalledWith(1);
+  });
 });

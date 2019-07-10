@@ -1,7 +1,9 @@
+import { BundleInterface } from './Bundle.interface';
 import { ContentInterface } from './Content.interface';
 import { EduContent } from './EduContent';
 import { EduContentInterface } from './EduContent.interface';
 import { HistoryInterface } from './History.interface';
+import { TaskInterface } from './Task.interface';
 
 export enum HistoryTypesEnum {
   AREA = 'area',
@@ -28,6 +30,27 @@ export function createHistoryFromEduContent(
     learningAreaId: eduContent.publishedEduContentMetadata
       ? eduContent.publishedEduContentMetadata.learningAreaId
       : null
+  };
+}
+
+export function createHistoryFromTask(task: TaskInterface): HistoryInterface {
+  return {
+    name: task.name,
+    type: HistoryTypesEnum.TASK,
+    taskId: task.id,
+    created: new Date(),
+    learningAreaId: task.learningAreaId
+  };
+}
+export function createHistoryFromBundle(
+  bundle: BundleInterface
+): HistoryInterface {
+  return {
+    name: bundle.name,
+    type: HistoryTypesEnum.BUNDLE,
+    bundleId: bundle.id,
+    created: new Date(),
+    learningAreaId: bundle.learningAreaId
   };
 }
 

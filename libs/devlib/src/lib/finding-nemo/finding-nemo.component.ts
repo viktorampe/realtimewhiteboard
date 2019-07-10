@@ -33,7 +33,7 @@ import {
 } from '@campus/search';
 import { TileSecondaryActionInterface } from '@campus/ui';
 import { EduContentMetadataApi } from '@diekeure/polpo-api-angular-sdk';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { EduContentSearchResultComponent } from 'apps/polpo-classroom-web/src/app/components/searchresults/edu-content-search-result.component';
 import { TocFilterFactory } from 'apps/polpo-classroom-web/src/app/factories/toc-filter/toc-filter.factory';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
@@ -75,9 +75,9 @@ export class FindingNemoComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     combineLatest(
-      this.store.select(LearningAreaQueries.getLoaded),
-      this.store.select(YearQueries.getLoaded),
-      this.store.select(MethodQueries.getLoaded)
+      this.store.pipe(select(LearningAreaQueries.getLoaded)),
+      this.store.pipe(select(YearQueries.getLoaded)),
+      this.store.pipe(select(MethodQueries.getLoaded))
     )
       .pipe(
         filter(loadedArray => loadedArray.every(value => value)),

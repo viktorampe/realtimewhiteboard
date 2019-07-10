@@ -9,6 +9,7 @@ export enum SettingsPermissions {
   REMOVE_SCHOOLS = 'removeSchools',
   LINK_TEACHERS = 'linkTeachers',
   UNLINK_TEACHERS = 'unlinkTeachers',
+  MANAGE_FAVORITES = 'manageFavorites',
   MANAGE_HISTORY = 'manageHistory'
 }
 

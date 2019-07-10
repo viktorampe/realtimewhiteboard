@@ -7,5 +7,32 @@
   "video": true,
   "videosFolder": "../../dist/out-tsc/apps/polpo-classroom-web-e2e/videos",
   "screenshotsFolder": "../../dist/out-tsc/apps/polpo-classroom-web-e2e/screenshots",
-  "chromeWebSecurity": false
+  "chromeWebSecurity": false,
+  "defaultCommandTimeout": 10000,
+  "env": {
+    "development": {
+      "apiUrl": "http://api.polpo.localhost:3000/",
+      "apiPaths": {
+        "eduContent": "api/eduContents",
+        "ludoAssets": "api/educontent-assets-ludo"
+      },
+      "appPaths": {
+        "bundles": "bundles"
+      },
+      "username": "teacher1",
+      "password": "testje"
+    },
+    "staging": {
+      "apiUrl": "https://api.staging.polpo.be/",
+      "apiPaths": {
+        "eduContent": "api/eduContents",
+        "ludoAssets": "api/educontent-assets-ludo"
+      },
+      "appPaths": {
+        "bundles": "bundles"
+      },
+      "username": "teacher1",
+      "password": "testje"
+    }
+  }
 }

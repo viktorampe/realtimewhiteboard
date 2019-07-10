@@ -8,6 +8,7 @@ import {
   ContentInterface,
   ContentStatusLabel,
   ContentStatusQueries,
+  createHistoryFromBundle,
   createHistoryFromContent,
   DalState,
   EduContent,
@@ -46,9 +47,9 @@ import { combineLatest, Observable } from 'rxjs';
 import {
   filter,
   map,
-  share,
   shareReplay,
   switchMap,
+  switchMapTo,
   take
 } from 'rxjs/operators';
 import {
@@ -81,8 +82,7 @@ export class BundlesViewModel {
     .hasPermission(Permissions.settings.MANAGE_HISTORY)
     .pipe(
       take(1),
-      filter(hasPermission => hasPermission),
-      share()
+      filter(hasPermission => hasPermission)
     );
   // > bundle detail page
 
@@ -397,6 +397,25 @@ export class BundlesViewModel {
       ),
       shareReplay(1)
     );
+  }
+
+  public setBundleHistory(bundleId: number): void {
+    this.hasManageHistoryPermission
+      .pipe(
+        switchMapTo(
+          this.store.pipe(
+            select(BundleQueries.getById, { id: bundleId }),
+            take(1)
+          )
+        )
+      )
+      .subscribe(bundle =>
+        this.store.dispatch(
+          new HistoryActions.StartUpsertHistory({
+            history: createHistoryFromBundle(bundle)
+          })
+        )
+      );
   }
 
   getContentStatusOptions(): Observable<SelectOption[]> {

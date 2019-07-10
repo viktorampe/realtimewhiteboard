@@ -18,7 +18,7 @@
     ></mat-icon>
     <div title__right>Instellingen</div>
     <ng-container *ngIf="(notifications$ | async) as notifications">
-      <ng-container *ngIf="notifications.length > 0; else: noAlerts">
+      <ng-container *ngIf="notifications.length > 0; else noAlerts">
         <div
           *ngFor="let notification of notifications"
           class="pages-settings-alerts__info-panel__notification"

@@ -78,6 +78,10 @@ describe('ShellComponent', () => {
     testContainerFixture.detectChanges();
   });
 
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
   it('should create', () => {
     expect(component).toBeTruthy();
   });

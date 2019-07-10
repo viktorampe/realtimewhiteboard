@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../../dist/out-tsc/apps/kabas-web",
+    "types": []
+  },
+  "exclude": ["src/test-setup.ts", "**/*.spec.ts"],
+  "include": [
+    "**/*.ts",
+    "../../libs/pages/error/src/index.ts",
+    "../../libs/shared/src/index.ts",
+    "../../libs/ui/src/index.ts",
+    "../../libs/dal/src/index.ts"
+  ]
+}
