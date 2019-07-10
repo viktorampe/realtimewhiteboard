@@ -69,7 +69,7 @@ steps:
   - script: |
       npm run lint
     displayName: 'Lint all'
-    condition: eq(variables['dkLintAll'], 'true')
+    condition: and(succeeded(), eq(variables['dkLintAll'], 'true'))
   - script: |
       npm run format:check
     displayName: 'Format check'
