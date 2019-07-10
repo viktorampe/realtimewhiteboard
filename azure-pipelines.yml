@@ -112,22 +112,22 @@ steps:
   - script: |
       npm run build:polpo:staging
     displayName: '[Build] polpo:staging'
-    condition: eq(variables['dkBuild'], 'true')
+    condition: and(succeeded(), eq(variables['dkBuild'], 'true'))
   - script: |
       npm run build:polpo:production
     displayName: '[Build] polpo:production'
-    condition: eq(variables['dkBuild'], 'true')
+    condition: and(succeeded(), eq(variables['dkBuild'], 'true'))
   - script: |
       npm run build:kabas:staging
     displayName: '[Build] kabas:staging'
-    condition: eq(variables['dkBuild'], 'true')
+    condition: and(succeeded(), eq(variables['dkBuild'], 'true'))
   - script: |
       npm run build:kabas:production
     displayName: '[Build] kabas:production'
-    condition: eq(variables['dkBuild'], 'true')
+    condition: and(succeeded(), eq(variables['dkBuild'], 'true'))
   - task: CopyFiles@2
     displayName: 'Copy builds to artifacts'
-    condition: eq(variables['dkBuild'], 'true')
+    condition: and(succeeded(), eq(variables['dkBuild'], 'true'))
     inputs:
       contents: |
         'dist/kabas-web-staging'
@@ -136,4 +136,4 @@ steps:
         'dist/polpo-web-production'
       targetFolder: $(Build.ArtifactStagingDirectory)
   - task: PublishBuildArtifacts@1
-    condition: eq(variables['dkBuild'], 'true')
+    condition: and(succeeded(), eq(variables['dkBuild'], 'true'))
