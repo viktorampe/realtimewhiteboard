@@ -128,7 +128,11 @@ steps:
     displayName: 'Copy builds to artifacts'
     condition: and(succeeded(), eq(variables['dkBuild'], 'true'))
     inputs:
-      contents: 'dist/**'
+      contents: |
+        'dist/kabas-web-staging/**'
+        'dist/kabas-web-production/**'
+        'dist/polpo-web-staging/**'
+        'dist/polpo-web-production/**'
       targetFolder: $(Build.ArtifactStagingDirectory)
   - task: PublishBuildArtifacts@1
     condition: and(succeeded(), eq(variables['dkBuild'], 'true'))
