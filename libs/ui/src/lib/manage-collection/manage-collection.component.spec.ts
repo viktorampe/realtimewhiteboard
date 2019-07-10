@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   MatDialogModule,
@@ -15,6 +15,7 @@ import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MockMatIconRegistry } from '@campus/testing';
 import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/utils';
+import { configureTestSuite } from 'ng-bullet';
 import { ButtonComponent } from '../button/button.component';
 import { FilterTextInputComponent } from '../filter-text-input/filter-text-input.component';
 import { InfoPanelComponent } from '../info-panel/info-panel.component';
@@ -30,35 +31,7 @@ describe('ManageCollectionComponent', () => {
   let generalListDE;
   let recentListDE;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      imports: [
-        MatDialogModule,
-        MatListModule,
-        MatIconModule,
-        RouterTestingModule,
-        FormsModule,
-        ReactiveFormsModule
-      ],
-      declarations: [
-        ManageCollectionComponent,
-        InfoPanelComponent,
-        FilterTextInputComponent,
-        ButtonComponent
-      ],
-      providers: [
-        { provide: MAT_DIALOG_DATA, useValue: mockInjectedData },
-        { provide: MatDialogRef, useValue: { close: () => {} } },
-        {
-          provide: FILTER_SERVICE_TOKEN,
-          useValue: { filter: () => mockInjectedData.linkableItems } // all injected items
-        },
-        { provide: MatIconRegistry, useClass: MockMatIconRegistry }
-      ]
-    });
-  }));
-
-  beforeAll(() => {
+  configureTestSuite(() => {
     mockLinkableItems = [
       {
         icon: 'bundle',
@@ -92,7 +65,35 @@ describe('ManageCollectionComponent', () => {
       linkedItemIds: new Set([3]), //selected item ids
       recentItemIds: new Set([1])
     };
+
+    TestBed.configureTestingModule({
+      imports: [
+        MatDialogModule,
+        MatListModule,
+        MatIconModule,
+        RouterTestingModule,
+        FormsModule,
+        ReactiveFormsModule
+      ],
+      declarations: [
+        ManageCollectionComponent,
+        InfoPanelComponent,
+        FilterTextInputComponent,
+        ButtonComponent
+      ],
+      providers: [
+        { provide: MAT_DIALOG_DATA, useValue: mockInjectedData },
+        { provide: MatDialogRef, useValue: { close: () => {} } },
+        {
+          provide: FILTER_SERVICE_TOKEN,
+          useValue: { filter: () => mockInjectedData.linkableItems } // all injected items
+        },
+        { provide: MatIconRegistry, useClass: MockMatIconRegistry }
+      ]
+    });
   });
+
+  beforeAll(() => {});
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ManageCollectionComponent);
@@ -179,7 +180,9 @@ describe('ManageCollectionComponent', () => {
         const mockFilteredItems = [mockLinkableItems[0], mockLinkableItems[1]];
         const mockFilteredItemsIds = mockFilteredItems.map(item => item.id);
 
-        filterService.filter = jest.fn().mockReturnValue(mockFilteredItems);
+        const spy = jest
+          .spyOn(filterService, 'filter')
+          .mockReturnValue(mockFilteredItems);
         component.filterTextInput.setValue('some value that does not matter');
 
         fixture.detectChanges();
@@ -189,6 +192,7 @@ describe('ManageCollectionComponent', () => {
           .map(dE => dE.componentInstance.value);
 
         expect(itemsInListIds).toEqual(mockFilteredItemsIds);
+        spy.mockRestore();
       });
       it('should hide the recent items when a filter is active', () => {
         component.filterTextInput.setValue('some value that does not matter');
@@ -216,12 +220,14 @@ describe('ManageCollectionComponent', () => {
 
         // filter all items away
         const mockFilteredItems = [];
-        filterService.filter = jest.fn().mockReturnValue(mockFilteredItems);
+        const spy = jest
+          .spyOn(filterService, 'filter')
+          .mockReturnValue(mockFilteredItems);
         component.filterTextInput.setValue('some value that does not matter');
         fixture.detectChanges();
 
         // clear filter
-        filterService.filter = jest.fn().mockReturnValue(mockLinkableItems);
+        spy.mockReturnValue(mockLinkableItems);
         component.filterTextInput.clear();
         fixture.detectChanges();
 
@@ -236,15 +242,22 @@ describe('ManageCollectionComponent', () => {
         const recentItem = recentListDE.query(By.directive(MatListOption))
           .componentInstance;
         expect(recentItem.selected).toBe(true);
+        spy.mockRestore();
       });
 
       describe('no results', () => {
         beforeEach(() => {
           // filter all items away
           const mockFilteredItems = [];
-          filterService.filter = jest.fn().mockReturnValue(mockFilteredItems);
+          jest
+            .spyOn(filterService, 'filter')
+            .mockReturnValue(mockFilteredItems);
           component.filterTextInput.setValue('some value that does not matter');
           fixture.detectChanges();
+        });
+
+        afterEach(() => {
+          jest.restoreAllMocks();
         });
 
         it('should show a message', () => {

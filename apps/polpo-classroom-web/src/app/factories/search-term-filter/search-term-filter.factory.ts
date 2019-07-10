@@ -22,7 +22,8 @@ import {
 import {
   MemoizedSelector,
   MemoizedSelectorWithProps,
-  Store
+  Store,
+  select
 } from '@ngrx/store';
 import { combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -111,24 +112,22 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
   ): Observable<SearchFilterInterface> {
     const filterQuery = this.filterQueries[name];
     if (filterQuery.learningAreaDependent) {
-      return this.store
-        .select(
+      return this.store.pipe(
+        select(
           filterQuery.query as MemoizedSelectorWithProps<Object, any, any[]>,
           {
             learningAreaIds: searchState.filterCriteriaSelections.get(
               'learningArea'
             )
           }
-        )
-        .pipe(
-          map(entities => this.getFilter(entities, filterQuery, searchState))
-        );
+        ),
+        map(entities => this.getFilter(entities, filterQuery, searchState))
+      );
     } else {
-      return this.store
-        .select(filterQuery.query as MemoizedSelector<Object, any[]>)
-        .pipe(
-          map(entities => this.getFilter(entities, filterQuery, searchState))
-        );
+      return this.store.pipe(
+        select(filterQuery.query as MemoizedSelector<Object, any[]>),
+        map(entities => this.getFilter(entities, filterQuery, searchState))
+      );
     }
   }
 
@@ -196,7 +195,8 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
   public getNestedEduContentProductTypes(
     searchState: SearchStateInterface
   ): Observable<SearchFilterInterface> {
-    return this.store.select(EduContentProductTypeQueries.getAll).pipe(
+    return this.store.pipe(
+      select(EduContentProductTypeQueries.getAll),
       map(productTypes =>
         productTypes.reduce(this.productTypesToHierarchy, [])
       ),

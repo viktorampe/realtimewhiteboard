@@ -39,15 +39,20 @@ export * from './lib/+state/user';
 export * from './lib/+state/user-content';
 export * from './lib/+state/year';
 export * from './lib/alert';
+export * from './lib/boeke';
+export * from './lib/bundle';
+export * from './lib/content-request';
 export * from './lib/dal.module';
-export {
-  EduContentServiceInterface,
-  EDU_CONTENT_SERVICE_TOKEN
-} from './lib/edu-content/edu-content.service.interface';
+export * from './lib/edu-content';
+export * from './lib/exercise';
 export * from './lib/favorite';
 export * from './lib/history';
+export * from './lib/learning-area';
 export * from './lib/learning-plan';
 export * from './lib/metadata';
 export * from './lib/persons';
+export * from './lib/results';
+export * from './lib/student-content-status';
+export * from './lib/tasks';
 export * from './lib/toc';
 export * from './lib/undo';

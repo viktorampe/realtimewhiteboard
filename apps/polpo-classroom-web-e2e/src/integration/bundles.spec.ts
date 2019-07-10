@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 
 import { getContentDisplayData } from '../support/bundles.po';
-import { dataCy, login, performSetup } from '../support/commands';
+import { cyEnv, dataCy, login, performSetup } from '../support/commands';
 import {
   ApiPathsInterface,
   AppPathsInterface,
@@ -9,9 +9,9 @@ import {
 } from '../support/interfaces';
 
 describe('Bundles', () => {
-  const apiUrl = Cypress.env('apiUrl');
-  const appPaths = Cypress.env('appPaths') as AppPathsInterface;
-  const apiPaths = Cypress.env('apiPaths') as ApiPathsInterface;
+  const apiUrl = cyEnv('apiUrl');
+  const appPaths = cyEnv('appPaths') as AppPathsInterface;
+  const apiPaths = cyEnv('apiPaths') as ApiPathsInterface;
   let setup: StudentOpenBundleContentInterface;
   before(() => {
     performSetup('studentOpenBundleContent').then(res => {
@@ -34,11 +34,6 @@ describe('Bundles', () => {
         .contains('1 bundel')
         .contains('1 boek');
       dataCy('learningArea')
-        .should(
-          'have.attr',
-          'ng-reflect-router-link',
-          `${setup.studentOpenBundleContent.learningArea.id}`
-        )
         .contains(setup.studentOpenBundleContent.learningArea.name)
         .click()
         .location('pathname')

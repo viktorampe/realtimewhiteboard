@@ -27,7 +27,7 @@ import {
   ItemToggledInCollectionInterface,
   ManageCollectionItemInterface
 } from '@campus/ui';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { combineLatest, Observable } from 'rxjs';
 import { filter, map, shareReplay, switchMap, take } from 'rxjs/operators';
 import { EduContentCollectionManagerServiceInterface } from './edu-content-collection-manager.service.interface';
@@ -56,11 +56,13 @@ export class EduContentCollectionManagerService
     // prepare streams
     let bundles$: Observable<BundleInterface[]>;
     if (learningAreaId) {
-      bundles$ = this.store.select(BundleQueries.getForLearningAreaId, {
-        learningAreaId
-      });
+      bundles$ = this.store.pipe(
+        select(BundleQueries.getForLearningAreaId, {
+          learningAreaId
+        })
+      );
     } else {
-      bundles$ = this.store.select(BundleQueries.getAll);
+      bundles$ = this.store.pipe(select(BundleQueries.getAll));
     }
     const bundlesCollection$: Observable<
       ManageCollectionItemInterface[]
@@ -78,23 +80,20 @@ export class EduContentCollectionManagerService
       ),
       shareReplay(1)
     );
-    const linkedBundleIds$: Observable<number[]> = this.store
-      .select(UnlockedContentQueries.getByEduContentId, {
+    const linkedBundleIds$: Observable<number[]> = this.store.pipe(
+      select(UnlockedContentQueries.getByEduContentId, {
         eduContentId: content.id
-      })
-      .pipe(
-        map(
-          (unlockedContents: UnlockedContent[]): number[] =>
-            Array.from(
-              new Set(
-                unlockedContents.map(
-                  unlockedContent => unlockedContent.bundleId
-                )
-              )
+      }),
+      map(
+        (unlockedContents: UnlockedContent[]): number[] =>
+          Array.from(
+            new Set(
+              unlockedContents.map(unlockedContent => unlockedContent.bundleId)
             )
-        ),
-        shareReplay(1)
-      );
+          )
+      ),
+      shareReplay(1)
+    );
     const recentBundleIds$: Observable<number[]> = this.getRecentItemsStream(
       FavoriteTypesEnum.BUNDLE,
       'bundleId'
@@ -154,33 +153,31 @@ export class EduContentCollectionManagerService
       content.publishedEduContentMetadata.learningAreaId;
     const tasksCollection$: Observable<
       ManageCollectionItemInterface[]
-    > = this.store
-      .select(TaskQueries.getForLearningAreaId, { learningAreaId })
-      .pipe(
-        map(
-          (tasks: TaskInterface[]): ManageCollectionItemInterface[] => {
-            return tasks.map(
-              (task): ManageCollectionItemInterface => ({
-                id: task.id,
-                label: task.name,
-                icon: 'task'
-              })
-            );
-          }
-        ),
-        shareReplay(1)
-      );
-    const linkedTaskIds$: Observable<number[]> = this.store
-      .select(TaskEduContentQueries.getByEduContentId, {
+    > = this.store.pipe(
+      select(TaskQueries.getForLearningAreaId, { learningAreaId }),
+      map(
+        (tasks: TaskInterface[]): ManageCollectionItemInterface[] => {
+          return tasks.map(
+            (task): ManageCollectionItemInterface => ({
+              id: task.id,
+              label: task.name,
+              icon: 'task'
+            })
+          );
+        }
+      ),
+      shareReplay(1)
+    );
+    const linkedTaskIds$: Observable<number[]> = this.store.pipe(
+      select(TaskEduContentQueries.getByEduContentId, {
         eduContentId: content.id
-      })
-      .pipe(
-        map(
-          (taskEduContents: TaskEduContentInterface[]): number[] =>
-            taskEduContents.map(taskEduContent => taskEduContent.taskId)
-        ),
-        shareReplay(1)
-      );
+      }),
+      map(
+        (taskEduContents: TaskEduContentInterface[]): number[] =>
+          taskEduContents.map(taskEduContent => taskEduContent.taskId)
+      ),
+      shareReplay(1)
+    );
     const recentTaskIds$: Observable<number[]> = this.getRecentItemsStream(
       FavoriteTypesEnum.TASK,
       'taskId'
@@ -246,11 +243,11 @@ export class EduContentCollectionManagerService
     task: ManageCollectionItemInterface
   ): void {
     this.store
-      .select(TaskEduContentQueries.getByTaskAndEduContentId, {
-        taskId: task.id,
-        eduContentId: content.id
-      })
       .pipe(
+        select(TaskEduContentQueries.getByTaskAndEduContentId, {
+          taskId: task.id,
+          eduContentId: content.id
+        }),
         take(1),
         filter(val => !!val)
       )
@@ -268,11 +265,11 @@ export class EduContentCollectionManagerService
     bundle: ManageCollectionItemInterface
   ): void {
     this.store
-      .select(UnlockedContentQueries.getByBundleAndEduContentId, {
-        bundleId: bundle.id,
-        eduContentId: content.id
-      })
       .pipe(
+        select(UnlockedContentQueries.getByBundleAndEduContentId, {
+          bundleId: bundle.id,
+          eduContentId: content.id
+        }),
         take(1),
         filter(val => !!val)
       )
@@ -290,11 +287,11 @@ export class EduContentCollectionManagerService
     bundle: ManageCollectionItemInterface
   ): void {
     this.store
-      .select(UnlockedContentQueries.getByBundleAndUserContentId, {
-        bundleId: bundle.id,
-        userContentId: content.id
-      })
       .pipe(
+        select(UnlockedContentQueries.getByBundleAndUserContentId, {
+          bundleId: bundle.id,
+          userContentId: content.id
+        }),
         take(1),
         filter(val => !!val)
       )

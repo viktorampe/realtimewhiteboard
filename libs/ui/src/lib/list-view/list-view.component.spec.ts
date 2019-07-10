@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, DebugElement, NgModule } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { configureTestSuite } from 'ng-bullet';
 import { UiModule } from '../ui.module';
 import { ListFormat } from './enums/list-format.enum';
 import { ListViewItemInterface } from './interfaces/list-view-item';
@@ -52,12 +53,12 @@ describe('ListViewComponent', () => {
   let testContainerComponent: TestContainerComponent;
   let componentDE: DebugElement;
 
-  beforeEach(async(() => {
+  configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [TestModule],
       providers: [ListViewComponent, ListViewItemInterface]
     });
-  }));
+  });
 
   beforeEach(() => {
     // regular component
@@ -361,7 +362,7 @@ describe('ListItemDirective', () => {
   let compDE: DebugElement;
   let dir: ListViewItemDirective<any>;
 
-  beforeEach(() => {
+  configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [TestModuleForDirective],
       providers: [ListViewComponent, ListViewItemInterface]

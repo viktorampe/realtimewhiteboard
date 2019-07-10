@@ -1,20 +1,21 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconModule, MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { MockMatIconRegistry } from '@campus/testing';
+import { configureTestSuite } from 'ng-bullet';
 import { DropAreaComponent } from './drop-area.component';
 
 describe('DropAreaComponent', () => {
   let component: DropAreaComponent;
   let fixture: ComponentFixture<DropAreaComponent>;
 
-  beforeEach(async(() => {
+  configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [MatIconModule],
       declarations: [DropAreaComponent],
       providers: [{ provide: MatIconRegistry, useClass: MockMatIconRegistry }]
     });
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(DropAreaComponent);

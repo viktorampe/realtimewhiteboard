@@ -4,6 +4,7 @@ import { MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
+import { configureTestSuite } from 'ng-bullet';
 import { FilterTextInputComponent } from './filter-text-input.component';
 
 describe('FilterTextInputComponent', () => {
@@ -19,12 +20,12 @@ describe('FilterTextInputComponent', () => {
     text: 'foo'
   };
 
-  beforeEach(async(() => {
+  configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [FormsModule, ReactiveFormsModule, UiModule],
       providers: [{ provide: MatIconRegistry, useClass: MockMatIconRegistry }]
     });
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(FilterTextInputComponent);

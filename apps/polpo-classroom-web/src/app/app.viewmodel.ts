@@ -160,9 +160,10 @@ export class AppViewModel implements OnDestroy {
 
   private setFeedbackFlow() {
     // success feedback goes to the feedbackService -> snackbar
+    // success feedback goes to the feedbackService -> snackbar
     this.store
-      .select(EffectFeedbackQueries.getNextSuccess)
       .pipe(
+        select(EffectFeedbackQueries.getNextSuccess),
         map(feedback => this.feedbackService.openSnackbar(feedback)),
         filter(snackbar => !!snackbar),
         switchMap(snackbarInfo =>
@@ -176,9 +177,10 @@ export class AppViewModel implements OnDestroy {
       .subscribe(evt => this.onFeedbackDismiss(evt));
 
     // error feedback goes into a stream -> bannerComponent
-    this.bannerFeedback$ = this.store
-      .select(EffectFeedbackQueries.getNextError)
-      .pipe(map(this.feedbackService.addDefaultCancelButton));
+    this.bannerFeedback$ = this.store.pipe(
+      select(EffectFeedbackQueries.getNextError),
+      map(this.feedbackService.addDefaultCancelButton)
+    );
   }
 
   private getCurrentUser(): Observable<PersonInterface> {
