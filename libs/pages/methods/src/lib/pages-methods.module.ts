@@ -1,14 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { PagesEduContentsRoutingModule } from './pages-pages-routing.module';
 
 @NgModule({
-  imports: [
-    CommonModule,
-
-    RouterModule.forChild([
-      /* {path: '', pathMatch: 'full', component: InsertYourComponentHere} */
-    ])
-  ]
+  imports: [CommonModule, PagesEduContentsRoutingModule]
 })
 export class PagesMethodsModule {}
