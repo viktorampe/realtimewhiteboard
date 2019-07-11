@@ -38,7 +38,6 @@ steps:
       echo Build information
       echo -----------------
       echo Build.Reason = $(Build.Reason)
-      echo Build.SourceVersionMessage	= $(Build.SourceVersionMessage)
       echo Build.SourceBranch	= $(Build.SourceBranch)
       echo System.PullRequest.TargetBranch = $(System.PullRequest.TargetBranch)
       echo Build.SourcesDirectory = $(Build.SourcesDirectory)
@@ -69,7 +68,7 @@ steps:
   - script: |
       npm run lint
     displayName: 'Lint all'
-    condition: eq(variables['dkLintAll'], 'true')
+    condition: and(succeeded(), eq(variables['dkLintAll'], 'true'))
   - script: |
       npm run format:check
     displayName: 'Format check'
@@ -112,28 +111,28 @@ steps:
   - script: |
       npm run build:polpo:staging
     displayName: '[Build] polpo:staging'
-    condition: eq(variables['dkBuild'], 'true')
+    condition: and(succeeded(), eq(variables['dkBuild'], 'true'))
   - script: |
       npm run build:polpo:production
     displayName: '[Build] polpo:production'
-    condition: eq(variables['dkBuild'], 'true')
+    condition: and(succeeded(), eq(variables['dkBuild'], 'true'))
   - script: |
       npm run build:kabas:staging
     displayName: '[Build] kabas:staging'
-    condition: eq(variables['dkBuild'], 'true')
+    condition: and(succeeded(), eq(variables['dkBuild'], 'true'))
   - script: |
       npm run build:kabas:production
     displayName: '[Build] kabas:production'
-    condition: eq(variables['dkBuild'], 'true')
+    condition: and(succeeded(), eq(variables['dkBuild'], 'true'))
+  - task: DeleteFiles@1
+    displayName: 'Remove e2e screenshots and videos from dist before copying'
+    inputs:
+      contents: 'dist/out-tsc'
   - task: CopyFiles@2
     displayName: 'Copy builds to artifacts'
-    condition: eq(variables['dkBuild'], 'true')
+    condition: and(succeeded(), eq(variables['dkBuild'], 'true'))
     inputs:
-      contents: |
-        'dist/kabas-web-staging'
-        'dist/kabas-web-production'
-        'dist/polpo-web-staging'
-        'dist/polpo-web-production'
+      contents: 'dist/**'
       targetFolder: $(Build.ArtifactStagingDirectory)
   - task: PublishBuildArtifacts@1
-    condition: eq(variables['dkBuild'], 'true')
+    condition: and(succeeded(), eq(variables['dkBuild'], 'true'))
