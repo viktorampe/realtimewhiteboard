@@ -15,15 +15,15 @@ const routes: Routes = [
     data: { breadcrumbText: 'Methodes' },
     children: [
       {
-        path: ':method',
+        path: ':toc',
         component: MethodComponent
       },
       {
-        path: ':method/:chapter',
+        path: ':toc/:chapter',
         component: MethodChapterComponent
       },
       {
-        path: ':method/:chapter/:lesson',
+        path: ':toc/:chapter/:lesson',
         component: MethodChapterLessonComponent
       }
     ]
