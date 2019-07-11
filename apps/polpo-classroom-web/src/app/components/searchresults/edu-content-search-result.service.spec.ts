@@ -23,6 +23,7 @@ import {
 } from '@campus/shared';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
+import { configureTestSuite } from 'ng-bullet';
 import { BehaviorSubject } from 'rxjs';
 import { EduContentSearchResultItemService } from './edu-content-search-result.service';
 import { EduContentSearchResultItemServiceInterface } from './edu-content-search-result.service.interface';
@@ -36,7 +37,7 @@ describe('EduContentSearchResultItemService', () => {
   let store: Store<DalState>;
   const permission$ = new BehaviorSubject<boolean>(true);
 
-  beforeEach(() => {
+  configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [
         StoreModule.forRoot({}),
@@ -108,7 +109,7 @@ describe('EduContentSearchResultItemService', () => {
 
   describe('toggleFavorite', () => {
     it('should dispatch a ToggleFavorite action', () => {
-      store.dispatch = jest.fn();
+      jest.spyOn(store, 'dispatch');
       const favorite = new FavoriteFixture();
 
       eduContentSearchResultItemService.toggleFavorite(favorite);
@@ -182,7 +183,8 @@ describe('EduContentSearchResultItemService', () => {
 
   describe('upsertEduContentToStore', () => {
     it('should dispatch a UpsertEduContent action', () => {
-      store.dispatch = jest.fn();
+      jest.spyOn(store, 'dispatch');
+
       const eduContent: EduContentInterface = new EduContentFixture();
 
       eduContentSearchResultItemService.upsertEduContentToStore(eduContent);

@@ -9,6 +9,7 @@ import {
   RoleFixture,
   RoleInterface
 } from '@campus/dal';
+import { configureTestSuite } from 'ng-bullet';
 import { NavItemService } from './nav-item-service';
 
 describe('NavItemServiceService', () => {
@@ -21,7 +22,7 @@ describe('NavItemServiceService', () => {
     teacherRole = new RoleFixture({ name: 'teacher' });
   });
 
-  beforeEach(() => {
+  configureTestSuite(() => {
     TestBed.configureTestingModule({
       providers: [NavItemService]
     });
