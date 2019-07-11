@@ -5,6 +5,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { WINDOW } from '@campus/browser';
 import { UiModule } from '@campus/ui';
+import { configureTestSuite } from 'ng-bullet';
 import { AppComponent } from './app.component';
 import { AppViewModel } from './app.viewmodel';
 import { FavIconService, FAVICON_SERVICE_TOKEN } from './services/favicons';
@@ -16,7 +17,7 @@ import { FavIconService, FAVICON_SERVICE_TOKEN } from './services/favicons';
 class CampusHeaderTestComponent {}
 
 describe('AppComponent', () => {
-  beforeEach(async(() => {
+  configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [UiModule, RouterTestingModule, NoopAnimationsModule],
       declarations: [AppComponent, CampusHeaderTestComponent],
@@ -43,7 +44,7 @@ describe('AppComponent', () => {
         }
       ]
     });
-  }));
+  });
 
   it('should create the app', async(() => {
     const fixture = TestBed.createComponent(AppComponent);

@@ -24,6 +24,7 @@ import {
 } from '@campus/search';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
+import { configureTestSuite } from 'ng-bullet';
 import { of } from 'rxjs';
 import {
   EDU_NETS_FILTER_PROPS,
@@ -70,8 +71,10 @@ const mockSpecialities: SpecialtyInterface[] = [
 
 describe('LearningPlanFilterFactory', () => {
   let store;
+  let learningPlanFilterFactory: LearningPlanFilterFactory;
+
   let learningPlanService;
-  beforeEach(() => {
+  configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [
         StoreModule.forRoot({}),
@@ -83,6 +86,7 @@ describe('LearningPlanFilterFactory', () => {
       ],
       providers: [
         Store,
+        LearningPlanFilterFactory,
         {
           provide: LEARNING_PLAN_SERVICE_TOKEN,
           useValue: {
@@ -94,38 +98,22 @@ describe('LearningPlanFilterFactory', () => {
     });
 
     store = TestBed.get(Store);
+
+    learningPlanFilterFactory = TestBed.get(LearningPlanFilterFactory);
     learningPlanService = TestBed.get(LEARNING_PLAN_SERVICE_TOKEN);
   });
 
+  beforeEach(() => {
+    loadInStore();
+  });
+
   it('should be created', () => {
-    const factory: LearningPlanFilterFactory = TestBed.get(
-      LearningPlanFilterFactory
-    );
-    expect(factory).toBeTruthy();
+    expect(learningPlanFilterFactory).toBeTruthy();
   });
 
   describe('getFilters', () => {
-    let learningPlanFilterFactory;
     let searchFilterCriterias;
     beforeEach(() => {
-      store.dispatch(
-        new LearningAreaActions.LearningAreasLoaded({
-          learningAreas: mockLearningAreas
-        })
-      );
-      store.dispatch(
-        new EduNetActions.EduNetsLoaded({
-          eduNets: mockEduNets
-        })
-      );
-      store.dispatch(
-        new SchoolTypeActions.SchoolTypesLoaded({
-          schoolTypes: mockSchoolTypes
-        })
-      );
-
-      learningPlanFilterFactory = TestBed.get(LearningPlanFilterFactory);
-
       searchFilterCriterias = [
         {
           ...LEARNING_AREA_FILTER_PROPS,
@@ -293,31 +281,35 @@ describe('LearningPlanFilterFactory', () => {
 
   describe('getPredictionFilterNames', () => {
     it('should return the filternames', () => {
-      const factory: LearningPlanFilterFactory = TestBed.get(
-        LearningPlanFilterFactory
-      );
-
       // learningarea present
       const mockSearchState = {
         filterCriteriaSelections: new Map([['learningArea', [1]]]),
         searchTerm: ''
       } as SearchStateInterface;
-      let result = factory.getPredictionFilterNames(mockSearchState);
+      let result = learningPlanFilterFactory.getPredictionFilterNames(
+        mockSearchState
+      );
       expect(result).toEqual(['eduNets']);
 
       // learningArea, eduNets present
       mockSearchState.filterCriteriaSelections.set('eduNets', [1]);
-      result = factory.getPredictionFilterNames(mockSearchState);
+      result = learningPlanFilterFactory.getPredictionFilterNames(
+        mockSearchState
+      );
       expect(result).toEqual(['eduNets', 'schoolTypes']);
 
       // learningArea, eduNets, schoolTypes present
       mockSearchState.filterCriteriaSelections.set('schoolTypes', [1]);
-      result = factory.getPredictionFilterNames(mockSearchState);
+      result = learningPlanFilterFactory.getPredictionFilterNames(
+        mockSearchState
+      );
       expect(result).toEqual(['eduNets', 'schoolTypes', 'years']);
 
       // learningArea, eduNets, schoolTypes, years present
       mockSearchState.filterCriteriaSelections.set('years', [1]);
-      result = factory.getPredictionFilterNames(mockSearchState);
+      result = learningPlanFilterFactory.getPredictionFilterNames(
+        mockSearchState
+      );
       expect(result).toEqual([
         'eduNets',
         'schoolTypes',
@@ -330,7 +322,9 @@ describe('LearningPlanFilterFactory', () => {
         'learningPlans.assignments.specialty',
         [1]
       );
-      result = factory.getPredictionFilterNames(mockSearchState);
+      result = learningPlanFilterFactory.getPredictionFilterNames(
+        mockSearchState
+      );
       expect(result).toEqual([
         'eduNets',
         'schoolTypes',
@@ -339,4 +333,22 @@ describe('LearningPlanFilterFactory', () => {
       ]);
     });
   });
+
+  function loadInStore() {
+    store.dispatch(
+      new LearningAreaActions.LearningAreasLoaded({
+        learningAreas: mockLearningAreas
+      })
+    );
+    store.dispatch(
+      new EduNetActions.EduNetsLoaded({
+        eduNets: mockEduNets
+      })
+    );
+    store.dispatch(
+      new SchoolTypeActions.SchoolTypesLoaded({
+        schoolTypes: mockSchoolTypes
+      })
+    );
+  }
 });

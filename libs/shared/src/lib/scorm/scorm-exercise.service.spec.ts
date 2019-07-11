@@ -21,7 +21,6 @@ describe('ScormExerciseService', () => {
   const closeWindow = jest.fn();
   let store: Store<CurrentExerciseReducer.State>;
   let usedState;
-  const spyStore = jest.spyOn(Store.prototype, 'dispatch');
 
   beforeAll(() => {
     usedState = {
@@ -64,9 +63,7 @@ describe('ScormExerciseService', () => {
     scormApiService = TestBed.get(ScormApiService);
 
     store = TestBed.get(Store);
-    spyStore.mockClear();
-    closeWindow.mockClear();
-    openWindow.mockClear();
+    jest.spyOn(store, 'dispatch');
   });
 
   it('should be created', () => {
@@ -77,7 +74,7 @@ describe('ScormExerciseService', () => {
 
   it('should start a preview from unlockedcontent with answers', () => {
     scormExerciseService.previewExerciseFromUnlockedContent(1, 2, 3, true);
-    expect(spyStore).toHaveBeenCalledWith(
+    expect(store.dispatch).toHaveBeenCalledWith(
       new CurrentExerciseActions.LoadExercise({
         userId: 1,
         educontentId: 2,
@@ -91,7 +88,7 @@ describe('ScormExerciseService', () => {
 
   it('should start a preview from task with answers', () => {
     scormExerciseService.previewExerciseFromTask(1, 2, 3, true);
-    expect(spyStore).toHaveBeenCalledWith(
+    expect(store.dispatch).toHaveBeenCalledWith(
       new CurrentExerciseActions.LoadExercise({
         userId: 1,
         educontentId: 2,
@@ -105,7 +102,7 @@ describe('ScormExerciseService', () => {
 
   it('should start a preview from unlockedcontent without answers', () => {
     scormExerciseService.previewExerciseFromUnlockedContent(1, 2, 3, false);
-    expect(spyStore).toHaveBeenCalledWith(
+    expect(store.dispatch).toHaveBeenCalledWith(
       new CurrentExerciseActions.LoadExercise({
         userId: 1,
         educontentId: 2,
@@ -119,7 +116,7 @@ describe('ScormExerciseService', () => {
 
   it('should start an preview task without answers ', () => {
     scormExerciseService.previewExerciseFromTask(1, 2, 3, false);
-    expect(spyStore).toHaveBeenCalledWith(
+    expect(store.dispatch).toHaveBeenCalledWith(
       new CurrentExerciseActions.LoadExercise({
         userId: 1,
         educontentId: 2,
@@ -141,7 +138,7 @@ describe('ScormExerciseService', () => {
       unlockedContentId: null
     });
     scormExerciseService.reviewExerciseFromResult(res);
-    expect(spyStore).toHaveBeenCalledWith(
+    expect(store.dispatch).toHaveBeenCalledWith(
       new CurrentExerciseActions.LoadExercise({
         userId: 1,
         educontentId: 2,
@@ -156,7 +153,7 @@ describe('ScormExerciseService', () => {
 
   it('should start a exercise as task', () => {
     scormExerciseService.startExerciseFromTask(1, 2, 3);
-    expect(spyStore).toHaveBeenCalledWith(
+    expect(store.dispatch).toHaveBeenCalledWith(
       new CurrentExerciseActions.LoadExercise({
         userId: 1,
         educontentId: 2,
@@ -170,7 +167,7 @@ describe('ScormExerciseService', () => {
 
   it('should start a exercise', () => {
     scormExerciseService.startExerciseFromUnlockedContent(1, 2, 3);
-    expect(spyStore).toHaveBeenCalledWith(
+    expect(store.dispatch).toHaveBeenCalledWith(
       new CurrentExerciseActions.LoadExercise({
         userId: 1,
         educontentId: 2,
@@ -184,7 +181,7 @@ describe('ScormExerciseService', () => {
 
   it('should close the window and dispatch clear', fakeAsync(() => {
     scormExerciseService.closeExercise();
-    expect(spyStore).toHaveBeenCalled();
+    expect(store.dispatch).toHaveBeenCalled();
   }));
 
   it('should get the current URL', () => {

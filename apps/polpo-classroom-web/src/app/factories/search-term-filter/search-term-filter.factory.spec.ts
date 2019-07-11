@@ -30,10 +30,12 @@ import {
 } from '@campus/search';
 import { Store, StoreModule } from '@ngrx/store';
 import { cold } from 'jasmine-marbles';
+import { configureTestSuite } from 'ng-bullet';
 import { SearchTermFilterFactory } from './search-term-filter.factory';
 
 describe('SearchTermFilterFactory', () => {
   let store: Store<DalState>;
+  let factory: SearchTermFilterFactory;
 
   const mockYears = [new YearFixture({ id: 3 }), new YearFixture({ id: 4 })];
   const currentLearningAreaId = 2;
@@ -74,7 +76,7 @@ describe('SearchTermFilterFactory', () => {
     new EduContentProductTypeFixture({ id: 14, parent: 13 })
   ];
 
-  beforeEach(() => {
+  configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [
         StoreModule.forRoot({}),
@@ -88,72 +90,29 @@ describe('SearchTermFilterFactory', () => {
           LearningAreaReducer
         ])
       ],
-      providers: [Store]
+      providers: [Store, SearchTermFilterFactory]
     });
 
     store = TestBed.get(Store);
+
+    factory = TestBed.get(SearchTermFilterFactory);
+  });
+
+  beforeEach(() => {
+    loadInStore();
   });
 
   it('should be created', () => {
-    const factory: SearchTermFilterFactory = TestBed.get(
-      SearchTermFilterFactory
-    );
     expect(factory).toBeTruthy();
   });
 
   describe('getFilters', () => {
-    let factory: SearchTermFilterFactory;
-
     const mockSearchState: SearchStateInterface = {
       searchTerm: '',
       filterCriteriaSelections: new Map<string, (number | string)[]>([
         ['learningArea', [2]]
       ])
     };
-
-    function loadInStore() {
-      store.dispatch(
-        new YearActions.YearsLoaded({
-          years: mockYears
-        })
-      );
-
-      store.dispatch(
-        new EduNetActions.EduNetsLoaded({
-          eduNets: mockEduNets
-        })
-      );
-
-      store.dispatch(
-        new SchoolTypeActions.SchoolTypesLoaded({
-          schoolTypes: mockSchoolTypes
-        })
-      );
-
-      store.dispatch(
-        new MethodActions.MethodsLoaded({
-          methods: mockMethods
-        })
-      );
-
-      store.dispatch(
-        new EduContentProductTypeActions.EduContentProductTypesLoaded({
-          eduContentProductTypes: mockEduContentProductTypes
-        })
-      );
-
-      store.dispatch(
-        new LearningDomainActions.LearningDomainsLoaded({
-          learningDomains: mockLearningDomains
-        })
-      );
-    }
-
-    beforeEach(() => {
-      factory = TestBed.get(SearchTermFilterFactory);
-
-      loadInStore();
-    });
 
     it('should return the right filters, in the correct order', () => {
       const result = factory.getFilters(mockSearchState);
@@ -188,10 +147,6 @@ describe('SearchTermFilterFactory', () => {
 
   describe('getPredictionFilterNames', () => {
     it('should return the correct filter names', () => {
-      const factory: SearchTermFilterFactory = TestBed.get(
-        SearchTermFilterFactory
-      );
-
       // this specific factory doesn't need the searchState for this
       const result = factory.getPredictionFilterNames();
 
@@ -326,6 +281,44 @@ describe('SearchTermFilterFactory', () => {
       extendedProductTypes,
       CheckboxListFilterComponent,
       5
+    );
+  }
+
+  function loadInStore() {
+    store.dispatch(
+      new YearActions.YearsLoaded({
+        years: mockYears
+      })
+    );
+
+    store.dispatch(
+      new EduNetActions.EduNetsLoaded({
+        eduNets: mockEduNets
+      })
+    );
+
+    store.dispatch(
+      new SchoolTypeActions.SchoolTypesLoaded({
+        schoolTypes: mockSchoolTypes
+      })
+    );
+
+    store.dispatch(
+      new MethodActions.MethodsLoaded({
+        methods: mockMethods
+      })
+    );
+
+    store.dispatch(
+      new EduContentProductTypeActions.EduContentProductTypesLoaded({
+        eduContentProductTypes: mockEduContentProductTypes
+      })
+    );
+
+    store.dispatch(
+      new LearningDomainActions.LearningDomainsLoaded({
+        learningDomains: mockLearningDomains
+      })
     );
   }
 });

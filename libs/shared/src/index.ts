@@ -17,6 +17,7 @@ export {
   FeedBackServiceInterface,
   FEEDBACK_SERVICE_TOKEN
 } from './lib/feedback/';
+export { FeedBackService } from './lib/feedback/feedback.service';
 export { SNACKBAR_DEFAULT_CONFIG_TOKEN } from './lib/feedback/snackbar.config';
 export * from './lib/fixtures';
 export * from './lib/interceptors';

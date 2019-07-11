@@ -1,5 +1,5 @@
 import { SimpleChange } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconModule, MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
@@ -16,6 +16,7 @@ import {
 import { EduContentSearchResultInterface } from '@campus/shared';
 import { MockDate, MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
+import { configureTestSuite } from 'ng-bullet';
 import { BehaviorSubject } from 'rxjs';
 import { EduContentSearchResultComponent } from './edu-content-search-result.component';
 import {
@@ -37,7 +38,7 @@ describe('EduContentSearchResultComponent', () => {
     dateMock.returnRealDate();
   });
 
-  beforeEach(async(() => {
+  configureTestSuite(() => {
     TestBed.configureTestingModule({
       declarations: [EduContentSearchResultComponent],
       imports: [MatIconModule, UiModule, NoopAnimationsModule],
@@ -62,7 +63,7 @@ describe('EduContentSearchResultComponent', () => {
     eduContentSearchResultItemService = TestBed.get(
       EDUCONTENT_SEARCH_RESULT_ITEM_SERVICE_TOKEN
     );
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(EduContentSearchResultComponent);
