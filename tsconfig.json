@@ -49,7 +49,8 @@
       "@campus/pages/settings/alerts": [
         "libs/pages/settings/alerts/src/index.ts"
       ],
-      "@campus/search": ["libs/search/src/index.ts"]
+      "@campus/search": ["libs/search/src/index.ts"],
+      "@campus/pages/methods": ["libs/pages/methods/src/index.ts"]
     },
     "module": "es2015"
   },

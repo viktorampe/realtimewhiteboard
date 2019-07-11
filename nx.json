@@ -91,6 +91,9 @@
     },
     "kabas-web-e2e": {
       "tags": []
+    },
+    "pages-methods": {
+      "tags": []
     }
   }
 }
