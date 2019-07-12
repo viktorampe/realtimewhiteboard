@@ -50,7 +50,8 @@
         "libs/pages/settings/alerts/src/index.ts"
       ],
       "@campus/search": ["libs/search/src/index.ts"],
-      "@campus/pages/methods": ["libs/pages/methods/src/index.ts"]
+      "@campus/pages/methods": ["libs/pages/methods/src/index.ts"],
+      "@campus/pages/global-search": ["libs/pages/global-search/src/index.ts"]
     },
     "module": "es2015"
   },
