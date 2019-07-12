@@ -11,22 +11,25 @@ const routes: Routes = [
     path: '',
     resolve: { isResolved: MethodsResolver },
     runGuardsAndResolvers: 'always',
-    component: MethodsOverviewComponent,
-    data: { breadcrumbText: 'Methodes' },
-    children: [
-      {
-        path: ':toc',
-        component: MethodComponent
-      },
-      {
-        path: ':toc/:chapter',
-        component: MethodChapterComponent
-      },
-      {
-        path: ':toc/:chapter/:lesson',
-        component: MethodChapterLessonComponent
-      }
-    ]
+    component: MethodsOverviewComponent
+  },
+  {
+    path: ':toc',
+    resolve: { isResolved: MethodsResolver },
+    runGuardsAndResolvers: 'always',
+    component: MethodComponent
+  },
+  {
+    path: ':toc/:chapter',
+    resolve: { isResolved: MethodsResolver },
+    runGuardsAndResolvers: 'always',
+    component: MethodChapterComponent
+  },
+  {
+    path: ':toc/:chapter/:lesson',
+    resolve: { isResolved: MethodsResolver },
+    runGuardsAndResolvers: 'always',
+    component: MethodChapterLessonComponent
   }
 ];
 
