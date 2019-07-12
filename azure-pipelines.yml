@@ -74,11 +74,13 @@ steps:
     displayName: 'Format check'
   - script: npm run test
     displayName: 'Test all'
-  - script: |
-      npm run e2e:polpo:staging
-    displayName: 'End-to-end all polpo'
-  # Kabas e2e is disabled until it's used, since the Kabas build is broken right now
-  # Enable it again when the time comes to use it, below:
+  # *** Polpo e2e is disabled until IT splits our VMs so the ports don't collide when multiple
+  # *** builds are running at the same time
+  #- script: |
+  #    npm run e2e:polpo:staging
+  #  displayName: 'End-to-end all polpo'
+  # *** Kabas e2e is disabled until it's used, since the Kabas build is broken right now
+  # *** Enable it again when the time comes to use it, below:
   #- script: |
   #    npm run e2e:kabas:staging
   #  displayName: 'End-to-end all kabas'
