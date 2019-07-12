@@ -8,6 +8,10 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   {
+    path: 'methods',
+    loadChildren: '@campus/pages/methods#PagesMethodsModule'
+  },
+  {
     path: 'error',
     loadChildren: '@campus/pages/error#PagesErrorModule',
     data: {
