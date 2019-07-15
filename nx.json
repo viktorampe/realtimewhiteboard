@@ -94,6 +94,9 @@
     },
     "pages-methods": {
       "tags": []
+    },
+    "pages-global-search": {
+      "tags": []
     }
   }
 }
