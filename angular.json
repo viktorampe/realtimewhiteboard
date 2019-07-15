@@ -926,6 +926,32 @@
           }
         }
       }
+    },
+    "pages-methods": {
+      "root": "libs/pages/methods",
+      "sourceRoot": "libs/pages/methods/src",
+      "projectType": "library",
+      "prefix": "campus",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/pages/methods/tsconfig.lib.json",
+              "libs/pages/methods/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/builders:jest",
+          "options": {
+            "jestConfig": "libs/pages/methods/jest.config.js",
+            "tsConfig": "libs/pages/methods/tsconfig.spec.json",
+            "setupFile": "libs/pages/methods/src/test-setup.ts"
+          }
+        }
+      }
     }
   },
   "cli": {

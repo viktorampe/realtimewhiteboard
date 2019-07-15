@@ -13,7 +13,7 @@ export class AppViewModel implements OnDestroy {
   //props
   public navItems: NavItem[] = [
     { title: 'Home', link: 'error/400' },
-    { title: 'Methodes', link: 'error/401' },
+    { title: 'Methodes', link: 'methods' },
     { title: 'Taken', link: 'error/402' },
     { title: 'Resultaten', link: 'error/403' },
     { title: 'Vrij oefenen', link: 'error/404' },
