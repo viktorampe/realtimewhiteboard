@@ -9,6 +9,9 @@
       (navItemChanged)="onNavItemChanged($event)"
     ></campus-tree-nav
   ></campus-shell-left>
-  <campus-shell-top><campus-header></campus-header> </campus-shell-top>
+  <campus-shell-top
+    ><campus-header></campus-header
+    ><button [routerLink]="['search']">go to search</button>
+  </campus-shell-top>
   <campus-shell-body> <router-outlet></router-outlet> </campus-shell-body>
 </campus-shell>

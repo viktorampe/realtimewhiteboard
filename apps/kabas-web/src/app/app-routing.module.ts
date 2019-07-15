@@ -12,6 +12,10 @@ const routes: Routes = [
     loadChildren: '@campus/pages/methods#PagesMethodsModule'
   },
   {
+    path: 'search',
+    loadChildren: '@campus/pages/global-search#PagesGlobalSearchModule'
+  },
+  {
     path: 'error',
     loadChildren: '@campus/pages/error#PagesErrorModule',
     data: {
