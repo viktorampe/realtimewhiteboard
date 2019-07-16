@@ -926,6 +926,63 @@
           }
         }
       }
+    },
+    "pages-methods": {
+      "root": "libs/pages/methods",
+      "sourceRoot": "libs/pages/methods/src",
+      "projectType": "library",
+      "prefix": "campus",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/pages/methods/tsconfig.lib.json",
+              "libs/pages/methods/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/builders:jest",
+          "options": {
+            "jestConfig": "libs/pages/methods/jest.config.js",
+            "tsConfig": "libs/pages/methods/tsconfig.spec.json",
+            "setupFile": "libs/pages/methods/src/test-setup.ts"
+          }
+        }
+      }
+    },
+    "pages-global-search": {
+      "root": "libs/pages/global-search",
+      "sourceRoot": "libs/pages/global-search/src",
+      "projectType": "library",
+      "prefix": "campus",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/pages/global-search/tsconfig.lib.json",
+              "libs/pages/global-search/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/builders:jest",
+          "options": {
+            "jestConfig": "libs/pages/global-search/jest.config.js",
+            "tsConfig": "libs/pages/global-search/tsconfig.spec.json",
+            "setupFile": "libs/pages/global-search/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/schematics:component": {
+          "styleext": "scss"
+        }
+      }
     }
   },
   "cli": {

@@ -10,6 +10,8 @@
     "../../libs/pages/error/src/index.ts",
     "../../libs/shared/src/index.ts",
     "../../libs/ui/src/index.ts",
-    "../../libs/dal/src/index.ts"
+    "../../libs/dal/src/index.ts",
+    "../../libs/pages/methods/src/index.ts",
+    "../../libs/pages/global-search/src/index.ts"
   ]
 }
