@@ -53,14 +53,9 @@ steps:
     displayName: 'Install Node.js'
     inputs:
       versionSpec: '10.x'
-  - task: DeleteFiles@1
+  - script: |
+      rm -rf dist junit coverage reportgenerator
     displayName: 'Clear junit, coverage reports, build output'
-    inputs:
-      contents: |
-        'junit'
-        'coverage'
-        'reportgenerator'
-        'dist'
   - task: Npm@1
     displayName: 'Npm install'
     inputs:
@@ -126,10 +121,9 @@ steps:
       npm run build:kabas:production
     displayName: '[Build] kabas:production'
     condition: and(succeeded(), eq(variables['dkBuild'], 'true'))
-  - task: DeleteFiles@1
+  - script: |
+      rm -rf dist/out-tsc
     displayName: 'Remove e2e screenshots and videos from dist before copying'
-    inputs:
-      contents: 'dist/out-tsc'
   - task: CopyFiles@2
     displayName: 'Copy builds to artifacts'
     condition: and(succeeded(), eq(variables['dkBuild'], 'true'))
