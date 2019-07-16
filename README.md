@@ -1,4 +1,5 @@
 # Campus
+[![Build Status](https://dev.azure.com/diekeure-webdev/LK2020/_apis/build/status/diekeure.campus?branchName=develop)](https://dev.azure.com/diekeure-webdev/LK2020/_build/latest?definitionId=2&branchName=develop)
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) using [Nrwl Nx](https://nrwl.io/nx).
 
