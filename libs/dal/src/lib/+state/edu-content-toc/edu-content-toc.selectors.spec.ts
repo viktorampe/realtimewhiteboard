@@ -1,5 +1,6 @@
 import { EduContentTocQueries } from '.';
 import { EduContentTOCInterface } from '../../+models';
+import { EduContentTOCFixture } from './../../+fixtures/EduContentTOC.fixture';
 import { State } from './edu-content-toc.reducer';
 
 describe('EduContentToc Selectors', () => {
@@ -49,6 +50,7 @@ describe('EduContentToc Selectors', () => {
       );
       storeState = { eduContentTocs: eduContentTocState };
     });
+
     it('getError() should return the error', () => {
       const results = EduContentTocQueries.getError(storeState);
       expect(results).toBe(eduContentTocState.error);
@@ -107,6 +109,29 @@ describe('EduContentToc Selectors', () => {
           bookId: 1
         });
         expect(results).toBe(true);
+      });
+    });
+
+    describe('getTocsForBook', () => {
+      let mockTOCs: EduContentTOCInterface[];
+
+      beforeEach(() => {
+        mockTOCs = [
+          new EduContentTOCFixture({ id: 4, treeId: 1 }),
+          new EduContentTOCFixture({ id: 1, treeId: 1 }),
+          new EduContentTOCFixture({ id: 2, treeId: 2 }),
+          new EduContentTOCFixture({ id: 3, treeId: 2 })
+        ];
+
+        eduContentTocState = createState(mockTOCs, [1], 'no error');
+        storeState = { eduContentTocs: eduContentTocState };
+      });
+
+      it('should return the correct tocs', () => {
+        const results = EduContentTocQueries.getTocsForBook(storeState, {
+          bookId: 1
+        });
+        expect(results).toEqual([mockTOCs[0], mockTOCs[1]]);
       });
     });
   });

@@ -66,3 +66,15 @@ export const isBookLoaded = createSelector(
   (state: State, props: { bookId: number }) =>
     state.loadedBooks.some(loadedBookId => loadedBookId === props.bookId)
 );
+
+export const getTocsForBook = createSelector(
+  selectEduContentTocState,
+  (state: State, props: { bookId: number }) =>
+    (state.ids as number[]).reduce((acc, currentTocId) => {
+      const currentToc = state.entities[currentTocId];
+      if (currentToc.treeId === props.bookId) {
+        acc.push(currentToc);
+      }
+      return acc;
+    }, [])
+);
