@@ -9,7 +9,6 @@ export const NAME = 'eduContentTocs';
 
 export interface State extends EntityState<EduContentTOCInterface> {
   // additional entities state properties
-  loaded: boolean;
   error?: any;
   loadedBooks: number[];
 }
@@ -20,7 +19,6 @@ export const adapter: EntityAdapter<
 
 export const initialState: State = adapter.getInitialState({
   // additional entity state properties
-  loaded: false,
   loadedBooks: []
 });
 
@@ -72,8 +70,7 @@ export function reducer(
       return {
         ...state,
         loadedBooks: [],
-        error: action.payload,
-        loaded: false
+        error: action.payload
       };
     }
 

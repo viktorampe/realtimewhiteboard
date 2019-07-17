@@ -15,16 +15,20 @@ export const getError = createSelector(
   (state: State) => state.error
 );
 
-export const getLoaded = createSelector(
+export const getAll = createSelector(
   selectEduContentTocState,
-  (state: State) => state.loaded
+  selectAll
 );
 
-export const getAll = createSelector(selectEduContentTocState, selectAll);
+export const getCount = createSelector(
+  selectEduContentTocState,
+  selectTotal
+);
 
-export const getCount = createSelector(selectEduContentTocState, selectTotal);
-
-export const getIds = createSelector(selectEduContentTocState, selectIds);
+export const getIds = createSelector(
+  selectEduContentTocState,
+  selectIds
+);
 
 export const getAllEntities = createSelector(
   selectEduContentTocState,
@@ -44,7 +48,6 @@ export const getByIds = createSelector(
     return props.ids.map(id => state.entities[id]);
   }
 );
-
 
 /**
  * returns array of objects in the order of the given ids

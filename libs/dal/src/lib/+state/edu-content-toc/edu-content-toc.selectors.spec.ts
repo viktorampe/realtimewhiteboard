@@ -12,7 +12,6 @@ describe('EduContentToc Selectors', () => {
   function createState(
     eduContentTocs: EduContentTOCInterface[],
     loadedBooks: number[],
-    loaded: boolean = false,
     error?: any
   ): State {
     return {
@@ -29,7 +28,6 @@ describe('EduContentToc Selectors', () => {
           )
         : {},
       loadedBooks,
-      loaded: loaded,
       error: error
     };
   }
@@ -47,7 +45,6 @@ describe('EduContentToc Selectors', () => {
           createEduContentToc(3)
         ],
         [1],
-        true,
         'no error'
       );
       storeState = { eduContentTocs: eduContentTocState };
@@ -55,10 +52,6 @@ describe('EduContentToc Selectors', () => {
     it('getError() should return the error', () => {
       const results = EduContentTocQueries.getError(storeState);
       expect(results).toBe(eduContentTocState.error);
-    });
-    it('getLoaded() should return the loaded boolean', () => {
-      const results = EduContentTocQueries.getLoaded(storeState);
-      expect(results).toBe(eduContentTocState.loaded);
     });
     it('getAll() should return an array of the entities in the order from the ids', () => {
       const results = EduContentTocQueries.getAll(storeState);
