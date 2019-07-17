@@ -15,7 +15,8 @@ module.exports = function(wallaby) {
     tests: [
       'apps/**/*.spec.ts',
       'libs/**/*.spec.ts',
-      '!apps/polpo-classroom-web-e2e/**/*.spec.ts'
+      '!apps/polpo-classroom-web-e2e/**/*.spec.ts',
+      '!apps/kabas-web-e2e/**/*.spec.ts'
     ],
 
     env: {
