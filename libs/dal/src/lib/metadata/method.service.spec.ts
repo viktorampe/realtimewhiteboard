@@ -1,6 +1,7 @@
 import { inject, TestBed } from '@angular/core/testing';
-import { MethodApi } from '@diekeure/polpo-api-angular-sdk';
+import { MethodApi, PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { hot } from '@nrwl/nx/testing';
+import { configureTestSuite } from 'ng-bullet';
 import { MethodFixture } from '../+fixtures';
 import { MethodService } from './method.service';
 import { MethodServiceInterface } from './method.service.interface';
@@ -9,7 +10,7 @@ describe('MethodService', () => {
   let methodService: MethodServiceInterface;
   let mockData$: any;
 
-  beforeEach(() => {
+  configureTestSuite(() => {
     TestBed.configureTestingModule({
       providers: [
         MethodService,
@@ -17,6 +18,12 @@ describe('MethodService', () => {
           provide: MethodApi,
           useValue: {
             find: () => mockData$
+          }
+        },
+        {
+          provide: PersonApi,
+          useValue: {
+            getData: () => mockData$
           }
         }
       ]
@@ -28,14 +35,33 @@ describe('MethodService', () => {
     expect(service).toBeTruthy();
   }));
 
-  it('should return methods', async () => {
-    mockData$ = hot('-a-|', {
-      a: [new MethodFixture({ id: 1 }), new MethodFixture({ id: 2 })]
-    });
-    expect(methodService.getAll()).toBeObservable(
-      hot('-a-|', {
+  describe('getAll', () => {
+    it('should return methods', async () => {
+      mockData$ = hot('-a-|', {
         a: [new MethodFixture({ id: 1 }), new MethodFixture({ id: 2 })]
-      })
-    );
+      });
+
+      expect(methodService.getAll()).toBeObservable(
+        hot('-a-|', {
+          a: [new MethodFixture({ id: 1 }), new MethodFixture({ id: 2 })]
+        })
+      );
+    });
+  });
+
+  describe('getAllowedMethodIds', () => {
+    it('should return method ids', async () => {
+      mockData$ = hot('-a-|', {
+        a: {
+          methods: [new MethodFixture({ id: 1 }), new MethodFixture({ id: 2 })]
+        }
+      });
+
+      expect(methodService.getAllowedMethodIds(1)).toBeObservable(
+        hot('-a-|', {
+          a: [1, 2]
+        })
+      );
+    });
   });
 });

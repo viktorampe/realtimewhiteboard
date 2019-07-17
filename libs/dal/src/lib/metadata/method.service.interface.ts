@@ -6,4 +6,5 @@ export const METHOD_SERVICE_TOKEN = new InjectionToken('MethodService');
 
 export interface MethodServiceInterface {
   getAll(): Observable<MethodInterface[]>;
+  getAllowedMethodIds(userId: number): Observable<number[]>;
 }
