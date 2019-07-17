@@ -35,7 +35,7 @@ export function reducer(
       return adapter.upsertOne(action.payload.eduContentToc, state);
     }
 
-    case EduContentTocsActionTypes.AddEduContentTocs: {
+    case EduContentTocsActionTypes.AddEduContentTocsForBook: {
       return adapter.addMany(action.payload.eduContentTocs, state);
     }
 
@@ -57,13 +57,6 @@ export function reducer(
 
     case EduContentTocsActionTypes.DeleteEduContentTocs: {
       return adapter.removeMany(action.payload.ids, state);
-    }
-
-    case EduContentTocsActionTypes.EduContentTocsLoadedBooks: {
-      return adapter.addAll(action.payload.eduContentTocs, {
-        ...state,
-        loaded: true
-      });
     }
 
     case EduContentTocsActionTypes.EduContentTocsLoadError: {

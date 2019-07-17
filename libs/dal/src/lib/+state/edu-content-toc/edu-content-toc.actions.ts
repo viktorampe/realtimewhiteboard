@@ -3,12 +3,12 @@ import { Action } from '@ngrx/store';
 import { EduContentTOCInterface } from '../../+models';
 
 export enum EduContentTocsActionTypes {
-  EduContentTocsLoaded = '[EduContentTocs] EduContentTocs Loaded',
   EduContentTocsLoadError = '[EduContentTocs] Load Error',
-  LoadEduContentTocs = '[EduContentTocs] Load EduContentTocs',
+  LoadEduContentTocsForBook = '[EduContentTocs] Load EduContentTocs for Book',
+  AddEduContentTocsForBook = '[EduContentTocs] Add EduContentTocs for Book',
+  AddLoadedBook = '[EduContentTocs] Add loaded Book',
   AddEduContentToc = '[EduContentTocs] Add EduContentToc',
   UpsertEduContentToc = '[EduContentTocs] Upsert EduContentToc',
-  AddEduContentTocs = '[EduContentTocs] Add EduContentTocs',
   UpsertEduContentTocs = '[EduContentTocs] Upsert EduContentTocs',
   UpdateEduContentToc = '[EduContentTocs] Update EduContentToc',
   UpdateEduContentTocs = '[EduContentTocs] Update EduContentTocs',
@@ -17,23 +17,29 @@ export enum EduContentTocsActionTypes {
   ClearEduContentTocs = '[EduContentTocs] Clear EduContentTocs'
 }
 
-export class LoadEduContentTocs implements Action {
-  readonly type = EduContentTocsActionTypes.LoadEduContentTocs;
-
-  constructor(
-    public payload: { force?: boolean; userId: number } = { userId: null }
-  ) {}
-}
-
-export class EduContentTocsLoaded implements Action {
-  readonly type = EduContentTocsActionTypes.EduContentTocsLoaded;
-
-  constructor(public payload: { eduContentTocs: EduContentTOCInterface[] }) {}
-}
-
 export class EduContentTocsLoadError implements Action {
   readonly type = EduContentTocsActionTypes.EduContentTocsLoadError;
   constructor(public payload: any) {}
+}
+
+export class LoadEduContentTocsForBook implements Action {
+  readonly type = EduContentTocsActionTypes.LoadEduContentTocsForBook;
+
+  constructor(public payload: { bookId: number }) {}
+}
+
+export class AddEduContentTocsForBook implements Action {
+  readonly type = EduContentTocsActionTypes.AddEduContentTocsForBook;
+
+  constructor(
+    public payload: { bookId: number; eduContentTocs: EduContentTOCInterface[] }
+  ) {}
+}
+
+export class AddLoadedBook implements Action {
+  readonly type = EduContentTocsActionTypes.AddLoadedBook;
+
+  constructor(public payload: { bookId: number }) {}
 }
 
 export class AddEduContentToc implements Action {
@@ -46,12 +52,6 @@ export class UpsertEduContentToc implements Action {
   readonly type = EduContentTocsActionTypes.UpsertEduContentToc;
 
   constructor(public payload: { eduContentToc: EduContentTOCInterface }) {}
-}
-
-export class AddEduContentTocs implements Action {
-  readonly type = EduContentTocsActionTypes.AddEduContentTocs;
-
-  constructor(public payload: { eduContentTocs: EduContentTOCInterface[] }) {}
 }
 
 export class UpsertEduContentTocs implements Action {
@@ -93,12 +93,12 @@ export class ClearEduContentTocs implements Action {
 }
 
 export type EduContentTocsActions =
-  | LoadEduContentTocs
-  | EduContentTocsLoaded
   | EduContentTocsLoadError
+  | LoadEduContentTocsForBook
+  | AddEduContentTocsForBook
+  | AddLoadedBook
   | AddEduContentToc
   | UpsertEduContentToc
-  | AddEduContentTocs
   | UpsertEduContentTocs
   | UpdateEduContentToc
   | UpdateEduContentTocs

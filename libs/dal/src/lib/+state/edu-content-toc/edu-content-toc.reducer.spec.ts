@@ -60,6 +60,7 @@ function createState(
 }
 
 describe('EduContentTocs Reducer', () => {
+  let bookId = 1;
   let eduContentTocs: EduContentTOCInterface[];
   beforeEach(() => {
     eduContentTocs = [
@@ -80,9 +81,9 @@ describe('EduContentTocs Reducer', () => {
   });
 
   describe('loaded action', () => {
-    it('should load all eduContentTocs', () => {
-      const action = new EduContentTocActions.EduContentTocsLoaded({
-        eduContentTocs
+    it('should load all eduContentTocs for a bookId', () => {
+      const action = new EduContentTocActions.LoadEduContentTocsForBook({
+        bookId
       });
       const result = reducer(initialState, action);
       expect(result).toEqual(createState(eduContentTocs, true));
@@ -108,7 +109,8 @@ describe('EduContentTocs Reducer', () => {
     });
 
     it('should add multiple eduContentTocs', () => {
-      const action = new EduContentTocActions.AddEduContentTocs({
+      const action = new EduContentTocActions.AddEduContentTocsForBook({
+        bookId,
         eduContentTocs
       });
       const result = reducer(initialState, action);
