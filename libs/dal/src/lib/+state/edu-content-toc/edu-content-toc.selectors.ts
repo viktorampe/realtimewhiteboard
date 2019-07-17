@@ -78,3 +78,24 @@ export const getTocsForBook = createSelector(
       return acc;
     }, [])
 );
+
+// returns the direct descendant tocs for a given toc, by tocId
+export const getTocsForToc = createSelector(
+  selectEduContentTocState,
+  (state: State, props: { tocId: number }) => {
+    const parentToc = state.entities[props.tocId];
+
+    return (state.ids as number[]).reduce((acc, currentTocId) => {
+      const currentToc = state.entities[currentTocId];
+
+      if (
+        currentToc.treeId === parentToc.treeId && // same book
+        (currentToc.lft > parentToc.lft && currentToc.rgt < parentToc.rgt) && //is a child of parentToc
+        currentToc.depth === parentToc.depth + 1 // correct depth
+      ) {
+        acc.push(currentToc);
+      }
+      return acc;
+    }, []);
+  }
+);

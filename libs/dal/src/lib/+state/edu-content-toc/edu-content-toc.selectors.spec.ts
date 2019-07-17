@@ -134,5 +134,70 @@ describe('EduContentToc Selectors', () => {
         expect(results).toEqual([mockTOCs[0], mockTOCs[1]]);
       });
     });
+
+    describe('getTocsForToc', () => {
+      let mockTOCs: EduContentTOCInterface[];
+
+      beforeEach(() => {
+        mockTOCs = [
+          new EduContentTOCFixture({
+            id: 4,
+            treeId: 1,
+            depth: 1,
+            lft: 2,
+            rgt: 3
+          }),
+          new EduContentTOCFixture({
+            // parent toc
+            id: 1,
+            treeId: 1,
+            depth: 0,
+            lft: 1,
+            rgt: 10
+          }),
+          new EduContentTOCFixture({
+            // wrong tree, correct depth, correct lft/rgt
+            id: 3,
+            treeId: 2,
+            depth: 1,
+            lft: 2,
+            rgt: 3
+          }),
+          new EduContentTOCFixture({
+            id: 5,
+            treeId: 1,
+            depth: 1,
+            lft: 4,
+            rgt: 7
+          }),
+          new EduContentTOCFixture({
+            // correct tree, correct depth, wrong lft/rgt
+            id: 6,
+            treeId: 1,
+            depth: 1,
+            lft: 8,
+            rgt: 11
+          }),
+          new EduContentTOCFixture({
+            // correct tree, wrong depth, correct lft/rgt
+            id: 7,
+            treeId: 1,
+            depth: 2,
+            lft: 5,
+            rgt: 6
+          })
+        ];
+
+        eduContentTocState = createState(mockTOCs, [1], 'no error');
+        storeState = { eduContentTocs: eduContentTocState };
+      });
+
+      it('should return the correct tocs', () => {
+        const results = EduContentTocQueries.getTocsForToc(storeState, {
+          tocId: 1
+        });
+        expect(results).toEqual([mockTOCs[0], mockTOCs[3]]);
+      });
+    });
   });
 });
