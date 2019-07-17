@@ -37,6 +37,7 @@ function createEduContentToc(
  */
 function createState(
   eduContentTocs: EduContentTOCInterface[],
+  loadedBooks: number[],
   loaded: boolean = false,
   error?: any
 ): State {
@@ -53,16 +54,18 @@ function createState(
           {}
         )
       : {},
-    loaded: loaded
+    loaded: loaded,
+    loadedBooks
   };
   if (error !== undefined) state.error = error;
   return state;
 }
 
 describe('EduContentTocs Reducer', () => {
-  let bookId = 1;
+  let bookId: number;
   let eduContentTocs: EduContentTOCInterface[];
   beforeEach(() => {
+    bookId = 1;
     eduContentTocs = [
       createEduContentToc(1),
       createEduContentToc(2),
@@ -81,19 +84,11 @@ describe('EduContentTocs Reducer', () => {
   });
 
   describe('loaded action', () => {
-    it('should load all eduContentTocs for a bookId', () => {
-      const action = new EduContentTocActions.LoadEduContentTocsForBook({
-        bookId
-      });
-      const result = reducer(initialState, action);
-      expect(result).toEqual(createState(eduContentTocs, true));
-    });
-
     it('should error', () => {
       const error = 'Something went wrong';
       const action = new EduContentTocActions.EduContentTocsLoadError(error);
       const result = reducer(initialState, action);
-      expect(result).toEqual(createState([], false, error));
+      expect(result).toEqual(createState([], [], false, error));
     });
   });
 
@@ -105,17 +100,26 @@ describe('EduContentTocs Reducer', () => {
       });
 
       const result = reducer(initialState, action);
-      expect(result).toEqual(createState([eduContentToc], false));
+      expect(result).toEqual(createState([eduContentToc], [], false));
     });
 
-    it('should add multiple eduContentTocs', () => {
+    it('should add multiple eduContentTocs for a book', () => {
       const action = new EduContentTocActions.AddEduContentTocsForBook({
         bookId,
         eduContentTocs
       });
       const result = reducer(initialState, action);
 
-      expect(result).toEqual(createState(eduContentTocs, false));
+      expect(result).toEqual(createState(eduContentTocs, [], false));
+    });
+
+    it('should add a book to the loadedBooks', () => {
+      const action = new EduContentTocActions.AddLoadedBook({
+        bookId
+      });
+      const result = reducer(initialState, action);
+
+      expect(result).toEqual(createState([], [bookId], false));
     });
   });
   describe('upsert actions', () => {
@@ -146,7 +150,7 @@ describe('EduContentTocs Reducer', () => {
     });
 
     it('should upsert many eduContentTocs', () => {
-      const startState = createState(eduContentTocs);
+      const startState = createState(eduContentTocs, []);
 
       const eduContentTocsToInsert = [
         createEduContentToc(1),
@@ -160,14 +164,14 @@ describe('EduContentTocs Reducer', () => {
 
       const result = reducer(startState, action);
 
-      expect(result).toEqual(createState(eduContentTocsToInsert));
+      expect(result).toEqual(createState(eduContentTocsToInsert, []));
     });
   });
 
   describe('update actions', () => {
     it('should update an eduContentToc', () => {
       const eduContentToc = eduContentTocs[0];
-      const startState = createState([eduContentToc]);
+      const startState = createState([eduContentToc], []);
       const update: Update<EduContentTOCInterface> = {
         id: 1,
         changes: {
@@ -179,12 +183,12 @@ describe('EduContentTocs Reducer', () => {
       });
       const result = reducer(startState, action);
       expect(result).toEqual(
-        createState([createEduContentToc(1, titleUpdatedValue)])
+        createState([createEduContentToc(1, titleUpdatedValue)], [])
       );
     });
 
     it('should update multiple eduContentTocs', () => {
-      const startState = createState(eduContentTocs);
+      const startState = createState(eduContentTocs, []);
       const updates: Update<EduContentTOCInterface>[] = [
         {
           id: 1,
@@ -205,11 +209,14 @@ describe('EduContentTocs Reducer', () => {
       const result = reducer(startState, action);
 
       expect(result).toEqual(
-        createState([
-          createEduContentToc(1, titleUpdatedValue),
-          createEduContentToc(2, titleUpdatedValue),
-          eduContentTocs[2]
-        ])
+        createState(
+          [
+            createEduContentToc(1, titleUpdatedValue),
+            createEduContentToc(2, titleUpdatedValue),
+            eduContentTocs[2]
+          ],
+          []
+        )
       );
     });
   });
@@ -217,34 +224,51 @@ describe('EduContentTocs Reducer', () => {
   describe('delete actions', () => {
     it('should delete one eduContentToc ', () => {
       const eduContentToc = eduContentTocs[0];
-      const startState = createState([eduContentToc]);
+      const startState = createState([eduContentToc], []);
       const action = new EduContentTocActions.DeleteEduContentToc({
         id: eduContentToc.id
       });
       const result = reducer(startState, action);
-      expect(result).toEqual(createState([]));
+      expect(result).toEqual(createState([], []));
     });
 
     it('should delete multiple eduContentTocs', () => {
-      const startState = createState(eduContentTocs);
+      const startState = createState(eduContentTocs, []);
       const action = new EduContentTocActions.DeleteEduContentTocs({
         ids: [eduContentTocs[0].id, eduContentTocs[1].id]
       });
       const result = reducer(startState, action);
-      expect(result).toEqual(createState([eduContentTocs[2]]));
+      expect(result).toEqual(createState([eduContentTocs[2]], []));
     });
   });
 
-  describe('clear action', () => {
+  describe('clear actions', () => {
     it('should clear the eduContentTocs collection', () => {
       const startState = createState(
         eduContentTocs,
+        [bookId],
         true,
         'something went wrong'
       );
       const action = new EduContentTocActions.ClearEduContentTocs();
       const result = reducer(startState, action);
-      expect(result).toEqual(createState([], true, 'something went wrong'));
+      expect(result).toEqual(
+        createState([], [bookId], true, 'something went wrong')
+      );
+    });
+
+    it('should clear the loadedBooks collection', () => {
+      const startState = createState(
+        eduContentTocs,
+        [bookId],
+        true,
+        'something went wrong'
+      );
+      const action = new EduContentTocActions.ClearLoadedBooks();
+      const result = reducer(startState, action);
+      expect(result).toEqual(
+        createState(eduContentTocs, [], true, 'something went wrong')
+      );
     });
   });
 });

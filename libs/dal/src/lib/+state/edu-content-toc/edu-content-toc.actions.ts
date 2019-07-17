@@ -14,7 +14,8 @@ export enum EduContentTocsActionTypes {
   UpdateEduContentTocs = '[EduContentTocs] Update EduContentTocs',
   DeleteEduContentToc = '[EduContentTocs] Delete EduContentToc',
   DeleteEduContentTocs = '[EduContentTocs] Delete EduContentTocs',
-  ClearEduContentTocs = '[EduContentTocs] Clear EduContentTocs'
+  ClearEduContentTocs = '[EduContentTocs] Clear EduContentTocs',
+  ClearLoadedBooks = '[EduContentTocs] Clear loaded Books'
 }
 
 export class EduContentTocsLoadError implements Action {
@@ -92,6 +93,10 @@ export class ClearEduContentTocs implements Action {
   readonly type = EduContentTocsActionTypes.ClearEduContentTocs;
 }
 
+export class ClearLoadedBooks implements Action {
+  readonly type = EduContentTocsActionTypes.ClearLoadedBooks;
+}
+
 export type EduContentTocsActions =
   | EduContentTocsLoadError
   | LoadEduContentTocsForBook
@@ -104,4 +109,5 @@ export type EduContentTocsActions =
   | UpdateEduContentTocs
   | DeleteEduContentToc
   | DeleteEduContentTocs
-  | ClearEduContentTocs;
+  | ClearEduContentTocs
+  | ClearLoadedBooks;

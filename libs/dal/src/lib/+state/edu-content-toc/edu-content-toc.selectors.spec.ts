@@ -1,21 +1,24 @@
 import { EduContentTocQueries } from '.';
-import { EduContentTocInterface } from '../../+models';
+import { EduContentTOCInterface } from '../../+models';
 import { State } from './edu-content-toc.reducer';
 
 describe('EduContentToc Selectors', () => {
-  function createEduContentToc(id: number): EduContentTocInterface | any {
+  function createEduContentToc(id: number): EduContentTOCInterface | any {
     return {
       id: id
     };
   }
 
   function createState(
-    eduContentTocs: EduContentTocInterface[],
+    eduContentTocs: EduContentTOCInterface[],
+    loadedBooks: number[],
     loaded: boolean = false,
     error?: any
   ): State {
     return {
-      ids: eduContentTocs ? eduContentTocs.map(eduContentToc => eduContentToc.id) : [],
+      ids: eduContentTocs
+        ? eduContentTocs.map(eduContentToc => eduContentToc.id)
+        : [],
       entities: eduContentTocs
         ? eduContentTocs.reduce(
             (entityMap, eduContentToc) => ({
@@ -25,6 +28,7 @@ describe('EduContentToc Selectors', () => {
             {}
           )
         : {},
+      loadedBooks,
       loaded: loaded,
       error: error
     };
@@ -42,6 +46,7 @@ describe('EduContentToc Selectors', () => {
           createEduContentToc(2),
           createEduContentToc(3)
         ],
+        [1],
         true,
         'no error'
       );

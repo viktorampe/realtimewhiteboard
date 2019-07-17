@@ -11,6 +11,7 @@ export interface State extends EntityState<EduContentTOCInterface> {
   // additional entities state properties
   loaded: boolean;
   error?: any;
+  loadedBooks: number[];
 }
 
 export const adapter: EntityAdapter<
@@ -19,7 +20,8 @@ export const adapter: EntityAdapter<
 
 export const initialState: State = adapter.getInitialState({
   // additional entity state properties
-  loaded: false
+  loaded: false,
+  loadedBooks: []
 });
 
 export function reducer(
@@ -37,6 +39,13 @@ export function reducer(
 
     case EduContentTocsActionTypes.AddEduContentTocsForBook: {
       return adapter.addMany(action.payload.eduContentTocs, state);
+    }
+
+    case EduContentTocsActionTypes.AddLoadedBook: {
+      return {
+        ...state,
+        loadedBooks: [...state.loadedBooks, action.payload.bookId]
+      };
     }
 
     case EduContentTocsActionTypes.UpsertEduContentTocs: {
@@ -60,11 +69,20 @@ export function reducer(
     }
 
     case EduContentTocsActionTypes.EduContentTocsLoadError: {
-      return { ...state, error: action.payload, loaded: false };
+      return {
+        ...state,
+        loadedBooks: [],
+        error: action.payload,
+        loaded: false
+      };
     }
 
     case EduContentTocsActionTypes.ClearEduContentTocs: {
       return adapter.removeAll(state);
+    }
+
+    case EduContentTocsActionTypes.ClearLoadedBooks: {
+      return { ...state, loadedBooks: [] };
     }
 
     default: {
