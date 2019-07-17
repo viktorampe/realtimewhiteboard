@@ -6,5 +6,5 @@ export interface DiaboloPhaseInterface {
   color: string;
   icon: string;
   phase: number;
-  eduContentMetadatas?: EduContentMetadataInterface[];
+  eduContentMetadata?: EduContentMetadataInterface[];
 }
