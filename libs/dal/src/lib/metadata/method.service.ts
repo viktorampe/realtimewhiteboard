@@ -11,8 +11,10 @@ import { MethodServiceInterface } from './method.service.interface';
 export class MethodService implements MethodServiceInterface {
   constructor(private methodApi: MethodApi, private personApi: PersonApi) {}
 
-  getAll(): Observable<MethodInterface[]> {
-    return this.methodApi.find<MethodInterface>();
+  getAllForUser(userId: number): Observable<MethodInterface[]> {
+    return this.personApi
+      .getData(userId, 'methods')
+      .pipe(map((res: { methods: MethodInterface[] }) => res.methods));
   }
 
   getAllowedMethodIds(userId: number): Observable<number[]> {

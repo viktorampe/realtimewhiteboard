@@ -38,10 +38,12 @@ describe('MethodService', () => {
   describe('getAll', () => {
     it('should return methods', async () => {
       mockData$ = hot('-a-|', {
-        a: [new MethodFixture({ id: 1 }), new MethodFixture({ id: 2 })]
+        a: {
+          methods: [new MethodFixture({ id: 1 }), new MethodFixture({ id: 2 })]
+        }
       });
 
-      expect(methodService.getAll()).toBeObservable(
+      expect(methodService.getAllForUser(1)).toBeObservable(
         hot('-a-|', {
           a: [new MethodFixture({ id: 1 }), new MethodFixture({ id: 2 })]
         })
