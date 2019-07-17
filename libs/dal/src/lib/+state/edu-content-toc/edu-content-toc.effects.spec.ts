@@ -7,6 +7,11 @@ import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
 import { EduContentTocReducer } from '.';
 import { TOC_SERVICE_TOKEN } from '../../toc/toc.service.interface';
+import {
+  AddEduContentTocsForBook,
+  EduContentTocsLoadError,
+  LoadEduContentTocsForBook
+} from './edu-content-toc.actions';
 import { EduContentTocEffects } from './edu-content-toc.effects';
 
 describe('EduContentTocEffects', () => {
@@ -58,9 +63,7 @@ describe('EduContentTocEffects', () => {
         StoreModule.forFeature(
           EduContentTocReducer.NAME,
           EduContentTocReducer.reducer,
-          {
-            initialState: usedState
-          }
+          { initialState: usedState }
         ),
         EffectsModule.forRoot([]),
         EffectsModule.forFeature([EduContentTocEffects])
@@ -68,7 +71,7 @@ describe('EduContentTocEffects', () => {
       providers: [
         {
           provide: TOC_SERVICE_TOKEN,
-          useValue: {}
+          useValue: { getTree: () => {} }
         },
         EduContentTocEffects,
         DataPersistence,
@@ -77,5 +80,76 @@ describe('EduContentTocEffects', () => {
     });
 
     effects = TestBed.get(EduContentTocEffects);
+  });
+
+  describe('loadEduContentTocsForBook$', () => {
+    const bookId = 1;
+    const loadTocsForBookAction = new LoadEduContentTocsForBook({ bookId });
+    const addTocsForBookAction = new AddEduContentTocsForBook({
+      bookId,
+      eduContentTocs: []
+    });
+    const loadErrorAction = new EduContentTocsLoadError(new Error('failed'));
+
+    beforeEach(() => {
+      mockServiceMethodReturnValue('getTree', []);
+    });
+
+    describe('the book has not been loaded', () => {
+      describe('api call succeeds', () => {
+        it('should trigger an api call and return an action', () => {
+          expectInAndOut(
+            effects.loadEduContentTocsForBook$,
+            loadTocsForBookAction,
+            addTocsForBookAction
+          );
+        });
+      });
+
+      describe('api call fails', () => {
+        beforeEach(() => {
+          mockServiceMethodError('getTree', 'failed');
+        });
+
+        it('should trigger an api call and return an error action', () => {
+          expectInAndOut(
+            effects.loadEduContentTocsForBook$,
+            loadTocsForBookAction,
+            loadErrorAction
+          );
+        });
+      });
+    });
+
+    describe('the book has already been loaded', () => {
+      beforeAll(() => {
+        usedState = {
+          ...EduContentTocReducer.initialState,
+          loadedBooks: [bookId]
+        };
+      });
+
+      describe('api call succeeds', () => {
+        it('should not trigger an api call and return nothing', () => {
+          expectInNoOut(
+            effects.loadEduContentTocsForBook$,
+            loadTocsForBookAction
+          );
+        });
+      });
+
+      describe('api call fails', () => {
+        beforeEach(() => {
+          mockServiceMethodError('getTree', 'failed');
+        });
+
+        it('should not trigger an api call and return nothing', () => {
+          expectInNoOut(
+            effects.loadEduContentTocsForBook$,
+            loadTocsForBookAction
+          );
+        });
+      });
+    });
   });
 });
