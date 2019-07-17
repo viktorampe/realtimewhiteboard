@@ -17,11 +17,7 @@ export class MethodService implements MethodServiceInterface {
 
   getAllowedMethodIds(userId: number): Observable<number[]> {
     return this.personApi
-      .getData(userId, 'methods')
-      .pipe(
-        map((res: { methods: MethodInterface[] }) =>
-          res.methods.map(method => method.id)
-        )
-      );
+      .getData(userId, 'allowedMethods')
+      .pipe(map((res: { allowedMethods: number[] }) => res.allowedMethods));
   }
 }

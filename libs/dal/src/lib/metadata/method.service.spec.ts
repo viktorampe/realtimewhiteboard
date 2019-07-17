@@ -51,15 +51,16 @@ describe('MethodService', () => {
 
   describe('getAllowedMethodIds', () => {
     it('should return method ids', async () => {
+      const allowedMethods = [1, 2];
       mockData$ = hot('-a-|', {
         a: {
-          methods: [new MethodFixture({ id: 1 }), new MethodFixture({ id: 2 })]
+          allowedMethods
         }
       });
 
       expect(methodService.getAllowedMethodIds(1)).toBeObservable(
         hot('-a-|', {
-          a: [1, 2]
+          a: allowedMethods
         })
       );
     });
