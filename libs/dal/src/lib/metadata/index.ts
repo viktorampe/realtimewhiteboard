@@ -1,3 +1,8 @@
+export * from './diabolo-phase.service';
+export {
+  DiaboloPhaseServiceInterface,
+  DIABOLO_PHASE_SERVICE_TOKEN
+} from './diabolo-phase.service.interface';
 export * from './edu-content-product-type.service';
 export {
   EduContentProductTypeServiceInterface,
