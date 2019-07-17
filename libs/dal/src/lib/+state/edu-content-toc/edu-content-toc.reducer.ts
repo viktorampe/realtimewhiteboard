@@ -1,5 +1,5 @@
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
-import { EduContentTocInterface } from '../../+models';
+import { EduContentTOCInterface } from '../../+models';
 import {
   EduContentTocsActions,
   EduContentTocsActionTypes
@@ -7,15 +7,15 @@ import {
 
 export const NAME = 'eduContentTocs';
 
-export interface State extends EntityState<EduContentTocInterface> {
+export interface State extends EntityState<EduContentTOCInterface> {
   // additional entities state properties
   loaded: boolean;
   error?: any;
 }
 
-export const adapter: EntityAdapter<EduContentTocInterface> = createEntityAdapter<
-  EduContentTocInterface
->();
+export const adapter: EntityAdapter<
+  EduContentTOCInterface
+> = createEntityAdapter<EduContentTOCInterface>();
 
 export const initialState: State = adapter.getInitialState({
   // additional entity state properties
@@ -59,8 +59,11 @@ export function reducer(
       return adapter.removeMany(action.payload.ids, state);
     }
 
-    case EduContentTocsActionTypes.EduContentTocsLoaded: {
-      return adapter.addAll(action.payload.eduContentTocs, { ...state, loaded: true });
+    case EduContentTocsActionTypes.EduContentTocsLoadedBooks: {
+      return adapter.addAll(action.payload.eduContentTocs, {
+        ...state,
+        loaded: true
+      });
     }
 
     case EduContentTocsActionTypes.EduContentTocsLoadError: {

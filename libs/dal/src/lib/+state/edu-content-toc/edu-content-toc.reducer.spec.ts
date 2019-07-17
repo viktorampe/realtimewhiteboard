@@ -1,44 +1,49 @@
 import { Update } from '@ngrx/entity';
-import {EduContentTocActions } from '.';
+import { EduContentTocActions } from '.';
+import { EduContentTOCInterface } from '../../+models';
 import { initialState, reducer, State } from './edu-content-toc.reducer';
-import { EduContentTocInterface } from '../../+models';
 
-/** 
+/**
  * This file is scaffolded, but needs some special attention:
- * - find and replace '__EXTRA__PROPERTY_NAME' and replace this with a property name of the EduContentToc entity.
- * - set the initial property value via '[__EXTRA__PROPERTY_NAME]InitialValue'.
- * - set the updated property value via '[__EXTRA__PROPERTY_NAME]UpdatedValue'.
-*/
-const __EXTRA__PROPERTY_NAMEInitialValue = ;
-const __EXTRA__PROPERTY_NAMEUpdatedValue = ;
+ * - find and replace 'title' and replace this with a property name of the EduContentToc entity.
+ * - set the initial property value via '[title]InitialValue'.
+ * - set the updated property value via '[title]UpdatedValue'.
+ */
+const titleInitialValue = 'initialTitle';
+const titleUpdatedValue = 'updatedTitle';
 
 /**
  * Creates a EduContentToc.
  * @param {number} id
- * @returns {EduContentTocInterface}
+ * @returns {EduContentTOCInterface}
  */
-function createEduContentToc(id: number, __EXTRA__PROPERTY_NAME:any = __EXTRA__PROPERTY_NAMEInitialValue): EduContentTocInterface | any {
+function createEduContentToc(
+  id: number,
+  title: any = titleInitialValue
+): EduContentTOCInterface | any {
   return {
     id: id,
-    __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAME
+    title: title
   };
 }
 
 /**
  * Utility to create the edu-content-toc state.
  *
- * @param {EduContentTocInterface[]} eduContentTocs
+ * @param {EduContentTOCInterface[]} eduContentTocs
  * @param {boolean} [loaded]
  * @param {*} [error]
  * @returns {State}
  */
 function createState(
-  eduContentTocs: EduContentTocInterface[],
+  eduContentTocs: EduContentTOCInterface[],
   loaded: boolean = false,
   error?: any
 ): State {
   const state: any = {
-    ids: eduContentTocs ? eduContentTocs.map(eduContentToc => eduContentToc.id) : [],
+    ids: eduContentTocs
+      ? eduContentTocs.map(eduContentToc => eduContentToc.id)
+      : [],
     entities: eduContentTocs
       ? eduContentTocs.reduce(
           (entityMap, eduContentToc) => ({
@@ -54,9 +59,8 @@ function createState(
   return state;
 }
 
-
 describe('EduContentTocs Reducer', () => {
-  let eduContentTocs: EduContentTocInterface[];
+  let eduContentTocs: EduContentTOCInterface[];
   beforeEach(() => {
     eduContentTocs = [
       createEduContentToc(1),
@@ -77,7 +81,9 @@ describe('EduContentTocs Reducer', () => {
 
   describe('loaded action', () => {
     it('should load all eduContentTocs', () => {
-      const action = new EduContentTocActions.EduContentTocsLoaded({ eduContentTocs });
+      const action = new EduContentTocActions.EduContentTocsLoaded({
+        eduContentTocs
+      });
       const result = reducer(initialState, action);
       expect(result).toEqual(createState(eduContentTocs, true));
     });
@@ -102,7 +108,9 @@ describe('EduContentTocs Reducer', () => {
     });
 
     it('should add multiple eduContentTocs', () => {
-      const action = new EduContentTocActions.AddEduContentTocs({ eduContentTocs });
+      const action = new EduContentTocActions.AddEduContentTocs({
+        eduContentTocs
+      });
       const result = reducer(initialState, action);
 
       expect(result).toEqual(createState(eduContentTocs, false));
@@ -111,7 +119,7 @@ describe('EduContentTocs Reducer', () => {
   describe('upsert actions', () => {
     it('should upsert one eduContentToc', () => {
       const originalEduContentToc = eduContentTocs[0];
-      
+
       const startState = reducer(
         initialState,
         new EduContentTocActions.AddEduContentToc({
@@ -119,16 +127,20 @@ describe('EduContentTocs Reducer', () => {
         })
       );
 
-    
-      const updatedEduContentToc = createEduContentToc(eduContentTocs[0].id, 'test');
-     
+      const updatedEduContentToc = createEduContentToc(
+        eduContentTocs[0].id,
+        'test'
+      );
+
       const action = new EduContentTocActions.UpsertEduContentToc({
         eduContentToc: updatedEduContentToc
       });
 
       const result = reducer(startState, action);
 
-      expect(result.entities[updatedEduContentToc.id]).toEqual(updatedEduContentToc);
+      expect(result.entities[updatedEduContentToc.id]).toEqual(
+        updatedEduContentToc
+      );
     });
 
     it('should upsert many eduContentTocs', () => {
@@ -146,9 +158,7 @@ describe('EduContentTocs Reducer', () => {
 
       const result = reducer(startState, action);
 
-      expect(result).toEqual(
-        createState(eduContentTocsToInsert)
-      );
+      expect(result).toEqual(createState(eduContentTocsToInsert));
     });
   });
 
@@ -156,34 +166,35 @@ describe('EduContentTocs Reducer', () => {
     it('should update an eduContentToc', () => {
       const eduContentToc = eduContentTocs[0];
       const startState = createState([eduContentToc]);
-      const update: Update<EduContentTocInterface> = {
+      const update: Update<EduContentTOCInterface> = {
         id: 1,
         changes: {
-          __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAMEUpdatedValue
-        } 
+          title: titleUpdatedValue
+        }
       };
       const action = new EduContentTocActions.UpdateEduContentToc({
         eduContentToc: update
       });
       const result = reducer(startState, action);
-      expect(result).toEqual(createState([createEduContentToc(1, __EXTRA__PROPERTY_NAMEUpdatedValue)]));
+      expect(result).toEqual(
+        createState([createEduContentToc(1, titleUpdatedValue)])
+      );
     });
 
     it('should update multiple eduContentTocs', () => {
       const startState = createState(eduContentTocs);
-      const updates: Update<EduContentTocInterface>[] = [
-        
+      const updates: Update<EduContentTOCInterface>[] = [
         {
           id: 1,
           changes: {
-            __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAMEUpdatedValue
-          } 
+            title: titleUpdatedValue
+          }
         },
         {
           id: 2,
           changes: {
-            __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAMEUpdatedValue
-          }  
+            title: titleUpdatedValue
+          }
         }
       ];
       const action = new EduContentTocActions.UpdateEduContentTocs({
@@ -192,7 +203,11 @@ describe('EduContentTocs Reducer', () => {
       const result = reducer(startState, action);
 
       expect(result).toEqual(
-        createState([createEduContentToc(1, __EXTRA__PROPERTY_NAMEUpdatedValue), createEduContentToc(2, __EXTRA__PROPERTY_NAMEUpdatedValue), eduContentTocs[2]])
+        createState([
+          createEduContentToc(1, titleUpdatedValue),
+          createEduContentToc(2, titleUpdatedValue),
+          eduContentTocs[2]
+        ])
       );
     });
   });
@@ -220,7 +235,11 @@ describe('EduContentTocs Reducer', () => {
 
   describe('clear action', () => {
     it('should clear the eduContentTocs collection', () => {
-      const startState = createState(eduContentTocs, true, 'something went wrong');
+      const startState = createState(
+        eduContentTocs,
+        true,
+        'something went wrong'
+      );
       const action = new EduContentTocActions.ClearEduContentTocs();
       const result = reducer(startState, action);
       expect(result).toEqual(createState([], true, 'something went wrong'));

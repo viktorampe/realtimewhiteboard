@@ -1,6 +1,6 @@
 import { Update } from '@ngrx/entity';
 import { Action } from '@ngrx/store';
-import { EduContentTocInterface } from '../../+models';
+import { EduContentTOCInterface } from '../../+models';
 
 export enum EduContentTocsActionTypes {
   EduContentTocsLoaded = '[EduContentTocs] EduContentTocs Loaded',
@@ -21,14 +21,14 @@ export class LoadEduContentTocs implements Action {
   readonly type = EduContentTocsActionTypes.LoadEduContentTocs;
 
   constructor(
-    public payload: { force?: boolean, userId: number } = { userId: null }
+    public payload: { force?: boolean; userId: number } = { userId: null }
   ) {}
 }
 
 export class EduContentTocsLoaded implements Action {
   readonly type = EduContentTocsActionTypes.EduContentTocsLoaded;
 
-  constructor(public payload: { eduContentTocs: EduContentTocInterface[] }) {}
+  constructor(public payload: { eduContentTocs: EduContentTOCInterface[] }) {}
 }
 
 export class EduContentTocsLoadError implements Action {
@@ -39,37 +39,41 @@ export class EduContentTocsLoadError implements Action {
 export class AddEduContentToc implements Action {
   readonly type = EduContentTocsActionTypes.AddEduContentToc;
 
-  constructor(public payload: { eduContentToc: EduContentTocInterface }) {}
+  constructor(public payload: { eduContentToc: EduContentTOCInterface }) {}
 }
 
 export class UpsertEduContentToc implements Action {
   readonly type = EduContentTocsActionTypes.UpsertEduContentToc;
 
-  constructor(public payload: { eduContentToc: EduContentTocInterface }) {}
+  constructor(public payload: { eduContentToc: EduContentTOCInterface }) {}
 }
 
 export class AddEduContentTocs implements Action {
   readonly type = EduContentTocsActionTypes.AddEduContentTocs;
 
-  constructor(public payload: { eduContentTocs: EduContentTocInterface[] }) {}
+  constructor(public payload: { eduContentTocs: EduContentTOCInterface[] }) {}
 }
 
 export class UpsertEduContentTocs implements Action {
   readonly type = EduContentTocsActionTypes.UpsertEduContentTocs;
 
-  constructor(public payload: { eduContentTocs: EduContentTocInterface[] }) {}
+  constructor(public payload: { eduContentTocs: EduContentTOCInterface[] }) {}
 }
 
 export class UpdateEduContentToc implements Action {
   readonly type = EduContentTocsActionTypes.UpdateEduContentToc;
 
-  constructor(public payload: { eduContentToc: Update<EduContentTocInterface> }) {}
+  constructor(
+    public payload: { eduContentToc: Update<EduContentTOCInterface> }
+  ) {}
 }
 
 export class UpdateEduContentTocs implements Action {
   readonly type = EduContentTocsActionTypes.UpdateEduContentTocs;
 
-  constructor(public payload: { eduContentTocs: Update<EduContentTocInterface>[] }) {}
+  constructor(
+    public payload: { eduContentTocs: Update<EduContentTOCInterface>[] }
+  ) {}
 }
 
 export class DeleteEduContentToc implements Action {
