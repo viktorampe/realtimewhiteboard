@@ -7,6 +7,8 @@ import {
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
   BundleActions,
+  DiaboloPhaseServiceInterface,
+  DIABOLO_PHASE_SERVICE_TOKEN,
   EduContent,
   EduContentActions,
   EduContentInterface,
@@ -44,7 +46,6 @@ import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { filter, map, take } from 'rxjs/operators';
 import { LoginPageViewModel } from './loginpage.viewmodel';
-
 @Component({
   selector: 'campus-loginpage',
   templateUrl: './loginpage.component.html',
@@ -89,7 +90,9 @@ export class LoginpageComponent implements OnInit {
     @Inject(EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN)
     private eduContentCollectionManagerService: EduContentCollectionManagerService,
     @Inject(HISTORY_SERVICE_TOKEN)
-    private historyService: HistoryServiceInterface
+    private historyService: HistoryServiceInterface,
+    @Inject(DIABOLO_PHASE_SERVICE_TOKEN)
+    private diaboloPhaseService: DiaboloPhaseServiceInterface
   ) {}
 
   ngOnInit() {
@@ -214,5 +217,9 @@ export class LoginpageComponent implements OnInit {
       taskId: 1
     });
     this.response = this.historyService.upsertHistory(history);
+  }
+
+  getDiabolo(): void {
+    this.response = this.diaboloPhaseService.getAll();
   }
 }
