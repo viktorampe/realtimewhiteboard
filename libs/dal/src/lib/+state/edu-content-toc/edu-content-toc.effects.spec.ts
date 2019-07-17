@@ -9,6 +9,7 @@ import { EduContentTocReducer } from '.';
 import { TOC_SERVICE_TOKEN } from '../../toc/toc.service.interface';
 import {
   AddEduContentTocsForBook,
+  AddLoadedBook,
   EduContentTocsLoadError,
   LoadEduContentTocsForBook
 } from './edu-content-toc.actions';
@@ -150,6 +151,25 @@ describe('EduContentTocEffects', () => {
           );
         });
       });
+    });
+  });
+
+  describe('addLoadedBook$', () => {
+    const bookId = 1;
+    const addTocsForBookAction = new AddEduContentTocsForBook({
+      bookId,
+      eduContentTocs: []
+    });
+    const addLoadedBookAction = new AddLoadedBook({ bookId });
+
+    const loadErrorAction = new EduContentTocsLoadError(new Error('failed'));
+
+    it('should add the book to the loadedBooks when the tocs are added to the state', () => {
+      expectInAndOut(
+        effects.addLoadedBook$,
+        addTocsForBookAction,
+        addLoadedBookAction
+      );
     });
   });
 });

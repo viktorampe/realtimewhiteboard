@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
 import { DataPersistence } from '@nrwl/nx';
 import { map } from 'rxjs/operators';
+import { EduContentTocQueries } from '.';
 import { DalState } from '..';
 import {
   TocServiceInterface,
@@ -9,6 +10,7 @@ import {
 } from '../../toc/toc.service.interface';
 import {
   AddEduContentTocsForBook,
+  AddLoadedBook,
   EduContentTocsActionTypes,
   EduContentTocsLoadError,
   LoadEduContentTocsForBook
@@ -24,9 +26,7 @@ export class EduContentTocEffects {
         const requestedBookId = action.payload.bookId;
 
         if (
-          state.eduContentTocs.loadedBooks.some(
-            loadedbookId => (loadedbookId = requestedBookId)
-          )
+          EduContentTocQueries.isBookLoaded(state, { bookId: requestedBookId })
         ) {
           return;
         }
@@ -42,6 +42,24 @@ export class EduContentTocEffects {
         );
       },
       onError: (action: LoadEduContentTocsForBook, error) => {
+        return new EduContentTocsLoadError(error);
+      }
+    }
+  );
+
+  // When AddEduContentTocsForBook is dispatched
+  // also dispatch an action to add the book to the loadedBooks
+  addLoadedBook$ = this.dataPersistence.pessimisticUpdate(
+    EduContentTocsActionTypes.AddEduContentTocsForBook,
+    {
+      run: (action: AddEduContentTocsForBook, state: DalState) => {
+        const addedBookId = action.payload.bookId;
+
+        return new AddLoadedBook({
+          bookId: addedBookId
+        });
+      },
+      onError: (action: AddEduContentTocsForBook, error) => {
         return new EduContentTocsLoadError(error);
       }
     }
