@@ -60,3 +60,9 @@ export const getById = createSelector(
   selectEduContentTocState,
   (state: State, props: { id: number }) => state.entities[props.id]
 );
+
+export const isBookLoaded = createSelector(
+  selectEduContentTocState,
+  (state: State, props: { bookId: number }) =>
+    state.loadedBooks.some(loadedBookId => loadedBookId === props.bookId)
+);

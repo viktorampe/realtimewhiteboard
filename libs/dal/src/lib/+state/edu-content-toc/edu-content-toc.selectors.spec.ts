@@ -93,5 +93,21 @@ describe('EduContentToc Selectors', () => {
       const results = EduContentTocQueries.getById(storeState, { id: 9 });
       expect(results).toBe(undefined);
     });
+
+    describe('isBookLoaded', () => {
+      it('should return false if the book has not been loaded', () => {
+        const results = EduContentTocQueries.isBookLoaded(storeState, {
+          bookId: 9
+        });
+        expect(results).toBe(false);
+      });
+
+      it('should return true if the book has been loaded', () => {
+        const results = EduContentTocQueries.isBookLoaded(storeState, {
+          bookId: 1
+        });
+        expect(results).toBe(true);
+      });
+    });
   });
 });
