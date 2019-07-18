@@ -38,6 +38,8 @@ function createEduContentBook(
 function createState(
   eduContentBooks: EduContentBookInterface[],
   loaded: boolean = false,
+  diaboloEnabledLoaded: boolean = false,
+  diaboloEnabledBookIds: number[] = [],
   error?: any
 ): State {
   const state: any = {
@@ -53,7 +55,9 @@ function createState(
           {}
         )
       : {},
-    loaded: loaded
+    loaded: loaded,
+    diaboloEnabledLoaded: diaboloEnabledLoaded,
+    diaboloEnabledBookIds: diaboloEnabledBookIds
   };
   if (error !== undefined) state.error = error;
   return state;
@@ -92,7 +96,7 @@ describe('EduContentBooks Reducer', () => {
       const error = 'Something went wrong';
       const action = new EduContentBookActions.EduContentBooksLoadError(error);
       const result = reducer(initialState, action);
-      expect(result).toEqual(createState([], false, error));
+      expect(result).toEqual(createState([], false, false, [], error));
     });
   });
 
@@ -238,11 +242,15 @@ describe('EduContentBooks Reducer', () => {
       const startState = createState(
         eduContentBooks,
         true,
+        false,
+        [],
         'something went wrong'
       );
       const action = new EduContentBookActions.ClearEduContentBooks();
       const result = reducer(startState, action);
-      expect(result).toEqual(createState([], true, 'something went wrong'));
+      expect(result).toEqual(
+        createState([], true, false, [], 'something went wrong')
+      );
     });
   });
 });

@@ -4,7 +4,6 @@ import { provideMockActions } from '@ngrx/effects/testing';
 import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
-import { configureTestSuite } from 'ng-bullet';
 import { Observable, of } from 'rxjs';
 import { EduContentBookReducer } from '.';
 import { TOC_SERVICE_TOKEN } from '../../toc/toc.service.interface';
@@ -56,7 +55,7 @@ describe('EduContentBookEffects', () => {
     });
   };
 
-  configureTestSuite(() => {
+  beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
         NxModule.forRoot(),
@@ -75,7 +74,7 @@ describe('EduContentBookEffects', () => {
         {
           provide: TOC_SERVICE_TOKEN,
           useValue: {
-            getAllForUser: () => {}
+            getBooksByMethodIds: () => {}
           }
         },
         EduContentBookEffects,
@@ -88,10 +87,13 @@ describe('EduContentBookEffects', () => {
   });
 
   describe('loadEduContentBook$', () => {
-    const unforcedLoadAction = new LoadEduContentBooks({ methodIds: [1] });
+    const unforcedLoadAction = new LoadEduContentBooks({
+      methodIds: [1, 2, 3]
+    });
+    console.log(unforcedLoadAction);
     const forcedLoadAction = new LoadEduContentBooks({
       force: true,
-      methodIds: [1]
+      methodIds: [1, 2, 3]
     });
     const filledLoadedAction = new EduContentBooksLoaded({
       eduContentBooks: []
