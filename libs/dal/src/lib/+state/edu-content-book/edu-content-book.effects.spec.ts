@@ -4,6 +4,7 @@ import { provideMockActions } from '@ngrx/effects/testing';
 import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
+import { configureTestSuite } from 'ng-bullet';
 import { Observable, of } from 'rxjs';
 import { EduContentBookReducer } from '.';
 import { EDU_CONTENT_BOOK_SERVICE_TOKEN } from '../../edu-content-book/edu-content-book.service.interface';
@@ -55,7 +56,7 @@ describe('EduContentBookEffects', () => {
     });
   };
 
-  beforeEach(() => {
+  configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [
         NxModule.forRoot(),
