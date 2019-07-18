@@ -1,5 +1,5 @@
 import { Injectable, InjectionToken, Type } from '@angular/core';
-import { DalState, EduContentProductTypeQueries } from '@campus/dal';
+import { DalState } from '@campus/dal';
 import {
   CheckboxListFilterComponent,
   SearchFilterComponentInterface,
@@ -15,8 +15,8 @@ import {
   select,
   Store
 } from '@ngrx/store';
-import { combineLatest, Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 export const CHAPTER_LESSON_FILTER_FACTORY_TOKEN = new InjectionToken(
   'ChapterLessonFilterFactory'
@@ -37,7 +37,7 @@ export class ChapterLessonFilterFactory implements SearchFilterFactory {
     [key: string]: FilterQueryInterface;
   } = {
     eduContentProductType: {
-      query: EduContentProductTypeQueries.getAll,
+      // query: EduContentProductTypeQueries.getAll,
       name: 'eduContentProductType',
       label: 'Type',
       component: SelectFilterComponent
@@ -74,18 +74,9 @@ export class ChapterLessonFilterFactory implements SearchFilterFactory {
   getFilters(
     searchState: SearchStateInterface
   ): Observable<SearchFilterInterface[]> {
-    const filters = ['eduContentProductType'].map(filterName => {
-      return this.buildFilter(filterName, searchState);
-    });
-
-    return combineLatest(filters).pipe(
-      map(searchFilters =>
-        searchFilters
-          .filter(f => f.criteria.values.length > 0)
-          .sort((a, b) => this.filterSorter(a, b, this.filterSortOrder))
-      ),
-      tap(filters => console.log('filters', filters))
-    );
+    return of([
+      // this.getFilter([], {} as FilterQueryInterface, searchState)
+    ]);
   }
 
   public getFilter<T>(
