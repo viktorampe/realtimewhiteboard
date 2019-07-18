@@ -41,7 +41,8 @@ export class EduContentBookEffects {
     EduContentBooksActionTypes.LoadDiaboloEnabledEduContentBookIds,
     {
       run: (action: LoadDiaboloEnabledEduContentBookIds, state: DalState) => {
-        if (!action.payload.force && state.eduContentBooks.loaded) return;
+        if (!action.payload.force && state.eduContentBooks.diaboloEnabledLoaded)
+          return;
         //TODO -- implent service that is still to be created for non existing api endpoint https://dev.azure.com/diekeure-webdev/LK2020/_workitems/edit/1658
         return new DiaboloEnabledEduContentBookIdsLoaded({
           diaboloEnabledEduContentBookIds: []
