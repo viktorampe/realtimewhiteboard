@@ -1,7 +1,6 @@
 import { Injectable, InjectionToken, Type } from '@angular/core';
-import { DalState } from '@campus/dal';
+import { DalState, EduContentProductTypeFixture } from '@campus/dal';
 import {
-  CheckboxListFilterComponent,
   SearchFilterComponentInterface,
   SearchFilterCriteriaInterface,
   SearchFilterFactory,
@@ -12,11 +11,9 @@ import {
 import {
   MemoizedSelector,
   MemoizedSelectorWithProps,
-  select,
   Store
 } from '@ngrx/store';
 import { Observable, of } from 'rxjs';
-import { map } from 'rxjs/operators';
 
 export const CHAPTER_LESSON_FILTER_FACTORY_TOKEN = new InjectionToken(
   'ChapterLessonFilterFactory'
@@ -28,7 +25,7 @@ export const CHAPTER_LESSON_FILTER_FACTORY_TOKEN = new InjectionToken(
 export class ChapterLessonFilterFactory implements SearchFilterFactory {
   private keyProperty = 'id';
   private displayProperty = 'name';
-  private component = CheckboxListFilterComponent;
+  private component = SelectFilterComponent;
   private domHost = 'hostTop';
 
   public filterSortOrder = ['eduContentProductType'];
@@ -46,36 +43,22 @@ export class ChapterLessonFilterFactory implements SearchFilterFactory {
 
   constructor(public store: Store<DalState>) {}
 
-  public buildFilter(
-    name: string,
-    searchState: SearchStateInterface
-  ): Observable<SearchFilterInterface> {
-    const filterQuery = this.filterQueries[name];
-    if (filterQuery.learningAreaDependent) {
-      return this.store.pipe(
-        select(
-          filterQuery.query as MemoizedSelectorWithProps<Object, any, any[]>,
-          {
-            learningAreaIds: searchState.filterCriteriaSelections.get(
-              'learningArea'
-            )
-          }
-        ),
-        map(entities => this.getFilter(entities, filterQuery, searchState))
-      );
-    } else {
-      return this.store.pipe(
-        select(filterQuery.query as MemoizedSelector<Object, any[]>),
-        map(entities => this.getFilter(entities, filterQuery, searchState))
-      );
-    }
-  }
-
   getFilters(
     searchState: SearchStateInterface
   ): Observable<SearchFilterInterface[]> {
     return of([
-      // this.getFilter([], {} as FilterQueryInterface, searchState)
+      this.getFilter(
+        [
+          new EduContentProductTypeFixture({ id: 1, name: 'Algemeen bestand' }),
+          new EduContentProductTypeFixture({ id: 2, name: 'Doelen' }),
+          new EduContentProductTypeFixture({ id: 3, name: 'Handleiding' })
+        ],
+        {
+          name: 'types',
+          label: 'types'
+        } as FilterQueryInterface,
+        searchState
+      )
     ]);
   }
 

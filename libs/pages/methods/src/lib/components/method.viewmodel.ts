@@ -24,7 +24,7 @@ import {
 import { RouterReducerState } from '@ngrx/router-store';
 import { select, Store } from '@ngrx/store';
 import { BehaviorSubject, Observable, of } from 'rxjs';
-import { filter, map, switchMapTo, withLatestFrom } from 'rxjs/operators';
+import { filter, map, switchMap, withLatestFrom } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -104,7 +104,7 @@ export class MethodViewModel {
         ])
       })),
       // switchMap(searchState => this.eduContentService.search(searchState)),
-      switchMapTo(of(this.getMockResults())),
+      switchMap(searchState => this.getMockResults()),
       map(searchResult => {
         return {
           ...searchResult,
@@ -126,47 +126,48 @@ export class MethodViewModel {
     );
   }
 
-  private getMockResults(): SearchResultInterface {
-    return {
-      count: 2,
+  private loadedMockResults = false;
+  private getMockResults(): Observable<SearchResultInterface> {
+    if (this.loadedMockResults) {
+      return of({
+        count: 3,
+        results: [],
+        filterCriteriaPredictions: new Map()
+      });
+    }
+    this.loadedMockResults = true;
+
+    return of({
+      count: 3,
       results: [
-        {
-          eduContent: new EduContentFixture(
-            {},
-            {
-              title: 'Aanliggende hoeken',
-              description:
-                'In dit leerobject maken leerlingen 3 tikoefeningen op aanliggende hoeken.',
-              fileExt: 'ludo.zip'
-            }
-          ),
-          inTask: true
-        },
-        {
-          eduContent: new EduContentFixture(
-            {},
-            {
-              thumbSmall:
-                'https://avatars3.githubusercontent.com/u/31932368?s=460&v=4'
-            }
-          ),
-          inBundle: true
-        },
-        {
-          eduContent: new EduContentFixture(
-            {},
-            {
-              eduContentProductType: new EduContentProductTypeFixture({
-                pedagogic: true
-              })
-            }
-          ),
-          isFavorite: true
-        }
+        new EduContentFixture(
+          {},
+          {
+            title: 'Aanliggende hoeken',
+            description:
+              'In dit leerobject maken leerlingen 3 tikoefeningen op aanliggende hoeken.',
+            fileExt: 'ludo.zip'
+          }
+        ),
+        new EduContentFixture(
+          {},
+          {
+            thumbSmall:
+              'https://avatars3.githubusercontent.com/u/31932368?s=460&v=4'
+          }
+        ),
+        new EduContentFixture(
+          {},
+          {
+            eduContentProductType: new EduContentProductTypeFixture({
+              pedagogic: true
+            })
+          }
+        )
       ],
       filterCriteriaPredictions: new Map([
         ['LearningArea', new Map([[1, 100], [2, 50]])]
       ])
-    };
+    });
   }
 }
