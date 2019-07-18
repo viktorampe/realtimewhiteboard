@@ -83,7 +83,7 @@ export function reducer(
       return { ...state, error: action.payload, loaded: false };
     }
 
-    case EduContentBooksActionTypes.EduContentBooksLoadError: {
+    case EduContentBooksActionTypes.DiaboloEnabledEduContentBookIdsLoadError: {
       return {
         ...state,
         diaboloEnabledError: action.payload,
