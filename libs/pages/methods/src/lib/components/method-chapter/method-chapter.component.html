@@ -1,1 +1,10 @@
 <p> MethodChapterView works! </p>
+<div>
+  <ng-container searchPortal="hostTop"></ng-container>
+</div>
+<campus-search
+  [searchMode]="searchMode"
+  [initialState]="initialSearchState$ | async"
+  [searchResults]="searchResults$ | async"
+  (searchState$)="onSearchStateChange($event)"
+></campus-search>
