@@ -44,6 +44,7 @@ export class EduContentBookEffects {
         if (!action.payload.force && state.eduContentBooks.diaboloEnabledLoaded)
           return;
         //TODO -- implent service that is still to be created for non existing api endpoint https://dev.azure.com/diekeure-webdev/LK2020/_workitems/edit/1658
+        //TODO -- add tests for effect once the service in implemented
         return new DiaboloEnabledEduContentBookIdsLoaded({
           diaboloEnabledEduContentBookIds: []
         });
