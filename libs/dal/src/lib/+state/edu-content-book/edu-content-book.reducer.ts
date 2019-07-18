@@ -10,6 +10,8 @@ export const NAME = 'eduContentBooks';
 export interface State extends EntityState<EduContentBookInterface> {
   // additional entities state properties
   loaded: boolean;
+  diaboloEnabledLoaded: boolean;
+  diaboloEnabledBookIds: number[];
   error?: any;
 }
 
@@ -19,7 +21,9 @@ export const adapter: EntityAdapter<
 
 export const initialState: State = adapter.getInitialState({
   // additional entity state properties
-  loaded: false
+  loaded: false,
+  diaboloEnabledLoaded: false,
+  diaboloEnabledBookIds: []
 });
 
 export function reducer(
