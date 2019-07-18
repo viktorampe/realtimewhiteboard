@@ -1,8 +1,11 @@
 import { NgModule } from '@angular/core';
-import { UiEffects } from '@campus/dal';
+import { DiaboloPhaseEffects, UiEffects } from '@campus/dal';
 import { EffectsModule } from '@ngrx/effects';
 
 @NgModule({
-  imports: [EffectsModule.forRoot([]), EffectsModule.forFeature([UiEffects])]
+  imports: [
+    EffectsModule.forRoot([]),
+    EffectsModule.forFeature([UiEffects, DiaboloPhaseEffects])
+  ]
 })
 export class AppEffectsModule {}

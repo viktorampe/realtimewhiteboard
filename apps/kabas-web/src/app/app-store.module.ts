@@ -1,5 +1,10 @@
 import { NgModule } from '@angular/core';
-import { CustomSerializer, UiReducer, UserReducer } from '@campus/dal';
+import {
+  CustomSerializer,
+  DiaboloPhaseReducer,
+  UiReducer,
+  UserReducer
+} from '@campus/dal';
 import {
   NavigationActionTiming,
   routerReducer,
@@ -31,6 +36,13 @@ import { environment } from '../environments/environment';
     StoreModule.forFeature(UserReducer.NAME, UserReducer.reducer, {
       initialState: UserReducer.initialState
     }),
+    StoreModule.forFeature(
+      DiaboloPhaseReducer.NAME,
+      DiaboloPhaseReducer.reducer,
+      {
+        initialState: DiaboloPhaseReducer.initialState
+      }
+    ),
     !environment.production ? StoreDevtoolsModule.instrument() : []
   ]
 })

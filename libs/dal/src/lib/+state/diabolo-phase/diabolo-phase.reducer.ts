@@ -13,9 +13,18 @@ export interface State extends EntityState<DiaboloPhaseInterface> {
   error?: any;
 }
 
+export function sortDiaboloPhases(
+  a: DiaboloPhaseInterface,
+  b: DiaboloPhaseInterface
+): number {
+  return a.phase - b.phase;
+}
+
 export const adapter: EntityAdapter<
   DiaboloPhaseInterface
-> = createEntityAdapter<DiaboloPhaseInterface>();
+> = createEntityAdapter<DiaboloPhaseInterface>({
+  sortComparer: sortDiaboloPhases
+});
 
 export const initialState: State = adapter.getInitialState({
   // additional entity state properties
@@ -27,38 +36,6 @@ export function reducer(
   action: DiaboloPhasesActions
 ): State {
   switch (action.type) {
-    case DiaboloPhasesActionTypes.AddDiaboloPhase: {
-      return adapter.addOne(action.payload.diaboloPhase, state);
-    }
-
-    case DiaboloPhasesActionTypes.UpsertDiaboloPhase: {
-      return adapter.upsertOne(action.payload.diaboloPhase, state);
-    }
-
-    case DiaboloPhasesActionTypes.AddDiaboloPhases: {
-      return adapter.addMany(action.payload.diaboloPhases, state);
-    }
-
-    case DiaboloPhasesActionTypes.UpsertDiaboloPhases: {
-      return adapter.upsertMany(action.payload.diaboloPhases, state);
-    }
-
-    case DiaboloPhasesActionTypes.UpdateDiaboloPhase: {
-      return adapter.updateOne(action.payload.diaboloPhase, state);
-    }
-
-    case DiaboloPhasesActionTypes.UpdateDiaboloPhases: {
-      return adapter.updateMany(action.payload.diaboloPhases, state);
-    }
-
-    case DiaboloPhasesActionTypes.DeleteDiaboloPhase: {
-      return adapter.removeOne(action.payload.id, state);
-    }
-
-    case DiaboloPhasesActionTypes.DeleteDiaboloPhases: {
-      return adapter.removeMany(action.payload.ids, state);
-    }
-
     case DiaboloPhasesActionTypes.DiaboloPhasesLoaded: {
       return adapter.addAll(action.payload.diaboloPhases, {
         ...state,
@@ -68,10 +45,6 @@ export function reducer(
 
     case DiaboloPhasesActionTypes.DiaboloPhasesLoadError: {
       return { ...state, error: action.payload, loaded: false };
-    }
-
-    case DiaboloPhasesActionTypes.ClearDiaboloPhases: {
-      return adapter.removeAll(state);
     }
 
     default: {
