@@ -1,5 +1,4 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { MatDialog } from '@angular/material';
 import { NavigationEnd, Router } from '@angular/router';
 import {
   AlertQueries,
@@ -7,23 +6,14 @@ import {
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
   BundleActions,
-  EduContent,
   EduContentActions,
   EduContentInterface,
-  EduContentQueries,
-  EffectFeedback,
-  EffectFeedbackActions,
+  EduContentTocActions,
   EffectFeedbackInterface,
   EffectFeedbackQueries,
   FavoriteActions,
   FavoriteInterface,
-  FavoriteQueries,
-  FavoriteServiceInterface,
   FavoriteTypesEnum,
-  FAVORITE_SERVICE_TOKEN,
-  HistoryFixture,
-  HistoryServiceInterface,
-  HISTORY_SERVICE_TOKEN,
   LearningAreaActions,
   TaskActions,
   TaskEduContentActions,
@@ -32,17 +22,10 @@ import {
   UnlockedContentActions,
   UserActions
 } from '@campus/dal';
-import {
-  EduContentCollectionManagerService,
-  EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN,
-  QuickLinkComponent,
-  QuickLinkTypeEnum
-} from '@campus/shared';
 import { ContentEditableComponent } from '@campus/ui';
-import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { filter, map, take } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 import { LoginPageViewModel } from './loginpage.viewmodel';
 
 @Component({
@@ -78,18 +61,10 @@ export class LoginpageComponent implements OnInit {
 
   constructor(
     public loginPageviewModel: LoginPageViewModel,
-    private personApi: PersonApi,
-    @Inject(FAVORITE_SERVICE_TOKEN)
-    private favoriteService: FavoriteServiceInterface,
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
     private store: Store<AlertReducer.State>,
     private router: Router,
-    @Inject(TOC_SERVICE_TOKEN) private tocService: TocServiceInterface,
-    private dialog: MatDialog,
-    @Inject(EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN)
-    private eduContentCollectionManagerService: EduContentCollectionManagerService,
-    @Inject(HISTORY_SERVICE_TOKEN)
-    private historyService: HistoryServiceInterface
+    @Inject(TOC_SERVICE_TOKEN) private tocService: TocServiceInterface
   ) {}
 
   ngOnInit() {
@@ -109,28 +84,6 @@ export class LoginpageComponent implements OnInit {
     }
   }
 
-  addErrorFeedback(): void {
-    const mockAction = new FavoriteActions.UpdateFavorite({
-      userId: this.authService.userId,
-      favorite: { id: 1, changes: { name: 'foo' } },
-      customFeedbackHandlers: {
-        useCustomErrorHandler: true
-      }
-    });
-    const mockFeedBack = EffectFeedback.generateErrorFeedback(
-      'foo',
-      mockAction,
-      'Het is niet gelukt de favoriet te wijzigen.'
-    );
-    mockFeedBack.icon = 'warning';
-
-    this.store.dispatch(
-      new EffectFeedbackActions.AddEffectFeedback({
-        effectFeedback: mockFeedBack
-      })
-    );
-  }
-
   getCurrentUser() {
     this.currentUser = this.authService.getCurrent();
     if (this.currentUser) this.loadCurrentUserinState();
@@ -138,29 +91,6 @@ export class LoginpageComponent implements OnInit {
 
   loadCurrentUserinState() {
     this.store.dispatch(new UserActions.LoadUser({ force: true }));
-  }
-
-  openDialog() {
-    this.store
-      .pipe(
-        select(EduContentQueries.getAll),
-        take(1)
-      )
-      .subscribe(entities => {
-        const content = Object.assign(new EduContent(), entities[0]);
-        this.eduContentCollectionManagerService.manageBundlesForContent(
-          content,
-          19
-        );
-      });
-  }
-
-  toggleEditable() {
-    this.contentEditable.active = !this.contentEditable.active;
-  }
-
-  textChanged(text: string) {
-    console.log('ContentEditable was changed, new text: ' + text);
   }
 
   loadStore() {
@@ -183,36 +113,9 @@ export class LoginpageComponent implements OnInit {
     this.store.dispatch(new LearningAreaActions.LoadLearningAreas());
   }
 
-  updateFavorite() {
-    let favorite: FavoriteInterface;
-    this.store.pipe(select(FavoriteQueries.getAll)).subscribe(favorites => {
-      favorite = favorites[0];
-    });
-    console.log(favorite);
-    this.response = this.favoriteService.updateFavorite(
-      this.authService.userId,
-      favorite.id,
-      {
-        name: favorite.name + 'x'
-      }
+  loadToc(): void {
+    this.store.dispatch(
+      new EduContentTocActions.LoadEduContentTocsForBook({ bookId: 1 })
     );
-  }
-
-  openQuickLinkManager(): void {
-    this.dialog.open(QuickLinkComponent, {
-      data: { mode: QuickLinkTypeEnum.FAVORITES },
-      autoFocus: true,
-      panelClass: 'quick-link__dialog'
-    });
-  }
-
-  upsertHistory(): void {
-    const history = new HistoryFixture({
-      name: 'test',
-      type: 'educontent',
-      learningAreaId: 19,
-      taskId: 1
-    });
-    this.response = this.historyService.upsertHistory(history);
   }
 }

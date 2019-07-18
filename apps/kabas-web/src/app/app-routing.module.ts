@@ -21,6 +21,11 @@ const routes: Routes = [
     data: {
       breadcrumbText: 'Foutmelding'
     }
+  },
+  {
+    path: 'dev',
+    loadChildren: '@campus/devlib#DevlibModule',
+    data: { breadcrumbText: 'Full retard' }
   }
 ];
 
