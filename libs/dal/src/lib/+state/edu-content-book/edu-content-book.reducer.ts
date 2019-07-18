@@ -13,6 +13,7 @@ export interface State extends EntityState<EduContentBookInterface> {
   diaboloEnabledLoaded: boolean;
   diaboloEnabledBookIds: number[];
   error?: any;
+  diaboloEnabledError?: any;
 }
 
 export const adapter: EntityAdapter<
@@ -70,8 +71,24 @@ export function reducer(
       });
     }
 
+    case EduContentBooksActionTypes.DiaboloEnabledEduContentBookIdsLoaded: {
+      return {
+        ...state,
+        diaboloEnabledBookIds: action.payload.diaboloEnabledEduContentBookIds,
+        diaboloEnabledLoaded: true
+      };
+    }
+
     case EduContentBooksActionTypes.EduContentBooksLoadError: {
       return { ...state, error: action.payload, loaded: false };
+    }
+
+    case EduContentBooksActionTypes.EduContentBooksLoadError: {
+      return {
+        ...state,
+        diaboloEnabledError: action.payload,
+        diaboloEnabledLoaded: false
+      };
     }
 
     case EduContentBooksActionTypes.ClearEduContentBooks: {
