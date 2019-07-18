@@ -21,7 +21,7 @@ export class LoadEduContentBooks implements Action {
   readonly type = EduContentBooksActionTypes.LoadEduContentBooks;
 
   constructor(
-    public payload: { force?: boolean; userId: number } = { userId: null }
+    public payload: { force?: boolean; methodIds: number[] } = { methodIds: [] }
   ) {}
 }
 
