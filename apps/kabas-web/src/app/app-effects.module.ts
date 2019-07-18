@@ -5,9 +5,7 @@ import { EffectsModule } from '@ngrx/effects';
 @NgModule({
   imports: [
     EffectsModule.forRoot([]),
-    EffectsModule.forFeature([UiEffects]),
-    EffectsModule.forFeature([UserEffects]),
-    EffectsModule.forFeature([EduContentTocEffects])
+    EffectsModule.forFeature([UiEffects, UserEffects, EduContentTocEffects])
   ]
 })
 export class AppEffectsModule {}
