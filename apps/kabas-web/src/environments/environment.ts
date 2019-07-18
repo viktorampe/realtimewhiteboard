@@ -1,4 +1,6 @@
 import { EnvironmentInterface } from '@campus/shared';
+import { EduContentSearchResultComponent } from '../app/components/searchresults/edu-content-search-result.component';
+import { ChapterLessonFilterFactory } from '../app/factories/chapter-lesson-filter/chapter-lesson-filter.factory';
 import { icons } from './icons';
 
 // This file can be replaced during build by using the `fileReplacements` array.
@@ -23,7 +25,7 @@ export const environment: EnvironmentInterface = {
     url: 'http://www.kabas.localhost:3020/dev'
   },
   api: {
-    APIBase: 'http://api.polpo.localhost:3000'
+    APIBase: 'http://api.kabas.localhost:3000'
   },
   features: {
     alerts: {
@@ -47,7 +49,25 @@ export const environment: EnvironmentInterface = {
     }
   },
   sso: {},
-  searchModes: {},
+  searchModes: {
+    'chapter-lesson': {
+      name: 'chapter-lesson',
+      label: 'Zoeken op <b>hoofdstuk</b>',
+      dynamicFilters: false,
+      searchFilterFactory: ChapterLessonFilterFactory,
+      results: {
+        component: EduContentSearchResultComponent,
+        sortModes: [
+          {
+            description: 'alfabetisch',
+            name: 'title.raw',
+            icon: 'sort-alpha-down'
+          }
+        ],
+        pageSize: 20
+      }
+    }
+  },
   testing: {
     removeDataCyAttributes: false
   }
