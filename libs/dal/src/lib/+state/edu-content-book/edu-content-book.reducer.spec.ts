@@ -5,22 +5,25 @@ import { initialState, reducer, State } from './edu-content-book.reducer';
 
 /**
  * This file is scaffolded, but needs some special attention:
- * - find and replace '__EXTRA__PROPERTY_NAME' and replace this with a property name of the EduContentBook entity.
- * - set the initial property value via '[__EXTRA__PROPERTY_NAME]InitialValue'.
- * - set the updated property value via '[__EXTRA__PROPERTY_NAME]UpdatedValue'.
-*/
-const __EXTRA__PROPERTY_NAMEInitialValue = ;
-const __EXTRA__PROPERTY_NAMEUpdatedValue = ;
+ * - find and replace 'ISBN' and replace this with a property name of the EduContentBook entity.
+ * - set the initial property value via '[ISBN]InitialValue'.
+ * - set the updated property value via '[ISBN]UpdatedValue'.
+ */
+const ISBNInitialValue = 'one';
+const ISBNUpdatedValue = `now it's two`;
 
 /**
  * Creates a EduContentBook.
  * @param {number} id
  * @returns {EduContentBookInterface}
  */
-function createEduContentBook(id: number, __EXTRA__PROPERTY_NAME:any = __EXTRA__PROPERTY_NAMEInitialValue): EduContentBookInterface | any {
+function createEduContentBook(
+  id: number,
+  ISBN: any = ISBNInitialValue
+): EduContentBookInterface | any {
   return {
     id: id,
-    __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAME
+    ISBN: ISBN
   };
 }
 
@@ -38,7 +41,9 @@ function createState(
   error?: any
 ): State {
   const state: any = {
-    ids: eduContentBooks ? eduContentBooks.map(eduContentBook => eduContentBook.id) : [],
+    ids: eduContentBooks
+      ? eduContentBooks.map(eduContentBook => eduContentBook.id)
+      : [],
     entities: eduContentBooks
       ? eduContentBooks.reduce(
           (entityMap, eduContentBook) => ({
@@ -53,7 +58,6 @@ function createState(
   if (error !== undefined) state.error = error;
   return state;
 }
-
 
 describe('EduContentBooks Reducer', () => {
   let eduContentBooks: EduContentBookInterface[];
@@ -77,7 +81,9 @@ describe('EduContentBooks Reducer', () => {
 
   describe('loaded action', () => {
     it('should load all eduContentBooks', () => {
-      const action = new EduContentBookActions.EduContentBooksLoaded({ eduContentBooks });
+      const action = new EduContentBookActions.EduContentBooksLoaded({
+        eduContentBooks
+      });
       const result = reducer(initialState, action);
       expect(result).toEqual(createState(eduContentBooks, true));
     });
@@ -102,7 +108,9 @@ describe('EduContentBooks Reducer', () => {
     });
 
     it('should add multiple eduContentBooks', () => {
-      const action = new EduContentBookActions.AddEduContentBooks({ eduContentBooks });
+      const action = new EduContentBookActions.AddEduContentBooks({
+        eduContentBooks
+      });
       const result = reducer(initialState, action);
 
       expect(result).toEqual(createState(eduContentBooks, false));
@@ -119,8 +127,10 @@ describe('EduContentBooks Reducer', () => {
         })
       );
 
-
-      const updatedEduContentBook = createEduContentBook(eduContentBooks[0].id, 'test');
+      const updatedEduContentBook = createEduContentBook(
+        eduContentBooks[0].id,
+        'test'
+      );
 
       const action = new EduContentBookActions.UpsertEduContentBook({
         eduContentBook: updatedEduContentBook
@@ -128,7 +138,9 @@ describe('EduContentBooks Reducer', () => {
 
       const result = reducer(startState, action);
 
-      expect(result.entities[updatedEduContentBook.id]).toEqual(updatedEduContentBook);
+      expect(result.entities[updatedEduContentBook.id]).toEqual(
+        updatedEduContentBook
+      );
     });
 
     it('should upsert many eduContentBooks', () => {
@@ -146,9 +158,7 @@ describe('EduContentBooks Reducer', () => {
 
       const result = reducer(startState, action);
 
-      expect(result).toEqual(
-        createState(eduContentBooksToInsert)
-      );
+      expect(result).toEqual(createState(eduContentBooksToInsert));
     });
   });
 
@@ -159,30 +169,31 @@ describe('EduContentBooks Reducer', () => {
       const update: Update<EduContentBookInterface> = {
         id: 1,
         changes: {
-          __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAMEUpdatedValue
+          ISBN: ISBNUpdatedValue
         }
       };
       const action = new EduContentBookActions.UpdateEduContentBook({
         eduContentBook: update
       });
       const result = reducer(startState, action);
-      expect(result).toEqual(createState([createEduContentBook(1, __EXTRA__PROPERTY_NAMEUpdatedValue)]));
+      expect(result).toEqual(
+        createState([createEduContentBook(1, ISBNUpdatedValue)])
+      );
     });
 
     it('should update multiple eduContentBooks', () => {
       const startState = createState(eduContentBooks);
       const updates: Update<EduContentBookInterface>[] = [
-
         {
           id: 1,
           changes: {
-            __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAMEUpdatedValue
+            ISBN: ISBNUpdatedValue
           }
         },
         {
           id: 2,
           changes: {
-            __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAMEUpdatedValue
+            ISBN: ISBNUpdatedValue
           }
         }
       ];
@@ -192,7 +203,11 @@ describe('EduContentBooks Reducer', () => {
       const result = reducer(startState, action);
 
       expect(result).toEqual(
-        createState([createEduContentBook(1, __EXTRA__PROPERTY_NAMEUpdatedValue), createEduContentBook(2, __EXTRA__PROPERTY_NAMEUpdatedValue), eduContentBooks[2]])
+        createState([
+          createEduContentBook(1, ISBNUpdatedValue),
+          createEduContentBook(2, ISBNUpdatedValue),
+          eduContentBooks[2]
+        ])
       );
     });
   });
@@ -220,7 +235,11 @@ describe('EduContentBooks Reducer', () => {
 
   describe('clear action', () => {
     it('should clear the eduContentBooks collection', () => {
-      const startState = createState(eduContentBooks, true, 'something went wrong');
+      const startState = createState(
+        eduContentBooks,
+        true,
+        'something went wrong'
+      );
       const action = new EduContentBookActions.ClearEduContentBooks();
       const result = reducer(startState, action);
       expect(result).toEqual(createState([], true, 'something went wrong'));
