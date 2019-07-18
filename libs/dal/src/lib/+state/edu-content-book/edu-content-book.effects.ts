@@ -3,10 +3,7 @@ import { Actions, Effect } from '@ngrx/effects';
 import { DataPersistence } from '@nrwl/nx';
 import { map } from 'rxjs/operators';
 import { DalState } from '..';
-import {
-  EduContentBookServiceInterface,
-  EDU_CONTENT_BOOK_SERVICE_TOKEN
-} from '../../edu-content-book/edu-content-book.service.interface';
+import { TocServiceInterface, TOC_SERVICE_TOKEN } from '../../..';
 import {
   EduContentBooksActionTypes,
   EduContentBooksLoaded,
@@ -22,8 +19,8 @@ export class EduContentBookEffects {
     {
       run: (action: LoadEduContentBooks, state: DalState) => {
         if (!action.payload.force && state.eduContentBooks.loaded) return;
-        return this.eduContentBookService
-          .getAllForUser(action.payload.userId)
+        return this.tocService
+          .getBooksByMethodIds(action.payload.methodIds)
           .pipe(
             map(
               eduContentBooks => new EduContentBooksLoaded({ eduContentBooks })
@@ -39,7 +36,7 @@ export class EduContentBookEffects {
   constructor(
     private actions: Actions,
     private dataPersistence: DataPersistence<DalState>,
-    @Inject(EDU_CONTENT_BOOK_SERVICE_TOKEN)
-    private eduContentBookService: EduContentBookServiceInterface
+    @Inject(TOC_SERVICE_TOKEN)
+    private tocService: TocServiceInterface
   ) {}
 }
