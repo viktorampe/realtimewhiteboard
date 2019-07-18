@@ -12,6 +12,7 @@ export * from './Content.interface';
 export * from './ContentCollection.interface';
 export * from './ContentStatus.interface';
 export * from './ConversationInfo.interface';
+export * from './DiaboloPhase.interface';
 export * from './EditorStatus.interface';
 export * from './EduContent';
 export * from './EduContent.interface';
