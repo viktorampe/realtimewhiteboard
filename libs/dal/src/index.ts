@@ -9,6 +9,7 @@ export * from './lib/+state/credential';
 export * from './lib/+state/current-exercise';
 export * from './lib/+state/dal.state.feature.builder';
 export * from './lib/+state/edu-content';
+export * from './lib/+state/edu-content-book';
 export * from './lib/+state/edu-content-product-type';
 export * from './lib/+state/edu-net';
 export * from './lib/+state/effect-feedback';
