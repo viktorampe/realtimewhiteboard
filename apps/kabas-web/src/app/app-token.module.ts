@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import {
   AuthService,
   AUTH_SERVICE_TOKEN,
+  DiaboloPhaseService,
+  DIABOLO_PHASE_SERVICE_TOKEN,
   PersonService,
   PERSON_SERVICE_TOKEN,
   TocService,
@@ -15,7 +17,8 @@ import {
     // dal services
     { provide: AUTH_SERVICE_TOKEN, useClass: AuthService },
     { provide: PERSON_SERVICE_TOKEN, useClass: PersonService },
-    { provide: TOC_SERVICE_TOKEN, useClass: TocService }
+    { provide: TOC_SERVICE_TOKEN, useClass: TocService },
+    { provide: DIABOLO_PHASE_SERVICE_TOKEN, useClass: DiaboloPhaseService }
   ]
 })
 export class AppTokenModule {}

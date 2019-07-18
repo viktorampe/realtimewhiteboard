@@ -6,6 +6,8 @@ import {
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
   BundleActions,
+  DiaboloPhaseServiceInterface,
+  DIABOLO_PHASE_SERVICE_TOKEN,
   EduContentActions,
   EduContentInterface,
   EduContentTocActions,
@@ -27,7 +29,6 @@ import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { LoginPageViewModel } from './loginpage.viewmodel';
-
 @Component({
   selector: 'campus-loginpage',
   templateUrl: './loginpage.component.html',
@@ -64,7 +65,9 @@ export class LoginpageComponent implements OnInit {
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
     private store: Store<AlertReducer.State>,
     private router: Router,
-    @Inject(TOC_SERVICE_TOKEN) private tocService: TocServiceInterface
+    @Inject(TOC_SERVICE_TOKEN) private tocService: TocServiceInterface,
+    @Inject(DIABOLO_PHASE_SERVICE_TOKEN)
+    private diaboloPhaseService: DiaboloPhaseServiceInterface
   ) {}
 
   ngOnInit() {
@@ -117,5 +120,9 @@ export class LoginpageComponent implements OnInit {
     this.store.dispatch(
       new EduContentTocActions.LoadEduContentTocsForBook({ bookId: 1 })
     );
+  }
+
+  getDiabolo(): void {
+    this.response = this.diaboloPhaseService.getAll();
   }
 }
