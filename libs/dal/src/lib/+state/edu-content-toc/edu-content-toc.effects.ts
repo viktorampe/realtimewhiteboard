@@ -3,8 +3,17 @@ import { Actions, Effect } from '@ngrx/effects';
 import { DataPersistence } from '@nrwl/nx';
 import { map } from 'rxjs/operators';
 import { DalState } from '..';
-import { TocServiceInterface, TOC_SERVICE_TOKEN } from '../../toc/toc.service.interface';
-import { AddEduContentTocsForBook, AddLoadedBook, EduContentTocsActionTypes, EduContentTocsLoadError, LoadEduContentTocsForBook } from './edu-content-toc.actions';
+import {
+  TocServiceInterface,
+  TOC_SERVICE_TOKEN
+} from '../../toc/toc.service.interface';
+import {
+  AddEduContentTocsForBook,
+  AddLoadedBook,
+  EduContentTocsActionTypes,
+  EduContentTocsLoadError,
+  LoadEduContentTocsForBook
+} from './edu-content-toc.actions';
 import { isBookLoaded } from './edu-content-toc.selectors';
 
 @Injectable()
