@@ -15,7 +15,9 @@ describe('DiaboloPhase Selectors', () => {
     error?: any
   ): State {
     return {
-      ids: diaboloPhases ? diaboloPhases.map(diaboloPhase => diaboloPhase.id) : [],
+      ids: diaboloPhases
+        ? diaboloPhases.map(diaboloPhase => diaboloPhase.id)
+        : [],
       entities: diaboloPhases
         ? diaboloPhases.reduce(
             (entityMap, diaboloPhase) => ({

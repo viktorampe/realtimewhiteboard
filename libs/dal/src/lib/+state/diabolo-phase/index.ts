@@ -3,4 +3,9 @@ import { DiaboloPhaseEffects } from './diabolo-phase.effects';
 import * as DiaboloPhaseReducer from './diabolo-phase.reducer';
 import * as DiaboloPhaseQueries from './diabolo-phase.selectors';
 
-export { DiaboloPhaseActions, DiaboloPhaseReducer, DiaboloPhaseQueries, DiaboloPhaseEffects };
+export {
+  DiaboloPhaseActions,
+  DiaboloPhaseReducer,
+  DiaboloPhaseQueries,
+  DiaboloPhaseEffects
+};

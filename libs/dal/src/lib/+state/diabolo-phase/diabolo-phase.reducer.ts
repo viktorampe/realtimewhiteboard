@@ -13,9 +13,9 @@ export interface State extends EntityState<DiaboloPhaseInterface> {
   error?: any;
 }
 
-export const adapter: EntityAdapter<DiaboloPhaseInterface> = createEntityAdapter<
+export const adapter: EntityAdapter<
   DiaboloPhaseInterface
->();
+> = createEntityAdapter<DiaboloPhaseInterface>();
 
 export const initialState: State = adapter.getInitialState({
   // additional entity state properties
@@ -60,7 +60,10 @@ export function reducer(
     }
 
     case DiaboloPhasesActionTypes.DiaboloPhasesLoaded: {
-      return adapter.addAll(action.payload.diaboloPhases, { ...state, loaded: true });
+      return adapter.addAll(action.payload.diaboloPhases, {
+        ...state,
+        loaded: true
+      });
     }
 
     case DiaboloPhasesActionTypes.DiaboloPhasesLoadError: {

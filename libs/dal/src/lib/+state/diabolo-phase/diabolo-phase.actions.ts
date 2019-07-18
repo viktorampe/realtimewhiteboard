@@ -21,7 +21,7 @@ export class LoadDiaboloPhases implements Action {
   readonly type = DiaboloPhasesActionTypes.LoadDiaboloPhases;
 
   constructor(
-    public payload: { force?: boolean, userId: number } = { userId: null }
+    public payload: { force?: boolean; userId: number } = { userId: null }
   ) {}
 }
 
@@ -63,13 +63,17 @@ export class UpsertDiaboloPhases implements Action {
 export class UpdateDiaboloPhase implements Action {
   readonly type = DiaboloPhasesActionTypes.UpdateDiaboloPhase;
 
-  constructor(public payload: { diaboloPhase: Update<DiaboloPhaseInterface> }) {}
+  constructor(
+    public payload: { diaboloPhase: Update<DiaboloPhaseInterface> }
+  ) {}
 }
 
 export class UpdateDiaboloPhases implements Action {
   readonly type = DiaboloPhasesActionTypes.UpdateDiaboloPhases;
 
-  constructor(public payload: { diaboloPhases: Update<DiaboloPhaseInterface>[] }) {}
+  constructor(
+    public payload: { diaboloPhases: Update<DiaboloPhaseInterface>[] }
+  ) {}
 }
 
 export class DeleteDiaboloPhase implements Action {
