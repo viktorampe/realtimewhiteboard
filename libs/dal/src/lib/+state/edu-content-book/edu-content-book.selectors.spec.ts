@@ -123,13 +123,13 @@ describe('EduContentBook Selectors', () => {
       const results = EduContentBookQueries.getDiaboloEnabledLoaded(storeState);
       expect(results).toBe(eduContentBookState.diaboloEnabledLoaded);
     });
-    it('getDiaboloEnabledBookIds() should return the loaded boolean', () => {
+    it('getDiaboloEnabledBookIds() should return ids array', () => {
       const results = EduContentBookQueries.getDiaboloEnabledBookIds(
         storeState
       );
       expect(results).toBe(eduContentBookState.diaboloEnabledBookIds);
     });
-    it('getDiaboloEnabledBookIds() should return the loaded boolean', () => {
+    it('getDiaboloEnabledBookIds() should return true or false depending on the ids array', () => {
       const results1 = EduContentBookQueries.isBookDiaboloEnabled(storeState, {
         id: 1
       });
@@ -139,7 +139,7 @@ describe('EduContentBook Selectors', () => {
       expect(results1).toBe(true);
       expect(results2).toBe(false);
     });
-    it('getDiaboloEnabledBooks() should return the loaded boolean', () => {
+    it('getDiaboloEnabledBooks() should return the an array of books', () => {
       const results = EduContentBookQueries.getDiaboloEnabledBooks(storeState);
       expect(results).toEqual([
         createEduContentBook(4),
