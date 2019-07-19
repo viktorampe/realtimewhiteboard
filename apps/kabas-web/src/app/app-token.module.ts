@@ -3,7 +3,11 @@ import {
   AuthService,
   AUTH_SERVICE_TOKEN,
   DiaboloPhaseService,
-  DIABOLO_PHASE_SERVICE_TOKEN
+  DIABOLO_PHASE_SERVICE_TOKEN,
+  PersonService,
+  PERSON_SERVICE_TOKEN,
+  TocService,
+  TOC_SERVICE_TOKEN
 } from '@campus/dal';
 
 @NgModule({
@@ -12,6 +16,8 @@ import {
 
     // dal services
     { provide: AUTH_SERVICE_TOKEN, useClass: AuthService },
+    { provide: PERSON_SERVICE_TOKEN, useClass: PersonService },
+    { provide: TOC_SERVICE_TOKEN, useClass: TocService },
     { provide: DIABOLO_PHASE_SERVICE_TOKEN, useClass: DiaboloPhaseService }
   ]
 })
