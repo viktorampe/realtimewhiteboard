@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { SearchResultInterface, SearchStateInterface } from '@campus/search';
 import { MapObjectConversionService } from '@campus/utils';
 import { EduContentApi, PersonApi } from '@diekeure/polpo-api-angular-sdk';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { EduContentInterface } from '../+models/EduContent.interface';
 import { EduContentServiceInterface } from './edu-content.service.interface';
@@ -29,7 +29,7 @@ export class EduContentService implements EduContentServiceInterface {
     bookId: number
   ): Observable<EduContentInterface[]> {
     // return this.eduContentApi.getGeneralEduContentsForBookId(bookId);
-    return of([]);
+    return this.eduContentApi['getGeneralEduContentsForBookId'](bookId); //TODO use other one
   }
 
   search(state: SearchStateInterface): Observable<SearchResultInterface> {
