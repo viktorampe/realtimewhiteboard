@@ -6,9 +6,9 @@ export const NAME = 'methods';
 
 export interface State extends EntityState<MethodInterface> {
   // additional entities state properties
-  allowedMethods: number[];
-  allowedMethodsLoaded: boolean;
   loaded: boolean;
+  allowedMethods?: number[];
+  allowedMethodsLoaded?: boolean;
   error?: any;
 }
 

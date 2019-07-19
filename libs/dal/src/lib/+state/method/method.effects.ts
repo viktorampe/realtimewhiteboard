@@ -8,6 +8,8 @@ import {
 } from '../../metadata/method.service.interface';
 import { DalState } from '../dal.state.interface';
 import {
+  AllowedMethodsLoaded,
+  LoadAllowedMethods,
   LoadMethods,
   MethodsActionTypes,
   MethodsLoaded,
@@ -28,6 +30,27 @@ export class MethodEffects {
       return new MethodsLoadError(error);
     }
   });
+
+  @Effect()
+  loadAllowedMethods$ = this.dataPersistence.fetch(
+    MethodsActionTypes.LoadAllowedMethods,
+    {
+      run: (action: LoadAllowedMethods, state: DalState) => {
+        if (!action.payload.force && state.methods.allowedMethodsLoaded) return;
+        return this.methodService
+          .getAllForUser(action.payload.userId)
+          .pipe(
+            map(
+              (methodIds: number[]) => new AllowedMethodsLoaded({ methodIds })
+            )
+          );
+      },
+      onError: (action: LoadAllowedMethods, error) => {
+        // TODO: what with errors?
+        return new MethodsLoadError(error);
+      }
+    }
+  );
 
   constructor(
     private actions: Actions,
