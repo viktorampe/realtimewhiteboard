@@ -14,19 +14,19 @@ const routes: Routes = [
     component: MethodsOverviewComponent
   },
   {
-    path: ':toc',
+    path: ':book',
     resolve: { isResolved: MethodsResolver },
     runGuardsAndResolvers: 'always',
     component: MethodComponent
   },
   {
-    path: ':toc/:chapter',
+    path: ':book/:chapter',
     resolve: { isResolved: MethodsResolver },
     runGuardsAndResolvers: 'always',
     component: MethodChapterComponent
   },
   {
-    path: ':toc/:chapter/:lesson',
+    path: ':book/:chapter/:lesson',
     resolve: { isResolved: MethodsResolver },
     runGuardsAndResolvers: 'always',
     component: MethodChapterLessonComponent
