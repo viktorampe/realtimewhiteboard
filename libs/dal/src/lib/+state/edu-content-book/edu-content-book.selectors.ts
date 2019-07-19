@@ -1,4 +1,5 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
+import { EduContentBookInterface } from '../../+models';
 import {
   NAME,
   selectAll,
@@ -64,4 +65,31 @@ export const getByIds = createSelector(
 export const getById = createSelector(
   selectEduContentBookState,
   (state: State, props: { id: number }) => state.entities[props.id]
+);
+
+export const getDiaboloEnabledError = createSelector(
+  selectEduContentBookState,
+  (state: State) => state.diaboloEnabledError
+);
+
+export const getDiaboloEnabledLoaded = createSelector(
+  selectEduContentBookState,
+  (state: State) => state.diaboloEnabledLoaded
+);
+
+export const getDiaboloEnabledBookIds = createSelector(
+  selectEduContentBookState,
+  (state: State) => state.diaboloEnabledBookIds
+);
+
+export const isBookDiaboloEnabled = createSelector(
+  getDiaboloEnabledBookIds,
+  (diaboloIds: number[], props: { id: number }) => diaboloIds.includes(props.id)
+);
+
+export const getDiaboloEnabledBooks = createSelector(
+  getAll,
+  getDiaboloEnabledBookIds,
+  (books: EduContentBookInterface[], diaboloIds: number[]) =>
+    books.filter(book => diaboloIds.includes(book.id))
 );
