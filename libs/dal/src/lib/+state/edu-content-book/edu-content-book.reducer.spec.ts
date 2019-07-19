@@ -94,7 +94,7 @@ describe('EduContentBooks Reducer', () => {
       expect(result).toEqual(createState(eduContentBooks, true));
     });
 
-    it('should load all eduContentBooks', () => {
+    it('should load all diaboloEnabledBookIds', () => {
       const action = new EduContentBookActions.DiaboloEnabledEduContentBookIdsLoaded(
         {
           diaboloEnabledEduContentBookIds: [492000058, 4148582590, 2573344880]
@@ -118,7 +118,7 @@ describe('EduContentBooks Reducer', () => {
       expect(result).toEqual(createState([], false, false, [], error));
     });
 
-    it('should error', () => {
+    it('should error on diaboloEnabled', () => {
       const error = 'Something went really wrong';
       const action = new EduContentBookActions.DiaboloEnabledEduContentBookIdsLoadError(
         error
