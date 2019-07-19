@@ -40,7 +40,9 @@ export class BooksResolver extends StateResolver {
       new EduContentActions.LoadEduContents({
         userId: this.authService.userId
       }),
-      new MethodActions.LoadMethods()
+      new MethodActions.LoadMethods({
+        userId: this.authService.userId
+      })
     ];
   }
   protected getResolvedQueries(): Selector<object, boolean>[] {

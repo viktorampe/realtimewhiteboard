@@ -32,7 +32,9 @@ export class TasksResolver extends StateResolver {
   protected getLoadableActions(): Action[] {
     return [
       new LearningAreaActions.LoadLearningAreas(),
-      new MethodActions.LoadMethods(),
+      new MethodActions.LoadMethods({
+        userId: this.authService.userId
+      }),
       new EduContentActions.LoadEduContents({
         userId: this.authService.userId
       }),
