@@ -43,6 +43,13 @@ import { environment } from '../environments/environment';
         initialState: EduContentTocReducer.initialState
       }
     ),
+    StoreModule.forFeature(
+      EduContentTocReducer.NAME,
+      EduContentTocReducer.reducer,
+      {
+        initialState: EduContentTocReducer.initialState
+      }
+    ),
     !environment.production ? StoreDevtoolsModule.instrument() : []
   ]
 })
