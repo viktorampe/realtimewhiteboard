@@ -75,8 +75,11 @@ export class ChapterLessonFilterFactory implements SearchFilterFactory {
       )
     );
   }
+  public getPredictionFilterNames(): string[] {
+    return Object.values(this.filterQueries).map(value => value.name);
+  }
 
-  public getFilter<T>(
+  private getFilter<T>(
     entities: T[],
     filterQuery: FilterQueryInterface,
     searchState: SearchStateInterface
@@ -101,10 +104,6 @@ export class ChapterLessonFilterFactory implements SearchFilterFactory {
     } as SearchFilterInterface;
     if (filterQuery.options) searchFilter.options = filterQuery.options;
     return searchFilter;
-  }
-
-  public getPredictionFilterNames(): string[] {
-    return Object.values(this.filterQueries).map(value => value.name);
   }
 
   private filterSorter(
