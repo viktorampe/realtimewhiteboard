@@ -90,7 +90,6 @@ describe('EduContentBookEffects', () => {
     const unforcedLoadAction = new LoadEduContentBooks({
       methodIds: [1, 2, 3]
     });
-    console.log(unforcedLoadAction);
     const forcedLoadAction = new LoadEduContentBooks({
       force: true,
       methodIds: [1, 2, 3]
