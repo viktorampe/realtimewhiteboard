@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import {
   CustomSerializer,
-  DiaboloPhaseReducer,
+  EduContentTocReducer,
   UiReducer,
   UserReducer
 } from '@campus/dal';
@@ -37,10 +37,17 @@ import { environment } from '../environments/environment';
       initialState: UserReducer.initialState
     }),
     StoreModule.forFeature(
-      DiaboloPhaseReducer.NAME,
-      DiaboloPhaseReducer.reducer,
+      EduContentTocReducer.NAME,
+      EduContentTocReducer.reducer,
       {
-        initialState: DiaboloPhaseReducer.initialState
+        initialState: EduContentTocReducer.initialState
+      }
+    ),
+    StoreModule.forFeature(
+      EduContentTocReducer.NAME,
+      EduContentTocReducer.reducer,
+      {
+        initialState: EduContentTocReducer.initialState
       }
     ),
     !environment.production ? StoreDevtoolsModule.instrument() : []

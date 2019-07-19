@@ -5,7 +5,11 @@ import {
   EduContentService,
   EDU_CONTENT_SERVICE_TOKEN,
   DiaboloPhaseService,
-  DIABOLO_PHASE_SERVICE_TOKEN
+  DIABOLO_PHASE_SERVICE_TOKEN,
+  PersonService,
+  PERSON_SERVICE_TOKEN,
+  TocService,
+  TOC_SERVICE_TOKEN
 } from '@campus/dal';
 import { EduContentSearchResultItemService } from './components/searchresults/edu-content-search-result.service';
 import { EDUCONTENT_SEARCH_RESULT_ITEM_SERVICE_TOKEN } from './components/searchresults/edu-content-search-result.service.interface';
@@ -21,7 +25,8 @@ import { EDUCONTENT_SEARCH_RESULT_ITEM_SERVICE_TOKEN } from './components/search
 
     // dal services
     { provide: AUTH_SERVICE_TOKEN, useClass: AuthService },
-    { provide: EDU_CONTENT_SERVICE_TOKEN, useClass: EduContentService },
+    { provide: PERSON_SERVICE_TOKEN, useClass: PersonService },
+    { provide: TOC_SERVICE_TOKEN, useClass: TocService },
     { provide: DIABOLO_PHASE_SERVICE_TOKEN, useClass: DiaboloPhaseService }
   ]
 })
