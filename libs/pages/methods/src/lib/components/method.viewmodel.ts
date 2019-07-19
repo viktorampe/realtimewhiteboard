@@ -16,7 +16,7 @@ import {
 } from '@campus/dal';
 import { RouterReducerState } from '@ngrx/router-store';
 import { select, Store } from '@ngrx/store';
-import { merge, Observable, of } from 'rxjs';
+import { merge, Observable } from 'rxjs';
 import { filter, map, mapTo, switchMap } from 'rxjs/operators';
 
 interface CurrentMethodParams {
@@ -44,60 +44,26 @@ export class MethodViewModel {
     private eduContentService: EduContentServiceInterface
   ) {
     this.setSourceStreams();
-
-    //X You have to get the routerstate to get the bookId, chapter and lesson Ids
-    //X Switch logic depending on whether these are available or not (check if in Overview)
-    //X From the bookId you get the book from the store
-    //X From the book you get the method & years
-    //X From the book you also get the toc for the book
-    //X You also get the generalFiles from the educontent of this book
-    //- (You may also need the types of these generalfiles)
-    //You get the diaboloPhase of this book
-    //You get the allowedMethods
   }
 
   setSourceStreams() {
     this.routerState$ = this.store.pipe(select(getRouterState));
 
-    this.currentMethodParams$ = this.routerState$.pipe(
+    this.currentMethodParams$ = this.getCurrentMethodParams();
+    this.currentBook$ = this.getCurrentBookStream();
+    this.currentMethod$ = this.getCurrentMethodStream();
+    this.currentToc$ = this.getTocsStream();
+
+    this.generalFiles$ = this.getGeneralFilesStream();
+  }
+
+  getCurrentMethodParams() {
+    return this.routerState$.pipe(
       map((routerState: RouterReducerState<RouterStateUrl>) => ({
         book: +routerState.state.params.book,
         chapter: +routerState.state.params.chapter,
         lesson: +routerState.state.params.lesson
       }))
-    );
-
-    this.currentBook$ = this.currentMethodParams$.pipe(
-      switchMap(currentMethodParams => {
-        if (currentMethodParams.book) {
-          return this.store.pipe(
-            select(EduContentBookQueries.getById, {
-              id: currentMethodParams.book
-            })
-          );
-        }
-
-        return of(null);
-      })
-    );
-
-    this.currentMethod$ = this.currentBook$.pipe(
-      map(book => {
-        return book ? book.method : null;
-      })
-    );
-
-    this.currentToc$ = this.getTocsStream();
-    this.generalFiles$ = this.currentMethodParams$.pipe(
-      switchMap(currentMethodParams => {
-        if (currentMethodParams.book) {
-          return this.eduContentService.getGeneralEduContentsForBookId(
-            currentMethodParams.book
-          );
-        }
-
-        return of([]);
-      })
     );
   }
 
@@ -121,27 +87,72 @@ export class MethodViewModel {
     return merge(currentBookWhenEmpty$, currentBookWhenExists$);
   }
 
-  getTocsStream() {
-    return this.currentMethodParams$.pipe(
-      switchMap(currentMethodParams => {
-        if (currentMethodParams.lesson || currentMethodParams.chapter) {
-          return this.store.pipe(
-            select(EduContentTocQueries.getTocsForToc, {
-              tocId: currentMethodParams.lesson || currentMethodParams.chapter
-            })
-          );
-        }
-
-        if (currentMethodParams.book) {
-          return this.store.pipe(
-            select(EduContentTocQueries.getTocsForBook, {
-              bookId: currentMethodParams.book
-            })
-          );
-        }
-
-        return of([]);
+  getCurrentMethodStream() {
+    const currentMethodWhenBook$ = this.currentBook$.pipe(
+      filter(book => !!book),
+      map(book => {
+        return book.method;
       })
     );
+
+    const currentMethodWhenNoBook$ = this.currentBook$.pipe(
+      filter(book => !book),
+      mapTo(null)
+    );
+
+    return merge(currentMethodWhenBook$, currentMethodWhenNoBook$);
+  }
+
+  getTocsStream() {
+    const tocStreamWhenLessonChapter$ = this.currentMethodParams$.pipe(
+      filter(params => !!params.lesson || !!params.chapter),
+      switchMap(params => {
+        return this.store.pipe(
+          select(EduContentTocQueries.getTocsForToc, {
+            tocId: params.lesson || params.chapter
+          })
+        );
+      })
+    );
+
+    const tocStreamWhenBook$ = this.currentMethodParams$.pipe(
+      filter(params => !!params.book && (!params.lesson && !params.chapter)),
+      switchMap(params => {
+        return this.store.pipe(
+          select(EduContentTocQueries.getTocsForBook, {
+            bookId: params.book
+          })
+        );
+      })
+    );
+
+    const tocStreamWhenNoBook$ = this.currentMethodParams$.pipe(
+      filter(params => !params.book),
+      mapTo([])
+    );
+
+    return merge(
+      tocStreamWhenLessonChapter$,
+      tocStreamWhenBook$,
+      tocStreamWhenNoBook$
+    );
+  }
+
+  getGeneralFilesStream() {
+    const generalFilesWhenBook$ = this.currentMethodParams$.pipe(
+      filter(params => !!params.book),
+      switchMap(currentMethodParams => {
+        return this.eduContentService.getGeneralEduContentsForBookId(
+          currentMethodParams.book
+        );
+      })
+    );
+
+    const generalFilesWhenNoBook$ = this.currentMethodParams$.pipe(
+      filter(params => !params.book),
+      mapTo([])
+    );
+
+    return merge(generalFilesWhenBook$, generalFilesWhenNoBook$);
   }
 }
