@@ -1,16 +1,19 @@
 import { NgModule } from '@angular/core';
 import {
   CustomSerializer,
+  DiaboloPhaseReducer,
+  EduContentProductTypeReducer,
   EduContentTocReducer,
   UiReducer,
   UserReducer
 } from '@campus/dal';
+import { EntityState } from '@ngrx/entity';
 import {
   NavigationActionTiming,
   routerReducer,
   StoreRouterConnectingModule
 } from '@ngrx/router-store';
-import { StoreModule } from '@ngrx/store';
+import { ActionReducer, StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { storeFreeze } from 'ngrx-store-freeze';
 import { handleUndo } from 'ngrx-undo';
@@ -37,10 +40,17 @@ import { environment } from '../environments/environment';
       initialState: UserReducer.initialState
     }),
     StoreModule.forFeature(
-      EduContentTocReducer.NAME,
-      EduContentTocReducer.reducer,
+      DiaboloPhaseReducer.NAME,
+      DiaboloPhaseReducer.reducer,
       {
-        initialState: EduContentTocReducer.initialState
+        initialState: DiaboloPhaseReducer.initialState
+      }
+    ),
+    StoreModule.forFeature(
+      EduContentProductTypeReducer.NAME,
+      EduContentProductTypeReducer.reducer,
+      {
+        initialState: EduContentProductTypeReducer.initialState
       }
     ),
     StoreModule.forFeature(
@@ -54,3 +64,19 @@ import { environment } from '../environments/environment';
   ]
 })
 export class AppStoreModule {}
+
+// TODO decide if this is a good idea
+// would clean up imports
+function includeFeaturesInStore(
+  reducers: {
+    NAME: string;
+    reducer: ActionReducer<any>;
+    initialState: EntityState<any>;
+  }[]
+) {
+  return reducers.map(reducer =>
+    StoreModule.forFeature(reducer.NAME, reducer.reducer, {
+      initialState: reducer.initialState
+    })
+  );
+}
