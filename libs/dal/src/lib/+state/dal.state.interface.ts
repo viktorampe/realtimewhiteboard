@@ -4,6 +4,7 @@ import {
   ContentStatusReducer,
   CredentialReducer,
   CurrentExerciseReducer,
+  DiaboloPhaseReducer,
   EduContentProductTypeReducer,
   EduContentReducer,
   EduNetReducer,
@@ -58,4 +59,5 @@ export interface DalState {
   schoolTypes: SchoolTypeReducer.State;
   years: YearReducer.State;
   history: HistoryReducer.State;
+  diaboloPhases: DiaboloPhaseReducer.State;
 }
