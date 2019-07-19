@@ -3,6 +3,9 @@
 >
   <ng-container searchPortal="hostTop"></ng-container>
 </div>
+<campus-button campusPrimary (click)="clearSearchFilters()"
+  >Reset Filters</campus-button
+>
 <div style="height:100%">
   <campus-search
     [searchMode]="searchMode"

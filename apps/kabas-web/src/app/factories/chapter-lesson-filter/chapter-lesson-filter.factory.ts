@@ -1,5 +1,9 @@
 import { Injectable, InjectionToken, Type } from '@angular/core';
-import { DalState, EduContentProductTypeFixture } from '@campus/dal';
+import {
+  DalState,
+  DiaboloPhaseQueries,
+  EduContentProductTypeQueries
+} from '@campus/dal';
 import {
   SearchFilterComponentInterface,
   SearchFilterCriteriaInterface,
@@ -11,9 +15,11 @@ import {
 import {
   MemoizedSelector,
   MemoizedSelectorWithProps,
+  select,
   Store
 } from '@ngrx/store';
-import { Observable, of } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 export const CHAPTER_LESSON_FILTER_FACTORY_TOKEN = new InjectionToken(
   'ChapterLessonFilterFactory'
@@ -28,38 +34,46 @@ export class ChapterLessonFilterFactory implements SearchFilterFactory {
   private component = SelectFilterComponent;
   private domHost = 'hostTop';
 
-  public filterSortOrder = ['eduContentProductType'];
+  private filterSortOrder = ['eduContentProductType', 'diaboloPhase'];
 
-  public filterQueries: {
+  private filterQueries: {
     [key: string]: FilterQueryInterface;
   } = {
     eduContentProductType: {
-      // query: EduContentProductTypeQueries.getAll,
+      query: EduContentProductTypeQueries.getAll,
       name: 'eduContentProductType',
       label: 'Type',
+      component: SelectFilterComponent
+    },
+    diaboloPhase: {
+      query: DiaboloPhaseQueries.getAll,
+      name: 'diaboloPhase',
+      label: 'Diabolo-fase',
       component: SelectFilterComponent
     }
   };
 
-  constructor(public store: Store<DalState>) {}
+  constructor(private store: Store<DalState>) {}
 
   getFilters(
     searchState: SearchStateInterface
   ): Observable<SearchFilterInterface[]> {
-    return of([
-      this.getFilter(
-        [
-          new EduContentProductTypeFixture({ id: 1, name: 'Algemeen bestand' }),
-          new EduContentProductTypeFixture({ id: 2, name: 'Doelen' }),
-          new EduContentProductTypeFixture({ id: 3, name: 'Handleiding' })
-        ],
-        {
-          name: 'types',
-          label: 'types'
-        } as FilterQueryInterface,
-        searchState
+    const eduContentProductTypeFilter$ = this.buildFilter(
+      'eduContentProductType',
+      searchState
+    );
+    const diaboloPhaseFilter$ = this.buildFilter('diaboloPhase', searchState);
+
+    return combineLatest([
+      eduContentProductTypeFilter$,
+      diaboloPhaseFilter$
+    ]).pipe(
+      map(searchFilters =>
+        searchFilters
+          .filter(f => f.criteria.values.length > 0)
+          .sort((a, b) => this.filterSorter(a, b, this.filterSortOrder))
       )
-    ]);
+    );
   }
 
   public getFilter<T>(
@@ -93,7 +107,7 @@ export class ChapterLessonFilterFactory implements SearchFilterFactory {
     return Object.values(this.filterQueries).map(value => value.name);
   }
 
-  public filterSorter(
+  private filterSorter(
     a: SearchFilterInterface,
     b: SearchFilterInterface,
     order: string[]
@@ -109,6 +123,28 @@ export class ChapterLessonFilterFactory implements SearchFilterFactory {
     bIndex = bIndex === -1 ? order.length : bIndex; // not found -> add at end
 
     return aIndex - bIndex;
+  }
+
+  private buildFilter(
+    name: string,
+    searchState: SearchStateInterface
+  ): Observable<SearchFilterInterface> {
+    const filterQuery = this.filterQueries[name];
+    if (filterQuery.learningAreaDependent) {
+      return this.store.pipe(
+        select(filterQuery.query as MemoizedSelectorWithProps<
+          Object,
+          any,
+          any[]
+        >),
+        map(entities => this.getFilter(entities, filterQuery, searchState))
+      );
+    } else {
+      return this.store.pipe(
+        select(filterQuery.query as MemoizedSelector<Object, any[]>),
+        map(entities => this.getFilter(entities, filterQuery, searchState))
+      );
+    }
   }
 }
 

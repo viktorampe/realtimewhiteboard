@@ -103,8 +103,8 @@ export class MethodViewModel {
           ...Array.from(initialSearchState.filterCriteriaSelections.entries())
         ])
       })),
-      // switchMap(searchState => this.eduContentService.search(searchState)),
-      switchMap(searchState => this.getMockResults()),
+      switchMap(searchState => this.eduContentService.search(searchState)),
+      // switchMap(searchState => this.getMockResults()),
       map(searchResult => {
         return {
           ...searchResult,
