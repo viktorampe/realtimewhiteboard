@@ -62,6 +62,8 @@ export class ChapterLessonFilterFactory implements SearchFilterFactory {
       'eduContentProductType',
       searchState
     );
+
+    // TODO only include for DiaboloEnabled book
     const diaboloPhaseFilter$ = this.buildFilter('diaboloPhase', searchState);
 
     return combineLatest([
