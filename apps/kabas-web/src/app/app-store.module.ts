@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import {
   CustomSerializer,
+  EduContentBookReducer,
   EduContentTocReducer,
   UiReducer,
   UserReducer
@@ -37,10 +38,10 @@ import { environment } from '../environments/environment';
       initialState: UserReducer.initialState
     }),
     StoreModule.forFeature(
-      EduContentTocReducer.NAME,
-      EduContentTocReducer.reducer,
+      EduContentBookReducer.NAME,
+      EduContentBookReducer.reducer,
       {
-        initialState: EduContentTocReducer.initialState
+        initialState: EduContentBookReducer.initialState
       }
     ),
     StoreModule.forFeature(

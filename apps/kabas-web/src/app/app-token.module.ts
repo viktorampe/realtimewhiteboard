@@ -16,8 +16,8 @@ import {
 
     // dal services
     { provide: AUTH_SERVICE_TOKEN, useClass: AuthService },
-    { provide: PERSON_SERVICE_TOKEN, useClass: PersonService },
     { provide: TOC_SERVICE_TOKEN, useClass: TocService },
+    { provide: PERSON_SERVICE_TOKEN, useClass: PersonService },
     { provide: DIABOLO_PHASE_SERVICE_TOKEN, useClass: DiaboloPhaseService }
   ]
 })
