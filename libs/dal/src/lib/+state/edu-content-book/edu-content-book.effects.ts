@@ -3,7 +3,10 @@ import { Actions, Effect } from '@ngrx/effects';
 import { DataPersistence } from '@nrwl/nx';
 import { map } from 'rxjs/operators';
 import { DalState } from '..';
-import { TocServiceInterface, TOC_SERVICE_TOKEN } from '../../..';
+import {
+  TocServiceInterface,
+  TOC_SERVICE_TOKEN
+} from '../../toc/toc.service.interface';
 import {
   DiaboloEnabledEduContentBookIdsLoaded,
   DiaboloEnabledEduContentBookIdsLoadError,
