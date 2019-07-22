@@ -7,7 +7,8 @@ export enum MethodsActionTypes {
   LoadMethods = '[Methods] Load Methods',
   ClearMethods = '[Methods] Clear Methods',
   LoadAllowedMethods = '[Methods] Load Allowed Methods',
-  AllowedMethodsLoaded = '[Methods] Allowed Methods Loaded'
+  AllowedMethodsLoaded = '[Methods] Allowed Methods Loaded',
+  AllowedMethodsLoadError = '[Methods] Allowed Methods Load Error'
 }
 
 export class LoadMethods implements Action {
@@ -38,6 +39,10 @@ export class AllowedMethodsLoaded implements Action {
   constructor(public payload: { methodIds: number[] }) {}
 }
 
+export class AllowedMethodsLoadError implements Action {
+  readonly type = MethodsActionTypes.AllowedMethodsLoadError;
+  constructor(public payload: any) {}
+}
 export class MethodsLoadError implements Action {
   readonly type = MethodsActionTypes.MethodsLoadError;
   constructor(public payload: any) {}
@@ -52,5 +57,6 @@ export type MethodsActions =
   | MethodsLoaded
   | LoadAllowedMethods
   | AllowedMethodsLoaded
+  | AllowedMethodsLoadError
   | MethodsLoadError
   | ClearMethods;

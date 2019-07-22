@@ -9,6 +9,7 @@ export interface State extends EntityState<MethodInterface> {
   loaded: boolean;
   allowedMethods?: number[];
   allowedMethodsLoaded?: boolean;
+  allowedMethodsError?: any;
   error?: any;
 }
 
@@ -34,6 +35,14 @@ export function reducer(state = initialState, action: MethodsActions): State {
         ...state,
         allowedMethods: [...state.allowedMethods, ...action.payload.methodIds],
         allowedMethodsLoaded: true
+      };
+    }
+
+    case MethodsActionTypes.AllowedMethodsLoadError: {
+      return {
+        ...state,
+        allowedMethodsError: action.payload,
+        allowedMethodsLoaded: false
       };
     }
 

@@ -102,6 +102,21 @@ describe('Methods Reducer', () => {
         loaded: false
       });
     });
+
+    it('should error', () => {
+      const error = 'Something went wrong';
+      const action = new MethodActions.AllowedMethodsLoadError(error);
+
+      const result = reducer(initialState, action);
+
+      expect(result).toEqual({
+        ...initialState,
+        ...{
+          allowedMethodsLoaded: false,
+          allowedMethodsError: 'Something went wrong'
+        }
+      });
+    });
   });
 
   describe('clear action', () => {
