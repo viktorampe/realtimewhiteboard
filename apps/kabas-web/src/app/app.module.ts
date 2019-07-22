@@ -13,11 +13,12 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppStoreModule } from './app-store.module';
 import { AppTokenModule } from './app-token.module';
 import { AppComponent } from './app.component';
+import { EduContentSearchResultComponent } from './components/searchresults/edu-content-search-result.component';
 
 configureBufferSize(150);
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, EduContentSearchResultComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -45,6 +46,7 @@ configureBufferSize(150);
     AppStoreModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [EduContentSearchResultComponent]
 })
 export class AppModule {}
