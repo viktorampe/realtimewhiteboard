@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import {
   AUTH_SERVICE_TOKEN,
   DalState,
+  EDU_CONTENT_SERVICE_TOKEN,
   getStoreModuleForFeatures,
   UserReducer
 } from '@campus/dal';
@@ -9,7 +10,6 @@ import { FilterFactoryFixture, SearchModeInterface } from '@campus/search';
 import { ENVIRONMENT_SEARCHMODES_TOKEN } from '@campus/shared';
 import { Store, StoreModule } from '@ngrx/store';
 import { configureTestSuite } from 'ng-bullet';
-import { EDU_CONTENT_SERVICE_TOKEN } from './../../../../../dal/src/lib/edu-content/edu-content.service.interface';
 import { MethodViewModel } from './method.viewmodel';
 
 describe('MethodViewModel', () => {
