@@ -184,15 +184,17 @@ export const getMethodYears = createSelector(
             });
           return agg;
         }, {})
-    ).reduce(
-      (
-        agg: MethodYearsInterface[],
-        methodYearEntry: [string, MethodYearValueObject]
-      ) => {
-        agg.push({ id: +methodYearEntry[0], ...methodYearEntry[1] });
-        return agg;
-      },
-      []
-    );
+    )
+      .reduce(
+        (
+          agg: MethodYearsInterface[],
+          methodYearEntry: [string, MethodYearValueObject]
+        ) => {
+          agg.push({ id: +methodYearEntry[0], ...methodYearEntry[1] });
+          return agg;
+        },
+        []
+      )
+      .sort((a, b) => a.name.localeCompare(b.name));
   }
 );
