@@ -7,3 +7,4 @@ export * from './results-list/result.component.base';
 export * from './search-term/search-term.component';
 export * from './search.viewmodel.mock';
 export * from './search/search.component';
+export * from './select-filter-component/select-filter.component';
