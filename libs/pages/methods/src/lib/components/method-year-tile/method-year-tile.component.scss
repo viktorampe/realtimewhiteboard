@@ -1,0 +1,19 @@
+:host {
+  border: 1px solid black;
+  width: 200px;
+  height: 400px;
+  display: flex;
+}
+
+pages-methods-tile {
+  &__image {
+    &__container {}
+  }
+
+  &__title {}
+
+  &__button {
+    &__container {}
+  }
+
+}

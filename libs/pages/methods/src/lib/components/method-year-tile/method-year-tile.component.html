@@ -1,3 +1,16 @@
-<p>
-  method-year-tile works!
-</p>
+<div class="pages-methods-tile__image__container">
+  <img
+    [src]="'assets/icons/method/' + logoUrl"
+    class="pages-methods-tile__image"
+  />
+</div>
+<div class="pages-methods-tile__title"></div>
+<div class="pages-methods-tile__button__container">
+  <campus-button
+    *ngFor="let year of years"
+    class="pages-methods-tile__button"
+    [campusRouterLink]=""
+  >
+    {{ year.name }}
+  </campus-button>
+</div>
