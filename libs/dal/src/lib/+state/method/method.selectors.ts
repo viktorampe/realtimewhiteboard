@@ -105,10 +105,10 @@ export const getByLearningAreaIds = createSelector(
   }
 );
 
-export const getAllowedMethods = createSelector(
+export const getAllowedMethodsLoaded = createSelector(
   selectMethodState,
   (state: State) => {
-    return getMethodsById(state, state.allowedMethods);
+    return state.allowedMethodsLoaded;
   }
 );
 
@@ -117,6 +117,20 @@ export const getAllowedMethodIds = createSelector(
   (state: State) => state.allowedMethods
 );
 
+export const getAllowedMethods = createSelector(
+  selectMethodState,
+  getAllowedMethodIds,
+  (state: State, allowedMethodIds: number[]) => {
+    const idsFromState = <number[]>state.ids;
+
+    // order allowed method ids like in the state.ids property
+    allowedMethodIds = idsFromState.filter(id => {
+      return allowedMethodIds.includes(id);
+    });
+
+    return getMethodsById(state, allowedMethodIds);
+  }
+);
 export const isAllowedMethod = createSelector(
   selectMethodState,
   (state: State, props: { id: number }) => {

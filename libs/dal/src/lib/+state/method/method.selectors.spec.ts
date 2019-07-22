@@ -32,7 +32,8 @@ describe('Method Selectors', () => {
         : {},
       loaded: loaded,
       error: error,
-      allowedMethods: allowedMethods
+      allowedMethods: allowedMethods,
+      allowedMethodsLoaded: true
     };
   }
 
@@ -89,13 +90,21 @@ describe('Method Selectors', () => {
         createMethod(2)
       ]);
     });
+
     it('getById() should return the desired entity', () => {
       const results = MethodQueries.getById(storeState, { id: 2 });
       expect(results).toEqual(createMethod(2));
     });
+
     it('getById() should return undefined if the entity is not present', () => {
       const results = MethodQueries.getById(storeState, { id: 9 });
       expect(results).toBe(undefined);
+    });
+
+    it('getAllowedMethodsLoaded() should return the allowedMethodsLoaded flag', () => {
+      const results = MethodQueries.getAllowedMethodsLoaded(storeState);
+
+      expect(results).toBe(true);
     });
 
     describe('isAllowedMethod', () => {
@@ -189,19 +198,19 @@ describe('Method Selectors', () => {
         expect(result).toEqual([]);
       });
 
-      it('should return all allowed methods', () => {
+      it('should return all allowed methods in order (determined by state.ids)', () => {
         const mockMethods = [
-          new MethodFixture({ id: 4 }),
           new MethodFixture({ id: 1 }),
           new MethodFixture({ id: 2 }),
-          new MethodFixture({ id: 3 })
+          new MethodFixture({ id: 3 }),
+          new MethodFixture({ id: 4 })
         ];
 
-        methodState = createState(mockMethods, true, [1, 2], 'no error');
+        methodState = createState(mockMethods, true, [2, 1], 'no error');
         storeState = { methods: methodState };
 
         const result = getAllowedMethods(storeState);
-        expect(result).toEqual([mockMethods[1], mockMethods[2]]);
+        expect(result).toEqual([mockMethods[0], mockMethods[1]]);
       });
     });
 
