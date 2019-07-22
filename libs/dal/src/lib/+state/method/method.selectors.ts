@@ -119,12 +119,11 @@ export const getAllowedMethodIds = createSelector(
 
 export const getAllowedMethods = createSelector(
   selectMethodState,
+  getIds,
   getAllowedMethodIds,
-  (state: State, allowedMethodIds: number[]) => {
-    const idsFromState = <number[]>state.ids;
-
+  (state: State, stateIds: number[], allowedMethodIds: number[]) => {
     // order allowed method ids like in the state.ids property
-    allowedMethodIds = idsFromState.filter(id => {
+    allowedMethodIds = stateIds.filter(id => {
       return allowedMethodIds.includes(id);
     });
 
