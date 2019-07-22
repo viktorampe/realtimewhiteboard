@@ -4,11 +4,8 @@ import { EduContentBookInterface } from '../../+models';
 
 export enum EduContentBooksActionTypes {
   EduContentBooksLoaded = '[EduContentBooks] EduContentBooks Loaded',
-  DiaboloEnabledEduContentBookIdsLoaded = '[EduContentBooks] DiaboloEnabled EduContentBookIds Loaded',
   EduContentBooksLoadError = '[EduContentBooks] Load Error',
-  DiaboloEnabledEduContentBookIdsLoadError = '[EduContentBooks] DiaboloEnabledLoad Error',
   LoadEduContentBooks = '[EduContentBooks] Load EduContentBooks',
-  LoadDiaboloEnabledEduContentBookIds = '[EduContentBooks] Load DiaboloEnabled EduContentBookIds',
   AddEduContentBook = '[EduContentBooks] Add EduContentBook',
   UpsertEduContentBook = '[EduContentBooks] Upsert EduContentBook',
   AddEduContentBooks = '[EduContentBooks] Add EduContentBooks',
@@ -36,26 +33,6 @@ export class EduContentBooksLoaded implements Action {
 
 export class EduContentBooksLoadError implements Action {
   readonly type = EduContentBooksActionTypes.EduContentBooksLoadError;
-  constructor(public payload: any) {}
-}
-
-export class LoadDiaboloEnabledEduContentBookIds implements Action {
-  readonly type =
-    EduContentBooksActionTypes.LoadDiaboloEnabledEduContentBookIds;
-
-  constructor(public payload: { force?: boolean }) {}
-}
-
-export class DiaboloEnabledEduContentBookIdsLoaded implements Action {
-  readonly type =
-    EduContentBooksActionTypes.DiaboloEnabledEduContentBookIdsLoaded;
-
-  constructor(public payload: { diaboloEnabledEduContentBookIds: number[] }) {}
-}
-
-export class DiaboloEnabledEduContentBookIdsLoadError implements Action {
-  readonly type =
-    EduContentBooksActionTypes.DiaboloEnabledEduContentBookIdsLoadError;
   constructor(public payload: any) {}
 }
 
@@ -117,11 +94,8 @@ export class ClearEduContentBooks implements Action {
 
 export type EduContentBooksActions =
   | LoadEduContentBooks
-  | LoadDiaboloEnabledEduContentBookIds
   | EduContentBooksLoaded
-  | DiaboloEnabledEduContentBookIdsLoaded
   | EduContentBooksLoadError
-  | DiaboloEnabledEduContentBookIdsLoadError
   | AddEduContentBook
   | UpsertEduContentBook
   | AddEduContentBooks
