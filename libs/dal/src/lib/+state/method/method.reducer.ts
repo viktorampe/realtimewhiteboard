@@ -7,6 +7,9 @@ export const NAME = 'methods';
 export interface State extends EntityState<MethodInterface> {
   // additional entities state properties
   loaded: boolean;
+  allowedMethods?: number[];
+  allowedMethodsLoaded?: boolean;
+  allowedMethodsError?: any;
   error?: any;
 }
 
@@ -16,6 +19,8 @@ export const adapter: EntityAdapter<MethodInterface> = createEntityAdapter<
 
 export const initialState: State = adapter.getInitialState({
   // additional entity state properties
+  allowedMethods: [],
+  allowedMethodsLoaded: false,
   loaded: false
 });
 
@@ -23,6 +28,22 @@ export function reducer(state = initialState, action: MethodsActions): State {
   switch (action.type) {
     case MethodsActionTypes.MethodsLoaded: {
       return adapter.addAll(action.payload.methods, { ...state, loaded: true });
+    }
+
+    case MethodsActionTypes.AllowedMethodsLoaded: {
+      return {
+        ...state,
+        allowedMethods: [...state.allowedMethods, ...action.payload.methodIds],
+        allowedMethodsLoaded: true
+      };
+    }
+
+    case MethodsActionTypes.AllowedMethodsLoadError: {
+      return {
+        ...state,
+        allowedMethodsError: action.payload,
+        allowedMethodsLoaded: false
+      };
     }
 
     case MethodsActionTypes.MethodsLoadError: {
