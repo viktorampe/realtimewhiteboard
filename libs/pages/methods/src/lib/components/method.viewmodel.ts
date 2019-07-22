@@ -32,6 +32,7 @@ import { filter, map, switchMap, withLatestFrom } from 'rxjs/operators';
 export class MethodViewModel {
   public searchResults$: Observable<SearchResultInterface>;
   public searchState$: Observable<SearchStateInterface>;
+  public allowedBooks$: Observable<any[]>;
 
   private _searchState$: BehaviorSubject<SearchStateInterface>;
   private routerState$: Observable<RouterReducerState<RouterStateUrl>>;

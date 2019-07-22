@@ -5,7 +5,7 @@ import {
   SearchStateInterface
 } from '@campus/search';
 import { ViewModelInterface } from '@campus/testing';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { MethodViewModel } from './method.viewmodel';
 
 @Injectable({
@@ -15,6 +15,7 @@ export class MockMethodViewModel
   implements ViewModelInterface<MethodViewModel> {
   public searchResults$: Observable<SearchResultInterface>;
   public searchState$: Observable<SearchStateInterface>;
+  public allowedBooks$ = new BehaviorSubject<any[]>(this.getAllowedBooks$());
 
   public getSearchMode(mode: string, book?: number): SearchModeInterface {
     return;
@@ -25,4 +26,61 @@ export class MockMethodViewModel
   }
 
   public updateState(state: SearchStateInterface): void {}
+
+  private getAllowedBooks$(): any[] {
+    return [
+      {
+        logoUrl: 'beautemps.svg',
+        name: 'testnaam',
+        years: [
+          {
+            id: 1,
+            name: 'L1',
+            bookId: 2
+          },
+          {
+            id: 2,
+            name: 'L2',
+            bookId: 3
+          },
+          {
+            id: 3,
+            name: 'L3',
+            bookId: 4
+          },
+          {
+            id: 4,
+            name: 'L4',
+            bookId: 5
+          }
+        ]
+      },
+      {
+        logoUrl: 'beautemps.svg',
+        name: 'testnaam',
+        years: [
+          {
+            id: 1,
+            name: 'L1',
+            bookId: 2
+          },
+          {
+            id: 2,
+            name: 'L2',
+            bookId: 3
+          },
+          {
+            id: 3,
+            name: 'L3',
+            bookId: 4
+          },
+          {
+            id: 4,
+            name: 'L4',
+            bookId: 5
+          }
+        ]
+      }
+    ];
+  }
 }

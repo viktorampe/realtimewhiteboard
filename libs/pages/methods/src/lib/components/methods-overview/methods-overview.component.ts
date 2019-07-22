@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { of } from 'rxjs';
 import { MethodViewModel } from '../method.viewmodel';
 import { MockMethodViewModel } from '../method.viewmodel.mock';
 
@@ -10,61 +9,7 @@ import { MockMethodViewModel } from '../method.viewmodel.mock';
   providers: [{ provide: MethodViewModel, useClass: MockMethodViewModel }]
 })
 export class MethodsOverviewComponent implements OnInit {
-  // TODO use viewmodel data
-  public allowedMethods$ = of([
-    {
-      logoUrl: 'beautemps.svg',
-      name: 'testnaam',
-      years: [
-        {
-          id: 1,
-          name: 'L1',
-          bookId: 2
-        },
-        {
-          id: 2,
-          name: 'L2',
-          bookId: 3
-        },
-        {
-          id: 3,
-          name: 'L3',
-          bookId: 4
-        },
-        {
-          id: 4,
-          name: 'L4',
-          bookId: 5
-        }
-      ]
-    },
-    {
-      logoUrl: 'beautemps.svg',
-      name: 'testnaam',
-      years: [
-        {
-          id: 1,
-          name: 'L1',
-          bookId: 2
-        },
-        {
-          id: 2,
-          name: 'L2',
-          bookId: 3
-        },
-        {
-          id: 3,
-          name: 'L3',
-          bookId: 4
-        },
-        {
-          id: 4,
-          name: 'L4',
-          bookId: 5
-        }
-      ]
-    }
-  ]);
+  public allowedMethods$ = this.methodViewmodel.allowedBooks$;
   constructor(private methodViewmodel: MethodViewModel) {}
 
   ngOnInit() {}
