@@ -3,4 +3,5 @@ export * from './lib/MockActivatedRoute';
 export * from './lib/MockDate';
 export * from './lib/MockMatIconRegistry';
 export * from './lib/MockWindow';
+export * from './lib/search-test-module';
 export * from './lib/testing.module';

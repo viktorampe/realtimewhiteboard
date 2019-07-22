@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { SearchModule } from '@campus/search';
 import { UiModule } from '@campus/ui';
 import { MethodChapterLessonComponent } from './components/method-chapter-lesson/method-chapter-lesson.component';
 import { MethodChapterComponent } from './components/method-chapter/method-chapter.component';
@@ -9,7 +10,7 @@ import { MethodsOverviewComponent } from './components/methods-overview/methods-
 import { PagesMethodsRoutingModule } from './pages-pages-routing.module';
 
 @NgModule({
-  imports: [CommonModule, UiModule, PagesMethodsRoutingModule],
+  imports: [CommonModule, PagesMethodsRoutingModule, SearchModule, UiModule],
   declarations: [
     MethodsOverviewComponent,
     MethodComponent,
