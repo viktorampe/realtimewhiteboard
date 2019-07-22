@@ -1,18 +1,22 @@
 import { TestBed } from '@angular/core/testing';
+import { DIABOLO_PHASE_SERVICE_TOKEN } from '@campus/dal';
 import { EffectsModule } from '@ngrx/effects';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
-import { MethodReducer } from '.';
-import { METHOD_SERVICE_TOKEN } from '../../metadata/method.service.interface';
-import { LoadMethods, MethodsLoaded, MethodsLoadError } from './method.actions';
-import { MethodEffects } from './method.effects';
+import { DiaboloPhaseReducer } from '.';
+import {
+  DiaboloPhasesLoaded,
+  DiaboloPhasesLoadError,
+  LoadDiaboloPhases
+} from './diabolo-phase.actions';
+import { DiaboloPhaseEffects } from './diabolo-phase.effects';
 
-describe('MethodEffects', () => {
+describe('DiaboloPhaseEffects', () => {
   let actions: Observable<any>;
-  let effects: MethodEffects;
+  let effects: DiaboloPhaseEffects;
   let usedState: any;
 
   const expectInAndOut = (
@@ -36,7 +40,7 @@ describe('MethodEffects', () => {
   const mockServiceMethodReturnValue = (
     method: string,
     returnValue: any,
-    service: any = METHOD_SERVICE_TOKEN
+    service: any = DIABOLO_PHASE_SERVICE_TOKEN
   ) => {
     jest.spyOn(TestBed.get(service), method).mockReturnValue(of(returnValue));
   };
@@ -44,7 +48,7 @@ describe('MethodEffects', () => {
   const mockServiceMethodError = (
     method: string,
     errorMessage: string,
-    service: any = METHOD_SERVICE_TOKEN
+    service: any = DIABOLO_PHASE_SERVICE_TOKEN
   ) => {
     jest.spyOn(TestBed.get(service), method).mockImplementation(() => {
       throw new Error(errorMessage);
@@ -56,50 +60,54 @@ describe('MethodEffects', () => {
       imports: [
         NxModule.forRoot(),
         StoreModule.forRoot({}),
-        StoreModule.forFeature(MethodReducer.NAME, MethodReducer.reducer, {
-          initialState: usedState
-        }),
+        StoreModule.forFeature(
+          DiaboloPhaseReducer.NAME,
+          DiaboloPhaseReducer.reducer,
+          {
+            initialState: usedState
+          }
+        ),
         EffectsModule.forRoot([]),
-        EffectsModule.forFeature([MethodEffects])
+        EffectsModule.forFeature([DiaboloPhaseEffects])
       ],
       providers: [
         {
-          provide: METHOD_SERVICE_TOKEN,
+          provide: DIABOLO_PHASE_SERVICE_TOKEN,
           useValue: {
-            getAllForUser: () => {}
+            getAll: () => {}
           }
         },
-        MethodEffects,
+        DiaboloPhaseEffects,
         DataPersistence,
         provideMockActions(() => actions)
       ]
     });
 
-    effects = TestBed.get(MethodEffects);
+    effects = TestBed.get(DiaboloPhaseEffects);
   });
 
-  describe('loadMethod$', () => {
-    const unforcedLoadAction = new LoadMethods();
-    const forcedLoadAction = new LoadMethods({ force: true });
-    const filledLoadedAction = new MethodsLoaded({ methods: [] });
-    const loadErrorAction = new MethodsLoadError(new Error('failed'));
+  describe('loadDiaboloPhase$', () => {
+    const unforcedLoadAction = new LoadDiaboloPhases({ userId: 1 });
+    const forcedLoadAction = new LoadDiaboloPhases({ force: true, userId: 1 });
+    const filledLoadedAction = new DiaboloPhasesLoaded({ diaboloPhases: [] });
+    const loadErrorAction = new DiaboloPhasesLoadError(new Error('failed'));
     describe('with initialState', () => {
       beforeAll(() => {
-        usedState = MethodReducer.initialState;
+        usedState = DiaboloPhaseReducer.initialState;
       });
       beforeEach(() => {
-        mockServiceMethodReturnValue('getAllForUser', []);
+        mockServiceMethodReturnValue('getAll', []);
       });
       it('should trigger an api call with the initialState if force is not true', () => {
         expectInAndOut(
-          effects.loadMethods$,
+          effects.loadDiaboloPhases$,
           unforcedLoadAction,
           filledLoadedAction
         );
       });
       it('should trigger an api call with the initialState if force is true', () => {
         expectInAndOut(
-          effects.loadMethods$,
+          effects.loadDiaboloPhases$,
           forcedLoadAction,
           filledLoadedAction
         );
@@ -107,17 +115,17 @@ describe('MethodEffects', () => {
     });
     describe('with loaded state', () => {
       beforeAll(() => {
-        usedState = { ...MethodReducer.initialState, loaded: true };
+        usedState = { ...DiaboloPhaseReducer.initialState, loaded: true };
       });
       beforeEach(() => {
-        mockServiceMethodReturnValue('getAllForUser', []);
+        mockServiceMethodReturnValue('getAll', []);
       });
       it('should not trigger an api call with the loaded state if force is not true', () => {
-        expectInNoOut(effects.loadMethods$, unforcedLoadAction);
+        expectInNoOut(effects.loadDiaboloPhases$, unforcedLoadAction);
       });
       it('should trigger an api call with the loaded state if force is true', () => {
         expectInAndOut(
-          effects.loadMethods$,
+          effects.loadDiaboloPhases$,
           forcedLoadAction,
           filledLoadedAction
         );
@@ -125,38 +133,46 @@ describe('MethodEffects', () => {
     });
     describe('with initialState and failing api call', () => {
       beforeAll(() => {
-        usedState = MethodReducer.initialState;
+        usedState = DiaboloPhaseReducer.initialState;
       });
       beforeEach(() => {
-        mockServiceMethodError('getAllForUser', 'failed');
+        mockServiceMethodError('getAll', 'failed');
       });
       it('should return a error action if force is not true', () => {
         expectInAndOut(
-          effects.loadMethods$,
+          effects.loadDiaboloPhases$,
           unforcedLoadAction,
           loadErrorAction
         );
       });
       it('should return a error action if force is true', () => {
-        expectInAndOut(effects.loadMethods$, forcedLoadAction, loadErrorAction);
+        expectInAndOut(
+          effects.loadDiaboloPhases$,
+          forcedLoadAction,
+          loadErrorAction
+        );
       });
     });
     describe('with loaded and failing api call', () => {
       beforeAll(() => {
         usedState = {
-          ...MethodReducer.initialState,
+          ...DiaboloPhaseReducer.initialState,
           loaded: true,
           list: []
         };
       });
       beforeEach(() => {
-        mockServiceMethodError('getAllForUser', 'failed');
+        mockServiceMethodError('getAll', 'failed');
       });
       it('should return nothing action if force is not true', () => {
-        expectInNoOut(effects.loadMethods$, unforcedLoadAction);
+        expectInNoOut(effects.loadDiaboloPhases$, unforcedLoadAction);
       });
       it('should return a error action if force is true', () => {
-        expectInAndOut(effects.loadMethods$, forcedLoadAction, loadErrorAction);
+        expectInAndOut(
+          effects.loadDiaboloPhases$,
+          forcedLoadAction,
+          loadErrorAction
+        );
       });
     });
   });
