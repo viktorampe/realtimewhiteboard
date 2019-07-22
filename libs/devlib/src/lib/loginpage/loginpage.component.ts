@@ -6,8 +6,7 @@ import {
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
   BundleActions,
-  DiaboloPhaseServiceInterface,
-  DIABOLO_PHASE_SERVICE_TOKEN,
+  DiaboloPhaseActions,
   EduContentActions,
   EduContentInterface,
   EduContentTocActions,
@@ -65,9 +64,7 @@ export class LoginpageComponent implements OnInit {
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
     private store: Store<AlertReducer.State>,
     private router: Router,
-    @Inject(TOC_SERVICE_TOKEN) private tocService: TocServiceInterface,
-    @Inject(DIABOLO_PHASE_SERVICE_TOKEN)
-    private diaboloPhaseService: DiaboloPhaseServiceInterface
+    @Inject(TOC_SERVICE_TOKEN) private tocService: TocServiceInterface
   ) {}
 
   ngOnInit() {
@@ -114,15 +111,12 @@ export class LoginpageComponent implements OnInit {
     this.store.dispatch(new EduContentActions.LoadEduContents({ userId }));
     this.store.dispatch(new FavoriteActions.LoadFavorites({ userId }));
     this.store.dispatch(new LearningAreaActions.LoadLearningAreas());
+    this.store.dispatch(new DiaboloPhaseActions.LoadDiaboloPhases({ userId }));
   }
 
   loadToc(): void {
     this.store.dispatch(
       new EduContentTocActions.LoadEduContentTocsForBook({ bookId: 1 })
     );
-  }
-
-  getDiabolo(): void {
-    this.response = this.diaboloPhaseService.getAll();
   }
 }
