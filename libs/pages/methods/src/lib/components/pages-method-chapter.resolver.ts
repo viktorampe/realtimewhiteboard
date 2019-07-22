@@ -5,7 +5,7 @@ import { Action, Selector, Store } from '@ngrx/store';
 @Injectable({
   providedIn: 'root'
 })
-export class MethodResolver extends StateResolver {
+export class MethodChapterResolver extends StateResolver {
   constructor(private store: Store<DalState>) {
     super(store);
   }
