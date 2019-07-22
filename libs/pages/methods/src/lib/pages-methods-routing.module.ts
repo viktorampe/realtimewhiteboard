@@ -4,7 +4,7 @@ import { MethodChapterLessonComponent } from './components/method-chapter-lesson
 import { MethodChapterComponent } from './components/method-chapter/method-chapter.component';
 import { MethodComponent } from './components/method/method.component';
 import { MethodsOverviewComponent } from './components/methods-overview/methods-overview.component';
-import { MethodChapterLessonResolver } from './components/pages-method-chapter-lessong.resolver';
+import { MethodChapterLessonResolver } from './components/pages-method-chapter-lesson.resolver';
 import { MethodChapterResolver } from './components/pages-method-chapter.resolver';
 import { MethodsOverviewResolver } from './components/pages-method-overview.resolver';
 import { MethodResolver } from './components/pages-methods.resolver';
