@@ -5,10 +5,7 @@ import { State } from './edu-content-book.reducer';
 export function createState(
   eduContentBooks: EduContentBookInterface[],
   loaded: boolean = false,
-  diaboloEnabledLoaded: boolean = false,
-  diaboloEnabledBookIds: number[] = [],
-  error?: any,
-  diaboloEnabledError?: any
+  error?: any
 ): State {
   return {
     ids: eduContentBooks
@@ -24,19 +21,17 @@ export function createState(
         )
       : {},
     loaded: loaded,
-    diaboloEnabledLoaded: diaboloEnabledLoaded,
-    diaboloEnabledBookIds: diaboloEnabledBookIds,
-    error: error,
-    diaboloEnabledError: diaboloEnabledError
+    error: error
   };
 }
 
 interface CreateEduContentBookOptions {
-  methodId: number;
-  years: {
+  methodId?: number;
+  years?: {
     id: number;
     name: string;
   }[];
+  diabolo?: boolean;
 }
 
 export function createEduContentBook(
@@ -47,21 +42,24 @@ export function createEduContentBook(
     id: id
   };
   if (options) {
-    data.methodId = options.methodId;
-    data.method = {
-      name: `method ${options.methodId}`,
-      logoUrl: `logo for method ${options.methodId}`
-    };
-    data.years = options.years;
+    if (options.methodId) {
+      data.methodId = options.methodId;
+      data.method = {
+        name: `method ${options.methodId}`,
+        logoUrl: `logo for method ${options.methodId}`
+      };
+    }
+    if (options.years) data.years = options.years;
+    if (options.diabolo) data.diabolo = options.diabolo;
   }
   return data;
 }
 
 const eduContentBooksArray = [
   createEduContentBook(4),
-  createEduContentBook(1),
+  createEduContentBook(1, { diabolo: true }),
   createEduContentBook(2),
-  createEduContentBook(3)
+  createEduContentBook(3, { diabolo: true })
 ];
 
 describe('EduContentBook Selectors', () => {
@@ -70,13 +68,7 @@ describe('EduContentBook Selectors', () => {
 
   describe('EduContentBook Selectors', () => {
     beforeEach(() => {
-      eduContentBookState = createState(
-        eduContentBooksArray,
-        true,
-        false,
-        [],
-        'no error'
-      );
+      eduContentBookState = createState(eduContentBooksArray, true, 'no error');
       storeState = { eduContentBooks: eduContentBookState };
     });
     it('getError() should return the error', () => {
@@ -108,8 +100,8 @@ describe('EduContentBook Selectors', () => {
         ids: [3, 1, 90, 2]
       });
       expect(results).toEqual([
-        createEduContentBook(3),
-        createEduContentBook(1),
+        createEduContentBook(3, { diabolo: true }),
+        createEduContentBook(1, { diabolo: true }),
         undefined,
         createEduContentBook(2)
       ]);
@@ -125,29 +117,14 @@ describe('EduContentBook Selectors', () => {
   });
   describe('EduContentBook Diabolo related Selectors', () => {
     beforeEach(() => {
-      eduContentBookState = createState(
-        eduContentBooksArray,
-        true,
-        true,
-        [1, 4],
-        undefined,
-        'diabolo error'
-      );
+      eduContentBookState = createState(eduContentBooksArray, true);
       storeState = { eduContentBooks: eduContentBookState };
-    });
-    it('getDiaboloEnabledError() should return the error', () => {
-      const results = EduContentBookQueries.getDiaboloEnabledError(storeState);
-      expect(results).toBe(eduContentBookState.diaboloEnabledError);
-    });
-    it('getDiaboloEnabledLoaded() should return the loaded boolean', () => {
-      const results = EduContentBookQueries.getDiaboloEnabledLoaded(storeState);
-      expect(results).toBe(eduContentBookState.diaboloEnabledLoaded);
     });
     it('getDiaboloEnabledBookIds() should return ids array', () => {
       const results = EduContentBookQueries.getDiaboloEnabledBookIds(
         storeState
       );
-      expect(results).toBe(eduContentBookState.diaboloEnabledBookIds);
+      expect(results).toEqual([1, 3]);
     });
     it('getDiaboloEnabledBookIds() should return true or false depending on the ids array', () => {
       const results1 = EduContentBookQueries.isBookDiaboloEnabled(storeState, {
@@ -162,8 +139,8 @@ describe('EduContentBook Selectors', () => {
     it('getDiaboloEnabledBooks() should return the an array of books', () => {
       const results = EduContentBookQueries.getDiaboloEnabledBooks(storeState);
       expect(results).toEqual([
-        createEduContentBook(4),
-        createEduContentBook(1)
+        createEduContentBook(1, { diabolo: true }),
+        createEduContentBook(3, { diabolo: true })
       ]);
     });
   });
