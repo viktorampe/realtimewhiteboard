@@ -68,8 +68,9 @@ export const getById = createSelector(
 );
 
 export const getDiaboloEnabledBookIds = createSelector(
-  selectEduContentBookState,
-  (state: State) => state.diaboloEnabledBookIds
+  getAll,
+  (eduContentBooks: EduContentBookInterface[]) =>
+    eduContentBooks.filter(book => book.diabolo).map(book => book.id)
 );
 
 export const isBookDiaboloEnabled = createSelector(
@@ -81,5 +82,5 @@ export const getDiaboloEnabledBooks = createSelector(
   getAll,
   getDiaboloEnabledBookIds,
   (books: EduContentBookInterface[], diaboloIds: number[]) =>
-    books.filter(book => diaboloIds.includes(book.id))
+    diaboloIds.map(id => books[id])
 );
