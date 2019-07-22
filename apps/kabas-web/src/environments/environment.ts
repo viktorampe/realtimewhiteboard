@@ -23,7 +23,7 @@ export const environment: EnvironmentInterface = {
     url: 'http://www.kabas.localhost:3020/dev'
   },
   api: {
-    APIBase: 'http://api.polpo.localhost:3000'
+    APIBase: 'http://api.kabas.localhost:3000'
   },
   features: {
     alerts: {
