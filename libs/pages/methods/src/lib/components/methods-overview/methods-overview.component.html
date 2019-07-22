@@ -1,6 +1,18 @@
-<p> MethodsOverview works! </p>
-<campus-method-year-tile
-  [logoUrl]="data.logoUrl"
-  [name]="data.name"
-  [years]="data.years"
-></campus-method-year-tile>
+<div class="pages-methods__container" *ngIf="(books$ | async) as books">
+  <campus-page-header [title]="'Methodes'" [iconClass]="'book'">
+  </campus-page-header>
+
+  <ng-template #noBooks>
+    <div>Er zijn momenteel geen boeken met jou gedeeld.</div>
+  </ng-template>
+
+  <ng-container *ngIf="books.length; else noBooks">
+    <ng-container *ngFor="let book of books">
+      <campus-method-year-tile
+        [logoUrl]="book.logoUrl"
+        [name]="book.name"
+        [years]="book.years"
+      ></campus-method-year-tile>
+    </ng-container>
+  </ng-container>
+</div>
