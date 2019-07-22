@@ -13,7 +13,9 @@ export enum MethodsActionTypes {
 export class LoadMethods implements Action {
   readonly type = MethodsActionTypes.LoadMethods;
 
-  constructor(public payload: { force?: boolean } = {}) {}
+  constructor(
+    public payload: { force?: boolean; userId: number } = { userId: null }
+  ) {}
 }
 
 export class MethodsLoaded implements Action {

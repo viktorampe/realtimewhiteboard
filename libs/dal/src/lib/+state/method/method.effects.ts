@@ -23,7 +23,7 @@ export class MethodEffects {
     run: (action: LoadMethods, state: DalState) => {
       if (!action.payload.force && state.methods.loaded) return;
       return this.methodService
-        .getAll()
+        .getAllForUser(action.payload.userId)
         .pipe(map(methods => new MethodsLoaded({ methods })));
     },
     onError: (action: LoadMethods, error) => {
