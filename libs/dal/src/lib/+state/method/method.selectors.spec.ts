@@ -1,6 +1,11 @@
 import { MethodQueries } from '.';
 import { YearFixture } from '../../+fixtures';
 import { MethodInterface } from '../../+models';
+import { State as BookState } from '../edu-content-book/edu-content-book.reducer';
+import {
+  createEduContentBook,
+  createState as createBookState
+} from '../edu-content-book/edu-content-book.selectors.spec';
 import { State as YearState } from '../year/year.reducer';
 import { MethodFixture } from './../../+fixtures/Method.fixture';
 import { State } from './method.reducer';
@@ -37,7 +42,7 @@ describe('Method Selectors', () => {
   }
 
   let methodState: State;
-  let storeState: { methods: State };
+  let storeState: { methods: State; eduContentBooks?: BookState };
 
   describe('Method Selectors', () => {
     beforeEach(() => {
@@ -253,6 +258,44 @@ describe('Method Selectors', () => {
         });
 
         expect(result).toBe('foo method baz year');
+      });
+    });
+    describe('getMethodYears', () => {
+      it('should return the method name and year name combination', () => {
+        const mockMethods = [
+          new MethodFixture({ id: 1, name: 'foo method' }),
+          new MethodFixture({ id: 2, name: 'bar method' }),
+          new MethodFixture({ id: 3, name: ' baz method' })
+        ];
+        storeState.eduContentBooks = createBookState([
+          createEduContentBook(1, {
+            methodId: 1,
+            years: [{ id: 1, name: 'Y1' }]
+          }),
+          createEduContentBook(2, {
+            methodId: 1,
+            years: [{ id: 2, name: 'Y2' }]
+          }),
+          createEduContentBook(3, {
+            methodId: 3,
+            years: [{ id: 1, name: 'Y1' }]
+          })
+        ]);
+
+        storeState.methods = createState(mockMethods, true, [1, 2], 'no error');
+
+        const result = MethodQueries.getMethodYears(storeState);
+
+        expect(result).toEqual({
+          1: {
+            logoUrl: 'logo for method 1',
+            name: 'method 1',
+            years: [
+              { id: 1, name: 'Y1', bookId: 1 },
+              { id: 2, name: 'Y2', bookId: 2 }
+            ]
+          }
+        });
       });
     });
   });

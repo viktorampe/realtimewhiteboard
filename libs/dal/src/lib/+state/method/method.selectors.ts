@@ -1,7 +1,9 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { MethodInterface } from '../../+models';
+import { EduContentBookInterface, MethodInterface } from '../../+models';
+import { getAll as getAllEduContentBooks } from '../edu-content-book/edu-content-book.selectors';
 import { State as YearState } from '../year/year.reducer';
 import { selectYearState } from '../year/year.selectors';
+import { MethodYearsInterface } from './method.interfaces';
 import {
   NAME,
   selectAll,
@@ -137,5 +139,32 @@ export const getMethodWithYear = createSelector(
       ' ' +
       yearState.entities[props.yearId].label
     );
+  }
+);
+
+export const getMethodYears = createSelector(
+  getAllowedMethodIds,
+  getAllEduContentBooks,
+  (
+    allowedMethodIds: number[],
+    eduContentBooks: EduContentBookInterface[]
+  ): MethodYearsInterface => {
+    return eduContentBooks
+      .filter(book => allowedMethodIds.includes(book.methodId))
+      .reduce((agg, book) => {
+        if (!agg[book.methodId])
+          agg[book.methodId] = {
+            logoUrl: book.method.logoUrl,
+            name: book.method.name,
+            years: []
+          };
+        if (book.years.length > 0)
+          agg[book.methodId].years.push({
+            name: book.years[0].name,
+            id: book.years[0].id,
+            bookId: book.id
+          });
+        return agg;
+      }, {});
   }
 );
