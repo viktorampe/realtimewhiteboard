@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { of } from 'rxjs';
+import { MethodViewModel } from '../method.viewmodel';
 
 @Component({
   selector: 'campus-methods-overview',
@@ -7,7 +8,34 @@ import { of } from 'rxjs';
   styleUrls: ['./methods-overview.component.scss']
 })
 export class MethodsOverviewComponent implements OnInit {
-  public books$ = of([
+  // TODO use viewmodel data
+  public allowedMethods$ = of([
+    {
+      logoUrl: 'beautemps.svg',
+      name: 'testnaam',
+      years: [
+        {
+          id: 1,
+          name: 'L1',
+          bookId: 2
+        },
+        {
+          id: 2,
+          name: 'L2',
+          bookId: 3
+        },
+        {
+          id: 3,
+          name: 'L3',
+          bookId: 4
+        },
+        {
+          id: 4,
+          name: 'L4',
+          bookId: 5
+        }
+      ]
+    },
     {
       logoUrl: 'beautemps.svg',
       name: 'testnaam',
@@ -35,7 +63,7 @@ export class MethodsOverviewComponent implements OnInit {
       ]
     }
   ]);
-  constructor() {}
+  constructor(private methodViewmodel: MethodViewModel) {}
 
   ngOnInit() {}
 }
