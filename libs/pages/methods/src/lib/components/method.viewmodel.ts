@@ -40,7 +40,7 @@ export class MethodViewModel {
     private store: Store<DalState>,
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
     @Inject(ENVIRONMENT_SEARCHMODES_TOKEN)
-    public searchModes: EnvironmentSearchModesInterface,
+    private searchModes: EnvironmentSearchModesInterface,
     @Inject(EDU_CONTENT_SERVICE_TOKEN)
     private eduContentService: EduContentServiceInterface
   ) {
@@ -126,6 +126,7 @@ export class MethodViewModel {
     );
   }
 
+  // tslint:disable-next-line: member-ordering
   private loadedMockResults = false;
   private getMockResults(): Observable<SearchResultInterface> {
     if (this.loadedMockResults) {

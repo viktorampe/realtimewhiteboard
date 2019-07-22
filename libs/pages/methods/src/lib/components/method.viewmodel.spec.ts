@@ -9,6 +9,7 @@ import { FilterFactoryFixture, SearchModeInterface } from '@campus/search';
 import { ENVIRONMENT_SEARCHMODES_TOKEN } from '@campus/shared';
 import { Store, StoreModule } from '@ngrx/store';
 import { configureTestSuite } from 'ng-bullet';
+import { EDU_CONTENT_SERVICE_TOKEN } from './../../../../../dal/src/lib/edu-content/edu-content.service.interface';
 import { MethodViewModel } from './method.viewmodel';
 
 describe('MethodViewModel', () => {
@@ -40,6 +41,12 @@ describe('MethodViewModel', () => {
       providers: [
         Store,
         { provide: AUTH_SERVICE_TOKEN, useValue: { userId: 1 } },
+        {
+          provide: EDU_CONTENT_SERVICE_TOKEN,
+          useValue: {
+            search: () => {}
+          }
+        },
         {
           provide: ENVIRONMENT_SEARCHMODES_TOKEN,
           useValue: {
