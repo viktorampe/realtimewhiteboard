@@ -15,7 +15,10 @@ import {
   EDU_CONTENT_SERVICE_TOKEN,
   getRouterState,
   MethodInterface,
-  RouterStateUrl
+  MethodQueries,
+  RouterStateUrl,
+  TocServiceInterface,
+  TOC_SERVICE_TOKEN
 } from '@campus/dal';
 import {
   SearchModeInterface,
@@ -41,15 +44,17 @@ interface CurrentMethodParams {
   providedIn: 'root'
 })
 export class MethodViewModel {
+  public searchResults$: Observable<SearchResultInterface>;
+  public searchState$: Observable<SearchStateInterface>;
+
   private currentMethodParams$: Observable<CurrentMethodParams>;
   private currentBook$: Observable<EduContentBookInterface>;
   private currentMethod$: Observable<MethodInterface>;
   private currentToc$: Observable<EduContentTOCInterface[]>;
   private generalFiles$: Observable<EduContentInterface[]>;
+  private allowedMethodIds$: Observable<number[]>;
+  private allowedBooksWithYears$: Observable<EduContentBookInterface[]>;
   private isDiaboloEnabled$: Observable<boolean>;
-
-  public searchResults$: Observable<SearchResultInterface>;
-  public searchState$: Observable<SearchStateInterface>;
 
   private _searchState$: BehaviorSubject<SearchStateInterface>;
 
@@ -60,6 +65,8 @@ export class MethodViewModel {
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
     @Inject(EDU_CONTENT_SERVICE_TOKEN)
     private eduContentService: EduContentServiceInterface,
+    @Inject(TOC_SERVICE_TOKEN)
+    private tocService: TocServiceInterface,
     @Inject(ENVIRONMENT_SEARCHMODES_TOKEN)
     private searchModes: EnvironmentSearchModesInterface
   ) {
@@ -74,6 +81,8 @@ export class MethodViewModel {
     this.currentBook$ = this.getCurrentBookStream();
     this.currentMethod$ = this.getCurrentMethodStream();
     this.currentToc$ = this.getTocsStream();
+    this.allowedMethodIds$ = this.getAllowedMethodIdsStream();
+    this.allowedBooksWithYears$ = this.getAllowedBooksWithYearsStream();
 
     this.generalFiles$ = this.getGeneralFilesStream();
   }
@@ -175,6 +184,18 @@ export class MethodViewModel {
     );
 
     return merge(generalFilesWhenBook$, generalFilesWhenNoBook$);
+  }
+
+  getAllowedMethodIdsStream() {
+    return this.store.pipe(select(MethodQueries.getAllowedMethodIds));
+  }
+
+  getAllowedBooksWithYearsStream() {
+    return this.allowedMethodIds$.pipe(
+      switchMap(ids => {
+        return this.tocService.getBooksByMethodIds(ids);
+      })
+    );
   }
 
   private initialise() {
