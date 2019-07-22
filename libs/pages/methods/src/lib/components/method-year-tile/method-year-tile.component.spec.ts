@@ -8,9 +8,8 @@ describe('MethodYearTileComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MethodYearTileComponent ]
-    })
-    .compileComponents();
+      declarations: [MethodYearTileComponent]
+    }).compileComponents();
   }));
 
   beforeEach(() => {
