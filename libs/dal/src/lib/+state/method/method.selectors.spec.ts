@@ -1,7 +1,10 @@
 import { MethodQueries } from '.';
+import { YearFixture } from '../../+fixtures';
 import { MethodInterface } from '../../+models';
+import { State as YearState } from '../year/year.reducer';
 import { MethodFixture } from './../../+fixtures/Method.fixture';
 import { State } from './method.reducer';
+import { getAllowedMethodIds, getAllowedMethods } from './method.selectors';
 
 describe('Method Selectors', () => {
   function createMethod(id: number): MethodInterface | any {
@@ -13,6 +16,7 @@ describe('Method Selectors', () => {
   function createState(
     methods: MethodInterface[],
     loaded: boolean = false,
+    allowedMethods: number[] = [],
     error?: any
   ): State {
     return {
@@ -27,18 +31,21 @@ describe('Method Selectors', () => {
           )
         : {},
       loaded: loaded,
-      error: error
+      error: error,
+      allowedMethods: allowedMethods,
+      allowedMethodsLoaded: true
     };
   }
 
   let methodState: State;
-  let storeState: any;
+  let storeState: { methods: State };
 
   describe('Method Selectors', () => {
     beforeEach(() => {
       methodState = createState(
         [createMethod(4), createMethod(1), createMethod(2), createMethod(3)],
         true,
+        [],
         'no error'
       );
       storeState = { methods: methodState };
@@ -83,13 +90,36 @@ describe('Method Selectors', () => {
         createMethod(2)
       ]);
     });
+
     it('getById() should return the desired entity', () => {
       const results = MethodQueries.getById(storeState, { id: 2 });
       expect(results).toEqual(createMethod(2));
     });
+
     it('getById() should return undefined if the entity is not present', () => {
       const results = MethodQueries.getById(storeState, { id: 9 });
       expect(results).toBe(undefined);
+    });
+
+    it('getAllowedMethodsLoaded() should return the allowedMethodsLoaded flag', () => {
+      const results = MethodQueries.getAllowedMethodsLoaded(storeState);
+
+      expect(results).toBe(true);
+    });
+
+    describe('isAllowedMethod', () => {
+      it('should return true if the provided method id is allowed', () => {
+        storeState.methods.allowedMethods = [1, 2];
+
+        const result = MethodQueries.isAllowedMethod(storeState, { id: 1 });
+        expect(result).toBe(true);
+      });
+      it('should return false if the provided method id is not allowed', () => {
+        storeState.methods.allowedMethods = [1, 2, 4];
+
+        const result = MethodQueries.isAllowedMethod(storeState, { id: 3 });
+        expect(result).toBe(false);
+      });
     });
 
     describe('getByLearningAreaId', () => {
@@ -103,7 +133,7 @@ describe('Method Selectors', () => {
           new MethodFixture({ id: 3, learningAreaId: 3 })
         ];
 
-        methodState = createState(mockMethods, true, 'no error');
+        methodState = createState(mockMethods, true, [], 'no error');
         storeState = { methods: methodState };
       });
 
@@ -137,7 +167,7 @@ describe('Method Selectors', () => {
           new MethodFixture({ id: 3, learningAreaId: 3 })
         ];
 
-        methodState = createState(mockMethods, true, 'no error');
+        methodState = createState(mockMethods, true, [], 'no error');
         storeState = { methods: methodState };
       });
 
@@ -157,6 +187,81 @@ describe('Method Selectors', () => {
 
         const expected = [];
         expect(results).toEqual(expected);
+      });
+    });
+
+    describe('getAllowedMethods', () => {
+      it('should return an empty array if there are no allowed methods', () => {
+        storeState.methods.allowedMethods = [];
+
+        const result = getAllowedMethods(storeState);
+        expect(result).toEqual([]);
+      });
+
+      it('should return all allowed methods in order (determined by state.ids)', () => {
+        const mockMethods = [
+          new MethodFixture({ id: 1 }),
+          new MethodFixture({ id: 2 }),
+          new MethodFixture({ id: 3 }),
+          new MethodFixture({ id: 4 })
+        ];
+
+        methodState = createState(mockMethods, true, [2, 1], 'no error');
+        storeState = { methods: methodState };
+
+        const result = getAllowedMethods(storeState);
+        expect(result).toEqual([mockMethods[0], mockMethods[1]]);
+      });
+    });
+
+    describe('getAllowedMethodIds', () => {
+      it('should return an empty array if there are no allowed methods', () => {
+        const result = getAllowedMethodIds(storeState);
+        expect(result).toEqual([]);
+      });
+
+      it('should return all allowed method ids', () => {
+        storeState.methods.allowedMethods = [1, 2];
+
+        const result = getAllowedMethodIds(storeState);
+        expect(result).toEqual([1, 2]);
+      });
+    });
+
+    describe('getMethodWithYear', () => {
+      it('should return the method name and year name combination', () => {
+        const mockMethods = [
+          new MethodFixture({ id: 1, name: 'foo method' }),
+          new MethodFixture({ id: 2, name: 'bar method' }),
+          new MethodFixture({ id: 3, name: ' baz method' })
+        ];
+
+        methodState = createState(mockMethods, true, [], 'no error');
+
+        const mockYears = [
+          new YearFixture({ id: 1, label: 'foo year' }),
+          new YearFixture({ id: 2, label: 'bar year' }),
+          new YearFixture({ id: 3, label: 'baz year' })
+        ];
+
+        const yearState: YearState = {
+          ids: [1, 2, 3],
+          entities: {
+            1: mockYears[0],
+            2: mockYears[1],
+            3: mockYears[2]
+          },
+          loaded: true
+        };
+
+        const methodAndYearState = { years: yearState, methods: methodState };
+
+        const result = MethodQueries.getMethodWithYear(methodAndYearState, {
+          methodId: 1,
+          yearId: 3
+        });
+
+        expect(result).toBe('foo method baz year');
       });
     });
   });
