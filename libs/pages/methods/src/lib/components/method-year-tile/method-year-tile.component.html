@@ -4,12 +4,12 @@
     class="pages-methods-tile__image"
   />
 </div>
-<div class="pages-methods-tile__title"></div>
+<div class="pages-methods-tile__title">{{ name }}</div>
 <div class="pages-methods-tile__button__container">
   <campus-button
     *ngFor="let year of years"
     class="pages-methods-tile__button"
-    [campusRouterLink]=""
+    [routerLink]="year.bookId"
   >
     {{ year.name }}
   </campus-button>

@@ -6,13 +6,13 @@ import { Component, HostBinding, Input, OnInit } from '@angular/core';
   styleUrls: ['./method-year-tile.component.scss']
 })
 export class MethodYearTileComponent implements OnInit {
-  @Input() logoUrl = '';
+  @Input() logoUrl: string;
   @Input() name: string;
   @Input() years: {
     id: number;
     name: string;
     bookId: number;
-  }[];
+  }[] = [];
 
   @HostBinding('class.pages-methods-tile') pagesMethodsTileClass = true;
 

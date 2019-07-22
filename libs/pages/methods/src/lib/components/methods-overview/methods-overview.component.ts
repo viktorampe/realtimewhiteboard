@@ -19,6 +19,16 @@ export class MethodsOverviewComponent implements OnInit {
         id: 2,
         name: 'L2',
         bookId: 3
+      },
+      {
+        id: 3,
+        name: 'L3',
+        bookId: 4
+      },
+      {
+        id: 4,
+        name: 'L4',
+        bookId: 5
       }
     ]
   };
