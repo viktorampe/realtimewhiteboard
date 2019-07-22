@@ -2,49 +2,69 @@ import { EduContentBookQueries } from '.';
 import { EduContentBookInterface } from '../../+models';
 import { State } from './edu-content-book.reducer';
 
+export function createState(
+  eduContentBooks: EduContentBookInterface[],
+  loaded: boolean = false,
+  diaboloEnabledLoaded: boolean = false,
+  diaboloEnabledBookIds: number[] = [],
+  error?: any,
+  diaboloEnabledError?: any
+): State {
+  return {
+    ids: eduContentBooks
+      ? eduContentBooks.map(eduContentBook => eduContentBook.id)
+      : [],
+    entities: eduContentBooks
+      ? eduContentBooks.reduce(
+          (entityMap, eduContentBook) => ({
+            ...entityMap,
+            [eduContentBook.id]: eduContentBook
+          }),
+          {}
+        )
+      : {},
+    loaded: loaded,
+    diaboloEnabledLoaded: diaboloEnabledLoaded,
+    diaboloEnabledBookIds: diaboloEnabledBookIds,
+    error: error,
+    diaboloEnabledError: diaboloEnabledError
+  };
+}
+
+interface CreateEduContentBookOptions {
+  methodId: number;
+  years: {
+    id: number;
+    name: string;
+  }[];
+}
+
+export function createEduContentBook(
+  id: number,
+  options?: CreateEduContentBookOptions
+): EduContentBookInterface | any {
+  const data: EduContentBookInterface | any = {
+    id: id
+  };
+  if (options) {
+    data.methodId = options.methodId;
+    data.method = {
+      name: `method ${options.methodId}`,
+      logoUrl: `logo for method ${options.methodId}`
+    };
+    data.years = options.years;
+  }
+  return data;
+}
+
+const eduContentBooksArray = [
+  createEduContentBook(4),
+  createEduContentBook(1),
+  createEduContentBook(2),
+  createEduContentBook(3)
+];
+
 describe('EduContentBook Selectors', () => {
-  const eduContentBooksArray = [
-    createEduContentBook(4),
-    createEduContentBook(1),
-    createEduContentBook(2),
-    createEduContentBook(3)
-  ];
-
-  function createEduContentBook(id: number): EduContentBookInterface | any {
-    return {
-      id: id
-    };
-  }
-
-  function createState(
-    eduContentBooks: EduContentBookInterface[],
-    loaded: boolean = false,
-    diaboloEnabledLoaded: boolean = false,
-    diaboloEnabledBookIds: number[] = [],
-    error?: any,
-    diaboloEnabledError?: any
-  ): State {
-    return {
-      ids: eduContentBooks
-        ? eduContentBooks.map(eduContentBook => eduContentBook.id)
-        : [],
-      entities: eduContentBooks
-        ? eduContentBooks.reduce(
-            (entityMap, eduContentBook) => ({
-              ...entityMap,
-              [eduContentBook.id]: eduContentBook
-            }),
-            {}
-          )
-        : {},
-      loaded: loaded,
-      diaboloEnabledLoaded: diaboloEnabledLoaded,
-      diaboloEnabledBookIds: diaboloEnabledBookIds,
-      error: error,
-      diaboloEnabledError: diaboloEnabledError
-    };
-  }
-
   let eduContentBookState: State;
   let storeState: any;
 
