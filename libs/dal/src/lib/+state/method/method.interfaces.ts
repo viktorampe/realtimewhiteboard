@@ -1,11 +1,24 @@
 export interface MethodYearsInterface {
-  [methodId: number]: {
-    logoUrl: string;
+  id: number;
+  logoUrl: string;
+  name: string;
+  years: {
+    id: number;
     name: string;
-    years: {
-      id: number;
-      name: string;
-      bookId: number;
-    }[];
-  };
+    bookId: number;
+  }[];
+}
+
+export interface MethodYearsKeyValueObject {
+  [methodId: number]: MethodYearValueObject;
+}
+
+export interface MethodYearValueObject {
+  logoUrl: string;
+  name: string;
+  years: {
+    id: number;
+    name: string;
+    bookId: number;
+  }[];
 }

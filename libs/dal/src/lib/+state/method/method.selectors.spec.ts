@@ -295,8 +295,9 @@ describe('Method Selectors', () => {
 
         const result = MethodQueries.getMethodYears(storeState);
 
-        expect(result).toEqual({
-          1: {
+        expect(result).toEqual([
+          {
+            id: 1,
             logoUrl: 'logo for method 1',
             name: 'method 1',
             years: [
@@ -304,7 +305,7 @@ describe('Method Selectors', () => {
               { id: 2, name: 'Y2', bookId: 2 }
             ]
           }
-        });
+        ]);
       });
     });
   });

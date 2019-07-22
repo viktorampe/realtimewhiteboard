@@ -3,7 +3,11 @@ import { EduContentBookInterface, MethodInterface } from '../../+models';
 import { getAll as getAllEduContentBooks } from '../edu-content-book/edu-content-book.selectors';
 import { State as YearState } from '../year/year.reducer';
 import { selectYearState } from '../year/year.selectors';
-import { MethodYearsInterface } from './method.interfaces';
+import {
+  MethodYearsInterface,
+  MethodYearsKeyValueObject,
+  MethodYearValueObject
+} from './method.interfaces';
 import {
   NAME,
   selectAll,
@@ -161,23 +165,34 @@ export const getMethodYears = createSelector(
   (
     allowedMethodIds: number[],
     eduContentBooks: EduContentBookInterface[]
-  ): MethodYearsInterface => {
-    return eduContentBooks
-      .filter(book => allowedMethodIds.includes(book.methodId))
-      .reduce((agg, book) => {
-        if (!agg[book.methodId])
-          agg[book.methodId] = {
-            logoUrl: book.method.logoUrl,
-            name: book.method.name,
-            years: []
-          };
-        if (book.years.length > 0)
-          agg[book.methodId].years.push({
-            name: book.years[0].name,
-            id: book.years[0].id,
-            bookId: book.id
-          });
+  ): MethodYearsInterface[] => {
+    return Object.entries(
+      eduContentBooks
+        .filter(book => allowedMethodIds.includes(book.methodId))
+        .reduce((agg, book): MethodYearsKeyValueObject => {
+          if (!agg[book.methodId])
+            agg[book.methodId] = {
+              logoUrl: book.method.logoUrl,
+              name: book.method.name,
+              years: []
+            };
+          if (book.years.length > 0)
+            agg[book.methodId].years.push({
+              name: book.years[0].name,
+              id: book.years[0].id,
+              bookId: book.id
+            });
+          return agg;
+        }, {})
+    ).reduce(
+      (
+        agg: MethodYearsInterface[],
+        methodYearEntry: [string, MethodYearValueObject]
+      ) => {
+        agg.push({ id: +methodYearEntry[0], ...methodYearEntry[1] });
         return agg;
-      }, {});
+      },
+      []
+    );
   }
 );
