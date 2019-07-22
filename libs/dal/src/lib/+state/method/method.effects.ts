@@ -9,6 +9,7 @@ import {
 import { DalState } from '../dal.state.interface';
 import {
   AllowedMethodsLoaded,
+  AllowedMethodsLoadError,
   LoadAllowedMethods,
   LoadMethods,
   MethodsActionTypes,
@@ -38,7 +39,7 @@ export class MethodEffects {
       run: (action: LoadAllowedMethods, state: DalState) => {
         if (!action.payload.force && state.methods.allowedMethodsLoaded) return;
         return this.methodService
-          .getAllForUser(action.payload.userId)
+          .getAllowedMethodIds(action.payload.userId)
           .pipe(
             map(
               (methodIds: number[]) => new AllowedMethodsLoaded({ methodIds })
@@ -46,8 +47,7 @@ export class MethodEffects {
           );
       },
       onError: (action: LoadAllowedMethods, error) => {
-        // TODO: what with errors?
-        return new MethodsLoadError(error);
+        return new AllowedMethodsLoadError(error);
       }
     }
   );
