@@ -1,1 +1,16 @@
-<p> MethodChapterView works! </p>
+<div
+  style="margin: 8px 8px 48px 8px; padding: 8px; width: 400px; border: 1px solid black"
+>
+  <ng-container searchPortal="hostTop"></ng-container>
+</div>
+<campus-button campusPrimary (click)="clearSearchFilters()"
+  >Reset Filters</campus-button
+>
+<div style="height:100%">
+  <campus-search
+    [searchMode]="searchMode"
+    [initialState]="initialSearchState$ | async"
+    [searchResults]="searchResults$ | async"
+    (searchState$)="onSearchStateChange($event)"
+  ></campus-search>
+</div>
