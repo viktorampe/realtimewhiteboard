@@ -44,7 +44,7 @@ export const getAllEntities = createSelector(
 );
 
 /**
- * Utitily to return all entities for the provided ids
+ * Utility to return all entities for the provided ids
  *
  * @param {State} state The method state
  * @param {number[]} ids The ids of the entities you want
