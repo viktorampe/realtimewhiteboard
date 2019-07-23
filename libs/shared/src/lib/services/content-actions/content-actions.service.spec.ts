@@ -27,9 +27,7 @@ describe('ContentActionsServiceInterface', () => {
             openEduContentAsSolution: () => {},
             openEduContentAsStream: () => {},
             openEduContentAsDownload: () => {},
-            openBoeke: () => {
-              return 'foo';
-            }
+            openBoeke: () => {}
           }
         }
       ]
@@ -115,14 +113,12 @@ describe('ContentActionsServiceInterface', () => {
       const mockEduContent = new EduContentFixture({
         type: EduContentTypeEnum.BOEKE
       });
-      const spy = jest.spyOn(contentOpener, 'openBoeke');
 
       const actions = contentActionsService.getActionsForEduContent(
         mockEduContent
       );
 
-      expect(actions[0].handler(mockEduContent)).toBe('foo');
-      // expect(spy).toHaveBeenCalled();
+      expect(actions[0].handler).toBe(contentOpener.openBoeke);
     });
   });
 });
