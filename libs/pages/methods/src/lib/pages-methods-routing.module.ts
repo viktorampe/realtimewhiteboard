@@ -17,8 +17,7 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        component: MethodsOverviewComponent,
-        data: { breadcrumbText: 'Methodes' }
+        component: MethodsOverviewComponent
       },
       {
         path: ':book',
