@@ -69,4 +69,5 @@ export interface EduContentMetadataInterface {
   fileLabel?: string;
   methodIds?: number[];
   streamable?: boolean;
+  eduContentBookId: number;
 }
