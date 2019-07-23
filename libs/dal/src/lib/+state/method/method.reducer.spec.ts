@@ -50,7 +50,9 @@ function createState(
           {}
         )
       : {},
-    loaded: loaded
+    loaded: loaded,
+    allowedMethods: [],
+    allowedMethodsLoaded: false
   };
   if (error !== undefined) state.error = error;
   return state;
@@ -84,6 +86,36 @@ describe('Methods Reducer', () => {
       const action = new MethodActions.MethodsLoadError(error);
       const result = reducer(initialState, action);
       expect(result).toEqual(createState([], false, error));
+    });
+  });
+  describe('AllowedMethodsloaded action', () => {
+    it('should load all allowed methods', () => {
+      const action = new MethodActions.AllowedMethodsLoaded({
+        methodIds: [1, 4, 3]
+      });
+      const result = reducer(initialState, action);
+      expect(result).toEqual({
+        ids: [],
+        entities: {},
+        allowedMethods: [1, 4, 3],
+        allowedMethodsLoaded: true,
+        loaded: false
+      });
+    });
+
+    it('should error', () => {
+      const error = 'Something went wrong';
+      const action = new MethodActions.AllowedMethodsLoadError(error);
+
+      const result = reducer(initialState, action);
+
+      expect(result).toEqual({
+        ...initialState,
+        ...{
+          allowedMethodsLoaded: false,
+          allowedMethodsError: 'Something went wrong'
+        }
+      });
     });
   });
 
