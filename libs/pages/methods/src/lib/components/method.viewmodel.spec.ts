@@ -6,6 +6,13 @@ import {
   AUTH_SERVICE_TOKEN,
   CustomSerializer,
   DalState,
+  EduContentBookActions,
+  EduContentBookFixture,
+  EduContentBookInterface,
+  EduContentBookReducer,
+  EduContentTocActions,
+  EduContentTOCFixture,
+  EduContentTocReducer,
   EDU_CONTENT_SERVICE_TOKEN,
   getStoreModuleForFeatures,
   UserReducer
@@ -22,6 +29,7 @@ import {
   StoreRouterConnectingModule
 } from '@ngrx/router-store';
 import { Store, StoreModule } from '@ngrx/store';
+import { hot } from '@nrwl/nx/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { MethodViewModel } from './method.viewmodel';
 
@@ -30,6 +38,23 @@ describe('MethodViewModel', () => {
   let store: Store<DalState>;
   let router: Router;
   let zone: NgZone;
+
+  const books: EduContentBookInterface[] = [
+    new EduContentBookFixture({
+      id: 5,
+      eduContentTOC: [
+        new EduContentTOCFixture({ id: 1, treeId: 5 }),
+        new EduContentTOCFixture({ id: 2, treeId: 5 })
+      ]
+    }),
+    new EduContentBookFixture({
+      id: 6,
+      eduContentTOC: [
+        new EduContentTOCFixture({ id: 3, treeId: 6 }),
+        new EduContentTOCFixture({ id: 4, treeId: 6 })
+      ]
+    })
+  ];
 
   const searchMode: SearchModeInterface = {
     name: 'demo',
@@ -51,7 +76,11 @@ describe('MethodViewModel', () => {
     TestBed.configureTestingModule({
       imports: [
         StoreModule.forRoot({ router: routerReducer }),
-        ...getStoreModuleForFeatures([UserReducer]),
+        ...getStoreModuleForFeatures([
+          UserReducer,
+          EduContentTocReducer,
+          EduContentBookReducer
+        ]),
         RouterTestingModule.withRoutes([
           {
             path: '',
@@ -60,25 +89,7 @@ describe('MethodViewModel', () => {
           },
           {
             path: 'methods',
-            component: Component,
-            children: [
-              {
-                path: ':book',
-                component: Component,
-                children: [
-                  {
-                    path: ':chapter',
-                    component: Component,
-                    children: [
-                      {
-                        path: ':lesson',
-                        component: Component
-                      }
-                    ]
-                  }
-                ]
-              }
-            ]
+            component: Component
           }
         ]),
         StoreRouterConnectingModule.forRoot({
@@ -109,7 +120,43 @@ describe('MethodViewModel', () => {
     store = TestBed.get(Store);
     zone = TestBed.get(NgZone);
     router = TestBed.get(Router);
+
+    loadInStore();
   });
+
+  function loadInStore() {
+    store.dispatch(
+      new EduContentBookActions.EduContentBooksLoaded({
+        eduContentBooks: books
+      })
+    );
+
+    books.forEach(book => {
+      store.dispatch(
+        new EduContentTocActions.AddEduContentTocsForBook({
+          bookId: book.id,
+          eduContentTocs: book.eduContentTOC
+        })
+      );
+    });
+  }
+
+  function navigateWithParams(params: {
+    book?: number;
+    chapter?: number;
+    lesson?: number;
+  }) {
+    zone.run(() => {
+      const navigationAction = {
+        type: ROUTER_NAVIGATION,
+        payload: {
+          routerState: { params },
+          event: {}
+        } as RouterNavigationPayload<any>
+      } as RouterNavigationAction;
+      store.dispatch(navigationAction);
+    });
+  }
 
   describe('creation', () => {
     it('should be defined', () => {
@@ -119,32 +166,36 @@ describe('MethodViewModel', () => {
 
   describe('presentation streams', () => {
     describe('currentToc$', () => {
-      beforeEach(() => {
-        zone.run(() => {
-          const navigationAction = {
-            type: ROUTER_NAVIGATION,
-            payload: {
-              routerState: { params: { bundle: '1' } },
-              event: {}
-            } as RouterNavigationPayload<any>
-          } as RouterNavigationAction;
-          store.dispatch(navigationAction);
-        });
+      it('should be an empty array when no book, chapter or lesson is selected', () => {
+        navigateWithParams({});
+
+        expect(methodViewModel.currentToc$).toBeObservable(
+          hot('a', {
+            a: []
+          })
+        );
       });
 
-      it('test', () => {
-        methodViewModel['routerState$'].subscribe(x => {
-          console.log(x);
-        });
+      it('should be an empty array when no book, chapter or lesson is selected', () => {
+        navigateWithParams({});
+
+        expect(methodViewModel.currentToc$).toBeObservable(
+          hot('a', {
+            a: []
+          })
+        );
       });
 
-      /*it('test', fakeAsync(done => {
-        tick(1000);
-        methodViewModel['routerState$'].subscribe(v => {
-          console.log(v);
-          done();
-        });
-      }));*/
+      it('should return tocs for book when book is selected', () => {
+        const book = books[0];
+        navigateWithParams({ book: book.id });
+
+        expect(methodViewModel.currentToc$).toBeObservable(
+          hot('a', {
+            a: book.eduContentTOC
+          })
+        );
+      });
     });
   });
 });
