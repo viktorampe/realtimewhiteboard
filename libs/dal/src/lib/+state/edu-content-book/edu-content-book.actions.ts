@@ -2,17 +2,9 @@ import { Action } from '@ngrx/store';
 import { EduContentBookInterface } from '../../+models';
 
 export enum EduContentBooksActionTypes {
+  LoadEduContentBooks = '[EduContentBooks] Load EduContentBooks',
   EduContentBooksLoaded = '[EduContentBooks] EduContentBooks Loaded',
   EduContentBooksLoadError = '[EduContentBooks] Load Error',
-  LoadEduContentBooks = '[EduContentBooks] Load EduContentBooks',
-  AddEduContentBook = '[EduContentBooks] Add EduContentBook',
-  UpsertEduContentBook = '[EduContentBooks] Upsert EduContentBook',
-  AddEduContentBooks = '[EduContentBooks] Add EduContentBooks',
-  UpsertEduContentBooks = '[EduContentBooks] Upsert EduContentBooks',
-  UpdateEduContentBook = '[EduContentBooks] Update EduContentBook',
-  UpdateEduContentBooks = '[EduContentBooks] Update EduContentBooks',
-  DeleteEduContentBook = '[EduContentBooks] Delete EduContentBook',
-  DeleteEduContentBooks = '[EduContentBooks] Delete EduContentBooks',
   ClearEduContentBooks = '[EduContentBooks] Clear EduContentBooks'
 }
 
