@@ -94,23 +94,6 @@ describe('EduContentBooks Reducer', () => {
       expect(result).toEqual(createState(eduContentBooks, true));
     });
 
-    it('should load all diaboloEnabledBookIds', () => {
-      const action = new EduContentBookActions.DiaboloEnabledEduContentBookIdsLoaded(
-        {
-          diaboloEnabledEduContentBookIds: [492000058, 4148582590, 2573344880]
-        }
-      );
-      const result = reducer(initialState, action);
-      expect(result).toEqual(
-        createState(
-          [],
-          false,
-          true,
-          action.payload.diaboloEnabledEduContentBookIds
-        )
-      );
-    });
-
     it('should error', () => {
       const error = 'Something went wrong';
       const action = new EduContentBookActions.EduContentBooksLoadError(error);
@@ -118,16 +101,6 @@ describe('EduContentBooks Reducer', () => {
       expect(result).toEqual(createState([], false, false, [], error));
     });
 
-    it('should error on diaboloEnabled', () => {
-      const error = 'Something went really wrong';
-      const action = new EduContentBookActions.DiaboloEnabledEduContentBookIdsLoadError(
-        error
-      );
-      const result = reducer(initialState, action);
-      expect(result).toEqual(
-        createState([], false, false, [], undefined, error)
-      );
-    });
   });
 
   describe('add actions', () => {
