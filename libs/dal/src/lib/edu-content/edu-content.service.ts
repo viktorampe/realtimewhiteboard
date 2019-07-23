@@ -25,11 +25,10 @@ export class EduContentService implements EduContentServiceInterface {
       );
   }
 
-  getGeneralEduContentsForBookId(
+  getGeneralEduContentForBookId(
     bookId: number
   ): Observable<EduContentInterface[]> {
-    // return this.eduContentApi.getGeneralEduContentsForBookId(bookId);
-    return this.eduContentApi['getGeneralEduContentsForBookId'](bookId); //TODO use other one
+    return this.eduContentApi.getGeneralEduContentForBookId(bookId);
   }
 
   search(state: SearchStateInterface): Observable<SearchResultInterface> {
