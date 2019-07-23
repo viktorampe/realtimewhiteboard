@@ -5,8 +5,7 @@ import { State as YearState } from '../year/year.reducer';
 import { selectYearState } from '../year/year.selectors';
 import {
   MethodYearsInterface,
-  MethodYearsKeyValueObject,
-  MethodYearValueObject
+  MethodYearsKeyValueObject
 } from './method.interfaces';
 import {
   NAME,
@@ -166,35 +165,28 @@ export const getMethodYears = createSelector(
     allowedMethodIds: number[],
     eduContentBooks: EduContentBookInterface[]
   ): MethodYearsInterface[] => {
-    return Object.entries(
-      eduContentBooks
-        .filter(book => allowedMethodIds.includes(book.methodId))
-        .reduce((agg, book): MethodYearsKeyValueObject => {
-          if (!agg[book.methodId])
-            agg[book.methodId] = {
-              logoUrl: book.method.logoUrl,
-              name: book.method.name,
-              years: []
-            };
-          if (book.years.length > 0)
-            agg[book.methodId].years.push({
-              name: book.years[0].name,
-              id: book.years[0].id,
-              bookId: book.id
-            });
-          return agg;
-        }, {})
-    )
-      .reduce(
-        (
-          agg: MethodYearsInterface[],
-          methodYearEntry: [string, MethodYearValueObject]
-        ) => {
-          agg.push({ id: +methodYearEntry[0], ...methodYearEntry[1] });
+    return Object.values(
+      eduContentBooks.reduce(
+        (agg, book): MethodYearsKeyValueObject => {
+          if (book.methodId) {
+            if (!agg[book.methodId])
+              agg[book.methodId] = {
+                id: book.id,
+                logoUrl: book.method.logoUrl,
+                name: book.method.name,
+                years: []
+              };
+            if (book.years.length > 0)
+              agg[book.methodId].years.push({
+                name: book.years[0].name,
+                id: book.years[0].id,
+                bookId: book.id
+              });
+          }
           return agg;
         },
-        []
+        {} as MethodYearsKeyValueObject
       )
-      .sort((a, b) => a.name.localeCompare(b.name));
+    ).sort((a, b) => a.name.localeCompare(b.name));
   }
 );
