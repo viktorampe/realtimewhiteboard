@@ -259,21 +259,21 @@ export class MethodViewModel {
 
   private getTocsStream() {
     const tocStreamWhenLessonChapter$ = this.currentMethodParams$.pipe(
-      filter(params => !!params.lesson || !!params.chapter),
+      filter(params => !!params.chapter),
       switchMap(params => {
         return this.store.pipe(
           select(EduContentTocQueries.getTocsForToc, {
-            tocId: params.lesson || params.chapter
+            tocId: params.chapter
           })
         );
       })
     );
 
     const tocStreamWhenBook$ = this.currentMethodParams$.pipe(
-      filter(params => !!params.book && (!params.lesson && !params.chapter)),
+      filter(params => !!params.book && !params.chapter),
       switchMap(params => {
         return this.store.pipe(
-          select(EduContentTocQueries.getTocsForBook, {
+          select(EduContentTocQueries.getChaptersForBook, {
             bookId: params.book
           })
         );

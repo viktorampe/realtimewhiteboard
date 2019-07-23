@@ -39,22 +39,54 @@ describe('MethodViewModel', () => {
   let router: Router;
   let zone: NgZone;
 
-  const books: EduContentBookInterface[] = [
-    new EduContentBookFixture({
-      id: 5,
-      eduContentTOC: [
-        new EduContentTOCFixture({ id: 1, treeId: 5 }),
-        new EduContentTOCFixture({ id: 2, treeId: 5 })
-      ]
+  const bookId = 5;
+
+  //First two lessons are in chapter 1, last lesson is in chapter 2
+  const chapterTocs = [
+    new EduContentTOCFixture({
+      id: 1,
+      treeId: bookId,
+      depth: 0,
+      lft: 1,
+      rgt: 6
     }),
-    new EduContentBookFixture({
-      id: 6,
-      eduContentTOC: [
-        new EduContentTOCFixture({ id: 3, treeId: 6 }),
-        new EduContentTOCFixture({ id: 4, treeId: 6 })
-      ]
+    new EduContentTOCFixture({
+      id: 2,
+      treeId: bookId,
+      depth: 0,
+      lft: 7,
+      rgt: 10
     })
   ];
+
+  const lessonTocs = [
+    new EduContentTOCFixture({
+      id: 3,
+      treeId: bookId,
+      depth: 1,
+      lft: 2,
+      rgt: 3
+    }),
+    new EduContentTOCFixture({
+      id: 4,
+      treeId: bookId,
+      depth: 1,
+      lft: 4,
+      rgt: 5
+    }),
+    new EduContentTOCFixture({
+      id: 5,
+      treeId: bookId,
+      depth: 1,
+      lft: 8,
+      rgt: 9
+    })
+  ];
+
+  const book: EduContentBookInterface = new EduContentBookFixture({
+    id: bookId,
+    eduContentTOC: [...chapterTocs, ...lessonTocs]
+  });
 
   const searchMode: SearchModeInterface = {
     name: 'demo',
@@ -127,18 +159,16 @@ describe('MethodViewModel', () => {
   function loadInStore() {
     store.dispatch(
       new EduContentBookActions.EduContentBooksLoaded({
-        eduContentBooks: books
+        eduContentBooks: [book]
       })
     );
 
-    books.forEach(book => {
-      store.dispatch(
-        new EduContentTocActions.AddEduContentTocsForBook({
-          bookId: book.id,
-          eduContentTocs: book.eduContentTOC
-        })
-      );
-    });
+    store.dispatch(
+      new EduContentTocActions.AddEduContentTocsForBook({
+        bookId: book.id,
+        eduContentTocs: book.eduContentTOC
+      })
+    );
   }
 
   function navigateWithParams(params: {
@@ -186,13 +216,32 @@ describe('MethodViewModel', () => {
         );
       });
 
-      it('should return tocs for book when book is selected', () => {
-        const book = books[0];
+      it('should return chapter tocs when book is selected', () => {
         navigateWithParams({ book: book.id });
 
         expect(methodViewModel.currentToc$).toBeObservable(
           hot('a', {
-            a: book.eduContentTOC
+            a: chapterTocs
+          })
+        );
+      });
+
+      it('should return lesson tocs when chapter is selected', () => {
+        navigateWithParams({ book: book.id, chapter: 1 });
+
+        expect(methodViewModel.currentToc$).toBeObservable(
+          hot('a', {
+            a: [lessonTocs[0], lessonTocs[1]]
+          })
+        );
+      });
+
+      it('should return lesson tocs when lesson is selected', () => {
+        navigateWithParams({ book: book.id, chapter: 1, lesson: 1 });
+
+        expect(methodViewModel.currentToc$).toBeObservable(
+          hot('a', {
+            a: [lessonTocs[0], lessonTocs[1]]
           })
         );
       });
