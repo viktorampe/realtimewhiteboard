@@ -38,34 +38,6 @@ export class ContentActionsService implements ContentActionsServiceInterface {
     private contentOpener: ContentOpenerInterface
   ) {}
 
-  private actionHandlers = new Map<string, (eduContent: EduContent) => void>([
-    [
-      'openEduContentAsExercise',
-      (input: EduContent): void =>
-        this.contentOpener.openEduContentAsExercise(input)
-    ],
-    [
-      'openEduContentAsSolution',
-      (input: EduContent): void =>
-        this.contentOpener.openEduContentAsSolution(input)
-    ],
-    [
-      'openEduContentAsStream',
-      (input: EduContent): void =>
-        this.contentOpener.openEduContentAsStream(input)
-    ],
-    [
-      'openEduContentAsDownload',
-      (input: EduContent): void =>
-        this.contentOpener.openEduContentAsDownload(input)
-    ],
-
-    [
-      'openBoeke',
-      (input: EduContent): void => this.contentOpener.openBoeke(input)
-    ]
-  ]);
-
   private contentActionDictionary: {
     [key: string]: ContentActionInterface;
   } = {
@@ -74,35 +46,35 @@ export class ContentActionsService implements ContentActionsServiceInterface {
       label: 'Openen',
       icon: 'exercise:open',
       tooltip: 'Open oefening zonder oplossingen',
-      handler: this.actionHandlers.get('openEduContentAsExercise')
+      handler: this.contentOpener.openEduContentAsExercise
     },
     openEduContentAsSolution: {
       actionType: 'open',
       label: 'Toon oplossing',
       icon: 'exercise:finished',
       tooltip: 'Open oefening met oplossingen',
-      handler: this.actionHandlers.get('openEduContentAsSolution')
+      handler: this.contentOpener.openEduContentAsSolution
     },
     openEduContentAsStream: {
       actionType: 'open',
       label: 'Openen',
       icon: 'lesmateriaal',
       tooltip: 'Open het lesmateriaal',
-      handler: this.actionHandlers.get('openEduContentAsStream')
+      handler: this.contentOpener.openEduContentAsStream
     },
     openEduContentAsDownload: {
       actionType: 'open',
       label: 'Downloaden',
       icon: 'download',
       tooltip: 'Download het lesmateriaal',
-      handler: this.actionHandlers.get('openEduContentAsDownload')
+      handler: this.contentOpener.openEduContentAsDownload
     },
     openBoeke: {
       actionType: 'open',
       label: 'Openen',
       icon: 'boeken',
       tooltip: 'Open het bordboek',
-      handler: this.actionHandlers.get('openBoeke')
+      handler: this.contentOpener.openBoeke
     }
   };
 
