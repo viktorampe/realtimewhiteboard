@@ -15,7 +15,6 @@ import { EffectsModule } from '@ngrx/effects';
     EffectsModule.forFeature([
       UiEffects,
       UserEffects,
-      EduContentBookEffects,
       EduContentTocEffects,
       EduContentBookEffects,
       DiaboloPhaseEffects,
