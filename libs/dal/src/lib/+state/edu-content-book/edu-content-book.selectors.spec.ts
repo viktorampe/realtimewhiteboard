@@ -12,8 +12,6 @@ describe('EduContentBook Selectors', () => {
   function createState(
     eduContentBooks: EduContentBookInterface[],
     loaded: boolean = false,
-    diaboloEnabledLoaded: boolean = false,
-    diaboloEnabledBookIds: number[] = [],
     error?: any
   ): State {
     return {
@@ -30,8 +28,6 @@ describe('EduContentBook Selectors', () => {
           )
         : {},
       loaded: loaded,
-      diaboloEnabledLoaded: diaboloEnabledLoaded,
-      diaboloEnabledBookIds: diaboloEnabledBookIds,
       error: error
     };
   }
@@ -49,8 +45,6 @@ describe('EduContentBook Selectors', () => {
           createEduContentBook(3)
         ],
         true,
-        false,
-        [],
         'no error'
       );
       storeState = { eduContentBooks: eduContentBookState };
