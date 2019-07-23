@@ -1,6 +1,7 @@
 import { Component, Inject, Input, OnInit } from '@angular/core';
 import { ResultItemBase } from '@campus/search';
 import {
+  ContentActionInterface,
   ContentActionsServiceInterface,
   CONTENT_ACTIONS_SERVICE_TOKEN,
   EduContentSearchResultInterface
@@ -16,6 +17,8 @@ export class EduContentSearchResultComponent extends ResultItemBase
   implements OnInit {
   @Input() data: EduContentSearchResultInterface;
 
+  actions: ContentActionInterface[];
+
   constructor(
     @Inject(CONTENT_ACTIONS_SERVICE_TOKEN)
     private contentActionsServiceInterface: ContentActionsServiceInterface
@@ -25,5 +28,8 @@ export class EduContentSearchResultComponent extends ResultItemBase
 
   ngOnInit() {
     super.ngOnInit();
+    this.actions = this.contentActionsServiceInterface.getActionsForEduContent(
+      this.data.eduContent
+    );
   }
 }

@@ -10,7 +10,7 @@ export interface ContentActionInterface {
   label: string;
   icon: string;
   tooltip: string;
-  handler: Function;
+  handler(eduContent: EduContent): void;
 }
 
 export interface ContentOpenerInterface {
