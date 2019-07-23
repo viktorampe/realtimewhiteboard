@@ -1,6 +1,9 @@
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 import { EduContentBookInterface } from '../../+models';
-import { EduContentBooksActions, EduContentBooksActionTypes } from './edu-content-book.actions';
+import {
+  EduContentBooksActions,
+  EduContentBooksActionTypes
+} from './edu-content-book.actions';
 
 export const NAME = 'eduContentBooks';
 
