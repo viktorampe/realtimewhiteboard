@@ -1,9 +1,6 @@
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 import { EduContentBookInterface } from '../../+models';
-import {
-  EduContentBooksActions,
-  EduContentBooksActionTypes
-} from './edu-content-book.actions';
+import { EduContentBooksActions, EduContentBooksActionTypes } from './edu-content-book.actions';
 
 export const NAME = 'eduContentBooks';
 
@@ -19,9 +16,7 @@ export const adapter: EntityAdapter<
 
 export const initialState: State = adapter.getInitialState({
   // additional entity state properties
-  loaded: false,
-  diaboloEnabledLoaded: false,
-  diaboloEnabledBookIds: []
+  loaded: false
 });
 
 export function reducer(
