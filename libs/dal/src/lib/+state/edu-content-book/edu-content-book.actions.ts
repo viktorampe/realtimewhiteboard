@@ -1,4 +1,3 @@
-import { Update } from '@ngrx/entity';
 import { Action } from '@ngrx/store';
 import { EduContentBookInterface } from '../../+models';
 
@@ -36,58 +35,6 @@ export class EduContentBooksLoadError implements Action {
   constructor(public payload: any) {}
 }
 
-export class AddEduContentBook implements Action {
-  readonly type = EduContentBooksActionTypes.AddEduContentBook;
-
-  constructor(public payload: { eduContentBook: EduContentBookInterface }) {}
-}
-
-export class UpsertEduContentBook implements Action {
-  readonly type = EduContentBooksActionTypes.UpsertEduContentBook;
-
-  constructor(public payload: { eduContentBook: EduContentBookInterface }) {}
-}
-
-export class AddEduContentBooks implements Action {
-  readonly type = EduContentBooksActionTypes.AddEduContentBooks;
-
-  constructor(public payload: { eduContentBooks: EduContentBookInterface[] }) {}
-}
-
-export class UpsertEduContentBooks implements Action {
-  readonly type = EduContentBooksActionTypes.UpsertEduContentBooks;
-
-  constructor(public payload: { eduContentBooks: EduContentBookInterface[] }) {}
-}
-
-export class UpdateEduContentBook implements Action {
-  readonly type = EduContentBooksActionTypes.UpdateEduContentBook;
-
-  constructor(
-    public payload: { eduContentBook: Update<EduContentBookInterface> }
-  ) {}
-}
-
-export class UpdateEduContentBooks implements Action {
-  readonly type = EduContentBooksActionTypes.UpdateEduContentBooks;
-
-  constructor(
-    public payload: { eduContentBooks: Update<EduContentBookInterface>[] }
-  ) {}
-}
-
-export class DeleteEduContentBook implements Action {
-  readonly type = EduContentBooksActionTypes.DeleteEduContentBook;
-
-  constructor(public payload: { id: number }) {}
-}
-
-export class DeleteEduContentBooks implements Action {
-  readonly type = EduContentBooksActionTypes.DeleteEduContentBooks;
-
-  constructor(public payload: { ids: number[] }) {}
-}
-
 export class ClearEduContentBooks implements Action {
   readonly type = EduContentBooksActionTypes.ClearEduContentBooks;
 }
@@ -96,12 +43,4 @@ export type EduContentBooksActions =
   | LoadEduContentBooks
   | EduContentBooksLoaded
   | EduContentBooksLoadError
-  | AddEduContentBook
-  | UpsertEduContentBook
-  | AddEduContentBooks
-  | UpsertEduContentBooks
-  | UpdateEduContentBook
-  | UpdateEduContentBooks
-  | DeleteEduContentBook
-  | DeleteEduContentBooks
   | ClearEduContentBooks;
