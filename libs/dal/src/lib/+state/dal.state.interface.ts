@@ -5,6 +5,7 @@ import {
   CredentialReducer,
   CurrentExerciseReducer,
   DiaboloPhaseReducer,
+  EduContentBookReducer,
   EduContentProductTypeReducer,
   EduContentReducer,
   EduContentTocReducer,
@@ -36,6 +37,7 @@ export interface DalState {
   learningAreas: LearningAreaReducer.State;
   learningDomains: LearningDomainReducer.State;
   bundles: BundleReducer.State;
+  eduContentBooks: EduContentBookReducer.State;
   eduContents: EduContentReducer.State;
   userContents: UserContentReducer.State;
   unlockedContents: UnlockedContentReducer.State;

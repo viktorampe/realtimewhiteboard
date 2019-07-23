@@ -26,8 +26,8 @@ import { EDUCONTENT_SEARCH_RESULT_ITEM_SERVICE_TOKEN } from './components/search
 
     // dal services
     { provide: AUTH_SERVICE_TOKEN, useClass: AuthService },
-    { provide: PERSON_SERVICE_TOKEN, useClass: PersonService },
     { provide: TOC_SERVICE_TOKEN, useClass: TocService },
+    { provide: PERSON_SERVICE_TOKEN, useClass: PersonService },
     { provide: DIABOLO_PHASE_SERVICE_TOKEN, useClass: DiaboloPhaseService },
     { provide: EDU_CONTENT_SERVICE_TOKEN, useClass: EduContentService },
     {

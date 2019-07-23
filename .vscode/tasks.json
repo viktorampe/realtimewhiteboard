@@ -27,6 +27,7 @@
       "type": "pickString",
       "options": [
         "polpo-classroom-web",
+        "kabas-web",
         "dal",
         "browser",
         "guards",
