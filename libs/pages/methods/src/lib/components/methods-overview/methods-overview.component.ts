@@ -9,7 +9,7 @@ import { MethodViewModel } from '../method.viewmodel';
   // providers: [{ provide: MethodViewModel, useClass: MockMethodViewModel }]
 })
 export class MethodsOverviewComponent implements OnInit {
-  public allowedMethods$: Observable<any>;
+  public allowedBooks$: Observable<any>; // TODO use interface
   constructor(private methodViewmodel: MethodViewModel) {}
 
   ngOnInit() {
@@ -17,6 +17,6 @@ export class MethodsOverviewComponent implements OnInit {
   }
 
   private setupStreams() {
-    this.allowedMethods$ = this.methodViewmodel.allowedBooks$;
+    this.allowedBooks$ = this.methodViewmodel.allowedBooks$;
   }
 }
