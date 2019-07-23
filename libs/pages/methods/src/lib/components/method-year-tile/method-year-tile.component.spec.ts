@@ -1,16 +1,19 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { UiModule } from '@campus/ui';
+import { configureTestSuite } from 'ng-bullet';
 import { MethodYearTileComponent } from './method-year-tile.component';
 
 describe('MethodYearTileComponent', () => {
   let component: MethodYearTileComponent;
   let fixture: ComponentFixture<MethodYearTileComponent>;
 
-  beforeEach(async(() => {
+  configureTestSuite(() => {
     TestBed.configureTestingModule({
+      imports: [UiModule, RouterTestingModule],
       declarations: [MethodYearTileComponent]
-    }).compileComponents();
-  }));
+    });
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(MethodYearTileComponent);
