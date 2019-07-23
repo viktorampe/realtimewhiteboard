@@ -17,6 +17,7 @@ import { EffectsModule } from '@ngrx/effects';
       UserEffects,
       EduContentBookEffects,
       EduContentTocEffects,
+      EduContentBookEffects,
       DiaboloPhaseEffects,
       EduContentProductTypeEffects
     ])

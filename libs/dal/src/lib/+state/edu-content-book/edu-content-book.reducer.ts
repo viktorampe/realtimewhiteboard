@@ -10,10 +10,7 @@ export const NAME = 'eduContentBooks';
 export interface State extends EntityState<EduContentBookInterface> {
   // additional entities state properties
   loaded: boolean;
-  diaboloEnabledLoaded: boolean;
-  diaboloEnabledBookIds: number[];
   error?: any;
-  diaboloEnabledError?: any;
 }
 
 export const adapter: EntityAdapter<
@@ -22,9 +19,7 @@ export const adapter: EntityAdapter<
 
 export const initialState: State = adapter.getInitialState({
   // additional entity state properties
-  loaded: false,
-  diaboloEnabledLoaded: false,
-  diaboloEnabledBookIds: []
+  loaded: false
 });
 
 export function reducer(
@@ -32,38 +27,6 @@ export function reducer(
   action: EduContentBooksActions
 ): State {
   switch (action.type) {
-    case EduContentBooksActionTypes.AddEduContentBook: {
-      return adapter.addOne(action.payload.eduContentBook, state);
-    }
-
-    case EduContentBooksActionTypes.UpsertEduContentBook: {
-      return adapter.upsertOne(action.payload.eduContentBook, state);
-    }
-
-    case EduContentBooksActionTypes.AddEduContentBooks: {
-      return adapter.addMany(action.payload.eduContentBooks, state);
-    }
-
-    case EduContentBooksActionTypes.UpsertEduContentBooks: {
-      return adapter.upsertMany(action.payload.eduContentBooks, state);
-    }
-
-    case EduContentBooksActionTypes.UpdateEduContentBook: {
-      return adapter.updateOne(action.payload.eduContentBook, state);
-    }
-
-    case EduContentBooksActionTypes.UpdateEduContentBooks: {
-      return adapter.updateMany(action.payload.eduContentBooks, state);
-    }
-
-    case EduContentBooksActionTypes.DeleteEduContentBook: {
-      return adapter.removeOne(action.payload.id, state);
-    }
-
-    case EduContentBooksActionTypes.DeleteEduContentBooks: {
-      return adapter.removeMany(action.payload.ids, state);
-    }
-
     case EduContentBooksActionTypes.EduContentBooksLoaded: {
       return adapter.addAll(action.payload.eduContentBooks, {
         ...state,
@@ -71,24 +34,8 @@ export function reducer(
       });
     }
 
-    case EduContentBooksActionTypes.DiaboloEnabledEduContentBookIdsLoaded: {
-      return {
-        ...state,
-        diaboloEnabledBookIds: action.payload.diaboloEnabledEduContentBookIds,
-        diaboloEnabledLoaded: true
-      };
-    }
-
     case EduContentBooksActionTypes.EduContentBooksLoadError: {
       return { ...state, error: action.payload, loaded: false };
-    }
-
-    case EduContentBooksActionTypes.DiaboloEnabledEduContentBookIdsLoadError: {
-      return {
-        ...state,
-        diaboloEnabledError: action.payload,
-        diaboloEnabledLoaded: false
-      };
     }
 
     case EduContentBooksActionTypes.ClearEduContentBooks: {

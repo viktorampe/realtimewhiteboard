@@ -3,14 +3,14 @@ import { Actions, Effect } from '@ngrx/effects';
 import { DataPersistence } from '@nrwl/nx';
 import { map } from 'rxjs/operators';
 import { DalState } from '..';
-import { TocServiceInterface, TOC_SERVICE_TOKEN } from '../../..';
 import {
-  DiaboloEnabledEduContentBookIdsLoaded,
-  DiaboloEnabledEduContentBookIdsLoadError,
+  TocServiceInterface,
+  TOC_SERVICE_TOKEN
+} from '../../toc/toc.service.interface';
+import {
   EduContentBooksActionTypes,
   EduContentBooksLoaded,
   EduContentBooksLoadError,
-  LoadDiaboloEnabledEduContentBookIds,
   LoadEduContentBooks
 } from './edu-content-book.actions';
 
@@ -32,25 +32,6 @@ export class EduContentBookEffects {
       },
       onError: (action: LoadEduContentBooks, error) => {
         return new EduContentBooksLoadError(error);
-      }
-    }
-  );
-
-  @Effect()
-  loadDiaboloEnabledEduContentBookIds$ = this.dataPersistence.fetch(
-    EduContentBooksActionTypes.LoadDiaboloEnabledEduContentBookIds,
-    {
-      run: (action: LoadDiaboloEnabledEduContentBookIds, state: DalState) => {
-        if (!action.payload.force && state.eduContentBooks.diaboloEnabledLoaded)
-          return;
-        //TODO -- implent service that is still to be created for non existing api endpoint https://dev.azure.com/diekeure-webdev/LK2020/_workitems/edit/1658
-        //TODO -- add tests for effect once the service in implemented
-        return new DiaboloEnabledEduContentBookIdsLoaded({
-          diaboloEnabledEduContentBookIds: []
-        });
-      },
-      onError: (action: LoadDiaboloEnabledEduContentBookIds, error) => {
-        return new DiaboloEnabledEduContentBookIdsLoadError(error);
       }
     }
   );

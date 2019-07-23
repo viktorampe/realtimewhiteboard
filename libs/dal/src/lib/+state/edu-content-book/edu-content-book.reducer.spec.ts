@@ -1,4 +1,3 @@
-import { Update } from '@ngrx/entity';
 import { EduContentBookActions } from '.';
 import { EduContentBookInterface } from '../../+models';
 import { initialState, reducer, State } from './edu-content-book.reducer';
@@ -38,10 +37,7 @@ function createEduContentBook(
 function createState(
   eduContentBooks: EduContentBookInterface[],
   loaded: boolean = false,
-  diaboloEnabledLoaded: boolean = false,
-  diaboloEnabledBookIds: number[] = [],
-  error?: any,
-  diaboloError?: any
+  error?: any
 ): State {
   const state: any = {
     ids: eduContentBooks
@@ -56,12 +52,9 @@ function createState(
           {}
         )
       : {},
-    loaded: loaded,
-    diaboloEnabledLoaded: diaboloEnabledLoaded,
-    diaboloEnabledBookIds: diaboloEnabledBookIds
+    loaded: loaded
   };
   if (error !== undefined) state.error = error;
-  if (diaboloError !== undefined) state.diaboloEnabledError = diaboloError;
   return state;
 }
 
@@ -94,193 +87,20 @@ describe('EduContentBooks Reducer', () => {
       expect(result).toEqual(createState(eduContentBooks, true));
     });
 
-    it('should load all diaboloEnabledBookIds', () => {
-      const action = new EduContentBookActions.DiaboloEnabledEduContentBookIdsLoaded(
-        {
-          diaboloEnabledEduContentBookIds: [492000058, 4148582590, 2573344880]
-        }
-      );
-      const result = reducer(initialState, action);
-      expect(result).toEqual(
-        createState(
-          [],
-          false,
-          true,
-          action.payload.diaboloEnabledEduContentBookIds
-        )
-      );
-    });
-
     it('should error', () => {
       const error = 'Something went wrong';
       const action = new EduContentBookActions.EduContentBooksLoadError(error);
       const result = reducer(initialState, action);
-      expect(result).toEqual(createState([], false, false, [], error));
-    });
-
-    it('should error on diaboloEnabled', () => {
-      const error = 'Something went really wrong';
-      const action = new EduContentBookActions.DiaboloEnabledEduContentBookIdsLoadError(
-        error
-      );
-      const result = reducer(initialState, action);
-      expect(result).toEqual(
-        createState([], false, false, [], undefined, error)
-      );
-    });
-  });
-
-  describe('add actions', () => {
-    it('should add one eduContentBook', () => {
-      const eduContentBook = eduContentBooks[0];
-      const action = new EduContentBookActions.AddEduContentBook({
-        eduContentBook
-      });
-
-      const result = reducer(initialState, action);
-      expect(result).toEqual(createState([eduContentBook], false));
-    });
-
-    it('should add multiple eduContentBooks', () => {
-      const action = new EduContentBookActions.AddEduContentBooks({
-        eduContentBooks
-      });
-      const result = reducer(initialState, action);
-
-      expect(result).toEqual(createState(eduContentBooks, false));
-    });
-  });
-  describe('upsert actions', () => {
-    it('should upsert one eduContentBook', () => {
-      const originalEduContentBook = eduContentBooks[0];
-
-      const startState = reducer(
-        initialState,
-        new EduContentBookActions.AddEduContentBook({
-          eduContentBook: originalEduContentBook
-        })
-      );
-
-      const updatedEduContentBook = createEduContentBook(
-        eduContentBooks[0].id,
-        'test'
-      );
-
-      const action = new EduContentBookActions.UpsertEduContentBook({
-        eduContentBook: updatedEduContentBook
-      });
-
-      const result = reducer(startState, action);
-
-      expect(result.entities[updatedEduContentBook.id]).toEqual(
-        updatedEduContentBook
-      );
-    });
-
-    it('should upsert many eduContentBooks', () => {
-      const startState = createState(eduContentBooks);
-
-      const eduContentBooksToInsert = [
-        createEduContentBook(1),
-        createEduContentBook(2),
-        createEduContentBook(3),
-        createEduContentBook(4)
-      ];
-      const action = new EduContentBookActions.UpsertEduContentBooks({
-        eduContentBooks: eduContentBooksToInsert
-      });
-
-      const result = reducer(startState, action);
-
-      expect(result).toEqual(createState(eduContentBooksToInsert));
-    });
-  });
-
-  describe('update actions', () => {
-    it('should update an eduContentBook', () => {
-      const eduContentBook = eduContentBooks[0];
-      const startState = createState([eduContentBook]);
-      const update: Update<EduContentBookInterface> = {
-        id: 1,
-        changes: {
-          ISBN: ISBNUpdatedValue
-        }
-      };
-      const action = new EduContentBookActions.UpdateEduContentBook({
-        eduContentBook: update
-      });
-      const result = reducer(startState, action);
-      expect(result).toEqual(
-        createState([createEduContentBook(1, ISBNUpdatedValue)])
-      );
-    });
-
-    it('should update multiple eduContentBooks', () => {
-      const startState = createState(eduContentBooks);
-      const updates: Update<EduContentBookInterface>[] = [
-        {
-          id: 1,
-          changes: {
-            ISBN: ISBNUpdatedValue
-          }
-        },
-        {
-          id: 2,
-          changes: {
-            ISBN: ISBNUpdatedValue
-          }
-        }
-      ];
-      const action = new EduContentBookActions.UpdateEduContentBooks({
-        eduContentBooks: updates
-      });
-      const result = reducer(startState, action);
-
-      expect(result).toEqual(
-        createState([
-          createEduContentBook(1, ISBNUpdatedValue),
-          createEduContentBook(2, ISBNUpdatedValue),
-          eduContentBooks[2]
-        ])
-      );
-    });
-  });
-
-  describe('delete actions', () => {
-    it('should delete one eduContentBook ', () => {
-      const eduContentBook = eduContentBooks[0];
-      const startState = createState([eduContentBook]);
-      const action = new EduContentBookActions.DeleteEduContentBook({
-        id: eduContentBook.id
-      });
-      const result = reducer(startState, action);
-      expect(result).toEqual(createState([]));
-    });
-
-    it('should delete multiple eduContentBooks', () => {
-      const startState = createState(eduContentBooks);
-      const action = new EduContentBookActions.DeleteEduContentBooks({
-        ids: [eduContentBooks[0].id, eduContentBooks[1].id]
-      });
-      const result = reducer(startState, action);
-      expect(result).toEqual(createState([eduContentBooks[2]]));
+      expect(result).toEqual(createState([], false, 'Something went wrong'));
     });
   });
 
   describe('clear action', () => {
     it('should clear the eduContentBooks collection', () => {
-      const startState = createState(
-        eduContentBooks,
-        true,
-        false,
-        [],
-        'something went wrong'
-      );
+      const startState = createState(eduContentBooks, true, false);
       const action = new EduContentBookActions.ClearEduContentBooks();
       const result = reducer(startState, action);
-      expect(result).toEqual(
-        createState([], true, false, [], 'something went wrong')
-      );
+      expect(result).toEqual(createState([], true, false));
     });
   });
 });
