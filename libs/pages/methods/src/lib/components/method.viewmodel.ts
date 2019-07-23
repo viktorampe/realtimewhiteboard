@@ -18,6 +18,7 @@ import {
   SearchStateInterface
 } from '@campus/search';
 import {
+  ContentOpenerInterface,
   EnvironmentSearchModesInterface,
   ENVIRONMENT_SEARCHMODES_TOKEN
 } from '@campus/shared';
@@ -29,7 +30,7 @@ import { filter, map, switchMap, withLatestFrom } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root'
 })
-export class MethodViewModel {
+export class MethodViewModel implements ContentOpenerInterface {
   public searchResults$: Observable<SearchResultInterface>;
   public searchState$: Observable<SearchStateInterface>;
 
@@ -170,5 +171,21 @@ export class MethodViewModel {
         ['LearningArea', new Map([[1, 100], [2, 50]])]
       ])
     });
+  }
+
+  openEduContentAsExercise(eduContent: any): void {
+    throw new Error('Method not implemented.');
+  }
+  openEduContentAsSolution(eduContent: EduContent): void {
+    throw new Error('Method not implemented.');
+  }
+  openEduContentAsStream(eduContent: EduContent): void {
+    throw new Error('Method not implemented.');
+  }
+  openEduContentAsDownload(eduContent: EduContent): void {
+    throw new Error('Method not implemented.');
+  }
+  openBoeke(eduContent: EduContent): void {
+    throw new Error('Method not implemented.');
   }
 }

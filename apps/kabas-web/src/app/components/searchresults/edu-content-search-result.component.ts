@@ -1,10 +1,10 @@
 import { Component, Inject, Input, OnInit } from '@angular/core';
 import { ResultItemBase } from '@campus/search';
-import { EduContentSearchResultInterface } from '@campus/shared';
 import {
-  EduContentSearchResultItemServiceInterface,
-  EDUCONTENT_SEARCH_RESULT_ITEM_SERVICE_TOKEN
-} from './edu-content-search-result.service.interface';
+  ContentActionsServiceInterface,
+  CONTENT_ACTIONS_SERVICE_TOKEN,
+  EduContentSearchResultInterface
+} from '@campus/shared';
 
 @Component({
   // tslint:disable-next-line
@@ -17,8 +17,8 @@ export class EduContentSearchResultComponent extends ResultItemBase
   @Input() data: EduContentSearchResultInterface;
 
   constructor(
-    @Inject(EDUCONTENT_SEARCH_RESULT_ITEM_SERVICE_TOKEN)
-    private eduContentSearchResultService: EduContentSearchResultItemServiceInterface
+    @Inject(CONTENT_ACTIONS_SERVICE_TOKEN)
+    private contentActionsServiceInterface: ContentActionsServiceInterface
   ) {
     super();
   }

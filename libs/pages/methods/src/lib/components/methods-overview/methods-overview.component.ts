@@ -1,4 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
+import {
+  ContentActionsServiceInterface,
+  CONTENT_ACTIONS_SERVICE_TOKEN
+} from '@campus/shared';
 
 @Component({
   selector: 'campus-methods-overview',
@@ -6,7 +10,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./methods-overview.component.scss']
 })
 export class MethodsOverviewComponent implements OnInit {
-  constructor() {}
+  constructor(
+    @Inject(CONTENT_ACTIONS_SERVICE_TOKEN)
+    contentActionsService: ContentActionsServiceInterface
+  ) {
+    console.log(contentActionsService);
+  }
 
   ngOnInit() {}
 }
