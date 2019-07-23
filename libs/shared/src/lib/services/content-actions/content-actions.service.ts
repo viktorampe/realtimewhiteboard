@@ -6,7 +6,6 @@ import {
 } from './content-actions.service.interface';
 
 export interface ContentActionInterface {
-  actionType: 'open';
   label: string;
   icon: string;
   tooltip: string;
@@ -21,7 +20,7 @@ export interface ContentOpenerInterface {
   openBoeke(eduContent: EduContent): void;
 }
 
-enum EduContentTypeEnum {
+export enum EduContentTypeEnum {
   BOEKE = 'boek-e',
   LINK = 'link',
   EXERCISE = 'exercise',
@@ -42,35 +41,30 @@ export class ContentActionsService implements ContentActionsServiceInterface {
     [key: string]: ContentActionInterface;
   } = {
     openEduContentAsExercise: {
-      actionType: 'open',
       label: 'Openen',
       icon: 'exercise:open',
       tooltip: 'Open oefening zonder oplossingen',
       handler: this.contentOpener.openEduContentAsExercise
     },
     openEduContentAsSolution: {
-      actionType: 'open',
       label: 'Toon oplossing',
       icon: 'exercise:finished',
       tooltip: 'Open oefening met oplossingen',
       handler: this.contentOpener.openEduContentAsSolution
     },
     openEduContentAsStream: {
-      actionType: 'open',
       label: 'Openen',
       icon: 'lesmateriaal',
       tooltip: 'Open het lesmateriaal',
       handler: this.contentOpener.openEduContentAsStream
     },
     openEduContentAsDownload: {
-      actionType: 'open',
       label: 'Downloaden',
       icon: 'download',
       tooltip: 'Download het lesmateriaal',
       handler: this.contentOpener.openEduContentAsDownload
     },
     openBoeke: {
-      actionType: 'open',
       label: 'Openen',
       icon: 'boeken',
       tooltip: 'Open het bordboek',
