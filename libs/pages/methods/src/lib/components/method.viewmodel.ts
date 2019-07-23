@@ -48,6 +48,9 @@ export class MethodViewModel {
   public searchResults$: Observable<SearchResultInterface>;
   public searchState$: Observable<SearchStateInterface>;
 
+  // Presentation streams
+  public currentToc$: Observable<EduContentTOCInterface[]>;
+
   // Source streams
   private routerState$: Observable<RouterReducerState<RouterStateUrl>>;
   private currentMethodParams$: Observable<CurrentMethodParams>;
@@ -56,9 +59,6 @@ export class MethodViewModel {
   private generalFiles$: Observable<EduContentInterface[]>;
   private eduContentProductTypes$: Observable<EduContentProductTypeInterface[]>;
   private diaboloPhases$: Observable<DiaboloPhaseInterface[]>;
-
-  // Presentation streams
-  private currentToc$: Observable<EduContentTOCInterface[]>;
 
   private _searchState$: BehaviorSubject<SearchStateInterface>;
 
