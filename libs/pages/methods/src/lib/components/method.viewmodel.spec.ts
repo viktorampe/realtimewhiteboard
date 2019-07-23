@@ -206,16 +206,6 @@ describe('MethodViewModel', () => {
         );
       });
 
-      it('should be an empty array when no book, chapter or lesson is selected', () => {
-        navigateWithParams({});
-
-        expect(methodViewModel.currentToc$).toBeObservable(
-          hot('a', {
-            a: []
-          })
-        );
-      });
-
       it('should return chapter tocs when book is selected', () => {
         navigateWithParams({ book: book.id });
 
