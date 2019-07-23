@@ -10,6 +10,8 @@ import {
   EduContentServiceInterface,
   EDU_CONTENT_SERVICE_TOKEN,
   getRouterState,
+  MethodQueries,
+  MethodYearsInterface,
   RouterStateUrl
 } from '@campus/dal';
 import {
@@ -32,6 +34,7 @@ import { filter, map, switchMap, withLatestFrom } from 'rxjs/operators';
 export class MethodViewModel {
   public searchResults$: Observable<SearchResultInterface>;
   public searchState$: Observable<SearchStateInterface>;
+  public methodYears$: Observable<MethodYearsInterface[]>;
 
   private _searchState$: BehaviorSubject<SearchStateInterface>;
   private routerState$: Observable<RouterReducerState<RouterStateUrl>>;
@@ -51,6 +54,7 @@ export class MethodViewModel {
     this._searchState$ = new BehaviorSubject<SearchStateInterface>(null);
     this.searchState$ = this._searchState$;
     this.routerState$ = this.store.pipe(select(getRouterState));
+    this.methodYears$ = this.store.pipe(select(MethodQueries.getMethodYears));
 
     this.setupSearchResults();
   }
