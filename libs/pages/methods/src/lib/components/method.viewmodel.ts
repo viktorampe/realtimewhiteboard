@@ -19,6 +19,7 @@ import {
   EDU_CONTENT_SERVICE_TOKEN,
   getRouterState,
   MethodInterface,
+  MethodQueries,
   RouterStateUrl
 } from '@campus/dal';
 import {
@@ -50,12 +51,12 @@ export class MethodViewModel {
 
   // Presentation streams
   public currentToc$: Observable<EduContentTOCInterface[]>;
+  public currentMethod$: Observable<MethodInterface>;
 
   // Source streams
   private routerState$: Observable<RouterReducerState<RouterStateUrl>>;
   private currentMethodParams$: Observable<CurrentMethodParams>;
   private currentBook$: Observable<EduContentBookInterface>;
-  private currentMethod$: Observable<MethodInterface>;
   private generalFiles$: Observable<EduContentInterface[]>;
   private eduContentProductTypes$: Observable<EduContentProductTypeInterface[]>;
   private diaboloPhases$: Observable<DiaboloPhaseInterface[]>;
@@ -211,7 +212,7 @@ export class MethodViewModel {
     this._searchState$.next(state);
   }
 
-  private getCurrentMethodParams() {
+  private getCurrentMethodParams(): Observable<CurrentMethodParams> {
     return this.routerState$.pipe(
       map((routerState: RouterReducerState<RouterStateUrl>) => ({
         book: +routerState.state.params.book,
@@ -221,7 +222,7 @@ export class MethodViewModel {
     );
   }
 
-  private getCurrentBookStream() {
+  private getCurrentBookStream(): Observable<EduContentBookInterface> {
     const currentBookWhenEmpty$ = this.currentMethodParams$.pipe(
       filter(params => !params.book),
       mapTo(null)
@@ -229,10 +230,10 @@ export class MethodViewModel {
 
     const currentBookWhenExists$ = this.currentMethodParams$.pipe(
       filter(params => !!params.book),
-      switchMap(currentMethodParams => {
+      switchMap(params => {
         return this.store.pipe(
           select(EduContentBookQueries.getById, {
-            id: currentMethodParams.book
+            id: params.book
           })
         );
       })
@@ -241,11 +242,13 @@ export class MethodViewModel {
     return merge(currentBookWhenEmpty$, currentBookWhenExists$);
   }
 
-  private getCurrentMethodStream() {
+  private getCurrentMethodStream(): Observable<MethodInterface> {
     const currentMethodWhenBook$ = this.currentBook$.pipe(
       filter(book => !!book),
-      map(book => {
-        return book.method;
+      switchMap(book => {
+        return this.store.pipe(
+          select(MethodQueries.getById, { id: book.methodId })
+        );
       })
     );
 
@@ -257,7 +260,7 @@ export class MethodViewModel {
     return merge(currentMethodWhenBook$, currentMethodWhenNoBook$);
   }
 
-  private getTocsStream() {
+  private getTocsStream(): Observable<EduContentTOCInterface[]> {
     const tocStreamWhenLessonChapter$ = this.currentMethodParams$.pipe(
       filter(params => !!params.chapter),
       switchMap(params => {
@@ -292,12 +295,12 @@ export class MethodViewModel {
     );
   }
 
-  private getGeneralFilesStream() {
+  private getGeneralFilesStream(): Observable<EduContentInterface[]> {
     const generalFilesWhenBook$ = this.currentMethodParams$.pipe(
       filter(params => !!params.book),
-      switchMap(currentMethodParams => {
-        return this.eduContentService.getGeneralEduContentsForBookId(
-          currentMethodParams.book
+      switchMap(params => {
+        return this.eduContentService.getGeneralEduContentForBookId(
+          params.book
         );
       })
     );
@@ -310,11 +313,13 @@ export class MethodViewModel {
     return merge(generalFilesWhenBook$, generalFilesWhenNoBook$);
   }
 
-  private getEduContentProductTypesStream() {
+  private getEduContentProductTypesStream(): Observable<
+    EduContentProductTypeInterface[]
+  > {
     return this.store.pipe(select(EduContentProductTypeQueries.getAll));
   }
 
-  private getDiaboloPhasesStream() {
+  private getDiaboloPhasesStream(): Observable<DiaboloPhaseInterface[]> {
     return this.store.pipe(select(DiaboloPhaseQueries.getAll));
   }
 }

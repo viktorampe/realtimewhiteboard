@@ -15,6 +15,10 @@ import {
   EduContentTocReducer,
   EDU_CONTENT_SERVICE_TOKEN,
   getStoreModuleForFeatures,
+  MethodActions,
+  MethodFixture,
+  MethodInterface,
+  MethodReducer,
   UserReducer
 } from '@campus/dal';
 import { FilterFactoryFixture, SearchModeInterface } from '@campus/search';
@@ -40,6 +44,7 @@ describe('MethodViewModel', () => {
   let zone: NgZone;
 
   const bookId = 5;
+  const bookMethodId = 1;
 
   //First two lessons are in chapter 1, last lesson is in chapter 2
   const chapterTocs = [
@@ -85,7 +90,12 @@ describe('MethodViewModel', () => {
 
   const book: EduContentBookInterface = new EduContentBookFixture({
     id: bookId,
+    methodId: bookMethodId,
     eduContentTOC: [...chapterTocs, ...lessonTocs]
+  });
+
+  const method: MethodInterface = new MethodFixture({
+    id: bookMethodId
   });
 
   const searchMode: SearchModeInterface = {
@@ -111,7 +121,8 @@ describe('MethodViewModel', () => {
         ...getStoreModuleForFeatures([
           UserReducer,
           EduContentTocReducer,
-          EduContentBookReducer
+          EduContentBookReducer,
+          MethodReducer
         ]),
         RouterTestingModule.withRoutes([
           {
@@ -158,6 +169,12 @@ describe('MethodViewModel', () => {
 
   function loadInStore() {
     store.dispatch(
+      new MethodActions.MethodsLoaded({
+        methods: [method]
+      })
+    );
+
+    store.dispatch(
       new EduContentBookActions.EduContentBooksLoaded({
         eduContentBooks: [book]
       })
@@ -195,6 +212,18 @@ describe('MethodViewModel', () => {
   });
 
   describe('presentation streams', () => {
+    describe('currentMethod$', () => {
+      it('should return the method for the current book', () => {
+        navigateWithParams({ book: book.id });
+
+        expect(methodViewModel.currentMethod$).toBeObservable(
+          hot('a', {
+            a: method
+          })
+        );
+      });
+    });
+
     describe('currentToc$', () => {
       it('should be an empty array when no book, chapter or lesson is selected', () => {
         navigateWithParams({});
