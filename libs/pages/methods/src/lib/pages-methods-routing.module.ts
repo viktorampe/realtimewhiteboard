@@ -7,7 +7,7 @@ import { MethodsOverviewComponent } from './components/methods-overview/methods-
 import { MethodChapterLessonResolver } from './components/pages-method-chapter-lesson.resolver';
 import { MethodChapterResolver } from './components/pages-method-chapter.resolver';
 import { MethodsOverviewResolver } from './components/pages-method-overview.resolver';
-import { MethodResolver } from './components/pages-methods.resolver';
+import { MethodsResolver } from './components/pages-methods.resolver';
 
 const routes: Routes = [
   {
@@ -21,7 +21,7 @@ const routes: Routes = [
       },
       {
         path: ':toc',
-        resolve: { isResolved: MethodResolver },
+        resolve: { isResolved: MethodsResolver },
         runGuardsAndResolvers: 'always',
         children: [
           {
