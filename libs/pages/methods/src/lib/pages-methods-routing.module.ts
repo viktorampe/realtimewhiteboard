@@ -14,27 +14,6 @@ const routes: Routes = [
     path: '',
     resolve: { isResolved: MethodsOverviewResolver },
     runGuardsAndResolvers: 'always',
-<<<<<<< HEAD:libs/pages/methods/src/lib/pages-pages-routing.module.ts
-    component: MethodsOverviewComponent
-  },
-  {
-    path: ':book',
-    resolve: { isResolved: MethodsResolver },
-    runGuardsAndResolvers: 'always',
-    component: MethodComponent
-  },
-  {
-    path: ':book/:chapter',
-    resolve: { isResolved: MethodsResolver },
-    runGuardsAndResolvers: 'always',
-    component: MethodChapterComponent
-  },
-  {
-    path: ':book/:chapter/:lesson',
-    resolve: { isResolved: MethodsResolver },
-    runGuardsAndResolvers: 'always',
-    component: MethodChapterLessonComponent
-=======
     children: [
       {
         path: '',
@@ -69,7 +48,6 @@ const routes: Routes = [
         ]
       }
     ]
->>>>>>> develop:libs/pages/methods/src/lib/pages-methods-routing.module.ts
   }
 ];
 
