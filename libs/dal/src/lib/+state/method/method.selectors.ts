@@ -1,4 +1,7 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
+import { MethodInterface } from '../../+models';
+import { State as YearState } from '../year/year.reducer';
+import { selectYearState } from '../year/year.selectors';
 import {
   NAME,
   selectAll,
@@ -41,6 +44,16 @@ export const getAllEntities = createSelector(
 );
 
 /**
+ * Utility to return all entities for the provided ids
+ *
+ * @param {State} state The method state
+ * @param {number[]} ids The ids of the entities you want
+ * @returns {MethodInterface[]}
+ */
+const getMethodsById = (state: State, ids: number[]): MethodInterface[] =>
+  ids.map(id => state.entities[id]);
+
+/**
  * returns array of objects in the order of the given ids
  * @example
  * method$: MethodInterface[] = this.store.pipe(
@@ -50,7 +63,7 @@ export const getAllEntities = createSelector(
 export const getByIds = createSelector(
   selectMethodState,
   (state: State, props: { ids: number[] }) => {
-    return props.ids.map(id => state.entities[id]);
+    return getMethodsById(state, props.ids);
   }
 );
 
@@ -88,6 +101,54 @@ export const getByLearningAreaIds = createSelector(
       props.learningAreaIds.some(
         learningAreaId => method.learningAreaId === learningAreaId
       )
+    );
+  }
+);
+
+export const getAllowedMethodsLoaded = createSelector(
+  selectMethodState,
+  (state: State) => {
+    return state.allowedMethodsLoaded;
+  }
+);
+
+export const getAllowedMethodIds = createSelector(
+  selectMethodState,
+  (state: State) => state.allowedMethods
+);
+
+export const getAllowedMethods = createSelector(
+  selectMethodState,
+  getIds,
+  getAllowedMethodIds,
+  (state: State, stateIds: number[], allowedMethodIds: number[]) => {
+    // order allowed method ids like in the state.ids property
+    allowedMethodIds = stateIds.filter(id => {
+      return allowedMethodIds.includes(id);
+    });
+
+    return getMethodsById(state, allowedMethodIds);
+  }
+);
+export const isAllowedMethod = createSelector(
+  selectMethodState,
+  (state: State, props: { id: number }) => {
+    return state.allowedMethods.some(id => id === props.id);
+  }
+);
+
+export const getMethodWithYear = createSelector(
+  selectMethodState,
+  selectYearState,
+  (
+    methodState: State,
+    yearState: YearState,
+    props: { methodId: number; yearId: number }
+  ) => {
+    return (
+      methodState.entities[props.methodId].name +
+      ' ' +
+      yearState.entities[props.yearId].label
     );
   }
 );
