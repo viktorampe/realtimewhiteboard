@@ -293,7 +293,7 @@ describe('Method Selectors', () => {
 
         storeState.methods = createState(mockMethods, true, [1, 2], 'no error');
 
-        const result = MethodQueries.getMethodYears(storeState);
+        const result = MethodQueries.getAllowedMethodYears(storeState);
 
         expect(result).toEqual([
           {

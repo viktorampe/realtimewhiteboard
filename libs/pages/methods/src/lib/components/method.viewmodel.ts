@@ -54,7 +54,9 @@ export class MethodViewModel {
     this._searchState$ = new BehaviorSubject<SearchStateInterface>(null);
     this.searchState$ = this._searchState$;
     this.routerState$ = this.store.pipe(select(getRouterState));
-    this.methodYears$ = this.store.pipe(select(MethodQueries.getMethodYears));
+    this.methodYears$ = this.store.pipe(
+      select(MethodQueries.getAllowedMethodYears)
+    );
 
     this.setupSearchResults();
   }

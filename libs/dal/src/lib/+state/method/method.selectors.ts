@@ -158,7 +158,7 @@ export const getMethodWithYear = createSelector(
   }
 );
 
-export const getMethodYears = createSelector(
+export const getAllowedMethodYears = createSelector(
   getAllowedMethodIds,
   getAllEduContentBooks,
   (
@@ -168,7 +168,7 @@ export const getMethodYears = createSelector(
     return Object.values(
       eduContentBooks.reduce(
         (agg, book): MethodYearsKeyValueObject => {
-          if (book.methodId) {
+          if (allowedMethodIds.includes(book.methodId)) {
             if (!agg[book.methodId])
               agg[book.methodId] = {
                 id: book.id,
