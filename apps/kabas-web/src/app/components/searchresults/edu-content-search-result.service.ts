@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { DalState, EduContent } from '@campus/dal';
-import { Store } from '@ngrx/store';
+import { EduContent } from '@campus/dal';
 import { EduContentSearchResultItemServiceInterface } from './edu-content-search-result.service.interface';
 
 export interface SearchResultActionInterface {
@@ -19,7 +18,7 @@ enum EduContentTypeEnum {
   PAPER_EXERCISE = 'paper exercise'
 }
 
-const SearchResultActionDictionary: {
+export const searchResultActionDictionary: {
   [key: string]: SearchResultActionInterface;
 } = {
   openEduContentAsExercise: {
@@ -60,47 +59,40 @@ const SearchResultActionDictionary: {
 })
 export class EduContentSearchResultItemService
   implements EduContentSearchResultItemServiceInterface {
-  constructor(private store: Store<DalState>) {}
+  constructor() {}
 
-  /* what actions
-  - link task
-  - unlink task
-  - toggle favorite
-  - open static
-  - open exercise
-  */
-
+  /**
+   * Gets all actions for the provided eduContent
+   *
+   * @param {EduContent} eduContent
+   * @returns {SearchResultActionInterface[]}
+   * @memberof EduContentSearchResultItemService
+   */
   getActionsForEduContent(
     eduContent: EduContent
   ): SearchResultActionInterface[] {
     // search result = EduContent + EduContentMetaData relation
-    // get actions based on EduContent type
     return this.getEduContentActions(eduContent);
   }
 
   private getEduContentActions(
     eduContent: EduContent
   ): SearchResultActionInterface[] {
-    const actions: SearchResultActionInterface[] = [];
-
     switch (eduContent.type) {
       case EduContentTypeEnum.BOEKE:
-        actions.push(SearchResultActionDictionary.openBoeke);
-        break;
+        return [searchResultActionDictionary.openBoeke];
+
       case EduContentTypeEnum.EXERCISE:
-        actions.push(
-          SearchResultActionDictionary.openEduContentAsExercise,
-          SearchResultActionDictionary.openEduContentAsSolution
-        );
-        break;
+        return [
+          searchResultActionDictionary.openEduContentAsExercise,
+          searchResultActionDictionary.openEduContentAsSolution
+        ];
     }
 
     if (eduContent.streamable) {
-      actions.push(SearchResultActionDictionary.openEduContentAsStream);
+      return [searchResultActionDictionary.openEduContentAsStream];
     } else {
-      actions.push(SearchResultActionDictionary.openEduContentAsDownload);
+      return [searchResultActionDictionary.openEduContentAsDownload];
     }
-
-    return actions;
   }
 }
