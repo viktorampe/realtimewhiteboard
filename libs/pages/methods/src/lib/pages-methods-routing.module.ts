@@ -20,7 +20,7 @@ const routes: Routes = [
         component: MethodsOverviewComponent
       },
       {
-        path: ':toc',
+        path: ':book',
         resolve: { isResolved: MethodsResolver },
         runGuardsAndResolvers: 'always',
         children: [
