@@ -222,6 +222,16 @@ describe('MethodViewModel', () => {
           })
         );
       });
+
+      it('should return null as method if no book is selected', () => {
+        navigateWithParams({});
+
+        expect(methodViewModel.currentMethod$).toBeObservable(
+          hot('a', {
+            a: null
+          })
+        );
+      });
     });
 
     describe('currentToc$', () => {
