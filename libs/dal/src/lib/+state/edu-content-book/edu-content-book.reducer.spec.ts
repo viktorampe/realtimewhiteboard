@@ -100,7 +100,6 @@ describe('EduContentBooks Reducer', () => {
       const result = reducer(initialState, action);
       expect(result).toEqual(createState([], false, false, [], error));
     });
-
   });
 
   describe('add actions', () => {
