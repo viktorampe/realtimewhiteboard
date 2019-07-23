@@ -32,6 +32,7 @@ import { filter, map, switchMap, withLatestFrom } from 'rxjs/operators';
 export class MethodViewModel {
   public searchResults$: Observable<SearchResultInterface>;
   public searchState$: Observable<SearchStateInterface>;
+  public currentBoeke$: Observable<EduContentInterface>;
 
   private _searchState$: BehaviorSubject<SearchStateInterface>;
   private routerState$: Observable<RouterReducerState<RouterStateUrl>>;
@@ -51,6 +52,7 @@ export class MethodViewModel {
     this._searchState$ = new BehaviorSubject<SearchStateInterface>(null);
     this.searchState$ = this._searchState$;
     this.routerState$ = this.store.pipe(select(getRouterState));
+    //TODO -- setup the currentBoeke output stream when the source stream branch is merged in dev and the source streams can be used to build it
 
     this.setupSearchResults();
   }
