@@ -104,8 +104,8 @@ export class MethodViewModel implements ContentOpenerInterface {
           ...Array.from(initialSearchState.filterCriteriaSelections.entries())
         ])
       })),
-      switchMap(searchState => this.eduContentService.search(searchState)),
-      // switchMap(searchState => this.getMockResults()),
+      // switchMap(searchState => this.eduContentService.search(searchState)),
+      switchMap(searchState => this.getMockResults()),
       map(searchResult => {
         return {
           ...searchResult,
@@ -143,7 +143,7 @@ export class MethodViewModel implements ContentOpenerInterface {
       count: 3,
       results: [
         new EduContentFixture(
-          {},
+          { type: 'boek-e' },
           {
             title: 'Aanliggende hoeken',
             description:
@@ -152,7 +152,7 @@ export class MethodViewModel implements ContentOpenerInterface {
           }
         ),
         new EduContentFixture(
-          {},
+          { type: 'exercise' },
           {
             thumbSmall:
               'https://avatars3.githubusercontent.com/u/31932368?s=460&v=4'

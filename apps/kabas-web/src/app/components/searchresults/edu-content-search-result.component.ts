@@ -28,8 +28,16 @@ export class EduContentSearchResultComponent extends ResultItemBase
 
   ngOnInit() {
     super.ngOnInit();
+    this.setupActions();
+  }
+
+  setupActions(): void {
     this.actions = this.contentActionsServiceInterface.getActionsForEduContent(
       this.data.eduContent
     );
+  }
+
+  onActionClick(action: ContentActionInterface) {
+    action.handler(this.data.eduContent);
   }
 }
