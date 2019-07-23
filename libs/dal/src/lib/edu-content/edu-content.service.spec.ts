@@ -42,7 +42,7 @@ describe('EduContentService', () => {
         {
           provide: EduContentApi,
           useValue: {
-            getGeneralEduContentsForBookId: () => mockEduContents$,
+            getGeneralEduContentForBookId: () => mockEduContents$,
             search: () => mockSearch$,
             autocomplete: () => mockAutocomplete$
           }
@@ -74,14 +74,14 @@ describe('EduContentService', () => {
     });
   });
 
-  describe('getGeneralEduContentsForBookId', () => {
+  describe('getGeneralEduContentForBookId', () => {
     it('should return general eduContents', () => {
       const eduContents = [{ id: 1, type: 'file' }];
       mockEduContents$ = hot('-a-|', {
         a: eduContents
       });
 
-      expect(service.getGeneralEduContentsForBookId(1)).toBeObservable(
+      expect(service.getGeneralEduContentForBookId(1)).toBeObservable(
         hot('-a-|', {
           a: eduContents
         })
