@@ -47,10 +47,10 @@ export class MethodViewModel {
     @Inject(EDU_CONTENT_SERVICE_TOKEN)
     private eduContentService: EduContentServiceInterface
   ) {
-    this.initialise();
+    this.initialize();
   }
 
-  private initialise() {
+  private initialize() {
     this._searchState$ = new BehaviorSubject<SearchStateInterface>(null);
     this.searchState$ = this._searchState$;
     this.routerState$ = this.store.pipe(select(getRouterState));
