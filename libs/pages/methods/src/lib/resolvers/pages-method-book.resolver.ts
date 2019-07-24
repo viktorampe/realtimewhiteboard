@@ -11,10 +11,10 @@ import {
   EduContentQueries,
   EduContentTocActions,
   EduContentTocQueries,
+  ResolvedQueryWithProps,
   StateResolver
 } from '@campus/dal';
-import { Action, select, Selector, Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { Action, Store } from '@ngrx/store';
 
 @Injectable({
   providedIn: 'root'
@@ -38,19 +38,14 @@ export class MethodBookResolver extends StateResolver {
     ];
   }
 
-  protected getResolvedQueries(): Selector<object, boolean>[] {
+  protected getResolvedQueries() {
     return [
       DiaboloPhaseQueries.getLoaded,
       EduContentProductTypeQueries.getLoaded,
-      EduContentQueries.getLoaded
-    ];
-  }
-
-  protected getStoreSelectionsWithProperties(): Observable<boolean>[] {
-    return [
-      this.store.pipe(
-        select(EduContentTocQueries.isBookLoaded, { bookId: this.params.book })
-      )
+      EduContentQueries.getLoaded,
+      new ResolvedQueryWithProps(EduContentTocQueries.isBookLoaded, {
+        bookId: +this.params.book
+      })
     ];
   }
 }
