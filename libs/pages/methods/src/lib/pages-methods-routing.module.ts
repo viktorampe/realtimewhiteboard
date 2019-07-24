@@ -4,11 +4,11 @@ import { MethodChapterLessonComponent } from './components/method-chapter-lesson
 import { MethodChapterComponent } from './components/method-chapter/method-chapter.component';
 import { MethodComponent } from './components/method/method.component';
 import { MethodsOverviewComponent } from './components/methods-overview/methods-overview.component';
-import { MethodBookChapterLessonResolver } from './components/pages-method-book-chapter-lesson.resolver';
-import { MethodBookChapterResolver } from './components/pages-method-book-chapter.resolver';
-import { MethodBookResolver } from './components/pages-method-book.resolver';
-import { MethodOverviewResolver } from './components/pages-method-overview.resolver';
-import { MethodResolver } from './components/pages-method.resolver';
+import { MethodBookChapterLessonResolver } from './resolvers/pages-method-book-chapter-lesson.resolver';
+import { MethodBookChapterResolver } from './resolvers/pages-method-book-chapter.resolver';
+import { MethodBookResolver } from './resolvers/pages-method-book.resolver';
+import { MethodOverviewResolver } from './resolvers/pages-method-overview.resolver';
+import { MethodResolver } from './resolvers/pages-method.resolver';
 
 const routes: Routes = [
   {
