@@ -30,6 +30,7 @@ import { SearchTermComponent } from './components/search-term/search-term.compon
 import { SearchComponent } from './components/search/search.component';
 import { SelectFilterComponent } from './components/select-filter-component/select-filter.component';
 import { SearchPortalDirective } from './directives/search-portal.directive';
+import { SearchTestModule } from './search-test-module';
 
 @NgModule({
   imports: [
@@ -76,7 +77,8 @@ import { SearchPortalDirective } from './directives/search-portal.directive';
     CheckboxFilterComponent,
     ColumnFilterComponent,
     SearchComponent,
-    SearchPortalDirective
+    SearchPortalDirective,
+    SearchTestModule
   ],
   providers: [ColumnFilterService],
   entryComponents: [

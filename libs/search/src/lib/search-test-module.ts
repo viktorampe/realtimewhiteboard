@@ -9,11 +9,11 @@ import {
 import { MatIconRegistry } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
-import { ResultItemBase, SearchComponent } from '@campus/search';
 import { ENVIRONMENT_ICON_MAPPING_TOKEN, SharedModule } from '@campus/shared';
 import { UiModule } from '@campus/ui';
 import { of } from 'rxjs';
-import { MockMatIconRegistry } from '..';
+import { MockMatIconRegistry } from '../../../testing/src';
+import { ResultItemBase, SearchComponent } from './components';
 
 @Component({
   selector: 'campus-result-item',
@@ -25,7 +25,7 @@ export class ResultItemMockComponent extends ResultItemBase {}
   template: `
     <div></div>
   `,
-  selector: 'campus-search'
+  selector: 'campus-search-stub'
 })
 export class SearchStubComponent {
   @Input() public searchMode;
