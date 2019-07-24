@@ -49,6 +49,10 @@ const routes: Routes = [
                 path: ':lesson',
                 resolve: { isResolved: MethodBookChapterLessonResolver },
                 runGuardsAndResolvers: 'always',
+                data: {
+                  selector: EduContentTocQueries.getById,
+                  displayProperty: 'title'
+                },
                 component: MethodChapterLessonComponent
               }
             ]
