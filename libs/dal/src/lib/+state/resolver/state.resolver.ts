@@ -1,12 +1,6 @@
 import { ActivatedRouteSnapshot, Params, Resolve } from '@angular/router';
 import { DalState } from '@campus/dal';
-import {
-  Action,
-  select,
-  Selector,
-  SelectorWithProps,
-  Store
-} from '@ngrx/store';
+import { Action, select, Selector, Store } from '@ngrx/store';
 import { combineLatest, Observable } from 'rxjs';
 import { filter, map, take } from 'rxjs/operators';
 
@@ -66,9 +60,7 @@ export abstract class StateResolver implements Resolve<boolean> {
   }
 
   protected abstract getLoadableActions(): Action[];
-  protected abstract getResolvedQueries(): (
-    | Selector<object, boolean>
-    | SelectorWithProps<object, any, boolean>)[];
+  protected abstract getResolvedQueries(): Selector<object, boolean>[];
   protected getStoreSelectionsWithProperties?(): Observable<boolean>[];
 
   private loadActions(actions: Action[]): void {
