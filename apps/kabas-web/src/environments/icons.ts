@@ -1,4 +1,5 @@
 export const icons = {
+  book: 'assets/icons/book.svg',
   warning: 'assets/icons/material/baseline-warning-24px.svg',
   menu: 'assets/icons/material/menu.svg',
   home: 'assets/icons/material/home.svg',
