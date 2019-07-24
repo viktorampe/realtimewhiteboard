@@ -1,5 +1,4 @@
 import { ActivatedRouteSnapshot, Params, Resolve } from '@angular/router';
-import { DalState } from '@campus/dal';
 import {
   Action,
   select,
@@ -9,6 +8,7 @@ import {
 } from '@ngrx/store';
 import { combineLatest, Observable } from 'rxjs';
 import { filter, map, take } from 'rxjs/operators';
+import { DalState } from '../dal.state.interface';
 
 export class ResolvedQueryWithProps<T> {
   constructor(
