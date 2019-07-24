@@ -3,10 +3,22 @@ import { EduContentBookInterface } from '../../+models';
 import { State } from './edu-content-book.reducer';
 
 describe('EduContentBook Selectors', () => {
-  function createEduContentBook(id: number): EduContentBookInterface | any {
-    return {
+  const eduContentBooksArray = [
+    createEduContentBook(4),
+    createEduContentBook(1, true),
+    createEduContentBook(2),
+    createEduContentBook(3, true)
+  ];
+
+  function createEduContentBook(
+    id: number,
+    diabolo?: boolean
+  ): EduContentBookInterface | any {
+    const data: EduContentBookInterface | any = {
       id: id
     };
+    if (diabolo) data.diabolo = diabolo;
+    return data;
   }
 
   function createState(
@@ -37,16 +49,7 @@ describe('EduContentBook Selectors', () => {
 
   describe('EduContentBook Selectors', () => {
     beforeEach(() => {
-      eduContentBookState = createState(
-        [
-          createEduContentBook(4),
-          createEduContentBook(1),
-          createEduContentBook(2),
-          createEduContentBook(3)
-        ],
-        true,
-        'no error'
-      );
+      eduContentBookState = createState(eduContentBooksArray, true, 'no error');
       storeState = { eduContentBooks: eduContentBookState };
     });
     it('getError() should return the error', () => {
@@ -59,12 +62,7 @@ describe('EduContentBook Selectors', () => {
     });
     it('getAll() should return an array of the entities in the order from the ids', () => {
       const results = EduContentBookQueries.getAll(storeState);
-      expect(results).toEqual([
-        createEduContentBook(4),
-        createEduContentBook(1),
-        createEduContentBook(2),
-        createEduContentBook(3)
-      ]);
+      expect(results).toEqual(eduContentBooksArray);
     });
     it('getCount() should return number of entities', () => {
       const results = EduContentBookQueries.getCount(storeState);
@@ -83,8 +81,8 @@ describe('EduContentBook Selectors', () => {
         ids: [3, 1, 90, 2]
       });
       expect(results).toEqual([
-        createEduContentBook(3),
-        createEduContentBook(1),
+        createEduContentBook(3, true),
+        createEduContentBook(1, true),
         undefined,
         createEduContentBook(2)
       ]);
@@ -96,6 +94,35 @@ describe('EduContentBook Selectors', () => {
     it('getById() should return undefined if the entity is not present', () => {
       const results = EduContentBookQueries.getById(storeState, { id: 9 });
       expect(results).toBe(undefined);
+    });
+  });
+  describe('EduContentBook Diabolo related Selectors', () => {
+    beforeEach(() => {
+      eduContentBookState = createState(eduContentBooksArray, true);
+      storeState = { eduContentBooks: eduContentBookState };
+    });
+    it('getDiaboloEnabledBookIds() should return ids array', () => {
+      const results = EduContentBookQueries.getDiaboloEnabledBookIds(
+        storeState
+      );
+      expect(results).toEqual([1, 3]);
+    });
+    it('isBookDiaboloEnabled() should return true or false depending on the ids array', () => {
+      const results1 = EduContentBookQueries.isBookDiaboloEnabled(storeState, {
+        id: 1
+      });
+      const results2 = EduContentBookQueries.isBookDiaboloEnabled(storeState, {
+        id: 2
+      });
+      expect(results1).toBe(true);
+      expect(results2).toBe(false);
+    });
+    it('getDiaboloEnabledBooks() should return the an array of books', () => {
+      const results = EduContentBookQueries.getDiaboloEnabledBooks(storeState);
+      expect(results).toEqual([
+        createEduContentBook(1, true),
+        createEduContentBook(3, true)
+      ]);
     });
   });
 });
