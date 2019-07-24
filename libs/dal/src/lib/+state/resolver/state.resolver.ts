@@ -1,6 +1,12 @@
-import { Resolve } from '@angular/router';
+import { ActivatedRouteSnapshot, Params, Resolve } from '@angular/router';
 import { DalState } from '@campus/dal';
-import { Action, select, Selector, Store } from '@ngrx/store';
+import {
+  Action,
+  select,
+  Selector,
+  SelectorWithProps,
+  Store
+} from '@ngrx/store';
 import { combineLatest, Observable } from 'rxjs';
 import { filter, map, take } from 'rxjs/operators';
 
@@ -15,7 +21,7 @@ import { filter, map, take } from 'rxjs/operators';
      providedIn: 'root'
    })
    export class BundlesResolver extends StateResolver {...}`
-  
+
    2.
    `constructor(
      private store: Store<DalState>,
@@ -23,7 +29,7 @@ import { filter, map, take } from 'rxjs/operators';
      ) {
        super(store);
      }`
-  
+
    3.
    `protected getLoadableActions(): Action[] {
       return [
@@ -43,19 +49,27 @@ import { filter, map, take } from 'rxjs/operators';
  * @implements {Resolve<boolean>}
  */
 export abstract class StateResolver implements Resolve<boolean> {
+  protected params: Params;
   constructor(private superStore: Store<DalState>) {}
 
-  resolve(): Observable<boolean> {
+  resolve(route: ActivatedRouteSnapshot): Observable<boolean> {
+    this.params = route.params;
     this.loadActions(this.getLoadableActions());
     return this.actionsLoaded(
       this.getResolvedQueries().map(query =>
         this.superStore.pipe(select(query))
-      )
+      ),
+      this.getStoreSelectionsWithProperties
+        ? this.getStoreSelectionsWithProperties()
+        : []
     );
   }
 
   protected abstract getLoadableActions(): Action[];
-  protected abstract getResolvedQueries(): Selector<object, boolean>[];
+  protected abstract getResolvedQueries(): (
+    | Selector<object, boolean>
+    | SelectorWithProps<object, any, boolean>)[];
+  protected getStoreSelectionsWithProperties?(): Observable<boolean>[];
 
   private loadActions(actions: Action[]): void {
     actions.forEach(action => {
@@ -63,8 +77,11 @@ export abstract class StateResolver implements Resolve<boolean> {
     });
   }
 
-  private actionsLoaded(loaded$: Observable<boolean>[]): Observable<boolean> {
-    return combineLatest(loaded$).pipe(
+  private actionsLoaded(
+    loaded$: Observable<boolean>[],
+    loadedWithProps$: Observable<boolean>[]
+  ): Observable<boolean> {
+    return combineLatest([...loaded$, ...loadedWithProps$]).pipe(
       map(loadedArray => loadedArray.every(loaded => loaded)),
       filter(loaded => loaded),
       take(1)
