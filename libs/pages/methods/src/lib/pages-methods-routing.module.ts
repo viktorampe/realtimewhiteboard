@@ -4,24 +4,27 @@ import { MethodChapterLessonComponent } from './components/method-chapter-lesson
 import { MethodChapterComponent } from './components/method-chapter/method-chapter.component';
 import { MethodComponent } from './components/method/method.component';
 import { MethodsOverviewComponent } from './components/methods-overview/methods-overview.component';
-import { MethodChapterLessonResolver } from './components/pages-method-chapter-lesson.resolver';
-import { MethodChapterResolver } from './components/pages-method-chapter.resolver';
-import { MethodsOverviewResolver } from './components/pages-method-overview.resolver';
-import { MethodsResolver } from './components/pages-methods.resolver';
+import { MethodBookChapterLessonResolver } from './resolvers/pages-method-book-chapter-lesson.resolver';
+import { MethodBookChapterResolver } from './resolvers/pages-method-book-chapter.resolver';
+import { MethodBookResolver } from './resolvers/pages-method-book.resolver';
+import { MethodOverviewResolver } from './resolvers/pages-method-overview.resolver';
+import { MethodResolver } from './resolvers/pages-method.resolver';
 
 const routes: Routes = [
   {
     path: '',
-    resolve: { isResolved: MethodsOverviewResolver },
+    resolve: { isResolved: MethodResolver },
     runGuardsAndResolvers: 'always',
     children: [
       {
         path: '',
+        resolve: { isResolved: MethodOverviewResolver },
+        runGuardsAndResolvers: 'always',
         component: MethodsOverviewComponent
       },
       {
         path: ':book',
-        resolve: { isResolved: MethodsResolver },
+        resolve: { isResolved: MethodBookResolver },
         runGuardsAndResolvers: 'always',
         children: [
           {
@@ -30,7 +33,7 @@ const routes: Routes = [
           },
           {
             path: ':chapter',
-            resolve: { isResolved: MethodChapterResolver },
+            resolve: { isResolved: MethodBookChapterResolver },
             runGuardsAndResolvers: 'always',
             children: [
               {
@@ -39,7 +42,7 @@ const routes: Routes = [
               },
               {
                 path: ':lesson',
-                resolve: { isResolved: MethodChapterLessonResolver },
+                resolve: { isResolved: MethodBookChapterLessonResolver },
                 runGuardsAndResolvers: 'always',
                 component: MethodChapterLessonComponent
               }

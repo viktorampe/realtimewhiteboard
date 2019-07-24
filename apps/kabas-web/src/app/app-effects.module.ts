@@ -3,9 +3,12 @@ import {
   DiaboloPhaseEffects,
   EduContentBookEffects,
   EduContentProductTypeEffects,
+  EduContentsEffects,
   EduContentTocEffects,
+  MethodEffects,
   UiEffects,
-  UserEffects
+  UserEffects,
+  YearEffects
 } from '@campus/dal';
 import { EffectsModule } from '@ngrx/effects';
 
@@ -18,7 +21,10 @@ import { EffectsModule } from '@ngrx/effects';
       EduContentTocEffects,
       EduContentBookEffects,
       DiaboloPhaseEffects,
-      EduContentProductTypeEffects
+      EduContentProductTypeEffects,
+      MethodEffects,
+      YearEffects,
+      EduContentsEffects
     ])
   ]
 })

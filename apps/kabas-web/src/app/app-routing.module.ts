@@ -9,7 +9,8 @@ const routes: Routes = [
   },
   {
     path: 'methods',
-    loadChildren: '@campus/pages/methods#PagesMethodsModule'
+    loadChildren: '@campus/pages/methods#PagesMethodsModule',
+    data: { breadcrumbText: 'Methodes' }
   },
   {
     path: 'search',
