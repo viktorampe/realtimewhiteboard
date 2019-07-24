@@ -4,6 +4,13 @@ import { Action, select, Selector, Store } from '@ngrx/store';
 import { combineLatest, Observable } from 'rxjs';
 import { filter, map, take } from 'rxjs/operators';
 
+export class ResolvedQueryWithProps<T> {
+  constructor(
+    public readonly selector: SelectorWithProps<object, T, boolean>,
+    public readonly props: Required<T>
+  ) {}
+}
+
 /**
  * 1. the injectable decorator NEEDS to be added to the extending class
  * 2. custom resolvers extending from this class NEED to call super in their own constructor.
