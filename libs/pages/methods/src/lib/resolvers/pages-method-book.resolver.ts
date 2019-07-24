@@ -33,7 +33,7 @@ export class MethodBookResolver extends StateResolver {
       new EduContentProductTypeActions.LoadEduContentProductTypes({ userId }),
       new EduContentActions.LoadEduContents({ userId }),
       new EduContentTocActions.LoadEduContentTocsForBook({
-        bookId: this.params.book
+        bookId: +this.params.book
       })
     ];
   }
