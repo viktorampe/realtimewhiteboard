@@ -6,10 +6,6 @@ import {
   NgModule,
   Output
 } from '@angular/core';
-import { MatIconRegistry } from '@angular/material';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { RouterTestingModule } from '@angular/router/testing';
-import { MockMatIconRegistry } from '@campus/testing';
 import { of } from 'rxjs';
 import { ResultItemBase, SearchComponent } from './components';
 
@@ -40,11 +36,8 @@ export class SearchStubComponent {
 
 @NgModule({
   declarations: [SearchStubComponent, ResultItemMockComponent],
-  imports: [CommonModule, NoopAnimationsModule, RouterTestingModule],
+  imports: [CommonModule],
   exports: [SearchStubComponent, ResultItemMockComponent],
-  providers: [
-    { provide: MatIconRegistry, useClass: MockMatIconRegistry },
-    { provide: SearchComponent, useValue: SearchStubComponent }
-  ]
+  providers: [{ provide: SearchComponent, useValue: SearchStubComponent }]
 })
 export class SearchTestModule {}
