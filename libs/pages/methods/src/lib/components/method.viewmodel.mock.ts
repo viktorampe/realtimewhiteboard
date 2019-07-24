@@ -30,7 +30,7 @@ export class MockMethodViewModel
   private getAllowedBooks$(): any[] {
     return [
       {
-        logoUrl: 'beautemps.svg',
+        logoUrl: 'beaufort.svg',
         name: 'testnaam',
         years: [
           {
@@ -56,14 +56,9 @@ export class MockMethodViewModel
         ]
       },
       {
-        logoUrl: 'beautemps.svg',
+        logoUrl: 'beaufort.svg',
         name: 'testnaam',
         years: [
-          {
-            id: 1,
-            name: 'L1',
-            bookId: 2
-          },
           {
             id: 2,
             name: 'L2',
