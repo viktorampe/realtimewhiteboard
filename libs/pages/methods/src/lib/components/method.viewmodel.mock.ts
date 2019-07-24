@@ -1,5 +1,9 @@
 import { Injectable } from '@angular/core';
-import { EduContentTOCInterface, MethodInterface } from '@campus/dal';
+import {
+  EduContentTOCInterface,
+  MethodInterface,
+  MethodYearsInterface
+} from '@campus/dal';
 import {
   SearchModeInterface,
   SearchResultInterface,
@@ -16,6 +20,9 @@ export class MockMethodViewModel
   implements ViewModelInterface<MethodViewModel> {
   public searchResults$: Observable<SearchResultInterface>;
   public searchState$: Observable<SearchStateInterface>;
+  public methodYears$ = new BehaviorSubject<MethodYearsInterface[]>(
+    this.getAllowedBooks$()
+  );
   public currentToc$ = new BehaviorSubject<EduContentTOCInterface[]>([]);
   public currentMethod$ = new BehaviorSubject<MethodInterface>(null);
 
@@ -28,4 +35,58 @@ export class MockMethodViewModel
   }
 
   public updateState(state: SearchStateInterface): void {}
+
+  private getAllowedBooks$(): MethodYearsInterface[] {
+    return [
+      {
+        id: 1,
+        logoUrl: 'beaufort.svg',
+        name: 'testnaam',
+        years: [
+          {
+            id: 1,
+            name: 'L1',
+            bookId: 2
+          },
+          {
+            id: 2,
+            name: 'L2',
+            bookId: 3
+          },
+          {
+            id: 3,
+            name: 'L3',
+            bookId: 4
+          },
+          {
+            id: 4,
+            name: 'L4',
+            bookId: 5
+          }
+        ]
+      },
+      {
+        id: 2,
+        logoUrl: 'beaufort.svg',
+        name: 'testnaam',
+        years: [
+          {
+            id: 2,
+            name: 'L2',
+            bookId: 3
+          },
+          {
+            id: 3,
+            name: 'L3',
+            bookId: 4
+          },
+          {
+            id: 4,
+            name: 'L4',
+            bookId: 5
+          }
+        ]
+      }
+    ];
+  }
 }
