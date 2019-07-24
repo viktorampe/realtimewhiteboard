@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { EduContent } from '@campus/dal';
 import {
   SearchModeInterface,
   SearchResultInterface,
@@ -25,4 +26,10 @@ export class MockMethodViewModel
   }
 
   public updateState(state: SearchStateInterface): void {}
+
+  openEduContentAsExercise(eduContent: any): void {}
+  openEduContentAsSolution(eduContent: EduContent): void {}
+  openEduContentAsStream(eduContent: EduContent): void {}
+  openEduContentAsDownload(eduContent: EduContent): void {}
+  openBoeke(eduContent: EduContent): void {}
 }
