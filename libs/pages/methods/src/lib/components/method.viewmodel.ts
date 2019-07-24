@@ -13,6 +13,7 @@ import {
   EduContentProductTypeFixture,
   EduContentProductTypeInterface,
   EduContentProductTypeQueries,
+  EduContentQueries,
   EduContentServiceInterface,
   EduContentTOCInterface,
   EduContentTocQueries,
@@ -53,6 +54,7 @@ export class MethodViewModel {
   // Presentation streams
   public currentToc$: Observable<EduContentTOCInterface[]>;
   public currentMethod$: Observable<MethodInterface>;
+  public currentBooke$: Observable<EduContentInterface>;
 
   // Source streams
   private routerState$: Observable<RouterReducerState<RouterStateUrl>>;
@@ -79,10 +81,26 @@ export class MethodViewModel {
     this._searchState$ = new BehaviorSubject<SearchStateInterface>(null);
     this.searchState$ = this._searchState$;
     this.routerState$ = this.store.pipe(select(getRouterState));
-    //TODO -- setup the currentBoeke output stream when the source stream branch is merged in dev and the source streams can be used to build it
 
     this.setSourceStreams();
+    this.setPresentationStreams();
     this.setupSearchResults();
+  }
+
+  private setPresentationStreams(): void {
+    this.currentBoeke$ = this.getCurrentBookeStream();
+  }
+
+  private getCurrentBookeStream(): Observable<EduContentInterface> {
+    return this.currentMethodParams$.pipe(
+      switchMap(currentMethodParams => {
+        return this.store.pipe(
+          select(EduContentQueries.getBookeByBookId, {
+            bookId: currentMethodParams.book
+          })
+        );
+      })
+    );
   }
 
   private setupSearchResults(): void {
