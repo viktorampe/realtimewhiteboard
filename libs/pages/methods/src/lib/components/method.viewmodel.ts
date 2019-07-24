@@ -173,7 +173,7 @@ export class MethodViewModel implements ContentOpenerInterface {
     });
   }
 
-  openEduContentAsExercise(eduContent: any): void {
+  openEduContentAsExercise(eduContent: EduContent): void {
     throw new Error('Method not implemented.');
   }
   openEduContentAsSolution(eduContent: EduContent): void {
