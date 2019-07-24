@@ -126,8 +126,8 @@ export class CredentialsViewModel {
 
     this.singleSignOnProviders$ = combineLatest([
       this.ssoFromEnvironment$,
-      this.credentials$]
-    ).pipe(
+      this.credentials$
+    ]).pipe(
       map(([ssoEnv, credentials]) => {
         return this.convertToSingleSignOnProviders(ssoEnv).filter(
           provider =>
