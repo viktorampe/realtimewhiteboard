@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import {
   DiaboloPhaseEffects,
+  EduContentBookEffects,
   EduContentProductTypeEffects,
   EduContentTocEffects,
   UiEffects,
@@ -15,6 +16,7 @@ import { EffectsModule } from '@ngrx/effects';
       UiEffects,
       UserEffects,
       EduContentTocEffects,
+      EduContentBookEffects,
       DiaboloPhaseEffects,
       EduContentProductTypeEffects
     ])
