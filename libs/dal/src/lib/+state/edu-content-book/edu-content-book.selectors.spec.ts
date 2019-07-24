@@ -126,7 +126,7 @@ describe('EduContentBook Selectors', () => {
       );
       expect(results).toEqual([1, 3]);
     });
-    it('getDiaboloEnabledBookIds() should return true or false depending on the ids array', () => {
+    it('isBookDiaboloEnabled() should return true or false depending on the ids array', () => {
       const results1 = EduContentBookQueries.isBookDiaboloEnabled(storeState, {
         id: 1
       });

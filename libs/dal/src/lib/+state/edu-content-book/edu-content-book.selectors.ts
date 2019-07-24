@@ -80,7 +80,5 @@ export const isBookDiaboloEnabled = createSelector(
 
 export const getDiaboloEnabledBooks = createSelector(
   getAll,
-  getDiaboloEnabledBookIds,
-  (books: EduContentBookInterface[], diaboloIds: number[]) =>
-    diaboloIds.map(id => books[id])
+  (books: EduContentBookInterface[]) => books.filter(book => book.diabolo)
 );
