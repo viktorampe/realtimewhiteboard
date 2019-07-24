@@ -1,0 +1,16 @@
+<div class="pages-methods-method-year-tile__image__container">
+  <img
+    [src]="'assets/icons/method/' + logoUrl"
+    class="pages-methods-method-year-tile__image"
+  />
+</div>
+<div class="pages-methods-method-year-tile__title">{{ name }}</div>
+<div class="pages-methods-method-year-tile__button__container">
+  <campus-button
+    *ngFor="let year of years"
+    class="pages-methods-method-year-tile__button"
+    [routerLink]="year.bookId"
+  >
+    {{ year.name }}
+  </campus-button>
+</div>
