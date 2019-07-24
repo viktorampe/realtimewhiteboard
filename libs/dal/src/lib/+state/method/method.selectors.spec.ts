@@ -272,34 +272,39 @@ describe('Method Selectors', () => {
     describe('getMethodYears', () => {
       it('should return the method name and year name combination', () => {
         const mockMethods = [
-          new MethodFixture({ id: 1, name: 'foo method' }),
-          new MethodFixture({ id: 2, name: 'bar method' }),
-          new MethodFixture({ id: 3, name: ' baz method' })
+          new MethodFixture({ id: 10, name: 'foo method' }),
+          new MethodFixture({ id: 20, name: 'bar method' }),
+          new MethodFixture({ id: 30, name: ' baz method' })
         ];
         storeState.eduContentBooks = createBookState([
           createEduContentBook(1, {
-            methodId: 1,
+            methodId: 10,
             years: [{ id: 1, name: 'Y1' }]
           }),
           createEduContentBook(2, {
-            methodId: 1,
+            methodId: 10,
             years: [{ id: 2, name: 'Y2' }]
           }),
           createEduContentBook(3, {
-            methodId: 3,
+            methodId: 30,
             years: [{ id: 1, name: 'Y1' }]
           })
         ]);
 
-        storeState.methods = createState(mockMethods, true, [1, 2], 'no error');
+        storeState.methods = createState(
+          mockMethods,
+          true,
+          [10, 20],
+          'no error'
+        );
 
         const result = MethodQueries.getAllowedMethodYears(storeState);
 
         expect(result).toEqual([
           {
-            id: 1,
-            logoUrl: 'logo for method 1',
-            name: 'method 1',
+            id: 10,
+            logoUrl: 'logo for method 10',
+            name: 'method 10',
             years: [
               { id: 1, name: 'Y1', bookId: 1 },
               { id: 2, name: 'Y2', bookId: 2 }
