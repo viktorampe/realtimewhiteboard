@@ -171,7 +171,7 @@ export const getAllowedMethodYears = createSelector(
           if (allowedMethodIds.includes(book.methodId)) {
             if (!agg[book.methodId])
               agg[book.methodId] = {
-                id: book.id,
+                id: book.methodId,
                 logoUrl: book.method.logoUrl,
                 name: book.method.name,
                 years: []
