@@ -1,3 +1,33 @@
-<div style="min-height: 60px; width: 200px; border: 1px solid black">{{
-  data.eduContent.name
-}}</div>
+<div class="app-educontentsearchresult">
+  <campus-file-extension
+    class="app-educontentsearchresult__extension"
+    [showIcon]="false"
+    [extensionClass]="data.eduContent.fileExtension"
+    [title]="data.eduContent.fileTypeLabel"
+  ></campus-file-extension>
+
+  <div class="app-educontentsearchresult__content">
+    <div class="app-educontentsearchresult__content__header">
+      <span class="app-educontentsearchresult__content__header__title">
+        {{ data.eduContent.name }}
+      </span>
+      <campus-button
+        class="app-educontentsearchresult__content__header__favorite"
+        circle
+        iconClass="favorite"
+        matTooltip="Toevoegen aan favorieten"
+        (click)="(null)"
+        campusClickStopPropagation
+      ></campus-button>
+      <mat-icon
+        class="app-educontentsearchresult__content__header__diabolo-phase"
+        svgIcon="diabolo-midden"
+      ></mat-icon>
+    </div>
+    <div class="app-educontentsearchresult__content__body">
+      <span class="app-educontentsearchresult__content__body__description">
+        {{ data.eduContent.description }}
+      </span>
+    </div>
+  </div>
+</div>
