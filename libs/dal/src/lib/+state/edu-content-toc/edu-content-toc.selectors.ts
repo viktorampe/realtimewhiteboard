@@ -79,6 +79,18 @@ export const getTocsForBook = createSelector(
     }, [])
 );
 
+export const getChaptersForBook = createSelector(
+  selectEduContentTocState,
+  (state: State, props: { bookId: number }) =>
+    (state.ids as number[]).reduce((acc, currentTocId) => {
+      const currentToc = state.entities[currentTocId];
+      if (currentToc.treeId === props.bookId && currentToc.depth === 0) {
+        acc.push(currentToc);
+      }
+      return acc;
+    }, [])
+);
+
 // returns the direct descendant tocs for a given toc, by tocId
 export const getTocsForToc = createSelector(
   selectEduContentTocState,

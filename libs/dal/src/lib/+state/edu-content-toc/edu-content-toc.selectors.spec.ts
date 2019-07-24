@@ -135,6 +135,57 @@ describe('EduContentToc Selectors', () => {
       });
     });
 
+    describe('getChaptersForBook', () => {
+      let chapterTOCs: EduContentTOCInterface[];
+
+      beforeEach(() => {
+        chapterTOCs = [
+          new EduContentTOCFixture({
+            id: 1,
+            treeId: 1,
+            depth: 0,
+            lft: 1,
+            rgt: 4
+          }),
+          new EduContentTOCFixture({
+            id: 2,
+            treeId: 1,
+            depth: 0,
+            lft: 5,
+            rgt: 8
+          })
+        ];
+
+        const mockTOCs = [
+          ...chapterTOCs,
+          new EduContentTOCFixture({
+            id: 3,
+            treeId: 1,
+            depth: 1,
+            lft: 2,
+            rgt: 3
+          }),
+          new EduContentTOCFixture({
+            id: 4,
+            treeId: 1,
+            depth: 1,
+            lft: 6,
+            rgt: 7
+          })
+        ];
+
+        eduContentTocState = createState(mockTOCs, [1], 'no error');
+        storeState = { eduContentTocs: eduContentTocState };
+      });
+
+      it('should return the chapters for the current book', () => {
+        const results = EduContentTocQueries.getChaptersForBook(storeState, {
+          bookId: 1
+        });
+        expect(results).toEqual(chapterTOCs);
+      });
+    });
+
     describe('getTocsForToc', () => {
       let mockTOCs: EduContentTOCInterface[];
 
