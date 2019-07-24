@@ -1,44 +1,33 @@
-import { Inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import {
-  AuthServiceInterface,
-  AUTH_SERVICE_TOKEN,
   DalState,
-  EduContentActions,
-  EduContentQueries,
-  MethodActions,
+  EduContentBookActions,
+  EduContentBookQueries,
   MethodQueries,
-  StateResolver,
-  YearActions,
-  YearQueries
+  StateResolver
 } from '@campus/dal';
-import { Action, Selector, Store } from '@ngrx/store';
+import { Action, select, Selector, Store } from '@ngrx/store';
+import { take } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
-export class MethodsOverviewResolver extends StateResolver {
-  constructor(
-    private store: Store<DalState>,
-    @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface
-  ) {
+export class MethodOverviewResolver extends StateResolver {
+  constructor(private store: Store<DalState>) {
     super(store);
   }
   protected getLoadableActions(): Action[] {
-    const userId = this.authService.userId;
-    return [
-      new MethodActions.LoadMethods({ userId }),
-      new MethodActions.LoadAllowedMethods({ userId }),
-      new YearActions.LoadYears({ userId }),
-      new EduContentActions.LoadEduContents({ userId })
-    ];
+    let methodIds: number[];
+    this.store
+      .pipe(
+        select(MethodQueries.getAllowedMethodIds),
+        take(1)
+      )
+      .subscribe(ids => (methodIds = ids)); // methodsIds resolved in parent resolver
+    return [new EduContentBookActions.LoadEduContentBooks({ methodIds })];
   }
 
   protected getResolvedQueries(): Selector<object, boolean>[] {
-    return [
-      MethodQueries.getLoaded,
-      MethodQueries.getAllowedMethodsLoaded,
-      YearQueries.getLoaded,
-      EduContentQueries.getLoaded
-    ];
+    return [EduContentBookQueries.getLoaded];
   }
 }
