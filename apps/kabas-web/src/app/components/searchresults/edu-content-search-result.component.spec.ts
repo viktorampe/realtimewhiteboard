@@ -12,7 +12,7 @@ import { EduContentSearchResultComponent } from './edu-content-search-result.com
 describe('EduContentSearchResultComponent', () => {
   let component: EduContentSearchResultComponent;
   let fixture: ComponentFixture<EduContentSearchResultComponent>;
-  let eduContentSearchResultItemService: EduContentSearchResultItemServiceInterface;
+
   const mockIsFavorite = new BehaviorSubject(false);
   let dateMock: MockDate;
 
