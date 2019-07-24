@@ -25,7 +25,7 @@ export class ResultItemMockComponent extends ResultItemBase {}
   template: `
     <div></div>
   `,
-  selector: 'campus-search-stub'
+  selector: 'campus-search'
 })
 export class SearchStubComponent {
   @Input() public searchMode;
