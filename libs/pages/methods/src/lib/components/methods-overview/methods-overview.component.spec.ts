@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
+import { MethodYearsInterface } from '@campus/dal';
 import { ENVIRONMENT_ICON_MAPPING_TOKEN, SharedModule } from '@campus/shared';
 import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
@@ -38,7 +39,9 @@ describe('MethodsOverviewComponent', () => {
     component = fixture.componentInstance;
 
     viewmodel = TestBed.get(MethodViewModel);
-    allowedBooks$ = viewmodel.allowedBooks$ as BehaviorSubject<any>;
+    allowedBooks$ = viewmodel.methodYears$ as BehaviorSubject<
+      MethodYearsInterface[]
+    >;
 
     fixture.detectChanges();
   });

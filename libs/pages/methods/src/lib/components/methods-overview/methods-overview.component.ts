@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MethodYearsInterface } from '@campus/dal';
 import { Observable } from 'rxjs';
 import { MethodViewModel } from '../method.viewmodel';
 
@@ -9,7 +10,7 @@ import { MethodViewModel } from '../method.viewmodel';
   // providers: [{ provide: MethodViewModel, useClass: MockMethodViewModel }]
 })
 export class MethodsOverviewComponent implements OnInit {
-  public allowedBooks$: Observable<any>; // TODO use interface
+  public allowedBooks$: Observable<MethodYearsInterface[]>;
   constructor(private methodViewmodel: MethodViewModel) {}
 
   ngOnInit() {
@@ -17,6 +18,6 @@ export class MethodsOverviewComponent implements OnInit {
   }
 
   private setupStreams() {
-    this.allowedBooks$ = this.methodViewmodel.allowedBooks$;
+    this.allowedBooks$ = this.methodViewmodel.methodYears$;
   }
 }

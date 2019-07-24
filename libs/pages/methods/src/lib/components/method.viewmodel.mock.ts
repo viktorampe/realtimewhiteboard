@@ -1,5 +1,10 @@
 import { Injectable } from '@angular/core';
 import {
+  EduContentTOCInterface,
+  MethodInterface,
+  MethodYearsInterface
+} from '@campus/dal';
+import {
   SearchModeInterface,
   SearchResultInterface,
   SearchStateInterface
@@ -15,7 +20,11 @@ export class MockMethodViewModel
   implements ViewModelInterface<MethodViewModel> {
   public searchResults$: Observable<SearchResultInterface>;
   public searchState$: Observable<SearchStateInterface>;
-  public allowedBooks$ = new BehaviorSubject<any[]>(this.getAllowedBooks$());
+  public methodYears$ = new BehaviorSubject<MethodYearsInterface[]>(
+    this.getAllowedBooks$()
+  );
+  public currentToc$ = new BehaviorSubject<EduContentTOCInterface[]>([]);
+  public currentMethod$ = new BehaviorSubject<MethodInterface>(null);
 
   public getSearchMode(mode: string, book?: number): SearchModeInterface {
     return;
@@ -27,9 +36,10 @@ export class MockMethodViewModel
 
   public updateState(state: SearchStateInterface): void {}
 
-  private getAllowedBooks$(): any[] {
+  private getAllowedBooks$(): MethodYearsInterface[] {
     return [
       {
+        id: 1,
         logoUrl: 'beaufort.svg',
         name: 'testnaam',
         years: [
@@ -56,6 +66,7 @@ export class MockMethodViewModel
         ]
       },
       {
+        id: 2,
         logoUrl: 'beaufort.svg',
         name: 'testnaam',
         years: [

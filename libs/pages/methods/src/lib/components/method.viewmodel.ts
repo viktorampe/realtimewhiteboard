@@ -3,13 +3,24 @@ import {
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
   DalState,
+  DiaboloPhaseInterface,
+  DiaboloPhaseQueries,
   EduContent,
+  EduContentBookInterface,
+  EduContentBookQueries,
   EduContentFixture,
   EduContentInterface,
   EduContentProductTypeFixture,
+  EduContentProductTypeInterface,
+  EduContentProductTypeQueries,
   EduContentServiceInterface,
+  EduContentTOCInterface,
+  EduContentTocQueries,
   EDU_CONTENT_SERVICE_TOKEN,
   getRouterState,
+  MethodInterface,
+  MethodQueries,
+  MethodYearsInterface,
   RouterStateUrl
 } from '@campus/dal';
 import {
@@ -23,8 +34,14 @@ import {
 } from '@campus/shared';
 import { RouterReducerState } from '@ngrx/router-store';
 import { select, Store } from '@ngrx/store';
-import { BehaviorSubject, Observable, of } from 'rxjs';
-import { filter, map, switchMap, withLatestFrom } from 'rxjs/operators';
+import { BehaviorSubject, merge, Observable, of } from 'rxjs';
+import { filter, map, mapTo, switchMap, withLatestFrom } from 'rxjs/operators';
+
+interface CurrentMethodParams {
+  book: number;
+  chapter: number;
+  lesson: number;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -32,64 +49,43 @@ import { filter, map, switchMap, withLatestFrom } from 'rxjs/operators';
 export class MethodViewModel {
   public searchResults$: Observable<SearchResultInterface>;
   public searchState$: Observable<SearchStateInterface>;
-  public allowedBooks$: Observable<any[]>;
+  public methodYears$: Observable<MethodYearsInterface[]>;
+
+  // Presentation streams
+  public currentToc$: Observable<EduContentTOCInterface[]>;
+  public currentMethod$: Observable<MethodInterface>;
+
+  // Source streams
+  private routerState$: Observable<RouterReducerState<RouterStateUrl>>;
+  private currentMethodParams$: Observable<CurrentMethodParams>;
+  private currentBook$: Observable<EduContentBookInterface>;
+  private generalFiles$: Observable<EduContentInterface[]>;
+  private eduContentProductTypes$: Observable<EduContentProductTypeInterface[]>;
+  private diaboloPhases$: Observable<DiaboloPhaseInterface[]>;
 
   private _searchState$: BehaviorSubject<SearchStateInterface>;
-  private routerState$: Observable<RouterReducerState<RouterStateUrl>>;
 
   constructor(
     private store: Store<DalState>,
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
-    @Inject(ENVIRONMENT_SEARCHMODES_TOKEN)
-    private searchModes: EnvironmentSearchModesInterface,
     @Inject(EDU_CONTENT_SERVICE_TOKEN)
-    private eduContentService: EduContentServiceInterface
+    private eduContentService: EduContentServiceInterface,
+    @Inject(ENVIRONMENT_SEARCHMODES_TOKEN)
+    private searchModes: EnvironmentSearchModesInterface
   ) {
-    this.initialise();
+    this.initialize();
   }
 
-  private initialise() {
+  private initialize() {
     this._searchState$ = new BehaviorSubject<SearchStateInterface>(null);
     this.searchState$ = this._searchState$;
     this.routerState$ = this.store.pipe(select(getRouterState));
-
-    this.setupSearchResults();
-  }
-
-  /*
-   * determine the searchMode for a given string
-   */
-  public getSearchMode(mode: string, book?: number): SearchModeInterface {
-    return this.searchModes[mode];
-  }
-
-  /*
-   * determine the initial searchState from the router state store
-   */
-  public getInitialSearchState(): Observable<SearchStateInterface> {
-    return this.routerState$.pipe(
-      map((routerState: RouterReducerState<RouterStateUrl>) => {
-        const initialSearchState: SearchStateInterface = {
-          searchTerm: '',
-          filterCriteriaSelections: new Map<string, (number | string)[]>()
-        };
-
-        // if (routerState.state.params.book) {
-        //   initialSearchState.filterCriteriaSelections.set('learningArea', [
-
-        //   ]);
-        // }
-
-        return initialSearchState;
-      })
+    this.methodYears$ = this.store.pipe(
+      select(MethodQueries.getAllowedMethodYears)
     );
-  }
 
-  /*
-   * let the page component pass through the updated state from the search component
-   */
-  public updateState(state: SearchStateInterface) {
-    this._searchState$.next(state);
+    this.setSourceStreams();
+    this.setupSearchResults();
   }
 
   private setupSearchResults(): void {
@@ -171,5 +167,168 @@ export class MethodViewModel {
         ['LearningArea', new Map([[1, 100], [2, 50]])]
       ])
     });
+  }
+
+  private setSourceStreams() {
+    this._searchState$ = new BehaviorSubject<SearchStateInterface>(null);
+    this.searchState$ = this._searchState$;
+
+    this.routerState$ = this.store.pipe(select(getRouterState));
+
+    this.currentMethodParams$ = this.getCurrentMethodParams();
+    this.currentBook$ = this.getCurrentBookStream();
+    this.currentMethod$ = this.getCurrentMethodStream();
+    this.currentToc$ = this.getTocsStream();
+
+    this.generalFiles$ = this.getGeneralFilesStream();
+    this.eduContentProductTypes$ = this.getEduContentProductTypesStream();
+    this.diaboloPhases$ = this.getDiaboloPhasesStream();
+  }
+
+  /*
+   * determine the searchMode for a given string
+   */
+  public getSearchMode(mode: string, book?: number): SearchModeInterface {
+    return this.searchModes[mode];
+  }
+
+  /*
+   * determine the initial searchState from the router state store
+   */
+  public getInitialSearchState(): Observable<SearchStateInterface> {
+    return this.routerState$.pipe(
+      map((routerState: RouterReducerState<RouterStateUrl>) => {
+        const initialSearchState: SearchStateInterface = {
+          searchTerm: '',
+          filterCriteriaSelections: new Map<string, (number | string)[]>()
+        };
+
+        // if (routerState.state.params.book) {
+        //   initialSearchState.filterCriteriaSelections.set('learningArea', [
+
+        //   ]);
+        // }
+
+        return initialSearchState;
+      })
+    );
+  }
+
+  /*
+   * let the page component pass through the updated state from the search component
+   */
+  public updateState(state: SearchStateInterface) {
+    this._searchState$.next(state);
+  }
+
+  private getCurrentMethodParams(): Observable<CurrentMethodParams> {
+    return this.routerState$.pipe(
+      map((routerState: RouterReducerState<RouterStateUrl>) => ({
+        book: +routerState.state.params.book,
+        chapter: +routerState.state.params.chapter,
+        lesson: +routerState.state.params.lesson
+      }))
+    );
+  }
+
+  private getCurrentBookStream(): Observable<EduContentBookInterface> {
+    const currentBookWhenEmpty$ = this.currentMethodParams$.pipe(
+      filter(params => !params.book),
+      mapTo(null)
+    );
+
+    const currentBookWhenExists$ = this.currentMethodParams$.pipe(
+      filter(params => !!params.book),
+      switchMap(params => {
+        return this.store.pipe(
+          select(EduContentBookQueries.getById, {
+            id: params.book
+          })
+        );
+      })
+    );
+
+    return merge(currentBookWhenEmpty$, currentBookWhenExists$);
+  }
+
+  private getCurrentMethodStream(): Observable<MethodInterface> {
+    const currentMethodWhenBook$ = this.currentBook$.pipe(
+      filter(book => !!book),
+      switchMap(book => {
+        return this.store.pipe(
+          select(MethodQueries.getById, { id: book.methodId })
+        );
+      })
+    );
+
+    const currentMethodWhenNoBook$ = this.currentBook$.pipe(
+      filter(book => !book),
+      mapTo(null)
+    );
+
+    return merge(currentMethodWhenBook$, currentMethodWhenNoBook$);
+  }
+
+  private getTocsStream(): Observable<EduContentTOCInterface[]> {
+    const tocStreamWhenLessonChapter$ = this.currentMethodParams$.pipe(
+      filter(params => !!params.chapter),
+      switchMap(params => {
+        return this.store.pipe(
+          select(EduContentTocQueries.getTocsForToc, {
+            tocId: params.chapter
+          })
+        );
+      })
+    );
+
+    const tocStreamWhenBook$ = this.currentMethodParams$.pipe(
+      filter(params => !!params.book && !params.chapter),
+      switchMap(params => {
+        return this.store.pipe(
+          select(EduContentTocQueries.getChaptersForBook, {
+            bookId: params.book
+          })
+        );
+      })
+    );
+
+    const tocStreamWhenNoBook$ = this.currentMethodParams$.pipe(
+      filter(params => !params.book),
+      mapTo([])
+    );
+
+    return merge(
+      tocStreamWhenLessonChapter$,
+      tocStreamWhenBook$,
+      tocStreamWhenNoBook$
+    );
+  }
+
+  private getGeneralFilesStream(): Observable<EduContentInterface[]> {
+    const generalFilesWhenBook$ = this.currentMethodParams$.pipe(
+      filter(params => !!params.book),
+      switchMap(params => {
+        return this.eduContentService.getGeneralEduContentForBookId(
+          params.book
+        );
+      })
+    );
+
+    const generalFilesWhenNoBook$ = this.currentMethodParams$.pipe(
+      filter(params => !params.book),
+      mapTo([])
+    );
+
+    return merge(generalFilesWhenBook$, generalFilesWhenNoBook$);
+  }
+
+  private getEduContentProductTypesStream(): Observable<
+    EduContentProductTypeInterface[]
+  > {
+    return this.store.pipe(select(EduContentProductTypeQueries.getAll));
+  }
+
+  private getDiaboloPhasesStream(): Observable<DiaboloPhaseInterface[]> {
+    return this.store.pipe(select(DiaboloPhaseQueries.getAll));
   }
 }
