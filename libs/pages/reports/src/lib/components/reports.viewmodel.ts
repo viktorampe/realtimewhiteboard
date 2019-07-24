@@ -58,7 +58,7 @@ export class ReportsViewModel {
   public getAssignmentResultsByLearningArea(
     learningAreaId: number
   ): Observable<AssignmentResultInterface[]> {
-    return combineLatest(
+    return combineLatest([
       this.select(EduContentQueries.getAllEntities),
       this.select(ResultQueries.getResultsForLearningAreaIdGrouped, {
         learningAreaId,
@@ -68,7 +68,7 @@ export class ReportsViewModel {
         learningAreaId,
         groupProp: { bundleId: 0 }
       })
-    ).pipe(
+    ]).pipe(
       map(([eduContents, resultsByTaskId, resultsByBundleId]) => {
         return [
           ...this.reportService.getAssignmentResults(
@@ -97,10 +97,10 @@ export class ReportsViewModel {
   private getLearningAreasWithResult(): Observable<
     LearningAreasWithResultsInterface
   > {
-    return combineLatest(
+    return combineLatest([
       this.select(LearningAreaQueries.getAllEntities),
       this.select(ResultQueries.getResultsGroupedByArea)
-    ).pipe(
+    ]).pipe(
       map(([areaEntities, resultsByArea]) => {
         const learningAreasWithResult = {
           learningAreas: Object.keys(resultsByArea).map(learningAreaId => {

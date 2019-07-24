@@ -1,36 +1,11 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Inject, Injectable, OnDestroy } from '@angular/core';
-import {
-  CredentialQueries,
-  DalState,
-  EffectFeedbackActions,
-  EffectFeedbackInterface,
-  EffectFeedbackQueries,
-  FavoriteInterface,
-  FavoriteQueries,
-  getRouterState,
-  LearningAreaQueries,
-  PassportUserCredentialInterface,
-  PersonInterface,
-  UiActions,
-  UiQuery,
-  UserQueries
-} from '@campus/dal';
-import {
-  FeedBackServiceInterface,
-  FEEDBACK_SERVICE_TOKEN
-} from '@campus/shared';
+import { CredentialQueries, DalState, EffectFeedbackActions, EffectFeedbackInterface, EffectFeedbackQueries, FavoriteInterface, FavoriteQueries, getRouterState, LearningAreaQueries, PassportUserCredentialInterface, PersonInterface, UiActions, UiQuery, UserQueries } from '@campus/dal';
+import { FeedBackServiceInterface, FEEDBACK_SERVICE_TOKEN } from '@campus/shared';
 import { DropdownMenuItemInterface, NavItem } from '@campus/ui';
 import { Action, select, Store } from '@ngrx/store';
 import { combineLatest, Observable, Subscription } from 'rxjs';
-import {
-  filter,
-  map,
-  skipWhile,
-  switchMap,
-  switchMapTo,
-  withLatestFrom
-} from 'rxjs/operators';
+import { filter, map, skipWhile, switchMap, switchMapTo, withLatestFrom } from 'rxjs/operators';
 import { NavItemService } from './services/nav-item-service';
 
 @Injectable({
@@ -137,8 +112,8 @@ export class AppViewModel implements OnDestroy {
   private setNavItems() {
     // send data to service -> get array of navItems
     this.sideNavItems$ = combineLatest(
-      this.getCurrentUser(),
-      this.getFavoriteAreas()
+      [this.getCurrentUser(),
+      this.getFavoriteAreas()]
     ).pipe(
       map(([user, favorites]) =>
         this.navItemService.getSideNavItems(user, favorites)

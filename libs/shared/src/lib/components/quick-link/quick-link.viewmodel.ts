@@ -211,13 +211,13 @@ export class QuickLinkViewModel {
     }>,
     mode: QuickLinkTypeEnum
   ): Observable<QuickLinkCategoryInterface[]> {
-    return combineLatest(
+    return combineLatest([
       quickLinksDict$,
       this.store.pipe(select(LearningAreaQueries.getAllEntities)),
       this.store.pipe(select(EduContentQueries.getAllEntities)),
       this.store.pipe(select(TaskQueries.getAllEntities)),
       this.store.pipe(select(BundleQueries.getAllEntities))
-    ).pipe(
+    ]).pipe(
       map(
         ([
           quickLinkDict,

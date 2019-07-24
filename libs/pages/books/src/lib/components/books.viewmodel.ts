@@ -56,7 +56,7 @@ export class BooksViewModel {
   }
 
   private getSharedBooks(): Observable<EduContent[]> {
-    return combineLatest(
+    return combineLatest([
       this.store.pipe(
         select(UnlockedBoekeGroupQueries.getShared, {
           userId: this.authService.userId
@@ -69,7 +69,7 @@ export class BooksViewModel {
       ),
       this.store.pipe(select(LearningAreaQueries.getAllEntities)),
       this.store.pipe(select(MethodQueries.getAllEntities))
-    ).pipe(
+    ]).pipe(
       switchMap(
         ([
           unlockedBookGroups,

@@ -308,10 +308,10 @@ export class EduContentCollectionManagerService
     type: FavoriteTypesEnum | HistoryTypesEnum,
     key: string
   ): Observable<number[]> {
-    return combineLatest(
+    return combineLatest([
       this.store.select(FavoriteQueries.getByType, { type }),
       this.store.select(HistoryQueries.getByType, { type })
-    ).pipe(
+    ]).pipe(
       map(
         ([favorites, histories]: [
           FavoriteInterface[],
@@ -336,7 +336,7 @@ export class EduContentCollectionManagerService
     linkedItemIds$: Observable<number[]>,
     recentItemIds$: Observable<number[]>
   ) {
-    return combineLatest(linkableItems$, linkedItemIds$, recentItemIds$).pipe(
+    return combineLatest([linkableItems$, linkedItemIds$, recentItemIds$]).pipe(
       take(1),
       switchMap(
         ([linkableItems, linkedIds, recentIds]): Observable<
