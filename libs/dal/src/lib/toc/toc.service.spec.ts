@@ -1,11 +1,11 @@
 import { inject, TestBed } from '@angular/core/testing';
-import { EduContentBookFixture, YearFixture } from '@campus/dal';
 import {
   EduContentBookApi,
   EduContentTOCApi
 } from '@diekeure/polpo-api-angular-sdk';
 import { hot } from '@nrwl/nx/testing';
 import { of } from 'rxjs';
+import { EduContentBookFixture, YearFixture } from '../+fixtures';
 import { TocService } from './toc.service';
 import { TocServiceInterface } from './toc.service.interface';
 
