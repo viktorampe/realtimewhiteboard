@@ -21,6 +21,7 @@ import {
   getRouterState,
   MethodInterface,
   MethodQueries,
+  MethodYearsInterface,
   RouterStateUrl
 } from '@campus/dal';
 import {
@@ -49,12 +50,12 @@ interface CurrentMethodParams {
 export class MethodViewModel {
   public searchResults$: Observable<SearchResultInterface>;
   public searchState$: Observable<SearchStateInterface>;
-  public currentBoeke$: Observable<EduContentInterface>;
 
   // Presentation streams
   public currentToc$: Observable<EduContentTOCInterface[]>;
   public currentMethod$: Observable<MethodInterface>;
-  public currentBooke$: Observable<EduContentInterface>;
+  public currentBoeke$: Observable<EduContentInterface>;
+  public methodYears$: Observable<MethodYearsInterface[]>;
 
   // Source streams
   private routerState$: Observable<RouterReducerState<RouterStateUrl>>;
@@ -74,10 +75,10 @@ export class MethodViewModel {
     @Inject(ENVIRONMENT_SEARCHMODES_TOKEN)
     private searchModes: EnvironmentSearchModesInterface
   ) {
-    this.initialise();
+    this.initialize();
   }
 
-  private initialise() {
+  private initialize() {
     this._searchState$ = new BehaviorSubject<SearchStateInterface>(null);
     this.searchState$ = this._searchState$;
     this.routerState$ = this.store.pipe(select(getRouterState));
@@ -89,6 +90,9 @@ export class MethodViewModel {
 
   private setPresentationStreams(): void {
     this.currentBoeke$ = this.getCurrentBookeStream();
+    this.methodYears$ = this.store.pipe(
+      select(MethodQueries.getAllowedMethodYears)
+    );
   }
 
   private getCurrentBookeStream(): Observable<EduContentInterface> {
