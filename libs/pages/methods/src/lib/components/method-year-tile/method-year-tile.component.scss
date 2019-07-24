@@ -1,0 +1,33 @@
+:host {
+  border: 1px solid black;
+  width: 200px;
+  height: 250px;
+  display: flex;
+  flex-direction: column;
+}
+
+.pages-methods-method-year-tile {
+  &__image {
+    width: 100%;
+  }
+
+  &__title {
+    background-color: black;
+    color: white;
+    text-align: end;
+    width: 100%;
+  }
+
+  &__button {
+    &__container {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      background-color: white;
+      justify-content: space-between;
+    }
+
+    min-width: 60px;
+    min-height: 60px;
+  }
+}

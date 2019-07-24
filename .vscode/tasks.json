@@ -43,6 +43,7 @@
         "pages-error",
         "pages-logout",
         "pages-messages",
+        "pages-methods",
         "pages-reports",
         "pages-shared",
         "pages-tasks",
