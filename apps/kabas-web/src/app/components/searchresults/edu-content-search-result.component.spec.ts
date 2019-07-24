@@ -35,7 +35,9 @@ describe('EduContentSearchResultComponent', () => {
         { provide: MatIconRegistry, useClass: MockMatIconRegistry },
         {
           provide: CONTENT_ACTIONS_SERVICE_TOKEN,
-          useValue: {}
+          useValue: {
+            getActionsForEduContent: () => {}
+          }
         }
       ]
     });
