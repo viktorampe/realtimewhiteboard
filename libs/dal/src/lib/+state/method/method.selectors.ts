@@ -1,7 +1,12 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { MethodInterface } from '../../+models';
+import { EduContentBookInterface, MethodInterface } from '../../+models';
+import { getAll as getAllEduContentBooks } from '../edu-content-book/edu-content-book.selectors';
 import { State as YearState } from '../year/year.reducer';
 import { selectYearState } from '../year/year.selectors';
+import {
+  MethodYearsInterface,
+  MethodYearsKeyValueObject
+} from './method.interfaces';
 import {
   NAME,
   selectAll,
@@ -150,5 +155,38 @@ export const getMethodWithYear = createSelector(
       ' ' +
       yearState.entities[props.yearId].label
     );
+  }
+);
+
+export const getAllowedMethodYears = createSelector(
+  getAllowedMethodIds,
+  getAllEduContentBooks,
+  (
+    allowedMethodIds: number[],
+    eduContentBooks: EduContentBookInterface[]
+  ): MethodYearsInterface[] => {
+    return Object.values(
+      eduContentBooks.reduce(
+        (agg, book): MethodYearsKeyValueObject => {
+          if (allowedMethodIds.includes(book.methodId)) {
+            if (!agg[book.methodId])
+              agg[book.methodId] = {
+                id: book.methodId,
+                logoUrl: book.method.logoUrl,
+                name: book.method.name,
+                years: []
+              };
+            if (book.years.length > 0)
+              agg[book.methodId].years.push({
+                name: book.years[0].name,
+                id: book.years[0].id,
+                bookId: book.id
+              });
+          }
+          return agg;
+        },
+        {} as MethodYearsKeyValueObject
+      )
+    ).sort((a, b) => a.name.localeCompare(b.name));
   }
 );

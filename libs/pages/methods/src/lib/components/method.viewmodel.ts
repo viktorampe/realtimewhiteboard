@@ -20,6 +20,7 @@ import {
   getRouterState,
   MethodInterface,
   MethodQueries,
+  MethodYearsInterface,
   RouterStateUrl
 } from '@campus/dal';
 import {
@@ -48,6 +49,7 @@ interface CurrentMethodParams {
 export class MethodViewModel {
   public searchResults$: Observable<SearchResultInterface>;
   public searchState$: Observable<SearchStateInterface>;
+  public methodYears$: Observable<MethodYearsInterface[]>;
 
   // Presentation streams
   public currentToc$: Observable<EduContentTOCInterface[]>;
@@ -71,10 +73,17 @@ export class MethodViewModel {
     @Inject(ENVIRONMENT_SEARCHMODES_TOKEN)
     private searchModes: EnvironmentSearchModesInterface
   ) {
-    this.initialise();
+    this.initialize();
   }
 
-  private initialise() {
+  private initialize() {
+    this._searchState$ = new BehaviorSubject<SearchStateInterface>(null);
+    this.searchState$ = this._searchState$;
+    this.routerState$ = this.store.pipe(select(getRouterState));
+    this.methodYears$ = this.store.pipe(
+      select(MethodQueries.getAllowedMethodYears)
+    );
+
     this.setSourceStreams();
     this.setupSearchResults();
   }
