@@ -160,7 +160,7 @@ export class MethodViewModel {
     });
   }
 
-  setSourceStreams() {
+  private setSourceStreams() {
     this._searchState$ = new BehaviorSubject<SearchStateInterface>(null);
     this.searchState$ = this._searchState$;
 
