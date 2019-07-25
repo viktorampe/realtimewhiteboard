@@ -1,1 +1,14 @@
-<p> MethodsView works! </p>
+<ng-container *ngIf="(generalFilesByType$ | async) as generalFilesByType">
+  <ng-container *ngIf="(productTypes$ | async) as productTypes">
+      <ng-container *ngFor="let productType of productTypes">
+        <div *ngIf="generalFilesByType[productType.id] as generalFiles">
+          {{ productType.name }}
+          <ul>
+            <li *ngFor="let generalFile of generalFiles">
+              <a (click)="clickOpenGeneralFile(generalFile)">{{ generalFile.name }}</a>
+            </li>
+          </ul>
+        </div>
+      </ng-container>
+  </ng-container>
+</ng-container>
