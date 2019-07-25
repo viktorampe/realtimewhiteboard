@@ -31,6 +31,7 @@ export class MethodChapterComponent implements OnInit, AfterViewInit {
 
   private currentBookId: number;
   private currentChapterId: number;
+  protected currentLessonId: number;
 
   @ViewChildren(SearchPortalDirective)
   private portalHosts: QueryList<SearchPortalDirective>;
@@ -64,8 +65,9 @@ export class MethodChapterComponent implements OnInit, AfterViewInit {
       })
     ]);
 
-    this.currentBookId = this.route.snapshot.params.book;
-    this.currentChapterId = this.route.snapshot.params.chapter;
+    this.currentBookId = +this.route.snapshot.params.book;
+    this.currentChapterId = +this.route.snapshot.params.chapter;
+    this.currentLessonId = +this.route.snapshot.params.lesson;
   }
 
   ngAfterViewInit() {
@@ -83,6 +85,8 @@ export class MethodChapterComponent implements OnInit, AfterViewInit {
   }
 
   public clickOpenLesson(lessonId: number) {
+    this.currentLessonId = lessonId;
+
     this.router.navigate([
       'methods',
       this.currentBookId,
@@ -92,6 +96,8 @@ export class MethodChapterComponent implements OnInit, AfterViewInit {
   }
 
   public clickBackLink() {
-    this.router.navigate(['methods', this.currentBookId]);
+    const urlParts = ['methods', this.currentBookId];
+    if (this.currentLessonId) urlParts.push(this.currentChapterId);
+    this.router.navigate(urlParts);
   }
 }
