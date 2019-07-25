@@ -29,14 +29,14 @@
         min-height: 38px;
       }
 
-      &__favorite,
-      &__favorite:focus {
+      &__action,
+      &__action:focus {
         background: none;
         color: black;
         transition: transform 0.3s ease;
       }
 
-      &__favorite:hover {
+      &__action:hover {
         transform: scale(1.2);
       }
     }
