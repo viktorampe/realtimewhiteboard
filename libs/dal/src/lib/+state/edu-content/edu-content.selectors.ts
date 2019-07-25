@@ -75,12 +75,14 @@ export const getById = createSelector(
 export const getBookeByBoekId = createSelector(
   getAll,
   (eduContents: EduContentInterface[], props: { bookId: number }) => {
-    return eduContents.find(
-      eduContent =>
-        eduContent.publishedEduContentMetadata &&
-        eduContent.publishedEduContentMetadata.eduContentBookId ===
-          props.bookId &&
-        eduContent.type === 'boek-e'
+    return asEduContent(
+      eduContents.find(
+        eduContent =>
+          eduContent.publishedEduContentMetadata &&
+          eduContent.publishedEduContentMetadata.eduContentBookId ===
+            props.bookId &&
+          eduContent.type === 'boek-e'
+      )
     );
   }
 );

@@ -54,7 +54,7 @@ export class MethodViewModel {
   // Presentation streams
   public currentToc$: Observable<EduContentTOCInterface[]>;
   public currentMethod$: Observable<MethodInterface>;
-  public currentBoeke$: Observable<EduContentInterface>;
+  public currentBoeke$: Observable<EduContent>;
   public methodYears$: Observable<MethodYearsInterface[]>;
 
   // Source streams
@@ -95,7 +95,7 @@ export class MethodViewModel {
     );
   }
 
-  private getCurrentBoekeStream(): Observable<EduContentInterface> {
+  private getCurrentBoekeStream(): Observable<EduContent> {
     return this.currentMethodParams$.pipe(
       switchMap(currentMethodParams =>
         this.store.pipe(
