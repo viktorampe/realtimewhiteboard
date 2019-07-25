@@ -33,6 +33,7 @@ import {
   EnvironmentSearchModesInterface,
   ENVIRONMENT_SEARCHMODES_TOKEN
 } from '@campus/shared';
+import { Dictionary } from '@ngrx/entity';
 import { RouterReducerState } from '@ngrx/router-store';
 import { select, Store } from '@ngrx/store';
 import { BehaviorSubject, merge, Observable, of } from 'rxjs';
@@ -55,13 +56,15 @@ export class MethodViewModel implements ContentOpenerInterface {
   // Presentation streams
   public currentToc$: Observable<EduContentTOCInterface[]>;
   public currentMethod$: Observable<MethodInterface>;
+  public currentBoeke$: Observable<EduContent>;
+  public currentBook$: Observable<EduContentBookInterface>;
+  public eduContentProductTypes$: Observable<EduContentProductTypeInterface[]>;
+  public generalFilesByType$: Observable<Dictionary<EduContent[]>>;
 
   // Source streams
   private routerState$: Observable<RouterReducerState<RouterStateUrl>>;
   private currentMethodParams$: Observable<CurrentMethodParams>;
-  private currentBook$: Observable<EduContentBookInterface>;
-  private generalFiles$: Observable<EduContentInterface[]>;
-  private eduContentProductTypes$: Observable<EduContentProductTypeInterface[]>;
+  private generalFiles$: Observable<EduContent[]>;
   private diaboloPhases$: Observable<DiaboloPhaseInterface[]>;
 
   private _searchState$: BehaviorSubject<SearchStateInterface>;
@@ -86,6 +89,7 @@ export class MethodViewModel implements ContentOpenerInterface {
     );
 
     this.setSourceStreams();
+    this.setPresentationStreams();
     this.setupSearchResults();
   }
 
@@ -179,11 +183,15 @@ export class MethodViewModel implements ContentOpenerInterface {
     this.currentMethodParams$ = this.getCurrentMethodParams();
     this.currentBook$ = this.getCurrentBookStream();
     this.currentMethod$ = this.getCurrentMethodStream();
-    this.currentToc$ = this.getTocsStream();
 
     this.generalFiles$ = this.getGeneralFilesStream();
-    this.eduContentProductTypes$ = this.getEduContentProductTypesStream();
     this.diaboloPhases$ = this.getDiaboloPhasesStream();
+  }
+
+  private setPresentationStreams() {
+    this.currentToc$ = this.getTocsStream();
+    this.eduContentProductTypes$ = this.getEduContentProductTypesStream();
+    this.generalFilesByType$ = this.getGeneralFilesByType();
   }
 
   /*
@@ -220,6 +228,22 @@ export class MethodViewModel implements ContentOpenerInterface {
    */
   public updateState(state: SearchStateInterface) {
     this._searchState$.next(state);
+  }
+
+  openEduContentAsExercise(eduContent: EduContent): void {
+    throw new Error('Method not implemented.');
+  }
+  openEduContentAsSolution(eduContent: EduContent): void {
+    throw new Error('Method not implemented.');
+  }
+  openEduContentAsStream(eduContent: EduContent): void {
+    throw new Error('Method not implemented.');
+  }
+  openEduContentAsDownload(eduContent: EduContent): void {
+    throw new Error('Method not implemented.');
+  }
+  openBoeke(eduContent: EduContent): void {
+    throw new Error('Method not implemented.');
   }
 
   private getCurrentMethodParams(): Observable<CurrentMethodParams> {
@@ -305,13 +329,21 @@ export class MethodViewModel implements ContentOpenerInterface {
     );
   }
 
-  private getGeneralFilesStream(): Observable<EduContentInterface[]> {
+  private getGeneralFilesStream(): Observable<EduContent[]> {
     const generalFilesWhenBook$ = this.currentMethodParams$.pipe(
       filter(params => !!params.book),
       switchMap(params => {
         return this.eduContentService.getGeneralEduContentForBookId(
           params.book
         );
+      }),
+      map(eduContents => {
+        return eduContents.map(eduContent => {
+          return Object.assign<EduContent, EduContentInterface>(
+            new EduContent(),
+            eduContent
+          );
+        });
       })
     );
 
@@ -333,19 +365,23 @@ export class MethodViewModel implements ContentOpenerInterface {
     return this.store.pipe(select(DiaboloPhaseQueries.getAll));
   }
 
-  openEduContentAsExercise(eduContent: EduContent): void {
-    throw new Error('Method not implemented.');
-  }
-  openEduContentAsSolution(eduContent: EduContent): void {
-    throw new Error('Method not implemented.');
-  }
-  openEduContentAsStream(eduContent: EduContent): void {
-    throw new Error('Method not implemented.');
-  }
-  openEduContentAsDownload(eduContent: EduContent): void {
-    throw new Error('Method not implemented.');
-  }
-  openBoeke(eduContent: EduContent): void {
-    throw new Error('Method not implemented.');
+  private getGeneralFilesByType(): Observable<Dictionary<EduContent[]>> {
+    return this.generalFiles$.pipe(
+      map(eduContents => {
+        return eduContents.reduce(
+          (acc, eduContent) => {
+            const productType =
+              eduContent.publishedEduContentMetadata.eduContentProductTypeId;
+            if (!acc[productType]) {
+              acc[productType] = [];
+            }
+            acc[productType].push(eduContent);
+
+            return acc;
+          },
+          {} as Dictionary<EduContent[]>
+        );
+      })
+    );
   }
 }
