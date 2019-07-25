@@ -4,9 +4,12 @@ import {
   DiaboloPhaseReducer,
   EduContentBookReducer,
   EduContentProductTypeReducer,
+  EduContentReducer,
   EduContentTocReducer,
+  MethodReducer,
   UiReducer,
-  UserReducer
+  UserReducer,
+  YearReducer
 } from '@campus/dal';
 import {
   NavigationActionTiming,
@@ -67,6 +70,15 @@ import { environment } from '../environments/environment';
         initialState: EduContentTocReducer.initialState
       }
     ),
+    StoreModule.forFeature(MethodReducer.NAME, MethodReducer.reducer, {
+      initialState: MethodReducer.initialState
+    }),
+    StoreModule.forFeature(YearReducer.NAME, YearReducer.reducer, {
+      initialState: YearReducer.initialState
+    }),
+    StoreModule.forFeature(EduContentReducer.NAME, EduContentReducer.reducer, {
+      initialState: EduContentReducer.initialState
+    }),
     !environment.production ? StoreDevtoolsModule.instrument() : []
   ]
 })
