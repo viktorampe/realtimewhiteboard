@@ -269,7 +269,8 @@ describe('Method Selectors', () => {
         expect(result).toBe('foo method baz year');
       });
     });
-    describe('getMethodYears', () => {
+
+    describe('getAllowedMethodYears', () => {
       it('should return the method name and year name combination', () => {
         const mockMethods = [
           new MethodFixture({ id: 10, name: 'foo method' }),
