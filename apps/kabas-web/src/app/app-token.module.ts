@@ -8,21 +8,19 @@ import {
   EduContentService,
   EDU_CONTENT_PRODUCT_TYPE_SERVICE_TOKEN,
   EDU_CONTENT_SERVICE_TOKEN,
+  MethodService,
+  METHOD_SERVICE_TOKEN,
   PersonService,
   PERSON_SERVICE_TOKEN,
   TocService,
-  TOC_SERVICE_TOKEN
+  TOC_SERVICE_TOKEN,
+  YearService,
+  YEAR_SERVICE_TOKEN
 } from '@campus/dal';
-import { EduContentSearchResultItemService } from './components/searchresults/edu-content-search-result.service';
-import { EDUCONTENT_SEARCH_RESULT_ITEM_SERVICE_TOKEN } from './components/searchresults/edu-content-search-result.service.interface';
 
 @NgModule({
   providers: [
     //app level services
-    {
-      provide: EDUCONTENT_SEARCH_RESULT_ITEM_SERVICE_TOKEN,
-      useClass: EduContentSearchResultItemService
-    },
 
     // dal services
     { provide: AUTH_SERVICE_TOKEN, useClass: AuthService },
@@ -33,7 +31,9 @@ import { EDUCONTENT_SEARCH_RESULT_ITEM_SERVICE_TOKEN } from './components/search
     {
       provide: EDU_CONTENT_PRODUCT_TYPE_SERVICE_TOKEN,
       useClass: EduContentProductTypeService
-    }
+    },
+    { provide: METHOD_SERVICE_TOKEN, useClass: MethodService },
+    { provide: YEAR_SERVICE_TOKEN, useClass: YearService }
   ]
 })
 export class AppTokenModule {}

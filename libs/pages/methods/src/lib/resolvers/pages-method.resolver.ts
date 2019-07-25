@@ -3,18 +3,18 @@ import {
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
   DalState,
-  DiaboloPhaseActions,
-  DiaboloPhaseQueries,
-  EduContentProductTypeActions,
-  EduContentProductTypeQueries,
-  StateResolver
+  MethodActions,
+  MethodQueries,
+  StateResolver,
+  YearActions,
+  YearQueries
 } from '@campus/dal';
 import { Action, Selector, Store } from '@ngrx/store';
 
 @Injectable({
   providedIn: 'root'
 })
-export class MethodsResolver extends StateResolver {
+export class MethodResolver extends StateResolver {
   constructor(
     private store: Store<DalState>,
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface
@@ -24,15 +24,17 @@ export class MethodsResolver extends StateResolver {
   protected getLoadableActions(): Action[] {
     const userId = this.authService.userId;
     return [
-      new DiaboloPhaseActions.LoadDiaboloPhases({ userId }),
-      new EduContentProductTypeActions.LoadEduContentProductTypes({ userId })
+      new MethodActions.LoadMethods({ userId }),
+      new MethodActions.LoadAllowedMethods({ userId }),
+      new YearActions.LoadYears({ userId })
     ];
   }
 
   protected getResolvedQueries(): Selector<object, boolean>[] {
     return [
-      DiaboloPhaseQueries.getLoaded,
-      EduContentProductTypeQueries.getLoaded
+      MethodQueries.getLoaded,
+      MethodQueries.getAllowedMethodsLoaded,
+      YearQueries.getLoaded
     ];
   }
 }

@@ -12,12 +12,13 @@
         {{ data.eduContent.name }}
       </span>
       <campus-button
-        class="app-educontentsearchresult__content__header__favorite"
+        *ngFor="let action of actions"
+        class="app-educontentsearchresult__content__header__action"
         circle
-        iconClass="favorite"
-        matTooltip="Toevoegen aan favorieten"
-        (click)="(null)"
+        [iconClass]="action.icon"
+        [matTooltip]="action.tooltip"
         campusClickStopPropagation
+        (click)="onActionClick(action)"
       ></campus-button>
       <mat-icon
         class="app-educontentsearchresult__content__header__diabolo-phase"
