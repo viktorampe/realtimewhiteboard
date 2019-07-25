@@ -7,7 +7,7 @@ import {
   ViewChildren
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { EduContentTOCFixture, EduContentTOCInterface } from '@campus/dal';
+import { EduContentTOCInterface } from '@campus/dal';
 import {
   SearchComponent,
   SearchModeInterface,
@@ -15,7 +15,7 @@ import {
   SearchResultInterface,
   SearchStateInterface
 } from '@campus/search';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { MethodViewModel } from '../method.viewmodel';
 
 @Component({
@@ -47,23 +47,7 @@ export class MethodChapterComponent implements OnInit, AfterViewInit {
     this.searchMode = this.methodViewModel.getSearchMode('chapter-lesson');
     this.initialSearchState$ = this.methodViewModel.getInitialSearchState();
     this.searchResults$ = this.methodViewModel.searchResults$;
-    // TODO: use viewmodel stream
-    this.lessonsForChapter$ = of([
-      new EduContentTOCFixture({
-        id: 1,
-        treeId: 1,
-        depth: 0,
-        lft: 1,
-        rgt: 6
-      }),
-      new EduContentTOCFixture({
-        id: 2,
-        treeId: 1,
-        depth: 0,
-        lft: 7,
-        rgt: 10
-      })
-    ]);
+    this.lessonsForChapter$ = this.methodViewModel.currentToc$;
 
     this.currentBookId = +this.route.snapshot.params.book;
     this.currentChapterId = +this.route.snapshot.params.chapter;
