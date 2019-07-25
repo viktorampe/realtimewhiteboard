@@ -49,6 +49,12 @@ export class MockMethodViewModel
 
   public updateState(state: SearchStateInterface): void {}
 
+  openEduContentAsExercise(eduContent: any): void {}
+  openEduContentAsSolution(eduContent: EduContent): void {}
+  openEduContentAsStream(eduContent: EduContent): void {}
+  openEduContentAsDownload(eduContent: EduContent): void {}
+  openBoeke(eduContent: EduContent): void {}
+
   private getAllowedBooks$(): MethodYearsInterface[] {
     return [
       {
