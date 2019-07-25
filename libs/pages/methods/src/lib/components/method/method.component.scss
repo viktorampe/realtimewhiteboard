@@ -1,0 +1,17 @@
+.method-method {
+  &__container {
+    height: 100%;
+    display: flex;
+    flex-flow: column nowrap;
+
+    campus-collapsible-sheet {
+      height: 0px;
+      flex: 1 0 auto;
+
+      div[aside] {
+        height: 100%;
+        overflow: auto;
+      }
+    }
+  }
+}

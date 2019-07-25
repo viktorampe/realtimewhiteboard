@@ -1,12 +1,36 @@
-<ng-container *ngIf="(generalFilesByType$ | async) as generalFilesByType">
-  <ng-container *ngFor="let productType of productTypes$ | async">
-    <div *ngIf="generalFilesByType[productType.id] as generalFiles">
-      {{ productType.name }}
-      <ul>
-        <li *ngFor="let generalFile of generalFiles">
-          <a (click)="clickOpenGeneralFile(generalFile)">{{ generalFile.name }}</a>
-        </li>
-      </ul>
+<div class="method-method__container">
+  <campus-collapsible-sheet>
+    <div aside>
+      <ng-container *ngFor="let chapter of (chapters$ | async)">
+        <mat-list [routerLink]="[chapter.id]">{{
+          chapter.title
+        }}</mat-list>
+      </ng-container>
     </div>
-  </ng-container>
-</ng-container>
+
+    <div main>
+      <mat-tab-group>
+        <mat-tab label="Lesmateriaal">
+
+          <ng-container *ngIf="(generalFilesByType$ | async) as generalFilesByType">
+            <ng-container *ngFor="let productType of productTypes$ | async">
+              <div *ngIf="generalFilesByType[productType.id] as generalFiles">
+                {{ productType.name }}
+                <ul>
+                  <li *ngFor="let generalFile of generalFiles">
+                    <a (click)="clickOpenGeneralFile(generalFile)">{{ generalFile.name }}</a>
+                  </li>
+                </ul>
+              </div>
+            </ng-container>
+          </ng-container>
+
+        </mat-tab>
+
+        <mat-tab label="Leerplandoelen">
+          Leerplandoelen
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+  </campus-collapsible-sheet>
+</div>

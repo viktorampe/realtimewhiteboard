@@ -19,14 +19,14 @@ export class MethodComponent implements OnInit {
   public boeke$: Observable<EduContent>;
   public book$: Observable<EduContentBookInterface>;
   public currentMethod$: Observable<MethodInterface>;
-  public toc$: Observable<EduContentTOCInterface[]>;
+  public chapters$: Observable<EduContentTOCInterface[]>;
   public productTypes$: Observable<EduContentProductTypeInterface[]>;
   public generalFilesByType$: Observable<Dictionary<EduContent[]>>;
 
   constructor(private viewModel: MethodViewModel) {}
 
   ngOnInit() {
-    this.toc$ = this.viewModel.currentToc$;
+    this.chapters$ = this.viewModel.currentToc$;
     this.boeke$ = this.viewModel.currentBoeke$;
     this.book$ = this.viewModel.currentBook$;
     this.productTypes$ = this.viewModel.eduContentProductTypes$;
