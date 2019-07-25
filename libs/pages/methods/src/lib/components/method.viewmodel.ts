@@ -182,14 +182,14 @@ export class MethodViewModel {
     this.currentMethodParams$ = this.getCurrentMethodParams();
     this.currentBook$ = this.getCurrentBookStream();
     this.currentMethod$ = this.getCurrentMethodStream();
-    this.currentToc$ = this.getTocsStream();
 
     this.generalFiles$ = this.getGeneralFilesStream();
-    this.eduContentProductTypes$ = this.getEduContentProductTypesStream();
     this.diaboloPhases$ = this.getDiaboloPhasesStream();
   }
 
   private setPresentationStreams() {
+    this.currentToc$ = this.getTocsStream();
+    this.eduContentProductTypes$ = this.getEduContentProductTypesStream();
     this.generalFilesByType$ = this.getGeneralFilesByType();
   }
 
