@@ -17,7 +17,8 @@ import {
 
 interface ButtonOption {
   value: SearchFilterCriteriaValuesInterface;
-  viewValue: string | number;
+  viewValue: string;
+  tooltip: string;
 }
 
 @Component({
@@ -61,15 +62,7 @@ export class ButtonToggleFilterComponent
             | SearchFilterCriteriaValuesInterface
             | SearchFilterCriteriaValuesInterface[]
         ): void => {
-          if (Array.isArray(selection)) {
-            // multiple === true
-            if (selection.includes(null)) {
-              // TODO check if still needed
-              // resetLabel was clicked
-              this.toggleControl.setValue([]);
-              return;
-            }
-          } else {
+          if (!Array.isArray(selection)) {
             selection = selection === null ? [] : [selection];
           }
           this.updateView(selection);
@@ -91,11 +84,9 @@ export class ButtonToggleFilterComponent
       .filter(value => value.visible)
       .map(
         (value: SearchFilterCriteriaValuesInterface): ButtonOption => {
-          let viewValue = value.data[criteria.displayProperty];
-          if (value.prediction !== undefined) {
-            viewValue += ' (' + value.prediction + ')';
-          }
-          return { value, viewValue };
+          const viewValue = value.data[criteria.displayProperty];
+          const tooltip = this.getToolTip(value);
+          return { value, viewValue, tooltip };
         }
       );
   }
@@ -120,5 +111,17 @@ export class ButtonToggleFilterComponent
     selection.forEach(selected => {
       selected.selected = true;
     });
+  }
+
+  private getToolTip(value: SearchFilterCriteriaValuesInterface): string {
+    if (!value.prediction) {
+      return '';
+    } else {
+      if (value.prediction === 1) {
+        return '1 resultaat';
+      } else {
+        return value.prediction + ' resultaten';
+      }
+    }
   }
 }

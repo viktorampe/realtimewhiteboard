@@ -2,13 +2,16 @@ import { DebugElement } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import {
-  MatBadge,
+  MatButtonToggle,
   MatButtonToggleGroup,
   MatButtonToggleModule,
-  MatSelect
+  MatIconModule,
+  MatIconRegistry,
+  MatTooltipModule
 } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { MockMatIconRegistry } from '@campus/testing';
 import {
   SearchFilterCriteriaFixture,
   SearchFilterCriteriaValuesFixture
@@ -21,7 +24,6 @@ describe('ButtonToggleFilterComponent', () => {
   let fixture: ComponentFixture<ButtonToggleFilterComponent>;
   let matButtonToggleGroup: DebugElement;
   let matButtonToggleGroupComponent: MatButtonToggleGroup;
-  let matBadge: DebugElement;
   let mockFilterCriteria: SearchFilterCriteriaInterface;
   let multiSelect: boolean;
 
@@ -30,9 +32,12 @@ describe('ButtonToggleFilterComponent', () => {
       imports: [
         MatButtonToggleModule,
         ReactiveFormsModule,
-        NoopAnimationsModule
+        NoopAnimationsModule,
+        MatTooltipModule,
+        MatIconModule
       ],
-      declarations: [ButtonToggleFilterComponent]
+      declarations: [ButtonToggleFilterComponent],
+      providers: [{ provide: MatIconRegistry, useClass: MockMatIconRegistry }]
     });
 
     mockFilterCriteria = new SearchFilterCriteriaFixture({}, [
@@ -63,10 +68,10 @@ describe('ButtonToggleFilterComponent', () => {
     component.multiple = multiSelect;
     component.filterCriteria = mockFilterCriteria;
 
-    matButtonToggleGroup = fixture.debugElement.query(By.directive(MatSelect));
+    matButtonToggleGroup = fixture.debugElement.query(
+      By.directive(MatButtonToggleGroup)
+    );
     matButtonToggleGroupComponent = matButtonToggleGroup.componentInstance as MatButtonToggleGroup;
-    matBadge = fixture.debugElement.query(By.directive(MatBadge));
-
     fixture.detectChanges();
   });
 
@@ -74,28 +79,32 @@ describe('ButtonToggleFilterComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should add options to the select component', () => {
-    const options = getOptionsForCriteria();
-    expect(options.length).toBe(mockFilterCriteria.values.length);
+  it('should add buttons to the toggleGroup component', () => {
+    const buttons = getButtonsForCriteria();
+    expect(buttons.length).toBe(mockFilterCriteria.values.length);
   });
 
-  it('should not display options where visible is falsy', () => {
+  it('should not display buttons where visible is falsy', () => {
     mockFilterCriteria.values[0].visible = false;
-    const options = getOptionsForCriteria();
-    expect(options.length).toBe(mockFilterCriteria.values.length - 1);
+    const buttons = getButtonsForCriteria();
+    expect(buttons.length).toBe(mockFilterCriteria.values.length - 1);
   });
 
-  it('should display prediction numbers', () => {
-    mockFilterCriteria.values[0].prediction = 2;
-    mockFilterCriteria.values[1].prediction = 4;
+  it('should display prediction numbers in the tooltip', () => {
+    mockFilterCriteria.values[0].prediction = 0;
+    mockFilterCriteria.values[1].prediction = 1;
     mockFilterCriteria.values[2].prediction = 6;
-    const options = getOptionsForCriteria();
-    expect(options[0].nativeElement.textContent).toContain('(2)');
-    expect(options[1].nativeElement.textContent).toContain('(4)');
-    expect(options[2].nativeElement.textContent).toContain('(6)');
+    const buttons = getButtonsForCriteria();
+    const tooltips = buttons.map(
+      option => option.nativeElement.attributes['ng-reflect-message'].value
+    );
+
+    expect(tooltips[0]).toBe('');
+    expect(tooltips[1]).toBe('1 resultaat');
+    expect(tooltips[2]).toBe('6 resultaten');
   });
 
-  it('should have [multiple] option active for the select component', () => {
+  it('should have [multiple] option active for the toggleGroup component', () => {
     // cannot change multiple after component initialization, but set as true at the start of the test
     expect(matButtonToggleGroupComponent.multiple).toBe(true);
   });
@@ -130,16 +139,29 @@ describe('ButtonToggleFilterComponent', () => {
       expect(selection).toEqual(expected);
       done();
     });
-    // select first two elements
+    // toggleGroup first two elements
     component.toggleControl.setValue(mockFilterCriteria.values.slice(0, 2));
   });
 
-  function getOptionsForCriteria(
+  it('should disable a button when there are 0 predictions', () => {
+    mockFilterCriteria.values[0].prediction = 0;
+    mockFilterCriteria.values[1].prediction = 1;
+    mockFilterCriteria.values[2].prediction = undefined;
+    const buttons = getButtonsForCriteria();
+    const buttonComponents = buttons.map(
+      button => button.componentInstance as MatButtonToggle
+    );
+
+    expect(buttonComponents[0].disabled).toBe(true);
+    expect(buttonComponents[1].disabled).toBe(false);
+    expect(buttonComponents[2].disabled).toBe(false);
+  });
+
+  function getButtonsForCriteria(
     criteria: SearchFilterCriteriaInterface = mockFilterCriteria
   ): DebugElement[] {
     component.filterCriteria = criteria;
-    // matButtonToggleGroupComponent.open();
     fixture.detectChanges();
-    return fixture.debugElement.queryAll(By.css('mat-option'));
+    return fixture.debugElement.queryAll(By.css('mat-button-toggle'));
   }
 });
