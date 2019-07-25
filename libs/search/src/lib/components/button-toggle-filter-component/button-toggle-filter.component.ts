@@ -42,10 +42,18 @@ export class ButtonToggleFilterComponent
     const selection = this.options
       .filter(option => option.value.selected)
       .map(option => option.value);
+
     this.updateView(selection);
   }
   public get filterCriteria() {
     return this.criteria;
+  }
+
+  @Input()
+  public set filterOptions(value: any) {
+    if (value && value.multiple) {
+      this.multiple = value.multiple;
+    }
   }
 
   @Output() filterSelectionChange: EventEmitter<
