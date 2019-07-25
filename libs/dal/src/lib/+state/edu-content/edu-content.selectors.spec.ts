@@ -1,5 +1,8 @@
 import { EduContentQueries } from '.';
-import { EduContentInterface, EduContentMetadataInterface } from '../../+models';
+import {
+  EduContentInterface,
+  EduContentMetadataInterface
+} from '../../+models';
 import { State } from './edu-content.reducer';
 
 describe('EduContent Selectors', () => {
