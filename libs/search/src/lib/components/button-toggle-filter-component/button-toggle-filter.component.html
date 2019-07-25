@@ -1,0 +1,5 @@
+<mat-button-toggle-group [multiple]="multiple" [formControl]="toggleControl">
+  <mat-button-toggle *ngFor="let option of options" [value]="option.value">
+    <mat-icon>{{ option.viewValue }}</mat-icon>
+  </mat-button-toggle>
+</mat-button-toggle-group>
