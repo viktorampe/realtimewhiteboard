@@ -1,38 +1,19 @@
 <div class="method-method__container">
   <campus-collapsible-sheet>
     <div aside>
-      <ng-container *ngFor="let chapter of (chapters$ | async)">
-        <mat-list [routerLink]="[chapter.id]">{{ chapter.title }}</mat-list>
-      </ng-container>
+      <h3 mat-subheader>Kies een hoofdstuk</h3>
+      <mat-list>
+        <mat-list-item
+          *ngFor="let chapter of (chapters$ | async)"
+          [routerLink]="[chapter.id]"
+          >{{ chapter.title }}</mat-list-item
+        >
+      </mat-list>
     </div>
 
     <div main>
       <mat-tab-group>
         <mat-tab label="Lesmateriaal">
-          <ng-container
-            *ngIf="(generalFilesByType$ | async) as generalFilesByType"
-          >
-            <ng-container *ngFor="let productType of (productTypes$ | async)">
-              <div *ngIf="generalFilesByType[productType.id] as generalFiles">
-                {{ productType.name }}
-                <ul>
-                  <li
-                    *ngFor="let generalFile of generalFiles"
-                    class="method-method__container__file"
-                    (click)="clickOpenGeneralFile(generalFile)"
-                  >
-                    <campus-file-extension
-                      [extensionClass]="generalFile.fileExtension"
-                      [title]="generalFile.fileTypeLabel"
-                    ></campus-file-extension>
-                    <div>{{ generalFile.name }}</div>
-                    {{ generalFile.description }}
-                  </li>
-                </ul>
-              </div>
-            </ng-container>
-          </ng-container>
-
           <mat-card
             class="method-method__container__boeke"
             *ngIf="(boeke$ | async) as boeke"
@@ -46,7 +27,7 @@
             <mat-card-content *ngIf="(method$ | async) as method">
               <img [src]="'assets/icons/method/' + method.logoUrl" />
               <p
-                *ngIf="boeke.diabolo"
+                *ngIf="(book$ | async)?.diabolo"
                 class="method-method__container__boeke__diabolo"
               >
                 {{ method.name }} is een diabolo methode.
@@ -58,9 +39,37 @@
               </p>
             </mat-card-content>
             <mat-card-actions>
-              <a (click)="clickOpenBoeke(boeke)" mat-button>OPEN</a>
+              <campus-button (click)="clickOpenBoeke(boeke)" mat-button
+                >OPEN</campus-button
+              >
             </mat-card-actions>
           </mat-card>
+
+          <ng-container
+            *ngIf="(generalFilesByType$ | async) as generalFilesByType"
+          >
+            <ng-container *ngFor="let productType of (productTypes$ | async)">
+              <div *ngIf="generalFilesByType[productType.id] as generalFiles">
+                <h3 mat-subheader>{{ productType.name }}</h3>
+                <ul>
+                  <li
+                    *ngFor="let generalFile of generalFiles"
+                    class="method-method__container__file"
+                    (click)="clickOpenGeneralFile(generalFile)"
+                  >
+                    <campus-file-extension
+                      [extensionClass]="generalFile.fileExtension"
+                      [title]="generalFile.fileTypeLabel"
+                    ></campus-file-extension>
+                    <div>
+                      {{ generalFile.name }}
+                      <br />{{ generalFile.description }}
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </ng-container>
+          </ng-container>
         </mat-tab>
 
         <mat-tab label="Leerplandoelen">
