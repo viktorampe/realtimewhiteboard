@@ -5,6 +5,7 @@ export * from './Content.fixture';
 export * from './ContentStatus.fixture';
 export * from './Credential.fixture';
 export * from './CurrentExercise.fixture';
+export * from './DiaboloPhase.fixture';
 export * from './EduContent.fixture';
 export * from './EduContentBook.fixture';
 export * from './EduContentMetadata.fixture';
