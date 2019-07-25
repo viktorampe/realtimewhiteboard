@@ -196,8 +196,19 @@ export class MethodViewModel {
   /*
    * determine the searchMode for a given string
    */
-  public getSearchMode(mode: string, book?: number): SearchModeInterface {
-    return this.searchModes[mode];
+  public getSearchMode(
+    mode: string,
+    book?: number
+  ): Observable<SearchModeInterface> {
+    return this.currentBook$.pipe(
+      map(currentBook => {
+        if (currentBook && currentBook.diabolo && mode === 'chapter-lesson') {
+          return this.searchModes['diabolo-chapter-lesson'];
+        } else {
+          return this.searchModes[mode];
+        }
+      })
+    );
   }
 
   /*

@@ -13,7 +13,7 @@
     [autoCompleteValues]="autoCompleteValues$ | async"
     (searchTermChangeForAutoComplete)="onAutoCompleteRequest($event)"
     [autoFocusSearchTerm]="true"
-    [searchMode]="searchMode"
+    [searchMode]="searchMode$ | async"
     [initialState]="initialSearchState$ | async"
     [searchResults]="searchResults$ | async"
     (searchState$)="onSearchStateChange($event)"
