@@ -29,6 +29,7 @@ import {
   SearchStateInterface
 } from '@campus/search';
 import {
+  ContentOpenerInterface,
   EnvironmentSearchModesInterface,
   ENVIRONMENT_SEARCHMODES_TOKEN
 } from '@campus/shared';
@@ -47,7 +48,7 @@ interface CurrentMethodParams {
 @Injectable({
   providedIn: 'root'
 })
-export class MethodViewModel {
+export class MethodViewModel implements ContentOpenerInterface {
   public searchResults$: Observable<SearchResultInterface>;
   public searchState$: Observable<SearchStateInterface>;
   public methodYears$: Observable<MethodYearsInterface[]>;
@@ -104,8 +105,8 @@ export class MethodViewModel {
           ...Array.from(initialSearchState.filterCriteriaSelections.entries())
         ])
       })),
-      switchMap(searchState => this.eduContentService.search(searchState)),
-      // switchMap(searchState => this.getMockResults()),
+      // switchMap(searchState => this.eduContentService.search(searchState)),
+      switchMap(searchState => this.getMockResults()),
       map(searchResult => {
         return {
           ...searchResult,
@@ -143,7 +144,7 @@ export class MethodViewModel {
       count: 3,
       results: [
         new EduContentFixture(
-          {},
+          { type: 'boek-e' },
           {
             title: 'Aanliggende hoeken',
             description:
@@ -152,7 +153,7 @@ export class MethodViewModel {
           }
         ),
         new EduContentFixture(
-          {},
+          { type: 'exercise' },
           {
             thumbSmall:
               'https://avatars3.githubusercontent.com/u/31932368?s=460&v=4'
@@ -227,6 +228,22 @@ export class MethodViewModel {
    */
   public updateState(state: SearchStateInterface) {
     this._searchState$.next(state);
+  }
+
+  openEduContentAsExercise(eduContent: EduContent): void {
+    throw new Error('Method not implemented.');
+  }
+  openEduContentAsSolution(eduContent: EduContent): void {
+    throw new Error('Method not implemented.');
+  }
+  openEduContentAsStream(eduContent: EduContent): void {
+    throw new Error('Method not implemented.');
+  }
+  openEduContentAsDownload(eduContent: EduContent): void {
+    throw new Error('Method not implemented.');
+  }
+  openBoeke(eduContent: EduContent): void {
+    throw new Error('Method not implemented.');
   }
 
   private getCurrentMethodParams(): Observable<CurrentMethodParams> {
