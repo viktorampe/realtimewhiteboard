@@ -10,12 +10,10 @@ import {
   MatFormFieldModule,
   MatIconModule,
   MatInputModule,
-  MatListModule,
   MatMenuModule,
   MatProgressSpinnerModule,
   MatSelectModule,
   MatSidenavModule,
-  MatTabsModule,
   MatTooltipModule
 } from '@angular/material';
 import { RouterModule } from '@angular/router';
@@ -97,9 +95,7 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     MatIconModule,
     MatMenuModule,
     UtilsModule,
-    MatDialogModule,
-    MatListModule,
-    MatTabsModule
+    MatDialogModule
   ],
   declarations: [
     FilterTextInputComponent,
@@ -209,9 +205,7 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     CollapsibleSheetComponent,
     DropAreaComponent,
     TileComponent,
-    JoinPipe,
-    MatListModule,
-    MatTabsModule
+    JoinPipe
   ],
   providers: [
     {

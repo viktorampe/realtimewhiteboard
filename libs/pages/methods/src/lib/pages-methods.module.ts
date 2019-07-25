@@ -1,5 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import {
+  MatCardModule,
+  MatIconModule,
+  MatListModule,
+  MatTabsModule
+} from '@angular/material';
 import { SearchModule } from '@campus/search';
 import { SharedModule } from '@campus/shared';
 import { UiModule } from '@campus/ui';
@@ -13,6 +19,10 @@ import { PagesMethodsRoutingModule } from './pages-methods-routing.module';
 @NgModule({
   imports: [
     CommonModule,
+    MatCardModule,
+    MatIconModule,
+    MatListModule,
+    MatTabsModule,
     PagesMethodsRoutingModule,
     SearchModule,
     SharedModule,

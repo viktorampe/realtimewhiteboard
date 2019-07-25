@@ -18,19 +18,20 @@ import { MethodViewModel } from '../method.viewmodel';
 export class MethodComponent implements OnInit {
   public boeke$: Observable<EduContent>;
   public book$: Observable<EduContentBookInterface>;
-  public currentMethod$: Observable<MethodInterface>;
   public chapters$: Observable<EduContentTOCInterface[]>;
-  public productTypes$: Observable<EduContentProductTypeInterface[]>;
   public generalFilesByType$: Observable<Dictionary<EduContent[]>>;
+  public method$: Observable<MethodInterface>;
+  public productTypes$: Observable<EduContentProductTypeInterface[]>;
 
   constructor(private viewModel: MethodViewModel) {}
 
   ngOnInit() {
-    this.chapters$ = this.viewModel.currentToc$;
     this.boeke$ = this.viewModel.currentBoeke$;
     this.book$ = this.viewModel.currentBook$;
-    this.productTypes$ = this.viewModel.eduContentProductTypes$;
+    this.chapters$ = this.viewModel.currentToc$;
     this.generalFilesByType$ = this.viewModel.generalFilesByType$;
+    this.method$ = this.viewModel.currentMethod$;
+    this.productTypes$ = this.viewModel.eduContentProductTypes$;
   }
 
   public clickOpenBoeke(eduContent: EduContent): void {

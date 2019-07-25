@@ -12,6 +12,25 @@
         height: 100%;
         overflow: auto;
       }
+
+      div[main] {
+        padding: 20px 40px;
+      }
+    }
+
+    &__boeke {
+      float: right;
+
+      img {
+        display: block;
+        width: 180px;
+        height: 60px;
+        margin: 0 20px;
+      }
+
+      &__diabolo {
+        padding: 10px;
+      }
     }
   }
 }
