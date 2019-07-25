@@ -6,10 +6,12 @@ import {
   AUTH_SERVICE_TOKEN,
   CustomSerializer,
   DalState,
+  EduContent,
   EduContentBookActions,
   EduContentBookFixture,
   EduContentBookInterface,
   EduContentBookReducer,
+  EduContentFixture,
   EduContentTocActions,
   EduContentTOCFixture,
   EduContentTocReducer,
@@ -35,6 +37,7 @@ import {
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
 import { configureTestSuite } from 'ng-bullet';
+import { of } from 'rxjs';
 import { MethodViewModel } from './method.viewmodel';
 
 describe('MethodViewModel', () => {
@@ -114,6 +117,12 @@ describe('MethodViewModel', () => {
     }
   };
 
+  const generalFiles: EduContent[] = [
+    new EduContentFixture({ id: 1 }, { eduContentProductTypeId: 1 }),
+    new EduContentFixture({ id: 2 }, { eduContentProductTypeId: 2 }),
+    new EduContentFixture({ id: 3 }, { eduContentProductTypeId: 2 })
+  ];
+
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [
@@ -147,6 +156,7 @@ describe('MethodViewModel', () => {
         {
           provide: EDU_CONTENT_SERVICE_TOKEN,
           useValue: {
+            getGeneralEduContentForBookId: () => of(generalFiles),
             search: () => {}
           }
         },
@@ -271,6 +281,21 @@ describe('MethodViewModel', () => {
         expect(methodViewModel.currentToc$).toBeObservable(
           hot('a', {
             a: [lessonTocs[0], lessonTocs[1]]
+          })
+        );
+      });
+    });
+
+    describe('generalFilesByType$', () => {
+      it('should return the eduContent in generalFiles$ grouped by productTypeId', () => {
+        navigateWithParams({ book: book.id });
+
+        expect(methodViewModel.generalFilesByType$).toBeObservable(
+          hot('a', {
+            a: {
+              1: [generalFiles[0]],
+              2: [generalFiles[1], generalFiles[2]]
+            }
           })
         );
       });
