@@ -1,32 +1,12 @@
 import { forwardRef, Inject, Injectable } from '@angular/core';
 import { EduContent } from '@campus/dal';
 import {
+  ContentActionInterface,
   ContentActionsServiceInterface,
-  CONTENT_OPENER_TOKEN
+  ContentOpenerInterface,
+  CONTENT_OPENER_TOKEN,
+  EduContentTypeEnum
 } from './content-actions.service.interface';
-
-export interface ContentActionInterface {
-  label: string;
-  icon: string;
-  tooltip: string;
-  handler(eduContent: EduContent): void;
-}
-
-export interface ContentOpenerInterface {
-  openEduContentAsExercise(eduContent: EduContent): void;
-  openEduContentAsSolution(eduContent: EduContent): void;
-  openEduContentAsStream(eduContent: EduContent): void;
-  openEduContentAsDownload(eduContent: EduContent): void;
-  openBoeke(eduContent: EduContent): void;
-}
-
-export enum EduContentTypeEnum {
-  BOEKE = 'boek-e',
-  LINK = 'link',
-  EXERCISE = 'exercise',
-  FILE = 'file',
-  PAPER_EXERCISE = 'paper exercise'
-}
 
 @Injectable({
   providedIn: 'root'

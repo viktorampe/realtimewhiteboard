@@ -3,11 +3,7 @@ import { MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MethodYearsInterface } from '@campus/dal';
-import {
-  CONTENT_OPENER_TOKEN,
-  ENVIRONMENT_ICON_MAPPING_TOKEN,
-  SharedModule
-} from '@campus/shared';
+import { ENVIRONMENT_ICON_MAPPING_TOKEN, SharedModule } from '@campus/shared';
 import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
 import { configureTestSuite } from 'ng-bullet';
@@ -33,8 +29,7 @@ describe('MethodsOverviewComponent', () => {
         {
           provide: ENVIRONMENT_ICON_MAPPING_TOKEN,
           useValue: {}
-        },
-        { provide: CONTENT_OPENER_TOKEN, useValue: {} }
+        }
       ]
     });
   });

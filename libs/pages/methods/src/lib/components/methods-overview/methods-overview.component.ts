@@ -1,9 +1,5 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MethodYearsInterface } from '@campus/dal';
-import {
-  ContentActionsServiceInterface,
-  CONTENT_ACTIONS_SERVICE_TOKEN
-} from '@campus/shared';
 import { Observable } from 'rxjs';
 import { MethodViewModel } from '../method.viewmodel';
 
@@ -16,11 +12,7 @@ import { MethodViewModel } from '../method.viewmodel';
 export class MethodsOverviewComponent implements OnInit {
   public allowedBooks$: Observable<MethodYearsInterface[]>;
 
-  constructor(
-    private methodViewmodel: MethodViewModel,
-    @Inject(CONTENT_ACTIONS_SERVICE_TOKEN)
-    contentActionsService: ContentActionsServiceInterface
-  ) {}
+  constructor(private methodViewmodel: MethodViewModel) {}
 
   ngOnInit() {
     this.setupStreams();

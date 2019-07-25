@@ -1,15 +1,13 @@
 import { inject, TestBed } from '@angular/core/testing';
 import { EduContentFixture } from '@campus/dal';
 import { configureTestSuite } from 'ng-bullet';
+import { ContentActionsService } from './content-actions.service';
 import {
   ContentActionInterface,
-  ContentActionsService,
-  ContentOpenerInterface,
-  EduContentTypeEnum
-} from './content-actions.service';
-import {
   ContentActionsServiceInterface,
-  CONTENT_OPENER_TOKEN
+  ContentOpenerInterface,
+  CONTENT_OPENER_TOKEN,
+  EduContentTypeEnum
 } from './content-actions.service.interface';
 
 describe('ContentActionsServiceInterface', () => {
@@ -32,7 +30,9 @@ describe('ContentActionsServiceInterface', () => {
         }
       ]
     });
+  });
 
+  beforeEach(() => {
     contentActionsService = TestBed.get(ContentActionsService);
     contentOpener = TestBed.get(CONTENT_OPENER_TOKEN);
   });
@@ -107,18 +107,6 @@ describe('ContentActionsServiceInterface', () => {
           contentActionsService.getActionsForEduContent(test.mockEduContent)
         ).toEqual(test.expected)
       );
-    });
-
-    it('should use the action handler from the injected content opener', () => {
-      const mockEduContent = new EduContentFixture({
-        type: EduContentTypeEnum.BOEKE
-      });
-
-      const actions = contentActionsService.getActionsForEduContent(
-        mockEduContent
-      );
-
-      expect(actions[0].handler).toBe(contentOpener.openBoeke);
     });
   });
 });
