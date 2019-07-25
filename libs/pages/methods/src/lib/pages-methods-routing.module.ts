@@ -34,7 +34,7 @@ const routes: Routes = [
             path: '',
             component: MethodComponent,
             data: {
-              selector: MethodQueries.getMethodWithYear
+              selector: MethodQueries.getMethodWithYearByBookId
             }
           },
           {
