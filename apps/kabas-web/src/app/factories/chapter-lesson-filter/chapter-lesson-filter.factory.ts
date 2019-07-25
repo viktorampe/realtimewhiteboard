@@ -58,18 +58,20 @@ export class ChapterLessonFilterFactory implements SearchFilterFactory {
   getFilters(
     searchState: SearchStateInterface
   ): Observable<SearchFilterInterface[]> {
+    const filters: Observable<SearchFilterInterface>[] = [];
     const eduContentProductTypeFilter$ = this.buildFilter(
       'eduContentProductType',
       searchState
     );
+    filters.push(eduContentProductTypeFilter$);
 
     // TODO only include for DiaboloEnabled book
-    const diaboloPhaseFilter$ = this.buildFilter('diaboloPhase', searchState);
+    if (this.hasDiaboloFilter()) {
+      const diaboloPhaseFilter$ = this.buildFilter('diaboloPhase', searchState);
+      filters.push(diaboloPhaseFilter$);
+    }
 
-    return combineLatest([
-      eduContentProductTypeFilter$,
-      diaboloPhaseFilter$
-    ]).pipe(
+    return combineLatest(filters).pipe(
       map(searchFilters =>
         searchFilters
           .filter(f => f.criteria.values.length > 0)
@@ -79,6 +81,10 @@ export class ChapterLessonFilterFactory implements SearchFilterFactory {
   }
   public getPredictionFilterNames(): string[] {
     return Object.values(this.filterQueries).map(value => value.name);
+  }
+
+  protected hasDiaboloFilter() {
+    return false;
   }
 
   private getFilter<T>(
