@@ -11,7 +11,7 @@ import {
   EduContentQueries,
   EduContentTocActions,
   EduContentTocQueries,
-  ResolvedQueryWithProps,
+  QueryWithProps,
   StateResolver
 } from '@campus/dal';
 import { Action, Store } from '@ngrx/store';
@@ -43,7 +43,7 @@ export class MethodBookResolver extends StateResolver {
       DiaboloPhaseQueries.getLoaded,
       EduContentProductTypeQueries.getLoaded,
       EduContentQueries.getLoaded,
-      new ResolvedQueryWithProps(EduContentTocQueries.isBookLoaded, {
+      new QueryWithProps(EduContentTocQueries.isBookLoaded, {
         bookId: +this.params.book
       })
     ];

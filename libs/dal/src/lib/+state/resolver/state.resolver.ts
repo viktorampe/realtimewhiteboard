@@ -10,7 +10,7 @@ import { combineLatest, Observable } from 'rxjs';
 import { filter, map, take } from 'rxjs/operators';
 import { DalState } from '../dal.state.interface';
 
-export class ResolvedQueryWithProps<T> {
+export class QueryWithProps<T> {
   constructor(
     public readonly selector: SelectorWithProps<object, T, boolean>,
     public readonly props: Required<T>
@@ -76,7 +76,7 @@ export abstract class StateResolver implements Resolve<boolean> {
   protected abstract getLoadableActions(): Action[];
   protected abstract getResolvedQueries(): (
     | Selector<object, boolean>
-    | ResolvedQueryWithProps<any>)[];
+    | QueryWithProps<any>)[];
 
   private loadActions(actions: Action[]): void {
     actions.forEach(action => {

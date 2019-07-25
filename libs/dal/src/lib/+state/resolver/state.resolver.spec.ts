@@ -12,7 +12,7 @@ import {
 import { hot } from '@nrwl/nx/testing';
 import { Observable } from 'rxjs';
 import { DalState } from '..';
-import { ResolvedQueryWithProps, StateResolver } from './state.resolver';
+import { QueryWithProps, StateResolver } from './state.resolver';
 
 class ActionOne implements Action {
   readonly type = 'ActionOne';
@@ -123,7 +123,7 @@ describe('stateResolver', () => {
       expect(selector).toHaveBeenCalled();
     });
     it('should map to the store selector for ResolvedQueryWithProps', () => {
-      resolvedQueries = [new ResolvedQueryWithProps(mockSelectorWithProp, {})];
+      resolvedQueries = [new QueryWithProps(mockSelectorWithProp, {})];
       stateResolver.resolve({} as ActivatedRouteSnapshot);
       expect(selector).toHaveBeenCalled();
     });
