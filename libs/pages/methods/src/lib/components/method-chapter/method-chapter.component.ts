@@ -6,6 +6,8 @@ import {
   ViewChild,
   ViewChildren
 } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { EduContentTOCFixture, EduContentTOCInterface } from '@campus/dal';
 import {
   SearchComponent,
   SearchModeInterface,
@@ -13,7 +15,7 @@ import {
   SearchResultInterface,
   SearchStateInterface
 } from '@campus/search';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { MethodViewModel } from '../method.viewmodel';
 
 @Component({
@@ -25,16 +27,45 @@ export class MethodChapterComponent implements OnInit, AfterViewInit {
   public searchMode: SearchModeInterface;
   public initialSearchState$: Observable<SearchStateInterface>;
   public searchResults$: Observable<SearchResultInterface>;
+  public lessonsForChapter$: Observable<EduContentTOCInterface[]>;
+
+  private currentBookId: number;
+  private currentChapterId: number;
+
   @ViewChildren(SearchPortalDirective)
   private portalHosts: QueryList<SearchPortalDirective>;
   @ViewChild(SearchComponent) public searchComponent: SearchComponent;
 
-  constructor(private methodViewModel: MethodViewModel) {}
+  constructor(
+    private methodViewModel: MethodViewModel,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.searchMode = this.methodViewModel.getSearchMode('chapter-lesson');
     this.initialSearchState$ = this.methodViewModel.getInitialSearchState();
     this.searchResults$ = this.methodViewModel.searchResults$;
+    // TODO: use viewmodel stream
+    this.lessonsForChapter$ = of([
+      new EduContentTOCFixture({
+        id: 1,
+        treeId: 1,
+        depth: 0,
+        lft: 1,
+        rgt: 6
+      }),
+      new EduContentTOCFixture({
+        id: 2,
+        treeId: 1,
+        depth: 0,
+        lft: 7,
+        rgt: 10
+      })
+    ]);
+
+    this.currentBookId = this.route.snapshot.params.book;
+    this.currentChapterId = this.route.snapshot.params.chapter;
   }
 
   ngAfterViewInit() {
@@ -49,5 +80,18 @@ export class MethodChapterComponent implements OnInit, AfterViewInit {
     if (this.searchComponent) {
       this.searchComponent.reset(undefined, false);
     }
+  }
+
+  public clickOpenLesson(lessonId: number) {
+    this.router.navigate([
+      'methods',
+      this.currentBookId,
+      this.currentChapterId,
+      lessonId
+    ]);
+  }
+
+  public clickBackLink() {
+    this.router.navigate(['methods', this.currentBookId]);
   }
 }

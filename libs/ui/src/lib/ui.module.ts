@@ -17,6 +17,7 @@ import {
   MatSidenavModule,
   MatTooltipModule
 } from '@angular/material';
+import { MatTabsModule } from '@angular/material/tabs';
 import { RouterModule } from '@angular/router';
 import { UtilsModule } from '@campus/utils';
 import { AppBarComponent } from './app-bar/app-bar.component';
@@ -97,7 +98,8 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     MatMenuModule,
     UtilsModule,
     MatDialogModule,
-    MatListModule
+    MatListModule,
+    MatTabsModule
   ],
   declarations: [
     FilterTextInputComponent,
@@ -207,7 +209,9 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     CollapsibleSheetComponent,
     DropAreaComponent,
     TileComponent,
-    JoinPipe
+    JoinPipe,
+    MatListModule,
+    MatTabsModule
   ],
   providers: [
     {

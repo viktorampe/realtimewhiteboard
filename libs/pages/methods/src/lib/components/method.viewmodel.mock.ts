@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import {
+  EduContentTOCFixture,
   EduContentTOCInterface,
   MethodInterface,
   MethodYearsInterface
@@ -23,7 +24,22 @@ export class MockMethodViewModel
   public methodYears$ = new BehaviorSubject<MethodYearsInterface[]>(
     this.getAllowedBooks$()
   );
-  public currentToc$ = new BehaviorSubject<EduContentTOCInterface[]>([]);
+  public currentToc$ = new BehaviorSubject<EduContentTOCInterface[]>([
+    new EduContentTOCFixture({
+      id: 1,
+      treeId: 1,
+      depth: 0,
+      lft: 1,
+      rgt: 6
+    }),
+    new EduContentTOCFixture({
+      id: 2,
+      treeId: 1,
+      depth: 0,
+      lft: 7,
+      rgt: 10
+    })
+  ]);
   public currentMethod$ = new BehaviorSubject<MethodInterface>(null);
 
   public getSearchMode(mode: string, book?: number): SearchModeInterface {
