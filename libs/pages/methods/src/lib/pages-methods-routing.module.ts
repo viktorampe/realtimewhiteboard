@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { EduContentTocQueries } from '@campus/dal';
+import { EduContentTocQueries, MethodQueries } from '@campus/dal';
 import { AllowedMethodGuard } from '../../../../guards/src/lib/can-activate/allowed-method.guard';
 import { MethodChapterLessonComponent } from './components/method-chapter-lesson/method-chapter-lesson.component';
 import { MethodChapterComponent } from './components/method-chapter/method-chapter.component';
@@ -32,7 +32,10 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            component: MethodComponent
+            component: MethodComponent,
+            data: {
+              selector: MethodQueries.getMethodWithYear
+            }
           },
           {
             path: ':chapter',
