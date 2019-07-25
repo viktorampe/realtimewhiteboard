@@ -2,24 +2,25 @@
   <campus-collapsible-sheet>
     <div aside>
       <ng-container *ngFor="let chapter of (chapters$ | async)">
-        <mat-list [routerLink]="[chapter.id]">{{
-          chapter.title
-        }}</mat-list>
+        <mat-list [routerLink]="[chapter.id]">{{ chapter.title }}</mat-list>
       </ng-container>
     </div>
 
     <div main>
       <mat-tab-group>
         <mat-tab label="Lesmateriaal">
-
-          <ng-container *ngIf="(generalFilesByType$ | async) as generalFilesByType">
-            <ng-container *ngFor="let productType of productTypes$ | async">
+          <ng-container
+            *ngIf="(generalFilesByType$ | async) as generalFilesByType"
+          >
+            <ng-container *ngFor="let productType of (productTypes$ | async)">
               <div *ngIf="generalFilesByType[productType.id] as generalFiles">
                 {{ productType.name }}
                 <ul>
-                  <li *ngFor="let generalFile of generalFiles"
-                      class="method-method__container__file"
-                      (click)="clickOpenGeneralFile(generalFile)">
+                  <li
+                    *ngFor="let generalFile of generalFiles"
+                    class="method-method__container__file"
+                    (click)="clickOpenGeneralFile(generalFile)"
+                  >
                     <campus-file-extension
                       [extensionClass]="generalFile.fileExtension"
                       [title]="generalFile.fileTypeLabel"
@@ -32,7 +33,10 @@
             </ng-container>
           </ng-container>
 
-          <mat-card class="method-method__container__boeke" *ngIf="(boeke$ | async) as boeke">
+          <mat-card
+            class="method-method__container__boeke"
+            *ngIf="(boeke$ | async) as boeke"
+          >
             <mat-card-header>
               <mat-card-title>
                 <mat-icon svgIcon="book"></mat-icon>
@@ -40,17 +44,23 @@
               </mat-card-title>
             </mat-card-header>
             <mat-card-content *ngIf="(method$ | async) as method">
-              <img [src]="'assets/icons/method/' + method.logoUrl">
-              <p *ngIf="boeke.diabolo" class="method-method__container__boeke__diabolo">
+              <img [src]="'assets/icons/method/' + method.logoUrl" />
+              <p
+                *ngIf="boeke.diabolo"
+                class="method-method__container__boeke__diabolo"
+              >
                 {{ method.name }} is een diabolo methode.
-                <a href="https://www.diekeure.be/nl-be/educatief/lager-onderwijs/diabolo" target="_blank">Lees meer over diabolo</a>
+                <a
+                  href="https://www.diekeure.be/nl-be/educatief/lager-onderwijs/diabolo"
+                  target="_blank"
+                  >Lees meer over diabolo</a
+                >
               </p>
             </mat-card-content>
             <mat-card-actions>
               <a (click)="clickOpenBoeke(boeke)" mat-button>OPEN</a>
             </mat-card-actions>
           </mat-card>
-
         </mat-tab>
 
         <mat-tab label="Leerplandoelen">
