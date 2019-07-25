@@ -89,17 +89,17 @@ export class MethodViewModel {
   }
 
   private setPresentationStreams(): void {
-    this.currentBoeke$ = this.getCurrentBookeStream();
+    this.currentBoeke$ = this.getCurrentBoekeStream();
     this.methodYears$ = this.store.pipe(
       select(MethodQueries.getAllowedMethodYears)
     );
   }
 
-  private getCurrentBookeStream(): Observable<EduContentInterface> {
+  private getCurrentBoekeStream(): Observable<EduContentInterface> {
     return this.currentMethodParams$.pipe(
       switchMap(currentMethodParams => {
         return this.store.pipe(
-          select(EduContentQueries.getBookeByBookId, {
+          select(EduContentQueries.getBookeByBoekId, {
             bookId: currentMethodParams.book
           })
         );
