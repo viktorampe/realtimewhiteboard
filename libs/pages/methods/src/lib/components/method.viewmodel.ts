@@ -32,6 +32,7 @@ import {
   EnvironmentSearchModesInterface,
   ENVIRONMENT_SEARCHMODES_TOKEN
 } from '@campus/shared';
+import { Dictionary } from '@ngrx/entity';
 import { RouterReducerState } from '@ngrx/router-store';
 import { select, Store } from '@ngrx/store';
 import { BehaviorSubject, merge, Observable, of } from 'rxjs';
@@ -54,13 +55,15 @@ export class MethodViewModel {
   // Presentation streams
   public currentToc$: Observable<EduContentTOCInterface[]>;
   public currentMethod$: Observable<MethodInterface>;
+  public currentBoeke$: Observable<EduContent>;
+  public currentBook$: Observable<EduContentBookInterface>;
+  public eduContentProductTypes$: Observable<EduContentProductTypeInterface[]>;
+  public generalFilesByType$: Observable<Dictionary<EduContent[]>>;
 
   // Source streams
   private routerState$: Observable<RouterReducerState<RouterStateUrl>>;
   private currentMethodParams$: Observable<CurrentMethodParams>;
-  private currentBook$: Observable<EduContentBookInterface>;
-  private generalFiles$: Observable<EduContentInterface[]>;
-  private eduContentProductTypes$: Observable<EduContentProductTypeInterface[]>;
+  private generalFiles$: Observable<EduContent[]>;
   private diaboloPhases$: Observable<DiaboloPhaseInterface[]>;
 
   private _searchState$: BehaviorSubject<SearchStateInterface>;
@@ -85,6 +88,7 @@ export class MethodViewModel {
     );
 
     this.setSourceStreams();
+    this.setPresentationStreams();
     this.setupSearchResults();
   }
 
@@ -178,11 +182,15 @@ export class MethodViewModel {
     this.currentMethodParams$ = this.getCurrentMethodParams();
     this.currentBook$ = this.getCurrentBookStream();
     this.currentMethod$ = this.getCurrentMethodStream();
-    this.currentToc$ = this.getTocsStream();
 
     this.generalFiles$ = this.getGeneralFilesStream();
-    this.eduContentProductTypes$ = this.getEduContentProductTypesStream();
     this.diaboloPhases$ = this.getDiaboloPhasesStream();
+  }
+
+  private setPresentationStreams() {
+    this.currentToc$ = this.getTocsStream();
+    this.eduContentProductTypes$ = this.getEduContentProductTypesStream();
+    this.generalFilesByType$ = this.getGeneralFilesByType();
   }
 
   /*
@@ -304,13 +312,21 @@ export class MethodViewModel {
     );
   }
 
-  private getGeneralFilesStream(): Observable<EduContentInterface[]> {
+  private getGeneralFilesStream(): Observable<EduContent[]> {
     const generalFilesWhenBook$ = this.currentMethodParams$.pipe(
       filter(params => !!params.book),
       switchMap(params => {
         return this.eduContentService.getGeneralEduContentForBookId(
           params.book
         );
+      }),
+      map(eduContents => {
+        return eduContents.map(eduContent => {
+          return Object.assign<EduContent, EduContentInterface>(
+            new EduContent(),
+            eduContent
+          );
+        });
       })
     );
 
@@ -330,5 +346,25 @@ export class MethodViewModel {
 
   private getDiaboloPhasesStream(): Observable<DiaboloPhaseInterface[]> {
     return this.store.pipe(select(DiaboloPhaseQueries.getAll));
+  }
+
+  private getGeneralFilesByType(): Observable<Dictionary<EduContent[]>> {
+    return this.generalFiles$.pipe(
+      map(eduContents => {
+        return eduContents.reduce(
+          (acc, eduContent) => {
+            const productType =
+              eduContent.publishedEduContentMetadata.eduContentProductTypeId;
+            if (!acc[productType]) {
+              acc[productType] = [];
+            }
+            acc[productType].push(eduContent);
+
+            return acc;
+          },
+          {} as Dictionary<EduContent[]>
+        );
+      })
+    );
   }
 }
