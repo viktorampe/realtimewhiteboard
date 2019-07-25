@@ -10,6 +10,7 @@ import {
   MatFormFieldModule,
   MatIconModule,
   MatInputModule,
+  MatListModule,
   MatMenuModule,
   MatProgressSpinnerModule,
   MatSelectModule,
@@ -95,7 +96,8 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     MatIconModule,
     MatMenuModule,
     UtilsModule,
-    MatDialogModule
+    MatDialogModule,
+    MatListModule
   ],
   declarations: [
     FilterTextInputComponent,

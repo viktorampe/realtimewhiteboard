@@ -18,6 +18,16 @@
       }
     }
 
+    &__file {
+      > campus-file-extension {
+        float: left;
+      }
+
+      > div {
+        font-size: 1.2em;
+      }
+    }
+
     &__boeke {
       float: right;
 

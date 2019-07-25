@@ -17,8 +17,15 @@
               <div *ngIf="generalFilesByType[productType.id] as generalFiles">
                 {{ productType.name }}
                 <ul>
-                  <li *ngFor="let generalFile of generalFiles">
-                    <a (click)="clickOpenGeneralFile(generalFile)">{{ generalFile.name }}</a>
+                  <li *ngFor="let generalFile of generalFiles"
+                      class="method-method__container__file"
+                      (click)="clickOpenGeneralFile(generalFile)">
+                    <campus-file-extension
+                      [extensionClass]="generalFile.fileExtension"
+                      [title]="generalFile.fileTypeLabel"
+                    ></campus-file-extension>
+                    <div>{{ generalFile.name }}</div>
+                    {{ generalFile.description }}
                   </li>
                 </ul>
               </div>
