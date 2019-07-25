@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import {
-  EduContentInterface,
+  EduContent,
+  EduContentBookInterface,
+  EduContentProductTypeInterface,
   EduContentTOCInterface,
   MethodInterface,
   MethodYearsInterface
@@ -11,6 +13,7 @@ import {
   SearchStateInterface
 } from '@campus/search';
 import { ViewModelInterface } from '@campus/testing';
+import { Dictionary } from '@ngrx/entity';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { MethodViewModel } from './method.viewmodel';
 
@@ -26,7 +29,15 @@ export class MockMethodViewModel
   );
   public currentToc$ = new BehaviorSubject<EduContentTOCInterface[]>([]);
   public currentMethod$ = new BehaviorSubject<MethodInterface>(null);
-  public currentBoeke$: Observable<EduContentInterface>;
+
+  public currentBoeke$ = new BehaviorSubject<EduContent>(null);
+  public currentBook$ = new BehaviorSubject<EduContentBookInterface>(null);
+  public eduContentProductTypes$ = new BehaviorSubject<
+    EduContentProductTypeInterface[]
+  >([]);
+  public generalFilesByType$ = new BehaviorSubject<Dictionary<EduContent[]>>(
+    {}
+  );
 
   public getSearchMode(mode: string, book?: number): SearchModeInterface {
     return;
