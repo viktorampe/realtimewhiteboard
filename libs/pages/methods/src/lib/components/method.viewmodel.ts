@@ -97,13 +97,13 @@ export class MethodViewModel {
 
   private getCurrentBoekeStream(): Observable<EduContentInterface> {
     return this.currentMethodParams$.pipe(
-      switchMap(currentMethodParams => {
-        return this.store.pipe(
+      switchMap(currentMethodParams =>
+        this.store.pipe(
           select(EduContentQueries.getBookeByBoekId, {
             bookId: currentMethodParams.book
           })
-        );
-      })
+        )
+      )
     );
   }
 

@@ -1,5 +1,10 @@
 import { Injectable } from '@angular/core';
-import { EduContentTOCInterface, MethodInterface } from '@campus/dal';
+import {
+  EduContentInterface,
+  EduContentTOCInterface,
+  MethodInterface,
+  MethodYearsInterface
+} from '@campus/dal';
 import {
   SearchModeInterface,
   SearchResultInterface,
@@ -18,6 +23,8 @@ export class MockMethodViewModel
   public searchState$: Observable<SearchStateInterface>;
   public currentToc$ = new BehaviorSubject<EduContentTOCInterface[]>([]);
   public currentMethod$ = new BehaviorSubject<MethodInterface>(null);
+  public currentBoeke$: Observable<EduContentInterface>;
+  public methodYears$: Observable<MethodYearsInterface[]>;
 
   public getSearchMode(mode: string, book?: number): SearchModeInterface {
     return;
