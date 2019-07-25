@@ -101,7 +101,7 @@ export class MethodViewModel {
         ])
       })),
       switchMap(searchState => this.eduContentService.search(searchState)),
-      switchMap(searchState => this.getMockResults()),
+      // switchMap(searchState => this.getMockResults()),
       map(searchResult => {
         return {
           ...searchResult,
@@ -203,11 +203,15 @@ export class MethodViewModel {
           filterCriteriaSelections: new Map<string, (number | string)[]>()
         };
 
-        // if (routerState.state.params.book) {
-        //   initialSearchState.filterCriteriaSelections.set('learningArea', [
-
-        //   ]);
-        // }
+        if (routerState.state.params.lesson) {
+          initialSearchState.filterCriteriaSelections.set('eduContentTOC', [
+            +routerState.state.params.lesson
+          ]);
+        } else if (routerState.state.params.chapter) {
+          initialSearchState.filterCriteriaSelections.set('eduContentTOC', [
+            +routerState.state.params.chapter
+          ]);
+        }
 
         return initialSearchState;
       })
