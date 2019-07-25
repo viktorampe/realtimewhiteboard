@@ -54,6 +54,9 @@ export const environment: EnvironmentInterface = {
       name: 'chapter-lesson',
       label: 'Zoeken op <b>hoofdstuk</b>',
       dynamicFilters: false,
+      searchTerm: {
+        domHost: 'searchTerm'
+      },
       searchFilterFactory: ChapterLessonFilterFactory,
       results: {
         component: EduContentSearchResultComponent,

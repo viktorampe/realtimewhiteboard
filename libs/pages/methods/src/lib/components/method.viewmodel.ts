@@ -222,6 +222,17 @@ export class MethodViewModel {
     );
   }
 
+  public requestAutoComplete(searchTerm: string): Observable<string[]> {
+    return this.getInitialSearchState().pipe(
+      map(initialSearchState => {
+        return { ...initialSearchState, searchTerm };
+      }),
+      switchMap(enrichedSearchState => {
+        return this.eduContentService.autoComplete(enrichedSearchState);
+      })
+    );
+  }
+
   /*
    * let the page component pass through the updated state from the search component
    */

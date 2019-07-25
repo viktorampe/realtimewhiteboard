@@ -25,6 +25,8 @@ export class MethodChapterComponent implements OnInit, AfterViewInit {
   public searchMode: SearchModeInterface;
   public initialSearchState$: Observable<SearchStateInterface>;
   public searchResults$: Observable<SearchResultInterface>;
+  public autoCompleteValues$: Observable<string[]>;
+
   @ViewChildren(SearchPortalDirective)
   private portalHosts: QueryList<SearchPortalDirective>;
   @ViewChild(SearchComponent) public searchComponent: SearchComponent;
@@ -39,6 +41,10 @@ export class MethodChapterComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     this.searchComponent.searchPortals = this.portalHosts;
+  }
+
+  public onAutoCompleteRequest(term: string) {
+    this.autoCompleteValues$ = this.methodViewModel.requestAutoComplete(term);
   }
 
   public onSearchStateChange(searchState: SearchStateInterface): void {
