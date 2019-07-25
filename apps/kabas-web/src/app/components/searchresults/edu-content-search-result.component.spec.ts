@@ -1,5 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatIconModule, MatIconRegistry } from '@angular/material';
+import {
+  MatIconModule,
+  MatIconRegistry,
+  MatTooltipModule
+} from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { EduContentFixture } from '@campus/dal';
 import {
@@ -30,7 +34,12 @@ describe('EduContentSearchResultComponent', () => {
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       declarations: [EduContentSearchResultComponent],
-      imports: [MatIconModule, UiModule, NoopAnimationsModule],
+      imports: [
+        MatTooltipModule,
+        MatIconModule,
+        UiModule,
+        NoopAnimationsModule
+      ],
       providers: [
         { provide: MatIconRegistry, useClass: MockMatIconRegistry },
         {
