@@ -86,3 +86,11 @@
     >Load TOC for book</campus-button
   >
 </div>
+
+<div>
+  <campus-button-toggle-filter
+    [multiple]="true"
+    [filterCriteria]="filterCriteria"
+    (filterSelectionChange)="filterSelectionChanged($event)"
+  ></campus-button-toggle-filter>
+</div>
