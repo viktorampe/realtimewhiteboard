@@ -1,8 +1,5 @@
 import { EduContentQueries } from '.';
-import {
-  EduContentInterface,
-  EduContentMetadataInterface
-} from '../../+models';
+import { EduContentInterface, EduContentMetadataInterface } from '../../+models';
 import { State } from './edu-content.reducer';
 
 describe('EduContent Selectors', () => {
@@ -110,7 +107,7 @@ describe('EduContent Selectors', () => {
       const results = EduContentQueries.getById(storeState, { id: 9 });
       expect(results).toBe(undefined);
     });
-    it('getBookeByBoekId () should return the boeke eduContent item for a given eduContentBookId', () => {
+    it('getBoekeByBookId () should return the boeke eduContent item for a given eduContentBookId', () => {
       eduContentState = createState(
         [
           createEduContent(4, { publishedEduContentMetadata: {} }),
@@ -131,7 +128,7 @@ describe('EduContent Selectors', () => {
         'no error'
       );
       storeState = { eduContents: eduContentState };
-      const results = EduContentQueries.getBookeByBoekId(storeState, {
+      const results = EduContentQueries.getBoekeByBookId(storeState, {
         bookId: 1
       });
       expect(results).toEqual(

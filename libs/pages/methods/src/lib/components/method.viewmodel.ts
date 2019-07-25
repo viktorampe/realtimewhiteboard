@@ -104,7 +104,7 @@ export class MethodViewModel {
     return this.currentMethodParams$.pipe(
       switchMap(currentMethodParams =>
         this.store.pipe(
-          select(EduContentQueries.getBookeByBoekId, {
+          select(EduContentQueries.getBoekeByBookId, {
             bookId: currentMethodParams.book
           })
         )

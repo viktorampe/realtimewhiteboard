@@ -72,7 +72,7 @@ export const getById = createSelector(
     asEduContent(state.entities[props.id])
 );
 
-export const getBookeByBoekId = createSelector(
+export const getBoekeByBookId = createSelector(
   getAll,
   (eduContents: EduContentInterface[], props: { bookId: number }) => {
     return asEduContent(
