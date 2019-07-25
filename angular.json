@@ -953,7 +953,7 @@
         }
       }
     },
-    "all-lib-files": {
+    "all-libs-files": {
       "root": "libs",
       "sourceRoot": "libs",
       "projectType": "library",

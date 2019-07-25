@@ -16,7 +16,7 @@ trigger:
 
 variables:
   dkRanTests: false
-  dkLintAll: false
+  dkLintAll: true
   dkBuild: false
 
 pool:
