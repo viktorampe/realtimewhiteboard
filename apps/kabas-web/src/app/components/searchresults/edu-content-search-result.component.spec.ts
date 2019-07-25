@@ -2,21 +2,21 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconModule, MatIconRegistry } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { EduContentFixture } from '@campus/dal';
-import { EduContentSearchResultInterface } from '@campus/shared';
+import {
+  ContentActionsServiceInterface,
+  CONTENT_ACTIONS_SERVICE_TOKEN,
+  EduContentSearchResultInterface
+} from '@campus/shared';
 import { MockDate, MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
 import { configureTestSuite } from 'ng-bullet';
 import { BehaviorSubject } from 'rxjs';
 import { EduContentSearchResultComponent } from './edu-content-search-result.component';
-import {
-  EduContentSearchResultItemServiceInterface,
-  EDUCONTENT_SEARCH_RESULT_ITEM_SERVICE_TOKEN
-} from './edu-content-search-result.service.interface';
 
 describe('EduContentSearchResultComponent', () => {
   let component: EduContentSearchResultComponent;
   let fixture: ComponentFixture<EduContentSearchResultComponent>;
-  let eduContentSearchResultItemService: EduContentSearchResultItemServiceInterface;
+  let contentActionsServiceInterface: ContentActionsServiceInterface;
   const mockIsFavorite = new BehaviorSubject(false);
   let dateMock: MockDate;
 
@@ -34,15 +34,15 @@ describe('EduContentSearchResultComponent', () => {
       providers: [
         { provide: MatIconRegistry, useClass: MockMatIconRegistry },
         {
-          provide: EDUCONTENT_SEARCH_RESULT_ITEM_SERVICE_TOKEN,
-          useValue: {}
+          provide: CONTENT_ACTIONS_SERVICE_TOKEN,
+          useValue: {
+            getActionsForEduContent: () => {}
+          }
         }
       ]
     });
 
-    eduContentSearchResultItemService = TestBed.get(
-      EDUCONTENT_SEARCH_RESULT_ITEM_SERVICE_TOKEN
-    );
+    contentActionsServiceInterface = TestBed.get(CONTENT_ACTIONS_SERVICE_TOKEN);
   });
 
   beforeEach(() => {
