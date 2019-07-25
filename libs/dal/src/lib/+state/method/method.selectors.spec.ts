@@ -278,7 +278,7 @@ describe('Method Selectors', () => {
         ];
         storeState.eduContentBooks = createBookState([
           createEduContentBook(1, {
-            methodId: 10,
+            methodId: 20,
             years: [{ id: 1, name: 'Y1' }]
           }),
           createEduContentBook(2, {
@@ -286,7 +286,7 @@ describe('Method Selectors', () => {
             years: [{ id: 2, name: 'Y2' }]
           }),
           createEduContentBook(3, {
-            methodId: 30,
+            methodId: 10,
             years: [{ id: 1, name: 'Y1' }]
           })
         ]);
@@ -306,9 +306,15 @@ describe('Method Selectors', () => {
             logoUrl: 'logo for method 10',
             name: 'method 10',
             years: [
-              { id: 1, name: 'Y1', bookId: 1 },
-              { id: 2, name: 'Y2', bookId: 2 }
+              { name: 'Y2', id: 2, bookId: 2 },
+              { name: 'Y1', id: 1, bookId: 3 }
             ]
+          },
+          {
+            id: 20,
+            logoUrl: 'logo for method 20',
+            name: 'method 20',
+            years: [{ id: 1, name: 'Y1', bookId: 1 }]
           }
         ]);
       });
