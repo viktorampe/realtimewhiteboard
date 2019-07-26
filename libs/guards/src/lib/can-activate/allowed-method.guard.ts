@@ -36,11 +36,9 @@ export class AllowedMethodGuard implements CanActivate {
       switchMap(() =>
         this.store.pipe(select(MethodQueries.getAllowedMethodIds))
       ),
-      tap(allowedMethodIds =>
+      tap(methodIds =>
         this.store.dispatch(
-          new EduContentBookActions.LoadEduContentBooks({
-            methodIds: allowedMethodIds
-          })
+          new EduContentBookActions.LoadEduContentBooks({ methodIds })
         )
       ),
       switchMap(() => this.store.pipe(select(EduContentBookQueries.getLoaded))),
