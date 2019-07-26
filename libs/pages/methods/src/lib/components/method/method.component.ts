@@ -9,13 +9,12 @@ import {
 import { Dictionary } from '@ngrx/entity';
 import { Observable } from 'rxjs';
 import { MethodViewModel } from '../method.viewmodel';
-import { MockMethodViewModel } from '../method.viewmodel.mock';
 
 @Component({
   selector: 'campus-method',
   templateUrl: './method.component.html',
-  styleUrls: ['./method.component.scss'],
-  providers: [{ provide: MethodViewModel, useClass: MockMethodViewModel }]
+  styleUrls: ['./method.component.scss']
+  // providers: [{ provide: MethodViewModel, useClass: MockMethodViewModel }]
 })
 export class MethodComponent implements OnInit {
   public boeke$: Observable<EduContent>;
