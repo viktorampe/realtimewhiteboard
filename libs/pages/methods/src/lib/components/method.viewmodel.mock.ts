@@ -29,6 +29,7 @@ export class MockMethodViewModel
   );
   public currentToc$ = new BehaviorSubject<EduContentTOCInterface[]>([]);
   public currentMethod$ = new BehaviorSubject<MethodInterface>(null);
+
   public currentBoeke$ = new BehaviorSubject<EduContent>(null);
   public currentBook$ = new BehaviorSubject<EduContentBookInterface>(null);
   public eduContentProductTypes$ = new BehaviorSubject<

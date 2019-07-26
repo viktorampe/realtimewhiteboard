@@ -13,6 +13,7 @@ import {
   EduContentProductTypeFixture,
   EduContentProductTypeInterface,
   EduContentProductTypeQueries,
+  EduContentQueries,
   EduContentServiceInterface,
   EduContentTOCInterface,
   EduContentTocQueries,
@@ -55,12 +56,12 @@ interface CurrentMethodParams {
 export class MethodViewModel implements ContentOpenerInterface {
   public searchResults$: Observable<SearchResultInterface>;
   public searchState$: Observable<SearchStateInterface>;
-  public methodYears$: Observable<MethodYearsInterface[]>;
 
   // Presentation streams
   public currentToc$: Observable<EduContentTOCInterface[]>;
   public currentMethod$: Observable<MethodInterface>;
   public currentBoeke$: Observable<EduContent>;
+  public methodYears$: Observable<MethodYearsInterface[]>;
   public currentBook$: Observable<EduContentBookInterface>;
   public eduContentProductTypes$: Observable<EduContentProductTypeInterface[]>;
   public generalFilesByType$: Observable<Dictionary<EduContent[]>>;
@@ -92,13 +93,32 @@ export class MethodViewModel implements ContentOpenerInterface {
     this._searchState$ = new BehaviorSubject<SearchStateInterface>(null);
     this.searchState$ = this._searchState$;
     this.routerState$ = this.store.pipe(select(getRouterState));
-    this.methodYears$ = this.store.pipe(
-      select(MethodQueries.getAllowedMethodYears)
-    );
 
     this.setSourceStreams();
     this.setPresentationStreams();
     this.setupSearchResults();
+  }
+
+  private setPresentationStreams(): void {
+    this.currentBoeke$ = this.getCurrentBoekeStream();
+    this.methodYears$ = this.store.pipe(
+      select(MethodQueries.getAllowedMethodYears)
+    );
+    this.currentToc$ = this.getTocsStream();
+    this.eduContentProductTypes$ = this.getEduContentProductTypesStream();
+    this.generalFilesByType$ = this.getGeneralFilesByType();
+  }
+
+  private getCurrentBoekeStream(): Observable<EduContent> {
+    return this.currentMethodParams$.pipe(
+      switchMap(currentMethodParams =>
+        this.store.pipe(
+          select(EduContentQueries.getBoekeByBookId, {
+            bookId: currentMethodParams.book
+          })
+        )
+      )
+    );
   }
 
   private setupSearchResults(): void {
@@ -194,12 +214,6 @@ export class MethodViewModel implements ContentOpenerInterface {
 
     this.generalFiles$ = this.getGeneralFilesStream();
     this.diaboloPhases$ = this.getDiaboloPhasesStream();
-  }
-
-  private setPresentationStreams() {
-    this.currentToc$ = this.getTocsStream();
-    this.eduContentProductTypes$ = this.getEduContentProductTypesStream();
-    this.generalFilesByType$ = this.getGeneralFilesByType();
   }
 
   /*
