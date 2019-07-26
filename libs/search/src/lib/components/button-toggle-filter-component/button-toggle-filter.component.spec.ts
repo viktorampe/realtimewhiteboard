@@ -91,7 +91,7 @@ describe('ButtonToggleFilterComponent', () => {
   });
 
   it('should display prediction numbers in the tooltip', () => {
-    mockFilterCriteria.values[0].prediction = 0;
+    mockFilterCriteria.values[0].prediction = undefined;
     mockFilterCriteria.values[1].prediction = 1;
     mockFilterCriteria.values[2].prediction = 6;
     const buttons = getButtonsForCriteria();

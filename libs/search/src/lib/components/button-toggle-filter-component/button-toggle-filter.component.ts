@@ -122,7 +122,7 @@ export class ButtonToggleFilterComponent
   }
 
   private getToolTip(value: SearchFilterCriteriaValuesInterface): string {
-    if (!value.prediction) {
+    if (value.prediction === undefined) {
       return '';
     } else {
       if (value.prediction === 1) {
