@@ -32,7 +32,11 @@ import {
 import {
   ContentOpenerInterface,
   EnvironmentSearchModesInterface,
-  ENVIRONMENT_SEARCHMODES_TOKEN
+  ENVIRONMENT_SEARCHMODES_TOKEN,
+  OpenStaticContentServiceInterface,
+  OPEN_STATIC_CONTENT_SERVICE_TOKEN,
+  ScormExerciseServiceInterface,
+  SCORM_EXERCISE_SERVICE_TOKEN
 } from '@campus/shared';
 import { Dictionary } from '@ngrx/entity';
 import { RouterReducerState } from '@ngrx/router-store';
@@ -76,7 +80,11 @@ export class MethodViewModel implements ContentOpenerInterface {
     @Inject(EDU_CONTENT_SERVICE_TOKEN)
     private eduContentService: EduContentServiceInterface,
     @Inject(ENVIRONMENT_SEARCHMODES_TOKEN)
-    private searchModes: EnvironmentSearchModesInterface
+    private searchModes: EnvironmentSearchModesInterface,
+    @Inject(OPEN_STATIC_CONTENT_SERVICE_TOKEN)
+    private openStaticContentService: OpenStaticContentServiceInterface,
+    @Inject(SCORM_EXERCISE_SERVICE_TOKEN)
+    private scormExerciseService: ScormExerciseServiceInterface
   ) {
     this.initialize();
   }
@@ -244,20 +252,34 @@ export class MethodViewModel implements ContentOpenerInterface {
     this._searchState$.next(state);
   }
 
-  openEduContentAsExercise(eduContent: EduContent): void {
-    throw new Error('Method not implemented.');
+  public openEduContentAsExercise(eduContent: EduContent): void {
+    this.scormExerciseService.previewExerciseFromUnlockedContent(
+      null,
+      eduContent.id,
+      null,
+      false
+    );
   }
-  openEduContentAsSolution(eduContent: EduContent): void {
-    throw new Error('Method not implemented.');
+
+  public openEduContentAsSolution(eduContent: EduContent): void {
+    this.scormExerciseService.previewExerciseFromUnlockedContent(
+      null,
+      eduContent.id,
+      null,
+      true
+    );
   }
-  openEduContentAsStream(eduContent: EduContent): void {
-    throw new Error('Method not implemented.');
+
+  public openEduContentAsStream(eduContent: EduContent): void {
+    this.openStaticContentService.open(eduContent, true);
   }
-  openEduContentAsDownload(eduContent: EduContent): void {
-    throw new Error('Method not implemented.');
+
+  public openEduContentAsDownload(eduContent: EduContent): void {
+    this.openStaticContentService.open(eduContent, false);
   }
-  openBoeke(eduContent: EduContent): void {
-    throw new Error('Method not implemented.');
+
+  public openBoeke(eduContent: EduContent): void {
+    this.openStaticContentService.open(eduContent);
   }
 
   private getCurrentMethodParams(): Observable<CurrentMethodParams> {
