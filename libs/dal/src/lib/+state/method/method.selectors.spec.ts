@@ -290,12 +290,25 @@ describe('Method Selectors', () => {
         expect(result).toBe('foo method foo year');
       });
     });
-    describe('getMethodYears', () => {
+
+    describe('getAllowedMethodYears', () => {
       it('should return the method name and year name combination', () => {
         const mockMethods = [
-          new MethodFixture({ id: 10, name: 'foo method' }),
-          new MethodFixture({ id: 20, name: 'bar method' }),
-          new MethodFixture({ id: 30, name: ' baz method' })
+          new MethodFixture({
+            id: 10,
+            name: 'method 10',
+            logoUrl: 'logo for method 10'
+          }),
+          new MethodFixture({
+            id: 20,
+            name: 'method 20',
+            logoUrl: 'logo for method 20'
+          }),
+          new MethodFixture({
+            id: 30,
+            name: ' method 30',
+            logoUrl: 'logo for method 30'
+          })
         ];
         storeState.eduContentBooks = createBookState([
           createEduContentBook(1, {

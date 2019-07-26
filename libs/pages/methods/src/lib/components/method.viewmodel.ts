@@ -13,6 +13,7 @@ import {
   EduContentProductTypeFixture,
   EduContentProductTypeInterface,
   EduContentProductTypeQueries,
+  EduContentQueries,
   EduContentServiceInterface,
   EduContentTOCInterface,
   EduContentTocQueries,
@@ -31,7 +32,11 @@ import {
 import {
   ContentOpenerInterface,
   EnvironmentSearchModesInterface,
-  ENVIRONMENT_SEARCHMODES_TOKEN
+  ENVIRONMENT_SEARCHMODES_TOKEN,
+  OpenStaticContentServiceInterface,
+  OPEN_STATIC_CONTENT_SERVICE_TOKEN,
+  ScormExerciseServiceInterface,
+  SCORM_EXERCISE_SERVICE_TOKEN
 } from '@campus/shared';
 import { Dictionary } from '@ngrx/entity';
 import { RouterReducerState } from '@ngrx/router-store';
@@ -51,12 +56,12 @@ interface CurrentMethodParams {
 export class MethodViewModel implements ContentOpenerInterface {
   public searchResults$: Observable<SearchResultInterface>;
   public searchState$: Observable<SearchStateInterface>;
-  public methodYears$: Observable<MethodYearsInterface[]>;
 
   // Presentation streams
   public currentToc$: Observable<EduContentTOCInterface[]>;
   public currentMethod$: Observable<MethodInterface>;
   public currentBoeke$: Observable<EduContent>;
+  public methodYears$: Observable<MethodYearsInterface[]>;
   public currentBook$: Observable<EduContentBookInterface>;
   public eduContentProductTypes$: Observable<EduContentProductTypeInterface[]>;
   public generalFilesByType$: Observable<Dictionary<EduContent[]>>;
@@ -75,7 +80,11 @@ export class MethodViewModel implements ContentOpenerInterface {
     @Inject(EDU_CONTENT_SERVICE_TOKEN)
     private eduContentService: EduContentServiceInterface,
     @Inject(ENVIRONMENT_SEARCHMODES_TOKEN)
-    private searchModes: EnvironmentSearchModesInterface
+    private searchModes: EnvironmentSearchModesInterface,
+    @Inject(OPEN_STATIC_CONTENT_SERVICE_TOKEN)
+    private openStaticContentService: OpenStaticContentServiceInterface,
+    @Inject(SCORM_EXERCISE_SERVICE_TOKEN)
+    private scormExerciseService: ScormExerciseServiceInterface
   ) {
     this.initialize();
   }
@@ -84,13 +93,32 @@ export class MethodViewModel implements ContentOpenerInterface {
     this._searchState$ = new BehaviorSubject<SearchStateInterface>(null);
     this.searchState$ = this._searchState$;
     this.routerState$ = this.store.pipe(select(getRouterState));
-    this.methodYears$ = this.store.pipe(
-      select(MethodQueries.getAllowedMethodYears)
-    );
 
     this.setSourceStreams();
     this.setPresentationStreams();
     this.setupSearchResults();
+  }
+
+  private setPresentationStreams(): void {
+    this.currentBoeke$ = this.getCurrentBoekeStream();
+    this.methodYears$ = this.store.pipe(
+      select(MethodQueries.getAllowedMethodYears)
+    );
+    this.currentToc$ = this.getTocsStream();
+    this.eduContentProductTypes$ = this.getEduContentProductTypesStream();
+    this.generalFilesByType$ = this.getGeneralFilesByType();
+  }
+
+  private getCurrentBoekeStream(): Observable<EduContent> {
+    return this.currentMethodParams$.pipe(
+      switchMap(currentMethodParams =>
+        this.store.pipe(
+          select(EduContentQueries.getBoekeByBookId, {
+            bookId: currentMethodParams.book
+          })
+        )
+      )
+    );
   }
 
   private setupSearchResults(): void {
@@ -188,12 +216,6 @@ export class MethodViewModel implements ContentOpenerInterface {
     this.diaboloPhases$ = this.getDiaboloPhasesStream();
   }
 
-  private setPresentationStreams() {
-    this.currentToc$ = this.getTocsStream();
-    this.eduContentProductTypes$ = this.getEduContentProductTypesStream();
-    this.generalFilesByType$ = this.getGeneralFilesByType();
-  }
-
   /*
    * determine the searchMode for a given string
    */
@@ -230,20 +252,34 @@ export class MethodViewModel implements ContentOpenerInterface {
     this._searchState$.next(state);
   }
 
-  openEduContentAsExercise(eduContent: EduContent): void {
-    throw new Error('Method not implemented.');
+  public openEduContentAsExercise(eduContent: EduContent): void {
+    this.scormExerciseService.previewExerciseFromUnlockedContent(
+      null,
+      eduContent.id,
+      null,
+      false
+    );
   }
-  openEduContentAsSolution(eduContent: EduContent): void {
-    throw new Error('Method not implemented.');
+
+  public openEduContentAsSolution(eduContent: EduContent): void {
+    this.scormExerciseService.previewExerciseFromUnlockedContent(
+      null,
+      eduContent.id,
+      null,
+      true
+    );
   }
-  openEduContentAsStream(eduContent: EduContent): void {
-    throw new Error('Method not implemented.');
+
+  public openEduContentAsStream(eduContent: EduContent): void {
+    this.openStaticContentService.open(eduContent, true);
   }
-  openEduContentAsDownload(eduContent: EduContent): void {
-    throw new Error('Method not implemented.');
+
+  public openEduContentAsDownload(eduContent: EduContent): void {
+    this.openStaticContentService.open(eduContent, false);
   }
-  openBoeke(eduContent: EduContent): void {
-    throw new Error('Method not implemented.');
+
+  public openBoeke(eduContent: EduContent): void {
+    this.openStaticContentService.open(eduContent);
   }
 
   private getCurrentMethodParams(): Observable<CurrentMethodParams> {
