@@ -32,6 +32,7 @@ export class MockMethodViewModel
   public methodYears$ = new BehaviorSubject<MethodYearsInterface[]>(
     this.getAllowedBooks$()
   );
+
   public currentToc$ = new BehaviorSubject<EduContentTOCInterface[]>(
     this.getTOCs()
   );
@@ -50,6 +51,7 @@ export class MockMethodViewModel
       diabolo: true
     })
   );
+
   public eduContentProductTypes$ = new BehaviorSubject<
     EduContentProductTypeInterface[]
   >(this.getEduContentProductTypes());
@@ -66,6 +68,12 @@ export class MockMethodViewModel
   }
 
   public updateState(state: SearchStateInterface): void {}
+
+  openEduContentAsExercise(eduContent: any): void {}
+  openEduContentAsSolution(eduContent: EduContent): void {}
+  openEduContentAsStream(eduContent: EduContent): void {}
+  openEduContentAsDownload(eduContent: EduContent): void {}
+  openBoeke(eduContent: EduContent): void {}
 
   private getAllowedBooks$(): MethodYearsInterface[] {
     return [

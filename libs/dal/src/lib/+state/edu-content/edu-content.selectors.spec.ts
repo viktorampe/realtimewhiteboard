@@ -1,12 +1,27 @@
 import { EduContentQueries } from '.';
-import { EduContentInterface } from '../../+models';
+import {
+  EduContentInterface,
+  EduContentMetadataInterface
+} from '../../+models';
 import { State } from './edu-content.reducer';
 
 describe('EduContent Selectors', () => {
-  function createEduContent(id: number): EduContentInterface | any {
-    return {
+  function createEduContent(
+    id: number,
+    options?: {
+      publishedEduContentMetadata?: Partial<EduContentMetadataInterface>;
+      type?: 'boek-e' | 'other';
+    }
+  ): EduContentInterface | any {
+    const data: EduContentInterface | any = {
       id: id
     };
+    if (options) {
+      if (options.publishedEduContentMetadata)
+        data.publishedEduContentMetadata = options.publishedEduContentMetadata;
+      if (options.type) data.type = options.type;
+    }
+    return data;
   }
 
   function createState(
@@ -94,6 +109,37 @@ describe('EduContent Selectors', () => {
     it('getById() should return undefined if the entity is not present', () => {
       const results = EduContentQueries.getById(storeState, { id: 9 });
       expect(results).toBe(undefined);
+    });
+    it('getBoekeByBookId () should return the boeke eduContent item for a given eduContentBookId', () => {
+      eduContentState = createState(
+        [
+          createEduContent(4, { publishedEduContentMetadata: {} }),
+          createEduContent(1, {
+            publishedEduContentMetadata: { eduContentBookId: 1 },
+            type: 'boek-e'
+          }),
+          createEduContent(2, {
+            publishedEduContentMetadata: { eduContentBookId: 1 },
+            type: 'other'
+          }),
+          createEduContent(3, {
+            publishedEduContentMetadata: { eduContentBookId: 2 },
+            type: 'boek-e'
+          })
+        ],
+        true,
+        'no error'
+      );
+      storeState = { eduContents: eduContentState };
+      const results = EduContentQueries.getBoekeByBookId(storeState, {
+        bookId: 1
+      });
+      expect(results).toEqual(
+        createEduContent(1, {
+          publishedEduContentMetadata: { eduContentBookId: 1 },
+          type: 'boek-e'
+        })
+      );
     });
   });
 });
