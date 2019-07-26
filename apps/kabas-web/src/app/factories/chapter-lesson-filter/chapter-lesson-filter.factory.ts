@@ -65,7 +65,6 @@ export class ChapterLessonFilterFactory implements SearchFilterFactory {
     );
     filters.push(eduContentProductTypeFilter$);
 
-    // TODO only include for DiaboloEnabled book
     if (this.hasDiaboloFilter()) {
       const diaboloPhaseFilter$ = this.buildFilter('diaboloPhase', searchState);
       filters.push(diaboloPhaseFilter$);
