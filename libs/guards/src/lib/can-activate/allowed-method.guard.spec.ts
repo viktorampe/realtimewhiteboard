@@ -6,6 +6,7 @@ import {
 } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import {
+  AUTH_SERVICE_TOKEN,
   DalState,
   EduContentBookActions,
   EduContentBookInterface,
@@ -63,7 +64,13 @@ describe('AllowedMethodGuard', () => {
       providers: [
         AllowedMethodGuard,
         Store,
-        { provide: Router, useClass: MockRouter }
+        { provide: Router, useClass: MockRouter },
+        {
+          provide: AUTH_SERVICE_TOKEN,
+          useValue: {
+            userId: 1
+          }
+        }
       ]
     });
     allowedMethodGuard = TestBed.get(AllowedMethodGuard);
