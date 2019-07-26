@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   MatAutocompleteModule,
   MatBadgeModule,
+  MatButtonToggleModule,
   MatCheckboxModule,
   MatFormFieldModule,
   MatIconModule,
@@ -16,6 +17,7 @@ import {
 import { UiModule } from '@campus/ui';
 import { UtilsModule } from '@campus/utils';
 import { BreadcrumbFilterComponent } from './components/breadcrumb-filter/breadcrumb-filter.component';
+import { ButtonToggleFilterComponent } from './components/button-toggle-filter-component/button-toggle-filter.component';
 import { CheckboxLineFilterComponent } from './components/checkbox-line-filter/checkbox-line-filter-component';
 import { CheckboxFilterComponent } from './components/checkbox-list-filter/checkbox-filter/checkbox-filter.component';
 import { CheckboxListFilterComponent } from './components/checkbox-list-filter/checkbox-list-filter.component';
@@ -48,6 +50,8 @@ import { SearchPortalDirective } from './directives/search-portal.directive';
     MatListModule,
     MatIconModule,
     MatAutocompleteModule,
+    MatButtonToggleModule,
+    MatTooltipModule,
     FormsModule,
     UtilsModule
   ],
@@ -63,6 +67,7 @@ import { SearchPortalDirective } from './directives/search-portal.directive';
     CheckboxListFilterComponent,
     CheckboxFilterComponent,
     ColumnFilterComponent,
+    ButtonToggleFilterComponent,
     SearchPortalDirective
   ],
   exports: [
@@ -76,6 +81,7 @@ import { SearchPortalDirective } from './directives/search-portal.directive';
     CheckboxFilterComponent,
     ColumnFilterComponent,
     SearchComponent,
+    ButtonToggleFilterComponent,
     SearchPortalDirective
   ],
   providers: [ColumnFilterService],
@@ -86,7 +92,8 @@ import { SearchPortalDirective } from './directives/search-portal.directive';
     BreadcrumbFilterComponent,
     ColumnFilterComponent,
     SelectFilterComponent,
-    SearchTermComponent
+    SearchTermComponent,
+    ButtonToggleFilterComponent
   ]
 })
 export class SearchModule {}
