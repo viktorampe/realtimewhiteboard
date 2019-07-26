@@ -13,6 +13,7 @@ import {
   EduContentProductTypeFixture,
   EduContentProductTypeInterface,
   EduContentProductTypeQueries,
+  EduContentQueries,
   EduContentServiceInterface,
   EduContentTOCInterface,
   EduContentTocQueries,
@@ -29,9 +30,15 @@ import {
   SearchStateInterface
 } from '@campus/search';
 import {
+  ContentOpenerInterface,
   EnvironmentSearchModesInterface,
-  ENVIRONMENT_SEARCHMODES_TOKEN
+  ENVIRONMENT_SEARCHMODES_TOKEN,
+  OpenStaticContentServiceInterface,
+  OPEN_STATIC_CONTENT_SERVICE_TOKEN,
+  ScormExerciseServiceInterface,
+  SCORM_EXERCISE_SERVICE_TOKEN
 } from '@campus/shared';
+import { Dictionary } from '@ngrx/entity';
 import { RouterReducerState } from '@ngrx/router-store';
 import { select, Store } from '@ngrx/store';
 import { BehaviorSubject, merge, Observable, of } from 'rxjs';
@@ -46,21 +53,23 @@ interface CurrentMethodParams {
 @Injectable({
   providedIn: 'root'
 })
-export class MethodViewModel {
+export class MethodViewModel implements ContentOpenerInterface {
   public searchResults$: Observable<SearchResultInterface>;
   public searchState$: Observable<SearchStateInterface>;
-  public methodYears$: Observable<MethodYearsInterface[]>;
 
   // Presentation streams
   public currentToc$: Observable<EduContentTOCInterface[]>;
   public currentMethod$: Observable<MethodInterface>;
+  public currentBoeke$: Observable<EduContent>;
+  public methodYears$: Observable<MethodYearsInterface[]>;
+  public currentBook$: Observable<EduContentBookInterface>;
+  public eduContentProductTypes$: Observable<EduContentProductTypeInterface[]>;
+  public generalFilesByType$: Observable<Dictionary<EduContent[]>>;
 
   // Source streams
   private routerState$: Observable<RouterReducerState<RouterStateUrl>>;
   private currentMethodParams$: Observable<CurrentMethodParams>;
-  private currentBook$: Observable<EduContentBookInterface>;
-  private generalFiles$: Observable<EduContentInterface[]>;
-  private eduContentProductTypes$: Observable<EduContentProductTypeInterface[]>;
+  private generalFiles$: Observable<EduContent[]>;
   private diaboloPhases$: Observable<DiaboloPhaseInterface[]>;
 
   private _searchState$: BehaviorSubject<SearchStateInterface>;
@@ -71,7 +80,11 @@ export class MethodViewModel {
     @Inject(EDU_CONTENT_SERVICE_TOKEN)
     private eduContentService: EduContentServiceInterface,
     @Inject(ENVIRONMENT_SEARCHMODES_TOKEN)
-    private searchModes: EnvironmentSearchModesInterface
+    private searchModes: EnvironmentSearchModesInterface,
+    @Inject(OPEN_STATIC_CONTENT_SERVICE_TOKEN)
+    private openStaticContentService: OpenStaticContentServiceInterface,
+    @Inject(SCORM_EXERCISE_SERVICE_TOKEN)
+    private scormExerciseService: ScormExerciseServiceInterface
   ) {
     this.initialize();
   }
@@ -80,12 +93,32 @@ export class MethodViewModel {
     this._searchState$ = new BehaviorSubject<SearchStateInterface>(null);
     this.searchState$ = this._searchState$;
     this.routerState$ = this.store.pipe(select(getRouterState));
+
+    this.setSourceStreams();
+    this.setPresentationStreams();
+    this.setupSearchResults();
+  }
+
+  private setPresentationStreams(): void {
+    this.currentBoeke$ = this.getCurrentBoekeStream();
     this.methodYears$ = this.store.pipe(
       select(MethodQueries.getAllowedMethodYears)
     );
+    this.currentToc$ = this.getTocsStream();
+    this.eduContentProductTypes$ = this.getEduContentProductTypesStream();
+    this.generalFilesByType$ = this.getGeneralFilesByType();
+  }
 
-    this.setSourceStreams();
-    this.setupSearchResults();
+  private getCurrentBoekeStream(): Observable<EduContent> {
+    return this.currentMethodParams$.pipe(
+      switchMap(currentMethodParams =>
+        this.store.pipe(
+          select(EduContentQueries.getBoekeByBookId, {
+            bookId: currentMethodParams.book
+          })
+        )
+      )
+    );
   }
 
   private setupSearchResults(): void {
@@ -100,8 +133,8 @@ export class MethodViewModel {
           ...Array.from(initialSearchState.filterCriteriaSelections.entries())
         ])
       })),
-      switchMap(searchState => this.eduContentService.search(searchState)),
-      // switchMap(searchState => this.getMockResults()),
+      // switchMap(searchState => this.eduContentService.search(searchState)),
+      switchMap(searchState => this.getMockResults()),
       map(searchResult => {
         return {
           ...searchResult,
@@ -139,7 +172,7 @@ export class MethodViewModel {
       count: 3,
       results: [
         new EduContentFixture(
-          {},
+          { type: 'boek-e' },
           {
             title: 'Aanliggende hoeken',
             description:
@@ -148,7 +181,7 @@ export class MethodViewModel {
           }
         ),
         new EduContentFixture(
-          {},
+          { type: 'exercise' },
           {
             thumbSmall:
               'https://avatars3.githubusercontent.com/u/31932368?s=460&v=4'
@@ -178,10 +211,8 @@ export class MethodViewModel {
     this.currentMethodParams$ = this.getCurrentMethodParams();
     this.currentBook$ = this.getCurrentBookStream();
     this.currentMethod$ = this.getCurrentMethodStream();
-    this.currentToc$ = this.getTocsStream();
 
     this.generalFiles$ = this.getGeneralFilesStream();
-    this.eduContentProductTypes$ = this.getEduContentProductTypesStream();
     this.diaboloPhases$ = this.getDiaboloPhasesStream();
   }
 
@@ -219,6 +250,36 @@ export class MethodViewModel {
    */
   public updateState(state: SearchStateInterface) {
     this._searchState$.next(state);
+  }
+
+  public openEduContentAsExercise(eduContent: EduContent): void {
+    this.scormExerciseService.previewExerciseFromUnlockedContent(
+      null,
+      eduContent.id,
+      null,
+      false
+    );
+  }
+
+  public openEduContentAsSolution(eduContent: EduContent): void {
+    this.scormExerciseService.previewExerciseFromUnlockedContent(
+      null,
+      eduContent.id,
+      null,
+      true
+    );
+  }
+
+  public openEduContentAsStream(eduContent: EduContent): void {
+    this.openStaticContentService.open(eduContent, true);
+  }
+
+  public openEduContentAsDownload(eduContent: EduContent): void {
+    this.openStaticContentService.open(eduContent, false);
+  }
+
+  public openBoeke(eduContent: EduContent): void {
+    this.openStaticContentService.open(eduContent);
   }
 
   private getCurrentMethodParams(): Observable<CurrentMethodParams> {
@@ -304,13 +365,21 @@ export class MethodViewModel {
     );
   }
 
-  private getGeneralFilesStream(): Observable<EduContentInterface[]> {
+  private getGeneralFilesStream(): Observable<EduContent[]> {
     const generalFilesWhenBook$ = this.currentMethodParams$.pipe(
       filter(params => !!params.book),
       switchMap(params => {
         return this.eduContentService.getGeneralEduContentForBookId(
           params.book
         );
+      }),
+      map(eduContents => {
+        return eduContents.map(eduContent => {
+          return Object.assign<EduContent, EduContentInterface>(
+            new EduContent(),
+            eduContent
+          );
+        });
       })
     );
 
@@ -330,5 +399,25 @@ export class MethodViewModel {
 
   private getDiaboloPhasesStream(): Observable<DiaboloPhaseInterface[]> {
     return this.store.pipe(select(DiaboloPhaseQueries.getAll));
+  }
+
+  private getGeneralFilesByType(): Observable<Dictionary<EduContent[]>> {
+    return this.generalFiles$.pipe(
+      map(eduContents => {
+        return eduContents.reduce(
+          (acc, eduContent) => {
+            const productType =
+              eduContent.publishedEduContentMetadata.eduContentProductTypeId;
+            if (!acc[productType]) {
+              acc[productType] = [];
+            }
+            acc[productType].push(eduContent);
+
+            return acc;
+          },
+          {} as Dictionary<EduContent[]>
+        );
+      })
+    );
   }
 }

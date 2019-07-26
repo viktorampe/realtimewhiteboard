@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { AlertQueueInterface } from '@campus/dal';
 import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { Observable } from 'rxjs';
+import { AlertQueueInterface } from '../+models/AlertQueue.interface';
 import { AlertServiceInterface } from './alert.service.interface';
 @Injectable({
   providedIn: 'root'

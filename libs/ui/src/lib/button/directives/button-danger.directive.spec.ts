@@ -2,8 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component, DebugElement, NgModule } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { UiModule } from '@campus/ui';
 import { configureTestSuite } from 'ng-bullet';
+import { UiModule } from '../../ui.module';
 import { ButtonComponent } from '../button.component';
 import { DangerDirective } from './button-danger.directive';
 

@@ -1,8 +1,8 @@
 import { Resolve } from '@angular/router';
-import { DalState } from '@campus/dal';
 import { Action, select, Selector, Store } from '@ngrx/store';
 import { combineLatest, Observable } from 'rxjs';
 import { filter, map, take } from 'rxjs/operators';
+import { DalState } from '../dal.state.interface';
 
 /**
  * 1. the injectable decorator NEEDS to be added to the extending class
@@ -15,7 +15,7 @@ import { filter, map, take } from 'rxjs/operators';
      providedIn: 'root'
    })
    export class BundlesResolver extends StateResolver {...}`
-  
+
    2.
    `constructor(
      private store: Store<DalState>,
@@ -23,7 +23,7 @@ import { filter, map, take } from 'rxjs/operators';
      ) {
        super(store);
      }`
-  
+
    3.
    `protected getLoadableActions(): Action[] {
       return [

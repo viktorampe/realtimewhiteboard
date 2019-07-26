@@ -3,9 +3,9 @@ import { CommonModule } from '@angular/common';
 import { Component, DebugElement, NgModule } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { UiModule } from '@campus/ui';
 import { configureTestSuite } from 'ng-bullet';
 import { Subject } from 'rxjs';
+import { UiModule } from '../../ui.module';
 import { IsMobileDirective } from './is-mobile.directive';
 
 @Component({
