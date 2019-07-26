@@ -420,12 +420,4 @@ export class MethodViewModel implements ContentOpenerInterface {
       })
     );
   }
-
-  public openBoeke(eduContent: EduContent): void {
-    throw new Error('Method not implemented.');
-  }
-
-  public openEduContentAsDownload(eduContent: EduContent): void {
-    throw new Error('Method not implemented.');
-  }
 }

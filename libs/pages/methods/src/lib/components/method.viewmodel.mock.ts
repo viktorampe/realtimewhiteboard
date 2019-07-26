@@ -129,14 +129,6 @@ export class MockMethodViewModel
     ];
   }
 
-  public openBoeke() {
-    console.log('openBoeke clicked');
-  }
-
-  public openEduContentAsDownload() {
-    console.log('openEduContentAsDownload clicked');
-  }
-
   private getTOCs(): EduContentTOCInterface[] {
     return [
       new EduContentTOCFixture({ id: 1, treeId: 1, title: 'chapter 1' }),
