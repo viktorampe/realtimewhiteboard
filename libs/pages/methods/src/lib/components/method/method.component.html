@@ -20,10 +20,8 @@
             *ngIf="(boeke$ | async) as boeke"
           >
             <mat-card-header>
-              <mat-card-title>
-                <mat-icon svgIcon="book"></mat-icon>
-                Bordboek
-              </mat-card-title>
+              <div mat-card-avatar><mat-icon svgIcon="book"></mat-icon></div>
+              <mat-card-title>Bordboek</mat-card-title>
             </mat-card-header>
             <mat-card-content *ngIf="(method$ | async) as method">
               <img [src]="'assets/icons/method/' + method.logoUrl" />

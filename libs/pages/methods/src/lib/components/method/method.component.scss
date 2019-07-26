@@ -26,6 +26,7 @@ campus-collapsible-sheet {
 
     &__files {
       max-width: 500px;
+      margin-right: 300px;
 
       h3 {
         border-bottom: 1px solid rgba(0, 0, 0, 0.12);
@@ -35,7 +36,7 @@ campus-collapsible-sheet {
         overflow: hidden;
         height: auto;
         list-style: none none outside;
-        padding: 10px;
+        padding: 5px 0;
 
         campus-file-extension {
           + div {
@@ -58,7 +59,7 @@ campus-collapsible-sheet {
       }
 
       &__diabolo {
-        padding: 10px;
+        padding-top: 10px;
       }
     }
   }
