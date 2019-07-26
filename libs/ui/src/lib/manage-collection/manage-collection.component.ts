@@ -76,7 +76,7 @@ export class ManageCollectionComponent
       // when options change i.e. after filtering
       // re-set selection
       this.selectionList.options.changes
-        .pipe(startWith(null)) // emit once on init
+        .pipe(startWith(null as any)) // emit once on init
         .subscribe(() => {
           this.selectListItems(this.selectedIds);
         })

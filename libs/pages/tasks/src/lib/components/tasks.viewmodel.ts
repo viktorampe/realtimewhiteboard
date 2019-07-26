@@ -127,13 +127,13 @@ export class TasksViewModel {
     areaId: number
   ): Observable<TasksWithInfoInterface> {
     const props = { userId: this.authService.userId, learningAreaId: areaId };
-    return combineLatest(
+    return combineLatest([
       this.select(TaskQueries.getSharedTaskIdsByLearningAreaId, props),
       this.select(TaskInstanceQueries.getActiveTaskIds, { date: new Date() }),
       this.select(TaskQueries.getAllEntities),
       this.select(TaskInstanceQueries.getAllGroupedByTaskId),
       this.select(TaskEduContentQueries.getAllGroupedByTaskId)
-    ).pipe(
+    ]).pipe(
       map(([ids, activeIds, entities, instancesById, taskEducontentById]) => {
         return {
           taskInfos: ids.reduce((acc, id) => {
@@ -156,13 +156,13 @@ export class TasksViewModel {
   }
 
   public getTaskWithInfo(taskId: number): Observable<TaskWithInfoInterface> {
-    return combineLatest(
+    return combineLatest([
       this.select(TaskInstanceQueries.getAllByTaskId, { taskId }),
       this.select(TaskEduContentQueries.getAllByTaskId, { taskId }),
       this.select(EduContentQueries.getAllEntities),
       this.select(TaskQueries.getById, { id: taskId }),
       this.select(LinkedPersonQueries.getAllEntities)
-    ).pipe(
+    ]).pipe(
       map(([taskInstances, taskEduContents, eduContents, task, teachers]) => {
         if (!task) return null;
         return {
@@ -194,13 +194,13 @@ export class TasksViewModel {
 
   private setLearningAreasWithTaskInfo() {
     const props = { userId: this.authService.userId };
-    this.learningAreasWithTaskInfo$ = combineLatest(
+    this.learningAreasWithTaskInfo$ = combineLatest([
       this.select(LearningAreaQueries.getAllEntities),
       this.select(TaskEduContentQueries.getUnfinishedTaskIds),
       this.select(TaskInstanceQueries.getActiveTaskIds, { date: new Date() }),
       this.select(TaskQueries.getShared, props),
       this.select(TaskQueries.getSharedLearningAreaIds, props)
-    ).pipe(
+    ]).pipe(
       map(([areaEntities, unfinishedIds, activeIds, sharedTasks, areaIds]) => {
         return {
           learningAreasWithInfo: Array.from(areaIds.values()).map(id => {

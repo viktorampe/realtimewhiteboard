@@ -1,5 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-import { DIABOLO_PHASE_SERVICE_TOKEN } from '@campus/dal';
 import { EffectsModule } from '@ngrx/effects';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Action, StoreModule } from '@ngrx/store';
@@ -7,6 +6,7 @@ import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
 import { DiaboloPhaseReducer } from '.';
+import { DIABOLO_PHASE_SERVICE_TOKEN } from '../../metadata/diabolo-phase.service.interface';
 import {
   DiaboloPhasesLoaded,
   DiaboloPhasesLoadError,

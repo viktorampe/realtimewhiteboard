@@ -1,4 +1,4 @@
-import { BreadcrumbLinkInterface } from '@campus/ui';
+import { BreadcrumbLinkInterface } from './breadcrumbs.component';
 
 export class BreadcrumbLinkFixture implements BreadcrumbLinkInterface {
   displayText = 'breadcrumb link';

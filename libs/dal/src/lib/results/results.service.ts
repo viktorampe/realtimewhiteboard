@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { ResultInterface } from '@campus/dal';
 import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { ResultInterface } from '../+models';
 import { ResultsServiceInterface } from './results.service.interface';
 
 @Injectable({

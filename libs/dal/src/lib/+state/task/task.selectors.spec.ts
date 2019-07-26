@@ -1,5 +1,5 @@
-import { TaskFixture } from '@campus/dal';
 import { TaskQueries } from '.';
+import { TaskFixture } from '../../+fixtures/Task.fixture';
 import { TaskInterface } from '../../+models';
 import { State } from './task.reducer';
 
