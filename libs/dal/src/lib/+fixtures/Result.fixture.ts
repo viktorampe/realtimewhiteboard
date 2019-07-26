@@ -1,5 +1,5 @@
-import { ResultInterface } from '@campus/dal';
 import { ScormStatus } from '@campus/scorm';
+import { ResultInterface } from '../+models';
 
 export class ResultFixture implements ResultInterface {
   // defaults

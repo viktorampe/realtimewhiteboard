@@ -8,9 +8,9 @@ import {
 } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { UiModule } from '@campus/ui';
 import { configureTestSuite } from 'ng-bullet';
 import { Subject } from 'rxjs';
+import { UiModule } from '../../ui.module';
 import { HideDesktopDirective } from './hide-desktop.directive';
 
 @Component({

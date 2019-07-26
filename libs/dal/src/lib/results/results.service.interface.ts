@@ -1,6 +1,6 @@
 import { InjectionToken } from '@angular/core';
-import { ResultInterface } from '@campus/dal';
 import { Observable } from 'rxjs';
+import { ResultInterface } from '../+models';
 
 export const RESULTS_SERVICE_TOKEN = new InjectionToken(
   'ResultsServiceInterface'

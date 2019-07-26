@@ -14,14 +14,14 @@ import {
   Type,
   ViewContainerRef
 } from '@angular/core';
+import { Observable, Subscription } from 'rxjs';
+import { debounceTime, skipWhile, take } from 'rxjs/operators';
+import { SearchPortalDirective } from '../../directives';
 import {
   SearchFilterComponentInterface,
   SearchFilterCriteriaInterface,
   SearchFilterInterface
-} from '@campus/search';
-import { Observable, Subscription } from 'rxjs';
-import { debounceTime, skipWhile, take } from 'rxjs/operators';
-import { SearchPortalDirective } from '../../directives';
+} from '../../interfaces';
 import { ColumnFilterService } from '../column-filter/column-filter.service';
 import { SearchTermComponent } from '../search-term/search-term.component';
 import { SearchViewModel } from '../search.viewmodel';
