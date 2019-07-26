@@ -9,7 +9,7 @@ import {
 } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { UiModule } from '@campus/ui';
 import { configureTestSuite } from 'ng-bullet';
@@ -23,6 +23,7 @@ describe('MethodComponent', () => {
   let fixture: ComponentFixture<MethodComponent>;
   let methodViewModel: MethodViewModel;
   let params: BehaviorSubject<Params>;
+  let router: Router;
 
   configureTestSuite(() => {
     params = new BehaviorSubject<Params>({ book: 1 });
@@ -38,12 +39,16 @@ describe('MethodComponent', () => {
       ],
       declarations: [MethodComponent],
       providers: [
-        { provide: ActivatedRoute, useValue: { params } },
+        {
+          provide: ActivatedRoute,
+          useValue: { params, snapshot: params.value }
+        },
         { provide: MethodViewModel, useClass: MockMethodViewModel }
       ]
     }).compileComponents();
 
     methodViewModel = TestBed.get(MethodViewModel);
+    router = TestBed.get(Router);
   });
 
   beforeEach(() => {
@@ -57,7 +62,8 @@ describe('MethodComponent', () => {
   });
 
   it('should show the chapter links', () => {
-    const chapters = fixture.debugElement.queryAll(By.directive(MatListItem));
+    const navDE = fixture.debugElement.query(By.css('div[aside]'));
+    const chapters = navDE.queryAll(By.directive(MatListItem));
     expect(chapters.length).toBe(4);
   });
 
@@ -67,9 +73,10 @@ describe('MethodComponent', () => {
   });
 
   it('should show the general files', () => {
-    const generalFiles = fixture.debugElement.queryAll(
-      By.css('.method-method__container__file')
+    const generalFilesDE = fixture.debugElement.query(
+      By.css('.method-method__container__files')
     );
+    const generalFiles = generalFilesDE.queryAll(By.directive(MatListItem));
     expect(generalFiles.length).toBe(3);
 
     const productTypeHeaders = fixture.debugElement.queryAll(

@@ -1,3 +1,18 @@
+campus-collapsible-sheet {
+  height: 0px;
+  flex: 1 0 auto;
+
+  div[aside] {
+    height: 100%;
+    overflow: auto;
+    padding: 20px;
+  }
+
+  div[main] {
+    padding: 20px 40px;
+  }
+}
+
 .method-method {
   &__container {
     height: 100%;
@@ -9,41 +24,24 @@
       font-size: 14px;
     }
 
-    campus-collapsible-sheet {
-      height: 0px;
-      flex: 1 0 auto;
+    &__files {
+      max-width: 500px;
 
-      div[aside] {
-        height: 100%;
-        overflow: auto;
-        padding: 20px;
+      h3 {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.12);
       }
 
-      div[main] {
-        padding: 20px 40px;
+      .mat-list-item {
+        overflow: hidden;
+        height: auto;
+        list-style: none none outside;
+        padding: 10px;
 
-        ul {
-          padding: 0;
-          margin: 0;
-        }
-
-        li {
-          overflow: hidden;
-          list-style: none none outside;
-          padding: 0;
-          margin: 0 0 10px 10px;
-          cursor: pointer;
-
-          > div {
-            padding: 20px 0 20px 100px;
+        campus-file-extension {
+          + div {
+            margin-left: 10px;
           }
         }
-      }
-    }
-
-    &__file {
-      > campus-file-extension {
-        float: left;
       }
     }
 
