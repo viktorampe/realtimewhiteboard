@@ -1,6 +1,6 @@
 import { InjectionToken } from '@angular/core';
-import { AlertQueueInterface } from '@campus/dal';
 import { Observable } from 'rxjs';
+import { AlertQueueInterface } from '../+models';
 
 export const ALERT_SERVICE_TOKEN = new InjectionToken('AlertService');
 export interface AlertServiceInterface {

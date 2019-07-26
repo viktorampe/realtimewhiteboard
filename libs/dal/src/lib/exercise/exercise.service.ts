@@ -132,7 +132,7 @@ export class ExerciseService implements ExerciseServiceInterface {
     let tempUrl$: Observable<string>;
     tempUrl$ = this.contentRequestService.requestUrl(educontentId);
 
-    const exercise$ = combineLatest(result$, tempUrl$).pipe(
+    const exercise$ = combineLatest([result$, tempUrl$]).pipe(
       take(1),
       map(([resultFromApi, url]) => {
         return {

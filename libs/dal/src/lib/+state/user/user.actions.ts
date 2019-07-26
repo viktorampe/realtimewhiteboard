@@ -1,5 +1,5 @@
-import { PersonInterface } from '@campus/dal';
 import { Action } from '@ngrx/store';
+import { PersonInterface } from '../../+models/Person.interface';
 import {
   CustomFeedbackHandlersInterface,
   FeedbackTriggeringAction

@@ -6,10 +6,12 @@ import {
   AUTH_SERVICE_TOKEN,
   CustomSerializer,
   DalState,
+  EduContent,
   EduContentBookActions,
   EduContentBookFixture,
   EduContentBookInterface,
   EduContentBookReducer,
+  EduContentFixture,
   EduContentTocActions,
   EduContentTOCFixture,
   EduContentTocReducer,
@@ -22,7 +24,13 @@ import {
   UserReducer
 } from '@campus/dal';
 import { FilterFactoryFixture, SearchModeInterface } from '@campus/search';
-import { ENVIRONMENT_SEARCHMODES_TOKEN } from '@campus/shared';
+import {
+  ENVIRONMENT_SEARCHMODES_TOKEN,
+  OpenStaticContentServiceInterface,
+  OPEN_STATIC_CONTENT_SERVICE_TOKEN,
+  ScormExerciseServiceInterface,
+  SCORM_EXERCISE_SERVICE_TOKEN
+} from '@campus/shared';
 import {
   NavigationActionTiming,
   RouterNavigationAction,
@@ -35,6 +43,7 @@ import {
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
 import { configureTestSuite } from 'ng-bullet';
+import { of } from 'rxjs';
 import { MethodViewModel } from './method.viewmodel';
 
 describe('MethodViewModel', () => {
@@ -42,6 +51,8 @@ describe('MethodViewModel', () => {
   let store: Store<DalState>;
   let router: Router;
   let zone: NgZone;
+  let openStaticContentService: OpenStaticContentServiceInterface;
+  let scormExerciseService: ScormExerciseServiceInterface;
 
   const bookId = 5;
   const bookMethodId = 1;
@@ -114,6 +125,12 @@ describe('MethodViewModel', () => {
     }
   };
 
+  const generalFiles: EduContent[] = [
+    new EduContentFixture({ id: 1 }, { eduContentProductTypeId: 1 }),
+    new EduContentFixture({ id: 2 }, { eduContentProductTypeId: 2 }),
+    new EduContentFixture({ id: 3 }, { eduContentProductTypeId: 2 })
+  ];
+
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [
@@ -147,6 +164,7 @@ describe('MethodViewModel', () => {
         {
           provide: EDU_CONTENT_SERVICE_TOKEN,
           useValue: {
+            getGeneralEduContentForBookId: () => of(generalFiles),
             search: () => {}
           }
         },
@@ -155,16 +173,27 @@ describe('MethodViewModel', () => {
           useValue: {
             demo: searchMode
           }
+        },
+        {
+          provide: OPEN_STATIC_CONTENT_SERVICE_TOKEN,
+          useValue: { open: jest.fn() }
+        },
+        {
+          provide: SCORM_EXERCISE_SERVICE_TOKEN,
+          useValue: { previewExerciseFromUnlockedContent: jest.fn() }
         }
       ]
     });
+  });
 
+  beforeEach(() => {
     methodViewModel = TestBed.get(MethodViewModel);
     store = TestBed.get(Store);
     zone = TestBed.get(NgZone);
     router = TestBed.get(Router);
-
     loadInStore();
+    openStaticContentService = TestBed.get(OPEN_STATIC_CONTENT_SERVICE_TOKEN);
+    scormExerciseService = TestBed.get(SCORM_EXERCISE_SERVICE_TOKEN);
   });
 
   function loadInStore() {
@@ -274,6 +303,84 @@ describe('MethodViewModel', () => {
           })
         );
       });
+    });
+
+    describe('generalFilesByType$', () => {
+      it('should return the eduContent in generalFiles$ grouped by productTypeId', () => {
+        navigateWithParams({ book: book.id });
+
+        expect(methodViewModel.generalFilesByType$).toBeObservable(
+          hot('a', {
+            a: {
+              1: [generalFiles[0]],
+              2: [generalFiles[1], generalFiles[2]]
+            }
+          })
+        );
+      });
+    });
+  });
+
+  describe('open eduContent', () => {
+    it('should open a boek-e', () => {
+      const eduContent = new EduContentFixture({
+        id: 4
+      });
+      const spy = jest.spyOn(openStaticContentService, 'open');
+
+      methodViewModel.openBoeke(eduContent);
+
+      expect(spy).toHaveBeenCalledWith(eduContent);
+    });
+
+    it('should open eduContent as a download', () => {
+      const eduContent = new EduContentFixture({
+        id: 4
+      });
+      const spy = jest.spyOn(openStaticContentService, 'open');
+
+      methodViewModel.openEduContentAsDownload(eduContent);
+
+      expect(spy).toHaveBeenCalledWith(eduContent, false);
+    });
+
+    it('should open eduContent as a stream', () => {
+      const eduContent = new EduContentFixture({
+        id: 4
+      });
+      const spy = jest.spyOn(openStaticContentService, 'open');
+
+      methodViewModel.openEduContentAsStream(eduContent);
+
+      expect(spy).toHaveBeenCalledWith(eduContent, true);
+    });
+
+    it('should open an exercise', () => {
+      const eduContent = new EduContentFixture({
+        id: 4
+      });
+      const spy = jest.spyOn(
+        scormExerciseService,
+        'previewExerciseFromUnlockedContent'
+      );
+
+      methodViewModel.openEduContentAsExercise(eduContent);
+
+      expect(spy).toHaveBeenCalledWith(null, eduContent.id, null, false);
+    });
+
+    it('should open an exercise with solutions', () => {
+      const eduContent = new EduContentFixture({
+        id: 4
+      });
+      const spy = jest.spyOn(
+        scormExerciseService,
+        'previewExerciseFromUnlockedContent'
+      );
+
+      methodViewModel.openEduContentAsSolution(eduContent);
+
+      expect(spy).toHaveBeenCalledWith(null, eduContent.id, null, true);
     });
   });
 });

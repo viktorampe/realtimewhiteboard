@@ -1,4 +1,4 @@
-import { EduContentMetadataInterface } from '@campus/dal';
+import { EduContentMetadataInterface } from '.';
 
 export interface DiaboloPhaseInterface {
   id?: number;

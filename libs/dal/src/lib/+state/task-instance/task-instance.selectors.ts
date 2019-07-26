@@ -1,7 +1,7 @@
-import { TaskInstanceInterface } from '@campus/dal';
 import { groupArrayByKey } from '@campus/utils';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { TaskInstance } from '../../+models/TaskInstance';
+import { TaskInstanceInterface } from '../../+models/TaskInstance.interface';
 import {
   NAME,
   selectAll,
