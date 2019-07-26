@@ -159,9 +159,11 @@ export const getMethodWithYear = createSelector(
 );
 
 export const getAllowedMethodYears = createSelector(
+  selectMethodState,
   getAllowedMethodIds,
   getAllEduContentBooks,
   (
+    methodState: State,
     allowedMethodIds: number[],
     eduContentBooks: EduContentBookInterface[]
   ): MethodYearsInterface[] => {
@@ -172,8 +174,8 @@ export const getAllowedMethodYears = createSelector(
             if (!agg[book.methodId])
               agg[book.methodId] = {
                 id: book.methodId,
-                logoUrl: book.method.logoUrl,
-                name: book.method.name,
+                logoUrl: methodState.entities[book.methodId].logoUrl,
+                name: methodState.entities[book.methodId].name,
                 years: []
               };
             if (book.years.length > 0)
