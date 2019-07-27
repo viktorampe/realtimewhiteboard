@@ -69,12 +69,6 @@
   ></div
 >
 
-<div
-  ><a [routerLink]="['./finding-nemo']" routerLinkActive="router-link-active"
-    >go to finding-nemo page</a
-  ></div
->
-
 <div>{{ response | async | json }}</div>
 
 <div>
@@ -85,4 +79,12 @@
   <campus-button campusPrimary (click)="loadToc()"
     >Load TOC for book</campus-button
   >
+</div>
+
+<div>
+  <campus-button-toggle-filter
+    [multiple]="true"
+    [filterCriteria]="filterCriteria"
+    (filterSelectionChange)="filterSelectionChanged($event)"
+  ></campus-button-toggle-filter>
 </div>

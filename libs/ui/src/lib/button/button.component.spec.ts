@@ -4,8 +4,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { MockMatIconRegistry } from '@campus/testing';
-import { UiModule } from '@campus/ui';
 import { configureTestSuite } from 'ng-bullet';
+import { UiModule } from '../ui.module';
 import { ButtonComponent } from './button.component';
 
 @Component({

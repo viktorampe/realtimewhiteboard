@@ -1,7 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
-import { SearchComponent } from '@campus/search';
-import { ResultItemMockComponent, SearchTestModule } from '@campus/testing';
+import {
+  ResultItemMockComponent,
+  SearchComponent,
+  SearchTestModule
+} from '@campus/search';
 import { UiModule } from '@campus/ui';
 import { configureTestSuite } from 'ng-bullet';
 import { MethodViewModel } from './../method.viewmodel';

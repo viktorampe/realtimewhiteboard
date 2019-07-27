@@ -1,11 +1,11 @@
 import { Inject, Injectable } from '@angular/core';
-import { StudentContentStatusInterface } from '@campus/dal';
 import { Actions, Effect } from '@ngrx/effects';
 import { select } from '@ngrx/store';
 import { DataPersistence } from '@nrwl/nx';
 import { undo } from 'ngrx-undo';
 import { from, Observable } from 'rxjs';
 import { concatMap, map, switchMap, take } from 'rxjs/operators';
+import { StudentContentStatusInterface } from '../../+models';
 import {
   StudentContentStatusServiceInterface,
   STUDENT_CONTENT_STATUS_SERVICE_TOKEN

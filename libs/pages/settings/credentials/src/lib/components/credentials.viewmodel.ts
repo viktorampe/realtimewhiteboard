@@ -112,10 +112,10 @@ export class CredentialsViewModel {
 
   private setPresentationStreams(): void {
     this.currentUser$ = this.store.pipe(select(UserQueries.getCurrentUser));
-    this.credentials$ = combineLatest(
+    this.credentials$ = combineLatest([
       this.ssoFromEnvironment$,
       this.store.pipe(select(CredentialQueries.getAll))
-    ).pipe(
+    ]).pipe(
       map(([ssoEnv, credentials]) => {
         return credentials.map(cred => ({
           ...cred,
@@ -124,10 +124,10 @@ export class CredentialsViewModel {
       })
     );
 
-    this.singleSignOnProviders$ = combineLatest(
+    this.singleSignOnProviders$ = combineLatest([
       this.ssoFromEnvironment$,
       this.credentials$
-    ).pipe(
+    ]).pipe(
       map(([ssoEnv, credentials]) => {
         return this.convertToSingleSignOnProviders(ssoEnv).filter(
           provider =>
