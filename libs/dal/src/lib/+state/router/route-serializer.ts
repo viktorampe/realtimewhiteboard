@@ -1,7 +1,7 @@
 import { Params, RouterStateSnapshot } from '@angular/router';
-import { DalState } from '@campus/dal';
 import { RouterStateSerializer } from '@ngrx/router-store';
 import { MemoizedSelectorWithProps } from '@ngrx/store';
+import { DalState } from '../dal.state.interface';
 
 export interface RouterStateUrl {
   url: string;

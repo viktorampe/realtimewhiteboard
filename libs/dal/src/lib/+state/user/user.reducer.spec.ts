@@ -1,6 +1,6 @@
-import { PersonInterface, UserActions } from '@campus/dal';
-import { UserReducer } from '.';
+import { UserActions, UserReducer } from '.';
 import { PersonFixture } from '../../+fixtures';
+import { PersonInterface } from '../../+models/Person.interface';
 import {
   PermissionsLoadError,
   UpdateUser,

@@ -1,5 +1,4 @@
 import { inject, TestBed } from '@angular/core/testing';
-import { LoginCredentials, PersonInterface } from '@campus/dal';
 import {
   LoopBackAuth,
   PersonApi,
@@ -7,7 +6,9 @@ import {
 } from '@diekeure/polpo-api-angular-sdk';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
+import { PersonInterface } from '../+models/Person.interface';
 import { AuthService } from './auth-service';
+import { LoginCredentials } from './auth-service.interface';
 
 const mockPerson = {
   email: 'brol'

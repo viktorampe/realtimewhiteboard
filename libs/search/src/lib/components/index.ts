@@ -1,4 +1,5 @@
 export * from './breadcrumb-filter/breadcrumb-filter.component';
+export * from './button-toggle-filter-component/button-toggle-filter.component';
 export * from './checkbox-line-filter/checkbox-line-filter-component';
 export * from './checkbox-list-filter/checkbox-filter/checkbox-filter.component';
 export * from './checkbox-list-filter/checkbox-list-filter.component';

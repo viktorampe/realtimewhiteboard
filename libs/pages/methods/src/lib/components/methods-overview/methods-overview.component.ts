@@ -11,6 +11,7 @@ import { MethodViewModel } from '../method.viewmodel';
 })
 export class MethodsOverviewComponent implements OnInit {
   public allowedBooks$: Observable<MethodYearsInterface[]>;
+
   constructor(private methodViewmodel: MethodViewModel) {}
 
   ngOnInit() {

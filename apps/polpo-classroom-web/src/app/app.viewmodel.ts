@@ -118,10 +118,10 @@ export class AppViewModel implements OnDestroy {
 
   private setProfileItems() {
     // send data to service -> get array of profileMenuItems
-    this.profileMenuItems$ = combineLatest(
+    this.profileMenuItems$ = combineLatest([
       this.getCurrentUser(),
       this.getCredentials()
-    ).pipe(
+    ]).pipe(
       map(([user, credentials]) =>
         this.navItemService.getProfileMenuItems(user, credentials)
       )
@@ -136,10 +136,10 @@ export class AppViewModel implements OnDestroy {
 
   private setNavItems() {
     // send data to service -> get array of navItems
-    this.sideNavItems$ = combineLatest(
+    this.sideNavItems$ = combineLatest([
       this.getCurrentUser(),
       this.getFavoriteAreas()
-    ).pipe(
+    ]).pipe(
       map(([user, favorites]) =>
         this.navItemService.getSideNavItems(user, favorites)
       )

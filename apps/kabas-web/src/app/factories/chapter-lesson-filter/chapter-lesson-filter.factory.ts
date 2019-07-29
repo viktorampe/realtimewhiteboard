@@ -86,7 +86,7 @@ export class ChapterLessonFilterFactory implements SearchFilterFactory {
         name: filterQuery.name,
         label: filterQuery.label,
         keyProperty: this.keyProperty,
-        displayProperty: this.displayProperty,
+        displayProperty: filterQuery.displayProperty || this.displayProperty,
         values: entities.map(entity => ({
           data: entity,
           visible: true,
@@ -154,6 +154,7 @@ export interface FilterQueryInterface {
   name: string;
   label: string;
   component?: Type<SearchFilterComponentInterface>;
+  displayProperty?: string;
   learningAreaDependent?: boolean;
   domHost?: string;
   options?: any;

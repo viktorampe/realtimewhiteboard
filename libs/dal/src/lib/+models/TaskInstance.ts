@@ -3,7 +3,7 @@ import {
   PersonInterface,
   TaskInstanceInterface,
   TaskInterface
-} from '@campus/dal';
+} from '.';
 
 export class TaskInstance implements TaskInstanceInterface {
   start: Date;

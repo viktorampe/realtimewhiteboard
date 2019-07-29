@@ -254,13 +254,13 @@ export class BundlesViewModel {
   }
 
   getBundleContents(bundleId: number): Observable<UnlockedContent[]> {
-    return combineLatest(
+    return combineLatest([
       this.store.pipe(
         select(UnlockedContentQueries.getByBundleId, { bundleId })
       ),
       this.store.pipe(select(EduContentQueries.getAllEntities)),
       this.store.pipe(select(UserContentQueries.getAllEntities))
-    ).pipe(
+    ]).pipe(
       map(([unlockedContents, eduContentEnts, userContentEnts]) => {
         return unlockedContents.map(
           (unlockedContent): UnlockedContent => {
@@ -287,7 +287,7 @@ export class BundlesViewModel {
   }
 
   private getSharedBooks(): Observable<EduContent[]> {
-    return combineLatest(
+    return combineLatest([
       this.store.pipe(
         select(UnlockedBoekeGroupQueries.getShared, {
           userId: this.authService.userId
@@ -298,7 +298,7 @@ export class BundlesViewModel {
           userId: this.authService.userId
         })
       )
-    ).pipe(
+    ]).pipe(
       switchMap(
         ([unlockedBookGroups, unlockedBookStudents]): Observable<
           EduContent[]
@@ -323,11 +323,11 @@ export class BundlesViewModel {
     bundlesByLearningArea$: Observable<Dictionary<BundleInterface[]>>,
     booksByLearningArea$: Observable<Dictionary<EduContent[]>>
   ): Observable<LearningAreasWithBundlesInfoInterface> {
-    return combineLatest(
+    return combineLatest([
       this.learningAreas$,
       bundlesByLearningArea$,
       booksByLearningArea$
-    ).pipe(
+    ]).pipe(
       map(
         ([
           learningAreas,
@@ -375,11 +375,11 @@ export class BundlesViewModel {
       Dictionary<UnlockedContentInterface[]>
     >
   ) {
-    return combineLatest(
+    return combineLatest([
       bundlesByLearningArea$,
       booksByLearningArea$,
       unlockedContentsByBundle$
-    ).pipe(
+    ]).pipe(
       map(
         ([bundlesByArea, booksByArea, unlockedContentsByBundle]: [
           Dictionary<BundleInterface[]>,
