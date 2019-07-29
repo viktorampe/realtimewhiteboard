@@ -17,6 +17,7 @@
   $educontentsearchresult-top-icons-color: $ui-tertiary-color-accent !default;
   $educontentsearchresult-top-padding: 10px 15px !default;
   $educontentsearchresult-top-footer-margin-top: 8px !default;
+  $educontentsearchresult-top-title-icon-margin-right: 8px !default;
 
   $educontentsearchresult-selected-top-backgroundcolor: $ui-tertiary-bg-color-2 !default;
   $educontentsearchresult-selected-top-color: $ui-tertiary-font-color-2 !default;
@@ -26,6 +27,7 @@
   $educontentsearchresult-bottom-contents-color: $ui-secondary-font-color !default;
   $educontentsearchresult-bottom-contents-padding: 8px !default;
   $educontentsearchresult-bottom-contents-max-height: 100px !default;
+  $educontentsearchresult-bottom-contents-producttype-icon-margin-right: 2px !default;
 
   $educontentsearchresult-bottom-buttonbar-backgroundcolor: $ui-button-bg-color-1 !default;
   $educontentsearchresult-bottom-buttonbar-hover-backgroundcolor: darken(
@@ -64,6 +66,7 @@
           &__title {
             mat-icon {
               color: $educontentsearchresult-top-icons-color;
+              margin-right: $educontentsearchresult-top-title-icon-margin-right;
             }
             span {
               height: $educontentsearchresult-title-height;
@@ -101,6 +104,13 @@
         padding-left: 115px;
         max-height: $educontentsearchresult-bottom-contents-max-height;
         overflow-y: auto;
+
+        &__producttype {
+          mat-icon {
+            margin-right: $educontentsearchresult-bottom-contents-producttype-icon-margin-right;
+          }
+        }
+
         &__toc-body {
           padding-left: $educontentsearchresult-toc-padding-left;
           ul {

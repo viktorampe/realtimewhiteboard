@@ -1,4 +1,5 @@
 import { EduContentMetadataInterface } from '../+models/EduContentMetadata.interface';
+import { DiaboloPhaseFixture } from './DiaboloPhase.fixture';
 import { EduContentBookFixture } from './EduContentBook.fixture';
 import { EduContentProductTypeFixture } from './EduContentProductType.fixture';
 import { EduContentTOCFixture } from './EduContentTOC.fixture';
@@ -95,6 +96,7 @@ export class EduContentMetadataFixture implements EduContentMetadataInterface {
       depth: 1
     })
   ];
+  diaboloPhase = new DiaboloPhaseFixture();
   streamable = false;
 
   constructor(props: Partial<EduContentMetadataInterface> = {}) {
