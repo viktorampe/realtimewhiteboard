@@ -1,3 +1,6 @@
-<div style="min-height: 60px; width: 200px; border: 1px solid black">{{
-  data.eduContent.name
-}}</div>
+<div style="min-height: 60px; width: 200px; border: 1px solid black"
+  >{{ data.eduContent.name }}
+  <div *ngFor="let action of actions">
+    <button (click)="onActionClick(action)">{{ action.label }}</button>
+  </div></div
+>

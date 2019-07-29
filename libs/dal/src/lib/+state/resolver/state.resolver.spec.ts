@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { inject, TestBed } from '@angular/core/testing';
+import { ActivatedRouteSnapshot } from '@angular/router';
 import {
   Action,
   createFeatureSelector,
+  createSelector,
   Selector,
   Store,
   StoreModule
@@ -10,7 +12,7 @@ import {
 import { hot } from '@nrwl/nx/testing';
 import { Observable } from 'rxjs';
 import { DalState } from '..';
-import { StateResolver } from './state.resolver';
+import { QueryWithProps, StateResolver } from './state.resolver';
 
 class ActionOne implements Action {
   readonly type = 'ActionOne';
@@ -21,6 +23,10 @@ class ActionTwo implements Action {
 }
 
 const mockSelector = createFeatureSelector<any>('learningAreas');
+const mockSelectorWithProp = createSelector(
+  mockSelector,
+  (s1, {}) => !!s1
+);
 let resolvedQueries = [];
 
 @Injectable({
@@ -106,14 +112,19 @@ describe('stateResolver', () => {
       selector = jest.spyOn(TestBed.get(Store), 'pipe');
     });
     it('should call loadActions and actionsLoaded', () => {
-      stateResolver.resolve();
+      stateResolver.resolve({} as ActivatedRouteSnapshot);
       expect(loadActionsSpy).toHaveBeenCalledWith([]);
       expect(actionsLoadedSpy).toHaveBeenCalledWith([]);
       expect(selector).toHaveBeenCalledTimes(0);
     });
     it('should map to the store selector', () => {
       resolvedQueries = [mockSelector, mockSelector, mockSelector];
-      stateResolver.resolve();
+      stateResolver.resolve({} as ActivatedRouteSnapshot);
+      expect(selector).toHaveBeenCalled();
+    });
+    it('should map to the store selector for ResolvedQueryWithProps', () => {
+      resolvedQueries = [new QueryWithProps(mockSelectorWithProp, {})];
+      stateResolver.resolve({} as ActivatedRouteSnapshot);
       expect(selector).toHaveBeenCalled();
     });
   });

@@ -51,11 +51,11 @@ export class CoupledTeacherGuard implements CanActivate {
         this.dispatchLoadActions(currentUser.id);
       }),
       switchMapTo(
-        combineLatest(this.personsLoaded$, this.teacherStudentLoaded$)
+        combineLatest([this.personsLoaded$, this.teacherStudentLoaded$])
       ),
       skipWhile(arr => !arr.every(Boolean)),
       switchMapTo(
-        combineLatest(this.isTeacher$, this.isStudent$, this.hasTeachers$)
+        combineLatest([this.isTeacher$, this.isStudent$, this.hasTeachers$])
       ),
       map(([isTeacher, isStudent, hasTeachers]) => {
         if (isTeacher) return true;

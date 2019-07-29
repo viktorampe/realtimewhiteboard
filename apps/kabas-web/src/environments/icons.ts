@@ -4,5 +4,10 @@ export const icons = {
   menu: 'assets/icons/material/menu.svg',
   home: 'assets/icons/material/home.svg',
   'arrow-back': 'assets/icons/material/arrow-back.svg',
-  'breadcrumb-separator': 'assets/icons/material/chevron-right.svg'
+  'breadcrumb-separator': 'assets/icons/material/chevron-right.svg',
+
+  //temporary diaboloPhase icons
+  'diabolo-intro': 'assets/icons/diabolo/intro.svg',
+  'diabolo-midden': 'assets/icons/diabolo/midden.svg',
+  'diabolo-outro': 'assets/icons/diabolo/outro.svg'
 };

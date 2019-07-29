@@ -45,6 +45,7 @@ export class MockMethodViewModel
     })
   ]);
   public currentMethod$ = new BehaviorSubject<MethodInterface>(null);
+
   public currentBoeke$ = new BehaviorSubject<EduContent>(null);
   public currentBook$ = new BehaviorSubject<EduContentBookInterface>(null);
   public eduContentProductTypes$ = new BehaviorSubject<
@@ -63,6 +64,12 @@ export class MockMethodViewModel
   }
 
   public updateState(state: SearchStateInterface): void {}
+
+  openEduContentAsExercise(eduContent: any): void {}
+  openEduContentAsSolution(eduContent: EduContent): void {}
+  openEduContentAsStream(eduContent: EduContent): void {}
+  openEduContentAsDownload(eduContent: EduContent): void {}
+  openBoeke(eduContent: EduContent): void {}
 
   private getAllowedBooks$(): MethodYearsInterface[] {
     return [

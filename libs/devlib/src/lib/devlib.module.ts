@@ -2,17 +2,12 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material';
-import { ScormModule } from '@campus/scorm';
 import { SearchModule } from '@campus/search';
 import { SharedModule } from '@campus/shared';
-import { ManageCollectionComponent, UiModule } from '@campus/ui';
+import { UiModule } from '@campus/ui';
 import { DevlibRoutingModule } from './devlib.routing.module';
-import { EduContentComponent } from './edu-content/edu-content.component';
-import { EduContentViewModel } from './edu-content/edu-content.viewmodel';
-import { FindingNemoComponent } from './finding-nemo/finding-nemo.component';
 import { LoginpageComponent } from './loginpage/loginpage.component';
 import { LoginPageViewModel } from './loginpage/loginpage.viewmodel';
-import { PolpoResultItemComponent } from './polpo-result-item/polpo-result-item.component';
 
 @NgModule({
   imports: [
@@ -22,17 +17,11 @@ import { PolpoResultItemComponent } from './polpo-result-item/polpo-result-item.
     DevlibRoutingModule,
     SharedModule,
     MatIconModule,
-    ScormModule,
     SearchModule
   ],
-  providers: [LoginPageViewModel, EduContentViewModel],
-  declarations: [
-    LoginpageComponent,
-    EduContentComponent,
-    FindingNemoComponent,
-    PolpoResultItemComponent
-  ],
+  providers: [LoginPageViewModel],
+  declarations: [LoginpageComponent],
   exports: [],
-  entryComponents: [PolpoResultItemComponent, ManageCollectionComponent]
+  entryComponents: []
 })
 export class DevlibModule {}

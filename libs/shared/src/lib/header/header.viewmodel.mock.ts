@@ -3,11 +3,11 @@ import {
   Alert,
   AlertFixture,
   AlertQueueInterface,
-  BreadcrumbLinkFixture,
   PersonFixture,
   PersonInterface
 } from '@campus/dal';
 import {
+  BreadcrumbLinkFixture,
   BreadcrumbLinkInterface,
   DropdownMenuItemInterface,
   ListFormat

@@ -6,14 +6,8 @@ import {
   NgModule,
   Output
 } from '@angular/core';
-import { MatIconRegistry } from '@angular/material';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { RouterTestingModule } from '@angular/router/testing';
-import { ResultItemBase, SearchComponent } from '@campus/search';
-import { ENVIRONMENT_ICON_MAPPING_TOKEN, SharedModule } from '@campus/shared';
-import { UiModule } from '@campus/ui';
 import { of } from 'rxjs';
-import { MockMatIconRegistry } from '..';
+import { ResultItemBase, SearchComponent } from './components';
 
 @Component({
   selector: 'campus-result-item',
@@ -42,21 +36,8 @@ export class SearchStubComponent {
 
 @NgModule({
   declarations: [SearchStubComponent, ResultItemMockComponent],
-  imports: [
-    CommonModule,
-    UiModule,
-    NoopAnimationsModule,
-    SharedModule,
-    RouterTestingModule
-  ],
+  imports: [CommonModule],
   exports: [SearchStubComponent, ResultItemMockComponent],
-  providers: [
-    {
-      provide: ENVIRONMENT_ICON_MAPPING_TOKEN,
-      useValue: {}
-    },
-    { provide: MatIconRegistry, useClass: MockMatIconRegistry },
-    { provide: SearchComponent, useValue: SearchStubComponent }
-  ]
+  providers: [{ provide: SearchComponent, useValue: SearchStubComponent }]
 })
 export class SearchTestModule {}
