@@ -1,1 +1,80 @@
-<p> MethodsView works! </p>
+<div class="method-method__container">
+  <campus-collapsible-sheet>
+    <div aside>
+      <h3 mat-subheader>Kies een hoofdstuk</h3>
+      <mat-nav-list>
+        <a
+          mat-list-item
+          *ngFor="let chapter of (chapters$ | async)"
+          [routerLink]="[chapter.id]"
+          >{{ chapter.title }}</a
+        >
+      </mat-nav-list>
+    </div>
+
+    <div main>
+      <mat-tab-group>
+        <mat-tab label="Lesmateriaal">
+          <mat-card
+            class="method-method__container__boeke"
+            *ngIf="(boeke$ | async) as boeke"
+          >
+            <mat-card-header>
+              <div mat-card-avatar><mat-icon svgIcon="book"></mat-icon></div>
+              <mat-card-title>Bordboek</mat-card-title>
+            </mat-card-header>
+            <mat-card-content *ngIf="(method$ | async) as method">
+              <img [src]="'assets/icons/method/' + method.logoUrl" />
+              <p
+                *ngIf="(book$ | async)?.diabolo"
+                class="method-method__container__boeke__diabolo"
+              >
+                {{ method.name }} is een diabolo methode.
+                <a
+                  href="https://www.diekeure.be/nl-be/educatief/lager-onderwijs/diabolo"
+                  target="_blank"
+                  >Lees meer over diabolo</a
+                >
+              </p>
+            </mat-card-content>
+            <mat-card-actions>
+              <campus-button (click)="clickOpenBoeke(boeke)" mat-button
+                >OPEN</campus-button
+              >
+            </mat-card-actions>
+          </mat-card>
+
+          <div
+            *ngIf="(generalFilesByType$ | async) as generalFilesByType"
+            class="method-method__container__files"
+          >
+            <ng-container *ngFor="let productType of (productTypes$ | async)">
+              <div *ngIf="generalFilesByType[productType.id] as generalFiles">
+                <h3 mat-subheader>{{ productType.name }}</h3>
+                <mat-nav-list>
+                  <mat-list-item
+                    *ngFor="let generalFile of generalFiles"
+                    (click)="clickOpenGeneralFile(generalFile)"
+                  >
+                    <campus-file-extension
+                      [extensionClass]="generalFile.fileExtension"
+                      [title]="generalFile.fileTypeLabel"
+                    ></campus-file-extension>
+                    <div>
+                      {{ generalFile.name }}
+                      <br />{{ generalFile.description }}
+                    </div>
+                  </mat-list-item>
+                </mat-nav-list>
+              </div>
+            </ng-container>
+          </div>
+        </mat-tab>
+
+        <mat-tab label="Leerplandoelen">
+          Leerplandoelen
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+  </campus-collapsible-sheet>
+</div>
