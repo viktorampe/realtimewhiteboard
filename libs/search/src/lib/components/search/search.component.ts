@@ -208,8 +208,8 @@ export class SearchComponent
 
     // set inputs
     const filterItem = componentRef.instance;
-    filterItem.filterCriteria = filter.criteria;
     if (filter.options) filterItem.filterOptions = filter.options;
+    filterItem.filterCriteria = filter.criteria;
 
     // subscribe to outputs
     this.portalsMap[filter.domHost].subscriptions.add(

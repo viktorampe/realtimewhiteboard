@@ -7,6 +7,7 @@ import {
   AUTH_SERVICE_TOKEN,
   BundleActions,
   DiaboloPhaseActions,
+  DiaboloPhaseFixture,
   EduContentActions,
   EduContentInterface,
   EduContentTocActions,
@@ -23,11 +24,16 @@ import {
   UnlockedContentActions,
   UserActions
 } from '@campus/dal';
+import {
+  SearchFilterCriteriaFixture,
+  SearchFilterCriteriaValuesFixture
+} from '@campus/search';
 import { ContentEditableComponent } from '@campus/ui';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { LoginPageViewModel } from './loginpage.viewmodel';
+
 @Component({
   selector: 'campus-loginpage',
   templateUrl: './loginpage.component.html',
@@ -118,5 +124,39 @@ export class LoginpageComponent implements OnInit {
     this.store.dispatch(
       new EduContentTocActions.LoadEduContentTocsForBook({ bookId: 1 })
     );
+  }
+
+  // tslint:disable-next-line: member-ordering
+  public filterCriteria = new SearchFilterCriteriaFixture(
+    { displayProperty: 'icon' },
+    [
+      new SearchFilterCriteriaValuesFixture({
+        data: new DiaboloPhaseFixture({
+          id: 1,
+          name: 'opt1',
+          icon: 'diabolo-intro'
+        }),
+        prediction: 0
+      }),
+      new SearchFilterCriteriaValuesFixture({
+        data: new DiaboloPhaseFixture({
+          id: 2,
+          name: 'opt2',
+          icon: 'diabolo-midden'
+        }),
+        prediction: 1
+      }),
+      new SearchFilterCriteriaValuesFixture({
+        data: new DiaboloPhaseFixture({
+          id: 3,
+          name: 'opt3',
+          icon: 'diabolo-outro'
+        })
+      })
+    ]
+  );
+
+  public filterSelectionChanged(event) {
+    console.log(event);
   }
 }
