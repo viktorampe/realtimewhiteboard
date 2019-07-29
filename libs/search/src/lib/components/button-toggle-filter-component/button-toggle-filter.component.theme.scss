@@ -6,6 +6,7 @@
     &__button {
       &--disabled {
         background-color: $button-toggle--disabled-color;
+        cursor: not-allowed;
       }
     }
   }
