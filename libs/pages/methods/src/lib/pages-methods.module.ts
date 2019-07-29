@@ -1,11 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import {
-  MatCardModule,
-  MatIconModule,
-  MatListModule,
-  MatTabsModule
-} from '@angular/material';
+import { MatCardModule, MatListModule, MatTabsModule } from '@angular/material';
 import { GuardsModule } from '@campus/guards';
 import { SearchModule } from '@campus/search';
 import {
@@ -27,7 +22,6 @@ import { PagesMethodsRoutingModule } from './pages-methods-routing.module';
   imports: [
     CommonModule,
     MatCardModule,
-    MatIconModule,
     MatListModule,
     MatTabsModule,
     PagesMethodsRoutingModule,
