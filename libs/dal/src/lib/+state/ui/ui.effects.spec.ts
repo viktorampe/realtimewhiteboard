@@ -177,7 +177,10 @@ describe('UiEffects', () => {
       const expected = [
         { displayText: 'bundles', link: ['bundles'] },
         { displayText: 'learningAreaName', link: ['bundles', '19'] },
-        { displayText: 'bundleName', link: ['bundles', '19', '1'] }
+        {
+          displayText: 'returnString instead of object',
+          link: ['bundles', '19', '1']
+        }
       ];
 
       actions = of({
@@ -239,8 +242,7 @@ function getMockRouterState() {
         },
         data: {
           breadcrumbText: 'bundles',
-          selector: () => ({ name: 'bundleName' }),
-          displayProperty: 'name',
+          selector: () => 'returnString instead of object',
           isResolved: true
         }
       },

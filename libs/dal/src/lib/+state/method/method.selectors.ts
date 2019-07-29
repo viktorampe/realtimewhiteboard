@@ -1,6 +1,9 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { EduContentBookInterface, MethodInterface } from '../../+models';
-import { getAll as getAllEduContentBooks } from '../edu-content-book/edu-content-book.selectors';
+import {
+  getAll as getAllEduContentBooks,
+  getById as getByIdEduContentBooks
+} from '../edu-content-book/edu-content-book.selectors';
 import { State as YearState } from '../year/year.reducer';
 import { selectYearState } from '../year/year.selectors';
 import {
@@ -142,18 +145,19 @@ export const isAllowedMethod = createSelector(
   }
 );
 
-export const getMethodWithYear = createSelector(
+export const getMethodWithYearByBookId = createSelector(
   selectMethodState,
   selectYearState,
+  getByIdEduContentBooks,
   (
     methodState: State,
     yearState: YearState,
-    props: { methodId: number; yearId: number }
+    eduContentBook: EduContentBookInterface
   ) => {
     return (
-      methodState.entities[props.methodId].name +
+      methodState.entities[eduContentBook.methodId].name +
       ' ' +
-      yearState.entities[props.yearId].label
+      yearState.entities[eduContentBook.years[0].id].label
     );
   }
 );

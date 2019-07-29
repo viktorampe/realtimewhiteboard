@@ -16,7 +16,6 @@ trigger:
 
 variables:
   dkRanTests: false
-  dkLintAll: false
   dkBuild: false
 
 pool:
@@ -26,10 +25,6 @@ steps:
   - script: |
       echo '##vso[task.setvariable variable=CI]1'
     displayName: 'Export environment variables'
-  - script: |
-      echo '##vso[task.setvariable variable=dkLintAll]true'
-    condition: and(in(variables['Build.SourceBranch'], 'refs/heads/master', 'refs/heads/develop', 'refs/heads/test/mock-master'), in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI'))
-    displayName: '(Check) Enable dkLintAll if pushing to a trigger branch'
   - script: |
       echo '##vso[task.setvariable variable=dkBuild]true'
     condition: and(in(variables['Build.SourceBranch'], 'refs/heads/master', 'refs/heads/test/mock-master'), in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI'))
@@ -42,7 +37,6 @@ steps:
       echo System.PullRequest.TargetBranch = $(System.PullRequest.TargetBranch)
       echo Build.SourcesDirectory = $(Build.SourcesDirectory)
       echo dkRanTests = $(dkRanTests)
-      echo dkLintAll = $(dkLintAll)
       echo dkBuild = $(dkBuild)
       echo
       echo Environment
@@ -63,7 +57,6 @@ steps:
   - script: |
       npm run lint
     displayName: 'Lint all'
-    condition: and(succeeded(), eq(variables['dkLintAll'], 'true'))
   - script: |
       npm run format:check
     displayName: 'Format check'

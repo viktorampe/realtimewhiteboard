@@ -6,6 +6,7 @@ import {
   MatListModule,
   MatTabsModule
 } from '@angular/material';
+import { GuardsModule } from '@campus/guards';
 import { SearchModule } from '@campus/search';
 import {
   ContentActionsService,
@@ -32,7 +33,8 @@ import { PagesMethodsRoutingModule } from './pages-methods-routing.module';
     PagesMethodsRoutingModule,
     SearchModule,
     SharedModule,
-    UiModule
+    UiModule,
+    GuardsModule
   ],
   providers: [
     {
