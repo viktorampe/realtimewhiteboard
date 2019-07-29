@@ -208,8 +208,8 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     DropAreaComponent,
     TileComponent,
     JoinPipe,
-    MatIconModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatIconModule
   ],
   providers: [
     {

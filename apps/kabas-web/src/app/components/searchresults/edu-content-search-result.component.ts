@@ -31,7 +31,7 @@ export class EduContentSearchResultComponent extends ResultItemBase
     this.setupActions();
   }
 
-  setupActions(): void {
+  private setupActions(): void {
     this.actions = this.contentActionsServiceInterface.getActionsForEduContent(
       this.data.eduContent
     );
