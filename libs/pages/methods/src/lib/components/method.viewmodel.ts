@@ -8,9 +8,7 @@ import {
   EduContent,
   EduContentBookInterface,
   EduContentBookQueries,
-  EduContentFixture,
   EduContentInterface,
-  EduContentProductTypeFixture,
   EduContentProductTypeInterface,
   EduContentProductTypeQueries,
   EduContentQueries,
@@ -41,7 +39,7 @@ import {
 import { Dictionary } from '@ngrx/entity';
 import { RouterReducerState } from '@ngrx/router-store';
 import { select, Store } from '@ngrx/store';
-import { BehaviorSubject, merge, Observable, of } from 'rxjs';
+import { BehaviorSubject, combineLatest, merge, Observable } from 'rxjs';
 import { filter, map, mapTo, switchMap, withLatestFrom } from 'rxjs/operators';
 
 interface CurrentMethodParams {
@@ -133,8 +131,7 @@ export class MethodViewModel implements ContentOpenerInterface {
           ...Array.from(initialSearchState.filterCriteriaSelections.entries())
         ])
       })),
-      // switchMap(searchState => this.eduContentService.search(searchState)),
-      switchMap(searchState => this.getMockResults()),
+      switchMap(searchState => this.eduContentService.search(searchState)),
       map(searchResult => {
         return {
           ...searchResult,
@@ -154,52 +151,6 @@ export class MethodViewModel implements ContentOpenerInterface {
         };
       })
     );
-  }
-
-  // tslint:disable-next-line: member-ordering
-  private loadedMockResults = false;
-  private getMockResults(): Observable<SearchResultInterface> {
-    if (this.loadedMockResults) {
-      return of({
-        count: 3,
-        results: [],
-        filterCriteriaPredictions: new Map()
-      });
-    }
-    this.loadedMockResults = true;
-
-    return of({
-      count: 3,
-      results: [
-        new EduContentFixture(
-          { type: 'boek-e' },
-          {
-            title: 'Aanliggende hoeken',
-            description:
-              'In dit leerobject maken leerlingen 3 tikoefeningen op aanliggende hoeken.',
-            fileExt: 'ludo.zip'
-          }
-        ),
-        new EduContentFixture(
-          { type: 'exercise' },
-          {
-            thumbSmall:
-              'https://avatars3.githubusercontent.com/u/31932368?s=460&v=4'
-          }
-        ),
-        new EduContentFixture(
-          {},
-          {
-            eduContentProductType: new EduContentProductTypeFixture({
-              pedagogic: true
-            })
-          }
-        )
-      ],
-      filterCriteriaPredictions: new Map([
-        ['LearningArea', new Map([[1, 100], [2, 50]])]
-      ])
-    });
   }
 
   private setSourceStreams() {
@@ -235,12 +186,41 @@ export class MethodViewModel implements ContentOpenerInterface {
    * determine the initial searchState from the router state store
    */
   public getInitialSearchState(): Observable<SearchStateInterface> {
-    return this.routerState$.pipe(
-      map((routerState: RouterReducerState<RouterStateUrl>) => {
+    return combineLatest([
+      this.currentBook$,
+      this.currentMethod$,
+      this.currentMethodParams$
+    ]).pipe(
+      map(([currentBook, currentMethod, currentMethodParams]) => {
         const initialSearchState: SearchStateInterface = {
           searchTerm: '',
           filterCriteriaSelections: new Map<string, (number | string)[]>()
         };
+
+        if (currentBook) {
+          initialSearchState.filterCriteriaSelections.set(
+            'year',
+            currentBook.years.map(year => year.id)
+          );
+
+          initialSearchState.filterCriteriaSelections.set('method', [
+            currentBook.methodId
+          ]);
+        }
+
+        if (currentMethod) {
+          initialSearchState.filterCriteriaSelections.set('learningArea', [
+            currentMethod.learningAreaId
+          ]);
+        }
+
+        if (currentMethodParams && currentMethodParams.chapter) {
+          initialSearchState.filterCriteriaSelections.set('eduContentTOC', [
+            currentMethodParams.lesson
+              ? currentMethodParams.lesson
+              : currentMethodParams.chapter
+          ]);
+        }
 
         return initialSearchState;
       })

@@ -80,6 +80,13 @@ describe('DiaboloChapterLessonFilterFactory', () => {
     });
   });
 
+  describe('getPredictionFilterNames', () => {
+    it('should return the correct filter names', () => {
+      const filternames = factory.getPredictionFilterNames();
+      expect(filternames).toEqual(['eduContentProductType', 'diaboloPhase']);
+    });
+  });
+
   function getExpectedFilter(
     name,
     label,

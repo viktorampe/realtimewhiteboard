@@ -15,6 +15,8 @@ export const DIABOLO_CHAPTER_LESSON_FILTER_FACTORY_TOKEN = new InjectionToken(
   providedIn: 'root'
 })
 export class DiaboloChapterLessonFilterFactory extends ChapterLessonFilterFactory {
+  protected filterSortOrder = ['eduContentProductType', 'diaboloPhase'];
+
   constructor(public store: Store<DalState>) {
     super(store);
 

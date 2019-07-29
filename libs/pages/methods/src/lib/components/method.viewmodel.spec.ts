@@ -12,6 +12,7 @@ import {
   EduContentBookInterface,
   EduContentBookReducer,
   EduContentFixture,
+  EduContentServiceInterface,
   EduContentTocActions,
   EduContentTOCFixture,
   EduContentTocReducer,
@@ -55,6 +56,7 @@ describe('MethodViewModel', () => {
   let openStaticContentService: OpenStaticContentServiceInterface;
   let scormExerciseService: ScormExerciseServiceInterface;
   let searchModes: EnvironmentSearchModesInterface;
+  let eduContentService: EduContentServiceInterface;
 
   const bookId = 5;
   const diaboloBookId = 6;
@@ -144,6 +146,8 @@ describe('MethodViewModel', () => {
     new EduContentFixture({ id: 3 }, { eduContentProductTypeId: 2 })
   ];
 
+  const mockAutoCompleteReturnValue = ['strings', 'for', 'autocomplete'];
+
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [
@@ -178,7 +182,8 @@ describe('MethodViewModel', () => {
           provide: EDU_CONTENT_SERVICE_TOKEN,
           useValue: {
             getGeneralEduContentForBookId: () => of(generalFiles),
-            search: () => {}
+            search: () => {},
+            autoComplete: () => {}
           }
         },
         {
@@ -211,6 +216,7 @@ describe('MethodViewModel', () => {
     loadInStore();
     openStaticContentService = TestBed.get(OPEN_STATIC_CONTENT_SERVICE_TOKEN);
     scormExerciseService = TestBed.get(SCORM_EXERCISE_SERVICE_TOKEN);
+    eduContentService = TestBed.get(EDU_CONTENT_SERVICE_TOKEN);
     searchModes = TestBed.get(ENVIRONMENT_SEARCHMODES_TOKEN);
   });
 
@@ -277,6 +283,34 @@ describe('MethodViewModel', () => {
           a: searchModes['diabolo-chapter-lesson']
         })
       );
+    });
+  });
+
+  describe('requestAutoComplete', () => {
+    it('should call getInitialSearchState', () => {
+      const getInitialSearchStateSpy = jest.spyOn(
+        methodViewModel,
+        'getInitialSearchState'
+      );
+      methodViewModel.requestAutoComplete('some string');
+      expect(getInitialSearchStateSpy).toHaveBeenCalledTimes(1);
+    });
+
+    it('should call the eduContentService.autoComplete with the correct parameters and return a string[] observable', () => {
+      navigateWithParams({});
+
+      const getAutoCompleteSpy = jest
+        .spyOn(eduContentService, 'autoComplete')
+        .mockReturnValue(of(mockAutoCompleteReturnValue));
+
+      expect(methodViewModel.requestAutoComplete('some string')).toBeObservable(
+        hot('a', { a: mockAutoCompleteReturnValue })
+      );
+      expect(getAutoCompleteSpy).toHaveBeenCalledTimes(1);
+      expect(getAutoCompleteSpy).toHaveBeenCalledWith({
+        searchTerm: 'some string',
+        filterCriteriaSelections: new Map<string, (number | string)[]>([])
+      });
     });
   });
 

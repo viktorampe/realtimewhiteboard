@@ -30,7 +30,7 @@ export class ChapterLessonFilterFactory implements SearchFilterFactory {
   private component = SelectFilterComponent;
   private domHost = 'hostTop';
 
-  private filterSortOrder = ['eduContentProductType', 'diaboloPhase'];
+  protected filterSortOrder = ['eduContentProductType'];
 
   protected filterQueries: {
     [key: string]: FilterQueryInterface;
@@ -45,7 +45,7 @@ export class ChapterLessonFilterFactory implements SearchFilterFactory {
 
   constructor(public store: Store<DalState>) {}
 
-  getFilters(
+  public getFilters(
     searchState: SearchStateInterface
   ): Observable<SearchFilterInterface[]> {
     return combineLatest(this.createFilters(searchState)).pipe(
