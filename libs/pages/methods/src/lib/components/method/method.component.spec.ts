@@ -1,12 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import {
-  MatCard,
-  MatCardModule,
-  MatIconModule,
-  MatListItem,
-  MatListModule,
-  MatTabsModule
-} from '@angular/material';
+import { MatCard, MatCardModule, MatListItem } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute, Params, Router } from '@angular/router';
@@ -30,9 +23,6 @@ describe('MethodComponent', () => {
     TestBed.configureTestingModule({
       imports: [
         MatCardModule,
-        MatIconModule,
-        MatListModule,
-        MatTabsModule,
         NoopAnimationsModule,
         RouterTestingModule,
         UiModule
