@@ -1,6 +1,6 @@
-<div class="checkbox-line-filter-component__title"
-  >{{ filterCriteria.label }}</div
->
+<div class="checkbox-line-filter-component__title">{{
+  filterCriteria.label
+}}</div>
 
 <div class="checkbox-line-filter-component__checkbox-holder">
   <mat-checkbox
@@ -9,7 +9,7 @@
     [class.checkbox-line-filter-component__checkbox--disabled]="
       !value.prediction && value.selected
     "
-    [disabled]="!value.prediction && !value.selected"
+    [disabled]="value.prediction === 0 && !value.selected"
     [checked]="value.selected"
     [value]="value"
     (change)="itemChanged(value)"

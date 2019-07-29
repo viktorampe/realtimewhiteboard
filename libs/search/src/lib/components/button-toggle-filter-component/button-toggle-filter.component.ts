@@ -24,7 +24,7 @@ interface ButtonOption {
 @Component({
   selector: 'campus-button-toggle-filter',
   templateUrl: './button-toggle-filter.component.html',
-  styleUrls: ['./button-toggle-filter.component.css']
+  styleUrls: ['./button-toggle-filter.component.scss']
 })
 export class ButtonToggleFilterComponent
   implements SearchFilterComponentInterface, OnInit, OnDestroy {

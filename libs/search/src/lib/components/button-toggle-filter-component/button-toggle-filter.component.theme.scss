@@ -1,0 +1,12 @@
+@mixin search-button-toggle-filter--deep() {
+  // color pallette
+  $button-toggle--disabled-color: #e0e0e0 !default; //mat-checked color
+
+  .button-toggle-filter-component {
+    &__button {
+      &--disabled {
+        background-color: $button-toggle--disabled-color;
+      }
+    }
+  }
+}
