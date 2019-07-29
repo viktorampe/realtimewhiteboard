@@ -1,3 +1,4 @@
+import { DiaboloPhaseInterface } from './DiaboloPhase.interface';
 import { EditorStatusInterface } from './EditorStatus.interface';
 import { EduContentInterface } from './EduContent.interface';
 import { EduContentProductTypeInterface } from './EduContentProductType.interface';
@@ -44,6 +45,7 @@ export interface EduContentMetadataInterface {
   eduContentId?: number;
   editorId?: number;
   learningAreaId?: number;
+  diaboloPhaseId?: number;
   eduContentProductTypeId?: number;
   editorStatusId?: number;
   eduContentSourceId?: number;
@@ -55,6 +57,7 @@ export interface EduContentMetadataInterface {
   schoolTypes?: SchoolTypeInterface[];
   technicalRequirements?: TechnicalRequirementInterface[];
   learningArea?: LearningAreaInterface;
+  diaboloPhase?: DiaboloPhaseInterface;
   learningDomains?: LearningDomainInterface[];
   eduContentProductType?: EduContentProductTypeInterface;
   learningPlans?: LearningPlanInterface[];

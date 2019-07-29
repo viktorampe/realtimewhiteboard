@@ -1,4 +1,5 @@
 import { ContentInterface } from './Content.interface';
+import { DiaboloPhaseInterface } from './DiaboloPhase.interface';
 import { EduContentInterface } from './EduContent.interface';
 import { EduContentMetadataInterface } from './EduContentMetadata.interface';
 import { EduContentNoteInterface } from './EduContentNote.interface';
@@ -70,6 +71,12 @@ export class EduContent implements EduContentInterface, ContentInterface {
     return (
       this.publishedEduContentMetadata &&
       this.publishedEduContentMetadata.streamable
+    );
+  }
+  get diaboloPhase(): DiaboloPhaseInterface {
+    return (
+      this.publishedEduContentMetadata &&
+      this.publishedEduContentMetadata.diaboloPhase
     );
   }
 }

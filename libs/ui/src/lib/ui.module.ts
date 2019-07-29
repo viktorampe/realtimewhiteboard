@@ -207,7 +207,9 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     CollapsibleSheetComponent,
     DropAreaComponent,
     TileComponent,
-    JoinPipe
+    JoinPipe,
+    MatTooltipModule,
+    MatIconModule
   ],
   providers: [
     {
