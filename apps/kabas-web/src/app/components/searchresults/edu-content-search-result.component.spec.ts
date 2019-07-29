@@ -134,22 +134,6 @@ describe('EduContentSearchResultComponent', () => {
       );
     });
 
-    it('should show the title and description of the eduContent', () => {
-      const titleDE = fixture.debugElement.query(
-        By.css('.app-educontentsearchresult__content__header__title')
-      );
-
-      const descriptionDE = fixture.debugElement.query(
-        By.css('.app-educontentsearchresult__content__body__description')
-      );
-
-      expect(titleDE.nativeElement.textContent).toBe(mockEduContent.name);
-
-      expect(descriptionDE.nativeElement.textContent).toBe(
-        mockEduContent.description
-      );
-    });
-
     it('should show the diabolo phase icon of the eduContent', () => {
       const diaboloIconDE = fixture.debugElement.query(
         By.css('.app-educontentsearchresult__content__header__diabolo-phase')
