@@ -1,8 +1,21 @@
-import { Resolve } from '@angular/router';
-import { Action, select, Selector, Store } from '@ngrx/store';
+import { ActivatedRouteSnapshot, Params, Resolve } from '@angular/router';
+import {
+  Action,
+  select,
+  Selector,
+  SelectorWithProps,
+  Store
+} from '@ngrx/store';
 import { combineLatest, Observable } from 'rxjs';
 import { filter, map, take } from 'rxjs/operators';
 import { DalState } from '../dal.state.interface';
+
+export class QueryWithProps<T> {
+  constructor(
+    public readonly selector: SelectorWithProps<object, T, boolean>,
+    public readonly props: Required<T>
+  ) {}
+}
 
 /**
  * 1. the injectable decorator NEEDS to be added to the extending class
@@ -43,19 +56,27 @@ import { DalState } from '../dal.state.interface';
  * @implements {Resolve<boolean>}
  */
 export abstract class StateResolver implements Resolve<boolean> {
+  protected params: Params;
   constructor(private superStore: Store<DalState>) {}
 
-  resolve(): Observable<boolean> {
+  resolve(route: ActivatedRouteSnapshot): Observable<boolean> {
+    this.params = route.params;
     this.loadActions(this.getLoadableActions());
     return this.actionsLoaded(
-      this.getResolvedQueries().map(query =>
-        this.superStore.pipe(select(query))
-      )
+      this.getResolvedQueries().map(query => {
+        if (typeof query === 'function') {
+          return this.superStore.pipe(select(query));
+        } else {
+          return this.superStore.pipe(select(query.selector, query.props));
+        }
+      })
     );
   }
 
   protected abstract getLoadableActions(): Action[];
-  protected abstract getResolvedQueries(): Selector<object, boolean>[];
+  protected abstract getResolvedQueries(): (
+    | Selector<object, boolean>
+    | QueryWithProps<any>)[];
 
   private loadActions(actions: Action[]): void {
     actions.forEach(action => {

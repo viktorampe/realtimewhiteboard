@@ -5,11 +5,16 @@ import {
   DalState,
   DiaboloPhaseActions,
   DiaboloPhaseQueries,
+  EduContentActions,
   EduContentProductTypeActions,
   EduContentProductTypeQueries,
+  EduContentQueries,
+  EduContentTocActions,
+  EduContentTocQueries,
+  QueryWithProps,
   StateResolver
 } from '@campus/dal';
-import { Action, Selector, Store } from '@ngrx/store';
+import { Action, Store } from '@ngrx/store';
 
 @Injectable({
   providedIn: 'root'
@@ -25,14 +30,22 @@ export class MethodBookResolver extends StateResolver {
     const userId = this.authService.userId;
     return [
       new DiaboloPhaseActions.LoadDiaboloPhases({ userId }),
-      new EduContentProductTypeActions.LoadEduContentProductTypes({ userId })
+      new EduContentProductTypeActions.LoadEduContentProductTypes({ userId }),
+      new EduContentActions.LoadEduContents({ userId }),
+      new EduContentTocActions.LoadEduContentTocsForBook({
+        bookId: +this.params.book
+      })
     ];
   }
 
-  protected getResolvedQueries(): Selector<object, boolean>[] {
+  protected getResolvedQueries() {
     return [
       DiaboloPhaseQueries.getLoaded,
-      EduContentProductTypeQueries.getLoaded
+      EduContentProductTypeQueries.getLoaded,
+      EduContentQueries.getLoaded,
+      new QueryWithProps(EduContentTocQueries.isBookLoaded, {
+        bookId: +this.params.book
+      })
     ];
   }
 }

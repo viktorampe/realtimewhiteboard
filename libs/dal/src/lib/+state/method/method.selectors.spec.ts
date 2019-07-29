@@ -1,11 +1,11 @@
 import { MethodQueries } from '.';
 import { YearFixture } from '../../+fixtures';
 import { MethodInterface } from '../../+models';
-import { State as BookState } from '../edu-content-book/edu-content-book.reducer';
 import {
   createEduContentBook,
   createState as createBookState
-} from '../edu-content-book/edu-content-book.selectors.spec';
+} from '../edu-content-book/edu-content-book.helpers';
+import { State as BookState } from '../edu-content-book/edu-content-book.reducer';
 import { State as YearState } from '../year/year.reducer';
 import { MethodFixture } from './../../+fixtures/Method.fixture';
 import { State } from './method.reducer';
@@ -259,14 +259,35 @@ describe('Method Selectors', () => {
           loaded: true
         };
 
-        const methodAndYearState = { years: yearState, methods: methodState };
+        const eduContentBooks = createBookState([
+          createEduContentBook(10, {
+            methodId: 1,
+            years: [{ id: 1, name: 'Y1' }]
+          }),
+          createEduContentBook(20, {
+            methodId: 2,
+            years: [{ id: 2, name: 'Y2' }]
+          }),
+          createEduContentBook(30, {
+            methodId: 3,
+            years: [{ id: 1, name: 'Y1' }]
+          })
+        ]);
 
-        const result = MethodQueries.getMethodWithYear(methodAndYearState, {
-          methodId: 1,
-          yearId: 3
-        });
+        const methodAndYearState = {
+          years: yearState,
+          methods: methodState,
+          eduContentBooks: eduContentBooks
+        };
 
-        expect(result).toBe('foo method baz year');
+        const result = MethodQueries.getMethodWithYearByBookId(
+          methodAndYearState,
+          {
+            id: 10
+          }
+        );
+
+        expect(result).toBe('foo method foo year');
       });
     });
 
@@ -291,7 +312,7 @@ describe('Method Selectors', () => {
         ];
         storeState.eduContentBooks = createBookState([
           createEduContentBook(1, {
-            methodId: 10,
+            methodId: 20,
             years: [{ id: 1, name: 'Y1' }]
           }),
           createEduContentBook(2, {
@@ -299,7 +320,7 @@ describe('Method Selectors', () => {
             years: [{ id: 2, name: 'Y2' }]
           }),
           createEduContentBook(3, {
-            methodId: 30,
+            methodId: 10,
             years: [{ id: 1, name: 'Y1' }]
           })
         ]);
@@ -319,9 +340,15 @@ describe('Method Selectors', () => {
             logoUrl: 'logo for method 10',
             name: 'method 10',
             years: [
-              { id: 1, name: 'Y1', bookId: 1 },
-              { id: 2, name: 'Y2', bookId: 2 }
+              { name: 'Y2', id: 2, bookId: 2 },
+              { name: 'Y1', id: 1, bookId: 3 }
             ]
+          },
+          {
+            id: 20,
+            logoUrl: 'logo for method 20',
+            name: 'method 20',
+            years: [{ id: 1, name: 'Y1', bookId: 1 }]
           }
         ]);
       });
