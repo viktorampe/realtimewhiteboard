@@ -211,7 +211,9 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     TileComponent,
     JoinPipe,
     MatListModule,
-    MatTabsModule
+    MatTabsModule,
+    MatIconModule,
+    MatTooltipModule
   ],
   providers: [
     {

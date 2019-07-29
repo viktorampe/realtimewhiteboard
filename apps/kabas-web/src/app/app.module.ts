@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { MatIconModule } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DalModule } from '@campus/dal';
@@ -24,7 +23,6 @@ configureBufferSize(150);
     BrowserAnimationsModule,
     AppRoutingModule,
     UiModule,
-    MatIconModule,
     SharedModule.forRoot(
       environment.features.alerts,
       environment.features.messages,

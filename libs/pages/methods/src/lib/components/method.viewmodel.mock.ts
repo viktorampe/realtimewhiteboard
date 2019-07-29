@@ -1,10 +1,14 @@
 import { Injectable } from '@angular/core';
 import {
   EduContent,
+  EduContentBookFixture,
   EduContentBookInterface,
+  EduContentFixture,
+  EduContentProductTypeFixture,
   EduContentProductTypeInterface,
   EduContentTOCFixture,
   EduContentTOCInterface,
+  MethodFixture,
   MethodInterface,
   MethodYearsInterface
 } from '@campus/dal';
@@ -28,31 +32,30 @@ export class MockMethodViewModel
   public methodYears$ = new BehaviorSubject<MethodYearsInterface[]>(
     this.getAllowedBooks$()
   );
-  public currentToc$ = new BehaviorSubject<EduContentTOCInterface[]>([
-    new EduContentTOCFixture({
+  public currentToc$ = new BehaviorSubject<EduContentTOCInterface[]>(
+    this.getTOCs()
+  );
+  public currentMethod$ = new BehaviorSubject<MethodInterface>(
+    new MethodFixture({
       id: 1,
-      treeId: 1,
-      depth: 0,
-      lft: 1,
-      rgt: 6
-    }),
-    new EduContentTOCFixture({
-      id: 2,
-      treeId: 1,
-      depth: 0,
-      lft: 7,
-      rgt: 10
+      name: 'Beaufort',
+      logoUrl: 'beaufort.svg'
     })
-  ]);
-  public currentMethod$ = new BehaviorSubject<MethodInterface>(null);
+  );
+  public currentBoeke$ = new BehaviorSubject<EduContent>(
+    new EduContentFixture()
+  );
+  public currentBook$ = new BehaviorSubject<EduContentBookInterface>(
+    new EduContentBookFixture({
+      diabolo: true
+    })
+  );
 
-  public currentBoeke$ = new BehaviorSubject<EduContent>(null);
-  public currentBook$ = new BehaviorSubject<EduContentBookInterface>(null);
   public eduContentProductTypes$ = new BehaviorSubject<
     EduContentProductTypeInterface[]
-  >([]);
+  >(this.getEduContentProductTypes());
   public generalFilesByType$ = new BehaviorSubject<Dictionary<EduContent[]>>(
-    {}
+    this.getGeneralFilesByType()
   );
 
   public getSearchMode(mode: string, book?: number): SearchModeInterface {
@@ -122,6 +125,44 @@ export class MockMethodViewModel
           }
         ]
       }
+    ];
+  }
+
+  private getTOCs(): EduContentTOCInterface[] {
+    return [
+      new EduContentTOCFixture({ id: 1, treeId: 1, title: 'chapter 1' }),
+      new EduContentTOCFixture({ id: 2, treeId: 1, title: 'chapter 2' }),
+      new EduContentTOCFixture({ id: 3, treeId: 1, title: 'chapter 3' }),
+      new EduContentTOCFixture({ id: 4, treeId: 1, title: 'chapter 4' })
+    ];
+  }
+
+  private getGeneralFilesByType(): Dictionary<EduContent[]> {
+    return {
+      1: [
+        new EduContentFixture(
+          { id: 1 },
+          { title: 'foo 1', fileExt: 'pdf', fileLabel: 'PDF' }
+        ),
+        new EduContentFixture(
+          { id: 2 },
+          { title: 'foo 2', fileExt: 'xls', fileLabel: 'Excel' }
+        )
+      ],
+      3: [
+        new EduContentFixture(
+          { id: 3 },
+          { title: 'foo 3', fileExt: 'pdf', fileLabel: 'PDF' }
+        )
+      ]
+    };
+  }
+
+  private getEduContentProductTypes(): EduContentProductTypeInterface[] {
+    return [
+      new EduContentProductTypeFixture({ id: 1, name: 'type 1' }),
+      new EduContentProductTypeFixture({ id: 2, name: 'type 2' }),
+      new EduContentProductTypeFixture({ id: 3, name: 'type 3' })
     ];
   }
 }
