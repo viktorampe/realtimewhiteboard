@@ -1,11 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-import {
-  BundleReducer,
-  DalState,
-  EffectFeedback,
-  PersonFixture,
-  TaskReducer
-} from '@campus/dal';
 import { MockDate } from '@campus/testing';
 import { EffectsModule } from '@ngrx/effects';
 import { provideMockActions } from '@ngrx/effects/testing';
@@ -14,14 +7,21 @@ import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
 import { TeacherStudentReducer } from '.';
-import { TaskFixture, TeacherStudentFixture } from '../../+fixtures';
+import { DalState } from '..';
+import {
+  PersonFixture,
+  TaskFixture,
+  TeacherStudentFixture
+} from '../../+fixtures';
 import { LINKED_PERSON_SERVICE_TOKEN } from '../../persons/linked-persons.service';
-import { Priority } from '../effect-feedback';
+import { BundleReducer } from '../bundle';
+import { EffectFeedback, Priority } from '../effect-feedback';
 import { AddEffectFeedback } from '../effect-feedback/effect-feedback.actions';
 import {
   AddLinkedPerson,
   DeleteLinkedPerson
 } from '../linked-person/linked-person.actions';
+import { TaskReducer } from '../task';
 import { TasksLoaded } from '../task/task.actions';
 import { UserReducer } from '../user';
 import { UserLoaded } from '../user/user.actions';

@@ -1,1 +1,1 @@
-export { StateResolver } from './state.resolver';
+export * from './state.resolver';

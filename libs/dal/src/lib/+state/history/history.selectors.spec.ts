@@ -1,5 +1,5 @@
-import { HistoryFixture } from '@campus/dal';
 import { HistoryQueries } from '.';
+import { HistoryFixture } from '../../+fixtures';
 import { HistoryInterface, HistoryTypesEnum } from '../../+models';
 import { State } from './history.reducer';
 

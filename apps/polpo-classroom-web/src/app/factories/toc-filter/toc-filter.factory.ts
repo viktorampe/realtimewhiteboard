@@ -135,7 +135,7 @@ export class TocFilterFactory implements SearchFilterFactory {
 
   private setupStreams() {
     this.searchStateDiff$ = this.searchState$.pipe(
-      startWith(null),
+      startWith(null as SearchStateInterface),
       pairwise(),
       shareReplay(1)
     );
