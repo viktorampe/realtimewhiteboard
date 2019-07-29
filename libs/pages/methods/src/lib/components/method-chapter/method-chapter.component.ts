@@ -24,9 +24,10 @@ import { MethodViewModel } from '../method.viewmodel';
   styleUrls: ['./method-chapter.component.scss']
 })
 export class MethodChapterComponent implements OnInit, AfterViewInit {
-  public searchMode: SearchModeInterface;
+  public searchMode$: Observable<SearchModeInterface>;
   public initialSearchState$: Observable<SearchStateInterface>;
   public searchResults$: Observable<SearchResultInterface>;
+  public autoCompleteValues$: Observable<string[]>;
   public lessonsForChapter$: Observable<EduContentTOCInterface[]>;
 
   private currentBookId: number;
@@ -43,7 +44,7 @@ export class MethodChapterComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit() {
-    this.searchMode = this.methodViewModel.getSearchMode('chapter-lesson');
+    this.searchMode$ = this.methodViewModel.getSearchMode('chapter-lesson');
     this.initialSearchState$ = this.methodViewModel.getInitialSearchState();
     this.searchResults$ = this.methodViewModel.searchResults$;
     this.lessonsForChapter$ = this.methodViewModel.currentToc$;
@@ -54,6 +55,10 @@ export class MethodChapterComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     this.searchComponent.searchPortals = this.portalHosts;
+  }
+
+  public onAutoCompleteRequest(term: string) {
+    this.autoCompleteValues$ = this.methodViewModel.requestAutoComplete(term);
   }
 
   public onSearchStateChange(searchState: SearchStateInterface): void {

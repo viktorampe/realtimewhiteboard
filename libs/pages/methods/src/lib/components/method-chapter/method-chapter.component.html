@@ -25,6 +25,7 @@
           <div
             style="margin: 8px 8px 48px 8px; padding: 8px; width: 400px; border: 1px solid black"
           >
+            <ng-container searchPortal="searchTerm"></ng-container>
             <ng-container searchPortal="hostTop"></ng-container>
           </div>
           <campus-button campusPrimary (click)="clearSearchFilters()"
@@ -32,7 +33,10 @@
           >
           <div style="height:100%">
             <campus-search
-              [searchMode]="searchMode"
+              [autoCompleteValues]="autoCompleteValues$ | async"
+              (searchTermChangeForAutoComplete)="onAutoCompleteRequest($event)"
+              [autoFocusSearchTerm]="true"
+              [searchMode]="searchMode$ | async"
               [initialState]="initialSearchState$ | async"
               [searchResults]="searchResults$ | async"
               (searchState$)="onSearchStateChange($event)"
