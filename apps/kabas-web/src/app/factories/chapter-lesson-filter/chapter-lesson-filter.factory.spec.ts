@@ -78,7 +78,7 @@ describe('ChapterLessonFilterFactory', () => {
     displayProperty,
     values,
     component,
-    maxVisibleItems?
+    options?
   ): SearchFilterInterface {
     const searchFilter = {
       criteria: {
@@ -104,7 +104,7 @@ describe('ChapterLessonFilterFactory', () => {
       component: component,
       domHost: 'hostTop'
     } as SearchFilterInterface;
-    if (maxVisibleItems) searchFilter.options = { maxVisibleItems };
+    if (options) searchFilter.options = options;
     return searchFilter;
   }
 
