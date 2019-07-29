@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { EduContentTocQueries } from '@campus/dal';
+import { EduContentTocQueries, MethodQueries } from '@campus/dal';
+import { AllowedMethodGuard } from '@campus/guards';
 import { MethodChapterLessonComponent } from './components/method-chapter-lesson/method-chapter-lesson.component';
 import { MethodChapterComponent } from './components/method-chapter/method-chapter.component';
 import { MethodComponent } from './components/method/method.component';
@@ -26,11 +27,15 @@ const routes: Routes = [
       {
         path: ':book',
         resolve: { isResolved: MethodBookResolver },
+        canActivate: [AllowedMethodGuard],
         runGuardsAndResolvers: 'always',
         children: [
           {
             path: '',
-            component: MethodComponent
+            component: MethodComponent,
+            data: {
+              selector: MethodQueries.getMethodWithYearByBookId
+            }
           },
           {
             path: ':chapter',

@@ -85,9 +85,7 @@ describe('PersonsService', () => {
         .fn()
         .mockRejectedValue(new Error('this is an error'));
 
-      expect(() =>
-        service.updateUser(mockData.userId, mockData.changedUserData)
-      ).toThrow();
+      expect(service.updateUser).toThrow();
     });
   });
 });

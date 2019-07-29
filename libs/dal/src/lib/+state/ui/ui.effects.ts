@@ -95,7 +95,9 @@ export class UiEffects {
 
         // in an effect, so selectors are synchronous
         const displayText = selector
-          ? selector(state, { id: routePart.url })[displayProperty]
+          ? displayProperty
+            ? selector(state, { id: routePart.url })[displayProperty]
+            : selector(state, { id: routePart.url })
           : breadcrumbText;
 
         return { displayText, link: routePart.urlParts };
