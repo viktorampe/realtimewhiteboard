@@ -1,6 +1,9 @@
 import { Injectable, InjectionToken } from '@angular/core';
 import { DalState, DiaboloPhaseQueries } from '@campus/dal';
-import { SearchStateInterface, SelectFilterComponent } from '@campus/search';
+import {
+  ButtonToggleFilterComponent,
+  SearchStateInterface
+} from '@campus/search';
 import { Store } from '@ngrx/store';
 import { ChapterLessonFilterFactory } from './chapter-lesson-filter.factory';
 
@@ -19,7 +22,9 @@ export class DiaboloChapterLessonFilterFactory extends ChapterLessonFilterFactor
       query: DiaboloPhaseQueries.getAll,
       name: 'diaboloPhase',
       label: 'Diabolo-fase',
-      component: SelectFilterComponent
+      component: ButtonToggleFilterComponent,
+      displayProperty: 'icon',
+      options: { multiple: true }
     };
   }
 
