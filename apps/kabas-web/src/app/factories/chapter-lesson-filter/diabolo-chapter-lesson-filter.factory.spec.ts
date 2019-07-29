@@ -10,6 +10,7 @@ import {
   getStoreModuleForFeatures
 } from '@campus/dal';
 import {
+  ButtonToggleFilterComponent,
   SearchFilterInterface,
   SearchStateInterface,
   SelectFilterComponent
@@ -134,7 +135,7 @@ describe('DiaboloChapterLessonFilterFactory', () => {
       'id',
       'icon',
       mockDiaboloPhases,
-      SelectFilterComponent,
+      ButtonToggleFilterComponent,
       { multiple: true }
     );
   }
