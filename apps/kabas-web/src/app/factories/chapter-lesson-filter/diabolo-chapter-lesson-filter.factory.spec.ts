@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import {
   DalState,
   DiaboloPhaseActions,
+  DiaboloPhaseFixture,
   DiaboloPhaseReducer,
   EduContentProductTypeActions,
   EduContentProductTypeFixture,
@@ -15,7 +16,6 @@ import {
 } from '@campus/search';
 import { Store, StoreModule } from '@ngrx/store';
 import { cold } from '@nrwl/nx/testing';
-import { DiaboloPhaseFixture } from 'libs/dal/src/lib/+fixtures/DiaboloPhase.fixture';
 import { configureTestSuite } from 'ng-bullet';
 import { DiaboloChapterLessonFilterFactory } from './diabolo-chapter-lesson-filter.factory';
 
@@ -86,7 +86,7 @@ describe('DiaboloChapterLessonFilterFactory', () => {
     displayProperty,
     values,
     component,
-    maxVisibleItems?
+    options?
   ): SearchFilterInterface {
     const searchFilter = {
       criteria: {
@@ -112,7 +112,7 @@ describe('DiaboloChapterLessonFilterFactory', () => {
       component: component,
       domHost: 'hostTop'
     } as SearchFilterInterface;
-    if (maxVisibleItems) searchFilter.options = { maxVisibleItems };
+    if (options) searchFilter.options = options;
     return searchFilter;
   }
 
@@ -132,9 +132,10 @@ describe('DiaboloChapterLessonFilterFactory', () => {
       'diaboloPhase',
       'Diabolo-fase',
       'id',
-      'name',
+      'icon',
       mockDiaboloPhases,
-      SelectFilterComponent
+      SelectFilterComponent,
+      { multiple: true }
     );
   }
 
