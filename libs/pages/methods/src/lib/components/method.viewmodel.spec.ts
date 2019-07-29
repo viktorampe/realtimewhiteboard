@@ -313,8 +313,8 @@ describe('MethodViewModel', () => {
         },
         expected: {
           selections: [
-            ['year', bookYears.map(years => years.id)],
-            ['method', [bookMethodId]],
+            ['years', bookYears.map(years => years.id)],
+            ['methods', [bookMethodId]],
             ['learningArea', [methodLearningAreaId]]
           ] as any[]
         }
@@ -330,8 +330,8 @@ describe('MethodViewModel', () => {
         },
         expected: {
           selections: [
-            ['year', bookYears.map(years => years.id)],
-            ['method', [bookMethodId]],
+            ['years', bookYears.map(years => years.id)],
+            ['methods', [bookMethodId]],
             ['learningArea', [methodLearningAreaId]],
             ['eduContentTOC', [3]]
           ] as any[]
@@ -349,8 +349,8 @@ describe('MethodViewModel', () => {
         },
         expected: {
           selections: [
-            ['year', bookYears.map(years => years.id)],
-            ['method', [bookMethodId]],
+            ['years', bookYears.map(years => years.id)],
+            ['methods', [bookMethodId]],
             ['learningArea', [methodLearningAreaId]],
             ['eduContentTOC', [4]]
           ] as any[]
@@ -429,8 +429,8 @@ describe('MethodViewModel', () => {
         filterCriteriaSelections: new Map([
           ['foo', [1, 2, 3]],
           // from the initialSearchState
-          ['year', bookYears.map(years => years.id)],
-          ['method', [bookMethodId]],
+          ['years', bookYears.map(years => years.id)],
+          ['methods', [bookMethodId]],
           ['learningArea', [methodLearningAreaId]]
         ])
       };

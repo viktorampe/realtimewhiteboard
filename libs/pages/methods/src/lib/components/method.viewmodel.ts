@@ -119,11 +119,11 @@ export class MethodViewModel implements ContentOpenerInterface {
 
         if (currentBook) {
           initialSearchState.filterCriteriaSelections.set(
-            'year',
+            'years',
             currentBook.years.map(year => year.id)
           );
 
-          initialSearchState.filterCriteriaSelections.set('method', [
+          initialSearchState.filterCriteriaSelections.set('methods', [
             currentBook.methodId
           ]);
         }
