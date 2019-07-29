@@ -407,8 +407,8 @@ describe('MethodViewModel', () => {
     beforeEach(() => {
       loadInStore();
 
-      eduContentService.search = jest
-        .fn()
+      jest
+        .spyOn(eduContentService, 'search')
         .mockReturnValue(of(mockSearchResult));
 
       navigateWithParams({ book: bookId });
