@@ -87,86 +87,6 @@ export class MethodViewModel implements ContentOpenerInterface {
     this.initialize();
   }
 
-  private initialize() {
-    this._searchState$ = new BehaviorSubject<SearchStateInterface>(null);
-    this.searchState$ = this._searchState$;
-    this.routerState$ = this.store.pipe(select(getRouterState));
-
-    this.setSourceStreams();
-    this.setPresentationStreams();
-    this.setupSearchResults();
-  }
-
-  private setPresentationStreams(): void {
-    this.currentBoeke$ = this.getCurrentBoekeStream();
-    this.methodYears$ = this.store.pipe(
-      select(MethodQueries.getAllowedMethodYears)
-    );
-    this.currentToc$ = this.getTocsStream();
-    this.eduContentProductTypes$ = this.getEduContentProductTypesStream();
-    this.generalFilesByType$ = this.getGeneralFilesByType();
-  }
-
-  private getCurrentBoekeStream(): Observable<EduContent> {
-    return this.currentMethodParams$.pipe(
-      switchMap(currentMethodParams =>
-        this.store.pipe(
-          select(EduContentQueries.getBoekeByBookId, {
-            bookId: currentMethodParams.book
-          })
-        )
-      )
-    );
-  }
-
-  private setupSearchResults(): void {
-    this.searchResults$ = this.searchState$.pipe(
-      filter(searchState => searchState !== null),
-      withLatestFrom(this.getInitialSearchState()),
-      map(([searchState, initialSearchState]) => ({
-        ...initialSearchState,
-        ...searchState,
-        filterCriteriaSelections: new Map([
-          ...Array.from(searchState.filterCriteriaSelections.entries()),
-          ...Array.from(initialSearchState.filterCriteriaSelections.entries())
-        ])
-      })),
-      switchMap(searchState => this.eduContentService.search(searchState)),
-      map(searchResult => {
-        return {
-          ...searchResult,
-          results: searchResult.results.map(
-            (searchResultItem: EduContentInterface) => {
-              const eduContent = Object.assign<EduContent, EduContentInterface>(
-                new EduContent(),
-                searchResultItem
-              );
-
-              return {
-                eduContent: eduContent
-                // add additional props for the resultItemComponent here
-              };
-            }
-          )
-        };
-      })
-    );
-  }
-
-  private setSourceStreams() {
-    this._searchState$ = new BehaviorSubject<SearchStateInterface>(null);
-    this.searchState$ = this._searchState$;
-
-    this.routerState$ = this.store.pipe(select(getRouterState));
-
-    this.currentMethodParams$ = this.getCurrentMethodParams();
-    this.currentBook$ = this.getCurrentBookStream();
-    this.currentMethod$ = this.getCurrentMethodStream();
-
-    this.generalFiles$ = this.getGeneralFilesStream();
-    this.diaboloPhases$ = this.getDiaboloPhasesStream();
-  }
-
   /*
    * determine the searchMode for a given string
    */
@@ -273,6 +193,86 @@ export class MethodViewModel implements ContentOpenerInterface {
 
   public openBoeke(eduContent: EduContent): void {
     this.openStaticContentService.open(eduContent);
+  }
+
+  private initialize() {
+    this._searchState$ = new BehaviorSubject<SearchStateInterface>(null);
+    this.searchState$ = this._searchState$;
+    this.routerState$ = this.store.pipe(select(getRouterState));
+
+    this.setSourceStreams();
+    this.setPresentationStreams();
+    this.setupSearchResults();
+  }
+
+  private setPresentationStreams(): void {
+    this.currentBoeke$ = this.getCurrentBoekeStream();
+    this.methodYears$ = this.store.pipe(
+      select(MethodQueries.getAllowedMethodYears)
+    );
+    this.currentToc$ = this.getTocsStream();
+    this.eduContentProductTypes$ = this.getEduContentProductTypesStream();
+    this.generalFilesByType$ = this.getGeneralFilesByType();
+  }
+
+  private getCurrentBoekeStream(): Observable<EduContent> {
+    return this.currentMethodParams$.pipe(
+      switchMap(currentMethodParams =>
+        this.store.pipe(
+          select(EduContentQueries.getBoekeByBookId, {
+            bookId: currentMethodParams.book
+          })
+        )
+      )
+    );
+  }
+
+  private setupSearchResults(): void {
+    this.searchResults$ = this.searchState$.pipe(
+      filter(searchState => searchState !== null),
+      withLatestFrom(this.getInitialSearchState()),
+      map(([searchState, initialSearchState]) => ({
+        ...initialSearchState,
+        ...searchState,
+        filterCriteriaSelections: new Map([
+          ...Array.from(searchState.filterCriteriaSelections.entries()),
+          ...Array.from(initialSearchState.filterCriteriaSelections.entries())
+        ])
+      })),
+      switchMap(searchState => this.eduContentService.search(searchState)),
+      map(searchResult => {
+        return {
+          ...searchResult,
+          results: searchResult.results.map(
+            (searchResultItem: EduContentInterface) => {
+              const eduContent = Object.assign<EduContent, EduContentInterface>(
+                new EduContent(),
+                searchResultItem
+              );
+
+              return {
+                eduContent: eduContent
+                // add additional props for the resultItemComponent here
+              };
+            }
+          )
+        };
+      })
+    );
+  }
+
+  private setSourceStreams() {
+    this._searchState$ = new BehaviorSubject<SearchStateInterface>(null);
+    this.searchState$ = this._searchState$;
+
+    this.routerState$ = this.store.pipe(select(getRouterState));
+
+    this.currentMethodParams$ = this.getCurrentMethodParams();
+    this.currentBook$ = this.getCurrentBookStream();
+    this.currentMethod$ = this.getCurrentMethodStream();
+
+    this.generalFiles$ = this.getGeneralFilesStream();
+    this.diaboloPhases$ = this.getDiaboloPhasesStream();
   }
 
   private getCurrentMethodParams(): Observable<CurrentMethodParams> {

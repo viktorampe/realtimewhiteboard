@@ -7,11 +7,13 @@ import {
   CustomSerializer,
   DalState,
   EduContent,
+  EduContentActions,
   EduContentBookActions,
   EduContentBookFixture,
   EduContentBookInterface,
   EduContentBookReducer,
   EduContentFixture,
+  EduContentReducer,
   EduContentServiceInterface,
   EduContentTocActions,
   EduContentTOCFixture,
@@ -22,10 +24,17 @@ import {
   MethodFixture,
   MethodInterface,
   MethodReducer,
-  UserReducer
+  UserReducer,
+  YearFixture
 } from '@campus/dal';
-import { FilterFactoryFixture, SearchModeInterface } from '@campus/search';
 import {
+  FilterFactoryFixture,
+  SearchModeInterface,
+  SearchResultInterface,
+  SearchStateInterface
+} from '@campus/search';
+import {
+  EduContentSearchResultFixture,
   EnvironmentSearchModesInterface,
   ENVIRONMENT_SEARCHMODES_TOKEN,
   OpenStaticContentServiceInterface,
@@ -46,6 +55,7 @@ import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { of } from 'rxjs';
+import { take } from 'rxjs/operators';
 import { MethodViewModel } from './method.viewmodel';
 
 describe('MethodViewModel', () => {
@@ -61,6 +71,7 @@ describe('MethodViewModel', () => {
   const bookId = 5;
   const diaboloBookId = 6;
   const bookMethodId = 1;
+  const methodLearningAreaId = 42;
 
   //First two lessons are in chapter 1, last lesson is in chapter 2
   const chapterTocs = [
@@ -104,10 +115,13 @@ describe('MethodViewModel', () => {
     })
   ];
 
+  const bookYears = [new YearFixture()];
+
   const book: EduContentBookInterface = new EduContentBookFixture({
     id: bookId,
     methodId: bookMethodId,
-    eduContentTOC: [...chapterTocs, ...lessonTocs]
+    eduContentTOC: [...chapterTocs, ...lessonTocs],
+    years: bookYears
   });
 
   const diaboloBook: EduContentBookInterface = new EduContentBookFixture({
@@ -116,7 +130,8 @@ describe('MethodViewModel', () => {
   });
 
   const method: MethodInterface = new MethodFixture({
-    id: bookMethodId
+    id: bookMethodId,
+    learningAreaId: methodLearningAreaId
   });
 
   function createMockSearchMode(overrides: Partial<SearchModeInterface>) {
@@ -156,7 +171,8 @@ describe('MethodViewModel', () => {
           UserReducer,
           EduContentTocReducer,
           EduContentBookReducer,
-          MethodReducer
+          MethodReducer,
+          EduContentReducer
         ]),
         RouterTestingModule.withRoutes([
           {
@@ -286,6 +302,166 @@ describe('MethodViewModel', () => {
     });
   });
 
+  describe('initialState', () => {
+    const testcases = [
+      {
+        description: 'should return the correct searchState, only book',
+        setup: {
+          params: {
+            book: bookId
+          }
+        },
+        expected: {
+          selections: [
+            ['year', bookYears.map(years => years.id)],
+            ['method', [bookMethodId]],
+            ['learningArea', [methodLearningAreaId]]
+          ] as any[]
+        }
+      },
+      {
+        description:
+          'should return the correct searchState, only book and chapter',
+        setup: {
+          params: {
+            book: bookId,
+            chapter: 3
+          }
+        },
+        expected: {
+          selections: [
+            ['year', bookYears.map(years => years.id)],
+            ['method', [bookMethodId]],
+            ['learningArea', [methodLearningAreaId]],
+            ['eduContentTOC', [3]]
+          ] as any[]
+        }
+      },
+      {
+        description:
+          'should return the correct searchState, book, chapter and lesson',
+        setup: {
+          params: {
+            book: bookId,
+            chapter: 3,
+            lesson: 4
+          }
+        },
+        expected: {
+          selections: [
+            ['year', bookYears.map(years => years.id)],
+            ['method', [bookMethodId]],
+            ['learningArea', [methodLearningAreaId]],
+            ['eduContentTOC', [4]]
+          ] as any[]
+        }
+      }
+    ];
+
+    beforeEach(() => {
+      loadInStore();
+    });
+
+    testcases.forEach(testcase =>
+      it(testcase.description, () => {
+        navigateWithParams(testcase.setup.params);
+
+        const initialSearchState$ = methodViewModel.getInitialSearchState();
+        const expected: SearchStateInterface = {
+          searchTerm: '',
+          filterCriteriaSelections: new Map<string, number[]>(
+            testcase.expected.selections
+          )
+        };
+
+        expect(initialSearchState$).toBeObservable(hot('a', { a: expected }));
+      })
+    );
+  });
+
+  describe('updateState', () => {
+    it('should emit the value in the searchState$', () => {
+      const mockSearchState = {} as SearchStateInterface;
+
+      methodViewModel.updateState(mockSearchState);
+      expect(methodViewModel.searchState$).toBeObservable(
+        hot('a', { a: mockSearchState })
+      );
+    });
+  });
+
+  describe('searchResult$', () => {
+    const mockSearchResult: SearchResultInterface = {
+      count: 2,
+      results: [
+        new EduContentSearchResultFixture({
+          eduContent: new EduContentFixture({ id: 1 })
+        }),
+        new EduContentSearchResultFixture({
+          eduContent: new EduContentFixture({ id: 2 })
+        })
+      ],
+      filterCriteriaPredictions: new Map()
+    };
+
+    beforeEach(() => {
+      loadInStore();
+
+      eduContentService.search = jest
+        .fn()
+        .mockReturnValue(of(mockSearchResult));
+
+      navigateWithParams({ book: bookId });
+    });
+
+    it('should call the eduContentService with the correct parameters', () => {
+      const searchState = {
+        searchTerm: '',
+        filterCriteriaSelections: new Map([['foo', [1, 2, 3]]])
+      } as SearchStateInterface;
+
+      methodViewModel.searchResults$.pipe(take(1)).subscribe();
+
+      methodViewModel.updateState(searchState);
+
+      const expectedSearchState = {
+        searchTerm: '',
+        filterCriteriaSelections: new Map([
+          ['foo', [1, 2, 3]],
+          // from the initialSearchState
+          ['year', bookYears.map(years => years.id)],
+          ['method', [bookMethodId]],
+          ['learningArea', [methodLearningAreaId]]
+        ])
+      };
+
+      expect(eduContentService.search).toHaveBeenCalled();
+      expect(eduContentService.search).toHaveBeenCalledTimes(1);
+      expect(eduContentService.search).toHaveBeenCalledWith(
+        expectedSearchState
+      );
+    });
+
+    it('should return the found results', () => {
+      const searchState = {
+        searchTerm: '',
+        filterCriteriaSelections: new Map([])
+      } as SearchStateInterface;
+
+      const searchResults$ = methodViewModel.searchResults$;
+      const expected = {
+        ...mockSearchResult,
+        results: mockSearchResult.results.map(result => ({
+          eduContent: result
+        }))
+      };
+
+      methodViewModel.updateState(searchState);
+
+      expect(searchResults$).toBeObservable(hot('a', { a: expected }));
+    });
+  });
+
   describe('requestAutoComplete', () => {
     it('should call getInitialSearchState', () => {
       const getInitialSearchStateSpy = jest.spyOn(
@@ -390,6 +566,29 @@ describe('MethodViewModel', () => {
               2: [generalFiles[1], generalFiles[2]]
             }
           })
+        );
+      });
+    });
+
+    describe('currentBoeke$', () => {
+      const mockBoeke = new EduContentFixture(
+        { type: 'boek-e' },
+        { eduContentBookId: bookId }
+      );
+
+      beforeEach(() => {
+        loadInStore();
+        store.dispatch(
+          new EduContentActions.EduContentsLoaded({ eduContents: [mockBoeke] })
+        );
+      });
+
+      it('should emit the boek-e for the currently selected book', () => {
+        navigateWithParams({ book: bookId });
+
+        const expected = mockBoeke;
+        expect(methodViewModel.currentBoeke$).toBeObservable(
+          hot('a', { a: expected })
         );
       });
     });
