@@ -1,0 +1,10 @@
+<mat-button-toggle-group [multiple]="multiple" [formControl]="toggleControl">
+  <mat-button-toggle
+    *ngFor="let option of options"
+    [value]="option.value"
+    [matTooltip]="option.tooltip"
+    [disabled]="option.value.prediction === 0"
+  >
+    <mat-icon [svgIcon]="option.viewValue"></mat-icon>
+  </mat-button-toggle>
+</mat-button-toggle-group>
