@@ -25,6 +25,7 @@ import {
 } from '@campus/dal';
 import { FilterFactoryFixture, SearchModeInterface } from '@campus/search';
 import {
+  EnvironmentSearchModesInterface,
   ENVIRONMENT_SEARCHMODES_TOKEN,
   OpenStaticContentServiceInterface,
   OPEN_STATIC_CONTENT_SERVICE_TOKEN,
@@ -53,8 +54,10 @@ describe('MethodViewModel', () => {
   let zone: NgZone;
   let openStaticContentService: OpenStaticContentServiceInterface;
   let scormExerciseService: ScormExerciseServiceInterface;
+  let searchModes: EnvironmentSearchModesInterface;
 
   const bookId = 5;
+  const diaboloBookId = 6;
   const bookMethodId = 1;
 
   //First two lessons are in chapter 1, last lesson is in chapter 2
@@ -105,25 +108,35 @@ describe('MethodViewModel', () => {
     eduContentTOC: [...chapterTocs, ...lessonTocs]
   });
 
+  const diaboloBook: EduContentBookInterface = new EduContentBookFixture({
+    id: diaboloBookId,
+    diabolo: true
+  });
+
   const method: MethodInterface = new MethodFixture({
     id: bookMethodId
   });
 
-  const searchMode: SearchModeInterface = {
-    name: 'demo',
-    label: 'demo',
-    dynamicFilters: false,
-    searchFilterFactory: FilterFactoryFixture,
-    searchTerm: {
-      // autocompleteEl: string; //reference to material autocomplete component
-      domHost: 'hostSearchTerm'
-    },
-    results: {
-      component: null,
-      sortModes: [],
-      pageSize: 3
-    }
-  };
+  function createMockSearchMode(overrides: Partial<SearchModeInterface>) {
+    return Object.assign(
+      {
+        name: 'demo',
+        label: 'demo',
+        dynamicFilters: false,
+        searchFilterFactory: FilterFactoryFixture,
+        searchTerm: {
+          // autocompleteEl: string; //reference to material autocomplete component
+          domHost: 'hostSearchTerm'
+        },
+        results: {
+          component: null,
+          sortModes: [],
+          pageSize: 3
+        }
+      },
+      overrides
+    ) as SearchModeInterface;
+  }
 
   const generalFiles: EduContent[] = [
     new EduContentFixture({ id: 1 }, { eduContentProductTypeId: 1 }),
@@ -171,7 +184,11 @@ describe('MethodViewModel', () => {
         {
           provide: ENVIRONMENT_SEARCHMODES_TOKEN,
           useValue: {
-            demo: searchMode
+            demo: createMockSearchMode({ name: 'demo' }),
+            'chapter-lesson': createMockSearchMode({ name: 'chapter-lesson' }),
+            'diabolo-chapter-lesson': createMockSearchMode({
+              name: 'diabolo-chapter-lesson'
+            })
           }
         },
         {
@@ -194,6 +211,7 @@ describe('MethodViewModel', () => {
     loadInStore();
     openStaticContentService = TestBed.get(OPEN_STATIC_CONTENT_SERVICE_TOKEN);
     scormExerciseService = TestBed.get(SCORM_EXERCISE_SERVICE_TOKEN);
+    searchModes = TestBed.get(ENVIRONMENT_SEARCHMODES_TOKEN);
   });
 
   function loadInStore() {
@@ -205,7 +223,7 @@ describe('MethodViewModel', () => {
 
     store.dispatch(
       new EduContentBookActions.EduContentBooksLoaded({
-        eduContentBooks: [book]
+        eduContentBooks: [book, diaboloBook]
       })
     );
 
@@ -237,6 +255,28 @@ describe('MethodViewModel', () => {
   describe('creation', () => {
     it('should be defined', () => {
       expect(methodViewModel).toBeDefined();
+    });
+  });
+
+  describe('getSearchMode', () => {
+    it('should return the requested search mode', () => {
+      navigateWithParams({ book: diaboloBook.id });
+
+      expect(methodViewModel.getSearchMode('demo')).toBeObservable(
+        hot('a', {
+          a: searchModes['demo']
+        })
+      );
+    });
+
+    it('should return diabolo-chapter-lesson when on diabolo book and requesting chapter-lesson', () => {
+      navigateWithParams({ book: diaboloBook.id });
+
+      expect(methodViewModel.getSearchMode('chapter-lesson')).toBeObservable(
+        hot('a', {
+          a: searchModes['diabolo-chapter-lesson']
+        })
+      );
     });
   });
 

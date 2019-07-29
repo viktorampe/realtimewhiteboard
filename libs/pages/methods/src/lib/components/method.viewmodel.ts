@@ -219,10 +219,7 @@ export class MethodViewModel implements ContentOpenerInterface {
   /*
    * determine the searchMode for a given string
    */
-  public getSearchMode(
-    mode: string,
-    book?: number
-  ): Observable<SearchModeInterface> {
+  public getSearchMode(mode: string): Observable<SearchModeInterface> {
     return this.currentBook$.pipe(
       map(currentBook => {
         if (currentBook && currentBook.diabolo && mode === 'chapter-lesson') {
@@ -244,12 +241,6 @@ export class MethodViewModel implements ContentOpenerInterface {
           searchTerm: '',
           filterCriteriaSelections: new Map<string, (number | string)[]>()
         };
-
-        // if (routerState.state.params.book) {
-        //   initialSearchState.filterCriteriaSelections.set('learningArea', [
-
-        //   ]);
-        // }
 
         return initialSearchState;
       })
