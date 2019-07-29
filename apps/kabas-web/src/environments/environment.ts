@@ -1,6 +1,7 @@
 import { EnvironmentInterface } from '@campus/shared';
 import { EduContentSearchResultComponent } from '../app/components/searchresults/edu-content-search-result.component';
 import { ChapterLessonFilterFactory } from '../app/factories/chapter-lesson-filter/chapter-lesson-filter.factory';
+import { DiaboloChapterLessonFilterFactory } from '../app/factories/chapter-lesson-filter/diabolo-chapter-lesson-filter.factory';
 import { icons } from './icons';
 
 // This file can be replaced during build by using the `fileReplacements` array.
@@ -54,7 +55,30 @@ export const environment: EnvironmentInterface = {
       name: 'chapter-lesson',
       label: 'Zoeken op <b>hoofdstuk</b>',
       dynamicFilters: false,
+      searchTerm: {
+        domHost: 'searchTerm'
+      },
       searchFilterFactory: ChapterLessonFilterFactory,
+      results: {
+        component: EduContentSearchResultComponent,
+        sortModes: [
+          {
+            description: 'alfabetisch',
+            name: 'title.raw',
+            icon: 'sort-alpha-down'
+          }
+        ],
+        pageSize: 20
+      }
+    },
+    'diabolo-chapter-lesson': {
+      name: 'diabolo-chapter-lesson',
+      label: 'Zoeken op <b>hoofdstuk</b>',
+      dynamicFilters: false,
+      searchTerm: {
+        domHost: 'searchTerm'
+      },
+      searchFilterFactory: DiaboloChapterLessonFilterFactory,
       results: {
         component: EduContentSearchResultComponent,
         sortModes: [

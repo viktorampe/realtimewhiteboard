@@ -59,11 +59,15 @@ export class MockMethodViewModel
     this.getGeneralFilesByType()
   );
 
-  public getSearchMode(mode: string, book?: number): SearchModeInterface {
+  public getSearchMode(mode: string): Observable<SearchModeInterface> {
     return;
   }
 
   public getInitialSearchState(): Observable<SearchStateInterface> {
+    return;
+  }
+
+  public requestAutoComplete(searchTerm: string): Observable<string[]> {
     return;
   }
 

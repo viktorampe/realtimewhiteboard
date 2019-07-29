@@ -1,12 +1,16 @@
 import { TestBed } from '@angular/core/testing';
 import {
   DalState,
+  DiaboloPhaseActions,
+  DiaboloPhaseFixture,
+  DiaboloPhaseReducer,
   EduContentProductTypeActions,
   EduContentProductTypeFixture,
   EduContentProductTypeReducer,
   getStoreModuleForFeatures
 } from '@campus/dal';
 import {
+  ButtonToggleFilterComponent,
   SearchFilterInterface,
   SearchStateInterface,
   SelectFilterComponent
@@ -14,11 +18,11 @@ import {
 import { Store, StoreModule } from '@ngrx/store';
 import { cold } from '@nrwl/nx/testing';
 import { configureTestSuite } from 'ng-bullet';
-import { ChapterLessonFilterFactory } from './chapter-lesson-filter.factory';
+import { DiaboloChapterLessonFilterFactory } from './diabolo-chapter-lesson-filter.factory';
 
-describe('ChapterLessonFilterFactory', () => {
+describe('DiaboloChapterLessonFilterFactory', () => {
   let store: Store<DalState>;
-  let factory: ChapterLessonFilterFactory;
+  let factory: DiaboloChapterLessonFilterFactory;
 
   const mockEduContentProductTypes = [
     new EduContentProductTypeFixture({ id: 12, parent: 0 }),
@@ -26,19 +30,28 @@ describe('ChapterLessonFilterFactory', () => {
     new EduContentProductTypeFixture({ id: 14, parent: 13 })
   ];
 
+  const mockDiaboloPhases = [
+    new DiaboloPhaseFixture({ id: 1, phase: 1 }),
+    new DiaboloPhaseFixture({ id: 2, phase: 2 }),
+    new DiaboloPhaseFixture({ id: 3, phase: 3 })
+  ];
+
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [
         StoreModule.forRoot({}),
-        ...getStoreModuleForFeatures([EduContentProductTypeReducer])
+        ...getStoreModuleForFeatures([
+          EduContentProductTypeReducer,
+          DiaboloPhaseReducer
+        ])
       ],
-      providers: [ChapterLessonFilterFactory, Store]
+      providers: [DiaboloChapterLessonFilterFactory, Store]
     });
   });
 
   beforeEach(() => {
     store = TestBed.get(Store);
-    factory = TestBed.get(ChapterLessonFilterFactory);
+    factory = TestBed.get(DiaboloChapterLessonFilterFactory);
 
     loadInStore();
   });
@@ -58,7 +71,10 @@ describe('ChapterLessonFilterFactory', () => {
 
       expect(result).toBeObservable(
         cold('a', {
-          a: [getExpectedEduContentProductTypeFilter()]
+          a: [
+            getExpectedEduContentProductTypeFilter(),
+            getExpectedDiaboloPhaseFilter()
+          ]
         })
       );
     });
@@ -67,7 +83,7 @@ describe('ChapterLessonFilterFactory', () => {
   describe('getPredictionFilterNames', () => {
     it('should return the correct filter names', () => {
       const filternames = factory.getPredictionFilterNames();
-      expect(filternames).toEqual(['eduContentProductType']);
+      expect(filternames).toEqual(['eduContentProductType', 'diaboloPhase']);
     });
   });
 
@@ -119,10 +135,28 @@ describe('ChapterLessonFilterFactory', () => {
     );
   }
 
+  function getExpectedDiaboloPhaseFilter() {
+    return getExpectedFilter(
+      'diaboloPhase',
+      'Diabolo-fase',
+      'id',
+      'icon',
+      mockDiaboloPhases,
+      ButtonToggleFilterComponent,
+      { multiple: true }
+    );
+  }
+
   function loadInStore() {
     store.dispatch(
       new EduContentProductTypeActions.EduContentProductTypesLoaded({
         eduContentProductTypes: mockEduContentProductTypes
+      })
+    );
+
+    store.dispatch(
+      new DiaboloPhaseActions.DiaboloPhasesLoaded({
+        diaboloPhases: mockDiaboloPhases
       })
     );
   }
