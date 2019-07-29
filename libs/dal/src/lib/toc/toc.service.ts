@@ -45,4 +45,8 @@ export class TocService implements TocServiceInterface {
   getTree(bookId: number): Observable<EduContentTOCInterface[]> {
     return this.eduContentTOCApi.tree(bookId);
   }
+
+  getTocsForBookId(bookId: number): Observable<EduContentTOCInterface[]> {
+    return this.eduContentTOCApi.find({ where: { treeId: bookId } });
+  }
 }
