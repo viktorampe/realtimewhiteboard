@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { MatCardModule, MatListModule, MatTabsModule } from '@angular/material';
 import { GuardsModule } from '@campus/guards';
 import { SearchModule } from '@campus/search';
 import {
@@ -20,6 +21,9 @@ import { PagesMethodsRoutingModule } from './pages-methods-routing.module';
 @NgModule({
   imports: [
     CommonModule,
+    MatCardModule,
+    MatListModule,
+    MatTabsModule,
     PagesMethodsRoutingModule,
     SearchModule,
     SharedModule,
