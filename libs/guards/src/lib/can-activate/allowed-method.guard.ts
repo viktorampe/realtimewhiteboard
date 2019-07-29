@@ -27,24 +27,23 @@ export class AllowedMethodGuard implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean> | Promise<boolean> | boolean {
+    this.store.dispatch(
+      new MethodActions.LoadAllowedMethods({
+        userId: this.authService.userId
+      })
+    );
+
     return this.store.pipe(
-      tap(() => {
-        this.store.dispatch(
-          new MethodActions.LoadAllowedMethods({
-            userId: this.authService.userId
-          })
-        );
-      }),
       select(MethodQueries.getAllowedMethodsLoaded),
       filter(allowedMethodsLoaded => allowedMethodsLoaded),
       switchMap(() =>
         this.store.pipe(select(MethodQueries.getAllowedMethodIds))
       ),
-      tap(methodIds =>
+      tap(methodIds => {
         this.store.dispatch(
           new EduContentBookActions.LoadEduContentBooks({ methodIds })
-        )
-      ),
+        );
+      }),
       switchMap(() => this.store.pipe(select(EduContentBookQueries.getLoaded))),
       filter(eduContentBooksLoaded => eduContentBooksLoaded),
       switchMap(() =>

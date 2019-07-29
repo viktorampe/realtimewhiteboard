@@ -48,9 +48,6 @@ describe('AllowedMethodGuard', () => {
     ).toBeObservable(hot('a', { a: expectedResult }));
   }
 
-  afterEach(() => {
-    jest.resetAllMocks();
-  });
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
