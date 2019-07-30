@@ -29,7 +29,7 @@ export class MethodChapterComponent implements OnInit, AfterViewInit {
   public initialSearchState$: Observable<SearchStateInterface>;
   public searchResults$: Observable<SearchResultInterface>;
   public autoCompleteValues$: Observable<string[]>;
-  public currentBoeke$: Observable<EduContent>;
+  public boeke$: Observable<EduContent>;
   public lessonsForChapter$: Observable<EduContentTOCInterface[]>;
 
   public currentLessonId: number;
@@ -51,7 +51,7 @@ export class MethodChapterComponent implements OnInit, AfterViewInit {
     this.searchMode$ = this.methodViewModel.getSearchMode('chapter-lesson');
     this.initialSearchState$ = this.methodViewModel.getInitialSearchState();
     this.searchResults$ = this.methodViewModel.searchResults$;
-    this.currentBoeke$ = this.methodViewModel.currentBoeke$;
+    this.boeke$ = this.methodViewModel.currentBoeke$;
     this.lessonsForChapter$ = this.methodViewModel.currentToc$;
 
     this.currentBookId = +this.route.snapshot.params.book;
@@ -94,7 +94,7 @@ export class MethodChapterComponent implements OnInit, AfterViewInit {
     this.router.navigate(urlParts);
   }
 
-  public openBoeke(boeke: EduContent) {
-    this.methodViewModel.openBoeke(boeke);
+  public clickOpenBoeke(eduContent: EduContent): void {
+    this.methodViewModel.openBoeke(eduContent);
   }
 }

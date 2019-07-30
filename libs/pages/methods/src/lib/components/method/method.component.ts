@@ -23,7 +23,6 @@ export class MethodComponent implements OnInit {
   public generalFilesByType$: Observable<Dictionary<EduContent[]>>;
   public method$: Observable<MethodInterface>;
   public productTypes$: Observable<EduContentProductTypeInterface[]>;
-  public currentBoeke$: Observable<EduContent>;
 
   constructor(private viewModel: MethodViewModel) {}
 
@@ -34,7 +33,6 @@ export class MethodComponent implements OnInit {
     this.generalFilesByType$ = this.viewModel.generalFilesByType$;
     this.method$ = this.viewModel.currentMethod$;
     this.productTypes$ = this.viewModel.eduContentProductTypes$;
-    this.currentBoeke$ = this.viewModel.currentBoeke$;
   }
 
   public clickOpenBoeke(eduContent: EduContent): void {

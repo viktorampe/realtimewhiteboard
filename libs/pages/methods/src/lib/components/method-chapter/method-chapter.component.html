@@ -2,8 +2,8 @@
   ><campus-button
     campusPrimary
     [iconClass]="'book'"
-    *ngIf="(currentBoeke$ | async) as boeke"
-    (click)="openBoeke(boeke)"
+    *ngIf="(boeke$ | async) as boeke"
+    (click)="clickOpenBoeke(boeke)"
   ></campus-button
 ></campus-page-bar>
 <div class="method-chapter">
