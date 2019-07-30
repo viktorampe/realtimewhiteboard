@@ -4,6 +4,10 @@ export const icons = {
   menu: 'assets/icons/material/menu.svg',
   favorite: 'assets/icons/material/favorite.svg',
   home: 'assets/icons/material/home.svg',
+  magnifier: 'assets/icons/magnifier.svg',
+  download: 'assets/icons/material/download.svg',
+  'exercise:open': 'assets/icons/exercise-open.svg',
+  'exercise:finished': 'assets/icons/exercise-finished.svg',
 
   //TODO: These are TEMPORARY SVGs for Diabolo that I made from the PNGs
   //get the OFFICIAL files from Antoon later
