@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import {
   EduContent,
   EduContentBookFixture,
@@ -18,10 +18,12 @@ import {
   SearchResultInterface,
   SearchStateInterface
 } from '@campus/search';
+import {
+  EnvironmentSearchModesInterface,
+  ENVIRONMENT_SEARCHMODES_TOKEN
+} from '@campus/shared';
 import { ViewModelInterface } from '@campus/testing';
 import { Dictionary } from '@ngrx/entity';
-import { EduContentSearchResultComponent } from 'apps/kabas-web/src/app/components/searchresults/edu-content-search-result.component';
-import { ChapterLessonFilterFactory } from 'apps/kabas-web/src/app/factories/chapter-lesson-filter/chapter-lesson-filter.factory';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { MethodViewModel } from './method.viewmodel';
@@ -65,31 +67,15 @@ export class MockMethodViewModel
     this.getGeneralFilesByType()
   );
 
-  constructor() {
+  constructor(
+    @Inject(ENVIRONMENT_SEARCHMODES_TOKEN)
+    private searchModes: EnvironmentSearchModesInterface
+  ) {
     this.setupSearchResults();
   }
 
   public getSearchMode(mode: string): Observable<SearchModeInterface> {
-    return of({
-      name: 'chapter-lesson',
-      label: 'Zoeken op <b>hoofdstuk</b>',
-      dynamicFilters: false,
-      searchTerm: {
-        domHost: 'searchTerm'
-      },
-      searchFilterFactory: ChapterLessonFilterFactory,
-      results: {
-        component: EduContentSearchResultComponent,
-        sortModes: [
-          {
-            description: 'alfabetisch',
-            name: 'title.raw',
-            icon: 'sort-alpha-down'
-          }
-        ],
-        pageSize: 20
-      }
-    });
+    return of(this.searchModes[mode]);
   }
 
   public getInitialSearchState(): Observable<SearchStateInterface> {
