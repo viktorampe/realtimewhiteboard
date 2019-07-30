@@ -9,7 +9,7 @@
     [class.checkbox-line-filter-component__checkbox--disabled]="
       !value.prediction && value.selected
     "
-    [disabled]="!value.prediction && !value.selected"
+    [disabled]="value.prediction === 0 && !value.selected"
     [checked]="value.selected"
     [value]="value"
     (change)="itemChanged(value)"

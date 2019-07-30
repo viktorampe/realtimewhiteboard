@@ -136,7 +136,8 @@ export class LoginpageComponent implements OnInit {
           name: 'opt1',
           icon: 'diabolo-intro'
         }),
-        prediction: 0
+        prediction: 0,
+        selected: true
       }),
       new SearchFilterCriteriaValuesFixture({
         data: new DiaboloPhaseFixture({
@@ -144,7 +145,8 @@ export class LoginpageComponent implements OnInit {
           name: 'opt2',
           icon: 'diabolo-midden'
         }),
-        prediction: 1
+        prediction: 1,
+        selected: true
       }),
       new SearchFilterCriteriaValuesFixture({
         data: new DiaboloPhaseFixture({
