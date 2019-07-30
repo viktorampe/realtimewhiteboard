@@ -1,7 +1,6 @@
-import { Injectable, InjectionToken, Type } from '@angular/core';
+import { Injectable, InjectionToken } from '@angular/core';
 import { DalState, EduContentProductTypeQueries } from '@campus/dal';
 import {
-  SearchFilterComponentInterface,
   SearchFilterCriteriaInterface,
   SearchFilterFactory,
   SearchFilterInterface,
@@ -16,6 +15,7 @@ import {
 } from '@ngrx/store';
 import { combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { FilterQueryInterface } from '../filter-query.interface';
 
 export const DIABOLO_CHAPTER_LESSON_FILTER_FACTORY_TOKEN = new InjectionToken(
   'DiaboloChapterLessonFilterFactory'
@@ -144,18 +144,4 @@ export class GlobalFilterFactory implements SearchFilterFactory {
       );
     }
   }
-}
-
-//Small interface used just here to simplify making filters for the non-special properties
-export interface FilterQueryInterface {
-  query?:
-    | MemoizedSelector<object, any[]>
-    | MemoizedSelectorWithProps<object, any, any[]>;
-  name: string;
-  label: string;
-  component?: Type<SearchFilterComponentInterface>;
-  displayProperty?: string;
-  learningAreaDependent?: boolean;
-  domHost?: string;
-  options?: any;
 }
