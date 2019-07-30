@@ -4,6 +4,7 @@ import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
+import { ENVIRONMENT_SEARCHMODES_TOKEN } from '@campus/shared';
 import { UiModule } from '@campus/ui';
 import { configureTestSuite } from 'ng-bullet';
 import { BehaviorSubject } from 'rxjs';
@@ -29,6 +30,10 @@ describe('MethodComponent', () => {
       ],
       declarations: [MethodComponent],
       providers: [
+        {
+          provide: ENVIRONMENT_SEARCHMODES_TOKEN,
+          useValue: {}
+        },
         {
           provide: ActivatedRoute,
           useValue: { params, snapshot: params.value }

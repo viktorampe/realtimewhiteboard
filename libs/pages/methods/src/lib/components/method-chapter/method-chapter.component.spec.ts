@@ -10,6 +10,7 @@ import {
   SearchStateInterface,
   SearchTestModule
 } from '@campus/search';
+import { ENVIRONMENT_SEARCHMODES_TOKEN } from '@campus/shared';
 import { ViewModelInterface } from '@campus/testing';
 import { UiModule } from '@campus/ui';
 import { configureTestSuite } from 'ng-bullet';
@@ -38,6 +39,10 @@ describe('MethodChapterComponent', () => {
       ],
       declarations: [MethodChapterComponent],
       providers: [
+        {
+          provide: ENVIRONMENT_SEARCHMODES_TOKEN,
+          useValue: {}
+        },
         {
           provide: Router,
           useValue: { navigate: jest.fn() }
