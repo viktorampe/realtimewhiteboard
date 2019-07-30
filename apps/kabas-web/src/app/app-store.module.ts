@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import {
+  CurrentExerciseReducer,
   CustomSerializer,
   DiaboloPhaseReducer,
   EduContentBookReducer,
@@ -79,6 +80,11 @@ import { environment } from '../environments/environment';
     StoreModule.forFeature(EduContentReducer.NAME, EduContentReducer.reducer, {
       initialState: EduContentReducer.initialState
     }),
+    StoreModule.forFeature(
+      CurrentExerciseReducer.NAME,
+      CurrentExerciseReducer.reducer,
+      { initialState: CurrentExerciseReducer.initialState }
+    ),
     !environment.production ? StoreDevtoolsModule.instrument() : []
   ]
 })

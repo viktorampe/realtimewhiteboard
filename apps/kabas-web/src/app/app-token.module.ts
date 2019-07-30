@@ -8,6 +8,8 @@ import {
   EduContentService,
   EDU_CONTENT_PRODUCT_TYPE_SERVICE_TOKEN,
   EDU_CONTENT_SERVICE_TOKEN,
+  ExerciseService,
+  EXERCISE_SERVICE_TOKEN,
   MethodService,
   METHOD_SERVICE_TOKEN,
   PersonService,
@@ -17,6 +19,12 @@ import {
   YearService,
   YEAR_SERVICE_TOKEN
 } from '@campus/dal';
+import {
+  OpenStaticContentService,
+  OPEN_STATIC_CONTENT_SERVICE_TOKEN,
+  ScormExerciseService,
+  SCORM_EXERCISE_SERVICE_TOKEN
+} from '@campus/shared';
 
 @NgModule({
   providers: [
@@ -33,7 +41,13 @@ import {
       useClass: EduContentProductTypeService
     },
     { provide: METHOD_SERVICE_TOKEN, useClass: MethodService },
-    { provide: YEAR_SERVICE_TOKEN, useClass: YearService }
+    { provide: YEAR_SERVICE_TOKEN, useClass: YearService },
+    { provide: SCORM_EXERCISE_SERVICE_TOKEN, useClass: ScormExerciseService },
+    { provide: EXERCISE_SERVICE_TOKEN, useClass: ExerciseService },
+    {
+      provide: OPEN_STATIC_CONTENT_SERVICE_TOKEN,
+      useClass: OpenStaticContentService
+    }
   ]
 })
 export class AppTokenModule {}
