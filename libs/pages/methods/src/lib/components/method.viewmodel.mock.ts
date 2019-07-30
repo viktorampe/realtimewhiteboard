@@ -1,9 +1,10 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import {
   EduContent,
   EduContentBookFixture,
   EduContentBookInterface,
   EduContentFixture,
+  EduContentInterface,
   EduContentProductTypeFixture,
   EduContentProductTypeInterface,
   EduContentTOCFixture,
@@ -17,9 +18,14 @@ import {
   SearchResultInterface,
   SearchStateInterface
 } from '@campus/search';
+import {
+  EnvironmentSearchModesInterface,
+  ENVIRONMENT_SEARCHMODES_TOKEN
+} from '@campus/shared';
 import { ViewModelInterface } from '@campus/testing';
 import { Dictionary } from '@ngrx/entity';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { MethodViewModel } from './method.viewmodel';
 
 @Injectable({
@@ -28,11 +34,13 @@ import { MethodViewModel } from './method.viewmodel';
 export class MockMethodViewModel
   implements ViewModelInterface<MethodViewModel> {
   public searchResults$: Observable<SearchResultInterface>;
-  public searchState$: Observable<SearchStateInterface>;
+  public searchState$ = new BehaviorSubject<SearchStateInterface>({
+    searchTerm: '',
+    filterCriteriaSelections: new Map<string, (string | number)[]>()
+  });
   public methodYears$ = new BehaviorSubject<MethodYearsInterface[]>(
     this.getAllowedBooks$()
   );
-
   public currentToc$ = new BehaviorSubject<EduContentTOCInterface[]>(
     this.getTOCs()
   );
@@ -59,12 +67,19 @@ export class MockMethodViewModel
     this.getGeneralFilesByType()
   );
 
+  constructor(
+    @Inject(ENVIRONMENT_SEARCHMODES_TOKEN)
+    private searchModes: EnvironmentSearchModesInterface
+  ) {
+    this.setupSearchResults();
+  }
+
   public getSearchMode(mode: string): Observable<SearchModeInterface> {
-    return;
+    return of(this.searchModes[mode]);
   }
 
   public getInitialSearchState(): Observable<SearchStateInterface> {
-    return;
+    return this.searchState$;
   }
 
   public requestAutoComplete(searchTerm: string): Observable<string[]> {
@@ -158,6 +173,18 @@ export class MockMethodViewModel
         new EduContentFixture(
           { id: 3 },
           { title: 'foo 3', fileExt: 'pdf', fileLabel: 'PDF' }
+        ),
+        new EduContentFixture(
+          { id: 4 },
+          { title: 'foo 4', fileExt: 'pdf', fileLabel: 'PDF' }
+        ),
+        new EduContentFixture(
+          { id: 5 },
+          { title: 'foo 5', fileExt: 'pdf', fileLabel: 'PDF' }
+        ),
+        new EduContentFixture(
+          { id: 6 },
+          { title: 'foo 6', fileExt: 'pdf', fileLabel: 'PDF' }
         )
       ]
     };
@@ -169,5 +196,90 @@ export class MockMethodViewModel
       new EduContentProductTypeFixture({ id: 2, name: 'type 2' }),
       new EduContentProductTypeFixture({ id: 3, name: 'type 3' })
     ];
+  }
+
+  private setupSearchResults(): void {
+    this.searchResults$ = this.getMockResults().pipe(
+      map(searchResult => {
+        return {
+          ...searchResult,
+          results: searchResult.results.map(
+            (searchResultItem: EduContentInterface) => {
+              const eduContent = Object.assign<EduContent, EduContentInterface>(
+                new EduContent(),
+                searchResultItem
+              );
+
+              return {
+                eduContent: eduContent
+                // add additional props for the resultItemComponent here
+              };
+            }
+          )
+        };
+      })
+    );
+  }
+
+  // tslint:disable-next-line: member-ordering
+  private loadedMockResults = false;
+  private getMockResults(): Observable<SearchResultInterface> {
+    if (this.loadedMockResults) {
+      return of({
+        count: 3,
+        results: [],
+        filterCriteriaPredictions: new Map()
+      });
+    }
+    this.loadedMockResults = true;
+
+    const mockResults: EduContent[] = [
+      new EduContentFixture(
+        {},
+        {
+          title: 'Aanliggende hoeken',
+          description:
+            'In dit leerobject maken leerlingen 3 tikoefeningen op aanliggende hoeken.',
+          fileExt: 'ludo.zip'
+        }
+      ),
+      new EduContentFixture(
+        {},
+        {
+          thumbSmall:
+            'https://avatars3.githubusercontent.com/u/31932368?s=460&v=4'
+        }
+      ),
+      new EduContentFixture(
+        {},
+        {
+          eduContentProductType: new EduContentProductTypeFixture({
+            pedagogic: true
+          })
+        }
+      )
+    ];
+
+    for (let i = 0; i < 25; i++) {
+      mockResults.push(
+        new EduContentFixture(
+          {},
+          {
+            title: 'Aanliggende hoeken',
+            description:
+              'In dit leerobject maken leerlingen 3 tikoefeningen op aanliggende hoeken.',
+            fileExt: 'ludo.zip'
+          }
+        )
+      );
+    }
+
+    return of({
+      count: mockResults.length,
+      results: mockResults,
+      filterCriteriaPredictions: new Map([
+        ['LearningArea', new Map([[1, 100], [2, 50]])]
+      ])
+    });
   }
 }

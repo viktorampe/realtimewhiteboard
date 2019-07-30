@@ -221,10 +221,10 @@ describe('SearchComponent', () => {
       jest.resetAllMocks();
     });
 
-    it('should call reset with the initial state on init', () => {
+    it('should call reset when the initialSearchState is set', () => {
       component.reset = jest.fn();
+      component.initialState = {} as SearchStateInterface;
 
-      component.ngOnInit();
       expect(component.reset).toHaveBeenCalled();
       expect(component.reset).toHaveBeenCalledWith(component.initialState);
     });

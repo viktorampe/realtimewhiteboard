@@ -1,21 +1,46 @@
-<div
-  style="margin: 8px 8px 48px 8px; padding: 8px; width: 400px; border: 1px solid black"
->
-  <ng-container searchPortal="searchTerm"></ng-container>
+<div class="method-chapter">
+  <campus-collapsible-sheet>
+    <div aside>
+      <a (click)="clickBackLink()" class="method-chapter__back-link"
+        ><mat-icon svgIcon="arrow-back"></mat-icon>Terug</a
+      >
+      <ng-container>
+        <mat-list>
+          <mat-list-item
+            *ngFor="let lesson of (lessonsForChapter$ | async)"
+            (click)="clickOpenLesson(lesson.id)"
+            class="method-chapter__lesson-link"
+          >
+            <span [class.active]="lesson.id === currentLessonId">{{
+              lesson.title
+            }}</span></mat-list-item
+          ></mat-list
+        >
+      </ng-container>
+    </div>
 
-  <ng-container searchPortal="hostTop"></ng-container>
-</div>
-<campus-button campusPrimary (click)="clearSearchFilters()"
-  >Reset Filters</campus-button
->
-<div style="height:100%">
-  <campus-search
-    [autoCompleteValues]="autoCompleteValues$ | async"
-    (searchTermChangeForAutoComplete)="onAutoCompleteRequest($event)"
-    [autoFocusSearchTerm]="true"
-    [searchMode]="searchMode$ | async"
-    [initialState]="initialSearchState$ | async"
-    [searchResults]="searchResults$ | async"
-    (searchState$)="onSearchStateChange($event)"
-  ></campus-search>
+    <div main>
+      <mat-tab-group>
+        <mat-tab label="Lesmateriaal">
+          <div class="method-chapter--filters">
+            <ng-container searchPortal="searchTerm"></ng-container>
+            <ng-container searchPortal="hostTop"></ng-container>
+            <campus-button campusPrimary (click)="clearSearchFilters()"
+              >Reset Filters</campus-button
+            >
+          </div>
+          <campus-search
+            [autoCompleteValues]="autoCompleteValues$ | async"
+            (searchTermChangeForAutoComplete)="onAutoCompleteRequest($event)"
+            [autoFocusSearchTerm]="true"
+            [searchMode]="searchMode$ | async"
+            [initialState]="initialSearchState$ | async"
+            [searchResults]="searchResults$ | async"
+            (searchState$)="onSearchStateChange($event)"
+          ></campus-search>
+        </mat-tab>
+        <mat-tab label="Leerplandoelen">Leerplandoelen</mat-tab>
+      </mat-tab-group>
+    </div>
+  </campus-collapsible-sheet>
 </div>
