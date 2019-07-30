@@ -5,7 +5,12 @@
   .button-toggle-filter-component {
     &__button {
       &--disabled {
+        // fake disabled
         background-color: $button-toggle--disabled-color;
+      }
+
+      &.mat-button-toggle-disabled button.mat-button-toggle-button {
+        // real disabled
         cursor: not-allowed;
       }
     }
