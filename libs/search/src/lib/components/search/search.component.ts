@@ -7,7 +7,6 @@ import {
   Input,
   OnChanges,
   OnDestroy,
-  OnInit,
   Output,
   QueryList,
   SimpleChanges,
@@ -38,8 +37,7 @@ import { SearchStateInterface } from './../../interfaces/search-state.interface'
   styleUrls: ['./search.component.scss'],
   providers: [SearchViewModel, ColumnFilterService]
 })
-export class SearchComponent
-  implements OnInit, AfterViewInit, OnDestroy, OnChanges {
+export class SearchComponent implements AfterViewInit, OnDestroy, OnChanges {
   private _initialState: SearchStateInterface;
   private searchTermComponent: SearchTermComponent;
   private subscriptions = new Subscription();
@@ -96,8 +94,6 @@ export class SearchComponent
       skipWhile(searchState => !searchState) // first emit from viewmodel is null
     );
   }
-
-  ngOnInit() {}
 
   ngAfterViewInit() {
     this.warnMissingSearchPortals();
