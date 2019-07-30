@@ -1,3 +1,11 @@
+<campus-page-bar
+  ><campus-button
+    campusPrimary
+    [iconClass]="'book'"
+    *ngIf="(currentBoeke$ | async) as boeke"
+    (click)="openBoeke(boeke)"
+  ></campus-button
+></campus-page-bar>
 <div
   style="margin: 8px 8px 48px 8px; padding: 8px; width: 400px; border: 1px solid black"
 >

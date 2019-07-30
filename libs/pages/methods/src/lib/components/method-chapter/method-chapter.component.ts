@@ -6,6 +6,7 @@ import {
   ViewChild,
   ViewChildren
 } from '@angular/core';
+import { EduContent } from '@campus/dal';
 import {
   SearchComponent,
   SearchModeInterface,
@@ -26,6 +27,7 @@ export class MethodChapterComponent implements OnInit, AfterViewInit {
   public initialSearchState$: Observable<SearchStateInterface>;
   public searchResults$: Observable<SearchResultInterface>;
   public autoCompleteValues$: Observable<string[]>;
+  public currentBoeke$: Observable<EduContent>;
 
   @ViewChildren(SearchPortalDirective)
   private portalHosts: QueryList<SearchPortalDirective>;
@@ -37,6 +39,7 @@ export class MethodChapterComponent implements OnInit, AfterViewInit {
     this.searchMode$ = this.methodViewModel.getSearchMode('chapter-lesson');
     this.initialSearchState$ = this.methodViewModel.getInitialSearchState();
     this.searchResults$ = this.methodViewModel.searchResults$;
+    this.currentBoeke$ = this.methodViewModel.currentBoeke$;
   }
 
   ngAfterViewInit() {
@@ -55,5 +58,9 @@ export class MethodChapterComponent implements OnInit, AfterViewInit {
     if (this.searchComponent) {
       this.searchComponent.reset(undefined, false);
     }
+  }
+
+  public openBoeke(boeke: EduContent) {
+    this.methodViewModel.openBoeke(boeke);
   }
 }

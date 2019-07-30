@@ -1,11 +1,13 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
+import { EduContentFixture } from '@campus/dal';
 import {
   ResultItemMockComponent,
   SearchComponent,
   SearchStateInterface,
   SearchTestModule
 } from '@campus/search';
+import { ENVIRONMENT_ICON_MAPPING_TOKEN, SharedModule } from '@campus/shared';
 import { UiModule } from '@campus/ui';
 import { configureTestSuite } from 'ng-bullet';
 import { MethodViewModel } from './../method.viewmodel';
@@ -20,9 +22,12 @@ describe('MethodChapterComponent', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [SearchTestModule, UiModule],
+      imports: [SearchTestModule, UiModule, SharedModule],
       declarations: [MethodChapterComponent],
-      providers: [{ provide: MethodViewModel, useClass: MockMethodViewModel }]
+      providers: [
+        { provide: MethodViewModel, useClass: MockMethodViewModel },
+        { provide: ENVIRONMENT_ICON_MAPPING_TOKEN, useValue: {} }
+      ]
     }).overrideModule(BrowserDynamicTestingModule, {
       set: { entryComponents: [ResultItemMockComponent] }
     });
@@ -73,6 +78,16 @@ describe('MethodChapterComponent', () => {
 
       expect(methodViewModel.updateState).toHaveBeenCalledTimes(1);
       expect(methodViewModel.updateState).toHaveBeenCalledWith(mockSearchState);
+    });
+  });
+
+  describe('openboeke', () => {
+    it('should call the correct method on the viewmodel', () => {
+      jest.spyOn(methodViewModel, 'openBoeke');
+
+      const mockBoeke = new EduContentFixture();
+      component.openBoeke(mockBoeke);
+      expect(methodViewModel.openBoeke).toHaveBeenCalledWith(mockBoeke);
     });
   });
 });
