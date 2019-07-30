@@ -10,15 +10,25 @@
     div[aside] {
       height: 100%;
       overflow: auto;
-      padding: 20px;
     }
 
     div[main] {
-      padding: 20px 40px;
+      display: flex;
+      flex-direction: column;
+      flex: 1 1 auto;
+
+      campus-search {
+        flex: 1 1 auto;
+      }
     }
   }
 
   span.active {
     font-weight: bold;
+  }
+
+  &--filters {
+    display: flex;
+    flex-direction: row;
   }
 }
