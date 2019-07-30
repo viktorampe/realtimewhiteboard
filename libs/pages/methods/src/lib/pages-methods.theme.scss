@@ -1,0 +1,5 @@
+@import './components/method-chapter/method-chapter.component.theme.scss';
+
+@mixin pages-methods-theme() {
+  @include pages-methods-method-chapter();
+}

@@ -5,7 +5,11 @@ import {
 } from '@diekeure/polpo-api-angular-sdk';
 import { hot } from '@nrwl/nx/testing';
 import { of } from 'rxjs';
-import { EduContentBookFixture, YearFixture } from '../+fixtures';
+import {
+  EduContentBookFixture,
+  EduContentTOCFixture,
+  YearFixture
+} from '../+fixtures';
 import { TocService } from './toc.service';
 import { TocServiceInterface } from './toc.service.interface';
 
@@ -22,7 +26,8 @@ describe('TocService', () => {
         {
           provide: EduContentTOCApi,
           useValue: {
-            tree: () => mockData$
+            tree: () => mockData$,
+            find: () => mockData$
           }
         },
         {
@@ -100,6 +105,29 @@ describe('TocService', () => {
       expect(spy).toHaveBeenCalledWith(1);
       expect(response).toBeObservable(
         hot('-a|', { a: { results: { foo: 'bar' } } })
+      );
+    });
+  });
+
+  describe('getTocsForBookId()', () => {
+    it('should get a list of tocs for the provided book', () => {
+      const tocs = [new EduContentTOCFixture(), new EduContentTOCFixture()];
+      mockData$ = hot('-a|', {
+        a: tocs
+      });
+
+      const spy = jest.spyOn(eduContentTOCApi, 'find');
+      const response = service.getTocsForBookId(1);
+      const expectedFilter = {
+        where: { treeId: 1 }
+      };
+
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy).toHaveBeenCalledWith(expectedFilter);
+      expect(response).toBeObservable(
+        hot('-a|', {
+          a: tocs
+        })
       );
     });
   });

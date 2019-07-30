@@ -72,7 +72,7 @@ describe('EduContentTocEffects', () => {
       providers: [
         {
           provide: TOC_SERVICE_TOKEN,
-          useValue: { getTree: () => {} }
+          useValue: { getTocsForBookId: () => {} }
         },
         EduContentTocEffects,
         DataPersistence,
@@ -93,7 +93,7 @@ describe('EduContentTocEffects', () => {
     const loadErrorAction = new EduContentTocsLoadError(new Error('failed'));
 
     beforeEach(() => {
-      mockServiceMethodReturnValue('getTree', []);
+      mockServiceMethodReturnValue('getTocsForBookId', []);
     });
 
     describe('the book has not been loaded', () => {
@@ -109,7 +109,7 @@ describe('EduContentTocEffects', () => {
 
       describe('api call fails', () => {
         beforeEach(() => {
-          mockServiceMethodError('getTree', 'failed');
+          mockServiceMethodError('getTocsForBookId', 'failed');
         });
 
         it('should trigger an api call and return an error action', () => {
@@ -141,7 +141,7 @@ describe('EduContentTocEffects', () => {
 
       describe('api call fails', () => {
         beforeEach(() => {
-          mockServiceMethodError('getTree', 'failed');
+          mockServiceMethodError('getTocsForBookId', 'failed');
         });
 
         it('should not trigger an api call and return nothing', () => {
