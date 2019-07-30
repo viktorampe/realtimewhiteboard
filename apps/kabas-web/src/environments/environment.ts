@@ -90,6 +90,36 @@ export const environment: EnvironmentInterface = {
         ],
         pageSize: 20
       }
+    },
+    global: {
+      name: 'global',
+      label: 'Zoeken in alle inhoud',
+      dynamicFilters: false,
+      searchTerm: {
+        domHost: 'searchTerm'
+      },
+      searchFilterFactory: GlobalFilterFactory,
+      results: {
+        component: EduContentSearchResultComponent,
+        sortModes: [
+          {
+            description: 'relevantie',
+            name: '_score',
+            icon: 'sort-numeric-down'
+          },
+          {
+            description: 'alfabetisch',
+            name: 'title.raw',
+            icon: 'sort-alpha-down'
+          },
+          {
+            description: 'laatst gewijzigd',
+            name: 'published',
+            icon: 'calendar-plus'
+          }
+        ],
+        pageSize: 20
+      }
     }
   },
   testing: {
