@@ -3,12 +3,7 @@ import { NgModule } from '@angular/core';
 import { MatCardModule, MatListModule, MatTabsModule } from '@angular/material';
 import { GuardsModule } from '@campus/guards';
 import { SearchModule } from '@campus/search';
-import {
-  ContentActionsService,
-  CONTENT_ACTIONS_SERVICE_TOKEN,
-  CONTENT_OPENER_TOKEN,
-  SharedModule
-} from '@campus/shared';
+import { CONTENT_OPENER_TOKEN, SharedModule } from '@campus/shared';
 import { UiModule } from '@campus/ui';
 import { MethodChapterLessonComponent } from './components/method-chapter-lesson/method-chapter-lesson.component';
 import { MethodChapterComponent } from './components/method-chapter/method-chapter.component';
@@ -34,10 +29,6 @@ import { PagesMethodsRoutingModule } from './pages-methods-routing.module';
     {
       provide: CONTENT_OPENER_TOKEN,
       useClass: MethodViewModel
-    },
-    {
-      provide: CONTENT_ACTIONS_SERVICE_TOKEN,
-      useClass: ContentActionsService
     }
   ],
   declarations: [

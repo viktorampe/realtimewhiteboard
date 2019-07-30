@@ -7,9 +7,10 @@ export {
   QuickLinkComponent
 } from './lib/components/quick-link/quick-link.component';
 export {
+  OpenStaticContentService,
   OpenStaticContentServiceInterface,
   OPEN_STATIC_CONTENT_SERVICE_TOKEN
-} from './lib/content/open-static-content.interface';
+} from './lib/content';
 export {
   CampusRouterlinkDirective
 } from './lib/directives/campus-routerlink.directive';
@@ -31,10 +32,7 @@ export {
 export {
   PersonBadgeFromCredentialPipe
 } from './lib/pipes/person-badge-from-credential/person-badge-from-credential-pipe';
-export {
-  ScormExerciseServiceInterface,
-  SCORM_EXERCISE_SERVICE_TOKEN
-} from './lib/scorm/scorm-exercise.service.interface';
+export * from './lib/scorm';
 export * from './lib/services';
 export * from './lib/shared.module';
 export * from './lib/validators';
