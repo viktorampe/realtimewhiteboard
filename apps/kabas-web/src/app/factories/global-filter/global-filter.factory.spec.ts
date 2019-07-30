@@ -7,13 +7,23 @@ import {
   EduContentProductTypeActions,
   EduContentProductTypeFixture,
   EduContentProductTypeReducer,
-  getStoreModuleForFeatures
+  getStoreModuleForFeatures,
+  LearningDomainActions,
+  LearningDomainFixture,
+  LearningDomainReducer,
+  MethodActions,
+  MethodFixture,
+  MethodReducer,
+  YearActions,
+  YearFixture,
+  YearReducer
 } from '@campus/dal';
 import {
   ButtonToggleFilterComponent,
+  CheckboxLineFilterComponent,
+  CheckboxListFilterComponent,
   SearchFilterInterface,
-  SearchStateInterface,
-  SelectFilterComponent
+  SearchStateInterface
 } from '@campus/search';
 import { Store, StoreModule } from '@ngrx/store';
 import { cold } from '@nrwl/nx/testing';
@@ -36,13 +46,37 @@ describe('DiaboloChapterLessonFilterFactory', () => {
     new DiaboloPhaseFixture({ id: 3, phase: 3 })
   ];
 
+  const mockMethods = [
+    new MethodFixture({ id: 1, name: 'foo B@r' }),
+    new MethodFixture({ id: 2, name: 'f00 Bar' }),
+    new MethodFixture({ id: 3, name: '1 5p3ak l33t' })
+  ];
+
+  const mockLearningDomains = [
+    new LearningDomainFixture({ id: 1, name: 'lezen' }),
+    new LearningDomainFixture({ id: 2, name: 'spreken' }),
+    new LearningDomainFixture({
+      id: 3,
+      name: 'Frederic accepteren zoals hij is'
+    })
+  ];
+
+  const mockYears = [
+    new YearFixture({ id: 1, name: 'K1' }),
+    new YearFixture({ id: 2, name: 'K2' }),
+    new YearFixture({ id: 3, name: 'K3' })
+  ];
+
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [
         StoreModule.forRoot({}),
         ...getStoreModuleForFeatures([
           EduContentProductTypeReducer,
-          DiaboloPhaseReducer
+          DiaboloPhaseReducer,
+          MethodReducer,
+          LearningDomainReducer,
+          YearReducer
         ])
       ],
       providers: [GlobalFilterFactory, Store]
@@ -72,8 +106,11 @@ describe('DiaboloChapterLessonFilterFactory', () => {
       expect(result).toBeObservable(
         cold('a', {
           a: [
+            getExpectedMethodFilter(),
+            getExpectedLearningDomainFilter(),
+            getExpectedDiaboloPhaseFilter(),
             getExpectedEduContentProductTypeFilter(),
-            getExpectedDiaboloPhaseFilter()
+            getExpectedYearFilter()
           ]
         })
       );
@@ -83,7 +120,13 @@ describe('DiaboloChapterLessonFilterFactory', () => {
   describe('getPredictionFilterNames', () => {
     it('should return the correct filter names', () => {
       const filternames = factory.getPredictionFilterNames();
-      expect(filternames).toEqual(['eduContentProductType', 'diaboloPhase']);
+      expect(filternames).toEqual([
+        'eduContentProductType',
+        'diaboloPhase',
+        'method',
+        'learningDomain',
+        'year'
+      ]);
     });
   });
 
@@ -131,7 +174,7 @@ describe('DiaboloChapterLessonFilterFactory', () => {
       'id',
       'name',
       mockEduContentProductTypes,
-      SelectFilterComponent
+      CheckboxListFilterComponent
     );
   }
 
@@ -147,6 +190,39 @@ describe('DiaboloChapterLessonFilterFactory', () => {
     );
   }
 
+  function getExpectedMethodFilter() {
+    return getExpectedFilter(
+      'method',
+      'Methode',
+      'id',
+      'name',
+      mockMethods,
+      CheckboxListFilterComponent
+    );
+  }
+
+  function getExpectedLearningDomainFilter() {
+    return getExpectedFilter(
+      'learningDomain',
+      'Leerdomein',
+      'id',
+      'name',
+      mockLearningDomains,
+      CheckboxListFilterComponent
+    );
+  }
+
+  function getExpectedYearFilter() {
+    return getExpectedFilter(
+      'year',
+      'Jaar',
+      'id',
+      'name',
+      mockYears,
+      CheckboxLineFilterComponent
+    );
+  }
+
   function loadInStore() {
     store.dispatch(
       new EduContentProductTypeActions.EduContentProductTypesLoaded({
@@ -157,6 +233,30 @@ describe('DiaboloChapterLessonFilterFactory', () => {
     store.dispatch(
       new DiaboloPhaseActions.DiaboloPhasesLoaded({
         diaboloPhases: mockDiaboloPhases
+      })
+    );
+
+    store.dispatch(
+      new MethodActions.MethodsLoaded({
+        methods: mockMethods
+      })
+    );
+
+    store.dispatch(
+      new MethodActions.AllowedMethodsLoaded({
+        methodIds: mockMethods.map(method => method.id)
+      })
+    );
+
+    store.dispatch(
+      new LearningDomainActions.LearningDomainsLoaded({
+        learningDomains: mockLearningDomains
+      })
+    );
+
+    store.dispatch(
+      new YearActions.YearsLoaded({
+        years: mockYears
       })
     );
   }

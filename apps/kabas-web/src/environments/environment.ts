@@ -2,6 +2,7 @@ import { EnvironmentInterface } from '@campus/shared';
 import { EduContentSearchResultComponent } from '../app/components/searchresults/edu-content-search-result.component';
 import { ChapterLessonFilterFactory } from '../app/factories/chapter-lesson-filter/chapter-lesson-filter.factory';
 import { DiaboloChapterLessonFilterFactory } from '../app/factories/chapter-lesson-filter/diabolo-chapter-lesson-filter.factory';
+import { GlobalFilterFactory } from '../app/factories/global-filter/global-filter.factory';
 import { icons } from './icons';
 
 // This file can be replaced during build by using the `fileReplacements` array.
