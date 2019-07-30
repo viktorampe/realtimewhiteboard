@@ -24,31 +24,39 @@ export class ContentActionsService implements ContentActionsServiceInterface {
       label: 'Openen',
       icon: 'exercise:open',
       tooltip: 'Open oefening zonder oplossingen',
-      handler: this.contentOpener.openEduContentAsExercise
+      handler: this.contentOpener.openEduContentAsExercise.bind(
+        this.contentOpener
+      )
     },
     openEduContentAsSolution: {
       label: 'Toon oplossing',
       icon: 'exercise:finished',
       tooltip: 'Open oefening met oplossingen',
-      handler: this.contentOpener.openEduContentAsSolution
+      handler: this.contentOpener.openEduContentAsSolution.bind(
+        this.contentOpener
+      )
     },
     openEduContentAsStream: {
       label: 'Openen',
       icon: 'lesmateriaal',
       tooltip: 'Open het lesmateriaal',
-      handler: this.contentOpener.openEduContentAsStream
+      handler: this.contentOpener.openEduContentAsStream.bind(
+        this.contentOpener
+      )
     },
     openEduContentAsDownload: {
       label: 'Downloaden',
       icon: 'download',
       tooltip: 'Download het lesmateriaal',
-      handler: this.contentOpener.openEduContentAsDownload
+      handler: this.contentOpener.openEduContentAsDownload.bind(
+        this.contentOpener
+      )
     },
     openBoeke: {
       label: 'Openen',
       icon: 'boeken',
       tooltip: 'Open het bordboek',
-      handler: this.contentOpener.openBoeke
+      handler: this.contentOpener.openBoeke.bind(this.contentOpener)
     }
   };
 
