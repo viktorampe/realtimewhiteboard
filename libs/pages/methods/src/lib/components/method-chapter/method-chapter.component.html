@@ -1,17 +1,14 @@
-<div class="method-chapter__container">
-  <campus-collapsible-sheet class="method-chapter__container__sheet">
+<div class="method-chapter">
+  <campus-collapsible-sheet>
     <div aside>
-      <a
-        class="method-chapter__container__sheet__back-link"
-        (click)="clickBackLink()"
-        ><mat-icon></mat-icon> Terug</a
+      <a (click)="clickBackLink()"
+        ><mat-icon svgIcon="arrow-back"></mat-icon> Terug</a
       >
       <ng-container>
         <mat-list>
           <mat-list-item
             *ngFor="let lesson of (lessonsForChapter$ | async)"
             (click)="clickOpenLesson(lesson.id)"
-            class="method-chapter__container__sheet__lesson-link"
           >
             <span>{{ lesson.title }}</span></mat-list-item
           ></mat-list
@@ -31,7 +28,7 @@
           <campus-button campusPrimary (click)="clearSearchFilters()"
             >Reset Filters</campus-button
           >
-          <div style="height:100%">
+          <div>
             <campus-search
               [autoCompleteValues]="autoCompleteValues$ | async"
               (searchTermChangeForAutoComplete)="onAutoCompleteRequest($event)"

@@ -1,14 +1,15 @@
 .method-chapter {
-  &__container {
-    // background: red;
-    height: 100vh;
+  height: 100%;
+  display: flex;
+  flex-flow: column nowrap;
 
-    &__sheet {
+  campus-collapsible-sheet {
+    height: 0px;
+    flex: 1 0 auto;
+
+    div[aside] {
       height: 100%;
-    }
-
-    span.active {
-      font-weight: bold;
+      overflow: auto;
     }
   }
 }
