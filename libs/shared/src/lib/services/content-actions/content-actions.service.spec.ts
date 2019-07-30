@@ -3,7 +3,6 @@ import { EduContentFixture } from '@campus/dal';
 import { configureTestSuite } from 'ng-bullet';
 import { ContentActionsService } from './content-actions.service';
 import {
-  ContentActionInterface,
   ContentActionsServiceInterface,
   ContentOpenerInterface,
   CONTENT_OPENER_TOKEN,
@@ -51,54 +50,35 @@ describe('ContentActionsServiceInterface', () => {
           mockEduContent: new EduContentFixture({
             type: EduContentTypeEnum.BOEKE
           }),
-          expected: [
-            {
-              label: 'Openen',
-              icon: 'boeken',
-              tooltip: 'Open het bordboek',
-              handler: contentOpener.openBoeke
-            } as ContentActionInterface
-          ]
+          expected: [contentActionsService.contentActionDictionary['openBoeke']]
         },
         {
           mockEduContent: new EduContentFixture({
             type: EduContentTypeEnum.EXERCISE
           }),
           expected: [
-            {
-              label: 'Openen',
-              icon: 'exercise:open',
-              tooltip: 'Open oefening zonder oplossingen',
-              handler: contentOpener.openEduContentAsExercise
-            } as ContentActionInterface,
-            {
-              label: 'Toon oplossing',
-              icon: 'exercise:finished',
-              tooltip: 'Open oefening met oplossingen',
-              handler: contentOpener.openEduContentAsSolution
-            } as ContentActionInterface
+            contentActionsService.contentActionDictionary[
+              'openEduContentAsExercise'
+            ],
+            contentActionsService.contentActionDictionary[
+              'openEduContentAsSolution'
+            ]
           ]
         },
         {
           mockEduContent: new EduContentFixture({}, { streamable: true }),
           expected: [
-            {
-              label: 'Openen',
-              icon: 'lesmateriaal',
-              tooltip: 'Open het lesmateriaal',
-              handler: contentOpener.openEduContentAsStream
-            }
+            contentActionsService.contentActionDictionary[
+              'openEduContentAsStream'
+            ]
           ]
         },
         {
           mockEduContent: new EduContentFixture({}, { streamable: false }),
           expected: [
-            {
-              label: 'Downloaden',
-              icon: 'download',
-              tooltip: 'Download het lesmateriaal',
-              handler: contentOpener.openEduContentAsDownload
-            }
+            contentActionsService.contentActionDictionary[
+              'openEduContentAsDownload'
+            ]
           ]
         }
       ];

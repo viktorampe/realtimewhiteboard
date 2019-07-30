@@ -29,6 +29,10 @@ body {
 @import 'libs/ui/src/lib/ui-theme';
 @include ui-theme();
 
+// include pages lib scss files
+@import 'libs/pages/methods/src/lib/pages-methods.theme';
+@include pages-methods-theme();
+
 // include shared lib scss
 @import 'libs/shared/src/lib/shared-theme';
 @include shared-theme();

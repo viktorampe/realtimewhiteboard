@@ -29,7 +29,7 @@ export class EduContentTocEffects {
           return;
         }
 
-        return this.eduContentTocService.getTree(requestedBookId).pipe(
+        return this.eduContentTocService.getTocsForBookId(requestedBookId).pipe(
           map(
             eduContentTocs =>
               new AddEduContentTocsForBook({

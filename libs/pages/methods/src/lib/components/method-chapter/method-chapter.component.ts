@@ -6,7 +6,8 @@ import {
   ViewChild,
   ViewChildren
 } from '@angular/core';
-import { EduContent } from '@campus/dal';
+import { ActivatedRoute, Router } from '@angular/router';
+import { EduContent, EduContentTOCInterface } from '@campus/dal';
 import {
   SearchComponent,
   SearchModeInterface,
@@ -21,6 +22,7 @@ import { MethodViewModel } from '../method.viewmodel';
   selector: 'campus-method-chapter',
   templateUrl: './method-chapter.component.html',
   styleUrls: ['./method-chapter.component.scss']
+  // providers: [{ provide: MethodViewModel, useClass: MockMethodViewModel }]
 })
 export class MethodChapterComponent implements OnInit, AfterViewInit {
   public searchMode$: Observable<SearchModeInterface>;
@@ -28,18 +30,33 @@ export class MethodChapterComponent implements OnInit, AfterViewInit {
   public searchResults$: Observable<SearchResultInterface>;
   public autoCompleteValues$: Observable<string[]>;
   public currentBoeke$: Observable<EduContent>;
+  public lessonsForChapter$: Observable<EduContentTOCInterface[]>;
+
+  public currentLessonId: number;
+
+  private currentBookId: number;
+  private currentChapterId: number;
 
   @ViewChildren(SearchPortalDirective)
   private portalHosts: QueryList<SearchPortalDirective>;
   @ViewChild(SearchComponent) public searchComponent: SearchComponent;
 
-  constructor(private methodViewModel: MethodViewModel) {}
+  constructor(
+    private methodViewModel: MethodViewModel,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.searchMode$ = this.methodViewModel.getSearchMode('chapter-lesson');
     this.initialSearchState$ = this.methodViewModel.getInitialSearchState();
     this.searchResults$ = this.methodViewModel.searchResults$;
     this.currentBoeke$ = this.methodViewModel.currentBoeke$;
+    this.lessonsForChapter$ = this.methodViewModel.currentToc$;
+
+    this.currentBookId = +this.route.snapshot.params.book;
+    this.currentChapterId = +this.route.snapshot.params.chapter;
+    this.currentLessonId = +this.route.snapshot.params.lesson;
   }
 
   ngAfterViewInit() {
@@ -58,6 +75,23 @@ export class MethodChapterComponent implements OnInit, AfterViewInit {
     if (this.searchComponent) {
       this.searchComponent.reset(undefined, false);
     }
+  }
+
+  public clickOpenLesson(lessonId: number) {
+    this.currentLessonId = lessonId;
+
+    this.router.navigate([
+      'methods',
+      this.currentBookId,
+      this.currentChapterId,
+      lessonId
+    ]);
+  }
+
+  public clickBackLink() {
+    const urlParts = ['methods', this.currentBookId];
+    if (this.currentLessonId) urlParts.push(this.currentChapterId);
+    this.router.navigate(urlParts);
   }
 
   public openBoeke(boeke: EduContent) {

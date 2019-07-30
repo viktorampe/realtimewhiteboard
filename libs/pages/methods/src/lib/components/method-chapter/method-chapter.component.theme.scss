@@ -1,0 +1,30 @@
+@mixin pages-methods-method-chapter() {
+  // .method-chapter {
+  //   div[main] {
+  //     .search-results-list {
+  //       &__results {
+  //         height: 100%;
+  //       }
+  //     }
+  //   }
+  // }
+  .method-chapter {
+    .collapsible-sheet__main {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .mat-tab-group {
+      flex: 1 1 auto;
+    }
+
+    .mat-tab-body-wrapper {
+      flex: 1 1 auto;
+    }
+
+    .mat-tab-body-content {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+}
