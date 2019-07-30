@@ -3,7 +3,11 @@ import { MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MethodYearsInterface } from '@campus/dal';
-import { ENVIRONMENT_ICON_MAPPING_TOKEN, SharedModule } from '@campus/shared';
+import {
+  ENVIRONMENT_ICON_MAPPING_TOKEN,
+  ENVIRONMENT_SEARCHMODES_TOKEN,
+  SharedModule
+} from '@campus/shared';
 import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
 import { configureTestSuite } from 'ng-bullet';
@@ -24,6 +28,10 @@ describe('MethodsOverviewComponent', () => {
       imports: [UiModule, SharedModule, RouterTestingModule],
       declarations: [MethodsOverviewComponent, MethodYearTileComponent],
       providers: [
+        {
+          provide: ENVIRONMENT_SEARCHMODES_TOKEN,
+          useValue: {}
+        },
         { provide: MethodViewModel, useClass: MockMethodViewModel },
         { provide: MatIconRegistry, useClass: MockMatIconRegistry },
         {

@@ -1,16 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import {
-  MatCard,
-  MatCardModule,
-  MatIconModule,
-  MatListItem,
-  MatListModule,
-  MatTabsModule
-} from '@angular/material';
+import { MatCard, MatCardModule, MatListItem } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
+import { ENVIRONMENT_SEARCHMODES_TOKEN } from '@campus/shared';
 import { UiModule } from '@campus/ui';
 import { configureTestSuite } from 'ng-bullet';
 import { BehaviorSubject } from 'rxjs';
@@ -30,15 +24,16 @@ describe('MethodComponent', () => {
     TestBed.configureTestingModule({
       imports: [
         MatCardModule,
-        MatIconModule,
-        MatListModule,
-        MatTabsModule,
         NoopAnimationsModule,
         RouterTestingModule,
         UiModule
       ],
       declarations: [MethodComponent],
       providers: [
+        {
+          provide: ENVIRONMENT_SEARCHMODES_TOKEN,
+          useValue: {}
+        },
         {
           provide: ActivatedRoute,
           useValue: { params, snapshot: params.value }
@@ -77,7 +72,7 @@ describe('MethodComponent', () => {
       By.css('.method-method__container__files')
     );
     const generalFiles = generalFilesDE.queryAll(By.directive(MatListItem));
-    expect(generalFiles.length).toBe(3);
+    expect(generalFiles.length).toBe(6);
 
     const productTypeHeaders = fixture.debugElement.queryAll(
       By.css('div[main] h3[mat-subheader]')

@@ -10,6 +10,7 @@ export interface TocServiceInterface {
     methodIds: number[]
   ): Observable<EduContentBookInterface[]>;
   getTree(bookId: number): Observable<EduContentTOCInterface[]>;
+  getTocsForBookId(bookId: number): Observable<EduContentTOCInterface[]>;
   getBooksByMethodIds(
     methodIds: number[]
   ): Observable<EduContentBookInterface[]>;
