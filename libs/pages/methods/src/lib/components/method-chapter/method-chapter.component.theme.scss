@@ -4,6 +4,7 @@
       .search-results-list {
         &__results {
           height: 100%;
+          overflow: hidden;
         }
       }
     }
