@@ -17,11 +17,13 @@ import {
 } from '@campus/search';
 import { Observable } from 'rxjs';
 import { MethodViewModel } from '../method.viewmodel';
+import { MockMethodViewModel } from '../method.viewmodel.mock';
 
 @Component({
   selector: 'campus-method-chapter',
   templateUrl: './method-chapter.component.html',
-  styleUrls: ['./method-chapter.component.scss']
+  styleUrls: ['./method-chapter.component.scss'],
+  providers: [{ provide: MethodViewModel, useClass: MockMethodViewModel }]
 })
 export class MethodChapterComponent implements OnInit, AfterViewInit {
   public searchMode$: Observable<SearchModeInterface>;
