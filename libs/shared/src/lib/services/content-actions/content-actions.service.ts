@@ -17,7 +17,7 @@ export class ContentActionsService implements ContentActionsServiceInterface {
     private contentOpener: ContentOpenerInterface
   ) {}
 
-  private contentActionDictionary: {
+  public contentActionDictionary: {
     [key: string]: ContentActionInterface;
   } = {
     openEduContentAsExercise: {
