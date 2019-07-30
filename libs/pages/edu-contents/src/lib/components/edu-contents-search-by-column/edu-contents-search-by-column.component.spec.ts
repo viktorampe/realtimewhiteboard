@@ -132,7 +132,7 @@ describe('EduContentSearchByColumnComponent', () => {
     expect(component).toBeTruthy();
   });
   describe('initialize', () => {
-    it('should call initialize on navigation', () => {
+    it('should call initialize on init', () => {
       component.initialize = jest.fn();
       component.ngOnInit();
 
