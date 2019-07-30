@@ -27,14 +27,14 @@ const routes: Routes = [
         path: ':book',
         resolve: { isResolved: MethodBookResolver },
         canActivate: [AllowedMethodGuard],
+        data: {
+          selector: MethodQueries.getMethodWithYearByBookId
+        },
         runGuardsAndResolvers: 'always',
         children: [
           {
             path: '',
-            component: MethodComponent,
-            data: {
-              selector: MethodQueries.getMethodWithYearByBookId
-            }
+            component: MethodComponent
           },
           {
             path: ':chapter',
