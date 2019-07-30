@@ -1,16 +1,19 @@
 <div class="method-chapter">
   <campus-collapsible-sheet>
     <div aside>
-      <a (click)="clickBackLink()"
-        ><mat-icon svgIcon="arrow-back"></mat-icon> Terug</a
+      <a (click)="clickBackLink()" class="method-chapter__back-link"
+        ><mat-icon svgIcon="arrow-back"></mat-icon>Terug</a
       >
       <ng-container>
         <mat-list>
           <mat-list-item
             *ngFor="let lesson of (lessonsForChapter$ | async)"
             (click)="clickOpenLesson(lesson.id)"
+            class="method-chapter__lesson-link"
           >
-            <span>{{ lesson.title }}</span></mat-list-item
+            <span [class.active]="lesson.id === currentLessonId">{{
+              lesson.title
+            }}</span></mat-list-item
           ></mat-list
         >
       </ng-container>

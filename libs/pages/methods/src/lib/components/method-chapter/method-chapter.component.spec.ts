@@ -27,7 +27,7 @@ describe('MethodChapterComponent', () => {
   let router: Router;
 
   configureTestSuite(() => {
-    params = new BehaviorSubject<Params>({ book: 1, chapter: 1 });
+    params = new BehaviorSubject<Params>({ book: 1, chapter: 2 });
 
     TestBed.configureTestingModule({
       imports: [
@@ -72,7 +72,7 @@ describe('MethodChapterComponent', () => {
   describe('navigation', () => {
     it('should have a back button that calls clickBackLink()', () => {
       const backDE = fixture.debugElement.query(
-        By.css('.method-chapter__container__sheet__back-link')
+        By.css('.method-chapter__back-link')
       );
 
       expect(backDE.nativeElement.textContent).toBe('Terug');
@@ -86,7 +86,7 @@ describe('MethodChapterComponent', () => {
 
     it('should show the toc navigation links', done => {
       const lessonLinkDEs = fixture.debugElement.queryAll(
-        By.css('.method-chapter__container__sheet__lesson-link')
+        By.css('.method-chapter__lesson-link')
       );
 
       methodViewModel.currentToc$.subscribe(tocs => {
@@ -109,18 +109,29 @@ describe('MethodChapterComponent', () => {
       });
     });
 
-    it('should navigate up one level when clickBackLink is called', () => {
-      component.clickBackLink();
+    describe('clickBackLink', () => {
+      it('should navigate up to the book when inside a chapter', () => {
+        component.clickBackLink();
 
-      expect(router.navigate).toHaveBeenCalled();
-      expect(router.navigate).toHaveBeenCalledWith(['methods', 1]);
+        expect(router.navigate).toHaveBeenCalled();
+        expect(router.navigate).toHaveBeenCalledWith(['methods', 1]);
+      });
+
+      it('should navigate up to the chapter when inside a lesson', () => {
+        component.currentLessonId = 3;
+
+        component.clickBackLink();
+
+        expect(router.navigate).toHaveBeenCalled();
+        expect(router.navigate).toHaveBeenCalledWith(['methods', 1, 2]);
+      });
     });
 
     it('should navigate to the lesson when clickOpenLesson is called', () => {
-      component.clickOpenLesson(2);
+      component.clickOpenLesson(3);
 
       expect(router.navigate).toHaveBeenCalled();
-      expect(router.navigate).toHaveBeenCalledWith(['methods', 1, 1, 2]);
+      expect(router.navigate).toHaveBeenCalledWith(['methods', 1, 2, 3]);
     });
   });
 

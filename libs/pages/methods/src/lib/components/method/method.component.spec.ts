@@ -67,7 +67,7 @@ describe('MethodComponent', () => {
       By.css('.method-method__container__files')
     );
     const generalFiles = generalFilesDE.queryAll(By.directive(MatListItem));
-    expect(generalFiles.length).toBe(3);
+    expect(generalFiles.length).toBe(6);
 
     const productTypeHeaders = fixture.debugElement.queryAll(
       By.css('div[main] h3[mat-subheader]')

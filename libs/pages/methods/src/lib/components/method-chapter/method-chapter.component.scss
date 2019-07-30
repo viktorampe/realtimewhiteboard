@@ -10,6 +10,15 @@
     div[aside] {
       height: 100%;
       overflow: auto;
+      padding: 20px;
     }
+
+    div[main] {
+      padding: 20px 40px;
+    }
+  }
+
+  span.active {
+    font-weight: bold;
   }
 }

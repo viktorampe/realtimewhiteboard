@@ -17,13 +17,12 @@ import {
 } from '@campus/search';
 import { Observable } from 'rxjs';
 import { MethodViewModel } from '../method.viewmodel';
-import { MockMethodViewModel } from '../method.viewmodel.mock';
 
 @Component({
   selector: 'campus-method-chapter',
   templateUrl: './method-chapter.component.html',
-  styleUrls: ['./method-chapter.component.scss'],
-  providers: [{ provide: MethodViewModel, useClass: MockMethodViewModel }]
+  styleUrls: ['./method-chapter.component.scss']
+  // providers: [{ provide: MethodViewModel, useClass: MockMethodViewModel }]
 })
 export class MethodChapterComponent implements OnInit, AfterViewInit {
   public searchMode$: Observable<SearchModeInterface>;
@@ -31,6 +30,8 @@ export class MethodChapterComponent implements OnInit, AfterViewInit {
   public searchResults$: Observable<SearchResultInterface>;
   public autoCompleteValues$: Observable<string[]>;
   public lessonsForChapter$: Observable<EduContentTOCInterface[]>;
+
+  public currentLessonId: number;
 
   private currentBookId: number;
   private currentChapterId: number;
@@ -53,6 +54,7 @@ export class MethodChapterComponent implements OnInit, AfterViewInit {
 
     this.currentBookId = +this.route.snapshot.params.book;
     this.currentChapterId = +this.route.snapshot.params.chapter;
+    this.currentLessonId = +this.route.snapshot.params.lesson;
   }
 
   ngAfterViewInit() {
@@ -74,6 +76,8 @@ export class MethodChapterComponent implements OnInit, AfterViewInit {
   }
 
   public clickOpenLesson(lessonId: number) {
+    this.currentLessonId = lessonId;
+
     this.router.navigate([
       'methods',
       this.currentBookId,
@@ -84,6 +88,7 @@ export class MethodChapterComponent implements OnInit, AfterViewInit {
 
   public clickBackLink() {
     const urlParts = ['methods', this.currentBookId];
+    if (this.currentLessonId) urlParts.push(this.currentChapterId);
     this.router.navigate(urlParts);
   }
 }
