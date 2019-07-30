@@ -40,6 +40,7 @@ import { SearchStateInterface } from './../../interfaces/search-state.interface'
 })
 export class SearchComponent
   implements OnInit, AfterViewInit, OnDestroy, OnChanges {
+  private _initialState: SearchStateInterface;
   private searchTermComponent: SearchTermComponent;
   private subscriptions = new Subscription();
   private _searchPortals: QueryList<SearchPortalDirective> = new QueryList();
@@ -53,7 +54,13 @@ export class SearchComponent
   @Input() public searchMode: SearchModeInterface;
   @Input() public autoCompleteValues: string[];
   @Input() public autoCompleteDebounceTime = 300;
-  @Input() public initialState: SearchStateInterface;
+  @Input() public set initialState(state: SearchStateInterface) {
+    this._initialState = state;
+    this.reset(this._initialState);
+  }
+  public get initialState() {
+    return this._initialState;
+  }
   @Input() public searchResults: SearchResultInterface;
   @Input() public autoFocusSearchTerm = false;
   @Input()
@@ -90,9 +97,7 @@ export class SearchComponent
     );
   }
 
-  ngOnInit() {
-    this.reset(this.initialState);
-  }
+  ngOnInit() {}
 
   ngAfterViewInit() {
     this.warnMissingSearchPortals();
@@ -119,7 +124,7 @@ export class SearchComponent
   }
 
   public reset(
-    initialState: SearchStateInterface = this.initialState,
+    initialState: SearchStateInterface = this._initialState,
     clearSearchTerm?: boolean
   ): void {
     if (clearSearchTerm) {
@@ -166,7 +171,7 @@ export class SearchComponent
 
     this.searchTermComponent = componentRef.instance;
 
-    this.searchTermComponent.initialValue = this.initialState.searchTerm;
+    this.searchTermComponent.initialValue = this._initialState.searchTerm;
     this.searchTermComponent.autoCompleteValues = this.autoCompleteValues;
     this.searchTermComponent.autofocus = this.autoFocusSearchTerm;
 
