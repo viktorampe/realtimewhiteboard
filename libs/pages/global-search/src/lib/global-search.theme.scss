@@ -1,0 +1,5 @@
+@import './components/global-search/global-search.component.theme.scss';
+
+@mixin pages-global-search-theme() {
+  @include pages-global-search();
+}
