@@ -7,7 +7,7 @@ import {
   ViewChildren
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { EduContentTOCInterface } from '@campus/dal';
+import { EduContent, EduContentTOCInterface } from '@campus/dal';
 import {
   SearchComponent,
   SearchModeInterface,
@@ -29,6 +29,7 @@ export class MethodChapterComponent implements OnInit, AfterViewInit {
   public initialSearchState$: Observable<SearchStateInterface>;
   public searchResults$: Observable<SearchResultInterface>;
   public autoCompleteValues$: Observable<string[]>;
+  public boeke$: Observable<EduContent>;
   public lessonsForChapter$: Observable<EduContentTOCInterface[]>;
 
   public currentLessonId: number;
@@ -50,6 +51,7 @@ export class MethodChapterComponent implements OnInit, AfterViewInit {
     this.searchMode$ = this.methodViewModel.getSearchMode('chapter-lesson');
     this.initialSearchState$ = this.methodViewModel.getInitialSearchState();
     this.searchResults$ = this.methodViewModel.searchResults$;
+    this.boeke$ = this.methodViewModel.currentBoeke$;
     this.lessonsForChapter$ = this.methodViewModel.currentToc$;
 
     this.currentBookId = +this.route.snapshot.params.book;
@@ -71,7 +73,7 @@ export class MethodChapterComponent implements OnInit, AfterViewInit {
 
   public clearSearchFilters(): void {
     if (this.searchComponent) {
-      this.searchComponent.reset(undefined, false);
+      this.searchComponent.reset(undefined, true);
     }
   }
 
@@ -90,5 +92,9 @@ export class MethodChapterComponent implements OnInit, AfterViewInit {
     const urlParts = ['methods', this.currentBookId];
     if (this.currentLessonId) urlParts.push(this.currentChapterId);
     this.router.navigate(urlParts);
+  }
+
+  public clickOpenBoeke(eduContent: EduContent): void {
+    this.methodViewModel.openBoeke(eduContent);
   }
 }

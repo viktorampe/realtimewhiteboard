@@ -40,11 +40,11 @@ export class GlobalFilterFactory implements SearchFilterFactory {
   private domHost = 'hostLeft';
 
   protected filterSortOrder = [
-    'method',
-    'learningDomain',
+    'methods',
+    'learningDomains',
     'diaboloPhase',
     'eduContentProductType',
-    'year'
+    'years'
   ];
 
   protected filterQueries: {
@@ -63,19 +63,19 @@ export class GlobalFilterFactory implements SearchFilterFactory {
       displayProperty: 'icon',
       options: { multiple: true }
     },
-    method: {
+    methods: {
       query: MethodQueries.getAllowedMethods,
-      name: 'method',
+      name: 'methods',
       label: 'Methode'
     },
-    learningDomain: {
+    learningDomains: {
       query: LearningDomainQueries.getAll,
-      name: 'learningDomain',
+      name: 'learningDomains',
       label: 'Leerdomein'
     },
-    year: {
+    years: {
       query: YearQueries.getAll,
-      name: 'year',
+      name: 'years',
       label: 'Jaar',
       component: CheckboxLineFilterComponent
     }
