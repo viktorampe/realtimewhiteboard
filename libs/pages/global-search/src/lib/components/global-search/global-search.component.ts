@@ -6,7 +6,7 @@ import {
   ViewChild,
   ViewChildren
 } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import {
   SearchComponent,
   SearchModeInterface,
@@ -34,7 +34,6 @@ export class GlobalSearchComponent implements OnInit, AfterViewInit {
 
   constructor(
     private globalSearchViewModel: GlobalSearchViewModel,
-    private route: ActivatedRoute,
     private router: Router
   ) {}
 
