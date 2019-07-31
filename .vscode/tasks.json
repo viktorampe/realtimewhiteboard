@@ -1,7 +1,6 @@
 {
   "version": "2.0.0",
-  "tasks": [
-    {
+  "tasks": [{
       "label": "wallaby-setup",
       "type": "shell",
       "command": "node",
@@ -20,8 +19,7 @@
       "problemMatcher": []
     }
   ],
-  "inputs": [
-    {
+  "inputs": [{
       "id": "wallabyProject",
       "description": "Project choises to run wallaby with",
       "type": "pickString",
@@ -41,6 +39,7 @@
         "pages-bundles",
         "pages-edu-contents",
         "pages-error",
+        "pages-global-search",
         "pages-logout",
         "pages-messages",
         "pages-methods",
