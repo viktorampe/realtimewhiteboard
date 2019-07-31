@@ -37,7 +37,7 @@ export class GlobalFilterFactory implements SearchFilterFactory {
   private keyProperty = 'id';
   private displayProperty = 'name';
   private component = CheckboxListFilterComponent;
-  private domHost = 'hostTop';
+  private domHost = 'hostLeft';
 
   protected filterSortOrder = [
     'method',

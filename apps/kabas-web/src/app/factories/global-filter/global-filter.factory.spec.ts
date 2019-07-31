@@ -161,7 +161,7 @@ describe('DiaboloChapterLessonFilterFactory', () => {
         }))
       },
       component: component,
-      domHost: 'hostTop'
+      domHost: 'hostLeft'
     } as SearchFilterInterface;
     if (options) searchFilter.options = options;
     return searchFilter;
