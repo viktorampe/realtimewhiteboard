@@ -95,7 +95,7 @@ export const environment: EnvironmentInterface = {
     global: {
       name: 'global',
       label: 'Zoeken in alle inhoud',
-      dynamicFilters: false,
+      dynamicFilters: true,
       searchTerm: {
         domHost: 'searchTerm'
       },
