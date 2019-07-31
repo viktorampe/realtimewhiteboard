@@ -123,9 +123,9 @@ describe('DiaboloChapterLessonFilterFactory', () => {
       expect(filternames).toEqual([
         'eduContentProductType',
         'diaboloPhase',
-        'method',
-        'learningDomain',
-        'year'
+        'methods',
+        'learningDomains',
+        'years'
       ]);
     });
   });
@@ -192,7 +192,7 @@ describe('DiaboloChapterLessonFilterFactory', () => {
 
   function getExpectedMethodFilter() {
     return getExpectedFilter(
-      'method',
+      'methods',
       'Methode',
       'id',
       'name',
@@ -203,7 +203,7 @@ describe('DiaboloChapterLessonFilterFactory', () => {
 
   function getExpectedLearningDomainFilter() {
     return getExpectedFilter(
-      'learningDomain',
+      'learningDomains',
       'Leerdomein',
       'id',
       'name',
@@ -214,7 +214,7 @@ describe('DiaboloChapterLessonFilterFactory', () => {
 
   function getExpectedYearFilter() {
     return getExpectedFilter(
-      'year',
+      'years',
       'Jaar',
       'id',
       'name',
