@@ -4,13 +4,18 @@ import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/t
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
+import { EduContentFixture } from '@campus/dal';
 import {
   ResultItemMockComponent,
   SearchComponent,
   SearchStateInterface,
   SearchTestModule
 } from '@campus/search';
-import { ENVIRONMENT_SEARCHMODES_TOKEN } from '@campus/shared';
+import {
+  ENVIRONMENT_ICON_MAPPING_TOKEN,
+  ENVIRONMENT_SEARCHMODES_TOKEN,
+  SharedModule
+} from '@campus/shared';
 import { ViewModelInterface } from '@campus/testing';
 import { UiModule } from '@campus/ui';
 import { configureTestSuite } from 'ng-bullet';
@@ -35,7 +40,8 @@ describe('MethodChapterComponent', () => {
         SearchTestModule,
         NoopAnimationsModule,
         UiModule,
-        RouterTestingModule
+        RouterTestingModule,
+        SharedModule
       ],
       declarations: [MethodChapterComponent],
       providers: [
@@ -51,13 +57,13 @@ describe('MethodChapterComponent', () => {
           provide: ActivatedRoute,
           useValue: { params, snapshot: { params: params.value } }
         },
-        { provide: MethodViewModel, useClass: MockMethodViewModel }
+        { provide: MethodViewModel, useClass: MockMethodViewModel },
+        { provide: ENVIRONMENT_ICON_MAPPING_TOKEN, useValue: {} }
       ]
     }).overrideModule(BrowserDynamicTestingModule, {
       set: { entryComponents: [ResultItemMockComponent] }
     });
 
-    methodViewModel = TestBed.get(MethodViewModel);
     router = TestBed.get(Router);
   });
 
@@ -172,6 +178,17 @@ describe('MethodChapterComponent', () => {
 
       expect(methodViewModel.updateState).toHaveBeenCalledTimes(1);
       expect(methodViewModel.updateState).toHaveBeenCalledWith(mockSearchState);
+    });
+  });
+
+  describe('openboeke', () => {
+    it('should call the correct method on the viewmodel', () => {
+      jest.spyOn(methodViewModel, 'openBoeke');
+
+      const mockBoeke = new EduContentFixture();
+      component.clickOpenBoeke(mockBoeke);
+
+      expect(methodViewModel.openBoeke).toHaveBeenCalledWith(mockBoeke);
     });
   });
 });

@@ -1,3 +1,11 @@
+<campus-page-bar
+  ><campus-button
+    campusPrimary
+    [iconClass]="'book'"
+    *ngIf="(boeke$ | async) as boeke"
+    (click)="clickOpenBoeke(boeke)"
+  ></campus-button
+></campus-page-bar>
 <div class="method-chapter">
   <campus-collapsible-sheet>
     <div aside>
