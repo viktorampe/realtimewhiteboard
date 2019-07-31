@@ -10,6 +10,7 @@ import {
   ENVIRONMENT_SEARCHMODES_TOKEN,
   SharedModule
 } from '@campus/shared';
+import { ViewModelInterface } from '@campus/testing';
 import { UiModule } from '@campus/ui';
 import { configureTestSuite } from 'ng-bullet';
 import { BehaviorSubject } from 'rxjs';
@@ -20,7 +21,7 @@ import { MethodComponent } from './method.component';
 describe('MethodComponent', () => {
   let component: MethodComponent;
   let fixture: ComponentFixture<MethodComponent>;
-  let methodViewModel: MethodViewModel;
+  let methodViewModel: ViewModelInterface<MethodViewModel>;
   let params: BehaviorSubject<Params>;
   let router: Router;
 
@@ -49,11 +50,11 @@ describe('MethodComponent', () => {
       ]
     });
 
-    methodViewModel = TestBed.get(MethodViewModel);
     router = TestBed.get(Router);
   });
 
   beforeEach(() => {
+    methodViewModel = TestBed.get(MethodViewModel);
     fixture = TestBed.createComponent(MethodComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

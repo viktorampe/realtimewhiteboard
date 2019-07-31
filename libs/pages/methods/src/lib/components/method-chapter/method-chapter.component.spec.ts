@@ -64,7 +64,6 @@ describe('MethodChapterComponent', () => {
       set: { entryComponents: [ResultItemMockComponent] }
     });
 
-    methodViewModel = TestBed.get(MethodViewModel);
     router = TestBed.get(Router);
   });
 
@@ -188,6 +187,7 @@ describe('MethodChapterComponent', () => {
 
       const mockBoeke = new EduContentFixture();
       component.clickOpenBoeke(mockBoeke);
+
       expect(methodViewModel.openBoeke).toHaveBeenCalledWith(mockBoeke);
     });
   });
