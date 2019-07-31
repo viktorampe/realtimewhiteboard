@@ -4,6 +4,7 @@ import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
+import { EduContentFixture } from '@campus/dal';
 import {
   ENVIRONMENT_ICON_MAPPING_TOKEN,
   ENVIRONMENT_SEARCHMODES_TOKEN,
@@ -46,7 +47,7 @@ describe('MethodComponent', () => {
         { provide: MethodViewModel, useClass: MockMethodViewModel },
         { provide: ENVIRONMENT_ICON_MAPPING_TOKEN, useValue: {} }
       ]
-    }).compileComponents();
+    });
 
     methodViewModel = TestBed.get(MethodViewModel);
     router = TestBed.get(Router);
@@ -84,5 +85,16 @@ describe('MethodComponent', () => {
       By.css('div[main] h3[mat-subheader]')
     );
     expect(productTypeHeaders.length).toBe(2);
+  });
+
+  describe('openboeke', () => {
+    it('should call the correct method on the viewmodel', () => {
+      jest.spyOn(methodViewModel, 'openBoeke');
+
+      const mockBoeke = new EduContentFixture();
+      component.clickOpenBoeke(mockBoeke);
+
+      expect(methodViewModel.openBoeke).toHaveBeenCalledWith(mockBoeke);
+    });
   });
 });

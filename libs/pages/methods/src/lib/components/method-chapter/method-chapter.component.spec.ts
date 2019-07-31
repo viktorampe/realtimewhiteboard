@@ -187,7 +187,7 @@ describe('MethodChapterComponent', () => {
       jest.spyOn(methodViewModel, 'openBoeke');
 
       const mockBoeke = new EduContentFixture();
-      component.openBoeke(mockBoeke);
+      component.clickOpenBoeke(mockBoeke);
       expect(methodViewModel.openBoeke).toHaveBeenCalledWith(mockBoeke);
     });
   });
