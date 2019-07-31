@@ -12,6 +12,13 @@
       overflow: auto;
 
       padding: 20px;
+
+      .global-search {
+        &--filters {
+          display: flex;
+          flex-direction: column;
+        }
+      }
     }
 
     div[main] {
@@ -24,15 +31,17 @@
       }
 
       padding: 20px 40px;
+
+      .global-search {
+        &--filters {
+          display: flex;
+          flex-direction: row;
+        }
+      }
     }
   }
 
   span.active {
     font-weight: bold;
-  }
-
-  &--filters {
-    display: flex;
-    flex-direction: row;
   }
 }
