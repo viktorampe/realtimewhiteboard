@@ -4,7 +4,13 @@ import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { ENVIRONMENT_SEARCHMODES_TOKEN } from '@campus/shared';
+import { EduContentFixture } from '@campus/dal';
+import {
+  ENVIRONMENT_ICON_MAPPING_TOKEN,
+  ENVIRONMENT_SEARCHMODES_TOKEN,
+  SharedModule
+} from '@campus/shared';
+import { ViewModelInterface } from '@campus/testing';
 import { UiModule } from '@campus/ui';
 import { configureTestSuite } from 'ng-bullet';
 import { BehaviorSubject } from 'rxjs';
@@ -15,7 +21,7 @@ import { MethodComponent } from './method.component';
 describe('MethodComponent', () => {
   let component: MethodComponent;
   let fixture: ComponentFixture<MethodComponent>;
-  let methodViewModel: MethodViewModel;
+  let methodViewModel: ViewModelInterface<MethodViewModel>;
   let params: BehaviorSubject<Params>;
   let router: Router;
 
@@ -26,7 +32,8 @@ describe('MethodComponent', () => {
         MatCardModule,
         NoopAnimationsModule,
         RouterTestingModule,
-        UiModule
+        UiModule,
+        SharedModule
       ],
       declarations: [MethodComponent],
       providers: [
@@ -38,15 +45,16 @@ describe('MethodComponent', () => {
           provide: ActivatedRoute,
           useValue: { params, snapshot: params.value }
         },
-        { provide: MethodViewModel, useClass: MockMethodViewModel }
+        { provide: MethodViewModel, useClass: MockMethodViewModel },
+        { provide: ENVIRONMENT_ICON_MAPPING_TOKEN, useValue: {} }
       ]
-    }).compileComponents();
+    });
 
-    methodViewModel = TestBed.get(MethodViewModel);
     router = TestBed.get(Router);
   });
 
   beforeEach(() => {
+    methodViewModel = TestBed.get(MethodViewModel);
     fixture = TestBed.createComponent(MethodComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -78,5 +86,16 @@ describe('MethodComponent', () => {
       By.css('div[main] h3[mat-subheader]')
     );
     expect(productTypeHeaders.length).toBe(2);
+  });
+
+  describe('openboeke', () => {
+    it('should call the correct method on the viewmodel', () => {
+      jest.spyOn(methodViewModel, 'openBoeke');
+
+      const mockBoeke = new EduContentFixture();
+      component.clickOpenBoeke(mockBoeke);
+
+      expect(methodViewModel.openBoeke).toHaveBeenCalledWith(mockBoeke);
+    });
   });
 });
