@@ -181,7 +181,7 @@ describe('DiaboloChapterLessonFilterFactory', () => {
   function getExpectedDiaboloPhaseFilter() {
     return getExpectedFilter(
       'diaboloPhase',
-      'Diabolo-fase',
+      'Diabolo',
       'id',
       'icon',
       mockDiaboloPhases,
