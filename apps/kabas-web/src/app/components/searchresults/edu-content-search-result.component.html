@@ -22,6 +22,7 @@
         >{{ action.label }}</campus-button
       >
       <mat-icon
+        *ngIf="data.eduContent.diaboloPhase"
         class="app-educontentsearchresult__content__header__diabolo-phase"
         svgIcon="{{ data.eduContent.diaboloPhase.icon }}"
       ></mat-icon>

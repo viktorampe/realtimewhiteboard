@@ -55,7 +55,7 @@ export class GlobalSearchComponent implements OnInit, AfterViewInit {
 
   public clearSearchFilters(): void {
     if (this.searchComponent) {
-      this.searchComponent.reset(undefined, false);
+      this.searchComponent.reset(undefined, true);
     }
   }
 }

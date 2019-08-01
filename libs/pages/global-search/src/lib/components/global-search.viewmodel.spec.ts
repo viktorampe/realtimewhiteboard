@@ -3,7 +3,6 @@ import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import {
-  AUTH_SERVICE_TOKEN,
   CustomSerializer,
   DalState,
   EduContentBookReducer,
@@ -110,7 +109,6 @@ describe('GlobalSearchViewModel', () => {
       providers: [
         Store,
         { provide: RouterStateSerializer, useClass: CustomSerializer },
-        { provide: AUTH_SERVICE_TOKEN, useValue: { userId: 1 } },
         {
           provide: EDU_CONTENT_SERVICE_TOKEN,
           useValue: {

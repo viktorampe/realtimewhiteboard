@@ -1,7 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
 import {
-  AuthServiceInterface,
-  AUTH_SERVICE_TOKEN,
   DalState,
   EduContent,
   EduContentInterface,
@@ -29,12 +27,6 @@ import { select, Store } from '@ngrx/store';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { filter, map, switchMap, withLatestFrom } from 'rxjs/operators';
 
-interface CurrentMethodParams {
-  book: number;
-  chapter: number;
-  lesson: number;
-}
-
 @Injectable({
   providedIn: 'root'
 })
@@ -49,7 +41,6 @@ export class GlobalSearchViewModel implements ContentOpenerInterface {
 
   constructor(
     private store: Store<DalState>,
-    @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
     @Inject(EDU_CONTENT_SERVICE_TOKEN)
     private eduContentService: EduContentServiceInterface,
     @Inject(ENVIRONMENT_SEARCHMODES_TOKEN)
@@ -134,10 +125,6 @@ export class GlobalSearchViewModel implements ContentOpenerInterface {
   }
 
   private initialize() {
-    this._searchState$ = new BehaviorSubject<SearchStateInterface>(null);
-    this.searchState$ = this._searchState$;
-    this.routerState$ = this.store.pipe(select(getRouterState));
-
     this.setSourceStreams();
     this.setPresentationStreams();
     this.setupSearchResults();

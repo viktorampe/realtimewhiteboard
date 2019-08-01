@@ -10,7 +10,6 @@
     div[aside] {
       height: 100%;
       overflow: auto;
-
       padding: 20px;
 
       .global-search {
@@ -25,12 +24,11 @@
       display: flex;
       flex-direction: column;
       flex: 1 1 auto;
+      padding: 20px 40px;
 
       campus-search {
         flex: 1 1 auto;
       }
-
-      padding: 20px 40px;
 
       .global-search {
         &__filters {
