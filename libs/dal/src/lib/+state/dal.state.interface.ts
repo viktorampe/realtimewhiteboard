@@ -31,6 +31,7 @@ import {
   UserReducer,
   YearReducer
 } from '../..';
+import { UserLessonReducer } from './user-lesson';
 
 export interface DalState {
   ui: UiReducer.UiState;
@@ -64,4 +65,5 @@ export interface DalState {
   history: HistoryReducer.State;
   eduContentTocs: EduContentTocReducer.State;
   diaboloPhases: DiaboloPhaseReducer.State;
+  userLessons: UserLessonReducer.State;
 }

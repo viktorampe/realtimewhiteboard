@@ -1,26 +1,23 @@
 import { Update } from '@ngrx/entity';
-import {UserLessonActions } from '.';
-import { initialState, reducer, State } from './user-lesson.reducer';
+import { UserLessonActions } from '.';
 import { UserLessonInterface } from '../../+models';
+import { initialState, reducer, State } from './user-lesson.reducer';
 
-/** 
- * This file is scaffolded, but needs some special attention:
- * - find and replace '__EXTRA__PROPERTY_NAME' and replace this with a property name of the UserLesson entity.
- * - set the initial property value via '[__EXTRA__PROPERTY_NAME]InitialValue'.
- * - set the updated property value via '[__EXTRA__PROPERTY_NAME]UpdatedValue'.
-*/
-const __EXTRA__PROPERTY_NAMEInitialValue = ;
-const __EXTRA__PROPERTY_NAMEUpdatedValue = ;
+const descriptionInitialValue = 'foo';
+const descriptionUpdatedValue = 'bar';
 
 /**
  * Creates a UserLesson.
  * @param {number} id
  * @returns {UserLessonInterface}
  */
-function createUserLesson(id: number, __EXTRA__PROPERTY_NAME:any = __EXTRA__PROPERTY_NAMEInitialValue): UserLessonInterface | any {
+function createUserLesson(
+  id: number,
+  description: any = descriptionInitialValue
+): UserLessonInterface | any {
   return {
     id: id,
-    __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAME
+    description: description
   };
 }
 
@@ -53,7 +50,6 @@ function createState(
   if (error !== undefined) state.error = error;
   return state;
 }
-
 
 describe('UserLessons Reducer', () => {
   let userLessons: UserLessonInterface[];
@@ -111,7 +107,7 @@ describe('UserLessons Reducer', () => {
   describe('upsert actions', () => {
     it('should upsert one userLesson', () => {
       const originalUserLesson = userLessons[0];
-      
+
       const startState = reducer(
         initialState,
         new UserLessonActions.AddUserLesson({
@@ -119,9 +115,8 @@ describe('UserLessons Reducer', () => {
         })
       );
 
-    
       const updatedUserLesson = createUserLesson(userLessons[0].id, 'test');
-     
+
       const action = new UserLessonActions.UpsertUserLesson({
         userLesson: updatedUserLesson
       });
@@ -146,9 +141,7 @@ describe('UserLessons Reducer', () => {
 
       const result = reducer(startState, action);
 
-      expect(result).toEqual(
-        createState(userLessonsToInsert)
-      );
+      expect(result).toEqual(createState(userLessonsToInsert));
     });
   });
 
@@ -159,31 +152,32 @@ describe('UserLessons Reducer', () => {
       const update: Update<UserLessonInterface> = {
         id: 1,
         changes: {
-          __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAMEUpdatedValue
-        } 
+          description: descriptionUpdatedValue
+        }
       };
       const action = new UserLessonActions.UpdateUserLesson({
         userLesson: update
       });
       const result = reducer(startState, action);
-      expect(result).toEqual(createState([createUserLesson(1, __EXTRA__PROPERTY_NAMEUpdatedValue)]));
+      expect(result).toEqual(
+        createState([createUserLesson(1, descriptionUpdatedValue)])
+      );
     });
 
     it('should update multiple userLessons', () => {
       const startState = createState(userLessons);
       const updates: Update<UserLessonInterface>[] = [
-        
         {
           id: 1,
           changes: {
-            __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAMEUpdatedValue
-          } 
+            description: descriptionUpdatedValue
+          }
         },
         {
           id: 2,
           changes: {
-            __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAMEUpdatedValue
-          }  
+            description: descriptionUpdatedValue
+          }
         }
       ];
       const action = new UserLessonActions.UpdateUserLessons({
@@ -192,7 +186,11 @@ describe('UserLessons Reducer', () => {
       const result = reducer(startState, action);
 
       expect(result).toEqual(
-        createState([createUserLesson(1, __EXTRA__PROPERTY_NAMEUpdatedValue), createUserLesson(2, __EXTRA__PROPERTY_NAMEUpdatedValue), userLessons[2]])
+        createState([
+          createUserLesson(1, descriptionUpdatedValue),
+          createUserLesson(2, descriptionUpdatedValue),
+          userLessons[2]
+        ])
       );
     });
   });
