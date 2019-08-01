@@ -14,7 +14,10 @@ const routes: Routes = [
   },
   {
     path: 'search',
-    loadChildren: '@campus/pages/global-search#PagesGlobalSearchModule'
+    loadChildren: '@campus/pages/global-search#PagesGlobalSearchModule',
+    data: {
+      breadcrumbText: 'Zoekresultaten'
+    }
   },
   {
     path: 'error',

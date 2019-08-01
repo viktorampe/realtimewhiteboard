@@ -1,13 +1,4 @@
 @mixin pages-methods-method-chapter() {
-  // .method-chapter {
-  //   div[main] {
-  //     .search-results-list {
-  //       &__results {
-  //         height: 100%;
-  //       }
-  //     }
-  //   }
-  // }
   .method-chapter {
     .collapsible-sheet__main {
       display: flex;
