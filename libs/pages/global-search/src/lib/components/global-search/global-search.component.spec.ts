@@ -62,4 +62,45 @@ describe('GlobalSearchComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  describe('search', () => {
+    let mockSearchState;
+
+    beforeEach(() => {
+      mockSearchState = {
+        searchTerm: 'breuken'
+      } as SearchStateInterface;
+    });
+
+    it('should reset search filters when clearSearchFilters is called', () => {
+      component.searchComponent.reset = jest.fn();
+      component.clearSearchFilters();
+
+      expect(component.searchComponent.reset).toHaveBeenCalledTimes(1);
+    });
+
+    it('should send searchText to viewmodel subject', () => {
+      jest.spyOn(globalSearchViewModel, 'requestAutoComplete');
+
+      component.onAutoCompleteRequest('foo');
+
+      expect(globalSearchViewModel.requestAutoComplete).toHaveBeenCalledTimes(
+        1
+      );
+      expect(globalSearchViewModel.requestAutoComplete).toHaveBeenCalledWith(
+        'foo'
+      );
+    });
+
+    it('should send searchstate to viewmodel on change', () => {
+      jest.spyOn(globalSearchViewModel, 'updateState');
+
+      component.onSearchStateChange(mockSearchState);
+
+      expect(globalSearchViewModel.updateState).toHaveBeenCalledTimes(1);
+      expect(globalSearchViewModel.updateState).toHaveBeenCalledWith(
+        mockSearchState
+      );
+    });
+  });
 });
