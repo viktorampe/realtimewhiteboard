@@ -14,7 +14,7 @@
       padding: 20px;
 
       .global-search {
-        &_filters {
+        &__filters {
           display: flex;
           flex-direction: column;
         }
@@ -33,7 +33,7 @@
       padding: 20px 40px;
 
       .global-search {
-        &_filters {
+        &__filters {
           display: flex;
           flex-direction: row;
         }
