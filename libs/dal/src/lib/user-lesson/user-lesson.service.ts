@@ -18,4 +18,11 @@ export class UserLessonService implements UserLessonServiceInterface {
         map((res: { userLessons: UserLessonInterface[] }) => res.userLessons)
       );
   }
+
+  createForUser(
+    userId,
+    userLesson: UserLessonInterface
+  ): Observable<UserLessonInterface> {
+    return this.personApi.createUserLessons(userId, userLesson);
+  }
 }

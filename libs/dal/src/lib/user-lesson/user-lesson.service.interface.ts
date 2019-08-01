@@ -8,4 +8,8 @@ export const USER_LESSON_SERVICE_TOKEN = new InjectionToken(
 
 export interface UserLessonServiceInterface {
   getAllForUser(userId): Observable<UserLessonInterface[]>;
+  createForUser(
+    userId,
+    userLesson: UserLessonInterface
+  ): Observable<UserLessonInterface>;
 }
