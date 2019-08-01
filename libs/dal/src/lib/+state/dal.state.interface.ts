@@ -28,10 +28,10 @@ import {
   UnlockedBoekeStudentReducer,
   UnlockedContentReducer,
   UserContentReducer,
+  UserLessonReducer,
   UserReducer,
   YearReducer
 } from '../..';
-import { UserLessonReducer } from './user-lesson';
 
 export interface DalState {
   ui: UiReducer.UiState;

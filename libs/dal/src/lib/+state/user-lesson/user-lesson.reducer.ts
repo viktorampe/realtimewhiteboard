@@ -60,7 +60,10 @@ export function reducer(
     }
 
     case UserLessonsActionTypes.UserLessonsLoaded: {
-      return adapter.addAll(action.payload.userLessons, { ...state, loaded: true });
+      return adapter.addAll(action.payload.userLessons, {
+        ...state,
+        loaded: true
+      });
     }
 
     case UserLessonsActionTypes.UserLessonsLoadError: {
