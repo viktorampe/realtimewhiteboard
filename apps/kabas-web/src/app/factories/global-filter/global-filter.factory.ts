@@ -58,7 +58,7 @@ export class GlobalFilterFactory implements SearchFilterFactory {
     diaboloPhase: {
       query: DiaboloPhaseQueries.getAll,
       name: 'diaboloPhase',
-      label: 'Diabolo-fase',
+      label: 'Diabolo',
       component: ButtonToggleFilterComponent,
       displayProperty: 'icon',
       options: { multiple: true }
