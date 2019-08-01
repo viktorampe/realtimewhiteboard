@@ -9,6 +9,7 @@ import {
   MethodEffects,
   UiEffects,
   UserEffects,
+  UserLessonEffects,
   YearEffects
 } from '@campus/dal';
 import { EffectsModule } from '@ngrx/effects';
@@ -26,7 +27,8 @@ import { EffectsModule } from '@ngrx/effects';
       MethodEffects,
       YearEffects,
       EduContentsEffects,
-      CurrentExerciseEffects
+      CurrentExerciseEffects,
+      UserLessonEffects
     ])
   ]
 })

@@ -9,6 +9,7 @@ import {
   EduContentTocReducer,
   MethodReducer,
   UiReducer,
+  UserLessonReducer,
   UserReducer,
   YearReducer
 } from '@campus/dal';
@@ -85,6 +86,9 @@ import { environment } from '../environments/environment';
       CurrentExerciseReducer.reducer,
       { initialState: CurrentExerciseReducer.initialState }
     ),
+    StoreModule.forFeature(UserLessonReducer.NAME, UserLessonReducer.reducer, {
+      initialState: UserLessonReducer.initialState
+    }),
     !environment.production ? StoreDevtoolsModule.instrument() : []
   ]
 })

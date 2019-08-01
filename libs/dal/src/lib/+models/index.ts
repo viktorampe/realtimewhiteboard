@@ -104,4 +104,5 @@ export * from './UnlockedContentGroup.interface';
 export * from './UnlockedContentStudent.interface';
 export * from './UserContent';
 export * from './UserContent.interface';
+export * from './UserLesson.interface';
 export * from './Year.interface';

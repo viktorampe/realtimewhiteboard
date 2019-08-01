@@ -16,6 +16,8 @@ import {
   PERSON_SERVICE_TOKEN,
   TocService,
   TOC_SERVICE_TOKEN,
+  UserLessonService,
+  USER_LESSON_SERVICE_TOKEN,
   YearService,
   YEAR_SERVICE_TOKEN
 } from '@campus/dal';
@@ -47,7 +49,8 @@ import {
     {
       provide: OPEN_STATIC_CONTENT_SERVICE_TOKEN,
       useClass: OpenStaticContentService
-    }
+    },
+    { provide: USER_LESSON_SERVICE_TOKEN, useClass: UserLessonService }
   ]
 })
 export class AppTokenModule {}
