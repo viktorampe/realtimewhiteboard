@@ -1,6 +1,10 @@
 import { Update } from '@ngrx/entity';
 import { Action } from '@ngrx/store';
 import { UserLessonInterface } from '../../+models';
+import {
+  CustomFeedbackHandlersInterface,
+  FeedbackTriggeringAction
+} from '../effect-feedback';
 
 export enum UserLessonsActionTypes {
   UserLessonsLoaded = '[UserLessons] UserLessons Loaded',
@@ -14,14 +18,15 @@ export enum UserLessonsActionTypes {
   UpdateUserLessons = '[UserLessons] Update UserLessons',
   DeleteUserLesson = '[UserLessons] Delete UserLesson',
   DeleteUserLessons = '[UserLessons] Delete UserLessons',
-  ClearUserLessons = '[UserLessons] Clear UserLessons'
+  ClearUserLessons = '[UserLessons] Clear UserLessons',
+  CreateUserLesson = '[UserLessons] Create UserLesson'
 }
 
 export class LoadUserLessons implements Action {
   readonly type = UserLessonsActionTypes.LoadUserLessons;
 
   constructor(
-    public payload: { force?: boolean, userId: number } = { userId: null }
+    public payload: { force?: boolean; userId: number } = { userId: null }
   ) {}
 }
 
@@ -88,6 +93,18 @@ export class ClearUserLessons implements Action {
   readonly type = UserLessonsActionTypes.ClearUserLessons;
 }
 
+export class CreateUserLesson implements FeedbackTriggeringAction {
+  readonly type = UserLessonsActionTypes.CreateUserLesson;
+
+  constructor(
+    public payload: {
+      userId: number;
+      userLesson: UserLessonInterface;
+      customFeedbackHandlers?: CustomFeedbackHandlersInterface;
+    }
+  ) {}
+}
+
 export type UserLessonsActions =
   | LoadUserLessons
   | UserLessonsLoaded
@@ -100,4 +117,5 @@ export type UserLessonsActions =
   | UpdateUserLessons
   | DeleteUserLesson
   | DeleteUserLessons
-  | ClearUserLessons;
+  | ClearUserLessons
+  | CreateUserLesson;

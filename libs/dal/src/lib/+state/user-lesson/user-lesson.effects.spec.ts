@@ -1,16 +1,26 @@
 import { TestBed } from '@angular/core/testing';
+import { MockDate } from '@campus/testing';
 import { EffectsModule } from '@ngrx/effects';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
-import { USER_LESSON_SERVICE_TOKEN } from '../../user-lesson/user-lesson.service.interface';
 import { UserLessonReducer } from '.';
+import { UserLessonFixture } from '../../+fixtures';
+import { USER_LESSON_SERVICE_TOKEN } from '../../user-lesson/user-lesson.service.interface';
 import {
+  EffectFeedback,
+  EffectFeedbackActions,
+  Priority
+} from '../effect-feedback';
+import { AddEffectFeedback } from '../effect-feedback/effect-feedback.actions';
+import {
+  AddUserLesson,
+  CreateUserLesson,
+  LoadUserLessons,
   UserLessonsLoaded,
-  UserLessonsLoadError,
-  LoadUserLessons
+  UserLessonsLoadError
 } from './user-lesson.actions';
 import { UserLessonEffects } from './user-lesson.effects';
 
@@ -19,6 +29,8 @@ describe('UserLessonEffects', () => {
   let effects: UserLessonEffects;
   let usedState: any;
 
+  const uuid = 'foo';
+  let mockDate: MockDate;
 
   const expectInAndOut = (
     effect: Observable<any>,
@@ -61,9 +73,13 @@ describe('UserLessonEffects', () => {
       imports: [
         NxModule.forRoot(),
         StoreModule.forRoot({}),
-        StoreModule.forFeature(UserLessonReducer.NAME , UserLessonReducer.reducer, {
-          initialState: usedState
-        }),
+        StoreModule.forFeature(
+          UserLessonReducer.NAME,
+          UserLessonReducer.reducer,
+          {
+            initialState: usedState
+          }
+        ),
         EffectsModule.forRoot([]),
         EffectsModule.forFeature([UserLessonEffects])
       ],
@@ -71,16 +87,29 @@ describe('UserLessonEffects', () => {
         {
           provide: USER_LESSON_SERVICE_TOKEN,
           useValue: {
-            getAllForUser: () => {}
+            getAllForUser: () => {},
+            createForUser: () => {}
           }
         },
         UserLessonEffects,
         DataPersistence,
-        provideMockActions(() => actions)
+        provideMockActions(() => actions),
+        {
+          provide: 'uuid',
+          useValue: () => uuid
+        }
       ]
     });
 
     effects = TestBed.get(UserLessonEffects);
+  });
+
+  beforeAll(() => {
+    mockDate = new MockDate();
+  });
+
+  afterAll(() => {
+    mockDate.returnRealDate();
   });
 
   describe('loadUserLesson$', () => {
@@ -169,6 +198,84 @@ describe('UserLessonEffects', () => {
           effects.loadUserLessons$,
           forcedLoadAction,
           loadErrorAction
+        );
+      });
+    });
+  });
+
+  describe('createUserLesson$', () => {
+    const userId = 1;
+    const userLesson = new UserLessonFixture({
+      id: undefined,
+      description: 'dit is een nieuwe userLesson',
+      personId: userId
+    });
+
+    let effectFeedback: EffectFeedback;
+    let addFeedbackAction: EffectFeedbackActions.AddEffectFeedback;
+
+    const createUserLessonAction = new CreateUserLesson({
+      userId,
+      userLesson
+    });
+
+    describe('when successful', () => {
+      const addUserLessonAction = new AddUserLesson({
+        userLesson
+      });
+
+      beforeAll(() => {
+        effectFeedback = new EffectFeedback({
+          id: uuid,
+          triggerAction: createUserLessonAction,
+          message: 'Les "dit is een nieuwe userLesson" toegevoegd.'
+        });
+        addFeedbackAction = new AddEffectFeedback({ effectFeedback });
+      });
+
+      beforeEach(() => {
+        mockServiceMethodReturnValue('createForUser', userLesson);
+      });
+
+      it('should dispatch an addUserLessonAction action', () => {
+        actions = hot('a', {
+          a: createUserLessonAction
+        });
+
+        expect(effects.createUserLesson$).toBeObservable(
+          hot('(ab)', {
+            a: addUserLessonAction,
+            b: addFeedbackAction
+          })
+        );
+      });
+    });
+
+    describe('when errored', () => {
+      beforeAll(() => {
+        effectFeedback = new EffectFeedback({
+          id: uuid,
+          triggerAction: createUserLessonAction,
+          message:
+            'Het is niet gelukt om les "dit is een nieuwe userLesson" toe te voegen.',
+          type: 'error',
+          userActions: [
+            { title: 'Opnieuw proberen', userAction: createUserLessonAction }
+          ],
+          priority: Priority.HIGH
+        });
+        addFeedbackAction = new AddEffectFeedback({ effectFeedback });
+      });
+
+      beforeEach(() => {
+        mockServiceMethodError('createForUser', 'Something went wrong');
+      });
+
+      it('should dispatch an error feedback action', () => {
+        expectInAndOut(
+          effects.createUserLesson$,
+          createUserLessonAction,
+          addFeedbackAction
         );
       });
     });
