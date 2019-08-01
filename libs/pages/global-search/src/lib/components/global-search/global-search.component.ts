@@ -6,7 +6,6 @@ import {
   ViewChild,
   ViewChildren
 } from '@angular/core';
-import { Router } from '@angular/router';
 import {
   SearchComponent,
   SearchModeInterface,
@@ -32,10 +31,7 @@ export class GlobalSearchComponent implements OnInit, AfterViewInit {
   private portalHosts: QueryList<SearchPortalDirective>;
   @ViewChild(SearchComponent) public searchComponent: SearchComponent;
 
-  constructor(
-    private globalSearchViewModel: GlobalSearchViewModel,
-    private router: Router
-  ) {}
+  constructor(private globalSearchViewModel: GlobalSearchViewModel) {}
 
   ngOnInit() {
     this.searchMode$ = this.globalSearchViewModel.getSearchMode('global');
@@ -61,10 +57,5 @@ export class GlobalSearchComponent implements OnInit, AfterViewInit {
     if (this.searchComponent) {
       this.searchComponent.reset(undefined, false);
     }
-  }
-
-  public clickBackLink() {
-    const urlParts = [];
-    this.router.navigate(urlParts);
   }
 }

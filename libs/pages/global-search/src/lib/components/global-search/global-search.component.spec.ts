@@ -2,11 +2,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import {
   ResultItemMockComponent,
   SearchComponent,
+  SearchStateInterface,
   SearchTestModule
 } from '@campus/search';
 import {
@@ -26,7 +26,6 @@ describe('GlobalSearchComponent', () => {
   let fixture: ComponentFixture<GlobalSearchComponent>;
   let searchComponent;
   let globalSearchViewModel: ViewModelInterface<GlobalSearchViewModel>;
-  let router: Router;
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
@@ -43,18 +42,12 @@ describe('GlobalSearchComponent', () => {
           provide: ENVIRONMENT_SEARCHMODES_TOKEN,
           useValue: {}
         },
-        {
-          provide: Router,
-          useValue: { navigate: jest.fn() }
-        },
         { provide: GlobalSearchViewModel, useClass: MockGlobalSearchViewModel },
         { provide: ENVIRONMENT_ICON_MAPPING_TOKEN, useValue: {} }
       ]
     }).overrideModule(BrowserDynamicTestingModule, {
       set: { entryComponents: [ResultItemMockComponent] }
     });
-
-    router = TestBed.get(Router);
   });
 
   beforeEach(() => {
