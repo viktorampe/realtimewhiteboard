@@ -4,7 +4,7 @@ import {
   MatIconRegistry,
   MatTooltipModule
 } from '@angular/material';
-import { By } from '@angular/platform-browser';
+import { By, HAMMER_LOADER } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import {
   DiaboloPhaseFixture,
@@ -76,6 +76,10 @@ describe('EduContentSearchResultComponent', () => {
       ],
       providers: [
         { provide: MatIconRegistry, useClass: MockMatIconRegistry },
+        {
+          provide: HAMMER_LOADER,
+          useValue: () => new Promise(() => {})
+        },
         {
           provide: CONTENT_ACTIONS_SERVICE_TOKEN,
           useValue: {

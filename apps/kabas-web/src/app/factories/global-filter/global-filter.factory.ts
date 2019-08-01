@@ -1,11 +1,20 @@
 import { Injectable, InjectionToken } from '@angular/core';
-import { DalState, EduContentProductTypeQueries } from '@campus/dal';
 import {
+  DalState,
+  DiaboloPhaseQueries,
+  EduContentProductTypeQueries,
+  LearningDomainQueries,
+  MethodQueries,
+  YearQueries
+} from '@campus/dal';
+import {
+  ButtonToggleFilterComponent,
+  CheckboxLineFilterComponent,
+  CheckboxListFilterComponent,
   SearchFilterCriteriaInterface,
   SearchFilterFactory,
   SearchFilterInterface,
-  SearchStateInterface,
-  SelectFilterComponent
+  SearchStateInterface
 } from '@campus/search';
 import {
   MemoizedSelector,
@@ -17,20 +26,26 @@ import { combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { FilterQueryInterface } from '../filter-query.interface';
 
-export const CHAPTER_LESSON_FILTER_FACTORY_TOKEN = new InjectionToken(
-  'ChapterLessonFilterFactory'
+export const GLOBAL_FILTER_FACTORY_TOKEN = new InjectionToken(
+  'GlobalFilterFactory'
 );
 
 @Injectable({
   providedIn: 'root'
 })
-export class ChapterLessonFilterFactory implements SearchFilterFactory {
+export class GlobalFilterFactory implements SearchFilterFactory {
   private keyProperty = 'id';
   private displayProperty = 'name';
-  private component = SelectFilterComponent;
-  private domHost = 'hostTop';
+  private component = CheckboxListFilterComponent;
+  private domHost = 'hostLeft';
 
-  protected filterSortOrder = ['eduContentProductType'];
+  protected filterSortOrder = [
+    'methods',
+    'learningDomains',
+    'diaboloPhase',
+    'eduContentProductType',
+    'years'
+  ];
 
   protected filterQueries: {
     [key: string]: FilterQueryInterface;
@@ -38,8 +53,31 @@ export class ChapterLessonFilterFactory implements SearchFilterFactory {
     eduContentProductType: {
       query: EduContentProductTypeQueries.getAll,
       name: 'eduContentProductType',
-      label: 'Type',
-      component: SelectFilterComponent
+      label: 'Type'
+    },
+    diaboloPhase: {
+      query: DiaboloPhaseQueries.getAll,
+      name: 'diaboloPhase',
+      label: 'Diabolo',
+      component: ButtonToggleFilterComponent,
+      displayProperty: 'icon',
+      options: { multiple: true }
+    },
+    methods: {
+      query: MethodQueries.getAllowedMethods,
+      name: 'methods',
+      label: 'Methode'
+    },
+    learningDomains: {
+      query: LearningDomainQueries.getAll,
+      name: 'learningDomains',
+      label: 'Leerdomein'
+    },
+    years: {
+      query: YearQueries.getAll,
+      name: 'years',
+      label: 'Jaar',
+      component: CheckboxLineFilterComponent
     }
   };
 
@@ -66,12 +104,9 @@ export class ChapterLessonFilterFactory implements SearchFilterFactory {
   protected createFilters(
     searchState: SearchStateInterface
   ): Observable<SearchFilterInterface>[] {
-    const filters: Observable<SearchFilterInterface>[] = [];
-    const eduContentProductTypeFilter$ = this.buildFilter(
-      'eduContentProductType',
-      searchState
+    const filters = Object.values(this.filterQueries).map(fQ =>
+      this.buildFilter(fQ.name, searchState)
     );
-    filters.push(eduContentProductTypeFilter$);
 
     return filters;
   }
