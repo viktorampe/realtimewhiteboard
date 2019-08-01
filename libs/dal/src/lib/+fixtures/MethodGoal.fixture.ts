@@ -2,12 +2,12 @@ import { MethodGoalInterface } from '../+models';
 
 export class MethodGoalFixture implements MethodGoalInterface {
   // defaults
-  name: string;
-  domain: string;
-  Sortnumber?: number;
-  id?: number;
-  methodId?: number;
-  eduContentBookId?: number;
+  name = 'De leerlingen kunnen goed lezen';
+  domain = 'Lezen';
+  Sortnumber = 1;
+  id = 1;
+  methodId = 1;
+  eduContentBookId = 1;
   finalTerms = [];
   learningPlanGoals = [];
   eduContentTOC = [];
