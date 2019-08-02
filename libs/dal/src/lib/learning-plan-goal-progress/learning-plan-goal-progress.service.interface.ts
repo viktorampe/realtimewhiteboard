@@ -16,7 +16,7 @@ export interface LearningPlanGoalProgressServiceInterface {
     learningPlanGoalProgressId: number
   ): Observable<boolean>;
 
-  bulkCreateLearningPlanGoalProgress(
+  createLearningPlanGoalProgressForEduContentTOC(
     userId: number,
     classGroupId: number,
     eduContentTOCId: number,
@@ -27,6 +27,6 @@ export interface LearningPlanGoalProgressServiceInterface {
     userId: number,
     classGroupId: number,
     userLessonId: number,
-    learningPlanGoalId: number
-  ): Observable<LearningPlanGoalProgressInterface>;
+    learningPlanGoalIds: number[]
+  ): Observable<LearningPlanGoalProgressInterface[]>;
 }

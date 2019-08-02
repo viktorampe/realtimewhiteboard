@@ -26,8 +26,7 @@ describe('LearningPlanGoalProgressService', () => {
           useValue: {
             getData: () => mockData$,
             destroyByIdLearningPlanProgress: () => {},
-            bulkCreateLearningPlanGoalProgressForTOC: () => {},
-            createLearningPlanGoalProgressForUserLesson: () => {}
+            createLearningPlanGoalProgress: () => {}
           }
         }
       ]
@@ -79,7 +78,7 @@ describe('LearningPlanGoalProgressService', () => {
     });
   });
 
-  describe('bulkCreateLearningPlanGoalProgress', () => {
+  describe('createLearningPlanGoalProgressForEduContentTOC', () => {
     const mockLearningPlanGoalProgressArray = [
       new LearningPlanGoalProgressFixture({
         id: 42
@@ -95,11 +94,11 @@ describe('LearningPlanGoalProgressService', () => {
 
     it('should call the api and return the results', () => {
       //TODO don't avoid type checking -> after publish
-      personApi[
-        'bulkCreateLearningPlanGoalProgressForTOC'
-      ] = jest.fn().mockReturnValue(of(mockLearningPlanGoalProgressArray));
+      personApi['createLearningPlanGoalProgress'] = jest
+        .fn()
+        .mockReturnValue(of(mockLearningPlanGoalProgressArray));
 
-      const response = service.bulkCreateLearningPlanGoalProgress(
+      const response = service.createLearningPlanGoalProgressForEduContentTOC(
         userId,
         mockClassGroupId,
         mockEduContentTOCId,
@@ -107,9 +106,7 @@ describe('LearningPlanGoalProgressService', () => {
       );
 
       //TODO don't avoid type checking -> after publish
-      expect(
-        personApi['bulkCreateLearningPlanGoalProgressForTOC']
-      ).toHaveBeenCalledWith(
+      expect(personApi['createLearningPlanGoalProgress']).toHaveBeenCalledWith(
         userId,
         mockClassGroupId,
         mockEduContentTOCId,
@@ -123,35 +120,42 @@ describe('LearningPlanGoalProgressService', () => {
   });
 
   describe('createLearningPlanGoalProgressForUserLesson', () => {
+    const mockLearningPlanGoalProgressArray = [
+      new LearningPlanGoalProgressFixture({
+        id: 42
+      }),
+      new LearningPlanGoalProgressFixture({
+        id: 43
+      })
+    ];
+
     const mockClassGroupId = 123;
     const mockUserLessonId = 456;
-    const mockLearningPlanGoalId = 789;
+    const mockLearningPlanGoalIds = [789, 147];
 
     it('should call the api and return the results', () => {
       //TODO don't avoid type checking -> after publish
-      personApi[
-        'createLearningPlanGoalProgressForUserLesson'
-      ] = jest.fn().mockReturnValue(of(mockLearningPlanGoalProgress));
+      personApi['createLearningPlanGoalProgress'] = jest
+        .fn()
+        .mockReturnValue(of(mockLearningPlanGoalProgressArray));
 
       const response = service.createLearningPlanGoalProgressForUserLesson(
         userId,
         mockClassGroupId,
         mockUserLessonId,
-        mockLearningPlanGoalId
+        mockLearningPlanGoalIds
       );
 
       //TODO don't avoid type checking -> after publish
-      expect(
-        personApi['createLearningPlanGoalProgressForUserLesson']
-      ).toHaveBeenCalledWith(
+      expect(personApi['createLearningPlanGoalProgress']).toHaveBeenCalledWith(
         userId,
         mockClassGroupId,
         mockUserLessonId,
-        mockLearningPlanGoalId
+        mockLearningPlanGoalIds
       );
 
       expect(response).toBeObservable(
-        cold('(a|)', { a: mockLearningPlanGoalProgress })
+        cold('(a|)', { a: mockLearningPlanGoalProgressArray })
       );
     });
   });

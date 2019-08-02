@@ -35,13 +35,13 @@ export class LearningPlanGoalProgressService
       .pipe(mapTo(true));
   }
 
-  bulkCreateLearningPlanGoalProgress(
+  createLearningPlanGoalProgressForEduContentTOC(
     userId: number,
     classGroupId: number,
     eduContentTOCId: number,
     learningPlanGoalIds: number[]
   ): Observable<LearningPlanGoalProgressInterface[]> {
-    return this.personApi['bulkCreateLearningPlanGoalProgressForTOC'](
+    return this.personApi['createLearningPlanGoalProgress'](
       userId,
       classGroupId,
       eduContentTOCId,
@@ -53,13 +53,13 @@ export class LearningPlanGoalProgressService
     userId: number,
     classGroupId: number,
     userLessonId: number,
-    learningPlanGoalId: number
-  ): Observable<LearningPlanGoalProgressInterface> {
-    return this.personApi['createLearningPlanGoalProgressForUserLesson'](
+    learningPlanGoalIds: number[]
+  ): Observable<LearningPlanGoalProgressInterface[]> {
+    return this.personApi['createLearningPlanGoalProgress'](
       userId,
       classGroupId,
       userLessonId,
-      learningPlanGoalId
+      learningPlanGoalIds
     ); //TODO don't avoid type checking -> after publish
   }
 }
