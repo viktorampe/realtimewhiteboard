@@ -7,7 +7,7 @@ export enum ContentStatusLabel {
 }
 
 export interface ContentStatusInterface {
-  label: ContentStatusLabel;
+  label: ContentStatusLabel | string;
   id?: number;
   studentContentStatuses?: StudentContentStatusInterface[];
 }
