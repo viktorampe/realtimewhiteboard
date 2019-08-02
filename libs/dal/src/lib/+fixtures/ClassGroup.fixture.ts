@@ -6,10 +6,6 @@ export class ClassGroupFixture implements ClassGroupInterface {
   id = 1;
   schoolId = 1;
   classGroupTypeId = 1;
-  licenses = [];
-  years = [];
-  learningPlanGoalProgress = [];
-  schoolRoleMapping = [];
 
   constructor(props: Partial<ClassGroupInterface> = {}) {
     // overwrite defaults

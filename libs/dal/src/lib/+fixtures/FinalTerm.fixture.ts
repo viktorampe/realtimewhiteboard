@@ -7,7 +7,6 @@ export class FinalTermFixture implements FinalTermInterface {
   id = 1;
   learningAreaId = 1;
   learningDomainId = 1;
-  methodGoals = [];
 
   constructor(props: Partial<FinalTermInterface> = {}) {
     Object.assign(this, props);

@@ -8,10 +8,6 @@ export class MethodGoalFixture implements MethodGoalInterface {
   id = 1;
   methodId = 1;
   eduContentBookId = 1;
-  finalTerms = [];
-  learningPlanGoals = [];
-  eduContentTOC = [];
-  eduContentMetadata = [];
 
   constructor(props: Partial<MethodGoalInterface> = {}) {
     // overwrite defaults
