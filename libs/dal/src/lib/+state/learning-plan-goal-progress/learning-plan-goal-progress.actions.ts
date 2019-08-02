@@ -6,6 +6,7 @@ export enum LearningPlanGoalProgressesActionTypes {
   LearningPlanGoalProgressesLoaded = '[LearningPlanGoalProgresses] LearningPlanGoalProgresses Loaded',
   LearningPlanGoalProgressesLoadError = '[LearningPlanGoalProgresses] Load Error',
   LoadLearningPlanGoalProgresses = '[LearningPlanGoalProgresses] Load LearningPlanGoalProgresses',
+  StartAddLearningPlanGoalProgress = '[LearningPlanGoalProgresses] Start Add LearningPlanGoalProgress',
   AddLearningPlanGoalProgress = '[LearningPlanGoalProgresses] Add LearningPlanGoalProgress',
   UpsertLearningPlanGoalProgress = '[LearningPlanGoalProgresses] Upsert LearningPlanGoalProgress',
   AddLearningPlanGoalProgresses = '[LearningPlanGoalProgresses] Add LearningPlanGoalProgresses',
@@ -44,6 +45,16 @@ export class LearningPlanGoalProgressesLoadError implements Action {
   constructor(public payload: any) {}
 }
 
+export class StartAddLearningPlanGoalProgress implements Action {
+  readonly type =
+    LearningPlanGoalProgressesActionTypes.StartAddLearningPlanGoalProgress;
+
+  constructor(
+    public payload: {
+      learningPlanGoalProgress: LearningPlanGoalProgressInterface;
+    }
+  ) {}
+}
 export class AddLearningPlanGoalProgress implements Action {
   readonly type =
     LearningPlanGoalProgressesActionTypes.AddLearningPlanGoalProgress;
@@ -154,4 +165,5 @@ export type LearningPlanGoalProgressesActions =
   | DeleteLearningPlanGoalProgress
   | DeleteLearningPlanGoalProgresses
   | ClearLearningPlanGoalProgresses
-  | ToggleLearningPlanGoalProgress;
+  | ToggleLearningPlanGoalProgress
+  | StartAddLearningPlanGoalProgress;
