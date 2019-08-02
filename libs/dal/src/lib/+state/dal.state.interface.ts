@@ -32,6 +32,7 @@ import {
   UserReducer,
   YearReducer
 } from '../..';
+import { LearningPlanGoalProgressReducer } from './learning-plan-goal-progress';
 
 export interface DalState {
   ui: UiReducer.UiState;
@@ -66,4 +67,5 @@ export interface DalState {
   eduContentTocs: EduContentTocReducer.State;
   diaboloPhases: DiaboloPhaseReducer.State;
   userLessons: UserLessonReducer.State;
+  learningPlanGoalProgresses: LearningPlanGoalProgressReducer.State;
 }
