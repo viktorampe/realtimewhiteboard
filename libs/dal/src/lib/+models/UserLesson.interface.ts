@@ -1,4 +1,4 @@
-import { PersonInterface } from '.';
+import { LearningPlanGoalProgressInterface, PersonInterface } from '.';
 
 export interface UserLessonInterface {
   id?: number;
@@ -6,9 +6,4 @@ export interface UserLessonInterface {
   personId?: number;
   person?: PersonInterface;
   learningPlanGoalProgress?: LearningPlanGoalProgressInterface[];
-}
-
-// TODO remove when actual interface in available
-interface LearningPlanGoalProgressInterface {
-  id?: number;
 }
