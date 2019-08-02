@@ -7,8 +7,8 @@ import {
 } from '.';
 
 export interface LearningPlanGoalProgressInterface {
-  originalClassGroup: string;
-  schoolYear: number;
+  originalClassGroup?: string;
+  schoolYear?: number;
   id?: number;
   personId?: number;
   classGroupId?: number;
