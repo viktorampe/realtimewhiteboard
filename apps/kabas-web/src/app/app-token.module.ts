@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import {
   AuthService,
   AUTH_SERVICE_TOKEN,
+  ClassGroupService,
+  CLASS_GROUP_SERVICE_TOKEN,
   DiaboloPhaseService,
   DIABOLO_PHASE_SERVICE_TOKEN,
   EduContentProductTypeService,
@@ -53,7 +55,8 @@ import {
       useClass: OpenStaticContentService
     },
     { provide: USER_LESSON_SERVICE_TOKEN, useClass: UserLessonService },
-    { provide: LEARNING_DOMAIN_SERVICE_TOKEN, useClass: LearningDomainService }
+    { provide: LEARNING_DOMAIN_SERVICE_TOKEN, useClass: LearningDomainService },
+    { provide: CLASS_GROUP_SERVICE_TOKEN, useClass: ClassGroupService }
   ]
 })
 export class AppTokenModule {}

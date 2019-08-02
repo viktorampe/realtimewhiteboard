@@ -46,6 +46,7 @@ export * from './lib/+state/year';
 export * from './lib/alert';
 export * from './lib/boeke';
 export * from './lib/bundle';
+export * from './lib/class-group';
 export * from './lib/content-request';
 export * from './lib/dal.module';
 export * from './lib/edu-content';
