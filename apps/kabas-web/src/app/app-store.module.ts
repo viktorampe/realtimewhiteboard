@@ -7,6 +7,7 @@ import {
   EduContentProductTypeReducer,
   EduContentReducer,
   EduContentTocReducer,
+  LearningDomainReducer,
   MethodReducer,
   UiReducer,
   UserReducer,
@@ -84,6 +85,13 @@ import { environment } from '../environments/environment';
       CurrentExerciseReducer.NAME,
       CurrentExerciseReducer.reducer,
       { initialState: CurrentExerciseReducer.initialState }
+    ),
+    StoreModule.forFeature(
+      LearningDomainReducer.NAME,
+      LearningDomainReducer.reducer,
+      {
+        initialState: LearningDomainReducer.initialState
+      }
     ),
     !environment.production ? StoreDevtoolsModule.instrument() : []
   ]
