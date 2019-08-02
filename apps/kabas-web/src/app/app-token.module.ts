@@ -10,12 +10,16 @@ import {
   EDU_CONTENT_SERVICE_TOKEN,
   ExerciseService,
   EXERCISE_SERVICE_TOKEN,
+  LearningDomainService,
+  LEARNING_DOMAIN_SERVICE_TOKEN,
   MethodService,
   METHOD_SERVICE_TOKEN,
   PersonService,
   PERSON_SERVICE_TOKEN,
   TocService,
   TOC_SERVICE_TOKEN,
+  UserLessonService,
+  USER_LESSON_SERVICE_TOKEN,
   YearService,
   YEAR_SERVICE_TOKEN
 } from '@campus/dal';
@@ -47,7 +51,9 @@ import {
     {
       provide: OPEN_STATIC_CONTENT_SERVICE_TOKEN,
       useClass: OpenStaticContentService
-    }
+    },
+    { provide: USER_LESSON_SERVICE_TOKEN, useClass: UserLessonService },
+    { provide: LEARNING_DOMAIN_SERVICE_TOKEN, useClass: LearningDomainService }
   ]
 })
 export class AppTokenModule {}

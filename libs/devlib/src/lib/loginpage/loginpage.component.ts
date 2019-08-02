@@ -22,7 +22,10 @@ import {
   TocServiceInterface,
   TOC_SERVICE_TOKEN,
   UnlockedContentActions,
-  UserActions
+  UserActions,
+  UserLessonFixture,
+  UserLessonServiceInterface,
+  USER_LESSON_SERVICE_TOKEN
 } from '@campus/dal';
 import {
   SearchFilterCriteriaFixture,
@@ -70,7 +73,9 @@ export class LoginpageComponent implements OnInit {
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
     private store: Store<AlertReducer.State>,
     private router: Router,
-    @Inject(TOC_SERVICE_TOKEN) private tocService: TocServiceInterface
+    @Inject(TOC_SERVICE_TOKEN) private tocService: TocServiceInterface,
+    @Inject(USER_LESSON_SERVICE_TOKEN)
+    private userLessonService: UserLessonServiceInterface
   ) {}
 
   ngOnInit() {
@@ -160,5 +165,15 @@ export class LoginpageComponent implements OnInit {
 
   public filterSelectionChanged(event) {
     console.log(event);
+  }
+
+  public createUserLesson() {
+    const userId = this.authService.userId;
+    const userLesson = new UserLessonFixture({
+      id: undefined,
+      description: 'dit is een nieuwe userLesson',
+      personId: userId
+    });
+    this.response = this.userLessonService.createForUser(userId, userLesson);
   }
 }

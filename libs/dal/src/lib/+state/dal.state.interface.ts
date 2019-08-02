@@ -28,6 +28,7 @@ import {
   UnlockedBoekeStudentReducer,
   UnlockedContentReducer,
   UserContentReducer,
+  UserLessonReducer,
   UserReducer,
   YearReducer
 } from '../..';
@@ -64,4 +65,5 @@ export interface DalState {
   history: HistoryReducer.State;
   eduContentTocs: EduContentTocReducer.State;
   diaboloPhases: DiaboloPhaseReducer.State;
+  userLessons: UserLessonReducer.State;
 }

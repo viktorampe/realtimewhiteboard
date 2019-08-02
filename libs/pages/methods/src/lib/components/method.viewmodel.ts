@@ -196,10 +196,6 @@ export class MethodViewModel implements ContentOpenerInterface {
   }
 
   private initialize() {
-    this._searchState$ = new BehaviorSubject<SearchStateInterface>(null);
-    this.searchState$ = this._searchState$;
-    this.routerState$ = this.store.pipe(select(getRouterState));
-
     this.setSourceStreams();
     this.setPresentationStreams();
     this.setupSearchResults();

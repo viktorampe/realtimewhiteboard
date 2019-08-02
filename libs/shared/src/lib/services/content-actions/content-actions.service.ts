@@ -54,7 +54,7 @@ export class ContentActionsService implements ContentActionsServiceInterface {
     },
     openBoeke: {
       label: 'Openen',
-      icon: 'boeken',
+      icon: 'book',
       tooltip: 'Open het bordboek',
       handler: this.contentOpener.openBoeke.bind(this.contentOpener)
     }
