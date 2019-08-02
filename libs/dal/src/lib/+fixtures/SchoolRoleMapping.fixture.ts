@@ -6,7 +6,6 @@ export class SchoolRoleMappingFixture implements SchoolRoleMappingInterface {
   personId = 1;
   roleId = 1;
   schoolId = 1;
-  classGroups = [];
 
   constructor(props: Partial<SchoolRoleMappingInterface> = {}) {
     // overwrite defaults

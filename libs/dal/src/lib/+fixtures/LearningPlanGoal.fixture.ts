@@ -10,8 +10,6 @@ export class LearningPlanGoalFixture implements LearningPlanGoalInterface {
   learningAreaId = 1;
   learningDomainId? = 1;
   eduNetId = 1;
-  methodGoals = [];
-  learningPlanGoalProgress = [];
 
   constructor(props: Partial<LearningPlanGoalInterface> = {}) {
     // overwrite defaults
