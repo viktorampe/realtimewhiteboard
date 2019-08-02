@@ -4,6 +4,7 @@ export * from './lib/+state';
 export { DalState } from './lib/+state';
 export * from './lib/+state/alert';
 export * from './lib/+state/bundle';
+export * from './lib/+state/class-group';
 export * from './lib/+state/content-status';
 export * from './lib/+state/credential';
 export * from './lib/+state/current-exercise';

@@ -1,6 +1,7 @@
 import {
   AlertReducer,
   BundleReducer,
+  ClassGroupReducer,
   ContentStatusReducer,
   CredentialReducer,
   CurrentExerciseReducer,
@@ -66,4 +67,5 @@ export interface DalState {
   eduContentTocs: EduContentTocReducer.State;
   diaboloPhases: DiaboloPhaseReducer.State;
   userLessons: UserLessonReducer.State;
+  classGroups: ClassGroupReducer.State;
 }
