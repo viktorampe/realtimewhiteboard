@@ -6,6 +6,7 @@ import {
   EduContentProductTypeEffects,
   EduContentsEffects,
   EduContentTocEffects,
+  LearningDomainEffects,
   MethodEffects,
   UiEffects,
   UserEffects,
@@ -28,7 +29,8 @@ import { EffectsModule } from '@ngrx/effects';
       YearEffects,
       EduContentsEffects,
       CurrentExerciseEffects,
-      UserLessonEffects
+      UserLessonEffects,
+      LearningDomainEffects
     ])
   ]
 })

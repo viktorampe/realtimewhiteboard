@@ -32,10 +32,16 @@ body {
 // include pages lib scss files
 @import 'libs/pages/methods/src/lib/pages-methods.theme';
 @include pages-methods-theme();
+@import 'libs/pages/global-search/src/lib/pages-global-search.theme';
+@include pages-global-search-theme();
 
 // include shared lib scss
 @import 'libs/shared/src/lib/shared-theme';
 @include shared-theme();
+
+// include search lib scss
+@import 'libs/search/src/lib/search-theme';
+@include search-theme();
 
 [ng-reflect-router-link] {
   cursor: pointer;
@@ -77,7 +83,8 @@ body {
     border-right: 12px solid #e1e5e7;
   }
 
-  @media #{$ui-breakpoint-xsmall}, #{$ui-breakpoint-small} {
+  @media #{$ui-breakpoint-xsmall},
+  #{$ui-breakpoint-small} {
     &:after {
       display: none;
     }
