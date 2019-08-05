@@ -19,7 +19,6 @@ describe('ClassGroupEffects', () => {
   let effects: ClassGroupEffects;
   let usedState: any;
 
-
   const expectInAndOut = (
     effect: Observable<any>,
     triggerAction: Action,
@@ -61,9 +60,13 @@ describe('ClassGroupEffects', () => {
       imports: [
         NxModule.forRoot(),
         StoreModule.forRoot({}),
-        StoreModule.forFeature(ClassGroupReducer.NAME , ClassGroupReducer.reducer, {
-          initialState: usedState
-        }),
+        StoreModule.forFeature(
+          ClassGroupReducer.NAME,
+          ClassGroupReducer.reducer,
+          {
+            initialState: usedState
+          }
+        ),
         EffectsModule.forRoot([]),
         EffectsModule.forFeature([ClassGroupEffects])
       ],

@@ -2,7 +2,10 @@ import { Inject, Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
 import { DataPersistence } from '@nrwl/nx';
 import { map } from 'rxjs/operators';
-import { ClassGroupServiceInterface, CLASS_GROUP_SERVICE_TOKEN } from '../../class-group/class-group.service.interface';
+import {
+  ClassGroupServiceInterface,
+  CLASS_GROUP_SERVICE_TOKEN
+} from '../../class-group/class-group.service.interface';
 import {
   ClassGroupsActionTypes,
   ClassGroupsLoadError,

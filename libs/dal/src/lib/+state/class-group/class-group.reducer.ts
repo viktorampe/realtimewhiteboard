@@ -60,7 +60,10 @@ export function reducer(
     }
 
     case ClassGroupsActionTypes.ClassGroupsLoaded: {
-      return adapter.addAll(action.payload.classGroups, { ...state, loaded: true });
+      return adapter.addAll(action.payload.classGroups, {
+        ...state,
+        loaded: true
+      });
     }
 
     case ClassGroupsActionTypes.ClassGroupsLoadError: {
