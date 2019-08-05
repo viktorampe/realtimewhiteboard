@@ -6,6 +6,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   MatButtonModule,
+  MatCheckboxModule,
   MatDialogModule,
   MatFormFieldModule,
   MatIconModule,
@@ -53,6 +54,7 @@ import {
 import { ManageCollectionComponent } from './manage-collection/manage-collection.component';
 import { CollectionManagerService } from './manage-collection/services/collection-manager.service';
 import { COLLECTION_MANAGER_SERVICE_TOKEN } from './manage-collection/services/collection-manager.service.interface';
+import { MultiCheckBoxTableComponent } from './multi-check-box-table/multi-check-box-table.component';
 import { DropdownDirective } from './notification/directives/notification-dropdown.directive';
 import { NotificationComponent } from './notification/notification.component';
 import { PageHeaderComponent } from './page-header/page-header.component';
@@ -78,7 +80,6 @@ import { HumanDateTimePipe } from './utils/pipes/human-date-time/human-date-time
 import { JoinPipe } from './utils/pipes/join/join.pipe';
 import { RemovePrefixStringPipe } from './utils/pipes/remove-prefix-string/remove-prefix-string.pipe';
 import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-string.pipe';
-import { MultiCheckBoxTableComponent } from './multi-check-box-table/multi-check-box-table.component';
 @NgModule({
   imports: [
     OverlayModule,
@@ -100,7 +101,8 @@ import { MultiCheckBoxTableComponent } from './multi-check-box-table/multi-check
     UtilsModule,
     MatDialogModule,
     MatListModule,
-    MatTabsModule
+    MatTabsModule,
+    MatCheckboxModule
   ],
   declarations: [
     FilterTextInputComponent,
@@ -216,7 +218,8 @@ import { MultiCheckBoxTableComponent } from './multi-check-box-table/multi-check
     MatTabsModule,
     MatTooltipModule,
     MatIconModule,
-    MultiCheckBoxTableComponent
+    MultiCheckBoxTableComponent,
+    MatCheckboxModule
   ],
   providers: [
     {

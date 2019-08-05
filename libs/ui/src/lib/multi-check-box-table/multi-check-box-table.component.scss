@@ -1,0 +1,22 @@
+.ui-multi-check-box-table__table__body {
+
+  .ui-multi-check-box-table__table__row {
+    &--even {
+      background-color: #f2f2f2;
+    }
+
+    &--odd {
+      background-color: #cccccc;
+    }
+
+    &__cell {
+      &--last-row-header {
+        width: 100%;
+      }
+
+      &--checkbox {
+        text-align: center
+      }
+    }
+  }
+}

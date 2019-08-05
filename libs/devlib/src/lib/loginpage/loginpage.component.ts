@@ -1,3 +1,4 @@
+// tslint:disable: member-ordering
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import {
@@ -6,17 +7,23 @@ import {
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
   BundleActions,
+  ClassGroupFixture,
+  ClassGroupInterface,
   DiaboloPhaseActions,
   DiaboloPhaseFixture,
   EduContentActions,
   EduContentInterface,
   EduContentTocActions,
+  EduContentTOCFixture,
+  EduContentTOCInterface,
   EffectFeedbackInterface,
   EffectFeedbackQueries,
   FavoriteActions,
   FavoriteInterface,
   FavoriteTypesEnum,
   LearningAreaActions,
+  LearningPlanGoalFixture,
+  LearningPlanGoalInterface,
   TaskActions,
   TaskEduContentActions,
   TocServiceInterface,
@@ -33,6 +40,13 @@ import {
 } from '@campus/search';
 import { ContentEditableComponent } from '@campus/ui';
 import { select, Store } from '@ngrx/store';
+// tslint:disable-next-line: nx-enforce-module-boundaries
+import {
+  ItemColumnInterface,
+  ItemInterface,
+  RowHeaderColumnInterface,
+  SubLevelInterface
+} from 'libs/ui/src/lib/multi-check-box-table/multi-check-box-table.interface';
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { LoginPageViewModel } from './loginpage.viewmodel';
@@ -176,4 +190,81 @@ export class LoginpageComponent implements OnInit {
     });
     this.response = this.userLessonService.createForUser(userId, userLesson);
   }
+
+  public subLevels: SubLevelInterface<
+    EduContentTOCInterface,
+    LearningPlanGoalInterface
+  >[] = [
+    {
+      item: new EduContentTOCFixture({ id: 1, title: 'les1' }),
+      label: 'title',
+      children: [
+        {
+          header: new LearningPlanGoalFixture({ id: 1, goal: 'item1' }),
+          content: { 1: true }
+        },
+        {
+          header: new LearningPlanGoalFixture({ id: 2, goal: 'item2' }),
+          content: { 2: true }
+        },
+        {
+          header: new LearningPlanGoalFixture({ id: 3, goal: 'item3' }),
+          content: { 1: true, 2: true }
+        }
+      ]
+    },
+    {
+      item: new EduContentTOCFixture({ id: 2, title: 'les2' }),
+      label: 'title',
+      children: [
+        {
+          header: new LearningPlanGoalFixture({ id: 4, goal: 'item4' }),
+          content: {}
+        },
+        {
+          header: new LearningPlanGoalFixture({ id: 5, goal: 'item5' }),
+          content: {}
+        },
+        {
+          header: new LearningPlanGoalFixture({ id: 6, goal: 'item6' }),
+          content: {}
+        }
+      ]
+    }
+  ];
+
+  public itemColumns: ItemColumnInterface<ClassGroupInterface>[] = [
+    {
+      item: new ClassGroupFixture({ id: 1, name: 'klas1' }),
+      key: 'id',
+      label: 'name'
+    },
+    {
+      item: new ClassGroupFixture({ id: 2, name: 'klas2' }),
+      key: 'id',
+      label: 'name'
+    }
+  ];
+
+  public rowHeaderColumns: RowHeaderColumnInterface<
+    LearningPlanGoalInterface
+  >[] = [
+    { caption: 'id', key: 'id' },
+    { caption: 'beschrijving', key: 'goal' }
+  ];
+
+  public items: ItemInterface<LearningPlanGoalInterface>[] = [
+    {
+      header: new LearningPlanGoalFixture({ id: 1, goal: 'item1' }),
+      content: { 1: true }
+    },
+    {
+      header: new LearningPlanGoalFixture({ id: 2, goal: 'item2' }),
+      content: { 2: true }
+    },
+    {
+      header: new LearningPlanGoalFixture({ id: 3, goal: 'item3' }),
+      content: { 1: true, 2: true }
+    }
+  ];
 }
