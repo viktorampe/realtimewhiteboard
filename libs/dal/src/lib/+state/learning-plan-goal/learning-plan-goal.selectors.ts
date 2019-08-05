@@ -15,11 +15,6 @@ export const getError = createSelector(
   (state: State) => state.error
 );
 
-export const getLoaded = createSelector(
-  selectLearningPlanGoalState,
-  (state: State) => state.loaded
-);
-
 export const getAll = createSelector(
   selectLearningPlanGoalState,
   selectAll
