@@ -109,8 +109,9 @@ describe('LearningPlanGoalProgressService', () => {
       expect(personApi['createLearningPlanGoalProgress']).toHaveBeenCalledWith(
         userId,
         mockClassGroupId,
-        mockEduContentTOCId,
-        mockLearningPlanGoalIds
+        mockLearningPlanGoalIds,
+        null,
+        mockEduContentTOCId
       );
 
       expect(response).toBeObservable(
@@ -150,8 +151,9 @@ describe('LearningPlanGoalProgressService', () => {
       expect(personApi['createLearningPlanGoalProgress']).toHaveBeenCalledWith(
         userId,
         mockClassGroupId,
+        mockLearningPlanGoalIds,
         mockUserLessonId,
-        mockLearningPlanGoalIds
+        null
       );
 
       expect(response).toBeObservable(
