@@ -11,11 +11,13 @@ describe('LearningPlanGoal Selectors', () => {
 
   function createState(
     learningPlanGoals: LearningPlanGoalInterface[],
-    loaded: boolean = false,
+    loadedBooks: number[],
     error?: any
   ): State {
     return {
-      ids: learningPlanGoals ? learningPlanGoals.map(learningPlanGoal => learningPlanGoal.id) : [],
+      ids: learningPlanGoals
+        ? learningPlanGoals.map(learningPlanGoal => learningPlanGoal.id)
+        : [],
       entities: learningPlanGoals
         ? learningPlanGoals.reduce(
             (entityMap, learningPlanGoal) => ({
@@ -25,7 +27,7 @@ describe('LearningPlanGoal Selectors', () => {
             {}
           )
         : {},
-      loaded: loaded,
+      loadedBooks,
       error: error
     };
   }
@@ -42,7 +44,7 @@ describe('LearningPlanGoal Selectors', () => {
           createLearningPlanGoal(2),
           createLearningPlanGoal(3)
         ],
-        true,
+        [],
         'no error'
       );
       storeState = { learningPlanGoals: learningPlanGoalState };
@@ -51,10 +53,7 @@ describe('LearningPlanGoal Selectors', () => {
       const results = LearningPlanGoalQueries.getError(storeState);
       expect(results).toBe(learningPlanGoalState.error);
     });
-    it('getLoaded() should return the loaded boolean', () => {
-      const results = LearningPlanGoalQueries.getLoaded(storeState);
-      expect(results).toBe(learningPlanGoalState.loaded);
-    });
+
     it('getAll() should return an array of the entities in the order from the ids', () => {
       const results = LearningPlanGoalQueries.getAll(storeState);
       expect(results).toEqual([
@@ -94,6 +93,22 @@ describe('LearningPlanGoal Selectors', () => {
     it('getById() should return undefined if the entity is not present', () => {
       const results = LearningPlanGoalQueries.getById(storeState, { id: 9 });
       expect(results).toBe(undefined);
+    });
+
+    describe('isBookLoaded', () => {
+      it('should return false if the book has not been loaded', () => {
+        const results = LearningPlanGoalQueries.isBookLoaded(storeState, {
+          bookId: 9
+        });
+        expect(results).toBe(false);
+      });
+
+      it('should return true if the book has been loaded', () => {
+        const results = LearningPlanGoalQueries.isBookLoaded(storeState, {
+          bookId: 1
+        });
+        expect(results).toBe(true);
+      });
     });
   });
 });

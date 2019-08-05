@@ -20,11 +20,20 @@ export const getLoaded = createSelector(
   (state: State) => state.loaded
 );
 
-export const getAll = createSelector(selectLearningPlanGoalState, selectAll);
+export const getAll = createSelector(
+  selectLearningPlanGoalState,
+  selectAll
+);
 
-export const getCount = createSelector(selectLearningPlanGoalState, selectTotal);
+export const getCount = createSelector(
+  selectLearningPlanGoalState,
+  selectTotal
+);
 
-export const getIds = createSelector(selectLearningPlanGoalState, selectIds);
+export const getIds = createSelector(
+  selectLearningPlanGoalState,
+  selectIds
+);
 
 export const getAllEntities = createSelector(
   selectLearningPlanGoalState,
@@ -45,7 +54,6 @@ export const getByIds = createSelector(
   }
 );
 
-
 /**
  * returns array of objects in the order of the given ids
  * @example
@@ -56,4 +64,10 @@ export const getByIds = createSelector(
 export const getById = createSelector(
   selectLearningPlanGoalState,
   (state: State, props: { id: number }) => state.entities[props.id]
+);
+
+export const isBookLoaded = createSelector(
+  selectLearningPlanGoalState,
+  (state: State, props: { bookId: number }) =>
+    state.loadedBooks.some(loadedBookId => loadedBookId === props.bookId)
 );
