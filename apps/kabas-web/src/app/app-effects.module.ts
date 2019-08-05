@@ -7,6 +7,7 @@ import {
   EduContentsEffects,
   EduContentTocEffects,
   LearningDomainEffects,
+  LearningPlanGoalEffects,
   MethodEffects,
   UiEffects,
   UserEffects,
@@ -14,7 +15,6 @@ import {
   YearEffects
 } from '@campus/dal';
 import { EffectsModule } from '@ngrx/effects';
-import { LearningPlanGoalEffects } from './../../../../libs/dal/src/lib/+state/learning-plan-goal/learning-plan-goal.effects';
 
 @NgModule({
   imports: [
