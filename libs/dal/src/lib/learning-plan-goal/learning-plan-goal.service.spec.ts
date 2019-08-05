@@ -48,7 +48,7 @@ describe('LearningPlanGoalService', () => {
       // TODO don't avoid typescript
       personApi[
         'getLearningPlanGoalsForBookRemote'
-      ] = jest.fn().mockReturnValue(of([mockLearningPlanGoal]));
+      ] = jest.fn().mockReturnValue(of({ result: [mockLearningPlanGoal] }));
 
       const response = service.getLearningPlanGoalsForBook(userId, bookId);
 
@@ -56,7 +56,9 @@ describe('LearningPlanGoalService', () => {
         personApi['getLearningPlanGoalsForBookRemote']
       ).toHaveBeenCalledWith(userId, bookId);
 
-      expect(response).toBeObservable(cold('a', { a: [mockLearningPlanGoal] }));
+      expect(response).toBeObservable(
+        cold('(a|)', { a: [mockLearningPlanGoal] })
+      );
     });
   });
 });

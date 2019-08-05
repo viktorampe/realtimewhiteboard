@@ -18,6 +18,7 @@ export class LearningPlanGoalService
       userId,
       bookId
     ).pipe(map(response => response['result'])); //TODO don't avoid typescript
+    // doublecheck -> no idea how the response will be formatted
   }
 
   constructor(private personApi: PersonApi) {}
