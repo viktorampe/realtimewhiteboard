@@ -10,9 +10,8 @@ import { LEARNING_PLAN_GOAL_SERVICE_TOKEN } from '../../learning-plan-goal/learn
 import {
   AddLearningPlanGoalsForBook,
   AddLoadedBook,
-  LearningPlanGoalsLoaded,
   LearningPlanGoalsLoadError,
-  loadLearningPlanGoalsForBook
+  LoadLearningPlanGoalsForBook
 } from './learning-plan-goal.actions';
 import { LearningPlanGoalEffects } from './learning-plan-goal.effects';
 
@@ -76,7 +75,7 @@ describe('LearningPlanGoalEffects', () => {
         {
           provide: LEARNING_PLAN_GOAL_SERVICE_TOKEN,
           useValue: {
-            getAllForUser: () => {}
+            getLearningPlanGoalsForBook: () => {}
           }
         },
         LearningPlanGoalEffects,
@@ -89,12 +88,12 @@ describe('LearningPlanGoalEffects', () => {
   });
 
   describe('loadLearningPlanGoal$', () => {
-    const unforcedLoadAction = new loadLearningPlanGoalsForBook({ userId: 1 });
-    const forcedLoadAction = new loadLearningPlanGoalsForBook({
-      force: true,
+    const loadAction = new LoadLearningPlanGoalsForBook({
+      bookId: 1,
       userId: 1
     });
-    const filledLoadedAction = new LearningPlanGoalsLoaded({
+    const filledLoadedAction = new AddLearningPlanGoalsForBook({
+      bookId: 1,
       learningPlanGoals: []
     });
     const loadErrorAction = new LearningPlanGoalsLoadError(new Error('failed'));
@@ -103,42 +102,28 @@ describe('LearningPlanGoalEffects', () => {
         usedState = LearningPlanGoalReducer.initialState;
       });
       beforeEach(() => {
-        mockServiceMethodReturnValue('getAllForUser', []);
+        mockServiceMethodReturnValue('getLearningPlanGoalsForBook', []);
       });
-      it('should trigger an api call with the initialState if force is not true', () => {
+      it('should trigger an api call with the initialState', () => {
         expectInAndOut(
           effects.loadLearningPlanGoalsForBook$,
-          unforcedLoadAction,
-          filledLoadedAction
-        );
-      });
-      it('should trigger an api call with the initialState if force is true', () => {
-        expectInAndOut(
-          effects.loadLearningPlanGoalsForBook$,
-          forcedLoadAction,
+          loadAction,
           filledLoadedAction
         );
       });
     });
     describe('with loaded state', () => {
       beforeAll(() => {
-        usedState = { ...LearningPlanGoalReducer.initialState, loaded: true };
+        usedState = {
+          ...LearningPlanGoalReducer.initialState,
+          loadedBooks: [1]
+        };
       });
       beforeEach(() => {
-        mockServiceMethodReturnValue('getAllForUser', []);
+        mockServiceMethodReturnValue('getLearningPlanGoalsForBook', []);
       });
-      it('should not trigger an api call with the loaded state if force is not true', () => {
-        expectInNoOut(
-          effects.loadLearningPlanGoalsForBook$,
-          unforcedLoadAction
-        );
-      });
-      it('should trigger an api call with the loaded state if force is true', () => {
-        expectInAndOut(
-          effects.loadLearningPlanGoalsForBook$,
-          forcedLoadAction,
-          filledLoadedAction
-        );
+      it('should not trigger an api call with the loaded state if the book is already loaded', () => {
+        expectInNoOut(effects.loadLearningPlanGoalsForBook$, loadAction);
       });
     });
     describe('with initialState and failing api call', () => {
@@ -146,44 +131,39 @@ describe('LearningPlanGoalEffects', () => {
         usedState = LearningPlanGoalReducer.initialState;
       });
       beforeEach(() => {
-        mockServiceMethodError('getAllForUser', 'failed');
+        mockServiceMethodError('getLearningPlanGoalsForBook', 'failed');
       });
-      it('should return a error action if force is not true', () => {
+      it('should return a error action', () => {
         expectInAndOut(
           effects.loadLearningPlanGoalsForBook$,
-          unforcedLoadAction,
-          loadErrorAction
-        );
-      });
-      it('should return a error action if force is true', () => {
-        expectInAndOut(
-          effects.loadLearningPlanGoalsForBook$,
-          forcedLoadAction,
+          loadAction,
           loadErrorAction
         );
       });
     });
     describe('with loaded and failing api call', () => {
+      const loadActionForNewBook = new LoadLearningPlanGoalsForBook({
+        bookId: 2,
+        userId: 1
+      });
+
       beforeAll(() => {
         usedState = {
           ...LearningPlanGoalReducer.initialState,
-          loaded: true,
+          loadedBooks: [1],
           list: []
         };
       });
       beforeEach(() => {
-        mockServiceMethodError('getAllForUser', 'failed');
+        mockServiceMethodError('getLearningPlanGoalsForBook', 'failed');
       });
-      it('should return nothing action if force is not true', () => {
-        expectInNoOut(
-          effects.loadLearningPlanGoalsForBook$,
-          unforcedLoadAction
-        );
+      it('should return nothing if the book is already loaded', () => {
+        expectInNoOut(effects.loadLearningPlanGoalsForBook$, loadAction);
       });
-      it('should return a error action if force is true', () => {
+      it('should return a error action if the book is not already loaded', () => {
         expectInAndOut(
           effects.loadLearningPlanGoalsForBook$,
-          forcedLoadAction,
+          loadActionForNewBook,
           loadErrorAction
         );
       });
@@ -200,7 +180,7 @@ describe('LearningPlanGoalEffects', () => {
 
     const loadErrorAction = new LearningPlanGoalsLoadError(new Error('failed'));
 
-    it('should add the book to the loadedBooks when the tocs are added to the state', () => {
+    it('should add the book to the loadedBooks when the learningPlanGoals are added to the state', () => {
       expectInAndOut(
         effects.addLoadedBook$,
         addLearningPlanGoalsForBookAction,
