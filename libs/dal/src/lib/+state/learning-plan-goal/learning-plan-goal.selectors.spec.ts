@@ -44,7 +44,7 @@ describe('LearningPlanGoal Selectors', () => {
           createLearningPlanGoal(2),
           createLearningPlanGoal(3)
         ],
-        [],
+        [1],
         'no error'
       );
       storeState = { learningPlanGoals: learningPlanGoalState };

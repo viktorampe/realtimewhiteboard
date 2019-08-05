@@ -19,7 +19,6 @@ export const adapter: EntityAdapter<
 
 export const initialState: State = adapter.getInitialState({
   // additional entity state properties
-  loaded: false,
   loadedBooks: []
 });
 
