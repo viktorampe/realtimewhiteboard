@@ -44,8 +44,9 @@ export class LearningPlanGoalProgressService
     return this.personApi['createLearningPlanGoalProgress'](
       userId,
       classGroupId,
-      eduContentTOCId,
-      learningPlanGoalIds
+      learningPlanGoalIds,
+      null,
+      eduContentTOCId
     ); //TODO don't avoid type checking -> after publish
   }
 
@@ -58,8 +59,9 @@ export class LearningPlanGoalProgressService
     return this.personApi['createLearningPlanGoalProgress'](
       userId,
       classGroupId,
+      learningPlanGoalIds,
       userLessonId,
-      learningPlanGoalIds
+      null
     ); //TODO don't avoid type checking -> after publish
   }
 }
