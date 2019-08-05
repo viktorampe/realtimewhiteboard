@@ -11,7 +11,9 @@ import {
   ExerciseService,
   EXERCISE_SERVICE_TOKEN,
   LearningDomainService,
+  LearningPlanGoalService,
   LEARNING_DOMAIN_SERVICE_TOKEN,
+  LEARNING_PLAN_GOAL_SERVICE_TOKEN,
   MethodService,
   METHOD_SERVICE_TOKEN,
   PersonService,
@@ -53,7 +55,11 @@ import {
       useClass: OpenStaticContentService
     },
     { provide: USER_LESSON_SERVICE_TOKEN, useClass: UserLessonService },
-    { provide: LEARNING_DOMAIN_SERVICE_TOKEN, useClass: LearningDomainService }
+    { provide: LEARNING_DOMAIN_SERVICE_TOKEN, useClass: LearningDomainService },
+    {
+      provide: LEARNING_PLAN_GOAL_SERVICE_TOKEN,
+      useClass: LearningPlanGoalService
+    }
   ]
 })
 export class AppTokenModule {}

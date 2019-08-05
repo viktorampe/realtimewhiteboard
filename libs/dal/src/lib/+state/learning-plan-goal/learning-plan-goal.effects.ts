@@ -3,8 +3,17 @@ import { Actions, Effect } from '@ngrx/effects';
 import { DataPersistence } from '@nrwl/nx';
 import { map } from 'rxjs/operators';
 import { DalState } from '..';
-import { LearningPlanGoalServiceInterface, LEARNING_PLAN_GOAL_SERVICE_TOKEN } from '../../learning-plan-goal/learning-plan-goal.service.interface';
-import { AddLearningPlanGoalsForBook, AddLoadedBook, LearningPlanGoalsActionTypes, LearningPlanGoalsLoadError, LoadLearningPlanGoalsForBook } from './learning-plan-goal.actions';
+import {
+  LearningPlanGoalServiceInterface,
+  LEARNING_PLAN_GOAL_SERVICE_TOKEN
+} from '../../learning-plan-goal/learning-plan-goal.service.interface';
+import {
+  AddLearningPlanGoalsForBook,
+  AddLoadedBook,
+  LearningPlanGoalsActionTypes,
+  LearningPlanGoalsLoadError,
+  LoadLearningPlanGoalsForBook
+} from './learning-plan-goal.actions';
 import { isBookLoaded } from './learning-plan-goal.selectors';
 
 @Injectable()
@@ -15,13 +24,14 @@ export class LearningPlanGoalEffects {
     {
       run: (action: LoadLearningPlanGoalsForBook, state: DalState) => {
         const requestedBookId = action.payload.bookId;
+        const userId = action.payload.userId;
 
         if (isBookLoaded(state, { bookId: requestedBookId })) {
           return;
         }
 
         return this.learningPlanGoalService
-          .geLearningPlanGoalsForBookId(requestedBookId)
+          .getLearningPlanGoalsForBook(userId, requestedBookId)
           .pipe(
             map(
               learningPlanGoals =>
@@ -35,7 +45,8 @@ export class LearningPlanGoalEffects {
       onError: (action: LoadLearningPlanGoalsForBook, error) => {
         return new LearningPlanGoalsLoadError(error);
       }
-    });
+    }
+  );
 
   // When AddLearningPlanGoalsForBook is dispatched
   // also dispatch an action to add the book to the loadedBooks
@@ -54,7 +65,6 @@ export class LearningPlanGoalEffects {
         return new LearningPlanGoalsLoadError(error);
       }
     }
-  );
   );
 
   constructor(
