@@ -1,4 +1,9 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {
+  ComponentFixture,
+  fakeAsync,
+  TestBed,
+  tick
+} from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
@@ -16,7 +21,6 @@ import {
   ENVIRONMENT_SEARCHMODES_TOKEN,
   SharedModule
 } from '@campus/shared';
-import { ViewModelInterface } from '@campus/testing';
 import { UiModule } from '@campus/ui';
 import { configureTestSuite } from 'ng-bullet';
 import { BehaviorSubject } from 'rxjs';
@@ -29,7 +33,7 @@ describe('MethodChapterComponent', () => {
   let fixture: ComponentFixture<MethodChapterComponent>;
   let searchComponent;
   let params: BehaviorSubject<Params>;
-  let methodViewModel: ViewModelInterface<MethodViewModel>;
+  let methodViewModel: MockMethodViewModel;
   let router: Router;
 
   configureTestSuite(() => {
@@ -121,28 +125,80 @@ describe('MethodChapterComponent', () => {
     });
 
     describe('clickBackLink', () => {
-      it('should navigate up to the book when inside a chapter', () => {
+      it('should navigate up to the book when inside a chapter', fakeAsync(() => {
         component.clickBackLink();
+        tick();
 
         expect(router.navigate).toHaveBeenCalled();
-        expect(router.navigate).toHaveBeenCalledWith(['methods', 1]);
-      });
+        expect(router.navigate).toHaveBeenCalledWith(['methods', 1], {
+          queryParams: { tab: 0 }
+        });
+      }));
 
-      it('should navigate up to the chapter when inside a lesson', () => {
+      it('should navigate up to the chapter when inside a lesson', fakeAsync(() => {
         component.currentLessonId = 3;
 
         component.clickBackLink();
+        tick();
 
         expect(router.navigate).toHaveBeenCalled();
-        expect(router.navigate).toHaveBeenCalledWith(['methods', 1, 2]);
-      });
+        expect(router.navigate).toHaveBeenCalledWith(['methods', 1, 2], {
+          queryParams: { tab: 0 }
+        });
+      }));
+
+      it('should pass the tab in the queryParams when going back', fakeAsync(() => {
+        const tab = 1;
+        methodViewModel.currentTab$.next(tab);
+
+        component.clickBackLink();
+        tick();
+
+        expect(router.navigate).toHaveBeenCalled();
+        expect(router.navigate).toHaveBeenCalledWith(['methods', 1], {
+          queryParams: { tab }
+        });
+      }));
     });
 
-    it('should navigate to the lesson when clickOpenLesson is called', () => {
-      component.clickOpenLesson(3);
+    describe('clickOpenLesson', () => {
+      it('should navigate to the lesson when clickOpenLesson is called', fakeAsync(() => {
+        component.clickOpenLesson(3);
+        tick();
 
-      expect(router.navigate).toHaveBeenCalled();
-      expect(router.navigate).toHaveBeenCalledWith(['methods', 1, 2, 3]);
+        expect(router.navigate).toHaveBeenCalled();
+        expect(router.navigate).toHaveBeenCalledWith(['methods', 1, 2, 3], {
+          queryParams: { tab: 0 }
+        });
+      }));
+
+      it('should pass the tab in the queryParams when clickOpenLesson is called', fakeAsync(() => {
+        const tab = 1;
+        methodViewModel.currentTab$.next(tab);
+
+        component.clickOpenLesson(3);
+        tick();
+
+        expect(router.navigate).toHaveBeenCalled();
+        expect(router.navigate).toHaveBeenCalledWith(['methods', 1, 2, 3], {
+          queryParams: { tab }
+        });
+      }));
+    });
+  });
+
+  describe('tabs', () => {
+    describe('onSelectedTabIndexChanged', () => {
+      it('should navigate with the new tab index in the queryParams', () => {
+        const tab = 1;
+
+        component.onSelectedTabIndexChanged(tab);
+
+        expect(router.navigate).toHaveBeenCalled();
+        expect(router.navigate).toHaveBeenCalledWith([], {
+          queryParams: { tab }
+        });
+      });
     });
   });
 

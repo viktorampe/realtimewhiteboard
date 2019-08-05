@@ -216,7 +216,11 @@ export class MethodViewModel implements ContentOpenerInterface {
   private getCurrentTab(): Observable<number> {
     return this.routerState$.pipe(
       map((routerState: RouterReducerState<RouterStateUrl>) => {
-        return routerState.state.queryParams.tab || 0;
+        return (
+          (routerState.state.queryParams &&
+            routerState.state.queryParams.tab) ||
+          0
+        );
       })
     );
   }

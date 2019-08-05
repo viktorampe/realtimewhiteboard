@@ -59,6 +59,7 @@ export class MockMethodViewModel
       diabolo: true
     })
   );
+  public currentTab$ = new BehaviorSubject<number>(0);
 
   public eduContentProductTypes$ = new BehaviorSubject<
     EduContentProductTypeInterface[]

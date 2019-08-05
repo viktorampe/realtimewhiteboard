@@ -10,7 +10,6 @@ import {
   ENVIRONMENT_SEARCHMODES_TOKEN,
   SharedModule
 } from '@campus/shared';
-import { ViewModelInterface } from '@campus/testing';
 import { UiModule } from '@campus/ui';
 import { configureTestSuite } from 'ng-bullet';
 import { BehaviorSubject } from 'rxjs';
@@ -21,7 +20,7 @@ import { MethodComponent } from './method.component';
 describe('MethodComponent', () => {
   let component: MethodComponent;
   let fixture: ComponentFixture<MethodComponent>;
-  let methodViewModel: ViewModelInterface<MethodViewModel>;
+  let methodViewModel: MockMethodViewModel;
   let params: BehaviorSubject<Params>;
   let router: Router;
 
@@ -49,12 +48,11 @@ describe('MethodComponent', () => {
         { provide: ENVIRONMENT_ICON_MAPPING_TOKEN, useValue: {} }
       ]
     });
-
-    router = TestBed.get(Router);
   });
 
   beforeEach(() => {
     methodViewModel = TestBed.get(MethodViewModel);
+    router = TestBed.get(Router);
     fixture = TestBed.createComponent(MethodComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -86,6 +84,23 @@ describe('MethodComponent', () => {
       By.css('div[main] h3[mat-subheader]')
     );
     expect(productTypeHeaders.length).toBe(2);
+  });
+
+  describe('tabs', () => {
+    describe('onSelectedTabIndexChanged', () => {
+      it('should navigate with the new tab index in the queryParams', () => {
+        const tab = 1;
+
+        const navigate = jest.spyOn(router, 'navigate');
+
+        component.onSelectedTabIndexChanged(tab);
+
+        expect(navigate).toHaveBeenCalled();
+        expect(navigate).toHaveBeenCalledWith([], {
+          queryParams: { tab }
+        });
+      });
+    });
   });
 
   describe('openboeke', () => {
