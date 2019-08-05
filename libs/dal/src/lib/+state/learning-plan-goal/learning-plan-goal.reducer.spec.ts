@@ -1,26 +1,24 @@
 import { Update } from '@ngrx/entity';
-import {LearningPlanGoalActions } from '.';
-import { initialState, reducer, State } from './learning-plan-goal.reducer';
+import { LearningPlanGoalActions } from '.';
 import { LearningPlanGoalInterface } from '../../+models';
+import { initialState, reducer, State } from './learning-plan-goal.reducer';
 
-/** 
- * This file is scaffolded, but needs some special attention:
- * - find and replace '__EXTRA__PROPERTY_NAME' and replace this with a property name of the LearningPlanGoal entity.
- * - set the initial property value via '[__EXTRA__PROPERTY_NAME]InitialValue'.
- * - set the updated property value via '[__EXTRA__PROPERTY_NAME]UpdatedValue'.
-*/
-const __EXTRA__PROPERTY_NAMEInitialValue = ;
-const __EXTRA__PROPERTY_NAMEUpdatedValue = ;
+const goalInitialValue = 'De leerlingen kunnen tellen tot 10.';
+const goalUpdatedValue =
+  'De leerlingen kunnen differentiaalvergelijkingen oplossen.';
 
 /**
  * Creates a LearningPlanGoal.
  * @param {number} id
  * @returns {LearningPlanGoalInterface}
  */
-function createLearningPlanGoal(id: number, __EXTRA__PROPERTY_NAME:any = __EXTRA__PROPERTY_NAMEInitialValue): LearningPlanGoalInterface | any {
+function createLearningPlanGoal(
+  id: number,
+  goal: any = goalInitialValue
+): LearningPlanGoalInterface | any {
   return {
     id: id,
-    __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAME
+    goal: goal
   };
 }
 
@@ -38,7 +36,9 @@ function createState(
   error?: any
 ): State {
   const state: any = {
-    ids: learningPlanGoals ? learningPlanGoals.map(learningPlanGoal => learningPlanGoal.id) : [],
+    ids: learningPlanGoals
+      ? learningPlanGoals.map(learningPlanGoal => learningPlanGoal.id)
+      : [],
     entities: learningPlanGoals
       ? learningPlanGoals.reduce(
           (entityMap, learningPlanGoal) => ({
@@ -53,7 +53,6 @@ function createState(
   if (error !== undefined) state.error = error;
   return state;
 }
-
 
 describe('LearningPlanGoals Reducer', () => {
   let learningPlanGoals: LearningPlanGoalInterface[];
@@ -77,14 +76,18 @@ describe('LearningPlanGoals Reducer', () => {
 
   describe('loaded action', () => {
     it('should load all learningPlanGoals', () => {
-      const action = new LearningPlanGoalActions.LearningPlanGoalsLoaded({ learningPlanGoals });
+      const action = new LearningPlanGoalActions.LearningPlanGoalsLoaded({
+        learningPlanGoals
+      });
       const result = reducer(initialState, action);
       expect(result).toEqual(createState(learningPlanGoals, true));
     });
 
     it('should error', () => {
       const error = 'Something went wrong';
-      const action = new LearningPlanGoalActions.LearningPlanGoalsLoadError(error);
+      const action = new LearningPlanGoalActions.LearningPlanGoalsLoadError(
+        error
+      );
       const result = reducer(initialState, action);
       expect(result).toEqual(createState([], false, error));
     });
@@ -102,7 +105,9 @@ describe('LearningPlanGoals Reducer', () => {
     });
 
     it('should add multiple learningPlanGoals', () => {
-      const action = new LearningPlanGoalActions.AddLearningPlanGoals({ learningPlanGoals });
+      const action = new LearningPlanGoalActions.AddLearningPlanGoals({
+        learningPlanGoals
+      });
       const result = reducer(initialState, action);
 
       expect(result).toEqual(createState(learningPlanGoals, false));
@@ -111,7 +116,7 @@ describe('LearningPlanGoals Reducer', () => {
   describe('upsert actions', () => {
     it('should upsert one learningPlanGoal', () => {
       const originalLearningPlanGoal = learningPlanGoals[0];
-      
+
       const startState = reducer(
         initialState,
         new LearningPlanGoalActions.AddLearningPlanGoal({
@@ -119,16 +124,20 @@ describe('LearningPlanGoals Reducer', () => {
         })
       );
 
-    
-      const updatedLearningPlanGoal = createLearningPlanGoal(learningPlanGoals[0].id, 'test');
-     
+      const updatedLearningPlanGoal = createLearningPlanGoal(
+        learningPlanGoals[0].id,
+        'test'
+      );
+
       const action = new LearningPlanGoalActions.UpsertLearningPlanGoal({
         learningPlanGoal: updatedLearningPlanGoal
       });
 
       const result = reducer(startState, action);
 
-      expect(result.entities[updatedLearningPlanGoal.id]).toEqual(updatedLearningPlanGoal);
+      expect(result.entities[updatedLearningPlanGoal.id]).toEqual(
+        updatedLearningPlanGoal
+      );
     });
 
     it('should upsert many learningPlanGoals', () => {
@@ -146,9 +155,7 @@ describe('LearningPlanGoals Reducer', () => {
 
       const result = reducer(startState, action);
 
-      expect(result).toEqual(
-        createState(learningPlanGoalsToInsert)
-      );
+      expect(result).toEqual(createState(learningPlanGoalsToInsert));
     });
   });
 
@@ -159,31 +166,32 @@ describe('LearningPlanGoals Reducer', () => {
       const update: Update<LearningPlanGoalInterface> = {
         id: 1,
         changes: {
-          __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAMEUpdatedValue
-        } 
+          goal: goalUpdatedValue
+        }
       };
       const action = new LearningPlanGoalActions.UpdateLearningPlanGoal({
         learningPlanGoal: update
       });
       const result = reducer(startState, action);
-      expect(result).toEqual(createState([createLearningPlanGoal(1, __EXTRA__PROPERTY_NAMEUpdatedValue)]));
+      expect(result).toEqual(
+        createState([createLearningPlanGoal(1, goalUpdatedValue)])
+      );
     });
 
     it('should update multiple learningPlanGoals', () => {
       const startState = createState(learningPlanGoals);
       const updates: Update<LearningPlanGoalInterface>[] = [
-        
         {
           id: 1,
           changes: {
-            __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAMEUpdatedValue
-          } 
+            goal: goalUpdatedValue
+          }
         },
         {
           id: 2,
           changes: {
-            __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAMEUpdatedValue
-          }  
+            goal: goalUpdatedValue
+          }
         }
       ];
       const action = new LearningPlanGoalActions.UpdateLearningPlanGoals({
@@ -192,7 +200,11 @@ describe('LearningPlanGoals Reducer', () => {
       const result = reducer(startState, action);
 
       expect(result).toEqual(
-        createState([createLearningPlanGoal(1, __EXTRA__PROPERTY_NAMEUpdatedValue), createLearningPlanGoal(2, __EXTRA__PROPERTY_NAMEUpdatedValue), learningPlanGoals[2]])
+        createState([
+          createLearningPlanGoal(1, goalUpdatedValue),
+          createLearningPlanGoal(2, goalUpdatedValue),
+          learningPlanGoals[2]
+        ])
       );
     });
   });
@@ -220,7 +232,11 @@ describe('LearningPlanGoals Reducer', () => {
 
   describe('clear action', () => {
     it('should clear the learningPlanGoals collection', () => {
-      const startState = createState(learningPlanGoals, true, 'something went wrong');
+      const startState = createState(
+        learningPlanGoals,
+        true,
+        'something went wrong'
+      );
       const action = new LearningPlanGoalActions.ClearLearningPlanGoals();
       const result = reducer(startState, action);
       expect(result).toEqual(createState([], true, 'something went wrong'));
