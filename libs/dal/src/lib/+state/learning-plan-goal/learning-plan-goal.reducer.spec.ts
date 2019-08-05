@@ -1,4 +1,3 @@
-import { Update } from '@ngrx/entity';
 import { LearningPlanGoalActions } from '.';
 import { LearningPlanGoalInterface } from '../../+models';
 import { initialState, reducer, State } from './learning-plan-goal.reducer';
@@ -32,7 +31,7 @@ function createLearningPlanGoal(
  */
 function createState(
   learningPlanGoals: LearningPlanGoalInterface[],
-  loaded: boolean = false,
+  loadedBooks: number[],
   error?: any
 ): State {
   const state: any = {
@@ -48,14 +47,16 @@ function createState(
           {}
         )
       : {},
-    loaded: loaded
+    loadedBooks
   };
   if (error !== undefined) state.error = error;
   return state;
 }
 
 describe('LearningPlanGoals Reducer', () => {
+  const bookId = 1;
   let learningPlanGoals: LearningPlanGoalInterface[];
+
   beforeEach(() => {
     learningPlanGoals = [
       createLearningPlanGoal(1),
@@ -75,158 +76,25 @@ describe('LearningPlanGoals Reducer', () => {
   });
 
   describe('loaded action', () => {
-    it('should load all learningPlanGoals', () => {
-      const action = new LearningPlanGoalActions.LearningPlanGoalsLoaded({
-        learningPlanGoals
-      });
-      const result = reducer(initialState, action);
-      expect(result).toEqual(createState(learningPlanGoals, true));
-    });
-
     it('should error', () => {
       const error = 'Something went wrong';
       const action = new LearningPlanGoalActions.LearningPlanGoalsLoadError(
         error
       );
       const result = reducer(initialState, action);
-      expect(result).toEqual(createState([], false, error));
+      expect(result).toEqual(createState([], [], error));
     });
   });
 
   describe('add actions', () => {
-    it('should add one learningPlanGoal', () => {
-      const learningPlanGoal = learningPlanGoals[0];
-      const action = new LearningPlanGoalActions.AddLearningPlanGoal({
-        learningPlanGoal
-      });
-
-      const result = reducer(initialState, action);
-      expect(result).toEqual(createState([learningPlanGoal], false));
-    });
-
-    it('should add multiple learningPlanGoals', () => {
-      const action = new LearningPlanGoalActions.AddLearningPlanGoals({
+    it('should add multiple learningPlanGoals for a book', () => {
+      const action = new LearningPlanGoalActions.AddLearningPlanGoalsForBook({
+        bookId,
         learningPlanGoals
       });
       const result = reducer(initialState, action);
 
-      expect(result).toEqual(createState(learningPlanGoals, false));
-    });
-  });
-  describe('upsert actions', () => {
-    it('should upsert one learningPlanGoal', () => {
-      const originalLearningPlanGoal = learningPlanGoals[0];
-
-      const startState = reducer(
-        initialState,
-        new LearningPlanGoalActions.AddLearningPlanGoal({
-          learningPlanGoal: originalLearningPlanGoal
-        })
-      );
-
-      const updatedLearningPlanGoal = createLearningPlanGoal(
-        learningPlanGoals[0].id,
-        'test'
-      );
-
-      const action = new LearningPlanGoalActions.UpsertLearningPlanGoal({
-        learningPlanGoal: updatedLearningPlanGoal
-      });
-
-      const result = reducer(startState, action);
-
-      expect(result.entities[updatedLearningPlanGoal.id]).toEqual(
-        updatedLearningPlanGoal
-      );
-    });
-
-    it('should upsert many learningPlanGoals', () => {
-      const startState = createState(learningPlanGoals);
-
-      const learningPlanGoalsToInsert = [
-        createLearningPlanGoal(1),
-        createLearningPlanGoal(2),
-        createLearningPlanGoal(3),
-        createLearningPlanGoal(4)
-      ];
-      const action = new LearningPlanGoalActions.UpsertLearningPlanGoals({
-        learningPlanGoals: learningPlanGoalsToInsert
-      });
-
-      const result = reducer(startState, action);
-
-      expect(result).toEqual(createState(learningPlanGoalsToInsert));
-    });
-  });
-
-  describe('update actions', () => {
-    it('should update an learningPlanGoal', () => {
-      const learningPlanGoal = learningPlanGoals[0];
-      const startState = createState([learningPlanGoal]);
-      const update: Update<LearningPlanGoalInterface> = {
-        id: 1,
-        changes: {
-          goal: goalUpdatedValue
-        }
-      };
-      const action = new LearningPlanGoalActions.UpdateLearningPlanGoal({
-        learningPlanGoal: update
-      });
-      const result = reducer(startState, action);
-      expect(result).toEqual(
-        createState([createLearningPlanGoal(1, goalUpdatedValue)])
-      );
-    });
-
-    it('should update multiple learningPlanGoals', () => {
-      const startState = createState(learningPlanGoals);
-      const updates: Update<LearningPlanGoalInterface>[] = [
-        {
-          id: 1,
-          changes: {
-            goal: goalUpdatedValue
-          }
-        },
-        {
-          id: 2,
-          changes: {
-            goal: goalUpdatedValue
-          }
-        }
-      ];
-      const action = new LearningPlanGoalActions.UpdateLearningPlanGoals({
-        learningPlanGoals: updates
-      });
-      const result = reducer(startState, action);
-
-      expect(result).toEqual(
-        createState([
-          createLearningPlanGoal(1, goalUpdatedValue),
-          createLearningPlanGoal(2, goalUpdatedValue),
-          learningPlanGoals[2]
-        ])
-      );
-    });
-  });
-
-  describe('delete actions', () => {
-    it('should delete one learningPlanGoal ', () => {
-      const learningPlanGoal = learningPlanGoals[0];
-      const startState = createState([learningPlanGoal]);
-      const action = new LearningPlanGoalActions.DeleteLearningPlanGoal({
-        id: learningPlanGoal.id
-      });
-      const result = reducer(startState, action);
-      expect(result).toEqual(createState([]));
-    });
-
-    it('should delete multiple learningPlanGoals', () => {
-      const startState = createState(learningPlanGoals);
-      const action = new LearningPlanGoalActions.DeleteLearningPlanGoals({
-        ids: [learningPlanGoals[0].id, learningPlanGoals[1].id]
-      });
-      const result = reducer(startState, action);
-      expect(result).toEqual(createState([learningPlanGoals[2]]));
+      expect(result).toEqual(createState(learningPlanGoals, []));
     });
   });
 
@@ -234,12 +102,25 @@ describe('LearningPlanGoals Reducer', () => {
     it('should clear the learningPlanGoals collection', () => {
       const startState = createState(
         learningPlanGoals,
-        true,
+        [],
         'something went wrong'
       );
       const action = new LearningPlanGoalActions.ClearLearningPlanGoals();
       const result = reducer(startState, action);
-      expect(result).toEqual(createState([], true, 'something went wrong'));
+      expect(result).toEqual(createState([], [], 'something went wrong'));
+    });
+
+    it('should clear the loadedBooks collection', () => {
+      const startState = createState(
+        learningPlanGoals,
+        [bookId],
+        'something went wrong'
+      );
+      const action = new LearningPlanGoalActions.ClearLoadedBooks();
+      const result = reducer(startState, action);
+      expect(result).toEqual(
+        createState(learningPlanGoals, [], 'something went wrong')
+      );
     });
   });
 });

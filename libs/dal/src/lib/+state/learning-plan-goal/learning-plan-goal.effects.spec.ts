@@ -5,12 +5,12 @@ import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
-import { LEARNING_PLAN_GOAL_SERVICE_TOKEN } from '../../learning-plan-goal/learning-plan-goal.service.interface';
 import { LearningPlanGoalReducer } from '.';
+import { LEARNING_PLAN_GOAL_SERVICE_TOKEN } from '../../learning-plan-goal/learning-plan-goal.service.interface';
 import {
   LearningPlanGoalsLoaded,
   LearningPlanGoalsLoadError,
-  LoadLearningPlanGoals
+  loadLearningPlanGoalsForBook
 } from './learning-plan-goal.actions';
 import { LearningPlanGoalEffects } from './learning-plan-goal.effects';
 
@@ -18,7 +18,6 @@ describe('LearningPlanGoalEffects', () => {
   let actions: Observable<any>;
   let effects: LearningPlanGoalEffects;
   let usedState: any;
-
 
   const expectInAndOut = (
     effect: Observable<any>,
@@ -61,9 +60,13 @@ describe('LearningPlanGoalEffects', () => {
       imports: [
         NxModule.forRoot(),
         StoreModule.forRoot({}),
-        StoreModule.forFeature(LearningPlanGoalReducer.NAME , LearningPlanGoalReducer.reducer, {
-          initialState: usedState
-        }),
+        StoreModule.forFeature(
+          LearningPlanGoalReducer.NAME,
+          LearningPlanGoalReducer.reducer,
+          {
+            initialState: usedState
+          }
+        ),
         EffectsModule.forRoot([]),
         EffectsModule.forFeature([LearningPlanGoalEffects])
       ],
@@ -84,9 +87,14 @@ describe('LearningPlanGoalEffects', () => {
   });
 
   describe('loadLearningPlanGoal$', () => {
-    const unforcedLoadAction = new LoadLearningPlanGoals({ userId: 1 });
-    const forcedLoadAction = new LoadLearningPlanGoals({ force: true, userId: 1 });
-    const filledLoadedAction = new LearningPlanGoalsLoaded({ learningPlanGoals: [] });
+    const unforcedLoadAction = new loadLearningPlanGoalsForBook({ userId: 1 });
+    const forcedLoadAction = new loadLearningPlanGoalsForBook({
+      force: true,
+      userId: 1
+    });
+    const filledLoadedAction = new LearningPlanGoalsLoaded({
+      learningPlanGoals: []
+    });
     const loadErrorAction = new LearningPlanGoalsLoadError(new Error('failed'));
     describe('with initialState', () => {
       beforeAll(() => {
@@ -97,14 +105,14 @@ describe('LearningPlanGoalEffects', () => {
       });
       it('should trigger an api call with the initialState if force is not true', () => {
         expectInAndOut(
-          effects.loadLearningPlanGoals$,
+          effects.loadLearningPlanGoalsForBook$,
           unforcedLoadAction,
           filledLoadedAction
         );
       });
       it('should trigger an api call with the initialState if force is true', () => {
         expectInAndOut(
-          effects.loadLearningPlanGoals$,
+          effects.loadLearningPlanGoalsForBook$,
           forcedLoadAction,
           filledLoadedAction
         );
@@ -118,11 +126,14 @@ describe('LearningPlanGoalEffects', () => {
         mockServiceMethodReturnValue('getAllForUser', []);
       });
       it('should not trigger an api call with the loaded state if force is not true', () => {
-        expectInNoOut(effects.loadLearningPlanGoals$, unforcedLoadAction);
+        expectInNoOut(
+          effects.loadLearningPlanGoalsForBook$,
+          unforcedLoadAction
+        );
       });
       it('should trigger an api call with the loaded state if force is true', () => {
         expectInAndOut(
-          effects.loadLearningPlanGoals$,
+          effects.loadLearningPlanGoalsForBook$,
           forcedLoadAction,
           filledLoadedAction
         );
@@ -137,14 +148,14 @@ describe('LearningPlanGoalEffects', () => {
       });
       it('should return a error action if force is not true', () => {
         expectInAndOut(
-          effects.loadLearningPlanGoals$,
+          effects.loadLearningPlanGoalsForBook$,
           unforcedLoadAction,
           loadErrorAction
         );
       });
       it('should return a error action if force is true', () => {
         expectInAndOut(
-          effects.loadLearningPlanGoals$,
+          effects.loadLearningPlanGoalsForBook$,
           forcedLoadAction,
           loadErrorAction
         );
@@ -162,11 +173,14 @@ describe('LearningPlanGoalEffects', () => {
         mockServiceMethodError('getAllForUser', 'failed');
       });
       it('should return nothing action if force is not true', () => {
-        expectInNoOut(effects.loadLearningPlanGoals$, unforcedLoadAction);
+        expectInNoOut(
+          effects.loadLearningPlanGoalsForBook$,
+          unforcedLoadAction
+        );
       });
       it('should return a error action if force is true', () => {
         expectInAndOut(
-          effects.loadLearningPlanGoals$,
+          effects.loadLearningPlanGoalsForBook$,
           forcedLoadAction,
           loadErrorAction
         );

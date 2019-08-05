@@ -9,17 +9,18 @@ export const NAME = 'learningPlanGoals';
 
 export interface State extends EntityState<LearningPlanGoalInterface> {
   // additional entities state properties
-  loaded: boolean;
   error?: any;
+  loadedBooks: number[];
 }
 
-export const adapter: EntityAdapter<LearningPlanGoalInterface> = createEntityAdapter<
+export const adapter: EntityAdapter<
   LearningPlanGoalInterface
->();
+> = createEntityAdapter<LearningPlanGoalInterface>();
 
 export const initialState: State = adapter.getInitialState({
   // additional entity state properties
-  loaded: false
+  loaded: false,
+  loadedBooks: []
 });
 
 export function reducer(
@@ -27,48 +28,27 @@ export function reducer(
   action: LearningPlanGoalsActions
 ): State {
   switch (action.type) {
-    case LearningPlanGoalsActionTypes.AddLearningPlanGoal: {
-      return adapter.addOne(action.payload.learningPlanGoal, state);
-    }
-
-    case LearningPlanGoalsActionTypes.UpsertLearningPlanGoal: {
-      return adapter.upsertOne(action.payload.learningPlanGoal, state);
-    }
-
-    case LearningPlanGoalsActionTypes.AddLearningPlanGoals: {
+    case LearningPlanGoalsActionTypes.AddLearningPlanGoalsForBook: {
       return adapter.addMany(action.payload.learningPlanGoals, state);
     }
 
-    case LearningPlanGoalsActionTypes.UpsertLearningPlanGoals: {
-      return adapter.upsertMany(action.payload.learningPlanGoals, state);
-    }
-
-    case LearningPlanGoalsActionTypes.UpdateLearningPlanGoal: {
-      return adapter.updateOne(action.payload.learningPlanGoal, state);
-    }
-
-    case LearningPlanGoalsActionTypes.UpdateLearningPlanGoals: {
-      return adapter.updateMany(action.payload.learningPlanGoals, state);
-    }
-
-    case LearningPlanGoalsActionTypes.DeleteLearningPlanGoal: {
-      return adapter.removeOne(action.payload.id, state);
-    }
-
-    case LearningPlanGoalsActionTypes.DeleteLearningPlanGoals: {
-      return adapter.removeMany(action.payload.ids, state);
-    }
-
-    case LearningPlanGoalsActionTypes.LearningPlanGoalsLoaded: {
-      return adapter.addAll(action.payload.learningPlanGoals, { ...state, loaded: true });
+    case LearningPlanGoalsActionTypes.AddLoadedBook: {
+      return {
+        ...state,
+        loadedBooks: [...state.loadedBooks, action.payload.bookId]
+      };
     }
 
     case LearningPlanGoalsActionTypes.LearningPlanGoalsLoadError: {
-      return { ...state, error: action.payload, loaded: false };
+      return { ...state, error: action.payload, loadedBooks: [] };
     }
 
     case LearningPlanGoalsActionTypes.ClearLearningPlanGoals: {
       return adapter.removeAll(state);
+    }
+
+    case LearningPlanGoalsActionTypes.ClearLoadedBooks: {
+      return { ...state, loadedBooks: [] };
     }
 
     default: {

@@ -1,34 +1,13 @@
-import { Update } from '@ngrx/entity';
 import { Action } from '@ngrx/store';
 import { LearningPlanGoalInterface } from '../../+models';
 
 export enum LearningPlanGoalsActionTypes {
-  LearningPlanGoalsLoaded = '[LearningPlanGoals] LearningPlanGoals Loaded',
   LearningPlanGoalsLoadError = '[LearningPlanGoals] Load Error',
-  LoadLearningPlanGoals = '[LearningPlanGoals] Load LearningPlanGoals',
-  AddLearningPlanGoal = '[LearningPlanGoals] Add LearningPlanGoal',
-  UpsertLearningPlanGoal = '[LearningPlanGoals] Upsert LearningPlanGoal',
-  AddLearningPlanGoals = '[LearningPlanGoals] Add LearningPlanGoals',
-  UpsertLearningPlanGoals = '[LearningPlanGoals] Upsert LearningPlanGoals',
-  UpdateLearningPlanGoal = '[LearningPlanGoals] Update LearningPlanGoal',
-  UpdateLearningPlanGoals = '[LearningPlanGoals] Update LearningPlanGoals',
-  DeleteLearningPlanGoal = '[LearningPlanGoals] Delete LearningPlanGoal',
-  DeleteLearningPlanGoals = '[LearningPlanGoals] Delete LearningPlanGoals',
-  ClearLearningPlanGoals = '[LearningPlanGoals] Clear LearningPlanGoals'
-}
-
-export class LoadLearningPlanGoals implements Action {
-  readonly type = LearningPlanGoalsActionTypes.LoadLearningPlanGoals;
-
-  constructor(
-    public payload: { force?: boolean, userId: number } = { userId: null }
-  ) {}
-}
-
-export class LearningPlanGoalsLoaded implements Action {
-  readonly type = LearningPlanGoalsActionTypes.LearningPlanGoalsLoaded;
-
-  constructor(public payload: { learningPlanGoals: LearningPlanGoalInterface[] }) {}
+  LoadLearningPlanGoalsForBook = '[LearningPlanGoals] Load LearningPlanGoals for Book',
+  AddLearningPlanGoalsForBook = '[LearningPlanGoals] Add LearningPlanGoals for Book',
+  AddLoadedBook = '[LearningPlanGoals] Add loaded Book',
+  ClearLearningPlanGoals = '[LearningPlanGoals] Clear LearningPlanGoals',
+  ClearLoadedBooks = '[EduContentTocs] Clear loaded Books'
 }
 
 export class LearningPlanGoalsLoadError implements Action {
@@ -36,68 +15,46 @@ export class LearningPlanGoalsLoadError implements Action {
   constructor(public payload: any) {}
 }
 
-export class AddLearningPlanGoal implements Action {
-  readonly type = LearningPlanGoalsActionTypes.AddLearningPlanGoal;
+export class LoadLearningPlanGoalsForBook implements Action {
+  readonly type = LearningPlanGoalsActionTypes.LoadLearningPlanGoalsForBook;
 
-  constructor(public payload: { learningPlanGoal: LearningPlanGoalInterface }) {}
+  constructor(
+    public payload: { bookId: number; userId: number } = {
+      bookId: null,
+      userId: null
+    }
+  ) {}
 }
 
-export class UpsertLearningPlanGoal implements Action {
-  readonly type = LearningPlanGoalsActionTypes.UpsertLearningPlanGoal;
+export class AddLearningPlanGoalsForBook implements Action {
+  readonly type = LearningPlanGoalsActionTypes.AddLearningPlanGoalsForBook;
 
-  constructor(public payload: { learningPlanGoal: LearningPlanGoalInterface }) {}
+  constructor(
+    public payload: {
+      bookId: number;
+      learningPlanGoals: LearningPlanGoalInterface[];
+    }
+  ) {}
 }
 
-export class AddLearningPlanGoals implements Action {
-  readonly type = LearningPlanGoalsActionTypes.AddLearningPlanGoals;
+export class AddLoadedBook implements Action {
+  readonly type = LearningPlanGoalsActionTypes.AddLoadedBook;
 
-  constructor(public payload: { learningPlanGoals: LearningPlanGoalInterface[] }) {}
-}
-
-export class UpsertLearningPlanGoals implements Action {
-  readonly type = LearningPlanGoalsActionTypes.UpsertLearningPlanGoals;
-
-  constructor(public payload: { learningPlanGoals: LearningPlanGoalInterface[] }) {}
-}
-
-export class UpdateLearningPlanGoal implements Action {
-  readonly type = LearningPlanGoalsActionTypes.UpdateLearningPlanGoal;
-
-  constructor(public payload: { learningPlanGoal: Update<LearningPlanGoalInterface> }) {}
-}
-
-export class UpdateLearningPlanGoals implements Action {
-  readonly type = LearningPlanGoalsActionTypes.UpdateLearningPlanGoals;
-
-  constructor(public payload: { learningPlanGoals: Update<LearningPlanGoalInterface>[] }) {}
-}
-
-export class DeleteLearningPlanGoal implements Action {
-  readonly type = LearningPlanGoalsActionTypes.DeleteLearningPlanGoal;
-
-  constructor(public payload: { id: number }) {}
-}
-
-export class DeleteLearningPlanGoals implements Action {
-  readonly type = LearningPlanGoalsActionTypes.DeleteLearningPlanGoals;
-
-  constructor(public payload: { ids: number[] }) {}
+  constructor(public payload: { bookId: number }) {}
 }
 
 export class ClearLearningPlanGoals implements Action {
   readonly type = LearningPlanGoalsActionTypes.ClearLearningPlanGoals;
 }
 
+export class ClearLoadedBooks implements Action {
+  readonly type = LearningPlanGoalsActionTypes.ClearLoadedBooks;
+}
+
 export type LearningPlanGoalsActions =
-  | LoadLearningPlanGoals
-  | LearningPlanGoalsLoaded
+  | LoadLearningPlanGoalsForBook
   | LearningPlanGoalsLoadError
-  | AddLearningPlanGoal
-  | UpsertLearningPlanGoal
-  | AddLearningPlanGoals
-  | UpsertLearningPlanGoals
-  | UpdateLearningPlanGoal
-  | UpdateLearningPlanGoals
-  | DeleteLearningPlanGoal
-  | DeleteLearningPlanGoals
-  | ClearLearningPlanGoals;
+  | AddLearningPlanGoalsForBook
+  | AddLoadedBook
+  | ClearLearningPlanGoals
+  | ClearLoadedBooks;
