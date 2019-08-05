@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import {
   EduContent,
   EduContentBookInterface,
@@ -23,8 +24,9 @@ export class MethodComponent implements OnInit {
   public generalFilesByType$: Observable<Dictionary<EduContent[]>>;
   public method$: Observable<MethodInterface>;
   public productTypes$: Observable<EduContentProductTypeInterface[]>;
+  public currentTab$: Observable<number>;
 
-  constructor(private viewModel: MethodViewModel) {}
+  constructor(private viewModel: MethodViewModel, private router: Router) {}
 
   ngOnInit() {
     this.boeke$ = this.viewModel.currentBoeke$;
@@ -33,6 +35,13 @@ export class MethodComponent implements OnInit {
     this.generalFilesByType$ = this.viewModel.generalFilesByType$;
     this.method$ = this.viewModel.currentMethod$;
     this.productTypes$ = this.viewModel.eduContentProductTypes$;
+    this.currentTab$ = this.viewModel.currentTab$;
+  }
+
+  public onSelectedTabIndexChanged(tab: number) {
+    this.router.navigate([], {
+      queryParams: { tab }
+    });
   }
 
   public clickOpenBoeke(eduContent: EduContent): void {

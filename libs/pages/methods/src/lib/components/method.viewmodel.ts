@@ -63,6 +63,7 @@ export class MethodViewModel implements ContentOpenerInterface {
   public currentBook$: Observable<EduContentBookInterface>;
   public eduContentProductTypes$: Observable<EduContentProductTypeInterface[]>;
   public generalFilesByType$: Observable<Dictionary<EduContent[]>>;
+  public currentTab$: Observable<number>;
 
   // Source streams
   private routerState$: Observable<RouterReducerState<RouterStateUrl>>;
@@ -209,6 +210,15 @@ export class MethodViewModel implements ContentOpenerInterface {
     this.currentToc$ = this.getTocsStream();
     this.eduContentProductTypes$ = this.getEduContentProductTypesStream();
     this.generalFilesByType$ = this.getGeneralFilesByType();
+    this.currentTab$ = this.getCurrentTab();
+  }
+
+  private getCurrentTab(): Observable<number> {
+    return this.routerState$.pipe(
+      map((routerState: RouterReducerState<RouterStateUrl>) => {
+        return routerState.state.queryParams.tab || 0;
+      })
+    );
   }
 
   private getCurrentBoekeStream(): Observable<EduContent> {
@@ -264,6 +274,7 @@ export class MethodViewModel implements ContentOpenerInterface {
     this.routerState$ = this.store.pipe(select(getRouterState));
 
     this.currentMethodParams$ = this.getCurrentMethodParams();
+
     this.currentBook$ = this.getCurrentBookStream();
     this.currentMethod$ = this.getCurrentMethodStream();
 

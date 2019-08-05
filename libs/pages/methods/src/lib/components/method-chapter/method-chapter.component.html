@@ -28,7 +28,10 @@
     </div>
 
     <div main>
-      <mat-tab-group>
+      <mat-tab-group
+        [selectedIndex]="currentTab$ | async"
+        (selectedIndexChange)="onSelectedTabIndexChanged($event)"
+      >
         <mat-tab label="Lesmateriaal">
           <div class="method-chapter--filters">
             <ng-container searchPortal="searchTerm"></ng-container>

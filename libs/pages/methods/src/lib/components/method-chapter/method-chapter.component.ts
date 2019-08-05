@@ -16,6 +16,7 @@ import {
   SearchStateInterface
 } from '@campus/search';
 import { Observable } from 'rxjs';
+import { take } from 'rxjs/operators';
 import { MethodViewModel } from '../method.viewmodel';
 
 @Component({
@@ -31,6 +32,7 @@ export class MethodChapterComponent implements OnInit, AfterViewInit {
   public autoCompleteValues$: Observable<string[]>;
   public boeke$: Observable<EduContent>;
   public lessonsForChapter$: Observable<EduContentTOCInterface[]>;
+  public currentTab$: Observable<number>;
 
   public currentLessonId: number;
 
@@ -53,6 +55,7 @@ export class MethodChapterComponent implements OnInit, AfterViewInit {
     this.searchResults$ = this.methodViewModel.searchResults$;
     this.boeke$ = this.methodViewModel.currentBoeke$;
     this.lessonsForChapter$ = this.methodViewModel.currentToc$;
+    this.currentTab$ = this.methodViewModel.currentTab$;
 
     this.currentBookId = +this.route.snapshot.params.book;
     this.currentChapterId = +this.route.snapshot.params.chapter;
@@ -61,6 +64,12 @@ export class MethodChapterComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     this.searchComponent.searchPortals = this.portalHosts;
+  }
+
+  public onSelectedTabIndexChanged(tab: number) {
+    this.router.navigate([], {
+      queryParams: { tab }
+    });
   }
 
   public onAutoCompleteRequest(term: string) {
@@ -80,18 +89,29 @@ export class MethodChapterComponent implements OnInit, AfterViewInit {
   public clickOpenLesson(lessonId: number) {
     this.currentLessonId = lessonId;
 
-    this.router.navigate([
-      'methods',
-      this.currentBookId,
-      this.currentChapterId,
-      lessonId
-    ]);
+    this.currentTab$.pipe(take(1)).subscribe(tab => {
+      this.router.navigate(
+        ['methods', this.currentBookId, this.currentChapterId, lessonId],
+        {
+          queryParams: {
+            tab
+          }
+        }
+      );
+    });
   }
 
   public clickBackLink() {
     const urlParts = ['methods', this.currentBookId];
     if (this.currentLessonId) urlParts.push(this.currentChapterId);
-    this.router.navigate(urlParts);
+
+    this.currentTab$.pipe(take(1)).subscribe(tab => {
+      this.router.navigate(urlParts, {
+        queryParams: {
+          tab
+        }
+      });
+    });
   }
 
   public clickOpenBoeke(eduContent: EduContent): void {
