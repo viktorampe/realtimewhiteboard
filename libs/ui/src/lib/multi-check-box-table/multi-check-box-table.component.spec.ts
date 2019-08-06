@@ -10,17 +10,17 @@ import { By } from '@angular/platform-browser';
 import { configureTestSuite } from 'ng-bullet';
 import { MultiCheckBoxTableComponent } from './multi-check-box-table.component';
 import {
-  ItemColumnInterface,
-  ItemInterface,
-  RowHeaderColumnInterface,
-  SubLevelInterface
+  MultiCheckBoxTableItemColumnInterface,
+  MultiCheckBoxTableItemInterface,
+  MultiCheckBoxTableRowHeaderColumnInterface,
+  MultiCheckBoxTableSubLevelInterface
 } from './multi-check-box-table.interface';
 
 describe('MultiCheckBoxTableComponent', () => {
   let component: MultiCheckBoxTableComponent<any, any, any>;
   let fixture: ComponentFixture<MultiCheckBoxTableComponent<any, any, any>>;
 
-  const subLevels: SubLevelInterface<any, any>[] = [
+  const subLevels: MultiCheckBoxTableSubLevelInterface<any, any>[] = [
     {
       item: { id: 1, title: 'les1' },
       label: 'title',
@@ -55,7 +55,7 @@ describe('MultiCheckBoxTableComponent', () => {
     }
   ];
 
-  const itemColumns: ItemColumnInterface<any>[] = [
+  const itemColumns: MultiCheckBoxTableItemColumnInterface<any>[] = [
     {
       item: { id: 1, name: 'klas1' },
       key: 'id',
@@ -68,12 +68,12 @@ describe('MultiCheckBoxTableComponent', () => {
     }
   ];
 
-  const rowHeaderColumns: RowHeaderColumnInterface<any>[] = [
+  const rowHeaderColumns: MultiCheckBoxTableRowHeaderColumnInterface<any>[] = [
     { caption: 'id', key: 'id' },
     { caption: 'beschrijving', key: 'goal' }
   ];
 
-  const items: ItemInterface<any>[] = [
+  const items: MultiCheckBoxTableItemInterface<any>[] = [
     {
       header: { id: 1, goal: 'item1' },
       content: { 1: true }

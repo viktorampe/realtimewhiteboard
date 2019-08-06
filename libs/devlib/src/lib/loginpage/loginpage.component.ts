@@ -7,9 +7,9 @@ import {
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
   BundleActions,
+  ClassGroupActions,
   ClassGroupFixture,
   ClassGroupInterface,
-  ClassGroupActions,
   DiaboloPhaseActions,
   DiaboloPhaseFixture,
   EduContentActions,
@@ -39,15 +39,14 @@ import {
   SearchFilterCriteriaFixture,
   SearchFilterCriteriaValuesFixture
 } from '@campus/search';
-import { ContentEditableComponent } from '@campus/ui';
-import { select, Store } from '@ngrx/store';
-// tslint:disable-next-line: nx-enforce-module-boundaries
 import {
-  ItemColumnInterface,
-  ItemInterface,
-  RowHeaderColumnInterface,
-  SubLevelInterface
-} from 'libs/ui/src/lib/multi-check-box-table/multi-check-box-table.interface';
+  ContentEditableComponent,
+  MultiCheckBoxTableItemColumnInterface,
+  MultiCheckBoxTableItemInterface,
+  MultiCheckBoxTableRowHeaderColumnInterface,
+  MultiCheckBoxTableSubLevelInterface
+} from '@campus/ui';
+import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { LoginPageViewModel } from './loginpage.viewmodel';
@@ -193,7 +192,7 @@ export class LoginpageComponent implements OnInit {
     this.response = this.userLessonService.createForUser(userId, userLesson);
   }
 
-  public subLevels: SubLevelInterface<
+  public subLevels: MultiCheckBoxTableSubLevelInterface<
     EduContentTOCInterface,
     LearningPlanGoalInterface
   >[] = [
@@ -235,7 +234,9 @@ export class LoginpageComponent implements OnInit {
     }
   ];
 
-  public itemColumns: ItemColumnInterface<ClassGroupInterface>[] = [
+  public itemColumns: MultiCheckBoxTableItemColumnInterface<
+    ClassGroupInterface
+  >[] = [
     {
       item: new ClassGroupFixture({ id: 1, name: 'klas1' }),
       key: 'id',
@@ -248,14 +249,14 @@ export class LoginpageComponent implements OnInit {
     }
   ];
 
-  public rowHeaderColumns: RowHeaderColumnInterface<
+  public rowHeaderColumns: MultiCheckBoxTableRowHeaderColumnInterface<
     LearningPlanGoalInterface
   >[] = [
     { caption: 'id', key: 'id' },
     { caption: 'beschrijving', key: 'goal' }
   ];
 
-  public items: ItemInterface<LearningPlanGoalInterface>[] = [
+  public items: MultiCheckBoxTableItemInterface<LearningPlanGoalInterface>[] = [
     {
       header: new LearningPlanGoalFixture({ id: 1, goal: 'item1' }),
       content: { 1: true }

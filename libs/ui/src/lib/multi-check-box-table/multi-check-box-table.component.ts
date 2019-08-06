@@ -7,11 +7,18 @@ import {
 } from '@angular/core';
 import { MatCheckboxChange } from '@angular/material';
 import {
-  ItemColumnInterface,
-  ItemInterface,
-  RowHeaderColumnInterface,
-  SubLevelInterface
+  MultiCheckBoxTableItemColumnInterface,
+  MultiCheckBoxTableItemInterface,
+  MultiCheckBoxTableRowHeaderColumnInterface,
+  MultiCheckBoxTableSubLevelInterface
 } from './multi-check-box-table.interface';
+
+export {
+  MultiCheckBoxTableItemColumnInterface as ItemColumnInterface,
+  MultiCheckBoxTableItemInterface as ItemInterface,
+  MultiCheckBoxTableRowHeaderColumnInterface as RowHeaderColumnInterface,
+  MultiCheckBoxTableSubLevelInterface as SubLevelInterface
+};
 
 @Component({
   selector: 'campus-multi-check-box-table',
@@ -27,14 +34,18 @@ export class MultiCheckBoxTableComponent<
   // There is some overlap in the generic types
 
   // Only use either subLevels or items
-  @Input() public subLevels: SubLevelInterface<
+  @Input() public subLevels: MultiCheckBoxTableSubLevelInterface<
     SubLevelItemType,
     ItemType
   >[] = [];
-  @Input() public items: ItemInterface<ItemType>[] = [];
+  @Input() public items: MultiCheckBoxTableItemInterface<ItemType>[] = [];
 
-  @Input() public rowHeaderColumns: RowHeaderColumnInterface<ItemType>[] = [];
-  @Input() public itemColumns: ItemColumnInterface<ItemColumnType>[] = [];
+  @Input() public rowHeaderColumns: MultiCheckBoxTableRowHeaderColumnInterface<
+    ItemType
+  >[] = [];
+  @Input() public itemColumns: MultiCheckBoxTableItemColumnInterface<
+    ItemColumnType
+  >[] = [];
 
   @Output() public checkBoxChanged = new EventEmitter<{
     column: ItemColumnType;
