@@ -53,10 +53,7 @@ export class MultiCheckBoxTableComponent<
     return true;
   }
 
-  public selectAllForSubLevel(subLevel, itemHeader) {
-    console.log('log: selectAllForSubLevel -> subLevel', subLevel);
-    console.log('log: selectAllForSubLevel -> itemHeader', itemHeader);
-  }
+  public selectAllForSubLevel(subLevel, itemHeader) {}
 
   public clickCheckbox(
     item: ItemType,
@@ -64,11 +61,6 @@ export class MultiCheckBoxTableComponent<
     subLevel: SubLevelItemType,
     event: MatCheckboxChange
   ) {
-    console.log('log: clickCheckBox -> subLevel', subLevel);
-    console.log('log: clickCheckBox -> item', item);
-    console.log('log: clickCheckBox -> column', column);
-    console.log('log: clickCheckBox -> event', event);
-
     this.checkBoxChanged.emit({ column, item, subLevel, value: event.checked });
   }
 }
