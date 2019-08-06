@@ -263,7 +263,11 @@ export class LoginpageComponent implements OnInit {
       content: { 2: true }
     },
     {
-      header: new LearningPlanGoalFixture({ id: 3, goal: 'item3' }),
+      header: new LearningPlanGoalFixture({
+        id: 3,
+        goal:
+          'item3 item3 item3 item3 item3 item3 item3 item3 item3 item3 item3 item3 item3 item3 item3 item3 item3 '
+      }),
       content: { 1: true, 2: true }
     }
   ];

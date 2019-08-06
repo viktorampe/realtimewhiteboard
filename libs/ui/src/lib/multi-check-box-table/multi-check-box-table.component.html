@@ -1,21 +1,26 @@
 <table>
-  <thead>
+  <thead class="ui-multi-check-box-table__header">
     <tr>
-      <th *ngFor="let columnHeader of rowHeaderColumns">{{
-        columnHeader.caption
-      }}</th
-      ><th *ngFor="let columnHeader of itemColumns">{{
-        columnHeader.item[columnHeader.label]
-      }}</th></tr
+      <th
+        *ngFor="let columnHeader of rowHeaderColumns"
+        class="ui-multi-check-box-table__header--row-header"
+        >{{ columnHeader.caption }}</th
+      ><th
+        *ngFor="let columnHeader of itemColumns"
+        class="ui-multi-check-box-table__header--item"
+        >{{ columnHeader.item[columnHeader.label] }}</th
+      ></tr
     >
   </thead>
-  <tbody class="ui-multi-check-box-table__table__body">
+  <tbody class="ui-multi-check-box-table__body">
     <ng-container *ngIf="subLevels.length; else noSubLevels">
       <ng-container *ngFor="let subLevel of subLevels">
-        <tr class="ui-multi-check-box-table__table__row--subLevel">
-          <th [colSpan]="rowHeaderColumns.length">{{
-            subLevel.item[subLevel.label]
-          }}</th>
+        <tr class="ui-multi-check-box-table__body__row--subLevel">
+          <th
+            [colSpan]="rowHeaderColumns.length"
+            class="ui-multi-check-box-table__body__row--subLevel__header"
+            >{{ subLevel.item[subLevel.label] }}</th
+          >
           <th *ngFor="let itemHeader of itemColumns">
             <mat-icon
               [svgIcon]="'select-all'"
@@ -23,54 +28,64 @@
             ></mat-icon>
           </th>
         </tr>
-        <tr
-          *ngFor="let item of subLevel.children; index as i"
-          class="{{
-            'ui-multi-check-box-table__table__row--' + (i % 2 ? 'even' : 'odd')
-          }}"
-        >
-          <td
-            *ngFor="let rowHeaderColumn of rowHeaderColumns; let last = last"
-            [class.ui-multi-check-box-table__table__row__cell--last-row-header]="
-              last
-            "
-            >{{ item.header[rowHeaderColumn.key] }}</td
-          >
-          <td
-            *ngFor="let itemColumn of itemColumns"
-            class="ui-multi-check-box-table__table__row__cell--checkbox"
-          >
-            <mat-checkbox
-              color="primary"
-              [checked]="item.content[itemColumn.item[itemColumn.key]]"
-              (click)="clickCheckBox(item.header, itemColumn.item)"
-            ></mat-checkbox>
-          </td>
-        </tr>
+        <ng-container
+          *ngTemplateOutlet="
+            itemRows;
+            context: {
+              subLevel: subLevel,
+              items: subLevel.children,
+              rowHeaderColumns: rowHeaderColumns,
+              itemColumns: itemColumns
+            }
+          "
+        ></ng-container>
       </ng-container>
     </ng-container>
 
     <ng-template #noSubLevels>
+      <ng-container
+        *ngTemplateOutlet="
+          itemRows;
+          context: {
+            subLevel: {},
+            items: items,
+            rowHeaderColumns: rowHeaderColumns,
+            itemColumns: itemColumns
+          }
+        "
+      ></ng-container>
+    </ng-template>
+
+    <ng-template
+      #itemRows
+      let-subLevel="subLevel"
+      let-items="items"
+      let-rowHeaderColumns="rowHeaderColumns"
+      let-itemColumns="itemColumns"
+    >
       <tr
-        *ngFor="let item of items; index as i"
-        class="{{
-          'ui-multi-check-box-table__table__row--' + (i % 2 ? 'even' : 'odd')
-        }}"
+        *ngFor="let item of items; even as even"
+        class="ui-multi-check-box-table__body__row"
+        [class.ui-multi-check-box-table__body__row--even]="even"
+        [class.ui-multi-check-box-table__body__row--odd]="!even"
       >
         <td
           *ngFor="let rowHeaderColumn of rowHeaderColumns; let last = last"
-          [class.ui-multi-check-box-table__table__row__cell--last-row-header]="
+          [class.ui-multi-check-box-table__body__row__cell--last-row-header]="
             last
           "
           >{{ item.header[rowHeaderColumn.key] }}</td
         >
         <td
           *ngFor="let itemColumn of itemColumns"
-          class="ui-multi-check-box-table__table__row__cell--checkbox"
+          class="ui-multi-check-box-table__body__row__cell--checkbox"
         >
           <mat-checkbox
             color="primary"
             [checked]="item.content[itemColumn.item[itemColumn.key]]"
+            (change)="
+              clickCheckBox(item.header, itemColumn.item, subLevel.item, $event)
+            "
           ></mat-checkbox>
         </td>
       </tr>
