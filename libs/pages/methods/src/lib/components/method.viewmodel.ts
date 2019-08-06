@@ -296,9 +296,9 @@ export class MethodViewModel implements ContentOpenerInterface {
   private getCurrentMethodParams(): Observable<CurrentMethodParams> {
     return this.routerState$.pipe(
       map((routerState: RouterReducerState<RouterStateUrl>) => ({
-        book: +routerState.state.params.book,
-        chapter: +routerState.state.params.chapter,
-        lesson: +routerState.state.params.lesson
+        book: +routerState.state.params.book || undefined,
+        chapter: +routerState.state.params.chapter || undefined,
+        lesson: +routerState.state.params.lesson || undefined
       })),
       distinctUntilChanged(
         (a, b) =>
