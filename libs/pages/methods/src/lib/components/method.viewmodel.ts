@@ -40,7 +40,14 @@ import { Dictionary } from '@ngrx/entity';
 import { RouterReducerState } from '@ngrx/router-store';
 import { select, Store } from '@ngrx/store';
 import { BehaviorSubject, combineLatest, merge, Observable } from 'rxjs';
-import { filter, map, mapTo, switchMap, withLatestFrom } from 'rxjs/operators';
+import {
+  distinctUntilChanged,
+  filter,
+  map,
+  mapTo,
+  switchMap,
+  withLatestFrom
+} from 'rxjs/operators';
 
 interface CurrentMethodParams {
   book: number;
@@ -292,7 +299,11 @@ export class MethodViewModel implements ContentOpenerInterface {
         book: +routerState.state.params.book,
         chapter: +routerState.state.params.chapter,
         lesson: +routerState.state.params.lesson
-      }))
+      })),
+      distinctUntilChanged(
+        (a, b) =>
+          a.book === b.book && a.chapter === b.chapter && a.lesson === b.lesson
+      )
     );
   }
 
