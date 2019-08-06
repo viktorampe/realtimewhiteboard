@@ -14,14 +14,16 @@
       &--subLevel {
         text-align: center;
 
-        &__header {
+        &--header {
           text-align: left;
         }
       }
 
       &__cell {
-        &--last-row-header {
-          width: 100%;
+        &--row-header {
+          &--last {
+            width: 100%;
+          }
         }
 
         &--checkbox {

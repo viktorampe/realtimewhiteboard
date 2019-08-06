@@ -18,10 +18,13 @@
         <tr class="ui-multi-check-box-table__body__row--subLevel">
           <th
             [colSpan]="rowHeaderColumns.length"
-            class="ui-multi-check-box-table__body__row--subLevel__header"
+            class="ui-multi-check-box-table__body__row--subLevel--header"
             >{{ subLevel.item[subLevel.label] }}</th
           >
-          <th *ngFor="let itemHeader of itemColumns">
+          <th
+            *ngFor="let itemHeader of itemColumns"
+            class="ui-multi-check-box-table__body__row--subLevel--item"
+          >
             <mat-icon
               [svgIcon]="'select-all'"
               (click)="selectAllForSubLevel(subLevel, itemHeader)"
@@ -65,26 +68,29 @@
     >
       <tr
         *ngFor="let item of items; even as even"
-        class="ui-multi-check-box-table__body__row"
+        class="ui-multi-check-box-table__body__row--item"
         [class.ui-multi-check-box-table__body__row--even]="even"
         [class.ui-multi-check-box-table__body__row--odd]="!even"
       >
         <td
           *ngFor="let rowHeaderColumn of rowHeaderColumns; let last = last"
-          [class.ui-multi-check-box-table__body__row__cell--last-row-header]="
+          class="ui-multi-check-box-table__body__row__cell
+           ui-multi-check-box-table__body__row__cell--row-header"
+          [class.ui-multi-check-box-table__body__row__cell--row-header--last]="
             last
           "
           >{{ item.header[rowHeaderColumn.key] }}</td
         >
         <td
           *ngFor="let itemColumn of itemColumns"
-          class="ui-multi-check-box-table__body__row__cell--checkbox"
+          class="ui-multi-check-box-table__body__row__cell
+          ui-multi-check-box-table__body__row__cell--checkbox"
         >
           <mat-checkbox
             color="primary"
             [checked]="item.content[itemColumn.item[itemColumn.key]]"
             (change)="
-              clickCheckBox(item.header, itemColumn.item, subLevel.item, $event)
+              clickCheckbox(item.header, itemColumn.item, subLevel.item, $event)
             "
           ></mat-checkbox>
         </td>

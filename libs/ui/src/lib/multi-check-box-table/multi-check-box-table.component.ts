@@ -58,7 +58,7 @@ export class MultiCheckBoxTableComponent<
     console.log('log: selectAllForSubLevel -> itemHeader', itemHeader);
   }
 
-  public clickCheckBox(
+  public clickCheckbox(
     item: ItemType,
     column: ItemColumnType,
     subLevel: SubLevelItemType,
