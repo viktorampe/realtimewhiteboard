@@ -97,13 +97,11 @@ describe('MethodComponent', () => {
 
   describe('clickOpenChapter', () => {
     it('should navigate to the chapter when clickOpenChapter is called', fakeAsync(() => {
-      const navigate = jest.spyOn(router, 'navigate');
-
       component.clickOpenChapter(3);
       tick();
 
-      expect(navigate).toHaveBeenCalled();
-      expect(navigate).toHaveBeenCalledWith(['methods', 1, 3], {
+      expect(router.navigate).toHaveBeenCalled();
+      expect(router.navigate).toHaveBeenCalledWith(['methods', 1, 3], {
         queryParams: { tab: 0 }
       });
     }));
@@ -127,12 +125,10 @@ describe('MethodComponent', () => {
       it('should navigate with the new tab index in the queryParams', () => {
         const tab = 1;
 
-        const navigate = jest.spyOn(router, 'navigate');
-
         component.onSelectedTabIndexChanged(tab);
 
-        expect(navigate).toHaveBeenCalled();
-        expect(navigate).toHaveBeenCalledWith([], {
+        expect(router.navigate).toHaveBeenCalled();
+        expect(router.navigate).toHaveBeenCalledWith([], {
           queryParams: { tab }
         });
       });
