@@ -9,6 +9,7 @@ import {
   BundleActions,
   ClassGroupFixture,
   ClassGroupInterface,
+  ClassGroupActions,
   DiaboloPhaseActions,
   DiaboloPhaseFixture,
   EduContentActions,
@@ -137,6 +138,7 @@ export class LoginpageComponent implements OnInit {
     this.store.dispatch(new FavoriteActions.LoadFavorites({ userId }));
     this.store.dispatch(new LearningAreaActions.LoadLearningAreas());
     this.store.dispatch(new DiaboloPhaseActions.LoadDiaboloPhases({ userId }));
+    this.store.dispatch(new ClassGroupActions.LoadClassGroups({ userId }));
   }
 
   loadToc(): void {
