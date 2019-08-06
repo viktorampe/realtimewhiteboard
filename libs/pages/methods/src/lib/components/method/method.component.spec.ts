@@ -1,4 +1,9 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {
+  ComponentFixture,
+  fakeAsync,
+  TestBed,
+  tick
+} from '@angular/core/testing';
 import { MatCard, MatCardModule, MatListItem } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
@@ -41,8 +46,12 @@ describe('MethodComponent', () => {
           useValue: {}
         },
         {
+          provide: Router,
+          useValue: { navigate: jest.fn() }
+        },
+        {
           provide: ActivatedRoute,
-          useValue: { params, snapshot: params.value }
+          useValue: { params, snapshot: { params: params.value } }
         },
         { provide: MethodViewModel, useClass: MockMethodViewModel },
         { provide: ENVIRONMENT_ICON_MAPPING_TOKEN, useValue: {} }
@@ -84,6 +93,33 @@ describe('MethodComponent', () => {
       By.css('div[main] h3[mat-subheader]')
     );
     expect(productTypeHeaders.length).toBe(2);
+  });
+
+  describe('clickOpenChapter', () => {
+    it('should navigate to the chapter when clickOpenChapter is called', fakeAsync(() => {
+      const navigate = jest.spyOn(router, 'navigate');
+
+      component.clickOpenChapter(3);
+      tick();
+
+      expect(navigate).toHaveBeenCalled();
+      expect(navigate).toHaveBeenCalledWith(['methods', 1, 3], {
+        queryParams: { tab: 0 }
+      });
+    }));
+
+    it('should pass the tab in the queryParams when clickOpenLesson is called', fakeAsync(() => {
+      const tab = 1;
+      methodViewModel.currentTab$.next(tab);
+
+      component.clickOpenChapter(3);
+      tick();
+
+      expect(router.navigate).toHaveBeenCalled();
+      expect(router.navigate).toHaveBeenCalledWith(['methods', 1, 3], {
+        queryParams: { tab }
+      });
+    }));
   });
 
   describe('tabs', () => {

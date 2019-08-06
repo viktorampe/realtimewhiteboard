@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
   EduContent,
   EduContentBookInterface,
@@ -9,6 +9,7 @@ import {
 } from '@campus/dal';
 import { Dictionary } from '@ngrx/entity';
 import { Observable } from 'rxjs';
+import { take } from 'rxjs/operators';
 import { MethodViewModel } from '../method.viewmodel';
 
 @Component({
@@ -26,7 +27,13 @@ export class MethodComponent implements OnInit {
   public productTypes$: Observable<EduContentProductTypeInterface[]>;
   public currentTab$: Observable<number>;
 
-  constructor(private viewModel: MethodViewModel, private router: Router) {}
+  private currentBookId: number;
+
+  constructor(
+    private viewModel: MethodViewModel,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.boeke$ = this.viewModel.currentBoeke$;
@@ -36,11 +43,23 @@ export class MethodComponent implements OnInit {
     this.method$ = this.viewModel.currentMethod$;
     this.productTypes$ = this.viewModel.eduContentProductTypes$;
     this.currentTab$ = this.viewModel.currentTab$;
+
+    this.currentBookId = +this.route.snapshot.params.book;
   }
 
   public onSelectedTabIndexChanged(tab: number) {
     this.router.navigate([], {
       queryParams: { tab }
+    });
+  }
+
+  public clickOpenChapter(chapterId: number) {
+    this.currentTab$.pipe(take(1)).subscribe(tab => {
+      this.router.navigate(['methods', this.currentBookId, chapterId], {
+        queryParams: {
+          tab
+        }
+      });
     });
   }
 

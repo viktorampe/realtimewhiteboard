@@ -14,8 +14,7 @@
         <a
           mat-list-item
           *ngFor="let chapter of (chapters$ | async)"
-          [routerLink]="[chapter.id]"
-          [queryParams]="{ tab: currentTab$ | async }"
+          (click)="clickOpenChapter(chapter.id)"
           >{{ chapter.title }}</a
         >
       </mat-nav-list>
