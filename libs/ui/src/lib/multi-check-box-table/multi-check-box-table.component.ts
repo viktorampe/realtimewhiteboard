@@ -3,7 +3,6 @@ import {
   EventEmitter,
   HostBinding,
   Input,
-  OnInit,
   Output
 } from '@angular/core';
 import { MatCheckboxChange } from '@angular/material';
@@ -23,7 +22,7 @@ export class MultiCheckBoxTableComponent<
   SubLevelItemType,
   ItemType,
   ItemColumnType
-> implements OnInit {
+> {
   // Pay some attention to the interfaces of the inputs
   // There is some overlap in the generic types
 
@@ -43,10 +42,6 @@ export class MultiCheckBoxTableComponent<
     subLevel: SubLevelItemType;
     value: boolean;
   }>();
-
-  constructor() {}
-
-  ngOnInit() {}
 
   @HostBinding('class.ui-multi-check-box-table')
   get isMultiCheckBoxTable() {
