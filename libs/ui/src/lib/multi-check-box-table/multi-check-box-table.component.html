@@ -1,4 +1,4 @@
-<table>
+<table *ngIf="rowHeaderColumns && itemColumns">
   <thead class="ui-multi-check-box-table__header">
     <tr>
       <th
@@ -13,7 +13,7 @@
     >
   </thead>
   <tbody class="ui-multi-check-box-table__body">
-    <ng-container *ngIf="subLevels; else noSubLevels">
+    <ng-container *ngIf="subLevels">
       <ng-container *ngFor="let subLevel of subLevels">
         <tr class="ui-multi-check-box-table__body__row--subLevel">
           <th
@@ -45,7 +45,7 @@
       </ng-container>
     </ng-container>
 
-    <ng-template #noSubLevels>
+    <ng-container *ngIf="items">
       <ng-container
         *ngTemplateOutlet="
           itemRows;
@@ -57,7 +57,7 @@
           }
         "
       ></ng-container>
-    </ng-template>
+    </ng-container>
 
     <ng-template
       #itemRows
