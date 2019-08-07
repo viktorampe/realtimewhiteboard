@@ -1,6 +1,10 @@
 import { Update } from '@ngrx/entity';
 import { Action } from '@ngrx/store';
 import { LearningPlanGoalProgressInterface } from '../../+models';
+import {
+  CustomFeedbackHandlersInterface,
+  FeedbackTriggeringAction
+} from '../effect-feedback';
 
 export enum LearningPlanGoalProgressesActionTypes {
   LearningPlanGoalProgressesLoaded = '[LearningPlanGoalProgresses] LearningPlanGoalProgresses Loaded',
@@ -45,13 +49,16 @@ export class LearningPlanGoalProgressesLoadError implements Action {
   constructor(public payload: any) {}
 }
 
-export class StartAddLearningPlanGoalProgress implements Action {
+export class StartAddLearningPlanGoalProgress
+  implements FeedbackTriggeringAction {
   readonly type =
     LearningPlanGoalProgressesActionTypes.StartAddLearningPlanGoalProgress;
 
   constructor(
     public payload: {
       learningPlanGoalProgress: LearningPlanGoalProgressInterface;
+      userId: number;
+      customFeedbackHandlers?: CustomFeedbackHandlersInterface;
     }
   ) {}
 }
@@ -121,11 +128,18 @@ export class UpdateLearningPlanGoalProgresses implements Action {
   ) {}
 }
 
-export class DeleteLearningPlanGoalProgress implements Action {
+export class DeleteLearningPlanGoalProgress
+  implements FeedbackTriggeringAction {
   readonly type =
     LearningPlanGoalProgressesActionTypes.DeleteLearningPlanGoalProgress;
 
-  constructor(public payload: { id: number }) {}
+  constructor(
+    public payload: {
+      id: number;
+      userId: number;
+      customFeedbackHandlers?: CustomFeedbackHandlersInterface;
+    }
+  ) {}
 }
 
 export class DeleteLearningPlanGoalProgresses implements Action {
@@ -146,8 +160,10 @@ export class ToggleLearningPlanGoalProgress implements Action {
   constructor(
     public payload: {
       classGroupId: number;
-      eduContentTOCId: number;
+      eduContentTOCId?: number;
+      userLessonId?: number;
       learningPlanGoalId: number;
+      personId: number;
     }
   ) {}
 }

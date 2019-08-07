@@ -8,7 +8,9 @@ import {
   State
 } from './learning-plan-goal-progress.reducer';
 
-export const selectLearningPlanGoalProgressState = createFeatureSelector<State>(NAME);
+export const selectLearningPlanGoalProgressState = createFeatureSelector<State>(
+  NAME
+);
 
 export const getError = createSelector(
   selectLearningPlanGoalProgressState,
@@ -20,11 +22,20 @@ export const getLoaded = createSelector(
   (state: State) => state.loaded
 );
 
-export const getAll = createSelector(selectLearningPlanGoalProgressState, selectAll);
+export const getAll = createSelector(
+  selectLearningPlanGoalProgressState,
+  selectAll
+);
 
-export const getCount = createSelector(selectLearningPlanGoalProgressState, selectTotal);
+export const getCount = createSelector(
+  selectLearningPlanGoalProgressState,
+  selectTotal
+);
 
-export const getIds = createSelector(selectLearningPlanGoalProgressState, selectIds);
+export const getIds = createSelector(
+  selectLearningPlanGoalProgressState,
+  selectIds
+);
 
 export const getAllEntities = createSelector(
   selectLearningPlanGoalProgressState,
@@ -45,7 +56,6 @@ export const getByIds = createSelector(
   }
 );
 
-
 /**
  * returns array of objects in the order of the given ids
  * @example
@@ -56,4 +66,27 @@ export const getByIds = createSelector(
 export const getById = createSelector(
   selectLearningPlanGoalProgressState,
   (state: State, props: { id: number }) => state.entities[props.id]
+);
+
+export const getByRelationIds = createSelector(
+  selectLearningPlanGoalProgressState,
+  (
+    state: State,
+    props: {
+      classGroupId: number;
+      eduContentTOCId?: number;
+      userLessonId?: number;
+      learningPlanGoalId: number;
+      personId: number;
+    }
+  ) =>
+    Object.values(state.entities).find(
+      learningPlanGoalProgress =>
+        learningPlanGoalProgress.classGroupId === props.classGroupId &&
+        learningPlanGoalProgress.learningPlanGoalId ===
+          props.learningPlanGoalId &&
+        learningPlanGoalProgress.personId === props.personId &&
+        (learningPlanGoalProgress.eduContentTOCId === props.eduContentTOCId ||
+          learningPlanGoalProgress.userLessonId === props.userLessonId)
+    )
 );
