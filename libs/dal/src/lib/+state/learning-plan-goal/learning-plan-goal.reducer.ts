@@ -41,11 +41,9 @@ export function reducer(
     }
 
     case LearningPlanGoalsActionTypes.ClearLearningPlanGoals: {
-      return adapter.removeAll(state);
-    }
+      const stateWithEmptyLoadedBooks = { ...state, loadedBooks: [] };
 
-    case LearningPlanGoalsActionTypes.ClearLoadedBooks: {
-      return { ...state, loadedBooks: [] };
+      return adapter.removeAll(stateWithEmptyLoadedBooks);
     }
 
     default: {

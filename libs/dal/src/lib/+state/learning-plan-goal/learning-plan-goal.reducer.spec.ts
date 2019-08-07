@@ -102,25 +102,12 @@ describe('LearningPlanGoals Reducer', () => {
     it('should clear the learningPlanGoals collection', () => {
       const startState = createState(
         learningPlanGoals,
-        [],
+        [1],
         'something went wrong'
       );
       const action = new LearningPlanGoalActions.ClearLearningPlanGoals();
       const result = reducer(startState, action);
       expect(result).toEqual(createState([], [], 'something went wrong'));
-    });
-
-    it('should clear the loadedBooks collection', () => {
-      const startState = createState(
-        learningPlanGoals,
-        [bookId],
-        'something went wrong'
-      );
-      const action = new LearningPlanGoalActions.ClearLoadedBooks();
-      const result = reducer(startState, action);
-      expect(result).toEqual(
-        createState(learningPlanGoals, [], 'something went wrong')
-      );
     });
   });
 });
