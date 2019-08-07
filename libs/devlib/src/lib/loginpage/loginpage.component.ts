@@ -21,6 +21,8 @@ import {
   LearningPlanGoalActions,
   MethodActions,
   MethodQueries,
+  LearningPlanGoalProgressServiceInterface,
+  LEARNING_PLAN_GOAL_PROGRESS_SERVICE_TOKEN,
   TaskActions,
   TaskEduContentActions,
   TocServiceInterface,
@@ -79,7 +81,9 @@ export class LoginpageComponent implements OnInit {
     private router: Router,
     @Inject(TOC_SERVICE_TOKEN) private tocService: TocServiceInterface,
     @Inject(USER_LESSON_SERVICE_TOKEN)
-    private userLessonService: UserLessonServiceInterface
+    private userLessonService: UserLessonServiceInterface,
+    @Inject(LEARNING_PLAN_GOAL_PROGRESS_SERVICE_TOKEN)
+    private learningPlanGoalProgressService: LearningPlanGoalProgressServiceInterface
   ) {}
 
   ngOnInit() {
@@ -202,5 +206,11 @@ export class LoginpageComponent implements OnInit {
       personId: userId
     });
     this.response = this.userLessonService.createForUser(userId, userLesson);
+  }
+
+  public getLearningPlanGoalProgress() {
+    const userId = this.authService.userId;
+
+    this.response = this.learningPlanGoalProgressService.getAllForUser(userId);
   }
 }
