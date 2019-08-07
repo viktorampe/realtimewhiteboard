@@ -382,15 +382,6 @@ describe('MethodViewModel', () => {
         expect(initialSearchState$).toBeObservable(hot('a', { a: expected }));
       })
     );
-
-    it('should not emit when the currentTab !== 0', () => {
-      navigateWithParams({ book: bookId }, { tab: 1 });
-
-      const initialSearchState$ = methodViewModel.getInitialSearchState();
-      const expected: SearchStateInterface = null;
-
-      expect(initialSearchState$).toBeObservable(hot(''));
-    });
   });
 
   describe('updateState', () => {

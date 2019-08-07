@@ -75,7 +75,7 @@ export class SearchComponent implements AfterViewInit, OnDestroy, OnChanges {
       });
       this.createFilters();
 
-      if (this.searchMode.searchTerm && this.initialState) {
+      if (this.searchMode.searchTerm) {
         this.createSearchTermComponent();
       }
     }

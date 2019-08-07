@@ -116,7 +116,6 @@ export class MethodViewModel implements ContentOpenerInterface {
    */
   public getInitialSearchState(): Observable<SearchStateInterface> {
     return this.currentTab$.pipe(
-      filter(currentTab => currentTab === 0),
       switchMapTo(
         this.currentMethodParams$.pipe(
           withLatestFrom(this.currentBook$, this.currentMethod$),
