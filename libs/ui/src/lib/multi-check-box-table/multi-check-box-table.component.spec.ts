@@ -366,6 +366,7 @@ describe('MultiCheckBoxTableComponent', () => {
 
   describe('event handlers', () => {
     beforeEach(() => {
+      component.rowHeaderColumns = [];
       component.itemColumns = [itemColumns[0]];
       component.items = [items[0]];
       fixture.detectChanges();
