@@ -7,7 +7,7 @@ import { LearningPlanGoalProgressInterface } from '../../+models';
 import {
   LearningPlanGoalProgressServiceInterface,
   LEARNING_PLAN_GOAL_PROGRESS_SERVICE_TOKEN
-} from '../../learning-plan-goal-progress/learning-plan-goal-progress.service.interface';
+} from '../../learning-plan-goal-progress';
 import {
   LearningPlanGoalProgressesActionTypes,
   LearningPlanGoalProgressesLoaded,

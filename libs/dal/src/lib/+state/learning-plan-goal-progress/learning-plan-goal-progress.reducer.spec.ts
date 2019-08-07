@@ -265,7 +265,7 @@ describe('LearningPlanGoalProgresses Reducer', () => {
         true,
         'something went wrong'
       );
-      const action = new LearningPlanGoalProgressActions.ClearLearningPlanGoalProgresss();
+      const action = new LearningPlanGoalProgressActions.ClearLearningPlanGoalProgresses();
       const result = reducer(startState, action);
       expect(result).toEqual(createState([], true, 'something went wrong'));
     });

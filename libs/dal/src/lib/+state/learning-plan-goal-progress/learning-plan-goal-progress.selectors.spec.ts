@@ -1,9 +1,12 @@
+import { Dictionary } from '@ngrx/entity';
 import { LearningPlanGoalProgressQueries } from '.';
 import { LearningPlanGoalProgressInterface } from '../../+models';
 import { State } from './learning-plan-goal-progress.reducer';
 
 describe('LearningPlanGoalProgress Selectors', () => {
-  function createLearningPlanGoalProgress(id: number): LearningPlanGoalProgressInterface | any {
+  function createLearningPlanGoalProgress(
+    id: number
+  ): LearningPlanGoalProgressInterface | any {
     return {
       id: id
     };
@@ -15,16 +18,21 @@ describe('LearningPlanGoalProgress Selectors', () => {
     error?: any
   ): State {
     return {
-      ids: learningPlanGoalProgresses ? learningPlanGoalProgresses.map(learningPlanGoalProgress => learningPlanGoalProgress.id) : [],
+      ids: learningPlanGoalProgresses
+        ? learningPlanGoalProgresses.map(
+            learningPlanGoalProgress => learningPlanGoalProgress.id
+          )
+        : [],
       entities: learningPlanGoalProgresses
         ? learningPlanGoalProgresses.reduce(
             (entityMap, learningPlanGoalProgress) => ({
               ...entityMap,
               [learningPlanGoalProgress.id]: learningPlanGoalProgress
             }),
-            {}
+            {} as Dictionary<LearningPlanGoalProgressInterface>
           )
         : {},
+
       loaded: loaded,
       error: error
     };
@@ -45,7 +53,9 @@ describe('LearningPlanGoalProgress Selectors', () => {
         true,
         'no error'
       );
-      storeState = { learningPlanGoalProgresses: learningPlanGoalProgressState };
+      storeState = {
+        learningPlanGoalProgresses: learningPlanGoalProgressState
+      };
     });
     it('getError() should return the error', () => {
       const results = LearningPlanGoalProgressQueries.getError(storeState);
@@ -73,7 +83,9 @@ describe('LearningPlanGoalProgress Selectors', () => {
       expect(results).toEqual([4, 1, 2, 3]);
     });
     it('getAllEntities() should return a key value object with all the entities', () => {
-      const results = LearningPlanGoalProgressQueries.getAllEntities(storeState);
+      const results = LearningPlanGoalProgressQueries.getAllEntities(
+        storeState
+      );
       expect(results).toEqual(learningPlanGoalProgressState.entities);
     });
     it('getByIds() should return an array of the requested entities in order and undefined if the id is not present', () => {
@@ -88,11 +100,15 @@ describe('LearningPlanGoalProgress Selectors', () => {
       ]);
     });
     it('getById() should return the desired entity', () => {
-      const results = LearningPlanGoalProgressQueries.getById(storeState, { id: 2 });
+      const results = LearningPlanGoalProgressQueries.getById(storeState, {
+        id: 2
+      });
       expect(results).toEqual(createLearningPlanGoalProgress(2));
     });
     it('getById() should return undefined if the entity is not present', () => {
-      const results = LearningPlanGoalProgressQueries.getById(storeState, { id: 9 });
+      const results = LearningPlanGoalProgressQueries.getById(storeState, {
+        id: 9
+      });
       expect(results).toBe(undefined);
     });
   });

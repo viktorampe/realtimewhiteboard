@@ -18,8 +18,7 @@ import {
   FavoriteInterface,
   FavoriteTypesEnum,
   LearningAreaActions,
-  LearningPlanGoalProgressServiceInterface,
-  LEARNING_PLAN_GOAL_PROGRESS_SERVICE_TOKEN,
+  LearningPlanGoalProgressActions,
   TaskActions,
   TaskEduContentActions,
   TocServiceInterface,
@@ -78,9 +77,7 @@ export class LoginpageComponent implements OnInit {
     private router: Router,
     @Inject(TOC_SERVICE_TOKEN) private tocService: TocServiceInterface,
     @Inject(USER_LESSON_SERVICE_TOKEN)
-    private userLessonService: UserLessonServiceInterface,
-    @Inject(LEARNING_PLAN_GOAL_PROGRESS_SERVICE_TOKEN)
-    private learningPlanGoalProgressService: LearningPlanGoalProgressServiceInterface
+    private userLessonService: UserLessonServiceInterface
   ) {}
 
   ngOnInit() {
@@ -129,6 +126,11 @@ export class LoginpageComponent implements OnInit {
     this.store.dispatch(new LearningAreaActions.LoadLearningAreas());
     this.store.dispatch(new DiaboloPhaseActions.LoadDiaboloPhases({ userId }));
     this.store.dispatch(new ClassGroupActions.LoadClassGroups({ userId }));
+    this.store.dispatch(
+      new LearningPlanGoalProgressActions.LoadLearningPlanGoalProgresses({
+        userId
+      })
+    );
   }
 
   loadToc(): void {
@@ -181,11 +183,5 @@ export class LoginpageComponent implements OnInit {
       personId: userId
     });
     this.response = this.userLessonService.createForUser(userId, userLesson);
-  }
-
-  public getLearningPlanGoalProgress() {
-    const userId = this.authService.userId;
-
-    this.response = this.learningPlanGoalProgressService.getAllForUser(userId);
   }
 }
