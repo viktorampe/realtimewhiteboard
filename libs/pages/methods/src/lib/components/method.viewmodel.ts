@@ -39,13 +39,15 @@ import {
 import { Dictionary } from '@ngrx/entity';
 import { RouterReducerState } from '@ngrx/router-store';
 import { select, Store } from '@ngrx/store';
-import { BehaviorSubject, combineLatest, merge, Observable } from 'rxjs';
+import { BehaviorSubject, merge, Observable } from 'rxjs';
 import {
   distinctUntilChanged,
   filter,
   map,
   mapTo,
-  switchMap
+  switchMap,
+  switchMapTo,
+  withLatestFrom
 } from 'rxjs/operators';
 
 export interface CurrentMethodParams {
@@ -113,44 +115,46 @@ export class MethodViewModel implements ContentOpenerInterface {
    * determine the initial searchState from the router state store
    */
   public getInitialSearchState(): Observable<SearchStateInterface> {
-    return combineLatest([
-      this.currentBook$,
-      this.currentMethod$,
-      this.currentMethodParams$
-    ]).pipe(
-      map(([currentBook, currentMethod, currentMethodParams]) => {
-        const initialSearchState: SearchStateInterface = {
-          searchTerm: '',
-          filterCriteriaSelections: new Map<string, (number | string)[]>()
-        };
+    return this.currentTab$.pipe(
+      filter(currentTab => currentTab === 0),
+      switchMapTo(
+        this.currentMethodParams$.pipe(
+          withLatestFrom(this.currentBook$, this.currentMethod$),
+          map(([currentMethodParams, currentBook, currentMethod]) => {
+            const initialSearchState: SearchStateInterface = {
+              searchTerm: '',
+              filterCriteriaSelections: new Map<string, (number | string)[]>()
+            };
 
-        if (currentBook) {
-          initialSearchState.filterCriteriaSelections.set(
-            'years',
-            currentBook.years.map(year => year.id)
-          );
+            if (currentBook) {
+              initialSearchState.filterCriteriaSelections.set(
+                'years',
+                currentBook.years.map(year => year.id)
+              );
 
-          initialSearchState.filterCriteriaSelections.set('methods', [
-            currentBook.methodId
-          ]);
-        }
+              initialSearchState.filterCriteriaSelections.set('methods', [
+                currentBook.methodId
+              ]);
+            }
 
-        if (currentMethod) {
-          initialSearchState.filterCriteriaSelections.set('learningArea', [
-            currentMethod.learningAreaId
-          ]);
-        }
+            if (currentMethod) {
+              initialSearchState.filterCriteriaSelections.set('learningArea', [
+                currentMethod.learningAreaId
+              ]);
+            }
 
-        if (currentMethodParams && currentMethodParams.chapter) {
-          initialSearchState.filterCriteriaSelections.set('eduContentTOC', [
-            currentMethodParams.lesson
-              ? currentMethodParams.lesson
-              : currentMethodParams.chapter
-          ]);
-        }
+            if (currentMethodParams && currentMethodParams.chapter) {
+              initialSearchState.filterCriteriaSelections.set('eduContentTOC', [
+                currentMethodParams.lesson
+                  ? currentMethodParams.lesson
+                  : currentMethodParams.chapter
+              ]);
+            }
 
-        return initialSearchState;
-      })
+            return initialSearchState;
+          })
+        )
+      )
     );
   }
 
@@ -244,11 +248,8 @@ export class MethodViewModel implements ContentOpenerInterface {
   }
 
   private setupSearchResults(): void {
-    this.searchResults$ = combineLatest([
-      this.searchState$,
-      this.getInitialSearchState(),
-      this.currentTab$
-    ]).pipe(
+    this.searchResults$ = this.searchState$.pipe(
+      withLatestFrom(this.getInitialSearchState(), this.currentTab$),
       filter(
         ([searchState, initialSearchState, currentTab]) =>
           searchState !== null && currentTab === 0

@@ -382,6 +382,15 @@ describe('MethodViewModel', () => {
         expect(initialSearchState$).toBeObservable(hot('a', { a: expected }));
       })
     );
+
+    it('should not emit when the currentTab !== 0', () => {
+      navigateWithParams({ book: bookId }, { tab: 1 });
+
+      const initialSearchState$ = methodViewModel.getInitialSearchState();
+      const expected: SearchStateInterface = null;
+
+      expect(initialSearchState$).toBeObservable(hot(''));
+    });
   });
 
   describe('updateState', () => {
@@ -464,6 +473,21 @@ describe('MethodViewModel', () => {
       methodViewModel.updateState(searchState);
 
       expect(searchResults$).toBeObservable(hot('a', { a: expected }));
+    });
+
+    it('should not call the eduContentService when the currentTab !== 0', () => {
+      navigateWithParams({ book: bookId }, { tab: 1 });
+
+      const searchState = {
+        searchTerm: '',
+        filterCriteriaSelections: new Map([['foo', [1, 2, 3]]])
+      } as SearchStateInterface;
+
+      methodViewModel.searchResults$.pipe(take(1)).subscribe();
+
+      methodViewModel.updateState(searchState);
+
+      expect(eduContentService.search).not.toHaveBeenCalled();
     });
   });
 
