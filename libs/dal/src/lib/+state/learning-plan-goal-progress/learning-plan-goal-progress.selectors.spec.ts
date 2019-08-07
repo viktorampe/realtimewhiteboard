@@ -1,5 +1,6 @@
 import { Dictionary } from '@ngrx/entity';
 import { LearningPlanGoalProgressQueries } from '.';
+import { LearningPlanGoalProgressFixture } from '../../+fixtures';
 import { LearningPlanGoalProgressInterface } from '../../+models';
 import { State } from './learning-plan-goal-progress.reducer';
 
@@ -110,6 +111,128 @@ describe('LearningPlanGoalProgress Selectors', () => {
         id: 9
       });
       expect(results).toBe(undefined);
+    });
+  });
+
+  describe('getByRelationIds', () => {
+    const learningPlanGoalProgressArray = [
+      new LearningPlanGoalProgressFixture({
+        id: 1,
+        classGroupId: 1,
+        personId: 1,
+        learningPlanGoalId: 1,
+        eduContentTOCId: 1,
+        userLessonId: undefined
+      }),
+      new LearningPlanGoalProgressFixture({
+        id: 2,
+        classGroupId: 2,
+        personId: 1,
+        learningPlanGoalId: 1,
+        eduContentTOCId: 1,
+        userLessonId: undefined
+      }),
+      new LearningPlanGoalProgressFixture({
+        id: 3,
+        classGroupId: 1,
+        personId: 2,
+        learningPlanGoalId: 1,
+        eduContentTOCId: 1,
+        userLessonId: undefined
+      }),
+      new LearningPlanGoalProgressFixture({
+        id: 4,
+        classGroupId: 1,
+        personId: 1,
+        learningPlanGoalId: 2,
+        eduContentTOCId: 1,
+        userLessonId: undefined
+      }),
+      new LearningPlanGoalProgressFixture({
+        id: 5,
+        classGroupId: 1,
+        personId: 1,
+        learningPlanGoalId: 1,
+        eduContentTOCId: 2,
+        userLessonId: undefined
+      }),
+      new LearningPlanGoalProgressFixture({
+        id: 6,
+        classGroupId: 1,
+        personId: 1,
+        learningPlanGoalId: 1,
+        eduContentTOCId: undefined,
+        userLessonId: 1
+      }),
+      new LearningPlanGoalProgressFixture({
+        id: 7,
+        classGroupId: 2,
+        personId: 1,
+        learningPlanGoalId: 1,
+        eduContentTOCId: undefined,
+        userLessonId: 1
+      }),
+      new LearningPlanGoalProgressFixture({
+        id: 8,
+        classGroupId: 1,
+        personId: 2,
+        learningPlanGoalId: 1,
+        eduContentTOCId: undefined,
+        userLessonId: 1
+      }),
+      new LearningPlanGoalProgressFixture({
+        id: 9,
+        classGroupId: 1,
+        personId: 1,
+        learningPlanGoalId: 2,
+        eduContentTOCId: undefined,
+        userLessonId: 1
+      }),
+      new LearningPlanGoalProgressFixture({
+        id: 10,
+        classGroupId: 1,
+        personId: 1,
+        learningPlanGoalId: 1,
+        eduContentTOCId: undefined,
+        userLessonId: 2
+      })
+    ];
+
+    beforeEach(() => {
+      learningPlanGoalProgressState = createState(
+        learningPlanGoalProgressArray,
+        true,
+        'no error'
+      );
+      storeState = {
+        learningPlanGoalProgresses: learningPlanGoalProgressState
+      };
+    });
+
+    it('should return the correct LearningPlanGoalProgress for eduContentTOCId', () => {
+      const results = LearningPlanGoalProgressQueries.getByRelationIds(
+        storeState,
+        {
+          classGroupId: 1,
+          personId: 1,
+          learningPlanGoalId: 1,
+          eduContentTOCId: 1
+        }
+      );
+      expect(results).toBe(learningPlanGoalProgressArray[0]);
+    });
+
+    it('should return the correct LearningPlanGoalProgress for userLessonId', () => {
+      const results = LearningPlanGoalProgressQueries.getByRelationIds(
+        storeState,
+        {
+          classGroupId: 1,
+          personId: 1,
+          learningPlanGoalId: 1,
+          userLessonId: 1
+        }
+      );
+      expect(results).toBe(learningPlanGoalProgressArray[5]);
     });
   });
 });

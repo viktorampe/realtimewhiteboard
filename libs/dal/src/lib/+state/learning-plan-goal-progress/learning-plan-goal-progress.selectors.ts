@@ -86,7 +86,7 @@ export const getByRelationIds = createSelector(
         learningPlanGoalProgress.learningPlanGoalId ===
           props.learningPlanGoalId &&
         learningPlanGoalProgress.personId === props.personId &&
-        (learningPlanGoalProgress.eduContentTOCId === props.eduContentTOCId ||
-          learningPlanGoalProgress.userLessonId === props.userLessonId)
+        (learningPlanGoalProgress.eduContentTOCId === +props.eduContentTOCId ||
+          learningPlanGoalProgress.userLessonId === +props.userLessonId)
     )
 );
