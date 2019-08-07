@@ -94,7 +94,7 @@ describe('LearningPlanGoals Reducer', () => {
       });
       const result = reducer(initialState, action);
 
-      expect(result).toEqual(createState(learningPlanGoals, []));
+      expect(result).toEqual(createState(learningPlanGoals, [bookId]));
     });
   });
 

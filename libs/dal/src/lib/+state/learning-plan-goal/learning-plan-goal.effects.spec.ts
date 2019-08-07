@@ -9,7 +9,6 @@ import { LearningPlanGoalReducer } from '.';
 import { LEARNING_PLAN_GOAL_SERVICE_TOKEN } from '../../learning-plan-goal/learning-plan-goal.service.interface';
 import {
   AddLearningPlanGoalsForBook,
-  AddLoadedBook,
   LearningPlanGoalsLoadError,
   LoadLearningPlanGoalsForBook
 } from './learning-plan-goal.actions';
@@ -167,25 +166,6 @@ describe('LearningPlanGoalEffects', () => {
           loadErrorAction
         );
       });
-    });
-  });
-
-  describe('addLoadedBook$', () => {
-    const bookId = 1;
-    const addLearningPlanGoalsForBookAction = new AddLearningPlanGoalsForBook({
-      bookId,
-      learningPlanGoals: []
-    });
-    const addLoadedBookAction = new AddLoadedBook({ bookId });
-
-    const loadErrorAction = new LearningPlanGoalsLoadError(new Error('failed'));
-
-    it('should add the book to the loadedBooks when the learningPlanGoals are added to the state', () => {
-      expectInAndOut(
-        effects.addLoadedBook$,
-        addLearningPlanGoalsForBookAction,
-        addLoadedBookAction
-      );
     });
   });
 });

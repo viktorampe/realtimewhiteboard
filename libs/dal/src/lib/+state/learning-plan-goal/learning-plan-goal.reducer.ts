@@ -28,14 +28,12 @@ export function reducer(
 ): State {
   switch (action.type) {
     case LearningPlanGoalsActionTypes.AddLearningPlanGoalsForBook: {
-      return adapter.addMany(action.payload.learningPlanGoals, state);
-    }
-
-    case LearningPlanGoalsActionTypes.AddLoadedBook: {
-      return {
+      const loadedBookState = {
         ...state,
         loadedBooks: [...state.loadedBooks, action.payload.bookId]
       };
+
+      return adapter.addMany(action.payload.learningPlanGoals, loadedBookState);
     }
 
     case LearningPlanGoalsActionTypes.LearningPlanGoalsLoadError: {

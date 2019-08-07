@@ -45,10 +45,9 @@ describe('LearningPlanGoalService', () => {
 
   describe('getLearningPlanGoalsForBook', () => {
     it('should return LearningPlanGoals', () => {
-      // TODO don't avoid typescript
-      personApi[
-        'getLearningPlanGoalsForBookRemote'
-      ] = jest.fn().mockReturnValue(of({ result: [mockLearningPlanGoal] }));
+      personApi.getLearningPlanGoalsForBookRemote = jest
+        .fn()
+        .mockReturnValue(of([mockLearningPlanGoal]));
 
       const response = service.getLearningPlanGoalsForBook(userId, bookId);
 

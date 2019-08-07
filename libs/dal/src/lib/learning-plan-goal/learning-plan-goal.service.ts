@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { LearningPlanGoalServiceInterface } from '.';
 import { LearningPlanGoalInterface } from '../+models';
 
@@ -14,11 +13,7 @@ export class LearningPlanGoalService
     userId: number,
     bookId: number
   ): Observable<LearningPlanGoalInterface[]> {
-    return this.personApi['getLearningPlanGoalsForBookRemote'](
-      userId,
-      bookId
-    ).pipe(map(response => response['result'])); //TODO don't avoid typescript
-    // doublecheck -> no idea how the response will be formatted
+    return this.personApi.getLearningPlanGoalsForBookRemote(userId, bookId);
   }
 
   constructor(private personApi: PersonApi) {}

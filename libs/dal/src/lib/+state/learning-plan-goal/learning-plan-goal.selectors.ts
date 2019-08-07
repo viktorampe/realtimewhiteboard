@@ -64,5 +64,5 @@ export const getById = createSelector(
 export const isBookLoaded = createSelector(
   selectLearningPlanGoalState,
   (state: State, props: { bookId: number }) =>
-    state.loadedBooks.some(loadedBookId => loadedBookId === props.bookId)
+    state.loadedBooks.includes(props.bookId)
 );

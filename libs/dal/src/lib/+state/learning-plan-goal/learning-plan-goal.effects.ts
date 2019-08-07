@@ -9,7 +9,6 @@ import {
 } from '../../learning-plan-goal/learning-plan-goal.service.interface';
 import {
   AddLearningPlanGoalsForBook,
-  AddLoadedBook,
   LearningPlanGoalsActionTypes,
   LearningPlanGoalsLoadError,
   LoadLearningPlanGoalsForBook
@@ -43,25 +42,6 @@ export class LearningPlanGoalEffects {
           );
       },
       onError: (action: LoadLearningPlanGoalsForBook, error) => {
-        return new LearningPlanGoalsLoadError(error);
-      }
-    }
-  );
-
-  // When AddLearningPlanGoalsForBook is dispatched
-  // also dispatch an action to add the book to the loadedBooks
-  @Effect()
-  addLoadedBook$ = this.dataPersistence.pessimisticUpdate(
-    LearningPlanGoalsActionTypes.AddLearningPlanGoalsForBook,
-    {
-      run: (action: AddLearningPlanGoalsForBook, state: DalState) => {
-        const addedBookId = action.payload.bookId;
-
-        return new AddLoadedBook({
-          bookId: addedBookId
-        });
-      },
-      onError: (action: AddLearningPlanGoalsForBook, error) => {
         return new LearningPlanGoalsLoadError(error);
       }
     }
