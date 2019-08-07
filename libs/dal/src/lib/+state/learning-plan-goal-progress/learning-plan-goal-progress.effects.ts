@@ -11,7 +11,6 @@ import {
   LearningPlanGoalProgressServiceInterface,
   LEARNING_PLAN_GOAL_PROGRESS_SERVICE_TOKEN
 } from '../../learning-plan-goal-progress';
-import { UndoServiceInterface, UNDO_SERVICE_TOKEN } from '../../undo';
 import { EffectFeedback, EffectFeedbackActions } from '../effect-feedback';
 import {
   AddLearningPlanGoalProgress,
@@ -171,7 +170,6 @@ export class LearningPlanGoalProgressEffects {
     private dataPersistence: DataPersistence<DalState>,
     @Inject(LEARNING_PLAN_GOAL_PROGRESS_SERVICE_TOKEN)
     private learningPlanGoalProgressService: LearningPlanGoalProgressServiceInterface,
-    @Inject(UNDO_SERVICE_TOKEN) private undoService: UndoServiceInterface,
     @Inject('uuid') private uuid: Function
   ) {}
 }

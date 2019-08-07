@@ -5,8 +5,8 @@ import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
-import { LEARNING_PLAN_GOAL_PROGRESS_SERVICE_TOKEN } from '../../learning-plan-goal-progress/learning-plan-goal-progress.service.interface';
 import { LearningPlanGoalProgressReducer } from '.';
+import { LEARNING_PLAN_GOAL_PROGRESS_SERVICE_TOKEN } from '../../learning-plan-goal-progress/learning-plan-goal-progress.service.interface';
 import {
   LearningPlanGoalProgressesLoaded,
   LearningPlanGoalProgressesLoadError,
@@ -19,6 +19,7 @@ describe('LearningPlanGoalProgressEffects', () => {
   let effects: LearningPlanGoalProgressEffects;
   let usedState: any;
 
+  const uuid = 'foo';
 
   const expectInAndOut = (
     effect: Observable<any>,
@@ -61,9 +62,13 @@ describe('LearningPlanGoalProgressEffects', () => {
       imports: [
         NxModule.forRoot(),
         StoreModule.forRoot({}),
-        StoreModule.forFeature(LearningPlanGoalProgressReducer.NAME , LearningPlanGoalProgressReducer.reducer, {
-          initialState: usedState
-        }),
+        StoreModule.forFeature(
+          LearningPlanGoalProgressReducer.NAME,
+          LearningPlanGoalProgressReducer.reducer,
+          {
+            initialState: usedState
+          }
+        ),
         EffectsModule.forRoot([]),
         EffectsModule.forFeature([LearningPlanGoalProgressEffects])
       ],
@@ -76,7 +81,11 @@ describe('LearningPlanGoalProgressEffects', () => {
         },
         LearningPlanGoalProgressEffects,
         DataPersistence,
-        provideMockActions(() => actions)
+        provideMockActions(() => actions),
+        {
+          provide: 'uuid',
+          useValue: () => uuid
+        }
       ]
     });
 
@@ -84,10 +93,19 @@ describe('LearningPlanGoalProgressEffects', () => {
   });
 
   describe('loadLearningPlanGoalProgress$', () => {
-    const unforcedLoadAction = new LoadLearningPlanGoalProgresses({ userId: 1 });
-    const forcedLoadAction = new LoadLearningPlanGoalProgresses({ force: true, userId: 1 });
-    const filledLoadedAction = new LearningPlanGoalProgressesLoaded({ learningPlanGoalProgresses: [] });
-    const loadErrorAction = new LearningPlanGoalProgressesLoadError(new Error('failed'));
+    const unforcedLoadAction = new LoadLearningPlanGoalProgresses({
+      userId: 1
+    });
+    const forcedLoadAction = new LoadLearningPlanGoalProgresses({
+      force: true,
+      userId: 1
+    });
+    const filledLoadedAction = new LearningPlanGoalProgressesLoaded({
+      learningPlanGoalProgresses: []
+    });
+    const loadErrorAction = new LearningPlanGoalProgressesLoadError(
+      new Error('failed')
+    );
     describe('with initialState', () => {
       beforeAll(() => {
         usedState = LearningPlanGoalProgressReducer.initialState;
@@ -112,13 +130,19 @@ describe('LearningPlanGoalProgressEffects', () => {
     });
     describe('with loaded state', () => {
       beforeAll(() => {
-        usedState = { ...LearningPlanGoalProgressReducer.initialState, loaded: true };
+        usedState = {
+          ...LearningPlanGoalProgressReducer.initialState,
+          loaded: true
+        };
       });
       beforeEach(() => {
         mockServiceMethodReturnValue('getAllForUser', []);
       });
       it('should not trigger an api call with the loaded state if force is not true', () => {
-        expectInNoOut(effects.loadLearningPlanGoalProgresses$, unforcedLoadAction);
+        expectInNoOut(
+          effects.loadLearningPlanGoalProgresses$,
+          unforcedLoadAction
+        );
       });
       it('should trigger an api call with the loaded state if force is true', () => {
         expectInAndOut(
@@ -162,7 +186,10 @@ describe('LearningPlanGoalProgressEffects', () => {
         mockServiceMethodError('getAllForUser', 'failed');
       });
       it('should return nothing action if force is not true', () => {
-        expectInNoOut(effects.loadLearningPlanGoalProgresses$, unforcedLoadAction);
+        expectInNoOut(
+          effects.loadLearningPlanGoalProgresses$,
+          unforcedLoadAction
+        );
       });
       it('should return a error action if force is true', () => {
         expectInAndOut(
