@@ -13,7 +13,7 @@
     >
   </thead>
   <tbody class="ui-multi-check-box-table__body">
-    <ng-container *ngIf="subLevels.length; else noSubLevels">
+    <ng-container *ngIf="subLevels; else noSubLevels">
       <ng-container *ngFor="let subLevel of subLevels">
         <tr class="ui-multi-check-box-table__body__row--subLevel">
           <th

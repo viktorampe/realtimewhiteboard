@@ -13,13 +13,6 @@ import {
   MultiCheckBoxTableSubLevelInterface
 } from './multi-check-box-table.interface';
 
-export {
-  MultiCheckBoxTableItemColumnInterface as ItemColumnInterface,
-  MultiCheckBoxTableItemInterface as ItemInterface,
-  MultiCheckBoxTableRowHeaderColumnInterface as RowHeaderColumnInterface,
-  MultiCheckBoxTableSubLevelInterface as SubLevelInterface
-};
-
 @Component({
   selector: 'campus-multi-check-box-table',
   templateUrl: './multi-check-box-table.component.html',
@@ -37,15 +30,15 @@ export class MultiCheckBoxTableComponent<
   @Input() public subLevels: MultiCheckBoxTableSubLevelInterface<
     SubLevelItemType,
     ItemType
-  >[] = [];
-  @Input() public items: MultiCheckBoxTableItemInterface<ItemType>[] = [];
+  >[];
+  @Input() public items: MultiCheckBoxTableItemInterface<ItemType>[];
 
   @Input() public rowHeaderColumns: MultiCheckBoxTableRowHeaderColumnInterface<
     ItemType
-  >[] = [];
+  >[];
   @Input() public itemColumns: MultiCheckBoxTableItemColumnInterface<
     ItemColumnType
-  >[] = [];
+  >[];
 
   @Output() public checkBoxChanged = new EventEmitter<{
     column: ItemColumnType;
@@ -55,9 +48,7 @@ export class MultiCheckBoxTableComponent<
   }>();
 
   @HostBinding('class.ui-multi-check-box-table')
-  get isMultiCheckBoxTable() {
-    return true;
-  }
+  isMultiCheckBoxTable = true;
 
   public selectAllForSubLevel(subLevel, itemHeader) {}
 
