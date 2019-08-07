@@ -18,6 +18,9 @@ import {
   FavoriteInterface,
   FavoriteTypesEnum,
   LearningAreaActions,
+  LearningPlanGoalActions,
+  MethodActions,
+  MethodQueries,
   TaskActions,
   TaskEduContentActions,
   TocServiceInterface,
@@ -35,7 +38,7 @@ import {
 import { ContentEditableComponent } from '@campus/ui';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { filter, map, take } from 'rxjs/operators';
 import { LoginPageViewModel } from './loginpage.viewmodel';
 
 @Component({
@@ -131,6 +134,28 @@ export class LoginpageComponent implements OnInit {
     this.store.dispatch(
       new EduContentTocActions.LoadEduContentTocsForBook({ bookId: 1 })
     );
+  }
+
+  loadLearningPlanGoalsForBooks() {
+    const userId = this.authService.userId;
+
+    this.store.dispatch(new MethodActions.LoadAllowedMethods({ userId }));
+
+    this.store
+      .pipe(
+        select(MethodQueries.getAllowedMethodIds),
+        take(1)
+      )
+      .subscribe(bookIds =>
+        bookIds.forEach(bookId => {
+          this.store.dispatch(
+            new LearningPlanGoalActions.LoadLearningPlanGoalsForBook({
+              userId,
+              bookId
+            })
+          );
+        })
+      );
   }
 
   // tslint:disable-next-line: member-ordering
