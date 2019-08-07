@@ -7,7 +7,7 @@ import {
 import { By } from '@angular/platform-browser';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { ActivatedRoute, Params, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { EduContentFixture } from '@campus/dal';
 import {
@@ -23,7 +23,6 @@ import {
 } from '@campus/shared';
 import { UiModule } from '@campus/ui';
 import { configureTestSuite } from 'ng-bullet';
-import { BehaviorSubject } from 'rxjs';
 import { MethodViewModel } from './../method.viewmodel';
 import { MockMethodViewModel } from './../method.viewmodel.mock';
 import { MethodChapterComponent } from './method-chapter.component';
@@ -32,13 +31,10 @@ describe('MethodChapterComponent', () => {
   let component: MethodChapterComponent;
   let fixture: ComponentFixture<MethodChapterComponent>;
   let searchComponent;
-  let params: BehaviorSubject<Params>;
   let methodViewModel: MockMethodViewModel;
   let router: Router;
 
   configureTestSuite(() => {
-    params = new BehaviorSubject<Params>({ book: 1, chapter: 2 });
-
     TestBed.configureTestingModule({
       imports: [
         SearchTestModule,
@@ -57,10 +53,6 @@ describe('MethodChapterComponent', () => {
           provide: Router,
           useValue: { navigate: jest.fn() }
         },
-        {
-          provide: ActivatedRoute,
-          useValue: { params, snapshot: { params: params.value } }
-        },
         { provide: MethodViewModel, useClass: MockMethodViewModel },
         { provide: ENVIRONMENT_ICON_MAPPING_TOKEN, useValue: {} }
       ]
@@ -76,6 +68,7 @@ describe('MethodChapterComponent', () => {
     component = fixture.componentInstance;
     searchComponent = TestBed.get(SearchComponent);
     methodViewModel = TestBed.get(MethodViewModel);
+    methodViewModel.currentMethodParams$.next({ book: 1, chapter: 2 });
     component.searchComponent = searchComponent;
     fixture.detectChanges();
   });
@@ -136,7 +129,10 @@ describe('MethodChapterComponent', () => {
       }));
 
       it('should navigate up to the chapter when inside a lesson', fakeAsync(() => {
-        component.currentLessonId = 3;
+        methodViewModel.currentMethodParams$.next({
+          ...methodViewModel.currentMethodParams$.value,
+          lesson: 3
+        });
 
         component.clickBackLink();
         tick();

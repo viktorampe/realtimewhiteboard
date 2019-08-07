@@ -26,7 +26,7 @@ import { ViewModelInterface } from '@campus/testing';
 import { Dictionary } from '@ngrx/entity';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { MethodViewModel } from './method.viewmodel';
+import { CurrentMethodParams, MethodViewModel } from './method.viewmodel';
 
 @Injectable({
   providedIn: 'root'
@@ -60,6 +60,7 @@ export class MockMethodViewModel
     })
   );
   public currentTab$ = new BehaviorSubject<number>(0);
+  public currentMethodParams$ = new BehaviorSubject<CurrentMethodParams>({});
 
   public eduContentProductTypes$ = new BehaviorSubject<
     EduContentProductTypeInterface[]

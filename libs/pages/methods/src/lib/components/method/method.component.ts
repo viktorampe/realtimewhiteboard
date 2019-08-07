@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import {
   EduContent,
   EduContentBookInterface,
@@ -9,8 +9,8 @@ import {
 } from '@campus/dal';
 import { Dictionary } from '@ngrx/entity';
 import { Observable } from 'rxjs';
-import { take } from 'rxjs/operators';
-import { MethodViewModel } from '../method.viewmodel';
+import { take, withLatestFrom } from 'rxjs/operators';
+import { CurrentMethodParams, MethodViewModel } from '../method.viewmodel';
 
 @Component({
   selector: 'campus-method',
@@ -26,14 +26,9 @@ export class MethodComponent implements OnInit {
   public method$: Observable<MethodInterface>;
   public productTypes$: Observable<EduContentProductTypeInterface[]>;
   public currentTab$: Observable<number>;
+  public currentMethodParams$: Observable<CurrentMethodParams>;
 
-  private currentBookId: number;
-
-  constructor(
-    private viewModel: MethodViewModel,
-    private route: ActivatedRoute,
-    private router: Router
-  ) {}
+  constructor(private viewModel: MethodViewModel, private router: Router) {}
 
   ngOnInit() {
     this.boeke$ = this.viewModel.currentBoeke$;
@@ -43,8 +38,7 @@ export class MethodComponent implements OnInit {
     this.method$ = this.viewModel.currentMethod$;
     this.productTypes$ = this.viewModel.eduContentProductTypes$;
     this.currentTab$ = this.viewModel.currentTab$;
-
-    this.currentBookId = +this.route.snapshot.params.book;
+    this.currentMethodParams$ = this.viewModel.currentMethodParams$;
   }
 
   public onSelectedTabIndexChanged(tab: number) {
@@ -54,13 +48,18 @@ export class MethodComponent implements OnInit {
   }
 
   public clickOpenChapter(chapterId: number) {
-    this.currentTab$.pipe(take(1)).subscribe(tab => {
-      this.router.navigate(['methods', this.currentBookId, chapterId], {
-        queryParams: {
-          tab
-        }
+    this.currentTab$
+      .pipe(
+        take(1),
+        withLatestFrom(this.currentMethodParams$)
+      )
+      .subscribe(([tab, currentMethodParams]) => {
+        this.router.navigate(['methods', currentMethodParams.book, chapterId], {
+          queryParams: {
+            tab
+          }
+        });
       });
-    });
   }
 
   public clickOpenBoeke(eduContent: EduContent): void {

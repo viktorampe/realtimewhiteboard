@@ -45,14 +45,13 @@ import {
   filter,
   map,
   mapTo,
-  switchMap,
-  withLatestFrom
+  switchMap
 } from 'rxjs/operators';
 
-interface CurrentMethodParams {
-  book: number;
-  chapter: number;
-  lesson: number;
+export interface CurrentMethodParams {
+  book?: number;
+  chapter?: number;
+  lesson?: number;
 }
 
 @Injectable({
@@ -71,10 +70,10 @@ export class MethodViewModel implements ContentOpenerInterface {
   public eduContentProductTypes$: Observable<EduContentProductTypeInterface[]>;
   public generalFilesByType$: Observable<Dictionary<EduContent[]>>;
   public currentTab$: Observable<number>;
+  public currentMethodParams$: Observable<CurrentMethodParams>;
 
   // Source streams
   private routerState$: Observable<RouterReducerState<RouterStateUrl>>;
-  private currentMethodParams$: Observable<CurrentMethodParams>;
   private generalFiles$: Observable<EduContent[]>;
   private diaboloPhases$: Observable<DiaboloPhaseInterface[]>;
 
@@ -225,7 +224,7 @@ export class MethodViewModel implements ContentOpenerInterface {
       map((routerState: RouterReducerState<RouterStateUrl>) => {
         return (
           (routerState.state.queryParams &&
-            routerState.state.queryParams.tab) ||
+            +routerState.state.queryParams.tab) ||
           0
         );
       })
@@ -245,9 +244,15 @@ export class MethodViewModel implements ContentOpenerInterface {
   }
 
   private setupSearchResults(): void {
-    this.searchResults$ = this.searchState$.pipe(
-      filter(searchState => searchState !== null),
-      withLatestFrom(this.getInitialSearchState()),
+    this.searchResults$ = combineLatest([
+      this.searchState$,
+      this.getInitialSearchState(),
+      this.currentTab$
+    ]).pipe(
+      filter(
+        ([searchState, initialSearchState, currentTab]) =>
+          searchState !== null && currentTab === 0
+      ),
       map(([searchState, initialSearchState]) => ({
         ...initialSearchState,
         ...searchState,

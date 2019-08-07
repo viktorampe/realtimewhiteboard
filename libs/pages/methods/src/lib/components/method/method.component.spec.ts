@@ -7,7 +7,7 @@ import {
 import { MatCard, MatCardModule, MatListItem } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { ActivatedRoute, Params, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { EduContentFixture } from '@campus/dal';
 import {
@@ -17,7 +17,6 @@ import {
 } from '@campus/shared';
 import { UiModule } from '@campus/ui';
 import { configureTestSuite } from 'ng-bullet';
-import { BehaviorSubject } from 'rxjs';
 import { MethodViewModel } from '../method.viewmodel';
 import { MockMethodViewModel } from '../method.viewmodel.mock';
 import { MethodComponent } from './method.component';
@@ -26,11 +25,9 @@ describe('MethodComponent', () => {
   let component: MethodComponent;
   let fixture: ComponentFixture<MethodComponent>;
   let methodViewModel: MockMethodViewModel;
-  let params: BehaviorSubject<Params>;
   let router: Router;
 
   configureTestSuite(() => {
-    params = new BehaviorSubject<Params>({ book: 1 });
     TestBed.configureTestingModule({
       imports: [
         MatCardModule,
@@ -49,10 +46,6 @@ describe('MethodComponent', () => {
           provide: Router,
           useValue: { navigate: jest.fn() }
         },
-        {
-          provide: ActivatedRoute,
-          useValue: { params, snapshot: { params: params.value } }
-        },
         { provide: MethodViewModel, useClass: MockMethodViewModel },
         { provide: ENVIRONMENT_ICON_MAPPING_TOKEN, useValue: {} }
       ]
@@ -61,6 +54,7 @@ describe('MethodComponent', () => {
 
   beforeEach(() => {
     methodViewModel = TestBed.get(MethodViewModel);
+    methodViewModel.currentMethodParams$.next({ book: 1 });
     router = TestBed.get(Router);
     fixture = TestBed.createComponent(MethodComponent);
     component = fixture.componentInstance;
