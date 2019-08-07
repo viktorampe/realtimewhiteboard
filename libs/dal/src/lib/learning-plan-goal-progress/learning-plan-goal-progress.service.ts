@@ -41,13 +41,13 @@ export class LearningPlanGoalProgressService
     eduContentTOCId: number,
     learningPlanGoalIds: number[]
   ): Observable<LearningPlanGoalProgressInterface[]> {
-    return this.personApi['createLearningPlanGoalProgress'](
+    return this.personApi.createLearningPlanGoalProgress(
       userId,
       classGroupId,
       learningPlanGoalIds,
       null,
       eduContentTOCId
-    ); //TODO don't avoid type checking -> after publish
+    );
   }
 
   createLearningPlanGoalProgressForUserLesson(
@@ -56,12 +56,12 @@ export class LearningPlanGoalProgressService
     userLessonId: number,
     learningPlanGoalIds: number[]
   ): Observable<LearningPlanGoalProgressInterface[]> {
-    return this.personApi['createLearningPlanGoalProgress'](
+    return this.personApi.createLearningPlanGoalProgress(
       userId,
       classGroupId,
       learningPlanGoalIds,
       userLessonId,
       null
-    ); //TODO don't avoid type checking -> after publish
+    );
   }
 }

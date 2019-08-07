@@ -93,8 +93,7 @@ describe('LearningPlanGoalProgressService', () => {
     const mockLearningPlanGoalIds = [789, 147];
 
     it('should call the api and return the results', () => {
-      //TODO don't avoid type checking -> after publish
-      personApi['createLearningPlanGoalProgress'] = jest
+      personApi.createLearningPlanGoalProgress = jest
         .fn()
         .mockReturnValue(of(mockLearningPlanGoalProgressArray));
 
@@ -105,8 +104,7 @@ describe('LearningPlanGoalProgressService', () => {
         mockLearningPlanGoalIds
       );
 
-      //TODO don't avoid type checking -> after publish
-      expect(personApi['createLearningPlanGoalProgress']).toHaveBeenCalledWith(
+      expect(personApi.createLearningPlanGoalProgress).toHaveBeenCalledWith(
         userId,
         mockClassGroupId,
         mockLearningPlanGoalIds,
@@ -135,8 +133,7 @@ describe('LearningPlanGoalProgressService', () => {
     const mockLearningPlanGoalIds = [789, 147];
 
     it('should call the api and return the results', () => {
-      //TODO don't avoid type checking -> after publish
-      personApi['createLearningPlanGoalProgress'] = jest
+      personApi.createLearningPlanGoalProgress = jest
         .fn()
         .mockReturnValue(of(mockLearningPlanGoalProgressArray));
 
@@ -147,8 +144,7 @@ describe('LearningPlanGoalProgressService', () => {
         mockLearningPlanGoalIds
       );
 
-      //TODO don't avoid type checking -> after publish
-      expect(personApi['createLearningPlanGoalProgress']).toHaveBeenCalledWith(
+      expect(personApi.createLearningPlanGoalProgress).toHaveBeenCalledWith(
         userId,
         mockClassGroupId,
         mockLearningPlanGoalIds,
