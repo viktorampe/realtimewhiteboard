@@ -55,6 +55,7 @@ export * from './lib/favorite';
 export * from './lib/history';
 export * from './lib/learning-area';
 export * from './lib/learning-plan';
+export * from './lib/learning-plan-goal-progress';
 export * from './lib/metadata';
 export * from './lib/persons';
 export * from './lib/results';
