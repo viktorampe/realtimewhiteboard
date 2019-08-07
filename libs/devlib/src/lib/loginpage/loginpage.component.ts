@@ -19,6 +19,7 @@ import {
   FavoriteTypesEnum,
   LearningAreaActions,
   LearningPlanGoalProgressActions,
+  LearningPlanGoalProgressQueries,
   TaskActions,
   TaskEduContentActions,
   TocServiceInterface,
@@ -183,5 +184,31 @@ export class LoginpageComponent implements OnInit {
       personId: userId
     });
     this.response = this.userLessonService.createForUser(userId, userLesson);
+  }
+
+  public toggleLearningPlanGoalProgress() {
+    const userId = this.authService.userId;
+    const classGroupId = 1;
+    const eduContentTOCId = 1;
+    const learningPlanGoalId = 1;
+    const userLessonId = 1;
+
+    this.store.dispatch(
+      new LearningPlanGoalProgressActions.ToggleLearningPlanGoalProgress({
+        personId: userId,
+        classGroupId,
+        userLessonId,
+        learningPlanGoalId
+      })
+    );
+
+    this.response = this.store.pipe(
+      select(LearningPlanGoalProgressQueries.getByRelationIds, {
+        personId: userId,
+        classGroupId,
+        userLessonId,
+        learningPlanGoalId
+      })
+    );
   }
 }
