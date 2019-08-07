@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import {
+  ClassGroupReducer,
   CurrentExerciseReducer,
   CustomSerializer,
   DiaboloPhaseReducer,
@@ -105,6 +106,9 @@ import { environment } from '../environments/environment';
         initialState: LearningPlanGoalProgressReducer.initialState
       }
     ),
+    StoreModule.forFeature(ClassGroupReducer.NAME, ClassGroupReducer.reducer, {
+      initialState: ClassGroupReducer.initialState
+    }),
     !environment.production ? StoreDevtoolsModule.instrument() : []
   ]
 })

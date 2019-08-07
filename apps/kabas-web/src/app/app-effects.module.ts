@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import {
+  ClassGroupEffects,
   CurrentExerciseEffects,
   DiaboloPhaseEffects,
   EduContentBookEffects,
@@ -32,7 +33,8 @@ import { EffectsModule } from '@ngrx/effects';
       CurrentExerciseEffects,
       UserLessonEffects,
       LearningDomainEffects,
-      LearningPlanGoalProgressEffects
+      LearningPlanGoalProgressEffects,
+      ClassGroupEffects
     ])
   ]
 })
