@@ -76,15 +76,16 @@ export const getByRelationIds = createSelector(
       classGroupId: number;
       eduContentTOCId?: number;
       userLessonId?: number;
-      learningPlanGoalId: number;
+      learningPlanGoalIds: number[];
       personId: number;
     }
   ) =>
-    Object.values(state.entities).find(
+    Object.values(state.entities).filter(
       learningPlanGoalProgress =>
         learningPlanGoalProgress.classGroupId === props.classGroupId &&
-        learningPlanGoalProgress.learningPlanGoalId ===
-          props.learningPlanGoalId &&
+        props.learningPlanGoalIds.includes(
+          learningPlanGoalProgress.learningPlanGoalId
+        ) &&
         learningPlanGoalProgress.personId === props.personId &&
         (learningPlanGoalProgress.eduContentTOCId === +props.eduContentTOCId ||
           learningPlanGoalProgress.userLessonId === +props.userLessonId)

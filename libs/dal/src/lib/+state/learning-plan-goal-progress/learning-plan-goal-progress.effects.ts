@@ -63,13 +63,21 @@ export class LearningPlanGoalProgressEffects {
       ): Observable<
         StartAddLearningPlanGoalProgress | DeleteLearningPlanGoalProgress
       > => {
+        const selectParams = {
+          classGroupId: action.payload.classGroupId,
+          personId: action.payload.personId,
+          eduContentTOCId: action.payload.eduContentTOCId,
+          userLessonId: action.payload.userLessonId,
+          learningPlanGoalIds: [action.payload.learningPlanGoalId]
+        };
+
         return this.dataPersistence.store.pipe(
-          select(getByRelationIds, action.payload),
+          select(getByRelationIds, selectParams),
           take(1),
-          map(learingPlanGoalProgress => {
-            if (learingPlanGoalProgress) {
+          map(learingPlanGoalProgressArray => {
+            if (learingPlanGoalProgressArray) {
               return new DeleteLearningPlanGoalProgress({
-                id: learingPlanGoalProgress.id,
+                id: learingPlanGoalProgressArray[0].id,
                 userId: action.payload.personId
               });
             } else {
