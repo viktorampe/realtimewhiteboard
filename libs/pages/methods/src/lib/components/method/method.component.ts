@@ -26,7 +26,8 @@ export class MethodComponent implements OnInit {
   public method$: Observable<MethodInterface>;
   public productTypes$: Observable<EduContentProductTypeInterface[]>;
   public currentTab$: Observable<number>;
-  public currentMethodParams$: Observable<CurrentMethodParams>;
+
+  private currentMethodParams$: Observable<CurrentMethodParams>;
 
   constructor(private viewModel: MethodViewModel, private router: Router) {}
 
