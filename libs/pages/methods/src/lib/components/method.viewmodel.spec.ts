@@ -533,28 +533,6 @@ describe('MethodViewModel', () => {
       });
     });
 
-    describe('currentBookEduContentTocs$', () => {
-      it('should be an empty array when no book is selected', () => {
-        navigateWithParams({});
-
-        expect(methodViewModel.currentBookTocs$).toBeObservable(
-          hot('a', {
-            a: []
-          })
-        );
-      });
-
-      it('should return all tocs when book is selected', () => {
-        navigateWithParams({ book: book.id });
-
-        expect(methodViewModel.currentBookTocs$).toBeObservable(
-          hot('a', {
-            a: [...chapterTocs, ...lessonTocs]
-          })
-        );
-      });
-    });
-
     describe('currentToc$', () => {
       it('should be an empty array when no book, chapter or lesson is selected', () => {
         navigateWithParams({});

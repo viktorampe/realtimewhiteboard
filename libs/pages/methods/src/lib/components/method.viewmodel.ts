@@ -79,7 +79,6 @@ export class MethodViewModel implements ContentOpenerInterface {
   public generalFilesByType$: Observable<Dictionary<EduContent[]>>;
   public currentTab$: Observable<number>;
   public currentMethodParams$: Observable<CurrentMethodParams>;
-  public currentBookTocs$: Observable<EduContentTOCInterface[]>;
   public classGroups$: Observable<ClassGroupInterface[]>;
 
   // Source streams
@@ -313,7 +312,6 @@ export class MethodViewModel implements ContentOpenerInterface {
       select(LearningPlanGoalQueries.getAll)
     );
     this.classGroups$ = this.store.pipe(select(ClassGroupQueries.getAll));
-    this.currentBookTocs$ = this.getAllTocsStream();
     this.learningPlanGoalProgress$ = this.store.pipe(
       select(LearningPlanGoalProgressQueries.getAll)
     );
@@ -369,26 +367,6 @@ export class MethodViewModel implements ContentOpenerInterface {
     );
 
     return merge(currentMethodWhenBook$, currentMethodWhenNoBook$);
-  }
-
-  private getAllTocsStream(): Observable<EduContentTOCInterface[]> {
-    const tocStreamWhenBook$ = this.currentMethodParams$.pipe(
-      filter(params => !!params.book && !params.chapter),
-      switchMap(params => {
-        return this.store.pipe(
-          select(EduContentTocQueries.getTocsForBook, {
-            bookId: params.book
-          })
-        );
-      })
-    );
-
-    const tocStreamWhenNoBook$ = this.currentMethodParams$.pipe(
-      filter(params => !params.book),
-      mapTo([])
-    );
-
-    return merge(tocStreamWhenBook$, tocStreamWhenNoBook$);
   }
 
   private getTocsStream(): Observable<EduContentTOCInterface[]> {
