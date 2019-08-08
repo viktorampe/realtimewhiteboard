@@ -1,4 +1,6 @@
+import { Dictionary } from '@ngrx/entity';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
+import { EduContentTOCInterface } from '../../+models';
 import {
   NAME,
   selectAll,
@@ -67,16 +69,25 @@ export const isBookLoaded = createSelector(
     state.loadedBooks.some(loadedBookId => loadedBookId === props.bookId)
 );
 
-export const getTocsForBook = createSelector(
+export const getTocsByBook = createSelector(
   selectEduContentTocState,
-  (state: State, props: { bookId: number }) =>
+  (state: State) =>
     (state.ids as number[]).reduce((acc, currentTocId) => {
       const currentToc = state.entities[currentTocId];
-      if (currentToc.treeId === props.bookId) {
-        acc.push(currentToc);
+      if (!acc[currentToc.treeId]) {
+        acc[currentToc.treeId] = [];
       }
+      acc[currentToc.treeId].push(currentToc);
       return acc;
-    }, [])
+    }, {})
+);
+
+export const getTocsForBook = createSelector(
+  getTocsByBook,
+  (
+    tocsByBook: Dictionary<EduContentTOCInterface[]>,
+    props: { bookId: number }
+  ) => tocsByBook[props.bookId] || []
 );
 
 export const getChaptersForBook = createSelector(
@@ -109,5 +120,18 @@ export const getTocsForToc = createSelector(
       }
       return acc;
     }, []);
+  }
+);
+
+export const getTocsForBookAndLearningPlanGoal = createSelector(
+  getTocsByBook,
+  (
+    tocsByBook: Dictionary<EduContentTOCInterface[]>,
+    props: { bookId: number; learningPlanGoalId: number }
+  ) => {
+    const tocs = tocsByBook[props.bookId] || [];
+    return tocs.filter(toc =>
+      toc.learningPlanGoalIds.includes(props.learningPlanGoalId)
+    );
   }
 );
