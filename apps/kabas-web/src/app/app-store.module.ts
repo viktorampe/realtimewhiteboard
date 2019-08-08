@@ -10,6 +10,7 @@ import {
   EduContentTocReducer,
   LearningDomainReducer,
   LearningPlanGoalProgressReducer,
+  LearningPlanGoalReducer,
   MethodReducer,
   UiReducer,
   UserLessonReducer,
@@ -104,6 +105,13 @@ import { environment } from '../environments/environment';
       LearningPlanGoalProgressReducer.reducer,
       {
         initialState: LearningPlanGoalProgressReducer.initialState
+      }
+    ),
+    StoreModule.forFeature(
+      LearningPlanGoalReducer.NAME,
+      LearningPlanGoalReducer.reducer,
+      {
+        initialState: LearningPlanGoalReducer.initialState
       }
     ),
     StoreModule.forFeature(ClassGroupReducer.NAME, ClassGroupReducer.reducer, {
