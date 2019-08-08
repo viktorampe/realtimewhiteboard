@@ -112,6 +112,30 @@ describe('EduContentToc Selectors', () => {
       });
     });
 
+    describe('getTocsByBook', () => {
+      let mockTOCs: EduContentTOCInterface[];
+
+      beforeEach(() => {
+        mockTOCs = [
+          new EduContentTOCFixture({ id: 4, treeId: 1 }),
+          new EduContentTOCFixture({ id: 1, treeId: 1 }),
+          new EduContentTOCFixture({ id: 2, treeId: 2 }),
+          new EduContentTOCFixture({ id: 3, treeId: 2 })
+        ];
+
+        eduContentTocState = createState(mockTOCs, [1], 'no error');
+        storeState = { eduContentTocs: eduContentTocState };
+      });
+
+      it('should return the tocs grouped by treeId', () => {
+        const results = EduContentTocQueries.getTocsByBook(storeState);
+        expect(results).toEqual({
+          1: [mockTOCs[0], mockTOCs[1]],
+          2: [mockTOCs[2], mockTOCs[3]]
+        });
+      });
+    });
+
     describe('getTocsForBook', () => {
       let mockTOCs: EduContentTOCInterface[];
 
@@ -248,6 +272,79 @@ describe('EduContentToc Selectors', () => {
           tocId: 1
         });
         expect(results).toEqual([mockTOCs[0], mockTOCs[3]]);
+      });
+    });
+  });
+
+  describe('getTocsForBookAndLearningPlanGoal', () => {
+    let mockTOCs: EduContentTOCInterface[];
+
+    beforeEach(() => {
+      mockTOCs = [
+        new EduContentTOCFixture({
+          id: 4,
+          treeId: 1,
+          learningPlanGoalIds: [1, 2]
+        }),
+        new EduContentTOCFixture({
+          id: 1,
+          treeId: 1,
+          learningPlanGoalIds: [1, 2, 3]
+        }),
+        new EduContentTOCFixture({
+          id: 2,
+          treeId: 2,
+          learningPlanGoalIds: [1, 2, 3]
+        }),
+        new EduContentTOCFixture({
+          id: 3,
+          treeId: 2,
+          learningPlanGoalIds: [2, 3, 4]
+        })
+      ];
+
+      eduContentTocState = createState(mockTOCs, [1], 'no error');
+      storeState = { eduContentTocs: eduContentTocState };
+    });
+
+    it('should return the tocs for a book with the specified learningPlanGoal', () => {
+      const tests = [
+        {
+          props: { bookId: 1, learningPlanGoalId: 1 },
+          expectedResult: [mockTOCs[0], mockTOCs[1]]
+        },
+        {
+          props: { bookId: 1, learningPlanGoalId: 2 },
+          expectedResult: [mockTOCs[0], mockTOCs[1]]
+        },
+        {
+          props: { bookId: 1, learningPlanGoalId: 3 },
+          expectedResult: [mockTOCs[1]]
+        },
+        {
+          props: { bookId: 1, learningPlanGoalId: 4 },
+          expectedResult: []
+        },
+        {
+          props: { bookId: 2, learningPlanGoalId: 1 },
+          expectedResult: [mockTOCs[2]]
+        },
+        {
+          props: { bookId: 2, learningPlanGoalId: 2 },
+          expectedResult: [mockTOCs[2], mockTOCs[3]]
+        },
+        {
+          props: { bookId: 2, learningPlanGoalId: 4 },
+          expectedResult: [mockTOCs[3]]
+        }
+      ];
+
+      tests.forEach(test => {
+        const results = EduContentTocQueries.getTocsForBookAndLearningPlanGoal(
+          storeState,
+          test.props
+        );
+        expect(results).toEqual(test.expectedResult);
       });
     });
   });
