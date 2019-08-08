@@ -15,6 +15,7 @@ import {
   HistoryReducer,
   LearningAreaReducer,
   LearningDomainReducer,
+  LearningPlanGoalProgressReducer,
   LearningPlanGoalReducer,
   LinkedPersonReducer,
   MethodReducer,
@@ -34,7 +35,6 @@ import {
   UserReducer,
   YearReducer
 } from '../..';
-import { LearningPlanGoalProgressReducer } from './learning-plan-goal-progress';
 
 export interface DalState {
   ui: UiReducer.UiState;

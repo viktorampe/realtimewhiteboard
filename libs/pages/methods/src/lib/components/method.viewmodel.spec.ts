@@ -257,16 +257,21 @@ describe('MethodViewModel', () => {
     );
   }
 
-  function navigateWithParams(params: {
-    book?: number;
-    chapter?: number;
-    lesson?: number;
-  }) {
+  function navigateWithParams(
+    params: {
+      book?: number;
+      chapter?: number;
+      lesson?: number;
+    },
+    queryParams?: {
+      tab?: number;
+    }
+  ) {
     zone.run(() => {
       const navigationAction = {
         type: ROUTER_NAVIGATION,
         payload: {
-          routerState: { params },
+          routerState: { params, queryParams },
           event: {}
         } as RouterNavigationPayload<any>
       } as RouterNavigationAction;
@@ -460,6 +465,21 @@ describe('MethodViewModel', () => {
 
       expect(searchResults$).toBeObservable(hot('a', { a: expected }));
     });
+
+    it('should not call the eduContentService when the currentTab !== 0', () => {
+      navigateWithParams({ book: bookId }, { tab: 1 });
+
+      const searchState = {
+        searchTerm: '',
+        filterCriteriaSelections: new Map([['foo', [1, 2, 3]]])
+      } as SearchStateInterface;
+
+      methodViewModel.searchResults$.pipe(take(1)).subscribe();
+
+      methodViewModel.updateState(searchState);
+
+      expect(eduContentService.search).not.toHaveBeenCalled();
+    });
   });
 
   describe('requestAutoComplete', () => {
@@ -589,6 +609,23 @@ describe('MethodViewModel', () => {
         const expected = mockBoeke;
         expect(methodViewModel.currentBoeke$).toBeObservable(
           hot('a', { a: expected })
+        );
+      });
+    });
+
+    describe('currentTab$', () => {
+      it('should return 0 if no tab is set in the queryParams', () => {
+        navigateWithParams({});
+
+        expect(methodViewModel.currentTab$).toBeObservable(hot('a', { a: 0 }));
+      });
+
+      it('should return the current tab in the queryParams', () => {
+        const tab = 1;
+        navigateWithParams({}, { tab });
+
+        expect(methodViewModel.currentTab$).toBeObservable(
+          hot('a', { a: tab })
         );
       });
     });

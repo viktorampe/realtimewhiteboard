@@ -141,6 +141,7 @@ export class ClearLearningPlanGoalProgresses implements Action {
   readonly type =
     LearningPlanGoalProgressesActionTypes.ClearLearningPlanGoalProgresses;
 }
+
 export class ToggleLearningPlanGoalProgress implements Action {
   readonly type =
     LearningPlanGoalProgressesActionTypes.ToggleLearningPlanGoalProgress;
