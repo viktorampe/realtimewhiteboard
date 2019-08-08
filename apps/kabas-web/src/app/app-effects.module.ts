@@ -9,6 +9,7 @@ import {
   EduContentTocEffects,
   LearningDomainEffects,
   LearningPlanGoalEffects,
+  LearningPlanGoalProgressEffects,
   MethodEffects,
   UiEffects,
   UserEffects,
@@ -33,6 +34,7 @@ import { EffectsModule } from '@ngrx/effects';
       CurrentExerciseEffects,
       UserLessonEffects,
       LearningDomainEffects,
+      LearningPlanGoalProgressEffects,
       LearningPlanGoalEffects,
       ClassGroupEffects
     ])
