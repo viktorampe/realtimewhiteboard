@@ -1,4 +1,9 @@
-import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
+import {
+  createEntityAdapter,
+  Dictionary,
+  EntityAdapter,
+  EntityState
+} from '@ngrx/entity';
 import { LearningPlanGoalInterface } from '../../+models';
 import {
   LearningPlanGoalsActions,
@@ -10,7 +15,7 @@ export const NAME = 'learningPlanGoals';
 export interface State extends EntityState<LearningPlanGoalInterface> {
   // additional entities state properties
   error?: any;
-  loadedBooks: number[];
+  loadedBooks: Dictionary<number[]>;
 }
 
 export const adapter: EntityAdapter<
@@ -19,7 +24,7 @@ export const adapter: EntityAdapter<
 
 export const initialState: State = adapter.getInitialState({
   // additional entity state properties
-  loadedBooks: []
+  loadedBooks: {}
 });
 
 export function reducer(
@@ -30,18 +35,23 @@ export function reducer(
     case LearningPlanGoalsActionTypes.AddLearningPlanGoalsForBook: {
       const loadedBookState = {
         ...state,
-        loadedBooks: [...state.loadedBooks, action.payload.bookId]
+        loadedBooks: {
+          ...state.loadedBooks,
+          [action.payload.bookId]: action.payload.learningPlanGoals.map(
+            learningPlanGoal => learningPlanGoal.id
+          )
+        }
       };
 
       return adapter.addMany(action.payload.learningPlanGoals, loadedBookState);
     }
 
     case LearningPlanGoalsActionTypes.LearningPlanGoalsLoadError: {
-      return { ...state, error: action.payload, loadedBooks: [] };
+      return { ...state, error: action.payload, loadedBooks: {} };
     }
 
     case LearningPlanGoalsActionTypes.ClearLearningPlanGoals: {
-      const stateWithEmptyLoadedBooks = { ...state, loadedBooks: [] };
+      const stateWithEmptyLoadedBooks = { ...state, loadedBooks: {} };
 
       return adapter.removeAll(stateWithEmptyLoadedBooks);
     }

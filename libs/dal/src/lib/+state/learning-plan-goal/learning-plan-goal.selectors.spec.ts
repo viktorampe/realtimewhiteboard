@@ -1,3 +1,4 @@
+import { Dictionary } from '@ngrx/entity';
 import { LearningPlanGoalQueries } from '.';
 import { LearningPlanGoalInterface } from '../../+models';
 import { State } from './learning-plan-goal.reducer';
@@ -11,7 +12,7 @@ describe('LearningPlanGoal Selectors', () => {
 
   function createState(
     learningPlanGoals: LearningPlanGoalInterface[],
-    loadedBooks: number[],
+    loadedBooks: Dictionary<number[]>,
     error?: any
   ): State {
     return {
@@ -44,7 +45,7 @@ describe('LearningPlanGoal Selectors', () => {
           createLearningPlanGoal(2),
           createLearningPlanGoal(3)
         ],
-        [1],
+        { 1: [4, 1, 2, 3] },
         'no error'
       );
       storeState = { learningPlanGoals: learningPlanGoalState };

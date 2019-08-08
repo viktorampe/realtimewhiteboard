@@ -63,6 +63,14 @@ export const getById = createSelector(
 
 export const isBookLoaded = createSelector(
   selectLearningPlanGoalState,
-  (state: State, props: { bookId: number }) =>
-    state.loadedBooks.includes(props.bookId)
+  (state: State, props: { bookId: number }) => !!state.loadedBooks[props.bookId]
+);
+
+export const getByBookId = createSelector(
+  selectLearningPlanGoalState,
+  (state: State, props: { bookId: number }) => {
+    return (state.loadedBooks[props.bookId] || []).map(
+      id => state.entities[id]
+    );
+  }
 );

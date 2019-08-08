@@ -85,7 +85,9 @@ export class MethodViewModel implements ContentOpenerInterface {
   private routerState$: Observable<RouterReducerState<RouterStateUrl>>;
   private generalFiles$: Observable<EduContent[]>;
   private diaboloPhases$: Observable<DiaboloPhaseInterface[]>;
-  private learningPlanGoals$: Observable<LearningPlanGoalInterface[]>;
+  private learningPlanGoalsForCurrentBook$: Observable<
+    LearningPlanGoalInterface[]
+  >;
   private learningPlanGoalProgress$: Observable<
     LearningPlanGoalProgressInterface[]
   >;
@@ -308,9 +310,7 @@ export class MethodViewModel implements ContentOpenerInterface {
     this.generalFiles$ = this.getGeneralFilesStream();
     this.diaboloPhases$ = this.getDiaboloPhasesStream();
 
-    this.learningPlanGoals$ = this.store.pipe(
-      select(LearningPlanGoalQueries.getAll)
-    );
+    this.learningPlanGoalsForCurrentBook$ = this.getLearningPlanGoalsForCurrentBookStream();
     this.classGroups$ = this.store.pipe(select(ClassGroupQueries.getAll));
     this.learningPlanGoalProgress$ = this.store.pipe(
       select(LearningPlanGoalProgressQueries.getAll)
@@ -455,6 +455,19 @@ export class MethodViewModel implements ContentOpenerInterface {
             return acc;
           },
           {} as Dictionary<EduContent[]>
+        );
+      })
+    );
+  }
+
+  private getLearningPlanGoalsForCurrentBookStream(): Observable<
+    LearningPlanGoalInterface[]
+  > {
+    return this.currentBook$.pipe(
+      filter(book => !!book),
+      switchMap(book => {
+        return this.store.pipe(
+          select(LearningPlanGoalQueries.getByBookId, { bookId: book.id })
         );
       })
     );

@@ -1,3 +1,4 @@
+import { Dictionary } from '@ngrx/entity';
 import { LearningPlanGoalActions } from '.';
 import { LearningPlanGoalInterface } from '../../+models';
 import { initialState, reducer, State } from './learning-plan-goal.reducer';
@@ -31,7 +32,7 @@ function createLearningPlanGoal(
  */
 function createState(
   learningPlanGoals: LearningPlanGoalInterface[],
-  loadedBooks: number[],
+  loadedBooks: Dictionary<number[]>,
   error?: any
 ): State {
   const state: any = {
@@ -82,7 +83,7 @@ describe('LearningPlanGoals Reducer', () => {
         error
       );
       const result = reducer(initialState, action);
-      expect(result).toEqual(createState([], [], error));
+      expect(result).toEqual(createState([], {}, error));
     });
   });
 
@@ -94,7 +95,20 @@ describe('LearningPlanGoals Reducer', () => {
       });
       const result = reducer(initialState, action);
 
-      expect(result).toEqual(createState(learningPlanGoals, [bookId]));
+      expect(result).toEqual(createState(learningPlanGoals, { 1: [1, 2, 3] }));
+
+      const action2 = new LearningPlanGoalActions.AddLearningPlanGoalsForBook({
+        bookId: 2,
+        learningPlanGoals
+      });
+      const result2 = reducer(result, action2);
+
+      expect(result2).toEqual(
+        createState(learningPlanGoals, {
+          1: [1, 2, 3],
+          2: [1, 2, 3]
+        })
+      );
     });
   });
 
@@ -102,12 +116,12 @@ describe('LearningPlanGoals Reducer', () => {
     it('should clear the learningPlanGoals collection', () => {
       const startState = createState(
         learningPlanGoals,
-        [1],
+        { 1: [1, 2, 3] },
         'something went wrong'
       );
       const action = new LearningPlanGoalActions.ClearLearningPlanGoals();
       const result = reducer(startState, action);
-      expect(result).toEqual(createState([], [], 'something went wrong'));
+      expect(result).toEqual(createState([], {}, 'something went wrong'));
     });
   });
 });

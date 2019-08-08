@@ -115,7 +115,7 @@ describe('LearningPlanGoalEffects', () => {
       beforeAll(() => {
         usedState = {
           ...LearningPlanGoalReducer.initialState,
-          loadedBooks: [1]
+          loadedBooks: { 1: [] }
         };
       });
       beforeEach(() => {
@@ -149,7 +149,7 @@ describe('LearningPlanGoalEffects', () => {
       beforeAll(() => {
         usedState = {
           ...LearningPlanGoalReducer.initialState,
-          loadedBooks: [1],
+          loadedBooks: { 1: [] },
           list: []
         };
       });
