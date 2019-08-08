@@ -10,7 +10,6 @@ export enum LearningPlanGoalProgressesActionTypes {
   LearningPlanGoalProgressesLoaded = '[LearningPlanGoalProgresses] LearningPlanGoalProgresses Loaded',
   LearningPlanGoalProgressesLoadError = '[LearningPlanGoalProgresses] Load Error',
   LoadLearningPlanGoalProgresses = '[LearningPlanGoalProgresses] Load LearningPlanGoalProgresses',
-  StartAddLearningPlanGoalProgress = '[LearningPlanGoalProgresses] Start Add LearningPlanGoalProgress',
   AddLearningPlanGoalProgress = '[LearningPlanGoalProgresses] Add LearningPlanGoalProgress',
   UpsertLearningPlanGoalProgress = '[LearningPlanGoalProgresses] Upsert LearningPlanGoalProgress',
   AddLearningPlanGoalProgresses = '[LearningPlanGoalProgresses] Add LearningPlanGoalProgresses',
@@ -20,7 +19,9 @@ export enum LearningPlanGoalProgressesActionTypes {
   DeleteLearningPlanGoalProgress = '[LearningPlanGoalProgresses] Delete LearningPlanGoalProgress',
   DeleteLearningPlanGoalProgresses = '[LearningPlanGoalProgresses] Delete LearningPlanGoalProgresses',
   ClearLearningPlanGoalProgresses = '[LearningPlanGoalProgresses] Clear LearningPlanGoalProgresses',
-  ToggleLearningPlanGoalProgress = '[LearningPlanGoalProgresses] Toggle LearningPlanGoalProgresses'
+  ToggleLearningPlanGoalProgress = '[LearningPlanGoalProgresses] Toggle LearningPlanGoalProgresses',
+  StartAddLearningPlanGoalProgresses = '[LearningPlanGoalProgresses] Start Add LearningPlanGoalProgresses',
+  BulkAddLearningPlanGoalProgresses = '[LearningPlanGoalProgresses] Bulk Add LearningPlanGoalProgresses'
 }
 
 export class LoadLearningPlanGoalProgresses implements Action {
@@ -49,19 +50,6 @@ export class LearningPlanGoalProgressesLoadError implements Action {
   constructor(public payload: any) {}
 }
 
-export class StartAddLearningPlanGoalProgress
-  implements FeedbackTriggeringAction {
-  readonly type =
-    LearningPlanGoalProgressesActionTypes.StartAddLearningPlanGoalProgress;
-
-  constructor(
-    public payload: {
-      learningPlanGoalProgress: LearningPlanGoalProgressInterface;
-      userId: number;
-      customFeedbackHandlers?: CustomFeedbackHandlersInterface;
-    }
-  ) {}
-}
 export class AddLearningPlanGoalProgress implements Action {
   readonly type =
     LearningPlanGoalProgressesActionTypes.AddLearningPlanGoalProgress;
@@ -168,6 +156,41 @@ export class ToggleLearningPlanGoalProgress implements Action {
   ) {}
 }
 
+export class BulkAddLearningPlanGoalProgresses implements Action {
+  readonly type =
+    LearningPlanGoalProgressesActionTypes.BulkAddLearningPlanGoalProgresses;
+
+  constructor(
+    public payload: {
+      classGroupId: number;
+      eduContentTOCId?: number;
+      userLessonId?: number;
+      learningPlanGoalIds: number[];
+      personId: number;
+    }
+  ) {}
+}
+
+export class StartAddLearningPlanGoalProgresses
+  implements FeedbackTriggeringAction {
+  readonly type =
+    LearningPlanGoalProgressesActionTypes.StartAddLearningPlanGoalProgresses;
+
+  constructor(
+    public payload: {
+      learningPlanGoalProgresses: {
+        classGroupId: number;
+        eduContentTOCId?: number;
+        userLessonId?: number;
+        learningPlanGoalIds: number[];
+        personId: number;
+      };
+      userId: number;
+      customFeedbackHandlers?: CustomFeedbackHandlersInterface;
+    }
+  ) {}
+}
+
 export type LearningPlanGoalProgressesActions =
   | LoadLearningPlanGoalProgresses
   | LearningPlanGoalProgressesLoaded
@@ -182,4 +205,5 @@ export type LearningPlanGoalProgressesActions =
   | DeleteLearningPlanGoalProgresses
   | ClearLearningPlanGoalProgresses
   | ToggleLearningPlanGoalProgress
-  | StartAddLearningPlanGoalProgress;
+  | StartAddLearningPlanGoalProgresses
+  | BulkAddLearningPlanGoalProgresses;

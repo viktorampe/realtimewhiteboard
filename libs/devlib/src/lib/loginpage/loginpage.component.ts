@@ -207,7 +207,7 @@ export class LoginpageComponent implements OnInit {
         personId: userId,
         classGroupId,
         userLessonId,
-        learningPlanGoalId
+        learningPlanGoalIds: [learningPlanGoalId]
       })
     );
   }
