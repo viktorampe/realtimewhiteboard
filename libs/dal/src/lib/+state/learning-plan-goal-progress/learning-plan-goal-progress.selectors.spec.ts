@@ -112,8 +112,8 @@ describe('LearningPlanGoalProgress Selectors', () => {
       });
       expect(results).toBe(undefined);
     });
-    it('getByLearningPlanGoalId() should return entities grouped by learingPlanGoalId', () => {
-      const results = LearningPlanGoalProgressQueries.getByLearningPlanGoalId(
+    it('getGroupedByLearningPlanGoalId() should return entities grouped by learingPlanGoalId', () => {
+      const results = LearningPlanGoalProgressQueries.getGroupedByLearningPlanGoalId(
         storeState
       );
       expect(results).toEqual({

@@ -313,7 +313,7 @@ export class MethodViewModel implements ContentOpenerInterface {
     this.learningPlanGoalsForCurrentBook$ = this.getLearningPlanGoalsForCurrentBookStream();
     this.classGroups$ = this.store.pipe(select(ClassGroupQueries.getAll));
     this.learningPlanGoalProgressBylearningPlanGoalId$ = this.store.pipe(
-      select(LearningPlanGoalProgressQueries.getByLearningPlanGoalId)
+      select(LearningPlanGoalProgressQueries.getGroupedByLearningPlanGoalId)
     );
   }
 

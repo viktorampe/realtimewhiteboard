@@ -95,6 +95,17 @@ describe('LearningPlanGoal Selectors', () => {
       const results = LearningPlanGoalQueries.getById(storeState, { id: 9 });
       expect(results).toBe(undefined);
     });
+    it('getByBookId() should return the desired entity', () => {
+      const results = LearningPlanGoalQueries.getByBookId(storeState, {
+        bookId: 1
+      });
+      expect(results).toEqual([
+        createLearningPlanGoal(4),
+        createLearningPlanGoal(1),
+        createLearningPlanGoal(2),
+        createLearningPlanGoal(3)
+      ]);
+    });
 
     describe('isBookLoaded', () => {
       it('should return false if the book has not been loaded', () => {
