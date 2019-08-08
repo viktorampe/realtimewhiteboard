@@ -13,9 +13,9 @@ export interface State extends EntityState<LearningPlanGoalProgressInterface> {
   error?: any;
 }
 
-export const adapter: EntityAdapter<LearningPlanGoalProgressInterface> = createEntityAdapter<
+export const adapter: EntityAdapter<
   LearningPlanGoalProgressInterface
->();
+> = createEntityAdapter<LearningPlanGoalProgressInterface>();
 
 export const initialState: State = adapter.getInitialState({
   // additional entity state properties
@@ -40,7 +40,10 @@ export function reducer(
     }
 
     case LearningPlanGoalProgressesActionTypes.UpsertLearningPlanGoalProgresses: {
-      return adapter.upsertMany(action.payload.learningPlanGoalProgresses, state);
+      return adapter.upsertMany(
+        action.payload.learningPlanGoalProgresses,
+        state
+      );
     }
 
     case LearningPlanGoalProgressesActionTypes.UpdateLearningPlanGoalProgress: {
@@ -48,7 +51,10 @@ export function reducer(
     }
 
     case LearningPlanGoalProgressesActionTypes.UpdateLearningPlanGoalProgresses: {
-      return adapter.updateMany(action.payload.learningPlanGoalProgresses, state);
+      return adapter.updateMany(
+        action.payload.learningPlanGoalProgresses,
+        state
+      );
     }
 
     case LearningPlanGoalProgressesActionTypes.DeleteLearningPlanGoalProgress: {
@@ -60,7 +66,10 @@ export function reducer(
     }
 
     case LearningPlanGoalProgressesActionTypes.LearningPlanGoalProgressesLoaded: {
-      return adapter.addAll(action.payload.learningPlanGoalProgresses, { ...state, loaded: true });
+      return adapter.addAll(action.payload.learningPlanGoalProgresses, {
+        ...state,
+        loaded: true
+      });
     }
 
     case LearningPlanGoalProgressesActionTypes.LearningPlanGoalProgressesLoadError: {

@@ -3,4 +3,9 @@ import { LearningPlanGoalProgressEffects } from './learning-plan-goal-progress.e
 import * as LearningPlanGoalProgressReducer from './learning-plan-goal-progress.reducer';
 import * as LearningPlanGoalProgressQueries from './learning-plan-goal-progress.selectors';
 
-export { LearningPlanGoalProgressActions, LearningPlanGoalProgressReducer, LearningPlanGoalProgressQueries, LearningPlanGoalProgressEffects };
+export {
+  LearningPlanGoalProgressActions,
+  LearningPlanGoalProgressReducer,
+  LearningPlanGoalProgressQueries,
+  LearningPlanGoalProgressEffects
+};
