@@ -9,7 +9,7 @@ describe('LearningPlanGoalProgress Selectors', () => {
   ): LearningPlanGoalProgressInterface | any {
     return {
       id: id,
-      learningPlanGoalId: id % 2
+      learningPlanGoalId: (id % 2) + 1
     };
   }
 
@@ -118,12 +118,12 @@ describe('LearningPlanGoalProgress Selectors', () => {
       );
       expect(results).toEqual({
         1: [
-          createLearningPlanGoalProgress(1),
-          createLearningPlanGoalProgress(3)
+          createLearningPlanGoalProgress(2),
+          createLearningPlanGoalProgress(4)
         ],
         2: [
-          createLearningPlanGoalProgress(4),
-          createLearningPlanGoalProgress(2)
+          createLearningPlanGoalProgress(1),
+          createLearningPlanGoalProgress(3)
         ]
       });
     });
