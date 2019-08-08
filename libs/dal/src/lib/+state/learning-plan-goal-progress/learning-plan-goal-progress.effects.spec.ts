@@ -5,8 +5,10 @@ import { provideMockActions } from '@ngrx/effects/testing';
 import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
 import { cold, hot } from '@nrwl/nx/testing';
+import { undo } from 'ngrx-undo';
 import { Observable, of } from 'rxjs';
 import { LearningPlanGoalProgressReducer } from '.';
+import { DalActions } from '..';
 import {
   LearningPlanGoalProgressServiceInterface,
   LEARNING_PLAN_GOAL_PROGRESS_SERVICE_TOKEN
@@ -18,6 +20,7 @@ import {
 } from '../effect-feedback';
 import {
   AddLearningPlanGoalProgresses,
+  DeleteLearningPlanGoalProgress,
   LearningPlanGoalProgressesLoaded,
   LearningPlanGoalProgressesLoadError,
   LoadLearningPlanGoalProgresses,
@@ -98,7 +101,8 @@ describe('LearningPlanGoalProgressEffects', () => {
           useValue: {
             getAllForUser: () => {},
             createLearningPlanGoalProgressForEduContentTOC: () => {},
-            createLearningPlanGoalProgressForUserLesson: () => {}
+            createLearningPlanGoalProgressForUserLesson: () => {},
+            deleteLearningPlanGoalProgress: () => {}
           }
         },
         LearningPlanGoalProgressEffects,
@@ -352,6 +356,81 @@ describe('LearningPlanGoalProgressEffects', () => {
       expect(effects.startAddLearningPlanGoalProgresses$).toBeObservable(
         hot('a', {
           a: feedbackAction
+        })
+      );
+    });
+  });
+
+  describe('deleteLearningPlanGoalProgress', () => {
+    const learningPlanGoalProgressId = 1;
+    const userId = 1;
+
+    const deleteAction = new DeleteLearningPlanGoalProgress({
+      id: learningPlanGoalProgressId,
+      userId
+    });
+
+    let learningPlanGoalProgressService: LearningPlanGoalProgressServiceInterface;
+
+    beforeEach(() => {
+      learningPlanGoalProgressService = TestBed.get(
+        LEARNING_PLAN_GOAL_PROGRESS_SERVICE_TOKEN
+      );
+    });
+
+    it('should make the service call', () => {
+      jest
+        .spyOn(
+          learningPlanGoalProgressService,
+          'deleteLearningPlanGoalProgress'
+        )
+        .mockReturnValue(of(true));
+
+      actions = hot('a', { a: deleteAction });
+
+      expect(effects.deleteLearningPlanGoalProgress$).toBeObservable(
+        cold('a', {
+          a: new DalActions.ActionSuccessful({
+            successfulAction: 'LearningPlanGoalProgress deleted.'
+          })
+        })
+      );
+
+      expect(
+        learningPlanGoalProgressService.deleteLearningPlanGoalProgress
+      ).toHaveBeenCalledWith(userId, learningPlanGoalProgressId);
+    });
+
+    it('should return an undoAction and a feedBackAction on error', () => {
+      jest
+        .spyOn(
+          learningPlanGoalProgressService,
+          'deleteLearningPlanGoalProgress'
+        )
+        .mockImplementation(() => {
+          throw new Error('error');
+        });
+
+      actions = hot('a', { a: deleteAction });
+
+      const feedbackAction = new EffectFeedbackActions.AddEffectFeedback({
+        effectFeedback: new EffectFeedback({
+          id: uuid,
+          triggerAction: deleteAction,
+          message:
+            'Het is niet gelukt om de status van het leerplandoel aan te passen.',
+          userActions: [
+            { title: 'Opnieuw proberen', userAction: deleteAction }
+          ],
+          type: 'error',
+          priority: Priority.HIGH
+        })
+      });
+
+      expect(effects.deleteLearningPlanGoalProgress$).toBeObservable(
+        cold('(ab)', {
+          a: undo(deleteAction),
+          b: feedbackAction
         })
       );
     });
