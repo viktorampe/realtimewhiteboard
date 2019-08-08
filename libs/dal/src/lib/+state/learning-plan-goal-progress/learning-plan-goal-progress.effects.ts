@@ -83,8 +83,7 @@ export class LearningPlanGoalProgressEffects {
               });
             } else {
               return new StartAddLearningPlanGoalProgresses({
-                learningPlanGoalProgresses: selectParams,
-                userId: action.payload.personId
+                ...selectParams
               });
             }
           })
@@ -98,23 +97,20 @@ export class LearningPlanGoalProgressEffects {
     LearningPlanGoalProgressesActionTypes.StartAddLearningPlanGoalProgresses,
     {
       run: (action: StartAddLearningPlanGoalProgresses, state: DalState) => {
-        const learningPlanGoalProgresses =
-          action.payload.learningPlanGoalProgresses;
-
         let serviceCall: Observable<LearningPlanGoalProgressInterface[]>;
-        if (learningPlanGoalProgresses.eduContentTOCId) {
+        if (action.payload.eduContentTOCId) {
           serviceCall = this.learningPlanGoalProgressService.createLearningPlanGoalProgressForEduContentTOC(
-            learningPlanGoalProgresses.personId,
-            learningPlanGoalProgresses.classGroupId,
-            learningPlanGoalProgresses.eduContentTOCId,
-            learningPlanGoalProgresses.learningPlanGoalIds
+            action.payload.personId,
+            action.payload.classGroupId,
+            action.payload.eduContentTOCId,
+            action.payload.learningPlanGoalIds
           );
-        } else if (learningPlanGoalProgresses.userLessonId) {
+        } else if (action.payload.userLessonId) {
           serviceCall = this.learningPlanGoalProgressService.createLearningPlanGoalProgressForUserLesson(
-            learningPlanGoalProgresses.personId,
-            learningPlanGoalProgresses.classGroupId,
-            learningPlanGoalProgresses.userLessonId,
-            learningPlanGoalProgresses.learningPlanGoalIds
+            action.payload.personId,
+            action.payload.classGroupId,
+            action.payload.userLessonId,
+            action.payload.learningPlanGoalIds
           );
         } else {
           throw new Error('Fill in either eduContentTOCId or userLessonId.');
@@ -208,8 +204,7 @@ export class LearningPlanGoalProgressEffects {
             };
 
             return new StartAddLearningPlanGoalProgresses({
-              learningPlanGoalProgresses: neededLearningPlanGoalProgresses,
-              userId: action.payload.personId
+              ...neededLearningPlanGoalProgresses
             });
           })
         );

@@ -179,14 +179,11 @@ export class StartAddLearningPlanGoalProgresses
 
   constructor(
     public payload: {
-      learningPlanGoalProgresses: {
-        classGroupId: number;
-        eduContentTOCId?: number;
-        userLessonId?: number;
-        learningPlanGoalIds: number[];
-        personId: number;
-      };
-      userId: number;
+      classGroupId: number;
+      eduContentTOCId?: number;
+      userLessonId?: number;
+      learningPlanGoalIds: number[];
+      personId: number;
       customFeedbackHandlers?: CustomFeedbackHandlersInterface;
     }
   ) {}

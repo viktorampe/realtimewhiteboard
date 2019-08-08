@@ -249,8 +249,8 @@ describe('LearningPlanGoalProgressEffects', () => {
       const eduContentTOCId = 1;
 
       const startAddAction = new StartAddLearningPlanGoalProgresses({
-        learningPlanGoalProgresses: { ...staticParams, eduContentTOCId },
-        userId: staticParams.personId
+        ...staticParams,
+        eduContentTOCId
       });
 
       const returnedValues = staticParams.learningPlanGoalIds.map(
@@ -293,8 +293,8 @@ describe('LearningPlanGoalProgressEffects', () => {
       const userLessonId = 1;
 
       const startAddAction = new StartAddLearningPlanGoalProgresses({
-        learningPlanGoalProgresses: { ...staticParams, userLessonId },
-        userId: staticParams.personId
+        ...staticParams,
+        userLessonId
       });
 
       const returnedValues = staticParams.learningPlanGoalIds.map(
@@ -336,8 +336,7 @@ describe('LearningPlanGoalProgressEffects', () => {
     it('should return a feedbackAction if an error occured', () => {
       // no eduContentId or UserLessonId -> will error
       const startAddAction = new StartAddLearningPlanGoalProgresses({
-        learningPlanGoalProgresses: { ...staticParams },
-        userId: staticParams.personId
+        ...staticParams
       });
 
       actions = hot('a', { a: startAddAction });
@@ -476,14 +475,11 @@ describe('LearningPlanGoalProgressEffects', () => {
       });
 
       const expectedAction = new StartAddLearningPlanGoalProgresses({
-        learningPlanGoalProgresses: {
-          personId,
-          classGroupId,
-          eduContentTOCId,
-          userLessonId: undefined,
-          learningPlanGoalIds: [2]
-        },
-        userId: personId
+        personId,
+        classGroupId,
+        eduContentTOCId,
+        userLessonId: undefined,
+        learningPlanGoalIds: [2]
       });
 
       expect(effects.bulkAddLearningPlanGoalProgress$).toBeObservable(
@@ -504,14 +500,11 @@ describe('LearningPlanGoalProgressEffects', () => {
       });
 
       const expectedAction = new StartAddLearningPlanGoalProgresses({
-        learningPlanGoalProgresses: {
-          personId,
-          classGroupId,
-          eduContentTOCId: undefined,
-          userLessonId,
-          learningPlanGoalIds: [2]
-        },
-        userId: personId
+        classGroupId,
+        eduContentTOCId: undefined,
+        userLessonId,
+        learningPlanGoalIds: [2],
+        personId
       });
 
       expect(effects.bulkAddLearningPlanGoalProgress$).toBeObservable(
@@ -555,13 +548,10 @@ describe('LearningPlanGoalProgressEffects', () => {
       actions = hot('a', { a: toggleAction });
 
       const expectedAction = new StartAddLearningPlanGoalProgresses({
-        learningPlanGoalProgresses: {
-          classGroupId,
-          personId,
-          learningPlanGoalIds: [2],
-          eduContentTOCId
-        },
-        userId: personId
+        classGroupId,
+        learningPlanGoalIds: [2],
+        eduContentTOCId,
+        personId
       });
 
       expect(effects.toggleLearningPlanGoalProgress$).toBeObservable(
