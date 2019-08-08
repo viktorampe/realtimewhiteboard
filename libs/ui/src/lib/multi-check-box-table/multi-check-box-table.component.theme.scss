@@ -1,32 +1,32 @@
 @mixin ui-multi-check-box-table_theme() {
   // color palette
-  $ui-multi-check-box-table-row-color-even: $ui-list-row-bg-even !default;
-  $ui-multi-check-box-table-row-color-odd: $ui-list-row-bg-odd !default;
+  $ui-multi-check-box-table_row-color--even: $ui-list-row-bg-even !default;
+  $ui-multi-check-box-table_row-color--odd: $ui-list-row-bg-odd !default;
 
   // spacing base
-  $ui-multi-check-box-table-cell-padding: 8px !default;
+  $ui-multi-check-box-table_cell-padding: 8px !default;
 
   .ui-multi-check-box-table {
     td,
     th {
-      padding: $ui-multi-check-box-table-cell-padding;
+      padding: $ui-multi-check-box-table_cell-padding;
     }
 
     &__body {
       &__row {
         &--subLevel {
           th {
-            padding-top: $ui-multi-check-box-table-cell-padding * 2;
-            padding-bottom: $ui-multi-check-box-table-cell-padding / 2;
+            padding-top: $ui-multi-check-box-table_cell-padding * 2;
+            padding-bottom: $ui-multi-check-box-table_cell-padding / 2;
           }
         }
 
         &--even {
-          background-color: $ui-multi-check-box-table-row-color-even;
+          background-color: $ui-multi-check-box-table_row-color--even;
         }
 
         &--odd {
-          background-color: $ui-multi-check-box-table-row-color-odd;
+          background-color: $ui-multi-check-box-table_row-color--odd;
         }
       }
     }
