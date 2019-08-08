@@ -27,6 +27,7 @@ import {
   LearningPlanGoalProgressesLoadError,
   LoadLearningPlanGoalProgresses,
   StartAddLearningPlanGoalProgresses,
+  ToggleLearningPlanGoalProgress
 } from './learning-plan-goal-progress.actions';
 import { LearningPlanGoalProgressEffects } from './learning-plan-goal-progress.effects';
 
@@ -514,6 +515,76 @@ describe('LearningPlanGoalProgressEffects', () => {
       });
 
       expect(effects.bulkAddLearningPlanGoalProgress$).toBeObservable(
+        hot('a', { a: expectedAction })
+      );
+    });
+  });
+
+  describe('toggleLearningPlanGoalProgress', () => {
+    const personId = 1;
+    const classGroupId = 1;
+    const eduContentTOCId = 1;
+    const userLessonId = 1;
+    const learningPlanGoalIds = [1, 2]; // 1 is already in state, 2 isn't
+
+    beforeAll(() => {
+      usedState = {
+        ...LearningPlanGoalProgressReducer.initialState,
+        ids: [1],
+        entities: {
+          1: new LearningPlanGoalProgressFixture()
+        }
+      };
+    });
+
+    let learningPlanGoalProgressService;
+    beforeEach(() => {
+      learningPlanGoalProgressService = TestBed.get(
+        LEARNING_PLAN_GOAL_PROGRESS_SERVICE_TOKEN
+      );
+    });
+
+    it('should return an StartAddLearningPlanGoalProgresses action if the progress does not exist', () => {
+      const toggleAction = new ToggleLearningPlanGoalProgress({
+        classGroupId,
+        personId,
+        learningPlanGoalId: 2,
+        eduContentTOCId
+      });
+
+      actions = hot('a', { a: toggleAction });
+
+      const expectedAction = new StartAddLearningPlanGoalProgresses({
+        learningPlanGoalProgresses: {
+          classGroupId,
+          personId,
+          learningPlanGoalIds: [2],
+          eduContentTOCId
+        },
+        userId: personId
+      });
+
+      expect(effects.toggleLearningPlanGoalProgress$).toBeObservable(
+        hot('a', { a: expectedAction })
+      );
+    });
+
+    it('should return a DeleteLearningPlanGoalProgress action if the progress exists', () => {
+      const toggleAction = new ToggleLearningPlanGoalProgress({
+        classGroupId,
+        personId,
+        learningPlanGoalId: 1,
+        eduContentTOCId
+      });
+
+      actions = hot('a', { a: toggleAction });
+
+      const expectedAction = new DeleteLearningPlanGoalProgress({
+        id: 1,
+        userId: personId
+      });
+
+      expect(effects.toggleLearningPlanGoalProgress$).toBeObservable(
         hot('a', { a: expectedAction })
       );
     });
