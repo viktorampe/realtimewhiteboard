@@ -177,7 +177,7 @@ export class LearningPlanGoalProgressEffects {
   );
 
   @Effect()
-  BulkAddLearningPlanGoalProgress$ = this.dataPersistence.actions.pipe(
+  bulkAddLearningPlanGoalProgress$ = this.dataPersistence.actions.pipe(
     ofType(
       LearningPlanGoalProgressesActionTypes.BulkAddLearningPlanGoalProgresses
     ),

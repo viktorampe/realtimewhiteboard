@@ -9,6 +9,7 @@ import { undo } from 'ngrx-undo';
 import { Observable, of } from 'rxjs';
 import { LearningPlanGoalProgressReducer } from '.';
 import { DalActions } from '..';
+import { LearningPlanGoalProgressFixture } from '../../+fixtures';
 import {
   LearningPlanGoalProgressServiceInterface,
   LEARNING_PLAN_GOAL_PROGRESS_SERVICE_TOKEN
@@ -20,11 +21,12 @@ import {
 } from '../effect-feedback';
 import {
   AddLearningPlanGoalProgresses,
+  BulkAddLearningPlanGoalProgresses,
   DeleteLearningPlanGoalProgress,
   LearningPlanGoalProgressesLoaded,
   LearningPlanGoalProgressesLoadError,
   LoadLearningPlanGoalProgresses,
-  StartAddLearningPlanGoalProgresses
+  StartAddLearningPlanGoalProgresses,
 } from './learning-plan-goal-progress.actions';
 import { LearningPlanGoalProgressEffects } from './learning-plan-goal-progress.effects';
 
@@ -432,6 +434,87 @@ describe('LearningPlanGoalProgressEffects', () => {
           a: undo(deleteAction),
           b: feedbackAction
         })
+      );
+    });
+  });
+
+  describe('bulkAddLearningPlanGoalProgress', () => {
+    const personId = 1;
+    const classGroupId = 1;
+    const eduContentTOCId = 1;
+    const userLessonId = 1;
+    const learningPlanGoalIds = [1, 2]; // 1 is already in state, 2 isn't
+
+    beforeAll(() => {
+      usedState = {
+        ...LearningPlanGoalProgressReducer.initialState,
+        ids: [1],
+        entities: {
+          1: new LearningPlanGoalProgressFixture()
+        }
+      };
+    });
+
+    let learningPlanGoalProgressService;
+    beforeEach(() => {
+      learningPlanGoalProgressService = TestBed.get(
+        LEARNING_PLAN_GOAL_PROGRESS_SERVICE_TOKEN
+      );
+    });
+
+    it('should return a StartAddLearningPlanGoalProgresses action, for eduContentTOCId', () => {
+      const bulkAddAction = new BulkAddLearningPlanGoalProgresses({
+        personId,
+        classGroupId,
+        eduContentTOCId,
+        learningPlanGoalIds
+      });
+
+      actions = hot('a', {
+        a: bulkAddAction
+      });
+
+      const expectedAction = new StartAddLearningPlanGoalProgresses({
+        learningPlanGoalProgresses: {
+          personId,
+          classGroupId,
+          eduContentTOCId,
+          userLessonId: undefined,
+          learningPlanGoalIds: [2]
+        },
+        userId: personId
+      });
+
+      expect(effects.bulkAddLearningPlanGoalProgress$).toBeObservable(
+        hot('a', { a: expectedAction })
+      );
+    });
+
+    it('should return a StartAddLearningPlanGoalProgresses action, for userLessonId', () => {
+      const bulkAddAction = new BulkAddLearningPlanGoalProgresses({
+        personId,
+        classGroupId,
+        userLessonId,
+        learningPlanGoalIds
+      });
+
+      actions = hot('a', {
+        a: bulkAddAction
+      });
+
+      const expectedAction = new StartAddLearningPlanGoalProgresses({
+        learningPlanGoalProgresses: {
+          personId,
+          classGroupId,
+          eduContentTOCId: undefined,
+          userLessonId,
+          learningPlanGoalIds: [2]
+        },
+        userId: personId
+      });
+
+      expect(effects.bulkAddLearningPlanGoalProgress$).toBeObservable(
+        hot('a', { a: expectedAction })
       );
     });
   });
