@@ -109,13 +109,15 @@ export class LearningPlanGoalProgressEffects {
             learningPlanGoalProgresses.eduContentTOCId,
             learningPlanGoalProgresses.learningPlanGoalIds
           );
-        } else {
+        } else if (learningPlanGoalProgresses.userLessonId) {
           serviceCall = this.learningPlanGoalProgressService.createLearningPlanGoalProgressForUserLesson(
             learningPlanGoalProgresses.personId,
             learningPlanGoalProgresses.classGroupId,
             learningPlanGoalProgresses.userLessonId,
             learningPlanGoalProgresses.learningPlanGoalIds
           );
+        } else {
+          throw new Error('Fill in either eduContentTOCId or userLessonId.');
         }
 
         return serviceCall.pipe(
