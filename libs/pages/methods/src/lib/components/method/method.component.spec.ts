@@ -1,8 +1,13 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {
+  ComponentFixture,
+  fakeAsync,
+  TestBed,
+  tick
+} from '@angular/core/testing';
 import { MatCard, MatCardModule, MatListItem } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { ActivatedRoute, Params, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { EduContentFixture } from '@campus/dal';
 import {
@@ -10,10 +15,8 @@ import {
   ENVIRONMENT_SEARCHMODES_TOKEN,
   SharedModule
 } from '@campus/shared';
-import { ViewModelInterface } from '@campus/testing';
 import { UiModule } from '@campus/ui';
 import { configureTestSuite } from 'ng-bullet';
-import { BehaviorSubject } from 'rxjs';
 import { MethodViewModel } from '../method.viewmodel';
 import { MockMethodViewModel } from '../method.viewmodel.mock';
 import { MethodComponent } from './method.component';
@@ -21,12 +24,10 @@ import { MethodComponent } from './method.component';
 describe('MethodComponent', () => {
   let component: MethodComponent;
   let fixture: ComponentFixture<MethodComponent>;
-  let methodViewModel: ViewModelInterface<MethodViewModel>;
-  let params: BehaviorSubject<Params>;
+  let methodViewModel: MockMethodViewModel;
   let router: Router;
 
   configureTestSuite(() => {
-    params = new BehaviorSubject<Params>({ book: 1 });
     TestBed.configureTestingModule({
       imports: [
         MatCardModule,
@@ -42,19 +43,19 @@ describe('MethodComponent', () => {
           useValue: {}
         },
         {
-          provide: ActivatedRoute,
-          useValue: { params, snapshot: params.value }
+          provide: Router,
+          useValue: { navigate: jest.fn() }
         },
         { provide: MethodViewModel, useClass: MockMethodViewModel },
         { provide: ENVIRONMENT_ICON_MAPPING_TOKEN, useValue: {} }
       ]
     });
-
-    router = TestBed.get(Router);
   });
 
   beforeEach(() => {
     methodViewModel = TestBed.get(MethodViewModel);
+    methodViewModel.currentMethodParams$.next({ book: 1 });
+    router = TestBed.get(Router);
     fixture = TestBed.createComponent(MethodComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -86,6 +87,46 @@ describe('MethodComponent', () => {
       By.css('div[main] h3[mat-subheader]')
     );
     expect(productTypeHeaders.length).toBe(2);
+  });
+
+  describe('clickOpenChapter', () => {
+    it('should navigate to the chapter when clickOpenChapter is called', fakeAsync(() => {
+      component.clickOpenChapter(3);
+      tick();
+
+      expect(router.navigate).toHaveBeenCalled();
+      expect(router.navigate).toHaveBeenCalledWith(['methods', 1, 3], {
+        queryParams: { tab: 0 }
+      });
+    }));
+
+    it('should pass the tab in the queryParams when clickOpenLesson is called', fakeAsync(() => {
+      const tab = 1;
+      methodViewModel.currentTab$.next(tab);
+
+      component.clickOpenChapter(3);
+      tick();
+
+      expect(router.navigate).toHaveBeenCalled();
+      expect(router.navigate).toHaveBeenCalledWith(['methods', 1, 3], {
+        queryParams: { tab }
+      });
+    }));
+  });
+
+  describe('tabs', () => {
+    describe('onSelectedTabIndexChanged', () => {
+      it('should navigate with the new tab index in the queryParams', () => {
+        const tab = 1;
+
+        component.onSelectedTabIndexChanged(tab);
+
+        expect(router.navigate).toHaveBeenCalled();
+        expect(router.navigate).toHaveBeenCalledWith([], {
+          queryParams: { tab }
+        });
+      });
+    });
   });
 
   describe('openboeke', () => {
