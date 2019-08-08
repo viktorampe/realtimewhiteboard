@@ -236,7 +236,8 @@ describe('LearningPlanGoalProgresses Reducer', () => {
       const startState = createState([learningPlanGoalProgress]);
       const action = new LearningPlanGoalProgressActions.DeleteLearningPlanGoalProgress(
         {
-          id: learningPlanGoalProgress.id
+          id: learningPlanGoalProgress.id,
+          userId: 1
         }
       );
       const result = reducer(startState, action);
