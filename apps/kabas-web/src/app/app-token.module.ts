@@ -14,6 +14,10 @@ import {
   EXERCISE_SERVICE_TOKEN,
   LearningDomainService,
   LEARNING_DOMAIN_SERVICE_TOKEN,
+  LearningPlanGoalService,
+  LEARNING_PLAN_GOAL_SERVICE_TOKEN,
+  LearningPlanGoalProgressService,
+  LEARNING_PLAN_GOAL_PROGRESS_SERVICE_TOKEN,
   MethodService,
   METHOD_SERVICE_TOKEN,
   PersonService,
@@ -56,7 +60,15 @@ import {
     },
     { provide: USER_LESSON_SERVICE_TOKEN, useClass: UserLessonService },
     { provide: LEARNING_DOMAIN_SERVICE_TOKEN, useClass: LearningDomainService },
-    { provide: CLASS_GROUP_SERVICE_TOKEN, useClass: ClassGroupService }
+    { provide: CLASS_GROUP_SERVICE_TOKEN, useClass: ClassGroupService },
+    {
+      provide: LEARNING_PLAN_GOAL_SERVICE_TOKEN,
+      useClass: LearningPlanGoalService
+    },
+    {
+      provide: LEARNING_PLAN_GOAL_PROGRESS_SERVICE_TOKEN,
+      useClass: LearningPlanGoalProgressService
+    }
   ]
 })
 export class AppTokenModule {}

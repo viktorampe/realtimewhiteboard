@@ -30,10 +30,7 @@ import {
   TocServiceInterface,
   TOC_SERVICE_TOKEN,
   UnlockedContentActions,
-  UserActions,
-  UserLessonFixture,
-  UserLessonServiceInterface,
-  USER_LESSON_SERVICE_TOKEN
+  UserActions
 } from '@campus/dal';
 import {
   SearchFilterCriteriaFixture,
@@ -87,9 +84,7 @@ export class LoginpageComponent implements OnInit {
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
     private store: Store<AlertReducer.State>,
     private router: Router,
-    @Inject(TOC_SERVICE_TOKEN) private tocService: TocServiceInterface,
-    @Inject(USER_LESSON_SERVICE_TOKEN)
-    private userLessonService: UserLessonServiceInterface
+    @Inject(TOC_SERVICE_TOKEN) private tocService: TocServiceInterface
   ) {}
 
   ngOnInit() {
@@ -181,97 +176,4 @@ export class LoginpageComponent implements OnInit {
   public filterSelectionChanged(event) {
     console.log(event);
   }
-
-  public createUserLesson() {
-    const userId = this.authService.userId;
-    const userLesson = new UserLessonFixture({
-      id: undefined,
-      description: 'dit is een nieuwe userLesson',
-      personId: userId
-    });
-    this.response = this.userLessonService.createForUser(userId, userLesson);
-  }
-
-  public subLevels: MultiCheckBoxTableSubLevelInterface<
-    EduContentTOCInterface,
-    LearningPlanGoalInterface
-  >[] = [
-    {
-      item: new EduContentTOCFixture({ id: 1, title: 'les1' }),
-      label: 'title',
-      children: [
-        {
-          header: new LearningPlanGoalFixture({ id: 1, goal: 'item1' }),
-          content: { 1: true }
-        },
-        {
-          header: new LearningPlanGoalFixture({ id: 2, goal: 'item2' }),
-          content: { 2: true }
-        },
-        {
-          header: new LearningPlanGoalFixture({ id: 3, goal: 'item3' }),
-          content: { 1: true, 2: true }
-        }
-      ]
-    },
-    {
-      item: new EduContentTOCFixture({ id: 2, title: 'les2' }),
-      label: 'title',
-      children: [
-        {
-          header: new LearningPlanGoalFixture({ id: 4, goal: 'item4' }),
-          content: {}
-        },
-        {
-          header: new LearningPlanGoalFixture({ id: 5, goal: 'item5' }),
-          content: {}
-        },
-        {
-          header: new LearningPlanGoalFixture({ id: 6, goal: 'item6' }),
-          content: {}
-        }
-      ]
-    }
-  ];
-
-  public itemColumns: MultiCheckBoxTableItemColumnInterface<
-    ClassGroupInterface
-  >[] = [
-    {
-      item: new ClassGroupFixture({ id: 1, name: 'klas1' }),
-      key: 'id',
-      label: 'name'
-    },
-    {
-      item: new ClassGroupFixture({ id: 2, name: 'klas2' }),
-      key: 'id',
-      label: 'name'
-    }
-  ];
-
-  public rowHeaderColumns: MultiCheckBoxTableRowHeaderColumnInterface<
-    LearningPlanGoalInterface
-  >[] = [
-    { caption: 'id', key: 'id' },
-    { caption: 'beschrijving', key: 'goal' }
-  ];
-
-  public items: MultiCheckBoxTableItemInterface<LearningPlanGoalInterface>[] = [
-    {
-      header: new LearningPlanGoalFixture({ id: 1, goal: 'item1' }),
-      content: { 1: true }
-    },
-    {
-      header: new LearningPlanGoalFixture({ id: 2, goal: 'item2' }),
-      content: { 2: true }
-    },
-    {
-      header: new LearningPlanGoalFixture({
-        id: 3,
-        goal:
-          'item3 item3 item3 item3 item3 item3 item3 item3 item3 item3 item3 item3 item3 item3 item3 item3 item3 '
-      }),
-      content: { 1: true, 2: true }
-    }
-  ];
 }
