@@ -12,23 +12,24 @@
       <a (click)="clickBackLink()" class="method-chapter__back-link"
         ><mat-icon svgIcon="arrow-back"></mat-icon>Terug</a
       >
-      <ng-container>
-        <mat-list>
-          <mat-list-item
-            *ngFor="let lesson of (lessonsForChapter$ | async)"
-            (click)="clickOpenLesson(lesson.id)"
-            class="method-chapter__lesson-link"
-          >
-            <span [class.active]="lesson.id === currentLessonId">{{
-              lesson.title
-            }}</span></mat-list-item
-          ></mat-list
+      <mat-list *ngIf="(currentMethodParams$ | async) as params">
+        <mat-list-item
+          *ngFor="let lesson of (lessonsForChapter$ | async)"
+          (click)="clickOpenLesson(lesson.id)"
+          class="method-chapter__lesson-link"
         >
-      </ng-container>
+          <span [class.active]="lesson.id === params.lesson">{{
+            lesson.title
+          }}</span></mat-list-item
+        ></mat-list
+      >
     </div>
 
     <div main>
-      <mat-tab-group>
+      <mat-tab-group
+        [selectedIndex]="currentTab$ | async"
+        (selectedIndexChange)="onSelectedTabIndexChanged($event)"
+      >
         <mat-tab label="Lesmateriaal">
           <div class="method-chapter--filters">
             <ng-container searchPortal="searchTerm"></ng-container>

@@ -1,0 +1,35 @@
+.ui-multi-check-box-table {
+  &__header {
+    &--row-header {
+      text-align: left;
+    }
+
+    &--item {
+      text-align: center;
+    }
+  }
+
+  &__body {
+    &__row {
+      &--subLevel {
+        text-align: center;
+
+        &--header {
+          text-align: left;
+        }
+      }
+
+      &__cell {
+        &--row-header {
+          &--last {
+            width: 100%;
+          }
+        }
+
+        &--checkbox {
+          text-align: center;
+        }
+      }
+    }
+  }
+}

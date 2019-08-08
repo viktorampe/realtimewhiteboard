@@ -1,3 +1,4 @@
+// tslint:disable: member-ordering
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import {
@@ -7,17 +8,23 @@ import {
   AUTH_SERVICE_TOKEN,
   BundleActions,
   ClassGroupActions,
+  ClassGroupFixture,
+  ClassGroupInterface,
   DiaboloPhaseActions,
   DiaboloPhaseFixture,
   EduContentActions,
   EduContentInterface,
   EduContentTocActions,
+  EduContentTOCFixture,
+  EduContentTOCInterface,
   EffectFeedbackInterface,
   EffectFeedbackQueries,
   FavoriteActions,
   FavoriteInterface,
   FavoriteTypesEnum,
   LearningAreaActions,
+  LearningPlanGoalFixture,
+  LearningPlanGoalInterface,
   LearningPlanGoalProgressActions,
   TaskActions,
   TaskEduContentActions,
@@ -30,7 +37,13 @@ import {
   SearchFilterCriteriaFixture,
   SearchFilterCriteriaValuesFixture
 } from '@campus/search';
-import { ContentEditableComponent } from '@campus/ui';
+import {
+  ContentEditableComponent,
+  MultiCheckBoxTableItemColumnInterface,
+  MultiCheckBoxTableItemInterface,
+  MultiCheckBoxTableRowHeaderColumnInterface,
+  MultiCheckBoxTableSubLevelInterface
+} from '@campus/ui';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';

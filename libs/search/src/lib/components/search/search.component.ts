@@ -53,6 +53,8 @@ export class SearchComponent implements AfterViewInit, OnDestroy, OnChanges {
   @Input() public autoCompleteValues: string[];
   @Input() public autoCompleteDebounceTime = 300;
   @Input() public set initialState(state: SearchStateInterface) {
+    if (!state) return;
+
     this._initialState = state;
     this.reset(this._initialState);
   }

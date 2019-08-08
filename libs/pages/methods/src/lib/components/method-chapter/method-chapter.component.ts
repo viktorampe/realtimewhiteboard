@@ -6,7 +6,7 @@ import {
   ViewChild,
   ViewChildren
 } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { EduContent, EduContentTOCInterface } from '@campus/dal';
 import {
   SearchComponent,
@@ -16,7 +16,8 @@ import {
   SearchStateInterface
 } from '@campus/search';
 import { Observable } from 'rxjs';
-import { MethodViewModel } from '../method.viewmodel';
+import { take, withLatestFrom } from 'rxjs/operators';
+import { CurrentMethodParams, MethodViewModel } from '../method.viewmodel';
 
 @Component({
   selector: 'campus-method-chapter',
@@ -31,11 +32,8 @@ export class MethodChapterComponent implements OnInit, AfterViewInit {
   public autoCompleteValues$: Observable<string[]>;
   public boeke$: Observable<EduContent>;
   public lessonsForChapter$: Observable<EduContentTOCInterface[]>;
-
-  public currentLessonId: number;
-
-  private currentBookId: number;
-  private currentChapterId: number;
+  public currentTab$: Observable<number>;
+  public currentMethodParams$: Observable<CurrentMethodParams>;
 
   @ViewChildren(SearchPortalDirective)
   private portalHosts: QueryList<SearchPortalDirective>;
@@ -43,7 +41,6 @@ export class MethodChapterComponent implements OnInit, AfterViewInit {
 
   constructor(
     private methodViewModel: MethodViewModel,
-    private route: ActivatedRoute,
     private router: Router
   ) {}
 
@@ -53,14 +50,18 @@ export class MethodChapterComponent implements OnInit, AfterViewInit {
     this.searchResults$ = this.methodViewModel.searchResults$;
     this.boeke$ = this.methodViewModel.currentBoeke$;
     this.lessonsForChapter$ = this.methodViewModel.currentToc$;
-
-    this.currentBookId = +this.route.snapshot.params.book;
-    this.currentChapterId = +this.route.snapshot.params.chapter;
-    this.currentLessonId = +this.route.snapshot.params.lesson;
+    this.currentTab$ = this.methodViewModel.currentTab$;
+    this.currentMethodParams$ = this.methodViewModel.currentMethodParams$;
   }
 
   ngAfterViewInit() {
     this.searchComponent.searchPortals = this.portalHosts;
+  }
+
+  public onSelectedTabIndexChanged(tab: number) {
+    this.router.navigate([], {
+      queryParams: { tab }
+    });
   }
 
   public onAutoCompleteRequest(term: string) {
@@ -78,20 +79,45 @@ export class MethodChapterComponent implements OnInit, AfterViewInit {
   }
 
   public clickOpenLesson(lessonId: number) {
-    this.currentLessonId = lessonId;
-
-    this.router.navigate([
-      'methods',
-      this.currentBookId,
-      this.currentChapterId,
-      lessonId
-    ]);
+    this.currentTab$
+      .pipe(
+        take(1),
+        withLatestFrom(this.currentMethodParams$)
+      )
+      .subscribe(([tab, currentMethodParams]) => {
+        this.router.navigate(
+          [
+            'methods',
+            currentMethodParams.book,
+            currentMethodParams.chapter,
+            lessonId
+          ],
+          {
+            queryParams: {
+              tab
+            }
+          }
+        );
+      });
   }
 
   public clickBackLink() {
-    const urlParts = ['methods', this.currentBookId];
-    if (this.currentLessonId) urlParts.push(this.currentChapterId);
-    this.router.navigate(urlParts);
+    this.currentTab$
+      .pipe(
+        take(1),
+        withLatestFrom(this.currentMethodParams$)
+      )
+      .subscribe(([tab, currentMethodParams]) => {
+        const urlParts = ['methods', currentMethodParams.book];
+        if (currentMethodParams.lesson)
+          urlParts.push(currentMethodParams.chapter);
+
+        this.router.navigate(urlParts, {
+          queryParams: {
+            tab
+          }
+        });
+      });
   }
 
   public clickOpenBoeke(eduContent: EduContent): void {
