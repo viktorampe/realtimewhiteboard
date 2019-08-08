@@ -75,10 +75,10 @@ export class LearningPlanGoalProgressEffects {
         return this.dataPersistence.store.pipe(
           select(getByRelationIds, selectParams),
           take(1),
-          map(learingPlanGoalProgressArray => {
-            if (learingPlanGoalProgressArray.length) {
+          map(learningPlanGoalProgressArray => {
+            if (learningPlanGoalProgressArray.length) {
               return new DeleteLearningPlanGoalProgress({
-                id: learingPlanGoalProgressArray[0].id,
+                id: learningPlanGoalProgressArray[0].id,
                 userId: action.payload.personId
               });
             } else {
@@ -98,19 +98,16 @@ export class LearningPlanGoalProgressEffects {
     {
       run: (action: StartAddLearningPlanGoalProgresses, state: DalState) => {
         let serviceCall: Observable<LearningPlanGoalProgressInterface[]>;
-        if (action.payload.eduContentTOCId) {
-          serviceCall = this.learningPlanGoalProgressService.createLearningPlanGoalProgressForEduContentTOC(
+        if (
+          (action.payload.eduContentTOCId || action.payload.userLessonId) &&
+          !(action.payload.eduContentTOCId && action.payload.userLessonId)
+        ) {
+          serviceCall = this.learningPlanGoalProgressService.createLearningPlanGoalProgress(
             action.payload.personId,
             action.payload.classGroupId,
-            action.payload.eduContentTOCId,
-            action.payload.learningPlanGoalIds
-          );
-        } else if (action.payload.userLessonId) {
-          serviceCall = this.learningPlanGoalProgressService.createLearningPlanGoalProgressForUserLesson(
-            action.payload.personId,
-            action.payload.classGroupId,
+            action.payload.learningPlanGoalIds,
             action.payload.userLessonId,
-            action.payload.learningPlanGoalIds
+            action.payload.eduContentTOCId
           );
         } else {
           throw new Error('Fill in either eduContentTOCId or userLessonId.');

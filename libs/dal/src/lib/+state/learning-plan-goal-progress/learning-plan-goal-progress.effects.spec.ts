@@ -103,8 +103,7 @@ describe('LearningPlanGoalProgressEffects', () => {
           provide: LEARNING_PLAN_GOAL_PROGRESS_SERVICE_TOKEN,
           useValue: {
             getAllForUser: () => {},
-            createLearningPlanGoalProgressForEduContentTOC: () => {},
-            createLearningPlanGoalProgressForUserLesson: () => {},
+            createLearningPlanGoalProgress: () => {},
             deleteLearningPlanGoalProgress: () => {}
           }
         },
@@ -247,6 +246,7 @@ describe('LearningPlanGoalProgressEffects', () => {
 
     it('should make the service call and return an action, for eduContentTOCId', () => {
       const eduContentTOCId = 1;
+      const userLessonId = undefined;
 
       const startAddAction = new StartAddLearningPlanGoalProgresses({
         ...staticParams,
@@ -265,7 +265,7 @@ describe('LearningPlanGoalProgressEffects', () => {
       jest
         .spyOn(
           learningPlanGoalProgressService,
-          'createLearningPlanGoalProgressForEduContentTOC'
+          'createLearningPlanGoalProgress'
         )
         .mockReturnValue(of(returnedValues));
 
@@ -280,16 +280,18 @@ describe('LearningPlanGoalProgressEffects', () => {
       );
 
       expect(
-        learningPlanGoalProgressService.createLearningPlanGoalProgressForEduContentTOC
+        learningPlanGoalProgressService.createLearningPlanGoalProgress
       ).toHaveBeenCalledWith(
         staticParams.personId,
         staticParams.classGroupId,
-        eduContentTOCId,
-        staticParams.learningPlanGoalIds
+        staticParams.learningPlanGoalIds,
+        userLessonId,
+        eduContentTOCId
       );
     });
 
     it('should make the service call and return an action, for userLessonId', () => {
+      const eduContentTOCId = undefined;
       const userLessonId = 1;
 
       const startAddAction = new StartAddLearningPlanGoalProgresses({
@@ -309,7 +311,7 @@ describe('LearningPlanGoalProgressEffects', () => {
       jest
         .spyOn(
           learningPlanGoalProgressService,
-          'createLearningPlanGoalProgressForUserLesson'
+          'createLearningPlanGoalProgress'
         )
         .mockReturnValue(of(returnedValues));
 
@@ -324,12 +326,13 @@ describe('LearningPlanGoalProgressEffects', () => {
       );
 
       expect(
-        learningPlanGoalProgressService.createLearningPlanGoalProgressForUserLesson
+        learningPlanGoalProgressService.createLearningPlanGoalProgress
       ).toHaveBeenCalledWith(
         staticParams.personId,
         staticParams.classGroupId,
+        staticParams.learningPlanGoalIds,
         userLessonId,
-        staticParams.learningPlanGoalIds
+        eduContentTOCId
       );
     });
 
