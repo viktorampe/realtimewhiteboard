@@ -21,6 +21,7 @@ import {
   getRouterState,
   LearningPlanGoalInterface,
   LearningPlanGoalProgressInterface,
+  LearningPlanGoalProgressQueries,
   LearningPlanGoalQueries,
   MethodInterface,
   MethodQueries,
@@ -313,8 +314,9 @@ export class MethodViewModel implements ContentOpenerInterface {
     );
     this.classGroups$ = this.store.pipe(select(ClassGroupQueries.getAll));
     this.currentBookTocs$ = this.getAllTocsStream();
-    // waiting for learningplangoalprogress state
-    // this.learningPlanGoalProgress$ = this.store.pipe(select(LearningPlanGoalProgressQueries.getAll));
+    this.learningPlanGoalProgress$ = this.store.pipe(
+      select(LearningPlanGoalProgressQueries.getAll)
+    );
   }
 
   private getCurrentMethodParams(): Observable<CurrentMethodParams> {
