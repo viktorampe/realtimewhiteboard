@@ -15,6 +15,7 @@ import {
   HistoryReducer,
   LearningAreaReducer,
   LearningDomainReducer,
+  LearningPlanGoalReducer,
   LinkedPersonReducer,
   MethodReducer,
   ResultReducer,
@@ -67,5 +68,6 @@ export interface DalState {
   eduContentTocs: EduContentTocReducer.State;
   diaboloPhases: DiaboloPhaseReducer.State;
   userLessons: UserLessonReducer.State;
+  learningPlanGoals: LearningPlanGoalReducer.State;
   classGroups: ClassGroupReducer.State;
 }
