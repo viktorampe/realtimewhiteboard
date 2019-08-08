@@ -39,13 +39,21 @@ import {
 import { Dictionary } from '@ngrx/entity';
 import { RouterReducerState } from '@ngrx/router-store';
 import { select, Store } from '@ngrx/store';
-import { BehaviorSubject, combineLatest, merge, Observable } from 'rxjs';
-import { filter, map, mapTo, switchMap, withLatestFrom } from 'rxjs/operators';
+import { BehaviorSubject, merge, Observable } from 'rxjs';
+import {
+  distinctUntilChanged,
+  filter,
+  map,
+  mapTo,
+  switchMap,
+  switchMapTo,
+  withLatestFrom
+} from 'rxjs/operators';
 
-interface CurrentMethodParams {
-  book: number;
-  chapter: number;
-  lesson: number;
+export interface CurrentMethodParams {
+  book?: number;
+  chapter?: number;
+  lesson?: number;
 }
 
 @Injectable({
@@ -63,10 +71,11 @@ export class MethodViewModel implements ContentOpenerInterface {
   public currentBook$: Observable<EduContentBookInterface>;
   public eduContentProductTypes$: Observable<EduContentProductTypeInterface[]>;
   public generalFilesByType$: Observable<Dictionary<EduContent[]>>;
+  public currentTab$: Observable<number>;
+  public currentMethodParams$: Observable<CurrentMethodParams>;
 
   // Source streams
   private routerState$: Observable<RouterReducerState<RouterStateUrl>>;
-  private currentMethodParams$: Observable<CurrentMethodParams>;
   private generalFiles$: Observable<EduContent[]>;
   private diaboloPhases$: Observable<DiaboloPhaseInterface[]>;
 
@@ -106,44 +115,45 @@ export class MethodViewModel implements ContentOpenerInterface {
    * determine the initial searchState from the router state store
    */
   public getInitialSearchState(): Observable<SearchStateInterface> {
-    return combineLatest([
-      this.currentBook$,
-      this.currentMethod$,
-      this.currentMethodParams$
-    ]).pipe(
-      map(([currentBook, currentMethod, currentMethodParams]) => {
-        const initialSearchState: SearchStateInterface = {
-          searchTerm: '',
-          filterCriteriaSelections: new Map<string, (number | string)[]>()
-        };
+    return this.currentTab$.pipe(
+      switchMapTo(
+        this.currentMethodParams$.pipe(
+          withLatestFrom(this.currentBook$, this.currentMethod$),
+          map(([currentMethodParams, currentBook, currentMethod]) => {
+            const initialSearchState: SearchStateInterface = {
+              searchTerm: '',
+              filterCriteriaSelections: new Map<string, (number | string)[]>()
+            };
 
-        if (currentBook) {
-          initialSearchState.filterCriteriaSelections.set(
-            'years',
-            currentBook.years.map(year => year.id)
-          );
+            if (currentBook) {
+              initialSearchState.filterCriteriaSelections.set(
+                'years',
+                currentBook.years.map(year => year.id)
+              );
 
-          initialSearchState.filterCriteriaSelections.set('methods', [
-            currentBook.methodId
-          ]);
-        }
+              initialSearchState.filterCriteriaSelections.set('methods', [
+                currentBook.methodId
+              ]);
+            }
 
-        if (currentMethod) {
-          initialSearchState.filterCriteriaSelections.set('learningArea', [
-            currentMethod.learningAreaId
-          ]);
-        }
+            if (currentMethod) {
+              initialSearchState.filterCriteriaSelections.set('learningArea', [
+                currentMethod.learningAreaId
+              ]);
+            }
 
-        if (currentMethodParams && currentMethodParams.chapter) {
-          initialSearchState.filterCriteriaSelections.set('eduContentTOC', [
-            currentMethodParams.lesson
-              ? currentMethodParams.lesson
-              : currentMethodParams.chapter
-          ]);
-        }
+            if (currentMethodParams && currentMethodParams.chapter) {
+              initialSearchState.filterCriteriaSelections.set('eduContentTOC', [
+                currentMethodParams.lesson
+                  ? currentMethodParams.lesson
+                  : currentMethodParams.chapter
+              ]);
+            }
 
-        return initialSearchState;
-      })
+            return initialSearchState;
+          })
+        )
+      )
     );
   }
 
@@ -209,6 +219,19 @@ export class MethodViewModel implements ContentOpenerInterface {
     this.currentToc$ = this.getTocsStream();
     this.eduContentProductTypes$ = this.getEduContentProductTypesStream();
     this.generalFilesByType$ = this.getGeneralFilesByType();
+    this.currentTab$ = this.getCurrentTab();
+  }
+
+  private getCurrentTab(): Observable<number> {
+    return this.routerState$.pipe(
+      map((routerState: RouterReducerState<RouterStateUrl>) => {
+        return (
+          (routerState.state.queryParams &&
+            +routerState.state.queryParams.tab) ||
+          0
+        );
+      })
+    );
   }
 
   private getCurrentBoekeStream(): Observable<EduContent> {
@@ -225,8 +248,11 @@ export class MethodViewModel implements ContentOpenerInterface {
 
   private setupSearchResults(): void {
     this.searchResults$ = this.searchState$.pipe(
-      filter(searchState => searchState !== null),
-      withLatestFrom(this.getInitialSearchState()),
+      withLatestFrom(this.getInitialSearchState(), this.currentTab$),
+      filter(
+        ([searchState, initialSearchState, currentTab]) =>
+          searchState !== null && currentTab === 0
+      ),
       map(([searchState, initialSearchState]) => ({
         ...initialSearchState,
         ...searchState,
@@ -264,6 +290,7 @@ export class MethodViewModel implements ContentOpenerInterface {
     this.routerState$ = this.store.pipe(select(getRouterState));
 
     this.currentMethodParams$ = this.getCurrentMethodParams();
+
     this.currentBook$ = this.getCurrentBookStream();
     this.currentMethod$ = this.getCurrentMethodStream();
 
@@ -274,10 +301,14 @@ export class MethodViewModel implements ContentOpenerInterface {
   private getCurrentMethodParams(): Observable<CurrentMethodParams> {
     return this.routerState$.pipe(
       map((routerState: RouterReducerState<RouterStateUrl>) => ({
-        book: +routerState.state.params.book,
-        chapter: +routerState.state.params.chapter,
-        lesson: +routerState.state.params.lesson
-      }))
+        book: +routerState.state.params.book || undefined,
+        chapter: +routerState.state.params.chapter || undefined,
+        lesson: +routerState.state.params.lesson || undefined
+      })),
+      distinctUntilChanged(
+        (a, b) =>
+          a.book === b.book && a.chapter === b.chapter && a.lesson === b.lesson
+      )
     );
   }
 
