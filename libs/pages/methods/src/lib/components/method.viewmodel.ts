@@ -2,6 +2,8 @@ import { Inject, Injectable } from '@angular/core';
 import {
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
+  ClassGroupInterface,
+  ClassGroupQueries,
   DalState,
   DiaboloPhaseInterface,
   DiaboloPhaseQueries,
@@ -17,6 +19,9 @@ import {
   EduContentTocQueries,
   EDU_CONTENT_SERVICE_TOKEN,
   getRouterState,
+  LearningPlanGoalInterface,
+  LearningPlanGoalProgressInterface,
+  LearningPlanGoalQueries,
   MethodInterface,
   MethodQueries,
   MethodYearsInterface,
@@ -73,11 +78,17 @@ export class MethodViewModel implements ContentOpenerInterface {
   public generalFilesByType$: Observable<Dictionary<EduContent[]>>;
   public currentTab$: Observable<number>;
   public currentMethodParams$: Observable<CurrentMethodParams>;
+  public currentBookTocs$: Observable<EduContentTOCInterface[]>;
+  public classGroups$: Observable<ClassGroupInterface[]>;
 
   // Source streams
   private routerState$: Observable<RouterReducerState<RouterStateUrl>>;
   private generalFiles$: Observable<EduContent[]>;
   private diaboloPhases$: Observable<DiaboloPhaseInterface[]>;
+  private learningPlanGoals$: Observable<LearningPlanGoalInterface[]>;
+  private learningPlanGoalProgress$: Observable<
+    LearningPlanGoalProgressInterface[]
+  >;
 
   private _searchState$: BehaviorSubject<SearchStateInterface>;
 
@@ -296,6 +307,14 @@ export class MethodViewModel implements ContentOpenerInterface {
 
     this.generalFiles$ = this.getGeneralFilesStream();
     this.diaboloPhases$ = this.getDiaboloPhasesStream();
+
+    this.learningPlanGoals$ = this.store.pipe(
+      select(LearningPlanGoalQueries.getAll)
+    );
+    this.classGroups$ = this.store.pipe(select(ClassGroupQueries.getAll));
+    this.currentBookTocs$ = this.getAllTocsStream();
+    // waiting for learningplangoalprogress state
+    // this.learningPlanGoalProgress$ = this.store.pipe(select(LearningPlanGoalProgressQueries.getAll));
   }
 
   private getCurrentMethodParams(): Observable<CurrentMethodParams> {
@@ -348,6 +367,26 @@ export class MethodViewModel implements ContentOpenerInterface {
     );
 
     return merge(currentMethodWhenBook$, currentMethodWhenNoBook$);
+  }
+
+  private getAllTocsStream(): Observable<EduContentTOCInterface[]> {
+    const tocStreamWhenBook$ = this.currentMethodParams$.pipe(
+      filter(params => !!params.book && !params.chapter),
+      switchMap(params => {
+        return this.store.pipe(
+          select(EduContentTocQueries.getTocsForBook, {
+            bookId: params.book
+          })
+        );
+      })
+    );
+
+    const tocStreamWhenNoBook$ = this.currentMethodParams$.pipe(
+      filter(params => !params.book),
+      mapTo([])
+    );
+
+    return merge(tocStreamWhenBook$, tocStreamWhenNoBook$);
   }
 
   private getTocsStream(): Observable<EduContentTOCInterface[]> {
