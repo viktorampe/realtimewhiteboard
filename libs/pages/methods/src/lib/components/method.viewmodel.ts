@@ -88,8 +88,8 @@ export class MethodViewModel implements ContentOpenerInterface {
   private learningPlanGoalsForCurrentBook$: Observable<
     LearningPlanGoalInterface[]
   >;
-  private learningPlanGoalProgress$: Observable<
-    LearningPlanGoalProgressInterface[]
+  private learningPlanGoalProgressBylearningPlanGoalId$: Observable<
+    Dictionary<LearningPlanGoalProgressInterface[]>
   >;
 
   private _searchState$: BehaviorSubject<SearchStateInterface>;
@@ -312,8 +312,8 @@ export class MethodViewModel implements ContentOpenerInterface {
 
     this.learningPlanGoalsForCurrentBook$ = this.getLearningPlanGoalsForCurrentBookStream();
     this.classGroups$ = this.store.pipe(select(ClassGroupQueries.getAll));
-    this.learningPlanGoalProgress$ = this.store.pipe(
-      select(LearningPlanGoalProgressQueries.getAll)
+    this.learningPlanGoalProgressBylearningPlanGoalId$ = this.store.pipe(
+      select(LearningPlanGoalProgressQueries.getByLearningPlanGoalId)
     );
   }
 
