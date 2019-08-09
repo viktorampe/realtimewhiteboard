@@ -44,11 +44,15 @@ import {
   ScormExerciseServiceInterface,
   SCORM_EXERCISE_SERVICE_TOKEN
 } from '@campus/shared';
-import { MultiCheckBoxTableRowHeaderColumnInterface } from '@campus/ui';
+import {
+  MultiCheckBoxTableItemInterface,
+  MultiCheckBoxTableRowHeaderColumnInterface,
+  MultiCheckBoxTableSubLevelInterface
+} from '@campus/ui';
 import { Dictionary } from '@ngrx/entity';
 import { RouterReducerState } from '@ngrx/router-store';
 import { select, Store } from '@ngrx/store';
-import { BehaviorSubject, merge, Observable } from 'rxjs';
+import { BehaviorSubject, combineLatest, merge, Observable, of } from 'rxjs';
 import {
   distinctUntilChanged,
   filter,
@@ -88,6 +92,15 @@ export class MethodViewModel implements ContentOpenerInterface {
   public currentMethodParams$: Observable<CurrentMethodParams>;
   public classGroups$: Observable<ClassGroupInterface[]>;
   public filteredClassGroups$: Observable<ClassGroupInterface[]>;
+  public learningPlanGoalsWithSelectionForClassGroups$: Observable<
+    MultiCheckBoxTableItemInterface<LearningPlanGoalProgressInterface>[]
+  >;
+  public learningPlanGoalsPerLessonWithSelectionForClassGroups$: Observable<
+    MultiCheckBoxTableSubLevelInterface<
+      EduContentTOCInterface,
+      LearningPlanGoalProgressInterface
+    >[]
+  >;
 
   // Source streams
   private routerState$: Observable<RouterReducerState<RouterStateUrl>>;
@@ -251,6 +264,8 @@ export class MethodViewModel implements ContentOpenerInterface {
     this.filteredClassGroups$ = this.getFilteredClassGroups();
     this.currentLessons$ = this.getTocLessonsStream();
     this.userLessons$ = this.store.pipe(select(UserLessonQueries.getAll));
+    this.learningPlanGoalsWithSelectionForClassGroups$ = this.getLearningPlanGoalsWithSelectionStream();
+    this.learningPlanGoalsPerLessonWithSelectionForClassGroups$ = this.getLearningPlanGoalsPerLessonWithSelectionStream();
   }
 
   private getCurrentTab(): Observable<number> {
@@ -510,5 +525,38 @@ export class MethodViewModel implements ContentOpenerInterface {
         );
       })
     );
+  }
+
+  private getLearningPlanGoalsWithSelectionStream(): Observable<
+    MultiCheckBoxTableItemInterface<LearningPlanGoalProgressInterface>[]
+  > {
+    return combineLatest([
+      this.learningPlanGoalsForCurrentBook$,
+      this.learningPlanGoalProgressBylearningPlanGoalId$,
+      this.classGroups$
+    ]).pipe(
+      map(([learningPlanGoals, progressByGoal, classGroups]) => {
+        return learningPlanGoals.map(learningPlanGoal => {
+          const progress = {};
+          classGroups.forEach(classGroup => {
+            progress[classGroup.id] = !!progressByGoal[learningPlanGoal.id];
+          });
+
+          return {
+            header: learningPlanGoal,
+            content: progress
+          };
+        });
+      })
+    );
+  }
+
+  private getLearningPlanGoalsPerLessonWithSelectionStream(): Observable<
+    MultiCheckBoxTableSubLevelInterface<
+      EduContentTOCInterface,
+      LearningPlanGoalProgressInterface
+    >[]
+  > {
+    return of([]);
   }
 }
