@@ -1,3 +1,4 @@
+import { groupArrayByKey } from '@campus/utils';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import {
   NAME,
@@ -66,4 +67,11 @@ export const getByIds = createSelector(
 export const getById = createSelector(
   selectLearningPlanGoalProgressState,
   (state: State, props: { id: number }) => state.entities[props.id]
+);
+
+export const getGroupedByLearningPlanGoalId = createSelector(
+  selectLearningPlanGoalProgressState,
+  (state: State) => {
+    return groupArrayByKey(Object.values(state.entities), 'learningPlanGoalId');
+  }
 );
