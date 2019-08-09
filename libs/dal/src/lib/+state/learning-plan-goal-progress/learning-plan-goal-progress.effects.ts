@@ -64,8 +64,10 @@ export class LearningPlanGoalProgressEffects {
       ): Observable<
         StartAddLearningPlanGoalProgresses | DeleteLearningPlanGoalProgress
       > => {
+        const { personId, ...selectParams } = action.payload;
+
         return this.dataPersistence.store.pipe(
-          select(findOne, action.payload),
+          select(findOne, selectParams),
           take(1),
           map(learningPlanGoalProgress => {
             if (learningPlanGoalProgress) {
@@ -174,7 +176,11 @@ export class LearningPlanGoalProgressEffects {
       (
         action: BulkAddLearningPlanGoalProgresses
       ): Observable<StartAddLearningPlanGoalProgresses> => {
-        const { learningPlanGoalIds, ...selectParams } = action.payload;
+        const {
+          learningPlanGoalIds,
+          personId,
+          ...selectParams
+        } = action.payload;
 
         const selectStreams = learningPlanGoalIds.map(learningPlanGoalId =>
           this.dataPersistence.store.pipe(
