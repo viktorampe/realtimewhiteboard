@@ -1,4 +1,5 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
+import { LearningPlanGoalProgressInterface } from '../../+models';
 import {
   NAME,
   selectAll,
@@ -68,26 +69,24 @@ export const getById = createSelector(
   (state: State, props: { id: number }) => state.entities[props.id]
 );
 
-export const getByRelationIds = createSelector(
+export const findOne = createSelector(
   selectLearningPlanGoalProgressState,
-  (
-    state: State,
-    props: {
-      classGroupId: number;
-      eduContentTOCId?: number;
-      userLessonId?: number;
-      learningPlanGoalIds: number[];
-      personId: number;
-    }
-  ) =>
-    Object.values(state.entities).filter(
-      learningPlanGoalProgress =>
-        learningPlanGoalProgress.classGroupId === props.classGroupId &&
-        props.learningPlanGoalIds.includes(
-          learningPlanGoalProgress.learningPlanGoalId
-        ) &&
-        learningPlanGoalProgress.personId === props.personId &&
-        (learningPlanGoalProgress.eduContentTOCId === +props.eduContentTOCId ||
-          learningPlanGoalProgress.userLessonId === +props.userLessonId)
-    )
+  (state: State, props: Partial<LearningPlanGoalProgressInterface>) => {
+    return Object.values(state.entities).find(learningPlanGoalProgress => {
+      return Object.keys(props).every(
+        prop => !props[prop] || learningPlanGoalProgress[prop] === props[prop]
+      );
+    });
+  }
+);
+
+export const findMany = createSelector(
+  selectLearningPlanGoalProgressState,
+  (state: State, props: Partial<LearningPlanGoalProgressInterface>) => {
+    return Object.values(state.entities).filter(learningPlanGoalProgress => {
+      return Object.keys(props).every(
+        prop => !props[prop] || learningPlanGoalProgress[prop] === props[prop]
+      );
+    });
+  }
 );

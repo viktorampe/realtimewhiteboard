@@ -114,7 +114,7 @@ describe('LearningPlanGoalProgress Selectors', () => {
     });
   });
 
-  describe('getByRelationIds', () => {
+  describe('find', () => {
     const learningPlanGoalProgressArray = [
       new LearningPlanGoalProgressFixture({
         id: 1,
@@ -209,66 +209,82 @@ describe('LearningPlanGoalProgress Selectors', () => {
       };
     });
 
-    it('should return the correct LearningPlanGoalProgress for eduContentTOCId', () => {
-      const results = LearningPlanGoalProgressQueries.getByRelationIds(
-        storeState,
-        {
+    describe('findMany', () => {
+      it('should return all LearningPlanGoalProgress', () => {
+        const results = LearningPlanGoalProgressQueries.findMany(
+          storeState,
+          {}
+        );
+        expect(results.length).toBe(10);
+        expect(results).toEqual(learningPlanGoalProgressArray);
+      });
+
+      it('should return the correct LearningPlanGoalProgress for ClassGroupId', () => {
+        const results = LearningPlanGoalProgressQueries.findMany(storeState, {
+          classGroupId: 2
+        });
+        expect(results.length).toBe(2);
+        expect(results).toEqual([
+          learningPlanGoalProgressArray[1],
+          learningPlanGoalProgressArray[6]
+        ]);
+      });
+
+      it('should return the correct LearningPlanGoalProgress for eduContentTOCId', () => {
+        const results = LearningPlanGoalProgressQueries.findMany(storeState, {
           classGroupId: 1,
-          personId: 1,
-          learningPlanGoalIds: [1],
+          learningPlanGoalId: 1,
           eduContentTOCId: 1
-        }
-      );
-      expect(results.length).toBe(1);
-      expect(results[0]).toBe(learningPlanGoalProgressArray[0]);
+        });
+        expect(results.length).toBe(2);
+        expect(results).toEqual([
+          learningPlanGoalProgressArray[0],
+          learningPlanGoalProgressArray[2]
+        ]);
+      });
+
+      it('should return the correct LearningPlanGoalProgress for userLessonId', () => {
+        const results = LearningPlanGoalProgressQueries.findMany(storeState, {
+          classGroupId: 1,
+          learningPlanGoalId: 1,
+          userLessonId: 1
+        });
+        expect(results.length).toBe(2);
+        expect(results).toEqual([
+          learningPlanGoalProgressArray[5],
+          learningPlanGoalProgressArray[7]
+        ]);
+      });
     });
 
-    it('should return the correct LearningPlanGoalProgressArray for eduContentTOCId', () => {
-      const results = LearningPlanGoalProgressQueries.getByRelationIds(
-        storeState,
-        {
+    describe('findOne', () => {
+      it('should return the correct LearningPlanGoalProgress for ClassGroupId', () => {
+        const result = LearningPlanGoalProgressQueries.findOne(storeState, {
+          classGroupId: 2
+        });
+
+        expect(result).toEqual(learningPlanGoalProgressArray[1]);
+      });
+
+      it('should return the correct LearningPlanGoalProgress for eduContentTOCId', () => {
+        const result = LearningPlanGoalProgressQueries.findOne(storeState, {
           classGroupId: 1,
-          personId: 1,
-          learningPlanGoalIds: [1, 2],
+          learningPlanGoalId: 1,
           eduContentTOCId: 1
-        }
-      );
-      expect(results.length).toBe(2);
-      expect(results).toEqual([
-        learningPlanGoalProgressArray[0],
-        learningPlanGoalProgressArray[3]
-      ]);
-    });
+        });
 
-    it('should return the correct LearningPlanGoalProgress for userLessonId', () => {
-      const results = LearningPlanGoalProgressQueries.getByRelationIds(
-        storeState,
-        {
-          classGroupId: 1,
-          personId: 1,
-          learningPlanGoalIds: [1],
-          userLessonId: 1
-        }
-      );
-      expect(results.length).toBe(1);
-      expect(results[0]).toBe(learningPlanGoalProgressArray[5]);
-    });
+        expect(result).toEqual(learningPlanGoalProgressArray[0]);
+      });
 
-    it('should return the correct LearningPlanGoalProgressArray for eduContentTOCId', () => {
-      const results = LearningPlanGoalProgressQueries.getByRelationIds(
-        storeState,
-        {
+      it('should return the correct LearningPlanGoalProgress for userLessonId', () => {
+        const result = LearningPlanGoalProgressQueries.findOne(storeState, {
           classGroupId: 1,
-          personId: 1,
-          learningPlanGoalIds: [1, 2],
+          learningPlanGoalId: 1,
           userLessonId: 1
-        }
-      );
-      expect(results.length).toBe(2);
-      expect(results).toEqual([
-        learningPlanGoalProgressArray[5],
-        learningPlanGoalProgressArray[8]
-      ]);
+        });
+
+        expect(result).toEqual(learningPlanGoalProgressArray[5]);
+      });
     });
   });
 });

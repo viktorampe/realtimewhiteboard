@@ -396,7 +396,7 @@ describe('LearningPlanGoalProgressEffects', () => {
       expect(effects.deleteLearningPlanGoalProgress$).toBeObservable(
         cold('a', {
           a: new DalActions.ActionSuccessful({
-            successfulAction: 'LearningPlanGoalProgress deleted.'
+            successfulAction: 'Leerplandoel voortgang verwijderd.'
           })
         })
       );
@@ -540,7 +540,7 @@ describe('LearningPlanGoalProgressEffects', () => {
       );
     });
 
-    it('should return an StartAddLearningPlanGoalProgresses action if the progress does not exist', () => {
+    it('should return an StartAddLearningPlanGoalProgresses action if the progress does not exist, for EduContentTOC', () => {
       const toggleAction = new ToggleLearningPlanGoalProgress({
         classGroupId,
         personId,
@@ -562,12 +562,54 @@ describe('LearningPlanGoalProgressEffects', () => {
       );
     });
 
-    it('should return a DeleteLearningPlanGoalProgress action if the progress exists', () => {
+    it('should return a DeleteLearningPlanGoalProgress action if the progress exists, for EduContentTOC', () => {
       const toggleAction = new ToggleLearningPlanGoalProgress({
         classGroupId,
         personId,
         learningPlanGoalId: 1,
         eduContentTOCId
+      });
+
+      actions = hot('a', { a: toggleAction });
+
+      const expectedAction = new DeleteLearningPlanGoalProgress({
+        id: 1,
+        userId: personId
+      });
+
+      expect(effects.toggleLearningPlanGoalProgress$).toBeObservable(
+        hot('a', { a: expectedAction })
+      );
+    });
+
+    it('should return an StartAddLearningPlanGoalProgresses action if the progress does not exist, for UserLesson', () => {
+      const toggleAction = new ToggleLearningPlanGoalProgress({
+        classGroupId,
+        personId,
+        learningPlanGoalId: 2,
+        userLessonId
+      });
+
+      actions = hot('a', { a: toggleAction });
+
+      const expectedAction = new StartAddLearningPlanGoalProgresses({
+        classGroupId,
+        learningPlanGoalIds: [2],
+        userLessonId,
+        personId
+      });
+
+      expect(effects.toggleLearningPlanGoalProgress$).toBeObservable(
+        hot('a', { a: expectedAction })
+      );
+    });
+
+    it('should return a DeleteLearningPlanGoalProgress action if the progress exists, for UserLesson', () => {
+      const toggleAction = new ToggleLearningPlanGoalProgress({
+        classGroupId,
+        personId,
+        learningPlanGoalId: 1,
+        userLessonId
       });
 
       actions = hot('a', { a: toggleAction });

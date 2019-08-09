@@ -3,7 +3,7 @@ import { Actions, Effect, ofType } from '@ngrx/effects';
 import { select } from '@ngrx/store';
 import { DataPersistence } from '@nrwl/nx';
 import { undo } from 'ngrx-undo';
-import { from, Observable } from 'rxjs';
+import { combineLatest, from, Observable } from 'rxjs';
 import { map, mapTo, switchMap, take } from 'rxjs/operators';
 import { DalActions, DalState } from '..';
 import { LearningPlanGoalProgressInterface } from '../../+models';
@@ -23,7 +23,7 @@ import {
   StartAddLearningPlanGoalProgresses,
   ToggleLearningPlanGoalProgress
 } from './learning-plan-goal-progress.actions';
-import { getByRelationIds } from './learning-plan-goal-progress.selectors';
+import { findOne } from './learning-plan-goal-progress.selectors';
 
 @Injectable()
 export class LearningPlanGoalProgressEffects {
@@ -64,26 +64,22 @@ export class LearningPlanGoalProgressEffects {
       ): Observable<
         StartAddLearningPlanGoalProgresses | DeleteLearningPlanGoalProgress
       > => {
-        const selectParams = {
-          classGroupId: action.payload.classGroupId,
-          personId: action.payload.personId,
-          eduContentTOCId: action.payload.eduContentTOCId,
-          userLessonId: action.payload.userLessonId,
-          learningPlanGoalIds: [action.payload.learningPlanGoalId]
-        };
-
         return this.dataPersistence.store.pipe(
-          select(getByRelationIds, selectParams),
+          select(findOne, action.payload),
           take(1),
-          map(learningPlanGoalProgressArray => {
-            if (learningPlanGoalProgressArray.length) {
+          map(learningPlanGoalProgress => {
+            if (learningPlanGoalProgress) {
               return new DeleteLearningPlanGoalProgress({
-                id: learningPlanGoalProgressArray[0].id,
+                id: learningPlanGoalProgress.id,
                 userId: action.payload.personId
               });
             } else {
               return new StartAddLearningPlanGoalProgresses({
-                ...selectParams
+                classGroupId: action.payload.classGroupId,
+                eduContentTOCId: action.payload.eduContentTOCId,
+                userLessonId: action.payload.userLessonId,
+                learningPlanGoalIds: [action.payload.learningPlanGoalId],
+                personId: action.payload.personId
               });
             }
           })
@@ -149,7 +145,7 @@ export class LearningPlanGoalProgressEffects {
           .pipe(
             mapTo(
               new DalActions.ActionSuccessful({
-                successfulAction: 'LearningPlanGoalProgress deleted.'
+                successfulAction: 'Leerplandoel voortgang verwijderd.'
               })
             )
           );
@@ -178,30 +174,33 @@ export class LearningPlanGoalProgressEffects {
       (
         action: BulkAddLearningPlanGoalProgresses
       ): Observable<StartAddLearningPlanGoalProgresses> => {
-        return this.dataPersistence.store.pipe(
-          select(getByRelationIds, action.payload),
+        const { learningPlanGoalIds, ...selectParams } = action.payload;
+
+        const selectStreams = learningPlanGoalIds.map(learningPlanGoalId =>
+          this.dataPersistence.store.pipe(
+            select(findOne, { ...selectParams, learningPlanGoalId })
+          )
+        );
+
+        return combineLatest(selectStreams).pipe(
           take(1),
-          map(learningPlanGoalProgressArray => {
-            const foundLearningPlanGoalIds = learningPlanGoalProgressArray.map(
-              learningPlanGoalProgress =>
-                learningPlanGoalProgress.learningPlanGoalId
+          map(results => {
+            const neededLearningPlanGoalIds = results.reduce(
+              (acc, currentResult, index) => {
+                if (!currentResult) {
+                  acc.push(learningPlanGoalIds[index]);
+                }
+                return acc;
+              },
+              [] as number[]
             );
 
-            const neededLearningPlanGoalIds = action.payload.learningPlanGoalIds.filter(
-              learningPlanGoalId =>
-                !foundLearningPlanGoalIds.includes(learningPlanGoalId)
-            );
-
-            const neededLearningPlanGoalProgresses = {
+            return new StartAddLearningPlanGoalProgresses({
               classGroupId: action.payload.classGroupId,
               personId: action.payload.personId,
               eduContentTOCId: action.payload.eduContentTOCId,
               userLessonId: action.payload.userLessonId,
               learningPlanGoalIds: neededLearningPlanGoalIds
-            };
-
-            return new StartAddLearningPlanGoalProgresses({
-              ...neededLearningPlanGoalProgresses
             });
           })
         );
