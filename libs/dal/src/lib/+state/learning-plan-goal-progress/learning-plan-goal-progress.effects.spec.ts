@@ -1,16 +1,33 @@
 import { TestBed } from '@angular/core/testing';
+import { MockDate } from '@campus/testing';
 import { EffectsModule } from '@ngrx/effects';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
-import { hot } from '@nrwl/nx/testing';
+import { cold, hot } from '@nrwl/nx/testing';
+import { undo } from 'ngrx-undo';
 import { Observable, of } from 'rxjs';
-import { LEARNING_PLAN_GOAL_PROGRESS_SERVICE_TOKEN } from '../../learning-plan-goal-progress/learning-plan-goal-progress.service.interface';
 import { LearningPlanGoalProgressReducer } from '.';
+import { DalActions } from '..';
+import { LearningPlanGoalProgressFixture } from '../../+fixtures';
 import {
+  LearningPlanGoalProgressServiceInterface,
+  LEARNING_PLAN_GOAL_PROGRESS_SERVICE_TOKEN
+} from '../../learning-plan-goal-progress/learning-plan-goal-progress.service.interface';
+import {
+  EffectFeedback,
+  EffectFeedbackActions,
+  Priority
+} from '../effect-feedback';
+import {
+  AddLearningPlanGoalProgresses,
+  BulkAddLearningPlanGoalProgresses,
+  DeleteLearningPlanGoalProgress,
   LearningPlanGoalProgressesLoaded,
   LearningPlanGoalProgressesLoadError,
-  LoadLearningPlanGoalProgresses
+  LoadLearningPlanGoalProgresses,
+  StartAddLearningPlanGoalProgresses,
+  ToggleLearningPlanGoalProgress
 } from './learning-plan-goal-progress.actions';
 import { LearningPlanGoalProgressEffects } from './learning-plan-goal-progress.effects';
 
@@ -18,6 +35,9 @@ describe('LearningPlanGoalProgressEffects', () => {
   let actions: Observable<any>;
   let effects: LearningPlanGoalProgressEffects;
   let usedState: any;
+
+  const uuid = 'foo';
+  let mockDate: MockDate;
 
   const expectInAndOut = (
     effect: Observable<any>,
@@ -55,6 +75,14 @@ describe('LearningPlanGoalProgressEffects', () => {
     });
   };
 
+  beforeAll(() => {
+    mockDate = new MockDate();
+  });
+
+  afterAll(() => {
+    mockDate.returnRealDate();
+  });
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
@@ -74,12 +102,18 @@ describe('LearningPlanGoalProgressEffects', () => {
         {
           provide: LEARNING_PLAN_GOAL_PROGRESS_SERVICE_TOKEN,
           useValue: {
-            getAllForUser: () => {}
+            getAllForUser: () => {},
+            createLearningPlanGoalProgress: () => {},
+            deleteLearningPlanGoalProgress: () => {}
           }
         },
         LearningPlanGoalProgressEffects,
         DataPersistence,
-        provideMockActions(() => actions)
+        provideMockActions(() => actions),
+        {
+          provide: 'uuid',
+          useValue: () => uuid
+        }
       ]
     });
 
@@ -192,6 +226,402 @@ describe('LearningPlanGoalProgressEffects', () => {
           loadErrorAction
         );
       });
+    });
+  });
+
+  describe('startAddLearningPlanGoalProgresses', () => {
+    const staticParams = {
+      personId: 1,
+      classGroupId: 1,
+      learningPlanGoalIds: [1, 2]
+    };
+
+    let learningPlanGoalProgressService: LearningPlanGoalProgressServiceInterface;
+
+    beforeEach(() => {
+      learningPlanGoalProgressService = TestBed.get(
+        LEARNING_PLAN_GOAL_PROGRESS_SERVICE_TOKEN
+      );
+    });
+
+    it('should make the service call and return an action, for eduContentTOCId', () => {
+      const eduContentTOCId = 1;
+      const userLessonId = undefined;
+
+      const startAddAction = new StartAddLearningPlanGoalProgresses({
+        ...staticParams,
+        eduContentTOCId
+      });
+
+      const returnedValues = staticParams.learningPlanGoalIds.map(
+        learningPlanGoalId => ({
+          personId: staticParams.personId,
+          classGroupId: staticParams.classGroupId,
+          learningPlanGoalId,
+          eduContentTOCId
+        })
+      );
+
+      jest
+        .spyOn(
+          learningPlanGoalProgressService,
+          'createLearningPlanGoalProgress'
+        )
+        .mockReturnValue(of(returnedValues));
+
+      actions = hot('a', { a: startAddAction });
+
+      expect(effects.startAddLearningPlanGoalProgresses$).toBeObservable(
+        cold('a', {
+          a: new AddLearningPlanGoalProgresses({
+            learningPlanGoalProgresses: returnedValues
+          })
+        })
+      );
+
+      expect(
+        learningPlanGoalProgressService.createLearningPlanGoalProgress
+      ).toHaveBeenCalledWith(
+        staticParams.personId,
+        staticParams.classGroupId,
+        staticParams.learningPlanGoalIds,
+        userLessonId,
+        eduContentTOCId
+      );
+    });
+
+    it('should make the service call and return an action, for userLessonId', () => {
+      const eduContentTOCId = undefined;
+      const userLessonId = 1;
+
+      const startAddAction = new StartAddLearningPlanGoalProgresses({
+        ...staticParams,
+        userLessonId
+      });
+
+      const returnedValues = staticParams.learningPlanGoalIds.map(
+        learningPlanGoalId => ({
+          personId: staticParams.personId,
+          classGroupId: staticParams.classGroupId,
+          learningPlanGoalId,
+          userLessonId
+        })
+      );
+
+      jest
+        .spyOn(
+          learningPlanGoalProgressService,
+          'createLearningPlanGoalProgress'
+        )
+        .mockReturnValue(of(returnedValues));
+
+      actions = hot('a', { a: startAddAction });
+
+      expect(effects.startAddLearningPlanGoalProgresses$).toBeObservable(
+        cold('a', {
+          a: new AddLearningPlanGoalProgresses({
+            learningPlanGoalProgresses: returnedValues
+          })
+        })
+      );
+
+      expect(
+        learningPlanGoalProgressService.createLearningPlanGoalProgress
+      ).toHaveBeenCalledWith(
+        staticParams.personId,
+        staticParams.classGroupId,
+        staticParams.learningPlanGoalIds,
+        userLessonId,
+        eduContentTOCId
+      );
+    });
+
+    it('should return a feedbackAction if an error occured', () => {
+      // no eduContentId or UserLessonId -> will error
+      const startAddAction = new StartAddLearningPlanGoalProgresses({
+        ...staticParams
+      });
+
+      actions = hot('a', { a: startAddAction });
+
+      const feedbackAction = new EffectFeedbackActions.AddEffectFeedback({
+        effectFeedback: new EffectFeedback({
+          id: uuid,
+          triggerAction: startAddAction,
+          message:
+            'Het is niet gelukt om de status van het leerplandoel aan te passen.',
+          userActions: [
+            { title: 'Opnieuw proberen', userAction: startAddAction }
+          ],
+          type: 'error',
+          priority: Priority.HIGH
+        })
+      });
+
+      expect(effects.startAddLearningPlanGoalProgresses$).toBeObservable(
+        hot('a', {
+          a: feedbackAction
+        })
+      );
+    });
+  });
+
+  describe('deleteLearningPlanGoalProgress', () => {
+    const learningPlanGoalProgressId = 1;
+    const userId = 1;
+
+    const deleteAction = new DeleteLearningPlanGoalProgress({
+      id: learningPlanGoalProgressId,
+      userId
+    });
+
+    let learningPlanGoalProgressService: LearningPlanGoalProgressServiceInterface;
+
+    beforeEach(() => {
+      learningPlanGoalProgressService = TestBed.get(
+        LEARNING_PLAN_GOAL_PROGRESS_SERVICE_TOKEN
+      );
+    });
+
+    it('should make the service call', () => {
+      jest
+        .spyOn(
+          learningPlanGoalProgressService,
+          'deleteLearningPlanGoalProgress'
+        )
+        .mockReturnValue(of(true));
+
+      actions = hot('a', { a: deleteAction });
+
+      expect(effects.deleteLearningPlanGoalProgress$).toBeObservable(
+        cold('a', {
+          a: new DalActions.ActionSuccessful({
+            successfulAction: 'Leerplandoel voortgang verwijderd.'
+          })
+        })
+      );
+
+      expect(
+        learningPlanGoalProgressService.deleteLearningPlanGoalProgress
+      ).toHaveBeenCalledWith(userId, learningPlanGoalProgressId);
+    });
+
+    it('should return an undoAction and a feedBackAction on error', () => {
+      jest
+        .spyOn(
+          learningPlanGoalProgressService,
+          'deleteLearningPlanGoalProgress'
+        )
+        .mockImplementation(() => {
+          throw new Error('error');
+        });
+
+      actions = hot('a', { a: deleteAction });
+
+      const feedbackAction = new EffectFeedbackActions.AddEffectFeedback({
+        effectFeedback: new EffectFeedback({
+          id: uuid,
+          triggerAction: deleteAction,
+          message:
+            'Het is niet gelukt om de status van het leerplandoel aan te passen.',
+          userActions: [
+            { title: 'Opnieuw proberen', userAction: deleteAction }
+          ],
+          type: 'error',
+          priority: Priority.HIGH
+        })
+      });
+
+      expect(effects.deleteLearningPlanGoalProgress$).toBeObservable(
+        cold('(ab)', {
+          a: undo(deleteAction),
+          b: feedbackAction
+        })
+      );
+    });
+  });
+
+  describe('bulkAddLearningPlanGoalProgress', () => {
+    const personId = 1;
+    const classGroupId = 1;
+    const eduContentTOCId = 1;
+    const userLessonId = 1;
+    const learningPlanGoalIds = [1, 2]; // 1 is already in state, 2 isn't
+
+    beforeAll(() => {
+      usedState = {
+        ...LearningPlanGoalProgressReducer.initialState,
+        ids: [1],
+        entities: {
+          1: new LearningPlanGoalProgressFixture()
+        }
+      };
+    });
+
+    let learningPlanGoalProgressService;
+    beforeEach(() => {
+      learningPlanGoalProgressService = TestBed.get(
+        LEARNING_PLAN_GOAL_PROGRESS_SERVICE_TOKEN
+      );
+    });
+
+    it('should return a StartAddLearningPlanGoalProgresses action, for eduContentTOCId', () => {
+      const bulkAddAction = new BulkAddLearningPlanGoalProgresses({
+        personId,
+        classGroupId,
+        eduContentTOCId,
+        learningPlanGoalIds
+      });
+
+      actions = hot('a', {
+        a: bulkAddAction
+      });
+
+      const expectedAction = new StartAddLearningPlanGoalProgresses({
+        personId,
+        classGroupId,
+        eduContentTOCId,
+        userLessonId: undefined,
+        learningPlanGoalIds: [2]
+      });
+
+      expect(effects.bulkAddLearningPlanGoalProgress$).toBeObservable(
+        hot('a', { a: expectedAction })
+      );
+    });
+
+    it('should return a StartAddLearningPlanGoalProgresses action, for userLessonId', () => {
+      const bulkAddAction = new BulkAddLearningPlanGoalProgresses({
+        personId,
+        classGroupId,
+        userLessonId,
+        learningPlanGoalIds
+      });
+
+      actions = hot('a', {
+        a: bulkAddAction
+      });
+
+      const expectedAction = new StartAddLearningPlanGoalProgresses({
+        classGroupId,
+        eduContentTOCId: undefined,
+        userLessonId,
+        learningPlanGoalIds: [2],
+        personId
+      });
+
+      expect(effects.bulkAddLearningPlanGoalProgress$).toBeObservable(
+        hot('a', { a: expectedAction })
+      );
+    });
+  });
+
+  describe('toggleLearningPlanGoalProgress', () => {
+    const personId = 1;
+    const classGroupId = 1;
+    const eduContentTOCId = 1;
+    const userLessonId = 1;
+    const learningPlanGoalIds = [1, 2]; // 1 is already in state, 2 isn't
+
+    beforeAll(() => {
+      usedState = {
+        ...LearningPlanGoalProgressReducer.initialState,
+        ids: [1],
+        entities: {
+          1: new LearningPlanGoalProgressFixture()
+        }
+      };
+    });
+
+    let learningPlanGoalProgressService;
+    beforeEach(() => {
+      learningPlanGoalProgressService = TestBed.get(
+        LEARNING_PLAN_GOAL_PROGRESS_SERVICE_TOKEN
+      );
+    });
+
+    it('should return an StartAddLearningPlanGoalProgresses action if the progress does not exist, for EduContentTOC', () => {
+      const toggleAction = new ToggleLearningPlanGoalProgress({
+        classGroupId,
+        personId,
+        learningPlanGoalId: 2,
+        eduContentTOCId
+      });
+
+      actions = hot('a', { a: toggleAction });
+
+      const expectedAction = new StartAddLearningPlanGoalProgresses({
+        classGroupId,
+        learningPlanGoalIds: [2],
+        eduContentTOCId,
+        personId
+      });
+
+      expect(effects.toggleLearningPlanGoalProgress$).toBeObservable(
+        hot('a', { a: expectedAction })
+      );
+    });
+
+    it('should return a DeleteLearningPlanGoalProgress action if the progress exists, for EduContentTOC', () => {
+      const toggleAction = new ToggleLearningPlanGoalProgress({
+        classGroupId,
+        personId,
+        learningPlanGoalId: 1,
+        eduContentTOCId
+      });
+
+      actions = hot('a', { a: toggleAction });
+
+      const expectedAction = new DeleteLearningPlanGoalProgress({
+        id: 1,
+        userId: personId
+      });
+
+      expect(effects.toggleLearningPlanGoalProgress$).toBeObservable(
+        hot('a', { a: expectedAction })
+      );
+    });
+
+    it('should return an StartAddLearningPlanGoalProgresses action if the progress does not exist, for UserLesson', () => {
+      const toggleAction = new ToggleLearningPlanGoalProgress({
+        classGroupId,
+        personId,
+        learningPlanGoalId: 2,
+        userLessonId
+      });
+
+      actions = hot('a', { a: toggleAction });
+
+      const expectedAction = new StartAddLearningPlanGoalProgresses({
+        classGroupId,
+        learningPlanGoalIds: [2],
+        userLessonId,
+        personId
+      });
+
+      expect(effects.toggleLearningPlanGoalProgress$).toBeObservable(
+        hot('a', { a: expectedAction })
+      );
+    });
+
+    it('should return a DeleteLearningPlanGoalProgress action if the progress exists, for UserLesson', () => {
+      const toggleAction = new ToggleLearningPlanGoalProgress({
+        classGroupId,
+        personId,
+        learningPlanGoalId: 1,
+        userLessonId
+      });
+
+      actions = hot('a', { a: toggleAction });
+
+      const expectedAction = new DeleteLearningPlanGoalProgress({
+        id: 1,
+        userId: personId
+      });
+
+      expect(effects.toggleLearningPlanGoalProgress$).toBeObservable(
+        hot('a', { a: expectedAction })
+      );
     });
   });
 });

@@ -8,24 +8,19 @@ import {
   AUTH_SERVICE_TOKEN,
   BundleActions,
   ClassGroupActions,
-  ClassGroupFixture,
-  ClassGroupInterface,
   DiaboloPhaseActions,
   DiaboloPhaseFixture,
   EduContentActions,
   EduContentInterface,
   EduContentTocActions,
-  EduContentTOCFixture,
-  EduContentTOCInterface,
   EffectFeedbackInterface,
   EffectFeedbackQueries,
   FavoriteActions,
   FavoriteInterface,
   FavoriteTypesEnum,
   LearningAreaActions,
-  LearningPlanGoalFixture,
-  LearningPlanGoalInterface,
   LearningPlanGoalProgressActions,
+  LearningPlanGoalProgressQueries,
   TaskActions,
   TaskEduContentActions,
   TocServiceInterface,
@@ -37,13 +32,7 @@ import {
   SearchFilterCriteriaFixture,
   SearchFilterCriteriaValuesFixture
 } from '@campus/search';
-import {
-  ContentEditableComponent,
-  MultiCheckBoxTableItemColumnInterface,
-  MultiCheckBoxTableItemInterface,
-  MultiCheckBoxTableRowHeaderColumnInterface,
-  MultiCheckBoxTableSubLevelInterface
-} from '@campus/ui';
+import { ContentEditableComponent } from '@campus/ui';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
@@ -181,5 +170,53 @@ export class LoginpageComponent implements OnInit {
 
   public filterSelectionChanged(event) {
     console.log(event);
+  }
+
+  public toggleLearningPlanGoalProgress() {
+    const userId = this.authService.userId;
+    const classGroupId = 1;
+    const eduContentTOCId = 1;
+    const learningPlanGoalId = 1;
+    const userLessonId = 1;
+
+    this.store.dispatch(
+      new LearningPlanGoalProgressActions.ToggleLearningPlanGoalProgress({
+        personId: userId,
+        classGroupId,
+        userLessonId,
+        learningPlanGoalId
+      })
+    );
+
+    this.response = this.store.pipe(
+      select(LearningPlanGoalProgressQueries.findMany, {
+        classGroupId,
+        userLessonId
+      })
+    );
+  }
+
+  public createBulk() {
+    const userId = this.authService.userId;
+    const classGroupId = 1;
+    const eduContentTOCId = 1;
+    const learningPlanGoalIds = [1, 2, 3];
+    const userLessonId = 1;
+
+    this.store.dispatch(
+      new LearningPlanGoalProgressActions.BulkAddLearningPlanGoalProgresses({
+        personId: userId,
+        classGroupId,
+        userLessonId,
+        learningPlanGoalIds
+      })
+    );
+
+    this.response = this.store.pipe(
+      select(LearningPlanGoalProgressQueries.findMany, {
+        classGroupId,
+        userLessonId
+      })
+    );
   }
 }
