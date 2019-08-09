@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@angular/core';
 import {
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
+  ClassGroupInterface,
   DalState,
   DiaboloPhaseInterface,
   DiaboloPhaseQueries,
@@ -17,10 +18,12 @@ import {
   EduContentTocQueries,
   EDU_CONTENT_SERVICE_TOKEN,
   getRouterState,
+  LearningPlanGoalInterface,
   MethodInterface,
   MethodQueries,
   MethodYearsInterface,
-  RouterStateUrl
+  RouterStateUrl,
+  UserLessonInterface
 } from '@campus/dal';
 import {
   SearchModeInterface,
@@ -36,6 +39,11 @@ import {
   ScormExerciseServiceInterface,
   SCORM_EXERCISE_SERVICE_TOKEN
 } from '@campus/shared';
+import {
+  MultiCheckBoxTableItemInterface,
+  MultiCheckBoxTableRowHeaderColumnInterface,
+  MultiCheckBoxTableSubLevelInterface
+} from '@campus/ui';
 import { Dictionary } from '@ngrx/entity';
 import { RouterReducerState } from '@ngrx/router-store';
 import { select, Store } from '@ngrx/store';
@@ -73,6 +81,27 @@ export class MethodViewModel implements ContentOpenerInterface {
   public generalFilesByType$: Observable<Dictionary<EduContent[]>>;
   public currentTab$: Observable<number>;
   public currentMethodParams$: Observable<CurrentMethodParams>;
+
+  // TODO: attach actual stream
+  public methodWithYearByBookId$: Observable<String>;
+  public filteredClassGroups$: Observable<ClassGroupInterface[]>;
+  public userLessons$: Observable<UserLessonInterface[]>;
+  public learningPlanGoalsWithSelectionForClassGroups$: Observable<
+    MultiCheckBoxTableItemInterface<LearningPlanGoalInterface>[]
+  >;
+  public learningPlanGoalsPerLessonWithSelectionForClassGroups$: Observable<
+    MultiCheckBoxTableSubLevelInterface<
+      EduContentTOCInterface,
+      LearningPlanGoalInterface
+    >[]
+  >;
+
+  public staticTableHeaders: MultiCheckBoxTableRowHeaderColumnInterface<
+    LearningPlanGoalInterface
+  >[] = [
+    { caption: 'prefix', key: 'prefix' },
+    { caption: 'beschrijving', key: 'goal' }
+  ];
 
   // Source streams
   private routerState$: Observable<RouterReducerState<RouterStateUrl>>;
