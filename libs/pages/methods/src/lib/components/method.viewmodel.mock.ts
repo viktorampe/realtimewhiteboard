@@ -79,6 +79,10 @@ export class MockMethodViewModel
   public generalFilesByType$ = new BehaviorSubject<Dictionary<EduContent[]>>(
     this.getGeneralFilesByType()
   );
+  public classGroups$ = new BehaviorSubject<ClassGroupInterface[]>([
+    new ClassGroupFixture({ id: 1, name: '1a' }),
+    new ClassGroupFixture({ id: 2, name: '1b' })
+  ]);
 
   public methodWithYearByBookId$ = new BehaviorSubject<string>(
     'Beaufort 1e leerjaar'
