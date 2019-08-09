@@ -80,7 +80,7 @@ export class MockMethodViewModel
     this.getGeneralFilesByType()
   );
 
-  public methodWithYearByBookId$ = new BehaviorSubject<String>(
+  public methodWithYearByBookId$ = new BehaviorSubject<string>(
     'Beaufort 1e leerjaar'
   );
 

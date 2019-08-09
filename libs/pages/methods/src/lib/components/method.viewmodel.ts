@@ -83,7 +83,7 @@ export class MethodViewModel implements ContentOpenerInterface {
   public currentMethodParams$: Observable<CurrentMethodParams>;
 
   // TODO: attach actual stream
-  public methodWithYearByBookId$: Observable<String>;
+  public methodWithYearByBookId$: Observable<string>;
   public filteredClassGroups$: Observable<ClassGroupInterface[]>;
   public userLessons$: Observable<UserLessonInterface[]>;
   public learningPlanGoalsWithSelectionForClassGroups$: Observable<
