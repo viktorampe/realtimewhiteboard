@@ -23,7 +23,6 @@ import {
   LearningPlanGoalProgressInterface,
   LearningPlanGoalProgressQueries,
   LearningPlanGoalQueries,
-
   MethodInterface,
   MethodQueries,
   MethodYearsInterface,
