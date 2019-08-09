@@ -9,7 +9,8 @@ describe('LearningPlanGoalProgress Selectors', () => {
     id: number
   ): LearningPlanGoalProgressInterface | any {
     return {
-      id: id
+      id: id,
+      learningPlanGoalId: (id % 2) + 1
     };
   }
 
@@ -111,6 +112,21 @@ describe('LearningPlanGoalProgress Selectors', () => {
         id: 9
       });
       expect(results).toBe(undefined);
+    });
+    it('getGroupedByLearningPlanGoalId() should return entities grouped by learingPlanGoalId', () => {
+      const results = LearningPlanGoalProgressQueries.getGroupedByLearningPlanGoalId(
+        storeState
+      );
+      expect(results).toEqual({
+        1: [
+          createLearningPlanGoalProgress(2),
+          createLearningPlanGoalProgress(4)
+        ],
+        2: [
+          createLearningPlanGoalProgress(1),
+          createLearningPlanGoalProgress(3)
+        ]
+      });
     });
   });
 

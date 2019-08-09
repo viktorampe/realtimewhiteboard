@@ -1,3 +1,4 @@
+import { groupArrayByKey } from '@campus/utils';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { LearningPlanGoalProgressInterface } from '../../+models';
 import {
@@ -88,5 +89,12 @@ export const findMany = createSelector(
         prop => !props[prop] || learningPlanGoalProgress[prop] === props[prop]
       );
     });
+  }
+);
+
+export const getGroupedByLearningPlanGoalId = createSelector(
+  selectLearningPlanGoalProgressState,
+  (state: State) => {
+    return groupArrayByKey(Object.values(state.entities), 'learningPlanGoalId');
   }
 );

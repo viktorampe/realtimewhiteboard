@@ -2,6 +2,8 @@ import { Inject, Injectable } from '@angular/core';
 import {
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
+  ClassGroupInterface,
+  ClassGroupQueries,
   DalState,
   DiaboloPhaseInterface,
   DiaboloPhaseQueries,
@@ -17,6 +19,10 @@ import {
   EduContentTocQueries,
   EDU_CONTENT_SERVICE_TOKEN,
   getRouterState,
+  LearningPlanGoalInterface,
+  LearningPlanGoalProgressInterface,
+  LearningPlanGoalProgressQueries,
+  LearningPlanGoalQueries,
   MethodInterface,
   MethodQueries,
   MethodYearsInterface,
@@ -73,11 +79,18 @@ export class MethodViewModel implements ContentOpenerInterface {
   public generalFilesByType$: Observable<Dictionary<EduContent[]>>;
   public currentTab$: Observable<number>;
   public currentMethodParams$: Observable<CurrentMethodParams>;
+  public classGroups$: Observable<ClassGroupInterface[]>;
 
   // Source streams
   private routerState$: Observable<RouterReducerState<RouterStateUrl>>;
   private generalFiles$: Observable<EduContent[]>;
   private diaboloPhases$: Observable<DiaboloPhaseInterface[]>;
+  private learningPlanGoalsForCurrentBook$: Observable<
+    LearningPlanGoalInterface[]
+  >;
+  private learningPlanGoalProgressBylearningPlanGoalId$: Observable<
+    Dictionary<LearningPlanGoalProgressInterface[]>
+  >;
 
   private _searchState$: BehaviorSubject<SearchStateInterface>;
 
@@ -296,6 +309,12 @@ export class MethodViewModel implements ContentOpenerInterface {
 
     this.generalFiles$ = this.getGeneralFilesStream();
     this.diaboloPhases$ = this.getDiaboloPhasesStream();
+
+    this.learningPlanGoalsForCurrentBook$ = this.getLearningPlanGoalsForCurrentBookStream();
+    this.classGroups$ = this.store.pipe(select(ClassGroupQueries.getAll));
+    this.learningPlanGoalProgressBylearningPlanGoalId$ = this.store.pipe(
+      select(LearningPlanGoalProgressQueries.getGroupedByLearningPlanGoalId)
+    );
   }
 
   private getCurrentMethodParams(): Observable<CurrentMethodParams> {
@@ -436,6 +455,19 @@ export class MethodViewModel implements ContentOpenerInterface {
             return acc;
           },
           {} as Dictionary<EduContent[]>
+        );
+      })
+    );
+  }
+
+  private getLearningPlanGoalsForCurrentBookStream(): Observable<
+    LearningPlanGoalInterface[]
+  > {
+    return this.currentBook$.pipe(
+      filter(book => !!book),
+      switchMap(book => {
+        return this.store.pipe(
+          select(LearningPlanGoalQueries.getByBookId, { bookId: book.id })
         );
       })
     );
