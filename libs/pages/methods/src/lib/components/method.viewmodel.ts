@@ -86,9 +86,6 @@ export class MethodViewModel implements ContentOpenerInterface {
   public currentTab$: Observable<number>;
   public currentMethodParams$: Observable<CurrentMethodParams>;
   public classGroups$: Observable<ClassGroupInterface[]>;
-
-  // TODO: attach actual stream
-  public methodWithYearByBookId$: Observable<string>;
   public filteredClassGroups$: Observable<ClassGroupInterface[]>;
   public userLessons$: Observable<UserLessonInterface[]>;
   public learningPlanGoalsWithSelectionForClassGroups$: Observable<
@@ -101,7 +98,7 @@ export class MethodViewModel implements ContentOpenerInterface {
     >[]
   >;
 
-  public staticTableHeaders: MultiCheckBoxTableRowHeaderColumnInterface<
+  public learningPlanGoalTableHeaders: MultiCheckBoxTableRowHeaderColumnInterface<
     LearningPlanGoalInterface
   >[] = [
     { caption: 'prefix', key: 'prefix' },

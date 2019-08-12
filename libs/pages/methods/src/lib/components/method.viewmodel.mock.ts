@@ -84,10 +84,6 @@ export class MockMethodViewModel
     new ClassGroupFixture({ id: 2, name: '1b' })
   ]);
 
-  public methodWithYearByBookId$ = new BehaviorSubject<string>(
-    'Beaufort 1e leerjaar'
-  );
-
   public filteredClassGroups$ = new BehaviorSubject<ClassGroupInterface[]>([
     new ClassGroupFixture({ id: 1, name: '1a' }),
     new ClassGroupFixture({ id: 2, name: '1b' })
@@ -99,7 +95,7 @@ export class MockMethodViewModel
     new UserLessonFixture({ id: 3, description: 'schoolfeest' })
   ]);
 
-  public staticTableHeaders: MultiCheckBoxTableRowHeaderColumnInterface<
+  public learningPlanGoalTableHeaders: MultiCheckBoxTableRowHeaderColumnInterface<
     LearningPlanGoalInterface
   >[] = [
     { caption: 'prefix', key: 'prefix' },
