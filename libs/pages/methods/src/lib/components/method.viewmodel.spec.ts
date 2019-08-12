@@ -4,6 +4,10 @@ import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import {
   AUTH_SERVICE_TOKEN,
+  ClassGroupActions,
+  ClassGroupFixture,
+  ClassGroupInterface,
+  ClassGroupReducer,
   CustomSerializer,
   DalState,
   EduContent,
@@ -20,6 +24,13 @@ import {
   EduContentTocReducer,
   EDU_CONTENT_SERVICE_TOKEN,
   getStoreModuleForFeatures,
+  LearningPlanGoalActions,
+  LearningPlanGoalFixture,
+  LearningPlanGoalProgressActions,
+  LearningPlanGoalProgressFixture,
+  LearningPlanGoalProgressInterface,
+  LearningPlanGoalProgressReducer,
+  LearningPlanGoalReducer,
   MethodActions,
   MethodFixture,
   MethodInterface,
@@ -42,6 +53,7 @@ import {
   ScormExerciseServiceInterface,
   SCORM_EXERCISE_SERVICE_TOKEN
 } from '@campus/shared';
+import { LearningPlanGoalInterface } from '@diekeure/polpo-api-angular-sdk';
 import {
   NavigationActionTiming,
   RouterNavigationAction,
@@ -80,14 +92,16 @@ describe('MethodViewModel', () => {
       treeId: bookId,
       depth: 0,
       lft: 1,
-      rgt: 6
+      rgt: 6,
+      learningPlanGoalIds: [1, 2, 3]
     }),
     new EduContentTOCFixture({
       id: 2,
       treeId: bookId,
       depth: 0,
       lft: 7,
-      rgt: 10
+      rgt: 10,
+      learningPlanGoalIds: [1, 2, 3, 4]
     })
   ];
 
@@ -97,21 +111,24 @@ describe('MethodViewModel', () => {
       treeId: bookId,
       depth: 1,
       lft: 2,
-      rgt: 3
+      rgt: 3,
+      learningPlanGoalIds: [1, 2]
     }),
     new EduContentTOCFixture({
       id: 4,
       treeId: bookId,
       depth: 1,
       lft: 4,
-      rgt: 5
+      rgt: 5,
+      learningPlanGoalIds: [2, 3, 4]
     }),
     new EduContentTOCFixture({
       id: 5,
       treeId: bookId,
       depth: 1,
       lft: 8,
-      rgt: 9
+      rgt: 9,
+      learningPlanGoalIds: [1, 2, 3]
     })
   ];
 
@@ -133,6 +150,50 @@ describe('MethodViewModel', () => {
     id: bookMethodId,
     learningAreaId: methodLearningAreaId
   });
+
+  const classGroups: ClassGroupInterface[] = [
+    new ClassGroupFixture({ id: 11 }),
+    new ClassGroupFixture({ id: 12 }),
+    new ClassGroupFixture({ id: 13 })
+  ];
+
+  const learningPlanGoals: LearningPlanGoalInterface[] = [
+    new LearningPlanGoalFixture({ id: 1, goal: 'foo' }),
+    new LearningPlanGoalFixture({ id: 2, goal: 'bar' }),
+    new LearningPlanGoalFixture({ id: 3, goal: 'baz' }),
+    new LearningPlanGoalFixture({ id: 4, goal: 'foobar' })
+  ];
+
+  const learningPlanGoalProgresses: LearningPlanGoalProgressInterface[] = [
+    new LearningPlanGoalProgressFixture({
+      id: 1,
+      learningPlanGoalId: 1,
+      classGroupId: 11,
+      eduContentTOCId: 3,
+      userLessonId: null
+    }),
+    new LearningPlanGoalProgressFixture({
+      id: 2,
+      learningPlanGoalId: 2,
+      classGroupId: 11,
+      eduContentTOCId: 3,
+      userLessonId: null
+    }),
+    new LearningPlanGoalProgressFixture({
+      id: 3,
+      learningPlanGoalId: 3,
+      classGroupId: 11,
+      eduContentTOCId: 4,
+      userLessonId: null
+    }),
+    new LearningPlanGoalProgressFixture({
+      id: 4,
+      learningPlanGoalId: 3,
+      classGroupId: 12,
+      eduContentTOCId: 4,
+      userLessonId: null
+    })
+  ];
 
   function createMockSearchMode(overrides: Partial<SearchModeInterface>) {
     return Object.assign(
@@ -172,7 +233,10 @@ describe('MethodViewModel', () => {
           EduContentTocReducer,
           EduContentBookReducer,
           MethodReducer,
-          EduContentReducer
+          EduContentReducer,
+          ClassGroupReducer,
+          LearningPlanGoalReducer,
+          LearningPlanGoalProgressReducer
         ]),
         RouterTestingModule.withRoutes([
           {
@@ -253,6 +317,21 @@ describe('MethodViewModel', () => {
       new EduContentTocActions.AddEduContentTocsForBook({
         bookId: book.id,
         eduContentTocs: book.eduContentTOC
+      })
+    );
+
+    store.dispatch(new ClassGroupActions.ClassGroupsLoaded({ classGroups }));
+
+    store.dispatch(
+      new LearningPlanGoalProgressActions.LearningPlanGoalProgressesLoaded({
+        learningPlanGoalProgresses
+      })
+    );
+
+    store.dispatch(
+      new LearningPlanGoalActions.AddLearningPlanGoalsForBook({
+        bookId,
+        learningPlanGoals
       })
     );
   }
@@ -627,6 +706,110 @@ describe('MethodViewModel', () => {
         expect(methodViewModel.currentTab$).toBeObservable(
           hot('a', { a: tab })
         );
+      });
+    });
+
+    describe('learningPlanGoalsWithSelectionForClassGroups$', () => {
+      beforeEach(() => {
+        loadInStore();
+      });
+
+      it('should emit the learningPlanGoals with selection by classGroup for the currently selected book', () => {
+        navigateWithParams({ book: bookId });
+
+        const expected = [
+          {
+            header: learningPlanGoals[0],
+            content: { 11: true, 12: false, 13: false }
+          },
+          {
+            header: learningPlanGoals[1],
+            content: { 11: true, 12: false, 13: false }
+          },
+          {
+            header: learningPlanGoals[2],
+            content: { 11: true, 12: true, 13: false }
+          },
+          {
+            header: learningPlanGoals[3],
+            content: { 11: false, 12: false, 13: false }
+          }
+        ];
+        expect(
+          methodViewModel.learningPlanGoalsWithSelectionForClassGroups$
+        ).toBeObservable(hot('a', { a: expected }));
+      });
+    });
+
+    describe('learningPlanGoalsPerLessonWithSelectionForClassGroups$', () => {
+      beforeEach(() => {
+        loadInStore();
+      });
+
+      it('should emit the learningPlanGoals with selection by classGroup for each lesson from the currently selected book', () => {
+        navigateWithParams({ book: bookId, chapter: 1 });
+
+        const expected = [
+          {
+            item: lessonTocs[0],
+            label: 'title',
+            children: [
+              {
+                header: learningPlanGoals[0],
+                content: { 11: true, 12: false, 13: false }
+              },
+              {
+                header: learningPlanGoals[1],
+                content: { 11: true, 12: false, 13: false }
+              }
+            ]
+          },
+          {
+            item: lessonTocs[1],
+            label: 'title',
+            children: [
+              {
+                header: learningPlanGoals[1],
+                content: { 11: true, 12: false, 13: false }
+              },
+              {
+                header: learningPlanGoals[2],
+                content: { 11: true, 12: true, 13: false }
+              },
+              {
+                header: learningPlanGoals[3],
+                content: { 11: false, 12: false, 13: false }
+              }
+            ]
+          }
+        ];
+        expect(
+          methodViewModel.learningPlanGoalsPerLessonWithSelectionForClassGroups$
+        ).toBeObservable(hot('a', { a: expected }));
+      });
+
+      it('should emit the learningPlanGoals with selection by classGroup for the current selected lesson', () => {
+        navigateWithParams({ book: bookId, chapter: 1, lesson: 3 });
+
+        const expected = [
+          {
+            item: lessonTocs[0],
+            label: 'title',
+            children: [
+              {
+                header: learningPlanGoals[0],
+                content: { 11: true, 12: false, 13: false }
+              },
+              {
+                header: learningPlanGoals[1],
+                content: { 11: true, 12: false, 13: false }
+              }
+            ]
+          }
+        ];
+        expect(
+          methodViewModel.learningPlanGoalsPerLessonWithSelectionForClassGroups$
+        ).toBeObservable(hot('a', { a: expected }));
       });
     });
   });

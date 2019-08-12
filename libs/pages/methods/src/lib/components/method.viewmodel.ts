@@ -453,7 +453,8 @@ export class MethodViewModel implements ContentOpenerInterface {
   }
 
   private getFilteredClassGroups(): Observable<ClassGroupInterface[]> {
-    // TODO: filter classgroups by year and method (through license relations) from the current book
+    // TODO: filter classgroups by years of the current book
+    // TODO: filter classgroups by their methods through licenses?
     // TODO: filter classgroups through select dropdown
     return this.store.pipe(select(ClassGroupQueries.getAll));
   }
