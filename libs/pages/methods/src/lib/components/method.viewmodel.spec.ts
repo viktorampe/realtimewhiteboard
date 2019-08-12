@@ -26,6 +26,7 @@ import {
   getStoreModuleForFeatures,
   LearningPlanGoalActions,
   LearningPlanGoalFixture,
+  LearningPlanGoalInterface,
   LearningPlanGoalProgressActions,
   LearningPlanGoalProgressFixture,
   LearningPlanGoalProgressInterface,
@@ -53,7 +54,6 @@ import {
   ScormExerciseServiceInterface,
   SCORM_EXERCISE_SERVICE_TOKEN
 } from '@campus/shared';
-import { LearningPlanGoalInterface } from '@diekeure/polpo-api-angular-sdk';
 import {
   NavigationActionTiming,
   RouterNavigationAction,
