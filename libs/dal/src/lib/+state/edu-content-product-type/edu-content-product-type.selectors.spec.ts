@@ -10,8 +10,8 @@ describe('EduContentProductType Selectors', () => {
   ): EduContentProductTypeInterface | any {
     return {
       id: id,
-      sequence: sequence ? sequence : undefined,
-      name: name ? name : undefined
+      sequence: sequence,
+      name: name
     };
   }
 
