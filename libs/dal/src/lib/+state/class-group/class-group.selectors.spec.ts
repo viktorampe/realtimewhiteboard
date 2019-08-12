@@ -1,11 +1,19 @@
+import { Dictionary } from '@ngrx/entity';
 import { ClassGroupQueries } from '.';
-import { ClassGroupInterface } from '../../+models';
+import { ClassGroupInterface } from '../../+models/ClassGroup.interface';
+import { ProductContentInterface } from '../../+models/ProductContent.interface';
 import { State } from './class-group.reducer';
 
 describe('ClassGroup Selectors', () => {
-  function createClassGroup(id: number): ClassGroupInterface | any {
+  function createClassGroup(
+    id: number,
+    productContents?: ProductContentInterface[]
+  ): ClassGroupInterface | any {
     return {
-      id: id
+      id: id,
+      licenses: productContents
+        ? [{ product: { productContents: productContents } }]
+        : undefined
     };
   }
 
@@ -22,7 +30,7 @@ describe('ClassGroup Selectors', () => {
               ...entityMap,
               [classGroup.id]: classGroup
             }),
-            {}
+            {} as Dictionary<ClassGroupInterface>
           )
         : {},
       loaded: loaded,
@@ -94,6 +102,27 @@ describe('ClassGroup Selectors', () => {
     it('getById() should return undefined if the entity is not present', () => {
       const results = ClassGroupQueries.getById(storeState, { id: 9 });
       expect(results).toBe(undefined);
+    });
+    describe('getByMethodId', () => {
+      beforeEach(() => {
+        classGroupState = createState(
+          [
+            createClassGroup(4, [{ licenseType: 'notmethod', methodId: 1 }]),
+            createClassGroup(1, [{ licenseType: 'method', methodId: 1 }]),
+            createClassGroup(2, [{ licenseType: 'method', methodId: 2 }]),
+            createClassGroup(3)
+          ],
+          true,
+          'no error'
+        );
+        storeState = { classGroups: classGroupState };
+      });
+      it('should only return if licenseType is method and methodId is given id', () => {
+        const results = ClassGroupQueries.getByMethodId(storeState, { id: 1 });
+        expect(results).toEqual([
+          createClassGroup(1, [{ licenseType: 'method', methodId: 1 }])
+        ]);
+      });
     });
   });
 });
