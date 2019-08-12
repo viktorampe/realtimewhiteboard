@@ -158,11 +158,11 @@ describe('MethodViewModel', () => {
   ];
 
   const learningPlanGoals: LearningPlanGoalInterface[] = [
-    new LearningPlanGoalFixture({ id: 1, goal: 'foo' }),
-    new LearningPlanGoalFixture({ id: 2, goal: 'bar' }),
-    new LearningPlanGoalFixture({ id: 3, goal: 'baz' }),
-    new LearningPlanGoalFixture({ id: 4, goal: 'foobar' })
-  ];
+    new LearningPlanGoalFixture({ id: 1, goal: 'foo', prefix: '1.2.3' }),
+    new LearningPlanGoalFixture({ id: 2, goal: 'bar', prefix: '1.1.3' }),
+    new LearningPlanGoalFixture({ id: 3, goal: 'baz', prefix: '1.1.20' }),
+    new LearningPlanGoalFixture({ id: 4, goal: 'foobar', prefix: '1.3' })
+  ]; // natural sorted order index = 1, 2, 0, 3
 
   const learningPlanGoalProgresses: LearningPlanGoalProgressInterface[] = [
     new LearningPlanGoalProgressFixture({
@@ -719,16 +719,16 @@ describe('MethodViewModel', () => {
 
         const expected = [
           {
-            header: learningPlanGoals[0],
-            content: { 11: true, 12: false, 13: false }
-          },
-          {
             header: learningPlanGoals[1],
             content: { 11: true, 12: false, 13: false }
           },
           {
             header: learningPlanGoals[2],
             content: { 11: true, 12: true, 13: false }
+          },
+          {
+            header: learningPlanGoals[0],
+            content: { 11: true, 12: false, 13: false }
           },
           {
             header: learningPlanGoals[3],
@@ -755,11 +755,11 @@ describe('MethodViewModel', () => {
             label: 'title',
             children: [
               {
-                header: learningPlanGoals[0],
+                header: learningPlanGoals[1],
                 content: { 11: true, 12: false, 13: false }
               },
               {
-                header: learningPlanGoals[1],
+                header: learningPlanGoals[0],
                 content: { 11: true, 12: false, 13: false }
               }
             ]
@@ -797,11 +797,11 @@ describe('MethodViewModel', () => {
             label: 'title',
             children: [
               {
-                header: learningPlanGoals[0],
+                header: learningPlanGoals[1],
                 content: { 11: true, 12: false, 13: false }
               },
               {
-                header: learningPlanGoals[1],
+                header: learningPlanGoals[0],
                 content: { 11: true, 12: false, 13: false }
               }
             ]

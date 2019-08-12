@@ -537,19 +537,11 @@ export class MethodViewModel implements ContentOpenerInterface {
       this.classGroups$
     ]).pipe(
       map(([learningPlanGoals, progressByGoal, classGroups]) => {
-        return learningPlanGoals.map(learningPlanGoal => {
-          const progress = {};
-          classGroups.forEach(classGroup => {
-            progress[classGroup.id] = (
-              progressByGoal[learningPlanGoal.id] || []
-            ).some(lpgp => lpgp.classGroupId === classGroup.id);
-          });
-
-          return {
-            header: learningPlanGoal,
-            content: progress
-          };
-        });
+        return this.createCheckboxItemsForLearningPlanGoals(
+          learningPlanGoals,
+          classGroups,
+          progressByGoal
+        );
       })
     );
   }
@@ -566,7 +558,7 @@ export class MethodViewModel implements ContentOpenerInterface {
       this.classGroups$,
       this.currentLessons$
     ]).pipe(
-      map(([learningPlanGoals, progressByGoal, classGroups, lessons]) => {
+      map(([learningPlanGoalsMap, progressByGoal, classGroups, lessons]) => {
         return lessons.map(
           (
             lesson
@@ -574,26 +566,47 @@ export class MethodViewModel implements ContentOpenerInterface {
             EduContentTOCInterface,
             LearningPlanGoalInterface
           > => {
+            const learningPlanGoals = lesson.learningPlanGoalIds.map(
+              lpgId => learningPlanGoalsMap[lpgId]
+            );
             return {
               item: lesson,
               label: 'title',
-              children: lesson.learningPlanGoalIds.map(learningPlanGoalId => {
-                const progress = {};
-                classGroups.forEach(classGroup => {
-                  progress[classGroup.id] = (
-                    progressByGoal[learningPlanGoalId] || []
-                  ).some(lpgp => lpgp.classGroupId === classGroup.id);
-                });
-
-                return {
-                  header: learningPlanGoals[learningPlanGoalId],
-                  content: progress
-                };
-              })
+              children: this.createCheckboxItemsForLearningPlanGoals(
+                learningPlanGoals,
+                classGroups,
+                progressByGoal
+              )
             };
           }
         );
       })
     );
+  }
+
+  private createCheckboxItemsForLearningPlanGoals(
+    learningPlanGoals: LearningPlanGoalInterface[],
+    classGroups: ClassGroupInterface[],
+    progressByGoal: Dictionary<LearningPlanGoalProgressInterface[]>
+  ): MultiCheckBoxTableItemInterface<LearningPlanGoalInterface>[] {
+    return learningPlanGoals
+      .map(learningPlanGoal => {
+        const progress = {};
+        classGroups.forEach(classGroup => {
+          progress[classGroup.id] = (
+            progressByGoal[learningPlanGoal.id] || []
+          ).some(lpgp => lpgp.classGroupId === classGroup.id);
+        });
+
+        return {
+          header: learningPlanGoal,
+          content: progress
+        };
+      })
+      .sort((a, b) => {
+        return a.header.prefix.localeCompare(b.header.prefix, undefined, {
+          numeric: true
+        });
+      });
   }
 }
