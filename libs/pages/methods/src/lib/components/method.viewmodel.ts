@@ -1,67 +1,13 @@
 import { Inject, Injectable } from '@angular/core';
-import {
-  AuthServiceInterface,
-  AUTH_SERVICE_TOKEN,
-  ClassGroupInterface,
-  ClassGroupQueries,
-  DalState,
-  DiaboloPhaseInterface,
-  DiaboloPhaseQueries,
-  EduContent,
-  EduContentBookInterface,
-  EduContentBookQueries,
-  EduContentInterface,
-  EduContentProductTypeInterface,
-  EduContentProductTypeQueries,
-  EduContentQueries,
-  EduContentServiceInterface,
-  EduContentTOCInterface,
-  EduContentTocQueries,
-  EDU_CONTENT_SERVICE_TOKEN,
-  getRouterState,
-  LearningPlanGoalInterface,
-  LearningPlanGoalProgressInterface,
-  LearningPlanGoalProgressQueries,
-  LearningPlanGoalQueries,
-  MethodInterface,
-  MethodQueries,
-  MethodYearsInterface,
-  RouterStateUrl,
-  UserLessonInterface,
-  UserLessonQueries
-} from '@campus/dal';
-import {
-  SearchModeInterface,
-  SearchResultInterface,
-  SearchStateInterface
-} from '@campus/search';
-import {
-  ContentOpenerInterface,
-  EnvironmentSearchModesInterface,
-  ENVIRONMENT_SEARCHMODES_TOKEN,
-  OpenStaticContentServiceInterface,
-  OPEN_STATIC_CONTENT_SERVICE_TOKEN,
-  ScormExerciseServiceInterface,
-  SCORM_EXERCISE_SERVICE_TOKEN
-} from '@campus/shared';
-import {
-  MultiCheckBoxTableItemInterface,
-  MultiCheckBoxTableRowHeaderColumnInterface,
-  MultiCheckBoxTableSubLevelInterface
-} from '@campus/ui';
+import { AuthServiceInterface, AUTH_SERVICE_TOKEN, ClassGroupInterface, ClassGroupQueries, DalState, DiaboloPhaseInterface, DiaboloPhaseQueries, EduContent, EduContentBookInterface, EduContentBookQueries, EduContentInterface, EduContentProductTypeInterface, EduContentProductTypeQueries, EduContentQueries, EduContentServiceInterface, EduContentTOCInterface, EduContentTocQueries, EDU_CONTENT_SERVICE_TOKEN, getRouterState, LearningPlanGoalInterface, LearningPlanGoalProgressInterface, LearningPlanGoalProgressQueries, LearningPlanGoalQueries, MethodInterface, MethodQueries, MethodYearsInterface, RouterStateUrl, UserLessonInterface, UserLessonQueries } from '@campus/dal';
+import { SearchModeInterface, SearchResultInterface, SearchStateInterface } from '@campus/search';
+import { ContentOpenerInterface, EnvironmentSearchModesInterface, ENVIRONMENT_SEARCHMODES_TOKEN, OpenStaticContentServiceInterface, OPEN_STATIC_CONTENT_SERVICE_TOKEN, ScormExerciseServiceInterface, SCORM_EXERCISE_SERVICE_TOKEN } from '@campus/shared';
+import { MultiCheckBoxTableItemInterface, MultiCheckBoxTableRowHeaderColumnInterface, MultiCheckBoxTableSubLevelInterface } from '@campus/ui';
 import { Dictionary } from '@ngrx/entity';
 import { RouterReducerState } from '@ngrx/router-store';
 import { select, Store } from '@ngrx/store';
 import { BehaviorSubject, combineLatest, merge, Observable } from 'rxjs';
-import {
-  distinctUntilChanged,
-  filter,
-  map,
-  mapTo,
-  switchMap,
-  switchMapTo,
-  withLatestFrom
-} from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, mapTo, switchMap, switchMapTo, withLatestFrom } from 'rxjs/operators';
 
 export interface CurrentMethodParams {
   book?: number;
@@ -500,7 +446,7 @@ export class MethodViewModel implements ContentOpenerInterface {
       map(eduContents => {
         return eduContents.reduce(
           (acc, eduContent) => {
-            const productType =
+            const productType: number =
               eduContent.publishedEduContentMetadata.eduContentProductTypeId;
             if (!acc[productType]) {
               acc[productType] = [];
@@ -566,7 +512,7 @@ export class MethodViewModel implements ContentOpenerInterface {
             EduContentTOCInterface,
             LearningPlanGoalInterface
           > => {
-            const learningPlanGoals = lesson.learningPlanGoalIds.map(
+            const learningPlanGoals: LearningPlanGoalInterface[] = lesson.learningPlanGoalIds.map(
               lpgId => learningPlanGoalsMap[lpgId]
             );
             return {
@@ -591,7 +537,7 @@ export class MethodViewModel implements ContentOpenerInterface {
   ): MultiCheckBoxTableItemInterface<LearningPlanGoalInterface>[] {
     return learningPlanGoals
       .map(learningPlanGoal => {
-        const progress = {};
+        const progress: Dictionary<boolean> = {};
         classGroups.forEach(classGroup => {
           progress[classGroup.id] = (
             progressByGoal[learningPlanGoal.id] || []
