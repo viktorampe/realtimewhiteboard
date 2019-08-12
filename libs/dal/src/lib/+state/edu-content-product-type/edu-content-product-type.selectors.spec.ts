@@ -202,9 +202,9 @@ describe('EduContentProductType Selectors', () => {
         createEduContentProductType(1, 3, 'a')
       ]);
     });
-    it('should return array ordered by name if prop orderby type is alphabetically', () => {
+    it('should return array ordered by name if prop orderby type is name', () => {
       const results = EduContentProductTypeQueries.getAllOrderedBy(storeState, {
-        orderBy: 'alphabetically'
+        orderBy: 'name'
       });
       expect(results).toEqual([
         createEduContentProductType(1, 3, 'a'),

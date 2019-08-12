@@ -47,14 +47,14 @@ export const getAllOrderedBy = createSelector(
   getAll,
   (
     eduContentProductTypes: EduContentProductTypeInterface[],
-    props: { orderBy: 'alphabetically' | 'sequence' }
+    props: { orderBy: 'name' | 'sequence' }
   ) => {
     switch (props.orderBy) {
       case 'sequence':
         return eduContentProductTypes.sort((a, b) =>
           a.sequence > b.sequence ? 1 : -1
         );
-      case 'alphabetically':
+      case 'name':
       default:
         return eduContentProductTypes.sort((a, b) =>
           a.name.localeCompare(b.name)
