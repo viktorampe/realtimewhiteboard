@@ -1,6 +1,9 @@
 @mixin search-button-toggle-filter--deep() {
   // color pallette
   $button-toggle--disabled-color: #e0e0e0 !default; //mat-checked color
+  $checkbox-list-title-border-color: $ui-tertiary-bg-color-2 !default;
+
+  $checkbox-list-filter-font-size: $ui-primary-font-size * 1.2 !default;
 
   .button-toggle-filter-component {
     &__button {
@@ -13,6 +16,13 @@
         // real disabled
         cursor: not-allowed;
       }
+    }
+  }
+
+  .button__toggle__filter__filter {
+    &__title {
+      border-bottom: solid 1px $checkbox-list-title-border-color;
+      font-size: $checkbox-list-filter-font-size;
     }
   }
 }
