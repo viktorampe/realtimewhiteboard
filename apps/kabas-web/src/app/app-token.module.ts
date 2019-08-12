@@ -24,6 +24,8 @@ import {
   PERSON_SERVICE_TOKEN,
   TocService,
   TOC_SERVICE_TOKEN,
+  UndoService,
+  UNDO_SERVICE_TOKEN,
   UserLessonService,
   USER_LESSON_SERVICE_TOKEN,
   YearService,
@@ -68,7 +70,8 @@ import {
     {
       provide: LEARNING_PLAN_GOAL_PROGRESS_SERVICE_TOKEN,
       useClass: LearningPlanGoalProgressService
-    }
+    },
+    { provide: UNDO_SERVICE_TOKEN, useClass: UndoService }
   ]
 })
 export class AppTokenModule {}

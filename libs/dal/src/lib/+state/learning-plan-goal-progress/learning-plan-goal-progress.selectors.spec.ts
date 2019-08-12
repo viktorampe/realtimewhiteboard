@@ -1,5 +1,6 @@
 import { Dictionary } from '@ngrx/entity';
 import { LearningPlanGoalProgressQueries } from '.';
+import { LearningPlanGoalProgressFixture } from '../../+fixtures';
 import { LearningPlanGoalProgressInterface } from '../../+models';
 import { State } from './learning-plan-goal-progress.reducer';
 
@@ -8,7 +9,8 @@ describe('LearningPlanGoalProgress Selectors', () => {
     id: number
   ): LearningPlanGoalProgressInterface | any {
     return {
-      id: id
+      id: id,
+      learningPlanGoalId: (id % 2) + 1
     };
   }
 
@@ -110,6 +112,195 @@ describe('LearningPlanGoalProgress Selectors', () => {
         id: 9
       });
       expect(results).toBe(undefined);
+    });
+    it('getGroupedByLearningPlanGoalId() should return entities grouped by learingPlanGoalId', () => {
+      const results = LearningPlanGoalProgressQueries.getGroupedByLearningPlanGoalId(
+        storeState
+      );
+      expect(results).toEqual({
+        1: [
+          createLearningPlanGoalProgress(2),
+          createLearningPlanGoalProgress(4)
+        ],
+        2: [
+          createLearningPlanGoalProgress(1),
+          createLearningPlanGoalProgress(3)
+        ]
+      });
+    });
+  });
+
+  describe('find', () => {
+    const learningPlanGoalProgressArray = [
+      new LearningPlanGoalProgressFixture({
+        id: 1,
+        classGroupId: 1,
+        personId: 1,
+        learningPlanGoalId: 1,
+        eduContentTOCId: 1,
+        userLessonId: undefined
+      }),
+      new LearningPlanGoalProgressFixture({
+        id: 2,
+        classGroupId: 2,
+        personId: 1,
+        learningPlanGoalId: 1,
+        eduContentTOCId: 1,
+        userLessonId: undefined
+      }),
+      new LearningPlanGoalProgressFixture({
+        id: 3,
+        classGroupId: 1,
+        personId: 2,
+        learningPlanGoalId: 1,
+        eduContentTOCId: 1,
+        userLessonId: undefined
+      }),
+      new LearningPlanGoalProgressFixture({
+        id: 4,
+        classGroupId: 1,
+        personId: 1,
+        learningPlanGoalId: 2,
+        eduContentTOCId: 1,
+        userLessonId: undefined
+      }),
+      new LearningPlanGoalProgressFixture({
+        id: 5,
+        classGroupId: 1,
+        personId: 1,
+        learningPlanGoalId: 1,
+        eduContentTOCId: 2,
+        userLessonId: undefined
+      }),
+      new LearningPlanGoalProgressFixture({
+        id: 6,
+        classGroupId: 1,
+        personId: 1,
+        learningPlanGoalId: 1,
+        eduContentTOCId: undefined,
+        userLessonId: 1
+      }),
+      new LearningPlanGoalProgressFixture({
+        id: 7,
+        classGroupId: 2,
+        personId: 1,
+        learningPlanGoalId: 1,
+        eduContentTOCId: undefined,
+        userLessonId: 1
+      }),
+      new LearningPlanGoalProgressFixture({
+        id: 8,
+        classGroupId: 1,
+        personId: 2,
+        learningPlanGoalId: 1,
+        eduContentTOCId: undefined,
+        userLessonId: 1
+      }),
+      new LearningPlanGoalProgressFixture({
+        id: 9,
+        classGroupId: 1,
+        personId: 1,
+        learningPlanGoalId: 2,
+        eduContentTOCId: undefined,
+        userLessonId: 1
+      }),
+      new LearningPlanGoalProgressFixture({
+        id: 10,
+        classGroupId: 1,
+        personId: 1,
+        learningPlanGoalId: 1,
+        eduContentTOCId: undefined,
+        userLessonId: 2
+      })
+    ];
+
+    beforeEach(() => {
+      learningPlanGoalProgressState = createState(
+        learningPlanGoalProgressArray,
+        true,
+        'no error'
+      );
+      storeState = {
+        learningPlanGoalProgresses: learningPlanGoalProgressState
+      };
+    });
+
+    describe('findMany', () => {
+      it('should return all LearningPlanGoalProgress', () => {
+        const results = LearningPlanGoalProgressQueries.findMany(
+          storeState,
+          {}
+        );
+        expect(results.length).toBe(10);
+        expect(results).toEqual(learningPlanGoalProgressArray);
+      });
+
+      it('should return the correct LearningPlanGoalProgress for ClassGroupId', () => {
+        const results = LearningPlanGoalProgressQueries.findMany(storeState, {
+          classGroupId: 2
+        });
+        expect(results.length).toBe(2);
+        expect(results).toEqual([
+          learningPlanGoalProgressArray[1],
+          learningPlanGoalProgressArray[6]
+        ]);
+      });
+
+      it('should return the correct LearningPlanGoalProgress for eduContentTOCId', () => {
+        const results = LearningPlanGoalProgressQueries.findMany(storeState, {
+          classGroupId: 1,
+          learningPlanGoalId: 1,
+          eduContentTOCId: 1
+        });
+        expect(results.length).toBe(2);
+        expect(results).toEqual([
+          learningPlanGoalProgressArray[0],
+          learningPlanGoalProgressArray[2]
+        ]);
+      });
+
+      it('should return the correct LearningPlanGoalProgress for userLessonId', () => {
+        const results = LearningPlanGoalProgressQueries.findMany(storeState, {
+          classGroupId: 1,
+          learningPlanGoalId: 1,
+          userLessonId: 1
+        });
+        expect(results.length).toBe(2);
+        expect(results).toEqual([
+          learningPlanGoalProgressArray[5],
+          learningPlanGoalProgressArray[7]
+        ]);
+      });
+    });
+
+    describe('findOne', () => {
+      it('should return the correct LearningPlanGoalProgress for ClassGroupId', () => {
+        const result = LearningPlanGoalProgressQueries.findOne(storeState, {
+          classGroupId: 2
+        });
+
+        expect(result).toEqual(learningPlanGoalProgressArray[1]);
+      });
+
+      it('should return the correct LearningPlanGoalProgress for eduContentTOCId', () => {
+        const result = LearningPlanGoalProgressQueries.findOne(storeState, {
+          classGroupId: 1,
+          learningPlanGoalId: 1,
+          eduContentTOCId: 1
+        });
+
+        expect(result).toEqual(learningPlanGoalProgressArray[0]);
+      });
+
+      it('should return the correct LearningPlanGoalProgress for userLessonId', () => {
+        const result = LearningPlanGoalProgressQueries.findOne(storeState, {
+          classGroupId: 1,
+          learningPlanGoalId: 1,
+          userLessonId: 1
+        });
+
+        expect(result).toEqual(learningPlanGoalProgressArray[5]);
+      });
     });
   });
 });
