@@ -52,7 +52,7 @@ import {
 import { Dictionary } from '@ngrx/entity';
 import { RouterReducerState } from '@ngrx/router-store';
 import { select, Store } from '@ngrx/store';
-import { BehaviorSubject, combineLatest, merge, Observable, of } from 'rxjs';
+import { BehaviorSubject, combineLatest, merge, Observable } from 'rxjs';
 import {
   distinctUntilChanged,
   filter,
@@ -539,7 +539,9 @@ export class MethodViewModel implements ContentOpenerInterface {
         return learningPlanGoals.map(learningPlanGoal => {
           const progress = {};
           classGroups.forEach(classGroup => {
-            progress[classGroup.id] = !!progressByGoal[learningPlanGoal.id];
+            progress[classGroup.id] = (
+              progressByGoal[learningPlanGoal.id] || []
+            ).some(lpgp => lpgp.classGroupId === classGroup.id);
           });
 
           return {
@@ -557,6 +559,40 @@ export class MethodViewModel implements ContentOpenerInterface {
       LearningPlanGoalInterface
     >[]
   > {
-    return of([]);
+    return combineLatest([
+      this.store.select(LearningPlanGoalQueries.getAllEntities),
+      this.learningPlanGoalProgressBylearningPlanGoalId$,
+      this.classGroups$,
+      this.currentLessons$
+    ]).pipe(
+      map(([learningPlanGoals, progressByGoal, classGroups, lessons]) => {
+        return lessons.map(
+          (
+            lesson
+          ): MultiCheckBoxTableSubLevelInterface<
+            EduContentTOCInterface,
+            LearningPlanGoalInterface
+          > => {
+            return {
+              item: lesson,
+              label: 'title',
+              children: lesson.learningPlanGoalIds.map(learningPlanGoalId => {
+                const progress = {};
+                classGroups.forEach(classGroup => {
+                  progress[classGroup.id] = (
+                    progressByGoal[learningPlanGoalId] || []
+                  ).some(lpgp => lpgp.classGroupId === classGroup.id);
+                });
+
+                return {
+                  header: learningPlanGoals[learningPlanGoalId],
+                  content: progress
+                };
+              })
+            };
+          }
+        );
+      })
+    );
   }
 }
