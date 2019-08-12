@@ -16,17 +16,11 @@ export interface LearningPlanGoalProgressServiceInterface {
     learningPlanGoalProgressId: number
   ): Observable<boolean>;
 
-  createLearningPlanGoalProgressForEduContentTOC(
+  createLearningPlanGoalProgress(
     userId: number,
     classGroupId: number,
-    eduContentTOCId: number,
-    learningPlanGoalIds: number[]
-  ): Observable<LearningPlanGoalProgressInterface[]>;
-
-  createLearningPlanGoalProgressForUserLesson(
-    userId: number,
-    classGroupId: number,
-    userLessonId: number,
-    learningPlanGoalIds: number[]
+    learningPlanGoalIds: number[],
+    userLessonId?: number,
+    eduContentTOCId?: number
   ): Observable<LearningPlanGoalProgressInterface[]>;
 }
