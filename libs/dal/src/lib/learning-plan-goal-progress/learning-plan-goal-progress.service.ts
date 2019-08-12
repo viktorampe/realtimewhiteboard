@@ -35,33 +35,22 @@ export class LearningPlanGoalProgressService
       .pipe(mapTo(true));
   }
 
-  createLearningPlanGoalProgressForEduContentTOC(
+  createLearningPlanGoalProgress(
     userId: number,
     classGroupId: number,
-    eduContentTOCId: number,
-    learningPlanGoalIds: number[]
+    learningPlanGoalIds: number[],
+    userLessonId?: number,
+    eduContentTOCId?: number
   ): Observable<LearningPlanGoalProgressInterface[]> {
-    return this.personApi.createLearningPlanGoalProgress(
-      userId,
-      classGroupId,
-      learningPlanGoalIds,
-      null,
-      eduContentTOCId
-    );
-  }
+    if (userLessonId && eduContentTOCId)
+      throw new Error('provide either a userLessonId or a eduContentTOCid.');
 
-  createLearningPlanGoalProgressForUserLesson(
-    userId: number,
-    classGroupId: number,
-    userLessonId: number,
-    learningPlanGoalIds: number[]
-  ): Observable<LearningPlanGoalProgressInterface[]> {
     return this.personApi.createLearningPlanGoalProgress(
       userId,
       classGroupId,
       learningPlanGoalIds,
-      userLessonId,
-      null
+      userLessonId || null,
+      eduContentTOCId || null
     );
   }
 }

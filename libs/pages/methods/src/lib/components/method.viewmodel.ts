@@ -92,6 +92,7 @@ export class MethodViewModel implements ContentOpenerInterface {
   public currentMethodParams$: Observable<CurrentMethodParams>;
   public classGroups$: Observable<ClassGroupInterface[]>;
   public filteredClassGroups$: Observable<ClassGroupInterface[]>;
+  public userLessons$: Observable<UserLessonInterface[]>;
   public learningPlanGoalsWithSelectionForClassGroups$: Observable<
     MultiCheckBoxTableItemInterface<LearningPlanGoalProgressInterface>[]
   >;
@@ -113,7 +114,6 @@ export class MethodViewModel implements ContentOpenerInterface {
     Dictionary<LearningPlanGoalProgressInterface[]>
   >;
   private currentLessons$: Observable<EduContentTOCInterface[]>;
-  private userLessons$: Observable<UserLessonInterface[]>;
 
   private _searchState$: BehaviorSubject<SearchStateInterface>;
 

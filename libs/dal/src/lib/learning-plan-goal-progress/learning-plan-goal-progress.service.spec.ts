@@ -78,7 +78,7 @@ describe('LearningPlanGoalProgressService', () => {
     });
   });
 
-  describe('createLearningPlanGoalProgressForEduContentTOC', () => {
+  describe('createLearningPlanGoalProgress for EduContentTOC', () => {
     const mockLearningPlanGoalProgressArray = [
       new LearningPlanGoalProgressFixture({
         id: 42
@@ -90,6 +90,7 @@ describe('LearningPlanGoalProgressService', () => {
 
     const mockClassGroupId = 123;
     const mockEduContentTOCId = 456;
+    const mockUserLessonId = undefined;
     const mockLearningPlanGoalIds = [789, 147];
 
     it('should call the api and return the results', () => {
@@ -97,11 +98,12 @@ describe('LearningPlanGoalProgressService', () => {
         .fn()
         .mockReturnValue(of(mockLearningPlanGoalProgressArray));
 
-      const response = service.createLearningPlanGoalProgressForEduContentTOC(
+      const response = service.createLearningPlanGoalProgress(
         userId,
         mockClassGroupId,
-        mockEduContentTOCId,
-        mockLearningPlanGoalIds
+        mockLearningPlanGoalIds,
+        mockUserLessonId,
+        mockEduContentTOCId
       );
 
       expect(personApi.createLearningPlanGoalProgress).toHaveBeenCalledWith(
@@ -118,7 +120,7 @@ describe('LearningPlanGoalProgressService', () => {
     });
   });
 
-  describe('createLearningPlanGoalProgressForUserLesson', () => {
+  describe('createLearningPlanGoalProgress for UserLesson', () => {
     const mockLearningPlanGoalProgressArray = [
       new LearningPlanGoalProgressFixture({
         id: 42
@@ -129,6 +131,7 @@ describe('LearningPlanGoalProgressService', () => {
     ];
 
     const mockClassGroupId = 123;
+    const mockEduContentTOCId = undefined;
     const mockUserLessonId = 456;
     const mockLearningPlanGoalIds = [789, 147];
 
@@ -137,11 +140,12 @@ describe('LearningPlanGoalProgressService', () => {
         .fn()
         .mockReturnValue(of(mockLearningPlanGoalProgressArray));
 
-      const response = service.createLearningPlanGoalProgressForUserLesson(
+      const response = service.createLearningPlanGoalProgress(
         userId,
         mockClassGroupId,
+        mockLearningPlanGoalIds,
         mockUserLessonId,
-        mockLearningPlanGoalIds
+        mockEduContentTOCId
       );
 
       expect(personApi.createLearningPlanGoalProgress).toHaveBeenCalledWith(
