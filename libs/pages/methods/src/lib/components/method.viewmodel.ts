@@ -86,6 +86,7 @@ export class MethodViewModel implements ContentOpenerInterface {
   public currentTab$: Observable<number>;
   public currentMethodParams$: Observable<CurrentMethodParams>;
   public classGroups$: Observable<ClassGroupInterface[]>;
+  public classGroupsForMethod$: Observable<ClassGroupInterface[]>;
   public filteredClassGroups$: Observable<ClassGroupInterface[]>;
   public userLessons$: Observable<UserLessonInterface[]>;
   public learningPlanGoalsWithSelectionForClassGroups$: Observable<
@@ -257,6 +258,19 @@ export class MethodViewModel implements ContentOpenerInterface {
     this.eduContentProductTypes$ = this.getEduContentProductTypesStream();
     this.generalFilesByType$ = this.getGeneralFilesByType();
     this.currentTab$ = this.getCurrentTab();
+    this.classGroupsForMethod$ = this.getClassGroupsForMethod();
+  }
+
+  private getClassGroupsForMethod(): Observable<ClassGroupInterface[]> {
+    return this.currentMethod$.pipe(
+      filter(currentMethod => !!currentMethod),
+      map(currentMethod => currentMethod.id),
+      switchMap(currentMethodId =>
+        this.store.pipe(
+          select(ClassGroupQueries.getByMethodId, { id: currentMethodId })
+        )
+      )
+    );
   }
 
   private getCurrentTab(): Observable<number> {
