@@ -441,7 +441,7 @@ export class MethodViewModel implements ContentOpenerInterface {
       switchMap(params => {
         if (params.lesson) {
           return this.store.pipe(
-            select(EduContentTocQueries.getById, { id: +params.lesson }),
+            select(EduContentTocQueries.getById, { id: params.lesson }),
             map(toc => [toc])
           );
         }
