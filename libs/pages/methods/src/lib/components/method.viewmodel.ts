@@ -44,7 +44,11 @@ import {
   ScormExerciseServiceInterface,
   SCORM_EXERCISE_SERVICE_TOKEN
 } from '@campus/shared';
-import { MultiCheckBoxTableRowHeaderColumnInterface } from '@campus/ui';
+import {
+  MultiCheckBoxTableItemInterface,
+  MultiCheckBoxTableRowHeaderColumnInterface,
+  MultiCheckBoxTableSubLevelInterface
+} from '@campus/ui';
 import { Dictionary } from '@ngrx/entity';
 import { RouterReducerState } from '@ngrx/router-store';
 import { select, Store } from '@ngrx/store';
@@ -88,6 +92,16 @@ export class MethodViewModel implements ContentOpenerInterface {
   public currentMethodParams$: Observable<CurrentMethodParams>;
   public classGroups$: Observable<ClassGroupInterface[]>;
   public filteredClassGroups$: Observable<ClassGroupInterface[]>;
+  public userLessons$: Observable<UserLessonInterface[]>;
+  public learningPlanGoalsWithSelectionForClassGroups$: Observable<
+    MultiCheckBoxTableItemInterface<LearningPlanGoalInterface>[]
+  >;
+  public learningPlanGoalsPerLessonWithSelectionForClassGroups$: Observable<
+    MultiCheckBoxTableSubLevelInterface<
+      EduContentTOCInterface,
+      LearningPlanGoalInterface
+    >[]
+  >;
 
   // Source streams
   private routerState$: Observable<RouterReducerState<RouterStateUrl>>;
@@ -100,7 +114,6 @@ export class MethodViewModel implements ContentOpenerInterface {
     Dictionary<LearningPlanGoalProgressInterface[]>
   >;
   private currentLessons$: Observable<EduContentTOCInterface[]>;
-  private userLessons$: Observable<UserLessonInterface[]>;
 
   private _searchState$: BehaviorSubject<SearchStateInterface>;
 
