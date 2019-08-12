@@ -94,12 +94,12 @@ export class MethodViewModel implements ContentOpenerInterface {
   public filteredClassGroups$: Observable<ClassGroupInterface[]>;
   public userLessons$: Observable<UserLessonInterface[]>;
   public learningPlanGoalsWithSelectionForClassGroups$: Observable<
-    MultiCheckBoxTableItemInterface<LearningPlanGoalProgressInterface>[]
+    MultiCheckBoxTableItemInterface<LearningPlanGoalInterface>[]
   >;
   public learningPlanGoalsPerLessonWithSelectionForClassGroups$: Observable<
     MultiCheckBoxTableSubLevelInterface<
       EduContentTOCInterface,
-      LearningPlanGoalProgressInterface
+      LearningPlanGoalInterface
     >[]
   >;
 
@@ -528,7 +528,7 @@ export class MethodViewModel implements ContentOpenerInterface {
   }
 
   private getLearningPlanGoalsWithSelectionStream(): Observable<
-    MultiCheckBoxTableItemInterface<LearningPlanGoalProgressInterface>[]
+    MultiCheckBoxTableItemInterface<LearningPlanGoalInterface>[]
   > {
     return combineLatest([
       this.learningPlanGoalsForCurrentBook$,
@@ -554,7 +554,7 @@ export class MethodViewModel implements ContentOpenerInterface {
   private getLearningPlanGoalsPerLessonWithSelectionStream(): Observable<
     MultiCheckBoxTableSubLevelInterface<
       EduContentTOCInterface,
-      LearningPlanGoalProgressInterface
+      LearningPlanGoalInterface
     >[]
   > {
     return of([]);
