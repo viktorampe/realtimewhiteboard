@@ -27,7 +27,8 @@ import {
   MethodQueries,
   MethodYearsInterface,
   RouterStateUrl,
-  UserLessonInterface
+  UserLessonInterface,
+  UserLessonQueries
 } from '@campus/dal';
 import {
   SearchModeInterface,
@@ -75,6 +76,10 @@ export class MethodViewModel implements ContentOpenerInterface {
   public searchResults$: Observable<SearchResultInterface>;
   public searchState$: Observable<SearchStateInterface>;
 
+  public learningPlanGoalTableHeaders: MultiCheckBoxTableRowHeaderColumnInterface<
+    LearningPlanGoalInterface
+  >[];
+
   // Presentation streams
   public currentToc$: Observable<EduContentTOCInterface[]>;
   public currentMethod$: Observable<MethodInterface>;
@@ -98,13 +103,6 @@ export class MethodViewModel implements ContentOpenerInterface {
     >[]
   >;
 
-  public learningPlanGoalTableHeaders: MultiCheckBoxTableRowHeaderColumnInterface<
-    LearningPlanGoalInterface
-  >[] = [
-    { caption: 'prefix', key: 'prefix' },
-    { caption: 'beschrijving', key: 'goal' }
-  ];
-
   // Source streams
   private routerState$: Observable<RouterReducerState<RouterStateUrl>>;
   private generalFiles$: Observable<EduContent[]>;
@@ -115,6 +113,7 @@ export class MethodViewModel implements ContentOpenerInterface {
   private learningPlanGoalProgressBylearningPlanGoalId$: Observable<
     Dictionary<LearningPlanGoalProgressInterface[]>
   >;
+  private currentLessons$: Observable<EduContentTOCInterface[]>;
 
   private _searchState$: BehaviorSubject<SearchStateInterface>;
 
@@ -243,6 +242,11 @@ export class MethodViewModel implements ContentOpenerInterface {
   }
 
   private initialize() {
+    this.learningPlanGoalTableHeaders = [
+      { caption: 'Prefix', key: 'prefix' },
+      { caption: 'Doel', key: 'goal' }
+    ];
+
     this.setSourceStreams();
     this.setPresentationStreams();
     this.setupSearchResults();
@@ -257,6 +261,9 @@ export class MethodViewModel implements ContentOpenerInterface {
     this.eduContentProductTypes$ = this.getEduContentProductTypesStream();
     this.generalFilesByType$ = this.getGeneralFilesByType();
     this.currentTab$ = this.getCurrentTab();
+    this.filteredClassGroups$ = this.getFilteredClassGroups();
+    this.currentLessons$ = this.getTocLessonsStream();
+    this.userLessons$ = this.store.pipe(select(UserLessonQueries.getAll));
   }
 
   private getCurrentTab(): Observable<number> {
@@ -426,6 +433,27 @@ export class MethodViewModel implements ContentOpenerInterface {
       tocStreamWhenBook$,
       tocStreamWhenNoBook$
     );
+  }
+
+  private getTocLessonsStream(): Observable<EduContentTOCInterface[]> {
+    return this.currentMethodParams$.pipe(
+      filter(params => !!params.chapter),
+      switchMap(params => {
+        if (params.lesson) {
+          return this.store.pipe(
+            select(EduContentTocQueries.getById, { id: params.lesson }),
+            map(toc => [toc])
+          );
+        }
+        return this.currentToc$;
+      })
+    );
+  }
+
+  private getFilteredClassGroups(): Observable<ClassGroupInterface[]> {
+    // TODO: filter classgroups by year and method (through license relations) from the current book
+    // TODO: filter classgroups through select dropdown
+    return this.store.pipe(select(ClassGroupQueries.getAll));
   }
 
   private getGeneralFilesStream(): Observable<EduContent[]> {
