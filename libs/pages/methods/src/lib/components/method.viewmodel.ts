@@ -270,7 +270,7 @@ export class MethodViewModel implements ContentOpenerInterface {
     this.currentLessons$ = this.getTocLessonsStream();
     this.userLessons$ = this.store.pipe(select(UserLessonQueries.getAll));
     this.breadCrumbTitles$ = this.getBreadCrumbTitlesStream();
-    this.breadCrumbTitles$.subscribe(console.log);
+
     this.learningPlanGoalsWithSelectionForClassGroups$ = this.getLearningPlanGoalsWithSelectionStream();
     this.learningPlanGoalsPerLessonWithSelectionForClassGroups$ = this.getLearningPlanGoalsPerLessonWithSelectionStream();
   }
