@@ -1,13 +1,67 @@
 import { Inject, Injectable } from '@angular/core';
-import { AuthServiceInterface, AUTH_SERVICE_TOKEN, ClassGroupInterface, ClassGroupQueries, DalState, DiaboloPhaseInterface, DiaboloPhaseQueries, EduContent, EduContentBookInterface, EduContentBookQueries, EduContentInterface, EduContentProductTypeInterface, EduContentProductTypeQueries, EduContentQueries, EduContentServiceInterface, EduContentTOCInterface, EduContentTocQueries, EDU_CONTENT_SERVICE_TOKEN, getRouterState, LearningPlanGoalInterface, LearningPlanGoalProgressInterface, LearningPlanGoalProgressQueries, LearningPlanGoalQueries, MethodInterface, MethodQueries, MethodYearsInterface, RouterStateUrl, UserLessonInterface, UserLessonQueries } from '@campus/dal';
-import { SearchModeInterface, SearchResultInterface, SearchStateInterface } from '@campus/search';
-import { ContentOpenerInterface, EnvironmentSearchModesInterface, ENVIRONMENT_SEARCHMODES_TOKEN, OpenStaticContentServiceInterface, OPEN_STATIC_CONTENT_SERVICE_TOKEN, ScormExerciseServiceInterface, SCORM_EXERCISE_SERVICE_TOKEN } from '@campus/shared';
-import { MultiCheckBoxTableItemInterface, MultiCheckBoxTableRowHeaderColumnInterface, MultiCheckBoxTableSubLevelInterface } from '@campus/ui';
+import {
+  AuthServiceInterface,
+  AUTH_SERVICE_TOKEN,
+  ClassGroupInterface,
+  ClassGroupQueries,
+  DalState,
+  DiaboloPhaseInterface,
+  DiaboloPhaseQueries,
+  EduContent,
+  EduContentBookInterface,
+  EduContentBookQueries,
+  EduContentInterface,
+  EduContentProductTypeInterface,
+  EduContentProductTypeQueries,
+  EduContentQueries,
+  EduContentServiceInterface,
+  EduContentTOCInterface,
+  EduContentTocQueries,
+  EDU_CONTENT_SERVICE_TOKEN,
+  getRouterState,
+  LearningPlanGoalInterface,
+  LearningPlanGoalProgressInterface,
+  LearningPlanGoalProgressQueries,
+  LearningPlanGoalQueries,
+  MethodInterface,
+  MethodQueries,
+  MethodYearsInterface,
+  RouterStateUrl,
+  UserLessonInterface,
+  UserLessonQueries
+} from '@campus/dal';
+import {
+  SearchModeInterface,
+  SearchResultInterface,
+  SearchStateInterface
+} from '@campus/search';
+import {
+  ContentOpenerInterface,
+  EnvironmentSearchModesInterface,
+  ENVIRONMENT_SEARCHMODES_TOKEN,
+  OpenStaticContentServiceInterface,
+  OPEN_STATIC_CONTENT_SERVICE_TOKEN,
+  ScormExerciseServiceInterface,
+  SCORM_EXERCISE_SERVICE_TOKEN
+} from '@campus/shared';
+import {
+  MultiCheckBoxTableItemInterface,
+  MultiCheckBoxTableRowHeaderColumnInterface,
+  MultiCheckBoxTableSubLevelInterface
+} from '@campus/ui';
 import { Dictionary } from '@ngrx/entity';
 import { RouterReducerState } from '@ngrx/router-store';
 import { select, Store } from '@ngrx/store';
 import { BehaviorSubject, combineLatest, merge, Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, mapTo, switchMap, switchMapTo, withLatestFrom } from 'rxjs/operators';
+import {
+  distinctUntilChanged,
+  filter,
+  map,
+  mapTo,
+  switchMap,
+  switchMapTo,
+  withLatestFrom
+} from 'rxjs/operators';
 
 export interface CurrentMethodParams {
   book?: number;
@@ -208,24 +262,11 @@ export class MethodViewModel implements ContentOpenerInterface {
     this.eduContentProductTypes$ = this.getEduContentProductTypesStream();
     this.generalFilesByType$ = this.getGeneralFilesByType();
     this.currentTab$ = this.getCurrentTab();
-    this.classGroupsForMethod$ = this.getClassGroupsForMethod();
     this.filteredClassGroups$ = this.getFilteredClassGroups();
     this.currentLessons$ = this.getTocLessonsStream();
     this.userLessons$ = this.store.pipe(select(UserLessonQueries.getAll));
     this.learningPlanGoalsWithSelectionForClassGroups$ = this.getLearningPlanGoalsWithSelectionStream();
     this.learningPlanGoalsPerLessonWithSelectionForClassGroups$ = this.getLearningPlanGoalsPerLessonWithSelectionStream();
-  }
-
-  private getClassGroupsForMethod(): Observable<ClassGroupInterface[]> {
-    return this.currentMethod$.pipe(
-      filter(currentMethod => !!currentMethod),
-      map(currentMethod => currentMethod.id),
-      switchMap(currentMethodId =>
-        this.store.pipe(
-          select(ClassGroupQueries.getByMethodId, { id: currentMethodId })
-        )
-      )
-    );
   }
 
   private getCurrentTab(): Observable<number> {
@@ -413,10 +454,15 @@ export class MethodViewModel implements ContentOpenerInterface {
   }
 
   private getFilteredClassGroups(): Observable<ClassGroupInterface[]> {
-    // TODO: filter classgroups by years of the current book
-    // TODO: filter classgroups by their methods through licenses?
-    // TODO: filter classgroups through select dropdown
-    return this.store.pipe(select(ClassGroupQueries.getAll));
+    return this.currentMethod$.pipe(
+      filter(currentMethod => !!currentMethod),
+      map(currentMethod => currentMethod.id),
+      switchMap(currentMethodId =>
+        this.store.pipe(
+          select(ClassGroupQueries.getByMethodId, { id: currentMethodId })
+        )
+      )
+    );
   }
 
   private getGeneralFilesStream(): Observable<EduContent[]> {
