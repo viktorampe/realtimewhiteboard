@@ -61,19 +61,7 @@ export class MethodComponent implements OnInit {
     this.breadcrumbTitles$ = of('this.viewModel.breadcrumbTitles$');
 
     this.learningPlanGoalTableHeaders = this.viewModel.learningPlanGoalTableHeaders;
-    this.classGroupColumns$ = this.viewModel.filteredClassGroups$.pipe(
-      map(classGroups =>
-        classGroups.map(
-          (
-            classGroup
-          ): MultiCheckBoxTableItemColumnInterface<ClassGroupInterface> => ({
-            item: classGroup,
-            key: 'id',
-            label: 'name'
-          })
-        )
-      )
-    );
+    this.classGroupColumns$ = this.getTableColumnsFromClassGroupsStream();
     this.learningPlanGoalsWithSelectionForClassGroups$ = this.viewModel.learningPlanGoalsWithSelectionForClassGroups$;
   }
 
@@ -113,5 +101,23 @@ export class MethodComponent implements OnInit {
     value: boolean;
   }) {
     // open popup
+  }
+
+  private getTableColumnsFromClassGroupsStream(): Observable<
+    MultiCheckBoxTableItemColumnInterface<ClassGroupInterface>[]
+  > {
+    return this.viewModel.filteredClassGroups$.pipe(
+      map(classGroups =>
+        classGroups.map(
+          (
+            classGroup
+          ): MultiCheckBoxTableItemColumnInterface<ClassGroupInterface> => ({
+            item: classGroup,
+            key: 'id',
+            label: 'name'
+          })
+        )
+      )
+    );
   }
 }
