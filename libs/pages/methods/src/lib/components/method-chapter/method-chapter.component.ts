@@ -77,6 +77,7 @@ export class MethodChapterComponent implements OnInit, AfterViewInit {
     this.currentMethodParams$ = this.methodViewModel.currentMethodParams$;
     //TODO: wait for breadCrumbTitles$ stream on viewmodel:
     //this.currentBookTitle$ = this.methodViewModel.methodWithYearByBookId$;
+    //TODO: Link event handlers from checkboxtable to here to viewmodel
     this.rowHeaderColumns = this.methodViewModel.learningPlanGoalTableHeaders;
     this.itemColumns$ = this.methodViewModel.filteredClassGroups$.pipe(
       map(classGroups =>
