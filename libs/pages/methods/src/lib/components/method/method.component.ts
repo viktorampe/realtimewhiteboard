@@ -10,6 +10,7 @@ import {
   MethodInterface
 } from '@campus/dal';
 import {
+  MultiCheckBoxTableChangeEventInterface,
   MultiCheckBoxTableItemColumnInterface,
   MultiCheckBoxTableItemInterface,
   MultiCheckBoxTableRowHeaderColumnInterface
@@ -94,13 +95,15 @@ export class MethodComponent implements OnInit {
     this.viewModel.openEduContentAsDownload(eduContent);
   }
 
-  public clickProgress(event: {
-    column: ClassGroupInterface;
-    item: LearningPlanGoalInterface;
-    subLevel: EduContentTOCInterface;
-    value: boolean;
-  }) {
+  public clickProgress(
+    event: MultiCheckBoxTableChangeEventInterface<
+      LearningPlanGoalInterface,
+      ClassGroupInterface,
+      EduContentTOCInterface
+    >
+  ) {
     // open popup
+    console.log(event);
   }
 
   private getTableColumnsFromClassGroupsStream(): Observable<
