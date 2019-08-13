@@ -48,7 +48,19 @@
             (searchState$)="onSearchStateChange($event)"
           ></campus-search>
         </mat-tab>
-        <mat-tab label="Leerplandoelen">Leerplandoelen</mat-tab>
+        <mat-tab label="Leerplandoelen">
+          <div>
+            Hieronder vind je een overzicht van de leerplandoelen die horen bij
+            {{ currentBookTitle$ | async }}.
+          </div>
+
+          <campus-multi-check-box-table
+            [rowHeaderColumns]="rowHeaderColumns"
+            [itemColumns]="itemColumns$ | async"
+            [subLevels]="subLevels$ | async"
+          >
+          </campus-multi-check-box-table>
+        </mat-tab>
       </mat-tab-group>
     </div>
   </campus-collapsible-sheet>

@@ -7,7 +7,12 @@ import {
   ViewChildren
 } from '@angular/core';
 import { Router } from '@angular/router';
-import { EduContent, EduContentTOCInterface } from '@campus/dal';
+import {
+  ClassGroupInterface,
+  EduContent,
+  EduContentTOCInterface,
+  LearningPlanGoalInterface
+} from '@campus/dal';
 import {
   SearchComponent,
   SearchModeInterface,
@@ -15,8 +20,13 @@ import {
   SearchResultInterface,
   SearchStateInterface
 } from '@campus/search';
+import {
+  MultiCheckBoxTableItemColumnInterface,
+  MultiCheckBoxTableRowHeaderColumnInterface,
+  MultiCheckBoxTableSubLevelInterface
+} from '@campus/ui';
 import { Observable } from 'rxjs';
-import { take, withLatestFrom } from 'rxjs/operators';
+import { map, take, withLatestFrom } from 'rxjs/operators';
 import { CurrentMethodParams, MethodViewModel } from '../method.viewmodel';
 
 @Component({
@@ -34,6 +44,19 @@ export class MethodChapterComponent implements OnInit, AfterViewInit {
   public lessonsForChapter$: Observable<EduContentTOCInterface[]>;
   public currentTab$: Observable<number>;
   public currentMethodParams$: Observable<CurrentMethodParams>;
+  public currentBookTitle$: Observable<string>;
+  public rowHeaderColumns: MultiCheckBoxTableRowHeaderColumnInterface<
+    LearningPlanGoalInterface
+  >[];
+  public itemColumns$: Observable<
+    MultiCheckBoxTableItemColumnInterface<ClassGroupInterface>[]
+  >;
+  public subLevels$: Observable<
+    MultiCheckBoxTableSubLevelInterface<
+      EduContentTOCInterface,
+      LearningPlanGoalInterface
+    >[]
+  >;
 
   @ViewChildren(SearchPortalDirective)
   private portalHosts: QueryList<SearchPortalDirective>;
@@ -52,6 +75,23 @@ export class MethodChapterComponent implements OnInit, AfterViewInit {
     this.lessonsForChapter$ = this.methodViewModel.currentToc$;
     this.currentTab$ = this.methodViewModel.currentTab$;
     this.currentMethodParams$ = this.methodViewModel.currentMethodParams$;
+    //TODO: wait for breadCrumbTitles$ stream on viewmodel:
+    //this.currentBookTitle$ = this.methodViewModel.methodWithYearByBookId$;
+    this.rowHeaderColumns = this.methodViewModel.learningPlanGoalTableHeaders;
+    this.itemColumns$ = this.methodViewModel.filteredClassGroups$.pipe(
+      map(classGroups =>
+        classGroups.map(
+          (
+            classGroup
+          ): MultiCheckBoxTableItemColumnInterface<ClassGroupInterface> => ({
+            item: classGroup,
+            key: 'id',
+            label: 'name'
+          })
+        )
+      )
+    );
+    this.subLevels$ = this.methodViewModel.learningPlanGoalsPerLessonWithSelectionForClassGroups$;
   }
 
   ngAfterViewInit() {
