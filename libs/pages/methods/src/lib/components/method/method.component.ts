@@ -1,15 +1,22 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import {
+  ClassGroupInterface,
   EduContent,
   EduContentBookInterface,
   EduContentProductTypeInterface,
   EduContentTOCInterface,
+  LearningPlanGoalInterface,
   MethodInterface
 } from '@campus/dal';
+import {
+  MultiCheckBoxTableItemColumnInterface,
+  MultiCheckBoxTableItemInterface,
+  MultiCheckBoxTableRowHeaderColumnInterface
+} from '@campus/ui';
 import { Dictionary } from '@ngrx/entity';
-import { Observable } from 'rxjs';
-import { take, withLatestFrom } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { map, take, withLatestFrom } from 'rxjs/operators';
 import { CurrentMethodParams, MethodViewModel } from '../method.viewmodel';
 
 @Component({
@@ -26,6 +33,17 @@ export class MethodComponent implements OnInit {
   public method$: Observable<MethodInterface>;
   public productTypes$: Observable<EduContentProductTypeInterface[]>;
   public currentTab$: Observable<number>;
+  public breadcrumbTitles$: Observable<string>;
+
+  public learningPlanGoalTableHeaders: MultiCheckBoxTableRowHeaderColumnInterface<
+    LearningPlanGoalInterface
+  >[];
+  public classGroupColumns$: Observable<
+    MultiCheckBoxTableItemColumnInterface<ClassGroupInterface>[]
+  >;
+  public learningPlanGoalsWithSelectionForClassGroups$: Observable<
+    MultiCheckBoxTableItemInterface<LearningPlanGoalInterface>[]
+  >;
 
   private currentMethodParams$: Observable<CurrentMethodParams>;
 
@@ -40,6 +58,23 @@ export class MethodComponent implements OnInit {
     this.productTypes$ = this.viewModel.eduContentProductTypes$;
     this.currentTab$ = this.viewModel.currentTab$;
     this.currentMethodParams$ = this.viewModel.currentMethodParams$;
+    this.breadcrumbTitles$ = of('this.viewModel.breadcrumbTitles$');
+
+    this.learningPlanGoalTableHeaders = this.viewModel.learningPlanGoalTableHeaders;
+    this.classGroupColumns$ = this.viewModel.filteredClassGroups$.pipe(
+      map(classGroups =>
+        classGroups.map(
+          (
+            classGroup
+          ): MultiCheckBoxTableItemColumnInterface<ClassGroupInterface> => ({
+            item: classGroup,
+            key: 'id',
+            label: 'name'
+          })
+        )
+      )
+    );
+    this.learningPlanGoalsWithSelectionForClassGroups$ = this.viewModel.learningPlanGoalsWithSelectionForClassGroups$;
   }
 
   public onSelectedTabIndexChanged(tab: number) {
@@ -69,5 +104,14 @@ export class MethodComponent implements OnInit {
 
   public clickOpenGeneralFile(eduContent: EduContent): void {
     this.viewModel.openEduContentAsDownload(eduContent);
+  }
+
+  public clickProgress(event: {
+    column: ClassGroupInterface;
+    item: LearningPlanGoalInterface;
+    subLevel: EduContentTOCInterface;
+    value: boolean;
+  }) {
+    // open popup
   }
 }

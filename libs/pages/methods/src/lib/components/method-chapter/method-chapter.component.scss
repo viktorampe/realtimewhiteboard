@@ -1,30 +1,6 @@
 .method-chapter {
-  height: 100%;
-  display: flex;
-  flex-flow: column nowrap;
-
-  campus-collapsible-sheet {
-    height: 0px;
-    flex: 1 0 auto;
-
-    div[aside] {
-      height: 100%;
-      overflow: auto;
-
-      padding: 20px;
-    }
-
-    div[main] {
-      display: flex;
-      flex-direction: column;
-      flex: 1 1 auto;
-
-      campus-search {
-        flex: 1 1 auto;
-      }
-
-      padding: 20px 40px;
-    }
+  campus-search {
+    flex: 1 1 auto;
   }
 
   span.active {
