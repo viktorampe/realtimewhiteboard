@@ -20,6 +20,7 @@ import {
   EDU_CONTENT_SERVICE_TOKEN,
   getRouterState,
   LearningPlanGoalInterface,
+  LearningPlanGoalProgressActions,
   LearningPlanGoalProgressInterface,
   LearningPlanGoalProgressQueries,
   LearningPlanGoalQueries,
@@ -45,6 +46,7 @@ import {
   SCORM_EXERCISE_SERVICE_TOKEN
 } from '@campus/shared';
 import {
+  MultiCheckBoxTableChangeEventInterface,
   MultiCheckBoxTableItemInterface,
   MultiCheckBoxTableRowHeaderColumnInterface,
   MultiCheckBoxTableSubLevelInterface
@@ -239,6 +241,42 @@ export class MethodViewModel implements ContentOpenerInterface {
 
   public openBoeke(eduContent: EduContent): void {
     this.openStaticContentService.open(eduContent);
+  }
+
+  public onLearningPlanGoalProgressChanged(
+    changeEvent: MultiCheckBoxTableChangeEventInterface<
+      LearningPlanGoalInterface,
+      ClassGroupInterface,
+      EduContentTOCInterface
+    >
+  ) {
+    this.store.dispatch(
+      new LearningPlanGoalProgressActions.ToggleLearningPlanGoalProgress({
+        classGroupId: changeEvent.column.id,
+        eduContentTOCId: changeEvent.subLevel.id,
+        learningPlanGoalId: changeEvent.item.id,
+        personId: this.authService.userId
+      })
+    );
+  }
+
+  public onBulkLearningPlanGoalProgressChanged(
+    changeEvents: MultiCheckBoxTableChangeEventInterface<
+      LearningPlanGoalInterface,
+      ClassGroupInterface,
+      EduContentTOCInterface
+    >[]
+  ) {
+    this.store.dispatch(
+      new LearningPlanGoalProgressActions.BulkAddLearningPlanGoalProgresses({
+        classGroupId: changeEvents[0].column.id,
+        eduContentTOCId: changeEvents[0].subLevel.id,
+        learningPlanGoalIds: changeEvents.map(
+          changeEvent => changeEvent.item.id
+        ),
+        personId: this.authService.userId
+      })
+    );
   }
 
   private initialize() {
