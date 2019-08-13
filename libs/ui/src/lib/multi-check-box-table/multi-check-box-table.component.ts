@@ -6,7 +6,7 @@ import {
   Output
 } from '@angular/core';
 import {
-  CheckBoxChangeInterface,
+  MultiCheckBoxTableChangeEventInterface,
   MultiCheckBoxTableItemColumnInterface,
   MultiCheckBoxTableItemInterface,
   MultiCheckBoxTableRowHeaderColumnInterface,
@@ -41,11 +41,19 @@ export class MultiCheckBoxTableComponent<
   >[];
 
   @Output() public checkBoxChanged = new EventEmitter<
-    CheckBoxChangeInterface<ItemType, ItemColumnType, SubLevelItemType>
+    MultiCheckBoxTableChangeEventInterface<
+      ItemType,
+      ItemColumnType,
+      SubLevelItemType
+    >
   >();
 
   @Output() public checkBoxesChanged = new EventEmitter<
-    CheckBoxChangeInterface<ItemType, ItemColumnType, SubLevelItemType>[]
+    MultiCheckBoxTableChangeEventInterface<
+      ItemType,
+      ItemColumnType,
+      SubLevelItemType
+    >[]
   >();
 
   @HostBinding('class.ui-multi-check-box-table')

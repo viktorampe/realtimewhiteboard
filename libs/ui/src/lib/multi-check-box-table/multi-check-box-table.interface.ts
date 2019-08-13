@@ -27,7 +27,7 @@ export interface MultiCheckBoxTableItemInterface<ItemType> {
   };
 }
 
-export interface CheckBoxChangeInterface<
+export interface MultiCheckBoxTableChangeEventInterface<
   ItemType,
   ItemColumnType,
   SubLevelItemType
