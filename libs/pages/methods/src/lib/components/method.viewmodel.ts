@@ -1,66 +1,13 @@
 import { Inject, Injectable } from '@angular/core';
-import {
-  AuthServiceInterface,
-  AUTH_SERVICE_TOKEN,
-  ClassGroupInterface,
-  ClassGroupQueries,
-  DalState,
-  DiaboloPhaseInterface,
-  DiaboloPhaseQueries,
-  EduContent,
-  EduContentBookInterface,
-  EduContentBookQueries,
-  EduContentInterface,
-  EduContentProductTypeInterface,
-  EduContentProductTypeQueries,
-  EduContentQueries,
-  EduContentServiceInterface,
-  EduContentTOCInterface,
-  EduContentTocQueries,
-  EDU_CONTENT_SERVICE_TOKEN,
-  getRouterState,
-  LearningPlanGoalInterface,
-  LearningPlanGoalProgressInterface,
-  LearningPlanGoalProgressQueries,
-  LearningPlanGoalQueries,
-  MethodInterface,
-  MethodQueries,
-  MethodYearsInterface,
-  RouterStateUrl,
-  UserLessonInterface
-} from '@campus/dal';
-import {
-  SearchModeInterface,
-  SearchResultInterface,
-  SearchStateInterface
-} from '@campus/search';
-import {
-  ContentOpenerInterface,
-  EnvironmentSearchModesInterface,
-  ENVIRONMENT_SEARCHMODES_TOKEN,
-  OpenStaticContentServiceInterface,
-  OPEN_STATIC_CONTENT_SERVICE_TOKEN,
-  ScormExerciseServiceInterface,
-  SCORM_EXERCISE_SERVICE_TOKEN
-} from '@campus/shared';
-import {
-  MultiCheckBoxTableItemInterface,
-  MultiCheckBoxTableRowHeaderColumnInterface,
-  MultiCheckBoxTableSubLevelInterface
-} from '@campus/ui';
+import { AuthServiceInterface, AUTH_SERVICE_TOKEN, ClassGroupInterface, ClassGroupQueries, DalState, DiaboloPhaseInterface, DiaboloPhaseQueries, EduContent, EduContentBookInterface, EduContentBookQueries, EduContentInterface, EduContentProductTypeInterface, EduContentProductTypeQueries, EduContentQueries, EduContentServiceInterface, EduContentTOCInterface, EduContentTocQueries, EDU_CONTENT_SERVICE_TOKEN, getRouterState, LearningPlanGoalInterface, LearningPlanGoalProgressInterface, LearningPlanGoalProgressQueries, LearningPlanGoalQueries, MethodInterface, MethodQueries, MethodYearsInterface, RouterStateUrl, UserLessonInterface, UserLessonQueries } from '@campus/dal';
+import { SearchModeInterface, SearchResultInterface, SearchStateInterface } from '@campus/search';
+import { ContentOpenerInterface, EnvironmentSearchModesInterface, ENVIRONMENT_SEARCHMODES_TOKEN, OpenStaticContentServiceInterface, OPEN_STATIC_CONTENT_SERVICE_TOKEN, ScormExerciseServiceInterface, SCORM_EXERCISE_SERVICE_TOKEN } from '@campus/shared';
+import { MultiCheckBoxTableItemInterface, MultiCheckBoxTableRowHeaderColumnInterface, MultiCheckBoxTableSubLevelInterface } from '@campus/ui';
 import { Dictionary } from '@ngrx/entity';
 import { RouterReducerState } from '@ngrx/router-store';
 import { select, Store } from '@ngrx/store';
-import { BehaviorSubject, merge, Observable } from 'rxjs';
-import {
-  distinctUntilChanged,
-  filter,
-  map,
-  mapTo,
-  switchMap,
-  switchMapTo,
-  withLatestFrom
-} from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, merge, Observable } from 'rxjs';
+import { distinctUntilChanged, filter, map, mapTo, switchMap, switchMapTo, withLatestFrom } from 'rxjs/operators';
 
 export interface CurrentMethodParams {
   book?: number;
@@ -74,6 +21,10 @@ export interface CurrentMethodParams {
 export class MethodViewModel implements ContentOpenerInterface {
   public searchResults$: Observable<SearchResultInterface>;
   public searchState$: Observable<SearchStateInterface>;
+
+  public learningPlanGoalTableHeaders: MultiCheckBoxTableRowHeaderColumnInterface<
+    LearningPlanGoalInterface
+  >[];
 
   // Presentation streams
   public currentToc$: Observable<EduContentTOCInterface[]>;
@@ -99,13 +50,6 @@ export class MethodViewModel implements ContentOpenerInterface {
     >[]
   >;
 
-  public learningPlanGoalTableHeaders: MultiCheckBoxTableRowHeaderColumnInterface<
-    LearningPlanGoalInterface
-  >[] = [
-    { caption: 'prefix', key: 'prefix' },
-    { caption: 'beschrijving', key: 'goal' }
-  ];
-
   // Source streams
   private routerState$: Observable<RouterReducerState<RouterStateUrl>>;
   private generalFiles$: Observable<EduContent[]>;
@@ -116,6 +60,7 @@ export class MethodViewModel implements ContentOpenerInterface {
   private learningPlanGoalProgressBylearningPlanGoalId$: Observable<
     Dictionary<LearningPlanGoalProgressInterface[]>
   >;
+  private currentLessons$: Observable<EduContentTOCInterface[]>;
 
   private _searchState$: BehaviorSubject<SearchStateInterface>;
 
@@ -244,6 +189,11 @@ export class MethodViewModel implements ContentOpenerInterface {
   }
 
   private initialize() {
+    this.learningPlanGoalTableHeaders = [
+      { caption: 'Prefix', key: 'prefix' },
+      { caption: 'Doel', key: 'goal' }
+    ];
+
     this.setSourceStreams();
     this.setPresentationStreams();
     this.setupSearchResults();
@@ -259,6 +209,11 @@ export class MethodViewModel implements ContentOpenerInterface {
     this.generalFilesByType$ = this.getGeneralFilesByType();
     this.currentTab$ = this.getCurrentTab();
     this.classGroupsForMethod$ = this.getClassGroupsForMethod();
+    this.filteredClassGroups$ = this.getFilteredClassGroups();
+    this.currentLessons$ = this.getTocLessonsStream();
+    this.userLessons$ = this.store.pipe(select(UserLessonQueries.getAll));
+    this.learningPlanGoalsWithSelectionForClassGroups$ = this.getLearningPlanGoalsWithSelectionStream();
+    this.learningPlanGoalsPerLessonWithSelectionForClassGroups$ = this.getLearningPlanGoalsPerLessonWithSelectionStream();
   }
 
   private getClassGroupsForMethod(): Observable<ClassGroupInterface[]> {
@@ -442,6 +397,28 @@ export class MethodViewModel implements ContentOpenerInterface {
     );
   }
 
+  private getTocLessonsStream(): Observable<EduContentTOCInterface[]> {
+    return this.currentMethodParams$.pipe(
+      filter(params => !!params.chapter),
+      switchMap(params => {
+        if (params.lesson) {
+          return this.store.pipe(
+            select(EduContentTocQueries.getById, { id: params.lesson }),
+            map(toc => [toc])
+          );
+        }
+        return this.currentToc$;
+      })
+    );
+  }
+
+  private getFilteredClassGroups(): Observable<ClassGroupInterface[]> {
+    // TODO: filter classgroups by years of the current book
+    // TODO: filter classgroups by their methods through licenses?
+    // TODO: filter classgroups through select dropdown
+    return this.store.pipe(select(ClassGroupQueries.getAll));
+  }
+
   private getGeneralFilesStream(): Observable<EduContent[]> {
     const generalFilesWhenBook$ = this.currentMethodParams$.pipe(
       filter(params => !!params.book),
@@ -483,7 +460,7 @@ export class MethodViewModel implements ContentOpenerInterface {
       map(eduContents => {
         return eduContents.reduce(
           (acc, eduContent) => {
-            const productType =
+            const productType: number =
               eduContent.publishedEduContentMetadata.eduContentProductTypeId;
             if (!acc[productType]) {
               acc[productType] = [];
@@ -509,5 +486,87 @@ export class MethodViewModel implements ContentOpenerInterface {
         );
       })
     );
+  }
+
+  private getLearningPlanGoalsWithSelectionStream(): Observable<
+    MultiCheckBoxTableItemInterface<LearningPlanGoalInterface>[]
+  > {
+    return combineLatest([
+      this.learningPlanGoalsForCurrentBook$,
+      this.learningPlanGoalProgressBylearningPlanGoalId$,
+      this.classGroups$
+    ]).pipe(
+      map(([learningPlanGoals, progressByGoal, classGroups]) => {
+        return this.createCheckboxItemsForLearningPlanGoals(
+          learningPlanGoals,
+          classGroups,
+          progressByGoal
+        );
+      })
+    );
+  }
+
+  private getLearningPlanGoalsPerLessonWithSelectionStream(): Observable<
+    MultiCheckBoxTableSubLevelInterface<
+      EduContentTOCInterface,
+      LearningPlanGoalInterface
+    >[]
+  > {
+    return combineLatest([
+      this.store.select(LearningPlanGoalQueries.getAllEntities),
+      this.learningPlanGoalProgressBylearningPlanGoalId$,
+      this.classGroups$,
+      this.currentLessons$
+    ]).pipe(
+      map(([learningPlanGoalsMap, progressByGoal, classGroups, lessons]) => {
+        return lessons.map(
+          (
+            lesson
+          ): MultiCheckBoxTableSubLevelInterface<
+            EduContentTOCInterface,
+            LearningPlanGoalInterface
+          > => {
+            const learningPlanGoals: LearningPlanGoalInterface[] = lesson.learningPlanGoalIds.map(
+              lpgId => learningPlanGoalsMap[lpgId]
+            );
+            return {
+              item: lesson,
+              label: 'title',
+              children: this.createCheckboxItemsForLearningPlanGoals(
+                learningPlanGoals,
+                classGroups,
+                progressByGoal
+              )
+            };
+          }
+        );
+      })
+    );
+  }
+
+  private createCheckboxItemsForLearningPlanGoals(
+    learningPlanGoals: LearningPlanGoalInterface[],
+    classGroups: ClassGroupInterface[],
+    progressByGoal: Dictionary<LearningPlanGoalProgressInterface[]>
+  ): MultiCheckBoxTableItemInterface<LearningPlanGoalInterface>[] {
+    return learningPlanGoals
+      .map(learningPlanGoal => {
+        const progress: Dictionary<boolean> = {};
+        classGroups.forEach(classGroup => {
+          progress[classGroup.id] = (
+            progressByGoal[learningPlanGoal.id] || []
+          ).some(lpgp => lpgp.classGroupId === classGroup.id);
+        });
+
+        return {
+          header: learningPlanGoal,
+          content: progress
+        };
+      })
+      .sort((a, b) => {
+        return a.header.prefix.localeCompare(b.header.prefix, undefined, {
+          numeric: true
+        });
+      });
   }
 }
