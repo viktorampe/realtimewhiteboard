@@ -1,15 +1,17 @@
+import { PrimitivePropertiesKeys } from '@campus/utils';
+
 export interface MultiCheckBoxTableSubLevelInterface<
   SubLevelItemType,
   ItemType
 > {
   item: SubLevelItemType; // eduContentTOC
-  label: keyof SubLevelItemType; // eduContentTOC title
+  label: PrimitivePropertiesKeys<SubLevelItemType>; // eduContentTOC title
   children: MultiCheckBoxTableItemInterface<ItemType>[];
 }
 
 export interface MultiCheckBoxTableRowHeaderColumnInterface<ItemType> {
   caption: string; // literal header of column
-  key: keyof ItemType; // property to show in column
+  key: PrimitivePropertiesKeys<ItemType>; // property to show in column
 }
 
 export interface MultiCheckBoxTableItemColumnInterface<ItemColumnType> {
