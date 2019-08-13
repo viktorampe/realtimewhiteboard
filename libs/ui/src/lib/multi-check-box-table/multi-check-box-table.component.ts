@@ -51,7 +51,7 @@ export class MultiCheckBoxTableComponent<
   @HostBinding('class.ui-multi-check-box-table')
   isMultiCheckBoxTable = true;
 
-  public selectAllForSubLevel(
+  public clickSelectAllForSubLevel(
     subLevel: { children: { header: unknown[] }[]; item: unknown }, // { children: {header: lpg }[]}, item: toc ...}
     itemHeader: { item: unknown } //{ item: classgroup ...}
   ) {
