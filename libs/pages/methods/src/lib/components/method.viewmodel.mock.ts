@@ -122,6 +122,8 @@ export class MockMethodViewModel
     }))
   );
 
+  public breadCrumbTitles$ = new BehaviorSubject('cool breadcrumb title');
+
   constructor(
     @Inject(ENVIRONMENT_SEARCHMODES_TOKEN)
     private searchModes: EnvironmentSearchModesInterface

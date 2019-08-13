@@ -15,7 +15,7 @@ import {
   MultiCheckBoxTableRowHeaderColumnInterface
 } from '@campus/ui';
 import { Dictionary } from '@ngrx/entity';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map, take, withLatestFrom } from 'rxjs/operators';
 import { CurrentMethodParams, MethodViewModel } from '../method.viewmodel';
 
@@ -58,7 +58,7 @@ export class MethodComponent implements OnInit {
     this.productTypes$ = this.viewModel.eduContentProductTypes$;
     this.currentTab$ = this.viewModel.currentTab$;
     this.currentMethodParams$ = this.viewModel.currentMethodParams$;
-    this.breadcrumbTitles$ = of('this.viewModel.breadcrumbTitles$');
+    this.breadcrumbTitles$ = this.viewModel.breadCrumbTitles$;
 
     this.learningPlanGoalTableHeaders = this.viewModel.learningPlanGoalTableHeaders;
     this.classGroupColumns$ = this.getTableColumnsFromClassGroupsStream();
