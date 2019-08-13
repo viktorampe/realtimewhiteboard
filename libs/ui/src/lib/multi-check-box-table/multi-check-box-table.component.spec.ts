@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import {
   MatCheckbox,
-  MatCheckboxChange,
   MatCheckboxModule,
   MatIcon,
   MatIconModule
@@ -365,52 +364,88 @@ describe('MultiCheckBoxTableComponent', () => {
   });
 
   describe('event handlers', () => {
-    beforeEach(() => {
-      component.rowHeaderColumns = [];
-      component.itemColumns = [itemColumns[0]];
-      component.items = [items[0]];
-      fixture.detectChanges();
-    });
-
     describe('clickCheckBox', () => {
-      it('should be triggered by checkbox change', () => {
+      beforeEach(() => {
+        component.rowHeaderColumns = [];
+        component.itemColumns = [itemColumns[0]];
+        component.items = [items[0]];
+        fixture.detectChanges();
+      });
+      it('should be triggered by checkbox click', () => {
         jest.spyOn(component, 'clickCheckbox');
 
-        const checkbox = fixture.debugElement.query(By.directive(MatCheckbox))
-          .componentInstance as MatCheckbox;
-        const event = new MatCheckboxChange();
-        event.checked = true;
-
-        checkbox.change.emit(event);
+        fixture.debugElement
+          .query(By.directive(MatCheckbox))
+          .triggerEventHandler('click', null);
 
         expect(component.clickCheckbox).toHaveBeenCalledWith(
           items[0].header,
           itemColumns[0].item,
-          undefined, // no subLevel in inputs
-          event
+          undefined // no subLevel in inputs
         );
       });
 
       it('should emit a checkBoxChanged event', () => {
         jest.spyOn(component.checkBoxChanged, 'emit');
 
-        const event = new MatCheckboxChange();
-        event.checked = true;
-
         component.clickCheckbox(
           items[0].header,
           itemColumns[0].item,
-          subLevels[0].item,
-          event
+          subLevels[0].item
         );
 
         expect(component.checkBoxChanged.emit).toHaveBeenCalledTimes(1);
         expect(component.checkBoxChanged.emit).toHaveBeenCalledWith({
           column: itemColumns[0].item,
           item: items[0].header,
-          subLevel: subLevels[0].item,
-          value: true
+          subLevel: subLevels[0].item
         });
+      });
+    });
+    describe('selectAllForSubLevel', () => {
+      beforeEach(() => {
+        component.rowHeaderColumns = [];
+        component.itemColumns = [itemColumns[0]];
+        component.items = items;
+        component.subLevels = [subLevels[0]];
+        fixture.detectChanges();
+      });
+      it('should be triggered by selectAll click', () => {
+        jest.spyOn(component, 'clickSelectAllForSubLevel');
+
+        fixture.debugElement
+          .query(By.directive(MatIcon))
+          .triggerEventHandler('click', null);
+
+        expect(component.clickSelectAllForSubLevel).toHaveBeenCalledWith(
+          subLevels[0],
+          itemColumns[0]
+        );
+      });
+
+      it('should emit a checkBoxChanged event', () => {
+        jest.spyOn(component.checkBoxesChanged, 'emit');
+
+        component.clickSelectAllForSubLevel(subLevels[0], itemColumns[0]);
+
+        expect(component.checkBoxesChanged.emit).toHaveBeenCalledTimes(1);
+        expect(component.checkBoxesChanged.emit).toHaveBeenCalledWith([
+          {
+            column: itemColumns[0].item,
+            item: items[0].header,
+            subLevel: subLevels[0].item
+          },
+          {
+            column: itemColumns[0].item,
+            item: items[1].header,
+            subLevel: subLevels[0].item
+          },
+          {
+            column: itemColumns[0].item,
+            item: items[2].header,
+            subLevel: subLevels[0].item
+          }
+        ]);
       });
     });
   });
