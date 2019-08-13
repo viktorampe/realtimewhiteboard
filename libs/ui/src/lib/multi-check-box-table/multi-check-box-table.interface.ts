@@ -16,8 +16,8 @@ export interface MultiCheckBoxTableRowHeaderColumnInterface<ItemType> {
 
 export interface MultiCheckBoxTableItemColumnInterface<ItemColumnType> {
   item: ItemColumnType; // classGroup
-  key: keyof ItemColumnType; // property to use in ItemInterface.content
-  label: keyof ItemColumnType; // property to show in header
+  key: PrimitivePropertiesKeys<ItemColumnType>; // property to use in ItemInterface.content
+  label: PrimitivePropertiesKeys<ItemColumnType>; // property to show in header
 }
 
 export interface MultiCheckBoxTableItemInterface<ItemType> {
