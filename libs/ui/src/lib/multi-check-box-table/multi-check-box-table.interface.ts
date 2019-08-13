@@ -25,8 +25,12 @@ export interface MultiCheckBoxTableItemInterface<ItemType> {
   };
 }
 
-export interface CheckBoxChangeInterface {
-  column: unknown;
-  item: unknown;
-  subLevel: unknown;
+export interface CheckBoxChangeInterface<
+  ItemType,
+  ItemColumnType,
+  SubLevelItemType
+> {
+  column: ItemColumnType;
+  item: ItemType;
+  subLevel: SubLevelItemType;
 }

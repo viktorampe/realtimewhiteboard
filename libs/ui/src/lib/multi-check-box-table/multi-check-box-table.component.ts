@@ -41,19 +41,19 @@ export class MultiCheckBoxTableComponent<
   >[];
 
   @Output() public checkBoxChanged = new EventEmitter<
-    CheckBoxChangeInterface
+    CheckBoxChangeInterface<ItemType, ItemColumnType, SubLevelItemType>
   >();
 
   @Output() public checkBoxesChanged = new EventEmitter<
-    CheckBoxChangeInterface[]
+    CheckBoxChangeInterface<ItemType, ItemColumnType, SubLevelItemType>[]
   >();
 
   @HostBinding('class.ui-multi-check-box-table')
   isMultiCheckBoxTable = true;
 
   public clickSelectAllForSubLevel(
-    subLevel: { children: { header: unknown[] }[]; item: unknown }, // { children: {header: lpg }[]}, item: toc ...}
-    itemHeader: { item: unknown } //{ item: classgroup ...}
+    subLevel: MultiCheckBoxTableSubLevelInterface<SubLevelItemType, ItemType>,
+    itemHeader: MultiCheckBoxTableItemColumnInterface<ItemColumnType>
   ) {
     this.checkBoxesChanged.emit(
       subLevel.children.map(child => ({
@@ -65,9 +65,9 @@ export class MultiCheckBoxTableComponent<
   }
 
   public clickCheckbox(
-    item: ItemType, // lpg
-    column: ItemColumnType, // classgroup
-    subLevel: SubLevelItemType // toc
+    item: ItemType,
+    column: ItemColumnType,
+    subLevel: SubLevelItemType
   ) {
     this.checkBoxChanged.emit({ column, item, subLevel });
   }
