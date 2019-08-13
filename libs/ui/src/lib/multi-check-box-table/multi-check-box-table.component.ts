@@ -5,8 +5,8 @@ import {
   Input,
   Output
 } from '@angular/core';
-import { MatCheckboxChange } from '@angular/material';
 import {
+  CheckBoxChangeInterface,
   MultiCheckBoxTableItemColumnInterface,
   MultiCheckBoxTableItemInterface,
   MultiCheckBoxTableRowHeaderColumnInterface,
@@ -40,24 +40,35 @@ export class MultiCheckBoxTableComponent<
     ItemColumnType
   >[];
 
-  @Output() public checkBoxChanged = new EventEmitter<{
-    column: ItemColumnType;
-    item: ItemType;
-    subLevel: SubLevelItemType;
-    value: boolean;
-  }>();
+  @Output() public checkBoxChanged = new EventEmitter<
+    CheckBoxChangeInterface
+  >();
+
+  @Output() public checkBoxesChanged = new EventEmitter<
+    CheckBoxChangeInterface[]
+  >();
 
   @HostBinding('class.ui-multi-check-box-table')
   isMultiCheckBoxTable = true;
 
-  public selectAllForSubLevel(subLevel, itemHeader) {}
+  public selectAllForSubLevel(
+    subLevel: { children: { header: unknown[] }[]; item: unknown }, // { children: {header: lpg }[]}, item: toc ...}
+    itemHeader: { item: unknown } //{ item: classgroup ...}
+  ) {
+    this.checkBoxesChanged.emit(
+      subLevel.children.map(child => ({
+        column: itemHeader.item,
+        item: child.header,
+        subLevel: subLevel.item
+      }))
+    );
+  }
 
   public clickCheckbox(
-    item: ItemType,
-    column: ItemColumnType,
-    subLevel: SubLevelItemType,
-    event: MatCheckboxChange
+    item: ItemType, // lpg
+    column: ItemColumnType, // classgroup
+    subLevel: SubLevelItemType // toc
   ) {
-    this.checkBoxChanged.emit({ column, item, subLevel, value: event.checked });
+    this.checkBoxChanged.emit({ column, item, subLevel });
   }
 }

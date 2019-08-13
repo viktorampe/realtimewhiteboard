@@ -24,3 +24,9 @@ export interface MultiCheckBoxTableItemInterface<ItemType> {
     [key: number]: boolean; // key = ItemColumnType.key, boolean = if checked
   };
 }
+
+export interface CheckBoxChangeInterface {
+  column: unknown;
+  item: unknown;
+  subLevel: unknown;
+}

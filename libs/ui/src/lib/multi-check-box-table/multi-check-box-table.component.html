@@ -89,9 +89,7 @@
           <mat-checkbox
             color="primary"
             [checked]="item.content[itemColumn.item[itemColumn.key]]"
-            (change)="
-              clickCheckbox(item.header, itemColumn.item, subLevel.item, $event)
-            "
+            (click)="clickCheckbox(item.header, itemColumn.item, subLevel.item)"
           ></mat-checkbox>
         </td>
       </tr>
