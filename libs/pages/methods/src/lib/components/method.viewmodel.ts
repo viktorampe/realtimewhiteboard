@@ -52,7 +52,7 @@ import {
 import { Dictionary } from '@ngrx/entity';
 import { RouterReducerState } from '@ngrx/router-store';
 import { select, Store } from '@ngrx/store';
-import { BehaviorSubject, merge, Observable } from 'rxjs';
+import { BehaviorSubject, combineLatest, merge, Observable } from 'rxjs';
 import {
   distinctUntilChanged,
   filter,
@@ -264,6 +264,8 @@ export class MethodViewModel implements ContentOpenerInterface {
     this.filteredClassGroups$ = this.getFilteredClassGroups();
     this.currentLessons$ = this.getTocLessonsStream();
     this.userLessons$ = this.store.pipe(select(UserLessonQueries.getAll));
+    this.learningPlanGoalsWithSelectionForClassGroups$ = this.getLearningPlanGoalsWithSelectionStream();
+    this.learningPlanGoalsPerLessonWithSelectionForClassGroups$ = this.getLearningPlanGoalsPerLessonWithSelectionStream();
   }
 
   private getCurrentTab(): Observable<number> {
@@ -451,7 +453,8 @@ export class MethodViewModel implements ContentOpenerInterface {
   }
 
   private getFilteredClassGroups(): Observable<ClassGroupInterface[]> {
-    // TODO: filter classgroups by year and method (through license relations) from the current book
+    // TODO: filter classgroups by years of the current book
+    // TODO: filter classgroups by their methods through licenses?
     // TODO: filter classgroups through select dropdown
     return this.store.pipe(select(ClassGroupQueries.getAll));
   }
@@ -497,7 +500,7 @@ export class MethodViewModel implements ContentOpenerInterface {
       map(eduContents => {
         return eduContents.reduce(
           (acc, eduContent) => {
-            const productType =
+            const productType: number =
               eduContent.publishedEduContentMetadata.eduContentProductTypeId;
             if (!acc[productType]) {
               acc[productType] = [];
@@ -523,5 +526,87 @@ export class MethodViewModel implements ContentOpenerInterface {
         );
       })
     );
+  }
+
+  private getLearningPlanGoalsWithSelectionStream(): Observable<
+    MultiCheckBoxTableItemInterface<LearningPlanGoalInterface>[]
+  > {
+    return combineLatest([
+      this.learningPlanGoalsForCurrentBook$,
+      this.learningPlanGoalProgressBylearningPlanGoalId$,
+      this.classGroups$
+    ]).pipe(
+      map(([learningPlanGoals, progressByGoal, classGroups]) => {
+        return this.createCheckboxItemsForLearningPlanGoals(
+          learningPlanGoals,
+          classGroups,
+          progressByGoal
+        );
+      })
+    );
+  }
+
+  private getLearningPlanGoalsPerLessonWithSelectionStream(): Observable<
+    MultiCheckBoxTableSubLevelInterface<
+      EduContentTOCInterface,
+      LearningPlanGoalInterface
+    >[]
+  > {
+    return combineLatest([
+      this.store.select(LearningPlanGoalQueries.getAllEntities),
+      this.learningPlanGoalProgressBylearningPlanGoalId$,
+      this.classGroups$,
+      this.currentLessons$
+    ]).pipe(
+      map(([learningPlanGoalsMap, progressByGoal, classGroups, lessons]) => {
+        return lessons.map(
+          (
+            lesson
+          ): MultiCheckBoxTableSubLevelInterface<
+            EduContentTOCInterface,
+            LearningPlanGoalInterface
+          > => {
+            const learningPlanGoals: LearningPlanGoalInterface[] = lesson.learningPlanGoalIds.map(
+              lpgId => learningPlanGoalsMap[lpgId]
+            );
+            return {
+              item: lesson,
+              label: 'title',
+              children: this.createCheckboxItemsForLearningPlanGoals(
+                learningPlanGoals,
+                classGroups,
+                progressByGoal
+              )
+            };
+          }
+        );
+      })
+    );
+  }
+
+  private createCheckboxItemsForLearningPlanGoals(
+    learningPlanGoals: LearningPlanGoalInterface[],
+    classGroups: ClassGroupInterface[],
+    progressByGoal: Dictionary<LearningPlanGoalProgressInterface[]>
+  ): MultiCheckBoxTableItemInterface<LearningPlanGoalInterface>[] {
+    return learningPlanGoals
+      .map(learningPlanGoal => {
+        const progress: Dictionary<boolean> = {};
+        classGroups.forEach(classGroup => {
+          progress[classGroup.id] = (
+            progressByGoal[learningPlanGoal.id] || []
+          ).some(lpgp => lpgp.classGroupId === classGroup.id);
+        });
+
+        return {
+          header: learningPlanGoal,
+          content: progress
+        };
+      })
+      .sort((a, b) => {
+        return a.header.prefix.localeCompare(b.header.prefix, undefined, {
+          numeric: true
+        });
+      });
   }
 }
