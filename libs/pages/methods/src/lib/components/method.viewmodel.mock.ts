@@ -1,5 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
 import {
+  ClassGroupFixture,
+  ClassGroupInterface,
   EduContent,
   EduContentBookFixture,
   EduContentBookInterface,
@@ -9,9 +11,13 @@ import {
   EduContentProductTypeInterface,
   EduContentTOCFixture,
   EduContentTOCInterface,
+  LearningPlanGoalFixture,
+  LearningPlanGoalInterface,
   MethodFixture,
   MethodInterface,
-  MethodYearsInterface
+  MethodYearsInterface,
+  UserLessonFixture,
+  UserLessonInterface
 } from '@campus/dal';
 import {
   SearchModeInterface,
@@ -23,6 +29,11 @@ import {
   ENVIRONMENT_SEARCHMODES_TOKEN
 } from '@campus/shared';
 import { ViewModelInterface } from '@campus/testing';
+import {
+  MultiCheckBoxTableItemInterface,
+  MultiCheckBoxTableRowHeaderColumnInterface,
+  MultiCheckBoxTableSubLevelInterface
+} from '@campus/ui';
 import { Dictionary } from '@ngrx/entity';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -68,6 +79,50 @@ export class MockMethodViewModel
   public generalFilesByType$ = new BehaviorSubject<Dictionary<EduContent[]>>(
     this.getGeneralFilesByType()
   );
+  public classGroups$ = new BehaviorSubject<ClassGroupInterface[]>([
+    new ClassGroupFixture({ id: 1, name: '1a' }),
+    new ClassGroupFixture({ id: 2, name: '1b' })
+  ]);
+
+  public filteredClassGroups$ = new BehaviorSubject<ClassGroupInterface[]>([
+    new ClassGroupFixture({ id: 1, name: '1a' }),
+    new ClassGroupFixture({ id: 2, name: '1b' })
+  ]);
+
+  public userLessons$ = new BehaviorSubject<UserLessonInterface[]>([
+    new UserLessonFixture({ id: 1, description: 'project verkeersveiligheid' }),
+    new UserLessonFixture({ id: 2, description: 'excursie bos' }),
+    new UserLessonFixture({ id: 3, description: 'schoolfeest' })
+  ]);
+
+  public learningPlanGoalTableHeaders: MultiCheckBoxTableRowHeaderColumnInterface<
+    LearningPlanGoalInterface
+  >[] = [
+    { caption: 'prefix', key: 'prefix' },
+    { caption: 'beschrijving', key: 'goal' }
+  ];
+
+  public learningPlanGoalsWithSelectionForClassGroups$ = new BehaviorSubject<
+    MultiCheckBoxTableItemInterface<LearningPlanGoalInterface>[]
+  >(this.getLearningPlanGoals().map(goal => ({ header: goal, content: {} })));
+
+  public learningPlanGoalsPerLessonWithSelectionForClassGroups$ = new BehaviorSubject<
+    MultiCheckBoxTableSubLevelInterface<
+      EduContentTOCInterface,
+      LearningPlanGoalInterface
+    >[]
+  >(
+    this.getTOCs().map(toc => ({
+      item: toc,
+      label: 'title',
+      children: this.getLearningPlanGoals().map(goal => ({
+        header: goal,
+        content: {}
+      }))
+    }))
+  );
+
+  public breadCrumbTitles$ = new BehaviorSubject('cool breadcrumb title');
 
   constructor(
     @Inject(ENVIRONMENT_SEARCHMODES_TOKEN)
@@ -283,5 +338,67 @@ export class MockMethodViewModel
         ['LearningArea', new Map([[1, 100], [2, 50]])]
       ])
     });
+  }
+
+  private getLearningPlanGoals(): LearningPlanGoalInterface[] {
+    return [
+      new LearningPlanGoalFixture({
+        id: 1,
+        goal:
+          'Spreekstrategie: zich blijven concentreren ondanks het feit dat ze niet alles kunnen uitdrukken.',
+        uniqueIdentifier: 'd4e4085f-f008-471a-9d80-ce6a60088d7b',
+        prefix: '5.15.2',
+        type: 'leerplandoelstelling',
+        learningAreaId: 1,
+        learningDomainId: 18,
+        eduNetId: 1
+      }),
+      new LearningPlanGoalFixture({
+        id: 2,
+        goal:
+          'De leerlingen kunnen het algemeen onderwerp bepalen in informatieve, narratieve ' +
+          'en artistiek-literaire teksten.',
+        uniqueIdentifier: 'f1c37bd2-a2c0-46ed-a732-82f27300f69f',
+        prefix: '5.1.',
+        type: 'leerplandoelstelling',
+        learningAreaId: 1,
+        learningDomainId: 17,
+        eduNetId: 1
+      }),
+      new LearningPlanGoalFixture({
+        id: 3,
+        goal:
+          'De leerlingen kunnen de hoofdgedachte achterhalen in informatieve en narratieve teksten. ',
+        uniqueIdentifier: '9386d059-9432-4d2f-aabb-ad84053ee3fc',
+        prefix: '5.1. BIS',
+        type: 'leerplandoelstelling',
+        learningAreaId: 1,
+        learningDomainId: 17,
+        eduNetId: 1
+      }),
+      new LearningPlanGoalFixture({
+        id: 4,
+        goal:
+          'De leerlingen kunnen het algemeen onderwerp bepalen in informatieve, narratieve ' +
+          'en artistiek-literaire teksten.',
+        uniqueIdentifier: 'f1c37bd2-a2c0-46ed-a732-82f27300f69f',
+        prefix: '5.1.',
+        type: 'leerplandoelstelling',
+        learningAreaId: 1,
+        learningDomainId: 17,
+        eduNetId: 1
+      }),
+      new LearningPlanGoalFixture({
+        id: 5,
+        goal:
+          'De leerlingen kunnen de hoofdgedachte achterhalen in informatieve en narratieve teksten. ',
+        uniqueIdentifier: '9386d059-9432-4d2f-aabb-ad84053ee3fc',
+        prefix: '5.1. BIS',
+        type: 'leerplandoelstelling',
+        learningAreaId: 1,
+        learningDomainId: 17,
+        eduNetId: 1
+      })
+    ];
   }
 }

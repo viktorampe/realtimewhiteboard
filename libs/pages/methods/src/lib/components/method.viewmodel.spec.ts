@@ -4,6 +4,10 @@ import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import {
   AUTH_SERVICE_TOKEN,
+  ClassGroupActions,
+  ClassGroupFixture,
+  ClassGroupInterface,
+  ClassGroupReducer,
   CustomSerializer,
   DalState,
   EduContent,
@@ -20,12 +24,22 @@ import {
   EduContentTocReducer,
   EDU_CONTENT_SERVICE_TOKEN,
   getStoreModuleForFeatures,
+  LearningPlanGoalActions,
+  LearningPlanGoalFixture,
+  LearningPlanGoalInterface,
+  LearningPlanGoalProgressActions,
+  LearningPlanGoalProgressFixture,
+  LearningPlanGoalProgressInterface,
+  LearningPlanGoalProgressReducer,
+  LearningPlanGoalReducer,
   MethodActions,
   MethodFixture,
   MethodInterface,
   MethodReducer,
   UserReducer,
-  YearFixture
+  YearActions,
+  YearFixture,
+  YearReducer
 } from '@campus/dal';
 import {
   FilterFactoryFixture,
@@ -78,16 +92,20 @@ describe('MethodViewModel', () => {
     new EduContentTOCFixture({
       id: 1,
       treeId: bookId,
+      title: 'Chapter 1',
       depth: 0,
       lft: 1,
-      rgt: 6
+      rgt: 6,
+      learningPlanGoalIds: [1, 2, 3]
     }),
     new EduContentTOCFixture({
       id: 2,
       treeId: bookId,
+      title: 'Chapter 2',
       depth: 0,
       lft: 7,
-      rgt: 10
+      rgt: 10,
+      learningPlanGoalIds: [1, 2, 3, 4]
     })
   ];
 
@@ -95,27 +113,33 @@ describe('MethodViewModel', () => {
     new EduContentTOCFixture({
       id: 3,
       treeId: bookId,
+      title: 'Lesson 1',
       depth: 1,
       lft: 2,
-      rgt: 3
+      rgt: 3,
+      learningPlanGoalIds: [1, 2]
     }),
     new EduContentTOCFixture({
       id: 4,
       treeId: bookId,
+      title: 'Lesson 2',
       depth: 1,
       lft: 4,
-      rgt: 5
+      rgt: 5,
+      learningPlanGoalIds: [2, 3, 4]
     }),
     new EduContentTOCFixture({
       id: 5,
       treeId: bookId,
+      title: 'Lesson 3',
       depth: 1,
       lft: 8,
-      rgt: 9
+      rgt: 9,
+      learningPlanGoalIds: [1, 2, 3]
     })
   ];
 
-  const bookYears = [new YearFixture()];
+  const bookYears = [new YearFixture({ label: '1e leerjaar' })];
 
   const book: EduContentBookInterface = new EduContentBookFixture({
     id: bookId,
@@ -131,8 +155,53 @@ describe('MethodViewModel', () => {
 
   const method: MethodInterface = new MethodFixture({
     id: bookMethodId,
+    name: 'Katapult',
     learningAreaId: methodLearningAreaId
   });
+
+  const classGroups: ClassGroupInterface[] = [
+    new ClassGroupFixture({ id: 11 }),
+    new ClassGroupFixture({ id: 12 }),
+    new ClassGroupFixture({ id: 13 })
+  ];
+
+  const learningPlanGoals: LearningPlanGoalInterface[] = [
+    new LearningPlanGoalFixture({ id: 1, goal: 'foo', prefix: '1.2.3' }),
+    new LearningPlanGoalFixture({ id: 2, goal: 'bar', prefix: '1.1.3' }),
+    new LearningPlanGoalFixture({ id: 3, goal: 'baz', prefix: '1.1.20' }),
+    new LearningPlanGoalFixture({ id: 4, goal: 'foobar', prefix: '1.3' })
+  ]; // natural sorted order index = 1, 2, 0, 3
+
+  const learningPlanGoalProgresses: LearningPlanGoalProgressInterface[] = [
+    new LearningPlanGoalProgressFixture({
+      id: 1,
+      learningPlanGoalId: 1,
+      classGroupId: 11,
+      eduContentTOCId: 3,
+      userLessonId: null
+    }),
+    new LearningPlanGoalProgressFixture({
+      id: 2,
+      learningPlanGoalId: 2,
+      classGroupId: 11,
+      eduContentTOCId: 3,
+      userLessonId: null
+    }),
+    new LearningPlanGoalProgressFixture({
+      id: 3,
+      learningPlanGoalId: 3,
+      classGroupId: 11,
+      eduContentTOCId: 4,
+      userLessonId: null
+    }),
+    new LearningPlanGoalProgressFixture({
+      id: 4,
+      learningPlanGoalId: 3,
+      classGroupId: 12,
+      eduContentTOCId: 4,
+      userLessonId: null
+    })
+  ];
 
   function createMockSearchMode(overrides: Partial<SearchModeInterface>) {
     return Object.assign(
@@ -172,7 +241,11 @@ describe('MethodViewModel', () => {
           EduContentTocReducer,
           EduContentBookReducer,
           MethodReducer,
-          EduContentReducer
+          YearReducer,
+          EduContentReducer,
+          ClassGroupReducer,
+          LearningPlanGoalReducer,
+          LearningPlanGoalProgressReducer
         ]),
         RouterTestingModule.withRoutes([
           {
@@ -244,6 +317,12 @@ describe('MethodViewModel', () => {
     );
 
     store.dispatch(
+      new YearActions.YearsLoaded({
+        years: bookYears
+      })
+    );
+
+    store.dispatch(
       new EduContentBookActions.EduContentBooksLoaded({
         eduContentBooks: [book, diaboloBook]
       })
@@ -253,6 +332,21 @@ describe('MethodViewModel', () => {
       new EduContentTocActions.AddEduContentTocsForBook({
         bookId: book.id,
         eduContentTocs: book.eduContentTOC
+      })
+    );
+
+    store.dispatch(new ClassGroupActions.ClassGroupsLoaded({ classGroups }));
+
+    store.dispatch(
+      new LearningPlanGoalProgressActions.LearningPlanGoalProgressesLoaded({
+        learningPlanGoalProgresses
+      })
+    );
+
+    store.dispatch(
+      new LearningPlanGoalActions.AddLearningPlanGoalsForBook({
+        bookId,
+        learningPlanGoals
       })
     );
   }
@@ -533,6 +627,57 @@ describe('MethodViewModel', () => {
       });
     });
 
+    describe('breadCrumbTitles$', () => {
+      it('should be an empty string when no book, chapter or lesson is selected', () => {
+        navigateWithParams({});
+        expect(methodViewModel.breadCrumbTitles$).toBeObservable(
+          hot('a', {
+            a: ''
+          })
+        );
+      });
+
+      it('should be the method year title when only a book is selected', () => {
+        navigateWithParams({ book: bookId });
+
+        const expectedResult = `${method.name} ${bookYears[0].label}`;
+
+        expect(methodViewModel.breadCrumbTitles$).toBeObservable(
+          hot('a', {
+            a: expectedResult
+          })
+        );
+      });
+
+      it('should be the method year title > toc title when a book and chapter is selected', () => {
+        navigateWithParams({ book: bookId, chapter: 1 });
+
+        const expectedResult = `${method.name} ${bookYears[0].label} > ${
+          chapterTocs[0].title
+        }`;
+
+        expect(methodViewModel.breadCrumbTitles$).toBeObservable(
+          hot('a', {
+            a: expectedResult
+          })
+        );
+      });
+
+      it('should be the method year title > toc title > toc title when a book, chapter and lesson is selected', () => {
+        navigateWithParams({ book: bookId, chapter: 1, lesson: 3 });
+
+        const expectedResult =
+          `${method.name} ${bookYears[0].label} > ${chapterTocs[0].title}` +
+          ` > ${lessonTocs[0].title}`;
+
+        expect(methodViewModel.breadCrumbTitles$).toBeObservable(
+          hot('a', {
+            a: expectedResult
+          })
+        );
+      });
+    });
+
     describe('currentToc$', () => {
       it('should be an empty array when no book, chapter or lesson is selected', () => {
         navigateWithParams({});
@@ -627,6 +772,110 @@ describe('MethodViewModel', () => {
         expect(methodViewModel.currentTab$).toBeObservable(
           hot('a', { a: tab })
         );
+      });
+    });
+
+    describe('learningPlanGoalsWithSelectionForClassGroups$', () => {
+      beforeEach(() => {
+        loadInStore();
+      });
+
+      it('should emit the learningPlanGoals with selection by classGroup for the currently selected book', () => {
+        navigateWithParams({ book: bookId });
+
+        const expected = [
+          {
+            header: learningPlanGoals[1],
+            content: { 11: true, 12: false, 13: false }
+          },
+          {
+            header: learningPlanGoals[2],
+            content: { 11: true, 12: true, 13: false }
+          },
+          {
+            header: learningPlanGoals[0],
+            content: { 11: true, 12: false, 13: false }
+          },
+          {
+            header: learningPlanGoals[3],
+            content: { 11: false, 12: false, 13: false }
+          }
+        ];
+        expect(
+          methodViewModel.learningPlanGoalsWithSelectionForClassGroups$
+        ).toBeObservable(hot('a', { a: expected }));
+      });
+    });
+
+    describe('learningPlanGoalsPerLessonWithSelectionForClassGroups$', () => {
+      beforeEach(() => {
+        loadInStore();
+      });
+
+      it('should emit the learningPlanGoals with selection by classGroup for each lesson from the currently selected book', () => {
+        navigateWithParams({ book: bookId, chapter: 1 });
+
+        const expected = [
+          {
+            item: lessonTocs[0],
+            label: 'title',
+            children: [
+              {
+                header: learningPlanGoals[1],
+                content: { 11: true, 12: false, 13: false }
+              },
+              {
+                header: learningPlanGoals[0],
+                content: { 11: true, 12: false, 13: false }
+              }
+            ]
+          },
+          {
+            item: lessonTocs[1],
+            label: 'title',
+            children: [
+              {
+                header: learningPlanGoals[1],
+                content: { 11: true, 12: false, 13: false }
+              },
+              {
+                header: learningPlanGoals[2],
+                content: { 11: true, 12: true, 13: false }
+              },
+              {
+                header: learningPlanGoals[3],
+                content: { 11: false, 12: false, 13: false }
+              }
+            ]
+          }
+        ];
+        expect(
+          methodViewModel.learningPlanGoalsPerLessonWithSelectionForClassGroups$
+        ).toBeObservable(hot('a', { a: expected }));
+      });
+
+      it('should emit the learningPlanGoals with selection by classGroup for the current selected lesson', () => {
+        navigateWithParams({ book: bookId, chapter: 1, lesson: 3 });
+
+        const expected = [
+          {
+            item: lessonTocs[0],
+            label: 'title',
+            children: [
+              {
+                header: learningPlanGoals[1],
+                content: { 11: true, 12: false, 13: false }
+              },
+              {
+                header: learningPlanGoals[0],
+                content: { 11: true, 12: false, 13: false }
+              }
+            ]
+          }
+        ];
+        expect(
+          methodViewModel.learningPlanGoalsPerLessonWithSelectionForClassGroups$
+        ).toBeObservable(hot('a', { a: expected }));
       });
     });
   });
