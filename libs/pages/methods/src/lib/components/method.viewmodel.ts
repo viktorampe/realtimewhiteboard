@@ -58,6 +58,7 @@ import {
   filter,
   map,
   mapTo,
+  shareReplay,
   switchMap,
   switchMapTo,
   withLatestFrom
@@ -94,6 +95,7 @@ export class MethodViewModel implements ContentOpenerInterface {
   public classGroupsForMethod$: Observable<ClassGroupInterface[]>;
   public filteredClassGroups$: Observable<ClassGroupInterface[]>;
   public userLessons$: Observable<UserLessonInterface[]>;
+  public breadCrumbTitles$: Observable<string>;
   public learningPlanGoalsWithSelectionForClassGroups$: Observable<
     MultiCheckBoxTableItemInterface<LearningPlanGoalInterface>[]
   >;
@@ -115,6 +117,9 @@ export class MethodViewModel implements ContentOpenerInterface {
     Dictionary<LearningPlanGoalProgressInterface[]>
   >;
   private currentLessons$: Observable<EduContentTOCInterface[]>;
+  private methodWithYear$: Observable<string>;
+  private currentChapterTitle$: Observable<string>;
+  private currentLessonTitle$: Observable<string>;
 
   private _searchState$: BehaviorSubject<SearchStateInterface>;
 
@@ -265,6 +270,8 @@ export class MethodViewModel implements ContentOpenerInterface {
     this.filteredClassGroups$ = this.getFilteredClassGroups();
     this.currentLessons$ = this.getTocLessonsStream();
     this.userLessons$ = this.store.pipe(select(UserLessonQueries.getAll));
+    this.breadCrumbTitles$ = this.getBreadCrumbTitlesStream();
+
     this.learningPlanGoalsWithSelectionForClassGroups$ = this.getLearningPlanGoalsWithSelectionStream();
     this.learningPlanGoalsPerLessonWithSelectionForClassGroups$ = this.getLearningPlanGoalsPerLessonWithSelectionStream();
   }
@@ -344,6 +351,10 @@ export class MethodViewModel implements ContentOpenerInterface {
     this.generalFiles$ = this.getGeneralFilesStream();
     this.diaboloPhases$ = this.getDiaboloPhasesStream();
 
+    this.methodWithYear$ = this.getMethodWithYearStream();
+    this.currentChapterTitle$ = this.getCurrentChapterTitleStream();
+    this.currentLessonTitle$ = this.getCurrentLessonTitleStream();
+
     this.learningPlanGoalsForCurrentBook$ = this.getLearningPlanGoalsForCurrentBookStream();
     this.classGroups$ = this.store.pipe(select(ClassGroupQueries.getAll));
     this.learningPlanGoalProgressBylearningPlanGoalId$ = this.store.pipe(
@@ -353,6 +364,7 @@ export class MethodViewModel implements ContentOpenerInterface {
 
   private getCurrentMethodParams(): Observable<CurrentMethodParams> {
     return this.routerState$.pipe(
+      filter(routerState => !!routerState),
       map((routerState: RouterReducerState<RouterStateUrl>) => ({
         book: +routerState.state.params.book || undefined,
         chapter: +routerState.state.params.chapter || undefined,
@@ -361,7 +373,8 @@ export class MethodViewModel implements ContentOpenerInterface {
       distinctUntilChanged(
         (a, b) =>
           a.book === b.book && a.chapter === b.chapter && a.lesson === b.lesson
-      )
+      ),
+      shareReplay(1)
     );
   }
 
@@ -453,6 +466,18 @@ export class MethodViewModel implements ContentOpenerInterface {
     );
   }
 
+  private getBreadCrumbTitlesStream(): Observable<string> {
+    return combineLatest([
+      this.methodWithYear$,
+      this.currentChapterTitle$,
+      this.currentLessonTitle$
+    ]).pipe(
+      map(titles => {
+        return titles.filter(title => title).join(' > ');
+      })
+    );
+  }
+
   private getFilteredClassGroups(): Observable<ClassGroupInterface[]> {
     return this.currentMethod$.pipe(
       filter(currentMethod => !!currentMethod),
@@ -499,6 +524,74 @@ export class MethodViewModel implements ContentOpenerInterface {
 
   private getDiaboloPhasesStream(): Observable<DiaboloPhaseInterface[]> {
     return this.store.pipe(select(DiaboloPhaseQueries.getAll));
+  }
+
+  private getMethodWithYearStream(): Observable<string> {
+    const methodYearWhenBook = this.currentMethodParams$.pipe(
+      filter(currentMethodParams => !!currentMethodParams.book),
+      switchMap(currentMethodParams => {
+        return this.store.pipe(
+          select(MethodQueries.getMethodWithYearByBookId, {
+            id: currentMethodParams.book
+          })
+        );
+      })
+    );
+
+    const methodYearWhenNoBook = this.currentMethodParams$.pipe(
+      filter(currentMethodParams => !currentMethodParams.book),
+      mapTo(null)
+    );
+
+    return merge(methodYearWhenBook, methodYearWhenNoBook).pipe(
+      distinctUntilChanged()
+    );
+  }
+
+  private getCurrentChapterTitleStream(): Observable<string> {
+    const chapterTitleWhenChapter = this.currentMethodParams$.pipe(
+      filter(currentMethodParams => !!currentMethodParams.chapter),
+      switchMap(currentMethodParams => {
+        return this.store.pipe(
+          select(EduContentTocQueries.getById, {
+            id: currentMethodParams.chapter
+          })
+        );
+      }),
+      map(toc => toc.title)
+    );
+
+    const chapterTitleWhenNoChapter = this.currentMethodParams$.pipe(
+      filter(currentMethodParams => !currentMethodParams.chapter),
+      mapTo(null)
+    );
+
+    return merge(chapterTitleWhenChapter, chapterTitleWhenNoChapter).pipe(
+      distinctUntilChanged()
+    );
+  }
+
+  private getCurrentLessonTitleStream(): Observable<string> {
+    const lessonTitleWhenLesson = this.currentMethodParams$.pipe(
+      filter(currentMethodParams => !!currentMethodParams.lesson),
+      switchMap(currentMethodParams => {
+        return this.store.pipe(
+          select(EduContentTocQueries.getById, {
+            id: currentMethodParams.lesson
+          })
+        );
+      }),
+      map(toc => toc.title)
+    );
+
+    const lessonTitleWhenNoLesson = this.currentMethodParams$.pipe(
+      filter(currentMethodParams => !currentMethodParams.lesson),
+      mapTo(null)
+    );
+
+    return merge(lessonTitleWhenLesson, lessonTitleWhenNoLesson).pipe(
+      distinctUntilChanged()
+    );
   }
 
   private getGeneralFilesByType(): Observable<Dictionary<EduContent[]>> {
