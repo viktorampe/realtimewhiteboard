@@ -112,14 +112,21 @@ export class MockMethodViewModel
       LearningPlanGoalInterface
     >[]
   >(
-    this.getTOCs().map(toc => ({
-      item: toc,
-      label: 'title',
-      children: this.getLearningPlanGoals().map(goal => ({
-        header: goal,
-        content: {}
-      }))
-    }))
+    this.getTOCs().map(
+      (
+        toc
+      ): MultiCheckBoxTableSubLevelInterface<
+        EduContentTOCInterface,
+        LearningPlanGoalInterface
+      > => ({
+        item: toc,
+        label: 'title',
+        children: this.getLearningPlanGoals().map(goal => ({
+          header: goal,
+          content: {}
+        }))
+      })
+    )
   );
 
   public breadCrumbTitles$ = new BehaviorSubject('cool breadcrumb title');

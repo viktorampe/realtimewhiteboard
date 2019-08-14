@@ -301,7 +301,7 @@ describe('MethodChapterComponent', () => {
         ).toHaveBeenCalled();
         expect(
           methodViewModel.onLearningPlanGoalProgressChanged
-        ).toHaveBeenCalledWith(1, 2, 3, undefined);
+        ).toHaveBeenCalledWith(1, 2, 3, null);
       });
     });
 
