@@ -43,24 +43,16 @@ export const getAllEntities = createSelector(
   selectEntities
 );
 
-export const getAllOrderedBy = createSelector(
+export const getAllOrderedByName = createSelector(
   getAll,
-  (
-    eduContentProductTypes: EduContentProductTypeInterface[],
-    props: { orderBy: 'name' | 'sequence' }
-  ) => {
-    switch (props.orderBy) {
-      case 'sequence':
-        return eduContentProductTypes.sort((a, b) =>
-          a.sequence > b.sequence ? 1 : -1
-        );
-      case 'name':
-      default:
-        return eduContentProductTypes.sort((a, b) =>
-          a.name.localeCompare(b.name)
-        );
-    }
-  }
+  (eduContentProductTypes: EduContentProductTypeInterface[]) =>
+    eduContentProductTypes.sort((a, b) => a.name.localeCompare(b.name))
+);
+
+export const getAllOrderedBySequence = createSelector(
+  getAll,
+  (eduContentProductTypes: EduContentProductTypeInterface[]) =>
+    eduContentProductTypes.sort((a, b) => (a.sequence > b.sequence ? 1 : -1))
 );
 
 /**

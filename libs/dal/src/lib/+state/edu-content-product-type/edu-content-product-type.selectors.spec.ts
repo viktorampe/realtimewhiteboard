@@ -177,7 +177,7 @@ describe('EduContentProductType Selectors', () => {
       expect(results).toBe(undefined);
     });
   });
-  describe('EduContentProductTypeOrderBy selector', () => {
+  describe('EduContentProductTypeOrder name and sequence selectors', () => {
     beforeEach(() => {
       eduContentProductTypeState = createState(
         [
@@ -192,9 +192,9 @@ describe('EduContentProductType Selectors', () => {
       storeState = { eduContentProductTypes: eduContentProductTypeState };
     });
     it('should return array ordered by sequence if prop orderby type is sequence', () => {
-      const results = EduContentProductTypeQueries.getAllOrderedBy(storeState, {
-        orderBy: 'sequence'
-      });
+      const results = EduContentProductTypeQueries.getAllOrderedBySequence(
+        storeState
+      );
       expect(results).toEqual([
         createEduContentProductType(4, 0, 'd'),
         createEduContentProductType(2, 1, 'c'),
@@ -203,9 +203,9 @@ describe('EduContentProductType Selectors', () => {
       ]);
     });
     it('should return array ordered by name if prop orderby type is name', () => {
-      const results = EduContentProductTypeQueries.getAllOrderedBy(storeState, {
-        orderBy: 'name'
-      });
+      const results = EduContentProductTypeQueries.getAllOrderedByName(
+        storeState
+      );
       expect(results).toEqual([
         createEduContentProductType(1, 3, 'a'),
         createEduContentProductType(3, 2, 'b'),
