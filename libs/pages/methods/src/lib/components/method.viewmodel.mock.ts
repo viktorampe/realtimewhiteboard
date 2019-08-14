@@ -149,6 +149,18 @@ export class MockMethodViewModel
   openEduContentAsDownload(eduContent: EduContent): void {}
   openBoeke(eduContent: EduContent): void {}
 
+  public onLearningPlanGoalProgressChanged(
+    classGroupId: number,
+    learningPlanGoalId: number,
+    eduContentTOCId: number,
+    userLessonId: number
+  ): void {}
+  public onBulkLearningPlanGoalProgressChanged(
+    classGroupId: number,
+    learningPlanGoalIds: number[],
+    eduContentTOCId: number
+  ): void {}
+
   private getAllowedBooks$(): MethodYearsInterface[] {
     return [
       {

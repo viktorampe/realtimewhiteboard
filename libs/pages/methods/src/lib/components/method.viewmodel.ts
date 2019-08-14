@@ -20,6 +20,7 @@ import {
   EDU_CONTENT_SERVICE_TOKEN,
   getRouterState,
   LearningPlanGoalInterface,
+  LearningPlanGoalProgressActions,
   LearningPlanGoalProgressInterface,
   LearningPlanGoalProgressQueries,
   LearningPlanGoalQueries,
@@ -244,6 +245,38 @@ export class MethodViewModel implements ContentOpenerInterface {
 
   public openBoeke(eduContent: EduContent): void {
     this.openStaticContentService.open(eduContent);
+  }
+
+  public onLearningPlanGoalProgressChanged(
+    classGroupId: number,
+    learningPlanGoalId: number,
+    eduContentTOCId: number,
+    userLessonId: number
+  ): void {
+    this.store.dispatch(
+      new LearningPlanGoalProgressActions.ToggleLearningPlanGoalProgress({
+        classGroupId,
+        learningPlanGoalId,
+        eduContentTOCId,
+        userLessonId,
+        personId: this.authService.userId
+      })
+    );
+  }
+
+  public onBulkLearningPlanGoalProgressChanged(
+    classGroupId: number,
+    learningPlanGoalIds: number[],
+    eduContentTOCId: number
+  ): void {
+    this.store.dispatch(
+      new LearningPlanGoalProgressActions.BulkAddLearningPlanGoalProgresses({
+        classGroupId,
+        eduContentTOCId,
+        learningPlanGoalIds,
+        personId: this.authService.userId
+      })
+    );
   }
 
   private initialize() {
