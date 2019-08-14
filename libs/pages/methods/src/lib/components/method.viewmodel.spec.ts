@@ -942,4 +942,55 @@ describe('MethodViewModel', () => {
       expect(spy).toHaveBeenCalledWith(null, eduContent.id, null, true);
     });
   });
+
+  describe('onLearningPlanGoalProgressChanged()', () => {
+    it('should dispatch ToggleLearningPlanGoalProgress', () => {
+      const classGroupId = 11;
+      const learningPlanGoalId = 12;
+      const eduContentTOCId = 13;
+      const userLessonId = undefined;
+
+      const spy = jest.spyOn(store, 'dispatch');
+      methodViewModel.onLearningPlanGoalProgressChanged(
+        classGroupId,
+        learningPlanGoalId,
+        eduContentTOCId,
+        userLessonId
+      );
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy).toHaveBeenCalledWith(
+        new LearningPlanGoalProgressActions.ToggleLearningPlanGoalProgress({
+          classGroupId,
+          learningPlanGoalId,
+          eduContentTOCId,
+          userLessonId,
+          personId: 1
+        })
+      );
+    });
+  });
+
+  describe('onBulkLearningPlanGoalProgressChanged()', () => {
+    it('should dispatch BulkAddLearningPlanGoalProgresses', () => {
+      const classGroupId = 11;
+      const learningPlanGoalIds = [12, 22];
+      const eduContentTOCId = 13;
+
+      const spy = jest.spyOn(store, 'dispatch');
+      methodViewModel.onBulkLearningPlanGoalProgressChanged(
+        classGroupId,
+        learningPlanGoalIds,
+        eduContentTOCId
+      );
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy).toHaveBeenCalledWith(
+        new LearningPlanGoalProgressActions.BulkAddLearningPlanGoalProgresses({
+          classGroupId,
+          eduContentTOCId,
+          learningPlanGoalIds,
+          personId: 1
+        })
+      );
+    });
+  });
 });
