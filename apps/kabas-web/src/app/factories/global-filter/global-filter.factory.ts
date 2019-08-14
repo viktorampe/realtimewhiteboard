@@ -51,7 +51,7 @@ export class GlobalFilterFactory implements SearchFilterFactory {
     [key: string]: FilterQueryInterface;
   } = {
     eduContentProductType: {
-      query: EduContentProductTypeQueries.getAll,
+      query: EduContentProductTypeQueries.getAllOrderedByName,
       name: 'eduContentProductType',
       label: 'Type'
     },

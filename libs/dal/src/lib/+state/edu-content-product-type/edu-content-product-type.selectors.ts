@@ -1,5 +1,4 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { EduContentProductTypeInterface } from '../../+models';
 import {
   NAME,
   selectAll,
@@ -43,24 +42,18 @@ export const getAllEntities = createSelector(
   selectEntities
 );
 
-export const getAllOrderedBy = createSelector(
-  getAll,
-  (
-    eduContentProductTypes: EduContentProductTypeInterface[],
-    props: { orderBy: 'name' | 'sequence' }
-  ) => {
-    switch (props.orderBy) {
-      case 'sequence':
-        return eduContentProductTypes.sort((a, b) =>
-          a.sequence > b.sequence ? 1 : -1
-        );
-      case 'name':
-      default:
-        return eduContentProductTypes.sort((a, b) =>
-          a.name.localeCompare(b.name)
-        );
-    }
-  }
+export const getAllOrderedByName = createSelector(
+  selectEduContentProductTypeState,
+  (state: State) =>
+    Object.values(state.entities).sort((a, b) => a.name.localeCompare(b.name))
+);
+
+export const getAllOrderedBySequence = createSelector(
+  selectEduContentProductTypeState,
+  (state: State) =>
+    Object.values(state.entities).sort((a, b) =>
+      a.sequence > b.sequence ? 1 : -1
+    )
 );
 
 /**

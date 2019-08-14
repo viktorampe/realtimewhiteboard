@@ -552,7 +552,9 @@ export class MethodViewModel implements ContentOpenerInterface {
   private getEduContentProductTypesStream(): Observable<
     EduContentProductTypeInterface[]
   > {
-    return this.store.pipe(select(EduContentProductTypeQueries.getAll));
+    return this.store.pipe(
+      select(EduContentProductTypeQueries.getAllOrderedBySequence)
+    );
   }
 
   private getDiaboloPhasesStream(): Observable<DiaboloPhaseInterface[]> {
