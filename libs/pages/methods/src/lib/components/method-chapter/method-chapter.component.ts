@@ -44,14 +44,14 @@ export class MethodChapterComponent implements OnInit, AfterViewInit {
   public lessonsForChapter$: Observable<EduContentTOCInterface[]>;
   public currentTab$: Observable<number>;
   public currentMethodParams$: Observable<CurrentMethodParams>;
-  public currentBookTitle$: Observable<string>;
-  public rowHeaderColumns: MultiCheckBoxTableRowHeaderColumnInterface<
+  public breadCrumbTitles$: Observable<string>;
+  public learningPlanGoalTableHeaders: MultiCheckBoxTableRowHeaderColumnInterface<
     LearningPlanGoalInterface
   >[];
-  public itemColumns$: Observable<
+  public classGroupColumns$: Observable<
     MultiCheckBoxTableItemColumnInterface<ClassGroupInterface>[]
   >;
-  public subLevels$: Observable<
+  public learningPlanGoalsPerLessonWithSelectionForClassGroups$: Observable<
     MultiCheckBoxTableSubLevelInterface<
       EduContentTOCInterface,
       LearningPlanGoalInterface
@@ -75,24 +75,11 @@ export class MethodChapterComponent implements OnInit, AfterViewInit {
     this.lessonsForChapter$ = this.methodViewModel.currentToc$;
     this.currentTab$ = this.methodViewModel.currentTab$;
     this.currentMethodParams$ = this.methodViewModel.currentMethodParams$;
-    //TODO: wait for breadCrumbTitles$ stream on viewmodel:
-    //this.currentBookTitle$ = this.methodViewModel.methodWithYearByBookId$;
+    this.breadCrumbTitles$ = this.methodViewModel.breadCrumbTitles$;
     //TODO: Link event handlers from checkboxtable to here to viewmodel
-    this.rowHeaderColumns = this.methodViewModel.learningPlanGoalTableHeaders;
-    this.itemColumns$ = this.methodViewModel.filteredClassGroups$.pipe(
-      map(classGroups =>
-        classGroups.map(
-          (
-            classGroup
-          ): MultiCheckBoxTableItemColumnInterface<ClassGroupInterface> => ({
-            item: classGroup,
-            key: 'id',
-            label: 'name'
-          })
-        )
-      )
-    );
-    this.subLevels$ = this.methodViewModel.learningPlanGoalsPerLessonWithSelectionForClassGroups$;
+    this.learningPlanGoalTableHeaders = this.methodViewModel.learningPlanGoalTableHeaders;
+    this.classGroupColumns$ = this.getTableColumnsFromClassGroupsStream();
+    this.learningPlanGoalsPerLessonWithSelectionForClassGroups$ = this.methodViewModel.learningPlanGoalsPerLessonWithSelectionForClassGroups$;
   }
 
   ngAfterViewInit() {
@@ -163,5 +150,23 @@ export class MethodChapterComponent implements OnInit, AfterViewInit {
 
   public clickOpenBoeke(eduContent: EduContent): void {
     this.methodViewModel.openBoeke(eduContent);
+  }
+
+  private getTableColumnsFromClassGroupsStream(): Observable<
+    MultiCheckBoxTableItemColumnInterface<ClassGroupInterface>[]
+  > {
+    return this.methodViewModel.filteredClassGroups$.pipe(
+      map(classGroups =>
+        classGroups.map(
+          (
+            classGroup
+          ): MultiCheckBoxTableItemColumnInterface<ClassGroupInterface> => ({
+            item: classGroup,
+            key: 'id',
+            label: 'name'
+          })
+        )
+      )
+    );
   }
 }

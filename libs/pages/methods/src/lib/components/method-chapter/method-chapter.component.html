@@ -51,13 +51,15 @@
         <mat-tab label="Leerplandoelen">
           <div>
             Hieronder vind je een overzicht van de leerplandoelen die horen bij
-            {{ currentBookTitle$ | async }}.
+            {{ breadCrumbTitles$ | async }}.
           </div>
 
           <campus-multi-check-box-table
-            [rowHeaderColumns]="rowHeaderColumns"
-            [itemColumns]="itemColumns$ | async"
-            [subLevels]="subLevels$ | async"
+            [rowHeaderColumns]="learningPlanGoalTableHeaders"
+            [itemColumns]="classGroupColumns$ | async"
+            [subLevels]="
+              learningPlanGoalsPerLessonWithSelectionForClassGroups$ | async
+            "
           >
           </campus-multi-check-box-table>
         </mat-tab>

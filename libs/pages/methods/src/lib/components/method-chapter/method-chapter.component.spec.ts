@@ -9,7 +9,11 @@ import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/t
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { EduContentFixture } from '@campus/dal';
+import {
+  ClassGroupFixture,
+  ClassGroupInterface,
+  EduContentFixture
+} from '@campus/dal';
 import {
   ResultItemMockComponent,
   SearchComponent,
@@ -21,7 +25,8 @@ import {
   ENVIRONMENT_SEARCHMODES_TOKEN,
   SharedModule
 } from '@campus/shared';
-import { UiModule } from '@campus/ui';
+import { MultiCheckBoxTableItemColumnInterface, UiModule } from '@campus/ui';
+import { hot } from '@nrwl/nx/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { MethodViewModel } from './../method.viewmodel';
 import { MockMethodViewModel } from './../method.viewmodel.mock';
@@ -75,6 +80,28 @@ describe('MethodChapterComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should convert the filteredClassGroups$ to tableHeaders', () => {
+    const expectedGroupColumns: MultiCheckBoxTableItemColumnInterface<
+      ClassGroupInterface
+    >[] = [
+      {
+        item: new ClassGroupFixture({ id: 1, name: '1a' }),
+        key: 'id',
+        label: 'name'
+      },
+      {
+        item: new ClassGroupFixture({ id: 2, name: '1b' }),
+        key: 'id',
+        label: 'name'
+      }
+    ];
+    expect(component.classGroupColumns$).toBeObservable(
+      hot('a', {
+        a: expectedGroupColumns
+      })
+    );
   });
 
   describe('navigation', () => {
