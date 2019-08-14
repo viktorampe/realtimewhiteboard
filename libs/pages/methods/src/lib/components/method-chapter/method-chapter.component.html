@@ -60,6 +60,8 @@
             [subLevels]="
               learningPlanGoalsPerLessonWithSelectionForClassGroups$ | async
             "
+            (checkBoxChanged)="checkBoxChanged($event)"
+            (checkBoxesChanged)="checkBoxesChanged($event)"
           >
           </campus-multi-check-box-table>
         </mat-tab>

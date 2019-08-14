@@ -12,7 +12,11 @@ import { RouterTestingModule } from '@angular/router/testing';
 import {
   ClassGroupFixture,
   ClassGroupInterface,
-  EduContentFixture
+  EduContentFixture,
+  EduContentTOCFixture,
+  EduContentTOCInterface,
+  LearningPlanGoalFixture,
+  LearningPlanGoalInterface
 } from '@campus/dal';
 import {
   ResultItemMockComponent,
@@ -25,7 +29,11 @@ import {
   ENVIRONMENT_SEARCHMODES_TOKEN,
   SharedModule
 } from '@campus/shared';
-import { MultiCheckBoxTableItemColumnInterface, UiModule } from '@campus/ui';
+import {
+  MultiCheckBoxTableChangeEventInterface,
+  MultiCheckBoxTableItemColumnInterface,
+  UiModule
+} from '@campus/ui';
 import { hot } from '@nrwl/nx/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { MethodViewModel } from './../method.viewmodel';
@@ -268,6 +276,77 @@ describe('MethodChapterComponent', () => {
       component.clickOpenBoeke(mockBoeke);
 
       expect(methodViewModel.openBoeke).toHaveBeenCalledWith(mockBoeke);
+    });
+  });
+
+  describe('MultiCheckBoxTable event handlers', () => {
+    describe('checkBoxChanged', () => {
+      it('should call onLearningPlanGoalProgressChanged on the viewmodel with the right arguments', () => {
+        jest.spyOn(methodViewModel, 'onLearningPlanGoalProgressChanged');
+
+        const changeEvent = {
+          column: new ClassGroupFixture({ id: 1 }),
+          item: new LearningPlanGoalFixture({ id: 2 }),
+          subLevel: new EduContentTOCFixture({ id: 3 })
+        } as MultiCheckBoxTableChangeEventInterface<
+          LearningPlanGoalInterface,
+          ClassGroupInterface,
+          EduContentTOCInterface
+        >;
+
+        component.checkBoxChanged(changeEvent);
+
+        expect(
+          methodViewModel.onLearningPlanGoalProgressChanged
+        ).toHaveBeenCalled();
+        expect(
+          methodViewModel.onLearningPlanGoalProgressChanged
+        ).toHaveBeenCalledWith(1, 2, 3, undefined);
+      });
+    });
+
+    describe('checkBoxesChanged', () => {
+      it('should not call onBulkLearningPlanGoalProgressChanged on the viewmodel if the array is empty', () => {
+        jest.spyOn(methodViewModel, 'onBulkLearningPlanGoalProgressChanged');
+
+        component.checkBoxesChanged([]);
+
+        expect(
+          methodViewModel.onBulkLearningPlanGoalProgressChanged
+        ).not.toHaveBeenCalled();
+      });
+
+      it('should call onBulkLearningPlanGoalProgressChanged on the viewmodel with the right arguments', () => {
+        jest.spyOn(methodViewModel, 'onBulkLearningPlanGoalProgressChanged');
+
+        const column = new ClassGroupFixture({ id: 1 });
+        const subLevel = new EduContentTOCFixture({ id: 4 });
+        const changeEvents = [
+          {
+            column,
+            item: new LearningPlanGoalFixture({ id: 2 }),
+            subLevel
+          },
+          {
+            column,
+            item: new LearningPlanGoalFixture({ id: 3 }),
+            subLevel
+          }
+        ] as MultiCheckBoxTableChangeEventInterface<
+          LearningPlanGoalInterface,
+          ClassGroupInterface,
+          EduContentTOCInterface
+        >[];
+
+        component.checkBoxesChanged(changeEvents);
+
+        expect(
+          methodViewModel.onBulkLearningPlanGoalProgressChanged
+        ).toHaveBeenCalled();
+        expect(
+          methodViewModel.onBulkLearningPlanGoalProgressChanged
+        ).toHaveBeenCalledWith(1, [2, 3], 4);
+      });
     });
   });
 });

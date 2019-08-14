@@ -21,6 +21,7 @@ import {
   SearchStateInterface
 } from '@campus/search';
 import {
+  MultiCheckBoxTableChangeEventInterface,
   MultiCheckBoxTableItemColumnInterface,
   MultiCheckBoxTableRowHeaderColumnInterface,
   MultiCheckBoxTableSubLevelInterface
@@ -76,7 +77,7 @@ export class MethodChapterComponent implements OnInit, AfterViewInit {
     this.currentTab$ = this.methodViewModel.currentTab$;
     this.currentMethodParams$ = this.methodViewModel.currentMethodParams$;
     this.breadCrumbTitles$ = this.methodViewModel.breadCrumbTitles$;
-    //TODO: Link event handlers from checkboxtable to here to viewmodel
+
     this.learningPlanGoalTableHeaders = this.methodViewModel.learningPlanGoalTableHeaders;
     this.classGroupColumns$ = this.getTableColumnsFromClassGroupsStream();
     this.learningPlanGoalsPerLessonWithSelectionForClassGroups$ = this.methodViewModel.learningPlanGoalsPerLessonWithSelectionForClassGroups$;
@@ -150,6 +151,37 @@ export class MethodChapterComponent implements OnInit, AfterViewInit {
 
   public clickOpenBoeke(eduContent: EduContent): void {
     this.methodViewModel.openBoeke(eduContent);
+  }
+
+  public checkBoxChanged(
+    event: MultiCheckBoxTableChangeEventInterface<
+      LearningPlanGoalInterface,
+      ClassGroupInterface,
+      EduContentTOCInterface
+    >
+  ) {
+    this.methodViewModel.onLearningPlanGoalProgressChanged(
+      event.column.id,
+      event.item.id,
+      event.subLevel.id,
+      undefined
+    );
+  }
+
+  public checkBoxesChanged(
+    events: MultiCheckBoxTableChangeEventInterface<
+      LearningPlanGoalInterface,
+      ClassGroupInterface,
+      EduContentTOCInterface
+    >[]
+  ) {
+    if (events.length) {
+      this.methodViewModel.onBulkLearningPlanGoalProgressChanged(
+        events[0].column.id,
+        events.map(e => e.item.id),
+        events[0].subLevel.id
+      );
+    }
   }
 
   private getTableColumnsFromClassGroupsStream(): Observable<
