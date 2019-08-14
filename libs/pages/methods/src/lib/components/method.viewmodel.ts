@@ -93,6 +93,7 @@ export class MethodViewModel implements ContentOpenerInterface {
   public currentTab$: Observable<number>;
   public currentMethodParams$: Observable<CurrentMethodParams>;
   public classGroups$: Observable<ClassGroupInterface[]>;
+  public classGroupsForMethod$: Observable<ClassGroupInterface[]>;
   public filteredClassGroups$: Observable<ClassGroupInterface[]>;
   public userLessons$: Observable<UserLessonInterface[]>;
   public breadCrumbTitles$: Observable<string>;
@@ -511,10 +512,15 @@ export class MethodViewModel implements ContentOpenerInterface {
   }
 
   private getFilteredClassGroups(): Observable<ClassGroupInterface[]> {
-    // TODO: filter classgroups by years of the current book
-    // TODO: filter classgroups by their methods through licenses?
-    // TODO: filter classgroups through select dropdown
-    return this.store.pipe(select(ClassGroupQueries.getAll));
+    return this.currentMethod$.pipe(
+      filter(currentMethod => !!currentMethod),
+      map(currentMethod => currentMethod.id),
+      switchMap(currentMethodId =>
+        this.store.pipe(
+          select(ClassGroupQueries.getByMethodId, { id: currentMethodId })
+        )
+      )
+    );
   }
 
   private getGeneralFilesStream(): Observable<EduContent[]> {
