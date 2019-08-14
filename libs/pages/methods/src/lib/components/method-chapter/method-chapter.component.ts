@@ -164,7 +164,7 @@ export class MethodChapterComponent implements OnInit, AfterViewInit {
       event.column.id,
       event.item.id,
       event.subLevel.id,
-      undefined
+      null
     );
   }
 
