@@ -9,7 +9,15 @@ import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/t
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { EduContentFixture } from '@campus/dal';
+import {
+  ClassGroupFixture,
+  ClassGroupInterface,
+  EduContentFixture,
+  EduContentTOCFixture,
+  EduContentTOCInterface,
+  LearningPlanGoalFixture,
+  LearningPlanGoalInterface
+} from '@campus/dal';
 import {
   ResultItemMockComponent,
   SearchComponent,
@@ -21,7 +29,12 @@ import {
   ENVIRONMENT_SEARCHMODES_TOKEN,
   SharedModule
 } from '@campus/shared';
-import { UiModule } from '@campus/ui';
+import {
+  MultiCheckBoxTableChangeEventInterface,
+  MultiCheckBoxTableItemColumnInterface,
+  UiModule
+} from '@campus/ui';
+import { hot } from '@nrwl/nx/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { MethodViewModel } from './../method.viewmodel';
 import { MockMethodViewModel } from './../method.viewmodel.mock';
@@ -75,6 +88,28 @@ describe('MethodChapterComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should convert the filteredClassGroups$ to tableHeaders', () => {
+    const expectedGroupColumns: MultiCheckBoxTableItemColumnInterface<
+      ClassGroupInterface
+    >[] = [
+      {
+        item: new ClassGroupFixture({ id: 1, name: '1a' }),
+        key: 'id',
+        label: 'name'
+      },
+      {
+        item: new ClassGroupFixture({ id: 2, name: '1b' }),
+        key: 'id',
+        label: 'name'
+      }
+    ];
+    expect(component.classGroupColumns$).toBeObservable(
+      hot('a', {
+        a: expectedGroupColumns
+      })
+    );
   });
 
   describe('navigation', () => {
@@ -241,6 +276,77 @@ describe('MethodChapterComponent', () => {
       component.clickOpenBoeke(mockBoeke);
 
       expect(methodViewModel.openBoeke).toHaveBeenCalledWith(mockBoeke);
+    });
+  });
+
+  describe('MultiCheckBoxTable event handlers', () => {
+    describe('checkBoxChanged', () => {
+      it('should call onLearningPlanGoalProgressChanged on the viewmodel with the right arguments', () => {
+        jest.spyOn(methodViewModel, 'onLearningPlanGoalProgressChanged');
+
+        const changeEvent = {
+          column: new ClassGroupFixture({ id: 1 }),
+          item: new LearningPlanGoalFixture({ id: 2 }),
+          subLevel: new EduContentTOCFixture({ id: 3 })
+        } as MultiCheckBoxTableChangeEventInterface<
+          LearningPlanGoalInterface,
+          ClassGroupInterface,
+          EduContentTOCInterface
+        >;
+
+        component.checkBoxChanged(changeEvent);
+
+        expect(
+          methodViewModel.onLearningPlanGoalProgressChanged
+        ).toHaveBeenCalled();
+        expect(
+          methodViewModel.onLearningPlanGoalProgressChanged
+        ).toHaveBeenCalledWith(1, 2, 3, null);
+      });
+    });
+
+    describe('checkBoxesChanged', () => {
+      it('should not call onBulkLearningPlanGoalProgressChanged on the viewmodel if the array is empty', () => {
+        jest.spyOn(methodViewModel, 'onBulkLearningPlanGoalProgressChanged');
+
+        component.checkBoxesChanged([]);
+
+        expect(
+          methodViewModel.onBulkLearningPlanGoalProgressChanged
+        ).not.toHaveBeenCalled();
+      });
+
+      it('should call onBulkLearningPlanGoalProgressChanged on the viewmodel with the right arguments', () => {
+        jest.spyOn(methodViewModel, 'onBulkLearningPlanGoalProgressChanged');
+
+        const column = new ClassGroupFixture({ id: 1 });
+        const subLevel = new EduContentTOCFixture({ id: 4 });
+        const changeEvents = [
+          {
+            column,
+            item: new LearningPlanGoalFixture({ id: 2 }),
+            subLevel
+          },
+          {
+            column,
+            item: new LearningPlanGoalFixture({ id: 3 }),
+            subLevel
+          }
+        ] as MultiCheckBoxTableChangeEventInterface<
+          LearningPlanGoalInterface,
+          ClassGroupInterface,
+          EduContentTOCInterface
+        >[];
+
+        component.checkBoxesChanged(changeEvents);
+
+        expect(
+          methodViewModel.onBulkLearningPlanGoalProgressChanged
+        ).toHaveBeenCalled();
+        expect(
+          methodViewModel.onBulkLearningPlanGoalProgressChanged
+        ).toHaveBeenCalledWith(1, [2, 3], 4);
+      });
     });
   });
 });

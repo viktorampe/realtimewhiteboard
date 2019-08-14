@@ -7,7 +7,12 @@ import {
   ViewChildren
 } from '@angular/core';
 import { Router } from '@angular/router';
-import { EduContent, EduContentTOCInterface } from '@campus/dal';
+import {
+  ClassGroupInterface,
+  EduContent,
+  EduContentTOCInterface,
+  LearningPlanGoalInterface
+} from '@campus/dal';
 import {
   SearchComponent,
   SearchModeInterface,
@@ -15,8 +20,14 @@ import {
   SearchResultInterface,
   SearchStateInterface
 } from '@campus/search';
+import {
+  MultiCheckBoxTableChangeEventInterface,
+  MultiCheckBoxTableItemColumnInterface,
+  MultiCheckBoxTableRowHeaderColumnInterface,
+  MultiCheckBoxTableSubLevelInterface
+} from '@campus/ui';
 import { Observable } from 'rxjs';
-import { take, withLatestFrom } from 'rxjs/operators';
+import { map, take, withLatestFrom } from 'rxjs/operators';
 import { CurrentMethodParams, MethodViewModel } from '../method.viewmodel';
 
 @Component({
@@ -34,6 +45,19 @@ export class MethodChapterComponent implements OnInit, AfterViewInit {
   public lessonsForChapter$: Observable<EduContentTOCInterface[]>;
   public currentTab$: Observable<number>;
   public currentMethodParams$: Observable<CurrentMethodParams>;
+  public breadCrumbTitles$: Observable<string>;
+  public learningPlanGoalTableHeaders: MultiCheckBoxTableRowHeaderColumnInterface<
+    LearningPlanGoalInterface
+  >[];
+  public classGroupColumns$: Observable<
+    MultiCheckBoxTableItemColumnInterface<ClassGroupInterface>[]
+  >;
+  public learningPlanGoalsPerLessonWithSelectionForClassGroups$: Observable<
+    MultiCheckBoxTableSubLevelInterface<
+      EduContentTOCInterface,
+      LearningPlanGoalInterface
+    >[]
+  >;
 
   @ViewChildren(SearchPortalDirective)
   private portalHosts: QueryList<SearchPortalDirective>;
@@ -52,6 +76,11 @@ export class MethodChapterComponent implements OnInit, AfterViewInit {
     this.lessonsForChapter$ = this.methodViewModel.currentToc$;
     this.currentTab$ = this.methodViewModel.currentTab$;
     this.currentMethodParams$ = this.methodViewModel.currentMethodParams$;
+    this.breadCrumbTitles$ = this.methodViewModel.breadCrumbTitles$;
+
+    this.learningPlanGoalTableHeaders = this.methodViewModel.learningPlanGoalTableHeaders;
+    this.classGroupColumns$ = this.getTableColumnsFromClassGroupsStream();
+    this.learningPlanGoalsPerLessonWithSelectionForClassGroups$ = this.methodViewModel.learningPlanGoalsPerLessonWithSelectionForClassGroups$;
   }
 
   ngAfterViewInit() {
@@ -122,5 +151,54 @@ export class MethodChapterComponent implements OnInit, AfterViewInit {
 
   public clickOpenBoeke(eduContent: EduContent): void {
     this.methodViewModel.openBoeke(eduContent);
+  }
+
+  public checkBoxChanged(
+    event: MultiCheckBoxTableChangeEventInterface<
+      LearningPlanGoalInterface,
+      ClassGroupInterface,
+      EduContentTOCInterface
+    >
+  ) {
+    this.methodViewModel.onLearningPlanGoalProgressChanged(
+      event.column.id,
+      event.item.id,
+      event.subLevel.id,
+      null
+    );
+  }
+
+  public checkBoxesChanged(
+    events: MultiCheckBoxTableChangeEventInterface<
+      LearningPlanGoalInterface,
+      ClassGroupInterface,
+      EduContentTOCInterface
+    >[]
+  ) {
+    if (events.length) {
+      this.methodViewModel.onBulkLearningPlanGoalProgressChanged(
+        events[0].column.id,
+        events.map(e => e.item.id),
+        events[0].subLevel.id
+      );
+    }
+  }
+
+  private getTableColumnsFromClassGroupsStream(): Observable<
+    MultiCheckBoxTableItemColumnInterface<ClassGroupInterface>[]
+  > {
+    return this.methodViewModel.filteredClassGroups$.pipe(
+      map(classGroups =>
+        classGroups.map(
+          (
+            classGroup
+          ): MultiCheckBoxTableItemColumnInterface<ClassGroupInterface> => ({
+            item: classGroup,
+            key: 'id',
+            label: 'name'
+          })
+        )
+      )
+    );
   }
 }
