@@ -8,4 +8,5 @@ export interface EduContentProductTypeInterface {
   id?: number;
   parent?: number;
   eduContentMetadata?: EduContentMetadataInterface[];
+  sequence?: number;
 }
