@@ -9,13 +9,18 @@ import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { EduContentFixture } from '@campus/dal';
+import {
+  ClassGroupFixture,
+  ClassGroupInterface,
+  EduContentFixture
+} from '@campus/dal';
 import {
   ENVIRONMENT_ICON_MAPPING_TOKEN,
   ENVIRONMENT_SEARCHMODES_TOKEN,
   SharedModule
 } from '@campus/shared';
-import { UiModule } from '@campus/ui';
+import { MultiCheckBoxTableItemColumnInterface, UiModule } from '@campus/ui';
+import { hot } from '@nrwl/nx/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { MethodViewModel } from '../method.viewmodel';
 import { MockMethodViewModel } from '../method.viewmodel.mock';
@@ -89,6 +94,28 @@ describe('MethodComponent', () => {
     expect(productTypeHeaders.length).toBe(2);
   });
 
+  it('should convert the filteredClassGroups$ to tableHeaders', () => {
+    const expectedGroupColumns: MultiCheckBoxTableItemColumnInterface<
+      ClassGroupInterface
+    >[] = [
+      {
+        item: new ClassGroupFixture({ id: 1, name: '1a' }),
+        key: 'id',
+        label: 'name'
+      },
+      {
+        item: new ClassGroupFixture({ id: 2, name: '1b' }),
+        key: 'id',
+        label: 'name'
+      }
+    ];
+    expect(component.classGroupColumns$).toBeObservable(
+      hot('a', {
+        a: expectedGroupColumns
+      })
+    );
+  });
+
   describe('clickOpenChapter', () => {
     it('should navigate to the chapter when clickOpenChapter is called', fakeAsync(() => {
       component.clickOpenChapter(3);
@@ -137,6 +164,25 @@ describe('MethodComponent', () => {
       component.clickOpenBoeke(mockBoeke);
 
       expect(methodViewModel.openBoeke).toHaveBeenCalledWith(mockBoeke);
+    });
+  });
+
+  describe('openGeneralFile', () => {
+    it('should call the correct method on the viewmodel', () => {
+      jest.spyOn(methodViewModel, 'openEduContentAsDownload');
+
+      const eduContent = new EduContentFixture();
+      component.clickOpenGeneralFile(eduContent);
+
+      expect(methodViewModel.openEduContentAsDownload).toHaveBeenCalledWith(
+        eduContent
+      );
+    });
+  });
+
+  describe('clickProgress', () => {
+    it('is not yet implemented', () => {
+      // TODO
     });
   });
 });

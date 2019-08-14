@@ -37,7 +37,9 @@ import {
   MethodInterface,
   MethodReducer,
   UserReducer,
-  YearFixture
+  YearActions,
+  YearFixture,
+  YearReducer
 } from '@campus/dal';
 import {
   FilterFactoryFixture,
@@ -90,6 +92,7 @@ describe('MethodViewModel', () => {
     new EduContentTOCFixture({
       id: 1,
       treeId: bookId,
+      title: 'Chapter 1',
       depth: 0,
       lft: 1,
       rgt: 6,
@@ -98,6 +101,7 @@ describe('MethodViewModel', () => {
     new EduContentTOCFixture({
       id: 2,
       treeId: bookId,
+      title: 'Chapter 2',
       depth: 0,
       lft: 7,
       rgt: 10,
@@ -109,6 +113,7 @@ describe('MethodViewModel', () => {
     new EduContentTOCFixture({
       id: 3,
       treeId: bookId,
+      title: 'Lesson 1',
       depth: 1,
       lft: 2,
       rgt: 3,
@@ -117,6 +122,7 @@ describe('MethodViewModel', () => {
     new EduContentTOCFixture({
       id: 4,
       treeId: bookId,
+      title: 'Lesson 2',
       depth: 1,
       lft: 4,
       rgt: 5,
@@ -125,6 +131,7 @@ describe('MethodViewModel', () => {
     new EduContentTOCFixture({
       id: 5,
       treeId: bookId,
+      title: 'Lesson 3',
       depth: 1,
       lft: 8,
       rgt: 9,
@@ -132,7 +139,7 @@ describe('MethodViewModel', () => {
     })
   ];
 
-  const bookYears = [new YearFixture()];
+  const bookYears = [new YearFixture({ label: '1e leerjaar' })];
 
   const book: EduContentBookInterface = new EduContentBookFixture({
     id: bookId,
@@ -148,6 +155,7 @@ describe('MethodViewModel', () => {
 
   const method: MethodInterface = new MethodFixture({
     id: bookMethodId,
+    name: 'Katapult',
     learningAreaId: methodLearningAreaId
   });
 
@@ -233,6 +241,7 @@ describe('MethodViewModel', () => {
           EduContentTocReducer,
           EduContentBookReducer,
           MethodReducer,
+          YearReducer,
           EduContentReducer,
           ClassGroupReducer,
           LearningPlanGoalReducer,
@@ -304,6 +313,12 @@ describe('MethodViewModel', () => {
     store.dispatch(
       new MethodActions.MethodsLoaded({
         methods: [method]
+      })
+    );
+
+    store.dispatch(
+      new YearActions.YearsLoaded({
+        years: bookYears
       })
     );
 
@@ -612,6 +627,57 @@ describe('MethodViewModel', () => {
       });
     });
 
+    describe('breadCrumbTitles$', () => {
+      it('should be an empty string when no book, chapter or lesson is selected', () => {
+        navigateWithParams({});
+        expect(methodViewModel.breadCrumbTitles$).toBeObservable(
+          hot('a', {
+            a: ''
+          })
+        );
+      });
+
+      it('should be the method year title when only a book is selected', () => {
+        navigateWithParams({ book: bookId });
+
+        const expectedResult = `${method.name} ${bookYears[0].label}`;
+
+        expect(methodViewModel.breadCrumbTitles$).toBeObservable(
+          hot('a', {
+            a: expectedResult
+          })
+        );
+      });
+
+      it('should be the method year title > toc title when a book and chapter is selected', () => {
+        navigateWithParams({ book: bookId, chapter: 1 });
+
+        const expectedResult = `${method.name} ${bookYears[0].label} > ${
+          chapterTocs[0].title
+        }`;
+
+        expect(methodViewModel.breadCrumbTitles$).toBeObservable(
+          hot('a', {
+            a: expectedResult
+          })
+        );
+      });
+
+      it('should be the method year title > toc title > toc title when a book, chapter and lesson is selected', () => {
+        navigateWithParams({ book: bookId, chapter: 1, lesson: 3 });
+
+        const expectedResult =
+          `${method.name} ${bookYears[0].label} > ${chapterTocs[0].title}` +
+          ` > ${lessonTocs[0].title}`;
+
+        expect(methodViewModel.breadCrumbTitles$).toBeObservable(
+          hot('a', {
+            a: expectedResult
+          })
+        );
+      });
+    });
+
     describe('currentToc$', () => {
       it('should be an empty array when no book, chapter or lesson is selected', () => {
         navigateWithParams({});
@@ -874,6 +940,57 @@ describe('MethodViewModel', () => {
       methodViewModel.openEduContentAsSolution(eduContent);
 
       expect(spy).toHaveBeenCalledWith(null, eduContent.id, null, true);
+    });
+  });
+
+  describe('onLearningPlanGoalProgressChanged()', () => {
+    it('should dispatch ToggleLearningPlanGoalProgress', () => {
+      const classGroupId = 11;
+      const learningPlanGoalId = 12;
+      const eduContentTOCId = 13;
+      const userLessonId = undefined;
+
+      const spy = jest.spyOn(store, 'dispatch');
+      methodViewModel.onLearningPlanGoalProgressChanged(
+        classGroupId,
+        learningPlanGoalId,
+        eduContentTOCId,
+        userLessonId
+      );
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy).toHaveBeenCalledWith(
+        new LearningPlanGoalProgressActions.ToggleLearningPlanGoalProgress({
+          classGroupId,
+          learningPlanGoalId,
+          eduContentTOCId,
+          userLessonId,
+          personId: 1
+        })
+      );
+    });
+  });
+
+  describe('onBulkLearningPlanGoalProgressChanged()', () => {
+    it('should dispatch BulkAddLearningPlanGoalProgresses', () => {
+      const classGroupId = 11;
+      const learningPlanGoalIds = [12, 22];
+      const eduContentTOCId = 13;
+
+      const spy = jest.spyOn(store, 'dispatch');
+      methodViewModel.onBulkLearningPlanGoalProgressChanged(
+        classGroupId,
+        learningPlanGoalIds,
+        eduContentTOCId
+      );
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy).toHaveBeenCalledWith(
+        new LearningPlanGoalProgressActions.BulkAddLearningPlanGoalProgresses({
+          classGroupId,
+          eduContentTOCId,
+          learningPlanGoalIds,
+          personId: 1
+        })
+      );
     });
   });
 });
