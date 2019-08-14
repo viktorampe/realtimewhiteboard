@@ -83,7 +83,18 @@
         </mat-tab>
 
         <mat-tab label="Leerplandoelen">
-          Leerplandoelen
+          <div class="method-method__container__goals">
+            Hieronder vind je een overzicht van de leerplandoelen die horen bij
+            {{ breadcrumbTitles$ | async }}.
+          </div>
+
+          <campus-multi-check-box-table
+            [rowHeaderColumns]="learningPlanGoalTableHeaders"
+            [itemColumns]="classGroupColumns$ | async"
+            [items]="learningPlanGoalsWithSelectionForClassGroups$ | async"
+            (checkBoxChanged)="clickProgress($event)"
+          >
+          </campus-multi-check-box-table>
         </mat-tab>
       </mat-tab-group>
     </div>
