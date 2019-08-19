@@ -34,6 +34,8 @@ export const GLOBAL_FILTER_FACTORY_TOKEN = new InjectionToken(
   providedIn: 'root'
 })
 export class GlobalFilterFactory implements SearchFilterFactory {
+  public readonly maxVisibleItems = 5;
+
   private keyProperty = 'id';
   private displayProperty = 'name';
   private component = CheckboxListFilterComponent;
@@ -53,7 +55,8 @@ export class GlobalFilterFactory implements SearchFilterFactory {
     eduContentProductType: {
       query: EduContentProductTypeQueries.getAllOrderedByName,
       name: 'eduContentProductType',
-      label: 'Type'
+      label: 'Type',
+      options: { maxVisibleItems: this.maxVisibleItems }
     },
     diaboloPhase: {
       query: DiaboloPhaseQueries.getAll,
@@ -66,12 +69,14 @@ export class GlobalFilterFactory implements SearchFilterFactory {
     methods: {
       query: MethodQueries.getAllowedMethods,
       name: 'methods',
-      label: 'Methode'
+      label: 'Methode',
+      options: { maxVisibleItems: this.maxVisibleItems }
     },
     learningDomains: {
       query: LearningDomainQueries.getAll,
       name: 'learningDomains',
-      label: 'Leerdomein'
+      label: 'Leerdomein',
+      options: { maxVisibleItems: this.maxVisibleItems }
     },
     years: {
       query: YearQueries.getAll,
