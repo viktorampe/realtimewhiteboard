@@ -174,7 +174,8 @@ describe('DiaboloChapterLessonFilterFactory', () => {
       'id',
       'name',
       mockEduContentProductTypes,
-      CheckboxListFilterComponent
+      CheckboxListFilterComponent,
+      { maxVisibleItems: 5 }
     );
   }
 
@@ -197,7 +198,8 @@ describe('DiaboloChapterLessonFilterFactory', () => {
       'id',
       'name',
       mockMethods,
-      CheckboxListFilterComponent
+      CheckboxListFilterComponent,
+      { maxVisibleItems: 5 }
     );
   }
 
@@ -208,7 +210,8 @@ describe('DiaboloChapterLessonFilterFactory', () => {
       'id',
       'name',
       mockLearningDomains,
-      CheckboxListFilterComponent
+      CheckboxListFilterComponent,
+      { maxVisibleItems: 5 }
     );
   }
 
