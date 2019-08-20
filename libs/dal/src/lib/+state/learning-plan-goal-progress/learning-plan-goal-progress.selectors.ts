@@ -92,6 +92,28 @@ export const findMany = createSelector(
   }
 );
 
+export const getByGroupLearningGoalAndTocs = createSelector(
+  selectLearningPlanGoalProgressState,
+  (
+    state: State,
+    props: {
+      classGroupId: number;
+      learningPlanGoalId: number;
+      eduContentTocIds: number[];
+    }
+  ) =>
+    Object.values(state.entities).filter(
+      learningPlanGoalProgress =>
+        learningPlanGoalProgress.classGroupId === props.classGroupId &&
+        learningPlanGoalProgress.learningPlanGoalId ===
+          props.learningPlanGoalId &&
+        (!!learningPlanGoalProgress.userLessonId ||
+          props.eduContentTocIds.includes(
+            learningPlanGoalProgress.eduContentTOCId
+          ))
+    )
+);
+
 export const getGroupedByLearningPlanGoalId = createSelector(
   selectLearningPlanGoalProgressState,
   (state: State) => {

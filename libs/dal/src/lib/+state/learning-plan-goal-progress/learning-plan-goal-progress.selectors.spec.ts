@@ -130,6 +130,73 @@ describe('LearningPlanGoalProgress Selectors', () => {
     });
   });
 
+  describe('getByGroupLearningGoalAndTocs', () => {
+    const learningPlanGoalProgressArray = [
+      new LearningPlanGoalProgressFixture({
+        id: 1,
+        classGroupId: 1,
+        personId: 1,
+        learningPlanGoalId: 2,
+        eduContentTOCId: 3,
+        userLessonId: undefined
+      }),
+      new LearningPlanGoalProgressFixture({
+        id: 2,
+        classGroupId: 1,
+        personId: 1,
+        learningPlanGoalId: 2,
+        eduContentTOCId: 4,
+        userLessonId: undefined
+      }),
+      new LearningPlanGoalProgressFixture({
+        id: 3,
+        classGroupId: 1,
+        personId: 1,
+        learningPlanGoalId: 2,
+        eduContentTOCId: undefined,
+        userLessonId: 5
+      }),
+      new LearningPlanGoalProgressFixture({
+        id: 4,
+        classGroupId: 2,
+        personId: 1,
+        learningPlanGoalId: 3,
+        eduContentTOCId: 1,
+        userLessonId: 6
+      }),
+      new LearningPlanGoalProgressFixture({
+        id: 5,
+        classGroupId: 2,
+        personId: 1,
+        learningPlanGoalId: 2,
+        eduContentTOCId: undefined,
+        userLessonId: 7
+      })
+    ];
+    beforeEach(() => {
+      learningPlanGoalProgressState = createState(
+        learningPlanGoalProgressArray,
+        true,
+        'no error'
+      );
+      storeState = {
+        learningPlanGoalProgresses: learningPlanGoalProgressState
+      };
+    });
+    it('should return all that correspond to userGroupId, learningPlanGoalId and either has a usergroup or a corresponding tocId', () => {
+      const results = LearningPlanGoalProgressQueries.getByGroupLearningGoalAndTocs(
+        storeState,
+        { classGroupId: 1, learningPlanGoalId: 2, eduContentTocIds: [3, 4] }
+      );
+      expect(results.length).toBe(3);
+      expect(results).toEqual([
+        learningPlanGoalProgressArray[0],
+        learningPlanGoalProgressArray[1],
+        learningPlanGoalProgressArray[2]
+      ]);
+    });
+  });
+
   describe('find', () => {
     const learningPlanGoalProgressArray = [
       new LearningPlanGoalProgressFixture({
