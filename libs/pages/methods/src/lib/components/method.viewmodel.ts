@@ -62,6 +62,7 @@ import {
   shareReplay,
   switchMap,
   switchMapTo,
+  take,
   withLatestFrom
 } from 'rxjs/operators';
 
@@ -742,5 +743,43 @@ export class MethodViewModel implements ContentOpenerInterface {
           numeric: true
         });
       });
+  }
+
+  public unCheckFromMethodPage(
+    learningPlanGoal: LearningPlanGoalInterface,
+    classGroup: ClassGroupInterface
+  ) {
+    let learningPlanGoalProgressesToBeDeleted: LearningPlanGoalProgressInterface[];
+    this.getLearningPlanGoalProgressesForGroupLearningGoalAndTocs(
+      learningPlanGoal,
+      classGroup
+    )
+      .pipe(take(1))
+      .subscribe(lpgs => (learningPlanGoalProgressesToBeDeleted = lpgs));
+    this.store.dispatch(
+      new LearningPlanGoalProgressActions.DeleteLearningPlanGoalProgresses({
+        ids: learningPlanGoalProgressesToBeDeleted.map(lpg => lpg.id)
+      })
+    );
+  }
+
+  private getLearningPlanGoalProgressesForGroupLearningGoalAndTocs(
+    learningPlanGoal: LearningPlanGoalInterface,
+    classGroup: ClassGroupInterface
+  ): Observable<LearningPlanGoalProgressInterface[]> {
+    return this.getTocsStream().pipe(
+      switchMap(tocs =>
+        this.store.pipe(
+          select(
+            LearningPlanGoalProgressQueries.getByGroupLearningGoalAndTocs,
+            {
+              classGroupId: classGroup.id,
+              learningPlanGoalId: learningPlanGoal.id,
+              eduContentTocIds: tocs.map(toc => toc.id)
+            }
+          )
+        )
+      )
+    );
   }
 }
