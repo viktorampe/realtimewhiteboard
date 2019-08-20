@@ -40,6 +40,9 @@ export class LearningPlanGoalProgressService
     learningPlanGoalProgressIds: number[]
   ): Observable<boolean> {
     //TODO -- implement call to new remote method
+    console.log(
+      `deleteLearningPlanGoalProgresses called with\n - userId: ${userId}\n - learningPlanGoalProgressIds: ${learningPlanGoalProgressIds}`
+    );
     return of(true);
   }
 

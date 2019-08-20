@@ -130,11 +130,18 @@ export class DeleteLearningPlanGoalProgress
   ) {}
 }
 
-export class DeleteLearningPlanGoalProgresses implements Action {
+export class DeleteLearningPlanGoalProgresses
+  implements FeedbackTriggeringAction {
   readonly type =
     LearningPlanGoalProgressesActionTypes.DeleteLearningPlanGoalProgresses;
 
-  constructor(public payload: { ids: number[] }) {}
+  constructor(
+    public payload: {
+      ids: number[];
+      userId: number;
+      customFeedbackHandlers?: CustomFeedbackHandlersInterface;
+    }
+  ) {}
 }
 
 export class ClearLearningPlanGoalProgresses implements Action {
