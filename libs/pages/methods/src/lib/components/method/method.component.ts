@@ -102,8 +102,16 @@ export class MethodComponent implements OnInit {
       EduContentTOCInterface
     >
   ) {
-    // open popup
-    console.log(event);
+    // no sublevel and checkbox means we are in the method page
+    if (!event.subLevel && event.checkBox) {
+      const previousCheckboxState = event.checkBox.checked;
+      if (previousCheckboxState) {
+        // if the checkbox becomes unchecked
+        const lpgs = this.viewModel.unCheckFromMethodPage(event.item, event.column);
+      } else {
+        console.log('checked');
+      }
+    }
   }
 
   private getTableColumnsFromClassGroupsStream(): Observable<
