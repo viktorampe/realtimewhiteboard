@@ -81,7 +81,7 @@ describe('MethodChapterComponent', () => {
     component = fixture.componentInstance;
     searchComponent = TestBed.get(SearchComponent);
     methodViewModel = TestBed.get(MethodViewModel);
-    methodViewModel.currentMethodParams$.next({ book: 1, chapter: 2 });
+    methodViewModel.currentMethodParams$.next({ book: 3599752219, chapter: 2 });
     component.searchComponent = searchComponent;
     fixture.detectChanges();
   });
@@ -158,7 +158,7 @@ describe('MethodChapterComponent', () => {
         tick();
 
         expect(router.navigate).toHaveBeenCalled();
-        expect(router.navigate).toHaveBeenCalledWith(['methods', 1], {
+        expect(router.navigate).toHaveBeenCalledWith(['methods', 3599752219], {
           queryParams: { tab: 0 }
         });
       }));
@@ -173,9 +173,12 @@ describe('MethodChapterComponent', () => {
         tick();
 
         expect(router.navigate).toHaveBeenCalled();
-        expect(router.navigate).toHaveBeenCalledWith(['methods', 1, 2], {
-          queryParams: { tab: 0 }
-        });
+        expect(router.navigate).toHaveBeenCalledWith(
+          ['methods', 3599752219, 2],
+          {
+            queryParams: { tab: 0 }
+          }
+        );
       }));
 
       it('should pass the tab in the queryParams when going back', fakeAsync(() => {
@@ -186,7 +189,7 @@ describe('MethodChapterComponent', () => {
         tick();
 
         expect(router.navigate).toHaveBeenCalled();
-        expect(router.navigate).toHaveBeenCalledWith(['methods', 1], {
+        expect(router.navigate).toHaveBeenCalledWith(['methods', 3599752219], {
           queryParams: { tab }
         });
       }));
@@ -198,9 +201,12 @@ describe('MethodChapterComponent', () => {
         tick();
 
         expect(router.navigate).toHaveBeenCalled();
-        expect(router.navigate).toHaveBeenCalledWith(['methods', 1, 2, 3], {
-          queryParams: { tab: 0 }
-        });
+        expect(router.navigate).toHaveBeenCalledWith(
+          ['methods', 3599752219, 2, 3],
+          {
+            queryParams: { tab: 0 }
+          }
+        );
       }));
 
       it('should pass the tab in the queryParams when clickOpenLesson is called', fakeAsync(() => {
@@ -211,9 +217,12 @@ describe('MethodChapterComponent', () => {
         tick();
 
         expect(router.navigate).toHaveBeenCalled();
-        expect(router.navigate).toHaveBeenCalledWith(['methods', 1, 2, 3], {
-          queryParams: { tab }
-        });
+        expect(router.navigate).toHaveBeenCalledWith(
+          ['methods', 3599752219, 2, 3],
+          {
+            queryParams: { tab }
+          }
+        );
       }));
     });
   });
@@ -301,7 +310,7 @@ describe('MethodChapterComponent', () => {
         ).toHaveBeenCalled();
         expect(
           methodViewModel.onLearningPlanGoalProgressChanged
-        ).toHaveBeenCalledWith(1, 2, 3, null);
+        ).toHaveBeenCalledWith(1, 2, 3, null, 3599752219);
       });
     });
 
@@ -345,7 +354,7 @@ describe('MethodChapterComponent', () => {
         ).toHaveBeenCalled();
         expect(
           methodViewModel.onBulkLearningPlanGoalProgressChanged
-        ).toHaveBeenCalledWith(1, [2, 3], 4);
+        ).toHaveBeenCalledWith(1, [2, 3], 4, 3599752219);
       });
     });
   });
