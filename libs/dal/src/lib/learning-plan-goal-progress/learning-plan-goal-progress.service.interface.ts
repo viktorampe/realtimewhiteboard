@@ -16,6 +16,11 @@ export interface LearningPlanGoalProgressServiceInterface {
     learningPlanGoalProgressId: number
   ): Observable<boolean>;
 
+  deleteLearningPlanGoalProgresses(
+    userId: number,
+    learningPlanGoalProgressIds: number[]
+  ): Observable<boolean>;
+
   createLearningPlanGoalProgress(
     userId: number,
     classGroupId: number,
