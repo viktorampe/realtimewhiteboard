@@ -50,6 +50,7 @@ import {
 import {
   EduContentSearchResultFixture,
   EnvironmentSearchModesInterface,
+  ENVIRONMENT_API_TOKEN,
   ENVIRONMENT_SEARCHMODES_TOKEN,
   OpenStaticContentServiceInterface,
   OPEN_STATIC_CONTENT_SERVICE_TOKEN,
@@ -231,6 +232,8 @@ describe('MethodViewModel', () => {
   ];
 
   const mockAutoCompleteReturnValue = ['strings', 'for', 'autocomplete'];
+  const apiBase = 'https://api.kabas.test';
+  const userId = 1;
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
@@ -266,7 +269,7 @@ describe('MethodViewModel', () => {
       providers: [
         Store,
         { provide: RouterStateSerializer, useClass: CustomSerializer },
-        { provide: AUTH_SERVICE_TOKEN, useValue: { userId: 1 } },
+        { provide: AUTH_SERVICE_TOKEN, useValue: { userId } },
         {
           provide: EDU_CONTENT_SERVICE_TOKEN,
           useValue: {
@@ -283,6 +286,12 @@ describe('MethodViewModel', () => {
             'diabolo-chapter-lesson': createMockSearchMode({
               name: 'diabolo-chapter-lesson'
             })
+          }
+        },
+        {
+          provide: ENVIRONMENT_API_TOKEN,
+          useValue: {
+            APIBase: apiBase
           }
         },
         {
@@ -990,6 +999,20 @@ describe('MethodViewModel', () => {
           learningPlanGoalIds,
           personId: 1
         })
+      );
+    });
+  });
+
+  describe('exportLearningPlanGoalProgress', () => {
+    it('should open a window with the correct url', () => {
+      navigateWithParams({ book: bookId });
+
+      const spy = jest.spyOn(window, 'open');
+
+      methodViewModel.exportLearningPlanGoalProgress();
+
+      expect(spy).toHaveBeenCalledWith(
+        `${apiBase}/people/${userId}/download-learning-plan-goal-progress/${bookId}`
       );
     });
   });
