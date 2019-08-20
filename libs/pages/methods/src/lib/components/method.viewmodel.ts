@@ -758,6 +758,7 @@ export class MethodViewModel implements ContentOpenerInterface {
       .subscribe(lpgs => (learningPlanGoalProgressesToBeDeleted = lpgs));
     this.store.dispatch(
       new LearningPlanGoalProgressActions.DeleteLearningPlanGoalProgresses({
+        userId: this.authService.userId,
         ids: learningPlanGoalProgressesToBeDeleted.map(lpg => lpg.id)
       })
     );
