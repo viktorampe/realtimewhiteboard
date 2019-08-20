@@ -233,7 +233,8 @@ describe('LearningPlanGoalProgressEffects', () => {
     const staticParams = {
       personId: 1,
       classGroupId: 1,
-      learningPlanGoalIds: [1, 2]
+      learningPlanGoalIds: [1, 2],
+      eduContentBookId: 1699729494
     };
 
     let learningPlanGoalProgressService: LearningPlanGoalProgressServiceInterface;
@@ -257,6 +258,7 @@ describe('LearningPlanGoalProgressEffects', () => {
         learningPlanGoalId => ({
           personId: staticParams.personId,
           classGroupId: staticParams.classGroupId,
+          eduContentBookId: staticParams.eduContentBookId,
           learningPlanGoalId,
           eduContentTOCId
         })
@@ -285,6 +287,7 @@ describe('LearningPlanGoalProgressEffects', () => {
         staticParams.personId,
         staticParams.classGroupId,
         staticParams.learningPlanGoalIds,
+        staticParams.eduContentBookId,
         userLessonId,
         eduContentTOCId
       );
@@ -331,6 +334,7 @@ describe('LearningPlanGoalProgressEffects', () => {
         staticParams.personId,
         staticParams.classGroupId,
         staticParams.learningPlanGoalIds,
+        staticParams.eduContentBookId,
         userLessonId,
         eduContentTOCId
       );
@@ -446,6 +450,7 @@ describe('LearningPlanGoalProgressEffects', () => {
     const classGroupId = 1;
     const eduContentTOCId = 1;
     const userLessonId = 1;
+    const eduContentBookId = 1790506026;
     const learningPlanGoalIds = [1, 2]; // 1 is already in state, 2 isn't
 
     beforeAll(() => {
@@ -453,7 +458,9 @@ describe('LearningPlanGoalProgressEffects', () => {
         ...LearningPlanGoalProgressReducer.initialState,
         ids: [1],
         entities: {
-          1: new LearningPlanGoalProgressFixture()
+          1: new LearningPlanGoalProgressFixture({
+            eduContentBookId: eduContentBookId
+          })
         }
       };
     });
@@ -470,7 +477,8 @@ describe('LearningPlanGoalProgressEffects', () => {
         personId,
         classGroupId,
         eduContentTOCId,
-        learningPlanGoalIds
+        learningPlanGoalIds,
+        eduContentBookId
       });
 
       actions = hot('a', {
@@ -482,7 +490,8 @@ describe('LearningPlanGoalProgressEffects', () => {
         classGroupId,
         eduContentTOCId,
         userLessonId: undefined,
-        learningPlanGoalIds: [2]
+        learningPlanGoalIds: [2],
+        eduContentBookId
       });
 
       expect(effects.bulkAddLearningPlanGoalProgress$).toBeObservable(
@@ -495,7 +504,8 @@ describe('LearningPlanGoalProgressEffects', () => {
         personId,
         classGroupId,
         userLessonId,
-        learningPlanGoalIds
+        learningPlanGoalIds,
+        eduContentBookId
       });
 
       actions = hot('a', {
@@ -507,7 +517,8 @@ describe('LearningPlanGoalProgressEffects', () => {
         eduContentTOCId: undefined,
         userLessonId,
         learningPlanGoalIds: [2],
-        personId
+        personId,
+        eduContentBookId
       });
 
       expect(effects.bulkAddLearningPlanGoalProgress$).toBeObservable(
@@ -521,6 +532,8 @@ describe('LearningPlanGoalProgressEffects', () => {
     const classGroupId = 1;
     const eduContentTOCId = 1;
     const userLessonId = 1;
+    const eduContentBookId = 571253002;
+
     const learningPlanGoalIds = [1, 2]; // 1 is already in state, 2 isn't
 
     beforeAll(() => {
@@ -528,7 +541,9 @@ describe('LearningPlanGoalProgressEffects', () => {
         ...LearningPlanGoalProgressReducer.initialState,
         ids: [1],
         entities: {
-          1: new LearningPlanGoalProgressFixture()
+          1: new LearningPlanGoalProgressFixture({
+            eduContentBookId: eduContentBookId
+          })
         }
       };
     });
@@ -545,7 +560,8 @@ describe('LearningPlanGoalProgressEffects', () => {
         classGroupId,
         personId,
         learningPlanGoalId: 2,
-        eduContentTOCId
+        eduContentTOCId,
+        eduContentBookId
       });
 
       actions = hot('a', { a: toggleAction });
@@ -554,7 +570,8 @@ describe('LearningPlanGoalProgressEffects', () => {
         classGroupId,
         learningPlanGoalIds: [2],
         eduContentTOCId,
-        personId
+        personId,
+        eduContentBookId
       });
 
       expect(effects.toggleLearningPlanGoalProgress$).toBeObservable(
@@ -567,7 +584,8 @@ describe('LearningPlanGoalProgressEffects', () => {
         classGroupId,
         personId,
         learningPlanGoalId: 1,
-        eduContentTOCId
+        eduContentTOCId,
+        eduContentBookId
       });
 
       actions = hot('a', { a: toggleAction });
@@ -587,7 +605,8 @@ describe('LearningPlanGoalProgressEffects', () => {
         classGroupId,
         personId,
         learningPlanGoalId: 2,
-        userLessonId
+        userLessonId,
+        eduContentBookId
       });
 
       actions = hot('a', { a: toggleAction });
@@ -596,7 +615,8 @@ describe('LearningPlanGoalProgressEffects', () => {
         classGroupId,
         learningPlanGoalIds: [2],
         userLessonId,
-        personId
+        personId,
+        eduContentBookId
       });
 
       expect(effects.toggleLearningPlanGoalProgress$).toBeObservable(
@@ -609,7 +629,8 @@ describe('LearningPlanGoalProgressEffects', () => {
         classGroupId,
         personId,
         learningPlanGoalId: 1,
-        userLessonId
+        userLessonId,
+        eduContentBookId
       });
 
       actions = hot('a', { a: toggleAction });

@@ -182,6 +182,7 @@ export class LearningPlanGoalProgressEffects {
           learningPlanGoalIds,
           personId,
           eduContentTOCId,
+          eduContentBookId,
           ...selectParams
         } = action.payload;
 
