@@ -92,14 +92,14 @@ export const findMany = createSelector(
   }
 );
 
-export const getByGroupLearningGoalAndTocs = createSelector(
+export const getByGroupLearningGoalAndBook = createSelector(
   selectLearningPlanGoalProgressState,
   (
     state: State,
     props: {
       classGroupId: number;
       learningPlanGoalId: number;
-      eduContentTocIds: number[];
+      eduContentBookId: number;
     }
   ) =>
     Object.values(state.entities).filter(
@@ -107,10 +107,7 @@ export const getByGroupLearningGoalAndTocs = createSelector(
         learningPlanGoalProgress.classGroupId === props.classGroupId &&
         learningPlanGoalProgress.learningPlanGoalId ===
           props.learningPlanGoalId &&
-        (!!learningPlanGoalProgress.userLessonId ||
-          props.eduContentTocIds.includes(
-            learningPlanGoalProgress.eduContentTOCId
-          ))
+        learningPlanGoalProgress.eduContentBookId === props.eduContentBookId
     )
 );
 
