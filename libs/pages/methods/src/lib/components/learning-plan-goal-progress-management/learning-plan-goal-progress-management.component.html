@@ -1,2 +1,8 @@
-<div>{{ learningPlanGoal | json }}</div>
-<div>{{ classGroup | json }}</div>
+<div class="lpgp-management">
+  <div class="lpgp-management__title">
+    Markeer een doel als behandeld voor {{ classGroup.name }}
+  </div>
+  <div class="lpgp-management__info">
+    {{ learningPlanGoal.prefix }} {{ learningPlanGoal.goal }}
+  </div>
+</div>
