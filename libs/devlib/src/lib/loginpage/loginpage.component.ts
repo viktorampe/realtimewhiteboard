@@ -178,13 +178,15 @@ export class LoginpageComponent implements OnInit {
     const eduContentTOCId = 1;
     const learningPlanGoalId = 1;
     const userLessonId = 1;
+    const eduContentBookId = 1;
 
     this.store.dispatch(
       new LearningPlanGoalProgressActions.ToggleLearningPlanGoalProgress({
         personId: userId,
         classGroupId,
         userLessonId,
-        learningPlanGoalId
+        learningPlanGoalId,
+        eduContentBookId
       })
     );
 
@@ -202,13 +204,15 @@ export class LoginpageComponent implements OnInit {
     const eduContentTOCId = 1;
     const learningPlanGoalIds = [1, 2, 3];
     const userLessonId = 1;
+    const eduContentBookId = 1;
 
     this.store.dispatch(
       new LearningPlanGoalProgressActions.BulkAddLearningPlanGoalProgresses({
         personId: userId,
         classGroupId,
         userLessonId,
-        learningPlanGoalIds
+        learningPlanGoalIds,
+        eduContentBookId
       })
     );
 
