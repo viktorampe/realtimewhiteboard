@@ -1,17 +1,23 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatDialogModule, MAT_DIALOG_DATA } from '@angular/material';
 import { ClassGroupFixture, LearningPlanGoalFixture } from '@campus/dal';
 import { configureTestSuite } from 'ng-bullet';
+import { LearningPlanGoalProgressManagementInterface } from './learning-plan-goal-progress-management-dialog.interface';
 import { LearningPlanGoalProgressManagementComponent } from './learning-plan-goal-progress-management.component';
 
 describe('LearningPlanGoalProgressManagementComponent', () => {
   let component: LearningPlanGoalProgressManagementComponent;
   let fixture: ComponentFixture<LearningPlanGoalProgressManagementComponent>;
-  let mockClassGroup = new ClassGroupFixture();
-  let mockLearningPlanGoal = new LearningPlanGoalFixture();
+  const mockInjectedData: LearningPlanGoalProgressManagementInterface = {
+    classGroup: new ClassGroupFixture(),
+    learningPlanGoal: new LearningPlanGoalFixture()
+  };
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [LearningPlanGoalProgressManagementComponent]
+      declarations: [LearningPlanGoalProgressManagementComponent],
+      imports: [MatDialogModule],
+      providers: [{ provide: MAT_DIALOG_DATA, useValue: mockInjectedData }]
     }).compileComponents();
   });
 
@@ -21,8 +27,6 @@ describe('LearningPlanGoalProgressManagementComponent', () => {
     );
 
     component = fixture.componentInstance;
-    component.classGroup = mockClassGroup;
-    component.learningPlanGoal = mockLearningPlanGoal;
 
     fixture.detectChanges();
   });
