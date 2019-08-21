@@ -2,6 +2,7 @@ import { Component, NgZone } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
+import { WINDOW } from '@campus/browser';
 import {
   AUTH_SERVICE_TOKEN,
   ClassGroupActions,
@@ -57,6 +58,7 @@ import {
   ScormExerciseServiceInterface,
   SCORM_EXERCISE_SERVICE_TOKEN
 } from '@campus/shared';
+import { MockWindow } from '@campus/testing';
 import {
   NavigationActionTiming,
   RouterNavigationAction,
@@ -82,6 +84,7 @@ describe('MethodViewModel', () => {
   let scormExerciseService: ScormExerciseServiceInterface;
   let searchModes: EnvironmentSearchModesInterface;
   let eduContentService: EduContentServiceInterface;
+  let mockWindow: MockWindow;
 
   const bookId = 5;
   const diaboloBookId = 6;
@@ -299,6 +302,10 @@ describe('MethodViewModel', () => {
           useValue: { open: jest.fn() }
         },
         {
+          provide: WINDOW,
+          useClass: MockWindow
+        },
+        {
           provide: SCORM_EXERCISE_SERVICE_TOKEN,
           useValue: { previewExerciseFromUnlockedContent: jest.fn() }
         }
@@ -311,6 +318,7 @@ describe('MethodViewModel', () => {
     store = TestBed.get(Store);
     zone = TestBed.get(NgZone);
     router = TestBed.get(Router);
+    mockWindow = TestBed.get(WINDOW);
     loadInStore();
     openStaticContentService = TestBed.get(OPEN_STATIC_CONTENT_SERVICE_TOKEN);
     scormExerciseService = TestBed.get(SCORM_EXERCISE_SERVICE_TOKEN);
@@ -1007,12 +1015,11 @@ describe('MethodViewModel', () => {
     it('should open a window with the correct url', () => {
       navigateWithParams({ book: bookId });
 
-      const spy = jest.spyOn(window, 'open');
-
+      const spy = jest.spyOn(mockWindow.location, 'href', 'set');
       methodViewModel.exportLearningPlanGoalProgress();
 
       expect(spy).toHaveBeenCalledWith(
-        `${apiBase}/people/${userId}/download-learning-plan-goal-progress/${bookId}`
+        `${apiBase}/api/People/${userId}/downloadLearningPlanGoalProgressByBookId/${bookId}`
       );
     });
   });

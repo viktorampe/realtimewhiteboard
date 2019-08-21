@@ -1,72 +1,14 @@
 import { Inject, Injectable } from '@angular/core';
-import {
-  AuthServiceInterface,
-  AUTH_SERVICE_TOKEN,
-  ClassGroupInterface,
-  ClassGroupQueries,
-  DalState,
-  DiaboloPhaseInterface,
-  DiaboloPhaseQueries,
-  EduContent,
-  EduContentBookInterface,
-  EduContentBookQueries,
-  EduContentInterface,
-  EduContentProductTypeInterface,
-  EduContentProductTypeQueries,
-  EduContentQueries,
-  EduContentServiceInterface,
-  EduContentTOCInterface,
-  EduContentTocQueries,
-  EDU_CONTENT_SERVICE_TOKEN,
-  getRouterState,
-  LearningPlanGoalInterface,
-  LearningPlanGoalProgressActions,
-  LearningPlanGoalProgressInterface,
-  LearningPlanGoalProgressQueries,
-  LearningPlanGoalQueries,
-  MethodInterface,
-  MethodQueries,
-  MethodYearsInterface,
-  RouterStateUrl,
-  UserLessonInterface,
-  UserLessonQueries
-} from '@campus/dal';
-import {
-  SearchModeInterface,
-  SearchResultInterface,
-  SearchStateInterface
-} from '@campus/search';
-import {
-  ContentOpenerInterface,
-  EnvironmentApiInterface,
-  EnvironmentSearchModesInterface,
-  ENVIRONMENT_API_TOKEN,
-  ENVIRONMENT_SEARCHMODES_TOKEN,
-  OpenStaticContentServiceInterface,
-  OPEN_STATIC_CONTENT_SERVICE_TOKEN,
-  ScormExerciseServiceInterface,
-  SCORM_EXERCISE_SERVICE_TOKEN
-} from '@campus/shared';
-import {
-  MultiCheckBoxTableItemInterface,
-  MultiCheckBoxTableRowHeaderColumnInterface,
-  MultiCheckBoxTableSubLevelInterface
-} from '@campus/ui';
+import { WINDOW } from '@campus/browser';
+import { AuthServiceInterface, AUTH_SERVICE_TOKEN, ClassGroupInterface, ClassGroupQueries, DalState, DiaboloPhaseInterface, DiaboloPhaseQueries, EduContent, EduContentBookInterface, EduContentBookQueries, EduContentInterface, EduContentProductTypeInterface, EduContentProductTypeQueries, EduContentQueries, EduContentServiceInterface, EduContentTOCInterface, EduContentTocQueries, EDU_CONTENT_SERVICE_TOKEN, getRouterState, LearningPlanGoalInterface, LearningPlanGoalProgressActions, LearningPlanGoalProgressInterface, LearningPlanGoalProgressQueries, LearningPlanGoalQueries, MethodInterface, MethodQueries, MethodYearsInterface, RouterStateUrl, UserLessonInterface, UserLessonQueries } from '@campus/dal';
+import { SearchModeInterface, SearchResultInterface, SearchStateInterface } from '@campus/search';
+import { ContentOpenerInterface, EnvironmentApiInterface, EnvironmentSearchModesInterface, ENVIRONMENT_API_TOKEN, ENVIRONMENT_SEARCHMODES_TOKEN, OpenStaticContentServiceInterface, OPEN_STATIC_CONTENT_SERVICE_TOKEN, ScormExerciseServiceInterface, SCORM_EXERCISE_SERVICE_TOKEN } from '@campus/shared';
+import { MultiCheckBoxTableItemInterface, MultiCheckBoxTableRowHeaderColumnInterface, MultiCheckBoxTableSubLevelInterface } from '@campus/ui';
 import { Dictionary } from '@ngrx/entity';
 import { RouterReducerState } from '@ngrx/router-store';
 import { select, Store } from '@ngrx/store';
 import { BehaviorSubject, combineLatest, merge, Observable } from 'rxjs';
-import {
-  distinctUntilChanged,
-  filter,
-  map,
-  mapTo,
-  shareReplay,
-  switchMap,
-  switchMapTo,
-  take,
-  withLatestFrom
-} from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, mapTo, shareReplay, switchMap, switchMapTo, take, withLatestFrom } from 'rxjs/operators';
 
 export interface CurrentMethodParams {
   book?: number;
@@ -139,7 +81,9 @@ export class MethodViewModel implements ContentOpenerInterface {
     @Inject(SCORM_EXERCISE_SERVICE_TOKEN)
     private scormExerciseService: ScormExerciseServiceInterface,
     @Inject(ENVIRONMENT_API_TOKEN)
-    private environmentApi: EnvironmentApiInterface
+    private environmentApi: EnvironmentApiInterface,
+    @Inject(WINDOW)
+    private window: Window
   ) {
     this.initialize();
   }
@@ -287,7 +231,7 @@ export class MethodViewModel implements ContentOpenerInterface {
 
   public exportLearningPlanGoalProgress() {
     this.currentMethodParams$.pipe(take(1)).subscribe(currentMethodParams => {
-      window.location.href = `${this.environmentApi.APIBase}/api/People/${
+      this.window.location.href = `${this.environmentApi.APIBase}/api/People/${
         this.authService.userId
       }/downloadLearningPlanGoalProgressByBookId/${currentMethodParams.book}`;
     });
