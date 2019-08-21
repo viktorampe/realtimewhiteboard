@@ -201,13 +201,15 @@ export class MethodViewModel implements ContentOpenerInterface {
     classGroupId: number,
     learningPlanGoalId: number,
     eduContentTOCId: number,
-    userLessonId: number
+    userLessonId: number,
+    eduContentBookId: number
   ): void {
     this.store.dispatch(
       new LearningPlanGoalProgressActions.ToggleLearningPlanGoalProgress({
         classGroupId,
         learningPlanGoalId,
         eduContentTOCId,
+        eduContentBookId,
         userLessonId,
         personId: this.authService.userId
       })
@@ -217,13 +219,15 @@ export class MethodViewModel implements ContentOpenerInterface {
   public onBulkLearningPlanGoalProgressChanged(
     classGroupId: number,
     learningPlanGoalIds: number[],
-    eduContentTOCId: number
+    eduContentTOCId: number,
+    eduContentBookId: number
   ): void {
     this.store.dispatch(
       new LearningPlanGoalProgressActions.BulkAddLearningPlanGoalProgresses({
         classGroupId,
         eduContentTOCId,
         learningPlanGoalIds,
+        eduContentBookId,
         personId: this.authService.userId
       })
     );

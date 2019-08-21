@@ -160,12 +160,15 @@ export class MethodChapterComponent implements OnInit, AfterViewInit {
       EduContentTOCInterface
     >
   ) {
-    this.methodViewModel.onLearningPlanGoalProgressChanged(
-      event.column.id,
-      event.item.id,
-      event.subLevel.id,
-      null
-    );
+    this.currentMethodParams$.pipe(take(1)).subscribe(params => {
+      this.methodViewModel.onLearningPlanGoalProgressChanged(
+        event.column.id,
+        event.item.id,
+        event.subLevel.id,
+        null,
+        +params.book
+      );
+    });
   }
 
   public checkBoxesChanged(
@@ -176,11 +179,14 @@ export class MethodChapterComponent implements OnInit, AfterViewInit {
     >[]
   ) {
     if (events.length) {
-      this.methodViewModel.onBulkLearningPlanGoalProgressChanged(
-        events[0].column.id,
-        events.map(e => e.item.id),
-        events[0].subLevel.id
-      );
+      this.currentMethodParams$.pipe(take(1)).subscribe(params => {
+        this.methodViewModel.onBulkLearningPlanGoalProgressChanged(
+          events[0].column.id,
+          events.map(e => e.item.id),
+          events[0].subLevel.id,
+          +params.book
+        );
+      });
     }
   }
 
