@@ -3,6 +3,7 @@ import { Inject, Injectable, OnDestroy } from '@angular/core';
 import {
   DalState,
   EffectFeedbackActions,
+  EffectFeedbackInterface,
   EffectFeedbackQueries,
   getRouterState,
   UiActions,
@@ -34,6 +35,7 @@ export class AppViewModel implements OnDestroy {
   // presentation streams
   public sideNavOpen$: Observable<boolean>;
   public navigationItems$: Observable<NavItem[]>;
+  public bannerFeedback$: Observable<EffectFeedbackInterface>;
 
   private subscriptions: Subscription;
 
@@ -93,12 +95,11 @@ export class AppViewModel implements OnDestroy {
       )
       .subscribe(evt => this.onFeedbackDismiss(evt));
 
-    // TODO: uncomment when banner is needed
     // error feedback goes into a stream -> bannerComponent
-    // this.bannerFeedback$ = this.store.pipe(
-    //   select(EffectFeedbackQueries.getNextError),
-    //   map(this.feedbackService.addDefaultCancelButton)
-    // );
+    this.bannerFeedback$ = this.store.pipe(
+      select(EffectFeedbackQueries.getNextError),
+      map(this.feedbackService.addDefaultCancelButton)
+    );
   }
 
   public toggleSidebarOnNavigation() {

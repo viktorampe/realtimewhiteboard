@@ -15,6 +15,7 @@ import {
   FEEDBACK_SERVICE_TOKEN
 } from '@campus/shared';
 import { Action, Store, StoreModule } from '@ngrx/store';
+import { hot } from '@nrwl/nx/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { BehaviorSubject, of } from 'rxjs';
 import { AppViewModel } from './app.viewmodel';
@@ -139,23 +140,23 @@ describe('AppViewModel', () => {
       });
     });
 
-    // describe('error feedback', () => {
-    //   beforeAll(() => {
-    //     mockFeedBack.type = 'error';
-    //   });
+    describe('error feedback', () => {
+      beforeAll(() => {
+        mockFeedBack.type = 'error';
+      });
 
-    //   it('should pass the error feedback to the banner-stream', () => {
-    //     store.dispatch(
-    //       new EffectFeedbackActions.AddEffectFeedback({
-    //         effectFeedback: mockFeedBack
-    //       })
-    //     );
+      it('should pass the error feedback to the banner-stream', () => {
+        store.dispatch(
+          new EffectFeedbackActions.AddEffectFeedback({
+            effectFeedback: mockFeedBack
+          })
+        );
 
-    //     expect(viewModel.bannerFeedback$).toBeObservable(
-    //       hot('a', { a: mockFeedBack })
-    //     );
-    //   });
-    // });
+        expect(viewModel.bannerFeedback$).toBeObservable(
+          hot('a', { a: mockFeedBack })
+        );
+      });
+    });
 
     describe('feedback event handling', () => {
       let mockEvent: { action: Action; feedbackId: string };
