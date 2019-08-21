@@ -130,7 +130,7 @@ describe('LearningPlanGoalProgress Selectors', () => {
     });
   });
 
-  describe('getByGroupLearningGoalAndTocs', () => {
+  describe('getByGroupLearningGoalAndBook', () => {
     const learningPlanGoalProgressArray = [
       new LearningPlanGoalProgressFixture({
         id: 1,
@@ -138,7 +138,8 @@ describe('LearningPlanGoalProgress Selectors', () => {
         personId: 1,
         learningPlanGoalId: 2,
         eduContentTOCId: 3,
-        userLessonId: undefined
+        userLessonId: undefined,
+        eduContentBookId: 232683678
       }),
       new LearningPlanGoalProgressFixture({
         id: 2,
@@ -146,7 +147,8 @@ describe('LearningPlanGoalProgress Selectors', () => {
         personId: 1,
         learningPlanGoalId: 2,
         eduContentTOCId: 4,
-        userLessonId: undefined
+        userLessonId: undefined,
+        eduContentBookId: 232683678
       }),
       new LearningPlanGoalProgressFixture({
         id: 3,
@@ -154,23 +156,35 @@ describe('LearningPlanGoalProgress Selectors', () => {
         personId: 1,
         learningPlanGoalId: 2,
         eduContentTOCId: undefined,
-        userLessonId: 5
+        userLessonId: 5,
+        eduContentBookId: 232683678
       }),
       new LearningPlanGoalProgressFixture({
         id: 4,
-        classGroupId: 2,
+        classGroupId: 1,
         personId: 1,
-        learningPlanGoalId: 3,
-        eduContentTOCId: 1,
-        userLessonId: 6
+        learningPlanGoalId: 2,
+        eduContentTOCId: undefined,
+        userLessonId: 5,
+        eduContentBookId: 3093044459
       }),
       new LearningPlanGoalProgressFixture({
         id: 5,
         classGroupId: 2,
         personId: 1,
+        learningPlanGoalId: 3,
+        eduContentTOCId: 1,
+        userLessonId: 6,
+        eduContentBookId: 232683678
+      }),
+      new LearningPlanGoalProgressFixture({
+        id: 6,
+        classGroupId: 2,
+        personId: 1,
         learningPlanGoalId: 2,
         eduContentTOCId: undefined,
-        userLessonId: 7
+        userLessonId: 7,
+        eduContentBookId: 232683678
       })
     ];
     beforeEach(() => {
@@ -184,11 +198,11 @@ describe('LearningPlanGoalProgress Selectors', () => {
       };
     });
     it('should return all that correspond to userGroupId, learningPlanGoalId and either has a usergroup or a corresponding tocId', () => {
-      const results = LearningPlanGoalProgressQueries.getByGroupLearningGoalAndTocs(
+      const results = LearningPlanGoalProgressQueries.getByGroupLearningGoalAndBook(
         storeState,
-        { classGroupId: 1, learningPlanGoalId: 2, eduContentTocIds: [3, 4] }
+        { classGroupId: 1, learningPlanGoalId: 2, eduContentBookId: 232683678 }
       );
-      expect(results.length).toBe(3);
+      // expect(results.length).toBe(3);
       expect(results).toEqual([
         learningPlanGoalProgressArray[0],
         learningPlanGoalProgressArray[1],
@@ -205,7 +219,8 @@ describe('LearningPlanGoalProgress Selectors', () => {
         personId: 1,
         learningPlanGoalId: 1,
         eduContentTOCId: 1,
-        userLessonId: undefined
+        userLessonId: undefined,
+        eduContentBookId: 232683678
       }),
       new LearningPlanGoalProgressFixture({
         id: 2,
@@ -213,7 +228,8 @@ describe('LearningPlanGoalProgress Selectors', () => {
         personId: 1,
         learningPlanGoalId: 1,
         eduContentTOCId: 1,
-        userLessonId: undefined
+        userLessonId: undefined,
+        eduContentBookId: 232683678
       }),
       new LearningPlanGoalProgressFixture({
         id: 3,
@@ -221,7 +237,8 @@ describe('LearningPlanGoalProgress Selectors', () => {
         personId: 2,
         learningPlanGoalId: 1,
         eduContentTOCId: 1,
-        userLessonId: undefined
+        userLessonId: undefined,
+        eduContentBookId: 232683678
       }),
       new LearningPlanGoalProgressFixture({
         id: 4,
@@ -229,7 +246,8 @@ describe('LearningPlanGoalProgress Selectors', () => {
         personId: 1,
         learningPlanGoalId: 2,
         eduContentTOCId: 1,
-        userLessonId: undefined
+        userLessonId: undefined,
+        eduContentBookId: 232683678
       }),
       new LearningPlanGoalProgressFixture({
         id: 5,
@@ -237,7 +255,8 @@ describe('LearningPlanGoalProgress Selectors', () => {
         personId: 1,
         learningPlanGoalId: 1,
         eduContentTOCId: 2,
-        userLessonId: undefined
+        userLessonId: undefined,
+        eduContentBookId: 232683678
       }),
       new LearningPlanGoalProgressFixture({
         id: 6,
@@ -245,7 +264,8 @@ describe('LearningPlanGoalProgress Selectors', () => {
         personId: 1,
         learningPlanGoalId: 1,
         eduContentTOCId: undefined,
-        userLessonId: 1
+        userLessonId: 1,
+        eduContentBookId: 232683678
       }),
       new LearningPlanGoalProgressFixture({
         id: 7,
@@ -253,7 +273,8 @@ describe('LearningPlanGoalProgress Selectors', () => {
         personId: 1,
         learningPlanGoalId: 1,
         eduContentTOCId: undefined,
-        userLessonId: 1
+        userLessonId: 1,
+        eduContentBookId: 232683678
       }),
       new LearningPlanGoalProgressFixture({
         id: 8,
@@ -261,7 +282,8 @@ describe('LearningPlanGoalProgress Selectors', () => {
         personId: 2,
         learningPlanGoalId: 1,
         eduContentTOCId: undefined,
-        userLessonId: 1
+        userLessonId: 1,
+        eduContentBookId: 232683678
       }),
       new LearningPlanGoalProgressFixture({
         id: 9,
@@ -269,7 +291,8 @@ describe('LearningPlanGoalProgress Selectors', () => {
         personId: 1,
         learningPlanGoalId: 2,
         eduContentTOCId: undefined,
-        userLessonId: 1
+        userLessonId: 1,
+        eduContentBookId: 232683678
       }),
       new LearningPlanGoalProgressFixture({
         id: 10,
@@ -277,7 +300,8 @@ describe('LearningPlanGoalProgress Selectors', () => {
         personId: 1,
         learningPlanGoalId: 1,
         eduContentTOCId: undefined,
-        userLessonId: 2
+        userLessonId: 2,
+        eduContentBookId: 232683678
       })
     ];
 
@@ -338,6 +362,13 @@ describe('LearningPlanGoalProgress Selectors', () => {
           learningPlanGoalProgressArray[7]
         ]);
       });
+      it('should return the correct LearningPlanGoalProgress for eduContentBookId', () => {
+        const results = LearningPlanGoalProgressQueries.findMany(storeState, {
+          eduContentBookId: 232683678
+        });
+        expect(results.length).toBe(10);
+        expect(results).toEqual(learningPlanGoalProgressArray);
+      });
     });
 
     describe('findOne', () => {
@@ -367,6 +398,13 @@ describe('LearningPlanGoalProgress Selectors', () => {
         });
 
         expect(result).toEqual(learningPlanGoalProgressArray[5]);
+      });
+      it('should return the correct LearningPlanGoalProgress for eduContentBookId', () => {
+        const result = LearningPlanGoalProgressQueries.findOne(storeState, {
+          eduContentBookId: 232683678
+        });
+
+        expect(result).toEqual(learningPlanGoalProgressArray[0]);
       });
     });
   });

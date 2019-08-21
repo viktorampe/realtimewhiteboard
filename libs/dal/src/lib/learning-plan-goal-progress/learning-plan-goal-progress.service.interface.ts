@@ -25,6 +25,7 @@ export interface LearningPlanGoalProgressServiceInterface {
     userId: number,
     classGroupId: number,
     learningPlanGoalIds: number[],
+    eduContentBookId: number,
     userLessonId?: number,
     eduContentTOCId?: number
   ): Observable<LearningPlanGoalProgressInterface[]>;

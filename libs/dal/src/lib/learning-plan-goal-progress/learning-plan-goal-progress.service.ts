@@ -50,6 +50,7 @@ export class LearningPlanGoalProgressService
     userId: number,
     classGroupId: number,
     learningPlanGoalIds: number[],
+    eduContentBookId: number,
     userLessonId?: number,
     eduContentTOCId?: number
   ): Observable<LearningPlanGoalProgressInterface[]> {
@@ -61,7 +62,8 @@ export class LearningPlanGoalProgressService
       classGroupId,
       learningPlanGoalIds,
       userLessonId || null,
-      eduContentTOCId || null
+      eduContentTOCId || null,
+      eduContentBookId
     );
   }
 }

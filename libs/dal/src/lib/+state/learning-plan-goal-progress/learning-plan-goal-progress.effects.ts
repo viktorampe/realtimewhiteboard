@@ -81,6 +81,7 @@ export class LearningPlanGoalProgressEffects {
                 classGroupId: action.payload.classGroupId,
                 eduContentTOCId: action.payload.eduContentTOCId,
                 userLessonId: action.payload.userLessonId,
+                eduContentBookId: action.payload.eduContentBookId,
                 learningPlanGoalIds: [action.payload.learningPlanGoalId],
                 personId: action.payload.personId
               });
@@ -105,6 +106,7 @@ export class LearningPlanGoalProgressEffects {
             action.payload.personId,
             action.payload.classGroupId,
             action.payload.learningPlanGoalIds,
+            action.payload.eduContentBookId,
             action.payload.userLessonId,
             action.payload.eduContentTOCId
           );
@@ -214,6 +216,7 @@ export class LearningPlanGoalProgressEffects {
           learningPlanGoalIds,
           personId,
           eduContentTOCId,
+          eduContentBookId,
           ...selectParams
         } = action.payload;
 
@@ -240,6 +243,7 @@ export class LearningPlanGoalProgressEffects {
               classGroupId: action.payload.classGroupId,
               personId: action.payload.personId,
               eduContentTOCId: action.payload.eduContentTOCId,
+              eduContentBookId: action.payload.eduContentBookId,
               userLessonId: action.payload.userLessonId,
               learningPlanGoalIds: neededLearningPlanGoalIds
             });

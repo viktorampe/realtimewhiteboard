@@ -158,6 +158,7 @@ export class ToggleLearningPlanGoalProgress implements Action {
       classGroupId: number;
       eduContentTOCId?: number;
       userLessonId?: number;
+      eduContentBookId: number;
       learningPlanGoalId: number;
       personId: number;
     }
@@ -173,6 +174,7 @@ export class BulkAddLearningPlanGoalProgresses implements Action {
       classGroupId: number;
       eduContentTOCId?: number;
       userLessonId?: number;
+      eduContentBookId: number;
       learningPlanGoalIds: number[];
       personId: number;
     }
@@ -189,6 +191,7 @@ export class StartAddLearningPlanGoalProgresses
       classGroupId: number;
       eduContentTOCId?: number;
       userLessonId?: number;
+      eduContentBookId: number;
       learningPlanGoalIds: number[];
       personId: number;
       customFeedbackHandlers?: CustomFeedbackHandlersInterface;

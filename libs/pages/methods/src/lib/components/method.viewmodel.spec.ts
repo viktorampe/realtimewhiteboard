@@ -70,6 +70,7 @@ import { hot } from '@nrwl/nx/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { of } from 'rxjs';
 import { take } from 'rxjs/operators';
+import { DeleteLearningPlanGoalProgresses } from '../../../../../dal/src/lib/+state/learning-plan-goal-progress/learning-plan-goal-progress.actions';
 import { MethodViewModel } from './method.viewmodel';
 
 describe('MethodViewModel', () => {
@@ -949,13 +950,15 @@ describe('MethodViewModel', () => {
       const learningPlanGoalId = 12;
       const eduContentTOCId = 13;
       const userLessonId = undefined;
+      const eduContentBookId = 728921451;
 
       const spy = jest.spyOn(store, 'dispatch');
       methodViewModel.onLearningPlanGoalProgressChanged(
         classGroupId,
         learningPlanGoalId,
         eduContentTOCId,
-        userLessonId
+        userLessonId,
+        eduContentBookId
       );
       expect(spy).toHaveBeenCalledTimes(1);
       expect(spy).toHaveBeenCalledWith(
@@ -964,7 +967,8 @@ describe('MethodViewModel', () => {
           learningPlanGoalId,
           eduContentTOCId,
           userLessonId,
-          personId: 1
+          personId: 1,
+          eduContentBookId
         })
       );
     });
@@ -975,12 +979,14 @@ describe('MethodViewModel', () => {
       const classGroupId = 11;
       const learningPlanGoalIds = [12, 22];
       const eduContentTOCId = 13;
+      const eduContentBookId = 728921451;
 
       const spy = jest.spyOn(store, 'dispatch');
       methodViewModel.onBulkLearningPlanGoalProgressChanged(
         classGroupId,
         learningPlanGoalIds,
-        eduContentTOCId
+        eduContentTOCId,
+        eduContentBookId
       );
       expect(spy).toHaveBeenCalledTimes(1);
       expect(spy).toHaveBeenCalledWith(
@@ -988,8 +994,24 @@ describe('MethodViewModel', () => {
           classGroupId,
           eduContentTOCId,
           learningPlanGoalIds,
-          personId: 1
+          personId: 1,
+          eduContentBookId
         })
+      );
+    });
+  });
+
+  describe('unCheckFromMethodPage()', () => {
+    it('should dispatch a delete many action', () => {
+      const spy = jest.spyOn(store, 'dispatch');
+      methodViewModel.unCheckLearningPlanGoalForGroupFromMethodPage(
+        learningPlanGoals[0],
+        classGroups[0]
+      );
+
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy).toHaveBeenCalledWith(
+        new DeleteLearningPlanGoalProgresses({ ids: [1] })
       );
     });
   });
