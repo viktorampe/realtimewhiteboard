@@ -749,7 +749,7 @@ export class MethodViewModel implements ContentOpenerInterface {
       });
   }
 
-  public unCheckLearningPlanGoalForGroupFromMethodPage(
+  public deleteLearningPlanGoalProgressForLearningPlanGoalsClassGroups(
     learningPlanGoal: LearningPlanGoalInterface,
     classGroup: ClassGroupInterface
   ) {
@@ -771,16 +771,17 @@ export class MethodViewModel implements ContentOpenerInterface {
     learningPlanGoal: LearningPlanGoalInterface,
     classGroup: ClassGroupInterface
   ): Observable<LearningPlanGoalProgressInterface[]> {
-    let bookId: number;
-    this.currentMethodParams$
-      .pipe(take(1))
-      .subscribe(params => (bookId = +params.book));
-    return this.store.pipe(
-      select(LearningPlanGoalProgressQueries.getByGroupLearningGoalAndBook, {
-        classGroupId: classGroup.id,
-        learningPlanGoalId: learningPlanGoal.id,
-        eduContentBookId: bookId
-      })
+    return this.currentMethodParams$.pipe(
+      take(1),
+      switchMap(params =>
+        this.store.pipe(
+          select(LearningPlanGoalProgressQueries.findMany, {
+            classGroupId: classGroup.id,
+            learningPlanGoalId: learningPlanGoal.id,
+            eduContentBookId: +params.book
+          })
+        )
+      )
     );
   }
 }
