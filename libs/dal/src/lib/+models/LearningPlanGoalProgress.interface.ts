@@ -1,5 +1,6 @@
 import {
   ClassGroupInterface,
+  EduContentBookInterface,
   EduContentTOCInterface,
   LearningPlanGoalInterface,
   PersonInterface,
@@ -20,4 +21,6 @@ export interface LearningPlanGoalProgressInterface {
   eduContentTOC?: EduContentTOCInterface;
   learningPlanGoal?: LearningPlanGoalInterface;
   userLesson?: UserLessonInterface;
+  eduContentBook?: EduContentBookInterface;
+  eduContentBookId?: number;
 }
