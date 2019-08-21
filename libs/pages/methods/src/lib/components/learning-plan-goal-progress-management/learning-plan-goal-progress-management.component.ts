@@ -1,6 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA } from '@angular/material';
 import { ClassGroupInterface, LearningPlanGoalInterface } from '@campus/dal';
-import { LearningPlanGoalProgressManagementViewModel } from './learning-plan-goal-progress-management.viewmodel';
+import { LearningPlanGoalProgressManagementInterface } from './learning-plan-goal-progress-management-dialog.interface';
 
 @Component({
   selector: 'campus-learning-plan-goal-progress-management',
@@ -8,11 +9,16 @@ import { LearningPlanGoalProgressManagementViewModel } from './learning-plan-goa
   styleUrls: ['./learning-plan-goal-progress-management.component.scss']
 })
 export class LearningPlanGoalProgressManagementComponent implements OnInit {
-  @Input() classGroup: ClassGroupInterface;
-  @Input() learningPlanGoal: LearningPlanGoalInterface;
+  protected learningPlanGoal: LearningPlanGoalInterface;
+  protected classGroup: ClassGroupInterface;
+
   constructor(
-    private learningPlanGoalProgressManagerVM: LearningPlanGoalProgressManagementViewModel
+    @Inject(MAT_DIALOG_DATA)
+    public data: LearningPlanGoalProgressManagementInterface
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.learningPlanGoal = this.data.learningPlanGoal;
+    this.classGroup = this.data.classGroup;
+  }
 }
