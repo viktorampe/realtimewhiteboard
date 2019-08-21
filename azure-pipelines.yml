@@ -3,12 +3,12 @@
 # Add steps that analyze code, save build artifacts, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
 
-# Run build on PRs to:
+# Run build on PRs to..
 pr:
   - develop
   - master
 
-# Run build on push to:
+# Run build on push to..
 trigger:
   - develop
   - master
@@ -62,9 +62,9 @@ steps:
     displayName: 'Format check'
   - script: npm run test
     displayName: 'Test all'
-  - script: |
-      npm run e2e:polpo:staging
-    displayName: 'End-to-end all polpo'
+  #- script: |
+  #    npm run e2e:polpo:staging
+  #  displayName: 'End-to-end all polpo'
   - script: |
       npm run e2e:kabas:staging
     displayName: 'End-to-end all kabas'
