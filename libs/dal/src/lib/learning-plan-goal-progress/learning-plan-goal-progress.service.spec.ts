@@ -91,6 +91,7 @@ describe('LearningPlanGoalProgressService', () => {
     const mockClassGroupId = 123;
     const mockEduContentTOCId = 456;
     const mockUserLessonId = undefined;
+    const mockEduContentBookId = 2202397597;
     const mockLearningPlanGoalIds = [789, 147];
 
     it('should call the api and return the results', () => {
@@ -102,6 +103,7 @@ describe('LearningPlanGoalProgressService', () => {
         userId,
         mockClassGroupId,
         mockLearningPlanGoalIds,
+        mockEduContentBookId,
         mockUserLessonId,
         mockEduContentTOCId
       );
@@ -111,7 +113,8 @@ describe('LearningPlanGoalProgressService', () => {
         mockClassGroupId,
         mockLearningPlanGoalIds,
         null,
-        mockEduContentTOCId
+        mockEduContentTOCId,
+        mockEduContentBookId
       );
 
       expect(response).toBeObservable(
@@ -133,6 +136,7 @@ describe('LearningPlanGoalProgressService', () => {
     const mockClassGroupId = 123;
     const mockEduContentTOCId = undefined;
     const mockUserLessonId = 456;
+    const mockEduContentBookId = 1618928396;
     const mockLearningPlanGoalIds = [789, 147];
 
     it('should call the api and return the results', () => {
@@ -144,6 +148,7 @@ describe('LearningPlanGoalProgressService', () => {
         userId,
         mockClassGroupId,
         mockLearningPlanGoalIds,
+        mockEduContentBookId,
         mockUserLessonId,
         mockEduContentTOCId
       );
@@ -153,7 +158,8 @@ describe('LearningPlanGoalProgressService', () => {
         mockClassGroupId,
         mockLearningPlanGoalIds,
         mockUserLessonId,
-        null
+        null,
+        mockEduContentBookId
       );
 
       expect(response).toBeObservable(
