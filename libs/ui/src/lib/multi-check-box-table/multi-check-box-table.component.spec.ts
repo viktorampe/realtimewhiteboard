@@ -374,14 +374,17 @@ describe('MultiCheckBoxTableComponent', () => {
       it('should be triggered by checkbox click', () => {
         jest.spyOn(component, 'clickCheckbox');
 
-        fixture.debugElement
-          .query(By.directive(MatCheckbox))
-          .triggerEventHandler('click', null);
+        const checkBoxDebugElement = fixture.debugElement.query(
+          By.directive(MatCheckbox)
+        );
+        checkBoxDebugElement.triggerEventHandler('click', null);
 
+        expect(component.clickCheckbox).toHaveBeenCalledTimes(1);
         expect(component.clickCheckbox).toHaveBeenCalledWith(
           items[0].header,
           itemColumns[0].item,
-          undefined // no subLevel in inputs
+          undefined, // no subLevel in inputs
+          checkBoxDebugElement.componentInstance
         );
       });
 
@@ -391,14 +394,16 @@ describe('MultiCheckBoxTableComponent', () => {
         component.clickCheckbox(
           items[0].header,
           itemColumns[0].item,
-          subLevels[0].item
+          subLevels[0].item,
+          { checked: true } as MatCheckbox
         );
 
         expect(component.checkBoxChanged.emit).toHaveBeenCalledTimes(1);
         expect(component.checkBoxChanged.emit).toHaveBeenCalledWith({
           column: itemColumns[0].item,
           item: items[0].header,
-          subLevel: subLevels[0].item
+          subLevel: subLevels[0].item,
+          checkBox: { checked: true } as MatCheckbox
         });
       });
     });
