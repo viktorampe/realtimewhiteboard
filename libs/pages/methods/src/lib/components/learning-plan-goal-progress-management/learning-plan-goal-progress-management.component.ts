@@ -11,13 +11,5 @@ export class LearningPlanGoalProgressManagementComponent implements OnInit {
   @Input() learningPlanGoal: LearningPlanGoalInterface;
   constructor() {}
 
-  ngOnInit() {
-    this.classGroup = { name: 'fooClass' };
-    this.learningPlanGoal = {
-      goal: 'bar goal',
-      uniqueIdentifier: '12345',
-      prefix: '1.1.1',
-      type: 'bar'
-    };
-  }
+  ngOnInit() {}
 }
