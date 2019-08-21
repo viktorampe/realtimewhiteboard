@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ClassGroupInterface, LearningPlanGoalInterface } from '@campus/dal';
+import { LearningPlanGoalProgressManagementViewModel } from './learning-plan-goal-progress-management.viewmodel';
 
 @Component({
   selector: 'campus-learning-plan-goal-progress-management',
@@ -9,7 +10,9 @@ import { ClassGroupInterface, LearningPlanGoalInterface } from '@campus/dal';
 export class LearningPlanGoalProgressManagementComponent implements OnInit {
   @Input() classGroup: ClassGroupInterface;
   @Input() learningPlanGoal: LearningPlanGoalInterface;
-  constructor() {}
+  constructor(
+    private learningPlanGoalProgressManagerVM: LearningPlanGoalProgressManagementViewModel
+  ) {}
 
   ngOnInit() {}
 }
