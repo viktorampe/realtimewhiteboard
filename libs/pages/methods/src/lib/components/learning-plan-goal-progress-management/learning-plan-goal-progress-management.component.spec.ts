@@ -1,5 +1,4 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { LearningPlanGoalProgressManagementComponent } from './learning-plan-goal-progress-management.component';
 
 describe('LearningPlanGoalProgressManagementComponent', () => {
@@ -8,13 +7,14 @@ describe('LearningPlanGoalProgressManagementComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ LearningPlanGoalProgressManagementComponent ]
-    })
-    .compileComponents();
+      declarations: [LearningPlanGoalProgressManagementComponent]
+    }).compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(LearningPlanGoalProgressManagementComponent);
+    fixture = TestBed.createComponent(
+      LearningPlanGoalProgressManagementComponent
+    );
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
