@@ -8,27 +8,10 @@ import { cold, hot } from '@nrwl/nx/testing';
 import { undo } from 'ngrx-undo';
 import { Observable, of } from 'rxjs';
 import { LearningPlanGoalProgressReducer } from '.';
-import { DalActions } from '..';
 import { LearningPlanGoalProgressFixture } from '../../+fixtures';
-import {
-  LearningPlanGoalProgressServiceInterface,
-  LEARNING_PLAN_GOAL_PROGRESS_SERVICE_TOKEN
-} from '../../learning-plan-goal-progress/learning-plan-goal-progress.service.interface';
-import {
-  EffectFeedback,
-  EffectFeedbackActions,
-  Priority
-} from '../effect-feedback';
-import {
-  AddLearningPlanGoalProgresses,
-  BulkAddLearningPlanGoalProgresses,
-  DeleteLearningPlanGoalProgress,
-  LearningPlanGoalProgressesLoaded,
-  LearningPlanGoalProgressesLoadError,
-  LoadLearningPlanGoalProgresses,
-  StartAddLearningPlanGoalProgresses,
-  ToggleLearningPlanGoalProgress
-} from './learning-plan-goal-progress.actions';
+import { LearningPlanGoalProgressServiceInterface, LEARNING_PLAN_GOAL_PROGRESS_SERVICE_TOKEN } from '../../learning-plan-goal-progress/learning-plan-goal-progress.service.interface';
+import { EffectFeedback, EffectFeedbackActions, Priority } from '../effect-feedback';
+import { AddLearningPlanGoalProgresses, BulkAddLearningPlanGoalProgresses, DeleteLearningPlanGoalProgress, LearningPlanGoalProgressesLoaded, LearningPlanGoalProgressesLoadError, LoadLearningPlanGoalProgresses, StartAddLearningPlanGoalProgresses, ToggleLearningPlanGoalProgress } from './learning-plan-goal-progress.actions';
 import { LearningPlanGoalProgressEffects } from './learning-plan-goal-progress.effects';
 
 describe('LearningPlanGoalProgressEffects', () => {
@@ -399,8 +382,12 @@ describe('LearningPlanGoalProgressEffects', () => {
 
       expect(effects.deleteLearningPlanGoalProgress$).toBeObservable(
         cold('a', {
-          a: new DalActions.ActionSuccessful({
-            successfulAction: 'Leerplandoel voortgang verwijderd.'
+          a: new EffectFeedbackActions.AddEffectFeedback({
+            effectFeedback:  EffectFeedback.generateSuccessFeedback(
+              uuid,
+              deleteAction,
+              'Leerplandoelvoortgang verwijderd.'
+            )
           })
         })
       );
