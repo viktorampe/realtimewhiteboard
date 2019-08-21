@@ -79,6 +79,11 @@ export class MultiCheckBoxTableComponent<
     subLevel: SubLevelItemType,
     checkBox: MatCheckbox
   ) {
-    this.checkBoxChanged.emit({ column, item, subLevel, checkBox });
+    this.checkBoxChanged.emit({
+      column,
+      item,
+      subLevel,
+      previousCheckboxState: checkBox.checked
+    });
   }
 }

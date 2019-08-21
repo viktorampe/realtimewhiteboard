@@ -102,18 +102,14 @@ export class MethodComponent implements OnInit {
       EduContentTOCInterface
     >
   ) {
-    // no sublevel and checkbox means we are in the method page
-    if (!event.subLevel && event.checkBox) {
-      const previousCheckboxState = event.checkBox.checked;
-      if (previousCheckboxState) {
-        // if the checkbox becomes unchecked
-        const lpgs = this.viewModel.unCheckLearningPlanGoalForGroupFromMethodPage(
-          event.item,
-          event.column
-        );
-      } else {
-        console.log('checked');
-      }
+    if (event.previousCheckboxState) {
+      // if the checkbox becomes unchecked
+      this.viewModel.deleteLearningPlanGoalProgressForLearningPlanGoalsClassGroups(
+        event.item,
+        event.column
+      );
+    } else {
+      console.log('checked');
     }
   }
 

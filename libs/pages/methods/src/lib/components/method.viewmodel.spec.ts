@@ -70,7 +70,6 @@ import { hot } from '@nrwl/nx/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { of } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { DeleteLearningPlanGoalProgresses } from '../../../../../dal/src/lib/+state/learning-plan-goal-progress/learning-plan-goal-progress.actions';
 import { MethodViewModel } from './method.viewmodel';
 
 describe('MethodViewModel', () => {
@@ -179,7 +178,8 @@ describe('MethodViewModel', () => {
       learningPlanGoalId: 1,
       classGroupId: 11,
       eduContentTOCId: 3,
-      userLessonId: null
+      userLessonId: null,
+      eduContentBookId: bookId
     }),
     new LearningPlanGoalProgressFixture({
       id: 2,
@@ -1001,17 +1001,20 @@ describe('MethodViewModel', () => {
     });
   });
 
-  describe('unCheckFromMethodPage()', () => {
+  describe('deleteLearningPlanGoalProgressForLearningPlanGoalsClassGroups()', () => {
     it('should dispatch a delete many action', () => {
       const spy = jest.spyOn(store, 'dispatch');
-      methodViewModel.unCheckLearningPlanGoalForGroupFromMethodPage(
+      methodViewModel.currentMethodParams$ = of({ book: bookId });
+      methodViewModel.deleteLearningPlanGoalProgressForLearningPlanGoalsClassGroups(
         learningPlanGoals[0],
         classGroups[0]
       );
 
       expect(spy).toHaveBeenCalledTimes(1);
       expect(spy).toHaveBeenCalledWith(
-        new DeleteLearningPlanGoalProgresses({ ids: [1] })
+        new LearningPlanGoalProgressActions.DeleteLearningPlanGoalProgresses({
+          ids: [learningPlanGoalProgresses[0].id]
+        })
       );
     });
   });
