@@ -107,7 +107,10 @@ export class MethodComponent implements OnInit {
       const previousCheckboxState = event.checkBox.checked;
       if (previousCheckboxState) {
         // if the checkbox becomes unchecked
-        const lpgs = this.viewModel.unCheckFromMethodPage(event.item, event.column);
+        const lpgs = this.viewModel.unCheckLearningPlanGoalForGroupFromMethodPage(
+          event.item,
+          event.column
+        );
       } else {
         console.log('checked');
       }

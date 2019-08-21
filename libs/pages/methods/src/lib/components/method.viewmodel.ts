@@ -749,7 +749,7 @@ export class MethodViewModel implements ContentOpenerInterface {
       });
   }
 
-  public unCheckFromMethodPage(
+  public unCheckLearningPlanGoalForGroupFromMethodPage(
     learningPlanGoal: LearningPlanGoalInterface,
     classGroup: ClassGroupInterface
   ) {
