@@ -1,8 +1,9 @@
 <div class="lpgp-management">
-  <div class="lpgp-management__title">
-    Markeer een doel als behandeld voor {{ classGroup.name }}
-  </div>
-  <div class="lpgp-management__info">
+  <p mat-dialog-title
+    >Markeer een doel als behandeld voor {{ classGroup.name }}</p
+  >
+  <mat-dialog-content>
     {{ learningPlanGoal.prefix }} {{ learningPlanGoal.goal }}
-  </div>
+  </mat-dialog-content>
+  <mat-dialog-actions></mat-dialog-actions>
 </div>
