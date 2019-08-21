@@ -1,4 +1,3 @@
-import { MatCheckbox } from '@angular/material';
 import { PrimitivePropertiesKeys } from '@campus/utils';
 
 export interface MultiCheckBoxTableSubLevelInterface<
@@ -36,5 +35,5 @@ export interface MultiCheckBoxTableChangeEventInterface<
   column: ItemColumnType;
   item: ItemType;
   subLevel: SubLevelItemType;
-  checkBox?: MatCheckbox;
+  previousCheckboxState?: boolean;
 }
