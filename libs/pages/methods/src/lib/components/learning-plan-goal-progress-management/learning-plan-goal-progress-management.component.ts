@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { ClassGroupInterface, LearningPlanGoalInterface } from '@campus/dal';
 
 @Component({
   selector: 'campus-learning-plan-goal-progress-management',
@@ -6,6 +7,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./learning-plan-goal-progress-management.component.scss']
 })
 export class LearningPlanGoalProgressManagementComponent implements OnInit {
+  @Input() classGroup: ClassGroupInterface;
+  @Input() learningPlanGoal: LearningPlanGoalInterface;
+
   constructor() {}
 
   ngOnInit() {}
