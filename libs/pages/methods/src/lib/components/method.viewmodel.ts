@@ -754,7 +754,7 @@ export class MethodViewModel implements ContentOpenerInterface {
     classGroup: ClassGroupInterface
   ) {
     let learningPlanGoalProgressesToBeDeleted: LearningPlanGoalProgressInterface[];
-    this.getLearningPlanGoalProgressesForGroupLearningGoalAndTocs(
+    this.getLearningPlanGoalProgressesForGroupLearningGoalAndBook(
       learningPlanGoal,
       classGroup
     )
@@ -767,23 +767,20 @@ export class MethodViewModel implements ContentOpenerInterface {
     );
   }
 
-  private getLearningPlanGoalProgressesForGroupLearningGoalAndTocs(
+  private getLearningPlanGoalProgressesForGroupLearningGoalAndBook(
     learningPlanGoal: LearningPlanGoalInterface,
     classGroup: ClassGroupInterface
   ): Observable<LearningPlanGoalProgressInterface[]> {
-    return this.getTocsStream().pipe(
-      switchMap(tocs =>
-        this.store.pipe(
-          select(
-            LearningPlanGoalProgressQueries.getByGroupLearningGoalAndTocs,
-            {
-              classGroupId: classGroup.id,
-              learningPlanGoalId: learningPlanGoal.id,
-              eduContentTocIds: tocs.map(toc => toc.id)
-            }
-          )
-        )
-      )
+    let bookId: number;
+    this.currentMethodParams$
+      .pipe(take(1))
+      .subscribe(params => (bookId = +params.book));
+    return this.store.pipe(
+      select(LearningPlanGoalProgressQueries.getByGroupLearningGoalAndBook, {
+        classGroupId: classGroup.id,
+        learningPlanGoalId: learningPlanGoal.id,
+        eduContentBookId: bookId
+      })
     );
   }
 }
