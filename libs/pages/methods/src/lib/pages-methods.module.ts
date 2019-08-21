@@ -11,6 +11,7 @@ import { MethodViewModel } from './components/method.viewmodel';
 import { MethodComponent } from './components/method/method.component';
 import { MethodsOverviewComponent } from './components/methods-overview/methods-overview.component';
 import { PagesMethodsRoutingModule } from './pages-methods-routing.module';
+import { LearningPlanGoalProgressManagementComponent } from './components/learning-plan-goal-progress-management/learning-plan-goal-progress-management.component';
 
 @NgModule({
   imports: [
@@ -32,7 +33,8 @@ import { PagesMethodsRoutingModule } from './pages-methods-routing.module';
     MethodsOverviewComponent,
     MethodComponent,
     MethodChapterComponent,
-    MethodYearTileComponent
+    MethodYearTileComponent,
+    LearningPlanGoalProgressManagementComponent
   ],
   exports: []
 })
