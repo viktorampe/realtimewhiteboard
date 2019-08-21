@@ -193,7 +193,7 @@ export class LearningPlanGoalProgressEffects {
         const effectFeedback = EffectFeedback.generateErrorFeedback(
           this.uuid(),
           action,
-          'Het is niet gelukt om de status van het leerplandoel aan te passen.'
+          'Het is niet gelukt om de status van het leerplandoelen aan te passen.'
         );
         const effectFeedbackAction = new EffectFeedbackActions.AddEffectFeedback(
           { effectFeedback }
