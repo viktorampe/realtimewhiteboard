@@ -5,25 +5,11 @@ import { DataPersistence } from '@nrwl/nx';
 import { undo } from 'ngrx-undo';
 import { combineLatest, from, Observable } from 'rxjs';
 import { map, mapTo, switchMap, take } from 'rxjs/operators';
-import { DalState } from '..';
+import { DalActions, DalState } from '..';
 import { LearningPlanGoalProgressInterface } from '../../+models';
-import {
-  LearningPlanGoalProgressServiceInterface,
-  LEARNING_PLAN_GOAL_PROGRESS_SERVICE_TOKEN
-} from '../../learning-plan-goal-progress';
+import { LearningPlanGoalProgressServiceInterface, LEARNING_PLAN_GOAL_PROGRESS_SERVICE_TOKEN } from '../../learning-plan-goal-progress';
 import { EffectFeedback, EffectFeedbackActions } from '../effect-feedback';
-import {
-  AddLearningPlanGoalProgresses,
-  BulkAddLearningPlanGoalProgresses,
-  DeleteLearningPlanGoalProgress,
-  DeleteLearningPlanGoalProgresses,
-  LearningPlanGoalProgressesActionTypes,
-  LearningPlanGoalProgressesLoaded,
-  LearningPlanGoalProgressesLoadError,
-  LoadLearningPlanGoalProgresses,
-  StartAddLearningPlanGoalProgresses,
-  ToggleLearningPlanGoalProgress
-} from './learning-plan-goal-progress.actions';
+import { AddLearningPlanGoalProgresses, BulkAddLearningPlanGoalProgresses, DeleteLearningPlanGoalProgress, DeleteLearningPlanGoalProgresses, LearningPlanGoalProgressesActionTypes, LearningPlanGoalProgressesLoaded, LearningPlanGoalProgressesLoadError, LoadLearningPlanGoalProgresses, StartAddLearningPlanGoalProgresses, ToggleLearningPlanGoalProgress } from './learning-plan-goal-progress.actions';
 import { findOne } from './learning-plan-goal-progress.selectors';
 
 @Injectable()
