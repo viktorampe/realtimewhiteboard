@@ -2,6 +2,7 @@ import { Component, NgZone } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
+import { WINDOW } from '@campus/browser';
 import {
   AUTH_SERVICE_TOKEN,
   ClassGroupActions,
@@ -50,12 +51,14 @@ import {
 import {
   EduContentSearchResultFixture,
   EnvironmentSearchModesInterface,
+  ENVIRONMENT_API_TOKEN,
   ENVIRONMENT_SEARCHMODES_TOKEN,
   OpenStaticContentServiceInterface,
   OPEN_STATIC_CONTENT_SERVICE_TOKEN,
   ScormExerciseServiceInterface,
   SCORM_EXERCISE_SERVICE_TOKEN
 } from '@campus/shared';
+import { MockWindow } from '@campus/testing';
 import {
   NavigationActionTiming,
   RouterNavigationAction,
@@ -81,6 +84,7 @@ describe('MethodViewModel', () => {
   let scormExerciseService: ScormExerciseServiceInterface;
   let searchModes: EnvironmentSearchModesInterface;
   let eduContentService: EduContentServiceInterface;
+  let mockWindow: MockWindow;
 
   const bookId = 5;
   const diaboloBookId = 6;
@@ -231,6 +235,8 @@ describe('MethodViewModel', () => {
   ];
 
   const mockAutoCompleteReturnValue = ['strings', 'for', 'autocomplete'];
+  const apiBase = 'https://api.kabas.test';
+  const userId = 1;
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
@@ -266,7 +272,7 @@ describe('MethodViewModel', () => {
       providers: [
         Store,
         { provide: RouterStateSerializer, useClass: CustomSerializer },
-        { provide: AUTH_SERVICE_TOKEN, useValue: { userId: 1 } },
+        { provide: AUTH_SERVICE_TOKEN, useValue: { userId } },
         {
           provide: EDU_CONTENT_SERVICE_TOKEN,
           useValue: {
@@ -286,8 +292,18 @@ describe('MethodViewModel', () => {
           }
         },
         {
+          provide: ENVIRONMENT_API_TOKEN,
+          useValue: {
+            APIBase: apiBase
+          }
+        },
+        {
           provide: OPEN_STATIC_CONTENT_SERVICE_TOKEN,
           useValue: { open: jest.fn() }
+        },
+        {
+          provide: WINDOW,
+          useClass: MockWindow
         },
         {
           provide: SCORM_EXERCISE_SERVICE_TOKEN,
@@ -302,6 +318,7 @@ describe('MethodViewModel', () => {
     store = TestBed.get(Store);
     zone = TestBed.get(NgZone);
     router = TestBed.get(Router);
+    mockWindow = TestBed.get(WINDOW);
     loadInStore();
     openStaticContentService = TestBed.get(OPEN_STATIC_CONTENT_SERVICE_TOKEN);
     scormExerciseService = TestBed.get(SCORM_EXERCISE_SERVICE_TOKEN);
@@ -990,6 +1007,19 @@ describe('MethodViewModel', () => {
           learningPlanGoalIds,
           personId: 1
         })
+      );
+    });
+  });
+
+  describe('exportLearningPlanGoalProgress', () => {
+    it('should open a window with the correct url', () => {
+      navigateWithParams({ book: bookId });
+
+      const spy = jest.spyOn(mockWindow.location, 'href', 'set');
+      methodViewModel.exportLearningPlanGoalProgress();
+
+      expect(spy).toHaveBeenCalledWith(
+        `${apiBase}/api/People/${userId}/downloadLearningPlanGoalProgressByBookId/${bookId}`
       );
     });
   });
