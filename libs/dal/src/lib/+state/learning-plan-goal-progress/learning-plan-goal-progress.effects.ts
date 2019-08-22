@@ -5,11 +5,26 @@ import { DataPersistence } from '@nrwl/nx';
 import { undo } from 'ngrx-undo';
 import { combineLatest, from, Observable } from 'rxjs';
 import { map, mapTo, switchMap, take } from 'rxjs/operators';
-import { DalActions, DalState } from '..';
+import { DalState } from '..';
 import { LearningPlanGoalProgressInterface } from '../../+models';
-import { LearningPlanGoalProgressServiceInterface, LEARNING_PLAN_GOAL_PROGRESS_SERVICE_TOKEN } from '../../learning-plan-goal-progress';
+import {
+  LearningPlanGoalProgressServiceInterface,
+  LEARNING_PLAN_GOAL_PROGRESS_SERVICE_TOKEN
+} from '../../learning-plan-goal-progress';
+import { UndoServiceInterface, UNDO_SERVICE_TOKEN } from '../../undo';
 import { EffectFeedback, EffectFeedbackActions } from '../effect-feedback';
-import { AddLearningPlanGoalProgresses, BulkAddLearningPlanGoalProgresses, DeleteLearningPlanGoalProgress, DeleteLearningPlanGoalProgresses, LearningPlanGoalProgressesActionTypes, LearningPlanGoalProgressesLoaded, LearningPlanGoalProgressesLoadError, LoadLearningPlanGoalProgresses, StartAddLearningPlanGoalProgresses, ToggleLearningPlanGoalProgress } from './learning-plan-goal-progress.actions';
+import {
+  AddLearningPlanGoalProgresses,
+  BulkAddLearningPlanGoalProgresses,
+  DeleteLearningPlanGoalProgress,
+  DeleteLearningPlanGoalProgresses,
+  LearningPlanGoalProgressesActionTypes,
+  LearningPlanGoalProgressesLoaded,
+  LearningPlanGoalProgressesLoadError,
+  LoadLearningPlanGoalProgresses,
+  StartAddLearningPlanGoalProgresses,
+  ToggleLearningPlanGoalProgress
+} from './learning-plan-goal-progress.actions';
 import { findOne } from './learning-plan-goal-progress.selectors';
 
 @Injectable()
@@ -165,18 +180,17 @@ export class LearningPlanGoalProgressEffects {
     LearningPlanGoalProgressesActionTypes.DeleteLearningPlanGoalProgresses,
     {
       run: (action: DeleteLearningPlanGoalProgresses, state: DalState) => {
-        return this.learningPlanGoalProgressService
-          .deleteLearningPlanGoalProgresses(
+        return this.undoService.dispatchActionAsUndoable({
+          action: action,
+          dataPersistence: this.dataPersistence,
+          intendedSideEffect: this.learningPlanGoalProgressService.deleteLearningPlanGoalProgresses(
             action.payload.userId,
             action.payload.ids
-          )
-          .pipe(
-            mapTo(
-              new DalActions.ActionSuccessful({
-                successfulAction: 'Leerplandoel voortgangen verwijderd.'
-              })
-            )
-          );
+          ),
+          undoLabel: 'Leerplandoel voortgangen worden verwijderd.',
+          undoneLabel: 'Leerplandoel voortgangen zijn niet verwijderd.',
+          doneLabel: 'Leerplandoel voortgangen zijn verwijderd.'
+        });
       },
       undoAction: (action: DeleteLearningPlanGoalProgresses, error) => {
         const undoAction = undo(action);
@@ -248,6 +262,7 @@ export class LearningPlanGoalProgressEffects {
     private dataPersistence: DataPersistence<DalState>,
     @Inject(LEARNING_PLAN_GOAL_PROGRESS_SERVICE_TOKEN)
     private learningPlanGoalProgressService: LearningPlanGoalProgressServiceInterface,
+    @Inject(UNDO_SERVICE_TOKEN) private undoService: UndoServiceInterface,
     @Inject('uuid') private uuid: Function
   ) {}
 }
