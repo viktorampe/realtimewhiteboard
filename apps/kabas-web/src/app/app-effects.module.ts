@@ -7,6 +7,7 @@ import {
   EduContentProductTypeEffects,
   EduContentsEffects,
   EduContentTocEffects,
+  EffectFeedbackEffects,
   LearningDomainEffects,
   LearningPlanGoalEffects,
   LearningPlanGoalProgressEffects,
@@ -24,6 +25,7 @@ import { EffectsModule } from '@ngrx/effects';
     EffectsModule.forFeature([
       UiEffects,
       UserEffects,
+      EffectFeedbackEffects,
       EduContentTocEffects,
       EduContentBookEffects,
       DiaboloPhaseEffects,

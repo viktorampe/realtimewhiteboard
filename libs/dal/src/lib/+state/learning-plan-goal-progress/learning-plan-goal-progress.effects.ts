@@ -5,7 +5,7 @@ import { DataPersistence } from '@nrwl/nx';
 import { undo } from 'ngrx-undo';
 import { combineLatest, from, Observable } from 'rxjs';
 import { map, mapTo, switchMap, take } from 'rxjs/operators';
-import { DalActions, DalState } from '..';
+import { DalState } from '..';
 import { LearningPlanGoalProgressInterface } from '../../+models';
 import {
   LearningPlanGoalProgressServiceInterface,
@@ -148,8 +148,12 @@ export class LearningPlanGoalProgressEffects {
           )
           .pipe(
             mapTo(
-              new DalActions.ActionSuccessful({
-                successfulAction: 'Leerplandoel voortgang verwijderd.'
+              new EffectFeedbackActions.AddEffectFeedback({
+                effectFeedback: EffectFeedback.generateSuccessFeedback(
+                  this.uuid(),
+                  action,
+                  'Leerplandoelvoortgang verwijderd.'
+                )
               })
             )
           );

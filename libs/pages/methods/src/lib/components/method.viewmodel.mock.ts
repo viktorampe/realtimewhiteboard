@@ -150,6 +150,10 @@ export class MockMethodViewModel
     return;
   }
 
+  public exportLearningPlanGoalProgress(): void {
+    return;
+  }
+
   public updateState(state: SearchStateInterface): void {}
 
   openEduContentAsExercise(eduContent: any): void {}
