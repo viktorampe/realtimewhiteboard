@@ -8,6 +8,7 @@ import { cold, hot } from '@nrwl/nx/testing';
 import { undo } from 'ngrx-undo';
 import { Observable, of } from 'rxjs';
 import { LearningPlanGoalProgressReducer } from '.';
+import { DalActions } from '..';
 import { LearningPlanGoalProgressFixture } from '../../+fixtures';
 import {
   LearningPlanGoalProgressServiceInterface,
