@@ -4,6 +4,8 @@ import { ClassGroupFixture, LearningPlanGoalFixture } from '@campus/dal';
 import { configureTestSuite } from 'ng-bullet';
 import { LearningPlanGoalProgressManagementInterface } from './learning-plan-goal-progress-management-dialog.interface';
 import { LearningPlanGoalProgressManagementComponent } from './learning-plan-goal-progress-management.component';
+import { LearningPlanGoalProgressManagementViewModel } from './learning-plan-goal-progress-management.viewmodel';
+import { MockLearningPlanGoalProgressManagementViewModel } from './learning-plan-goal-progress-management.viewmodel.mock';
 
 describe('LearningPlanGoalProgressManagementComponent', () => {
   let component: LearningPlanGoalProgressManagementComponent;
@@ -18,7 +20,18 @@ describe('LearningPlanGoalProgressManagementComponent', () => {
       declarations: [LearningPlanGoalProgressManagementComponent],
       imports: [MatDialogModule],
       providers: [{ provide: MAT_DIALOG_DATA, useValue: mockInjectedData }]
-    }).compileComponents();
+    })
+      .overrideComponent(LearningPlanGoalProgressManagementComponent, {
+        set: {
+          providers: [
+            {
+              provide: LearningPlanGoalProgressManagementViewModel,
+              useClass: MockLearningPlanGoalProgressManagementViewModel
+            }
+          ]
+        }
+      })
+      .compileComponents();
   });
 
   beforeEach(() => {
