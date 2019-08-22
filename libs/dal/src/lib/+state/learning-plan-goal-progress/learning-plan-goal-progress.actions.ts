@@ -138,6 +138,7 @@ export class DeleteLearningPlanGoalProgresses
   constructor(
     public payload: {
       ids: number[];
+      userId: number;
       customFeedbackHandlers?: CustomFeedbackHandlersInterface;
     }
   ) {}

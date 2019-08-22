@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map, mapTo } from 'rxjs/operators';
 import { LearningPlanGoalProgressInterface } from '../+models';
 import { LearningPlanGoalProgressServiceInterface } from './learning-plan-goal-progress.service.interface';
@@ -33,6 +33,17 @@ export class LearningPlanGoalProgressService
     return this.personApi
       .destroyByIdLearningPlanProgress(userId, learningPlanGoalProgressId)
       .pipe(mapTo(true));
+  }
+
+  deleteLearningPlanGoalProgresses(
+    userId: number,
+    learningPlanGoalProgressIds: number[]
+  ): Observable<boolean> {
+    //TODO -- implement call to new remote method
+    console.log(
+      `deleteLearningPlanGoalProgresses called with\n - userId: ${userId}\n - learningPlanGoalProgressIds: ${learningPlanGoalProgressIds}`
+    );
+    return of(true);
   }
 
   createLearningPlanGoalProgress(
