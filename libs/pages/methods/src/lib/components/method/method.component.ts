@@ -102,8 +102,15 @@ export class MethodComponent implements OnInit {
       EduContentTOCInterface
     >
   ) {
-    // open popup
-    console.log(event);
+    if (event.previousCheckboxState) {
+      // if the checkbox becomes unchecked
+      this.viewModel.deleteLearningPlanGoalProgressForLearningPlanGoalsClassGroups(
+        event.item,
+        event.column
+      );
+    } else {
+      console.log('checked');
+    }
   }
 
   public clickExportGoals(): void {
