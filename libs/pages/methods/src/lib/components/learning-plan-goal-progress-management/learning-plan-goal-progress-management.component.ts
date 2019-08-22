@@ -14,7 +14,7 @@ export class LearningPlanGoalProgressManagementComponent implements OnInit {
 
   constructor(
     @Inject(MAT_DIALOG_DATA)
-    public data: LearningPlanGoalProgressManagementInterface
+    private data: LearningPlanGoalProgressManagementInterface
   ) {}
 
   ngOnInit() {
