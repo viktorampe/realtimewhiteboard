@@ -5,6 +5,7 @@ import {
   Input,
   Output
 } from '@angular/core';
+import { MatCheckbox } from '@angular/material';
 import {
   MultiCheckBoxTableChangeEventInterface,
   MultiCheckBoxTableItemColumnInterface,
@@ -75,8 +76,14 @@ export class MultiCheckBoxTableComponent<
   public clickCheckbox(
     item: ItemType,
     column: ItemColumnType,
-    subLevel: SubLevelItemType
+    subLevel: SubLevelItemType,
+    checkBox: MatCheckbox
   ) {
-    this.checkBoxChanged.emit({ column, item, subLevel });
+    this.checkBoxChanged.emit({
+      column,
+      item,
+      subLevel,
+      previousCheckboxState: checkBox.checked
+    });
   }
 }

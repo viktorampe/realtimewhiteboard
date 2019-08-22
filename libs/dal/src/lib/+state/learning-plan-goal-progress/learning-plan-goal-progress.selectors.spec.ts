@@ -138,7 +138,8 @@ describe('LearningPlanGoalProgress Selectors', () => {
         personId: 1,
         learningPlanGoalId: 1,
         eduContentTOCId: 1,
-        userLessonId: undefined
+        userLessonId: undefined,
+        eduContentBookId: 232683678
       }),
       new LearningPlanGoalProgressFixture({
         id: 2,
@@ -146,7 +147,8 @@ describe('LearningPlanGoalProgress Selectors', () => {
         personId: 1,
         learningPlanGoalId: 1,
         eduContentTOCId: 1,
-        userLessonId: undefined
+        userLessonId: undefined,
+        eduContentBookId: 232683678
       }),
       new LearningPlanGoalProgressFixture({
         id: 3,
@@ -154,7 +156,8 @@ describe('LearningPlanGoalProgress Selectors', () => {
         personId: 2,
         learningPlanGoalId: 1,
         eduContentTOCId: 1,
-        userLessonId: undefined
+        userLessonId: undefined,
+        eduContentBookId: 232683678
       }),
       new LearningPlanGoalProgressFixture({
         id: 4,
@@ -162,7 +165,8 @@ describe('LearningPlanGoalProgress Selectors', () => {
         personId: 1,
         learningPlanGoalId: 2,
         eduContentTOCId: 1,
-        userLessonId: undefined
+        userLessonId: undefined,
+        eduContentBookId: 232683678
       }),
       new LearningPlanGoalProgressFixture({
         id: 5,
@@ -170,7 +174,8 @@ describe('LearningPlanGoalProgress Selectors', () => {
         personId: 1,
         learningPlanGoalId: 1,
         eduContentTOCId: 2,
-        userLessonId: undefined
+        userLessonId: undefined,
+        eduContentBookId: 232683678
       }),
       new LearningPlanGoalProgressFixture({
         id: 6,
@@ -178,7 +183,8 @@ describe('LearningPlanGoalProgress Selectors', () => {
         personId: 1,
         learningPlanGoalId: 1,
         eduContentTOCId: undefined,
-        userLessonId: 1
+        userLessonId: 1,
+        eduContentBookId: 232683678
       }),
       new LearningPlanGoalProgressFixture({
         id: 7,
@@ -186,7 +192,8 @@ describe('LearningPlanGoalProgress Selectors', () => {
         personId: 1,
         learningPlanGoalId: 1,
         eduContentTOCId: undefined,
-        userLessonId: 1
+        userLessonId: 1,
+        eduContentBookId: 232683678
       }),
       new LearningPlanGoalProgressFixture({
         id: 8,
@@ -194,7 +201,8 @@ describe('LearningPlanGoalProgress Selectors', () => {
         personId: 2,
         learningPlanGoalId: 1,
         eduContentTOCId: undefined,
-        userLessonId: 1
+        userLessonId: 1,
+        eduContentBookId: 232683678
       }),
       new LearningPlanGoalProgressFixture({
         id: 9,
@@ -202,7 +210,8 @@ describe('LearningPlanGoalProgress Selectors', () => {
         personId: 1,
         learningPlanGoalId: 2,
         eduContentTOCId: undefined,
-        userLessonId: 1
+        userLessonId: 1,
+        eduContentBookId: 232683678
       }),
       new LearningPlanGoalProgressFixture({
         id: 10,
@@ -210,7 +219,8 @@ describe('LearningPlanGoalProgress Selectors', () => {
         personId: 1,
         learningPlanGoalId: 1,
         eduContentTOCId: undefined,
-        userLessonId: 2
+        userLessonId: 2,
+        eduContentBookId: 232683678
       })
     ];
 
@@ -271,6 +281,13 @@ describe('LearningPlanGoalProgress Selectors', () => {
           learningPlanGoalProgressArray[7]
         ]);
       });
+      it('should return the correct LearningPlanGoalProgress for eduContentBookId', () => {
+        const results = LearningPlanGoalProgressQueries.findMany(storeState, {
+          eduContentBookId: 232683678
+        });
+        expect(results.length).toBe(10);
+        expect(results).toEqual(learningPlanGoalProgressArray);
+      });
     });
 
     describe('findOne', () => {
@@ -300,6 +317,13 @@ describe('LearningPlanGoalProgress Selectors', () => {
         });
 
         expect(result).toEqual(learningPlanGoalProgressArray[5]);
+      });
+      it('should return the correct LearningPlanGoalProgress for eduContentBookId', () => {
+        const result = LearningPlanGoalProgressQueries.findOne(storeState, {
+          eduContentBookId: 232683678
+        });
+
+        expect(result).toEqual(learningPlanGoalProgressArray[0]);
       });
     });
   });
