@@ -167,6 +167,16 @@ describe('MethodComponent', () => {
     });
   });
 
+  describe('exportGoals', () => {
+    it('should call the correct method on the viewmodel', () => {
+      jest.spyOn(methodViewModel, 'exportLearningPlanGoalProgress');
+
+      component.clickExportGoals();
+
+      expect(methodViewModel.exportLearningPlanGoalProgress).toHaveBeenCalled();
+    });
+  });
+
   describe('openGeneralFile', () => {
     it('should call the correct method on the viewmodel', () => {
       jest.spyOn(methodViewModel, 'openEduContentAsDownload');

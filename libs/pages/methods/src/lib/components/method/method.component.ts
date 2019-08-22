@@ -106,6 +106,10 @@ export class MethodComponent implements OnInit {
     console.log(event);
   }
 
+  public clickExportGoals(): void {
+    this.viewModel.exportLearningPlanGoalProgress();
+  }
+
   private getTableColumnsFromClassGroupsStream(): Observable<
     MultiCheckBoxTableItemColumnInterface<ClassGroupInterface>[]
   > {
