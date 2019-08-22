@@ -21,7 +21,8 @@ export enum LearningPlanGoalProgressesActionTypes {
   ClearLearningPlanGoalProgresses = '[LearningPlanGoalProgresses] Clear LearningPlanGoalProgresses',
   ToggleLearningPlanGoalProgress = '[LearningPlanGoalProgresses] Toggle LearningPlanGoalProgresses',
   StartAddLearningPlanGoalProgresses = '[LearningPlanGoalProgresses] Start Add LearningPlanGoalProgresses',
-  BulkAddLearningPlanGoalProgresses = '[LearningPlanGoalProgresses] Bulk Add LearningPlanGoalProgresses'
+  BulkAddLearningPlanGoalProgresses = '[LearningPlanGoalProgresses] Bulk Add LearningPlanGoalProgresses',
+  StartAddManyLearningPlanGoalProgresses = '[LearningPlanGoalProgresses] Start Add many LearningPlanGoalProgresses'
 }
 
 export class LoadLearningPlanGoalProgresses implements Action {
@@ -200,6 +201,22 @@ export class StartAddLearningPlanGoalProgresses
   ) {}
 }
 
+export class StartAddManyLearningPlanGoalProgresses
+  implements FeedbackTriggeringAction {
+  readonly type =
+    LearningPlanGoalProgressesActionTypes.StartAddManyLearningPlanGoalProgresses;
+
+  constructor(
+    public payload: {
+      learningPlanGoalProgresses: (
+        | MinimalLearningPlanGoalProgressEduContentTocInterface
+        | MinimalLearningPlanGoalProgressUserLessonInterface)[];
+      personId: number;
+      customFeedbackHandlers?: CustomFeedbackHandlersInterface;
+    }
+  ) {}
+}
+
 export type LearningPlanGoalProgressesActions =
   | LoadLearningPlanGoalProgresses
   | LearningPlanGoalProgressesLoaded
@@ -215,4 +232,20 @@ export type LearningPlanGoalProgressesActions =
   | ClearLearningPlanGoalProgresses
   | ToggleLearningPlanGoalProgress
   | StartAddLearningPlanGoalProgresses
-  | BulkAddLearningPlanGoalProgresses;
+  | BulkAddLearningPlanGoalProgresses
+  | StartAddManyLearningPlanGoalProgresses;
+
+interface MinimalLearningPlanGoalProgressUserLessonInterface
+  extends LearningPlanGoalProgressInterface {
+  classGroupId: number;
+  learningPlanGoalId: number;
+  userLessonId: number;
+  eduContentBookId: number;
+}
+
+interface MinimalLearningPlanGoalProgressEduContentTocInterface
+  extends LearningPlanGoalProgressInterface {
+  classGroupId: number;
+  learningPlanGoalId: number;
+  eduContentTocId: number;
+}
