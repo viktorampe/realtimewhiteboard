@@ -6,7 +6,8 @@ export class MockWindow {
   location = {
     // @ts-ignore
     assign: jest.fn(),
-    origin: 'foo'
+    origin: 'foo',
+    set href(value: string) {}
   };
   // @ts-ignore
   clearTimeout = jest.fn();

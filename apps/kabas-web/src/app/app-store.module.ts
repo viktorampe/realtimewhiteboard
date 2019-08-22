@@ -8,6 +8,7 @@ import {
   EduContentProductTypeReducer,
   EduContentReducer,
   EduContentTocReducer,
+  EffectFeedbackReducer,
   LearningDomainReducer,
   LearningPlanGoalProgressReducer,
   LearningPlanGoalReducer,
@@ -117,6 +118,13 @@ import { environment } from '../environments/environment';
     StoreModule.forFeature(ClassGroupReducer.NAME, ClassGroupReducer.reducer, {
       initialState: ClassGroupReducer.initialState
     }),
+    StoreModule.forFeature(
+      EffectFeedbackReducer.NAME,
+      EffectFeedbackReducer.reducer,
+      {
+        initialState: EffectFeedbackReducer.initialState
+      }
+    ),
     !environment.production ? StoreDevtoolsModule.instrument() : []
   ]
 })

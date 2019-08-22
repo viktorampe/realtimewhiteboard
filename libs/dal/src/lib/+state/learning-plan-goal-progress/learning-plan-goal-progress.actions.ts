@@ -149,7 +149,8 @@ export class ClearLearningPlanGoalProgresses implements Action {
     LearningPlanGoalProgressesActionTypes.ClearLearningPlanGoalProgresses;
 }
 
-export class ToggleLearningPlanGoalProgress implements Action {
+export class ToggleLearningPlanGoalProgress
+  implements FeedbackTriggeringAction {
   readonly type =
     LearningPlanGoalProgressesActionTypes.ToggleLearningPlanGoalProgress;
 
@@ -161,6 +162,7 @@ export class ToggleLearningPlanGoalProgress implements Action {
       eduContentBookId: number;
       learningPlanGoalId: number;
       personId: number;
+      customFeedbackHandlers?: CustomFeedbackHandlersInterface;
     }
   ) {}
 }
