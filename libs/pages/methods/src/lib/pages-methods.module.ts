@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { MatCardModule } from '@angular/material';
+import { MatCardModule, MatDialogModule } from '@angular/material';
 import { GuardsModule } from '@campus/guards';
 import { SearchModule } from '@campus/search';
 import { CONTENT_OPENER_TOKEN, SharedModule } from '@campus/shared';
 import { UiModule } from '@campus/ui';
+import { LearningPlanGoalProgressManagementComponent } from './components/learning-plan-goal-progress-management/learning-plan-goal-progress-management.component';
 import { MethodChapterComponent } from './components/method-chapter/method-chapter.component';
 import { MethodYearTileComponent } from './components/method-year-tile/method-year-tile.component';
 import { MethodViewModel } from './components/method.viewmodel';
@@ -20,7 +21,8 @@ import { PagesMethodsRoutingModule } from './pages-methods-routing.module';
     SearchModule,
     SharedModule,
     UiModule,
-    GuardsModule
+    GuardsModule,
+    MatDialogModule
   ],
   providers: [
     {
@@ -32,8 +34,10 @@ import { PagesMethodsRoutingModule } from './pages-methods-routing.module';
     MethodsOverviewComponent,
     MethodComponent,
     MethodChapterComponent,
-    MethodYearTileComponent
+    MethodYearTileComponent,
+    LearningPlanGoalProgressManagementComponent
   ],
-  exports: []
+  exports: [],
+  entryComponents: [LearningPlanGoalProgressManagementComponent]
 })
 export class PagesMethodsModule {}
