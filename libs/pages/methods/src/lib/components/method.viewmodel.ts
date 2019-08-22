@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
+import { WINDOW } from '@campus/browser';
 import {
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
@@ -38,7 +39,9 @@ import {
 } from '@campus/search';
 import {
   ContentOpenerInterface,
+  EnvironmentApiInterface,
   EnvironmentSearchModesInterface,
+  ENVIRONMENT_API_TOKEN,
   ENVIRONMENT_SEARCHMODES_TOKEN,
   OpenStaticContentServiceInterface,
   OPEN_STATIC_CONTENT_SERVICE_TOKEN,
@@ -62,6 +65,7 @@ import {
   shareReplay,
   switchMap,
   switchMapTo,
+  take,
   withLatestFrom
 } from 'rxjs/operators';
 
@@ -134,7 +138,11 @@ export class MethodViewModel implements ContentOpenerInterface {
     @Inject(OPEN_STATIC_CONTENT_SERVICE_TOKEN)
     private openStaticContentService: OpenStaticContentServiceInterface,
     @Inject(SCORM_EXERCISE_SERVICE_TOKEN)
-    private scormExerciseService: ScormExerciseServiceInterface
+    private scormExerciseService: ScormExerciseServiceInterface,
+    @Inject(ENVIRONMENT_API_TOKEN)
+    private environmentApi: EnvironmentApiInterface,
+    @Inject(WINDOW)
+    private window: Window
   ) {
     this.initialize();
   }
@@ -282,6 +290,14 @@ export class MethodViewModel implements ContentOpenerInterface {
         personId: this.authService.userId
       })
     );
+  }
+
+  public exportLearningPlanGoalProgress() {
+    this.currentMethodParams$.pipe(take(1)).subscribe(currentMethodParams => {
+      this.window.location.href = `${this.environmentApi.APIBase}/api/People/${
+        this.authService.userId
+      }/downloadLearningPlanGoalProgressByBookId/${currentMethodParams.book}`;
+    });
   }
 
   private initialize() {

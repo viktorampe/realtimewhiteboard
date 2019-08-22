@@ -130,11 +130,17 @@ export class DeleteLearningPlanGoalProgress
   ) {}
 }
 
-export class DeleteLearningPlanGoalProgresses implements Action {
+export class DeleteLearningPlanGoalProgresses
+  implements FeedbackTriggeringAction {
   readonly type =
     LearningPlanGoalProgressesActionTypes.DeleteLearningPlanGoalProgresses;
 
-  constructor(public payload: { ids: number[] }) {}
+  constructor(
+    public payload: {
+      ids: number[];
+      customFeedbackHandlers?: CustomFeedbackHandlersInterface;
+    }
+  ) {}
 }
 
 export class ClearLearningPlanGoalProgresses implements Action {
@@ -142,7 +148,8 @@ export class ClearLearningPlanGoalProgresses implements Action {
     LearningPlanGoalProgressesActionTypes.ClearLearningPlanGoalProgresses;
 }
 
-export class ToggleLearningPlanGoalProgress implements Action {
+export class ToggleLearningPlanGoalProgress
+  implements FeedbackTriggeringAction {
   readonly type =
     LearningPlanGoalProgressesActionTypes.ToggleLearningPlanGoalProgress;
 
@@ -154,6 +161,7 @@ export class ToggleLearningPlanGoalProgress implements Action {
       eduContentBookId: number;
       learningPlanGoalId: number;
       personId: number;
+      customFeedbackHandlers?: CustomFeedbackHandlersInterface;
     }
   ) {}
 }

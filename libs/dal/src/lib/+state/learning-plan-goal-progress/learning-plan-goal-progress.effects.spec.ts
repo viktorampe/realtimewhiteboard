@@ -8,7 +8,6 @@ import { cold, hot } from '@nrwl/nx/testing';
 import { undo } from 'ngrx-undo';
 import { Observable, of } from 'rxjs';
 import { LearningPlanGoalProgressReducer } from '.';
-import { DalActions } from '..';
 import { LearningPlanGoalProgressFixture } from '../../+fixtures';
 import {
   LearningPlanGoalProgressServiceInterface,
@@ -399,8 +398,12 @@ describe('LearningPlanGoalProgressEffects', () => {
 
       expect(effects.deleteLearningPlanGoalProgress$).toBeObservable(
         cold('a', {
-          a: new DalActions.ActionSuccessful({
-            successfulAction: 'Leerplandoel voortgang verwijderd.'
+          a: new EffectFeedbackActions.AddEffectFeedback({
+            effectFeedback: EffectFeedback.generateSuccessFeedback(
+              uuid,
+              deleteAction,
+              'Leerplandoelvoortgang verwijderd.'
+            )
           })
         })
       );
