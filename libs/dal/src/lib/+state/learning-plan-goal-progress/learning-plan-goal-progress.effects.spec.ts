@@ -14,6 +14,7 @@ import {
   LearningPlanGoalProgressServiceInterface,
   LEARNING_PLAN_GOAL_PROGRESS_SERVICE_TOKEN
 } from '../../learning-plan-goal-progress/learning-plan-goal-progress.service.interface';
+import { UndoService, UNDO_SERVICE_TOKEN } from '../../undo';
 import {
   EffectFeedback,
   EffectFeedbackActions,
@@ -108,6 +109,10 @@ describe('LearningPlanGoalProgressEffects', () => {
             deleteLearningPlanGoalProgresses: () => {},
             deleteLearningPlanGoalProgress: () => {}
           }
+        },
+        {
+          provide: UNDO_SERVICE_TOKEN,
+          useClass: UndoService
         },
         LearningPlanGoalProgressEffects,
         DataPersistence,
