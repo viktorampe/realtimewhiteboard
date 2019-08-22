@@ -87,9 +87,17 @@
           ui-multi-check-box-table__body__row__cell--checkbox"
         >
           <mat-checkbox
+            #checkbox
             color="primary"
             [checked]="item.content[itemColumn.item[itemColumn.key]]"
-            (click)="clickCheckbox(item.header, itemColumn.item, subLevel.item)"
+            (click)="
+              clickCheckbox(
+                item.header,
+                itemColumn.item,
+                subLevel.item,
+                checkbox
+              )
+            "
           ></mat-checkbox>
         </td>
       </tr>
