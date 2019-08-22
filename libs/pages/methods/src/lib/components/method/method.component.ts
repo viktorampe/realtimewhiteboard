@@ -104,6 +104,7 @@ export class MethodComponent implements OnInit {
   ) {
     // open popup
     console.log(event);
+    this.viewModel.openLearningPlanGoalProgressManagementDialog();
   }
 
   public clickExportGoals(): void {

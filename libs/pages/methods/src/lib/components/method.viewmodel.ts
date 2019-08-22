@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
+import { MatDialog } from '@angular/material';
 import { WINDOW } from '@campus/browser';
 import {
   AuthServiceInterface,
@@ -43,6 +44,7 @@ import {
   EnvironmentSearchModesInterface,
   ENVIRONMENT_API_TOKEN,
   ENVIRONMENT_SEARCHMODES_TOKEN,
+  LearningPlanGoalProgressManagementComponent,
   OpenStaticContentServiceInterface,
   OPEN_STATIC_CONTENT_SERVICE_TOKEN,
   ScormExerciseServiceInterface,
@@ -142,7 +144,8 @@ export class MethodViewModel implements ContentOpenerInterface {
     @Inject(ENVIRONMENT_API_TOKEN)
     private environmentApi: EnvironmentApiInterface,
     @Inject(WINDOW)
-    private window: Window
+    private window: Window,
+    private dialog: MatDialog
   ) {
     this.initialize();
   }
@@ -297,6 +300,14 @@ export class MethodViewModel implements ContentOpenerInterface {
       this.window.location.href = `${this.environmentApi.APIBase}/api/People/${
         this.authService.userId
       }/downloadLearningPlanGoalProgressByBookId/${currentMethodParams.book}`;
+    });
+  }
+
+  openLearningPlanGoalProgressManagementDialog(): void {
+    this.dialog.open(LearningPlanGoalProgressManagementComponent, {
+      height: '400px',
+      width: '600px',
+      data: {}
     });
   }
 
