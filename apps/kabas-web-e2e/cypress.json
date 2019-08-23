@@ -7,5 +7,32 @@
   "video": true,
   "videosFolder": "../../dist/out-tsc/apps/kabas-web-e2e/videos",
   "screenshotsFolder": "../../dist/out-tsc/apps/kabas-web-e2e/screenshots",
-  "chromeWebSecurity": false
+  "chromeWebSecurity": false,
+  "defaultCommandTimeout": 10000,
+  "env": {
+    "development": {
+      "apiUrl": "http://api.kabas.localhost:3000/",
+      "apiPaths": {
+        "eduContent": "api/eduContents",
+        "ludoAssets": "api/educontent-assets-ludo"
+      },
+      "appPaths": {
+        "methods": "methods"
+      },
+      "username": "teacher1",
+      "password": "testje"
+    },
+    "staging": {
+      "apiUrl": "https://api.kabas.polpo.be/",
+      "apiPaths": {
+        "eduContent": "api/eduContents",
+        "ludoAssets": "api/educontent-assets-ludo"
+      },
+      "appPaths": {
+        "methods": "methods"
+      },
+      "username": "teacher1",
+      "password": "testje"
+    }
+  }
 }
