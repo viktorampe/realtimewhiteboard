@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { EffectFeedbackInterface } from '@campus/dal';
 import { NavItem } from '@campus/ui';
 import { Observable } from 'rxjs';
 import { AppViewModel } from './app.viewmodel';
@@ -12,6 +13,7 @@ export class AppComponent {
   // streams
   public navigationItems$: Observable<NavItem[]>;
   public sideNavOpen$: Observable<boolean>;
+  public bannerFeedback$: Observable<EffectFeedbackInterface>;
 
   constructor(private appViewModel: AppViewModel) {
     this.initialize();
@@ -20,6 +22,7 @@ export class AppComponent {
   initialize() {
     this.navigationItems$ = this.appViewModel.navigationItems$;
     this.sideNavOpen$ = this.appViewModel.sideNavOpen$;
+    this.bannerFeedback$ = this.appViewModel.bannerFeedback$;
   }
 
   public onNavItemChanged(event) {
@@ -28,5 +31,9 @@ export class AppComponent {
 
   public onSideBarToggle(open: boolean) {
     this.appViewModel.toggleSidebar(open);
+  }
+
+  public onBannerDismiss(event) {
+    this.appViewModel.onFeedbackDismiss(event);
   }
 }
