@@ -45,6 +45,7 @@ import {
   ENVIRONMENT_API_TOKEN,
   ENVIRONMENT_SEARCHMODES_TOKEN,
   LearningPlanGoalProgressManagementComponent,
+  LearningPlanGoalProgressManagementInterface,
   OpenStaticContentServiceInterface,
   OPEN_STATIC_CONTENT_SERVICE_TOKEN,
   ScormExerciseServiceInterface,
@@ -303,11 +304,18 @@ export class MethodViewModel implements ContentOpenerInterface {
     });
   }
 
-  openLearningPlanGoalProgressManagementDialog(): void {
+  openLearningPlanGoalProgressManagementDialog(
+    learningPlanGoal: LearningPlanGoalInterface,
+    classGroup: ClassGroupInterface
+  ): void {
+    const data: LearningPlanGoalProgressManagementInterface = {
+      classGroup,
+      learningPlanGoal
+    };
     this.dialog.open(LearningPlanGoalProgressManagementComponent, {
       height: '400px',
       width: '600px',
-      data: {}
+      data
     });
   }
 

@@ -1,8 +1,6 @@
 export * from './lib/auth';
 export * from './lib/collection-manager';
-export {
-  LearningPlanGoalProgressManagementComponent
-} from './lib/components/learning-plan-goal-progress-management/learning-plan-goal-progress-management.component';
+export * from './lib/components/learning-plan-goal-progress-management';
 export {
   QuickLinkTypeEnum
 } from './lib/components/quick-link/quick-link-type.enum';

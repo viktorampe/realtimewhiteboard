@@ -102,9 +102,10 @@ export class MethodComponent implements OnInit {
       EduContentTOCInterface
     >
   ) {
-    // open popup
-    console.log(event);
-    this.viewModel.openLearningPlanGoalProgressManagementDialog();
+    this.viewModel.openLearningPlanGoalProgressManagementDialog(
+      event.item,
+      event.column
+    );
   }
 
   public clickExportGoals(): void {
