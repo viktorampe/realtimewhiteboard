@@ -8,7 +8,6 @@ import { cold, hot } from '@nrwl/nx/testing';
 import { undo } from 'ngrx-undo';
 import { Observable, of } from 'rxjs';
 import { LearningPlanGoalProgressReducer } from '.';
-import { DalActions } from '..';
 import { LearningPlanGoalProgressFixture } from '../../+fixtures';
 import {
   LearningPlanGoalProgressServiceInterface,
@@ -36,6 +35,7 @@ import { LearningPlanGoalProgressEffects } from './learning-plan-goal-progress.e
 describe('LearningPlanGoalProgressEffects', () => {
   let actions: Observable<any>;
   let effects: LearningPlanGoalProgressEffects;
+  let undoService: UndoService;
   let usedState: any;
 
   const uuid = 'foo';
@@ -125,6 +125,7 @@ describe('LearningPlanGoalProgressEffects', () => {
     });
 
     effects = TestBed.get(LearningPlanGoalProgressEffects);
+    undoService = TestBed.get(UNDO_SERVICE_TOKEN);
   });
 
   describe('loadLearningPlanGoalProgress$', () => {
@@ -481,16 +482,23 @@ describe('LearningPlanGoalProgressEffects', () => {
         )
         .mockReturnValue(of(true));
 
+      const dummyAction = {
+        type: 'some action',
+        payload: { userId: 317646491, ids: [612837505, 892853336] }
+      };
+      const undoSpy = jest
+        .spyOn(undoService, 'dispatchActionAsUndoable')
+        .mockReturnValue(of(dummyAction));
+
       actions = hot('a', { a: deleteAction });
 
       expect(effects.deleteLearningPlanGoalProgresses$).toBeObservable(
         cold('a', {
-          a: new DalActions.ActionSuccessful({
-            successfulAction: 'Leerplandoel voortgangen verwijderd.'
-          })
+          a: dummyAction
         })
       );
 
+      expect(undoSpy).toHaveBeenCalledTimes(1);
       expect(
         learningPlanGoalProgressService.deleteLearningPlanGoalProgresses
       ).toHaveBeenCalledWith(userId, learningPlanGoalProgressIds);
