@@ -12,6 +12,7 @@
       <h3 mat-subheader>Kies een hoofdstuk</h3>
       <mat-nav-list>
         <a
+          data-cy="chapter-link"
           mat-list-item
           *ngFor="let chapter of (chapters$ | async)"
           (click)="clickOpenChapter(chapter.id)"
@@ -37,6 +38,7 @@
             <mat-card-content *ngIf="(method$ | async) as method">
               <img [src]="'assets/icons/method/' + method.logoUrl" />
               <p
+                data-cy="diabolo-info"
                 *ngIf="(book$ | async)?.diabolo"
                 class="method-method__container__boeke__diabolo"
               >
@@ -49,7 +51,10 @@
               </p>
             </mat-card-content>
             <mat-card-actions>
-              <campus-button (click)="clickOpenBoeke(boeke)" mat-button
+              <campus-button
+                data-cy="open-boeke"
+                (click)="clickOpenBoeke(boeke)"
+                mat-button
                 >OPEN</campus-button
               >
             </mat-card-actions>
@@ -64,6 +69,7 @@
                 <h3 mat-subheader>{{ productType.name }}</h3>
                 <mat-nav-list>
                   <mat-list-item
+                    data-cy="general-file"
                     *ngFor="let generalFile of generalFiles"
                     (click)="clickOpenGeneralFile(generalFile)"
                   >

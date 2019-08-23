@@ -4,23 +4,30 @@ export interface KabasMethodsPagesInterface {
     book: number;
     chapter: number;
     lesson: number;
-    testData: {
+    searchTerm: string;
+    diaboloPhase: string;
+    expected: {
+      method: {
+        name: string;
+        year: string;
+      };
+      boeke: {
+        eduContentId: number;
+      };
+      generalFiles: {
+        count: number;
+      };
+      chapters: {
+        count: number;
+      };
       searchNoFilters: {
-        expected: {
-          results: number;
-        };
+        results: number;
       };
       searchByTerm: {
-        searchTerm: 'de';
-        expected: {
-          results: number;
-        };
+        results: number;
       };
       searchDiabolo: {
-        diaboloPhase: 'outro';
-        expected: {
-          results: number;
-        };
+        results: number;
       };
     };
   };
