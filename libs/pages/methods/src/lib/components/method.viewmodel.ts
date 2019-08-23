@@ -304,17 +304,15 @@ export class MethodViewModel implements ContentOpenerInterface {
     });
   }
 
-  openLearningPlanGoalProgressManagementDialog(
+  public openLearningPlanGoalProgressManagementDialog(
     learningPlanGoal: LearningPlanGoalInterface,
     classGroup: ClassGroupInterface
   ): void {
     const data: LearningPlanGoalProgressManagementInterface = {
-      classGroup,
-      learningPlanGoal
+      learningPlanGoal,
+      classGroup
     };
     this.dialog.open(LearningPlanGoalProgressManagementComponent, {
-      height: '400px',
-      width: '600px',
       data
     });
   }

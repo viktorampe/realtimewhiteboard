@@ -1,73 +1,14 @@
 import { Component, NgZone } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import { MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { WINDOW } from '@campus/browser';
-import {
-  AUTH_SERVICE_TOKEN,
-  ClassGroupActions,
-  ClassGroupFixture,
-  ClassGroupInterface,
-  ClassGroupReducer,
-  CustomSerializer,
-  DalState,
-  EduContent,
-  EduContentActions,
-  EduContentBookActions,
-  EduContentBookFixture,
-  EduContentBookInterface,
-  EduContentBookReducer,
-  EduContentFixture,
-  EduContentReducer,
-  EduContentServiceInterface,
-  EduContentTocActions,
-  EduContentTOCFixture,
-  EduContentTocReducer,
-  EDU_CONTENT_SERVICE_TOKEN,
-  getStoreModuleForFeatures,
-  LearningPlanGoalActions,
-  LearningPlanGoalFixture,
-  LearningPlanGoalInterface,
-  LearningPlanGoalProgressActions,
-  LearningPlanGoalProgressFixture,
-  LearningPlanGoalProgressInterface,
-  LearningPlanGoalProgressReducer,
-  LearningPlanGoalReducer,
-  MethodActions,
-  MethodFixture,
-  MethodInterface,
-  MethodReducer,
-  UserReducer,
-  YearActions,
-  YearFixture,
-  YearReducer
-} from '@campus/dal';
-import {
-  FilterFactoryFixture,
-  SearchModeInterface,
-  SearchResultInterface,
-  SearchStateInterface
-} from '@campus/search';
-import {
-  EduContentSearchResultFixture,
-  EnvironmentSearchModesInterface,
-  ENVIRONMENT_API_TOKEN,
-  ENVIRONMENT_SEARCHMODES_TOKEN,
-  OpenStaticContentServiceInterface,
-  OPEN_STATIC_CONTENT_SERVICE_TOKEN,
-  ScormExerciseServiceInterface,
-  SCORM_EXERCISE_SERVICE_TOKEN
-} from '@campus/shared';
+import { AUTH_SERVICE_TOKEN, ClassGroupActions, ClassGroupFixture, ClassGroupInterface, ClassGroupReducer, CustomSerializer, DalState, EduContent, EduContentActions, EduContentBookActions, EduContentBookFixture, EduContentBookInterface, EduContentBookReducer, EduContentFixture, EduContentReducer, EduContentServiceInterface, EduContentTocActions, EduContentTOCFixture, EduContentTocReducer, EDU_CONTENT_SERVICE_TOKEN, getStoreModuleForFeatures, LearningPlanGoalActions, LearningPlanGoalFixture, LearningPlanGoalInterface, LearningPlanGoalProgressActions, LearningPlanGoalProgressFixture, LearningPlanGoalProgressInterface, LearningPlanGoalProgressReducer, LearningPlanGoalReducer, MethodActions, MethodFixture, MethodInterface, MethodReducer, UserReducer, YearActions, YearFixture, YearReducer } from '@campus/dal';
+import { FilterFactoryFixture, SearchModeInterface, SearchResultInterface, SearchStateInterface } from '@campus/search';
+import { EduContentSearchResultFixture, EnvironmentSearchModesInterface, ENVIRONMENT_API_TOKEN, ENVIRONMENT_SEARCHMODES_TOKEN, LearningPlanGoalProgressManagementComponent, OpenStaticContentServiceInterface, OPEN_STATIC_CONTENT_SERVICE_TOKEN, ScormExerciseServiceInterface, SCORM_EXERCISE_SERVICE_TOKEN } from '@campus/shared';
 import { MockWindow } from '@campus/testing';
-import {
-  NavigationActionTiming,
-  RouterNavigationAction,
-  RouterNavigationPayload,
-  routerReducer,
-  RouterStateSerializer,
-  ROUTER_NAVIGATION,
-  StoreRouterConnectingModule
-} from '@ngrx/router-store';
+import { NavigationActionTiming, RouterNavigationAction, RouterNavigationPayload, routerReducer, RouterStateSerializer, ROUTER_NAVIGATION, StoreRouterConnectingModule } from '@ngrx/router-store';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
 import { configureTestSuite } from 'ng-bullet';
@@ -85,6 +26,7 @@ describe('MethodViewModel', () => {
   let searchModes: EnvironmentSearchModesInterface;
   let eduContentService: EduContentServiceInterface;
   let mockWindow: MockWindow;
+  let matDialog: MatDialog;
 
   const bookId = 5;
   const diaboloBookId = 6;
@@ -267,7 +209,7 @@ describe('MethodViewModel', () => {
         StoreRouterConnectingModule.forRoot({
           navigationActionTiming: NavigationActionTiming.PostActivation,
           serializer: CustomSerializer
-        })
+        }),
       ],
       providers: [
         Store,
@@ -308,6 +250,12 @@ describe('MethodViewModel', () => {
         {
           provide: SCORM_EXERCISE_SERVICE_TOKEN,
           useValue: { previewExerciseFromUnlockedContent: jest.fn() }
+        },
+        {
+          provide: MatDialog,
+          useValue: {
+            open: jest.fn()
+          }
         }
       ]
     });
@@ -324,6 +272,8 @@ describe('MethodViewModel', () => {
     scormExerciseService = TestBed.get(SCORM_EXERCISE_SERVICE_TOKEN);
     eduContentService = TestBed.get(EDU_CONTENT_SERVICE_TOKEN);
     searchModes = TestBed.get(ENVIRONMENT_SEARCHMODES_TOKEN);
+
+    matDialog = TestBed.get(MatDialog);
   });
 
   function loadInStore() {
@@ -1020,6 +970,24 @@ describe('MethodViewModel', () => {
 
       expect(spy).toHaveBeenCalledWith(
         `${apiBase}/api/People/${userId}/downloadLearningPlanGoalProgressByBookId/${bookId}`
+      );
+    });
+  });
+
+  describe('openLearningPlanGoalProgressManagementDialog()', () => {
+    it('should open a dialog with the learningPlanGoalProgressManagementComponent', () => {
+      methodViewModel.openLearningPlanGoalProgressManagementDialog(
+        { id: 1 } as LearningPlanGoalInterface,
+        { id: 2 }
+      );
+      expect(matDialog.open).toHaveBeenCalledWith(
+        LearningPlanGoalProgressManagementComponent,
+        {
+          data: {
+            learningPlanGoal: { id: 1 },
+            classGroup: { id: 2 }
+          }
+        }
       );
     });
   });
