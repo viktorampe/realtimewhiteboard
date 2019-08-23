@@ -1030,7 +1030,8 @@ describe('MethodViewModel', () => {
       expect(spy).toHaveBeenCalledTimes(1);
       expect(spy).toHaveBeenCalledWith(
         new LearningPlanGoalProgressActions.DeleteLearningPlanGoalProgresses({
-          ids: [learningPlanGoalProgresses[0].id]
+          ids: [learningPlanGoalProgresses[0].id],
+          userId
         })
       );
     });

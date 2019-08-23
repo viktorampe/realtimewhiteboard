@@ -5,7 +5,7 @@ import { DataPersistence } from '@nrwl/nx';
 import { undo } from 'ngrx-undo';
 import { combineLatest, from, Observable } from 'rxjs';
 import { map, mapTo, switchMap, take } from 'rxjs/operators';
-import { DalState } from '..';
+import { DalActions, DalState } from '..';
 import { LearningPlanGoalProgressInterface } from '../../+models';
 import {
   LearningPlanGoalProgressServiceInterface,
@@ -16,6 +16,7 @@ import {
   AddLearningPlanGoalProgresses,
   BulkAddLearningPlanGoalProgresses,
   DeleteLearningPlanGoalProgress,
+  DeleteLearningPlanGoalProgresses,
   LearningPlanGoalProgressesActionTypes,
   LearningPlanGoalProgressesLoaded,
   LearningPlanGoalProgressesLoadError,
@@ -164,6 +165,39 @@ export class LearningPlanGoalProgressEffects {
           this.uuid(),
           action,
           'Het is niet gelukt om de status van het leerplandoel aan te passen.'
+        );
+        const effectFeedbackAction = new EffectFeedbackActions.AddEffectFeedback(
+          { effectFeedback }
+        );
+        return from([undoAction, effectFeedbackAction]);
+      }
+    }
+  );
+
+  @Effect()
+  deleteLearningPlanGoalProgresses$ = this.dataPersistence.optimisticUpdate(
+    LearningPlanGoalProgressesActionTypes.DeleteLearningPlanGoalProgresses,
+    {
+      run: (action: DeleteLearningPlanGoalProgresses, state: DalState) => {
+        return this.learningPlanGoalProgressService
+          .deleteLearningPlanGoalProgresses(
+            action.payload.userId,
+            action.payload.ids
+          )
+          .pipe(
+            mapTo(
+              new DalActions.ActionSuccessful({
+                successfulAction: 'Leerplandoel voortgangen verwijderd.'
+              })
+            )
+          );
+      },
+      undoAction: (action: DeleteLearningPlanGoalProgresses, error) => {
+        const undoAction = undo(action);
+        const effectFeedback = EffectFeedback.generateErrorFeedback(
+          this.uuid(),
+          action,
+          'Het is niet gelukt om de status van het leerplandoelen aan te passen.'
         );
         const effectFeedbackAction = new EffectFeedbackActions.AddEffectFeedback(
           { effectFeedback }
