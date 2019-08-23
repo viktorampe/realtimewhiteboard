@@ -62,6 +62,17 @@ describe('Methods', () => {
           }/redirectURL`
         );
     });
+    it('should show the boeke link in the top bar', () => {
+      dataCy('nav-open-boeke').click();
+      cy.window()
+        .its('open')
+        .should(
+          'be.calledWithExactly',
+          `${apiUrl}${apiPaths.eduContent}/${
+            setup.kabasMethodsPages.expected.boeke.eduContentId
+          }/redirectURL`
+        );
+    });
     it('should show the general files', () => {
       dataCy('general-file').should(
         'have.length',
