@@ -780,4 +780,41 @@ export class MethodViewModel implements ContentOpenerInterface {
         });
       });
   }
+
+  public deleteLearningPlanGoalProgressForLearningPlanGoalsClassGroups(
+    learningPlanGoal: LearningPlanGoalInterface,
+    classGroup: ClassGroupInterface
+  ) {
+    let learningPlanGoalProgressesToBeDeleted: LearningPlanGoalProgressInterface[];
+    this.getLearningPlanGoalProgressesForGroupLearningGoalAndBook(
+      learningPlanGoal,
+      classGroup
+    )
+      .pipe(take(1))
+      .subscribe(lpgs => (learningPlanGoalProgressesToBeDeleted = lpgs));
+    this.store.dispatch(
+      new LearningPlanGoalProgressActions.DeleteLearningPlanGoalProgresses({
+        userId: this.authService.userId,
+        ids: learningPlanGoalProgressesToBeDeleted.map(lpg => lpg.id)
+      })
+    );
+  }
+
+  private getLearningPlanGoalProgressesForGroupLearningGoalAndBook(
+    learningPlanGoal: LearningPlanGoalInterface,
+    classGroup: ClassGroupInterface
+  ): Observable<LearningPlanGoalProgressInterface[]> {
+    return this.currentMethodParams$.pipe(
+      take(1),
+      switchMap(params =>
+        this.store.pipe(
+          select(LearningPlanGoalProgressQueries.findMany, {
+            classGroupId: classGroup.id,
+            learningPlanGoalId: learningPlanGoal.id,
+            eduContentBookId: +params.book
+          })
+        )
+      )
+    );
+  }
 }

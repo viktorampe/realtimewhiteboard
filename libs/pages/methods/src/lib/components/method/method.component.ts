@@ -102,10 +102,18 @@ export class MethodComponent implements OnInit {
       EduContentTOCInterface
     >
   ) {
-    this.viewModel.openLearningPlanGoalProgressManagementDialog(
-      event.item,
-      event.column
-    );
+    if (event.previousCheckboxState) {
+      // if the checkbox becomes unchecked
+      this.viewModel.deleteLearningPlanGoalProgressForLearningPlanGoalsClassGroups(
+        event.item,
+        event.column
+      );
+    } else {
+      this.viewModel.openLearningPlanGoalProgressManagementDialog(
+        event.item, // lpg
+        event.column // classGroup
+      );
+    }
   }
 
   public clickExportGoals(): void {
