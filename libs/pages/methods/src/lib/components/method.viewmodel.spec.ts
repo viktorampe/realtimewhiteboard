@@ -3,11 +3,71 @@ import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { WINDOW } from '@campus/browser';
-import { AUTH_SERVICE_TOKEN, ClassGroupActions, ClassGroupFixture, ClassGroupInterface, ClassGroupReducer, CustomSerializer, DalState, EduContent, EduContentActions, EduContentBookActions, EduContentBookFixture, EduContentBookInterface, EduContentBookReducer, EduContentFixture, EduContentReducer, EduContentServiceInterface, EduContentTocActions, EduContentTOCFixture, EduContentTocReducer, EDU_CONTENT_SERVICE_TOKEN, getStoreModuleForFeatures, LearningPlanGoalActions, LearningPlanGoalFixture, LearningPlanGoalInterface, LearningPlanGoalProgressActions, LearningPlanGoalProgressFixture, LearningPlanGoalProgressInterface, LearningPlanGoalProgressReducer, LearningPlanGoalReducer, MethodActions, MethodFixture, MethodInterface, MethodReducer, UserReducer, YearActions, YearFixture, YearReducer } from '@campus/dal';
-import { FilterFactoryFixture, SearchModeInterface, SearchResultInterface, SearchStateInterface } from '@campus/search';
-import { EduContentSearchResultFixture, EnvironmentSearchModesInterface, ENVIRONMENT_API_TOKEN, ENVIRONMENT_SEARCHMODES_TOKEN, OpenStaticContentServiceInterface, OPEN_STATIC_CONTENT_SERVICE_TOKEN, ScormExerciseServiceInterface, SCORM_EXERCISE_SERVICE_TOKEN } from '@campus/shared';
+import {
+  AUTH_SERVICE_TOKEN,
+  ClassGroupActions,
+  ClassGroupFixture,
+  ClassGroupInterface,
+  ClassGroupReducer,
+  CustomSerializer,
+  DalState,
+  EduContent,
+  EduContentActions,
+  EduContentBookActions,
+  EduContentBookFixture,
+  EduContentBookInterface,
+  EduContentBookReducer,
+  EduContentFixture,
+  EduContentReducer,
+  EduContentServiceInterface,
+  EduContentTocActions,
+  EduContentTOCFixture,
+  EduContentTocReducer,
+  EDU_CONTENT_SERVICE_TOKEN,
+  getStoreModuleForFeatures,
+  LearningPlanGoalActions,
+  LearningPlanGoalFixture,
+  LearningPlanGoalInterface,
+  LearningPlanGoalProgressActions,
+  LearningPlanGoalProgressFixture,
+  LearningPlanGoalProgressInterface,
+  LearningPlanGoalProgressReducer,
+  LearningPlanGoalReducer,
+  MethodActions,
+  MethodFixture,
+  MethodInterface,
+  MethodReducer,
+  UserReducer,
+  YearActions,
+  YearFixture,
+  YearReducer
+} from '@campus/dal';
+import {
+  FilterFactoryFixture,
+  SearchModeInterface,
+  SearchResultInterface,
+  SearchStateInterface
+} from '@campus/search';
+import {
+  EduContentSearchResultFixture,
+  EnvironmentSearchModesInterface,
+  ENVIRONMENT_API_TOKEN,
+  ENVIRONMENT_SEARCHMODES_TOKEN,
+  OpenStaticContentServiceInterface,
+  OPEN_STATIC_CONTENT_SERVICE_TOKEN,
+  ScormExerciseServiceInterface,
+  SCORM_EXERCISE_SERVICE_TOKEN
+} from '@campus/shared';
 import { MockWindow } from '@campus/testing';
-import { NavigationActionTiming, RouterNavigationAction, RouterNavigationPayload, routerReducer, RouterStateSerializer, ROUTER_NAVIGATION, StoreRouterConnectingModule } from '@ngrx/router-store';
+import {
+  NavigationActionTiming,
+  RouterNavigationAction,
+  RouterNavigationPayload,
+  routerReducer,
+  RouterStateSerializer,
+  ROUTER_NAVIGATION,
+  StoreRouterConnectingModule
+} from '@ngrx/router-store';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
 import { configureTestSuite } from 'ng-bullet';
