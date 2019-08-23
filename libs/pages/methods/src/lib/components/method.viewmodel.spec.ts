@@ -3,71 +3,11 @@ import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { WINDOW } from '@campus/browser';
-import {
-  AUTH_SERVICE_TOKEN,
-  ClassGroupActions,
-  ClassGroupFixture,
-  ClassGroupInterface,
-  ClassGroupReducer,
-  CustomSerializer,
-  DalState,
-  EduContent,
-  EduContentActions,
-  EduContentBookActions,
-  EduContentBookFixture,
-  EduContentBookInterface,
-  EduContentBookReducer,
-  EduContentFixture,
-  EduContentReducer,
-  EduContentServiceInterface,
-  EduContentTocActions,
-  EduContentTOCFixture,
-  EduContentTocReducer,
-  EDU_CONTENT_SERVICE_TOKEN,
-  getStoreModuleForFeatures,
-  LearningPlanGoalActions,
-  LearningPlanGoalFixture,
-  LearningPlanGoalInterface,
-  LearningPlanGoalProgressActions,
-  LearningPlanGoalProgressFixture,
-  LearningPlanGoalProgressInterface,
-  LearningPlanGoalProgressReducer,
-  LearningPlanGoalReducer,
-  MethodActions,
-  MethodFixture,
-  MethodInterface,
-  MethodReducer,
-  UserReducer,
-  YearActions,
-  YearFixture,
-  YearReducer
-} from '@campus/dal';
-import {
-  FilterFactoryFixture,
-  SearchModeInterface,
-  SearchResultInterface,
-  SearchStateInterface
-} from '@campus/search';
-import {
-  EduContentSearchResultFixture,
-  EnvironmentSearchModesInterface,
-  ENVIRONMENT_API_TOKEN,
-  ENVIRONMENT_SEARCHMODES_TOKEN,
-  OpenStaticContentServiceInterface,
-  OPEN_STATIC_CONTENT_SERVICE_TOKEN,
-  ScormExerciseServiceInterface,
-  SCORM_EXERCISE_SERVICE_TOKEN
-} from '@campus/shared';
+import { AUTH_SERVICE_TOKEN, ClassGroupActions, ClassGroupFixture, ClassGroupInterface, ClassGroupReducer, CustomSerializer, DalState, EduContent, EduContentActions, EduContentBookActions, EduContentBookFixture, EduContentBookInterface, EduContentBookReducer, EduContentFixture, EduContentReducer, EduContentServiceInterface, EduContentTocActions, EduContentTOCFixture, EduContentTocReducer, EDU_CONTENT_SERVICE_TOKEN, getStoreModuleForFeatures, LearningPlanGoalActions, LearningPlanGoalFixture, LearningPlanGoalInterface, LearningPlanGoalProgressActions, LearningPlanGoalProgressFixture, LearningPlanGoalProgressInterface, LearningPlanGoalProgressReducer, LearningPlanGoalReducer, MethodActions, MethodFixture, MethodInterface, MethodReducer, UserReducer, YearActions, YearFixture, YearReducer } from '@campus/dal';
+import { FilterFactoryFixture, SearchModeInterface, SearchResultInterface, SearchStateInterface } from '@campus/search';
+import { EduContentSearchResultFixture, EnvironmentSearchModesInterface, ENVIRONMENT_API_TOKEN, ENVIRONMENT_SEARCHMODES_TOKEN, OpenStaticContentServiceInterface, OPEN_STATIC_CONTENT_SERVICE_TOKEN, ScormExerciseServiceInterface, SCORM_EXERCISE_SERVICE_TOKEN } from '@campus/shared';
 import { MockWindow } from '@campus/testing';
-import {
-  NavigationActionTiming,
-  RouterNavigationAction,
-  RouterNavigationPayload,
-  routerReducer,
-  RouterStateSerializer,
-  ROUTER_NAVIGATION,
-  StoreRouterConnectingModule
-} from '@ngrx/router-store';
+import { NavigationActionTiming, RouterNavigationAction, RouterNavigationPayload, routerReducer, RouterStateSerializer, ROUTER_NAVIGATION, StoreRouterConnectingModule } from '@ngrx/router-store';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
 import { configureTestSuite } from 'ng-bullet';
@@ -190,21 +130,32 @@ describe('MethodViewModel', () => {
       learningPlanGoalId: 2,
       classGroupId: 11,
       eduContentTOCId: 3,
-      userLessonId: null
+      userLessonId: null,
+      eduContentBookId: bookId
     }),
     new LearningPlanGoalProgressFixture({
       id: 3,
       learningPlanGoalId: 3,
       classGroupId: 11,
       eduContentTOCId: 4,
-      userLessonId: null
+      userLessonId: null,
+      eduContentBookId: bookId
     }),
     new LearningPlanGoalProgressFixture({
       id: 4,
       learningPlanGoalId: 3,
       classGroupId: 12,
       eduContentTOCId: 4,
-      userLessonId: null
+      userLessonId: null,
+      eduContentBookId: bookId
+    }),
+    new LearningPlanGoalProgressFixture({
+      id: 5,
+      learningPlanGoalId: 2,
+      classGroupId: 13,
+      eduContentTOCId: null,
+      userLessonId: 1,
+      eduContentBookId: bookId
     })
   ];
 
@@ -804,7 +755,7 @@ describe('MethodViewModel', () => {
         const expected = [
           {
             header: learningPlanGoals[1],
-            content: { 11: true, 12: false, 13: false }
+            content: { 11: true, 12: false, 13: true }
           },
           {
             header: learningPlanGoals[2],
@@ -854,7 +805,7 @@ describe('MethodViewModel', () => {
             children: [
               {
                 header: learningPlanGoals[1],
-                content: { 11: true, 12: false, 13: false }
+                content: { 11: false, 12: false, 13: false }
               },
               {
                 header: learningPlanGoals[2],
