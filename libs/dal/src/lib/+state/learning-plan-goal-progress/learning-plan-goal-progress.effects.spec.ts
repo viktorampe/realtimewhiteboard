@@ -28,6 +28,7 @@ import {
   LearningPlanGoalProgressesLoadError,
   LoadLearningPlanGoalProgresses,
   StartAddLearningPlanGoalProgresses,
+  StartAddManyLearningPlanGoalProgresses,
   ToggleLearningPlanGoalProgress
 } from './learning-plan-goal-progress.actions';
 import { LearningPlanGoalProgressEffects } from './learning-plan-goal-progress.effects';
@@ -106,6 +107,7 @@ describe('LearningPlanGoalProgressEffects', () => {
           useValue: {
             getAllForUser: () => {},
             createLearningPlanGoalProgress: () => {},
+            createLearningPlanGoalProgresses: () => {},
             deleteLearningPlanGoalProgresses: () => {},
             deleteLearningPlanGoalProgress: () => {}
           }
@@ -617,6 +619,87 @@ describe('LearningPlanGoalProgressEffects', () => {
 
       expect(effects.bulkAddLearningPlanGoalProgress$).toBeObservable(
         hot('a', { a: expectedAction })
+      );
+    });
+  });
+
+  describe('deleteLearningPlanGoalProgresses', () => {
+    const personId = 1;
+
+    const triggerAction = new StartAddManyLearningPlanGoalProgresses({
+      personId,
+      learningPlanGoalProgresses: []
+    });
+
+    let learningPlanGoalProgressService: LearningPlanGoalProgressServiceInterface;
+
+    beforeEach(() => {
+      learningPlanGoalProgressService = TestBed.get(
+        LEARNING_PLAN_GOAL_PROGRESS_SERVICE_TOKEN
+      );
+    });
+
+    it('should make the service call', () => {
+      jest
+        .spyOn(
+          learningPlanGoalProgressService,
+          'createLearningPlanGoalProgresses'
+        )
+        .mockReturnValue(of([]));
+
+      const dummyAction = {
+        type: 'some action',
+        payload: { userId: 317646491, ids: [612837505, 892853336] }
+      };
+      const undoSpy = jest
+        .spyOn(undoService, 'dispatchActionAsUndoable')
+        .mockReturnValue(of(dummyAction));
+
+      actions = hot('a', { a: triggerAction });
+
+      expect(effects.startAddManyLearningPlanGoalProgresses$).toBeObservable(
+        cold('a', {
+          a: dummyAction
+        })
+      );
+
+      expect(undoSpy).toHaveBeenCalledTimes(1);
+      expect(
+        learningPlanGoalProgressService.createLearningPlanGoalProgresses
+      ).toHaveBeenCalledWith(personId, []);
+    });
+
+    it('should return an undoAction and a feedBackAction on error', () => {
+      jest
+        .spyOn(
+          learningPlanGoalProgressService,
+          'createLearningPlanGoalProgresses'
+        )
+        .mockImplementation(() => {
+          throw new Error('error');
+        });
+
+      actions = hot('a', { a: triggerAction });
+
+      const feedbackAction = new EffectFeedbackActions.AddEffectFeedback({
+        effectFeedback: new EffectFeedback({
+          id: uuid,
+          triggerAction: triggerAction,
+          message:
+            'Het is niet gelukt om de status van de leerplandoelen aan te passen.',
+          userActions: [
+            { title: 'Opnieuw proberen', userAction: triggerAction }
+          ],
+          type: 'error',
+          priority: Priority.HIGH
+        })
+      });
+
+      expect(effects.startAddManyLearningPlanGoalProgresses$).toBeObservable(
+        cold('(ab)', {
+          a: undo(triggerAction),
+          b: feedbackAction
+        })
       );
     });
   });

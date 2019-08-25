@@ -23,6 +23,7 @@ import {
   LearningPlanGoalProgressesLoadError,
   LoadLearningPlanGoalProgresses,
   StartAddLearningPlanGoalProgresses,
+  StartAddManyLearningPlanGoalProgresses,
   ToggleLearningPlanGoalProgress
 } from './learning-plan-goal-progress.actions';
 import { findOne } from './learning-plan-goal-progress.selectors';
@@ -255,6 +256,51 @@ export class LearningPlanGoalProgressEffects {
         );
       }
     )
+  );
+
+  @Effect()
+  startAddManyLearningPlanGoalProgresses$ = this.dataPersistence.optimisticUpdate(
+    LearningPlanGoalProgressesActionTypes.StartAddManyLearningPlanGoalProgresses,
+    {
+      run: (
+        action: StartAddManyLearningPlanGoalProgresses,
+        state: DalState
+      ) => {
+        const intendedSideEffect = this.learningPlanGoalProgressService
+          .createLearningPlanGoalProgresses(
+            action.payload.personId,
+            action.payload.learningPlanGoalProgresses
+          )
+          .pipe(
+            map(
+              learningPlanGoalProgresses =>
+                new AddLearningPlanGoalProgresses({
+                  learningPlanGoalProgresses
+                })
+            )
+          );
+        return this.undoService.dispatchActionAsUndoable({
+          action: action,
+          dataPersistence: this.dataPersistence,
+          intendedSideEffect: intendedSideEffect,
+          undoLabel: 'Leerplandoel voortgangen worden toegevoegd.',
+          undoneLabel: 'Leerplandoel voortgangen werden niet toegevoegd.',
+          doneLabel: 'Leerplandoel voortgangen zijn toegevoegd.'
+        });
+      },
+      undoAction: (action: StartAddManyLearningPlanGoalProgresses, error) => {
+        const undoAction = undo(action);
+        const effectFeedback = EffectFeedback.generateErrorFeedback(
+          this.uuid(),
+          action,
+          'Het is niet gelukt om de status van de leerplandoelen aan te passen.'
+        );
+        const effectFeedbackAction = new EffectFeedbackActions.AddEffectFeedback(
+          { effectFeedback }
+        );
+        return from([undoAction, effectFeedbackAction]);
+      }
+    }
   );
 
   constructor(
