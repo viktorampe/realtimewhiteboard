@@ -3,6 +3,10 @@ import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { Observable, of } from 'rxjs';
 import { map, mapTo, tap } from 'rxjs/operators';
 import { LearningPlanGoalProgressInterface } from '../+models';
+import {
+  MinimalLearningPlanGoalProgressEduContentTocInterface,
+  MinimalLearningPlanGoalProgressUserLessonInterface
+} from '../+state/learning-plan-goal-progress/learning-plan-goal-progress.actions';
 import { LearningPlanGoalProgressServiceInterface } from './learning-plan-goal-progress.service.interface';
 
 @Injectable({
@@ -67,6 +71,22 @@ export class LearningPlanGoalProgressService
       userLessonId || null,
       eduContentTOCId || null,
       eduContentBookId
+    );
+  }
+
+  createLearningPlanGoalProgresses(
+    userId: number,
+    learninGoalProgresses: (
+      | MinimalLearningPlanGoalProgressEduContentTocInterface
+      | MinimalLearningPlanGoalProgressUserLessonInterface)[]
+  ): Observable<LearningPlanGoalProgressInterface[]> {
+    //TODO -- implement call to new remote method
+    return of([]).pipe(
+      tap(val => {
+        console.log(
+          `createLearningPlanGoalProgresses called with\n - userId: ${userId}\n - learninGoalProgresses: ${learninGoalProgresses}`
+        );
+      })
     );
   }
 }
