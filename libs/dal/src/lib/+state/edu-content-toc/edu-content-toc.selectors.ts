@@ -146,7 +146,6 @@ export const getLessonDisplaysForBook = createSelector(
     tocsForBookLearningPlanGoal: EduContentTOCInterface[],
     tocsForBook: EduContentTOCInterface[]
   ) => {
-    console.log('in selector');
     const array = tocsForBookLearningPlanGoal.map(currentToc => {
       const display = {
         eduContentTocId: currentToc.id,
