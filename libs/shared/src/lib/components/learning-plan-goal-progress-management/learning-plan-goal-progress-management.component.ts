@@ -1,6 +1,11 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material';
-import { ClassGroupInterface, LearningPlanGoalInterface } from '@campus/dal';
+import {
+  ClassGroupInterface,
+  EduContentBookInterface,
+  LearningPlanGoalInterface
+} from '@campus/dal';
+import { Observable } from 'rxjs';
 import { LearningPlanGoalProgressManagementInterface } from './learning-plan-goal-progress-management-dialog.interface';
 import { LearningPlanGoalProgressManagementViewModel } from './learning-plan-goal-progress-management.viewmodel';
 
@@ -13,6 +18,10 @@ import { LearningPlanGoalProgressManagementViewModel } from './learning-plan-goa
 export class LearningPlanGoalProgressManagementComponent implements OnInit {
   protected learningPlanGoal: LearningPlanGoalInterface;
   protected classGroup: ClassGroupInterface;
+  protected book: EduContentBookInterface;
+  protected methodLessonsForBook$: Observable<
+    { eduContentTocId: number; values: string[] }[]
+  >;
 
   constructor(
     @Inject(MAT_DIALOG_DATA)
@@ -23,5 +32,10 @@ export class LearningPlanGoalProgressManagementComponent implements OnInit {
   ngOnInit() {
     this.learningPlanGoal = this.data.learningPlanGoal;
     this.classGroup = this.data.classGroup;
+    this.book = this.data.book;
+    this.methodLessonsForBook$ = this.learningPlanGoalProgressManagerVM.getMethodLessonsForBook(
+      this.book.id,
+      this.learningPlanGoal.id
+    );
   }
 }

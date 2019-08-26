@@ -4,6 +4,9 @@
   >
   <mat-dialog-content>
     {{ learningPlanGoal.prefix }} {{ learningPlanGoal.goal }}
+    <div *ngFor="let methodLesson of (methodLessonsForBook$ | async)">
+      {{ methodLesson.values.join(' > ') }}
+    </div>
   </mat-dialog-content>
   <mat-dialog-actions></mat-dialog-actions>
 </div>
