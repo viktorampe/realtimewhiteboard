@@ -8,15 +8,9 @@ import {
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class LearningPlanGoalProgressManagementViewModel {
-  bookId: number;
-  learningPlanGoalId: number;
-
-  userLessons$: Observable<UserLessonInterface[]>;
-  methodLessonsForBook$: Observable<
-    { eduContentTocId: number; values: string[] }[]
-  >;
+  public userLessons$: Observable<UserLessonInterface[]>;
 
   constructor(private store: Store<DalState>) {
     this.initialize();
