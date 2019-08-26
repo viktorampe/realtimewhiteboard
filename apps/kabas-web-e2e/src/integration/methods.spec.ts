@@ -98,7 +98,7 @@ describe('Methods', () => {
     });
   });
 
-  describe.only('method chapter page', () => {
+  describe('method chapter page', () => {
     beforeEach(() => {
       cy.visit(
         `${appPaths.methods}/${setup.kabasMethodsPages.book}/${
