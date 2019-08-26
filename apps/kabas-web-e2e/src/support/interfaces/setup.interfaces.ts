@@ -5,7 +5,6 @@ export interface KabasMethodsPagesInterface {
     chapter: number;
     lesson: number;
     searchTerm: string;
-    diaboloPhase: string;
     expected: {
       method: {
         name: string;
@@ -20,13 +19,16 @@ export interface KabasMethodsPagesInterface {
       chapters: {
         count: number;
       };
-      searchNoFilters: {
+      lessons: {
+        count: number;
+      };
+      chapterSearchNoFilters: {
         results: number;
       };
-      searchByTerm: {
+      chapterSearchByTerm: {
         results: number;
       };
-      searchDiabolo: {
+      chapterSearchDiabolo: {
         results: number;
       };
     };

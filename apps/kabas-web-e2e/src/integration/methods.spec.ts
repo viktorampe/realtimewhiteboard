@@ -41,7 +41,7 @@ describe('Methods', () => {
         .should('be', `${appPaths.methods}/${setup.kabasMethodsPages.book}`);
     });
   });
-  
+
   describe('method page', () => {
     beforeEach(() => {
       cy.visit(`${appPaths.methods}/${setup.kabasMethodsPages.book}`, {
@@ -95,6 +95,73 @@ describe('Methods', () => {
             setup.kabasMethodsPages.chapter
           }`
         );
+    });
+  });
+
+  describe.only('method chapter page', () => {
+    beforeEach(() => {
+      cy.visit(
+        `${appPaths.methods}/${setup.kabasMethodsPages.book}/${
+          setup.kabasMethodsPages.chapter
+        }`,
+        {
+          onBeforeLoad(win) {
+            cy.stub(win, 'open');
+          }
+        }
+      );
+    });
+    it('should show the boeke link in the top bar', () => {
+      dataCy('nav-open-boeke').click();
+      cy.window()
+        .its('open')
+        .should(
+          'be.calledWithExactly',
+          `${apiUrl}${apiPaths.eduContent}/${
+            setup.kabasMethodsPages.expected.boeke.eduContentId
+          }/redirectURL`
+        );
+    });
+    it('should show the lesson links', () => {
+      dataCy('lesson-link')
+        .should('have.length', setup.kabasMethodsPages.expected.lessons.count)
+        .first()
+        .click()
+        .location('pathname')
+        .should(
+          'be',
+          `${appPaths.methods}/${setup.kabasMethodsPages.book}/${
+            setup.kabasMethodsPages.chapter
+          }/${setup.kabasMethodsPages.lesson}`
+        );
+    });
+    it('should show search results', () => {
+      cy.get('edu-content-search-result').should(
+        'have.length',
+        setup.kabasMethodsPages.expected.chapterSearchNoFilters.results
+      );
+    });
+    it('should filter on search term', () => {
+      dataCy('search-filters')
+        .find('campus-search-term input')
+        .type(setup.kabasMethodsPages.searchTerm)
+        .type('{enter}');
+
+      cy.get('edu-content-search-result').should(
+        'have.length',
+        setup.kabasMethodsPages.expected.chapterSearchByTerm.results
+      );
+    });
+    it('should filter on diabolo phase', () => {
+      dataCy('search-filters')
+        .find('.button-toggle-filter-component__button')
+        .last()
+        .click();
+
+      cy.get('edu-content-search-result').should(
+        'have.length',
+        setup.kabasMethodsPages.expected.chapterSearchDiabolo.results
+      );
     });
   });
 });

@@ -1,5 +1,6 @@
 <campus-page-bar
   ><campus-button
+    data-cy="nav-open-boeke"
     campusPrimary
     [iconClass]="'book'"
     *ngIf="(boeke$ | async) as boeke"
@@ -14,6 +15,7 @@
       >
       <mat-list *ngIf="(currentMethodParams$ | async) as params">
         <mat-list-item
+          data-cy="lesson-link"
           *ngFor="let lesson of (lessonsForChapter$ | async)"
           (click)="clickOpenLesson(lesson.id)"
           class="method-chapter__lesson-link"
@@ -31,7 +33,7 @@
         (selectedIndexChange)="onSelectedTabIndexChanged($event)"
       >
         <mat-tab label="Lesmateriaal">
-          <div class="method-chapter--filters">
+          <div data-cy="search-filters" class="method-chapter--filters">
             <ng-container searchPortal="searchTerm"></ng-container>
             <ng-container searchPortal="hostTop"></ng-container>
             <campus-button campusPrimary (click)="clearSearchFilters()"
