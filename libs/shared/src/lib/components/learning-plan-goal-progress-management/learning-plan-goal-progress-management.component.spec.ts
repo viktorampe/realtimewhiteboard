@@ -1,6 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialogModule, MAT_DIALOG_DATA } from '@angular/material';
-import { ClassGroupFixture, LearningPlanGoalFixture } from '@campus/dal';
+import {
+  ClassGroupFixture,
+  EduContentBookFixture,
+  LearningPlanGoalFixture
+} from '@campus/dal';
 import { configureTestSuite } from 'ng-bullet';
 import { LearningPlanGoalProgressManagementInterface } from './learning-plan-goal-progress-management-dialog.interface';
 import { LearningPlanGoalProgressManagementComponent } from './learning-plan-goal-progress-management.component';
@@ -12,7 +16,8 @@ describe('LearningPlanGoalProgressManagementComponent', () => {
   let fixture: ComponentFixture<LearningPlanGoalProgressManagementComponent>;
   const mockInjectedData: LearningPlanGoalProgressManagementInterface = {
     classGroup: new ClassGroupFixture(),
-    learningPlanGoal: new LearningPlanGoalFixture()
+    learningPlanGoal: new LearningPlanGoalFixture(),
+    book: new EduContentBookFixture()
   };
 
   configureTestSuite(() => {
