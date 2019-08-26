@@ -14,6 +14,9 @@ export class LearningPlanGoalProgressManagementComponent implements OnInit {
   protected learningPlanGoal: LearningPlanGoalInterface;
   protected classGroup: ClassGroupInterface;
 
+  // TODO remove -> will depend on userLesson input
+  public isUserLessonInput = true;
+
   constructor(
     @Inject(MAT_DIALOG_DATA)
     private data: LearningPlanGoalProgressManagementInterface,
