@@ -66,7 +66,7 @@ export class LearningPlanGoalProgressEffects {
       ): Observable<
         StartAddLearningPlanGoalProgresses | DeleteLearningPlanGoalProgress
       > => {
-        const { personId, eduContentTOCId, ...selectParams } = action.payload;
+        const { personId, ...selectParams } = action.payload;
 
         return this.dataPersistence.store.pipe(
           select(findOne, selectParams),
@@ -219,8 +219,6 @@ export class LearningPlanGoalProgressEffects {
         const {
           learningPlanGoalIds,
           personId,
-          eduContentTOCId,
-          eduContentBookId,
           ...selectParams
         } = action.payload;
 
