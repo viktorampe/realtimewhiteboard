@@ -4,6 +4,7 @@ export interface KabasMethodsPagesInterface {
     book: number;
     chapter: number;
     lesson: number;
+    lessonLast: number;
     searchTerm: string;
     expected: {
       method: {
@@ -29,6 +30,15 @@ export interface KabasMethodsPagesInterface {
         results: number;
       };
       chapterSearchDiabolo: {
+        results: number;
+      };
+      lessonSearchNoFilters: {
+        results: number;
+      };
+      lessonSearchByTerm: {
+        results: number;
+      };
+      lessonSearchDiabolo: {
         results: number;
       };
     };

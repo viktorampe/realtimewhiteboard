@@ -164,4 +164,71 @@ describe('Methods', () => {
       );
     });
   });
+
+  describe.only('method lesson page', () => {
+    beforeEach(() => {
+      cy.visit(
+        `${appPaths.methods}/${setup.kabasMethodsPages.book}/${
+          setup.kabasMethodsPages.chapter
+        }/${setup.kabasMethodsPages.lesson}`,
+        {
+          onBeforeLoad(win) {
+            cy.stub(win, 'open');
+          }
+        }
+      );
+    });
+    it('should show the boeke link in the top bar', () => {
+      dataCy('nav-open-boeke').click();
+      cy.window()
+        .its('open')
+        .should(
+          'be.calledWithExactly',
+          `${apiUrl}${apiPaths.eduContent}/${
+            setup.kabasMethodsPages.expected.boeke.eduContentId
+          }/redirectURL`
+        );
+    });
+    it('should show the lesson links', () => {
+      dataCy('lesson-link')
+        .should('have.length', setup.kabasMethodsPages.expected.lessons.count)
+        .last()
+        .click()
+        .location('pathname')
+        .should(
+          'be',
+          `${appPaths.methods}/${setup.kabasMethodsPages.book}/${
+            setup.kabasMethodsPages.chapter
+          }/${setup.kabasMethodsPages.lessonLast}`
+        );
+    });
+    it('should show search results', () => {
+      cy.get('edu-content-search-result').should(
+        'have.length',
+        setup.kabasMethodsPages.expected.lessonSearchNoFilters.results
+      );
+    });
+    it('should filter on search term', () => {
+      dataCy('search-filters')
+        .find('campus-search-term input')
+        .type(setup.kabasMethodsPages.searchTerm)
+        .type('{enter}');
+
+      cy.get('edu-content-search-result').should(
+        'have.length',
+        setup.kabasMethodsPages.expected.lessonSearchByTerm.results
+      );
+    });
+    it('should filter on diabolo phase', () => {
+      dataCy('search-filters')
+        .find('.button-toggle-filter-component__button')
+        .last()
+        .click();
+
+      cy.get('edu-content-search-result').should(
+        'have.length',
+        setup.kabasMethodsPages.expected.lessonSearchDiabolo.results
+      );
+    });
+  });
 });
