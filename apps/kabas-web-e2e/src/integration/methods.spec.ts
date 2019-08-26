@@ -26,6 +26,42 @@ describe('Methods', () => {
     );
   });
 
+  function checkNavOpenBoeke() {
+    dataCy('nav-open-boeke').click();
+    cy.window()
+      .its('open')
+      .should(
+        'be.calledWithExactly',
+        `${apiUrl}${apiPaths.eduContent}/${
+          setup.kabasMethodsPages.expected.boeke.eduContentId
+        }/redirectURL`
+      );
+  }
+
+  function checkSearchTerm() {
+    dataCy('search-filters')
+      .find('campus-search-term input')
+      .type(setup.kabasMethodsPages.searchTerm)
+      .type('{enter}');
+
+    cy.get('edu-content-search-result').should(
+      'have.length',
+      setup.kabasMethodsPages.expected.chapterSearchByTerm.results
+    );
+  }
+
+  function checkDiaboloFilter() {
+    dataCy('search-filters')
+      .find('.button-toggle-filter-component__button')
+      .last()
+      .click();
+
+    cy.get('edu-content-search-result').should(
+      'have.length',
+      setup.kabasMethodsPages.expected.lessonSearchDiabolo.results
+    );
+  }
+
   describe('methods overview page', () => {
     beforeEach(() => {
       cy.visit(`${appPaths.methods}`);
@@ -67,15 +103,7 @@ describe('Methods', () => {
         );
     });
     it('should show the boeke link in the top bar', () => {
-      dataCy('nav-open-boeke').click();
-      cy.window()
-        .its('open')
-        .should(
-          'be.calledWithExactly',
-          `${apiUrl}${apiPaths.eduContent}/${
-            setup.kabasMethodsPages.expected.boeke.eduContentId
-          }/redirectURL`
-        );
+      checkNavOpenBoeke();
     });
     it('should show the general files', () => {
       dataCy('general-file').should(
@@ -112,15 +140,7 @@ describe('Methods', () => {
       );
     });
     it('should show the boeke link in the top bar', () => {
-      dataCy('nav-open-boeke').click();
-      cy.window()
-        .its('open')
-        .should(
-          'be.calledWithExactly',
-          `${apiUrl}${apiPaths.eduContent}/${
-            setup.kabasMethodsPages.expected.boeke.eduContentId
-          }/redirectURL`
-        );
+      checkNavOpenBoeke();
     });
     it('should show the lesson links', () => {
       dataCy('lesson-link')
@@ -142,26 +162,10 @@ describe('Methods', () => {
       );
     });
     it('should filter on search term', () => {
-      dataCy('search-filters')
-        .find('campus-search-term input')
-        .type(setup.kabasMethodsPages.searchTerm)
-        .type('{enter}');
-
-      cy.get('edu-content-search-result').should(
-        'have.length',
-        setup.kabasMethodsPages.expected.chapterSearchByTerm.results
-      );
+      checkSearchTerm();
     });
     it('should filter on diabolo phase', () => {
-      dataCy('search-filters')
-        .find('.button-toggle-filter-component__button')
-        .last()
-        .click();
-
-      cy.get('edu-content-search-result').should(
-        'have.length',
-        setup.kabasMethodsPages.expected.chapterSearchDiabolo.results
-      );
+      checkDiaboloFilter();
     });
   });
 
@@ -179,15 +183,7 @@ describe('Methods', () => {
       );
     });
     it('should show the boeke link in the top bar', () => {
-      dataCy('nav-open-boeke').click();
-      cy.window()
-        .its('open')
-        .should(
-          'be.calledWithExactly',
-          `${apiUrl}${apiPaths.eduContent}/${
-            setup.kabasMethodsPages.expected.boeke.eduContentId
-          }/redirectURL`
-        );
+      checkNavOpenBoeke();
     });
     it('should show the lesson links', () => {
       dataCy('lesson-link')
@@ -209,26 +205,10 @@ describe('Methods', () => {
       );
     });
     it('should filter on search term', () => {
-      dataCy('search-filters')
-        .find('campus-search-term input')
-        .type(setup.kabasMethodsPages.searchTerm)
-        .type('{enter}');
-
-      cy.get('edu-content-search-result').should(
-        'have.length',
-        setup.kabasMethodsPages.expected.lessonSearchByTerm.results
-      );
+      checkSearchTerm();
     });
     it('should filter on diabolo phase', () => {
-      dataCy('search-filters')
-        .find('.button-toggle-filter-component__button')
-        .last()
-        .click();
-
-      cy.get('edu-content-search-result').should(
-        'have.length',
-        setup.kabasMethodsPages.expected.lessonSearchDiabolo.results
-      );
+      checkDiaboloFilter();
     });
   });
 });
