@@ -740,13 +740,25 @@ export class MethodViewModel implements ContentOpenerInterface {
             const learningPlanGoals: LearningPlanGoalInterface[] = lesson.learningPlanGoalIds.map(
               lpgId => learningPlanGoalsMap[lpgId]
             );
+
+            // filter out learningPlanGoalProgress without eduContentToc in currentLesson
+            const progressByGoalForLesson = Object.keys(progressByGoal).reduce(
+              (dict, key) => {
+                dict[key] = progressByGoal[key].filter(
+                  progress => progress.eduContentTOCId === lesson.id
+                );
+                return dict;
+              },
+              {}
+            );
+
             return {
               item: lesson,
               label: 'title',
               children: this.createCheckboxItemsForLearningPlanGoals(
                 learningPlanGoals,
                 classGroups,
-                progressByGoal
+                progressByGoalForLesson
               )
             };
           }

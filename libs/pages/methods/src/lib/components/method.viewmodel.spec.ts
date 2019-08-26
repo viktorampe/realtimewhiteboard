@@ -193,21 +193,32 @@ describe('MethodViewModel', () => {
       learningPlanGoalId: 2,
       classGroupId: 11,
       eduContentTOCId: 3,
-      userLessonId: null
+      userLessonId: null,
+      eduContentBookId: bookId
     }),
     new LearningPlanGoalProgressFixture({
       id: 3,
       learningPlanGoalId: 3,
       classGroupId: 11,
       eduContentTOCId: 4,
-      userLessonId: null
+      userLessonId: null,
+      eduContentBookId: bookId
     }),
     new LearningPlanGoalProgressFixture({
       id: 4,
       learningPlanGoalId: 3,
       classGroupId: 12,
       eduContentTOCId: 4,
-      userLessonId: null
+      userLessonId: null,
+      eduContentBookId: bookId
+    }),
+    new LearningPlanGoalProgressFixture({
+      id: 5,
+      learningPlanGoalId: 2,
+      classGroupId: 13,
+      eduContentTOCId: null,
+      userLessonId: 1,
+      eduContentBookId: bookId
     })
   ];
 
@@ -815,7 +826,7 @@ describe('MethodViewModel', () => {
         const expected = [
           {
             header: learningPlanGoals[1],
-            content: { 11: true, 12: false, 13: false }
+            content: { 11: true, 12: false, 13: true }
           },
           {
             header: learningPlanGoals[2],
@@ -865,7 +876,7 @@ describe('MethodViewModel', () => {
             children: [
               {
                 header: learningPlanGoals[1],
-                content: { 11: true, 12: false, 13: false }
+                content: { 11: false, 12: false, 13: false }
               },
               {
                 header: learningPlanGoals[2],
