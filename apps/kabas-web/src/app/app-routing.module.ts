@@ -1,24 +1,60 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { AuthenticationGuard, TermPrivacyGuard } from '@campus/guards';
+import { AppResolver } from './app.resolver';
 
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'error/999',
-    pathMatch: 'full'
+    runGuardsAndResolvers: 'always',
+    canActivate: [AuthenticationGuard, TermPrivacyGuard],
+    resolve: { isResolved: AppResolver },
+    children: [
+      {
+        path: 'methods',
+        loadChildren: '@campus/pages/methods#PagesMethodsModule',
+        data: { breadcrumbText: 'Methodes' }
+      },
+      {
+        path: 'search',
+        loadChildren: '@campus/pages/global-search#PagesGlobalSearchModule',
+        data: {
+          breadcrumbText: 'Zoekresultaten'
+        }
+      },
+      {
+        path: 'settings',
+        data: { breadcrumbText: 'Instellingen' },
+        children: [
+          {
+            path: '',
+            loadChildren:
+              '@campus/pages/settings/dashboard#PagesSettingsDashboardModule',
+            data: { breadcrumbText: 'Dashboard' }
+          },
+          {
+            path: 'profile',
+            loadChildren:
+              '@campus/pages/settings/profile#PagesSettingsProfileModule',
+            data: { breadcrumbText: 'Profiel' }
+          },
+          {
+            path: 'credentials',
+            loadChildren:
+              '@campus/pages/settings/credentials#PagesSettingsCredentialsModule',
+            data: { breadcrumbText: 'Inloggegevens' }
+          },
+          {
+            path: 'alerts',
+            loadChildren:
+              '@campus/pages/settings/alerts#PagesSettingsAlertsModule',
+            data: { breadcrumbText: 'Meldingen' }
+          }
+        ]
+      }
+    ]
   },
-  {
-    path: 'methods',
-    loadChildren: '@campus/pages/methods#PagesMethodsModule',
-    data: { breadcrumbText: 'Methodes' }
-  },
-  {
-    path: 'search',
-    loadChildren: '@campus/pages/global-search#PagesGlobalSearchModule',
-    data: {
-      breadcrumbText: 'Zoekresultaten'
-    }
-  },
+
   {
     path: 'error',
     loadChildren: '@campus/pages/error#PagesErrorModule',
