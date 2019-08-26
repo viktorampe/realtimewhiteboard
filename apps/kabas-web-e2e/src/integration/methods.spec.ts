@@ -38,28 +38,22 @@ describe('Methods', () => {
       );
   }
 
-  function checkSearchTerm() {
+  function enterSearchTerm() {
     dataCy('search-filters')
       .find('campus-search-term input')
       .type(setup.kabasMethodsPages.searchTerm)
       .type('{enter}');
-
-    cy.get('edu-content-search-result').should(
-      'have.length',
-      setup.kabasMethodsPages.expected.chapterSearchByTerm.results
-    );
   }
 
-  function checkDiaboloFilter() {
+  function clickDiaboloFilter() {
     dataCy('search-filters')
       .find('.button-toggle-filter-component__button')
       .last()
       .click();
+  }
 
-    cy.get('edu-content-search-result').should(
-      'have.length',
-      setup.kabasMethodsPages.expected.lessonSearchDiabolo.results
-    );
+  function hasSearchResultCount(count: number) {
+    cy.get('edu-content-search-result').should('have.length', count);
   }
 
   describe('methods overview page', () => {
@@ -162,10 +156,16 @@ describe('Methods', () => {
       );
     });
     it('should filter on search term', () => {
-      checkSearchTerm();
+      enterSearchTerm();
+      hasSearchResultCount(
+        setup.kabasMethodsPages.expected.chapterSearchByTerm.results
+      );
     });
     it('should filter on diabolo phase', () => {
-      checkDiaboloFilter();
+      clickDiaboloFilter();
+      hasSearchResultCount(
+        setup.kabasMethodsPages.expected.chapterSearchDiabolo.results
+      );
     });
   });
 
@@ -205,10 +205,16 @@ describe('Methods', () => {
       );
     });
     it('should filter on search term', () => {
-      checkSearchTerm();
+      enterSearchTerm();
+      hasSearchResultCount(
+        setup.kabasMethodsPages.expected.lessonSearchByTerm.results
+      );
     });
     it('should filter on diabolo phase', () => {
-      checkDiaboloFilter();
+      clickDiaboloFilter();
+      hasSearchResultCount(
+        setup.kabasMethodsPages.expected.lessonSearchDiabolo.results
+      );
     });
   });
 });
