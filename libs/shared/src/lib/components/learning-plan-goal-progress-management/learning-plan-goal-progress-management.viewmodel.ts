@@ -7,6 +7,7 @@ import {
 } from '@campus/dal';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class LearningPlanGoalProgressManagementViewModel {
@@ -29,9 +30,10 @@ export class LearningPlanGoalProgressManagementViewModel {
     learningPlanGoalId: number
   ): Observable<{ eduContentTocId: number; values: string[] }[]> {
     const props = { bookId, learningPlanGoalId };
-
+    console.log('here');
     return this.store.pipe(
-      select(EduContentTocQueries.getLessonDisplaysForBook, props)
+      select(EduContentTocQueries.getLessonDisplaysForBook, props),
+      tap(console.log)
     );
   }
 }
