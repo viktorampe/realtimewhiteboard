@@ -109,7 +109,10 @@ export class MethodComponent implements OnInit {
         event.column
       );
     } else {
-      console.log('checked');
+      this.viewModel.openLearningPlanGoalProgressManagementDialog(
+        event.item, // lpg
+        event.column // classGroup
+      );
     }
   }
 
