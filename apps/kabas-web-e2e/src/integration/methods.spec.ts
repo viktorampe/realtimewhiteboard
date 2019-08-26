@@ -12,17 +12,20 @@ describe('Methods', () => {
   const appPaths = cyEnv('appPaths') as AppPathsInterface;
   const apiPaths = cyEnv('apiPaths') as ApiPathsInterface;
   let setup: KabasMethodsPagesInterface;
+
   before(() => {
     performSetup('kabasMethodsPages').then(res => {
       setup = res.body;
     });
   });
+
   beforeEach(() => {
     login(
       setup.kabasMethodsPages.login.username,
       setup.kabasMethodsPages.login.password
     );
   });
+
   describe('methods overview page', () => {
     beforeEach(() => {
       cy.visit(`${appPaths.methods}`);
@@ -38,6 +41,7 @@ describe('Methods', () => {
         .should('be', `${appPaths.methods}/${setup.kabasMethodsPages.book}`);
     });
   });
+  
   describe('method page', () => {
     beforeEach(() => {
       cy.visit(`${appPaths.methods}/${setup.kabasMethodsPages.book}`, {
