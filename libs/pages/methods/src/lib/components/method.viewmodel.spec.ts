@@ -1,5 +1,6 @@
 import { Component, NgZone } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import { MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { WINDOW } from '@campus/browser';
@@ -53,6 +54,7 @@ import {
   EnvironmentSearchModesInterface,
   ENVIRONMENT_API_TOKEN,
   ENVIRONMENT_SEARCHMODES_TOKEN,
+  LearningPlanGoalProgressManagementComponent,
   OpenStaticContentServiceInterface,
   OPEN_STATIC_CONTENT_SERVICE_TOKEN,
   ScormExerciseServiceInterface,
@@ -85,6 +87,7 @@ describe('MethodViewModel', () => {
   let searchModes: EnvironmentSearchModesInterface;
   let eduContentService: EduContentServiceInterface;
   let mockWindow: MockWindow;
+  let matDialog: MatDialog;
 
   const bookId = 5;
   const diaboloBookId = 6;
@@ -190,21 +193,32 @@ describe('MethodViewModel', () => {
       learningPlanGoalId: 2,
       classGroupId: 11,
       eduContentTOCId: 3,
-      userLessonId: null
+      userLessonId: null,
+      eduContentBookId: bookId
     }),
     new LearningPlanGoalProgressFixture({
       id: 3,
       learningPlanGoalId: 3,
       classGroupId: 11,
       eduContentTOCId: 4,
-      userLessonId: null
+      userLessonId: null,
+      eduContentBookId: bookId
     }),
     new LearningPlanGoalProgressFixture({
       id: 4,
       learningPlanGoalId: 3,
       classGroupId: 12,
       eduContentTOCId: 4,
-      userLessonId: null
+      userLessonId: null,
+      eduContentBookId: bookId
+    }),
+    new LearningPlanGoalProgressFixture({
+      id: 5,
+      learningPlanGoalId: 2,
+      classGroupId: 13,
+      eduContentTOCId: null,
+      userLessonId: 1,
+      eduContentBookId: bookId
     })
   ];
 
@@ -309,6 +323,12 @@ describe('MethodViewModel', () => {
         {
           provide: SCORM_EXERCISE_SERVICE_TOKEN,
           useValue: { previewExerciseFromUnlockedContent: jest.fn() }
+        },
+        {
+          provide: MatDialog,
+          useValue: {
+            open: jest.fn()
+          }
         }
       ]
     });
@@ -325,6 +345,8 @@ describe('MethodViewModel', () => {
     scormExerciseService = TestBed.get(SCORM_EXERCISE_SERVICE_TOKEN);
     eduContentService = TestBed.get(EDU_CONTENT_SERVICE_TOKEN);
     searchModes = TestBed.get(ENVIRONMENT_SEARCHMODES_TOKEN);
+
+    matDialog = TestBed.get(MatDialog);
   });
 
   function loadInStore() {
@@ -804,7 +826,7 @@ describe('MethodViewModel', () => {
         const expected = [
           {
             header: learningPlanGoals[1],
-            content: { 11: true, 12: false, 13: false }
+            content: { 11: true, 12: false, 13: true }
           },
           {
             header: learningPlanGoals[2],
@@ -854,7 +876,7 @@ describe('MethodViewModel', () => {
             children: [
               {
                 header: learningPlanGoals[1],
-                content: { 11: true, 12: false, 13: false }
+                content: { 11: false, 12: false, 13: false }
               },
               {
                 header: learningPlanGoals[2],
@@ -1046,6 +1068,24 @@ describe('MethodViewModel', () => {
 
       expect(spy).toHaveBeenCalledWith(
         `${apiBase}/api/People/${userId}/downloadLearningPlanGoalProgressByBookId/${bookId}`
+      );
+    });
+  });
+
+  describe('openLearningPlanGoalProgressManagementDialog()', () => {
+    it('should open a dialog with the learningPlanGoalProgressManagementComponent', () => {
+      methodViewModel.openLearningPlanGoalProgressManagementDialog(
+        { id: 1 } as LearningPlanGoalInterface,
+        { id: 2 }
+      );
+      expect(matDialog.open).toHaveBeenCalledWith(
+        LearningPlanGoalProgressManagementComponent,
+        {
+          data: {
+            learningPlanGoal: { id: 1 },
+            classGroup: { id: 2 }
+          }
+        }
       );
     });
   });

@@ -11,6 +11,7 @@ export class LearningPlanGoalProgressFixture
   eduContentTOCId = 1;
   learningPlanGoalId = 1;
   userLessonId = 1;
+  eduContentBookId = 1;
 
   constructor(props: Partial<LearningPlanGoalProgressInterface> = {}) {
     // overwrite defaults
