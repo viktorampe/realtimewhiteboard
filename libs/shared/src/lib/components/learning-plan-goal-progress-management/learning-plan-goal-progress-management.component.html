@@ -31,12 +31,18 @@
     </mat-form-field>
     <h3 class="mat-h3">... of klik een les uit de methode aan</h3>
     <mat-selection-list
+      [disabled]="selectionListDisabled()"
+      #selectionList
       *ngFor="let methodLesson of (methodLessonsForBook$ | async)"
+      (selectionChange)="selectionChanged()"
     >
-      <mat-list-option checkboxPosition="before">{{
+      <mat-list-option checkboxPosition="before" [value]="methodLesson">{{
         methodLesson.values.join(' > ')
       }}</mat-list-option>
     </mat-selection-list>
   </mat-dialog-content>
-  <mat-dialog-actions></mat-dialog-actions>
+  <mat-dialog-actions>
+    <button mat-button (click)="onCancel()">Annuleren</button>
+    <button mat-button (click)="onSave()">Opslaan</button>
+  </mat-dialog-actions>
 </div>
