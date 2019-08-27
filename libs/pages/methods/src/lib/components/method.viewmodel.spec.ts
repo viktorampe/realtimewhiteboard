@@ -1086,7 +1086,8 @@ describe('MethodViewModel', () => {
             learningPlanGoal: { id: 1 },
             classGroup: { id: 2 },
             book
-          }
+          },
+          autoFocus: false
         }
       );
     });
