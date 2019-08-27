@@ -1074,6 +1074,7 @@ describe('MethodViewModel', () => {
 
   describe('openLearningPlanGoalProgressManagementDialog()', () => {
     it('should open a dialog with the learningPlanGoalProgressManagementComponent', () => {
+      navigateWithParams({ book: bookId });
       methodViewModel.openLearningPlanGoalProgressManagementDialog(
         { id: 1 } as LearningPlanGoalInterface,
         { id: 2 }
@@ -1083,7 +1084,8 @@ describe('MethodViewModel', () => {
         {
           data: {
             learningPlanGoal: { id: 1 },
-            classGroup: { id: 2 }
+            classGroup: { id: 2 },
+            book
           }
         }
       );

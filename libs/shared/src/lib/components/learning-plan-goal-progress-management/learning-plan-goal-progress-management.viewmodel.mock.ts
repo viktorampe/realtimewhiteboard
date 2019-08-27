@@ -5,6 +5,7 @@ import {
   UserLessonInterface
 } from '@campus/dal';
 import { ViewModelInterface } from '@campus/testing';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { LearningPlanGoalProgressManagementViewModel } from './learning-plan-goal-progress-management.viewmodel';
 
 @Injectable({
@@ -12,6 +13,12 @@ import { LearningPlanGoalProgressManagementViewModel } from './learning-plan-goa
 })
 export class MockLearningPlanGoalProgressManagementViewModel
   implements ViewModelInterface<LearningPlanGoalProgressManagementViewModel> {
+  userLessons$: BehaviorSubject<UserLessonInterface[]>;
+  getMethodLessonsForBook(): Observable<
+    { eduContentTocId: number; values: string[] }[]
+  > {
+    return of([]);
+  }
   public createLearningPlanGoalProgressForUserLesson(
     learningPlanGoal: LearningPlanGoalInterface,
     classGroup: ClassGroupInterface,

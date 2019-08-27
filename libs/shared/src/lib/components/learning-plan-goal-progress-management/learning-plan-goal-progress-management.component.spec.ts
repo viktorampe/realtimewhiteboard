@@ -5,7 +5,11 @@ import {
   MAT_DIALOG_DATA
 } from '@angular/material';
 import { HAMMER_LOADER } from '@angular/platform-browser';
-import { ClassGroupFixture, LearningPlanGoalFixture } from '@campus/dal';
+import {
+  ClassGroupFixture,
+  EduContentBookFixture,
+  LearningPlanGoalFixture
+} from '@campus/dal';
 import { UiModule } from '@campus/ui';
 import { configureTestSuite } from 'ng-bullet';
 import { LearningPlanGoalProgressManagementInterface } from './learning-plan-goal-progress-management-dialog.interface';
@@ -18,7 +22,8 @@ describe('LearningPlanGoalProgressManagementComponent', () => {
   let fixture: ComponentFixture<LearningPlanGoalProgressManagementComponent>;
   const mockInjectedData: LearningPlanGoalProgressManagementInterface = {
     classGroup: new ClassGroupFixture(),
-    learningPlanGoal: new LearningPlanGoalFixture()
+    learningPlanGoal: new LearningPlanGoalFixture(),
+    book: new EduContentBookFixture()
   };
 
   let lpgpManagementViewModel: LearningPlanGoalProgressManagementViewModel;
