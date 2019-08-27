@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import {
+  AlertService,
+  ALERT_SERVICE_TOKEN,
   AuthService,
   AUTH_SERVICE_TOKEN,
   ClassGroupService,
@@ -12,12 +14,16 @@ import {
   EDU_CONTENT_SERVICE_TOKEN,
   ExerciseService,
   EXERCISE_SERVICE_TOKEN,
+  FavoriteService,
+  FAVORITE_SERVICE_TOKEN,
+  HistoryService,
+  HISTORY_SERVICE_TOKEN,
   LearningDomainService,
-  LEARNING_DOMAIN_SERVICE_TOKEN,
-  LearningPlanGoalService,
-  LEARNING_PLAN_GOAL_SERVICE_TOKEN,
   LearningPlanGoalProgressService,
+  LearningPlanGoalService,
+  LEARNING_DOMAIN_SERVICE_TOKEN,
   LEARNING_PLAN_GOAL_PROGRESS_SERVICE_TOKEN,
+  LEARNING_PLAN_GOAL_SERVICE_TOKEN,
   MethodService,
   METHOD_SERVICE_TOKEN,
   PersonService,
@@ -66,6 +72,12 @@ import {
     {
       provide: LEARNING_PLAN_GOAL_SERVICE_TOKEN,
       useClass: LearningPlanGoalService
+    },
+    { provide: FAVORITE_SERVICE_TOKEN, useClass: FavoriteService },
+    { provide: HISTORY_SERVICE_TOKEN, useClass: HistoryService },
+    {
+      provide: ALERT_SERVICE_TOKEN,
+      useClass: AlertService
     },
     {
       provide: LEARNING_PLAN_GOAL_PROGRESS_SERVICE_TOKEN,

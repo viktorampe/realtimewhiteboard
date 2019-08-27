@@ -5,7 +5,6 @@ import { GuardsModule } from '@campus/guards';
 import { SearchModule } from '@campus/search';
 import { CONTENT_OPENER_TOKEN, SharedModule } from '@campus/shared';
 import { UiModule } from '@campus/ui';
-import { LearningPlanGoalProgressManagementComponent } from './components/learning-plan-goal-progress-management/learning-plan-goal-progress-management.component';
 import { MethodChapterComponent } from './components/method-chapter/method-chapter.component';
 import { MethodYearTileComponent } from './components/method-year-tile/method-year-tile.component';
 import { MethodViewModel } from './components/method.viewmodel';
@@ -34,10 +33,9 @@ import { PagesMethodsRoutingModule } from './pages-methods-routing.module';
     MethodsOverviewComponent,
     MethodComponent,
     MethodChapterComponent,
-    MethodYearTileComponent,
-    LearningPlanGoalProgressManagementComponent
+    MethodYearTileComponent
   ],
   exports: [],
-  entryComponents: [LearningPlanGoalProgressManagementComponent]
+  entryComponents: []
 })
 export class PagesMethodsModule {}
