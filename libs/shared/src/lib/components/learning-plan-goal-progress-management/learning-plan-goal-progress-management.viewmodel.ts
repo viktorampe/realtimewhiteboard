@@ -10,9 +10,18 @@ import {
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
-@Injectable()
+export interface MethodLessonInterface {
+  eduContentTocId: number;
+  values: string[];
+}
+
+@Injectable({ providedIn: 'root' })
 export class LearningPlanGoalProgressManagementViewModel {
-  public userLessons$: Observable<UserLessonInterface[]>;
+  bookId: number;
+  learningPlanGoalId: number;
+
+  userLessons$: Observable<UserLessonInterface[]>;
+  methodLessonsForBook$: Observable<MethodLessonInterface[]>;
 
   constructor(private store: Store<DalState>) {
     this.initialize();
@@ -29,7 +38,7 @@ export class LearningPlanGoalProgressManagementViewModel {
   public getMethodLessonsForBook(
     bookId: number,
     learningPlanGoalId: number
-  ): Observable<{ eduContentTocId: number; values: string[] }[]> {
+  ): Observable<MethodLessonInterface[]> {
     const props = { bookId, learningPlanGoalId };
 
     return this.store.pipe(

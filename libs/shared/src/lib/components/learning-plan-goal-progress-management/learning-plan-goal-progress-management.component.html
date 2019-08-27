@@ -1,12 +1,23 @@
 <div class="lpgp-management">
-  <p mat-dialog-title
+  <p mat-dialog-title class="learning-plan-goal-progress-management__title"
     >Markeer een doel als behandeld voor {{ classGroup.name }}</p
   >
   <mat-dialog-content>
-    {{ learningPlanGoal.prefix }} {{ learningPlanGoal.goal }}
-    <div *ngFor="let methodLesson of (methodLessonsForBook$ | async)">
-      {{ methodLesson.values.join(' > ') }}
-    </div>
+    <code class="learning-plan-goal-progress-management__lpg"
+      ><b>{{ learningPlanGoal.prefix }}</b> {{ learningPlanGoal.goal }}</code
+    >
+
+    <h3 class="mat-h3">Voeg je eigen project toe...</h3>
+    placeholder
+    <h3 class="mat-h3">... of klik een les uit de methode aan</h3>
+    <mat-selection-list>
+      <mat-list-option
+        *ngFor="let methodLesson of (methodLessonsForBook$ | async)"
+        checkboxPosition="before"
+        class="learning-plan-goal-progress-management__list-option"
+        >{{ methodLesson.values.join(' > ') }}</mat-list-option
+      >
+    </mat-selection-list>
   </mat-dialog-content>
   <mat-dialog-actions>
     <campus-button
