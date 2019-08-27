@@ -28,7 +28,7 @@ export class LearningPlanGoalProgressManagementViewModel {
     eduContentTOCids: number[]
   ): void {
     console.log(
-      'createLearningPlanGoalProgressForUserLesson',
+      'createLearningPlanGoalProgressForEduContentTOCs',
       learningPlanGoal,
       classGroup,
       eduContentTOCids

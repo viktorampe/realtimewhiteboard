@@ -1,5 +1,3 @@
-// file.only
-
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import {
   MatDialogModule,
@@ -56,10 +54,11 @@ describe('LearningPlanGoalProgressManagementComponent', () => {
       LearningPlanGoalProgressManagementComponent
     );
 
-    component = fixture.componentInstance;
+    lpgpManagementViewModel = fixture.componentRef.injector.get(
+      LearningPlanGoalProgressManagementViewModel
+    );
 
-    // provided on component level
-    lpgpManagementViewModel = component['learningPlanGoalProgressManagerVM'];
+    component = fixture.componentInstance;
 
     fixture.detectChanges();
   });
