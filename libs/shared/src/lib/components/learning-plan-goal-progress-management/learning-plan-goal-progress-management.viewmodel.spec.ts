@@ -38,15 +38,19 @@ describe('LearningPlanGoalProgressViewModel', () => {
   });
 
   describe('getMethodLessonsForBook()', () => {
-    it('should call the getLessonsDisplaysForBook selector with the correct props', () => {
+    it('should call the getLessonsDisplaysForBook selector with the correct props and return the result', () => {
       const props = { bookId: 1, learningPlanGoalId: 2 };
+      const mockResults = [{ eduContentTocId: 1, values: ['foo'] }];
+      let returnValue;
 
-      jest.spyOn(EduContentTocQueries, 'getLessonDisplaysForBook');
+      jest
+        .spyOn(EduContentTocQueries, 'getLessonDisplaysForBook')
+        .mockReturnValue(mockResults);
 
       lpgpManagementViewModel
         .getMethodLessonsForBook(1, 2)
         .pipe(take(1))
-        .subscribe();
+        .subscribe(val => (returnValue = val));
 
       expect(
         EduContentTocQueries.getLessonDisplaysForBook
@@ -54,6 +58,8 @@ describe('LearningPlanGoalProgressViewModel', () => {
         { eduContentTocs: EduContentTocReducer.initialState },
         props
       );
+
+      expect(returnValue).toEqual(mockResults);
     });
   });
 });
