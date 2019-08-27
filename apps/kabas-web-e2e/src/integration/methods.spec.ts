@@ -292,7 +292,7 @@ describe('Methods', () => {
 
     it('should bulk check learning plan goals in lesson', () => {
       dataCy('goals-check-box-table')
-        .find('mat-icon')
+        .find('.ui-multi-check-box-table__body__row--subLevel--item')
         .click();
 
       dataCy('back-link').click();
@@ -309,7 +309,7 @@ describe('Methods', () => {
       dataCy('back-link').click();
 
       dataCy('goals-check-box-table')
-        .find('mat-icon')
+        .find('.ui-multi-check-box-table__body__row--subLevel--item')
         .eq(1)
         .click();
 
