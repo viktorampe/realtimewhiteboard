@@ -17,6 +17,7 @@ export const icons = {
   avatar: 'assets/icons/avatar.svg',
   notifications: 'assets/icons/material/notifications.svg',
   settings: 'assets/icons/settings.svg',
+  account: 'assets/icons/account-circle.svg',
   //TODO: These are TEMPORARY SVGs for Diabolo that I made from the PNGs
   //get the OFFICIAL files from Antoon later
   'diabolo-intro': 'assets/icons/diabolo/intro.svg',
