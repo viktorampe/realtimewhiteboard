@@ -10,7 +10,10 @@
 <div class="method-chapter">
   <campus-collapsible-sheet>
     <div aside>
-      <a (click)="clickBackLink()" class="method-chapter__back-link"
+      <a
+        data-cy="back-link"
+        (click)="clickBackLink()"
+        class="method-chapter__back-link"
         ><mat-icon svgIcon="arrow-back"></mat-icon>Terug</a
       >
       <mat-list *ngIf="(currentMethodParams$ | async) as params">
@@ -57,6 +60,7 @@
           </div>
 
           <campus-multi-check-box-table
+            data-cy="goals-check-box-table"
             [rowHeaderColumns]="learningPlanGoalTableHeaders"
             [itemColumns]="classGroupColumns$ | async"
             [subLevels]="
