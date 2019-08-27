@@ -236,7 +236,7 @@ export type LearningPlanGoalProgressesActions =
   | BulkAddLearningPlanGoalProgresses
   | StartAddManyLearningPlanGoalProgresses;
 
-interface MinimalLearningPlanGoalProgressUserLessonInterface
+export interface MinimalLearningPlanGoalProgressUserLessonInterface
   extends LearningPlanGoalProgressInterface {
   classGroupId: number;
   learningPlanGoalId: number;
@@ -244,7 +244,7 @@ interface MinimalLearningPlanGoalProgressUserLessonInterface
   eduContentBookId: number;
 }
 
-interface MinimalLearningPlanGoalProgressEduContentTocInterface
+export interface MinimalLearningPlanGoalProgressEduContentTocInterface
   extends LearningPlanGoalProgressInterface {
   classGroupId: number;
   learningPlanGoalId: number;
