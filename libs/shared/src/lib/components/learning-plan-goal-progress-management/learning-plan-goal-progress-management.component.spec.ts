@@ -1,10 +1,15 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ReactiveFormsModule } from '@angular/forms';
 import {
+  MatAutocompleteModule,
   MatDialogModule,
+  MatFormFieldModule,
+  MatInputModule,
   MatListModule,
   MAT_DIALOG_DATA
 } from '@angular/material';
 import { By } from '@angular/platform-browser';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import {
   ClassGroupFixture,
   EduContentBookFixture,
@@ -54,7 +59,15 @@ describe('LearningPlanGoalProgressManagementComponent', () => {
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       declarations: [LearningPlanGoalProgressManagementComponent],
-      imports: [MatDialogModule, MatListModule],
+      imports: [
+        MatDialogModule,
+        MatListModule,
+        ReactiveFormsModule,
+        MatAutocompleteModule,
+        MatFormFieldModule,
+        MatInputModule,
+        NoopAnimationsModule
+      ],
       providers: [{ provide: MAT_DIALOG_DATA, useValue: mockInjectedData }]
     })
       .overrideComponent(LearningPlanGoalProgressManagementComponent, {
