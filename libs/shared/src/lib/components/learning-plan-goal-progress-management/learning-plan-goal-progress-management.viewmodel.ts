@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import {
+  ClassGroupInterface,
   DalState,
   EduContentTocQueries,
+  LearningPlanGoalInterface,
   UserLessonInterface,
   UserLessonQueries
 } from '@campus/dal';
@@ -41,6 +43,32 @@ export class LearningPlanGoalProgressManagementViewModel {
 
     return this.store.pipe(
       select(EduContentTocQueries.getLessonDisplaysForBook, props)
+    );
+  }
+
+  public createLearningPlanGoalProgressForUserLesson(
+    learningPlanGoal: LearningPlanGoalInterface,
+    classGroup: ClassGroupInterface,
+    userLesson: UserLessonInterface // could just be description -> create new
+  ): void {
+    console.log(
+      'createLearningPlanGoalProgressForUserLesson',
+      learningPlanGoal,
+      classGroup,
+      userLesson
+    );
+  }
+
+  public createLearningPlanGoalProgressForEduContentTOCs(
+    learningPlanGoal: LearningPlanGoalInterface,
+    classGroup: ClassGroupInterface,
+    eduContentTOCids: number[]
+  ): void {
+    console.log(
+      'createLearningPlanGoalProgressForEduContentTOCs',
+      learningPlanGoal,
+      classGroup,
+      eduContentTOCids
     );
   }
 }

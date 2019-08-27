@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import {
   ClassGroupInterface,
   EduContentBookInterface,
@@ -22,17 +22,22 @@ export class LearningPlanGoalProgressManagementComponent implements OnInit {
   protected inputFromControl: FormControl;
   protected userLessons$: Observable<UserLessonInterface[]>;
   protected filteredUserLessons$: Observable<UserLessonInterface[]>;
-  protected learningPlanGoal: LearningPlanGoalInterface;
-  protected classGroup: ClassGroupInterface;
   protected book: EduContentBookInterface;
   protected methodLessonsForBook$: Observable<
     { eduContentTocId: number; values: string[] }[]
   >;
 
+  public learningPlanGoal: LearningPlanGoalInterface;
+  public classGroup: ClassGroupInterface;
+
+  // TODO remove -> will depend on userLesson input
+  public isUserLessonInput = true;
+
   constructor(
     @Inject(MAT_DIALOG_DATA)
     private data: LearningPlanGoalProgressManagementInterface,
-    private learningPlanGoalProgressManagerVM: LearningPlanGoalProgressManagementViewModel
+    private learningPlanGoalProgressManagerVM: LearningPlanGoalProgressManagementViewModel,
+    private dialogRef: MatDialogRef<LearningPlanGoalProgressManagementComponent>
   ) {}
 
   ngOnInit() {
@@ -77,5 +82,27 @@ export class LearningPlanGoalProgressManagementComponent implements OnInit {
     return userLessons.filter(userLesson =>
       userLesson.description.toLowerCase().includes(filterValue)
     );
+  }
+
+  public saveForUserLesson(userLesson: UserLessonInterface): void {
+    this.learningPlanGoalProgressManagerVM.createLearningPlanGoalProgressForUserLesson(
+      this.learningPlanGoal,
+      this.classGroup,
+      userLesson
+    );
+    this.closeDialog();
+  }
+
+  public saveForEduContentTOCselection(eduContentTOCids: number[]): void {
+    this.learningPlanGoalProgressManagerVM.createLearningPlanGoalProgressForEduContentTOCs(
+      this.learningPlanGoal,
+      this.classGroup,
+      eduContentTOCids
+    );
+    this.closeDialog();
+  }
+
+  public closeDialog() {
+    this.dialogRef.close();
   }
 }

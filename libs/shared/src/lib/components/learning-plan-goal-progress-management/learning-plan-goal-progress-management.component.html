@@ -40,5 +40,19 @@
       >
     </mat-selection-list>
   </mat-dialog-content>
-  <mat-dialog-actions></mat-dialog-actions>
+  <mat-dialog-actions>
+    <campus-button
+      *ngIf="isUserLessonInput"
+      primary
+      (click)="saveForUserLesson({ description: 'foo' })"
+      >Opslaan (project)</campus-button
+    >
+    <campus-button
+      *ngIf="!isUserLessonInput"
+      primary
+      (click)="saveForEduContentTOCselection([1, 2, 3])"
+      >Opslaan (hoofdstuk)</campus-button
+    >
+    <campus-button primary (click)="closeDialog()">Sluiten</campus-button>
+  </mat-dialog-actions>
 </div>
