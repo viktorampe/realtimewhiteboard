@@ -8,7 +8,28 @@
     >
 
     <h3 class="mat-h3">Voeg je eigen project toe...</h3>
-    placeholder
+    <mat-form-field class="input-form">
+      <input
+        type="text"
+        placeholder="Eigen project"
+        matInput
+        [formControl]="inputFromControl"
+        [matAutocomplete]="auto"
+        class="input-full-width learning-plan-goal-progress-management__input"
+      />
+      <mat-autocomplete
+        #auto="matAutocomplete"
+        [displayWith]="displayUserLesson"
+      >
+        <mat-option
+          class="learning-plan-goal-progress-management__autocomplete-option"
+          *ngFor="let userLesson of (filteredUserLessons$ | async)"
+          [value]="userLesson"
+        >
+          {{ userLesson.description }}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
     <h3 class="mat-h3">... of klik een les uit de methode aan</h3>
     <mat-selection-list>
       <mat-list-option

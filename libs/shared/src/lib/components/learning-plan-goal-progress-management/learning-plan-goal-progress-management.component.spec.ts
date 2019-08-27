@@ -1,15 +1,21 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ReactiveFormsModule } from '@angular/forms';
 import {
+  MatAutocompleteModule,
   MatDialogModule,
   MatDialogRef,
+  MatFormFieldModule,
+  MatInputModule,
   MatListModule,
   MAT_DIALOG_DATA
 } from '@angular/material';
 import { By, HAMMER_LOADER } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
   ClassGroupFixture,
   EduContentBookFixture,
-  LearningPlanGoalFixture
+  LearningPlanGoalFixture,
+  UserLessonInterface
 } from '@campus/dal';
 import { UiModule } from '@campus/ui';
 import { configureTestSuite } from 'ng-bullet';
@@ -54,10 +60,46 @@ describe('LearningPlanGoalProgressManagementComponent', () => {
   ];
   let lpgpManagementViewModel: LearningPlanGoalProgressManagementViewModel;
 
+  const mockUserLessons: UserLessonInterface[] = [
+    {
+      id: 1,
+      description: 'needed guide brown'
+    },
+    {
+      id: 2,
+      description: 'fox branch fifteen'
+    },
+    {
+      id: 3,
+      description: 'simple importance frog'
+    },
+    {
+      id: 4,
+      description: 'fear fireplace with'
+    },
+    {
+      id: 5,
+      description: 'brought science kids'
+    },
+    {
+      id: 6,
+      description: 'music younger flow'
+    }
+  ];
+
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       declarations: [LearningPlanGoalProgressManagementComponent],
-      imports: [MatDialogModule, MatListModule, UiModule],
+      imports: [
+        MatDialogModule,
+        MatListModule,
+        ReactiveFormsModule,
+        MatAutocompleteModule,
+        MatFormFieldModule,
+        MatInputModule,
+        BrowserAnimationsModule,
+        UiModule
+      ],
       providers: [
         { provide: MAT_DIALOG_DATA, useValue: mockInjectedData },
         { provide: MatDialogRef, useValue: { close: () => {} } },
@@ -73,7 +115,8 @@ describe('LearningPlanGoalProgressManagementComponent', () => {
             {
               provide: LearningPlanGoalProgressManagementViewModel,
               useValue: {
-                getMethodLessonsForBook: () => of(mockMethodLessons)
+                getMethodLessonsForBook: () => of(mockMethodLessons),
+                userLessons$: of(mockUserLessons)
               }
             }
           ]
@@ -129,6 +172,44 @@ describe('LearningPlanGoalProgressManagementComponent', () => {
         `${mockMethodLessons[index].values.join(' > ')}`
       );
     });
+  });
+  it('should show the autocomplete values when the input is focused', async () => {
+    component.ngOnInit();
+    fixture.detectChanges();
+    const input = fixture.debugElement.query(
+      By.css('.learning-plan-goal-progress-management__input')
+    );
+    const inputElement = input.nativeElement;
+    expect(input).toBeTruthy();
+    expect(inputElement).toBeTruthy();
+    await updateInputValue(inputElement, fixture, '');
+    const autocompleteOptions = fixture.debugElement.queryAll(
+      By.css('.learning-plan-goal-progress-management__autocomplete-option')
+    );
+    expect(autocompleteOptions.length).toBe(mockUserLessons.length);
+    autocompleteOptions.forEach((autocompleteOption, index) => {
+      expect(autocompleteOption.nativeElement.textContent).toBe(
+        ` ${mockUserLessons[index].description} `
+      );
+    });
+  });
+  it('should show the filtered autocomplete values when the input is focused and a string value was entered', async () => {
+    component.ngOnInit();
+    fixture.detectChanges();
+    const input = fixture.debugElement.query(
+      By.css('.learning-plan-goal-progress-management__input')
+    );
+    const inputElement = input.nativeElement;
+    expect(input).toBeTruthy();
+    expect(inputElement).toBeTruthy();
+    await updateInputValue(inputElement, fixture, 'fire');
+    const autocompleteOptions = fixture.debugElement.queryAll(
+      By.css('.learning-plan-goal-progress-management__autocomplete-option')
+    );
+    expect(autocompleteOptions.length).toBe(1);
+    expect(autocompleteOptions[0].nativeElement.textContent).toBe(
+      ` ${mockUserLessons[3].description} `
+    );
   });
 
   describe('data and streams', () => {
@@ -201,3 +282,16 @@ describe('LearningPlanGoalProgressManagementComponent', () => {
     });
   });
 });
+
+async function updateInputValue(
+  inputElement: any,
+  fixture: ComponentFixture<LearningPlanGoalProgressManagementComponent>,
+  inputValue: string
+) {
+  inputElement.dispatchEvent(new Event('focusin'));
+  inputElement.value = inputValue;
+  inputElement.dispatchEvent(new Event('input'));
+  fixture.detectChanges();
+  await fixture.whenStable();
+  fixture.detectChanges();
+}

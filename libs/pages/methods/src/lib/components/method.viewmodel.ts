@@ -316,7 +316,8 @@ export class MethodViewModel implements ContentOpenerInterface {
         book
       };
       this.dialog.open(LearningPlanGoalProgressManagementComponent, {
-        data
+        data,
+        autoFocus: false
       });
     });
   }
