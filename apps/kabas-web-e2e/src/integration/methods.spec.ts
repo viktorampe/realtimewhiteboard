@@ -217,4 +217,142 @@ describe('Methods', () => {
       );
     });
   });
+
+  describe('method learningplangoals chapter + lesson', () => {
+    beforeEach(() => {
+      cy.visit(
+        `${appPaths.methods}/${setup.kabasMethodsPages.book}/${
+          setup.kabasMethodsPages.chapter
+        }/${setup.kabasMethodsPages.lesson}?tab=1`
+      );
+    });
+
+    it('should check off a learning plan goal', () => {
+      dataCy('goals-check-box-table')
+        .find('mat-checkbox')
+        .first()
+        .click();
+
+      dataCy('back-link').click();
+
+      dataCy('goals-check-box-table')
+        .find('mat-checkbox')
+        .first()
+        .should('have.class', 'mat-checkbox-checked');
+    });
+
+    it('should uncheck a learning plan goal', () => {
+      dataCy('goals-check-box-table')
+        .find('mat-checkbox')
+        .eq(1)
+        .click();
+
+      dataCy('back-link').click();
+
+      dataCy('goals-check-box-table')
+        .find('mat-checkbox')
+        .eq(1)
+        .click();
+
+      dataCy('lesson-link')
+        .first()
+        .click();
+
+      dataCy('goals-check-box-table')
+        .find('mat-checkbox')
+        .eq(1)
+        .should('not.have.class', 'mat-checkbox-checked');
+    });
+
+    it('should stay on the learning plan goals tab', () => {
+      cy.get('.mat-tab-label-active')
+        .find('.mat-tab-label-content')
+        .should('have.text', 'Leerplandoelen');
+
+      dataCy('back-link').click();
+
+      cy.get('.mat-tab-label-active')
+        .find('.mat-tab-label-content')
+        .should('have.text', 'Leerplandoelen');
+    });
+
+    it('should bulk check learning plan goals in lesson', () => {
+      dataCy('goals-check-box-table')
+        .find('.ui-multi-check-box-table__body__row--subLevel--item')
+        .click();
+
+      dataCy('back-link').click();
+
+      for (let i = 0; i <= 2; i++) {
+        dataCy('goals-check-box-table')
+          .find('mat-checkbox')
+          .eq(i)
+          .should('have.class', 'mat-checkbox-checked');
+      }
+    });
+
+    it('should bulk check learning plan goals in chapter', () => {
+      dataCy('back-link').click();
+
+      dataCy('goals-check-box-table')
+        .find('.ui-multi-check-box-table__body__row--subLevel--item')
+        .eq(1)
+        .click();
+
+      dataCy('lesson-link')
+        .last()
+        .click();
+
+      for (let i = 0; i <= 2; i++) {
+        dataCy('goals-check-box-table')
+          .find('mat-checkbox')
+          .eq(i)
+          .should('have.class', 'mat-checkbox-checked');
+      }
+    });
+  });
+
+  describe('tabs navigation', () => {
+    it('should keep the tab selected from method to chapter', () => {
+      cy.visit(`${appPaths.methods}/${setup.kabasMethodsPages.book}`);
+
+      cy.get('.mat-tab-label')
+        .eq(1)
+        .click();
+
+      dataCy('chapter-link')
+        .first()
+        .click()
+        .location('pathname')
+        .should(
+          'be',
+          `${appPaths.methods}/${setup.kabasMethodsPages.book}/${
+            setup.kabasMethodsPages.chapter
+          }?tab=1`
+        );
+    });
+
+    it('should keep the tab selected from chapter to lesson', () => {
+      cy.visit(
+        `${appPaths.methods}/${setup.kabasMethodsPages.book}/${
+          setup.kabasMethodsPages.chapter
+        }`
+      );
+
+      cy.get('.mat-tab-label')
+        .eq(1)
+        .click();
+
+      dataCy('lesson-link')
+        .first()
+        .click()
+        .location('pathname')
+        .should(
+          'be',
+          `${appPaths.methods}/${setup.kabasMethodsPages.book}/${
+            setup.kabasMethodsPages.chapter
+          }/${setup.kabasMethodsPages.lesson}?tab=1`
+        );
+    });
+  });
 });
