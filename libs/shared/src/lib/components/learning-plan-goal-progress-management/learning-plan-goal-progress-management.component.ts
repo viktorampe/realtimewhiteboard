@@ -27,8 +27,6 @@ export class LearningPlanGoalProgressManagementComponent implements OnInit {
   protected inputFromControl: FormControl;
   protected userLessons$: Observable<UserLessonInterface[]>;
   protected filteredUserLessons$: Observable<UserLessonInterface[]>;
-  protected learningPlanGoal: LearningPlanGoalInterface;
-  protected classGroup: ClassGroupInterface;
   protected book: EduContentBookInterface;
   protected methodLessonsForBook$: Observable<
     { eduContentTocId: number; values: string[] }[]
@@ -39,6 +37,12 @@ export class LearningPlanGoalProgressManagementComponent implements OnInit {
 
   @ViewChild('selectionList', { read: MatSelectionList })
   private matSelectionList: MatSelectionList;
+
+  public learningPlanGoal: LearningPlanGoalInterface;
+  public classGroup: ClassGroupInterface;
+
+  // TODO remove -> will depend on userLesson input
+  public isUserLessonInput = true;
 
   constructor(
     public dialogRef: MatDialogRef<LearningPlanGoalProgressManagementComponent>,
@@ -94,33 +98,43 @@ export class LearningPlanGoalProgressManagementComponent implements OnInit {
     );
   }
 
-  selectionListDisabled(): boolean {
+  isSelectionListDisabled(): boolean {
     // disable or enable selectionList
     return !!this.matInput.value;
   }
 
-  inputDisabled(): boolean {
+  isInputDisabled(): boolean {
     return this.matSelectionList.selectedOptions.selected.length > 0;
   }
 
   selectionChanged() {
-    this.setInputDisabled();
+    this.toggleInputDisabled();
   }
 
-  private setInputDisabled() {
-    if (this.inputDisabled()) this.inputFromControl.disable();
+  private toggleInputDisabled() {
+    if (this.isInputDisabled()) this.inputFromControl.disable();
     else this.inputFromControl.enable();
   }
 
-  onCancel(): void {
-    this.dialogRef.close();
+  public saveForUserLesson(userLesson: UserLessonInterface): void {
+    this.learningPlanGoalProgressManagerVM.createLearningPlanGoalProgressForUserLesson(
+      this.learningPlanGoal,
+      this.classGroup,
+      userLesson
+    );
+    this.closeDialog();
   }
 
-  onSave(): void {
-    //TODO -- this is a temp placeholder, this will be done in another issue
-    if (!this.inputDisabled() && !this.selectionListDisabled())
-      console.log('nothing to save here');
-    else if (this.inputDisabled()) console.log('selection made');
-    else if (this.selectionListDisabled()) console.log('userlesson used');
+  public saveForEduContentTOCselection(eduContentTOCids: number[]): void {
+    this.learningPlanGoalProgressManagerVM.createLearningPlanGoalProgressForEduContentTOCs(
+      this.learningPlanGoal,
+      this.classGroup,
+      eduContentTOCids
+    );
+    this.closeDialog();
+  }
+
+  public closeDialog() {
+    this.dialogRef.close();
   }
 }

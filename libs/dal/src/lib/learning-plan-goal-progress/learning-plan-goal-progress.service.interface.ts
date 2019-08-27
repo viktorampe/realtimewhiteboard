@@ -1,6 +1,10 @@
 import { InjectionToken } from '@angular/core';
 import { Observable } from 'rxjs';
 import { LearningPlanGoalProgressInterface } from '../+models';
+import {
+  MinimalLearningPlanGoalProgressEduContentTocInterface,
+  MinimalLearningPlanGoalProgressUserLessonInterface
+} from '../+state/learning-plan-goal-progress/learning-plan-goal-progress.actions';
 
 export const LEARNING_PLAN_GOAL_PROGRESS_SERVICE_TOKEN = new InjectionToken(
   'LearningPlanGoalProgressService'
@@ -28,5 +32,12 @@ export interface LearningPlanGoalProgressServiceInterface {
     eduContentBookId: number,
     userLessonId?: number,
     eduContentTOCId?: number
+  ): Observable<LearningPlanGoalProgressInterface[]>;
+
+  createLearningPlanGoalProgresses(
+    userId: number,
+    learninGoalProgresses: (
+      | MinimalLearningPlanGoalProgressEduContentTocInterface
+      | MinimalLearningPlanGoalProgressUserLessonInterface)[]
   ): Observable<LearningPlanGoalProgressInterface[]>;
 }
