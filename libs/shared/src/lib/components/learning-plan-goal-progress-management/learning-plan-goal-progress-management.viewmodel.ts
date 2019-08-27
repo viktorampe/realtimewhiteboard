@@ -8,12 +8,13 @@ import {
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class LearningPlanGoalProgressManagementViewModel {
   public userLessons$: Observable<UserLessonInterface[]>;
 
   constructor(private store: Store<DalState>) {
     this.initialize();
+    console.log('vm', 'constructed!');
   }
 
   private initialize() {
