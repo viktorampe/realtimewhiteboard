@@ -308,12 +308,17 @@ export class MethodViewModel implements ContentOpenerInterface {
     learningPlanGoal: LearningPlanGoalInterface,
     classGroup: ClassGroupInterface
   ): void {
-    const data: LearningPlanGoalProgressManagementInterface = {
-      learningPlanGoal,
-      classGroup
-    };
-    this.dialog.open(LearningPlanGoalProgressManagementComponent, {
-      data
+    // we need the current book
+    this.currentBook$.pipe(take(1)).subscribe(book => {
+      const data: LearningPlanGoalProgressManagementInterface = {
+        learningPlanGoal,
+        classGroup,
+        book
+      };
+      this.dialog.open(LearningPlanGoalProgressManagementComponent, {
+        data,
+        autoFocus: false
+      });
     });
   }
 
