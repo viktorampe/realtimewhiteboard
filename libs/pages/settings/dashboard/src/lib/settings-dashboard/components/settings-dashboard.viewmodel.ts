@@ -30,7 +30,7 @@ export class SettingsDashboardViewModel {
       name: 'Mijn koppelingen',
       url: ['/settings', 'credentials'],
       icon: 'credentials',
-      permissions: [SettingsPermissions.UPDATE_AVATAR]
+      permissions: [SettingsPermissions.ADD_CREDENTIALS]
     },
     {
       name: 'Mijn leerkrachten',
