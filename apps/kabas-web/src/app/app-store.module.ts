@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import {
+  AlertReducer,
   ClassGroupReducer,
   CurrentExerciseReducer,
   CustomSerializer,
@@ -9,6 +10,8 @@ import {
   EduContentReducer,
   EduContentTocReducer,
   EffectFeedbackReducer,
+  FavoriteReducer,
+  HistoryReducer,
   LearningDomainReducer,
   LearningPlanGoalProgressReducer,
   LearningPlanGoalReducer,
@@ -125,6 +128,16 @@ import { environment } from '../environments/environment';
         initialState: EffectFeedbackReducer.initialState
       }
     ),
+    StoreModule.forFeature(AlertReducer.NAME, AlertReducer.reducer, {
+      initialState: AlertReducer.initialState
+    }),
+    StoreModule.forFeature(FavoriteReducer.NAME, FavoriteReducer.reducer, {
+      initialState: FavoriteReducer.initialState
+    }),
+    StoreModule.forFeature(HistoryReducer.NAME, HistoryReducer.reducer, {
+      initialState: HistoryReducer.initialState
+    }),
+
     !environment.production ? StoreDevtoolsModule.instrument() : []
   ]
 })
