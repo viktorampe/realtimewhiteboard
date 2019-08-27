@@ -9,11 +9,12 @@ import {
   MAT_DIALOG_DATA
 } from '@angular/material';
 import { By } from '@angular/platform-browser';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
   ClassGroupFixture,
   EduContentBookFixture,
-  LearningPlanGoalFixture
+  LearningPlanGoalFixture,
+  UserLessonInterface
 } from '@campus/dal';
 import { configureTestSuite } from 'ng-bullet';
 import { of } from 'rxjs';
@@ -56,6 +57,33 @@ describe('LearningPlanGoalProgressManagementComponent', () => {
     }
   ];
 
+  const mockUserLessons: UserLessonInterface[] = [
+    {
+      id: 1,
+      description: 'needed guide brown'
+    },
+    {
+      id: 2,
+      description: 'fox branch fifteen'
+    },
+    {
+      id: 3,
+      description: 'simple importance frog'
+    },
+    {
+      id: 4,
+      description: 'fear fireplace with'
+    },
+    {
+      id: 5,
+      description: 'brought science kids'
+    },
+    {
+      id: 6,
+      description: 'music younger flow'
+    }
+  ];
+
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       declarations: [LearningPlanGoalProgressManagementComponent],
@@ -66,7 +94,7 @@ describe('LearningPlanGoalProgressManagementComponent', () => {
         MatAutocompleteModule,
         MatFormFieldModule,
         MatInputModule,
-        NoopAnimationsModule
+        BrowserAnimationsModule
       ],
       providers: [{ provide: MAT_DIALOG_DATA, useValue: mockInjectedData }]
     })
@@ -76,7 +104,8 @@ describe('LearningPlanGoalProgressManagementComponent', () => {
             {
               provide: LearningPlanGoalProgressManagementViewModel,
               useValue: {
-                getMethodLessonsForBook: () => of(mockMethodLessons)
+                getMethodLessonsForBook: () => of(mockMethodLessons),
+                userLessons$: of(mockUserLessons)
               }
             }
           ]
@@ -129,4 +158,55 @@ describe('LearningPlanGoalProgressManagementComponent', () => {
       );
     });
   });
+  it('should show the autocomplete values when the input is focused', async () => {
+    component.ngOnInit();
+    fixture.detectChanges();
+    const input = fixture.debugElement.query(
+      By.css('.learning-plan-goal-progress-management__input')
+    );
+    const inputElement = input.nativeElement;
+    expect(input).toBeTruthy();
+    expect(inputElement).toBeTruthy();
+    await updateInputValue(inputElement, fixture, '');
+    const autocompleteOptions = fixture.debugElement.queryAll(
+      By.css('.learning-plan-goal-progress-management__autocomplete-option')
+    );
+    expect(autocompleteOptions.length).toBe(mockUserLessons.length);
+    autocompleteOptions.forEach((autocompleteOption, index) => {
+      expect(autocompleteOption.nativeElement.textContent).toBe(
+        ` ${mockUserLessons[index].description} `
+      );
+    });
+  });
+  it('should show the filtered autocomplete values when the input is focused and a string value was entered', async () => {
+    component.ngOnInit();
+    fixture.detectChanges();
+    const input = fixture.debugElement.query(
+      By.css('.learning-plan-goal-progress-management__input')
+    );
+    const inputElement = input.nativeElement;
+    expect(input).toBeTruthy();
+    expect(inputElement).toBeTruthy();
+    await updateInputValue(inputElement, fixture, 'fire');
+    const autocompleteOptions = fixture.debugElement.queryAll(
+      By.css('.learning-plan-goal-progress-management__autocomplete-option')
+    );
+    expect(autocompleteOptions.length).toBe(1);
+    expect(autocompleteOptions[0].nativeElement.textContent).toBe(
+      ` ${mockUserLessons[3].description} `
+    );
+  });
 });
+
+async function updateInputValue(
+  inputElement: any,
+  fixture: ComponentFixture<LearningPlanGoalProgressManagementComponent>,
+  inputValue: string
+) {
+  inputElement.dispatchEvent(new Event('focusin'));
+  inputElement.value = inputValue;
+  inputElement.dispatchEvent(new Event('input'));
+  fixture.detectChanges();
+  await fixture.whenStable();
+  fixture.detectChanges();
+}

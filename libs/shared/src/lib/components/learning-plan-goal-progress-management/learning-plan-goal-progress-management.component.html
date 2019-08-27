@@ -15,13 +15,14 @@
         matInput
         [formControl]="inputFromControl"
         [matAutocomplete]="auto"
-        class="input-full-width"
+        class="input-full-width learning-plan-goal-progress-management__input"
       />
       <mat-autocomplete
         #auto="matAutocomplete"
         [displayWith]="displayUserLesson"
       >
         <mat-option
+          class="learning-plan-goal-progress-management__autocomplete-option"
           *ngFor="let userLesson of (filteredUserLessons$ | async)"
           [value]="userLesson"
         >
