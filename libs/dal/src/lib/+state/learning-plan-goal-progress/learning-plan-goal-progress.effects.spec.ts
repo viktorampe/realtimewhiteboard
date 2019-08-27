@@ -593,6 +593,33 @@ describe('LearningPlanGoalProgressEffects', () => {
       );
     });
 
+    it('should return a StartAddLearningPlanGoalProgresses action, for eduContentTOCId', () => {
+      const bulkAddAction = new BulkAddLearningPlanGoalProgresses({
+        personId,
+        classGroupId,
+        eduContentTOCId: 2,
+        learningPlanGoalIds,
+        eduContentBookId
+      });
+
+      actions = hot('a', {
+        a: bulkAddAction
+      });
+
+      const expectedAction = new StartAddLearningPlanGoalProgresses({
+        personId,
+        classGroupId,
+        eduContentTOCId: 2, // doesn't exist
+        userLessonId: undefined,
+        learningPlanGoalIds: [1, 2],
+        eduContentBookId
+      });
+
+      expect(effects.bulkAddLearningPlanGoalProgress$).toBeObservable(
+        hot('a', { a: expectedAction })
+      );
+    });
+
     it('should return a StartAddLearningPlanGoalProgresses action, for userLessonId', () => {
       const bulkAddAction = new BulkAddLearningPlanGoalProgresses({
         personId,
@@ -613,6 +640,33 @@ describe('LearningPlanGoalProgressEffects', () => {
         learningPlanGoalIds: [2],
         personId,
         eduContentBookId
+      });
+
+      expect(effects.bulkAddLearningPlanGoalProgress$).toBeObservable(
+        hot('a', { a: expectedAction })
+      );
+    });
+
+    it('should return a StartAddLearningPlanGoalProgresses action, for userLessonId', () => {
+      const bulkAddAction = new BulkAddLearningPlanGoalProgresses({
+        personId,
+        classGroupId,
+        userLessonId,
+        learningPlanGoalIds,
+        eduContentBookId: 2
+      });
+
+      actions = hot('a', {
+        a: bulkAddAction
+      });
+
+      const expectedAction = new StartAddLearningPlanGoalProgresses({
+        classGroupId,
+        eduContentTOCId: undefined,
+        userLessonId,
+        learningPlanGoalIds: [1, 2],
+        personId,
+        eduContentBookId: 2
       });
 
       expect(effects.bulkAddLearningPlanGoalProgress$).toBeObservable(
@@ -666,6 +720,54 @@ describe('LearningPlanGoalProgressEffects', () => {
         eduContentTOCId,
         personId,
         eduContentBookId
+      });
+
+      expect(effects.toggleLearningPlanGoalProgress$).toBeObservable(
+        hot('a', { a: expectedAction })
+      );
+    });
+
+    it('should return an StartAddLearningPlanGoalProgresses action if the progress does not exist, for EduContentTOC', () => {
+      const toggleAction = new ToggleLearningPlanGoalProgress({
+        classGroupId,
+        personId,
+        learningPlanGoalId: 1, // exists
+        eduContentTOCId: 2, // doesn't exist,
+        eduContentBookId
+      });
+
+      actions = hot('a', { a: toggleAction });
+
+      const expectedAction = new StartAddLearningPlanGoalProgresses({
+        classGroupId,
+        learningPlanGoalIds: [1],
+        eduContentTOCId: 2,
+        personId,
+        eduContentBookId
+      });
+
+      expect(effects.toggleLearningPlanGoalProgress$).toBeObservable(
+        hot('a', { a: expectedAction })
+      );
+    });
+
+    it('should return an StartAddLearningPlanGoalProgresses action if the progress does not exist, for EduContentTOC', () => {
+      const toggleAction = new ToggleLearningPlanGoalProgress({
+        classGroupId,
+        personId,
+        learningPlanGoalId: 1,
+        eduContentTOCId,
+        eduContentBookId: 2 // doesn't exist
+      });
+
+      actions = hot('a', { a: toggleAction });
+
+      const expectedAction = new StartAddLearningPlanGoalProgresses({
+        classGroupId,
+        learningPlanGoalIds: [1],
+        eduContentTOCId,
+        personId,
+        eduContentBookId: 2
       });
 
       expect(effects.toggleLearningPlanGoalProgress$).toBeObservable(

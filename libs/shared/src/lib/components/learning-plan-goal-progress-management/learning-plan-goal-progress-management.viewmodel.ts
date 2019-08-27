@@ -13,7 +13,7 @@ export interface MethodLessonInterface {
   values: string[];
 }
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class LearningPlanGoalProgressManagementViewModel {
   bookId: number;
   learningPlanGoalId: number;
