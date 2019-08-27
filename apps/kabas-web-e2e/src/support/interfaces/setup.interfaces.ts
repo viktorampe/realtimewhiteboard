@@ -4,8 +4,8 @@ export interface KabasMethodsPagesInterface {
     book: number;
     chapter: number;
     lesson: number;
+    lessonLast: number;
     searchTerm: string;
-    diaboloPhase: string;
     expected: {
       method: {
         name: string;
@@ -20,13 +20,25 @@ export interface KabasMethodsPagesInterface {
       chapters: {
         count: number;
       };
-      searchNoFilters: {
+      lessons: {
+        count: number;
+      };
+      chapterSearchNoFilters: {
         results: number;
       };
-      searchByTerm: {
+      chapterSearchByTerm: {
         results: number;
       };
-      searchDiabolo: {
+      chapterSearchDiabolo: {
+        results: number;
+      };
+      lessonSearchNoFilters: {
+        results: number;
+      };
+      lessonSearchByTerm: {
+        results: number;
+      };
+      lessonSearchDiabolo: {
         results: number;
       };
     };
