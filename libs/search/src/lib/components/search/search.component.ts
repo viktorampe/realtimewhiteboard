@@ -130,13 +130,12 @@ export class SearchComponent implements AfterViewInit, OnDestroy, OnChanges {
       this.searchTermComponent.currentValue = undefined;
     }
 
-    const sortMode =
-      initialState.sort || this.searchMode.results.sortModes[0].name;
+    const sort = initialState.sort || this.searchMode.results.sortModes[0].name;
 
     this.searchViewmodel.reset(this.searchMode, {
       ...initialState,
       filterCriteriaSelections: new Map(initialState.filterCriteriaSelections),
-      sort: sortMode
+      sort
     });
   }
 
