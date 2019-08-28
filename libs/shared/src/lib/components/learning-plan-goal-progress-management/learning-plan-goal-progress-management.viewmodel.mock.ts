@@ -1,9 +1,5 @@
 import { Injectable } from '@angular/core';
-import {
-  ClassGroupInterface,
-  LearningPlanGoalInterface,
-  UserLessonInterface
-} from '@campus/dal';
+import { UserLessonInterface } from '@campus/dal';
 import { ViewModelInterface } from '@campus/testing';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { LearningPlanGoalProgressManagementViewModel } from './learning-plan-goal-progress-management.viewmodel';
@@ -21,14 +17,14 @@ export class MockLearningPlanGoalProgressManagementViewModel
     return of([]);
   }
   public createLearningPlanGoalProgressForUserLesson(
-    learningPlanGoal: LearningPlanGoalInterface,
-    classGroup: ClassGroupInterface,
-    userLesson: UserLessonInterface
+    learningPlanGoalId: number,
+    classGroupId: number,
+    description: string
   ): void {}
 
   public createLearningPlanGoalProgressForEduContentTOCs(
-    learningPlanGoal: LearningPlanGoalInterface,
-    classGroup: ClassGroupInterface,
+    learningPlanGoalId: number,
+    classGroupId: number,
     eduContentTOCids: number[]
   ): void {}
 }

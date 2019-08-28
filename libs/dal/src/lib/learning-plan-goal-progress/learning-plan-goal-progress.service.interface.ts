@@ -36,7 +36,7 @@ export interface LearningPlanGoalProgressServiceInterface {
 
   createLearningPlanGoalProgresses(
     userId: number,
-    learninGoalProgresses: (
+    learningGoalProgresses: (
       | MinimalLearningPlanGoalProgressEduContentTocInterface
       | MinimalLearningPlanGoalProgressUserLessonInterface)[]
   ): Observable<LearningPlanGoalProgressInterface[]>;

@@ -1,14 +1,16 @@
 import { Injectable } from '@angular/core';
 import {
-  ClassGroupInterface,
   DalState,
   EduContentTocQueries,
-  LearningPlanGoalInterface,
+  LearningPlanGoalProgressActions,
+  UserLessonActions,
   UserLessonInterface,
-  UserLessonQueries
+  UserLessonQueries,
+  UserQueries
 } from '@campus/dal';
 import { select, Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
+import { take } from 'rxjs/operators';
 
 export interface MethodLessonInterface {
   eduContentTocId: number;
@@ -43,28 +45,88 @@ export class LearningPlanGoalProgressManagementViewModel {
   }
 
   public createLearningPlanGoalProgressForUserLesson(
-    learningPlanGoal: LearningPlanGoalInterface,
-    classGroup: ClassGroupInterface,
-    userLesson: UserLessonInterface // could just be description -> create new
+    learningPlanGoalId: number,
+    classGroupId: number,
+    description: string,
+    eduContentBookId: number
   ): void {
-    console.log(
-      'createLearningPlanGoalProgressForUserLesson',
-      learningPlanGoal,
-      classGroup,
-      userLesson
-    );
+    combineLatest([
+      this.store.pipe(select(UserLessonQueries.getAll)),
+      this.store.pipe(select(UserQueries.getCurrentUser))
+    ])
+      .pipe(take(1))
+      .subscribe(([userLessons, user]) => {
+        const foundUserLesson = userLessons.find(
+          userLesson => userLesson.description === description
+        );
+
+        console.log(
+          'log: LearningPlanGoalProgressManagementViewModel -> userLessons',
+          userLessons
+        );
+        if (foundUserLesson) {
+          this.store.dispatch(
+            new LearningPlanGoalProgressActions.StartAddManyLearningPlanGoalProgresses(
+              {
+                personId: user.id, // TODO will need to refactor to userId
+                learningPlanGoalProgresses: [
+                  {
+                    classGroupId,
+                    learningPlanGoalId,
+                    userLessonId: foundUserLesson.id,
+                    eduContentBookId
+                  }
+                ]
+              }
+            )
+          );
+        } else {
+          this.store.dispatch(
+            new UserLessonActions.CreateUserLessonWithLearningPlanGoalProgresses(
+              {
+                userId: user.id,
+                userLesson: { description },
+                learningPlanGoalProgresses: [
+                  {
+                    classGroupId,
+                    learningPlanGoalId,
+                    eduContentBookId
+                  }
+                ]
+              }
+            )
+          );
+        }
+      });
   }
 
   public createLearningPlanGoalProgressForEduContentTOCs(
-    learningPlanGoal: LearningPlanGoalInterface,
-    classGroup: ClassGroupInterface,
-    eduContentTOCids: number[]
+    learningPlanGoalId: number,
+    classGroupId: number,
+    eduContentTOCids: number[],
+    eduContentBookId: number
   ): void {
-    console.log(
-      'createLearningPlanGoalProgressForEduContentTOCs',
-      learningPlanGoal,
-      classGroup,
-      eduContentTOCids
-    );
+    this.store
+      .pipe(
+        select(UserQueries.getCurrentUser),
+        take(1)
+      )
+      .subscribe(user => {
+        this.store.dispatch(
+          new LearningPlanGoalProgressActions.StartAddManyLearningPlanGoalProgresses(
+            {
+              personId: user.id, // TODO will need to refactor to userId
+              learningPlanGoalProgresses: eduContentTOCids.map(
+                eduContentTocId => ({
+                  classGroupId,
+                  learningPlanGoalId,
+                  eduContentTocId,
+                  eduContentBookId
+                })
+              )
+            }
+          )
+        );
+      });
   }
 }

@@ -114,12 +114,13 @@ export class LearningPlanGoalProgressManagementComponent implements OnInit {
   }
 
   public saveForUserLesson(): void {
-    const userLesson = { description: this.inputFromControl.value };
+    const description = this.inputFromControl.value;
 
     this.learningPlanGoalProgressManagerVM.createLearningPlanGoalProgressForUserLesson(
-      this.learningPlanGoal,
-      this.classGroup,
-      userLesson
+      this.learningPlanGoal.id,
+      this.classGroup.id,
+      description,
+      this.book.id
     );
     this.closeDialog();
   }
@@ -130,9 +131,10 @@ export class LearningPlanGoalProgressManagementComponent implements OnInit {
     );
 
     this.learningPlanGoalProgressManagerVM.createLearningPlanGoalProgressForEduContentTOCs(
-      this.learningPlanGoal,
-      this.classGroup,
-      eduContentTOCids
+      this.learningPlanGoal.id,
+      this.classGroup.id,
+      eduContentTOCids,
+      this.book.id
     );
     this.closeDialog();
   }

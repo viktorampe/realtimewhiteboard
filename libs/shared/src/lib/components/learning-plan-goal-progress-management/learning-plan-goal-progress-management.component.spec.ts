@@ -349,8 +349,8 @@ describe('LearningPlanGoalProgressManagementComponent', () => {
         By.css('.learning-plan-goal-progress-management__input')
       ).nativeElement;
 
-      await updateInputValue(input, fixture, 'some random string');
-      const userLesson = { description: 'some random string' };
+      const description = 'some random string';
+      await updateInputValue(input, fixture, description);
 
       component.saveForUserLesson();
 
@@ -363,9 +363,10 @@ describe('LearningPlanGoalProgressManagementComponent', () => {
       expect(
         lpgpManagementViewModel.createLearningPlanGoalProgressForUserLesson
       ).toHaveBeenCalledWith(
-        mockInjectedData.learningPlanGoal,
-        mockInjectedData.classGroup,
-        userLesson
+        mockInjectedData.learningPlanGoal.id,
+        mockInjectedData.classGroup.id,
+        description,
+        mockInjectedData.book.id
       );
       expect(component.closeDialog).toHaveBeenCalled();
     });
@@ -395,9 +396,10 @@ describe('LearningPlanGoalProgressManagementComponent', () => {
       expect(
         lpgpManagementViewModel.createLearningPlanGoalProgressForEduContentTOCs
       ).toHaveBeenCalledWith(
-        mockInjectedData.learningPlanGoal,
-        mockInjectedData.classGroup,
-        expectedEduContentTOCids
+        mockInjectedData.learningPlanGoal.id,
+        mockInjectedData.classGroup.id,
+        expectedEduContentTOCids,
+        mockInjectedData.book.id
       );
       expect(component.closeDialog).toHaveBeenCalled();
     });
