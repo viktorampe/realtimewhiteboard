@@ -62,14 +62,12 @@ steps:
     displayName: 'Format check'
   - script: npm run test
     displayName: 'Test all'
-  #- script: |
-  #    npm run e2e:polpo:staging
-  #  displayName: 'End-to-end all polpo'
-  # *** Kabas e2e is disabled until it's used, since the Kabas e2e is broken right now
-  # *** Enable it again when the time comes to use it, below:
-  #- script: |
-  #    npm run e2e:kabas:staging
-  #  displayName: 'End-to-end all kabas'
+  - script: |
+      npm run e2e:polpo:staging
+    displayName: 'End-to-end all polpo'
+  - script: |
+      npm run e2e:kabas:staging
+    displayName: 'End-to-end all kabas'
   - bash: |
       if [ -d "coverage" ]; then
         echo "##vso[task.setVariable variable=dkRanTests]true"

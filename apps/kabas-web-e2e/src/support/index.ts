@@ -16,4 +16,3 @@
 import './commands';
 import './interfaces';
 import './types';
-

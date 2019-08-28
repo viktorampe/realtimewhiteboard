@@ -23,7 +23,7 @@
       "password": "testje"
     },
     "staging": {
-      "apiUrl": "https://api.kabas.polpo.be/",
+      "apiUrl": "https://api.staging.lk2020.be/",
       "apiPaths": {
         "eduContent": "api/eduContents",
         "ludoAssets": "api/educontent-assets-ludo"
