@@ -241,7 +241,7 @@ describe('LearningPlanGoalProgressEffects', () => {
 
   describe('startAddLearningPlanGoalProgresses', () => {
     const staticParams = {
-      personId: 1,
+      userId: 1,
       classGroupId: 1,
       learningPlanGoalIds: [1, 2],
       eduContentBookId: 1699729494
@@ -266,7 +266,7 @@ describe('LearningPlanGoalProgressEffects', () => {
 
       const returnedValues = staticParams.learningPlanGoalIds.map(
         learningPlanGoalId => ({
-          personId: staticParams.personId,
+          userId: staticParams.userId,
           classGroupId: staticParams.classGroupId,
           eduContentBookId: staticParams.eduContentBookId,
           learningPlanGoalId,
@@ -294,7 +294,7 @@ describe('LearningPlanGoalProgressEffects', () => {
       expect(
         learningPlanGoalProgressService.createLearningPlanGoalProgress
       ).toHaveBeenCalledWith(
-        staticParams.personId,
+        staticParams.userId,
         staticParams.classGroupId,
         staticParams.learningPlanGoalIds,
         staticParams.eduContentBookId,
@@ -314,7 +314,7 @@ describe('LearningPlanGoalProgressEffects', () => {
 
       const returnedValues = staticParams.learningPlanGoalIds.map(
         learningPlanGoalId => ({
-          personId: staticParams.personId,
+          userId: staticParams.userId,
           classGroupId: staticParams.classGroupId,
           learningPlanGoalId,
           userLessonId
@@ -341,7 +341,7 @@ describe('LearningPlanGoalProgressEffects', () => {
       expect(
         learningPlanGoalProgressService.createLearningPlanGoalProgress
       ).toHaveBeenCalledWith(
-        staticParams.personId,
+        staticParams.userId,
         staticParams.classGroupId,
         staticParams.learningPlanGoalIds,
         staticParams.eduContentBookId,
@@ -542,7 +542,7 @@ describe('LearningPlanGoalProgressEffects', () => {
   });
 
   describe('bulkAddLearningPlanGoalProgress', () => {
-    const personId = 1;
+    const userId = 1;
     const classGroupId = 1;
     const eduContentTOCId = 1;
     const userLessonId = 1;
@@ -570,7 +570,7 @@ describe('LearningPlanGoalProgressEffects', () => {
 
     it('should return a StartAddLearningPlanGoalProgresses action, for eduContentTOCId', () => {
       const bulkAddAction = new BulkAddLearningPlanGoalProgresses({
-        personId,
+        userId,
         classGroupId,
         eduContentTOCId,
         learningPlanGoalIds,
@@ -582,7 +582,7 @@ describe('LearningPlanGoalProgressEffects', () => {
       });
 
       const expectedAction = new StartAddLearningPlanGoalProgresses({
-        personId,
+        userId,
         classGroupId,
         eduContentTOCId,
         userLessonId: undefined,
@@ -597,7 +597,7 @@ describe('LearningPlanGoalProgressEffects', () => {
 
     it('should return a StartAddLearningPlanGoalProgresses action, for eduContentTOCId', () => {
       const bulkAddAction = new BulkAddLearningPlanGoalProgresses({
-        personId,
+        userId,
         classGroupId,
         eduContentTOCId: 2,
         learningPlanGoalIds,
@@ -609,7 +609,7 @@ describe('LearningPlanGoalProgressEffects', () => {
       });
 
       const expectedAction = new StartAddLearningPlanGoalProgresses({
-        personId,
+        userId,
         classGroupId,
         eduContentTOCId: 2, // doesn't exist
         userLessonId: undefined,
@@ -624,7 +624,7 @@ describe('LearningPlanGoalProgressEffects', () => {
 
     it('should return a StartAddLearningPlanGoalProgresses action, for userLessonId', () => {
       const bulkAddAction = new BulkAddLearningPlanGoalProgresses({
-        personId,
+        userId,
         classGroupId,
         userLessonId,
         learningPlanGoalIds,
@@ -640,7 +640,7 @@ describe('LearningPlanGoalProgressEffects', () => {
         eduContentTOCId: undefined,
         userLessonId,
         learningPlanGoalIds: [2],
-        personId,
+        userId,
         eduContentBookId
       });
 
@@ -651,7 +651,7 @@ describe('LearningPlanGoalProgressEffects', () => {
 
     it('should return a StartAddLearningPlanGoalProgresses action, for userLessonId', () => {
       const bulkAddAction = new BulkAddLearningPlanGoalProgresses({
-        personId,
+        userId,
         classGroupId,
         userLessonId,
         learningPlanGoalIds,
@@ -667,7 +667,7 @@ describe('LearningPlanGoalProgressEffects', () => {
         eduContentTOCId: undefined,
         userLessonId,
         learningPlanGoalIds: [1, 2],
-        personId,
+        userId,
         eduContentBookId: 2
       });
 
@@ -678,10 +678,10 @@ describe('LearningPlanGoalProgressEffects', () => {
   });
 
   describe('startAddManyLearningPlanGoalProgresses', () => {
-    const personId = 1;
+    const userId = 1;
 
     const triggerAction = new StartAddManyLearningPlanGoalProgresses({
-      personId,
+      userId,
       learningPlanGoalProgresses: []
     });
 
@@ -720,7 +720,7 @@ describe('LearningPlanGoalProgressEffects', () => {
       expect(undoSpy).toHaveBeenCalledTimes(1);
       expect(
         learningPlanGoalProgressService.createLearningPlanGoalProgresses
-      ).toHaveBeenCalledWith(personId, []);
+      ).toHaveBeenCalledWith(userId, []);
     });
 
     it('should return an undoAction and a feedBackAction on error', () => {
@@ -759,7 +759,7 @@ describe('LearningPlanGoalProgressEffects', () => {
   });
 
   describe('toggleLearningPlanGoalProgress', () => {
-    const personId = 1;
+    const userId = 1;
     const classGroupId = 1;
     const eduContentTOCId = 1;
     const userLessonId = 1;
@@ -789,7 +789,7 @@ describe('LearningPlanGoalProgressEffects', () => {
     it('should return an StartAddLearningPlanGoalProgresses action if the progress does not exist, for EduContentTOC', () => {
       const toggleAction = new ToggleLearningPlanGoalProgress({
         classGroupId,
-        personId,
+        userId,
         learningPlanGoalId: 2,
         eduContentTOCId,
         eduContentBookId
@@ -801,7 +801,7 @@ describe('LearningPlanGoalProgressEffects', () => {
         classGroupId,
         learningPlanGoalIds: [2],
         eduContentTOCId,
-        personId,
+        userId,
         eduContentBookId
       });
 
@@ -813,7 +813,7 @@ describe('LearningPlanGoalProgressEffects', () => {
     it('should return an StartAddLearningPlanGoalProgresses action if the progress does not exist, for EduContentTOC', () => {
       const toggleAction = new ToggleLearningPlanGoalProgress({
         classGroupId,
-        personId,
+        userId,
         learningPlanGoalId: 1, // exists
         eduContentTOCId: 2, // doesn't exist,
         eduContentBookId
@@ -825,7 +825,7 @@ describe('LearningPlanGoalProgressEffects', () => {
         classGroupId,
         learningPlanGoalIds: [1],
         eduContentTOCId: 2,
-        personId,
+        userId,
         eduContentBookId
       });
 
@@ -837,7 +837,7 @@ describe('LearningPlanGoalProgressEffects', () => {
     it('should return an StartAddLearningPlanGoalProgresses action if the progress does not exist, for EduContentTOC', () => {
       const toggleAction = new ToggleLearningPlanGoalProgress({
         classGroupId,
-        personId,
+        userId,
         learningPlanGoalId: 1,
         eduContentTOCId,
         eduContentBookId: 2 // doesn't exist
@@ -849,7 +849,7 @@ describe('LearningPlanGoalProgressEffects', () => {
         classGroupId,
         learningPlanGoalIds: [1],
         eduContentTOCId,
-        personId,
+        userId,
         eduContentBookId: 2
       });
 
@@ -861,7 +861,7 @@ describe('LearningPlanGoalProgressEffects', () => {
     it('should return a DeleteLearningPlanGoalProgress action if the progress exists, for EduContentTOC', () => {
       const toggleAction = new ToggleLearningPlanGoalProgress({
         classGroupId,
-        personId,
+        userId,
         learningPlanGoalId: 1,
         eduContentTOCId,
         eduContentBookId
@@ -871,7 +871,7 @@ describe('LearningPlanGoalProgressEffects', () => {
 
       const expectedAction = new DeleteLearningPlanGoalProgress({
         id: 1,
-        userId: personId
+        userId: userId
       });
 
       expect(effects.toggleLearningPlanGoalProgress$).toBeObservable(
@@ -882,7 +882,7 @@ describe('LearningPlanGoalProgressEffects', () => {
     it('should return an StartAddLearningPlanGoalProgresses action if the progress does not exist, for UserLesson', () => {
       const toggleAction = new ToggleLearningPlanGoalProgress({
         classGroupId,
-        personId,
+        userId,
         learningPlanGoalId: 2,
         userLessonId,
         eduContentBookId
@@ -894,7 +894,7 @@ describe('LearningPlanGoalProgressEffects', () => {
         classGroupId,
         learningPlanGoalIds: [2],
         userLessonId,
-        personId,
+        userId,
         eduContentBookId
       });
 
@@ -906,7 +906,7 @@ describe('LearningPlanGoalProgressEffects', () => {
     it('should return a DeleteLearningPlanGoalProgress action if the progress exists, for UserLesson', () => {
       const toggleAction = new ToggleLearningPlanGoalProgress({
         classGroupId,
-        personId,
+        userId,
         learningPlanGoalId: 1,
         userLessonId,
         eduContentBookId
@@ -916,7 +916,7 @@ describe('LearningPlanGoalProgressEffects', () => {
 
       const expectedAction = new DeleteLearningPlanGoalProgress({
         id: 1,
-        userId: personId
+        userId
       });
 
       expect(effects.toggleLearningPlanGoalProgress$).toBeObservable(
