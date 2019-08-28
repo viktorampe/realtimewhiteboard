@@ -1,6 +1,11 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import {
+  MatDialogRef,
+  MatInput,
+  MatSelectionList,
+  MAT_DIALOG_DATA
+} from '@angular/material';
 import {
   ClassGroupInterface,
   EduContentBookInterface,
@@ -8,7 +13,7 @@ import {
   UserLessonInterface
 } from '@campus/dal';
 import { combineLatest, Observable } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
+import { filter, map, startWith } from 'rxjs/operators';
 import { LearningPlanGoalProgressManagementInterface } from './learning-plan-goal-progress-management-dialog.interface';
 import { LearningPlanGoalProgressManagementViewModel } from './learning-plan-goal-progress-management.viewmodel';
 
@@ -27,6 +32,12 @@ export class LearningPlanGoalProgressManagementComponent implements OnInit {
     { eduContentTocId: number; values: string[] }[]
   >;
 
+  @ViewChild(MatInput)
+  private matInput: MatInput;
+
+  @ViewChild('selectionList', { read: MatSelectionList })
+  private matSelectionList: MatSelectionList;
+
   public learningPlanGoal: LearningPlanGoalInterface;
   public classGroup: ClassGroupInterface;
 
@@ -34,10 +45,10 @@ export class LearningPlanGoalProgressManagementComponent implements OnInit {
   public isUserLessonInput = true;
 
   constructor(
+    public dialogRef: MatDialogRef<LearningPlanGoalProgressManagementComponent>,
     @Inject(MAT_DIALOG_DATA)
     private data: LearningPlanGoalProgressManagementInterface,
-    private learningPlanGoalProgressManagerVM: LearningPlanGoalProgressManagementViewModel,
-    private dialogRef: MatDialogRef<LearningPlanGoalProgressManagementComponent>
+    private learningPlanGoalProgressManagerVM: LearningPlanGoalProgressManagementViewModel
   ) {}
 
   ngOnInit() {
@@ -59,7 +70,10 @@ export class LearningPlanGoalProgressManagementComponent implements OnInit {
 
   getFilteredUserLessons(): Observable<UserLessonInterface[]> {
     return combineLatest([
-      this.inputFromControl.valueChanges.pipe(startWith('')),
+      this.inputFromControl.valueChanges.pipe(
+        startWith(''),
+        filter(val => !(val === null))
+      ),
       this.userLessons$
     ]).pipe(
       map(
@@ -82,6 +96,24 @@ export class LearningPlanGoalProgressManagementComponent implements OnInit {
     return userLessons.filter(userLesson =>
       userLesson.description.toLowerCase().includes(filterValue)
     );
+  }
+
+  isSelectionListDisabled(): boolean {
+    // disable or enable selectionList
+    return !!this.matInput.value;
+  }
+
+  isInputDisabled(): boolean {
+    return this.matSelectionList.selectedOptions.selected.length > 0;
+  }
+
+  selectionChanged() {
+    this.toggleInputDisabled();
+  }
+
+  private toggleInputDisabled() {
+    if (this.isInputDisabled()) this.inputFromControl.disable();
+    else this.inputFromControl.enable();
   }
 
   public saveForUserLesson(userLesson: UserLessonInterface): void {

@@ -211,6 +211,34 @@ describe('LearningPlanGoalProgressManagementComponent', () => {
       ` ${mockUserLessons[3].description} `
     );
   });
+  it('should call inputFormControl disable if a lessonMethod selection was made', () => {
+    component.ngOnInit();
+    fixture.detectChanges();
+    const formControlSpy = jest.spyOn(component['inputFromControl'], 'disable');
+    const options = fixture.debugElement.queryAll(
+      By.css('.learning-plan-goal-progress-management__list-option')
+    );
+    expect(options.length).toBe(mockMethodLessons.length);
+    options[0].triggerEventHandler('click', null);
+    fixture.detectChanges();
+    expect(formControlSpy).toHaveBeenCalledTimes(1);
+  });
+  it('should call inputFromControl enable if the input value has been set', async () => {
+    component.ngOnInit();
+    fixture.detectChanges();
+    const input = fixture.debugElement.query(
+      By.css('.learning-plan-goal-progress-management__input')
+    );
+    const inputElement = input.nativeElement;
+    await updateInputValue(inputElement, fixture, 'fire');
+    const autocompleteOptions = fixture.debugElement.queryAll(
+      By.css('.learning-plan-goal-progress-management__autocomplete-option')
+    );
+    expect(autocompleteOptions.length).toBe(1);
+    autocompleteOptions[0].triggerEventHandler('click', null);
+    fixture.detectChanges();
+    expect(inputElement.disabled).toBe(false);
+  });
 
   describe('data and streams', () => {
     describe('data', () => {
