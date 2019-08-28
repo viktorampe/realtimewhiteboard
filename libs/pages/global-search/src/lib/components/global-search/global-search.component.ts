@@ -13,8 +13,7 @@ import {
   SearchResultInterface,
   SearchStateInterface
 } from '@campus/search';
-import { combineLatest, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 import { GlobalSearchViewModel } from '../global-search.viewmodel';
 
 @Component({
@@ -36,17 +35,7 @@ export class GlobalSearchComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.searchMode$ = this.globalSearchViewModel.getSearchMode('global');
-    this.initialSearchState$ = combineLatest([
-      this.searchMode$,
-      this.globalSearchViewModel.getInitialSearchState()
-    ]).pipe(
-      map(([searchMode, initialSearchState]) => {
-        return {
-          ...initialSearchState,
-          sort: searchMode.results.sortModes[0].name
-        };
-      })
-    );
+    this.initialSearchState$ = this.globalSearchViewModel.getInitialSearchState();
     this.searchResults$ = this.globalSearchViewModel.searchResults$;
   }
 
