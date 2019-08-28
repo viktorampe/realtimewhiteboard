@@ -252,6 +252,71 @@ describe('LearningPlanGoalProgressManagementComponent', () => {
       fixture.detectChanges();
       expect(inputElement.disabled).toBe(false);
     });
+
+    describe('buttons', () => {
+      it('should show a close button', () => {
+        const buttonDE = fixture.debugElement.query(
+          By.css('.learning-plan-goal-progress-management__button--close')
+        );
+
+        expect(buttonDE.nativeElement.textContent.trim()).toBe('Sluiten');
+
+        component.closeDialog = jest.fn();
+        buttonDE.triggerEventHandler('click', null);
+
+        expect(component.closeDialog).toHaveBeenCalled();
+      });
+
+      it('should show a save button, for Userlesson', async () => {
+        const input = fixture.debugElement.query(
+          By.css('.learning-plan-goal-progress-management__input')
+        ).nativeElement;
+
+        await updateInputValue(input, fixture, 'some random string');
+
+        const buttonDE = fixture.debugElement.query(
+          By.css('.learning-plan-goal-progress-management__button--save')
+        );
+        expect(buttonDE.nativeElement.textContent.trim()).toBe(
+          'Opslaan (project)'
+        );
+
+        component.saveForUserLesson = jest.fn();
+        buttonDE.triggerEventHandler('click', null);
+
+        expect(component.saveForUserLesson).toHaveBeenCalled();
+      });
+
+      it('should show a save button, for selection', async () => {
+        const input = fixture.debugElement.query(
+          By.css('.learning-plan-goal-progress-management__input')
+        ).nativeElement;
+
+        // on by default
+        let buttonDE = fixture.debugElement.query(
+          By.css('.learning-plan-goal-progress-management__button--save')
+        );
+        expect(buttonDE.nativeElement.textContent.trim()).toBe(
+          'Opslaan (hoofdstuk)'
+        );
+
+        // toggle on/off
+        await updateInputValue(input, fixture, 'some random string');
+        await updateInputValue(input, fixture, '');
+
+        buttonDE = fixture.debugElement.query(
+          By.css('.learning-plan-goal-progress-management__button--save')
+        );
+        expect(buttonDE.nativeElement.textContent.trim()).toBe(
+          'Opslaan (hoofdstuk)'
+        );
+
+        component.saveForEduContentTOCselection = jest.fn();
+        buttonDE.triggerEventHandler('click', null);
+
+        expect(component.saveForEduContentTOCselection).toHaveBeenCalled();
+      });
+    });
   });
 
   describe('data and streams', () => {
