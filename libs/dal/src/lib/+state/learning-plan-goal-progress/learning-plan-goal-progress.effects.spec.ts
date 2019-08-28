@@ -9,12 +9,30 @@ import { undo } from 'ngrx-undo';
 import { Observable, of } from 'rxjs';
 import { LearningPlanGoalProgressReducer } from '.';
 import { LearningPlanGoalProgressFixture } from '../../+fixtures';
-import { LearningPlanGoalProgressServiceInterface, LEARNING_PLAN_GOAL_PROGRESS_SERVICE_TOKEN } from '../../learning-plan-goal-progress/learning-plan-goal-progress.service.interface';
+import {
+  LearningPlanGoalProgressServiceInterface,
+  LEARNING_PLAN_GOAL_PROGRESS_SERVICE_TOKEN
+} from '../../learning-plan-goal-progress/learning-plan-goal-progress.service.interface';
 import { UndoService, UNDO_SERVICE_TOKEN } from '../../undo';
-import { EffectFeedback, EffectFeedbackActions, Priority } from '../effect-feedback';
+import {
+  EffectFeedback,
+  EffectFeedbackActions,
+  Priority
+} from '../effect-feedback';
 import { AddUserLessonWithLearningPlanGoalProgresses } from '../user-lesson/user-lesson.actions';
 import { UserLessonFixture } from './../../+fixtures/UserLesson.fixture';
-import { AddLearningPlanGoalProgresses, BulkAddLearningPlanGoalProgresses, DeleteLearningPlanGoalProgress, DeleteLearningPlanGoalProgresses, LearningPlanGoalProgressesLoaded, LearningPlanGoalProgressesLoadError, LoadLearningPlanGoalProgresses, StartAddLearningPlanGoalProgresses, StartAddManyLearningPlanGoalProgresses, ToggleLearningPlanGoalProgress } from './learning-plan-goal-progress.actions';
+import {
+  AddLearningPlanGoalProgresses,
+  BulkAddLearningPlanGoalProgresses,
+  DeleteLearningPlanGoalProgress,
+  DeleteLearningPlanGoalProgresses,
+  LearningPlanGoalProgressesLoaded,
+  LearningPlanGoalProgressesLoadError,
+  LoadLearningPlanGoalProgresses,
+  StartAddLearningPlanGoalProgresses,
+  StartAddManyLearningPlanGoalProgresses,
+  ToggleLearningPlanGoalProgress
+} from './learning-plan-goal-progress.actions';
 import { LearningPlanGoalProgressEffects } from './learning-plan-goal-progress.effects';
 
 describe('LearningPlanGoalProgressEffects', () => {
@@ -672,149 +690,95 @@ describe('LearningPlanGoalProgressEffects', () => {
       );
     });
 
-    describe('StartAddManyLearningPlanGoalProgresses action', () => {
-      const triggerAction = new StartAddManyLearningPlanGoalProgresses({
-        userId,
-        learningPlanGoalProgresses: []
-      });
-
-      it('should make the service call', () => {
-        jest
-          .spyOn(
-            learningPlanGoalProgressService,
-            'createLearningPlanGoalProgresses'
-          )
-          .mockReturnValue(of([]));
-
-        const dummyAction = {
-          type: 'some action',
-          payload: { userId: 317646491, ids: [612837505, 892853336] }
-        };
-        const undoSpy = jest
-          .spyOn(undoService, 'dispatchActionAsUndoable')
-          .mockReturnValue(of(dummyAction));
-
-        actions = hot('a', { a: triggerAction });
-
-        expect(effects.startAddManyLearningPlanGoalProgresses$).toBeObservable(
-          cold('a', {
-            a: dummyAction
-          })
-        );
-
-        expect(undoSpy).toHaveBeenCalledTimes(1);
-        expect(
-          learningPlanGoalProgressService.createLearningPlanGoalProgresses
-        ).toHaveBeenCalledWith(userId, []);
-      });
-
-      it('should return an undoAction and a feedBackAction on error', () => {
-        jest
-          .spyOn(
-            learningPlanGoalProgressService,
-            'createLearningPlanGoalProgresses'
-          )
-          .mockImplementation(() => {
-            throw new Error('error');
-          });
-
-        actions = hot('a', { a: triggerAction });
-
-        const feedbackAction = new EffectFeedbackActions.AddEffectFeedback({
-          effectFeedback: new EffectFeedback({
-            id: uuid,
-            triggerAction: triggerAction,
-            message:
-              'Het is niet gelukt om de status van de leerplandoelen aan te passen.',
-            userActions: [
-              { title: 'Opnieuw proberen', userAction: triggerAction }
-            ],
-            type: 'error',
-            priority: Priority.HIGH
-          })
-        });
-
-        expect(effects.startAddManyLearningPlanGoalProgresses$).toBeObservable(
-          cold('(ab)', {
-            a: undo(triggerAction),
-            b: feedbackAction
-          })
-        );
-      });
-    });
-
-    describe('AddUserLessonWithLearningPlanGoalProgresses action', () => {
-      const userLesson = new UserLessonFixture();
-      const triggerAction = new AddUserLessonWithLearningPlanGoalProgresses(
-        {
+    const triggers = [
+      {
+        description: 'StartAddManyLearningPlanGoalProgresses',
+        action: new StartAddManyLearningPlanGoalProgresses({
           userId,
-          userLesson,
           learningPlanGoalProgresses: []
-        }
-      );
+        })
+      },
+      {
+        description: 'AddUserLessonWithLearningPlanGoalProgresses',
+        action: new AddUserLessonWithLearningPlanGoalProgresses({
+          userId,
+          userLesson: new UserLessonFixture(),
+          learningPlanGoalProgresses: []
+        })
+      }
+    ];
 
-      it('should make the service call', () => {
-        jest
-          .spyOn(
-            learningPlanGoalProgressService,
-            'createLearningPlanGoalProgresses'
-          )
-          .mockReturnValue(of([]));
+    triggers.forEach(trigger => {
+      describe(trigger.description + ' action', () => {
+        const triggerAction = trigger.action;
 
-        const dummyAction = {
-          type: 'some action',
-          payload: { userId: 317646491, ids: [612837505, 892853336] }
-        };
-        const undoSpy = jest
-          .spyOn(undoService, 'dispatchActionAsUndoable')
-          .mockReturnValue(of(dummyAction));
+        it('should make the service call', () => {
+          jest
+            .spyOn(
+              learningPlanGoalProgressService,
+              'createLearningPlanGoalProgresses'
+            )
+            .mockReturnValue(of([]));
 
-        actions = hot('a', { a: triggerAction });
+          const dummyAction = {
+            type: 'some action',
+            payload: { userId: 317646491, ids: [612837505, 892853336] }
+          };
+          const undoSpy = jest
+            .spyOn(undoService, 'dispatchActionAsUndoable')
+            .mockReturnValue(of(dummyAction));
 
-        expect(effects.startAddManyLearningPlanGoalProgresses$).toBeObservable(
-          cold('a', {
-            a: dummyAction
-          })
-        );
+          actions = hot('a', { a: triggerAction });
 
-        expect(undoSpy).toHaveBeenCalledTimes(1);
-        expect(
-          learningPlanGoalProgressService.createLearningPlanGoalProgresses
-        ).toHaveBeenCalledWith(userId, []);
-      });
+          expect(
+            effects.startAddManyLearningPlanGoalProgresses$
+          ).toBeObservable(
+            cold('a', {
+              a: dummyAction
+            })
+          );
 
-      it('should return an undoAction and a feedBackAction on error', () => {
-        jest
-          .spyOn(
-            learningPlanGoalProgressService,
-            'createLearningPlanGoalProgresses'
-          )
-          .mockImplementation(() => {
-            throw new Error('error');
-          });
-
-        actions = hot('a', { a: triggerAction });
-
-        const feedbackAction = new EffectFeedbackActions.AddEffectFeedback({
-          effectFeedback: new EffectFeedback({
-            id: uuid,
-            triggerAction: triggerAction,
-            message:
-              'Het is niet gelukt om de status van de leerplandoelen aan te passen.',
-            userActions: [
-              { title: 'Opnieuw proberen', userAction: triggerAction }
-            ],
-            type: 'error',
-            priority: Priority.HIGH
-          })
+          expect(undoSpy).toHaveBeenCalledTimes(1);
+          expect(
+            learningPlanGoalProgressService.createLearningPlanGoalProgresses
+          ).toHaveBeenCalledWith(userId, []);
         });
 
-        expect(effects.startAddManyLearningPlanGoalProgresses$).toBeObservable(
-          cold('(ab)', {
-            a: undo(triggerAction),
-            b: feedbackAction
-          })
-        );
+        it('should return an undoAction and a feedBackAction on error', () => {
+          jest
+            .spyOn(
+              learningPlanGoalProgressService,
+              'createLearningPlanGoalProgresses'
+            )
+            .mockImplementation(() => {
+              throw new Error('error');
+            });
+
+          actions = hot('a', { a: triggerAction });
+
+          const feedbackAction = new EffectFeedbackActions.AddEffectFeedback({
+            effectFeedback: new EffectFeedback({
+              id: uuid,
+              triggerAction: triggerAction,
+              message:
+                'Het is niet gelukt om de status van de leerplandoelen aan te passen.',
+              userActions: [
+                { title: 'Opnieuw proberen', userAction: triggerAction }
+              ],
+              type: 'error',
+              priority: Priority.HIGH
+            })
+          });
+
+          expect(
+            effects.startAddManyLearningPlanGoalProgresses$
+          ).toBeObservable(
+            cold('(ab)', {
+              a: undo(triggerAction),
+              b: feedbackAction
+            })
+          );
+        });
       });
     });
   });

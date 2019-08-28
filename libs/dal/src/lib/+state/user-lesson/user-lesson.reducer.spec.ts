@@ -87,14 +87,36 @@ describe('UserLessons Reducer', () => {
   });
 
   describe('add actions', () => {
-    it('should add one userLesson', () => {
-      const userLesson = userLessons[0];
-      const action = new UserLessonActions.AddUserLesson({
-        userLesson
-      });
+    const triggers = [
+      {
+        description: 'AddUserLesson',
+        action: new UserLessonActions.AddUserLesson({
+          userLesson: null
+        })
+      },
+      {
+        description: 'AddUserLessonWithLearningPlanGoalProgresses',
+        action: new UserLessonActions.AddUserLessonWithLearningPlanGoalProgresses(
+          {
+            userLesson: null,
+            learningPlanGoalProgresses: [],
+            userId: 1
+          }
+        )
+      }
+    ];
 
-      const result = reducer(initialState, action);
-      expect(result).toEqual(createState([userLesson], false));
+    triggers.forEach(trigger => {
+      it('should add one userLesson, for ' + trigger.description, () => {
+        const action = trigger.action;
+
+        // needed because userLessons isn't defined when action is declared
+        const userLesson = userLessons[0];
+        action.payload.userLesson = userLesson;
+
+        const result = reducer(initialState, action);
+        expect(result).toEqual(createState([userLesson], false));
+      });
     });
 
     it('should add multiple userLessons', () => {
