@@ -274,7 +274,7 @@ export class MethodViewModel implements ContentOpenerInterface {
         eduContentTOCId,
         eduContentBookId,
         userLessonId,
-        personId: this.authService.userId
+        userId: this.authService.userId
       })
     );
   }
@@ -291,7 +291,7 @@ export class MethodViewModel implements ContentOpenerInterface {
         eduContentTOCId,
         learningPlanGoalIds,
         eduContentBookId,
-        personId: this.authService.userId
+        userId: this.authService.userId
       })
     );
   }

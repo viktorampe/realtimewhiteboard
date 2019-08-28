@@ -1006,7 +1006,7 @@ describe('MethodViewModel', () => {
           learningPlanGoalId,
           eduContentTOCId,
           userLessonId,
-          personId: 1,
+          userId: 1,
           eduContentBookId
         })
       );
@@ -1033,7 +1033,7 @@ describe('MethodViewModel', () => {
           classGroupId,
           eduContentTOCId,
           learningPlanGoalIds,
-          personId: 1,
+          userId: 1,
           eduContentBookId
         })
       );
