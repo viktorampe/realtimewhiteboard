@@ -47,13 +47,13 @@
   </mat-dialog-content>
   <mat-dialog-actions>
     <campus-button
-      *ngIf="isUserLessonInput"
+      *ngIf="isSelectionListDisabled()"
       primary
       (click)="saveForUserLesson({ description: 'foo' })"
       >Opslaan (project)</campus-button
     >
     <campus-button
-      *ngIf="!isUserLessonInput"
+      *ngIf="!isSelectionListDisabled()"
       primary
       (click)="saveForEduContentTOCselection([1, 2, 3])"
       >Opslaan (hoofdstuk)</campus-button

@@ -142,102 +142,116 @@ describe('LearningPlanGoalProgressManagementComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-  it('should show the title with the group name', () => {
-    const title = fixture.debugElement.query(
-      By.css('.learning-plan-goal-progress-management__title')
-    );
-    expect(title.nativeElement.textContent).toBe(
-      `Markeer een doel als behandeld voor ${mockInjectedData.classGroup.name}`
-    );
-  });
-  it('should show the learning plan goal prefix and goal', () => {
-    const lpg = fixture.debugElement.query(
-      By.css('.learning-plan-goal-progress-management__lpg')
-    );
-    expect(lpg.nativeElement.textContent).toBe(
-      `${mockInjectedData.learningPlanGoal.prefix} ${
-        mockInjectedData.learningPlanGoal.goal
-      }`
-    );
-  });
-  it('should show an option for each methodLesson', () => {
-    component.ngOnInit();
-    fixture.detectChanges();
-    const options = fixture.debugElement.queryAll(
-      By.css('.learning-plan-goal-progress-management__list-option')
-    );
-    expect(options.length).toBe(mockMethodLessons.length);
-    options.forEach((option, index) => {
-      expect(option.nativeElement.textContent).toBe(
-        `${mockMethodLessons[index].values.join(' > ')}`
+
+  describe('UI', () => {
+    it('should show the title with the group name', () => {
+      const title = fixture.debugElement.query(
+        By.css('.learning-plan-goal-progress-management__title')
+      );
+      expect(title.nativeElement.textContent).toBe(
+        `Markeer een doel als behandeld voor ${
+          mockInjectedData.classGroup.name
+        }`
       );
     });
-  });
-  it('should show the autocomplete values when the input is focused', async () => {
-    component.ngOnInit();
-    fixture.detectChanges();
-    const input = fixture.debugElement.query(
-      By.css('.learning-plan-goal-progress-management__input')
-    );
-    const inputElement = input.nativeElement;
-    expect(input).toBeTruthy();
-    expect(inputElement).toBeTruthy();
-    await updateInputValue(inputElement, fixture, '');
-    const autocompleteOptions = fixture.debugElement.queryAll(
-      By.css('.learning-plan-goal-progress-management__autocomplete-option')
-    );
-    expect(autocompleteOptions.length).toBe(mockUserLessons.length);
-    autocompleteOptions.forEach((autocompleteOption, index) => {
-      expect(autocompleteOption.nativeElement.textContent).toBe(
-        ` ${mockUserLessons[index].description} `
+
+    it('should show the learning plan goal prefix and goal', () => {
+      const lpg = fixture.debugElement.query(
+        By.css('.learning-plan-goal-progress-management__lpg')
+      );
+      expect(lpg.nativeElement.textContent).toBe(
+        `${mockInjectedData.learningPlanGoal.prefix} ${
+          mockInjectedData.learningPlanGoal.goal
+        }`
       );
     });
-  });
-  it('should show the filtered autocomplete values when the input is focused and a string value was entered', async () => {
-    component.ngOnInit();
-    fixture.detectChanges();
-    const input = fixture.debugElement.query(
-      By.css('.learning-plan-goal-progress-management__input')
-    );
-    const inputElement = input.nativeElement;
-    expect(input).toBeTruthy();
-    expect(inputElement).toBeTruthy();
-    await updateInputValue(inputElement, fixture, 'fire');
-    const autocompleteOptions = fixture.debugElement.queryAll(
-      By.css('.learning-plan-goal-progress-management__autocomplete-option')
-    );
-    expect(autocompleteOptions.length).toBe(1);
-    expect(autocompleteOptions[0].nativeElement.textContent).toBe(
-      ` ${mockUserLessons[3].description} `
-    );
-  });
-  it('should call inputFormControl disable if a lessonMethod selection was made', () => {
-    component.ngOnInit();
-    fixture.detectChanges();
-    const formControlSpy = jest.spyOn(component['inputFromControl'], 'disable');
-    const options = fixture.debugElement.queryAll(
-      By.css('.learning-plan-goal-progress-management__list-option')
-    );
-    expect(options.length).toBe(mockMethodLessons.length);
-    options[0].triggerEventHandler('click', null);
-    fixture.detectChanges();
-    expect(formControlSpy).toHaveBeenCalledTimes(1);
-  });
-  it('should call inputFromControl enable if the input value has been set', async () => {
-    component.ngOnInit();
-    fixture.detectChanges();
-    const input = fixture.debugElement.query(
-      By.css('.learning-plan-goal-progress-management__input')
-    );
-    const inputElement = input.nativeElement;
-    await updateInputValue(inputElement, fixture, 'fire');
-    const autocompleteOptions = fixture.debugElement.queryAll(
-      By.css('.learning-plan-goal-progress-management__autocomplete-option')
-    );
-    expect(autocompleteOptions.length).toBe(1);
-    autocompleteOptions[0].triggerEventHandler('click', null);
-    fixture.detectChanges();
-    expect(inputElement.disabled).toBe(false);
+
+    it('should show an option for each methodLesson', () => {
+      component.ngOnInit();
+      fixture.detectChanges();
+      const options = fixture.debugElement.queryAll(
+        By.css('.learning-plan-goal-progress-management__list-option')
+      );
+      expect(options.length).toBe(mockMethodLessons.length);
+      options.forEach((option, index) => {
+        expect(option.nativeElement.textContent).toBe(
+          `${mockMethodLessons[index].values.join(' > ')}`
+        );
+      });
+    });
+
+    it('should show the autocomplete values when the input is focused', async () => {
+      component.ngOnInit();
+      fixture.detectChanges();
+      const input = fixture.debugElement.query(
+        By.css('.learning-plan-goal-progress-management__input')
+      );
+      const inputElement = input.nativeElement;
+      expect(input).toBeTruthy();
+      expect(inputElement).toBeTruthy();
+      await updateInputValue(inputElement, fixture, '');
+      const autocompleteOptions = fixture.debugElement.queryAll(
+        By.css('.learning-plan-goal-progress-management__autocomplete-option')
+      );
+      expect(autocompleteOptions.length).toBe(mockUserLessons.length);
+      autocompleteOptions.forEach((autocompleteOption, index) => {
+        expect(autocompleteOption.nativeElement.textContent).toBe(
+          ` ${mockUserLessons[index].description} `
+        );
+      });
+    });
+
+    it('should show the filtered autocomplete values when the input is focused and a string value was entered', async () => {
+      component.ngOnInit();
+      fixture.detectChanges();
+      const input = fixture.debugElement.query(
+        By.css('.learning-plan-goal-progress-management__input')
+      );
+      const inputElement = input.nativeElement;
+      expect(input).toBeTruthy();
+      expect(inputElement).toBeTruthy();
+      await updateInputValue(inputElement, fixture, 'fire');
+      const autocompleteOptions = fixture.debugElement.queryAll(
+        By.css('.learning-plan-goal-progress-management__autocomplete-option')
+      );
+      expect(autocompleteOptions.length).toBe(1);
+      expect(autocompleteOptions[0].nativeElement.textContent).toBe(
+        ` ${mockUserLessons[3].description} `
+      );
+    });
+
+    it('should call inputFormControl disable if a lessonMethod selection was made', () => {
+      component.ngOnInit();
+      fixture.detectChanges();
+      const formControlSpy = jest.spyOn(
+        component['inputFromControl'], // TODO refactor -> protected
+        'disable'
+      );
+      const options = fixture.debugElement.queryAll(
+        By.css('.learning-plan-goal-progress-management__list-option')
+      );
+      expect(options.length).toBe(mockMethodLessons.length);
+      options[0].triggerEventHandler('click', null);
+      fixture.detectChanges();
+      expect(formControlSpy).toHaveBeenCalledTimes(1);
+    });
+
+    it('should not disable the input when an autocomplete value is selected', async () => {
+      component.ngOnInit();
+      fixture.detectChanges();
+      const input = fixture.debugElement.query(
+        By.css('.learning-plan-goal-progress-management__input')
+      );
+      const inputElement = input.nativeElement;
+      await updateInputValue(inputElement, fixture, 'fire');
+      const autocompleteOptions = fixture.debugElement.queryAll(
+        By.css('.learning-plan-goal-progress-management__autocomplete-option')
+      );
+      expect(autocompleteOptions.length).toBe(1);
+      autocompleteOptions[0].triggerEventHandler('click', null);
+      fixture.detectChanges();
+      expect(inputElement.disabled).toBe(false);
+    });
   });
 
   describe('data and streams', () => {

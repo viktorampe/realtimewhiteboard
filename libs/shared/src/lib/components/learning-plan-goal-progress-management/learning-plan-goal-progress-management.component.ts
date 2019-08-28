@@ -41,9 +41,6 @@ export class LearningPlanGoalProgressManagementComponent implements OnInit {
   public learningPlanGoal: LearningPlanGoalInterface;
   public classGroup: ClassGroupInterface;
 
-  // TODO remove -> will depend on userLesson input
-  public isUserLessonInput = true;
-
   constructor(
     public dialogRef: MatDialogRef<LearningPlanGoalProgressManagementComponent>,
     @Inject(MAT_DIALOG_DATA)
