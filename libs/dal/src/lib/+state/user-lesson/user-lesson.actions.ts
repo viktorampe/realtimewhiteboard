@@ -157,3 +157,6 @@ export type UserLessonsActions =
   | CreateUserLesson
   | CreateUserLessonWithLearningPlanGoalProgresses
   | AddUserLessonWithLearningPlanGoalProgresses;
+
+// needed because we're not running typescript 3.5
+type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
