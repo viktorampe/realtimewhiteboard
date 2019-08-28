@@ -31,10 +31,15 @@
       </mat-autocomplete>
     </mat-form-field>
     <h3 class="mat-h3">... of klik een les uit de methode aan</h3>
-    <mat-selection-list>
+    <mat-selection-list
+      [disabled]="isSelectionListDisabled()"
+      #selectionList
+      (selectionChange)="selectionChanged()"
+    >
       <mat-list-option
         *ngFor="let methodLesson of (methodLessonsForBook$ | async)"
         checkboxPosition="before"
+        [value]="methodLesson"
         class="learning-plan-goal-progress-management__list-option"
         >{{ methodLesson.values.join(' > ') }}</mat-list-option
       >

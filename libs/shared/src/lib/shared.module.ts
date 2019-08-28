@@ -7,6 +7,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import {
   MatAutocompleteModule,
   MatBadgeModule,
+  MatButtonModule,
   MatDialogModule,
   MatFormFieldModule,
   MatIconModule,
@@ -90,6 +91,7 @@ import { CONTENT_ACTIONS_SERVICE_TOKEN } from './services/content-actions/conten
     RouterModule,
     MatSnackBarModule,
     MatDialogModule,
+    MatButtonModule,
     MatListModule,
     MatTooltipModule,
     UtilsModule,
