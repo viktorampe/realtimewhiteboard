@@ -26,7 +26,8 @@ import {
   TocServiceInterface,
   TOC_SERVICE_TOKEN,
   UnlockedContentActions,
-  UserActions
+  UserActions,
+  UserLessonActions
 } from '@campus/dal';
 import {
   SearchFilterCriteriaFixture,
@@ -182,7 +183,7 @@ export class LoginpageComponent implements OnInit {
 
     this.store.dispatch(
       new LearningPlanGoalProgressActions.ToggleLearningPlanGoalProgress({
-        personId: userId,
+        userId,
         classGroupId,
         userLessonId,
         learningPlanGoalId,
@@ -208,7 +209,7 @@ export class LoginpageComponent implements OnInit {
 
     this.store.dispatch(
       new LearningPlanGoalProgressActions.BulkAddLearningPlanGoalProgresses({
-        personId: userId,
+        userId,
         classGroupId,
         userLessonId,
         learningPlanGoalIds,
@@ -220,6 +221,27 @@ export class LoginpageComponent implements OnInit {
       select(LearningPlanGoalProgressQueries.findMany, {
         classGroupId,
         userLessonId
+      })
+    );
+  }
+
+  public createUserLessonWithLearningPlanGoalProgresses() {
+    const userId = this.authService.userId;
+    const classGroupId = 5;
+    const learningPlanGoalId = 1;
+    const eduContentBookId = 34;
+
+    this.store.dispatch(
+      new UserLessonActions.CreateUserLessonWithLearningPlanGoalProgresses({
+        userId,
+        userLesson: { description: 'foo' },
+        learningPlanGoalProgresses: [
+          {
+            classGroupId,
+            eduContentBookId,
+            learningPlanGoalId
+          }
+        ]
       })
     );
   }
