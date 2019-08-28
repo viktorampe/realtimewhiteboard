@@ -3,11 +3,15 @@ import { PortalModule } from '@angular/cdk/portal';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Inject, ModuleWithProviders, NgModule } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 import {
+  MatAutocompleteModule,
   MatBadgeModule,
   MatDialogModule,
+  MatFormFieldModule,
   MatIconModule,
   MatIconRegistry,
+  MatInputModule,
   MatListModule,
   MatMenuModule,
   MatSnackBarModule,
@@ -90,7 +94,11 @@ import { CONTENT_ACTIONS_SERVICE_TOKEN } from './services/content-actions/conten
     MatTooltipModule,
     UtilsModule,
     MatMenuModule,
-    HttpClientModule
+    MatAutocompleteModule,
+    MatFormFieldModule,
+    HttpClientModule,
+    MatInputModule,
+    ReactiveFormsModule
   ],
   declarations: [
     HeaderComponent,
