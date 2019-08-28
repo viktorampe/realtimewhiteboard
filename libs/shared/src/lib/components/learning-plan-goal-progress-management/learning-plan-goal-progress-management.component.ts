@@ -113,7 +113,9 @@ export class LearningPlanGoalProgressManagementComponent implements OnInit {
     else this.inputFromControl.enable();
   }
 
-  public saveForUserLesson(userLesson: UserLessonInterface): void {
+  public saveForUserLesson(): void {
+    const userLesson = { description: this.inputFromControl.value };
+
     this.learningPlanGoalProgressManagerVM.createLearningPlanGoalProgressForUserLesson(
       this.learningPlanGoal,
       this.classGroup,
@@ -122,7 +124,11 @@ export class LearningPlanGoalProgressManagementComponent implements OnInit {
     this.closeDialog();
   }
 
-  public saveForEduContentTOCselection(eduContentTOCids: number[]): void {
+  public saveForEduContentTOCselection(): void {
+    const eduContentTOCids = this.matSelectionList.selectedOptions.selected.map(
+      option => option.value.eduContentTocId
+    );
+
     this.learningPlanGoalProgressManagerVM.createLearningPlanGoalProgressForEduContentTOCs(
       this.learningPlanGoal,
       this.classGroup,

@@ -7,6 +7,7 @@ import {
   MatFormFieldModule,
   MatInputModule,
   MatListModule,
+  MatSelectionList,
   MAT_DIALOG_DATA
 } from '@angular/material';
 import { By, HAMMER_LOADER } from '@angular/platform-browser';
@@ -340,13 +341,18 @@ describe('LearningPlanGoalProgressManagementComponent', () => {
       expect(dialogRef.close).toHaveBeenCalled();
     });
 
-    it('saveForUserLesson should call the correct method on the viewmodel and close the dialog', () => {
+    it('saveForUserLesson should call the correct method on the viewmodel and close the dialog', async () => {
       lpgpManagementViewModel.createLearningPlanGoalProgressForUserLesson = jest.fn();
       component.closeDialog = jest.fn();
 
-      const userLesson = { description: 'foo' };
+      const input = fixture.debugElement.query(
+        By.css('.learning-plan-goal-progress-management__input')
+      ).nativeElement;
 
-      component.saveForUserLesson(userLesson);
+      await updateInputValue(input, fixture, 'some random string');
+      const userLesson = { description: 'some random string' };
+
+      component.saveForUserLesson();
 
       expect(
         lpgpManagementViewModel.createLearningPlanGoalProgressForUserLesson
@@ -368,9 +374,17 @@ describe('LearningPlanGoalProgressManagementComponent', () => {
       lpgpManagementViewModel.createLearningPlanGoalProgressForEduContentTOCs = jest.fn();
       component.closeDialog = jest.fn();
 
-      const eduContentTOCids = [1, 2, 3];
+      const selectionList = fixture.debugElement.query(
+        By.css('mat-selection-list')
+      ).componentInstance as MatSelectionList;
 
-      component.saveForEduContentTOCselection(eduContentTOCids);
+      selectionList.selectAll();
+
+      const expectedEduContentTOCids = mockMethodLessons.map(
+        methodLesson => methodLesson.eduContentTocId
+      );
+
+      component.saveForEduContentTOCselection();
 
       expect(
         lpgpManagementViewModel.createLearningPlanGoalProgressForEduContentTOCs
@@ -383,7 +397,7 @@ describe('LearningPlanGoalProgressManagementComponent', () => {
       ).toHaveBeenCalledWith(
         mockInjectedData.learningPlanGoal,
         mockInjectedData.classGroup,
-        eduContentTOCids
+        expectedEduContentTOCids
       );
       expect(component.closeDialog).toHaveBeenCalled();
     });

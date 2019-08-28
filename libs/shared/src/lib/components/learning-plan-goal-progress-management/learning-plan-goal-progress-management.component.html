@@ -50,14 +50,14 @@
       *ngIf="isSelectionListDisabled()"
       class="learning-plan-goal-progress-management__button learning-plan-goal-progress-management__button--save"
       primary
-      (click)="saveForUserLesson({ description: 'foo' })"
+      (click)="saveForUserLesson()"
       >Opslaan (project)</campus-button
     >
     <campus-button
       *ngIf="!isSelectionListDisabled()"
       class="learning-plan-goal-progress-management__button learning-plan-goal-progress-management__button--save"
       primary
-      (click)="saveForEduContentTOCselection([1, 2, 3])"
+      (click)="saveForEduContentTOCselection()"
       >Opslaan (hoofdstuk)</campus-button
     >
     <campus-button
