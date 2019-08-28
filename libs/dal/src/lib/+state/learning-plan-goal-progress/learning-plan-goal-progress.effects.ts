@@ -14,6 +14,10 @@ import {
 import { UndoServiceInterface, UNDO_SERVICE_TOKEN } from '../../undo';
 import { EffectFeedback, EffectFeedbackActions } from '../effect-feedback';
 import {
+  AddUserLessonWithLearningPlanGoalProgresses,
+  UserLessonsActionTypes
+} from '../user-lesson/user-lesson.actions';
+import {
   AddLearningPlanGoalProgresses,
   BulkAddLearningPlanGoalProgresses,
   DeleteLearningPlanGoalProgress,
@@ -254,15 +258,18 @@ export class LearningPlanGoalProgressEffects {
 
   @Effect()
   startAddManyLearningPlanGoalProgresses$ = this.dataPersistence.optimisticUpdate(
-    LearningPlanGoalProgressesActionTypes.StartAddManyLearningPlanGoalProgresses,
+    LearningPlanGoalProgressesActionTypes.StartAddManyLearningPlanGoalProgresses ||
+      UserLessonsActionTypes.AddUserLessonWithLearningPlanGoalProgresses,
     {
       run: (
-        action: StartAddManyLearningPlanGoalProgresses,
+        action:
+          | StartAddManyLearningPlanGoalProgresses
+          | AddUserLessonWithLearningPlanGoalProgresses,
         state: DalState
       ) => {
         const intendedSideEffect = this.learningPlanGoalProgressService
           .createLearningPlanGoalProgresses(
-            action.payload.personId,
+            action.payload.userId,
             action.payload.learningPlanGoalProgresses
           )
           .pipe(
@@ -282,7 +289,12 @@ export class LearningPlanGoalProgressEffects {
           doneLabel: 'Leerplandoel voortgangen zijn toegevoegd.'
         });
       },
-      undoAction: (action: StartAddManyLearningPlanGoalProgresses, error) => {
+      undoAction: (
+        action:
+          | StartAddManyLearningPlanGoalProgresses
+          | AddUserLessonWithLearningPlanGoalProgresses,
+        error
+      ) => {
         const undoAction = undo(action);
         const effectFeedback = EffectFeedback.generateErrorFeedback(
           this.uuid(),

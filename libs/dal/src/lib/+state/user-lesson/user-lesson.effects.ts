@@ -13,7 +13,9 @@ import { EffectFeedback } from '../effect-feedback';
 import { AddEffectFeedback } from '../effect-feedback/effect-feedback.actions';
 import {
   AddUserLesson,
+  AddUserLessonWithLearningPlanGoalProgresses,
   CreateUserLesson,
+  CreateUserLessonWithLearningPlanGoalProgresses,
   LoadUserLessons,
   UserLessonsActionTypes,
   UserLessonsLoaded,
@@ -61,6 +63,59 @@ export class UserLessonEffects {
           );
       },
       onError: (action: CreateUserLesson, error) => {
+        return new AddEffectFeedback({
+          effectFeedback: EffectFeedback.generateErrorFeedback(
+            this.uuid(),
+            action,
+            `Het is niet gelukt om les "${
+              action.payload.userLesson.description
+            }" toe te voegen.`
+          )
+        });
+      }
+    }
+  );
+
+  @Effect()
+  createUserLessonWithLearningPlanGoalProgresses$ = this.dataPersistence.pessimisticUpdate(
+    UserLessonsActionTypes.CreateUserLessonWithLearningPlanGoalProgresses,
+    {
+      run: (
+        action: CreateUserLessonWithLearningPlanGoalProgresses,
+        state: DalState
+      ) => {
+        return this.userLessonService
+          .createForUser(action.payload.userId, action.payload.userLesson)
+          .pipe(
+            switchMap((userLesson: UserLessonInterface) => {
+              const actions: (
+                | AddEffectFeedback
+                | AddUserLessonWithLearningPlanGoalProgresses)[] = [
+                new AddUserLessonWithLearningPlanGoalProgresses({
+                  userId: action.payload.userId,
+                  userLesson,
+                  learningPlanGoalProgresses: action.payload.learningPlanGoalProgresses.map(
+                    learningPlanGoalprogress => ({
+                      ...learningPlanGoalprogress,
+                      userLessonId: userLesson.id
+                    })
+                  )
+                })
+              ];
+              const effectFeedback = EffectFeedback.generateSuccessFeedback(
+                this.uuid(),
+                action,
+                `Les "${action.payload.userLesson.description}" toegevoegd.`
+              );
+              actions.push(new AddEffectFeedback({ effectFeedback }));
+              return from(actions);
+            })
+          );
+      },
+      onError: (
+        action: CreateUserLessonWithLearningPlanGoalProgresses,
+        error
+      ) => {
         return new AddEffectFeedback({
           effectFeedback: EffectFeedback.generateErrorFeedback(
             this.uuid(),
