@@ -6,6 +6,17 @@ import {
   AppPathsInterface,
   KabasMethodsPagesInterface
 } from '../support/interfaces';
+import {
+  checkLPGChecked,
+  checkLPGUnchecked,
+  checkNavOpenBoeke,
+  checkSearchResultCount,
+  clickBulkLPGCheckbox,
+  clickDiaboloOutroFilter,
+  clickLPGCheckbox,
+  enterSearchTerm,
+  getActiveTab
+} from './methods';
 
 describe('Methods', () => {
   const apiUrl = cyEnv('apiUrl');
@@ -25,36 +36,6 @@ describe('Methods', () => {
       setup.kabasMethodsPages.login.password
     );
   });
-
-  function checkNavOpenBoeke() {
-    dataCy('nav-open-boeke').click();
-    cy.window()
-      .its('open')
-      .should(
-        'be.calledWithExactly',
-        `${apiUrl}${apiPaths.eduContent}/${
-          setup.kabasMethodsPages.expected.boeke.eduContentId
-        }/redirectURL`
-      );
-  }
-
-  function enterSearchTerm() {
-    dataCy('search-filters')
-      .find('campus-search-term input')
-      .type(setup.kabasMethodsPages.searchTerm)
-      .type('{enter}');
-  }
-
-  function clickDiaboloFilter() {
-    dataCy('search-filters')
-      .find('.button-toggle-filter-component__button')
-      .last()
-      .click();
-  }
-
-  function hasSearchResultCount(count: number) {
-    cy.get('edu-content-search-result').should('have.length', count);
-  }
 
   describe('methods overview page', () => {
     beforeEach(() => {
@@ -97,7 +78,7 @@ describe('Methods', () => {
         );
     });
     it('should show the boeke link in the top bar', () => {
-      checkNavOpenBoeke();
+      checkNavOpenBoeke(setup);
     });
     it('should show the general files', () => {
       dataCy('general-file').should(
@@ -134,7 +115,7 @@ describe('Methods', () => {
       );
     });
     it('should show the boeke link in the top bar', () => {
-      checkNavOpenBoeke();
+      checkNavOpenBoeke(setup);
     });
     it('should show the lesson links', () => {
       dataCy('lesson-link')
@@ -156,14 +137,14 @@ describe('Methods', () => {
       );
     });
     it('should filter on search term', () => {
-      enterSearchTerm();
-      hasSearchResultCount(
+      enterSearchTerm(setup);
+      checkSearchResultCount(
         setup.kabasMethodsPages.expected.chapterSearchByTerm.results
       );
     });
     it('should filter on diabolo phase', () => {
-      clickDiaboloFilter();
-      hasSearchResultCount(
+      clickDiaboloOutroFilter();
+      checkSearchResultCount(
         setup.kabasMethodsPages.expected.chapterSearchDiabolo.results
       );
     });
@@ -183,7 +164,7 @@ describe('Methods', () => {
       );
     });
     it('should show the boeke link in the top bar', () => {
-      checkNavOpenBoeke();
+      checkNavOpenBoeke(setup);
     });
     it('should show the lesson links', () => {
       dataCy('lesson-link')
@@ -205,14 +186,14 @@ describe('Methods', () => {
       );
     });
     it('should filter on search term', () => {
-      enterSearchTerm();
-      hasSearchResultCount(
+      enterSearchTerm(setup);
+      checkSearchResultCount(
         setup.kabasMethodsPages.expected.lessonSearchByTerm.results
       );
     });
     it('should filter on diabolo phase', () => {
-      clickDiaboloFilter();
-      hasSearchResultCount(
+      clickDiaboloOutroFilter();
+      checkSearchResultCount(
         setup.kabasMethodsPages.expected.lessonSearchDiabolo.results
       );
     });
@@ -228,86 +209,56 @@ describe('Methods', () => {
     });
 
     it('should check off a learning plan goal', () => {
-      dataCy('goals-check-box-table')
-        .find('mat-checkbox')
-        .first()
-        .click();
+      clickLPGCheckbox(0);
 
       dataCy('back-link').click();
 
-      dataCy('goals-check-box-table')
-        .find('mat-checkbox')
-        .first()
-        .should('have.class', 'mat-checkbox-checked');
+      checkLPGChecked(0);
     });
 
     it('should uncheck a learning plan goal', () => {
-      dataCy('goals-check-box-table')
-        .find('mat-checkbox')
-        .eq(1)
-        .click();
+      clickLPGCheckbox(1);
 
       dataCy('back-link').click();
 
-      dataCy('goals-check-box-table')
-        .find('mat-checkbox')
-        .eq(1)
-        .click();
+      clickLPGCheckbox(1);
 
       dataCy('lesson-link')
         .first()
         .click();
 
-      dataCy('goals-check-box-table')
-        .find('mat-checkbox')
-        .eq(1)
-        .should('not.have.class', 'mat-checkbox-checked');
+      checkLPGUnchecked(1);
     });
 
     it('should stay on the learning plan goals tab', () => {
-      cy.get('.mat-tab-label-active')
-        .find('.mat-tab-label-content')
-        .should('have.text', 'Leerplandoelen');
+      getActiveTab().should('have.text', 'Leerplandoelen');
 
       dataCy('back-link').click();
 
-      cy.get('.mat-tab-label-active')
-        .find('.mat-tab-label-content')
-        .should('have.text', 'Leerplandoelen');
+      getActiveTab().should('have.text', 'Leerplandoelen');
     });
 
     it('should bulk check learning plan goals in lesson', () => {
-      dataCy('goals-check-box-table')
-        .find('.ui-multi-check-box-table__body__row--subLevel--item')
-        .click();
+      clickBulkLPGCheckbox(0);
 
       dataCy('back-link').click();
 
       for (let i = 0; i <= 2; i++) {
-        dataCy('goals-check-box-table')
-          .find('mat-checkbox')
-          .eq(i)
-          .should('have.class', 'mat-checkbox-checked');
+        checkLPGChecked(i);
       }
     });
 
     it('should bulk check learning plan goals in chapter', () => {
       dataCy('back-link').click();
 
-      dataCy('goals-check-box-table')
-        .find('.ui-multi-check-box-table__body__row--subLevel--item')
-        .eq(1)
-        .click();
+      clickBulkLPGCheckbox(1);
 
       dataCy('lesson-link')
         .last()
         .click();
 
       for (let i = 0; i <= 2; i++) {
-        dataCy('goals-check-box-table')
-          .find('mat-checkbox')
-          .eq(i)
-          .should('have.class', 'mat-checkbox-checked');
+        checkLPGChecked(i);
       }
     });
   });
