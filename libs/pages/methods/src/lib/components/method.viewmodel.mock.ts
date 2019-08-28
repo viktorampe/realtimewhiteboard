@@ -150,6 +150,10 @@ export class MockMethodViewModel
     return;
   }
 
+  public exportLearningPlanGoalProgress(): void {
+    return;
+  }
+
   public updateState(state: SearchStateInterface): void {}
 
   openEduContentAsExercise(eduContent: any): void {}
@@ -157,6 +161,10 @@ export class MockMethodViewModel
   openEduContentAsStream(eduContent: EduContent): void {}
   openEduContentAsDownload(eduContent: EduContent): void {}
   openBoeke(eduContent: EduContent): void {}
+  openLearningPlanGoalProgressManagementDialog(
+    learningPlanGoal: LearningPlanGoalInterface,
+    classGroup: ClassGroupInterface
+  ): void {}
 
   public onLearningPlanGoalProgressChanged(
     classGroupId: number,

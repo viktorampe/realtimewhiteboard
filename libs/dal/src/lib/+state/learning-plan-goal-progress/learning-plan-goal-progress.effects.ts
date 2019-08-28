@@ -5,22 +5,25 @@ import { DataPersistence } from '@nrwl/nx';
 import { undo } from 'ngrx-undo';
 import { combineLatest, from, Observable } from 'rxjs';
 import { map, mapTo, switchMap, take } from 'rxjs/operators';
-import { DalActions, DalState } from '..';
+import { DalState } from '..';
 import { LearningPlanGoalProgressInterface } from '../../+models';
 import {
   LearningPlanGoalProgressServiceInterface,
   LEARNING_PLAN_GOAL_PROGRESS_SERVICE_TOKEN
 } from '../../learning-plan-goal-progress';
+import { UndoServiceInterface, UNDO_SERVICE_TOKEN } from '../../undo';
 import { EffectFeedback, EffectFeedbackActions } from '../effect-feedback';
 import {
   AddLearningPlanGoalProgresses,
   BulkAddLearningPlanGoalProgresses,
   DeleteLearningPlanGoalProgress,
+  DeleteLearningPlanGoalProgresses,
   LearningPlanGoalProgressesActionTypes,
   LearningPlanGoalProgressesLoaded,
   LearningPlanGoalProgressesLoadError,
   LoadLearningPlanGoalProgresses,
   StartAddLearningPlanGoalProgresses,
+  StartAddManyLearningPlanGoalProgresses,
   ToggleLearningPlanGoalProgress
 } from './learning-plan-goal-progress.actions';
 import { findOne } from './learning-plan-goal-progress.selectors';
@@ -64,7 +67,7 @@ export class LearningPlanGoalProgressEffects {
       ): Observable<
         StartAddLearningPlanGoalProgresses | DeleteLearningPlanGoalProgress
       > => {
-        const { personId, eduContentTOCId, ...selectParams } = action.payload;
+        const { personId, ...selectParams } = action.payload;
 
         return this.dataPersistence.store.pipe(
           select(findOne, selectParams),
@@ -148,8 +151,12 @@ export class LearningPlanGoalProgressEffects {
           )
           .pipe(
             mapTo(
-              new DalActions.ActionSuccessful({
-                successfulAction: 'Leerplandoel voortgang verwijderd.'
+              new EffectFeedbackActions.AddEffectFeedback({
+                effectFeedback: EffectFeedback.generateSuccessFeedback(
+                  this.uuid(),
+                  action,
+                  'Leerplandoelvoortgang verwijderd.'
+                )
               })
             )
           );
@@ -160,6 +167,38 @@ export class LearningPlanGoalProgressEffects {
           this.uuid(),
           action,
           'Het is niet gelukt om de status van het leerplandoel aan te passen.'
+        );
+        const effectFeedbackAction = new EffectFeedbackActions.AddEffectFeedback(
+          { effectFeedback }
+        );
+        return from([undoAction, effectFeedbackAction]);
+      }
+    }
+  );
+
+  @Effect()
+  deleteLearningPlanGoalProgresses$ = this.dataPersistence.optimisticUpdate(
+    LearningPlanGoalProgressesActionTypes.DeleteLearningPlanGoalProgresses,
+    {
+      run: (action: DeleteLearningPlanGoalProgresses, state: DalState) => {
+        return this.undoService.dispatchActionAsUndoable({
+          action: action,
+          dataPersistence: this.dataPersistence,
+          intendedSideEffect: this.learningPlanGoalProgressService.deleteLearningPlanGoalProgresses(
+            action.payload.userId,
+            action.payload.ids
+          ),
+          undoLabel: 'Leerplandoel voortgangen worden verwijderd.',
+          undoneLabel: 'Leerplandoel voortgangen zijn niet verwijderd.',
+          doneLabel: 'Leerplandoel voortgangen zijn verwijderd.'
+        });
+      },
+      undoAction: (action: DeleteLearningPlanGoalProgresses, error) => {
+        const undoAction = undo(action);
+        const effectFeedback = EffectFeedback.generateErrorFeedback(
+          this.uuid(),
+          action,
+          'Het is niet gelukt om de status van het leerplandoelen aan te passen.'
         );
         const effectFeedbackAction = new EffectFeedbackActions.AddEffectFeedback(
           { effectFeedback }
@@ -181,8 +220,6 @@ export class LearningPlanGoalProgressEffects {
         const {
           learningPlanGoalIds,
           personId,
-          eduContentTOCId,
-          eduContentBookId,
           ...selectParams
         } = action.payload;
 
@@ -219,11 +256,57 @@ export class LearningPlanGoalProgressEffects {
     )
   );
 
+  @Effect()
+  startAddManyLearningPlanGoalProgresses$ = this.dataPersistence.optimisticUpdate(
+    LearningPlanGoalProgressesActionTypes.StartAddManyLearningPlanGoalProgresses,
+    {
+      run: (
+        action: StartAddManyLearningPlanGoalProgresses,
+        state: DalState
+      ) => {
+        const intendedSideEffect = this.learningPlanGoalProgressService
+          .createLearningPlanGoalProgresses(
+            action.payload.personId,
+            action.payload.learningPlanGoalProgresses
+          )
+          .pipe(
+            map(
+              learningPlanGoalProgresses =>
+                new AddLearningPlanGoalProgresses({
+                  learningPlanGoalProgresses
+                })
+            )
+          );
+        return this.undoService.dispatchActionAsUndoable({
+          action: action,
+          dataPersistence: this.dataPersistence,
+          intendedSideEffect: intendedSideEffect,
+          undoLabel: 'Leerplandoel voortgangen worden toegevoegd.',
+          undoneLabel: 'Leerplandoel voortgangen werden niet toegevoegd.',
+          doneLabel: 'Leerplandoel voortgangen zijn toegevoegd.'
+        });
+      },
+      undoAction: (action: StartAddManyLearningPlanGoalProgresses, error) => {
+        const undoAction = undo(action);
+        const effectFeedback = EffectFeedback.generateErrorFeedback(
+          this.uuid(),
+          action,
+          'Het is niet gelukt om de status van de leerplandoelen aan te passen.'
+        );
+        const effectFeedbackAction = new EffectFeedbackActions.AddEffectFeedback(
+          { effectFeedback }
+        );
+        return from([undoAction, effectFeedbackAction]);
+      }
+    }
+  );
+
   constructor(
     private actions: Actions,
     private dataPersistence: DataPersistence<DalState>,
     @Inject(LEARNING_PLAN_GOAL_PROGRESS_SERVICE_TOKEN)
     private learningPlanGoalProgressService: LearningPlanGoalProgressServiceInterface,
+    @Inject(UNDO_SERVICE_TOKEN) private undoService: UndoServiceInterface,
     @Inject('uuid') private uuid: Function
   ) {}
 }

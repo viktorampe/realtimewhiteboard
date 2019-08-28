@@ -19,7 +19,11 @@ import {
   ENVIRONMENT_SEARCHMODES_TOKEN,
   SharedModule
 } from '@campus/shared';
-import { MultiCheckBoxTableItemColumnInterface, UiModule } from '@campus/ui';
+import {
+  MultiCheckBoxTableChangeEventInterface,
+  MultiCheckBoxTableItemColumnInterface,
+  UiModule
+} from '@campus/ui';
 import { hot } from '@nrwl/nx/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { MethodViewModel } from '../method.viewmodel';
@@ -167,6 +171,16 @@ describe('MethodComponent', () => {
     });
   });
 
+  describe('exportGoals', () => {
+    it('should call the correct method on the viewmodel', () => {
+      jest.spyOn(methodViewModel, 'exportLearningPlanGoalProgress');
+
+      component.clickExportGoals();
+
+      expect(methodViewModel.exportLearningPlanGoalProgress).toHaveBeenCalled();
+    });
+  });
+
   describe('openGeneralFile', () => {
     it('should call the correct method on the viewmodel', () => {
       jest.spyOn(methodViewModel, 'openEduContentAsDownload');
@@ -181,8 +195,26 @@ describe('MethodComponent', () => {
   });
 
   describe('clickProgress', () => {
-    it('is not yet implemented', () => {
-      // TODO
+    it("should call the viewmodel's openLearningPlanGoalProgressManagementDialog()", () => {
+      jest.spyOn(
+        methodViewModel,
+        'openLearningPlanGoalProgressManagementDialog'
+      );
+
+      const event: MultiCheckBoxTableChangeEventInterface<any, any, any> = {
+        column: { classGroup: 'I am a classGroup' },
+        item: { lpg: 'I am a learning plan goal' },
+        subLevel: { foo: 'I am not relevant' }
+      };
+
+      component.clickProgress(event);
+
+      expect(
+        methodViewModel.openLearningPlanGoalProgressManagementDialog
+      ).toHaveBeenCalledWith(
+        { lpg: 'I am a learning plan goal' },
+        { classGroup: 'I am a classGroup' }
+      );
     });
   });
 });

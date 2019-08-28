@@ -10,7 +10,14 @@ export const icons = {
   'exercise:finished': 'assets/icons/exercise-finished.svg',
   lesmateriaal: 'assets/icons/lesmateriaal.svg',
   'select-all': 'assets/icons/done_all.svg',
-
+  'import-export': 'assets/icons/material/import-export.svg',
+  'bordered:favorites': 'assets/icons/favorites2.svg',
+  'bordered:history': 'assets/icons/clock2.svg',
+  profile: 'assets/icons/account-circle.svg',
+  avatar: 'assets/icons/avatar.svg',
+  notifications: 'assets/icons/material/notifications.svg',
+  settings: 'assets/icons/settings.svg',
+  account: 'assets/icons/account-circle.svg',
   //TODO: These are TEMPORARY SVGs for Diabolo that I made from the PNGs
   //get the OFFICIAL files from Antoon later
   'diabolo-intro': 'assets/icons/diabolo/intro.svg',

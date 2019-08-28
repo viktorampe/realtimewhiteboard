@@ -5,8 +5,14 @@
     [iconClass]="'book'"
     *ngIf="(boeke$ | async) as boeke"
     (click)="clickOpenBoeke(boeke)"
-  ></campus-button
-></campus-page-bar>
+  ></campus-button>
+  <campus-button
+    campusPrimary
+    iconClass="import-export"
+    *ngIf="(currentTab$ | async) === 1"
+    (click)="clickExportGoals()"
+  ></campus-button>
+</campus-page-bar>
 <div class="method-method__container">
   <campus-collapsible-sheet>
     <div aside>

@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DalModule } from '@campus/dal';
+import { AuthenticationGuard, TermPrivacyGuard } from '@campus/guards';
 import { SharedModule } from '@campus/shared';
 import { UiModule } from '@campus/ui';
 import { NxModule } from '@nrwl/nx';
@@ -43,7 +44,7 @@ configureBufferSize(150);
     AppEffectsModule,
     AppStoreModule
   ],
-  providers: [],
+  providers: [AuthenticationGuard, TermPrivacyGuard],
   bootstrap: [AppComponent],
   entryComponents: [EduContentSearchResultComponent]
 })

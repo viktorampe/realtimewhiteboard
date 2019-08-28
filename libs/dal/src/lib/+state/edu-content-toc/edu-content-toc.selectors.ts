@@ -98,6 +98,7 @@ export const getChaptersForBook = createSelector(
       if (currentToc.treeId === props.bookId && currentToc.depth === 0) {
         acc.push(currentToc);
       }
+
       return acc;
     }, [])
 );
@@ -135,3 +136,40 @@ export const getTocsForBookAndLearningPlanGoal = createSelector(
     );
   }
 );
+
+export const getLessonDisplaysForBook = createSelector(
+  getTocsForBookAndLearningPlanGoal,
+  // getChaptersForBook relies on the fact that there will only be 2 levels
+  // use getTocsForBook to search in all levels
+  getChaptersForBook,
+  (
+    tocsForBookLearningPlanGoal: EduContentTOCInterface[],
+    tocsForBook: EduContentTOCInterface[]
+  ) => {
+    const array = tocsForBookLearningPlanGoal.map(currentToc => {
+      const display = {
+        eduContentTocId: currentToc.id,
+        values: [currentToc.title]
+      };
+
+      let parent = findParentTOC(currentToc, tocsForBook);
+      while (parent) {
+        display.values = [parent.title, ...display.values];
+        parent = findParentTOC(parent, tocsForBook);
+      }
+
+      return display;
+    });
+
+    return array;
+  }
+);
+
+function findParentTOC(currentToc, tocsToSearch) {
+  return tocsToSearch.find(
+    parentToc =>
+      parentToc.depth === currentToc.depth - 1 &&
+      currentToc.lft > parentToc.lft &&
+      currentToc.rgt < parentToc.rgt
+  );
+}

@@ -3,12 +3,16 @@ import { PortalModule } from '@angular/cdk/portal';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Inject, ModuleWithProviders, NgModule } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 import {
+  MatAutocompleteModule,
   MatBadgeModule,
-  MatDialog,
+  MatButtonModule,
   MatDialogModule,
+  MatFormFieldModule,
   MatIconModule,
   MatIconRegistry,
+  MatInputModule,
   MatListModule,
   MatMenuModule,
   MatSnackBarModule,
@@ -28,6 +32,7 @@ import { PermissionService } from './auth/permission.service';
 import { PERMISSION_SERVICE_TOKEN } from './auth/permission.service.interface';
 import { EduContentCollectionManagerService } from './collection-manager/edu-content-collection-manager.service';
 import { EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN } from './collection-manager/edu-content-collection-manager.service.interface';
+import { LearningPlanGoalProgressManagementComponent } from './components/learning-plan-goal-progress-management/learning-plan-goal-progress-management.component';
 import { PageBarContainerComponent } from './components/page-bar-container/page-bar-container.component';
 import { QuickLinkComponent } from './components/quick-link/quick-link.component';
 import { OPEN_STATIC_CONTENT_SERVICE_TOKEN } from './content/open-static-content.interface';
@@ -86,11 +91,16 @@ import { CONTENT_ACTIONS_SERVICE_TOKEN } from './services/content-actions/conten
     RouterModule,
     MatSnackBarModule,
     MatDialogModule,
+    MatButtonModule,
     MatListModule,
     MatTooltipModule,
     UtilsModule,
     MatMenuModule,
-    HttpClientModule
+    MatAutocompleteModule,
+    MatFormFieldModule,
+    HttpClientModule,
+    MatInputModule,
+    ReactiveFormsModule
   ],
   declarations: [
     HeaderComponent,
@@ -101,7 +111,8 @@ import { CONTENT_ACTIONS_SERVICE_TOKEN } from './services/content-actions/conten
     CampusRouterlinkDirective,
     DataCyDirective,
     AlertToNotificationItemPipe,
-    QuickLinkComponent
+    QuickLinkComponent,
+    LearningPlanGoalProgressManagementComponent
   ],
   exports: [
     HeaderComponent,
@@ -140,10 +151,12 @@ import { CONTENT_ACTIONS_SERVICE_TOKEN } from './services/content-actions/conten
       useClass: EduContentCollectionManagerService
     },
     { provide: CONTENT_ACTIONS_SERVICE_TOKEN, useClass: ContentActionsService },
-    AlertToNotificationItemPipe,
-    MatDialog
+    AlertToNotificationItemPipe
   ],
-  entryComponents: [QuickLinkComponent]
+  entryComponents: [
+    QuickLinkComponent,
+    LearningPlanGoalProgressManagementComponent
+  ]
 })
 export class SharedModule {
   constructor(

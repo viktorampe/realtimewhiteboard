@@ -21,7 +21,8 @@ export enum LearningPlanGoalProgressesActionTypes {
   ClearLearningPlanGoalProgresses = '[LearningPlanGoalProgresses] Clear LearningPlanGoalProgresses',
   ToggleLearningPlanGoalProgress = '[LearningPlanGoalProgresses] Toggle LearningPlanGoalProgresses',
   StartAddLearningPlanGoalProgresses = '[LearningPlanGoalProgresses] Start Add LearningPlanGoalProgresses',
-  BulkAddLearningPlanGoalProgresses = '[LearningPlanGoalProgresses] Bulk Add LearningPlanGoalProgresses'
+  BulkAddLearningPlanGoalProgresses = '[LearningPlanGoalProgresses] Bulk Add LearningPlanGoalProgresses',
+  StartAddManyLearningPlanGoalProgresses = '[LearningPlanGoalProgresses] Start Add many LearningPlanGoalProgresses'
 }
 
 export class LoadLearningPlanGoalProgresses implements Action {
@@ -130,11 +131,18 @@ export class DeleteLearningPlanGoalProgress
   ) {}
 }
 
-export class DeleteLearningPlanGoalProgresses implements Action {
+export class DeleteLearningPlanGoalProgresses
+  implements FeedbackTriggeringAction {
   readonly type =
     LearningPlanGoalProgressesActionTypes.DeleteLearningPlanGoalProgresses;
 
-  constructor(public payload: { ids: number[] }) {}
+  constructor(
+    public payload: {
+      ids: number[];
+      userId: number;
+      customFeedbackHandlers?: CustomFeedbackHandlersInterface;
+    }
+  ) {}
 }
 
 export class ClearLearningPlanGoalProgresses implements Action {
@@ -142,7 +150,8 @@ export class ClearLearningPlanGoalProgresses implements Action {
     LearningPlanGoalProgressesActionTypes.ClearLearningPlanGoalProgresses;
 }
 
-export class ToggleLearningPlanGoalProgress implements Action {
+export class ToggleLearningPlanGoalProgress
+  implements FeedbackTriggeringAction {
   readonly type =
     LearningPlanGoalProgressesActionTypes.ToggleLearningPlanGoalProgress;
 
@@ -154,6 +163,7 @@ export class ToggleLearningPlanGoalProgress implements Action {
       eduContentBookId: number;
       learningPlanGoalId: number;
       personId: number;
+      customFeedbackHandlers?: CustomFeedbackHandlersInterface;
     }
   ) {}
 }
@@ -192,6 +202,22 @@ export class StartAddLearningPlanGoalProgresses
   ) {}
 }
 
+export class StartAddManyLearningPlanGoalProgresses
+  implements FeedbackTriggeringAction {
+  readonly type =
+    LearningPlanGoalProgressesActionTypes.StartAddManyLearningPlanGoalProgresses;
+
+  constructor(
+    public payload: {
+      learningPlanGoalProgresses: (
+        | MinimalLearningPlanGoalProgressEduContentTocInterface
+        | MinimalLearningPlanGoalProgressUserLessonInterface)[];
+      personId: number;
+      customFeedbackHandlers?: CustomFeedbackHandlersInterface;
+    }
+  ) {}
+}
+
 export type LearningPlanGoalProgressesActions =
   | LoadLearningPlanGoalProgresses
   | LearningPlanGoalProgressesLoaded
@@ -207,4 +233,20 @@ export type LearningPlanGoalProgressesActions =
   | ClearLearningPlanGoalProgresses
   | ToggleLearningPlanGoalProgress
   | StartAddLearningPlanGoalProgresses
-  | BulkAddLearningPlanGoalProgresses;
+  | BulkAddLearningPlanGoalProgresses
+  | StartAddManyLearningPlanGoalProgresses;
+
+export interface MinimalLearningPlanGoalProgressUserLessonInterface
+  extends LearningPlanGoalProgressInterface {
+  classGroupId: number;
+  learningPlanGoalId: number;
+  userLessonId: number;
+  eduContentBookId: number;
+}
+
+export interface MinimalLearningPlanGoalProgressEduContentTocInterface
+  extends LearningPlanGoalProgressInterface {
+  classGroupId: number;
+  learningPlanGoalId: number;
+  eduContentTocId: number;
+}

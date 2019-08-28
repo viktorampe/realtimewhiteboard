@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { MatCardModule } from '@angular/material';
+import { MatCardModule, MatDialogModule } from '@angular/material';
 import { GuardsModule } from '@campus/guards';
 import { SearchModule } from '@campus/search';
 import { CONTENT_OPENER_TOKEN, SharedModule } from '@campus/shared';
@@ -20,7 +20,8 @@ import { PagesMethodsRoutingModule } from './pages-methods-routing.module';
     SearchModule,
     SharedModule,
     UiModule,
-    GuardsModule
+    GuardsModule,
+    MatDialogModule
   ],
   providers: [
     {
@@ -34,6 +35,7 @@ import { PagesMethodsRoutingModule } from './pages-methods-routing.module';
     MethodChapterComponent,
     MethodYearTileComponent
   ],
-  exports: []
+  exports: [],
+  entryComponents: []
 })
 export class PagesMethodsModule {}

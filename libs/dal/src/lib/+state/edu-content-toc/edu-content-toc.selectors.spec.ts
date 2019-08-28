@@ -348,4 +348,127 @@ describe('EduContentToc Selectors', () => {
       });
     });
   });
+
+  describe('getLessonDisplaysForBook', () => {
+    /**
+     *  book 1
+     *  - 1 (lpg 1,2)
+     *    - 2
+     *    - 3
+     *      - 4 (lpg 2)
+     *    - 5 (lpg 2,3)
+     *
+     * book 2
+     *  - 6 (lpg 1)
+     *    - 7 (lpg 2)
+     */
+
+    const mockTOCs = [
+      new EduContentTOCFixture({
+        id: 1,
+        treeId: 1,
+        depth: 0,
+        title: 'b1_1',
+        lft: 1,
+        rgt: 10,
+        learningPlanGoalIds: [1, 2]
+      }),
+      new EduContentTOCFixture({
+        id: 2,
+        treeId: 1,
+        depth: 1,
+        title: 'b1_1_2',
+        lft: 2,
+        rgt: 3,
+        learningPlanGoalIds: []
+      }),
+      new EduContentTOCFixture({
+        id: 3,
+        treeId: 1,
+        depth: 1,
+        title: 'b1_1_3',
+        lft: 4,
+        rgt: 7,
+        learningPlanGoalIds: []
+      }),
+      new EduContentTOCFixture({
+        id: 4,
+        treeId: 1,
+        depth: 2,
+        title: 'b1_1_3_4',
+        lft: 5,
+        rgt: 6,
+        learningPlanGoalIds: [2]
+      }),
+      new EduContentTOCFixture({
+        id: 5,
+        treeId: 1,
+        depth: 1,
+        title: 'b1_1_5',
+        lft: 8,
+        rgt: 9,
+        learningPlanGoalIds: [2, 3]
+      }),
+      new EduContentTOCFixture({
+        id: 6,
+        treeId: 2,
+        depth: 0,
+        title: 'b2_6',
+        lft: 1,
+        rgt: 4,
+        learningPlanGoalIds: [1]
+      }),
+      new EduContentTOCFixture({
+        id: 7,
+        treeId: 2,
+        depth: 1,
+        title: 'b2_6_7',
+        lft: 2,
+        rgt: 3,
+        learningPlanGoalIds: [2]
+      })
+    ];
+
+    beforeEach(() => {
+      eduContentTocState = createState(mockTOCs, [1, 2, 3], 'no error');
+      storeState = { eduContentTocs: eduContentTocState };
+    });
+
+    const tests = [
+      {
+        props: { bookId: 1, learningPlanGoalId: 1 },
+        expectedResult: [{ eduContentTocId: 1, values: ['b1_1'] }]
+      },
+      {
+        props: { bookId: 1, learningPlanGoalId: 2 },
+        expectedResult: [
+          { eduContentTocId: 1, values: ['b1_1'] },
+          { eduContentTocId: 4, values: ['b1_1_3_4'] }, // no direct parent in chaptersForBook
+          { eduContentTocId: 5, values: ['b1_1', 'b1_1_5'] }
+        ]
+      },
+      {
+        props: { bookId: 1, learningPlanGoalId: 3 },
+        expectedResult: [{ eduContentTocId: 5, values: ['b1_1', 'b1_1_5'] }]
+      },
+      {
+        props: { bookId: 2, learningPlanGoalId: 3 }, // no toc with lpg
+        expectedResult: []
+      },
+      {
+        props: { bookId: 3, learningPlanGoalId: 1 }, // no tocs for book
+        expectedResult: []
+      }
+    ];
+
+    tests.forEach(test => {
+      it('should return the correct display values', () => {
+        const results = EduContentTocQueries.getLessonDisplaysForBook(
+          storeState,
+          test.props
+        );
+        expect(results).toEqual(test.expectedResult);
+      });
+    });
+  });
 });

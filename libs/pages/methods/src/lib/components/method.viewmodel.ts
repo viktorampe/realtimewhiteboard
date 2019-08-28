@@ -1,4 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
+import { MatDialog } from '@angular/material';
+import { WINDOW } from '@campus/browser';
 import {
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
@@ -38,8 +40,12 @@ import {
 } from '@campus/search';
 import {
   ContentOpenerInterface,
+  EnvironmentApiInterface,
   EnvironmentSearchModesInterface,
+  ENVIRONMENT_API_TOKEN,
   ENVIRONMENT_SEARCHMODES_TOKEN,
+  LearningPlanGoalProgressManagementComponent,
+  LearningPlanGoalProgressManagementInterface,
   OpenStaticContentServiceInterface,
   OPEN_STATIC_CONTENT_SERVICE_TOKEN,
   ScormExerciseServiceInterface,
@@ -62,6 +68,7 @@ import {
   shareReplay,
   switchMap,
   switchMapTo,
+  take,
   withLatestFrom
 } from 'rxjs/operators';
 
@@ -134,7 +141,12 @@ export class MethodViewModel implements ContentOpenerInterface {
     @Inject(OPEN_STATIC_CONTENT_SERVICE_TOKEN)
     private openStaticContentService: OpenStaticContentServiceInterface,
     @Inject(SCORM_EXERCISE_SERVICE_TOKEN)
-    private scormExerciseService: ScormExerciseServiceInterface
+    private scormExerciseService: ScormExerciseServiceInterface,
+    @Inject(ENVIRONMENT_API_TOKEN)
+    private environmentApi: EnvironmentApiInterface,
+    @Inject(WINDOW)
+    private window: Window,
+    private dialog: MatDialog
   ) {
     this.initialize();
   }
@@ -282,6 +294,32 @@ export class MethodViewModel implements ContentOpenerInterface {
         personId: this.authService.userId
       })
     );
+  }
+
+  public exportLearningPlanGoalProgress() {
+    this.currentMethodParams$.pipe(take(1)).subscribe(currentMethodParams => {
+      this.window.location.href = `${this.environmentApi.APIBase}/api/People/${
+        this.authService.userId
+      }/downloadLearningPlanGoalProgressByBookId/${currentMethodParams.book}`;
+    });
+  }
+
+  public openLearningPlanGoalProgressManagementDialog(
+    learningPlanGoal: LearningPlanGoalInterface,
+    classGroup: ClassGroupInterface
+  ): void {
+    // we need the current book
+    this.currentBook$.pipe(take(1)).subscribe(book => {
+      const data: LearningPlanGoalProgressManagementInterface = {
+        learningPlanGoal,
+        classGroup,
+        book
+      };
+      this.dialog.open(LearningPlanGoalProgressManagementComponent, {
+        data,
+        autoFocus: false
+      });
+    });
   }
 
   private initialize() {
@@ -707,13 +745,25 @@ export class MethodViewModel implements ContentOpenerInterface {
             const learningPlanGoals: LearningPlanGoalInterface[] = lesson.learningPlanGoalIds.map(
               lpgId => learningPlanGoalsMap[lpgId]
             );
+
+            // filter out learningPlanGoalProgress without eduContentToc in currentLesson
+            const progressByGoalForLesson = Object.keys(progressByGoal).reduce(
+              (dict, key) => {
+                dict[key] = progressByGoal[key].filter(
+                  progress => progress.eduContentTOCId === lesson.id
+                );
+                return dict;
+              },
+              {}
+            );
+
             return {
               item: lesson,
               label: 'title',
               children: this.createCheckboxItemsForLearningPlanGoals(
                 learningPlanGoals,
                 classGroups,
-                progressByGoal
+                progressByGoalForLesson
               )
             };
           }
@@ -746,5 +796,42 @@ export class MethodViewModel implements ContentOpenerInterface {
           numeric: true
         });
       });
+  }
+
+  public deleteLearningPlanGoalProgressForLearningPlanGoalsClassGroups(
+    learningPlanGoal: LearningPlanGoalInterface,
+    classGroup: ClassGroupInterface
+  ) {
+    let learningPlanGoalProgressesToBeDeleted: LearningPlanGoalProgressInterface[];
+    this.getLearningPlanGoalProgressesForGroupLearningGoalAndBook(
+      learningPlanGoal,
+      classGroup
+    )
+      .pipe(take(1))
+      .subscribe(lpgs => (learningPlanGoalProgressesToBeDeleted = lpgs));
+    this.store.dispatch(
+      new LearningPlanGoalProgressActions.DeleteLearningPlanGoalProgresses({
+        userId: this.authService.userId,
+        ids: learningPlanGoalProgressesToBeDeleted.map(lpg => lpg.id)
+      })
+    );
+  }
+
+  private getLearningPlanGoalProgressesForGroupLearningGoalAndBook(
+    learningPlanGoal: LearningPlanGoalInterface,
+    classGroup: ClassGroupInterface
+  ): Observable<LearningPlanGoalProgressInterface[]> {
+    return this.currentMethodParams$.pipe(
+      take(1),
+      switchMap(params =>
+        this.store.pipe(
+          select(LearningPlanGoalProgressQueries.findMany, {
+            classGroupId: classGroup.id,
+            learningPlanGoalId: learningPlanGoal.id,
+            eduContentBookId: +params.book
+          })
+        )
+      )
+    );
   }
 }

@@ -1,7 +1,9 @@
 import { Component, NgZone } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import { MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
+import { WINDOW } from '@campus/browser';
 import {
   AUTH_SERVICE_TOKEN,
   ClassGroupActions,
@@ -50,12 +52,15 @@ import {
 import {
   EduContentSearchResultFixture,
   EnvironmentSearchModesInterface,
+  ENVIRONMENT_API_TOKEN,
   ENVIRONMENT_SEARCHMODES_TOKEN,
+  LearningPlanGoalProgressManagementComponent,
   OpenStaticContentServiceInterface,
   OPEN_STATIC_CONTENT_SERVICE_TOKEN,
   ScormExerciseServiceInterface,
   SCORM_EXERCISE_SERVICE_TOKEN
 } from '@campus/shared';
+import { MockWindow } from '@campus/testing';
 import {
   NavigationActionTiming,
   RouterNavigationAction,
@@ -81,6 +86,8 @@ describe('MethodViewModel', () => {
   let scormExerciseService: ScormExerciseServiceInterface;
   let searchModes: EnvironmentSearchModesInterface;
   let eduContentService: EduContentServiceInterface;
+  let mockWindow: MockWindow;
+  let matDialog: MatDialog;
 
   const bookId = 5;
   const diaboloBookId = 6;
@@ -178,28 +185,40 @@ describe('MethodViewModel', () => {
       learningPlanGoalId: 1,
       classGroupId: 11,
       eduContentTOCId: 3,
-      userLessonId: null
+      userLessonId: null,
+      eduContentBookId: bookId
     }),
     new LearningPlanGoalProgressFixture({
       id: 2,
       learningPlanGoalId: 2,
       classGroupId: 11,
       eduContentTOCId: 3,
-      userLessonId: null
+      userLessonId: null,
+      eduContentBookId: bookId
     }),
     new LearningPlanGoalProgressFixture({
       id: 3,
       learningPlanGoalId: 3,
       classGroupId: 11,
       eduContentTOCId: 4,
-      userLessonId: null
+      userLessonId: null,
+      eduContentBookId: bookId
     }),
     new LearningPlanGoalProgressFixture({
       id: 4,
       learningPlanGoalId: 3,
       classGroupId: 12,
       eduContentTOCId: 4,
-      userLessonId: null
+      userLessonId: null,
+      eduContentBookId: bookId
+    }),
+    new LearningPlanGoalProgressFixture({
+      id: 5,
+      learningPlanGoalId: 2,
+      classGroupId: 13,
+      eduContentTOCId: null,
+      userLessonId: 1,
+      eduContentBookId: bookId
     })
   ];
 
@@ -231,6 +250,8 @@ describe('MethodViewModel', () => {
   ];
 
   const mockAutoCompleteReturnValue = ['strings', 'for', 'autocomplete'];
+  const apiBase = 'https://api.kabas.test';
+  const userId = 1;
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
@@ -266,7 +287,7 @@ describe('MethodViewModel', () => {
       providers: [
         Store,
         { provide: RouterStateSerializer, useClass: CustomSerializer },
-        { provide: AUTH_SERVICE_TOKEN, useValue: { userId: 1 } },
+        { provide: AUTH_SERVICE_TOKEN, useValue: { userId } },
         {
           provide: EDU_CONTENT_SERVICE_TOKEN,
           useValue: {
@@ -286,12 +307,28 @@ describe('MethodViewModel', () => {
           }
         },
         {
+          provide: ENVIRONMENT_API_TOKEN,
+          useValue: {
+            APIBase: apiBase
+          }
+        },
+        {
           provide: OPEN_STATIC_CONTENT_SERVICE_TOKEN,
           useValue: { open: jest.fn() }
         },
         {
+          provide: WINDOW,
+          useClass: MockWindow
+        },
+        {
           provide: SCORM_EXERCISE_SERVICE_TOKEN,
           useValue: { previewExerciseFromUnlockedContent: jest.fn() }
+        },
+        {
+          provide: MatDialog,
+          useValue: {
+            open: jest.fn()
+          }
         }
       ]
     });
@@ -302,11 +339,14 @@ describe('MethodViewModel', () => {
     store = TestBed.get(Store);
     zone = TestBed.get(NgZone);
     router = TestBed.get(Router);
+    mockWindow = TestBed.get(WINDOW);
     loadInStore();
     openStaticContentService = TestBed.get(OPEN_STATIC_CONTENT_SERVICE_TOKEN);
     scormExerciseService = TestBed.get(SCORM_EXERCISE_SERVICE_TOKEN);
     eduContentService = TestBed.get(EDU_CONTENT_SERVICE_TOKEN);
     searchModes = TestBed.get(ENVIRONMENT_SEARCHMODES_TOKEN);
+
+    matDialog = TestBed.get(MatDialog);
   });
 
   function loadInStore() {
@@ -786,7 +826,7 @@ describe('MethodViewModel', () => {
         const expected = [
           {
             header: learningPlanGoals[1],
-            content: { 11: true, 12: false, 13: false }
+            content: { 11: true, 12: false, 13: true }
           },
           {
             header: learningPlanGoals[2],
@@ -836,7 +876,7 @@ describe('MethodViewModel', () => {
             children: [
               {
                 header: learningPlanGoals[1],
-                content: { 11: true, 12: false, 13: false }
+                content: { 11: false, 12: false, 13: false }
               },
               {
                 header: learningPlanGoals[2],
@@ -949,13 +989,15 @@ describe('MethodViewModel', () => {
       const learningPlanGoalId = 12;
       const eduContentTOCId = 13;
       const userLessonId = undefined;
+      const eduContentBookId = 728921451;
 
       const spy = jest.spyOn(store, 'dispatch');
       methodViewModel.onLearningPlanGoalProgressChanged(
         classGroupId,
         learningPlanGoalId,
         eduContentTOCId,
-        userLessonId
+        userLessonId,
+        eduContentBookId
       );
       expect(spy).toHaveBeenCalledTimes(1);
       expect(spy).toHaveBeenCalledWith(
@@ -964,7 +1006,8 @@ describe('MethodViewModel', () => {
           learningPlanGoalId,
           eduContentTOCId,
           userLessonId,
-          personId: 1
+          personId: 1,
+          eduContentBookId
         })
       );
     });
@@ -975,12 +1018,14 @@ describe('MethodViewModel', () => {
       const classGroupId = 11;
       const learningPlanGoalIds = [12, 22];
       const eduContentTOCId = 13;
+      const eduContentBookId = 728921451;
 
       const spy = jest.spyOn(store, 'dispatch');
       methodViewModel.onBulkLearningPlanGoalProgressChanged(
         classGroupId,
         learningPlanGoalIds,
-        eduContentTOCId
+        eduContentTOCId,
+        eduContentBookId
       );
       expect(spy).toHaveBeenCalledTimes(1);
       expect(spy).toHaveBeenCalledWith(
@@ -988,8 +1033,62 @@ describe('MethodViewModel', () => {
           classGroupId,
           eduContentTOCId,
           learningPlanGoalIds,
-          personId: 1
+          personId: 1,
+          eduContentBookId
         })
+      );
+    });
+  });
+
+  describe('deleteLearningPlanGoalProgressForLearningPlanGoalsClassGroups()', () => {
+    it('should dispatch a delete many action', () => {
+      const spy = jest.spyOn(store, 'dispatch');
+      methodViewModel.currentMethodParams$ = of({ book: bookId });
+      methodViewModel.deleteLearningPlanGoalProgressForLearningPlanGoalsClassGroups(
+        learningPlanGoals[0],
+        classGroups[0]
+      );
+
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy).toHaveBeenCalledWith(
+        new LearningPlanGoalProgressActions.DeleteLearningPlanGoalProgresses({
+          ids: [learningPlanGoalProgresses[0].id],
+          userId
+        })
+      );
+    });
+  });
+
+  describe('exportLearningPlanGoalProgress', () => {
+    it('should open a window with the correct url', () => {
+      navigateWithParams({ book: bookId });
+
+      const spy = jest.spyOn(mockWindow.location, 'href', 'set');
+      methodViewModel.exportLearningPlanGoalProgress();
+
+      expect(spy).toHaveBeenCalledWith(
+        `${apiBase}/api/People/${userId}/downloadLearningPlanGoalProgressByBookId/${bookId}`
+      );
+    });
+  });
+
+  describe('openLearningPlanGoalProgressManagementDialog()', () => {
+    it('should open a dialog with the learningPlanGoalProgressManagementComponent', () => {
+      navigateWithParams({ book: bookId });
+      methodViewModel.openLearningPlanGoalProgressManagementDialog(
+        { id: 1 } as LearningPlanGoalInterface,
+        { id: 2 }
+      );
+      expect(matDialog.open).toHaveBeenCalledWith(
+        LearningPlanGoalProgressManagementComponent,
+        {
+          data: {
+            learningPlanGoal: { id: 1 },
+            classGroup: { id: 2 },
+            book
+          },
+          autoFocus: false
+        }
       );
     });
   });
