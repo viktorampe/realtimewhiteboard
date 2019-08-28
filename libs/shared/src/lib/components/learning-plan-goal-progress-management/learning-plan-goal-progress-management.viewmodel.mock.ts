@@ -13,8 +13,9 @@ import { LearningPlanGoalProgressManagementViewModel } from './learning-plan-goa
 })
 export class MockLearningPlanGoalProgressManagementViewModel
   implements ViewModelInterface<LearningPlanGoalProgressManagementViewModel> {
-  userLessons$: BehaviorSubject<UserLessonInterface[]>;
-  getMethodLessonsForBook(): Observable<
+  public userLessons$ = new BehaviorSubject<UserLessonInterface[]>([]);
+
+  public getMethodLessonsForBook(): Observable<
     { eduContentTocId: number; values: string[] }[]
   > {
     return of([]);

@@ -17,11 +17,7 @@ export interface MethodLessonInterface {
 
 @Injectable({ providedIn: 'root' })
 export class LearningPlanGoalProgressManagementViewModel {
-  bookId: number;
-  learningPlanGoalId: number;
-
-  userLessons$: Observable<UserLessonInterface[]>;
-  methodLessonsForBook$: Observable<MethodLessonInterface[]>;
+  public userLessons$: Observable<UserLessonInterface[]>;
 
   constructor(private store: Store<DalState>) {
     this.initialize();
