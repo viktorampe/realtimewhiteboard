@@ -3,7 +3,7 @@ import { Actions, Effect, ofType } from '@ngrx/effects';
 import { select } from '@ngrx/store';
 import { DataPersistence } from '@nrwl/nx';
 import { undo } from 'ngrx-undo';
-import { combineLatest, from, Observable } from 'rxjs';
+import { combineLatest, from, merge, Observable } from 'rxjs';
 import { map, mapTo, switchMap, take } from 'rxjs/operators';
 import { DalState } from '..';
 import { LearningPlanGoalProgressInterface } from '../../+models';
@@ -257,10 +257,19 @@ export class LearningPlanGoalProgressEffects {
   );
 
   @Effect()
-  startAddManyLearningPlanGoalProgresses$ = this.dataPersistence.optimisticUpdate(
-    LearningPlanGoalProgressesActionTypes.StartAddManyLearningPlanGoalProgresses ||
+  startAddManyLearningPlanGoalProgresses$ = merge(
+    this.dataPersistence.optimisticUpdate(
+      LearningPlanGoalProgressesActionTypes.StartAddManyLearningPlanGoalProgresses,
+      this.getStartAddManyLearningPlanGoalProgressesOpts()
+    ),
+    this.dataPersistence.optimisticUpdate(
       UserLessonsActionTypes.AddUserLessonWithLearningPlanGoalProgresses,
-    {
+      this.getStartAddManyLearningPlanGoalProgressesOpts()
+    )
+  );
+
+  private getStartAddManyLearningPlanGoalProgressesOpts() {
+    return {
       run: (
         action:
           | StartAddManyLearningPlanGoalProgresses
@@ -273,12 +282,11 @@ export class LearningPlanGoalProgressEffects {
             action.payload.learningPlanGoalProgresses
           )
           .pipe(
-            map(
-              learningPlanGoalProgresses =>
-                new AddLearningPlanGoalProgresses({
-                  learningPlanGoalProgresses
-                })
-            )
+            map(learningPlanGoalProgresses => {
+              return new AddLearningPlanGoalProgresses({
+                learningPlanGoalProgresses
+              });
+            })
           );
         return this.undoService.dispatchActionAsUndoable({
           action: action,
@@ -306,8 +314,8 @@ export class LearningPlanGoalProgressEffects {
         );
         return from([undoAction, effectFeedbackAction]);
       }
-    }
-  );
+    };
+  }
 
   constructor(
     private actions: Actions,

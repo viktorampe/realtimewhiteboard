@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
 import { DataPersistence } from '@nrwl/nx';
-import { from } from 'rxjs';
+import { from, merge } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { DalState } from '..';
 import { UserLessonInterface } from '../../+models';
@@ -41,67 +41,53 @@ export class UserLessonEffects {
   );
 
   @Effect()
-  createUserLesson$ = this.dataPersistence.pessimisticUpdate(
-    UserLessonsActionTypes.CreateUserLesson,
-    {
-      run: (action: CreateUserLesson, state: DalState) => {
-        return this.userLessonService
-          .createForUser(action.payload.userId, action.payload.userLesson)
-          .pipe(
-            switchMap((userLesson: UserLessonInterface) => {
-              const actions: (AddEffectFeedback | AddUserLesson)[] = [
-                new AddUserLesson({ userLesson })
-              ];
-              const effectFeedback = EffectFeedback.generateSuccessFeedback(
-                this.uuid(),
-                action,
-                `Les "${action.payload.userLesson.description}" toegevoegd.`
-              );
-              actions.push(new AddEffectFeedback({ effectFeedback }));
-              return from(actions);
-            })
-          );
-      },
-      onError: (action: CreateUserLesson, error) => {
-        return new AddEffectFeedback({
-          effectFeedback: EffectFeedback.generateErrorFeedback(
-            this.uuid(),
-            action,
-            `Het is niet gelukt om les "${
-              action.payload.userLesson.description
-            }" toe te voegen.`
-          )
-        });
-      }
-    }
+  createUserLesson$ = merge(
+    this.dataPersistence.pessimisticUpdate(
+      UserLessonsActionTypes.CreateUserLesson,
+      this.getCreateUserLessonOpts()
+    ),
+    this.dataPersistence.pessimisticUpdate(
+      UserLessonsActionTypes.CreateUserLessonWithLearningPlanGoalProgresses,
+      this.getCreateUserLessonOpts()
+    )
   );
 
-  @Effect()
-  createUserLessonWithLearningPlanGoalProgresses$ = this.dataPersistence.pessimisticUpdate(
-    UserLessonsActionTypes.CreateUserLessonWithLearningPlanGoalProgresses,
-    {
+  private getCreateUserLessonOpts() {
+    return {
       run: (
-        action: CreateUserLessonWithLearningPlanGoalProgresses,
+        action:
+          | CreateUserLesson
+          | CreateUserLessonWithLearningPlanGoalProgresses,
         state: DalState
       ) => {
         return this.userLessonService
           .createForUser(action.payload.userId, action.payload.userLesson)
           .pipe(
             switchMap((userLesson: UserLessonInterface) => {
-              const actions: (
+              let actions: (
                 | AddEffectFeedback
-                | AddUserLessonWithLearningPlanGoalProgresses)[] = [
-                new AddUserLessonWithLearningPlanGoalProgresses({
-                  userId: action.payload.userId,
-                  userLesson,
-                  learningPlanGoalProgresses: action.payload.learningPlanGoalProgresses.map(
-                    learningPlanGoalprogress => ({
-                      ...learningPlanGoalprogress,
-                      userLessonId: userLesson.id
-                    })
-                  )
-                })
-              ];
+                | AddUserLesson
+                | AddUserLessonWithLearningPlanGoalProgresses)[];
+
+              if (action instanceof CreateUserLesson) {
+                actions = [new AddUserLesson({ userLesson })];
+              } else if (
+                action instanceof CreateUserLessonWithLearningPlanGoalProgresses
+              ) {
+                actions = [
+                  new AddUserLessonWithLearningPlanGoalProgresses({
+                    userId: action.payload.userId,
+                    userLesson,
+                    learningPlanGoalProgresses: action.payload.learningPlanGoalProgresses.map(
+                      learningPlanGoalprogress => ({
+                        ...learningPlanGoalprogress,
+                        userLessonId: userLesson.id
+                      })
+                    )
+                  })
+                ];
+              }
+
               const effectFeedback = EffectFeedback.generateSuccessFeedback(
                 this.uuid(),
                 action,
@@ -113,7 +99,9 @@ export class UserLessonEffects {
           );
       },
       onError: (
-        action: CreateUserLessonWithLearningPlanGoalProgresses,
+        action:
+          | CreateUserLesson
+          | CreateUserLessonWithLearningPlanGoalProgresses,
         error
       ) => {
         return new AddEffectFeedback({
@@ -126,8 +114,8 @@ export class UserLessonEffects {
           )
         });
       }
-    }
-  );
+    };
+  }
 
   constructor(
     private actions: Actions,
