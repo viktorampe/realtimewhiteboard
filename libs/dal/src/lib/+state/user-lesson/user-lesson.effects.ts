@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
 import { DataPersistence } from '@nrwl/nx';
-import { from, merge } from 'rxjs';
+import { from } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { DalState } from '..';
 import { UserLessonInterface } from '../../+models';
@@ -11,9 +11,9 @@ import {
 } from '../../user-lesson/user-lesson.service.interface';
 import { EffectFeedback } from '../effect-feedback';
 import { AddEffectFeedback } from '../effect-feedback/effect-feedback.actions';
+import { StartAddManyLearningPlanGoalProgresses } from '../learning-plan-goal-progress/learning-plan-goal-progress.actions';
 import {
   AddUserLesson,
-  AddUserLessonWithLearningPlanGoalProgresses,
   CreateUserLesson,
   CreateUserLessonWithLearningPlanGoalProgresses,
   LoadUserLessons,
@@ -41,23 +41,48 @@ export class UserLessonEffects {
   );
 
   @Effect()
-  createUserLesson$ = merge(
-    this.dataPersistence.pessimisticUpdate(
-      UserLessonsActionTypes.CreateUserLesson,
-      this.getCreateUserLessonOpts()
-    ),
-    this.dataPersistence.pessimisticUpdate(
-      UserLessonsActionTypes.CreateUserLessonWithLearningPlanGoalProgresses,
-      this.getCreateUserLessonOpts()
-    )
+  createUserLesson$ = this.dataPersistence.pessimisticUpdate(
+    UserLessonsActionTypes.CreateUserLesson,
+    {
+      run: (action: CreateUserLesson, state: DalState) => {
+        return this.userLessonService
+          .createForUser(action.payload.userId, action.payload.userLesson)
+          .pipe(
+            switchMap((userLesson: UserLessonInterface) => {
+              let actions: (AddEffectFeedback | AddUserLesson)[];
+
+              actions = [new AddUserLesson({ userLesson })];
+
+              const effectFeedback = EffectFeedback.generateSuccessFeedback(
+                this.uuid(),
+                action,
+                `Les "${action.payload.userLesson.description}" toegevoegd.`
+              );
+              actions.push(new AddEffectFeedback({ effectFeedback }));
+              return from(actions);
+            })
+          );
+      },
+      onError: (action: CreateUserLesson, error) => {
+        return new AddEffectFeedback({
+          effectFeedback: EffectFeedback.generateErrorFeedback(
+            this.uuid(),
+            action,
+            `Het is niet gelukt om les "${
+              action.payload.userLesson.description
+            }" toe te voegen.`
+          )
+        });
+      }
+    }
   );
 
-  private getCreateUserLessonOpts() {
-    return {
+  @Effect()
+  createUserLessonWithLearningPlanGoalProgresses$ = this.dataPersistence.pessimisticUpdate(
+    UserLessonsActionTypes.CreateUserLessonWithLearningPlanGoalProgresses,
+    {
       run: (
-        action:
-          | CreateUserLesson
-          | CreateUserLessonWithLearningPlanGoalProgresses,
+        action: CreateUserLessonWithLearningPlanGoalProgresses,
         state: DalState
       ) => {
         return this.userLessonService
@@ -67,26 +92,20 @@ export class UserLessonEffects {
               let actions: (
                 | AddEffectFeedback
                 | AddUserLesson
-                | AddUserLessonWithLearningPlanGoalProgresses)[];
+                | StartAddManyLearningPlanGoalProgresses)[];
 
-              if (action instanceof CreateUserLesson) {
-                actions = [new AddUserLesson({ userLesson })];
-              } else if (
-                action instanceof CreateUserLessonWithLearningPlanGoalProgresses
-              ) {
-                actions = [
-                  new AddUserLessonWithLearningPlanGoalProgresses({
-                    userId: action.payload.userId,
-                    userLesson,
-                    learningPlanGoalProgresses: action.payload.learningPlanGoalProgresses.map(
-                      learningPlanGoalprogress => ({
-                        ...learningPlanGoalprogress,
-                        userLessonId: userLesson.id
-                      })
-                    )
-                  })
-                ];
-              }
+              actions = [
+                new AddUserLesson({ userLesson }),
+                new StartAddManyLearningPlanGoalProgresses({
+                  userId: action.payload.userId,
+                  learningPlanGoalProgresses: action.payload.learningPlanGoalProgresses.map(
+                    learningPlanGoalprogress => ({
+                      ...learningPlanGoalprogress,
+                      userLessonId: userLesson.id
+                    })
+                  )
+                })
+              ];
 
               const effectFeedback = EffectFeedback.generateSuccessFeedback(
                 this.uuid(),
@@ -99,9 +118,7 @@ export class UserLessonEffects {
           );
       },
       onError: (
-        action:
-          | CreateUserLesson
-          | CreateUserLessonWithLearningPlanGoalProgresses,
+        action: CreateUserLessonWithLearningPlanGoalProgresses,
         error
       ) => {
         return new AddEffectFeedback({
@@ -114,8 +131,8 @@ export class UserLessonEffects {
           )
         });
       }
-    };
-  }
+    }
+  );
 
   constructor(
     private actions: Actions,

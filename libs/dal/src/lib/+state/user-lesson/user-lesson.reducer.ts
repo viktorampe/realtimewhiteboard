@@ -27,8 +27,7 @@ export function reducer(
   action: UserLessonsActions
 ): State {
   switch (action.type) {
-    case UserLessonsActionTypes.AddUserLesson:
-    case UserLessonsActionTypes.AddUserLessonWithLearningPlanGoalProgresses: {
+    case UserLessonsActionTypes.AddUserLesson: {
       return adapter.addOne(action.payload.userLesson, state);
     }
 
