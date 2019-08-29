@@ -4,6 +4,10 @@ import { cold, hot } from '@nrwl/nx/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { of } from 'rxjs';
 import { LearningPlanGoalProgressFixture } from '../+fixtures';
+import {
+  MinimalLearningPlanGoalProgressEduContentTocInterface,
+  MinimalLearningPlanGoalProgressUserLessonInterface
+} from '../+state/learning-plan-goal-progress/learning-plan-goal-progress.actions';
 import { LearningPlanGoalProgressService } from './learning-plan-goal-progress.service';
 import { LearningPlanGoalProgressServiceInterface } from './learning-plan-goal-progress.service.interface';
 
@@ -27,7 +31,8 @@ describe('LearningPlanGoalProgressService', () => {
             getData: () => mockData$,
             destroyByIdLearningPlanProgress: () => {},
             createLearningPlanGoalProgress: () => {},
-            destroyManyLearningPlanGoalProgress: () => of('useful')
+            destroyManyLearningPlanGoalProgress: () => of('useful'),
+            createLearningPlanGoalProgresses: () => of([{ stuff: 'is good' }])
           }
         }
       ]
@@ -180,6 +185,46 @@ describe('LearningPlanGoalProgressService', () => {
       ).toBeObservable(hot('a', { a: true }));
       expect(spy).toHaveBeenCalledTimes(1);
       expect(spy).toHaveBeenCalledWith(id, lpgpsIds);
+    });
+  });
+  describe('createLearningPlanGoalProgresses', () => {
+    it('should call the personApi createLearningPlanGoalProgresses method with the correct parameters', () => {
+      const spy = jest.spyOn(personApi, 'createLearningPlanGoalProgresses');
+
+      const id = 16;
+      const progresses: (
+        | MinimalLearningPlanGoalProgressEduContentTocInterface
+        | MinimalLearningPlanGoalProgressUserLessonInterface)[] = [
+        {
+          classGroupId: 10,
+          learningPlanGoalId: 37,
+          eduContentTocId: 17,
+          eduContentBookId: 24
+        },
+        {
+          classGroupId: 3,
+          learningPlanGoalId: 75,
+          userLessonId: 37,
+          eduContentBookId: 20
+        },
+        {
+          classGroupId: 71,
+          learningPlanGoalId: 37,
+          eduContentTocId: 32,
+          eduContentBookId: 74
+        },
+        {
+          classGroupId: 12,
+          learningPlanGoalId: 73,
+          userLessonId: 65,
+          eduContentBookId: 96
+        }
+      ];
+      expect(
+        service.createLearningPlanGoalProgresses(id, progresses)
+      ).toBeObservable(hot('a', { a: [{ stuff: 'is good' }] }));
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy).toHaveBeenCalledWith(id, progresses);
     });
   });
 });
