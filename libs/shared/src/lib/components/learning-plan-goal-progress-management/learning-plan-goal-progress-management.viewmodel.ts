@@ -57,18 +57,16 @@ export class LearningPlanGoalProgressManagementViewModel {
       .pipe(take(1))
       .subscribe(([userLessons, user]) => {
         const foundUserLesson = userLessons.find(
-          userLesson => userLesson.description === description
+          userLesson =>
+            userLesson.description === description &&
+            userLesson.personId === user.id // Don't add to the userLesson of a colleague, create a new one
         );
 
-        console.log(
-          'log: LearningPlanGoalProgressManagementViewModel -> userLessons',
-          userLessons
-        );
         if (foundUserLesson) {
           this.store.dispatch(
             new LearningPlanGoalProgressActions.StartAddManyLearningPlanGoalProgresses(
               {
-                personId: user.id, // TODO will need to refactor to userId
+                personId: user.id,
                 learningPlanGoalProgresses: [
                   {
                     classGroupId,
@@ -115,7 +113,7 @@ export class LearningPlanGoalProgressManagementViewModel {
         this.store.dispatch(
           new LearningPlanGoalProgressActions.StartAddManyLearningPlanGoalProgresses(
             {
-              personId: user.id, // TODO will need to refactor to userId
+              personId: user.id,
               learningPlanGoalProgresses: eduContentTOCids.map(
                 eduContentTocId => ({
                   classGroupId,

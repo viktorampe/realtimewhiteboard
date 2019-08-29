@@ -138,10 +138,10 @@ describe('LearningPlanGoalProgressViewModel', () => {
 
       jest
         .spyOn(UserLessonQueries, 'getAll')
-        .mockReturnValue([{ id: userLessonId, description }]);
+        .mockReturnValue([{ id: userLessonId, description, personId: userId }]);
     });
 
-    it('should dispatch an action, create', () => {
+    it('should dispatch an action, create (different description)', () => {
       store.dispatch = jest.fn();
 
       lpgpManagementViewModel.createLearningPlanGoalProgressForUserLesson(
@@ -155,6 +155,39 @@ describe('LearningPlanGoalProgressViewModel', () => {
         {
           userId,
           userLesson: { description: 'not ' + description },
+          learningPlanGoalProgresses: [
+            {
+              classGroupId,
+              learningPlanGoalId,
+              eduContentBookId
+            }
+          ]
+        }
+      );
+
+      expect(store.dispatch).toHaveBeenCalledWith(expectedAction);
+    });
+
+    it('should dispatch an action, create (different personId)', () => {
+      store.dispatch = jest.fn();
+
+      jest
+        .spyOn(UserLessonQueries, 'getAll')
+        .mockReturnValue([
+          { id: userLessonId, description, personId: userId + 1 }
+        ]);
+
+      lpgpManagementViewModel.createLearningPlanGoalProgressForUserLesson(
+        learningPlanGoalId,
+        classGroupId,
+        description,
+        eduContentBookId
+      );
+
+      const expectedAction = new UserLessonActions.CreateUserLessonWithLearningPlanGoalProgresses(
+        {
+          userId,
+          userLesson: { description },
           learningPlanGoalProgresses: [
             {
               classGroupId,
