@@ -50,7 +50,7 @@ export class SearchViewModel {
       newSearchState = {
         ...state,
         sort:
-          (this.searchState$.value ? this.searchState$.value.sort : false) || // the current sort mode
+          (this.searchState$.value && this.searchState$.value.sort) || // the current sort mode
           state.sort || // the one in the initial state
           mode.results.sortModes[0].name // the first one defined in the searchMode
       };
