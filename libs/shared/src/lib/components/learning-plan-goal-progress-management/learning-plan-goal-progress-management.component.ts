@@ -24,13 +24,8 @@ import { LearningPlanGoalProgressManagementViewModel } from './learning-plan-goa
   providers: [LearningPlanGoalProgressManagementViewModel]
 })
 export class LearningPlanGoalProgressManagementComponent implements OnInit {
-  protected inputFromControl: FormControl;
   protected userLessons$: Observable<UserLessonInterface[]>;
-  protected filteredUserLessons$: Observable<UserLessonInterface[]>;
   protected book: EduContentBookInterface;
-  protected methodLessonsForBook$: Observable<
-    { eduContentTocId: number; values: string[] }[]
-  >;
 
   @ViewChild(MatInput)
   private matInput: MatInput;
@@ -40,6 +35,12 @@ export class LearningPlanGoalProgressManagementComponent implements OnInit {
 
   public learningPlanGoal: LearningPlanGoalInterface;
   public classGroup: ClassGroupInterface;
+
+  public inputFromControl: FormControl;
+  public filteredUserLessons$: Observable<UserLessonInterface[]>;
+  public methodLessonsForBook$: Observable<
+    { eduContentTocId: number; values: string[] }[]
+  >;
 
   constructor(
     public dialogRef: MatDialogRef<LearningPlanGoalProgressManagementComponent>,

@@ -27,6 +27,7 @@ import {
 import {
   ENVIRONMENT_ICON_MAPPING_TOKEN,
   ENVIRONMENT_SEARCHMODES_TOKEN,
+  ENVIRONMENT_TESTING_TOKEN,
   SharedModule
 } from '@campus/shared';
 import {
@@ -67,7 +68,8 @@ describe('MethodChapterComponent', () => {
           useValue: { navigate: jest.fn() }
         },
         { provide: MethodViewModel, useClass: MockMethodViewModel },
-        { provide: ENVIRONMENT_ICON_MAPPING_TOKEN, useValue: {} }
+        { provide: ENVIRONMENT_ICON_MAPPING_TOKEN, useValue: {} },
+        { provide: ENVIRONMENT_TESTING_TOKEN, useValue: {} }
       ]
     }).overrideModule(BrowserDynamicTestingModule, {
       set: { entryComponents: [ResultItemMockComponent] }
