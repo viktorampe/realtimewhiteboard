@@ -6,6 +6,7 @@ import { MethodYearsInterface } from '@campus/dal';
 import {
   ENVIRONMENT_ICON_MAPPING_TOKEN,
   ENVIRONMENT_SEARCHMODES_TOKEN,
+  ENVIRONMENT_TESTING_TOKEN,
   SharedModule
 } from '@campus/shared';
 import { MockMatIconRegistry } from '@campus/testing';
@@ -37,7 +38,8 @@ describe('MethodsOverviewComponent', () => {
         {
           provide: ENVIRONMENT_ICON_MAPPING_TOKEN,
           useValue: {}
-        }
+        },
+        { provide: ENVIRONMENT_TESTING_TOKEN, useValue: {} }
       ]
     });
   });

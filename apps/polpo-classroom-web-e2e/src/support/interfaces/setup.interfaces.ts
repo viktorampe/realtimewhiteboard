@@ -1,5 +1,5 @@
-export interface StudentOpenBundleContentInterface {
-  studentOpenBundleContent: {
+export interface PolpoStudentOpenBundleContentInterface {
+  polpoStudentOpenBundleContent: {
     login: { username: string; password: string };
     teacher: {
       name: string;
