@@ -43,14 +43,9 @@ export class LearningPlanGoalProgressService
     userId: number,
     learningPlanGoalProgressIds: number[]
   ): Observable<boolean> {
-    //TODO -- implement call to new remote method
-    return of(true).pipe(
-      tap(val => {
-        console.log(
-          `deleteLearningPlanGoalProgresses called with\n - userId: ${userId}\n - learningPlanGoalProgressIds: ${learningPlanGoalProgressIds}`
-        );
-      })
-    );
+    return this.personApi
+      .destroyManyLearningPlanGoalProgress(userId, learningPlanGoalProgressIds)
+      .pipe(mapTo(true));
   }
 
   createLearningPlanGoalProgress(

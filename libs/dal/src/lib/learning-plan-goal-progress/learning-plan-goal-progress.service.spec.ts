@@ -26,7 +26,8 @@ describe('LearningPlanGoalProgressService', () => {
           useValue: {
             getData: () => mockData$,
             destroyByIdLearningPlanProgress: () => {},
-            createLearningPlanGoalProgress: () => {}
+            createLearningPlanGoalProgress: () => {},
+            destroyManyLearningPlanGoalProgress: () => of('useful')
           }
         }
       ]
@@ -165,6 +166,20 @@ describe('LearningPlanGoalProgressService', () => {
       expect(response).toBeObservable(
         cold('(a|)', { a: mockLearningPlanGoalProgressArray })
       );
+    });
+  });
+
+  describe('deleteLearningPlanGoalProgresses', () => {
+    it('should call the personApi destroyManyLearningPlanGoalProgress method with the correct parameters', () => {
+      const spy = jest.spyOn(personApi, 'destroyManyLearningPlanGoalProgress');
+
+      const id = 16;
+      const lpgpsIds = [94, 64, 46];
+      expect(
+        service.deleteLearningPlanGoalProgresses(id, lpgpsIds)
+      ).toBeObservable(hot('a', { a: true }));
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy).toHaveBeenCalledWith(id, lpgpsIds);
     });
   });
 });
