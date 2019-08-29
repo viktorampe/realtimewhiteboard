@@ -19,8 +19,6 @@ import {
   EffectFeedbackActions,
   Priority
 } from '../effect-feedback';
-import { AddUserLessonWithLearningPlanGoalProgresses } from '../user-lesson/user-lesson.actions';
-import { UserLessonFixture } from './../../+fixtures/UserLesson.fixture';
 import {
   AddLearningPlanGoalProgresses,
   BulkAddLearningPlanGoalProgresses,
@@ -243,7 +241,7 @@ describe('LearningPlanGoalProgressEffects', () => {
 
   describe('startAddLearningPlanGoalProgresses', () => {
     const staticParams = {
-      userId: 1,
+      personId: 1,
       classGroupId: 1,
       learningPlanGoalIds: [1, 2],
       eduContentBookId: 1699729494
@@ -268,7 +266,7 @@ describe('LearningPlanGoalProgressEffects', () => {
 
       const returnedValues = staticParams.learningPlanGoalIds.map(
         learningPlanGoalId => ({
-          userId: staticParams.userId,
+          personId: staticParams.personId,
           classGroupId: staticParams.classGroupId,
           eduContentBookId: staticParams.eduContentBookId,
           learningPlanGoalId,
@@ -296,7 +294,7 @@ describe('LearningPlanGoalProgressEffects', () => {
       expect(
         learningPlanGoalProgressService.createLearningPlanGoalProgress
       ).toHaveBeenCalledWith(
-        staticParams.userId,
+        staticParams.personId,
         staticParams.classGroupId,
         staticParams.learningPlanGoalIds,
         staticParams.eduContentBookId,
@@ -316,7 +314,7 @@ describe('LearningPlanGoalProgressEffects', () => {
 
       const returnedValues = staticParams.learningPlanGoalIds.map(
         learningPlanGoalId => ({
-          userId: staticParams.userId,
+          personId: staticParams.personId,
           classGroupId: staticParams.classGroupId,
           learningPlanGoalId,
           userLessonId
@@ -343,7 +341,7 @@ describe('LearningPlanGoalProgressEffects', () => {
       expect(
         learningPlanGoalProgressService.createLearningPlanGoalProgress
       ).toHaveBeenCalledWith(
-        staticParams.userId,
+        staticParams.personId,
         staticParams.classGroupId,
         staticParams.learningPlanGoalIds,
         staticParams.eduContentBookId,
@@ -544,7 +542,7 @@ describe('LearningPlanGoalProgressEffects', () => {
   });
 
   describe('bulkAddLearningPlanGoalProgress', () => {
-    const userId = 1;
+    const personId = 1;
     const classGroupId = 1;
     const eduContentTOCId = 1;
     const userLessonId = 1;
@@ -572,7 +570,7 @@ describe('LearningPlanGoalProgressEffects', () => {
 
     it('should return a StartAddLearningPlanGoalProgresses action, for eduContentTOCId', () => {
       const bulkAddAction = new BulkAddLearningPlanGoalProgresses({
-        userId,
+        personId,
         classGroupId,
         eduContentTOCId,
         learningPlanGoalIds,
@@ -584,7 +582,7 @@ describe('LearningPlanGoalProgressEffects', () => {
       });
 
       const expectedAction = new StartAddLearningPlanGoalProgresses({
-        userId,
+        personId,
         classGroupId,
         eduContentTOCId,
         userLessonId: undefined,
@@ -599,7 +597,7 @@ describe('LearningPlanGoalProgressEffects', () => {
 
     it('should return a StartAddLearningPlanGoalProgresses action, for eduContentTOCId', () => {
       const bulkAddAction = new BulkAddLearningPlanGoalProgresses({
-        userId,
+        personId,
         classGroupId,
         eduContentTOCId: 2,
         learningPlanGoalIds,
@@ -611,7 +609,7 @@ describe('LearningPlanGoalProgressEffects', () => {
       });
 
       const expectedAction = new StartAddLearningPlanGoalProgresses({
-        userId,
+        personId,
         classGroupId,
         eduContentTOCId: 2, // doesn't exist
         userLessonId: undefined,
@@ -626,7 +624,7 @@ describe('LearningPlanGoalProgressEffects', () => {
 
     it('should return a StartAddLearningPlanGoalProgresses action, for userLessonId', () => {
       const bulkAddAction = new BulkAddLearningPlanGoalProgresses({
-        userId,
+        personId,
         classGroupId,
         userLessonId,
         learningPlanGoalIds,
@@ -642,7 +640,7 @@ describe('LearningPlanGoalProgressEffects', () => {
         eduContentTOCId: undefined,
         userLessonId,
         learningPlanGoalIds: [2],
-        userId,
+        personId,
         eduContentBookId
       });
 
@@ -653,7 +651,7 @@ describe('LearningPlanGoalProgressEffects', () => {
 
     it('should return a StartAddLearningPlanGoalProgresses action, for userLessonId', () => {
       const bulkAddAction = new BulkAddLearningPlanGoalProgresses({
-        userId,
+        personId,
         classGroupId,
         userLessonId,
         learningPlanGoalIds,
@@ -669,7 +667,7 @@ describe('LearningPlanGoalProgressEffects', () => {
         eduContentTOCId: undefined,
         userLessonId,
         learningPlanGoalIds: [1, 2],
-        userId,
+        personId,
         eduContentBookId: 2
       });
 
@@ -680,7 +678,12 @@ describe('LearningPlanGoalProgressEffects', () => {
   });
 
   describe('startAddManyLearningPlanGoalProgresses', () => {
-    const userId = 1;
+    const personId = 1;
+
+    const triggerAction = new StartAddManyLearningPlanGoalProgresses({
+      personId,
+      learningPlanGoalProgresses: []
+    });
 
     let learningPlanGoalProgressService: LearningPlanGoalProgressServiceInterface;
 
@@ -690,101 +693,83 @@ describe('LearningPlanGoalProgressEffects', () => {
       );
     });
 
-    const triggers = [
-      {
-        description: 'StartAddManyLearningPlanGoalProgresses',
-        action: new StartAddManyLearningPlanGoalProgresses({
-          userId,
-          learningPlanGoalProgresses: []
+    it('should make the service call', () => {
+      jest
+        .spyOn(
+          learningPlanGoalProgressService,
+          'createLearningPlanGoalProgresses'
+        )
+        .mockReturnValue(of([]));
+
+      const dummyAction = {
+        type: 'some action',
+        payload: { userId: 317646491, ids: [612837505, 892853336] }
+      };
+      const undoSpy = jest
+        .spyOn(undoService, 'dispatchActionAsUndoable')
+        .mockReturnValue(of(dummyAction));
+
+      actions = hot('a', { a: triggerAction });
+
+      expect(effects.startAddManyLearningPlanGoalProgresses$).toBeObservable(
+        cold('a', {
+          a: dummyAction
         })
-      },
-      {
-        description: 'AddUserLessonWithLearningPlanGoalProgresses',
-        action: new AddUserLessonWithLearningPlanGoalProgresses({
-          userId,
-          userLesson: new UserLessonFixture(),
-          learningPlanGoalProgresses: []
-        })
-      }
-    ];
+      );
+      expect(undoSpy).toHaveBeenCalledTimes(1);
+      expect(
+        learningPlanGoalProgressService.createLearningPlanGoalProgresses
+      ).toHaveBeenCalledWith(personId, []);
+    });
 
-    triggers.forEach(trigger => {
-      describe(trigger.description + ' action', () => {
-        const triggerAction = trigger.action;
-
-        it('should make the service call', () => {
-          jest
-            .spyOn(
-              learningPlanGoalProgressService,
-              'createLearningPlanGoalProgresses'
-            )
-            .mockReturnValue(of([]));
-
-          const dummyAction = {
-            type: 'some action',
-            payload: { userId: 317646491, ids: [612837505, 892853336] }
-          };
-          const undoSpy = jest
-            .spyOn(undoService, 'dispatchActionAsUndoable')
-            .mockReturnValue(of(dummyAction));
-
-          actions = hot('a', { a: triggerAction });
-
-          expect(
-            effects.startAddManyLearningPlanGoalProgresses$
-          ).toBeObservable(
-            cold('a', {
-              a: dummyAction
-            })
-          );
-
-          expect(undoSpy).toHaveBeenCalledTimes(1);
-          expect(
-            learningPlanGoalProgressService.createLearningPlanGoalProgresses
-          ).toHaveBeenCalledWith(userId, []);
+    it('should return an undoAction and a feedBackAction on error', () => {
+      jest
+        .spyOn(
+          learningPlanGoalProgressService,
+          'createLearningPlanGoalProgresses'
+        )
+        .mockImplementation(() => {
+          throw new Error('error');
         });
 
-        it('should return an undoAction and a feedBackAction on error', () => {
-          jest
-            .spyOn(
-              learningPlanGoalProgressService,
-              'createLearningPlanGoalProgresses'
-            )
-            .mockImplementation(() => {
-              throw new Error('error');
-            });
-
-          actions = hot('a', { a: triggerAction });
-
-          const feedbackAction = new EffectFeedbackActions.AddEffectFeedback({
-            effectFeedback: new EffectFeedback({
-              id: uuid,
-              triggerAction: triggerAction,
-              message:
-                'Het is niet gelukt om de status van de leerplandoelen aan te passen.',
-              userActions: [
-                { title: 'Opnieuw proberen', userAction: triggerAction }
-              ],
-              type: 'error',
-              priority: Priority.HIGH
-            })
+      it('should return an undoAction and a feedBackAction on error', () => {
+        jest
+          .spyOn(
+            learningPlanGoalProgressService,
+            'createLearningPlanGoalProgresses'
+          )
+          .mockImplementation(() => {
+            throw new Error('error');
           });
 
-          expect(
-            effects.startAddManyLearningPlanGoalProgresses$
-          ).toBeObservable(
-            cold('(ab)', {
-              a: undo(triggerAction),
-              b: feedbackAction
-            })
-          );
+        actions = hot('a', { a: triggerAction });
+
+        const feedbackAction = new EffectFeedbackActions.AddEffectFeedback({
+          effectFeedback: new EffectFeedback({
+            id: uuid,
+            triggerAction: triggerAction,
+            message:
+              'Het is niet gelukt om de status van de leerplandoelen aan te passen.',
+            userActions: [
+              { title: 'Opnieuw proberen', userAction: triggerAction }
+            ],
+            type: 'error',
+            priority: Priority.HIGH
+          })
         });
+
+        expect(effects.startAddManyLearningPlanGoalProgresses$).toBeObservable(
+          cold('(ab)', {
+            a: undo(triggerAction),
+            b: feedbackAction
+          })
+        );
       });
     });
   });
 
   describe('toggleLearningPlanGoalProgress', () => {
-    const userId = 1;
+    const personId = 1;
     const classGroupId = 1;
     const eduContentTOCId = 1;
     const userLessonId = 1;
@@ -814,7 +799,7 @@ describe('LearningPlanGoalProgressEffects', () => {
     it('should return an StartAddLearningPlanGoalProgresses action if the progress does not exist, for EduContentTOC', () => {
       const toggleAction = new ToggleLearningPlanGoalProgress({
         classGroupId,
-        userId,
+        personId,
         learningPlanGoalId: 2,
         eduContentTOCId,
         eduContentBookId
@@ -826,7 +811,7 @@ describe('LearningPlanGoalProgressEffects', () => {
         classGroupId,
         learningPlanGoalIds: [2],
         eduContentTOCId,
-        userId,
+        personId,
         eduContentBookId
       });
 
@@ -838,7 +823,7 @@ describe('LearningPlanGoalProgressEffects', () => {
     it('should return an StartAddLearningPlanGoalProgresses action if the progress does not exist, for EduContentTOC', () => {
       const toggleAction = new ToggleLearningPlanGoalProgress({
         classGroupId,
-        userId,
+        personId,
         learningPlanGoalId: 1, // exists
         eduContentTOCId: 2, // doesn't exist,
         eduContentBookId
@@ -850,7 +835,7 @@ describe('LearningPlanGoalProgressEffects', () => {
         classGroupId,
         learningPlanGoalIds: [1],
         eduContentTOCId: 2,
-        userId,
+        personId,
         eduContentBookId
       });
 
@@ -862,7 +847,7 @@ describe('LearningPlanGoalProgressEffects', () => {
     it('should return an StartAddLearningPlanGoalProgresses action if the progress does not exist, for EduContentTOC', () => {
       const toggleAction = new ToggleLearningPlanGoalProgress({
         classGroupId,
-        userId,
+        personId,
         learningPlanGoalId: 1,
         eduContentTOCId,
         eduContentBookId: 2 // doesn't exist
@@ -874,7 +859,7 @@ describe('LearningPlanGoalProgressEffects', () => {
         classGroupId,
         learningPlanGoalIds: [1],
         eduContentTOCId,
-        userId,
+        personId,
         eduContentBookId: 2
       });
 
@@ -886,7 +871,7 @@ describe('LearningPlanGoalProgressEffects', () => {
     it('should return a DeleteLearningPlanGoalProgress action if the progress exists, for EduContentTOC', () => {
       const toggleAction = new ToggleLearningPlanGoalProgress({
         classGroupId,
-        userId,
+        personId,
         learningPlanGoalId: 1,
         eduContentTOCId,
         eduContentBookId
@@ -896,7 +881,7 @@ describe('LearningPlanGoalProgressEffects', () => {
 
       const expectedAction = new DeleteLearningPlanGoalProgress({
         id: 1,
-        userId: userId
+        userId: personId
       });
 
       expect(effects.toggleLearningPlanGoalProgress$).toBeObservable(
@@ -907,7 +892,7 @@ describe('LearningPlanGoalProgressEffects', () => {
     it('should return an StartAddLearningPlanGoalProgresses action if the progress does not exist, for UserLesson', () => {
       const toggleAction = new ToggleLearningPlanGoalProgress({
         classGroupId,
-        userId,
+        personId,
         learningPlanGoalId: 2,
         userLessonId,
         eduContentBookId
@@ -919,7 +904,7 @@ describe('LearningPlanGoalProgressEffects', () => {
         classGroupId,
         learningPlanGoalIds: [2],
         userLessonId,
-        userId,
+        personId,
         eduContentBookId
       });
 
@@ -931,7 +916,7 @@ describe('LearningPlanGoalProgressEffects', () => {
     it('should return a DeleteLearningPlanGoalProgress action if the progress exists, for UserLesson', () => {
       const toggleAction = new ToggleLearningPlanGoalProgress({
         classGroupId,
-        userId,
+        personId,
         learningPlanGoalId: 1,
         userLessonId,
         eduContentBookId
@@ -941,7 +926,7 @@ describe('LearningPlanGoalProgressEffects', () => {
 
       const expectedAction = new DeleteLearningPlanGoalProgress({
         id: 1,
-        userId
+        userId: personId
       });
 
       expect(effects.toggleLearningPlanGoalProgress$).toBeObservable(

@@ -162,7 +162,7 @@ export class ToggleLearningPlanGoalProgress
       userLessonId?: number;
       eduContentBookId: number;
       learningPlanGoalId: number;
-      userId: number;
+      personId: number;
       customFeedbackHandlers?: CustomFeedbackHandlersInterface;
     }
   ) {}
@@ -179,7 +179,7 @@ export class BulkAddLearningPlanGoalProgresses implements Action {
       userLessonId?: number;
       eduContentBookId: number;
       learningPlanGoalIds: number[];
-      userId: number;
+      personId: number;
     }
   ) {}
 }
@@ -196,7 +196,7 @@ export class StartAddLearningPlanGoalProgresses
       userLessonId?: number;
       eduContentBookId: number;
       learningPlanGoalIds: number[];
-      userId: number;
+      personId: number;
       customFeedbackHandlers?: CustomFeedbackHandlersInterface;
     }
   ) {}
@@ -212,7 +212,7 @@ export class StartAddManyLearningPlanGoalProgresses
       learningPlanGoalProgresses: (
         | MinimalLearningPlanGoalProgressEduContentTocInterface
         | MinimalLearningPlanGoalProgressUserLessonInterface)[];
-      userId: number;
+      personId: number;
       customFeedbackHandlers?: CustomFeedbackHandlersInterface;
     }
   ) {}

@@ -71,7 +71,7 @@ export class LearningPlanGoalProgressEffects {
       ): Observable<
         StartAddLearningPlanGoalProgresses | DeleteLearningPlanGoalProgress
       > => {
-        const { userId, ...selectParams } = action.payload;
+        const { personId, ...selectParams } = action.payload;
 
         return this.dataPersistence.store.pipe(
           select(findOne, selectParams),
@@ -80,7 +80,7 @@ export class LearningPlanGoalProgressEffects {
             if (learningPlanGoalProgress) {
               return new DeleteLearningPlanGoalProgress({
                 id: learningPlanGoalProgress.id,
-                userId: action.payload.userId
+                userId: action.payload.personId
               });
             } else {
               return new StartAddLearningPlanGoalProgresses({
@@ -89,7 +89,7 @@ export class LearningPlanGoalProgressEffects {
                 userLessonId: action.payload.userLessonId,
                 eduContentBookId: action.payload.eduContentBookId,
                 learningPlanGoalIds: [action.payload.learningPlanGoalId],
-                userId: action.payload.userId
+                personId: action.payload.personId
               });
             }
           })
@@ -109,7 +109,7 @@ export class LearningPlanGoalProgressEffects {
           !(action.payload.eduContentTOCId && action.payload.userLessonId)
         ) {
           serviceCall = this.learningPlanGoalProgressService.createLearningPlanGoalProgress(
-            action.payload.userId,
+            action.payload.personId,
             action.payload.classGroupId,
             action.payload.learningPlanGoalIds,
             action.payload.eduContentBookId,
@@ -221,7 +221,11 @@ export class LearningPlanGoalProgressEffects {
       (
         action: BulkAddLearningPlanGoalProgresses
       ): Observable<StartAddLearningPlanGoalProgresses> => {
-        const { learningPlanGoalIds, userId, ...selectParams } = action.payload;
+        const {
+          learningPlanGoalIds,
+          personId,
+          ...selectParams
+        } = action.payload;
 
         const selectStreams = learningPlanGoalIds.map(learningPlanGoalId =>
           this.dataPersistence.store.pipe(
@@ -244,7 +248,7 @@ export class LearningPlanGoalProgressEffects {
 
             return new StartAddLearningPlanGoalProgresses({
               classGroupId: action.payload.classGroupId,
-              userId: action.payload.userId,
+              personId: action.payload.personId,
               eduContentTOCId: action.payload.eduContentTOCId,
               eduContentBookId: action.payload.eduContentBookId,
               userLessonId: action.payload.userLessonId,

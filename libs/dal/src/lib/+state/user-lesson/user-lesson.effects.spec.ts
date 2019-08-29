@@ -327,7 +327,7 @@ describe('UserLessonEffects', () => {
       });
       const startAddManyLearningPlanGoalProgressesAction = new StartAddManyLearningPlanGoalProgresses(
         {
-          userId,
+          personId: userId,
           learningPlanGoalProgresses: [
             {
               userLessonId,

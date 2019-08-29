@@ -97,7 +97,7 @@ export class UserLessonEffects {
               actions = [
                 new AddUserLesson({ userLesson }),
                 new StartAddManyLearningPlanGoalProgresses({
-                  userId: action.payload.userId,
+                  personId: action.payload.userId,
                   learningPlanGoalProgresses: action.payload.learningPlanGoalProgresses.map(
                     learningPlanGoalprogress => ({
                       ...learningPlanGoalprogress,
