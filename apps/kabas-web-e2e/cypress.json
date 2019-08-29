@@ -9,6 +9,7 @@
   "screenshotsFolder": "../../dist/out-tsc/apps/kabas-web-e2e/screenshots",
   "chromeWebSecurity": false,
   "defaultCommandTimeout": 10000,
+  "testFiles": "**/*.spec.js",
   "env": {
     "development": {
       "apiUrl": "http://api.kabas.localhost:3000/",
