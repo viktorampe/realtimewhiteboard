@@ -5,6 +5,7 @@ import {
   CustomFeedbackHandlersInterface,
   FeedbackTriggeringAction
 } from '../effect-feedback';
+import { MinimalLearningPlanGoalProgressUserLessonInterface } from './../learning-plan-goal-progress/learning-plan-goal-progress.actions';
 
 export enum UserLessonsActionTypes {
   UserLessonsLoaded = '[UserLessons] UserLessons Loaded',
@@ -19,7 +20,9 @@ export enum UserLessonsActionTypes {
   DeleteUserLesson = '[UserLessons] Delete UserLesson',
   DeleteUserLessons = '[UserLessons] Delete UserLessons',
   ClearUserLessons = '[UserLessons] Clear UserLessons',
-  CreateUserLesson = '[UserLessons] Create UserLesson'
+  CreateUserLesson = '[UserLessons] Create UserLesson',
+  CreateUserLessonWithLearningPlanGoalProgresses = '[UserLessons] Create UserLesson with LearningPlanGoalProgresses',
+  AddUserLessonWithLearningPlanGoalProgresses = '[UserLessons] Add UserLesson  with LearningPlanGoalProgresses'
 }
 
 export class LoadUserLessons implements Action {
@@ -105,6 +108,39 @@ export class CreateUserLesson implements FeedbackTriggeringAction {
   ) {}
 }
 
+export class CreateUserLessonWithLearningPlanGoalProgresses
+  implements FeedbackTriggeringAction {
+  readonly type =
+    UserLessonsActionTypes.CreateUserLessonWithLearningPlanGoalProgresses;
+
+  constructor(
+    public payload: {
+      userId: number;
+      userLesson: UserLessonInterface;
+      learningPlanGoalProgresses: Omit<
+        MinimalLearningPlanGoalProgressUserLessonInterface,
+        'userLessonId'
+      >[];
+      customFeedbackHandlers?: CustomFeedbackHandlersInterface;
+    }
+  ) {}
+}
+
+export class AddUserLessonWithLearningPlanGoalProgresses
+  implements FeedbackTriggeringAction {
+  readonly type =
+    UserLessonsActionTypes.AddUserLessonWithLearningPlanGoalProgresses;
+
+  constructor(
+    public payload: {
+      userId: number;
+      userLesson: UserLessonInterface;
+      learningPlanGoalProgresses: MinimalLearningPlanGoalProgressUserLessonInterface[];
+      customFeedbackHandlers?: CustomFeedbackHandlersInterface;
+    }
+  ) {}
+}
+
 export type UserLessonsActions =
   | LoadUserLessons
   | UserLessonsLoaded
@@ -118,4 +154,9 @@ export type UserLessonsActions =
   | DeleteUserLesson
   | DeleteUserLessons
   | ClearUserLessons
-  | CreateUserLesson;
+  | CreateUserLesson
+  | CreateUserLessonWithLearningPlanGoalProgresses
+  | AddUserLessonWithLearningPlanGoalProgresses;
+
+// needed because we're not running typescript 3.5
+type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
