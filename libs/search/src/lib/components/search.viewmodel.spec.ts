@@ -13,8 +13,7 @@ import {
   SearchFilterInterface,
   SearchModeInterface,
   SearchResultInterface,
-  SearchStateInterface,
-  SortModeInterface
+  SearchStateInterface
 } from '../interfaces';
 import { CheckboxLineFilterComponent } from './checkbox-line-filter/checkbox-line-filter-component';
 import { SearchViewModel } from './search.viewmodel';
@@ -404,15 +403,11 @@ describe('SearchViewModel', () => {
     });
 
     describe('changeSort', () => {
-      let mockSortMode: SortModeInterface;
-
-      beforeEach(() => {
-        mockSortMode = {
-          name: 'new sort mode',
-          description: 'this is the hottest new sortmode',
-          icon: 'foo'
-        };
-      });
+      const newSortMode = {
+        name: 'new sort mode',
+        description: 'this is the hottest new sortmode',
+        icon: 'foo'
+      };
 
       it('should trigger an emit the new searchState', () => {
         const oldValue: SearchStateInterface = {
@@ -420,9 +415,9 @@ describe('SearchViewModel', () => {
           filterCriteriaSelections: new Map<string, (number | string)[]>()
         };
         searchViewModel.searchState$.next(oldValue);
-        searchViewModel.changeSort(mockSortMode);
+        searchViewModel.changeSort(newSortMode);
 
-        const expected = { ...oldValue, sort: mockSortMode.name, from: 0 };
+        const expected = { ...oldValue, sort: newSortMode.name, from: 0 };
 
         expect(searchViewModel.searchState$).toBeObservable(
           hot('a', { a: expected })
