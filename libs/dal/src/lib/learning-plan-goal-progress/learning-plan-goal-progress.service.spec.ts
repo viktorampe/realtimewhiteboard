@@ -128,7 +128,6 @@ describe('LearningPlanGoalProgressService', () => {
       );
     });
   });
-
   describe('createLearningPlanGoalProgress for UserLesson', () => {
     const mockLearningPlanGoalProgressArray = [
       new LearningPlanGoalProgressFixture({
@@ -182,7 +181,7 @@ describe('LearningPlanGoalProgressService', () => {
       const lpgpsIds = [94, 64, 46];
       expect(
         service.deleteLearningPlanGoalProgresses(id, lpgpsIds)
-      ).toBeObservable(hot('a', { a: true }));
+      ).toBeObservable(hot('(a|)', { a: true }));
       expect(spy).toHaveBeenCalledTimes(1);
       expect(spy).toHaveBeenCalledWith(id, lpgpsIds);
     });
@@ -222,7 +221,7 @@ describe('LearningPlanGoalProgressService', () => {
       ];
       expect(
         service.createLearningPlanGoalProgresses(id, progresses)
-      ).toBeObservable(hot('a', { a: [{ stuff: 'is good' }] }));
+      ).toBeObservable(hot('(a|)', { a: [{ stuff: 'is good' }] }));
       expect(spy).toHaveBeenCalledTimes(1);
       expect(spy).toHaveBeenCalledWith(id, progresses);
     });
