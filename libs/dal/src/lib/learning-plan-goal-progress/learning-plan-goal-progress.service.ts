@@ -71,13 +71,13 @@ export class LearningPlanGoalProgressService
 
   createLearningPlanGoalProgresses(
     userId: number,
-    learninGoalProgresses: (
+    learningGoalPlanProgresses: (
       | MinimalLearningPlanGoalProgressEduContentTocInterface
       | MinimalLearningPlanGoalProgressUserLessonInterface)[]
   ): Observable<LearningPlanGoalProgressInterface[]> {
     return this.personApi.createLearningPlanGoalProgresses(
       userId,
-      learninGoalProgresses
+      learningGoalPlanProgresses
     );
   }
 }
