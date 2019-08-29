@@ -38,12 +38,23 @@ class MockFilterFactory implements SearchFilterFactory {
 }
 describe('SearchViewModel', () => {
   let searchViewModel: SearchViewModel;
+
+  const mockSortMode = {
+    name: 'foo',
+    description: 'bar',
+    icon: 'icon'
+  };
+
   const mockSearchMode: SearchModeInterface = {
     name: 'searchMode',
     label: 'foo',
     dynamicFilters: true,
     searchFilterFactory: MockFilterFactory,
-    results: null
+    results: {
+      component: null,
+      sortModes: [mockSortMode],
+      pageSize: 10
+    }
   };
 
   beforeEach(() => {
@@ -118,7 +129,8 @@ describe('SearchViewModel', () => {
             filterCriteriaSelections: new Map([
               ['foo', [1, 2]],
               ['bar', [4, 5, 6]]
-            ])
+            ]),
+            sort: mockSortMode.name
           }
         })
       );
@@ -168,7 +180,8 @@ describe('SearchViewModel', () => {
             filterCriteriaSelections: new Map([
               ['foo', [1, 2, 3]],
               ['bar', [4, 5, 6]]
-            ])
+            ]),
+            sort: mockSortMode.name
           }
         })
       );
@@ -219,7 +232,8 @@ describe('SearchViewModel', () => {
               ['foo', [1]],
               ['bar', [4, 5, 6]],
               ['baz', [1, 3]]
-            ])
+            ]),
+            sort: mockSortMode.name
           }
         })
       );
@@ -295,7 +309,8 @@ describe('SearchViewModel', () => {
               ['bar', [4, 5, 6]],
               ['blah', [8, 9]],
               ['baz', [1, 3]]
-            ])
+            ]),
+            sort: mockSortMode.name
           }
         })
       );
@@ -379,7 +394,8 @@ describe('SearchViewModel', () => {
           ['foo', [1]],
           ['bar', [2]],
           ['blabla', []]
-        ])
+        ]),
+        sort: mockSortMode.name
       } as SearchStateInterface;
 
       expect(searchViewModel.searchState$).toBeObservable(
@@ -469,7 +485,7 @@ describe('SearchViewModel', () => {
 
         expect(searchViewModel.searchState$).toBeObservable(
           hot('a', {
-            a: mockSearchState
+            a: { ...mockSearchState, sort: mockSortMode.name }
           })
         );
       });
@@ -495,20 +511,11 @@ describe('SearchViewModel', () => {
           filterCriteriaSelections: mockSelections
         } as SearchStateInterface;
 
-        searchViewModel.reset(
-          {
-            name: 'foo',
-            searchFilterFactory: MockFilterFactory,
-            label: '',
-            dynamicFilters: null,
-            results: null
-          } as SearchModeInterface,
-          mockInitialSearchState
-        );
+        searchViewModel.reset(mockSearchMode, mockInitialSearchState);
 
         expect(searchViewModel.searchState$).toBeObservable(
           hot('a', {
-            a: mockInitialSearchState
+            a: { ...mockInitialSearchState, sort: mockSortMode.name }
           })
         );
       });
@@ -518,13 +525,17 @@ describe('SearchViewModel', () => {
 
         // set initial state
         const mockSearchState = {
-          searchTerm: 'foo'
+          searchTerm: 'foo',
+          filterCriteriaSelections: new Map()
         } as SearchStateInterface;
 
         searchViewModel.reset(mockSearchMode, mockSearchState);
 
         expect(spy).toHaveBeenCalledTimes(1);
-        expect(spy).toHaveBeenCalledWith(mockSearchState);
+        expect(spy).toHaveBeenCalledWith({
+          ...mockSearchState,
+          sort: mockSortMode.name
+        });
       });
     });
 
