@@ -11,9 +11,11 @@ import {
 } from '../../user-lesson/user-lesson.service.interface';
 import { EffectFeedback } from '../effect-feedback';
 import { AddEffectFeedback } from '../effect-feedback/effect-feedback.actions';
+import { StartAddManyLearningPlanGoalProgresses } from '../learning-plan-goal-progress/learning-plan-goal-progress.actions';
 import {
   AddUserLesson,
   CreateUserLesson,
+  CreateUserLessonWithLearningPlanGoalProgresses,
   LoadUserLessons,
   UserLessonsActionTypes,
   UserLessonsLoaded,
@@ -50,6 +52,7 @@ export class UserLessonEffects {
               const actions: (AddEffectFeedback | AddUserLesson)[] = [
                 new AddUserLesson({ userLesson })
               ];
+
               const effectFeedback = EffectFeedback.generateSuccessFeedback(
                 this.uuid(),
                 action,
@@ -61,6 +64,63 @@ export class UserLessonEffects {
           );
       },
       onError: (action: CreateUserLesson, error) => {
+        return new AddEffectFeedback({
+          effectFeedback: EffectFeedback.generateErrorFeedback(
+            this.uuid(),
+            action,
+            `Het is niet gelukt om les "${
+              action.payload.userLesson.description
+            }" toe te voegen.`
+          )
+        });
+      }
+    }
+  );
+
+  @Effect()
+  createUserLessonWithLearningPlanGoalProgresses$ = this.dataPersistence.pessimisticUpdate(
+    UserLessonsActionTypes.CreateUserLessonWithLearningPlanGoalProgresses,
+    {
+      run: (
+        action: CreateUserLessonWithLearningPlanGoalProgresses,
+        state: DalState
+      ) => {
+        return this.userLessonService
+          .createForUser(action.payload.userId, action.payload.userLesson)
+          .pipe(
+            switchMap((userLesson: UserLessonInterface) => {
+              let actions: (
+                | AddEffectFeedback
+                | AddUserLesson
+                | StartAddManyLearningPlanGoalProgresses)[];
+
+              actions = [
+                new AddUserLesson({ userLesson }),
+                new StartAddManyLearningPlanGoalProgresses({
+                  personId: action.payload.userId,
+                  learningPlanGoalProgresses: action.payload.learningPlanGoalProgresses.map(
+                    learningPlanGoalprogress => ({
+                      ...learningPlanGoalprogress,
+                      userLessonId: userLesson.id
+                    })
+                  )
+                })
+              ];
+
+              const effectFeedback = EffectFeedback.generateSuccessFeedback(
+                this.uuid(),
+                action,
+                `Les "${action.payload.userLesson.description}" toegevoegd.`
+              );
+              actions.push(new AddEffectFeedback({ effectFeedback }));
+              return from(actions);
+            })
+          );
+      },
+      onError: (
+        action: CreateUserLessonWithLearningPlanGoalProgresses,
+        error
+      ) => {
         return new AddEffectFeedback({
           effectFeedback: EffectFeedback.generateErrorFeedback(
             this.uuid(),

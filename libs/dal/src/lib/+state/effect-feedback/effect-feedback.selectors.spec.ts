@@ -47,7 +47,7 @@ describe('EffectFeedback selectors', () => {
       new EffectFeedbackFixture({
         id: 'guid6',
         display: false,
-        triggerAction: { type: 'foo' }
+        triggerAction: { type: 'foo', payload: undefined }
       }),
       new EffectFeedbackFixture({
         id: 'guid8',
@@ -58,7 +58,7 @@ describe('EffectFeedback selectors', () => {
       new EffectFeedbackFixture({
         id: 'guid12',
         display: false,
-        triggerAction: { type: 'bar' }
+        triggerAction: { type: 'bar', payload: undefined }
       })
     ]);
     storeState = { effectFeedback: effectFeedbackState };
@@ -110,12 +110,12 @@ describe('EffectFeedback selectors', () => {
       new EffectFeedbackFixture({
         id: 'guid11',
         display: false,
-        triggerAction: { type: 'foo' }
+        triggerAction: { type: 'foo', payload: undefined }
       }),
       new EffectFeedbackFixture({
         id: 'guid12',
         display: false,
-        triggerAction: { type: 'bar' }
+        triggerAction: { type: 'bar', payload: undefined }
       })
     ]);
     storeState = { effectFeedback: effectFeedbackState };
@@ -137,28 +137,28 @@ describe('EffectFeedback selectors', () => {
           // error, wrong action type
           id: 'guid11',
           display: false,
-          triggerAction: { type: 'foo' },
+          triggerAction: { type: 'foo', payload: undefined },
           type: 'error'
         }),
         new EffectFeedbackFixture({
           // success, correct action type
           id: 'guid12',
           display: false,
-          triggerAction: { type: 'bar' },
+          triggerAction: { type: 'bar', payload: undefined },
           type: 'success'
         }),
         new EffectFeedbackFixture({
           // error, correct action type -> this should be the result
           id: 'guid13',
           display: false,
-          triggerAction: { type: 'bar' },
+          triggerAction: { type: 'bar', payload: undefined },
           type: 'error'
         }),
         new EffectFeedbackFixture({
           // error, correct action type -> but it is less urgent
           id: 'guid14',
           display: false,
-          triggerAction: { type: 'baz' },
+          triggerAction: { type: 'baz', payload: undefined },
           type: 'error'
         })
       ]);
