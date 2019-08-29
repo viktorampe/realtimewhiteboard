@@ -15,9 +15,11 @@ import {
   Priority
 } from '../effect-feedback';
 import { AddEffectFeedback } from '../effect-feedback/effect-feedback.actions';
+import { StartAddManyLearningPlanGoalProgresses } from '../learning-plan-goal-progress/learning-plan-goal-progress.actions';
 import {
   AddUserLesson,
   CreateUserLesson,
+  CreateUserLessonWithLearningPlanGoalProgresses,
   LoadUserLessons,
   UserLessonsLoaded,
   UserLessonsLoadError
@@ -275,6 +277,125 @@ describe('UserLessonEffects', () => {
         expectInAndOut(
           effects.createUserLesson$,
           createUserLessonAction,
+          addFeedbackAction
+        );
+      });
+    });
+  });
+
+  describe('createUserLessonWithLearningPlanGoalProgresses$', () => {
+    const userId = 1;
+    const classGroupId = 2;
+    const learningPlanGoalId = 3;
+    const eduContentBookId = 4;
+    const userLessonId = 5;
+
+    const userLesson = new UserLessonFixture({
+      id: undefined,
+      description: 'dit is een nieuwe userLesson',
+      personId: userId
+    });
+
+    const returnedUserLesson = new UserLessonFixture({
+      id: userLessonId,
+      description: 'dit is een nieuwe userLesson',
+      personId: userId
+    });
+
+    const lpgpsToCreate = [
+      {
+        classGroupId,
+        learningPlanGoalId,
+        eduContentBookId
+      }
+    ];
+
+    let effectFeedback: EffectFeedback;
+    let addFeedbackAction: EffectFeedbackActions.AddEffectFeedback;
+
+    const createUserLessonWithLearningPlanGoalProgressesAction = new CreateUserLessonWithLearningPlanGoalProgresses(
+      {
+        userId,
+        userLesson,
+        learningPlanGoalProgresses: lpgpsToCreate
+      }
+    );
+
+    describe('when successful', () => {
+      const addUserLessonAction = new AddUserLesson({
+        userLesson: returnedUserLesson
+      });
+      const startAddManyLearningPlanGoalProgressesAction = new StartAddManyLearningPlanGoalProgresses(
+        {
+          personId: userId,
+          learningPlanGoalProgresses: [
+            {
+              userLessonId,
+              classGroupId,
+              learningPlanGoalId,
+              eduContentBookId
+            }
+          ]
+        }
+      );
+
+      beforeAll(() => {
+        effectFeedback = new EffectFeedback({
+          id: uuid,
+          triggerAction: createUserLessonWithLearningPlanGoalProgressesAction,
+          message: 'Les "dit is een nieuwe userLesson" toegevoegd.'
+        });
+        addFeedbackAction = new AddEffectFeedback({ effectFeedback });
+      });
+
+      beforeEach(() => {
+        mockServiceMethodReturnValue('createForUser', returnedUserLesson);
+      });
+
+      it('should dispatch an addUserLessonAction action and a startAddManyLearningPlanGoalProgresses action', () => {
+        actions = hot('a', {
+          a: createUserLessonWithLearningPlanGoalProgressesAction
+        });
+
+        expect(
+          effects.createUserLessonWithLearningPlanGoalProgresses$
+        ).toBeObservable(
+          hot('(abc)', {
+            a: addUserLessonAction,
+            b: startAddManyLearningPlanGoalProgressesAction,
+            c: addFeedbackAction
+          })
+        );
+      });
+    });
+
+    describe('when errored', () => {
+      beforeAll(() => {
+        effectFeedback = new EffectFeedback({
+          id: uuid,
+          triggerAction: createUserLessonWithLearningPlanGoalProgressesAction,
+          message:
+            'Het is niet gelukt om les "dit is een nieuwe userLesson" toe te voegen.',
+          type: 'error',
+          userActions: [
+            {
+              title: 'Opnieuw proberen',
+              userAction: createUserLessonWithLearningPlanGoalProgressesAction
+            }
+          ],
+          priority: Priority.HIGH
+        });
+        addFeedbackAction = new AddEffectFeedback({ effectFeedback });
+      });
+
+      beforeEach(() => {
+        mockServiceMethodError('createForUser', 'Something went wrong');
+      });
+
+      it('should dispatch an error feedback action', () => {
+        expectInAndOut(
+          effects.createUserLessonWithLearningPlanGoalProgresses$,
+          createUserLessonWithLearningPlanGoalProgressesAction,
           addFeedbackAction
         );
       });
