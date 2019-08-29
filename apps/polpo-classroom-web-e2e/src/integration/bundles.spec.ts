@@ -5,23 +5,23 @@ import { cyEnv, dataCy, login, performSetup } from '../support/commands';
 import {
   ApiPathsInterface,
   AppPathsInterface,
-  StudentOpenBundleContentInterface
+  PolpoStudentOpenBundleContentInterface
 } from '../support/interfaces';
 
 describe('Bundles', () => {
   const apiUrl = cyEnv('apiUrl');
   const appPaths = cyEnv('appPaths') as AppPathsInterface;
   const apiPaths = cyEnv('apiPaths') as ApiPathsInterface;
-  let setup: StudentOpenBundleContentInterface;
+  let setup: PolpoStudentOpenBundleContentInterface;
   before(() => {
-    performSetup('studentOpenBundleContent').then(res => {
+    performSetup('polpoStudentOpenBundleContent').then(res => {
       setup = res.body;
     });
   });
   beforeEach(() => {
     login(
-      setup.studentOpenBundleContent.login.username,
-      setup.studentOpenBundleContent.login.password
+      setup.polpoStudentOpenBundleContent.login.username,
+      setup.polpoStudentOpenBundleContent.login.password
     );
   });
   describe('learningarea page', () => {
@@ -34,13 +34,13 @@ describe('Bundles', () => {
         .contains('1 bundel')
         .contains('1 boek');
       dataCy('learningArea')
-        .contains(setup.studentOpenBundleContent.learningArea.name)
+        .contains(setup.polpoStudentOpenBundleContent.learningArea.name)
         .click()
         .location('pathname')
         .should(
           'be',
           `${appPaths.bundles}/${
-            setup.studentOpenBundleContent.learningArea.id
+            setup.polpoStudentOpenBundleContent.learningArea.id
           }`
         );
     });
@@ -48,7 +48,9 @@ describe('Bundles', () => {
   describe('bundles page', () => {
     beforeEach(() => {
       cy.visit(
-        `${appPaths.bundles}/${setup.studentOpenBundleContent.learningArea.id}`,
+        `${appPaths.bundles}/${
+          setup.polpoStudentOpenBundleContent.learningArea.id
+        }`,
         {
           onBeforeLoad(win) {
             cy.stub(win, 'open');
@@ -60,29 +62,30 @@ describe('Bundles', () => {
       dataCy('bundle-count').contains('1 van 1 weergegeven');
       dataCy('bundle-details').contains('3 items');
       dataCy('bundle')
-        .contains(`${setup.studentOpenBundleContent.bundle.name}`)
+        .contains(`${setup.polpoStudentOpenBundleContent.bundle.name}`)
         .click()
         .location('pathname')
         .should(
           'be',
           `${appPaths.bundles}/${
-            setup.studentOpenBundleContent.bundle.learningAreaId
-          }/${setup.studentOpenBundleContent.bundle.id}`
+            setup.polpoStudentOpenBundleContent.bundle.learningAreaId
+          }/${setup.polpoStudentOpenBundleContent.bundle.id}`
         );
     });
     it('should show the boeke', () => {
       dataCy('boeke-count').contains(
         `Je hebt 1 boek voor ${
-          setup.studentOpenBundleContent.learningArea.name
+          setup.polpoStudentOpenBundleContent.learningArea.name
         }`
       );
       dataCy('boeke').as('boeke');
       cy.get('@boeke').contains(
-        setup.studentOpenBundleContent.boeke.publishedEduContentMetadata
+        setup.polpoStudentOpenBundleContent.boeke.publishedEduContentMetadata
           .fileLabel
       );
       cy.get('@boeke').contains(
-        setup.studentOpenBundleContent.boeke.publishedEduContentMetadata.title
+        setup.polpoStudentOpenBundleContent.boeke.publishedEduContentMetadata
+          .title
       );
       dataCy('boeke-view-content').click();
       cy.window()
@@ -90,8 +93,8 @@ describe('Bundles', () => {
         .should(
           'be.calledWithExactly',
           `${apiUrl}${apiPaths.eduContent}/${
-            setup.studentOpenBundleContent.boeke.publishedEduContentMetadata
-              .eduContentId
+            setup.polpoStudentOpenBundleContent.boeke
+              .publishedEduContentMetadata.eduContentId
           }/redirectURL`
         );
     });
@@ -100,8 +103,8 @@ describe('Bundles', () => {
     beforeEach(() => {
       cy.visit(
         `${appPaths.bundles}/${
-          setup.studentOpenBundleContent.learningArea.id
-        }/${setup.studentOpenBundleContent.bundle.id}`,
+          setup.polpoStudentOpenBundleContent.learningArea.id
+        }/${setup.polpoStudentOpenBundleContent.bundle.id}`,
         {
           onBeforeLoad(win) {
             cy.stub(win, 'open');
@@ -111,7 +114,7 @@ describe('Bundles', () => {
     });
     it('should show the bundle details', () => {
       dataCy('bundle-header').contains(
-        `${setup.studentOpenBundleContent.bundle.name}`
+        `${setup.polpoStudentOpenBundleContent.bundle.name}`
       );
       dataCy('bundle-count').contains('3 van 3 weergegeven');
       const contentDisplayData = getContentDisplayData(setup);
@@ -123,9 +126,11 @@ describe('Bundles', () => {
         });
       dataCy('bundle-info').as('info');
       cy.get('@info').contains(
-        `${setup.studentOpenBundleContent.teacher.displayName}`
+        `${setup.polpoStudentOpenBundleContent.teacher.displayName}`
       );
-      cy.get('@info').contains(`${setup.studentOpenBundleContent.bundle.name}`);
+      cy.get('@info').contains(
+        `${setup.polpoStudentOpenBundleContent.bundle.name}`
+      );
     });
     it('should show details if content is clicked', () => {
       const contentDisplayData = getContentDisplayData(setup);
@@ -147,7 +152,7 @@ describe('Bundles', () => {
         .and(
           'contain',
           `${apiUrl}${apiPaths.ludoAssets}/${
-            setup.studentOpenBundleContent.contentExercise.id
+            setup.polpoStudentOpenBundleContent.contentExercise.id
           }`
         );
     });
@@ -160,7 +165,7 @@ describe('Bundles', () => {
         .should(
           'be.calledWithExactly',
           `${apiUrl}${apiPaths.eduContent}/${
-            setup.studentOpenBundleContent.contentDownloadable
+            setup.polpoStudentOpenBundleContent.contentDownloadable
               .publishedEduContentMetadata.eduContentId
           }/redirectURL`
         );
@@ -171,7 +176,7 @@ describe('Bundles', () => {
         .its('open')
         .should(
           'be.calledWithExactly',
-          `${setup.studentOpenBundleContent.contentUserContent.link}`
+          `${setup.polpoStudentOpenBundleContent.contentUserContent.link}`
         );
     });
     it('should change the status', () => {

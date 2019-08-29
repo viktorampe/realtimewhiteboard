@@ -1,28 +1,29 @@
-import { StudentOpenBundleContentInterface } from './interfaces';
+import { PolpoStudentOpenBundleContentInterface } from './interfaces';
 
 export const getContentDisplayData = (
-  setup: StudentOpenBundleContentInterface
+  setup: PolpoStudentOpenBundleContentInterface
 ) => {
   return [
     {
       name:
-        setup.studentOpenBundleContent.contentExercise
+        setup.polpoStudentOpenBundleContent.contentExercise
           .publishedEduContentMetadata.title,
       fileLabel:
-        setup.studentOpenBundleContent.contentExercise
+        setup.polpoStudentOpenBundleContent.contentExercise
           .publishedEduContentMetadata.fileLabel
     },
     {
       name:
-        setup.studentOpenBundleContent.contentDownloadable
+        setup.polpoStudentOpenBundleContent.contentDownloadable
           .publishedEduContentMetadata.title,
       fileLabel:
-        setup.studentOpenBundleContent.contentDownloadable
+        setup.polpoStudentOpenBundleContent.contentDownloadable
           .publishedEduContentMetadata.fileLabel
     },
     {
-      name: setup.studentOpenBundleContent.contentUserContent.name,
-      fileLabel: setup.studentOpenBundleContent.contentUserContent.fileLabel
+      name: setup.polpoStudentOpenBundleContent.contentUserContent.name,
+      fileLabel:
+        setup.polpoStudentOpenBundleContent.contentUserContent.fileLabel
     }
   ];
 };
