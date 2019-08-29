@@ -3,7 +3,7 @@ import { Actions, Effect, ofType } from '@ngrx/effects';
 import { select } from '@ngrx/store';
 import { DataPersistence } from '@nrwl/nx';
 import { undo } from 'ngrx-undo';
-import { combineLatest, from, merge, Observable } from 'rxjs';
+import { combineLatest, from, Observable } from 'rxjs';
 import { map, mapTo, switchMap, take } from 'rxjs/operators';
 import { DalState } from '..';
 import { LearningPlanGoalProgressInterface } from '../../+models';
@@ -13,10 +13,6 @@ import {
 } from '../../learning-plan-goal-progress';
 import { UndoServiceInterface, UNDO_SERVICE_TOKEN } from '../../undo';
 import { EffectFeedback, EffectFeedbackActions } from '../effect-feedback';
-import {
-  AddUserLessonWithLearningPlanGoalProgresses,
-  UserLessonsActionTypes
-} from '../user-lesson/user-lesson.actions';
 import {
   AddLearningPlanGoalProgresses,
   BulkAddLearningPlanGoalProgresses,
@@ -261,28 +257,16 @@ export class LearningPlanGoalProgressEffects {
   );
 
   @Effect()
-  startAddManyLearningPlanGoalProgresses$ = merge(
-    this.dataPersistence.optimisticUpdate(
-      LearningPlanGoalProgressesActionTypes.StartAddManyLearningPlanGoalProgresses,
-      this.getStartAddManyLearningPlanGoalProgressesOpts()
-    ),
-    this.dataPersistence.optimisticUpdate(
-      UserLessonsActionTypes.AddUserLessonWithLearningPlanGoalProgresses,
-      this.getStartAddManyLearningPlanGoalProgressesOpts()
-    )
-  );
-
-  private getStartAddManyLearningPlanGoalProgressesOpts() {
-    return {
+  startAddManyLearningPlanGoalProgresses$ = this.dataPersistence.optimisticUpdate(
+    LearningPlanGoalProgressesActionTypes.StartAddManyLearningPlanGoalProgresses,
+    {
       run: (
-        action:
-          | StartAddManyLearningPlanGoalProgresses
-          | AddUserLessonWithLearningPlanGoalProgresses,
+        action: StartAddManyLearningPlanGoalProgresses,
         state: DalState
       ) => {
         const intendedSideEffect = this.learningPlanGoalProgressService
           .createLearningPlanGoalProgresses(
-            action.payload.userId,
+            action.payload.personId,
             action.payload.learningPlanGoalProgresses
           )
           .pipe(
@@ -301,12 +285,7 @@ export class LearningPlanGoalProgressEffects {
           doneLabel: 'Leerplandoel voortgangen zijn toegevoegd.'
         });
       },
-      undoAction: (
-        action:
-          | StartAddManyLearningPlanGoalProgresses
-          | AddUserLessonWithLearningPlanGoalProgresses,
-        error
-      ) => {
+      undoAction: (action: StartAddManyLearningPlanGoalProgresses, error) => {
         const undoAction = undo(action);
         const effectFeedback = EffectFeedback.generateErrorFeedback(
           this.uuid(),
@@ -318,8 +297,8 @@ export class LearningPlanGoalProgressEffects {
         );
         return from([undoAction, effectFeedbackAction]);
       }
-    };
-  }
+    }
+  );
 
   constructor(
     private actions: Actions,

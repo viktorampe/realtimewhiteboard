@@ -732,39 +732,28 @@ describe('LearningPlanGoalProgressEffects', () => {
           throw new Error('error');
         });
 
-      it('should return an undoAction and a feedBackAction on error', () => {
-        jest
-          .spyOn(
-            learningPlanGoalProgressService,
-            'createLearningPlanGoalProgresses'
-          )
-          .mockImplementation(() => {
-            throw new Error('error');
-          });
+      actions = hot('a', { a: triggerAction });
 
-        actions = hot('a', { a: triggerAction });
-
-        const feedbackAction = new EffectFeedbackActions.AddEffectFeedback({
-          effectFeedback: new EffectFeedback({
-            id: uuid,
-            triggerAction: triggerAction,
-            message:
-              'Het is niet gelukt om de status van de leerplandoelen aan te passen.',
-            userActions: [
-              { title: 'Opnieuw proberen', userAction: triggerAction }
-            ],
-            type: 'error',
-            priority: Priority.HIGH
-          })
-        });
-
-        expect(effects.startAddManyLearningPlanGoalProgresses$).toBeObservable(
-          cold('(ab)', {
-            a: undo(triggerAction),
-            b: feedbackAction
-          })
-        );
+      const feedbackAction = new EffectFeedbackActions.AddEffectFeedback({
+        effectFeedback: new EffectFeedback({
+          id: uuid,
+          triggerAction: triggerAction,
+          message:
+            'Het is niet gelukt om de status van de leerplandoelen aan te passen.',
+          userActions: [
+            { title: 'Opnieuw proberen', userAction: triggerAction }
+          ],
+          type: 'error',
+          priority: Priority.HIGH
+        })
       });
+
+      expect(effects.startAddManyLearningPlanGoalProgresses$).toBeObservable(
+        cold('(ab)', {
+          a: undo(triggerAction),
+          b: feedbackAction
+        })
+      );
     });
   });
 
