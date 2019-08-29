@@ -152,7 +152,6 @@ export class SearchViewModel {
   }
 
   private initiateStreams(): void {
-    this.searchState$.subscribe(console.log);
 
     this.searchFilters$ = this.searchFilterData$.pipe(
       filter(data => !!data),
