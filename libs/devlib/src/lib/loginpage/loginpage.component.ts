@@ -183,7 +183,7 @@ export class LoginpageComponent implements OnInit {
 
     this.store.dispatch(
       new LearningPlanGoalProgressActions.ToggleLearningPlanGoalProgress({
-        userId,
+        personId: userId,
         classGroupId,
         userLessonId,
         learningPlanGoalId,
@@ -209,7 +209,7 @@ export class LoginpageComponent implements OnInit {
 
     this.store.dispatch(
       new LearningPlanGoalProgressActions.BulkAddLearningPlanGoalProgresses({
-        userId,
+        personId: userId,
         classGroupId,
         userLessonId,
         learningPlanGoalIds,

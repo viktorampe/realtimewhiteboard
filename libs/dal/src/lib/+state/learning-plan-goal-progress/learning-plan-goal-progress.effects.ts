@@ -270,11 +270,12 @@ export class LearningPlanGoalProgressEffects {
             action.payload.learningPlanGoalProgresses
           )
           .pipe(
-            map(learningPlanGoalProgresses => {
-              return new AddLearningPlanGoalProgresses({
-                learningPlanGoalProgresses
-              });
-            })
+            map(
+              learningPlanGoalProgresses =>
+                new AddLearningPlanGoalProgresses({
+                  learningPlanGoalProgresses
+                })
+            )
           );
         return this.undoService.dispatchActionAsUndoable({
           action: action,

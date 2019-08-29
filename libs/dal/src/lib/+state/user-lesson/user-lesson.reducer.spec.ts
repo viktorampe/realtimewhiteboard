@@ -88,12 +88,13 @@ describe('UserLessons Reducer', () => {
 
   describe('add actions', () => {
     it('should add one userLesson', () => {
+      const userLesson = userLessons[0];
       const action = new UserLessonActions.AddUserLesson({
-        userLesson: userLessons[0]
+        userLesson
       });
 
       const result = reducer(initialState, action);
-      expect(result).toEqual(createState([userLessons[0]], false));
+      expect(result).toEqual(createState([userLesson], false));
     });
 
     it('should add multiple userLessons', () => {

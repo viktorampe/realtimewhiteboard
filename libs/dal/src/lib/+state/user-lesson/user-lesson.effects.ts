@@ -49,9 +49,9 @@ export class UserLessonEffects {
           .createForUser(action.payload.userId, action.payload.userLesson)
           .pipe(
             switchMap((userLesson: UserLessonInterface) => {
-              let actions: (AddEffectFeedback | AddUserLesson)[];
-
-              actions = [new AddUserLesson({ userLesson })];
+              const actions: (AddEffectFeedback | AddUserLesson)[] = [
+                new AddUserLesson({ userLesson })
+              ];
 
               const effectFeedback = EffectFeedback.generateSuccessFeedback(
                 this.uuid(),
