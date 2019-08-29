@@ -4,11 +4,12 @@
   "integrationFolder": "../../dist/out-tsc/apps/polpo-classroom-web-e2e/src/integration",
   "pluginsFile": "../../dist/out-tsc/apps/polpo-classroom-web-e2e/src/plugins/index.js",
   "supportFile": false,
-  "video": true,
+  "video": false,
   "videosFolder": "../../dist/out-tsc/apps/polpo-classroom-web-e2e/videos",
   "screenshotsFolder": "../../dist/out-tsc/apps/polpo-classroom-web-e2e/screenshots",
   "chromeWebSecurity": false,
   "defaultCommandTimeout": 10000,
+  "testFiles": "**/*.spec.js",
   "env": {
     "development": {
       "apiUrl": "http://api.polpo.localhost:3000/",
