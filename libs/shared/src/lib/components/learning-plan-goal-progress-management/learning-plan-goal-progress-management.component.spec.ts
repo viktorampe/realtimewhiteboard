@@ -16,6 +16,7 @@ import {
   ClassGroupFixture,
   EduContentBookFixture,
   LearningPlanGoalFixture,
+  UserLessonFixture,
   UserLessonInterface
 } from '@campus/dal';
 import { UiModule } from '@campus/ui';
@@ -360,6 +361,26 @@ describe('LearningPlanGoalProgressManagementComponent', () => {
       expect(component.closeDialog).toHaveBeenCalled();
     });
 
+    it('saveForUserLesson should use the description of an existing user lesson', async () => {
+      lpgpManagementViewModel.createLearningPlanGoalProgressForUserLesson = jest.fn();
+
+      const existingUserLesson = new UserLessonFixture({ description: 'foo' });
+
+      component.inputFromControl.setValue(existingUserLesson);
+      fixture.detectChanges();
+
+      component.saveForUserLesson();
+
+      expect(
+        lpgpManagementViewModel.createLearningPlanGoalProgressForUserLesson
+      ).toHaveBeenCalledWith(
+        mockInjectedData.learningPlanGoal.id,
+        mockInjectedData.classGroup.id,
+        existingUserLesson.description,
+        mockInjectedData.book.id
+      );
+    });
+
     it('saveForEduContentTOCselection should call the correct method on the viewmodel and close the dialog', () => {
       lpgpManagementViewModel.createLearningPlanGoalProgressForEduContentTOCs = jest.fn();
       component.closeDialog = jest.fn();
@@ -398,7 +419,7 @@ describe('LearningPlanGoalProgressManagementComponent', () => {
 async function updateInputValue(
   inputElement: any,
   fixture: ComponentFixture<LearningPlanGoalProgressManagementComponent>,
-  inputValue: string
+  inputValue: string | UserLessonInterface
 ) {
   inputElement.dispatchEvent(new Event('focusin'));
   inputElement.value = inputValue;
