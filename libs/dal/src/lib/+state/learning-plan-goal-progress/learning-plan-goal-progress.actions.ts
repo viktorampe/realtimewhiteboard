@@ -249,4 +249,5 @@ export interface MinimalLearningPlanGoalProgressEduContentTocInterface
   classGroupId: number;
   learningPlanGoalId: number;
   eduContentTocId: number;
+  eduContentBookId: number;
 }
