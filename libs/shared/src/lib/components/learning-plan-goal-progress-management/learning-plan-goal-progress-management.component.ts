@@ -36,8 +36,6 @@ export class LearningPlanGoalProgressManagementComponent implements OnInit {
   public learningPlanGoal: LearningPlanGoalInterface;
   public classGroup: ClassGroupInterface;
 
-  // TODO remove -> will depend on userLesson input
-  public isUserLessonInput = true;
   public inputFromControl: FormControl;
   public filteredUserLessons$: Observable<UserLessonInterface[]>;
   public methodLessonsForBook$: Observable<
@@ -116,22 +114,34 @@ export class LearningPlanGoalProgressManagementComponent implements OnInit {
     else this.inputFromControl.enable();
   }
 
-  public saveForUserLesson(userLesson: UserLessonInterface): void {
-    this.learningPlanGoalProgressManagerVM.createLearningPlanGoalProgressForUserLesson(
-      this.learningPlanGoal,
-      this.classGroup,
-      userLesson
-    );
-    this.closeDialog();
+  public saveForUserLesson(): void {
+    const description = this.inputFromControl.value;
+
+    if (description) {
+      this.learningPlanGoalProgressManagerVM.createLearningPlanGoalProgressForUserLesson(
+        this.learningPlanGoal.id,
+        this.classGroup.id,
+        description,
+        this.book.id
+      );
+      this.closeDialog();
+    }
   }
 
-  public saveForEduContentTOCselection(eduContentTOCids: number[]): void {
-    this.learningPlanGoalProgressManagerVM.createLearningPlanGoalProgressForEduContentTOCs(
-      this.learningPlanGoal,
-      this.classGroup,
-      eduContentTOCids
+  public saveForEduContentTOCselection(): void {
+    const eduContentTOCids = this.matSelectionList.selectedOptions.selected.map(
+      option => option.value.eduContentTocId
     );
-    this.closeDialog();
+
+    if (eduContentTOCids.length) {
+      this.learningPlanGoalProgressManagerVM.createLearningPlanGoalProgressForEduContentTOCs(
+        this.learningPlanGoal.id,
+        this.classGroup.id,
+        eduContentTOCids,
+        this.book.id
+      );
+      this.closeDialog();
+    }
   }
 
   public closeDialog() {
