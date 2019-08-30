@@ -106,13 +106,13 @@ describe('LearningPlanGoalProgressViewModel', () => {
             {
               classGroupId,
               learningPlanGoalId,
-              eduContentTocId: eduContentTocIds[0],
+              eduContentTOCId: eduContentTocIds[0],
               eduContentBookId
             },
             {
               classGroupId,
               learningPlanGoalId,
-              eduContentTocId: eduContentTocIds[1],
+              eduContentTOCId: eduContentTocIds[1],
               eduContentBookId
             }
           ]
