@@ -47,17 +47,25 @@
   </mat-dialog-content>
   <mat-dialog-actions>
     <campus-button
-      *ngIf="isUserLessonInput"
+      *ngIf="!isInputDisabled()"
+      class="learning-plan-goal-progress-management__button learning-plan-goal-progress-management__button--save"
       primary
-      (click)="saveForUserLesson({ description: 'foo' })"
+      [class.ui-button--disabled]="!isSelectionListDisabled()"
+      (click)="saveForUserLesson()"
       >Opslaan (project)</campus-button
     >
     <campus-button
-      *ngIf="!isUserLessonInput"
+      *ngIf="isInputDisabled()"
+      class="learning-plan-goal-progress-management__button learning-plan-goal-progress-management__button--save"
       primary
-      (click)="saveForEduContentTOCselection([1, 2, 3])"
+      (click)="saveForEduContentTOCselection()"
       >Opslaan (hoofdstuk)</campus-button
     >
-    <campus-button primary (click)="closeDialog()">Sluiten</campus-button>
+    <campus-button
+      class="learning-plan-goal-progress-management__button learning-plan-goal-progress-management__button--close"
+      primary
+      (click)="closeDialog()"
+      >Sluiten</campus-button
+    >
   </mat-dialog-actions>
 </div>
