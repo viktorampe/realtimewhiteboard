@@ -117,13 +117,15 @@ export class LearningPlanGoalProgressManagementComponent implements OnInit {
   public saveForUserLesson(): void {
     const description = this.inputFromControl.value;
 
-    this.learningPlanGoalProgressManagerVM.createLearningPlanGoalProgressForUserLesson(
-      this.learningPlanGoal.id,
-      this.classGroup.id,
-      description,
-      this.book.id
-    );
-    this.closeDialog();
+    if (description) {
+      this.learningPlanGoalProgressManagerVM.createLearningPlanGoalProgressForUserLesson(
+        this.learningPlanGoal.id,
+        this.classGroup.id,
+        description,
+        this.book.id
+      );
+      this.closeDialog();
+    }
   }
 
   public saveForEduContentTOCselection(): void {
@@ -131,13 +133,15 @@ export class LearningPlanGoalProgressManagementComponent implements OnInit {
       option => option.value.eduContentTocId
     );
 
-    this.learningPlanGoalProgressManagerVM.createLearningPlanGoalProgressForEduContentTOCs(
-      this.learningPlanGoal.id,
-      this.classGroup.id,
-      eduContentTOCids,
-      this.book.id
-    );
-    this.closeDialog();
+    if (eduContentTOCids.length) {
+      this.learningPlanGoalProgressManagerVM.createLearningPlanGoalProgressForEduContentTOCs(
+        this.learningPlanGoal.id,
+        this.classGroup.id,
+        eduContentTOCids,
+        this.book.id
+      );
+      this.closeDialog();
+    }
   }
 
   public closeDialog() {

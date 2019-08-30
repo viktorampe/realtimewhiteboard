@@ -224,10 +224,7 @@ describe('LearningPlanGoalProgressManagementComponent', () => {
     it('should call inputFormControl disable if a lessonMethod selection was made', () => {
       component.ngOnInit();
       fixture.detectChanges();
-      const formControlSpy = jest.spyOn(
-        component['inputFromControl'], // TODO refactor -> protected
-        'disable'
-      );
+      const formControlSpy = jest.spyOn(component.inputFromControl, 'disable');
       const options = fixture.debugElement.queryAll(
         By.css('.learning-plan-goal-progress-management__list-option')
       );
@@ -289,25 +286,17 @@ describe('LearningPlanGoalProgressManagementComponent', () => {
       });
 
       it('should show a save button, for selection', async () => {
-        const input = fixture.debugElement.query(
-          By.css('.learning-plan-goal-progress-management__input')
-        ).nativeElement;
+        const matList = fixture.debugElement.query(
+          By.directive(MatSelectionList)
+        ).componentInstance as MatSelectionList;
+        matList.selectAll();
 
-        // on by default
+        fixture.detectChanges();
+
         let buttonDE = fixture.debugElement.query(
           By.css('.learning-plan-goal-progress-management__button--save')
         );
-        expect(buttonDE.nativeElement.textContent.trim()).toBe(
-          'Opslaan (hoofdstuk)'
-        );
 
-        // toggle on/off
-        await updateInputValue(input, fixture, 'some random string');
-        await updateInputValue(input, fixture, '');
-
-        buttonDE = fixture.debugElement.query(
-          By.css('.learning-plan-goal-progress-management__button--save')
-        );
         expect(buttonDE.nativeElement.textContent.trim()).toBe(
           'Opslaan (hoofdstuk)'
         );
