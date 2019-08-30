@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
-import { Observable, of } from 'rxjs';
-import { map, mapTo, tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { map, mapTo } from 'rxjs/operators';
 import { LearningPlanGoalProgressInterface } from '../+models';
 import {
   MinimalLearningPlanGoalProgressEduContentTocInterface,
@@ -43,14 +43,9 @@ export class LearningPlanGoalProgressService
     userId: number,
     learningPlanGoalProgressIds: number[]
   ): Observable<boolean> {
-    //TODO -- implement call to new remote method
-    return of(true).pipe(
-      tap(val => {
-        console.log(
-          `deleteLearningPlanGoalProgresses called with\n - userId: ${userId}\n - learningPlanGoalProgressIds: ${learningPlanGoalProgressIds}`
-        );
-      })
-    );
+    return this.personApi
+      .destroyManyLearningPlanGoalProgress(userId, learningPlanGoalProgressIds)
+      .pipe(mapTo(true));
   }
 
   createLearningPlanGoalProgress(
@@ -76,17 +71,13 @@ export class LearningPlanGoalProgressService
 
   createLearningPlanGoalProgresses(
     userId: number,
-    learninGoalProgresses: (
+    learningGoalPlanProgresses: (
       | MinimalLearningPlanGoalProgressEduContentTocInterface
       | MinimalLearningPlanGoalProgressUserLessonInterface)[]
   ): Observable<LearningPlanGoalProgressInterface[]> {
-    //TODO -- implement call to new remote method
-    return of([]).pipe(
-      tap(val => {
-        console.log(
-          `createLearningPlanGoalProgresses called with\n - userId: ${userId}\n - learninGoalProgresses: ${learninGoalProgresses}`
-        );
-      })
+    return this.personApi.createLearningPlanGoalProgresses(
+      userId,
+      learningGoalPlanProgresses
     );
   }
 }

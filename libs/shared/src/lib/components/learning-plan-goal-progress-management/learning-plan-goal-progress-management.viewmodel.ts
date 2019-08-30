@@ -115,10 +115,10 @@ export class LearningPlanGoalProgressManagementViewModel {
             {
               personId: user.id,
               learningPlanGoalProgresses: eduContentTOCids.map(
-                eduContentTocId => ({
+                eduContentTOCId => ({
                   classGroupId,
                   learningPlanGoalId,
-                  eduContentTocId,
+                  eduContentTOCId,
                   eduContentBookId
                 })
               )
