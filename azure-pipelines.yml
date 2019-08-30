@@ -32,7 +32,7 @@ steps:
     displayName: '(Check) Enable dkBuild (artifacts) if pushing to master'
   - script: |
       echo '##vso[task.setvariable variable=dkE2E]true'
-    condition: in(variables['System.PullRequest.TargetBranch'], 'master', 'mock-master')
+    condition: in(variables['System.PullRequest.TargetBranch'], 'master', 'test/mock-master')
     displayName: '(Check) Enable dkE2E (end-to-end tests) if building or target is master'
   - script: |
       echo Build information
