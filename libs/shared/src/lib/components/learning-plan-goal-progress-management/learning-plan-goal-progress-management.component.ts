@@ -115,7 +115,8 @@ export class LearningPlanGoalProgressManagementComponent implements OnInit {
   }
 
   public saveForUserLesson(): void {
-    const description = this.inputFromControl.value;
+    const inputValue = this.inputFromControl.value;
+    const description = inputValue.description || inputValue;
 
     if (description) {
       this.learningPlanGoalProgressManagerVM.createLearningPlanGoalProgressForUserLesson(
