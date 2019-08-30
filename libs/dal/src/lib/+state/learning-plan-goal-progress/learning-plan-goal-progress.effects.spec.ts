@@ -716,7 +716,6 @@ describe('LearningPlanGoalProgressEffects', () => {
           a: dummyAction
         })
       );
-
       expect(undoSpy).toHaveBeenCalledTimes(1);
       expect(
         learningPlanGoalProgressService.createLearningPlanGoalProgresses

@@ -21,8 +21,7 @@ export enum UserLessonsActionTypes {
   DeleteUserLessons = '[UserLessons] Delete UserLessons',
   ClearUserLessons = '[UserLessons] Clear UserLessons',
   CreateUserLesson = '[UserLessons] Create UserLesson',
-  CreateUserLessonWithLearningPlanGoalProgresses = '[UserLessons] Create UserLesson with LearningPlanGoalProgresses',
-  AddUserLessonWithLearningPlanGoalProgresses = '[UserLessons] Add UserLesson  with LearningPlanGoalProgresses'
+  CreateUserLessonWithLearningPlanGoalProgresses = '[UserLessons] Create UserLesson with LearningPlanGoalProgresses'
 }
 
 export class LoadUserLessons implements Action {
@@ -126,21 +125,6 @@ export class CreateUserLessonWithLearningPlanGoalProgresses
   ) {}
 }
 
-export class AddUserLessonWithLearningPlanGoalProgresses
-  implements FeedbackTriggeringAction {
-  readonly type =
-    UserLessonsActionTypes.AddUserLessonWithLearningPlanGoalProgresses;
-
-  constructor(
-    public payload: {
-      userId: number;
-      userLesson: UserLessonInterface;
-      learningPlanGoalProgresses: MinimalLearningPlanGoalProgressUserLessonInterface[];
-      customFeedbackHandlers?: CustomFeedbackHandlersInterface;
-    }
-  ) {}
-}
-
 export type UserLessonsActions =
   | LoadUserLessons
   | UserLessonsLoaded
@@ -155,8 +139,7 @@ export type UserLessonsActions =
   | DeleteUserLessons
   | ClearUserLessons
   | CreateUserLesson
-  | CreateUserLessonWithLearningPlanGoalProgresses
-  | AddUserLessonWithLearningPlanGoalProgresses;
+  | CreateUserLessonWithLearningPlanGoalProgresses;
 
 // needed because we're not running typescript 3.5
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
