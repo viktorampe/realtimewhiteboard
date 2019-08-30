@@ -293,7 +293,7 @@ describe('LearningPlanGoalProgressManagementComponent', () => {
 
         fixture.detectChanges();
 
-        let buttonDE = fixture.debugElement.query(
+        const buttonDE = fixture.debugElement.query(
           By.css('.learning-plan-goal-progress-management__button--save')
         );
 
