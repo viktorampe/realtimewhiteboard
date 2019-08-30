@@ -90,6 +90,7 @@
             #checkbox
             color="primary"
             [checked]="item.content[itemColumn.item[itemColumn.key]]"
+            campusClickPreventDefault
             (click)="
               clickCheckbox(
                 item.header,
