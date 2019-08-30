@@ -248,6 +248,6 @@ export interface MinimalLearningPlanGoalProgressEduContentTocInterface
   extends LearningPlanGoalProgressInterface {
   classGroupId: number;
   learningPlanGoalId: number;
-  eduContentTocId: number;
+  eduContentTOCId: number;
   eduContentBookId: number;
 }
