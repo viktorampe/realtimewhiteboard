@@ -115,16 +115,8 @@ export class LearningPlanGoalProgressManagementComponent implements OnInit {
   }
 
   public saveForUserLesson(): void {
-    let description = null;
     const inputValue = this.inputFromControl.value;
-
-    if (typeof inputValue === 'object') {
-      // user has chosen an existing user lesson
-      description = inputValue.description;
-    } else {
-      // new user lesson
-      description = inputValue;
-    }
+    const description = inputValue.description || inputValue;
 
     if (description) {
       this.learningPlanGoalProgressManagerVM.createLearningPlanGoalProgressForUserLesson(
