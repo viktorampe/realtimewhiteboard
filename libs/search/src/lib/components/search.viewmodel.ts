@@ -152,7 +152,6 @@ export class SearchViewModel {
   }
 
   private initiateStreams(): void {
-
     this.searchFilters$ = this.searchFilterData$.pipe(
       filter(data => !!data),
       map(({ predictions, factoryFilters, state }) => {
