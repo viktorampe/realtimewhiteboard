@@ -3,7 +3,7 @@ import { ofType } from '@ngrx/effects';
 import { Action } from '@ngrx/store';
 import { undo } from 'ngrx-undo';
 import { from, Observable } from 'rxjs';
-import { filter, map, switchMap, take } from 'rxjs/operators';
+import { filter, map, switchMap, take, tap } from 'rxjs/operators';
 import {
   EffectFeedback,
   EffectFeedbackActions,
@@ -61,6 +61,9 @@ export class UndoService implements UndoServiceInterface {
         (deleteFeedbackAction: EffectFeedbackActions.DeleteEffectFeedback) => {
           if (deleteFeedbackAction.payload.userAction !== undoAction) {
             return intendedSideEffect.pipe(
+              tap(res => {
+                if (res) dataPersistence.store.dispatch(res);
+              }), //TODO: do this cleanly AB#1915
               map(res => {
                 const effectFeedback = new EffectFeedback({
                   id: this.uuid(),
