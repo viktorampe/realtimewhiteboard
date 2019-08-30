@@ -71,7 +71,7 @@ describe('UndoService', () => {
         undoLabel: 'undo label',
         undoneLabel: 'undone label',
         doneLabel: 'done label',
-        intendedSideEffect: of('returnValue')
+        intendedSideEffect: of({ type: 'returnValue' })
       };
       warningFeedback = new EffectFeedback({
         id: uuid(),

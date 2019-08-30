@@ -61,7 +61,9 @@ export class UndoService implements UndoServiceInterface {
         (deleteFeedbackAction: EffectFeedbackActions.DeleteEffectFeedback) => {
           if (deleteFeedbackAction.payload.userAction !== undoAction) {
             return intendedSideEffect.pipe(
-              tap(res => dataPersistence.store.dispatch(res)), //TODO: do this cleanly AB#1915
+              tap(res => {
+                if (res) dataPersistence.store.dispatch(res);
+              }), //TODO: do this cleanly AB#1915
               map(res => {
                 const effectFeedback = new EffectFeedback({
                   id: this.uuid(),
