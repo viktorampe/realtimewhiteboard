@@ -165,8 +165,8 @@ describe('SearchComponent', () => {
     component = fixture.componentInstance;
 
     searchViewmodel = component['searchViewmodel'];
-    component.initialState = mockSearchState;
     component.searchMode = mockSearchMode;
+    component.initialState = mockSearchState;
 
     resultList = fixture.debugElement.query(By.directive(ResultsListComponent))
       .componentInstance;

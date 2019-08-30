@@ -129,6 +129,7 @@ export class SearchComponent implements AfterViewInit, OnDestroy, OnChanges {
       initialState.searchTerm = undefined;
       this.searchTermComponent.currentValue = undefined;
     }
+
     this.searchViewmodel.reset(this.searchMode, {
       ...initialState,
       filterCriteriaSelections: new Map(initialState.filterCriteriaSelections)
