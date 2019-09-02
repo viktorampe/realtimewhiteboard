@@ -52,6 +52,7 @@ describe('MethodViewModel', () => {
     trainingViewModel = TestBed.get(TrainingViewModel);
     store = TestBed.get(Store);
     router = TestBed.get(Router);
+    zone = TestBed.get(NgZone);
   });
 
   describe('creation', () => {
