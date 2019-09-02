@@ -27,7 +27,7 @@ describe('MethodsOverviewComponent', () => {
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [UiModule, SharedModule, RouterTestingModule],
-      declarations: [MethodsOverviewComponent, MethodYearTileComponent],
+      declarations: [MethodsOverviewComponent],
       providers: [
         {
           provide: ENVIRONMENT_SEARCHMODES_TOKEN,
