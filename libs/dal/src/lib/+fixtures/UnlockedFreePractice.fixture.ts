@@ -5,7 +5,6 @@ export class UnlockedFreePracticeFixture
   // defaults
   id = 1;
   eduContentBookId = 1;
-  eduContentTOCId = 1;
   classGroupId = 1;
 
   constructor(props: Partial<UnlockedFreePracticeInterface> = {}) {
