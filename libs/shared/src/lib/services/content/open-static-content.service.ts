@@ -1,8 +1,8 @@
 import { Inject, Injectable } from '@angular/core';
 import { WINDOW } from '@campus/browser';
 import { ContentInterface, EduContent, UserContent } from '@campus/dal';
-import { EnvironmentApiInterface, ENVIRONMENT_API_TOKEN } from '../interfaces';
 import { OpenStaticContentServiceInterface } from './open-static-content.interface';
+import { EnvironmentApiInterface, ENVIRONMENT_API_TOKEN } from '../../interfaces';
 
 @Injectable({
   providedIn: 'root'

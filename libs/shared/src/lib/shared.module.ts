@@ -30,22 +30,18 @@ import {
 import { HasPermissionDirective } from './auth/has-permission.directive';
 import { PermissionService } from './auth/permission.service';
 import { PERMISSION_SERVICE_TOKEN } from './auth/permission.service.interface';
-import { EduContentCollectionManagerService } from './collection-manager/edu-content-collection-manager.service';
-import { EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN } from './collection-manager/edu-content-collection-manager.service.interface';
 import { LearningPlanGoalProgressManagementComponent } from './components/learning-plan-goal-progress-management/learning-plan-goal-progress-management.component';
 import { MethodYearTileComponent } from './components/method-year-tile/method-year-tile.component';
 import { PageBarContainerComponent } from './components/page-bar-container/page-bar-container.component';
 import { QuickLinkComponent } from './components/quick-link/quick-link.component';
-import { OPEN_STATIC_CONTENT_SERVICE_TOKEN } from './content/open-static-content.interface';
-import { OpenStaticContentService } from './content/open-static-content.service';
 import { CampusRouterlinkDirective } from './directives/campus-routerlink.directive';
 import { DataCyDirective } from './directives/data-cy.directive';
-import { FeedBackService, FEEDBACK_SERVICE_TOKEN } from './feedback';
+import { FeedBackService, FEEDBACK_SERVICE_TOKEN } from './services/feedback';
 import {
   SnackBarDefaultConfig,
   SNACKBAR_DEFAULT_CONFIG_TOKEN
-} from './feedback/snackbar.config';
-import { HeaderComponent } from './header/header.component';
+} from './services/feedback/snackbar.config';
+import { HeaderComponent } from './components/header/header.component';
 import { CampusHttpInterceptor } from './interceptors/campus-http.interceptor';
 import {
   EnvironmentAlertsFeatureInterface,
@@ -76,10 +72,14 @@ import {
 import { AlertToNotificationItemPipe } from './pipes/alert-to-notification/alert-to-notification-pipe';
 import { MailToByCredentialPipe } from './pipes/mail-to/mail-to-credential-pipe';
 import { PersonBadgeFromCredentialPipe } from './pipes/person-badge-from-credential/person-badge-from-credential-pipe';
-import { ScormExerciseService } from './scorm/scorm-exercise.service';
-import { SCORM_EXERCISE_SERVICE_TOKEN } from './scorm/scorm-exercise.service.interface';
+import { EduContentCollectionManagerService } from './services/collection-manager/edu-content-collection-manager.service';
+import { EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN } from './services/collection-manager/edu-content-collection-manager.service.interface';
 import { ContentActionsService } from './services/content-actions/content-actions.service';
 import { CONTENT_ACTIONS_SERVICE_TOKEN } from './services/content-actions/content-actions.service.interface';
+import { OPEN_STATIC_CONTENT_SERVICE_TOKEN } from './services/content/open-static-content.interface';
+import { OpenStaticContentService } from './services/content/open-static-content.service';
+import { ScormExerciseService } from './services/scorm/scorm-exercise.service';
+import { SCORM_EXERCISE_SERVICE_TOKEN } from './services/scorm/scorm-exercise.service.interface';
 
 @NgModule({
   imports: [

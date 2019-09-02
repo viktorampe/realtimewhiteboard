@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { WINDOW } from '@campus/browser';
 import { EduContentFixture, UserContentFixture } from '@campus/dal';
-import { ENVIRONMENT_API_TOKEN } from '../interfaces';
+import { ENVIRONMENT_API_TOKEN } from '../../interfaces';
 import { OpenStaticContentService } from './open-static-content.service';
 
 describe('OpenStaticContentServiceService', () => {
