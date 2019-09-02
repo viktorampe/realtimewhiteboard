@@ -13,9 +13,7 @@ import { PagesTrainingRoutingModule } from './pages-training-routing.module';
     UiModule,
     PagesSharedModule
   ],
-  declarations: [
-    TrainingComponent,
-  ],
+  declarations: [TrainingComponent],
   providers: [TrainingViewModel]
 })
 export class PagesTrainingModule {}
