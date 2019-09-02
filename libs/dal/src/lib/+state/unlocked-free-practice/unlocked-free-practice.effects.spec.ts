@@ -19,7 +19,6 @@ describe('UnlockedFreePracticeEffects', () => {
   let effects: UnlockedFreePracticeEffects;
   let usedState: any;
 
-
   const expectInAndOut = (
     effect: Observable<any>,
     triggerAction: Action,
@@ -61,9 +60,13 @@ describe('UnlockedFreePracticeEffects', () => {
       imports: [
         NxModule.forRoot(),
         StoreModule.forRoot({}),
-        StoreModule.forFeature(UnlockedFreePracticeReducer.NAME , UnlockedFreePracticeReducer.reducer, {
-          initialState: usedState
-        }),
+        StoreModule.forFeature(
+          UnlockedFreePracticeReducer.NAME,
+          UnlockedFreePracticeReducer.reducer,
+          {
+            initialState: usedState
+          }
+        ),
         EffectsModule.forRoot([]),
         EffectsModule.forFeature([UnlockedFreePracticeEffects])
       ],
@@ -85,9 +88,16 @@ describe('UnlockedFreePracticeEffects', () => {
 
   describe('loadUnlockedFreePractice$', () => {
     const unforcedLoadAction = new LoadUnlockedFreePractices({ userId: 1 });
-    const forcedLoadAction = new LoadUnlockedFreePractices({ force: true, userId: 1 });
-    const filledLoadedAction = new UnlockedFreePracticesLoaded({ unlockedFreePractices: [] });
-    const loadErrorAction = new UnlockedFreePracticesLoadError(new Error('failed'));
+    const forcedLoadAction = new LoadUnlockedFreePractices({
+      force: true,
+      userId: 1
+    });
+    const filledLoadedAction = new UnlockedFreePracticesLoaded({
+      unlockedFreePractices: []
+    });
+    const loadErrorAction = new UnlockedFreePracticesLoadError(
+      new Error('failed')
+    );
     describe('with initialState', () => {
       beforeAll(() => {
         usedState = UnlockedFreePracticeReducer.initialState;
@@ -112,7 +122,10 @@ describe('UnlockedFreePracticeEffects', () => {
     });
     describe('with loaded state', () => {
       beforeAll(() => {
-        usedState = { ...UnlockedFreePracticeReducer.initialState, loaded: true };
+        usedState = {
+          ...UnlockedFreePracticeReducer.initialState,
+          loaded: true
+        };
       });
       beforeEach(() => {
         mockServiceMethodReturnValue('getAllForUser', []);

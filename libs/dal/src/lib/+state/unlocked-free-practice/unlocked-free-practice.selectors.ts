@@ -8,7 +8,9 @@ import {
   State
 } from './unlocked-free-practice.reducer';
 
-export const selectUnlockedFreePracticeState = createFeatureSelector<State>(NAME);
+export const selectUnlockedFreePracticeState = createFeatureSelector<State>(
+  NAME
+);
 
 export const getError = createSelector(
   selectUnlockedFreePracticeState,
@@ -20,11 +22,20 @@ export const getLoaded = createSelector(
   (state: State) => state.loaded
 );
 
-export const getAll = createSelector(selectUnlockedFreePracticeState, selectAll);
+export const getAll = createSelector(
+  selectUnlockedFreePracticeState,
+  selectAll
+);
 
-export const getCount = createSelector(selectUnlockedFreePracticeState, selectTotal);
+export const getCount = createSelector(
+  selectUnlockedFreePracticeState,
+  selectTotal
+);
 
-export const getIds = createSelector(selectUnlockedFreePracticeState, selectIds);
+export const getIds = createSelector(
+  selectUnlockedFreePracticeState,
+  selectIds
+);
 
 export const getAllEntities = createSelector(
   selectUnlockedFreePracticeState,
@@ -44,7 +55,6 @@ export const getByIds = createSelector(
     return props.ids.map(id => state.entities[id]);
   }
 );
-
 
 /**
  * returns array of objects in the order of the given ids

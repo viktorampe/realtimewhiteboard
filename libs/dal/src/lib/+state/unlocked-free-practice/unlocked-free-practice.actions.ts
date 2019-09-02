@@ -21,55 +21,74 @@ export class LoadUnlockedFreePractices implements Action {
   readonly type = UnlockedFreePracticesActionTypes.LoadUnlockedFreePractices;
 
   constructor(
-    public payload: { force?: boolean, userId: number } = { userId: null }
+    public payload: { force?: boolean; userId: number } = { userId: null }
   ) {}
 }
 
 export class UnlockedFreePracticesLoaded implements Action {
   readonly type = UnlockedFreePracticesActionTypes.UnlockedFreePracticesLoaded;
 
-  constructor(public payload: { unlockedFreePractices: UnlockedFreePracticeInterface[] }) {}
+  constructor(
+    public payload: { unlockedFreePractices: UnlockedFreePracticeInterface[] }
+  ) {}
 }
 
 export class UnlockedFreePracticesLoadError implements Action {
-  readonly type = UnlockedFreePracticesActionTypes.UnlockedFreePracticesLoadError;
+  readonly type =
+    UnlockedFreePracticesActionTypes.UnlockedFreePracticesLoadError;
   constructor(public payload: any) {}
 }
 
 export class AddUnlockedFreePractice implements Action {
   readonly type = UnlockedFreePracticesActionTypes.AddUnlockedFreePractice;
 
-  constructor(public payload: { unlockedFreePractice: UnlockedFreePracticeInterface }) {}
+  constructor(
+    public payload: { unlockedFreePractice: UnlockedFreePracticeInterface }
+  ) {}
 }
 
 export class UpsertUnlockedFreePractice implements Action {
   readonly type = UnlockedFreePracticesActionTypes.UpsertUnlockedFreePractice;
 
-  constructor(public payload: { unlockedFreePractice: UnlockedFreePracticeInterface }) {}
+  constructor(
+    public payload: { unlockedFreePractice: UnlockedFreePracticeInterface }
+  ) {}
 }
 
 export class AddUnlockedFreePractices implements Action {
   readonly type = UnlockedFreePracticesActionTypes.AddUnlockedFreePractices;
 
-  constructor(public payload: { unlockedFreePractices: UnlockedFreePracticeInterface[] }) {}
+  constructor(
+    public payload: { unlockedFreePractices: UnlockedFreePracticeInterface[] }
+  ) {}
 }
 
 export class UpsertUnlockedFreePractices implements Action {
   readonly type = UnlockedFreePracticesActionTypes.UpsertUnlockedFreePractices;
 
-  constructor(public payload: { unlockedFreePractices: UnlockedFreePracticeInterface[] }) {}
+  constructor(
+    public payload: { unlockedFreePractices: UnlockedFreePracticeInterface[] }
+  ) {}
 }
 
 export class UpdateUnlockedFreePractice implements Action {
   readonly type = UnlockedFreePracticesActionTypes.UpdateUnlockedFreePractice;
 
-  constructor(public payload: { unlockedFreePractice: Update<UnlockedFreePracticeInterface> }) {}
+  constructor(
+    public payload: {
+      unlockedFreePractice: Update<UnlockedFreePracticeInterface>;
+    }
+  ) {}
 }
 
 export class UpdateUnlockedFreePractices implements Action {
   readonly type = UnlockedFreePracticesActionTypes.UpdateUnlockedFreePractices;
 
-  constructor(public payload: { unlockedFreePractices: Update<UnlockedFreePracticeInterface>[] }) {}
+  constructor(
+    public payload: {
+      unlockedFreePractices: Update<UnlockedFreePracticeInterface>[];
+    }
+  ) {}
 }
 
 export class DeleteUnlockedFreePractice implements Action {

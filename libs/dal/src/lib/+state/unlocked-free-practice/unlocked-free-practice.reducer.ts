@@ -13,9 +13,9 @@ export interface State extends EntityState<UnlockedFreePracticeInterface> {
   error?: any;
 }
 
-export const adapter: EntityAdapter<UnlockedFreePracticeInterface> = createEntityAdapter<
+export const adapter: EntityAdapter<
   UnlockedFreePracticeInterface
->();
+> = createEntityAdapter<UnlockedFreePracticeInterface>();
 
 export const initialState: State = adapter.getInitialState({
   // additional entity state properties
@@ -60,7 +60,10 @@ export function reducer(
     }
 
     case UnlockedFreePracticesActionTypes.UnlockedFreePracticesLoaded: {
-      return adapter.addAll(action.payload.unlockedFreePractices, { ...state, loaded: true });
+      return adapter.addAll(action.payload.unlockedFreePractices, {
+        ...state,
+        loaded: true
+      });
     }
 
     case UnlockedFreePracticesActionTypes.UnlockedFreePracticesLoadError: {

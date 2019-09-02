@@ -3,7 +3,9 @@ import { UnlockedFreePracticeInterface } from '../../+models';
 import { State } from './unlocked-free-practice.reducer';
 
 describe('UnlockedFreePractice Selectors', () => {
-  function createUnlockedFreePractice(id: number): UnlockedFreePracticeInterface | any {
+  function createUnlockedFreePractice(
+    id: number
+  ): UnlockedFreePracticeInterface | any {
     return {
       id: id
     };
@@ -15,7 +17,11 @@ describe('UnlockedFreePractice Selectors', () => {
     error?: any
   ): State {
     return {
-      ids: unlockedFreePractices ? unlockedFreePractices.map(unlockedFreePractice => unlockedFreePractice.id) : [],
+      ids: unlockedFreePractices
+        ? unlockedFreePractices.map(
+            unlockedFreePractice => unlockedFreePractice.id
+          )
+        : [],
       entities: unlockedFreePractices
         ? unlockedFreePractices.reduce(
             (entityMap, unlockedFreePractice) => ({
@@ -88,11 +94,15 @@ describe('UnlockedFreePractice Selectors', () => {
       ]);
     });
     it('getById() should return the desired entity', () => {
-      const results = UnlockedFreePracticeQueries.getById(storeState, { id: 2 });
+      const results = UnlockedFreePracticeQueries.getById(storeState, {
+        id: 2
+      });
       expect(results).toEqual(createUnlockedFreePractice(2));
     });
     it('getById() should return undefined if the entity is not present', () => {
-      const results = UnlockedFreePracticeQueries.getById(storeState, { id: 9 });
+      const results = UnlockedFreePracticeQueries.getById(storeState, {
+        id: 9
+      });
       expect(results).toBe(undefined);
     });
   });
