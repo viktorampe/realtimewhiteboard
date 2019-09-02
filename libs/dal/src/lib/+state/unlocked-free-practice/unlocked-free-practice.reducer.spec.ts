@@ -1,26 +1,29 @@
 import { Update } from '@ngrx/entity';
-import {UnlockedFreePracticeActions } from '.';
-import { initialState, reducer, State } from './unlocked-free-practice.reducer';
+import { UnlockedFreePracticeActions } from '.';
 import { UnlockedFreePracticeInterface } from '../../+models';
+import { initialState, reducer, State } from './unlocked-free-practice.reducer';
 
-/** 
+/**
  * This file is scaffolded, but needs some special attention:
- * - find and replace '__EXTRA__PROPERTY_NAME' and replace this with a property name of the UnlockedFreePractice entity.
- * - set the initial property value via '[__EXTRA__PROPERTY_NAME]InitialValue'.
- * - set the updated property value via '[__EXTRA__PROPERTY_NAME]UpdatedValue'.
-*/
-const __EXTRA__PROPERTY_NAMEInitialValue = ;
-const __EXTRA__PROPERTY_NAMEUpdatedValue = ;
+ * - find and replace 'classGroupId' and replace this with a property name of the UnlockedFreePractice entity.
+ * - set the initial property value via '[classGroupId]InitialValue'.
+ * - set the updated property value via '[classGroupId]UpdatedValue'.
+ */
+const classGroupIdInitialValue = 1;
+const classGroupIdUpdatedValue = 2;
 
 /**
  * Creates a UnlockedFreePractice.
  * @param {number} id
  * @returns {UnlockedFreePracticeInterface}
  */
-function createUnlockedFreePractice(id: number, __EXTRA__PROPERTY_NAME:any = __EXTRA__PROPERTY_NAMEInitialValue): UnlockedFreePracticeInterface | any {
+function createUnlockedFreePractice(
+  id: number,
+  classGroupId: any = classGroupIdInitialValue
+): UnlockedFreePracticeInterface | any {
   return {
     id: id,
-    __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAME
+    classGroupId: classGroupId
   };
 }
 
@@ -38,7 +41,11 @@ function createState(
   error?: any
 ): State {
   const state: any = {
-    ids: unlockedFreePractices ? unlockedFreePractices.map(unlockedFreePractice => unlockedFreePractice.id) : [],
+    ids: unlockedFreePractices
+      ? unlockedFreePractices.map(
+          unlockedFreePractice => unlockedFreePractice.id
+        )
+      : [],
     entities: unlockedFreePractices
       ? unlockedFreePractices.reduce(
           (entityMap, unlockedFreePractice) => ({
@@ -53,7 +60,6 @@ function createState(
   if (error !== undefined) state.error = error;
   return state;
 }
-
 
 describe('UnlockedFreePractices Reducer', () => {
   let unlockedFreePractices: UnlockedFreePracticeInterface[];
@@ -77,14 +83,18 @@ describe('UnlockedFreePractices Reducer', () => {
 
   describe('loaded action', () => {
     it('should load all unlockedFreePractices', () => {
-      const action = new UnlockedFreePracticeActions.UnlockedFreePracticesLoaded({ unlockedFreePractices });
+      const action = new UnlockedFreePracticeActions.UnlockedFreePracticesLoaded(
+        { unlockedFreePractices }
+      );
       const result = reducer(initialState, action);
       expect(result).toEqual(createState(unlockedFreePractices, true));
     });
 
     it('should error', () => {
       const error = 'Something went wrong';
-      const action = new UnlockedFreePracticeActions.UnlockedFreePracticesLoadError(error);
+      const action = new UnlockedFreePracticeActions.UnlockedFreePracticesLoadError(
+        error
+      );
       const result = reducer(initialState, action);
       expect(result).toEqual(createState([], false, error));
     });
@@ -102,7 +112,9 @@ describe('UnlockedFreePractices Reducer', () => {
     });
 
     it('should add multiple unlockedFreePractices', () => {
-      const action = new UnlockedFreePracticeActions.AddUnlockedFreePractices({ unlockedFreePractices });
+      const action = new UnlockedFreePracticeActions.AddUnlockedFreePractices({
+        unlockedFreePractices
+      });
       const result = reducer(initialState, action);
 
       expect(result).toEqual(createState(unlockedFreePractices, false));
@@ -111,7 +123,7 @@ describe('UnlockedFreePractices Reducer', () => {
   describe('upsert actions', () => {
     it('should upsert one unlockedFreePractice', () => {
       const originalUnlockedFreePractice = unlockedFreePractices[0];
-      
+
       const startState = reducer(
         initialState,
         new UnlockedFreePracticeActions.AddUnlockedFreePractice({
@@ -119,16 +131,22 @@ describe('UnlockedFreePractices Reducer', () => {
         })
       );
 
-    
-      const updatedUnlockedFreePractice = createUnlockedFreePractice(unlockedFreePractices[0].id, 'test');
-     
-      const action = new UnlockedFreePracticeActions.UpsertUnlockedFreePractice({
-        unlockedFreePractice: updatedUnlockedFreePractice
-      });
+      const updatedUnlockedFreePractice = createUnlockedFreePractice(
+        unlockedFreePractices[0].id,
+        'test'
+      );
+
+      const action = new UnlockedFreePracticeActions.UpsertUnlockedFreePractice(
+        {
+          unlockedFreePractice: updatedUnlockedFreePractice
+        }
+      );
 
       const result = reducer(startState, action);
 
-      expect(result.entities[updatedUnlockedFreePractice.id]).toEqual(updatedUnlockedFreePractice);
+      expect(result.entities[updatedUnlockedFreePractice.id]).toEqual(
+        updatedUnlockedFreePractice
+      );
     });
 
     it('should upsert many unlockedFreePractices', () => {
@@ -140,15 +158,15 @@ describe('UnlockedFreePractices Reducer', () => {
         createUnlockedFreePractice(3),
         createUnlockedFreePractice(4)
       ];
-      const action = new UnlockedFreePracticeActions.UpsertUnlockedFreePractices({
-        unlockedFreePractices: unlockedFreePracticesToInsert
-      });
+      const action = new UnlockedFreePracticeActions.UpsertUnlockedFreePractices(
+        {
+          unlockedFreePractices: unlockedFreePracticesToInsert
+        }
+      );
 
       const result = reducer(startState, action);
 
-      expect(result).toEqual(
-        createState(unlockedFreePracticesToInsert)
-      );
+      expect(result).toEqual(createState(unlockedFreePracticesToInsert));
     });
   });
 
@@ -159,40 +177,49 @@ describe('UnlockedFreePractices Reducer', () => {
       const update: Update<UnlockedFreePracticeInterface> = {
         id: 1,
         changes: {
-          __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAMEUpdatedValue
-        } 
+          classGroupId: classGroupIdUpdatedValue
+        }
       };
-      const action = new UnlockedFreePracticeActions.UpdateUnlockedFreePractice({
-        unlockedFreePractice: update
-      });
+      const action = new UnlockedFreePracticeActions.UpdateUnlockedFreePractice(
+        {
+          unlockedFreePractice: update
+        }
+      );
       const result = reducer(startState, action);
-      expect(result).toEqual(createState([createUnlockedFreePractice(1, __EXTRA__PROPERTY_NAMEUpdatedValue)]));
+      expect(result).toEqual(
+        createState([createUnlockedFreePractice(1, classGroupIdUpdatedValue)])
+      );
     });
 
     it('should update multiple unlockedFreePractices', () => {
       const startState = createState(unlockedFreePractices);
       const updates: Update<UnlockedFreePracticeInterface>[] = [
-        
         {
           id: 1,
           changes: {
-            __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAMEUpdatedValue
-          } 
+            classGroupId: classGroupIdUpdatedValue
+          }
         },
         {
           id: 2,
           changes: {
-            __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAMEUpdatedValue
-          }  
+            classGroupId: classGroupIdUpdatedValue
+          }
         }
       ];
-      const action = new UnlockedFreePracticeActions.UpdateUnlockedFreePractices({
-        unlockedFreePractices: updates
-      });
+      const action = new UnlockedFreePracticeActions.UpdateUnlockedFreePractices(
+        {
+          unlockedFreePractices: updates
+        }
+      );
       const result = reducer(startState, action);
 
       expect(result).toEqual(
-        createState([createUnlockedFreePractice(1, __EXTRA__PROPERTY_NAMEUpdatedValue), createUnlockedFreePractice(2, __EXTRA__PROPERTY_NAMEUpdatedValue), unlockedFreePractices[2]])
+        createState([
+          createUnlockedFreePractice(1, classGroupIdUpdatedValue),
+          createUnlockedFreePractice(2, classGroupIdUpdatedValue),
+          unlockedFreePractices[2]
+        ])
       );
     });
   });
@@ -201,18 +228,22 @@ describe('UnlockedFreePractices Reducer', () => {
     it('should delete one unlockedFreePractice ', () => {
       const unlockedFreePractice = unlockedFreePractices[0];
       const startState = createState([unlockedFreePractice]);
-      const action = new UnlockedFreePracticeActions.DeleteUnlockedFreePractice({
-        id: unlockedFreePractice.id
-      });
+      const action = new UnlockedFreePracticeActions.DeleteUnlockedFreePractice(
+        {
+          id: unlockedFreePractice.id
+        }
+      );
       const result = reducer(startState, action);
       expect(result).toEqual(createState([]));
     });
 
     it('should delete multiple unlockedFreePractices', () => {
       const startState = createState(unlockedFreePractices);
-      const action = new UnlockedFreePracticeActions.DeleteUnlockedFreePractices({
-        ids: [unlockedFreePractices[0].id, unlockedFreePractices[1].id]
-      });
+      const action = new UnlockedFreePracticeActions.DeleteUnlockedFreePractices(
+        {
+          ids: [unlockedFreePractices[0].id, unlockedFreePractices[1].id]
+        }
+      );
       const result = reducer(startState, action);
       expect(result).toEqual(createState([unlockedFreePractices[2]]));
     });
@@ -220,7 +251,11 @@ describe('UnlockedFreePractices Reducer', () => {
 
   describe('clear action', () => {
     it('should clear the unlockedFreePractices collection', () => {
-      const startState = createState(unlockedFreePractices, true, 'something went wrong');
+      const startState = createState(
+        unlockedFreePractices,
+        true,
+        'something went wrong'
+      );
       const action = new UnlockedFreePracticeActions.ClearUnlockedFreePractices();
       const result = reducer(startState, action);
       expect(result).toEqual(createState([], true, 'something went wrong'));
