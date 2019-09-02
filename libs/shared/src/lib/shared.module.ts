@@ -30,18 +30,15 @@ import {
 import { HasPermissionDirective } from './auth/has-permission.directive';
 import { PermissionService } from './auth/permission.service';
 import { PERMISSION_SERVICE_TOKEN } from './auth/permission.service.interface';
-import { LearningPlanGoalProgressManagementComponent } from './components/learning-plan-goal-progress-management/learning-plan-goal-progress-management.component';
-import { MethodYearTileComponent } from './components/method-year-tile/method-year-tile.component';
+import {
+  LearningPlanGoalProgressManagementComponent,
+  MethodYearTileComponent,
+  QuickLinkComponent
+} from './components';
+import { HeaderComponent } from './components/header/header.component';
 import { PageBarContainerComponent } from './components/page-bar-container/page-bar-container.component';
-import { QuickLinkComponent } from './components/quick-link/quick-link.component';
 import { CampusRouterlinkDirective } from './directives/campus-routerlink.directive';
 import { DataCyDirective } from './directives/data-cy.directive';
-import { FeedBackService, FEEDBACK_SERVICE_TOKEN } from './services/feedback';
-import {
-  SnackBarDefaultConfig,
-  SNACKBAR_DEFAULT_CONFIG_TOKEN
-} from './services/feedback/snackbar.config';
-import { HeaderComponent } from './components/header/header.component';
 import { CampusHttpInterceptor } from './interceptors/campus-http.interceptor';
 import {
   EnvironmentAlertsFeatureInterface,
@@ -78,6 +75,11 @@ import { ContentActionsService } from './services/content-actions/content-action
 import { CONTENT_ACTIONS_SERVICE_TOKEN } from './services/content-actions/content-actions.service.interface';
 import { OPEN_STATIC_CONTENT_SERVICE_TOKEN } from './services/content/open-static-content.interface';
 import { OpenStaticContentService } from './services/content/open-static-content.service';
+import { FeedBackService, FEEDBACK_SERVICE_TOKEN } from './services/feedback';
+import {
+  SnackBarDefaultConfig,
+  SNACKBAR_DEFAULT_CONFIG_TOKEN
+} from './services/feedback/snackbar.config';
 import { ScormExerciseService } from './services/scorm/scorm-exercise.service';
 import { SCORM_EXERCISE_SERVICE_TOKEN } from './services/scorm/scorm-exercise.service.interface';
 
