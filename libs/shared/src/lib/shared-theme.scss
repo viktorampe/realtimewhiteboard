@@ -3,7 +3,7 @@ $shared-element-border-color-1: #057a74 !default;
 $shared-button-color-accent: #359590 !default;
 $shared-color-1: #95a0aa !default;
 
-@import './header/header.component.theme';
+@import './components/header/header.component.theme';
 @import './components/quick-link/quick-link.component.theme';
 
 @mixin shared-theme() {
