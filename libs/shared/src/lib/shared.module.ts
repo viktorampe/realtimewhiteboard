@@ -33,7 +33,6 @@ import { PERMISSION_SERVICE_TOKEN } from './auth/permission.service.interface';
 import { EduContentCollectionManagerService } from './collection-manager/edu-content-collection-manager.service';
 import { EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN } from './collection-manager/edu-content-collection-manager.service.interface';
 import { LearningPlanGoalProgressManagementComponent } from './components/learning-plan-goal-progress-management/learning-plan-goal-progress-management.component';
-import { MethodYearTileComponent } from './components/method-year-tile/method-year-tile.component';
 import { PageBarContainerComponent } from './components/page-bar-container/page-bar-container.component';
 import { QuickLinkComponent } from './components/quick-link/quick-link.component';
 import { OPEN_STATIC_CONTENT_SERVICE_TOKEN } from './content/open-static-content.interface';
@@ -113,8 +112,7 @@ import { CONTENT_ACTIONS_SERVICE_TOKEN } from './services/content-actions/conten
     DataCyDirective,
     AlertToNotificationItemPipe,
     QuickLinkComponent,
-    LearningPlanGoalProgressManagementComponent,
-    MethodYearTileComponent
+    LearningPlanGoalProgressManagementComponent
   ],
   exports: [
     HeaderComponent,
@@ -127,8 +125,7 @@ import { CONTENT_ACTIONS_SERVICE_TOKEN } from './services/content-actions/conten
     CampusRouterlinkDirective,
     DataCyDirective,
     AlertToNotificationItemPipe,
-    QuickLinkComponent,
-    MethodYearTileComponent
+    QuickLinkComponent
   ],
   providers: [
     MapObjectConversionService,

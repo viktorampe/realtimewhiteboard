@@ -2,9 +2,6 @@ export * from './lib/auth';
 export * from './lib/collection-manager';
 export * from './lib/components/learning-plan-goal-progress-management';
 export {
-  MethodYearTileComponent
-} from './lib/components/method-year-tile/method-year-tile.component';
-export {
   QuickLinkTypeEnum
 } from './lib/components/quick-link/quick-link-type.enum';
 export {
