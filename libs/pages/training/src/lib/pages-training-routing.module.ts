@@ -1,13 +1,11 @@
-import { TrainingViewModel } from './components/training.viewmodel';
-import { TrainingComponent } from './components/training.component';
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
+import { TrainingComponent } from './components/training.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: TrainingComponent,
-    resolve: { isResolved: TrainingViewModel }
+    component: TrainingComponent
   }
 ];
 
