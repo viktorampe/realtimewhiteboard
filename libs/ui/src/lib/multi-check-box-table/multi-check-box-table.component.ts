@@ -24,9 +24,12 @@ export class MultiCheckBoxTableComponent<
   ItemType,
   ItemColumnType
 > {
+  private topLevelSelectedItemsMap = {};
+
+  @Input() selectAllTopLevel = false;
+
   // Pay some attention to the interfaces of the inputs
   // There is some overlap in the generic types
-
   // Only use either subLevels or items
   @Input() public subLevels: MultiCheckBoxTableSubLevelInterface<
     SubLevelItemType,
@@ -57,6 +60,11 @@ export class MultiCheckBoxTableComponent<
     >[]
   >();
 
+  @Output() public topLevelCheckBoxToggled = new EventEmitter<{
+    itemColumn: ItemColumnType;
+    selectedValues: number[];
+  }>();
+
   @HostBinding('class.ui-multi-check-box-table')
   isMultiCheckBoxTable = true;
 
@@ -73,6 +81,29 @@ export class MultiCheckBoxTableComponent<
     );
   }
 
+  public clickSelectAllForTopLevel(
+    itemHeader: MultiCheckBoxTableItemColumnInterface<ItemColumnType>,
+    checkBox: MatCheckbox
+  ) {
+    // selected or not?
+    this.topLevelSelectedItemsMap[itemHeader.item.id] = !checkBox.checked;
+
+    // pass column item as output
+    if (this.topLevelSelectedItemsMap[itemHeader.item.id]) {
+      // all selected
+      this.topLevelCheckBoxToggled.emit({
+        itemColumn: itemHeader.item,
+        selectedValues: this.items.map(item => item.header.id)
+      });
+    } else {
+      // all deselected
+      this.topLevelCheckBoxToggled.emit({
+        itemColumn: itemHeader.item,
+        selectedValues: []
+      });
+    }
+  }
+
   public clickCheckbox(
     item: ItemType,
     column: ItemColumnType,
@@ -85,5 +116,9 @@ export class MultiCheckBoxTableComponent<
       subLevel,
       previousCheckboxState: checkBox.checked
     });
+  }
+
+  public isDisabled(itemColumn: ItemColumnType) {
+    return this.topLevelSelectedItemsMap[itemColumn.item.id];
   }
 }
