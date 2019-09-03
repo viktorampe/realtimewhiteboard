@@ -17,6 +17,7 @@ import {
   LearningPlanGoalReducer,
   MethodReducer,
   UiReducer,
+  UnlockedFreePracticeReducer,
   UserLessonReducer,
   UserReducer,
   YearReducer
@@ -137,6 +138,13 @@ import { environment } from '../environments/environment';
     StoreModule.forFeature(HistoryReducer.NAME, HistoryReducer.reducer, {
       initialState: HistoryReducer.initialState
     }),
+    StoreModule.forFeature(
+      UnlockedFreePracticeReducer.NAME,
+      UnlockedFreePracticeReducer.reducer,
+      {
+        initialState: UnlockedFreePracticeReducer.initialState
+      }
+    ),
 
     !environment.production ? StoreDevtoolsModule.instrument() : []
   ]
