@@ -69,14 +69,6 @@ describe('PracticeViewModel', () => {
     });
   });
 
-  /*
-  public currentPracticeParams$: Observable<CurrentPracticeParams>;
-  public bookTitle$: Observable<string>;
-  public bookChapters$: Observable<EduContentTOCInterface[]>;
-  public filteredClassGroups$: Observable<ClassGroupInterface[]>;
-
-  */
-
   describe('presentation streams', () => {
     describe('currentPracticeParams$', () => {
       it('should contain the current bookId from the route', () => {
