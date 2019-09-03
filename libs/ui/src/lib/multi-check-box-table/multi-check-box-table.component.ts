@@ -24,9 +24,10 @@ export class MultiCheckBoxTableComponent<
   ItemType,
   ItemColumnType
 > {
+  // Keeps track of which columns are (de)selected
   private topLevelColumnSelectionMap: any = {};
 
-  @Input() selectAllTopLevel = false;
+  @Input() topLevelSelectAllEnabled = false;
 
   // Pay some attention to the interfaces of the inputs
   // There is some overlap in the generic types
