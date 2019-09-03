@@ -12,6 +12,7 @@
     "../../libs/ui/src/index.ts",
     "../../libs/dal/src/index.ts",
     "../../libs/pages/methods/src/index.ts",
+    "../../libs/pages/practice/src/index.ts",
     "../../libs/pages/global-search/src/index.ts",
     "../../libs/devlib/src/index.ts",
     "../../libs/pages/settings/dashboard/src/index.ts",
