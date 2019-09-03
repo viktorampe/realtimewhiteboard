@@ -88,14 +88,14 @@ export class MultiCheckBoxTableComponent<
   ) {
     // set internal state:
     // is checkbox checked or unchecked?
-    const keyValue = itemColumn.item[itemColumn.key];
     // for which column is the checkbox (un)checked?
-    this.topLevelColumnSelectionMap[keyValue] = !checkBox.checked;
+    const columnKeyValue = itemColumn.item[itemColumn.key];
+    this.topLevelColumnSelectionMap[columnKeyValue] = !checkBox.checked;
 
     // emit event: for this column item, all row items are selected/deselected
     this.topLevelCheckBoxToggled.emit({
       itemColumn: itemColumn.item,
-      isSelected: this.topLevelColumnSelectionMap[keyValue]
+      isSelected: this.topLevelColumnSelectionMap[columnKeyValue]
     });
   }
 
