@@ -87,7 +87,6 @@ export class MultiCheckBoxTableComponent<
     checkBox: MatCheckbox
   ) {
     // set internal state:
-    // is checkbox checked or unchecked?
     // for which column is the checkbox (un)checked?
     const columnKeyValue = itemColumn.item[itemColumn.key];
     this.topLevelColumnSelectionMap[columnKeyValue] = !checkBox.checked;
