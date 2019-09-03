@@ -21,7 +21,7 @@ import { Store, StoreModule } from '@ngrx/store';
 import { configureTestSuite } from 'ng-bullet';
 import { PracticeViewModel } from './practice.viewmodel';
 
-describe('TrainingViewModel', () => {
+describe('PracticeViewModel', () => {
   let practiceViewModel: PracticeViewModel;
   let store: Store<DalState>;
   let router: Router;
