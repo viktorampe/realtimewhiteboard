@@ -46,15 +46,15 @@ import { map } from 'rxjs/operators';
 import {
   OpenStaticContentServiceInterface,
   OPEN_STATIC_CONTENT_SERVICE_TOKEN
-} from '../../content/open-static-content.interface';
+} from '../../services/content/open-static-content.interface';
 import {
   FeedBackServiceInterface,
   FEEDBACK_SERVICE_TOKEN
-} from '../../feedback';
+} from '../../services/feedback';
 import {
   ScormExerciseServiceInterface,
   SCORM_EXERCISE_SERVICE_TOKEN
-} from '../../scorm/scorm-exercise.service.interface';
+} from '../../services/scorm/scorm-exercise.service.interface';
 import { QuickLinkTypeEnum } from './quick-link-type.enum';
 import {
   quickLinkActionDictionary,

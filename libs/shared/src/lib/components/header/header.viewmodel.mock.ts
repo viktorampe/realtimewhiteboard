@@ -13,7 +13,7 @@ import {
   ListFormat
 } from '@campus/ui';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { QuickLinkTypeEnum } from '../components/quick-link/quick-link-type.enum';
+import { QuickLinkTypeEnum } from '../quick-link/quick-link-type.enum';
 
 @Injectable({
   providedIn: 'root'
