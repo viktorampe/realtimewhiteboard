@@ -109,6 +109,7 @@ export * from './UnlockedContent';
 export * from './UnlockedContent.interface';
 export * from './UnlockedContentGroup.interface';
 export * from './UnlockedContentStudent.interface';
+export * from './UnlockedFreePractice.interface';
 export * from './UserContent';
 export * from './UserContent.interface';
 export * from './UserLesson.interface';

@@ -32,6 +32,8 @@ import {
   TOC_SERVICE_TOKEN,
   UndoService,
   UNDO_SERVICE_TOKEN,
+  UnlockedFreePracticeService,
+  UNLOCKED_FREE_PRACTICE_SERVICE_TOKEN,
   UserLessonService,
   USER_LESSON_SERVICE_TOKEN,
   YearService,
@@ -83,7 +85,11 @@ import {
       provide: LEARNING_PLAN_GOAL_PROGRESS_SERVICE_TOKEN,
       useClass: LearningPlanGoalProgressService
     },
-    { provide: UNDO_SERVICE_TOKEN, useClass: UndoService }
+    { provide: UNDO_SERVICE_TOKEN, useClass: UndoService },
+    {
+      provide: UNLOCKED_FREE_PRACTICE_SERVICE_TOKEN,
+      useClass: UnlockedFreePracticeService
+    }
   ]
 })
 export class AppTokenModule {}

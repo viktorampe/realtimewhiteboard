@@ -7,13 +7,13 @@ import {
   ENVIRONMENT_ICON_MAPPING_TOKEN,
   ENVIRONMENT_SEARCHMODES_TOKEN,
   ENVIRONMENT_TESTING_TOKEN,
+  MethodYearTileComponent,
   SharedModule
 } from '@campus/shared';
 import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
 import { configureTestSuite } from 'ng-bullet';
 import { BehaviorSubject } from 'rxjs';
-import { MethodYearTileComponent } from '../method-year-tile/method-year-tile.component';
 import { MethodViewModel } from '../method.viewmodel';
 import { MockMethodViewModel } from '../method.viewmodel.mock';
 import { MethodsOverviewComponent } from './methods-overview.component';
@@ -27,7 +27,7 @@ describe('MethodsOverviewComponent', () => {
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [UiModule, SharedModule, RouterTestingModule],
-      declarations: [MethodsOverviewComponent, MethodYearTileComponent],
+      declarations: [MethodsOverviewComponent],
       providers: [
         {
           provide: ENVIRONMENT_SEARCHMODES_TOKEN,
