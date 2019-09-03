@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Permissions } from '@campus/dal';
 import { map } from 'rxjs/operators';
-import { QuickLinkTypeEnum } from '../components/quick-link/quick-link-type.enum';
-import { AlertToNotificationItemPipe } from '../pipes/alert-to-notification/alert-to-notification-pipe';
+import { AlertToNotificationItemPipe } from '../../pipes/alert-to-notification/alert-to-notification-pipe';
+import { QuickLinkTypeEnum } from '../quick-link/quick-link-type.enum';
 import { HeaderViewModel } from './header.viewmodel';
 
 @Component({

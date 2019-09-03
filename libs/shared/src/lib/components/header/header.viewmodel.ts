@@ -17,10 +17,10 @@ import { BreadcrumbLinkInterface, DropdownMenuItemInterface } from '@campus/ui';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { QuickLinkTypeEnum } from '../components/quick-link/quick-link-type.enum';
-import { QuickLinkComponent } from '../components/quick-link/quick-link.component';
-import { ENVIRONMENT_ALERTS_FEATURE_TOKEN } from '../interfaces/environment.injectiontokens';
-import { EnvironmentAlertsFeatureInterface } from '../interfaces/environment.interfaces';
+import { ENVIRONMENT_ALERTS_FEATURE_TOKEN } from '../../interfaces/environment.injectiontokens';
+import { EnvironmentAlertsFeatureInterface } from '../../interfaces/environment.interfaces';
+import { QuickLinkTypeEnum } from '../quick-link/quick-link-type.enum';
+import { QuickLinkComponent } from '../quick-link/quick-link.component';
 
 @Injectable({
   providedIn: 'root'
