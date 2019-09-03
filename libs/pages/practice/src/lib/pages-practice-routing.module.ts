@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { MethodQueries } from '@campus/dal';
 import { AllowedMethodGuard } from '@campus/guards';
+import { PracticeOverviewComponent } from './components/practice-overview/practice-overview.component';
 import { PracticeComponent } from './components/practice.component';
 import { PracticeMethodDetailResolver } from './resolvers/pages-practice-method-detail.resolver';
 import { PracticeOverviewResolver } from './resolvers/pages-practice-overview.resolver';
@@ -17,7 +18,7 @@ const routes: Routes = [
         path: '',
         resolve: { isResolved: PracticeOverviewResolver },
         runGuardsAndResolvers: 'always',
-        component: PracticeComponent //Placeholder practice-overview
+        component: PracticeOverviewComponent //Placeholder practice-overview
       },
       {
         path: ':book',
