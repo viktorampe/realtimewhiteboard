@@ -18,12 +18,12 @@
         >Alle</th
       >
       <th
-        *ngFor="let itemHeader of itemColumns"
+        *ngFor="let itemColumn of itemColumns"
         class="ui-multi-check-box-table__body__row--subLevel--item"
       >
         <mat-checkbox
           #selectAllCheckbox
-          (click)="clickSelectAllForTopLevel(itemHeader, selectAllCheckbox)"
+          (click)="clickSelectAllForTopLevel(itemColumn, selectAllCheckbox)"
         ></mat-checkbox>
       </th>
     </tr>

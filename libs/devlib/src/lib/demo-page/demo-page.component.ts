@@ -30,6 +30,14 @@ export class DemoPageComponent implements OnInit {
       {
         header: new EduContentTOCFixture({ id: 1, title: 'Hoofdstuk 1' }),
         content: { 1: false, 2: true }
+      },
+      {
+        header: new EduContentTOCFixture({ id: 2, title: 'Hoofdstuk 2' }),
+        content: { 1: false, 2: false }
+      },
+      {
+        header: new EduContentTOCFixture({ id: 3, title: 'Hoofdstuk 3' }),
+        content: { 1: false, 2: false }
       }
     ];
 

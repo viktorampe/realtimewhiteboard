@@ -24,7 +24,7 @@ export class MultiCheckBoxTableComponent<
   ItemType,
   ItemColumnType
 > {
-  private topLevelSelectedItemsMap = {};
+  private topLevelColumnSelectionMap: any = {};
 
   @Input() selectAllTopLevel = false;
 
@@ -62,7 +62,7 @@ export class MultiCheckBoxTableComponent<
 
   @Output() public topLevelCheckBoxToggled = new EventEmitter<{
     itemColumn: ItemColumnType;
-    selectedValues: number[];
+    isSelected: boolean;
   }>();
 
   @HostBinding('class.ui-multi-check-box-table')
@@ -82,26 +82,20 @@ export class MultiCheckBoxTableComponent<
   }
 
   public clickSelectAllForTopLevel(
-    itemHeader: MultiCheckBoxTableItemColumnInterface<ItemColumnType>,
+    itemColumn: MultiCheckBoxTableItemColumnInterface<ItemColumnType>,
     checkBox: MatCheckbox
   ) {
-    // selected or not?
-    this.topLevelSelectedItemsMap[itemHeader.item.id] = !checkBox.checked;
+    // set internal state:
+    // is checkbox checked or unchecked?
+    const keyValue = itemColumn.item[itemColumn.key];
+    // for which column is the checkbox (un)checked?
+    this.topLevelColumnSelectionMap[keyValue] = !checkBox.checked;
 
-    // pass column item as output
-    if (this.topLevelSelectedItemsMap[itemHeader.item.id]) {
-      // all selected
-      this.topLevelCheckBoxToggled.emit({
-        itemColumn: itemHeader.item,
-        selectedValues: this.items.map(item => item.header.id)
-      });
-    } else {
-      // all deselected
-      this.topLevelCheckBoxToggled.emit({
-        itemColumn: itemHeader.item,
-        selectedValues: []
-      });
-    }
+    // emit event: for this column item, all row items are selected/deselected
+    this.topLevelCheckBoxToggled.emit({
+      itemColumn: itemColumn.item,
+      isSelected: this.topLevelColumnSelectionMap[keyValue]
+    });
   }
 
   public clickCheckbox(
@@ -118,7 +112,9 @@ export class MultiCheckBoxTableComponent<
     });
   }
 
-  public isDisabled(itemColumn: ItemColumnType) {
-    return this.topLevelSelectedItemsMap[itemColumn.item.id];
+  public isDisabled(
+    itemColumn: MultiCheckBoxTableItemColumnInterface<ItemColumnType>
+  ) {
+    return this.topLevelColumnSelectionMap[itemColumn.item[itemColumn.key]];
   }
 }
