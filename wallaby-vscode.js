@@ -42,7 +42,7 @@ module.exports = function(wallaby) {
         jestConfig
       );
       delete jestConfig.moduleNameMapper;
-      jestConfig.transformIgnorePatterns.push('instrumented.*.(jsx?|html)$');
+      jestConfig.transformIgnorePatterns.push('instrumented.*.(jsx?)$');
       jestConfig.setupFilesAfterEnv = ['<rootDir>/wallaby-test-setup.js'];
       if (!jestConfig.moduleNameMapper) {
         var paths = require('./tsconfig').compilerOptions.paths;
