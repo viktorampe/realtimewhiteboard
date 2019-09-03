@@ -2,17 +2,17 @@ import { Inject, Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
 import { DataPersistence } from '@nrwl/nx';
 import { map } from 'rxjs/operators';
+import { DalState } from '..';
 import {
   UnlockedFreePracticeServiceInterface,
   UNLOCKED_FREE_PRACTICE_SERVICE_TOKEN
 } from '../../unlocked-free-practice/unlocked-free-practice.service.interface';
 import {
-  UnlockedFreePracticesActionTypes,
-  UnlockedFreePracticesLoadError,
   LoadUnlockedFreePractices,
-  UnlockedFreePracticesLoaded
+  UnlockedFreePracticesActionTypes,
+  UnlockedFreePracticesLoaded,
+  UnlockedFreePracticesLoadError
 } from './unlocked-free-practice.actions';
-import { DalState } from '..';
 
 @Injectable()
 export class UnlockedFreePracticeEffects {
