@@ -214,7 +214,7 @@ describe('UnlockedFreePractice Selectors', () => {
         expect(result).toEqual(unlockedFreePractices[0]);
       });
 
-      it('should return the correct UnlockedFreePractice for userLessonId and classgroupId', () => {
+      it('should return the correct UnlockedFreePractice for eduContentBookId and classgroupId', () => {
         const result = UnlockedFreePracticeQueries.findOne(storeState, {
           classGroupId: 1,
           eduContentBookId: 22
