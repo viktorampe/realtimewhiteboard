@@ -67,7 +67,7 @@ function getDependencies(project) {
 }
 
 function updateUsedOptionsWithDependencies(dependencies) {
-  const apps = ['polpo-classroom-web'];
+  const apps = ['kabas-web', 'polpo-classroom-web'];
   dependencies.forEach(dependency => {
     const startOfUrl = `${
       apps.indexOf(dependency) > -1 ? 'apps' : 'libs'

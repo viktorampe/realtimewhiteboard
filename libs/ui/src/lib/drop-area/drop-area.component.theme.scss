@@ -1,5 +1,8 @@
+@import 'libs/ui/src/lib/breakpoints.scss';
+
 @mixin ui-drop-area-theme() {
   $ui-drop-area-width: $ui-tile-width !default;
+  $ui-drop-area-width--breakpoint-xsmall: $ui-tile-width--breakpoint-xsmall !default;
   $ui-drop-area-height: $ui-tile-height !default;
   $ui-drop-area-background: none !default;
   $ui-drop-area-border: 2px dashed $ui-primary-font-color-2 !default;
@@ -11,6 +14,7 @@
   $ui-drop-area__icon-container-margin: 0 0 0 15px !default;
   $ui-drop-area__label-color: $ui-primary-font-color-2 !default;
   $ui-drop-area__label-max-height: 75px !default;
+  $ui-drop-area__label-max-height--breakpoint-xsmall: 84px !default;
   $ui-drop-area__label-font-weight: 700 !default;
   $ui-drop-area__label-font-size: $ui-primary-font-size !default;
   $ui-drop-area__label-margin: 0 15px !default;
@@ -37,6 +41,12 @@
       font-weight: $ui-drop-area__label-font-weight;
       margin: $ui-drop-area__label-margin;
       max-height: $ui-drop-area__label-max-height;
+    }
+    @media #{$ui-breakpoint-xsmall} {
+      width: $ui-drop-area-width--breakpoint-xsmall;
+      &__label {
+        max-height: $ui-drop-area__label-max-height--breakpoint-xsmall;
+      }
     }
   }
 }

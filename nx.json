@@ -91,6 +91,21 @@
     },
     "kabas-web-e2e": {
       "tags": []
+    },
+    "pages-methods": {
+      "tags": []
+    },
+    "pages-global-search": {
+      "tags": []
+    },
+    "all-libs-files": {
+      "tags": []
+    },
+    "all-apps-files": {
+      "tags": []
+    },
+    "pages-practice": {
+      "tags": []
     }
   }
 }

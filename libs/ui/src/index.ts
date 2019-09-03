@@ -1,7 +1,5 @@
 export * from './lib/banner/banner.component';
-export {
-  BreadcrumbLinkInterface
-} from './lib/breadcrumbs/breadcrumbs.component';
+export * from './lib/breadcrumbs';
 export { ButtonComponent } from './lib/button/button.component';
 export {
   CollapsibleBreakpointsInterface
@@ -41,6 +39,13 @@ export {
   CollectionManagerServiceInterface,
   COLLECTION_MANAGER_SERVICE_TOKEN
 } from './lib/manage-collection/services/collection-manager.service.interface';
+export {
+  MultiCheckBoxTableChangeEventInterface,
+  MultiCheckBoxTableItemColumnInterface,
+  MultiCheckBoxTableItemInterface,
+  MultiCheckBoxTableRowHeaderColumnInterface,
+  MultiCheckBoxTableSubLevelInterface
+} from './lib/multi-check-box-table/multi-check-box-table.interface';
 export {
   NotificationItemInterface
 } from './lib/notification/notification.component';

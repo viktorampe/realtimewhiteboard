@@ -7,7 +7,14 @@ import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
 import { MethodReducer } from '.';
 import { METHOD_SERVICE_TOKEN } from '../../metadata/method.service.interface';
-import { LoadMethods, MethodsLoaded, MethodsLoadError } from './method.actions';
+import {
+  AllowedMethodsLoaded,
+  AllowedMethodsLoadError,
+  LoadAllowedMethods,
+  LoadMethods,
+  MethodsLoaded,
+  MethodsLoadError
+} from './method.actions';
 import { MethodEffects } from './method.effects';
 
 describe('MethodEffects', () => {
@@ -66,7 +73,8 @@ describe('MethodEffects', () => {
         {
           provide: METHOD_SERVICE_TOKEN,
           useValue: {
-            getAll: () => {}
+            getAllForUser: () => {},
+            getAllowedMethodIds: () => {}
           }
         },
         MethodEffects,
@@ -88,7 +96,7 @@ describe('MethodEffects', () => {
         usedState = MethodReducer.initialState;
       });
       beforeEach(() => {
-        mockServiceMethodReturnValue('getAll', []);
+        mockServiceMethodReturnValue('getAllForUser', []);
       });
       it('should trigger an api call with the initialState if force is not true', () => {
         expectInAndOut(
@@ -110,7 +118,7 @@ describe('MethodEffects', () => {
         usedState = { ...MethodReducer.initialState, loaded: true };
       });
       beforeEach(() => {
-        mockServiceMethodReturnValue('getAll', []);
+        mockServiceMethodReturnValue('getAllForUser', []);
       });
       it('should not trigger an api call with the loaded state if force is not true', () => {
         expectInNoOut(effects.loadMethods$, unforcedLoadAction);
@@ -128,7 +136,7 @@ describe('MethodEffects', () => {
         usedState = MethodReducer.initialState;
       });
       beforeEach(() => {
-        mockServiceMethodError('getAll', 'failed');
+        mockServiceMethodError('getAllForUser', 'failed');
       });
       it('should return a error action if force is not true', () => {
         expectInAndOut(
@@ -150,13 +158,105 @@ describe('MethodEffects', () => {
         };
       });
       beforeEach(() => {
-        mockServiceMethodError('getAll', 'failed');
+        mockServiceMethodError('getAllForUser', 'failed');
       });
       it('should return nothing action if force is not true', () => {
         expectInNoOut(effects.loadMethods$, unforcedLoadAction);
       });
       it('should return a error action if force is true', () => {
         expectInAndOut(effects.loadMethods$, forcedLoadAction, loadErrorAction);
+      });
+    });
+  });
+
+  describe('loadAllowedMethods$', () => {
+    describe('allowedMethodsLoaded=false', () => {
+      const allowedMethodsLoadedAction = new AllowedMethodsLoaded({
+        methodIds: [1, 2, 5]
+      });
+
+      beforeAll(() => {
+        usedState = {
+          ...MethodReducer.initialState,
+          ...{ allowedMethodsLoaded: false }
+        };
+      });
+
+      beforeEach(() => {
+        mockServiceMethodReturnValue('getAllowedMethodIds', [1, 2, 5]);
+      });
+
+      it('should return the allowed method ids if force=true', () => {
+        const loadAllowedMethodsActionForce = new LoadAllowedMethods({
+          force: true,
+          userId: 1
+        });
+
+        expectInAndOut(
+          effects.loadAllowedMethods$,
+          loadAllowedMethodsActionForce,
+          allowedMethodsLoadedAction
+        );
+      });
+
+      it('should return the allowed method ids if force=false', () => {
+        const loadAllowedMethodsActionNoForce = new LoadAllowedMethods({
+          force: false,
+          userId: 1
+        });
+
+        expectInAndOut(
+          effects.loadAllowedMethods$,
+          loadAllowedMethodsActionNoForce,
+          allowedMethodsLoadedAction
+        );
+      });
+
+      it('should return an error action', () => {
+        const loadAllowedMethodsAction = new LoadAllowedMethods();
+        mockServiceMethodError('getAllowedMethodIds', 'I am an error');
+        const allowedMethodsLoadError = new AllowedMethodsLoadError(
+          new Error('I am an error')
+        );
+
+        expectInAndOut(
+          effects.loadAllowedMethods$,
+          loadAllowedMethodsAction,
+          allowedMethodsLoadError
+        );
+      });
+    });
+
+    describe('allowedMethodsLoaded=true', () => {
+      beforeAll(() => {
+        usedState = {
+          ...MethodReducer.initialState,
+          ...{ allowedMethodsLoaded: true }
+        };
+      });
+
+      it('should do nothing if force=false', () => {
+        const loadAllowedMethodsAction = new LoadAllowedMethods({
+          force: false,
+          userId: 1
+        });
+
+        expectInNoOut(effects.loadAllowedMethods$, loadAllowedMethodsAction);
+      });
+
+      it('should return the allowed method ids if force=true', () => {
+        const loadAllowedMethodsAction = new LoadAllowedMethods({
+          force: true,
+          userId: 1
+        });
+        mockServiceMethodReturnValue('getAllowedMethodIds', [2, 6]);
+        const result = new AllowedMethodsLoaded({ methodIds: [2, 6] });
+
+        expectInAndOut(
+          effects.loadAllowedMethods$,
+          loadAllowedMethodsAction,
+          result
+        );
       });
     });
   });

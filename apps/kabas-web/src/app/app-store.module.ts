@@ -1,5 +1,27 @@
 import { NgModule } from '@angular/core';
-import { CustomSerializer, UiReducer, UserReducer } from '@campus/dal';
+import {
+  AlertReducer,
+  ClassGroupReducer,
+  CurrentExerciseReducer,
+  CustomSerializer,
+  DiaboloPhaseReducer,
+  EduContentBookReducer,
+  EduContentProductTypeReducer,
+  EduContentReducer,
+  EduContentTocReducer,
+  EffectFeedbackReducer,
+  FavoriteReducer,
+  HistoryReducer,
+  LearningDomainReducer,
+  LearningPlanGoalProgressReducer,
+  LearningPlanGoalReducer,
+  MethodReducer,
+  UiReducer,
+  UnlockedFreePracticeReducer,
+  UserLessonReducer,
+  UserReducer,
+  YearReducer
+} from '@campus/dal';
 import {
   NavigationActionTiming,
   routerReducer,
@@ -31,6 +53,99 @@ import { environment } from '../environments/environment';
     StoreModule.forFeature(UserReducer.NAME, UserReducer.reducer, {
       initialState: UserReducer.initialState
     }),
+    StoreModule.forFeature(
+      EduContentBookReducer.NAME,
+      EduContentBookReducer.reducer,
+      {
+        initialState: EduContentBookReducer.initialState
+      }
+    ),
+    StoreModule.forFeature(
+      DiaboloPhaseReducer.NAME,
+      DiaboloPhaseReducer.reducer,
+      {
+        initialState: DiaboloPhaseReducer.initialState
+      }
+    ),
+    StoreModule.forFeature(
+      EduContentProductTypeReducer.NAME,
+      EduContentProductTypeReducer.reducer,
+      {
+        initialState: EduContentProductTypeReducer.initialState
+      }
+    ),
+    StoreModule.forFeature(
+      EduContentTocReducer.NAME,
+      EduContentTocReducer.reducer,
+      {
+        initialState: EduContentTocReducer.initialState
+      }
+    ),
+    StoreModule.forFeature(MethodReducer.NAME, MethodReducer.reducer, {
+      initialState: MethodReducer.initialState
+    }),
+    StoreModule.forFeature(YearReducer.NAME, YearReducer.reducer, {
+      initialState: YearReducer.initialState
+    }),
+    StoreModule.forFeature(EduContentReducer.NAME, EduContentReducer.reducer, {
+      initialState: EduContentReducer.initialState
+    }),
+    StoreModule.forFeature(
+      CurrentExerciseReducer.NAME,
+      CurrentExerciseReducer.reducer,
+      { initialState: CurrentExerciseReducer.initialState }
+    ),
+    StoreModule.forFeature(UserLessonReducer.NAME, UserLessonReducer.reducer, {
+      initialState: UserLessonReducer.initialState
+    }),
+    StoreModule.forFeature(
+      LearningDomainReducer.NAME,
+      LearningDomainReducer.reducer,
+      {
+        initialState: LearningDomainReducer.initialState
+      }
+    ),
+    StoreModule.forFeature(
+      LearningPlanGoalProgressReducer.NAME,
+      LearningPlanGoalProgressReducer.reducer,
+      {
+        initialState: LearningPlanGoalProgressReducer.initialState
+      }
+    ),
+    StoreModule.forFeature(
+      LearningPlanGoalReducer.NAME,
+      LearningPlanGoalReducer.reducer,
+      {
+        initialState: LearningPlanGoalReducer.initialState
+      }
+    ),
+    StoreModule.forFeature(ClassGroupReducer.NAME, ClassGroupReducer.reducer, {
+      initialState: ClassGroupReducer.initialState
+    }),
+    StoreModule.forFeature(
+      EffectFeedbackReducer.NAME,
+      EffectFeedbackReducer.reducer,
+      {
+        initialState: EffectFeedbackReducer.initialState
+      }
+    ),
+    StoreModule.forFeature(AlertReducer.NAME, AlertReducer.reducer, {
+      initialState: AlertReducer.initialState
+    }),
+    StoreModule.forFeature(FavoriteReducer.NAME, FavoriteReducer.reducer, {
+      initialState: FavoriteReducer.initialState
+    }),
+    StoreModule.forFeature(HistoryReducer.NAME, HistoryReducer.reducer, {
+      initialState: HistoryReducer.initialState
+    }),
+    StoreModule.forFeature(
+      UnlockedFreePracticeReducer.NAME,
+      UnlockedFreePracticeReducer.reducer,
+      {
+        initialState: UnlockedFreePracticeReducer.initialState
+      }
+    ),
+
     !environment.production ? StoreDevtoolsModule.instrument() : []
   ]
 })

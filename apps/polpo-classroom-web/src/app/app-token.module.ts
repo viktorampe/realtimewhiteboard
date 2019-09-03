@@ -10,6 +10,8 @@ import {
   CONTENT_REQUEST_SERVICE_TOKEN,
   CredentialService,
   CREDENTIAL_SERVICE_TOKEN,
+  DiaboloPhaseService,
+  DIABOLO_PHASE_SERVICE_TOKEN,
   EduContentProductTypeService,
   EduContentService,
   EduNetService,
@@ -135,7 +137,8 @@ import { FavIconService, FAVICON_SERVICE_TOKEN } from './services/favicons';
     { provide: FAVORITE_SERVICE_TOKEN, useClass: FavoriteService },
     { provide: TOC_SERVICE_TOKEN, useClass: TocService },
     { provide: LEARNING_DOMAIN_SERVICE_TOKEN, useClass: LearningDomainService },
-    { provide: HISTORY_SERVICE_TOKEN, useClass: HistoryService }
+    { provide: HISTORY_SERVICE_TOKEN, useClass: HistoryService },
+    { provide: DIABOLO_PHASE_SERVICE_TOKEN, useClass: DiaboloPhaseService }
   ]
 })
 export class AppTokenModule {}

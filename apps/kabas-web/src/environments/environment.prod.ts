@@ -1,4 +1,5 @@
 import { icons } from './icons';
+import { searchModes } from './search-modes';
 
 export const environment = {
   production: true,
@@ -42,7 +43,7 @@ export const environment = {
     }
   },
   sso: {},
-  searchModes: {},
+  searchModes: searchModes,
   testing: {
     removeDataCyAttributes: true
   }

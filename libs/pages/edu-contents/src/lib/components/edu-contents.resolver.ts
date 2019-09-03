@@ -52,7 +52,9 @@ export class EduContentsResolver extends StateResolver {
       new FavoriteActions.LoadFavorites({
         userId: this.authService.userId
       }),
-      new MethodActions.LoadMethods(),
+      new MethodActions.LoadMethods({
+        userId: this.authService.userId
+      }),
       new EduContentProductTypeActions.LoadEduContentProductTypes(),
       new EduNetActions.LoadEduNets(),
       new SchoolTypeActions.LoadSchoolTypes(),

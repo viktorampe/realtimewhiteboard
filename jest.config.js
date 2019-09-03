@@ -20,5 +20,6 @@ module.exports = {
       ]
     : ["default"],
   bail: true,
-  logHeapUsage: true
+  logHeapUsage: true,
+  restoreMocks: true
 };

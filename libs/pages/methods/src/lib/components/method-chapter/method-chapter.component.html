@@ -1,0 +1,77 @@
+<campus-page-bar
+  ><campus-button
+    data-cy="nav-open-boeke"
+    campusPrimary
+    [iconClass]="'book'"
+    *ngIf="(boeke$ | async) as boeke"
+    (click)="clickOpenBoeke(boeke)"
+  ></campus-button
+></campus-page-bar>
+<div class="method-chapter">
+  <campus-collapsible-sheet>
+    <div aside>
+      <a
+        data-cy="back-link"
+        (click)="clickBackLink()"
+        class="method-chapter__back-link"
+        ><mat-icon svgIcon="arrow-back"></mat-icon>Terug</a
+      >
+      <mat-list *ngIf="(currentMethodParams$ | async) as params">
+        <mat-list-item
+          data-cy="lesson-link"
+          *ngFor="let lesson of (lessonsForChapter$ | async)"
+          (click)="clickOpenLesson(lesson.id)"
+          class="method-chapter__lesson-link"
+        >
+          <span [class.active]="lesson.id === params.lesson">{{
+            lesson.title
+          }}</span></mat-list-item
+        ></mat-list
+      >
+    </div>
+
+    <div main>
+      <mat-tab-group
+        [selectedIndex]="currentTab$ | async"
+        (selectedIndexChange)="onSelectedTabIndexChanged($event)"
+      >
+        <mat-tab label="Lesmateriaal">
+          <div data-cy="search-filters" class="method-chapter--filters">
+            <ng-container searchPortal="searchTerm"></ng-container>
+            <ng-container searchPortal="hostTop"></ng-container>
+            <campus-button campusPrimary (click)="clearSearchFilters()"
+              >Reset Filters</campus-button
+            >
+          </div>
+          <campus-search
+            [autoCompleteValues]="autoCompleteValues$ | async"
+            (searchTermChangeForAutoComplete)="onAutoCompleteRequest($event)"
+            [autoFocusSearchTerm]="true"
+            [searchMode]="searchMode$ | async"
+            [initialState]="initialSearchState$ | async"
+            [searchResults]="searchResults$ | async"
+            (searchState$)="onSearchStateChange($event)"
+          ></campus-search>
+        </mat-tab>
+        <mat-tab label="Leerplandoelen">
+          <div>
+            Hieronder vind je een overzicht van de leerplandoelen die horen bij
+            {{ breadCrumbTitles$ | async }}.
+          </div>
+
+          <campus-multi-check-box-table
+            data-cy="goals-check-box-table"
+            [rowHeaderColumns]="learningPlanGoalTableHeaders"
+            [itemColumns]="classGroupColumns$ | async"
+            [subLevels]="
+              learningPlanGoalsPerLessonWithSelectionForClassGroups$ | async
+            "
+            (checkBoxChanged)="checkBoxChanged($event)"
+            (checkBoxesChanged)="checkBoxesChanged($event)"
+          >
+          </campus-multi-check-box-table>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+  </campus-collapsible-sheet>
+</div>

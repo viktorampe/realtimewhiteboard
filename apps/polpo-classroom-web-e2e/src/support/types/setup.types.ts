@@ -1,1 +1,1 @@
-export type SetupScenarioType = 'studentOpenBundleContent';
+export type SetupScenarioType = 'polpoStudentOpenBundleContent';

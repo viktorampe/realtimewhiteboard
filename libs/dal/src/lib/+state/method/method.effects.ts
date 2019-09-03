@@ -8,6 +8,9 @@ import {
 } from '../../metadata/method.service.interface';
 import { DalState } from '../dal.state.interface';
 import {
+  AllowedMethodsLoaded,
+  AllowedMethodsLoadError,
+  LoadAllowedMethods,
   LoadMethods,
   MethodsActionTypes,
   MethodsLoaded,
@@ -21,13 +24,33 @@ export class MethodEffects {
     run: (action: LoadMethods, state: DalState) => {
       if (!action.payload.force && state.methods.loaded) return;
       return this.methodService
-        .getAll()
+        .getAllForUser(action.payload.userId)
         .pipe(map(methods => new MethodsLoaded({ methods })));
     },
     onError: (action: LoadMethods, error) => {
       return new MethodsLoadError(error);
     }
   });
+
+  @Effect()
+  loadAllowedMethods$ = this.dataPersistence.fetch(
+    MethodsActionTypes.LoadAllowedMethods,
+    {
+      run: (action: LoadAllowedMethods, state: DalState) => {
+        if (!action.payload.force && state.methods.allowedMethodsLoaded) return;
+        return this.methodService
+          .getAllowedMethodIds(action.payload.userId)
+          .pipe(
+            map(
+              (methodIds: number[]) => new AllowedMethodsLoaded({ methodIds })
+            )
+          );
+      },
+      onError: (action: LoadAllowedMethods, error) => {
+        return new AllowedMethodsLoadError(error);
+      }
+    }
+  );
 
   constructor(
     private actions: Actions,

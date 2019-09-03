@@ -72,6 +72,21 @@ export const getById = createSelector(
     asEduContent(state.entities[props.id])
 );
 
+export const getBoekeByBookId = createSelector(
+  getAll,
+  (eduContents: EduContentInterface[], props: { bookId: number }) => {
+    return asEduContent(
+      eduContents.find(
+        eduContent =>
+          eduContent.publishedEduContentMetadata &&
+          eduContent.publishedEduContentMetadata.eduContentBookId ===
+            props.bookId &&
+          eduContent.type === 'boek-e'
+      )
+    );
+  }
+);
+
 function asEduContent(item: EduContentInterface): EduContent {
   if (item) {
     return Object.assign<EduContent, EduContentInterface>(

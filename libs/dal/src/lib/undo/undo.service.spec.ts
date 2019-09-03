@@ -3,6 +3,7 @@ import { Actions, EffectsModule } from '@ngrx/effects';
 import { Action, Store, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
+import { configureTestSuite } from 'ng-bullet';
 import { from, of } from 'rxjs';
 import { DalState } from '../+state';
 import {
@@ -20,7 +21,7 @@ describe('UndoService', () => {
   let service: UndoService;
   let store: Store<DalState>;
   let uuid: Function;
-  beforeAll(() => {
+  configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [
         NxModule.forRoot(),
@@ -40,7 +41,6 @@ describe('UndoService', () => {
     store = TestBed.get(Store);
     uuid = TestBed.get('uuid');
   });
-  beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
     expect(service).toBeTruthy();
@@ -59,7 +59,8 @@ describe('UndoService', () => {
     let actions: Actions;
     let payload: UndoableActionInterface;
     let warningFeedback: EffectFeedback;
-    beforeAll(() => {
+
+    beforeEach(() => {
       jest.spyOn(Date, 'now').mockReturnValue(1234567890);
       actions = from([]);
       payload = {
@@ -70,7 +71,7 @@ describe('UndoService', () => {
         undoLabel: 'undo label',
         undoneLabel: 'undone label',
         doneLabel: 'done label',
-        intendedSideEffect: of('returnValue')
+        intendedSideEffect: of({ type: 'returnValue' })
       };
       warningFeedback = new EffectFeedback({
         id: uuid(),
@@ -83,9 +84,7 @@ describe('UndoService', () => {
         priority: Priority.NORM
       });
     });
-    afterAll(() => {
-      jest.resetAllMocks();
-    });
+
     it('should dispatch a AddEffectFeedback with the warning', () => {
       const storeSpy = jest.spyOn(store, 'dispatch');
       service.dispatchActionAsUndoable(payload);

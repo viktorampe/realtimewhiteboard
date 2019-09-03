@@ -8,6 +8,7 @@ import {
   ContentInterface,
   ContentStatusLabel,
   ContentStatusQueries,
+  createHistoryFromBundle,
   createHistoryFromContent,
   DalState,
   EduContent,
@@ -46,9 +47,9 @@ import { combineLatest, Observable } from 'rxjs';
 import {
   filter,
   map,
-  share,
   shareReplay,
   switchMap,
+  switchMapTo,
   take
 } from 'rxjs/operators';
 import {
@@ -81,8 +82,7 @@ export class BundlesViewModel {
     .hasPermission(Permissions.settings.MANAGE_HISTORY)
     .pipe(
       take(1),
-      filter(hasPermission => hasPermission),
-      share()
+      filter(hasPermission => hasPermission)
     );
   // > bundle detail page
 
@@ -254,13 +254,13 @@ export class BundlesViewModel {
   }
 
   getBundleContents(bundleId: number): Observable<UnlockedContent[]> {
-    return combineLatest(
+    return combineLatest([
       this.store.pipe(
         select(UnlockedContentQueries.getByBundleId, { bundleId })
       ),
       this.store.pipe(select(EduContentQueries.getAllEntities)),
       this.store.pipe(select(UserContentQueries.getAllEntities))
-    ).pipe(
+    ]).pipe(
       map(([unlockedContents, eduContentEnts, userContentEnts]) => {
         return unlockedContents.map(
           (unlockedContent): UnlockedContent => {
@@ -287,7 +287,7 @@ export class BundlesViewModel {
   }
 
   private getSharedBooks(): Observable<EduContent[]> {
-    return combineLatest(
+    return combineLatest([
       this.store.pipe(
         select(UnlockedBoekeGroupQueries.getShared, {
           userId: this.authService.userId
@@ -298,7 +298,7 @@ export class BundlesViewModel {
           userId: this.authService.userId
         })
       )
-    ).pipe(
+    ]).pipe(
       switchMap(
         ([unlockedBookGroups, unlockedBookStudents]): Observable<
           EduContent[]
@@ -323,11 +323,11 @@ export class BundlesViewModel {
     bundlesByLearningArea$: Observable<Dictionary<BundleInterface[]>>,
     booksByLearningArea$: Observable<Dictionary<EduContent[]>>
   ): Observable<LearningAreasWithBundlesInfoInterface> {
-    return combineLatest(
+    return combineLatest([
       this.learningAreas$,
       bundlesByLearningArea$,
       booksByLearningArea$
-    ).pipe(
+    ]).pipe(
       map(
         ([
           learningAreas,
@@ -375,11 +375,11 @@ export class BundlesViewModel {
       Dictionary<UnlockedContentInterface[]>
     >
   ) {
-    return combineLatest(
+    return combineLatest([
       bundlesByLearningArea$,
       booksByLearningArea$,
       unlockedContentsByBundle$
-    ).pipe(
+    ]).pipe(
       map(
         ([bundlesByArea, booksByArea, unlockedContentsByBundle]: [
           Dictionary<BundleInterface[]>,
@@ -397,6 +397,25 @@ export class BundlesViewModel {
       ),
       shareReplay(1)
     );
+  }
+
+  public setBundleHistory(bundleId: number): void {
+    this.hasManageHistoryPermission
+      .pipe(
+        switchMapTo(
+          this.store.pipe(
+            select(BundleQueries.getById, { id: bundleId }),
+            take(1)
+          )
+        )
+      )
+      .subscribe(bundle =>
+        this.store.dispatch(
+          new HistoryActions.StartUpsertHistory({
+            history: createHistoryFromBundle(bundle)
+          })
+        )
+      );
   }
 
   getContentStatusOptions(): Observable<SelectOption[]> {

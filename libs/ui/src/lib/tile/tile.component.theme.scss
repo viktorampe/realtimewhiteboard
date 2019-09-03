@@ -1,6 +1,9 @@
+@import 'libs/ui/src/lib/breakpoints.scss';
+
 @mixin ui-tile() {
   $ui-tile-margins: 0 20px 20px 0 !default;
   $ui-tile-size-width: $ui-tile-width !default;
+  $ui-tile-size-width--breakpoint-xsmall: $ui-tile-width--breakpoint-xsmall !default;
   $ui-tile-size-height: $ui-tile-height !default;
   $ui-tile-background-color: $ui-primary-color-accent !default;
   $ui-tile-background-image: '' !default;
@@ -87,6 +90,9 @@
           margin-left: $ui-tile-content-icon-margin;
         }
       }
+    }
+    @media #{$ui-breakpoint-xsmall} {
+      width: $ui-tile-size-width--breakpoint-xsmall;
     }
   }
 }

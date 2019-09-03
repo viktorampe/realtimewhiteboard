@@ -1,5 +1,5 @@
-import { ResultInterface } from '@campus/dal';
 import { ScormCmiMode } from '@campus/scorm';
+import { ResultInterface } from '../../+models';
 import {
   CurrentExerciseActions,
   CurrentExerciseActionTypes

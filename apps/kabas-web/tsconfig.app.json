@@ -10,6 +10,15 @@
     "../../libs/pages/error/src/index.ts",
     "../../libs/shared/src/index.ts",
     "../../libs/ui/src/index.ts",
-    "../../libs/dal/src/index.ts"
+    "../../libs/dal/src/index.ts",
+    "../../libs/pages/methods/src/index.ts",
+    "../../libs/pages/global-search/src/index.ts",
+    "../../libs/devlib/src/index.ts",
+    "../../libs/pages/settings/dashboard/src/index.ts",
+    "../../libs/pages/settings/profile/src/index.ts",
+    "../../libs/pages/settings/credentials/src/index.ts",
+    "../../libs/pages/settings/coupled-teachers/src/index.ts",
+    "../../libs/pages/settings/avatar/src/index.ts",
+    "../../libs/pages/settings/alerts/src/index.ts"
   ]
 }

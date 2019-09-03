@@ -1,5 +1,5 @@
+// tslint:disable: member-ordering
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { MatDialog } from '@angular/material';
 import { NavigationEnd, Router } from '@angular/router';
 import {
   AlertQueries,
@@ -7,42 +7,36 @@ import {
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
   BundleActions,
-  EduContent,
+  ClassGroupActions,
+  DiaboloPhaseActions,
+  DiaboloPhaseFixture,
   EduContentActions,
   EduContentInterface,
-  EduContentQueries,
-  EffectFeedback,
-  EffectFeedbackActions,
+  EduContentTocActions,
   EffectFeedbackInterface,
   EffectFeedbackQueries,
   FavoriteActions,
   FavoriteInterface,
-  FavoriteQueries,
-  FavoriteServiceInterface,
   FavoriteTypesEnum,
-  FAVORITE_SERVICE_TOKEN,
-  HistoryFixture,
-  HistoryServiceInterface,
-  HISTORY_SERVICE_TOKEN,
   LearningAreaActions,
+  LearningPlanGoalProgressActions,
+  LearningPlanGoalProgressQueries,
   TaskActions,
   TaskEduContentActions,
   TocServiceInterface,
   TOC_SERVICE_TOKEN,
   UnlockedContentActions,
-  UserActions
+  UserActions,
+  UserLessonActions
 } from '@campus/dal';
 import {
-  EduContentCollectionManagerService,
-  EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN,
-  QuickLinkComponent,
-  QuickLinkTypeEnum
-} from '@campus/shared';
+  SearchFilterCriteriaFixture,
+  SearchFilterCriteriaValuesFixture
+} from '@campus/search';
 import { ContentEditableComponent } from '@campus/ui';
-import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { filter, map, take } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 import { LoginPageViewModel } from './loginpage.viewmodel';
 
 @Component({
@@ -78,18 +72,10 @@ export class LoginpageComponent implements OnInit {
 
   constructor(
     public loginPageviewModel: LoginPageViewModel,
-    private personApi: PersonApi,
-    @Inject(FAVORITE_SERVICE_TOKEN)
-    private favoriteService: FavoriteServiceInterface,
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
     private store: Store<AlertReducer.State>,
     private router: Router,
-    @Inject(TOC_SERVICE_TOKEN) private tocService: TocServiceInterface,
-    private dialog: MatDialog,
-    @Inject(EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN)
-    private eduContentCollectionManagerService: EduContentCollectionManagerService,
-    @Inject(HISTORY_SERVICE_TOKEN)
-    private historyService: HistoryServiceInterface
+    @Inject(TOC_SERVICE_TOKEN) private tocService: TocServiceInterface
   ) {}
 
   ngOnInit() {
@@ -109,28 +95,6 @@ export class LoginpageComponent implements OnInit {
     }
   }
 
-  addErrorFeedback(): void {
-    const mockAction = new FavoriteActions.UpdateFavorite({
-      userId: this.authService.userId,
-      favorite: { id: 1, changes: { name: 'foo' } },
-      customFeedbackHandlers: {
-        useCustomErrorHandler: true
-      }
-    });
-    const mockFeedBack = EffectFeedback.generateErrorFeedback(
-      'foo',
-      mockAction,
-      'Het is niet gelukt de favoriet te wijzigen.'
-    );
-    mockFeedBack.icon = 'warning';
-
-    this.store.dispatch(
-      new EffectFeedbackActions.AddEffectFeedback({
-        effectFeedback: mockFeedBack
-      })
-    );
-  }
-
   getCurrentUser() {
     this.currentUser = this.authService.getCurrent();
     if (this.currentUser) this.loadCurrentUserinState();
@@ -138,29 +102,6 @@ export class LoginpageComponent implements OnInit {
 
   loadCurrentUserinState() {
     this.store.dispatch(new UserActions.LoadUser({ force: true }));
-  }
-
-  openDialog() {
-    this.store
-      .pipe(
-        select(EduContentQueries.getAll),
-        take(1)
-      )
-      .subscribe(entities => {
-        const content = Object.assign(new EduContent(), entities[0]);
-        this.eduContentCollectionManagerService.manageBundlesForContent(
-          content,
-          19
-        );
-      });
-  }
-
-  toggleEditable() {
-    this.contentEditable.active = !this.contentEditable.active;
-  }
-
-  textChanged(text: string) {
-    console.log('ContentEditable was changed, new text: ' + text);
   }
 
   loadStore() {
@@ -181,38 +122,127 @@ export class LoginpageComponent implements OnInit {
     this.store.dispatch(new EduContentActions.LoadEduContents({ userId }));
     this.store.dispatch(new FavoriteActions.LoadFavorites({ userId }));
     this.store.dispatch(new LearningAreaActions.LoadLearningAreas());
-  }
-
-  updateFavorite() {
-    let favorite: FavoriteInterface;
-    this.store.pipe(select(FavoriteQueries.getAll)).subscribe(favorites => {
-      favorite = favorites[0];
-    });
-    console.log(favorite);
-    this.response = this.favoriteService.updateFavorite(
-      this.authService.userId,
-      favorite.id,
-      {
-        name: favorite.name + 'x'
-      }
+    this.store.dispatch(new DiaboloPhaseActions.LoadDiaboloPhases({ userId }));
+    this.store.dispatch(new ClassGroupActions.LoadClassGroups({ userId }));
+    this.store.dispatch(
+      new LearningPlanGoalProgressActions.LoadLearningPlanGoalProgresses({
+        userId
+      })
     );
   }
 
-  openQuickLinkManager(): void {
-    this.dialog.open(QuickLinkComponent, {
-      data: { mode: QuickLinkTypeEnum.FAVORITES },
-      autoFocus: true,
-      panelClass: 'quick-link__dialog'
-    });
+  loadToc(): void {
+    this.store.dispatch(
+      new EduContentTocActions.LoadEduContentTocsForBook({ bookId: 1 })
+    );
   }
 
-  upsertHistory(): void {
-    const history = new HistoryFixture({
-      name: 'test',
-      type: 'educontent',
-      learningAreaId: 19,
-      taskId: 1
-    });
-    this.response = this.historyService.upsertHistory(history);
+  // tslint:disable-next-line: member-ordering
+  public filterCriteria = new SearchFilterCriteriaFixture(
+    { displayProperty: 'icon' },
+    [
+      new SearchFilterCriteriaValuesFixture({
+        data: new DiaboloPhaseFixture({
+          id: 1,
+          name: 'opt1',
+          icon: 'diabolo-intro'
+        }),
+        prediction: 0,
+        selected: true
+      }),
+      new SearchFilterCriteriaValuesFixture({
+        data: new DiaboloPhaseFixture({
+          id: 2,
+          name: 'opt2',
+          icon: 'diabolo-midden'
+        }),
+        prediction: 1,
+        selected: true
+      }),
+      new SearchFilterCriteriaValuesFixture({
+        data: new DiaboloPhaseFixture({
+          id: 3,
+          name: 'opt3',
+          icon: 'diabolo-outro'
+        })
+      })
+    ]
+  );
+
+  public filterSelectionChanged(event) {
+    console.log(event);
+  }
+
+  public toggleLearningPlanGoalProgress() {
+    const userId = this.authService.userId;
+    const classGroupId = 1;
+    const eduContentTOCId = 1;
+    const learningPlanGoalId = 1;
+    const userLessonId = 1;
+    const eduContentBookId = 1;
+
+    this.store.dispatch(
+      new LearningPlanGoalProgressActions.ToggleLearningPlanGoalProgress({
+        personId: userId,
+        classGroupId,
+        userLessonId,
+        learningPlanGoalId,
+        eduContentBookId
+      })
+    );
+
+    this.response = this.store.pipe(
+      select(LearningPlanGoalProgressQueries.findMany, {
+        classGroupId,
+        userLessonId
+      })
+    );
+  }
+
+  public createBulk() {
+    const userId = this.authService.userId;
+    const classGroupId = 1;
+    const eduContentTOCId = 1;
+    const learningPlanGoalIds = [1, 2, 3];
+    const userLessonId = 1;
+    const eduContentBookId = 1;
+
+    this.store.dispatch(
+      new LearningPlanGoalProgressActions.BulkAddLearningPlanGoalProgresses({
+        personId: userId,
+        classGroupId,
+        userLessonId,
+        learningPlanGoalIds,
+        eduContentBookId
+      })
+    );
+
+    this.response = this.store.pipe(
+      select(LearningPlanGoalProgressQueries.findMany, {
+        classGroupId,
+        userLessonId
+      })
+    );
+  }
+
+  public createUserLessonWithLearningPlanGoalProgresses() {
+    const userId = this.authService.userId;
+    const classGroupId = 5;
+    const learningPlanGoalId = 1;
+    const eduContentBookId = 34;
+
+    this.store.dispatch(
+      new UserLessonActions.CreateUserLessonWithLearningPlanGoalProgresses({
+        userId,
+        userLesson: { description: 'foo' },
+        learningPlanGoalProgresses: [
+          {
+            classGroupId,
+            eduContentBookId,
+            learningPlanGoalId
+          }
+        ]
+      })
+    );
   }
 }

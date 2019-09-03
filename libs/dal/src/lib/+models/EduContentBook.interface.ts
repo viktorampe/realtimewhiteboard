@@ -10,4 +10,5 @@ export interface EduContentBookInterface {
   years?: YearInterface[];
   method?: MethodInterface;
   eduContentTOC?: EduContentTOCInterface[];
+  diabolo?: boolean;
 }

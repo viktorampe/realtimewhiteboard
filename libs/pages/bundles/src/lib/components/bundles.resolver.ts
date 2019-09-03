@@ -40,7 +40,9 @@ export class BundlesResolver extends StateResolver {
   protected getLoadableActions(): Action[] {
     return [
       new LearningAreaActions.LoadLearningAreas(),
-      new MethodActions.LoadMethods(),
+      new MethodActions.LoadMethods({
+        userId: this.authService.userId
+      }),
       new ContentStatusActions.LoadContentStatuses(),
       new StudentContentStatusActions.LoadStudentContentStatuses({
         studentId: this.authService.userId

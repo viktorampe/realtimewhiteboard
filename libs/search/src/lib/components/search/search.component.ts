@@ -7,21 +7,20 @@ import {
   Input,
   OnChanges,
   OnDestroy,
-  OnInit,
   Output,
   QueryList,
   SimpleChanges,
   Type,
   ViewContainerRef
 } from '@angular/core';
+import { Observable, Subscription } from 'rxjs';
+import { debounceTime, skipWhile, take } from 'rxjs/operators';
+import { SearchPortalDirective } from '../../directives';
 import {
   SearchFilterComponentInterface,
   SearchFilterCriteriaInterface,
   SearchFilterInterface
-} from '@campus/search';
-import { Observable, Subscription } from 'rxjs';
-import { debounceTime, skipWhile, take } from 'rxjs/operators';
-import { SearchPortalDirective } from '../../directives';
+} from '../../interfaces';
 import { ColumnFilterService } from '../column-filter/column-filter.service';
 import { SearchTermComponent } from '../search-term/search-term.component';
 import { SearchViewModel } from '../search.viewmodel';
@@ -38,8 +37,8 @@ import { SearchStateInterface } from './../../interfaces/search-state.interface'
   styleUrls: ['./search.component.scss'],
   providers: [SearchViewModel, ColumnFilterService]
 })
-export class SearchComponent
-  implements OnInit, AfterViewInit, OnDestroy, OnChanges {
+export class SearchComponent implements AfterViewInit, OnDestroy, OnChanges {
+  private _initialState: SearchStateInterface;
   private searchTermComponent: SearchTermComponent;
   private subscriptions = new Subscription();
   private _searchPortals: QueryList<SearchPortalDirective> = new QueryList();
@@ -53,7 +52,15 @@ export class SearchComponent
   @Input() public searchMode: SearchModeInterface;
   @Input() public autoCompleteValues: string[];
   @Input() public autoCompleteDebounceTime = 300;
-  @Input() public initialState: SearchStateInterface;
+  @Input() public set initialState(state: SearchStateInterface) {
+    if (!state) return;
+
+    this._initialState = state;
+    this.reset(this._initialState);
+  }
+  public get initialState() {
+    return this._initialState;
+  }
   @Input() public searchResults: SearchResultInterface;
   @Input() public autoFocusSearchTerm = false;
   @Input()
@@ -90,10 +97,6 @@ export class SearchComponent
     );
   }
 
-  ngOnInit() {
-    this.reset(this.initialState);
-  }
-
   ngAfterViewInit() {
     this.warnMissingSearchPortals();
   }
@@ -119,13 +122,14 @@ export class SearchComponent
   }
 
   public reset(
-    initialState: SearchStateInterface = this.initialState,
+    initialState: SearchStateInterface = this._initialState,
     clearSearchTerm?: boolean
   ): void {
     if (clearSearchTerm) {
       initialState.searchTerm = undefined;
       this.searchTermComponent.currentValue = undefined;
     }
+
     this.searchViewmodel.reset(this.searchMode, {
       ...initialState,
       filterCriteriaSelections: new Map(initialState.filterCriteriaSelections)
@@ -166,7 +170,7 @@ export class SearchComponent
 
     this.searchTermComponent = componentRef.instance;
 
-    this.searchTermComponent.initialValue = this.initialState.searchTerm;
+    this.searchTermComponent.initialValue = this._initialState.searchTerm;
     this.searchTermComponent.autoCompleteValues = this.autoCompleteValues;
     this.searchTermComponent.autofocus = this.autoFocusSearchTerm;
 
@@ -208,8 +212,8 @@ export class SearchComponent
 
     // set inputs
     const filterItem = componentRef.instance;
-    filterItem.filterCriteria = filter.criteria;
     if (filter.options) filterItem.filterOptions = filter.options;
+    filterItem.filterCriteria = filter.criteria;
 
     // subscribe to outputs
     this.portalsMap[filter.domHost].subscriptions.add(

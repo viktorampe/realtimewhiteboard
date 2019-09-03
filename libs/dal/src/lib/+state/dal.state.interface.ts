@@ -1,16 +1,22 @@
 import {
   AlertReducer,
   BundleReducer,
+  ClassGroupReducer,
   ContentStatusReducer,
   CredentialReducer,
   CurrentExerciseReducer,
+  DiaboloPhaseReducer,
+  EduContentBookReducer,
   EduContentProductTypeReducer,
   EduContentReducer,
+  EduContentTocReducer,
   EduNetReducer,
   FavoriteReducer,
   HistoryReducer,
   LearningAreaReducer,
   LearningDomainReducer,
+  LearningPlanGoalProgressReducer,
+  LearningPlanGoalReducer,
   LinkedPersonReducer,
   MethodReducer,
   ResultReducer,
@@ -24,7 +30,9 @@ import {
   UnlockedBoekeGroupReducer,
   UnlockedBoekeStudentReducer,
   UnlockedContentReducer,
+  UnlockedFreePracticeReducer,
   UserContentReducer,
+  UserLessonReducer,
   UserReducer,
   YearReducer
 } from '../..';
@@ -34,6 +42,7 @@ export interface DalState {
   learningAreas: LearningAreaReducer.State;
   learningDomains: LearningDomainReducer.State;
   bundles: BundleReducer.State;
+  eduContentBooks: EduContentBookReducer.State;
   eduContents: EduContentReducer.State;
   userContents: UserContentReducer.State;
   unlockedContents: UnlockedContentReducer.State;
@@ -58,4 +67,11 @@ export interface DalState {
   schoolTypes: SchoolTypeReducer.State;
   years: YearReducer.State;
   history: HistoryReducer.State;
+  eduContentTocs: EduContentTocReducer.State;
+  diaboloPhases: DiaboloPhaseReducer.State;
+  userLessons: UserLessonReducer.State;
+  learningPlanGoalProgresses: LearningPlanGoalProgressReducer.State;
+  learningPlanGoals: LearningPlanGoalReducer.State;
+  classGroups: ClassGroupReducer.State;
+  unlockedFreePractices: UnlockedFreePracticeReducer.State;
 }

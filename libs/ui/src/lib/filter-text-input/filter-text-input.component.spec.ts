@@ -3,8 +3,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { MockMatIconRegistry } from '@campus/testing';
-import { UiModule } from '@campus/ui';
 import { configureTestSuite } from 'ng-bullet';
+import { UiModule } from '../ui.module';
 import { FilterTextInputComponent } from './filter-text-input.component';
 
 describe('FilterTextInputComponent', () => {

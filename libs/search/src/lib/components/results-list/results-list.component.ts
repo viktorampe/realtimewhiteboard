@@ -162,6 +162,10 @@ export class ResultsListComponent implements OnDestroy, AfterViewInit {
       this.loading = false;
     } else if (searchState.from === 0) {
       this.loading = true;
+      if (this.clearResultsTimer) {
+        // a new search was triggered before the previous results arrived
+        this.nativeWindow.clearInterval(this.clearResultsTimer);
+      }
       // UX: don't clear results immediately to avoid flicker effects
       this.clearResultsTimer = this.nativeWindow.setTimeout(() => {
         this.clearResults();

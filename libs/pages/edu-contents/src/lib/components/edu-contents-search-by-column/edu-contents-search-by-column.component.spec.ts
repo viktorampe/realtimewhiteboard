@@ -132,16 +132,12 @@ describe('EduContentSearchByColumnComponent', () => {
     expect(component).toBeTruthy();
   });
   describe('initialize', () => {
-    it('should call initialize on navigation', async(() => {
+    it('should call initialize on init', () => {
       component.initialize = jest.fn();
-      fixture.ngZone.run(() => {
-        fixture.whenStable().then(() => {
-          router.navigate([]).then(() => {
-            expect(component.initialize).toHaveBeenCalledTimes(1);
-          });
-        });
-      });
-    }));
+      component.ngOnInit();
+
+      expect(component.initialize).toHaveBeenCalledTimes(1);
+    });
     it('should call getSearchMode', () => {
       const getSearchModeSpy = jest.spyOn(
         eduContentsViewModel,

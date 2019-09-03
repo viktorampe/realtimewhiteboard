@@ -69,37 +69,42 @@
   ></div
 >
 
-<div
-  ><a [routerLink]="['./finding-nemo']" routerLinkActive="router-link-active"
-    >go to finding-nemo page</a
-  ></div
->
-
 <div>{{ response | async | json }}</div>
 
 <div>
   <campus-button campusPrimary (click)="loadStore()">Load store</campus-button>
 </div>
+
 <div>
-  <campus-button campusPrimary (click)="addErrorFeedback()"
-    >Add error feedback to store</campus-button
-  >
-</div>
-<div>
-  <campus-button campusPrimary (click)="openQuickLinkManager()"
-    >Open quicklink</campus-button
+  <campus-button campusPrimary (click)="loadToc()"
+    >Load TOC for book</campus-button
   >
 </div>
 
 <div>
-  <h2>Content Editable Component</h2>
-
-  <campus-content-editable text="Try to edit me"></campus-content-editable>
-  <campus-button (click)="toggleEditable()">Edit</campus-button>
+  <campus-button-toggle-filter
+    [multiple]="true"
+    [filterCriteria]="filterCriteria"
+    (filterSelectionChange)="filterSelectionChanged($event)"
+  ></campus-button-toggle-filter>
 </div>
 
 <div>
-  <campus-button campusPrimary (click)="upsertHistory()"
-    >Upsert History</campus-button
+  <campus-button campusPrimary (click)="toggleLearningPlanGoalProgress()"
+    >Toggle LearningPlanGoalProgress</campus-button
+  >
+</div>
+
+<div>
+  <campus-button campusPrimary (click)="createBulk()"
+    >Create Bulk LearningPlanGoalProgress</campus-button
+  >
+</div>
+
+<div>
+  <campus-button
+    campusPrimary
+    (click)="createUserLessonWithLearningPlanGoalProgresses()"
+    >Create UserLessonWithLearningPlanGoalProgresses</campus-button
   >
 </div>

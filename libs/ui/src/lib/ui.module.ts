@@ -6,6 +6,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   MatButtonModule,
+  MatCheckboxModule,
   MatDialogModule,
   MatFormFieldModule,
   MatIconModule,
@@ -17,6 +18,7 @@ import {
   MatSidenavModule,
   MatTooltipModule
 } from '@angular/material';
+import { MatTabsModule } from '@angular/material/tabs';
 import { RouterModule } from '@angular/router';
 import { UtilsModule } from '@campus/utils';
 import { AppBarComponent } from './app-bar/app-bar.component';
@@ -52,6 +54,7 @@ import {
 import { ManageCollectionComponent } from './manage-collection/manage-collection.component';
 import { CollectionManagerService } from './manage-collection/services/collection-manager.service';
 import { COLLECTION_MANAGER_SERVICE_TOKEN } from './manage-collection/services/collection-manager.service.interface';
+import { MultiCheckBoxTableComponent } from './multi-check-box-table/multi-check-box-table.component';
 import { DropdownDirective } from './notification/directives/notification-dropdown.directive';
 import { NotificationComponent } from './notification/notification.component';
 import { PageHeaderComponent } from './page-header/page-header.component';
@@ -97,7 +100,9 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     MatMenuModule,
     UtilsModule,
     MatDialogModule,
-    MatListModule
+    MatListModule,
+    MatTabsModule,
+    MatCheckboxModule
   ],
   declarations: [
     FilterTextInputComponent,
@@ -153,7 +158,8 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     DropAreaComponent,
     TileComponent,
     JoinPipe,
-    ManageCollectionComponent
+    ManageCollectionComponent,
+    MultiCheckBoxTableComponent
   ],
   exports: [
     FilterTextInputComponent,
@@ -207,7 +213,13 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     CollapsibleSheetComponent,
     DropAreaComponent,
     TileComponent,
-    JoinPipe
+    JoinPipe,
+    MatListModule,
+    MatTabsModule,
+    MatTooltipModule,
+    MatIconModule,
+    MultiCheckBoxTableComponent,
+    MatCheckboxModule
   ],
   providers: [
     {

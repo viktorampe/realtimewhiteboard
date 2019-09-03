@@ -1,0 +1,56 @@
+@import './components/method/method.component.theme.scss';
+@import './components/method-chapter/method-chapter.component.theme.scss';
+
+.method-method__container,
+.method-chapter {
+  height: 100%;
+  display: flex;
+  flex-flow: column nowrap;
+
+  campus-collapsible-sheet {
+    height: 0px;
+    flex: 1 0 auto;
+
+    div[aside] {
+      height: 100%;
+      overflow: auto;
+      padding: 20px;
+    }
+
+    div[main] {
+      display: flex;
+      flex-direction: column;
+      flex: 1 1 auto;
+      padding: 20px 40px;
+    }
+  }
+
+  .collapsible-sheet__main {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .mat-tab-group {
+    flex: 1 1 auto;
+  }
+
+  .mat-tab-body-wrapper {
+    flex: 1 1 auto;
+  }
+
+  .mat-tab-body-content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .ui-multi-check-box-table {
+    &__body__row__cell:first-child {
+      white-space: nowrap;
+    }
+  }
+}
+
+@mixin pages-methods-theme() {
+  @include pages-methods-method();
+  @include pages-methods-method-chapter();
+}

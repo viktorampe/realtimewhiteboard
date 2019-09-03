@@ -42,6 +42,20 @@ export const getAllEntities = createSelector(
   selectEntities
 );
 
+export const getAllOrderedByName = createSelector(
+  selectEduContentProductTypeState,
+  (state: State) =>
+    Object.values(state.entities).sort((a, b) => a.name.localeCompare(b.name))
+);
+
+export const getAllOrderedBySequence = createSelector(
+  selectEduContentProductTypeState,
+  (state: State) =>
+    Object.values(state.entities).sort((a, b) =>
+      a.sequence > b.sequence ? 1 : -1
+    )
+);
+
 /**
  * returns array of objects in the order of the given ids
  * @example

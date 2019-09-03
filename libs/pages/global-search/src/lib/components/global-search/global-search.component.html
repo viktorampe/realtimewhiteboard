@@ -1,0 +1,27 @@
+<div class="global-search">
+  <campus-collapsible-sheet>
+    <div aside>
+      <div class="global-search__filters">
+        <campus-button campusPrimary (click)="clearSearchFilters()"
+          >Reset Filters</campus-button
+        >
+        <ng-container searchPortal="hostLeft"></ng-container>
+      </div>
+    </div>
+
+    <div main>
+      <div class="global-search__filters">
+        <ng-container searchPortal="searchTerm"></ng-container>
+      </div>
+      <campus-search
+        [autoCompleteValues]="autoCompleteValues$ | async"
+        (searchTermChangeForAutoComplete)="onAutoCompleteRequest($event)"
+        [autoFocusSearchTerm]="true"
+        [searchMode]="searchMode$ | async"
+        [initialState]="initialSearchState$ | async"
+        [searchResults]="searchResults$ | async"
+        (searchState$)="onSearchStateChange($event)"
+      ></campus-search>
+    </div>
+  </campus-collapsible-sheet>
+</div>

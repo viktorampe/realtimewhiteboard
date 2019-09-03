@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
-import { MatIconModule } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DalModule } from '@campus/dal';
+import { AuthenticationGuard, TermPrivacyGuard } from '@campus/guards';
 import { SharedModule } from '@campus/shared';
 import { UiModule } from '@campus/ui';
 import { NxModule } from '@nrwl/nx';
@@ -13,17 +13,17 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppStoreModule } from './app-store.module';
 import { AppTokenModule } from './app-token.module';
 import { AppComponent } from './app.component';
+import { EduContentSearchResultComponent } from './components/searchresults/edu-content-search-result.component';
 
 configureBufferSize(150);
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, EduContentSearchResultComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
     UiModule,
-    MatIconModule,
     SharedModule.forRoot(
       environment.features.alerts,
       environment.features.messages,
@@ -44,7 +44,8 @@ configureBufferSize(150);
     AppEffectsModule,
     AppStoreModule
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  providers: [AuthenticationGuard, TermPrivacyGuard],
+  bootstrap: [AppComponent],
+  entryComponents: [EduContentSearchResultComponent]
 })
 export class AppModule {}

@@ -120,13 +120,13 @@ export class LearningPlanFilterFactory implements SearchFilterFactory {
             selectedPropertyIds[ColumnLevel.LEARNING_AREA]
           )
         : of(undefined);
-    return combineLatest(
+    return combineLatest([
       this.learningAreas$,
       this.eduNets$,
       this.schoolTypes$,
       years$,
       specialities$
-    ).pipe(
+    ]).pipe(
       map(
         (
           columnValuesData: [

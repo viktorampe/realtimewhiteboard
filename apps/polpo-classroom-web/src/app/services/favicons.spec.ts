@@ -1,10 +1,11 @@
 import { TestBed } from '@angular/core/testing';
+import { configureTestSuite } from 'ng-bullet';
 import { FavIconService } from './favicons';
 
 describe('FavIconService', () => {
   let browserFaviconService: FavIconService;
 
-  beforeEach(() => {
+  configureTestSuite(() => {
     TestBed.configureTestingModule({
       providers: [FavIconService]
     });

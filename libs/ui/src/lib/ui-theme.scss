@@ -66,6 +66,7 @@ $ui-button-padding-bottom: $ui-primary-font-size/2 !default;
 
 // tiles and droparea
 $ui-tile-width: 280px !default;
+$ui-tile-width--breakpoint-xsmall: 250px !default;
 $ui-tile-height: 105px !default;
 
 // helper classes
@@ -103,6 +104,7 @@ $ui-tile-height: 105px !default;
 @import './drop-area/drop-area.component.theme.scss';
 @import './tile/tile.component.theme.scss';
 @import './manage-collection/manage-collection.component.theme.scss';
+@import './multi-check-box-table/multi-check-box-table.component.theme.scss';
 
 @mixin ui-forms() {
   form {
@@ -206,4 +208,5 @@ $ui-tile-height: 105px !default;
   @include ui-drop-area-theme();
   @include ui-tile();
   @include ui-manage-collection();
+  @include ui-multi-check-box-table_theme();
 }

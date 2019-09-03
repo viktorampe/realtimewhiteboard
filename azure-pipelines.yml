@@ -16,8 +16,8 @@ trigger:
 
 variables:
   dkRanTests: false
-  dkLintAll: false
   dkBuild: false
+  dkE2E: false
 
 pool:
   name: 'Campus'
@@ -27,13 +27,13 @@ steps:
       echo '##vso[task.setvariable variable=CI]1'
     displayName: 'Export environment variables'
   - script: |
-      echo '##vso[task.setvariable variable=dkLintAll]true'
-    condition: and(in(variables['Build.SourceBranch'], 'refs/heads/master', 'refs/heads/develop', 'refs/heads/test/mock-master'), in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI'))
-    displayName: '(Check) Enable dkLintAll if pushing to a trigger branch'
-  - script: |
       echo '##vso[task.setvariable variable=dkBuild]true'
     condition: and(in(variables['Build.SourceBranch'], 'refs/heads/master', 'refs/heads/test/mock-master'), in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI'))
     displayName: '(Check) Enable dkBuild (artifacts) if pushing to master'
+  - script: |
+      echo '##vso[task.setvariable variable=dkE2E]true'
+    condition: or(in(variables['System.PullRequest.TargetBranch'], 'master', 'test/mock-master'), eq(variables['dkBuild'], 'true'), and(in(variables['Build.SourceBranch'], 'refs/heads/develop'), in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI')))
+    displayName: '(Check) Enable dkE2E (end-to-end tests) if building, target is master or merge to develop'
   - script: |
       echo Build information
       echo -----------------
@@ -42,7 +42,6 @@ steps:
       echo System.PullRequest.TargetBranch = $(System.PullRequest.TargetBranch)
       echo Build.SourcesDirectory = $(Build.SourcesDirectory)
       echo dkRanTests = $(dkRanTests)
-      echo dkLintAll = $(dkLintAll)
       echo dkBuild = $(dkBuild)
       echo
       echo Environment
@@ -53,14 +52,9 @@ steps:
     displayName: 'Install Node.js'
     inputs:
       versionSpec: '10.x'
-  - task: DeleteFiles@1
+  - script: |
+      rm -rf dist junit coverage reportgenerator
     displayName: 'Clear junit, coverage reports, build output'
-    inputs:
-      contents: |
-        'junit'
-        'coverage'
-        'reportgenerator'
-        'dist'
   - task: Npm@1
     displayName: 'Npm install'
     inputs:
@@ -68,7 +62,6 @@ steps:
   - script: |
       npm run lint
     displayName: 'Lint all'
-    condition: and(succeeded(), eq(variables['dkLintAll'], 'true'))
   - script: |
       npm run format:check
     displayName: 'Format check'
@@ -77,11 +70,11 @@ steps:
   - script: |
       npm run e2e:polpo:staging
     displayName: 'End-to-end all polpo'
-  # Kabas e2e is disabled until it's used, since the Kabas build is broken right now
-  # Enable it again when the time comes to use it, below:
-  #- script: |
-  #    npm run e2e:kabas:staging
-  #  displayName: 'End-to-end all kabas'
+    condition: and(succeeded(), eq(variables['dkE2E'], 'true'))
+  - script: |
+      npm run e2e:kabas:staging
+    displayName: 'End-to-end all kabas'
+    condition: and(succeeded(), eq(variables['dkE2E'], 'true'))
   - bash: |
       if [ -d "coverage" ]; then
         echo "##vso[task.setVariable variable=dkRanTests]true"
@@ -124,10 +117,9 @@ steps:
       npm run build:kabas:production
     displayName: '[Build] kabas:production'
     condition: and(succeeded(), eq(variables['dkBuild'], 'true'))
-  - task: DeleteFiles@1
+  - script: |
+      rm -rf dist/out-tsc
     displayName: 'Remove e2e screenshots and videos from dist before copying'
-    inputs:
-      contents: 'dist/out-tsc'
   - task: CopyFiles@2
     displayName: 'Copy builds to artifacts'
     condition: and(succeeded(), eq(variables['dkBuild'], 'true'))

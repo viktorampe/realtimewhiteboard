@@ -1,0 +1,115 @@
+<campus-page-bar>
+  <campus-button
+    data-cy="nav-open-boeke"
+    campusPrimary
+    [iconClass]="'book'"
+    *ngIf="(boeke$ | async) as boeke"
+    (click)="clickOpenBoeke(boeke)"
+  ></campus-button>
+  <campus-button
+    campusPrimary
+    iconClass="import-export"
+    *ngIf="(currentTab$ | async) === 1"
+    (click)="clickExportGoals()"
+  ></campus-button>
+</campus-page-bar>
+<div class="method-method__container">
+  <campus-collapsible-sheet>
+    <div aside>
+      <h3 mat-subheader>Kies een hoofdstuk</h3>
+      <mat-nav-list>
+        <a
+          data-cy="chapter-link"
+          mat-list-item
+          *ngFor="let chapter of (chapters$ | async)"
+          (click)="clickOpenChapter(chapter.id)"
+          >{{ chapter.title }}</a
+        >
+      </mat-nav-list>
+    </div>
+
+    <div main>
+      <mat-tab-group
+        [selectedIndex]="currentTab$ | async"
+        (selectedIndexChange)="onSelectedTabIndexChanged($event)"
+      >
+        <mat-tab label="Lesmateriaal">
+          <mat-card
+            class="method-method__container__boeke"
+            *ngIf="(boeke$ | async) as boeke"
+          >
+            <mat-card-header>
+              <div mat-card-avatar><mat-icon svgIcon="book"></mat-icon></div>
+              <mat-card-title>Bordboek</mat-card-title>
+            </mat-card-header>
+            <mat-card-content *ngIf="(method$ | async) as method">
+              <img [src]="'assets/icons/method/' + method.logoUrl" />
+              <p
+                data-cy="diabolo-info"
+                *ngIf="(book$ | async)?.diabolo"
+                class="method-method__container__boeke__diabolo"
+              >
+                {{ method.name }} is een diabolo methode.
+                <a
+                  href="https://www.diekeure.be/nl-be/educatief/lager-onderwijs/diabolo"
+                  target="_blank"
+                  >Lees meer over diabolo</a
+                >
+              </p>
+            </mat-card-content>
+            <mat-card-actions>
+              <campus-button
+                data-cy="open-boeke"
+                (click)="clickOpenBoeke(boeke)"
+                mat-button
+                >OPEN</campus-button
+              >
+            </mat-card-actions>
+          </mat-card>
+
+          <div
+            *ngIf="(generalFilesByType$ | async) as generalFilesByType"
+            class="method-method__container__files"
+          >
+            <ng-container *ngFor="let productType of (productTypes$ | async)">
+              <div *ngIf="generalFilesByType[productType.id] as generalFiles">
+                <h3 mat-subheader>{{ productType.name }}</h3>
+                <mat-nav-list>
+                  <mat-list-item
+                    data-cy="general-file"
+                    *ngFor="let generalFile of generalFiles"
+                    (click)="clickOpenGeneralFile(generalFile)"
+                  >
+                    <campus-file-extension
+                      [extensionClass]="generalFile.fileExtension"
+                      [title]="generalFile.fileTypeLabel"
+                    ></campus-file-extension>
+                    <div>
+                      {{ generalFile.name }}
+                      <br />{{ generalFile.description }}
+                    </div>
+                  </mat-list-item>
+                </mat-nav-list>
+              </div>
+            </ng-container>
+          </div>
+        </mat-tab>
+
+        <mat-tab label="Leerplandoelen">
+          <div class="method-method__container__goals">
+            Hieronder vind je een overzicht van de leerplandoelen die horen bij
+            {{ breadcrumbTitles$ | async }}.
+          </div>
+
+          <campus-multi-check-box-table
+            [rowHeaderColumns]="learningPlanGoalTableHeaders"
+            [itemColumns]="classGroupColumns$ | async"
+            [items]="learningPlanGoalsWithSelectionForClassGroups$ | async"
+            (checkBoxChanged)="clickProgress($event)"
+          >
+          </campus-multi-check-box-table>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+  </campus-collapsible-sheet>
+</div>

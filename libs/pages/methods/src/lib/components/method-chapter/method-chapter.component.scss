@@ -1,0 +1,14 @@
+.method-chapter {
+  campus-search {
+    flex: 1 1 auto;
+  }
+
+  span.active {
+    font-weight: bold;
+  }
+
+  &--filters {
+    display: flex;
+    flex-direction: row;
+  }
+}

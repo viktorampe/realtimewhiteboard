@@ -2,11 +2,12 @@ import {
   AfterViewInit,
   Component,
   OnDestroy,
+  OnInit,
   QueryList,
   ViewChild,
   ViewChildren
 } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import {
   SearchComponent,
   SearchModeInterface,
@@ -23,7 +24,7 @@ import { EduContentsViewModel } from '../edu-contents.viewmodel';
   styleUrls: ['./edu-contents-search-by-column.component.scss']
 })
 export class EduContentSearchByColumnComponent
-  implements AfterViewInit, OnDestroy {
+  implements AfterViewInit, OnDestroy, OnInit {
   public searchMode: SearchModeInterface;
   public initialSearchState$: Observable<SearchStateInterface>;
   public searchState$: Observable<SearchStateInterface>;
@@ -39,22 +40,15 @@ export class EduContentSearchByColumnComponent
 
   constructor(
     private eduContentsViewModel: EduContentsViewModel,
-    private activatedRoute: ActivatedRoute,
-    private router: Router
-  ) {
-    // always re-initialise after navigation
-    // 2 routes use same component
-    this.subscriptions.add(
-      router.events.subscribe(e => {
-        if (e instanceof NavigationEnd) {
-          this.initialize();
-        }
-      })
-    );
-  }
+    private activatedRoute: ActivatedRoute
+  ) {}
 
   ngAfterViewInit(): void {
     this.searchComponent.searchPortals = this.portalHosts;
+  }
+
+  ngOnInit(): void {
+    this.initialize();
   }
 
   initialize(): void {

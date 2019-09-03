@@ -1,0 +1,71 @@
+<div class="lpgp-management">
+  <p mat-dialog-title class="learning-plan-goal-progress-management__title"
+    >Markeer een doel als behandeld voor {{ classGroup.name }}</p
+  >
+  <mat-dialog-content>
+    <code class="learning-plan-goal-progress-management__lpg"
+      ><b>{{ learningPlanGoal.prefix }}</b> {{ learningPlanGoal.goal }}</code
+    >
+
+    <h3 class="mat-h3">Voeg je eigen project toe...</h3>
+    <mat-form-field class="input-form">
+      <input
+        type="text"
+        placeholder="Eigen project"
+        matInput
+        [formControl]="inputFromControl"
+        [matAutocomplete]="auto"
+        class="input-full-width learning-plan-goal-progress-management__input"
+      />
+      <mat-autocomplete
+        #auto="matAutocomplete"
+        [displayWith]="displayUserLesson"
+      >
+        <mat-option
+          class="learning-plan-goal-progress-management__autocomplete-option"
+          *ngFor="let userLesson of (filteredUserLessons$ | async)"
+          [value]="userLesson"
+        >
+          {{ userLesson.description }}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+    <h3 class="mat-h3">... of klik een les uit de methode aan</h3>
+    <mat-selection-list
+      [disabled]="isSelectionListDisabled()"
+      #selectionList
+      (selectionChange)="selectionChanged()"
+    >
+      <mat-list-option
+        *ngFor="let methodLesson of (methodLessonsForBook$ | async)"
+        checkboxPosition="before"
+        [value]="methodLesson"
+        class="learning-plan-goal-progress-management__list-option"
+        >{{ methodLesson.values.join(' > ') }}</mat-list-option
+      >
+    </mat-selection-list>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <campus-button
+      *ngIf="!isInputDisabled()"
+      class="learning-plan-goal-progress-management__button learning-plan-goal-progress-management__button--save"
+      primary
+      [class.ui-button--disabled]="!isSelectionListDisabled()"
+      (click)="saveForUserLesson()"
+      >Opslaan (project)</campus-button
+    >
+    <campus-button
+      *ngIf="isInputDisabled()"
+      class="learning-plan-goal-progress-management__button learning-plan-goal-progress-management__button--save"
+      primary
+      (click)="saveForEduContentTOCselection()"
+      >Opslaan (hoofdstuk)</campus-button
+    >
+    <campus-button
+      class="learning-plan-goal-progress-management__button learning-plan-goal-progress-management__button--close"
+      primary
+      (click)="closeDialog()"
+      >Sluiten</campus-button
+    >
+  </mat-dialog-actions>
+</div>

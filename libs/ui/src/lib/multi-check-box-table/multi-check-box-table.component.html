@@ -1,0 +1,107 @@
+<table *ngIf="rowHeaderColumns && itemColumns">
+  <thead class="ui-multi-check-box-table__header">
+    <tr>
+      <th
+        *ngFor="let columnHeader of rowHeaderColumns"
+        class="ui-multi-check-box-table__header--row-header"
+        >{{ columnHeader.caption }}</th
+      ><th
+        *ngFor="let columnHeader of itemColumns"
+        class="ui-multi-check-box-table__header--item"
+        >{{ columnHeader.item[columnHeader.label] }}</th
+      ></tr
+    >
+  </thead>
+  <tbody class="ui-multi-check-box-table__body">
+    <ng-container *ngIf="subLevels">
+      <ng-container *ngFor="let subLevel of subLevels">
+        <tr class="ui-multi-check-box-table__body__row--subLevel">
+          <th
+            [colSpan]="rowHeaderColumns.length"
+            class="ui-multi-check-box-table__body__row--subLevel--header"
+            >{{ subLevel.item[subLevel.label] }}</th
+          >
+          <th
+            *ngFor="let itemHeader of itemColumns"
+            class="ui-multi-check-box-table__body__row--subLevel--item"
+          >
+            <mat-icon
+              [svgIcon]="'select-all'"
+              (click)="clickSelectAllForSubLevel(subLevel, itemHeader)"
+            ></mat-icon>
+          </th>
+        </tr>
+        <ng-container
+          *ngTemplateOutlet="
+            itemRows;
+            context: {
+              subLevel: subLevel,
+              items: subLevel.children,
+              rowHeaderColumns: rowHeaderColumns,
+              itemColumns: itemColumns
+            }
+          "
+        ></ng-container>
+      </ng-container>
+    </ng-container>
+
+    <ng-container *ngIf="items">
+      <ng-container
+        *ngTemplateOutlet="
+          itemRows;
+          context: {
+            subLevel: {},
+            items: items,
+            rowHeaderColumns: rowHeaderColumns,
+            itemColumns: itemColumns
+          }
+        "
+      ></ng-container>
+    </ng-container>
+
+    <ng-template
+      #itemRows
+      let-subLevel="subLevel"
+      let-items="items"
+      let-rowHeaderColumns="rowHeaderColumns"
+      let-itemColumns="itemColumns"
+    >
+      <tr
+        *ngFor="let item of items; even as even"
+        class="ui-multi-check-box-table__body__row--item"
+        [class.ui-multi-check-box-table__body__row--even]="even"
+        [class.ui-multi-check-box-table__body__row--odd]="!even"
+      >
+        <td
+          *ngFor="let rowHeaderColumn of rowHeaderColumns; let last = last"
+          class="ui-multi-check-box-table__body__row__cell
+           ui-multi-check-box-table__body__row__cell--row-header"
+          [class.ui-multi-check-box-table__body__row__cell--row-header--last]="
+            last
+          "
+          >{{ item.header[rowHeaderColumn.key] }}</td
+        >
+        <td
+          *ngFor="let itemColumn of itemColumns"
+          class="ui-multi-check-box-table__body__row__cell
+          ui-multi-check-box-table__body__row__cell--checkbox"
+        >
+          <mat-checkbox
+            #checkbox
+            color="primary"
+            [checked]="item.content[itemColumn.item[itemColumn.key]]"
+            campusClickPreventDefault
+            (click)="
+              clickCheckbox(
+                item.header,
+                itemColumn.item,
+                subLevel.item,
+                checkbox
+              )
+            "
+          ></mat-checkbox>
+        </td>
+      </tr>
+    </ng-template>
+  </tbody>
+</table>
