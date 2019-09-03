@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { ViewModelInterface } from '@campus/testing';
-import { TrainingViewModel } from './training.viewmodel';
+import { PracticeViewModel } from './practice.viewmodel';
 
 @Injectable({
   providedIn: 'root'
 })
-export class MockTrainingViewModel
-  implements ViewModelInterface<TrainingViewModel> {
+export class MockPracticeViewModel
+  implements ViewModelInterface<PracticeViewModel> {
   constructor() {}
 }

@@ -998,9 +998,9 @@
         }
       }
     },
-    "pages-training": {
-      "root": "libs/pages/training",
-      "sourceRoot": "libs/pages/training/src",
+    "pages-practice": {
+      "root": "libs/pages/practice",
+      "sourceRoot": "libs/pages/practice/src",
       "projectType": "library",
       "prefix": "campus",
       "architect": {
@@ -1008,8 +1008,8 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "libs/pages/training/tsconfig.lib.json",
-              "libs/pages/training/tsconfig.spec.json"
+              "libs/pages/practice/tsconfig.lib.json",
+              "libs/pages/practice/tsconfig.spec.json"
             ],
             "exclude": ["**/node_modules/**"]
           }
@@ -1017,9 +1017,9 @@
         "test": {
           "builder": "@nrwl/builders:jest",
           "options": {
-            "jestConfig": "libs/pages/training/jest.config.js",
-            "tsConfig": "libs/pages/training/tsconfig.spec.json",
-            "setupFile": "libs/pages/training/src/test-setup.ts"
+            "jestConfig": "libs/pages/practice/jest.config.js",
+            "tsConfig": "libs/pages/practice/tsconfig.spec.json",
+            "setupFile": "libs/pages/practice/src/test-setup.ts"
           }
         }
       }

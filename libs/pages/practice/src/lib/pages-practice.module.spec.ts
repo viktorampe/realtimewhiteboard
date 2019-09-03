@@ -1,14 +1,14 @@
 import { async, TestBed } from '@angular/core/testing';
-import { PagesTrainingModule } from './pages-training.module';
+import { PagesPracticeModule } from './pages-practice.module';
 
-describe('PagesTrainingModule', () => {
+describe('PagesPracticeModule', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [PagesTrainingModule]
+      imports: [PagesPracticeModule]
     }).compileComponents();
   }));
 
   it('should create', () => {
-    expect(PagesTrainingModule).toBeDefined();
+    expect(PagesPracticeModule).toBeDefined();
   });
 });
