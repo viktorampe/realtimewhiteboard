@@ -363,6 +363,40 @@ describe('MultiCheckBoxTableComponent', () => {
     });
   });
 
+  describe('table options', () => {
+    beforeEach(() => {
+      component.rowHeaderColumns = rowHeaderColumns;
+      component.itemColumns = itemColumns;
+      fixture.detectChanges();
+    });
+
+    describe('toplevelSelectAllEnabled', () => {
+      beforeEach(() => {
+        component.topLevelSelectAllEnabled = true;
+        fixture.detectChanges();
+      });
+
+      it('should show the select all checkboxes', () => {
+        const checkBoxes = fixture.debugElement.queryAll(
+          By.css('.ui-multi-check-box-table__header mat-checkbox')
+        );
+
+        expect(checkBoxes.length).toEqual(itemColumns.length);
+      });
+
+      it('should show the correct text', () => {
+        const headerCells = fixture.debugElement.queryAll(
+          By.css(
+            '.ui-multi-check-box-table__header .ui-multi-check-box-table__header--row-header'
+          )
+        );
+        expect(
+          headerCells[rowHeaderColumns.length].nativeElement.textContent.trim()
+        ).toContain('Alle');
+      });
+    });
+  });
+
   describe('event handlers', () => {
     describe('clickCheckBox', () => {
       beforeEach(() => {
@@ -451,6 +485,38 @@ describe('MultiCheckBoxTableComponent', () => {
             subLevel: subLevels[0].item
           }
         ]);
+      });
+    });
+
+    describe('clickSelectAllForTopLevel', () => {
+      beforeEach(() => {
+        component.topLevelSelectAllEnabled = true;
+        component.itemColumns = itemColumns;
+        component.rowHeaderColumns = rowHeaderColumns;
+        fixture.detectChanges();
+      });
+
+      it('should be triggered by topLevelselectAllCheckbox', () => {
+        jest.spyOn(component, 'clickSelectAllForTopLevel');
+
+        const checkBox = fixture.debugElement.query(By.directive(MatCheckbox));
+        checkBox.triggerEventHandler('click', null);
+
+        expect(component.clickSelectAllForTopLevel).toHaveBeenCalled();
+      });
+
+      it('should emit a topLevelCheckBoxToggled event', () => {
+        jest.spyOn(component.topLevelCheckBoxToggled, 'emit');
+
+        component.clickSelectAllForTopLevel(itemColumns[0], {
+          checked: true
+        } as MatCheckbox);
+
+        expect(component.topLevelCheckBoxToggled.emit).toHaveBeenCalledTimes(1);
+        expect(component.topLevelCheckBoxToggled.emit).toHaveBeenCalledWith({
+          itemColumn: itemColumns[0].item,
+          isSelected: false
+        });
       });
     });
   });

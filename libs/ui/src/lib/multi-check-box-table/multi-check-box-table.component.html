@@ -14,16 +14,15 @@
     <tr *ngIf="topLevelSelectAllEnabled">
       <th
         [colSpan]="rowHeaderColumns.length"
-        class="ui-multi-check-box-table__body__row--subLevel--header"
+        class="ui-multi-check-box-table__header--row-header"
         >Alle</th
       >
-      <th
-        *ngFor="let itemColumn of itemColumns"
-        class="ui-multi-check-box-table__body__row--subLevel--item"
-      >
+      <th *ngFor="let itemColumn of itemColumns">
         <mat-checkbox
-          #selectAllCheckbox
-          (click)="clickSelectAllForTopLevel(itemColumn, selectAllCheckbox)"
+          #topLevelselectAllCheckBox
+          (click)="
+            clickSelectAllForTopLevel(itemColumn, topLevelselectAllCheckBox)
+          "
         ></mat-checkbox>
       </th>
     </tr>
