@@ -394,6 +394,59 @@ describe('MultiCheckBoxTableComponent', () => {
           headerCells[rowHeaderColumns.length].nativeElement.textContent.trim()
         ).toContain('Alle');
       });
+
+      describe('selection state', () => {
+        /**
+         * Test setup:
+         *
+         *          X         0
+         *        klas 1    klas 2
+         * item 1   X         0
+         * item 2   X         X
+         * item 3   X         X
+         */
+        let bodyCheckBoxes;
+        let topLevelCheckBoxes;
+        beforeEach(() => {
+          component.itemColumns = itemColumns;
+          component.itemColumns[0].isTopLevelSelected = true;
+
+          component.items = items;
+          fixture.detectChanges();
+
+          const allCheckBoxes = fixture.debugElement.queryAll(
+            By.directive(MatCheckbox)
+          );
+          topLevelCheckBoxes = allCheckBoxes.splice(0, itemColumns.length);
+          bodyCheckBoxes = allCheckBoxes;
+        });
+        it('should reflect the toplevel selection state', () => {
+          expect(!!topLevelCheckBoxes[0].componentInstance.checked).toBe(true);
+          expect(!!topLevelCheckBoxes[1].componentInstance.checked).toBe(false);
+        });
+
+        it('should select and disable all items when toplevel is clicked', () => {
+          const checkBoxCheckedStates = bodyCheckBoxes.map(
+            checkBox => !!checkBox.componentInstance.checked
+          );
+          const checkBoxDisabledStates = bodyCheckBoxes.map(
+            checkBox => !!checkBox.componentInstance.disabled
+          );
+
+          const expectedCheckedValues = [true, false, true, true, true, true];
+          const expectedDisabledValues = [
+            true,
+            false,
+            true,
+            false,
+            true,
+            false
+          ];
+
+          expect(checkBoxCheckedStates).toEqual(expectedCheckedValues);
+          expect(checkBoxDisabledStates).toEqual(expectedDisabledValues);
+        });
+      });
     });
   });
 
