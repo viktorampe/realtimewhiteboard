@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { GuardsModule } from '@campus/guards';
 import { PagesSharedModule } from '@campus/pages/shared';
 import { SharedModule } from '@campus/shared';
 import { UiModule } from '@campus/ui';
@@ -13,7 +14,8 @@ import { PagesPracticeRoutingModule } from './pages-practice-routing.module';
     PagesPracticeRoutingModule,
     UiModule,
     PagesSharedModule,
-    SharedModule
+    SharedModule,
+    GuardsModule
   ],
   declarations: [PracticeOverviewComponent, PracticeComponent],
   providers: [PracticeViewModel],

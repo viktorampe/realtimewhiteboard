@@ -30,6 +30,7 @@ import {
   UnlockedBoekeGroupReducer,
   UnlockedBoekeStudentReducer,
   UnlockedContentReducer,
+  UnlockedFreePracticeReducer,
   UserContentReducer,
   UserLessonReducer,
   UserReducer,
@@ -72,4 +73,5 @@ export interface DalState {
   learningPlanGoalProgresses: LearningPlanGoalProgressReducer.State;
   learningPlanGoals: LearningPlanGoalReducer.State;
   classGroups: ClassGroupReducer.State;
+  unlockedFreePractices: UnlockedFreePracticeReducer.State;
 }
