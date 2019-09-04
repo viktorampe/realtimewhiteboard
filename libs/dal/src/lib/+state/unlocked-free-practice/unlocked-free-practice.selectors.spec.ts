@@ -1,4 +1,5 @@
 import { UnlockedFreePracticeQueries } from '.';
+import { UnlockedFreePracticeFixture } from '../../+fixtures/UnlockedFreePractice.fixture';
 import { UnlockedFreePracticeInterface } from '../../+models';
 import { State } from './unlocked-free-practice.reducer';
 
@@ -104,6 +105,180 @@ describe('UnlockedFreePractice Selectors', () => {
         id: 9
       });
       expect(results).toBe(undefined);
+    });
+  });
+
+  describe('find', () => {
+    const unlockedFreePractices = [
+      new UnlockedFreePracticeFixture({
+        id: 1,
+        classGroupId: 1,
+        eduContentTOCId: 11,
+        eduContentBookId: undefined
+      }),
+      new UnlockedFreePracticeFixture({
+        id: 2,
+        classGroupId: 2,
+        eduContentTOCId: 11,
+        eduContentBookId: undefined
+      }),
+      new UnlockedFreePracticeFixture({
+        id: 3,
+        classGroupId: 1,
+        eduContentTOCId: 12,
+        eduContentBookId: undefined
+      }),
+      new UnlockedFreePracticeFixture({
+        id: 4,
+        classGroupId: 1,
+        eduContentTOCId: undefined,
+        eduContentBookId: 21
+      }),
+      new UnlockedFreePracticeFixture({
+        id: 5,
+        classGroupId: 2,
+        eduContentTOCId: undefined,
+        eduContentBookId: 21
+      }),
+      new UnlockedFreePracticeFixture({
+        id: 6,
+        classGroupId: 1,
+        eduContentTOCId: undefined,
+        eduContentBookId: 22
+      })
+    ];
+
+    beforeEach(() => {
+      unlockedFreePracticeState = createState(
+        unlockedFreePractices,
+        true,
+        'no error'
+      );
+      storeState = {
+        unlockedFreePractices: unlockedFreePracticeState
+      };
+    });
+
+    describe('findMany', () => {
+      it('should return all UnlockedFreePractices', () => {
+        const results = UnlockedFreePracticeQueries.findMany(storeState, {});
+        expect(results.length).toBe(6);
+        expect(results).toEqual(unlockedFreePractices);
+      });
+
+      it('should return the correct UnlockedFreePractices for ClassGroupId', () => {
+        const results = UnlockedFreePracticeQueries.findMany(storeState, {
+          classGroupId: 2
+        });
+        expect(results.length).toBe(2);
+        expect(results).toEqual([
+          unlockedFreePractices[1],
+          unlockedFreePractices[4]
+        ]);
+      });
+
+      it('should return the correct UnlockedFreePractices for eduContentTOCId and classgroupId', () => {
+        const results = UnlockedFreePracticeQueries.findMany(storeState, {
+          classGroupId: 1,
+          eduContentTOCId: 11
+        });
+        expect(results.length).toBe(1);
+        expect(results).toEqual([unlockedFreePractices[0]]);
+      });
+
+      it('should return the correct UnlockedFreePractices for eduContentBookId and classgroupId', () => {
+        const results = UnlockedFreePracticeQueries.findMany(storeState, {
+          classGroupId: 1,
+          eduContentBookId: 21
+        });
+        expect(results.length).toBe(1);
+        expect(results).toEqual([unlockedFreePractices[3]]);
+      });
+    });
+
+    describe('findOne', () => {
+      it('should return the correct UnlockedFreePractice for ClassGroupId', () => {
+        const result = UnlockedFreePracticeQueries.findOne(storeState, {
+          classGroupId: 2
+        });
+
+        expect(result).toEqual(unlockedFreePractices[1]);
+      });
+
+      it('should return the correct UnlockedFreePractice for eduContentTOCId and classgroupId', () => {
+        const result = UnlockedFreePracticeQueries.findOne(storeState, {
+          classGroupId: 1,
+          eduContentTOCId: 11
+        });
+
+        expect(result).toEqual(unlockedFreePractices[0]);
+      });
+
+      it('should return the correct UnlockedFreePractice for eduContentBookId and classgroupId', () => {
+        const result = UnlockedFreePracticeQueries.findOne(storeState, {
+          classGroupId: 1,
+          eduContentBookId: 22
+        });
+
+        expect(result).toEqual(unlockedFreePractices[5]);
+      });
+    });
+  });
+
+  describe('', () => {
+    const mockUnlockedFreePractice = [
+      new UnlockedFreePracticeFixture({
+        id: 4,
+        eduContentTOCId: 1,
+        eduContentBookId: undefined
+      }),
+      new UnlockedFreePracticeFixture({
+        id: 1,
+        eduContentTOCId: 2,
+        eduContentBookId: undefined
+      }),
+      new UnlockedFreePracticeFixture({
+        id: 2,
+        eduContentTOCId: 1,
+        eduContentBookId: undefined
+      }),
+      new UnlockedFreePracticeFixture({
+        id: 3,
+        eduContentTOCId: 2,
+        eduContentBookId: undefined
+      }),
+      new UnlockedFreePracticeFixture({ id: 5, eduContentBookId: 1 }),
+      new UnlockedFreePracticeFixture({ id: 6, eduContentBookId: 2 }),
+      new UnlockedFreePracticeFixture({ id: 8, eduContentBookId: 1 }),
+      new UnlockedFreePracticeFixture({ id: 7, eduContentBookId: 2 })
+    ];
+    beforeEach(() => {
+      unlockedFreePracticeState = createState(
+        mockUnlockedFreePractice,
+        true,
+        'no error'
+      );
+      storeState = { unlockedFreePractices: unlockedFreePracticeState };
+    });
+
+    it('getGroupedByEduContentTOCId() should return entities grouped by eduContentTOCId', () => {
+      const results = UnlockedFreePracticeQueries.getGroupedByEduContentTOCId(
+        storeState
+      );
+      expect(results).toEqual({
+        1: [mockUnlockedFreePractice[2], mockUnlockedFreePractice[0]],
+        2: [mockUnlockedFreePractice[1], mockUnlockedFreePractice[3]]
+      });
+    });
+
+    it('getGroupedByEduContentBookId() should return entities grouped by eduContentBookId', () => {
+      const results = UnlockedFreePracticeQueries.getGroupedByEduContentBookId(
+        storeState
+      );
+      expect(results).toEqual({
+        1: [mockUnlockedFreePractice[4], mockUnlockedFreePractice[6]],
+        2: [mockUnlockedFreePractice[5], mockUnlockedFreePractice[7]]
+      });
     });
   });
 });
