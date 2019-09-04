@@ -16,6 +16,6 @@ export interface UnlockedFreePracticeServiceInterface {
 
   deleteUnlockedFreePractices(
     userId: number,
-    unlockedFreePracticIds: number[]
+    unlockedFreePracticeIds: number[]
   ): Observable<boolean>;
 }
