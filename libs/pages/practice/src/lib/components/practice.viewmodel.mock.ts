@@ -1,9 +1,39 @@
 import { Inject, Injectable } from '@angular/core';
-import { ClassGroupFixture, ClassGroupInterface, EduContent, EduContentBookFixture, EduContentBookInterface, EduContentFixture, EduContentInterface, EduContentProductTypeFixture, EduContentProductTypeInterface, EduContentTOCFixture, EduContentTOCInterface, LearningPlanGoalFixture, LearningPlanGoalInterface, MethodFixture, MethodInterface, MethodYearsInterface, UserLessonFixture, UserLessonInterface } from '@campus/dal';
-import { SearchModeInterface, SearchResultInterface, SearchStateInterface } from '@campus/search';
-import { EnvironmentSearchModesInterface, ENVIRONMENT_SEARCHMODES_TOKEN } from '@campus/shared';
+import {
+  ClassGroupFixture,
+  ClassGroupInterface,
+  EduContent,
+  EduContentBookFixture,
+  EduContentBookInterface,
+  EduContentFixture,
+  EduContentInterface,
+  EduContentProductTypeFixture,
+  EduContentProductTypeInterface,
+  EduContentTOCFixture,
+  EduContentTOCInterface,
+  LearningPlanGoalFixture,
+  LearningPlanGoalInterface,
+  MethodFixture,
+  MethodInterface,
+  MethodYearsInterface,
+  UserLessonFixture,
+  UserLessonInterface
+} from '@campus/dal';
+import {
+  SearchModeInterface,
+  SearchResultInterface,
+  SearchStateInterface
+} from '@campus/search';
+import {
+  EnvironmentSearchModesInterface,
+  ENVIRONMENT_SEARCHMODES_TOKEN
+} from '@campus/shared';
 import { ViewModelInterface } from '@campus/testing';
-import { MultiCheckBoxTableItemInterface, MultiCheckBoxTableRowHeaderColumnInterface, MultiCheckBoxTableSubLevelInterface } from '@campus/ui';
+import {
+  MultiCheckBoxTableItemInterface,
+  MultiCheckBoxTableRowHeaderColumnInterface,
+  MultiCheckBoxTableSubLevelInterface
+} from '@campus/ui';
 import { Dictionary } from '@ngrx/entity';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
