@@ -87,7 +87,7 @@ describe('PracticeViewModel', () => {
       classGroups: jest.spyOn(ClassGroupQueries, 'getByMethodId'),
       //Used by bookChapters$
       bookChapters: jest.spyOn(EduContentTocQueries, 'getChaptersForBook'),
-      //Used by unlockedFreePracticeByEduContentTOCId
+      //Used by unlockedFreePracticeByEduContentTOCId$
       ufpByEduContentTOCId: jest.spyOn(
         UnlockedFreePracticeQueries,
         'getGroupedByEduContentTOCId'
@@ -226,7 +226,7 @@ describe('PracticeViewModel', () => {
         new ClassGroupFixture({ id: 1, name: '1a' }),
         new ClassGroupFixture({ id: 2, name: '1b' })
       ];
-      const mockFilteredClassGroups = [
+      const mockTableClassGroups = [
         {
           item: mockClassGroupsByMethodId[0],
           key: 'id',
@@ -279,7 +279,7 @@ describe('PracticeViewModel', () => {
         it('should return table item columns based on the classgroups', () => {
           const expectedGroupColumns: MultiCheckBoxTableItemColumnInterface<
             ClassGroupInterface
-          >[] = mockFilteredClassGroups as MultiCheckBoxTableItemColumnInterface<
+          >[] = mockTableClassGroups as MultiCheckBoxTableItemColumnInterface<
             ClassGroupInterface
           >[];
 
