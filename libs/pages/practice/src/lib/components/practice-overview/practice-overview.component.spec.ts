@@ -71,7 +71,7 @@ describe('PracticeOverviewComponent', () => {
       expect(booksOnPage.length).toBe(0);
 
       const textOnPage = fixture.debugElement.query(
-        By.css('.pages-methods__no-books')
+        By.css('.pages-practice__no-books')
       ).nativeElement.textContent;
 
       expect(textOnPage).toBe(
