@@ -22,6 +22,8 @@ export class DemoPageComponent implements OnInit {
   >[]; // chapters
   items: MultiCheckBoxTableItemInterface<EduContentTOCInterface>[];
   itemColumns: MultiCheckBoxTableItemColumnInterface<ClassGroupInterface>[];
+  selectedColumnState: MultiCheckBoxTableItemInterface<ClassGroupInterface>;
+
   constructor() {}
 
   ngOnInit() {
@@ -29,7 +31,7 @@ export class DemoPageComponent implements OnInit {
     this.items = [
       {
         header: new EduContentTOCFixture({ id: 1, title: 'Hoofdstuk 1' }),
-        content: { 1: false, 2: true }
+        content: { 1: false, 2: false }
       },
       {
         header: new EduContentTOCFixture({ id: 2, title: 'Hoofdstuk 2' }),
@@ -53,9 +55,15 @@ export class DemoPageComponent implements OnInit {
         label: 'name'
       }
     ];
+
+    this.selectedColumnState = { header: {}, content: { 1: true, 2: false } };
   }
 
   log(data) {
     console.log(data);
+
+    this.selectedColumnState.content[data.itemColumn.id] = data.isSelected;
+
+    console.log(this.selectedColumnState);
   }
 }

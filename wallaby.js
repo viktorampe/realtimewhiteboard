@@ -55,7 +55,7 @@ module.exports = function(wallaby) {
         jestConfig
       );
       delete jestConfig.moduleNameMapper;
-      jestConfig.transformIgnorePatterns.push('instrumented.*.(jsx?)$');
+      jestConfig.transformIgnorePatterns.push('instrumented.*.(jsx?|html)$');
       jestConfig.setupFilesAfterEnv = ['<rootDir>/wallaby-test-setup.js'];
 
       if (!jestConfig.moduleNameMapper) {

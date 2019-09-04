@@ -24,9 +24,6 @@ export class MultiCheckBoxTableComponent<
   ItemType,
   ItemColumnType
 > {
-  // Keeps track of which columns are (de)selected
-  private topLevelColumnSelectionMap: any = {};
-
   @Input() topLevelSelectAllEnabled = false;
 
   // Pay some attention to the interfaces of the inputs
@@ -36,6 +33,11 @@ export class MultiCheckBoxTableComponent<
     SubLevelItemType,
     ItemType
   >[];
+
+  @Input() public selectedColumnState: MultiCheckBoxTableItemInterface<
+    ItemColumnType
+  >;
+
   @Input() public items: MultiCheckBoxTableItemInterface<ItemType>[];
 
   @Input() public rowHeaderColumns: MultiCheckBoxTableRowHeaderColumnInterface<
@@ -86,15 +88,10 @@ export class MultiCheckBoxTableComponent<
     itemColumn: MultiCheckBoxTableItemColumnInterface<ItemColumnType>,
     checkBox: MatCheckbox
   ) {
-    // set internal state:
-    // for which column is the checkbox (un)checked?
-    const columnKeyValue = itemColumn.item[itemColumn.key];
-    this.topLevelColumnSelectionMap[columnKeyValue] = !checkBox.checked;
-
     // emit event: for this column item, all row items are selected/deselected
     this.topLevelCheckBoxToggled.emit({
       itemColumn: itemColumn.item,
-      isSelected: this.topLevelColumnSelectionMap[columnKeyValue]
+      isSelected: !checkBox.checked
     });
   }
 
@@ -110,11 +107,5 @@ export class MultiCheckBoxTableComponent<
       subLevel,
       previousCheckboxState: checkBox.checked
     });
-  }
-
-  public isDisabled(
-    itemColumn: MultiCheckBoxTableItemColumnInterface<ItemColumnType>
-  ) {
-    return this.topLevelColumnSelectionMap[itemColumn.item[itemColumn.key]];
   }
 }
