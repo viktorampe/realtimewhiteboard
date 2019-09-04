@@ -10,11 +10,19 @@ import {
   getRouterState,
   MethodQueries,
   MethodYearsInterface,
-  RouterStateUrl
+  RouterStateUrl,
+  UnlockedFreePracticeInterface,
+  UnlockedFreePracticeQueries
 } from '@campus/dal';
+import {
+  MultiCheckBoxTableItemColumnInterface,
+  MultiCheckBoxTableItemInterface,
+  MultiCheckBoxTableRowHeaderColumnInterface
+} from '@campus/ui';
+import { Dictionary } from '@ngrx/entity';
 import { RouterReducerState } from '@ngrx/router-store';
 import { select, Store } from '@ngrx/store';
-import { merge, Observable } from 'rxjs';
+import { combineLatest, merge, Observable } from 'rxjs';
 import {
   distinctUntilChanged,
   filter,
@@ -39,9 +47,23 @@ export class PracticeViewModel {
   public filteredClassGroups$: Observable<ClassGroupInterface[]>;
   public methodYears$: Observable<MethodYearsInterface[]>;
 
+  //Multi-check-box-table streams
+  public unlockedFreePracticeTableRowHeaders: MultiCheckBoxTableRowHeaderColumnInterface<
+    EduContentTOCInterface
+  >[];
+  public unlockedFreePracticeTableItemColumns$: Observable<
+    MultiCheckBoxTableItemColumnInterface<ClassGroupInterface>[]
+  >;
+  public unlockedFreePracticeTableItems$: Observable<
+    MultiCheckBoxTableItemInterface<EduContentTOCInterface>[]
+  >;
+
   //Source streams
   private routerState$: Observable<RouterReducerState<RouterStateUrl>>;
   private currentBook$: Observable<EduContentBookInterface>;
+  private unlockedFreePracticeByEduContentTOCId$: Observable<
+    Dictionary<UnlockedFreePracticeInterface[]>
+  >;
 
   constructor(private store: Store<DalState>) {
     this.initialize();
@@ -57,6 +79,9 @@ export class PracticeViewModel {
     this.currentPracticeParams$ = this.getCurrentPracticeParamsStream();
 
     this.currentBook$ = this.getCurrentBookStream();
+    this.unlockedFreePracticeByEduContentTOCId$ = this.store.pipe(
+      select(UnlockedFreePracticeQueries.getGroupedByEduContentTOCId)
+    );
   }
 
   private setPresentationStreams() {
@@ -66,6 +91,13 @@ export class PracticeViewModel {
     this.methodYears$ = this.store.pipe(
       select(MethodQueries.getAllowedMethodYears)
     );
+
+    //Multi-check-box-table streams
+    this.unlockedFreePracticeTableRowHeaders = [
+      { caption: 'Hoofdstuk', key: 'title' }
+    ];
+    this.unlockedFreePracticeTableItemColumns$ = this.getPracticeTableItemColumnsStream();
+    this.unlockedFreePracticeTableItems$ = this.getPracticeTableItemsStream();
   }
 
   private getCurrentPracticeParamsStream(): Observable<CurrentPracticeParams> {
@@ -148,5 +180,69 @@ export class PracticeViewModel {
         );
       })
     );
+  }
+
+  private getPracticeTableItemColumnsStream(): Observable<
+    MultiCheckBoxTableItemColumnInterface<ClassGroupInterface>[]
+  > {
+    return this.filteredClassGroups$.pipe(
+      map(classGroups =>
+        classGroups.map(
+          (
+            classGroup
+          ): MultiCheckBoxTableItemColumnInterface<ClassGroupInterface> => ({
+            item: classGroup,
+            key: 'id',
+            label: 'name'
+          })
+        )
+      )
+    );
+  }
+
+  private getPracticeTableItemsStream(): Observable<
+    MultiCheckBoxTableItemInterface<EduContentTOCInterface>[]
+  > {
+    return combineLatest([
+      this.bookChapters$,
+      this.unlockedFreePracticeByEduContentTOCId$,
+      this.filteredClassGroups$
+    ]).pipe(
+      map(([chapterTOCs, unlockedPracticesByTOC, filteredClassGroups]) => {
+        return this.createCheckboxItemsForLearningPlanGoals(
+          chapterTOCs,
+          filteredClassGroups,
+          unlockedPracticesByTOC
+        );
+      })
+    );
+  }
+
+  private createCheckboxItemsForLearningPlanGoals(
+    eduContentTOCs: EduContentTOCInterface[],
+    classGroups: ClassGroupInterface[],
+    unlockedPracticesByTOC: Dictionary<UnlockedFreePracticeInterface[]>
+  ): MultiCheckBoxTableItemInterface<EduContentTOCInterface>[] {
+    return eduContentTOCs
+      .map(eduContentTOC => {
+        const unlockedPracticesByClassGroup: Dictionary<boolean> = {};
+        classGroups.forEach(classGroup => {
+          unlockedPracticesByClassGroup[classGroup.id] = (
+            unlockedPracticesByTOC[eduContentTOC.id] || []
+          ).some(
+            unlockedPractice => unlockedPractice.classGroupId === classGroup.id
+          );
+        });
+
+        return {
+          header: eduContentTOC,
+          content: unlockedPracticesByClassGroup
+        };
+      })
+      .sort((a, b) => {
+        return a.header.title.localeCompare(b.header.title, undefined, {
+          numeric: true
+        });
+      });
   }
 }
