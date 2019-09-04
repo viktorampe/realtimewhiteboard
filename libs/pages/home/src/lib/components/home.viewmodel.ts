@@ -1,34 +1,10 @@
 import { Injectable } from '@angular/core';
-import { StateResolver, StateResolverInterface } from '@campus/pages/shared';
-import { Action, Selector } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { DalState } from '@campus/dal';
+import { Store } from '@ngrx/store';
 
 @Injectable({
   providedIn: 'root'
 })
-export class HomeViewModel implements StateResolverInterface {
-
-  resolve(): Observable<boolean> {
-    return this.stateResolver.resolve(
-      this.getLoadableActions(),
-      this.getResolvedQueries()
-    );
-  }
-
-  getLoadableActions(): Action[] {
-    return [
-      // TODO add load actions, eg. new LearningAreaActions.LoadLearningAreas()
-    ];
-  }
-
-  getResolvedQueries(): Selector<object, boolean>[] {
-    return [
-      // TODO add loaded queries, eg. LearningAreaQueries.getLoaded
-    ];
-  }
-
-  constructor(
-    // eg. store: Store<DalState>,
-    private stateResolver: StateResolver
-  ) {}
+export class HomeViewModel {
+  constructor(private store: Store<DalState>) {}
 }
