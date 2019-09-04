@@ -5,6 +5,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import {
   AUTH_SERVICE_TOKEN,
   ClassGroupFixture,
+  ClassGroupInterface,
   ClassGroupQueries,
   CustomSerializer,
   DalState,
@@ -13,8 +14,13 @@ import {
   EduContentTOCFixture,
   EduContentTocQueries,
   getStoreModuleForFeatures,
-  MethodQueries
+  MethodQueries,
+  UnlockedFreePracticeFixture,
+  UnlockedFreePracticeInterface,
+  UnlockedFreePracticeQueries
 } from '@campus/dal';
+import { MultiCheckBoxTableItemColumnInterface } from '@campus/ui';
+import { Dictionary } from '@ngrx/entity';
 import {
   NavigationActionTiming,
   RouterNavigationAction,
@@ -34,8 +40,16 @@ describe('PracticeViewModel', () => {
   let store: Store<DalState>;
   let router: Router;
   let zone: NgZone;
+  let selectorSpies: {
+    book: jest.SpyInstance;
+    classGroups: jest.SpyInstance;
+    bookChapters: jest.SpyInstance;
+    ufpByEduContentTOCId: jest.SpyInstance;
+    methodWithYearByBookId: jest.SpyInstance;
+  };
 
   const userId = 1;
+  const storeState = jasmine.anything();
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
@@ -57,11 +71,33 @@ describe('PracticeViewModel', () => {
   });
 
   beforeEach(() => {
+    setupSelectorSpies();
+
     practiceViewModel = TestBed.get(PracticeViewModel);
     store = TestBed.get(Store);
     router = TestBed.get(Router);
     zone = TestBed.get(NgZone);
   });
+
+  function setupSelectorSpies() {
+    selectorSpies = {
+      //Used by currentBook$
+      book: jest.spyOn(EduContentBookQueries, 'getById'),
+      //Used by filteredClassgroups$
+      classGroups: jest.spyOn(ClassGroupQueries, 'getByMethodId'),
+      //Used by bookChapters$
+      bookChapters: jest.spyOn(EduContentTocQueries, 'getChaptersForBook'),
+      //Used by unlockedFreePracticeByEduContentTOCId
+      ufpByEduContentTOCId: jest.spyOn(
+        UnlockedFreePracticeQueries,
+        'getGroupedByEduContentTOCId'
+      ),
+      methodWithYearByBookId: jest.spyOn(
+        MethodQueries,
+        'getMethodWithYearByBookId'
+      )
+    };
+  }
 
   describe('creation', () => {
     it('should be defined', () => {
@@ -86,12 +122,9 @@ describe('PracticeViewModel', () => {
 
     describe('bookTitle$', () => {
       const mockBookTitle = 'Kompas 1';
-      const storeState = jasmine.anything();
 
       beforeEach(() => {
-        jest
-          .spyOn(MethodQueries, 'getMethodWithYearByBookId')
-          .mockReturnValue(mockBookTitle);
+        selectorSpies.methodWithYearByBookId.mockReturnValue(mockBookTitle);
       });
 
       it('should be null if not in a book', () => {
@@ -126,12 +159,9 @@ describe('PracticeViewModel', () => {
         new EduContentTOCFixture({ id: 2 }),
         new EduContentTOCFixture({ id: 3 })
       ];
-      const storeState = jasmine.anything();
 
       beforeEach(() => {
-        jest
-          .spyOn(EduContentTocQueries, 'getChaptersForBook')
-          .mockReturnValue(bookChapters);
+        selectorSpies.bookChapters.mockReturnValue(bookChapters);
       });
 
       it('should be an empty array if not in a book', () => {
@@ -167,15 +197,10 @@ describe('PracticeViewModel', () => {
         new ClassGroupFixture({ id: 1 }),
         new ClassGroupFixture({ id: 2 })
       ];
-      const storeState = jasmine.anything();
 
       beforeEach(() => {
-        //Make currentBook$ return the mockBook
-        jest.spyOn(EduContentBookQueries, 'getById').mockReturnValue(mockBook);
-
-        jest
-          .spyOn(ClassGroupQueries, 'getByMethodId')
-          .mockReturnValue(mockClassGroups);
+        selectorSpies.book.mockReturnValue(mockBook);
+        selectorSpies.classGroups.mockReturnValue(mockClassGroups);
       });
 
       it('should return the classGroups matching the current book method', () => {
@@ -191,6 +216,104 @@ describe('PracticeViewModel', () => {
           storeState,
           { id: methodId }
         );
+      });
+    });
+
+    describe('multi-check-box-table streams', () => {
+      const methodId = 5;
+      const mockBook = new EduContentBookFixture({ id: 1, methodId });
+      const mockClassGroupsByMethodId = [
+        new ClassGroupFixture({ id: 1, name: '1a' }),
+        new ClassGroupFixture({ id: 2, name: '1b' })
+      ];
+      const mockFilteredClassGroups = [
+        {
+          item: mockClassGroupsByMethodId[0],
+          key: 'id',
+          label: 'name'
+        },
+        {
+          item: mockClassGroupsByMethodId[1],
+          key: 'id',
+          label: 'name'
+        }
+      ];
+      const mockBookChapters = [
+        new EduContentTOCFixture({ id: 1 }),
+        new EduContentTOCFixture({ id: 2 }),
+        new EduContentTOCFixture({ id: 3 })
+      ];
+      const unlockedFreePracticeByEduContentTOCId: Dictionary<
+        UnlockedFreePracticeInterface[]
+      > = {
+        1: [
+          new UnlockedFreePracticeFixture({
+            id: 1,
+            eduContentBookId: 1,
+            eduContentTOCId: 1,
+            classGroupId: 1
+          })
+        ],
+        2: [
+          new UnlockedFreePracticeFixture({
+            id: 1,
+            eduContentBookId: 1,
+            eduContentTOCId: 2,
+            classGroupId: 2
+          })
+        ]
+      };
+
+      beforeEach(() => {
+        selectorSpies.book.mockReturnValue(mockBook);
+        selectorSpies.bookChapters.mockReturnValue(mockBookChapters);
+        selectorSpies.classGroups.mockReturnValue(mockClassGroupsByMethodId);
+        selectorSpies.ufpByEduContentTOCId.mockReturnValue(
+          unlockedFreePracticeByEduContentTOCId
+        );
+
+        navigateWithParams({ book: 1 });
+      });
+
+      describe('unlockedFreePracticeTableItemColumns$', () => {
+        it('should return table item columns based on the classgroups', () => {
+          const expectedGroupColumns: MultiCheckBoxTableItemColumnInterface<
+            ClassGroupInterface
+          >[] = mockFilteredClassGroups as MultiCheckBoxTableItemColumnInterface<
+            ClassGroupInterface
+          >[];
+
+          expect(
+            practiceViewModel.unlockedFreePracticeTableItemColumns$
+          ).toBeObservable(
+            hot('a', {
+              a: expectedGroupColumns
+            })
+          );
+        });
+      });
+
+      describe('unlockedFreePracticeTableItems$', () => {
+        it('should return items based on the unlocked free practices and classgroups', () => {
+          const expected = [
+            {
+              header: mockBookChapters[0],
+              content: { 1: true, 2: false }
+            },
+            {
+              header: mockBookChapters[1],
+              content: { 1: false, 2: true }
+            },
+            {
+              header: mockBookChapters[2],
+              content: { 1: false, 2: false }
+            }
+          ];
+
+          expect(
+            practiceViewModel.unlockedFreePracticeTableItems$
+          ).toBeObservable(hot('a', { a: expected }));
+        });
       });
     });
   });
