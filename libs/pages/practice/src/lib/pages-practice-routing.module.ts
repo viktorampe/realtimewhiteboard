@@ -18,7 +18,7 @@ const routes: Routes = [
         path: '',
         resolve: { isResolved: PracticeOverviewResolver },
         runGuardsAndResolvers: 'always',
-        component: PracticeOverviewComponent //Placeholder practice-overview
+        component: PracticeOverviewComponent
       },
       {
         path: ':book',
