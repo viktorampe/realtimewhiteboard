@@ -5,7 +5,6 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { MethodYearsInterface } from '@campus/dal';
 import {
   ENVIRONMENT_ICON_MAPPING_TOKEN,
-  ENVIRONMENT_SEARCHMODES_TOKEN,
   ENVIRONMENT_TESTING_TOKEN,
   MethodYearTileComponent,
   SharedModule
@@ -29,10 +28,6 @@ describe('PracticeOverviewComponent', () => {
       imports: [UiModule, SharedModule, RouterTestingModule],
       declarations: [PracticeOverviewComponent],
       providers: [
-        {
-          provide: ENVIRONMENT_SEARCHMODES_TOKEN,
-          useValue: {}
-        },
         { provide: PracticeViewModel, useClass: MockPracticeViewModel },
         { provide: MatIconRegistry, useClass: MockMatIconRegistry },
         {
