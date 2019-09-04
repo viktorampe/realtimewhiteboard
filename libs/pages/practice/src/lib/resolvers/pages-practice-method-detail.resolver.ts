@@ -2,7 +2,12 @@ import { Inject, Injectable } from '@angular/core';
 import {
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
+  ClassGroupActions,
+  ClassGroupQueries,
   DalState,
+  EduContentTocActions,
+  EduContentTocQueries,
+  QueryWithProps,
   StateResolver
 } from '@campus/dal';
 import { Action, Store } from '@ngrx/store';
@@ -19,10 +24,22 @@ export class PracticeMethodDetailResolver extends StateResolver {
   }
   protected getLoadableActions(): Action[] {
     const userId = this.authService.userId;
-    return [];
+    return [
+      new EduContentTocActions.LoadEduContentTocsForBook({
+        bookId: +this.params.book
+      }),
+      new ClassGroupActions.LoadClassGroups({
+        userId
+      })
+    ];
   }
 
   protected getResolvedQueries() {
-    return [];
+    return [
+      ClassGroupQueries.getLoaded,
+      new QueryWithProps(EduContentTocQueries.isBookLoaded, {
+        bookId: +this.params.book
+      })
+    ];
   }
 }
