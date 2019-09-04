@@ -209,7 +209,7 @@ export class PracticeViewModel {
       this.filteredClassGroups$
     ]).pipe(
       map(([chapterTOCs, unlockedPracticesByTOC, filteredClassGroups]) => {
-        return this.createCheckboxItemsForLearningPlanGoals(
+        return this.createCheckboxItemsForUnlockedFreePractices(
           chapterTOCs,
           filteredClassGroups,
           unlockedPracticesByTOC
@@ -218,7 +218,7 @@ export class PracticeViewModel {
     );
   }
 
-  private createCheckboxItemsForLearningPlanGoals(
+  private createCheckboxItemsForUnlockedFreePractices(
     eduContentTOCs: EduContentTOCInterface[],
     classGroups: ClassGroupInterface[],
     unlockedPracticesByTOC: Dictionary<UnlockedFreePracticeInterface[]>
