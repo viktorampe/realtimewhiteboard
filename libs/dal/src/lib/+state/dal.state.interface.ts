@@ -73,5 +73,5 @@ export interface DalState {
   learningPlanGoalProgresses: LearningPlanGoalProgressReducer.State;
   learningPlanGoals: LearningPlanGoalReducer.State;
   classGroups: ClassGroupReducer.State;
-  unlockedFreePractice: UnlockedFreePracticeReducer.State;
+  unlockedFreePractices: UnlockedFreePracticeReducer.State;
 }

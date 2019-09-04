@@ -28,7 +28,7 @@ export class AppViewModel implements OnDestroy {
     { title: 'Methodes', link: 'methods' },
     { title: 'Taken', link: 'error/402' },
     { title: 'Resultaten', link: 'error/403' },
-    { title: 'Vrij oefenen', link: 'error/404' },
+    { title: 'Vrij oefenen', link: 'practice' },
     { title: 'Differentiëren', link: 'error/405' },
     { title: 'Instellingen', link: 'settings' }
   ];
