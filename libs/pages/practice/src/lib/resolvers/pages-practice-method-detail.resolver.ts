@@ -8,7 +8,9 @@ import {
   EduContentTocActions,
   EduContentTocQueries,
   QueryWithProps,
-  StateResolver
+  StateResolver,
+  UnlockedFreePracticeActions,
+  UnlockedFreePracticeQueries
 } from '@campus/dal';
 import { Action, Store } from '@ngrx/store';
 
@@ -30,6 +32,9 @@ export class PracticeMethodDetailResolver extends StateResolver {
       }),
       new ClassGroupActions.LoadClassGroups({
         userId
+      }),
+      new UnlockedFreePracticeActions.LoadUnlockedFreePractices({
+        userId
       })
     ];
   }
@@ -37,6 +42,7 @@ export class PracticeMethodDetailResolver extends StateResolver {
   protected getResolvedQueries() {
     return [
       ClassGroupQueries.getLoaded,
+      UnlockedFreePracticeQueries.getLoaded,
       new QueryWithProps(EduContentTocQueries.isBookLoaded, {
         bookId: +this.params.book
       })
