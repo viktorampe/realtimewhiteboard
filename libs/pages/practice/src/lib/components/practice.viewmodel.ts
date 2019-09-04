@@ -9,6 +9,7 @@ import {
   EduContentTocQueries,
   getRouterState,
   MethodQueries,
+  MethodYearsInterface,
   RouterStateUrl
 } from '@campus/dal';
 import { RouterReducerState } from '@ngrx/router-store';
@@ -36,6 +37,7 @@ export class PracticeViewModel {
   public bookTitle$: Observable<string>;
   public bookChapters$: Observable<EduContentTOCInterface[]>;
   public filteredClassGroups$: Observable<ClassGroupInterface[]>;
+  public methodYears$: Observable<MethodYearsInterface[]>;
 
   //Source streams
   private routerState$: Observable<RouterReducerState<RouterStateUrl>>;
@@ -61,6 +63,9 @@ export class PracticeViewModel {
     this.bookTitle$ = this.getBookTitleStream();
     this.bookChapters$ = this.getBookChaptersStream();
     this.filteredClassGroups$ = this.getFilteredClassGroupsStream();
+    this.methodYears$ = this.store.pipe(
+      select(MethodQueries.getAllowedMethodYears)
+    );
   }
 
   private getCurrentPracticeParamsStream(): Observable<CurrentPracticeParams> {
