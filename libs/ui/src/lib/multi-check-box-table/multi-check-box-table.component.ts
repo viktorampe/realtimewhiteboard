@@ -24,7 +24,7 @@ export class MultiCheckBoxTableComponent<
   ItemType,
   ItemColumnType
 > {
-  @Input() topLevelSelectAllEnabled = false;
+  @Input() public topLevelSelectAllEnabled = false;
 
   // Pay some attention to the interfaces of the inputs
   // There is some overlap in the generic types
@@ -33,10 +33,6 @@ export class MultiCheckBoxTableComponent<
     SubLevelItemType,
     ItemType
   >[];
-
-  @Input() public selectedColumnState: MultiCheckBoxTableItemInterface<
-    ItemColumnType
-  >;
 
   @Input() public items: MultiCheckBoxTableItemInterface<ItemType>[];
 
