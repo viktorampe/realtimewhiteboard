@@ -1,9 +1,9 @@
 <div class="container">
   <campus-multi-check-box-table
-    topLevelSelectAllEnabled="true"
+    selectAllForColumnEnabled="true"
     [rowHeaderColumns]="rowHeaderColumns"
     [itemColumns]="itemColumns"
     [items]="items"
-    (topLevelCheckBoxToggled)="log($event)"
+    (selectAllForColumnChanged)="log($event)"
   ></campus-multi-check-box-table>
 </div>

@@ -11,7 +11,7 @@
         >{{ columnHeader.item[columnHeader.label] }}</th
       ></tr
     >
-    <tr *ngIf="topLevelSelectAllEnabled">
+    <tr *ngIf="selectAllForColumnEnabled">
       <th
         [colSpan]="rowHeaderColumns.length"
         class="ui-multi-check-box-table__header--row-header"
@@ -22,7 +22,7 @@
           #topLevelselectAllCheckBox
           campusClickPreventDefault
           (click)="
-            clickSelectAllForTopLevel(itemColumn, topLevelselectAllCheckBox)
+            clickSelectAllForColumn(itemColumn, topLevelselectAllCheckBox)
           "
           [checked]="itemColumn.isTopLevelSelected"
         ></mat-checkbox>

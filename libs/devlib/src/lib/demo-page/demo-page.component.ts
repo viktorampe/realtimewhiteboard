@@ -6,6 +6,7 @@ import {
   EduContentTOCInterface
 } from '@campus/dal';
 import {
+  MultiCheckBoxTableColumnChangeEventInterface,
   MultiCheckBoxTableItemColumnInterface,
   MultiCheckBoxTableItemInterface,
   MultiCheckBoxTableRowHeaderColumnInterface
@@ -57,12 +58,12 @@ export class DemoPageComponent implements OnInit {
     ];
   }
 
-  log(data) {
+  log(data: MultiCheckBoxTableColumnChangeEventInterface<ClassGroupInterface>) {
     console.log(data);
 
     this.itemColumns.forEach(columnData => {
       if (columnData.item.id === data.itemColumn.id) {
-        columnData.isTopLevelSelected = data.isSelected;
+        columnData.isTopLevelSelected = data.isChecked;
       }
     });
     this.itemColumns = [...this.itemColumns];

@@ -25,7 +25,7 @@ export class MultiCheckBoxTableComponent<
   ItemType,
   ItemColumnType
 > {
-  @Input() public topLevelSelectAllEnabled = false;
+  @Input() public selectAllForColumnEnabled = false;
 
   // Pay some attention to the interfaces of the inputs
   // There is some overlap in the generic types
@@ -60,7 +60,7 @@ export class MultiCheckBoxTableComponent<
     >[]
   >();
 
-  @Output() public topLevelCheckBoxToggled = new EventEmitter<
+  @Output() public selectAllForColumnChanged = new EventEmitter<
     MultiCheckBoxTableColumnChangeEventInterface<ItemColumnType>
   >();
 
@@ -80,12 +80,12 @@ export class MultiCheckBoxTableComponent<
     );
   }
 
-  public clickSelectAllForTopLevel(
+  public clickSelectAllForColumn(
     itemColumn: MultiCheckBoxTableItemColumnInterface<ItemColumnType>,
     checkBox: MatCheckbox
   ) {
     // emit event: for this column item, all row items are selected/deselected
-    this.topLevelCheckBoxToggled.emit({
+    this.selectAllForColumnChanged.emit({
       itemColumn: itemColumn.item,
       isChecked: !checkBox.checked
     });

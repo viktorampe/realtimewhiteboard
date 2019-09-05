@@ -370,9 +370,9 @@ describe('MultiCheckBoxTableComponent', () => {
       fixture.detectChanges();
     });
 
-    describe('toplevelSelectAllEnabled', () => {
+    describe('selectAllForColumnEnabled', () => {
       beforeEach(() => {
-        component.topLevelSelectAllEnabled = true;
+        component.selectAllForColumnEnabled = true;
         fixture.detectChanges();
       });
 
@@ -541,32 +541,34 @@ describe('MultiCheckBoxTableComponent', () => {
       });
     });
 
-    describe('clickSelectAllForTopLevel', () => {
+    describe('clickSelectAllForColumn', () => {
       beforeEach(() => {
-        component.topLevelSelectAllEnabled = true;
+        component.selectAllForColumnEnabled = true;
         component.itemColumns = itemColumns;
         component.rowHeaderColumns = rowHeaderColumns;
         fixture.detectChanges();
       });
 
       it('should be triggered by topLevelselectAllCheckbox', () => {
-        jest.spyOn(component, 'clickSelectAllForTopLevel');
+        jest.spyOn(component, 'clickSelectAllForColumn');
 
         const checkBox = fixture.debugElement.query(By.directive(MatCheckbox));
         checkBox.triggerEventHandler('click', null);
 
-        expect(component.clickSelectAllForTopLevel).toHaveBeenCalled();
+        expect(component.clickSelectAllForColumn).toHaveBeenCalled();
       });
 
-      it('should emit a topLevelCheckBoxToggled event', () => {
-        jest.spyOn(component.topLevelCheckBoxToggled, 'emit');
+      it('should emit a selectAllForColumnChanged event', () => {
+        jest.spyOn(component.selectAllForColumnChanged, 'emit');
 
-        component.clickSelectAllForTopLevel(itemColumns[0], {
+        component.clickSelectAllForColumn(itemColumns[0], {
           checked: true
         } as MatCheckbox);
 
-        expect(component.topLevelCheckBoxToggled.emit).toHaveBeenCalledTimes(1);
-        expect(component.topLevelCheckBoxToggled.emit).toHaveBeenCalledWith({
+        expect(component.selectAllForColumnChanged.emit).toHaveBeenCalledTimes(
+          1
+        );
+        expect(component.selectAllForColumnChanged.emit).toHaveBeenCalledWith({
           itemColumn: itemColumns[0].item,
           isChecked: false
         });
