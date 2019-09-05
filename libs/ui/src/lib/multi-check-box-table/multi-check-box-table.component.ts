@@ -7,8 +7,8 @@ import {
 } from '@angular/core';
 import { MatCheckbox } from '@angular/material';
 import {
-  MultiCheckBoxTableChangeEventInterface,
   MultiCheckBoxTableColumnChangeEventInterface,
+  MultiCheckBoxTableItemChangeEventInterface,
   MultiCheckBoxTableItemColumnInterface,
   MultiCheckBoxTableItemInterface,
   MultiCheckBoxTableRowHeaderColumnInterface,
@@ -45,7 +45,7 @@ export class MultiCheckBoxTableComponent<
   >[];
 
   @Output() public checkBoxChanged = new EventEmitter<
-    MultiCheckBoxTableChangeEventInterface<
+    MultiCheckBoxTableItemChangeEventInterface<
       ItemType,
       ItemColumnType,
       SubLevelItemType
@@ -53,7 +53,7 @@ export class MultiCheckBoxTableComponent<
   >();
 
   @Output() public checkBoxesChanged = new EventEmitter<
-    MultiCheckBoxTableChangeEventInterface<
+    MultiCheckBoxTableItemChangeEventInterface<
       ItemType,
       ItemColumnType,
       SubLevelItemType
@@ -101,7 +101,7 @@ export class MultiCheckBoxTableComponent<
       column,
       item,
       subLevel,
-      previousCheckboxState: checkBox.checked
+      isChecked: !checkBox.checked
     });
   }
 }

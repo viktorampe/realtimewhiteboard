@@ -490,7 +490,7 @@ describe('MultiCheckBoxTableComponent', () => {
           column: itemColumns[0].item,
           item: items[0].header,
           subLevel: subLevels[0].item,
-          previousCheckboxState: true
+          isChecked: false
         });
       });
     });

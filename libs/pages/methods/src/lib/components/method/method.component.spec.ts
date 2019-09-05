@@ -21,7 +21,7 @@ import {
   SharedModule
 } from '@campus/shared';
 import {
-  MultiCheckBoxTableChangeEventInterface,
+  MultiCheckBoxTableItemChangeEventInterface,
   MultiCheckBoxTableItemColumnInterface,
   UiModule
 } from '@campus/ui';
@@ -203,7 +203,7 @@ describe('MethodComponent', () => {
         'openLearningPlanGoalProgressManagementDialog'
       );
 
-      const event: MultiCheckBoxTableChangeEventInterface<any, any, any> = {
+      const event: MultiCheckBoxTableItemChangeEventInterface<any, any, any> = {
         column: { classGroup: 'I am a classGroup' },
         item: { lpg: 'I am a learning plan goal' },
         subLevel: { foo: 'I am not relevant' }
