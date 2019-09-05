@@ -6,7 +6,7 @@ import {
 
 export interface UnlockedFreePracticeInterface {
   id?: number;
-  eduContentBookId?: number;
+  eduContentBookId: number;
   eduContentTOCId?: number;
   classGroupId: number;
   eduContentBook?: EduContentBookInterface;
