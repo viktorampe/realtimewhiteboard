@@ -110,25 +110,6 @@ export class PracticeViewModel {
     );
   }
 
-  public toggleUnlockedFreePractice(
-    unlockedFreePractice: UnlockedFreePracticeInterface,
-    checked: boolean
-  ): void {
-    if (checked) {
-      this.store.dispatch(
-        new UnlockedFreePracticeActions.AddUnlockedFreePractice({
-          unlockedFreePractice: unlockedFreePractice
-        })
-      );
-    } else {
-      this.store.dispatch(
-        new UnlockedFreePracticeActions.DeleteUnlockedFreePractice({
-          id: unlockedFreePractice.id
-        })
-      );
-    }
-  }
-
   private getCurrentBookStream(): Observable<EduContentBookInterface> {
     const currentBookWhenEmpty$ = this.currentPracticeParams$.pipe(
       filter(params => !params.book),
@@ -262,5 +243,24 @@ export class PracticeViewModel {
           numeric: true
         });
       });
+  }
+
+  public toggleUnlockedFreePractice(
+    unlockedFreePractice: UnlockedFreePracticeInterface,
+    checked: boolean
+  ): void {
+    if (checked) {
+      this.store.dispatch(
+        new UnlockedFreePracticeActions.AddUnlockedFreePractice({
+          unlockedFreePractice: unlockedFreePractice
+        })
+      );
+    } else {
+      this.store.dispatch(
+        new UnlockedFreePracticeActions.DeleteUnlockedFreePractice({
+          id: unlockedFreePractice.id
+        })
+      );
+    }
   }
 }
