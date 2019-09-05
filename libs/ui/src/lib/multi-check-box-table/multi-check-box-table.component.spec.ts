@@ -3,9 +3,11 @@ import {
   MatCheckbox,
   MatCheckboxModule,
   MatIcon,
-  MatIconModule
+  MatIconModule,
+  MatIconRegistry
 } from '@angular/material';
 import { By } from '@angular/platform-browser';
+import { MockMatIconRegistry } from '@campus/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { MultiCheckBoxTableComponent } from './multi-check-box-table.component';
 import {
@@ -90,7 +92,8 @@ describe('MultiCheckBoxTableComponent', () => {
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [MatIconModule, MatCheckboxModule],
-      declarations: [MultiCheckBoxTableComponent]
+      declarations: [MultiCheckBoxTableComponent],
+      providers: [{ provide: MatIconRegistry, useClass: MockMatIconRegistry }]
     });
   });
 

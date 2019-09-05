@@ -4,6 +4,7 @@ import {
   TestBed,
   tick
 } from '@angular/core/testing';
+import { MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
@@ -30,6 +31,7 @@ import {
   ENVIRONMENT_TESTING_TOKEN,
   SharedModule
 } from '@campus/shared';
+import { MockMatIconRegistry } from '@campus/testing';
 import {
   MultiCheckBoxTableChangeEventInterface,
   MultiCheckBoxTableItemColumnInterface,
@@ -59,6 +61,7 @@ describe('MethodChapterComponent', () => {
       ],
       declarations: [MethodChapterComponent],
       providers: [
+        { provide: MatIconRegistry, useClass: MockMatIconRegistry },
         {
           provide: ENVIRONMENT_SEARCHMODES_TOKEN,
           useValue: {}
