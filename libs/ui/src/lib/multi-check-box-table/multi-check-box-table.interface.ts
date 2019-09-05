@@ -38,3 +38,8 @@ export interface MultiCheckBoxTableChangeEventInterface<
   subLevel: SubLevelItemType;
   previousCheckboxState?: boolean;
 }
+
+export interface MultiCheckBoxTableColumnChangeEventInterface<ItemColumnType> {
+  itemColumn: ItemColumnType;
+  isChecked: boolean;
+}

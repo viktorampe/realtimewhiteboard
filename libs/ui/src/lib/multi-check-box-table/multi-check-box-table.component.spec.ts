@@ -568,7 +568,7 @@ describe('MultiCheckBoxTableComponent', () => {
         expect(component.topLevelCheckBoxToggled.emit).toHaveBeenCalledTimes(1);
         expect(component.topLevelCheckBoxToggled.emit).toHaveBeenCalledWith({
           itemColumn: itemColumns[0].item,
-          isSelected: false
+          isChecked: false
         });
       });
     });

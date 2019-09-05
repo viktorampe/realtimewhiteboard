@@ -8,6 +8,7 @@ import {
 import { MatCheckbox } from '@angular/material';
 import {
   MultiCheckBoxTableChangeEventInterface,
+  MultiCheckBoxTableColumnChangeEventInterface,
   MultiCheckBoxTableItemColumnInterface,
   MultiCheckBoxTableItemInterface,
   MultiCheckBoxTableRowHeaderColumnInterface,
@@ -59,10 +60,9 @@ export class MultiCheckBoxTableComponent<
     >[]
   >();
 
-  @Output() public topLevelCheckBoxToggled = new EventEmitter<{
-    itemColumn: ItemColumnType;
-    isSelected: boolean;
-  }>();
+  @Output() public topLevelCheckBoxToggled = new EventEmitter<
+    MultiCheckBoxTableColumnChangeEventInterface<ItemColumnType>
+  >();
 
   @HostBinding('class.ui-multi-check-box-table')
   isMultiCheckBoxTable = true;
@@ -87,7 +87,7 @@ export class MultiCheckBoxTableComponent<
     // emit event: for this column item, all row items are selected/deselected
     this.topLevelCheckBoxToggled.emit({
       itemColumn: itemColumn.item,
-      isSelected: !checkBox.checked
+      isChecked: !checkBox.checked
     });
   }
 
