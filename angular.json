@@ -1023,6 +1023,32 @@
           }
         }
       }
+    },
+    "pages-home": {
+      "root": "libs/pages/home",
+      "sourceRoot": "libs/pages/home/src",
+      "projectType": "library",
+      "prefix": "campus",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/pages/home/tsconfig.lib.json",
+              "libs/pages/home/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/builders:jest",
+          "options": {
+            "jestConfig": "libs/pages/home/jest.config.js",
+            "tsConfig": "libs/pages/home/tsconfig.spec.json",
+            "setupFile": "libs/pages/home/src/test-setup.ts"
+          }
+        }
+      }
     }
   },
   "cli": {

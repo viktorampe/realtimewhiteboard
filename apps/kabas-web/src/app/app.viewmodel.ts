@@ -24,7 +24,7 @@ import { filter, map, switchMap } from 'rxjs/operators';
 export class AppViewModel implements OnDestroy {
   //props
   public navItems: NavItem[] = [
-    { title: 'Home', link: 'error/400' },
+    { title: 'Home', link: 'home' },
     { title: 'Methodes', link: 'methods' },
     { title: 'Taken', link: 'error/402' },
     { title: 'Resultaten', link: 'error/403' },
