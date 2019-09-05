@@ -1,3 +1,19 @@
-<p>
-  practice-method-detail works!
-</p>
+<campus-page-header
+  [title]="'Vrij oefenen'"
+  [subtitle]="'Oefeningen beheren'"
+  [iconClass]="'book'"
+>
+</campus-page-header>
+<div class="pages-practice-method-detail__container">
+  <p
+    >Duid aan welke hoofdstukken leerlingen mogen oefenen voor
+    {{ breadCrumbTitles$ | async }}</p
+  >
+
+  <campus-multi-check-box-table
+    [rowHeaderColumns]="eduContentTOCsTableHeaders"
+    [itemColumns]="classGroupColumns$ | async"
+    [items]="eduContentTOCsWithSelectionForClassGroups$ | async"
+    (checkBoxChanged)="clickFreePracticeForChapter($event)"
+  ></campus-multi-check-box-table>
+</div>
