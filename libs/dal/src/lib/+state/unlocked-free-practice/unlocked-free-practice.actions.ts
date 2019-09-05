@@ -1,6 +1,10 @@
 import { Update } from '@ngrx/entity';
 import { Action } from '@ngrx/store';
 import { UnlockedFreePracticeInterface } from '../../+models';
+import {
+  CustomFeedbackHandlersInterface,
+  FeedbackTriggeringAction
+} from '../effect-feedback';
 
 export enum UnlockedFreePracticesActionTypes {
   UnlockedFreePracticesLoaded = '[UnlockedFreePractices] UnlockedFreePractices Loaded',
@@ -108,7 +112,8 @@ export class ClearUnlockedFreePractices implements Action {
   readonly type = UnlockedFreePracticesActionTypes.ClearUnlockedFreePractices;
 }
 
-export class StartAddManyUnlockedFreePractices implements Action {
+export class StartAddManyUnlockedFreePractices
+  implements FeedbackTriggeringAction {
   readonly type =
     UnlockedFreePracticesActionTypes.StartAddManyUnlockedFreePractices;
 
@@ -116,6 +121,7 @@ export class StartAddManyUnlockedFreePractices implements Action {
     public payload: {
       userId: number;
       unlockedFreePractices: UnlockedFreePracticeInterface[];
+      customFeedbackHandlers?: CustomFeedbackHandlersInterface;
     }
   ) {}
 }
