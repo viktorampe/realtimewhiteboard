@@ -49,7 +49,6 @@ describe('PracticeViewModel', () => {
     methodWithYearByBookId: jest.SpyInstance;
   };
 
-  const unlockedFreePrac = new UnlockedFreePracticeFixture();
   const userId = 1;
   const storeState = jasmine.anything();
 
@@ -318,23 +317,24 @@ describe('PracticeViewModel', () => {
   });
 
   describe('toggleUnlockedFreePractice()', () => {
-    it('should add dispatch', () => {
+    const unlockedFreePractice = new UnlockedFreePracticeFixture();
+    it('should dispatch AddUnlockedFreePractice when checkbox is on', () => {
       const spy = jest.spyOn(store, 'dispatch');
-      practiceViewModel.toggleUnlockedFreePractice(unlockedFreePrac, true);
+      practiceViewModel.toggleUnlockedFreePractice(unlockedFreePractice, true);
       expect(spy).toHaveBeenCalledTimes(1);
       expect(spy).toHaveBeenCalledWith(
         new UnlockedFreePracticeActions.AddUnlockedFreePractice({
-          unlockedFreePractice: unlockedFreePrac
+          unlockedFreePractice: unlockedFreePractice
         })
       );
     });
-    it('should delete dispatch', () => {
+    it('should dispatch DeleteUnlockedFreePractice when checkbox is off', () => {
       const spy = jest.spyOn(store, 'dispatch');
-      practiceViewModel.toggleUnlockedFreePractice(unlockedFreePrac, false);
+      practiceViewModel.toggleUnlockedFreePractice(unlockedFreePractice, false);
       expect(spy).toHaveBeenCalledTimes(1);
       expect(spy).toHaveBeenCalledWith(
         new UnlockedFreePracticeActions.DeleteUnlockedFreePractice({
-          id: unlockedFreePrac.id
+          id: unlockedFreePractice.id
         })
       );
     });
