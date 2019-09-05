@@ -14,7 +14,8 @@ export enum UnlockedFreePracticesActionTypes {
   UpdateUnlockedFreePractices = '[UnlockedFreePractices] Update UnlockedFreePractices',
   DeleteUnlockedFreePractice = '[UnlockedFreePractices] Delete UnlockedFreePractice',
   DeleteUnlockedFreePractices = '[UnlockedFreePractices] Delete UnlockedFreePractices',
-  ClearUnlockedFreePractices = '[UnlockedFreePractices] Clear UnlockedFreePractices'
+  ClearUnlockedFreePractices = '[UnlockedFreePractices] Clear UnlockedFreePractices',
+  StartAddManyUnlockedFreePractices = '[UnlockedFreePractices] Start Add many UnlockedFreePractices'
 }
 
 export class LoadUnlockedFreePractices implements Action {
@@ -107,6 +108,18 @@ export class ClearUnlockedFreePractices implements Action {
   readonly type = UnlockedFreePracticesActionTypes.ClearUnlockedFreePractices;
 }
 
+export class StartAddManyUnlockedFreePractices implements Action {
+  readonly type =
+    UnlockedFreePracticesActionTypes.StartAddManyUnlockedFreePractices;
+
+  constructor(
+    public payload: {
+      userId: number;
+      unlockedFreePractices: UnlockedFreePracticeInterface[];
+    }
+  ) {}
+}
+
 export type UnlockedFreePracticesActions =
   | LoadUnlockedFreePractices
   | UnlockedFreePracticesLoaded
@@ -119,4 +132,5 @@ export type UnlockedFreePracticesActions =
   | UpdateUnlockedFreePractices
   | DeleteUnlockedFreePractice
   | DeleteUnlockedFreePractices
-  | ClearUnlockedFreePractices;
+  | ClearUnlockedFreePractices
+  | StartAddManyUnlockedFreePractices;

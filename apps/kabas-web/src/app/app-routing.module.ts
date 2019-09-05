@@ -11,6 +11,16 @@ const routes: Routes = [
     resolve: { isResolved: AppResolver },
     children: [
       {
+        path: '',
+        redirectTo: 'home',
+        pathMatch: 'full'
+      },
+      {
+        path: 'home',
+        loadChildren: '@campus/pages/home#PagesHomeModule',
+        data: { breadcrumbText: 'Home' }
+      },
+      {
         path: 'methods',
         loadChildren: '@campus/pages/methods#PagesMethodsModule',
         data: { breadcrumbText: 'Methodes' }
