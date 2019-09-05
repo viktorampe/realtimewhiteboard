@@ -226,18 +226,6 @@ describe('PracticeViewModel', () => {
         new ClassGroupFixture({ id: 1, name: '1a' }),
         new ClassGroupFixture({ id: 2, name: '1b' })
       ];
-      const mockTableClassGroups = [
-        {
-          item: mockClassGroupsByMethodId[0],
-          key: 'id',
-          label: 'name'
-        },
-        {
-          item: mockClassGroupsByMethodId[1],
-          key: 'id',
-          label: 'name'
-        }
-      ];
       const mockBookChapters = [
         new EduContentTOCFixture({ id: 1 }),
         new EduContentTOCFixture({ id: 2 }),
@@ -279,9 +267,18 @@ describe('PracticeViewModel', () => {
         it('should return table item columns based on the classgroups', () => {
           const expectedGroupColumns: MultiCheckBoxTableItemColumnInterface<
             ClassGroupInterface
-          >[] = mockTableClassGroups as MultiCheckBoxTableItemColumnInterface<
-            ClassGroupInterface
-          >[];
+          >[] = [
+            {
+              item: mockClassGroupsByMethodId[0],
+              key: 'id',
+              label: 'name'
+            },
+            {
+              item: mockClassGroupsByMethodId[1],
+              key: 'id',
+              label: 'name'
+            }
+          ];
 
           expect(
             practiceViewModel.unlockedFreePracticeTableItemColumns$
