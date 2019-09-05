@@ -9,6 +9,10 @@ import {
   ClassGroupQueries,
   CustomSerializer,
   DalState,
+  getStoreModuleForFeatures,
+  UnlockedFreePracticeActions,
+  UnlockedFreePracticeFixture,
+  UnlockedFreePracticeInterface
   EduContentBookFixture,
   EduContentBookQueries,
   EduContentTOCFixture,
@@ -48,6 +52,13 @@ describe('PracticeViewModel', () => {
     methodWithYearByBookId: jest.SpyInstance;
   };
 
+  const unlockedFreePrac = new UnlockedFreePracticeFixture();
+  const unlockedFreePracticeMock: UnlockedFreePracticeInterface = {
+    id: 5,
+    eduContentBookId: 34,
+    eduContentTOCId: 23,
+    classGroupId: 5
+  };
   const userId = 1;
   const storeState = jasmine.anything();
 
@@ -312,6 +323,32 @@ describe('PracticeViewModel', () => {
           ).toBeObservable(hot('a', { a: expected }));
         });
       });
+    });
+  });
+
+  describe('toggleUnlockedFreePractice()', () => {
+    it('should add dispatch', () => {
+      const spy = jest.spyOn(store, 'dispatch');
+      practiceViewModel.toggleUnlockedFreePractice(
+        unlockedFreePracticeMock,
+        true
+      );
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy).toHaveBeenCalledWith(
+        new UnlockedFreePracticeActions.AddUnlockedFreePractice({
+          unlockedFreePractice: unlockedFreePracticeMock
+        })
+      );
+    });
+    it('should delete dispatch', () => {
+      const spy = jest.spyOn(store, 'dispatch');
+      practiceViewModel.toggleUnlockedFreePractice(unlockedFreePrac, false);
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy).toHaveBeenCalledWith(
+        new UnlockedFreePracticeActions.DeleteUnlockedFreePractice({
+          id: unlockedFreePrac.id
+        })
+      );
     });
   });
 
