@@ -448,7 +448,7 @@ describe('MultiCheckBoxTableComponent', () => {
           }, {});
         });
 
-        it('should reflect the toplevel selection state', () => {
+        it('should reflect the select all for column selection state', () => {
           topLevelCheckBoxes.forEach((checkbox, index) => {
             expect(!!topLevelCheckBoxes[index].componentInstance.checked).toBe(
               selectedColumnIndex === index
