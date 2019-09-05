@@ -11,6 +11,7 @@ import {
   MethodQueries,
   MethodYearsInterface,
   RouterStateUrl,
+  UnlockedFreePracticeActions,
   UnlockedFreePracticeInterface,
   UnlockedFreePracticeQueries
 } from '@campus/dal';
@@ -21,15 +22,19 @@ import {
 } from '@campus/ui';
 import { Dictionary } from '@ngrx/entity';
 import { RouterReducerState } from '@ngrx/router-store';
-import {
-  DalState,
-  MethodQueries,
-  MethodYearsInterface,
-  UnlockedFreePracticeActions,
-  UnlockedFreePracticeInterface
-} from '@campus/dal';
 import { select, Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { combineLatest, merge, Observable } from 'rxjs';
+import {
+  distinctUntilChanged,
+  filter,
+  map,
+  mapTo,
+  shareReplay,
+  switchMap
+} from 'rxjs/operators';
+export interface CurrentPracticeParams {
+  book?: number;
+}
 @Injectable({
   providedIn: 'root'
 })
@@ -103,6 +108,8 @@ export class PracticeViewModel {
       distinctUntilChanged((a, b) => a.book === b.book),
       shareReplay(1)
     );
+  }
+
   public toggleUnlockedFreePractice(
     unlockedFreePractice: UnlockedFreePracticeInterface,
     checked: boolean
@@ -120,10 +127,6 @@ export class PracticeViewModel {
         })
       );
     }
-  }
-
-  private initialize() {
-    this.setPresentationStreams();
   }
 
   private getCurrentBookStream(): Observable<EduContentBookInterface> {

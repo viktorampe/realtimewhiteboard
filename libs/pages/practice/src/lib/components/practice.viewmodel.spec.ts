@@ -9,16 +9,13 @@ import {
   ClassGroupQueries,
   CustomSerializer,
   DalState,
-  getStoreModuleForFeatures,
-  UnlockedFreePracticeActions,
-  UnlockedFreePracticeFixture,
-  UnlockedFreePracticeInterface
   EduContentBookFixture,
   EduContentBookQueries,
   EduContentTOCFixture,
   EduContentTocQueries,
   getStoreModuleForFeatures,
   MethodQueries,
+  UnlockedFreePracticeActions,
   UnlockedFreePracticeFixture,
   UnlockedFreePracticeInterface,
   UnlockedFreePracticeQueries
