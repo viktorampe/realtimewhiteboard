@@ -1,10 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { MethodQueries } from '@campus/dal';
-import { AllowedMethodGuard } from '@campus/guards';
+import { PracticeMethodDetailComponent } from './components/practice-method-detail/practice-method-detail.component';
 import { PracticeOverviewComponent } from './components/practice-overview/practice-overview.component';
-import { PracticeComponent } from './components/practice.component';
-import { PracticeMethodDetailResolver } from './resolvers/pages-practice-method-detail.resolver';
 import { PracticeOverviewResolver } from './resolvers/pages-practice-overview.resolver';
 import { PracticeResolver } from './resolvers/pages-practice.resolver';
 
@@ -22,8 +20,9 @@ const routes: Routes = [
       },
       {
         path: ':book',
-        resolve: { isResolved: PracticeMethodDetailResolver },
-        canActivate: [AllowedMethodGuard],
+        //TODO: uncomment when UnlockedFreePracticeService.getAllForUser() is implemented
+        //resolve: { isResolved: PracticeMethodDetailResolver },
+        canActivate: [],
         data: {
           selector: MethodQueries.getMethodWithYearByBookId
         },
@@ -31,7 +30,7 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            component: PracticeComponent //Placeholder practice-method-detail
+            component: PracticeMethodDetailComponent
           }
         ]
       }
