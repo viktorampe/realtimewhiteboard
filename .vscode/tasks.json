@@ -51,7 +51,8 @@
         "pages-settings-coupled-teachers",
         "pages-settings-credentials",
         "pages-settings-dashboard",
-        "pages-settings-profile"
+        "pages-settings-profile",
+        "pages-home"
       ],
       "default": "polpo-classroom-web"
     },
