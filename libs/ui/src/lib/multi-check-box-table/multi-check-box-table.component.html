@@ -19,10 +19,10 @@
       >
       <th *ngFor="let itemColumn of itemColumns">
         <mat-checkbox
-          #topLevelselectAllCheckBox
+          #selectAllForColumnCheckBox
           campusClickPreventDefault
           (click)="
-            clickSelectAllForColumn(itemColumn, topLevelselectAllCheckBox)
+            clickSelectAllForColumn(itemColumn, selectAllForColumnCheckBox)
           "
           [checked]="itemColumn.isTopLevelSelected"
         ></mat-checkbox>
