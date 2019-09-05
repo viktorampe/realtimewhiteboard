@@ -50,12 +50,6 @@ describe('PracticeViewModel', () => {
   };
 
   const unlockedFreePrac = new UnlockedFreePracticeFixture();
-  const unlockedFreePracticeMock: UnlockedFreePracticeInterface = {
-    id: 5,
-    eduContentBookId: 34,
-    eduContentTOCId: 23,
-    classGroupId: 5
-  };
   const userId = 1;
   const storeState = jasmine.anything();
 
@@ -326,14 +320,11 @@ describe('PracticeViewModel', () => {
   describe('toggleUnlockedFreePractice()', () => {
     it('should add dispatch', () => {
       const spy = jest.spyOn(store, 'dispatch');
-      practiceViewModel.toggleUnlockedFreePractice(
-        unlockedFreePracticeMock,
-        true
-      );
+      practiceViewModel.toggleUnlockedFreePractice(unlockedFreePrac, true);
       expect(spy).toHaveBeenCalledTimes(1);
       expect(spy).toHaveBeenCalledWith(
         new UnlockedFreePracticeActions.AddUnlockedFreePractice({
-          unlockedFreePractice: unlockedFreePracticeMock
+          unlockedFreePractice: unlockedFreePrac
         })
       );
     });
