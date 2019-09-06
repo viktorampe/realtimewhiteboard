@@ -7,7 +7,8 @@ import {
 } from '@angular/core';
 import { MatCheckbox } from '@angular/material';
 import {
-  MultiCheckBoxTableChangeEventInterface,
+  MultiCheckBoxTableColumnChangeEventInterface,
+  MultiCheckBoxTableItemChangeEventInterface,
   MultiCheckBoxTableItemColumnInterface,
   MultiCheckBoxTableItemInterface,
   MultiCheckBoxTableRowHeaderColumnInterface,
@@ -24,14 +25,16 @@ export class MultiCheckBoxTableComponent<
   ItemType,
   ItemColumnType
 > {
+  @Input() public selectAllForColumnEnabled = false;
+
   // Pay some attention to the interfaces of the inputs
   // There is some overlap in the generic types
-
   // Only use either subLevels or items
   @Input() public subLevels: MultiCheckBoxTableSubLevelInterface<
     SubLevelItemType,
     ItemType
   >[];
+
   @Input() public items: MultiCheckBoxTableItemInterface<ItemType>[];
 
   @Input() public rowHeaderColumns: MultiCheckBoxTableRowHeaderColumnInterface<
@@ -42,7 +45,7 @@ export class MultiCheckBoxTableComponent<
   >[];
 
   @Output() public checkBoxChanged = new EventEmitter<
-    MultiCheckBoxTableChangeEventInterface<
+    MultiCheckBoxTableItemChangeEventInterface<
       ItemType,
       ItemColumnType,
       SubLevelItemType
@@ -50,11 +53,15 @@ export class MultiCheckBoxTableComponent<
   >();
 
   @Output() public checkBoxesChanged = new EventEmitter<
-    MultiCheckBoxTableChangeEventInterface<
+    MultiCheckBoxTableItemChangeEventInterface<
       ItemType,
       ItemColumnType,
       SubLevelItemType
     >[]
+  >();
+
+  @Output() public selectAllForColumnChanged = new EventEmitter<
+    MultiCheckBoxTableColumnChangeEventInterface<ItemColumnType>
   >();
 
   @HostBinding('class.ui-multi-check-box-table')
@@ -73,6 +80,17 @@ export class MultiCheckBoxTableComponent<
     );
   }
 
+  public clickSelectAllForColumn(
+    itemColumn: MultiCheckBoxTableItemColumnInterface<ItemColumnType>,
+    checkBox: MatCheckbox
+  ) {
+    // emit event: for this column item, all row items are selected/deselected
+    this.selectAllForColumnChanged.emit({
+      column: itemColumn.item,
+      isChecked: !checkBox.checked
+    });
+  }
+
   public clickCheckbox(
     item: ItemType,
     column: ItemColumnType,
@@ -83,7 +101,7 @@ export class MultiCheckBoxTableComponent<
       column,
       item,
       subLevel,
-      previousCheckboxState: checkBox.checked
+      isChecked: !checkBox.checked
     });
   }
 }

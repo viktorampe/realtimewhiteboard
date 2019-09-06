@@ -40,7 +40,8 @@ export {
   COLLECTION_MANAGER_SERVICE_TOKEN
 } from './lib/manage-collection/services/collection-manager.service.interface';
 export {
-  MultiCheckBoxTableChangeEventInterface,
+  MultiCheckBoxTableColumnChangeEventInterface,
+  MultiCheckBoxTableItemChangeEventInterface,
   MultiCheckBoxTableItemColumnInterface,
   MultiCheckBoxTableItemInterface,
   MultiCheckBoxTableRowHeaderColumnInterface,
