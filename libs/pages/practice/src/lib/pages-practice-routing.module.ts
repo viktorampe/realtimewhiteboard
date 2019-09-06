@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { MethodQueries } from '@campus/dal';
 import { PracticeMethodDetailComponent } from './components/practice-method-detail/practice-method-detail.component';
 import { PracticeOverviewComponent } from './components/practice-overview/practice-overview.component';
+import { PracticeMethodDetailResolver } from './resolvers/pages-practice-method-detail.resolver';
 import { PracticeOverviewResolver } from './resolvers/pages-practice-overview.resolver';
 import { PracticeResolver } from './resolvers/pages-practice.resolver';
 
@@ -20,8 +21,7 @@ const routes: Routes = [
       },
       {
         path: ':book',
-        //TODO: uncomment when UnlockedFreePracticeService.getAllForUser() is implemented
-        //resolve: { isResolved: PracticeMethodDetailResolver },
+        resolve: { isResolved: PracticeMethodDetailResolver },
         canActivate: [],
         data: {
           selector: MethodQueries.getMethodWithYearByBookId

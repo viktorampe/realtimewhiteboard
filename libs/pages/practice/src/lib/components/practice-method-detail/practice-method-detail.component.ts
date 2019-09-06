@@ -1,12 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { ClassGroupInterface, EduContentTOCInterface } from '@campus/dal';
 import {
-  MultiCheckBoxTableChangeEventInterface,
+  ClassGroupInterface,
+  EduContentBookInterface,
+  EduContentTOCInterface,
+  UnlockedFreePracticeInterface
+} from '@campus/dal';
+import {
   MultiCheckBoxTableItemColumnInterface,
   MultiCheckBoxTableItemInterface,
   MultiCheckBoxTableRowHeaderColumnInterface
 } from '@campus/ui';
 import { Observable } from 'rxjs';
+import { take } from 'rxjs/operators';
 import { PracticeViewModel } from '../practice.viewmodel';
 
 @Component({
@@ -15,9 +20,11 @@ import { PracticeViewModel } from '../practice.viewmodel';
   styleUrls: ['./practice-method-detail.component.scss']
 })
 export class PracticeMethodDetailComponent implements OnInit {
+  private book$: Observable<EduContentBookInterface>;
+
   public breadCrumbTitles$: Observable<string>; // used to show book method + year
 
-  public eduContentTOCsTableHeaders: MultiCheckBoxTableRowHeaderColumnInterface<
+  public unlockedFreePracticeTableRowHeaders: MultiCheckBoxTableRowHeaderColumnInterface<
     EduContentTOCInterface
   >[];
   public classGroupColumns$: Observable<
@@ -29,28 +36,60 @@ export class PracticeMethodDetailComponent implements OnInit {
 
   constructor(private viewModel: PracticeViewModel) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.breadCrumbTitles$ = this.viewModel.bookTitle$;
+    this.book$ = this.viewModel.currentBook$;
+    this.unlockedFreePracticeTableRowHeaders = this.viewModel.unlockedFreePracticeTableRowHeaders;
+    this.classGroupColumns$ = this.viewModel.unlockedFreePracticeTableItemColumns$;
+    this.eduContentTOCsWithSelectionForClassGroups$ = this.viewModel.unlockedFreePracticeTableItems$;
+  }
 
-  clickFreePracticeForBook() {}
+  clickFreePracticeForBook(
+    event: MultiCheckBoxTableColumnChangeEventInterface<ClassGroupInterface>
+  ) {
+    this.book$.pipe(take(1)).subscribe(book => {
+      const unLockedFreePractice = this.createUnlockedFreePractice(
+        event.column.id, // classGroup
+        book.id
+      );
+
+      this.viewModel.toggleUnlockedFreePractice(
+        unLockedFreePractice,
+        event.isChecked
+      );
+    });
+  }
 
   clickFreePracticeForChapter(
-    event: MultiCheckBoxTableChangeEventInterface<
+    event: MultiCheckBoxTableItemChangeEventInterface<
       EduContentTOCInterface,
       ClassGroupInterface,
       undefined
     >
   ) {
-    if (event.previousCheckboxState) {
-      // if the checkbox becomes unchecked
-      this.viewModel.deleteUnLockedFreePracticeForEduContentTOCClassGroup(
-        event.item, // eduContentTOC
-        event.column // classgroup
+    this.book$.pipe(take(1)).subscribe(book => {
+      const unLockedFreePractice = this.createUnlockedFreePractice(
+        event.column.id, // classGroup
+        book.id,
+        event.item.id // eduContentTOC
       );
-    } else {
-      this.viewModel.addUnLockedFreePracticeForEduContentTOCClassGroup(
-        event.item, // eduContentTOC
-        event.column // classGroup
+
+      this.viewModel.toggleUnlockedFreePractice(
+        unLockedFreePractice,
+        event.isChecked
       );
-    }
+    });
+  }
+
+  private createUnlockedFreePractice(
+    classGroupId: number,
+    eduContentBookId: number,
+    eduContentTOCId: number = null
+  ): UnlockedFreePracticeInterface {
+    return {
+      eduContentBookId,
+      classGroupId,
+      eduContentTOCId
+    };
   }
 }
