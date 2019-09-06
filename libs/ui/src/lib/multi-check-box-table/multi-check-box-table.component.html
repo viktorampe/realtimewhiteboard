@@ -11,6 +11,23 @@
         >{{ columnHeader.item[columnHeader.label] }}</th
       ></tr
     >
+    <tr *ngIf="selectAllForColumnEnabled">
+      <th
+        [colSpan]="rowHeaderColumns.length"
+        class="ui-multi-check-box-table__header--row-header"
+        >Alle</th
+      >
+      <th *ngFor="let itemColumn of itemColumns">
+        <mat-checkbox
+          #selectAllForColumnCheckBox
+          campusClickPreventDefault
+          (click)="
+            clickSelectAllForColumn(itemColumn, selectAllForColumnCheckBox)
+          "
+          [checked]="itemColumn.isAllSelected"
+        ></mat-checkbox>
+      </th>
+    </tr>
   </thead>
   <tbody class="ui-multi-check-box-table__body">
     <ng-container *ngIf="subLevels">
@@ -89,7 +106,10 @@
           <mat-checkbox
             #checkbox
             color="primary"
-            [checked]="item.content[itemColumn.item[itemColumn.key]]"
+            [checked]="
+              item.content[itemColumn.item[itemColumn.key]] ||
+              itemColumn.isAllSelected
+            "
             campusClickPreventDefault
             (click)="
               clickCheckbox(
@@ -99,6 +119,7 @@
                 checkbox
               )
             "
+            [disabled]="itemColumn.isAllSelected"
           ></mat-checkbox>
         </td>
       </tr>
