@@ -317,24 +317,33 @@ describe('PracticeViewModel', () => {
   });
 
   describe('toggleUnlockedFreePractice()', () => {
-    const unlockedFreePractice = new UnlockedFreePracticeFixture();
+    const unlockedFreePractices: UnlockedFreePracticeInterface[] = [
+      new UnlockedFreePracticeFixture(),
+      new UnlockedFreePracticeFixture(),
+      new UnlockedFreePracticeFixture()
+    ];
+
     it('should dispatch AddUnlockedFreePractice when checkbox is on', () => {
       const spy = jest.spyOn(store, 'dispatch');
-      practiceViewModel.toggleUnlockedFreePractice(unlockedFreePractice, true);
+      practiceViewModel.toggleUnlockedFreePractice(unlockedFreePractices, true);
       expect(spy).toHaveBeenCalledTimes(1);
       expect(spy).toHaveBeenCalledWith(
-        new UnlockedFreePracticeActions.AddUnlockedFreePractice({
-          unlockedFreePractice: unlockedFreePractice
+        new UnlockedFreePracticeActions.StartAddManyUnlockedFreePractices({
+          unlockedFreePractices: unlockedFreePractices,
+          userId: userId
         })
       );
     });
     it('should dispatch DeleteUnlockedFreePractice when checkbox is off', () => {
       const spy = jest.spyOn(store, 'dispatch');
-      practiceViewModel.toggleUnlockedFreePractice(unlockedFreePractice, false);
+      practiceViewModel.toggleUnlockedFreePractice(
+        unlockedFreePractices,
+        false
+      );
       expect(spy).toHaveBeenCalledTimes(1);
       expect(spy).toHaveBeenCalledWith(
-        new UnlockedFreePracticeActions.DeleteUnlockedFreePractice({
-          id: unlockedFreePractice.id
+        new UnlockedFreePracticeActions.DeleteUnlockedFreePractices({
+          ids: unlockedFreePractices.map(ufp => ufp.id)
         })
       );
     });
