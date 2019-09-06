@@ -2,9 +2,11 @@ import { Injectable } from '@angular/core';
 import {
   ClassGroupFixture,
   ClassGroupInterface,
+  EduContentBookInterface,
   EduContentTOCFixture,
   EduContentTOCInterface,
-  MethodYearsInterface
+  MethodYearsInterface,
+  EduContentBookFixture
 } from '@campus/dal';
 import { ViewModelInterface } from '@campus/testing';
 import {
@@ -19,6 +21,9 @@ import { CurrentPracticeParams, PracticeViewModel } from './practice.viewmodel';
 })
 export class MockPracticeViewModel
   implements ViewModelInterface<PracticeViewModel> {
+  public currentBook$ = new BehaviorSubject<EduContentBookInterface>(
+    this.getBook()
+  );
   public methodYears$ = new BehaviorSubject<MethodYearsInterface[]>(
     this.getAllowedBooks$()
   );
@@ -139,5 +144,9 @@ export class MockPracticeViewModel
       new EduContentTOCFixture({ id: 2, title: 'Hoofdstuk 2' }),
       new EduContentTOCFixture({ id: 3, title: 'Hoofdstuk 3' })
     ];
+  }
+
+  private getBook() {
+    return new EduContentBookFixture();
   }
 }
