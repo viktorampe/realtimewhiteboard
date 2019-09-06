@@ -48,7 +48,7 @@ export class DemoPageComponent implements OnInit {
         item: new ClassGroupFixture({ id: 1, name: 'Klas 1A' }),
         key: 'id',
         label: 'name',
-        isTopLevelSelected: true
+        isAllSelected: true
       },
       {
         item: new ClassGroupFixture({ id: 2, name: 'Klas 1B' }),
@@ -63,7 +63,7 @@ export class DemoPageComponent implements OnInit {
 
     this.itemColumns.forEach(columnData => {
       if (columnData.item.id === data.column.id) {
-        columnData.isTopLevelSelected = data.isChecked;
+        columnData.isAllSelected = data.isChecked;
       }
     });
     this.itemColumns = [...this.itemColumns];

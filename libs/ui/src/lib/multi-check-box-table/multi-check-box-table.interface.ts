@@ -18,7 +18,7 @@ export interface MultiCheckBoxTableItemColumnInterface<ItemColumnType> {
   item: ItemColumnType; // classGroup
   key: PrimitivePropertiesKeys<ItemColumnType>; // property to use in ItemInterface.content
   label: PrimitivePropertiesKeys<ItemColumnType>; // property to show in header
-  isTopLevelSelected?: boolean;
+  isAllSelected?: boolean;
 }
 
 export interface MultiCheckBoxTableItemInterface<ItemType> {

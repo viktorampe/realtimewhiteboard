@@ -1,9 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatCheckbox, MatCheckboxModule, MatIcon, MatIconModule } from '@angular/material';
+import {
+  MatCheckbox,
+  MatCheckboxModule,
+  MatIcon,
+  MatIconModule
+} from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { configureTestSuite } from 'ng-bullet';
 import { MultiCheckBoxTableComponent } from './multi-check-box-table.component';
-import { MultiCheckBoxTableItemColumnInterface, MultiCheckBoxTableItemInterface, MultiCheckBoxTableRowHeaderColumnInterface, MultiCheckBoxTableSubLevelInterface } from './multi-check-box-table.interface';
+import {
+  MultiCheckBoxTableItemColumnInterface,
+  MultiCheckBoxTableItemInterface,
+  MultiCheckBoxTableRowHeaderColumnInterface,
+  MultiCheckBoxTableSubLevelInterface
+} from './multi-check-box-table.interface';
 
 describe('MultiCheckBoxTableComponent', () => {
   let component: MultiCheckBoxTableComponent<any, any, any>;
@@ -402,7 +412,7 @@ describe('MultiCheckBoxTableComponent', () => {
 
         beforeEach(() => {
           component.itemColumns = itemColumns;
-          component.itemColumns[selectedColumnIndex].isTopLevelSelected = true;
+          component.itemColumns[selectedColumnIndex].isAllSelected = true;
           component.items = [
             {
               header: { id: 1, goal: 'item1' },

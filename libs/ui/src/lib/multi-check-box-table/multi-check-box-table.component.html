@@ -24,7 +24,7 @@
           (click)="
             clickSelectAllForColumn(itemColumn, selectAllForColumnCheckBox)
           "
-          [checked]="itemColumn.isTopLevelSelected"
+          [checked]="itemColumn.isAllSelected"
         ></mat-checkbox>
       </th>
     </tr>
@@ -108,7 +108,7 @@
             color="primary"
             [checked]="
               item.content[itemColumn.item[itemColumn.key]] ||
-              itemColumn.isTopLevelSelected
+              itemColumn.isAllSelected
             "
             campusClickPreventDefault
             (click)="
@@ -119,7 +119,7 @@
                 checkbox
               )
             "
-            [disabled]="itemColumn.isTopLevelSelected"
+            [disabled]="itemColumn.isAllSelected"
           ></mat-checkbox>
         </td>
       </tr>
