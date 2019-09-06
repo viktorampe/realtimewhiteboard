@@ -258,7 +258,7 @@ export class PracticeViewModel {
       this.store.dispatch(
         new UnlockedFreePracticeActions.StartAddManyUnlockedFreePractices({
           userId: this.authService.userId,
-          unlockedFreePractices: unlockedFreePractices
+          unlockedFreePractices
         })
       );
     } else {
