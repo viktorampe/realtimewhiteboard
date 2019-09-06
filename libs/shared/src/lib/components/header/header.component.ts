@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Permissions } from '@campus/dal';
 import { map } from 'rxjs/operators';
 import { AlertToNotificationItemPipe } from '../../pipes/alert-to-notification/alert-to-notification-pipe';
@@ -14,6 +14,15 @@ export class HeaderComponent implements OnInit {
   Permissions = Permissions.settings;
 
   enableAlerts: boolean;
+
+  @Input()
+  breadcrumbPosition: 'top-left|page-left';
+  @Input()
+  profileMenuPosition: 'top-right';
+  @Input()
+  quicklinkPosition: 'page-right|top-right';
+  @Input()
+  alertsPosition: 'top-right';
 
   profileMenuItems$ = this.headerViewModel.profileMenuItems$;
   alertsLoaded$ = this.headerViewModel.alertsLoaded$;
