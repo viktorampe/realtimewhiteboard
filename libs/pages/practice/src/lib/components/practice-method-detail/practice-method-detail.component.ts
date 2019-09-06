@@ -69,18 +69,16 @@ export class PracticeMethodDetailComponent implements OnInit {
       undefined
     >
   ) {
-    this.book$.pipe(take(1)).subscribe(book => {
-      const unLockedFreePractice = this.createUnlockedFreePractice(
-        event.column.id, // classGroup
-        book.id,
-        event.item.id // eduContentTOC
-      );
+    const unLockedFreePractice = this.createUnlockedFreePractice(
+      event.column.id, // classGroup
+      event.item.treeId, // book id
+      event.item.id // eduContentTOC id
+    );
 
-      this.viewModel.toggleUnlockedFreePractice(
-        [unLockedFreePractice],
-        event.isChecked
-      );
-    });
+    this.viewModel.toggleUnlockedFreePractice(
+      [unLockedFreePractice],
+      event.isChecked
+    );
   }
 
   private createUnlockedFreePractice(
