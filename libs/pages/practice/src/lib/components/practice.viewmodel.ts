@@ -1,5 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import {
+  AuthServiceInterface,
+  AUTH_SERVICE_TOKEN,
   ClassGroupInterface,
   ClassGroupQueries,
   DalState,
@@ -11,6 +13,7 @@ import {
   MethodQueries,
   MethodYearsInterface,
   RouterStateUrl,
+  UnlockedFreePracticeActions,
   UnlockedFreePracticeInterface,
   UnlockedFreePracticeQueries
 } from '@campus/dal';
@@ -31,11 +34,9 @@ import {
   shareReplay,
   switchMap
 } from 'rxjs/operators';
-
 export interface CurrentPracticeParams {
   book?: number;
 }
-
 @Injectable({
   providedIn: 'root'
 })
@@ -65,7 +66,10 @@ export class PracticeViewModel {
     Dictionary<UnlockedFreePracticeInterface[]>
   >;
 
-  constructor(private store: Store<DalState>) {
+  constructor(
+    private store: Store<DalState>,
+    @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface
+  ) {
     this.initialize();
   }
 
@@ -244,5 +248,25 @@ export class PracticeViewModel {
           numeric: true
         });
       });
+  }
+
+  public toggleUnlockedFreePractice(
+    unlockedFreePractices: UnlockedFreePracticeInterface[],
+    checked: boolean
+  ): void {
+    if (checked) {
+      this.store.dispatch(
+        new UnlockedFreePracticeActions.StartAddManyUnlockedFreePractices({
+          userId: this.authService.userId,
+          unlockedFreePractices
+        })
+      );
+    } else {
+      this.store.dispatch(
+        new UnlockedFreePracticeActions.DeleteUnlockedFreePractices({
+          ids: unlockedFreePractices.map(ufp => ufp.id)
+        })
+      );
+    }
   }
 }

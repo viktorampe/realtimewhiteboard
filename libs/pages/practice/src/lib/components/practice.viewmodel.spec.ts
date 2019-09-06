@@ -15,6 +15,7 @@ import {
   EduContentTocQueries,
   getStoreModuleForFeatures,
   MethodQueries,
+  UnlockedFreePracticeActions,
   UnlockedFreePracticeFixture,
   UnlockedFreePracticeInterface,
   UnlockedFreePracticeQueries
@@ -312,6 +313,39 @@ describe('PracticeViewModel', () => {
           ).toBeObservable(hot('a', { a: expected }));
         });
       });
+    });
+  });
+
+  describe('toggleUnlockedFreePractice()', () => {
+    const unlockedFreePractices: UnlockedFreePracticeInterface[] = [
+      new UnlockedFreePracticeFixture(),
+      new UnlockedFreePracticeFixture(),
+      new UnlockedFreePracticeFixture()
+    ];
+
+    it('should dispatch StartAddManyUnlockedFreePractices when checkbox is on', () => {
+      const spy = jest.spyOn(store, 'dispatch');
+      practiceViewModel.toggleUnlockedFreePractice(unlockedFreePractices, true);
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy).toHaveBeenCalledWith(
+        new UnlockedFreePracticeActions.StartAddManyUnlockedFreePractices({
+          unlockedFreePractices: unlockedFreePractices,
+          userId: userId
+        })
+      );
+    });
+    it('should dispatch DeleteUnlockedFreePractices when checkbox is off', () => {
+      const spy = jest.spyOn(store, 'dispatch');
+      practiceViewModel.toggleUnlockedFreePractice(
+        unlockedFreePractices,
+        false
+      );
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy).toHaveBeenCalledWith(
+        new UnlockedFreePracticeActions.DeleteUnlockedFreePractices({
+          ids: unlockedFreePractices.map(ufp => ufp.id)
+        })
+      );
     });
   });
 
