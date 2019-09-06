@@ -1,13 +1,15 @@
 import { Inject, Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
 import { DataPersistence } from '@nrwl/nx';
-import { map } from 'rxjs/operators';
+import { from } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
 import { DalState } from '..';
 import {
   UnlockedFreePracticeServiceInterface,
   UNLOCKED_FREE_PRACTICE_SERVICE_TOKEN
 } from '../../unlocked-free-practice/unlocked-free-practice.service.interface';
 import { EffectFeedback, EffectFeedbackActions } from '../effect-feedback';
+import { AddEffectFeedback } from '../effect-feedback/effect-feedback.actions';
 import {
   AddUnlockedFreePractices,
   LoadUnlockedFreePractices,
@@ -51,12 +53,20 @@ export class UnlockedFreePracticeEffects {
             action.payload.unlockedFreePractices
           )
           .pipe(
-            map(
-              unlockedFreePractices =>
+            switchMap(unlockedFreePractices => {
+              return from([
                 new AddUnlockedFreePractices({
                   unlockedFreePractices
+                }),
+                new AddEffectFeedback({
+                  effectFeedback: new EffectFeedback({
+                    id: this.uuid(),
+                    triggerAction: action,
+                    message: "De 'vrij oefenen' status werd gewijzigd."
+                  })
                 })
-            )
+              ]);
+            })
           );
       },
       onError: (action: StartAddManyUnlockedFreePractices, error) => {

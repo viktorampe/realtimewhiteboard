@@ -243,6 +243,14 @@ describe('UnlockedFreePracticeEffects', () => {
         return Object.assign(ufp, { id: index + 1 });
       });
 
+      const feedbackAction = new EffectFeedbackActions.AddEffectFeedback({
+        effectFeedback: new EffectFeedback({
+          id: uuid,
+          triggerAction: startAddAction,
+          message: "De 'vrij oefenen' status werd gewijzigd."
+        })
+      });
+
       jest
         .spyOn(unlockedFreePracticeService, 'createUnlockedFreePractices')
         .mockReturnValue(of(returnedValues));
@@ -250,10 +258,11 @@ describe('UnlockedFreePracticeEffects', () => {
       actions = hot('a', { a: startAddAction });
 
       expect(effects.startAddManyUnlockedFreePractices$).toBeObservable(
-        cold('a', {
+        cold('(ab)', {
           a: new AddUnlockedFreePractices({
             unlockedFreePractices: returnedValues
-          })
+          }),
+          b: feedbackAction
         })
       );
 
