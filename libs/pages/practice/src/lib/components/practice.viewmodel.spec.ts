@@ -334,7 +334,7 @@ describe('PracticeViewModel', () => {
         })
       );
     });
-    it('should dispatch DeleteUnlockedFreePractice when checkbox is off', () => {
+    it('should dispatch DeleteUnlockedFreePractices when checkbox is off', () => {
       const spy = jest.spyOn(store, 'dispatch');
       practiceViewModel.toggleUnlockedFreePractice(
         unlockedFreePractices,
