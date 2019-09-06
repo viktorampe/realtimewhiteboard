@@ -402,77 +402,65 @@ describe('MultiCheckBoxTableComponent', () => {
          *          X         0
          *        klas 1    klas 2
          * item 1   X         0
-         * item 2   X         0
-         * item 3   X         0
+         * item 2   X         X
+         * item 3   X         X
          */
         let bodyCheckBoxes;
         let topLevelCheckBoxes;
-        let checkBoxesByColumn;
         const selectedColumnIndex = 0;
 
         beforeEach(() => {
           component.itemColumns = itemColumns;
           component.itemColumns[selectedColumnIndex].isAllSelected = true;
-          component.items = [
-            {
-              header: { id: 1, goal: 'item1' },
-              content: {}
-            },
-            {
-              header: { id: 2, goal: 'item2' },
-              content: {}
-            },
-            {
-              header: { id: 3, goal: 'item3' },
-              content: {}
-            }
-          ];
+          component.items = items;
 
           fixture.detectChanges();
 
-          const allCheckBoxes = fixture.debugElement.queryAll(
-            By.directive(MatCheckbox)
-          );
+          topLevelCheckBoxes = fixture.debugElement
+            .query(By.css('.ui-multi-check-box-table__header'))
+            .queryAll(By.directive(MatCheckbox));
 
-          topLevelCheckBoxes = allCheckBoxes.splice(0, itemColumns.length);
-          bodyCheckBoxes = allCheckBoxes;
-
-          const numColumns = component.itemColumns.length;
-          checkBoxesByColumn = bodyCheckBoxes.reduce((acc, checkBox, index) => {
-            const x = index % numColumns;
-
-            if (!acc[x]) acc[x] = [];
-            acc[x].push(index);
-
-            return acc;
-          }, {});
+          bodyCheckBoxes = fixture.debugElement
+            .queryAll(
+              By.css('.ui-multi-check-box-table__body__row__cell--checkbox')
+            )
+            .map(bodyRow => bodyRow.query(By.directive(MatCheckbox)));
         });
 
         it('should reflect the select all for column selection state', () => {
-          topLevelCheckBoxes.forEach((checkbox, index) => {
-            expect(!!topLevelCheckBoxes[index].componentInstance.checked).toBe(
-              selectedColumnIndex === index
+          for (let i = 0; i < topLevelCheckBoxes.length; i++) {
+            expect(!!topLevelCheckBoxes[i].componentInstance.checked).toBe(
+              selectedColumnIndex === i
             );
-          });
+          }
         });
 
         it('should select and disable all items when selectAllForColumn is clicked', () => {
           // all checkboxes in first column 1 should be disabled & checked
-          const expectedCheckedValues = bodyCheckBoxes.map(
-            (checkBox, index) => {
-              return checkBoxesByColumn[selectedColumnIndex].includes(index);
-            }
-          );
-
           const checkBoxCheckedStates = bodyCheckBoxes.map(
             checkBox => !!checkBox.componentInstance.checked
           );
+          // none of the checkboxes of column 2 should be disabled
           const checkBoxDisabledStates = bodyCheckBoxes.map(
             checkBox => !!checkBox.componentInstance.disabled
           );
 
-          expect(checkBoxCheckedStates).toEqual(expectedCheckedValues);
-          expect(checkBoxDisabledStates).toEqual(expectedCheckedValues);
+          expect(checkBoxCheckedStates).toEqual([
+            true,
+            false,
+            true,
+            true,
+            true,
+            true
+          ]);
+          expect(checkBoxDisabledStates).toEqual([
+            true,
+            false,
+            true,
+            false,
+            true,
+            false
+          ]);
         });
       });
     });
