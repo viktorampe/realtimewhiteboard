@@ -86,7 +86,7 @@ export class MultiCheckBoxTableComponent<
   ) {
     // emit event: for this column item, all row items are selected/deselected
     this.selectAllForColumnChanged.emit({
-      itemColumn: itemColumn.item,
+      column: itemColumn.item,
       isChecked: !checkBox.checked
     });
   }

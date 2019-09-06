@@ -40,6 +40,6 @@ export interface MultiCheckBoxTableItemChangeEventInterface<
 }
 
 export interface MultiCheckBoxTableColumnChangeEventInterface<ItemColumnType> {
-  itemColumn: ItemColumnType;
+  column: ItemColumnType;
   isChecked: boolean;
 }

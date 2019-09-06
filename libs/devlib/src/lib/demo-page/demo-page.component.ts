@@ -62,7 +62,7 @@ export class DemoPageComponent implements OnInit {
     console.log(data);
 
     this.itemColumns.forEach(columnData => {
-      if (columnData.item.id === data.itemColumn.id) {
+      if (columnData.item.id === data.column.id) {
         columnData.isTopLevelSelected = data.isChecked;
       }
     });
