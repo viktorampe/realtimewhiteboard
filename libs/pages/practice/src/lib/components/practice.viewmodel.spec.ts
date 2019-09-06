@@ -323,7 +323,7 @@ describe('PracticeViewModel', () => {
       new UnlockedFreePracticeFixture()
     ];
 
-    it('should dispatch AddUnlockedFreePractice when checkbox is on', () => {
+    it('should dispatch StartAddManyUnlockedFreePractices when checkbox is on', () => {
       const spy = jest.spyOn(store, 'dispatch');
       practiceViewModel.toggleUnlockedFreePractice(unlockedFreePractices, true);
       expect(spy).toHaveBeenCalledTimes(1);
