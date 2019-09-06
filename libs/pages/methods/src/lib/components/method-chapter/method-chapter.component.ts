@@ -21,7 +21,7 @@ import {
   SearchStateInterface
 } from '@campus/search';
 import {
-  MultiCheckBoxTableChangeEventInterface,
+  MultiCheckBoxTableItemChangeEventInterface,
   MultiCheckBoxTableItemColumnInterface,
   MultiCheckBoxTableRowHeaderColumnInterface,
   MultiCheckBoxTableSubLevelInterface
@@ -154,7 +154,7 @@ export class MethodChapterComponent implements OnInit, AfterViewInit {
   }
 
   public checkBoxChanged(
-    event: MultiCheckBoxTableChangeEventInterface<
+    event: MultiCheckBoxTableItemChangeEventInterface<
       LearningPlanGoalInterface,
       ClassGroupInterface,
       EduContentTOCInterface
@@ -172,7 +172,7 @@ export class MethodChapterComponent implements OnInit, AfterViewInit {
   }
 
   public checkBoxesChanged(
-    events: MultiCheckBoxTableChangeEventInterface<
+    events: MultiCheckBoxTableItemChangeEventInterface<
       LearningPlanGoalInterface,
       ClassGroupInterface,
       EduContentTOCInterface

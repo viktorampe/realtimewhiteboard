@@ -18,6 +18,7 @@ export interface MultiCheckBoxTableItemColumnInterface<ItemColumnType> {
   item: ItemColumnType; // classGroup
   key: PrimitivePropertiesKeys<ItemColumnType>; // property to use in ItemInterface.content
   label: PrimitivePropertiesKeys<ItemColumnType>; // property to show in header
+  isAllSelected?: boolean;
 }
 
 export interface MultiCheckBoxTableItemInterface<ItemType> {
@@ -27,7 +28,7 @@ export interface MultiCheckBoxTableItemInterface<ItemType> {
   };
 }
 
-export interface MultiCheckBoxTableChangeEventInterface<
+export interface MultiCheckBoxTableItemChangeEventInterface<
   ItemType,
   ItemColumnType,
   SubLevelItemType
@@ -35,5 +36,10 @@ export interface MultiCheckBoxTableChangeEventInterface<
   column: ItemColumnType;
   item: ItemType;
   subLevel: SubLevelItemType;
-  previousCheckboxState?: boolean;
+  isChecked?: boolean;
+}
+
+export interface MultiCheckBoxTableColumnChangeEventInterface<ItemColumnType> {
+  column: ItemColumnType;
+  isChecked: boolean;
 }

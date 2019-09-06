@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { DemoPageComponent } from './demo-page/demo-page.component';
 import { LoginpageComponent } from './loginpage/loginpage.component';
 
 const routes: Routes = [
@@ -11,6 +12,11 @@ const routes: Routes = [
     path: 'login',
     component: LoginpageComponent,
     data: { breadcrumbText: 'Login' }
+  },
+  {
+    path: 'demo',
+    component: DemoPageComponent,
+    data: { breadcrumbText: 'demo' }
   },
   {
     path: '',

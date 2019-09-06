@@ -1,0 +1,9 @@
+<div class="container">
+  <campus-multi-check-box-table
+    selectAllForColumnEnabled="true"
+    [rowHeaderColumns]="rowHeaderColumns"
+    [itemColumns]="itemColumns"
+    [items]="items"
+    (selectAllForColumnChanged)="log($event)"
+  ></campus-multi-check-box-table>
+</div>
