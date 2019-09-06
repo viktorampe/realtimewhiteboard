@@ -8,6 +8,7 @@ import { UiModule } from '@campus/ui';
 import { DevlibRoutingModule } from './devlib.routing.module';
 import { LoginpageComponent } from './loginpage/loginpage.component';
 import { LoginPageViewModel } from './loginpage/loginpage.viewmodel';
+import { DemoPageComponent } from './demo-page/demo-page.component';
 
 @NgModule({
   imports: [
@@ -20,7 +21,7 @@ import { LoginPageViewModel } from './loginpage/loginpage.viewmodel';
     SearchModule
   ],
   providers: [LoginPageViewModel],
-  declarations: [LoginpageComponent],
+  declarations: [LoginpageComponent, DemoPageComponent],
   exports: [],
   entryComponents: []
 })

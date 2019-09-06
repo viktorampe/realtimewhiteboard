@@ -31,7 +31,7 @@ import {
   SharedModule
 } from '@campus/shared';
 import {
-  MultiCheckBoxTableChangeEventInterface,
+  MultiCheckBoxTableItemChangeEventInterface,
   MultiCheckBoxTableItemColumnInterface,
   UiModule
 } from '@campus/ui';
@@ -299,7 +299,7 @@ describe('MethodChapterComponent', () => {
           column: new ClassGroupFixture({ id: 1 }),
           item: new LearningPlanGoalFixture({ id: 2 }),
           subLevel: new EduContentTOCFixture({ id: 3 })
-        } as MultiCheckBoxTableChangeEventInterface<
+        } as MultiCheckBoxTableItemChangeEventInterface<
           LearningPlanGoalInterface,
           ClassGroupInterface,
           EduContentTOCInterface
@@ -343,7 +343,7 @@ describe('MethodChapterComponent', () => {
             item: new LearningPlanGoalFixture({ id: 3 }),
             subLevel
           }
-        ] as MultiCheckBoxTableChangeEventInterface<
+        ] as MultiCheckBoxTableItemChangeEventInterface<
           LearningPlanGoalInterface,
           ClassGroupInterface,
           EduContentTOCInterface

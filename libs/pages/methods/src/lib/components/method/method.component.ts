@@ -10,7 +10,7 @@ import {
   MethodInterface
 } from '@campus/dal';
 import {
-  MultiCheckBoxTableChangeEventInterface,
+  MultiCheckBoxTableItemChangeEventInterface,
   MultiCheckBoxTableItemColumnInterface,
   MultiCheckBoxTableItemInterface,
   MultiCheckBoxTableRowHeaderColumnInterface
@@ -96,22 +96,22 @@ export class MethodComponent implements OnInit {
   }
 
   public clickProgress(
-    event: MultiCheckBoxTableChangeEventInterface<
+    event: MultiCheckBoxTableItemChangeEventInterface<
       LearningPlanGoalInterface,
       ClassGroupInterface,
       EduContentTOCInterface
     >
   ) {
-    if (event.previousCheckboxState) {
-      // if the checkbox becomes unchecked
-      this.viewModel.deleteLearningPlanGoalProgressForLearningPlanGoalsClassGroups(
-        event.item,
-        event.column
-      );
-    } else {
+    if (event.isChecked) {
+      // if the checkbox is checked
       this.viewModel.openLearningPlanGoalProgressManagementDialog(
         event.item, // lpg
         event.column // classGroup
+      );
+    } else {
+      this.viewModel.deleteLearningPlanGoalProgressForLearningPlanGoalsClassGroups(
+        event.item,
+        event.column
       );
     }
   }
