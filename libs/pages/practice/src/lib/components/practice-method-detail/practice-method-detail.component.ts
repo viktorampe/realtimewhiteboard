@@ -6,6 +6,8 @@ import {
   UnlockedFreePracticeInterface
 } from '@campus/dal';
 import {
+  MultiCheckBoxTableColumnChangeEventInterface,
+  MultiCheckBoxTableItemChangeEventInterface,
   MultiCheckBoxTableItemColumnInterface,
   MultiCheckBoxTableItemInterface,
   MultiCheckBoxTableRowHeaderColumnInterface
@@ -54,7 +56,7 @@ export class PracticeMethodDetailComponent implements OnInit {
       );
 
       this.viewModel.toggleUnlockedFreePractice(
-        unLockedFreePractice,
+        [unLockedFreePractice],
         event.isChecked
       );
     });
@@ -75,7 +77,7 @@ export class PracticeMethodDetailComponent implements OnInit {
       );
 
       this.viewModel.toggleUnlockedFreePractice(
-        unLockedFreePractice,
+        [unLockedFreePractice],
         event.isChecked
       );
     });
