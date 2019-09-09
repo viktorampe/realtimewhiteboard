@@ -1,14 +1,18 @@
 import { Inject, Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
 import { DataPersistence } from '@nrwl/nx';
-import { map } from 'rxjs/operators';
+import { from } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
 import { DalState } from '..';
 import {
   UnlockedFreePracticeServiceInterface,
   UNLOCKED_FREE_PRACTICE_SERVICE_TOKEN
 } from '../../unlocked-free-practice/unlocked-free-practice.service.interface';
+import { EffectFeedback, EffectFeedbackActions } from '../effect-feedback';
+import { AddEffectFeedback } from '../effect-feedback/effect-feedback.actions';
 import {
   LoadUnlockedFreePractices,
+  StartAddManyUnlockedFreePractices,
   UnlockedFreePracticesActionTypes,
   UnlockedFreePracticesLoaded,
   UnlockedFreePracticesLoadError
@@ -37,9 +41,52 @@ export class UnlockedFreePracticeEffects {
     }
   );
 
+  @Effect()
+  startAddManyUnlockedFreePractices$ = this.dataPersistence.pessimisticUpdate(
+    UnlockedFreePracticesActionTypes.StartAddManyUnlockedFreePractices,
+    {
+      run: (action: StartAddManyUnlockedFreePractices, state: DalState) => {
+        return this.unlockedFreePracticeService
+          .createUnlockedFreePractices(
+            action.payload.userId,
+            action.payload.unlockedFreePractices
+          )
+          .pipe(
+            switchMap(unlockedFreePractices => {
+              return from([
+                new LoadUnlockedFreePractices({
+                  force: true,
+                  userId: action.payload.userId
+                }),
+                new AddEffectFeedback({
+                  effectFeedback: new EffectFeedback({
+                    id: this.uuid(),
+                    triggerAction: action,
+                    message: "De 'vrij oefenen' status werd gewijzigd."
+                  })
+                })
+              ]);
+            })
+          );
+      },
+      onError: (action: StartAddManyUnlockedFreePractices, error) => {
+        const effectFeedback = EffectFeedback.generateErrorFeedback(
+          this.uuid(),
+          action,
+          "Het is niet gelukt om de 'vrij oefenen' status van het hoofdstuk aan te passen."
+        );
+        const effectFeedbackAction = new EffectFeedbackActions.AddEffectFeedback(
+          { effectFeedback }
+        );
+        return effectFeedbackAction;
+      }
+    }
+  );
+
   constructor(
     private actions: Actions,
     private dataPersistence: DataPersistence<DalState>,
+    @Inject('uuid') private uuid: Function,
     @Inject(UNLOCKED_FREE_PRACTICE_SERVICE_TOKEN)
     private unlockedFreePracticeService: UnlockedFreePracticeServiceInterface
   ) {}
