@@ -5,6 +5,7 @@ import { provideMockActions } from '@ngrx/effects/testing';
 import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
 import { cold, hot } from '@nrwl/nx/testing';
+import { undo } from 'ngrx-undo';
 import { Observable, of } from 'rxjs';
 import { UnlockedFreePracticeReducer } from '.';
 import { UnlockedFreePracticeFixture } from '../../+fixtures';
@@ -17,7 +18,9 @@ import {
   EffectFeedbackActions,
   Priority
 } from '../effect-feedback';
+import { AddEffectFeedback } from '../effect-feedback/effect-feedback.actions';
 import {
+  DeleteUnlockedFreePractices,
   LoadUnlockedFreePractices,
   StartAddManyUnlockedFreePractices,
   UnlockedFreePracticesLoaded,
@@ -29,9 +32,8 @@ describe('UnlockedFreePracticeEffects', () => {
   let actions: Observable<any>;
   let effects: UnlockedFreePracticeEffects;
   let usedState: any;
+  let uuid: Function;
   let mockDate: MockDate;
-
-  const uuid = 'foo';
 
   const expectInAndOut = (
     effect: Observable<any>,
@@ -94,15 +96,16 @@ describe('UnlockedFreePracticeEffects', () => {
       ],
       providers: [
         {
-          provide: 'uuid',
-          useValue: () => uuid
-        },
-        {
           provide: UNLOCKED_FREE_PRACTICE_SERVICE_TOKEN,
           useValue: {
             getAllForUser: () => {},
+            deleteUnlockedFreePractices: () => {},
             createUnlockedFreePractices: () => {}
           }
+        },
+        {
+          provide: 'uuid',
+          useValue: (): string => 'foo'
         },
         UnlockedFreePracticeEffects,
         DataPersistence,
@@ -111,6 +114,7 @@ describe('UnlockedFreePracticeEffects', () => {
     });
 
     effects = TestBed.get(UnlockedFreePracticeEffects);
+    uuid = TestBed.get('uuid');
   });
 
   describe('loadUnlockedFreePractice$', () => {
@@ -214,10 +218,73 @@ describe('UnlockedFreePracticeEffects', () => {
     });
   });
 
-  describe('startAddLearningPlanGoalProgresses', () => {
-    const userId = 1;
-
+  describe('deleteUnlockedFreePractices$', () => {
     let unlockedFreePracticeService: UnlockedFreePracticeServiceInterface;
+
+    beforeEach(() => {
+      unlockedFreePracticeService = TestBed.get(
+        UNLOCKED_FREE_PRACTICE_SERVICE_TOKEN
+      );
+    });
+
+    it('should call service.deleteUnlockedFreePractices and return an addFeedbackAction if no error occured', () => {
+      const ids = [1];
+      const userId = 1;
+      const deleteAction = new DeleteUnlockedFreePractices({
+        ids,
+        userId
+      });
+      const addFeedbackAction = new AddEffectFeedback({
+        effectFeedback: new EffectFeedback({
+          id: uuid(),
+          triggerAction: deleteAction,
+          message: "De 'vrij oefenen' status werd gewijzigd."
+        })
+      });
+      const spy = jest
+        .spyOn(unlockedFreePracticeService, 'deleteUnlockedFreePractices')
+        .mockReturnValue(of(true));
+
+      expectInAndOut(
+        effects.deleteUnlockedFreePractices$,
+        deleteAction,
+        addFeedbackAction
+      );
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy).toHaveBeenCalledWith(userId, ids);
+    });
+
+    it('should return an undoAction and a feedbackAction if an error occured', () => {
+      const ids = [1];
+      const userId = 1;
+      const deleteAction = new DeleteUnlockedFreePractices({ ids, userId });
+      const spy = jest
+        .spyOn(unlockedFreePracticeService, 'deleteUnlockedFreePractices')
+        .mockImplementation(() => {
+          throw Error('some error');
+        });
+      const feedbackAction = new EffectFeedbackActions.AddEffectFeedback({
+        effectFeedback: EffectFeedback.generateErrorFeedback(
+          uuid(),
+          deleteAction,
+          "Het is niet gelukt om de 'vrij oefenen' status aan te passen."
+        )
+      });
+
+      actions = hot('-a', { a: deleteAction });
+      expect(effects.deleteUnlockedFreePractices$).toBeObservable(
+        hot('-(ab)', {
+          a: undo(deleteAction),
+          b: feedbackAction
+        })
+      );
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('startAddLearningPlanGoalProgresses', () => {
+    let unlockedFreePracticeService: UnlockedFreePracticeServiceInterface;
+    const userId = 1;
 
     beforeEach(() => {
       unlockedFreePracticeService = TestBed.get(
@@ -244,7 +311,7 @@ describe('UnlockedFreePracticeEffects', () => {
 
       const feedbackAction = new EffectFeedbackActions.AddEffectFeedback({
         effectFeedback: new EffectFeedback({
-          id: uuid,
+          id: uuid(),
           triggerAction: startAddAction,
           message: "De 'vrij oefenen' status werd gewijzigd."
         })
@@ -287,7 +354,7 @@ describe('UnlockedFreePracticeEffects', () => {
 
       const feedbackAction = new EffectFeedbackActions.AddEffectFeedback({
         effectFeedback: new EffectFeedback({
-          id: uuid,
+          id: uuid(),
           triggerAction: startAddAction,
           message:
             "Het is niet gelukt om de 'vrij oefenen' status van het hoofdstuk aan te passen.",

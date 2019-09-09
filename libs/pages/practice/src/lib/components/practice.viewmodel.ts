@@ -65,6 +65,9 @@ export class PracticeViewModel {
   private unlockedFreePracticeByEduContentTOCId$: Observable<
     Dictionary<UnlockedFreePracticeInterface[]>
   >;
+  private unlockedFreePracticeByEduContentBookId$: Observable<
+    Dictionary<UnlockedFreePracticeInterface[]>
+  >;
 
   constructor(
     private store: Store<DalState>,
@@ -85,6 +88,9 @@ export class PracticeViewModel {
     this.currentBook$ = this.getCurrentBookStream();
     this.unlockedFreePracticeByEduContentTOCId$ = this.store.pipe(
       select(UnlockedFreePracticeQueries.getGroupedByEduContentTOCId)
+    );
+    this.unlockedFreePracticeByEduContentBookId$ = this.store.pipe(
+      select(UnlockedFreePracticeQueries.getGroupedByEduContentBookId)
     );
   }
 
@@ -189,17 +195,39 @@ export class PracticeViewModel {
   private getPracticeTableItemColumnsStream(): Observable<
     MultiCheckBoxTableItemColumnInterface<ClassGroupInterface>[]
   > {
-    return this.filteredClassGroups$.pipe(
-      map(classGroups =>
-        classGroups.map(
+    return combineLatest([
+      this.filteredClassGroups$,
+      this.unlockedFreePracticeByEduContentBookId$,
+      this.currentBook$
+    ]).pipe(
+      map(([filteredClassGroups, ufpByBookId, currentBook]) => {
+        return filteredClassGroups.map(
           (
             classGroup
           ): MultiCheckBoxTableItemColumnInterface<ClassGroupInterface> => ({
             item: classGroup,
             key: 'id',
-            label: 'name'
+            label: 'name',
+            isAllSelected: this.isAllSelectedForClassGroup(
+              currentBook.id,
+              ufpByBookId,
+              classGroup
+            )
           })
-        )
+        );
+      })
+    );
+  }
+
+  private isAllSelectedForClassGroup(
+    currentBookId: number,
+    unlockedFreePracticeByBookId: Dictionary<UnlockedFreePracticeInterface[]>,
+    classGroup: ClassGroupInterface
+  ): boolean {
+    return (
+      unlockedFreePracticeByBookId[currentBookId] &&
+      unlockedFreePracticeByBookId[currentBookId].some(
+        item => !item.eduContentTOCId && item.classGroupId === classGroup.id
       )
     );
   }
@@ -264,6 +292,7 @@ export class PracticeViewModel {
     } else {
       this.store.dispatch(
         new UnlockedFreePracticeActions.DeleteUnlockedFreePractices({
+          userId: this.authService.userId,
           ids: unlockedFreePractices.map(ufp => ufp.id)
         })
       );

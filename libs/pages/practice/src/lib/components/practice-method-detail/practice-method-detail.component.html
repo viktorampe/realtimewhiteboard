@@ -1,0 +1,15 @@
+<div class="pages-practice-method-detail__container">
+  <p
+    >Duid aan welke hoofdstukken leerlingen mogen oefenen voor
+    {{ breadCrumbTitles$ | async }}</p
+  >
+
+  <campus-multi-check-box-table
+    selectAllForColumnEnabled="true"
+    [rowHeaderColumns]="unlockedFreePracticeTableRowHeaders"
+    [itemColumns]="classGroupColumns$ | async"
+    [items]="eduContentTOCsWithSelectionForClassGroups$ | async"
+    (checkBoxChanged)="clickFreePracticeForChapter($event)"
+    (selectAllForColumnChanged)="clickFreePracticeForBook($event)"
+  ></campus-multi-check-box-table>
+</div>
