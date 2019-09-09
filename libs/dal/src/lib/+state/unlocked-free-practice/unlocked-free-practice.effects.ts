@@ -11,7 +11,6 @@ import {
 import { EffectFeedback, EffectFeedbackActions } from '../effect-feedback';
 import { AddEffectFeedback } from '../effect-feedback/effect-feedback.actions';
 import {
-  AddUnlockedFreePractices,
   LoadUnlockedFreePractices,
   StartAddManyUnlockedFreePractices,
   UnlockedFreePracticesActionTypes,
@@ -55,8 +54,9 @@ export class UnlockedFreePracticeEffects {
           .pipe(
             switchMap(unlockedFreePractices => {
               return from([
-                new AddUnlockedFreePractices({
-                  unlockedFreePractices
+                new LoadUnlockedFreePractices({
+                  force: true,
+                  userId: action.payload.userId
                 }),
                 new AddEffectFeedback({
                   effectFeedback: new EffectFeedback({

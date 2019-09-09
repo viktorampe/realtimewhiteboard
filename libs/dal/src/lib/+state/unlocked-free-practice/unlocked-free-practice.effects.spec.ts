@@ -18,7 +18,6 @@ import {
   Priority
 } from '../effect-feedback';
 import {
-  AddUnlockedFreePractices,
   LoadUnlockedFreePractices,
   StartAddManyUnlockedFreePractices,
   UnlockedFreePracticesLoaded,
@@ -259,8 +258,9 @@ describe('UnlockedFreePracticeEffects', () => {
 
       expect(effects.startAddManyUnlockedFreePractices$).toBeObservable(
         cold('(ab)', {
-          a: new AddUnlockedFreePractices({
-            unlockedFreePractices: returnedValues
+          a: new LoadUnlockedFreePractices({
+            userId,
+            force: true
           }),
           b: feedbackAction
         })
