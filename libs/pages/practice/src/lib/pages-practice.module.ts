@@ -6,7 +6,6 @@ import { SharedModule } from '@campus/shared';
 import { UiModule } from '@campus/ui';
 import { PracticeMethodDetailComponent } from './components/practice-method-detail/practice-method-detail.component';
 import { PracticeOverviewComponent } from './components/practice-overview/practice-overview.component';
-import { PracticeComponent } from './components/practice.component';
 import { PracticeViewModel } from './components/practice.viewmodel';
 import { PagesPracticeRoutingModule } from './pages-practice-routing.module';
 @NgModule({
@@ -18,11 +17,7 @@ import { PagesPracticeRoutingModule } from './pages-practice-routing.module';
     SharedModule,
     GuardsModule
   ],
-  declarations: [
-    PracticeOverviewComponent,
-    PracticeComponent,
-    PracticeMethodDetailComponent
-  ],
+  declarations: [PracticeOverviewComponent, PracticeMethodDetailComponent],
   providers: [PracticeViewModel],
   exports: []
 })
