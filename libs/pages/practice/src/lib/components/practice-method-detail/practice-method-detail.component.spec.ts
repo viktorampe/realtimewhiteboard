@@ -1,4 +1,3 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import {
@@ -10,27 +9,15 @@ import {
 } from '@campus/dal';
 import {
   MultiCheckBoxTableColumnChangeEventInterface,
-  MultiCheckBoxTableItemChangeEventInterface
+  MultiCheckBoxTableComponent,
+  MultiCheckBoxTableItemChangeEventInterface,
+  UiModule
 } from '@campus/ui';
 import { EduContentBookInterface } from '@diekeure/polpo-api-angular-sdk';
 import { configureTestSuite } from 'ng-bullet';
 import { PracticeViewModel } from '../practice.viewmodel';
 import { MockPracticeViewModel } from '../practice.viewmodel.mock';
 import { PracticeMethodDetailComponent } from './practice-method-detail.component';
-
-@Component({
-  selector: 'campus-multi-check-box-table',
-  template: `
-    <div>I am a mock multiCheckboxTable</div>
-  `
-})
-export class MockMultiCheckBoxTableComponent {
-  @Input() rowHeaderColumns: any;
-  @Input() itemColumns: any;
-  @Input() items: any;
-  @Output() selectAllForColumnChanged = new EventEmitter();
-  @Output() checkBoxChanged = new EventEmitter();
-}
 
 describe('PracticeMethodDetailComponent', () => {
   let component: PracticeMethodDetailComponent;
@@ -41,18 +28,15 @@ describe('PracticeMethodDetailComponent', () => {
   });
   const mockEduContentTOC = new EduContentTOCFixture({ id: 2, treeId: 4 });
   const mockClassGroup = new ClassGroupFixture({ id: 5 });
-  let multiCheckboxTable: MockMultiCheckBoxTableComponent;
+  let multiCheckboxTable: MultiCheckBoxTableComponent<any, any, any>;
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        PracticeMethodDetailComponent,
-        MockMultiCheckBoxTableComponent
-      ],
+      declarations: [PracticeMethodDetailComponent],
       providers: [
         { provide: PracticeViewModel, useClass: MockPracticeViewModel }
       ],
-      imports: []
+      imports: [UiModule]
     }).compileComponents();
   });
 
@@ -62,7 +46,7 @@ describe('PracticeMethodDetailComponent', () => {
     viewModel = TestBed.get(PracticeViewModel);
     viewModel.currentPracticeParams$.next({ book: mockBook.id });
     multiCheckboxTable = fixture.debugElement.query(
-      By.directive(MockMultiCheckBoxTableComponent)
+      By.directive(MultiCheckBoxTableComponent)
     ).componentInstance;
     fixture.detectChanges();
   });
@@ -104,35 +88,40 @@ describe('PracticeMethodDetailComponent', () => {
   });
 
   describe('clickFreePracticeForChapter()', () => {
+    const tableItemChangeEventData: MultiCheckBoxTableItemChangeEventInterface<
+      EduContentTOCInterface,
+      ClassGroupInterface,
+      any
+    > = {
+      column: mockClassGroup,
+      item: mockEduContentTOC,
+      subLevel: undefined,
+      isChecked: false
+    };
+
     it('should be triggered by multi-check-box-table checkBoxChanged output', () => {
-      jest.spyOn(component, 'clickFreePracticeForChapter');
+      jest
+        .spyOn(component, 'clickFreePracticeForChapter')
+        .mockImplementationOnce(() => {});
 
-      multiCheckboxTable.checkBoxChanged.emit('bar');
+      multiCheckboxTable.checkBoxChanged.emit(tableItemChangeEventData);
       expect(component.clickFreePracticeForChapter).toHaveBeenCalledTimes(1);
-      expect(component.clickFreePracticeForChapter).toHaveBeenCalledWith('bar');
+      expect(component.clickFreePracticeForChapter).toHaveBeenCalledWith(
+        tableItemChangeEventData
+      );
     });
-    it('should call viewmodel.toggleUnlockedFreePractice()', () => {
-      const eventData: MultiCheckBoxTableItemChangeEventInterface<
-        EduContentTOCInterface,
-        ClassGroupInterface,
-        any
-      > = {
-        column: mockClassGroup,
-        item: mockEduContentTOC,
-        subLevel: undefined,
-        isChecked: false
-      };
 
+    it('should call viewmodel.toggleUnlockedFreePractice()', () => {
       jest.spyOn(viewModel, 'toggleUnlockedFreePractice');
-      component.clickFreePracticeForChapter(eventData);
+      component.clickFreePracticeForChapter(tableItemChangeEventData);
 
       expect(viewModel.toggleUnlockedFreePractice).toHaveBeenCalledTimes(1);
       expect(viewModel.toggleUnlockedFreePractice).toHaveBeenCalledWith(
         [
           {
-            classGroupId: eventData.column.id,
-            eduContentBookId: eventData.item.treeId,
-            eduContentTOCId: eventData.item.id
+            classGroupId: tableItemChangeEventData.column.id,
+            eduContentBookId: tableItemChangeEventData.item.treeId,
+            eduContentTOCId: tableItemChangeEventData.item.id
           }
         ],
         false
