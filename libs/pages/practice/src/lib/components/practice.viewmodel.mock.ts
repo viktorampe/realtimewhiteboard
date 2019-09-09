@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import {
   ClassGroupFixture,
   ClassGroupInterface,
-  EduContentBookFixture,
   EduContentTOCFixture,
   EduContentTOCInterface,
   MethodYearsInterface
@@ -140,9 +139,5 @@ export class MockPracticeViewModel
       new EduContentTOCFixture({ id: 2, title: 'Hoofdstuk 2' }),
       new EduContentTOCFixture({ id: 3, title: 'Hoofdstuk 3' })
     ];
-  }
-
-  private getBook() {
-    return new EduContentBookFixture();
   }
 }
