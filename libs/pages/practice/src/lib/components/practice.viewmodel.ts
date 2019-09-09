@@ -61,7 +61,7 @@ export class PracticeViewModel {
 
   //Source streams
   private routerState$: Observable<RouterReducerState<RouterStateUrl>>;
-  public currentBook$: Observable<EduContentBookInterface>;
+  private currentBook$: Observable<EduContentBookInterface>;
   private unlockedFreePracticeByEduContentTOCId$: Observable<
     Dictionary<UnlockedFreePracticeInterface[]>
   >;

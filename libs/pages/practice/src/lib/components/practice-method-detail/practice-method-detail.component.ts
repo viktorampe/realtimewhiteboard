@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {
   ClassGroupInterface,
-  EduContentBookInterface,
   EduContentTOCInterface,
   UnlockedFreePracticeInterface
 } from '@campus/dal';
@@ -13,8 +12,11 @@ import {
   MultiCheckBoxTableRowHeaderColumnInterface
 } from '@campus/ui';
 import { Observable } from 'rxjs';
-import { take } from 'rxjs/operators';
-import { PracticeViewModel } from '../practice.viewmodel';
+import { map, take } from 'rxjs/operators';
+import {
+  CurrentPracticeParams,
+  PracticeViewModel
+} from '../practice.viewmodel';
 
 @Component({
   selector: 'campus-practice-method-detail',
@@ -22,7 +24,7 @@ import { PracticeViewModel } from '../practice.viewmodel';
   styleUrls: ['./practice-method-detail.component.scss']
 })
 export class PracticeMethodDetailComponent implements OnInit {
-  private book$: Observable<EduContentBookInterface>;
+  private bookId$: Observable<number>;
 
   public breadCrumbTitles$: Observable<string>; // used to show book method + year
 
@@ -40,7 +42,7 @@ export class PracticeMethodDetailComponent implements OnInit {
 
   ngOnInit() {
     this.breadCrumbTitles$ = this.viewModel.bookTitle$;
-    this.book$ = this.viewModel.currentBook$;
+    this.bookId$ = this.getCurrentBookId();
     this.unlockedFreePracticeTableRowHeaders = this.viewModel.unlockedFreePracticeTableRowHeaders;
     this.classGroupColumns$ = this.viewModel.unlockedFreePracticeTableItemColumns$;
     this.eduContentTOCsWithSelectionForClassGroups$ = this.viewModel.unlockedFreePracticeTableItems$;
@@ -49,14 +51,14 @@ export class PracticeMethodDetailComponent implements OnInit {
   clickFreePracticeForBook(
     event: MultiCheckBoxTableColumnChangeEventInterface<ClassGroupInterface>
   ) {
-    this.book$.pipe(take(1)).subscribe(book => {
-      const unLockedFreePractice = this.createUnlockedFreePractice(
+    this.bookId$.pipe(take(1)).subscribe(bookId => {
+      const unlockedFreePractice = this.createUnlockedFreePractice(
         event.column.id, // classGroup
-        book.id
+        bookId
       );
 
       this.viewModel.toggleUnlockedFreePractice(
-        [unLockedFreePractice],
+        [unlockedFreePractice],
         event.isChecked
       );
     });
@@ -69,15 +71,21 @@ export class PracticeMethodDetailComponent implements OnInit {
       undefined
     >
   ) {
-    const unLockedFreePractice = this.createUnlockedFreePractice(
+    const unlockedFreePractice = this.createUnlockedFreePractice(
       event.column.id, // classGroup
       event.item.treeId, // book id
       event.item.id // eduContentTOC id
     );
 
     this.viewModel.toggleUnlockedFreePractice(
-      [unLockedFreePractice],
+      [unlockedFreePractice],
       event.isChecked
+    );
+  }
+
+  private getCurrentBookId(): Observable<number> {
+    return this.viewModel.currentPracticeParams$.pipe(
+      map((params: CurrentPracticeParams) => params.book)
     );
   }
 

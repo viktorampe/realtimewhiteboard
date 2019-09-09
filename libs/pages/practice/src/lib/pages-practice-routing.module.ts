@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { MethodQueries } from '@campus/dal';
+import { AllowedMethodGuard } from '@campus/guards';
 import { PracticeMethodDetailComponent } from './components/practice-method-detail/practice-method-detail.component';
 import { PracticeOverviewComponent } from './components/practice-overview/practice-overview.component';
 import { PracticeMethodDetailResolver } from './resolvers/pages-practice-method-detail.resolver';
@@ -22,7 +23,7 @@ const routes: Routes = [
       {
         path: ':book',
         resolve: { isResolved: PracticeMethodDetailResolver },
-        canActivate: [],
+        canActivate: [AllowedMethodGuard],
         data: {
           selector: MethodQueries.getMethodWithYearByBookId
         },

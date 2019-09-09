@@ -60,7 +60,7 @@ describe('PracticeMethodDetailComponent', () => {
     fixture = TestBed.createComponent(PracticeMethodDetailComponent);
     component = fixture.componentInstance;
     viewModel = TestBed.get(PracticeViewModel);
-    viewModel.currentBook$.next(mockBook);
+    viewModel.currentPracticeParams$.next({ book: mockBook.id });
     multiCheckboxTable = fixture.debugElement.query(
       By.directive(MockMultiCheckBoxTableComponent)
     ).componentInstance;
