@@ -70,6 +70,8 @@ export class MockPracticeViewModel
 
   constructor() {}
 
+  public toggleUnlockedFreePractice(): void {}
+
   private getAllowedBooks$(): MethodYearsInterface[] {
     return [
       {
