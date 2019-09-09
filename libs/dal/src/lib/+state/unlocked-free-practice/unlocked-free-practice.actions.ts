@@ -118,7 +118,8 @@ export class ClearUnlockedFreePractices implements Action {
   readonly type = UnlockedFreePracticesActionTypes.ClearUnlockedFreePractices;
 }
 
-export class StartAddManyUnlockedFreePractices implements Action {
+export class StartAddManyUnlockedFreePractices
+  implements FeedbackTriggeringAction {
   readonly type =
     UnlockedFreePracticesActionTypes.StartAddManyUnlockedFreePractices;
 
@@ -126,6 +127,7 @@ export class StartAddManyUnlockedFreePractices implements Action {
     public payload: {
       userId: number;
       unlockedFreePractices: UnlockedFreePracticeInterface[];
+      customFeedbackHandlers?: CustomFeedbackHandlersInterface;
     }
   ) {}
 }

@@ -9,7 +9,7 @@ import {
   MatIconRegistry,
   MatTooltipModule
 } from '@angular/material';
-import { By } from '@angular/platform-browser';
+import { By, HAMMER_LOADER } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MockMatIconRegistry } from '@campus/testing';
 import {
@@ -37,7 +37,13 @@ describe('ButtonToggleFilterComponent', () => {
         MatIconModule
       ],
       declarations: [ButtonToggleFilterComponent],
-      providers: [{ provide: MatIconRegistry, useClass: MockMatIconRegistry }]
+      providers: [
+        {
+          provide: HAMMER_LOADER,
+          useValue: () => new Promise(() => {})
+        },
+        { provide: MatIconRegistry, useClass: MockMatIconRegistry }
+      ]
     });
 
     mockFilterCriteria = new SearchFilterCriteriaFixture({}, [
