@@ -177,6 +177,12 @@ export class MockMethodViewModel
     learningPlanGoalIds: number[],
     eduContentTOCId: number
   ): void {}
+  public deleteLearningPlanGoalProgressForLearningPlanGoalsClassGroups(
+    learningPlanGoal: LearningPlanGoalInterface,
+    classGroup: ClassGroupInterface
+  ): void {}
+
+  public deleteLearningPlanGoalProgressForLearningPlanGoalsClassGroups() {}
 
   private getAllowedBooks$(): MethodYearsInterface[] {
     return [

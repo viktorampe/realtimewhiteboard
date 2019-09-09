@@ -27,7 +27,7 @@ import {
 } from '@campus/shared';
 import { MockMatIconRegistry } from '@campus/testing';
 import {
-  MultiCheckBoxTableChangeEventInterface,
+  MultiCheckBoxTableItemChangeEventInterface,
   MultiCheckBoxTableItemColumnInterface,
   UiModule
 } from '@campus/ui';
@@ -210,16 +210,39 @@ describe('MethodComponent', () => {
         'openLearningPlanGoalProgressManagementDialog'
       );
 
-      const event: MultiCheckBoxTableChangeEventInterface<any, any, any> = {
+      const event: MultiCheckBoxTableItemChangeEventInterface<any, any, any> = {
         column: { classGroup: 'I am a classGroup' },
         item: { lpg: 'I am a learning plan goal' },
-        subLevel: { foo: 'I am not relevant' }
+        subLevel: { foo: 'I am not relevant' },
+        isChecked: true
       };
 
       component.clickProgress(event);
 
       expect(
         methodViewModel.openLearningPlanGoalProgressManagementDialog
+      ).toHaveBeenCalledWith(
+        { lpg: 'I am a learning plan goal' },
+        { classGroup: 'I am a classGroup' }
+      );
+    });
+    it("should call the viewmodel's deleteLearningPlanGoalProgressForLearningPlanGoalsClassGroups()", () => {
+      jest.spyOn(
+        methodViewModel,
+        'deleteLearningPlanGoalProgressForLearningPlanGoalsClassGroups'
+      );
+
+      const event: MultiCheckBoxTableItemChangeEventInterface<any, any, any> = {
+        column: { classGroup: 'I am a classGroup' },
+        item: { lpg: 'I am a learning plan goal' },
+        subLevel: { foo: 'I am not relevant' },
+        isChecked: false
+      };
+
+      component.clickProgress(event);
+
+      expect(
+        methodViewModel.deleteLearningPlanGoalProgressForLearningPlanGoalsClassGroups
       ).toHaveBeenCalledWith(
         { lpg: 'I am a learning plan goal' },
         { classGroup: 'I am a classGroup' }

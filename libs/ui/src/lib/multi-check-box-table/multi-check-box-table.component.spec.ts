@@ -366,6 +366,109 @@ describe('MultiCheckBoxTableComponent', () => {
     });
   });
 
+  describe('table options', () => {
+    beforeEach(() => {
+      component.rowHeaderColumns = rowHeaderColumns;
+      component.itemColumns = itemColumns;
+      fixture.detectChanges();
+    });
+
+    describe('selectAllForColumnEnabled', () => {
+      beforeEach(() => {
+        component.selectAllForColumnEnabled = true;
+        fixture.detectChanges();
+      });
+
+      it('should show the select all checkboxes', () => {
+        const checkBoxes = fixture.debugElement.queryAll(
+          By.css('.ui-multi-check-box-table__header mat-checkbox')
+        );
+
+        expect(checkBoxes.length).toEqual(itemColumns.length);
+      });
+
+      it('should show the correct text', () => {
+        const headerCells = fixture.debugElement.queryAll(
+          By.css(
+            '.ui-multi-check-box-table__header .ui-multi-check-box-table__header--row-header'
+          )
+        );
+        expect(
+          headerCells[rowHeaderColumns.length].nativeElement.textContent.trim()
+        ).toContain('Alle');
+      });
+
+      describe('selection state', () => {
+        /**
+         * Test setup:
+         *
+         *          X         0
+         *        klas 1    klas 2
+         * item 1   X         0
+         * item 2   X         X
+         * item 3   X         X
+         */
+        let bodyCheckBoxes;
+        let topLevelCheckBoxes;
+        const selectedColumnIndex = 0;
+
+        beforeEach(() => {
+          component.itemColumns = itemColumns;
+          component.itemColumns[selectedColumnIndex].isAllSelected = true;
+          component.items = items;
+
+          fixture.detectChanges();
+
+          topLevelCheckBoxes = fixture.debugElement
+            .query(By.css('.ui-multi-check-box-table__header'))
+            .queryAll(By.directive(MatCheckbox));
+
+          bodyCheckBoxes = fixture.debugElement
+            .queryAll(
+              By.css('.ui-multi-check-box-table__body__row__cell--checkbox')
+            )
+            .map(bodyRow => bodyRow.query(By.directive(MatCheckbox)));
+        });
+
+        it('should reflect the select all for column selection state', () => {
+          for (let i = 0; i < topLevelCheckBoxes.length; i++) {
+            expect(!!topLevelCheckBoxes[i].componentInstance.checked).toBe(
+              selectedColumnIndex === i
+            );
+          }
+        });
+
+        it('should select and disable all items when selectAllForColumn is clicked', () => {
+          // all checkboxes in first column 1 should be disabled & checked
+          const checkBoxCheckedStates = bodyCheckBoxes.map(
+            checkBox => !!checkBox.componentInstance.checked
+          );
+          // none of the checkboxes of column 2 should be disabled
+          const checkBoxDisabledStates = bodyCheckBoxes.map(
+            checkBox => !!checkBox.componentInstance.disabled
+          );
+
+          expect(checkBoxCheckedStates).toEqual([
+            true,
+            false,
+            true,
+            true,
+            true,
+            true
+          ]);
+          expect(checkBoxDisabledStates).toEqual([
+            true,
+            false,
+            true,
+            false,
+            true,
+            false
+          ]);
+        });
+      });
+    });
+  });
+
   describe('event handlers', () => {
     describe('clickCheckBox', () => {
       beforeEach(() => {
@@ -406,7 +509,7 @@ describe('MultiCheckBoxTableComponent', () => {
           column: itemColumns[0].item,
           item: items[0].header,
           subLevel: subLevels[0].item,
-          previousCheckboxState: true
+          isChecked: false
         });
       });
     });
@@ -454,6 +557,40 @@ describe('MultiCheckBoxTableComponent', () => {
             subLevel: subLevels[0].item
           }
         ]);
+      });
+    });
+
+    describe('clickSelectAllForColumn', () => {
+      beforeEach(() => {
+        component.selectAllForColumnEnabled = true;
+        component.itemColumns = itemColumns;
+        component.rowHeaderColumns = rowHeaderColumns;
+        fixture.detectChanges();
+      });
+
+      it('should be triggered by topLevelselectAllCheckbox', () => {
+        jest.spyOn(component, 'clickSelectAllForColumn');
+
+        const checkBox = fixture.debugElement.query(By.directive(MatCheckbox));
+        checkBox.triggerEventHandler('click', null);
+
+        expect(component.clickSelectAllForColumn).toHaveBeenCalled();
+      });
+
+      it('should emit a selectAllForColumnChanged event', () => {
+        jest.spyOn(component.selectAllForColumnChanged, 'emit');
+
+        component.clickSelectAllForColumn(itemColumns[0], {
+          checked: true
+        } as MatCheckbox);
+
+        expect(component.selectAllForColumnChanged.emit).toHaveBeenCalledTimes(
+          1
+        );
+        expect(component.selectAllForColumnChanged.emit).toHaveBeenCalledWith({
+          column: itemColumns[0].item,
+          isChecked: false
+        });
       });
     });
   });
