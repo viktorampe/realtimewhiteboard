@@ -1,8 +1,9 @@
 import { Inject, Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
 import { DataPersistence } from '@nrwl/nx';
+import { undo } from 'ngrx-undo';
 import { from } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { map, mapTo, switchMap } from 'rxjs/operators';
 import { DalState } from '..';
 import {
   UnlockedFreePracticeServiceInterface,
@@ -11,6 +12,7 @@ import {
 import { EffectFeedback, EffectFeedbackActions } from '../effect-feedback';
 import { AddEffectFeedback } from '../effect-feedback/effect-feedback.actions';
 import {
+  DeleteUnlockedFreePractices,
   LoadUnlockedFreePractices,
   StartAddManyUnlockedFreePractices,
   UnlockedFreePracticesActionTypes,
@@ -37,6 +39,44 @@ export class UnlockedFreePracticeEffects {
       },
       onError: (action: LoadUnlockedFreePractices, error) => {
         return new UnlockedFreePracticesLoadError(error);
+      }
+    }
+  );
+
+  @Effect()
+  deleteUnlockedFreePractices$ = this.dataPersistence.optimisticUpdate(
+    UnlockedFreePracticesActionTypes.DeleteUnlockedFreePractices,
+    {
+      run: (action: DeleteUnlockedFreePractices, state: DalState) => {
+        return this.unlockedFreePracticeService
+          .deleteUnlockedFreePractices(
+            action.payload.userId,
+            action.payload.ids
+          )
+          .pipe(
+            mapTo(
+              new AddEffectFeedback({
+                effectFeedback: new EffectFeedback({
+                  id: this.uuid(),
+                  triggerAction: action,
+                  message: "De 'vrij oefenen' status werd gewijzigd."
+                })
+              })
+            )
+          );
+      },
+      undoAction: (action: DeleteUnlockedFreePractices, error) => {
+        const undoAction = undo(action);
+        const effectFeedback = EffectFeedback.generateErrorFeedback(
+          this.uuid(),
+          action,
+          "Het is niet gelukt om de 'vrij oefenen' status aan te passen."
+        );
+        const effectFeedbackAction = new EffectFeedbackActions.AddEffectFeedback(
+          { effectFeedback }
+        );
+
+        return from([undoAction, effectFeedbackAction]);
       }
     }
   );
