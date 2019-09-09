@@ -292,6 +292,7 @@ export class PracticeViewModel {
     } else {
       this.store.dispatch(
         new UnlockedFreePracticeActions.DeleteUnlockedFreePractices({
+          userId: this.authService.userId,
           ids: unlockedFreePractices.map(ufp => ufp.id)
         })
       );
