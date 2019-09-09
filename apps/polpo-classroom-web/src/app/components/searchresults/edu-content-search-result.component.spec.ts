@@ -1,7 +1,7 @@
 import { SimpleChange } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconModule, MatIconRegistry } from '@angular/material';
-import { By } from '@angular/platform-browser';
+import { By, HAMMER_LOADER } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import {
   BundleFixture,
@@ -43,6 +43,10 @@ describe('EduContentSearchResultComponent', () => {
       declarations: [EduContentSearchResultComponent],
       imports: [MatIconModule, UiModule, NoopAnimationsModule],
       providers: [
+        {
+          provide: HAMMER_LOADER,
+          useValue: () => new Promise(() => {})
+        },
         { provide: MatIconRegistry, useClass: MockMatIconRegistry },
         {
           provide: EDUCONTENT_SEARCH_RESULT_ITEM_SERVICE_TOKEN,
