@@ -14,6 +14,7 @@ export class HeaderComponent implements OnInit {
   Permissions = Permissions.settings;
 
   enableAlerts: boolean;
+  enableGlobalSearch: boolean;
 
   @Input()
   breadcrumbPosition: 'top-left|page-left';
@@ -23,6 +24,8 @@ export class HeaderComponent implements OnInit {
   quicklinkPosition: 'page-right|top-right';
   @Input()
   alertsPosition: 'top-right';
+  @Input()
+  profileLinkPosition: 'top-right';
 
   profileMenuItems$ = this.headerViewModel.profileMenuItems$;
   alertsLoaded$ = this.headerViewModel.alertsLoaded$;
@@ -47,6 +50,7 @@ export class HeaderComponent implements OnInit {
 
   private loadFeatureToggles() {
     this.enableAlerts = this.headerViewModel.enableAlerts;
+    this.enableGlobalSearch = this.headerViewModel.enableGlobalSearch;
   }
 
   onMenuClick() {

@@ -54,6 +54,9 @@ export const environment: EnvironmentInterface = {
           messageRegex: 'no_teacher_found_for_given_key'
         }
       ]
+    },
+    globalSearch: {
+      enabled: false
     }
   },
   sso: {

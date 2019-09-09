@@ -4,11 +4,20 @@
       <span bar__left *ngIf="this.breadcrumbPosition === 'top-left'">
         <ng-container *ngTemplateOutlet="breadcrumbs"></ng-container>
       </span>
+      <div bar__right *ngIf="this.enableGlobalSearch">
+        <ng-container *ngTemplateOutlet="globalSearch"></ng-container>
+      </div>
       <div bar__right *ngIf="this.alertsPosition === 'top-right'">
         <ng-container *ngTemplateOutlet="alerts"></ng-container>
       </div>
       <div bar__right *ngIf="this.profileMenuPosition === 'top-right'">
         <ng-container *ngTemplateOutlet="profilemenu"></ng-container>
+      </div>
+      <div bar__right *ngIf="this.quicklinkPosition === 'top-right'">
+        <ng-container *ngTemplateOutlet="quicklinks"></ng-container>
+      </div>
+      <div bar__right *ngIf="this.profileLinkPosition === 'top-right'">
+        <ng-container *ngTemplateOutlet="profileLink"></ng-container>
       </div>
     </campus-app-bar>
   </div>
@@ -26,6 +35,9 @@
         [iconClass]="'menu'"
       ></campus-button>
     </ng-template>
+    <span bar__left *ngIf="this.breadcrumbPosition === 'page-left'">
+      <ng-container *ngTemplateOutlet="breadcrumbs"></ng-container>
+    </span>
     <div id="page-bar-container"></div>
     <div class="shared-header__page-bar__right">
       <div *ngIf="this.quicklinkPosition === 'page-right'">
@@ -127,5 +139,20 @@
     (click)="onManageHistoryClick()"
     class="shared-header__quicklink__button"
     [iconClass]="'bordered:history'"
+  ></campus-button>
+</ng-template>
+
+<ng-template #globalSearch>
+  <campus-button
+    *hasPermission="Permissions.GLOBAL_SEARCH"
+    [iconClass]="'magnifier'"
+    [routerLink]="['search']"
+  ></campus-button>
+</ng-template>
+
+<ng-template #profileLink>
+  <campus-button
+    [iconClass]="'profile'"
+    [routerLink]="['settings']"
   ></campus-button>
 </ng-template>

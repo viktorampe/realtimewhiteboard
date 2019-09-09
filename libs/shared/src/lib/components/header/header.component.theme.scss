@@ -7,6 +7,7 @@
   $shared-header__page-bar__divider-height: 40px !default;
   $shared-header__page-bar__divider-width: 2px !default;
   $shared-header__page-bar__element-height: 40px !default;
+  $shared-header__page-bar-container__justify-content: flex-start !default;
   $shared-header__page-bar__page-bar-style--searchmode-button-width: 140px !default;
   $shared-header__page-bar__element-border-width: 2px !default;
   $shared-header__page-bar__element-padding-top: 2px !default;
@@ -50,6 +51,7 @@
       }
 
       #page-bar-container {
+        justify-content: $shared-header__page-bar-container__justify-content;
         .page-bar-style {
           &--searchmode-button {
             border: $shared-header__page-bar__element-border-width solid
