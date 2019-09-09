@@ -329,8 +329,8 @@ describe('PracticeViewModel', () => {
       expect(spy).toHaveBeenCalledTimes(1);
       expect(spy).toHaveBeenCalledWith(
         new UnlockedFreePracticeActions.StartAddManyUnlockedFreePractices({
-          unlockedFreePractices: unlockedFreePractices,
-          userId: userId
+          userId,
+          unlockedFreePractices: unlockedFreePractices
         })
       );
     });
@@ -343,6 +343,7 @@ describe('PracticeViewModel', () => {
       expect(spy).toHaveBeenCalledTimes(1);
       expect(spy).toHaveBeenCalledWith(
         new UnlockedFreePracticeActions.DeleteUnlockedFreePractices({
+          userId,
           ids: unlockedFreePractices.map(ufp => ufp.id)
         })
       );
