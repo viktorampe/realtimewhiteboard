@@ -1,4 +1,5 @@
 import {
+  EduContent,
   EduContentInterface,
   EduContentQueries,
   FavoriteInterface,
@@ -9,6 +10,7 @@ import { createSelector } from '@ngrx/store';
 
 export interface FavoriteWithEduContent {
   favorite: FavoriteInterface;
+  bookId: number;
   eduContent: EduContentInterface;
 }
 
@@ -17,13 +19,18 @@ export const getFavoritesWithEduContent = createSelector(
   EduContentQueries.getAllEntities,
   (
     favoritesByType: FavoriteInterface[],
-    eduContents: { [id: number]: EduContentInterface },
+    eduContents: { [id: number]: EduContent },
     props: { type: FavoriteTypesEnum }
   ) => {
     return favoritesByType.map(favorite => {
+      const eduContent = eduContents[favorite.eduContentId];
+
       return {
         favorite,
-        eduContent: eduContents[favorite.eduContentId]
+        //Shortcut property for navigating to the 'method'
+        bookId:
+          eduContent && eduContent.publishedEduContentMetadata.eduContentBookId,
+        eduContent: eduContent
       } as FavoriteWithEduContent;
     });
   }

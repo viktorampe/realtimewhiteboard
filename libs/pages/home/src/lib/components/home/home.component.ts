@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { HomeViewModel } from '../home.viewmodel';
 
 @Component({
   selector: 'campus-home',
@@ -7,5 +6,5 @@ import { HomeViewModel } from '../home.viewmodel';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent {
-  constructor(private homeViewModel: HomeViewModel) {}
+  constructor() {}
 }

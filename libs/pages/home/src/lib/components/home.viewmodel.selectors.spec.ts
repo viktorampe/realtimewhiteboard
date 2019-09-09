@@ -32,8 +32,8 @@ describe('PracticeViewModel', () => {
       })
     ];
     const eduContents = {
-      1: new EduContentFixture({ id: 1 }),
-      2: new EduContentFixture({ id: 2 })
+      1: new EduContentFixture({ id: 1 }, { eduContentBookId: 3 }),
+      2: new EduContentFixture({ id: 2 }, { eduContentBookId: 4 })
     };
 
     it('should return favorites with EduContent', () => {
@@ -42,14 +42,17 @@ describe('PracticeViewModel', () => {
       expect(result).toEqual([
         {
           favorite: favoritesByType[0],
+          bookId: eduContents[1].publishedEduContentMetadata.eduContentBookId,
           eduContent: eduContents[1]
         },
         {
           favorite: favoritesByType[1],
+          bookId: eduContents[2].publishedEduContentMetadata.eduContentBookId,
           eduContent: eduContents[2]
         },
         {
           favorite: favoritesByType[2],
+          bookId: undefined,
           eduContent: undefined
         }
       ]);
