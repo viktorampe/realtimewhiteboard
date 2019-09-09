@@ -1,11 +1,17 @@
 import { Inject, Injectable } from '@angular/core';
-import { DalState, EduContent, FavoriteTypesEnum } from '@campus/dal';
+import {
+  DalState,
+  EduContent,
+  FavoriteTypesEnum,
+  UserQueries
+} from '@campus/dal';
 import {
   OpenStaticContentServiceInterface,
   OPEN_STATIC_CONTENT_SERVICE_TOKEN
 } from '@campus/shared';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import {
   FavoriteWithEduContent,
   getFavoritesWithEduContent
@@ -16,6 +22,7 @@ import {
 })
 export class HomeViewModel {
   //Presentation streams
+  public userFirstName$: Observable<string>;
   public favoritesWithEduContent$: Observable<FavoriteWithEduContent[]>;
 
   constructor(
@@ -35,6 +42,10 @@ export class HomeViewModel {
   }
 
   private setPresentationStreams(): void {
+    this.userFirstName$ = this.store.pipe(
+      select(UserQueries.getCurrentUser),
+      map(user => user.firstName || '')
+    );
     this.favoritesWithEduContent$ = this.store.pipe(
       select(getFavoritesWithEduContent, { type: FavoriteTypesEnum.BOEKE })
     );
