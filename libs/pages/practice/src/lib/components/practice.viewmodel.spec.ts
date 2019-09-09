@@ -46,6 +46,7 @@ describe('PracticeViewModel', () => {
     classGroups: jest.SpyInstance;
     bookChapters: jest.SpyInstance;
     ufpByEduContentTOCId: jest.SpyInstance;
+    ufpByEduContentBookId: jest.SpyInstance;
     methodWithYearByBookId: jest.SpyInstance;
   };
 
@@ -92,6 +93,10 @@ describe('PracticeViewModel', () => {
       ufpByEduContentTOCId: jest.spyOn(
         UnlockedFreePracticeQueries,
         'getGroupedByEduContentTOCId'
+      ),
+      ufpByEduContentBookId: jest.spyOn(
+        UnlockedFreePracticeQueries,
+        'getGroupedByEduContentBookId'
       ),
       methodWithYearByBookId: jest.spyOn(
         MethodQueries,
@@ -252,6 +257,18 @@ describe('PracticeViewModel', () => {
           })
         ]
       };
+      const unlockedFreePracticeByEduContentBookId: Dictionary<
+        UnlockedFreePracticeInterface[]
+      > = {
+        1: [
+          new UnlockedFreePracticeFixture({
+            id: 1,
+            eduContentBookId: 1,
+            eduContentTOCId: undefined,
+            classGroupId: 1
+          })
+        ]
+      };
 
       beforeEach(() => {
         selectorSpies.book.mockReturnValue(mockBook);
@@ -260,24 +277,31 @@ describe('PracticeViewModel', () => {
         selectorSpies.ufpByEduContentTOCId.mockReturnValue(
           unlockedFreePracticeByEduContentTOCId
         );
+        selectorSpies.ufpByEduContentBookId.mockReturnValue(
+          unlockedFreePracticeByEduContentBookId
+        );
 
         navigateWithParams({ book: 1 });
       });
 
       describe('unlockedFreePracticeTableItemColumns$', () => {
         it('should return table item columns based on the classgroups', () => {
+          //ClassGroup 1 should have all selected, ClassGroup 2 not
+
           const expectedGroupColumns: MultiCheckBoxTableItemColumnInterface<
             ClassGroupInterface
           >[] = [
             {
               item: mockClassGroupsByMethodId[0],
               key: 'id',
-              label: 'name'
+              label: 'name',
+              isAllSelected: true
             },
             {
               item: mockClassGroupsByMethodId[1],
               key: 'id',
-              label: 'name'
+              label: 'name',
+              isAllSelected: false
             }
           ];
 
