@@ -34,6 +34,8 @@ body {
 @include pages-methods-theme();
 @import 'libs/pages/global-search/src/lib/pages-global-search.theme';
 @include pages-global-search-theme();
+@import 'libs/pages/home/src/lib/pages-home.theme';
+@include pages-home-theme();
 
 // include shared lib scss
 @import 'libs/shared/src/lib/shared-theme';

@@ -32,7 +32,6 @@ import { PermissionService } from './auth/permission.service';
 import { PERMISSION_SERVICE_TOKEN } from './auth/permission.service.interface';
 import {
   LearningPlanGoalProgressManagementComponent,
-  MethodFavoriteTileComponent,
   MethodYearTileComponent,
   QuickLinkComponent
 } from './components';
@@ -117,8 +116,7 @@ import { SCORM_EXERCISE_SERVICE_TOKEN } from './services/scorm/scorm-exercise.se
     AlertToNotificationItemPipe,
     QuickLinkComponent,
     LearningPlanGoalProgressManagementComponent,
-    MethodYearTileComponent,
-    MethodFavoriteTileComponent
+    MethodYearTileComponent
   ],
   exports: [
     HeaderComponent,
@@ -132,8 +130,7 @@ import { SCORM_EXERCISE_SERVICE_TOKEN } from './services/scorm/scorm-exercise.se
     DataCyDirective,
     AlertToNotificationItemPipe,
     QuickLinkComponent,
-    MethodYearTileComponent,
-    MethodFavoriteTileComponent
+    MethodYearTileComponent
   ],
   providers: [
     MapObjectConversionService,

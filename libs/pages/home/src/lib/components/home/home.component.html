@@ -19,8 +19,12 @@
     *ngIf="favorites.length; else noFavorites"
     class="pages-home__favorite-list"
   >
-    <ng-container *ngFor="let favorite of favorites">
-      <campus-method-favorite-tile> </campus-method-favorite-tile>
+    <ng-container *ngFor="let favoriteMethod of favorites">
+      <campus-method-favorite-tile
+        [name]="favoriteMethod.favorite.name"
+        [logoUrl]="favoriteMethod.logoUrl"
+      >
+      </campus-method-favorite-tile>
     </ng-container>
   </div>
 </div>

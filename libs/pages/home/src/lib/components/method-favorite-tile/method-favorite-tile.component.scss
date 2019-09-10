@@ -1,12 +1,12 @@
 :host {
   border: 1px solid black;
   width: 200px;
-  height: 300px;
+  height: auto;
   display: flex;
   flex-direction: column;
 }
 
-.pages-methods-method-favorite-tile {
+.pages-home-method-favorite-tile {
   &__image {
     width: 100%;
   }
@@ -22,16 +22,6 @@
     &__container {
       display: flex;
       flex-direction: row;
-      flex-wrap: wrap;
-      background-color: white;
-      justify-content: flex-start;
-      padding: 5px 3px 3px 6px;
-      height: 100%;
     }
-
-    width: 60px;
-    height: 60px;
-    margin-right: 3px;
-    margin-bottom: 3px;
   }
 }

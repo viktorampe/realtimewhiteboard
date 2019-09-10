@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HomeViewModel } from '../home.viewmodel';
 import { MockHomeViewModel } from '../home.viewmodel.mock';
-import { FavoriteWithEduContent } from '../home.viewmodel.selectors';
+import { FavoriteMethodWithEduContent } from '../home.viewmodel.selectors';
 
 @Component({
   selector: 'campus-home',
@@ -12,7 +12,7 @@ import { FavoriteWithEduContent } from '../home.viewmodel.selectors';
 })
 export class HomeComponent {
   public displayName$: Observable<string>;
-  public favoritesWithEduContent$: Observable<FavoriteWithEduContent[]>;
+  public favoritesWithEduContent$: Observable<FavoriteMethodWithEduContent[]>;
 
   constructor(private homeViewModel: HomeViewModel) {
     this.displayName$ = homeViewModel.displayName$;
