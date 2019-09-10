@@ -513,7 +513,7 @@ describe('MultiCheckBoxTableComponent', () => {
         });
       });
 
-      it('should not emit a checkBoxChanged event when checkbox is disbaled', () => {
+      it('should not emit a checkBoxChanged event when checkbox is disabled', () => {
         jest.spyOn(component.checkBoxChanged, 'emit');
 
         component.clickCheckbox(
