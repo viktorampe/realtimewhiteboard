@@ -291,16 +291,16 @@ export class PracticeViewModel {
         })
       );
     } else {
-      const ufpsIds$ = unlockedFreePractices.map(ufp => {
+      const ufps$ = unlockedFreePractices.map(ufp => {
         return this.store.pipe(
           select(UnlockedFreePracticeQueries.findOne, ufp),
-          filter(foundUfp => !!foundUfp),
-          map(foundUfp => foundUfp.id),
           take(1)
         );
       });
 
-      zip(...ufpsIds$).subscribe(ids => {
+      zip(...ufps$).subscribe(ufps => {
+        const ids = ufps.filter(ufp => !!ufp).map(ufp => ufp.id);
+
         this.store.dispatch(
           new UnlockedFreePracticeActions.DeleteUnlockedFreePractices({
             userId: this.authService.userId,

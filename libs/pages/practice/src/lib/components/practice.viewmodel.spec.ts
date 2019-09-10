@@ -363,8 +363,8 @@ describe('PracticeViewModel', () => {
       jest
         .spyOn(UnlockedFreePracticeQueries, 'findOne')
         .mockReturnValueOnce(unlockedFreePractices[0]) // id 1
-        .mockReturnValueOnce(unlockedFreePractices[1]) // id 2
-        .mockReturnValueOnce(new UnlockedFreePracticeFixture({ id: 5 })); // id 5
+        .mockReturnValueOnce(undefined) // mock that second ufp is not found in the store
+        .mockReturnValueOnce(unlockedFreePractices[2]); // id 3
 
       practiceViewModel.toggleUnlockedFreePractice(
         unlockedFreePractices,
@@ -375,7 +375,7 @@ describe('PracticeViewModel', () => {
       expect(spy).toHaveBeenCalledWith(
         new UnlockedFreePracticeActions.DeleteUnlockedFreePractices({
           userId,
-          ids: [unlockedFreePractices[0].id, unlockedFreePractices[1].id, 5]
+          ids: [unlockedFreePractices[0].id, unlockedFreePractices[2].id]
         })
       );
     });
