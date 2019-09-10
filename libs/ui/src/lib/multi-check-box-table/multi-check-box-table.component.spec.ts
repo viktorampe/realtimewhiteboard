@@ -512,6 +512,19 @@ describe('MultiCheckBoxTableComponent', () => {
           isChecked: false
         });
       });
+
+      it('should not emit a checkBoxChanged event when checkbox is disabled', () => {
+        jest.spyOn(component.checkBoxChanged, 'emit');
+
+        component.clickCheckbox(
+          items[0].header,
+          itemColumns[0].item,
+          subLevels[0].item,
+          { checked: true, disabled: true } as MatCheckbox
+        );
+
+        expect(component.checkBoxChanged.emit).not.toHaveBeenCalled();
+      });
     });
     describe('selectAllForSubLevel', () => {
       beforeEach(() => {
