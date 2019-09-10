@@ -25,14 +25,15 @@ import {
 import { Dictionary } from '@ngrx/entity';
 import { RouterReducerState } from '@ngrx/router-store';
 import { select, Store } from '@ngrx/store';
-import { combineLatest, merge, Observable } from 'rxjs';
+import { combineLatest, merge, Observable, zip } from 'rxjs';
 import {
   distinctUntilChanged,
   filter,
   map,
   mapTo,
   shareReplay,
-  switchMap
+  switchMap,
+  take
 } from 'rxjs/operators';
 export interface CurrentPracticeParams {
   book?: number;
@@ -290,12 +291,23 @@ export class PracticeViewModel {
         })
       );
     } else {
-      this.store.dispatch(
-        new UnlockedFreePracticeActions.DeleteUnlockedFreePractices({
-          userId: this.authService.userId,
-          ids: unlockedFreePractices.map(ufp => ufp.id)
-        })
-      );
+      const ufps$ = unlockedFreePractices.map(ufp => {
+        return this.store.pipe(
+          select(UnlockedFreePracticeQueries.findOne, ufp),
+          filter(foundUfp => !!foundUfp),
+          map(foundUfp => foundUfp.id),
+          take(1)
+        );
+      });
+
+      zip(...ufps$).subscribe(ids => {
+        this.store.dispatch(
+          new UnlockedFreePracticeActions.DeleteUnlockedFreePractices({
+            userId: this.authService.userId,
+            ids
+          })
+        );
+      });
     }
   }
 }
