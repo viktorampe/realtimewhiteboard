@@ -14,6 +14,7 @@
     iconClass="book"
     data-cy="method-favorite-open-boeke"
     class="pages-home-method-favorite-tile__button"
+    (click)="openBoeke()"
   >
     Boek
   </campus-button>
@@ -21,6 +22,7 @@
     iconClass="lesmateriaal"
     data-cy="method-favorite-open-method"
     class="pages-home-method-favorite-tile__button"
+    [routerLink]="['/methods', bookId]"
   >
     Methode
   </campus-button>

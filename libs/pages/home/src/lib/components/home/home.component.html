@@ -23,6 +23,9 @@
       <campus-method-favorite-tile
         [name]="favoriteMethod.favorite.name"
         [logoUrl]="favoriteMethod.logoUrl"
+        [eduContent]="favoriteMethod.eduContent"
+        [bookId]="favoriteMethod.bookId"
+        (clickOpenBoeke)="clickOpenBoeke($event)"
       >
       </campus-method-favorite-tile>
     </ng-container>
