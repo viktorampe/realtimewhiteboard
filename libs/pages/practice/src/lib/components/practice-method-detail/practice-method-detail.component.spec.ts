@@ -5,15 +5,20 @@ import {
   ClassGroupInterface,
   EduContentBookFixture,
   EduContentTOCFixture,
-  EduContentTOCInterface
+  EduContentTOCInterface,
+  UnlockedFreePracticeFixture,
+  UnlockedFreePracticeInterface
 } from '@campus/dal';
 import {
   MultiCheckBoxTableColumnChangeEventInterface,
   MultiCheckBoxTableComponent,
   MultiCheckBoxTableItemChangeEventInterface,
+  MultiCheckBoxTableItemColumnInterface,
   UiModule
 } from '@campus/ui';
 import { EduContentBookInterface } from '@diekeure/polpo-api-angular-sdk';
+import { Dictionary } from '@ngrx/entity';
+import { hot } from '@nrwl/nx/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { PracticeViewModel } from '../practice.viewmodel';
 import { MockPracticeViewModel } from '../practice.viewmodel.mock';
@@ -53,6 +58,119 @@ describe('PracticeMethodDetailComponent', () => {
   describe('creation', () => {
     it('should create', () => {
       expect(component).toBeTruthy();
+    });
+  });
+
+  describe('MultiCheckBoxTable', () => {
+    const mockClassGroupsByMethodId = [
+      new ClassGroupFixture({ id: 1, name: '1a' }),
+      new ClassGroupFixture({ id: 2, name: '1b' })
+    ];
+
+    const unlockedFreePracticeByEduContentBookId: Dictionary<
+      UnlockedFreePracticeInterface[]
+    > = {
+      5: [
+        new UnlockedFreePracticeFixture({
+          id: 1,
+          eduContentBookId: 5,
+          eduContentTOCId: undefined,
+          classGroupId: 1
+        })
+      ]
+    };
+
+    const mockBookChapters = [
+      new EduContentTOCFixture({ id: 1 }),
+      new EduContentTOCFixture({ id: 2 }),
+      new EduContentTOCFixture({ id: 3 })
+    ];
+
+    const unlockedFreePracticeByEduContentTOCId: Dictionary<
+      UnlockedFreePracticeInterface[]
+    > = {
+      1: [
+        new UnlockedFreePracticeFixture({
+          id: 1,
+          eduContentBookId: 1,
+          eduContentTOCId: 1,
+          classGroupId: 1
+        })
+      ],
+      2: [
+        new UnlockedFreePracticeFixture({
+          id: 1,
+          eduContentBookId: 1,
+          eduContentTOCId: 2,
+          classGroupId: 2
+        })
+      ]
+    };
+
+    beforeEach(() => {
+      viewModel.unlockedFreePracticeByEduContentBookId$.next(
+        unlockedFreePracticeByEduContentBookId
+      );
+      viewModel.filteredClassGroups$.next(mockClassGroupsByMethodId);
+      viewModel.bookChapters$.next(mockBookChapters);
+      viewModel.unlockedFreePracticeByEduContentTOCId$.next(
+        unlockedFreePracticeByEduContentTOCId
+      );
+    });
+
+    it('should have table row headers', () => {
+      expect(component.unlockedFreePracticeTableRowHeaders).toEqual([
+        { caption: 'Hoofdstuk', key: 'title' }
+      ]);
+    });
+
+    describe('classGroupColumns$', () => {
+      it('should return table item columns based on the classgroups', () => {
+        //ClassGroup 1 should have all selected, ClassGroup 2 not
+
+        const expectedGroupColumns: MultiCheckBoxTableItemColumnInterface<
+          ClassGroupInterface
+        >[] = [
+          {
+            item: mockClassGroupsByMethodId[0],
+            key: 'id',
+            label: 'name',
+            isAllSelected: true
+          },
+          {
+            item: mockClassGroupsByMethodId[1],
+            key: 'id',
+            label: 'name',
+            isAllSelected: false
+          }
+        ];
+        expect(component.classGroupColumns$).toBeObservable(
+          hot('a', { a: expectedGroupColumns })
+        );
+      });
+    });
+
+    describe('eduContentTOCsWithSelectionForClassGroups$', () => {
+      it('should return items based on the unlocked free practices and classgroups', () => {
+        const expected = [
+          {
+            header: mockBookChapters[0],
+            content: { 1: true, 2: false }
+          },
+          {
+            header: mockBookChapters[1],
+            content: { 1: false, 2: true }
+          },
+          {
+            header: mockBookChapters[2],
+            content: { 1: false, 2: false }
+          }
+        ];
+
+        expect(
+          component.eduContentTOCsWithSelectionForClassGroups$
+        ).toBeObservable(hot('a', { a: expected }));
+      });
     });
   });
 
