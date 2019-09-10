@@ -17,15 +17,10 @@ import {
   UnlockedFreePracticeInterface,
   UnlockedFreePracticeQueries
 } from '@campus/dal';
-import {
-  MultiCheckBoxTableItemColumnInterface,
-  MultiCheckBoxTableItemInterface,
-  MultiCheckBoxTableRowHeaderColumnInterface
-} from '@campus/ui';
 import { Dictionary } from '@ngrx/entity';
 import { RouterReducerState } from '@ngrx/router-store';
 import { select, Store } from '@ngrx/store';
-import { combineLatest, merge, Observable } from 'rxjs';
+import { merge, Observable } from 'rxjs';
 import {
   distinctUntilChanged,
   filter,
@@ -47,27 +42,16 @@ export class PracticeViewModel {
   public bookChapters$: Observable<EduContentTOCInterface[]>;
   public filteredClassGroups$: Observable<ClassGroupInterface[]>;
   public methodYears$: Observable<MethodYearsInterface[]>;
-
-  //Multi-check-box-table streams
-  public unlockedFreePracticeTableRowHeaders: MultiCheckBoxTableRowHeaderColumnInterface<
-    EduContentTOCInterface
-  >[];
-  public unlockedFreePracticeTableItemColumns$: Observable<
-    MultiCheckBoxTableItemColumnInterface<ClassGroupInterface>[]
+  public unlockedFreePracticeByEduContentTOCId$: Observable<
+    Dictionary<UnlockedFreePracticeInterface[]>
   >;
-  public unlockedFreePracticeTableItems$: Observable<
-    MultiCheckBoxTableItemInterface<EduContentTOCInterface>[]
+  public unlockedFreePracticeByEduContentBookId$: Observable<
+    Dictionary<UnlockedFreePracticeInterface[]>
   >;
 
   //Source streams
   private routerState$: Observable<RouterReducerState<RouterStateUrl>>;
   private currentBook$: Observable<EduContentBookInterface>;
-  private unlockedFreePracticeByEduContentTOCId$: Observable<
-    Dictionary<UnlockedFreePracticeInterface[]>
-  >;
-  private unlockedFreePracticeByEduContentBookId$: Observable<
-    Dictionary<UnlockedFreePracticeInterface[]>
-  >;
 
   constructor(
     private store: Store<DalState>,
@@ -101,13 +85,6 @@ export class PracticeViewModel {
     this.methodYears$ = this.store.pipe(
       select(MethodQueries.getAllowedMethodYears)
     );
-
-    //Multi-check-box-table streams
-    this.unlockedFreePracticeTableRowHeaders = [
-      { caption: 'Hoofdstuk', key: 'title' }
-    ];
-    this.unlockedFreePracticeTableItemColumns$ = this.getPracticeTableItemColumnsStream();
-    this.unlockedFreePracticeTableItems$ = this.getPracticeTableItemsStream();
   }
 
   private getCurrentPracticeParamsStream(): Observable<CurrentPracticeParams> {
@@ -190,92 +167,6 @@ export class PracticeViewModel {
         );
       })
     );
-  }
-
-  private getPracticeTableItemColumnsStream(): Observable<
-    MultiCheckBoxTableItemColumnInterface<ClassGroupInterface>[]
-  > {
-    return combineLatest([
-      this.filteredClassGroups$,
-      this.unlockedFreePracticeByEduContentBookId$,
-      this.currentBook$
-    ]).pipe(
-      map(([filteredClassGroups, ufpByBookId, currentBook]) => {
-        return filteredClassGroups.map(
-          (
-            classGroup
-          ): MultiCheckBoxTableItemColumnInterface<ClassGroupInterface> => ({
-            item: classGroup,
-            key: 'id',
-            label: 'name',
-            isAllSelected: this.isAllSelectedForClassGroup(
-              currentBook.id,
-              ufpByBookId,
-              classGroup
-            )
-          })
-        );
-      })
-    );
-  }
-
-  private isAllSelectedForClassGroup(
-    currentBookId: number,
-    unlockedFreePracticeByBookId: Dictionary<UnlockedFreePracticeInterface[]>,
-    classGroup: ClassGroupInterface
-  ): boolean {
-    return (
-      unlockedFreePracticeByBookId[currentBookId] &&
-      unlockedFreePracticeByBookId[currentBookId].some(
-        item => !item.eduContentTOCId && item.classGroupId === classGroup.id
-      )
-    );
-  }
-
-  private getPracticeTableItemsStream(): Observable<
-    MultiCheckBoxTableItemInterface<EduContentTOCInterface>[]
-  > {
-    return combineLatest([
-      this.bookChapters$,
-      this.unlockedFreePracticeByEduContentTOCId$,
-      this.filteredClassGroups$
-    ]).pipe(
-      map(([chapterTOCs, unlockedPracticesByTOC, filteredClassGroups]) => {
-        return this.createCheckboxItemsForUnlockedFreePractices(
-          chapterTOCs,
-          filteredClassGroups,
-          unlockedPracticesByTOC
-        );
-      })
-    );
-  }
-
-  private createCheckboxItemsForUnlockedFreePractices(
-    eduContentTOCs: EduContentTOCInterface[],
-    classGroups: ClassGroupInterface[],
-    unlockedPracticesByTOC: Dictionary<UnlockedFreePracticeInterface[]>
-  ): MultiCheckBoxTableItemInterface<EduContentTOCInterface>[] {
-    return eduContentTOCs
-      .map(eduContentTOC => {
-        const unlockedPracticesByClassGroup: Dictionary<boolean> = {};
-        classGroups.forEach(classGroup => {
-          unlockedPracticesByClassGroup[classGroup.id] = (
-            unlockedPracticesByTOC[eduContentTOC.id] || []
-          ).some(
-            unlockedPractice => unlockedPractice.classGroupId === classGroup.id
-          );
-        });
-
-        return {
-          header: eduContentTOC,
-          content: unlockedPracticesByClassGroup
-        };
-      })
-      .sort((a, b) => {
-        return a.header.title.localeCompare(b.header.title, undefined, {
-          numeric: true
-        });
-      });
   }
 
   public toggleUnlockedFreePractice(
