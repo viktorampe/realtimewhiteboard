@@ -97,11 +97,13 @@ export class MultiCheckBoxTableComponent<
     subLevel: SubLevelItemType,
     checkBox: MatCheckbox
   ) {
-    this.checkBoxChanged.emit({
-      column,
-      item,
-      subLevel,
-      isChecked: !checkBox.checked
-    });
+    if (!checkBox.disabled) {
+      this.checkBoxChanged.emit({
+        column,
+        item,
+        subLevel,
+        isChecked: !checkBox.checked
+      });
+    }
   }
 }
