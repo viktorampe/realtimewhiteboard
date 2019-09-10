@@ -8,7 +8,7 @@ import {
 import { ViewModelInterface } from '@campus/testing';
 import { BehaviorSubject } from 'rxjs';
 import { HomeViewModel } from './home.viewmodel';
-import { FavoriteWithEduContent } from './home.viewmodel.selectors';
+import { FavoriteMethodWithEduContent } from './home.viewmodel.selectors';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +16,7 @@ import { FavoriteWithEduContent } from './home.viewmodel.selectors';
 export class MockHomeViewModel implements ViewModelInterface<HomeViewModel> {
   public displayName$ = new BehaviorSubject<string>('George');
   public favoritesWithEduContent$ = new BehaviorSubject<
-    FavoriteWithEduContent[]
+    FavoriteMethodWithEduContent[]
   >([
     {
       favorite: new FavoriteFixture({
@@ -26,7 +26,8 @@ export class MockHomeViewModel implements ViewModelInterface<HomeViewModel> {
         eduContentId: 1
       }),
       bookId: 3,
-      eduContent: new EduContentFixture({ id: 1 }, { eduContentBookId: 3 })
+      eduContent: new EduContentFixture({ id: 1 }, { eduContentBookId: 3 }),
+      logoUrl: 'katapult.svg'
     },
     {
       favorite: new FavoriteFixture({
@@ -36,7 +37,8 @@ export class MockHomeViewModel implements ViewModelInterface<HomeViewModel> {
         eduContentId: 2
       }),
       bookId: 4,
-      eduContent: new EduContentFixture({ id: 2 }, { eduContentBookId: 4 })
+      eduContent: new EduContentFixture({ id: 2 }, { eduContentBookId: 4 }),
+      logoUrl: 'molenbeer.svg'
     }
   ]);
 

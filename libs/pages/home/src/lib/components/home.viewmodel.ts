@@ -13,7 +13,7 @@ import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import {
-  FavoriteWithEduContent,
+  FavoriteMethodWithEduContent,
   getFavoritesWithEduContent
 } from './home.viewmodel.selectors';
 
@@ -23,7 +23,7 @@ import {
 export class HomeViewModel {
   //Presentation streams
   public displayName$: Observable<string>;
-  public favoritesWithEduContent$: Observable<FavoriteWithEduContent[]>;
+  public favoritesWithEduContent$: Observable<FavoriteMethodWithEduContent[]>;
 
   constructor(
     private store: Store<DalState>,
