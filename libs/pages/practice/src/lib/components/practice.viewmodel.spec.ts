@@ -225,9 +225,9 @@ describe('PracticeViewModel', () => {
 
   describe('toggleUnlockedFreePractice()', () => {
     const unlockedFreePractices: UnlockedFreePracticeInterface[] = [
-      new UnlockedFreePracticeFixture(),
-      new UnlockedFreePracticeFixture(),
-      new UnlockedFreePracticeFixture()
+      new UnlockedFreePracticeFixture({ id: 1 }),
+      new UnlockedFreePracticeFixture({ id: 2 }),
+      new UnlockedFreePracticeFixture({ id: 3 })
     ];
 
     it('should dispatch StartAddManyUnlockedFreePractices when checkbox is on', () => {
@@ -243,15 +243,22 @@ describe('PracticeViewModel', () => {
     });
     it('should dispatch DeleteUnlockedFreePractices when checkbox is off', () => {
       const spy = jest.spyOn(store, 'dispatch');
+      jest
+        .spyOn(UnlockedFreePracticeQueries, 'findOne')
+        .mockReturnValueOnce(unlockedFreePractices[0]) // id 1
+        .mockReturnValueOnce(undefined) // mock that second ufp is not found in the store
+        .mockReturnValueOnce(unlockedFreePractices[2]); // id 3
+
       practiceViewModel.toggleUnlockedFreePractice(
         unlockedFreePractices,
         false
       );
+
       expect(spy).toHaveBeenCalledTimes(1);
       expect(spy).toHaveBeenCalledWith(
         new UnlockedFreePracticeActions.DeleteUnlockedFreePractices({
           userId,
-          ids: unlockedFreePractices.map(ufp => ufp.id)
+          ids: [unlockedFreePractices[0].id, unlockedFreePractices[2].id]
         })
       );
     });
