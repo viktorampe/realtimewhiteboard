@@ -291,7 +291,7 @@ export class PracticeViewModel {
         })
       );
     } else {
-      const ufps$ = unlockedFreePractices.map(ufp => {
+      const ufpsIds$ = unlockedFreePractices.map(ufp => {
         return this.store.pipe(
           select(UnlockedFreePracticeQueries.findOne, ufp),
           filter(foundUfp => !!foundUfp),
@@ -300,7 +300,7 @@ export class PracticeViewModel {
         );
       });
 
-      zip(...ufps$).subscribe(ids => {
+      zip(...ufpsIds$).subscribe(ids => {
         this.store.dispatch(
           new UnlockedFreePracticeActions.DeleteUnlockedFreePractices({
             userId: this.authService.userId,
