@@ -6,6 +6,8 @@ import {
   EduContentBookInterface,
   EduContentProductTypeInterface,
   EduContentTOCInterface,
+  FavoriteInterface,
+  FavoriteTypesEnum,
   LearningPlanGoalInterface,
   MethodInterface
 } from '@campus/dal';
@@ -35,6 +37,7 @@ export class MethodComponent implements OnInit {
   public productTypes$: Observable<EduContentProductTypeInterface[]>;
   public currentTab$: Observable<number>;
   public breadcrumbTitles$: Observable<string>;
+  public isBoekeFavorite$: Observable<boolean>;
 
   public learningPlanGoalTableHeaders: MultiCheckBoxTableRowHeaderColumnInterface<
     LearningPlanGoalInterface
@@ -52,6 +55,7 @@ export class MethodComponent implements OnInit {
 
   ngOnInit() {
     this.boeke$ = this.viewModel.currentBoeke$;
+    this.isBoekeFavorite$ = this.viewModel.isCurrentBoekeFavorite$;
     this.book$ = this.viewModel.currentBook$;
     this.chapters$ = this.viewModel.currentToc$;
     this.generalFilesByType$ = this.viewModel.generalFilesByType$;
@@ -118,6 +122,20 @@ export class MethodComponent implements OnInit {
 
   public clickExportGoals(): void {
     this.viewModel.exportLearningPlanGoalProgress();
+  }
+
+  public toggleBoekeFavorite(boeke: EduContent) {
+    this.book$.pipe(take(1)).subscribe(book => {
+      const favorite: FavoriteInterface = {
+        name: book.title + ' ' + book.years.map(year => year.label).join(','),
+        type: FavoriteTypesEnum.BOEKE,
+        eduContentId: boeke.id,
+        created: new Date(),
+        learningAreaId: boeke.publishedEduContentMetadata.learningAreaId
+      };
+
+      this.viewModel.toggleFavorite(favorite);
+    });
   }
 
   private getTableColumnsFromClassGroupsStream(): Observable<

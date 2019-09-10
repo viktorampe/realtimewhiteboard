@@ -20,6 +20,9 @@ import {
   EduContentTOCInterface,
   EduContentTocQueries,
   EDU_CONTENT_SERVICE_TOKEN,
+  FavoriteActions,
+  FavoriteInterface,
+  FavoriteQueries,
   getRouterState,
   LearningPlanGoalInterface,
   LearningPlanGoalProgressActions,
@@ -112,6 +115,7 @@ export class MethodViewModel implements ContentOpenerInterface {
       LearningPlanGoalInterface
     >[]
   >;
+  public isCurrentBoekeFavorite$: Observable<boolean>;
 
   // Source streams
   private routerState$: Observable<RouterReducerState<RouterStateUrl>>;
@@ -321,6 +325,10 @@ export class MethodViewModel implements ContentOpenerInterface {
     });
   }
 
+  toggleFavorite(favorite: FavoriteInterface): void {
+    this.store.dispatch(new FavoriteActions.ToggleFavorite({ favorite }));
+  }
+
   private initialize() {
     this.learningPlanGoalTableHeaders = [
       { caption: 'Prefix', key: 'prefix' },
@@ -345,9 +353,22 @@ export class MethodViewModel implements ContentOpenerInterface {
     this.currentLessons$ = this.getTocLessonsStream();
     this.userLessons$ = this.store.pipe(select(UserLessonQueries.getAll));
     this.breadCrumbTitles$ = this.getBreadCrumbTitlesStream();
+    this.isCurrentBoekeFavorite$ = this.getIsCurrentBoekeFavoriteStream();
 
     this.learningPlanGoalsWithSelectionForClassGroups$ = this.getLearningPlanGoalsWithSelectionStream();
     this.learningPlanGoalsPerLessonWithSelectionForClassGroups$ = this.getLearningPlanGoalsPerLessonWithSelectionStream();
+  }
+
+  private getIsCurrentBoekeFavoriteStream(): Observable<boolean> {
+    return this.currentBoeke$.pipe(
+      switchMap(boeke =>
+        this.store.pipe(
+          select(FavoriteQueries.getIsFavoriteEduContent, {
+            eduContentId: boeke.id
+          })
+        )
+      )
+    );
   }
 
   private getCurrentTab(): Observable<number> {
