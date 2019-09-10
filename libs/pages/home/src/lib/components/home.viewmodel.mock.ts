@@ -14,7 +14,7 @@ import { FavoriteWithEduContent } from './home.viewmodel.selectors';
   providedIn: 'root'
 })
 export class MockHomeViewModel implements ViewModelInterface<HomeViewModel> {
-  public userFirstName$ = new BehaviorSubject<string>('George');
+  public displayName$ = new BehaviorSubject<string>('George');
   public favoritesWithEduContent$ = new BehaviorSubject<
     FavoriteWithEduContent[]
   >([

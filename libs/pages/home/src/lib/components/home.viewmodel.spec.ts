@@ -46,37 +46,23 @@ describe('HomeViewModel', () => {
 
   function setupSelectorSpies() {
     selectorSpies = {
-      //Used by userFirstName$
+      //Used by displayName$
       currentUser: jest.spyOn(UserQueries, 'getCurrentUser')
     };
   }
 
   describe('presentation streams', () => {
-    describe('userFirstName$', () => {
-      it("should return the current user's first name", () => {
-        const firstName = 'Jan';
+    describe('displayName$', () => {
+      it("should return the current user's displayName", () => {
+        const displayName = 'Jan';
 
         selectorSpies.currentUser.mockReturnValue(
-          new PersonFixture({ firstName, name: 'Smit' })
+          new PersonFixture({ displayName })
         );
 
-        expect(homeViewModel.userFirstName$).toBeObservable(
+        expect(homeViewModel.displayName$).toBeObservable(
           hot('a', {
-            a: firstName
-          })
-        );
-      });
-
-      it('should return an empty string if the current user has no first name', () => {
-        const firstName = undefined;
-
-        selectorSpies.currentUser.mockReturnValue(
-          new PersonFixture({ firstName, name: 'Smit' })
-        );
-
-        expect(homeViewModel.userFirstName$).toBeObservable(
-          hot('a', {
-            a: ''
+            a: displayName
           })
         );
       });

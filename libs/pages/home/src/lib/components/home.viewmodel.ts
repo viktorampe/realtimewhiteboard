@@ -22,7 +22,7 @@ import {
 })
 export class HomeViewModel {
   //Presentation streams
-  public userFirstName$: Observable<string>;
+  public displayName$: Observable<string>;
   public favoritesWithEduContent$: Observable<FavoriteWithEduContent[]>;
 
   constructor(
@@ -42,9 +42,9 @@ export class HomeViewModel {
   }
 
   private setPresentationStreams(): void {
-    this.userFirstName$ = this.store.pipe(
+    this.displayName$ = this.store.pipe(
       select(UserQueries.getCurrentUser),
-      map(user => user.firstName || '')
+      map(user => user.displayName)
     );
     this.favoritesWithEduContent$ = this.store.pipe(
       select(getFavoritesWithEduContent, { type: FavoriteTypesEnum.BOEKE })
