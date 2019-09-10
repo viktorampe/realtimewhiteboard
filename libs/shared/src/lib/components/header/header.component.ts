@@ -17,11 +17,11 @@ export class HeaderComponent implements OnInit {
   enableGlobalSearch: boolean;
 
   @Input()
-  breadcrumbPosition: 'top-left|page-left';
+  breadcrumbPosition: 'top-left' | 'page-left';
   @Input()
   profileMenuPosition: 'top-right';
   @Input()
-  quicklinkPosition: 'page-right|top-right';
+  quicklinkPosition: 'page-right' | 'top-right';
   @Input()
   alertsPosition: 'top-right';
   @Input()

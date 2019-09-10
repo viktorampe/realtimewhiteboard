@@ -129,12 +129,14 @@
 
 <ng-template #quicklinks>
   <campus-button
+    id="global-favorites-btn"
     *hasPermission="Permissions.MANAGE_FAVORITES"
     (click)="onManageFavoritesClick()"
     class="shared-header__quicklink__button"
     [iconClass]="'bordered:favorites'"
   ></campus-button>
   <campus-button
+    id="global-history-btn"
     *hasPermission="Permissions.MANAGE_HISTORY"
     (click)="onManageHistoryClick()"
     class="shared-header__quicklink__button"
@@ -144,6 +146,7 @@
 
 <ng-template #globalSearch>
   <campus-button
+    id="global-search-btn"
     *hasPermission="Permissions.GLOBAL_SEARCH"
     [iconClass]="'magnifier'"
     [routerLink]="['search']"
@@ -152,6 +155,7 @@
 
 <ng-template #profileLink>
   <campus-button
+    id="global-profile-btn"
     [iconClass]="'profile'"
     [routerLink]="['settings']"
   ></campus-button>
