@@ -62,7 +62,7 @@ export class UndoService implements UndoServiceInterface {
           if (deleteFeedbackAction.payload.userAction !== undoAction) {
             return intendedSideEffect.pipe(
               tap(res => {
-                if (res) dataPersistence.store.dispatch(res);
+                if (isAction(res)) dataPersistence.store.dispatch(res);
               }), //TODO: do this cleanly AB#1915
               map(res => {
                 const effectFeedback = new EffectFeedback({
@@ -98,4 +98,8 @@ export class UndoService implements UndoServiceInterface {
       )
     );
   }
+}
+
+function isAction(obj): obj is Action {
+  return (obj as Action).type !== undefined;
 }
