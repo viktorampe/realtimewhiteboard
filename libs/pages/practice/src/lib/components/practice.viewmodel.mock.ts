@@ -4,7 +4,8 @@ import {
   ClassGroupInterface,
   EduContentTOCFixture,
   EduContentTOCInterface,
-  MethodYearsInterface
+  MethodYearsInterface,
+  UnlockedFreePracticeInterface
 } from '@campus/dal';
 import { ViewModelInterface } from '@campus/testing';
 import {
@@ -12,6 +13,7 @@ import {
   MultiCheckBoxTableItemInterface,
   MultiCheckBoxTableRowHeaderColumnInterface
 } from '@campus/ui';
+import { Dictionary } from '@ngrx/entity';
 import { BehaviorSubject } from 'rxjs';
 import { CurrentPracticeParams, PracticeViewModel } from './practice.viewmodel';
 @Injectable({
@@ -34,6 +36,12 @@ export class MockPracticeViewModel
   );
 
   //Multi-check-box-table streams
+  public unlockedFreePracticeByEduContentTOCId$ = new BehaviorSubject<
+    Dictionary<UnlockedFreePracticeInterface[]>
+  >(null);
+  public unlockedFreePracticeByEduContentBookId$ = new BehaviorSubject<
+    Dictionary<UnlockedFreePracticeInterface[]>
+  >(null);
   public unlockedFreePracticeTableRowHeaders: MultiCheckBoxTableRowHeaderColumnInterface<
     EduContentTOCInterface
   >[] = [{ caption: 'Hoofdstuk', key: 'title' }];
