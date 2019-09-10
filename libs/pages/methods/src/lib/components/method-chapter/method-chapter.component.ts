@@ -10,7 +10,10 @@ import { Router } from '@angular/router';
 import {
   ClassGroupInterface,
   EduContent,
+  EduContentBookInterface,
   EduContentTOCInterface,
+  FavoriteInterface,
+  FavoriteTypesEnum,
   LearningPlanGoalInterface
 } from '@campus/dal';
 import {
@@ -42,6 +45,7 @@ export class MethodChapterComponent implements OnInit, AfterViewInit {
   public searchResults$: Observable<SearchResultInterface>;
   public autoCompleteValues$: Observable<string[]>;
   public boeke$: Observable<EduContent>;
+  public isBoekeFavorite$: Observable<boolean>;
   public lessonsForChapter$: Observable<EduContentTOCInterface[]>;
   public currentTab$: Observable<number>;
   public currentMethodParams$: Observable<CurrentMethodParams>;
@@ -59,6 +63,8 @@ export class MethodChapterComponent implements OnInit, AfterViewInit {
     >[]
   >;
 
+  private book$: Observable<EduContentBookInterface>;
+
   @ViewChildren(SearchPortalDirective)
   private portalHosts: QueryList<SearchPortalDirective>;
   @ViewChild(SearchComponent) public searchComponent: SearchComponent;
@@ -73,6 +79,8 @@ export class MethodChapterComponent implements OnInit, AfterViewInit {
     this.initialSearchState$ = this.methodViewModel.getInitialSearchState();
     this.searchResults$ = this.methodViewModel.searchResults$;
     this.boeke$ = this.methodViewModel.currentBoeke$;
+    this.isBoekeFavorite$ = this.methodViewModel.isCurrentBoekeFavorite$;
+    this.book$ = this.methodViewModel.currentBook$;
     this.lessonsForChapter$ = this.methodViewModel.currentToc$;
     this.currentTab$ = this.methodViewModel.currentTab$;
     this.currentMethodParams$ = this.methodViewModel.currentMethodParams$;
@@ -151,6 +159,20 @@ export class MethodChapterComponent implements OnInit, AfterViewInit {
 
   public clickOpenBoeke(eduContent: EduContent): void {
     this.methodViewModel.openBoeke(eduContent);
+  }
+
+  public toggleBoekeFavorite(boeke: EduContent) {
+    this.book$.pipe(take(1)).subscribe(book => {
+      const favorite: FavoriteInterface = {
+        name: book.title + ' ' + book.years.map(year => year.label).join(', '),
+        type: FavoriteTypesEnum.BOEKE,
+        eduContentId: boeke.id,
+        created: new Date(),
+        learningAreaId: boeke.publishedEduContentMetadata.learningAreaId
+      };
+
+      this.methodViewModel.toggleFavorite(favorite);
+    });
   }
 
   public checkBoxChanged(

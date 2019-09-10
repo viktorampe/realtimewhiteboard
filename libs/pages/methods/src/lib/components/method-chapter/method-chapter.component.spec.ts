@@ -13,11 +13,15 @@ import { RouterTestingModule } from '@angular/router/testing';
 import {
   ClassGroupFixture,
   ClassGroupInterface,
+  EduContentBookFixture,
+  EduContentBookInterface,
   EduContentFixture,
   EduContentTOCFixture,
   EduContentTOCInterface,
+  FavoriteTypesEnum,
   LearningPlanGoalFixture,
-  LearningPlanGoalInterface
+  LearningPlanGoalInterface,
+  YearFixture
 } from '@campus/dal';
 import {
   ResultItemMockComponent,
@@ -31,7 +35,7 @@ import {
   ENVIRONMENT_TESTING_TOKEN,
   SharedModule
 } from '@campus/shared';
-import { MockMatIconRegistry } from '@campus/testing';
+import { MockDate, MockMatIconRegistry } from '@campus/testing';
 import {
   MultiCheckBoxTableItemChangeEventInterface,
   MultiCheckBoxTableItemColumnInterface,
@@ -39,6 +43,7 @@ import {
 } from '@campus/ui';
 import { hot } from '@nrwl/nx/testing';
 import { configureTestSuite } from 'ng-bullet';
+import { BehaviorSubject } from 'rxjs';
 import { MethodViewModel } from './../method.viewmodel';
 import { MockMethodViewModel } from './../method.viewmodel.mock';
 import { MethodChapterComponent } from './method-chapter.component';
@@ -360,6 +365,44 @@ describe('MethodChapterComponent', () => {
         expect(
           methodViewModel.onBulkLearningPlanGoalProgressChanged
         ).toHaveBeenCalledWith(1, [2, 3], 4, 3599752219);
+      });
+    });
+  });
+
+  describe('toggleFavorite', () => {
+    let dateMock;
+
+    beforeAll(() => {
+      dateMock = new MockDate();
+    });
+
+    afterAll(() => {
+      dateMock.returnRealDate();
+    });
+
+    it('should call the correct method on the viewmodel', () => {
+      jest.spyOn(methodViewModel, 'toggleFavorite');
+      const boeke = new EduContentFixture({ id: 123 }, { learningAreaId: 456 });
+      const years = [
+        new YearFixture({ label: 'bar' }),
+        new YearFixture({ label: 'bar2' })
+      ];
+      const currentBook = new EduContentBookFixture({
+        title: 'foo',
+        years
+      });
+
+      (methodViewModel.currentBook$ as BehaviorSubject<
+        EduContentBookInterface
+      >).next(currentBook);
+
+      component.toggleBoekeFavorite(boeke);
+      expect(methodViewModel.toggleFavorite).toHaveBeenCalledWith({
+        created: dateMock.mockDate,
+        eduContentId: boeke.id,
+        learningAreaId: boeke.publishedEduContentMetadata.learningAreaId,
+        type: FavoriteTypesEnum.BOEKE,
+        name: 'foo bar, bar2'
       });
     });
   });
