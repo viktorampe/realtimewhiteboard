@@ -1,13 +1,40 @@
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { MatCard, MatCardModule, MatIconRegistry, MatListItem } from '@angular/material';
+import {
+  ComponentFixture,
+  fakeAsync,
+  TestBed,
+  tick
+} from '@angular/core/testing';
+import {
+  MatCard,
+  MatCardModule,
+  MatIconRegistry,
+  MatListItem
+} from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { ClassGroupFixture, ClassGroupInterface, EduContentBookFixture, EduContentBookInterface, EduContentFixture, FavoriteTypesEnum, YearFixture } from '@campus/dal';
-import { ENVIRONMENT_ICON_MAPPING_TOKEN, ENVIRONMENT_SEARCHMODES_TOKEN, ENVIRONMENT_TESTING_TOKEN, SharedModule } from '@campus/shared';
+import {
+  ClassGroupFixture,
+  ClassGroupInterface,
+  EduContentBookFixture,
+  EduContentBookInterface,
+  EduContentFixture,
+  FavoriteTypesEnum,
+  YearFixture
+} from '@campus/dal';
+import {
+  ENVIRONMENT_ICON_MAPPING_TOKEN,
+  ENVIRONMENT_SEARCHMODES_TOKEN,
+  ENVIRONMENT_TESTING_TOKEN,
+  SharedModule
+} from '@campus/shared';
 import { MockDate, MockMatIconRegistry } from '@campus/testing';
-import { MultiCheckBoxTableItemChangeEventInterface, MultiCheckBoxTableItemColumnInterface, UiModule } from '@campus/ui';
+import {
+  MultiCheckBoxTableItemChangeEventInterface,
+  MultiCheckBoxTableItemColumnInterface,
+  UiModule
+} from '@campus/ui';
 import { hot } from '@nrwl/nx/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { BehaviorSubject } from 'rxjs';
