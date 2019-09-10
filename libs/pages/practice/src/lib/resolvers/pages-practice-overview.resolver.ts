@@ -24,7 +24,7 @@ export class PracticeOverviewResolver extends StateResolver {
         select(MethodQueries.getAllowedMethodIds),
         take(1)
       )
-      .subscribe(ids => (methodIds = ids)); // methodsIds resolved in parent resolver
+      .subscribe(ids => (methodIds = ids)); // methodsIds resolved in app resolver
     return [new EduContentBookActions.LoadEduContentBooks({ methodIds })];
   }
 

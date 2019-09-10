@@ -9,8 +9,6 @@ import {
   EduContentProductTypeQueries,
   LearningDomainActions,
   LearningDomainQueries,
-  MethodActions,
-  MethodQueries,
   StateResolver,
   YearActions,
   YearQueries
@@ -30,8 +28,6 @@ export class GlobalSearchResolver extends StateResolver {
   protected getLoadableActions(): Action[] {
     const userId = this.authService.userId;
     return [
-      new MethodActions.LoadMethods({ userId }),
-      new MethodActions.LoadAllowedMethods({ userId }),
       new YearActions.LoadYears({ userId }),
       new LearningDomainActions.LoadLearningDomains(),
       new DiaboloPhaseActions.LoadDiaboloPhases({ userId }),
@@ -41,8 +37,6 @@ export class GlobalSearchResolver extends StateResolver {
 
   protected getResolvedQueries(): Selector<object, boolean>[] {
     return [
-      MethodQueries.getLoaded,
-      MethodQueries.getAllowedMethodsLoaded,
       YearQueries.getLoaded,
       LearningDomainQueries.getLoaded,
       DiaboloPhaseQueries.getLoaded,

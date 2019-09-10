@@ -3,8 +3,6 @@ import {
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
   DalState,
-  MethodActions,
-  MethodQueries,
   StateResolver,
   YearActions,
   YearQueries
@@ -24,18 +22,10 @@ export class PracticeResolver extends StateResolver {
 
   protected getLoadableActions(): Action[] {
     const userId = this.authService.userId;
-    return [
-      new MethodActions.LoadMethods({ userId }),
-      new MethodActions.LoadAllowedMethods({ userId }),
-      new YearActions.LoadYears({ userId })
-    ];
+    return [new YearActions.LoadYears({ userId })];
   }
 
   protected getResolvedQueries(): Selector<object, boolean>[] {
-    return [
-      MethodQueries.getLoaded,
-      MethodQueries.getAllowedMethodsLoaded,
-      YearQueries.getLoaded
-    ];
+    return [YearQueries.getLoaded];
   }
 }
