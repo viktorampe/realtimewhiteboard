@@ -30,20 +30,19 @@ export class PracticeMethodDetailComponent implements OnInit {
   private unlockedFreePracticeByEduContentBookId$: Observable<
     Dictionary<UnlockedFreePracticeInterface[]>
   >;
-
   private unlockedFreePracticeByEduContentTOCId$: Observable<
     Dictionary<UnlockedFreePracticeInterface[]>
   >;
 
   public breadCrumbTitles$: Observable<string>; // used to show book method + year
 
+  // MultiCheckBoxTable
   public unlockedFreePracticeTableItems$: Observable<
     MultiCheckBoxTableItemInterface<EduContentTOCInterface>[]
   >;
   public unlockedFreePracticeTableRowHeaders: MultiCheckBoxTableRowHeaderColumnInterface<
     EduContentTOCInterface
   >[];
-
   public classGroupColumns$: Observable<
     MultiCheckBoxTableItemColumnInterface<ClassGroupInterface>[]
   >;

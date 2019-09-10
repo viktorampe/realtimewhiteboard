@@ -42,17 +42,16 @@ export class PracticeViewModel {
   public bookChapters$: Observable<EduContentTOCInterface[]>;
   public filteredClassGroups$: Observable<ClassGroupInterface[]>;
   public methodYears$: Observable<MethodYearsInterface[]>;
+  public unlockedFreePracticeByEduContentTOCId$: Observable<
+    Dictionary<UnlockedFreePracticeInterface[]>
+  >;
+  public unlockedFreePracticeByEduContentBookId$: Observable<
+    Dictionary<UnlockedFreePracticeInterface[]>
+  >;
 
   //Source streams
   private routerState$: Observable<RouterReducerState<RouterStateUrl>>;
   private currentBook$: Observable<EduContentBookInterface>;
-  public unlockedFreePracticeByEduContentTOCId$: Observable<
-    Dictionary<UnlockedFreePracticeInterface[]>
-  >;
-
-  public unlockedFreePracticeByEduContentBookId$: Observable<
-    Dictionary<UnlockedFreePracticeInterface[]>
-  >;
 
   constructor(
     private store: Store<DalState>,
