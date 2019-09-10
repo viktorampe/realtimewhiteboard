@@ -7,6 +7,7 @@ import {
 } from '@campus/dal';
 import {
   MultiCheckBoxTableColumnChangeEventInterface,
+  MultiCheckBoxTableItemChangeEventInterface,
   MultiCheckBoxTableItemColumnInterface,
   MultiCheckBoxTableItemInterface,
   MultiCheckBoxTableRowHeaderColumnInterface
@@ -67,5 +68,15 @@ export class DemoPageComponent implements OnInit {
       }
     });
     this.itemColumns = [...this.itemColumns];
+  }
+
+  clickCheckBox(
+    data: MultiCheckBoxTableItemChangeEventInterface<
+      EduContentTOCInterface,
+      ClassGroupInterface,
+      any
+    >
+  ) {
+    console.log(data);
   }
 }
