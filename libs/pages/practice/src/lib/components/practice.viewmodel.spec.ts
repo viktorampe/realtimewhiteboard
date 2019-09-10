@@ -5,7 +5,6 @@ import { RouterTestingModule } from '@angular/router/testing';
 import {
   AUTH_SERVICE_TOKEN,
   ClassGroupFixture,
-  ClassGroupInterface,
   ClassGroupQueries,
   CustomSerializer,
   DalState,
@@ -20,8 +19,6 @@ import {
   UnlockedFreePracticeInterface,
   UnlockedFreePracticeQueries
 } from '@campus/dal';
-import { MultiCheckBoxTableItemColumnInterface } from '@campus/ui';
-import { Dictionary } from '@ngrx/entity';
 import {
   NavigationActionTiming,
   RouterNavigationAction,
@@ -224,127 +221,13 @@ describe('PracticeViewModel', () => {
         );
       });
     });
-
-    describe('multi-check-box-table streams', () => {
-      const methodId = 5;
-      const mockBook = new EduContentBookFixture({ id: 1, methodId });
-      const mockClassGroupsByMethodId = [
-        new ClassGroupFixture({ id: 1, name: '1a' }),
-        new ClassGroupFixture({ id: 2, name: '1b' })
-      ];
-      const mockBookChapters = [
-        new EduContentTOCFixture({ id: 1 }),
-        new EduContentTOCFixture({ id: 2 }),
-        new EduContentTOCFixture({ id: 3 })
-      ];
-      const unlockedFreePracticeByEduContentTOCId: Dictionary<
-        UnlockedFreePracticeInterface[]
-      > = {
-        1: [
-          new UnlockedFreePracticeFixture({
-            id: 1,
-            eduContentBookId: 1,
-            eduContentTOCId: 1,
-            classGroupId: 1
-          })
-        ],
-        2: [
-          new UnlockedFreePracticeFixture({
-            id: 1,
-            eduContentBookId: 1,
-            eduContentTOCId: 2,
-            classGroupId: 2
-          })
-        ]
-      };
-      const unlockedFreePracticeByEduContentBookId: Dictionary<
-        UnlockedFreePracticeInterface[]
-      > = {
-        1: [
-          new UnlockedFreePracticeFixture({
-            id: 1,
-            eduContentBookId: 1,
-            eduContentTOCId: undefined,
-            classGroupId: 1
-          })
-        ]
-      };
-
-      beforeEach(() => {
-        selectorSpies.book.mockReturnValue(mockBook);
-        selectorSpies.bookChapters.mockReturnValue(mockBookChapters);
-        selectorSpies.classGroups.mockReturnValue(mockClassGroupsByMethodId);
-        selectorSpies.ufpByEduContentTOCId.mockReturnValue(
-          unlockedFreePracticeByEduContentTOCId
-        );
-        selectorSpies.ufpByEduContentBookId.mockReturnValue(
-          unlockedFreePracticeByEduContentBookId
-        );
-
-        navigateWithParams({ book: 1 });
-      });
-
-      describe('unlockedFreePracticeTableItemColumns$', () => {
-        it('should return table item columns based on the classgroups', () => {
-          //ClassGroup 1 should have all selected, ClassGroup 2 not
-
-          const expectedGroupColumns: MultiCheckBoxTableItemColumnInterface<
-            ClassGroupInterface
-          >[] = [
-            {
-              item: mockClassGroupsByMethodId[0],
-              key: 'id',
-              label: 'name',
-              isAllSelected: true
-            },
-            {
-              item: mockClassGroupsByMethodId[1],
-              key: 'id',
-              label: 'name',
-              isAllSelected: false
-            }
-          ];
-
-          expect(
-            practiceViewModel.unlockedFreePracticeTableItemColumns$
-          ).toBeObservable(
-            hot('a', {
-              a: expectedGroupColumns
-            })
-          );
-        });
-      });
-
-      describe('unlockedFreePracticeTableItems$', () => {
-        it('should return items based on the unlocked free practices and classgroups', () => {
-          const expected = [
-            {
-              header: mockBookChapters[0],
-              content: { 1: true, 2: false }
-            },
-            {
-              header: mockBookChapters[1],
-              content: { 1: false, 2: true }
-            },
-            {
-              header: mockBookChapters[2],
-              content: { 1: false, 2: false }
-            }
-          ];
-
-          expect(
-            practiceViewModel.unlockedFreePracticeTableItems$
-          ).toBeObservable(hot('a', { a: expected }));
-        });
-      });
-    });
   });
 
   describe('toggleUnlockedFreePractice()', () => {
     const unlockedFreePractices: UnlockedFreePracticeInterface[] = [
-      new UnlockedFreePracticeFixture(),
-      new UnlockedFreePracticeFixture(),
-      new UnlockedFreePracticeFixture()
+      new UnlockedFreePracticeFixture({ id: 1 }),
+      new UnlockedFreePracticeFixture({ id: 2 }),
+      new UnlockedFreePracticeFixture({ id: 3 })
     ];
 
     it('should dispatch StartAddManyUnlockedFreePractices when checkbox is on', () => {
@@ -360,15 +243,22 @@ describe('PracticeViewModel', () => {
     });
     it('should dispatch DeleteUnlockedFreePractices when checkbox is off', () => {
       const spy = jest.spyOn(store, 'dispatch');
+      jest
+        .spyOn(UnlockedFreePracticeQueries, 'findOne')
+        .mockReturnValueOnce(unlockedFreePractices[0]) // id 1
+        .mockReturnValueOnce(undefined) // mock that second ufp is not found in the store
+        .mockReturnValueOnce(unlockedFreePractices[2]); // id 3
+
       practiceViewModel.toggleUnlockedFreePractice(
         unlockedFreePractices,
         false
       );
+
       expect(spy).toHaveBeenCalledTimes(1);
       expect(spy).toHaveBeenCalledWith(
         new UnlockedFreePracticeActions.DeleteUnlockedFreePractices({
           userId,
-          ids: unlockedFreePractices.map(ufp => ufp.id)
+          ids: [unlockedFreePractices[0].id, unlockedFreePractices[2].id]
         })
       );
     });
