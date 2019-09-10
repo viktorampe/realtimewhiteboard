@@ -19,12 +19,15 @@ import {
   EduContentBookInterface,
   EduContentBookReducer,
   EduContentFixture,
+  EduContentQueries,
   EduContentReducer,
   EduContentServiceInterface,
   EduContentTocActions,
   EduContentTOCFixture,
   EduContentTocReducer,
   EDU_CONTENT_SERVICE_TOKEN,
+  FavoriteActions,
+  FavoriteQueries,
   getStoreModuleForFeatures,
   LearningPlanGoalActions,
   LearningPlanGoalFixture,
@@ -75,6 +78,7 @@ import { hot } from '@nrwl/nx/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { of } from 'rxjs';
 import { take } from 'rxjs/operators';
+import { FavoriteFixture } from './../../../../../dal/src/lib/+fixtures/Favorite.fixture';
 import { MethodViewModel } from './method.viewmodel';
 
 describe('MethodViewModel', () => {
@@ -88,6 +92,11 @@ describe('MethodViewModel', () => {
   let eduContentService: EduContentServiceInterface;
   let mockWindow: MockWindow;
   let matDialog: MatDialog;
+
+  let selectorSpies: {
+    boeke: jest.SpyInstance;
+    isFavorite: jest.SpyInstance;
+  };
 
   const bookId = 5;
   const diaboloBookId = 6;
@@ -335,6 +344,7 @@ describe('MethodViewModel', () => {
   });
 
   beforeEach(() => {
+    setupSelectorSpies();
     methodViewModel = TestBed.get(MethodViewModel);
     store = TestBed.get(Store);
     zone = TestBed.get(NgZone);
@@ -348,6 +358,13 @@ describe('MethodViewModel', () => {
 
     matDialog = TestBed.get(MatDialog);
   });
+
+  function setupSelectorSpies() {
+    selectorSpies = {
+      boeke: jest.spyOn(EduContentQueries, 'getBoekeByBookId'),
+      isFavorite: jest.spyOn(FavoriteQueries, 'getIsFavoriteEduContent')
+    };
+  }
 
   function loadInStore() {
     store.dispatch(
@@ -918,6 +935,29 @@ describe('MethodViewModel', () => {
         ).toBeObservable(hot('a', { a: expected }));
       });
     });
+
+    describe('isCurrentBoekeFavorite$', () => {
+      const mockBoeke = new EduContentFixture({ id: 123, type: 'boek-e' });
+      const mockIsFavorite = true;
+      const storeState = jasmine.anything();
+
+      beforeEach(() => {
+        selectorSpies.boeke.mockReturnValue(mockBoeke);
+        selectorSpies.isFavorite.mockReturnValue(mockIsFavorite);
+        navigateWithParams({ book: book.id });
+      });
+
+      it('should call the correct selector and return the value', () => {
+        expect(methodViewModel.isCurrentBoekeFavorite$).toBeObservable(
+          hot('a', { a: mockIsFavorite })
+        );
+
+        expect(FavoriteQueries.getIsFavoriteEduContent).toHaveBeenCalledWith(
+          storeState,
+          { eduContentId: mockBoeke.id }
+        );
+      });
+    });
   });
 
   describe('open eduContent', () => {
@@ -1089,6 +1129,19 @@ describe('MethodViewModel', () => {
           },
           autoFocus: false
         }
+      );
+    });
+  });
+
+  describe('toggleFavorite', () => {
+    it('should dispatch an action', () => {
+      jest.spyOn(store, 'dispatch');
+      const favorite = new FavoriteFixture();
+
+      methodViewModel.toggleFavorite(favorite);
+
+      expect(store.dispatch).toHaveBeenCalledWith(
+        new FavoriteActions.ToggleFavorite({ favorite })
       );
     });
   });

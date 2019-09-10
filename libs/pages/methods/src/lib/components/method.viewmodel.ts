@@ -325,7 +325,7 @@ export class MethodViewModel implements ContentOpenerInterface {
     });
   }
 
-  toggleFavorite(favorite: FavoriteInterface): void {
+  public toggleFavorite(favorite: FavoriteInterface): void {
     this.store.dispatch(new FavoriteActions.ToggleFavorite({ favorite }));
   }
 

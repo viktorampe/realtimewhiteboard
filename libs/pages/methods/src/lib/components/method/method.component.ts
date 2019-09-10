@@ -127,7 +127,7 @@ export class MethodComponent implements OnInit {
   public toggleBoekeFavorite(boeke: EduContent) {
     this.book$.pipe(take(1)).subscribe(book => {
       const favorite: FavoriteInterface = {
-        name: book.title + ' ' + book.years.map(year => year.label).join(','),
+        name: book.title + ' ' + book.years.map(year => year.label).join(', '),
         type: FavoriteTypesEnum.BOEKE,
         eduContentId: boeke.id,
         created: new Date(),
