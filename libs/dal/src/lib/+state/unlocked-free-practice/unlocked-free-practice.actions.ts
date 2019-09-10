@@ -102,10 +102,16 @@ export class DeleteUnlockedFreePractice implements Action {
   constructor(public payload: { id: number }) {}
 }
 
-export class DeleteUnlockedFreePractices implements Action {
+export class DeleteUnlockedFreePractices implements FeedbackTriggeringAction {
   readonly type = UnlockedFreePracticesActionTypes.DeleteUnlockedFreePractices;
 
-  constructor(public payload: { ids: number[] }) {}
+  constructor(
+    public payload: {
+      userId: number;
+      ids: number[];
+      customFeedbackHandlers?: CustomFeedbackHandlersInterface;
+    }
+  ) {}
 }
 
 export class ClearUnlockedFreePractices implements Action {
