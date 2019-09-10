@@ -11,6 +11,7 @@ import {
   EduContentProductTypeInterface,
   EduContentTOCFixture,
   EduContentTOCInterface,
+  FavoriteInterface,
   LearningPlanGoalFixture,
   LearningPlanGoalInterface,
   MethodFixture,
@@ -131,6 +132,8 @@ export class MockMethodViewModel
 
   public breadCrumbTitles$ = new BehaviorSubject('cool breadcrumb title');
 
+  public isCurrentBoekeFavorite$ = new BehaviorSubject(true);
+
   constructor(
     @Inject(ENVIRONMENT_SEARCHMODES_TOKEN)
     private searchModes: EnvironmentSearchModesInterface
@@ -182,7 +185,7 @@ export class MockMethodViewModel
     classGroup: ClassGroupInterface
   ): void {}
 
-  public deleteLearningPlanGoalProgressForLearningPlanGoalsClassGroups() {}
+  public toggleFavorite(favorite: FavoriteInterface): void {}
 
   private getAllowedBooks$(): MethodYearsInterface[] {
     return [
