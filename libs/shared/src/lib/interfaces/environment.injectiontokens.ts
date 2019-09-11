@@ -10,7 +10,7 @@ export const ENVIRONMENT_WEBSITE_TOKEN = new InjectionToken(
   'environmentWebsite'
 );
 
-export const ENVIRONMENT_QUICK_LINK_FEATURE_TOKEN = new InjectionToken(
+export const ENVIRONMENT_FAVORITES_FEATURE_TOKEN = new InjectionToken(
   'environmentQuickLinkFeature'
 );
 
