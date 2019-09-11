@@ -46,7 +46,7 @@ describe('HeaderComponent', () => {
         {
           provide: PERMISSION_SERVICE_TOKEN,
           useValue: {
-            hasPermission: () => of(true)
+            hasPermission$: () => of(true)
           }
         }
       ]

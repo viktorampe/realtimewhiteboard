@@ -16,10 +16,14 @@ import { SettingsDashboardViewModel } from './settings-dashboard.viewmodel';
 import { MockSettingsDashboardViewModel } from './settings-dashboard.viewmodel.mock';
 
 class MockPermissionService implements PermissionServiceInterface {
-  hasPermission(
+  hasPermission$(
     requiredPermissions: string | (string | string[])[]
   ): Observable<boolean> {
     return of(true);
+  }
+
+  hasPermission() {
+    return true;
   }
 }
 

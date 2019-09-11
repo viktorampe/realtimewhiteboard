@@ -89,7 +89,7 @@ export class TasksViewModel {
 
   public setTaskHistory(taskId: number): void {
     this.permissionService
-      .hasPermission(Permissions.settings.MANAGE_HISTORY)
+      .hasPermission$(Permissions.settings.MANAGE_HISTORY)
       .pipe(
         take(1),
         filter(permission => permission),

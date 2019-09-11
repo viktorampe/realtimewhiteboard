@@ -79,7 +79,7 @@ export class BundlesViewModel {
   >;
 
   private hasManageHistoryPermission = this.permissionService
-    .hasPermission(Permissions.settings.MANAGE_HISTORY)
+    .hasPermission$(Permissions.settings.MANAGE_HISTORY)
     .pipe(
       take(1),
       filter(hasPermission => hasPermission)

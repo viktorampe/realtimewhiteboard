@@ -1,5 +1,8 @@
 import { Inject, Injectable, InjectionToken } from '@angular/core';
-import { PersonInterface, RoleInterface } from '@campus/dal';
+import {
+  PermissionServiceInterface,
+  PERMISSION_SERVICE_TOKEN
+} from '../../auth';
 
 export const APP_NAVIGATION_TREE_TOKEN = new InjectionToken<NavItem[]>(
   'AppNavigationTreeToken'
@@ -10,9 +13,9 @@ export const NAVIGATION_ITEM_SERVICE_TOKEN = new InjectionToken<
 >('NavigationItemService');
 
 export interface NavigationItemServiceInterface {
-  getSideNavItems(user: PersonInterface): NavItem[];
-  getSettingsNavItems(user: PersonInterface): NavItem[];
-  getProfileMenuNavItems(user: PersonInterface): NavItem[];
+  getSideNavItems(userPermissions: string[]): NavItem[];
+  getSettingsNavItems(userPermissions: string[]): NavItem[];
+  getProfileMenuNavItems(userPermissions: string[]): NavItem[];
 }
 
 export interface NavItem {
@@ -21,7 +24,7 @@ export interface NavItem {
   link?: any[] | string;
   children?: NavItem[];
   expanded?: boolean;
-  availableForRoles?: string[];
+  requiredPermissions?: string[];
 }
 
 export interface AppNavTreeInterface {
@@ -36,28 +39,31 @@ export interface AppNavTreeInterface {
 export class NavigationItemService implements NavigationItemServiceInterface {
   constructor(
     @Inject(APP_NAVIGATION_TREE_TOKEN)
-    private appNavigationTree: AppNavTreeInterface
+    private appNavigationTree: AppNavTreeInterface,
+    @Inject(PERMISSION_SERVICE_TOKEN)
+    private permissionService: PermissionServiceInterface
   ) {}
 
-  getSideNavItems(user: PersonInterface): NavItem[] {
-    return this.getNavItemsForTreeAndRoles('sideNav', user.roles);
+  getSideNavItems(userPermissions: string[]): NavItem[] {
+    return this.getNavItemsForTreeAndRoles('sideNav', userPermissions);
   }
 
-  getSettingsNavItems(user: PersonInterface): NavItem[] {
-    return this.getNavItemsForTreeAndRoles('settingsNav', user.roles);
+  getSettingsNavItems(userPermissions: string[]): NavItem[] {
+    return this.getNavItemsForTreeAndRoles('settingsNav', userPermissions);
   }
 
-  getProfileMenuNavItems(user: PersonInterface): NavItem[] {
-    return this.getNavItemsForTreeAndRoles('profileMenuNav', user.roles);
+  getProfileMenuNavItems(userPermissions: string[]): NavItem[] {
+    return this.getNavItemsForTreeAndRoles('profileMenuNav', userPermissions);
   }
 
   private getNavItemsForTreeAndRoles(
     tree: string,
-    roles: RoleInterface[]
+    availablePermissions: string[]
   ): NavItem[] {
     return this.appNavigationTree[tree].filter(navItem =>
-      navItem.availableForRoles.some(role =>
-        roles.some(userRole => userRole.name === role)
+      this.permissionService.hasPermission(
+        [navItem.requiredPermissions],
+        availablePermissions
       )
     );
   }

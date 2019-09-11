@@ -70,19 +70,19 @@ const standardSettingsNavItems: NavItem[] = [
     title: 'Mijn gegevens',
     icon: 'profile',
     link: '/settings/profile',
-    availableForRoles: ['teacher', 'student']
+    requiredPermissions: ['updateProfile']
   },
   {
     title: 'Verander profielfoto',
     icon: 'avatar',
     link: '/settings/profile/avatar',
-    availableForRoles: ['teacher']
+    requiredPermissions: ['updateAvatar']
   },
   {
     title: 'Meldingen',
     icon: 'notifications',
     link: '/settings/alerts',
-    availableForRoles: ['teacher']
+    requiredPermissions: []
   }
 ];
 

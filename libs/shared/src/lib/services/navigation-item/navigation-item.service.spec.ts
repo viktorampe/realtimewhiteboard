@@ -1,4 +1,5 @@
-import { PersonFixture, RoleFixture } from '@campus/dal';
+import { Store } from '@ngrx/store';
+import { PermissionService } from '../../auth';
 import {
   AppNavTreeInterface,
   NavigationItemService
@@ -9,44 +10,50 @@ describe('NavigationItemService', () => {
     sideNav: [
       {
         title: 'foo nav item',
-        availableForRoles: ['roleA']
+        requiredPermissions: ['permissionA']
       },
       {
         title: 'bar nav item',
-        availableForRoles: ['roleB']
+        requiredPermissions: ['permissionB']
       },
       {
         title: 'baz nav item',
-        availableForRoles: ['roleA', 'roleB']
+        requiredPermissions: ['permissionA', 'permissionB']
       }
     ],
     settingsNav: [
       {
         title: 'foo settings nav item',
-        availableForRoles: ['roleA']
+        requiredPermissions: ['permissionA']
       },
       {
         title: 'bar settings nav item',
-        availableForRoles: ['roleB']
+        requiredPermissions: ['permissionB']
       },
       {
         title: 'baz settings nav item',
-        availableForRoles: ['roleB', 'roleC']
+        requiredPermissions: ['permissionA', 'permissionC']
+      },
+      {
+        title: 'bak settings nav item',
+        requiredPermissions: ['permissionB']
       }
     ],
     profileMenuNav: [
       {
         title: 'foo profile menu nav item',
-        availableForRoles: ['roleA']
+        requiredPermissions: ['permissionA']
       },
       {
         title: 'bar profile menu nav item',
-        availableForRoles: ['roleC']
+        requiredPermissions: ['permissionC']
       }
     ]
   };
+  const permissionService = new PermissionService({} as Store<any>);
   const service: NavigationItemService = new NavigationItemService(
-    mockAppNavTree
+    mockAppNavTree,
+    permissionService
   );
 
   it('should be created', () => {
@@ -56,18 +63,15 @@ describe('NavigationItemService', () => {
   describe('getSideNavItems()', () => {
     const testCases = [
       {
-        roles: [new RoleFixture({ name: 'roleA' })],
+        userPermissions: ['permissionA'],
         expected: [mockAppNavTree.sideNav[0], mockAppNavTree.sideNav[2]]
       },
       {
-        roles: [new RoleFixture({ name: 'roleB' })],
+        userPermissions: ['permissionB'],
         expected: [mockAppNavTree.sideNav[1], mockAppNavTree.sideNav[2]]
       },
       {
-        roles: [
-          new RoleFixture({ name: 'roleA' }),
-          new RoleFixture({ name: 'roleB' })
-        ],
+        userPermissions: ['permissionA', 'permissionB'],
         expected: [
           mockAppNavTree.sideNav[0],
           mockAppNavTree.sideNav[1],
@@ -75,86 +79,68 @@ describe('NavigationItemService', () => {
         ]
       },
       {
-        roles: [
-          new RoleFixture({ name: 'roleD' }),
-          new RoleFixture({ name: 'roleB' })
-        ],
-        expected: [mockAppNavTree.sideNav[1], mockAppNavTree.sideNav[2]]
+        userPermissions: ['permissionC'],
+        expected: []
       },
       {
-        roles: [new RoleFixture({ name: 'roleD' })],
+        userPermissions: [],
         expected: []
       }
     ];
     it('should return the side nav items for the user', () => {
-      const user = new PersonFixture();
-
       testCases.forEach(testCase => {
-        user.roles = testCase.roles;
-
-        const result = service.getSideNavItems(user);
+        const result = service.getSideNavItems(testCase.userPermissions);
         expect(result).toEqual(testCase.expected);
       });
-    });
-
-    it('should return the profile menu nav items for the user', () => {
-      const user = new PersonFixture({
-        roles: [new RoleFixture({ name: 'roleA' })]
-      });
-
-      const result = service.getProfileMenuNavItems(user);
-      expect(result).toEqual([mockAppNavTree.profileMenuNav[0]]);
     });
   });
 
   describe('getSettingsNavItems()', () => {
-    const user = new PersonFixture();
     const testCases = [
       {
-        roles: [new RoleFixture({ name: 'roleA' })],
-        expected: [mockAppNavTree.settingsNav[0]]
+        requiredPermissions: ['permissionA'],
+        expected: [mockAppNavTree.settingsNav[0], mockAppNavTree.settingsNav[2]]
       },
       {
-        roles: [new RoleFixture({ name: 'roleB' })],
-        expected: [mockAppNavTree.settingsNav[1], mockAppNavTree.settingsNav[2]]
+        requiredPermissions: ['permissionB'],
+        expected: [mockAppNavTree.settingsNav[1], mockAppNavTree.settingsNav[3]]
       },
       {
-        roles: [new RoleFixture({ name: 'roleC' })],
+        requiredPermissions: ['permissionC'],
         expected: [mockAppNavTree.settingsNav[2]]
       }
     ];
     it('should return the setting nav items for the user', () => {
       testCases.forEach(testCase => {
-        user.roles = testCase.roles;
-
-        const result = service.getSettingsNavItems(user);
+        const result = service.getSettingsNavItems(
+          testCase.requiredPermissions
+        );
         expect(result).toEqual(testCase.expected);
       });
     });
   });
 
   describe('getProfileMenuNavItems()', () => {
-    const user = new PersonFixture();
     const testCases = [
       {
-        roles: [new RoleFixture({ name: 'roleA' })],
+        requiredPermissions: ['permissionA'],
         expected: [mockAppNavTree.profileMenuNav[0]]
       },
       {
-        roles: [new RoleFixture({ name: 'roleB' })],
+        requiredPermissions: ['permissionB'],
         expected: []
       },
       {
-        roles: [new RoleFixture({ name: 'roleC' })],
+        requiredPermissions: ['permissionC'],
         expected: [mockAppNavTree.profileMenuNav[1]]
       }
     ];
 
     it('should return the profile menu nav items for the user', () => {
       testCases.forEach(testCase => {
-        user.roles = testCase.roles;
-
-        const result = service.getProfileMenuNavItems(user);
+        const result = service.getProfileMenuNavItems(
+          testCase.requiredPermissions
+        );
         expect(result).toEqual(testCase.expected);
       });
     });
