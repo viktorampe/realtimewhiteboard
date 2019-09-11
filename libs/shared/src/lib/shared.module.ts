@@ -49,7 +49,7 @@ import {
   EnvironmentLoginInterface,
   EnvironmentLogoutInterface,
   EnvironmentMessagesFeatureInterface,
-  EnvironmentQuickLinkFeatureInterface,
+  EnvironmentFavoritesFeatureInterface,
   EnvironmentSearchModesInterface,
   EnvironmentSsoInterface,
   EnvironmentTermPrivacyInterface,
