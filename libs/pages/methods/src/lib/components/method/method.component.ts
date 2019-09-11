@@ -3,11 +3,8 @@ import { Router } from '@angular/router';
 import {
   ClassGroupInterface,
   EduContent,
-  EduContentBookInterface,
   EduContentProductTypeInterface,
   EduContentTOCInterface,
-  FavoriteInterface,
-  FavoriteTypesEnum,
   LearningPlanGoalInterface,
   MethodInterface
 } from '@campus/dal';
@@ -30,7 +27,6 @@ import { CurrentMethodParams, MethodViewModel } from '../method.viewmodel';
 })
 export class MethodComponent implements OnInit {
   public boeke$: Observable<EduContent>;
-  public book$: Observable<EduContentBookInterface>;
   public chapters$: Observable<EduContentTOCInterface[]>;
   public generalFilesByType$: Observable<Dictionary<EduContent[]>>;
   public method$: Observable<MethodInterface>;
@@ -56,7 +52,6 @@ export class MethodComponent implements OnInit {
   ngOnInit() {
     this.boeke$ = this.viewModel.currentBoeke$;
     this.isBoekeFavorite$ = this.viewModel.isCurrentBoekeFavorite$;
-    this.book$ = this.viewModel.currentBook$;
     this.chapters$ = this.viewModel.currentToc$;
     this.generalFilesByType$ = this.viewModel.generalFilesByType$;
     this.method$ = this.viewModel.currentMethod$;
@@ -125,17 +120,7 @@ export class MethodComponent implements OnInit {
   }
 
   public toggleBoekeFavorite(boeke: EduContent) {
-    this.book$.pipe(take(1)).subscribe(book => {
-      const favorite: FavoriteInterface = {
-        name: book.title + ' ' + book.years.map(year => year.label).join(', '),
-        type: FavoriteTypesEnum.BOEKE,
-        eduContentId: boeke.id,
-        created: new Date(),
-        learningAreaId: boeke.publishedEduContentMetadata.learningAreaId
-      };
-
-      this.viewModel.toggleFavorite(favorite);
-    });
+    this.viewModel.toggleBoekeFavorite(boeke);
   }
 
   private getTableColumnsFromClassGroupsStream(): Observable<

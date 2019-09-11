@@ -23,6 +23,7 @@ import {
   FavoriteActions,
   FavoriteInterface,
   FavoriteQueries,
+  FavoriteTypesEnum,
   getRouterState,
   LearningPlanGoalInterface,
   LearningPlanGoalProgressActions,
@@ -325,8 +326,18 @@ export class MethodViewModel implements ContentOpenerInterface {
     });
   }
 
-  public toggleFavorite(favorite: FavoriteInterface): void {
-    this.store.dispatch(new FavoriteActions.ToggleFavorite({ favorite }));
+  public toggleBoekeFavorite(boeke: EduContent): void {
+    this.methodWithYear$.pipe(take(1)).subscribe(name => {
+      const favorite: FavoriteInterface = {
+        name,
+        type: FavoriteTypesEnum.BOEKE,
+        eduContentId: boeke.id,
+        created: new Date(),
+        learningAreaId: boeke.publishedEduContentMetadata.learningAreaId
+      };
+
+      this.store.dispatch(new FavoriteActions.ToggleFavorite({ favorite }));
+    });
   }
 
   private initialize() {

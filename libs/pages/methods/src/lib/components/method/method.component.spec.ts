@@ -17,11 +17,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import {
   ClassGroupFixture,
   ClassGroupInterface,
-  EduContentBookFixture,
-  EduContentBookInterface,
-  EduContentFixture,
-  FavoriteTypesEnum,
-  YearFixture
+  EduContentFixture
 } from '@campus/dal';
 import {
   ENVIRONMENT_ICON_MAPPING_TOKEN,
@@ -29,7 +25,7 @@ import {
   ENVIRONMENT_TESTING_TOKEN,
   SharedModule
 } from '@campus/shared';
-import { MockDate, MockMatIconRegistry } from '@campus/testing';
+import { MockMatIconRegistry } from '@campus/testing';
 import {
   MultiCheckBoxTableItemChangeEventInterface,
   MultiCheckBoxTableItemColumnInterface,
@@ -37,7 +33,6 @@ import {
 } from '@campus/ui';
 import { hot } from '@nrwl/nx/testing';
 import { configureTestSuite } from 'ng-bullet';
-import { BehaviorSubject } from 'rxjs';
 import { MethodViewModel } from '../method.viewmodel';
 import { MockMethodViewModel } from '../method.viewmodel.mock';
 import { MethodComponent } from './method.component';
@@ -47,7 +42,6 @@ describe('MethodComponent', () => {
   let fixture: ComponentFixture<MethodComponent>;
   let methodViewModel: MockMethodViewModel;
   let router: Router;
-  let dateMock: MockDate;
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
@@ -256,39 +250,13 @@ describe('MethodComponent', () => {
     });
   });
 
-  describe('toggleFavorite', () => {
-    beforeAll(() => {
-      dateMock = new MockDate();
-    });
-
-    afterAll(() => {
-      dateMock.returnRealDate();
-    });
-
+  describe('toggleBoekeFavorite', () => {
     it('should call the correct method on the viewmodel', () => {
-      jest.spyOn(methodViewModel, 'toggleFavorite');
+      jest.spyOn(methodViewModel, 'toggleBoekeFavorite');
       const boeke = new EduContentFixture({ id: 123 }, { learningAreaId: 456 });
-      const years = [
-        new YearFixture({ label: 'bar' }),
-        new YearFixture({ label: 'bar2' })
-      ];
-      const currentBook = new EduContentBookFixture({
-        title: 'foo',
-        years
-      });
-
-      (methodViewModel.currentBook$ as BehaviorSubject<
-        EduContentBookInterface
-      >).next(currentBook);
 
       component.toggleBoekeFavorite(boeke);
-      expect(methodViewModel.toggleFavorite).toHaveBeenCalledWith({
-        created: dateMock.mockDate,
-        eduContentId: boeke.id,
-        learningAreaId: boeke.publishedEduContentMetadata.learningAreaId,
-        type: FavoriteTypesEnum.BOEKE,
-        name: 'foo bar, bar2'
-      });
+      expect(methodViewModel.toggleBoekeFavorite).toHaveBeenCalledWith(boeke);
     });
   });
 });

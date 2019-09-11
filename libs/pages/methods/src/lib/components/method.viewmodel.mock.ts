@@ -11,7 +11,6 @@ import {
   EduContentProductTypeInterface,
   EduContentTOCFixture,
   EduContentTOCInterface,
-  FavoriteInterface,
   LearningPlanGoalFixture,
   LearningPlanGoalInterface,
   MethodFixture,
@@ -185,7 +184,7 @@ export class MockMethodViewModel
     classGroup: ClassGroupInterface
   ): void {}
 
-  public toggleFavorite(favorite: FavoriteInterface): void {}
+  public toggleBoekeFavorite(boeke: EduContent): void {}
 
   private getAllowedBooks$(): MethodYearsInterface[] {
     return [

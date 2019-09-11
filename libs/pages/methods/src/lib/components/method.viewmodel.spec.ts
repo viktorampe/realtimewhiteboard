@@ -4,76 +4,11 @@ import { MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { WINDOW } from '@campus/browser';
-import {
-  AUTH_SERVICE_TOKEN,
-  ClassGroupActions,
-  ClassGroupFixture,
-  ClassGroupInterface,
-  ClassGroupReducer,
-  CustomSerializer,
-  DalState,
-  EduContent,
-  EduContentActions,
-  EduContentBookActions,
-  EduContentBookFixture,
-  EduContentBookInterface,
-  EduContentBookReducer,
-  EduContentFixture,
-  EduContentQueries,
-  EduContentReducer,
-  EduContentServiceInterface,
-  EduContentTocActions,
-  EduContentTOCFixture,
-  EduContentTocReducer,
-  EDU_CONTENT_SERVICE_TOKEN,
-  FavoriteActions,
-  FavoriteFixture,
-  FavoriteQueries,
-  getStoreModuleForFeatures,
-  LearningPlanGoalActions,
-  LearningPlanGoalFixture,
-  LearningPlanGoalInterface,
-  LearningPlanGoalProgressActions,
-  LearningPlanGoalProgressFixture,
-  LearningPlanGoalProgressInterface,
-  LearningPlanGoalProgressReducer,
-  LearningPlanGoalReducer,
-  MethodActions,
-  MethodFixture,
-  MethodInterface,
-  MethodReducer,
-  UserReducer,
-  YearActions,
-  YearFixture,
-  YearReducer
-} from '@campus/dal';
-import {
-  FilterFactoryFixture,
-  SearchModeInterface,
-  SearchResultInterface,
-  SearchStateInterface
-} from '@campus/search';
-import {
-  EduContentSearchResultFixture,
-  EnvironmentSearchModesInterface,
-  ENVIRONMENT_API_TOKEN,
-  ENVIRONMENT_SEARCHMODES_TOKEN,
-  LearningPlanGoalProgressManagementComponent,
-  OpenStaticContentServiceInterface,
-  OPEN_STATIC_CONTENT_SERVICE_TOKEN,
-  ScormExerciseServiceInterface,
-  SCORM_EXERCISE_SERVICE_TOKEN
-} from '@campus/shared';
-import { MockWindow } from '@campus/testing';
-import {
-  NavigationActionTiming,
-  RouterNavigationAction,
-  RouterNavigationPayload,
-  routerReducer,
-  RouterStateSerializer,
-  ROUTER_NAVIGATION,
-  StoreRouterConnectingModule
-} from '@ngrx/router-store';
+import { AUTH_SERVICE_TOKEN, ClassGroupActions, ClassGroupFixture, ClassGroupInterface, ClassGroupReducer, CustomSerializer, DalState, EduContent, EduContentActions, EduContentBookActions, EduContentBookFixture, EduContentBookInterface, EduContentBookReducer, EduContentFixture, EduContentQueries, EduContentReducer, EduContentServiceInterface, EduContentTocActions, EduContentTOCFixture, EduContentTocReducer, EDU_CONTENT_SERVICE_TOKEN, FavoriteActions, FavoriteQueries, FavoriteTypesEnum, getStoreModuleForFeatures, LearningPlanGoalActions, LearningPlanGoalFixture, LearningPlanGoalInterface, LearningPlanGoalProgressActions, LearningPlanGoalProgressFixture, LearningPlanGoalProgressInterface, LearningPlanGoalProgressReducer, LearningPlanGoalReducer, MethodActions, MethodFixture, MethodInterface, MethodQueries, MethodReducer, UserReducer, YearActions, YearFixture, YearReducer } from '@campus/dal';
+import { FilterFactoryFixture, SearchModeInterface, SearchResultInterface, SearchStateInterface } from '@campus/search';
+import { EduContentSearchResultFixture, EnvironmentSearchModesInterface, ENVIRONMENT_API_TOKEN, ENVIRONMENT_SEARCHMODES_TOKEN, LearningPlanGoalProgressManagementComponent, OpenStaticContentServiceInterface, OPEN_STATIC_CONTENT_SERVICE_TOKEN, ScormExerciseServiceInterface, SCORM_EXERCISE_SERVICE_TOKEN } from '@campus/shared';
+import { MockDate, MockWindow } from '@campus/testing';
+import { NavigationActionTiming, RouterNavigationAction, RouterNavigationPayload, routerReducer, RouterStateSerializer, ROUTER_NAVIGATION, StoreRouterConnectingModule } from '@ngrx/router-store';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
 import { configureTestSuite } from 'ng-bullet';
@@ -96,6 +31,7 @@ describe('MethodViewModel', () => {
   let selectorSpies: {
     boeke: jest.SpyInstance;
     isFavorite: jest.SpyInstance;
+    methodWithYear: jest.SpyInstance;
   };
 
   const bookId = 5;
@@ -362,7 +298,8 @@ describe('MethodViewModel', () => {
   function setupSelectorSpies() {
     selectorSpies = {
       boeke: jest.spyOn(EduContentQueries, 'getBoekeByBookId'),
-      isFavorite: jest.spyOn(FavoriteQueries, 'getIsFavoriteEduContent')
+      isFavorite: jest.spyOn(FavoriteQueries, 'getIsFavoriteEduContent'),
+      methodWithYear: jest.spyOn(MethodQueries, 'getMethodWithYearByBookId')
     };
   }
 
@@ -1134,11 +1071,36 @@ describe('MethodViewModel', () => {
   });
 
   describe('toggleFavorite', () => {
+    let dateMock: MockDate;
+
+    beforeAll(() => {
+      dateMock = new MockDate();
+    });
+
+    afterAll(() => {
+      dateMock.returnRealDate();
+    });
+
+    beforeEach(()=>{
+      navigateWithParams({book:1});
+    })
+
     it('should dispatch an action', () => {
       jest.spyOn(store, 'dispatch');
-      const favorite = new FavoriteFixture();
+      const boeke = new EduContentFixture({ id: 123 }, { learningAreaId: 456 });
+      const methodWithYear = 'Programming with pretty colors - K1';
+      
+      selectorSpies.methodWithYear.mockReturnValue(methodWithYear);
 
-      methodViewModel.toggleFavorite(favorite);
+      methodViewModel.toggleBoekeFavorite(boeke);
+
+      const favorite = {
+        created: dateMock.mockDate,
+        eduContentId: boeke.id,
+        learningAreaId: boeke.publishedEduContentMetadata.learningAreaId,
+        type: FavoriteTypesEnum.BOEKE,
+        name: methodWithYear
+      };
 
       expect(store.dispatch).toHaveBeenCalledWith(
         new FavoriteActions.ToggleFavorite({ favorite })
