@@ -10,7 +10,12 @@
     ></campus-tree-nav
   ></campus-shell-left>
   <campus-shell-top
-    ><campus-header></campus-header
+    ><campus-header
+      breadcrumbPosition="page-left"
+      quicklinkPosition="top-right"
+      alertsPosition="top-right"
+      profileLinkPosition="top-right"
+    ></campus-header
     ><campus-banner
       *ngIf="(bannerFeedback$ | async) as bannerFeedback"
       [id]="bannerFeedback.id"
@@ -18,8 +23,7 @@
       [icon]="bannerFeedback.icon"
       [actions]="bannerFeedback.userActions"
       (afterDismiss)="onBannerDismiss($event)"
-    ></campus-banner
-    ><button [routerLink]="['search']">go to search</button>
+    ></campus-banner>
   </campus-shell-top>
   <campus-shell-body> <router-outlet></router-outlet> </campus-shell-body>
 </campus-shell>

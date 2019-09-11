@@ -40,6 +40,9 @@ export const environment = {
           urlRegex: 'http.*assets\\/icons.*.svg'
         }
       ]
+    },
+    globalSearch: {
+      enabled: true
     }
   },
   sso: {},
