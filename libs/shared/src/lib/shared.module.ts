@@ -181,7 +181,7 @@ export class SharedModule {
     environmentMessagesFeature: EnvironmentMessagesFeatureInterface,
     environmentErrorManagementFeature: EnvironmentErrorManagementFeatureInterface,
     environmentGlobalSearch: EnvironmentGlobalSearchFeatureInterface,
-    environmentQuickLinkFeature: EnvironmentQuickLinkFeatureInterface,
+    environmentFavoritesFeature: EnvironmentFavoritesFeatureInterface,
     environmentIconMapping: EnvironmentIconMappingInterface,
     environmentWebsite: EnvironmentWebsiteInterface,
     environmentLogout: EnvironmentLogoutInterface,
