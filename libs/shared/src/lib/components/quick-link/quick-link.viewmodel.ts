@@ -228,7 +228,7 @@ export class QuickLinkViewModel {
       return allowedFavoriteType === FavoriteTypesEnum.TASK;
     });
 
-    const needBundles = allowedFavoriteTypes.some(allowedFavoriteType => {
+    const needBundles = allowedFavoriteTypes.includes(FavoriteTypesEnum.BUNDLE);
       return allowedFavoriteType === FavoriteTypesEnum.BUNDLE;
     });
 
