@@ -3,7 +3,6 @@ import {
   EventEmitter,
   HostBinding,
   Input,
-  OnInit,
   Output
 } from '@angular/core';
 import { EduContent } from '@campus/dal';
@@ -13,7 +12,7 @@ import { EduContent } from '@campus/dal';
   templateUrl: './method-favorite-tile.component.html',
   styleUrls: ['./method-favorite-tile.component.scss']
 })
-export class MethodFavoriteTileComponent implements OnInit {
+export class MethodFavoriteTileComponent {
   @Input() logoUrl: string;
   @Input() name: string;
   @Input() bookId: number;
@@ -22,10 +21,6 @@ export class MethodFavoriteTileComponent implements OnInit {
 
   @HostBinding('class.pages-home-method-favorite-tile')
   pagesHomeMethodFavoriteTileClass = true;
-
-  constructor() {}
-
-  ngOnInit() {}
 
   openBoeke() {
     this.clickOpenBoeke.emit(this.eduContent);

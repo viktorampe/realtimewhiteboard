@@ -66,7 +66,7 @@ describe('HomeComponent', () => {
       const name = (mockViewModel.displayName$ as BehaviorSubject<string>)
         .value;
 
-      expect(headerDE.nativeElement.textContent).toBe(
+      expect(headerDE.nativeElement.textContent.trim()).toBe(
         `Welkom ${name}, dit zijn je veel gebruikte methodes:`
       );
     });
@@ -82,22 +82,31 @@ describe('HomeComponent', () => {
       );
 
       expect(noFavoritesDE).toBeTruthy();
-      expect(noFavoritesDE.nativeElement.textContent).toBe(
+      expect(noFavoritesDE.nativeElement.textContent.trim()).toBe(
         'Er zijn nog geen veel gebruikte methodes, voeg een methode toe aan je favorieten om ze hier terug te vinden.'
       );
     });
 
     it('should show the favorite methods', () => {
       const methodFavoriteDEs = fixture.debugElement.queryAll(
-        By.css('campus-method-favorite-tile')
+        By.directive(MethodFavoriteTileComponent)
       );
 
-      const favoritesLength = (mockViewModel.favoritesWithEduContent$ as BehaviorSubject<
+      const favorites = (mockViewModel.favoritesWithEduContent$ as BehaviorSubject<
         FavoriteMethodWithEduContent[]
-      >).value.length;
+      >).value;
 
       expect(methodFavoriteDEs).toBeTruthy();
-      expect(methodFavoriteDEs.length).toBe(favoritesLength);
+      expect(methodFavoriteDEs.length).toBe(favorites.length);
+      methodFavoriteDEs.forEach((methodFavoriteDE, index) => {
+        const instance = methodFavoriteDE.componentInstance;
+        const favorite = favorites[index];
+
+        expect(instance.logoUrl).toBe(favorite.logoUrl);
+        expect(instance.name).toBe(favorite.favorite.name);
+        expect(instance.eduContent).toBe(favorite.eduContent);
+        expect(instance.bookId).toBe(favorite.bookId);
+      });
     });
   });
 

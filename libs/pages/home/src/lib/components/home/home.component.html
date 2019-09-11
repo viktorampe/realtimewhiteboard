@@ -1,26 +1,22 @@
-<campus-page-bar> </campus-page-bar>
-<campus-page-header> </campus-page-header>
-<div
-  class="pages-home__container"
-  *ngIf="(favoritesWithEduContent$ | async) as favorites"
->
+<div class="pages-home__container">
   <h1 mat-subheader
     >Welkom {{ displayName$ | async }}, dit zijn je veel gebruikte methodes:</h1
   >
 
-  <ng-template #noFavorites>
-    <div class="pages-home__no-favorites"
-      >Er zijn nog geen veel gebruikte methodes, voeg een methode toe aan je
-      favorieten om ze hier terug te vinden.</div
-    >
-  </ng-template>
+  <ng-container *ngIf="(favoritesWithEduContent$ | async) as favorites">
+    <ng-template #noFavorites>
+      <div class="pages-home__no-favorites"
+        >Er zijn nog geen veel gebruikte methodes, voeg een methode toe aan je
+        favorieten om ze hier terug te vinden.</div
+      >
+    </ng-template>
 
-  <div
-    *ngIf="favorites.length; else noFavorites"
-    class="pages-home__favorite-list"
-  >
-    <ng-container *ngFor="let favoriteMethod of favorites">
+    <div
+      *ngIf="favorites.length; else noFavorites"
+      class="pages-home__favorite-list"
+    >
       <campus-method-favorite-tile
+        *ngFor="let favoriteMethod of favorites"
         [name]="favoriteMethod.favorite.name"
         [logoUrl]="favoriteMethod.logoUrl"
         [eduContent]="favoriteMethod.eduContent"
@@ -28,6 +24,6 @@
         (clickOpenBoeke)="clickOpenBoeke($event)"
       >
       </campus-method-favorite-tile>
-    </ng-container>
-  </div>
+    </div>
+  </ng-container>
 </div>

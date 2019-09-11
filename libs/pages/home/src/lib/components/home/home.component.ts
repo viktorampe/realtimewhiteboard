@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { EduContent } from '@campus/dal';
 import { Observable } from 'rxjs';
 import { HomeViewModel } from '../home.viewmodel';
@@ -10,13 +10,15 @@ import { FavoriteMethodWithEduContent } from '../home.viewmodel.selectors';
   styleUrls: ['./home.component.scss']
   //providers: [{ provide: HomeViewModel, useClass: MockHomeViewModel }]
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
   public displayName$: Observable<string>;
   public favoritesWithEduContent$: Observable<FavoriteMethodWithEduContent[]>;
 
-  constructor(private homeViewModel: HomeViewModel) {
-    this.displayName$ = homeViewModel.displayName$;
-    this.favoritesWithEduContent$ = homeViewModel.favoritesWithEduContent$;
+  constructor(private homeViewModel: HomeViewModel) {}
+
+  ngOnInit() {
+    this.displayName$ = this.homeViewModel.displayName$;
+    this.favoritesWithEduContent$ = this.homeViewModel.favoritesWithEduContent$;
   }
 
   public clickOpenBoeke(eduContent: EduContent) {
