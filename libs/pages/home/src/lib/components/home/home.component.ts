@@ -8,7 +8,6 @@ import { FavoriteMethodWithEduContent } from '../home.viewmodel.selectors';
   selector: 'campus-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
-  //providers: [{ provide: HomeViewModel, useClass: MockHomeViewModel }]
 })
 export class HomeComponent implements OnInit {
   public displayName$: Observable<string>;
