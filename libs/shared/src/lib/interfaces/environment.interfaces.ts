@@ -1,5 +1,4 @@
 import { SearchModeInterface } from '@campus/search';
-import { NavItem } from '@campus/ui';
 
 export interface EnvironmentInterface {
   production: boolean;
@@ -92,8 +91,4 @@ export interface EnvironmentApiInterface {
 
 export interface EnvironmentTestingInterface {
   removeDataCyAttributes: boolean;
-}
-
-export interface EnvironmentNavItemsInterface {
-  navItems: NavItem[];
 }
