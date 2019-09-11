@@ -13,7 +13,7 @@ export interface EnvironmentInterface {
     alerts: EnvironmentAlertsFeatureInterface;
     messages: EnvironmentMessagesFeatureInterface;
     errorManagement: EnvironmentErrorManagementFeatureInterface;
-    quickLink: EnvironmentQuickLinkFeatureInterface;
+    favorites: EnvironmentFavoritesFeatureInterface;
     globalSearch: EnvironmentGlobalSearchFeatureInterface;
   };
   sso: EnvironmentSsoInterface;
