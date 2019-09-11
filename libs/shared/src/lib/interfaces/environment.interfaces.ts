@@ -12,6 +12,7 @@ export interface EnvironmentInterface {
     alerts: EnvironmentAlertsFeatureInterface;
     messages: EnvironmentMessagesFeatureInterface;
     errorManagement: EnvironmentErrorManagementFeatureInterface;
+    globalSearch: EnvironmentGlobalSearchFeatureInterface;
   };
   sso: EnvironmentSsoInterface;
   searchModes: EnvironmentSearchModesInterface;
@@ -31,6 +32,10 @@ export interface EnvironmentAlertsFeatureInterface {
 export interface EnvironmentMessagesFeatureInterface {
   enabled: boolean;
   hasAppBarDropDown: boolean;
+}
+
+export interface EnvironmentGlobalSearchFeatureInterface {
+  enabled: boolean;
 }
 
 export interface EnvironmentErrorManagementFeatureInterface {

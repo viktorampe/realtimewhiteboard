@@ -17,5 +17,6 @@
   "todo-tree.showCountsInTree": true,
   "[html]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
-  }
+  },
+  "todo-tree.tree.showCountsInTree": true
 }

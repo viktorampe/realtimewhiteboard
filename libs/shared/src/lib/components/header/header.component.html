@@ -1,79 +1,23 @@
 <div class="shared-header">
   <div class="shared-header__app-bar">
     <campus-app-bar>
-      <campus-breadcrumbs
-        bar__left
-        [breadCrumbs]="breadCrumbs$ | async"
-        [baseIcon]="'home'"
-        [seperator]="'breadcrumb-separator'"
-      >
-      </campus-breadcrumbs>
-      <div
-        class="shared-header__app-bar__alerts"
-        bar__right
-        *ngIf="enableAlerts && (alertsLoaded$ | async)"
-      >
-        <campus-button
-          (click)="dropDownAlerts.toggle()"
-          class="shared-header__app-bar__alerts__button"
-        >
-          <mat-icon
-            [svgIcon]="'notifications'"
-            [matBadge]="unreadAlertCount$ | async"
-            [matBadgeHidden]="!((unreadAlertCount$ | async) > 0)"
-            matBadgePosition="above before"
-            matBadgeColor="accent"
-          ></mat-icon>
-        </campus-button>
-
-        <campus-dropdown-menu
-          #dropDownAlerts
-          [showHeader]="true"
-          [newItemCount]="unreadAlertCount$ | async"
-          [headerIcon]="'notifications'"
-          itemType="meldingen"
-          linkText="Alle meldingen"
-          linkUrl="/settings/alerts"
-        >
-          <ng-container *ngIf="(alertNotifications$ | async) as notifications">
-            <campus-notification
-              *ngFor="let notification of notifications"
-              dropdown
-              [icon]="notification.icon"
-              [notificationText]="notification.titleText"
-              [campusRouterLink]="notification.link"
-              [notificationDate]="notification.notificationDate"
-              [accented]="notification.accented"
-            ></campus-notification>
-          </ng-container>
-        </campus-dropdown-menu>
+      <span bar__left *ngIf="this.breadcrumbPosition === 'top-left'">
+        <ng-container *ngTemplateOutlet="breadcrumbs"></ng-container>
+      </span>
+      <div bar__right *ngIf="this.enableGlobalSearch">
+        <ng-container *ngTemplateOutlet="globalSearch"></ng-container>
       </div>
-
-      <div class="shared-header__app-bar__profile-menu" bar__right>
-        <ng-container *ngIf="(currentUser$ | async) as user">
-          <campus-person-badge
-            (click)="dropDownProfile.toggle()"
-            [person]="user"
-            [subText]="'&#x25BE;'"
-            [showBorder]="false"
-            size="small"
-          ></campus-person-badge>
-        </ng-container>
-        <campus-dropdown-menu
-          #dropDownProfile
-          [showHeader]="false"
-          [smallWidth]="true"
-        >
-          <campus-dropdown-menu-item
-            *ngFor="let menuItem of (profileMenuItems$ | async)"
-            [icon]="menuItem.icon"
-            [description]="menuItem.description"
-            [header]="menuItem.header"
-            [image]="menuItem.image"
-            [campusRouterLink]="menuItem.internalLink || menuItem.externalLink"
-            [class.ui-dropdown-menu-item__divider]="menuItem.dividerBefore"
-          ></campus-dropdown-menu-item>
-        </campus-dropdown-menu>
+      <div bar__right *ngIf="this.alertsPosition === 'top-right'">
+        <ng-container *ngTemplateOutlet="alerts"></ng-container>
+      </div>
+      <div bar__right *ngIf="this.profileMenuPosition === 'top-right'">
+        <ng-container *ngTemplateOutlet="profilemenu"></ng-container>
+      </div>
+      <div bar__right *ngIf="this.quicklinkPosition === 'top-right'">
+        <ng-container *ngTemplateOutlet="quicklinks"></ng-container>
+      </div>
+      <div bar__right *ngIf="this.profileLinkPosition === 'top-right'">
+        <ng-container *ngTemplateOutlet="profileLink"></ng-container>
       </div>
     </campus-app-bar>
   </div>
@@ -91,20 +35,128 @@
         [iconClass]="'menu'"
       ></campus-button>
     </ng-template>
+    <span bar__left *ngIf="this.breadcrumbPosition === 'page-left'">
+      <ng-container *ngTemplateOutlet="breadcrumbs"></ng-container>
+    </span>
     <div id="page-bar-container"></div>
-    <div class="shared-header__page-bar__quicklink">
-      <campus-button
-        *hasPermission="Permissions.MANAGE_FAVORITES"
-        (click)="onManageFavoritesClick()"
-        class="shared-header__page-bar__quicklink__button"
-        [iconClass]="'bordered:favorites'"
-      ></campus-button>
-      <campus-button
-        *hasPermission="Permissions.MANAGE_HISTORY"
-        (click)="onManageHistoryClick()"
-        class="shared-header__page-bar__quicklink__button"
-        [iconClass]="'bordered:history'"
-      ></campus-button>
+    <div class="shared-header__page-bar__right">
+      <div *ngIf="this.quicklinkPosition === 'page-right'">
+        <ng-container *ngTemplateOutlet="quicklinks"></ng-container>
+      </div>
     </div>
   </div>
 </div>
+<ng-template #breadcrumbs>
+  <campus-breadcrumbs
+    bar__left
+    [breadCrumbs]="breadCrumbs$ | async"
+    [baseIcon]="'home'"
+    [seperator]="'breadcrumb-separator'"
+  >
+  </campus-breadcrumbs>
+</ng-template>
+
+<ng-template #profilemenu>
+  <div class="shared-header__profile-menu">
+    <ng-container *ngIf="(currentUser$ | async) as user">
+      <campus-person-badge
+        (click)="dropDownProfile.toggle()"
+        [person]="user"
+        [subText]="'&#x25BE;'"
+        [showBorder]="false"
+        size="small"
+      ></campus-person-badge>
+    </ng-container>
+    <campus-dropdown-menu
+      #dropDownProfile
+      [showHeader]="false"
+      [smallWidth]="true"
+    >
+      <campus-dropdown-menu-item
+        *ngFor="let menuItem of (profileMenuItems$ | async)"
+        [icon]="menuItem.icon"
+        [description]="menuItem.description"
+        [header]="menuItem.header"
+        [image]="menuItem.image"
+        [campusRouterLink]="menuItem.internalLink || menuItem.externalLink"
+        [class.ui-dropdown-menu-item__divider]="menuItem.dividerBefore"
+      ></campus-dropdown-menu-item>
+    </campus-dropdown-menu>
+  </div>
+</ng-template>
+
+<ng-template #alerts>
+  <div
+    class="shared-header__alerts"
+    *ngIf="enableAlerts && (alertsLoaded$ | async)"
+  >
+    <campus-button
+      (click)="dropDownAlerts.toggle()"
+      class="shared-header__alerts__button"
+    >
+      <mat-icon
+        [svgIcon]="'notifications'"
+        [matBadge]="unreadAlertCount$ | async"
+        [matBadgeHidden]="!((unreadAlertCount$ | async) > 0)"
+        matBadgePosition="above before"
+        matBadgeColor="accent"
+      ></mat-icon>
+    </campus-button>
+
+    <campus-dropdown-menu
+      #dropDownAlerts
+      [showHeader]="true"
+      [newItemCount]="unreadAlertCount$ | async"
+      [headerIcon]="'notifications'"
+      itemType="meldingen"
+      linkText="Alle meldingen"
+      linkUrl="/settings/alerts"
+    >
+      <ng-container *ngIf="(alertNotifications$ | async) as notifications">
+        <campus-notification
+          *ngFor="let notification of notifications"
+          dropdown
+          [icon]="notification.icon"
+          [notificationText]="notification.titleText"
+          [campusRouterLink]="notification.link"
+          [notificationDate]="notification.notificationDate"
+          [accented]="notification.accented"
+        ></campus-notification>
+      </ng-container>
+    </campus-dropdown-menu>
+  </div>
+</ng-template>
+
+<ng-template #quicklinks>
+  <campus-button
+    id="global-favorites-btn"
+    *hasPermission="Permissions.MANAGE_FAVORITES"
+    (click)="onManageFavoritesClick()"
+    class="shared-header__quicklink__button"
+    [iconClass]="'bordered:favorites'"
+  ></campus-button>
+  <campus-button
+    id="global-history-btn"
+    *hasPermission="Permissions.MANAGE_HISTORY"
+    (click)="onManageHistoryClick()"
+    class="shared-header__quicklink__button"
+    [iconClass]="'bordered:history'"
+  ></campus-button>
+</ng-template>
+
+<ng-template #globalSearch>
+  <campus-button
+    id="global-search-btn"
+    *hasPermission="Permissions.GLOBAL_SEARCH"
+    [iconClass]="'magnifier'"
+    [routerLink]="['search']"
+  ></campus-button>
+</ng-template>
+
+<ng-template #profileLink>
+  <campus-button
+    id="global-profile-btn"
+    [iconClass]="'profile'"
+    [routerLink]="['settings']"
+  ></campus-button>
+</ng-template>
