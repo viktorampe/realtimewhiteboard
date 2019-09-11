@@ -56,6 +56,9 @@ export const environment: EnvironmentInterface = {
         }
       ]
     },
+    globalSearch: {
+      enabled: false
+    },
     quickLink: {
       allowedFavoriteTypes: [
         FavoriteTypesEnum.AREA,

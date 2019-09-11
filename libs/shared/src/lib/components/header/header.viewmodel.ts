@@ -19,6 +19,14 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import {
   ENVIRONMENT_ALERTS_FEATURE_TOKEN,
+  ENVIRONMENT_GLOBAL_SEARCH_FEATURE_TOKEN
+} from '../../interfaces/environment.injectiontokens';
+import {
+  EnvironmentAlertsFeatureInterface,
+  EnvironmentGlobalSearchFeatureInterface
+} from '../../interfaces/environment.interfaces';
+import {
+  ENVIRONMENT_ALERTS_FEATURE_TOKEN,
   ENVIRONMENT_QUICK_LINK_FEATURE_TOKEN
 } from '../../interfaces/environment.injectiontokens';
 import {
@@ -34,6 +42,7 @@ import { QuickLinkComponent } from '../quick-link/quick-link.component';
 export class HeaderViewModel {
   // publics
   enableAlerts: boolean;
+  enableGlobalSearch: boolean;
 
   alertsLoaded$: Observable<boolean>;
 
@@ -52,6 +61,8 @@ export class HeaderViewModel {
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
     @Inject(ENVIRONMENT_ALERTS_FEATURE_TOKEN)
     private environmentAlertsFeature: EnvironmentAlertsFeatureInterface,
+    @Inject(ENVIRONMENT_GLOBAL_SEARCH_FEATURE_TOKEN)
+    private environmentGlobalSearchFeature: EnvironmentGlobalSearchFeatureInterface,
     @Inject(ENVIRONMENT_QUICK_LINK_FEATURE_TOKEN)
     private environmentQuickLinkFeature: EnvironmentQuickLinkFeatureInterface,
     private dialog: MatDialog,
@@ -89,6 +100,8 @@ export class HeaderViewModel {
     this.enableAlerts =
       this.environmentAlertsFeature.enabled &&
       this.environmentAlertsFeature.hasAppBarDropDown;
+
+    this.enableGlobalSearch = this.environmentGlobalSearchFeature.enabled;
   }
 
   private getAlertNotifications(): Observable<AlertQueueInterface[]> {

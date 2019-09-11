@@ -15,7 +15,12 @@
     ></campus-tree-nav>
   </campus-shell-left>
   <campus-shell-top>
-    <campus-header></campus-header>
+    <campus-header
+      breadcrumbPosition="top-left"
+      alertsPosition="top-right"
+      profileMenuPosition="top-right"
+      quicklinkPosition="page-right"
+    ></campus-header>
     <campus-banner
       *ngIf="(bannerFeedback$ | async) as bannerFeedback"
       [id]="bannerFeedback.id"
