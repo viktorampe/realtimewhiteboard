@@ -213,7 +213,7 @@ export class SharedModule {
         },
         {
           provide: ENVIRONMENT_QUICK_LINK_FEATURE_TOKEN,
-          useValue: environmentQuickLinkFeature
+          useValue: environmentFavoritesFeature
         },
         {
           provide: ENVIRONMENT_WEBSITE_TOKEN,
