@@ -10,7 +10,8 @@ export enum SettingsPermissions {
   LINK_TEACHERS = 'linkTeachers',
   UNLINK_TEACHERS = 'unlinkTeachers',
   MANAGE_FAVORITES = 'manageFavorites',
-  MANAGE_HISTORY = 'manageHistory'
+  MANAGE_HISTORY = 'manageHistory',
+  GLOBAL_SEARCH = 'globalSearch'
 }
 
 export const Permissions = {
