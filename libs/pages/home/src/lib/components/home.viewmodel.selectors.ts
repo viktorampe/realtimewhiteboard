@@ -2,7 +2,6 @@ import {
   EduContent,
   EduContentBookInterface,
   EduContentBookQueries,
-  EduContentInterface,
   EduContentQueries,
   FavoriteInterface,
   FavoriteQueries,
@@ -15,7 +14,7 @@ import { createSelector } from '@ngrx/store';
 export interface FavoriteMethodWithEduContent {
   favorite: FavoriteInterface;
   bookId: number;
-  eduContent: EduContentInterface;
+  eduContent: EduContent;
   logoUrl: string;
 }
 
@@ -27,13 +26,13 @@ export const getFavoritesWithEduContent = createSelector(
     EduContentBookQueries.getAllEntities
   ],
   (
-    favoritesByType: FavoriteInterface[],
+    favorites: FavoriteInterface[],
     eduContents: { [id: number]: EduContent },
     methods: { [id: number]: MethodInterface },
     books: { [id: number]: EduContentBookInterface },
     props: { type: FavoriteTypesEnum }
   ) => {
-    return favoritesByType.map(favorite => {
+    return favorites.map(favorite => {
       const eduContent = eduContents[favorite.eduContentId];
       const bookId =
         eduContent && eduContent.publishedEduContentMetadata.eduContentBookId;
