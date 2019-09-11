@@ -50,8 +50,12 @@ export const environment: EnvironmentInterface = {
     globalSearch: {
       enabled: true
     },
-    quickLink: {
-      allowedFavoriteTypes: [FavoriteTypesEnum.BOEKE, FavoriteTypesEnum.TASK]
+    favorites: {
+      allowedFavoriteTypes: [
+        FavoriteTypesEnum.BOEKE,
+        FavoriteTypesEnum.TASK,
+        FavoriteTypesEnum.EDUCONTENT
+      ]
     }
   },
   sso: {},

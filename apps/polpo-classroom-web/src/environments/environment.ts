@@ -1,4 +1,3 @@
-import { FavoriteTypesEnum } from '@campus/dal';
 import { EnvironmentInterface } from '@campus/shared';
 import { EduContentSearchResultComponent } from '../app/components/searchresults/edu-content-search-result.component';
 import { GlobalSearchTermFilterFactory } from '../app/factories/global-search-term-filter/global-search-term-filter.factory';
@@ -59,15 +58,8 @@ export const environment: EnvironmentInterface = {
     globalSearch: {
       enabled: false
     },
-    quickLink: {
-      allowedFavoriteTypes: [
-        FavoriteTypesEnum.AREA,
-        FavoriteTypesEnum.BOEKE,
-        FavoriteTypesEnum.BUNDLE,
-        FavoriteTypesEnum.EDUCONTENT,
-        FavoriteTypesEnum.SEARCH,
-        FavoriteTypesEnum.TASK
-      ]
+    favorites: {
+      allowedFavoriteTypes: []
     }
   },
   sso: {

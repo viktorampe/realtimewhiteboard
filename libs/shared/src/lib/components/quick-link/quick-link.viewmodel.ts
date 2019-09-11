@@ -225,12 +225,7 @@ export class QuickLinkViewModel {
     });
 
     const needTasks = allowedFavoriteTypes.includes(FavoriteTypesEnum.TASK);
-      return allowedFavoriteType === FavoriteTypesEnum.TASK;
-    });
-
     const needBundles = allowedFavoriteTypes.includes(FavoriteTypesEnum.BUNDLE);
-      return allowedFavoriteType === FavoriteTypesEnum.BUNDLE;
-    });
 
     return combineLatest([
       quickLinksDict$,

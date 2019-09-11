@@ -19,19 +19,13 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import {
   ENVIRONMENT_ALERTS_FEATURE_TOKEN,
+  ENVIRONMENT_FAVORITES_FEATURE_TOKEN,
   ENVIRONMENT_GLOBAL_SEARCH_FEATURE_TOKEN
 } from '../../interfaces/environment.injectiontokens';
 import {
   EnvironmentAlertsFeatureInterface,
+  EnvironmentFavoritesFeatureInterface,
   EnvironmentGlobalSearchFeatureInterface
-} from '../../interfaces/environment.interfaces';
-import {
-  ENVIRONMENT_ALERTS_FEATURE_TOKEN,
-  ENVIRONMENT_QUICK_LINK_FEATURE_TOKEN
-} from '../../interfaces/environment.injectiontokens';
-import {
-  EnvironmentAlertsFeatureInterface,
-  EnvironmentQuickLinkFeatureInterface
 } from '../../interfaces/environment.interfaces';
 import { QuickLinkTypeEnum } from '../quick-link/quick-link-type.enum';
 import { QuickLinkComponent } from '../quick-link/quick-link.component';
@@ -63,8 +57,8 @@ export class HeaderViewModel {
     private environmentAlertsFeature: EnvironmentAlertsFeatureInterface,
     @Inject(ENVIRONMENT_GLOBAL_SEARCH_FEATURE_TOKEN)
     private environmentGlobalSearchFeature: EnvironmentGlobalSearchFeatureInterface,
-    @Inject(ENVIRONMENT_QUICK_LINK_FEATURE_TOKEN)
-    private environmentQuickLinkFeature: EnvironmentQuickLinkFeatureInterface,
+    @Inject(ENVIRONMENT_FAVORITES_FEATURE_TOKEN)
+    private environmentFavoritesFeature: EnvironmentFavoritesFeatureInterface,
     private dialog: MatDialog,
     private store: Store<DalState>
   ) {
@@ -148,7 +142,7 @@ export class HeaderViewModel {
     this.dialog.open(QuickLinkComponent, {
       data: {
         mode,
-        allowedFavoriteTypes: this.environmentQuickLinkFeature
+        allowedFavoriteTypes: this.environmentFavoritesFeature
           .allowedFavoriteTypes
       },
       panelClass: 'quick-link__dialog'
