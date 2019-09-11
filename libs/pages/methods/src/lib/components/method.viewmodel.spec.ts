@@ -1136,7 +1136,7 @@ describe('MethodViewModel', () => {
     });
   });
 
-   describe('toggleBoekeFavorite', () => {
+  describe('toggleBoekeFavorite', () => {
     let dateMock: MockDate;
 
     beforeAll(() => {
