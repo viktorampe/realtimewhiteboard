@@ -19,8 +19,14 @@ import {
 import { MockDate } from '@campus/testing';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
-import { ENVIRONMENT_ALERTS_FEATURE_TOKEN } from '../../interfaces/environment.injectiontokens';
-import { EnvironmentAlertsFeatureInterface } from '../../interfaces/environment.interfaces';
+import {
+  ENVIRONMENT_ALERTS_FEATURE_TOKEN,
+  ENVIRONMENT_GLOBAL_SEARCH_FEATURE_TOKEN
+} from '../../interfaces/environment.injectiontokens';
+import {
+  EnvironmentAlertsFeatureInterface,
+  EnvironmentGlobalSearchFeatureInterface
+} from '../../interfaces/environment.interfaces';
 import { AlertToNotificationItemPipe } from '../../pipes/alert-to-notification/alert-to-notification-pipe';
 import { QuickLinkTypeEnum } from '../quick-link/quick-link-type.enum';
 import { QuickLinkComponent } from '../quick-link/quick-link.component';
@@ -30,6 +36,9 @@ let environmentAlertsFeature: EnvironmentAlertsFeatureInterface = {
   enabled: false,
   hasAppBarDropDown: false,
   appBarPollingInterval: 3000
+};
+const environmentGlobalSearchFeature: EnvironmentGlobalSearchFeatureInterface = {
+  enabled: true
 };
 let headerViewModel: HeaderViewModel;
 
@@ -100,6 +109,10 @@ describe('headerViewModel', () => {
         {
           provide: ENVIRONMENT_ALERTS_FEATURE_TOKEN,
           useValue: environmentAlertsFeature
+        },
+        {
+          provide: ENVIRONMENT_GLOBAL_SEARCH_FEATURE_TOKEN,
+          useValue: environmentGlobalSearchFeature
         },
         Store,
         {

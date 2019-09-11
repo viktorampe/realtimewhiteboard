@@ -28,8 +28,8 @@ export const environment: EnvironmentInterface = {
   },
   features: {
     alerts: {
-      enabled: false,
-      hasAppBarDropDown: false,
+      enabled: true,
+      hasAppBarDropDown: true,
       appBarPollingInterval: 3000
     },
     messages: {
@@ -45,6 +45,9 @@ export const environment: EnvironmentInterface = {
           urlRegex: 'http.*assets\\/icons.*.svg'
         }
       ]
+    },
+    globalSearch: {
+      enabled: true
     }
   },
   sso: {},
