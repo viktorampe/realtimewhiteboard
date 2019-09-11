@@ -40,6 +40,8 @@ import {
   YEAR_SERVICE_TOKEN
 } from '@campus/dal';
 import {
+  NavigationItemService,
+  NAVIGATION_ITEM_SERVICE_TOKEN,
   OpenStaticContentService,
   OPEN_STATIC_CONTENT_SERVICE_TOKEN,
   ScormExerciseService,
@@ -89,7 +91,8 @@ import {
     {
       provide: UNLOCKED_FREE_PRACTICE_SERVICE_TOKEN,
       useClass: UnlockedFreePracticeService
-    }
+    },
+    { provide: NAVIGATION_ITEM_SERVICE_TOKEN, useClass: NavigationItemService }
   ]
 })
 export class AppTokenModule {}
