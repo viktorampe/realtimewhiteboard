@@ -25,7 +25,7 @@ export interface EnvironmentIconMappingInterface {
   [icon: string]: string;
 }
 
-export interface EnvironmentQuickLinkFeatureInterface {
+export interface EnvironmentFavoritesFeatureInterface {
   allowedFavoriteTypes: FavoriteTypesEnum[];
 }
 
