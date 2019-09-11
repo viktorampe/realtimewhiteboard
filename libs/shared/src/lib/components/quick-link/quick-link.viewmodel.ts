@@ -224,7 +224,7 @@ export class QuickLinkViewModel {
       );
     });
 
-    const needTasks = allowedFavoriteTypes.some(allowedFavoriteType => {
+    const needTasks = allowedFavoriteTypes.includes(FavoriteTypesEnum.TASK);
       return allowedFavoriteType === FavoriteTypesEnum.TASK;
     });
 
