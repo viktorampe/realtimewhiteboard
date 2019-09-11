@@ -212,7 +212,7 @@ export class SharedModule {
           useValue: environmentErrorManagementFeature
         },
         {
-          provide: ENVIRONMENT_QUICK_LINK_FEATURE_TOKEN,
+          provide: ENVIRONMENT_FAVORITES_FEATURE_TOKEN,
           useValue: environmentFavoritesFeature
         },
         {
