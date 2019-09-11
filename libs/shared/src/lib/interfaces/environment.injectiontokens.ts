@@ -41,3 +41,7 @@ export const ENVIRONMENT_SEARCHMODES_TOKEN = new InjectionToken(
 export const ENVIRONMENT_TESTING_TOKEN = new InjectionToken(
   'environmentTesting'
 );
+
+export const ENVIRONMENT_NAV_ITEMS_TOKEN = new InjectionToken(
+  'environmentNavItems'
+);
