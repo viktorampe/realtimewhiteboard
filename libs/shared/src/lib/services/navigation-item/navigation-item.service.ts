@@ -26,8 +26,8 @@ export interface NavItem {
 
 export interface AppNavTreeInterface {
   sideNav: NavItem[];
-  settingsNav?: NavItem[];
-  profileMenuNav?: NavItem[];
+  settingsNav: NavItem[];
+  profileMenuNav: NavItem[];
 }
 
 @Injectable({
