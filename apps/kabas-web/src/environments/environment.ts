@@ -1,3 +1,4 @@
+import { FavoriteTypesEnum } from '@campus/dal';
 import { EnvironmentInterface } from '@campus/shared';
 import { icons } from './icons';
 import { searchModes } from './search-modes';
@@ -45,6 +46,9 @@ export const environment: EnvironmentInterface = {
           urlRegex: 'http.*assets\\/icons.*.svg'
         }
       ]
+    },
+    quickLink: {
+      allowedFavoriteTypes: [FavoriteTypesEnum.BOEKE, FavoriteTypesEnum.TASK]
     }
   },
   sso: {},

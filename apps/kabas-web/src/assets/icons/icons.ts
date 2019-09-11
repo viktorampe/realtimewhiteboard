@@ -24,8 +24,6 @@ export const icons = {
   filter: 'assets/icons/filter.svg',
   context_menu: 'assets/icons/material/more_vert.svg',
   favorites: 'assets/icons/favorites.svg',
-  check: 'assets/icons/check.svg',
-  close: 'assets/icons/close.svg',
   //TODO: These are TEMPORARY SVGs for Diabolo that I made from the PNGs
   //get the OFFICIAL files from Antoon later
   'diabolo-intro': 'assets/icons/diabolo/intro.svg',

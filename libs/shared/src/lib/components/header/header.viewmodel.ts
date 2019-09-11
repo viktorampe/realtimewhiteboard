@@ -17,8 +17,14 @@ import { BreadcrumbLinkInterface, DropdownMenuItemInterface } from '@campus/ui';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ENVIRONMENT_ALERTS_FEATURE_TOKEN } from '../../interfaces/environment.injectiontokens';
-import { EnvironmentAlertsFeatureInterface } from '../../interfaces/environment.interfaces';
+import {
+  ENVIRONMENT_ALERTS_FEATURE_TOKEN,
+  ENVIRONMENT_QUICK_LINK_FEATURE_TOKEN
+} from '../../interfaces/environment.injectiontokens';
+import {
+  EnvironmentAlertsFeatureInterface,
+  EnvironmentQuickLinkFeatureInterface
+} from '../../interfaces/environment.interfaces';
 import { QuickLinkTypeEnum } from '../quick-link/quick-link-type.enum';
 import { QuickLinkComponent } from '../quick-link/quick-link.component';
 
@@ -46,6 +52,8 @@ export class HeaderViewModel {
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
     @Inject(ENVIRONMENT_ALERTS_FEATURE_TOKEN)
     private environmentAlertsFeature: EnvironmentAlertsFeatureInterface,
+    @Inject(ENVIRONMENT_QUICK_LINK_FEATURE_TOKEN)
+    private environmentQuickLinkFeature: EnvironmentQuickLinkFeatureInterface,
     private dialog: MatDialog,
     private store: Store<DalState>
   ) {
@@ -125,7 +133,11 @@ export class HeaderViewModel {
 
   openDialog(mode: QuickLinkTypeEnum): void {
     this.dialog.open(QuickLinkComponent, {
-      data: { mode },
+      data: {
+        mode,
+        allowedFavoriteTypes: this.environmentQuickLinkFeature
+          .allowedFavoriteTypes
+      },
       panelClass: 'quick-link__dialog'
     });
   }

@@ -10,6 +10,10 @@ export const ENVIRONMENT_WEBSITE_TOKEN = new InjectionToken(
   'environmentWebsite'
 );
 
+export const ENVIRONMENT_QUICK_LINK_FEATURE_TOKEN = new InjectionToken(
+  'environmentQuickLinkFeature'
+);
+
 export const ENVIRONMENT_LOGOUT_TOKEN = new InjectionToken('environmentLogout');
 
 export const ENVIRONMENT_LOGIN_TOKEN = new InjectionToken('environmentLogin');

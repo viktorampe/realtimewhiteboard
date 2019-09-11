@@ -25,7 +25,7 @@ import {
 } from '@campus/dal';
 import { Update } from '@ngrx/entity';
 import { Action, select, Store } from '@ngrx/store';
-import { combineLatest, Observable } from 'rxjs';
+import { combineLatest, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import {
   OpenStaticContentServiceInterface,
@@ -63,7 +63,8 @@ export class QuickLinkViewModel {
   ) {}
 
   public getQuickLinkCategories$(
-    mode: QuickLinkTypeEnum
+    mode: QuickLinkTypeEnum,
+    allowedFavoriteTypes: FavoriteTypesEnum[]
   ): Observable<QuickLinkCategoryInterface[]> {
     let quickLinksDict$: Observable<{
       [key: string]: FavoriteInterface[] | HistoryInterface[];
@@ -83,7 +84,11 @@ export class QuickLinkViewModel {
       quickLinksDict$ = this.store.pipe(select(HistoryQueries.historyByType));
     }
 
-    return this.composeQuickLinkCategories$(quickLinksDict$, mode);
+    return this.composeQuickLinkCategories$(
+      quickLinksDict$,
+      mode,
+      allowedFavoriteTypes
+    );
   }
 
   public update(id: number, name: string, mode: QuickLinkTypeEnum): void {
@@ -209,14 +214,34 @@ export class QuickLinkViewModel {
     quickLinksDict$: Observable<{
       [key: string]: FavoriteInterface[] | HistoryInterface[];
     }>,
-    mode: QuickLinkTypeEnum
+    mode: QuickLinkTypeEnum,
+    allowedFavoriteTypes: FavoriteTypesEnum[]
   ): Observable<QuickLinkCategoryInterface[]> {
+    const needEduContents = allowedFavoriteTypes.some(allowedFavoriteType => {
+      return (
+        allowedFavoriteType === FavoriteTypesEnum.BOEKE ||
+        allowedFavoriteType === FavoriteTypesEnum.EDUCONTENT
+      );
+    });
+
+    const needTasks = allowedFavoriteTypes.some(allowedFavoriteType => {
+      return allowedFavoriteType === FavoriteTypesEnum.TASK;
+    });
+
+    const needBundles = allowedFavoriteTypes.some(allowedFavoriteType => {
+      return allowedFavoriteType === FavoriteTypesEnum.BUNDLE;
+    });
+
     return combineLatest([
       quickLinksDict$,
       this.store.pipe(select(LearningAreaQueries.getAllEntities)),
-      this.store.pipe(select(EduContentQueries.getAllEntities)),
-      this.store.pipe(select(TaskQueries.getAllEntities)),
-      this.store.pipe(select(BundleQueries.getAllEntities))
+      needEduContents
+        ? this.store.pipe(select(EduContentQueries.getAllEntities))
+        : of({}),
+      needTasks ? this.store.pipe(select(TaskQueries.getAllEntities)) : of({}),
+      needBundles
+        ? this.store.pipe(select(BundleQueries.getAllEntities))
+        : of({})
     ]).pipe(
       map(
         ([

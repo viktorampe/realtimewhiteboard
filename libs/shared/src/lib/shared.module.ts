@@ -48,6 +48,7 @@ import {
   EnvironmentLoginInterface,
   EnvironmentLogoutInterface,
   EnvironmentMessagesFeatureInterface,
+  EnvironmentQuickLinkFeatureInterface,
   EnvironmentSearchModesInterface,
   EnvironmentSsoInterface,
   EnvironmentTermPrivacyInterface,
@@ -60,6 +61,7 @@ import {
   ENVIRONMENT_LOGIN_TOKEN,
   ENVIRONMENT_LOGOUT_TOKEN,
   ENVIRONMENT_MESSAGES_FEATURE_TOKEN,
+  ENVIRONMENT_QUICK_LINK_FEATURE_TOKEN,
   ENVIRONMENT_SEARCHMODES_TOKEN,
   ENVIRONMENT_SSO_TOKEN,
   ENVIRONMENT_TERM_PRIVACY_TOKEN,
@@ -176,6 +178,7 @@ export class SharedModule {
     environmentAlertsFeature: EnvironmentAlertsFeatureInterface,
     environmentMessagesFeature: EnvironmentMessagesFeatureInterface,
     environmentErrorManagementFeature: EnvironmentErrorManagementFeatureInterface,
+    environmentQuickLinkFeature: EnvironmentQuickLinkFeatureInterface,
     environmentIconMapping: EnvironmentIconMappingInterface,
     environmentWebsite: EnvironmentWebsiteInterface,
     environmentLogout: EnvironmentLogoutInterface,
@@ -200,6 +203,10 @@ export class SharedModule {
         {
           provide: ENVIRONMENT_ERROR_MANAGEMENT_FEATURE_TOKEN,
           useValue: environmentErrorManagementFeature
+        },
+        {
+          provide: ENVIRONMENT_QUICK_LINK_FEATURE_TOKEN,
+          useValue: environmentQuickLinkFeature
         },
         {
           provide: ENVIRONMENT_WEBSITE_TOKEN,
