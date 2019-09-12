@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DalModule } from '@campus/dal';
 import { AuthenticationGuard, TermPrivacyGuard } from '@campus/guards';
-import { APP_NAVIGATION_TREE_TOKEN, SharedModule } from '@campus/shared';
+import { SharedModule } from '@campus/shared';
 import { UiModule } from '@campus/ui';
 import { NxModule } from '@nrwl/nx';
 import { configureBufferSize } from 'ngrx-undo';
@@ -13,7 +13,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppStoreModule } from './app-store.module';
 import { AppTokenModule } from './app-token.module';
 import { AppComponent } from './app.component';
-import { kabasConfig } from './app.config';
 import { EduContentSearchResultComponent } from './components/searchresults/edu-content-search-result.component';
 
 configureBufferSize(150);
@@ -46,11 +45,7 @@ configureBufferSize(150);
     AppEffectsModule,
     AppStoreModule
   ],
-  providers: [
-    AuthenticationGuard,
-    TermPrivacyGuard,
-    { provide: APP_NAVIGATION_TREE_TOKEN, useValue: kabasConfig.appNavtree }
-  ],
+  providers: [AuthenticationGuard, TermPrivacyGuard],
   bootstrap: [AppComponent],
   entryComponents: [EduContentSearchResultComponent]
 })

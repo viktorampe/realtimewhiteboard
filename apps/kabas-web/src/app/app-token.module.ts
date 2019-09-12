@@ -40,6 +40,7 @@ import {
   YEAR_SERVICE_TOKEN
 } from '@campus/dal';
 import {
+  APP_NAVIGATION_TREE_TOKEN,
   NavigationItemService,
   NAVIGATION_ITEM_SERVICE_TOKEN,
   OpenStaticContentService,
@@ -47,6 +48,7 @@ import {
   ScormExerciseService,
   SCORM_EXERCISE_SERVICE_TOKEN
 } from '@campus/shared';
+import { kabasConfig } from './app.config';
 
 @NgModule({
   providers: [
@@ -92,7 +94,8 @@ import {
       provide: UNLOCKED_FREE_PRACTICE_SERVICE_TOKEN,
       useClass: UnlockedFreePracticeService
     },
-    { provide: NAVIGATION_ITEM_SERVICE_TOKEN, useClass: NavigationItemService }
+    { provide: NAVIGATION_ITEM_SERVICE_TOKEN, useClass: NavigationItemService },
+    { provide: APP_NAVIGATION_TREE_TOKEN, useValue: kabasConfig.appNavtree }
   ]
 })
 export class AppTokenModule {}
