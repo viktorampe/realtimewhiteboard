@@ -131,6 +131,8 @@ export class MockMethodViewModel
 
   public breadCrumbTitles$ = new BehaviorSubject('cool breadcrumb title');
 
+  public isCurrentBoekeFavorite$ = new BehaviorSubject(true);
+
   constructor(
     @Inject(ENVIRONMENT_SEARCHMODES_TOKEN)
     private searchModes: EnvironmentSearchModesInterface
@@ -182,7 +184,7 @@ export class MockMethodViewModel
     classGroup: ClassGroupInterface
   ): void {}
 
-  public deleteLearningPlanGoalProgressForLearningPlanGoalsClassGroups() {}
+  public toggleBoekeFavorite(boeke: EduContent): void {}
 
   private getAllowedBooks$(): MethodYearsInterface[] {
     return [

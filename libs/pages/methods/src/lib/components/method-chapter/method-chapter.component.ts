@@ -42,6 +42,7 @@ export class MethodChapterComponent implements OnInit, AfterViewInit {
   public searchResults$: Observable<SearchResultInterface>;
   public autoCompleteValues$: Observable<string[]>;
   public boeke$: Observable<EduContent>;
+  public isBoekeFavorite$: Observable<boolean>;
   public lessonsForChapter$: Observable<EduContentTOCInterface[]>;
   public currentTab$: Observable<number>;
   public currentMethodParams$: Observable<CurrentMethodParams>;
@@ -73,6 +74,7 @@ export class MethodChapterComponent implements OnInit, AfterViewInit {
     this.initialSearchState$ = this.methodViewModel.getInitialSearchState();
     this.searchResults$ = this.methodViewModel.searchResults$;
     this.boeke$ = this.methodViewModel.currentBoeke$;
+    this.isBoekeFavorite$ = this.methodViewModel.isCurrentBoekeFavorite$;
     this.lessonsForChapter$ = this.methodViewModel.currentToc$;
     this.currentTab$ = this.methodViewModel.currentTab$;
     this.currentMethodParams$ = this.methodViewModel.currentMethodParams$;
@@ -151,6 +153,10 @@ export class MethodChapterComponent implements OnInit, AfterViewInit {
 
   public clickOpenBoeke(eduContent: EduContent): void {
     this.methodViewModel.openBoeke(eduContent);
+  }
+
+  public toggleBoekeFavorite(boeke: EduContent) {
+    this.methodViewModel.toggleBoekeFavorite(boeke);
   }
 
   public checkBoxChanged(

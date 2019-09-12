@@ -249,4 +249,14 @@ describe('MethodComponent', () => {
       );
     });
   });
+
+  describe('toggleBoekeFavorite', () => {
+    it('should call the correct method on the viewmodel', () => {
+      jest.spyOn(methodViewModel, 'toggleBoekeFavorite');
+      const boeke = new EduContentFixture({ id: 123 }, { learningAreaId: 456 });
+
+      component.toggleBoekeFavorite(boeke);
+      expect(methodViewModel.toggleBoekeFavorite).toHaveBeenCalledWith(boeke);
+    });
+  });
 });

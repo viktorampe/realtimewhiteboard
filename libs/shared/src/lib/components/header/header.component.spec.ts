@@ -24,7 +24,10 @@ describe('HeaderComponent', () => {
   let component: HeaderComponent;
   let fixture: ComponentFixture<HeaderComponent>;
   let headerViewModel: MockHeaderViewModel;
-  const breakpointStream: Subject<{ matches: boolean }> = new Subject();
+  const breakpointStream: Subject<{
+    matches: boolean;
+    breakpoints: { [key: string]: boolean };
+  }> = new Subject();
   let pageBarNavButton: HTMLElement;
 
   beforeEach(async(() => {
@@ -71,12 +74,13 @@ describe('HeaderComponent', () => {
   describe('feature toggles', () => {
     beforeEach(() => {
       headerViewModel.alertsLoaded$.next(true);
+      component.alertsPosition = 'top-right';
     });
     it('should show the feature components if true', () => {
       component.enableAlerts = true;
       fixture.detectChanges();
       expect(
-        fixture.debugElement.query(By.css('.shared-header__app-bar__alerts'))
+        fixture.debugElement.query(By.css('.shared-header__alerts'))
       ).toBeTruthy();
     });
     it('should not show the feature components if false', () => {
@@ -89,6 +93,100 @@ describe('HeaderComponent', () => {
     });
   });
 
+  describe('positioning', () => {
+    function expectFalsy(selector) {
+      fixture.detectChanges();
+      expect(fixture.debugElement.query(By.css(selector))).toBeFalsy();
+    }
+
+    function expectThruthy(selector) {
+      fixture.detectChanges();
+      expect(fixture.debugElement.query(By.css(selector))).toBeTruthy();
+    }
+
+    beforeEach(() => {
+      headerViewModel.alertsLoaded$.next(true);
+      component.enableAlerts = true;
+    });
+    it('should show the alert component', () => {
+      component.alertsPosition = 'top-right';
+      expectThruthy('.shared-header__alerts');
+    });
+    it('should not show the alert component', () => {
+      expectFalsy('.shared-header__app-bar__alerts');
+    });
+
+    it('should show the breadcrumbs in the app bar', () => {
+      component.breadcrumbPosition = 'top-left';
+      expectThruthy('campus-app-bar campus-breadcrumbs');
+      expectFalsy('.shared-header__page-bar campus-breadcrumbs');
+    });
+
+    it('should show the breadcrumbs in the page bar', () => {
+      component.breadcrumbPosition = 'page-left';
+      expectFalsy('campus-app-bar campus-breadcrumbs');
+      expectThruthy('.shared-header__page-bar campus-breadcrumbs');
+    });
+
+    it('should not show the breadcrumbs', () => {
+      component.breadcrumbPosition = null;
+      expectFalsy('campus-app-bar campus-breadcrumbs');
+      expectFalsy('.shared-header__page-bar campus-breadcrumbs');
+    });
+
+    it('should show the globalsearch', () => {
+      component.enableGlobalSearch = true;
+      expectThruthy('#global-search-btn');
+    });
+
+    it('should not show the globalsearch', () => {
+      component.enableGlobalSearch = false;
+      expectFalsy('#global-search-btn');
+    });
+
+    it('should show the profileMenu', () => {
+      component.profileMenuPosition = 'top-right';
+      expectThruthy('.shared-header__profile-menu');
+    });
+
+    it('should hide the profileMenu', () => {
+      component.profileMenuPosition = null;
+      expectFalsy('.shared-header__profile-menu');
+    });
+
+    it('should show the profileLink', () => {
+      component.profileLinkPosition = 'top-right';
+      expectThruthy('#global-profile-btn');
+    });
+
+    it('should hide the profileLink', () => {
+      component.profileMenuPosition = null;
+      expectFalsy('#global-profile-btn');
+    });
+
+    it('should show the quicklinks in the app bar', () => {
+      component.quicklinkPosition = 'top-right';
+      expectThruthy('campus-app-bar #global-history-btn');
+      expectThruthy('campus-app-bar #global-favorites-btn');
+      expectFalsy('.shared-header__page-bar #global-history-btn');
+      expectFalsy('.shared-header__page-bar #global-favorites-btn');
+    });
+
+    it('should show the quicklinks in the page bar', () => {
+      component.quicklinkPosition = 'page-right';
+      expectFalsy('campus-app-bar #global-history-btn');
+      expectFalsy('campus-app-bar #global-favorites-btn');
+      expectThruthy('.shared-header__page-bar #global-history-btn');
+      expectThruthy('.shared-header__page-bar #global-favorites-btn');
+    });
+
+    it('should not show the quicklinks', () => {
+      component.quicklinkPosition = null;
+      expectFalsy('#global-history-btn');
+      expectFalsy('#global-favorites-btn');
+    });
+  });
+
   it('should contain the element with the id page-bar-container', () => {
     expect(
       fixture.debugElement.query(By.css('#page-bar-container'))
@@ -98,6 +196,7 @@ describe('HeaderComponent', () => {
   describe('unread badge counter', () => {
     beforeEach(() => {
       headerViewModel.alertsLoaded$.next(true);
+      component.alertsPosition = 'top-right';
       fixture.detectChanges();
     });
     it('should show the badge if the unreadAlertCount$ is bigger than 0', () => {
@@ -129,7 +228,7 @@ describe('HeaderComponent', () => {
       headerViewModel.alertsLoaded$.next(true);
 
       // mock that we're on small sreen size
-      breakpointStream.next({ matches: true });
+      breakpointStream.next({ matches: true, breakpoints: {} });
       fixture.detectChanges();
     });
     describe('page bar navigation', () => {

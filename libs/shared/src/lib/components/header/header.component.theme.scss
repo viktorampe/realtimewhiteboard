@@ -7,6 +7,7 @@
   $shared-header__page-bar__divider-height: 40px !default;
   $shared-header__page-bar__divider-width: 2px !default;
   $shared-header__page-bar__element-height: 40px !default;
+  $shared-header__page-bar-container__justify-content: flex-start !default;
   $shared-header__page-bar__page-bar-style--searchmode-button-width: 140px !default;
   $shared-header__page-bar__element-border-width: 2px !default;
   $shared-header__page-bar__element-padding-top: 2px !default;
@@ -20,7 +21,7 @@
   $shared-header__page-bar__mat-badge-line-height: 20px !default;
   $shared-header__page-bar__mat-badge__content-color: $secondary-font-color-badge !default;
   $shared-header__page-bar__mat-badge__content-background-color: $secondary-bg-color-badge !default;
-  $shared-header__page-bar__quicklinks-color-hover: $shared-button-color-accent !default;
+  $shared-header__page-bar__right-color-hover: $shared-button-color-accent !default;
 
   .shared-header {
     &__app-bar {
@@ -50,6 +51,7 @@
       }
 
       #page-bar-container {
+        justify-content: $shared-header__page-bar-container__justify-content;
         .page-bar-style {
           &--searchmode-button {
             border: $shared-header__page-bar__element-border-width solid
@@ -79,21 +81,19 @@
           padding-bottom: $shared-header__page-bar__element-padding-bottom;
         }
       }
+    }
 
-      &__quicklink {
-        &__button {
-          color: $shared-header__app-bar-color;
-          background-color: $shared-header__page-bar-background-color;
+    &__quicklink__button {
+      color: $shared-header__app-bar-color;
+      background-color: $shared-header__page-bar-background-color;
 
-          &:hover {
-            color: $shared-header__page-bar__quicklinks-color-hover;
-            background-color: $shared-header__page-bar-background-color;
-          }
-        }
+      &:hover {
+        color: $shared-header__page-bar__right-color-hover;
+        background-color: $shared-header__page-bar-background-color;
       }
     }
 
-    .shared-header__app-bar__alerts {
+    .shared-header__alerts {
       display: flex;
       align-items: center;
       margin-right: $shared-header__page-bar__divider-margin-left-right;
@@ -112,7 +112,7 @@
       }
     }
 
-    .shared-header__app-bar__profile-menu {
+    .shared-header__profile-menu {
       display: flex;
       align-items: center;
       cursor: pointer;
