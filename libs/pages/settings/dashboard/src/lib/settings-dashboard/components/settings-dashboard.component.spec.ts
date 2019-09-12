@@ -2,29 +2,12 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconRegistry, MatListModule } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
-import {
-  ENVIRONMENT_ICON_MAPPING_TOKEN,
-  PermissionServiceInterface,
-  SharedModule
-} from '@campus/shared';
+import { ENVIRONMENT_ICON_MAPPING_TOKEN, SharedModule } from '@campus/shared';
 import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
-import { Observable, of } from 'rxjs';
 import { SettingsDashboardComponent } from './settings-dashboard.component';
 import { SettingsDashboardViewModel } from './settings-dashboard.viewmodel';
 import { MockSettingsDashboardViewModel } from './settings-dashboard.viewmodel.mock';
-
-class MockPermissionService implements PermissionServiceInterface {
-  hasPermission$(
-    requiredPermissions: string | (string | string[])[]
-  ): Observable<boolean> {
-    return of(true);
-  }
-
-  hasPermission() {
-    return true;
-  }
-}
 
 describe('SettingsDashboardComponent', () => {
   let component: SettingsDashboardComponent;
