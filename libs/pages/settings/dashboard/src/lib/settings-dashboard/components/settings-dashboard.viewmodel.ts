@@ -2,9 +2,9 @@ import { Inject, Injectable } from '@angular/core';
 import { DalState, UserQueries } from '@campus/dal';
 import {
   NavigationItemServiceInterface,
-  NAVIGATION_ITEM_SERVICE_TOKEN,
-  NavItem
+  NAVIGATION_ITEM_SERVICE_TOKEN
 } from '@campus/shared';
+import { NavItem } from '@campus/ui';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';

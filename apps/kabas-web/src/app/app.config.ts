@@ -1,4 +1,5 @@
-import { AppNavTreeInterface, NavItem } from '@campus/shared';
+import { AppNavTreeInterface } from '@campus/shared';
+import { NavItem } from '@campus/ui';
 
 const standardSideNavItems: NavItem[] = [
   {

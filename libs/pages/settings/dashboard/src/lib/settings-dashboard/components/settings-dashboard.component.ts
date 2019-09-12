@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavItem } from '@campus/shared';
+import { NavItem } from '@campus/ui';
 import { Observable } from 'rxjs';
 import { SettingsDashboardViewModel } from './settings-dashboard.viewmodel';
 
