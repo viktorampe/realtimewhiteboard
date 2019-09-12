@@ -36,11 +36,6 @@ const standardSideNavItems: NavItem[] = [
     title: 'Instellingen',
     icon: 'settings',
     link: '/settings'
-  },
-  {
-    title: 'Oefenen',
-    icon: '',
-    link: '/oefenen'
   }
 ];
 
