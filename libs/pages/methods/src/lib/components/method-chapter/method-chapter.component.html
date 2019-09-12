@@ -6,7 +6,22 @@
     *ngIf="(boeke$ | async) as boeke"
     (click)="clickOpenBoeke(boeke)"
   ></campus-button
-></campus-page-bar>
+  ><campus-button
+    data-cy="nav-toggle-boeke-favorite"
+    campusPrimary
+    [iconClass]="'favorite'"
+    *ngIf="(boeke$ | async) as boeke"
+    (click)="toggleBoekeFavorite(boeke)"
+  >
+    <ng-container
+      *ngIf="(isBoekeFavorite$ | async) as isBoekeFavorite; else notFavorite"
+      >-</ng-container
+    >
+    <ng-template #notFavorite>
+      +
+    </ng-template>
+  </campus-button></campus-page-bar
+>
 <div class="method-chapter">
   <campus-collapsible-sheet>
     <div aside>
