@@ -79,11 +79,6 @@ export class MockMethodViewModel
   public generalFilesByType$ = new BehaviorSubject<Dictionary<EduContent[]>>(
     this.getGeneralFilesByType()
   );
-  public classGroups$ = new BehaviorSubject<ClassGroupInterface[]>([
-    new ClassGroupFixture({ id: 1, name: '1a' }),
-    new ClassGroupFixture({ id: 2, name: '1b' })
-  ]);
-
   public filteredClassGroups$ = new BehaviorSubject<ClassGroupInterface[]>([
     new ClassGroupFixture({ id: 1, name: '1a' }),
     new ClassGroupFixture({ id: 2, name: '1b' })
@@ -130,6 +125,8 @@ export class MockMethodViewModel
   );
 
   public breadCrumbTitles$ = new BehaviorSubject('cool breadcrumb title');
+
+  public isCurrentBoekeFavorite$ = new BehaviorSubject(true);
 
   constructor(
     @Inject(ENVIRONMENT_SEARCHMODES_TOKEN)
@@ -182,7 +179,7 @@ export class MockMethodViewModel
     classGroup: ClassGroupInterface
   ): void {}
 
-  public deleteLearningPlanGoalProgressForLearningPlanGoalsClassGroups() {}
+  public toggleBoekeFavorite(boeke: EduContent): void {}
 
   private getAllowedBooks$(): MethodYearsInterface[] {
     return [

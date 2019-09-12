@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import {
   ClassGroupInterface,
   EduContent,
-  EduContentBookInterface,
   EduContentProductTypeInterface,
   EduContentTOCInterface,
   LearningPlanGoalInterface,
@@ -28,13 +27,13 @@ import { CurrentMethodParams, MethodViewModel } from '../method.viewmodel';
 })
 export class MethodComponent implements OnInit {
   public boeke$: Observable<EduContent>;
-  public book$: Observable<EduContentBookInterface>;
   public chapters$: Observable<EduContentTOCInterface[]>;
   public generalFilesByType$: Observable<Dictionary<EduContent[]>>;
   public method$: Observable<MethodInterface>;
   public productTypes$: Observable<EduContentProductTypeInterface[]>;
   public currentTab$: Observable<number>;
   public breadcrumbTitles$: Observable<string>;
+  public isBoekeFavorite$: Observable<boolean>;
 
   public learningPlanGoalTableHeaders: MultiCheckBoxTableRowHeaderColumnInterface<
     LearningPlanGoalInterface
@@ -52,7 +51,7 @@ export class MethodComponent implements OnInit {
 
   ngOnInit() {
     this.boeke$ = this.viewModel.currentBoeke$;
-    this.book$ = this.viewModel.currentBook$;
+    this.isBoekeFavorite$ = this.viewModel.isCurrentBoekeFavorite$;
     this.chapters$ = this.viewModel.currentToc$;
     this.generalFilesByType$ = this.viewModel.generalFilesByType$;
     this.method$ = this.viewModel.currentMethod$;
@@ -118,6 +117,10 @@ export class MethodComponent implements OnInit {
 
   public clickExportGoals(): void {
     this.viewModel.exportLearningPlanGoalProgress();
+  }
+
+  public toggleBoekeFavorite(boeke: EduContent) {
+    this.viewModel.toggleBoekeFavorite(boeke);
   }
 
   private getTableColumnsFromClassGroupsStream(): Observable<

@@ -7,6 +7,21 @@
     (click)="clickOpenBoeke(boeke)"
   ></campus-button>
   <campus-button
+    data-cy="nav-toggle-boeke-favorite"
+    campusPrimary
+    [iconClass]="'favorite'"
+    *ngIf="(boeke$ | async) as boeke"
+    (click)="toggleBoekeFavorite(boeke)"
+  >
+    <ng-container
+      *ngIf="(isBoekeFavorite$ | async) as isBoekeFavorite; else notFavorite"
+      >-</ng-container
+    >
+    <ng-template #notFavorite>
+      +
+    </ng-template>
+  </campus-button>
+  <campus-button
     campusPrimary
     iconClass="import-export"
     *ngIf="(currentTab$ | async) === 1"

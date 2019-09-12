@@ -27,8 +27,7 @@ export class UnlockedFreePracticeService
     userId: number,
     unlockedFreePractices: UnlockedFreePracticeInterface[]
   ): Observable<UnlockedFreePracticeInterface[]> {
-    //TODO don't avoid typescript after sdk publish
-    return this.personApi['createUnlockedFreePractices'](
+    return this.personApi.createUnlockedFreePractices(
       userId,
       unlockedFreePractices
     );
@@ -38,10 +37,8 @@ export class UnlockedFreePracticeService
     userId: number,
     unlockedFreePracticeIds: number[]
   ): Observable<boolean> {
-    //TODO don't avoid typescript after sdk publish
-    return this.personApi['deleteUnlockedFreePractices'](
-      userId,
-      unlockedFreePracticeIds
-    ).pipe(mapTo(true));
+    return this.personApi
+      .deleteManyUnlockedFreePracticeRemote(userId, unlockedFreePracticeIds)
+      .pipe(mapTo(true));
   }
 }
