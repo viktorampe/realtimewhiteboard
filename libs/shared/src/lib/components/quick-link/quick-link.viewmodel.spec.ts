@@ -43,6 +43,7 @@ import { Action, Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { ENVIRONMENT_FAVORITES_FEATURE_TOKEN } from '../../interfaces';
 import {
   OpenStaticContentServiceInterface,
   OPEN_STATIC_CONTENT_SERVICE_TOKEN
@@ -63,7 +64,6 @@ import {
   QuickLinkInterface
 } from './quick-link.interface';
 import { QuickLinkViewModel } from './quick-link.viewmodel';
-
 describe('QuickLinkViewModel', () => {
   let quickLinkViewModel: QuickLinkViewModel;
   let store: Store<DalState>;
@@ -219,6 +219,18 @@ describe('QuickLinkViewModel', () => {
           useValue: { open: jest.fn() }
         },
         {
+          provide: ENVIRONMENT_FAVORITES_FEATURE_TOKEN,
+          useValue: {
+            allowedFavoriteTypes: [
+              FavoriteTypesEnum.EDUCONTENT,
+              FavoriteTypesEnum.AREA,
+              FavoriteTypesEnum.BOEKE,
+              FavoriteTypesEnum.BUNDLE,
+              FavoriteTypesEnum.TASK
+            ]
+          }
+        },
+        {
           provide: SCORM_EXERCISE_SERVICE_TOKEN,
           useValue: { previewExerciseFromUnlockedContent: jest.fn() }
         },
@@ -264,12 +276,7 @@ describe('QuickLinkViewModel', () => {
 
         it('should return quickLinks for favorites', () => {
           expect(
-            quickLinkViewModel.getQuickLinkCategories$(quickLinkType, [
-              FavoriteTypesEnum.TASK,
-              FavoriteTypesEnum.EDUCONTENT,
-              FavoriteTypesEnum.BUNDLE,
-              FavoriteTypesEnum.BOEKE
-            ])
+            quickLinkViewModel.getQuickLinkCategories$(quickLinkType)
           ).toBeObservable(
             hot('a', {
               a: [
@@ -763,9 +770,7 @@ describe('QuickLinkViewModel', () => {
 
               // isolate category of item under test
               quickLinkCategory$ = quickLinkViewModel
-                .getQuickLinkCategories$(testCase.setup.quickLinkDataMode, [
-                  FavoriteTypesEnum.EDUCONTENT
-                ])
+                .getQuickLinkCategories$(testCase.setup.quickLinkDataMode)
                 .pipe(
                   map(
                     // only 1 item in the store

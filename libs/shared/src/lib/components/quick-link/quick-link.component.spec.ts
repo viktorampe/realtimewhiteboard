@@ -123,8 +123,7 @@ describe('QuickLinkComponent', () => {
     // in the mockViewmodel this is a BehaviorSubject
     // in the mockViewmodel the mode parameter isn't used
     vmQuickLinkCategories$ = quickLinkViewModel.getQuickLinkCategories$(
-      null,
-      []
+      null
     ) as BehaviorSubject<QuickLinkCategoryInterface[]>;
     vmFeedback$ = quickLinkViewModel.getFeedback$() as BehaviorSubject<
       EffectFeedbackInterface

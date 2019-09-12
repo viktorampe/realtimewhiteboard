@@ -28,6 +28,10 @@ import { Action, select, Store } from '@ngrx/store';
 import { combineLatest, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import {
+  EnvironmentFavoritesFeatureInterface,
+  ENVIRONMENT_FAVORITES_FEATURE_TOKEN
+} from '../../interfaces';
+import {
   OpenStaticContentServiceInterface,
   OPEN_STATIC_CONTENT_SERVICE_TOKEN
 } from '../../services/content/open-static-content.interface';
@@ -50,6 +54,8 @@ import {
 
 @Injectable()
 export class QuickLinkViewModel {
+  private allowedFavoriteTypes: FavoriteTypesEnum[];
+
   constructor(
     private store: Store<DalState>,
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
@@ -59,12 +65,16 @@ export class QuickLinkViewModel {
     @Inject(SCORM_EXERCISE_SERVICE_TOKEN)
     private scormExerciseService: ScormExerciseServiceInterface,
     @Inject(FEEDBACK_SERVICE_TOKEN)
-    private feedBackService: FeedBackServiceInterface
-  ) {}
+    private feedBackService: FeedBackServiceInterface,
+    @Inject(ENVIRONMENT_FAVORITES_FEATURE_TOKEN)
+    private environmentFavoritesFeature: EnvironmentFavoritesFeatureInterface
+  ) {
+    this.allowedFavoriteTypes =
+      environmentFavoritesFeature.allowedFavoriteTypes;
+  }
 
   public getQuickLinkCategories$(
-    mode: QuickLinkTypeEnum,
-    allowedFavoriteTypes: FavoriteTypesEnum[]
+    mode: QuickLinkTypeEnum
   ): Observable<QuickLinkCategoryInterface[]> {
     let quickLinksDict$: Observable<{
       [key: string]: FavoriteInterface[] | HistoryInterface[];
@@ -84,11 +94,7 @@ export class QuickLinkViewModel {
       quickLinksDict$ = this.store.pipe(select(HistoryQueries.historyByType));
     }
 
-    return this.composeQuickLinkCategories$(
-      quickLinksDict$,
-      mode,
-      allowedFavoriteTypes
-    );
+    return this.composeQuickLinkCategories$(quickLinksDict$, mode);
   }
 
   public update(id: number, name: string, mode: QuickLinkTypeEnum): void {
@@ -210,41 +216,58 @@ export class QuickLinkViewModel {
     );
   }
 
+  private getBundlesStream() {
+    if (this.allowedFavoriteTypes.includes(FavoriteTypesEnum.BUNDLE)) {
+      return this.store.pipe(select(BundleQueries.getAllEntities));
+    } else {
+      return of({});
+    }
+  }
+
+  private getTasksStream() {
+    if (this.allowedFavoriteTypes.includes(FavoriteTypesEnum.TASK)) {
+      return this.store.pipe(select(TaskQueries.getAllEntities));
+    } else {
+      return of({});
+    }
+  }
+
+  private getEduContentsStream() {
+    const needEduContents = this.allowedFavoriteTypes.some(
+      allowedFavoriteType => {
+        return (
+          allowedFavoriteType === FavoriteTypesEnum.BOEKE ||
+          allowedFavoriteType === FavoriteTypesEnum.EDUCONTENT
+        );
+      }
+    );
+    if (needEduContents) {
+      return this.store.pipe(select(EduContentQueries.getAllEntities));
+    } else {
+      return of({});
+    }
+  }
+
   private composeQuickLinkCategories$(
     quickLinksDict$: Observable<{
       [key: string]: FavoriteInterface[] | HistoryInterface[];
     }>,
-    mode: QuickLinkTypeEnum,
-    allowedFavoriteTypes: FavoriteTypesEnum[]
+    mode: QuickLinkTypeEnum
   ): Observable<QuickLinkCategoryInterface[]> {
-    const needEduContents = allowedFavoriteTypes.some(allowedFavoriteType => {
-      return (
-        allowedFavoriteType === FavoriteTypesEnum.BOEKE ||
-        allowedFavoriteType === FavoriteTypesEnum.EDUCONTENT
-      );
-    });
-
-    const needTasks = allowedFavoriteTypes.includes(FavoriteTypesEnum.TASK);
-    const needBundles = allowedFavoriteTypes.includes(FavoriteTypesEnum.BUNDLE);
-
     return combineLatest([
       quickLinksDict$,
       this.store.pipe(select(LearningAreaQueries.getAllEntities)),
-      needEduContents
-        ? this.store.pipe(select(EduContentQueries.getAllEntities))
-        : of({}),
-      needTasks ? this.store.pipe(select(TaskQueries.getAllEntities)) : of({}),
-      needBundles
-        ? this.store.pipe(select(BundleQueries.getAllEntities))
-        : of({})
+      this.getBundlesStream(),
+      this.getTasksStream(),
+      this.getEduContentsStream()
     ]).pipe(
       map(
         ([
           quickLinkDict,
           learningAreaDict,
-          eduContentDict,
+          bundleDict,
           taskDict,
-          bundleDict
+          eduContentDict
         ]) =>
           Object.keys(quickLinkDict).map(
             key =>

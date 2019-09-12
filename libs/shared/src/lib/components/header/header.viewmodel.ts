@@ -19,12 +19,10 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import {
   ENVIRONMENT_ALERTS_FEATURE_TOKEN,
-  ENVIRONMENT_FAVORITES_FEATURE_TOKEN,
   ENVIRONMENT_GLOBAL_SEARCH_FEATURE_TOKEN
 } from '../../interfaces/environment.injectiontokens';
 import {
   EnvironmentAlertsFeatureInterface,
-  EnvironmentFavoritesFeatureInterface,
   EnvironmentGlobalSearchFeatureInterface
 } from '../../interfaces/environment.interfaces';
 import { QuickLinkTypeEnum } from '../quick-link/quick-link-type.enum';
@@ -57,8 +55,6 @@ export class HeaderViewModel {
     private environmentAlertsFeature: EnvironmentAlertsFeatureInterface,
     @Inject(ENVIRONMENT_GLOBAL_SEARCH_FEATURE_TOKEN)
     private environmentGlobalSearchFeature: EnvironmentGlobalSearchFeatureInterface,
-    @Inject(ENVIRONMENT_FAVORITES_FEATURE_TOKEN)
-    private environmentFavoritesFeature: EnvironmentFavoritesFeatureInterface,
     private dialog: MatDialog,
     private store: Store<DalState>
   ) {
@@ -141,9 +137,7 @@ export class HeaderViewModel {
   openDialog(mode: QuickLinkTypeEnum): void {
     this.dialog.open(QuickLinkComponent, {
       data: {
-        mode,
-        allowedFavoriteTypes: this.environmentFavoritesFeature
-          .allowedFavoriteTypes
+        mode
       },
       panelClass: 'quick-link__dialog'
     });

@@ -7,7 +7,7 @@ import {
   ViewChildren
 } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { EffectFeedbackInterface, FavoriteTypesEnum } from '@campus/dal';
+import { EffectFeedbackInterface } from '@campus/dal';
 import { ContentEditableComponent, FilterTextInputComponent } from '@campus/ui';
 import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/utils';
 import { Observable } from 'rxjs';
@@ -83,7 +83,6 @@ export class QuickLinkComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA)
     public data: {
       mode: QuickLinkTypeEnum;
-      allowedFavoriteTypes: FavoriteTypesEnum[];
     },
     private dialogRef: MatDialogRef<QuickLinkComponent>,
     private quickLinkViewModel: QuickLinkViewModel,
@@ -212,7 +211,7 @@ export class QuickLinkComponent implements OnInit {
 
   private setupStreams() {
     this.quickLinkCategories$ = this.quickLinkViewModel
-      .getQuickLinkCategories$(this.data.mode, this.data.allowedFavoriteTypes)
+      .getQuickLinkCategories$(this.data.mode)
       .pipe(
         map(
           categories =>
