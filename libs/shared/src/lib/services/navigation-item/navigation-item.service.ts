@@ -30,7 +30,6 @@ export class NavigationItemService implements NavigationItemServiceInterface {
       // if the nav item doesn't have a requiredPermissions key --> return true
       return (
         !navItem.requiredPermissions ||
-        !navItem.requiredPermissions.length ||
         this.permissionService.hasPermission(
           navItem.requiredPermissions,
           userPermissions
