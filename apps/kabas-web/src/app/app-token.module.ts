@@ -53,6 +53,8 @@ import { kabasConfig } from './app.config';
 @NgModule({
   providers: [
     //app level services
+    { provide: NAVIGATION_ITEM_SERVICE_TOKEN, useClass: NavigationItemService },
+    { provide: APP_NAVIGATION_TREE_TOKEN, useValue: kabasConfig.appNavtree },
 
     // dal services
     { provide: AUTH_SERVICE_TOKEN, useClass: AuthService },
@@ -93,9 +95,7 @@ import { kabasConfig } from './app.config';
     {
       provide: UNLOCKED_FREE_PRACTICE_SERVICE_TOKEN,
       useClass: UnlockedFreePracticeService
-    },
-    { provide: NAVIGATION_ITEM_SERVICE_TOKEN, useClass: NavigationItemService },
-    { provide: APP_NAVIGATION_TREE_TOKEN, useValue: kabasConfig.appNavtree }
+    }
   ]
 })
 export class AppTokenModule {}
