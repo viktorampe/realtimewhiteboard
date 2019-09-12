@@ -21,10 +21,12 @@ import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
 import {
   ENVIRONMENT_ALERTS_FEATURE_TOKEN,
+  ENVIRONMENT_FAVORITES_FEATURE_TOKEN,
   ENVIRONMENT_GLOBAL_SEARCH_FEATURE_TOKEN
 } from '../../interfaces/environment.injectiontokens';
 import {
   EnvironmentAlertsFeatureInterface,
+  EnvironmentFavoritesFeatureInterface,
   EnvironmentGlobalSearchFeatureInterface
 } from '../../interfaces/environment.interfaces';
 import { AlertToNotificationItemPipe } from '../../pipes/alert-to-notification/alert-to-notification-pipe';
@@ -39,6 +41,9 @@ let environmentAlertsFeature: EnvironmentAlertsFeatureInterface = {
 };
 const environmentGlobalSearchFeature: EnvironmentGlobalSearchFeatureInterface = {
   enabled: true
+};
+const environmentFavoritesFeature: EnvironmentFavoritesFeatureInterface = {
+  allowedFavoriteTypes: []
 };
 let headerViewModel: HeaderViewModel;
 
@@ -113,6 +118,10 @@ describe('headerViewModel', () => {
         {
           provide: ENVIRONMENT_GLOBAL_SEARCH_FEATURE_TOKEN,
           useValue: environmentGlobalSearchFeature
+        },
+        {
+          provide: ENVIRONMENT_FAVORITES_FEATURE_TOKEN,
+          useValue: environmentFavoritesFeature
         },
         Store,
         {
@@ -255,7 +264,7 @@ describe('headerViewModel', () => {
     it('should open the modal dialog with the correct mode', () => {
       headerViewModel.openDialog(QuickLinkTypeEnum.FAVORITES);
       expect(matDialog.open).toHaveBeenCalledWith(QuickLinkComponent, {
-        data: { mode: QuickLinkTypeEnum.FAVORITES },
+        data: { mode: QuickLinkTypeEnum.FAVORITES, allowedFavoriteTypes: [] },
         panelClass: 'quick-link__dialog'
       });
     });

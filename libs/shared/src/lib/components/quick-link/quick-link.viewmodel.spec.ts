@@ -264,7 +264,12 @@ describe('QuickLinkViewModel', () => {
 
         it('should return quickLinks for favorites', () => {
           expect(
-            quickLinkViewModel.getQuickLinkCategories$(quickLinkType)
+            quickLinkViewModel.getQuickLinkCategories$(quickLinkType, [
+              FavoriteTypesEnum.TASK,
+              FavoriteTypesEnum.EDUCONTENT,
+              FavoriteTypesEnum.BUNDLE,
+              FavoriteTypesEnum.BOEKE
+            ])
           ).toBeObservable(
             hot('a', {
               a: [
@@ -758,7 +763,9 @@ describe('QuickLinkViewModel', () => {
 
               // isolate category of item under test
               quickLinkCategory$ = quickLinkViewModel
-                .getQuickLinkCategories$(testCase.setup.quickLinkDataMode)
+                .getQuickLinkCategories$(testCase.setup.quickLinkDataMode, [
+                  FavoriteTypesEnum.EDUCONTENT
+                ])
                 .pipe(
                   map(
                     // only 1 item in the store

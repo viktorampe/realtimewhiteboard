@@ -1,61 +1,17 @@
-import {
-  async,
-  ComponentFixture,
-  fakeAsync,
-  TestBed
-} from '@angular/core/testing';
-import {
-  MatDialogActions,
-  MatDialogModule,
-  MatDialogRef,
-  MatIcon,
-  MatIconModule,
-  MatIconRegistry,
-  MatList,
-  MatListItem,
-  MatListModule,
-  MatListSubheaderCssMatStyler,
-  MatMenuModule,
-  MatTooltipModule,
-  MAT_DIALOG_DATA
-} from '@angular/material';
+import { async, ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
+import { MatDialogActions, MatDialogModule, MatDialogRef, MatIcon, MatIconModule, MatIconRegistry, MatList, MatListItem, MatListModule, MatListSubheaderCssMatStyler, MatMenuModule, MatTooltipModule, MAT_DIALOG_DATA } from '@angular/material';
 import { By, HAMMER_LOADER } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
-import {
-  BundleFixture,
-  EduContent,
-  EduContentFixture,
-  EduContentMetadataFixture,
-  EffectFeedbackFixture,
-  EffectFeedbackInterface,
-  FavoriteFixture,
-  FavoriteInterface,
-  FavoriteTypesEnum,
-  HistoryInterface,
-  LearningAreaFixture,
-  Priority,
-  TaskFixture
-} from '@campus/dal';
+import { BundleFixture, EduContent, EduContentFixture, EduContentMetadataFixture, EffectFeedbackFixture, EffectFeedbackInterface, FavoriteFixture, FavoriteInterface, FavoriteTypesEnum, HistoryInterface, LearningAreaFixture, Priority, TaskFixture } from '@campus/dal';
 import { MockDate, MockMatIconRegistry } from '@campus/testing';
-import {
-  BannerComponent,
-  ButtonComponent,
-  ContentEditableComponent,
-  FilterTextInputComponent,
-  InfoPanelComponent,
-  UiModule
-} from '@campus/ui';
+import { BannerComponent, ButtonComponent, ContentEditableComponent, FilterTextInputComponent, InfoPanelComponent, UiModule } from '@campus/ui';
 import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/utils';
 import { hot } from '@nrwl/nx/testing';
 import { BehaviorSubject } from 'rxjs';
 import { QuickLinkTypeEnum } from './quick-link-type.enum';
 import { QuickLinkComponent } from './quick-link.component';
-import {
-  QuickLinkActionInterface,
-  QuickLinkCategoryInterface,
-  QuickLinkInterface
-} from './quick-link.interface';
+import { QuickLinkActionInterface, QuickLinkCategoryInterface, QuickLinkInterface } from './quick-link.interface';
 import { QuickLinkViewModel } from './quick-link.viewmodel';
 import { MockQuickLinkViewModel } from './quick-link.viewmodel.mock';
 
@@ -123,7 +79,7 @@ describe('QuickLinkComponent', () => {
     // in the mockViewmodel this is a BehaviorSubject
     // in the mockViewmodel the mode parameter isn't used
     vmQuickLinkCategories$ = quickLinkViewModel.getQuickLinkCategories$(
-      null
+      null,[]
     ) as BehaviorSubject<QuickLinkCategoryInterface[]>;
     vmFeedback$ = quickLinkViewModel.getFeedback$() as BehaviorSubject<
       EffectFeedbackInterface
