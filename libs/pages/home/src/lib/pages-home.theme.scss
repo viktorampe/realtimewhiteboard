@@ -1,0 +1,6 @@
+@import './components/home/home.component.theme.scss';
+@import './components/method-favorite-tile/method-favorite-tile.component.theme.scss';
+
+@mixin pages-home-theme() {
+  @include pages-home-method-favorite-tile();
+}
