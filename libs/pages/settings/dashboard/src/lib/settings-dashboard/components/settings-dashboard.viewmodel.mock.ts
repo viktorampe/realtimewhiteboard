@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { SettingsPermissions } from '@campus/dal';
-import { NavItem } from '@campus/shared';
 import { ViewModelInterface } from '@campus/testing';
+import { NavItem } from '@campus/ui';
 import { Observable, of } from 'rxjs';
 import { SettingsDashboardViewModel } from './settings-dashboard.viewmodel';
 

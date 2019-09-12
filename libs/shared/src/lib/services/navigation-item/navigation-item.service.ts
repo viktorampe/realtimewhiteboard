@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
+import { NavItem } from '@campus/ui';
 import {
   PermissionServiceInterface,
   PERMISSION_SERVICE_TOKEN
@@ -9,7 +10,6 @@ import {
   APP_NAVIGATION_TREE_TOKEN,
   NavigationItemServiceInterface
 } from './navigation-item.service.interface';
-import { NavItem } from '@campus/ui';
 
 @Injectable({
   providedIn: 'root'
@@ -32,7 +32,7 @@ export class NavigationItemService implements NavigationItemServiceInterface {
         !navItem.requiredPermissions ||
         !navItem.requiredPermissions.length ||
         this.permissionService.hasPermission(
-          [navItem.requiredPermissions],
+          navItem.requiredPermissions,
           userPermissions
         )
       );

@@ -14,7 +14,7 @@ export interface NavItem {
   link?: any[] | string;
   children?: NavItem[];
   expanded?: boolean;
-  requiredPermissions?: string[];
+  requiredPermissions?: (string | string[])[];
 }
 
 /**

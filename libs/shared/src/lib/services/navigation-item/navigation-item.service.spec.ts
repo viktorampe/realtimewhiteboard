@@ -16,7 +16,7 @@ describe('NavigationItemService', () => {
       },
       {
         title: 'side nav item 3',
-        requiredPermissions: ['permissionA', 'permissionB']
+        requiredPermissions: [['permissionA', 'permissionB']]
       },
       {
         title: 'nav item that has an empty required permissions array', // should always be returned
@@ -37,7 +37,7 @@ describe('NavigationItemService', () => {
       },
       {
         title: 'settings nav item 2',
-        requiredPermissions: ['permissionA', 'permissionC']
+        requiredPermissions: [['permissionA', 'permissionC']]
       },
       {
         title: 'settings nav item 3',
