@@ -9,6 +9,7 @@ import {
   ClassGroupActions,
   ClassGroupFixture,
   ClassGroupInterface,
+  ClassGroupQueries,
   ClassGroupReducer,
   CustomSerializer,
   DalState,
@@ -98,6 +99,7 @@ describe('MethodViewModel', () => {
     boeke: jest.SpyInstance;
     isFavorite: jest.SpyInstance;
     methodWithYear: jest.SpyInstance;
+    classGroupsForBook: jest.SpyInstance;
   };
 
   const bookId = 5;
@@ -365,7 +367,8 @@ describe('MethodViewModel', () => {
     selectorSpies = {
       boeke: jest.spyOn(EduContentQueries, 'getBoekeByBookId'),
       isFavorite: jest.spyOn(FavoriteQueries, 'getIsFavoriteEduContent'),
-      methodWithYear: jest.spyOn(MethodQueries, 'getMethodWithYearByBookId')
+      methodWithYear: jest.spyOn(MethodQueries, 'getMethodWithYearByBookId'),
+      classGroupsForBook: jest.spyOn(ClassGroupQueries, 'getClassGroupsForBook')
     };
   }
 
@@ -861,6 +864,9 @@ describe('MethodViewModel', () => {
             content: { 11: false, 12: false, 13: false }
           }
         ];
+
+        selectorSpies.classGroupsForBook.mockReturnValue(classGroups);
+
         expect(
           methodViewModel.learningPlanGoalsWithSelectionForClassGroups$
         ).toBeObservable(hot('a', { a: expected }));
@@ -909,6 +915,9 @@ describe('MethodViewModel', () => {
             ]
           }
         ];
+
+        selectorSpies.classGroupsForBook.mockReturnValue(classGroups);
+
         expect(
           methodViewModel.learningPlanGoalsPerLessonWithSelectionForClassGroups$
         ).toBeObservable(hot('a', { a: expected }));
@@ -933,6 +942,9 @@ describe('MethodViewModel', () => {
             ]
           }
         ];
+
+        selectorSpies.classGroupsForBook.mockReturnValue(classGroups);
+
         expect(
           methodViewModel.learningPlanGoalsPerLessonWithSelectionForClassGroups$
         ).toBeObservable(hot('a', { a: expected }));
