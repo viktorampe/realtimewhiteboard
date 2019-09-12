@@ -30,7 +30,7 @@ const standardSideNavItems: NavItem[] = [
   {
     title: 'Differentiëren',
     icon: '',
-    link: ''
+    link: '/differentiate'
   },
   {
     title: 'Instellingen',
