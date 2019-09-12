@@ -585,14 +585,15 @@ export class MethodViewModel implements ContentOpenerInterface {
   }
 
   private getFilteredClassGroups(): Observable<ClassGroupInterface[]> {
-    return this.currentMethod$.pipe(
-      filter(currentMethod => !!currentMethod),
-      map(currentMethod => currentMethod.id),
-      switchMap(currentMethodId =>
-        this.store.pipe(
-          select(ClassGroupQueries.getByMethodId, { id: currentMethodId })
-        )
-      )
+    return this.currentBook$.pipe(
+      filter(currentBook => !!currentBook),
+      switchMap(currentBook => {
+        return this.store.pipe(
+          select(ClassGroupQueries.getClassGroupsForBook, {
+            id: currentBook.id
+          })
+        );
+      })
     );
   }
 

@@ -106,27 +106,6 @@ describe('ClassGroup Selectors', () => {
       const results = ClassGroupQueries.getById(storeState, { id: 9 });
       expect(results).toBe(undefined);
     });
-    describe('getByMethodId', () => {
-      beforeEach(() => {
-        classGroupState = createState(
-          [
-            createClassGroup(4, [{ licenseType: 'notmethod', methodId: 1 }]),
-            createClassGroup(1, [{ licenseType: 'method', methodId: 1 }]),
-            createClassGroup(2, [{ licenseType: 'method', methodId: 2 }]),
-            createClassGroup(3)
-          ],
-          true,
-          'no error'
-        );
-        storeState = { classGroups: classGroupState };
-      });
-      it('should only return if licenseType is method and methodId is given id', () => {
-        const results = ClassGroupQueries.getByMethodId(storeState, { id: 1 });
-        expect(results).toEqual([
-          createClassGroup(1, [{ licenseType: 'method', methodId: 1 }])
-        ]);
-      });
-    });
     describe('getClassGroupsByMethodId', () => {
       const classGroups = [
         createClassGroup(1, [

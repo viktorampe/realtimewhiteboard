@@ -164,7 +164,9 @@ export class PracticeViewModel {
       filter(currentBook => !!currentBook),
       switchMap(currentBook => {
         return this.store.pipe(
-          select(ClassGroupQueries.getByMethodId, { id: currentBook.methodId })
+          select(ClassGroupQueries.getClassGroupsForBook, {
+            id: currentBook.id
+          })
         );
       })
     );

@@ -68,33 +68,6 @@ export const getById = createSelector(
   (state: State, props: { id: number }) => state.entities[props.id]
 );
 
-/**
- * returns array of objects in the order of the given ids
- * @example
- * classGroup$: ClassGroupInterface = this.store.pipe(
-  select(ClassGroupQueries.getById, { id: 3 })
-);
-*/
-export const getByMethodId = createSelector(
-  getAll,
-  (classGroups: ClassGroupInterface[], props: { id: number }) => {
-    return classGroups.filter(
-      classGroup =>
-        classGroup.licenses &&
-        classGroup.licenses.some(
-          license =>
-            license.product &&
-            license.product.productContents &&
-            license.product.productContents.some(
-              productContent =>
-                productContent.licenseType === 'method' &&
-                productContent.methodId === props.id
-            )
-        )
-    );
-  }
-);
-
 export const getClassGroupsByMethodId = createSelector(
   getAll,
   (

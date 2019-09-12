@@ -83,7 +83,7 @@ describe('PracticeViewModel', () => {
       //Used by currentBook$
       book: jest.spyOn(EduContentBookQueries, 'getById'),
       //Used by filteredClassgroups$
-      classGroups: jest.spyOn(ClassGroupQueries, 'getByMethodId'),
+      classGroups: jest.spyOn(ClassGroupQueries, 'getClassGroupsForBook'),
       //Used by bookChapters$
       bookChapters: jest.spyOn(EduContentTocQueries, 'getChaptersForBook'),
       //Used by unlockedFreePracticeByEduContentTOCId$
@@ -215,9 +215,9 @@ describe('PracticeViewModel', () => {
           })
         );
 
-        expect(ClassGroupQueries.getByMethodId).toHaveBeenCalledWith(
+        expect(ClassGroupQueries.getClassGroupsForBook).toHaveBeenCalledWith(
           storeState,
-          { id: methodId }
+          { id: mockBook.id }
         );
       });
     });
