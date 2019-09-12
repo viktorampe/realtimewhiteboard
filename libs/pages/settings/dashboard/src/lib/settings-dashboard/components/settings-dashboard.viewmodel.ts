@@ -1,14 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
-import {
-  AuthServiceInterface,
-  AUTH_SERVICE_TOKEN,
-  SettingsPermissions
-} from '@campus/dal';
-import {
-  NavigationItemServiceInterface,
-  NAVIGATION_ITEM_SERVICE_TOKEN,
-  NavItem
-} from '@campus/shared';
+import { DalState, SettingsPermissions, UserQueries } from '@campus/dal';
+import { NavigationItemServiceInterface, NAVIGATION_ITEM_SERVICE_TOKEN, NavItem } from '@campus/shared';
+import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -26,7 +19,7 @@ export class SettingsDashboardViewModel {
   links$: Observable<NavItem[]>;
 
   constructor(
-    @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
+    private store: Store<DalState>,
     @Inject(NAVIGATION_ITEM_SERVICE_TOKEN)
     private navigationItemService: NavigationItemServiceInterface
   ) {
@@ -34,8 +27,8 @@ export class SettingsDashboardViewModel {
   }
 
   private initialize() {
-    this.links$ = this.authService
-      .getCurrent()
-      .pipe(map(user => this.navigationItemService.getSettingsNavItems(user)));
+    this.links$ = this.store.pipe(
+      select(UserQueries.getPermissions),
+      map(userPermissions => this.navigationItemService.getSettingsNavItems(userPermissions)));
   }
 }

@@ -5,7 +5,6 @@ import { RouterTestingModule } from '@angular/router/testing';
 import {
   ENVIRONMENT_ICON_MAPPING_TOKEN,
   PermissionServiceInterface,
-  PERMISSION_SERVICE_TOKEN,
   SharedModule
 } from '@campus/shared';
 import { MockMatIconRegistry } from '@campus/testing';
@@ -39,10 +38,6 @@ describe('SettingsDashboardComponent', () => {
         {
           provide: ENVIRONMENT_ICON_MAPPING_TOKEN,
           useValue: {}
-        },
-        {
-          provide: PERMISSION_SERVICE_TOKEN,
-          useClass: MockPermissionService
         },
         {
           provide: SettingsDashboardViewModel,
