@@ -1,51 +1,56 @@
 import { Store } from '@ngrx/store';
+import { AppNavTreeInterface, AppNavTreeKeys } from '.';
 import { PermissionService } from '../../auth';
-import {
-  AppNavTreeInterface,
-  NavigationItemService
-} from './navigation-item.service';
+import { NavigationItemService } from './navigation-item.service';
 
 describe('NavigationItemService', () => {
   const mockAppNavTree: AppNavTreeInterface = {
     sideNav: [
       {
-        title: 'foo nav item',
+        title: 'side nav item 1',
         requiredPermissions: ['permissionA']
       },
       {
-        title: 'bar nav item',
+        title: 'side nav item 2',
         requiredPermissions: ['permissionB']
       },
       {
-        title: 'baz nav item',
+        title: 'side nav item 3',
         requiredPermissions: ['permissionA', 'permissionB']
+      },
+      {
+        title: 'nav item that has an empty required permissions array', // should always be returned
+        requiredPermissions: []
+      },
+      {
+        title: 'nav item that does not have requiredPermissions key' // should always be returned
       }
     ],
     settingsNav: [
       {
-        title: 'foo settings nav item',
+        title: 'settings nav item 1',
         requiredPermissions: ['permissionA']
       },
       {
-        title: 'bar settings nav item',
+        title: 'settings nav item 2',
         requiredPermissions: ['permissionB']
       },
       {
-        title: 'baz settings nav item',
+        title: 'settings nav item 2',
         requiredPermissions: ['permissionA', 'permissionC']
       },
       {
-        title: 'bak settings nav item',
+        title: 'settings nav item 3',
         requiredPermissions: ['permissionB']
       }
     ],
     profileMenuNav: [
       {
-        title: 'foo profile menu nav item',
+        title: 'profile menu nav item 1',
         requiredPermissions: ['permissionA']
       },
       {
-        title: 'bar profile menu nav item',
+        title: 'profile menu nav item 2',
         requiredPermissions: ['permissionC']
       }
     ]
@@ -60,86 +65,66 @@ describe('NavigationItemService', () => {
     expect(service).toBeTruthy();
   });
 
-  describe('getSideNavItems()', () => {
+  describe('getNavItemsForTree', () => {
     const testCases = [
       {
+        tree: 'sideNav',
         userPermissions: ['permissionA'],
-        expected: [mockAppNavTree.sideNav[0], mockAppNavTree.sideNav[2]]
+        expected: [
+          mockAppNavTree.sideNav[0],
+          mockAppNavTree.sideNav[2],
+          mockAppNavTree.sideNav[3],
+          mockAppNavTree.sideNav[4]
+        ]
       },
       {
+        tree: 'sideNav',
         userPermissions: ['permissionB'],
-        expected: [mockAppNavTree.sideNav[1], mockAppNavTree.sideNav[2]]
+        expected: [
+          mockAppNavTree.sideNav[1],
+          mockAppNavTree.sideNav[2],
+          mockAppNavTree.sideNav[3],
+          mockAppNavTree.sideNav[4]
+        ]
       },
       {
+        tree: 'sideNav',
         userPermissions: ['permissionA', 'permissionB'],
         expected: [
           mockAppNavTree.sideNav[0],
           mockAppNavTree.sideNav[1],
-          mockAppNavTree.sideNav[2]
+          mockAppNavTree.sideNav[2],
+          mockAppNavTree.sideNav[3],
+          mockAppNavTree.sideNav[4]
         ]
       },
       {
+        tree: 'sideNav',
         userPermissions: ['permissionC'],
-        expected: []
+        expected: [mockAppNavTree.sideNav[3], mockAppNavTree.sideNav[4]]
       },
       {
+        tree: 'sideNav',
         userPermissions: [],
-        expected: []
-      }
-    ];
-    it('should return the side nav items for the user', () => {
-      testCases.forEach(testCase => {
-        const result = service.getSideNavItems(testCase.userPermissions);
-        expect(result).toEqual(testCase.expected);
-      });
-    });
-  });
-
-  describe('getSettingsNavItems()', () => {
-    const testCases = [
+        expected: [mockAppNavTree.sideNav[3], mockAppNavTree.sideNav[4]]
+      },
       {
-        requiredPermissions: ['permissionA'],
+        tree: 'settingsNav',
+        userPermissions: ['permissionA'],
         expected: [mockAppNavTree.settingsNav[0], mockAppNavTree.settingsNav[2]]
       },
       {
-        requiredPermissions: ['permissionB'],
-        expected: [mockAppNavTree.settingsNav[1], mockAppNavTree.settingsNav[3]]
-      },
-      {
-        requiredPermissions: ['permissionC'],
-        expected: [mockAppNavTree.settingsNav[2]]
-      }
-    ];
-    it('should return the setting nav items for the user', () => {
-      testCases.forEach(testCase => {
-        const result = service.getSettingsNavItems(
-          testCase.requiredPermissions
-        );
-        expect(result).toEqual(testCase.expected);
-      });
-    });
-  });
-
-  describe('getProfileMenuNavItems()', () => {
-    const testCases = [
-      {
-        requiredPermissions: ['permissionA'],
+        tree: 'profileMenuNav',
+        userPermissions: ['permissionA'],
         expected: [mockAppNavTree.profileMenuNav[0]]
-      },
-      {
-        requiredPermissions: ['permissionB'],
-        expected: []
-      },
-      {
-        requiredPermissions: ['permissionC'],
-        expected: [mockAppNavTree.profileMenuNav[1]]
       }
     ];
 
-    it('should return the profile menu nav items for the user', () => {
+    it('should return the nav items for the provided tree and permissions', () => {
       testCases.forEach(testCase => {
-        const result = service.getProfileMenuNavItems(
-          testCase.requiredPermissions
+        const result = service.getNavItemsForTree(
+          testCase.tree as AppNavTreeKeys,
+          testCase.userPermissions
         );
         expect(result).toEqual(testCase.expected);
       });

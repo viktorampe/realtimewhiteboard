@@ -59,8 +59,7 @@ const standardSettingsNavItems: NavItem[] = [
   {
     title: 'Meldingen',
     icon: 'notifications',
-    link: '/settings/alerts',
-    requiredPermissions: []
+    link: '/settings/alerts'
   }
 ];
 
