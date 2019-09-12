@@ -1,3 +1,4 @@
+import { Dictionary } from '@ngrx/entity';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { ClassGroupInterface, EduContentBookInterface } from '../../+models';
 import { EduContentBookQueries } from '../edu-content-book';
@@ -70,14 +71,9 @@ export const getById = createSelector(
 
 export const getClassGroupsByMethodId = createSelector(
   getAll,
-  (
-    classGroups: ClassGroupInterface[]
-  ): { [id: number]: ClassGroupInterface[] } => {
+  (classGroups: ClassGroupInterface[]): Dictionary<ClassGroupInterface[]> => {
     return classGroups.reduce(
-      (
-        acc: { [id: number]: ClassGroupInterface[] },
-        currentClassGroup: ClassGroupInterface
-      ) => {
+      (acc, currentClassGroup) => {
         currentClassGroup.licenses.forEach(license => {
           license.product.productContents.forEach(productContent => {
             if (
@@ -95,7 +91,7 @@ export const getClassGroupsByMethodId = createSelector(
 
         return acc;
       },
-      {}
+      {} as Dictionary<ClassGroupInterface[]>
     );
   }
 );
@@ -105,7 +101,7 @@ export const getClassGroupsForBook = createSelector(
   getClassGroupsByMethodId,
   (
     book: EduContentBookInterface,
-    classGroupsByMethodId: { [id: number]: ClassGroupInterface[] },
+    classGroupsByMethodId: Dictionary<ClassGroupInterface[]>,
     props: { id: number }
   ): ClassGroupInterface[] => {
     const bookYearIds = book.years.map(year => year.id);
@@ -116,7 +112,7 @@ export const getClassGroupsForBook = createSelector(
 
     return classGroupsByMethodId[book.methodId].filter(classGroup => {
       //One of the classGroups' years must be in the books' years
-      return classGroup.years.some(year => bookYearIds.indexOf(year.id) !== -1);
+      return classGroup.years.some(year => bookYearIds.includes(year.id));
     });
   }
 );
