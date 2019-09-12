@@ -196,15 +196,3 @@ export const getAllowedMethodYears = createSelector(
     ).sort((a, b) => a.name.localeCompare(b.name));
   }
 );
-
-export const getAllowedMethodYearForBookId = createSelector(
-  getAllowedMethodYears,
-  (
-    methodYears: MethodYearsInterface[],
-    props: { bookId: number }
-  ): MethodYearsInterface => {
-    return methodYears.find(methodYear => {
-      return methodYear.years.some(year => year.bookId === props.bookId);
-    });
-  }
-);

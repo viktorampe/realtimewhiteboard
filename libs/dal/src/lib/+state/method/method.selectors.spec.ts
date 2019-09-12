@@ -8,13 +8,8 @@ import {
 import { State as BookState } from '../edu-content-book/edu-content-book.reducer';
 import { State as YearState } from '../year/year.reducer';
 import { MethodFixture } from './../../+fixtures/Method.fixture';
-import { MethodYearsInterface } from './method.interfaces';
 import { State } from './method.reducer';
-import {
-  getAllowedMethodIds,
-  getAllowedMethods,
-  getAllowedMethodYearForBookId
-} from './method.selectors';
+import { getAllowedMethodIds, getAllowedMethods } from './method.selectors';
 
 describe('Method Selectors', () => {
   function createMethod(id: number): MethodInterface | any {
@@ -221,34 +216,6 @@ describe('Method Selectors', () => {
 
         const result = getAllowedMethods(storeState);
         expect(result).toEqual([mockMethods[0], mockMethods[1]]);
-      });
-    });
-
-    describe('getAllowedMethodYearForBookId', () => {
-      const projector = getAllowedMethodYearForBookId.projector;
-
-      it('should return the method year for a bookId', () => {
-        const allowedMethodYears = [
-          {
-            id: 1,
-            logoUrl: 'katapult.svg',
-            years: [
-              { id: 1, name: 'L1', bookId: 1 },
-              { id: 2, name: 'L2', bookId: 2 }
-            ]
-          },
-          {
-            id: 2,
-            logoUrl: 'molenbeer.svg',
-            years: [
-              { id: 3, name: 'L5', bookId: 3 },
-              { id: 4, name: 'L6', bookId: 4 }
-            ]
-          }
-        ] as MethodYearsInterface[];
-
-        const result = projector(allowedMethodYears, { bookId: 4 });
-        expect(result).toEqual(allowedMethodYears[1]);
       });
     });
 

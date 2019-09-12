@@ -1,5 +1,6 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { ClassGroupInterface } from '../../+models';
+import { ClassGroupInterface, EduContentBookInterface } from '../../+models';
+import { EduContentBookQueries } from '../edu-content-book';
 import {
   NAME,
   selectAll,
@@ -128,5 +129,26 @@ export const getClassGroupsByMethodId = createSelector(
       },
       {}
     );
+  }
+);
+
+export const getClassGroupsForBook = createSelector(
+  EduContentBookQueries.getById,
+  getClassGroupsByMethodId,
+  (
+    book: EduContentBookInterface,
+    classGroupsByMethodId: { [id: number]: ClassGroupInterface[] },
+    props: { id: number }
+  ): ClassGroupInterface[] => {
+    const bookYearIds = book.years.map(year => year.id);
+
+    if (!classGroupsByMethodId[book.methodId]) {
+      return [];
+    }
+
+    return classGroupsByMethodId[book.methodId].filter(classGroup => {
+      //One of the classGroups' years must be in the books' years
+      return classGroup.years.some(year => bookYearIds.indexOf(year.id) !== -1);
+    });
   }
 );
