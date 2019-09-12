@@ -93,3 +93,40 @@ export const getByMethodId = createSelector(
     );
   }
 );
+
+export const getClassGroupsByMethodId = createSelector(
+  getAll,
+  (
+    classGroups: ClassGroupInterface[]
+  ): { [id: number]: ClassGroupInterface[] } => {
+    return classGroups.reduce(
+      (
+        acc: { [id: number]: ClassGroupInterface[] },
+        currentClassGroup: ClassGroupInterface
+      ) => {
+        const methodIds: number[] = []
+          .concat(
+            ...currentClassGroup.licenses.map(license =>
+              license.product.productContents
+                .filter(
+                  productContent => productContent.licenseType === 'method'
+                )
+                .map(productContent => productContent.methodId)
+            )
+          )
+          .filter(methodId => methodId);
+
+        methodIds.forEach(methodId => {
+          if (!acc[methodId]) {
+            acc[methodId] = [];
+          }
+
+          acc[methodId].push(currentClassGroup);
+        });
+
+        return acc;
+      },
+      {}
+    );
+  }
+);

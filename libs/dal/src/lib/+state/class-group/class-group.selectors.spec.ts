@@ -124,5 +124,30 @@ describe('ClassGroup Selectors', () => {
         ]);
       });
     });
+    describe('getClassGroupsByMethodId', () => {
+      const classGroups = [
+        createClassGroup(1, [
+          { licenseType: 'notmethod', methodId: 1 },
+          { licenseType: 'method', methodId: 2 }
+        ]),
+        createClassGroup(2, [
+          { licenseType: 'notmethod', methodId: 1 },
+          { licenseType: 'method', methodId: 2 },
+          { licenseType: 'method', methodId: 3 }
+        ])
+      ];
+      beforeEach(() => {
+        classGroupState = createState(classGroups, true, 'no error');
+        storeState = { classGroups: classGroupState };
+      });
+
+      it('should return the classGroups grouped by methodId', () => {
+        const results = ClassGroupQueries.getClassGroupsByMethodId(storeState);
+        expect(results).toEqual({
+          2: [classGroups[0], classGroups[1]],
+          3: [classGroups[1]]
+        });
+      });
+    });
   });
 });
