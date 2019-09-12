@@ -12,10 +12,12 @@ import {
   EffectFeedbackReducer,
   FavoriteReducer,
   HistoryReducer,
+  LearningAreaReducer,
   LearningDomainReducer,
   LearningPlanGoalProgressReducer,
   LearningPlanGoalReducer,
   MethodReducer,
+  TaskReducer,
   UiReducer,
   UnlockedFreePracticeReducer,
   UserLessonReducer,
@@ -117,6 +119,16 @@ import { environment } from '../environments/environment';
       LearningPlanGoalReducer.reducer,
       {
         initialState: LearningPlanGoalReducer.initialState
+      }
+    ),
+    StoreModule.forFeature(TaskReducer.NAME, TaskReducer.reducer, {
+      initialState: TaskReducer.initialState
+    }),
+    StoreModule.forFeature(
+      LearningAreaReducer.NAME,
+      LearningAreaReducer.reducer,
+      {
+        initialState: LearningAreaReducer.initialState
       }
     ),
     StoreModule.forFeature(ClassGroupReducer.NAME, ClassGroupReducer.reducer, {
