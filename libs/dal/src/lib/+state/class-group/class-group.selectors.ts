@@ -78,24 +78,19 @@ export const getClassGroupsByMethodId = createSelector(
         acc: { [id: number]: ClassGroupInterface[] },
         currentClassGroup: ClassGroupInterface
       ) => {
-        const methodIds: number[] = []
-          .concat(
-            ...currentClassGroup.licenses.map(license =>
-              license.product.productContents
-                .filter(
-                  productContent => productContent.licenseType === 'method'
-                )
-                .map(productContent => productContent.methodId)
-            )
-          )
-          .filter(methodId => methodId);
+        currentClassGroup.licenses.forEach(license => {
+          license.product.productContents.forEach(productContent => {
+            if (
+              productContent.licenseType === 'method' &&
+              productContent.methodId
+            ) {
+              if (!acc[productContent.methodId]) {
+                acc[productContent.methodId] = [];
+              }
 
-        methodIds.forEach(methodId => {
-          if (!acc[methodId]) {
-            acc[methodId] = [];
-          }
-
-          acc[methodId].push(currentClassGroup);
+              acc[productContent.methodId].push(currentClassGroup);
+            }
+          });
         });
 
         return acc;
