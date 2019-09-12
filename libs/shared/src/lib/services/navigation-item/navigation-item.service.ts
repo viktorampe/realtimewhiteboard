@@ -7,9 +7,9 @@ import {
   AppNavTreeInterface,
   AppNavTreeKeys,
   APP_NAVIGATION_TREE_TOKEN,
-  NavigationItemServiceInterface,
-  NavItem
+  NavigationItemServiceInterface
 } from './navigation-item.service.interface';
+import { NavItem } from '@campus/ui';
 
 @Injectable({
   providedIn: 'root'

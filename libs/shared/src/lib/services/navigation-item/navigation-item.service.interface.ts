@@ -1,4 +1,5 @@
 import { InjectionToken } from '@angular/core';
+import { NavItem } from '@campus/ui';
 import { NavigationItemService } from '.';
 
 export const APP_NAVIGATION_TREE_TOKEN = new InjectionToken<NavItem[]>(
@@ -14,15 +15,6 @@ export interface NavigationItemServiceInterface {
     tree: AppNavTreeKeys,
     userPermissions: string[]
   ): NavItem[];
-}
-
-export interface NavItem {
-  title: string;
-  icon?: string;
-  link?: any[] | string;
-  children?: NavItem[];
-  expanded?: boolean;
-  requiredPermissions?: string[];
 }
 
 export interface AppNavTreeInterface {
