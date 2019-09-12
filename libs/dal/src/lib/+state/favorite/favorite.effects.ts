@@ -77,17 +77,20 @@ export class FavoriteEffects {
     FavoritesActionTypes.DeleteFavorite,
     {
       run: (action: DeleteFavorite, state: DalState) => {
-        return this.undoService.dispatchActionAsUndoable({
-          action: action,
-          dataPersistence: this.dataPersistence,
-          intendedSideEffect: this.favoriteService.deleteFavorite(
-            action.payload.userId,
-            action.payload.id
-          ),
-          undoLabel: 'Favoriet wordt verwijderd.',
-          doneLabel: 'Favoriet is verwijderd.',
-          undoneLabel: 'Favoriet is niet verwijderd.'
-        });
+        return this.favoriteService
+          .deleteFavorite(action.payload.userId, action.payload.id)
+          .pipe(
+            map(() => {
+              const effectFeedback = EffectFeedback.generateSuccessFeedback(
+                this.uuid(),
+                action,
+                'Favoriet is verwijderd.'
+              );
+              return new EffectFeedbackActions.AddEffectFeedback({
+                effectFeedback
+              });
+            })
+          );
       },
       undoAction: (action: DeleteFavorite, error) => {
         const undoAction = undo(action);

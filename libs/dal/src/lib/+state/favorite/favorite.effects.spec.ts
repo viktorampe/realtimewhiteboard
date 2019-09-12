@@ -6,7 +6,7 @@ import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
 import { undo } from 'ngrx-undo';
-import { from, Observable, of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { FavoriteReducer } from '.';
 import { FavoriteTypesEnum } from '../../+models';
 import { FAVORITE_SERVICE_TOKEN } from '../../favorite/favorite.service.interface';
@@ -18,6 +18,7 @@ import {
   Priority
 } from '../effect-feedback';
 import { AddEffectFeedback } from '../effect-feedback/effect-feedback.actions';
+import { FavoriteServiceInterface } from './../../favorite/favorite.service.interface';
 import {
   AddFavorite,
   DeleteFavorite,
@@ -33,7 +34,6 @@ import { FavoriteEffects } from './favorite.effects';
 describe('FavoriteEffects', () => {
   let actions: Observable<any>;
   let effects: FavoriteEffects;
-  let undoService: UndoService;
   let usedState: any;
   let uuid: Function;
   let mockDate: MockDate;
@@ -117,7 +117,6 @@ describe('FavoriteEffects', () => {
 
     effects = TestBed.get(FavoriteEffects);
     uuid = TestBed.get('uuid');
-    undoService = TestBed.get(UNDO_SERVICE_TOKEN);
   });
 
   beforeAll(() => {
@@ -339,39 +338,40 @@ describe('FavoriteEffects', () => {
   });
 
   describe('deleteFavorite', () => {
-    it('should call service.dispatchActionAsUndoable with the correct payload and return an addFeedbackAction if no error occured', () => {
-      const deleteAction = new DeleteFavorite({ id: 0, userId: 1 });
+    let favoriteService: FavoriteServiceInterface;
+    const favoriteId = 123;
+    const userId = 456;
+
+    beforeEach(() => {
+      favoriteService = TestBed.get(FAVORITE_SERVICE_TOKEN);
+    });
+
+    it('should return make the service call and return a feedbackAction', () => {
+      jest.spyOn(favoriteService, 'deleteFavorite').mockReturnValue(of(true));
+
+      const deleteAction = new DeleteFavorite({ id: favoriteId, userId });
       const effectFeedback = new EffectFeedback({
         id: uuid(),
         triggerAction: deleteAction,
-        message: 'some message',
+        message: 'Favoriet is verwijderd.',
         type: 'success',
-        priority: Priority.HIGH
+        priority: Priority.NORM
       });
       const addFeedbackAction = new AddEffectFeedback({ effectFeedback });
-      const spy = jest
-        .spyOn(undoService, 'dispatchActionAsUndoable')
-        .mockReturnValue(from([addFeedbackAction]));
 
-      const payload = {
-        action: deleteAction,
-        dataPersistence: effects['dataPersistence'],
-        intendedSideEffect: 'returnValue',
-        undoLabel: 'Favoriet wordt verwijderd.',
-        undoneLabel: 'Favoriet is niet verwijderd.',
-        doneLabel: 'Favoriet is verwijderd.'
-      };
       expectInAndOut(effects.deleteFavorite$, deleteAction, addFeedbackAction);
-      expect(spy).toHaveBeenCalledTimes(1);
-      expect(spy).toHaveBeenCalledWith(payload);
+      expect(favoriteService.deleteFavorite).toHaveBeenCalledWith(
+        userId,
+        favoriteId
+      );
     });
     it('should return an undoAction and a feedbackAction if an error occured', () => {
-      const deleteAction = new DeleteFavorite({ id: 0, userId: 1 });
-      const spy = jest
-        .spyOn(undoService, 'dispatchActionAsUndoable')
-        .mockImplementation(() => {
-          throw Error('some error');
-        });
+      jest.spyOn(favoriteService, 'deleteFavorite').mockImplementation(() => {
+        throw new Error('nope, that does not work');
+      });
+
+      const deleteAction = new DeleteFavorite({ id: favoriteId, userId });
+
       const feedbackAction = new EffectFeedbackActions.AddEffectFeedback({
         effectFeedback: new EffectFeedback({
           id: uuid(),
@@ -392,7 +392,7 @@ describe('FavoriteEffects', () => {
           b: feedbackAction
         })
       );
-      expect(spy).toHaveBeenCalledTimes(1);
+      expect(favoriteService.deleteFavorite).toHaveBeenCalledTimes(1);
     });
   });
 

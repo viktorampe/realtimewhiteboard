@@ -103,7 +103,6 @@ export class MethodViewModel implements ContentOpenerInterface {
   public generalFilesByType$: Observable<Dictionary<EduContent[]>>;
   public currentTab$: Observable<number>;
   public currentMethodParams$: Observable<CurrentMethodParams>;
-  public classGroups$: Observable<ClassGroupInterface[]>;
   public filteredClassGroups$: Observable<ClassGroupInterface[]>;
   public userLessons$: Observable<UserLessonInterface[]>;
   public breadCrumbTitles$: Observable<string>;
@@ -462,7 +461,6 @@ export class MethodViewModel implements ContentOpenerInterface {
     this.currentLessonTitle$ = this.getCurrentLessonTitleStream();
 
     this.learningPlanGoalsForCurrentBook$ = this.getLearningPlanGoalsForCurrentBookStream();
-    this.classGroups$ = this.store.pipe(select(ClassGroupQueries.getAll));
     this.learningPlanGoalProgressBylearningPlanGoalId$ = this.store.pipe(
       select(LearningPlanGoalProgressQueries.getGroupedByLearningPlanGoalId)
     );
@@ -585,14 +583,15 @@ export class MethodViewModel implements ContentOpenerInterface {
   }
 
   private getFilteredClassGroups(): Observable<ClassGroupInterface[]> {
-    return this.currentMethod$.pipe(
-      filter(currentMethod => !!currentMethod),
-      map(currentMethod => currentMethod.id),
-      switchMap(currentMethodId =>
-        this.store.pipe(
-          select(ClassGroupQueries.getByMethodId, { id: currentMethodId })
-        )
-      )
+    return this.currentBook$.pipe(
+      filter(currentBook => !!currentBook),
+      switchMap(currentBook => {
+        return this.store.pipe(
+          select(ClassGroupQueries.getClassGroupsForBook, {
+            id: currentBook.id
+          })
+        );
+      })
     );
   }
 
@@ -741,7 +740,7 @@ export class MethodViewModel implements ContentOpenerInterface {
     return combineLatest([
       this.learningPlanGoalsForCurrentBook$,
       this.learningPlanGoalProgressBylearningPlanGoalId$,
-      this.classGroups$
+      this.filteredClassGroups$
     ]).pipe(
       map(([learningPlanGoals, progressByGoal, classGroups]) => {
         return this.createCheckboxItemsForLearningPlanGoals(
@@ -762,7 +761,7 @@ export class MethodViewModel implements ContentOpenerInterface {
     return combineLatest([
       this.store.select(LearningPlanGoalQueries.getAllEntities),
       this.learningPlanGoalProgressBylearningPlanGoalId$,
-      this.classGroups$,
+      this.filteredClassGroups$,
       this.currentLessons$
     ]).pipe(
       map(([learningPlanGoalsMap, progressByGoal, classGroups, lessons]) => {
