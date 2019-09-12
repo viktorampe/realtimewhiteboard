@@ -1,0 +1,29 @@
+<div class="pages-home-method-favorite-tile__image__container">
+  <img
+    [src]="'assets/icons/method/' + logoUrl"
+    class="pages-home-method-favorite-tile__image"
+  />
+</div>
+<div
+  data-cy="method-favorite-title"
+  class="pages-home-method-favorite-tile__title"
+  >{{ name }}</div
+>
+<div class="pages-home-method-favorite-tile__button__container">
+  <campus-button
+    iconClass="book"
+    data-cy="method-favorite-open-boeke"
+    class="pages-home-method-favorite-tile__button"
+    (click)="openBoeke()"
+  >
+    Boek
+  </campus-button>
+  <campus-button
+    iconClass="lesmateriaal"
+    data-cy="method-favorite-open-method"
+    class="pages-home-method-favorite-tile__button"
+    [routerLink]="['/methods', bookId]"
+  >
+    Methode
+  </campus-button>
+</div>

@@ -1,0 +1,10 @@
+@mixin pages-home-method-favorite-tile() {
+  .pages-home-method-favorite-tile {
+    campus-button {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      flex: 1 0 0;
+    }
+  }
+}
