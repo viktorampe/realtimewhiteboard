@@ -1,11 +1,13 @@
 import { Update } from '@ngrx/entity';
 import { Action } from '@ngrx/store';
-import { UserLessonInterface } from '../../+models';
+import {
+  LearningPlanGoalProgressInterface,
+  UserLessonInterface
+} from '../../+models';
 import {
   CustomFeedbackHandlersInterface,
   FeedbackTriggeringAction
 } from '../effect-feedback';
-import { MinimalLearningPlanGoalProgressUserLessonInterface } from './../learning-plan-goal-progress/learning-plan-goal-progress.actions';
 
 export enum UserLessonsActionTypes {
   UserLessonsLoaded = '[UserLessons] UserLessons Loaded',
@@ -116,10 +118,7 @@ export class CreateUserLessonWithLearningPlanGoalProgresses
     public payload: {
       userId: number;
       userLesson: UserLessonInterface;
-      learningPlanGoalProgresses: Omit<
-        MinimalLearningPlanGoalProgressUserLessonInterface,
-        'userLessonId'
-      >[];
+      learningPlanGoalProgresses: LearningPlanGoalProgressInterface[];
       customFeedbackHandlers?: CustomFeedbackHandlersInterface;
     }
   ) {}
@@ -140,6 +139,3 @@ export type UserLessonsActions =
   | ClearUserLessons
   | CreateUserLesson
   | CreateUserLessonWithLearningPlanGoalProgresses;
-
-// needed because we're not running typescript 3.5
-type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
