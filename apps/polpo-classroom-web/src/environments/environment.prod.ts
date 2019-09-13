@@ -1,3 +1,4 @@
+import { FavoriteTypesEnum } from '@campus/dal';
 import { EduContentSearchResultComponent } from '../app/components/searchresults/edu-content-search-result.component';
 import { GlobalSearchTermFilterFactory } from '../app/factories/global-search-term-filter/global-search-term-filter.factory';
 import { LearningPlanFilterFactory } from '../app/factories/learning-plan-filter/learning-plan-filter.factory';
@@ -52,6 +53,15 @@ export const environment = {
     },
     globalSearch: {
       enabled: false
+    },
+    favorites: {
+      allowedFavoriteTypes: [
+        FavoriteTypesEnum.BOEKE,
+        FavoriteTypesEnum.BUNDLE,
+        FavoriteTypesEnum.TASK,
+        FavoriteTypesEnum.EDUCONTENT,
+        FavoriteTypesEnum.AREA
+      ]
     }
   },
   sso: {
