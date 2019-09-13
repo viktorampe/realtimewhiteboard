@@ -30,12 +30,17 @@ const standardSideNavItems: NavItem[] = [
   {
     title: 'Differentiëren',
     icon: '',
-    link: ''
+    link: '/differentiate'
   },
   {
     title: 'Instellingen',
     icon: 'settings',
     link: '/settings'
+  },
+  {
+    title: 'Afmelden',
+    icon: 'lock',
+    link: '/logout'
   }
 ];
 
