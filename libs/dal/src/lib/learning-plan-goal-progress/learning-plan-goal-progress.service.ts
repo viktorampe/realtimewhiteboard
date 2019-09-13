@@ -4,8 +4,8 @@ import { Observable } from 'rxjs';
 import { map, mapTo } from 'rxjs/operators';
 import { LearningPlanGoalProgressInterface } from '../+models';
 import {
-  MinimalLearningPlanGoalProgressEduContentTocInterface,
-  MinimalLearningPlanGoalProgressUserLessonInterface
+  LearningPlanGoalProgressWithEduContentTocInterface,
+  LearningPlanGoalProgressWithUserLessonInterface
 } from '../+state/learning-plan-goal-progress/learning-plan-goal-progress.actions';
 import { LearningPlanGoalProgressServiceInterface } from './learning-plan-goal-progress.service.interface';
 
@@ -72,8 +72,8 @@ export class LearningPlanGoalProgressService
   createLearningPlanGoalProgresses(
     userId: number,
     learningGoalPlanProgresses: (
-      | MinimalLearningPlanGoalProgressEduContentTocInterface
-      | MinimalLearningPlanGoalProgressUserLessonInterface)[]
+      | LearningPlanGoalProgressWithEduContentTocInterface
+      | LearningPlanGoalProgressWithUserLessonInterface)[]
   ): Observable<LearningPlanGoalProgressInterface[]> {
     return this.personApi.createLearningPlanGoalProgresses(
       userId,
