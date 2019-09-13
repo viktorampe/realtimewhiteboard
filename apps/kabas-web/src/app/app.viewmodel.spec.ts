@@ -8,12 +8,18 @@ import {
   EffectFeedbackInterface,
   EffectFeedbackReducer,
   Priority,
-  StateFeatureBuilder
+  StateFeatureBuilder,
+  UiReducer,
+  UserActions,
+  UserReducer
 } from '@campus/dal';
 import {
   FeedBackServiceInterface,
-  FEEDBACK_SERVICE_TOKEN
+  FEEDBACK_SERVICE_TOKEN,
+  NavigationItemServiceInterface,
+  NAVIGATION_ITEM_SERVICE_TOKEN
 } from '@campus/shared';
+import { NavItem } from '@campus/ui';
 import { Action, Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
 import { configureTestSuite } from 'ng-bullet';
@@ -28,6 +34,8 @@ describe('AppViewModel', () => {
   let storeSpy: jest.SpyInstance;
   let breakpointSubject: BehaviorSubject<BreakpointState>;
   let feedbackService: FeedBackServiceInterface;
+  let navigationItemService: NavigationItemServiceInterface;
+  const mockNavItems: NavItem[] = [{ title: 'foo' }, { title: 'bar' }];
 
   beforeAll(() => {
     mockFeedBack = new EffectFeedbackFixture({
@@ -64,10 +72,13 @@ describe('AppViewModel', () => {
 
     TestBed.configureTestingModule({
       imports: [
+        StoreModule.forRoot({}),
+
         ...StateFeatureBuilder.getModuleWithForFeatureProviders([
-          EffectFeedbackReducer
-        ]),
-        StoreModule.forRoot({})
+          EffectFeedbackReducer,
+          UserReducer,
+          UiReducer
+        ])
       ],
       providers: [
         AppViewModel,
@@ -87,6 +98,12 @@ describe('AppViewModel', () => {
                 feedback: mockFeedBack
               })
           }
+        },
+        {
+          provide: NAVIGATION_ITEM_SERVICE_TOKEN,
+          useValue: {
+            getNavItemsForTree: () => mockNavItems
+          }
         }
       ]
     });
@@ -94,6 +111,7 @@ describe('AppViewModel', () => {
     viewModel = TestBed.get(AppViewModel);
     store = TestBed.get(Store);
     feedbackService = TestBed.get(FEEDBACK_SERVICE_TOKEN);
+    navigationItemService = TestBed.get(NAVIGATION_ITEM_SERVICE_TOKEN);
   });
 
   beforeEach(() => {
@@ -103,6 +121,25 @@ describe('AppViewModel', () => {
   describe('creation', () => {
     it('should be defined', () => {
       expect(viewModel).toBeDefined();
+    });
+  });
+
+  describe('navigationItems$', () => {
+    beforeEach(() => {
+      jest.spyOn(navigationItemService, 'getNavItemsForTree');
+
+      store.dispatch(new UserActions.PermissionsLoaded(['permissionA']));
+    });
+
+    it('should stream the values returned from the navigation item service', () => {
+      expect(viewModel.sideNavItems$).toBeObservable(
+        hot('a', { a: mockNavItems })
+      );
+      expect(navigationItemService.getNavItemsForTree).toHaveBeenCalledTimes(1);
+      expect(navigationItemService.getNavItemsForTree).toHaveBeenCalledWith(
+        'sideNav',
+        ['permissionA']
+      );
     });
   });
 

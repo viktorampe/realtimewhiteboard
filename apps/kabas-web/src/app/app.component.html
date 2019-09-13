@@ -5,7 +5,7 @@
   <campus-shell-logo> logo </campus-shell-logo>
   <campus-shell-left>
     <campus-tree-nav
-      [treeNav]="navigationItems$ | async"
+      [treeNav]="sideNavItems$ | async"
       (navItemChanged)="onNavItemChanged($event)"
     ></campus-tree-nav
   ></campus-shell-left>
