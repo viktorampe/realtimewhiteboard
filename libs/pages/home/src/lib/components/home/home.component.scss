@@ -1,0 +1,15 @@
+.pages-home {
+  &__container {
+    padding: 20px;
+  }
+
+  &__favorite-list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+    :not(:last-child) {
+      margin-right: 16px;
+    }
+  }
+}

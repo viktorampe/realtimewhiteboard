@@ -49,6 +49,7 @@ import {
   EnvironmentLoginInterface,
   EnvironmentLogoutInterface,
   EnvironmentMessagesFeatureInterface,
+  EnvironmentFavoritesFeatureInterface,
   EnvironmentSearchModesInterface,
   EnvironmentSsoInterface,
   EnvironmentTermPrivacyInterface,
@@ -62,6 +63,7 @@ import {
   ENVIRONMENT_LOGIN_TOKEN,
   ENVIRONMENT_LOGOUT_TOKEN,
   ENVIRONMENT_MESSAGES_FEATURE_TOKEN,
+  ENVIRONMENT_FAVORITES_FEATURE_TOKEN,
   ENVIRONMENT_SEARCHMODES_TOKEN,
   ENVIRONMENT_SSO_TOKEN,
   ENVIRONMENT_TERM_PRIVACY_TOKEN,
@@ -179,6 +181,7 @@ export class SharedModule {
     environmentMessagesFeature: EnvironmentMessagesFeatureInterface,
     environmentErrorManagementFeature: EnvironmentErrorManagementFeatureInterface,
     environmentGlobalSearch: EnvironmentGlobalSearchFeatureInterface,
+    environmentFavoritesFeature: EnvironmentFavoritesFeatureInterface,
     environmentIconMapping: EnvironmentIconMappingInterface,
     environmentWebsite: EnvironmentWebsiteInterface,
     environmentLogout: EnvironmentLogoutInterface,
@@ -207,6 +210,10 @@ export class SharedModule {
         {
           provide: ENVIRONMENT_ERROR_MANAGEMENT_FEATURE_TOKEN,
           useValue: environmentErrorManagementFeature
+        },
+        {
+          provide: ENVIRONMENT_FAVORITES_FEATURE_TOKEN,
+          useValue: environmentFavoritesFeature
         },
         {
           provide: ENVIRONMENT_WEBSITE_TOKEN,

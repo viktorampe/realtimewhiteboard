@@ -81,7 +81,9 @@ export class QuickLinkComponent implements OnInit {
 
   constructor(
     @Inject(MAT_DIALOG_DATA)
-    public data: { mode: QuickLinkTypeEnum },
+    public data: {
+      mode: QuickLinkTypeEnum;
+    },
     private dialogRef: MatDialogRef<QuickLinkComponent>,
     private quickLinkViewModel: QuickLinkViewModel,
     @Inject(FILTER_SERVICE_TOKEN) private filterService: FilterServiceInterface

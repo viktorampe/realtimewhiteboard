@@ -24,7 +24,7 @@ describe('UnlockedFreePracticeService', () => {
           useValue: {
             getData: () => mockData$,
             createUnlockedFreePractices: () => {},
-            deleteUnlockedFreePractices: () => {}
+            deleteManyUnlockedFreePracticeRemote: () => {}
           }
         }
       ]
@@ -58,8 +58,7 @@ describe('UnlockedFreePracticeService', () => {
 
   describe('createUnlockedFreePractices', () => {
     it('should call the personApi and return the results ', () => {
-      //TODO don't avoid typescript after sdk publish
-      personApi['createUnlockedFreePractices'] = jest
+      personApi.createUnlockedFreePractices = jest
         .fn()
         .mockReturnValue(of([mockUnlockedFreePractice]));
 
@@ -69,9 +68,8 @@ describe('UnlockedFreePracticeService', () => {
         service.createUnlockedFreePractices(userId, [ufpWithOutId])
       ).toBeObservable(hot('(a|)', { a: [mockUnlockedFreePractice] }));
 
-      //TODO don't avoid typescript after sdk publish
-      expect(personApi['createUnlockedFreePractices']).toHaveBeenCalledTimes(1);
-      expect(personApi['createUnlockedFreePractices']).toHaveBeenCalledWith(
+      expect(personApi.createUnlockedFreePractices).toHaveBeenCalledTimes(1);
+      expect(personApi.createUnlockedFreePractices).toHaveBeenCalledWith(
         userId,
         [ufpWithOutId]
       );
@@ -80,8 +78,7 @@ describe('UnlockedFreePracticeService', () => {
 
   describe('deleteUnlockedFreePractices', () => {
     it('should call the api and return true', () => {
-      //TODO don't avoid typescript after sdk publish
-      personApi['deleteUnlockedFreePractices'] = jest
+      personApi.deleteManyUnlockedFreePracticeRemote = jest
         .fn()
         .mockReturnValue(of(null));
 
@@ -89,11 +86,9 @@ describe('UnlockedFreePracticeService', () => {
         mockUnlockedFreePractice.id
       ]);
 
-      //TODO don't avoid typescript after sdk publish
-      expect(personApi['deleteUnlockedFreePractices']).toHaveBeenCalledWith(
-        userId,
-        [mockUnlockedFreePractice.id]
-      );
+      expect(
+        personApi.deleteManyUnlockedFreePracticeRemote
+      ).toHaveBeenCalledWith(userId, [mockUnlockedFreePractice.id]);
 
       expect(response).toBeObservable(cold('(a|)', { a: true }));
     });

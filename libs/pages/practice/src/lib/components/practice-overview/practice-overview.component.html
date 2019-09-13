@@ -1,10 +1,4 @@
 <campus-page-bar> </campus-page-bar>
-<campus-page-header
-  [title]="'Vrij oefenen'"
-  [subtitle]="'toegekende methodes'"
-  [iconClass]="'book'"
->
-</campus-page-header>
 <div class="pages-practice__container" *ngIf="(allowedBooks$ | async) as books">
   <h1 mat-subheader>Met welke methode wil je vrij oefenen?</h1>
   <p>Kies hieronder het jaar waarvoor je de oefeningen wil vrijgeven.</p>

@@ -18,6 +18,8 @@ import {
   FAVORITE_SERVICE_TOKEN,
   HistoryService,
   HISTORY_SERVICE_TOKEN,
+  LearningAreaService,
+  LEARNINGAREA_SERVICE_TOKEN,
   LearningDomainService,
   LearningPlanGoalProgressService,
   LearningPlanGoalService,
@@ -80,6 +82,10 @@ import { kabasConfig } from './app.config';
     {
       provide: LEARNING_PLAN_GOAL_SERVICE_TOKEN,
       useClass: LearningPlanGoalService
+    },
+    {
+      provide: LEARNINGAREA_SERVICE_TOKEN,
+      useClass: LearningAreaService
     },
     { provide: FAVORITE_SERVICE_TOKEN, useClass: FavoriteService },
     { provide: HISTORY_SERVICE_TOKEN, useClass: HistoryService },

@@ -18,6 +18,14 @@ export const icons = {
   notifications: 'assets/icons/material/notifications.svg',
   settings: 'assets/icons/settings.svg',
   account: 'assets/icons/account-circle.svg',
+  cancel: 'assets/icons/cancel.svg',
+  delete: 'assets/icons/material/delete.svg',
+  edit: 'assets/icons/material/edit.svg',
+  filter: 'assets/icons/filter.svg',
+  context_menu: 'assets/icons/material/more_vert.svg',
+  favorites: 'assets/icons/favorites.svg',
+  check: 'assets/icons/check.svg',
+  close: 'assets/icons/close.svg',
   //TODO: These are TEMPORARY SVGs for Diabolo that I made from the PNGs
   //get the OFFICIAL files from Antoon later
   'diabolo-intro': 'assets/icons/diabolo/intro.svg',

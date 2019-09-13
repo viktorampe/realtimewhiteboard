@@ -25,8 +25,12 @@ import {
 } from '@campus/dal';
 import { Update } from '@ngrx/entity';
 import { Action, select, Store } from '@ngrx/store';
-import { combineLatest, Observable } from 'rxjs';
+import { combineLatest, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
+import {
+  EnvironmentFavoritesFeatureInterface,
+  ENVIRONMENT_FAVORITES_FEATURE_TOKEN
+} from '../../interfaces';
 import {
   OpenStaticContentServiceInterface,
   OPEN_STATIC_CONTENT_SERVICE_TOKEN
@@ -50,6 +54,8 @@ import {
 
 @Injectable()
 export class QuickLinkViewModel {
+  private allowedFavoriteTypes: FavoriteTypesEnum[];
+
   constructor(
     private store: Store<DalState>,
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
@@ -59,8 +65,13 @@ export class QuickLinkViewModel {
     @Inject(SCORM_EXERCISE_SERVICE_TOKEN)
     private scormExerciseService: ScormExerciseServiceInterface,
     @Inject(FEEDBACK_SERVICE_TOKEN)
-    private feedBackService: FeedBackServiceInterface
-  ) {}
+    private feedBackService: FeedBackServiceInterface,
+    @Inject(ENVIRONMENT_FAVORITES_FEATURE_TOKEN)
+    private environmentFavoritesFeature: EnvironmentFavoritesFeatureInterface
+  ) {
+    this.allowedFavoriteTypes =
+      environmentFavoritesFeature.allowedFavoriteTypes;
+  }
 
   public getQuickLinkCategories$(
     mode: QuickLinkTypeEnum
@@ -205,6 +216,38 @@ export class QuickLinkViewModel {
     );
   }
 
+  private getBundlesStream() {
+    if (this.allowedFavoriteTypes.includes(FavoriteTypesEnum.BUNDLE)) {
+      return this.store.pipe(select(BundleQueries.getAllEntities));
+    } else {
+      return of({});
+    }
+  }
+
+  private getTasksStream() {
+    if (this.allowedFavoriteTypes.includes(FavoriteTypesEnum.TASK)) {
+      return this.store.pipe(select(TaskQueries.getAllEntities));
+    } else {
+      return of({});
+    }
+  }
+
+  private getEduContentsStream() {
+    const needEduContents = this.allowedFavoriteTypes.some(
+      allowedFavoriteType => {
+        return (
+          allowedFavoriteType === FavoriteTypesEnum.BOEKE ||
+          allowedFavoriteType === FavoriteTypesEnum.EDUCONTENT
+        );
+      }
+    );
+    if (needEduContents) {
+      return this.store.pipe(select(EduContentQueries.getAllEntities));
+    } else {
+      return of({});
+    }
+  }
+
   private composeQuickLinkCategories$(
     quickLinksDict$: Observable<{
       [key: string]: FavoriteInterface[] | HistoryInterface[];
@@ -214,17 +257,17 @@ export class QuickLinkViewModel {
     return combineLatest([
       quickLinksDict$,
       this.store.pipe(select(LearningAreaQueries.getAllEntities)),
-      this.store.pipe(select(EduContentQueries.getAllEntities)),
-      this.store.pipe(select(TaskQueries.getAllEntities)),
-      this.store.pipe(select(BundleQueries.getAllEntities))
+      this.getBundlesStream(),
+      this.getTasksStream(),
+      this.getEduContentsStream()
     ]).pipe(
       map(
         ([
           quickLinkDict,
           learningAreaDict,
-          eduContentDict,
+          bundleDict,
           taskDict,
-          bundleDict
+          eduContentDict
         ]) =>
           Object.keys(quickLinkDict).map(
             key =>
