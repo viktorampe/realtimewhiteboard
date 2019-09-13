@@ -42,15 +42,21 @@ import {
   YEAR_SERVICE_TOKEN
 } from '@campus/dal';
 import {
+  APP_NAVIGATION_TREE_TOKEN,
+  NavigationItemService,
+  NAVIGATION_ITEM_SERVICE_TOKEN,
   OpenStaticContentService,
   OPEN_STATIC_CONTENT_SERVICE_TOKEN,
   ScormExerciseService,
   SCORM_EXERCISE_SERVICE_TOKEN
 } from '@campus/shared';
+import { kabasConfig } from './app.config';
 
 @NgModule({
   providers: [
     //app level services
+    { provide: NAVIGATION_ITEM_SERVICE_TOKEN, useClass: NavigationItemService },
+    { provide: APP_NAVIGATION_TREE_TOKEN, useValue: kabasConfig.appNavtree },
 
     // dal services
     { provide: AUTH_SERVICE_TOKEN, useClass: AuthService },
