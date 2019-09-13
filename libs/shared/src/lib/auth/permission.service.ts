@@ -22,7 +22,7 @@ export class PermissionService implements PermissionServiceInterface {
    * <div *hasPermission="[Licenses.VIEW, [Licenses.ADD, Licenses.REVOKE]]">
    * @example
    */
-  hasPermission(
+  hasPermission$(
     requiredPermissions: string | (string | string[])[]
   ): Observable<boolean> {
     let permissions: (string | string[])[];
@@ -34,17 +34,21 @@ export class PermissionService implements PermissionServiceInterface {
     }
     return this.store.pipe(
       select(UserQueries.getPermissions),
-      map(userPermissions => {
-        // every permission in the list must match
-
-        return permissions.every(permission => {
-          if (typeof permission === 'string') {
-            return userPermissions.includes(permission);
-          }
-          // if permission is an array, at least one must match
-          return permission.some(p => userPermissions.includes(p));
-        });
-      })
+      map(userPermissions => this.hasPermission(permissions, userPermissions))
     );
+  }
+
+  hasPermission(
+    requiredPermissions: (string | string[])[],
+    availablePermissions: string[]
+  ): boolean {
+    // every permission in the list must match
+    return requiredPermissions.every(permission => {
+      if (typeof permission === 'string') {
+        return availablePermissions.includes(permission);
+      }
+      // if permission is an array, at least one must match
+      return permission.some(p => availablePermissions.includes(p));
+    });
   }
 }
