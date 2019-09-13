@@ -62,7 +62,7 @@ describe('EduContentSearchResultItemService', () => {
         },
         {
           provide: PERMISSION_SERVICE_TOKEN,
-          useValue: { hasPermission: () => permission$ }
+          useValue: { hasPermission$: () => permission$ }
         },
         Store
       ]

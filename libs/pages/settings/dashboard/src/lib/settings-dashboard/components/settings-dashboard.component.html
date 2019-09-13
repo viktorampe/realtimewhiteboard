@@ -11,11 +11,10 @@
         large
         bordered
         rounded-corners
-        *hasPermission="link.permissions"
-        [routerLink]="link.url"
+        [routerLink]="link.link"
         [iconClass]="link.icon"
       >
-        <div> {{ link.name }} </div>
+        <div> {{ link.title }} </div>
       </campus-button>
     </div>
   </mat-nav-list>

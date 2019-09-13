@@ -122,7 +122,7 @@ describe('BundlesViewModel', () => {
         },
         {
           provide: PERMISSION_SERVICE_TOKEN,
-          useValue: { hasPermission: () => permissions$ }
+          useValue: { hasPermission$: () => permissions$ }
         }
       ]
     });

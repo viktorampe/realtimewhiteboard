@@ -80,7 +80,7 @@ describe('TasksViewModel met State', () => {
         },
         {
           provide: PERMISSION_SERVICE_TOKEN,
-          useValue: { hasPermission: () => {} }
+          useValue: { hasPermission$: () => {} }
         },
         Store
       ]
@@ -424,7 +424,7 @@ describe('TasksViewModel met State', () => {
 
       it('should add the task to history, if the user has permission', () => {
         jest
-          .spyOn(TestBed.get(PERMISSION_SERVICE_TOKEN), 'hasPermission')
+          .spyOn(TestBed.get(PERMISSION_SERVICE_TOKEN), 'hasPermission$')
           .mockReturnValue(of(true));
 
         jest.spyOn(store, 'dispatch');
@@ -446,7 +446,7 @@ describe('TasksViewModel met State', () => {
 
       it('should not add the task to history, if the user does not have permission', () => {
         jest
-          .spyOn(TestBed.get(PERMISSION_SERVICE_TOKEN), 'hasPermission')
+          .spyOn(TestBed.get(PERMISSION_SERVICE_TOKEN), 'hasPermission$')
           .mockReturnValue(of(false));
 
         jest.spyOn(store, 'dispatch');

@@ -36,6 +36,7 @@ configureBufferSize(150);
       environment.features.messages,
       environment.features.errorManagement,
       environment.features.globalSearch,
+      environment.features.favorites,
       environment.iconMapping,
       environment.website,
       environment.logout,
