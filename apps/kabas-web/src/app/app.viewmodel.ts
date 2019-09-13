@@ -1,7 +1,21 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Inject, Injectable, OnDestroy } from '@angular/core';
-import { DalState, EffectFeedbackActions, EffectFeedbackInterface, EffectFeedbackQueries, getRouterState, UiActions, UiQuery, UserQueries } from '@campus/dal';
-import { FeedBackServiceInterface, FEEDBACK_SERVICE_TOKEN, NavigationItemServiceInterface, NAVIGATION_ITEM_SERVICE_TOKEN } from '@campus/shared';
+import {
+  DalState,
+  EffectFeedbackActions,
+  EffectFeedbackInterface,
+  EffectFeedbackQueries,
+  getRouterState,
+  UiActions,
+  UiQuery,
+  UserQueries
+} from '@campus/dal';
+import {
+  FeedBackServiceInterface,
+  FEEDBACK_SERVICE_TOKEN,
+  NavigationItemServiceInterface,
+  NAVIGATION_ITEM_SERVICE_TOKEN
+} from '@campus/shared';
 import { NavItem } from '@campus/ui';
 import { Action, select, Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
