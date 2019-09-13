@@ -100,12 +100,8 @@ describe('MethodComponent', () => {
       const diaboloDE = fixture.debugElement.query(
         By.css('.method-method__container__boeke__diabolo')
       );
-      const method = methodViewModel.currentMethod$.value;
 
       expect(diaboloDE).toBeTruthy();
-      expect(diaboloDE.nativeElement.textContent.trim()).toBe(
-        `${method.name} is een diabolo methode. Lees meer over diabolo`
-      );
     });
 
     it('should not show diabolo info if the current book is not diabolo', () => {
