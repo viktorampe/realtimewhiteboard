@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import {
   ClassGroupInterface,
   EduContent,
+  EduContentBookInterface,
   EduContentProductTypeInterface,
   EduContentTOCInterface,
   LearningPlanGoalInterface,
@@ -27,6 +28,7 @@ import { CurrentMethodParams, MethodViewModel } from '../method.viewmodel';
 })
 export class MethodComponent implements OnInit {
   public boeke$: Observable<EduContent>;
+  public book$: Observable<EduContentBookInterface>;
   public chapters$: Observable<EduContentTOCInterface[]>;
   public generalFilesByType$: Observable<Dictionary<EduContent[]>>;
   public method$: Observable<MethodInterface>;
@@ -50,6 +52,7 @@ export class MethodComponent implements OnInit {
   constructor(private viewModel: MethodViewModel, private router: Router) {}
 
   ngOnInit() {
+    this.book$ = this.viewModel.currentBook$;
     this.boeke$ = this.viewModel.currentBoeke$;
     this.isBoekeFavorite$ = this.viewModel.isCurrentBoekeFavorite$;
     this.chapters$ = this.viewModel.currentToc$;
