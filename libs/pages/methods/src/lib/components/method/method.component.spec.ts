@@ -108,7 +108,7 @@ describe('MethodComponent', () => {
       );
     });
 
-    it('should not show diabolo info if the current book is diabolo', () => {
+    it('should not show diabolo info if the current book is not diabolo', () => {
       methodViewModel.currentBook$.next(new EduContentBookFixture());
       fixture.detectChanges();
 
