@@ -76,16 +76,8 @@ describe('AppViewModel', () => {
 
         ...StateFeatureBuilder.getModuleWithForFeatureProviders([
           EffectFeedbackReducer,
-          {
-            NAME: UserReducer.NAME,
-            reducer: UserReducer.reducer,
-            initialState: UserReducer.initialState
-          },
-          {
-            NAME: UiReducer.NAME,
-            reducer: UiReducer.reducer,
-            initialState: UiReducer.initialState
-          }
+          UserReducer,
+          UiReducer
         ])
       ],
       providers: [
