@@ -11,7 +11,7 @@ import { AppViewModel } from './app.viewmodel';
 })
 export class AppComponent {
   // streams
-  public navigationItems$: Observable<NavItem[]>;
+  public sideNavItems$: Observable<NavItem[]>;
   public sideNavOpen$: Observable<boolean>;
   public bannerFeedback$: Observable<EffectFeedbackInterface>;
 
@@ -20,7 +20,7 @@ export class AppComponent {
   }
 
   initialize() {
-    this.navigationItems$ = this.appViewModel.navigationItems$;
+    this.sideNavItems$ = this.appViewModel.sideNavItems$;
     this.sideNavOpen$ = this.appViewModel.sideNavOpen$;
     this.bannerFeedback$ = this.appViewModel.bannerFeedback$;
   }

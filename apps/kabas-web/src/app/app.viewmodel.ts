@@ -1,21 +1,7 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Inject, Injectable, OnDestroy } from '@angular/core';
-import {
-  DalState,
-  EffectFeedbackActions,
-  EffectFeedbackInterface,
-  EffectFeedbackQueries,
-  getRouterState,
-  UiActions,
-  UiQuery,
-  UserQueries
-} from '@campus/dal';
-import {
-  FeedBackServiceInterface,
-  FEEDBACK_SERVICE_TOKEN,
-  NavigationItemServiceInterface,
-  NAVIGATION_ITEM_SERVICE_TOKEN
-} from '@campus/shared';
+import { DalState, EffectFeedbackActions, EffectFeedbackInterface, EffectFeedbackQueries, getRouterState, UiActions, UiQuery, UserQueries } from '@campus/dal';
+import { FeedBackServiceInterface, FEEDBACK_SERVICE_TOKEN, NavigationItemServiceInterface, NAVIGATION_ITEM_SERVICE_TOKEN } from '@campus/shared';
 import { NavItem } from '@campus/ui';
 import { Action, select, Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
@@ -28,12 +14,9 @@ export class AppViewModel implements OnDestroy {
   // source streams
   private userPermissions$: Observable<string[]>;
 
-  // intermediate streams
-  public sideNavItems$: Observable<NavItem[]>;
-
   // presentation streams
   public sideNavOpen$: Observable<boolean>;
-  public navigationItems$: Observable<NavItem[]>;
+  public sideNavItems$: Observable<NavItem[]>;
   public bannerFeedback$: Observable<EffectFeedbackInterface>;
 
   private subscriptions: Subscription;
@@ -78,13 +61,6 @@ export class AppViewModel implements OnDestroy {
         this.navigationItemService.getNavItemsForTree('sideNav', permissions)
       )
     );
-
-    this.sideNavItems$.subscribe(navItems =>
-      this.store.dispatch(new UiActions.SetSideNavItems({ navItems }))
-    );
-
-    // read array of navItems from the store
-    this.navigationItems$ = this.store.pipe(select(UiQuery.getSideNavItems));
 
     // get sideNav opened state
     this.sideNavOpen$ = this.store.pipe(select(UiQuery.getSideNavOpen));

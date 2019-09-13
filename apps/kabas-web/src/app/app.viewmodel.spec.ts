@@ -9,8 +9,6 @@ import {
   EffectFeedbackReducer,
   Priority,
   StateFeatureBuilder,
-  UiActions,
-  UiQuery,
   UiReducer,
   UserActions,
   UserReducer
@@ -137,23 +135,18 @@ describe('AppViewModel', () => {
   describe('navigationItems$', () => {
     beforeEach(() => {
       jest.spyOn(navigationItemService, 'getNavItemsForTree');
-      jest.spyOn(UiQuery, 'getSideNavItems');
 
       store.dispatch(new UserActions.PermissionsLoaded(['permissionA']));
     });
 
-    it('should stream the values from the navigation item service', () => {
+    it('should stream the values returned from the navigation item service', () => {
+      expect(viewModel.sideNavItems$).toBeObservable(
+        hot('a', { a: mockNavItems })
+      );
       expect(navigationItemService.getNavItemsForTree).toHaveBeenCalledTimes(1);
       expect(navigationItemService.getNavItemsForTree).toHaveBeenCalledWith(
         'sideNav',
         ['permissionA']
-      );
-
-      expect(store.dispatch).toHaveBeenCalledWith(
-        new UiActions.SetSideNavItems({ navItems: mockNavItems })
-      );
-      expect(viewModel.navigationItems$).toBeObservable(
-        hot('a', { a: mockNavItems })
       );
     });
   });
