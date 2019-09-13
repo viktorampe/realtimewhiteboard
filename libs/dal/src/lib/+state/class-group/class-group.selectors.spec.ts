@@ -1,8 +1,11 @@
+import { EduContentBookFixture } from '@campus/dal';
 import { Dictionary } from '@ngrx/entity';
 import { ClassGroupQueries } from '.';
+import { ClassGroupFixture, YearFixture } from '../../+fixtures';
 import { ClassGroupInterface } from '../../+models/ClassGroup.interface';
 import { ProductContentInterface } from '../../+models/ProductContent.interface';
 import { State } from './class-group.reducer';
+import { getClassGroupsForBook } from './class-group.selectors';
 
 describe('ClassGroup Selectors', () => {
   function createClassGroup(
@@ -103,24 +106,61 @@ describe('ClassGroup Selectors', () => {
       const results = ClassGroupQueries.getById(storeState, { id: 9 });
       expect(results).toBe(undefined);
     });
-    describe('getByMethodId', () => {
+    describe('getClassGroupsByMethodId', () => {
+      const classGroups = [
+        createClassGroup(1, [
+          { licenseType: 'notmethod', methodId: 1 },
+          { licenseType: 'method', methodId: 2 }
+        ]),
+        createClassGroup(2, [
+          { licenseType: 'notmethod', methodId: 1 },
+          { licenseType: 'method', methodId: 2 },
+          { licenseType: 'method', methodId: 3 }
+        ])
+      ];
       beforeEach(() => {
-        classGroupState = createState(
-          [
-            createClassGroup(4, [{ licenseType: 'notmethod', methodId: 1 }]),
-            createClassGroup(1, [{ licenseType: 'method', methodId: 1 }]),
-            createClassGroup(2, [{ licenseType: 'method', methodId: 2 }]),
-            createClassGroup(3)
-          ],
-          true,
-          'no error'
-        );
+        classGroupState = createState(classGroups, true, 'no error');
         storeState = { classGroups: classGroupState };
       });
-      it('should only return if licenseType is method and methodId is given id', () => {
-        const results = ClassGroupQueries.getByMethodId(storeState, { id: 1 });
-        expect(results).toEqual([
-          createClassGroup(1, [{ licenseType: 'method', methodId: 1 }])
+
+      it('should return the classGroups grouped by methodId', () => {
+        const results = ClassGroupQueries.getClassGroupsByMethodId(storeState);
+        expect(results).toEqual({
+          2: [classGroups[0], classGroups[1]],
+          3: [classGroups[1]]
+        });
+      });
+    });
+
+    describe('getClassGroupsForBook', () => {
+      const projector = getClassGroupsForBook.projector;
+      const years = [
+        new YearFixture({ id: 1, label: 'L1' }),
+        new YearFixture({ id: 2, label: 'L2' }),
+        new YearFixture({ id: 3, label: 'L3' })
+      ];
+      const book = new EduContentBookFixture({
+        id: 1,
+        methodId: 1,
+        years: [years[0], years[1]]
+      });
+      const classGroupsByMethodId = {
+        1: [
+          new ClassGroupFixture({ id: 1, years: [years[0]] }),
+          new ClassGroupFixture({ id: 2, years: [years[1]] }),
+          new ClassGroupFixture({ id: 3, years: [years[1], years[2]] }),
+          new ClassGroupFixture({ id: 4, years: [years[2]] })
+        ],
+        2: [new ClassGroupFixture({ id: 5, years: [years[0]] })]
+      };
+
+      it("should return the classGroups for the book's method and year", () => {
+        const methodClassGroups = classGroupsByMethodId[1];
+
+        expect(projector(book, classGroupsByMethodId)).toEqual([
+          methodClassGroups[0],
+          methodClassGroups[1],
+          methodClassGroups[2]
         ]);
       });
     });

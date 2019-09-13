@@ -1,3 +1,4 @@
+import { FavoriteTypesEnum } from '@campus/dal';
 import { SearchModeInterface } from '@campus/search';
 
 export interface EnvironmentInterface {
@@ -12,6 +13,7 @@ export interface EnvironmentInterface {
     alerts: EnvironmentAlertsFeatureInterface;
     messages: EnvironmentMessagesFeatureInterface;
     errorManagement: EnvironmentErrorManagementFeatureInterface;
+    favorites: EnvironmentFavoritesFeatureInterface;
     globalSearch: EnvironmentGlobalSearchFeatureInterface;
   };
   sso: EnvironmentSsoInterface;
@@ -21,6 +23,10 @@ export interface EnvironmentInterface {
 
 export interface EnvironmentIconMappingInterface {
   [icon: string]: string;
+}
+
+export interface EnvironmentFavoritesFeatureInterface {
+  allowedFavoriteTypes: FavoriteTypesEnum[];
 }
 
 export interface EnvironmentAlertsFeatureInterface {

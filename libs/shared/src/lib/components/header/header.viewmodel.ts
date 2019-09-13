@@ -136,7 +136,9 @@ export class HeaderViewModel {
 
   openDialog(mode: QuickLinkTypeEnum): void {
     this.dialog.open(QuickLinkComponent, {
-      data: { mode },
+      data: {
+        mode
+      },
       panelClass: 'quick-link__dialog'
     });
   }
