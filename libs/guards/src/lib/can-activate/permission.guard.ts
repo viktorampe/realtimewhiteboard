@@ -28,7 +28,7 @@ export class PermissionGuard implements CanActivate {
       return true;
 
     return this.permissionService
-      .hasPermission(route.data.requiredPermissions)
+      .hasPermission$(route.data.requiredPermissions)
       .pipe(
         tap(permitted => {
           if (!permitted) this.router.navigate(['/error/401']);

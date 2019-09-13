@@ -1,9 +1,7 @@
 import { Component } from '@angular/core';
+import { NavItem } from '@campus/ui';
 import { Observable } from 'rxjs';
-import {
-  Link,
-  SettingsDashboardViewModel
-} from './settings-dashboard.viewmodel';
+import { SettingsDashboardViewModel } from './settings-dashboard.viewmodel';
 
 @Component({
   selector: 'campus-settings-dashboard',
@@ -11,7 +9,7 @@ import {
   styleUrls: ['./settings-dashboard.component.scss']
 })
 export class SettingsDashboardComponent {
-  links$: Observable<Link[]> = this.viewModel.links$;
+  links$: Observable<NavItem[]> = this.viewModel.links$;
 
   constructor(private viewModel: SettingsDashboardViewModel) {}
 }

@@ -32,7 +32,7 @@ import { EduContentSearchResultItemServiceInterface } from './edu-content-search
 export class EduContentSearchResultItemService
   implements EduContentSearchResultItemServiceInterface {
   private hasManageHistoryPermission = this.permissionService
-    .hasPermission(Permissions.settings.MANAGE_HISTORY)
+    .hasPermission$(Permissions.settings.MANAGE_HISTORY)
     .pipe(
       take(1),
       filter(hasPermission => !!hasPermission),
