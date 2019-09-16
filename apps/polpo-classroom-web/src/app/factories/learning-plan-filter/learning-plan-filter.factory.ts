@@ -9,6 +9,7 @@ import {
   LEARNING_PLAN_SERVICE_TOKEN,
   SchoolTypeInterface,
   SchoolTypeQueries,
+  SearchStateInterface,
   SpecialtyInterface,
   YearInterface
 } from '@campus/dal';
@@ -18,8 +19,7 @@ import {
   SearchFilterComponentInterface,
   SearchFilterCriteriaInterface,
   SearchFilterFactory,
-  SearchFilterInterface,
-  SearchStateInterface
+  SearchFilterInterface
 } from '@campus/search';
 import { select, Store } from '@ngrx/store';
 import { combineLatest, Observable, of } from 'rxjs';

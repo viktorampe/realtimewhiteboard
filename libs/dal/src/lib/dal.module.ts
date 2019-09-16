@@ -1,3 +1,4 @@
+import { SearchStateInterface } from '@campus/dal';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import {

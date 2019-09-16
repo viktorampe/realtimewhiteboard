@@ -17,14 +17,12 @@ import {
   LearningAreaInterface,
   LearningAreaQueries,
   RouterStateUrl,
+  SearchResultInterface,
+  SearchStateInterface,
   TaskInterface,
   TaskQueries
 } from '@campus/dal';
-import {
-  SearchModeInterface,
-  SearchResultInterface,
-  SearchStateInterface
-} from '@campus/search';
+import { SearchModeInterface } from '@campus/search';
 import {
   EnvironmentSearchModesInterface,
   ENVIRONMENT_SEARCHMODES_TOKEN

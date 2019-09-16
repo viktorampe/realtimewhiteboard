@@ -8,6 +8,7 @@ import {
   LearningDomainQueries,
   MethodQueries,
   SchoolTypeQueries,
+  SearchStateInterface,
   YearQueries
 } from '@campus/dal';
 import {
@@ -16,14 +17,13 @@ import {
   SearchFilterComponentInterface,
   SearchFilterCriteriaInterface,
   SearchFilterFactory,
-  SearchFilterInterface,
-  SearchStateInterface
+  SearchFilterInterface
 } from '@campus/search';
 import {
   MemoizedSelector,
   MemoizedSelectorWithProps,
-  Store,
-  select
+  select,
+  Store
 } from '@ngrx/store';
 import { combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';

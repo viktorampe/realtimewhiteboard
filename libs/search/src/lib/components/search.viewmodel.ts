@@ -1,4 +1,5 @@
 import { Injectable, Injector } from '@angular/core';
+import { SearchResultInterface, SearchStateInterface } from '@campus/dal';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { filter, map, share, startWith, take } from 'rxjs/operators';
 import {
@@ -7,8 +8,6 @@ import {
   SearchFilterFactory,
   SearchFilterInterface,
   SearchModeInterface,
-  SearchResultInterface,
-  SearchStateInterface,
   SortModeInterface
 } from '../interfaces';
 

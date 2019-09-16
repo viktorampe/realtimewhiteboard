@@ -8,12 +8,11 @@ import {
   ViewChildren
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { SearchResultInterface, SearchStateInterface } from '@campus/dal';
 import {
   SearchComponent,
   SearchModeInterface,
-  SearchPortalDirective,
-  SearchResultInterface,
-  SearchStateInterface
+  SearchPortalDirective
 } from '@campus/search';
 import { Observable, Subscription } from 'rxjs';
 import { EduContentsViewModel } from '../edu-contents.viewmodel';

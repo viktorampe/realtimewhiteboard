@@ -93,8 +93,34 @@
       true,
       {
         "allow": [],
-        "depConstraints": [
-          { "sourceTag": "*", "onlyDependOnLibsWithTags": ["*"] }
+        "depConstraints": [{
+            "sourceTag": "*",
+            "onlyDependOnLibsWithTags": ["*"]
+          },
+          {
+            "sourceTag": "dep:ui",
+            "onlyDependOnLibsWithTags": ["dep:ui", "dep:testing", "dep:utils"]
+          },
+          {
+            "sourceTag": "dep:dal",
+            "onlyDependOnLibsWithTags": ["dep:scorm", "dep:browser", "dep:testing", "dep:utils"]
+          },
+          {
+            "sourceTag": "dep:scorm",
+            "onlyDependOnLibsWithTags": ["dep:scorm","dep:browser"]
+          },
+          {
+            "sourceTag": "dep:browser",
+            "onlyDependOnLibsWithTags": ["dep:browser"]
+          },
+          {
+            "sourceTag": "dep:testing",
+            "onlyDependOnLibsWithTags": ["dep:testing"]
+          },
+          {
+            "sourceTag": "dep:utils",
+            "onlyDependOnLibsWithTags": ["dep:utils"]
+          }
         ]
       }
     ]

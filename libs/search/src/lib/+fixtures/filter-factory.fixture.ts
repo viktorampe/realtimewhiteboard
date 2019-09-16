@@ -1,14 +1,11 @@
 import { Injectable } from '@angular/core';
+import { SearchStateInterface } from '@campus/dal';
 import { Observable, of } from 'rxjs';
 import {
   CheckboxLineFilterComponent,
   CheckboxListFilterComponent
 } from '../components';
-import {
-  SearchFilterFactory,
-  SearchFilterInterface,
-  SearchStateInterface
-} from '../interfaces';
+import { SearchFilterFactory, SearchFilterInterface } from '../interfaces';
 import { SearchFilterCriteriaValuesFixture } from './search-filter-criteria.fixture';
 
 @Injectable()

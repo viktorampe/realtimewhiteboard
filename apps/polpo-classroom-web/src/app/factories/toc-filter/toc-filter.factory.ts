@@ -5,6 +5,7 @@ import {
   EduContentTOCInterface,
   LearningAreaQueries,
   MethodQueries,
+  SearchStateInterface,
   TocServiceInterface,
   TOC_SERVICE_TOKEN,
   YearInterface
@@ -15,8 +16,7 @@ import {
   SearchFilterComponentInterface,
   SearchFilterCriteriaInterface,
   SearchFilterFactory,
-  SearchFilterInterface,
-  SearchStateInterface
+  SearchFilterInterface
 } from '@campus/search';
 import { PrimitivePropertiesKeys } from '@campus/utils';
 import { select, Store } from '@ngrx/store';

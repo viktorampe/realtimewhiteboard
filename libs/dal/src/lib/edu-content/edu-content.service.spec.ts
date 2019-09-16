@@ -1,5 +1,5 @@
 import { inject, TestBed } from '@angular/core/testing';
-import { SearchStateInterface } from '@campus/search';
+import { SearchStateInterface } from '.';
 import { MapObjectConversionService } from '@campus/utils';
 import { EduContentApi, PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { hot } from '@nrwl/nx/testing';

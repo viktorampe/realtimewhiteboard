@@ -21,6 +21,7 @@ import { MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { SearchResultInterface, SearchStateInterface } from '@campus/dal';
 import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
 import { hot } from 'jasmine-marbles';
@@ -34,9 +35,7 @@ import {
 import {
   SearchFilterFactory,
   SearchFilterInterface,
-  SearchModeInterface,
-  SearchResultInterface,
-  SearchStateInterface
+  SearchModeInterface
 } from '../../interfaces';
 import { SearchModule } from '../../search.module';
 import { BreadcrumbFilterComponent } from '../breadcrumb-filter/breadcrumb-filter.component';
