@@ -3,8 +3,11 @@ import { MapObjectConversionService } from '@campus/utils';
 import { EduContentApi, PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import {
+  SearchResultInterface,
+  SearchStateInterface
+} from '../+external-interfaces';
 import { EduContentInterface } from '../+models/EduContent.interface';
-import { SearchResultInterface, SearchStateInterface } from '../edu-content';
 import { EduContentServiceInterface } from './edu-content.service.interface';
 
 @Injectable({

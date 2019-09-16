@@ -4,7 +4,7 @@ import { hot } from '@nrwl/nx/testing';
 import { Observable } from 'rxjs';
 import { ResultFixture } from '../+fixtures';
 import { ResultInterface } from '../+models';
-import { ScormCmiMode, ScormStatus } from '../exercise/scorm-api.interface';
+import { ScormCmiMode, ScormStatus } from '../+external-interfaces/scorm-api.interface';
 import { ResultsService } from './results.service';
 import { ResultsServiceInterface } from './results.service.interface';
 

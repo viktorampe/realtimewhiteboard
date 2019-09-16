@@ -6,7 +6,7 @@ import { ResultsService } from '../results/results.service';
 import { CurrentExerciseInterface } from './../+state/current-exercise/current-exercise.reducer';
 import { ContentRequestService } from './../content-request/content-request.service';
 import { ExerciseServiceInterface } from './exercise.service.interface';
-import { ScormCmiMode } from './scorm-api.interface';
+import { ScormCmiMode } from '../+external-interfaces/scorm-api.interface';
 
 @Injectable({
   providedIn: 'root'

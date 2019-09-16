@@ -1,4 +1,4 @@
-import { ScormCmiMode } from '../exercise/scorm-api.interface';
+import { ScormCmiMode } from '../+external-interfaces/scorm-api.interface';
 import { CurrentExerciseInterface } from './../+state/current-exercise/current-exercise.reducer';
 
 export class CurrentExerciseFixture implements CurrentExerciseInterface {

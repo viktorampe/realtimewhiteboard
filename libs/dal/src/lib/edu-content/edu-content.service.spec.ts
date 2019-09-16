@@ -1,9 +1,9 @@
 import { inject, TestBed } from '@angular/core/testing';
-import { SearchStateInterface } from '.';
 import { MapObjectConversionService } from '@campus/utils';
 import { EduContentApi, PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { hot } from '@nrwl/nx/testing';
 import { configureTestSuite } from 'ng-bullet';
+import { SearchStateInterface } from '../+external-interfaces';
 import { EduContentService } from './edu-content.service';
 import { EduContentServiceInterface } from './edu-content.service.interface';
 

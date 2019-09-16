@@ -9,7 +9,7 @@ import { undo } from 'ngrx-undo';
 import { Observable, of } from 'rxjs';
 import { CurrentExerciseReducer } from '.';
 import { EXERCISE_SERVICE_TOKEN } from '../../exercise/exercise.service.interface';
-import { ScormCmiMode } from '../../exercise/scorm-api.interface';
+import { ScormCmiMode } from '../../+external-interfaces/scorm-api.interface';
 import {
   EffectFeedback,
   EffectFeedbackActions,

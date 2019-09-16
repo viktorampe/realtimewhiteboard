@@ -15,7 +15,7 @@ import { ResultsServiceInterface } from '../results/results.service.interface';
 import { ResultFixture } from './../+fixtures/Result.fixture';
 import { ExerciseService } from './exercise.service';
 import { ExerciseServiceInterface } from './exercise.service.interface';
-import { ScormCmiMode } from './scorm-api.interface';
+import { ScormCmiMode } from '../+external-interfaces/scorm-api.interface';
 
 describe('ExerciseService', () => {
   let exerciseService: ExerciseServiceInterface;
