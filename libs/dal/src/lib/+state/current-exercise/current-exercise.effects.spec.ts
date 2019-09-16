@@ -1,5 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-import { ScormCmiMode } from '@campus/scorm';
 import { MockDate } from '@campus/testing';
 import { EffectsModule } from '@ngrx/effects';
 import { provideMockActions } from '@ngrx/effects/testing';
@@ -10,6 +9,7 @@ import { undo } from 'ngrx-undo';
 import { Observable, of } from 'rxjs';
 import { CurrentExerciseReducer } from '.';
 import { EXERCISE_SERVICE_TOKEN } from '../../exercise/exercise.service.interface';
+import { ScormCmiMode } from '../../exercise/scorm-api.interface';
 import {
   EffectFeedback,
   EffectFeedbackActions,

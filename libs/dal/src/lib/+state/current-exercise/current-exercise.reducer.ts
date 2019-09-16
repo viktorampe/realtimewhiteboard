@@ -1,5 +1,5 @@
-import { ScormCmiMode } from '@campus/scorm';
 import { ResultInterface } from '../../+models';
+import { ScormCmiMode } from '../../exercise/scorm-api.interface';
 import {
   CurrentExerciseActions,
   CurrentExerciseActionTypes

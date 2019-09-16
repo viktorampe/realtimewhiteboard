@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { ScormCmiMode } from '@campus/scorm';
 import { combineLatest, Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { ResultInterface } from '../+models';
@@ -7,6 +6,7 @@ import { ResultsService } from '../results/results.service';
 import { CurrentExerciseInterface } from './../+state/current-exercise/current-exercise.reducer';
 import { ContentRequestService } from './../content-request/content-request.service';
 import { ExerciseServiceInterface } from './exercise.service.interface';
+import { ScormCmiMode } from './scorm-api.interface';
 
 @Injectable({
   providedIn: 'root'

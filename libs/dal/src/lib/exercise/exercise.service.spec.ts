@@ -1,5 +1,4 @@
 import { inject, TestBed } from '@angular/core/testing';
-import { ScormCmiMode } from '@campus/scorm';
 import { EduContentApi, PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
@@ -16,6 +15,7 @@ import { ResultsServiceInterface } from '../results/results.service.interface';
 import { ResultFixture } from './../+fixtures/Result.fixture';
 import { ExerciseService } from './exercise.service';
 import { ExerciseServiceInterface } from './exercise.service.interface';
+import { ScormCmiMode } from './scorm-api.interface';
 
 describe('ExerciseService', () => {
   let exerciseService: ExerciseServiceInterface;

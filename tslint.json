@@ -103,11 +103,11 @@
           },
           {
             "sourceTag": "dep:dal",
-            "onlyDependOnLibsWithTags": ["dep:scorm", "dep:browser", "dep:testing", "dep:utils"]
+            "onlyDependOnLibsWithTags": ["dep:browser", "dep:testing", "dep:utils"]
           },
           {
             "sourceTag": "dep:scorm",
-            "onlyDependOnLibsWithTags": ["dep:scorm","dep:browser"]
+            "onlyDependOnLibsWithTags": ["dep:scorm", "dep:browser"]
           },
           {
             "sourceTag": "dep:browser",

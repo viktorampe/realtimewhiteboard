@@ -1,6 +1,6 @@
-import { ScormCmiMode } from '@campus/scorm';
 import { CurrentExerciseActions } from '.';
 import { CurrentExerciseFixture } from '../../+fixtures';
+import { ScormCmiMode } from '../../exercise/scorm-api.interface';
 import {
   CurrentExerciseInterface,
   initialState,

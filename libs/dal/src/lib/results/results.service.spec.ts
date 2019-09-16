@@ -1,9 +1,10 @@
 import { inject, TestBed } from '@angular/core/testing';
-import { ScormCmiMode, ScormStatus } from '@campus/scorm';
-import { PersonApi, ResultInterface } from '@diekeure/polpo-api-angular-sdk';
+import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { hot } from '@nrwl/nx/testing';
 import { Observable } from 'rxjs';
 import { ResultFixture } from '../+fixtures';
+import { ResultInterface } from '../+models';
+import { ScormCmiMode, ScormStatus } from '../exercise/scorm-api.interface';
 import { ResultsService } from './results.service';
 import { ResultsServiceInterface } from './results.service.interface';
 
@@ -54,7 +55,7 @@ describe('ResultsService', () => {
     });
     expect(service.getResultForTask(6, 1, 1)).toBeObservable(
       hot('-a-|', {
-        a: response as ResultInterface
+        a: (response as unknown) as ResultInterface
       })
     );
   });
@@ -77,7 +78,7 @@ describe('ResultsService', () => {
     });
     expect(service.getResultForUnlockedContent(6, 1, 1)).toBeObservable(
       hot('-a-|', {
-        a: response as ResultInterface
+        a: (response as unknown) as ResultInterface
       })
     );
   });
@@ -101,7 +102,7 @@ describe('ResultsService', () => {
     mockData$ = hot('-a-|', {
       a: response
     });
-    expect(service.saveResult(6, 3, cmi)).toBeObservable(
+    expect(service.saveResult(6, cmi as any)).toBeObservable(
       hot('-a-|', {
         a: response as ResultInterface
       })
