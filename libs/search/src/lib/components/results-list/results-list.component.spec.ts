@@ -4,10 +4,14 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconRegistry, MatTooltipModule } from '@angular/material';
 import { By, HAMMER_LOADER } from '@angular/platform-browser';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
-import { SearchResultInterface, SearchStateInterface } from '@campus/dal';
 import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
-import { SearchFilterFactory, SearchModeInterface } from '../../interfaces';
+import {
+  SearchFilterFactory,
+  SearchModeInterface,
+  SearchResultInterface,
+  SearchStateInterface
+} from '../../interfaces';
 import { ResultItemBase } from './result.component.base';
 import {
   ResultListDirective,

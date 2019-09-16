@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
-import { SearchResultInterface, SearchStateInterface } from '@campus/dal';
 import { ViewModelInterface } from '@campus/testing';
 import { BehaviorSubject } from 'rxjs';
 import {
   SearchFilterCriteriaInterface,
   SearchFilterInterface,
   SearchModeInterface,
+  SearchResultInterface,
+  SearchStateInterface,
   SortModeInterface
 } from '../interfaces';
 import {

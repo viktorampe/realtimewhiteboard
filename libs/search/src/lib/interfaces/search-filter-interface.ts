@@ -1,8 +1,8 @@
 import { Type } from '@angular/core';
-import { SearchStateInterface } from '@campus/dal';
 import { Observable } from 'rxjs';
 import { SearchFilterComponentInterface } from './search-filter-component-interface';
 import { SearchFilterCriteriaInterface } from './search-filter-criteria.interface';
+import { SearchStateInterface } from './search-state.interface';
 
 export interface SearchFilterInterface {
   criteria: SearchFilterCriteriaInterface | SearchFilterCriteriaInterface[];

@@ -1,6 +1,5 @@
 import { Type } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { SearchResultInterface, SearchStateInterface } from '@campus/dal';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
 import {
@@ -12,7 +11,9 @@ import {
   SearchFilterCriteriaInterface,
   SearchFilterFactory,
   SearchFilterInterface,
-  SearchModeInterface
+  SearchModeInterface,
+  SearchResultInterface,
+  SearchStateInterface
 } from '../interfaces';
 import { CheckboxLineFilterComponent } from './checkbox-line-filter/checkbox-line-filter-component';
 import { SearchViewModel } from './search.viewmodel';

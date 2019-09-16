@@ -13,7 +13,6 @@ import {
   Type,
   ViewContainerRef
 } from '@angular/core';
-import { SearchResultInterface, SearchStateInterface } from '@campus/dal';
 import { Observable, Subscription } from 'rxjs';
 import { debounceTime, skipWhile, take } from 'rxjs/operators';
 import { SearchPortalDirective } from '../../directives';
@@ -29,6 +28,8 @@ import {
   SearchModeInterface,
   SortModeInterface
 } from './../../interfaces/search-mode-interface';
+import { SearchResultInterface } from './../../interfaces/search-result-interface';
+import { SearchStateInterface } from './../../interfaces/search-state.interface';
 
 @Component({
   selector: 'campus-search',

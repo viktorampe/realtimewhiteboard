@@ -15,12 +15,16 @@ import {
   ViewContainerRef
 } from '@angular/core';
 import { WINDOW } from '@campus/browser';
-import { SearchResultInterface, SearchStateInterface } from '@campus/dal';
 import { ListViewComponent } from '@campus/ui';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { SearchModeInterface, SortModeInterface } from '../../interfaces';
-import { SearchResultItemComponentInterface } from './../../interfaces/search-result-interface';
+import {
+  SearchModeInterface,
+  SearchResultInterface,
+  SearchResultItemComponentInterface,
+  SearchStateInterface,
+  SortModeInterface
+} from '../../interfaces';
 
 // https://angular.io/guide/dynamic-component-loader
 

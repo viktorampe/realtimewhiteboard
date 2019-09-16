@@ -1,6 +1,6 @@
 import { Injectable, InjectionToken } from '@angular/core';
-import { DalState, SearchStateInterface } from '@campus/dal';
-import { SearchFilterInterface } from '@campus/search';
+import { DalState } from '@campus/dal';
+import { SearchFilterInterface, SearchStateInterface } from '@campus/search';
 import { Store } from '@ngrx/store';
 import { combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
