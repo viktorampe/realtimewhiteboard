@@ -9,140 +9,106 @@
   },
   "projects": {
     "devlib": {
-      "tags": ["scope:dev"],
-      "implicitDependencies": []
+      "tags": ["scope:dev"]
     },
     "polpo-classroom-web": {
-      "tags": ["scope:app"],
-      "implicitDependencies": []
+      "tags": ["scope:app"]
     },
     "polpo-classroom-web-e2e": {
-      "tags": ["scope:app"],
-      "implicitDependencies": ["polpo-classroom-web"]
+      "tags": ["scope:app"]
     },
     "pages-bundles": {
-      "tags": [],
-      "implicitDependencies": []
+      "tags": []
     },
     "pages-edu-contents": {
-      "tags": [],
-      "implicitDependencies": []
+      "tags": []
     },
     "pages-logout": {
-      "tags": [],
-      "implicitDependencies": []
+      "tags": []
     },
     "pages-messages": {
-      "tags": [],
-      "implicitDependencies": []
+      "tags": []
     },
     "pages-reports": {
-      "tags": [],
-      "implicitDependencies": []
+      "tags": []
     },
     "pages-tasks": {
-      "tags": [],
-      "implicitDependencies": []
+      "tags": []
     },
     "pages-books": {
-      "tags": [],
-      "implicitDependencies": []
+      "tags": []
     },
     "ui": {
-      "tags": ["dep:ui"],
-      "implicitDependencies": []
+      "tags": ["dep:ui"]
     },
     "dal": {
-      "tags": ["dep:dal"],
-      "implicitDependencies": []
+      "tags": ["dep:dal"]
     },
     "pages-shared": {
-      "tags": [],
-      "implicitDependencies": []
+      "tags": []
     },
     "browser": {
-      "tags": ["dep:browser"],
-      "implicitDependencies": []
+      "tags": ["dep:browser"]
     },
     "shared": {
-      "tags": [],
-      "implicitDependencies": []
+      "tags": []
     },
     "scorm": {
-      "tags": ["dep:scorm"],
-      "implicitDependencies": []
+      "tags": ["dep:scorm"]
     },
     "guards": {
-      "tags": [],
-      "implicitDependencies": []
+      "tags": []
     },
     "pages-error": {
-      "tags": [],
-      "implicitDependencies": []
+      "tags": []
     },
     "testing": {
-      "tags": ["dep:testing"],
-      "implicitDependencies": []
+      "tags": ["dep:testing"]
     },
     "utils": {
-      "tags": ["dep:utils"],
-      "implicitDependencies": []
+      "tags": ["dep:utils"]
     },
     "pages-settings-dashboard": {
-      "tags": [],
-      "implicitDependencies": []
+      "tags": []
     },
     "pages-settings-profile": {
-      "tags": [],
-      "implicitDependencies": []
+      "tags": []
     },
     "pages-settings-credentials": {
-      "tags": [],
-      "implicitDependencies": []
+      "tags": []
     },
     "pages-settings-coupled-teachers": {
-      "tags": [],
-      "implicitDependencies": []
+      "tags": []
     },
     "pages-settings-alerts": {
-      "tags": [],
-      "implicitDependencies": []
+      "tags": []
     },
     "search": {
-      "tags": ["dep:search"],
-      "implicitDependencies": []
+      "tags": ["dep:search"]
     },
     "kabas-web": {
-      "tags": ["scope:app"],
-      "implicitDependencies": []
+      "tags": ["scope:app"]
     },
     "kabas-web-e2e": {
-      "tags": ["scope:app"],
-      "implicitDependencies": ["kabas-web"]
+      "tags": ["scope:app"]
     },
     "pages-methods": {
-      "tags": [],
-      "implicitDependencies": []
+      "tags": []
     },
     "pages-global-search": {
-      "tags": [],
-      "implicitDependencies": []
+      "tags": []
     },
     "all-libs-files": {
-      "tags": [],
-      "implicitDependencies": []
+      "tags": []
     },
     "all-apps-files": {
-      "tags": [],
-      "implicitDependencies": []
+      "tags": []
     },
     "pages-practice": {
-      "tags": [],
-      "implicitDependencies": []
+      "tags": []
     },
     "pages-home": {
-      "tags": [],
-      "implicitDependencies": []
+      "tags": []
     }
   }
 }
