@@ -13,7 +13,7 @@ $color-blue-1: #953575;
 $color-blue-2: #b04495;
 $color-blue-3: #d36ebd;
 $color-orange-1: #09ff00;
-$color-red-1: #00ccff;
+$color-red-1: #c92d5f;
 $color-white-1: #fff;
 
 // app > main body
@@ -28,7 +28,7 @@ $primary-font-size: 14px;
 $secondary-bg-color: $color-gray-1;
 $secondary-font-color: $color-gray-2;
 $secondary-bg-color-accent: darken($color-blue-3, 40%); // active buttons
-$secondary-font-color-accent: $color-blue-3; // link, button (borders)
+$secondary-font-color-accent: $color-red-1; // link, button (borders)
 $secondary-bg-color-badge: $color-red-1; //  badge
 $secondary-font-color-badge: $color-white-1; // badge
 // app > panel headers
