@@ -5,10 +5,11 @@ import { MatIconModule } from '@angular/material';
 import { SearchModule } from '@campus/search';
 import { SharedModule } from '@campus/shared';
 import { UiModule } from '@campus/ui';
+import { MethodFavoriteTileComponent } from 'libs/pages/home/src/lib/components/method-favorite-tile/method-favorite-tile.component';
+import { DemoPageComponent } from './demo-page/demo-page.component';
 import { DevlibRoutingModule } from './devlib.routing.module';
 import { LoginpageComponent } from './loginpage/loginpage.component';
 import { LoginPageViewModel } from './loginpage/loginpage.viewmodel';
-import { DemoPageComponent } from './demo-page/demo-page.component';
 
 @NgModule({
   imports: [
@@ -21,7 +22,11 @@ import { DemoPageComponent } from './demo-page/demo-page.component';
     SearchModule
   ],
   providers: [LoginPageViewModel],
-  declarations: [LoginpageComponent, DemoPageComponent],
+  declarations: [
+    LoginpageComponent,
+    DemoPageComponent,
+    MethodFavoriteTileComponent
+  ],
   exports: [],
   entryComponents: []
 })
