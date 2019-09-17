@@ -5,4 +5,3 @@ export * from './nav-item.interface';
 export * from './scorm-api.interface';
 export * from './search-result-interface';
 export * from './search-state.interface';
-
