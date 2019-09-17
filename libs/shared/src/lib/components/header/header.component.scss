@@ -23,8 +23,15 @@
     }
   }
 
-  &__alerts {
-    margin-right: 0px;
+  &__quicklink__button {
+    &__label {
+      display: none;
+    }
   }
-  margin-top: 60px;
+
+  &__alerts__button {
+    &__label {
+      display: none;
+    }
+  }
 }

@@ -102,7 +102,7 @@
         matBadgePosition="above before"
         matBadgeColor="accent"
       ></mat-icon
-      ><span>Meldingen</span>
+      ><span class="shared-header__alerts__button__label">Meldingen</span>
     </campus-button>
 
     <campus-dropdown-menu
@@ -129,14 +129,6 @@
   </div>
 </ng-template>
 
-<ng-template #globalSearch>
-  <campus-button
-    id="global-search-btn"
-    [iconClass]="'magnifier'"
-    [routerLink]="['search']"
-    ><span>Zoeken</span></campus-button
-  >
-</ng-template>
 <ng-template #quicklinks>
   <campus-button
     id="global-favorites-btn"
@@ -144,7 +136,9 @@
     (click)="onManageFavoritesClick()"
     class="shared-header__quicklink__button"
     [iconClass]="'bordered:favorites'"
-    ><span>Favorieten</span></campus-button
+    ><span class="shared-header__quicklink__button__label"
+      >Favorieten</span
+    ></campus-button
   >
   <campus-button
     id="global-history-btn"
@@ -152,7 +146,18 @@
     (click)="onManageHistoryClick()"
     class="shared-header__quicklink__button"
     [iconClass]="'bordered:history'"
-    ><span>Geschiedenis</span></campus-button
+    ><span class="shared-header__quicklink__button__label"
+      >Geschiedenis</span
+    ></campus-button
+  >
+</ng-template>
+
+<ng-template #globalSearch>
+  <campus-button
+    id="global-search-btn"
+    [iconClass]="'magnifier'"
+    [routerLink]="['search']"
+    ><span>Zoeken</span></campus-button
   >
 </ng-template>
 

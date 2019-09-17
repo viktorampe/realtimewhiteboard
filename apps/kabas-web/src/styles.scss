@@ -197,9 +197,17 @@ header.ui-app-bar {
 }
 
 .shared-header {
-  &__page-bar {
-    background: linear-gradient(141deg, #9edae3, #21b0bd);
+  .shared-header__quicklink__button .shared-header__quicklink__button__label {
+    display: inline-block;
   }
+
+  .shared-header__alerts
+    .shared-header__alerts__button
+    .shared-header__alerts__button__label {
+    display: inline-block;
+  }
+
+  margin-top: 60px;
 }
 /*
  * icon fonts
