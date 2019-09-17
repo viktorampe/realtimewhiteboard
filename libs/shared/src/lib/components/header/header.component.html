@@ -7,16 +7,15 @@
       <div bar__right *ngIf="this.enableGlobalSearch">
         <ng-container *ngTemplateOutlet="globalSearch"></ng-container>
       </div>
+      <div bar__right *ngIf="this.alertsPosition === 'top-right'">
+        <ng-container *ngTemplateOutlet="alerts"></ng-container>
+      </div>
       <div bar__right *ngIf="this.profileMenuPosition === 'top-right'">
         <ng-container *ngTemplateOutlet="profilemenu"></ng-container>
       </div>
       <div bar__right *ngIf="this.quicklinkPosition === 'top-right'">
         <ng-container *ngTemplateOutlet="quicklinks"></ng-container>
       </div>
-      <div bar__right *ngIf="this.alertsPosition === 'top-right'">
-        <ng-container *ngTemplateOutlet="alerts"></ng-container>
-      </div>
-
       <div bar__right *ngIf="this.profileLinkPosition === 'top-right'">
         <ng-container *ngTemplateOutlet="profileLink"></ng-container>
       </div>
@@ -92,19 +91,18 @@
     *ngIf="enableAlerts && (alertsLoaded$ | async)"
   >
     <campus-button
-      primary
       id="global-alert-btn"
       (click)="dropDownAlerts.toggle()"
       class="shared-header__alerts__button"
     >
       <mat-icon
-        [svgIcon]="'alert2'"
+        [svgIcon]="'notifications'"
         [matBadge]="unreadAlertCount$ | async"
         [matBadgeHidden]="!((unreadAlertCount$ | async) > 0)"
         matBadgePosition="above before"
         matBadgeColor="accent"
       ></mat-icon
-      ><div class="textHeaderIcons">Meldingen</div>
+      ><span>Meldingen</span>
     </campus-button>
 
     <campus-dropdown-menu
@@ -133,40 +131,36 @@
 
 <ng-template #globalSearch>
   <campus-button
-    primary
     id="global-search-btn"
     [iconClass]="'magnifier'"
     [routerLink]="['search']"
-    ><div class="textHeaderIcons">Zoeken</div></campus-button
+    ><span>Zoeken</span></campus-button
   >
 </ng-template>
 <ng-template #quicklinks>
   <campus-button
-    primary
-    id="global-history-btn"
-    *hasPermission="Permissions.MANAGE_HISTORY"
-    (click)="onManageHistoryClick()"
-    class="shared-header__quicklink__button"
-    [iconClass]="'history'"
-    ><div class="textHeaderIcons">Geschiedenis</div></campus-button
-  >
-  <campus-button
-    primary
     id="global-favorites-btn"
     *hasPermission="Permissions.MANAGE_FAVORITES"
     (click)="onManageFavoritesClick()"
     class="shared-header__quicklink__button"
-    [iconClass]="'favorites3'"
-    ><div class="textHeaderIcons">Favorieten</div></campus-button
+    [iconClass]="'bordered:favorites'"
+    ><span>Favorieten</span></campus-button
+  >
+  <campus-button
+    id="global-history-btn"
+    *hasPermission="Permissions.MANAGE_HISTORY"
+    (click)="onManageHistoryClick()"
+    class="shared-header__quicklink__button"
+    [iconClass]="'bordered:history'"
+    ><span>Geschiedenis</span></campus-button
   >
 </ng-template>
 
 <ng-template #profileLink>
   <campus-button
-    primary
     id="global-profile-btn"
-    [iconClass]="'profile2'"
+    [iconClass]="'profile'"
     [routerLink]="['settings']"
-    ><div class="textHeaderIcons">Profiel</div></campus-button
+    ><span>Profiel</span></campus-button
   >
 </ng-template>

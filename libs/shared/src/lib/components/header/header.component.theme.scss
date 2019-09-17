@@ -22,11 +22,7 @@
   $shared-header__page-bar__mat-badge__content-color: $secondary-font-color-badge !default;
   $shared-header__page-bar__mat-badge__content-background-color: $secondary-bg-color-badge !default;
   $shared-header__page-bar__right-color-hover: $shared-button-color-accent !default;
-  $shared_header__page-bar_background_gradient: linear-gradient(
-    141deg,
-    #9edae3,
-    #21b0bd
-  ) !default;
+  $shared_header__page-bar_background: none !default;
 
   .shared-header {
     &__app-bar {
@@ -34,7 +30,7 @@
     }
 
     &__page-bar {
-      background: $shared_header__page-bar_background_gradient;
+      background: $shared_header__page-bar_background;
       height: $shared-header__page-bar-height;
       background-color: $shared-header__page-bar-background-color;
 

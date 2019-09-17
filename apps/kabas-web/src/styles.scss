@@ -93,6 +93,12 @@ body {
   }
 }
 
+#page-bar-container campus-button span {
+  text-align: center;
+  margin-top: 5px;
+  color: #000;
+}
+
 .ui-breadcrumbs a {
   color: #000000;
 }
@@ -107,6 +113,93 @@ body {
 
 #page-bar-container campus-button {
   margin-right: 30px;
+}
+
+header.ui-app-bar {
+  .ui-app-bar__section--align-end {
+    padding-left: 0;
+    padding-right: 192px;
+    justify-content: flex-end;
+    order: 1;
+    flex: 0 0 auto;
+
+    campus-button {
+      span {
+        text-align: center;
+        margin-top: 5px;
+        margin-bottom: 32px;
+      }
+    }
+  }
+}
+
+.ui-shell__logo {
+  img {
+    margin-top: 16px;
+  }
+}
+
+#global-search-btn {
+  color: #c48ec5;
+  fill: #c48ec5;
+  background-color: transparent;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+
+#global-search-btn:hover {
+  filter: brightness(85%);
+}
+
+#global-favorites-btn {
+  color: #e09fa5;
+  background-color: transparent;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+
+#global-favorites-btn:hover {
+  filter: brightness(85%);
+}
+
+#global-history-btn {
+  color: #88bee8;
+  fill: #88bee8;
+  background-color: transparent;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+
+#global-history-btn:hover {
+  filter: brightness(85%);
+}
+
+#global-profile-btn {
+  color: #dfa64f;
+  fill: #dfa64f;
+  background-color: transparent;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+
+#global-profile-btn:hover {
+  filter: brightness(85%);
+}
+#global-alert-btn {
+  color: #8ec5a3;
+  fill: #8ec5a3;
+  background-color: transparent;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+#global-alert-btn:hover {
+  filter: brightness(85%);
+}
+
+.shared-header {
+  &__page-bar {
+    background: linear-gradient(141deg, #9edae3, #21b0bd);
+  }
 }
 /*
  * icon fonts
