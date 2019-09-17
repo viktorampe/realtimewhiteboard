@@ -5,6 +5,8 @@ import { MatIconModule } from '@angular/material';
 import { SearchModule } from '@campus/search';
 import { SharedModule } from '@campus/shared';
 import { UiModule } from '@campus/ui';
+// component is page specific -> won't be exported
+/* tslint:disable-next-line */
 import { MethodFavoriteTileComponent } from 'libs/pages/home/src/lib/components/method-favorite-tile/method-favorite-tile.component';
 import { DemoPageComponent } from './demo-page/demo-page.component';
 import { DevlibRoutingModule } from './devlib.routing.module';
