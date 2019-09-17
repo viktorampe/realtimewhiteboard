@@ -1,25 +1,30 @@
 <campus-page-bar>
   <campus-button
+    id="open-boeke"
     data-cy="nav-open-boeke"
     campusPrimary
-    [iconClass]="'book'"
+    [iconClass]="'boardbook'"
     *ngIf="(boeke$ | async) as boeke"
     (click)="clickOpenBoeke(boeke)"
-  ></campus-button>
+  >
+    <div class="iconsOnPageBar">Open bordboek</div></campus-button
+  >
   <campus-button
+    id="toggle-boeke-favorite"
     data-cy="nav-toggle-boeke-favorite"
     campusPrimary
-    [iconClass]="'favorite'"
+    [iconClass]="'favorites3black'"
     *ngIf="(boeke$ | async) as boeke"
     (click)="toggleBoekeFavorite(boeke)"
   >
     <ng-container
       *ngIf="(isBoekeFavorite$ | async) as isBoekeFavorite; else notFavorite"
-      >-</ng-container
+      ><!-----></ng-container
     >
     <ng-template #notFavorite>
-      +
+      <!--+-->
     </ng-template>
+    <div class="iconsOnPageBar">Zet als favoriet</div>
   </campus-button>
   <campus-button
     campusPrimary

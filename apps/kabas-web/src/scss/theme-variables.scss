@@ -57,14 +57,15 @@ $ui-tertiary-bg-color-2: $tertiary-bg-color-2;
 $ui-tertiary-font-color-2: $tertiary-font-color-2;
 
 // ui > app bar
-$ui-app-bar-background-color: $color-black-2;
+$ui-app-bar-background-color: $color-white-1;
 // ui > app shell variables
 $ui-shell__left-width: 235px;
 $ui-shell__top-height: 105px;
 $ui-shell__top-height--mobile: 60px;
 $ui-shell__logo-height: 105px;
-$ui-shell__logo-background-color: $color-blue-2;
+$ui-shell__logo-background-color: $color-white-1;
 
+$ui-shell__top-background-color: $color-white-1;
 // ui > person badge > polpo override
 $ui-person-badge-size-large: 72px;
 $ui-person-badge-size-large-font-size: 24px;
