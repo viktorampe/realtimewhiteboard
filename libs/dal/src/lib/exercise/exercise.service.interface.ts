@@ -1,8 +1,8 @@
 import { InjectionToken } from '@angular/core';
-import { ScormCmiMode } from '@campus/scorm';
 import { Observable } from 'rxjs';
 import { ResultInterface } from '../+models';
 import { CurrentExerciseInterface } from './../+state/current-exercise/current-exercise.reducer';
+import { ScormCmiMode } from '../+external-interfaces/scorm-api.interface';
 
 export const EXERCISE_SERVICE_TOKEN = new InjectionToken('ExerciseService');
 

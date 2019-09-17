@@ -401,7 +401,7 @@ describe('TocFilterFactory', () => {
 
             const spy = jest.spyOn(tocService, 'getTree');
             spy.mockReset();
-            spy.mockReturnValue(of(mockTree[0]));
+            spy.mockReturnValue(of([mockTree[0]]));
 
             const newSearchState = getMockSearchState(
               mockSelectedAreaId,

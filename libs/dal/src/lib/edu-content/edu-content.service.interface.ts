@@ -1,6 +1,9 @@
 import { InjectionToken } from '@angular/core';
-import { SearchResultInterface, SearchStateInterface } from '@campus/search';
 import { Observable } from 'rxjs';
+import {
+  SearchResultInterface,
+  SearchStateInterface
+} from '../+external-interfaces';
 import { EduContentInterface } from '../+models';
 
 export const EDU_CONTENT_SERVICE_TOKEN = new InjectionToken(

@@ -93,8 +93,46 @@
       true,
       {
         "allow": [],
-        "depConstraints": [
-          { "sourceTag": "*", "onlyDependOnLibsWithTags": ["*"] }
+        "depConstraints": [{
+            "sourceTag": "*",
+            "onlyDependOnLibsWithTags": ["*"]
+          },
+          {
+            "sourceTag": "dep:ui",
+            "onlyDependOnLibsWithTags": ["dep:ui", "dep:testing", "dep:utils"]
+          },
+          {
+            "sourceTag": "dep:dal",
+            "onlyDependOnLibsWithTags": ["dep:browser", "dep:testing", "dep:utils"]
+          },
+          {
+            "sourceTag": "dep:search",
+            "onlyDependOnLibsWithTags": ["dep:ui", "dep:browser", "dep:utils", "dep:testing"]
+          },
+          {
+            "sourceTag": "dep:scorm",
+            "onlyDependOnLibsWithTags": ["dep:scorm", "dep:browser"]
+          },
+          {
+            "sourceTag": "dep:shared",
+            "onlyDependOnLibsWithTags": ["dep:dal", "dep:ui", "dep:utils", "dep:testing", "dep:browser", "dep:scorm", "dep:search"]
+          },
+          {
+            "sourceTag": "dep:guards",
+            "onlyDependOnLibsWithTags": ["dep:dal", "dep:utils", "dep:testing", "dep:browser", "dep:shared"]
+          },
+          {
+            "sourceTag": "dep:browser",
+            "onlyDependOnLibsWithTags": []
+          },
+          {
+            "sourceTag": "dep:testing",
+            "onlyDependOnLibsWithTags": []
+          },
+          {
+            "sourceTag": "dep:utils",
+            "onlyDependOnLibsWithTags": []
+          }
         ]
       }
     ]
