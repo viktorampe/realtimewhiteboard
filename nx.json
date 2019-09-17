@@ -51,13 +51,13 @@
       "tags": ["dep:browser"]
     },
     "shared": {
-      "tags": []
+      "tags": ["dep:shared"]
     },
     "scorm": {
       "tags": ["dep:scorm"]
     },
     "guards": {
-      "tags": []
+      "tags": ["dep:guards"]
     },
     "pages-error": {
       "tags": []
