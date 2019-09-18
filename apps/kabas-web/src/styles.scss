@@ -122,6 +122,7 @@ header.ui-app-bar {
     justify-content: flex-end;
     order: 1;
     flex: 0 0 auto;
+    padding-top: 80px; //change here to align with new logo
 
     campus-button {
       span {
@@ -144,7 +145,6 @@ header.ui-app-bar {
   fill: #c48ec5;
   background-color: transparent;
   flex-direction: column;
-  margin-bottom: 10px;
 }
 
 #global-search-btn:hover {
@@ -155,7 +155,6 @@ header.ui-app-bar {
   color: #e09fa5;
   background-color: transparent;
   flex-direction: column;
-  margin-bottom: 10px;
 }
 
 #global-favorites-btn:hover {
@@ -167,7 +166,6 @@ header.ui-app-bar {
   fill: #88bee8;
   background-color: transparent;
   flex-direction: column;
-  margin-bottom: 10px;
 }
 
 #global-history-btn:hover {
@@ -179,7 +177,6 @@ header.ui-app-bar {
   fill: #dfa64f;
   background-color: transparent;
   flex-direction: column;
-  margin-bottom: 10px;
 }
 
 #global-profile-btn:hover {
@@ -190,10 +187,18 @@ header.ui-app-bar {
   fill: #8ec5a3;
   background-color: transparent;
   flex-direction: column;
-  margin-bottom: 10px;
 }
 #global-alert-btn:hover {
   filter: brightness(85%);
+}
+
+.ui-app-bar {
+  height: 105px;
+  padding-top: 80px;
+}
+
+.shared-header__app-bar {
+  height: 105px;
 }
 
 .shared-header {
@@ -206,8 +211,6 @@ header.ui-app-bar {
     .shared-header__alerts__button__label {
     display: inline-block;
   }
-
-  margin-top: 60px;
 }
 /*
  * icon fonts

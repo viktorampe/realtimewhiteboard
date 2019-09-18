@@ -4,21 +4,21 @@
       <span bar__left *ngIf="this.breadcrumbPosition === 'top-left'">
         <ng-container *ngTemplateOutlet="breadcrumbs"></ng-container>
       </span>
-      <div bar__right *ngIf="this.enableGlobalSearch">
+      <ng-container bar__right *ngIf="this.enableGlobalSearch">
         <ng-container *ngTemplateOutlet="globalSearch"></ng-container>
-      </div>
-      <div bar__right *ngIf="this.alertsPosition === 'top-right'">
+      </ng-container>
+      <ng-container bar__right *ngIf="this.alertsPosition === 'top-right'">
         <ng-container *ngTemplateOutlet="alerts"></ng-container>
-      </div>
-      <div bar__right *ngIf="this.profileMenuPosition === 'top-right'">
+      </ng-container>
+      <ng-container bar__right *ngIf="this.profileMenuPosition === 'top-right'">
         <ng-container *ngTemplateOutlet="profilemenu"></ng-container>
-      </div>
-      <div bar__right *ngIf="this.quicklinkPosition === 'top-right'">
+      </ng-container>
+      <ng-container bar__right *ngIf="this.quicklinkPosition === 'top-right'">
         <ng-container *ngTemplateOutlet="quicklinks"></ng-container>
-      </div>
-      <div bar__right *ngIf="this.profileLinkPosition === 'top-right'">
+      </ng-container>
+      <ng-container bar__right *ngIf="this.profileLinkPosition === 'top-right'">
         <ng-container *ngTemplateOutlet="profileLink"></ng-container>
-      </div>
+      </ng-container>
     </campus-app-bar>
   </div>
   <div class="shared-header__page-bar">
