@@ -29,7 +29,10 @@
     width: $pages-home-method-favorite-tile_container-width;
     background-color: $pages-home-method-favorite-tile_title-background-color;
     color: $pages-home-method-favorite-tile_title-text-color;
-    box-shadow: $pages-home-method-favorite-tile_container-shadow-offset $pages-home-method-favorite-tile_container-shadow-blur $pages-home-method-favorite-tile_container-shadow-spread $pages-home-method-favorite-tile_container-shadow-color;
+    box-shadow: $pages-home-method-favorite-tile_container-shadow-offset
+      $pages-home-method-favorite-tile_container-shadow-blur
+      $pages-home-method-favorite-tile_container-shadow-spread
+      $pages-home-method-favorite-tile_container-shadow-color;
 
     &__image {
       background-color: $pages-home-method-favorite-tile_image-background-color;
@@ -41,7 +44,8 @@
       height: $pages-home-method-favorite-tile_title-height;
       font-size: $pages-home-method-favorite-tile_title-font-size;
       line-height: $pages-home-method-favorite-tile_title-line-height;
-      padding: $pages-home-method-favorite-tile_title-padding-vertical $pages-home-method-favorite-tile_title-padding-horizontal;
+      padding: $pages-home-method-favorite-tile_title-padding-vertical
+        $pages-home-method-favorite-tile_title-padding-horizontal;
     }
 
     .ui-button {
