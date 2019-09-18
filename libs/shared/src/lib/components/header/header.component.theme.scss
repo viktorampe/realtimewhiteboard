@@ -32,7 +32,6 @@
   .shared-header {
     &__app-bar {
       height: $shared-header__app-bar-height;
-      //padding-right: $shared-header__app-bar-padding-right;
       padding: $shared-header__app-bar-padding-top
         $shared-header__app-bar-padding-right
         $shared-header__app-bar-padding-bottom

@@ -96,23 +96,16 @@ body {
 #page-bar-container campus-button span {
   text-align: center;
   margin-top: 5px;
-  color: #000;
+  color: $color-gray-3;
 }
 
 .ui-breadcrumbs a {
-  color: #000000;
+  color: $color-gray-3;
 }
 
 .mat-drawer-side {
   border-right: none;
 }
-
-// .shared-header__app-bar {
-//   padding-right: 192px !important;
-// }
-// .shared-header__page-bar {
-//   padding-right: 192px !important;
-// }
 
 header.ui-app-bar {
   .ui-app-bar__section--align-end {
@@ -136,12 +129,12 @@ header.ui-app-bar {
 }
 
 .ui-button {
-  margin-right: 0; //5 default
+  margin-right: 5; //5 default (todo: op 0 zetten & 5 toevoegen als default)
 }
 
 #global-search-btn {
-  color: #c48ec5;
-  fill: #c48ec5;
+  color: $color-lila-1;
+  fill: $color-lila-purple-1;
   background-color: transparent;
   flex-direction: column;
   order: 1;
@@ -152,7 +145,7 @@ header.ui-app-bar {
 }
 
 #global-favorites-btn {
-  color: #e09fa5;
+  color: $color-light-red-2;
   background-color: transparent;
   flex-direction: column;
   order: 3;
@@ -163,8 +156,8 @@ header.ui-app-bar {
 }
 
 #global-history-btn {
-  color: #88bee8;
-  fill: #88bee8;
+  color: $color-blue-1;
+  fill: $color-blue-1;
   background-color: transparent;
   flex-direction: column;
   order: 2;
@@ -175,8 +168,8 @@ header.ui-app-bar {
 }
 
 #global-profile-btn {
-  color: #dfa64f;
-  fill: #dfa64f;
+  color: $color-orange-1;
+  fill: $color-orange-1;
   background-color: transparent;
   flex-direction: column;
   order: 5;
@@ -186,8 +179,8 @@ header.ui-app-bar {
   filter: brightness(85%);
 }
 #global-alert-btn {
-  color: #8ec5a3;
-  fill: #8ec5a3;
+  color: $color-green-1;
+  fill: $color-green-1;
   background-color: transparent;
   flex-direction: column;
   order: 4;
