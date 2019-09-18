@@ -2,7 +2,6 @@
   <campus-button
     id="open-boeke"
     data-cy="nav-open-boeke"
-    campusPrimary
     [iconClass]="'boardbook'"
     *ngIf="(boeke$ | async) as boeke"
     (click)="clickOpenBoeke(boeke)"
@@ -13,7 +12,6 @@
   <campus-button
     id="toggle-boeke-favorite"
     data-cy="nav-toggle-boeke-favorite"
-    campusPrimary
     [iconClass]="
       (isBoekeFavorite$ | async) ? 'quicklink:favorites' : 'quicklink:favorites'
     "

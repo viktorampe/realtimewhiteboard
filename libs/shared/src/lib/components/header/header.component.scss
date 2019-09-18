@@ -16,24 +16,9 @@
       flex: 1 1 auto;
     }
   }
-  div.shared-header {
-    &__alerts {
-      order: 5;
-    }
-  }
+
   &__right {
     flex: 0 0 auto;
     text-align: right;
-  }
-  &__quicklink__button {
-    &__label {
-      display: none;
-    }
-  }
-
-  &__alerts__button {
-    &__label {
-      display: none;
-    }
   }
 }

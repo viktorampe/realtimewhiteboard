@@ -1,6 +1,7 @@
 @mixin ui-app-bar {
   $ui-app-bar-height: 45px !default;
   $ui-app-bar-background-color: $ui-secondary-bg-color !default;
+  $ui-app-bar-button-width: auto !default;
 
   .ui-app-bar {
     background-color: $ui-app-bar-background-color;
@@ -9,6 +10,11 @@
     .ui-button {
       width: $ui-app-bar-button-width;
       max-width: $ui-app-bar-button-width;
+      text-align: center;
+
+      span {
+        margin-top: 5px;
+      }
     }
   }
 }

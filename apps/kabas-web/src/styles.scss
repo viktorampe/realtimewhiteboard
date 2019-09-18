@@ -58,16 +58,6 @@ body {
   color: $primary-font-color;
 }
 
-.ui-shell__logo {
-  text-align: center;
-  padding-top: 25px;
-}
-
-.ui-shell__logo {
-  text-align: center;
-  padding-top: 25px;
-}
-
 .ui-tree-nav__node--active {
   position: relative;
 
@@ -93,33 +83,8 @@ body {
   }
 }
 
-#page-bar-container campus-button span {
-  text-align: center;
-  margin-top: 5px;
-  color: $color-gray-3;
-}
-
-.ui-breadcrumbs a {
-  color: $color-gray-3;
-}
-
 .mat-drawer-side {
   border-right: none;
-}
-
-header.ui-app-bar {
-  .ui-app-bar__section--align-end {
-    justify-content: flex-end;
-    order: 1;
-    flex: 0 0 auto;
-
-    campus-button {
-      span {
-        text-align: center;
-        margin-top: 5px;
-      }
-    }
-  }
 }
 
 .ui-shell__logo {
@@ -128,20 +93,16 @@ header.ui-app-bar {
   }
 }
 
-.ui-button {
-  margin-right: 0; //5 default
-}
-
 #global-search-btn {
   color: $color-lila-1;
   fill: $color-lila-1;
   background-color: transparent;
   flex-direction: column;
   order: 1;
-}
 
-#global-search-btn:hover {
-  filter: brightness(85%);
+  &:hover {
+    filter: brightness(85%);
+  }
 }
 
 #global-favorites-btn {
@@ -149,10 +110,10 @@ header.ui-app-bar {
   background-color: transparent;
   flex-direction: column;
   order: 3;
-}
 
-#global-favorites-btn:hover {
-  filter: brightness(85%);
+  &:hover {
+    filter: brightness(85%);
+  }
 }
 
 #global-history-btn {
@@ -161,10 +122,10 @@ header.ui-app-bar {
   background-color: transparent;
   flex-direction: column;
   order: 2;
-}
 
-#global-history-btn:hover {
-  filter: brightness(85%);
+  &:hover {
+    filter: brightness(85%);
+  }
 }
 
 #global-profile-btn {
@@ -173,38 +134,23 @@ header.ui-app-bar {
   background-color: transparent;
   flex-direction: column;
   order: 5;
+
+  &:hover {
+    filter: brightness(85%);
+  }
 }
 
-#global-profile-btn:hover {
-  filter: brightness(85%);
+.shared-header__alerts {
+  order: 4;
 }
 #global-alert-btn {
   color: $color-green-1;
   fill: $color-green-1;
   background-color: transparent;
   flex-direction: column;
-  order: 4;
-}
-#global-alert-btn:hover {
-  filter: brightness(85%);
-}
 
-.shared-header__app-bar {
-  height: 105px;
-  background-color: $color-white-1;
-}
-
-.shared-header {
-  .shared-header__quicklink__button .shared-header__quicklink__button__label {
-    display: inline-block;
-  }
-
-  .shared-header__alerts {
-    margin-right: 0;
-
-    .shared-header__alerts__button .shared-header__alerts__button__label {
-      display: inline-block;
-    }
+  &:hover {
+    filter: brightness(85%);
   }
 }
 
