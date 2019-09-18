@@ -5,5 +5,10 @@
   .ui-app-bar {
     background-color: $ui-app-bar-background-color;
     height: $ui-app-bar-height;
+
+    .ui-button {
+      width: $ui-app-bar-button-width;
+      max-width: $ui-app-bar-button-width;
+    }
   }
 }

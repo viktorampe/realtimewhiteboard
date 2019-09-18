@@ -1,6 +1,11 @@
 @mixin shared-header {
   $shared-header__app-bar-height: 45px !default;
   $shared-header__app-bar-color: $shared-color-1 !default;
+  $shared-header__app-bar-padding-right: 0 !default;
+  $shared-header__app-bar-padding-top: 0px !default;
+  $shared-header__app-bar-padding-bottom: 0px !default;
+  $shared-header__app-bar-padding-left: 0px !default;
+  $shared-header__page-bar-padding-right: 10px !default;
   $shared-header__page-bar-height: 60px !default;
   $shared-header__page-bar-background-color: $shared-bg-color-1 !default;
   $shared-header__page-bar__divider-background-color: $shared-element-border-color-1 !default;
@@ -27,12 +32,18 @@
   .shared-header {
     &__app-bar {
       height: $shared-header__app-bar-height;
+      //padding-right: $shared-header__app-bar-padding-right;
+      padding: $shared-header__app-bar-padding-top
+        $shared-header__app-bar-padding-right
+        $shared-header__app-bar-padding-bottom
+        $shared-header__app-bar-padding-left;
     }
 
     &__page-bar {
       background: $shared_header__page-bar_background;
       height: $shared-header__page-bar-height;
       background-color: $shared-header__page-bar-background-color;
+      padding-right: $shared_header__page-bar-padding-right;
 
       &__nav-button {
         background-color: $shared-header__page-bar-background-color;
@@ -146,6 +157,11 @@
 
       &-medium.mat-badge-overlap.mat-badge-before .mat-badge-content {
         left: $shared-header__page-bar__mat-badge-left;
+      }
+    }
+    &__page-bar {
+      .ui-button {
+        width: $ui-app-bar-button-width;
       }
     }
   }

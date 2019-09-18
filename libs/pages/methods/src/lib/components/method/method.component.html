@@ -9,11 +9,14 @@
   >
     <span>Open bordboek</span></campus-button
   >
+  <!--todo styling favorites-->
   <campus-button
     id="toggle-boeke-favorite"
     data-cy="nav-toggle-boeke-favorite"
     campusPrimary
-    [iconClass]="(isBoekeFavorite$ | async) ? 'favorites3' : 'favorites3black'"
+    [iconClass]="
+      (isBoekeFavorite$ | async) ? 'quicklink:favorites' : 'quicklink:favorites'
+    "
     *ngIf="(boeke$ | async) as boeke"
     (click)="toggleBoekeFavorite(boeke)"
   >

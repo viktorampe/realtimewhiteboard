@@ -4,7 +4,6 @@
     flex-direction: row;
     flex-wrap: nowrap;
     align-items: center;
-    padding: 0 10px;
 
     &__nav-button {
       margin-right: 10px;
@@ -16,13 +15,16 @@
       align-items: center;
       flex: 1 1 auto;
     }
-
-    &__right {
-      flex: 0 0 auto;
-      text-align: right;
+  }
+  div.shared-header {
+    &__alerts {
+      order: 5;
     }
   }
-
+  &__right {
+    flex: 0 0 auto;
+    text-align: right;
+  }
   &__quicklink__button {
     &__label {
       display: none;

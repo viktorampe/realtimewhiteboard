@@ -58,6 +58,9 @@ $ui-tertiary-font-color-2: $tertiary-font-color-2;
 
 // ui > app bar
 $ui-app-bar-background-color: $color-white-1;
+$shared-header__app-bar-padding-right: 192px;
+$shared-header__app-bar-padding-top: 50px;
+$ui-app-bar-button-width: 85px;
 // ui > app shell variables
 $ui-shell__left-width: 235px;
 $ui-shell__top-height: 105px;
@@ -136,3 +139,5 @@ $shared-button-color-accent: $color-blue-1 !default;
 $shared-color-1: #95a0aa !default;
 $shared-header__page-bar-container__justify-content: flex-end;
 $shared_header__page-bar_background: linear-gradient(141deg, #9edae3, #21b0bd);
+$shared_header__page-bar-padding-right: $shared-header__app-bar-padding-right;
+// $ui-breadcrumbs-crumb-color: ;
