@@ -1,0 +1,49 @@
+@mixin shared-method-year-tile {
+  $shared-method-year-tile_container-width: 240px !default;
+  $shared-method-year-tile_container-box-shadow: 0 0 8px 2px
+    $ui-tertiary-bg-color-2 !default;
+  $shared-method-year-tile_title-background-color: #fff !default;
+  $shared-method-year-tile_title-text-color: $ui-primary-font-color !default;
+  $shared-method-year-tile_image-background-color: #00a !default;
+  $shared-method-year-tile_image-margin-top: 8px !default;
+  $shared-method-year-tile_image-height: 152px !default; // container-width * 2/3 - image-margin-top
+  $shared-method-year-tile_title-height: 48px !default; // container-width / 5
+  $shared-method-year-tile_title-font-size: 24px !default; // title-height / 2
+  $shared-method-year-tile_title-padding: 12px 0px !default; // title-height / 4, vertical align handled by line height
+  $shared-method-year-tile_button_container_button-box-shadow: 0 2px 4px 0
+    $ui-tertiary-bg-color-2 !default;
+  $shared-method-year-tile_button_container_button-height: 32px !default;
+  $shared-method-year-tile_button_container_button-width: 32px !default;
+  $shared-method-year-tile_button_container_button-background-color: #fff !default;
+
+  .pages-methods-method-year-tile {
+    width: $shared-method-year-tile_container-width;
+    background-color: $shared-method-year-tile_title-background-color;
+    color: $shared-method-year-tile_title-text-color;
+    box-shadow: $shared-method-year-tile_container-box-shadow;
+
+    &__image {
+      background-color: $shared-method-year-tile_image-background-color;
+      margin-top: $shared-method-year-tile_image-margin-top;
+      height: $shared-method-year-tile_image-height;
+    }
+
+    &__title {
+      height: $shared-method-year-tile_title-height;
+      font-size: $shared-method-year-tile_title-font-size;
+      padding: $shared-method-year-tile_title-padding;
+    }
+
+    &__button__container {
+      padding: 8px;
+
+      campus-button {
+        background-color: $shared-method-year-tile_button_container_button-background-color;
+        box-shadow: $shared-method-year-tile_button_container_button-box-shadow;
+        width: $shared-method-year-tile_button_container_button-width;
+        height: $shared-method-year-tile_button_container_button-height;
+        font-size: 16px;
+      }
+    }
+  }
+}

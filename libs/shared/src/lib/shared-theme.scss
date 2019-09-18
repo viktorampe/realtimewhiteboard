@@ -5,8 +5,10 @@ $shared-color-1: #95a0aa !default;
 
 @import './components/header/header.component.theme';
 @import './components/quick-link/quick-link.component.theme';
+@import './components/method-year-tile/method-year-tile.component.theme';
 
 @mixin shared-theme() {
   @include shared-header();
   @include shared-quick-link();
+  @include shared-method-year-tile();
 }
