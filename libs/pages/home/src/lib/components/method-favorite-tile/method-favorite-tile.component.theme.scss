@@ -11,8 +11,8 @@
   // measurements
   $pages-home-method-favorite-tile_container-width: 240px !default;
   $pages-home-method-favorite-tile_container-shadow-offset: 0px 0px !default;
-  $pages-home-method-favorite-tile_container-shadow-blur: 16px !default;
-  $pages-home-method-favorite-tile_container-shadow-spread: 4px !default;
+  $pages-home-method-favorite-tile_container-shadow-blur: 8px !default;
+  $pages-home-method-favorite-tile_container-shadow-spread: 2px !default;
   $pages-home-method-favorite-tile_image-margin-top: 8px !default;
   $pages-home-method-favorite-tile_image-height: 152px !default; // container-width * 2/3 - image-margin-top
   $pages-home-method-favorite-tile_title-height: 48px !default; // container-width / 5
@@ -21,7 +21,7 @@
   $pages-home-method-favorite-tile_title-padding-horizontal: 12px !default; // title-height / 4
   $pages-home-method-favorite-tile_title-padding-vertical: 0px !default; // vertical align handled with line-height
   $pages-home-method-favorite-tile_button-width: 120px !default; // container-width / 2
-  $pages-home-method-favorite-tile_button-font-size: 24px !default; // title-font-size
+  $pages-home-method-favorite-tile_button-font-size: 16px !default; // title-font-size * 2 /3
   $pages-home-method-favorite-tile_button-margin-right: 1px !default;
   $pages-home-method-favorite-tile_button-icon-width: 72px !default; // button-width * 60%
 
@@ -29,10 +29,7 @@
     width: $pages-home-method-favorite-tile_container-width;
     background-color: $pages-home-method-favorite-tile_title-background-color;
     color: $pages-home-method-favorite-tile_title-text-color;
-    box-shadow: $pages-home-method-favorite-tile_container-shadow-offset
-      $pages-home-method-favorite-tile_container-shadow-blur
-      $pages-home-method-favorite-tile_container-shadow-spread
-      $pages-home-method-favorite-tile_container-shadow-color;
+    box-shadow: $pages-home-method-favorite-tile_container-shadow-offset $pages-home-method-favorite-tile_container-shadow-blur $pages-home-method-favorite-tile_container-shadow-spread $pages-home-method-favorite-tile_container-shadow-color;
 
     &__image {
       background-color: $pages-home-method-favorite-tile_image-background-color;
@@ -44,12 +41,13 @@
       height: $pages-home-method-favorite-tile_title-height;
       font-size: $pages-home-method-favorite-tile_title-font-size;
       line-height: $pages-home-method-favorite-tile_title-line-height;
-      padding: $pages-home-method-favorite-tile_title-padding-vertical
-        $pages-home-method-favorite-tile_title-padding-horizontal;
+      padding: $pages-home-method-favorite-tile_title-padding-vertical $pages-home-method-favorite-tile_title-padding-horizontal;
     }
 
     .ui-button {
       flex-direction: column; //deep
+      font-weight: bold; //deep
+
       margin-right: $pages-home-method-favorite-tile_button-margin-right;
       background-color: $pages-home-method-favorite-tile_button-background-color;
       color: $pages-home-method-favorite-tile_button-foreground-color;
