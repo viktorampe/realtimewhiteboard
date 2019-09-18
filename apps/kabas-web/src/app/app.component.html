@@ -25,16 +25,18 @@
       (afterDismiss)="onBannerDismiss($event)"
     ></campus-banner>
   </campus-shell-top>
-  <campus-shell-body> <router-outlet></router-outlet> </campus-shell-body>
+  <campus-shell-body>
+    <router-outlet></router-outlet>
+  </campus-shell-body>
+  <div class="kabas__footer">
+    <div class="kabas__footer__part kabas__footer__part--left"></div>
+    <div
+      class="kabas__footer__part__overlap kabas__footer__part__overlap--left"
+    ></div>
+    <div class="kabas__footer__part kabas__footer__part--middle"></div>
+    <div
+      class="kabas__footer__part__overlap kabas__footer__part__overlap--right"
+    ></div>
+    <div class="kabas__footer__part kabas__footer__part--right"></div>
+  </div>
 </campus-shell>
-<div class="kabas__footer">
-  <div class="kabas__footer__part kabas__footer__part--left"></div>
-  <div
-    class="kabas__footer__part__overlap kabas__footer__part__overlap--left"
-  ></div>
-  <div class="kabas__footer__part kabas__footer__part--middle"></div>
-  <div
-    class="kabas__footer__part__overlap kabas__footer__part__overlap--right"
-  ></div>
-  <div class="kabas__footer__part kabas__footer__part--right"></div>
-</div>
