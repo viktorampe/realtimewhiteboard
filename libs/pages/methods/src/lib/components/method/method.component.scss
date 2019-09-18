@@ -53,4 +53,20 @@
 #open-boeke {
   background-color: transparent;
   flex-direction: column;
+  width: 115px;
+}
+
+#toggle-boeke-favorite {
+  margin-left: 15px;
+  margin-right: -15px;
+}
+
+#toggle-boeke-favorite mat-icon {
+  width: 20px !important;
+  height: 20px !important;
+}
+
+#open-boeke .mat-icon {
+  width: 20px !important;
+  height: 20px !important;
 }

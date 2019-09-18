@@ -124,17 +124,17 @@ header.ui-app-bar {
 
 .ui-shell__logo {
   img {
-    margin-top: 16px;
+    margin-top: 20px;
   }
 }
 
 .ui-button {
-  margin-right: 5; //5 default (todo: op 0 zetten & 5 toevoegen als default)
+  margin-right: 0; //5 default
 }
 
 #global-search-btn {
   color: $color-lila-1;
-  fill: $color-lila-purple-1;
+  fill: $color-lila-1;
   background-color: transparent;
   flex-direction: column;
   order: 1;
@@ -145,7 +145,7 @@ header.ui-app-bar {
 }
 
 #global-favorites-btn {
-  color: $color-light-red-2;
+  color: $color-red-2;
   background-color: transparent;
   flex-direction: column;
   order: 3;
@@ -191,6 +191,7 @@ header.ui-app-bar {
 
 .shared-header__app-bar {
   height: 105px;
+  background-color: $color-white-1;
 }
 
 .shared-header {
