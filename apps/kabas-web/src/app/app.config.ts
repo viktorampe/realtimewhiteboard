@@ -3,7 +3,7 @@ import { NavItem } from '@campus/ui';
 
 const standardSideNavItems: NavItem[] = [
   {
-    title: 'Dashboard',
+    title: 'Home',
     link: '/home'
   },
   {

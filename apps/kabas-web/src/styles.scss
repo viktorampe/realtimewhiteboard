@@ -82,6 +82,7 @@ campus-tree-nav {
     border-top: none;
     > a {
       border-left: none;
+      padding: 24px 0px 0px 24px;
       &:hover,
       &.ui-tree-nav__node--active {
         border-left: none;
