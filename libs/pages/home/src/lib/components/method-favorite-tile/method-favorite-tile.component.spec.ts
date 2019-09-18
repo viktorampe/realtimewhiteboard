@@ -1,7 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 import { EduContentFixture } from '@campus/dal';
+import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
 import { configureTestSuite } from 'ng-bullet';
 import { MethodFavoriteTileComponent } from './method-favorite-tile.component';
@@ -18,7 +20,8 @@ describe('MethodFavoriteTileComponent', () => {
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [UiModule, RouterTestingModule],
-      declarations: [MethodFavoriteTileComponent]
+      declarations: [MethodFavoriteTileComponent],
+      providers: [{ provide: MatIconRegistry, useClass: MockMatIconRegistry }]
     });
   });
 
