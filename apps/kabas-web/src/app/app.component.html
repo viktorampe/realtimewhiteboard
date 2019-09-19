@@ -2,7 +2,9 @@
   [sidebarOpen]="sideNavOpen$ | async"
   (sidebarToggled)="onSideBarToggle($event)"
 >
-  <campus-shell-logo> logo </campus-shell-logo>
+  <campus-shell-logo>
+    <img src="/assets/images/kabas.png" alt="Kabas" />
+  </campus-shell-logo>
   <campus-shell-left>
     <campus-tree-nav
       [treeNav]="sideNavItems$ | async"

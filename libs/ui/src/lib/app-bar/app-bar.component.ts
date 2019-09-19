@@ -13,6 +13,6 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'campus-app-bar',
   templateUrl: './app-bar.component.html',
-  styleUrls: ['./app-bar.component.theme.scss', './app-bar.component.scss']
+  styleUrls: ['./app-bar.component.scss']
 })
 export class AppBarComponent {}
