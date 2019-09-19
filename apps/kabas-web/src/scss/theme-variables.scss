@@ -1,39 +1,42 @@
 // color definitions
-$color-black-1: #32323a;
-$color-black-2: #51515b;
-$color-gray-1: #f8f8f8;
-$color-gray-2: #484748;
-$color-gray-3: #ececec;
-$color-gray-4: #ecf4f6;
-$color-gray-5: #e1edf2;
-$color-gray-6: #cbced4;
-$color-gray-7: #fafafa;
+// > header + icons homepage
+$color-white-1: #fff; // header
+$color-red-1: #c92d5f; // kabas logo color
+$color-lila-1: #c48ec5;
+$color-blue-1: #88bee8;
+$color-red-2: #d3757e;
+$color-green-1: #8ec5a3;
+$color-orange-1: #dfa64f;
+// > sidebar
+$color-gray-1: #f8f8f8; // bg       / table rows
+$color-gray-2: #ececec; // left bar / table rows
+$color-gray-3: #484748; // text
 
-$color-blue-1: #953575;
-$color-blue-2: #b04495;
-$color-blue-3: #d36ebd;
-$color-orange-1: #09ff00;
-$color-red-1: #c92d5f;
-$color-white-1: #fff;
+// main
+$color-blue-2: #b2d9e3; // left gradient color
+$color-blue-3: #62abb8; // right gradient color + accent color (borders / links / checkboxes)
+$color-gray-4: #808080; // icons + text
+$color-gray-5: #dcdcdc; // border between boek | methode buttons
+$color-gray-6: #898989; // font color home + toc subnav
 
 // app > main body
-$primary-bg-color: $color-gray-3;
-$primary-font-color: $color-black-1;
-$primary-color-accent: $color-blue-1; // link, button (borders)
-$primary-font-color-2: $color-gray-1; // subtitle
-$primary-font-family: 'Arial', 'Open Sans', sans-serif;
+$primary-bg-color: $color-white-1;
+$primary-font-color: $color-gray-3;
+$primary-color-accent: $color-blue-3; // link, button (borders)
+$primary-font-color-2: $color-gray-4; // subtitle
+$primary-font-family: 'Helvetica', 'Arial', 'Open Sans', sans-serif;
 $primary-font-family-2: 'Lato', sans-serif; // title
 $primary-font-size: 14px;
 // app > nav + site header (shell)
-$secondary-bg-color: $color-gray-1;
-$secondary-font-color: $color-gray-2;
-$secondary-bg-color-accent: darken($color-blue-3, 40%); // active buttons
+$secondary-bg-color: $color-gray-2;
+$secondary-font-color: $color-gray-3;
+$secondary-bg-color-accent: $color-blue-2; // active buttons
 $secondary-font-color-accent: $color-red-1; // link, button (borders)
-$secondary-bg-color-badge: $color-red-1; //  badge
+$secondary-bg-color-badge: $color-white-1; //  badge
 $secondary-font-color-badge: $color-white-1; // badge
 // app > panel headers
 $tertiary-bg-color: $color-white-1;
-$tertiary-font-color: $color-black-1;
+$tertiary-font-color: $color-gray-3;
 $tertiary-bg-color-2: $color-gray-1;
 $tertiary-font-color-2: $color-white-1;
 
@@ -58,7 +61,11 @@ $ui-tertiary-bg-color-2: $tertiary-bg-color-2;
 $ui-tertiary-font-color-2: $tertiary-font-color-2;
 
 // ui > app bar
-$ui-app-bar-background-color: $color-white-1;
+$ui-app-bar-background-color: linear-gradient(
+  90deg,
+  $color-blue-2 0%,
+  $color-blue-3 100%
+);
 // ui > app shell variables
 $ui-shell__left-width: 235px;
 $ui-shell__top-height: 105px;
@@ -66,40 +73,10 @@ $ui-shell__top-height--mobile: 60px;
 $ui-shell__logo-height: 105px;
 $ui-shell__logo-background-color: $color-white-1;
 
-$ui-shell__top-background-color: $color-white-1;
-// ui > person badge > polpo override
-$ui-person-badge-size-large: 72px;
-$ui-person-badge-size-large-font-size: 24px;
-$ui-person-badge-size-medium: 50px;
-$ui-person-badge-size-medium-font-size: 14px;
-
-$ui-page-header_section-subtitle-bg-color: $color-blue-2;
-
 // ui > forms
 $ui-form-button-default-bg-color: $color-gray-3;
 $ui-form-button-primary-bg-color: $color-blue-2;
 $ui-button--large-font-size: 18px;
-
-// ui > tiles
-$ui-tile-background-color: $color-blue-1;
-$ui-tile-background-image: '/assets/images/polpo-overlay-white.png';
-$ui-tile-content-icon-color: $color-gray-6;
-$ui-tile-content-label-color: $color-blue-3;
-$ui-tile-content-label-font-size: 18px;
-$ui-tile-content-icon-show-border: true;
-
-// ui > tile
-$ui-tile-height: 130px !default;
-$ui-tile-width: 280px !default;
-
-// ui > drop area
-$ui-drop-area-border: 2px dashed $color-gray-1;
-$ui-drop-area__icon-container__mat-icon-color: $color-gray-1;
-$ui-drop-area__label-color: $color-gray-1;
-$ui-drop-area__label-font-size: 18px;
-$ui-drop-area__icon-container__mat-icon-size: 41px;
-$ui-drop-area-background: url(/assets/images/polpo-overlay-dark.png) right
-  center no-repeat $color-gray-7;
 
 // social media
 $facebook-button-background-color: #455897;
@@ -109,30 +86,5 @@ $google-button-font-color: white;
 $smartschool-button-background-color: #ff520e;
 $smartschool-button-font-color: white;
 
-// alerts
-$pages-settings-alerts__info-panel__notification-bg-color-odd: $color-gray-4;
-$pages-settings-alerts__info-panel__notification-bg-color-even: $color-gray-5;
-$pages-settings-alerts__info-panel__notification-margin-bottom: 5px;
-$pages-settings-alerts__info-panel__notification-border: 1px solid $color-gray-1;
-$pages-settings-alerts__info-panel__notification__actions-bg-color: $color-gray-6;
-$pages-settings-alerts__info-panel__notification__actions-padding: 10px;
-$pages-settings-alerts__info-panel__notification__actions__element-cursor: pointer;
-
-// edu-contents
-$pages-edu-contents-areas-list_favorite-border-color: $color-blue-3;
-$pages-edu-contents-areas-list_grid-border-color: $color-gray-6;
-
-$ui-list-view-selection-overlay-border-color: transparent;
-$ui-list-view-selection-overlay-circle-fg-color: $color-white-1;
-$ui-list-view-selection-overlay-circle-bg-color: $color-blue-1;
-$ui-list-view-selection-overlay-circle--selected-content: '✓' !default;
-
-// mat-overrides
-$campus_search_term--line_height: 28px;
-
 // campus-header
-$shared-bg-color-1: #32323a !default;
-$shared-element-border-color-1: $color-blue-2 !default;
-$shared-button-color-accent: $color-blue-1 !default;
-$shared-color-1: #95a0aa !default;
 $shared-header__page-bar-container__justify-content: flex-end;

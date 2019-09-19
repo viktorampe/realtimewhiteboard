@@ -41,6 +41,7 @@ import {
   YearService,
   YEAR_SERVICE_TOKEN
 } from '@campus/dal';
+import { ScormApiService, SCORM_API_SERVICE_TOKEN } from '@campus/scorm';
 import {
   APP_NAVIGATION_TREE_TOKEN,
   NavigationItemService,
@@ -101,7 +102,8 @@ import { kabasConfig } from './app.config';
     {
       provide: UNLOCKED_FREE_PRACTICE_SERVICE_TOKEN,
       useClass: UnlockedFreePracticeService
-    }
+    },
+    { provide: SCORM_API_SERVICE_TOKEN, useClass: ScormApiService }
   ]
 })
 export class AppTokenModule {}

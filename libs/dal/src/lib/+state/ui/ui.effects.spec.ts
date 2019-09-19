@@ -1,6 +1,5 @@
 import { TestBed } from '@angular/core/testing';
 import { BROWSER_STORAGE_SERVICE_TOKEN, StorageService } from '@campus/browser';
-import { ListFormat } from '@campus/ui';
 import { EffectsModule } from '@ngrx/effects';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { ROUTER_NAVIGATION } from '@ngrx/router-store';
@@ -8,6 +7,7 @@ import { StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
+import { ListFormat } from '../../+external-interfaces';
 import {
   LoadUi,
   SaveUi,

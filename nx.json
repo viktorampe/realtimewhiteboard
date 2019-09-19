@@ -9,13 +9,13 @@
   },
   "projects": {
     "devlib": {
-      "tags": []
+      "tags": ["scope:dev"]
     },
     "polpo-classroom-web": {
-      "tags": []
+      "tags": ["scope:app"]
     },
     "polpo-classroom-web-e2e": {
-      "tags": []
+      "tags": ["scope:app"]
     },
     "pages-bundles": {
       "tags": []
@@ -39,34 +39,34 @@
       "tags": []
     },
     "ui": {
-      "tags": []
+      "tags": ["dep:ui"]
     },
     "dal": {
-      "tags": []
+      "tags": ["dep:dal"]
     },
     "pages-shared": {
       "tags": []
     },
     "browser": {
-      "tags": []
+      "tags": ["dep:browser"]
     },
     "shared": {
-      "tags": []
+      "tags": ["dep:shared"]
     },
     "scorm": {
-      "tags": []
+      "tags": ["dep:scorm"]
     },
     "guards": {
-      "tags": []
+      "tags": ["dep:guards"]
     },
     "pages-error": {
       "tags": []
     },
     "testing": {
-      "tags": []
+      "tags": ["dep:testing"]
     },
     "utils": {
-      "tags": []
+      "tags": ["dep:utils"]
     },
     "pages-settings-dashboard": {
       "tags": []
@@ -84,13 +84,13 @@
       "tags": []
     },
     "search": {
-      "tags": []
+      "tags": ["dep:search"]
     },
     "kabas-web": {
-      "tags": []
+      "tags": ["scope:app"]
     },
     "kabas-web-e2e": {
-      "tags": []
+      "tags": ["scope:app"]
     },
     "pages-methods": {
       "tags": []

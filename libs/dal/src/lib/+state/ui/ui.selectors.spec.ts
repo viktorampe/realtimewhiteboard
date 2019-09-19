@@ -3,7 +3,7 @@ import {
   DropdownMenuItemInterface,
   ListFormat,
   NavItem
-} from '@campus/ui';
+} from '../../+external-interfaces';
 import { UiQuery } from './ui.selectors';
 
 describe('Ui Selectors', () => {

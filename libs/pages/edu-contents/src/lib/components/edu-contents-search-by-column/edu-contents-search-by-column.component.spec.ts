@@ -7,7 +7,7 @@ import {
   NgModule,
   Output
 } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
@@ -18,6 +18,7 @@ import { ENVIRONMENT_ICON_MAPPING_TOKEN, SharedModule } from '@campus/shared';
 import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
 import { hot } from '@nrwl/nx/testing';
+import { configureTestSuite } from 'ng-bullet';
 import { of } from 'rxjs';
 import { EduContentsViewModel } from '../edu-contents.viewmodel';
 import { EduContentSearchByColumnComponent } from './edu-contents-search-by-column.component';
@@ -86,7 +87,8 @@ describe('EduContentSearchByColumnComponent', () => {
   let searchComponent;
   let eduContentsViewModel;
   let router: Router;
-  beforeEach(async(() => {
+
+  configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [TestModule],
       declarations: [],
@@ -114,9 +116,8 @@ describe('EduContentSearchByColumnComponent', () => {
         { provide: MatIconRegistry, useClass: MockMatIconRegistry },
         { provide: ENVIRONMENT_ICON_MAPPING_TOKEN, useValue: {} }
       ]
-    }).compileComponents();
-    eduContentsViewModel = TestBed.get(EduContentsViewModel);
-  }));
+    });
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(EduContentSearchByColumnComponent);
@@ -126,6 +127,7 @@ describe('EduContentSearchByColumnComponent', () => {
     component.initialize(); // manually execute initialize -> navigation hasn't triggered yet
     fixture.detectChanges();
     router = TestBed.get(Router);
+    eduContentsViewModel = TestBed.get(EduContentsViewModel);
   });
 
   it('should create', () => {

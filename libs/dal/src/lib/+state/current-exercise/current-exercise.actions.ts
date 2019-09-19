@@ -1,6 +1,6 @@
-import { ScormCmiMode } from '@campus/scorm';
 import { Action } from '@ngrx/store';
 import { ResultInterface } from '../../+models';
+import { ScormCmiMode } from '../../+external-interfaces/scorm-api.interface';
 import {
   CustomFeedbackHandlersInterface,
   FeedbackTriggeringAction

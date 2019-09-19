@@ -1,10 +1,10 @@
+import { Action } from '@ngrx/store';
 import {
   BreadcrumbLinkInterface,
   DropdownMenuItemInterface,
   ListFormat,
   NavItem
-} from '@campus/ui';
-import { Action } from '@ngrx/store';
+} from '../../+external-interfaces';
 import { UiState } from './ui.reducer';
 
 export enum UiActionTypes {
