@@ -12,7 +12,11 @@
     <campus-button
       class="shared-header__quicklink__button"
       data-cy="nav-toggle-boeke-favorite"
-      [iconClass]="(isBoekeFavorite$ | async) ? 'quicklink:favorites' : 'quicklink:favorites'"
+      [iconClass]="
+        (isBoekeFavorite$ | async)
+          ? 'quicklink:favorites'
+          : 'quicklink:favorites'
+      "
       (click)="toggleBoekeFavorite(boeke)"
     >
       <ng-container
@@ -30,7 +34,8 @@
     iconClass="import-export"
     *ngIf="(currentTab$ | async) === 1"
     (click)="clickExportGoals()"
-  ><span>Download</span></campus-button>
+    ><span>Download</span></campus-button
+  >
 </campus-page-bar>
 
 <div class="method-method__container">
