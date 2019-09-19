@@ -32,8 +32,8 @@ $secondary-bg-color-accent: darken($color-blue-3, 40%); // active buttons
 $secondary-font-color-accent: $color-blue-3; // link, button (borders)
 $secondary-bg-color-badge: $color-red-1; //  badge
 $secondary-font-color-badge: $color-white-1; // badge
-$ui-tree-nav-font-weight: $primary-font-weight;
-$ui-tree-nav-font-size: $primary-font-size;
+$ui-tree-nav__node-font-weight: $primary-font-weight;
+$ui-tree-nav__node-font-size: $primary-font-size;
 
 // app > panel headers
 $tertiary-bg-color: $color-white-1;

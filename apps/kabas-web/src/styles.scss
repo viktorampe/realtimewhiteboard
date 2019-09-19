@@ -63,26 +63,6 @@ body {
   padding-top: 25px;
 }
 
-campus-shell {
-  .ui-shell__left__content.ui-shell__filler {
-    border-left: 50px solid $color-gray-2;
-  }
-}
-campus-tree-nav {
-  .ui-tree-nav__node {
-    line-height: 1.5;
-    border-top: none;
-    > a {
-      border-left: none;
-      padding: 24px 0px 0px 24px;
-      &:hover,
-      &.ui-tree-nav__node--active {
-        border-left: none;
-      }
-    }
-  }
-}
-
 .mat-drawer-side {
   border-right: none;
 }

@@ -1,6 +1,9 @@
 @mixin ui-app-shell() {
   $ui-shell__left-width: 200px !default;
   $ui-shell__left-background-color: $ui-secondary-bg-color !default;
+  $ui-shell__left__content-border-left-width: 0px !default;
+  $ui-shell__left__content-border-left-style: none !default;
+  $ui-shell__left__content-border-left-color: transparent !default;
 
   $ui-shell__top-height: 50px !default;
   $ui-shell__top-height--mobile: 50px !default;
@@ -17,6 +20,11 @@
   .ui-shell__left {
     width: $ui-shell__left-width;
     background-color: $ui-shell__left-background-color;
+    &__content {
+      border-left: $ui-shell__left__content-border-left-width
+        $ui-shell__left__content-border-left-style
+        $ui-shell__left__content-border-left-color;
+    }
   }
 
   .ui-shell__logo {
