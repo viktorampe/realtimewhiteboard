@@ -1,10 +1,10 @@
 @mixin shared-method-year-tile {
-  $shared-method-year-tile_container-width: 240px !default;
-  $shared-method-year-tile_container-box-shadow: 0 0 8px 2px
-    $ui-tertiary-bg-color-2 !default;
-  $shared-method-year-tile_title-background-color: #fff !default;
+  $shared-method-year-tile_title-background-color: $shared-bg-color-2 !default;
   $shared-method-year-tile_title-text-color: $ui-primary-font-color !default;
-  $shared-method-year-tile_image-background-color: #00a !default;
+  $shared-method-year-tile_image-background-color: $shared_image-bg-color !default;
+  $shared-method-year-tile_button_container_button-background-color: $shared-bg-color-2 !default;
+  $shared-method-year-tile_container-box-shadow-color: $ui-tertiary-bg-color-2 !default;
+
   $shared-method-year-tile_image-margin-top: 8px !default;
   $shared-method-year-tile_image-height: 152px !default; // container-width * 2/3 - image-margin-top
   $shared-method-year-tile_title-height: 48px !default; // container-width / 5
@@ -14,13 +14,19 @@
     $ui-tertiary-bg-color-2 !default;
   $shared-method-year-tile_button_container_button-height: 32px !default;
   $shared-method-year-tile_button_container_button-width: 32px !default;
-  $shared-method-year-tile_button_container_button-background-color: #fff !default;
+  $shared-method-year-tile_container-width: 240px !default;
+  $shared-method-year-tile_container-box-shadow-offset: 0 0 !default;
+  $shared-method-year-tile_container-box-shadow-blur: 8px !default;
+  $shared-method-year-tile_container-box-shadow-spread: 2px !default;
 
   .pages-methods-method-year-tile {
     width: $shared-method-year-tile_container-width;
     background-color: $shared-method-year-tile_title-background-color;
     color: $shared-method-year-tile_title-text-color;
-    box-shadow: $shared-method-year-tile_container-box-shadow;
+    box-shadow: $shared-method-year-tile_container-box-shadow-offset
+      $shared-method-year-tile_container-box-shadow-blur
+      $shared-method-year-tile_container-box-shadow-spread
+      $shared-method-year-tile_container-box-shadow-color;
 
     &__image {
       background-color: $shared-method-year-tile_image-background-color;
@@ -35,14 +41,18 @@
     }
 
     &__button__container {
-      padding: 8px;
+      padding: 4px;
 
-      campus-button {
+      .ui-button {
         background-color: $shared-method-year-tile_button_container_button-background-color;
         box-shadow: $shared-method-year-tile_button_container_button-box-shadow;
         width: $shared-method-year-tile_button_container_button-width;
         height: $shared-method-year-tile_button_container_button-height;
         font-size: 16px;
+
+        &:hover {
+          color: red;
+        }
       }
     }
   }

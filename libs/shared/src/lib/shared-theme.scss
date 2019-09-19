@@ -2,6 +2,11 @@ $shared-bg-color-1: #32323a !default;
 $shared-element-border-color-1: #057a74 !default;
 $shared-button-color-accent: #359590 !default;
 $shared-color-1: #95a0aa !default;
+$shared-color-2: black !default;
+$shared-bg-color-2: lightgray !default;
+
+// fallback when the image doesn't have a background color
+$shared_image-bg-color: lightskyblue !default;
 
 @import './components/header/header.component.theme';
 @import './components/quick-link/quick-link.component.theme';
