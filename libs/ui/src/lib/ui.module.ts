@@ -62,6 +62,7 @@ import { PersonBadgeComponent } from './person-badge/person-badge.component';
 import { PersonInitialsPipe } from './person-badge/pipes/person-initials.pipe';
 import { PersonSummaryComponent } from './person-summary-component/person-summary.component';
 import { ShellBodyDirective } from './shell/directives/shell-body.directive';
+import { ShellBottomDirective } from './shell/directives/shell-bottom.directive';
 import { ShellLeftDirective } from './shell/directives/shell-left.directive';
 import { ShellLogoDirective } from './shell/directives/shell-logo.directive';
 import { ShellTopDirective } from './shell/directives/shell-top.directive';
@@ -115,6 +116,7 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     ShellTopDirective,
     ShellLeftDirective,
     ShellBodyDirective,
+    ShellBottomDirective,
     AppBarComponent,
     PageHeaderComponent,
     FileExtensionComponent,
@@ -159,7 +161,8 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     TileComponent,
     JoinPipe,
     ManageCollectionComponent,
-    MultiCheckBoxTableComponent
+    MultiCheckBoxTableComponent,
+    ShellBottomDirective
   ],
   exports: [
     FilterTextInputComponent,
@@ -172,6 +175,7 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     ShellTopDirective,
     ShellLeftDirective,
     ShellBodyDirective,
+    ShellBottomDirective,
     AppBarComponent,
     PageHeaderComponent,
     InfoPanelComponent,
