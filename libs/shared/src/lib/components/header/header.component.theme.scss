@@ -108,6 +108,7 @@
       color: $shared-header__quicklink-color;
       background-color: $shared-header__quicklink-bg-color;
       flex-direction: column;
+      height: $shared-header__page-bar-height;
       width: $shared-header__quicklink-width;
 
       &:hover {
