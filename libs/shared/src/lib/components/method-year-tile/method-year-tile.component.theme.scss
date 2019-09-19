@@ -1,19 +1,25 @@
 @mixin shared-method-year-tile {
-  $shared-method-year-tile_title-background-color: $shared-bg-color-2 !default;
-  $shared-method-year-tile_title-text-color: $ui-primary-font-color !default;
+  $shared-method-year-tile_title-background-color: $shared-bg-color-1 !default;
+  $shared-method-year-tile_title-text-color: $shared-color-1 !default;
   $shared-method-year-tile_image-background-color: $shared_image-bg-color !default;
-  $shared-method-year-tile_button_container_button-background-color: $shared-bg-color-2 !default;
-  $shared-method-year-tile_container-box-shadow-color: $ui-tertiary-bg-color-2 !default;
+  $shared-method-year-tile_button_container_button-background-color: $shared-bg-color-1 !default;
+  $shared-method-year-tile_button_container_button-focus-background-color: $shared-bg-color-1 !default;
+  $shared-method-year-tile_button_container_button-hover-background-color: $shared-bg-color-2 !default;
+  $shared-method-year-tile_container-box-shadow-color: $shared-bg-color-2 !default;
+  $shared-method-year-tile_button_container_button-box-shadow-color: $shared-bg-color-2 !default;
 
   $shared-method-year-tile_image-margin-top: 8px !default;
   $shared-method-year-tile_image-height: 152px !default; // container-width * 2/3 - image-margin-top
   $shared-method-year-tile_title-height: 48px !default; // container-width / 5
   $shared-method-year-tile_title-font-size: 24px !default; // title-height / 2
   $shared-method-year-tile_title-padding: 12px 0px !default; // title-height / 4, vertical align handled by line height
-  $shared-method-year-tile_button_container_button-box-shadow: 0 2px 4px 0
-    $ui-tertiary-bg-color-2 !default;
+  $shared-method-year-tile_button_container-padding: 4px !default;
+  $shared-method-year-tile_button_container_button-box-shadow-offset: 0 2px !default;
+  $shared-method-year-tile_button_container_button-box-shadow-blur: 4px !default;
+  $shared-method-year-tile_button_container_button-box-shadow-spread: 0 !default;
   $shared-method-year-tile_button_container_button-height: 32px !default;
   $shared-method-year-tile_button_container_button-width: 32px !default;
+  $shared-method-year-tile_button_container_button-font-size: 16px !default;
   $shared-method-year-tile_container-width: 240px !default;
   $shared-method-year-tile_container-box-shadow-offset: 0 0 !default;
   $shared-method-year-tile_container-box-shadow-blur: 8px !default;
@@ -41,17 +47,24 @@
     }
 
     &__button__container {
-      padding: 4px;
+      padding: $shared-method-year-tile_button_container-padding;
 
       .ui-button {
         background-color: $shared-method-year-tile_button_container_button-background-color;
-        box-shadow: $shared-method-year-tile_button_container_button-box-shadow;
+        box-shadow: $shared-method-year-tile_button_container_button-box-shadow-offset
+          $shared-method-year-tile_button_container_button-box-shadow-blur
+          $shared-method-year-tile_button_container_button-box-shadow-spread
+          $shared-method-year-tile_button_container_button-box-shadow-color;
         width: $shared-method-year-tile_button_container_button-width;
         height: $shared-method-year-tile_button_container_button-height;
-        font-size: 16px;
+        font-size: $shared-method-year-tile_button_container_button-font-size;
 
         &:hover {
-          color: red;
+          background-color: $shared-method-year-tile_button_container_button-hover-background-color;
+        }
+
+        &:focus {
+          background-color: $shared-method-year-tile_button_container_button-focus-background-color;
         }
       }
     }

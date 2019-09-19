@@ -7,6 +7,7 @@ $color-blue-1: #88bee8;
 $color-red-2: #d3757e;
 $color-green-1: #8ec5a3;
 $color-orange-1: #dfa64f;
+
 // > sidebar
 $color-gray-1: #f8f8f8; // bg       / table rows
 $color-gray-2: #ececec; // left bar / table rows
@@ -87,3 +88,12 @@ $smartschool-button-font-color: white;
 
 // campus-header
 $shared-header__page-bar-container__justify-content: flex-end;
+
+// shared lib colors
+$shared-bg-color-1: $primary-bg-color;
+$shared-color-1: $primary-font-color;
+$shared-bg-color-2: $color-gray-5;
+
+// method-year-tile
+$shared-method-year-tile_button_container_button-hover-background-color: $secondary-bg-color;
+$shared-method-year-tile_button_container_button-focus-background-color: $color-red-1;
