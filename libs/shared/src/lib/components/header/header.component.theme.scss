@@ -34,6 +34,7 @@
   $shared-header__quicklink-bg-color: $shared-header__page-bar-background-color !default;
   $shared-header__quicklink-width: 115px !default;
   $shared-header__quicklink-icon-size: 24px !default;
+  $shared-header__quicklink-icon-size-small: 20px !default;
 
   .shared-header {
     &__app-bar {
@@ -107,6 +108,7 @@
       color: $shared-header__quicklink-color;
       background-color: $shared-header__quicklink-bg-color;
       flex-direction: column;
+      height: $shared-header__page-bar-height;
       width: $shared-header__quicklink-width;
 
       &:hover {
@@ -119,7 +121,12 @@
         height: $shared-header__quicklink-icon-size;
       }
     }
-
+    :not(.smallIcon) {
+      .smallIcon .mat-icon {
+        width: $shared-header__quicklink-icon-size-small;
+        height: $shared-header__quicklink-icon-size-small;
+      }
+    }
     .shared-header__alerts {
       display: flex;
       align-items: center;
@@ -135,7 +142,10 @@
       }
 
       .ui-dropdown-menu__trigger {
-        height: $shared-header__app-bar-height * 1.2; // used for vertical positioning dropdown
+        height: (
+          ($shared-header__app-bar-height - $shared-header__app-bar-padding-top) *
+            1.2
+        );
       }
     }
 
@@ -149,7 +159,10 @@
       }
 
       .ui-dropdown-menu__trigger {
-        height: $shared-header__app-bar-height * 1.2; // used for vertical positioning dropdown
+        height: (
+          ($shared-header__app-bar-height - $shared-header__app-bar-padding-top) *
+            1.2
+        );
       }
     }
 

@@ -1,7 +1,7 @@
 <campus-page-bar>
   <ng-container *ngIf="(boeke$ | async) as boeke">
     <campus-button
-      class="shared-header__quicklink__button"
+      class="shared-header__quicklink__button smallIcon"
       data-cy="nav-open-boeke"
       [iconClass]="'boardbook'"
       (click)="clickOpenBoeke(boeke)"
@@ -10,9 +10,13 @@
     >
     <!--todo styling favorites-->
     <campus-button
-      class="shared-header__quicklink__button"
+      class="shared-header__quicklink__button smallIcon"
       data-cy="nav-toggle-boeke-favorite"
-      [iconClass]="(isBoekeFavorite$ | async) ? 'quicklink:favorites' : 'quicklink:favorites'"
+      [iconClass]="
+        (isBoekeFavorite$ | async)
+          ? 'quicklink:favorites'
+          : 'quicklink:favorites'
+      "
       (click)="toggleBoekeFavorite(boeke)"
     >
       <ng-container
@@ -26,11 +30,12 @@
   </ng-container>
 
   <campus-button
-    campusPrimary
+    class="shared-header__quicklink__button smallIcon"
     iconClass="import-export"
     *ngIf="(currentTab$ | async) === 1"
     (click)="clickExportGoals()"
-  ></campus-button>
+    ><span>Download</span></campus-button
+  >
 </campus-page-bar>
 
 <div class="method-method__container">
