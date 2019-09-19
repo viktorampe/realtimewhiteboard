@@ -61,10 +61,10 @@ $ui-tertiary-font-color-2: $tertiary-font-color-2;
 
 // ui > app bar
 $ui-app-bar-background-color: $color-white-1;
-$shared-header__app-bar-padding-right: 192px;
 $shared-header__app-bar-padding-top: 55px;
 $shared-header__app-bar-height: 105px;
 $ui-app-bar-button-width: 85px;
+$ui-app-bar__section__align-right-padding-right: 25px;
 
 // ui > app shell variables
 $ui-shell__left-width: 235px;
@@ -75,6 +75,7 @@ $ui-shell__logo-height: 105px;
 $ui-shell__logo-background-color: $color-white-1;
 $ui-shell__logo-padding-top: 20px;
 $shared-header__page-bar__divider-margin-left-right: 0;
+$shared-header__quicklink-icon-size: 20px;
 
 // ui > forms
 $ui-form-button-default-bg-color: $color-gray-3;
@@ -96,4 +97,8 @@ $shared_header__page-bar_background: linear-gradient(
   $color-blue-2,
   $color-blue-3
 );
-$shared_header__page-bar-padding-right: $shared-header__app-bar-padding-right;
+
+// app bar
+$shared-header__quicklink-color: $secondary-font-color;
+$shared-header__quicklink-color-hover: $secondary-font-color-accent;
+$shared-header__quicklink-bg-color: transparent;

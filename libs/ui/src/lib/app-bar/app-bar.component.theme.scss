@@ -2,6 +2,7 @@
   $ui-app-bar-height: 45px !default;
   $ui-app-bar-background-color: $ui-secondary-bg-color !default;
   $ui-app-bar-button-width: auto !default;
+  $ui-app-bar__section__align-right-padding-right: 12px !default;
 
   .ui-app-bar {
     background-color: $ui-app-bar-background-color;
@@ -14,6 +15,12 @@
 
       span {
         margin-top: 5px;
+      }
+    }
+
+    &__section {
+      &--align-end {
+        padding-right: $ui-app-bar__section__align-right-padding-right;
       }
     }
   }
