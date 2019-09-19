@@ -24,12 +24,8 @@ $primary-bg-color: $color-white-1;
 $primary-font-color: $color-gray-3;
 $primary-color-accent: $color-blue-3; // link, button (borders)
 $primary-font-color-2: $color-gray-4; // subtitle
-$primary-font-family: 'Helvetica',
-'Arial',
-'Open Sans',
-sans-serif;
-$primary-font-family-2: 'Lato',
-sans-serif; // title
+$primary-font-family: 'Helvetica', 'Arial', 'Open Sans', sans-serif;
+$primary-font-family-2: 'Lato', sans-serif; // title
 $primary-font-size: 14px;
 // app > nav + site header (shell)
 $secondary-bg-color: $color-gray-2;
@@ -64,9 +60,11 @@ $ui-tertiary-bg-color-2: $tertiary-bg-color-2;
 $ui-tertiary-font-color-2: $tertiary-font-color-2;
 
 // ui > app bar
-$ui-app-bar-background-color: linear-gradient(90deg,
+$ui-app-bar-background-color: linear-gradient(
+  90deg,
   $color-blue-2 0%,
-  $color-blue-3 100%);
+  $color-blue-3 100%
+);
 // ui > app shell variables
 $ui-shell__left-width: 235px;
 $ui-shell__top-height: 105px;
