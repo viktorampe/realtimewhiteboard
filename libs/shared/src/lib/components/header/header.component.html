@@ -4,21 +4,21 @@
       <span bar__left *ngIf="this.breadcrumbPosition === 'top-left'">
         <ng-container *ngTemplateOutlet="breadcrumbs"></ng-container>
       </span>
-      <div bar__right *ngIf="this.enableGlobalSearch">
+      <ng-container bar__right *ngIf="this.enableGlobalSearch">
         <ng-container *ngTemplateOutlet="globalSearch"></ng-container>
-      </div>
-      <div bar__right *ngIf="this.alertsPosition === 'top-right'">
+      </ng-container>
+      <ng-container bar__right *ngIf="this.alertsPosition === 'top-right'">
         <ng-container *ngTemplateOutlet="alerts"></ng-container>
-      </div>
-      <div bar__right *ngIf="this.profileMenuPosition === 'top-right'">
+      </ng-container>
+      <ng-container bar__right *ngIf="this.profileMenuPosition === 'top-right'">
         <ng-container *ngTemplateOutlet="profilemenu"></ng-container>
-      </div>
-      <div bar__right *ngIf="this.quicklinkPosition === 'top-right'">
+      </ng-container>
+      <ng-container bar__right *ngIf="this.quicklinkPosition === 'top-right'">
         <ng-container *ngTemplateOutlet="quicklinks"></ng-container>
-      </div>
-      <div bar__right *ngIf="this.profileLinkPosition === 'top-right'">
+      </ng-container>
+      <ng-container bar__right *ngIf="this.profileLinkPosition === 'top-right'">
         <ng-container *ngTemplateOutlet="profileLink"></ng-container>
-      </div>
+      </ng-container>
     </campus-app-bar>
   </div>
   <div class="shared-header__page-bar">
@@ -91,6 +91,7 @@
     *ngIf="enableAlerts && (alertsLoaded$ | async)"
   >
     <campus-button
+      id="global-alert-btn"
       (click)="dropDownAlerts.toggle()"
       class="shared-header__alerts__button"
     >
@@ -100,7 +101,8 @@
         [matBadgeHidden]="!((unreadAlertCount$ | async) > 0)"
         matBadgePosition="above before"
         matBadgeColor="accent"
-      ></mat-icon>
+      ></mat-icon
+      ><span>Meldingen</span>
     </campus-button>
 
     <campus-dropdown-menu
@@ -133,24 +135,26 @@
     *hasPermission="Permissions.MANAGE_FAVORITES"
     (click)="onManageFavoritesClick()"
     class="shared-header__quicklink__button"
-    [iconClass]="'bordered:favorites'"
-  ></campus-button>
+    [iconClass]="'quicklink:favorites'"
+    ><span>Favorieten</span></campus-button
+  >
   <campus-button
     id="global-history-btn"
     *hasPermission="Permissions.MANAGE_HISTORY"
     (click)="onManageHistoryClick()"
     class="shared-header__quicklink__button"
-    [iconClass]="'bordered:history'"
-  ></campus-button>
+    [iconClass]="'quicklink:history'"
+    ><span>Geschiedenis</span></campus-button
+  >
 </ng-template>
 
 <ng-template #globalSearch>
   <campus-button
     id="global-search-btn"
-    *hasPermission="Permissions.GLOBAL_SEARCH"
     [iconClass]="'magnifier'"
     [routerLink]="['search']"
-  ></campus-button>
+    ><span>Zoeken</span></campus-button
+  >
 </ng-template>
 
 <ng-template #profileLink>
@@ -158,5 +162,6 @@
     id="global-profile-btn"
     [iconClass]="'profile'"
     [routerLink]="['settings']"
-  ></campus-button>
+    ><span>Profiel</span></campus-button
+  >
 </ng-template>

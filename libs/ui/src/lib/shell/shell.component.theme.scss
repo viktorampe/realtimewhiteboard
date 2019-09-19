@@ -10,6 +10,7 @@
 
   $ui-shell__logo-height: 50px !default;
   $ui-shell__logo-background-color: $ui-secondary-bg-color !default;
+  $ui-shell__logo-padding-top: 25px !default;
 
   $ui-shell__body-background-color: $ui-primary-bg-color !default;
 
@@ -21,6 +22,7 @@
   .ui-shell__logo {
     height: $ui-shell__logo-height;
     background-color: $ui-shell__logo-background-color;
+    padding-top: $ui-shell__logo-padding-top;
   }
 
   .ui-shell__top {
