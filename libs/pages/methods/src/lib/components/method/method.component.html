@@ -26,11 +26,11 @@
   </ng-container>
 
   <campus-button
-    campusPrimary
+    class="shared-header__quicklink__button"
     iconClass="import-export"
     *ngIf="(currentTab$ | async) === 1"
     (click)="clickExportGoals()"
-  ></campus-button>
+  ><span>Download</span></campus-button>
 </campus-page-bar>
 
 <div class="method-method__container">
