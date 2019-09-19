@@ -48,8 +48,13 @@
   $ui-tree-nav-color: $ui-secondary-font-color !default;
   $ui-tree-nav-color-active: $ui-secondary-font-color-accent !default;
   $ui-tree-nav-color-separator: darken($ui-tree-nav-color, 40%) !default;
+  // font
+  $ui-tree-nav-font-size: 16px !default;
+  $ui-tree-nav-font-weight: bold !default;
 
   .ui-tree-nav__node {
+    font-size: $ui-tree-nav-font-size;
+    font-weight: $ui-tree-nav-font-weight;
     > a {
       color: $ui-tree-nav-color;
       border-left: 3px solid transparent;

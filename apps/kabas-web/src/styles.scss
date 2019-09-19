@@ -70,14 +70,12 @@ body {
 
 campus-shell {
   .ui-shell__left__content.ui-shell__filler {
-    border-left: 50px solid $color-gray-3;
+    border-left: 50px solid $color-gray-2;
   }
 }
 
 campus-tree-nav {
   .ui-tree-nav__node {
-    font-weight: bold;
-    font-size: 16px;
     line-height: 1.5;
     border-top: none;
     > a {
