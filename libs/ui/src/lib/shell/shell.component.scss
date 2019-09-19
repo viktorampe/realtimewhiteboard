@@ -1,12 +1,12 @@
 :host {
   display: flex;
-  flex-flow: row;
+  flex-flow: column;
   align-content: stretch;
   height: 100%;
 }
 
 mat-drawer-container {
-  flex: 0 0 100%;
+  flex: 1 1 auto;
 }
 
 .ui-shell__right {
