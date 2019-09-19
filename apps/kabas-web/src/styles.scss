@@ -63,17 +63,11 @@ body {
   padding-top: 25px;
 }
 
-.ui-shell__logo {
-  text-align: center;
-  padding-top: 25px;
-}
-
 campus-shell {
   .ui-shell__left__content.ui-shell__filler {
     border-left: 50px solid $color-gray-2;
   }
 }
-
 campus-tree-nav {
   .ui-tree-nav__node {
     line-height: 1.5;
@@ -89,21 +83,77 @@ campus-tree-nav {
   }
 }
 
-.ui-breadcrumbs a {
-  color: #000000;
-}
-
 .mat-drawer-side {
   border-right: none;
 }
 
-#page-bar-container {
-  margin-right: 180px;
+.ui-shell__logo {
+  img {
+    margin-top: 20px;
+  }
 }
 
-#page-bar-container campus-button {
-  margin-right: 30px;
+#global-search-btn {
+  color: $color-lila-1;
+  fill: $color-lila-1;
+  background-color: transparent;
+  flex-direction: column;
+  order: 1;
+
+  &:hover {
+    filter: brightness(85%);
+  }
 }
+
+#global-favorites-btn {
+  color: $color-red-2;
+  background-color: transparent;
+  flex-direction: column;
+  order: 3;
+
+  &:hover {
+    filter: brightness(85%);
+  }
+}
+
+#global-history-btn {
+  color: $color-blue-1;
+  fill: $color-blue-1;
+  background-color: transparent;
+  flex-direction: column;
+  order: 2;
+
+  &:hover {
+    filter: brightness(85%);
+  }
+}
+
+#global-profile-btn {
+  color: $color-orange-1;
+  fill: $color-orange-1;
+  background-color: transparent;
+  flex-direction: column;
+  order: 5;
+
+  &:hover {
+    filter: brightness(85%);
+  }
+}
+
+.shared-header__alerts {
+  order: 4;
+}
+#global-alert-btn {
+  color: $color-green-1;
+  fill: $color-green-1;
+  background-color: transparent;
+  flex-direction: column;
+
+  &:hover {
+    filter: brightness(85%);
+  }
+}
+
 /*
  * icon fonts
  */

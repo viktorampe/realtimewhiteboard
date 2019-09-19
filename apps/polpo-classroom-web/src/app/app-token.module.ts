@@ -63,6 +63,7 @@ import {
   YearService,
   YEAR_SERVICE_TOKEN
 } from '@campus/dal';
+import { ScormApiService, SCORM_API_SERVICE_TOKEN } from '@campus/scorm';
 import {
   APP_NAVIGATION_TREE_TOKEN,
   NavigationItemService,
@@ -97,6 +98,7 @@ import { FavIconService, FAVICON_SERVICE_TOKEN } from './services/favicons';
       useClass: NavigationItemService
     },
     { provide: APP_NAVIGATION_TREE_TOKEN, useValue: polpoConfig.appNavtree },
+    { provide: SCORM_API_SERVICE_TOKEN, useClass: ScormApiService },
 
     // dal services
     { provide: UNDO_SERVICE_TOKEN, useClass: UndoService },
