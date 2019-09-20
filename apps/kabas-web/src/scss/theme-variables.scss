@@ -103,11 +103,15 @@ $shared_header__page-bar_background: linear-gradient(
 // shared lib colors
 $shared-bg-color-1: $primary-bg-color;
 $shared-color-1: $primary-font-color;
-$shared-bg-color-2: $color-gray-5;
+$shared-bg-color-2: $secondary-bg-color;
+$shared_image-bg-color: $secondary-font-color-accent;
 
 // method-year-tile
-$shared-method-year-tile_button_container_button-hover-background-color: $secondary-bg-color;
-$shared-method-year-tile_button_container_button-focus-background-color: $color-red-1;
+$shared-method-year-tile_button_container_button-hover-background-color: $tertiary-bg-color;
+$shared-method-year-tile_button_container_button-hover-color: $secondary-font-color-accent;
+$shared-method-year-tile_button_container_button-focus-background-color: $tertiary-bg-color;
+$shared-method-year-tile_container-box-shadow-color: $primary-font-color-2;
+$shared-method-year-tile_button_container_button-box-shadow-color: $primary-font-color-2;
 
 // app bar
 $shared-header__quicklink-color: $secondary-font-color;

@@ -5,12 +5,12 @@
   $shared-method-year-tile_button_container_button-background-color: $shared-bg-color-1 !default;
   $shared-method-year-tile_button_container_button-focus-background-color: $shared-bg-color-1 !default;
   $shared-method-year-tile_button_container_button-hover-background-color: $shared-bg-color-2 !default;
+  $shared-method-year-tile_button_container_button-hover-color: $shared-color-3 !default;
   $shared-method-year-tile_container-box-shadow-color: $shared-bg-color-2 !default;
   $shared-method-year-tile_button_container_button-box-shadow-color: $shared-bg-color-2 !default;
 
   $shared-method-year-tile_image-margin-top: 8px !default;
   $shared-method-year-tile_image-height: 152px !default; // container-width * 2/3 - image-margin-top
-  $shared-method-year-tile_title-height: 48px !default; // container-width / 5
   $shared-method-year-tile_title-font-size: 24px !default; // title-height / 2
   $shared-method-year-tile_title-padding: 12px 0px !default; // title-height / 4, vertical align handled by line height
   $shared-method-year-tile_button_container-padding: 4px !default;
@@ -20,6 +20,7 @@
   $shared-method-year-tile_button_container_button-height: 32px !default;
   $shared-method-year-tile_button_container_button-width: 32px !default;
   $shared-method-year-tile_button_container_button-font-size: 16px !default;
+  $shared-method-year-tile_button_container-margin-bottom: 8px !default;
   $shared-method-year-tile_container-width: 240px !default;
   $shared-method-year-tile_container-box-shadow-offset: 0 0 !default;
   $shared-method-year-tile_container-box-shadow-blur: 8px !default;
@@ -41,13 +42,13 @@
     }
 
     &__title {
-      height: $shared-method-year-tile_title-height;
       font-size: $shared-method-year-tile_title-font-size;
       padding: $shared-method-year-tile_title-padding;
     }
 
     &__button__container {
       padding: $shared-method-year-tile_button_container-padding;
+      margin-bottom: $shared-method-year-tile_button_container-margin-bottom;
 
       .ui-button {
         background-color: $shared-method-year-tile_button_container_button-background-color;
@@ -60,7 +61,9 @@
         font-size: $shared-method-year-tile_button_container_button-font-size;
 
         &:hover {
+          color: $shared-method-year-tile_button_container_button-hover-color;
           background-color: $shared-method-year-tile_button_container_button-hover-background-color;
+          font-weight: bold;
         }
 
         &:focus {
