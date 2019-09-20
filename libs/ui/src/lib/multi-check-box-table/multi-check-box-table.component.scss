@@ -1,5 +1,3 @@
-$ui-color-checkboxes: $color-blue-3;
-
 .ui-multi-check-box-table {
   &__header {
     &--row-header {
@@ -33,23 +31,5 @@ $ui-color-checkboxes: $color-blue-3;
         }
       }
     }
-  }
-}
-/deep/ .mat-checkbox.mat-accent {
-  .mat-checkbox-frame {
-    border: 1px solid $ui-color-checkboxes;
-    background-color: transparent;
-    border-radius: 50%;
-  }
-
-  &.mat-checkbox-checked .mat-checkbox-background {
-    background-color: transparent;
-    border-radius: 50%;
-    border: 1px solid $ui-color-checkboxes;
-  }
-
-  .mat-checkbox-checkmark-path {
-    background-color: transparent;
-    stroke: $ui-color-checkboxes !important;
   }
 }

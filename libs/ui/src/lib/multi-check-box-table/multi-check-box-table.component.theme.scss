@@ -2,7 +2,7 @@
   // color palette
   $ui-multi-check-box-table_row-color--even: $ui-list-row-bg-even !default;
   $ui-multi-check-box-table_row-color--odd: $ui-list-row-bg-odd !default;
-
+  $ui-color-checkboxes: $color-blue-3 !default;
   // spacing base
   $ui-multi-check-box-table_cell-padding: 8px !default;
 
@@ -32,21 +32,24 @@
     }
   }
 }
-/deep/ .mat-checkbox.mat-accent {
-  .mat-checkbox-frame {
-    border: 1px solid $color-blue-3;
-    background-color: transparent;
-    border-radius: 50%;
-  }
 
-  &.mat-checkbox-checked .mat-checkbox-background {
-    background-color: transparent;
-    border-radius: 50%;
-    border: 1px solid $color-blue-3;
+.mat-checkbox .mat-checkbox-frame,
+.mat-checkbox-checked .mat-checkbox-background {
+  background-color: transparent;
+  border-radius: 50%;
+  border: 1px solid $color-blue-3;
+}
+.mat-checkbox {
+  &-checkmark {
+    &-path {
+      background-color: transparent;
+      stroke: $color-blue-3 !important;
+    }
   }
-
-  .mat-checkbox-checkmark-path {
+}
+.mat-checkbox-checked.mat-primary,
+.mat-checkbox-checked.mat-accent {
+  .mat-checkbox-background {
     background-color: transparent;
-    stroke: $color-blue-3 !important;
   }
 }
