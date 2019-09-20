@@ -58,16 +58,6 @@ body {
   color: $primary-font-color;
 }
 
-.ui-shell__logo {
-  text-align: center;
-  padding-top: 25px;
-}
-
-.ui-shell__logo {
-  text-align: center;
-  padding-top: 25px;
-}
-
 .ui-tree-nav__node--active {
   position: relative;
 
@@ -90,6 +80,77 @@ body {
     &:after {
       display: none;
     }
+  }
+}
+
+.mat-drawer-side {
+  border-right: none;
+}
+
+.ui-shell__logo {
+  img {
+    margin-top: 20px;
+  }
+}
+
+#global-search-btn {
+  color: $color-lila-1;
+  fill: $color-lila-1;
+  background-color: transparent;
+  flex-direction: column;
+  order: 1;
+
+  &:hover {
+    filter: brightness(85%);
+  }
+}
+
+#global-favorites-btn {
+  color: $color-red-2;
+  background-color: transparent;
+  flex-direction: column;
+  order: 3;
+
+  &:hover {
+    filter: brightness(85%);
+  }
+}
+
+#global-history-btn {
+  color: $color-blue-1;
+  fill: $color-blue-1;
+  background-color: transparent;
+  flex-direction: column;
+  order: 2;
+
+  &:hover {
+    filter: brightness(85%);
+  }
+}
+
+#global-profile-btn {
+  color: $color-orange-1;
+  fill: $color-orange-1;
+  background-color: transparent;
+  flex-direction: column;
+  order: 5;
+
+  &:hover {
+    filter: brightness(85%);
+  }
+}
+
+.shared-header__alerts {
+  order: 4;
+}
+#global-alert-btn {
+  color: $color-green-1;
+  fill: $color-green-1;
+  background-color: transparent;
+  flex-direction: column;
+
+  &:hover {
+    filter: brightness(85%);
   }
 }
 

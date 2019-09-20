@@ -60,17 +60,23 @@ $ui-tertiary-bg-color-2: $tertiary-bg-color-2;
 $ui-tertiary-font-color-2: $tertiary-font-color-2;
 
 // ui > app bar
-$ui-app-bar-background-color: linear-gradient(
-  90deg,
-  $color-blue-2 0%,
-  $color-blue-3 100%
-);
+$ui-app-bar-background-color: $color-white-1;
+$shared-header__app-bar-padding-top: 55px;
+$shared-header__app-bar-height: 105px;
+$ui-app-bar-button-width: 85px;
+$ui-app-bar__section__align-right-padding-right: 25px;
+
 // ui > app shell variables
 $ui-shell__left-width: 235px;
 $ui-shell__top-height: 105px;
 $ui-shell__top-height--mobile: 60px;
+$ui-shell__top-background-color: $color-white-1;
 $ui-shell__logo-height: 105px;
-$ui-shell__logo-background-color: $color-blue-2;
+$ui-shell__logo-background-color: $color-white-1;
+$ui-shell__logo-padding-top: 20px;
+$shared-header__page-bar__divider-margin-left-right: 0;
+$shared-header__quicklink-icon-size: 24px;
+$shared-header__quicklink-icon-size-small: 20px;
 
 // ui > forms
 $ui-form-button-default-bg-color: $color-gray-3;
@@ -87,6 +93,16 @@ $smartschool-button-font-color: white;
 
 // campus-header
 $shared-header__page-bar-container__justify-content: flex-end;
+$shared_header__page-bar_background: linear-gradient(
+  141deg,
+  $color-blue-2,
+  $color-blue-3
+);
+
+// app bar
+$shared-header__quicklink-color: $secondary-font-color;
+$shared-header__quicklink-color-hover: $secondary-font-color-accent;
+$shared-header__quicklink-bg-color: transparent;
 
 // home
 $pages-home-text-color--primary: $primary-font-color-2;
@@ -95,3 +111,6 @@ $pages-home-background-color--primary: $primary-bg-color;
 $pages-home-text-color--secondary: $primary-font-color;
 $pages-home-background-color--secondary: $secondary-bg-color;
 $pages-home_image-background-color: $secondary-font-color-accent;
+
+
+
