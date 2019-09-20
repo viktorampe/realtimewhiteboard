@@ -7,10 +7,6 @@ import {
   UserActions,
   UserReducer
 } from '@campus/dal';
-import {
-  ScormApiServiceInterface,
-  SCORM_API_SERVICE_TOKEN
-} from '@campus/scorm';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
@@ -24,9 +20,7 @@ export class LoginPageViewModel {
 
   constructor(
     private store: Store<UserReducer.State>,
-    @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
-    @Inject(SCORM_API_SERVICE_TOKEN)
-    private scormApiService: ScormApiServiceInterface
+    @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface
   ) {}
 
   /**

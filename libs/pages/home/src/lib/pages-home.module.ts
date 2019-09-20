@@ -8,6 +8,7 @@ import { PagesHomeRoutingModule } from './pages-home-routing.module';
 
 @NgModule({
   imports: [CommonModule, PagesHomeRoutingModule, UiModule, PagesSharedModule],
-  declarations: [HomeComponent, MethodFavoriteTileComponent]
+  declarations: [HomeComponent, MethodFavoriteTileComponent],
+  exports: [MethodFavoriteTileComponent]
 })
 export class PagesHomeModule {}

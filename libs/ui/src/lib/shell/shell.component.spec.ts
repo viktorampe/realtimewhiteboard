@@ -12,6 +12,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { configureTestSuite } from 'ng-bullet';
 import { Subject } from 'rxjs';
 import { UiModule } from '../ui.module';
+import { ShellBottomDirective } from './directives/shell-bottom.directive';
 import { ShellLeftDirective } from './directives/shell-left.directive';
 import { ShellLogoDirective } from './directives/shell-logo.directive';
 import { ShellTopDirective } from './directives/shell-top.directive';
@@ -26,6 +27,7 @@ import { ShellComponent } from './shell.component';
       <campus-shell-logo>test-logo</campus-shell-logo>
       <campus-shell-left>test-left</campus-shell-left>
       <campus-shell-body><p>Hi there handsome</p></campus-shell-body>
+      <campus-shell-bottom><p>Nice bottom</p></campus-shell-bottom>
     </campus-shell>
   `
 })
@@ -109,6 +111,13 @@ describe('ShellComponent', () => {
       By.directive(ShellTopDirective)
     ).nativeElement.textContent;
     expect(topContent).toBe('test-top');
+  });
+
+  it('should project bottom content', () => {
+    const bottomContent = testContainerFixture.debugElement.query(
+      By.directive(ShellBottomDirective)
+    ).nativeElement.textContent;
+    expect(bottomContent).toBe('Nice bottom');
   });
 
   it('should project the rest of the content in the body', () => {

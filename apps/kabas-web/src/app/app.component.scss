@@ -1,0 +1,39 @@
+$footer-height: 10px;
+.kabas {
+  &__footer {
+    flex: 0 0 $footer-height;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    height: $footer-height;
+    &__part {
+      flex: 1 1 auto;
+      &--left {
+        background-color: #f1d729;
+      }
+      &--middle {
+        background-color: #5a97d4;
+      }
+      &--right {
+        background-color: #c3293b;
+      }
+
+      &__overlap {
+        border-style: solid;
+        border-width: 0px $footer-height $footer-height $footer-height;
+        position: absolute;
+        z-index: 1;
+        margin-left: -$footer-height;
+
+        &--left {
+          left: 33.33%;
+          border-color: transparent transparent #529749 transparent;
+        }
+        &--right {
+          left: 66.66%;
+          border-color: transparent transparent #522780 transparent;
+        }
+      }
+    }
+  }
+}
