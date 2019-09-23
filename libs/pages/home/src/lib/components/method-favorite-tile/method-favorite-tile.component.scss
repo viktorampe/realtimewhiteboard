@@ -1,6 +1,4 @@
 :host {
-  border: 1px solid black;
-  width: 200px;
   height: auto;
   display: flex;
   flex-direction: column;
@@ -12,10 +10,13 @@
   }
 
   &__title {
-    background-color: black;
-    color: white;
-    text-align: end;
+    text-align: center;
+    justify-content: center;
     width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: bold;
   }
 
   &__button {
