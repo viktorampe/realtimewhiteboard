@@ -53,11 +53,26 @@ describe('HomeViewModel', () => {
 
   describe('presentation streams', () => {
     describe('displayName$', () => {
-      it("should return the current user's displayName", () => {
+      it("should return the current user's firstName if it is set", () => {
+        const displayName = 'Janneke';
+        const firstName = 'Jan';
+
+        selectorSpies.currentUser.mockReturnValue(
+          new PersonFixture({ firstName, displayName })
+        );
+
+        expect(homeViewModel.displayName$).toBeObservable(
+          hot('a', {
+            a: firstName
+          })
+        );
+      });
+
+      it("should return the current user's displayName if there is no firstName", () => {
         const displayName = 'Jan';
 
         selectorSpies.currentUser.mockReturnValue(
-          new PersonFixture({ displayName })
+          new PersonFixture({ firstName: undefined, displayName })
         );
 
         expect(homeViewModel.displayName$).toBeObservable(
