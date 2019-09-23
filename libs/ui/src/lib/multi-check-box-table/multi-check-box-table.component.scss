@@ -17,6 +17,12 @@
         &--header {
           text-align: left;
         }
+
+        &--item {
+          .mat-icon {
+            cursor: pointer;
+          }
+        }
       }
 
       &__cell {
