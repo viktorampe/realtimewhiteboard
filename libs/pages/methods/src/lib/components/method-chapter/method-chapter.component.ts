@@ -116,14 +116,20 @@ export class MethodChapterComponent implements OnInit, AfterViewInit {
         withLatestFrom(this.currentMethodParams$)
       )
       .subscribe(([tab, currentMethodParams]) => {
-        const navParts = [
-          'methods',
-          currentMethodParams.book,
-          currentMethodParams.chapter,
-          tocId
-        ];
+        const staticNavParts = ['methods', currentMethodParams.book];
 
-        this.router.navigate(navParts.slice(0, 3 + depth), {
+        let dynamicNavParts = [];
+        switch (depth) {
+          case 0: // chapter
+            dynamicNavParts = [tocId];
+            break;
+          case 1: // lesson
+            dynamicNavParts = [currentMethodParams.chapter, tocId];
+            break;
+          // add more cases when we add more depth
+        }
+
+        this.router.navigate(staticNavParts.concat(dynamicNavParts), {
           queryParams: {
             tab
           }
