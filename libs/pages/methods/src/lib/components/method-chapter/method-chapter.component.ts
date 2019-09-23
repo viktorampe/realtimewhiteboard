@@ -109,26 +109,25 @@ export class MethodChapterComponent implements OnInit, AfterViewInit {
     }
   }
 
-  public clickOpenLesson(lessonId: number) {
+  public clickOpenToc(tocId: number, depth: number = 1) {
     this.currentTab$
       .pipe(
         take(1),
         withLatestFrom(this.currentMethodParams$)
       )
       .subscribe(([tab, currentMethodParams]) => {
-        this.router.navigate(
-          [
-            'methods',
-            currentMethodParams.book,
-            currentMethodParams.chapter,
-            lessonId
-          ],
-          {
-            queryParams: {
-              tab
-            }
+        const navParts = [
+          'methods',
+          currentMethodParams.book,
+          currentMethodParams.chapter,
+          tocId
+        ];
+
+        this.router.navigate(navParts.slice(0, 3 + depth), {
+          queryParams: {
+            tab
           }
-        );
+        });
       });
   }
 
