@@ -1,12 +1,12 @@
 // color definitions
 // > header + icons homepage
 $color-white-1: #fff; // header
-$color-red-1: #c92d5f; // kabas logo color
-$color-lila-1: #c48ec5;
-$color-blue-1: #88bee8;
-$color-red-2: #d3757e;
-$color-green-1: #8ec5a3;
-$color-orange-1: #dfa64f;
+$color-red-1: #e7215d; // kabas logo color
+$color-lila-1: #d48fc6;
+$color-blue-1: #65c1ea;
+$color-red-2: #ec727c;
+$color-green-1: #70c5a3;
+$color-orange-1: #f2a248;
 
 // > sidebar
 $color-gray-1: #f8f8f8; // bg       / table rows
@@ -14,8 +14,8 @@ $color-gray-2: #ececec; // left bar / table rows
 $color-gray-3: #484748; // text
 
 // main
-$color-blue-2: #b2d9e3; // left gradient color
-$color-blue-3: #62abb8; // right gradient color + accent color (borders / links / checkboxes)
+$color-blue-2: #9fdae4; // left gradient color
+$color-blue-3: #15adb9; // right gradient color + accent color (borders / links / checkboxes)
 $color-gray-4: #808080; // icons + text
 $color-gray-5: #dcdcdc; // border between boek | methode buttons
 $color-gray-6: #898989; // font color home + toc subnav
@@ -28,13 +28,15 @@ $primary-font-color-2: $color-gray-4; // subtitle
 $primary-font-family: 'Helvetica', 'Arial', 'Open Sans', sans-serif;
 $primary-font-family-2: 'Lato', sans-serif; // title
 $primary-font-size: 14px;
+
 // app > nav + site header (shell)
-$secondary-bg-color: $color-gray-2;
+$secondary-bg-color: $color-gray-1;
 $secondary-font-color: $color-gray-3;
 $secondary-bg-color-accent: $color-blue-2; // active buttons
 $secondary-font-color-accent: $color-red-1; // link, button (borders)
 $secondary-bg-color-badge: $color-white-1; //  badge
 $secondary-font-color-badge: $color-white-1; // badge
+
 // app > panel headers
 $tertiary-bg-color: $color-white-1;
 $tertiary-font-color: $color-gray-3;
@@ -54,6 +56,13 @@ $ui-secondary-bg-color: $secondary-bg-color;
 $ui-secondary-font-color: $secondary-font-color;
 $ui-secondary-bg-color-accent: $secondary-bg-color-accent;
 $ui-secondary-font-color-accent: $secondary-font-color-accent;
+$ui-tree-nav-color-separator: $secondary-bg-color;
+$ui-tree-nav__node-border-top: none;
+$ui-tree-nav__node-line-height: 1.5;
+$ui-tree-nav__node__link-border-left: none;
+$ui-tree-nav__node__link-border-active: none;
+$ui-tree-nav__node__top-level-padding: 12px 0px 12px 24px;
+
 // ui > panel headers
 $ui-tertiary-bg-color: $tertiary-bg-color;
 $ui-tertiary-font-color: $tertiary-font-color;
@@ -68,13 +77,18 @@ $ui-app-bar-button-width: 85px;
 $ui-app-bar__section__align-right-padding-right: 25px;
 
 // ui > app shell variables
-$ui-shell__left-width: 235px;
+$ui-shell__left-width: 210px;
 $ui-shell__top-height: 105px;
 $ui-shell__top-height--mobile: 60px;
 $ui-shell__top-background-color: $color-white-1;
 $ui-shell__logo-height: 105px;
 $ui-shell__logo-background-color: $color-white-1;
 $ui-shell__logo-padding-top: 20px;
+$ui-shell__logo-padding-bottom: 7px;
+$ui-shell__logo-border-left: 50px solid $color-white-1;
+$ui-shell__left__content-border-left: 50px solid $color-gray-2;
+$ui-shell__logo__img-width: 120px;
+$ui-shell__logo-text-align: start;
 $shared-header__page-bar__divider-margin-left-right: 0;
 $shared-header__quicklink-icon-size: 24px;
 $shared-header__quicklink-icon-size-small: 20px;
@@ -95,7 +109,7 @@ $smartschool-button-font-color: white;
 // campus-header
 $shared-header__page-bar-container__justify-content: flex-end;
 $shared_header__page-bar_background: linear-gradient(
-  141deg,
+  90deg,
   $color-blue-2,
   $color-blue-3
 );
@@ -123,5 +137,5 @@ $pages-home-text-color--primary: $primary-font-color-2;
 $pages-home-text-color--primary--hover: $secondary-font-color-accent;
 $pages-home-background-color--primary: $primary-bg-color;
 $pages-home-text-color--secondary: $primary-font-color;
-$pages-home-background-color--secondary: $secondary-bg-color;
+$pages-home-background-color--secondary: $color-gray-2;
 $pages-home_image-background-color: $secondary-font-color-accent;
