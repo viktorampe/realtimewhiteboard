@@ -16,7 +16,7 @@
       &.mat-list-item .mat-list-item-content {
         padding-left: $pages-method-chapter__mat-list-padding-left--override;
         color: $pages-method-chapter-color;
-        background-color: $pages-method-chapter-background-color
+        background-color: $pages-method-chapter-background-color;
       }
 
       &:hover {
@@ -28,9 +28,12 @@
       &--selected {
         &.mat-list-item .mat-list-item-content {
           background-color: $pages-method-chapter-background-color--accent;
+          padding-left: $pages-method-chapter__mat-list-padding-left--override -
+            $pages-method-chapter__mat-list-item--selected-border-width;
         }
 
-        border-left: $pages-method-chapter__mat-list-item--selected-border-width $pages-method-chapter-color--accent solid;
+        border-left: $pages-method-chapter__mat-list-item--selected-border-width
+          $pages-method-chapter-color--accent solid;
       }
 
       &--depth-0 {

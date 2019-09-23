@@ -24,12 +24,8 @@ $primary-bg-color: $color-white-1;
 $primary-font-color: $color-gray-3;
 $primary-color-accent: $color-blue-3; // link, button (borders)
 $primary-font-color-2: $color-gray-4; // subtitle
-$primary-font-family: 'Helvetica',
-'Arial',
-'Open Sans',
-sans-serif;
-$primary-font-family-2: 'Lato',
-sans-serif; // title
+$primary-font-family: 'Helvetica', 'Arial', 'Open Sans', sans-serif;
+$primary-font-family-2: 'Lato', sans-serif; // title
 $primary-font-size: 14px;
 
 // app > nav + site header (shell)
@@ -111,9 +107,11 @@ $smartschool-button-font-color: white;
 
 // campus-header
 $shared-header__page-bar-container__justify-content: flex-end;
-$shared_header__page-bar_background: linear-gradient(141deg,
+$shared_header__page-bar_background: linear-gradient(
+  141deg,
   $color-blue-2,
-  $color-blue-3);
+  $color-blue-3
+);
 
 // app bar
 $shared-header__quicklink-color: $secondary-font-color;
