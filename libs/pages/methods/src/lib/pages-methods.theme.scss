@@ -32,32 +32,10 @@
 
   .mat-tab-group {
     flex: 1 1 auto;
-    &.mat-primary {
-      .mat-ink-bar {
-        background-color: $color-blue-3;
-      }
-    }
   }
 
   .mat-tab-header {
     border-bottom: none;
-  }
-  .mat-tab-label {
-    font-family: $primary-font-family;
-    font-size: 20px;
-    font-weight: bold;
-    height: 25px;
-
-    .mat-tab-label-content {
-      color: $color-gray-3;
-      border-bottom: 3px solid $color-gray-3;
-    }
-    &:focus {
-      .mat-tab-label-content {
-        color: $color-blue-3;
-        border-bottom: 3px solid $color-blue-3;
-      }
-    }
   }
 
   .mat-tab-body-wrapper {
