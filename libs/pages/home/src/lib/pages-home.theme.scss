@@ -13,5 +13,6 @@ $pages-home-background-color--secondary: lightgray !default;
 $pages-home_image-background-color: lightskyblue !default;
 
 @mixin pages-home-theme() {
+  @include pages-home();
   @include pages-home-method-favorite-tile();
 }
