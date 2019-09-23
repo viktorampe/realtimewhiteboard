@@ -1,4 +1,7 @@
 @mixin pages-methods-method-chapter() {
   .method-chapter {
+    .mat-list-base .mat-list-item .mat-list-item-content {
+      padding-left: 40px;
+    }
   }
 }
