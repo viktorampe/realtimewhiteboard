@@ -154,6 +154,42 @@ body {
   }
 }
 
+/* Multi checkbox table */
+.ui-multi-check-box-table {
+  .mat-checkbox .mat-checkbox-frame,
+  .mat-checkbox-checked .mat-checkbox-background {
+    background-color: transparent;
+    border-radius: 50%;
+    border: 1px solid $primary-color-accent;
+  }
+
+  .mat-checkbox {
+    &-disabled {
+      .mat-checkbox-frame,
+      .mat-checkbox-background {
+        border: 1px solid $primary-font-color-2 !important;
+      }
+
+      .mat-checkbox-checkmark-path {
+        stroke: $primary-font-color-2 !important;
+      }
+    }
+
+    &-checkmark {
+      &-path {
+        background-color: transparent;
+        stroke: $primary-color-accent !important;
+      }
+    }
+  }
+  .mat-checkbox-checked.mat-primary,
+  .mat-checkbox-checked.mat-accent {
+    .mat-checkbox-background {
+      background-color: transparent;
+    }
+  }
+}
+
 /*
  * icon fonts
  */

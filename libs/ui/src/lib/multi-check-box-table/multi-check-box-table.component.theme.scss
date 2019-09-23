@@ -31,24 +31,3 @@
     }
   }
 }
-
-.mat-checkbox .mat-checkbox-frame,
-.mat-checkbox-checked .mat-checkbox-background {
-  background-color: transparent;
-  border-radius: 50%;
-  border: 1px solid $color-blue-3;
-}
-.mat-checkbox {
-  &-checkmark {
-    &-path {
-      background-color: transparent;
-      stroke: $color-blue-3 !important;
-    }
-  }
-}
-.mat-checkbox-checked.mat-primary,
-.mat-checkbox-checked.mat-accent {
-  .mat-checkbox-background {
-    background-color: transparent;
-  }
-}
