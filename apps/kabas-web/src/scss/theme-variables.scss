@@ -61,6 +61,7 @@ $ui-tree-nav__node-line-height: 1.5;
 $ui-tree-nav__node__link-border-left: none;
 $ui-tree-nav__node__link-border-active: none;
 $ui-tree-nav__node__top-level-padding: 12px 0px 12px 24px;
+
 // ui > panel headers
 $ui-tertiary-bg-color: $tertiary-bg-color;
 $ui-tertiary-font-color: $tertiary-font-color;
@@ -82,8 +83,11 @@ $ui-shell__top-background-color: $color-white-1;
 $ui-shell__logo-height: 105px;
 $ui-shell__logo-background-color: $color-white-1;
 $ui-shell__logo-padding-top: 20px;
+$ui-shell__logo-padding-bottom: 7px;
+$ui-shell__logo-border-left: 50px solid $color-white-1;
 $ui-shell__left__content-border-left: 50px solid $color-gray-2;
-
+$ui-shell__logo__img-width: 120px;
+$ui-shell__logo-text-align: start;
 $shared-header__page-bar__divider-margin-left-right: 0;
 $shared-header__quicklink-icon-size: 24px;
 $shared-header__quicklink-icon-size-small: 20px;
