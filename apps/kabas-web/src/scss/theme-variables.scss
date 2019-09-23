@@ -27,7 +27,7 @@ $primary-font-color-2: $color-gray-4; // subtitle
 $primary-font-family: 'Helvetica', 'Arial', 'Open Sans', sans-serif;
 $primary-font-family-2: 'Lato', sans-serif; // title
 $primary-font-size: 14px;
-$primary-font-weight: normal;
+
 // app > nav + site header (shell)
 $secondary-bg-color: $color-gray-1;
 $secondary-font-color: $color-gray-3;
@@ -60,7 +60,7 @@ $ui-tree-nav__node-border-top: none;
 $ui-tree-nav__node-line-height: 1.5;
 $ui-tree-nav__node__link-border-left: none;
 $ui-tree-nav__node__link-border-active: none;
-$ui-tree-nav__node__top-level-padding: 24px 0px 0px 24px;
+$ui-tree-nav__node__top-level-padding: 12px 0px 12px 24px;
 // ui > panel headers
 $ui-tertiary-bg-color: $tertiary-bg-color;
 $ui-tertiary-font-color: $tertiary-font-color;
@@ -75,16 +75,14 @@ $ui-app-bar-button-width: 85px;
 $ui-app-bar__section__align-right-padding-right: 25px;
 
 // ui > app shell variables
-$ui-shell__left-width: 235px;
+$ui-shell__left-width: 210px;
 $ui-shell__top-height: 105px;
 $ui-shell__top-height--mobile: 60px;
 $ui-shell__top-background-color: $color-white-1;
 $ui-shell__logo-height: 105px;
 $ui-shell__logo-background-color: $color-white-1;
 $ui-shell__logo-padding-top: 20px;
-$ui-shell__left__content-border-left-width: 50px;
-$ui-shell__left__content-border-left-style: solid;
-$ui-shell__left__content-border-left-color: $color-gray-2;
+$ui-shell__left__content-border-left: 50px solid $color-gray-2;
 
 $shared-header__page-bar__divider-margin-left-right: 0;
 $shared-header__quicklink-icon-size: 24px;

@@ -24,7 +24,7 @@ $primary-font-color-2: $color-gray-1; // subtitle
 $primary-font-family: 'Helvetica', 'Arial', 'Open Sans', sans-serif;
 $primary-font-family-2: 'Lato', sans-serif; // title
 $primary-font-size: 14px;
-$primary-font-weight: normal;
+
 // app > nav + site header (shell)
 $secondary-bg-color: $color-black-1;
 $secondary-font-color: $color-gray-1;
@@ -32,7 +32,7 @@ $secondary-bg-color-accent: darken($color-blue-3, 40%); // active buttons
 $secondary-font-color-accent: $color-blue-3; // link, button (borders)
 $secondary-bg-color-badge: $color-red-1; //  badge
 $secondary-font-color-badge: $color-white-1; // badge
-$ui-tree-nav__node-font-weight: $primary-font-weight;
+$ui-tree-nav__node-font-weight: normal;
 $ui-tree-nav__node-font-size: $primary-font-size;
 
 // app > panel headers
