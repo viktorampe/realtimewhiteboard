@@ -9,21 +9,21 @@
   $pages-home-method-favorite-tile_button--hover-foreground-color: $pages-home-text-color--primary--hover !default;
 
   // measurements
-  $pages-home-method-favorite-tile_container-width: 240px !default;
+  $pages-home-method-favorite-tile_container-width: 200px !default;
   $pages-home-method-favorite-tile_container-shadow-offset: 0px 0px !default;
   $pages-home-method-favorite-tile_container-shadow-blur: 8px !default;
   $pages-home-method-favorite-tile_container-shadow-spread: 2px !default;
   $pages-home-method-favorite-tile_image-margin-top: 8px !default;
-  $pages-home-method-favorite-tile_image-height: 152px !default; // container-width * 2/3 - image-margin-top
-  $pages-home-method-favorite-tile_title-height: 48px !default; // container-width / 5
-  $pages-home-method-favorite-tile_title-font-size: 24px !default; // title-height / 2
-  $pages-home-method-favorite-tile_title-line-height: 48px !default; // title-height
-  $pages-home-method-favorite-tile_title-padding-horizontal: 12px !default; // title-height / 4
+  $pages-home-method-favorite-tile_image-height: 124px !default; // container-width * 2/3 - image-margin-top
+  $pages-home-method-favorite-tile_title-height: 40px !default; // container-width / 5
+  $pages-home-method-favorite-tile_title-font-size: 20px !default; // title-height / 2
+  $pages-home-method-favorite-tile_title-line-height: 40px !default; // title-height
+  $pages-home-method-favorite-tile_title-padding-horizontal: 10px !default; // title-height / 4
   $pages-home-method-favorite-tile_title-padding-vertical: 0px !default; // vertical align handled with line-height
-  $pages-home-method-favorite-tile_button-width: 120px !default; // container-width / 2
+  $pages-home-method-favorite-tile_button-width: 100px !default; // container-width / 2
   $pages-home-method-favorite-tile_button-font-size: 16px !default; // title-font-size * 2 /3
   $pages-home-method-favorite-tile_button-margin-right: 1px !default;
-  $pages-home-method-favorite-tile_button-icon-width: 72px !default; // button-width * 60%
+  $pages-home-method-favorite-tile_button-icon-width: 60px !default; // button-width * 60%
 
   .pages-home-method-favorite-tile {
     width: $pages-home-method-favorite-tile_container-width;
