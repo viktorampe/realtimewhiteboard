@@ -1,6 +1,9 @@
 <campus-page-bar> </campus-page-bar>
 
-<div class="pages-methods__container" *ngIf="(allowedBooks$ | async) as books">
+<div
+  class="pages-methods__container pages-methods-overview"
+  *ngIf="(allowedBooks$ | async) as books"
+>
   <campus-page-header
     [title]="'Methodes'"
     [subtitle]="'toegekende methodes'"

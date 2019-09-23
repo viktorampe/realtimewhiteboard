@@ -58,31 +58,6 @@ body {
   color: $primary-font-color;
 }
 
-.ui-tree-nav__node--active {
-  position: relative;
-
-  &:after {
-    content: '';
-    display: block;
-    position: absolute;
-    right: 0;
-    top: 8px;
-    background: 0 0;
-    width: 0;
-    height: 0;
-    border-top: 12px solid transparent;
-    border-bottom: 12px solid transparent;
-    border-right: 12px solid #e1e5e7;
-  }
-
-  @media #{$ui-breakpoint-xsmall},
-  #{$ui-breakpoint-small} {
-    &:after {
-      display: none;
-    }
-  }
-}
-
 .mat-drawer-side {
   border-right: none;
 }
@@ -151,6 +126,80 @@ body {
 
   &:hover {
     filter: brightness(85%);
+  }
+}
+
+/* Material checkboxes */
+.mat-checkbox .mat-checkbox-frame,
+.mat-checkbox-checked .mat-checkbox-background {
+  background-color: transparent;
+  border-radius: 50%;
+  border: 2px solid $primary-color-accent;
+}
+
+.mat-checkbox {
+  &-disabled {
+    .mat-checkbox-frame,
+    .mat-checkbox-background {
+      border: 2px solid $primary-font-color-2 !important;
+    }
+
+    .mat-checkbox-checkmark-path {
+      stroke: $primary-font-color-2 !important;
+    }
+  }
+
+  &-checkmark {
+    padding: 1px !important;
+
+    &-path {
+      background-color: transparent;
+      stroke: $primary-color-accent !important;
+      stroke-width: 3px !important;
+    }
+  }
+}
+.mat-checkbox-checked.mat-primary,
+.mat-checkbox-checked.mat-accent {
+  .mat-checkbox-background {
+    background-color: transparent;
+  }
+}
+
+.mat-checkbox:not(.mat-checkbox-disabled).mat-primary
+  .mat-checkbox-ripple
+  .mat-ripple-element {
+  background-color: $secondary-font-color-accent;
+}
+
+.mat-checkbox .mat-checkbox-inner-container {
+  height: 24px;
+  width: 24px;
+}
+
+.pages-home__container,
+.pages-methods-overview,
+.pages-practice-overview,
+.pages-settings-profile,
+.pages-settings-dashboard,
+.pages-settings-alerts {
+  position: relative;
+
+  > * {
+    z-index: 1;
+    position: relative;
+    display: flex;
+  }
+
+  &:after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 260px;
+    background: $shared_header__page-bar_background;
+    z-index: 0;
   }
 }
 
