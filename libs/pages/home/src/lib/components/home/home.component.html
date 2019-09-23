@@ -17,6 +17,7 @@
         class="pages-home__favorite-list"
       >
         <campus-method-favorite-tile
+          class="pages-home__favorite-list__favorite"
           *ngFor="let favoriteMethod of favorites"
           [name]="favoriteMethod.favorite.name"
           [logoUrl]="favoriteMethod.logoUrl"

@@ -84,8 +84,10 @@
       }
     }
 
-    &__favorite-list:not(:last-child) {
-      margin-right: $pages-home_favorite-list-margin-right;
+    &__favorite-list {
+      &__favorite:not(:last-child) {
+        margin-right: $pages-home_favorite-list-margin-right;
+      }
     }
   }
 }
