@@ -1,29 +1,115 @@
 <div class="pages-home__container">
-  <h1 mat-subheader
-    >Welkom {{ displayName$ | async }}, dit zijn je veel gebruikte methodes:</h1
-  >
-
-  <ng-container *ngIf="(favoritesWithEduContent$ | async) as favorites">
-    <ng-template #noFavorites>
-      <div class="pages-home__no-favorites"
-        >Er zijn nog geen veel gebruikte methodes, voeg een methode toe aan je
-        favorieten om ze hier terug te vinden.</div
-      >
-    </ng-template>
-
-    <div
-      *ngIf="favorites.length; else noFavorites"
-      class="pages-home__favorite-list"
+  <div class="pages-home__container__favorites">
+    <h1 mat-subheader
+      >Welkom {{ displayName$ | async }}, dit zijn je veel gebruikte
+      methodes:</h1
     >
-      <campus-method-favorite-tile
-        *ngFor="let favoriteMethod of favorites"
-        [name]="favoriteMethod.favorite.name"
-        [logoUrl]="favoriteMethod.logoUrl"
-        [eduContent]="favoriteMethod.eduContent"
-        [bookId]="favoriteMethod.bookId"
-        (clickOpenBoeke)="clickOpenBoeke($event)"
+    <ng-container *ngIf="(favoritesWithEduContent$ | async) as favorites">
+      <ng-template #noFavorites>
+        <div class="pages-home__no-favorites"
+          >Er zijn nog geen veel gebruikte methodes, voeg een methode toe aan je
+          favorieten om ze hier terug te vinden.</div
+        >
+      </ng-template>
+
+      <div
+        *ngIf="favorites.length; else noFavorites"
+        class="pages-home__favorite-list"
       >
-      </campus-method-favorite-tile>
+        <campus-method-favorite-tile
+          *ngFor="let favoriteMethod of favorites"
+          [name]="favoriteMethod.favorite.name"
+          [logoUrl]="favoriteMethod.logoUrl"
+          [eduContent]="favoriteMethod.eduContent"
+          [bookId]="favoriteMethod.bookId"
+          (clickOpenBoeke)="clickOpenBoeke($event)"
+        >
+        </campus-method-favorite-tile>
+      </div>
+    </ng-container>
+  </div>
+  <div class="pages-home__container__shortcuts">
+    <h1 mat-subheader>Wat wil je doen, {{ displayName$ | async }}?</h1>
+
+    <div class="pages-home__container__shortcuts__list">
+      <div
+        class="pages-home__container__shortcuts__list__shortcut pages-home__container__shortcuts__list__shortcut--methods"
+      >
+        <mat-icon svgIcon="methods"> </mat-icon>
+        <h2 mat-subheader>Methodes</h2>
+
+        <div
+          class="pages-home__container__shortcuts__list__shortcut__description"
+        >
+          Je bordboeken en lesmateriaal in een handig overzicht + de status van
+          je leerplan
+        </div>
+
+        <a
+          [routerLink]="['/methods']"
+          class="pages-home__container__shortcuts__list__shortcut__link"
+        >
+          Open
+        </a>
+      </div>
+      <div
+        class="pages-home__container__shortcuts__list__shortcut pages-home__container__shortcuts__list__shortcut--tasks"
+      >
+        <mat-icon svgIcon="tasks"> </mat-icon>
+        <h2 mat-subheader>Taken</h2>
+
+        <div
+          class="pages-home__container__shortcuts__list__shortcut__description"
+        >
+          Geef taken aan je klassen en/of individuele leerlingen
+        </div>
+
+        <a
+          [routerLink]="['/tasks']"
+          class="pages-home__container__shortcuts__list__shortcut__link"
+        >
+          Open
+        </a>
+      </div>
+      <div
+        class="pages-home__container__shortcuts__list__shortcut pages-home__container__shortcuts__list__shortcut--results"
+      >
+        <mat-icon svgIcon="results"> </mat-icon>
+        <h2 mat-subheader>Resultaten</h2>
+
+        <div
+          class="pages-home__container__shortcuts__list__shortcut__description"
+        >
+          Resultaten van oefeningen per taak of per leerling, met de
+          mogelijkheid om dit te exporteren
+        </div>
+
+        <a
+          [routerLink]="['/results']"
+          class="pages-home__container__shortcuts__list__shortcut__link"
+        >
+          Open
+        </a>
+      </div>
+      <div
+        class="pages-home__container__shortcuts__list__shortcut pages-home__container__shortcuts__list__shortcut--differentiate"
+      >
+        <mat-icon svgIcon="differentiate"> </mat-icon>
+        <h2 mat-subheader>Differentiëren</h2>
+
+        <div
+          class="pages-home__container__shortcuts__list__shortcut__description"
+        >
+          Suggesties per leerling op basis van behaalde doelen
+        </div>
+
+        <a
+          [routerLink]="['/differentiate']"
+          class="pages-home__container__shortcuts__list__shortcut__link"
+        >
+          Open
+        </a>
+      </div>
     </div>
-  </ng-container>
+  </div>
 </div>
