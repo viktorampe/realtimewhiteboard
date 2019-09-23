@@ -147,6 +147,32 @@ body {
   }
 }
 
+.pages-home__container,
+.pages-methods-overview,
+.pages-practice-overview,
+.pages-settings-profile,
+.pages-settings-dashboard,
+.pages-settings-alerts {
+  position: relative;
+
+  > * {
+    z-index: 1;
+    position: relative;
+    display: flex;
+  }
+
+  &:after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 260px;
+    background: $shared_header__page-bar_background;
+    z-index: 0;
+  }
+}
+
 /*
  * icon fonts
  */

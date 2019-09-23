@@ -31,6 +31,7 @@ export const icons = {
   close: 'assets/icons/close.svg',
   history: 'assets/icons/history.svg',
   boardbook: 'assets/icons/boardbook.svg',
+  method: 'assets/icons/lesmateriaal.svg',
   //TODO: These are TEMPORARY SVGs for Diabolo that I made from the PNGs
   //get the OFFICIAL files from Antoon later
   'diabolo-intro': 'assets/icons/diabolo/intro.svg',
