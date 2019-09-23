@@ -143,8 +143,8 @@ describe('MethodChapterComponent', () => {
       });
     });
 
-    describe('clickOpenLesson', () => {
-      it('should navigate to the lesson when clickOpenLesson is called', fakeAsync(() => {
+    describe('clickOpenToc', () => {
+      it('should navigate to the lesson when clickOpenToc is called', fakeAsync(() => {
         component.clickOpenToc(3);
         tick();
 
@@ -157,7 +157,20 @@ describe('MethodChapterComponent', () => {
         );
       }));
 
-      it('should pass the tab in the queryParams when clickOpenLesson is called', fakeAsync(() => {
+      it('should navigate to the chapter when clickOpenToc is called', fakeAsync(() => {
+        component.clickOpenToc(3, 0);
+        tick();
+
+        expect(router.navigate).toHaveBeenCalled();
+        expect(router.navigate).toHaveBeenCalledWith(
+          ['methods', 3599752219, 3],
+          {
+            queryParams: { tab: 0 }
+          }
+        );
+      }));
+
+      it('should pass the tab in the queryParams when clickOpenToc is called', fakeAsync(() => {
         const tab = 1;
         methodViewModel.currentTab$.next(tab);
 

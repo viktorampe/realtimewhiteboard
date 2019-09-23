@@ -3,43 +3,35 @@ import { NavItem } from '@campus/ui';
 
 const standardSideNavItems: NavItem[] = [
   {
-    title: 'Dashboard',
-    icon: 'home',
+    title: 'Home',
     link: '/home'
   },
   {
     title: 'Methodes',
-    icon: 'book',
     link: '/methods'
   },
   {
     title: 'Taken',
-    icon: '',
     link: '/tasks'
   },
   {
     title: 'Resultaten',
-    icon: '',
     link: '/results'
   },
   {
     title: 'Vrij oefenen',
-    icon: '',
     link: '/practice'
   },
   {
     title: 'Differentiëren',
-    icon: '',
     link: '/differentiate'
   },
   {
     title: 'Instellingen',
-    icon: 'settings',
     link: '/settings'
   },
   {
     title: 'Afmelden',
-    icon: 'lock',
     link: '/logout'
   }
 ];
