@@ -24,8 +24,12 @@ $primary-bg-color: $color-white-1;
 $primary-font-color: $color-gray-3;
 $primary-color-accent: $color-blue-3; // link, button (borders)
 $primary-font-color-2: $color-gray-4; // subtitle
-$primary-font-family: 'Helvetica', 'Arial', 'Open Sans', sans-serif;
-$primary-font-family-2: 'Lato', sans-serif; // title
+$primary-font-family: 'Helvetica',
+'Arial',
+'Open Sans',
+sans-serif;
+$primary-font-family-2: 'Lato',
+sans-serif; // title
 $primary-font-size: 14px;
 // app > nav + site header (shell)
 $secondary-bg-color: $color-gray-2;
@@ -93,11 +97,9 @@ $smartschool-button-font-color: white;
 
 // campus-header
 $shared-header__page-bar-container__justify-content: flex-end;
-$shared_header__page-bar_background: linear-gradient(
-  141deg,
+$shared_header__page-bar_background: linear-gradient(141deg,
   $color-blue-2,
-  $color-blue-3
-);
+  $color-blue-3);
 
 // app bar
 $shared-header__quicklink-color: $secondary-font-color;
@@ -111,3 +113,10 @@ $pages-home-background-color--primary: $primary-bg-color;
 $pages-home-text-color--secondary: $primary-font-color;
 $pages-home-background-color--secondary: $secondary-bg-color;
 $pages-home_image-background-color: $secondary-font-color-accent;
+
+// methods
+$pages-methods-text-color--primary: $primary-font-color;
+$pages-methods-text-color--primary--accent: $secondary-font-color-accent;
+$pages-methods-background-color--primary: $primary-bg-color;
+$pages-methods-text-color--secondary: $primary-font-color-2;
+$pages-methods-background-color--secondary: $secondary-bg-color;

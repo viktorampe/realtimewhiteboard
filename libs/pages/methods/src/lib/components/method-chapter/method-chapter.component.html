@@ -34,6 +34,9 @@
   <campus-collapsible-sheet>
     <div aside>
       <mat-list *ngIf="(currentMethodParams$ | async) as params">
+        <div class="method-chapter__list-header" matSubheader
+          >Kies een hoofdstuk</div
+        >
         <mat-list-item
           data-cy="lesson-link"
           *ngFor="let toc of (lessonsForChapter$ | async)"

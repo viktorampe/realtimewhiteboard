@@ -1,6 +1,15 @@
 @import './components/method/method.component.theme.scss';
 @import './components/method-chapter/method-chapter.component.theme.scss';
 
+// color palette
+$pages-methods-text-color--primary: black !default;
+$pages-methods-text-color--primary--accent: darkred !default;
+$pages-methods-background-color--primary: white !default;
+
+$pages-methods-text-color--secondary: darkgray !default;
+$pages-methods-background-color--secondary: whitesmoke !default;
+
+
 .method-method__container,
 .method-chapter {
   height: 100%;

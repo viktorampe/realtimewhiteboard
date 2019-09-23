@@ -8,45 +8,11 @@
     flex-direction: row;
   }
 
-  &__back-link {
-    line-height: 24px; // = icon size
-    display: flex;
-    padding: 0px 16px 0px 40px;
-    height: 24px; // mat-list-item height
-    border-bottom: 1px solid gray;
-  }
-
   &__lesson-link {
-    overflow: hidden;
-
-    &:hover {
-      background-color: whitesmoke;
-    }
-
-    &--selected {
-      border-left: 2px darkred solid;
-      background-color: whitesmoke;
-    }
-
     &__title {
       text-overflow: ellipsis;
       white-space: nowrap;
-    }
-
-    &--depth-0 {
-      .method-chapter__lesson-link__title {
-        margin-left: 0px;
-        font-weight: 600; // = left column ?
-      }
-    }
-
-    &--depth-1 {
-      .method-chapter__lesson-link__title {
-        margin-left: 16px;
-        // &:before {
-        //   content: "- "
-        // }
-      }
+      overflow: hidden;
     }
   }
 }
