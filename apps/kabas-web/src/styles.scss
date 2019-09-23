@@ -129,6 +129,54 @@ body {
   }
 }
 
+/* Material checkboxes */
+.mat-checkbox .mat-checkbox-frame,
+.mat-checkbox-checked .mat-checkbox-background {
+  background-color: transparent;
+  border-radius: 50%;
+  border: 2px solid $primary-color-accent;
+}
+
+.mat-checkbox {
+  &-disabled {
+    .mat-checkbox-frame,
+    .mat-checkbox-background {
+      border: 2px solid $primary-font-color-2 !important;
+    }
+
+    .mat-checkbox-checkmark-path {
+      stroke: $primary-font-color-2 !important;
+    }
+  }
+
+  &-checkmark {
+    padding: 1px !important;
+
+    &-path {
+      background-color: transparent;
+      stroke: $primary-color-accent !important;
+      stroke-width: 3px !important;
+    }
+  }
+}
+.mat-checkbox-checked.mat-primary,
+.mat-checkbox-checked.mat-accent {
+  .mat-checkbox-background {
+    background-color: transparent;
+  }
+}
+
+.mat-checkbox:not(.mat-checkbox-disabled).mat-primary
+  .mat-checkbox-ripple
+  .mat-ripple-element {
+  background-color: $secondary-font-color-accent;
+}
+
+.mat-checkbox .mat-checkbox-inner-container {
+  height: 24px;
+  width: 24px;
+}
+
 .pages-home__container,
 .pages-methods-overview,
 .pages-practice-overview,
