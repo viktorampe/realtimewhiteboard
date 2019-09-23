@@ -33,7 +33,7 @@
 <div class="method-chapter">
   <campus-collapsible-sheet>
     <div aside>
-      <mat-list *ngIf="(currentMethodParams$ | async) as params">
+      <mat-nav-list *ngIf="(currentMethodParams$ | async) as params">
         <div class="method-chapter__list-header" matSubheader
           >Kies een hoofdstuk</div
         >
@@ -50,7 +50,7 @@
           <span class="method-chapter__lesson-link__title">{{
             toc.title
           }}</span></mat-list-item
-        ></mat-list
+        ></mat-nav-list
       >
     </div>
 

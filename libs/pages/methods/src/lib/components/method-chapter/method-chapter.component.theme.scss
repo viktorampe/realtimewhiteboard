@@ -1,5 +1,5 @@
 @mixin pages-methods-method-chapter() {
-  // color pallette
+  // color palette
   $pages-method-chapter-color: $pages-methods-text-color--primary !default;
   $pages-method-chapter-color--accent: $pages-methods-text-color--primary--accent !default;
   $pages-method-chapter-background-color: $pages-methods-background-color--primary !default;
@@ -7,9 +7,10 @@
   $pages-method-chapter-color--secondary: $pages-methods-text-color--secondary !default;
 
   // measurements
-  $pages-method-chapter__mat-list-padding-left--override: 40px !default; // = breadcrumb padding left
+  $pages-method-chapter__mat-list-padding-left--override: $pages-method__chapter-padding-left !default;
   $pages-method-chapter__mat-list-content-margin-left--override: 16px !default; // = used for list indentation -> depth
   $pages-method-chapter__mat-list-item--selected-border-width: 4px !default;
+  $pages-method-chapter__mat-list__chapter-font-weight: $pages-method__chapter-font-weight !default;
 
   .method-chapter {
     .method-chapter__lesson-link {
@@ -28,18 +29,16 @@
       &--selected {
         &.mat-list-item .mat-list-item-content {
           background-color: $pages-method-chapter-background-color--accent;
-          padding-left: $pages-method-chapter__mat-list-padding-left--override -
-            $pages-method-chapter__mat-list-item--selected-border-width;
+          padding-left: $pages-method-chapter__mat-list-padding-left--override - $pages-method-chapter__mat-list-item--selected-border-width;
         }
 
-        border-left: $pages-method-chapter__mat-list-item--selected-border-width
-          $pages-method-chapter-color--accent solid;
+        border-left: $pages-method-chapter__mat-list-item--selected-border-width $pages-method-chapter-color--accent solid;
       }
 
       &--depth-0 {
         .method-chapter__lesson-link__title {
           margin-left: 0px;
-          font-weight: 600; // = left column ?
+          font-weight: $pages-method-chapter__mat-list__chapter-font-weight;
         }
       }
 

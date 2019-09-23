@@ -9,6 +9,10 @@ $pages-methods-background-color--primary: white !default;
 $pages-methods-text-color--secondary: darkgray !default;
 $pages-methods-background-color--secondary: whitesmoke !default;
 
+// measurements
+$pages-method__chapter-padding-left: 40px !default; // = breadcrumb padding left
+$pages-method__chapter-font-weight: 600 !default; // = somewhat lighter than left column
+
 .method-method__container,
 .method-chapter {
   height: 100%;
