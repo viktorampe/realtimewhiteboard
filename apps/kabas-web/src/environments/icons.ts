@@ -8,7 +8,10 @@ export const icons = {
   download: 'assets/icons/material/download.svg',
   'exercise:open': 'assets/icons/exercise-open.svg',
   'exercise:finished': 'assets/icons/exercise-finished.svg',
-  lesmateriaal: 'assets/icons/lesmateriaal.svg',
+  methods: 'assets/icons/methods.svg', //Temp icon
+  tasks: 'assets/icons/tasks.svg', //Temp icon
+  results: 'assets/icons/results.svg', //Temp icon
+  differentiate: 'assets/icons/differentiate.svg', //Temp icon
   'select-all': 'assets/icons/done_all.svg',
   'import-export': 'assets/icons/material/import-export.svg',
   'quicklink:favorites': 'assets/icons/favorites3.svg',
