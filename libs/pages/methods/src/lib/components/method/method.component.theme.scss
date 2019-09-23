@@ -1,4 +1,7 @@
 @mixin pages-methods-method() {
   .method-method__container {
+    .mat-tab-body-content {
+      display: block;
+    }
   }
 }
