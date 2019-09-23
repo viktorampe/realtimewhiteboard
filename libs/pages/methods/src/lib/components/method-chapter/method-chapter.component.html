@@ -33,12 +33,6 @@
 <div class="method-chapter">
   <campus-collapsible-sheet>
     <div aside>
-      <a
-        data-cy="back-link"
-        (click)="clickBackLink()"
-        class="method-chapter__back-link"
-        ><mat-icon svgIcon="arrow-back"></mat-icon>Terug</a
-      >
       <mat-list *ngIf="(currentMethodParams$ | async) as params">
         <mat-list-item
           data-cy="lesson-link"
