@@ -102,7 +102,10 @@ export const getClassGroupsForBook = createSelector(
   (
     book: EduContentBookInterface,
     classGroupsByMethodId: Dictionary<ClassGroupInterface[]>,
-    props: { id: number }
+    props: {
+      id: number;
+      filterByYear: boolean;
+    }
   ): ClassGroupInterface[] => {
     const bookYearIds = book.years.map(year => year.id);
 
@@ -110,9 +113,14 @@ export const getClassGroupsForBook = createSelector(
       return [];
     }
 
+    console.log(props.filterByYear);
+
     return classGroupsByMethodId[book.methodId].filter(classGroup => {
       //One of the classGroups' years must be in the books' years
-      return classGroup.years.some(year => bookYearIds.includes(year.id));
+      return (
+        !props.filterByYear ||
+        classGroup.years.some(year => bookYearIds.includes(year.id))
+      );
     });
   }
 );
