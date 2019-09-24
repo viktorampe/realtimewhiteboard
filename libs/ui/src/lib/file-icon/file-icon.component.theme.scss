@@ -1,0 +1,19 @@
+@mixin ui-file-icon() {
+  $ui-file-icon-width: 60px;
+  $ui-file-icon-height: 100px;
+
+  $ui-file-icon__label-top: 60%;
+  $ui-file-icon__label-right: -10px;
+
+  .ui-file-icon {
+    .mat-icon {
+      width: $ui-file-icon-width;
+      height: $ui-file-icon-height;
+    }
+
+    &__label {
+      top: $ui-file-icon__label-top;
+      right: $ui-file-icon__label-right;
+    }
+  }
+}

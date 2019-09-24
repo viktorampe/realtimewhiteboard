@@ -8,9 +8,8 @@ describe('FileIconComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ FileIconComponent ]
-    })
-    .compileComponents();
+      declarations: [FileIconComponent]
+    }).compileComponents();
   }));
 
   beforeEach(() => {
