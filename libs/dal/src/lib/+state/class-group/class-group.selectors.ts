@@ -113,8 +113,6 @@ export const getClassGroupsForBook = createSelector(
       return [];
     }
 
-    console.log(props.filterByYear);
-
     return classGroupsByMethodId[book.methodId].filter(classGroup => {
       //One of the classGroups' years must be in the books' years
       return (
