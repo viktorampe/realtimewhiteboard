@@ -124,7 +124,10 @@ describe('ClassGroup Selectors', () => {
       });
 
       it('should return the classGroups grouped by methodId', () => {
-        const results = ClassGroupQueries.getClassGroupsByMethodId(storeState);
+        const results = ClassGroupQueries.getClassGroupsByMethodId(
+          storeState,
+          {}
+        );
         expect(results).toEqual({
           2: [classGroups[0], classGroups[1]],
           3: [classGroups[1]]

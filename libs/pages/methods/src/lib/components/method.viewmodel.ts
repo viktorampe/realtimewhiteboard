@@ -615,9 +615,7 @@ export class MethodViewModel implements ContentOpenerInterface {
           select(ClassGroupQueries.getClassGroupsForBook, {
             id: currentBook.id,
             filterByYear: true
-          } as any)
-          //It only takes the props of the first selector, instead of adding my props -> as any
-          //The other option was duplicating the selector itself with and without filterByYear
+          })
         );
       })
     );

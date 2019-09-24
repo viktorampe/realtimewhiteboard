@@ -71,7 +71,10 @@ export const getById = createSelector(
 
 export const getClassGroupsByMethodId = createSelector(
   getAll,
-  (classGroups: ClassGroupInterface[]): Dictionary<ClassGroupInterface[]> => {
+  (
+    classGroups: ClassGroupInterface[],
+    props: {} //It's necessary to accept empty props for the getClassGroupsForBook selector
+  ): Dictionary<ClassGroupInterface[]> => {
     return classGroups.reduce(
       (acc, currentClassGroup) => {
         currentClassGroup.licenses.forEach(license => {
