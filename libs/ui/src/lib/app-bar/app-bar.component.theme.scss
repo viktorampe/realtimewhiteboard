@@ -3,6 +3,9 @@
   $ui-app-bar-background-color: $ui-secondary-bg-color !default;
   $ui-app-bar-button-width: auto !default;
   $ui-app-bar__section__align-right-padding-right: 12px !default;
+  $ui-app-bar__button-font-size: 14px !default;
+  $ui-app-bar__button-font-weight: normal !default;
+  $ui-app-bar__button__icon-size: 24px !default;
 
   .ui-app-bar {
     background-color: $ui-app-bar-background-color;
@@ -12,6 +15,13 @@
       width: $ui-app-bar-button-width;
       max-width: $ui-app-bar-button-width;
       text-align: center;
+      font-size: $ui-app-bar__button-font-size;
+      font-weight: $ui-app-bar__button-font-weight;
+
+      .mat-icon {
+        width: $ui-app-bar__button__icon-size;
+        height: $ui-app-bar__button__icon-size;
+      }
 
       span {
         margin-top: 5px;
