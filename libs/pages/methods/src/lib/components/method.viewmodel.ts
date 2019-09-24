@@ -360,7 +360,7 @@ export class MethodViewModel implements ContentOpenerInterface {
     this.generalFilesByType$ = this.getGeneralFilesByType();
     this.currentTab$ = this.getCurrentTab();
     this.filteredClassGroups$ = this.getFilteredClassGroups();
-    this.currentLessons$ = this.getTocLessonsStream();
+
     this.userLessons$ = this.store.pipe(select(UserLessonQueries.getAll));
     this.breadCrumbTitles$ = this.getBreadCrumbTitlesStream();
     this.isCurrentBoekeFavorite$ = this.getIsCurrentBoekeFavoriteStream();
@@ -464,6 +464,7 @@ export class MethodViewModel implements ContentOpenerInterface {
     this.learningPlanGoalProgressBylearningPlanGoalId$ = this.store.pipe(
       select(LearningPlanGoalProgressQueries.getGroupedByLearningPlanGoalId)
     );
+    this.currentLessons$ = this.getTocLessonsStream();
   }
 
   private getCurrentMethodParams(): Observable<CurrentMethodParams> {
@@ -523,13 +524,9 @@ export class MethodViewModel implements ContentOpenerInterface {
   private getTocsStream(): Observable<EduContentTOCInterface[]> {
     const tocStreamWhenLessonChapter$ = this.currentMethodParams$.pipe(
       filter(params => !!params.chapter),
-      switchMap(params => {
-        return this.store.pipe(
-          select(EduContentTocQueries.getTocsForToc, {
-            tocId: params.chapter
-          })
-        );
-      })
+      switchMap(params =>
+        this.combineChaptersLessons(params.book, params.chapter)
+      )
     );
 
     const tocStreamWhenBook$ = this.currentMethodParams$.pipe(
@@ -555,6 +552,32 @@ export class MethodViewModel implements ContentOpenerInterface {
     );
   }
 
+  private combineChaptersLessons(
+    bookId,
+    chapterId
+  ): Observable<EduContentTOCInterface[]> {
+    return this.store.pipe(
+      select(EduContentTocQueries.getChaptersForBook, {
+        bookId
+      }),
+      withLatestFrom(
+        this.store.pipe(
+          select(EduContentTocQueries.getTocsForToc, {
+            tocId: chapterId
+          })
+        )
+      ),
+      map(([chapters, lessons]) => {
+        const foundIndex = chapters.findIndex(
+          chapter => chapter.id === chapterId
+        );
+
+        chapters.splice(foundIndex + 1, 0, ...lessons);
+        return chapters;
+      })
+    );
+  }
+
   private getTocLessonsStream(): Observable<EduContentTOCInterface[]> {
     return this.currentMethodParams$.pipe(
       filter(params => !!params.chapter),
@@ -565,7 +588,9 @@ export class MethodViewModel implements ContentOpenerInterface {
             map(toc => [toc])
           );
         }
-        return this.currentToc$;
+        return this.store.pipe(
+          select(EduContentTocQueries.getTocsForToc, { tocId: params.chapter })
+        );
       })
     );
   }

@@ -20,7 +20,7 @@ body {
  * Angular Material theme
  */
 @import 'scss/theme-angular-material';
-@include angular-material-theme($polpo-theme);
+@include angular-material-theme($app-theme);
 
 // load all variables for your app theme and ui components
 @import 'scss/theme-variables';
