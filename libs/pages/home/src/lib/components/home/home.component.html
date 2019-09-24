@@ -1,9 +1,13 @@
 <div class="pages-home__container">
   <div class="pages-home__container__favorites">
-    <h1 mat-subheader
-      >Welkom {{ displayName$ | async }}, dit zijn je veel gebruikte
-      methodes:</h1
+    <campus-page-header
+      [title]="
+        'Welkom ' +
+        (displayName$ | async) +
+        ' dit zijn je veel gebruikte methodes:'
+      "
     >
+    </campus-page-header>
     <ng-container *ngIf="(favoritesWithEduContent$ | async) as favorites">
       <ng-template #noFavorites>
         <div class="pages-home__no-favorites"
@@ -30,14 +34,17 @@
     </ng-container>
   </div>
   <div class="pages-home__container__shortcuts">
-    <h1 mat-subheader>Wat wil je doen, {{ displayName$ | async }}?</h1>
+    <campus-page-header
+      [title]="'Wat wil je doen, ' + (displayName$ | async) + '?'"
+    >
+    </campus-page-header>
 
     <div class="pages-home__container__shortcuts__list">
       <div
         class="pages-home__container__shortcuts__list__shortcut pages-home__container__shortcuts__list__shortcut--methods"
       >
         <mat-icon svgIcon="methods"> </mat-icon>
-        <h2 mat-subheader>Methodes</h2>
+        <h2>Methodes</h2>
 
         <div
           class="pages-home__container__shortcuts__list__shortcut__description"
@@ -57,7 +64,7 @@
         class="pages-home__container__shortcuts__list__shortcut pages-home__container__shortcuts__list__shortcut--tasks"
       >
         <mat-icon svgIcon="tasks"> </mat-icon>
-        <h2 mat-subheader>Taken</h2>
+        <h2>Taken</h2>
 
         <div
           class="pages-home__container__shortcuts__list__shortcut__description"
@@ -76,7 +83,7 @@
         class="pages-home__container__shortcuts__list__shortcut pages-home__container__shortcuts__list__shortcut--results"
       >
         <mat-icon svgIcon="results"> </mat-icon>
-        <h2 mat-subheader>Resultaten</h2>
+        <h2>Resultaten</h2>
 
         <div
           class="pages-home__container__shortcuts__list__shortcut__description"
@@ -96,7 +103,7 @@
         class="pages-home__container__shortcuts__list__shortcut pages-home__container__shortcuts__list__shortcut--differentiate"
       >
         <mat-icon svgIcon="differentiate"> </mat-icon>
-        <h2 mat-subheader>Differentiëren</h2>
+        <h2>Differentiëren</h2>
 
         <div
           class="pages-home__container__shortcuts__list__shortcut__description"

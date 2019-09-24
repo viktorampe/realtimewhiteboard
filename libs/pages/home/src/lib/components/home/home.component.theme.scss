@@ -6,30 +6,29 @@
 
   $pages-home_container_shortcuts-border-top-width: 2px !default;
   $pages-home_container_shortcuts-border-top-color: $pages-home-background-color--secondary !default;
-  $pages-home_container_shortcuts-border-bottom-width: 2px !default;
-  $pages-home_container_shortcuts-border-bottom-color: $pages-home-background-color--secondary !default;
   $pages-home_container_shortcuts-padding-top: 50px !default;
   $pages-home_container_shortcuts-padding-right: 40px !default;
   $pages-home_container_shortcuts-padding-bottom: 50px !default;
   $pages-home_container_shortcuts-padding-left: 40px !default;
-  $pages-home_container_shortcuts-margin-bottom: 120px !default;
 
-  $pages-home_container_shortcuts_list_shortcut-margin-right: 40px !default;
+  $pages-home_container_shortcuts_list_shortcut-margin-right: 56px !default;
   $pages-home_container_shortcuts_list_shortcut-width: 176px !default;
 
   $pages-home_container_shortcuts_list_shortcut_icon-width: 64px !default;
-  $pages-home_container_shortcuts_list_shortcut_icon-height: 64px !default;
+  $pages-home_container_shortcuts_list_shortcut_icon-height: 48px !default;
 
   $pages-home_container_shortcuts_list_shortcut_title-color: $pages-home-text-color--secondary !default;
-  $pages-home_container_shortcuts_list_shortcut_title-font-size: 24px !default;
+  $pages-home_container_shortcuts_list_shortcut_title-font-size: 20px !default;
 
   $pages-home_container_shortcuts_list_shortcut_description-color: $pages-home-text-color--tertiary !default;
   $pages-home_container_shortcuts_list_shortcut_description-margin-bottom: 16px !default;
+  $pages-home_container_shortcuts_list_shortcut_description-font-weight: bold !default;
+  $pages-home_container_shortcuts_list_shortcut_description-font-size: 12px !default;
 
   $pages-home_container_shortcuts_list_shortcut_link-color: $pages-home-text-color--secondary !default;
   $pages-home_container_shortcuts_list_shortcut_link-font-size: 16px !default;
 
-  $pages-home_favorite-list-margin-right: 16px !default;
+  $pages-home_favorite-list-margin-right: 32px !default;
 
   .pages-home {
     &__container {
@@ -43,13 +42,10 @@
       &__shortcuts {
         border-top: $pages-home_container_shortcuts-border-top-width solid
           $pages-home_container_shortcuts-border-top-color;
-        border-bottom: $pages-home_container_shortcuts-border-bottom-width solid
-          $pages-home_container_shortcuts-border-bottom-color;
         padding: $pages-home_container_shortcuts-padding-top
           $pages-home_container_shortcuts-padding-right
           $pages-home_container_shortcuts-padding-bottom
           $pages-home_container_shortcuts-padding-left;
-        margin-bottom: $pages-home_container_shortcuts-margin-bottom;
 
         h1 {
           margin-top: 0;
@@ -73,6 +69,8 @@
             &__description {
               color: $pages-home_container_shortcuts_list_shortcut_description-color;
               margin-bottom: $pages-home_container_shortcuts_list_shortcut_description-margin-bottom;
+              font-weight: $pages-home_container_shortcuts_list_shortcut_description-font-weight;
+              font-size: $pages-home_container_shortcuts_list_shortcut_description-font-size;
             }
 
             a {
