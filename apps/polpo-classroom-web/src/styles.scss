@@ -78,7 +78,7 @@ figure {
  * Angular Material theme
  */
 @import 'scss/theme-angular-material';
-@include angular-material-theme($polpo-theme);
+@include angular-material-theme($app-theme);
 // alternative: include individual component mixins
 
 // include ui lib scss file

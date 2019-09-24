@@ -137,25 +137,6 @@ export class MethodChapterComponent implements OnInit, AfterViewInit {
       });
   }
 
-  public clickBackLink() {
-    this.currentTab$
-      .pipe(
-        take(1),
-        withLatestFrom(this.currentMethodParams$)
-      )
-      .subscribe(([tab, currentMethodParams]) => {
-        const urlParts = ['methods', currentMethodParams.book];
-        if (currentMethodParams.lesson)
-          urlParts.push(currentMethodParams.chapter);
-
-        this.router.navigate(urlParts, {
-          queryParams: {
-            tab
-          }
-        });
-      });
-  }
-
   public clickOpenBoeke(eduContent: EduContent): void {
     this.methodViewModel.openBoeke(eduContent);
   }

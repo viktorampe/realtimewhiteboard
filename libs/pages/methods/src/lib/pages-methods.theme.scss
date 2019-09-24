@@ -1,6 +1,18 @@
 @import './components/method/method.component.theme.scss';
 @import './components/method-chapter/method-chapter.component.theme.scss';
 
+// color palette
+$pages-methods-text-color--primary: black !default;
+$pages-methods-text-color--primary--accent: darkred !default;
+$pages-methods-background-color--primary: white !default;
+
+$pages-methods-text-color--secondary: darkgray !default;
+$pages-methods-background-color--secondary: whitesmoke !default;
+
+// measurements
+$pages-method__chapter-padding-left: 40px !default; // = breadcrumb padding left
+$pages-method__chapter-font-weight: 600 !default; // = somewhat lighter than left column
+
 .method-method__container,
 .method-chapter {
   height: 100%;
@@ -14,7 +26,7 @@
     div[aside] {
       height: 100%;
       overflow: auto;
-      padding: 20px;
+      padding: 0px;
     }
 
     div[main] {
