@@ -1,7 +1,7 @@
 @import '~@angular/material/_theming';
 @include mat-core(); // be sure to include this mixin only once
 // created theme with http://mcg.mbitson.com/ (find main palette color next to '500 :')
-$mat-polpo-primary: (
+$mat-app-primary: (
   50: #eaeaea,
   100: #cbcbcb,
   200: #a8a8a8,
@@ -33,7 +33,7 @@ $mat-polpo-primary: (
     A700: #ffffff
   )
 );
-$mat-polpo-accent: (
+$mat-app-accent: (
   50: #eefaf8,
   100: #d4f2ec,
   200: #b7e9e0,
@@ -65,12 +65,12 @@ $mat-polpo-accent: (
     A700: #000000
   )
 );
-$mat-polpo-warn: $mat-red;
+$mat-app-warn: $mat-red;
 // apply custom theme to my components (https://material.angular.io/guide/theming-your-components)
-$polpo-primary: mat-palette($mat-polpo-primary);
-$polpo-accent: mat-palette($mat-polpo-accent, 500, 900, A100);
-$polpo-warn: mat-palette($mat-deep-orange);
-$polpo-theme: mat-light-theme($polpo-primary, $polpo-accent, $polpo-warn);
+$app-primary: mat-palette($mat-app-primary);
+$app-accent: mat-palette($mat-app-accent, 500, 900, A100);
+$app-warn: mat-palette($mat-deep-orange);
+$app-theme: mat-light-theme($app-primary, $app-accent, $app-warn);
 // theme overrides
 mat-drawer {
   border-right: none !important;

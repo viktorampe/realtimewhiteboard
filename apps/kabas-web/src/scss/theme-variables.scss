@@ -24,7 +24,7 @@ $primary-bg-color: $color-white-1;
 $primary-font-color: $color-gray-3;
 $primary-color-accent: $color-blue-3; // link, button (borders)
 $primary-font-color-2: $color-gray-4; // subtitle
-$primary-font-family: 'Helvetica', 'Arial', 'Open Sans', sans-serif;
+$primary-font-family: 'Arial', 'Open Sans', sans-serif;
 $primary-font-family-2: 'Lato', sans-serif; // title
 $primary-font-size: 14px;
 
@@ -93,9 +93,13 @@ $shared-header__quicklink-icon-size: 24px;
 $shared-header__quicklink-icon-size-small: 20px;
 
 // ui > forms
-$ui-form-button-default-bg-color: $color-gray-3;
-$ui-form-button-primary-bg-color: $color-blue-2;
+$ui-form-button-default-bg-color: $color-gray-2;
+$ui-form-button-primary-bg-color: $color-orange-1;
 $ui-button--large-font-size: 18px;
+
+// ui > collapsible sheet
+$ui-collapsible-sheet-button-bg-color: $color-gray-2;
+$ui-collapsible-sheet-border-color: $color-gray-2;
 
 // social media
 $facebook-button-background-color: #455897;
