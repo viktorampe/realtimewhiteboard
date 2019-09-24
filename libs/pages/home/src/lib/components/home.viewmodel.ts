@@ -44,7 +44,7 @@ export class HomeViewModel {
   private setPresentationStreams(): void {
     this.displayName$ = this.store.pipe(
       select(UserQueries.getCurrentUser),
-      map(user => user.displayName)
+      map(user => user.firstName || user.displayName)
     );
     this.favoritesWithEduContent$ = this.store.pipe(
       select(getFavoritesWithEduContent, { type: FavoriteTypesEnum.BOEKE })
