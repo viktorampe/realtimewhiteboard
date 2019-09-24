@@ -1,0 +1,18 @@
+@mixin file-icon($ext, $color) {
+  .ui-file-icon--#{$ext} {
+    border-color: $color;
+
+    .mat-icon {
+      fill: $color;
+    }
+
+    > span {
+      color: $color;
+      border-color: $color;
+      background-color: lighten($color, 60);
+    }
+  }
+}
+
+@include file-icon('pdf', red);
+@include file-icon('campus', green);

@@ -6,6 +6,6 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./file-icon.component.scss']
 })
 export class FileIconComponent {
-  @Input() svgIcon = '';
-  @Input() title = '';
+  @Input() icon = '';
+  @Input() label = '';
 }

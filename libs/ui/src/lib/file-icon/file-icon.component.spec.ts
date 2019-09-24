@@ -1,5 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { MatIconModule, MatIconRegistry } from '@angular/material';
+import { MockMatIconRegistry } from '@campus/testing';
 import { FileIconComponent } from './file-icon.component';
 
 describe('FileIconComponent', () => {
@@ -8,7 +9,9 @@ describe('FileIconComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [FileIconComponent]
+      imports: [MatIconModule],
+      declarations: [FileIconComponent],
+      providers: [{ provide: MatIconRegistry, useClass: MockMatIconRegistry }]
     }).compileComponents();
   }));
 

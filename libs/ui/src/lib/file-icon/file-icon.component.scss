@@ -1,7 +1,8 @@
 .ui-file-icon {
   position: relative;
 
-  &__label {
+  > span {
     position: absolute;
+    display: block;
   }
 }
