@@ -93,9 +93,13 @@ $shared-header__quicklink-icon-size: 24px;
 $shared-header__quicklink-icon-size-small: 20px;
 
 // ui > forms
-$ui-form-button-default-bg-color: $color-gray-3;
-$ui-form-button-primary-bg-color: $color-blue-2;
+$ui-form-button-default-bg-color: $color-gray-2;
+$ui-form-button-primary-bg-color: $color-orange-1;
 $ui-button--large-font-size: 18px;
+
+// ui > collapsible sheet
+$ui-collapsible-sheet-button-bg-color: $color-gray-2;
+$ui-collapsible-sheet-border-color: $color-gray-2;
 
 // social media
 $facebook-button-background-color: #455897;
@@ -125,3 +129,10 @@ $pages-home-background-color--primary: $primary-bg-color;
 $pages-home-text-color--secondary: $primary-font-color;
 $pages-home-background-color--secondary: $color-gray-2;
 $pages-home_image-background-color: $secondary-font-color-accent;
+
+// methods
+$pages-methods-text-color--primary: $primary-font-color;
+$pages-methods-text-color--primary--accent: $secondary-font-color-accent;
+$pages-methods-background-color--primary: $primary-bg-color;
+$pages-methods-text-color--secondary: $primary-font-color-2;
+$pages-methods-background-color--secondary: $secondary-bg-color;
