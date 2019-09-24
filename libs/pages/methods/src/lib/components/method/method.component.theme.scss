@@ -4,6 +4,26 @@
       display: block;
     }
 
+    &__boeke {
+      border: 1px lightgrey solid;
+
+      &.mat-card {
+        box-shadow: none !important;
+      }
+
+      &__image {
+        margin-top: 8px !important;
+      }
+
+      &__diabolo {
+        &__title {
+          font-size: 16px;
+          font-weight: bold;
+        }
+      }
+    }
+
+
     // placeholder
     .banner-container {
       width: 75px;
@@ -17,7 +37,7 @@
     // placeholder
     .banner {
       width: 112px;
-      padding: 6px;
+      padding: 8px;
       background-color: $color-gray-2;
       color: $color-gray-3;
       text-align: center;

@@ -69,14 +69,17 @@
             </div>
 
             <mat-card-content *ngIf="(method$ | async) as method">
-              <img [src]="'assets/icons/method/' + method.logoUrl" />
+              <img
+                class="method-method__container__boeke__image"
+                [src]="'assets/icons/method/' + method.logoUrl"
+              />
 
               <p
                 data-cy="diabolo-info"
                 *ngIf="(book$ | async)?.diabolo"
                 class="method-method__container__boeke__diabolo"
               >
-                {{ method.name }} is een diabolo methode.
+                <span class="method-method__container__boeke__diabolo__title">{{ method.name }} is een diabolo methode.</span><br />
                 <a
                   href="https://www.diekeure.be/nl-be/educatief/lager-onderwijs/diabolo"
                   target="_blank"
