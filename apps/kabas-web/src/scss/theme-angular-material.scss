@@ -1,21 +1,21 @@
 @import '~@angular/material/_theming';
 @include mat-core(); // be sure to include this mixin only once
 // created theme with http://mcg.mbitson.com/ (find main palette color next to '500 :')
-$mat-polpo-primary: (
-  50: #f8eff4,
-  100: #edd7e3,
-  200: #e1bdd0,
-  300: #d4a3bd,
-  400: #cb8fae,
-  500: #c27ba0,
-  600: #bc7398,
-  700: #b4688e,
-  800: #ac5e84,
-  900: #9f4b73,
-  A100: #fffcfd,
-  A200: #ffc9e2,
-  A400: #ff96c7,
-  A700: #ff7cb9,
+$mat-app-primary: (
+  50: #ecf5f6,
+  100: #d0e6ea,
+  200: #b1d5dc,
+  300: #91c4cd,
+  400: #7ab8c3,
+  500: #62abb8,
+  600: #5aa4b1,
+  700: #509aa8,
+  800: #4691a0,
+  900: #348091,
+  A100: #dcf8ff,
+  A200: #a9efff,
+  A400: #76e5ff,
+  A700: #5de0ff,
   contrast: (
     50: #000000,
     100: #000000,
@@ -33,27 +33,27 @@ $mat-polpo-primary: (
     A700: #000000
   )
 );
-$mat-polpo-accent: (
-  50: #f4eaef,
-  100: #e4cad7,
-  200: #d3a6bc,
-  300: #c182a1,
-  400: #b3688d,
-  500: #a64d79,
-  600: #9e4671,
-  700: #953d66,
-  800: #8b345c,
-  900: #7b2549,
-  A100: #ffbcd7,
-  A200: #ff89b8,
-  A400: #ff5699,
-  A700: #ff3c8a,
+$mat-app-accent: (
+  50: #f9e6ec,
+  100: #efc0cf,
+  200: #e496af,
+  300: #d96c8f,
+  400: #d14d77,
+  500: #c92d5f,
+  600: #c32857,
+  700: #bc224d,
+  800: #b51c43,
+  900: #a91132,
+  A100: #ffd9e0,
+  A200: #ffa6b6,
+  A400: #ff738d,
+  A700: #ff5978,
   contrast: (
     50: #000000,
     100: #000000,
     200: #000000,
     300: #000000,
-    400: #000000,
+    400: #ffffff,
     500: #ffffff,
     600: #ffffff,
     700: #ffffff,
@@ -62,12 +62,12 @@ $mat-polpo-accent: (
     A100: #000000,
     A200: #000000,
     A400: #000000,
-    A700: #ffffff
+    A700: #000000
   )
 );
-$mat-polpo-warn: $mat-red;
+$mat-app-warn: $mat-red;
 // apply custom theme to my components (https://material.angular.io/guide/theming-your-components)
-$polpo-primary: mat-palette($mat-polpo-primary);
-$polpo-accent: mat-palette($mat-polpo-accent, 500, 900, A100);
-$polpo-warn: mat-palette($mat-deep-orange);
-$polpo-theme: mat-light-theme($polpo-primary, $polpo-accent, $polpo-warn);
+$app-primary: mat-palette($mat-app-primary);
+$app-accent: mat-palette($mat-app-accent, 500, 900, A100);
+$app-warn: mat-palette($mat-deep-orange);
+$app-theme: mat-light-theme($app-primary, $app-accent, $app-warn);
