@@ -610,18 +610,16 @@ export class MethodViewModel implements ContentOpenerInterface {
   private getFilteredClassGroups(): Observable<ClassGroupInterface[]> {
     return this.currentBook$.pipe(
       filter(currentBook => !!currentBook),
-      switchMap(
-        (currentBook): Observable<ClassGroupInterface[]> => {
-          return this.store.pipe(
-            select(ClassGroupQueries.getClassGroupsForBook, {
-              id: currentBook.id,
-              filterByYear: true
-            } as any)
-            //It only takes the props of the first selector, instead of adding my props -> as any
-            //The other option was duplicating the selector itself with and without filterByYear
-          );
-        }
-      )
+      switchMap(currentBook => {
+        return this.store.pipe(
+          select(ClassGroupQueries.getClassGroupsForBook, {
+            id: currentBook.id,
+            filterByYear: true
+          } as any)
+          //It only takes the props of the first selector, instead of adding my props -> as any
+          //The other option was duplicating the selector itself with and without filterByYear
+        );
+      })
     );
   }
 
