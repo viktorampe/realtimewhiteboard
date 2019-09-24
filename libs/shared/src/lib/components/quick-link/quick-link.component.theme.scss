@@ -4,11 +4,11 @@
 
   // extract material colors from theme
   $shared-quick-link_item_icon-color: map-get(
-    map-get($polpo-theme, foreground),
+    map-get($app-theme, foreground),
     secondary-text
   ) !default;
   $shared-quick-link_item_hover-color: map-get(
-    map-get($polpo-theme, background),
+    map-get($app-theme, background),
     hover
   ) !default;
 
