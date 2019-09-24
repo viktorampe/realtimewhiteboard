@@ -70,6 +70,26 @@ describe('PageHeaderComponent', () => {
 
     expect(subTitleDE.nativeElement.textContent).toBe(mockData.subTitle);
   });
+
+  it('should set the --title-only class on the title if there is no subtitle', () => {
+    component.subtitle = '';
+    fixture.detectChanges();
+
+    const TitleDE = fixture.debugElement.query(
+      By.css('.ui-page-header__title--title-only')
+    );
+
+    expect(TitleDE).toBeTruthy();
+  });
+
+  it('should not set the --title-only class on the title if there is a subtitle', () => {
+    const TitleDE = fixture.debugElement.query(
+      By.css('.ui-page-header__title--title-only')
+    );
+
+    expect(TitleDE).toBeFalsy();
+  });
+
   it('should not display the subtitle span if the layout is set to centered', () => {
     component.layout = 'centered';
     fixture.detectChanges();
