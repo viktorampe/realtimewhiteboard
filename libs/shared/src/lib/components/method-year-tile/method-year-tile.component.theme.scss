@@ -61,6 +61,7 @@
         width: $shared-method-year-tile_button_container_button-width;
         height: $shared-method-year-tile_button_container_button-height;
         font-size: $shared-method-year-tile_button_container_button-font-size;
+        padding: 0; //Internet Exploder Fix
 
         &:hover {
           color: $shared-method-year-tile_button_container_button-hover-color;
