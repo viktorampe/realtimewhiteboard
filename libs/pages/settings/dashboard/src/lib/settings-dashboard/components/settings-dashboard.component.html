@@ -37,7 +37,10 @@
 </ng-template>
 
 <ng-template #navItemTemplate>
-  <mat-list-item *ngFor="let link of (links$ | async)">
-    {{ link.title }}
-  </mat-list-item>
+  <ng-container *ngFor="let link of (links$ | async)">
+    <mat-list-item class="pages-settings-dashboard__mat-list__item">
+      {{ link.title }}
+    </mat-list-item>
+    <mat-divider></mat-divider>
+  </ng-container>
 </ng-template>

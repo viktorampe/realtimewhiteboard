@@ -1,1 +1,40 @@
-@mixin pages-settings-dashboard-component-theme() {}
+@mixin pages-settings-dashboard-component-theme() {
+  // color palette
+  $pages-settings-dashboard_container-background-color: $pages-settings_container-background-color !default;
+  $pages-settings-dashboard_mat-list_item-color: $pages-settings_mat-list_item-color !default;
+  $pages-settings-dashboard_mat-list_item-background-color: $pages-settings_container-background-color !default;
+  $pages-settings-dashboard_mat-list_item-background-color--accent: $pages-settings_mat-list_item-background-color--accent !default;
+
+
+  $pages-settings-dashboard_container-box-shadow: $pages-settings_container-box-shadow !default;
+  $pages-settings-dashboard_container-max-width: $pages-settings_container-max-width !default;
+  $pages-settings-dashboard_mat-list_item-font-weight: $pages-settings_mat-list_item-font-weight !default;
+
+  .pages-settings-dashboard {
+    &__page-header {
+      display: $pages-settings_page-header-display;
+    }
+
+    &__container {
+      background-color: $pages-settings-dashboard_container-background-color;
+      box-shadow: $pages-settings-dashboard_container-box-shadow;
+      max-width: $pages-settings-dashboard_container-max-width;
+    }
+
+    &__mat-list {
+      &__item {
+        &.mat-list-item .mat-list-item-content {
+          color: $pages-settings-dashboard_mat-list_item-color;
+          background-color: $pages-settings-dashboard_mat-list_item-background-color;
+          font-weight: $pages-settings-dashboard_mat-list_item-font-weight;
+        }
+
+        &:hover {
+          &.mat-list-item .mat-list-item-content {
+            background-color: $pages-settings-dashboard_mat-list_item-background-color--accent;
+          }
+        }
+      }
+    }
+  }
+}

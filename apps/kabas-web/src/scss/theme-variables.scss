@@ -24,8 +24,11 @@ $primary-bg-color: $color-white-1;
 $primary-font-color: $color-gray-3;
 $primary-color-accent: $color-blue-3; // link, button (borders)
 $primary-font-color-2: $color-gray-4; // subtitle
-$primary-font-family: 'Arial', 'Open Sans', sans-serif;
-$primary-font-family-2: 'Lato', sans-serif; // title
+$primary-font-family: 'Arial',
+'Open Sans',
+sans-serif;
+$primary-font-family-2: 'Lato',
+sans-serif; // title
 $primary-font-size: 14px;
 
 // app > nav + site header (shell)
@@ -88,11 +91,9 @@ $shared-header__page-bar-padding-left: 40px;
 $shared-header__page-bar-height: 80px;
 $shared-header__page-bar__divider-margin-left-right: 0;
 $shared-header__page-bar-container__justify-content: flex-end;
-$shared_header__page-bar_background: linear-gradient(
-  90deg,
+$shared_header__page-bar_background: linear-gradient(90deg,
   $color-blue-2,
-  $color-blue-3
-);
+  $color-blue-3);
 $shared-header__quicklink-color: $secondary-font-color;
 $shared-header__quicklink-color-hover: $secondary-font-color-accent;
 $shared-header__quicklink-bg-color: transparent;
@@ -142,3 +143,13 @@ $pages-methods-text-color--primary--accent: $secondary-font-color-accent;
 $pages-methods-background-color--primary: $primary-bg-color;
 $pages-methods-text-color--secondary: $primary-font-color-2;
 $pages-methods-background-color--secondary: $secondary-bg-color;
+
+//settings
+$pages-settings_page-header-display: none;
+$pages-settings_container-background-color: $color-white-1;
+$pages-settings_container-box-shadow: 0px 0px 8px 2px $color-gray-3;
+$pages-settings_container-max-width: 400px;
+
+$pages-settings_mat-list_item-color: $primary-font-color;
+$pages-settings_mat-list_item-font-weight: bold;
+$pages-settings_mat-list_item-background-color--accent: $secondary-bg-color;

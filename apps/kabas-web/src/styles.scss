@@ -30,12 +30,16 @@ body {
 @include ui-theme();
 
 // include pages lib scss files
+@import 'libs/pages/shared/src/pages-theme';
+@include pages-theme();
 @import 'libs/pages/methods/src/lib/pages-methods.theme';
 @include pages-methods-theme();
 @import 'libs/pages/global-search/src/lib/pages-global-search.theme';
 @include pages-global-search-theme();
 @import 'libs/pages/home/src/lib/pages-home.theme';
 @include pages-home-theme();
+@import 'libs/pages/settings/pages-settings.theme';
+@include pages-settings-theme();
 
 // include shared lib scss
 @import 'libs/shared/src/lib/shared-theme';
@@ -118,6 +122,7 @@ body {
 .shared-header__alerts {
   order: 4;
 }
+
 #global-alert-btn {
   color: $color-green-1;
   fill: $color-green-1;
@@ -139,6 +144,7 @@ body {
 
 .mat-checkbox {
   &-disabled {
+
     .mat-checkbox-frame,
     .mat-checkbox-background {
       border: 2px solid $primary-font-color-2 !important;
@@ -159,6 +165,7 @@ body {
     }
   }
 }
+
 .mat-checkbox-checked.mat-primary,
 .mat-checkbox-checked.mat-accent {
   .mat-checkbox-background {
@@ -166,9 +173,7 @@ body {
   }
 }
 
-.mat-checkbox:not(.mat-checkbox-disabled).mat-primary
-  .mat-checkbox-ripple
-  .mat-ripple-element {
+.mat-checkbox:not(.mat-checkbox-disabled).mat-primary .mat-checkbox-ripple .mat-ripple-element {
   background-color: $secondary-font-color-accent;
 }
 
@@ -185,7 +190,7 @@ body {
 .pages-settings-alerts {
   position: relative;
 
-  > * {
+  >* {
     z-index: 1;
     position: relative;
     display: flex;
@@ -209,13 +214,11 @@ body {
 @font-face {
   font-family: FontAwesome;
   src: url(/assets/fonts/fontawesome-webfont.eot?v=4.4.0);
-  src: url(/assets/fonts/fontawesome-webfont.eot?#iefix&v=4.4.0)
-      format('embedded-opentype'),
+  src: url(/assets/fonts/fontawesome-webfont.eot?#iefix&v=4.4.0) format('embedded-opentype'),
     url(/assets/fonts/fontawesome-webfont.woff2?v=4.4.0) format('woff2'),
     url(/assets/fonts/fontawesome-webfont.woff?v=4.4.0) format('woff'),
     url(/assets/fonts/fontawesome-webfont.ttf?v=4.4.0) format('truetype'),
-    url(/assets/fonts/fontawesome-webfont.svg?v=4.4.0#fontawesomeregular)
-      format('svg');
+    url(/assets/fonts/fontawesome-webfont.svg?v=4.4.0#fontawesomeregular) format('svg');
   font-weight: 400;
   font-style: normal;
 }
@@ -223,13 +226,11 @@ body {
 @font-face {
   font-family: simple-line-icons;
   src: url(/assets/fonts/Simple-Line-Icons.eot?v=2.2.2);
-  src: url(/assets/fonts/Simple-Line-Icons.eot?v=2.2.2#iefix)
-      format('embedded-opentype'),
+  src: url(/assets/fonts/Simple-Line-Icons.eot?v=2.2.2#iefix) format('embedded-opentype'),
     url(/assets/fonts/Simple-Line-Icons.ttf?v=2.2.2) format('truetype'),
     url(/assets/fonts/Simple-Line-Icons.woff2?v=2.2.2) format('woff2'),
     url(/assets/fonts/Simple-Line-Icons.woff?v=2.2.2) format('woff'),
-    url(/assets/fonts/Simple-Line-Icons.svg?v=2.2.2#simple-line-icons)
-      format('svg');
+    url(/assets/fonts/Simple-Line-Icons.svg?v=2.2.2#simple-line-icons) format('svg');
   font-weight: 400;
   font-style: normal;
 }
@@ -237,13 +238,11 @@ body {
 @font-face {
   font-family: 'Glyphicons Halflings';
   src: url(/assets/fonts/glyphicons-halflings-regular.eot);
-  src: url(/assets/fonts/glyphicons-halflings-regular.eot?#iefix)
-      format('embedded-opentype'),
+  src: url(/assets/fonts/glyphicons-halflings-regular.eot?#iefix) format('embedded-opentype'),
     url(/assets/fonts/glyphicons-halflings-regular.woff2) format('woff2'),
     url(/assets/fonts/glyphicons-halflings-regular.woff) format('woff'),
     url(/assets/fonts/glyphicons-halflings-regular.ttf) format('truetype'),
-    url(/assets/fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular)
-      format('svg');
+    url(/assets/fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular) format('svg');
 }
 
 @font-face {
