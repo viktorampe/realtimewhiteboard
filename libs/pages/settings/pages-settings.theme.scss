@@ -1,0 +1,9 @@
+@import './dashboard/src/lib/pages-settings-dashboard.theme';
+@import './profile/src/lib/pages-settings-profile.theme';
+@import './alerts/src/lib/pages-settings-alerts.theme';
+
+@mixin pages-settings-theme() {
+  @include pages-settings-dashboard-theme();
+  @include pages-settings-profile-theme();
+  @include pages-settings-alerts-theme();
+}
