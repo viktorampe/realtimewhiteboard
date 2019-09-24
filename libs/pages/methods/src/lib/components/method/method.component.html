@@ -63,12 +63,14 @@
             class="method-method__container__boeke"
             *ngIf="(boeke$ | async) as boeke"
           >
-            <mat-card-header>
-              <div mat-card-avatar><mat-icon svgIcon="book"></mat-icon></div>
-              <mat-card-title>Bordboek</mat-card-title>
-            </mat-card-header>
+            <!-- placeholder for actual banner image -->
+            <div class="banner-container">
+              <div class="banner">bordboek</div>
+            </div>
+
             <mat-card-content *ngIf="(method$ | async) as method">
               <img [src]="'assets/icons/method/' + method.logoUrl" />
+
               <p
                 data-cy="diabolo-info"
                 *ngIf="(book$ | async)?.diabolo"
@@ -86,7 +88,7 @@
               <campus-button
                 data-cy="open-boeke"
                 (click)="clickOpenBoeke(boeke)"
-                mat-button
+                primary
                 >OPEN</campus-button
               >
             </mat-card-actions>
