@@ -1,6 +1,8 @@
 import { Inject, Injectable } from '@angular/core';
 import { DalState, UserQueries } from '@campus/dal';
 import {
+  EnvironmentUIInterface,
+  ENVIRONMENT_UI_TOKEN,
   NavigationItemServiceInterface,
   NAVIGATION_ITEM_SERVICE_TOKEN
 } from '@campus/shared';
@@ -18,7 +20,8 @@ export class SettingsDashboardViewModel {
   constructor(
     private store: Store<DalState>,
     @Inject(NAVIGATION_ITEM_SERVICE_TOKEN)
-    private navigationItemService: NavigationItemServiceInterface
+    private navigationItemService: NavigationItemServiceInterface,
+    @Inject(ENVIRONMENT_UI_TOKEN) public environmentUi: EnvironmentUIInterface
   ) {
     this.initialize();
   }

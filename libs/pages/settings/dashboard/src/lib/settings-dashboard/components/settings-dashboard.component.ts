@@ -10,6 +10,7 @@ import { SettingsDashboardViewModel } from './settings-dashboard.viewmodel';
 })
 export class SettingsDashboardComponent {
   links$: Observable<NavItem[]> = this.viewModel.links$;
+  useNavItemStyle: boolean = this.viewModel.environmentUi.useNavItemStyle;
 
   constructor(private viewModel: SettingsDashboardViewModel) {}
 }

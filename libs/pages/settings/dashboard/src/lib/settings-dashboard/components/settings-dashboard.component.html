@@ -1,21 +1,43 @@
 <div class="campus-page pages-settings-dashboard">
-  <campus-page-header
-    [title]="'Instellingen'"
-    [subtitle]="'Dashboard'"
-    [iconClass]="'settings'"
-  >
-  </campus-page-header>
-  <mat-nav-list>
-    <div *ngFor="let link of (links$ | async)">
-      <campus-button
-        large
-        bordered
-        rounded-corners
-        [routerLink]="link.link"
-        [iconClass]="link.icon"
-      >
-        <div> {{ link.title }} </div>
-      </campus-button>
+  <div class="pages-settings-dashboard__container">
+    <campus-page-header
+      class="pages-settings-dashboard__page-header"
+      [title]="'Instellingen'"
+      [subtitle]="'Dashboard'"
+      [iconClass]="'settings'"
+    >
+    </campus-page-header>
+
+    <div class="pages-settings-dashboard__image__container">
+      <div class="pages-settings-dashboard__image"> </div>
+      <div class="pages-settings-dashboard__image__caption"> </div>
     </div>
-  </mat-nav-list>
+
+    <div class="pages-settings-dashboard__button__container">
+      <mat-nav-list class="pages-settings-dashboard__mat-list">
+        <ng-container
+          *ngIf="useNavItemStyle; then navItemTemplate; else buttonTemplate"
+        >
+        </ng-container>
+      </mat-nav-list>
+    </div>
+  </div>
 </div>
+
+<ng-template #buttonTemplate>
+  <campus-button
+    *ngFor="let link of (links$ | async)"
+    large
+    bordered
+    [routerLink]="link.link"
+    [iconClass]="link.icon"
+  >
+    <div> {{ link.title }} </div>
+  </campus-button>
+</ng-template>
+
+<ng-template #navItemTemplate>
+  <mat-list-item *ngFor="let link of (links$ | async)">
+    {{ link.title }}
+  </mat-list-item>
+</ng-template>
