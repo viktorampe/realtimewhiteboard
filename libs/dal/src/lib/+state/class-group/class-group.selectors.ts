@@ -113,12 +113,13 @@ export const getClassGroupsForBook = createSelector(
       return [];
     }
 
-    return classGroupsByMethodId[book.methodId].filter(classGroup => {
-      //One of the classGroups' years must be in the books' years
-      return (
-        !props.filterByYear ||
-        classGroup.years.some(year => bookYearIds.includes(year.id))
-      );
-    });
+    if (props.filterByYear) {
+      return classGroupsByMethodId[book.methodId].filter(classGroup => {
+        //One of the classGroups' years must be in the books' years
+        return classGroup.years.some(year => bookYearIds.includes(year.id));
+      });
+    } else {
+      return classGroupsByMethodId[book.methodId];
+    }
   }
 );
