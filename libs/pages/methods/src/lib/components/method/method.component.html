@@ -41,11 +41,14 @@
 <div class="method-method__container">
   <campus-collapsible-sheet>
     <div aside>
-      <h3 mat-subheader>Kies een hoofdstuk</h3>
       <mat-nav-list>
+        <div class="method-chapter__list-header" matSubheader
+          >Kies een hoofdstuk</div
+        >
         <a
           data-cy="chapter-link"
           mat-list-item
+          class="method-chapter-link"
           *ngFor="let chapter of (chapters$ | async)"
           (click)="clickOpenChapter(chapter.id)"
           >{{ chapter.title }}</a
