@@ -24,7 +24,7 @@ $primary-bg-color: $color-white-1;
 $primary-font-color: $color-gray-3;
 $primary-color-accent: $color-blue-3; // link, button (borders)
 $primary-font-color-2: $color-gray-4; // subtitle
-$primary-font-family: 'Helvetica', 'Arial', 'Open Sans', sans-serif;
+$primary-font-family: 'Arial', 'Open Sans', sans-serif;
 $primary-font-family-2: 'Lato', sans-serif; // title
 $primary-font-size: 14px;
 
@@ -129,5 +129,5 @@ $pages-home-text-color--primary: $primary-font-color-2;
 $pages-home-text-color--primary--hover: $secondary-font-color-accent;
 $pages-home-background-color--primary: $primary-bg-color;
 $pages-home-text-color--secondary: $primary-font-color;
-$pages-home-background-color--secondary: $secondary-bg-color;
+$pages-home-background-color--secondary: $color-gray-2;
 $pages-home_image-background-color: $secondary-font-color-accent;
