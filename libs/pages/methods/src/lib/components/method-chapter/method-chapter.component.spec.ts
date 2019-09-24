@@ -118,20 +118,6 @@ describe('MethodChapterComponent', () => {
   });
 
   describe('navigation', () => {
-    it('should have a back button that calls clickBackLink()', () => {
-      const backDE = fixture.debugElement.query(
-        By.css('.method-chapter__back-link')
-      );
-
-      expect(backDE.nativeElement.textContent).toBe('Terug');
-
-      const clickBackLink = jest
-        .spyOn(component, 'clickBackLink')
-        .mockImplementation();
-      backDE.nativeElement.click();
-      expect(clickBackLink).toHaveBeenCalled();
-    });
-
     it('should show the toc navigation links', done => {
       const lessonLinkDEs = fixture.debugElement.queryAll(
         By.css('.method-chapter__lesson-link')
@@ -155,49 +141,6 @@ describe('MethodChapterComponent', () => {
 
         done();
       });
-    });
-
-    describe('clickBackLink', () => {
-      it('should navigate up to the book when inside a chapter', fakeAsync(() => {
-        component.clickBackLink();
-        tick();
-
-        expect(router.navigate).toHaveBeenCalled();
-        expect(router.navigate).toHaveBeenCalledWith(['methods', 3599752219], {
-          queryParams: { tab: 0 }
-        });
-      }));
-
-      it('should navigate up to the chapter when inside a lesson', fakeAsync(() => {
-        methodViewModel.currentMethodParams$.next({
-          ...methodViewModel.currentMethodParams$.value,
-          lesson: 3
-        });
-
-        component.clickBackLink();
-        tick();
-
-        expect(router.navigate).toHaveBeenCalled();
-        expect(router.navigate).toHaveBeenCalledWith(
-          ['methods', 3599752219, 2],
-          {
-            queryParams: { tab: 0 }
-          }
-        );
-      }));
-
-      it('should pass the tab in the queryParams when going back', fakeAsync(() => {
-        const tab = 1;
-        methodViewModel.currentTab$.next(tab);
-
-        component.clickBackLink();
-        tick();
-
-        expect(router.navigate).toHaveBeenCalled();
-        expect(router.navigate).toHaveBeenCalledWith(['methods', 3599752219], {
-          queryParams: { tab }
-        });
-      }));
     });
 
     describe('clickOpenToc', () => {

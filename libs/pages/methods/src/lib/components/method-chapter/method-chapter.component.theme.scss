@@ -1,4 +1,62 @@
 @mixin pages-methods-method-chapter() {
+  // color palette
+  $pages-method-chapter-color: $pages-methods-text-color--primary !default;
+  $pages-method-chapter-color--accent: $pages-methods-text-color--primary--accent !default;
+  $pages-method-chapter-background-color: $pages-methods-background-color--primary !default;
+  $pages-method-chapter-background-color--accent: $pages-methods-background-color--secondary !default;
+  $pages-method-chapter-color--secondary: $pages-methods-text-color--secondary !default;
+
+  // measurements
+  $pages-method-chapter__mat-list-padding-left--override: $pages-method__chapter-padding-left !default;
+  $pages-method-chapter__mat-list-content-margin-left--override: 16px !default; // = used for list indentation -> depth
+  $pages-method-chapter__mat-list-item--selected-border-width: 4px !default;
+  $pages-method-chapter__mat-list__chapter-font-weight: $pages-method__chapter-font-weight !default;
+
   .method-chapter {
+    .method-chapter__lesson-link {
+      &.mat-list-item .mat-list-item-content {
+        padding-left: $pages-method-chapter__mat-list-padding-left--override;
+        color: $pages-method-chapter-color;
+        background-color: $pages-method-chapter-background-color;
+      }
+
+      &:hover {
+        &.mat-list-item .mat-list-item-content {
+          background-color: $pages-method-chapter-background-color--accent;
+        }
+      }
+
+      &--selected {
+        &.mat-list-item .mat-list-item-content {
+          background-color: $pages-method-chapter-background-color--accent;
+          padding-left: $pages-method-chapter__mat-list-padding-left--override -
+            $pages-method-chapter__mat-list-item--selected-border-width;
+        }
+
+        border-left: $pages-method-chapter__mat-list-item--selected-border-width
+          $pages-method-chapter-color--accent solid;
+      }
+
+      &--depth-0 {
+        .method-chapter__lesson-link__title {
+          margin-left: 0px;
+          font-weight: $pages-method-chapter__mat-list__chapter-font-weight;
+        }
+      }
+
+      &--depth-1 {
+        .method-chapter__lesson-link__title {
+          margin-left: $pages-method-chapter__mat-list-content-margin-left--override;
+        }
+      }
+    }
+
+    .method-chapter__list-header {
+      &.mat-subheader {
+        padding-left: $pages-method-chapter__mat-list-padding-left--override;
+        color: $pages-method-chapter-color--secondary;
+        background-color: $pages-method-chapter-background-color;
+      }
+    }
   }
 }
