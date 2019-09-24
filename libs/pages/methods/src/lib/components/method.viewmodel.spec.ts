@@ -767,7 +767,7 @@ describe('MethodViewModel', () => {
 
         expect(methodViewModel.currentToc$).toBeObservable(
           hot('a', {
-            a: [lessonTocs[0], lessonTocs[1]]
+            a: [chapterTocs[0], lessonTocs[0], lessonTocs[1], chapterTocs[1]]
           })
         );
       });
@@ -777,7 +777,7 @@ describe('MethodViewModel', () => {
 
         expect(methodViewModel.currentToc$).toBeObservable(
           hot('a', {
-            a: [lessonTocs[0], lessonTocs[1]]
+            a: [chapterTocs[0], lessonTocs[0], lessonTocs[1], chapterTocs[1]]
           })
         );
       });

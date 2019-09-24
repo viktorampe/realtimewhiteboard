@@ -1,11 +1,38 @@
 @mixin pages-methods-method() {
   .method-method__container {
+    // color palette
+    $pages-method-color: $pages-methods-text-color--primary !default;
+    $pages-method-color--accent: $pages-methods-text-color--primary--accent !default;
+    $pages-method-background-color: $pages-methods-background-color--primary !default;
+    $pages-method-background-color--accent: $pages-methods-background-color--secondary !default;
+    $pages-method-color--secondary: $pages-methods-text-color--secondary !default;
+
+    // measurements
+    $pages-method__mat-list-padding-left--override: $pages-method__chapter-padding-left !default;
+    $pages-method__mat-list__chapter-font-weight: $pages-method__chapter-font-weight !default;
+
     .mat-tab-body-content {
       display: block;
     }
 
+    .method-chapter-link {
+      &.mat-list-item .mat-list-item-content {
+        padding-left: $pages-method__mat-list-padding-left--override;
+        color: $pages-method-color;
+        background-color: $pages-method-background-color;
+        font-weight: $pages-method__mat-list__chapter-font-weight;
+      }
+
+      &:hover {
+        &.mat-list-item .mat-list-item-content {
+          background-color: $pages-method-background-color--accent;
+        }
+      }
+    }
+
+
     &__boeke {
-      border: 1px lightgrey solid;
+      border: 1px $pages-method-color--secondary solid;
 
       &.mat-card {
         box-shadow: none !important;
@@ -21,29 +48,36 @@
           font-weight: bold;
         }
       }
-    }
 
+      // placeholder
+      .banner-container {
+        width: 75px;
+        height: 75px;
+        overflow: hidden;
+        position: absolute;
+        top: -1px;
+        left: -1px;
+      }
 
-    // placeholder
-    .banner-container {
-      width: 75px;
-      height: 75px;
-      overflow: hidden;
-      position: absolute;
-      top: -1px;
-      left: -1px;
-    }
+      // placeholder
+      .banner {
+        width: 112px;
+        padding: 8px;
+        background-color: $color-gray-2;
+        color: $color-gray-3;
+        text-align: center;
+        transform: rotate(-45deg) translate(-28%, -35%);
+        font-size: 12px;
+        font-weight: bold;
 
-    // placeholder
-    .banner {
-      width: 112px;
-      padding: 8px;
-      background-color: $color-gray-2;
-      color: $color-gray-3;
-      text-align: center;
-      transform: rotate(-45deg) translate(-28%, -35%);
-      font-size: 12px;
-      font-weight: bold;
+        .method-chapter__list-header {
+          &.mat-subheader {
+            padding-left: $pages-method__mat-list-padding-left--override;
+            color: $pages-method-color--secondary;
+            background-color: $pages-method-background-color;
+          }
+        }
+      }
     }
   }
 }
