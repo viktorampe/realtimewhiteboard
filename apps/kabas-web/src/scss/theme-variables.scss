@@ -68,6 +68,9 @@ $ui-tertiary-font-color: $tertiary-font-color;
 $ui-tertiary-bg-color-2: $tertiary-bg-color-2;
 $ui-tertiary-font-color-2: $tertiary-font-color-2;
 
+// ui > page header
+$ui-page-header-font-size: 20px;
+
 // ui > app bar
 $ui-app-bar-height: 80px;
 $ui-app-bar-background-color: $color-white-1;
@@ -135,6 +138,7 @@ $pages-home-background-color--primary: $primary-bg-color;
 $pages-home-text-color--secondary: $primary-font-color;
 $pages-home-background-color--secondary: $color-gray-2;
 $pages-home_image-background-color: $secondary-font-color-accent;
+$pages-home-text-color--tertiary: $primary-font-color;
 
 // methods
 $pages-methods-text-color--primary: $primary-font-color;
