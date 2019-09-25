@@ -24,7 +24,8 @@
 
     $pages-method__mat-card__title-font-size--override: 20px !default;
     $pages-method__mat-card__image-margin-top--override: 32px !default;
-    $pages-method__mat-card__box-shadow--override: 0px 0px 4px 0px $pages-method-color--secondary !default;
+    $pages-method__mat-card__box-shadow--override: 0px 0px 4px 0px
+      $pages-method-color--secondary !default;
 
     .mat-tab-body-content {
       display: block;
