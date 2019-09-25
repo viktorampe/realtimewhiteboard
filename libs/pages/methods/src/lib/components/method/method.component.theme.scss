@@ -10,6 +10,40 @@
     // measurements
     $pages-method__mat-list-padding-left--override: $pages-method__chapter-padding-left !default;
     $pages-method__mat-list__chapter-font-weight: $pages-method__chapter-font-weight !default;
+    $pages-method__container__files-header-font-weight: $pages-method__chapter-font-weight !default;
+    $pages-method__container__files-header-font-size: $pages-method__list-section-title-font-size !default;
+    $pages-method__container__files-header-font-family: $pages-method-font-family !default;
+    $pages-method__file__title-font-size: 18px !default;
+    $pages-method__file-padding-left: 24px !default;
+
+    &__files {
+      .mat-list-item {
+        &.method-file {
+          padding: 15px 15px 15px $pages-method__file-padding-left;
+        }
+      }
+      &-header {
+        padding: 44px 16px 24px $pages-method__file-padding-left + 16px;
+        font-family: $pages-method__container__files-header-font-family;
+        font-size: $pages-method__container__files-header-font-size;
+        font-weight: $pages-method__container__files-header-font-weight;
+        color: $pages-method-color--secondary;
+      }
+
+      .method-file {
+        &__copy {
+          display: flex;
+          flex-direction: column;
+        }
+        &__title {
+          color: $pages-method-color;
+          font-weight: $pages-method__container__files-header-font-weight;
+          font-size: $pages-method__file__title-font-size;
+        }
+        &__description {
+        }
+      }
+    }
 
     .method-chapter-link {
       &.mat-list-item .mat-list-item-content {

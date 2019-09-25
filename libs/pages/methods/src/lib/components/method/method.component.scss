@@ -1,29 +1,8 @@
 .method-method {
   &__container {
-    h3 {
-      font-weight: normal;
-      font-size: 14px;
-    }
-
     &__files {
-      max-width: 500px;
-      margin-right: 300px;
-
-      h3 {
-        border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-      }
-
-      .mat-list-item {
-        overflow: hidden;
-        height: auto;
-        list-style: none none outside;
-        padding: 5px 0;
-
-        campus-file-extension {
-          + div {
-            margin-left: 10px;
-          }
-        }
+      .mat-list-item-content {
+        height: 120px;
       }
     }
 
