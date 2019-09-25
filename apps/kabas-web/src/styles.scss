@@ -30,6 +30,8 @@ body {
 @include ui-theme();
 
 // include pages lib scss files
+@import 'libs/pages/shared/src/pages-theme';
+@include pages-theme();
 @import 'libs/pages/methods/src/lib/pages-methods.theme';
 @include pages-methods-theme();
 @import 'libs/pages/global-search/src/lib/pages-global-search.theme';
@@ -60,6 +62,10 @@ body {
 
 h2 {
   font-weight: normal;
+}
+
+p {
+  margin: 0 0 1em 0;
 }
 
 .mat-drawer-side {
