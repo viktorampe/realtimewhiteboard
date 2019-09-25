@@ -71,6 +71,7 @@ $ui-tertiary-font-color-2: $tertiary-font-color-2;
 
 // ui > page header
 $ui-page-header-font-size: 20px;
+$ui-page-header-font-weight: bold;
 
 // ui > app bar
 $ui-app-bar-height: 80px;
@@ -82,6 +83,7 @@ $ui-app-bar__button-font-weight: bold;
 $ui-app-bar__button__icon-size: 32px;
 $ui-breadcrumbs-crumb-text-size: 15px;
 $ui-breadcrumbs-crumb-text-weight: bold;
+$ui-breadcrumbs-crumb-icon-size: 20px;
 
 // shared header (app & page bar)
 $shared-header-font-size: 12px;
@@ -152,7 +154,8 @@ $pages-home-background-color--primary: $primary-bg-color;
 $pages-home-text-color--secondary: $primary-font-color;
 $pages-home-background-color--secondary: $color-gray-2;
 $pages-home_image-background-color: $secondary-font-color-accent;
-$pages-home-text-color--tertiary: $primary-font-color;
+$pages-home-text-color--tertiary: $primary-font-color-2;
+$pages-home_container_shortcuts-border-top-color: $secondary-bg-color;
 
 // methods
 $pages-methods-text-color--primary: $primary-font-color;

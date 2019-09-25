@@ -58,13 +58,23 @@ body {
   color: $primary-font-color;
 }
 
+h2 {
+  font-weight: normal;
+}
+
 .mat-drawer-side {
   border-right: none;
 }
 
-.ui-shell__logo {
-  img {
-    margin-top: 20px;
+.ui-shell {
+  &__logo {
+    img {
+      margin-top: 20px;
+    }
+  }
+
+  &__left__content {
+    padding-top: 15px;
   }
 }
 
@@ -132,6 +142,7 @@ body {
 .pages-home__container__shortcuts__list__shortcut {
   &--methods mat-icon {
     stroke: $color-lila-1;
+    width: 64px;
   }
 
   &--tasks mat-icon {
@@ -216,7 +227,7 @@ body {
     left: 0;
     right: 0;
     top: 0;
-    height: 260px;
+    height: 187px;
     background: $shared_header__page-bar_background;
     z-index: 0;
   }
