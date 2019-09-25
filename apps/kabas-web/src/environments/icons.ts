@@ -40,6 +40,7 @@ export const icons = {
   'arrow-back': 'assets/icons/material/arrow-back.svg',
   'breadcrumb-separator': 'assets/icons/material/chevron-right.svg',
   'collapsible-sheet-back': 'assets/icons/material/arrow-back.svg',
+  file: 'assets/icons/general-file.svg',
 
   // search: sort modes
   'sort-numeric-down': 'assets/icons/sort-numeric-down.svg',

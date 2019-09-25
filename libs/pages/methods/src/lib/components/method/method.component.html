@@ -114,6 +114,11 @@
                     (click)="clickOpenGeneralFile(generalFile)"
                     class="method-file"
                   >
+                    <campus-file-icon
+                      [classModifier]="'product-type-' + productType.id"
+                      [label]="generalFile.fileExtension"
+                      icon="file"
+                    ></campus-file-icon>
                     <div class="method-file__copy">
                       <div class="method-file__title"
                         >{{ generalFile.name }}
