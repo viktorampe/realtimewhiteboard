@@ -1,4 +1,6 @@
 @mixin shared-header {
+  $shared-header-font-size: 14px !default;
+  $shared-header-font-weight: normal !default;
   $shared-header__app-bar-height: 45px !default;
   $shared-header__app-bar-color: $shared-color-1 !default;
   $shared-header__app-bar-padding-right: 0 !default;
@@ -35,6 +37,8 @@
   $shared-header__quicklink-width: 115px !default;
   $shared-header__quicklink-icon-size: 24px !default;
   $shared-header__quicklink-icon-size-small: 20px !default;
+  $shared-header__quicklink-font-size: $shared-header-font-size !default;
+  $shared-header__quicklink-font-weight: $shared-header-font-weight !default;
 
   .shared-header {
     &__app-bar {
@@ -104,6 +108,8 @@
     }
 
     &__quicklink__button {
+      font-size: $shared-header__quicklink-font-size;
+      font-weight: $shared-header__quicklink-font-weight;
       text-align: center;
       color: $shared-header__quicklink-color;
       background-color: $shared-header__quicklink-bg-color;

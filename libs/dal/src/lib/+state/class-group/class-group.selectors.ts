@@ -71,7 +71,10 @@ export const getById = createSelector(
 
 export const getClassGroupsByMethodId = createSelector(
   getAll,
-  (classGroups: ClassGroupInterface[]): Dictionary<ClassGroupInterface[]> => {
+  (
+    classGroups: ClassGroupInterface[],
+    props: {} //It's necessary to accept empty props for the getClassGroupsForBook selector
+  ): Dictionary<ClassGroupInterface[]> => {
     return classGroups.reduce(
       (acc, currentClassGroup) => {
         currentClassGroup.licenses.forEach(license => {
@@ -102,7 +105,10 @@ export const getClassGroupsForBook = createSelector(
   (
     book: EduContentBookInterface,
     classGroupsByMethodId: Dictionary<ClassGroupInterface[]>,
-    props: { id: number }
+    props: {
+      id: number;
+      filterByYear: boolean;
+    }
   ): ClassGroupInterface[] => {
     const bookYearIds = book.years.map(year => year.id);
 
@@ -110,9 +116,13 @@ export const getClassGroupsForBook = createSelector(
       return [];
     }
 
-    return classGroupsByMethodId[book.methodId].filter(classGroup => {
-      //One of the classGroups' years must be in the books' years
-      return classGroup.years.some(year => bookYearIds.includes(year.id));
-    });
+    if (props.filterByYear) {
+      return classGroupsByMethodId[book.methodId].filter(classGroup => {
+        //One of the classGroups' years must be in the books' years
+        return classGroup.years.some(year => bookYearIds.includes(year.id));
+      });
+    } else {
+      return classGroupsByMethodId[book.methodId];
+    }
   }
 );
