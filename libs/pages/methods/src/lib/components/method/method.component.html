@@ -82,7 +82,9 @@
                 *ngIf="(book$ | async)?.diabolo"
                 class="method-method__container__boeke__diabolo"
               >
-                <span class="method-method__container__boeke__diabolo__title">{{ method.name }} is een diabolo methode.</span><br />
+                <span class="method-method__container__boeke__diabolo__title"
+                  >{{ method.name }} is een diabolo methode.</span
+                ><br />
                 <a
                   href="https://www.diekeure.be/nl-be/educatief/lager-onderwijs/diabolo"
                   target="_blank"
@@ -95,7 +97,6 @@
                 primary
                 data-cy="open-boeke"
                 (click)="clickOpenBoeke(boeke)"
-                primary
                 >OPEN</campus-button
               >
             </mat-card-actions>

@@ -68,29 +68,51 @@ $ui-tertiary-font-color: $tertiary-font-color;
 $ui-tertiary-bg-color-2: $tertiary-bg-color-2;
 $ui-tertiary-font-color-2: $tertiary-font-color-2;
 
+// ui > page header
+$ui-page-header-font-size: 20px;
+
 // ui > app bar
+$ui-app-bar-height: 80px;
 $ui-app-bar-background-color: $color-white-1;
-$shared-header__app-bar-padding-top: 55px;
-$shared-header__app-bar-height: 105px;
 $ui-app-bar-button-width: 85px;
 $ui-app-bar__section__align-right-padding-right: 25px;
+$ui-app-bar__button-font-size: 12px;
+$ui-app-bar__button-font-weight: bold;
+$ui-app-bar__button__icon-size: 32px;
+$ui-breadcrumbs-crumb-text-size: 15px;
+$ui-breadcrumbs-crumb-text-weight: bold;
+
+// shared header (app & page bar)
+$shared-header-font-size: 12px;
+$shared-header-font-weight: bold;
+$shared-header__app-bar-height: 120px;
+$shared-header__app-bar-padding-top: 40px;
+$shared-header__page-bar-padding-left: 40px;
+$shared-header__page-bar-height: 80px;
+$shared-header__page-bar__divider-margin-left-right: 0;
+$shared-header__page-bar-container__justify-content: flex-end;
+$shared_header__page-bar_background: linear-gradient(
+  90deg,
+  $color-blue-2,
+  $color-blue-3
+);
+$shared-header__quicklink-color: $secondary-font-color;
+$shared-header__quicklink-color-hover: $secondary-font-color-accent;
+$shared-header__quicklink-bg-color: transparent;
+$shared-header__quicklink-icon-size: 24px;
+$shared-header__quicklink-icon-size-small: 20px;
 
 // ui > app shell variables
 $ui-shell__left-width: 210px;
-$ui-shell__top-height: 105px;
-$ui-shell__top-height--mobile: 60px;
+$ui-shell__top-height: 200px;
+$ui-shell__top-height--mobile: 80px;
 $ui-shell__top-background-color: $color-white-1;
-$ui-shell__logo-height: 105px;
+$ui-shell__logo-height: 120px;
 $ui-shell__logo-background-color: $color-white-1;
-$ui-shell__logo-padding-top: 20px;
-$ui-shell__logo-padding-bottom: 7px;
+$ui-shell__logo-padding-top: 0;
 $ui-shell__logo-border-left: 50px solid $color-white-1;
 $ui-shell__left__content-border-left: 50px solid $color-gray-2;
-$ui-shell__logo__img-width: 120px;
-$ui-shell__logo-text-align: start;
-$shared-header__page-bar__divider-margin-left-right: 0;
-$shared-header__quicklink-icon-size: 24px;
-$shared-header__quicklink-icon-size-small: 20px;
+$ui-shell__logo__img-width: 100%;
 
 // ui > forms
 $ui-form-button-default-bg-color: $color-gray-2;
@@ -109,19 +131,6 @@ $google-button-font-color: white;
 $smartschool-button-background-color: #ff520e;
 $smartschool-button-font-color: white;
 
-// campus-header
-$shared-header__page-bar-container__justify-content: flex-end;
-$shared_header__page-bar_background: linear-gradient(
-  90deg,
-  $color-blue-2,
-  $color-blue-3
-);
-
-// app bar
-$shared-header__quicklink-color: $secondary-font-color;
-$shared-header__quicklink-color-hover: $secondary-font-color-accent;
-$shared-header__quicklink-bg-color: transparent;
-
 // home
 $pages-home-text-color--primary: $primary-font-color-2;
 $pages-home-text-color--primary--hover: $secondary-font-color-accent;
@@ -129,6 +138,7 @@ $pages-home-background-color--primary: $primary-bg-color;
 $pages-home-text-color--secondary: $primary-font-color;
 $pages-home-background-color--secondary: $color-gray-2;
 $pages-home_image-background-color: $secondary-font-color-accent;
+$pages-home-text-color--tertiary: $primary-font-color;
 
 // methods
 $pages-methods-text-color--primary: $primary-font-color;

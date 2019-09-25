@@ -613,7 +613,8 @@ export class MethodViewModel implements ContentOpenerInterface {
       switchMap(currentBook => {
         return this.store.pipe(
           select(ClassGroupQueries.getClassGroupsForBook, {
-            id: currentBook.id
+            id: currentBook.id,
+            filterByYear: true
           })
         );
       })

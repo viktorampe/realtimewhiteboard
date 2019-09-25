@@ -12,9 +12,8 @@
     $pages-method__mat-list-padding-left--override: $pages-method__chapter-padding-left !default;
     $pages-method__mat-list__chapter-font-weight: $pages-method__chapter-font-weight !default;
 
-    $pages-method__mat-card__title-font-size--override: 16px !default;
+    $pages-method__mat-card__title-font-size--override: 20px !default;
     $pages-method__mat-card__image-margin-top--override: 8px !default;
-
 
 
     .mat-tab-body-content {
@@ -58,7 +57,6 @@
       &__diabolo {
         &__title {
           font-size: $pages-method__mat-card__title-font-size--override;
-          font-weight: bold;
         }
       }
 
