@@ -8,16 +8,30 @@ export const icons = {
   download: 'assets/icons/material/download.svg',
   'exercise:open': 'assets/icons/exercise-open.svg',
   'exercise:finished': 'assets/icons/exercise-finished.svg',
-  lesmateriaal: 'assets/icons/lesmateriaal.svg',
+  methods: 'assets/icons/methods.svg', //Temp icon
+  tasks: 'assets/icons/tasks.svg', //Temp icon
+  results: 'assets/icons/results.svg', //Temp icon
+  differentiate: 'assets/icons/differentiate.svg', //Temp icon
   'select-all': 'assets/icons/done_all.svg',
   'import-export': 'assets/icons/material/import-export.svg',
-  'bordered:favorites': 'assets/icons/favorites2.svg',
-  'bordered:history': 'assets/icons/clock2.svg',
-  profile: 'assets/icons/account-circle.svg',
+  'quicklink:favorites': 'assets/icons/favorites3.svg',
+  'quicklink:history': 'assets/icons/clock2.svg',
+  profile: 'assets/icons/profile2.svg',
   avatar: 'assets/icons/avatar.svg',
-  notifications: 'assets/icons/material/notifications.svg',
+  notifications: 'assets/icons/alert2.svg',
   settings: 'assets/icons/settings.svg',
   account: 'assets/icons/account-circle.svg',
+  cancel: 'assets/icons/cancel.svg',
+  delete: 'assets/icons/material/delete.svg',
+  edit: 'assets/icons/material/edit.svg',
+  filter: 'assets/icons/filter.svg',
+  context_menu: 'assets/icons/material/more_vert.svg',
+  favorites: 'assets/icons/assets/icons/favorites3.svg',
+  check: 'assets/icons/check.svg',
+  close: 'assets/icons/close.svg',
+  history: 'assets/icons/history.svg',
+  boardbook: 'assets/icons/boardbook.svg',
+  method: 'assets/icons/lesmateriaal.svg',
   //TODO: These are TEMPORARY SVGs for Diabolo that I made from the PNGs
   //get the OFFICIAL files from Antoon later
   'diabolo-intro': 'assets/icons/diabolo/intro.svg',

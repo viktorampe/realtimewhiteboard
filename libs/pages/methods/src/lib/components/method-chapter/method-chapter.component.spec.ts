@@ -4,6 +4,7 @@ import {
   TestBed,
   tick
 } from '@angular/core/testing';
+import { MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
@@ -30,8 +31,9 @@ import {
   ENVIRONMENT_TESTING_TOKEN,
   SharedModule
 } from '@campus/shared';
+import { MockMatIconRegistry } from '@campus/testing';
 import {
-  MultiCheckBoxTableChangeEventInterface,
+  MultiCheckBoxTableItemChangeEventInterface,
   MultiCheckBoxTableItemColumnInterface,
   UiModule
 } from '@campus/ui';
@@ -59,6 +61,7 @@ describe('MethodChapterComponent', () => {
       ],
       declarations: [MethodChapterComponent],
       providers: [
+        { provide: MatIconRegistry, useClass: MockMatIconRegistry },
         {
           provide: ENVIRONMENT_SEARCHMODES_TOKEN,
           useValue: {}
@@ -115,20 +118,6 @@ describe('MethodChapterComponent', () => {
   });
 
   describe('navigation', () => {
-    it('should have a back button that calls clickBackLink()', () => {
-      const backDE = fixture.debugElement.query(
-        By.css('.method-chapter__back-link')
-      );
-
-      expect(backDE.nativeElement.textContent).toBe('Terug');
-
-      const clickBackLink = jest
-        .spyOn(component, 'clickBackLink')
-        .mockImplementation();
-      backDE.nativeElement.click();
-      expect(clickBackLink).toHaveBeenCalled();
-    });
-
     it('should show the toc navigation links', done => {
       const lessonLinkDEs = fixture.debugElement.queryAll(
         By.css('.method-chapter__lesson-link')
@@ -141,65 +130,22 @@ describe('MethodChapterComponent', () => {
           expect(lessonLinkDE.nativeElement.textContent).toBe(toc.title);
 
           const clickOpenLesson = jest
-            .spyOn(component, 'clickOpenLesson')
+            .spyOn(component, 'clickOpenToc')
             .mockImplementation();
 
           lessonLinkDE.nativeElement.click();
 
           expect(clickOpenLesson).toHaveBeenCalled();
-          expect(clickOpenLesson).toHaveBeenCalledWith(toc.id);
+          expect(clickOpenLesson).toHaveBeenCalledWith(toc.id, toc.depth);
         });
 
         done();
       });
     });
 
-    describe('clickBackLink', () => {
-      it('should navigate up to the book when inside a chapter', fakeAsync(() => {
-        component.clickBackLink();
-        tick();
-
-        expect(router.navigate).toHaveBeenCalled();
-        expect(router.navigate).toHaveBeenCalledWith(['methods', 3599752219], {
-          queryParams: { tab: 0 }
-        });
-      }));
-
-      it('should navigate up to the chapter when inside a lesson', fakeAsync(() => {
-        methodViewModel.currentMethodParams$.next({
-          ...methodViewModel.currentMethodParams$.value,
-          lesson: 3
-        });
-
-        component.clickBackLink();
-        tick();
-
-        expect(router.navigate).toHaveBeenCalled();
-        expect(router.navigate).toHaveBeenCalledWith(
-          ['methods', 3599752219, 2],
-          {
-            queryParams: { tab: 0 }
-          }
-        );
-      }));
-
-      it('should pass the tab in the queryParams when going back', fakeAsync(() => {
-        const tab = 1;
-        methodViewModel.currentTab$.next(tab);
-
-        component.clickBackLink();
-        tick();
-
-        expect(router.navigate).toHaveBeenCalled();
-        expect(router.navigate).toHaveBeenCalledWith(['methods', 3599752219], {
-          queryParams: { tab }
-        });
-      }));
-    });
-
-    describe('clickOpenLesson', () => {
-      it('should navigate to the lesson when clickOpenLesson is called', fakeAsync(() => {
-        component.clickOpenLesson(3);
+    describe('clickOpenToc', () => {
+      it('should navigate to the lesson when clickOpenToc is called', fakeAsync(() => {
+        component.clickOpenToc(3);
         tick();
 
         expect(router.navigate).toHaveBeenCalled();
@@ -211,11 +157,24 @@ describe('MethodChapterComponent', () => {
         );
       }));
 
-      it('should pass the tab in the queryParams when clickOpenLesson is called', fakeAsync(() => {
+      it('should navigate to the chapter when clickOpenToc is called', fakeAsync(() => {
+        component.clickOpenToc(3, 0);
+        tick();
+
+        expect(router.navigate).toHaveBeenCalled();
+        expect(router.navigate).toHaveBeenCalledWith(
+          ['methods', 3599752219, 3],
+          {
+            queryParams: { tab: 0 }
+          }
+        );
+      }));
+
+      it('should pass the tab in the queryParams when clickOpenToc is called', fakeAsync(() => {
         const tab = 1;
         methodViewModel.currentTab$.next(tab);
 
-        component.clickOpenLesson(3);
+        component.clickOpenToc(3);
         tick();
 
         expect(router.navigate).toHaveBeenCalled();
@@ -299,7 +258,7 @@ describe('MethodChapterComponent', () => {
           column: new ClassGroupFixture({ id: 1 }),
           item: new LearningPlanGoalFixture({ id: 2 }),
           subLevel: new EduContentTOCFixture({ id: 3 })
-        } as MultiCheckBoxTableChangeEventInterface<
+        } as MultiCheckBoxTableItemChangeEventInterface<
           LearningPlanGoalInterface,
           ClassGroupInterface,
           EduContentTOCInterface
@@ -343,7 +302,7 @@ describe('MethodChapterComponent', () => {
             item: new LearningPlanGoalFixture({ id: 3 }),
             subLevel
           }
-        ] as MultiCheckBoxTableChangeEventInterface<
+        ] as MultiCheckBoxTableItemChangeEventInterface<
           LearningPlanGoalInterface,
           ClassGroupInterface,
           EduContentTOCInterface
@@ -358,6 +317,16 @@ describe('MethodChapterComponent', () => {
           methodViewModel.onBulkLearningPlanGoalProgressChanged
         ).toHaveBeenCalledWith(1, [2, 3], 4, 3599752219);
       });
+    });
+  });
+
+  describe('toggleBoekeFavorite', () => {
+    it('should call the correct method on the viewmodel', () => {
+      jest.spyOn(methodViewModel, 'toggleBoekeFavorite');
+      const boeke = new EduContentFixture({ id: 123 }, { learningAreaId: 456 });
+
+      component.toggleBoekeFavorite(boeke);
+      expect(methodViewModel.toggleBoekeFavorite).toHaveBeenCalledWith(boeke);
     });
   });
 });

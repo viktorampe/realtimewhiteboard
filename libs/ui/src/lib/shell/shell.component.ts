@@ -14,7 +14,7 @@ import { filter, map, shareReplay, takeWhile } from 'rxjs/operators';
 
 /**
  * Component that acts a a skeleton for the app.
- * Contains placeholders for left-side content, logo, header-bar and body content
+ * Contains placeholders for left-side content, logo, header-bar, body content and bottom content
  * Handles responsiveness for the side content as well
  * @example
  * <campus-shell>
@@ -30,6 +30,9 @@ import { filter, map, shareReplay, takeWhile } from 'rxjs/operators';
  *   <campus-shell-top>
  *       Home > dashboard
  *   </campus-shell-top>
+ *   <campus-shell-bottom>
+ *      Ideal for a footer
+ *   </campus-shell-bottom>
  *   <h1>Hello world</h1>
  *   <p>Is it wrong to be strong?</p>
  * </campus-shell>

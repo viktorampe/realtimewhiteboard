@@ -18,6 +18,8 @@ import {
   FAVORITE_SERVICE_TOKEN,
   HistoryService,
   HISTORY_SERVICE_TOKEN,
+  LearningAreaService,
+  LEARNINGAREA_SERVICE_TOKEN,
   LearningDomainService,
   LearningPlanGoalProgressService,
   LearningPlanGoalService,
@@ -39,16 +41,23 @@ import {
   YearService,
   YEAR_SERVICE_TOKEN
 } from '@campus/dal';
+import { ScormApiService, SCORM_API_SERVICE_TOKEN } from '@campus/scorm';
 import {
+  APP_NAVIGATION_TREE_TOKEN,
+  NavigationItemService,
+  NAVIGATION_ITEM_SERVICE_TOKEN,
   OpenStaticContentService,
   OPEN_STATIC_CONTENT_SERVICE_TOKEN,
   ScormExerciseService,
   SCORM_EXERCISE_SERVICE_TOKEN
 } from '@campus/shared';
+import { kabasConfig } from './app.config';
 
 @NgModule({
   providers: [
     //app level services
+    { provide: NAVIGATION_ITEM_SERVICE_TOKEN, useClass: NavigationItemService },
+    { provide: APP_NAVIGATION_TREE_TOKEN, useValue: kabasConfig.appNavtree },
 
     // dal services
     { provide: AUTH_SERVICE_TOKEN, useClass: AuthService },
@@ -75,6 +84,10 @@ import {
       provide: LEARNING_PLAN_GOAL_SERVICE_TOKEN,
       useClass: LearningPlanGoalService
     },
+    {
+      provide: LEARNINGAREA_SERVICE_TOKEN,
+      useClass: LearningAreaService
+    },
     { provide: FAVORITE_SERVICE_TOKEN, useClass: FavoriteService },
     { provide: HISTORY_SERVICE_TOKEN, useClass: HistoryService },
     {
@@ -89,7 +102,8 @@ import {
     {
       provide: UNLOCKED_FREE_PRACTICE_SERVICE_TOKEN,
       useClass: UnlockedFreePracticeService
-    }
+    },
+    { provide: SCORM_API_SERVICE_TOKEN, useClass: ScormApiService }
   ]
 })
 export class AppTokenModule {}

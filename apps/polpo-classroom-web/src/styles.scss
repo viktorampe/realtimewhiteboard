@@ -78,7 +78,7 @@ figure {
  * Angular Material theme
  */
 @import 'scss/theme-angular-material';
-@include angular-material-theme($polpo-theme);
+@include angular-material-theme($app-theme);
 // alternative: include individual component mixins
 
 // include ui lib scss file
@@ -132,9 +132,18 @@ body {
   color: $primary-font-color;
 }
 
-.ui-shell__logo {
-  text-align: center;
-  padding-top: 25px;
+.shared-header__app-bar {
+  campus-button {
+    span {
+      display: none;
+    }
+  }
+}
+
+.shared-header__quicklink__button {
+  span {
+    display: none;
+  }
 }
 
 .ui-tree-nav__node--active {
@@ -157,22 +166,6 @@ body {
   @media #{$ui-breakpoint-xsmall}, #{$ui-breakpoint-small} {
     &:after {
       display: none;
-    }
-  }
-}
-
-.ui-tool-bar {
-  height: 60px;
-  padding: 10px;
-
-  .ui-filter-text-input {
-    &__input {
-      border: solid 2px $secondary-bg-color-accent;
-    }
-
-    &__icon,
-    &__cancel {
-      margin: 2px 0; // to offset top position with input border
     }
   }
 }

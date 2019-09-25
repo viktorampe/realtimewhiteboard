@@ -12,9 +12,9 @@ export interface LearningPlanGoalProgressInterface {
   schoolYear?: number;
   id?: number;
   personId?: number;
-  classGroupId?: number;
+  classGroupId: number;
   eduContentTOCId?: number;
-  learningPlanGoalId?: number;
+  learningPlanGoalId: number;
   userLessonId?: number;
   person?: PersonInterface;
   classGroup?: ClassGroupInterface;
@@ -22,5 +22,5 @@ export interface LearningPlanGoalProgressInterface {
   learningPlanGoal?: LearningPlanGoalInterface;
   userLesson?: UserLessonInterface;
   eduContentBook?: EduContentBookInterface;
-  eduContentBookId?: number;
+  eduContentBookId: number;
 }

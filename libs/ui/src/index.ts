@@ -39,13 +39,7 @@ export {
   CollectionManagerServiceInterface,
   COLLECTION_MANAGER_SERVICE_TOKEN
 } from './lib/manage-collection/services/collection-manager.service.interface';
-export {
-  MultiCheckBoxTableChangeEventInterface,
-  MultiCheckBoxTableItemColumnInterface,
-  MultiCheckBoxTableItemInterface,
-  MultiCheckBoxTableRowHeaderColumnInterface,
-  MultiCheckBoxTableSubLevelInterface
-} from './lib/multi-check-box-table/multi-check-box-table.interface';
+export * from './lib/multi-check-box-table';
 export {
   NotificationItemInterface
 } from './lib/notification/notification.component';

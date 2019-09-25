@@ -1,3 +1,4 @@
+import { FavoriteTypesEnum } from '@campus/dal';
 import { EnvironmentInterface } from '@campus/shared';
 import { EduContentSearchResultComponent } from '../app/components/searchresults/edu-content-search-result.component';
 import { GlobalSearchTermFilterFactory } from '../app/factories/global-search-term-filter/global-search-term-filter.factory';
@@ -53,6 +54,18 @@ export const environment: EnvironmentInterface = {
           status: 404,
           messageRegex: 'no_teacher_found_for_given_key'
         }
+      ]
+    },
+    globalSearch: {
+      enabled: false
+    },
+    favorites: {
+      allowedFavoriteTypes: [
+        FavoriteTypesEnum.BOEKE,
+        FavoriteTypesEnum.BUNDLE,
+        FavoriteTypesEnum.TASK,
+        FavoriteTypesEnum.EDUCONTENT,
+        FavoriteTypesEnum.AREA
       ]
     }
   },

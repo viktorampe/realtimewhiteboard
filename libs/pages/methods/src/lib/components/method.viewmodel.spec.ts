@@ -9,6 +9,7 @@ import {
   ClassGroupActions,
   ClassGroupFixture,
   ClassGroupInterface,
+  ClassGroupQueries,
   ClassGroupReducer,
   CustomSerializer,
   DalState,
@@ -19,12 +20,16 @@ import {
   EduContentBookInterface,
   EduContentBookReducer,
   EduContentFixture,
+  EduContentQueries,
   EduContentReducer,
   EduContentServiceInterface,
   EduContentTocActions,
   EduContentTOCFixture,
   EduContentTocReducer,
   EDU_CONTENT_SERVICE_TOKEN,
+  FavoriteActions,
+  FavoriteQueries,
+  FavoriteTypesEnum,
   getStoreModuleForFeatures,
   LearningPlanGoalActions,
   LearningPlanGoalFixture,
@@ -37,6 +42,7 @@ import {
   MethodActions,
   MethodFixture,
   MethodInterface,
+  MethodQueries,
   MethodReducer,
   UserReducer,
   YearActions,
@@ -60,7 +66,7 @@ import {
   ScormExerciseServiceInterface,
   SCORM_EXERCISE_SERVICE_TOKEN
 } from '@campus/shared';
-import { MockWindow } from '@campus/testing';
+import { MockDate, MockWindow } from '@campus/testing';
 import {
   NavigationActionTiming,
   RouterNavigationAction,
@@ -88,6 +94,13 @@ describe('MethodViewModel', () => {
   let eduContentService: EduContentServiceInterface;
   let mockWindow: MockWindow;
   let matDialog: MatDialog;
+
+  let selectorSpies: {
+    boeke: jest.SpyInstance;
+    isFavorite: jest.SpyInstance;
+    methodWithYear: jest.SpyInstance;
+    classGroupsForBook: jest.SpyInstance;
+  };
 
   const bookId = 5;
   const diaboloBookId = 6;
@@ -335,6 +348,7 @@ describe('MethodViewModel', () => {
   });
 
   beforeEach(() => {
+    setupSelectorSpies();
     methodViewModel = TestBed.get(MethodViewModel);
     store = TestBed.get(Store);
     zone = TestBed.get(NgZone);
@@ -348,6 +362,15 @@ describe('MethodViewModel', () => {
 
     matDialog = TestBed.get(MatDialog);
   });
+
+  function setupSelectorSpies() {
+    selectorSpies = {
+      boeke: jest.spyOn(EduContentQueries, 'getBoekeByBookId'),
+      isFavorite: jest.spyOn(FavoriteQueries, 'getIsFavoriteEduContent'),
+      methodWithYear: jest.spyOn(MethodQueries, 'getMethodWithYearByBookId'),
+      classGroupsForBook: jest.spyOn(ClassGroupQueries, 'getClassGroupsForBook')
+    };
+  }
 
   function loadInStore() {
     store.dispatch(
@@ -744,7 +767,7 @@ describe('MethodViewModel', () => {
 
         expect(methodViewModel.currentToc$).toBeObservable(
           hot('a', {
-            a: [lessonTocs[0], lessonTocs[1]]
+            a: [chapterTocs[0], lessonTocs[0], lessonTocs[1], chapterTocs[1]]
           })
         );
       });
@@ -754,7 +777,7 @@ describe('MethodViewModel', () => {
 
         expect(methodViewModel.currentToc$).toBeObservable(
           hot('a', {
-            a: [lessonTocs[0], lessonTocs[1]]
+            a: [chapterTocs[0], lessonTocs[0], lessonTocs[1], chapterTocs[1]]
           })
         );
       });
@@ -841,6 +864,9 @@ describe('MethodViewModel', () => {
             content: { 11: false, 12: false, 13: false }
           }
         ];
+
+        selectorSpies.classGroupsForBook.mockReturnValue(classGroups);
+
         expect(
           methodViewModel.learningPlanGoalsWithSelectionForClassGroups$
         ).toBeObservable(hot('a', { a: expected }));
@@ -889,6 +915,9 @@ describe('MethodViewModel', () => {
             ]
           }
         ];
+
+        selectorSpies.classGroupsForBook.mockReturnValue(classGroups);
+
         expect(
           methodViewModel.learningPlanGoalsPerLessonWithSelectionForClassGroups$
         ).toBeObservable(hot('a', { a: expected }));
@@ -913,9 +942,35 @@ describe('MethodViewModel', () => {
             ]
           }
         ];
+
+        selectorSpies.classGroupsForBook.mockReturnValue(classGroups);
+
         expect(
           methodViewModel.learningPlanGoalsPerLessonWithSelectionForClassGroups$
         ).toBeObservable(hot('a', { a: expected }));
+      });
+    });
+
+    describe('isCurrentBoekeFavorite$', () => {
+      const mockBoeke = new EduContentFixture({ id: 123, type: 'boek-e' });
+      const mockIsFavorite = true;
+      const storeState = jasmine.anything();
+
+      beforeEach(() => {
+        selectorSpies.boeke.mockReturnValue(mockBoeke);
+        selectorSpies.isFavorite.mockReturnValue(mockIsFavorite);
+        navigateWithParams({ book: book.id });
+      });
+
+      it('should call the correct selector and return the value', () => {
+        expect(methodViewModel.isCurrentBoekeFavorite$).toBeObservable(
+          hot('a', { a: mockIsFavorite })
+        );
+
+        expect(FavoriteQueries.getIsFavoriteEduContent).toHaveBeenCalledWith(
+          storeState,
+          { eduContentId: mockBoeke.id }
+        );
       });
     });
   });
@@ -1089,6 +1144,44 @@ describe('MethodViewModel', () => {
           },
           autoFocus: false
         }
+      );
+    });
+  });
+
+  describe('toggleBoekeFavorite', () => {
+    let dateMock: MockDate;
+
+    beforeAll(() => {
+      dateMock = new MockDate();
+    });
+
+    afterAll(() => {
+      dateMock.returnRealDate();
+    });
+
+    beforeEach(() => {
+      navigateWithParams({ book: 1 });
+    });
+
+    it('should dispatch an action', () => {
+      jest.spyOn(store, 'dispatch');
+      const boeke = new EduContentFixture({ id: 123 }, { learningAreaId: 456 });
+      const methodWithYear = 'Programming with pretty colors - K1';
+
+      selectorSpies.methodWithYear.mockReturnValue(methodWithYear);
+
+      methodViewModel.toggleBoekeFavorite(boeke);
+
+      const favorite = {
+        created: dateMock.mockDate,
+        eduContentId: boeke.id,
+        learningAreaId: boeke.publishedEduContentMetadata.learningAreaId,
+        type: FavoriteTypesEnum.BOEKE,
+        name: methodWithYear
+      };
+
+      expect(store.dispatch).toHaveBeenCalledWith(
+        new FavoriteActions.ToggleFavorite({ favorite })
       );
     });
   });

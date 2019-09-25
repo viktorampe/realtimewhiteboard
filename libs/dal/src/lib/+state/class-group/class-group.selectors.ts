@@ -1,5 +1,7 @@
+import { Dictionary } from '@ngrx/entity';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { ClassGroupInterface } from '../../+models';
+import { ClassGroupInterface, EduContentBookInterface } from '../../+models';
+import { EduContentBookQueries } from '../edu-content-book';
 import {
   NAME,
   selectAll,
@@ -67,29 +69,60 @@ export const getById = createSelector(
   (state: State, props: { id: number }) => state.entities[props.id]
 );
 
-/**
- * returns array of objects in the order of the given ids
- * @example
- * classGroup$: ClassGroupInterface = this.store.pipe(
-  select(ClassGroupQueries.getById, { id: 3 })
-);
-*/
-export const getByMethodId = createSelector(
+export const getClassGroupsByMethodId = createSelector(
   getAll,
-  (classGroups: ClassGroupInterface[], props: { id: number }) => {
-    return classGroups.filter(
-      classGroup =>
-        classGroup.licenses &&
-        classGroup.licenses.some(
-          license =>
-            license.product &&
-            license.product.productContents &&
-            license.product.productContents.some(
-              productContent =>
-                productContent.licenseType === 'method' &&
-                productContent.methodId === props.id
-            )
-        )
+  (
+    classGroups: ClassGroupInterface[],
+    props: {} //It's necessary to accept empty props for the getClassGroupsForBook selector
+  ): Dictionary<ClassGroupInterface[]> => {
+    return classGroups.reduce(
+      (acc, currentClassGroup) => {
+        currentClassGroup.licenses.forEach(license => {
+          license.product.productContents.forEach(productContent => {
+            if (
+              productContent.licenseType === 'method' &&
+              productContent.methodId
+            ) {
+              if (!acc[productContent.methodId]) {
+                acc[productContent.methodId] = [];
+              }
+
+              acc[productContent.methodId].push(currentClassGroup);
+            }
+          });
+        });
+
+        return acc;
+      },
+      {} as Dictionary<ClassGroupInterface[]>
     );
+  }
+);
+
+export const getClassGroupsForBook = createSelector(
+  EduContentBookQueries.getById,
+  getClassGroupsByMethodId,
+  (
+    book: EduContentBookInterface,
+    classGroupsByMethodId: Dictionary<ClassGroupInterface[]>,
+    props: {
+      id: number;
+      filterByYear: boolean;
+    }
+  ): ClassGroupInterface[] => {
+    const bookYearIds = book.years.map(year => year.id);
+
+    if (!classGroupsByMethodId[book.methodId]) {
+      return [];
+    }
+
+    if (props.filterByYear) {
+      return classGroupsByMethodId[book.methodId].filter(classGroup => {
+        //One of the classGroups' years must be in the books' years
+        return classGroup.years.some(year => bookYearIds.includes(year.id));
+      });
+    } else {
+      return classGroupsByMethodId[book.methodId];
+    }
   }
 );

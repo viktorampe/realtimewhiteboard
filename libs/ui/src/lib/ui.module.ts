@@ -62,6 +62,7 @@ import { PersonBadgeComponent } from './person-badge/person-badge.component';
 import { PersonInitialsPipe } from './person-badge/pipes/person-initials.pipe';
 import { PersonSummaryComponent } from './person-summary-component/person-summary.component';
 import { ShellBodyDirective } from './shell/directives/shell-body.directive';
+import { ShellBottomDirective } from './shell/directives/shell-bottom.directive';
 import { ShellLeftDirective } from './shell/directives/shell-left.directive';
 import { ShellLogoDirective } from './shell/directives/shell-logo.directive';
 import { ShellTopDirective } from './shell/directives/shell-top.directive';
@@ -80,6 +81,7 @@ import { HumanDateTimePipe } from './utils/pipes/human-date-time/human-date-time
 import { JoinPipe } from './utils/pipes/join/join.pipe';
 import { RemovePrefixStringPipe } from './utils/pipes/remove-prefix-string/remove-prefix-string.pipe';
 import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-string.pipe';
+import { FileIconComponent } from './file-icon/file-icon.component';
 @NgModule({
   imports: [
     OverlayModule,
@@ -115,6 +117,7 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     ShellTopDirective,
     ShellLeftDirective,
     ShellBodyDirective,
+    ShellBottomDirective,
     AppBarComponent,
     PageHeaderComponent,
     FileExtensionComponent,
@@ -159,7 +162,9 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     TileComponent,
     JoinPipe,
     ManageCollectionComponent,
-    MultiCheckBoxTableComponent
+    MultiCheckBoxTableComponent,
+    ShellBottomDirective,
+    FileIconComponent
   ],
   exports: [
     FilterTextInputComponent,
@@ -172,6 +177,7 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     ShellTopDirective,
     ShellLeftDirective,
     ShellBodyDirective,
+    ShellBottomDirective,
     AppBarComponent,
     PageHeaderComponent,
     InfoPanelComponent,
@@ -219,7 +225,8 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     MatTooltipModule,
     MatIconModule,
     MultiCheckBoxTableComponent,
-    MatCheckboxModule
+    MatCheckboxModule,
+    FileIconComponent
   ],
   providers: [
     {

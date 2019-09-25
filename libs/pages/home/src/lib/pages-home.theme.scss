@@ -1,0 +1,20 @@
+@import './components/home/home.component.theme.scss';
+@import './components/method-favorite-tile/method-favorite-tile.component.theme.scss';
+
+// color palette
+$pages-home-text-color--primary: darkgray !default;
+$pages-home-text-color--primary--hover: purple !default;
+$pages-home-background-color--primary: white !default;
+
+$pages-home-text-color--secondary: black !default;
+$pages-home-background-color--secondary: lightgray !default;
+
+$pages-home-text-color--tertiary: purple !default;
+
+// fallback when the image doesn't have a background color
+$pages-home_image-background-color: lightskyblue !default;
+
+@mixin pages-home-theme() {
+  @include pages-home();
+  @include pages-home-method-favorite-tile();
+}

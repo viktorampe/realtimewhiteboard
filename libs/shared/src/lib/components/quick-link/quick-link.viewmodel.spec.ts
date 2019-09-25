@@ -43,6 +43,7 @@ import { Action, Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { ENVIRONMENT_FAVORITES_FEATURE_TOKEN } from '../../interfaces';
 import {
   OpenStaticContentServiceInterface,
   OPEN_STATIC_CONTENT_SERVICE_TOKEN
@@ -63,7 +64,6 @@ import {
   QuickLinkInterface
 } from './quick-link.interface';
 import { QuickLinkViewModel } from './quick-link.viewmodel';
-
 describe('QuickLinkViewModel', () => {
   let quickLinkViewModel: QuickLinkViewModel;
   let store: Store<DalState>;
@@ -217,6 +217,18 @@ describe('QuickLinkViewModel', () => {
         {
           provide: OPEN_STATIC_CONTENT_SERVICE_TOKEN,
           useValue: { open: jest.fn() }
+        },
+        {
+          provide: ENVIRONMENT_FAVORITES_FEATURE_TOKEN,
+          useValue: {
+            allowedFavoriteTypes: [
+              FavoriteTypesEnum.EDUCONTENT,
+              FavoriteTypesEnum.AREA,
+              FavoriteTypesEnum.BOEKE,
+              FavoriteTypesEnum.BUNDLE,
+              FavoriteTypesEnum.TASK
+            ]
+          }
         },
         {
           provide: SCORM_EXERCISE_SERVICE_TOKEN,

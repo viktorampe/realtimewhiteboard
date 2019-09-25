@@ -26,6 +26,7 @@ import {
   TocServiceInterface,
   TOC_SERVICE_TOKEN,
   UnlockedContentActions,
+  UnlockedFreePracticeActions,
   UserActions,
   UserLessonActions
 } from '@campus/dal';
@@ -124,6 +125,9 @@ export class LoginpageComponent implements OnInit {
     this.store.dispatch(new LearningAreaActions.LoadLearningAreas());
     this.store.dispatch(new DiaboloPhaseActions.LoadDiaboloPhases({ userId }));
     this.store.dispatch(new ClassGroupActions.LoadClassGroups({ userId }));
+    this.store.dispatch(
+      new UnlockedFreePracticeActions.LoadUnlockedFreePractices({ userId })
+    );
     this.store.dispatch(
       new LearningPlanGoalProgressActions.LoadLearningPlanGoalProgresses({
         userId
@@ -241,6 +245,20 @@ export class LoginpageComponent implements OnInit {
             eduContentBookId,
             learningPlanGoalId
           }
+        ]
+      })
+    );
+  }
+
+  public createUnlockedFreePractice() {
+    const userId = this.authService.userId;
+
+    this.store.dispatch(
+      new UnlockedFreePracticeActions.StartAddManyUnlockedFreePractices({
+        userId,
+        unlockedFreePractices: [
+          { id: 1, classGroupId: 5, eduContentBookId: 1 },
+          { id: 1, classGroupId: 5, eduContentBookId: 52, eduContentTOCId: 32 }
         ]
       })
     );

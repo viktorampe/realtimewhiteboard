@@ -1,0 +1,20 @@
+<div class="container" style="display: none;">
+  <campus-multi-check-box-table
+    selectAllForColumnEnabled="true"
+    [rowHeaderColumns]="rowHeaderColumns"
+    [itemColumns]="itemColumns"
+    [items]="items"
+    (selectAllForColumnChanged)="log($event)"
+    (checkBoxChanged)="clickCheckBox($event)"
+  ></campus-multi-check-box-table>
+</div>
+
+<div class="container">
+  <campus-method-favorite-tile
+    [name]="'Mol en beer'"
+    [logoUrl]="'molenbeer.svg'"
+    [eduContent]="null"
+    [bookId]="34"
+  >
+  </campus-method-favorite-tile>
+</div>

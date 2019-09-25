@@ -9,6 +9,10 @@ import {
   FavoriteQueries,
   HistoryActions,
   HistoryQueries,
+  LearningAreaActions,
+  LearningAreaQueries,
+  MethodActions,
+  MethodQueries,
   StateResolver,
   UiActions,
   UiQuery
@@ -28,7 +32,10 @@ export class AppResolver extends StateResolver {
 
   protected getLoadableActions(): Action[] {
     return [
+      new MethodActions.LoadMethods({ userId: this.authService.userId }),
+      new MethodActions.LoadAllowedMethods({ userId: this.authService.userId }),
       new AlertActions.LoadAlerts({ userId: this.authService.userId }),
+      new LearningAreaActions.LoadLearningAreas(),
       new FavoriteActions.LoadFavorites({ userId: this.authService.userId }),
       new HistoryActions.LoadHistory({ userId: this.authService.userId }),
       new UiActions.LoadUi()
@@ -36,7 +43,10 @@ export class AppResolver extends StateResolver {
   }
   protected getResolvedQueries(): Selector<object, boolean>[] {
     return [
+      MethodQueries.getLoaded,
+      MethodQueries.getAllowedMethodsLoaded,
       AlertQueries.getLoaded,
+      LearningAreaQueries.getLoaded,
       FavoriteQueries.getLoaded,
       HistoryQueries.getLoaded,
       UiQuery.getLoaded

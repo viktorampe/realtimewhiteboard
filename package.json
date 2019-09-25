@@ -1,6 +1,6 @@
 {
   "name": "campus",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "license": "MIT",
   "scripts": {
     "ng": "ng",
@@ -44,7 +44,7 @@
     "@angular/platform-browser": "^7.1.0",
     "@angular/platform-browser-dynamic": "^7.1.0",
     "@angular/router": "^7.1.0",
-    "@diekeure/polpo-api-angular-sdk": "^2.1.19",
+    "@diekeure/polpo-api-angular-sdk": "^2.1.20",
     "@ngrx/effects": "7.2.0",
     "@ngrx/entity": "7.0.0-beta.0",
     "@ngrx/router-store": "7.2.0",

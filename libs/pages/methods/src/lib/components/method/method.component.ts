@@ -10,7 +10,7 @@ import {
   MethodInterface
 } from '@campus/dal';
 import {
-  MultiCheckBoxTableChangeEventInterface,
+  MultiCheckBoxTableItemChangeEventInterface,
   MultiCheckBoxTableItemColumnInterface,
   MultiCheckBoxTableItemInterface,
   MultiCheckBoxTableRowHeaderColumnInterface
@@ -35,6 +35,7 @@ export class MethodComponent implements OnInit {
   public productTypes$: Observable<EduContentProductTypeInterface[]>;
   public currentTab$: Observable<number>;
   public breadcrumbTitles$: Observable<string>;
+  public isBoekeFavorite$: Observable<boolean>;
 
   public learningPlanGoalTableHeaders: MultiCheckBoxTableRowHeaderColumnInterface<
     LearningPlanGoalInterface
@@ -51,8 +52,9 @@ export class MethodComponent implements OnInit {
   constructor(private viewModel: MethodViewModel, private router: Router) {}
 
   ngOnInit() {
-    this.boeke$ = this.viewModel.currentBoeke$;
     this.book$ = this.viewModel.currentBook$;
+    this.boeke$ = this.viewModel.currentBoeke$;
+    this.isBoekeFavorite$ = this.viewModel.isCurrentBoekeFavorite$;
     this.chapters$ = this.viewModel.currentToc$;
     this.generalFilesByType$ = this.viewModel.generalFilesByType$;
     this.method$ = this.viewModel.currentMethod$;
@@ -96,28 +98,32 @@ export class MethodComponent implements OnInit {
   }
 
   public clickProgress(
-    event: MultiCheckBoxTableChangeEventInterface<
+    event: MultiCheckBoxTableItemChangeEventInterface<
       LearningPlanGoalInterface,
       ClassGroupInterface,
       EduContentTOCInterface
     >
   ) {
-    if (event.previousCheckboxState) {
-      // if the checkbox becomes unchecked
-      this.viewModel.deleteLearningPlanGoalProgressForLearningPlanGoalsClassGroups(
-        event.item,
-        event.column
-      );
-    } else {
+    if (event.isChecked) {
+      // if the checkbox is checked
       this.viewModel.openLearningPlanGoalProgressManagementDialog(
         event.item, // lpg
         event.column // classGroup
+      );
+    } else {
+      this.viewModel.deleteLearningPlanGoalProgressForLearningPlanGoalsClassGroups(
+        event.item,
+        event.column
       );
     }
   }
 
   public clickExportGoals(): void {
     this.viewModel.exportLearningPlanGoalProgress();
+  }
+
+  public toggleBoekeFavorite(boeke: EduContent) {
+    this.viewModel.toggleBoekeFavorite(boeke);
   }
 
   private getTableColumnsFromClassGroupsStream(): Observable<

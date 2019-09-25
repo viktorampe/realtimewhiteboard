@@ -1,12 +1,21 @@
 @mixin shared-header {
+  $shared-header-font-size: 14px !default;
+  $shared-header-font-weight: normal !default;
   $shared-header__app-bar-height: 45px !default;
   $shared-header__app-bar-color: $shared-color-1 !default;
+  $shared-header__app-bar-padding-right: 0 !default;
+  $shared-header__app-bar-padding-top: 0px !default;
+  $shared-header__app-bar-padding-bottom: 0px !default;
+  $shared-header__app-bar-padding-left: 0px !default;
+  $shared-header__page-bar-padding-left: 10px !default;
+  $shared-header__page-bar-padding-right: 10px !default;
   $shared-header__page-bar-height: 60px !default;
   $shared-header__page-bar-background-color: $shared-bg-color-1 !default;
   $shared-header__page-bar__divider-background-color: $shared-element-border-color-1 !default;
   $shared-header__page-bar__divider-height: 40px !default;
   $shared-header__page-bar__divider-width: 2px !default;
   $shared-header__page-bar__element-height: 40px !default;
+  $shared-header__page-bar-container__justify-content: flex-start !default;
   $shared-header__page-bar__page-bar-style--searchmode-button-width: 140px !default;
   $shared-header__page-bar__element-border-width: 2px !default;
   $shared-header__page-bar__element-padding-top: 2px !default;
@@ -20,16 +29,32 @@
   $shared-header__page-bar__mat-badge-line-height: 20px !default;
   $shared-header__page-bar__mat-badge__content-color: $secondary-font-color-badge !default;
   $shared-header__page-bar__mat-badge__content-background-color: $secondary-bg-color-badge !default;
-  $shared-header__page-bar__quicklinks-color-hover: $shared-button-color-accent !default;
+  $shared-header__page-bar__right-color-hover: $shared-button-color-accent !default;
+  $shared_header__page-bar_background: none !default;
+  $shared-header__quicklink-color: $shared-header__app-bar-color !default;
+  $shared-header__quicklink-color-hover: $shared-header__page-bar__right-color-hover !default;
+  $shared-header__quicklink-bg-color: $shared-header__page-bar-background-color !default;
+  $shared-header__quicklink-width: 115px !default;
+  $shared-header__quicklink-icon-size: 24px !default;
+  $shared-header__quicklink-icon-size-small: 20px !default;
+  $shared-header__quicklink-font-size: $shared-header-font-size !default;
+  $shared-header__quicklink-font-weight: $shared-header-font-weight !default;
 
   .shared-header {
     &__app-bar {
       height: $shared-header__app-bar-height;
+      padding: $shared-header__app-bar-padding-top
+        $shared-header__app-bar-padding-right
+        $shared-header__app-bar-padding-bottom
+        $shared-header__app-bar-padding-left;
     }
 
     &__page-bar {
+      background: $shared_header__page-bar_background;
       height: $shared-header__page-bar-height;
       background-color: $shared-header__page-bar-background-color;
+      padding-left: $shared-header__page-bar-padding-left;
+      padding-right: $shared-header__page-bar-padding-right;
 
       &__nav-button {
         background-color: $shared-header__page-bar-background-color;
@@ -50,6 +75,7 @@
       }
 
       #page-bar-container {
+        justify-content: $shared-header__page-bar-container__justify-content;
         .page-bar-style {
           &--searchmode-button {
             border: $shared-header__page-bar__element-border-width solid
@@ -79,21 +105,35 @@
           padding-bottom: $shared-header__page-bar__element-padding-bottom;
         }
       }
-
-      &__quicklink {
-        &__button {
-          color: $shared-header__app-bar-color;
-          background-color: $shared-header__page-bar-background-color;
-
-          &:hover {
-            color: $shared-header__page-bar__quicklinks-color-hover;
-            background-color: $shared-header__page-bar-background-color;
-          }
-        }
-      }
     }
 
-    .shared-header__app-bar__alerts {
+    &__quicklink__button {
+      font-size: $shared-header__quicklink-font-size;
+      font-weight: $shared-header__quicklink-font-weight;
+      text-align: center;
+      color: $shared-header__quicklink-color;
+      background-color: $shared-header__quicklink-bg-color;
+      flex-direction: column;
+      height: $shared-header__page-bar-height;
+      width: $shared-header__quicklink-width;
+
+      &:hover {
+        color: $shared-header__quicklink-color-hover;
+        background-color: $shared-header__quicklink-bg-color;
+      }
+
+      .mat-icon {
+        width: $shared-header__quicklink-icon-size;
+        height: $shared-header__quicklink-icon-size;
+      }
+    }
+    :not(.smallIcon) {
+      .smallIcon .mat-icon {
+        width: $shared-header__quicklink-icon-size-small;
+        height: $shared-header__quicklink-icon-size-small;
+      }
+    }
+    .shared-header__alerts {
       display: flex;
       align-items: center;
       margin-right: $shared-header__page-bar__divider-margin-left-right;
@@ -108,11 +148,14 @@
       }
 
       .ui-dropdown-menu__trigger {
-        height: $shared-header__app-bar-height * 1.2; // used for vertical positioning dropdown
+        height: (
+          ($shared-header__app-bar-height - $shared-header__app-bar-padding-top) *
+            1.2
+        );
       }
     }
 
-    .shared-header__app-bar__profile-menu {
+    .shared-header__profile-menu {
       display: flex;
       align-items: center;
       cursor: pointer;
@@ -122,7 +165,10 @@
       }
 
       .ui-dropdown-menu__trigger {
-        height: $shared-header__app-bar-height * 1.2; // used for vertical positioning dropdown
+        height: (
+          ($shared-header__app-bar-height - $shared-header__app-bar-padding-top) *
+            1.2
+        );
       }
     }
 

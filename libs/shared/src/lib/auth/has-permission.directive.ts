@@ -36,7 +36,7 @@ export class HasPermissionDirective implements OnInit, OnDestroy {
   private applyPermission(): void {
     this.subscriptions.add(
       this.permissionService
-        .hasPermission(this.permissions)
+        .hasPermission$(this.permissions)
         .subscribe(hasPermission => {
           if (hasPermission) {
             this.viewContainer.createEmbeddedView(this.templateRef);

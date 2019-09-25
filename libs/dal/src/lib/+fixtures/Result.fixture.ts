@@ -1,5 +1,5 @@
-import { ScormStatus } from '@campus/scorm';
 import { ResultInterface } from '../+models';
+import { ScormStatus } from '../+external-interfaces/scorm-api.interface';
 
 export class ResultFixture implements ResultInterface {
   // defaults

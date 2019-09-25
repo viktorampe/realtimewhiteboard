@@ -21,7 +21,7 @@ import {
   SearchStateInterface
 } from '@campus/search';
 import {
-  MultiCheckBoxTableChangeEventInterface,
+  MultiCheckBoxTableItemChangeEventInterface,
   MultiCheckBoxTableItemColumnInterface,
   MultiCheckBoxTableRowHeaderColumnInterface,
   MultiCheckBoxTableSubLevelInterface
@@ -42,6 +42,7 @@ export class MethodChapterComponent implements OnInit, AfterViewInit {
   public searchResults$: Observable<SearchResultInterface>;
   public autoCompleteValues$: Observable<string[]>;
   public boeke$: Observable<EduContent>;
+  public isBoekeFavorite$: Observable<boolean>;
   public lessonsForChapter$: Observable<EduContentTOCInterface[]>;
   public currentTab$: Observable<number>;
   public currentMethodParams$: Observable<CurrentMethodParams>;
@@ -73,6 +74,7 @@ export class MethodChapterComponent implements OnInit, AfterViewInit {
     this.initialSearchState$ = this.methodViewModel.getInitialSearchState();
     this.searchResults$ = this.methodViewModel.searchResults$;
     this.boeke$ = this.methodViewModel.currentBoeke$;
+    this.isBoekeFavorite$ = this.methodViewModel.isCurrentBoekeFavorite$;
     this.lessonsForChapter$ = this.methodViewModel.currentToc$;
     this.currentTab$ = this.methodViewModel.currentTab$;
     this.currentMethodParams$ = this.methodViewModel.currentMethodParams$;
@@ -107,41 +109,27 @@ export class MethodChapterComponent implements OnInit, AfterViewInit {
     }
   }
 
-  public clickOpenLesson(lessonId: number) {
+  public clickOpenToc(tocId: number, depth: number = 1) {
     this.currentTab$
       .pipe(
         take(1),
         withLatestFrom(this.currentMethodParams$)
       )
       .subscribe(([tab, currentMethodParams]) => {
-        this.router.navigate(
-          [
-            'methods',
-            currentMethodParams.book,
-            currentMethodParams.chapter,
-            lessonId
-          ],
-          {
-            queryParams: {
-              tab
-            }
-          }
-        );
-      });
-  }
+        const staticNavParts = ['methods', currentMethodParams.book];
 
-  public clickBackLink() {
-    this.currentTab$
-      .pipe(
-        take(1),
-        withLatestFrom(this.currentMethodParams$)
-      )
-      .subscribe(([tab, currentMethodParams]) => {
-        const urlParts = ['methods', currentMethodParams.book];
-        if (currentMethodParams.lesson)
-          urlParts.push(currentMethodParams.chapter);
+        let dynamicNavParts = [];
+        switch (depth) {
+          case 0: // chapter
+            dynamicNavParts = [tocId];
+            break;
+          case 1: // lesson
+            dynamicNavParts = [currentMethodParams.chapter, tocId];
+            break;
+          // add more cases when we add more depth
+        }
 
-        this.router.navigate(urlParts, {
+        this.router.navigate(staticNavParts.concat(dynamicNavParts), {
           queryParams: {
             tab
           }
@@ -153,8 +141,12 @@ export class MethodChapterComponent implements OnInit, AfterViewInit {
     this.methodViewModel.openBoeke(eduContent);
   }
 
+  public toggleBoekeFavorite(boeke: EduContent) {
+    this.methodViewModel.toggleBoekeFavorite(boeke);
+  }
+
   public checkBoxChanged(
-    event: MultiCheckBoxTableChangeEventInterface<
+    event: MultiCheckBoxTableItemChangeEventInterface<
       LearningPlanGoalInterface,
       ClassGroupInterface,
       EduContentTOCInterface
@@ -172,7 +164,7 @@ export class MethodChapterComponent implements OnInit, AfterViewInit {
   }
 
   public checkBoxesChanged(
-    events: MultiCheckBoxTableChangeEventInterface<
+    events: MultiCheckBoxTableItemChangeEventInterface<
       LearningPlanGoalInterface,
       ClassGroupInterface,
       EduContentTOCInterface

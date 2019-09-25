@@ -63,6 +63,13 @@ import {
   YearService,
   YEAR_SERVICE_TOKEN
 } from '@campus/dal';
+import { ScormApiService, SCORM_API_SERVICE_TOKEN } from '@campus/scorm';
+import {
+  APP_NAVIGATION_TREE_TOKEN,
+  NavigationItemService,
+  NAVIGATION_ITEM_SERVICE_TOKEN
+} from '@campus/shared';
+import { polpoConfig } from './app.config';
 import { EduContentSearchResultItemService } from './components/searchresults/edu-content-search-result.service';
 import { EDUCONTENT_SEARCH_RESULT_ITEM_SERVICE_TOKEN } from './components/searchresults/edu-content-search-result.service.interface';
 import {
@@ -86,6 +93,13 @@ import { FavIconService, FAVICON_SERVICE_TOKEN } from './services/favicons';
       provide: EDUCONTENT_SEARCH_RESULT_ITEM_SERVICE_TOKEN,
       useClass: EduContentSearchResultItemService
     },
+    {
+      provide: NAVIGATION_ITEM_SERVICE_TOKEN,
+      useClass: NavigationItemService
+    },
+    { provide: APP_NAVIGATION_TREE_TOKEN, useValue: polpoConfig.appNavtree },
+    { provide: SCORM_API_SERVICE_TOKEN, useClass: ScormApiService },
+
     // dal services
     { provide: UNDO_SERVICE_TOKEN, useClass: UndoService },
     { provide: EXERCISE_SERVICE_TOKEN, useClass: ExerciseService },

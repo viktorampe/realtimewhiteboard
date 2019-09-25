@@ -1,4 +1,6 @@
+import { groupArrayByKey } from '@campus/utils';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
+import { UnlockedFreePracticeInterface } from '../../+models';
 import {
   NAME,
   selectAll,
@@ -66,4 +68,40 @@ export const getByIds = createSelector(
 export const getById = createSelector(
   selectUnlockedFreePracticeState,
   (state: State, props: { id: number }) => state.entities[props.id]
+);
+
+export const findOne = createSelector(
+  selectUnlockedFreePracticeState,
+  (state: State, props: Partial<UnlockedFreePracticeInterface>) => {
+    return Object.values(state.entities).find(unlockedFreePractice => {
+      return Object.keys(props).every(
+        prop => !props[prop] || unlockedFreePractice[prop] === props[prop]
+      );
+    });
+  }
+);
+
+export const findMany = createSelector(
+  selectUnlockedFreePracticeState,
+  (state: State, props: Partial<UnlockedFreePracticeInterface>) => {
+    return Object.values(state.entities).filter(unlockedFreePractice => {
+      return Object.keys(props).every(
+        prop => !props[prop] || unlockedFreePractice[prop] === props[prop]
+      );
+    });
+  }
+);
+
+export const getGroupedByEduContentTOCId = createSelector(
+  selectUnlockedFreePracticeState,
+  (state: State) => {
+    return groupArrayByKey(Object.values(state.entities), 'eduContentTOCId');
+  }
+);
+
+export const getGroupedByEduContentBookId = createSelector(
+  selectUnlockedFreePracticeState,
+  (state: State) => {
+    return groupArrayByKey(Object.values(state.entities), 'eduContentBookId');
+  }
 );

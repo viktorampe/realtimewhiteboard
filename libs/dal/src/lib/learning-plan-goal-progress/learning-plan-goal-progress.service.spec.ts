@@ -5,8 +5,8 @@ import { configureTestSuite } from 'ng-bullet';
 import { of } from 'rxjs';
 import { LearningPlanGoalProgressFixture } from '../+fixtures';
 import {
-  MinimalLearningPlanGoalProgressEduContentTocInterface,
-  MinimalLearningPlanGoalProgressUserLessonInterface
+  LearningPlanGoalProgressWithEduContentTocInterface,
+  LearningPlanGoalProgressWithUserLessonInterface
 } from '../+state/learning-plan-goal-progress/learning-plan-goal-progress.actions';
 import { LearningPlanGoalProgressService } from './learning-plan-goal-progress.service';
 import { LearningPlanGoalProgressServiceInterface } from './learning-plan-goal-progress.service.interface';
@@ -192,8 +192,8 @@ describe('LearningPlanGoalProgressService', () => {
 
       const id = 16;
       const progresses: (
-        | MinimalLearningPlanGoalProgressEduContentTocInterface
-        | MinimalLearningPlanGoalProgressUserLessonInterface)[] = [
+        | LearningPlanGoalProgressWithEduContentTocInterface
+        | LearningPlanGoalProgressWithUserLessonInterface)[] = [
         {
           classGroupId: 10,
           learningPlanGoalId: 37,

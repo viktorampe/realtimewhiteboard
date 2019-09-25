@@ -7,11 +7,14 @@ import {
   EffectFeedbackQueries,
   getRouterState,
   UiActions,
-  UiQuery
+  UiQuery,
+  UserQueries
 } from '@campus/dal';
 import {
   FeedBackServiceInterface,
-  FEEDBACK_SERVICE_TOKEN
+  FEEDBACK_SERVICE_TOKEN,
+  NavigationItemServiceInterface,
+  NAVIGATION_ITEM_SERVICE_TOKEN
 } from '@campus/shared';
 import { NavItem } from '@campus/ui';
 import { Action, select, Store } from '@ngrx/store';
@@ -22,20 +25,12 @@ import { filter, map, switchMap } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class AppViewModel implements OnDestroy {
-  //props
-  public navItems: NavItem[] = [
-    { title: 'Home', link: 'error/400' },
-    { title: 'Methodes', link: 'methods' },
-    { title: 'Taken', link: 'error/402' },
-    { title: 'Resultaten', link: 'error/403' },
-    { title: 'Vrij oefenen', link: 'error/404' },
-    { title: 'Differentiëren', link: 'error/405' },
-    { title: 'Instellingen', link: 'settings' }
-  ];
+  // source streams
+  private userPermissions$: Observable<string[]>;
 
   // presentation streams
   public sideNavOpen$: Observable<boolean>;
-  public navigationItems$: Observable<NavItem[]>;
+  public sideNavItems$: Observable<NavItem[]>;
   public bannerFeedback$: Observable<EffectFeedbackInterface>;
 
   private subscriptions: Subscription;
@@ -44,12 +39,15 @@ export class AppViewModel implements OnDestroy {
     @Inject(FEEDBACK_SERVICE_TOKEN)
     private feedbackService: FeedBackServiceInterface,
     private store: Store<DalState>,
-    private breakPointObserver: BreakpointObserver
+    private breakPointObserver: BreakpointObserver,
+    @Inject(NAVIGATION_ITEM_SERVICE_TOKEN)
+    private navigationItemService: NavigationItemServiceInterface
   ) {
     this.initialize();
   }
 
   private initialize() {
+    this.setSourceStreams();
     this.setNavItems();
     this.setFeedbackFlow();
   }
@@ -67,13 +65,16 @@ export class AppViewModel implements OnDestroy {
     this.store.dispatch(new UiActions.UpdateNavItem({ navItem }));
   }
 
-  private setNavItems() {
-    this.store.dispatch(
-      new UiActions.SetSideNavItems({ navItems: this.navItems })
-    );
+  private setSourceStreams() {
+    this.userPermissions$ = this.store.pipe(select(UserQueries.getPermissions));
+  }
 
-    // read array of navItems from the store
-    this.navigationItems$ = this.store.pipe(select(UiQuery.getSideNavItems));
+  private setNavItems() {
+    this.sideNavItems$ = this.userPermissions$.pipe(
+      map(permissions =>
+        this.navigationItemService.getNavItemsForTree('sideNav', permissions)
+      )
+    );
 
     // get sideNav opened state
     this.sideNavOpen$ = this.store.pipe(select(UiQuery.getSideNavOpen));

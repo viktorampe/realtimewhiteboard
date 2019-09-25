@@ -1,6 +1,10 @@
 import { Update } from '@ngrx/entity';
 import { Action } from '@ngrx/store';
 import { UnlockedFreePracticeInterface } from '../../+models';
+import {
+  CustomFeedbackHandlersInterface,
+  FeedbackTriggeringAction
+} from '../effect-feedback';
 
 export enum UnlockedFreePracticesActionTypes {
   UnlockedFreePracticesLoaded = '[UnlockedFreePractices] UnlockedFreePractices Loaded',
@@ -14,7 +18,8 @@ export enum UnlockedFreePracticesActionTypes {
   UpdateUnlockedFreePractices = '[UnlockedFreePractices] Update UnlockedFreePractices',
   DeleteUnlockedFreePractice = '[UnlockedFreePractices] Delete UnlockedFreePractice',
   DeleteUnlockedFreePractices = '[UnlockedFreePractices] Delete UnlockedFreePractices',
-  ClearUnlockedFreePractices = '[UnlockedFreePractices] Clear UnlockedFreePractices'
+  ClearUnlockedFreePractices = '[UnlockedFreePractices] Clear UnlockedFreePractices',
+  StartAddManyUnlockedFreePractices = '[UnlockedFreePractices] Start Add many UnlockedFreePractices'
 }
 
 export class LoadUnlockedFreePractices implements Action {
@@ -97,14 +102,34 @@ export class DeleteUnlockedFreePractice implements Action {
   constructor(public payload: { id: number }) {}
 }
 
-export class DeleteUnlockedFreePractices implements Action {
+export class DeleteUnlockedFreePractices implements FeedbackTriggeringAction {
   readonly type = UnlockedFreePracticesActionTypes.DeleteUnlockedFreePractices;
 
-  constructor(public payload: { ids: number[] }) {}
+  constructor(
+    public payload: {
+      userId: number;
+      ids: number[];
+      customFeedbackHandlers?: CustomFeedbackHandlersInterface;
+    }
+  ) {}
 }
 
 export class ClearUnlockedFreePractices implements Action {
   readonly type = UnlockedFreePracticesActionTypes.ClearUnlockedFreePractices;
+}
+
+export class StartAddManyUnlockedFreePractices
+  implements FeedbackTriggeringAction {
+  readonly type =
+    UnlockedFreePracticesActionTypes.StartAddManyUnlockedFreePractices;
+
+  constructor(
+    public payload: {
+      userId: number;
+      unlockedFreePractices: UnlockedFreePracticeInterface[];
+      customFeedbackHandlers?: CustomFeedbackHandlersInterface;
+    }
+  ) {}
 }
 
 export type UnlockedFreePracticesActions =
@@ -119,4 +144,5 @@ export type UnlockedFreePracticesActions =
   | UpdateUnlockedFreePractices
   | DeleteUnlockedFreePractice
   | DeleteUnlockedFreePractices
-  | ClearUnlockedFreePractices;
+  | ClearUnlockedFreePractices
+  | StartAddManyUnlockedFreePractices;

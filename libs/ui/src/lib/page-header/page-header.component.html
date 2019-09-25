@@ -3,7 +3,11 @@
     <mat-icon [svgIcon]="iconClass"></mat-icon>
   </div>
   <div>
-    {{ title }} <small *ngIf="layout === 'default'">{{ subtitle }}</small>
+    <span
+      class="ui-page-header__title"
+      [class.ui-page-header__title--title-only]="!subtitle"
+      >{{ title }}</span
+    ><small *ngIf="layout === 'default'">{{ subtitle }}</small>
   </div>
 </h1>
 <h2 *ngIf="layout === 'centered'" class="ui-page-header-centered-subtitle">{{

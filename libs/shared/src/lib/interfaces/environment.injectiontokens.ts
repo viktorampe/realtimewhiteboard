@@ -10,6 +10,10 @@ export const ENVIRONMENT_WEBSITE_TOKEN = new InjectionToken(
   'environmentWebsite'
 );
 
+export const ENVIRONMENT_FAVORITES_FEATURE_TOKEN = new InjectionToken(
+  'environmentQuickLinkFeature'
+);
+
 export const ENVIRONMENT_LOGOUT_TOKEN = new InjectionToken('environmentLogout');
 
 export const ENVIRONMENT_LOGIN_TOKEN = new InjectionToken('environmentLogin');
@@ -28,6 +32,10 @@ export const ENVIRONMENT_MESSAGES_FEATURE_TOKEN = new InjectionToken(
 
 export const ENVIRONMENT_ALERTS_FEATURE_TOKEN = new InjectionToken(
   'environmentAlertsFeature'
+);
+
+export const ENVIRONMENT_GLOBAL_SEARCH_FEATURE_TOKEN = new InjectionToken(
+  'environmentGlobalSearchFeature'
 );
 
 export const ENVIRONMENT_SSO_TOKEN = new InjectionToken(

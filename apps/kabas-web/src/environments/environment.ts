@@ -1,3 +1,4 @@
+import { FavoriteTypesEnum } from '@campus/dal';
 import { EnvironmentInterface } from '@campus/shared';
 import { icons } from './icons';
 import { searchModes } from './search-modes';
@@ -28,8 +29,8 @@ export const environment: EnvironmentInterface = {
   },
   features: {
     alerts: {
-      enabled: false,
-      hasAppBarDropDown: false,
+      enabled: true,
+      hasAppBarDropDown: true,
       appBarPollingInterval: 3000
     },
     messages: {
@@ -44,6 +45,16 @@ export const environment: EnvironmentInterface = {
           statusText: 'Not Found',
           urlRegex: 'http.*assets\\/icons.*.svg'
         }
+      ]
+    },
+    globalSearch: {
+      enabled: true
+    },
+    favorites: {
+      allowedFavoriteTypes: [
+        FavoriteTypesEnum.BOEKE,
+        FavoriteTypesEnum.TASK,
+        FavoriteTypesEnum.EDUCONTENT
       ]
     }
   },

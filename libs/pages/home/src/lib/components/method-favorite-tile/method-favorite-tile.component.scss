@@ -1,0 +1,28 @@
+:host {
+  height: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.pages-home-method-favorite-tile {
+  &__image {
+    width: 100%;
+  }
+
+  &__title {
+    text-align: center;
+    justify-content: center;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: bold;
+  }
+
+  &__button {
+    &__container {
+      display: flex;
+      flex-direction: row;
+    }
+  }
+}

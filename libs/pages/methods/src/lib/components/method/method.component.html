@@ -1,26 +1,54 @@
 <campus-page-bar>
+  <ng-container *ngIf="(boeke$ | async) as boeke">
+    <campus-button
+      class="shared-header__quicklink__button smallIcon"
+      data-cy="nav-open-boeke"
+      [iconClass]="'boardbook'"
+      (click)="clickOpenBoeke(boeke)"
+    >
+      <span>Open bordboek</span></campus-button
+    >
+    <!--todo styling favorites-->
+    <campus-button
+      class="shared-header__quicklink__button smallIcon"
+      data-cy="nav-toggle-boeke-favorite"
+      [iconClass]="
+        (isBoekeFavorite$ | async)
+          ? 'quicklink:favorites'
+          : 'quicklink:favorites'
+      "
+      (click)="toggleBoekeFavorite(boeke)"
+    >
+      <ng-container
+        *ngIf="(isBoekeFavorite$ | async) as isBoekeFavorite; else notFavorite"
+        ><span>Verwijder uit favorieten</span></ng-container
+      >
+      <ng-template #notFavorite>
+        <span>Zet als favoriet</span>
+      </ng-template>
+    </campus-button>
+  </ng-container>
+
   <campus-button
-    data-cy="nav-open-boeke"
-    campusPrimary
-    [iconClass]="'book'"
-    *ngIf="(boeke$ | async) as boeke"
-    (click)="clickOpenBoeke(boeke)"
-  ></campus-button>
-  <campus-button
-    campusPrimary
+    class="shared-header__quicklink__button smallIcon"
     iconClass="import-export"
     *ngIf="(currentTab$ | async) === 1"
     (click)="clickExportGoals()"
-  ></campus-button>
+    ><span>Download</span></campus-button
+  >
 </campus-page-bar>
+
 <div class="method-method__container">
   <campus-collapsible-sheet>
     <div aside>
-      <h3 mat-subheader>Kies een hoofdstuk</h3>
       <mat-nav-list>
+        <div class="method-chapter__list-header" matSubheader
+          >Kies een hoofdstuk</div
+        >
         <a
           data-cy="chapter-link"
           mat-list-item
+          class="method-chapter-link"
           *ngFor="let chapter of (chapters$ | async)"
           (click)="clickOpenChapter(chapter.id)"
           >{{ chapter.title }}</a
@@ -59,6 +87,7 @@
             </mat-card-content>
             <mat-card-actions>
               <campus-button
+                primary
                 data-cy="open-boeke"
                 (click)="clickOpenBoeke(boeke)"
                 mat-button

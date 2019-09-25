@@ -4,7 +4,6 @@
     flex-direction: row;
     flex-wrap: nowrap;
     align-items: center;
-    padding: 0 10px;
 
     &__nav-button {
       margin-right: 10px;
@@ -16,10 +15,10 @@
       align-items: center;
       flex: 1 1 auto;
     }
+  }
 
-    &__quicklink {
-      flex: 1 1 auto;
-      text-align: right;
-    }
+  &__right {
+    flex: 0 0 auto;
+    text-align: right;
   }
 }

@@ -4,7 +4,12 @@ import {
   TestBed,
   tick
 } from '@angular/core/testing';
-import { MatCard, MatCardModule, MatListItem } from '@angular/material';
+import {
+  MatCard,
+  MatCardModule,
+  MatIconRegistry,
+  MatListItem
+} from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Router } from '@angular/router';
@@ -12,6 +17,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import {
   ClassGroupFixture,
   ClassGroupInterface,
+  EduContentBookFixture,
   EduContentFixture
 } from '@campus/dal';
 import {
@@ -20,8 +26,9 @@ import {
   ENVIRONMENT_TESTING_TOKEN,
   SharedModule
 } from '@campus/shared';
+import { MockMatIconRegistry } from '@campus/testing';
 import {
-  MultiCheckBoxTableChangeEventInterface,
+  MultiCheckBoxTableItemChangeEventInterface,
   MultiCheckBoxTableItemColumnInterface,
   UiModule
 } from '@campus/ui';
@@ -48,6 +55,7 @@ describe('MethodComponent', () => {
       ],
       declarations: [MethodComponent],
       providers: [
+        { provide: MatIconRegistry, useClass: MockMatIconRegistry },
         {
           provide: ENVIRONMENT_SEARCHMODES_TOKEN,
           useValue: {}
@@ -85,6 +93,27 @@ describe('MethodComponent', () => {
   it('should show the method info card', () => {
     const methodCard = fixture.debugElement.query(By.directive(MatCard));
     expect(methodCard).toBeDefined();
+  });
+
+  describe('diabolo info', () => {
+    it('should show diabolo info if the current book is diabolo', () => {
+      const diaboloDE = fixture.debugElement.query(
+        By.css('.method-method__container__boeke__diabolo')
+      );
+
+      expect(diaboloDE).toBeTruthy();
+    });
+
+    it('should not show diabolo info if the current book is not diabolo', () => {
+      methodViewModel.currentBook$.next(new EduContentBookFixture());
+      fixture.detectChanges();
+
+      const diaboloDE = fixture.debugElement.query(
+        By.css('.method-method__container__boeke__diabolo')
+      );
+
+      expect(diaboloDE).toBeFalsy();
+    });
   });
 
   it('should show the general files', () => {
@@ -203,10 +232,11 @@ describe('MethodComponent', () => {
         'openLearningPlanGoalProgressManagementDialog'
       );
 
-      const event: MultiCheckBoxTableChangeEventInterface<any, any, any> = {
+      const event: MultiCheckBoxTableItemChangeEventInterface<any, any, any> = {
         column: { classGroup: 'I am a classGroup' },
         item: { lpg: 'I am a learning plan goal' },
-        subLevel: { foo: 'I am not relevant' }
+        subLevel: { foo: 'I am not relevant' },
+        isChecked: true
       };
 
       component.clickProgress(event);
@@ -217,6 +247,38 @@ describe('MethodComponent', () => {
         { lpg: 'I am a learning plan goal' },
         { classGroup: 'I am a classGroup' }
       );
+    });
+    it("should call the viewmodel's deleteLearningPlanGoalProgressForLearningPlanGoalsClassGroups()", () => {
+      jest.spyOn(
+        methodViewModel,
+        'deleteLearningPlanGoalProgressForLearningPlanGoalsClassGroups'
+      );
+
+      const event: MultiCheckBoxTableItemChangeEventInterface<any, any, any> = {
+        column: { classGroup: 'I am a classGroup' },
+        item: { lpg: 'I am a learning plan goal' },
+        subLevel: { foo: 'I am not relevant' },
+        isChecked: false
+      };
+
+      component.clickProgress(event);
+
+      expect(
+        methodViewModel.deleteLearningPlanGoalProgressForLearningPlanGoalsClassGroups
+      ).toHaveBeenCalledWith(
+        { lpg: 'I am a learning plan goal' },
+        { classGroup: 'I am a classGroup' }
+      );
+    });
+  });
+
+  describe('toggleBoekeFavorite', () => {
+    it('should call the correct method on the viewmodel', () => {
+      jest.spyOn(methodViewModel, 'toggleBoekeFavorite');
+      const boeke = new EduContentFixture({ id: 123 }, { learningAreaId: 456 });
+
+      component.toggleBoekeFavorite(boeke);
+      expect(methodViewModel.toggleBoekeFavorite).toHaveBeenCalledWith(boeke);
     });
   });
 });

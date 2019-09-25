@@ -12,7 +12,6 @@ import {
   BROWSER_STORAGE_SERVICE_TOKEN,
   StorageService
 } from '@campus/browser';
-import { ScormModule } from '@campus/scorm';
 import {
   LoopBackConfig,
   SDKBrowserModule
@@ -30,7 +29,6 @@ export const DAL_OPTIONS = new InjectionToken('dal-options');
     CommonModule,
     SDKBrowserModule.forRoot(),
     HttpClientModule,
-    ScormModule,
     MatSnackBarModule
   ],
   providers: [

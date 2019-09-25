@@ -210,8 +210,8 @@ export class StartAddManyLearningPlanGoalProgresses
   constructor(
     public payload: {
       learningPlanGoalProgresses: (
-        | MinimalLearningPlanGoalProgressEduContentTocInterface
-        | MinimalLearningPlanGoalProgressUserLessonInterface)[];
+        | LearningPlanGoalProgressWithEduContentTocInterface
+        | LearningPlanGoalProgressWithUserLessonInterface)[];
       personId: number;
       customFeedbackHandlers?: CustomFeedbackHandlersInterface;
     }
@@ -236,18 +236,12 @@ export type LearningPlanGoalProgressesActions =
   | BulkAddLearningPlanGoalProgresses
   | StartAddManyLearningPlanGoalProgresses;
 
-export interface MinimalLearningPlanGoalProgressUserLessonInterface
+export interface LearningPlanGoalProgressWithUserLessonInterface
   extends LearningPlanGoalProgressInterface {
-  classGroupId: number;
-  learningPlanGoalId: number;
   userLessonId: number;
-  eduContentBookId: number;
 }
 
-export interface MinimalLearningPlanGoalProgressEduContentTocInterface
+export interface LearningPlanGoalProgressWithEduContentTocInterface
   extends LearningPlanGoalProgressInterface {
-  classGroupId: number;
-  learningPlanGoalId: number;
   eduContentTOCId: number;
-  eduContentBookId: number;
 }

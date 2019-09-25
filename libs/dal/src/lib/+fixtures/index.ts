@@ -40,6 +40,7 @@ export * from './TeacherStudent.fixture';
 export * from './UnlockedBoekeGroup.fixture';
 export * from './UnlockedBoekeStudent.fixture';
 export * from './UnlockedContent.fixture';
+export * from './UnlockedFreePractice.fixture';
 export * from './UserContent.fixture';
 export * from './UserLesson.fixture';
 export * from './Year.fixture';

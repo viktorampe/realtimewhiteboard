@@ -1,3 +1,4 @@
+import { FavoriteTypesEnum } from '@campus/dal';
 import { icons } from './icons';
 import { searchModes } from './search-modes';
 
@@ -39,6 +40,16 @@ export const environment = {
           statusText: 'Not Found',
           urlRegex: 'http.*assets\\/icons.*.svg'
         }
+      ]
+    },
+    globalSearch: {
+      enabled: true
+    },
+    favorites: {
+      allowedFavoriteTypes: [
+        FavoriteTypesEnum.BOEKE,
+        FavoriteTypesEnum.TASK,
+        FavoriteTypesEnum.EDUCONTENT
       ]
     }
   },
