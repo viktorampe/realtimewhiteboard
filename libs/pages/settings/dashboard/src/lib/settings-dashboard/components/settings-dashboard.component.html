@@ -10,13 +10,10 @@
 
     <div class="pages-settings-dashboard__avatar">
       <campus-person-badge
-        [person]="{
-          displayName: 'string',
-          name: 'string',
-          firstName: 'string',
-          avatar: 'string'
-        }"
-        [subText]="'Leerkracht'"
+        *ngIf="(user$ | async) as user"
+        [person]="user.badgeInfo"
+        [subText]="user.subText"
+        [align]="'bottom'"
         [size]="'large'"
       ></campus-person-badge>
     </div>
@@ -48,9 +45,9 @@
 <!-- kabas -->
 <ng-template #navItemTemplate>
   <ng-container *ngFor="let link of (links$ | async)">
+    <mat-divider></mat-divider>
     <mat-list-item class="pages-settings-dashboard__mat-list__item">
       {{ link.title }}
     </mat-list-item>
-    <mat-divider></mat-divider>
   </ng-container>
 </ng-template>

@@ -4,12 +4,16 @@
   $ui-person-badge-bg-color: $ui-primary-color-accent !default;
   $ui-person-badge-border-color: $ui-tertiary-bg-color-2 !default;
   $ui-person-badge-border-size: 2px !default;
+  $ui-person-badge-border-radius: 50% !default;
+  $ui-person-badge_display-line-height: 1.8 !default;
 
   .ui_person-badge {
+
     &__badge,
     img {
       background-color: $ui-person-badge-bg-color;
       color: $ui-person-badge-color;
+      border-radius: $ui-person-badge-border-radius;
     }
 
     &__badge {
@@ -52,6 +56,49 @@
           font-size: $ui-person-badge-size-large-font-size;
           height: $ui-person-badge-size-large;
           width: $ui-person-badge-size-large;
+        }
+      }
+    }
+
+    &__display {
+      line-height: $ui-person-badge_display-line-height;
+
+      &--large {
+        .ui_person-badge__display {
+
+          &__name {
+            font-size: $ui-person-badge-size-large_name-font-size;
+          }
+
+          &__subtext {
+            font-size: $ui-person-badge-size-large_sub-text-font-size;
+          }
+        }
+      }
+
+      &--medium {
+        .ui_person-badge__display {
+
+          &__name {
+            font-size: $ui-person-badge-size-medium_name-font-size;
+          }
+
+          &__subtext {
+            font-size: $ui-person-badge-size-medium_sub-text-font-size;
+          }
+        }
+      }
+
+      &--small {
+        .ui_person-badge__display {
+
+          &__name {
+            font-size: $ui-person-badge-size-small_name-font-size;
+          }
+
+          &__subtext {
+            font-size: $ui-person-badge-size-small_sub-text-font-size;
+          }
         }
       }
     }

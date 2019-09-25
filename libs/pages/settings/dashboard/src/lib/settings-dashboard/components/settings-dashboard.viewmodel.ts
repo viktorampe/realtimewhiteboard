@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
-import { DalState, UserQueries } from '@campus/dal';
+import { DalState, PersonInterface, UserQueries } from '@campus/dal';
 import {
   EnvironmentUIInterface,
   ENVIRONMENT_UI_TOKEN,
@@ -16,6 +16,7 @@ import { map } from 'rxjs/operators';
 })
 export class SettingsDashboardViewModel {
   links$: Observable<NavItem[]>;
+  public user$: Observable<PersonInterface>;
 
   constructor(
     private store: Store<DalState>,
@@ -27,6 +28,8 @@ export class SettingsDashboardViewModel {
   }
 
   private initialize() {
+    this.user$ = this.store.pipe(select(UserQueries.getCurrentUser));
+
     this.links$ = this.store.pipe(
       select(UserQueries.getPermissions),
       map(userPermissions =>

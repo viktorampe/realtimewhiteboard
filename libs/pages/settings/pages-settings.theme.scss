@@ -6,7 +6,11 @@ $pages-settings_page-header-display: block !default;
 
 $pages-settings_container-background-color: unset !default;
 $pages-settings_container-box-shadow: unset !default;
-$pages-settings_container-max-width:100% !default;
+$pages-settings_container-max-width: 100% !default;
+$pages-settings_avatar-padding-top: 0px !default;
+$pages-settings_avatar-padding-bottom: 0px !default;
+$pages-settings_avatar_container-width: 400px !default; // = button--large width
+$pages-settings_avatar-subtext-color: unset !default;
 
 $pages-settings_mat-list_item-color: black !default;
 $pages-settings_mat-list_item-background-color--accent: unset !default;
