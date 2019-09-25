@@ -8,9 +8,17 @@
     >
     </campus-page-header>
 
-    <div class="pages-settings-dashboard__image__container">
-      <div class="pages-settings-dashboard__image"> </div>
-      <div class="pages-settings-dashboard__image__caption"> </div>
+    <div class="pages-settings-dashboard__avatar">
+      <campus-person-badge
+        [person]="{
+          displayName: 'string',
+          name: 'string',
+          firstName: 'string',
+          avatar: 'string'
+        }"
+        [subText]="'Leerkracht'"
+        [size]="'large'"
+      ></campus-person-badge>
     </div>
 
     <div class="pages-settings-dashboard__button__container">
@@ -24,6 +32,7 @@
   </div>
 </div>
 
+<!-- campus -->
 <ng-template #buttonTemplate>
   <campus-button
     *ngFor="let link of (links$ | async)"
@@ -36,6 +45,7 @@
   </campus-button>
 </ng-template>
 
+<!-- kabas -->
 <ng-template #navItemTemplate>
   <ng-container *ngFor="let link of (links$ | async)">
     <mat-list-item class="pages-settings-dashboard__mat-list__item">

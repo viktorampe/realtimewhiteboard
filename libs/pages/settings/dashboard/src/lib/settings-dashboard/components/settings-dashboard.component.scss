@@ -1,4 +1,15 @@
 .pages-settings-dashboard {
+  &__container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__avatar {
+    display: flex;
+    width: 400px;
+    justify-content: center;
+  }
+
   &__mat-list {
     flex-direction: column;
     display: flex;
