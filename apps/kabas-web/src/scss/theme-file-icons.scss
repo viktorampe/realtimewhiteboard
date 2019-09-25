@@ -6,7 +6,7 @@
       fill: $color;
     }
 
-    > span {
+    > div {
       color: $color;
       border-color: $color;
       background-color: lighten($color, 60);
@@ -15,4 +15,5 @@
 }
 
 @include file-icon('pdf', red);
-@include file-icon('campus', green);
+@include file-icon('docx', blue);
+@include file-icon('xlsx', green);
