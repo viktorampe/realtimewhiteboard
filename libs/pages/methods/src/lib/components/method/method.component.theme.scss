@@ -14,16 +14,19 @@
     $pages-method__container__files-header-font-size: $pages-method__list-section-title-font-size !default;
     $pages-method__container__files-header-font-family: $pages-method-font-family !default;
     $pages-method__file__title-font-size: 18px !default;
-    $pages-method__file-padding-left: 24px !default;
+    $pages-method__file-padding-left: 40px !default;
 
     &__files {
       .mat-list-item {
         &.method-file {
-          padding: 15px 15px 15px $pages-method__file-padding-left;
+          height: 120px;
+        }
+        .mat-list-item-content {
+          padding: 15px 15px 15px $pages-method__file-padding-left !important;
         }
       }
       &-header {
-        padding: 44px 16px 24px $pages-method__file-padding-left + 16px;
+        padding: 44px 16px 24px $pages-method__file-padding-left;
         font-family: $pages-method__container__files-header-font-family;
         font-size: $pages-method__container__files-header-font-size;
         font-weight: $pages-method__container__files-header-font-weight;
@@ -39,8 +42,6 @@
           color: $pages-method-color;
           font-weight: $pages-method__container__files-header-font-weight;
           font-size: $pages-method__file__title-font-size;
-        }
-        &__description {
         }
       }
     }
