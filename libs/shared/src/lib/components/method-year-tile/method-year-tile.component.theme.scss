@@ -20,7 +20,7 @@
   $shared-method-year-tile_button_container_button-box-shadow-spread: 0 !default;
   $shared-method-year-tile_button_container_button-height: 24px !default;
   $shared-method-year-tile_button_container_button-width: 24px !default;
-  $shared-method-year-tile_button_container_button-font-size: 16px !default;
+  $shared-method-year-tile_button_container_button-font-size: 14px !default;
   $shared-method-year-tile_button_container-margin-bottom: 8px !default;
   $shared-method-year-tile_container-width: 200px !default;
   $shared-method-year-tile_container-box-shadow-offset: 0 0 !default;
@@ -67,10 +67,6 @@
           color: $shared-method-year-tile_button_container_button-hover-color;
           background-color: $shared-method-year-tile_button_container_button-hover-background-color;
           font-weight: bold;
-        }
-
-        &:focus {
-          background-color: $shared-method-year-tile_button_container_button-focus-background-color;
         }
       }
     }
