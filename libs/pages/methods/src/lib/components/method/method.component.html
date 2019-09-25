@@ -77,7 +77,16 @@
                 [src]="'assets/icons/method/' + method.logoUrl"
               />
 
-              <p
+              <div class="method-method__container__boeke__actions">
+                <campus-button
+                  primary
+                  data-cy="open-boeke"
+                  (click)="clickOpenBoeke(boeke)"
+                  >OPEN</campus-button
+                >
+              </div>
+
+              <div
                 data-cy="diabolo-info"
                 *ngIf="(book$ | async)?.diabolo"
                 class="method-method__container__boeke__diabolo"
@@ -90,16 +99,8 @@
                   target="_blank"
                   >Lees meer over diabolo</a
                 >
-              </p>
+              </div>
             </mat-card-content>
-            <mat-card-actions>
-              <campus-button
-                primary
-                data-cy="open-boeke"
-                (click)="clickOpenBoeke(boeke)"
-                >OPEN</campus-button
-              >
-            </mat-card-actions>
           </mat-card>
 
           <div

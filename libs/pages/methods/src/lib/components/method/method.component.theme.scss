@@ -23,9 +23,11 @@
     $pages-method__mat-card__banner__text-width: 141% !default; // sqrt(2) * 100%
 
     $pages-method__mat-card__title-font-size--override: 20px !default;
-    $pages-method__mat-card__image-margin-top--override: 32px !default;
+    $pages-method__mat-card__image-margin-top--override: 8px !default;
     $pages-method__mat-card__box-shadow--override: 0px 0px 4px 0px
       $pages-method-color--secondary !default;
+    $pages-method__mat-card-padding--override: 32px !default;
+    $pages-method__mat-card__content-margin-vertical--override: 16px !default; // = padding /2
 
     .mat-tab-body-content {
       display: block;
@@ -61,6 +63,7 @@
 
       &.mat-card {
         box-shadow: $pages-method__mat-card__box-shadow--override !important;
+        padding: $pages-method__mat-card-padding--override;
       }
 
       &__image {
@@ -68,9 +71,15 @@
       }
 
       &__diabolo {
+        margin: $pages-method__mat-card__content-margin-vertical--override 0px;
+
         &__title {
           font-size: $pages-method__mat-card__title-font-size--override;
         }
+      }
+
+      &__actions {
+        margin: $pages-method__mat-card__content-margin-vertical--override 0px;
       }
 
       .banner {
