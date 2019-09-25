@@ -1,4 +1,5 @@
 @import './components/method/method.component.theme.scss';
+@import './components/methods-overview/methods-overview.component.theme.scss';
 @import './components/method-chapter/method-chapter.component.theme.scss';
 
 // font
@@ -68,5 +69,6 @@ $pages-method__list-section-title-font-size: 16px !default;
 
 @mixin pages-methods-theme() {
   @include pages-methods-method();
+  @include pages-methods-method-overview();
   @include pages-methods-method-chapter();
 }

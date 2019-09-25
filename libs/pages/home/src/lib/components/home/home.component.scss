@@ -1,15 +1,30 @@
 .pages-home {
   &__container {
-    padding: 20px;
+    &__shortcuts {
+      &__list {
+        display: flex;
+        flex-direction: row;
+
+        &__shortcut {
+          display: flex;
+          flex-direction: column;
+          flex: 0 0 auto;
+
+          mat-icon {
+            flex: 0 0 auto;
+          }
+
+          &__description {
+            flex: 1 0 auto;
+          }
+        }
+      }
+    }
   }
 
   &__favorite-list {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-
-    :not(:last-child) {
-      margin-right: 16px;
-    }
   }
 }

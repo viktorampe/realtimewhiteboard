@@ -217,7 +217,7 @@ describe('PracticeViewModel', () => {
 
         expect(ClassGroupQueries.getClassGroupsForBook).toHaveBeenCalledWith(
           storeState,
-          { id: mockBook.id }
+          { id: mockBook.id, filterByYear: false }
         );
       });
     });

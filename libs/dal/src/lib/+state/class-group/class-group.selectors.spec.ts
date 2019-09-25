@@ -124,7 +124,10 @@ describe('ClassGroup Selectors', () => {
       });
 
       it('should return the classGroups grouped by methodId', () => {
-        const results = ClassGroupQueries.getClassGroupsByMethodId(storeState);
+        const results = ClassGroupQueries.getClassGroupsByMethodId(
+          storeState,
+          {}
+        );
         expect(results).toEqual({
           2: [classGroups[0], classGroups[1]],
           3: [classGroups[1]]
@@ -154,14 +157,24 @@ describe('ClassGroup Selectors', () => {
         2: [new ClassGroupFixture({ id: 5, years: [years[0]] })]
       };
 
-      it("should return the classGroups for the book's method and year", () => {
+      it("should return the classGroups for the book's method and year if filterByYear is true", () => {
         const methodClassGroups = classGroupsByMethodId[1];
 
-        expect(projector(book, classGroupsByMethodId)).toEqual([
+        expect(
+          projector(book, classGroupsByMethodId, { filterByYear: true })
+        ).toEqual([
           methodClassGroups[0],
           methodClassGroups[1],
           methodClassGroups[2]
         ]);
+      });
+
+      it("should return the classGroups for the book's method if filterByYear is false", () => {
+        const methodClassGroups = classGroupsByMethodId[1];
+
+        expect(
+          projector(book, classGroupsByMethodId, { filterByYear: false })
+        ).toEqual(methodClassGroups);
       });
     });
   });
