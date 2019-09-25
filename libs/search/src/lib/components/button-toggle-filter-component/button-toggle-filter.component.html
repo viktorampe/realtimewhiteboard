@@ -1,4 +1,6 @@
-<div class="button-toggle-filter__title">{{ criteria.label }}</div>
+<div class="button-toggle-filter__title search-filter-title">{{
+  criteria.label
+}}</div>
 <mat-button-toggle-group [multiple]="multiple" [formControl]="toggleControl">
   <mat-button-toggle
     *ngFor="let option of options"

@@ -123,6 +123,13 @@ $ui-button--large-font-size: 18px;
 $ui-collapsible-sheet-button-bg-color: $color-gray-2;
 $ui-collapsible-sheet-border-color: $color-gray-2;
 
+//search filters > search term
+$search-search-term-button-background-color: transparent;
+$search-search-term-button-box-shadow-color: transparent;
+$search-search-term-button-border-color: $primary-font-color-2;
+$search-search-term-button-border-left-width: 0;
+$search-search-term_mat-form-field_outline-opacity: 1;
+
 // social media
 $facebook-button-background-color: #455897;
 $facebook-button-font-color: white;

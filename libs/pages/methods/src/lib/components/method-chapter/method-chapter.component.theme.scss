@@ -13,6 +13,10 @@
   $pages-method-chapter__mat-list__chapter-font-weight: $pages-method__chapter-font-weight !default;
 
   .method-chapter {
+    .search-filter-title {
+      display: none;
+    }
+
     .method-chapter__lesson-link {
       &.mat-list-item .mat-list-item-content {
         padding-left: $pages-method-chapter__mat-list-padding-left--override;

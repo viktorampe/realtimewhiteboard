@@ -1,4 +1,6 @@
 @mixin search-term() {
+  $search-search-term-transition: border-color ease-in-out 0.15s,
+    box-shadow ease-in-out 0.15s !default;
   $search-search-term-background-color: $ui-tertiary-bg-color;
   $search-search-term-border-color: $ui-tertiary-bg-color !default;
   $search-search-term-button-background-color: $ui-button-bg-color-1 !default;
@@ -6,16 +8,32 @@
     $search-search-term-button-background-color,
     10%
   ) !default;
+  $search-search-term-button-border-left-width: 1px !default;
+  $search-search-term-button-border-right-width: 1px !default;
+  $search-search-term-button-border-top-width: 1px !default;
+  $search-search-term-button-border-bottom-width: 1px !default;
+  $search-search-term-button-box-shadow-color: rgba(0, 175, 145, 0.5) !default;
   $search-search-term-autocomplete-background-color: $ui-tertiary-bg-color !default;
+
+  $search-search-term_mat-form-field_outline-opacity: 0 !default;
+
   .search-term {
+    transition: $search-search-term-transition;
     background-color: $search-search-term-background-color;
     border: 1px solid $search-search-term-border-color;
+
+    .mat-form-field-appearance-outline .mat-form-field-outline-thick {
+      opacity: $search-search-term_mat-form-field_outline-opacity;
+    }
+
     mat-form-field {
       width: 100%;
+
       &.mat-form-field-appearance-outline {
         .mat-form-field-outline-thick,
         .mat-form-field-outline {
           > div {
+            opacity: 1;
             border-width: 1px;
             border-radius: 0px;
             border-right: none;
@@ -29,8 +47,16 @@
     }
     campus-button {
       background-color: $search-search-term-button-background-color;
-      border: 1px solid $search-search-term-button-border-color;
-      box-shadow: inset 0 0 2px 1px rgba(0, 175, 145, 0.5);
+      border-left: $search-search-term-button-border-left-width solid
+        $search-search-term-button-border-color;
+      border-right: $search-search-term-button-border-right-width solid
+        $search-search-term-button-border-color;
+      border-top: $search-search-term-button-border-top-width solid
+        $search-search-term-button-border-color;
+      border-bottom: $search-search-term-button-border-bottom-width solid
+        $search-search-term-button-border-color;
+
+      box-shadow: inset 0 0 2px 1px $search-search-term-button-box-shadow-color;
       width: 42px;
       mat-icon {
         width: 14px;
