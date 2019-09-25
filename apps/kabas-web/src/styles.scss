@@ -134,6 +134,24 @@ body {
   }
 }
 
+.pages-home__container__shortcuts__list__shortcut {
+  &--methods mat-icon {
+    stroke: $color-lila-1;
+  }
+
+  &--tasks mat-icon {
+    fill: $color-green-1;
+  }
+
+  &--results mat-icon {
+    fill: $color-orange-1;
+  }
+
+  &--differentiate mat-icon {
+    stroke: $color-red-1;
+  }
+}
+
 /* Material checkboxes */
 .mat-checkbox .mat-checkbox-frame,
 .mat-checkbox-checked .mat-checkbox-background {
@@ -194,6 +212,7 @@ body {
     z-index: 1;
     position: relative;
     display: flex;
+    flex-direction: column;
   }
 
   &:after {

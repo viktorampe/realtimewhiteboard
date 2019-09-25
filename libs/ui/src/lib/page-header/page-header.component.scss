@@ -5,6 +5,12 @@
   margin-bottom: 25px;
   line-height: 1;
 
+  &__title {
+    &--title-only {
+      line-height: normal;
+    }
+  }
+
   &--default {
     justify-content: left;
 
