@@ -7,6 +7,7 @@ $color-blue-1: #65c1ea;
 $color-red-2: #ec727c;
 $color-green-1: #70c5a3;
 $color-orange-1: #f2a248;
+
 // > sidebar
 $color-gray-1: #f8f8f8; // bg       / table rows
 $color-gray-2: #ececec; // left bar / table rows
@@ -127,6 +128,10 @@ $ui-button--large-font-size: 18px;
 $ui-collapsible-sheet-button-bg-color: $color-gray-2;
 $ui-collapsible-sheet-border-color: $color-gray-2;
 
+// ui > file-icons
+// $ui-file-icon-border: none;
+// $ui-file-icon__label-bg-color: transparent !important;
+
 // social media
 $facebook-button-background-color: #455897;
 $facebook-button-font-color: white;
@@ -134,6 +139,19 @@ $google-button-background-color: #4285f4;
 $google-button-font-color: white;
 $smartschool-button-background-color: #ff520e;
 $smartschool-button-font-color: white;
+
+// shared lib colors
+$shared-bg-color-1: $primary-bg-color;
+$shared-color-1: $primary-font-color;
+$shared-bg-color-2: $secondary-bg-color;
+$shared_image-bg-color: $secondary-font-color-accent;
+
+// method-year-tile
+$shared-method-year-tile_button_container_button-hover-background-color: $tertiary-bg-color;
+$shared-method-year-tile_button_container_button-hover-color: $secondary-font-color-accent;
+$shared-method-year-tile_button_container_button-focus-background-color: $tertiary-bg-color;
+$shared-method-year-tile_container-box-shadow-color: $primary-font-color-2;
+$shared-method-year-tile_button_container_button-box-shadow-color: $primary-font-color-2;
 
 // home
 $pages-home-text-color--primary: $primary-font-color-2;
@@ -148,6 +166,7 @@ $pages-home-text-color--tertiary: $primary-font-color;
 $pages-methods-text-color--primary: $primary-font-color;
 $pages-methods-text-color--primary--accent: $secondary-font-color-accent;
 $pages-methods-background-color--primary: $primary-bg-color;
+$pages-methods-border-color--primary: $color-gray-2;
 $pages-methods-text-color--secondary: $primary-font-color-2;
 $pages-methods-background-color--secondary: $secondary-bg-color;
 

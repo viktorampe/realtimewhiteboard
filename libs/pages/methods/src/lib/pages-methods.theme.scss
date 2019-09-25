@@ -1,10 +1,12 @@
 @import './components/method/method.component.theme.scss';
+@import './components/methods-overview/methods-overview.component.theme.scss';
 @import './components/method-chapter/method-chapter.component.theme.scss';
 
 // color palette
 $pages-methods-text-color--primary: black !default;
 $pages-methods-text-color--primary--accent: darkred !default;
 $pages-methods-background-color--primary: white !default;
+$pages-methods-border-color--primary: lightgrey !default;
 
 $pages-methods-text-color--secondary: darkgray !default;
 $pages-methods-background-color--secondary: whitesmoke !default;
@@ -64,5 +66,6 @@ $pages-method__chapter-font-weight: 600 !default; // = somewhat lighter than lef
 
 @mixin pages-methods-theme() {
   @include pages-methods-method();
+  @include pages-methods-method-overview();
   @include pages-methods-method-chapter();
 }
