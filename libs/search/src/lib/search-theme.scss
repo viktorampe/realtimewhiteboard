@@ -5,6 +5,7 @@
 @import './components/column-filter/column-filter.component.theme.scss';
 @import './components/search-term/search-term.component.theme.scss';
 @import './components/button-toggle-filter-component/button-toggle-filter.component.theme.scss';
+@import './components/select-filter-component/select-filter.component.theme.scss';
 
 // create theme-mixin with each mixin from our library components
 @mixin search-theme() {
@@ -13,6 +14,7 @@
   @include search-checkbox-filter-theme();
   @include search-checkbox-list-filter-theme();
   @include column-filter-theme();
+  @include select-filter-component();
   @include search-term();
   @include search-button-toggle-filter--deep();
 }

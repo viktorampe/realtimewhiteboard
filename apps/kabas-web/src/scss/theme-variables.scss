@@ -123,7 +123,8 @@ $ui-button--large-font-size: 18px;
 $ui-collapsible-sheet-button-bg-color: $color-gray-2;
 $ui-collapsible-sheet-border-color: $color-gray-2;
 
-//search filters > search term
+// search filters > search term
+$search-search-term-border-width: 0px;
 $search-search-term-button-background-color: transparent;
 $search-search-term-button-box-shadow-color: transparent;
 $search-search-term-button-border-left-width: 0;
@@ -138,9 +139,15 @@ $search-search-term-button-hover-background-color: $color-orange-1;
 $search-search-term-button-hover-icon-color: $color-white-1;
 $search-search-term_mat-form-field_outline-border-color: $primary-font-color-2;
 
-//search filters > diabolo buttons
+// search filters > diabolo buttons
 $button-toggle-filter_button-group-border-radius: 0;
 $button-toggle-filter_button-group-border-color: $primary-font-color-2;
+//$button-toggle-filter_button-group-height: 51.98px; //= search input height, ugly hack -> find better way
+
+// search filters > select filter
+$select-filter-component_mat-select-trigger-padding: 8px;
+$select-filter-component_mat-select-trigger-border-width: 1px;
+$select-filter-component_mat-select-trigger-border-color: $primary-font-color-2;
 
 // social media
 $facebook-button-background-color: #455897;

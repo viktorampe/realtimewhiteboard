@@ -5,11 +5,14 @@
 
   $button-toggle-filter--font-size: $ui-primary-font-size * 1.2 !default;
 
+  //$button-toggle-filter_button-group-height: inherit !default;
   $button-toggle-filter_button-group-border-radius: 4px !default;
   $button-toggle-filter_button-group-border-color: $ui-tertiary-bg-color-2 !default;
 
   .button-toggle-filter-component {
     &__button-group {
+      //height: $button-toggle-filter_button-group-height;
+
       &.mat-button-toggle-group-appearance-standard {
         border-radius: $button-toggle-filter_button-group-border-radius;
         border-color: $button-toggle-filter_button-group-border-color;
@@ -20,6 +23,10 @@
       &--disabled {
         // fake disabled
         background-color: $button-toggle--disabled-color;
+      }
+
+      &.mat-button-toggle-appearance-standard .mat-button-toggle-label-content {
+        //line-height: $button-toggle-filter_button-group-height;
       }
 
       &.mat-button-toggle-disabled button.mat-button-toggle-button {

@@ -3,6 +3,7 @@
     box-shadow ease-in-out 0.15s !default;
   $search-search-term-background-color: $ui-tertiary-bg-color;
   $search-search-term-border-color: $ui-tertiary-bg-color !default;
+  $search-search-term-border-width: 1px !default;
   $search-search-term-button-background-color: $ui-button-bg-color-1 !default;
   $search-search-term-button-hover-background-color: $ui-button-bg-color-2 !default;
   $search-search-term-button-hover-icon-color: inherit !default;
@@ -26,7 +27,8 @@
   .search-term {
     transition: $search-search-term-transition;
     background-color: $search-search-term-background-color;
-    border: 1px solid $search-search-term-border-color;
+    border: $search-search-term-border-width solid
+      $search-search-term-border-color;
 
     .mat-form-field-appearance-outline .mat-form-field-outline-thick {
       opacity: $search-search-term_mat-form-field_outline-opacity;
