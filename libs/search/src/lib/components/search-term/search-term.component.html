@@ -1,18 +1,24 @@
 <div class="search-term">
-  <mat-form-field
-    [appearance]="'outline'"
-    *ngIf="!autoComplete; else autoCompleteTemplate"
-  >
-    <mat-label>{{ placeholder }}</mat-label>
-    <input
-      [autofocus]="getAutoFocusValue()"
-      matInput
-      [(ngModel)]="currentValue"
-      [placeholder]="placeholder"
-      (keyup.enter)="onChange()"
-    />
-  </mat-form-field>
-  <campus-button [iconClass]="'magnifier'" (click)="onChange()"></campus-button>
+  <div class="search-term__field-wrapper">
+    <mat-form-field
+      [appearance]="'outline'"
+      *ngIf="!autoComplete; else autoCompleteTemplate"
+    >
+      <mat-label>{{ placeholder }}</mat-label>
+      <input
+        [autofocus]="getAutoFocusValue()"
+        matInput
+        [(ngModel)]="currentValue"
+        [placeholder]="placeholder"
+        (keyup.enter)="onChange()"
+      />
+    </mat-form-field>
+
+    <campus-button
+      [iconClass]="'magnifier'"
+      (click)="onChange()"
+    ></campus-button>
+  </div>
 
   <ng-template #autoCompleteTemplate>
     <mat-form-field [appearance]="'outline'">
