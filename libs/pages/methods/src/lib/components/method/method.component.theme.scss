@@ -22,7 +22,6 @@
     $pages-method__mat-card__banner__text-padding: 12px !default;
     $pages-method__mat-card__banner__text-width: 141% !default; // sqrt(2) * 100%
 
-    $pages-method__mat-card__title-font-size--override: 20px !default;
     $pages-method__mat-card__image-margin-top--override: 8px !default;
     $pages-method__mat-card__box-shadow--override: 0px 0px 4px 0px
       $pages-method-color--secondary !default;
@@ -72,9 +71,10 @@
 
       &__diabolo {
         margin: $pages-method__mat-card__content-margin-vertical--override 0px;
+        color: $pages-method-color;
 
-        &__title {
-          font-size: $pages-method__mat-card__title-font-size--override;
+        a {
+          color: $pages-method-color;
         }
       }
 
