@@ -21,12 +21,8 @@ $primary-bg-color: $color-gray-3;
 $primary-font-color: $color-black-1;
 $primary-color-accent: $color-blue-1; // link, button (borders)
 $primary-font-color-2: $color-gray-1; // subtitle
-$primary-font-family: 'Helvetica',
-'Arial',
-'Open Sans',
-sans-serif;
-$primary-font-family-2: 'Lato',
-sans-serif; // title
+$primary-font-family: 'Helvetica', 'Arial', 'Open Sans', sans-serif;
+$primary-font-family-2: 'Lato', sans-serif; // title
 $primary-font-size: 14px;
 
 // app > nav + site header (shell)
@@ -106,7 +102,8 @@ $ui-drop-area__icon-container__mat-icon-color: $color-gray-1;
 $ui-drop-area__label-color: $color-gray-1;
 $ui-drop-area__label-font-size: 18px;
 $ui-drop-area__icon-container__mat-icon-size: 41px;
-$ui-drop-area-background: url(/assets/images/polpo-overlay-dark.png) right center no-repeat $color-gray-7;
+$ui-drop-area-background: url(/assets/images/polpo-overlay-dark.png) right
+  center no-repeat $color-gray-7;
 
 // social media
 $facebook-button-background-color: #455897;

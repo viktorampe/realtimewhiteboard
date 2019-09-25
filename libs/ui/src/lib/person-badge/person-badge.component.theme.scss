@@ -8,7 +8,6 @@
   $ui-person-badge_display-line-height: 1.8 !default;
 
   .ui_person-badge {
-
     &__badge,
     img {
       background-color: $ui-person-badge-bg-color;
@@ -65,7 +64,6 @@
 
       &--large {
         .ui_person-badge__display {
-
           &__name {
             font-size: $ui-person-badge-size-large_name-font-size;
           }
@@ -78,7 +76,6 @@
 
       &--medium {
         .ui_person-badge__display {
-
           &__name {
             font-size: $ui-person-badge-size-medium_name-font-size;
           }
@@ -91,7 +88,6 @@
 
       &--small {
         .ui_person-badge__display {
-
           &__name {
             font-size: $ui-person-badge-size-small_name-font-size;
           }

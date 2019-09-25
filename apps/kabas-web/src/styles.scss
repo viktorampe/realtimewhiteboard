@@ -162,7 +162,6 @@ body {
 
 .mat-checkbox {
   &-disabled {
-
     .mat-checkbox-frame,
     .mat-checkbox-background {
       border: 2px solid $primary-font-color-2 !important;
@@ -191,7 +190,9 @@ body {
   }
 }
 
-.mat-checkbox:not(.mat-checkbox-disabled).mat-primary .mat-checkbox-ripple .mat-ripple-element {
+.mat-checkbox:not(.mat-checkbox-disabled).mat-primary
+  .mat-checkbox-ripple
+  .mat-ripple-element {
   background-color: $secondary-font-color-accent;
 }
 
@@ -208,7 +209,7 @@ body {
 .pages-settings-alerts {
   position: relative;
 
-  >* {
+  > * {
     z-index: 1;
     position: relative;
     display: flex;
@@ -235,11 +236,13 @@ body {
 @font-face {
   font-family: FontAwesome;
   src: url(/assets/fonts/fontawesome-webfont.eot?v=4.4.0);
-  src: url(/assets/fonts/fontawesome-webfont.eot?#iefix&v=4.4.0) format('embedded-opentype'),
+  src: url(/assets/fonts/fontawesome-webfont.eot?#iefix&v=4.4.0)
+      format('embedded-opentype'),
     url(/assets/fonts/fontawesome-webfont.woff2?v=4.4.0) format('woff2'),
     url(/assets/fonts/fontawesome-webfont.woff?v=4.4.0) format('woff'),
     url(/assets/fonts/fontawesome-webfont.ttf?v=4.4.0) format('truetype'),
-    url(/assets/fonts/fontawesome-webfont.svg?v=4.4.0#fontawesomeregular) format('svg');
+    url(/assets/fonts/fontawesome-webfont.svg?v=4.4.0#fontawesomeregular)
+      format('svg');
   font-weight: 400;
   font-style: normal;
 }
@@ -247,11 +250,13 @@ body {
 @font-face {
   font-family: simple-line-icons;
   src: url(/assets/fonts/Simple-Line-Icons.eot?v=2.2.2);
-  src: url(/assets/fonts/Simple-Line-Icons.eot?v=2.2.2#iefix) format('embedded-opentype'),
+  src: url(/assets/fonts/Simple-Line-Icons.eot?v=2.2.2#iefix)
+      format('embedded-opentype'),
     url(/assets/fonts/Simple-Line-Icons.ttf?v=2.2.2) format('truetype'),
     url(/assets/fonts/Simple-Line-Icons.woff2?v=2.2.2) format('woff2'),
     url(/assets/fonts/Simple-Line-Icons.woff?v=2.2.2) format('woff'),
-    url(/assets/fonts/Simple-Line-Icons.svg?v=2.2.2#simple-line-icons) format('svg');
+    url(/assets/fonts/Simple-Line-Icons.svg?v=2.2.2#simple-line-icons)
+      format('svg');
   font-weight: 400;
   font-style: normal;
 }
@@ -259,11 +264,13 @@ body {
 @font-face {
   font-family: 'Glyphicons Halflings';
   src: url(/assets/fonts/glyphicons-halflings-regular.eot);
-  src: url(/assets/fonts/glyphicons-halflings-regular.eot?#iefix) format('embedded-opentype'),
+  src: url(/assets/fonts/glyphicons-halflings-regular.eot?#iefix)
+      format('embedded-opentype'),
     url(/assets/fonts/glyphicons-halflings-regular.woff2) format('woff2'),
     url(/assets/fonts/glyphicons-halflings-regular.woff) format('woff'),
     url(/assets/fonts/glyphicons-halflings-regular.ttf) format('truetype'),
-    url(/assets/fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular) format('svg');
+    url(/assets/fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular)
+      format('svg');
 }
 
 @font-face {
