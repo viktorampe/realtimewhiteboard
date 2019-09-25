@@ -6,18 +6,18 @@ export const environment = {
   production: true,
   iconMapping: icons,
   website: {
-    url: 'http://www.lk2020.be',
+    url: 'https://www.lk2020.be',
     title: 'KABAS',
     favicon: 'assets/icons/favicon.ico'
   },
   logout: {
-    url: 'http://www.lk2020.be'
+    url: 'https://www.lk2020.be'
   },
   login: {
-    url: 'http://www.lk2020.be'
+    url: 'https://www.lk2020.be'
   },
   termPrivacy: {
-    url: 'http://www.lk2020.be'
+    url: 'https://www.lk2020.be'
   },
   api: {
     APIBase: 'https://api.lk2020.be'
