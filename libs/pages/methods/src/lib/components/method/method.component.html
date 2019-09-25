@@ -66,9 +66,9 @@
             class="method-method__container__boeke"
             *ngIf="(boeke$ | async) as boeke"
           >
-            <!-- placeholder for actual banner image -->
             <div class="banner-container">
-              <div class="banner">bordboek</div>
+              <div class="banner-text">Bordboek</div>
+              <img class="banner-image" src="assets/icons/book-label.svg" />
             </div>
 
             <mat-card-content *ngIf="(method$ | async) as method">

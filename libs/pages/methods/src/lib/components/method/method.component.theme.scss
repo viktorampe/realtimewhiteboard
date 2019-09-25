@@ -12,8 +12,19 @@
     $pages-method__mat-list-padding-left--override: $pages-method__chapter-padding-left !default;
     $pages-method__mat-list__chapter-font-weight: $pages-method__chapter-font-weight !default;
 
+    $pages-method__mat-card-margin-top: 16px !default;
+    $pages-method__mat-card-margin-right: 16px !default;
+    $pages-method__mat-card-width: 304px !default;
+
+    $pages-method__mat-card__banner-width: 120px !default;
+    $pages-method__mat-card__banner-offset: -6px !default;
+    $pages-method__mat-card__banner__text-font-size: 16px !default;
+    $pages-method__mat-card__banner__text-padding: 12px !default;
+    $pages-method__mat-card__banner__text-width: 141% !default; // sqrt(2) * 100%
+
     $pages-method__mat-card__title-font-size--override: 20px !default;
-    $pages-method__mat-card__image-margin-top--override: 8px !default;
+    $pages-method__mat-card__image-margin-top--override: 32px !default;
+    $pages-method__mat-card__box-shadow--override: 0px 0px 4px 0px $pages-method-color--secondary !default;
 
 
     .mat-tab-body-content {
@@ -44,10 +55,12 @@
     }
 
     &__boeke {
-      border: 1px $pages-method-border-color solid;
+      margin-top: $pages-method__mat-card-margin-top;
+      margin-right: $pages-method__mat-card-margin-right;
+      width: $pages-method__mat-card-width;
 
       &.mat-card {
-        box-shadow: none !important;
+        box-shadow: $pages-method__mat-card__box-shadow--override !important;
       }
 
       &__image {
@@ -60,26 +73,36 @@
         }
       }
 
-      // placeholder
-      .banner-container {
-        width: 75px;
-        height: 75px;
-        overflow: hidden;
-        position: absolute;
-        top: -1px;
-        left: -1px;
-      }
-
-      // placeholder
       .banner {
-        width: 112px;
-        padding: 8px;
-        background-color: $pages-method-border-color;
-        color: $pages-method-color;
-        text-align: center;
-        transform: rotate(-45deg) translate(-28%, -35%);
-        font-size: 12px;
-        font-weight: bold;
+        &-container {
+          width: $pages-method__mat-card__banner-width;
+          height: $pages-method__mat-card__banner-width;
+          position: absolute;
+          top: $pages-method__mat-card__banner-offset;
+          left: $pages-method__mat-card__banner-offset;
+        }
+
+        &-text {
+          width: $pages-method__mat-card__banner__text-width;
+          padding: $pages-method__mat-card__banner__text-padding;
+          color: $pages-method-color;
+          text-align: center;
+          font-size: $pages-method__mat-card__banner__text-font-size;
+          font-weight: bold;
+          position: absolute;
+          z-index: 1;
+
+          // rotate around bottom left corner
+          bottom: 0;
+          transform-origin: 0 100%;
+          transform: rotate(-45deg);
+        }
+
+        &-image {
+          position: absolute;
+          height: $pages-method__mat-card__banner-width;
+          width: $pages-method__mat-card__banner-width;
+        }
       }
     }
   }
