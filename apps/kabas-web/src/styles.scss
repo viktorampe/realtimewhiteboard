@@ -38,6 +38,8 @@ body {
 @include pages-global-search-theme();
 @import 'libs/pages/home/src/lib/pages-home.theme';
 @include pages-home-theme();
+@import 'libs/pages/practice/src/lib/components/practice-method-detail/practice-method-detail.component.theme';
+@include pages-practice-method-detail();
 
 // include shared lib scss
 @import 'libs/shared/src/lib/shared-theme';
@@ -237,6 +239,11 @@ p {
     background: $shared_header__page-bar_background;
     z-index: 0;
   }
+}
+
+.pages-practice-method-detail__container {
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
 /*
