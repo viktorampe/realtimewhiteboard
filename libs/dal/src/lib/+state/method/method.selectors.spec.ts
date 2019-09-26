@@ -297,17 +297,17 @@ describe('Method Selectors', () => {
           new MethodFixture({
             id: 10,
             name: 'method 10',
-            logoUrl: 'logo for method 10'
+            code: 'code-for-method-10'
           }),
           new MethodFixture({
             id: 20,
             name: 'method 20',
-            logoUrl: 'logo for method 20'
+            code: 'code-for-method-20'
           }),
           new MethodFixture({
             id: 30,
             name: ' method 30',
-            logoUrl: 'logo for method 30'
+            code: 'code-for-method-30'
           })
         ];
         storeState.eduContentBooks = createBookState([
@@ -337,7 +337,7 @@ describe('Method Selectors', () => {
         expect(result).toEqual([
           {
             id: 10,
-            logoUrl: 'logo for method 10',
+            logoUrl: 'assets/methods/code-for-method-10.jpg',
             name: 'method 10',
             years: [
               { name: 'Y2', id: 2, bookId: 2 },
@@ -346,7 +346,7 @@ describe('Method Selectors', () => {
           },
           {
             id: 20,
-            logoUrl: 'logo for method 20',
+            logoUrl: 'assets/methods/code-for-method-20.jpg',
             name: 'method 20',
             years: [{ id: 1, name: 'Y1', bookId: 1 }]
           }
