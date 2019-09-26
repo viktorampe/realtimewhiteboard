@@ -24,3 +24,20 @@
 ); // general file
 
 @include file-icon('product-type-doelen', #9ca70a); // learning plan goal
+
+.method-method__container__files {
+  .ui-file-icon {
+    border: none;
+    background-color: transparent;
+    height: 40px;
+    width: 33.33px;
+    padding: 0px;
+
+    > div {
+      border: none;
+      background-color: transparent !important;
+      color: $color-red-1;
+      top: 35%;
+    }
+  }
+}
