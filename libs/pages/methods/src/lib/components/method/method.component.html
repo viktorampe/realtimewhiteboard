@@ -62,7 +62,7 @@
         (selectedIndexChange)="onSelectedTabIndexChanged($event)"
       >
         <mat-tab label="Lesmateriaal">
-          <!-- <mat-card
+          <mat-card
             class="method-method__container__boeke"
             *ngIf="(boeke$ | async) as boeke"
           >
@@ -94,7 +94,7 @@
                 >OPEN</campus-button
               >
             </mat-card-actions>
-          </mat-card> -->
+          </mat-card>
 
           <div
             *ngIf="(generalFilesByType$ | async) as generalFilesByType"
