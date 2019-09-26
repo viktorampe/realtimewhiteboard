@@ -11,6 +11,59 @@
     // measurements
     $pages-method__mat-list-padding-left--override: $pages-method__chapter-padding-left !default;
     $pages-method__mat-list__chapter-font-weight: $pages-method__chapter-font-weight !default;
+    $pages-method__container__files-max-width: 400px !default;
+    $pages-method__container__files-header-font-weight: $pages-method__chapter-font-weight !default;
+    $pages-method__container__files-header-font-size: $pages-method__list-section-title-font-size !default;
+    $pages-method__container__files-header-font-family: $pages-method-font-family !default;
+    $pages-method__file-padding-left: 32px !default;
+    $pages-method__file-title-font-size: 15px !default;
+    $pages-method__file-description-font-size: 13px !default;
+    $pages-method__file-height: 64px !default;
+
+    &__files {
+      max-width: $pages-method__container__files-max-width;
+      .mat-list-item {
+        &.method-file {
+          height: $pages-method__file-height;
+          .mat-list-item-content {
+            height: $pages-method__file-height;
+          }
+        }
+      }
+      &-header {
+        padding: 44px 16px 24px $pages-method__file-padding-left;
+        font-family: $pages-method__container__files-header-font-family;
+        font-size: $pages-method__container__files-header-font-size;
+        font-weight: $pages-method__container__files-header-font-weight;
+        color: $pages-method-color--secondary;
+      }
+
+      .method-file {
+        campus-file-icon {
+          font-size: 12px;
+        }
+        &__content {
+          padding: 15px 0px 15px $pages-method__file-padding-left - 16px !important;
+        }
+        &__copy {
+          font-family: $pages-method-font-family;
+        }
+        &__title {
+          color: $pages-method-color;
+          font-family: $pages-method-font-family;
+          font-weight: $pages-method__container__files-header-font-weight;
+          font-size: $pages-method__file-title-font-size;
+        }
+        &__description {
+          font-size: $pages-method__file-description-font-size;
+        }
+      }
+      .ui-file-icon--product-type-doelen {
+        > div {
+          display: none;
+        }
+      }
+    }
 
     $pages-method__mat-card-margin-top: 16px !default;
     $pages-method__mat-card-margin-right: 16px !default;
