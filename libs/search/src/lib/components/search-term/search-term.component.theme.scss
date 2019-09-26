@@ -1,24 +1,66 @@
 @mixin search-term() {
+  $search-search-term-transition: border-color ease-in-out 0.15s,
+    box-shadow ease-in-out 0.15s !default;
   $search-search-term-background-color: $ui-tertiary-bg-color;
   $search-search-term-border-color: $ui-tertiary-bg-color !default;
+  $search-search-term-border-width: 1px !default;
   $search-search-term-button-background-color: $ui-button-bg-color-1 !default;
+  $search-search-term-button-hover-background-color: $ui-button-bg-color-2 !default;
+  $search-search-term-button-hover-icon-color: inherit !default;
   $search-search-term-button-border-color: darken(
     $search-search-term-button-background-color,
     10%
   ) !default;
+  $search-search-term-button-border-width: 1px !default;
+  $search-search-term-button-top: 0 !default;
+  $search-search-term-button-bottom: 0 !default;
+  $search-search-term-button-right: 0 !default;
+  $search-search-term-button-width: 42px !default;
+  $search-search-term-button_icon-color: black !default;
+  $search-search-term-button-box-shadow-color: rgba(0, 175, 145, 0.5) !default;
   $search-search-term-autocomplete-background-color: $ui-tertiary-bg-color !default;
+
+  $search-search-term_mat-form-field_outline-opacity: 0 !default;
+  $search-search-term_mat-form-field_outline-border-right-width: 0px !default;
+  $search-search-term_mat-form-field_outline-border-color: inherit !default;
+
   .search-term {
+    transition: $search-search-term-transition;
     background-color: $search-search-term-background-color;
-    border: 1px solid $search-search-term-border-color;
+    border: $search-search-term-border-width solid
+      $search-search-term-border-color;
+
+    .mat-form-field-appearance-outline .mat-form-field-outline-thick {
+      opacity: $search-search-term_mat-form-field_outline-opacity;
+    }
+
+    &__field-wrapper {
+      position: relative;
+    }
+
     mat-form-field {
       width: 100%;
+
+      &:not(.mat-focused) {
+        .mat-form-field-outline-thick,
+        .mat-form-field-outline {
+          color: $search-search-term_mat-form-field_outline-border-color;
+        }
+      }
+
       &.mat-form-field-appearance-outline {
+        .mat-form-field-flex {
+          padding-right: 48px;
+        }
+
         .mat-form-field-outline-thick,
         .mat-form-field-outline {
           > div {
+            opacity: 1;
             border-width: 1px;
             border-radius: 0px;
-            border-right: none;
+
+            border-right-width: $search-search-term_mat-form-field_outline-border-right-width;
           }
         }
         .mat-form-field-wrapper {
@@ -29,15 +71,26 @@
     }
     campus-button {
       background-color: $search-search-term-button-background-color;
-      border: 1px solid $search-search-term-button-border-color;
-      box-shadow: inset 0 0 2px 1px rgba(0, 175, 145, 0.5);
-      width: 42px;
+      border: $search-search-term-button-border-width solid
+        $search-search-term-button-border-color;
+      position: absolute;
+      top: $search-search-term-button-top;
+      right: $search-search-term-button-right;
+      bottom: $search-search-term-button-bottom;
+
+      box-shadow: inset 0 0 2px 1px $search-search-term-button-box-shadow-color;
+      width: $search-search-term-button-width;
       mat-icon {
         width: 14px;
         height: 14px;
+        color: $search-search-term-button_icon-color;
       }
       &:hover {
-        background-color: $search-search-term-button-background-color;
+        mat-icon {
+          color: $search-search-term-button-hover-icon-color;
+        }
+
+        background-color: $search-search-term-button-hover-background-color;
       }
     }
   }

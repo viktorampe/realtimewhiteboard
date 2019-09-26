@@ -1,6 +1,7 @@
 import {
   Component,
   EventEmitter,
+  HostBinding,
   Input,
   OnDestroy,
   OnInit,
@@ -52,6 +53,9 @@ export class SelectFilterComponent
   @Output() filterSelectionChange: EventEmitter<
     SearchFilterCriteriaInterface[]
   > = new EventEmitter();
+
+  @HostBinding('class.select-filter-component')
+  selectFilterComponentClass = true;
 
   constructor() {}
 

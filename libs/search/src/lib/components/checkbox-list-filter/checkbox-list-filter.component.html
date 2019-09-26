@@ -1,6 +1,8 @@
-<div class="checkbox__list__filter__title" *ngIf="hasPredictions">{{
-  filterCriteria.label
-}}</div>
+<div
+  class="checkbox__list__filter__title search-filter-title"
+  *ngIf="hasPredictions"
+  >{{ filterCriteria.label }}</div
+>
 <mat-list class="checkbox__list__filter__list" *ngIf="hasPredictions">
   <campus-checkbox-filter
     class="checkbox-filter"

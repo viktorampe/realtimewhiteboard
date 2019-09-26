@@ -5,7 +5,17 @@
 
   $button-toggle-filter--font-size: $ui-primary-font-size * 1.2 !default;
 
+  $button-toggle-filter_button-group-border-radius: 4px !default;
+  $button-toggle-filter_button-group-border-color: $ui-tertiary-bg-color-2 !default;
+
   .button-toggle-filter-component {
+    &__button-group {
+      &.mat-button-toggle-group-appearance-standard {
+        border-radius: $button-toggle-filter_button-group-border-radius;
+        border-color: $button-toggle-filter_button-group-border-color;
+      }
+    }
+
     &__button {
       &--disabled {
         // fake disabled
