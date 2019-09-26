@@ -13,6 +13,9 @@
   $pages-settings-dashboard_avatar-padding-bottom: $pages-settings_avatar-padding-bottom !default;
   $pages-settings-dashboard_avatar_person-badge-subtext-color: $pages-settings_avatar-subtext-color !default;
 
+  $pages-settings-dashboard_mat-list-margin-bottom: $pages-settings_mat-list-margin-bottom !default;
+  $pages-settings-dashboard_mat-list_item-padding-left--override: 32px !default;
+
   .pages-settings-dashboard {
     &__page-header {
       display: $pages-settings_page-header-display;
@@ -29,17 +32,24 @@
       padding-top: $pages-settings-dashboard_avatar-padding-top;
       padding-bottom: $pages-settings-dashboard_avatar-padding-bottom;
 
+      .ui_person-badge__display__name {
+        font-weight: bold;
+      }
+
       .ui_person-badge__display__subtext {
         color: $pages-settings-dashboard_avatar_person-badge-subtext-color;
       }
     }
 
     &__mat-list {
+      margin-bottom: $pages-settings-dashboard_mat-list-margin-bottom;
+
       &__item {
         &.mat-list-item .mat-list-item-content {
           color: $pages-settings-dashboard_mat-list_item-color;
           background-color: $pages-settings-dashboard_mat-list_item-background-color;
           font-weight: $pages-settings-dashboard_mat-list_item-font-weight;
+          padding-left: $pages-settings-dashboard_mat-list_item-padding-left--override !important;
         }
 
         &:hover {

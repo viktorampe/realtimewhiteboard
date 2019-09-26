@@ -40,13 +40,13 @@ export class SettingsDashboardComponent implements OnInit {
     function translateRole(role: string) {
       switch (role) {
         case 'teacher':
-          return 'leerkracht';
+          return 'Leerkracht';
         case 'student':
-          return 'leerling';
+          return 'Leerling';
         case 'schooladmin':
-          return 'beheerder';
+          return 'Beheerder';
         default:
-          return 'medewerker';
+          return 'Medewerker';
       }
     }
   }

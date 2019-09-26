@@ -44,10 +44,14 @@
 
 <!-- kabas -->
 <ng-template #navItemTemplate>
-  <ng-container *ngFor="let link of (links$ | async)">
+  <ng-container *ngFor="let link of (links$ | async); last as isLast">
     <mat-divider></mat-divider>
-    <mat-list-item class="pages-settings-dashboard__mat-list__item">
+    <mat-list-item
+      class="pages-settings-dashboard__mat-list__item"
+      [routerLink]="link.link"
+    >
       {{ link.title }}
     </mat-list-item>
+    <mat-divider *ngIf="isLast"></mat-divider>
   </ng-container>
 </ng-template>
