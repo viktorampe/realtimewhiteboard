@@ -109,7 +109,7 @@ $shared-header__quicklink-icon-size: 24px;
 $shared-header__quicklink-icon-size-small: 20px;
 
 // pages
-$pages-padding: 0 40px;
+$pages-padding: $kabas-page-vertical-padding $kabas-page-horizontal-padding;
 
 // ui > app shell variables
 $ui-shell__left-width: 210px;
