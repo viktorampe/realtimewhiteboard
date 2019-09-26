@@ -45,9 +45,7 @@ describe('MethodFavoriteTileComponent', () => {
       By.css('.pages-home-method-favorite-tile__image')
     );
 
-    expect(imageDE.nativeElement.src).toContain(
-      'assets/icons/method/' + mockLogoUrl
-    );
+    expect(imageDE.nativeElement.src).toContain(mockLogoUrl);
   });
 
   it('should show the name of the favorite', () => {
