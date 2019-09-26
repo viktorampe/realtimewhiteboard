@@ -14,9 +14,13 @@
     &.ui-list-view__list__item--selected {
       border-left: $app-edu-content-search-result-selected-border-width solid
         $app-edu-content-search-result-selected-border-color !important;
+
+      .app-educontentsearchresult__content {
+        margin-left: -$app-edu-content-search-result-selected-border-width;
+      }
     }
 
-    &:nth-child(even) {
+    &:nth-child(odd) {
       background-color: $app-edu-content-search-result-even-background-color;
 
       mat-icon {
