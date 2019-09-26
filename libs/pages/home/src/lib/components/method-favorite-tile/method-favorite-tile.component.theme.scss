@@ -23,7 +23,9 @@
   $pages-home-method-favorite-tile_button-width: 99px !default; // (container-width - button-margin) / 2
   $pages-home-method-favorite-tile_button-font-size: 16px !default; // title-font-size * 2 /3
   $pages-home-method-favorite-tile_button-margin-right: 2px !default;
-  $pages-home-method-favorite-tile_button-icon-width: 60px !default; // button-width * 60%
+  $pages-home-method-favorite-tile_button-icon-height: 48px !default; // button-width * 60%
+  $pages-home-method-favorite-tile_button-icon-width: 64px !default; // button-width * 60%
+  $pages-home-method-favorite-tile_button-icon-margin: 0 0 4px 0 !default;
 
   .pages-home-method-favorite-tile {
     width: $pages-home-method-favorite-tile_container-width;
@@ -64,9 +66,10 @@
         background-color: $pages-home-method-favorite-tile_button-background-color;
       }
 
-      mat-icon {
-        height: $pages-home-method-favorite-tile_button-icon-width;
+      .mat-icon {
+        height: $pages-home-method-favorite-tile_button-icon-height;
         width: $pages-home-method-favorite-tile_button-icon-width;
+        margin: $pages-home-method-favorite-tile_button-icon-margin;
       }
 
       &:last-child {

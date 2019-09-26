@@ -37,7 +37,10 @@ export const getFavoritesWithEduContent = createSelector(
       const bookId =
         eduContent && eduContent.publishedEduContentMetadata.eduContentBookId;
       const book = bookId && books[bookId];
-      const logoUrl = book && methods[book.methodId].logoUrl;
+      const logoUrl =
+        book &&
+        methods[book.methodId].code &&
+        'assets/methods/' + methods[book.methodId].code + '.jpg';
 
       return {
         favorite,
