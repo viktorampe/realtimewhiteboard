@@ -222,6 +222,13 @@ body {
   }
 }
 
+campus-button.ui-button[iconclass='reset-filters'] {
+  height: $search-filter-height;
+  width: $search-filter-height;
+  background: none;
+  border: 1px solid $color-gray-4;
+}
+
 /*
  * icon fonts
  */

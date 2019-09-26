@@ -19,7 +19,7 @@
   @include search-button-toggle-filter--deep();
 }
 
-$search-filter-height: $search-filter-height !default;
+$search-filter-height: 1.125 !default;
 
 campus-search-term,
 campus-select-filter,
