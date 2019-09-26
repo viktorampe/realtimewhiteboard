@@ -1,4 +1,6 @@
 @mixin shared-method-year-tile {
+  $shared-method-year-tile-margin-right: 32px !default;
+
   $shared-method-year-tile_title-background-color: $shared-bg-color-1 !default;
   $shared-method-year-tile_title-text-color: $shared-color-1 !default;
   $shared-method-year-tile_image-background-color: $shared_image-bg-color !default;
@@ -27,14 +29,19 @@
   $shared-method-year-tile_container-box-shadow-blur: 8px !default;
   $shared-method-year-tile_container-box-shadow-spread: 2px !default;
 
-  .pages-methods-method-year-tile {
+  .shared-method-year-tile {
     width: $shared-method-year-tile_container-width;
     background-color: $shared-method-year-tile_title-background-color;
     color: $shared-method-year-tile_title-text-color;
+    margin-right: $shared-method-year-tile-margin-right;
     box-shadow: $shared-method-year-tile_container-box-shadow-offset
       $shared-method-year-tile_container-box-shadow-blur
       $shared-method-year-tile_container-box-shadow-spread
       $shared-method-year-tile_container-box-shadow-color;
+
+    &:last-child {
+      margin-right: 0;
+    }
 
     &__image {
       background-color: $shared-method-year-tile_image-background-color;
