@@ -227,7 +227,7 @@ h2 {
 
   &__shortcuts__list__shortcut {
     &--methods mat-icon {
-      stroke: $color-lila-1;
+      fill: $color-lila-1;
       width: 64px;
     }
 
@@ -240,7 +240,7 @@ h2 {
     }
 
     &--differentiate mat-icon {
-      stroke: $color-red-1;
+      fill: $color-red-1;
     }
   }
 }
