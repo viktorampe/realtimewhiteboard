@@ -81,6 +81,7 @@ import { HumanDateTimePipe } from './utils/pipes/human-date-time/human-date-time
 import { JoinPipe } from './utils/pipes/join/join.pipe';
 import { RemovePrefixStringPipe } from './utils/pipes/remove-prefix-string/remove-prefix-string.pipe';
 import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-string.pipe';
+import { FileIconComponent } from './file-icon/file-icon.component';
 @NgModule({
   imports: [
     OverlayModule,
@@ -162,7 +163,8 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     JoinPipe,
     ManageCollectionComponent,
     MultiCheckBoxTableComponent,
-    ShellBottomDirective
+    ShellBottomDirective,
+    FileIconComponent
   ],
   exports: [
     FilterTextInputComponent,
@@ -223,7 +225,8 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     MatTooltipModule,
     MatIconModule,
     MultiCheckBoxTableComponent,
-    MatCheckboxModule
+    MatCheckboxModule,
+    FileIconComponent
   ],
   providers: [
     {
