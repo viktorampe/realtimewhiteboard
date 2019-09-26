@@ -49,6 +49,7 @@ $pages-method__chapter-font-weight: 600 !default; // = somewhat lighter than lef
 
   .mat-tab-body-wrapper {
     flex: 1 1 auto;
+    height: 0; // forces vertical scrollbar inside tab
   }
 
   .mat-tab-body-content {
