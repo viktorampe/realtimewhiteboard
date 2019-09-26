@@ -6,21 +6,21 @@ export const environment = {
   production: true,
   iconMapping: icons,
   website: {
-    url: 'http://www.kabas.be',
+    url: 'https://www.lk2020.be',
     title: 'KABAS',
     favicon: 'assets/icons/favicon.ico'
   },
   logout: {
-    url: 'http://www.kabas.be'
+    url: 'https://www.lk2020.be'
   },
   login: {
-    url: 'http://www.kabas.be'
+    url: 'https://www.lk2020.be'
   },
   termPrivacy: {
-    url: 'http://www.kabas.be'
+    url: 'https://www.lk2020.be'
   },
   api: {
-    APIBase: 'http://api.lk2020.be'
+    APIBase: 'https://api.lk2020.be'
   },
   features: {
     alerts: {

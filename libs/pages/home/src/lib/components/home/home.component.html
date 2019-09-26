@@ -1,5 +1,9 @@
-<div class="pages-home__container">
-  <div class="pages-home__container__favorites">
+<div
+  class="pages-home__container campus-page"
+  *ngIf="(favoritesWithEduContent$ | async) as favorites"
+  [class.no-favorites]="favorites.length === 0"
+>
+  <div *ngIf="favorites.length" class="pages-home__container__favorites">
     <campus-page-header
       [title]="
         'Welkom ' +
@@ -8,117 +12,103 @@
       "
     >
     </campus-page-header>
-    <ng-container *ngIf="(favoritesWithEduContent$ | async) as favorites">
-      <ng-template #noFavorites>
-        <div class="pages-home__no-favorites"
-          >Er zijn nog geen veel gebruikte methodes, voeg een methode toe aan je
-          favorieten om ze hier terug te vinden.</div
-        >
-      </ng-template>
-
-      <div
-        *ngIf="favorites.length; else noFavorites"
-        class="pages-home__favorite-list"
+    <div class="pages-home__favorite-list">
+      <campus-method-favorite-tile
+        class="pages-home__favorite-list__favorite"
+        *ngFor="let favoriteMethod of favorites"
+        [name]="favoriteMethod.favorite.name"
+        [logoUrl]="favoriteMethod.logoUrl"
+        [eduContent]="favoriteMethod.eduContent"
+        [bookId]="favoriteMethod.bookId"
+        (clickOpenBoeke)="clickOpenBoeke($event)"
       >
-        <campus-method-favorite-tile
-          class="pages-home__favorite-list__favorite"
-          *ngFor="let favoriteMethod of favorites"
-          [name]="favoriteMethod.favorite.name"
-          [logoUrl]="favoriteMethod.logoUrl"
-          [eduContent]="favoriteMethod.eduContent"
-          [bookId]="favoriteMethod.bookId"
-          (clickOpenBoeke)="clickOpenBoeke($event)"
-        >
-        </campus-method-favorite-tile>
-      </div>
-    </ng-container>
+      </campus-method-favorite-tile>
+    </div>
   </div>
 
-  <div class="pages-home__container__shortcuts">
-    <campus-page-header
-      [title]="'Wat wil je doen, ' + (displayName$ | async) + '?'"
+  <campus-page-header
+    [title]="'Wat wil je doen, ' + (displayName$ | async) + '?'"
+  >
+  </campus-page-header>
+
+  <div class="pages-home__container__shortcuts__list">
+    <div
+      class="pages-home__container__shortcuts__list__shortcut pages-home__container__shortcuts__list__shortcut--methods"
     >
-    </campus-page-header>
+      <mat-icon svgIcon="methods"> </mat-icon>
+      <h2>Methodes</h2>
 
-    <div class="pages-home__container__shortcuts__list">
       <div
-        class="pages-home__container__shortcuts__list__shortcut pages-home__container__shortcuts__list__shortcut--methods"
+        class="pages-home__container__shortcuts__list__shortcut__description"
       >
-        <mat-icon svgIcon="methods"> </mat-icon>
-        <h2>Methodes</h2>
-
-        <div
-          class="pages-home__container__shortcuts__list__shortcut__description"
-        >
-          Je bordboeken en lesmateriaal in een handig overzicht + de status van
-          je leerplan
-        </div>
-
-        <a
-          [routerLink]="['/methods']"
-          class="pages-home__container__shortcuts__list__shortcut__link"
-        >
-          Open
-        </a>
+        Je bordboeken en lesmateriaal in een handig overzicht + de status van je
+        leerplan
       </div>
+
+      <a
+        [routerLink]="['/methods']"
+        class="pages-home__container__shortcuts__list__shortcut__link"
+      >
+        Open
+      </a>
+    </div>
+    <div
+      class="pages-home__container__shortcuts__list__shortcut pages-home__container__shortcuts__list__shortcut--tasks"
+    >
+      <mat-icon svgIcon="tasks"> </mat-icon>
+      <h2>Taken</h2>
+
       <div
-        class="pages-home__container__shortcuts__list__shortcut pages-home__container__shortcuts__list__shortcut--tasks"
+        class="pages-home__container__shortcuts__list__shortcut__description"
       >
-        <mat-icon svgIcon="tasks"> </mat-icon>
-        <h2>Taken</h2>
-
-        <div
-          class="pages-home__container__shortcuts__list__shortcut__description"
-        >
-          Geef taken aan je klassen en/of individuele leerlingen
-        </div>
-
-        <a
-          [routerLink]="['/tasks']"
-          class="pages-home__container__shortcuts__list__shortcut__link"
-        >
-          Open
-        </a>
+        Geef taken aan je klassen en/of individuele leerlingen
       </div>
+
+      <a
+        [routerLink]="['/tasks']"
+        class="pages-home__container__shortcuts__list__shortcut__link"
+      >
+        Open
+      </a>
+    </div>
+    <div
+      class="pages-home__container__shortcuts__list__shortcut pages-home__container__shortcuts__list__shortcut--results"
+    >
+      <mat-icon svgIcon="results"> </mat-icon>
+      <h2>Resultaten</h2>
+
       <div
-        class="pages-home__container__shortcuts__list__shortcut pages-home__container__shortcuts__list__shortcut--results"
+        class="pages-home__container__shortcuts__list__shortcut__description"
       >
-        <mat-icon svgIcon="results"> </mat-icon>
-        <h2>Resultaten</h2>
-
-        <div
-          class="pages-home__container__shortcuts__list__shortcut__description"
-        >
-          Resultaten van oefeningen per taak of per leerling, met de
-          mogelijkheid om dit te exporteren
-        </div>
-
-        <a
-          [routerLink]="['/results']"
-          class="pages-home__container__shortcuts__list__shortcut__link"
-        >
-          Open
-        </a>
+        Resultaten van oefeningen per taak of per leerling, met de mogelijkheid
+        om dit te exporteren
       </div>
+
+      <a
+        [routerLink]="['/results']"
+        class="pages-home__container__shortcuts__list__shortcut__link"
+      >
+        Open
+      </a>
+    </div>
+    <div
+      class="pages-home__container__shortcuts__list__shortcut pages-home__container__shortcuts__list__shortcut--differentiate"
+    >
+      <mat-icon svgIcon="differentiate"> </mat-icon>
+      <h2>Differentiëren</h2>
+
       <div
-        class="pages-home__container__shortcuts__list__shortcut pages-home__container__shortcuts__list__shortcut--differentiate"
+        class="pages-home__container__shortcuts__list__shortcut__description"
       >
-        <mat-icon svgIcon="differentiate"> </mat-icon>
-        <h2>Differentiëren</h2>
-
-        <div
-          class="pages-home__container__shortcuts__list__shortcut__description"
-        >
-          Suggesties per leerling op basis van behaalde doelen
-        </div>
-
-        <a
-          [routerLink]="['/differentiate']"
-          class="pages-home__container__shortcuts__list__shortcut__link"
-        >
-          Open
-        </a>
+        Suggesties per leerling op basis van behaalde doelen
       </div>
+
+      <a
+        [routerLink]="['/differentiate']"
+        class="pages-home__container__shortcuts__list__shortcut__link"
+      >
+        Open
+      </a>
     </div>
   </div>
 </div>

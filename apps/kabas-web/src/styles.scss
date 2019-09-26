@@ -77,7 +77,7 @@ p {
 .ui-shell {
   &__logo {
     img {
-      margin-top: 20px;
+      margin-top: 28px;
     }
   }
 
@@ -144,25 +144,6 @@ p {
 
   &:hover {
     filter: brightness(85%);
-  }
-}
-
-.pages-home__container__shortcuts__list__shortcut {
-  &--methods mat-icon {
-    stroke: $color-lila-1;
-    width: 64px;
-  }
-
-  &--tasks mat-icon {
-    fill: $color-green-1;
-  }
-
-  &--results mat-icon {
-    fill: $color-orange-1;
-  }
-
-  &--differentiate mat-icon {
-    stroke: $color-red-1;
   }
 }
 
@@ -241,10 +222,41 @@ p {
   }
 }
 
+.pages-home__container {
+  &.no-favorites {
+    padding-top: 20px;
+
+    &:after {
+      display: none;
+    }
+  }
+
+  &__shortcuts__list__shortcut {
+    &--methods mat-icon {
+      stroke: $color-lila-1;
+      width: 64px;
+    }
+
+    &--tasks mat-icon {
+      fill: $color-green-1;
+    }
+
+    &--results mat-icon {
+      fill: $color-orange-1;
+    }
+
+    &--differentiate mat-icon {
+      stroke: $color-red-1;
+    }
+  }
+}
+
 .pages-practice-method-detail__container {
   padding-top: 20px;
   padding-bottom: 20px;
 }
+
+@import 'scss/theme-file-icons';
 
 /*
  * icon fonts
