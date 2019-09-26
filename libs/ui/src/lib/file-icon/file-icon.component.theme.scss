@@ -40,6 +40,8 @@
       color: $ui-file-icon__label-text-color;
       background-color: $ui-file-icon__label-bg-color;
       border: $ui-file-icon__label-border;
+      max-width: $ui-file-icon-width;
+      overflow: hidden;
     }
   }
 }
