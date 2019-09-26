@@ -160,17 +160,21 @@ $select-filter-component_mat-select-value-vertical-align: middle;
 // ui > file-icons
 $ui-file-icon-border: none;
 $ui-file-icon-bg-color: transparent;
-$ui-file-icon-height: 40px;
-$ui-file-icon-width: 33.33px;
 $ui-file-icon__label-bg-color: transparent !important;
 $ui-file-icon__label-height: 20px;
-$ui-file-icon__label-top: 35%;
 $ui-file-icon__label-left: 0; // center horizontally
 $ui-file-icon__label-right: 0; // center horizontally
-$ui-file-icon-padding: 0px;
 $ui-file-icon__label-text-color: $color-red-1;
 $ui-file-icon__label-text-transform: lowercase;
 $ui-file-icon__label-text-weight: bold;
+$ui-file-icon-padding: 0;
+$ui-file-icon-height: 32px;
+$ui-file-icon-width: 32px;
+$ui-file-icon__label-top: 20%;
+$ui-file-icon__font-size: 10px;
+$ui-file-icon__font-weight: bold;
+$ui-file-icon__label-text-color: $primary-color-accent;
+$ui-file-icon__label-text-transform: unset;
 
 // social media
 $facebook-button-background-color: #455897;

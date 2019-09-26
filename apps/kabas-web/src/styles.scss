@@ -47,6 +47,9 @@ body {
 @import 'libs/search/src/lib/search-theme';
 @include search-theme();
 
+@import './app/components/searchresults/edu-content-search-result.component.theme';
+@include app-edu-content-search-result();
+
 [ng-reflect-router-link] {
   cursor: pointer;
 }
@@ -221,6 +224,12 @@ campus-button.ui-button[iconclass='reset-filters'] {
   width: $search-filter-height;
   background: none;
   border: 1px solid $color-gray-4;
+}
+
+.search-results {
+  .ui-list-view__list {
+    align-items: flex-start !important;
+  }
 }
 
 .pages-home__container {
