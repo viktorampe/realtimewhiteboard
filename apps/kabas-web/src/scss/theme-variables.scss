@@ -146,9 +146,11 @@ $button-toggle-filter_button-group-border-color: $primary-font-color-2;
 //$button-toggle-filter_button-group-height: 51.98px; //= search input height, ugly hack -> find better way
 
 // search filters > select filter
+$search-filter-height: 50px;
 $select-filter-component_mat-select-trigger-padding: 8px;
 $select-filter-component_mat-select-trigger-border-width: 1px;
 $select-filter-component_mat-select-trigger-border-color: $primary-font-color-2;
+$select-filter-component_mat-select-value-vertical-align: middle;
 
 // social media
 $facebook-button-background-color: #455897;

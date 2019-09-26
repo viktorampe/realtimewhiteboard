@@ -18,3 +18,14 @@
   @include search-term();
   @include search-button-toggle-filter--deep();
 }
+
+$search-filter-height: $search-filter-height !default;
+
+campus-search-term,
+campus-select-filter,
+campus-button-toggle-filter {
+  .mat-form-field,
+  .mat-form-field-outline {
+    height: $search-filter-height;
+  }
+}
