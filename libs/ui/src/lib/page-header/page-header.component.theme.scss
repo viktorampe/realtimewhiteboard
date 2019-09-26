@@ -5,13 +5,19 @@
   $ui-page-header-centered-subtitle-font-color: $ui-tertiary-font-color-2 !default;
   $ui-page-header_centered-subtitle-bg-color: $ui-secondary-bg-color-accent !default;
 
+  $ui-page-header-margin: 13px 0 25px 0 !default;
+  $ui-page-header-font-family: $ui-primary-font-family !default;
   $ui-page-header-font-size: ($ui-primary-font-size + 2) * 1.2 !default;
   $ui-page-header-font-size--small: $ui-primary-font-size + 2 !default;
   $ui-page-header-font-size--centered: ($ui-primary-font-size + 2) * 2 !default;
+  $ui-page-header-font-weight: 600 !default;
 
   .ui-page-header {
+    font-family: $ui-page-header-font-family;
     color: $ui-page-header-color;
     font-size: $ui-page-header-font-size;
+    font-weight: $ui-page-header-font-weight;
+    margin: $ui-page-header-margin;
 
     // only used in default header
     small {
