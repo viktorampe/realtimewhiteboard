@@ -256,6 +256,20 @@ p {
   padding-bottom: 20px;
 }
 
+.ui-multi-check-box-table {
+  margin: 0 -40px;
+
+  th:first-child,
+  td:first-child {
+    padding-left: 40px;
+  }
+
+  th:last-child,
+  td:last-child {
+    padding-right: 40px;
+  }
+}
+
 @import 'scss/theme-file-icons';
 
 /*
