@@ -129,6 +129,10 @@ $ui-button--large-font-size: 18px;
 $ui-collapsible-sheet-button-bg-color: $color-gray-2;
 $ui-collapsible-sheet-border-color: $color-gray-2;
 
+// ui > file-icons
+// $ui-file-icon-border: none;
+// $ui-file-icon__label-bg-color: transparent !important;
+
 // social media
 $facebook-button-background-color: #455897;
 $facebook-button-font-color: white;
@@ -164,5 +168,6 @@ $pages-home_container_shortcuts-border-top-color: $secondary-bg-color;
 $pages-methods-text-color--primary: $primary-font-color;
 $pages-methods-text-color--primary--accent: $secondary-font-color-accent;
 $pages-methods-background-color--primary: $primary-bg-color;
+$pages-methods-border-color--primary: $color-gray-2;
 $pages-methods-text-color--secondary: $primary-font-color-2;
 $pages-methods-background-color--secondary: $secondary-bg-color;

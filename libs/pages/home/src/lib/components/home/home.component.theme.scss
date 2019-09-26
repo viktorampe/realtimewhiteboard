@@ -1,8 +1,8 @@
 @mixin pages-home() {
+  $pages-home_container_favorites-margin: 0 -40px 40px -40px !default;
   $pages-home_container_favorites-padding: 0 40px 40px 40px !default;
-
-  $pages-home_container_shortcuts-border-top-width: 2px !default;
-  $pages-home_container_shortcuts-border-top-color: $pages-home-background-color--secondary !default;
+  $pages-home_container_favorites-border-bottom-width: 2px !default;
+  $pages-home_container_favorites-border-bottom-color: $pages-home-background-color--secondary !default;
   $pages-home_container_shortcuts-padding: 40px !default;
 
   $pages-home_container_shortcuts_list_shortcut-margin-right: 56px !default;
@@ -27,12 +27,13 @@
   .pages-home {
     &__container {
       &__favorites {
+        margin: $pages-home_container_favorites-margin;
         padding: $pages-home_container_favorites-padding;
+        border-bottom: $pages-home_container_favorites-border-bottom-width solid
+          $pages-home_container_favorites-border-bottom-color;
       }
 
       &__shortcuts {
-        border-top: $pages-home_container_shortcuts-border-top-width solid
-          $pages-home_container_shortcuts-border-top-color;
         padding: $pages-home_container_shortcuts-padding;
 
         &__list {
