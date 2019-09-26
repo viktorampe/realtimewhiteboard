@@ -2,15 +2,14 @@
   <thead class="ui-multi-check-box-table__header">
     <tr>
       <th
-        *ngFor="let columnHeader of rowHeaderColumns; let first = first; let last = last"
+        *ngFor="
+          let columnHeader of rowHeaderColumns;
+          let first = first;
+          let last = last
+        "
         class="ui-multi-check-box-table__header--row-header"
-        [class.ui-multi-check-box-table__header--row-header--first]="
-          first
-        "
-        [class.ui-multi-check-box-table__header--row-header--last]="
-          last
-        "
-
+        [class.ui-multi-check-box-table__header--row-header--first]="first"
+        [class.ui-multi-check-box-table__header--row-header--last]="last"
         >{{ columnHeader.caption }}</th
       ><th
         *ngFor="let columnHeader of itemColumns"
