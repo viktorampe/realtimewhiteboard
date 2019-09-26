@@ -1,5 +1,25 @@
 .method-method {
   &__container {
+    .method-file {
+      &__content {
+        display: flex;
+        flex-direction: row;
+      }
+      &__copy {
+        margin-left: 8px;
+        display: flex;
+        flex-direction: column;
+      }
+      &__title {
+        margin-bottom: 8px;
+      }
+      &__description {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        max-width: 300px;
+      }
+    }
     &__boeke {
       float: right;
     }
