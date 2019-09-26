@@ -30,6 +30,8 @@ body {
 @include ui-theme();
 
 // include pages lib scss files
+@import 'libs/pages/shared/src/pages-theme';
+@include pages-theme();
 @import 'libs/pages/methods/src/lib/pages-methods.theme';
 @include pages-methods-theme();
 @import 'libs/pages/global-search/src/lib/pages-global-search.theme';
@@ -139,25 +141,6 @@ h2 {
   }
 }
 
-.pages-home__container__shortcuts__list__shortcut {
-  &--methods mat-icon {
-    stroke: $color-lila-1;
-    width: 64px;
-  }
-
-  &--tasks mat-icon {
-    fill: $color-green-1;
-  }
-
-  &--results mat-icon {
-    fill: $color-orange-1;
-  }
-
-  &--differentiate mat-icon {
-    stroke: $color-red-1;
-  }
-}
-
 /* Material checkboxes */
 .mat-checkbox .mat-checkbox-frame,
 .mat-checkbox-checked .mat-checkbox-background {
@@ -230,6 +213,35 @@ h2 {
     height: 187px;
     background: $shared_header__page-bar_background;
     z-index: 0;
+  }
+}
+
+.pages-home__container {
+  &.no-favorites {
+    padding-top: 20px;
+
+    &:after {
+      display: none;
+    }
+  }
+
+  &__shortcuts__list__shortcut {
+    &--methods mat-icon {
+      stroke: $color-lila-1;
+      width: 64px;
+    }
+
+    &--tasks mat-icon {
+      fill: $color-green-1;
+    }
+
+    &--results mat-icon {
+      fill: $color-orange-1;
+    }
+
+    &--differentiate mat-icon {
+      stroke: $color-red-1;
+    }
   }
 }
 
