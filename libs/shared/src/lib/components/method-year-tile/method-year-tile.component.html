@@ -1,19 +1,19 @@
-<div class="pages-methods-method-year-tile__image__container">
+<div class="shared-method-year-tile__image__container">
   <img
     [src]="'assets/icons/method/' + logoUrl"
-    class="pages-methods-method-year-tile__image"
+    class="shared-method-year-tile__image"
   />
 </div>
 <div
   data-cy="method-year-title"
-  class="pages-methods-method-year-tile__title"
+  class="shared-method-year-tile__title"
   >{{ name }}</div
 >
-<div class="pages-methods-method-year-tile__button__container">
+<div class="shared-method-year-tile__button__container">
   <campus-button
     data-cy="method-year-link"
     *ngFor="let year of years"
-    class="pages-methods-method-year-tile__button__container__button"
+    class="shared-method-year-tile__button__container__button"
     [routerLink]="year.bookId"
   >
     {{ year.name }}

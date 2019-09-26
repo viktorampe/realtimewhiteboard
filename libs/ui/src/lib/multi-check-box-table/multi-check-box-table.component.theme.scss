@@ -1,4 +1,7 @@
 @mixin ui-multi-check-box-table_theme() {
+  $ui-multi-check-box-table_row-header_item-width: 80px !default;
+  $ui-multi-check-box-table_row-header_first-width: 60px !default;
+  $ui-multi-check-box-table_row-header_last-width: 600px !default;
   // color palette
   $ui-multi-check-box-table_row-color--even: $ui-list-row-bg-even !default;
   $ui-multi-check-box-table_row-color--odd: $ui-list-row-bg-odd !default;
@@ -9,6 +12,21 @@
     td,
     th {
       padding: $ui-multi-check-box-table_cell-padding;
+    }
+
+    &__header {
+      &--row-header {
+        &--first {
+          width: $ui-multi-check-box-table_row-header_first-width;
+        }
+        &--last {
+          width: $ui-multi-check-box-table_row-header_last-width;
+        }
+      }
+
+      &--item {
+        width: $ui-multi-check-box-table_row-header_item-width;
+      }
     }
 
     &__body {
@@ -26,6 +44,10 @@
 
         &--odd {
           background-color: $ui-multi-check-box-table_row-color--odd;
+        }
+
+        &__cell {
+          vertical-align: top;
         }
       }
     }

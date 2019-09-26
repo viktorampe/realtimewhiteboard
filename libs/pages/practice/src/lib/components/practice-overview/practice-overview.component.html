@@ -1,9 +1,12 @@
 <campus-page-bar> </campus-page-bar>
 <div
-  class="pages-practice__container pages-practice-overview"
+  class="pages-practice__container pages-practice-overview campus-page"
   *ngIf="(allowedBooks$ | async) as books"
 >
-  <h1 mat-subheader>Met welke methode wil je vrij oefenen?</h1>
+  <campus-page-header
+    [title]="'Met welke methode wil je vrij oefenen?'"
+  >
+  </campus-page-header>
   <p>Kies hieronder het jaar waarvoor je de oefeningen wil vrijgeven.</p>
 
   <ng-template #noBooks>

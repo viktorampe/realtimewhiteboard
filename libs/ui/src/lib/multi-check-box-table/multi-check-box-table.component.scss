@@ -26,14 +26,13 @@
       }
 
       &__cell {
-        &--row-header {
-          &--last {
-            width: 100%;
-          }
-        }
-
         &--checkbox {
           text-align: center;
+
+          .mat-checkbox-disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+          }
         }
       }
     }
