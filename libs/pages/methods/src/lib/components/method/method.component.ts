@@ -126,6 +126,16 @@ export class MethodComponent implements OnInit {
     this.viewModel.toggleBoekeFavorite(boeke);
   }
 
+  public getProductTypeClass(productType: EduContentProductTypeInterface) {
+    return 'product-type-' + productType.name.toLowerCase().replace(' ', '-');
+  }
+
+  public getProductTypeIcon(
+    productType: EduContentProductTypeInterface
+  ): string {
+    return 'educontent-product-type:' + productType.name.toLowerCase();
+  }
+
   private getTableColumnsFromClassGroupsStream(): Observable<
     MultiCheckBoxTableItemColumnInterface<ClassGroupInterface>[]
   > {

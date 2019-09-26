@@ -119,18 +119,20 @@
                     (click)="clickOpenGeneralFile(generalFile)"
                     class="method-file"
                   >
-                    <campus-file-icon
-                      [classModifier]="'product-type-' + productType.id"
-                      [label]="generalFile.fileExtension"
-                      icon="file"
-                    ></campus-file-icon>
-                    <div class="method-file__copy">
-                      <div class="method-file__title"
-                        >{{ generalFile.name }}
+                    <div class="method-file__content">
+                      <campus-file-icon
+                        [classModifier]="getProductTypeClass(productType)"
+                        [label]="generalFile.fileExtension"
+                        [icon]="getProductTypeIcon(productType)"
+                      ></campus-file-icon>
+                      <div class="method-file__copy">
+                        <div class="method-file__title"
+                          >{{ generalFile.name }}
+                        </div>
+                        <div class="method-file__description">{{
+                          generalFile.description
+                        }}</div>
                       </div>
-                      <div class="method-file__description">{{
-                        generalFile.description
-                      }}</div>
                     </div>
                   </mat-list-item>
                 </mat-nav-list>
