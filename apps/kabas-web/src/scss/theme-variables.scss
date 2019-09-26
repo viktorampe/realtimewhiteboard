@@ -20,6 +20,9 @@ $color-gray-4: #808080; // icons + text
 $color-gray-5: #dcdcdc; // border between boek | methode buttons
 $color-gray-6: #898989; // font color home + toc subnav
 
+$kabas-page-vertical-padding: 20px;
+$kabas-page-horizontal-padding: 40px;
+
 // app > main body
 $primary-bg-color: $color-white-1;
 $primary-font-color: $color-gray-3;
@@ -90,7 +93,7 @@ $shared-header-font-size: 12px;
 $shared-header-font-weight: bold;
 $shared-header__app-bar-height: 120px;
 $shared-header__app-bar-padding-top: 40px;
-$shared-header__page-bar-padding-left: 40px;
+$shared-header__page-bar-padding-left: $kabas-page-horizontal-padding;
 $shared-header__page-bar-height: 80px;
 $shared-header__page-bar__divider-margin-left-right: 0;
 $shared-header__page-bar-container__justify-content: flex-end;

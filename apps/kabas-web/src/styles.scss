@@ -197,8 +197,7 @@ p {
 
 /* ng material tabs */
 .mat-tab-body-content {
-  display: block;
-  padding: 20px 40px;
+  padding: $kabas-page-vertical-padding $kabas-page-horizontal-padding;
 }
 
 /* page specifics */
@@ -231,7 +230,7 @@ p {
 
 .pages-home__container {
   &.no-favorites {
-    padding-top: 20px;
+    padding-top: $kabas-page-vertical-padding;
 
     &:after {
       display: none;
@@ -259,22 +258,22 @@ p {
 }
 
 .pages-practice-method-detail__container {
-  padding-top: 20px;
-  padding-bottom: 20px;
+  padding-top: $kabas-page-vertical-padding;
+  padding-bottom: $kabas-page-vertical-padding;
 }
 
 .ui-multi-check-box-table {
-  margin: 0 -40px;
+  margin: 0 (-$kabas-page-horizontal-padding);
 
   th:first-child,
   td:first-child {
-    padding-left: 40px;
+    padding-left: $kabas-page-horizontal-padding;
     border-left: none;
   }
 
   th:last-child,
   td:last-child {
-    padding-right: 40px;
+    padding-right: $kabas-page-horizontal-padding;
     border-right: none;
   }
 }
