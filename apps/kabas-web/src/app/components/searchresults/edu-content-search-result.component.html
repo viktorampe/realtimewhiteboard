@@ -25,7 +25,6 @@
   <campus-button
     *ngFor="let action of actions"
     class="app-educontentsearchresult__content__header__action"
-    circle
     [matTooltip]="action.tooltip"
     campusClickStopPropagation
     (click)="onActionClick(action)"
