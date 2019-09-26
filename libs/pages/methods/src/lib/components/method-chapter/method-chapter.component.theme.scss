@@ -11,8 +11,8 @@
   $pages-method-chapter__mat-list-content-margin-left--override: 16px !default; // = used for list indentation -> depth
   $pages-method-chapter__mat-list-item--selected-border-width: 4px !default;
   $pages-method-chapter__mat-list__chapter-font-weight: $pages-method__chapter-font-weight !default;
-  $pages-method-chapter--filters-margin-right: 16px !default;
-  $pages-method-chapter--filters-padding: 8px !default;
+  $pages-method-chapter__filters-margin-right: 16px !default;
+  $pages-method-chapter__filters-padding: 8px !default;
 
   .method-chapter {
     .search-filter-title {
@@ -24,13 +24,11 @@
     }
 
     &--filters {
-      campus-search-term,
-      campus-select-filter,
-      campus-button-toggle-filter {
-        margin-right: $pages-method-chapter--filters-margin-right;
+      > :not(:last-child) {
+        margin-right: $pages-method-chapter__filters-margin-right;
       }
 
-      padding: $pages-method-chapter--filters-padding;
+      padding: $pages-method-chapter__filters-padding;
     }
 
     .method-chapter__lesson-link {
