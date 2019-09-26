@@ -96,11 +96,8 @@ figure {
 @import 'libs/pages/reports/src/lib/pages-reports.theme';
 @include pages-reports-theme();
 
-@import 'libs/pages/settings/profile/src/lib/pages-settings-profile.theme';
-@include pages-settings-profile-theme();
-
-@import 'libs/pages/settings/alerts/src/lib/pages-settings-alerts.theme';
-@include pages-settings-alerts-theme();
+@import 'libs/pages/settings/pages-settings.theme';
+@include pages-settings-theme();
 
 @import 'libs/pages/edu-contents/src/lib/pages-edu-contents.theme';
 @include pages-edu-contents-theme();

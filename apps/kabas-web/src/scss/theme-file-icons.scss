@@ -1,9 +1,10 @@
-@mixin file-icon($ext, $color) {
-  .ui-file-icon--#{$ext} {
+@mixin file-icon($classModifier, $color) {
+  .ui-file-icon--#{$classModifier} {
     border-color: $color;
 
     .mat-icon {
       fill: $color;
+      stroke: $color;
     }
 
     > div {
@@ -15,5 +16,11 @@
 }
 
 @include file-icon('pdf', red);
-@include file-icon('docx', blue);
+@include file-icon('doc', blue);
 @include file-icon('xlsx', green);
+@include file-icon(
+  'product-type-algemeen-bestand',
+  $color-red-1
+); // general file
+
+@include file-icon('product-type-doelen', #9ca70a); // learning plan goal

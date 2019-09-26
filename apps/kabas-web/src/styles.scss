@@ -30,12 +30,18 @@ body {
 @include ui-theme();
 
 // include pages lib scss files
+@import 'libs/pages/shared/src/pages-theme';
+@include pages-theme();
 @import 'libs/pages/methods/src/lib/pages-methods.theme';
 @include pages-methods-theme();
 @import 'libs/pages/global-search/src/lib/pages-global-search.theme';
 @include pages-global-search-theme();
 @import 'libs/pages/home/src/lib/pages-home.theme';
 @include pages-home-theme();
+@import 'libs/pages/practice/src/lib/components/practice-method-detail/practice-method-detail.component.theme';
+@include pages-practice-method-detail();
+@import 'libs/pages/settings/pages-settings.theme';
+@include pages-settings-theme();
 
 // include shared lib scss
 @import 'libs/shared/src/lib/shared-theme';
@@ -44,6 +50,9 @@ body {
 // include search lib scss
 @import 'libs/search/src/lib/search-theme';
 @include search-theme();
+
+@import './app/components/searchresults/edu-content-search-result.component.theme';
+@include app-edu-content-search-result();
 
 [ng-reflect-router-link] {
   cursor: pointer;
@@ -58,13 +67,27 @@ body {
   color: $primary-font-color;
 }
 
+h2 {
+  font-weight: normal;
+}
+
+p {
+  margin: 0 0 1em 0;
+}
+
 .mat-drawer-side {
   border-right: none;
 }
 
-.ui-shell__logo {
-  img {
-    margin-top: 20px;
+.ui-shell {
+  &__logo {
+    img {
+      margin-top: 28px;
+    }
+  }
+
+  &__left__content {
+    padding-top: 15px;
   }
 }
 
@@ -118,6 +141,7 @@ body {
 .shared-header__alerts {
   order: 4;
 }
+
 #global-alert-btn {
   color: $color-green-1;
   fill: $color-green-1;
@@ -126,24 +150,6 @@ body {
 
   &:hover {
     filter: brightness(85%);
-  }
-}
-
-.pages-home__container__shortcuts__list__shortcut {
-  &--methods mat-icon {
-    stroke: $color-lila-1;
-  }
-
-  &--tasks mat-icon {
-    fill: $color-green-1;
-  }
-
-  &--results mat-icon {
-    fill: $color-orange-1;
-  }
-
-  &--differentiate mat-icon {
-    stroke: $color-red-1;
   }
 }
 
@@ -177,6 +183,7 @@ body {
     }
   }
 }
+
 .mat-checkbox-checked.mat-primary,
 .mat-checkbox-checked.mat-accent {
   .mat-checkbox-background {
@@ -216,10 +223,57 @@ body {
     left: 0;
     right: 0;
     top: 0;
-    height: 260px;
+    height: 187px;
     background: $shared_header__page-bar_background;
     z-index: 0;
   }
+}
+
+campus-button.ui-button[iconclass='reset-filters'] {
+  height: $search-filter-height;
+  width: $search-filter-height;
+  background: none;
+  border: 1px solid $color-gray-4;
+}
+
+.search-results {
+  .ui-list-view__list {
+    align-items: flex-start !important;
+  }
+}
+
+.pages-home__container {
+  &.no-favorites {
+    padding-top: 20px;
+
+    &:after {
+      display: none;
+    }
+  }
+
+  &__shortcuts__list__shortcut {
+    &--methods mat-icon {
+      fill: $color-lila-1;
+      width: 64px;
+    }
+
+    &--tasks mat-icon {
+      fill: $color-green-1;
+    }
+
+    &--results mat-icon {
+      fill: $color-orange-1;
+    }
+
+    &--differentiate mat-icon {
+      fill: $color-red-1;
+    }
+  }
+}
+
+.pages-practice-method-detail__container {
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
 @import 'scss/theme-file-icons';

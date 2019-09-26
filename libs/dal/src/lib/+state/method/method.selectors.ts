@@ -178,7 +178,10 @@ export const getAllowedMethodYears = createSelector(
             if (!agg[book.methodId])
               agg[book.methodId] = {
                 id: book.methodId,
-                logoUrl: methodState.entities[book.methodId].logoUrl,
+                logoUrl:
+                  'assets/methods/' +
+                  methodState.entities[book.methodId].code +
+                  '.jpg',
                 name: methodState.entities[book.methodId].name,
                 years: []
               };

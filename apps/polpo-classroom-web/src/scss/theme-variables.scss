@@ -25,6 +25,8 @@ $primary-font-family: 'Helvetica', 'Arial', 'Open Sans', sans-serif;
 $primary-font-family-2: 'Lato', sans-serif; // title
 $primary-font-size: 14px;
 
+$ui-page-header-font-family: 'Open Sans', sans-serif;
+
 // app > nav + site header (shell)
 $secondary-bg-color: $color-black-1;
 $secondary-font-color: $color-gray-1;
@@ -72,8 +74,6 @@ $ui-shell__logo-background-color: $color-blue-2;
 $shared-header__quicklink-width: auto;
 
 // ui > person badge > polpo override
-$ui-person-badge-size-large: 72px;
-$ui-person-badge-size-large-font-size: 24px;
 $ui-person-badge-size-medium: 50px;
 $ui-person-badge-size-medium-font-size: 14px;
 

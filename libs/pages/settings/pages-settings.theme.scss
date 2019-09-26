@@ -1,0 +1,24 @@
+@import './dashboard/src/lib/pages-settings-dashboard.theme';
+@import './profile/src/lib/pages-settings-profile.theme';
+@import './alerts/src/lib/pages-settings-alerts.theme';
+
+$pages-settings_page-header-display: block !default;
+
+$pages-settings_container-background-color: unset !default;
+$pages-settings_container-box-shadow: unset !default;
+$pages-settings_container-max-width: 100% !default;
+$pages-settings_avatar-padding-top: 0px !default;
+$pages-settings_avatar-padding-bottom: 0px !default;
+$pages-settings_avatar_container-width: 400px !default; // = button--large width
+$pages-settings_avatar-subtext-color: unset !default;
+
+$pages-settings_mat-list-margin-bottom: 0px !default;
+$pages-settings_mat-list_item-color: black !default;
+$pages-settings_mat-list_item-background-color--accent: unset !default;
+$pages-settings_mat-list_item-font-weight: unset !default;
+
+@mixin pages-settings-theme() {
+  @include pages-settings-dashboard-theme();
+  @include pages-settings-profile-theme();
+  @include pages-settings-alerts-theme();
+}

@@ -1,9 +1,10 @@
 .ui-page-header {
-  font-family: 'Open Sans', Sans-Serif;
-  font-weight: 600;
   white-space: nowrap;
-  margin-bottom: 25px;
   line-height: 1;
+
+  &:first-child {
+    margin-top: 0;
+  }
 
   &__title {
     &--title-only {

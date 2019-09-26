@@ -2,6 +2,7 @@
   $ui-breadcrumbs-crumb-color: $ui-secondary-font-color !default;
   $ui-breadcrumbs-crumb-text-size: 14px !default;
   $ui-breadcrumbs-crumb-text-weight: normal !default;
+  $ui-breadcrumbs-crumb-icon-size: 24px !default;
 
   .ui-breadcrumbs {
     &__holder {
@@ -12,6 +13,11 @@
         span {
           color: $ui-breadcrumbs-crumb-color;
           font-size: $ui-breadcrumbs-crumb-text-size;
+        }
+
+        .mat-icon {
+          width: $ui-breadcrumbs-crumb-icon-size;
+          height: $ui-breadcrumbs-crumb-icon-size;
         }
       }
     }

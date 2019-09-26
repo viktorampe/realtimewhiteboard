@@ -1,5 +1,9 @@
 import { Injectable } from '@angular/core';
-import { SettingsPermissions } from '@campus/dal';
+import {
+  PersonFixture,
+  PersonInterface,
+  SettingsPermissions
+} from '@campus/dal';
 import { ViewModelInterface } from '@campus/testing';
 import { NavItem } from '@campus/ui';
 import { Observable, of } from 'rxjs';
@@ -45,4 +49,7 @@ export class MockSettingsDashboardViewModel
       requiredPermissions: [SettingsPermissions.UPDATE_AVATAR]
     }
   ]);
+
+  user$: Observable<PersonInterface> = of(new PersonFixture());
+  environmentUi = {};
 }

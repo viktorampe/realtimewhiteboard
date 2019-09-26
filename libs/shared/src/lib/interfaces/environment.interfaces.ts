@@ -19,6 +19,7 @@ export interface EnvironmentInterface {
   sso: EnvironmentSsoInterface;
   searchModes: EnvironmentSearchModesInterface;
   testing: EnvironmentTestingInterface;
+  ui: EnvironmentUIInterface;
 }
 
 export interface EnvironmentIconMappingInterface {
@@ -102,4 +103,8 @@ export interface EnvironmentApiInterface {
 
 export interface EnvironmentTestingInterface {
   removeDataCyAttributes: boolean;
+}
+
+export interface EnvironmentUIInterface {
+  useNavItemStyle?: boolean;
 }

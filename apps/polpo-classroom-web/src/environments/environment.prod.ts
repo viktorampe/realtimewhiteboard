@@ -186,5 +186,6 @@ export const environment = {
   },
   testing: {
     removeDataCyAttributes: true
-  }
+  },
+  ui: {}
 };
