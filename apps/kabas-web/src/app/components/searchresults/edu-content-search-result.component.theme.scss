@@ -1,0 +1,31 @@
+@mixin app-edu-content-search-result() {
+  $app-edu-content-search-result-selected-border-width: 4px !default;
+  $app-edu-content-search-result-selected-border-color: $primary-color-accent !default;
+  $app-edu-content-search-result-icon-color: $primary-color-accent !default;
+  $app-edu-content-search-result-even-background-color: $secondary-bg-color !default;
+
+  .app-educontentsearchresult {
+    &.ui-list-view__list__item--selected,
+    &.ui-list-view__list__item--selected > * {
+      transform: none !important;
+      box-shadow: none !important;
+    }
+
+    &.ui-list-view__list__item--selected {
+      border-left: $app-edu-content-search-result-selected-border-width solid
+        $app-edu-content-search-result-selected-border-color !important;
+    }
+
+    &:nth-child(even) {
+      background-color: $app-edu-content-search-result-even-background-color;
+
+      mat-icon {
+        background-color: $app-edu-content-search-result-even-background-color;
+      }
+    }
+
+    &__extension {
+      color: $app-edu-content-search-result-icon-color;
+    }
+  }
+}
