@@ -131,7 +131,7 @@ body {
 
 .pages-home__container__shortcuts__list__shortcut {
   &--methods mat-icon {
-    stroke: $color-lila-1;
+    fill: $color-lila-1;
   }
 
   &--tasks mat-icon {
@@ -143,7 +143,7 @@ body {
   }
 
   &--differentiate mat-icon {
-    stroke: $color-red-1;
+    fill: $color-red-1;
   }
 }
 
