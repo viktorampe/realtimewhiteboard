@@ -14,7 +14,7 @@ export class MethodYearTileComponent implements OnInit {
     bookId: number;
   }[] = [];
 
-  @HostBinding('class.pages-methods-method-year-tile')
+  @HostBinding('class.shared-method-year-tile')
   pagesMethodsMethodYearTileClass = true;
 
   constructor() {}
