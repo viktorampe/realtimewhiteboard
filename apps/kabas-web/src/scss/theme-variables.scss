@@ -157,9 +157,13 @@ $select-filter-component_mat-select-trigger-border-width: 1px;
 $select-filter-component_mat-select-trigger-border-color: $primary-font-color-2;
 $select-filter-component_mat-select-value-vertical-align: middle;
 
-// ui > file-icons
-// $ui-file-icon-border: none;
-// $ui-file-icon__label-bg-color: transparent !important;
+// search > reset filters button
+$pages-method-chapter__reset-filters-border-color: $primary-font-color-2;
+$pages-method-chapter__reset-filters-width: $search-filter-height;
+$pages-method-chapter__reset-filters-height: $search-filter-height;
+$pages-method-chapter__reset-filters-background-color: transparent;
+$pages-method-chapter__reset-filters-hover-background-color: $color-orange-1;
+$pages-method-chapter__reset-filters-hover-color: $color-white-1;
 
 // social media
 $facebook-button-background-color: #455897;

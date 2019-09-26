@@ -216,13 +216,6 @@ h2 {
   }
 }
 
-campus-button.ui-button[iconclass='reset-filters'] {
-  height: $search-filter-height;
-  width: $search-filter-height;
-  background: none;
-  border: 1px solid $color-gray-4;
-}
-
 .pages-home__container {
   &.no-favorites {
     padding-top: 20px;
