@@ -18,7 +18,10 @@
         class="ui-multi-check-box-table__header--row-header"
         >Alle</th
       >
-      <th *ngFor="let itemColumn of itemColumns">
+      <th
+        *ngFor="let itemColumn of itemColumns"
+        class="ui-multi-check-box-table__body__row__cell--checkbox"
+      >
         <mat-checkbox
           #selectAllForColumnCheckBox
           campusClickPreventDefault

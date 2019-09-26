@@ -7,17 +7,20 @@
   $ui-multi-check-box-table_row-color--odd: $ui-list-row-bg-odd !default;
   // spacing base
   $ui-multi-check-box-table_cell-padding: 8px !default;
+  $ui-multi-check-box-table_cell-border: 2px solid $ui-list-row-bg-odd !default;
 
   .ui-multi-check-box-table {
     display: block;
 
     table {
+      border-collapse: collapse;
       width: $ui-multi-check-box-table-width;
     }
 
     td,
     th {
       padding: $ui-multi-check-box-table_cell-padding;
+      border: $ui-multi-check-box-table_cell-border;
     }
 
     &__header {

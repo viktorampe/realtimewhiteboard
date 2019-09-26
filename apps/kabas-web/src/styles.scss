@@ -195,6 +195,13 @@ p {
   width: 24px;
 }
 
+/* ng material tabs */
+.mat-tab-body-content {
+  display: block;
+  padding: 20px 40px;
+}
+
+/* page specifics */
 .pages-home__container,
 .pages-methods-overview,
 .pages-practice-overview,
@@ -262,11 +269,13 @@ p {
   th:first-child,
   td:first-child {
     padding-left: 40px;
+    border-left: none;
   }
 
   th:last-child,
   td:last-child {
     padding-right: 40px;
+    border-right: none;
   }
 }
 
