@@ -1,0 +1,22 @@
+.pages-settings-dashboard {
+  &__container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__avatar {
+    display: flex;
+    justify-content: center;
+    max-width: 100%;
+  }
+
+  &__mat-list {
+    flex-direction: column;
+    display: flex;
+    width: 100%;
+  }
+
+  &__button__container {
+    width: 100%;
+  }
+}

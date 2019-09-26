@@ -191,7 +191,8 @@ export const environment: EnvironmentInterface = {
   },
   testing: {
     removeDataCyAttributes: false
-  }
+  },
+  ui: {}
 };
 
 /*

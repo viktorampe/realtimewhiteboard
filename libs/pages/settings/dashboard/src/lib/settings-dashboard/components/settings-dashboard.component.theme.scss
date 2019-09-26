@@ -1,0 +1,63 @@
+@mixin pages-settings-dashboard-component-theme() {
+  // color palette
+  $pages-settings-dashboard_container-background-color: $pages-settings_container-background-color !default;
+  $pages-settings-dashboard_mat-list_item-color: $pages-settings_mat-list_item-color !default;
+  $pages-settings-dashboard_mat-list_item-background-color: $pages-settings_container-background-color !default;
+  $pages-settings-dashboard_mat-list_item-background-color--accent: $pages-settings_mat-list_item-background-color--accent !default;
+
+  $pages-settings-dashboard_container-box-shadow: $pages-settings_container-box-shadow !default;
+  $pages-settings-dashboard_container-max-width: $pages-settings_container-max-width !default;
+  $pages-settings-dashboard_mat-list_item-font-weight: $pages-settings_mat-list_item-font-weight !default;
+  $pages-settings-dashboard_avatar_container-width: $pages-settings_avatar_container-width !default;
+  $pages-settings-dashboard_avatar-padding-top: $pages-settings_avatar-padding-top !default;
+  $pages-settings-dashboard_avatar-padding-bottom: $pages-settings_avatar-padding-bottom !default;
+  $pages-settings-dashboard_avatar_person-badge-subtext-color: $pages-settings_avatar-subtext-color !default;
+
+  $pages-settings-dashboard_mat-list-margin-bottom: $pages-settings_mat-list-margin-bottom !default;
+  $pages-settings-dashboard_mat-list_item-padding-left--override: 32px !default;
+
+  .pages-settings-dashboard {
+    &__page-header {
+      display: $pages-settings_page-header-display;
+    }
+
+    &__container {
+      background-color: $pages-settings-dashboard_container-background-color;
+      box-shadow: $pages-settings-dashboard_container-box-shadow;
+      max-width: $pages-settings-dashboard_container-max-width;
+    }
+
+    &__avatar {
+      width: $pages-settings-dashboard_avatar_container-width;
+      padding-top: $pages-settings-dashboard_avatar-padding-top;
+      padding-bottom: $pages-settings-dashboard_avatar-padding-bottom;
+
+      .ui_person-badge__display__name {
+        font-weight: bold;
+      }
+
+      .ui_person-badge__display__subtext {
+        color: $pages-settings-dashboard_avatar_person-badge-subtext-color;
+      }
+    }
+
+    &__mat-list {
+      margin-bottom: $pages-settings-dashboard_mat-list-margin-bottom;
+
+      &__item {
+        &.mat-list-item .mat-list-item-content {
+          color: $pages-settings-dashboard_mat-list_item-color;
+          background-color: $pages-settings-dashboard_mat-list_item-background-color;
+          font-weight: $pages-settings-dashboard_mat-list_item-font-weight;
+          padding-left: $pages-settings-dashboard_mat-list_item-padding-left--override !important;
+        }
+
+        &:hover {
+          &.mat-list-item .mat-list-item-content {
+            background-color: $pages-settings-dashboard_mat-list_item-background-color--accent;
+          }
+        }
+      }
+    }
+  }
+}
