@@ -118,6 +118,9 @@
                     *ngFor="let generalFile of generalFiles"
                     (click)="clickOpenGeneralFile(generalFile)"
                     class="method-file"
+                    [ngClass]="
+                      'producttype-' + getProductTypeClass(productType)
+                    "
                   >
                     <div class="method-file__content">
                       <campus-file-icon
