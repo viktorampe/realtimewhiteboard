@@ -1,21 +1,23 @@
 @import '~@angular/material/_theming';
 @include mat-core(); // be sure to include this mixin only once
 // created theme with http://mcg.mbitson.com/ (find main palette color next to '500 :')
+
+// $color-blue-3: #15adb9;
 $mat-app-primary: (
-  50: #ecf5f6,
-  100: #d0e6ea,
-  200: #b1d5dc,
-  300: #91c4cd,
-  400: #7ab8c3,
-  500: #62abb8,
-  600: #5aa4b1,
-  700: #509aa8,
-  800: #4691a0,
-  900: #348091,
-  A100: #dcf8ff,
-  A200: #a9efff,
-  A400: #76e5ff,
-  A700: #5de0ff,
+  50: #e3f5f7,
+  100: #b9e6ea,
+  200: #8ad6dc,
+  300: #5bc6ce,
+  400: #38b9c4,
+  500: #15adb9,
+  600: #12a6b2,
+  700: #0f9caa,
+  800: #0c93a2,
+  900: #068393,
+  A100: #bff7ff,
+  A200: #8cf0ff,
+  A400: #59eaff,
+  A700: #40e7ff,
   contrast: (
     50: #000000,
     100: #000000,
@@ -23,8 +25,8 @@ $mat-app-primary: (
     300: #000000,
     400: #000000,
     500: #000000,
-    600: #000000,
-    700: #000000,
+    600: #ffffff,
+    700: #ffffff,
     800: #ffffff,
     900: #ffffff,
     A100: #000000,
@@ -33,21 +35,23 @@ $mat-app-primary: (
     A700: #000000
   )
 );
+
+//$color-red-1: #e7215d; // kabas logo color
 $mat-app-accent: (
-  50: #f9e6ec,
-  100: #efc0cf,
-  200: #e496af,
-  300: #d96c8f,
-  400: #d14d77,
-  500: #c92d5f,
-  600: #c32857,
-  700: #bc224d,
-  800: #b51c43,
-  900: #a91132,
-  A100: #ffd9e0,
-  A200: #ffa6b6,
-  A400: #ff738d,
-  A700: #ff5978,
+  50: #fce4ec,
+  100: #f8bcce,
+  200: #f390ae,
+  300: #ee648e,
+  400: #eb4275,
+  500: #e7215d,
+  600: #e41d55,
+  700: #e0184b,
+  800: #dd1441,
+  900: #d70b30,
+  A100: #ffffff,
+  A200: #ffcfd5,
+  A400: #ff9caa,
+  A700: #ff8294,
   contrast: (
     50: #000000,
     100: #000000,
@@ -71,3 +75,7 @@ $app-primary: mat-palette($mat-app-primary);
 $app-accent: mat-palette($mat-app-accent, 500, 900, A100);
 $app-warn: mat-palette($mat-deep-orange);
 $app-theme: mat-light-theme($app-primary, $app-accent, $app-warn);
+
+$app-typography: mat-typography-config(
+  $font-family: 'Arial, Open Sans, sans-serif'
+);

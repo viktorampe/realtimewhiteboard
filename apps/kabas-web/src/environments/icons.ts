@@ -42,9 +42,22 @@ export const icons = {
   'arrow-back': 'assets/icons/material/arrow-back.svg',
   'breadcrumb-separator': 'assets/icons/material/chevron-right.svg',
   'collapsible-sheet-back': 'assets/icons/material/arrow-back.svg',
+  file: 'assets/icons/general-file.svg',
 
   // search: sort modes
   'sort-numeric-down': 'assets/icons/sort-numeric-down.svg',
   'sort-alpha-down': 'assets/icons/sort-alpha-down.svg',
-  'calendar-plus': 'assets/icons/calendar-plus.svg'
+  'calendar-plus': 'assets/icons/calendar-plus.svg',
+  'educontent-product-type:algemeen bestand': 'assets/icons/general-file.svg',
+  'educontent-product-type:doelen': 'assets/icons/learning-goals.svg',
+  'educontent-product-type:handleiding': 'assets/icons/general-file.svg',
+  'educontent-product-type:evaluatie': 'assets/icons/general-file.svg',
+  'educontent-product-type:differentiatie': 'assets/icons/general-file.svg',
+  'educontent-product-type:kopieerblad': 'assets/icons/general-file.svg',
+  'educontent-product-type:bijlage': 'assets/icons/general-file.svg',
+  'educontent-product-type:audio': 'assets/icons/general-file.svg',
+  'educontent-product-type:video': 'assets/icons/general-file.svg',
+  'educontent-product-type:presentatie': 'assets/icons/general-file.svg',
+  'educontent-product-type:applicatie': 'assets/icons/general-file.svg',
+  'educontent-product-type:correctiesleutel': 'assets/icons/general-file.svg'
 };
