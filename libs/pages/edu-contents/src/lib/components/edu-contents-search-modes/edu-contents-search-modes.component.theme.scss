@@ -2,8 +2,7 @@
   $pages-edu-contents__search-modes__item-width: 335px !default;
   $pages-edu-contents__search-modes__item-padding: 25px !default;
   $pages-edu-contents__search-modes__item-margin: 6px !default;
-  $pages-edu-contents__search-modes__item-border: 1px solid
-    $ui-tertiary-bg-color-2 !default;
+  $pages-edu-contents__search-modes__item-border: 1px solid $ui-tertiary-bg-color-2 !default;
   $pages-edu-contents__search-modes__item-background: $ui-tertiary-bg-color !default;
 
   $pages-edu-contents__search-modes__title-font-size: $ui-primary-font-size !default;
@@ -15,12 +14,14 @@
     &__item {
       campus-search-term {
         .ui-button {
-          height: $campus_search_term--line_height__override + 11px;
+          // height: $campus_search_term--line_height__override + 11px;
         }
+
         .mat-form-field-infix {
-          line-height: $campus_search_term--line_height__override;
+          // line-height: $campus_search_term--line_height__override;
         }
       }
+
       width: $pages-edu-contents__search-modes__item-width;
       padding: $pages-edu-contents__search-modes__item-padding;
       margin: $pages-edu-contents__search-modes__item-margin;
@@ -45,6 +46,11 @@
     }
 
     campus-search-term {
+      // .search-term {
+
+      //   display: block;
+      // }
+
       margin: 20px 10px 0;
     }
   }
