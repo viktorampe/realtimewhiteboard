@@ -1,12 +1,7 @@
 @mixin pages-methods-method-overview() {
-  $pages-methods-method-overview-padding: 20px !default;
   $pages-methods-method-overview__book-list-margin: 32px !default;
 
   .pages-methods {
-    &__container {
-      padding: $pages-methods-method-overview-padding;
-    }
-
     &-method-year-tile {
       margin-right: $pages-methods-method-overview__book-list-margin;
 

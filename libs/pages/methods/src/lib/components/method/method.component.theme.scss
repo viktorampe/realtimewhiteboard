@@ -11,10 +11,10 @@
     // measurements
     $pages-method__mat-list-padding-left--override: $pages-method__chapter-padding-left !default;
     $pages-method__mat-list__chapter-font-weight: $pages-method__chapter-font-weight !default;
-    $pages-method__container__files-max-width: 400px !default;
+    $pages-method__container__files-max-width: 360px !default;
     $pages-method__container__files-header-font-weight: $pages-method__chapter-font-weight !default;
     $pages-method__container__files-header-font-size: $pages-method__list-section-title-font-size !default;
-    $pages-method__file-padding-left: 32px !default;
+    $pages-method__file-padding-left: 40px !default;
     $pages-method__file-title-font-size: 15px !default;
     $pages-method__file-description-font-size: 13px !default;
     $pages-method__file-height: 64px !default;
@@ -30,10 +30,13 @@
         }
       }
       &-header {
-        padding: 44px 16px 24px $pages-method__file-padding-left;
         font-size: $pages-method__container__files-header-font-size;
         font-weight: $pages-method__container__files-header-font-weight;
         color: $pages-method-color--secondary;
+      }
+
+      &__items {
+        margin-left: (-$pages-method__file-padding-left);
       }
 
       .method-file {
@@ -41,7 +44,7 @@
           font-size: 12px;
         }
         &__content {
-          padding: 15px 0px 15px $pages-method__file-padding-left - 16px !important;
+          padding: 15px 0px 15px ($pages-method__file-padding-left - 16px) !important;
         }
         &__title {
           color: $pages-method-color;
@@ -59,9 +62,8 @@
       }
     }
 
-    $pages-method__mat-card-margin-top: 16px !default;
-    $pages-method__mat-card-margin-right: 16px !default;
     $pages-method__mat-card-width: 304px !default;
+    $pages-method__mat-card-margin: 0 0 16px 16px !default;
 
     $pages-method__mat-card__banner-width: 120px !default;
     $pages-method__mat-card__banner-offset: -6px !default;
@@ -103,9 +105,8 @@
     }
 
     &__boeke {
-      margin-top: $pages-method__mat-card-margin-top;
-      margin-right: $pages-method__mat-card-margin-right;
       width: $pages-method__mat-card-width;
+      margin: $pages-method__mat-card-margin;
 
       &.mat-card {
         box-shadow: $pages-method__mat-card__box-shadow--override !important;
