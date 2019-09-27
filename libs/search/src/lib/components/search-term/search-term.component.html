@@ -12,12 +12,12 @@
         [placeholder]="placeholder"
         (keyup.enter)="onChange()"
       />
+      <campus-button
+        [iconClass]="'magnifier'"
+        (click)="onChange()"
+        matSuffix
+      ></campus-button>
     </mat-form-field>
-
-    <campus-button
-      [iconClass]="'magnifier'"
-      (click)="onChange()"
-    ></campus-button>
   </div>
 
   <ng-template #autoCompleteTemplate>
@@ -45,6 +45,11 @@
           >{{ option }}</mat-option
         >
       </mat-autocomplete>
+      <campus-button
+        [iconClass]="'magnifier'"
+        (click)="onChange()"
+        matSuffix
+      ></campus-button>
     </mat-form-field>
   </ng-template>
 </div>
