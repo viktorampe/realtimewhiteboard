@@ -21,6 +21,7 @@ body {
  */
 @import 'scss/theme-angular-material';
 @include angular-material-theme($app-theme);
+@include angular-material-typography($app-typography);
 
 // load all variables for your app theme and ui components
 @import 'scss/theme-variables';
