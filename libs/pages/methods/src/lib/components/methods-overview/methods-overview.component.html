@@ -4,12 +4,7 @@
   class="pages-methods__container pages-methods-overview"
   *ngIf="(allowedBooks$ | async) as books"
 >
-  <campus-page-header
-    [title]="'Methodes'"
-    [subtitle]="'toegekende methodes'"
-    [iconClass]="'book'"
-  >
-  </campus-page-header>
+  <campus-page-header [title]="'Beschikbare methodes'"> </campus-page-header>
 
   <ng-template #noBooks>
     <div class="pages-methods__no-books"
