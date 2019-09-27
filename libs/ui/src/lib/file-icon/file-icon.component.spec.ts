@@ -43,4 +43,14 @@ describe('FileIconComponent', () => {
       .componentInstance as MatIcon;
     expect(icon.svgIcon).toBe(`I'm special`);
   });
+
+  it('should add the class from classModifier', () => {
+    component.classModifier = `special`;
+    fixture.detectChanges();
+
+    const componentDE = fixture.debugElement.query(By.css('.ui-file-icon'));
+    expect(componentDE.nativeElement.classList).toContain(
+      'ui-file-icon--special'
+    );
+  });
 });

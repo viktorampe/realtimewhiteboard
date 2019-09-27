@@ -14,7 +14,6 @@
     $pages-method__container__files-max-width: 400px !default;
     $pages-method__container__files-header-font-weight: $pages-method__chapter-font-weight !default;
     $pages-method__container__files-header-font-size: $pages-method__list-section-title-font-size !default;
-    $pages-method__container__files-header-font-family: $pages-method-font-family !default;
     $pages-method__file-padding-left: 32px !default;
     $pages-method__file-title-font-size: 15px !default;
     $pages-method__file-description-font-size: 13px !default;
@@ -32,7 +31,6 @@
       }
       &-header {
         padding: 44px 16px 24px $pages-method__file-padding-left;
-        font-family: $pages-method__container__files-header-font-family;
         font-size: $pages-method__container__files-header-font-size;
         font-weight: $pages-method__container__files-header-font-weight;
         color: $pages-method-color--secondary;
@@ -45,12 +43,8 @@
         &__content {
           padding: 15px 0px 15px $pages-method__file-padding-left - 16px !important;
         }
-        &__copy {
-          font-family: $pages-method-font-family;
-        }
         &__title {
           color: $pages-method-color;
-          font-family: $pages-method-font-family;
           font-weight: $pages-method__container__files-header-font-weight;
           font-size: $pages-method__file-title-font-size;
         }
