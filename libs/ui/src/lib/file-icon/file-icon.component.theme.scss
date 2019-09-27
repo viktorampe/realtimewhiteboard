@@ -13,6 +13,8 @@
   $ui-file-icon__label-text-color: gray !default;
   $ui-file-icon__label-bg-color: lightgray !default;
   $ui-file-icon__label-border: $ui-file-icon-border !default;
+  $ui-file-icon__label-text-transform: uppercase !default;
+  $ui-file-icon__label-text-weight: normal !default;
 
   .ui-file-icon {
     width: $ui-file-icon-width;
@@ -28,7 +30,8 @@
 
     > div {
       text-align: center;
-      text-transform: uppercase;
+      font-weight: $ui-file-icon__label-text-weight;
+      text-transform: $ui-file-icon__label-text-transform;
       top: $ui-file-icon__label-top;
       left: $ui-file-icon__label-left;
       right: $ui-file-icon__label-right;
@@ -37,6 +40,8 @@
       color: $ui-file-icon__label-text-color;
       background-color: $ui-file-icon__label-bg-color;
       border: $ui-file-icon__label-border;
+      max-width: $ui-file-icon-width;
+      overflow: hidden;
     }
   }
 }

@@ -14,11 +14,11 @@ export const icons = {
   differentiate: 'assets/icons/differentiate.svg', //Temp icon
   'select-all': 'assets/icons/done_all.svg',
   'import-export': 'assets/icons/material/import-export.svg',
-  'quicklink:favorites': 'assets/icons/favorites3.svg',
-  'quicklink:history': 'assets/icons/clock2.svg',
-  profile: 'assets/icons/profile2.svg',
+  'quicklink:favorites': 'assets/icons/favorite.svg',
+  'quicklink:history': 'assets/icons/history.svg',
+  profile: 'assets/icons/profile.svg',
   avatar: 'assets/icons/avatar.svg',
-  notifications: 'assets/icons/alert2.svg',
+  notifications: 'assets/icons/alerts.svg',
   settings: 'assets/icons/settings.svg',
   account: 'assets/icons/account-circle.svg',
   cancel: 'assets/icons/cancel.svg',
@@ -26,12 +26,12 @@ export const icons = {
   edit: 'assets/icons/material/edit.svg',
   filter: 'assets/icons/filter.svg',
   context_menu: 'assets/icons/material/more_vert.svg',
-  favorites: 'assets/icons/assets/icons/favorites3.svg',
+  favorites: 'assets/icons/assets/icons/favorite.svg',
   check: 'assets/icons/check.svg',
   close: 'assets/icons/close.svg',
   history: 'assets/icons/history.svg',
   boardbook: 'assets/icons/boardbook.svg',
-  method: 'assets/icons/lesmateriaal.svg',
+  method: 'assets/icons/methods.svg',
   //TODO: These are TEMPORARY SVGs for Diabolo that I made from the PNGs
   //get the OFFICIAL files from Antoon later
   'diabolo-intro': 'assets/icons/diabolo/intro.svg',
@@ -40,9 +40,22 @@ export const icons = {
   'arrow-back': 'assets/icons/material/arrow-back.svg',
   'breadcrumb-separator': 'assets/icons/material/chevron-right.svg',
   'collapsible-sheet-back': 'assets/icons/material/arrow-back.svg',
+  file: 'assets/icons/general-file.svg',
 
   // search: sort modes
   'sort-numeric-down': 'assets/icons/sort-numeric-down.svg',
   'sort-alpha-down': 'assets/icons/sort-alpha-down.svg',
-  'calendar-plus': 'assets/icons/calendar-plus.svg'
+  'calendar-plus': 'assets/icons/calendar-plus.svg',
+  'educontent-product-type:algemeen bestand': 'assets/icons/general-file.svg',
+  'educontent-product-type:doelen': 'assets/icons/learning-goals.svg',
+  'educontent-product-type:handleiding': 'assets/icons/general-file.svg',
+  'educontent-product-type:evaluatie': 'assets/icons/general-file.svg',
+  'educontent-product-type:differentiatie': 'assets/icons/general-file.svg',
+  'educontent-product-type:kopieerblad': 'assets/icons/general-file.svg',
+  'educontent-product-type:bijlage': 'assets/icons/general-file.svg',
+  'educontent-product-type:audio': 'assets/icons/general-file.svg',
+  'educontent-product-type:video': 'assets/icons/general-file.svg',
+  'educontent-product-type:presentatie': 'assets/icons/general-file.svg',
+  'educontent-product-type:applicatie': 'assets/icons/general-file.svg',
+  'educontent-product-type:correctiesleutel': 'assets/icons/general-file.svg'
 };
