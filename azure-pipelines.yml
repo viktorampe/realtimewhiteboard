@@ -17,7 +17,7 @@ trigger:
 variables:
   dkRanTests: false
   dkBuild: false
-  dkE2E: true
+  dkE2E: false
 
 pool:
   name: 'Campus'

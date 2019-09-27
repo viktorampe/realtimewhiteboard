@@ -11,7 +11,6 @@
     "e2e:polpo:development": "cross-env CYPRESS_ENVIRONMENT=development ng e2e polpo-classroom-web-e2e --watch",
     "e2e:polpo:staging": "node ./node_modules/cross-env/dist/bin/cross-env CYPRESS_ENVIRONMENT=staging node --max_old_space_size=12000 ./node_modules/@angular/cli/bin/ng e2e polpo-classroom-web-e2e --headless --configuration staging",
     "e2e:kabas:development": "cross-env CYPRESS_ENVIRONMENT=development ng e2e kabas-web-e2e --watch",
-    "e2e:kabas:staging:local": "node ./node_modules/cross-env/dist/bin/cross-env CYPRESS_ENVIRONMENT=staging node ./node_modules/@angular/cli/bin/ng e2e kabas-web-e2e --watch --configuration staging",
     "e2e:kabas:staging": "node ./node_modules/cross-env/dist/bin/cross-env CYPRESS_ENVIRONMENT=staging node --max_old_space_size=12000 ./node_modules/@angular/cli/bin/ng e2e kabas-web-e2e --headless --configuration staging",
     "affected:apps": "./node_modules/.bin/nx affected:apps",
     "affected:libs": "./node_modules/.bin/nx affected:libs",
