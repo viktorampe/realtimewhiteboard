@@ -1,17 +1,20 @@
-.app-educontentsearchresult {
+:host {
   width: 100%;
   padding: 8px;
-  background-color: white;
-  display: flex;
+  display: flex !important;
   flex-direction: row;
   align-items: center;
+}
 
+.app-educontentsearchresult {
   &__extension {
-    margin-right: 8px;
+    margin-right: 18px;
   }
 
   &__content {
     width: 100%;
+    margin-right: 18px;
+    max-width: 500px;
 
     &__header {
       display: flex;
@@ -20,30 +23,33 @@
 
       &__title {
         color: black;
-        font-size: 18px;
+        font-size: 14px;
+        font-weight: bold;
+        margin-bottom: 8px;
       }
 
       &__diabolo-phase {
-        margin-left: auto;
         min-width: 38px;
         min-height: 38px;
       }
 
-      &__action,
-      &__action:focus {
-        background: none;
-        color: black;
-        transition: transform 0.3s ease;
-      }
+      &__action {
+        &:not(:hover) {
+          background-color: transparent;
+        }
 
-      &__action:hover {
-        transform: scale(1.2);
+        margin-left: -7px;
+        margin-right: 16px;
       }
     }
 
     &__body {
       display: flex;
       flex-direction: row;
+
+      &__description {
+        margin-bottom: 8px;
+      }
     }
   }
 }
