@@ -90,31 +90,45 @@ describe('SettingsDashboardComponent', () => {
   });
 
   describe('links', () => {
-    it('should use the correct template for the list items', () => {
-      component.useNavItemStyle = false; // polpo
-      fixture.detectChanges();
+    describe('polpo', () => {
+      beforeEach(() => {
+        viewModel.environmentUi.useNavItemStyle = false;
+        component.ngOnInit();
+        fixture.detectChanges();
+      });
 
-      let matList = fixture.debugElement.query(
-        By.css('.pages-settings-dashboard__mat-list')
-      );
-      const buttonChildren = matList.queryAll(By.directive(ButtonComponent));
+      it('should use the correct template for the list items', () => {
+        let matList = fixture.debugElement.query(
+          By.css('.pages-settings-dashboard__mat-list')
+        );
+        const buttonChildren = matList.queryAll(By.directive(ButtonComponent));
 
-      expect(matList.children.length).toBe(buttonChildren.length);
+        expect(matList.children.length).toBe(buttonChildren.length);
+      });
 
-      component.useNavItemStyle = true; // kabas
-      fixture.detectChanges();
+      describe('kabas', () => {
+        beforeEach(() => {
+          viewModel.environmentUi.useNavItemStyle = true;
+          component.ngOnInit();
+          fixture.detectChanges();
+        });
 
-      matList = fixture.debugElement.query(
-        By.css('.pages-settings-dashboard__mat-list')
-      );
+        it('should use the correct template for the list items', () => {
+          console.log(component.useNavItemStyle);
 
-      const dividerChildren = matList.queryAll(By.directive(MatDivider));
-      const listItemChildren = matList.queryAll(By.directive(MatListItem));
+          const matList = fixture.debugElement.query(
+            By.css('.pages-settings-dashboard__mat-list')
+          );
 
-      expect(matList.children.length).toBe(
-        dividerChildren.length + listItemChildren.length
-      );
-      expect(dividerChildren.length).toBe(listItemChildren.length + 1);
+          const dividerChildren = matList.queryAll(By.directive(MatDivider));
+          const listItemChildren = matList.queryAll(By.directive(MatListItem));
+
+          expect(matList.children.length).toBe(
+            dividerChildren.length + listItemChildren.length
+          );
+          expect(dividerChildren.length).toBe(listItemChildren.length + 1);
+        });
+      });
     });
   });
 });
