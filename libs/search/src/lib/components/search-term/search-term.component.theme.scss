@@ -57,7 +57,7 @@
 
       input {
         height: $search-filter-height;
-        margin-top: -8px;
+        margin-top: -8px; // +/- 60% of font size
       }
 
       &:not(.mat-focused) {
