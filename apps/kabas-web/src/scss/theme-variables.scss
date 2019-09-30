@@ -20,6 +20,9 @@ $color-gray-4: #808080; // icons + text
 $color-gray-5: #dcdcdc; // border between boek | methode buttons
 $color-gray-6: #898989; // font color home + toc subnav
 
+$kabas-page-vertical-padding: 20px;
+$kabas-page-horizontal-padding: 40px;
+
 // app > main body
 $primary-bg-color: $color-white-1;
 $primary-font-color: $color-gray-3;
@@ -90,7 +93,7 @@ $shared-header-font-size: 12px;
 $shared-header-font-weight: bold;
 $shared-header__app-bar-height: 120px;
 $shared-header__app-bar-padding-top: 40px;
-$shared-header__page-bar-padding-left: 40px;
+$shared-header__page-bar-padding-left: $kabas-page-horizontal-padding;
 $shared-header__page-bar-height: 80px;
 $shared-header__page-bar__divider-margin-left-right: 0;
 $shared-header__page-bar-container__justify-content: flex-end;
@@ -106,7 +109,7 @@ $shared-header__quicklink-icon-size: 24px;
 $shared-header__quicklink-icon-size-small: 20px;
 
 // pages
-$pages-padding: 0 40px;
+$pages-padding: $kabas-page-vertical-padding $kabas-page-horizontal-padding;
 
 // ui > app shell variables
 $ui-shell__left-width: 210px;
@@ -165,6 +168,18 @@ $pages-method-chapter__reset-filters-height: $search-filter-height;
 $pages-method-chapter__reset-filters-background-color: transparent;
 $pages-method-chapter__reset-filters-hover-background-color: $color-orange-1;
 $pages-method-chapter__reset-filters-hover-color: $color-white-1;
+
+// ui > file-icons
+$ui-file-icon-width: 33.33px;
+$ui-file-icon-height: 40px;
+$ui-file-icon-padding: 0px;
+$ui-file-icon-border: none;
+$ui-file-icon__label-left: 0; // center horizontally
+$ui-file-icon__label-right: 0; // center horizontally
+$ui-file-icon__label-text-transform: unset;
+$ui-file-icon__label-text-weight: bold;
+$ui-file-icon__label-top: 35%;
+$ui-file-icon__label-text-color: $secondary-font-color-accent;
 
 // social media
 $facebook-button-background-color: #455897;

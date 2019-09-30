@@ -6,6 +6,7 @@ export const icons = {
   home: 'assets/icons/material/home.svg',
   magnifier: 'assets/icons/magnifier.svg',
   download: 'assets/icons/material/download.svg',
+  exercise: 'assets/icons/material/gamepad.svg',
   'exercise:open': 'assets/icons/exercise-open.svg',
   'exercise:finished': 'assets/icons/exercise-finished.svg',
   methods: 'assets/icons/methods.svg', //Temp icon
@@ -32,6 +33,7 @@ export const icons = {
   history: 'assets/icons/history.svg',
   boardbook: 'assets/icons/boardbook.svg',
   'reset-filters': 'assets/icons/material/reset.svg',
+  'general-file': 'assets/icons/general-file.svg',
   method: 'assets/icons/methods.svg',
   //TODO: These are TEMPORARY SVGs for Diabolo that I made from the PNGs
   //get the OFFICIAL files from Antoon later
@@ -41,9 +43,22 @@ export const icons = {
   'arrow-back': 'assets/icons/material/arrow-back.svg',
   'breadcrumb-separator': 'assets/icons/material/chevron-right.svg',
   'collapsible-sheet-back': 'assets/icons/material/arrow-back.svg',
+  file: 'assets/icons/general-file.svg',
 
   // search: sort modes
   'sort-numeric-down': 'assets/icons/sort-numeric-down.svg',
   'sort-alpha-down': 'assets/icons/sort-alpha-down.svg',
-  'calendar-plus': 'assets/icons/calendar-plus.svg'
+  'calendar-plus': 'assets/icons/calendar-plus.svg',
+  'educontent-product-type:algemeen bestand': 'assets/icons/general-file.svg',
+  'educontent-product-type:doelen': 'assets/icons/learning-goals.svg',
+  'educontent-product-type:handleiding': 'assets/icons/general-file.svg',
+  'educontent-product-type:evaluatie': 'assets/icons/general-file.svg',
+  'educontent-product-type:differentiatie': 'assets/icons/general-file.svg',
+  'educontent-product-type:kopieerblad': 'assets/icons/general-file.svg',
+  'educontent-product-type:bijlage': 'assets/icons/general-file.svg',
+  'educontent-product-type:audio': 'assets/icons/general-file.svg',
+  'educontent-product-type:video': 'assets/icons/general-file.svg',
+  'educontent-product-type:presentatie': 'assets/icons/general-file.svg',
+  'educontent-product-type:applicatie': 'assets/icons/general-file.svg',
+  'educontent-product-type:correctiesleutel': 'assets/icons/general-file.svg'
 };
