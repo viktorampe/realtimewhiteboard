@@ -7,8 +7,10 @@
   $search-search-term-button-background-color: $ui-button-bg-color-1 !default;
   $search-search-term-button-hover-background-color: $ui-button-bg-color-2 !default;
   $search-search-term-button-hover-icon-color: inherit !default;
-  $search-search-term-button-border-color: darken($search-search-term-button-background-color,
-      10%) !default;
+  $search-search-term-button-border-color: darken(
+    $search-search-term-button-background-color,
+    10%
+  ) !default;
   $search-search-term-button-border-width: 1px !default;
   $search-search-term-button-top: 0 !default;
   $search-search-term-button-bottom: 0 !default;
@@ -25,7 +27,8 @@
   .search-term {
     transition: $search-search-term-transition;
     background-color: $search-search-term-background-color;
-    border: $search-search-term-border-width solid $search-search-term-border-color;
+    border: $search-search-term-border-width solid
+      $search-search-term-border-color;
 
     .mat-form-field-appearance-outline .mat-form-field-outline-thick {
       opacity: $search-search-term_mat-form-field_outline-opacity;
@@ -43,12 +46,11 @@
         padding: 0px;
       }
 
-
-      &.mat-focused {
+      &.mat-form-field-should-float {
+        .mat-form-field-appearance-outline,
         .mat-form-field-label {
           top: 1.84375em !important; //is mat-default
         }
-
       }
 
       .mat-form-field-label {
@@ -56,14 +58,12 @@
         top: $search-filter-height/2;
       }
 
-
       input {
         height: $search-filter-height;
         margin-top: -8px;
       }
 
       &:not(.mat-focused) {
-
         .mat-form-field-outline-thick,
         .mat-form-field-outline {
           color: $search-search-term_mat-form-field_outline-border-color;
@@ -71,10 +71,9 @@
       }
 
       &.mat-form-field-appearance-outline {
-
         .mat-form-field-outline-thick,
         .mat-form-field-outline {
-          >div {
+          > div {
             opacity: 1;
             border-width: 1px;
             border-radius: 0px;
@@ -97,13 +96,12 @@
 
     campus-button {
       background-color: $search-search-term-button-background-color;
-      border: $search-search-term-button-border-width solid $search-search-term-button-border-color;
+      border: $search-search-term-button-border-width solid
+        $search-search-term-button-border-color;
       box-shadow: inset 0 0 2px 1px $search-search-term-button-box-shadow-color;
       width: $search-search-term-button-width;
-      margin-right: -.75em !important;
+      margin-right: -0.75em !important;
       height: 100%;
-
-
 
       mat-icon {
         width: 14px;
