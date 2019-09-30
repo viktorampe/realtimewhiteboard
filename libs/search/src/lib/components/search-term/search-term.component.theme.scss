@@ -41,6 +41,28 @@
     mat-form-field {
       width: 100%;
 
+      .mat-form-field-appearance-outline,
+      .mat-form-field-infix {
+        padding: 0px;
+      }
+
+      &.mat-form-field-should-float {
+        .mat-form-field-appearance-outline,
+        .mat-form-field-label {
+          top: 1.84375em !important; //is mat-default
+        }
+      }
+
+      .mat-form-field-label {
+        height: 15px; // font size + border width -> scales 0.75
+        top: $search-filter-height/2;
+      }
+
+      input {
+        height: $search-filter-height;
+        margin-top: -8px;
+      }
+
       &:not(.mat-focused) {
         .mat-form-field-outline-thick,
         .mat-form-field-outline {
@@ -49,10 +71,6 @@
       }
 
       &.mat-form-field-appearance-outline {
-        .mat-form-field-flex {
-          padding-right: 48px;
-        }
-
         .mat-form-field-outline-thick,
         .mat-form-field-outline {
           > div {
@@ -63,28 +81,35 @@
             border-right-width: $search-search-term_mat-form-field_outline-border-right-width;
           }
         }
+
         .mat-form-field-wrapper {
           margin: 0px;
           padding-bottom: 0px;
         }
       }
     }
+
+    .mat-form-field-suffix {
+      align-self: stretch;
+      height: $search-filter-height;
+    }
+
     campus-button {
       background-color: $search-search-term-button-background-color;
       border: $search-search-term-button-border-width solid
         $search-search-term-button-border-color;
-      position: absolute;
-      top: $search-search-term-button-top;
-      right: $search-search-term-button-right;
-      bottom: $search-search-term-button-bottom;
-
       box-shadow: inset 0 0 2px 1px $search-search-term-button-box-shadow-color;
       width: $search-search-term-button-width;
+      margin-right: -0.75em !important;
+      height: 100%;
+
       mat-icon {
         width: 14px;
         height: 14px;
         color: $search-search-term-button_icon-color;
+        font-size: 100% !important;
       }
+
       &:hover {
         mat-icon {
           color: $search-search-term-button-hover-icon-color;
@@ -94,6 +119,7 @@
       }
     }
   }
+
   .mat-autocomplete-panel.search-term__autocomplete {
     background: $search-search-term-autocomplete-background-color;
   }
