@@ -169,6 +169,20 @@ $pages-method-chapter__reset-filters-background-color: transparent;
 $pages-method-chapter__reset-filters-hover-background-color: $color-orange-1;
 $pages-method-chapter__reset-filters-hover-color: $color-white-1;
 
+// method chapter filters
+$pages-method-chapter__filters-padding-top: 32px;
+$pages-method-chapter__filters-padding-right: 32px;
+$pages-method-chapter__filters-padding-bottom: 18px;
+$pages-method-chapter__filters-padding-left: 32px;
+$pages-method-chapter__filters-border-color: $secondary-bg-color;
+$pages-method-chapter__filters-box-shadow-color: $secondary-font-color;
+
+// search > results list
+$search-results-list__info-height: auto;
+$search-results-list__info-color: $primary-font-color-2;
+$search-results-list__info-padding-vertical: 16px;
+$search-results-list__info-padding-horizontal: 32px;
+
 // ui > file-icons
 $ui-file-icon-width: 33.33px;
 $ui-file-icon-height: 40px;
