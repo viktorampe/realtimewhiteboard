@@ -1,5 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatDivider, MatIconRegistry, MatListItem, MatListModule } from '@angular/material';
+import {
+  MatDivider,
+  MatIconRegistry,
+  MatListItem,
+  MatListModule
+} from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 import { PersonFixture, PersonInterface, RoleFixture } from '@campus/dal';
@@ -108,8 +113,6 @@ describe('SettingsDashboardComponent', () => {
         });
 
         it('should use the correct template for the list items', () => {
-          console.log(component.useNavItemStyle);
-
           const matList = fixture.debugElement.query(
             By.css('.pages-settings-dashboard__mat-list')
           );
