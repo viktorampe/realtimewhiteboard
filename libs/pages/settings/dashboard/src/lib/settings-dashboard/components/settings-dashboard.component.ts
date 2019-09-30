@@ -11,7 +11,7 @@ import { SettingsDashboardViewModel } from './settings-dashboard.viewmodel';
 })
 export class SettingsDashboardComponent implements OnInit {
   links$: Observable<NavItem[]> = this.viewModel.links$;
-  useNavItemStyle: boolean = this.viewModel.environmentUi.useNavItemStyle;
+  useNavItemStyle: boolean;
 
   user$: Observable<{
     badgeInfo: BadgePersonInterface;
@@ -21,6 +21,7 @@ export class SettingsDashboardComponent implements OnInit {
   constructor(private viewModel: SettingsDashboardViewModel) {}
 
   ngOnInit() {
+    this.useNavItemStyle = this.viewModel.environmentUi.useNavItemStyle;
     this.user$ = this.viewModel.user$.pipe(
       map(user => ({
         badgeInfo: {

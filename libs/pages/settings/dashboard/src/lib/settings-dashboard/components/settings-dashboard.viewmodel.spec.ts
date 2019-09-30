@@ -1,16 +1,41 @@
 import { TestBed } from '@angular/core/testing';
+import { DalState } from '@campus/dal';
+import {
+  ENVIRONMENT_UI_TOKEN,
+  NAVIGATION_ITEM_SERVICE_TOKEN
+} from '@campus/shared';
+import { Store, StoreModule } from '@ngrx/store';
+import { configureTestSuite } from 'ng-bullet';
+import { SettingsDashboardViewModel } from './settings-dashboard.viewmodel';
 
 describe('SettingsDashboardViewModel', () => {
-  beforeAll(() => {});
+  let settingsDashboardViewModel: SettingsDashboardViewModel;
+  let store: Store<DalState>;
 
-  beforeEach(() => {
+  configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [],
-      providers: []
+      imports: [StoreModule.forRoot({})],
+      providers: [
+        SettingsDashboardViewModel,
+        Store,
+        {
+          provide: NAVIGATION_ITEM_SERVICE_TOKEN,
+          useValue: {}
+        },
+        {
+          provide: ENVIRONMENT_UI_TOKEN,
+          useValue: {}
+        }
+      ]
     });
   });
 
-  it('should do something', () => {
-    return;
+  beforeEach(() => {
+    settingsDashboardViewModel = TestBed.get(SettingsDashboardViewModel);
+    store = TestBed.get(Store);
+  });
+
+  it('should be defined', () => {
+    expect(settingsDashboardViewModel).toBeDefined();
   });
 });
