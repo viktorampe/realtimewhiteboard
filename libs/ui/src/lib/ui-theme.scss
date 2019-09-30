@@ -47,12 +47,18 @@ $ui-form-actions-padding: 20px 0 0 0 !default;
 $ui-form-spacing: 5px !default;
 
 // sizes
-$ui-person-badge-size-large: 96px !default;
+$ui-person-badge-size-large: 200px !default;
 $ui-person-badge-size-large-font-size: $ui-person-badge-size-large / 2 !default;
+$ui-person-badge-size-large_name-font-size: 20px !default;
+$ui-person-badge-size-large_sub-text-font-size: 16px !default;
 $ui-person-badge-size-medium: 48px !default;
 $ui-person-badge-size-medium-font-size: $ui-person-badge-size-medium / 2 !default;
+$ui-person-badge-size-medium_name-font-size: 14px !default;
+$ui-person-badge-size-medium_sub-text-font-size: 14px !default;
 $ui-person-badge-size-small: 36px !default;
 $ui-person-badge-size-small-font-size: $ui-person-badge-size-small / 2 !default;
+$ui-person-badge-size-small_name-font-size: 14px !default;
+$ui-person-badge-size-small_sub-text-font-size: 14px !default;
 $ui-icon-size-large: 96px !default;
 $ui-icon-size-medium: 48px !default;
 $ui-icon-size-small: 36px !default;

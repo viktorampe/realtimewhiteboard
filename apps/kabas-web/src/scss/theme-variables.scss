@@ -123,6 +123,9 @@ $ui-shell__logo-border-left: 50px solid $color-white-1;
 $ui-shell__left__content-border-left: 50px solid $color-gray-2;
 $ui-shell__logo__img-width: 100%;
 
+// ui > person badge
+$ui-person-badge-border-radius: 0;
+
 // ui > forms
 $ui-form-button-default-bg-color: $color-gray-2;
 $ui-form-button-primary-bg-color: $color-orange-1;
@@ -215,3 +218,18 @@ $pages-methods-background-color--primary: $primary-bg-color;
 $pages-methods-border-color--primary: $color-gray-2;
 $pages-methods-text-color--secondary: $primary-font-color-2;
 $pages-methods-background-color--secondary: $secondary-bg-color;
+
+//settings
+$pages-settings_page-header-display: none;
+$pages-settings_container-max-width: 320px;
+$pages-settings_container-background-color: $color-white-1;
+$pages-settings_container-box-shadow: 0px 0px 8px 2px $color-gray-3;
+$pages-settings_avatar_container-width: 100%;
+$pages-settings_avatar-padding-top: 60px; // (container width - badge width) / 2
+$pages-settings_avatar-padding-bottom: 30px;
+$pages-settings_avatar-subtext-color: $primary-font-color-2;
+
+$pages-settings_mat-list-margin-bottom: 48px; //= mat-list-item height
+$pages-settings_mat-list_item-color: $primary-font-color;
+$pages-settings_mat-list_item-font-weight: bold;
+$pages-settings_mat-list_item-background-color--accent: $secondary-bg-color;

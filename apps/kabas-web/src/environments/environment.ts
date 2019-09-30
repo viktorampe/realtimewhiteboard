@@ -62,6 +62,9 @@ export const environment: EnvironmentInterface = {
   searchModes: searchModes,
   testing: {
     removeDataCyAttributes: false
+  },
+  ui: {
+    useNavItemStyle: true
   }
 };
 

@@ -57,5 +57,8 @@ export const environment = {
   searchModes: searchModes,
   testing: {
     removeDataCyAttributes: false
+  },
+  ui: {
+    useNavItemStyle: true
   }
 };
