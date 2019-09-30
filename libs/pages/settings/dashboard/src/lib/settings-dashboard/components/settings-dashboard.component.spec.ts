@@ -1,17 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import {
-  MatDivider,
-  MatIconRegistry,
-  MatListItem,
-  MatListModule
-} from '@angular/material';
+import { MatDivider, MatIconRegistry, MatListItem, MatListModule } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 import { PersonFixture, PersonInterface, RoleFixture } from '@campus/dal';
 import { ENVIRONMENT_ICON_MAPPING_TOKEN, SharedModule } from '@campus/shared';
 import { MockMatIconRegistry } from '@campus/testing';
-import { ButtonComponent, UiModule } from '@campus/ui';
-import { PersonBadgeComponent } from 'libs/ui/src/lib/person-badge/person-badge.component';
+import { ButtonComponent, PersonBadgeComponent, UiModule } from '@campus/ui';
 import { configureTestSuite } from 'ng-bullet';
 import { BehaviorSubject } from 'rxjs';
 import { SettingsDashboardComponent } from './settings-dashboard.component';
@@ -98,7 +92,7 @@ describe('SettingsDashboardComponent', () => {
       });
 
       it('should use the correct template for the list items', () => {
-        let matList = fixture.debugElement.query(
+        const matList = fixture.debugElement.query(
           By.css('.pages-settings-dashboard__mat-list')
         );
         const buttonChildren = matList.queryAll(By.directive(ButtonComponent));
