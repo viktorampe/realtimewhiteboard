@@ -1,3 +1,11 @@
+.method-method__container__files {
+  .mat-list-item {
+    &.method-file {
+      border-left: solid 2px transparent;
+    }
+  }
+}
+
 @mixin file-icon($classModifier, $color) {
   .ui-file-icon--#{$classModifier} {
     border-color: $color;
@@ -36,22 +44,3 @@
 ); // general file
 
 @include file-icon('product-type-doelen', #9ca70a); // learning plan goal
-
-.method-method__container__files {
-  .ui-file-icon {
-    background-color: transparent;
-    height: 40px;
-    width: 33.33px;
-    padding: 0px;
-    > div {
-      color: $color-red-1;
-      top: 35%;
-    }
-  }
-
-  .mat-list-item {
-    &.method-file {
-      border-left: solid 2px transparent;
-    }
-  }
-}
