@@ -38,7 +38,8 @@ configureBufferSize(150);
       environment.api,
       environment.sso,
       environment.searchModes,
-      environment.testing
+      environment.testing,
+      environment.ui
     ),
     NxModule.forRoot(),
     DalModule.forRoot({ apiBaseUrl: environment.api.APIBase }),
