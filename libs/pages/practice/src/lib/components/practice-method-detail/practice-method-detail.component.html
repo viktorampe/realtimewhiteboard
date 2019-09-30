@@ -1,4 +1,8 @@
-<div class="pages-practice-method-detail__container">
+<div class="pages-practice-method-detail__container campus-page">
+  <campus-page-header
+    [title]="'Vrij oefenen in ' + (breadCrumbTitles$ | async)"
+  >
+  </campus-page-header>
   <p
     >Duid aan welke hoofdstukken leerlingen mogen oefenen voor
     {{ breadCrumbTitles$ | async }}</p

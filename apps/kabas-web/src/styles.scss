@@ -41,6 +41,8 @@ body {
 @include pages-home-theme();
 @import 'libs/pages/settings/pages-settings.theme';
 @include pages-settings-theme();
+@import 'libs/pages/practice/src/lib/components/practice-method-detail/practice-method-detail.component.theme';
+@include pages-practice-method-detail();
 
 // include shared lib scss
 @import 'libs/shared/src/lib/shared-theme';
@@ -49,6 +51,9 @@ body {
 // include search lib scss
 @import 'libs/search/src/lib/search-theme';
 @include search-theme();
+
+@import './app/components/searchresults/edu-content-search-result.component.theme';
+@include app-edu-content-search-result();
 
 [ng-reflect-router-link] {
   cursor: pointer;
@@ -159,6 +164,7 @@ p {
 
 .mat-checkbox {
   &-disabled {
+
     .mat-checkbox-frame,
     .mat-checkbox-background {
       border: 2px solid $primary-font-color-2 !important;
@@ -187,9 +193,7 @@ p {
   }
 }
 
-.mat-checkbox:not(.mat-checkbox-disabled).mat-primary
-  .mat-checkbox-ripple
-  .mat-ripple-element {
+.mat-checkbox:not(.mat-checkbox-disabled).mat-primary .mat-checkbox-ripple .mat-ripple-element {
   background-color: $secondary-font-color-accent;
 }
 
@@ -198,6 +202,12 @@ p {
   width: 24px;
 }
 
+/* ng material tabs */
+.mat-tab-body-content {
+  padding: $kabas-page-vertical-padding $kabas-page-horizontal-padding;
+}
+
+/* page specifics */
 .pages-home__container,
 .pages-methods-overview,
 .pages-practice-overview,
@@ -205,8 +215,9 @@ p {
 .pages-settings-dashboard,
 .pages-settings-alerts {
   position: relative;
+  padding-top: 0;
 
-  > * {
+  >* {
     z-index: 1;
     position: relative;
     display: flex;
@@ -225,9 +236,15 @@ p {
   }
 }
 
+.search-results {
+  .ui-list-view__list {
+    align-items: flex-start !important;
+  }
+}
+
 .pages-home__container {
   &.no-favorites {
-    padding-top: 20px;
+    padding-top: $kabas-page-vertical-padding;
 
     &:after {
       display: none;
@@ -254,6 +271,22 @@ p {
   }
 }
 
+.ui-multi-check-box-table {
+  margin: 0 (-$kabas-page-horizontal-padding);
+
+  th:first-child,
+  td:first-child {
+    padding-left: $kabas-page-horizontal-padding;
+    border-left: none;
+  }
+
+  th:last-child,
+  td:last-child {
+    padding-right: $kabas-page-horizontal-padding;
+    border-right: none;
+  }
+}
+
 @import 'scss/theme-file-icons';
 
 /*
@@ -262,13 +295,11 @@ p {
 @font-face {
   font-family: FontAwesome;
   src: url(/assets/fonts/fontawesome-webfont.eot?v=4.4.0);
-  src: url(/assets/fonts/fontawesome-webfont.eot?#iefix&v=4.4.0)
-      format('embedded-opentype'),
+  src: url(/assets/fonts/fontawesome-webfont.eot?#iefix&v=4.4.0) format('embedded-opentype'),
     url(/assets/fonts/fontawesome-webfont.woff2?v=4.4.0) format('woff2'),
     url(/assets/fonts/fontawesome-webfont.woff?v=4.4.0) format('woff'),
     url(/assets/fonts/fontawesome-webfont.ttf?v=4.4.0) format('truetype'),
-    url(/assets/fonts/fontawesome-webfont.svg?v=4.4.0#fontawesomeregular)
-      format('svg');
+    url(/assets/fonts/fontawesome-webfont.svg?v=4.4.0#fontawesomeregular) format('svg');
   font-weight: 400;
   font-style: normal;
 }
@@ -276,13 +307,11 @@ p {
 @font-face {
   font-family: simple-line-icons;
   src: url(/assets/fonts/Simple-Line-Icons.eot?v=2.2.2);
-  src: url(/assets/fonts/Simple-Line-Icons.eot?v=2.2.2#iefix)
-      format('embedded-opentype'),
+  src: url(/assets/fonts/Simple-Line-Icons.eot?v=2.2.2#iefix) format('embedded-opentype'),
     url(/assets/fonts/Simple-Line-Icons.ttf?v=2.2.2) format('truetype'),
     url(/assets/fonts/Simple-Line-Icons.woff2?v=2.2.2) format('woff2'),
     url(/assets/fonts/Simple-Line-Icons.woff?v=2.2.2) format('woff'),
-    url(/assets/fonts/Simple-Line-Icons.svg?v=2.2.2#simple-line-icons)
-      format('svg');
+    url(/assets/fonts/Simple-Line-Icons.svg?v=2.2.2#simple-line-icons) format('svg');
   font-weight: 400;
   font-style: normal;
 }
@@ -290,13 +319,11 @@ p {
 @font-face {
   font-family: 'Glyphicons Halflings';
   src: url(/assets/fonts/glyphicons-halflings-regular.eot);
-  src: url(/assets/fonts/glyphicons-halflings-regular.eot?#iefix)
-      format('embedded-opentype'),
+  src: url(/assets/fonts/glyphicons-halflings-regular.eot?#iefix) format('embedded-opentype'),
     url(/assets/fonts/glyphicons-halflings-regular.woff2) format('woff2'),
     url(/assets/fonts/glyphicons-halflings-regular.woff) format('woff'),
     url(/assets/fonts/glyphicons-halflings-regular.ttf) format('truetype'),
-    url(/assets/fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular)
-      format('svg');
+    url(/assets/fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular) format('svg');
 }
 
 @font-face {
