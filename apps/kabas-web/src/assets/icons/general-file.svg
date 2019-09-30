@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Generator: Adobe Illustrator 23.0.6, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 51.8 65.8" style="enable-background:new 0 0 51.8 65.8;" xml:space="preserve">
-<g id="academic_grading_2_">
-	<g>
-		<g>
-			<path d="M47.9,65.8h-44c-2.2,0-3.9-1.8-3.9-3.9v-47c0-0.5,0.2-1,0.6-1.4l13-13C13.9,0.2,14.4,0,14.9,0h33
+<svg version="1.1" id="Layer_1" 
+  xmlns="http://www.w3.org/2000/svg" 
+  xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 51.8 65.8" style="enable-background:new 0 0 51.8 65.8;" xml:space="preserve">
+  <g id="academic_grading_1_">
+    <g>
+      <g>
+        <path d="M47.9,65.8h-44c-2.2,0-3.9-1.8-3.9-3.9v-47c0-0.5,0.2-1,0.6-1.4l13-13C13.9,0.2,14.4,0,14.9,0h33
 				c2.2,0,3.9,1.8,3.9,3.9v58C51.8,64.1,50.1,65.8,47.9,65.8z M3.8,15.7v46.2c0,0,0,0.1,0.1,0.1h44c0,0,0.1,0,0.1-0.1v-58
 				c0,0,0-0.1-0.1-0.1H15.7L3.8,15.7z"/>
-		</g>
-		<g>
-			<path d="M13.8,16.8H1.9C0.9,16.8,0,16,0,14.9S0.9,13,1.9,13h11V2.5c0-1.1,0.9-1.9,1.9-1.9s1.9,0.9,1.9,1.9v11.4
+      </g>
+      <g>
+        <path d="M13.8,16.8H1.9C0.8,16.8,0,16,0,14.9S0.8,13,1.9,13h11V2.5c0-1.1,0.9-1.9,1.9-1.9s1.9,0.9,1.9,1.9v11.4
 				C16.7,15.6,15.5,16.8,13.8,16.8z"/>
-		</g>
-	</g>
-</g>
+      </g>
+    </g>
+  </g>
 </svg>

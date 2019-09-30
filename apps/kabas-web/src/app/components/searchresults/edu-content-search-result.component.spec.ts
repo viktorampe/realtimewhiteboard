@@ -108,18 +108,39 @@ describe('EduContentSearchResultComponent', () => {
   });
 
   describe('template', () => {
-    it('should show the file extension of the eduContent', () => {
+    it('should set file icon label to the eduContent fileExtension', () => {
       const extensionDE = fixture.debugElement.query(
         By.css('.app-educontentsearchresult__extension')
       );
 
-      expect(extensionDE.componentInstance.extensionClass).toBe(
+      expect(extensionDE.componentInstance.label).toBe(
         mockEduContent.fileExtension
       );
+    });
 
-      expect(extensionDE.componentInstance.title).toBe(
-        mockEduContent.fileTypeLabel
+    it('should clear the file icon label if the eduContent is an exercise', () => {
+      const extensionDE = fixture.debugElement.query(
+        By.css('.app-educontentsearchresult__extension')
       );
+
+      component.data = {
+        eduContent: new EduContentFixture({
+          id: 1,
+          publishedEduContentMetadata: new EduContentMetadataFixture({
+            title: 'De breuken',
+            description: 'mock description',
+            fileExt: 'ludo.zip',
+            fileLabel: 'pdfLabel',
+            diaboloPhase: new DiaboloPhaseFixture({
+              icon: 'diabolo-intro'
+            })
+          })
+        })
+      } as EduContentSearchResultInterface;
+
+      fixture.detectChanges();
+
+      expect(extensionDE.componentInstance.label).toBe('');
     });
 
     it('should show the title and description of the eduContent', () => {
@@ -159,7 +180,6 @@ describe('EduContentSearchResultComponent', () => {
         const clickAction = jest.spyOn(component, 'onActionClick');
 
         expect(actionDE.nativeElement.textContent).toBe(mockAction.label);
-        expect(actionDE.componentInstance.iconClass).toBe(mockAction.icon);
 
         actionDE.nativeElement.click();
         expect(clickAction).toHaveBeenCalled();

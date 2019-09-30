@@ -1,4 +1,4 @@
-import { Component, Inject, Input, OnInit } from '@angular/core';
+import { Component, HostBinding, Inject, Input, OnInit } from '@angular/core';
 import { ResultItemBase } from '@campus/search';
 import {
   ContentActionInterface,
@@ -18,6 +18,9 @@ export class EduContentSearchResultComponent extends ResultItemBase
   @Input() data: EduContentSearchResultInterface;
 
   actions: ContentActionInterface[];
+
+  @HostBinding('class.app-educontentsearchresult')
+  appEduContentSearchResultClass = true;
 
   constructor(
     @Inject(CONTENT_ACTIONS_SERVICE_TOKEN)

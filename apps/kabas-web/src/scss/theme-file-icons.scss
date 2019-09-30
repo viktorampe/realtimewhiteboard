@@ -9,7 +9,6 @@
     > div {
       color: $color;
       border-color: $color;
-      background-color: lighten($color, 60);
     }
   }
 
@@ -30,6 +29,10 @@
 @include file-icon(
   'product-type-algemeen-bestand',
   $color-red-1
+); // general file
+@include file-icon(
+  'product-type-zoekresultaat-algemeen-bestand',
+  $color-blue-3
 ); // general file
 
 @include file-icon('product-type-doelen', #9ca70a); // learning plan goal

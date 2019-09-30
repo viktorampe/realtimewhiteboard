@@ -21,6 +21,7 @@ body {
  */
 @import 'scss/theme-angular-material';
 @include angular-material-theme($app-theme);
+@include angular-material-typography($app-typography);
 
 // load all variables for your app theme and ui components
 @import 'scss/theme-variables';
@@ -48,6 +49,9 @@ body {
 // include search lib scss
 @import 'libs/search/src/lib/search-theme';
 @include search-theme();
+
+@import './app/components/searchresults/edu-content-search-result.component.theme';
+@include app-edu-content-search-result();
 
 [ng-reflect-router-link] {
   cursor: pointer;
@@ -226,6 +230,12 @@ p {
     height: 187px;
     background: $shared_header__page-bar_background;
     z-index: 0;
+  }
+}
+
+.search-results {
+  .ui-list-view__list {
+    align-items: flex-start !important;
   }
 }
 
