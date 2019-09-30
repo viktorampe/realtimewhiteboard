@@ -7,6 +7,7 @@ export interface MethodInterface {
   icon?: string;
   logoUrl?: string;
   experimental?: boolean;
+  code?: string;
   id?: number;
   learningAreaId?: number;
   productContents?: ProductContentInterface[];

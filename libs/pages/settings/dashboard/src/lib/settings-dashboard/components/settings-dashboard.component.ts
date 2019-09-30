@@ -38,7 +38,7 @@ export class SettingsDashboardComponent implements OnInit {
   private getUserTypeTranslation(roles: { name: string }[]): string[] {
     return roles.map(role => translateRole(role.name));
 
-    function translateRole(role: string) {
+    function translateRole(role: string): string {
       switch (role) {
         case 'teacher':
           return 'Leerkracht';

@@ -87,11 +87,12 @@
               </div>
 
               <div
-                data-cy="diabolo-info"
                 *ngIf="(book$ | async)?.diabolo"
                 class="method-method__container__boeke__diabolo"
               >
-                <span>{{ method.name }} is een diabolo methode.</span><br />
+                <span data-cy="diabolo-info"
+                  >{{ method.name }} is een diabolo methode.</span
+                ><br />
                 <a
                   href="https://www.diekeure.be/nl-be/educatief/lager-onderwijs/diabolo"
                   target="_blank"
@@ -106,34 +107,46 @@
             class="method-method__container__files"
           >
             <ng-container *ngFor="let productType of (productTypes$ | async)">
-              <div *ngIf="generalFilesByType[productType.id] as generalFiles">
-                <h3 mat-subheader>{{ productType.name }}</h3>
+              <ng-container
+                *ngIf="generalFilesByType[productType.id] as generalFiles"
+              >
+                <div class="method-method__container__files-header">{{
+                  productType.name
+                }}</div>
                 <mat-nav-list>
                   <mat-list-item
                     data-cy="general-file"
                     *ngFor="let generalFile of generalFiles"
                     (click)="clickOpenGeneralFile(generalFile)"
+                    class="method-file"
                   >
-                    <campus-file-extension
-                      [extensionClass]="generalFile.fileExtension"
-                      [title]="generalFile.fileTypeLabel"
-                    ></campus-file-extension>
-                    <div>
-                      {{ generalFile.name }}
-                      <br />{{ generalFile.description }}
+                    <div class="method-file__content">
+                      <campus-file-icon
+                        [classModifier]="getProductTypeClass(productType)"
+                        [label]="generalFile.fileExtension"
+                        [icon]="getProductTypeIcon(productType)"
+                      ></campus-file-icon>
+                      <div class="method-file__copy">
+                        <div class="method-file__title"
+                          >{{ generalFile.name }}
+                        </div>
+                        <div class="method-file__description">{{
+                          generalFile.description
+                        }}</div>
+                      </div>
                     </div>
                   </mat-list-item>
                 </mat-nav-list>
-              </div>
+              </ng-container>
             </ng-container>
           </div>
         </mat-tab>
 
         <mat-tab label="Leerplandoelen">
-          <div class="method-method__container__goals">
+          <p>
             Hieronder vind je een overzicht van de leerplandoelen die horen bij
             {{ breadcrumbTitles$ | async }}.
-          </div>
+          </p>
 
           <campus-multi-check-box-table
             [rowHeaderColumns]="learningPlanGoalTableHeaders"

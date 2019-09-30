@@ -21,6 +21,7 @@ body {
  */
 @import 'scss/theme-angular-material';
 @include angular-material-theme($app-theme);
+@include angular-material-typography($app-typography);
 
 // load all variables for your app theme and ui components
 @import 'scss/theme-variables';
@@ -40,6 +41,8 @@ body {
 @include pages-home-theme();
 @import 'libs/pages/settings/pages-settings.theme';
 @include pages-settings-theme();
+@import 'libs/pages/practice/src/lib/components/practice-method-detail/practice-method-detail.component.theme';
+@include pages-practice-method-detail();
 
 // include shared lib scss
 @import 'libs/shared/src/lib/shared-theme';
@@ -48,6 +51,9 @@ body {
 // include search lib scss
 @import 'libs/search/src/lib/search-theme';
 @include search-theme();
+
+@import './app/components/searchresults/edu-content-search-result.component.theme';
+@include app-edu-content-search-result();
 
 [ng-reflect-router-link] {
   cursor: pointer;
@@ -62,13 +68,27 @@ body {
   color: $primary-font-color;
 }
 
+h2 {
+  font-weight: normal;
+}
+
+p {
+  margin: 0 0 1em 0;
+}
+
 .mat-drawer-side {
   border-right: none;
 }
 
-.ui-shell__logo {
-  img {
-    margin-top: 20px;
+.ui-shell {
+  &__logo {
+    img {
+      margin-top: 28px;
+    }
+  }
+
+  &__left__content {
+    padding-top: 15px;
   }
 }
 
@@ -134,24 +154,6 @@ body {
   }
 }
 
-.pages-home__container__shortcuts__list__shortcut {
-  &--methods mat-icon {
-    stroke: $color-lila-1;
-  }
-
-  &--tasks mat-icon {
-    fill: $color-green-1;
-  }
-
-  &--results mat-icon {
-    fill: $color-orange-1;
-  }
-
-  &--differentiate mat-icon {
-    stroke: $color-red-1;
-  }
-}
-
 /* Material checkboxes */
 .mat-checkbox .mat-checkbox-frame,
 .mat-checkbox-checked .mat-checkbox-background {
@@ -201,6 +203,12 @@ body {
   width: 24px;
 }
 
+/* ng material tabs */
+.mat-tab-body-content {
+  padding: $kabas-page-vertical-padding $kabas-page-horizontal-padding;
+}
+
+/* page specifics */
 .pages-home__container,
 .pages-methods-overview,
 .pages-practice-overview,
@@ -208,6 +216,7 @@ body {
 .pages-settings-dashboard,
 .pages-settings-alerts {
   position: relative;
+  padding-top: 0;
 
   > * {
     z-index: 1;
@@ -222,9 +231,60 @@ body {
     left: 0;
     right: 0;
     top: 0;
-    height: 260px;
+    height: 187px;
     background: $shared_header__page-bar_background;
     z-index: 0;
+  }
+}
+
+.search-results {
+  .ui-list-view__list {
+    align-items: flex-start !important;
+  }
+}
+
+.pages-home__container {
+  &.no-favorites {
+    padding-top: $kabas-page-vertical-padding;
+
+    &:after {
+      display: none;
+    }
+  }
+
+  &__shortcuts__list__shortcut {
+    &--methods mat-icon {
+      fill: $color-lila-1;
+      width: 64px;
+    }
+
+    &--tasks mat-icon {
+      fill: $color-green-1;
+    }
+
+    &--results mat-icon {
+      fill: $color-orange-1;
+    }
+
+    &--differentiate mat-icon {
+      fill: $color-red-1;
+    }
+  }
+}
+
+.ui-multi-check-box-table {
+  margin: 0 (-$kabas-page-horizontal-padding);
+
+  th:first-child,
+  td:first-child {
+    padding-left: $kabas-page-horizontal-padding;
+    border-left: none;
+  }
+
+  th:last-child,
+  td:last-child {
+    padding-right: $kabas-page-horizontal-padding;
+    border-right: none;
   }
 }
 

@@ -124,7 +124,7 @@ describe('MethodComponent', () => {
     expect(generalFiles.length).toBe(6);
 
     const productTypeHeaders = fixture.debugElement.queryAll(
-      By.css('div[main] h3[mat-subheader]')
+      By.css('div[main] .method-method__container__files-header')
     );
     expect(productTypeHeaders.length).toBe(2);
   });

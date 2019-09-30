@@ -5,6 +5,7 @@ export class MethodFixture implements MethodInterface {
   icon?: string;
   logoUrl?: string;
   experimental?: boolean;
+  code?: string;
   id?: number;
   learningAreaId?: number;
   learningArea?: LearningAreaInterface;

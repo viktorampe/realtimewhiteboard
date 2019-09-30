@@ -1,14 +1,38 @@
 @mixin ui-multi-check-box-table_theme() {
+  $ui-multi-check-box-table-width: 100% !default;
+  $ui-multi-check-box-table_row-header_item-width: 80px !default;
+  $ui-multi-check-box-table_row-header_last-min-width: 450px !default;
   // color palette
   $ui-multi-check-box-table_row-color--even: $ui-list-row-bg-even !default;
   $ui-multi-check-box-table_row-color--odd: $ui-list-row-bg-odd !default;
   // spacing base
   $ui-multi-check-box-table_cell-padding: 8px !default;
+  $ui-multi-check-box-table_cell-border: 2px solid $ui-list-row-bg-odd !default;
 
   .ui-multi-check-box-table {
+    display: block;
+
+    table {
+      border-collapse: collapse;
+      width: $ui-multi-check-box-table-width;
+    }
+
     td,
     th {
       padding: $ui-multi-check-box-table_cell-padding;
+      border: $ui-multi-check-box-table_cell-border;
+    }
+
+    &__header {
+      &--row-header {
+        &--last {
+          min-width: $ui-multi-check-box-table_row-header_last-min-width;
+        }
+      }
+
+      &--item {
+        width: $ui-multi-check-box-table_row-header_item-width;
+      }
     }
 
     &__body {
@@ -26,6 +50,10 @@
 
         &--odd {
           background-color: $ui-multi-check-box-table_row-color--odd;
+        }
+
+        &__cell {
+          vertical-align: top;
         }
       }
     }

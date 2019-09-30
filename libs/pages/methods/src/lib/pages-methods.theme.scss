@@ -14,6 +14,7 @@ $pages-methods-background-color--secondary: whitesmoke !default;
 // measurements
 $pages-method__chapter-padding-left: 40px !default; // = breadcrumb padding left
 $pages-method__chapter-font-weight: 600 !default; // = somewhat lighter than left column
+$pages-method__list-section-title-font-size: 16px !default;
 
 .method-method__container,
 .method-chapter {
@@ -35,7 +36,6 @@ $pages-method__chapter-font-weight: 600 !default; // = somewhat lighter than lef
       display: flex;
       flex-direction: column;
       flex: 1 1 auto;
-      padding: 20px 40px;
     }
   }
 
@@ -50,6 +50,7 @@ $pages-method__chapter-font-weight: 600 !default; // = somewhat lighter than lef
 
   .mat-tab-body-wrapper {
     flex: 1 1 auto;
+    height: 0; // forces vertical scrollbar inside tab
   }
 
   .mat-tab-body-content {

@@ -38,8 +38,8 @@ describe('PracticeViewModel', () => {
       2: new EduContentFixture({ id: 2 }, { eduContentBookId: 4 })
     };
     const methods = {
-      1: new MethodFixture({ id: 1, logoUrl: 'Katapult.svg' }),
-      2: new MethodFixture({ id: 2, logoUrl: 'Molenbeer.svg' })
+      1: new MethodFixture({ id: 1, code: 'katapult' }),
+      2: new MethodFixture({ id: 2, code: 'mol-en-beer' })
     };
     const books = {
       3: new EduContentBookFixture({ id: 3, methodId: 1 }),
@@ -60,13 +60,13 @@ describe('PracticeViewModel', () => {
           favorite: favoritesByType[0],
           bookId: eduContents[1].publishedEduContentMetadata.eduContentBookId,
           eduContent: eduContents[1],
-          logoUrl: methods[1].logoUrl
+          logoUrl: 'assets/methods/' + methods[1].code + '.jpg'
         },
         {
           favorite: favoritesByType[1],
           bookId: eduContents[2].publishedEduContentMetadata.eduContentBookId,
           eduContent: eduContents[2],
-          logoUrl: methods[2].logoUrl
+          logoUrl: 'assets/methods/' + methods[2].code + '.jpg'
         },
         {
           favorite: favoritesByType[2],
