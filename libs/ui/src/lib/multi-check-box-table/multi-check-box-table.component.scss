@@ -2,6 +2,7 @@
   &__header {
     &--row-header {
       text-align: left;
+      vertical-align: bottom;
     }
 
     &--item {
@@ -26,14 +27,16 @@
       }
 
       &__cell {
-        &--row-header {
-          &--last {
-            width: 100%;
-          }
-        }
-
         &--checkbox {
           text-align: center;
+          vertical-align: middle;
+          padding-top: 0;
+          padding-bottom: 0;
+
+          .mat-checkbox-disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+          }
         }
       }
     }

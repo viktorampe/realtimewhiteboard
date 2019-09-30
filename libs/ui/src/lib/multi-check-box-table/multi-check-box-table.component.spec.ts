@@ -425,7 +425,9 @@ describe('MultiCheckBoxTableComponent', () => {
 
           bodyCheckBoxes = fixture.debugElement
             .queryAll(
-              By.css('.ui-multi-check-box-table__body__row__cell--checkbox')
+              By.css(
+                'tbody .ui-multi-check-box-table__body__row__cell--checkbox'
+              )
             )
             .map(bodyRow => bodyRow.query(By.directive(MatCheckbox)));
         });
