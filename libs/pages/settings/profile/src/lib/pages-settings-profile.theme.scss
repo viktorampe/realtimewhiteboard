@@ -1,5 +1,7 @@
 @import './components/avatar/avatar.component.theme';
+@import './components/profile/profile.component.theme';
 
 @mixin pages-settings-profile-theme() {
+  @include pages-settings-profile-component-theme();
   @include pages-settings-profile-avatar-theme();
 }
