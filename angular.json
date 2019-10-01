@@ -23,14 +23,20 @@
               "apps/polpo-classroom-web/src/assets"
             ],
             "styles": ["apps/polpo-classroom-web/src/styles.scss"],
-            "scripts": []
+            "scripts": [
+              {
+                "input": "node_modules/document-register-element/build/document-register-element.js"
+              }
+            ]
           },
           "configurations": {
             "staging": {
-              "fileReplacements": [{
-                "replace": "apps/polpo-classroom-web/src/environments/environment.ts",
-                "with": "apps/polpo-classroom-web/src/environments/environment.staging.ts"
-              }],
+              "fileReplacements": [
+                {
+                  "replace": "apps/polpo-classroom-web/src/environments/environment.ts",
+                  "with": "apps/polpo-classroom-web/src/environments/environment.staging.ts"
+                }
+              ],
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -40,17 +46,21 @@
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
-              "budgets": [{
-                "type": "initial",
-                "maximumWarning": "2mb",
-                "maximumError": "5mb"
-              }]
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ]
             },
             "production": {
-              "fileReplacements": [{
-                "replace": "apps/polpo-classroom-web/src/environments/environment.ts",
-                "with": "apps/polpo-classroom-web/src/environments/environment.prod.ts"
-              }],
+              "fileReplacements": [
+                {
+                  "replace": "apps/polpo-classroom-web/src/environments/environment.ts",
+                  "with": "apps/polpo-classroom-web/src/environments/environment.prod.ts"
+                }
+              ],
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -60,11 +70,13 @@
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
-              "budgets": [{
-                "type": "initial",
-                "maximumWarning": "2mb",
-                "maximumError": "5mb"
-              }]
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ]
             }
           }
         },
@@ -793,10 +805,12 @@
           },
           "configurations": {
             "staging": {
-              "fileReplacements": [{
-                "replace": "apps/kabas-web/src/environments/environment.ts",
-                "with": "apps/kabas-web/src/environments/environment.staging.ts"
-              }],
+              "fileReplacements": [
+                {
+                  "replace": "apps/kabas-web/src/environments/environment.ts",
+                  "with": "apps/kabas-web/src/environments/environment.staging.ts"
+                }
+              ],
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -806,17 +820,21 @@
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
-              "budgets": [{
-                "type": "initial",
-                "maximumWarning": "2mb",
-                "maximumError": "5mb"
-              }]
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ]
             },
             "production": {
-              "fileReplacements": [{
-                "replace": "apps/kabas-web/src/environments/environment.ts",
-                "with": "apps/kabas-web/src/environments/environment.prod.ts"
-              }],
+              "fileReplacements": [
+                {
+                  "replace": "apps/kabas-web/src/environments/environment.ts",
+                  "with": "apps/kabas-web/src/environments/environment.prod.ts"
+                }
+              ],
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -826,11 +844,13 @@
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
-              "budgets": [{
-                "type": "initial",
-                "maximumWarning": "2mb",
-                "maximumError": "5mb"
-              }]
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ]
             }
           }
         },
@@ -1046,6 +1066,129 @@
             "jestConfig": "libs/pages/home/jest.config.js",
             "tsConfig": "libs/pages/home/tsconfig.spec.json",
             "setupFile": "libs/pages/home/src/test-setup.ts"
+          }
+        }
+      }
+    },
+    "timeline": {
+      "root": "apps/timeline/",
+      "sourceRoot": "apps/timeline/src",
+      "projectType": "application",
+      "prefix": "campus",
+      "schematics": {
+        "@nrwl/schematics:component": {
+          "style": "scss"
+        }
+      },
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/apps/timeline",
+            "index": "apps/timeline/src/index.html",
+            "main": "apps/timeline/src/main.ts",
+            "polyfills": "apps/timeline/src/polyfills.ts",
+            "tsConfig": "apps/timeline/tsconfig.app.json",
+            "assets": [
+              "apps/timeline/src/favicon.ico",
+              "apps/timeline/src/assets"
+            ],
+            "styles": ["apps/timeline/src/styles.scss"],
+            "scripts": [],
+            "es5BrowserSupport": true
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/timeline/src/environments/environment.ts",
+                  "with": "apps/timeline/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "timeline:build",
+            "host": "timeline.campus.localhost",
+            "port": 3030
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "timeline:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "timeline:build"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "apps/timeline/tsconfig.app.json",
+              "apps/timeline/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**"]
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "apps/timeline/src/test.ts",
+            "tsConfig": "apps/timeline/tsconfig.spec.json",
+            "karmaConfig": "apps/timeline/karma.conf.js",
+            "polyfills": "apps/timeline/src/polyfills.ts",
+            "styles": [],
+            "scripts": [],
+            "assets": []
+          }
+        }
+      }
+    },
+    "timeline-e2e": {
+      "root": "apps/timeline-e2e",
+      "projectType": "application",
+      "prefix": "",
+      "architect": {
+        "e2e": {
+          "builder": "@angular-devkit/build-angular:protractor",
+          "options": {
+            "protractorConfig": "apps/timeline-e2e/protractor.conf.js",
+            "devServerTarget": "timeline:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "timeline:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": "apps/timeline-e2e/tsconfig.e2e.json",
+            "exclude": ["**/node_modules/**"]
           }
         }
       }
