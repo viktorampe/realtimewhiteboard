@@ -1,7 +1,7 @@
 @mixin search-term() {
   $search-search-term-transition: border-color ease-in-out 0.15s,
     box-shadow ease-in-out 0.15s !default;
-  $search-search-term-background-color: $ui-tertiary-bg-color;
+  $search-search-term-background-color: $ui-tertiary-bg-color !default;
   $search-search-term-border-color: $ui-tertiary-bg-color !default;
   $search-search-term-border-width: 1px !default;
   $search-search-term-button-background-color: $ui-button-bg-color-1 !default;
