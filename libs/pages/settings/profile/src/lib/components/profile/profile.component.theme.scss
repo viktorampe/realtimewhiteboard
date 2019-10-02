@@ -1,29 +1,39 @@
 @mixin pages-settings-profile-component-theme() {
   $pages-settings-profile__page-header-display: $pages-settings_page-header-display !default;
 
+  $pages-settings-profile__form-color: $pages-settings_form-color !default;
+  $pages-settings-profile__form-padding: $pages-settings_form-padding !default;
+  $pages-settings-profile__form__title-font-size: $pages-settings_form__title-font-size !default;
+  $pages-settings-profile__form__title-font-weight: $pages-settings_form__title-font-weight !default;
+  $pages-settings-profile__form__title-margin-bottom: $pages-settings_form__title-margin-bottom !default;
+  $pages-settings-profile__form-bg-color: $pages-settings_container-background-color !default;
+  $pages-settings-profile__form-width: $pages-settings_container-max-width !default;
+  $pages-settings-profile__form-box-shadow: $pages-settings_container-box-shadow !default;
+  $pages-settings-profile__form__input-color: $pages-settings_form__input-color !default;
+  $pages-settings-profile__form__label-color: $pages-settings_form__label-color !default;
+
   .pages-settings-profile {
     campus-page-header {
       display: $pages-settings-profile__page-header-display;
     }
 
     &__form {
-      box-shadow: 0px 0px 8px 2px #484748;
-      width: 500px;
-      color: $color-gray-4;
-      background-color: white;
-      padding: 72px 64px 52px 64px;
+      box-shadow: $pages-settings-profile__form-box-shadow;
+      width: $pages-settings-profile__form-width;
+      color: $pages-settings-profile__form-color;
+      background-color: $pages-settings-profile__form-bg-color;
+      padding: $pages-settings-profile__form-padding;
       &__title {
-        font-family: $primary-font-family;
-        font-size: 16px;
-        font-weight: bold;
-        margin-bottom: 32px;
+        font-size: $pages-settings-profile__form__title-font-size;
+        font-weight: $pages-settings-profile__form__title-font-weight;
+        margin-bottom: $pages-settings-profile__form__title-margin-bottom;
       }
       campus-profile-form {
         .mat-input-element {
-          color: $color-gray-3;
+          color: $pages-settings-profile__form__input-color;
         }
         .mat-form-field-label {
-          color: $color-gray-3;
+          color: $pages-settings-profile__form__label-color;
         }
       }
     }
