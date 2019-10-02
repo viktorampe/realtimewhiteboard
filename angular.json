@@ -1154,15 +1154,12 @@
           }
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@nrwl/builders:jest",
           "options": {
             "main": "apps/timeline/src/test.ts",
+            "jestConfig": "apps/timeline/jest.config.js",
             "tsConfig": "apps/timeline/tsconfig.spec.json",
-            "karmaConfig": "apps/timeline/karma.conf.js",
-            "polyfills": "apps/timeline/src/polyfills.ts",
-            "styles": [],
-            "scripts": [],
-            "assets": []
+            "setupFile": "apps/timeline/src/test-setup.ts"
           }
         }
       }
