@@ -135,6 +135,40 @@ $ui-button--large-font-size: 18px;
 $ui-collapsible-sheet-button-bg-color: $color-gray-2;
 $ui-collapsible-sheet-border-color: $color-gray-2;
 
+// search filters
+$search-filter-height: 50px;
+
+// search filters > search term
+$search-search-term-border-width: 0px;
+$search-search-term-button-background-color: transparent;
+$search-search-term-button-box-shadow-color: transparent;
+$search-search-term-button-border-left-width: 0;
+$search-search-term_mat-form-field_outline-opacity: 1;
+$search-search-term-button-border-width: 0px;
+$search-search-term_mat-form-field_outline-border-right-width: 1px;
+$search-search-term-button_icon-color: $primary-font-color-2;
+$search-search-term-button-hover-background-color: $color-orange-1;
+$search-search-term-button-hover-icon-color: $color-white-1;
+$search-search-term_mat-form-field_outline-border-color: $primary-font-color-2;
+
+// search filters > diabolo buttons
+$button-toggle-filter_button-group-border-radius: 0;
+$button-toggle-filter_button-group-border-color: $primary-font-color-2;
+
+// search filters > select filter
+$select-filter_mat-select-trigger-padding: 8px;
+$select-filter_mat-select-trigger-border-width: 1px;
+$select-filter_mat-select-trigger-border-color: $primary-font-color-2;
+$select-filter_mat-select-value-vertical-align: middle;
+
+// search > reset filters button
+$pages-method-chapter__reset-filters-border-color: $primary-font-color-2;
+$pages-method-chapter__reset-filters-width: $search-filter-height;
+$pages-method-chapter__reset-filters-height: $search-filter-height;
+$pages-method-chapter__reset-filters-background-color: transparent;
+$pages-method-chapter__reset-filters-hover-background-color: $color-orange-1;
+$pages-method-chapter__reset-filters-hover-color: $color-white-1;
+
 // ui > file-icons
 $ui-file-icon-width: 33.33px;
 $ui-file-icon-height: 40px;

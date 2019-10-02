@@ -32,6 +32,7 @@ export const icons = {
   close: 'assets/icons/close.svg',
   history: 'assets/icons/history.svg',
   boardbook: 'assets/icons/boardbook.svg',
+  'reset-filters': 'assets/icons/material/reset.svg',
   'general-file': 'assets/icons/general-file.svg',
   method: 'assets/icons/methods.svg',
   //TODO: These are TEMPORARY SVGs for Diabolo that I made from the PNGs
