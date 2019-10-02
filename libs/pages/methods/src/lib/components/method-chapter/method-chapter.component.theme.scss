@@ -11,8 +11,49 @@
   $pages-method-chapter__mat-list-content-margin-left--override: 16px !default; // = used for list indentation -> depth
   $pages-method-chapter__mat-list-item--selected-border-width: 4px !default;
   $pages-method-chapter__mat-list__chapter-font-weight: $pages-method__chapter-font-weight !default;
+  $pages-method-chapter__filters-margin-right: 16px !default;
+  $pages-method-chapter__filters-margin-top: 16px !default;
+  $pages-method-chapter__filters-padding: 8px !default;
+  $pages-method-chapter__reset-filters-width: 32px !default;
+  $pages-method-chapter__reset-filters-height: 32px !default;
+  $pages-method-chapter__reset-filters-border-width: 1px !default;
+  $pages-method-chapter__reset-filters-border-color: $pages-methods-text-color--secondary !default;
+  $pages-method-chapter__reset-filters-background-color: $pages-methods-background-color--secondary !default;
+  $pages-method-chapter__reset-filters-hover-background-color: $pages-methods-text-color--primary--accent !default;
+  $pages-method-chapter__reset-filters-hover-color: $pages-methods-text-color--secondary !default;
 
   .method-chapter {
+    .search-filter-title {
+      display: none;
+    }
+
+    .select-filter-component {
+      width: 150px;
+    }
+
+    &--reset-filters {
+      width: $pages-method-chapter__reset-filters-width;
+      height: $pages-method-chapter__reset-filters-height;
+      background-color: $pages-method-chapter__reset-filters-background-color;
+      border: $pages-method-chapter__reset-filters-border-width solid
+        $pages-method-chapter__reset-filters-border-color;
+
+      &:hover {
+        color: $pages-method-chapter__reset-filters-hover-color;
+        background-color: $pages-method-chapter__reset-filters-hover-background-color;
+      }
+    }
+
+    &--filters {
+      margin-top: $pages-method-chapter__filters-margin-top;
+
+      > :not(:last-child) {
+        margin-right: $pages-method-chapter__filters-margin-right;
+      }
+
+      padding: $pages-method-chapter__filters-padding;
+    }
+
     .method-chapter__lesson-link {
       &.mat-list-item .mat-list-item-content {
         padding-left: $pages-method-chapter__mat-list-padding-left--override;
