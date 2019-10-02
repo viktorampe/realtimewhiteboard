@@ -1173,12 +1173,16 @@
       "prefix": "",
       "architect": {
         "e2e": {
-          "builder": "@angular-devkit/build-angular:protractor",
+          "builder": "@nrwl/builders:cypress",
           "options": {
-            "protractorConfig": "apps/timeline-e2e/protractor.conf.js",
+            "cypressConfig": "apps/timeline-e2e/cypress.json",
+            "tsConfig": "apps/timeline-e2e/tsconfig.e2e.json",
             "devServerTarget": "timeline:serve"
           },
           "configurations": {
+            "staging": {
+              "devServerTarget": "timeline:serve:staging"
+            },
             "production": {
               "devServerTarget": "timeline:serve:production"
             }
