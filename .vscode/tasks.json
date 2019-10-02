@@ -52,7 +52,8 @@
         "pages-settings-credentials",
         "pages-settings-dashboard",
         "pages-settings-profile",
-        "pages-home"
+        "pages-home",
+        "timeline-editor"
       ],
       "default": "polpo-classroom-web"
     },
