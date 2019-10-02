@@ -1098,6 +1098,30 @@
             "es5BrowserSupport": true
           },
           "configurations": {
+            "staging": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/timeline/src/environments/environment.ts",
+                  "with": "apps/timeline/src/environments/environment.staging.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ]
+            },
             "production": {
               "fileReplacements": [
                 {
@@ -1132,6 +1156,9 @@
             "port": 3030
           },
           "configurations": {
+            "staging": {
+              "browserTarget": "timeline:build:staging"
+            },
             "production": {
               "browserTarget": "timeline:build:production"
             }
