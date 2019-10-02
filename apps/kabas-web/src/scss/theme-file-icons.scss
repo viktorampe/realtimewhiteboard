@@ -1,3 +1,11 @@
+.method-method__container__files {
+  .mat-list-item {
+    &.method-file {
+      border-left: solid 2px transparent;
+    }
+  }
+}
+
 @mixin file-icon($classModifier, $color) {
   .ui-file-icon--#{$classModifier} {
     border-color: $color;
@@ -9,6 +17,16 @@
     > div {
       color: $color;
       border-color: $color;
+    }
+  }
+
+  .method-method__container__files {
+    .producttype-#{$classModifier} {
+      &.method-file {
+        &:hover {
+          border-left: solid 2px $color;
+        }
+      }
     }
   }
 }
