@@ -1,7 +1,7 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "outDir": "../../dist/out-tsc/apps/timeline",
+    "outDir": "../../dist/out-tsc/apps/timeline-editor",
     "types": []
   },
   "exclude": ["src/test.ts", "**/*.spec.ts"],

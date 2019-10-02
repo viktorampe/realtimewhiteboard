@@ -1070,9 +1070,9 @@
         }
       }
     },
-    "timeline": {
-      "root": "apps/timeline/",
-      "sourceRoot": "apps/timeline/src",
+    "timeline-editor": {
+      "root": "apps/timeline-editor/",
+      "sourceRoot": "apps/timeline-editor/src",
       "projectType": "application",
       "prefix": "campus",
       "schematics": {
@@ -1084,16 +1084,16 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/apps/timeline",
-            "index": "apps/timeline/src/index.html",
-            "main": "apps/timeline/src/main.ts",
-            "polyfills": "apps/timeline/src/polyfills.ts",
-            "tsConfig": "apps/timeline/tsconfig.app.json",
+            "outputPath": "dist/apps/timeline-editor",
+            "index": "apps/timeline-editor/src/index.html",
+            "main": "apps/timeline-editor/src/main.ts",
+            "polyfills": "apps/timeline-editor/src/polyfills.ts",
+            "tsConfig": "apps/timeline-editor/tsconfig.app.json",
             "assets": [
-              "apps/timeline/src/favicon.ico",
-              "apps/timeline/src/assets"
+              "apps/timeline-editor/src/favicon.ico",
+              "apps/timeline-editor/src/assets"
             ],
-            "styles": ["apps/timeline/src/styles.scss"],
+            "styles": ["apps/timeline-editor/src/styles.scss"],
             "scripts": [],
             "es5BrowserSupport": true
           },
@@ -1101,8 +1101,8 @@
             "staging": {
               "fileReplacements": [
                 {
-                  "replace": "apps/timeline/src/environments/environment.ts",
-                  "with": "apps/timeline/src/environments/environment.staging.ts"
+                  "replace": "apps/timeline-editor/src/environments/environment.ts",
+                  "with": "apps/timeline-editor/src/environments/environment.staging.ts"
                 }
               ],
               "optimization": true,
@@ -1125,8 +1125,8 @@
             "production": {
               "fileReplacements": [
                 {
-                  "replace": "apps/timeline/src/environments/environment.ts",
-                  "with": "apps/timeline/src/environments/environment.prod.ts"
+                  "replace": "apps/timeline-editor/src/environments/environment.ts",
+                  "with": "apps/timeline-editor/src/environments/environment.prod.ts"
                 }
               ],
               "optimization": true,
@@ -1151,31 +1151,31 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "timeline:build",
-            "host": "timeline.campus.localhost",
+            "browserTarget": "timeline-editor:build",
+            "host": "timeline-editor.campus.localhost",
             "port": 3030
           },
           "configurations": {
             "staging": {
-              "browserTarget": "timeline:build:staging"
+              "browserTarget": "timeline-editor:build:staging"
             },
             "production": {
-              "browserTarget": "timeline:build:production"
+              "browserTarget": "timeline-editor:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "timeline:build"
+            "browserTarget": "timeline-editor:build"
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "apps/timeline/tsconfig.app.json",
-              "apps/timeline/tsconfig.spec.json"
+              "apps/timeline-editor/tsconfig.app.json",
+              "apps/timeline-editor/tsconfig.spec.json"
             ],
             "exclude": ["**/node_modules/**"]
           }
@@ -1183,39 +1183,39 @@
         "test": {
           "builder": "@nrwl/builders:jest",
           "options": {
-            "main": "apps/timeline/src/test.ts",
-            "jestConfig": "apps/timeline/jest.config.js",
-            "tsConfig": "apps/timeline/tsconfig.spec.json",
-            "setupFile": "apps/timeline/src/test-setup.ts"
+            "main": "apps/timeline-editor/src/test.ts",
+            "jestConfig": "apps/timeline-editor/jest.config.js",
+            "tsConfig": "apps/timeline-editor/tsconfig.spec.json",
+            "setupFile": "apps/timeline-editor/src/test-setup.ts"
           }
         }
       }
     },
-    "timeline-e2e": {
-      "root": "apps/timeline-e2e",
+    "timeline-editor-e2e": {
+      "root": "apps/timeline-editor-e2e",
       "projectType": "application",
       "prefix": "",
       "architect": {
         "e2e": {
           "builder": "@nrwl/builders:cypress",
           "options": {
-            "cypressConfig": "apps/timeline-e2e/cypress.json",
-            "tsConfig": "apps/timeline-e2e/tsconfig.e2e.json",
-            "devServerTarget": "timeline:serve"
+            "cypressConfig": "apps/timeline-editor-e2e/cypress.json",
+            "tsConfig": "apps/timeline-editor-e2e/tsconfig.e2e.json",
+            "devServerTarget": "timeline-editor:serve"
           },
           "configurations": {
             "staging": {
-              "devServerTarget": "timeline:serve:staging"
+              "devServerTarget": "timeline-editor:serve:staging"
             },
             "production": {
-              "devServerTarget": "timeline:serve:production"
+              "devServerTarget": "timeline-editor:serve:production"
             }
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": "apps/timeline-e2e/tsconfig.e2e.json",
+            "tsConfig": "apps/timeline-editor-e2e/tsconfig.e2e.json",
             "exclude": ["**/node_modules/**"]
           }
         }
