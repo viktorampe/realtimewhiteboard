@@ -38,13 +38,10 @@
         color: #444;
 
         & + .after {
-          content: '';
-          position: relative;
           width: 1px;
           margin: 0 5px 0 5px;
           height: 10px;
-          border-left: 1px solid #808080;
-          overflow: hidden;
+          background-color: #808080;
           display: inline-block;
         }
       }
