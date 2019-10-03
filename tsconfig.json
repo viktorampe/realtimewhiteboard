@@ -53,7 +53,8 @@
       "@campus/pages/methods": ["libs/pages/methods/src/index.ts"],
       "@campus/pages/practice": ["libs/pages/practice/src/index.ts"],
       "@campus/pages/global-search": ["libs/pages/global-search/src/index.ts"],
-      "@campus/pages/home": ["libs/pages/home/src/index.ts"]
+      "@campus/pages/home": ["libs/pages/home/src/index.ts"],
+      "@campus/timeline": ["libs/timeline/src/index.ts"]
     },
     "module": "es2015"
   },

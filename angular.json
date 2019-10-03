@@ -1220,6 +1220,37 @@
           }
         }
       }
+    },
+    "timeline": {
+      "root": "libs/timeline",
+      "sourceRoot": "libs/timeline/src",
+      "projectType": "library",
+      "prefix": "campus",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/timeline/tsconfig.lib.json",
+              "libs/timeline/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/builders:jest",
+          "options": {
+            "jestConfig": "libs/timeline/jest.config.js",
+            "tsConfig": "libs/timeline/tsconfig.spec.json",
+            "setupFile": "libs/timeline/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/schematics:component": {
+          "styleext": "scss"
+        }
+      }
     }
   },
   "cli": {
