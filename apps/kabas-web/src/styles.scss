@@ -288,6 +288,18 @@ p {
   }
 }
 
+.method-chapter {
+  campus-search {
+    margin: 0 (-$kabas-page-horizontal-padding) (-$kabas-page-vertical-padding)
+      (-$kabas-page-horizontal-padding);
+  }
+
+  &--filters {
+    margin: (-$kabas-page-vertical-padding) (-$kabas-page-horizontal-padding) 0
+      (-$kabas-page-horizontal-padding);
+  }
+}
+
 @import 'scss/theme-file-icons';
 
 /*

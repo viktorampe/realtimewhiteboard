@@ -23,14 +23,16 @@
       data.eduContent.description
     }}</span>
   </div>
-  <campus-button
-    *ngFor="let action of actions"
-    class="app-educontentsearchresult__content__header__action"
-    [matTooltip]="action.tooltip"
-    campusClickStopPropagation
-    (click)="onActionClick(action)"
-    >{{ action.label }}</campus-button
-  >
+  <ng-container *ngFor="let action of actions; let last = last">
+    <a
+      class="app-educontentsearchresult__content__header__action"
+      [matTooltip]="action.tooltip"
+      campusClickStopPropagation
+      (click)="onActionClick(action)"
+      >{{ action.label }}</a
+    >
+    <span class="after" *ngIf="!last"></span>
+  </ng-container>
 </div>
 
 <mat-icon
