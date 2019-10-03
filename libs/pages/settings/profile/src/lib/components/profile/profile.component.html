@@ -19,6 +19,7 @@
       <campus-profile-form
         (saveProfile)="onSaveProfile($event)"
         [user]="user$ | async"
+        formFieldAppearance="outline"
       ></campus-profile-form>
     </div>
   </ng-template>
@@ -40,6 +41,7 @@
       <campus-profile-form
         (saveProfile)="onSaveProfile($event)"
         [user]="user$ | async"
+        formFieldAppearance="standard"
       ></campus-profile-form>
     </campus-info-panel>
   </ng-template>

@@ -36,6 +36,7 @@ export class ProfileFormComponent implements OnInit {
   errorMatcher = new CrossFieldErrorMatcher();
 
   @Input() user: PersonInterface;
+  @Input() formFieldAppearance: 'standard' | 'outline';
 
   @Output() saveProfile = new EventEmitter<Partial<PersonInterface>>();
 

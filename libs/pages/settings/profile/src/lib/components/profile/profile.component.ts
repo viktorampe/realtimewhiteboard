@@ -9,6 +9,7 @@ import { ProfileViewModel } from '../profile.viewmodel';
 })
 export class ProfileComponent implements OnInit {
   useInfoPanelStyle: boolean;
+
   pageTitle = 'Mijn gegevens';
   pageIcon = ''; // TODO: add icon
   user$ = this.viewModel.currentUser$;

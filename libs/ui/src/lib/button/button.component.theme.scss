@@ -1,6 +1,7 @@
 @mixin ui-button() {
   $ui-button-padding: $ui-button-font-size/2 !default;
   $ui-button-color: $ui-button-font-color !default;
+
   $ui-button-background-color: $ui-button-bg-color !default;
   $ui-button__icon-margin: 0 $ui-button-font-size/2 0 0 !default;
   $ui-button-border-color: darken($ui-button-background-color, 10%) !default;
@@ -90,6 +91,7 @@
   ) !default;
   .ui-button {
     font-size: $ui-button-font-size;
+    font-weight: $ui-button-font-weight;
     padding: $ui-button-padding;
     color: $ui-form-item-font-color;
     background-color: $ui-button-background-color;

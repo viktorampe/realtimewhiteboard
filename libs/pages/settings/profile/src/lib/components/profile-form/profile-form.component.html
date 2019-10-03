@@ -3,7 +3,7 @@
   class="pages-settings-profile-form"
   (ngSubmit)="onSubmit()"
 >
-  <mat-form-field [appearance]="">
+  <mat-form-field [appearance]="formFieldAppearance">
     <mat-label>Naam</mat-label>
     <input
       matInput
@@ -16,7 +16,8 @@
       >Naam is verplicht.</mat-error
     >
   </mat-form-field>
-  <mat-form-field>
+  <mat-form-field [appearance]="formFieldAppearance">
+    <mat-label>Voornaam</mat-label>
     <input
       matInput
       type="text"
@@ -28,7 +29,8 @@
       >Voornaam is verplicht.</mat-error
     >
   </mat-form-field>
-  <mat-form-field>
+  <mat-form-field [appearance]="formFieldAppearance">
+    <mat-label>Gebruikersnaam</mat-label>
     <input
       matInput
       type="text"
@@ -43,7 +45,8 @@
       >Deze gebruikersnaam is niet uniek.</mat-error
     >
   </mat-form-field>
-  <mat-form-field>
+  <mat-form-field [appearance]="formFieldAppearance">
+    <mat-label>E-mail</mat-label>
     <input
       matInput
       type="text"
@@ -61,7 +64,8 @@
       >Dit e-mailadres is niet uniek.</mat-error
     >
   </mat-form-field>
-  <mat-form-field>
+  <mat-form-field [appearance]="formFieldAppearance">
+    <mat-label>Wachtwoord</mat-label>
     <input
       matInput
       type="password"
@@ -73,7 +77,11 @@
     >
   </mat-form-field>
 
-  <mat-form-field *ngIf="getControl('password').value">
+  <mat-form-field
+    [appearance]="formFieldAppearance"
+    *ngIf="getControl('password').value"
+  >
+    <mat-label>Herhaal wachtwoord</mat-label>
     <input
       matInput
       type="password"
@@ -89,11 +97,12 @@
   <div class="form-actions">
     <campus-button
       primary
+      bordered
       type="submit"
       (click)="onSubmit()"
       [ngClass]="{ 'ui-button--disabled': !profileForm.valid }"
       >Opslaan</campus-button
     >
-    <campus-button (click)="onReset()">Annuleren</campus-button>
+    <campus-button bordered (click)="onReset()">Annuleren</campus-button>
   </div>
 </form>

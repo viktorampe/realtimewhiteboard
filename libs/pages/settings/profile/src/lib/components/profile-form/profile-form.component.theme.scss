@@ -1,0 +1,24 @@
+@mixin pages-settings-profile-form-component-theme() {
+  $pages-settings-profile-form-border-radius: 0px !default;
+  $pages-settings-profile-form__field-bg-color: #fff !default;
+  $pages-settings-profile-form__field-font-weight: normal !default;
+  $pages-settings-profile-form__field-margin-bottom: 10px !default;
+
+  .mat-form-field {
+    margin-bottom: $pages-settings-profile-form__field-margin-bottom;
+
+    input {
+      font-weight: $pages-settings-profile-form__field-font-weight;
+    }
+    .mat-form-field-outline {
+      background-color: $pages-settings-profile-form__field-bg-color;
+      .mat-form-field-outline-start {
+        border-radius: 0px;
+      }
+
+      .mat-form-field-outline-end {
+        border-radius: 0px;
+      }
+    }
+  }
+}
