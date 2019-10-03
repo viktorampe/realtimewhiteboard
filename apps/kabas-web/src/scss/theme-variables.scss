@@ -128,6 +128,9 @@ $ui-form-button-default-bg-color: $color-gray-2;
 $ui-form-button-primary-bg-color: $color-orange-1;
 $ui-button--large-font-size: 18px;
 $ui-button-font-weight: bold;
+$ui-form-input-font-weight: bold;
+$ui-form-input-font-color: $color-gray-3;
+$ui-form-item-label-color: $color-gray-3;
 
 // ui > collapsible sheet
 $ui-collapsible-sheet-button-bg-color: $color-gray-2;
@@ -201,5 +204,3 @@ $pages-settings_form__title-margin-bottom: 32px;
 $pages-settings-profile__form-box-shadow: $pages-settings_container-box-shadow;
 $pages-settings-profile__form-color: $color-gray-4;
 $pages-settings-profile__form-width: 500px;
-$pages-settings-profile__form__input-color: $color-gray-3;
-$pages-settings-profile__form__label-color: $color-gray-3;
