@@ -1,7 +1,7 @@
 @mixin search-term() {
   $search-search-term-transition: border-color ease-in-out 0.15s,
     box-shadow ease-in-out 0.15s !default;
-  $search-search-term-background-color: $ui-tertiary-bg-color;
+  $search-search-term-background-color: $ui-tertiary-bg-color !default;
   $search-search-term-border-color: $ui-tertiary-bg-color !default;
   $search-search-term-border-width: 1px !default;
   $search-search-term-button-background-color: $ui-button-bg-color-1 !default;
@@ -12,9 +12,6 @@
     10%
   ) !default;
   $search-search-term-button-border-width: 1px !default;
-  $search-search-term-button-top: 0 !default;
-  $search-search-term-button-bottom: 0 !default;
-  $search-search-term-button-right: 0 !default;
   $search-search-term-button-width: 42px !default;
   $search-search-term-button_icon-color: black !default;
   $search-search-term-button-box-shadow-color: rgba(0, 175, 145, 0.5) !default;
@@ -60,7 +57,7 @@
 
       input {
         height: $search-filter-height;
-        margin-top: -8px;
+        margin-top: -8px; // +/- 60% of font size
       }
 
       &:not(.mat-focused) {

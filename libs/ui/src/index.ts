@@ -44,7 +44,8 @@ export {
   NotificationItemInterface
 } from './lib/notification/notification.component';
 export {
-  BadgePersonInterface
+  BadgePersonInterface,
+  PersonBadgeComponent
 } from './lib/person-badge/person-badge.component';
 export { SideSheetComponent } from './lib/side-sheet/side-sheet.component';
 export {

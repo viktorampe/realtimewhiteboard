@@ -113,12 +113,15 @@
                 <div class="method-method__container__files-header">{{
                   productType.name
                 }}</div>
-                <mat-nav-list>
+                <mat-nav-list class="method-method__container__files__items">
                   <mat-list-item
                     data-cy="general-file"
                     *ngFor="let generalFile of generalFiles"
                     (click)="clickOpenGeneralFile(generalFile)"
                     class="method-file"
+                    [ngClass]="
+                      'producttype-' + getProductTypeClass(productType)
+                    "
                   >
                     <div class="method-file__content">
                       <campus-file-icon

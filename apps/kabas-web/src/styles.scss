@@ -39,6 +39,8 @@ body {
 @include pages-global-search-theme();
 @import 'libs/pages/home/src/lib/pages-home.theme';
 @include pages-home-theme();
+@import 'libs/pages/settings/pages-settings.theme';
+@include pages-settings-theme();
 @import 'libs/pages/practice/src/lib/components/practice-method-detail/practice-method-detail.component.theme';
 @include pages-practice-method-detail();
 
@@ -140,6 +142,7 @@ p {
 .shared-header__alerts {
   order: 4;
 }
+
 #global-alert-btn {
   color: $color-green-1;
   fill: $color-green-1;
@@ -181,6 +184,7 @@ p {
     }
   }
 }
+
 .mat-checkbox-checked.mat-primary,
 .mat-checkbox-checked.mat-accent {
   .mat-checkbox-background {

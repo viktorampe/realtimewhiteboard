@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
-import { NavItem } from '@campus/ui';
+import { Component, OnInit } from '@angular/core';
+import { BadgePersonInterface, NavItem } from '@campus/ui';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { SettingsDashboardViewModel } from './settings-dashboard.viewmodel';
 
 @Component({
@@ -8,8 +9,46 @@ import { SettingsDashboardViewModel } from './settings-dashboard.viewmodel';
   templateUrl: './settings-dashboard.component.html',
   styleUrls: ['./settings-dashboard.component.scss']
 })
-export class SettingsDashboardComponent {
+export class SettingsDashboardComponent implements OnInit {
   links$: Observable<NavItem[]> = this.viewModel.links$;
+  useNavItemStyle: boolean;
+
+  user$: Observable<{
+    badgeInfo: BadgePersonInterface;
+    subText: string;
+  }>;
 
   constructor(private viewModel: SettingsDashboardViewModel) {}
+
+  ngOnInit() {
+    this.useNavItemStyle = this.viewModel.environmentUi.useNavItemStyle;
+    this.user$ = this.viewModel.user$.pipe(
+      map(user => ({
+        badgeInfo: {
+          displayName: user.displayName,
+          name: user.name,
+          firstName: user.firstName,
+          avatar: user.avatar
+        },
+        subText: this.getUserTypeTranslation(user.roles).join(' - ')
+      }))
+    );
+  }
+
+  private getUserTypeTranslation(roles: { name: string }[]): string[] {
+    return roles.map(role => translateRole(role.name));
+
+    function translateRole(role: string): string {
+      switch (role) {
+        case 'teacher':
+          return 'Leerkracht';
+        case 'student':
+          return 'Leerling';
+        case 'schooladmin':
+          return 'Beheerder';
+        default:
+          return 'Medewerker';
+      }
+    }
+  }
 }

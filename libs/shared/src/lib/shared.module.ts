@@ -68,8 +68,10 @@ import {
   ENVIRONMENT_SSO_TOKEN,
   ENVIRONMENT_TERM_PRIVACY_TOKEN,
   ENVIRONMENT_TESTING_TOKEN,
+  ENVIRONMENT_UI_TOKEN,
   ENVIRONMENT_WEBSITE_TOKEN
 } from './interfaces';
+import { EnvironmentUIInterface } from './interfaces/environment.interfaces';
 import { AlertToNotificationItemPipe } from './pipes/alert-to-notification/alert-to-notification-pipe';
 import { MailToByCredentialPipe } from './pipes/mail-to/mail-to-credential-pipe';
 import { PersonBadgeFromCredentialPipe } from './pipes/person-badge-from-credential/person-badge-from-credential-pipe';
@@ -190,7 +192,8 @@ export class SharedModule {
     environmentApi: EnvironmentApiInterface,
     environmentSsoSettings: EnvironmentSsoInterface,
     environmentSearchModes: EnvironmentSearchModesInterface,
-    environmentTesting: EnvironmentTestingInterface
+    environmentTesting: EnvironmentTestingInterface,
+    environmentUi: EnvironmentUIInterface
   ): ModuleWithProviders {
     return {
       ngModule: SharedModule,
@@ -250,6 +253,10 @@ export class SharedModule {
         {
           provide: ENVIRONMENT_TESTING_TOKEN,
           useValue: environmentTesting
+        },
+        {
+          provide: ENVIRONMENT_UI_TOKEN,
+          useValue: environmentUi
         }
       ]
     };

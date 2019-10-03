@@ -2,10 +2,13 @@
   display: flex;
   flex: 1 1 auto;
 
-  &__badge,
-  img {
-    border-radius: 50%;
+  &__badge {
     flex: 0 0 auto;
+
+    img {
+      width: 100%;
+      height: 100%;
+    }
   }
 
   &__display {
@@ -49,6 +52,8 @@
     flex-direction: column-reverse;
 
     .ui_person-badge__display {
+      flex-direction: column;
+
       &__name,
       &__subtext {
         justify-content: center;
@@ -64,6 +69,8 @@
     flex-direction: column;
 
     .ui_person-badge__display {
+      flex-direction: column;
+
       &__name,
       &__subtext {
         justify-content: center;

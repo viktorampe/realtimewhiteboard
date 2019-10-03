@@ -1,20 +1,20 @@
 @mixin select-filter-component() {
-  $select-filter-component_mat-select-trigger-height: 1.125em !default;
-  $select-filter-component_mat-select-trigger-padding: 0px !default;
-  $select-filter-component_mat-select-trigger-border-width: 0px !default;
-  $select-filter-component_mat-select-trigger-border-color: transparent !default;
-  $select-filter-component_mat-select-value-vertical-align: baseline !default;
+  $select-filter_mat-select-trigger-height: 1.125em !default;
+  $select-filter_mat-select-trigger-padding: 0px !default;
+  $select-filter_mat-select-trigger-border-width: 0px !default;
+  $select-filter_mat-select-trigger-border-color: transparent !default;
+  $select-filter_mat-select-value-vertical-align: baseline !default;
 
   .select-filter-component {
     .mat-select-trigger {
-      padding: $select-filter-component_mat-select-trigger-padding;
-      border: $select-filter-component_mat-select-trigger-border-width solid
-        $select-filter-component_mat-select-trigger-border-color;
+      padding: $select-filter_mat-select-trigger-padding;
+      border: $select-filter_mat-select-trigger-border-width solid
+        $select-filter_mat-select-trigger-border-color;
       height: 50px;
     }
 
     .mat-select-value {
-      vertical-align: $select-filter-component_mat-select-value-vertical-align;
+      vertical-align: $select-filter_mat-select-value-vertical-align;
     }
   }
 }

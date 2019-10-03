@@ -123,6 +123,9 @@ $ui-shell__logo-border-left: 50px solid $color-white-1;
 $ui-shell__left__content-border-left: 50px solid $color-gray-2;
 $ui-shell__logo__img-width: 100%;
 
+// ui > person badge
+$ui-person-badge-border-radius: 0;
+
 // ui > forms
 $ui-form-button-default-bg-color: $color-gray-2;
 $ui-form-button-primary-bg-color: $color-orange-1;
@@ -132,8 +135,10 @@ $ui-button--large-font-size: 18px;
 $ui-collapsible-sheet-button-bg-color: $color-gray-2;
 $ui-collapsible-sheet-border-color: $color-gray-2;
 
-// search filters > search term
+// search filters
 $search-filter-height: 50px;
+
+// search filters > search term
 $search-search-term-border-width: 0px;
 $search-search-term-button-background-color: transparent;
 $search-search-term-button-box-shadow-color: transparent;
@@ -142,9 +147,6 @@ $search-search-term_mat-form-field_outline-opacity: 1;
 $search-search-term-button-border-width: 0px;
 $search-search-term_mat-form-field_outline-border-right-width: 1px;
 $search-search-term-button_icon-color: $primary-font-color-2;
-$search-search-term-button-top: 1px;
-$search-search-term-button-bottom: 1px;
-$search-search-term-button-right: 1px;
 $search-search-term-button-hover-background-color: $color-orange-1;
 $search-search-term-button-hover-icon-color: $color-white-1;
 $search-search-term_mat-form-field_outline-border-color: $primary-font-color-2;
@@ -152,13 +154,12 @@ $search-search-term_mat-form-field_outline-border-color: $primary-font-color-2;
 // search filters > diabolo buttons
 $button-toggle-filter_button-group-border-radius: 0;
 $button-toggle-filter_button-group-border-color: $primary-font-color-2;
-//$button-toggle-filter_button-group-height: 51.98px; //= search input height, ugly hack -> find better way
 
-// search filters > select filterz
-$select-filter-component_mat-select-trigger-padding: 8px;
-$select-filter-component_mat-select-trigger-border-width: 1px;
-$select-filter-component_mat-select-trigger-border-color: $primary-font-color-2;
-$select-filter-component_mat-select-value-vertical-align: middle;
+// search filters > select filter
+$select-filter_mat-select-trigger-padding: 8px;
+$select-filter_mat-select-trigger-border-width: 1px;
+$select-filter_mat-select-trigger-border-color: $primary-font-color-2;
+$select-filter_mat-select-value-vertical-align: middle;
 
 // search > reset filters button
 $pages-method-chapter__reset-filters-border-color: $primary-font-color-2;
@@ -233,3 +234,18 @@ $pages-methods-background-color--primary: $primary-bg-color;
 $pages-methods-border-color--primary: $color-gray-2;
 $pages-methods-text-color--secondary: $primary-font-color-2;
 $pages-methods-background-color--secondary: $secondary-bg-color;
+
+//settings
+$pages-settings_page-header-display: none;
+$pages-settings_container-max-width: 320px;
+$pages-settings_container-background-color: $color-white-1;
+$pages-settings_container-box-shadow: 0px 0px 8px 2px $color-gray-3;
+$pages-settings_avatar_container-width: 100%;
+$pages-settings_avatar-padding-top: 60px; // (container width - badge width) / 2
+$pages-settings_avatar-padding-bottom: 30px;
+$pages-settings_avatar-subtext-color: $primary-font-color-2;
+
+$pages-settings_mat-list-margin-bottom: 48px; //= mat-list-item height
+$pages-settings_mat-list_item-color: $primary-font-color;
+$pages-settings_mat-list_item-font-weight: bold;
+$pages-settings_mat-list_item-background-color--accent: $secondary-bg-color;
