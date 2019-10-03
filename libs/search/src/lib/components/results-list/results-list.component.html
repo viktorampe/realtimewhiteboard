@@ -20,6 +20,8 @@
     <campus-list-view [listFormat]="'line'" [placeHolderText]="''">
       <ng-template result-list-host></ng-template>
     </campus-list-view>
-    <div *ngIf="loading">Even geduld, de resultaten worden geladen...</div>
+    <div *ngIf="loading" class="search-results-list__results__loading"
+      >Even geduld, de resultaten worden geladen...</div
+    >
   </div>
 </div>
