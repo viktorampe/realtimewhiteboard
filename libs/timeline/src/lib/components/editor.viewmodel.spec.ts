@@ -12,4 +12,8 @@ describe('EditorViewModel', () => {
   beforeEach(() => {
     editorViewModel = TestBed.get(EditorViewModel);
   });
+
+  it('should create', () => {
+    expect(editorViewModel).toBeTruthy();
+  });
 });
