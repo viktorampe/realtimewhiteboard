@@ -1,19 +1,18 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { EditorTimelineComponent } from './editor-timeline.component';
 
-import { EditorComponent } from './editor.component';
-
-describe('EditorComponent', () => {
-  let component: EditorComponent;
-  let fixture: ComponentFixture<EditorComponent>;
+describe('EditorTimelineComponent', () => {
+  let component: EditorTimelineComponent;
+  let fixture: ComponentFixture<EditorTimelineComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [EditorComponent]
+      declarations: [EditorTimelineComponent]
     }).compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(EditorComponent);
+    fixture = TestBed.createComponent(EditorTimelineComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

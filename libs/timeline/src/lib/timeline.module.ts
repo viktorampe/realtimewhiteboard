@@ -1,23 +1,18 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { EditorComponent } from './components/editor/editor.component';
-import { SlideListComponent } from './components/slide-list/slide-list.component';
-import { SlideDetailComponent } from './components/slide-detail/slide-detail.component';
+import { NgModule } from '@angular/core';
+import { EditorTimelineComponent } from './components/editor-timeline/editor-timeline.component';
 import { SettingsComponent } from './components/settings/settings.component';
+import { SlideDetailComponent } from './components/slide-detail/slide-detail.component';
+import { SlideListComponent } from './components/slide-list/slide-list.component';
 
 @NgModule({
   imports: [CommonModule],
   declarations: [
-    EditorComponent,
+    EditorTimelineComponent,
     SlideListComponent,
     SlideDetailComponent,
     SettingsComponent
   ],
-  exports: [
-    EditorComponent,
-    SlideListComponent,
-    SlideDetailComponent,
-    SettingsComponent
-  ]
+  exports: [EditorTimelineComponent]
 })
 export class TimelineModule {}
