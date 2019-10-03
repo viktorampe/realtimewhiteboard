@@ -7,7 +7,17 @@ import { SettingsComponent } from './components/settings/settings.component';
 
 @NgModule({
   imports: [CommonModule],
-  declarations: [EditorComponent, SlideListComponent, SlideDetailComponent, SettingsComponent],
-  exports: [EditorComponent, SlideListComponent, SlideDetailComponent, SettingsComponent]
+  declarations: [
+    EditorComponent,
+    SlideListComponent,
+    SlideDetailComponent,
+    SettingsComponent
+  ],
+  exports: [
+    EditorComponent,
+    SlideListComponent,
+    SlideDetailComponent,
+    SettingsComponent
+  ]
 })
 export class TimelineModule {}
