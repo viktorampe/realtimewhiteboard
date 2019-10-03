@@ -2,9 +2,11 @@ import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable, InjectionToken } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import {
+  EnvironmentApiInterface,
+  ENVIRONMENT_API_TOKEN
+} from '../interfaces/environment';
 import { TimelineConfig } from '../interfaces/timeline';
-import { ENVIRONMENT_API_TOKEN } from './../../../../shared/src/lib/interfaces/environment.injectiontokens';
-import { EnvironmentApiInterface } from './../../../../shared/src/lib/interfaces/environment.interfaces';
 import { EditorHttpServiceInterface } from './editor-http.service.interface';
 
 export const EDITOR_HTTP_SERVICE_TOKEN = new InjectionToken(
@@ -23,7 +25,9 @@ export class EditorHttpService implements EditorHttpServiceInterface {
 
   public getJson(eduContentMetadataId: number): Observable<TimelineConfig> {
     const response$ = this.http.get(
-      this.environmentApi + '/api/eduContentMetaData/' + eduContentMetadataId
+      this.environmentApi.APIBase +
+        '/api/eduContentMetaData/' +
+        eduContentMetadataId
       // +
       // '/timeline'
     );

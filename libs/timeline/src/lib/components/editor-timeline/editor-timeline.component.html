@@ -1,3 +1,9 @@
 <p>
   editor-timeline works!
 </p>
+
+<div>
+  {{ response | async | json }}
+</div>
+
+<button (click)="getResponse()">klik</button>

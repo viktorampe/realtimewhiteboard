@@ -4,6 +4,10 @@ import { EditorTimelineComponent } from './components/editor-timeline/editor-tim
 import { SettingsComponent } from './components/settings/settings.component';
 import { SlideDetailComponent } from './components/slide-detail/slide-detail.component';
 import { SlideListComponent } from './components/slide-list/slide-list.component';
+import {
+  EditorHttpService,
+  EDITOR_HTTP_SERVICE_TOKEN
+} from './services/editor-http.service';
 
 @NgModule({
   imports: [CommonModule],
@@ -13,6 +17,9 @@ import { SlideListComponent } from './components/slide-list/slide-list.component
     SlideDetailComponent,
     SettingsComponent
   ],
-  exports: [EditorTimelineComponent]
+  exports: [EditorTimelineComponent],
+  providers: [
+    { provide: EDITOR_HTTP_SERVICE_TOKEN, useClass: EditorHttpService }
+  ]
 })
 export class TimelineModule {}
