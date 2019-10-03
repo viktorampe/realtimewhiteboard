@@ -109,6 +109,12 @@
     },
     "pages-home": {
       "tags": []
+    },
+    "timeline-editor": {
+      "tags": []
+    },
+    "timeline-editor-e2e": {
+      "tags": []
     }
   }
 }
