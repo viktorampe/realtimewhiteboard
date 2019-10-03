@@ -6,6 +6,7 @@ export const icons = {
   home: 'assets/icons/material/home.svg',
   magnifier: 'assets/icons/magnifier.svg',
   download: 'assets/icons/material/download.svg',
+  exercise: 'assets/icons/material/gamepad.svg',
   'exercise:open': 'assets/icons/exercise-open.svg',
   'exercise:finished': 'assets/icons/exercise-finished.svg',
   methods: 'assets/icons/methods.svg', //Temp icon
@@ -31,6 +32,8 @@ export const icons = {
   close: 'assets/icons/close.svg',
   history: 'assets/icons/history.svg',
   boardbook: 'assets/icons/boardbook.svg',
+  'reset-filters': 'assets/icons/material/reset.svg',
+  'general-file': 'assets/icons/general-file.svg',
   method: 'assets/icons/methods.svg',
   //TODO: These are TEMPORARY SVGs for Diabolo that I made from the PNGs
   //get the OFFICIAL files from Antoon later

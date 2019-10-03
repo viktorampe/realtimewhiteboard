@@ -65,7 +65,7 @@ describe('Methods', () => {
       dataCy('diabolo-info').contains(
         `${
           setup.kabasMethodsPages.expected.method.name
-        } is een diabolo methode. Lees meer over diabolo`
+        } is een diabolo methode.`
       );
       dataCy('open-boeke').click();
       cy.window()
@@ -119,7 +119,11 @@ describe('Methods', () => {
     });
     it('should show the lesson links', () => {
       dataCy('lesson-link')
-        .should('have.length', setup.kabasMethodsPages.expected.lessons.count)
+        .should(
+          'have.length',
+          setup.kabasMethodsPages.expected.lessons.count +
+            setup.kabasMethodsPages.expected.chapters.count
+        )
         .first()
         .click()
         .location('pathname')
@@ -168,7 +172,11 @@ describe('Methods', () => {
     });
     it('should show the lesson links', () => {
       dataCy('lesson-link')
-        .should('have.length', setup.kabasMethodsPages.expected.lessons.count)
+        .should(
+          'have.length',
+          setup.kabasMethodsPages.expected.lessons.count +
+            setup.kabasMethodsPages.expected.chapters.count
+        )
         .last()
         .click()
         .location('pathname')
@@ -211,7 +219,11 @@ describe('Methods', () => {
     it('should check off a learning plan goal', () => {
       clickLPGCheckbox(0);
 
-      dataCy('back-link').click();
+      cy.visit(
+        `${appPaths.methods}/${setup.kabasMethodsPages.book}/${
+          setup.kabasMethodsPages.chapter
+        }?tab=1`
+      );
 
       checkLPGChecked(0);
     });
@@ -219,7 +231,11 @@ describe('Methods', () => {
     it('should uncheck a learning plan goal', () => {
       clickLPGCheckbox(1);
 
-      dataCy('back-link').click();
+      cy.visit(
+        `${appPaths.methods}/${setup.kabasMethodsPages.book}/${
+          setup.kabasMethodsPages.chapter
+        }?tab=1`
+      );
 
       clickLPGCheckbox(1);
 
@@ -233,7 +249,11 @@ describe('Methods', () => {
     it('should stay on the learning plan goals tab', () => {
       getActiveTab().should('have.text', 'Leerplandoelen');
 
-      dataCy('back-link').click();
+      cy.visit(
+        `${appPaths.methods}/${setup.kabasMethodsPages.book}/${
+          setup.kabasMethodsPages.chapter
+        }?tab=1`
+      );
 
       getActiveTab().should('have.text', 'Leerplandoelen');
     });
@@ -241,7 +261,11 @@ describe('Methods', () => {
     it('should bulk check learning plan goals in lesson', () => {
       clickBulkLPGCheckbox(0);
 
-      dataCy('back-link').click();
+      cy.visit(
+        `${appPaths.methods}/${setup.kabasMethodsPages.book}/${
+          setup.kabasMethodsPages.chapter
+        }?tab=1`
+      );
 
       for (let i = 0; i <= 2; i++) {
         checkLPGChecked(i);
@@ -249,7 +273,11 @@ describe('Methods', () => {
     });
 
     it('should bulk check learning plan goals in chapter', () => {
-      dataCy('back-link').click();
+      cy.visit(
+        `${appPaths.methods}/${setup.kabasMethodsPages.book}/${
+          setup.kabasMethodsPages.chapter
+        }?tab=1`
+      );
 
       clickBulkLPGCheckbox(1);
 

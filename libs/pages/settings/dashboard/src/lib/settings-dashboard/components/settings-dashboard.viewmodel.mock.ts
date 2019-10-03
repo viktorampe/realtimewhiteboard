@@ -6,7 +6,7 @@ import {
 } from '@campus/dal';
 import { ViewModelInterface } from '@campus/testing';
 import { NavItem } from '@campus/ui';
-import { Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { SettingsDashboardViewModel } from './settings-dashboard.viewmodel';
 
 @Injectable({
@@ -50,6 +50,6 @@ export class MockSettingsDashboardViewModel
     }
   ]);
 
-  user$: Observable<PersonInterface> = of(new PersonFixture());
+  user$ = new BehaviorSubject<PersonInterface>(new PersonFixture());
   environmentUi = {};
 }

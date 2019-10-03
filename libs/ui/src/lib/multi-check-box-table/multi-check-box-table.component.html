@@ -2,8 +2,9 @@
   <thead class="ui-multi-check-box-table__header">
     <tr>
       <th
-        *ngFor="let columnHeader of rowHeaderColumns"
+        *ngFor="let columnHeader of rowHeaderColumns; let last = last"
         class="ui-multi-check-box-table__header--row-header"
+        [class.ui-multi-check-box-table__header--row-header--last]="last"
         >{{ columnHeader.caption }}</th
       ><th
         *ngFor="let columnHeader of itemColumns"
@@ -17,7 +18,10 @@
         class="ui-multi-check-box-table__header--row-header"
         >Alle</th
       >
-      <th *ngFor="let itemColumn of itemColumns">
+      <th
+        *ngFor="let itemColumn of itemColumns"
+        class="ui-multi-check-box-table__body__row__cell--checkbox"
+      >
         <mat-checkbox
           #selectAllForColumnCheckBox
           campusClickPreventDefault
@@ -90,12 +94,9 @@
         [class.ui-multi-check-box-table__body__row--odd]="!even"
       >
         <td
-          *ngFor="let rowHeaderColumn of rowHeaderColumns; let last = last"
+          *ngFor="let rowHeaderColumn of rowHeaderColumns"
           class="ui-multi-check-box-table__body__row__cell
            ui-multi-check-box-table__body__row__cell--row-header"
-          [class.ui-multi-check-box-table__body__row__cell--row-header--last]="
-            last
-          "
           >{{ item.header[rowHeaderColumn.key] }}</td
         >
         <td

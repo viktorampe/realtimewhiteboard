@@ -41,6 +41,8 @@ body {
 @include pages-home-theme();
 @import 'libs/pages/settings/pages-settings.theme';
 @include pages-settings-theme();
+@import 'libs/pages/practice/src/lib/components/practice-method-detail/practice-method-detail.component.theme';
+@include pages-practice-method-detail();
 
 // include shared lib scss
 @import 'libs/shared/src/lib/shared-theme';
@@ -49,6 +51,9 @@ body {
 // include search lib scss
 @import 'libs/search/src/lib/search-theme';
 @include search-theme();
+
+@import './app/components/searchresults/edu-content-search-result.component.theme';
+@include app-edu-content-search-result();
 
 [ng-reflect-router-link] {
   cursor: pointer;
@@ -198,6 +203,12 @@ p {
   width: 24px;
 }
 
+/* ng material tabs */
+.mat-tab-body-content {
+  padding: $kabas-page-vertical-padding $kabas-page-horizontal-padding;
+}
+
+/* page specifics */
 .pages-home__container,
 .pages-methods-overview,
 .pages-practice-overview,
@@ -205,6 +216,7 @@ p {
 .pages-settings-dashboard,
 .pages-settings-alerts {
   position: relative;
+  padding-top: 0;
 
   > * {
     z-index: 1;
@@ -225,9 +237,15 @@ p {
   }
 }
 
+.search-results {
+  .ui-list-view__list {
+    align-items: flex-start !important;
+  }
+}
+
 .pages-home__container {
   &.no-favorites {
-    padding-top: 20px;
+    padding-top: $kabas-page-vertical-padding;
 
     &:after {
       display: none;
@@ -251,6 +269,22 @@ p {
     &--differentiate mat-icon {
       fill: $color-red-1;
     }
+  }
+}
+
+.ui-multi-check-box-table {
+  margin: 0 (-$kabas-page-horizontal-padding);
+
+  th:first-child,
+  td:first-child {
+    padding-left: $kabas-page-horizontal-padding;
+    border-left: none;
+  }
+
+  th:last-child,
+  td:last-child {
+    padding-right: $kabas-page-horizontal-padding;
+    border-right: none;
   }
 }
 

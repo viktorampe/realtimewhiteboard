@@ -87,11 +87,12 @@
               </div>
 
               <div
-                data-cy="diabolo-info"
                 *ngIf="(book$ | async)?.diabolo"
                 class="method-method__container__boeke__diabolo"
               >
-                <span>{{ method.name }} is een diabolo methode.</span><br />
+                <span data-cy="diabolo-info"
+                  >{{ method.name }} is een diabolo methode.</span
+                ><br />
                 <a
                   href="https://www.diekeure.be/nl-be/educatief/lager-onderwijs/diabolo"
                   target="_blank"
@@ -112,12 +113,15 @@
                 <div class="method-method__container__files-header">{{
                   productType.name
                 }}</div>
-                <mat-nav-list>
+                <mat-nav-list class="method-method__container__files__items">
                   <mat-list-item
                     data-cy="general-file"
                     *ngFor="let generalFile of generalFiles"
                     (click)="clickOpenGeneralFile(generalFile)"
                     class="method-file"
+                    [ngClass]="
+                      'producttype-' + getProductTypeClass(productType)
+                    "
                   >
                     <div class="method-file__content">
                       <campus-file-icon
@@ -142,10 +146,10 @@
         </mat-tab>
 
         <mat-tab label="Leerplandoelen">
-          <div class="method-method__container__goals">
+          <p>
             Hieronder vind je een overzicht van de leerplandoelen die horen bij
             {{ breadcrumbTitles$ | async }}.
-          </div>
+          </p>
 
           <campus-multi-check-box-table
             [rowHeaderColumns]="learningPlanGoalTableHeaders"

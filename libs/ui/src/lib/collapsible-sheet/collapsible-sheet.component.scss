@@ -19,7 +19,8 @@
 
   &__main {
     position: relative;
-    width: 100%;
+    flex: 1 1 auto;
+    width: 0; // forces horizontal scrollbar inside main panel
   }
 
   &__toggle-button {
@@ -28,5 +29,6 @@
     left: 0;
     border-radius: 50%;
     cursor: pointer;
+    z-index: 20;
   }
 }

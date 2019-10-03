@@ -1,36 +1,40 @@
-<div class="app-educontentsearchresult">
-  <campus-file-extension
-    class="app-educontentsearchresult__extension"
-    [showIcon]="false"
-    [extensionClass]="data.eduContent.fileExtension"
-    [title]="data.eduContent.fileTypeLabel"
-  ></campus-file-extension>
+<campus-file-icon
+  class="app-educontentsearchresult__extension"
+  classModifier="product-type-zoekresultaat-algemeen-bestand"
+  [icon]="
+    data.eduContent.fileExtension != 'ludo.zip' ? 'general-file' : 'exercise'
+  "
+  [label]="
+    data.eduContent.fileExtension != 'ludo.zip'
+      ? data.eduContent.fileExtension
+      : ''
+  "
+>
+</campus-file-icon>
 
-  <div class="app-educontentsearchresult__content">
-    <div class="app-educontentsearchresult__content__header">
-      <span class="app-educontentsearchresult__content__header__title">{{
-        data.eduContent.name
-      }}</span>
-      <campus-button
-        *ngFor="let action of actions"
-        class="app-educontentsearchresult__content__header__action"
-        circle
-        [iconClass]="action.icon"
-        [matTooltip]="action.tooltip"
-        campusClickStopPropagation
-        (click)="onActionClick(action)"
-        >{{ action.label }}</campus-button
-      >
-      <mat-icon
-        *ngIf="data.eduContent.diaboloPhase"
-        class="app-educontentsearchresult__content__header__diabolo-phase"
-        svgIcon="{{ data.eduContent.diaboloPhase.icon }}"
-      ></mat-icon>
-    </div>
-    <div class="app-educontentsearchresult__content__body">
-      <span class="app-educontentsearchresult__content__body__description">{{
-        data.eduContent.description
-      }}</span>
-    </div>
+<div class="app-educontentsearchresult__content">
+  <div class="app-educontentsearchresult__content__header">
+    <span class="app-educontentsearchresult__content__header__title">{{
+      data.eduContent.name
+    }}</span>
   </div>
+  <div class="app-educontentsearchresult__content__body">
+    <span class="app-educontentsearchresult__content__body__description">{{
+      data.eduContent.description
+    }}</span>
+  </div>
+  <campus-button
+    *ngFor="let action of actions"
+    class="app-educontentsearchresult__content__header__action"
+    [matTooltip]="action.tooltip"
+    campusClickStopPropagation
+    (click)="onActionClick(action)"
+    >{{ action.label }}</campus-button
+  >
 </div>
+
+<mat-icon
+  *ngIf="data.eduContent.diaboloPhase"
+  class="app-educontentsearchresult__content__header__diabolo-phase"
+  svgIcon="{{ data.eduContent.diaboloPhase.icon }}"
+></mat-icon>

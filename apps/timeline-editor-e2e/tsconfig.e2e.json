@@ -1,0 +1,11 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "sourceMap": false,
+    "outDir": "../../dist/out-tsc/apps/timeline-editor-e2e/src",
+    "lib": ["es2018", "dom"],
+    "types": ["cypress", "node"]
+  },
+  "exclude": [],
+  "include": ["src/**/*.ts", "../../node_modules/cypress"]
+}
