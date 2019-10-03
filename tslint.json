@@ -11,10 +11,7 @@
       "severity": "warn"
     },
     "forin": true,
-    "import-blacklist": [
-      true,
-      "rxjs/Rx"
-    ],
+    "import-blacklist": [true, "rxjs/Rx"],
     "interface-over-type-literal": true,
     "member-access": false,
     "member-ordering": [
@@ -30,24 +27,14 @@
     ],
     "no-arg": true,
     "no-bitwise": true,
-    "no-console": [
-      true,
-      "debug",
-      "info",
-      "time",
-      "timeEnd",
-      "trace"
-    ],
+    "no-console": [true, "debug", "info", "time", "timeEnd", "trace"],
     "no-construct": true,
     "no-debugger": true,
     "no-duplicate-super": true,
     "no-empty": false,
     "no-empty-interface": true,
     "no-eval": true,
-    "no-inferrable-types": [
-      true,
-      "ignore-params"
-    ],
+    "no-inferrable-types": [true, "ignore-params"],
     "no-misused-new": true,
     "no-non-null-assertion": true,
     "no-shadowed-variable": true,
@@ -61,24 +48,11 @@
     "object-literal-sort-keys": false,
     "prefer-const": true,
     "radix": true,
-    "triple-equals": [
-      true,
-      "allow-null-check"
-    ],
+    "triple-equals": [true, "allow-null-check"],
     "unified-signatures": true,
     "variable-name": false,
-    "directive-selector": [
-      true,
-      "attribute",
-      "app",
-      "camelCase"
-    ],
-    "component-selector": [
-      true,
-      "element",
-      "app",
-      "kebab-case"
-    ],
+    "directive-selector": [true, "attribute", "app", "camelCase"],
+    "component-selector": [true, "element", "app", "kebab-case"],
     "no-output-on-prefix": true,
     "use-input-property-decorator": true,
     "use-output-property-decorator": true,
@@ -93,7 +67,8 @@
       true,
       {
         "allow": [],
-        "depConstraints": [{
+        "depConstraints": [
+          {
             "sourceTag": "*",
             "onlyDependOnLibsWithTags": ["*"]
           },
@@ -103,11 +78,20 @@
           },
           {
             "sourceTag": "dep:dal",
-            "onlyDependOnLibsWithTags": ["dep:browser", "dep:testing", "dep:utils"]
+            "onlyDependOnLibsWithTags": [
+              "dep:browser",
+              "dep:testing",
+              "dep:utils"
+            ]
           },
           {
             "sourceTag": "dep:search",
-            "onlyDependOnLibsWithTags": ["dep:ui", "dep:browser", "dep:utils", "dep:testing"]
+            "onlyDependOnLibsWithTags": [
+              "dep:ui",
+              "dep:browser",
+              "dep:utils",
+              "dep:testing"
+            ]
           },
           {
             "sourceTag": "dep:scorm",
@@ -115,11 +99,25 @@
           },
           {
             "sourceTag": "dep:shared",
-            "onlyDependOnLibsWithTags": ["dep:dal", "dep:ui", "dep:utils", "dep:testing", "dep:browser", "dep:scorm", "dep:search"]
+            "onlyDependOnLibsWithTags": [
+              "dep:dal",
+              "dep:ui",
+              "dep:utils",
+              "dep:testing",
+              "dep:browser",
+              "dep:scorm",
+              "dep:search"
+            ]
           },
           {
             "sourceTag": "dep:guards",
-            "onlyDependOnLibsWithTags": ["dep:dal", "dep:utils", "dep:testing", "dep:browser", "dep:shared"]
+            "onlyDependOnLibsWithTags": [
+              "dep:dal",
+              "dep:utils",
+              "dep:testing",
+              "dep:browser",
+              "dep:shared"
+            ]
           },
           {
             "sourceTag": "dep:browser",
