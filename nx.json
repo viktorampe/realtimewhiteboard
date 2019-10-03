@@ -115,6 +115,9 @@
     },
     "timeline-editor-e2e": {
       "tags": []
+    },
+    "timeline": {
+      "tags": []
     }
   }
 }
