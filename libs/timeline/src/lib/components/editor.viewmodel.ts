@@ -19,7 +19,7 @@ export class EditorViewModel {
   }
 
   previewTimeline(eduContentMetadataId: number): Observable<string> {
-    return this.editorHttpService.openPreview();
+    return this.editorHttpService.openPreview(eduContentMetadataId);
   }
 
   uploadFile(eduContentMetadataId: number, file: string): void {
