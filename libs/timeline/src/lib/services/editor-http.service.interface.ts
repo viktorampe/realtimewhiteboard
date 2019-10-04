@@ -11,5 +11,5 @@ export interface EditorHttpServiceInterface {
     eduContentId: number,
     eduContentMetadataId: number
   ): Observable<string>;
-  uploadFile(file: string): Observable<boolean>;
+  uploadFile(eduContentId: number, file: FormData): Observable<boolean>;
 }
