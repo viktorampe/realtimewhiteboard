@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable, InjectionToken } from '@angular/core';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
+import { catchError, map, retry } from 'rxjs/operators';
 import {
   EnvironmentApiInterface,
   ENVIRONMENT_API_TOKEN
@@ -12,6 +12,7 @@ import { EditorHttpServiceInterface } from './editor-http.service.interface';
 export const EDITOR_HTTP_SERVICE_TOKEN = new InjectionToken(
   'EditorHttpService'
 );
+const RETRY_AMOUNT = 2;
 
 @Injectable({
   providedIn: 'root'
@@ -24,21 +25,20 @@ export class EditorHttpService implements EditorHttpServiceInterface {
   ) {}
 
   public getJson(eduContentMetadataId: number): Observable<TimelineConfig> {
-    const response$ = this.http.get(
-      this.environmentApi.APIBase +
-        '/api/eduContentMetaData/' +
-        eduContentMetadataId
-      // +
-      // '/timeline'
-    );
+    const response$ = this.http
+      .get<{ timeline: string }>(
+        this.environmentApi.APIBase +
+          '/api/eduContentMetaData/' +
+          eduContentMetadataId +
+          '?filter[fields]=timeline&access_token=2'
+      )
+      .pipe(
+        retry(RETRY_AMOUNT),
+        catchError(this.handleError),
+        map(response => JSON.parse(response.timeline) as TimelineConfig)
+      );
 
-    const timelineConfig$: Observable<TimelineConfig> = response$.pipe(
-      map(response => this.convertGetJsonReponseToTimelineConfig(response))
-    );
-
-    timelineConfig$.subscribe(response => console.log(response));
-
-    return timelineConfig$;
+    return response$;
   }
 
   public setJson(
@@ -56,12 +56,7 @@ export class EditorHttpService implements EditorHttpServiceInterface {
     return;
   }
 
-  private convertGetJsonReponseToTimelineConfig(response) {
-    console.log(
-      'log: EditorHttpService -> convertGetJsonReponseToTimelineConfig -> response',
-      response
-    );
-
-    return {} as TimelineConfig;
+  private handleError(error) {
+    return throwError(error);
   }
 }
