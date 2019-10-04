@@ -48,6 +48,7 @@ export interface TimelineMedia {
   alt?: string;
   title?: string;
   link?: string;
+  eduFileId?: number; // checked to replace the url field with a signed url
 }
 
 export interface TimelineOptions {
