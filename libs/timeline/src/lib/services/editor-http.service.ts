@@ -30,7 +30,8 @@ export class EditorHttpService implements EditorHttpServiceInterface {
         this.environmentApi.APIBase +
           '/api/eduContentMetaData/' +
           eduContentMetadataId +
-          '?filter[fields]=timeline&access_token=2'
+          '?filter[fields]=timeline' +
+          '&access_token=2' // TODO: remove this bit
       )
       .pipe(
         retry(RETRY_AMOUNT),
