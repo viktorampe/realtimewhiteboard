@@ -10,20 +10,24 @@ export class EditorViewModel {
   constructor(private editorHttpService: EditorHttpServiceInterface) {}
 
   getTimeline(eduContentMetadataId: number): Observable<TimelineConfig> {
-    return this.editorHttpService.getJson(eduContentMetaDataId);
+    return this.editorHttpService.getJson(eduContentMetadataId);
   }
 
   updateTimeline(eduContentMetadataId: number, data: TimelineConfig): void {
-    // returned true / false
     this.editorHttpService.setJson(eduContentMetadataId, data);
   }
 
-  previewTimeline(eduContentMetadataId: number): Observable<string> {
-    return this.editorHttpService.openPreview(eduContentMetadataId);
+  previewTimeline(
+    eduContentId: number,
+    eduContentMetadataId: number
+  ): Observable<string> {
+    return this.editorHttpService.openPreview(
+      eduContentId,
+      eduContentMetadataId
+    );
   }
 
-  uploadFile(eduContentMetadataId: number, file: string): void {
-    // true or false
-    this.editorHttpService.uploadFile(eduContentMetaDataId, file);
+  uploadFile(file: string): void {
+    this.editorHttpService.uploadFile(file);
   }
 }
