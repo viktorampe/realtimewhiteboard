@@ -1,8 +1,6 @@
-import { TimelineSlide } from './../interfaces/timeline';
-import { TimelineBackgroundFixture } from './timeline-background.fixture';
 import { TimelineDateFixture } from './timeline-data.fixture';
 import { TimelineTextFixture } from './timeline-text.fixture';
-
+import { TimelineEra } from '../interfaces/timeline';
 export class TimelineEraFixture implements TimelineEra {
   // defaults
   start_date = new TimelineDateFixture();
