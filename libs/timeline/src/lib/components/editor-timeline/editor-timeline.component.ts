@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { EditorViewModel } from './../editor.viewmodel';
 
 @Component({
   selector: 'campus-editor-timeline',
@@ -7,13 +6,7 @@ import { EditorViewModel } from './../editor.viewmodel';
   styleUrls: ['./editor-timeline.component.scss']
 })
 export class EditorTimelineComponent implements OnInit {
-  public response;
-
-  constructor(private editorViewModel: EditorViewModel) {}
+  constructor() {}
 
   ngOnInit() {}
-
-  getResponse() {
-    this.response = this.editorViewModel.getTimelineConfig();
-  }
 }
