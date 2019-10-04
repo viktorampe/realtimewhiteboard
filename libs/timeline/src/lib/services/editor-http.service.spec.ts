@@ -43,8 +43,8 @@ describe('EditorHttpService', () => {
 
   it('should be created and available via DI', inject(
     [EditorHttpService],
-    (editorHttpService: EditorHttpService) => {
-      expect(editorHttpService).toBeTruthy();
+    (service: EditorHttpService) => {
+      expect(service).toBeTruthy();
     }
   ));
 
