@@ -41,13 +41,14 @@ export interface TimelineText {
 }
 
 export interface TimelineMedia {
-  url: string;
+  url?: string; // if omitted, it should be added by the wrapper (see eduFileId)
   caption?: string;
   credit?: string;
   thumbnail?: string;
   alt?: string;
   title?: string;
   link?: string;
+  eduFileId?: number; // checked to replace the url field with a signed url
 }
 
 export interface TimelineOptions {
@@ -58,4 +59,5 @@ export interface TimelineOptions {
 export interface TimelineBackground {
   url?: string;
   color?: string;
+  eduFileId?: number; // checked to replace the url field with a signed url
 }
