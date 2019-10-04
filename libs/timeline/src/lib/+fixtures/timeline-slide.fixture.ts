@@ -1,6 +1,6 @@
 import { TimelineSlide } from './../interfaces/timeline';
 import { TimelineBackgroundFixture } from './timeline-background.fixture';
-import { TimelineDateFixture } from './timeline-data.fixture';
+import { TimelineDateFixture } from './timeline-date.fixture';
 import { TimelineTextFixture } from './timeline-text.fixture';
 
 export class TimelineSlideFixture implements TimelineSlide {
