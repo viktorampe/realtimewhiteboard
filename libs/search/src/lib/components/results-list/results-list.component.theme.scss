@@ -1,12 +1,21 @@
 @mixin search-results-list() {
   $search-results-list__info-height: 60px !default;
+  $search-results-list__info-color: inherit !default;
+  $search-results-list__info-padding-horizontal: 0 !default;
+  $search-results-list__info-padding-vertical: 0 !default;
+  $search-results-list__info-line-height: inherit !default;
+
   $search-results-list__sorting-padding: 3px !default;
   $search-results-list__sorting-margin: 20px !default;
   $search-results-list__sorting-size: 15px !default;
+  $search-results-list__loading-padding: 0 !default;
 
   .search-results-list {
     &__info {
+      color: $search-results-list__info-color;
       height: $search-results-list__info-height;
+      padding: $search-results-list__info-padding-vertical
+        $search-results-list__info-padding-horizontal;
     }
 
     &__sorting {
@@ -25,6 +34,10 @@
     &__results {
       .ui-list-view__list {
         margin-top: 0 !important;
+      }
+
+      &__loading {
+        padding: $search-results-list__loading-padding;
       }
     }
   }

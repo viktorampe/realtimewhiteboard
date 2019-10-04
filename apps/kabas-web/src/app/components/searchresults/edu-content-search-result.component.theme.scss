@@ -11,13 +11,12 @@
       box-shadow: none !important;
     }
 
+    border-left: $app-edu-content-search-result-selected-border-width solid
+      transparent;
+
     &.ui-list-view__list__item--selected {
       border-left: $app-edu-content-search-result-selected-border-width solid
         $app-edu-content-search-result-selected-border-color !important;
-
-      .app-educontentsearchresult__content {
-        margin-left: -$app-edu-content-search-result-selected-border-width;
-      }
     }
 
     &:nth-child(odd) {

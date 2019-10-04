@@ -1,6 +1,7 @@
 {
   "version": "2.0.0",
-  "tasks": [{
+  "tasks": [
+    {
       "label": "wallaby-setup",
       "type": "shell",
       "command": "node",
@@ -19,7 +20,8 @@
       "problemMatcher": []
     }
   ],
-  "inputs": [{
+  "inputs": [
+    {
       "id": "wallabyProject",
       "description": "Project choises to run wallaby with",
       "type": "pickString",
@@ -53,7 +55,8 @@
         "pages-settings-dashboard",
         "pages-settings-profile",
         "pages-home",
-        "timeline-editor"
+        "timeline-editor",
+        "timeline"
       ],
       "default": "polpo-classroom-web"
     },
