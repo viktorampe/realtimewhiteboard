@@ -17,7 +17,7 @@ export class EditorHttpService implements EditorHttpServiceInterface {
   setJson(
     eduContentMetadataId: number,
     timeLineConfig: TimelineConfig
-  ): import('rxjs').Observable<boolean> {
+  ): Observable<boolean> {
     throw new Error('Method not implemented.');
   }
   openPreview(
