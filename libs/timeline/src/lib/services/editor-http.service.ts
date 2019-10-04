@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable, InjectionToken } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
-import { catchError, map, retry } from 'rxjs/operators';
+import { catchError, map, mapTo, retry } from 'rxjs/operators';
 import {
   EnvironmentApiInterface,
   ENVIRONMENT_API_TOKEN
@@ -46,7 +46,21 @@ export class EditorHttpService implements EditorHttpServiceInterface {
     eduContentMetadataId: number,
     timeLineConfig: TimelineConfig
   ): Observable<boolean> {
-    return;
+    const response$ = this.http
+      .put(
+        this.environmentApi.APIBase +
+          '/api/eduContentMetaData/' +
+          eduContentMetadataId +
+          '?access_token=2', // TODO: remove this bit
+        { timeline: JSON.stringify(timeLineConfig) }
+      )
+      .pipe(
+        retry(RETRY_AMOUNT),
+        catchError(this.handleError),
+        mapTo(true)
+      );
+
+    return response$;
   }
 
   public openPreview(): Observable<string> {

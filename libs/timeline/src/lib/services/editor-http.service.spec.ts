@@ -1,7 +1,5 @@
-// file.only
 import { HttpClient } from '@angular/common/http';
 import { inject, TestBed } from '@angular/core/testing';
-import { Data } from '@angular/router';
 import { cold } from '@nrwl/nx/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { of } from 'rxjs';
@@ -15,6 +13,9 @@ describe('EditorHttpService', () => {
   let httpClient: HttpClient;
 
   const APIBase = 'http://some.website.address';
+  const mockTimeline = new TimelineConfigFixture();
+  const apiData = { timeline: JSON.stringify(mockTimeline) };
+  const requestMetadataId = 123;
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
@@ -23,7 +24,8 @@ describe('EditorHttpService', () => {
         {
           provide: HttpClient,
           useValue: {
-            get: () => {}
+            get: () => {},
+            put: () => {}
           }
         },
         {
@@ -47,26 +49,43 @@ describe('EditorHttpService', () => {
   ));
 
   describe('getJson', () => {
-    const mockTimeline = new TimelineConfigFixture();
-    const apiData: Data = { timeline: JSON.stringify(mockTimeline) };
-
-    const requestedMetadataId = 123;
-
     beforeEach(() => {
       httpClient.get = jest.fn().mockReturnValue(of(apiData));
     });
 
     it('should make the correct api call and return the response', () => {
-      expect(editorHttpService.getJson(requestedMetadataId)).toBeObservable(
+      expect(editorHttpService.getJson(requestMetadataId)).toBeObservable(
         cold('(a|)', { a: mockTimeline })
       );
 
       expect(httpClient.get).toHaveBeenCalledWith(
         APIBase +
           '/api/eduContentMetaData/' +
-          requestedMetadataId +
+          requestMetadataId +
           '?filter[fields]=timeline' +
           '&access_token=2' //TODO remove this bit
+      );
+    });
+  });
+
+  describe('setJson', () => {
+    beforeEach(() => {
+      // actual call returns entire eduContentMetadata
+      // but response is mapped to a boolean, so it doesn't matter
+      httpClient.put = jest.fn().mockReturnValue(of(apiData));
+    });
+
+    it('should make the correct api call and return the response', () => {
+      expect(
+        editorHttpService.setJson(requestMetadataId, mockTimeline)
+      ).toBeObservable(cold('(a|)', { a: true }));
+
+      expect(httpClient.put).toHaveBeenCalledWith(
+        APIBase +
+          '/api/eduContentMetaData/' +
+          requestMetadataId +
+          '?access_token=2', //TODO remove this bit
+        { timeline: JSON.stringify(mockTimeline) }
       );
     });
   });
