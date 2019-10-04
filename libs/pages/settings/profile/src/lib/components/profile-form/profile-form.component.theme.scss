@@ -1,2 +1,10 @@
 @mixin pages-settings-profile-form-component-theme() {
+  $pages-settings-profile-form__button-border-width: $pages-settings_form__button-border-width !default;
+  form {
+    campus-button {
+      &.ui-button.ui-button--bordered {
+        border-width: $pages-settings-profile-form__button-border-width;
+      }
+    }
+  }
 }

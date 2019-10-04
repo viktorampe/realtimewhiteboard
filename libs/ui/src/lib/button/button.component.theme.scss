@@ -5,6 +5,7 @@
   $ui-button-background-color: $ui-button-bg-color !default;
   $ui-button__icon-margin: 0 $ui-button-font-size/2 0 0 !default;
   $ui-button-border-color: darken($ui-button-background-color, 10%) !default;
+  $ui-button-border-width: 1px !default;
   $ui-button-background-color-1: $ui-button-bg-color-1 !default;
   $ui-button-background-color-2: $ui-button-bg-color-2 !default;
 
@@ -113,7 +114,7 @@
     &.ui-button--bordered {
       border-color: $ui-button-border-color;
       border-style: solid;
-      border-width: 1px; // --bordered--disabled
+      border-width: $ui-button-border-width; // --bordered--disabled
       &.ui-button--disabled {
         .ui-button {
           border-color: $ui-button--disabled-border-color;
