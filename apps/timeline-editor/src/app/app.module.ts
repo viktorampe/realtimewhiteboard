@@ -1,4 +1,3 @@
-import { HttpClientModule } from '@angular/common/http';
 import { Injector, NgModule } from '@angular/core';
 import { createCustomElement } from '@angular/elements';
 import { BrowserModule } from '@angular/platform-browser';
@@ -11,7 +10,6 @@ import { TimelineEditorComponent } from './timeline-editor/timeline-editor.compo
   declarations: [TimelineEditorComponent],
   imports: [
     BrowserModule,
-    HttpClientModule,
     RouterModule.forRoot([], { initialNavigation: 'enabled' }),
     TimelineModule
   ],

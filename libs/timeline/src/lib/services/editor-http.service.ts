@@ -28,7 +28,7 @@ export class EditorHttpService implements EditorHttpServiceInterface {
     const response$ = this.http
       .get<{ timeline: string }>(
         this.environmentApi.APIBase +
-          '/api/eduContentMetaData/' +
+          '/api/eduContentMetadata/' +
           eduContentMetadataId +
           '?filter[fields]=timeline' +
           '&access_token=2' // TODO: remove this bit
@@ -44,15 +44,15 @@ export class EditorHttpService implements EditorHttpServiceInterface {
 
   public setJson(
     eduContentMetadataId: number,
-    timeLineConfig: TimelineConfig
+    timelineConfig: TimelineConfig
   ): Observable<boolean> {
     const response$ = this.http
       .put(
         this.environmentApi.APIBase +
-          '/api/eduContentMetaData/' +
+          '/api/eduContentMetadata/' +
           eduContentMetadataId +
           '?access_token=2', // TODO: remove this bit
-        { timeline: JSON.stringify(timeLineConfig) }
+        { timeline: JSON.stringify(timelineConfig) }
       )
       .pipe(
         retry(RETRY_AMOUNT),

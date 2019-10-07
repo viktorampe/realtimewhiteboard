@@ -5,7 +5,7 @@ export interface EditorHttpServiceInterface {
   getJson(eduContentMetadataId: number): Observable<TimelineConfig>;
   setJson(
     eduContentMetadataId: number,
-    timeLineConfig: TimelineConfig
+    timelineConfig: TimelineConfig
   ): Observable<boolean>;
   openPreview(
     eduContentId: number,
