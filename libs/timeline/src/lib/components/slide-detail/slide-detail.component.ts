@@ -9,7 +9,9 @@ import {
 } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import {
+  TimelineBackground,
   TimelineDate,
+  TimelineMedia,
   TimelineSlide,
   TimelineText
 } from '../../interfaces/timeline';
@@ -26,6 +28,9 @@ interface SlideFormInterface {
   endDateTime: SlideFormDateInterface;
   group: string;
   text: TimelineText;
+  background: TimelineBackground;
+  media: TimelineMedia;
+  displayDate: string;
 }
 
 @Component({
@@ -56,21 +61,36 @@ export class SlideDetailComponent implements OnInit, OnChanges {
       startDateTime: this.fb.group({
         date: [this.formData.startDateTime.date],
         hour: [this.formData.startDateTime.hour],
-        minute: [this.formData.startDateTime.minute]
+        minute: [this.formData.startDateTime.minute],
+        displayDate: [this.formData.startDateTime.displayDate]
       }),
       endDateTime: this.fb.group({
         date: [this.formData.endDateTime.date],
         hour: [this.formData.endDateTime.hour],
-        minute: [this.formData.endDateTime.minute]
+        minute: [this.formData.endDateTime.minute],
+        displayDate: [this.formData.endDateTime.displayDate]
       }),
       group: [this.formData.group],
       text: this.fb.group({
         headline: ['headline'],
         text: ['text']
-      })
-      // background: [this.slide.background],
-      // media: [this.slide.media],
-      // display_data: [this.slide.display_date]
+      }),
+      background: this.fb.group({
+        url: [''],
+        color: [''],
+        eduFileId: ['']
+      }),
+      media: this.fb.group({
+        url: [''],
+        caption: [''],
+        credit: [''],
+        thumbnail: [''],
+        alt: [''],
+        title: [''],
+        link: [''],
+        eduFileId: ['']
+      }),
+      displayDate: [this.formData.displayDate]
     });
   }
 
@@ -87,35 +107,41 @@ export class SlideDetailComponent implements OnInit, OnChanges {
       startDateTime: {
         date: this.transformTimelineDateToJsDate(this.slide.start_date),
         hour: slide.start_date.hour,
-        minute: slide.start_date.minute
+        minute: slide.start_date.minute,
+        displayDate: slide.start_date.display_date
       },
       endDateTime: {
         date: this.transformTimelineDateToJsDate(slide.end_date),
         hour: slide.end_date.hour,
-        minute: slide.end_date.minute
+        minute: slide.end_date.minute,
+        displayDate: slide.end_date.display_date
       },
       group: slide.group,
-      text: slide.text
+      text: slide.text,
+      background: slide.background,
+      media: slide.media,
+      displayDate: slide.display_date
     };
     return formData;
   }
 
   private mapFormDataToSlide(formData: SlideFormInterface): TimelineSlide {
     const slideData: TimelineSlide = {
-      start_date: this.transformJsDateToTimelineDate(
-        formData.startDateTime.date
-      ),
-      end_date: this.transformJsDateToTimelineDate(formData.endDateTime.date),
+      start_date: this.getTimelineDate(formData.startDateTime),
+      end_date: this.getTimelineDate(formData.endDateTime),
       group: formData.group,
       text: formData.text
     };
-
-    slideData.start_date.hour = formData.startDateTime.hour;
-    slideData.start_date.minute = formData.startDateTime.minute;
-    slideData.end_date.hour = formData.endDateTime.hour;
-    slideData.end_date.minute = formData.endDateTime.minute;
-
     return slideData;
+  }
+
+  getTimelineDate(slideFormDate: SlideFormDateInterface): TimelineDate {
+    const timelineDate: TimelineDate = {
+      ...this.transformJsDateToTimelineDate(slideFormDate.date),
+      ...slideFormDate
+    };
+
+    return timelineDate;
   }
 
   private transformTimelineDateToJsDate(timelineDate: TimelineDate): Date {
@@ -134,7 +160,7 @@ export class SlideDetailComponent implements OnInit, OnChanges {
     const timelineDate: TimelineDate = {
       year: jsDate.getFullYear(),
       month: jsDate.getMonth() + 1, // timeline date month is 1 based
-      day: jsDate.getDay()
+      day: jsDate.getDate()
     };
 
     return timelineDate;
