@@ -6,7 +6,7 @@ import {
   EnvironmentApiInterface,
   ENVIRONMENT_API_TOKEN
 } from '../interfaces/environment';
-import { TimelineConfig } from '../interfaces/timeline';
+import { TimelineConfigInterface } from '../interfaces/timeline';
 import { EditorHttpServiceInterface } from './editor-http.service.interface';
 
 export const EDITOR_HTTP_SERVICE_TOKEN = new InjectionToken(
@@ -24,7 +24,9 @@ export class EditorHttpService implements EditorHttpServiceInterface {
     private environmentApi: EnvironmentApiInterface
   ) {}
 
-  public getJson(eduContentMetadataId: number): Observable<TimelineConfig> {
+  public getJson(
+    eduContentMetadataId: number
+  ): Observable<TimelineConfigInterface> {
     const response$ = this.http
       .get<{ timeline: string }>(
         this.environmentApi.APIBase +
@@ -36,7 +38,9 @@ export class EditorHttpService implements EditorHttpServiceInterface {
       .pipe(
         retry(RETRY_AMOUNT),
         catchError(this.handleError),
-        map(response => JSON.parse(response.timeline) as TimelineConfig)
+        map(
+          response => JSON.parse(response.timeline) as TimelineConfigInterface
+        )
       );
 
     return response$;
@@ -44,7 +48,7 @@ export class EditorHttpService implements EditorHttpServiceInterface {
 
   public setJson(
     eduContentMetadataId: number,
-    timelineConfig: TimelineConfig
+    timelineConfig: TimelineConfigInterface
   ): Observable<boolean> {
     const response$ = this.http
       .put(

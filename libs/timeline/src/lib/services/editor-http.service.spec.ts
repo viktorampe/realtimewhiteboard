@@ -60,7 +60,7 @@ describe('EditorHttpService', () => {
 
       expect(httpClient.get).toHaveBeenCalledWith(
         APIBase +
-          '/api/eduContentMetaData/' +
+          '/api/eduContentMetadata/' +
           requestMetadataId +
           '?filter[fields]=timeline' +
           '&access_token=2' //TODO remove this bit
@@ -82,7 +82,7 @@ describe('EditorHttpService', () => {
 
       expect(httpClient.put).toHaveBeenCalledWith(
         APIBase +
-          '/api/eduContentMetaData/' +
+          '/api/eduContentMetadata/' +
           requestMetadataId +
           '?access_token=2', //TODO remove this bit
         { timeline: JSON.stringify(mockTimeline) }
