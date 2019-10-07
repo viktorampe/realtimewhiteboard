@@ -1,9 +1,18 @@
 import { Inject, Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { map, shareReplay, take, withLatestFrom } from 'rxjs/operators';
+import { BehaviorSubject, merge, Observable } from 'rxjs';
+import {
+  filter,
+  map,
+  mapTo,
+  shareReplay,
+  switchMapTo,
+  take,
+  withLatestFrom
+} from 'rxjs/operators';
 import {
   TimelineConfigInterface,
   TimelineDateInterface,
+  TimelineSettingsInterface,
   TimelineSlideInterface
 } from '../interfaces/timeline';
 import { EDITOR_HTTP_SERVICE_TOKEN } from '../services/editor-http.service';
@@ -23,6 +32,7 @@ export class EditorViewModel {
 
   public activeSlideDetail$: Observable<TimelineViewSlideInterface>;
   public slideList$: Observable<TimelineViewSlideInterface[]>;
+  public settings$: Observable<TimelineSettingsInterface>;
 
   // where does the eduContentId and eduContentMetadataId come from?
   // the component? DI?
@@ -50,23 +60,47 @@ export class EditorViewModel {
 
   private setPresentationStreams() {
     this.slideList$ = this.data$.pipe(
-      map(data =>
-        this.mapToViewSlides(
-          (data && data.eras) || [],
-          (data && data.events) || []
-        )
-      ),
+      filter(data => !!data),
+      map(data => this.mapToViewSlides(data.eras, data.events)),
       shareReplay(1)
     );
 
-    this.activeSlideDetail$ = this.activeSlideId$.pipe(
+    this.activeSlideDetail$ = this.getActiveSlideDetail();
+    this.settings$ = this.getSettings();
+  }
+
+  private getActiveSlideDetail(): Observable<TimelineViewSlideInterface> {
+    const detailWithActiveSlideId = this.activeSlideId$.pipe(
+      filter(activeSlideId => Number.isInteger(activeSlideId)),
       withLatestFrom(this.slideList$),
-      map(([activeSlideId, viewSlides]) => {
-        if (activeSlideId !== null && activeSlideId !== undefined) {
-          return viewSlides[activeSlideId];
-        } else return;
-      })
+      map(([activeSlideId, viewSlides]) => viewSlides[activeSlideId])
     );
+
+    const detailWithoutActiveSlideId = this.activeSlideId$.pipe(
+      filter(activeSlideId => !Number.isInteger(activeSlideId)),
+      mapTo(null)
+    );
+
+    return merge(detailWithActiveSlideId, detailWithoutActiveSlideId);
+  }
+
+  private getSettings(): Observable<TimelineSettingsInterface> {
+    const settingsWithoutActiveSlideId = this.activeSlideId$.pipe(
+      filter(activeSlideId => !Number.isInteger(activeSlideId)),
+      switchMapTo(this.data$.pipe(filter(data => !!data))),
+      map(data => ({
+        title: data.title,
+        scale: data.scale,
+        options: data.options
+      }))
+    );
+
+    const settingsWithActiveSlideId = this.activeSlideId$.pipe(
+      filter(activeSlideId => Number.isInteger(activeSlideId)),
+      mapTo(null)
+    );
+
+    return merge(settingsWithoutActiveSlideId, settingsWithActiveSlideId);
   }
 
   private mapToViewSlides(
