@@ -53,7 +53,7 @@ configureBufferSize(150);
     TermPrivacyGuard,
     {
       provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
-      useValue: { appearance: 'outline' }
+      useValue: { appearance: 'fill' }
     }
   ],
   bootstrap: [AppComponent],

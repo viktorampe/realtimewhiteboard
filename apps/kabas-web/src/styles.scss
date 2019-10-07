@@ -300,6 +300,18 @@ p {
   }
 }
 
+//forms
+
+.mat-form-field-underline {
+  opacity: 0;
+}
+
+.mat-form-field-appearance-fill .mat-form-field-flex {
+  background-color: $color-white-1;
+  border: 1px solid $color-gray-4;
+  border-radius: 1px !important;
+}
+
 @import 'scss/theme-file-icons';
 
 /*

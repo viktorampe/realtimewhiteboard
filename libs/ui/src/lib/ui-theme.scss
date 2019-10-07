@@ -45,6 +45,7 @@ $ui-button-font-weight: inherit !default;
 $ui-button-font-size: $ui-primary-font-size !default;
 $ui-form-input-font-weight: normal !default;
 $ui-form-input-font-color: inherit !default;
+$ui-form-input--focused-font-color: $ui-primary-font-color !default;
 $ui-form-item-padding-bottom: $ui-primary-font-size !default;
 $ui-form-item-margin-bottom: 0px !default;
 $ui-form-item-border-radius: 0px !default;
@@ -124,7 +125,6 @@ $ui-tile-height: 105px !default;
   form {
     .mat-form-field {
       display: block;
-      margin-bottom: $ui-form-item-margin-bottom;
 
       .mat-form-field-wrapper {
         padding-bottom: $ui-form-item-padding-bottom;
@@ -148,6 +148,13 @@ $ui-tile-height: 105px !default;
       input {
         font-weight: $ui-form-input-font-weight;
         color: $ui-form-input-font-color;
+      }
+
+      &.mat-focused {
+        input,
+        select {
+          color: $ui-form-input--focused-font-color;
+        }
       }
     }
 
