@@ -86,6 +86,8 @@ export class EditorHttpService implements EditorHttpServiceInterface {
     eduContentId: number,
     file: File
   ): Observable<StorageInfoInterface> {
+    // expects multiple='multiple' to be set on the file input
+
     const formData: FormData = new FormData();
     formData.append('file', file, file.name);
 
