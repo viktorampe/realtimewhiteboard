@@ -8,6 +8,13 @@ export interface TimelineConfigInterface {
   options: TimelineOptionsInterface;
 }
 
+export interface TimelineViewSlideInterface {
+  type: 'slide' | 'era';
+  viewSlide: TimelineSlideInterface | TimelineEraInterface;
+  label: string;
+  date: Date;
+}
+
 export interface TimelineSlideInterface {
   start_date?: TimelineDateInterface; // Not required for title slide
   end_date?: TimelineDateInterface;
