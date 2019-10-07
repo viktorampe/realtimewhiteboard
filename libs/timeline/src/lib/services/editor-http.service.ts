@@ -2,14 +2,17 @@ import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable, InjectionToken } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map, mapTo, retry } from 'rxjs/operators';
-import { EnvironmentApiInterface, ENVIRONMENT_API_TOKEN } from '../interfaces/environment';
+import {
+  EnvironmentApiInterface,
+  ENVIRONMENT_API_TOKEN
+} from '../interfaces/environment';
 import { TimelineConfig } from '../interfaces/timeline';
 import { EditorHttpServiceInterface } from './editor-http.service.interface';
 
 export const EDITOR_HTTP_SERVICE_TOKEN = new InjectionToken(
   'EditorHttpService'
 );
-const RETRY_AMOUNT = 2;
+const RETRY_AMOUNT = 0;
 
 @Injectable({
   providedIn: 'root'
@@ -64,21 +67,25 @@ export class EditorHttpService implements EditorHttpServiceInterface {
     return;
   }
 
-  public uploadFile(eduContentId: number, file: FormData): Observable<boolean> {
+  public uploadFile(eduContentId: number, file: File): Observable<boolean> {
+    const formData: FormData = new FormData();
+    formData.append('file', file, file.name);
+    
     const response$ = this.http
       .post(
         this.environmentApi.APIBase +
           '/api/EduContentFiles/' +
           eduContentId +
+          '/store' +
           '?access_token=2', // TODO: remove this bit
-        file
+        formData
       )
       .pipe(
         retry(RETRY_AMOUNT),
         catchError(this.handleError),
         mapTo(true)
       );
-    
+
     return response$;
   }
 
