@@ -1,0 +1,13 @@
+.timeline-slide-detail {
+  form {
+    width: 400px;
+  }
+  &__form {
+    &__dateTimePicker {
+      display: flex;
+      mat-form-field {
+        margin-right: 10px;
+      }
+    }
+  }
+}
