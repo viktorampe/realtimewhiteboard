@@ -1,4 +1,5 @@
 import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { EditorTimelineComponent } from './components/editor-timeline/editor-timeline.component';
 import { SettingsComponent } from './components/settings/settings.component';
@@ -10,7 +11,7 @@ import {
 } from './services/editor-http.service';
 
 @NgModule({
-  imports: [CommonModule],
+  imports: [CommonModule, HttpClientModule],
   declarations: [
     EditorTimelineComponent,
     SlideListComponent,
