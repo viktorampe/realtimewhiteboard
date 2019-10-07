@@ -6,7 +6,7 @@ export const EDITOR_HTTP_SERVICE_TOKEN = new InjectionToken(
 );
 
 @Injectable({
-  providedIn: 'root'
+  provideTimelineConfigInterface
 })
 export class EditorHttpService implements EditorHttpServiceInterface {
   getJson() {}
@@ -17,3 +17,4 @@ export class EditorHttpService implements EditorHttpServiceInterface {
 
   uploadFile() {}
 }
+TimelineConfigInterfaceTimelineConfigInterfaceTimelineConfigInterface;
