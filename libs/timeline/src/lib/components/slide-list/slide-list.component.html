@@ -1,3 +1,15 @@
-<p>
-  slide-list works!
-</p>
+<div class="timeline-slide-list__buttons">
+  <button mat-button (click)="showTimelineSettings()">Tijdslijn</button>
+  <button mat-button (click)="createSlide()">+ slide</button>
+  <button mat-button (click)="createEra()">+ era</button>
+</div>
+<mat-action-list>
+  <button
+    mat-list-item
+    *ngFor="let slide of viewSlides; let i = index"
+    (click)="clickViewSlide(slide)"
+    [class.active]="i === activeViewSlide"
+    [class.slide]="slide.type === 'slide'"
+    >{{ slide.label }}</button
+  >
+</mat-action-list>
