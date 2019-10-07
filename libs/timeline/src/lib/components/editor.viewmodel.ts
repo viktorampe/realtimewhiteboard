@@ -17,8 +17,11 @@ export class EditorViewModel {
     return this.editorHttpService.getJson(eduContentMetadataId);
   }
 
-  updateTimeline(eduContentMetadataId: number, data: TimelineConfig): void {
-    this.editorHttpService.setJson(eduContentMetadataId, data);
+  updateTimeline(
+    eduContentMetadataId: number,
+    data: TimelineConfig
+  ): Observable<boolean> {
+    return this.editorHttpService.setJson(eduContentMetadataId, data);
   }
 
   previewTimeline(
@@ -31,7 +34,7 @@ export class EditorViewModel {
     );
   }
 
-  uploadFile(file: string): void {
-    this.editorHttpService.uploadFile(file);
+  uploadFile(file: string): Observable<boolean> {
+    return this.editorHttpService.uploadFile(file);
   }
 }
