@@ -33,6 +33,7 @@ export class EditorViewModel {
   public activeSlideDetail$: Observable<TimelineViewSlideInterface>;
   public slideList$: Observable<TimelineViewSlideInterface[]>;
   public settings$: Observable<TimelineSettingsInterface>;
+  public isFormDirty$: Observable<boolean>;
 
   // where does the eduContentId and eduContentMetadataId come from?
   // the component? DI?
@@ -44,7 +45,7 @@ export class EditorViewModel {
   }
 
   private initialise() {
-    this.eduContentId = 19;
+    this.eduContentId = 19; // TODO make variable
     this.setSourceStreams(this.eduContentId);
     this.setPresentationStreams();
   }
@@ -67,6 +68,7 @@ export class EditorViewModel {
 
     this.activeSlideDetail$ = this.getActiveSlideDetail();
     this.settings$ = this.getSettings();
+    this.isFormDirty$ = new BehaviorSubject(false);
   }
 
   private getActiveSlideDetail(): Observable<TimelineViewSlideInterface> {
