@@ -6,7 +6,10 @@ import { of } from 'rxjs';
 import { TimelineConfigFixture } from '../+fixtures/timeline-config.fixture';
 import { ENVIRONMENT_API_TOKEN } from '../interfaces/environment';
 import { EditorHttpService } from './editor-http.service';
-import { EditorHttpServiceInterface } from './editor-http.service.interface';
+import {
+  EditorHttpServiceInterface,
+  StorageInfoInterface
+} from './editor-http.service.interface';
 
 describe('EditorHttpService', () => {
   let editorHttpService: EditorHttpServiceInterface;
@@ -25,7 +28,8 @@ describe('EditorHttpService', () => {
           provide: HttpClient,
           useValue: {
             get: () => {},
-            put: () => {}
+            put: () => {},
+            post: () => {}
           }
         },
         {
@@ -39,6 +43,10 @@ describe('EditorHttpService', () => {
   beforeEach(() => {
     editorHttpService = TestBed.get(EditorHttpService);
     httpClient = TestBed.get(HttpClient);
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
   });
 
   it('should be created and available via DI', inject(
@@ -86,6 +94,39 @@ describe('EditorHttpService', () => {
           requestMetadataId +
           '?access_token=2', //TODO remove this bit
         { timeline: JSON.stringify(mockTimeline) }
+      );
+    });
+  });
+
+  describe('uploadFile', () => {
+    const eduContentId = 123;
+
+    const storageInfo: StorageInfoInterface = {
+      name: 'foo.exe',
+      storageName: 'some-hash'
+    };
+
+    const file = new File([], 'foo.exe');
+
+    const formData = new FormData();
+    formData.append('file', file, file.name);
+
+    beforeEach(() => {
+      httpClient.post = jest.fn().mockReturnValue(of(storageInfo));
+    });
+
+    it('should make the correct api call and return the response', () => {
+      expect(editorHttpService.uploadFile(eduContentId, file)).toBeObservable(
+        cold('(a|)', { a: storageInfo })
+      );
+
+      expect(httpClient.post).toHaveBeenCalledWith(
+        APIBase +
+          '/api/EduContentFiles/' +
+          eduContentId +
+          '/store' +
+          '?access_token=2', // TODO: remove this bit
+        formData
       );
     });
   });

@@ -7,7 +7,10 @@ import {
   ENVIRONMENT_API_TOKEN
 } from '../interfaces/environment';
 import { TimelineConfig } from '../interfaces/timeline';
-import { EditorHttpServiceInterface } from './editor-http.service.interface';
+import {
+  EditorHttpServiceInterface,
+  StorageInfoInterface
+} from './editor-http.service.interface';
 
 export const EDITOR_HTTP_SERVICE_TOKEN = new InjectionToken(
   'EditorHttpService'
@@ -67,10 +70,13 @@ export class EditorHttpService implements EditorHttpServiceInterface {
     return;
   }
 
-  public uploadFile(eduContentId: number, file: File): Observable<boolean> {
+  public uploadFile(
+    eduContentId: number,
+    file: File
+  ): Observable<StorageInfoInterface> {
     const formData: FormData = new FormData();
     formData.append('file', file, file.name);
-    
+
     const response$ = this.http
       .post(
         this.environmentApi.APIBase +
@@ -83,7 +89,7 @@ export class EditorHttpService implements EditorHttpServiceInterface {
       .pipe(
         retry(RETRY_AMOUNT),
         catchError(this.handleError),
-        mapTo(true)
+        map(response => response as StorageInfoInterface)
       );
 
     return response$;

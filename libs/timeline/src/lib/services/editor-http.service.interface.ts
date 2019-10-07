@@ -11,5 +11,14 @@ export interface EditorHttpServiceInterface {
     eduContentId: number,
     eduContentMetadataId: number
   ): Observable<string>;
-  uploadFile(eduContentId: number, file: File): Observable<boolean>;
+  uploadFile(
+    eduContentId: number,
+    file: File
+  ): Observable<StorageInfoInterface>;
+}
+
+export interface StorageInfoInterface {
+  checksum?: string;
+  name: string;
+  storageName: string;
 }
