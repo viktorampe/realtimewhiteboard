@@ -1,25 +1,19 @@
 import { HttpClient } from '@angular/common/http';
-import { Inject, Injectable, InjectionToken } from '@angular/core';
+import { Inject } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map, mapTo, retry } from 'rxjs/operators';
 import {
   EnvironmentApiInterface,
   ENVIRONMENT_API_TOKEN
 } from '../interfaces/environment';
-import { TimelineConfig } from '../interfaces/timeline';
+import { TimelineConfigInterface } from '../interfaces/timeline';
 import {
   EditorHttpServiceInterface,
   StorageInfoInterface
 } from './editor-http.service.interface';
 
-export const EDITOR_HTTP_SERVICE_TOKEN = new InjectionToken(
-  'EditorHttpService'
-);
-const RETRY_AMOUNT = 0;
+const RETRY_AMOUNT = 2;
 
-@Injectable({
-  providedIn: 'root'
-})
 export class EditorHttpService implements EditorHttpServiceInterface {
   constructor(
     private http: HttpClient,
@@ -27,11 +21,13 @@ export class EditorHttpService implements EditorHttpServiceInterface {
     private environmentApi: EnvironmentApiInterface
   ) {}
 
-  public getJson(eduContentMetadataId: number): Observable<TimelineConfig> {
+  public getJson(
+    eduContentMetadataId: number
+  ): Observable<TimelineConfigInterface> {
     const response$ = this.http
       .get<{ timeline: string }>(
         this.environmentApi.APIBase +
-          '/api/eduContentMetaData/' +
+          '/api/eduContentMetadata/' +
           eduContentMetadataId +
           '?filter[fields]=timeline' +
           '&access_token=2' // TODO: remove this bit
@@ -39,7 +35,9 @@ export class EditorHttpService implements EditorHttpServiceInterface {
       .pipe(
         retry(RETRY_AMOUNT),
         catchError(this.handleError),
-        map(response => JSON.parse(response.timeline) as TimelineConfig)
+        map(
+          response => JSON.parse(response.timeline) as TimelineConfigInterface
+        )
       );
 
     return response$;
@@ -47,15 +45,15 @@ export class EditorHttpService implements EditorHttpServiceInterface {
 
   public setJson(
     eduContentMetadataId: number,
-    timeLineConfig: TimelineConfig
+    timelineConfig: TimelineConfigInterface
   ): Observable<boolean> {
     const response$ = this.http
       .put(
         this.environmentApi.APIBase +
-          '/api/eduContentMetaData/' +
+          '/api/eduContentMetadata/' +
           eduContentMetadataId +
           '?access_token=2', // TODO: remove this bit
-        { timeline: JSON.stringify(timeLineConfig) }
+        { timeline: JSON.stringify(timelineConfig) }
       )
       .pipe(
         retry(RETRY_AMOUNT),

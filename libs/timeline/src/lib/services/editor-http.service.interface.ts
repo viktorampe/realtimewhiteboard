@@ -1,11 +1,10 @@
 import { Observable } from 'rxjs';
-import { TimelineConfig } from '../interfaces/timeline';
-
+import { TimelineConfigInterface } from '../interfaces/timeline';
 export interface EditorHttpServiceInterface {
-  getJson(eduContentMetadataId: number): Observable<TimelineConfig>;
+  getJson(eduContentMetadataId: number): Observable<TimelineConfigInterface>;
   setJson(
     eduContentMetadataId: number,
-    timeLineConfig: TimelineConfig
+    timelineConfig: TimelineConfigInterface
   ): Observable<boolean>;
   openPreview(
     eduContentId: number,
@@ -21,4 +20,5 @@ export interface StorageInfoInterface {
   checksum?: string;
   name: string;
   storageName: string;
+  eduFileId?: string;
 }

@@ -1,9 +1,9 @@
-import { TimelineOptions } from '../interfaces/timeline';
+import { TimelineOptionsInterface } from '../interfaces/timeline';
 
-export class TimelineOptionsFixture implements TimelineOptions {
+export class TimelineOptionsFixture implements TimelineOptionsInterface {
   // defaults
 
-  constructor(props: Partial<TimelineOptions> = {}) {
+  constructor(props: Partial<TimelineOptionsInterface> = {}) {
     // overwrite defaults
     Object.assign(this, props);
   }
