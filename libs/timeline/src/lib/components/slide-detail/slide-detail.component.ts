@@ -37,8 +37,8 @@ interface SlideFormInterface extends TimelineSlideInterface {
   styleUrls: ['./slide-detail.component.scss']
 })
 export class SlideDetailComponent implements OnInit, OnChanges {
-  @Input() viewSlide: TimelineViewSlideInterface; // TODO: use TimeLineViewSlideInterface
-  @Output() saveSlide = new EventEmitter<TimelineSlideInterface>();
+  @Input() viewSlide: TimelineViewSlideInterface;
+  @Output() saveSlide = new EventEmitter<TimelineViewSlideInterface>();
 
   private formData: SlideFormInterface;
 
@@ -134,11 +134,11 @@ export class SlideDetailComponent implements OnInit, OnChanges {
     viewSlide: TimelineViewSlideInterface
   ): SlideFormInterface {
     const formData: SlideFormInterface = {
-      ...this.getEmptyTimelineSlide(),
-      ...viewSlide
+      ...this.getEmptyTimelineSlide(), // set all properties
+      ...viewSlide // override default properties
     };
 
-    // add properties that are used by the form, but not needed for the slide
+    // add properties that are used by the form, but not needed for the view slide
     formData.type = viewSlide.type;
     formData.start_date.date = this.transformTimelineDateToJsDate(
       viewSlide.viewSlide.start_date
@@ -150,16 +150,21 @@ export class SlideDetailComponent implements OnInit, OnChanges {
     return formData;
   }
 
-  private mapFormDataToSlide(
+  private mapFormDataToViewSlide(
     formData: SlideFormInterface
-  ): TimelineSlideInterface {
+  ): TimelineViewSlideInterface {
     formData.start_date = this.getTimelineDate(formData.start_date);
     formData.end_date = this.getTimelineDate(formData.end_date);
 
     delete formData.start_date.date;
     delete formData.end_date.date;
 
-    return formData;
+    const viewSlide: TimelineViewSlideInterface = {
+      type: formData.type,
+      viewSlide: formData,
+      label: this.viewSlide.label
+    };
+    return viewSlide;
   }
 
   private getTimelineDate(
@@ -233,8 +238,9 @@ export class SlideDetailComponent implements OnInit, OnChanges {
 
   onSubmit(): void {
     if (this.slideForm.valid) {
-      console.log(this.mapFormDataToSlide(this.slideForm.value));
-      // this.saveSlide.next(this.mapFormDataToSlide(this.slideForm.value));
+      const outputData = this.mapFormDataToViewSlide(this.slideForm.value);
+      console.log(outputData);
+      this.saveSlide.next(outputData);
     }
   }
 }

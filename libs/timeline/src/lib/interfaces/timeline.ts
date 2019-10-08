@@ -63,7 +63,7 @@ export interface TimelineBackgroundInterface {
 }
 
 export interface TimelineViewSlideInterface {
-  type: 'slide' | 'era';
+  type: 'slide' | 'era' | 'title';
   viewSlide: TimelineSlideInterface | TimelineEraInterface;
   label: string;
 }
