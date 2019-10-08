@@ -61,17 +61,29 @@ export class SlideDetailComponent implements OnInit, OnChanges {
 
   buildForm(): void {
     this.slideForm = this.fb.group({
-      type: [this.formData.type],
+      type: [this.formData.type, Validators.required],
       start_date: this.fb.group({
         date: [this.formData.start_date.date || null], // always required, TODO: make month & day optional
-        hour: [this.formData.start_date.hour || null],
-        minute: [this.formData.start_date.minute || null],
+        hour: [
+          this.formData.start_date.hour || null,
+          [Validators.min(0), Validators.max(23), Validators.maxLength(2)]
+        ],
+        minute: [
+          this.formData.start_date.minute || null,
+          [Validators.min(0), Validators.max(59), Validators.maxLength(2)]
+        ],
         displayDate: [this.formData.start_date.display_date || '']
       }),
       end_date: this.fb.group({
         date: [this.formData.end_date.date || null],
-        hour: [this.formData.end_date.hour || null],
-        minute: [this.formData.end_date.minute || null],
+        hour: [
+          this.formData.end_date.hour || null,
+          [Validators.min(0), Validators.max(23), Validators.maxLength(2)]
+        ],
+        minute: [
+          this.formData.end_date.minute || null,
+          [Validators.min(0), Validators.max(59), Validators.maxLength(2)]
+        ],
         displayDate: [this.formData.end_date.display_date || '']
       }),
       group: [this.formData.group],
@@ -203,12 +215,22 @@ export class SlideDetailComponent implements OnInit, OnChanges {
       start_date: {
         year: null,
         month: null,
-        day: null
+        day: null,
+        hour: null,
+        minute: null,
+        second: null,
+        millisecond: null,
+        display_date: ''
       },
       end_date: {
         year: null,
         month: null,
-        day: null
+        day: null,
+        hour: null,
+        minute: null,
+        second: null,
+        millisecond: null,
+        display_date: ''
       },
       group: '',
       text: {
