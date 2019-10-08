@@ -1,0 +1,13 @@
+.timeline-slide-list__buttons {
+  button {
+    margin-left: 5px;
+
+    &:first-child {
+      margin-left: 0;
+    }
+  }
+}
+
+.mat-list-item.slide {
+  padding-left: 10px;
+}

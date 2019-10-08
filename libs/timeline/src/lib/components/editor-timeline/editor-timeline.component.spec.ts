@@ -1,4 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatListModule } from '@angular/material';
+import { SlideListComponent } from '../slide-list/slide-list.component';
 import { EditorTimelineComponent } from './editor-timeline.component';
 
 describe('EditorTimelineComponent', () => {
@@ -7,7 +9,8 @@ describe('EditorTimelineComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [EditorTimelineComponent]
+      imports: [MatListModule],
+      declarations: [EditorTimelineComponent, SlideListComponent]
     }).compileComponents();
   }));
 
