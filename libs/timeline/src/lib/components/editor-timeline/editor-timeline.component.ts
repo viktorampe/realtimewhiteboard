@@ -13,6 +13,7 @@ import { EditorViewModel } from './../editor.viewmodel';
 })
 export class EditorTimelineComponent implements OnInit {
   public slideList$: Observable<TimelineViewSlideInterface[]>;
+  public activeSlide$: Observable<TimelineViewSlideInterface>;
   public activeSlideDetail$: Observable<TimelineViewSlideInterface>;
   public settings$: Observable<TimelineSettingsInterface>;
   public isFormDirty$: Observable<boolean>;
@@ -24,6 +25,7 @@ export class EditorTimelineComponent implements OnInit {
   ngOnInit() {
     this.slideList$ = this.editorViewModel.slideList$;
     this.activeSlideDetail$ = this.editorViewModel.activeSlideDetail$;
+    this.activeSlide$ = this.editorViewModel.activeSlide$;
     this.settings$ = this.editorViewModel.settings$;
     this.isFormDirty$ = this.editorViewModel.isFormDirty$;
   }

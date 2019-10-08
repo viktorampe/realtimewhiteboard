@@ -29,7 +29,7 @@
   <div class="timeline-editor__main__list">
     <campus-slide-list
       [viewSlides]="slideList$ | async"
-      [activeViewSlide]="1"
+      [activeViewSlide]="activeSlide$ | async"
       (clickSetSlide)="setActiveSlide($event)"
     ></campus-slide-list>
   </div>
