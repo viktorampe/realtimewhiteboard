@@ -23,6 +23,7 @@ export class MockEditorViewModel
     this.getSettings()
   );
   public isFormDirty$ = new BehaviorSubject<boolean>(false);
+  public newSlide$ = new BehaviorSubject<TimelineViewSlideInterface>(null);
 
   private getActiveSlideDetail(): TimelineViewSlideInterface {
     return this.getSlideList()[2];

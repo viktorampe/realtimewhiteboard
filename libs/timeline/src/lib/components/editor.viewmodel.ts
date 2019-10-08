@@ -35,6 +35,11 @@ export class EditorViewModel {
   public settings$: Observable<TimelineSettingsInterface>;
   public isFormDirty$: Observable<boolean>;
 
+  // stores temporary value for new slide
+  // always emit this in activeSlide when there is a value
+  // emit null in setting$ when there is a value
+  public newSlide$: Observable<TimelineViewSlideInterface>;
+
   // where does the eduContentId and eduContentMetadataId come from?
   // the component? DI?
   constructor(
@@ -63,6 +68,7 @@ export class EditorViewModel {
       shareReplay(1)
     );
 
+    this.newSlide$ = new BehaviorSubject<TimelineViewSlideInterface>(null);
     this.activeSlideDetail$ = this.getActiveSlideDetail();
     this.settings$ = this.getSettings();
     this.isFormDirty$ = new BehaviorSubject(false);
@@ -70,22 +76,38 @@ export class EditorViewModel {
 
   private getActiveSlideDetail(): Observable<TimelineViewSlideInterface> {
     const detailWithActiveSlideId$ = this.activeSlideId$.pipe(
-      filter(activeSlideId => Number.isInteger(activeSlideId)),
+      withLatestFrom(this.newSlide$),
+      filter(
+        ([activeSlideId, newSlide]) =>
+          Number.isInteger(activeSlideId) && !newSlide
+      ),
       withLatestFrom(this.slideList$),
-      map(([activeSlideId, viewSlides]) => viewSlides[activeSlideId])
+      map(([[activeSlideId], viewSlides]) => viewSlides[activeSlideId])
     );
 
     const detailWithoutActiveSlideId$ = this.activeSlideId$.pipe(
-      filter(activeSlideId => !Number.isInteger(activeSlideId)),
+      withLatestFrom(this.newSlide$),
+      filter(
+        ([activeSlideId, newSlide]) =>
+          !Number.isInteger(activeSlideId) && !newSlide
+      ),
       mapTo(null)
     );
 
-    return merge(detailWithActiveSlideId$, detailWithoutActiveSlideId$);
+    return merge(
+      detailWithActiveSlideId$,
+      detailWithoutActiveSlideId$,
+      this.newSlide$
+    );
   }
 
   private getSettings(): Observable<TimelineSettingsInterface> {
     const settingsWithoutActiveSlideId$ = this.activeSlideId$.pipe(
-      filter(activeSlideId => !Number.isInteger(activeSlideId)),
+      withLatestFrom(this.newSlide$),
+      filter(
+        ([activeSlideId, newSlide]) =>
+          !Number.isInteger(activeSlideId) && !newSlide
+      ),
       switchMapTo(this.data$),
       filter(data => !!data),
       map(data => ({
@@ -96,7 +118,11 @@ export class EditorViewModel {
     );
 
     const settingsWithActiveSlideId$ = this.activeSlideId$.pipe(
-      filter(activeSlideId => Number.isInteger(activeSlideId)),
+      withLatestFrom(this.newSlide$),
+      filter(
+        ([activeSlideId, newSlide]) =>
+          Number.isInteger(activeSlideId) || !!newSlide
+      ),
       mapTo(null)
     );
 
