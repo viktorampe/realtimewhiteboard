@@ -107,10 +107,11 @@ export class EditorViewModel {
 
   private mapToViewSlides(
     eras: TimelineEraInterface[],
-    slides: TimelineSlideInterface[]
+    slides: TimelineSlideInterface[],
+    title?: TimelineSlideInterface
   ): TimelineViewSlideInterface[] {
     const viewEras = eras.map(era => ({
-      type: 'era' as ('era' | 'slide'),
+      type: 'era' as 'era',
       viewSlide: era,
       date: this.transformTimelineDateToJsDate(era.start_date),
       label:
@@ -119,7 +120,7 @@ export class EditorViewModel {
     }));
 
     const viewSlides = slides.map(slide => ({
-      type: 'slide' as ('era' | 'slide'),
+      type: 'slide' as 'slide',
       viewSlide: slide,
       date: this.transformTimelineDateToJsDate(slide.start_date),
       label:
@@ -131,9 +132,22 @@ export class EditorViewModel {
       if (a.date === b.date) {
         return a.type > b.type ? 1 : -1;
       }
-
       return a.date > b.date ? 1 : -1;
     });
+
+    if (title) {
+      const viewTitle = {
+        type: 'title' as 'title',
+        viewSlide: title,
+        label:
+          title.display_date ||
+          (title.start_date &&
+            this.transformTimelineDateToLabel(title.start_date)) ||
+          'Titel',
+        date: null
+      };
+      return [viewTitle, ...slideList];
+    }
 
     return slideList;
   }
