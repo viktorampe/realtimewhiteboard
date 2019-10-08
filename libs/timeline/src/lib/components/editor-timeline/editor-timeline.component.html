@@ -1,10 +1,49 @@
-<p>
-  editor-timeline works!
-</p>
-<campus-slide-list
-  [viewSlides]="slides$ | async"
-  [activeViewSlide]="1"
-  (clickSetSlide)="noop()"
-  (clickCreateSlide)="noop()"
-  (clickCreateEra)="noop()"
-></campus-slide-list>
+<div class="timeline-editor__toolbar">
+  <div class="timeline-editor__toolbar__button-container">
+    <button
+      mat-button
+      class="timeline-editor__toolbar__button"
+      (click)="showSettings()"
+      >Tijdslijn</button
+    >
+    <button
+      mat-button
+      class="timeline-editor__toolbar__button"
+      (click)="createSlide()"
+      >+ slide</button
+    >
+    <button
+      mat-button
+      class="timeline-editor__toolbar__button"
+      (click)="createEra()"
+      >+ era</button
+    >
+  </div>
+  <div
+    *ngIf="(isFormDirty$ | async)"
+    class="timeline-editor__toolbar__form-dirty-warning"
+    >Niet opgeslagen aanpassingen...</div
+  >
+</div>
+<div class="timeline-editor__main">
+  <div class="timeline-editor__main__list">
+    <campus-slide-list
+      [viewSlides]="slideList$ | async"
+      [activeViewSlide]="1"
+      (clickSetSlide)="setActiveSlide($event)"
+    ></campus-slide-list>
+  </div>
+
+  <div class="timeline-editor__main__detail">
+    <div
+      *ngIf="(activeSlideDetail$ | async) as activeSlideDetail"
+      class="timeline-editor__main__detail--slide"
+      >{{ activeSlideDetail | json }}</div
+    >
+    <div
+      *ngIf="(settings$ | async) as settings"
+      class="timeline-editor__main__detail--settings"
+      >{{ settings | json }}</div
+    >
+  </div>
+</div>
