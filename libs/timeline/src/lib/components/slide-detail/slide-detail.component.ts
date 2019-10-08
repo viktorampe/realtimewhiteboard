@@ -157,6 +157,8 @@ export class SlideDetailComponent implements OnInit, OnChanges {
       ...viewSlide // override default properties
     };
 
+    viewSlide.viewSlide = viewSlide.viewSlide as TimelineSlideInterface;
+
     // add properties that are used by the form, but not needed for the view slide
     formData.general = {
       type: viewSlide.type,
@@ -197,6 +199,7 @@ export class SlideDetailComponent implements OnInit, OnChanges {
       viewSlideData.text = formDataCopy.text;
     } else {
       // type is 'slide' or 'title'
+      viewSlideData = viewSlideData as TimelineSlideInterface;
       viewSlideData.group = formDataCopy.general.group;
       viewSlideData.display_date = formDataCopy.general.display_date;
 
