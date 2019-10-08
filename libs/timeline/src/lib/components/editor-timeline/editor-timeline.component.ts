@@ -37,4 +37,6 @@ export class EditorTimelineComponent implements OnInit {
   }
 
   ngOnInit() {}
+
+  noop(): void {}
 }

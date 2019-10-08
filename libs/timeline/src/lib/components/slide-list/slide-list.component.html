@@ -7,7 +7,7 @@
   <button
     mat-list-item
     *ngFor="let slide of viewSlides; let i = index"
-    (click)="clickViewSlide(slide)"
+    (click)="setViewSlide(slide)"
     [class.active]="i === activeViewSlide"
     [class.slide]="slide.type === 'slide'"
     >{{ slide.label }}</button
