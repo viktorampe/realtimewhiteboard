@@ -39,7 +39,7 @@ interface SlideFormInterface extends TimelineSlideInterface {
 })
 export class SlideDetailComponent implements OnInit, OnChanges {
   @Input() viewSlide: TimelineViewSlideInterface;
-  @Output() saveSlide = new EventEmitter<TimelineViewSlideInterface>();
+  @Output() saveViewSlide = new EventEmitter<TimelineViewSlideInterface>();
 
   private formData: SlideFormInterface;
 
@@ -309,7 +309,7 @@ export class SlideDetailComponent implements OnInit, OnChanges {
     if (this.slideForm.valid) {
       const outputData = this.mapFormDataToViewSlide(this.slideForm.value);
       console.log(outputData);
-      this.saveSlide.next(outputData);
+      this.saveViewSlide.next(outputData);
     }
   }
 }
