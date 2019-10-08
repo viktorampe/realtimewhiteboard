@@ -8,29 +8,15 @@ import {
   SimpleChanges
 } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import {
-  TimelineBackground,
-  TimelineDate,
-  TimelineMedia,
-  TimelineSlide,
-  TimelineText
-} from '../../interfaces/timeline';
+import { TimelineDate, TimelineSlide } from '../../interfaces/timeline';
 
-interface SlideFormDateInterface {
-  date: Date;
-  hour: number;
-  minute: number;
-  displayDate?: string;
+interface SlideFormDateInterface extends TimelineDate {
+  date?: Date;
 }
 
-interface SlideFormInterface {
-  startDateTime: SlideFormDateInterface;
-  endDateTime: SlideFormDateInterface;
-  group: string;
-  text: TimelineText;
-  background: TimelineBackground;
-  media: TimelineMedia;
-  displayDate: string;
+interface SlideFormInterface extends TimelineSlide {
+  start_date?: SlideFormDateInterface;
+  end_date?: SlideFormDateInterface;
 }
 
 @Component({
@@ -58,17 +44,17 @@ export class SlideDetailComponent implements OnInit, OnChanges {
 
   buildForm(): void {
     this.slideForm = this.fb.group({
-      startDateTime: this.fb.group({
-        date: [this.formData.startDateTime.date],
-        hour: [this.formData.startDateTime.hour],
-        minute: [this.formData.startDateTime.minute],
-        displayDate: [this.formData.startDateTime.displayDate]
+      start_date: this.fb.group({
+        date: [this.formData.start_date.date],
+        hour: [this.formData.start_date.hour],
+        minute: [this.formData.start_date.minute],
+        displayDate: [this.formData.start_date.display_date]
       }),
-      endDateTime: this.fb.group({
-        date: [this.formData.endDateTime.date],
-        hour: [this.formData.endDateTime.hour],
-        minute: [this.formData.endDateTime.minute],
-        displayDate: [this.formData.endDateTime.displayDate]
+      end_date: this.fb.group({
+        date: [this.formData.end_date.date],
+        hour: [this.formData.end_date.hour],
+        minute: [this.formData.end_date.minute],
+        displayDate: [this.formData.end_date.display_date]
       }),
       group: [this.formData.group],
       text: this.fb.group({
@@ -90,7 +76,7 @@ export class SlideDetailComponent implements OnInit, OnChanges {
         link: [''],
         eduFileId: ['']
       }),
-      displayDate: [this.formData.displayDate]
+      displayDate: [this.formData.display_date]
     });
   }
 
@@ -104,35 +90,25 @@ export class SlideDetailComponent implements OnInit, OnChanges {
 
   private mapSlideToFormData(slide: TimelineSlide): SlideFormInterface {
     const formData: SlideFormInterface = {
-      startDateTime: {
-        date: this.transformTimelineDateToJsDate(this.slide.start_date),
-        hour: slide.start_date.hour,
-        minute: slide.start_date.minute,
-        displayDate: slide.start_date.display_date
-      },
-      endDateTime: {
-        date: this.transformTimelineDateToJsDate(slide.end_date),
-        hour: slide.end_date.hour,
-        minute: slide.end_date.minute,
-        displayDate: slide.end_date.display_date
-      },
-      group: slide.group,
-      text: slide.text,
-      background: slide.background,
-      media: slide.media,
-      displayDate: slide.display_date
+      ...slide
     };
+
+    formData.start_date.date = this.transformTimelineDateToJsDate(
+      slide.start_date
+    );
+    formData.end_date.date = this.transformTimelineDateToJsDate(slide.end_date);
+
     return formData;
   }
 
   private mapFormDataToSlide(formData: SlideFormInterface): TimelineSlide {
-    const slideData: TimelineSlide = {
-      start_date: this.getTimelineDate(formData.startDateTime),
-      end_date: this.getTimelineDate(formData.endDateTime),
-      group: formData.group,
-      text: formData.text
-    };
-    return slideData;
+    formData.start_date = this.getTimelineDate(formData.start_date);
+    formData.end_date = this.getTimelineDate(formData.end_date);
+
+    delete formData.start_date.date;
+    delete formData.end_date.date;
+
+    return formData;
   }
 
   getTimelineDate(slideFormDate: SlideFormDateInterface): TimelineDate {
@@ -169,7 +145,7 @@ export class SlideDetailComponent implements OnInit, OnChanges {
   onSubmit() {
     if (this.slideForm.valid) {
       console.log(this.mapFormDataToSlide(this.slideForm.value));
-      this.saveSlide.next(this.mapFormDataToSlide(this.slideForm.value));
+      // this.saveSlide.next(this.mapFormDataToSlide(this.slideForm.value));
     }
   }
 }

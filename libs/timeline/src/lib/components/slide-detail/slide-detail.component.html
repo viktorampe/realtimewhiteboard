@@ -1,7 +1,7 @@
 <div class="campus-page timeline-slide-detail">
   <form [formGroup]="slideForm" (ngSubmit)="onSubmit()">
     <div
-      formGroupName="startDateTime"
+      formGroupName="start_date"
       class="timeline-slide-detail__form__dateTimePicker"
     >
       <div class="mat-h3">Startdatum</div>
@@ -45,7 +45,7 @@
       </mat-form-field>
     </div>
     <div
-      formGroupName="endDateTime"
+      formGroupName="end_date"
       class="timeline-slide-detail__form__dateTimePicker"
     >
       <div class="mat-h3">Einddatum</div>
@@ -208,6 +208,6 @@
         placeholder="Weergavedatum"
       />
     </mat-form-field>
-    <button mat-button type="submit" (click)="onSubmit()">Opslaan</button>
+    <button mat-button type="submit">Opslaan</button>
   </form>
 </div>
