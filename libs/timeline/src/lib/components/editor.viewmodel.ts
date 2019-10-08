@@ -127,6 +127,30 @@ export class EditorViewModel {
     this.data$.next(data);
   }
 
+  public deleteSlide(slide: TimelineViewSlideInterface) {
+    const data = this.data$.value;
+
+    if (slide.type === TIMELINE_SLIDE_TYPES.SLIDE) {
+      const viewSlide: TimelineSlideInterface = slide.viewSlide as TimelineSlideInterface;
+      const foundEventIndex = data.events.findIndex(
+        event => event === viewSlide
+      );
+
+      if (foundEventIndex !== -1) {
+        data.events.splice(foundEventIndex, 1);
+      }
+    } else if (slide.type === TIMELINE_SLIDE_TYPES.ERA) {
+      const viewSlide: TimelineEraInterface = slide.viewSlide as TimelineEraInterface;
+      const foundEraIndex = data.eras.findIndex(era => era === viewSlide);
+
+      if (foundEraIndex !== -1) {
+        data.eras.splice(foundEraIndex, 1);
+      }
+    }
+
+    this.data$.next(data);
+  }
+
   /**
    * Returns true if it is safe to proceed. That means: the user has
    * no changes or the user has changes and just saved them.
