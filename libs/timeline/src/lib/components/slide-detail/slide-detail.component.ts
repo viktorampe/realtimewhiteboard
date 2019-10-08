@@ -15,13 +15,16 @@ import {
 } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { startWith } from 'rxjs/operators';
-import { TimelineDate, TimelineSlide } from '../../interfaces/timeline';
+import {
+  TimelineDateInterface,
+  TimelineSlideInterface
+} from '../../interfaces/timeline';
 
-interface SlideFormDateInterface extends TimelineDate {
+interface SlideFormDateInterface extends TimelineDateInterface {
   date?: Date;
 }
 
-interface SlideFormInterface extends TimelineSlide {
+interface SlideFormInterface extends TimelineSlideInterface {
   type?: 'slide' | 'era';
   start_date?: SlideFormDateInterface;
   end_date?: SlideFormDateInterface;
@@ -34,8 +37,8 @@ interface SlideFormInterface extends TimelineSlide {
 })
 export class SlideDetailComponent implements OnInit, OnChanges {
   @Input() slideType: 'slide' | 'era';
-  @Input() slide: TimelineSlide; // TODO: use TimeLineViewSlideInterface
-  @Output() saveSlide = new EventEmitter<TimelineSlide>();
+  @Input() slide: TimelineSlideInterface; // TODO: use TimeLineViewSlideInterface
+  @Output() saveSlide = new EventEmitter<TimelineSlideInterface>();
 
   private formData: SlideFormInterface;
 
@@ -109,7 +112,9 @@ export class SlideDetailComponent implements OnInit, OnChanges {
     );
   }
 
-  private mapSlideToFormData(slide: TimelineSlide): SlideFormInterface {
+  private mapSlideToFormData(
+    slide: TimelineSlideInterface
+  ): SlideFormInterface {
     const formData: SlideFormInterface = {
       ...this.getEmptyTimelineSlide(),
       ...slide
@@ -125,7 +130,9 @@ export class SlideDetailComponent implements OnInit, OnChanges {
     return formData;
   }
 
-  private mapFormDataToSlide(formData: SlideFormInterface): TimelineSlide {
+  private mapFormDataToSlide(
+    formData: SlideFormInterface
+  ): TimelineSlideInterface {
     formData.start_date = this.getTimelineDate(formData.start_date);
     formData.end_date = this.getTimelineDate(formData.end_date);
 
@@ -135,8 +142,10 @@ export class SlideDetailComponent implements OnInit, OnChanges {
     return formData;
   }
 
-  private getTimelineDate(slideFormDate: SlideFormDateInterface): TimelineDate {
-    const timelineDate: TimelineDate = {
+  private getTimelineDate(
+    slideFormDate: SlideFormDateInterface
+  ): TimelineDateInterface {
+    const timelineDate: TimelineDateInterface = {
       ...this.transformJsDateToTimelineDate(slideFormDate.date),
       ...slideFormDate
     };
@@ -144,7 +153,9 @@ export class SlideDetailComponent implements OnInit, OnChanges {
     return timelineDate;
   }
 
-  private transformTimelineDateToJsDate(timelineDate: TimelineDate): Date {
+  private transformTimelineDateToJsDate(
+    timelineDate: TimelineDateInterface
+  ): Date {
     return new Date(
       timelineDate.year,
       timelineDate.month - 1, // js date object month is zero based
@@ -152,8 +163,8 @@ export class SlideDetailComponent implements OnInit, OnChanges {
     );
   }
 
-  private transformJsDateToTimelineDate(jsDate: Date): TimelineDate {
-    const timelineDate: TimelineDate = {
+  private transformJsDateToTimelineDate(jsDate: Date): TimelineDateInterface {
+    const timelineDate: TimelineDateInterface = {
       year: jsDate.getFullYear(),
       month: jsDate.getMonth() + 1, // timeline date month is 1 based
       day: jsDate.getDate()
@@ -162,7 +173,7 @@ export class SlideDetailComponent implements OnInit, OnChanges {
     return timelineDate;
   }
 
-  private getEmptyTimelineSlide(): TimelineSlide {
+  private getEmptyTimelineSlide(): TimelineSlideInterface {
     const emptySlide: SlideFormInterface = {
       start_date: {
         year: null,

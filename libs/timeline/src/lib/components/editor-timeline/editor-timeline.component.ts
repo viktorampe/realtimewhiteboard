@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { TimelineDateFixture } from '../../+fixtures/timeline-date.fixture';
-import { TimelineMediaFixture } from '../../+fixtures/timeline-media.fixture';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { TimelineSlideFixture } from '../../+fixtures/timeline-slide.fixture';
+import { TimelineViewSlideInterface } from '../../interfaces/timeline';
 
 @Component({
   selector: 'campus-editor-timeline',
@@ -9,11 +9,38 @@ import { TimelineSlideFixture } from '../../+fixtures/timeline-slide.fixture';
   styleUrls: ['./editor-timeline.component.scss']
 })
 export class EditorTimelineComponent implements OnInit {
-  slide = new TimelineSlideFixture({
-    start_date: new TimelineDateFixture({ hour: 11, minute: 55 }),
-    media: new TimelineMediaFixture({ title: 'foo title' })
-  });
-  constructor() {}
+  slides = [
+    {
+      type: 'era',
+      viewSlide: new TimelineSlideFixture(),
+      label: 'januari - februari 2019'
+    },
+    {
+      type: 'slide',
+      viewSlide: new TimelineSlideFixture(),
+      label: 'januari 2019'
+    },
+    {
+      type: 'slide',
+      viewSlide: new TimelineSlideFixture(),
+      label: 'februari 2019'
+    },
+    {
+      type: 'slide',
+      viewSlide: new TimelineSlideFixture(),
+      label: 'maart 2019'
+    }
+  ];
+
+  public activeSlide = this.slides[0];
+  public slides$: Observable<TimelineViewSlideInterface[]>;
+
+  constructor() {
+    this.slides$ = new BehaviorSubject(this
+      .slides as TimelineViewSlideInterface[]);
+  }
 
   ngOnInit() {}
+
+  noop(): void {}
 }

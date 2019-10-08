@@ -1,5 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { MatListModule } from '@angular/material';
 import { SlideListComponent } from './slide-list.component';
 
 describe('SlideListComponent', () => {
@@ -8,6 +8,7 @@ describe('SlideListComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [MatListModule],
       declarations: [SlideListComponent]
     }).compileComponents();
   }));

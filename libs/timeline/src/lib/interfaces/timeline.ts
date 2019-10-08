@@ -1,30 +1,30 @@
 // These interfaces match with the objects used in the TimelineJS library
 
-export interface TimelineConfig {
-  title?: TimelineSlide;
-  events: TimelineSlide[];
-  eras: TimelineEra[];
+export interface TimelineConfigInterface {
+  title?: TimelineSlideInterface;
+  events: TimelineSlideInterface[];
+  eras: TimelineEraInterface[];
   scale?: 'human' | 'cosmological';
-  options: TimelineOptions;
+  options: TimelineOptionsInterface;
 }
 
-export interface TimelineSlide {
-  start_date?: TimelineDate; // Not required for title slide
-  end_date?: TimelineDate;
+export interface TimelineSlideInterface {
+  start_date?: TimelineDateInterface; // Not required for title slide
+  end_date?: TimelineDateInterface;
   group?: string;
-  text?: TimelineText;
-  background?: TimelineBackground;
-  media?: TimelineMedia;
+  text?: TimelineTextInterface;
+  background?: TimelineBackgroundInterface;
+  media?: TimelineMediaInterface;
   display_date?: string; // Override representation of start and end date
 }
 
-export interface TimelineEra {
-  start_date: TimelineDate;
-  end_date: TimelineDate;
-  text?: TimelineText;
+export interface TimelineEraInterface {
+  start_date: TimelineDateInterface;
+  end_date: TimelineDateInterface;
+  text?: TimelineTextInterface;
 }
 
-export interface TimelineDate {
+export interface TimelineDateInterface {
   year: number;
   month?: number; // Note: 1 is January, not 0
   day?: number;
@@ -35,12 +35,12 @@ export interface TimelineDate {
   display_date?: string; // Optional string representation of date
 }
 
-export interface TimelineText {
+export interface TimelineTextInterface {
   headline?: string;
   text?: string; // Not used for era slides
 }
 
-export interface TimelineMedia {
+export interface TimelineMediaInterface {
   url?: string; // if omitted, it should be added by the wrapper (see eduFileId)
   caption?: string;
   credit?: string;
@@ -51,13 +51,19 @@ export interface TimelineMedia {
   eduFileId?: number; // checked to replace the url field with a signed url
 }
 
-export interface TimelineOptions {
+export interface TimelineOptionsInterface {
   relative?: boolean; // Defaults to false
   scale_factor?: number; // Amount of screen widths timeline takes up
 }
 
-export interface TimelineBackground {
+export interface TimelineBackgroundInterface {
   url?: string;
   color?: string;
   eduFileId?: number; // checked to replace the url field with a signed url
+}
+
+export interface TimelineViewSlideInterface {
+  type: 'slide' | 'era';
+  viewSlide: TimelineSlideInterface | TimelineEraInterface;
+  label: string;
 }

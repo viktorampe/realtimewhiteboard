@@ -192,7 +192,9 @@ export const environment: EnvironmentInterface = {
   testing: {
     removeDataCyAttributes: false
   },
-  ui: {}
+  ui: {
+    useInfoPanelStyle: true
+  }
 };
 
 /*

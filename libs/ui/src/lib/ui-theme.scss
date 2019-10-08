@@ -41,8 +41,16 @@ $ui-button-bg-color: $ui-form-button-default-bg-color !default;
 $ui-button-bg-color-1: $ui-form-button-primary-bg-color !default;
 $ui-button-bg-color-2: $ui-tertiary-bg-color !default;
 $ui-button-font-color: #fff !default;
+$ui-button-font-weight: inherit !default;
 $ui-button-font-size: $ui-primary-font-size !default;
+$ui-form-input-font-weight: normal !default;
+$ui-form-input-font-color: inherit !default;
+$ui-form-input--focused-font-color: $ui-primary-font-color !default;
 $ui-form-item-padding-bottom: $ui-primary-font-size !default;
+$ui-form-item-margin-bottom: 0px !default;
+$ui-form-item-border-radius: 0px !default;
+$ui-form-item-label-color: inherit !default;
+$ui-form-item-bg-color: #fff !default;
 $ui-form-actions-padding: 20px 0 0 0 !default;
 $ui-form-spacing: 5px !default;
 
@@ -120,6 +128,33 @@ $ui-tile-height: 105px !default;
 
       .mat-form-field-wrapper {
         padding-bottom: $ui-form-item-padding-bottom;
+      }
+
+      .mat-form-field-outline {
+        background-color: $ui-form-item-bg-color;
+        .mat-form-field-outline-start {
+          border-radius: $ui-form-item-border-radius;
+        }
+
+        .mat-form-field-outline-end {
+          border-radius: $ui-form-item-border-radius;
+        }
+      }
+
+      .mat-form-field-label {
+        color: $ui-form-item-label-color;
+      }
+
+      input {
+        font-weight: $ui-form-input-font-weight;
+        color: $ui-form-input-font-color;
+      }
+
+      &.mat-focused {
+        input,
+        select {
+          color: $ui-form-input--focused-font-color;
+        }
       }
     }
 
