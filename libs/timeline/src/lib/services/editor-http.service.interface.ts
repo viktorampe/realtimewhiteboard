@@ -6,10 +6,7 @@ export interface EditorHttpServiceInterface {
     eduContentMetadataId: number,
     timelineConfig: TimelineConfigInterface
   ): Observable<boolean>;
-  openPreview(
-    eduContentId: number,
-    eduContentMetadataId: number
-  ): Observable<string>;
+  getPreviewUrl(eduContentId, eduContentMetadataId): string;
   uploadFile(
     eduContentId: number,
     file: File

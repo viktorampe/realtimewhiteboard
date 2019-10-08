@@ -64,22 +64,15 @@ export class EditorHttpService implements EditorHttpServiceInterface {
     return response$;
   }
 
-  public openPreview(eduContentId, eduContentMetadataId): Observable<string> {
-    const response$ = this.http
-      .get<string>(
-        this.environmentApi.APIBase +
-        '/api/eduContents/' +
-        eduContentId +
-        '/redirectURL/' + // TODO: doublecheck once API is finalised
-          eduContentMetadataId +
-          '?access_token=2' // TODO: remove this bit
-      )
-      .pipe(
-        retry(RETRY_AMOUNT),
-        catchError(this.handleError)
-      );
-
-    return response$;
+  public getPreviewUrl(eduContentId, eduContentMetadataId): string {
+    return (
+      this.environmentApi.APIBase +
+      '/api/eduContents/' +
+      eduContentId +
+      '/redirectURL/' + // TODO: doublecheck once API is finalised
+      eduContentMetadataId +
+      '?access_token=2' // TODO: remove this bit
+    );
   }
 
   public uploadFile(

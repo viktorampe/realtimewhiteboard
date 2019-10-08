@@ -132,29 +132,25 @@ describe('EditorHttpService', () => {
     });
   });
 
-  describe('openPreview', () => {
+  describe('getPreviewUrl', () => {
     const eduContentId = 123;
     const eduContentMetadataId = 456;
 
-    const requestedUrl = 'www.foo.com';
-
-    beforeEach(() => {
-      httpClient.get = jest.fn().mockReturnValue(of(requestedUrl));
-    });
-
     it('should make the correct api call and return the response', () => {
-      expect(
-        editorHttpService.openPreview(eduContentId, eduContentMetadataId)
-      ).toBeObservable(cold('(a|)', { a: requestedUrl }));
-
-      expect(httpClient.get).toHaveBeenCalledWith(
-        APIBase +
-          '/api/eduContents/' +
-          eduContentId +
-          '/redirectURL/' +
-          eduContentMetadataId +
-          '?access_token=2' // TODO: remove this bit
+      const previewUrl = editorHttpService.getPreviewUrl(
+        eduContentId,
+        eduContentMetadataId
       );
+
+      const expected =
+        APIBase +
+        '/api/eduContents/' +
+        eduContentId +
+        '/redirectURL/' +
+        eduContentMetadataId +
+        '?access_token=2'; // TODO: remove this bit
+
+      expect(previewUrl).toEqual(expected);
     });
   });
 });
