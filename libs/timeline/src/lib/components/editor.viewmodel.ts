@@ -151,6 +151,10 @@ export class EditorViewModel {
     this.data$.next(data);
   }
 
+  public setActiveSlideId(index: number) {
+    this.activeSlideId$.next(index);
+  }
+
   /**
    * Returns true if it is safe to proceed. That means: the user has
    * no changes or the user has changes and just saved them.
