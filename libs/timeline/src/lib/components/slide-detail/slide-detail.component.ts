@@ -166,6 +166,7 @@ export class SlideDetailComponent implements OnInit, OnChanges {
   private mapFormDataToViewSlide(
     formData: SlideFormInterface
   ): TimelineViewSlideInterface {
+    // don't mutate the form data
     const formDataCopy = { ...formData };
 
     // transform js dates back to timeline dates
@@ -197,6 +198,7 @@ export class SlideDetailComponent implements OnInit, OnChanges {
       viewSlide: viewSlideData,
       label: this.viewSlide.label
     };
+
     return viewSlide;
   }
 
@@ -279,9 +281,9 @@ export class SlideDetailComponent implements OnInit, OnChanges {
     return emptySlide;
   }
 
-  private removeEmpty(obj) {
+  private removeEmpty(obj): object {
     const newObj = {};
-
+    // https://stackoverflow.com/questions/42736031/remove-empty-objects-from-an-object?answertab=votes#tab-top
     // delete empty properties
     Object.keys(obj).forEach(key => {
       if (obj[key] && typeof obj[key] === 'object') {
