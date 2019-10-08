@@ -59,6 +59,7 @@ export const environment = {
     removeDataCyAttributes: false
   },
   ui: {
-    useNavItemStyle: true
+    useNavItemStyle: true,
+    useInfoPanelStyle: false
   }
 };

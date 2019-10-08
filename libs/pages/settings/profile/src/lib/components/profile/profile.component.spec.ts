@@ -6,6 +6,7 @@ import {
   PersonFixture,
   UserReducer
 } from '@campus/dal';
+import { ENVIRONMENT_UI_TOKEN } from '@campus/shared';
 import { Store, StoreModule } from '@ngrx/store';
 import { ProfileViewModel } from '../profile.viewmodel';
 import { MockProfileViewModel } from '../profile.viewmodel.mock';
@@ -32,6 +33,12 @@ describe('ProfileComponent', () => {
           provide: AUTH_SERVICE_TOKEN,
           useValue: {
             userId: 1
+          }
+        },
+        {
+          provide: ENVIRONMENT_UI_TOKEN,
+          useValue: {
+            useInfoPanelStyle: true
           }
         }
       ],

@@ -64,7 +64,8 @@ export const environment: EnvironmentInterface = {
     removeDataCyAttributes: false
   },
   ui: {
-    useNavItemStyle: true
+    useNavItemStyle: true,
+    useInfoPanelStyle: false
   }
 };
 

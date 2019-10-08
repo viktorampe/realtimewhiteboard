@@ -4,6 +4,7 @@
   (ngSubmit)="onSubmit()"
 >
   <mat-form-field>
+    <mat-label>Naam</mat-label>
     <input
       matInput
       type="text"
@@ -16,6 +17,7 @@
     >
   </mat-form-field>
   <mat-form-field>
+    <mat-label>Voornaam</mat-label>
     <input
       matInput
       type="text"
@@ -28,6 +30,7 @@
     >
   </mat-form-field>
   <mat-form-field>
+    <mat-label>Gebruikersnaam</mat-label>
     <input
       matInput
       type="text"
@@ -43,6 +46,7 @@
     >
   </mat-form-field>
   <mat-form-field>
+    <mat-label>E-mail</mat-label>
     <input
       matInput
       type="text"
@@ -61,6 +65,7 @@
     >
   </mat-form-field>
   <mat-form-field>
+    <mat-label>Wachtwoord</mat-label>
     <input
       matInput
       type="password"
@@ -73,6 +78,7 @@
   </mat-form-field>
 
   <mat-form-field *ngIf="getControl('password').value">
+    <mat-label>Herhaal wachtwoord</mat-label>
     <input
       matInput
       type="password"
@@ -88,11 +94,12 @@
   <div class="form-actions">
     <campus-button
       primary
+      bordered
       type="submit"
       (click)="onSubmit()"
       [ngClass]="{ 'ui-button--disabled': !profileForm.valid }"
       >Opslaan</campus-button
     >
-    <campus-button (click)="onReset()">Annuleren</campus-button>
+    <campus-button bordered (click)="onReset()">Annuleren</campus-button>
   </div>
 </form>
