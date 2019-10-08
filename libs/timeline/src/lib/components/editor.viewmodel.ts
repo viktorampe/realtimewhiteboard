@@ -6,14 +6,14 @@ import {
   mapTo,
   shareReplay,
   switchMapTo,
-  take,
   withLatestFrom
 } from 'rxjs/operators';
 import {
   TimelineConfigInterface,
   TimelineDateInterface,
   TimelineSettingsInterface,
-  TimelineSlideInterface
+  TimelineSlideInterface,
+  TIMELINE_SLIDE_TYPES
 } from '../interfaces/timeline';
 import { EDITOR_HTTP_SERVICE_TOKEN } from '../services/editor-http.service';
 import { EditorHttpServiceInterface } from '../services/editor-http.service.interface';
@@ -51,12 +51,9 @@ export class EditorViewModel {
   }
 
   private setSourceStreams(eduContentId) {
-    this.editorHttpService
-      .getJson(eduContentId)
-      .pipe(take(1))
-      .subscribe(timeline => {
-        this.data$.next(timeline);
-      });
+    this.editorHttpService.getJson(eduContentId).subscribe(timeline => {
+      this.data$.next(timeline);
+    });
   }
 
   private setPresentationStreams() {
@@ -72,24 +69,25 @@ export class EditorViewModel {
   }
 
   private getActiveSlideDetail(): Observable<TimelineViewSlideInterface> {
-    const detailWithActiveSlideId = this.activeSlideId$.pipe(
+    const detailWithActiveSlideId$ = this.activeSlideId$.pipe(
       filter(activeSlideId => Number.isInteger(activeSlideId)),
       withLatestFrom(this.slideList$),
       map(([activeSlideId, viewSlides]) => viewSlides[activeSlideId])
     );
 
-    const detailWithoutActiveSlideId = this.activeSlideId$.pipe(
+    const detailWithoutActiveSlideId$ = this.activeSlideId$.pipe(
       filter(activeSlideId => !Number.isInteger(activeSlideId)),
       mapTo(null)
     );
 
-    return merge(detailWithActiveSlideId, detailWithoutActiveSlideId);
+    return merge(detailWithActiveSlideId$, detailWithoutActiveSlideId$);
   }
 
   private getSettings(): Observable<TimelineSettingsInterface> {
-    const settingsWithoutActiveSlideId = this.activeSlideId$.pipe(
+    const settingsWithoutActiveSlideId$ = this.activeSlideId$.pipe(
       filter(activeSlideId => !Number.isInteger(activeSlideId)),
-      switchMapTo(this.data$.pipe(filter(data => !!data))),
+      switchMapTo(this.data$),
+      filter(data => !!data),
       map(data => ({
         title: data.title,
         scale: data.scale,
@@ -97,12 +95,12 @@ export class EditorViewModel {
       }))
     );
 
-    const settingsWithActiveSlideId = this.activeSlideId$.pipe(
+    const settingsWithActiveSlideId$ = this.activeSlideId$.pipe(
       filter(activeSlideId => Number.isInteger(activeSlideId)),
       mapTo(null)
     );
 
-    return merge(settingsWithoutActiveSlideId, settingsWithActiveSlideId);
+    return merge(settingsWithoutActiveSlideId$, settingsWithActiveSlideId$);
   }
 
   private mapToViewSlides(
@@ -111,7 +109,7 @@ export class EditorViewModel {
     title?: TimelineSlideInterface
   ): TimelineViewSlideInterface[] {
     const viewEras = eras.map(era => ({
-      type: 'era' as 'era',
+      type: TIMELINE_SLIDE_TYPES.ERA,
       viewSlide: era,
       date: this.transformTimelineDateToJsDate(era.start_date),
       label:
@@ -120,7 +118,7 @@ export class EditorViewModel {
     }));
 
     const viewSlides = slides.map(slide => ({
-      type: 'slide' as 'slide',
+      type: TIMELINE_SLIDE_TYPES.SLIDE,
       viewSlide: slide,
       date: this.transformTimelineDateToJsDate(slide.start_date),
       label:
@@ -132,12 +130,13 @@ export class EditorViewModel {
       if (a.date === b.date) {
         return a.type > b.type ? 1 : -1;
       }
+
       return a.date > b.date ? 1 : -1;
     });
 
     if (title) {
       const viewTitle = {
-        type: 'title' as 'title',
+        type: TIMELINE_SLIDE_TYPES.TITLE,
         viewSlide: title,
         label:
           title.display_date ||
