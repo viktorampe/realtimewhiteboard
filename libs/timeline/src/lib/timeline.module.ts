@@ -8,7 +8,8 @@ import {
   MatInputModule,
   MatListModule,
   MatNativeDateModule,
-  MatRadioModule
+  MatRadioModule,
+  MatStepperModule
 } from '@angular/material';
 import { EditorTimelineComponent } from './components/editor-timeline/editor-timeline.component';
 import { SettingsComponent } from './components/settings/settings.component';
@@ -30,7 +31,8 @@ import {
     MatInputModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatRadioModule
+    MatRadioModule,
+    MatStepperModule
   ],
   declarations: [
     EditorTimelineComponent,

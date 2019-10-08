@@ -29,6 +29,8 @@ interface SlideFormDateInterface extends TimelineDateInterface {
 interface SlideFormInterface extends TimelineSlideInterface {
   general?: {
     type: 'slide' | 'era' | 'title';
+    group: string;
+    display_date: string;
   };
   start_date?: SlideFormDateInterface;
   end_date?: SlideFormDateInterface;
@@ -65,7 +67,9 @@ export class SlideDetailComponent implements OnInit, OnChanges {
   buildForm(): void {
     this.slideForm = this.fb.group({
       general: this.fb.group({
-        type: [this.formData.general.type, Validators.required]
+        type: [this.formData.general.type, Validators.required],
+        group: [this.formData.general.group],
+        display_date: [this.formData.general.display_date]
       }),
       start_date: this.fb.group({
         date: [this.formData.start_date.date || null], // always required, TODO: make month & day optional
@@ -91,7 +95,6 @@ export class SlideDetailComponent implements OnInit, OnChanges {
         ],
         displayDate: [this.formData.end_date.display_date || '']
       }),
-      group: [this.formData.group],
       text: this.fb.group({
         headline: [this.formData.text.headline || ''],
         text: [this.formData.text.text || '']
@@ -110,8 +113,7 @@ export class SlideDetailComponent implements OnInit, OnChanges {
         title: [this.formData.media.title || ''],
         link: [this.formData.media.link || ''],
         eduFileId: ['']
-      }),
-      displayDate: [this.formData.display_date]
+      })
     });
   }
 
@@ -156,7 +158,11 @@ export class SlideDetailComponent implements OnInit, OnChanges {
     };
 
     // add properties that are used by the form, but not needed for the view slide
-    formData.general = { type: viewSlide.type };
+    formData.general = {
+      type: viewSlide.type,
+      group: viewSlide.viewSlide.group,
+      display_date: viewSlide.viewSlide.display_date
+    };
     formData.start_date.date = this.transformTimelineDateToJsDate(
       viewSlide.viewSlide.start_date
     );
@@ -191,7 +197,16 @@ export class SlideDetailComponent implements OnInit, OnChanges {
       viewSlideData.text = formDataCopy.text;
     } else {
       // type is 'slide' or 'title'
-      viewSlideData = { ...viewSlideData, ...formDataCopy };
+      viewSlideData.group = formDataCopy.general.group;
+      viewSlideData.display_date = formDataCopy.general.display_date;
+
+      // remove form specific properties
+      delete formDataCopy.general;
+
+      viewSlideData = {
+        ...viewSlideData,
+        ...formDataCopy
+      } as TimelineSlideInterface;
     }
 
     // remove not set properties
