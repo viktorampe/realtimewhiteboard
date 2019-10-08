@@ -6,20 +6,41 @@
   >
   </campus-page-header>
 
-  <campus-info-panel
-    [titleText]="pageTitle"
-    [titleIcon]="'profile'"
-    [titleRightRouterLink]="['/settings']"
-  >
-    <mat-icon
-      title__right
-      class="info-panel__title--left__icon"
-      [svgIcon]="'arrow-back'"
-    ></mat-icon>
-    <div title__right>Instellingen</div>
-    <campus-profile-form
-      (saveProfile)="onSaveProfile($event)"
-      [user]="user$ | async"
-    ></campus-profile-form>
-  </campus-info-panel>
+  <ng-container
+    *ngIf="useInfoPanelStyle; then infoPanelTemplate; else noInfoPanelTemplate"
+  ></ng-container>
+
+  <!-- kabas -->
+  <ng-template #noInfoPanelTemplate>
+    <div class="pages-settings-profile__form">
+      <div class="pages-settings-profile__form__title"
+        >Mijn gegevens aanpassen</div
+      >
+      <campus-profile-form
+        (saveProfile)="onSaveProfile($event)"
+        [user]="user$ | async"
+      ></campus-profile-form>
+    </div>
+  </ng-template>
+
+  <!-- polpo -->
+  <ng-template #infoPanelTemplate>
+    <campus-info-panel
+      [titleText]="pageTitle"
+      [titleIcon]="'profile'"
+      [titleRightRouterLink]="['/settings']"
+    >
+      <mat-icon
+        title__right
+        class="info-panel__title--left__icon"
+        [svgIcon]="'arrow-back'"
+      ></mat-icon>
+      <div title__right>Instellingen</div>
+
+      <campus-profile-form
+        (saveProfile)="onSaveProfile($event)"
+        [user]="user$ | async"
+      ></campus-profile-form>
+    </campus-info-panel>
+  </ng-template>
 </div>

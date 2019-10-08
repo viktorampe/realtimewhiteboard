@@ -130,6 +130,12 @@ $ui-person-badge-border-radius: 0;
 $ui-form-button-default-bg-color: $color-gray-2;
 $ui-form-button-primary-bg-color: $color-orange-1;
 $ui-button--large-font-size: 18px;
+$ui-button-font-weight: bold;
+$ui-form-input-font-weight: bold;
+$ui-form-input-font-color: $color-gray-4;
+$ui-form-input--focused-font-color: $color-blue-3;
+$ui-form-item-label-color: $color-gray-4;
+$ui-form-item-margin-bottom: 10px;
 
 // ui > collapsible sheet
 $ui-collapsible-sheet-button-bg-color: $color-gray-2;
@@ -249,3 +255,10 @@ $pages-settings_mat-list-margin-bottom: 48px; //= mat-list-item height
 $pages-settings_mat-list_item-color: $primary-font-color;
 $pages-settings_mat-list_item-font-weight: bold;
 $pages-settings_mat-list_item-background-color--accent: $secondary-bg-color;
+
+$pages-settings_form-bg-color: $color-gray-2;
+$pages-settings_form-padding: 64px;
+$pages-settings_form__title-margin-bottom: 32px;
+$pages-settings-profile__form-box-shadow: $pages-settings_container-box-shadow;
+$pages-settings-profile__form-color: $color-gray-4;
+$pages-settings-profile__form-width: 500px;

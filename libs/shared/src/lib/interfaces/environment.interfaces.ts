@@ -107,4 +107,5 @@ export interface EnvironmentTestingInterface {
 
 export interface EnvironmentUIInterface {
   useNavItemStyle?: boolean;
+  useInfoPanelStyle?: boolean;
 }
