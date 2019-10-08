@@ -1,4 +1,10 @@
 <div class="campus-page timeline-slide-detail">
+  <div>
+    {{ slideForm.value | json }}
+  </div>
+  <div>
+    {{ slideForm.valid | json }}
+  </div>
   <ng-container *ngIf="(chosenType$ | async) as slideType">
     <form
       [formGroup]="slideForm"
@@ -132,7 +138,7 @@
               placeholder="Titel"
             />
           </mat-form-field>
-          <mat-form-field>
+          <mat-form-field *ngIf="slideType != 'era'">
             <input
               matInput
               type="string"

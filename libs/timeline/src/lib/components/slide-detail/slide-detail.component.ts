@@ -17,6 +17,7 @@ import { Observable } from 'rxjs';
 import { startWith, tap } from 'rxjs/operators';
 import {
   TimelineDateInterface,
+  TimelineEraInterface,
   TimelineSlideInterface,
   TimelineViewSlideInterface
 } from '../../interfaces/timeline';
@@ -165,15 +166,35 @@ export class SlideDetailComponent implements OnInit, OnChanges {
   private mapFormDataToViewSlide(
     formData: SlideFormInterface
   ): TimelineViewSlideInterface {
-    formData.start_date = this.getTimelineDate(formData.start_date);
-    formData.end_date = this.getTimelineDate(formData.end_date);
+    const formDataCopy = { ...formData };
 
-    delete formData.start_date.date;
-    delete formData.end_date.date;
+    // transform js dates back to timeline dates
+    formDataCopy.start_date = this.getTimelineDate(formDataCopy.start_date);
+    formDataCopy.end_date = this.getTimelineDate(formDataCopy.end_date);
+
+    // remove form specific properties
+    delete formDataCopy.start_date.date;
+    delete formDataCopy.end_date.date;
+
+    let viewSlideData: TimelineSlideInterface | TimelineEraInterface = {
+      start_date: formDataCopy.start_date,
+      end_date: formDataCopy.end_date
+    };
+
+    // check slide type
+    if (formDataCopy.type === 'era') {
+      viewSlideData.text = formDataCopy.text;
+    } else {
+      // type is 'slide' or 'title'
+      viewSlideData = { ...viewSlideData, ...formDataCopy };
+    }
+
+    // remove not set properties
+    viewSlideData = this.removeEmpty(viewSlideData);
 
     const viewSlide: TimelineViewSlideInterface = {
-      type: formData.type,
-      viewSlide: formData,
+      type: formDataCopy.type,
+      viewSlide: viewSlideData,
       label: this.viewSlide.label
     };
     return viewSlide;
@@ -256,6 +277,30 @@ export class SlideDetailComponent implements OnInit, OnChanges {
     };
 
     return emptySlide;
+  }
+
+  private removeEmpty(obj) {
+    const newObj = {};
+
+    // delete empty properties
+    Object.keys(obj).forEach(key => {
+      if (obj[key] && typeof obj[key] === 'object') {
+        newObj[key] = this.removeEmpty(obj[key]); // recurse
+      } else if (obj[key] != null && obj[key] !== '') {
+        newObj[key] = obj[key]; // copy value
+      }
+    });
+
+    // delete keys with empty objects
+    Object.keys(newObj).forEach(key => {
+      if (newObj[key] && typeof newObj[key] === 'object') {
+        if (Object.keys(newObj[key]).length === 0) {
+          delete newObj[key];
+        }
+      }
+    });
+
+    return newObj;
   }
 
   onSubmit(): void {
