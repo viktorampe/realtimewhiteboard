@@ -44,7 +44,7 @@
     &__list {
       min-width: 15%;
       overflow: auto;
-      color: #5b9bd1
+      color: #5b9bd1;
     }
 
     &__detail {
@@ -52,11 +52,11 @@
       overflow: auto;
 
       &--slide {
-        height: 100%
+        height: 100%;
       }
 
       &--settings {
-        height: 100%
+        height: 100%;
       }
     }
   }

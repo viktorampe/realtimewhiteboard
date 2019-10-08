@@ -1,13 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
-import { BehaviorSubject, merge, Observable } from 'rxjs';
-import {
-  combineLatest,
-  filter,
-  map,
-  mapTo,
-  shareReplay,
-  switchMapTo
-} from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, merge, Observable } from 'rxjs';
+import { filter, map, mapTo, shareReplay, switchMapTo } from 'rxjs/operators';
 import {
   TimelineConfigInterface,
   TimelineDateInterface,
@@ -77,8 +70,7 @@ export class EditorViewModel {
   }
 
   private showSettings() {
-    return this.activeSlide$.pipe(
-      combineLatest(this.newSlide$),
+    return combineLatest([this.activeSlide$, this.newSlide$]).pipe(
       map(([activeSlide, newSlide]) => !activeSlide && !newSlide),
       shareReplay(1)
     );
