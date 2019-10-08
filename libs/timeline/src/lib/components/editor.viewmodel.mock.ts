@@ -3,7 +3,8 @@ import { ViewModelInterface } from '@campus/testing';
 import { BehaviorSubject } from 'rxjs';
 import {
   TimelineSettingsInterface,
-  TimelineViewSlideInterface
+  TimelineViewSlideInterface,
+  TIMELINE_SLIDE_TYPES
 } from '../interfaces/timeline';
 import { EditorViewModel } from './editor.viewmodel';
 
@@ -29,7 +30,7 @@ export class MockEditorViewModel
 
   private getSlideList(): TimelineViewSlideInterface[] {
     const slides = [1, 2, 3, 4, 5].map(key => ({
-      type: 'slide' as 'slide',
+      type: TIMELINE_SLIDE_TYPES.SLIDE,
       viewSlide: {
         start_date: { year: 2019, month: key },
         text: {
@@ -42,7 +43,7 @@ export class MockEditorViewModel
     }));
 
     const eras = [1, 4].map(key => ({
-      type: 'era' as 'era',
+      type: TIMELINE_SLIDE_TYPES.ERA,
       viewSlide: {
         start_date: { year: 2019, month: key },
         end_date: { year: 2019, month: key + 2 },
@@ -53,7 +54,7 @@ export class MockEditorViewModel
     }));
 
     const title = {
-      type: 'title' as 'title',
+      type: TIMELINE_SLIDE_TYPES.TITLE,
       viewSlide: this.getSettings().title,
       label: 'Title',
       date: null
