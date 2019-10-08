@@ -133,4 +133,7 @@ $ui-list-view-selection-overlay-circle-fg-color: $color-white-1;
 $ui-list-view-selection-overlay-circle-bg-color: $color-blue-1;
 $ui-list-view-selection-overlay-circle--selected-content: '✓' !default;
 
+// settings forms
+$pages-settings_form__button-border-width: 0px; // override bordered directive
+
 @import '_logos';

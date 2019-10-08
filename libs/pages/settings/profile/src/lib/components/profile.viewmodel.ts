@@ -7,6 +7,7 @@ import {
   UserActions,
   UserQueries
 } from '@campus/dal';
+import { EnvironmentUIInterface, ENVIRONMENT_UI_TOKEN } from '@campus/shared';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
@@ -18,7 +19,8 @@ export class ProfileViewModel {
 
   constructor(
     private store: Store<DalState>,
-    @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface
+    @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
+    @Inject(ENVIRONMENT_UI_TOKEN) public environmentUi: EnvironmentUIInterface
   ) {
     this.setPresentationStreams();
   }

@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
+import { MatButtonModule, MatListModule } from '@angular/material';
 import { EditorTimelineComponent } from './components/editor-timeline/editor-timeline.component';
 import { SettingsComponent } from './components/settings/settings.component';
 import { SlideDetailComponent } from './components/slide-detail/slide-detail.component';
@@ -11,7 +12,7 @@ import {
 } from './services/editor-http.service';
 
 @NgModule({
-  imports: [CommonModule, HttpClientModule],
+  imports: [CommonModule, HttpClientModule, MatButtonModule, MatListModule],
   declarations: [
     EditorTimelineComponent,
     SlideListComponent,

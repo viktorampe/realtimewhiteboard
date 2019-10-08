@@ -1,3 +1,10 @@
 <p>
   editor-timeline works!
 </p>
+<campus-slide-list
+  [viewSlides]="slides$ | async"
+  [activeViewSlide]="1"
+  (clickSetSlide)="noop()"
+  (clickCreateSlide)="noop()"
+  (clickCreateEra)="noop()"
+></campus-slide-list>
