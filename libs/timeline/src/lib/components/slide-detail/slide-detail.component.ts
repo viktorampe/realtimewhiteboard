@@ -124,11 +124,7 @@ export class SlideDetailComponent implements OnInit, OnChanges {
     return new Date(
       timelineDate.year,
       timelineDate.month - 1, // js date object month is zero based
-      timelineDate.day ? timelineDate.day : 0
-      // timelineDate.hour ? timelineDate.hour : 0,
-      // timelineDate.minute ? timelineDate.minute : 0,
-      // timelineDate.second ? timelineDate.second : 0,
-      // timelineDate.millisecond ? timelineDate.millisecond : 0
+      timelineDate.day ? timelineDate.day : 0 // timeline date day is optional
     );
   }
 
