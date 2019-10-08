@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { TimelineSlideFixture } from '../../+fixtures/timeline-slide.fixture';
+import { TimelineViewSlideInterface } from '../../interfaces/timeline';
 
 @Component({
   selector: 'campus-editor-timeline',
@@ -6,7 +9,34 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./editor-timeline.component.scss']
 })
 export class EditorTimelineComponent implements OnInit {
-  constructor() {}
+  public slides$: Observable<TimelineViewSlideInterface[]>;
+
+  constructor() {
+    this.slides$ = new BehaviorSubject([
+      {
+        type: 'era',
+        viewSlide: new TimelineSlideFixture(),
+        label: 'januari - februari 2019'
+      },
+      {
+        type: 'slide',
+        viewSlide: new TimelineSlideFixture(),
+        label: 'januari 2019'
+      },
+      {
+        type: 'slide',
+        viewSlide: new TimelineSlideFixture(),
+        label: 'februari 2019'
+      },
+      {
+        type: 'slide',
+        viewSlide: new TimelineSlideFixture(),
+        label: 'maart 2019'
+      }
+    ] as TimelineViewSlideInterface[]);
+  }
 
   ngOnInit() {}
+
+  noop(): void {}
 }
