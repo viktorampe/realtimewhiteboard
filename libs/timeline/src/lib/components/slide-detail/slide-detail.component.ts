@@ -15,6 +15,7 @@ interface SlideFormDateInterface extends TimelineDate {
 }
 
 interface SlideFormInterface extends TimelineSlide {
+  type?: 'slide' | 'era';
   start_date?: SlideFormDateInterface;
   end_date?: SlideFormDateInterface;
 }
@@ -25,12 +26,15 @@ interface SlideFormInterface extends TimelineSlide {
   styleUrls: ['./slide-detail.component.scss']
 })
 export class SlideDetailComponent implements OnInit, OnChanges {
-  private formData: SlideFormInterface;
-
+  @Input() slideType: 'slide' | 'era';
   @Input() slide: TimelineSlide;
   @Output() saveSlide = new EventEmitter<TimelineSlide>();
 
+  private formData: SlideFormInterface;
+
   slideForm: FormGroup;
+
+  slideTypes: string[] = ['slide', 'era'];
 
   constructor(private fb: FormBuilder) {}
 
@@ -44,6 +48,7 @@ export class SlideDetailComponent implements OnInit, OnChanges {
 
   buildForm(): void {
     this.slideForm = this.fb.group({
+      type: [this.formData.type],
       start_date: this.fb.group({
         date: [this.formData.start_date.date],
         hour: [this.formData.start_date.hour],
@@ -93,6 +98,7 @@ export class SlideDetailComponent implements OnInit, OnChanges {
       ...slide
     };
 
+    formData.type = this.slideType;
     formData.start_date.date = this.transformTimelineDateToJsDate(
       slide.start_date
     );
@@ -111,7 +117,7 @@ export class SlideDetailComponent implements OnInit, OnChanges {
     return formData;
   }
 
-  getTimelineDate(slideFormDate: SlideFormDateInterface): TimelineDate {
+  private getTimelineDate(slideFormDate: SlideFormDateInterface): TimelineDate {
     const timelineDate: TimelineDate = {
       ...this.transformJsDateToTimelineDate(slideFormDate.date),
       ...slideFormDate

@@ -1,5 +1,19 @@
 <div class="campus-page timeline-slide-detail">
-  <form [formGroup]="slideForm" (ngSubmit)="onSubmit()">
+  <form
+    class="campus-page timeline-slide-detail__form"
+    [formGroup]="slideForm"
+    (ngSubmit)="onSubmit()"
+  >
+    <label>Welk type slide wil je maken?</label>
+    <mat-radio-group class="radio-group" formControlName="type">
+      <mat-radio-button
+        class="radio-button"
+        *ngFor="let type of slideTypes"
+        [value]="type"
+        >{{ type }}</mat-radio-button
+      >
+    </mat-radio-group>
+
     <div
       formGroupName="start_date"
       class="timeline-slide-detail__form__dateTimePicker"
