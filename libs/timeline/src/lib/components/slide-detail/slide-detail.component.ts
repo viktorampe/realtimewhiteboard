@@ -95,10 +95,6 @@ export class SlideDetailComponent implements OnInit, OnChanges {
     });
   }
 
-  private getInitialValue(value: string | number) {
-    return value ? value : null;
-  }
-
   getControl(name: string): FormControl {
     return this.slideForm.get(name) as FormControl;
   }
