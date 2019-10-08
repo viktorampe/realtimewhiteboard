@@ -56,9 +56,28 @@ export class EditorViewModel {
         formDirty &&
         confirm('Er zijn niet opgeslagen wijzigingen, wijzigingen opslaan?')
       ) {
-        //TODO: save here
+        //TODO: if a slide is selected, save it first here
       } else {
         this.activeSlideId$.next(null);
+        this.newSlide$.next(null);
+      }
+    });
+  }
+
+  public updateSettings(newSettings: TimelineSettingsInterface) {
+    this.isFormDirty$.subscribe(formDirty => {
+      if (
+        formDirty &&
+        confirm('Er zijn niet opgeslagen wijzigingen, wijzigingen opslaan?')
+      ) {
+        const data = this.data$.value;
+        data.scale = newSettings.scale;
+        data.options = newSettings.options;
+
+        this.data$.next(data);
+      } else {
+        this.activeSlideId$.next(null);
+        this.newSlide$.next(null);
       }
     });
   }
