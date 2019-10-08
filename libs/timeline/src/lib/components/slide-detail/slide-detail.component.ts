@@ -27,7 +27,9 @@ interface SlideFormDateInterface extends TimelineDateInterface {
 }
 
 interface SlideFormInterface extends TimelineSlideInterface {
-  type?: 'slide' | 'era' | 'title';
+  general?: {
+    type: 'slide' | 'era' | 'title';
+  };
   start_date?: SlideFormDateInterface;
   end_date?: SlideFormDateInterface;
 }
@@ -62,7 +64,9 @@ export class SlideDetailComponent implements OnInit, OnChanges {
 
   buildForm(): void {
     this.slideForm = this.fb.group({
-      type: [this.formData.type, Validators.required],
+      general: this.fb.group({
+        type: [this.formData.general.type, Validators.required]
+      }),
       start_date: this.fb.group({
         date: [this.formData.start_date.date || null], // always required, TODO: make month & day optional
         hour: [
@@ -120,8 +124,8 @@ export class SlideDetailComponent implements OnInit, OnChanges {
   }
 
   private initializeStreams() {
-    this.chosenType$ = this.getControl('type').valueChanges.pipe(
-      startWith(this.formData.type),
+    this.chosenType$ = this.getControl('general.type').valueChanges.pipe(
+      startWith(this.formData.general.type),
       tap(slideType => {
         if (slideType === 'title') {
           this.setFormControlAsOptional('start_date.date');
@@ -147,12 +151,12 @@ export class SlideDetailComponent implements OnInit, OnChanges {
     viewSlide: TimelineViewSlideInterface
   ): SlideFormInterface {
     const formData: SlideFormInterface = {
-      ...this.getEmptyTimelineSlide(), // set all properties
+      ...this.getInitialSlideForm(), // set all properties
       ...viewSlide // override default properties
     };
 
     // add properties that are used by the form, but not needed for the view slide
-    formData.type = viewSlide.type;
+    formData.general = { type: viewSlide.type };
     formData.start_date.date = this.transformTimelineDateToJsDate(
       viewSlide.viewSlide.start_date
     );
@@ -183,7 +187,7 @@ export class SlideDetailComponent implements OnInit, OnChanges {
     };
 
     // check slide type
-    if (formDataCopy.type === 'era') {
+    if (formDataCopy.general.type === 'era') {
       viewSlideData.text = formDataCopy.text;
     } else {
       // type is 'slide' or 'title'
@@ -194,7 +198,7 @@ export class SlideDetailComponent implements OnInit, OnChanges {
     viewSlideData = this.removeEmpty(viewSlideData);
 
     const viewSlide: TimelineViewSlideInterface = {
-      type: formDataCopy.type,
+      type: formDataCopy.general.type,
       viewSlide: viewSlideData,
       label: this.viewSlide.label
     };
@@ -233,7 +237,7 @@ export class SlideDetailComponent implements OnInit, OnChanges {
     return timelineDate;
   }
 
-  private getEmptyTimelineSlide(): TimelineSlideInterface {
+  private getInitialSlideForm(): TimelineSlideInterface {
     const emptySlide: SlideFormInterface = {
       start_date: {
         year: null,

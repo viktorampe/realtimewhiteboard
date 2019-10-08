@@ -1,17 +1,11 @@
 <div class="campus-page timeline-slide-detail">
-  <div>
-    {{ slideForm.value | json }}
-  </div>
-  <div>
-    {{ slideForm.valid | json }}
-  </div>
   <ng-container *ngIf="(chosenType$ | async) as slideType">
     <form
       [formGroup]="slideForm"
       (ngSubmit)="onSubmit()"
       class="timeline-slide-detail__form"
     >
-      <div class="timeline-slide-detail__form__section">
+      <div formGroupName="general" class="timeline-slide-detail__form__section">
         <label>Welk type slide wil je maken?</label>
         <mat-radio-group class="radio-group" formControlName="type">
           <mat-radio-button
