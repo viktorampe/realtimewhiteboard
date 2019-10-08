@@ -49,6 +49,19 @@ export class EditorViewModel {
     this.initialise();
   }
 
+  public showSettings() {
+    this.isFormDirty$.subscribe(formDirty => {
+      if (
+        formDirty &&
+        confirm('Er zijn niet opgeslagen wijzigingen, wijzigingen opslaan?')
+      ) {
+        //TODO: save here
+      } else {
+        this.activeSlideId$.next(null);
+      }
+    });
+  }
+
   private initialise() {
     this.eduContentId = 19; // TODO make variable
     this.setSourceStreams(this.eduContentId);
