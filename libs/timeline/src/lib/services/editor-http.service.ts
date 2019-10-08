@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Inject, Injectable, InjectionToken } from '@angular/core';
+import { Inject, InjectionToken } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map, mapTo, retry } from 'rxjs/operators';
 import {
@@ -7,16 +7,16 @@ import {
   ENVIRONMENT_API_TOKEN
 } from '../interfaces/environment';
 import { TimelineConfigInterface } from '../interfaces/timeline';
-import { EditorHttpServiceInterface } from './editor-http.service.interface';
+import {
+  EditorHttpServiceInterface,
+  StorageInfoInterface
+} from './editor-http.service.interface';
 
 export const EDITOR_HTTP_SERVICE_TOKEN = new InjectionToken(
   'EditorHttpService'
 );
 const RETRY_AMOUNT = 2;
 
-@Injectable({
-  providedIn: 'root'
-})
 export class EditorHttpService implements EditorHttpServiceInterface {
   constructor(
     private http: HttpClient,
@@ -67,12 +67,42 @@ export class EditorHttpService implements EditorHttpServiceInterface {
     return response$;
   }
 
-  public openPreview(): Observable<string> {
-    return;
+  public getPreviewUrl(eduContentId, eduContentMetadataId): string {
+    return (
+      this.environmentApi.APIBase +
+      '/api/eduContents/' +
+      eduContentId +
+      '/redirectURL/' + // TODO: doublecheck once API is finalised
+      eduContentMetadataId +
+      '?access_token=2' // TODO: remove this bit
+    );
   }
 
-  public uploadFile(file: string): Observable<boolean> {
-    return;
+  public uploadFile(
+    eduContentId: number,
+    file: File
+  ): Observable<StorageInfoInterface> {
+    // expects multiple='multiple' to be set on the file input
+
+    const formData: FormData = new FormData();
+    formData.append('file', file, file.name);
+
+    const response$ = this.http
+      .post(
+        this.environmentApi.APIBase +
+          '/api/EduContentFiles/' +
+          eduContentId +
+          '/store' +
+          '?access_token=2', // TODO: remove this bit
+        formData
+      )
+      .pipe(
+        retry(RETRY_AMOUNT),
+        catchError(this.handleError),
+        map(response => response as StorageInfoInterface)
+      );
+
+    return response$;
   }
 
   private handleError(error) {
