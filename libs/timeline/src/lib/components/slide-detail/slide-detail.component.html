@@ -1,5 +1,4 @@
 <div class="campus-page timeline-slide-detail">
-  {{ formData | json }}
   <ng-container *ngIf="(chosenType$ | async) as slideType">
     <form
       [formGroup]="slideForm"
@@ -22,6 +21,9 @@
         formGroupName="start_date"
         class="timeline-slide-detail__form__dateTimePicker timeline-slide-detail__form__section"
       >
+        <p>{{ getControl('start_date.date').value }}</p>
+        <p>{{ getControl('start_date.date').valid }}</p>
+
         <div class="mat-h3">Startdatum</div>
         <mat-form-field>
           <input

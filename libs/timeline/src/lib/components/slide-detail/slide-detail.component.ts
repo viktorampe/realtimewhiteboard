@@ -14,7 +14,7 @@ import {
   Validators
 } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { startWith } from 'rxjs/operators';
+import { startWith, tap } from 'rxjs/operators';
 import {
   TimelineDateInterface,
   TimelineSlideInterface,
@@ -26,7 +26,7 @@ interface SlideFormDateInterface extends TimelineDateInterface {
 }
 
 interface SlideFormInterface extends TimelineSlideInterface {
-  type?: 'slide' | 'era';
+  type?: 'slide' | 'era' | 'title';
   start_date?: SlideFormDateInterface;
   end_date?: SlideFormDateInterface;
 }
@@ -43,7 +43,7 @@ export class SlideDetailComponent implements OnInit, OnChanges {
   private formData: SlideFormInterface;
 
   slideForm: FormGroup;
-  slideTypes: string[] = ['slide', 'era'];
+  slideTypes: string[] = ['title', 'slide', 'era'];
 
   chosenType$: Observable<string>;
 
@@ -63,7 +63,7 @@ export class SlideDetailComponent implements OnInit, OnChanges {
     this.slideForm = this.fb.group({
       type: [this.formData.type],
       start_date: this.fb.group({
-        date: [this.formData.start_date.date || null, Validators.required], // always required, TODO: make month & day optional
+        date: [this.formData.start_date.date || null], // always required, TODO: make month & day optional
         hour: [this.formData.start_date.hour || null],
         minute: [this.formData.start_date.minute || null],
         displayDate: [this.formData.start_date.display_date || '']
@@ -108,8 +108,26 @@ export class SlideDetailComponent implements OnInit, OnChanges {
 
   private initializeStreams() {
     this.chosenType$ = this.getControl('type').valueChanges.pipe(
-      startWith(this.formData.type)
+      startWith(this.formData.type),
+      tap(slideType => {
+        if (slideType === 'title') {
+          this.setFormControlAsOptional('start_date.date');
+        } else {
+          this.setFormControlAsRequired('start_date.date');
+        }
+      })
     );
+  }
+
+  private setFormControlAsOptional(formControlName: string): void {
+    const control = this.getControl(formControlName);
+    control.setValidators(null);
+    control.updateValueAndValidity();
+  }
+  private setFormControlAsRequired(formControlName: string): void {
+    const control = this.getControl(formControlName);
+    control.setValidators([Validators.required]);
+    control.updateValueAndValidity();
   }
 
   private mapViewSlideToFormData(
