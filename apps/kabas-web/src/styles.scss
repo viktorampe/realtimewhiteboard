@@ -216,7 +216,7 @@ p {
 .pages-settings-dashboard,
 .pages-settings-alerts {
   position: relative;
-  padding-top: 0;
+  padding-top: 10px;
 
   > * {
     z-index: 1;
@@ -231,7 +231,7 @@ p {
     left: 0;
     right: 0;
     top: 0;
-    height: 187px;
+    height: 197px;
     background: $shared_header__page-bar_background;
     z-index: 0;
   }
@@ -298,6 +298,18 @@ p {
     margin: (-$kabas-page-vertical-padding) (-$kabas-page-horizontal-padding) 0
       (-$kabas-page-horizontal-padding);
   }
+}
+
+//forms
+
+.mat-form-field-underline {
+  opacity: 0;
+}
+
+.mat-form-field-appearance-fill .mat-form-field-flex {
+  background-color: $color-white-1;
+  border: 1px solid $color-gray-4;
+  border-radius: 1px !important;
 }
 
 @import 'scss/theme-file-icons';

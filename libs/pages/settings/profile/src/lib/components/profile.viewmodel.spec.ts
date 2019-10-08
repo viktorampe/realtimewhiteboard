@@ -8,6 +8,7 @@ import {
   UserActions,
   UserReducer
 } from '@campus/dal';
+import { ENVIRONMENT_UI_TOKEN } from '@campus/shared';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
 import { ProfileViewModel } from './profile.viewmodel';
@@ -28,7 +29,8 @@ describe('ProfileViewModel', () => {
       ],
       providers: [
         Store,
-        { provide: AUTH_SERVICE_TOKEN, useValue: { userId: 1 } }
+        { provide: AUTH_SERVICE_TOKEN, useValue: { userId: 1 } },
+        { provide: ENVIRONMENT_UI_TOKEN, useValue: { useInfoPanelStyle: true } }
       ]
     });
 
