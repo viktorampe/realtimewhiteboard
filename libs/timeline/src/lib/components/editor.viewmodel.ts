@@ -28,7 +28,6 @@ import {
 export class EditorViewModel {
   private eduContentId: number;
   private data$ = new BehaviorSubject<TimelineConfigInterface>(null);
-  private activeSlide$ = new BehaviorSubject<TimelineViewSlideInterface>(null);
 
   // stores temporary value for new slide
   // always emit this in activeSlide when there is a value
@@ -36,6 +35,7 @@ export class EditorViewModel {
   private newSlide$ = new BehaviorSubject<TimelineViewSlideInterface>(null);
   private showSettings$: Observable<boolean>;
 
+  public activeSlide$: Observable<TimelineViewSlideInterface>;
   public activeSlideDetail$: Observable<TimelineViewSlideInterface>;
   public slideList$: Observable<TimelineViewSlideInterface[]>;
   public settings$: Observable<TimelineSettingsInterface>;
@@ -63,13 +63,14 @@ export class EditorViewModel {
   }
 
   private setPresentationStreams() {
-    this.showSettings$ = this.showSettings();
     this.slideList$ = this.data$.pipe(
       filter(data => !!data),
       map(data => this.mapToViewSlides(data.eras || [], data.events || [])),
       shareReplay(1)
     );
 
+    this.activeSlide$ = new BehaviorSubject<TimelineViewSlideInterface>(null);
+    this.showSettings$ = this.showSettings();
     this.activeSlideDetail$ = this.getActiveSlideDetail();
     this.settings$ = this.getSettings();
     this.isFormDirty$ = new BehaviorSubject(false);
