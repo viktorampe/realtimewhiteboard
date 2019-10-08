@@ -17,7 +17,8 @@ import { Observable } from 'rxjs';
 import { startWith } from 'rxjs/operators';
 import {
   TimelineDateInterface,
-  TimelineSlideInterface
+  TimelineSlideInterface,
+  TimelineViewSlideInterface
 } from '../../interfaces/timeline';
 
 interface SlideFormDateInterface extends TimelineDateInterface {
@@ -36,8 +37,7 @@ interface SlideFormInterface extends TimelineSlideInterface {
   styleUrls: ['./slide-detail.component.scss']
 })
 export class SlideDetailComponent implements OnInit, OnChanges {
-  @Input() slideType: 'slide' | 'era';
-  @Input() slide: TimelineSlideInterface; // TODO: use TimeLineViewSlideInterface
+  @Input() viewSlide: TimelineViewSlideInterface; // TODO: use TimeLineViewSlideInterface
   @Output() saveSlide = new EventEmitter<TimelineSlideInterface>();
 
   private formData: SlideFormInterface;
@@ -50,13 +50,13 @@ export class SlideDetailComponent implements OnInit, OnChanges {
   constructor(private fb: FormBuilder) {}
 
   ngOnInit() {
-    this.formData = this.mapSlideToFormData(this.slide);
+    this.formData = this.mapViewSlideToFormData(this.viewSlide);
     this.buildForm();
     this.initializeStreams();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    this.formData = this.mapSlideToFormData(changes.slide.currentValue);
+    this.formData = this.mapViewSlideToFormData(changes.viewSlide.currentValue);
   }
 
   buildForm(): void {
@@ -112,20 +112,22 @@ export class SlideDetailComponent implements OnInit, OnChanges {
     );
   }
 
-  private mapSlideToFormData(
-    slide: TimelineSlideInterface
+  private mapViewSlideToFormData(
+    viewSlide: TimelineViewSlideInterface
   ): SlideFormInterface {
     const formData: SlideFormInterface = {
       ...this.getEmptyTimelineSlide(),
-      ...slide
+      ...viewSlide
     };
 
     // add properties that are used by the form, but not needed for the slide
-    formData.type = this.slideType;
+    formData.type = viewSlide.type;
     formData.start_date.date = this.transformTimelineDateToJsDate(
-      slide.start_date
+      viewSlide.viewSlide.start_date
     );
-    formData.end_date.date = this.transformTimelineDateToJsDate(slide.end_date);
+    formData.end_date.date = this.transformTimelineDateToJsDate(
+      viewSlide.viewSlide.end_date
+    );
 
     return formData;
   }
@@ -211,7 +213,7 @@ export class SlideDetailComponent implements OnInit, OnChanges {
     return emptySlide;
   }
 
-  onSubmit() {
+  onSubmit(): void {
     if (this.slideForm.valid) {
       console.log(this.mapFormDataToSlide(this.slideForm.value));
       // this.saveSlide.next(this.mapFormDataToSlide(this.slideForm.value));
