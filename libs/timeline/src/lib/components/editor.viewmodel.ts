@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
 import { BehaviorSubject, merge, Observable } from 'rxjs';
 import {
+  combineLatest,
   filter,
   map,
   mapTo,
@@ -30,15 +31,15 @@ export class EditorViewModel {
   private data$ = new BehaviorSubject<TimelineConfigInterface>(null);
   private activeSlideId$ = new BehaviorSubject<number>(null);
 
+  // stores temporary value for new slide
+  // always emit this in activeSlide when there is a value
+  // emit null in setting$ when there is a value
+  private newSlide$ = new BehaviorSubject<TimelineViewSlideInterface>(null);
+
   public activeSlideDetail$: Observable<TimelineViewSlideInterface>;
   public slideList$: Observable<TimelineViewSlideInterface[]>;
   public settings$: Observable<TimelineSettingsInterface>;
   public isFormDirty$: Observable<boolean>;
-
-  // stores temporary value for new slide
-  // always emit this in activeSlide when there is a value
-  // emit null in setting$ when there is a value
-  public newSlide$: Observable<TimelineViewSlideInterface>;
 
   // where does the eduContentId and eduContentMetadataId come from?
   // the component? DI?
@@ -68,7 +69,6 @@ export class EditorViewModel {
       shareReplay(1)
     );
 
-    this.newSlide$ = new BehaviorSubject<TimelineViewSlideInterface>(null);
     this.activeSlideDetail$ = this.getActiveSlideDetail();
     this.settings$ = this.getSettings();
     this.isFormDirty$ = new BehaviorSubject(false);
@@ -76,7 +76,7 @@ export class EditorViewModel {
 
   private getActiveSlideDetail(): Observable<TimelineViewSlideInterface> {
     const detailWithActiveSlideId$ = this.activeSlideId$.pipe(
-      withLatestFrom(this.newSlide$),
+      combineLatest(this.newSlide$),
       filter(
         ([activeSlideId, newSlide]) =>
           Number.isInteger(activeSlideId) && !newSlide
@@ -86,7 +86,7 @@ export class EditorViewModel {
     );
 
     const detailWithoutActiveSlideId$ = this.activeSlideId$.pipe(
-      withLatestFrom(this.newSlide$),
+      combineLatest(this.newSlide$),
       filter(
         ([activeSlideId, newSlide]) =>
           !Number.isInteger(activeSlideId) && !newSlide
@@ -103,7 +103,7 @@ export class EditorViewModel {
 
   private getSettings(): Observable<TimelineSettingsInterface> {
     const settingsWithoutActiveSlideId$ = this.activeSlideId$.pipe(
-      withLatestFrom(this.newSlide$),
+      combineLatest(this.newSlide$),
       filter(
         ([activeSlideId, newSlide]) =>
           !Number.isInteger(activeSlideId) && !newSlide
@@ -118,7 +118,7 @@ export class EditorViewModel {
     );
 
     const settingsWithActiveSlideId$ = this.activeSlideId$.pipe(
-      withLatestFrom(this.newSlide$),
+      combineLatest(this.newSlide$),
       filter(
         ([activeSlideId, newSlide]) =>
           Number.isInteger(activeSlideId) || !!newSlide
