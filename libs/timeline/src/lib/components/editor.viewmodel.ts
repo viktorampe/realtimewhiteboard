@@ -51,13 +51,8 @@ export class EditorViewModel {
   }
 
   public showSettings() {
-    this.isFormDirty$.subscribe(formDirty => {
-      if (
-        formDirty &&
-        confirm('Er zijn niet opgeslagen wijzigingen, wijzigingen opslaan?')
-      ) {
-        //TODO: if a slide is selected, save it first here
-      } else {
+    this.checkUnsavedChanges().subscribe(savedChanges => {
+      if (savedChanges) {
         this.activeSlideId$.next(null);
         this.newSlide$.next(null);
       }
@@ -65,21 +60,67 @@ export class EditorViewModel {
   }
 
   public updateSettings(newSettings: TimelineSettingsInterface) {
-    this.isFormDirty$.subscribe(formDirty => {
-      if (
-        formDirty &&
-        confirm('Er zijn niet opgeslagen wijzigingen, wijzigingen opslaan?')
-      ) {
+    this.checkUnsavedChanges().subscribe(savedChanges => {
+      if (savedChanges) {
         const data = this.data$.value;
         data.scale = newSettings.scale;
         data.options = newSettings.options;
 
         this.data$.next(data);
-      } else {
-        this.activeSlideId$.next(null);
-        this.newSlide$.next(null);
       }
     });
+  }
+
+  public createSlide(slideType: TIMELINE_SLIDE_TYPES) {
+    this.checkUnsavedChanges().subscribe(savedChanges => {
+      if (savedChanges) {
+        let newSlide: TimelineSlideInterface | TimelineEraInterface = {};
+
+        // Era type has some required properties whereas slide type has none
+        if (slideType === TIMELINE_SLIDE_TYPES.ERA) {
+          newSlide = {
+            start_date: {
+              year: 0
+            },
+            end_date: {
+              year: 0
+            }
+          };
+        }
+
+        this.activeSlideId$.next(null);
+        this.newSlide$.next({
+          type: slideType,
+          label: 'Naamloos',
+          date: null,
+          viewSlide: newSlide
+        });
+      }
+    });
+  }
+
+  /**
+   * Returns true if it is safe to proceed. That means: the user has
+   * no changes or the user has changes and just saved them.
+   */
+  private checkUnsavedChanges(): Observable<boolean> {
+    return this.isFormDirty$.pipe(
+      map(formDirty => {
+        if (formDirty) {
+          const mustSave = confirm(
+            'Er zijn niet opgeslagen wijzigingen. Wijzigingen opslaan en doorgaan?'
+          );
+
+          if (mustSave) {
+            //TODO: save current slide
+          }
+
+          return mustSave;
+        } else {
+          return true;
+        }
+      })
+    );
   }
 
   private initialise() {
