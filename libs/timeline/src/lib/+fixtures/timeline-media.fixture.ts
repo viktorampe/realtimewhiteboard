@@ -1,10 +1,10 @@
-import { TimelineMedia } from '../interfaces/timeline';
+import { TimelineMediaInterface } from '../interfaces/timeline';
 
-export class TimelineMediaFixture implements TimelineMedia {
+export class TimelineMediaFixture implements TimelineMediaInterface {
   // defaults
   url = 'foo.jpg';
 
-  constructor(props: Partial<TimelineMedia> = {}) {
+  constructor(props: Partial<TimelineMediaInterface> = {}) {
     // overwrite defaults
     Object.assign(this, props);
   }
