@@ -2,10 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Inject, InjectionToken } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map, mapTo, retry } from 'rxjs/operators';
-import {
-  EnvironmentApiInterface,
-  ENVIRONMENT_API_TOKEN
-} from '../interfaces/environment';
 import { TimelineConfigInterface } from '../interfaces/timeline';
 import {
   EditorHttpServiceInterface,
@@ -21,8 +17,6 @@ const RETRY_AMOUNT = 2;
 export class EditorHttpService implements EditorHttpServiceInterface {
   constructor(
     private http: HttpClient,
-    @Inject(ENVIRONMENT_API_TOKEN)
-    private environmentApi: EnvironmentApiInterface,
     @Inject(SETTINGS_SERVICE_TOKEN)
     private settingsService: SettingsService
   ) {}
@@ -30,6 +24,7 @@ export class EditorHttpService implements EditorHttpServiceInterface {
   public getJson(
     eduContentMetadataId: number
   ): Observable<TimelineConfigInterface> {
+    console.log('booop');
     const response$ = this.http
       .get<{ timeline: string; eduContentId: number }>(
         this.settingsService.APIBase +
