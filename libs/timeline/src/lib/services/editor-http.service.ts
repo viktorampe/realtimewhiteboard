@@ -11,6 +11,7 @@ import {
   EditorHttpServiceInterface,
   StorageInfoInterface
 } from './editor-http.service.interface';
+import { SettingsService, SETTINGS_SERVICE_TOKEN } from './settings.service';
 
 export const EDITOR_HTTP_SERVICE_TOKEN = new InjectionToken(
   'EditorHttpService'
@@ -21,25 +22,30 @@ export class EditorHttpService implements EditorHttpServiceInterface {
   constructor(
     private http: HttpClient,
     @Inject(ENVIRONMENT_API_TOKEN)
-    private environmentApi: EnvironmentApiInterface
+    private environmentApi: EnvironmentApiInterface,
+    @Inject(SETTINGS_SERVICE_TOKEN)
+    private settingsService: SettingsService
   ) {}
 
   public getJson(
     eduContentMetadataId: number
   ): Observable<TimelineConfigInterface> {
     const response$ = this.http
-      .get<{ timeline: string }>(
-        this.environmentApi.APIBase +
+      .get<{ timeline: string; eduContentId: number }>(
+        this.settingsService.APIBase +
           '/api/eduContentMetadata/' +
-          eduContentMetadataId +
-          '?filter[fields]=timeline' +
+          this.settingsService.eduContentMetadataId +
+          '?filter={"fields": ["timeline", "eduContentId"]}' +
           '&access_token=2' // TODO: remove this bit
       )
       .pipe(
         retry(RETRY_AMOUNT),
         catchError(this.handleError),
         map(
-          response => JSON.parse(response.timeline) as TimelineConfigInterface
+          (response): TimelineConfigInterface => {
+            this.settingsService.eduContentId = response.eduContentId;
+            return JSON.parse(response.timeline);
+          }
         )
       );
 
@@ -52,9 +58,9 @@ export class EditorHttpService implements EditorHttpServiceInterface {
   ): Observable<boolean> {
     const response$ = this.http
       .put(
-        this.environmentApi.APIBase +
+        this.settingsService.APIBase +
           '/api/eduContentMetadata/' +
-          eduContentMetadataId +
+          this.settingsService.eduContentMetadataId +
           '?access_token=2', // TODO: remove this bit
         { timeline: JSON.stringify(timelineConfig) }
       )
@@ -69,17 +75,17 @@ export class EditorHttpService implements EditorHttpServiceInterface {
 
   public getPreviewUrl(eduContentId, eduContentMetadataId): string {
     return (
-      this.environmentApi.APIBase +
+      this.settingsService.APIBase +
       '/api/eduContents/' +
-      eduContentId +
+      this.settingsService.eduContentId +
       '/redirectURL/' + // TODO: doublecheck once API is finalised
-      eduContentMetadataId +
+      this.settingsService.eduContentMetadataId +
       '?access_token=2' // TODO: remove this bit
     );
   }
 
   public uploadFile(
-    eduContentId: number,
+    eduContentMetadataId: number,
     file: File
   ): Observable<StorageInfoInterface> {
     // expects multiple='multiple' to be set on the file input
@@ -89,9 +95,9 @@ export class EditorHttpService implements EditorHttpServiceInterface {
 
     const response$ = this.http
       .post(
-        this.environmentApi.APIBase +
+        this.settingsService.APIBase +
           '/api/EduContentFiles/' +
-          eduContentId +
+          this.settingsService.eduContentMetadataId +
           '/store' +
           '?access_token=2', // TODO: remove this bit
         formData
