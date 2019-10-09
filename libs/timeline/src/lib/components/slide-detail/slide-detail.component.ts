@@ -64,7 +64,11 @@ export class SlideDetailComponent implements OnInit, OnChanges {
     this.formData = this.mapViewSlideToFormData(changes.viewSlide.currentValue);
   }
 
-  buildForm(): void {
+  private buildForm(): void {
+    // validation defaults:
+    //  - type: always required
+    //  - all other properties: optional
+    // validation rules are dependent on the chosen type
     this.slideForm = this.fb.group({
       general: this.fb.group({
         type: [this.formData.general.type, Validators.required],
@@ -72,7 +76,7 @@ export class SlideDetailComponent implements OnInit, OnChanges {
         display_date: [this.formData.general.display_date]
       }),
       start_date: this.fb.group({
-        date: [this.formData.start_date.date || null], // always required, TODO: make month & day optional
+        date: [this.formData.start_date.date || null],
         hour: [
           this.formData.start_date.hour || null,
           [Validators.min(0), Validators.max(23), Validators.maxLength(2)]
@@ -117,11 +121,11 @@ export class SlideDetailComponent implements OnInit, OnChanges {
     });
   }
 
-  getControl(name: string): FormControl {
+  private getControl(name: string): FormControl {
     return this.slideForm.get(name) as FormControl;
   }
 
-  getFormGroup(name: string): FormGroup {
+  private getFormGroup(name: string): FormGroup {
     return this.slideForm.get(name) as FormGroup;
   }
 
@@ -129,13 +133,39 @@ export class SlideDetailComponent implements OnInit, OnChanges {
     this.chosenType$ = this.getControl('general.type').valueChanges.pipe(
       startWith(this.formData.general.type),
       tap(slideType => {
-        if (slideType === 'title') {
-          this.setFormControlAsOptional('start_date.date');
-        } else {
-          this.setFormControlAsRequired('start_date.date');
-        }
+        this.updateValidatorsForType(slideType);
       })
     );
+  }
+
+  private updateValidatorsForType(type: 'era' | 'slide' | 'title'): void {
+    // reset
+    this.setFormControlAsOptional('start_date.date');
+    this.setFormControlAsOptional('end_date.date');
+    this.setFormControlAsOptional('media.url');
+
+    switch (type) {
+      case 'slide':
+        // start_date is required
+        // end_date is optional
+        // media url is required
+        this.setFormControlAsRequired('start_date.date');
+        this.setFormControlAsRequired('media.url');
+        break;
+      case 'title':
+        // same as slide, except the start_date is optional
+        // media url is required
+        this.setFormControlAsRequired('media.url');
+        break;
+      case 'era':
+        // start_date & end_date are required
+        // media url is optional
+        this.setFormControlAsRequired('start_date.date');
+        this.setFormControlAsRequired('end_date.date');
+        break;
+      default:
+        break;
+    }
   }
 
   private setFormControlAsOptional(formControlName: string): void {
