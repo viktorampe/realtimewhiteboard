@@ -187,6 +187,8 @@
         >
           <div class="timeline-slide-detail__form__section">
             <div class="mat-h3">Achtergrond</div>
+            {{ getFormGroup('background').value | json }}
+
             <div class="timeline-slide-detail__form__file-upload">
               <button mat-button (click)="backgroundUrlInput.click()"
                 >Upload een bestand ...</button
@@ -195,7 +197,9 @@
                 #backgroundUrlInput
                 type="file"
                 [style.display]="'none'"
-                (change)="handleFileInput($event.target.files, 'background.url')"
+                (change)="
+                  handleFileInput($event.target.files, 'background.url')
+                "
               />
 
               <mat-form-field>
@@ -207,15 +211,28 @@
                 />
               </mat-form-field>
             </div>
-            <mat-form-field>
+            <div class="timeline-slide-detail__form__color-picker">
+              <button mat-button (click)="backgroundColorInput.click()"
+                >Kies een kleur</button
+              >
               <input
-                matInput
-                type="string"
-                formControlName="color"
-                placeholder="Kleur"
+                #backgroundColorInput
+                type="color"
+                [style.display]="'none'"
+                (change)="handleColorPick($event.target.value)"
               />
-            </mat-form-field>
+              <mat-form-field>
+                <input
+                  readonly="true"
+                  matInput
+                  type="string"
+                  formControlName="color"
+                  placeholder="Kleur"
+                />
+              </mat-form-field>
+            </div>
           </div>
+
           <div>
             <button mat-button matStepperPrevious>Vorige</button>
             <button mat-button matStepperNext>Volgende</button>

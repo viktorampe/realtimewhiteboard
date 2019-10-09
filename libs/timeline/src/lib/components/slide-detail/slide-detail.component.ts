@@ -94,6 +94,10 @@ export class SlideDetailComponent implements OnInit, OnChanges {
     this.uploadFile.next({ file: fileToUpload, formControlName });
   }
 
+  handleColorPick(color: string): void {
+    this.getControl('background.color').setValue(color);
+  }
+
   private buildForm(): void {
     // validation defaults:
     //  - type: always required
