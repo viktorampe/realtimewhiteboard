@@ -15,7 +15,6 @@ import {
 export const EDITOR_HTTP_SERVICE_TOKEN = new InjectionToken(
   'EditorHttpService'
 );
-
 const RETRY_AMOUNT = 2;
 
 @Injectable({

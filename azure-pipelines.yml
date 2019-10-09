@@ -118,6 +118,10 @@ steps:
     displayName: '[Build] kabas:production'
     condition: and(succeeded(), eq(variables['dkBuild'], 'true'))
   - script: |
+      npm run build:timeline-editor
+    displayName: '[Build] timeline-editor'
+    condition: and(succeeded(), eq(variables['dkBuild'], 'true'))
+  - script: |
       rm -rf dist/out-tsc
     displayName: 'Remove e2e screenshots and videos from dist before copying'
   - task: CopyFiles@2

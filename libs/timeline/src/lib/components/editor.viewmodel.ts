@@ -212,7 +212,10 @@ export class EditorViewModel {
   private setPresentationStreams() {
     this.slideList$ = this.data$.pipe(
       filter(data => !!data),
-      map(data => this.mapToViewSlides(data.eras, data.events)),
+      map(data => {
+        this.addUrlForEduFiles(data);
+        return this.mapToViewSlides(data.eras || [], data.events || []);
+      }),
       shareReplay(1)
     );
 
@@ -221,6 +224,32 @@ export class EditorViewModel {
     this.activeSlideDetail$ = this.getActiveSlideDetail();
     this.settings$ = this.getSettings();
     this.isFormDirty$ = new BehaviorSubject(false);
+  }
+
+  private addUrlForEduFiles(
+    data: TimelineConfigInterface
+  ): TimelineConfigInterface {
+    [data.title, ...data.events].forEach(slide => {
+      if (slide) {
+        if (slide.media && !slide.media.url && slide.media.eduFileId) {
+          slide.media.url = `/api/EduFiles/${
+            slide.media.eduFileId
+          }/redirectURL`;
+        }
+
+        if (
+          slide.background &&
+          !slide.background.url &&
+          slide.background.eduFileId
+        ) {
+          slide.background.url = `/api/EduFiles/${
+            slide.background.eduFileId
+          }/redirectURL`;
+        }
+      }
+    });
+
+    return data;
   }
 
   private showSettings() {
