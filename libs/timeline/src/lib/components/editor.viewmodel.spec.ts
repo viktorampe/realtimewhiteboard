@@ -1,9 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 import { configureTestSuite } from 'ng-bullet';
-import { TimelineConfig } from '../interfaces/timeline';
 import { EDITOR_HTTP_SERVICE_TOKEN } from '../services/editor-http.service';
 import { EditorHttpServiceInterface } from '../services/editor-http.service.interface';
 import { EditorViewModel } from './editor.viewmodel';
+import { TimelineConfigInterface } from '../interfaces/timeline';
 
 describe('EditorViewModel', () => {
   let editorViewModel: EditorViewModel;
@@ -19,7 +19,7 @@ describe('EditorViewModel', () => {
           useValue: {
             getJson: () => {},
             setJson: () => {},
-            openPreview: () => {},
+            getPreviewUrl: () => {},
             uploadFile: () => {}
           }
         }
@@ -58,7 +58,11 @@ describe('EditorViewModel', () => {
     });
 
     it('setTimeline() should call the editorHttpService.setJson', () => {
-      const data: TimelineConfig = { events: [], eras: [], options: {} };
+      const data: TimelineConfigInterface = {
+        events: [],
+        eras: [],
+        options: {}
+      };
       jest.spyOn(editorHttpService, 'setJson');
 
       editorViewModel.updateTimeline(eduContentMetadataId, data);
@@ -68,23 +72,26 @@ describe('EditorViewModel', () => {
       );
     });
 
-    it('previewTimeline() should call the editorHttpService.openPreview', () => {
-      jest.spyOn(editorHttpService, 'openPreview');
+    it('previewTimeline() should call the editorHttpService.getPreviewUrl', () => {
+      jest.spyOn(editorHttpService, 'getPreviewUrl');
 
       editorViewModel.previewTimeline(eduContentId, eduContentMetadataId);
-      expect(editorHttpService.openPreview).toHaveBeenCalledWith(
+      expect(editorHttpService.getPreviewUrl).toHaveBeenCalledWith(
         eduContentId,
         eduContentMetadataId
       );
     });
 
     it('uploadFile() should call the editorHttpService.uploadFile', () => {
-      const file = 'I am a file';
+      const file: File = {} as File;
 
       jest.spyOn(editorHttpService, 'uploadFile');
 
-      editorViewModel.uploadFile(file);
-      expect(editorHttpService.uploadFile).toHaveBeenCalledWith(file);
+      editorViewModel.uploadFile(eduContentId, file);
+      expect(editorHttpService.uploadFile).toHaveBeenCalledWith(
+        eduContentId,
+        file
+      );
     });
   });
 });

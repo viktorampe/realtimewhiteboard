@@ -19,6 +19,8 @@ export class MockProfileViewModel
     })
   );
 
+  public environmentUi = { useInfoPanelStyle: true };
+
   public updateProfile(changedProps: Partial<PersonInterface>): void {}
 }
 

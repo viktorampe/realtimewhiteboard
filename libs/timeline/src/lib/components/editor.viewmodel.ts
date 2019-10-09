@@ -1,8 +1,11 @@
 import { Inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { TimelineConfig } from '../interfaces/timeline';
+import { TimelineConfigInterface } from '../interfaces/timeline';
 import { EDITOR_HTTP_SERVICE_TOKEN } from '../services/editor-http.service';
-import { EditorHttpServiceInterface } from '../services/editor-http.service.interface';
+import {
+  EditorHttpServiceInterface,
+  StorageInfoInterface
+} from '../services/editor-http.service.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -13,28 +16,30 @@ export class EditorViewModel {
     private editorHttpService: EditorHttpServiceInterface
   ) {}
 
-  getTimeline(eduContentMetadataId: number): Observable<TimelineConfig> {
+  getTimeline(
+    eduContentMetadataId: number
+  ): Observable<TimelineConfigInterface> {
     return this.editorHttpService.getJson(eduContentMetadataId);
   }
 
   updateTimeline(
     eduContentMetadataId: number,
-    data: TimelineConfig
+    data: TimelineConfigInterface
   ): Observable<boolean> {
     return this.editorHttpService.setJson(eduContentMetadataId, data);
   }
 
-  previewTimeline(
-    eduContentId: number,
-    eduContentMetadataId: number
-  ): Observable<string> {
-    return this.editorHttpService.openPreview(
+  previewTimeline(eduContentId: number, eduContentMetadataId: number): string {
+    return this.editorHttpService.getPreviewUrl(
       eduContentId,
       eduContentMetadataId
     );
   }
 
-  uploadFile(file: string): Observable<boolean> {
-    return this.editorHttpService.uploadFile(file);
+  uploadFile(
+    eduContentId: number,
+    file: File
+  ): Observable<StorageInfoInterface> {
+    return this.editorHttpService.uploadFile(eduContentId, file);
   }
 }

@@ -61,3 +61,9 @@ export interface TimelineBackgroundInterface {
   color?: string;
   eduFileId?: number; // checked to replace the url field with a signed url
 }
+
+export interface TimelineViewSlideInterface {
+  type: 'slide' | 'era';
+  viewSlide: TimelineSlideInterface | TimelineEraInterface;
+  label: string;
+}

@@ -23,20 +23,16 @@
               "apps/polpo-classroom-web/src/assets"
             ],
             "styles": ["apps/polpo-classroom-web/src/styles.scss"],
-            "scripts": [
-              {
-                "input": "node_modules/document-register-element/build/document-register-element.js"
-              }
-            ]
+            "scripts": [{
+              "input": "node_modules/document-register-element/build/document-register-element.js"
+            }]
           },
           "configurations": {
             "staging": {
-              "fileReplacements": [
-                {
-                  "replace": "apps/polpo-classroom-web/src/environments/environment.ts",
-                  "with": "apps/polpo-classroom-web/src/environments/environment.staging.ts"
-                }
-              ],
+              "fileReplacements": [{
+                "replace": "apps/polpo-classroom-web/src/environments/environment.ts",
+                "with": "apps/polpo-classroom-web/src/environments/environment.staging.ts"
+              }],
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -46,21 +42,17 @@
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
-                }
-              ]
+              "budgets": [{
+                "type": "initial",
+                "maximumWarning": "2mb",
+                "maximumError": "5mb"
+              }]
             },
             "production": {
-              "fileReplacements": [
-                {
-                  "replace": "apps/polpo-classroom-web/src/environments/environment.ts",
-                  "with": "apps/polpo-classroom-web/src/environments/environment.prod.ts"
-                }
-              ],
+              "fileReplacements": [{
+                "replace": "apps/polpo-classroom-web/src/environments/environment.ts",
+                "with": "apps/polpo-classroom-web/src/environments/environment.prod.ts"
+              }],
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -70,13 +62,11 @@
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
-                }
-              ]
+              "budgets": [{
+                "type": "initial",
+                "maximumWarning": "2mb",
+                "maximumError": "5mb"
+              }]
             }
           }
         },
@@ -805,12 +795,10 @@
           },
           "configurations": {
             "staging": {
-              "fileReplacements": [
-                {
-                  "replace": "apps/kabas-web/src/environments/environment.ts",
-                  "with": "apps/kabas-web/src/environments/environment.staging.ts"
-                }
-              ],
+              "fileReplacements": [{
+                "replace": "apps/kabas-web/src/environments/environment.ts",
+                "with": "apps/kabas-web/src/environments/environment.staging.ts"
+              }],
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -820,21 +808,17 @@
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
-                }
-              ]
+              "budgets": [{
+                "type": "initial",
+                "maximumWarning": "2mb",
+                "maximumError": "5mb"
+              }]
             },
             "production": {
-              "fileReplacements": [
-                {
-                  "replace": "apps/kabas-web/src/environments/environment.ts",
-                  "with": "apps/kabas-web/src/environments/environment.prod.ts"
-                }
-              ],
+              "fileReplacements": [{
+                "replace": "apps/kabas-web/src/environments/environment.ts",
+                "with": "apps/kabas-web/src/environments/environment.prod.ts"
+              }],
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -844,13 +828,11 @@
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
-                }
-              ]
+              "budgets": [{
+                "type": "initial",
+                "maximumWarning": "2mb",
+                "maximumError": "5mb"
+              }]
             }
           }
         },
@@ -1099,12 +1081,10 @@
           },
           "configurations": {
             "staging": {
-              "fileReplacements": [
-                {
-                  "replace": "apps/timeline-editor/src/environments/environment.ts",
-                  "with": "apps/timeline-editor/src/environments/environment.staging.ts"
-                }
-              ],
+              "fileReplacements": [{
+                "replace": "apps/timeline-editor/src/environments/environment.ts",
+                "with": "apps/timeline-editor/src/environments/environment.staging.ts"
+              }],
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -1114,21 +1094,17 @@
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
-                }
-              ]
+              "budgets": [{
+                "type": "initial",
+                "maximumWarning": "2mb",
+                "maximumError": "5mb"
+              }]
             },
             "production": {
-              "fileReplacements": [
-                {
-                  "replace": "apps/timeline-editor/src/environments/environment.ts",
-                  "with": "apps/timeline-editor/src/environments/environment.prod.ts"
-                }
-              ],
+              "fileReplacements": [{
+                "replace": "apps/timeline-editor/src/environments/environment.ts",
+                "with": "apps/timeline-editor/src/environments/environment.prod.ts"
+              }],
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -1138,13 +1114,11 @@
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
-                }
-              ]
+              "budgets": [{
+                "type": "initial",
+                "maximumWarning": "2mb",
+                "maximumError": "5mb"
+              }]
             }
           }
         },
@@ -1152,7 +1126,7 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
             "browserTarget": "timeline-editor:build",
-            "host": "timeline-editor.campus.localhost",
+            "host": "timeline-editor.kabas.localhost",
             "port": 3030
           },
           "configurations": {

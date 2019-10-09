@@ -7,10 +7,20 @@ $pages-settings_page-header-display: block !default;
 $pages-settings_container-background-color: unset !default;
 $pages-settings_container-box-shadow: unset !default;
 $pages-settings_container-max-width: 100% !default;
+
 $pages-settings_avatar-padding-top: 0px !default;
 $pages-settings_avatar-padding-bottom: 0px !default;
 $pages-settings_avatar_container-width: 400px !default; // = button--large width
 $pages-settings_avatar-subtext-color: unset !default;
+
+// settings forms
+$pages-settings_form-color: inherit !default;
+$pages-settings_form-bg-color: inherit !default;
+$pages-settings_form-padding: 0px !default;
+$pages-settings_form__title-font-size: 16px !default;
+$pages-settings_form__title-font-weight: bold !default;
+$pages-settings_form__title-margin-bottom: 0px !default;
+$pages-settings_form__button-border-width: 1px !default;
 
 $pages-settings_mat-list-margin-bottom: 0px !default;
 $pages-settings_mat-list_item-color: black !default;

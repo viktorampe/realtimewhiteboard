@@ -16,7 +16,8 @@ module.exports = function(wallaby) {
       'apps/**/*.spec.ts',
       'libs/**/*.spec.ts',
       '!apps/polpo-classroom-web-e2e/**/*.spec.ts',
-      '!apps/kabas-web-e2e/**/*.spec.ts'
+      '!apps/kabas-web-e2e/**/*.spec.ts',
+      '!apps/timeline-editor-e2e/**/*.spec.ts'
     ],
 
     env: {
