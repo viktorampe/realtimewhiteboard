@@ -94,6 +94,7 @@ export function clickBulkLPGCheckbox(index: number) {
   dataCy('goals-check-box-table')
     .find('.ui-multi-check-box-table__body__row--subLevel--item')
     .eq(index)
+    .find('mat-icon')
     .click();
 }
 
