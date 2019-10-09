@@ -178,50 +178,52 @@ export class SlideDetailComponent implements OnInit, OnChanges {
   private mapFormDataToViewSlide(
     formData: SlideFormInterface
   ): TimelineViewSlideInterface {
-    // don't mutate the form data
-    const formDataCopy = { ...formData };
-
-    // transform js dates back to timeline dates
-    formDataCopy.start_date = this.getTimelineDate(formDataCopy.start_date);
-    formDataCopy.end_date = this.getTimelineDate(formDataCopy.end_date);
-
-    // remove form specific properties
-    delete formDataCopy.start_date.date;
-    delete formDataCopy.end_date.date;
-
-    let viewSlideData: TimelineSlideInterface | TimelineEraInterface = {
-      start_date: formDataCopy.start_date,
-      end_date: formDataCopy.end_date
-    };
+    let viewSlideData: TimelineSlideInterface | TimelineEraInterface;
 
     // check slide type
-    if (formDataCopy.general.type === 'era') {
-      viewSlideData.text = formDataCopy.text;
+    if (formData.general.type === 'era') {
+      viewSlideData = this.mapFormDataToEra(formData);
     } else {
       // type is 'slide' or 'title'
-      viewSlideData = viewSlideData as TimelineSlideInterface;
-      viewSlideData.group = formDataCopy.general.group;
-      viewSlideData.display_date = formDataCopy.general.display_date;
-
-      // remove form specific properties
-      delete formDataCopy.general;
-
-      viewSlideData = {
-        ...viewSlideData,
-        ...formDataCopy
-      } as TimelineSlideInterface;
+      viewSlideData = this.mapFormDataToSlide(formData);
     }
 
     // remove not set properties
     viewSlideData = this.removeEmpty(viewSlideData);
 
     const viewSlide: TimelineViewSlideInterface = {
-      type: formDataCopy.general.type,
+      type: formData.general.type,
       viewSlide: viewSlideData,
       label: this.viewSlide.label
     };
 
     return viewSlide;
+  }
+
+  private mapFormDataToEra(formData: SlideFormInterface): TimelineEraInterface {
+    const eraData: TimelineEraInterface = {
+      start_date: this.getTimelineDate(formData.start_date),
+      end_date: this.getTimelineDate(formData.end_date),
+      text: formData.text
+    };
+
+    return eraData;
+  }
+
+  private mapFormDataToSlide(
+    formData: SlideFormInterface
+  ): TimelineSlideInterface {
+    const slideData: TimelineSlideInterface = {
+      start_date: this.getTimelineDate(formData.start_date),
+      end_date: this.getTimelineDate(formData.end_date),
+      group: formData.general.group,
+      text: formData.text,
+      background: formData.background,
+      media: formData.media,
+      display_date: formData.general.display_date
+    };
+
+    return slideData;
   }
 
   private getTimelineDate(
@@ -246,6 +248,8 @@ export class SlideDetailComponent implements OnInit, OnChanges {
   }
 
   private transformJsDateToTimelineDate(jsDate: Date): TimelineDateInterface {
+    if (!jsDate) return null;
+
     const timelineDate: TimelineDateInterface = {
       year: jsDate.getFullYear(),
       month: jsDate.getMonth() + 1, // timeline date month is 1 based
