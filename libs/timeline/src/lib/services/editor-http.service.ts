@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Inject } from '@angular/core';
+import { Inject, Injectable, InjectionToken } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map, mapTo, retry } from 'rxjs/operators';
 import {
@@ -12,8 +12,15 @@ import {
   StorageInfoInterface
 } from './editor-http.service.interface';
 
+export const EDITOR_HTTP_SERVICE_TOKEN = new InjectionToken(
+  'EditorHttpService'
+);
+
 const RETRY_AMOUNT = 2;
 
+@Injectable({
+  providedIn: 'root'
+})
 export class EditorHttpService implements EditorHttpServiceInterface {
   constructor(
     private http: HttpClient,

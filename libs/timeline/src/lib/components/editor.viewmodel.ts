@@ -50,25 +50,23 @@ export class EditorViewModel {
     this.initialise();
   }
 
-  public showSettings() {
+  public openSettings() {
     this.checkUnsavedChanges().subscribe(savedChanges => {
       if (savedChanges) {
-        this.activeSlideId$.next(null);
+        (this.activeSlide$ as BehaviorSubject<TimelineViewSlideInterface>).next(
+          null
+        );
         this.newSlide$.next(null);
       }
     });
   }
 
   public updateSettings(newSettings: TimelineSettingsInterface) {
-    this.checkUnsavedChanges().subscribe(savedChanges => {
-      if (savedChanges) {
-        const data = this.data$.value;
-        data.scale = newSettings.scale;
-        data.options = newSettings.options;
+    const data = this.data$.value;
+    data.scale = newSettings.scale;
+    data.options = newSettings.options;
 
-        this.data$.next(data);
-      }
-    });
+    this.data$.next(data);
   }
 
   public createSlide(slideType: TIMELINE_SLIDE_TYPES) {
@@ -88,7 +86,9 @@ export class EditorViewModel {
           };
         }
 
-        this.activeSlideId$.next(null);
+        (this.activeSlide$ as BehaviorSubject<TimelineViewSlideInterface>).next(
+          null
+        );
         this.newSlide$.next({
           type: slideType,
           label: 'Naamloos',
@@ -99,60 +99,78 @@ export class EditorViewModel {
     });
   }
 
-  public upsertSlide(slide: TimelineViewSlideInterface) {
-    const data = this.data$.value;
+  public upsertSlide(updatedSlide: TimelineViewSlideInterface) {
+    this.activeSlide$.subscribe(activeSlide => {
+      const data = this.data$.value;
 
-    if (slide.type === TIMELINE_SLIDE_TYPES.SLIDE) {
-      const viewSlide: TimelineSlideInterface = slide.viewSlide as TimelineSlideInterface;
-      const foundEventIndex = data.events.findIndex(
-        event => event === viewSlide
-      );
-
-      if (foundEventIndex === -1) {
-        data.events.push(viewSlide);
-      } else {
-        data.events[foundEventIndex] = viewSlide;
+      if (updatedSlide.type === TIMELINE_SLIDE_TYPES.TITLE) {
+        data.title = updatedSlide.viewSlide;
+      } else if (updatedSlide.type === TIMELINE_SLIDE_TYPES.SLIDE) {
+        data.events.push(updatedSlide.viewSlide as TimelineSlideInterface);
+      } else if (updatedSlide.type === TIMELINE_SLIDE_TYPES.ERA) {
+        data.eras.push(updatedSlide.viewSlide as TimelineEraInterface);
       }
-    } else if (slide.type === TIMELINE_SLIDE_TYPES.ERA) {
-      const viewSlide: TimelineEraInterface = slide.viewSlide as TimelineEraInterface;
-      const foundEraIndex = data.eras.findIndex(era => era === viewSlide);
 
-      if (foundEraIndex === -1) {
-        data.eras.push(viewSlide);
-      } else {
-        data.eras[foundEraIndex] = viewSlide;
-      }
-    }
+      // Nexting data causes the slideList to be updated
+      this.data$.next(data);
 
-    this.data$.next(data);
+      // Delete what we had before this
+      this.deleteActiveSlide();
+
+      // With the slideList updated, we can select the new active slide
+      this.slideList$.subscribe(slideList => {
+        const slideItem = slideList.find(
+          slideListItem => slideListItem.viewSlide === updatedSlide.viewSlide
+        );
+
+        (this.activeSlide$ as BehaviorSubject<TimelineViewSlideInterface>).next(
+          slideItem
+        );
+      });
+    });
   }
 
-  public deleteSlide(slide: TimelineViewSlideInterface) {
+  public deleteActiveSlide() {
     const data = this.data$.value;
 
-    if (slide.type === TIMELINE_SLIDE_TYPES.SLIDE) {
-      const viewSlide: TimelineSlideInterface = slide.viewSlide as TimelineSlideInterface;
-      const foundEventIndex = data.events.findIndex(
-        event => event === viewSlide
+    this.activeSlide$.subscribe(activeSlide => {
+      if (activeSlide.type === TIMELINE_SLIDE_TYPES.TITLE) {
+        data.title = null;
+      } else if (activeSlide.type === TIMELINE_SLIDE_TYPES.SLIDE) {
+        const foundEventIndex = data.events.findIndex(
+          event => event === activeSlide.viewSlide
+        );
+
+        if (foundEventIndex !== -1) {
+          data.events.splice(foundEventIndex, 1);
+        }
+      } else if (activeSlide.type === TIMELINE_SLIDE_TYPES.ERA) {
+        const foundEraIndex = data.eras.findIndex(
+          era => era === activeSlide.viewSlide
+        );
+
+        if (foundEraIndex !== -1) {
+          data.eras.splice(foundEraIndex, 1);
+        }
+      }
+
+      // Select nothing, since the previously active slide was deleted
+      (this.activeSlide$ as BehaviorSubject<TimelineViewSlideInterface>).next(
+        null
       );
 
-      if (foundEventIndex !== -1) {
-        data.events.splice(foundEventIndex, 1);
-      }
-    } else if (slide.type === TIMELINE_SLIDE_TYPES.ERA) {
-      const viewSlide: TimelineEraInterface = slide.viewSlide as TimelineEraInterface;
-      const foundEraIndex = data.eras.findIndex(era => era === viewSlide);
-
-      if (foundEraIndex !== -1) {
-        data.eras.splice(foundEraIndex, 1);
-      }
-    }
-
-    this.data$.next(data);
+      this.data$.next(data);
+    });
   }
 
-  public setActiveSlideId(index: number) {
-    this.activeSlideId$.next(index);
+  public setActiveSlide(slide: TimelineViewSlideInterface) {
+    this.checkUnsavedChanges().subscribe(savedChanges => {
+      if (savedChanges) {
+        (this.activeSlide$ as BehaviorSubject<TimelineViewSlideInterface>).next(
+          slide
+        );
+      }
+    });
   }
 
   /**
