@@ -114,8 +114,10 @@ export class EditorViewModel {
       // Nexting data causes the slideList to be updated
       this.data$.next(data);
 
-      // Delete what we had before this
-      this.deleteActiveSlide();
+      // If it's an update and not an insert, delete what we had before this
+      if (activeSlide) {
+        this.deleteActiveSlide();
+      }
 
       // With the slideList updated, we can select the new active slide
       this.slideList$.subscribe(slideList => {
