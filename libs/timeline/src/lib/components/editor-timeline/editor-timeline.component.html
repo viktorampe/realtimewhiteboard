@@ -24,26 +24,31 @@
     class="timeline-editor__toolbar__form-dirty-warning"
     >Niet opgeslagen aanpassingen...</div
   >
+  <button
+    mat-button
+    *ngIf="(activeSlide$ | async) as slide"
+    class="timeline-editor__toolbar__button--delete"
+    (click)="destroySlide(slide)"
+    >Huidige slide verwijderen</button
+  >
 </div>
 <div class="timeline-editor__main">
-  <div class="timeline-editor__main__list">
-    <campus-slide-list
-      [viewSlides]="slideList$ | async"
-      [activeViewSlide]="activeSlide$ | async"
-      (clickSetSlide)="setActiveSlide($event)"
-    ></campus-slide-list>
-  </div>
+  <campus-slide-list
+    class="timeline-editor__main__list"
+    [viewSlides]="slideList$ | async"
+    [activeViewSlide]="activeSlide$ | async"
+    (clickSetSlide)="setActiveSlide($event)"
+  ></campus-slide-list>
 
   <div class="timeline-editor__main__detail">
-    <div
+    <campus-slide-detail
       *ngIf="(activeSlideDetail$ | async) as activeSlideDetail"
       class="timeline-editor__main__detail--slide"
-      >{{ activeSlideDetail | json }}</div
-    >
-    <div
+    ></campus-slide-detail>
+
+    <campus-settings
       *ngIf="(settings$ | async) as settings"
       class="timeline-editor__main__detail--settings"
-      >{{ settings | json }}</div
-    >
+    ></campus-settings>
   </div>
 </div>

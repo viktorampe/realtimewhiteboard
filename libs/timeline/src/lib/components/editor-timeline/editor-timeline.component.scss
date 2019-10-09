@@ -25,6 +25,11 @@
 
       background-color: #428bca;
       color: white;
+
+      &--delete {
+        background-color: red;
+        color: white;
+      }
     }
 
     &__form-dirty-warning {

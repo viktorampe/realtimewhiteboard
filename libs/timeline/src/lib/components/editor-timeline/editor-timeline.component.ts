@@ -41,4 +41,8 @@ export class EditorTimelineComponent implements OnInit {
   public createSlide(): void {}
 
   public createEra(): void {}
+
+  public destroySlide(viewSlide: TimelineViewSlideInterface): void {
+    // this.editorViewModel. ... ?
+  }
 }
