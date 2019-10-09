@@ -34,6 +34,7 @@ export class EditorViewModel {
   // emit null in setting$ when there is a value
   private newSlide$ = new BehaviorSubject<TimelineViewSlideInterface>(null);
   private showSettings$: Observable<boolean>;
+  private _activeSlide$: BehaviorSubject<TimelineViewSlideInterface>;
 
   public activeSlide$: Observable<TimelineViewSlideInterface>;
   public activeSlideDetail$: Observable<TimelineViewSlideInterface>;
@@ -53,9 +54,7 @@ export class EditorViewModel {
   public openSettings() {
     this.checkUnsavedChanges().subscribe(savedChanges => {
       if (savedChanges) {
-        (this.activeSlide$ as BehaviorSubject<TimelineViewSlideInterface>).next(
-          null
-        );
+        this._activeSlide$.next(null);
         this.newSlide$.next(null);
       }
     });
@@ -86,9 +85,7 @@ export class EditorViewModel {
           };
         }
 
-        (this.activeSlide$ as BehaviorSubject<TimelineViewSlideInterface>).next(
-          null
-        );
+        this._activeSlide$.next(null);
         this.newSlide$.next({
           type: slideType,
           label: 'Naamloos',
@@ -100,7 +97,7 @@ export class EditorViewModel {
   }
 
   public upsertSlide(updatedSlide: TimelineViewSlideInterface) {
-    this.activeSlide$.subscribe(activeSlide => {
+    this._activeSlide$.subscribe(activeSlide => {
       const data = this.data$.value;
 
       if (updatedSlide.type === TIMELINE_SLIDE_TYPES.TITLE) {
@@ -125,9 +122,7 @@ export class EditorViewModel {
           slideListItem => slideListItem.viewSlide === updatedSlide.viewSlide
         );
 
-        (this.activeSlide$ as BehaviorSubject<TimelineViewSlideInterface>).next(
-          slideItem
-        );
+        this._activeSlide$.next(slideItem);
       });
     });
   }
@@ -135,7 +130,7 @@ export class EditorViewModel {
   public deleteActiveSlide() {
     const data = this.data$.value;
 
-    this.activeSlide$.subscribe(activeSlide => {
+    this._activeSlide$.subscribe(activeSlide => {
       if (activeSlide.type === TIMELINE_SLIDE_TYPES.TITLE) {
         data.title = null;
       } else if (activeSlide.type === TIMELINE_SLIDE_TYPES.SLIDE) {
@@ -157,9 +152,7 @@ export class EditorViewModel {
       }
 
       // Select nothing, since the previously active slide was deleted
-      (this.activeSlide$ as BehaviorSubject<TimelineViewSlideInterface>).next(
-        null
-      );
+      this._activeSlide$.next(null);
 
       this.data$.next(data);
     });
@@ -168,9 +161,7 @@ export class EditorViewModel {
   public setActiveSlide(slide: TimelineViewSlideInterface) {
     this.checkUnsavedChanges().subscribe(savedChanges => {
       if (savedChanges) {
-        (this.activeSlide$ as BehaviorSubject<TimelineViewSlideInterface>).next(
-          slide
-        );
+        this._activeSlide$.next(slide);
       }
     });
   }
@@ -221,7 +212,8 @@ export class EditorViewModel {
       shareReplay(1)
     );
 
-    this.activeSlide$ = new BehaviorSubject<TimelineViewSlideInterface>(null);
+    this._activeSlide$ = new BehaviorSubject<TimelineViewSlideInterface>(null);
+    this.activeSlide$ = this._activeSlide$.asObservable();
     this.showSettings$ = this.showSettings();
     this.activeSlideDetail$ = this.getActiveSlideDetail();
     this.settings$ = this.getSettings();
@@ -255,7 +247,7 @@ export class EditorViewModel {
   }
 
   private showSettings() {
-    return this.activeSlide$.pipe(
+    return this._activeSlide$.pipe(
       combineLatest(this.newSlide$),
       map(([activeSlide, newSlide]) => !activeSlide && !newSlide),
       shareReplay(1)
@@ -263,7 +255,7 @@ export class EditorViewModel {
   }
 
   private getActiveSlideDetail(): Observable<TimelineViewSlideInterface> {
-    const detailWithActiveSlide$ = this.activeSlide$.pipe(
+    const detailWithActiveSlide$ = this._activeSlide$.pipe(
       filter(activeSlide => !!activeSlide),
       map(activeSlide => ({ ...activeSlide }))
     );
