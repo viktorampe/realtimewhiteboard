@@ -25,7 +25,7 @@
     "build:polpo:production": "ng build polpo-classroom-web -c production --outputPath dist/polpo-web-production",
     "build:kabas:staging": "ng build kabas-web -c staging --outputPath dist/kabas-web-staging",
     "build:kabas:production": "ng build kabas-web -c production --outputPath dist/kabas-web-production",
-    "build:timeline-editor": "ng build timeline-editor --prod --output-hashing=none --outputPath dist/timeline-editor && cat dist/timeline-editor/runtime.js dist/timeline-editor/es2015-polyfills.js dist/timeline-editor/polyfills.js dist/timeline-editor/main.js > dist/timeline-editor/index.js",
+    "build:timeline-editor": "ng build timeline",
     "format": "./node_modules/.bin/nx format:write",
     "format:write": "./node_modules/.bin/nx format:write",
     "format:check": "./node_modules/.bin/nx format:check",
