@@ -2,7 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { TimelineSlideFixture } from '../../+fixtures/timeline-slide.fixture';
 import { TimelineViewSlideInterface } from '../../interfaces/timeline';
-import { FileUploadResult } from '../slide-detail/slide-detail.component';
+import {
+  FileUploadResult,
+  UploadFileOutput
+} from '../slide-detail/slide-detail.component';
 
 @Component({
   selector: 'campus-editor-timeline',
@@ -46,8 +49,9 @@ export class EditorTimelineComponent implements OnInit {
 
   noop(): void {}
 
-  handleFileUpload(file: File) {
+  handleFileUpload(upload: UploadFileOutput) {
     this.fileUploadResult = {
+      formControlName: upload.formControlName,
       url: 'www.some-url.com'
     };
   }

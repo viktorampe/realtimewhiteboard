@@ -36,10 +36,20 @@ interface SlideFormInterface extends TimelineSlideInterface {
   end_date?: SlideFormDateInterface;
 }
 
+export type FormControlName =
+  | 'media.url'
+  | 'media.thumbnail'
+  | 'background.url';
+
 export interface FileUploadResult {
+  formControlName: FormControlName;
   url?: string;
 }
 
+export interface UploadFileOutput {
+  file: File;
+  formControlName: FormControlName;
+}
 @Component({
   selector: 'campus-slide-detail',
   templateUrl: './slide-detail.component.html',
@@ -49,7 +59,7 @@ export class SlideDetailComponent implements OnInit, OnChanges {
   @Input() viewSlide: TimelineViewSlideInterface;
   @Input() fileUploadResult: FileUploadResult;
   @Output() saveViewSlide = new EventEmitter<TimelineViewSlideInterface>();
-  @Output() uploadFile = new EventEmitter<File>();
+  @Output() uploadFile = new EventEmitter<UploadFileOutput>();
 
   private formData: SlideFormInterface;
 
@@ -72,16 +82,16 @@ export class SlideDetailComponent implements OnInit, OnChanges {
         changes.viewSlide.currentValue
       );
     if (changes.fileUploadResult && !changes.fileUploadResult.firstChange) {
-      this.getControl('media.url').setValue(
-        changes.fileUploadResult.currentValue.url
-      );
+      this.getControl(
+        changes.fileUploadResult.currentValue.formControlName
+      ).setValue(changes.fileUploadResult.currentValue.url);
     }
   }
 
-  handleFileInput(files: FileList) {
-    this.fileUploadResult = { url: '' };
+  handleFileInput(files: FileList, formControlName: FormControlName) {
+    this.fileUploadResult = { url: '', formControlName };
     const fileToUpload: File = files.item(0);
-    this.uploadFile.next(fileToUpload);
+    this.uploadFile.next({ file: fileToUpload, formControlName });
   }
 
   private buildForm(): void {

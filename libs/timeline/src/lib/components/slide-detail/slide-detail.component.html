@@ -187,14 +187,26 @@
         >
           <div class="timeline-slide-detail__form__section">
             <div class="mat-h3">Achtergrond</div>
-            <mat-form-field>
+            <div class="timeline-slide-detail__form__file-upload">
+              <button mat-button (click)="backgroundUrlInput.click()"
+                >Upload een bestand ...</button
+              >
               <input
-                matInput
-                type="string"
-                formControlName="url"
-                placeholder="url"
+                #backgroundUrlInput
+                type="file"
+                [style.display]="'none'"
+                (change)="handleFileInput($event.target.files, 'background.url')"
               />
-            </mat-form-field>
+
+              <mat-form-field>
+                <input
+                  matInput
+                  type="string"
+                  formControlName="url"
+                  placeholder="url"
+                />
+              </mat-form-field>
+            </div>
             <mat-form-field>
               <input
                 matInput
@@ -217,25 +229,25 @@
         >
           <div class="timeline-slide-detail__form__section">
             <div class="mat-h3">Media</div>
-            <div class="file-upload">
-              <button mat-button (click)="inputFile.click()"
+            <div class="timeline-slide-detail__form__file-upload">
+              <button mat-button (click)="mediaUrlInput.click()"
                 >Upload een bestand ...</button
               >
               <input
-                #inputFile
+                #mediaUrlInput
                 type="file"
                 [style.display]="'none'"
-                (change)="handleFileInput($event.target.files)"
+                (change)="handleFileInput($event.target.files, 'media.url')"
               />
+              <mat-form-field>
+                <input
+                  matInput
+                  type="string"
+                  formControlName="url"
+                  placeholder="Of plaats hier een link naar een bestand"
+                />
+              </mat-form-field>
             </div>
-            <mat-form-field>
-              <input
-                matInput
-                type="string"
-                formControlName="url"
-                placeholder="Of plaats hier een link naar een bestand"
-              />
-            </mat-form-field>
             <mat-form-field>
               <input
                 matInput
@@ -252,14 +264,28 @@
                 placeholder="Credit"
               />
             </mat-form-field>
-            <mat-form-field>
+            <div class="timeline-slide-detail__form__file-upload">
+              <button mat-button (click)="mediaThumbnailUrlInput.click()"
+                >Upload een bestand ...</button
+              >
               <input
-                matInput
-                type="string"
-                formControlName="thumbnail"
-                placeholder="Thumbnail"
+                #mediaThumbnailUrlInput
+                type="file"
+                [style.display]="'none'"
+                (change)="
+                  handleFileInput($event.target.files, 'media.thumbnail')
+                "
               />
-            </mat-form-field>
+              <mat-form-field>
+                <input
+                  matInput
+                  type="string"
+                  formControlName="thumbnail"
+                  placeholder="Thumbnail"
+                />
+              </mat-form-field>
+            </div>
+
             <mat-form-field>
               <input
                 matInput
