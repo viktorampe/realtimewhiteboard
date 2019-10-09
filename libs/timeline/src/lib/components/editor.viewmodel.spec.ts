@@ -1,9 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 import { configureTestSuite } from 'ng-bullet';
+import { TimelineConfigInterface } from '../interfaces/timeline';
 import { EDITOR_HTTP_SERVICE_TOKEN } from '../services/editor-http.service';
 import { EditorHttpServiceInterface } from '../services/editor-http.service.interface';
 import { EditorViewModel } from './editor.viewmodel';
-import { TimelineConfigInterface } from '../interfaces/timeline';
 
 describe('EditorViewModel', () => {
   let editorViewModel: EditorViewModel;
@@ -40,14 +40,6 @@ describe('EditorViewModel', () => {
     const eduContentMetadataId = 1;
     const eduContentId = 1;
 
-    it('getTimeline() should call the editorHttpService.getJson', () => {
-      jest.spyOn(editorHttpService, 'getJson');
-
-      editorViewModel.getTimeline(eduContentMetadataId);
-      expect(editorHttpService.getJson).toHaveBeenCalledWith(
-        eduContentMetadataId
-      );
-    });
     it('getTimeline() should call the editorHttpService.getJson', () => {
       jest.spyOn(editorHttpService, 'getJson');
 
