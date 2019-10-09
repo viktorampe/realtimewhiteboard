@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { TimelineSlideFixture } from '../../+fixtures/timeline-slide.fixture';
 import { TimelineViewSlideInterface } from '../../interfaces/timeline';
+import { FileUploadResult } from '../slide-detail/slide-detail.component';
 
 @Component({
   selector: 'campus-editor-timeline',
@@ -32,7 +33,8 @@ export class EditorTimelineComponent implements OnInit {
     }
   ];
 
-  public activeSlide = this.slides[0];
+  public activeSlide = this.slides[1];
+  public fileUploadResult: FileUploadResult;
   public slides$: Observable<TimelineViewSlideInterface[]>;
 
   constructor() {
@@ -43,4 +45,10 @@ export class EditorTimelineComponent implements OnInit {
   ngOnInit() {}
 
   noop(): void {}
+
+  handleFileUpload(file: File) {
+    this.fileUploadResult = {
+      url: 'www.some-url.com'
+    };
+  }
 }

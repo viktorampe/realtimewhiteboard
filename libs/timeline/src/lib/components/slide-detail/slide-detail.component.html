@@ -6,6 +6,7 @@
       class="timeline-slide-detail__form"
     >
       <mat-vertical-stepper>
+        <!-- GENERAL -->
         <mat-step formGroupName="general" label="Algemeen">
           <div class="timeline-slide-detail__form__section">
             <label>Welk type slide wil je maken?</label>
@@ -51,6 +52,7 @@
             <button mat-button matStepperNext>Volgende</button>
           </div>
         </mat-step>
+        <!-- START_DATE -->
         <mat-step formGroupName="start_date" label="Startdatum">
           <div
             class="timeline-slide-detail__form__dateTimePicker timeline-slide-detail__form__section"
@@ -100,6 +102,7 @@
             <button mat-button matStepperNext>Volgende</button>
           </div>
         </mat-step>
+        <!-- END_DATE -->
         <mat-step formGroupName="end_date" label="Einddatum">
           <div
             class="timeline-slide-detail__form__dateTimePicker timeline-slide-detail__form__section"
@@ -149,6 +152,7 @@
             <button mat-button matStepperNext>Volgende</button>
           </div>
         </mat-step>
+        <!-- TEXT -->
         <mat-step formGroupName="text" label="Tekst">
           <div class="timeline-slide-detail__form__section">
             <div class="mat-h3">Tekst</div>
@@ -175,6 +179,7 @@
             <button mat-button matStepperNext>Volgende</button>
           </div>
         </mat-step>
+        <!-- BACKGROUND -->
         <mat-step
           *ngIf="slideType != 'era'"
           formGroupName="background"
@@ -198,20 +203,13 @@
                 placeholder="Kleur"
               />
             </mat-form-field>
-            <mat-form-field>
-              <input
-                matInput
-                type="number"
-                formControlName="eduFileId"
-                placeholder="EduFileId"
-              />
-            </mat-form-field>
           </div>
           <div>
             <button mat-button matStepperPrevious>Vorige</button>
             <button mat-button matStepperNext>Volgende</button>
           </div>
         </mat-step>
+        <!-- MEDIA -->
         <mat-step
           *ngIf="slideType != 'era'"
           formGroupName="media"
@@ -219,12 +217,23 @@
         >
           <div class="timeline-slide-detail__form__section">
             <div class="mat-h3">Media</div>
+            <div class="file-upload">
+              <button mat-button (click)="inputFile.click()"
+                >Upload een bestand ...</button
+              >
+              <input
+                #inputFile
+                type="file"
+                [style.display]="'none'"
+                (change)="handleFileInput($event.target.files)"
+              />
+            </div>
             <mat-form-field>
               <input
                 matInput
                 type="string"
                 formControlName="url"
-                placeholder="url"
+                placeholder="Of plaats hier een link naar een bestand"
               />
             </mat-form-field>
             <mat-form-field>
@@ -273,14 +282,6 @@
                 type="string"
                 formControlName="link"
                 placeholder="Link"
-              />
-            </mat-form-field>
-            <mat-form-field>
-              <input
-                matInput
-                type="number"
-                formControlName="eduFileId"
-                placeholder="EduFileId"
               />
             </mat-form-field>
           </div>

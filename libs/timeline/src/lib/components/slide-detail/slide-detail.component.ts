@@ -36,6 +36,10 @@ interface SlideFormInterface extends TimelineSlideInterface {
   end_date?: SlideFormDateInterface;
 }
 
+export interface FileUploadResult {
+  url?: string;
+}
+
 @Component({
   selector: 'campus-slide-detail',
   templateUrl: './slide-detail.component.html',
@@ -43,7 +47,9 @@ interface SlideFormInterface extends TimelineSlideInterface {
 })
 export class SlideDetailComponent implements OnInit, OnChanges {
   @Input() viewSlide: TimelineViewSlideInterface;
+  @Input() fileUploadResult: FileUploadResult;
   @Output() saveViewSlide = new EventEmitter<TimelineViewSlideInterface>();
+  @Output() uploadFile = new EventEmitter<File>();
 
   private formData: SlideFormInterface;
 
@@ -61,7 +67,21 @@ export class SlideDetailComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    this.formData = this.mapViewSlideToFormData(changes.viewSlide.currentValue);
+    if (changes.viewSlide)
+      this.formData = this.mapViewSlideToFormData(
+        changes.viewSlide.currentValue
+      );
+    if (changes.fileUploadResult && !changes.fileUploadResult.firstChange) {
+      this.getControl('media.url').setValue(
+        changes.fileUploadResult.currentValue.url
+      );
+    }
+  }
+
+  handleFileInput(files: FileList) {
+    this.fileUploadResult = { url: '' };
+    const fileToUpload: File = files.item(0);
+    this.uploadFile.next(fileToUpload);
   }
 
   private buildForm(): void {
@@ -105,8 +125,7 @@ export class SlideDetailComponent implements OnInit, OnChanges {
       }),
       background: this.fb.group({
         url: [this.formData.background.url || ''],
-        color: [this.formData.background.color || ''],
-        eduFileId: ['']
+        color: [this.formData.background.color || '']
       }),
       media: this.fb.group({
         url: [this.formData.media.url || ''],
@@ -115,8 +134,7 @@ export class SlideDetailComponent implements OnInit, OnChanges {
         thumbnail: [this.formData.media.thumbnail || ''],
         alt: [this.formData.media.alt || ''],
         title: [this.formData.media.title || ''],
-        link: [this.formData.media.link || ''],
-        eduFileId: ['']
+        link: [this.formData.media.link || '']
       })
     });
   }
@@ -319,7 +337,6 @@ export class SlideDetailComponent implements OnInit, OnChanges {
       background: {
         url: '',
         color: ''
-        // eduFileId: null
       },
       media: {
         url: '',
@@ -329,7 +346,6 @@ export class SlideDetailComponent implements OnInit, OnChanges {
         alt: '',
         title: '',
         link: ''
-        // eduFileId: null
       },
       display_date: ''
     };
