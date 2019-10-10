@@ -1228,10 +1228,18 @@
       "prefix": "campus",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "ngx-build-plus:build",
           "options": {
-            "tsConfig": "libs/timeline/tsconfig.lib.json",
-            "project": "libs/timeline/ng-package.json"
+            "outputPath": "dist/elements/timeline",
+            "index": "",
+            "main": "libs/timeline/src/element.ts",
+            "scripts": [],
+            "styles": ["libs/timeline/src/element.scss"],
+            "assets": ["libs/timeline/src/package.json"],
+            "tsConfig": "libs/timeline/tsconfig.json",
+            "singleBundle": true,
+            "optimization": true,
+            "aot": true
           }
         },
         "lint": {
