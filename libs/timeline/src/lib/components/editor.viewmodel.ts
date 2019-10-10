@@ -16,7 +16,10 @@ import {
   TIMELINE_SLIDE_TYPES
 } from '../interfaces/timeline';
 import { EDITOR_HTTP_SERVICE_TOKEN } from '../services/editor-http.service';
-import { EditorHttpServiceInterface } from '../services/editor-http.service.interface';
+import {
+  EditorHttpServiceInterface,
+  StorageInfoInterface
+} from '../services/editor-http.service.interface';
 import {
   TimelineEraInterface,
   TimelineViewSlideInterface
@@ -48,6 +51,33 @@ export class EditorViewModel {
     private editorHttpService: EditorHttpServiceInterface
   ) {
     this.initialise();
+  }
+
+  getTimeline(
+    eduContentMetadataId: number
+  ): Observable<TimelineConfigInterface> {
+    return this.editorHttpService.getJson(eduContentMetadataId);
+  }
+
+  updateTimeline(
+    eduContentMetadataId: number,
+    data: TimelineConfigInterface
+  ): Observable<boolean> {
+    return this.editorHttpService.setJson(eduContentMetadataId, data);
+  }
+
+  previewTimeline(eduContentId: number, eduContentMetadataId: number): string {
+    return this.editorHttpService.getPreviewUrl(
+      eduContentId,
+      eduContentMetadataId
+    );
+  }
+
+  uploadFile(
+    eduContentId: number,
+    file: File
+  ): Observable<StorageInfoInterface> {
+    return this.editorHttpService.uploadFile(eduContentId, file);
   }
 
   private initialise() {
