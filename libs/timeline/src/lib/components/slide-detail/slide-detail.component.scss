@@ -1,6 +1,6 @@
 .timeline-slide-detail {
   &__form {
-    width: 400px;
+    width: 100%;
     .radio-group {
       display: flex;
       flex-direction: column;
@@ -9,13 +9,6 @@
 
     .radio-button {
       margin: 5px;
-    }
-
-    &__dateTimePicker {
-      // display: flex;
-      // mat-form-field {
-      //   margin-right: 10px;
-      // }
     }
   }
 }

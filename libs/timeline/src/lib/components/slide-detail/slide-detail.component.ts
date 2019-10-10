@@ -13,15 +13,15 @@ import {
   FormGroup,
   Validators
 } from '@angular/forms';
+import * as equal from 'fast-deep-equal';
 import { Observable } from 'rxjs';
-import { startWith, tap } from 'rxjs/operators';
+import { debounceTime, map, startWith, tap } from 'rxjs/operators';
 import {
   TimelineDateInterface,
   TimelineEraInterface,
   TimelineSlideInterface,
   TimelineViewSlideInterface
 } from '../../interfaces/timeline';
-
 interface SlideFormDateInterface extends TimelineDateInterface {
   date?: Date;
 }
@@ -58,9 +58,12 @@ export interface UploadFileOutput {
 export class SlideDetailComponent implements OnInit, OnChanges {
   @Input() viewSlide: TimelineViewSlideInterface;
   @Input() fileUploadResult: FileUploadResult;
+
   @Output() saveViewSlide = new EventEmitter<TimelineViewSlideInterface>();
   @Output() uploadFile = new EventEmitter<UploadFileOutput>();
+  @Output() isDirty$: Observable<boolean>;
 
+  private initialFormValues: any; // used for isDirty$
   private formData: SlideFormInterface;
 
   slideForm: FormGroup;
@@ -72,7 +75,8 @@ export class SlideDetailComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     this.formData = this.mapViewSlideToFormData(this.viewSlide);
-    this.buildForm();
+    this.slideForm = this.buildForm();
+    this.initialFormValues = { ...this.slideForm.value }; // used for isDirty check
     this.initializeStreams();
   }
 
@@ -98,12 +102,12 @@ export class SlideDetailComponent implements OnInit, OnChanges {
     this.getControl('background.color').setValue(color);
   }
 
-  private buildForm(): void {
+  private buildForm(): FormGroup {
     // validation defaults:
     //  - type: always required
     //  - all other properties: optional
-    // validation rules are dependent on the chosen type
-    this.slideForm = this.fb.group({
+    // validation rules are dependent on the chosen type (see updateValidatorsForType())
+    return this.fb.group({
       general: this.fb.group({
         type: [this.formData.general.type, Validators.required],
         group: [this.formData.general.group],
@@ -168,6 +172,15 @@ export class SlideDetailComponent implements OnInit, OnChanges {
         this.updateValidatorsForType(slideType);
       })
     );
+
+    this.isDirty$ = this.slideForm.valueChanges.pipe(
+      debounceTime(300),
+      map(
+        updatedFormValues =>
+          equal(updatedFormValues, this.initialFormValues) === false
+      ),
+      startWith(false)
+    );
   }
 
   private updateValidatorsForType(type: 'era' | 'slide' | 'title'): void {
@@ -205,6 +218,7 @@ export class SlideDetailComponent implements OnInit, OnChanges {
     control.setValidators(null);
     control.updateValueAndValidity();
   }
+
   private setFormControlAsRequired(formControlName: string): void {
     const control = this.getControl(formControlName);
     control.setValidators([Validators.required]);
@@ -224,8 +238,8 @@ export class SlideDetailComponent implements OnInit, OnChanges {
     // add properties that are used by the form, but not needed for the view slide
     formData.general = {
       type: viewSlide.type,
-      group: viewSlide.viewSlide.group,
-      display_date: viewSlide.viewSlide.display_date
+      group: viewSlide.viewSlide.group || '', // default to empty string for isDirty$
+      display_date: viewSlide.viewSlide.display_date || '' // // default to empty string for isDirty$
     };
     formData.start_date.date = this.transformTimelineDateToJsDate(
       viewSlide.viewSlide.start_date

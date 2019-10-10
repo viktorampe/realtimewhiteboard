@@ -1,10 +1,6 @@
 <div class="campus-page timeline-slide-detail">
   <ng-container *ngIf="(chosenType$ | async) as slideType">
-    <form
-      [formGroup]="slideForm"
-      (ngSubmit)="onSubmit()"
-      class="timeline-slide-detail__form"
-    >
+    <form [formGroup]="slideForm" class="timeline-slide-detail__form">
       <mat-vertical-stepper>
         <!-- GENERAL -->
         <mat-step formGroupName="general" label="Algemeen">
@@ -334,7 +330,7 @@
         </mat-step>
       </mat-vertical-stepper>
 
-      <button mat-button type="submit">Opslaan</button>
+      <button mat-button (click)="onSubmit()">Opslaan</button>
     </form>
   </ng-container>
 </div>
