@@ -25,7 +25,7 @@ import { TimelineEditorComponent } from './timeline-editor/timeline-editor.compo
     },
     {
       provide: ENVIRONMENT_ICON_MAPPING_TOKEN,
-      useValue: environment.iconMapping as { [icon: string]: string }
+      useValue: environment.iconMapping
     }
   ]
 })
