@@ -43,6 +43,7 @@ export class EditorViewModel {
   public slideList$: Observable<TimelineViewSlideInterface[]>;
   public settings$: Observable<TimelineSettingsInterface>;
   public isFormDirty$: Observable<boolean>;
+  public activeSlideDetailCanSaveAsTitle$: Observable<boolean>;
 
   // where does the eduContentId and eduContentMetadataId come from?
   // the component? DI?
@@ -104,6 +105,16 @@ export class EditorViewModel {
     this.activeSlideDetail$ = this.getActiveSlideDetail();
     this.settings$ = this.getSettings();
     this.isFormDirty$ = new BehaviorSubject(false);
+    this.activeSlideDetailCanSaveAsTitle$ = this.getActiveSlideDetailCanSaveAsTitle();
+  }
+
+  private getActiveSlideDetailCanSaveAsTitle(): Observable<boolean> {
+    return combineLatest([this.data$, this.activeSlideDetail$]).pipe(
+      map(
+        ([data, activeSlideDetail]) =>
+          !data.title || data.title === activeSlideDetail
+      )
+    );
   }
 
   private showSettings(): Observable<boolean> {
