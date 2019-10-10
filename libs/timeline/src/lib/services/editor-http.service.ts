@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Inject, InjectionToken } from '@angular/core';
+import { Inject, Injectable, InjectionToken } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map, mapTo, retry } from 'rxjs/operators';
 import { TimelineConfigInterface } from '../interfaces/timeline';
@@ -7,31 +7,34 @@ import {
   EditorHttpServiceInterface,
   StorageInfoInterface
 } from './editor-http.service.interface';
-import { SettingsService, SETTINGS_SERVICE_TOKEN } from './settings.service';
+import {
+  SettingsServiceInterface,
+  SETTINGS_SERVICE_TOKEN
+} from './settings.service.interface';
 
 export const EDITOR_HTTP_SERVICE_TOKEN = new InjectionToken(
   'EditorHttpService'
 );
 const RETRY_AMOUNT = 2;
 
+@Injectable()
 export class EditorHttpService implements EditorHttpServiceInterface {
   constructor(
     private http: HttpClient,
     @Inject(SETTINGS_SERVICE_TOKEN)
-    private settingsService: SettingsService
+    private settingsService: SettingsServiceInterface
   ) {}
 
   public getJson(
     eduContentMetadataId: number
   ): Observable<TimelineConfigInterface> {
-    console.log('booop');
     const response$ = this.http
       .get<{ timeline: string; eduContentId: number }>(
         this.settingsService.APIBase +
           '/api/eduContentMetadata/' +
           this.settingsService.eduContentMetadataId +
-          '?filter={"fields": ["timeline", "eduContentId"]}' +
-          '&access_token=2' // TODO: remove this bit
+          '?filter={"fields":["timeline","eduContentId"]}',
+        { withCredentials: true }
       )
       .pipe(
         retry(RETRY_AMOUNT),
@@ -55,9 +58,9 @@ export class EditorHttpService implements EditorHttpServiceInterface {
       .put(
         this.settingsService.APIBase +
           '/api/eduContentMetadata/' +
-          this.settingsService.eduContentMetadataId +
-          '?access_token=2', // TODO: remove this bit
-        { timeline: JSON.stringify(timelineConfig) }
+          this.settingsService.eduContentMetadataId,
+        { timeline: JSON.stringify(timelineConfig) },
+        { withCredentials: true }
       )
       .pipe(
         retry(RETRY_AMOUNT),
@@ -74,8 +77,7 @@ export class EditorHttpService implements EditorHttpServiceInterface {
       '/api/eduContents/' +
       this.settingsService.eduContentId +
       '/redirectURL/' + // TODO: doublecheck once API is finalised
-      this.settingsService.eduContentMetadataId +
-      '?access_token=2' // TODO: remove this bit
+      this.settingsService.eduContentMetadataId
     );
   }
 
@@ -93,9 +95,9 @@ export class EditorHttpService implements EditorHttpServiceInterface {
         this.settingsService.APIBase +
           '/api/EduContentFiles/' +
           this.settingsService.eduContentMetadataId +
-          '/store' +
-          '?access_token=2', // TODO: remove this bit
-        formData
+          '/store',
+        formData,
+        { withCredentials: true }
       )
       .pipe(
         retry(RETRY_AMOUNT),

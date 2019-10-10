@@ -13,7 +13,9 @@ export class EditorTimelineComponent implements OnInit {
   public slides$: Observable<TimelineViewSlideInterface[]>;
 
   constructor(private editorViewModel: EditorViewModel) {
-    this.editorViewModel.getTimeline(123);
+    // this.editorViewModel.getTimeline(0).subscribe(timeline => {
+    //   console.log(timeline);
+    // });
 
     this.slides$ = new BehaviorSubject([
       {

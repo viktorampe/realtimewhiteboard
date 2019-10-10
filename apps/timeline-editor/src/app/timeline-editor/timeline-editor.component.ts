@@ -6,7 +6,10 @@ import {
   OnInit,
   SimpleChanges
 } from '@angular/core';
-import { SettingsService, SETTINGS_SERVICE_TOKEN } from '@campus/timeline';
+import {
+  SettingsServiceInterface,
+  SETTINGS_SERVICE_TOKEN
+} from '@campus/timeline';
 
 @Component({
   // selector: 'campus-timeline-editor',
@@ -19,18 +22,18 @@ export class TimelineEditorComponent implements OnInit, OnChanges {
 
   constructor(
     @Inject(SETTINGS_SERVICE_TOKEN)
-    private settingsService: SettingsService
+    private settingsService: SettingsServiceInterface
   ) {
-    this.settingsService.eduContentMetadataId = 1;
-    this.settingsService.APIBase = 'http://api.lk2020.localhost:3000/api';
+    // this.settingsService.eduContentMetadataId = 1;
+    // this.settingsService.APIBase = 'http://api.kabas.localhost:3000';
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.eduContentMetadataId) {
-      this.settingsService.eduContentMetadataId = this.eduContentMetadataId;
-    }
     if (changes.apiBase) {
       this.settingsService.APIBase = this.apiBase;
+    }
+    if (changes.eduContentMetadataId) {
+      this.settingsService.eduContentMetadataId = this.eduContentMetadataId;
     }
   }
 
