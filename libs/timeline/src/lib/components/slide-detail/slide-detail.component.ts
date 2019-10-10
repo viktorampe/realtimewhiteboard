@@ -18,14 +18,10 @@ import * as equal from 'fast-deep-equal';
 import { Observable } from 'rxjs';
 import { debounceTime, map, startWith, tap } from 'rxjs/operators';
 import {
-  TimelineDateInterface,
   TimelineEraInterface,
   TimelineSlideInterface,
   TimelineViewSlideInterface
 } from '../../interfaces/timeline';
-interface SlideFormDateInterface extends TimelineDateInterface {
-  date?: Date;
-}
 
 interface SlideFormInterface extends TimelineSlideInterface {
   general?: {
@@ -33,8 +29,6 @@ interface SlideFormInterface extends TimelineSlideInterface {
     group: string;
     display_date: string;
   };
-  start_date?: SlideFormDateInterface;
-  end_date?: SlideFormDateInterface;
 }
 
 export type FormControlName =
@@ -64,8 +58,10 @@ export class SlideDetailComponent implements OnInit, OnChanges {
   @Output() uploadFile = new EventEmitter<UploadFileOutput>();
   @Output() isDirty$: Observable<boolean>;
 
-  @HostBinding('class.campus-page timeline-slide-detail')
-  timelineSlideDetailClass = true;
+  @HostBinding('class.campus-page')
+  setCampusPageClass = true;
+  @HostBinding('class.timeline-slide-detail')
+  setTimelineSlideDetailClass = true;
 
   private initialFormValues: any; // used for isDirty$
   private formData: SlideFormInterface;
@@ -114,33 +110,11 @@ export class SlideDetailComponent implements OnInit, OnChanges {
     return this.fb.group({
       general: this.fb.group({
         type: [this.formData.general.type, Validators.required],
-        group: [this.formData.general.group],
+        group: [this.formData.general.group || ''],
         display_date: [this.formData.general.display_date]
       }),
-      start_date: this.fb.group({
-        date: [this.formData.start_date.date || null],
-        hour: [
-          this.formData.start_date.hour || null,
-          [Validators.min(0), Validators.max(23), Validators.maxLength(2)]
-        ],
-        minute: [
-          this.formData.start_date.minute || null,
-          [Validators.min(0), Validators.max(59), Validators.maxLength(2)]
-        ],
-        displayDate: [this.formData.start_date.display_date || '']
-      }),
-      end_date: this.fb.group({
-        date: [this.formData.end_date.date || null],
-        hour: [
-          this.formData.end_date.hour || null,
-          [Validators.min(0), Validators.max(23), Validators.maxLength(2)]
-        ],
-        minute: [
-          this.formData.end_date.minute || null,
-          [Validators.min(0), Validators.max(59), Validators.maxLength(2)]
-        ],
-        displayDate: [this.formData.end_date.display_date || '']
-      }),
+      start_date: this.getDateFormGroup('start_date'),
+      end_date: this.getDateFormGroup('end_date'),
       text: this.fb.group({
         headline: [this.formData.text.headline || ''],
         text: [this.formData.text.text || '']
@@ -158,6 +132,25 @@ export class SlideDetailComponent implements OnInit, OnChanges {
         title: [this.formData.media.title || ''],
         link: [this.formData.media.link || '']
       })
+    });
+  }
+
+  private getDateFormGroup(group: 'start_date' | 'end_date'): FormGroup {
+    return this.fb.group({
+      year: [this.formData[group].year || null, [Validators.required]],
+      month: [this.formData[group].month || null],
+      day: [this.formData[group].day || null],
+      hour: [
+        this.formData[group].hour || null,
+        [Validators.min(0), Validators.max(23), Validators.maxLength(2)]
+      ],
+      minute: [
+        this.formData[group].minute || null,
+        [Validators.min(0), Validators.max(59), Validators.maxLength(2)]
+      ],
+      second: [this.formData[group].second || null, [Validators.max(59)]],
+      millisecond: [this.formData[group].millisecond || null],
+      displayDate: [this.formData[group].display_date || '']
     });
   }
 
@@ -189,28 +182,24 @@ export class SlideDetailComponent implements OnInit, OnChanges {
 
   private updateValidatorsForType(type: 'era' | 'slide' | 'title'): void {
     // reset
-    this.setFormControlAsOptional('start_date.date');
-    this.setFormControlAsOptional('end_date.date');
-    this.setFormControlAsOptional('media.url');
+    this.setFormControlAsOptional('start_date.year');
+    this.setFormControlAsOptional('end_date.year');
 
     switch (type) {
       case 'slide':
         // start_date is required
         // end_date is optional
-        // media url is required
-        this.setFormControlAsRequired('start_date.date');
-        this.setFormControlAsRequired('media.url');
+        this.setFormControlAsRequired('start_date.year');
         break;
       case 'title':
         // same as slide, except the start_date is optional
-        // media url is required
-        this.setFormControlAsRequired('media.url');
+        // so same as reset values
         break;
       case 'era':
         // start_date & end_date are required
         // media url is optional
-        this.setFormControlAsRequired('start_date.date');
-        this.setFormControlAsRequired('end_date.date');
+        this.setFormControlAsRequired('start_date.year');
+        this.setFormControlAsRequired('end_date.year');
         break;
       default:
         break;
@@ -234,7 +223,7 @@ export class SlideDetailComponent implements OnInit, OnChanges {
   ): SlideFormInterface {
     const formData: SlideFormInterface = {
       ...this.getInitialSlideForm(), // set all properties
-      ...viewSlide // override default properties
+      ...viewSlide.viewSlide // override default properties
     };
 
     viewSlide.viewSlide = viewSlide.viewSlide as TimelineSlideInterface;
@@ -245,12 +234,6 @@ export class SlideDetailComponent implements OnInit, OnChanges {
       group: viewSlide.viewSlide.group || '', // default to empty string for isDirty$
       display_date: viewSlide.viewSlide.display_date || '' // // default to empty string for isDirty$
     };
-    formData.start_date.date = this.transformTimelineDateToJsDate(
-      viewSlide.viewSlide.start_date
-    );
-    formData.end_date.date = this.transformTimelineDateToJsDate(
-      viewSlide.viewSlide.end_date
-    );
 
     return formData;
   }
@@ -282,8 +265,8 @@ export class SlideDetailComponent implements OnInit, OnChanges {
 
   private mapFormDataToEra(formData: SlideFormInterface): TimelineEraInterface {
     const eraData: TimelineEraInterface = {
-      start_date: this.getTimelineDate(formData.start_date),
-      end_date: this.getTimelineDate(formData.end_date),
+      start_date: formData.start_date,
+      end_date: formData.end_date,
       text: formData.text
     };
 
@@ -294,8 +277,8 @@ export class SlideDetailComponent implements OnInit, OnChanges {
     formData: SlideFormInterface
   ): TimelineSlideInterface {
     const slideData: TimelineSlideInterface = {
-      start_date: this.getTimelineDate(formData.start_date),
-      end_date: this.getTimelineDate(formData.end_date),
+      start_date: formData.start_date,
+      end_date: formData.end_date,
       group: formData.general.group,
       text: formData.text,
       background: formData.background,
@@ -304,39 +287,6 @@ export class SlideDetailComponent implements OnInit, OnChanges {
     };
 
     return slideData;
-  }
-
-  private getTimelineDate(
-    slideFormDate: SlideFormDateInterface
-  ): TimelineDateInterface {
-    const timelineDate: TimelineDateInterface = {
-      ...this.transformJsDateToTimelineDate(slideFormDate.date),
-      ...slideFormDate
-    };
-
-    return timelineDate;
-  }
-
-  private transformTimelineDateToJsDate(
-    timelineDate: TimelineDateInterface
-  ): Date {
-    return new Date(
-      timelineDate.year,
-      timelineDate.month - 1, // js date object month is zero based
-      timelineDate.day ? timelineDate.day : 0 // timeline date day is optional
-    );
-  }
-
-  private transformJsDateToTimelineDate(jsDate: Date): TimelineDateInterface {
-    if (!jsDate) return null;
-
-    const timelineDate: TimelineDateInterface = {
-      year: jsDate.getFullYear(),
-      month: jsDate.getMonth() + 1, // timeline date month is 1 based
-      day: jsDate.getDate()
-    };
-
-    return timelineDate;
   }
 
   private getInitialSlideForm(): TimelineSlideInterface {
