@@ -2,7 +2,11 @@ import { Injector, NgModule } from '@angular/core';
 import { createCustomElement } from '@angular/elements';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
-import { ENVIRONMENT_API_TOKEN, TimelineModule } from '@campus/timeline';
+import {
+  ENVIRONMENT_API_TOKEN,
+  ENVIRONMENT_ICON_MAPPING_TOKEN,
+  TimelineModule
+} from '@campus/timeline';
 import { environment } from './../environments/environment';
 import { TimelineEditorComponent } from './timeline-editor/timeline-editor.component';
 
@@ -18,6 +22,10 @@ import { TimelineEditorComponent } from './timeline-editor/timeline-editor.compo
     {
       provide: ENVIRONMENT_API_TOKEN,
       useValue: environment.api
+    },
+    {
+      provide: ENVIRONMENT_ICON_MAPPING_TOKEN,
+      useValue: environment.iconMapping
     }
   ]
 })
