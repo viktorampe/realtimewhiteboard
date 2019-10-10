@@ -1,6 +1,7 @@
 import {
   Component,
   EventEmitter,
+  HostBinding,
   Input,
   OnChanges,
   OnInit,
@@ -62,6 +63,9 @@ export class SlideDetailComponent implements OnInit, OnChanges {
   @Output() saveViewSlide = new EventEmitter<TimelineViewSlideInterface>();
   @Output() uploadFile = new EventEmitter<UploadFileOutput>();
   @Output() isDirty$: Observable<boolean>;
+
+  @HostBinding('class.campus-page timeline-slide-detail')
+  timelineSlideDetailClass = true;
 
   private initialFormValues: any; // used for isDirty$
   private formData: SlideFormInterface;
