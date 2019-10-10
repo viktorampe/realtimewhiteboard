@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatListModule } from '@angular/material';
+import { MatIconModule, MatListModule } from '@angular/material';
 import { configureTestSuite } from 'ng-bullet';
 import { SettingsComponent } from '../settings/settings.component';
 import { SlideDetailComponent } from '../slide-detail/slide-detail.component';
@@ -14,7 +14,7 @@ describe('EditorTimelineComponent', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [MatListModule],
+      imports: [MatListModule, MatIconModule],
       declarations: [
         EditorTimelineComponent,
         SlideListComponent,

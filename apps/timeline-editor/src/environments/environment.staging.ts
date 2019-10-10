@@ -2,8 +2,10 @@
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
+import { icons } from './icons';
 export const environment = {
   production: true,
+  iconMapping: icons,
   api: {
     APIBase: 'https://api.staging.lk2020.be'
   }

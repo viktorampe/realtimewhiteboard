@@ -1,6 +1,13 @@
 import { Inject, Injectable } from '@angular/core';
 import { BehaviorSubject, combineLatest, merge, Observable } from 'rxjs';
-import { filter, map, mapTo, shareReplay, switchMapTo } from 'rxjs/operators';
+import {
+  distinctUntilChanged,
+  filter,
+  map,
+  mapTo,
+  shareReplay,
+  switchMapTo
+} from 'rxjs/operators';
 import {
   TimelineConfigInterface,
   TimelineDateInterface,
@@ -9,7 +16,10 @@ import {
   TIMELINE_SLIDE_TYPES
 } from '../interfaces/timeline';
 import { EDITOR_HTTP_SERVICE_TOKEN } from '../services/editor-http.service';
-import { EditorHttpServiceInterface } from '../services/editor-http.service.interface';
+import {
+  EditorHttpServiceInterface,
+  StorageInfoInterface
+} from '../services/editor-http.service.interface';
 import {
   TimelineEraInterface,
   TimelineViewSlideInterface
@@ -33,6 +43,7 @@ export class EditorViewModel {
   public slideList$: Observable<TimelineViewSlideInterface[]>;
   public settings$: Observable<TimelineSettingsInterface>;
   public isFormDirty$: Observable<boolean>;
+  public activeSlideDetailCanSaveAsTitle$: Observable<boolean>;
 
   // where does the eduContentId and eduContentMetadataId come from?
   // the component? DI?
@@ -41,6 +52,33 @@ export class EditorViewModel {
     private editorHttpService: EditorHttpServiceInterface
   ) {
     this.initialise();
+  }
+
+  getTimeline(
+    eduContentMetadataId: number
+  ): Observable<TimelineConfigInterface> {
+    return this.editorHttpService.getJson(eduContentMetadataId);
+  }
+
+  updateTimeline(
+    eduContentMetadataId: number,
+    data: TimelineConfigInterface
+  ): Observable<boolean> {
+    return this.editorHttpService.setJson(eduContentMetadataId, data);
+  }
+
+  previewTimeline(eduContentId: number, eduContentMetadataId: number): string {
+    return this.editorHttpService.getPreviewUrl(
+      eduContentId,
+      eduContentMetadataId
+    );
+  }
+
+  uploadFile(
+    eduContentId: number,
+    file: File
+  ): Observable<StorageInfoInterface> {
+    return this.editorHttpService.uploadFile(eduContentId, file);
   }
 
   private initialise() {
@@ -67,11 +105,22 @@ export class EditorViewModel {
     this.activeSlideDetail$ = this.getActiveSlideDetail();
     this.settings$ = this.getSettings();
     this.isFormDirty$ = new BehaviorSubject(false);
+    this.activeSlideDetailCanSaveAsTitle$ = this.getActiveSlideDetailCanSaveAsTitle();
   }
 
-  private showSettings() {
+  private getActiveSlideDetailCanSaveAsTitle(): Observable<boolean> {
+    return combineLatest([this.data$, this.activeSlideDetail$]).pipe(
+      map(
+        ([data, activeSlideDetail]) =>
+          !data.title || data.title === activeSlideDetail
+      )
+    );
+  }
+
+  private showSettings(): Observable<boolean> {
     return combineLatest([this.activeSlide$, this.newSlide$]).pipe(
       map(([activeSlide, newSlide]) => !activeSlide && !newSlide),
+      distinctUntilChanged(),
       shareReplay(1)
     );
   }
@@ -126,7 +175,6 @@ export class EditorViewModel {
     const viewEras = eras.map(era => ({
       type: TIMELINE_SLIDE_TYPES.ERA,
       viewSlide: era,
-      date: this.transformTimelineDateToJsDate(era.start_date),
       label:
         (era.text && era.text.headline) ||
         this.transformTimelineDateToLabel(era.start_date)
@@ -135,19 +183,14 @@ export class EditorViewModel {
     const viewSlides = slides.map(slide => ({
       type: TIMELINE_SLIDE_TYPES.SLIDE,
       viewSlide: slide,
-      date: this.transformTimelineDateToJsDate(slide.start_date),
       label:
         slide.display_date ||
         this.transformTimelineDateToLabel(slide.start_date)
     }));
 
-    const slideList = [...viewEras, ...viewSlides].sort((a, b) => {
-      if (a.date === b.date) {
-        return a.type > b.type ? 1 : -1;
-      }
-
-      return a.date > b.date ? 1 : -1;
-    });
+    const slideList = [...viewEras, ...viewSlides].sort((a, b) =>
+      this.timelineViewSlideSorter(a, b)
+    );
 
     if (title) {
       const viewTitle = {
@@ -157,8 +200,7 @@ export class EditorViewModel {
           title.display_date ||
           (title.start_date &&
             this.transformTimelineDateToLabel(title.start_date)) ||
-          'Titel',
-        date: null
+          'Titel'
       };
       return [viewTitle, ...slideList];
     }
@@ -177,17 +219,28 @@ export class EditorViewModel {
     );
   }
 
-  private transformTimelineDateToJsDate(
-    timelineDate: TimelineDateInterface
-  ): Date {
-    return new Date(
-      timelineDate.year,
-      timelineDate.month ? timelineDate.month - 1 : 0, // js date object month is zero based
-      timelineDate.day ? timelineDate.day : 1,
-      timelineDate.hour ? timelineDate.hour : 0,
-      timelineDate.minute ? timelineDate.minute : 0,
-      timelineDate.second ? timelineDate.second : 0,
-      timelineDate.millisecond ? timelineDate.millisecond : 0
-    );
+  private timelineViewSlideSorter(
+    a: TimelineViewSlideInterface,
+    b: TimelineViewSlideInterface
+  ): number {
+    const startDate_A = a.viewSlide.start_date;
+    const startDate_B = b.viewSlide.start_date;
+
+    if (startDate_A.year !== startDate_B.year)
+      return startDate_A.year - startDate_B.year;
+    if (startDate_A.month !== startDate_B.month)
+      return (startDate_A.month || 0) - (startDate_B.month || 0);
+    if (startDate_A.day !== startDate_B.day)
+      return (startDate_A.day || 0) - (startDate_B.day || 0);
+    if (startDate_A.hour !== startDate_B.hour)
+      return (startDate_A.hour || 0) - (startDate_B.hour || 0);
+    if (startDate_A.minute !== startDate_B.minute)
+      return (startDate_A.hour || 0) - (startDate_B.hour || 0);
+    if (startDate_A.second !== startDate_B.second)
+      return (startDate_A.second || 0) - (startDate_B.second || 0);
+    if (startDate_A.millisecond !== startDate_B.millisecond)
+      return (startDate_A.millisecond || 0) - (startDate_B.millisecond || 0);
+    if (a.type !== b.type) return a.type - b.type;
+    return 0;
   }
 }
