@@ -202,7 +202,8 @@ export class SlideDetailComponent implements OnInit, OnChanges {
         this.setFormControlAsRequired('end_date.year');
         break;
       default:
-        break;
+        throw new Error('type not recognised');
+      
     }
   }
 
