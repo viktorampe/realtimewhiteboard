@@ -58,7 +58,7 @@ export class EditorViewModel {
   private setPresentationStreams() {
     this.slideList$ = this.data$.pipe(
       filter(data => !!data),
-      map(data => this.mapToViewSlides(data.eras, data.events)),
+      map(data => this.mapToViewSlides(data.eras || [], data.events || [])),
       shareReplay(1)
     );
 
