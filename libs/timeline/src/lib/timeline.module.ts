@@ -5,6 +5,7 @@ import {
   MatButtonModule,
   MatDatepickerModule,
   MatFormFieldModule,
+  MatIconModule,
   MatInputModule,
   MatListModule,
   MatNativeDateModule,
@@ -32,7 +33,8 @@ import {
     MatDatepickerModule,
     MatNativeDateModule,
     MatRadioModule,
-    MatStepperModule
+    MatStepperModule,
+    MatIconModule
   ],
   declarations: [
     EditorTimelineComponent,

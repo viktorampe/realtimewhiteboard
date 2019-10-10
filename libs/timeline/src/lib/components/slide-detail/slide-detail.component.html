@@ -1,6 +1,13 @@
 <ng-container *ngIf="(chosenType$ | async) as slideType">
   <form [formGroup]="slideForm" class="timeline-slide-detail__form">
     <mat-vertical-stepper>
+      <ng-template matStepperIcon="edit">
+        <mat-icon [svgIcon]="'edit'"></mat-icon>
+      </ng-template>
+
+      <ng-template matStepperIcon="done">
+        <mat-icon [svgIcon]="'close'"></mat-icon>
+      </ng-template>
       <!-- GENERAL -->
       <mat-step formGroupName="general" label="Algemeen">
         <div class="timeline-slide-detail__form__section">
