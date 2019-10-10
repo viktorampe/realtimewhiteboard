@@ -1,14 +1,13 @@
 export enum TIMELINE_SLIDE_TYPES {
-  ERA = 'era',
-  SLIDE = 'slide',
-  TITLE = 'title'
+  ERA = 2,
+  SLIDE = 3,
+  TITLE = 1
 }
 
 export interface TimelineViewSlideInterface {
   type: TIMELINE_SLIDE_TYPES;
   viewSlide: TimelineSlideInterface | TimelineEraInterface;
   label: string;
-  date: Date;
 }
 
 export interface TimelineSettingsInterface {
