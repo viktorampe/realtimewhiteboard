@@ -4,6 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import {
   ENVIRONMENT_API_TOKEN,
+  ENVIRONMENT_ICON_MAPPING_TOKEN,
   SettingsService,
   SETTINGS_SERVICE_TOKEN,
   TimelineModule
@@ -27,6 +28,10 @@ import { TimelineEditorComponent } from './timeline-editor/timeline-editor.compo
     {
       provide: SETTINGS_SERVICE_TOKEN,
       useClass: SettingsService
+    },
+    {
+      provide: ENVIRONMENT_ICON_MAPPING_TOKEN,
+      useValue: environment.iconMapping
     }
   ]
 })

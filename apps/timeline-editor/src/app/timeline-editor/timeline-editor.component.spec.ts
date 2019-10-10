@@ -1,5 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { SETTINGS_SERVICE_TOKEN, TimelineModule } from '@campus/timeline';
+import { MatIconModule } from '@angular/material';
+import {
+  ENVIRONMENT_ICON_MAPPING_TOKEN,
+  SETTINGS_SERVICE_TOKEN,
+  TimelineModule
+} from '@campus/timeline';
 import { configureTestSuite } from 'ng-bullet';
 import { TimelineEditorComponent } from './timeline-editor.component';
 
@@ -12,9 +17,13 @@ describe('TimelineEditorComponent', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [TimelineModule],
+      imports: [TimelineModule, MatIconModule],
       declarations: [TimelineEditorComponent],
       providers: [
+        {
+          provide: ENVIRONMENT_ICON_MAPPING_TOKEN,
+          useValue: {}
+        },
         {
           provide: SETTINGS_SERVICE_TOKEN,
           useValue: {
@@ -24,7 +33,7 @@ describe('TimelineEditorComponent', () => {
           }
         }
       ]
-    }).compileComponents();
+    });
   });
 
   beforeEach(() => {
