@@ -1,5 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatListModule } from '@angular/material';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatIconModule, MatListModule } from '@angular/material';
+import { configureTestSuite } from 'ng-bullet';
 import { SlideListComponent } from '../slide-list/slide-list.component';
 import { EditorTimelineComponent } from './editor-timeline.component';
 
@@ -7,12 +8,12 @@ describe('EditorTimelineComponent', () => {
   let component: EditorTimelineComponent;
   let fixture: ComponentFixture<EditorTimelineComponent>;
 
-  beforeEach(async(() => {
+  configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [MatListModule],
+      imports: [MatListModule, MatIconModule],
       declarations: [EditorTimelineComponent, SlideListComponent]
-    }).compileComponents();
-  }));
+    });
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(EditorTimelineComponent);
