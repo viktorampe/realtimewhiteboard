@@ -6,7 +6,8 @@ import {
   map,
   mapTo,
   shareReplay,
-  switchMapTo
+  switchMapTo,
+  take
 } from 'rxjs/operators';
 import {
   TimelineConfigInterface,
@@ -35,6 +36,7 @@ export class EditorViewModel {
   private newSlide$ = new BehaviorSubject<TimelineViewSlideInterface>(null);
   private showSettings$: Observable<boolean>;
   private _activeSlide$: BehaviorSubject<TimelineViewSlideInterface>;
+  private _isFormDirty$: BehaviorSubject<boolean>;
 
   public activeSlide$: Observable<TimelineViewSlideInterface>;
   public activeSlideDetail$: Observable<TimelineViewSlideInterface>;
@@ -52,142 +54,107 @@ export class EditorViewModel {
   }
 
   public openSettings() {
-    this.checkUnsavedChanges().subscribe(savedChanges => {
-      if (savedChanges) {
-        this._activeSlide$.next(null);
-        this.newSlide$.next(null);
-      }
-    });
+    if (!this.isSafeToNavigate()) return;
+
+    this._activeSlide$.next(null);
+    this.newSlide$.next(null);
   }
 
   public updateSettings(newSettings: TimelineSettingsInterface) {
-    const data = this.data$.value;
-    data.scale = newSettings.scale;
-    data.options = newSettings.options;
+    const data = { ...this.data$.value, ...newSettings };
 
     this.data$.next(data);
   }
 
-  public createSlide(slideType: TIMELINE_SLIDE_TYPES) {
-    this.checkUnsavedChanges().subscribe(savedChanges => {
-      if (savedChanges) {
-        let newSlide: TimelineSlideInterface | TimelineEraInterface = {};
+  public createSlide() {
+    if (!this.isSafeToNavigate()) return;
 
-        // Era type has some required properties whereas slide type has none
-        if (slideType === TIMELINE_SLIDE_TYPES.ERA) {
-          newSlide = {
-            start_date: {
-              year: 0
-            },
-            end_date: {
-              year: 0
-            }
-          };
-        }
+    const data = this.data$.value;
 
-        this._activeSlide$.next(null);
-        this.newSlide$.next({
-          type: slideType,
-          label: 'Naamloos',
-          date: null,
-          viewSlide: newSlide
-        });
-      }
+    this._activeSlide$.next(null);
+    this.newSlide$.next({
+      type: data.title
+        ? TIMELINE_SLIDE_TYPES.SLIDE
+        : TIMELINE_SLIDE_TYPES.TITLE,
+      label: 'Naamloos',
+      date: null,
+      viewSlide: {}
     });
   }
 
   public upsertSlide(updatedSlide: TimelineViewSlideInterface) {
-    this._activeSlide$.subscribe(activeSlide => {
-      const data = this.data$.value;
+    const data = this.data$.value;
+    const activeSlide = this._activeSlide$.value;
 
-      if (updatedSlide.type === TIMELINE_SLIDE_TYPES.TITLE) {
-        data.title = updatedSlide.viewSlide;
-      } else if (updatedSlide.type === TIMELINE_SLIDE_TYPES.SLIDE) {
-        data.events.push(updatedSlide.viewSlide as TimelineSlideInterface);
-      } else if (updatedSlide.type === TIMELINE_SLIDE_TYPES.ERA) {
-        data.eras.push(updatedSlide.viewSlide as TimelineEraInterface);
-      }
+    if (updatedSlide.type === TIMELINE_SLIDE_TYPES.TITLE) {
+      data.title = updatedSlide.viewSlide;
+    } else if (updatedSlide.type === TIMELINE_SLIDE_TYPES.SLIDE) {
+      data.events.push(updatedSlide.viewSlide as TimelineSlideInterface);
+    } else if (updatedSlide.type === TIMELINE_SLIDE_TYPES.ERA) {
+      data.eras.push(updatedSlide.viewSlide as TimelineEraInterface);
+    }
 
-      // Nexting data causes the slideList to be updated
-      this.data$.next(data);
+    // Nexting data causes the slideList to be updated
+    this.data$.next(data);
 
-      // If it's an update and not an insert, delete what we had before this
-      if (activeSlide) {
-        this.deleteActiveSlide();
-      }
+    // If it's an update and not an insert, delete what we had before this
+    if (activeSlide) {
+      this.deleteActiveSlide();
+    }
 
-      // With the slideList updated, we can select the new active slide
-      this.slideList$.subscribe(slideList => {
-        const slideItem = slideList.find(
-          slideListItem => slideListItem.viewSlide === updatedSlide.viewSlide
-        );
+    // With the slideList updated, we can select the new active slide
+    this.slideList$.pipe(take(1)).subscribe(slideList => {
+      const slideItem = slideList.find(
+        slideListItem => slideListItem.viewSlide === updatedSlide.viewSlide
+      );
 
-        this._activeSlide$.next(slideItem);
-      });
+      this._activeSlide$.next(slideItem);
     });
   }
 
   public deleteActiveSlide() {
     const data = this.data$.value;
+    const activeSlide = this._activeSlide$.value;
 
-    this._activeSlide$.subscribe(activeSlide => {
-      if (activeSlide.type === TIMELINE_SLIDE_TYPES.TITLE) {
-        data.title = null;
-      } else if (activeSlide.type === TIMELINE_SLIDE_TYPES.SLIDE) {
-        const foundEventIndex = data.events.findIndex(
-          event => event === activeSlide.viewSlide
-        );
+    // Bail out if we don't have anything selected
+    if (!activeSlide) return;
 
-        if (foundEventIndex !== -1) {
-          data.events.splice(foundEventIndex, 1);
-        }
-      } else if (activeSlide.type === TIMELINE_SLIDE_TYPES.ERA) {
-        const foundEraIndex = data.eras.findIndex(
-          era => era === activeSlide.viewSlide
-        );
+    if (activeSlide.type === TIMELINE_SLIDE_TYPES.TITLE) {
+      data.title = null;
+    } else if (activeSlide.type === TIMELINE_SLIDE_TYPES.SLIDE) {
+      data.events = data.events.filter(
+        event => event !== activeSlide.viewSlide
+      );
+    } else if (activeSlide.type === TIMELINE_SLIDE_TYPES.ERA) {
+      data.eras = data.eras.filter(era => era !== activeSlide.viewSlide);
+    }
 
-        if (foundEraIndex !== -1) {
-          data.eras.splice(foundEraIndex, 1);
-        }
-      }
+    // Select nothing, since the previously active slide was deleted
+    this._activeSlide$.next(null);
 
-      // Select nothing, since the previously active slide was deleted
-      this._activeSlide$.next(null);
-
-      this.data$.next(data);
-    });
+    this.data$.next(data);
   }
 
   public setActiveSlide(slide: TimelineViewSlideInterface) {
-    this.checkUnsavedChanges().subscribe(savedChanges => {
-      if (savedChanges) {
-        this._activeSlide$.next(slide);
-      }
-    });
+    if (!this.isSafeToNavigate()) return;
+
+    this._activeSlide$.next(slide);
   }
 
   /**
-   * Returns true if it is safe to proceed. That means: the user has
-   * no changes or the user has changes and just saved them.
+   * Returns true only when it's safe to proceed.
+   * This means: the user has no unsaved changes or the user agreed to discard any unsaved changes.
    */
-  private checkUnsavedChanges(): Observable<boolean> {
-    return this.isFormDirty$.pipe(
-      map(formDirty => {
-        if (formDirty) {
-          const mustSave = confirm(
-            'Er zijn niet opgeslagen wijzigingen. Wijzigingen opslaan en doorgaan?'
-          );
+  private isSafeToNavigate(): boolean {
+    const formDirty = this._isFormDirty$.value;
 
-          if (mustSave) {
-            //TODO: save current slide
-          }
-
-          return mustSave;
-        } else {
-          return true;
-        }
-      })
-    );
+    if (formDirty) {
+      return confirm(
+        'Let op! Er zijn niet opgeslagen wijzigingen. Doorgaan zonder wijzigingen op te slaan?'
+      );
+    } else {
+      return true;
+    }
   }
 
   private initialise() {
@@ -214,7 +181,8 @@ export class EditorViewModel {
     this.showSettings$ = this.showSettings();
     this.activeSlideDetail$ = this.getActiveSlideDetail();
     this.settings$ = this.getSettings();
-    this.isFormDirty$ = new BehaviorSubject(false);
+    this._isFormDirty$ = new BehaviorSubject(false);
+    this.isFormDirty$ = this._isFormDirty$.asObservable();
   }
 
   private showSettings() {
