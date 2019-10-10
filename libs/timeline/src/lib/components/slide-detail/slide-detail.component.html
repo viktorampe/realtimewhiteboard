@@ -21,35 +21,31 @@
             >
           </mat-radio-group>
         </div>
-        <div
-          *ngIf="slideType != 'era'"
-          class="timeline-slide-detail__form__section"
-        >
-          <div class="mat-h3">Groep</div>
-          <mat-form-field>
-            <input
-              matInput
-              type="string"
-              formControlName="group"
-              placeholder="Tot welke groep behoort deze gebeurtenis?"
-            />
-          </mat-form-field>
-        </div>
+        <ng-container *ngIf="slideType != 'era'">
+          <div class="timeline-slide-detail__form__section">
+            <div class="mat-h3">Groep</div>
+            <mat-form-field>
+              <input
+                matInput
+                type="string"
+                formControlName="group"
+                placeholder="Tot welke groep behoort deze gebeurtenis?"
+              />
+            </mat-form-field>
+          </div>
 
-        <div
-          *ngIf="slideType != 'era'"
-          class="timeline-slide-detail__form__section"
-        >
-          <div class="mat-h3">Weergavedatum</div>
-          <mat-form-field>
-            <input
-              matInput
-              type="string"
-              formControlName="display_date"
-              placeholder="Weergavedatum"
-            />
-          </mat-form-field>
-        </div>
+          <div class="timeline-slide-detail__form__section">
+            <div class="mat-h3">Weergavedatum</div>
+            <mat-form-field>
+              <input
+                matInput
+                type="string"
+                formControlName="display_date"
+                placeholder="Weergavedatum"
+              />
+            </mat-form-field>
+          </div>
+        </ng-container>
         <div>
           <button mat-button matStepperNext>Volgende</button>
         </div>
