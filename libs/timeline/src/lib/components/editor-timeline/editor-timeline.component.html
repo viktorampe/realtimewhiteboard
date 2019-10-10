@@ -20,9 +20,9 @@
   >
   <button
     mat-button
-    *ngIf="(activeSlide$ | async) as slide"
+    *ngIf="(activeSlide$ | async)"
     class="timeline-editor__toolbar__button--delete"
-    (click)="destroySlide(slide)"
+    (click)="destroyActiveSlide()"
     >Huidige slide verwijderen</button
   >
 </div>
