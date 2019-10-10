@@ -5,7 +5,7 @@ import { EditorTimelineComponent, TimelineModule } from '@campus/timeline';
 
 @NgModule({
   imports: [BrowserModule, TimelineModule],
-  entryComponents: [EditorTimelineComponent] //place additional files here
+  entryComponents: [EditorTimelineComponent] //place additional custom components here and ...
 })
 export class ElementModule {
   constructor(injector: Injector) {
@@ -15,7 +15,7 @@ export class ElementModule {
         injector: injector
       }
     );
-    customElements.define('campus-editor-timeline', timelineEditorComponent);
+    customElements.define('campus-editor-timeline', timelineEditorComponent); //... and here
   }
 
   ngDoBootstrap() {}
