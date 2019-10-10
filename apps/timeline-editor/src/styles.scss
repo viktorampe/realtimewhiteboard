@@ -3,6 +3,4 @@
 /*
  * Angular Material theme
  */
-@import './scss/theme-angular-material.scss';
-@include angular-material-theme($app-theme);
-@include angular-material-typography($app-typography);
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
