@@ -17,7 +17,9 @@ export const EDITOR_HTTP_SERVICE_TOKEN = new InjectionToken(
 );
 const RETRY_AMOUNT = 2;
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class EditorHttpService implements EditorHttpServiceInterface {
   constructor(
     private http: HttpClient,
