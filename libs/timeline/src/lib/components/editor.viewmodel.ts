@@ -57,6 +57,33 @@ export class EditorViewModel {
     this.initialise();
   }
 
+  getTimeline(
+    eduContentMetadataId: number
+  ): Observable<TimelineConfigInterface> {
+    return this.editorHttpService.getJson(eduContentMetadataId);
+  }
+
+  updateTimeline(
+    eduContentMetadataId: number,
+    data: TimelineConfigInterface
+  ): Observable<boolean> {
+    return this.editorHttpService.setJson(eduContentMetadataId, data);
+  }
+
+  previewTimeline(eduContentId: number, eduContentMetadataId: number): string {
+    return this.editorHttpService.getPreviewUrl(
+      eduContentId,
+      eduContentMetadataId
+    );
+  }
+
+  uploadFile(
+    eduContentId: number,
+    file: File
+  ): Observable<StorageInfoInterface> {
+    return this.editorHttpService.uploadFile(eduContentId, file);
+  }
+
   public openSettings() {
     if (!this.isSafeToNavigate()) return;
 
@@ -311,32 +338,5 @@ export class EditorViewModel {
       timelineDate.second ? timelineDate.second : 0,
       timelineDate.millisecond ? timelineDate.millisecond : 0
     );
-  }
-
-  getTimeline(
-    eduContentMetadataId: number
-  ): Observable<TimelineConfigInterface> {
-    return this.editorHttpService.getJson(eduContentMetadataId);
-  }
-
-  updateTimeline(
-    eduContentMetadataId: number,
-    data: TimelineConfigInterface
-  ): Observable<boolean> {
-    return this.editorHttpService.setJson(eduContentMetadataId, data);
-  }
-
-  previewTimeline(eduContentId: number, eduContentMetadataId: number): string {
-    return this.editorHttpService.getPreviewUrl(
-      eduContentId,
-      eduContentMetadataId
-    );
-  }
-
-  uploadFile(
-    eduContentId: number,
-    file: File
-  ): Observable<StorageInfoInterface> {
-    return this.editorHttpService.uploadFile(eduContentId, file);
   }
 }
