@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@angular/core';
 import { BehaviorSubject, merge, Observable } from 'rxjs';
 import {
   combineLatest,
+  distinctUntilChanged,
   filter,
   map,
   mapTo,
@@ -71,7 +72,6 @@ export class EditorViewModel {
 
     const data = this.data$.value;
 
-    this._activeSlide$.next(null);
     this.newSlide$.next({
       type: data.title
         ? TIMELINE_SLIDE_TYPES.SLIDE
@@ -80,6 +80,7 @@ export class EditorViewModel {
       date: null,
       viewSlide: {}
     });
+    this._activeSlide$.next(null);
   }
 
   public upsertSlide(updatedSlide: TimelineViewSlideInterface) {
@@ -189,6 +190,7 @@ export class EditorViewModel {
     return this._activeSlide$.pipe(
       combineLatest(this.newSlide$),
       map(([activeSlide, newSlide]) => !activeSlide && !newSlide),
+      distinctUntilChanged(),
       shareReplay(1)
     );
   }
