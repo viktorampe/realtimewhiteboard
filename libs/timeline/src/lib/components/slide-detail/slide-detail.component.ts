@@ -16,7 +16,7 @@ import {
 } from '@angular/forms';
 import * as equal from 'fast-deep-equal';
 import { Observable } from 'rxjs';
-import { debounceTime, map, startWith, tap } from 'rxjs/operators';
+import { debounceTime, map, shareReplay, startWith, tap } from 'rxjs/operators';
 import {
   TimelineEraInterface,
   TimelineSlideInterface,
@@ -167,7 +167,8 @@ export class SlideDetailComponent implements OnInit, OnChanges {
       startWith(this.formData.general.type),
       tap(slideType => {
         this.updateValidatorsForType(slideType);
-      })
+      }),
+      shareReplay(1)
     );
 
     this.isDirty$ = this.slideForm.valueChanges.pipe(
@@ -203,7 +204,6 @@ export class SlideDetailComponent implements OnInit, OnChanges {
         break;
       default:
         throw new Error('type not recognised');
-      
     }
   }
 
