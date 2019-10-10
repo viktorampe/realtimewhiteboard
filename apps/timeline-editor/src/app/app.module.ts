@@ -3,10 +3,12 @@ import { createCustomElement } from '@angular/elements';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import {
+  ENVIRONMENT_API_TOKEN,
   SettingsService,
   SETTINGS_SERVICE_TOKEN,
   TimelineModule
 } from '@campus/timeline';
+import { environment } from '../environments/environment';
 import { TimelineEditorComponent } from './timeline-editor/timeline-editor.component';
 
 @NgModule({
@@ -18,6 +20,10 @@ import { TimelineEditorComponent } from './timeline-editor/timeline-editor.compo
   ],
   entryComponents: [TimelineEditorComponent],
   providers: [
+    {
+      provide: ENVIRONMENT_API_TOKEN,
+      useValue: environment.api
+    },
     {
       provide: SETTINGS_SERVICE_TOKEN,
       useClass: SettingsService
