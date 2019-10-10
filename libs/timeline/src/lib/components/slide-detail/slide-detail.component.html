@@ -1,6 +1,6 @@
 <ng-container *ngIf="(chosenType$ | async) as slideType">
   <form [formGroup]="slideForm" class="timeline-slide-detail__form">
-    <mat-vertical-stepper>
+    <mat-horizontal-stepper>
       <ng-template matStepperIcon="edit">
         <mat-icon [svgIcon]="'edit'"></mat-icon>
       </ng-template>
@@ -326,7 +326,7 @@
           <button mat-button matStepperPrevious>Vorige</button>
         </div>
       </mat-step>
-    </mat-vertical-stepper>
+    </mat-horizontal-stepper>
 
     <button mat-button (click)="onSubmit()">Opslaan</button>
   </form>
