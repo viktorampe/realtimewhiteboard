@@ -116,6 +116,11 @@ export class EditorViewModel {
     const data = this.data$.value;
     const activeSlide = this._activeSlide$.value;
 
+    // If it's an update and not an insert, delete what we had before this
+    if (activeSlide) {
+      this.deleteActiveSlide();
+    }
+
     if (updatedSlide.type === TIMELINE_SLIDE_TYPES.TITLE) {
       data.title = updatedSlide.viewSlide;
     } else if (updatedSlide.type === TIMELINE_SLIDE_TYPES.SLIDE) {
@@ -126,11 +131,6 @@ export class EditorViewModel {
 
     // Nexting data causes the slideList to be updated
     this.data$.next(data);
-
-    // If it's an update and not an insert, delete what we had before this
-    if (activeSlide) {
-      this.deleteActiveSlide();
-    }
 
     // With the slideList updated, we can select the new active slide
     this.slideList$.pipe(take(1)).subscribe(slideList => {
@@ -169,6 +169,7 @@ export class EditorViewModel {
     if (!this.isSafeToNavigate()) return;
 
     this._activeSlide$.next(slide);
+    this.newSlide$.next(null);
   }
 
   /**
