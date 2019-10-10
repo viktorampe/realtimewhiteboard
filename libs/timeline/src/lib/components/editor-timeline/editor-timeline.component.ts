@@ -1,18 +1,10 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-<<<<<<< HEAD
 import {
   TimelineSettingsInterface,
   TimelineViewSlideInterface
 } from '../../interfaces/timeline';
 import { EditorViewModel } from './../editor.viewmodel';
-=======
-import { TimelineSlideFixture } from '../../+fixtures/timeline-slide.fixture';
-import {
-  TimelineViewSlideInterface,
-  TIMELINE_SLIDE_TYPES
-} from '../../interfaces/timeline';
->>>>>>> feature/timeline-viewmodel_streams
 
 @Component({
   selector: 'campus-editor-timeline',
