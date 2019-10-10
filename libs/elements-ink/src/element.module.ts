@@ -1,8 +1,7 @@
 import { Injector, NgModule } from '@angular/core';
 import { createCustomElement } from '@angular/elements';
 import { BrowserModule } from '@angular/platform-browser';
-import { EditorTimelineComponent } from './lib/components/editor-timeline/editor-timeline.component';
-import { TimelineModule } from './lib/timeline.module';
+import { EditorTimelineComponent, TimelineModule } from '@campus/timeline';
 
 @NgModule({
   imports: [BrowserModule, TimelineModule],

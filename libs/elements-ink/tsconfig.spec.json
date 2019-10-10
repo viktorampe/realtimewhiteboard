@@ -1,7 +1,7 @@
 {
-  "extends": "../../tsconfig.json",
+  "extends": "./tsconfig.json",
   "compilerOptions": {
-    "outDir": "../../dist/out-tsc/libs/timeline",
+    "outDir": "../../dist/out-tsc/libs/elements-ink",
     "module": "commonjs",
     "types": ["jest", "node"]
   },

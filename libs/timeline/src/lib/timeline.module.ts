@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { Inject, InjectionToken, NgModule } from '@angular/core';
+import { InjectionToken, NgModule } from '@angular/core';
 import {
   MatButtonModule,
   MatIconModule,
@@ -43,27 +43,25 @@ export const ENVIRONMENT_ICON_MAPPING_TOKEN = new InjectionToken(
 export class TimelineModule {
   constructor(
     private iconRegistry: MatIconRegistry,
-    private sanitizer: DomSanitizer,
-    @Inject(ENVIRONMENT_ICON_MAPPING_TOKEN)
-    private iconMapping: { [icon: string]: string }
+    private sanitizer: DomSanitizer
   ) {
-    this.setupIconRegistry();
+    //this.setupIconRegistry();
   }
 
-  setupIconRegistry() {
-    for (const key in this.iconMapping) {
-      if (key.indexOf(':') > 0) {
-        this.iconRegistry.addSvgIconInNamespace(
-          key.split(':')[0],
-          key.split(':')[1],
-          this.sanitizer.bypassSecurityTrustResourceUrl(this.iconMapping[key])
-        );
-      } else {
-        this.iconRegistry.addSvgIcon(
-          key,
-          this.sanitizer.bypassSecurityTrustResourceUrl(this.iconMapping[key])
-        );
-      }
-    }
-  }
+  // setupIconRegistry() {
+  //   for (const key in this.iconMapping) {
+  //     if (key.indexOf(':') > 0) {
+  //       this.iconRegistry.addSvgIconInNamespace(
+  //         key.split(':')[0],
+  //         key.split(':')[1],
+  //         this.sanitizer.bypassSecurityTrustResourceUrl(this.iconMapping[key])
+  //       );
+  //     } else {
+  //       this.iconRegistry.addSvgIcon(
+  //         key,
+  //         this.sanitizer.bypassSecurityTrustResourceUrl(this.iconMapping[key])
+  //       );
+  //     }
+  //   }
+  // }
 }
