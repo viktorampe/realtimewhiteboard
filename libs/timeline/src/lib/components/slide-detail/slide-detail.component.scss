@@ -10,5 +10,15 @@
     .radio-button {
       margin: 5px;
     }
+
+    &__color-picker {
+      display: flex;
+      flex-direction: row nowrap;
+      &__preview {
+        margin-left: 20px;
+        width: 100%;
+        height: 50px;
+      }
+    }
   }
 }
