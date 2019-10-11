@@ -24,7 +24,11 @@ import { WhiteboardDemoPageComponent } from './whiteboard-demo-page/whiteboard-d
     PagesHomeModule
   ],
   providers: [LoginPageViewModel],
-  declarations: [LoginpageComponent, DemoPageComponent, WhiteboardDemoPageComponent],
+  declarations: [
+    LoginpageComponent,
+    DemoPageComponent,
+    WhiteboardDemoPageComponent
+  ],
   exports: [],
   entryComponents: []
 })
