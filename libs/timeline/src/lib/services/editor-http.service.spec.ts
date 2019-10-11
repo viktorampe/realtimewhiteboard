@@ -101,8 +101,6 @@ describe('EditorHttpService', () => {
   });
 
   describe('uploadFile', () => {
-    const eduContentId = 123;
-
     const storageInfo: StorageInfoInterface = {
       name: 'foo.exe',
       storageName: 'some-hash'
@@ -123,7 +121,7 @@ describe('EditorHttpService', () => {
       );
 
       expect(httpClient.post).toHaveBeenCalledWith(
-        APIBase + '/api/EduContentFiles/' + eduContentId + '/store',
+        APIBase + '/api/EduContentFiles/' + apiData.eduContentId + '/store',
         formData,
         { withCredentials: true }
       );

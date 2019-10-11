@@ -10,9 +10,6 @@ import { TimelineEditorComponent } from './timeline-editor.component';
 describe('TimelineEditorComponent', () => {
   let component: TimelineEditorComponent;
   let fixture: ComponentFixture<TimelineEditorComponent>;
-  let APIBase: string;
-  let eduContentMetadataId: number;
-  let eduContentId: number;
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
@@ -28,10 +25,6 @@ describe('TimelineEditorComponent', () => {
   });
 
   beforeEach(() => {
-    APIBase = 'http://foo.localhost/';
-    eduContentMetadataId = 1;
-    eduContentId = 1;
-
     fixture = TestBed.createComponent(TimelineEditorComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

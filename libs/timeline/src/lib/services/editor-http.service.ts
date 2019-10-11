@@ -36,7 +36,9 @@ export class EditorHttpService implements EditorHttpServiceInterface {
         retry(RETRY_AMOUNT),
         catchError(this.handleError),
         tap(response => (this.eduContentId = response.eduContentId)),
-        map((response): TimelineConfigInterface => JSON.parse(response.timeline))
+        map(
+          (response): TimelineConfigInterface => JSON.parse(response.timeline)
+        )
       );
 
     return response$;

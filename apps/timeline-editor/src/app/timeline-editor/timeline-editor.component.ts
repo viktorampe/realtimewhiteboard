@@ -7,8 +7,8 @@ import { environment } from '../../environments/environment';
   styleUrls: ['./timeline-editor.component.scss']
 })
 export class TimelineEditorComponent implements OnInit {
-  apiBase: string;
-  eduContentMetadataId: number;
+  public apiBase: string;
+  public eduContentMetadataId: number;
 
   constructor() {}
 
