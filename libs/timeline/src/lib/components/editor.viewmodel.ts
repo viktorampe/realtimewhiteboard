@@ -31,6 +31,7 @@ import {
 })
 export class EditorViewModel {
   private eduContentId: number;
+  private eduContentMetadataId: number; // TODO remove -> httpService will have this info
   private data$ = new BehaviorSubject<TimelineConfigInterface>(null);
 
   // stores temporary value for new slide
@@ -130,6 +131,9 @@ export class EditorViewModel {
       data.eras.push(updatedSlide.viewSlide as TimelineEraInterface);
     }
 
+    // Persist changes
+    this.updateTimeline(this.eduContentMetadataId, data).subscribe();
+
     // Nexting data causes the slideList to be updated
     this.data$.next(data);
 
@@ -159,6 +163,9 @@ export class EditorViewModel {
     } else if (activeSlide.type === TIMELINE_SLIDE_TYPES.ERA) {
       data.eras = data.eras.filter(era => era !== activeSlide.viewSlide);
     }
+
+    // Persist changes
+    this.updateTimeline(this.eduContentMetadataId, data).subscribe();
 
     // Select nothing, since the previously active slide was deleted
     this._activeSlide$.next(null);
