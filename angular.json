@@ -1252,6 +1252,37 @@
         }
       }
     },
+    "whiteboard": {
+      "root": "libs/whiteboard",
+      "sourceRoot": "libs/whiteboard/src",
+      "projectType": "library",
+      "prefix": "campus",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/whiteboard/tsconfig.lib.json",
+              "libs/whiteboard/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/builders:jest",
+          "options": {
+            "jestConfig": "libs/whiteboard/jest.config.js",
+            "tsConfig": "libs/whiteboard/tsconfig.spec.json",
+            "setupFile": "libs/whiteboard/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/schematics:component": {
+          "styleext": "scss"
+        }
+      }
+    },
     "elements-ink": {
       "root": "libs/elements-ink",
       "sourceRoot": "libs/elements-ink/src",
