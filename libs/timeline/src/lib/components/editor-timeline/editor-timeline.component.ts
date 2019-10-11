@@ -2,19 +2,24 @@ import { Component, OnInit } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { TimelineSlideFixture } from '../../+fixtures/timeline-slide.fixture';
 import {
+  TimelineSettingsInterface,
   TimelineViewSlideInterface,
   TIMELINE_SLIDE_TYPES
 } from '../../interfaces/timeline';
+import { EditorViewModel } from '../editor.viewmodel';
+import { MockEditorViewModel } from '../editor.viewmodel.mock';
 
 @Component({
   selector: 'campus-editor-timeline',
   templateUrl: './editor-timeline.component.html',
-  styleUrls: ['./editor-timeline.component.scss']
+  styleUrls: ['./editor-timeline.component.scss'],
+  providers: [{ provide: EditorViewModel, useClass: MockEditorViewModel }]
 })
 export class EditorTimelineComponent implements OnInit {
   public slides$: Observable<TimelineViewSlideInterface[]>;
+  public settings$: Observable<TimelineSettingsInterface>;
 
-  constructor() {
+  constructor(private editorViewModel: EditorViewModel) {
     this.slides$ = new BehaviorSubject([
       {
         type: TIMELINE_SLIDE_TYPES.ERA,
@@ -39,7 +44,9 @@ export class EditorTimelineComponent implements OnInit {
     ] as TimelineViewSlideInterface[]);
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.settings$ = this.editorViewModel.settings$;
+  }
 
   noop(): void {}
 }

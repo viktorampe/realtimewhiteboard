@@ -79,12 +79,6 @@ export class MockEditorViewModel
         relative: false,
         scale_factor: 1
       },
-      title: {
-        text: {
-          headline: 'Dit is een titel.',
-          text: 'Dit is de tekst van de titel'
-        }
-      },
       scale: 'human'
     };
   }

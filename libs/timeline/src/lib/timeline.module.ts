@@ -1,10 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { Inject, InjectionToken, NgModule } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 import {
   MatButtonModule,
+  MatFormFieldModule,
   MatIconModule,
   MatIconRegistry,
+  MatInputModule,
   MatListModule
 } from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -27,7 +30,10 @@ export const ENVIRONMENT_ICON_MAPPING_TOKEN = new InjectionToken(
     HttpClientModule,
     MatButtonModule,
     MatListModule,
-    MatIconModule
+    MatIconModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule
   ],
   declarations: [
     EditorTimelineComponent,
