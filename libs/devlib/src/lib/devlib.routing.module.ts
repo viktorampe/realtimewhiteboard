@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { DemoPageComponent } from './demo-page/demo-page.component';
 import { LoginpageComponent } from './loginpage/loginpage.component';
+import { WhiteboardDemoPageComponent } from './whiteboard-demo-page/whiteboard-demo-page.component';
 
 const routes: Routes = [
   {
@@ -15,9 +16,21 @@ const routes: Routes = [
   },
   {
     path: 'demo',
-    component: DemoPageComponent,
-    data: { breadcrumbText: 'demo' }
+    data: { breadcrumbText: 'demo' },
+    children: [
+      {
+        path: '',
+        component: DemoPageComponent,
+        data: { breadcrumbText: 'general' }
+      },
+      {
+        path: 'whiteboard',
+        component: WhiteboardDemoPageComponent,
+        data: { breadcrumbText: 'whiteboard' }
+      }
+    ]
   },
+
   {
     path: '',
     component: LoginpageComponent,

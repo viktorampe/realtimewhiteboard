@@ -10,6 +10,7 @@ import { DemoPageComponent } from './demo-page/demo-page.component';
 import { DevlibRoutingModule } from './devlib.routing.module';
 import { LoginpageComponent } from './loginpage/loginpage.component';
 import { LoginPageViewModel } from './loginpage/loginpage.viewmodel';
+import { WhiteboardDemoPageComponent } from './whiteboard-demo-page/whiteboard-demo-page.component';
 
 @NgModule({
   imports: [
@@ -23,7 +24,7 @@ import { LoginPageViewModel } from './loginpage/loginpage.viewmodel';
     PagesHomeModule
   ],
   providers: [LoginPageViewModel],
-  declarations: [LoginpageComponent, DemoPageComponent],
+  declarations: [LoginpageComponent, DemoPageComponent, WhiteboardDemoPageComponent],
   exports: [],
   entryComponents: []
 })
