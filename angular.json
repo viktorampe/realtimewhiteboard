@@ -1269,11 +1269,11 @@
           }
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@nrwl/builders:jest",
           "options": {
-            "main": "libs/whiteboard/src/test.ts",
-            "tsConfig": "libs/whiteboard/tsconfig.spec.json",
-            "karmaConfig": "libs/whiteboard/karma.conf.js"
+            "jestConfig": "libs/timeline/jest.config.js",
+            "tsConfig": "libs/timeline/tsconfig.spec.json",
+            "setupFile": "libs/timeline/src/test-setup.ts"
           }
         }
       },
