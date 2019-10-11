@@ -235,7 +235,7 @@ export class EditorViewModel {
     if (startDate_A.hour !== startDate_B.hour)
       return (startDate_A.hour || 0) - (startDate_B.hour || 0);
     if (startDate_A.minute !== startDate_B.minute)
-      return (startDate_A.hour || 0) - (startDate_B.hour || 0);
+      return (startDate_A.minute || 0) - (startDate_B.minute || 0);
     if (startDate_A.second !== startDate_B.second)
       return (startDate_A.second || 0) - (startDate_B.second || 0);
     if (startDate_A.millisecond !== startDate_B.millisecond)
