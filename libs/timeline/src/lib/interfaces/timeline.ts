@@ -11,13 +11,13 @@ export interface TimelineViewSlideInterface {
 }
 
 export interface TimelineSettingsInterface {
-  title?: TimelineSlideInterface;
   scale?: 'human' | 'cosmological';
   options: TimelineOptionsInterface;
 }
 
 // These interfaces match with the objects used in the TimelineJS library
 export interface TimelineConfigInterface extends TimelineSettingsInterface {
+  title?: TimelineSlideInterface;
   events: TimelineSlideInterface[];
   eras: TimelineEraInterface[];
 }
