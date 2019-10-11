@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { TimelineSlideFixture } from '../../+fixtures/timeline-slide.fixture';
-import { TimelineViewSlideInterface } from '../../interfaces/timeline';
+import {
+  TimelineViewSlideInterface,
+  TIMELINE_SLIDE_TYPES
+} from '../../interfaces/timeline';
 import { EditorViewModel } from '../editor.viewmodel';
 
 @Component({
@@ -19,22 +22,22 @@ export class EditorTimelineComponent implements OnInit {
 
     this.slides$ = new BehaviorSubject([
       {
-        type: 'era',
+        type: TIMELINE_SLIDE_TYPES.ERA,
         viewSlide: new TimelineSlideFixture(),
         label: 'januari - februari 2019'
       },
       {
-        type: 'slide',
+        type: TIMELINE_SLIDE_TYPES.SLIDE,
         viewSlide: new TimelineSlideFixture(),
         label: 'januari 2019'
       },
       {
-        type: 'slide',
+        type: TIMELINE_SLIDE_TYPES.SLIDE,
         viewSlide: new TimelineSlideFixture(),
         label: 'februari 2019'
       },
       {
-        type: 'slide',
+        type: TIMELINE_SLIDE_TYPES.SLIDE,
         viewSlide: new TimelineSlideFixture(),
         label: 'maart 2019'
       }

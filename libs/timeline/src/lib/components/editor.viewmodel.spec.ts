@@ -1,28 +1,37 @@
+import { HttpClientModule } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
+import { BrowserModule } from '@angular/platform-browser';
 import { configureTestSuite } from 'ng-bullet';
+import { BehaviorSubject } from 'rxjs';
+import { TimelineConfigFixture } from '../+fixtures/timeline-config.fixture';
 import { TimelineConfigInterface } from '../interfaces/timeline';
 import { EDITOR_HTTP_SERVICE_TOKEN } from '../services/editor-http.service';
 import { EditorHttpServiceInterface } from '../services/editor-http.service.interface';
+import { ENVIRONMENT_API_TOKEN } from './../interfaces/environment';
 import { EditorViewModel } from './editor.viewmodel';
 
 describe('EditorViewModel', () => {
   let editorViewModel: EditorViewModel;
   let editorHttpService: EditorHttpServiceInterface;
 
+  const APIBase = 'http://api.kabas.localhost:3000';
+
+  const timelineConfig = new TimelineConfigFixture();
+
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [],
+      imports: [BrowserModule, HttpClientModule],
       providers: [
-        EditorViewModel,
         {
           provide: EDITOR_HTTP_SERVICE_TOKEN,
           useValue: {
-            getJson: () => {},
+            getJson: () => new BehaviorSubject(timelineConfig),
             setJson: () => {},
             getPreviewUrl: () => {},
             uploadFile: () => {}
           }
-        }
+        },
+        { provide: ENVIRONMENT_API_TOKEN, useValue: { APIBase } }
       ]
     });
   });
