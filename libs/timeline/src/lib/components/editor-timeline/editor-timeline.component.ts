@@ -1,5 +1,5 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import {
   TimelineSettingsInterface,
   TimelineViewSlideInterface
@@ -31,19 +31,18 @@ export class EditorTimelineComponent implements OnInit {
   }
 
   public setActiveSlide(viewSlide: TimelineViewSlideInterface): void {
-    // this.editorViewModel.setActiveSlide(viewSlide)
-    (this.editorViewModel.activeSlide$ as BehaviorSubject<
-      TimelineViewSlideInterface
-    >).next(viewSlide); //TODO use viewmodel method
+    this.editorViewModel.setActiveSlide(viewSlide);
   }
 
   public showSettings(): void {
-    // this.editorViewModel.showSettings();
+    this.editorViewModel.openSettings();
   }
 
-  public createSlide(): void {}
+  public createSlide(): void {
+    this.editorViewModel.createSlide();
+  }
 
   public deleteActiveSlide(): void {
-    // this.editorViewModel. ... ?
+    this.editorViewModel.deleteActiveSlide();
   }
 }
