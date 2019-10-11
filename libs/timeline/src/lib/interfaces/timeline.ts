@@ -1,11 +1,25 @@
-// These interfaces match with the objects used in the TimelineJS library
+export enum TIMELINE_SLIDE_TYPES {
+  ERA = 2,
+  SLIDE = 3,
+  TITLE = 1
+}
 
-export interface TimelineConfigInterface {
+export interface TimelineViewSlideInterface {
+  type: TIMELINE_SLIDE_TYPES;
+  viewSlide: TimelineSlideInterface | TimelineEraInterface;
+  label: string;
+}
+
+export interface TimelineSettingsInterface {
   title?: TimelineSlideInterface;
-  events: TimelineSlideInterface[];
-  eras: TimelineEraInterface[];
   scale?: 'human' | 'cosmological';
   options: TimelineOptionsInterface;
+}
+
+// These interfaces match with the objects used in the TimelineJS library
+export interface TimelineConfigInterface extends TimelineSettingsInterface {
+  events: TimelineSlideInterface[];
+  eras: TimelineEraInterface[];
 }
 
 export interface TimelineSlideInterface {
@@ -60,10 +74,4 @@ export interface TimelineBackgroundInterface {
   url?: string;
   color?: string;
   eduFileId?: number; // checked to replace the url field with a signed url
-}
-
-export interface TimelineViewSlideInterface {
-  type: 'slide' | 'era';
-  viewSlide: TimelineSlideInterface | TimelineEraInterface;
-  label: string;
 }
