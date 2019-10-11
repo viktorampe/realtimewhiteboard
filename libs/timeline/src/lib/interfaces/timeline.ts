@@ -62,8 +62,14 @@ export interface TimelineBackgroundInterface {
   eduFileId?: number; // checked to replace the url field with a signed url
 }
 
+export enum TIMELINE_SLIDE_TYPES {
+  ERA = 2,
+  SLIDE = 3,
+  TITLE = 1
+}
+
 export interface TimelineViewSlideInterface {
-  type: 'slide' | 'era' | 'title';
+  type: TIMELINE_SLIDE_TYPES;
   viewSlide: TimelineSlideInterface | TimelineEraInterface;
   label: string;
 }

@@ -20,12 +20,13 @@ import { debounceTime, map, shareReplay, startWith, tap } from 'rxjs/operators';
 import {
   TimelineEraInterface,
   TimelineSlideInterface,
-  TimelineViewSlideInterface
+  TimelineViewSlideInterface,
+  TIMELINE_SLIDE_TYPES
 } from '../../interfaces/timeline';
 
 interface SlideFormInterface extends TimelineSlideInterface {
   general?: {
-    type: 'slide' | 'era' | 'title';
+    type: TIMELINE_SLIDE_TYPES;
     group: string;
     display_date: string;
   };
@@ -68,6 +69,7 @@ export class SlideDetailComponent implements OnInit, OnChanges {
 
   slideForm: FormGroup;
   slideTypes: string[] = ['title', 'slide', 'era'];
+  slideTypesEnum = TIMELINE_SLIDE_TYPES;
 
   chosenType$: Observable<string>;
 
@@ -181,22 +183,22 @@ export class SlideDetailComponent implements OnInit, OnChanges {
     );
   }
 
-  private updateValidatorsForType(type: 'era' | 'slide' | 'title'): void {
+  private updateValidatorsForType(type: TIMELINE_SLIDE_TYPES): void {
     // reset
     this.setFormControlAsOptional('start_date.year');
     this.setFormControlAsOptional('end_date.year');
 
     switch (type) {
-      case 'slide':
+      case TIMELINE_SLIDE_TYPES.SLIDE:
         // start_date is required
         // end_date is optional
         this.setFormControlAsRequired('start_date.year');
         break;
-      case 'title':
+      case TIMELINE_SLIDE_TYPES.TITLE:
         // same as slide, except the start_date is optional
         // so same as reset values
         break;
-      case 'era':
+      case TIMELINE_SLIDE_TYPES.ERA:
         // start_date & end_date are required
         // media url is optional
         this.setFormControlAsRequired('start_date.year');
@@ -245,7 +247,7 @@ export class SlideDetailComponent implements OnInit, OnChanges {
     let viewSlideData: TimelineSlideInterface | TimelineEraInterface;
 
     // check slide type
-    if (formData.general.type === 'era') {
+    if (formData.general.type === TIMELINE_SLIDE_TYPES.ERA) {
       viewSlideData = this.mapFormDataToEra(formData);
     } else {
       // type is 'slide' or 'title'
