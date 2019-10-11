@@ -6,7 +6,8 @@ import {
   map,
   mapTo,
   shareReplay,
-  switchMapTo
+  switchMapTo,
+  take
 } from 'rxjs/operators';
 import {
   TimelineConfigInterface,
@@ -37,6 +38,8 @@ export class EditorViewModel {
   // emit null in setting$ when there is a value
   private newSlide$ = new BehaviorSubject<TimelineViewSlideInterface>(null);
   private showSettings$: Observable<boolean>;
+  private _activeSlide$: BehaviorSubject<TimelineViewSlideInterface>;
+  private _isFormDirty$: BehaviorSubject<boolean>;
 
   public activeSlide$: Observable<TimelineViewSlideInterface>;
   public activeSlideDetail$: Observable<TimelineViewSlideInterface>;
@@ -81,6 +84,110 @@ export class EditorViewModel {
     return this.editorHttpService.uploadFile(eduContentId, file);
   }
 
+  public openSettings() {
+    if (!this.isSafeToNavigate()) return;
+
+    this._activeSlide$.next(null);
+    this.newSlide$.next(null);
+  }
+
+  public updateSettings(newSettings: TimelineSettingsInterface) {
+    const data = { ...this.data$.value, ...newSettings };
+
+    this.data$.next(data);
+  }
+
+  public createSlide() {
+    if (!this.isSafeToNavigate()) return;
+
+    const data = this.data$.value;
+
+    this.newSlide$.next({
+      type: data.title
+        ? TIMELINE_SLIDE_TYPES.SLIDE
+        : TIMELINE_SLIDE_TYPES.TITLE,
+      label: 'Naamloos',
+      viewSlide: {}
+    });
+    this._activeSlide$.next(null);
+  }
+
+  public upsertSlide(updatedSlide: TimelineViewSlideInterface) {
+    const data = this.data$.value;
+    const activeSlide = this._activeSlide$.value;
+
+    // If it's an update and not an insert, delete what we had before this
+    if (activeSlide) {
+      this.deleteActiveSlide();
+    }
+
+    if (updatedSlide.type === TIMELINE_SLIDE_TYPES.TITLE) {
+      data.title = updatedSlide.viewSlide;
+    } else if (updatedSlide.type === TIMELINE_SLIDE_TYPES.SLIDE) {
+      data.events.push(updatedSlide.viewSlide as TimelineSlideInterface);
+    } else if (updatedSlide.type === TIMELINE_SLIDE_TYPES.ERA) {
+      data.eras.push(updatedSlide.viewSlide as TimelineEraInterface);
+    }
+
+    // Nexting data causes the slideList to be updated
+    this.data$.next(data);
+
+    // With the slideList updated, we can select the new active slide
+    this.slideList$.pipe(take(1)).subscribe(slideList => {
+      const slideItem = slideList.find(
+        slideListItem => slideListItem.viewSlide === updatedSlide.viewSlide
+      );
+
+      this._activeSlide$.next(slideItem);
+    });
+  }
+
+  public deleteActiveSlide() {
+    const data = this.data$.value;
+    const activeSlide = this._activeSlide$.value;
+
+    // Bail out if we don't have anything selected
+    if (!activeSlide) return;
+
+    if (activeSlide.type === TIMELINE_SLIDE_TYPES.TITLE) {
+      data.title = null;
+    } else if (activeSlide.type === TIMELINE_SLIDE_TYPES.SLIDE) {
+      data.events = data.events.filter(
+        event => event !== activeSlide.viewSlide
+      );
+    } else if (activeSlide.type === TIMELINE_SLIDE_TYPES.ERA) {
+      data.eras = data.eras.filter(era => era !== activeSlide.viewSlide);
+    }
+
+    // Select nothing, since the previously active slide was deleted
+    this._activeSlide$.next(null);
+
+    this.data$.next(data);
+  }
+
+  public setActiveSlide(slide: TimelineViewSlideInterface) {
+    if (!this.isSafeToNavigate()) return;
+
+    this._activeSlide$.next(slide);
+    this.newSlide$.next(null);
+  }
+
+  /**
+   * Returns true only when it's safe to proceed.
+   * This means: the user has no unsaved changes or the user agreed to discard any unsaved changes.
+   */
+  private isSafeToNavigate(): boolean {
+    const formDirty = this._isFormDirty$.value;
+
+    if (formDirty) {
+      return confirm(
+        'Let op! Er zijn niet opgeslagen wijzigingen. Doorgaan zonder wijzigingen op te slaan?'
+      );
+    } else {
+      return true;
+    }
+  }
+
   private initialise() {
     this.eduContentId = 19; // TODO make variable
     this.setSourceStreams(this.eduContentId);
@@ -100,12 +207,22 @@ export class EditorViewModel {
       shareReplay(1)
     );
 
-    this.activeSlide$ = new BehaviorSubject<TimelineViewSlideInterface>(null);
+    this._activeSlide$ = new BehaviorSubject<TimelineViewSlideInterface>(null);
+    this.activeSlide$ = this._activeSlide$.asObservable();
     this.showSettings$ = this.showSettings();
     this.activeSlideDetail$ = this.getActiveSlideDetail();
     this.settings$ = this.getSettings();
-    this.isFormDirty$ = new BehaviorSubject(false);
+    this._isFormDirty$ = new BehaviorSubject(false);
+    this.isFormDirty$ = this._isFormDirty$.asObservable();
     this.activeSlideDetailCanSaveAsTitle$ = this.getActiveSlideDetailCanSaveAsTitle();
+  }
+
+  private showSettings(): Observable<boolean> {
+    return combineLatest([this.activeSlide$, this.newSlide$]).pipe(
+      map(([activeSlide, newSlide]) => !activeSlide && !newSlide),
+      distinctUntilChanged(),
+      shareReplay(1)
+    );
   }
 
   private getActiveSlideDetailCanSaveAsTitle(): Observable<boolean> {
@@ -117,16 +234,8 @@ export class EditorViewModel {
     );
   }
 
-  private showSettings(): Observable<boolean> {
-    return combineLatest([this.activeSlide$, this.newSlide$]).pipe(
-      map(([activeSlide, newSlide]) => !activeSlide && !newSlide),
-      distinctUntilChanged(),
-      shareReplay(1)
-    );
-  }
-
   private getActiveSlideDetail(): Observable<TimelineViewSlideInterface> {
-    const detailWithActiveSlide$ = this.activeSlide$.pipe(
+    const detailWithActiveSlide$ = this._activeSlide$.pipe(
       filter(activeSlide => !!activeSlide),
       map(activeSlide => ({ ...activeSlide }))
     );
