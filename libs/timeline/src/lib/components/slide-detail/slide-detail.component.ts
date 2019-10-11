@@ -136,22 +136,34 @@ export class SlideDetailComponent implements OnInit, OnChanges {
     });
   }
 
-  private getDateFormGroup(group: 'start_date' | 'end_date'): FormGroup {
+  private getDateFormGroup(formGroupKey: 'start_date' | 'end_date'): FormGroup {
     return this.fb.group({
-      year: [this.formData[group].year || null, [Validators.required]],
-      month: [this.formData[group].month || null],
-      day: [this.formData[group].day || null],
+      year: [this.formData[formGroupKey].year || null, [Validators.required]],
+      month: [
+        this.formData[formGroupKey].month || null,
+        [Validators.min(1), Validators.max(12), Validators.maxLength(2)]
+      ],
+      day: [this.formData[formGroupKey].day || null, [Validators.min(1)]],
       hour: [
-        this.formData[group].hour || null,
+        this.formData[formGroupKey].hour === 0
+          ? 0 // user has chosen number 0
+          : this.formData[formGroupKey].hour || null,
         [Validators.min(0), Validators.max(23), Validators.maxLength(2)]
       ],
       minute: [
-        this.formData[group].minute || null,
+        this.formData[formGroupKey].minute === 0
+          ? 0
+          : this.formData[formGroupKey].minute || null,
         [Validators.min(0), Validators.max(59), Validators.maxLength(2)]
       ],
-      second: [this.formData[group].second || null, [Validators.max(59)]],
-      millisecond: [this.formData[group].millisecond || null],
-      displayDate: [this.formData[group].display_date || '']
+      second: [
+        this.formData[formGroupKey].second === 0
+          ? 0
+          : this.formData[formGroupKey].second || null,
+        [Validators.min(0), Validators.max(59), Validators.maxLength(2)]
+      ],
+      millisecond: [this.formData[formGroupKey].millisecond || null],
+      displayDate: [this.formData[formGroupKey].display_date || '']
     });
   }
 
