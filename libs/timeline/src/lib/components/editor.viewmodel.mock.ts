@@ -26,6 +26,8 @@ export class MockEditorViewModel
   );
   public isFormDirty$ = new BehaviorSubject<boolean>(false);
   public newSlide$ = new BehaviorSubject<TimelineViewSlideInterface>(null);
+  public activeSlide$ = new BehaviorSubject<TimelineViewSlideInterface>(null);
+  public activeSlideDetailCanSaveAsTitle$ = new BehaviorSubject<boolean>(true);
 
   getTimeline(
     eduContentMetadataId: number

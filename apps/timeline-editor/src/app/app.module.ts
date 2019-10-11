@@ -5,8 +5,6 @@ import { RouterModule } from '@angular/router';
 import {
   ENVIRONMENT_API_TOKEN,
   ENVIRONMENT_ICON_MAPPING_TOKEN,
-  SettingsService,
-  SETTINGS_SERVICE_TOKEN,
   TimelineModule
 } from '@campus/timeline';
 import { environment } from '../environments/environment';
@@ -24,10 +22,6 @@ import { TimelineEditorComponent } from './timeline-editor/timeline-editor.compo
     {
       provide: ENVIRONMENT_API_TOKEN,
       useValue: environment.api
-    },
-    {
-      provide: SETTINGS_SERVICE_TOKEN,
-      useClass: SettingsService
     },
     {
       provide: ENVIRONMENT_ICON_MAPPING_TOKEN,

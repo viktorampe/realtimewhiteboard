@@ -1,41 +1,19 @@
-import {
-  Component,
-  Inject,
-  Input,
-  OnChanges,
-  OnInit,
-  SimpleChanges
-} from '@angular/core';
-import {
-  SettingsServiceInterface,
-  SETTINGS_SERVICE_TOKEN
-} from '@campus/timeline';
+import { Component, OnInit } from '@angular/core';
+import { environment } from '../../environments/environment';
 
 @Component({
   // selector: 'campus-timeline-editor',
   templateUrl: './timeline-editor.component.html',
   styleUrls: ['./timeline-editor.component.scss']
 })
-export class TimelineEditorComponent implements OnInit, OnChanges {
-  @Input() eduContentMetadataId: number;
-  @Input() apiBase: string;
+export class TimelineEditorComponent implements OnInit {
+  apiBase: string;
+  eduContentMetadataId: number;
 
-  constructor(
-    @Inject(SETTINGS_SERVICE_TOKEN)
-    private settingsService: SettingsServiceInterface
-  ) {
-    // this.settingsService.eduContentMetadataId = 1;
-    // this.settingsService.APIBase = 'http://api.kabas.localhost:3000';
+  constructor() {}
+
+  ngOnInit() {
+    this.apiBase = environment.api.APIBase;
+    this.eduContentMetadataId = 19; // example
   }
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes.apiBase) {
-      this.settingsService.APIBase = this.apiBase;
-    }
-    if (changes.eduContentMetadataId) {
-      this.settingsService.eduContentMetadataId = this.eduContentMetadataId;
-    }
-  }
-
-  ngOnInit() {}
 }

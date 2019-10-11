@@ -10,14 +10,9 @@ import {
   EditorHttpServiceInterface,
   StorageInfoInterface
 } from './editor-http.service.interface';
-import {
-  SettingsServiceInterface,
-  SETTINGS_SERVICE_TOKEN
-} from './settings.service.interface';
 
 describe('EditorHttpService', () => {
   let editorHttpService: EditorHttpServiceInterface;
-  let settingsService: SettingsServiceInterface;
   let httpClient: HttpClient;
 
   const APIBase = 'http://some.website.address';
@@ -40,14 +35,6 @@ describe('EditorHttpService', () => {
         {
           provide: ENVIRONMENT_API_TOKEN,
           useValue: { APIBase }
-        },
-        {
-          provide: SETTINGS_SERVICE_TOKEN,
-          useValue: {
-            APIBase,
-            eduContentMetadataId: requestMetadataId,
-            eduContentId: apiData.eduContentId
-          }
         }
       ]
     });
@@ -55,8 +42,10 @@ describe('EditorHttpService', () => {
 
   beforeEach(() => {
     editorHttpService = TestBed.get(EditorHttpService);
-    settingsService = TestBed.get(SETTINGS_SERVICE_TOKEN);
     httpClient = TestBed.get(HttpClient);
+    editorHttpService.apiBase = APIBase;
+    editorHttpService.eduContentMetadataId = requestMetadataId;
+    editorHttpService['eduContentId'] = apiData.eduContentId;
   });
 
   afterEach(() => {
@@ -77,7 +66,7 @@ describe('EditorHttpService', () => {
     });
 
     it('should make the correct api call and return the response', () => {
-      expect(editorHttpService.getJson(requestMetadataId)).toBeObservable(
+      expect(editorHttpService.getJson()).toBeObservable(
         cold('(a|)', { a: mockTimeline })
       );
 
@@ -99,9 +88,9 @@ describe('EditorHttpService', () => {
     });
 
     it('should make the correct api call and return the response', () => {
-      expect(
-        editorHttpService.setJson(requestMetadataId, mockTimeline)
-      ).toBeObservable(cold('(a|)', { a: true }));
+      expect(editorHttpService.setJson(mockTimeline)).toBeObservable(
+        cold('(a|)', { a: true })
+      );
 
       expect(httpClient.put).toHaveBeenCalledWith(
         APIBase + '/api/eduContentMetadata/' + requestMetadataId,
@@ -129,7 +118,7 @@ describe('EditorHttpService', () => {
     });
 
     it('should make the correct api call and return the response', () => {
-      expect(editorHttpService.uploadFile(eduContentId, file)).toBeObservable(
+      expect(editorHttpService.uploadFile(file)).toBeObservable(
         cold('(a|)', { a: storageInfo })
       );
 
@@ -142,21 +131,15 @@ describe('EditorHttpService', () => {
   });
 
   describe('getPreviewUrl', () => {
-    const eduContentId = 123;
-    const eduContentMetadataId = 456;
-
     it('should make the correct api call and return the response', () => {
-      const previewUrl = editorHttpService.getPreviewUrl(
-        eduContentId,
-        eduContentMetadataId
-      );
+      const previewUrl = editorHttpService.getPreviewUrl();
 
       const expected =
-        settingsService.APIBase +
+        editorHttpService.apiBase +
         '/api/eduContents/' +
-        settingsService.eduContentId +
+        editorHttpService['eduContentId'] +
         '/redirectURL/' +
-        settingsService.eduContentMetadataId;
+        editorHttpService.eduContentMetadataId;
 
       expect(previewUrl).toEqual(expected);
     });

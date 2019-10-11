@@ -29,7 +29,6 @@ import {
   providedIn: 'root'
 })
 export class EditorViewModel {
-  private eduContentId: number;
   private data$ = new BehaviorSubject<TimelineConfigInterface>(null);
 
   // stores temporary value for new slide
@@ -50,45 +49,31 @@ export class EditorViewModel {
   constructor(
     @Inject(EDITOR_HTTP_SERVICE_TOKEN)
     private editorHttpService: EditorHttpServiceInterface
-  ) {
-    this.initialise();
+  ) {}
+
+  getTimeline(): Observable<TimelineConfigInterface> {
+    return this.editorHttpService.getJson();
   }
 
-  getTimeline(
-    eduContentMetadataId: number
-  ): Observable<TimelineConfigInterface> {
-    return this.editorHttpService.getJson(eduContentMetadataId);
+  updateTimeline(data: TimelineConfigInterface): Observable<boolean> {
+    return this.editorHttpService.setJson(data);
   }
 
-  updateTimeline(
-    eduContentMetadataId: number,
-    data: TimelineConfigInterface
-  ): Observable<boolean> {
-    return this.editorHttpService.setJson(eduContentMetadataId, data);
+  previewTimeline(): string {
+    return this.editorHttpService.getPreviewUrl();
   }
 
-  previewTimeline(eduContentId: number, eduContentMetadataId: number): string {
-    return this.editorHttpService.getPreviewUrl(
-      eduContentId,
-      eduContentMetadataId
-    );
+  uploadFile(file: File): Observable<StorageInfoInterface> {
+    return this.editorHttpService.uploadFile(file);
   }
 
-  uploadFile(
-    eduContentId: number,
-    file: File
-  ): Observable<StorageInfoInterface> {
-    return this.editorHttpService.uploadFile(eduContentId, file);
-  }
-
-  private initialise() {
-    this.eduContentId = 19; // TODO make variable
-    this.setSourceStreams(this.eduContentId);
+  public initialise() {
+    this.setSourceStreams();
     this.setPresentationStreams();
   }
 
-  private setSourceStreams(eduContentId) {
-    this.editorHttpService.getJson(eduContentId).subscribe(timeline => {
+  private setSourceStreams() {
+    this.editorHttpService.getJson().subscribe(timeline => {
       this.data$.next(timeline);
     });
   }
