@@ -225,7 +225,7 @@ export class SlideDetailComponent implements OnInit, OnChanges {
 
   private setFormControlAsOptional(formControlName: string): void {
     const control = this.getControl(formControlName);
-    control.setValidators(null);
+    control.clearValidators();
     control.updateValueAndValidity();
   }
 
