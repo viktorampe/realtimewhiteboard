@@ -1,6 +1,7 @@
 <ng-container *ngIf="(chosenType$ | async) as slideType">
-  <p>{{ slideForm.valid }}</p>
+  <p>{{ isDirty$ | async }}</p>
   <p>{{ slideForm.value | json }}</p>
+  <p>{{ initialFormValues | json }}</p>
   <form [formGroup]="slideForm" class="timeline-slide-detail__form">
     <mat-horizontal-stepper>
       <ng-template matStepperIcon="edit">
@@ -139,7 +140,7 @@
               />
             </mat-form-field>
           </div>
-          
+
           <div class="timeline-slide-detail__form__color-picker">
             <button mat-button (click)="backgroundColorInput.click()"
               >Kies een kleur</button

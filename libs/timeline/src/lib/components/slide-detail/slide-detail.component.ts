@@ -14,7 +14,6 @@ import {
   FormGroup,
   Validators
 } from '@angular/forms';
-import * as equal from 'fast-deep-equal';
 import { Observable } from 'rxjs';
 import { debounceTime, map, shareReplay, startWith, tap } from 'rxjs/operators';
 import {
@@ -177,7 +176,10 @@ export class SlideDetailComponent implements OnInit, OnChanges {
       debounceTime(300),
       map(
         updatedFormValues =>
-          equal(updatedFormValues, this.initialFormValues) === false
+          !(
+            JSON.stringify(updatedFormValues) ===
+            JSON.stringify(this.initialFormValues)
+          )
       ),
       startWith(false)
     );
