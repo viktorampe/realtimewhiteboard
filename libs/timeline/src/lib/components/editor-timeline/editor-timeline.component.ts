@@ -34,16 +34,24 @@ export class EditorTimelineComponent implements OnInit {
     this.editorViewModel.setActiveSlide(viewSlide);
   }
 
-  public showSettings(): void {
-    this.editorViewModel.openSettings();
-  }
-
   public createSlide(): void {
     this.editorViewModel.createSlide();
   }
 
   public deleteActiveSlide(): void {
     this.editorViewModel.deleteActiveSlide();
+  }
+
+  public saveSlide(slide: TimelineViewSlideInterface) {
+    this.editorViewModel.upsertSlide(slide);
+  }
+
+  public showSettings(): void {
+    this.editorViewModel.openSettings();
+  }
+
+  public saveSettings(settings: TimelineSettingsInterface): void {
+    this.editorViewModel.updateSettings(settings);
   }
 
   public setIsFormDirty(isDirty: boolean): void {
