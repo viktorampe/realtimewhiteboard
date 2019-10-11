@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, InjectionToken } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
-import { catchError, map, mapTo, retry } from 'rxjs/operators';
+import { catchError, map, mapTo, retry, tap } from 'rxjs/operators';
 import { TimelineConfigInterface } from '../interfaces/timeline';
 import {
   EditorHttpServiceInterface,
@@ -35,12 +35,8 @@ export class EditorHttpService implements EditorHttpServiceInterface {
       .pipe(
         retry(RETRY_AMOUNT),
         catchError(this.handleError),
-        map(
-          (response): TimelineConfigInterface => {
-            this.eduContentId = response.eduContentId;
-            return JSON.parse(response.timeline);
-          }
-        )
+        tap(response => (this.eduContentId = response.eduContentId)),
+        map((response): TimelineConfigInterface => JSON.parse(response.timeline))
       );
 
     return response$;
@@ -80,10 +76,7 @@ export class EditorHttpService implements EditorHttpServiceInterface {
 
     const response$ = this.http
       .post(
-        this.apiBase +
-          '/api/EduContentFiles/' +
-          this.eduContentMetadataId +
-          '/store',
+        this.apiBase + '/api/EduContentFiles/' + this.eduContentId + '/store',
         formData,
         { withCredentials: true }
       )
