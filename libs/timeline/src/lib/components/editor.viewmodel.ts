@@ -89,6 +89,7 @@ export class EditorViewModel {
 
     this._activeSlide$.next(null);
     this.newSlide$.next(null);
+    this._isFormDirty$.next(false);
   }
 
   public updateSettings(newSettings: TimelineSettingsInterface) {
@@ -170,6 +171,11 @@ export class EditorViewModel {
 
     this._activeSlide$.next(slide);
     this.newSlide$.next(null);
+    this._isFormDirty$.next(false);
+  }
+
+  public setFormDirty(value: boolean) {
+    this._isFormDirty$.next(value);
   }
 
   /**

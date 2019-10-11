@@ -45,4 +45,8 @@ export class EditorTimelineComponent implements OnInit {
   public deleteActiveSlide(): void {
     this.editorViewModel.deleteActiveSlide();
   }
+
+  public setIsFormDirty(isDirty: boolean): void {
+    this.editorViewModel.setFormDirty(isDirty);
+  }
 }
