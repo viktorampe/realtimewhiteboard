@@ -118,7 +118,7 @@ steps:
     displayName: '[Build] kabas:production'
     condition: and(succeeded(), eq(variables['dkBuild'], 'true'))
   - script: |
-      npm run build:timeline-editor
+      npm run build:elements-ink
     displayName: '[Build] timeline-editor'
     condition: and(succeeded(), eq(variables['dkBuild'], 'true'))
   - script: |

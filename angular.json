@@ -1282,6 +1282,52 @@
           "styleext": "scss"
         }
       }
+    },
+    "elements-ink": {
+      "root": "libs/elements-ink",
+      "sourceRoot": "libs/elements-ink/src",
+      "projectType": "library",
+      "prefix": "campus",
+      "architect": {
+        "build": {
+          "builder": "ngx-build-plus:build",
+          "options": {
+            "outputPath": "dist/elements/elements-ink",
+            "index": "",
+            "main": "libs/elements-ink/src/element.ts",
+            "scripts": [],
+            "styles": [],
+            "assets": ["libs/elements-ink/src/package.json"],
+            "tsConfig": "libs/elements-ink/tsconfig.json",
+            "singleBundle": true,
+            "optimization": true,
+            "aot": true
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/elements-ink/tsconfig.lib.json",
+              "libs/elements-ink/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/builders:jest",
+          "options": {
+            "jestConfig": "libs/elements-ink/jest.config.js",
+            "tsConfig": "libs/elements-ink/tsconfig.spec.json",
+            "setupFile": "libs/elements-ink/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/schematics:component": {
+          "styleext": "scss"
+        }
+      }
     }
   },
   "cli": {
