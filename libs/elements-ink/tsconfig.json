@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "outDir": "../../dist/out-tsc/libs/elements-ink",
+    "target": "es2015",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "declaration": true,
+    "sourceMap": false,
+    "inlineSources": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "types": ["node"],
+    "lib": ["dom", "es2018"],
+    "baseUrl": ".",
+    "typeRoots": ["node_modules/@types"],
+    "paths": {
+      "@campus/testing": ["../testing/src/index.ts"],
+      "@campus/timeline": ["../timeline/src/index.ts"]
+    }
+  },
+  "angularCompilerOptions": {
+    "annotateForClosureCompiler": false,
+    "skipTemplateCodegen": true,
+    "strictMetadataEmit": true,
+    "fullTemplateTypeCheck": true,
+    "strictInjectionParameters": true
+  },
+  "exclude": ["src/test.ts", "**/*.spec.ts"]
+}

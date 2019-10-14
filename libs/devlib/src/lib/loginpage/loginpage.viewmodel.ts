@@ -1,9 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
 import {
-  AlertActions,
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
-  StudentContentStatusActions,
   UserActions,
   UserReducer
 } from '@campus/dal';
@@ -50,23 +48,6 @@ export class LoginPageViewModel {
       );
     }
     return;
-  }
-
-  updateStudentContentStatus() {
-    this.store.dispatch(
-      new StudentContentStatusActions.UpdateStudentContentStatus({
-        studentContentStatus: {
-          id: 1,
-          changes: { contentStatusId: 3, unlockedContentId: 5 }
-        }
-      })
-    );
-  }
-
-  updateAlert() {
-    this.store.dispatch(
-      new AlertActions.SetReadAlert({ personId: 1, alertIds: 58, read: true })
-    );
   }
 
   /**
