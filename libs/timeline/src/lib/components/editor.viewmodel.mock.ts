@@ -1,13 +1,17 @@
 import { Injectable } from '@angular/core';
 import { ViewModelInterface } from '@campus/testing';
 import { BehaviorSubject, Observable, of } from 'rxjs';
+import { TimelineConfigFixture } from '../+fixtures/timeline-config.fixture';
 import {
   TimelineConfigInterface,
   TimelineSettingsInterface,
   TimelineViewSlideInterface,
   TIMELINE_SLIDE_TYPES
 } from '../interfaces/timeline';
-import { StorageInfoInterface } from '../services/editor-http.service.interface';
+import {
+  EditorHttpSettingsInterface,
+  StorageInfoInterface
+} from '../services/editor-http.service.interface';
 import { EditorViewModel } from './editor.viewmodel';
 
 @Injectable({
@@ -29,27 +33,34 @@ export class MockEditorViewModel
   public activeSlide$ = new BehaviorSubject<TimelineViewSlideInterface>(null);
   public activeSlideDetailCanSaveAsTitle$ = new BehaviorSubject<boolean>(true);
 
-  getTimeline(
-    eduContentMetadataId: number
-  ): Observable<TimelineConfigInterface> {
+  setHttpSettings(): void {}
+  openSettings(): EditorHttpSettingsInterface {
+    return {
+      apiBase: 'http://foo.bar',
+      eduContentMetadataId: 1
+    };
+  }
+
+  updateSettings(): void {}
+  createSlide() {}
+  upsertSlide() {}
+  deleteActiveSlide() {}
+  setActiveSlide() {}
+  setFormDirty() {}
+
+  getTimeline(): Observable<TimelineConfigInterface> {
     return of(null);
   }
 
-  updateTimeline(
-    eduContentMetadataId: number,
-    data: TimelineConfigInterface
-  ): Observable<boolean> {
+  updateTimeline(data: TimelineConfigInterface): Observable<boolean> {
     return of(null);
   }
 
-  previewTimeline(eduContentId: number, eduContentMetadataId: number): string {
+  previewTimeline(): string {
     return '';
   }
 
-  uploadFile(
-    eduContentId: number,
-    file: File
-  ): Observable<StorageInfoInterface> {
+  uploadFile(file: File): Observable<StorageInfoInterface> {
     return of(null);
   }
 
@@ -84,7 +95,7 @@ export class MockEditorViewModel
 
     const title = {
       type: TIMELINE_SLIDE_TYPES.TITLE,
-      viewSlide: this.getSettings().title,
+      viewSlide: this.getConfig().title,
       label: 'Title',
       date: null
     };
@@ -107,13 +118,18 @@ export class MockEditorViewModel
         relative: false,
         scale_factor: 1
       },
+      scale: 'human'
+    };
+  }
+
+  private getConfig(): TimelineConfigInterface {
+    return new TimelineConfigFixture({
       title: {
         text: {
           headline: 'Dit is een titel.',
           text: 'Dit is de tekst van de titel'
         }
-      },
-      scale: 'human'
-    };
+      }
+    });
   }
 }
