@@ -1,7 +1,7 @@
 <ng-container *ngIf="(chosenType$ | async) as slideType">
   <p>{{ isDirty$ | async }}</p>
   <p>{{ slideForm.value | json }}</p>
-  <p>{{ initialFormValues | json }}</p>
+  <p>{{ slideForm.pristine }}</p>
   <form [formGroup]="slideForm" class="timeline-slide-detail__form">
     <mat-horizontal-stepper>
       <ng-template matStepperIcon="edit">

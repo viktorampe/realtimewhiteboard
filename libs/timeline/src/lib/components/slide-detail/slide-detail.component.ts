@@ -379,8 +379,7 @@ export class SlideDetailComponent implements OnInit, OnChanges {
   onSubmit(): void {
     if (this.slideForm.valid) {
       const outputData = this.mapFormDataToViewSlide(this.slideForm.value);
-      console.log(outputData);
-      this.saveViewSlide.next(outputData);
+      this.saveViewSlide.emit(outputData);
     }
   }
 }
