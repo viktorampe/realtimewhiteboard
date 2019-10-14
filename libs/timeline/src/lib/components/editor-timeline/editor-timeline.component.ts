@@ -36,8 +36,6 @@ export class EditorTimelineComponent implements OnInit {
     this.isFormDirty$ = this.editorViewModel.isFormDirty$;
   }
 
-  noop(): void {}
-
   public setActiveSlide(viewSlide: TimelineViewSlideInterface): void {
     this.editorViewModel.setActiveSlide(viewSlide);
   }
@@ -72,7 +70,7 @@ export class EditorTimelineComponent implements OnInit {
       .pipe(
         map(storageInfo => ({
           formControlName: upload.formControlName,
-          url: '/api/EduFiles/' + storageInfo.eduFileId
+          url: `/api/EduFiles/${storageInfo.eduFileId}/redirectURL`
         }))
       );
   }
