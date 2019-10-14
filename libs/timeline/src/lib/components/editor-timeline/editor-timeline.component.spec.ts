@@ -1,7 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconModule, MatListModule } from '@angular/material';
 import { configureTestSuite } from 'ng-bullet';
+import { SettingsComponent } from '../settings/settings.component';
+import { SlideDetailComponent } from '../slide-detail/slide-detail.component';
 import { SlideListComponent } from '../slide-list/slide-list.component';
+import { EditorViewModel } from './../editor.viewmodel';
+import { MockEditorViewModel } from './../editor.viewmodel.mock';
 import { EditorTimelineComponent } from './editor-timeline.component';
 
 describe('EditorTimelineComponent', () => {
@@ -11,7 +15,13 @@ describe('EditorTimelineComponent', () => {
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [MatListModule, MatIconModule],
-      declarations: [EditorTimelineComponent, SlideListComponent]
+      declarations: [
+        EditorTimelineComponent,
+        SlideListComponent,
+        SlideDetailComponent,
+        SettingsComponent
+      ],
+      providers: [{ provide: EditorViewModel, useClass: MockEditorViewModel }]
     });
   });
 
