@@ -22,14 +22,6 @@
           margin-right: 8px;
         }
       }
-
-      background-color: #428bca;
-      color: white;
-
-      &--delete {
-        background-color: red;
-        color: white;
-      }
     }
 
     &__form-dirty-warning {
@@ -49,7 +41,6 @@
     &__list {
       min-width: 15%;
       overflow: auto;
-      color: #5b9bd1;
     }
 
     &__detail {
