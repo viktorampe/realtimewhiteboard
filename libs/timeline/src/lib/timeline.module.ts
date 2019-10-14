@@ -15,6 +15,7 @@ import {
   MatStepperModule
 } from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { EditorTimelineComponent } from './components/editor-timeline/editor-timeline.component';
 import { SettingsComponent } from './components/settings/settings.component';
 import { SlideDetailComponent } from './components/slide-detail/slide-detail.component';
@@ -43,7 +44,8 @@ export const ENVIRONMENT_ICON_MAPPING_TOKEN = new InjectionToken(
     MatRadioModule,
     MatStepperModule,
     MatIconModule,
-    HttpClientModule
+    HttpClientModule,
+    BrowserAnimationsModule
   ],
   declarations: [
     EditorTimelineComponent,
