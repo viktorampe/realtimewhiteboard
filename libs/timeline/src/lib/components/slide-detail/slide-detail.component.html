@@ -100,12 +100,13 @@
             />
           </mat-form-field>
           <mat-form-field *ngIf="slideType != slideTypesEnum.ERA">
-            <input
+            <textarea
               matInput
               type="string"
               formControlName="text"
               placeholder="Omschrijving"
-            />
+            >
+            </textarea>
           </mat-form-field>
         </div>
         <div>
