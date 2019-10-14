@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs';
 import { TimelineConfigInterface } from '../interfaces/timeline';
 export interface EditorHttpServiceInterface {
-  setSettings(settings: HttpSettingsInterface): void;
+  setSettings(settings: EditorHttpSettingsInterface): void;
   getJson(): Observable<TimelineConfigInterface>;
   setJson(timelineConfig: TimelineConfigInterface): Observable<boolean>;
   getPreviewUrl(): string;
@@ -14,7 +14,7 @@ export interface StorageInfoInterface {
   storageName: string;
 }
 
-export interface HttpSettingsInterface {
+export interface EditorHttpSettingsInterface {
   apiBase: string;
   eduContentMetadataId: number;
 }

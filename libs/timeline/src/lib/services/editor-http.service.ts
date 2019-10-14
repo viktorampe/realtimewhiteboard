@@ -14,7 +14,7 @@ import {
 import { TimelineConfigInterface } from '../interfaces/timeline';
 import {
   EditorHttpServiceInterface,
-  HttpSettingsInterface,
+  EditorHttpSettingsInterface,
   StorageInfoInterface
 } from './editor-http.service.interface';
 
@@ -27,12 +27,12 @@ const RETRY_AMOUNT = 2;
   providedIn: 'root'
 })
 export class EditorHttpService implements EditorHttpServiceInterface {
-  private apiSettings$ = new BehaviorSubject<HttpSettingsInterface>(null);
+  private apiSettings$ = new BehaviorSubject<EditorHttpSettingsInterface>(null);
   private eduContentId: number;
 
   constructor(private http: HttpClient) {}
 
-  public setSettings(settings: HttpSettingsInterface): void {
+  public setSettings(settings: EditorHttpSettingsInterface): void {
     this.apiSettings$.next(settings);
   }
 
@@ -59,7 +59,7 @@ export class EditorHttpService implements EditorHttpServiceInterface {
   }
 
   public setJson(timelineConfig: TimelineConfigInterface): Observable<boolean> {
-    const apiSettings = this.getSettings();
+    const apiSettings: EditorHttpSettingsInterface = this.getSettings();
     const response$ = this.http
       .put(
         apiSettings.apiBase +
@@ -78,7 +78,7 @@ export class EditorHttpService implements EditorHttpServiceInterface {
   }
 
   public getPreviewUrl(): string {
-    const apiSettings = this.getSettings(true);
+    const apiSettings: EditorHttpSettingsInterface = this.getSettings(true);
     return (
       apiSettings.apiBase +
       '/api/eduContents/' +
@@ -89,7 +89,7 @@ export class EditorHttpService implements EditorHttpServiceInterface {
   }
 
   public uploadFile(file: File): Observable<StorageInfoInterface> {
-    const apiSettings = this.getSettings(true);
+    const apiSettings: EditorHttpSettingsInterface = this.getSettings(true);
     // expects multiple='multiple' to be set on the file input
 
     const formData: FormData = new FormData();
@@ -117,8 +117,10 @@ export class EditorHttpService implements EditorHttpServiceInterface {
     return throwError(error);
   }
 
-  private getSettings(eduContentIdRequired?: boolean) {
-    const apiSettings = this.apiSettings$.value;
+  private getSettings(
+    eduContentIdRequired?: boolean
+  ): EditorHttpSettingsInterface {
+    const apiSettings: EditorHttpSettingsInterface = this.apiSettings$.value;
     if (!apiSettings || (eduContentIdRequired && !this.eduContentId)) {
       throw new Error('no_http_settings_loaded');
     }

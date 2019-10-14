@@ -19,7 +19,7 @@ import {
 import { EDITOR_HTTP_SERVICE_TOKEN } from '../services/editor-http.service';
 import {
   EditorHttpServiceInterface,
-  HttpSettingsInterface,
+  EditorHttpSettingsInterface,
   StorageInfoInterface
 } from '../services/editor-http.service.interface';
 import {
@@ -57,7 +57,7 @@ export class EditorViewModel {
     this.initialise();
   }
 
-  setHttpSettings(settings: HttpSettingsInterface) {
+  setHttpSettings(settings: EditorHttpSettingsInterface) {
     this.editorHttpService.setSettings(settings);
   }
 
