@@ -1,0 +1,59 @@
+:host {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.timeline-editor {
+  &__toolbar {
+    background-color: #e5e5e5;
+    height: 50px;
+    display: flex;
+    padding: 8px;
+
+    &__button {
+      &-container {
+        display: flex;
+        align-content: center;
+        flex-grow: 1;
+
+        :not(:last-child) {
+          margin-right: 8px;
+        }
+      }
+    }
+
+    &__form-dirty-warning {
+      background-color: orange;
+      color: white;
+      align-self: flex-end;
+    }
+  }
+
+  &__main {
+    display: flex;
+    flex: 0 1 100%;
+    height: 100%;
+    flex-direction: row;
+    overflow: hidden;
+
+    &__list {
+      min-width: 15%;
+      overflow: auto;
+    }
+
+    &__detail {
+      flex: 1 1 auto;
+      overflow: auto;
+
+      &--slide {
+        height: 100%;
+      }
+
+      &--settings {
+        height: 100%;
+      }
+    }
+  }
+}
