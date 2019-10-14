@@ -75,9 +75,3 @@ export interface TimelineBackgroundInterface {
   color?: string;
   eduFileId?: number; // checked to replace the url field with a signed url
 }
-
-export interface TimelineViewSlideInterface {
-  type: TIMELINE_SLIDE_TYPES;
-  viewSlide: TimelineSlideInterface | TimelineEraInterface;
-  label: string;
-}
