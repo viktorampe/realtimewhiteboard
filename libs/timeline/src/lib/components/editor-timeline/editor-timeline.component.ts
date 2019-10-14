@@ -22,8 +22,7 @@ export class EditorTimelineComponent implements OnInit {
   public activeSlideDetail$: Observable<TimelineViewSlideInterface>;
   public settings$: Observable<TimelineSettingsInterface>;
   public isFormDirty$: Observable<boolean>;
-
-  public fileUploadResult: Observable<FileUploadResult>;
+  public fileUploadResult$: Observable<FileUploadResult>;
 
   constructor(private editorViewModel: EditorViewModel) {}
 
@@ -68,7 +67,7 @@ export class EditorTimelineComponent implements OnInit {
   }
 
   public handleFileUpload(upload: UploadFileOutput) {
-    this.fileUploadResult = this.editorViewModel
+    this.fileUploadResult$ = this.editorViewModel
       .uploadFile(19, upload.file) //TODO refactor without eduContentId
       .pipe(
         map(storageInfo => ({
