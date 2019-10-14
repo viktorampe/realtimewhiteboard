@@ -73,7 +73,7 @@ export class EditorTimelineComponent implements OnInit {
       .pipe(
         map(storageInfo => ({
           formControlName: upload.formControlName,
-          url: '/api/EduFile/' + storageInfo.eduFileId
+          url: '/api/EduFiles/' + storageInfo.eduFileId
         }))
       );
   }
