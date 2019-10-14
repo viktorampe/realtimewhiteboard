@@ -1,11 +1,18 @@
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { InjectionToken, NgModule } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 import {
   MatButtonModule,
+  MatDatepickerModule,
+  MatFormFieldModule,
   MatIconModule,
   MatIconRegistry,
-  MatListModule
+  MatInputModule,
+  MatListModule,
+  MatNativeDateModule,
+  MatRadioModule,
+  MatStepperModule
 } from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
 import { EditorTimelineComponent } from './components/editor-timeline/editor-timeline.component';
@@ -27,7 +34,16 @@ export const ENVIRONMENT_ICON_MAPPING_TOKEN = new InjectionToken(
     HttpClientModule,
     MatButtonModule,
     MatListModule,
-    MatIconModule
+    CommonModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatRadioModule,
+    MatStepperModule,
+    MatIconModule,
+    HttpClientModule
   ],
   declarations: [
     EditorTimelineComponent,
@@ -37,7 +53,8 @@ export const ENVIRONMENT_ICON_MAPPING_TOKEN = new InjectionToken(
   ],
   exports: [EditorTimelineComponent],
   providers: [
-    { provide: EDITOR_HTTP_SERVICE_TOKEN, useClass: EditorHttpService }
+    { provide: EDITOR_HTTP_SERVICE_TOKEN, useClass: EditorHttpService },
+    { provide: ENVIRONMENT_ICON_MAPPING_TOKEN, useValue: {} }
   ]
 })
 export class TimelineModule {

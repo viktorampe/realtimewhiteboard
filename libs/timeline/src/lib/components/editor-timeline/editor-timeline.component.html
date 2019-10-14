@@ -44,6 +44,9 @@
     <campus-slide-detail
       *ngIf="(activeSlideDetail$ | async) as activeSlideDetail"
       class="timeline-editor__main__detail--slide"
+      (uploadFile)="handleFileUpload($event)"
+      [fileUploadResult]="fileUploadResult"
+      [viewSlide]="activeSlideDetail"
     ></campus-slide-detail>
 
     <campus-settings

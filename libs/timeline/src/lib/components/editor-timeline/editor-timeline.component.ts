@@ -4,6 +4,10 @@ import {
   TimelineSettingsInterface,
   TimelineViewSlideInterface
 } from '../../interfaces/timeline';
+import {
+  FileUploadResult,
+  UploadFileOutput
+} from '../slide-detail/slide-detail.component';
 import { EditorViewModel } from './../editor.viewmodel';
 
 @Component({
@@ -18,6 +22,9 @@ export class EditorTimelineComponent implements OnInit {
   public settings$: Observable<TimelineSettingsInterface>;
   public isFormDirty$: Observable<boolean>;
 
+  public fileUploadResult: FileUploadResult;
+  public slides$: Observable<TimelineViewSlideInterface[]>;
+
   constructor(private editorViewModel: EditorViewModel) {}
 
   @HostBinding('class.timeline-editor') private isTimelineEditor = true;
@@ -29,6 +36,8 @@ export class EditorTimelineComponent implements OnInit {
     this.settings$ = this.editorViewModel.settings$;
     this.isFormDirty$ = this.editorViewModel.isFormDirty$;
   }
+
+  noop(): void {}
 
   public setActiveSlide(viewSlide: TimelineViewSlideInterface): void {
     this.editorViewModel.setActiveSlide(viewSlide);
@@ -56,5 +65,12 @@ export class EditorTimelineComponent implements OnInit {
 
   public setIsFormDirty(isDirty: boolean): void {
     this.editorViewModel.setFormDirty(isDirty);
+  }
+
+  public handleFileUpload(upload: UploadFileOutput) {
+    this.fileUploadResult = {
+      formControlName: upload.formControlName,
+      url: 'www.some-url.com'
+    };
   }
 }
