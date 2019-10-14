@@ -149,7 +149,7 @@ export class SlideDetailComponent implements OnInit, OnChanges {
     return this.fb.group({
       year: [
         this.formData[formGroupKey].year === 0
-          ? 0  // user has chosen number 0
+          ? 0 // user has chosen number 0
           : this.formData[formGroupKey].year || null,
         [Validators.required]
       ],
