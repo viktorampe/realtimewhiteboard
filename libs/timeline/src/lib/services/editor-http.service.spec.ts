@@ -43,8 +43,10 @@ describe('EditorHttpService', () => {
   beforeEach(() => {
     editorHttpService = TestBed.get(EditorHttpService);
     httpClient = TestBed.get(HttpClient);
-    editorHttpService.apiBase = APIBase;
-    editorHttpService.eduContentMetadataId = requestMetadataId;
+    editorHttpService.setSettings({
+      apiBase: APIBase,
+      eduContentMetadataId: requestMetadataId
+    });
     editorHttpService['eduContentId'] = apiData.eduContentId;
   });
 
@@ -133,11 +135,11 @@ describe('EditorHttpService', () => {
       const previewUrl = editorHttpService.getPreviewUrl();
 
       const expected =
-        editorHttpService.apiBase +
+        APIBase +
         '/api/eduContents/' +
-        editorHttpService['eduContentId'] +
+        apiData.eduContentId +
         '/redirectURL/' +
-        editorHttpService.eduContentMetadataId;
+        requestMetadataId;
 
       expect(previewUrl).toEqual(expected);
     });
