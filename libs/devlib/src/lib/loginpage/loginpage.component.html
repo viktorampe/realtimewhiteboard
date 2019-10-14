@@ -56,66 +56,16 @@
 <button (click)="getCurrentUser()">fetch current user</button>
 <div>{{ currentUser | async | json }}</div>
 
-<br /><br />
-
+<button (click)="loadStore()">Load store</button>
 <div
-  ><a [routerLink]="['/bundles']" routerLinkActive="router-link-active"
-    >go to bundle page</a
+  ><a [routerLink]="['demo']" routerLinkActive="router-link-active"
+    >go demo page</a
   ></div
 >
 <div
-  ><a [routerLink]="['/tasks']" routerLinkActive="router-link-active"
-    >go to tasks page</a
+  ><a
+    [routerLink]="['demo', 'whiteboard']"
+    routerLinkActive="router-link-active"
+    >go to whiteboard demo page</a
   ></div
 >
-
-<div>{{ response | async | json }}</div>
-
-<div>
-  <campus-button campusPrimary (click)="loadStore()">Load store</campus-button>
-</div>
-
-<div>
-  <campus-button campusPrimary (click)="loadToc()"
-    >Load TOC for book</campus-button
-  >
-</div>
-
-<div>
-  <campus-button-toggle-filter
-    [multiple]="true"
-    [filterCriteria]="filterCriteria"
-    (filterSelectionChange)="filterSelectionChanged($event)"
-  ></campus-button-toggle-filter>
-</div>
-
-<div>
-  <campus-button campusPrimary (click)="toggleLearningPlanGoalProgress()"
-    >Toggle LearningPlanGoalProgress</campus-button
-  >
-</div>
-
-<div>
-  <campus-button campusPrimary (click)="createBulk()"
-    >Create Bulk LearningPlanGoalProgress</campus-button
-  >
-</div>
-
-<div>
-  <campus-button
-    campusPrimary
-    (click)="createUserLessonWithLearningPlanGoalProgresses()"
-    >Create UserLessonWithLearningPlanGoalProgresses</campus-button
-  >
-</div>
-
-<div>
-  <campus-button campusPrimary (click)="createUnlockedFreePractice()"
-    >Create UnlockedFreePractice</campus-button
-  >
-</div>
-
-<div>
-  <campus-file-icon label="kabas" icon="avatar"></campus-file-icon>
-  <campus-file-icon label="xlsx" icon="avatar"></campus-file-icon>
-</div>
