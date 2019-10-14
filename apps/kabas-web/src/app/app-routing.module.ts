@@ -80,7 +80,7 @@ const routes: Routes = [
   {
     path: 'dev',
     loadChildren: '@campus/devlib#DevlibModule',
-    data: { breadcrumbText: 'Full retard' }
+    data: { breadcrumbText: 'Devlib' }
   }
 ];
 

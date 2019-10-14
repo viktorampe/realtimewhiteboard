@@ -56,7 +56,8 @@
         "pages-settings-profile",
         "pages-home",
         "timeline-editor",
-        "timeline"
+        "timeline",
+        "whiteboard"
       ],
       "default": "polpo-classroom-web"
     },

@@ -3,18 +3,22 @@ import { ReactiveFormsModule } from '@angular/forms';
 import {
   MatFormFieldModule,
   MatIconModule,
+  MatIconRegistry,
   MatInputModule,
+  MatListModule,
   MatRadioModule,
   MatStepperModule
 } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { ENVIRONMENT_ICON_MAPPING_TOKEN } from '@campus/shared';
+import { MockMatIconRegistry } from '@campus/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { TimelineSlideFixture } from '../../+fixtures/timeline-slide.fixture';
 import {
   TimelineViewSlideInterface,
   TIMELINE_SLIDE_TYPES
 } from '../../interfaces/timeline';
+import { EditorViewModel } from '../editor.viewmodel';
+import { MockEditorViewModel } from '../editor.viewmodel.mock';
 import { SlideDetailComponent } from './slide-detail.component';
 
 describe('SlideDetailComponent', () => {
@@ -23,22 +27,29 @@ describe('SlideDetailComponent', () => {
   const viewSlide: TimelineViewSlideInterface = {
     type: TIMELINE_SLIDE_TYPES.SLIDE,
     viewSlide: new TimelineSlideFixture(),
-    label: 'januari - februari 2019'
+    label: 'foo'
   };
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [
-        NoopAnimationsModule,
+        MatListModule,
         ReactiveFormsModule,
-        MatIconModule,
-        MatRadioModule,
         MatFormFieldModule,
+        MatInputModule,
+        MatRadioModule,
         MatStepperModule,
-        MatInputModule
+        MatIconModule,
+        NoopAnimationsModule
       ],
       declarations: [SlideDetailComponent],
-      providers: [{ provide: ENVIRONMENT_ICON_MAPPING_TOKEN, useValue: {} }]
+      providers: [
+        { provide: MatIconRegistry, useClass: MockMatIconRegistry },
+        {
+          provide: EditorViewModel,
+          useClass: MockEditorViewModel
+        }
+      ]
     });
   });
 

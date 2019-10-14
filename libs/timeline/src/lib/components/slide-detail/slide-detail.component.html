@@ -1,7 +1,4 @@
 <ng-container *ngIf="(chosenType$ | async) as slideType">
-  <p>{{ isDirty$ | async }}</p>
-  <p>{{ slideForm.value | json }}</p>
-  <p>{{ initialFormValues | json }}</p>
   <form [formGroup]="slideForm" class="timeline-slide-detail__form">
     <mat-horizontal-stepper>
       <ng-template matStepperIcon="edit">
@@ -20,6 +17,7 @@
               class="radio-button"
               *ngFor="let type of slideTypes"
               [value]="slideTypesEnum[type.toUpperCase()]"
+              [disabled]="type === 'title' && !canBeSavedAsTitle"
               >{{ type }}</mat-radio-button
             >
           </mat-radio-group>
@@ -100,12 +98,13 @@
             />
           </mat-form-field>
           <mat-form-field *ngIf="slideType != slideTypesEnum.ERA">
-            <input
+            <textarea
               matInput
               type="string"
               formControlName="text"
               placeholder="Omschrijving"
-            />
+            >
+            </textarea>
           </mat-form-field>
         </div>
         <div>

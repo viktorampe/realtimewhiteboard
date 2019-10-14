@@ -1,17 +1,55 @@
-<p>
-  editor-timeline works!
-</p>
-<mat-icon [svgIcon]="'settings'"></mat-icon>
-<campus-slide-list
-  [viewSlides]="slides$ | async"
-  [activeViewSlide]="1"
-  (clickSetSlide)="noop()"
-  (clickCreateSlide)="noop()"
-  (clickCreateEra)="noop()"
-></campus-slide-list>
+<div class="timeline-editor__toolbar">
+  <div class="timeline-editor__toolbar__button-container">
+    <button
+      mat-button
+      mat-flat-button
+      class="timeline-editor__toolbar__button"
+      (click)="showSettings()"
+      color="primary"
+      >Tijdslijn</button
+    >
+    <button
+      mat-button
+      mat-flat-button
+      class="timeline-editor__toolbar__button"
+      (click)="createSlide()"
+      color="primary"
+      >+ slide</button
+    >
+  </div>
+  <div
+    *ngIf="(isFormDirty$ | async)"
+    class="timeline-editor__toolbar__form-dirty-warning"
+    >Niet opgeslagen aanpassingen...</div
+  >
+  <button
+    mat-button
+    mat-flat-button
+    *ngIf="(activeSlide$ | async)"
+    class="timeline-editor__toolbar__button--delete"
+    (click)="deleteActiveSlide()"
+    color="warn"
+    >Huidige slide verwijderen</button
+  >
+</div>
+<div class="timeline-editor__main">
+  <campus-slide-list
+    class="timeline-editor__main__list"
+    [viewSlides]="slideList$ | async"
+    [activeViewSlide]="activeSlide$ | async"
+    (clickSetSlide)="setActiveSlide($event)"
+  ></campus-slide-list>
 
-<campus-slide-detail
-  (uploadFile)="handleFileUpload($event)"
-  [fileUploadResult]="fileUploadResult"
-  [viewSlide]="activeSlide"
-></campus-slide-detail>
+  <div class="timeline-editor__main__detail">
+    <campus-slide-detail
+      *ngIf="(activeSlideDetail$ | async) as activeSlideDetail"
+      class="timeline-editor__main__detail--slide"
+      [viewSlide]="activeSlideDetail"
+    ></campus-slide-detail>
+
+    <campus-settings
+      *ngIf="(settings$ | async) as settings"
+      class="timeline-editor__main__detail--settings"
+    ></campus-settings>
+  </div>
+</div>
