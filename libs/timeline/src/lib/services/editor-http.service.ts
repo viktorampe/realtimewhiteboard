@@ -1,10 +1,20 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, InjectionToken } from '@angular/core';
-import { Observable, throwError } from 'rxjs';
-import { catchError, map, mapTo, retry, tap } from 'rxjs/operators';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import {
+  catchError,
+  filter,
+  map,
+  mapTo,
+  retry,
+  switchMap,
+  take,
+  tap
+} from 'rxjs/operators';
 import { TimelineConfigInterface } from '../interfaces/timeline';
 import {
   EditorHttpServiceInterface,
+  HttpSettingsInterface,
   StorageInfoInterface
 } from './editor-http.service.interface';
 
@@ -17,37 +27,44 @@ const RETRY_AMOUNT = 2;
   providedIn: 'root'
 })
 export class EditorHttpService implements EditorHttpServiceInterface {
-  public apiBase: string;
-  public eduContentMetadataId: number;
+  private apiSettings$ = new BehaviorSubject<HttpSettingsInterface>(null);
   private eduContentId: number;
 
   constructor(private http: HttpClient) {}
 
+  public setSettings(settings: HttpSettingsInterface): void {
+    this.apiSettings$.next(settings);
+  }
+
   public getJson(): Observable<TimelineConfigInterface> {
-    const response$ = this.http
-      .get<{ timeline: string; eduContentId: number }>(
-        this.apiBase +
-          '/api/eduContentMetadata/' +
-          this.eduContentMetadataId +
-          '?filter={"fields":["timeline","eduContentId"]}',
-        { withCredentials: true }
-      )
-      .pipe(
-        retry(RETRY_AMOUNT),
-        catchError(this.handleError),
-        tap(response => (this.eduContentId = response.eduContentId)),
-        map(
-          (response): TimelineConfigInterface => JSON.parse(response.timeline)
+    const response$ = this.apiSettings$.pipe(
+      filter(settings => !!settings),
+      take(1),
+      switchMap(settings =>
+        this.http.get<{ timeline: string; eduContentId: number }>(
+          settings.apiBase +
+            '/api/eduContentMetadata/' +
+            settings.eduContentMetadataId +
+            '?filter={"fields":["timeline","eduContentId"]}',
+          { withCredentials: true }
         )
-      );
+      ),
+      retry(RETRY_AMOUNT),
+      catchError(this.handleError),
+      tap(response => (this.eduContentId = response.eduContentId)),
+      map((response): TimelineConfigInterface => JSON.parse(response.timeline))
+    );
 
     return response$;
   }
 
   public setJson(timelineConfig: TimelineConfigInterface): Observable<boolean> {
+    const apiSettings = this.getSettings();
     const response$ = this.http
       .put(
-        this.apiBase + '/api/eduContentMetadata/' + this.eduContentMetadataId,
+        apiSettings.apiBase +
+          '/api/eduContentMetadata/' +
+          apiSettings.eduContentMetadataId,
         { timeline: JSON.stringify(timelineConfig) },
         { withCredentials: true }
       )
@@ -61,16 +78,18 @@ export class EditorHttpService implements EditorHttpServiceInterface {
   }
 
   public getPreviewUrl(): string {
+    const apiSettings = this.getSettings(true);
     return (
-      this.apiBase +
+      apiSettings.apiBase +
       '/api/eduContents/' +
       this.eduContentId +
-      '/redirectURL/' + // TODO: doublecheck once API is finalised
-      this.eduContentMetadataId
+      '/redirectURL/' +
+      apiSettings.eduContentMetadataId
     );
   }
 
   public uploadFile(file: File): Observable<StorageInfoInterface> {
+    const apiSettings = this.getSettings(true);
     // expects multiple='multiple' to be set on the file input
 
     const formData: FormData = new FormData();
@@ -78,7 +97,10 @@ export class EditorHttpService implements EditorHttpServiceInterface {
 
     const response$ = this.http
       .post(
-        this.apiBase + '/api/EduContentFiles/' + this.eduContentId + '/store',
+        apiSettings.apiBase +
+          '/api/EduContentFiles/' +
+          this.eduContentId +
+          '/store',
         formData,
         { withCredentials: true }
       )
@@ -93,5 +115,13 @@ export class EditorHttpService implements EditorHttpServiceInterface {
 
   private handleError(error) {
     return throwError(error);
+  }
+
+  private getSettings(eduContentIdRequired?: boolean) {
+    const apiSettings = this.apiSettings$.value;
+    if (!apiSettings || (eduContentIdRequired && !this.eduContentId)) {
+      throw new Error('no_http_settings_loaded');
+    }
+    return apiSettings;
   }
 }

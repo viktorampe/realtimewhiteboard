@@ -1,6 +1,5 @@
 import {
   Component,
-  Inject,
   Input,
   OnChanges,
   OnInit,
@@ -8,8 +7,6 @@ import {
 } from '@angular/core';
 import { Observable } from 'rxjs';
 import { TimelineViewSlideInterface } from '../../interfaces/timeline';
-import { EDITOR_HTTP_SERVICE_TOKEN } from '../../services/editor-http.service';
-import { EditorHttpServiceInterface } from '../../services/editor-http.service.interface';
 import { EditorViewModel } from '../editor.viewmodel';
 
 @Component({
@@ -23,11 +20,7 @@ export class EditorTimelineComponent implements OnInit, OnChanges {
   @Input() eduContentMetadataId: number;
   @Input() apiBase: string;
 
-  constructor(
-    private editorViewModel: EditorViewModel,
-    @Inject(EDITOR_HTTP_SERVICE_TOKEN)
-    private editorHttpService: EditorHttpServiceInterface
-  ) {}
+  constructor(private editorViewModel: EditorViewModel) {}
 
   ngOnInit() {}
 
@@ -37,9 +30,10 @@ export class EditorTimelineComponent implements OnInit, OnChanges {
 
   private initialise() {
     if (this.apiBase && this.eduContentMetadataId) {
-      this.editorHttpService.apiBase = this.apiBase;
-      this.editorHttpService.eduContentMetadataId = this.eduContentMetadataId;
-      this.editorViewModel.initialise();
+      this.editorViewModel.setHttpSettings({
+        apiBase: this.apiBase,
+        eduContentMetadataId: this.eduContentMetadataId
+      });
     }
   }
 
