@@ -32,10 +32,8 @@ export const ENVIRONMENT_ICON_MAPPING_TOKEN = new InjectionToken(
 @NgModule({
   imports: [
     CommonModule,
-    HttpClientModule,
     MatButtonModule,
     MatListModule,
-    CommonModule,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
