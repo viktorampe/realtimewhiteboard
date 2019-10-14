@@ -8,8 +8,10 @@ import {
   MatIconModule,
   MatIconRegistry,
   MatInputModule,
-  MatListModule
+  MatListModule,
+  MatRadioModule
 } from '@angular/material';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { DomSanitizer } from '@angular/platform-browser';
 import { EditorTimelineComponent } from './components/editor-timeline/editor-timeline.component';
 import { SettingsComponent } from './components/settings/settings.component';
@@ -33,7 +35,13 @@ export const ENVIRONMENT_ICON_MAPPING_TOKEN = new InjectionToken(
     MatIconModule,
     ReactiveFormsModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    CommonModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatRadioModule,
+    MatSlideToggleModule
   ],
   declarations: [
     EditorTimelineComponent,

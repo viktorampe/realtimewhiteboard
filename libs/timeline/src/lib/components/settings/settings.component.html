@@ -1,4 +1,33 @@
-<p>test</p>
 <ng-container>
-  <form [formGroup]="settingsForm"> </form>
+  <form [formGroup]="settingsForm">
+    <div class="example-container">
+      <section class="example-section">
+        Human
+        <mat-slide-toggle
+          [checked]="isHuman"
+          (change)="onChange($event, 'human')"
+        >
+        </mat-slide-toggle>
+        Cosmological
+      </section>
+      <section class="example-section">
+        Relative
+        <mat-slide-toggle
+          [checked]="isRelative"
+          (change)="onChange($event, 'relative')"
+        >
+        </mat-slide-toggle>
+      </section>
+    </div>
+
+    <mat-form-field>
+      <input
+        matInput
+        type="number"
+        formControlName="scale_factor"
+        placeholder="Default 1%"
+      />
+    </mat-form-field>
+    <a mat-button (click)="onSubmit()">Opslaan</a>
+  </form>
 </ng-container>
