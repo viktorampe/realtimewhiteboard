@@ -4,13 +4,11 @@ import { Inject, InjectionToken, NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import {
   MatButtonModule,
-  MatDatepickerModule,
   MatFormFieldModule,
   MatIconModule,
   MatIconRegistry,
   MatInputModule,
   MatListModule,
-  MatNativeDateModule,
   MatRadioModule,
   MatStepperModule
 } from '@angular/material';
@@ -37,8 +35,6 @@ export const ENVIRONMENT_ICON_MAPPING_TOKEN = new InjectionToken(
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
     MatRadioModule,
     MatStepperModule,
     MatIconModule,
