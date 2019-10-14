@@ -138,7 +138,12 @@ export class SlideDetailComponent implements OnInit, OnChanges {
 
   private getDateFormGroup(formGroupKey: 'start_date' | 'end_date'): FormGroup {
     return this.fb.group({
-      year: [this.formData[formGroupKey].year || null, [Validators.required]],
+      year: [
+        this.formData[formGroupKey].year === 0
+          ? 0  // user has chosen number 0
+          : this.formData[formGroupKey].year || null,
+        [Validators.required]
+      ],
       month: [
         this.formData[formGroupKey].month || null,
         [Validators.min(1), Validators.max(12), Validators.maxLength(2)]
@@ -146,7 +151,7 @@ export class SlideDetailComponent implements OnInit, OnChanges {
       day: [this.formData[formGroupKey].day || null, [Validators.min(1)]],
       hour: [
         this.formData[formGroupKey].hour === 0
-          ? 0 // user has chosen number 0
+          ? 0
           : this.formData[formGroupKey].hour || null,
         [Validators.min(0), Validators.max(23), Validators.maxLength(2)]
       ],
