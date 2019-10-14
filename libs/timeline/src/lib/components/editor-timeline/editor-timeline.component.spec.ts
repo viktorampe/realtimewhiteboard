@@ -4,6 +4,8 @@ import { configureTestSuite } from 'ng-bullet';
 import { EDITOR_HTTP_SERVICE_TOKEN } from '../../services/editor-http.service';
 import { EditorViewModel } from '../editor.viewmodel';
 import { MockEditorViewModel } from '../editor.viewmodel.mock';
+import { SettingsComponent } from '../settings/settings.component';
+import { SlideDetailComponent } from '../slide-detail/slide-detail.component';
 import { SlideListComponent } from '../slide-list/slide-list.component';
 import { EditorTimelineComponent } from './editor-timeline.component';
 
@@ -14,7 +16,12 @@ describe('EditorTimelineComponent', () => {
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [MatListModule, MatIconModule],
-      declarations: [EditorTimelineComponent, SlideListComponent],
+      declarations: [
+        EditorTimelineComponent,
+        SlideListComponent,
+        SlideDetailComponent,
+        SettingsComponent
+      ],
       providers: [
         { provide: EditorViewModel, useClass: MockEditorViewModel },
         { provide: EDITOR_HTTP_SERVICE_TOKEN, useValue: {} }

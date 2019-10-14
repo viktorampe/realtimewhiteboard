@@ -82,6 +82,7 @@ export class EditorViewModel {
 
     this._activeSlide$.next(null);
     this.newSlide$.next(null);
+    this._isFormDirty$.next(false);
   }
 
   public updateSettings(newSettings: TimelineSettingsInterface) {
@@ -122,6 +123,9 @@ export class EditorViewModel {
       data.eras.push(updatedSlide.viewSlide as TimelineEraInterface);
     }
 
+    // Persist changes
+    this.updateTimeline(data).subscribe();
+
     // Nexting data causes the slideList to be updated
     this.data$.next(data);
 
@@ -152,6 +156,9 @@ export class EditorViewModel {
       data.eras = data.eras.filter(era => era !== activeSlide.viewSlide);
     }
 
+    // Persist changes
+    this.updateTimeline(data).subscribe();
+
     // Select nothing, since the previously active slide was deleted
     this._activeSlide$.next(null);
 
@@ -163,6 +170,11 @@ export class EditorViewModel {
 
     this._activeSlide$.next(slide);
     this.newSlide$.next(null);
+    this._isFormDirty$.next(false);
+  }
+
+  public setFormDirty(value: boolean) {
+    this._isFormDirty$.next(value);
   }
 
   /**
@@ -195,7 +207,7 @@ export class EditorViewModel {
   private setPresentationStreams() {
     this.slideList$ = this.data$.pipe(
       filter(data => !!data),
-      map(data => this.mapToViewSlides(data.eras, data.events)),
+      map(data => this.mapToViewSlides(data.eras || [], data.events || [])),
       shareReplay(1)
     );
 

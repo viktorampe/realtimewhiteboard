@@ -1,12 +1,16 @@
 import {
   Component,
+  HostBinding,
   Input,
   OnChanges,
   OnInit,
   SimpleChanges
 } from '@angular/core';
 import { Observable } from 'rxjs';
-import { TimelineViewSlideInterface } from '../../interfaces/timeline';
+import {
+  TimelineSettingsInterface,
+  TimelineViewSlideInterface
+} from '../../interfaces/timeline';
 import { EditorViewModel } from '../editor.viewmodel';
 
 @Component({
@@ -15,20 +19,28 @@ import { EditorViewModel } from '../editor.viewmodel';
   styleUrls: ['./editor-timeline.component.scss']
 })
 export class EditorTimelineComponent implements OnInit, OnChanges {
-  public slides$: Observable<TimelineViewSlideInterface[]>;
+  public slideList$: Observable<TimelineViewSlideInterface[]>;
+  public activeSlide$: Observable<TimelineViewSlideInterface>;
+  public activeSlideDetail$: Observable<TimelineViewSlideInterface>;
+  public settings$: Observable<TimelineSettingsInterface>;
+  public isFormDirty$: Observable<boolean>;
 
   @Input() eduContentMetadataId: number;
   @Input() apiBase: string;
 
   constructor(private editorViewModel: EditorViewModel) {}
 
-  ngOnInit() {}
+  @HostBinding('class.timeline-editor') private isTimelineEditor = true;
 
-  ngOnChanges(changes: SimpleChanges) {
-    this.initialise();
+  ngOnInit() {
+    this.slideList$ = this.editorViewModel.slideList$;
+    this.activeSlideDetail$ = this.editorViewModel.activeSlideDetail$;
+    this.activeSlide$ = this.editorViewModel.activeSlide$;
+    this.settings$ = this.editorViewModel.settings$;
+    this.isFormDirty$ = this.editorViewModel.isFormDirty$;
   }
 
-  private initialise() {
+  ngOnChanges(changes: SimpleChanges) {
     if (this.apiBase && this.eduContentMetadataId) {
       this.editorViewModel.setHttpSettings({
         apiBase: this.apiBase,
@@ -37,5 +49,31 @@ export class EditorTimelineComponent implements OnInit, OnChanges {
     }
   }
 
-  noop(): void {}
+  public setActiveSlide(viewSlide: TimelineViewSlideInterface): void {
+    this.editorViewModel.setActiveSlide(viewSlide);
+  }
+
+  public createSlide(): void {
+    this.editorViewModel.createSlide();
+  }
+
+  public deleteActiveSlide(): void {
+    this.editorViewModel.deleteActiveSlide();
+  }
+
+  public saveSlide(slide: TimelineViewSlideInterface) {
+    this.editorViewModel.upsertSlide(slide);
+  }
+
+  public showSettings(): void {
+    this.editorViewModel.openSettings();
+  }
+
+  public saveSettings(settings: TimelineSettingsInterface): void {
+    this.editorViewModel.updateSettings(settings);
+  }
+
+  public setIsFormDirty(isDirty: boolean): void {
+    this.editorViewModel.setFormDirty(isDirty);
+  }
 }
