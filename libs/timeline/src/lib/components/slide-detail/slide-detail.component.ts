@@ -76,7 +76,11 @@ export class SlideDetailComponent implements OnInit, OnChanges {
   private formData: SlideFormInterface;
 
   slideForm: FormGroup;
-  slideTypes: string[] = ['title', 'slide', 'era'];
+  slideTypes: { label: string; value: TIMELINE_SLIDE_TYPES }[] = [
+    { label: 'titelslide', value: TIMELINE_SLIDE_TYPES.TITLE },
+    { label: 'slide', value: TIMELINE_SLIDE_TYPES.SLIDE },
+    { label: 'era', value: TIMELINE_SLIDE_TYPES.ERA }
+  ];
   slideTypesEnum = TIMELINE_SLIDE_TYPES;
 
   chosenType$: Observable<string>;
@@ -91,10 +95,11 @@ export class SlideDetailComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.viewSlide)
-      this.formData = this.mapViewSlideToFormData(
-        changes.viewSlide.currentValue
-      );
+    if (changes.viewSlide) {
+      this.formData = this.mapViewSlideToFormData(this.viewSlide);
+      this.updateFormData();
+    }
+
     if (changes.fileUploadResult && !changes.fileUploadResult.firstChange) {
       this.getControl(
         changes.fileUploadResult.currentValue.formControlName
@@ -142,6 +147,38 @@ export class SlideDetailComponent implements OnInit, OnChanges {
         title: [this.formData.media.title || ''],
         link: [this.formData.media.link || '']
       })
+    });
+  }
+
+  private updateFormData() {
+    if (!this.slideForm) {
+      return;
+    }
+    this.slideForm.patchValue({
+      general: {
+        type: this.formData.general.type,
+        group: this.formData.general.group,
+        display_date: this.formData.general.display_date
+      },
+      start_date: this.getDateFormGroup('start_date'),
+      end_date: this.getDateFormGroup('end_date'),
+      text: {
+        headline: this.formData.text.headline,
+        text: this.formData.text.text
+      },
+      background: {
+        url: this.formData.background.url,
+        color: this.formData.background.color
+      },
+      media: {
+        url: this.formData.media.url,
+        caption: this.formData.media.caption,
+        credit: this.formData.media.credit,
+        thumbnail: this.formData.media.thumbnail,
+        alt: this.formData.media.alt,
+        title: this.formData.media.title,
+        link: this.formData.media.link
+      }
     });
   }
 

@@ -16,9 +16,9 @@
             <mat-radio-button
               class="radio-button"
               *ngFor="let type of slideTypes"
-              [value]="slideTypesEnum[type.toUpperCase()]"
-              [disabled]="type === 'title' && !canBeSavedAsTitle"
-              >{{ type }}</mat-radio-button
+              [value]="type.value"
+              [disabled]="type.value === slideTypesEnum.TITLE && !canBeSavedAsTitle"
+              >{{ type.label }}</mat-radio-button
             >
           </mat-radio-group>
         </div>
