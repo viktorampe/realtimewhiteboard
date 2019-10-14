@@ -53,6 +53,15 @@ export interface UploadFileOutput {
 export class SlideDetailComponent implements OnInit, OnChanges {
   @Input() viewSlide: TimelineViewSlideInterface;
   @Input() fileUploadResult: FileUploadResult;
+  /**
+   * Indicates if the current slide can be saved as a title slide.
+   * There can be only one title slide per timeline.
+   * Used for disabling the title radio button.
+   *
+   * @type {boolean}
+   * @memberof SlideDetailComponent
+   */
+  @Input() canBeSavedAsTitle: boolean;
 
   @Output() saveViewSlide = new EventEmitter<TimelineViewSlideInterface>();
   @Output() uploadFile = new EventEmitter<UploadFileOutput>();
