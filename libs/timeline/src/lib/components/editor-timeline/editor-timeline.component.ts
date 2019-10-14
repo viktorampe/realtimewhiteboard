@@ -1,5 +1,6 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import {
   TimelineSettingsInterface,
   TimelineViewSlideInterface
@@ -22,8 +23,7 @@ export class EditorTimelineComponent implements OnInit {
   public settings$: Observable<TimelineSettingsInterface>;
   public isFormDirty$: Observable<boolean>;
 
-  public fileUploadResult: FileUploadResult;
-  public slides$: Observable<TimelineViewSlideInterface[]>;
+  public fileUploadResult: Observable<FileUploadResult>;
 
   constructor(private editorViewModel: EditorViewModel) {}
 
@@ -68,9 +68,13 @@ export class EditorTimelineComponent implements OnInit {
   }
 
   public handleFileUpload(upload: UploadFileOutput) {
-    this.fileUploadResult = {
-      formControlName: upload.formControlName,
-      url: 'www.some-url.com'
-    };
+    this.fileUploadResult = this.editorViewModel
+      .uploadFile(19, upload.file) //TODO refactor without eduContentId
+      .pipe(
+        map(storageInfo => ({
+          formControlName: upload.formControlName,
+          url: '/api/EduFile/' + storageInfo.eduFileId
+        }))
+      );
   }
 }
