@@ -49,4 +49,8 @@ export class EditorTimelineComponent implements OnInit {
   }
 
   noop(): void {}
+
+  updateSettings(settings: TimelineSettingsInterface) {
+    this.editorViewModel.updateSettings(settings);
+  }
 }

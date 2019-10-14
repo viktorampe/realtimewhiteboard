@@ -9,5 +9,6 @@
   (clickCreateSlide)="noop()"
   (clickCreateEra)="noop()"
 ></campus-slide-list>
-<campus-settings> </campus-settings>
+<campus-settings (saveSettings)="updateSettings($event)" [settings]="settings$">
+</campus-settings>
 <!--[settings]="settings$ | async"--->

@@ -1,6 +1,13 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output
+} from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { TimelineSettingsInterface } from '../../interfaces/timeline';
 
 @Component({
@@ -8,51 +15,71 @@ import { TimelineSettingsInterface } from '../../interfaces/timeline';
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.scss']
 })
-export class SettingsComponent implements OnInit {
-  @Input() settings: TimelineSettingsInterface;
+export class SettingsComponent implements OnInit, OnDestroy {
+  @Input() settings: Observable<TimelineSettingsInterface>;
 
   @Output() isDirty$: Observable<boolean>;
   //@Output() saveSettings: TimelineSettingsInterface;
   @Output() saveSettings = new EventEmitter<TimelineSettingsInterface>();
-  isHuman = false;
-  isRelative = false;
+  public settingsForm: FormGroup;
   private initialFormValues: any; // used for isDirty$
-  private formData: TimelineSettingsInterface;
-  settingsForm: FormGroup;
+  private subscriptions: Subscription;
+  private formDefaults = {
+    scaleFactor: 1,
+    humanCosmological: 'human',
+    relative: false
+  };
 
   constructor(private fb: FormBuilder) {}
 
   ngOnInit() {
-    this.formData.options.scale_factor = 4;
     this.settingsForm = this.buildForm();
-    console.log(this.settings);
+    this.subscriptions = new Subscription();
+    this.subscriptions.add(
+      this.settings.subscribe(settings => {
+        this.settingsForm
+          .get('scaleFactor')
+          .setValue(
+            settings.options.scale_factor || this.formDefaults.scaleFactor
+          );
+        this.settingsForm
+          .get('humanCosmological')
+          .setValue(
+            (settings.scale || this.formDefaults.humanCosmological) ===
+              'cosmological'
+          );
+        this.settingsForm
+          .get('relative')
+          .setValue(settings.options.relative || this.formDefaults.relative);
+      })
+    );
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
   }
 
   private buildForm(): FormGroup {
     return this.fb.group({
-      scaleFactor: [this.formData.options.scale_factor]
+      scaleFactor: 1,
+      humanCosmological: false,
+      relative: false
     });
   }
 
-  public onChange(state) {
-    console.log(state);
-    switch (state) {
-      case 'relative':
-        this.isRelative = state.checked;
-        break;
-      case 'human':
-        this.isHuman = state.checked;
-        break;
-    }
-  }
-
   onSubmit(): void {
-    console.log(this.formData);
-    const outputData = this.formData;
-    // if (this.settingsForm.valid) {
-    //   const outputData = this.settingsForm.value;
-    //   console.log(outputData);
-    //   //this.saveSettings.emit(outputData);
-    // }
+    if (this.settingsForm.valid) {
+      this.saveSettings.emit({
+        scale:
+          this.settingsForm.get('humanCosmological').value ||
+          this.formDefaults.humanCosmological,
+        options: {
+          relative: !!this.settingsForm.get('relative').value,
+          scale_factor:
+            this.settingsForm.get('scaleFactor').value ||
+            this.formDefaults.scaleFactor
+        }
+      });
+    }
   }
 }

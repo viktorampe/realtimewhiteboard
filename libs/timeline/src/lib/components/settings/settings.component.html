@@ -3,20 +3,14 @@
     <div class="example-container">
       <section class="example-section">
         Human
-        <mat-slide-toggle
-          [checked]="isHuman"
-          (change)="onChange($event, 'human')"
-        >
+        <mat-slide-toggle formControlName="humanCosmological">
         </mat-slide-toggle>
         Cosmological
       </section>
       <section class="example-section">
+        Absolute
+        <mat-slide-toggle formControlName="relative"> </mat-slide-toggle>
         Relative
-        <mat-slide-toggle
-          [checked]="isRelative"
-          (change)="onChange($event, 'relative')"
-        >
-        </mat-slide-toggle>
       </section>
     </div>
 
@@ -24,10 +18,10 @@
       <input
         matInput
         type="number"
-        formControlName="scale_factor"
+        formControlName="scaleFactor"
         placeholder="Default 1%"
       />
     </mat-form-field>
-    <a mat-button (click)="onSubmit()">Opslaan</a>
+    <button mat-button (click)="onSubmit()">Opslaan</button>
   </form>
 </ng-container>
