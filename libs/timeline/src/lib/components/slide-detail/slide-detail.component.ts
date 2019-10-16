@@ -76,7 +76,11 @@ export class SlideDetailComponent implements OnInit, OnChanges {
   private formData: SlideFormInterface;
 
   slideForm: FormGroup;
-  slideTypes: string[] = ['title', 'slide', 'era'];
+  slideTypes: { label: string; value: TIMELINE_SLIDE_TYPES }[] = [
+    { label: 'titelslide', value: TIMELINE_SLIDE_TYPES.TITLE },
+    { label: 'slide', value: TIMELINE_SLIDE_TYPES.SLIDE },
+    { label: 'era', value: TIMELINE_SLIDE_TYPES.ERA }
+  ];
   slideTypesEnum = TIMELINE_SLIDE_TYPES;
 
   chosenType$: Observable<string>;
@@ -146,6 +150,13 @@ export class SlideDetailComponent implements OnInit, OnChanges {
         link: [this.formData.media.link || '']
       })
     });
+  }
+
+  private updateFormData() {
+    if (!this.slideForm) {
+      return;
+    }
+    this.slideForm.patchValue(this.formData);
   }
 
   private getDateFormGroup(formGroupKey: 'start_date' | 'end_date'): FormGroup {
