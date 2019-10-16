@@ -330,27 +330,6 @@ describe('EditorViewModel', () => {
             hot('a', { a: expected })
           );
         });
-
-        it('should use the correct label - default', () => {
-          timelineConfig.title = new TimelineSlideFixture({
-            display_date: undefined,
-            start_date: undefined
-          });
-          timelineConfig.eras = [];
-          timelineConfig.events = [];
-
-          const expected: TimelineViewSlideInterface[] = [
-            {
-              type: TIMELINE_SLIDE_TYPES.TITLE,
-              viewSlide: timelineConfig.title,
-              label: 'Titel'
-            }
-          ];
-
-          expect(editorViewModel.slideList$).toBeObservable(
-            hot('a', { a: expected })
-          );
-        });
       });
 
       describe('event', () => {
@@ -617,7 +596,7 @@ describe('EditorViewModel', () => {
       });
     });
 
-    describe('showSettings$', () => {
+    describe('settings$', () => {
       beforeEach(() => {
         timelineConfig.scale = 'cosmological';
         timelineConfig.options = new TimelineOptionsFixture({
