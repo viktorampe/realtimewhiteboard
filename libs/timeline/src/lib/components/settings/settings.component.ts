@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
+import { debounceTime, map, startWith } from 'rxjs/operators';
 import { TimelineSettingsInterface } from '../../interfaces/timeline';
 
 @Component({
@@ -34,6 +35,22 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.settingsForm = this.buildForm();
+    this.initialStreams();
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
+  }
+
+  private buildForm(): FormGroup {
+    return this.fb.group({
+      scaleFactor: 1,
+      humanCosmological: false,
+      relative: false
+    });
+  }
+
+  private initialStreams() {
     this.subscriptions = new Subscription();
     this.subscriptions.add(
       this.settings.subscribe(settings => {
@@ -53,18 +70,18 @@ export class SettingsComponent implements OnInit, OnDestroy {
           .setValue(settings.options.relative || this.formDefaults.relative);
       })
     );
-  }
-
-  ngOnDestroy() {
-    this.subscriptions.unsubscribe();
-  }
-
-  private buildForm(): FormGroup {
-    return this.fb.group({
-      scaleFactor: 1,
-      humanCosmological: false,
-      relative: false
-    });
+    this.initialFormValues = { ...this.settingsForm.value };
+    this.isDirty$ = this.settingsForm.valueChanges.pipe(
+      debounceTime(300),
+      map(
+        updatedFormValues =>
+          !(
+            JSON.stringify(updatedFormValues) ===
+            JSON.stringify(this.initialFormValues)
+          )
+      ),
+      startWith(false)
+    );
   }
 
   onSubmit(): void {
