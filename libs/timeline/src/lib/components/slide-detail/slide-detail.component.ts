@@ -164,7 +164,12 @@ export class SlideDetailComponent implements OnInit, OnChanges {
         this.formData[formGroupKey].month || null,
         [Validators.min(1), Validators.max(12), Validators.maxLength(2)]
       ],
-      day: [this.formData[formGroupKey].day || null, [Validators.min(1)]],
+      day: [
+        this.formData[formGroupKey].day === 0
+          ? 0
+          : this.formData[formGroupKey].day || null,
+        [Validators.min(1)]
+      ],
       hour: [
         this.formData[formGroupKey].hour === 0
           ? 0
@@ -183,7 +188,11 @@ export class SlideDetailComponent implements OnInit, OnChanges {
           : this.formData[formGroupKey].second || null,
         [Validators.min(0), Validators.max(59), Validators.maxLength(2)]
       ],
-      millisecond: [this.formData[formGroupKey].millisecond || null],
+      millisecond: [
+        this.formData[formGroupKey].millisecond === 0
+          ? 0
+          : this.formData[formGroupKey].millisecond || null
+      ],
       display_date: [this.formData[formGroupKey].display_date || '']
     });
   }
