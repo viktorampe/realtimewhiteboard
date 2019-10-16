@@ -5,14 +5,22 @@ import { ReactiveFormsModule } from '@angular/forms';
 import {
   MatButtonModule,
   MatFormFieldModule,
+  MatDatepickerModule,
+  MatFormFieldModule,
   MatIconModule,
   MatIconRegistry,
+  MatInputModule,
+  MatListModule,
+  MatNativeDateModule,
+  MatRadioModule,
+  MatStepperModule
   MatInputModule,
   MatListModule,
   MatRadioModule
 } from '@angular/material';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { DomSanitizer } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import 'hammerjs';
 import { EditorTimelineComponent } from './components/editor-timeline/editor-timeline.component';
@@ -31,9 +39,18 @@ export const ENVIRONMENT_ICON_MAPPING_TOKEN = new InjectionToken(
 @NgModule({
   imports: [
     CommonModule,
-    HttpClientModule,
     MatButtonModule,
     MatListModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatRadioModule,
+    MatStepperModule,
+    MatIconModule,
+    HttpClientModule,
+    BrowserAnimationsModule
     MatIconModule,
     ReactiveFormsModule,
     MatFormFieldModule,
@@ -54,7 +71,8 @@ export const ENVIRONMENT_ICON_MAPPING_TOKEN = new InjectionToken(
   ],
   exports: [EditorTimelineComponent],
   providers: [
-    { provide: EDITOR_HTTP_SERVICE_TOKEN, useClass: EditorHttpService }
+    { provide: EDITOR_HTTP_SERVICE_TOKEN, useClass: EditorHttpService },
+    { provide: ENVIRONMENT_ICON_MAPPING_TOKEN, useValue: {} }
   ]
 })
 export class TimelineModule {

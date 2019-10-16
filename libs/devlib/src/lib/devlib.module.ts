@@ -5,6 +5,7 @@ import { MatIconModule } from '@angular/material';
 import { PagesHomeModule } from '@campus/pages/home';
 import { SearchModule } from '@campus/search';
 import { SharedModule } from '@campus/shared';
+import { TimelineModule } from '@campus/timeline';
 import { UiModule } from '@campus/ui';
 import { DemoPageComponent } from './demo-page/demo-page.component';
 import { DevlibRoutingModule } from './devlib.routing.module';
@@ -21,7 +22,8 @@ import { WhiteboardDemoPageComponent } from './whiteboard-demo-page/whiteboard-d
     SharedModule,
     MatIconModule,
     SearchModule,
-    PagesHomeModule
+    PagesHomeModule,
+    TimelineModule
   ],
   providers: [LoginPageViewModel],
   declarations: [
