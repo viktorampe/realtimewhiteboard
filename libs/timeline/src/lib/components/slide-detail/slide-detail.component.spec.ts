@@ -65,6 +65,32 @@ describe('SlideDetailComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  describe('handleFileInput()', () => {
+    let uploadFileSpy: jest.SpyInstance;
+
+    beforeEach(() => {
+      uploadFileSpy = jest.spyOn(component.uploadFile, 'emit');
+    });
+
+    it('should emit the correct data', () => {
+      const fileOne = new File(['I am file one'], 'foo');
+      const fileList: FileList = {
+        length: 1,
+        0: fileOne,
+        item: () => fileOne
+      };
+
+      component.handleFileInput(fileList, 'media.url');
+
+      expect(uploadFileSpy).toHaveBeenCalled();
+      expect(uploadFileSpy).toHaveBeenCalledTimes(1);
+      expect(uploadFileSpy).toHaveBeenCalledWith({
+        file: fileOne,
+        formControlName: 'media.url'
+      });
+    });
+  });
+
   describe('onSubmit()', () => {
     let saveViewSlideSpy: jest.SpyInstance;
 
@@ -81,6 +107,7 @@ describe('SlideDetailComponent', () => {
       it('should emit when the form data is valid', () => {
         component.onSubmit();
         expect(saveViewSlideSpy).toHaveBeenCalled();
+        expect(saveViewSlideSpy).toHaveBeenCalledTimes(1);
       });
 
       it('should emit the updated viewSlide data', () => {

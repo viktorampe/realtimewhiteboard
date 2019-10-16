@@ -112,7 +112,7 @@ export class SlideDetailComponent implements OnInit, OnChanges {
   handleFileInput(files: FileList, formControlName: FormControlName) {
     this.fileUploadResult = { url: '', formControlName };
     const fileToUpload: File = files.item(0);
-    this.uploadFile.next({ file: fileToUpload, formControlName });
+    this.uploadFile.emit({ file: fileToUpload, formControlName });
   }
 
   handleColorPick(color: string): void {
