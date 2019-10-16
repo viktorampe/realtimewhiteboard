@@ -20,7 +20,10 @@ import {
 } from '../../interfaces/timeline';
 import { EditorViewModel } from '../editor.viewmodel';
 import { MockEditorViewModel } from '../editor.viewmodel.mock';
-import { SlideDetailComponent } from './slide-detail.component';
+import {
+  FileUploadResult,
+  SlideDetailComponent
+} from './slide-detail.component';
 
 describe('SlideDetailComponent', () => {
   let component: SlideDetailComponent;
@@ -63,6 +66,26 @@ describe('SlideDetailComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  describe('fileUploadResult input', () => {
+    it('should set the value of the correct formControl', () => {
+      const mockUploadResult: FileUploadResult = {
+        formControlName: 'background.url',
+        url: 'www.foo.url'
+      };
+
+      component.ngOnChanges({
+        fileUploadResult: new SimpleChange(null, mockUploadResult, false)
+      });
+
+      expect(component.slideForm.get('background.url').value).toBe(
+        'www.foo.url'
+      );
+      // make sure the other url's aren't accidentally set
+      expect(component.slideForm.get('media.url').value).toBe('');
+      expect(component.slideForm.get('media.thumbnail').value).toBe('');
+    });
   });
 
   describe('handleFileInput()', () => {
