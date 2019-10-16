@@ -1,3 +1,4 @@
+import { SimpleChange } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import {
@@ -24,7 +25,7 @@ import { SlideDetailComponent } from './slide-detail.component';
 describe('SlideDetailComponent', () => {
   let component: SlideDetailComponent;
   let fixture: ComponentFixture<SlideDetailComponent>;
-  const viewSlide: TimelineViewSlideInterface = {
+  const viewSlideMock: TimelineViewSlideInterface = {
     type: TIMELINE_SLIDE_TYPES.SLIDE,
     viewSlide: new TimelineSlideFixture(),
     label: 'foo'
@@ -56,11 +57,106 @@ describe('SlideDetailComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(SlideDetailComponent);
     component = fixture.componentInstance;
-    component.viewSlide = viewSlide;
+    component.viewSlide = viewSlideMock;
     fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  describe('onSubmit()', () => {
+    let saveViewSlideSpy: jest.SpyInstance;
+
+    beforeEach(() => {
+      saveViewSlideSpy = jest.spyOn(component.saveViewSlide, 'emit');
+    });
+
+    describe('when valid', () => {
+      beforeEach(() => {
+        component.slideForm.setErrors(null); // make the form valid
+        component.slideForm.updateValueAndValidity(); // make sure the form knows it's valid
+      });
+
+      it('should emit when the form data is valid', () => {
+        component.onSubmit();
+        expect(saveViewSlideSpy).toHaveBeenCalled();
+      });
+
+      it('should emit the updated viewSlide data', () => {
+        const mockViewSlide = {
+          type: TIMELINE_SLIDE_TYPES.SLIDE,
+          viewSlide: {
+            start_date: {
+              year: 1,
+              month: 2,
+              day: 3,
+              display_date: 'foo start'
+            },
+            end_date: {
+              year: 2,
+              month: 3,
+              day: 4,
+              display_date: 'foo end'
+            },
+            group: 'foo group',
+            text: {
+              text: 'foo text',
+              headline: 'foo headline'
+            },
+            background: { color: 'foo color' }
+          },
+          label: 'foo label'
+        };
+
+        component.viewSlide = mockViewSlide; // needed because the input value won't be changed by triggering ngOnChanges!
+        component.ngOnChanges({
+          viewSlide: new SimpleChange(null, mockViewSlide, false)
+        });
+
+        component.onSubmit();
+
+        const expectedOutput: TimelineViewSlideInterface = {
+          type: 3, // slide
+          viewSlide: {
+            start_date: {
+              year: 1,
+              month: 2,
+              day: 3,
+              display_date: 'foo start'
+            },
+            end_date: {
+              year: 2,
+              month: 3,
+              day: 4,
+              display_date: 'foo end'
+            },
+            group: 'foo group',
+            text: {
+              text: 'foo text',
+              headline: 'foo headline'
+            },
+            background: {
+              color: 'foo color'
+            }
+          },
+          label: 'foo label'
+        };
+
+        expect(saveViewSlideSpy).toHaveBeenCalledWith(expectedOutput);
+      });
+    });
+
+    describe('when invalid', () => {
+      beforeEach(() => {
+        component.slideForm.get('media').setErrors({ required: true }); // make the form invalid
+        component.slideForm.updateValueAndValidity(); // make sure the form knows it's invalid
+      });
+      it('should not emit when the form data is invalid', () => {
+        component.onSubmit();
+
+        expect(saveViewSlideSpy).not.toHaveBeenCalled();
+      });
+    });
   });
 });

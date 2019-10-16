@@ -86,15 +86,18 @@ export class SlideDetailComponent implements OnInit, OnChanges {
   ngOnInit() {
     this.formData = this.mapViewSlideToFormData(this.viewSlide);
     this.slideForm = this.buildForm();
+
     this.initialFormValues = { ...this.slideForm.value }; // used for isDirty check
     this.initializeStreams();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.viewSlide)
+    if (changes.viewSlide && !changes.viewSlide.firstChange) {
       this.formData = this.mapViewSlideToFormData(
         changes.viewSlide.currentValue
       );
+      this.slideForm.patchValue(this.formData);
+    }
     if (changes.fileUploadResult && !changes.fileUploadResult.firstChange) {
       this.getControl(
         changes.fileUploadResult.currentValue.formControlName
@@ -177,7 +180,7 @@ export class SlideDetailComponent implements OnInit, OnChanges {
         [Validators.min(0), Validators.max(59), Validators.maxLength(2)]
       ],
       millisecond: [this.formData[formGroupKey].millisecond || null],
-      displayDate: [this.formData[formGroupKey].display_date || '']
+      display_date: [this.formData[formGroupKey].display_date || '']
     });
   }
 
@@ -265,7 +268,6 @@ export class SlideDetailComponent implements OnInit, OnChanges {
       group: viewSlide.viewSlide.group || '', // default to empty string for isDirty$
       display_date: viewSlide.viewSlide.display_date || '' // // default to empty string for isDirty$
     };
-
     return formData;
   }
 
