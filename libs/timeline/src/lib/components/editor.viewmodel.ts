@@ -19,6 +19,7 @@ import {
 import { EDITOR_HTTP_SERVICE_TOKEN } from '../services/editor-http.service';
 import {
   EditorHttpServiceInterface,
+  EditorHttpSettingsInterface,
   StorageInfoInterface
 } from '../services/editor-http.service.interface';
 import {
@@ -30,8 +31,6 @@ import {
   providedIn: 'root'
 })
 export class EditorViewModel {
-  private eduContentId: number;
-  private eduContentMetadataId: number; // TODO remove -> httpService will have this info
   private data$ = new BehaviorSubject<TimelineConfigInterface>(null);
 
   // stores temporary value for new slide
@@ -58,31 +57,24 @@ export class EditorViewModel {
     this.initialise();
   }
 
-  getTimeline(
-    eduContentMetadataId: number
-  ): Observable<TimelineConfigInterface> {
-    return this.editorHttpService.getJson(eduContentMetadataId);
+  setHttpSettings(settings: EditorHttpSettingsInterface) {
+    this.editorHttpService.setSettings(settings);
   }
 
-  updateTimeline(
-    eduContentMetadataId: number,
-    data: TimelineConfigInterface
-  ): Observable<boolean> {
-    return this.editorHttpService.setJson(eduContentMetadataId, data);
+  getTimeline(): Observable<TimelineConfigInterface> {
+    return this.editorHttpService.getJson();
   }
 
-  previewTimeline(eduContentId: number, eduContentMetadataId: number): string {
-    return this.editorHttpService.getPreviewUrl(
-      eduContentId,
-      eduContentMetadataId
-    );
+  updateTimeline(data: TimelineConfigInterface): Observable<boolean> {
+    return this.editorHttpService.setJson(data);
   }
 
-  uploadFile(
-    eduContentId: number,
-    file: File
-  ): Observable<StorageInfoInterface> {
-    return this.editorHttpService.uploadFile(eduContentId, file);
+  previewTimeline(): string {
+    return this.editorHttpService.getPreviewUrl();
+  }
+
+  uploadFile(file: File): Observable<StorageInfoInterface> {
+    return this.editorHttpService.uploadFile(file);
   }
 
   public openSettings() {
@@ -132,7 +124,7 @@ export class EditorViewModel {
     }
 
     // Persist changes
-    this.updateTimeline(this.eduContentMetadataId, data).subscribe();
+    this.updateTimeline(data).subscribe();
 
     // Nexting data causes the slideList to be updated
     this.data$.next(data);
@@ -165,7 +157,7 @@ export class EditorViewModel {
     }
 
     // Persist changes
-    this.updateTimeline(this.eduContentMetadataId, data).subscribe();
+    this.updateTimeline(data).subscribe();
 
     // Select nothing, since the previously active slide was deleted
     this._activeSlide$.next(null);
@@ -202,12 +194,12 @@ export class EditorViewModel {
   }
 
   private initialise() {
-    this.setSourceStreams(this.eduContentId);
+    this.setSourceStreams();
     this.setPresentationStreams();
   }
 
-  private setSourceStreams(eduContentId) {
-    this.editorHttpService.getJson(eduContentId).subscribe(timeline => {
+  private setSourceStreams() {
+    this.editorHttpService.getJson().subscribe(timeline => {
       this.data$.next(timeline);
     });
   }
