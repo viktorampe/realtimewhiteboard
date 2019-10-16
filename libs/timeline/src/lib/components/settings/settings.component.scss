@@ -1,4 +1,5 @@
-.example-container {
-  display: flex;
-  flex-direction: column;
+.timeline-settings {
+  &__section {
+    margin-bottom: 16px;
+  }
 }

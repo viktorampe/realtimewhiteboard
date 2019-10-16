@@ -1,19 +1,15 @@
-<ng-container>
-  <form [formGroup]="settingsForm">
-    <div class="example-container">
-      <section class="example-section">
-        Human
-        <mat-slide-toggle formControlName="humanCosmological">
-        </mat-slide-toggle>
-        Cosmological
-      </section>
-      <section class="example-section">
-        Absolute
-        <mat-slide-toggle formControlName="relative"> </mat-slide-toggle>
-        Relative
-      </section>
-    </div>
-
+<form [formGroup]="settingsForm">
+  <section class="timeline-settings__section">
+    Human
+    <mat-slide-toggle formControlName="humanCosmological"> </mat-slide-toggle>
+    Cosmological
+  </section>
+  <section class="timeline-settings__section">
+    Absolute
+    <mat-slide-toggle formControlName="relative"> </mat-slide-toggle>
+    Relative
+  </section>
+  <section class="timeline-settings__section">
     <mat-form-field>
       <input
         matInput
@@ -22,6 +18,6 @@
         placeholder="Default 1"
       />
     </mat-form-field>
-    <button mat-button (click)="onSubmit()">Opslaan</button>
-  </form>
-</ng-container>
+  </section>
+  <button mat-button (click)="onSubmit()">Opslaan</button>
+</form>

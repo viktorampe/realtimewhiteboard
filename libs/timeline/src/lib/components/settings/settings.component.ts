@@ -25,6 +25,8 @@ export class SettingsComponent implements OnInit {
 
   constructor(private fb: FormBuilder) {}
 
+  @HostBinding('class.timeline-settings') private isSettings = true;
+
   ngOnInit() {
     this.settingsForm = this.buildForm();
     this.initialStreams();
