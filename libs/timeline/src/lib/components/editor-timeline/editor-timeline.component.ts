@@ -1,5 +1,6 @@
 import {
   Component,
+  ElementRef,
   HostBinding,
   Input,
   OnChanges,
@@ -28,9 +29,12 @@ export class EditorTimelineComponent implements OnInit, OnChanges {
   @Input() eduContentMetadataId: number;
   @Input() apiBase: string;
 
-  constructor(private editorViewModel: EditorViewModel) {}
+  constructor(
+    private el: ElementRef,
+    private editorViewModel: EditorViewModel
+  ) {}
 
-  @HostBinding('class.timeline-editor') private isTimelineEditor = true;
+  @HostBinding('class.timeline-editor') public isTimelineEditor = true;
 
   ngOnInit() {
     this.slideList$ = this.editorViewModel.slideList$;
@@ -38,6 +42,11 @@ export class EditorTimelineComponent implements OnInit, OnChanges {
     this.activeSlide$ = this.editorViewModel.activeSlide$;
     this.settings$ = this.editorViewModel.settings$;
     this.isFormDirty$ = this.editorViewModel.isFormDirty$;
+
+    this.editorViewModel.errors$.subscribe(error => {
+      const event = new CustomEvent('error-message', { detail: error });
+      this.el.nativeElement.dispatchEvent(event);
+    });
   }
 
   ngOnChanges(changes: SimpleChanges) {

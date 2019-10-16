@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, InjectionToken } from '@angular/core';
-import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, ReplaySubject, throwError } from 'rxjs';
 import {
   catchError,
   filter,
@@ -27,10 +27,15 @@ const RETRY_AMOUNT = 2;
   providedIn: 'root'
 })
 export class EditorHttpService implements EditorHttpServiceInterface {
+  public errors$: Observable<Error>;
+
   private apiSettings$ = new BehaviorSubject<EditorHttpSettingsInterface>(null);
   private eduContentId: number;
+  private _errorMessages$ = new ReplaySubject<Error>();
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    this.errors$ = this._errorMessages$.asObservable();
+  }
 
   public setSettings(settings: EditorHttpSettingsInterface): void {
     this.apiSettings$.next(settings);
@@ -50,7 +55,7 @@ export class EditorHttpService implements EditorHttpServiceInterface {
         )
       ),
       retry(RETRY_AMOUNT),
-      catchError(this.handleError),
+      catchError(this.handleError.bind(this)),
       tap(response => (this.eduContentId = response.eduContentId)),
       map((response): TimelineConfigInterface => JSON.parse(response.timeline))
     );
@@ -60,6 +65,7 @@ export class EditorHttpService implements EditorHttpServiceInterface {
 
   public setJson(timelineConfig: TimelineConfigInterface): Observable<boolean> {
     const apiSettings: EditorHttpSettingsInterface = this.getSettings();
+
     const response$ = this.http
       .put(
         apiSettings.apiBase +
@@ -70,7 +76,7 @@ export class EditorHttpService implements EditorHttpServiceInterface {
       )
       .pipe(
         retry(RETRY_AMOUNT),
-        catchError(this.handleError),
+        catchError(this.handleError.bind(this)),
         mapTo(true)
       );
 
@@ -106,14 +112,16 @@ export class EditorHttpService implements EditorHttpServiceInterface {
       )
       .pipe(
         retry(RETRY_AMOUNT),
-        catchError(this.handleError),
+        catchError(this.handleError.bind(this)),
         map(response => response as StorageInfoInterface)
       );
 
     return response$;
   }
 
-  private handleError(error) {
+  private handleError(error: Error) {
+    this._errorMessages$.next(error);
+
     return throwError(error);
   }
 
