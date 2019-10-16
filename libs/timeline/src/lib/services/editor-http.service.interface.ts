@@ -1,21 +1,20 @@
 import { Observable } from 'rxjs';
 import { TimelineConfigInterface } from '../interfaces/timeline';
 export interface EditorHttpServiceInterface {
-  getJson(eduContentMetadataId: number): Observable<TimelineConfigInterface>;
-  setJson(
-    eduContentMetadataId: number,
-    timelineConfig: TimelineConfigInterface
-  ): Observable<boolean>;
-  getPreviewUrl(eduContentId, eduContentMetadataId): string;
-  uploadFile(
-    eduContentId: number,
-    file: File
-  ): Observable<StorageInfoInterface>;
+  setSettings(settings: EditorHttpSettingsInterface): void;
+  getJson(): Observable<TimelineConfigInterface>;
+  setJson(timelineConfig: TimelineConfigInterface): Observable<boolean>;
+  getPreviewUrl(): string;
+  uploadFile(file: File): Observable<StorageInfoInterface>;
 }
 
 export interface StorageInfoInterface {
   checksum?: string;
   name: string;
   storageName: string;
-  eduFileId?: string;
+}
+
+export interface EditorHttpSettingsInterface {
+  apiBase: string;
+  eduContentMetadataId: number;
 }

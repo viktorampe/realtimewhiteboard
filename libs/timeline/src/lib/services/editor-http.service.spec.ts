@@ -17,7 +17,7 @@ describe('EditorHttpService', () => {
 
   const APIBase = 'http://some.website.address';
   const mockTimeline = new TimelineConfigFixture();
-  const apiData = { timeline: JSON.stringify(mockTimeline) };
+  const apiData = { timeline: JSON.stringify(mockTimeline), eduContentId: 1 };
   const requestMetadataId = 123;
 
   configureTestSuite(() => {
@@ -43,6 +43,11 @@ describe('EditorHttpService', () => {
   beforeEach(() => {
     editorHttpService = TestBed.get(EditorHttpService);
     httpClient = TestBed.get(HttpClient);
+    editorHttpService.setSettings({
+      apiBase: APIBase,
+      eduContentMetadataId: requestMetadataId
+    });
+    editorHttpService['eduContentId'] = apiData.eduContentId;
   });
 
   afterEach(() => {
@@ -63,7 +68,7 @@ describe('EditorHttpService', () => {
     });
 
     it('should make the correct api call and return the response', () => {
-      expect(editorHttpService.getJson(requestMetadataId)).toBeObservable(
+      expect(editorHttpService.getJson()).toBeObservable(
         cold('(a|)', { a: mockTimeline })
       );
 
@@ -71,8 +76,8 @@ describe('EditorHttpService', () => {
         APIBase +
           '/api/eduContentMetadata/' +
           requestMetadataId +
-          '?filter[fields]=timeline' +
-          '&access_token=2' //TODO remove this bit
+          '?filter={"fields":["timeline","eduContentId"]}',
+        { withCredentials: true }
       );
     });
   });
@@ -85,23 +90,19 @@ describe('EditorHttpService', () => {
     });
 
     it('should make the correct api call and return the response', () => {
-      expect(
-        editorHttpService.setJson(requestMetadataId, mockTimeline)
-      ).toBeObservable(cold('(a|)', { a: true }));
+      expect(editorHttpService.setJson(mockTimeline)).toBeObservable(
+        cold('(a|)', { a: true })
+      );
 
       expect(httpClient.put).toHaveBeenCalledWith(
-        APIBase +
-          '/api/eduContentMetadata/' +
-          requestMetadataId +
-          '?access_token=2', //TODO remove this bit
-        { timeline: JSON.stringify(mockTimeline) }
+        APIBase + '/api/eduContentMetadata/' + requestMetadataId,
+        { timeline: JSON.stringify(mockTimeline) },
+        { withCredentials: true }
       );
     });
   });
 
   describe('uploadFile', () => {
-    const eduContentId = 123;
-
     const storageInfo: StorageInfoInterface = {
       name: 'foo.exe',
       storageName: 'some-hash'
@@ -117,38 +118,28 @@ describe('EditorHttpService', () => {
     });
 
     it('should make the correct api call and return the response', () => {
-      expect(editorHttpService.uploadFile(eduContentId, file)).toBeObservable(
+      expect(editorHttpService.uploadFile(file)).toBeObservable(
         cold('(a|)', { a: storageInfo })
       );
 
       expect(httpClient.post).toHaveBeenCalledWith(
-        APIBase +
-          '/api/EduContentFiles/' +
-          eduContentId +
-          '/store' +
-          '?access_token=2', // TODO: remove this bit
-        formData
+        APIBase + '/api/EduContentFiles/' + apiData.eduContentId + '/store',
+        formData,
+        { withCredentials: true }
       );
     });
   });
 
   describe('getPreviewUrl', () => {
-    const eduContentId = 123;
-    const eduContentMetadataId = 456;
-
     it('should make the correct api call and return the response', () => {
-      const previewUrl = editorHttpService.getPreviewUrl(
-        eduContentId,
-        eduContentMetadataId
-      );
+      const previewUrl = editorHttpService.getPreviewUrl();
 
       const expected =
         APIBase +
         '/api/eduContents/' +
-        eduContentId +
+        apiData.eduContentId +
         '/redirectURL/' +
-        eduContentMetadataId +
-        '?access_token=2'; // TODO: remove this bit
+        requestMetadataId;
 
       expect(previewUrl).toEqual(expected);
     });
