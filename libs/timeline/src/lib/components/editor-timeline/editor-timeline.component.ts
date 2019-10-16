@@ -10,19 +10,13 @@ import { Observable } from 'rxjs';
 import {
   TimelineSettingsInterface,
   TimelineViewSlideInterface
-  TimelineSettingsInterface,
-  TimelineViewSlideInterface,
-  TIMELINE_SLIDE_TYPES
 } from '../../interfaces/timeline';
-import { EditorViewModel } from '../editor.viewmodel';
-import { MockEditorViewModel } from '../editor.viewmodel.mock';
 import { EditorViewModel } from '../editor.viewmodel';
 
 @Component({
   selector: 'campus-editor-timeline',
   templateUrl: './editor-timeline.component.html',
-  styleUrls: ['./editor-timeline.component.scss'],
-  providers: [{ provide: EditorViewModel, useClass: MockEditorViewModel }]
+  styleUrls: ['./editor-timeline.component.scss']
 })
 export class EditorTimelineComponent implements OnInit, OnChanges {
   public slideList$: Observable<TimelineViewSlideInterface[]>;

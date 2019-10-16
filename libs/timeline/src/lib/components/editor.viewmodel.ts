@@ -88,6 +88,9 @@ export class EditorViewModel {
   public updateSettings(newSettings: TimelineSettingsInterface) {
     const data = { ...this.data$.value, ...newSettings };
 
+    // Persist changes
+    this.updateTimeline(data).subscribe();
+
     this.data$.next(data);
   }
 

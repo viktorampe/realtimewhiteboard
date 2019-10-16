@@ -17,7 +17,7 @@ import { TimelineSettingsInterface } from '../../interfaces/timeline';
   styleUrls: ['./settings.component.scss']
 })
 export class SettingsComponent implements OnInit, OnDestroy {
-  @Input() settings: Observable<TimelineSettingsInterface>;
+  @Input() settings: TimelineSettingsInterface;
 
   @Output() isDirty$: Observable<boolean>;
   //@Output() saveSettings: TimelineSettingsInterface;
@@ -51,25 +51,21 @@ export class SettingsComponent implements OnInit, OnDestroy {
   }
 
   private initialStreams() {
-    this.subscriptions = new Subscription();
-    this.subscriptions.add(
-      this.settings.subscribe(settings => {
-        this.settingsForm
-          .get('scaleFactor')
-          .setValue(
-            settings.options.scale_factor || this.formDefaults.scaleFactor
-          );
-        this.settingsForm
-          .get('humanCosmological')
-          .setValue(
-            (settings.scale || this.formDefaults.humanCosmological) ===
-              'cosmological'
-          );
-        this.settingsForm
-          .get('relative')
-          .setValue(settings.options.relative || this.formDefaults.relative);
-      })
-    );
+    this.settingsForm
+      .get('scaleFactor')
+      .setValue(
+        this.settings.options.scale_factor || this.formDefaults.scaleFactor
+      );
+    this.settingsForm
+      .get('humanCosmological')
+      .setValue(
+        (this.settings.scale || this.formDefaults.humanCosmological) ===
+          'cosmological'
+      );
+    this.settingsForm
+      .get('relative')
+      .setValue(this.settings.options.relative || this.formDefaults.relative);
+
     this.initialFormValues = { ...this.settingsForm.value };
     this.isDirty$ = this.settingsForm.valueChanges.pipe(
       debounceTime(300),
