@@ -51,7 +51,7 @@
       class="timeline-editor__main__detail--settings"
       (saveSettings)="saveSettings($event)"
       [settings]="settings"
-      (isDirty)="setIsFormDirty($isDirty)"
+      (isDirty)="setIsFormDirty(isFormDirty$)"
     ></campus-settings>
   </div>
 </div>

@@ -1,13 +1,6 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnDestroy,
-  OnInit,
-  Output
-} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Observable, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 import { debounceTime, map, startWith } from 'rxjs/operators';
 import { TimelineSettingsInterface } from '../../interfaces/timeline';
 
@@ -16,7 +9,7 @@ import { TimelineSettingsInterface } from '../../interfaces/timeline';
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.scss']
 })
-export class SettingsComponent implements OnInit, OnDestroy {
+export class SettingsComponent implements OnInit {
   @Input() settings: TimelineSettingsInterface;
 
   @Output() isDirty$: Observable<boolean>;
@@ -24,7 +17,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
   @Output() saveSettings = new EventEmitter<TimelineSettingsInterface>();
   public settingsForm: FormGroup;
   private initialFormValues: any; // used for isDirty$
-  private subscriptions: Subscription;
   private formDefaults = {
     scaleFactor: 1,
     humanCosmological: 'human',
@@ -38,34 +30,25 @@ export class SettingsComponent implements OnInit, OnDestroy {
     this.initialStreams();
   }
 
-  ngOnDestroy() {
-    this.subscriptions.unsubscribe();
-  }
-
   private buildForm(): FormGroup {
-    return this.fb.group({
-      scaleFactor: 1,
-      humanCosmological: false,
-      relative: false
-    });
+    let settings;
+    if (this.settings) {
+      settings = { ...this.settings.options, scale: this.settings.scale };
+    }
+
+    return this.fb.group(
+      Object.assign(
+        {
+          scaleFactor: 1,
+          humanCosmological: false,
+          relative: false
+        },
+        settings
+      )
+    );
   }
 
   private initialStreams() {
-    this.settingsForm
-      .get('scaleFactor')
-      .setValue(
-        this.settings.options.scale_factor || this.formDefaults.scaleFactor
-      );
-    this.settingsForm
-      .get('humanCosmological')
-      .setValue(
-        (this.settings.scale || this.formDefaults.humanCosmological) ===
-          'cosmological'
-      );
-    this.settingsForm
-      .get('relative')
-      .setValue(this.settings.options.relative || this.formDefaults.relative);
-
     this.initialFormValues = { ...this.settingsForm.value };
     this.isDirty$ = this.settingsForm.valueChanges.pipe(
       debounceTime(300),
