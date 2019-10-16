@@ -4,7 +4,6 @@ import { InjectionToken, NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import {
   MatButtonModule,
-  MatFormFieldModule,
   MatDatepickerModule,
   MatFormFieldModule,
   MatIconModule,
@@ -14,13 +13,9 @@ import {
   MatNativeDateModule,
   MatRadioModule,
   MatStepperModule
-  MatInputModule,
-  MatListModule,
-  MatRadioModule
 } from '@angular/material';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { DomSanitizer } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import 'hammerjs';
 import { EditorTimelineComponent } from './components/editor-timeline/editor-timeline.component';
@@ -50,7 +45,7 @@ export const ENVIRONMENT_ICON_MAPPING_TOKEN = new InjectionToken(
     MatStepperModule,
     MatIconModule,
     HttpClientModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
     MatIconModule,
     ReactiveFormsModule,
     MatFormFieldModule,

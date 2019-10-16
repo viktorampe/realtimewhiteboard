@@ -8,8 +8,9 @@ import {
   MatListModule
 } from '@angular/material';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import 'hammerjs';
+import { TimelineSettingsInterface } from '../../interfaces/timeline';
 import { SettingsComponent } from './settings.component';
 
 describe('SettingsComponent', () => {
@@ -26,7 +27,7 @@ describe('SettingsComponent', () => {
         MatListModule,
         ReactiveFormsModule,
         MatSlideToggleModule,
-        BrowserAnimationsModule
+        NoopAnimationsModule
       ],
       declarations: [SettingsComponent]
     }).compileComponents();
@@ -51,9 +52,13 @@ describe('SettingsComponent', () => {
   });
 
   it('should have the same values as the input', () => {
-    const mockViewSlide = {
-      scale: 'human',
+    const mockSettings: TimelineSettingsInterface = {
+      scale: 'cosmological',
       options: { relative: false, scale_factor: 3 }
     };
+    component.settings = mockSettings;
+    component.ngOnInit();
+    fixture.detectChanges();
+    expect(component.settingsForm.get('humanCosmological').value).toEqual(true);
   });
 });

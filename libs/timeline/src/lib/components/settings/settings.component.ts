@@ -18,8 +18,8 @@ export class SettingsComponent implements OnInit {
   public settingsForm: FormGroup;
   private initialFormValues: any; // used for isDirty$
   private formDefaults = {
-    scaleFactor: 1,
-    humanCosmological: 'human',
+    scale_factor: 1,
+    humanCosmological: false,
     relative: false
   };
 
@@ -33,19 +33,13 @@ export class SettingsComponent implements OnInit {
   private buildForm(): FormGroup {
     let settings;
     if (this.settings) {
-      settings = { ...this.settings.options, scale: this.settings.scale };
+      settings = {
+        ...this.settings.options,
+        humanCosmological: this.settings.scale === 'cosmological'
+      };
     }
 
-    return this.fb.group(
-      Object.assign(
-        {
-          scaleFactor: 1,
-          humanCosmological: false,
-          relative: false
-        },
-        settings
-      )
-    );
+    return this.fb.group(Object.assign({}, this.formDefaults, settings));
   }
 
   private initialStreams() {
@@ -66,14 +60,12 @@ export class SettingsComponent implements OnInit {
   onSubmit(): void {
     if (this.settingsForm.valid) {
       this.saveSettings.emit({
-        scale:
-          this.settingsForm.get('humanCosmological').value ||
-          this.formDefaults.humanCosmological,
+        scale: this.settingsForm.get('humanCosmological').value
+          ? 'cosmological'
+          : 'human',
         options: {
           relative: !!this.settingsForm.get('relative').value,
-          scale_factor:
-            this.settingsForm.get('scaleFactor').value ||
-            this.formDefaults.scaleFactor
+          scale_factor: this.settingsForm.get('scale_factor').value
         }
       });
     }
