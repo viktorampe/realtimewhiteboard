@@ -95,9 +95,11 @@ export class SlideDetailComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.viewSlide) {
-      this.formData = this.mapViewSlideToFormData(this.viewSlide);
-      this.updateFormData();
+    if (changes.viewSlide && !changes.viewSlide.firstChange) {
+      this.formData = this.mapViewSlideToFormData(
+        changes.viewSlide.currentValue
+      );
+      this.slideForm.patchValue(this.formData);
     }
 
     if (changes.fileUploadResult && !changes.fileUploadResult.firstChange) {
@@ -150,13 +152,6 @@ export class SlideDetailComponent implements OnInit, OnChanges {
     });
   }
 
-  private updateFormData() {
-    if (!this.slideForm) {
-      return;
-    }
-    this.slideForm.patchValue(this.formData);
-  }
-
   private getDateFormGroup(formGroupKey: 'start_date' | 'end_date'): FormGroup {
     return this.fb.group({
       year: [
@@ -195,10 +190,6 @@ export class SlideDetailComponent implements OnInit, OnChanges {
 
   private getControl(name: string): FormControl {
     return this.slideForm.get(name) as FormControl;
-  }
-
-  private getFormGroup(name: string): FormGroup {
-    return this.slideForm.get(name) as FormGroup;
   }
 
   private initializeStreams() {
@@ -264,10 +255,10 @@ export class SlideDetailComponent implements OnInit, OnChanges {
   private mapViewSlideToFormData(
     viewSlide: TimelineViewSlideInterface
   ): SlideFormInterface {
-    const formData: SlideFormInterface = {
-      ...this.getInitialSlideForm(), // set all properties
-      ...viewSlide.viewSlide // override default properties
-    };
+    const formData: SlideFormInterface = this.deepMergeObjects(
+      this.getInitialSlideForm(),
+      viewSlide.viewSlide
+    );
 
     viewSlide.viewSlide = viewSlide.viewSlide as TimelineSlideInterface;
 
@@ -279,6 +270,17 @@ export class SlideDetailComponent implements OnInit, OnChanges {
     };
 
     return formData;
+  }
+
+  private deepMergeObjects(source, assign) {
+    Object.keys(assign).forEach(key => {
+      if (assign[key] === Object(assign[key])) {
+        // is an object?
+        return this.deepMergeObjects(source[key], assign[key]);
+      }
+      source[key] = assign[key];
+    });
+    return source;
   }
 
   private mapFormDataToViewSlide(
