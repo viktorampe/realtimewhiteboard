@@ -91,6 +91,15 @@ describe('SlideDetailComponent', () => {
     });
   });
 
+  describe('handleColorPick()', () => {
+    it('should set the value of the background color formcontrol to the picked color', () => {
+      component.handleColorPick('fooColor');
+      expect(component.slideForm.get('background.color').value).toBe(
+        'fooColor'
+      );
+    });
+  });
+
   describe('onSubmit()', () => {
     let saveViewSlideSpy: jest.SpyInstance;
 
