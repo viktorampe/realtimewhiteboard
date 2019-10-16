@@ -154,32 +154,7 @@ export class SlideDetailComponent implements OnInit, OnChanges {
     if (!this.slideForm) {
       return;
     }
-    this.slideForm.patchValue({
-      general: {
-        type: this.formData.general.type,
-        group: this.formData.general.group,
-        display_date: this.formData.general.display_date
-      },
-      start_date: this.getDateFormGroup('start_date'),
-      end_date: this.getDateFormGroup('end_date'),
-      text: {
-        headline: this.formData.text.headline,
-        text: this.formData.text.text
-      },
-      background: {
-        url: this.formData.background.url,
-        color: this.formData.background.color
-      },
-      media: {
-        url: this.formData.media.url,
-        caption: this.formData.media.caption,
-        credit: this.formData.media.credit,
-        thumbnail: this.formData.media.thumbnail,
-        alt: this.formData.media.alt,
-        title: this.formData.media.title,
-        link: this.formData.media.link
-      }
-    });
+    this.slideForm.patchValue(this.formData);
   }
 
   private getDateFormGroup(formGroupKey: 'start_date' | 'end_date'): FormGroup {
