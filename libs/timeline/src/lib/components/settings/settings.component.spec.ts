@@ -36,8 +36,8 @@ describe('SettingsComponent', () => {
     fixture = TestBed.createComponent(SettingsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-    component.settingsForm.setErrors(null); // make the form valid
-    component.settingsForm.updateValueAndValidity(); // make sure the form knows it's valid
+    component.settingsForm.setErrors(null);
+    component.settingsForm.updateValueAndValidity();
   });
 
   it('should create', () => {
@@ -48,6 +48,12 @@ describe('SettingsComponent', () => {
     const saveSettingSpy = jest.spyOn(component.saveSettings, 'emit');
     component.onSubmit();
     expect(saveSettingSpy).toHaveBeenCalled();
-    expect(saveSettingSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it('should have the same values as the input', () => {
+    const mockViewSlide = {
+      scale: 'human',
+      options: { relative: false, scale_factor: 3 }
+    };
   });
 });
