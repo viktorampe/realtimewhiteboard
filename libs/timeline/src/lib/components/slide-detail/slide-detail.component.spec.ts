@@ -156,19 +156,19 @@ describe('SlideDetailComponent', () => {
         end_dateYearControl.updateValueAndValidity();
       });
 
-      it('should update for type era', () => {
+      it('should update validators for type era', () => {
         typeControl.setValue(TIMELINE_SLIDE_TYPES.ERA);
         expect(start_dateYearControl.getError('required')).toBe(true);
         expect(end_dateYearControl.getError('required')).toEqual(true);
       });
 
-      it('should update for type slide', () => {
+      it('should update validators for type slide', () => {
         typeControl.setValue(TIMELINE_SLIDE_TYPES.SLIDE);
         expect(start_dateYearControl.getError('required')).toEqual(true);
         expect(end_dateYearControl.getError('required')).toEqual(null); // optional when slide
       });
 
-      it('should update for type title', () => {
+      it('should update validators for type title', () => {
         typeControl.setValue(TIMELINE_SLIDE_TYPES.TITLE);
         expect(start_dateYearControl.getError('required')).toEqual(null); // optional when title
         expect(end_dateYearControl.getError('required')).toEqual(null); // optional when slide
