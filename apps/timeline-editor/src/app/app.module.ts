@@ -1,6 +1,6 @@
 import { Injector, NgModule } from '@angular/core';
 import { createCustomElement } from '@angular/elements';
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 import {
   ENVIRONMENT_API_TOKEN,
@@ -13,7 +13,7 @@ import { TimelineEditorComponent } from './timeline-editor/timeline-editor.compo
 @NgModule({
   declarations: [TimelineEditorComponent],
   imports: [
-    BrowserModule,
+    BrowserAnimationsModule,
     RouterModule.forRoot([], { initialNavigation: 'enabled' }),
     TimelineModule
   ],
