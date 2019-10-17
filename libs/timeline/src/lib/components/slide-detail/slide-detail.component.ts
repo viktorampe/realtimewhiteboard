@@ -17,8 +17,9 @@ import {
 } from '@angular/forms';
 import { MatStepper } from '@angular/material';
 import { Observable } from 'rxjs';
-import { debounceTime, map, shareReplay, startWith, tap } from 'rxjs/operators';
+import { map, shareReplay, startWith, tap } from 'rxjs/operators';
 import {
+  TimelineDateInterface,
   TimelineEraInterface,
   TimelineSlideInterface,
   TimelineViewSlideInterface,
@@ -76,24 +77,31 @@ export class SlideDetailComponent implements OnInit, OnChanges {
   @HostBinding('class.timeline-slide-detail')
   setTimelineSlideDetailClass = true;
 
-  private initialFormValues: any; // used for isDirty$
+  private initialFormValues: SlideFormInterface; // used for isDirty$
   private formData: SlideFormInterface;
 
   slideForm: FormGroup;
   slideTypes: { label: string; value: TIMELINE_SLIDE_TYPES }[] = [
     { label: 'titelslide', value: TIMELINE_SLIDE_TYPES.TITLE },
-    { label: 'slide', value: TIMELINE_SLIDE_TYPES.SLIDE },
-    { label: 'era', value: TIMELINE_SLIDE_TYPES.ERA }
+    { label: 'gebeurtenis', value: TIMELINE_SLIDE_TYPES.SLIDE },
+    { label: 'tijdspanne', value: TIMELINE_SLIDE_TYPES.ERA }
   ];
   slideTypesEnum = TIMELINE_SLIDE_TYPES;
 
   chosenType$: Observable<string>;
 
+  // used for setting the required * in the template
+  requiredFieldsMap = {
+    'start_date.year': true,
+    'end_date.year': false
+  };
+
   constructor(private fb: FormBuilder) {}
 
   ngOnInit() {
     this.formData = this.mapViewSlideToFormData(this.viewSlide);
-    this.slideForm = this.buildForm();
+    this.slideForm = this.buildForm(); // first time --> build form + add values
+
     this.initialFormValues = { ...this.slideForm.value }; // used for isDirty check
     this.initializeStreams();
   }
@@ -104,9 +112,9 @@ export class SlideDetailComponent implements OnInit, OnChanges {
       this.formData = this.mapViewSlideToFormData(
         changes.viewSlide.currentValue
       );
+      // form already exists --> update form values
       this.slideForm.patchValue(this.formData);
     }
-
     if (changes.fileUploadResult && !changes.fileUploadResult.firstChange) {
       this.getControl(
         changes.fileUploadResult.currentValue.formControlName
@@ -117,7 +125,7 @@ export class SlideDetailComponent implements OnInit, OnChanges {
   handleFileInput(files: FileList, formControlName: FormControlName) {
     this.fileUploadResult = { url: '', formControlName };
     const fileToUpload: File = files.item(0);
-    this.uploadFile.next({ file: fileToUpload, formControlName });
+    this.uploadFile.emit({ file: fileToUpload, formControlName });
   }
 
   handleColorPick(color: string): void {
@@ -130,6 +138,72 @@ export class SlideDetailComponent implements OnInit, OnChanges {
 
   goForward() {
     this.stepper.next();
+  }
+
+  getErrorMessage(field: string): string {
+    let errorMessage = '';
+    const control = this.getControl(field);
+    switch (field) {
+      case 'start_date.year':
+        errorMessage = control.hasError('required')
+          ? 'Je moet een startjaar invullen.'
+          : 'Je hebt een ongeldig jaar ingevuld.';
+        break;
+      case 'end_date.year':
+        errorMessage = control.hasError('required')
+          ? 'Je moet een eindjaar invullen.'
+          : 'Je hebt een ongeldig jaar ingevuld.';
+        break;
+      case 'start_date.month':
+      case 'end_date.month':
+        errorMessage =
+          control.hasError('min') || control.hasError('max')
+            ? 'De maand is een getal van 1 (januari) tot en met 12 (december).'
+            : 'Je hebt een ongeldige maand ingevuld.';
+        break;
+      case 'start_date.day':
+      case 'end_date.day':
+        errorMessage =
+          control.hasError('min') || control.hasError('max')
+            ? 'De dag is een getal van 1 tot en met 31.'
+            : 'Je hebt een ongeldige dag ingevuld.';
+        break;
+      case 'start_date.hour':
+      case 'end_date.hour':
+        errorMessage =
+          control.hasError('min') || control.hasError('max')
+            ? 'Het uur is een getal van 0 tot en met 23.'
+            : 'Je hebt een ongeldig uur ingevuld.';
+        break;
+      case 'start_date.minute':
+      case 'end_date.minute':
+        errorMessage =
+          control.hasError('min') || control.hasError('max')
+            ? 'De minuut is een getal van 0 tot en met 59.'
+            : 'Je hebt een ongeldige minuut ingevuld.';
+        break;
+      case 'start_date.second':
+      case 'end_date.second':
+        errorMessage =
+          control.hasError('min') || control.hasError('max')
+            ? 'De seconde is een getal van 0 tot en met 59.'
+            : 'Je hebt een ongeldige seconde ingevuld.';
+        break;
+      case 'start_date.millisecond':
+      case 'end_date.millisecond':
+        errorMessage = control.hasError('min')
+          ? 'De milliseconde kan niet minder dan 0 zijn.'
+          : 'Je hebt een ongeldige minuut ingevuld.';
+        break;
+
+      default:
+        break;
+    }
+    return errorMessage;
+  }
+
+  getFormGroup(formGroupName: string): FormGroup {
+    return this.slideForm.get(formGroupName) as FormGroup;
   }
 
   private buildForm(): FormGroup {
@@ -165,39 +239,58 @@ export class SlideDetailComponent implements OnInit, OnChanges {
     });
   }
 
+  private getDateValue(dateValue: number, isZeroPossible: boolean): number {
+    if (isZeroPossible) {
+      return dateValue === 0 ? 0 : dateValue || null;
+    } else {
+      return dateValue || null;
+    }
+  }
+
+  private getDateValues(
+    timelineDate: TimelineDateInterface
+  ): TimelineDateInterface {
+    if (!timelineDate) return { year: null };
+
+    Object.keys(timelineDate).forEach(key => {
+      let isZeroPossible = true;
+      if (key === 'display_date')
+        return (timelineDate[key] = timelineDate[key]);
+      if (key === 'month') isZeroPossible = false;
+
+      timelineDate[key] = this.getDateValue(timelineDate[key], isZeroPossible);
+    });
+    return timelineDate;
+  }
+
   private getDateFormGroup(formGroupKey: 'start_date' | 'end_date'): FormGroup {
     return this.fb.group({
-      year: [
-        this.formData[formGroupKey].year === 0
-          ? 0 // user has chosen number 0
-          : this.formData[formGroupKey].year || null,
-        [Validators.required]
-      ],
+      year: [this.formData[formGroupKey].year, [Validators.required]],
       month: [
-        this.formData[formGroupKey].month || null,
+        this.formData[formGroupKey].month,
         [Validators.min(1), Validators.max(12), Validators.maxLength(2)]
       ],
-      day: [this.formData[formGroupKey].day || null, [Validators.min(1)]],
+      day: [
+        this.formData[formGroupKey].day,
+        [Validators.min(1), Validators.max(23)]
+      ],
       hour: [
-        this.formData[formGroupKey].hour === 0
-          ? 0
-          : this.formData[formGroupKey].hour || null,
+        this.formData[formGroupKey].hour,
         [Validators.min(0), Validators.max(23), Validators.maxLength(2)]
       ],
       minute: [
-        this.formData[formGroupKey].minute === 0
-          ? 0
-          : this.formData[formGroupKey].minute || null,
+        this.formData[formGroupKey].minute,
         [Validators.min(0), Validators.max(59), Validators.maxLength(2)]
       ],
       second: [
-        this.formData[formGroupKey].second === 0
-          ? 0
-          : this.formData[formGroupKey].second || null,
+        this.formData[formGroupKey].second,
         [Validators.min(0), Validators.max(59), Validators.maxLength(2)]
       ],
-      millisecond: [this.formData[formGroupKey].millisecond || null],
-      displayDate: [this.formData[formGroupKey].display_date || '']
+      millisecond: [
+        this.formData[formGroupKey].millisecond,
+        [Validators.min(0)]
+      ],
+      display_date: [this.formData[formGroupKey].display_date || '']
     });
   }
 
@@ -215,7 +308,6 @@ export class SlideDetailComponent implements OnInit, OnChanges {
     );
 
     this.isDirty$ = this.slideForm.valueChanges.pipe(
-      debounceTime(300),
       map(
         updatedFormValues =>
           JSON.stringify(updatedFormValues) !==
@@ -230,11 +322,15 @@ export class SlideDetailComponent implements OnInit, OnChanges {
     this.setFormControlAsOptional('start_date.year');
     this.setFormControlAsOptional('end_date.year');
 
+    this.requiredFieldsMap['start_date.year'] = false;
+    this.requiredFieldsMap['end_date.year'] = false;
+
     switch (type) {
       case TIMELINE_SLIDE_TYPES.SLIDE:
         // start_date is required
         // end_date is optional
         this.setFormControlAsRequired('start_date.year');
+        this.requiredFieldsMap['start_date.year'] = true;
         break;
       case TIMELINE_SLIDE_TYPES.TITLE:
         // same as slide, except the start_date is optional
@@ -245,6 +341,8 @@ export class SlideDetailComponent implements OnInit, OnChanges {
         // media url is optional
         this.setFormControlAsRequired('start_date.year');
         this.setFormControlAsRequired('end_date.year');
+        this.requiredFieldsMap['start_date.year'] = true;
+        this.requiredFieldsMap['end_date.year'] = true;
         break;
       default:
         throw new Error('type not recognised');
@@ -272,6 +370,9 @@ export class SlideDetailComponent implements OnInit, OnChanges {
     );
 
     viewSlide.viewSlide = viewSlide.viewSlide as TimelineSlideInterface;
+
+    formData.start_date = this.getDateValues(formData.start_date);
+    formData.end_date = this.getDateValues(formData.end_date);
 
     // add properties that are used by the form, but not needed for the view slide
     formData.general = {

@@ -103,6 +103,10 @@
   }
 }
 
+:host ::ng-deep .mat-error {
+  margin-bottom: 10px;
+}
+
 :host ::ng-deep .date-form-line .mat-form-field-infix {
   width: unset !important;
 }
