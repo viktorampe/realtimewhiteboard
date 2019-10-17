@@ -163,7 +163,7 @@
             class="timeline-slide-detail__form__tooltip__trigger"
             [matTooltip]="tooltips['text']"
             [matTooltipClass]="'timeline-slide-detail__form__tooltip'"
-            *ngIf="tooltips['text']"
+            *ngIf="tooltips['text'] && slideType !== slideTypesEnum.ERA"
             >i</div
           >
         </div>
