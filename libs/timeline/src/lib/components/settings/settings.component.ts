@@ -94,13 +94,11 @@ export class SettingsComponent implements OnInit {
   private getTooltipDictionary() {
     return {
       visual:
-        'titel: een speciaal soort gebeurtenis, wordt als eerste getoond bij het laden van een tijdslijn.\n' +
-        'Een tijdslijn heeft maximum 1 titel.\n\n' +
-        'gebeurtenis: de standaard bouwblok van een tijdslijn.\n\n' +
-        'tijdspanne: dient om in de tijdslijnbalk onderaan een periode aan te duiden.',
+        'Dient om de lay-out te bepalen.\n' +
+        'Absoluut komt overeen met een normale tijd.\n' +
+        'Relatief komt niet overeen met een exact tijdstip, bvb: levensjaren',
       cosmological:
-        'optioneel\n' +
-        'Gebeurtenissen en tijdspannes met de zelfde groep krijgen op de tijdslijnbalk een eigen rij'
+        'Gebruik kosmologisch voor een tijdslijn die een heel groot bereik nodig heeft.'
     };
   }
 }
