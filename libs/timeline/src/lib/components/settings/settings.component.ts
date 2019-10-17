@@ -5,8 +5,7 @@ import {
   Input,
   OnDestroy,
   OnInit,
-  Output,
-  ViewEncapsulation
+  Output
 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MAT_TOOLTIP_DEFAULT_OPTIONS } from '@angular/material';
@@ -19,8 +18,7 @@ import { TimelineSettingsInterface } from '../../interfaces/timeline';
   styleUrls: ['./settings.component.scss'],
   providers: [
     { provide: MAT_TOOLTIP_DEFAULT_OPTIONS, useValue: { position: 'after' } }
-  ],
-  encapsulation: ViewEncapsulation.None
+  ]
 })
 export class SettingsComponent implements OnInit, OnDestroy {
   public settingsForm: FormGroup;
