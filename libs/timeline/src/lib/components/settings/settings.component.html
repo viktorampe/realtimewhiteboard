@@ -1,4 +1,5 @@
 <form [formGroup]="settingsForm">
+  <h4>Instellingen</h4>
   <section class="timeline-settings__section">
     Human
     <mat-slide-toggle formControlName="humanCosmological"> </mat-slide-toggle>
@@ -19,5 +20,5 @@
       />
     </mat-form-field>
   </section>
-  <button mat-button (click)="onSubmit()">Opslaan</button>
+  <button mat-button mat-stroked-button (click)="onSubmit()">Opslaan</button>
 </form>
