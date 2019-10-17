@@ -32,6 +32,7 @@ export class EditorTimelineComponent implements OnInit, OnChanges, OnDestroy {
   public activeSlideDetail$: Observable<TimelineViewSlideInterface>;
   public settings$: Observable<TimelineSettingsInterface>;
   public isFormDirty$: Observable<boolean>;
+  public canBeSavedAsTitle$: Observable<boolean>;
   public fileUploadResult$ = new Subject<FileUploadResult>();
 
   @Input() eduContentMetadataId: number;
@@ -50,6 +51,7 @@ export class EditorTimelineComponent implements OnInit, OnChanges, OnDestroy {
     this.activeSlide$ = this.editorViewModel.activeSlide$;
     this.settings$ = this.editorViewModel.settings$;
     this.isFormDirty$ = this.editorViewModel.isFormDirty$;
+    this.canBeSavedAsTitle$ = this.editorViewModel.activeSlideDetailCanSaveAsTitle$;
 
     this.subscriptions.add(
       this.editorViewModel.errors$.subscribe(error => {
