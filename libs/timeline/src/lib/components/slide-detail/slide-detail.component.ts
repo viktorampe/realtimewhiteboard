@@ -173,6 +173,12 @@ export class SlideDetailComponent implements OnInit, OnChanges {
     return errorMessage;
   }
 
+  getFormGroup(formGroupName:string):FormGroup{
+    return this.slideForm.get(formGroupName) as FormGroup;
+  }
+
+
+
   private buildForm(): FormGroup {
     // validation defaults:
     //  - type: always required
