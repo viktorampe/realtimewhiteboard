@@ -7,6 +7,7 @@ import {
   ENVIRONMENT_ICON_MAPPING_TOKEN,
   TimelineModule
 } from '@campus/timeline';
+import 'hammerjs';
 import { environment } from '../environments/environment';
 import { TimelineEditorComponent } from './timeline-editor/timeline-editor.component';
 
