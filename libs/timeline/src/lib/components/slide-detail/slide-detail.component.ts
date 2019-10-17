@@ -1,30 +1,9 @@
-import {
-  Component,
-  EventEmitter,
-  HostBinding,
-  Input,
-  OnChanges,
-  OnInit,
-  Output,
-  SimpleChanges,
-  ViewChild,
-  ViewEncapsulation
-} from '@angular/core';
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators
-} from '@angular/forms';
+import { Component, EventEmitter, HostBinding, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild, ViewEncapsulation } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatStepper, MAT_TOOLTIP_DEFAULT_OPTIONS } from '@angular/material';
 import { Observable } from 'rxjs';
 import { debounceTime, map, shareReplay, startWith, tap } from 'rxjs/operators';
-import {
-  TimelineEraInterface,
-  TimelineSlideInterface,
-  TimelineViewSlideInterface,
-  TIMELINE_SLIDE_TYPES
-} from '../../interfaces/timeline';
+import { TimelineEraInterface, TimelineSlideInterface, TimelineViewSlideInterface, TIMELINE_SLIDE_TYPES } from '../../interfaces/timeline';
 
 interface SlideFormInterface extends TimelineSlideInterface {
   general?: {
@@ -424,24 +403,50 @@ export class SlideDetailComponent implements OnInit, OnChanges {
         'tijdspanne: dient om in de tijdslijnbalk onderaan een periode aan te duiden.',
       group:
         'optioneel\n' +
-        'Gebeurtenissen en tijdspannes met de zelfde groep krijgen op de tijdslijnbalk een eigen rij',
+        'Gebeurtenissen en tijdspannes met de zelfde groep krijgen op de tijdslijnbalk een eigen rij.',
       display_date:
         'optioneel\n' +
-        'Deze tekst wordt getoond in plaats van de ingevoerde datum',
-      start_date: '1',
-      end_date: '1',
-      headline: '1',
-      text: '1',
-      background: '1',
-      url: '1',
-      color: '1',
-      media: '1',
-      caption: '1',
-      credit: '1',
-      thumbnail: '1',
-      alt: '1',
-      title: '1',
-      link: '1'
+        'Deze tekst wordt getoond in plaats van de ingevoerde datum.',
+      start_date:
+        'optioneel voor een titel\n' +
+        'Deze datum wordt ook gebruikt om de gebeurtenissen en tijdspannes te ordenen.\n' +
+        'Een datum bevat minimaal een jaar.',
+      end_date:
+        'optioneel voor een titel en een gebeurtenis\n' +
+        'Een datum bevat minimaal een jaar.',
+      headline: 'optioneel, aangeraden \n' + 'De titel van de slide',
+      text: 'optioneel, aangeraden \n' + 'De beschrijvende tekst van de slide',
+      background:
+        'optioneel \n' +
+        'Gebruik de knop om een bestand op te laden, \n' +
+        'of vul zelf een url in. (incl. http:// )',
+      color: 'optioneel \n' + 'Gebruik de knop om een kleur te kiezen',
+      url:
+        'optioneel \n' +
+        'Gebruik de knop om een bestand op te laden, \n' +
+        'of vul zelf een url in. (incl. http:// )',
+      thumbnail:
+        'optioneel \n' +
+        'Gebruik de knop om een bestand op te laden, \n' +
+        'of vul zelf een url in. (incl. http:// )',
+      caption:
+        'optioneel \n' +
+        'Het bijschrift van het media element.\n' +
+        'Dit komt onder het media element.',
+      credit:
+        'optioneel \n' +
+        'De bronvermelding van het media element.\n' +
+        'Dit komt direct onder het media element.',
+      alt:
+        'optioneel \n' +
+        'De alternatieve tekst als het media element niet kan weergegeven worden. \n' +
+        'Standaardwaarde: bijschrift, indien ingevuld',
+      title:
+        'optioneel \n' +
+        'De titel van het media element, \n' +
+        'wordt getoond als de muisaanwijzer zweeft boven het media element \n' +
+        'Standaardwaarde: bijschrift, indien ingevuld',
+      link: 'optioneel \n' + 'De hyperlink van het media element.'
     };
   }
 }

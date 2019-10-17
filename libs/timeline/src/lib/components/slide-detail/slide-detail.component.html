@@ -251,6 +251,8 @@
       >
         <div class="timeline-slide-detail__form__section">
           <div class="mat-h3">Media</div>
+          <div class="mat-h5"
+          >Media element</div>
           <div class="timeline-slide-detail__form__file-upload">
             <button mat-button (click)="mediaUrlInput.click()"
               >Upload een bestand ...</button
@@ -271,12 +273,14 @@
             </mat-form-field>
             <div
               class="timeline-slide-detail__form__tooltip__trigger"
-              [matTooltip]="tooltips['media']"
+              [matTooltip]="tooltips['url']"
               [matTooltipClass]="'timeline-slide-detail__form__tooltip'"
-              *ngIf="tooltips['media']"
+              *ngIf="tooltips['url']"
               >i</div
             >
           </div>
+          <div class="mat-h5"
+              >Thumbnail</div>
           <div class="timeline-slide-detail__form__file-upload">
             <button mat-button (click)="mediaThumbnailUrlInput.click()"
               >Upload een bestand ...</button
@@ -308,7 +312,7 @@
               matInput
               type="string"
               formControlName="caption"
-              placeholder="Caption"
+              placeholder="Bijschrift"
             />
           </mat-form-field>
           <div
@@ -323,7 +327,7 @@
               matInput
               type="string"
               formControlName="credit"
-              placeholder="Credit"
+              placeholder="Bronvermelding"
             />
           </mat-form-field>
           <div
@@ -339,7 +343,7 @@
               matInput
               type="string"
               formControlName="alt"
-              placeholder="Alt"
+              placeholder="Alternatieve tekst"
             />
           </mat-form-field>
           <div
