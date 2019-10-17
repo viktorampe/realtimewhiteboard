@@ -15,6 +15,7 @@ import { MockMatIconRegistry } from '@campus/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { TimelineSlideFixture } from '../../+fixtures/timeline-slide.fixture';
 import {
+  TimelineEraInterface,
   TimelineSlideInterface,
   TimelineViewSlideInterface,
   TIMELINE_SLIDE_TYPES
@@ -69,7 +70,13 @@ describe('SlideDetailComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  xdescribe('viewslide data to  form data', () => {
+  it('should initialize the streams and properties', () => {
+    expect(component.slideForm).toBeDefined();
+    expect(component.chosenType$).toBeDefined();
+    expect(component.isDirty$).toBeDefined();
+  });
+
+  describe('mapping viewslide data to  form data', () => {
     const testCases = [
       {
         viewSlide: {
@@ -245,13 +252,13 @@ describe('SlideDetailComponent', () => {
         component.slideForm.updateValueAndValidity(); // make sure the form knows it's valid
       });
 
-      it('should emit when the form data is valid', () => {
+      it('should trigger the saveViewSlide output when the form data is valid', () => {
         component.onSubmit();
         expect(saveViewSlideSpy).toHaveBeenCalled();
         expect(saveViewSlideSpy).toHaveBeenCalledTimes(1);
       });
 
-      it('should emit the updated viewSlide data', () => {
+      it('should emit the updated viewSlide data of type slide', () => {
         const mockViewSlide = {
           type: TIMELINE_SLIDE_TYPES.SLIDE,
           viewSlide: {
@@ -273,7 +280,7 @@ describe('SlideDetailComponent', () => {
               headline: 'foo headline'
             },
             background: { color: 'foo color' }
-          },
+          } as TimelineSlideInterface,
           label: 'foo label'
         };
 
@@ -306,6 +313,118 @@ describe('SlideDetailComponent', () => {
             },
             background: {
               color: 'foo color'
+            }
+          },
+          label: 'foo label'
+        };
+
+        expect(saveViewSlideSpy).toHaveBeenCalledWith(expectedOutput);
+      });
+
+      it('should emit the updated viewSlide data of type title', () => {
+        const mockViewSlide = {
+          type: TIMELINE_SLIDE_TYPES.TITLE,
+          viewSlide: {
+            start_date: {
+              year: 1,
+              month: 2,
+              day: 3,
+              display_date: 'title start'
+            },
+            end_date: {
+              year: 2,
+              month: 3,
+              day: 4,
+              display_date: 'title end'
+            },
+            group: 'title group',
+            text: {
+              text: 'title text',
+              headline: 'title headline'
+            },
+            background: { color: 'title color' }
+          } as TimelineSlideInterface,
+          label: 'title label'
+        };
+
+        component.viewSlide = mockViewSlide; // needed because the input value won't be changed by triggering ngOnChanges!
+        component.ngOnChanges({
+          viewSlide: new SimpleChange(null, mockViewSlide, false)
+        });
+
+        component.onSubmit();
+
+        const expectedOutput: TimelineViewSlideInterface = {
+          type: 1, // title
+          viewSlide: {
+            start_date: {
+              year: 1,
+              month: 2,
+              day: 3,
+              display_date: 'title start'
+            },
+            end_date: {
+              year: 2,
+              month: 3,
+              day: 4,
+              display_date: 'title end'
+            },
+            group: 'title group',
+            text: {
+              text: 'title text',
+              headline: 'title headline'
+            },
+            background: {
+              color: 'title color'
+            }
+          },
+          label: 'title label'
+        };
+
+        expect(saveViewSlideSpy).toHaveBeenCalledWith(expectedOutput);
+      });
+
+      it('should emit the updated viewSlide data of type era', () => {
+        const mockViewSlide = {
+          type: TIMELINE_SLIDE_TYPES.ERA,
+          viewSlide: {
+            start_date: {
+              year: 1,
+              month: 2,
+              day: 3,
+              display_date: 'foo start'
+            },
+            end_date: {
+              year: 2,
+              month: 3,
+              day: 4,
+              display_date: 'foo end'
+            }
+          } as TimelineEraInterface,
+          label: 'foo label'
+        };
+
+        component.viewSlide = mockViewSlide; // needed because the input value won't be changed by triggering ngOnChanges!
+        component.ngOnChanges({
+          viewSlide: new SimpleChange(null, mockViewSlide, false)
+        });
+
+        component.onSubmit();
+
+        const expectedOutput: TimelineViewSlideInterface = {
+          type: 2, // slide
+          viewSlide: {
+            start_date: {
+              year: 1,
+              month: 2,
+              day: 3,
+              display_date: 'foo start'
+            },
+            end_date: {
+              year: 2,
+              month: 3,
+              day: 4,
+              display_date: 'foo end'
             }
           },
           label: 'foo label'
