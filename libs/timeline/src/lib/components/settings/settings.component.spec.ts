@@ -4,7 +4,8 @@ import {
   MatButtonModule,
   MatFormFieldModule,
   MatIconModule,
-  MatInputModule
+  MatInputModule,
+  MatTooltipModule
 } from '@angular/material';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { HAMMER_LOADER } from '@angular/platform-browser';
@@ -24,6 +25,7 @@ describe('SettingsComponent', () => {
         MatFormFieldModule,
         MatIconModule,
         MatInputModule,
+        MatTooltipModule,
         ReactiveFormsModule,
         MatSlideToggleModule,
         NoopAnimationsModule
