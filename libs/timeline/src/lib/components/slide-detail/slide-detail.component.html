@@ -265,7 +265,9 @@
       </mat-step>
     </mat-horizontal-stepper>
 
-    <button mat-button (click)="onSubmit()">Opslaan</button>
+    <button mat-button [disabled]="slideForm.invalid" (click)="onSubmit()"
+      >Opslaan</button
+    >
   </form>
 </ng-container>
 
