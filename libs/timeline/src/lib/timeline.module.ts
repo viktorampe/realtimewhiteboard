@@ -12,13 +12,11 @@ import {
   MatListModule,
   MatNativeDateModule,
   MatRadioModule,
+  MatSlideToggleModule,
   MatStepperModule,
   MatTooltipModule
 } from '@angular/material';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { DomSanitizer } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import 'hammerjs';
 import { EditorTimelineComponent } from './components/editor-timeline/editor-timeline.component';
 import { SettingsComponent } from './components/settings/settings.component';
 import { SlideDetailComponent } from './components/slide-detail/slide-detail.component';
@@ -44,9 +42,10 @@ export const ENVIRONMENT_ICON_MAPPING_TOKEN = new InjectionToken(
     MatNativeDateModule,
     MatRadioModule,
     MatStepperModule,
+    MatSlideToggleModule,
     MatIconModule,
     HttpClientModule,
-    BrowserAnimationsModule,
+    CommonModule,
     MatIconModule,
     ReactiveFormsModule,
     MatFormFieldModule,
@@ -57,7 +56,6 @@ export const ENVIRONMENT_ICON_MAPPING_TOKEN = new InjectionToken(
     MatInputModule,
     MatRadioModule,
     MatSlideToggleModule,
-    BrowserAnimationsModule,
     MatTooltipModule
   ],
   declarations: [

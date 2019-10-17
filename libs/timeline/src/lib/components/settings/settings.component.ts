@@ -3,15 +3,16 @@ import {
   EventEmitter,
   HostBinding,
   Input,
+  OnDestroy,
   OnInit,
   Output,
   ViewEncapsulation
 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { Subscription } from 'rxjs';
 import { MAT_TOOLTIP_DEFAULT_OPTIONS } from '@angular/material';
 import { debounceTime, map, startWith } from 'rxjs/operators';
 import { TimelineSettingsInterface } from '../../interfaces/timeline';
-
 @Component({
   selector: 'campus-settings',
   templateUrl: './settings.component.html',
@@ -21,10 +22,11 @@ import { TimelineSettingsInterface } from '../../interfaces/timeline';
   ],
   encapsulation: ViewEncapsulation.None
 })
-export class SettingsComponent implements OnInit {
+export class SettingsComponent implements OnInit, OnDestroy {
   public settingsForm: FormGroup;
   private initialFormValues: string; // used for isDirty$
   public tooltips: { [key: string]: string };
+  private subscriptions: Subscription;
   private formDefaults = {
     scale_factor: 1,
     humanCosmological: false,
@@ -58,6 +60,8 @@ export class SettingsComponent implements OnInit {
         }
       });
     }
+    this.initialFormValues = JSON.stringify(this.settingsForm.value);
+    this.isDirty.emit(false);
   }
 
   private buildForm(): FormGroup {
@@ -75,20 +79,22 @@ export class SettingsComponent implements OnInit {
   }
 
   private initialStreams() {
+    this.subscriptions = new Subscription();
     this.initialFormValues = JSON.stringify(this.settingsForm.value);
 
-    // TODO unsubscribe on destroy
     // TODO test -> see Frederic -> has/had some issues
-    this.settingsForm.valueChanges
-      .pipe(
-        debounceTime(300),
-        map(
-          updatedFormValues =>
-            !(JSON.stringify(updatedFormValues) === this.initialFormValues)
-        ),
-        startWith(false)
-      )
-      .subscribe(value => this.isDirty.emit(value));
+    this.subscriptions.add(
+      this.settingsForm.valueChanges
+        .pipe(
+          debounceTime(300),
+          map(
+            updatedFormValues =>
+              JSON.stringify(updatedFormValues) !== this.initialFormValues
+          ),
+          startWith(false)
+        )
+        .subscribe(value => this.isDirty.emit(value))
+    );
   }
 
   private getTooltipDictionary() {
@@ -100,5 +106,9 @@ export class SettingsComponent implements OnInit {
       cosmological:
         'Gebruik kosmologisch voor een tijdslijn die een heel groot bereik nodig heeft.'
     };
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
   }
 }
