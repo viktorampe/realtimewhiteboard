@@ -1,9 +1,30 @@
-import { Component, EventEmitter, HostBinding, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  Component,
+  EventEmitter,
+  HostBinding,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges,
+  ViewChild
+} from '@angular/core';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators
+} from '@angular/forms';
 import { MatStepper } from '@angular/material';
 import { Observable } from 'rxjs';
 import { map, shareReplay, startWith, tap } from 'rxjs/operators';
-import { TimelineDateInterface, TimelineEraInterface, TimelineSlideInterface, TimelineViewSlideInterface, TIMELINE_SLIDE_TYPES } from '../../interfaces/timeline';
+import {
+  TimelineDateInterface,
+  TimelineEraInterface,
+  TimelineSlideInterface,
+  TimelineViewSlideInterface,
+  TIMELINE_SLIDE_TYPES
+} from '../../interfaces/timeline';
 
 interface SlideFormInterface extends TimelineSlideInterface {
   general?: {
@@ -258,8 +279,8 @@ export class SlideDetailComponent implements OnInit, OnChanges {
 
     viewSlide.viewSlide = viewSlide.viewSlide as TimelineSlideInterface;
 
-    formData.start_date = this.getDateValues(viewSlide.viewSlide.start_date);
-    formData.end_date = this.getDateValues(viewSlide.viewSlide.end_date);
+    formData.start_date = this.getDateValues(formData.start_date);
+    formData.end_date = this.getDateValues(formData.end_date);
 
     // add properties that are used by the form, but not needed for the view slide
     formData.general = {
