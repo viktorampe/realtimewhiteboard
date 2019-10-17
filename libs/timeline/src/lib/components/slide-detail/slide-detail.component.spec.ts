@@ -15,6 +15,7 @@ import { MockMatIconRegistry } from '@campus/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { TimelineSlideFixture } from '../../+fixtures/timeline-slide.fixture';
 import {
+  TimelineSlideInterface,
   TimelineViewSlideInterface,
   TIMELINE_SLIDE_TYPES
 } from '../../interfaces/timeline';
@@ -30,7 +31,7 @@ describe('SlideDetailComponent', () => {
   let fixture: ComponentFixture<SlideDetailComponent>;
   const viewSlideMock: TimelineViewSlideInterface = {
     type: TIMELINE_SLIDE_TYPES.SLIDE,
-    viewSlide: new TimelineSlideFixture(),
+    viewSlide: new TimelineSlideFixture({ group: 'foo group' }),
     label: 'foo'
   };
 
@@ -324,6 +325,36 @@ describe('SlideDetailComponent', () => {
 
         expect(saveViewSlideSpy).not.toHaveBeenCalled();
       });
+    });
+  });
+
+  describe('isDirty$', () => {
+    it('should emit true if the initial form values != updated form values', () => {
+      let isDirty: boolean;
+      component.isDirty$.subscribe(output => {
+        isDirty = output;
+      });
+
+      component.slideForm.patchValue({ general: { group: 'updated value' } });
+
+      expect(isDirty).toBe(true);
+    });
+
+    it('should emit false if the updated form values === initial form values', () => {
+      let isDirty: boolean;
+      component.isDirty$.subscribe(output => {
+        isDirty = output;
+      });
+
+      // needed because TimelineEraInterface does not have a group property
+      const viewSlideData = viewSlideMock.viewSlide as TimelineSlideInterface;
+
+      component.slideForm.patchValue({ general: { group: 'updated value' } });
+      component.slideForm.patchValue({
+        general: { group: viewSlideData.group }
+      }); // reset group value
+
+      expect(isDirty).toBe(false);
     });
   });
 });

@@ -1,27 +1,8 @@
-import {
-  Component,
-  EventEmitter,
-  HostBinding,
-  Input,
-  OnChanges,
-  OnInit,
-  Output,
-  SimpleChanges
-} from '@angular/core';
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators
-} from '@angular/forms';
+import { Component, EventEmitter, HostBinding, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { debounceTime, map, shareReplay, startWith, tap } from 'rxjs/operators';
-import {
-  TimelineEraInterface,
-  TimelineSlideInterface,
-  TimelineViewSlideInterface,
-  TIMELINE_SLIDE_TYPES
-} from '../../interfaces/timeline';
+import { map, shareReplay, startWith, tap } from 'rxjs/operators';
+import { TimelineEraInterface, TimelineSlideInterface, TimelineViewSlideInterface, TIMELINE_SLIDE_TYPES } from '../../interfaces/timeline';
 
 interface SlideFormInterface extends TimelineSlideInterface {
   general?: {
@@ -211,7 +192,6 @@ export class SlideDetailComponent implements OnInit, OnChanges {
     );
 
     this.isDirty$ = this.slideForm.valueChanges.pipe(
-      debounceTime(300),
       map(
         updatedFormValues =>
           !(
