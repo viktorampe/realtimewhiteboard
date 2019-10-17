@@ -1,5 +1,6 @@
-import { Component, EventEmitter, HostBinding, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, HostBinding, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatStepper } from '@angular/material';
 import { Observable } from 'rxjs';
 import { map, shareReplay, startWith, tap } from 'rxjs/operators';
 import { TimelineDateInterface, TimelineEraInterface, TimelineSlideInterface, TimelineViewSlideInterface, TIMELINE_SLIDE_TYPES } from '../../interfaces/timeline';
@@ -48,6 +49,8 @@ export class SlideDetailComponent implements OnInit, OnChanges {
   @Output() uploadFile = new EventEmitter<UploadFileOutput>();
   @Output() isDirty$: Observable<boolean>;
 
+  @ViewChild(MatStepper) stepper: MatStepper;
+
   @HostBinding('class.campus-page')
   setCampusPageClass = true;
   @HostBinding('class.timeline-slide-detail')
@@ -78,6 +81,7 @@ export class SlideDetailComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.viewSlide && !changes.viewSlide.firstChange) {
+      this.stepper.reset();
       this.formData = this.mapViewSlideToFormData(
         changes.viewSlide.currentValue
       );
@@ -205,10 +209,8 @@ export class SlideDetailComponent implements OnInit, OnChanges {
     this.isDirty$ = this.slideForm.valueChanges.pipe(
       map(
         updatedFormValues =>
-          !(
-            JSON.stringify(updatedFormValues) ===
-            JSON.stringify(this.initialFormValues)
-          )
+          JSON.stringify(updatedFormValues) !==
+          JSON.stringify(this.initialFormValues)
       ),
       startWith(false)
     );
@@ -275,7 +277,7 @@ export class SlideDetailComponent implements OnInit, OnChanges {
     return formData;
   }
 
-  private deepMergeObjects(source, assign) {
+  private deepMergeObjects(source: object, assign: object): object {
     Object.keys(assign).forEach(key => {
       if (assign[key] === Object(assign[key])) {
         // is an object?
@@ -385,22 +387,15 @@ export class SlideDetailComponent implements OnInit, OnChanges {
 
   private removeEmpty(obj): object {
     const newObj = {};
-    // https://stackoverflow.com/questions/42736031/remove-empty-objects-from-an-object?answertab=votes#tab-top
     // delete empty properties
     Object.keys(obj).forEach(key => {
-      if (obj[key] && typeof obj[key] === 'object') {
-        newObj[key] = this.removeEmpty(obj[key]); // recurse
-      } else if (obj[key] != null && obj[key] !== '') {
-        newObj[key] = obj[key]; // copy value
-      }
-    });
-
-    // delete keys with empty objects
-    Object.keys(newObj).forEach(key => {
-      if (newObj[key] && typeof newObj[key] === 'object') {
-        if (Object.keys(newObj[key]).length === 0) {
-          delete newObj[key];
+      if (obj[key] === Object(obj[key])) {
+        const cleanedValue = this.removeEmpty(obj[key]); // recurse
+        if (Object.keys(cleanedValue).length > 0) {
+          newObj[key] = cleanedValue;
         }
+      } else if (obj[key] !== null && obj[key] !== '') {
+        newObj[key] = obj[key]; // copy value
       }
     });
 
