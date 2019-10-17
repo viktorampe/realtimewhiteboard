@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, InjectionToken } from '@angular/core';
-import { BehaviorSubject, Observable, ReplaySubject, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, throwError } from 'rxjs';
 import {
   catchError,
   filter,
@@ -31,7 +31,7 @@ export class EditorHttpService implements EditorHttpServiceInterface {
 
   private apiSettings$ = new BehaviorSubject<EditorHttpSettingsInterface>(null);
   private eduContentId: number;
-  private _errors$ = new ReplaySubject<Error>();
+  private _errors$ = new Subject<Error>();
 
   constructor(private http: HttpClient) {
     this.errors$ = this._errors$.asObservable();

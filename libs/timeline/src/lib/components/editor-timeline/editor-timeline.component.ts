@@ -4,11 +4,12 @@ import {
   HostBinding,
   Input,
   OnChanges,
+  OnDestroy,
   OnInit,
   Output,
   SimpleChanges
 } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import {
   TimelineSettingsInterface,
   TimelineViewSlideInterface
@@ -20,7 +21,7 @@ import { EditorViewModel } from '../editor.viewmodel';
   templateUrl: './editor-timeline.component.html',
   styleUrls: ['./editor-timeline.component.scss']
 })
-export class EditorTimelineComponent implements OnInit, OnChanges {
+export class EditorTimelineComponent implements OnInit, OnChanges, OnDestroy {
   public slideList$: Observable<TimelineViewSlideInterface[]>;
   public activeSlide$: Observable<TimelineViewSlideInterface>;
   public activeSlideDetail$: Observable<TimelineViewSlideInterface>;
@@ -30,6 +31,8 @@ export class EditorTimelineComponent implements OnInit, OnChanges {
   @Input() eduContentMetadataId: number;
   @Input() apiBase: string;
   @Output() errors = new EventEmitter<any>();
+
+  private subscriptions = new Subscription();
 
   constructor(private editorViewModel: EditorViewModel) {}
 
@@ -42,9 +45,11 @@ export class EditorTimelineComponent implements OnInit, OnChanges {
     this.settings$ = this.editorViewModel.settings$;
     this.isFormDirty$ = this.editorViewModel.isFormDirty$;
 
-    this.editorViewModel.errors$.subscribe(error => {
-      this.errors.emit(error);
-    });
+    this.subscriptions.add(
+      this.editorViewModel.errors$.subscribe(error => {
+        this.errors.emit(error);
+      })
+    );
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -54,6 +59,10 @@ export class EditorTimelineComponent implements OnInit, OnChanges {
         eduContentMetadataId: this.eduContentMetadataId
       });
     }
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
   }
 
   public setActiveSlide(viewSlide: TimelineViewSlideInterface): void {
