@@ -89,9 +89,9 @@ export class EditorViewModel {
     const data = { ...this.data$.value, ...newSettings };
 
     // Persist changes
-    this.updateTimeline(data).subscribe();
-
-    this.data$.next(data);
+    this.updateTimeline(data).subscribe(() => {
+      this.data$.next(data);
+    });
   }
 
   public createSlide() {

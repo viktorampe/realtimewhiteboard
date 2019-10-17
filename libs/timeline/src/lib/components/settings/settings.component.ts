@@ -3,22 +3,23 @@ import {
   EventEmitter,
   HostBinding,
   Input,
+  OnDestroy,
   OnInit,
   Output
 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { Subscription } from 'rxjs';
 import { debounceTime, map, startWith } from 'rxjs/operators';
 import { TimelineSettingsInterface } from '../../interfaces/timeline';
-
 @Component({
   selector: 'campus-settings',
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.scss']
 })
-export class SettingsComponent implements OnInit {
+export class SettingsComponent implements OnInit, OnDestroy {
   public settingsForm: FormGroup;
   private initialFormValues: string; // used for isDirty$
-
+  private subscriptions: Subscription;
   private formDefaults = {
     scale_factor: 1,
     humanCosmological: false,
@@ -51,6 +52,8 @@ export class SettingsComponent implements OnInit {
         }
       });
     }
+    this.initialFormValues = JSON.stringify(this.settingsForm.value);
+    this.isDirty.emit(false);
   }
 
   private buildForm(): FormGroup {
@@ -68,19 +71,25 @@ export class SettingsComponent implements OnInit {
   }
 
   private initialStreams() {
+    this.subscriptions = new Subscription();
     this.initialFormValues = JSON.stringify(this.settingsForm.value);
 
-    // TODO unsubscribe on destroy
     // TODO test -> see Frederic -> has/had some issues
-    this.settingsForm.valueChanges
-      .pipe(
-        debounceTime(300),
-        map(
-          updatedFormValues =>
-            !(JSON.stringify(updatedFormValues) === this.initialFormValues)
-        ),
-        startWith(false)
-      )
-      .subscribe(value => this.isDirty.emit(value));
+    this.subscriptions.add(
+      this.settingsForm.valueChanges
+        .pipe(
+          debounceTime(300),
+          map(
+            updatedFormValues =>
+              JSON.stringify(updatedFormValues) !== this.initialFormValues
+          ),
+          startWith(false)
+        )
+        .subscribe(value => this.isDirty.emit(value))
+    );
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
   }
 }
