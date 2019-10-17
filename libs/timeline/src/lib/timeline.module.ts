@@ -12,7 +12,8 @@ import {
   MatListModule,
   MatNativeDateModule,
   MatRadioModule,
-  MatStepperModule
+  MatStepperModule,
+  MatTooltipModule
 } from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -42,6 +43,7 @@ export const ENVIRONMENT_ICON_MAPPING_TOKEN = new InjectionToken(
     MatRadioModule,
     MatStepperModule,
     MatIconModule,
+    MatTooltipModule,
     HttpClientModule,
     BrowserAnimationsModule
   ],
