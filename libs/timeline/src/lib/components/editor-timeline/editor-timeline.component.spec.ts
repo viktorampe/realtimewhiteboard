@@ -1,5 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatIconModule, MatListModule } from '@angular/material';
+import { ReactiveFormsModule } from '@angular/forms';
+import {
+  MatFormFieldModule,
+  MatIconModule,
+  MatIconRegistry,
+  MatInputModule,
+  MatListModule,
+  MatRadioModule,
+  MatSlideToggleModule,
+  MatStepperModule,
+  MatTooltipModule
+} from '@angular/material';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { MockMatIconRegistry } from '@campus/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { EDITOR_HTTP_SERVICE_TOKEN } from '../../services/editor-http.service';
 import { EditorViewModel } from '../editor.viewmodel';
@@ -15,7 +28,18 @@ describe('EditorTimelineComponent', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [MatListModule, MatIconModule],
+      imports: [
+        MatListModule,
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatRadioModule,
+        MatStepperModule,
+        MatIconModule,
+        MatSlideToggleModule,
+        NoopAnimationsModule,
+        MatTooltipModule
+      ],
       declarations: [
         EditorTimelineComponent,
         SlideListComponent,
@@ -23,6 +47,7 @@ describe('EditorTimelineComponent', () => {
         SettingsComponent
       ],
       providers: [
+        { provide: MatIconRegistry, useClass: MockMatIconRegistry },
         { provide: EditorViewModel, useClass: MockEditorViewModel },
         { provide: EDITOR_HTTP_SERVICE_TOKEN, useValue: {} }
       ]

@@ -7,7 +7,7 @@ export const environment = {
   production: true,
   iconMapping: icons,
   api: {
-    APIBase: 'https://api.staging.lk2020.be'
+    APIBase: 'https://api.staging.lk2020.be/api'
   }
 };
 
