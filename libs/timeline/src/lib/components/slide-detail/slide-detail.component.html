@@ -12,8 +12,14 @@
       <ng-template matStepperIcon="warning">
         <mat-icon [svgIcon]="'warning'"></mat-icon>
       </ng-template>
+
       <!-- GENERAL -->
-      <mat-step formGroupName="general" label="Algemeen">
+      <mat-step
+        [stepControl]="getFormGroup('general')"
+        errorMessage="Hier is iets mis"
+        formGroupName="general"
+        label="Algemeen"
+      >
         <div class="timeline-slide-detail__form__section">
           <label>Welk type slide wil je maken?</label>
           <mat-radio-group class="radio-group" formControlName="type">
@@ -57,8 +63,8 @@
           <button mat-button matStepperNext>Volgende</button>
         </div>
       </mat-step>
-      <!-- START_DATE -->
 
+      <!-- START_DATE -->
       <mat-step
         [stepControl]="getFormGroup('start_date')"
         label="Startdatum"
@@ -100,8 +106,14 @@
           <button mat-button matStepperNext>Volgende</button>
         </div>
       </mat-step>
+
       <!-- TEXT -->
-      <mat-step formGroupName="text" label="Tekst">
+      <mat-step
+        [stepControl]="getFormGroup('text')"
+        errorMessage="Hier is iets mis"
+        formGroupName="text"
+        label="Tekst"
+      >
         <div class="timeline-slide-detail__form__section">
           <div class="mat-h3">Tekst</div>
 
@@ -133,9 +145,12 @@
           >
         </div>
       </mat-step>
+
       <!-- BACKGROUND -->
       <mat-step
         *ngIf="slideType !== slideTypesEnum.ERA"
+        [stepControl]="getFormGroup('background')"
+        errorMessage="Hier is iets mis"
         formGroupName="background"
         label="Achtergrond"
       >
@@ -185,9 +200,12 @@
           <button mat-button matStepperNext>Volgende</button>
         </div>
       </mat-step>
+
       <!-- MEDIA -->
       <mat-step
         *ngIf="slideType !== slideTypesEnum.ERA"
+        [stepControl]="getFormGroup('media')"
+        errorMessage="Hier is iets mis"
         formGroupName="media"
         label="Media"
       >
