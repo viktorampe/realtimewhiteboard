@@ -1,7 +1,22 @@
-import { Component, HostBinding, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { Observable } from 'rxjs';
-import { TimelineSettingsInterface, TimelineViewSlideInterface } from '../../interfaces/timeline';
-import { EditorViewModel } from '../editor.viewmodel';
+import {
+  Component,
+  HostBinding,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges
+} from '@angular/core';
+import { Observable, Subject } from 'rxjs';
+import { map } from 'rxjs/operators';
+import {
+  TimelineSettingsInterface,
+  TimelineViewSlideInterface
+} from '../../interfaces/timeline';
+import {
+  FileUploadResult,
+  UploadFileOutput
+} from '../slide-detail/slide-detail.component';
+import { EditorViewModel } from './../editor.viewmodel';
 
 @Component({
   selector: 'campus-editor-timeline',
@@ -14,7 +29,8 @@ export class EditorTimelineComponent implements OnInit, OnChanges {
   public activeSlideDetail$: Observable<TimelineViewSlideInterface>;
   public settings$: Observable<TimelineSettingsInterface>;
   public isFormDirty$: Observable<boolean>;
-  public canBeSavedAsTitle$:Observable<boolean>;
+  public canBeSavedAsTitle$: Observable<boolean>;
+  public fileUploadResult$ = new Subject<FileUploadResult>();
 
   @Input() eduContentMetadataId: number;
   @Input() apiBase: string;
@@ -53,7 +69,7 @@ export class EditorTimelineComponent implements OnInit, OnChanges {
     this.editorViewModel.deleteActiveSlide();
   }
 
-  public saveSlide(slide: TimelineViewSlideInterface) {
+  public saveSlide(slide: TimelineViewSlideInterface): void {
     this.editorViewModel.upsertSlide(slide);
   }
 
@@ -67,5 +83,21 @@ export class EditorTimelineComponent implements OnInit, OnChanges {
 
   public setIsFormDirty(isDirty: boolean): void {
     this.editorViewModel.setFormDirty(isDirty);
+  }
+
+  public handleFileUpload(upload: UploadFileOutput): void {
+    this.editorViewModel
+      .uploadFile(upload.file)
+      .pipe(
+        map(
+          (storageInfo): FileUploadResult => ({
+            formControlName: upload.formControlName,
+            url: `/api/EduFiles/${storageInfo.eduFileId}/redirectURL`
+          })
+        )
+      )
+      .subscribe((result: FileUploadResult) =>
+        this.fileUploadResult$.next(result)
+      );
   }
 }
