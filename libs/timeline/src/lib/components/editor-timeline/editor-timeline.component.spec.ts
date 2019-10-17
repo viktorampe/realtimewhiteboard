@@ -7,6 +7,7 @@ import {
   MatInputModule,
   MatListModule,
   MatRadioModule,
+  MatSlideToggleModule,
   MatStepperModule
 } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
@@ -34,6 +35,7 @@ describe('EditorTimelineComponent', () => {
         MatRadioModule,
         MatStepperModule,
         MatIconModule,
+        MatSlideToggleModule,
         NoopAnimationsModule
       ],
       declarations: [
