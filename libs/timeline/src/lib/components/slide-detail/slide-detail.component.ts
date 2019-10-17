@@ -258,8 +258,8 @@ export class SlideDetailComponent implements OnInit, OnChanges {
 
     viewSlide.viewSlide = viewSlide.viewSlide as TimelineSlideInterface;
 
-    formData.start_date = this.getDateValues(viewSlide.viewSlide.start_date);
-    formData.end_date = this.getDateValues(viewSlide.viewSlide.end_date);
+    formData.start_date = this.getDateValues(formData.start_date);
+    formData.end_date = this.getDateValues(formData.end_date);
 
     // add properties that are used by the form, but not needed for the view slide
     formData.general = {
