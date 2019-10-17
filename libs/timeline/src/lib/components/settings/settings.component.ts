@@ -5,20 +5,27 @@ import {
   Input,
   OnDestroy,
   OnInit,
-  Output
+  Output,
+  ViewEncapsulation
 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { MAT_TOOLTIP_DEFAULT_OPTIONS } from '@angular/material';
 import { Subscription } from 'rxjs';
 import { debounceTime, map, startWith } from 'rxjs/operators';
 import { TimelineSettingsInterface } from '../../interfaces/timeline';
 @Component({
   selector: 'campus-settings',
   templateUrl: './settings.component.html',
-  styleUrls: ['./settings.component.scss']
+  styleUrls: ['./settings.component.scss'],
+  providers: [
+    { provide: MAT_TOOLTIP_DEFAULT_OPTIONS, useValue: { position: 'after' } }
+  ],
+  encapsulation: ViewEncapsulation.None
 })
 export class SettingsComponent implements OnInit, OnDestroy {
   public settingsForm: FormGroup;
   private initialFormValues: string; // used for isDirty$
+  public tooltips: { [key: string]: string };
   private subscriptions: Subscription;
   private formDefaults = {
     scale_factor: 1,
@@ -38,6 +45,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.settingsForm = this.buildForm();
     this.initialStreams();
+    this.tooltips = this.getTooltipDictionary();
   }
 
   public onSubmit(): void {
@@ -87,6 +95,19 @@ export class SettingsComponent implements OnInit, OnDestroy {
         )
         .subscribe(value => this.isDirty.emit(value))
     );
+  }
+
+  private getTooltipDictionary() {
+    return {
+      visual:
+        'Dient om de lay-out te bepalen.\n' +
+        'Absoluut komt overeen met een normale tijd.\n' +
+        'Relatief komt niet overeen met een exact tijdstip, bvb: levensjaren',
+      cosmological:
+        'Gebruik kosmologisch voor een tijdslijn die een heel groot bereik nodig heeft.',
+      scalefactor:
+        'Hoeveel keer de schermbreedte zal ingenomen worden bij de eerste presentatie.'
+    };
   }
 
   ngOnDestroy() {
