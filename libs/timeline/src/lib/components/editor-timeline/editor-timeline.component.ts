@@ -1,10 +1,11 @@
 import {
   Component,
-  ElementRef,
+  EventEmitter,
   HostBinding,
   Input,
   OnChanges,
   OnInit,
+  Output,
   SimpleChanges
 } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -28,11 +29,9 @@ export class EditorTimelineComponent implements OnInit, OnChanges {
 
   @Input() eduContentMetadataId: number;
   @Input() apiBase: string;
+  @Output() errors = new EventEmitter<any>();
 
-  constructor(
-    private el: ElementRef,
-    private editorViewModel: EditorViewModel
-  ) {}
+  constructor(private editorViewModel: EditorViewModel) {}
 
   @HostBinding('class.timeline-editor') public isTimelineEditor = true;
 
@@ -44,8 +43,7 @@ export class EditorTimelineComponent implements OnInit, OnChanges {
     this.isFormDirty$ = this.editorViewModel.isFormDirty$;
 
     this.editorViewModel.errors$.subscribe(error => {
-      const event = new CustomEvent('error-message', { detail: error });
-      this.el.nativeElement.dispatchEvent(event);
+      this.errors.emit(error);
     });
   }
 

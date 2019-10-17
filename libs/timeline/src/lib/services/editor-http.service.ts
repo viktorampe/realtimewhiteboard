@@ -48,7 +48,7 @@ export class EditorHttpService implements EditorHttpServiceInterface {
       switchMap(settings =>
         this.http.get<{ timeline: string; eduContentId: number }>(
           settings.apiBase +
-            '/api/eduContentMetadata/' +
+            '/eduContentMetadata/' +
             settings.eduContentMetadataId +
             '?filter={"fields":["timeline","eduContentId"]}',
           { withCredentials: true }
@@ -67,9 +67,9 @@ export class EditorHttpService implements EditorHttpServiceInterface {
     const apiSettings: EditorHttpSettingsInterface = this.getSettings();
 
     const response$ = this.http
-      .put(
+      .patch(
         apiSettings.apiBase +
-          '/api/eduContentMetadata/' +
+          '/eduContentMetadata/' +
           apiSettings.eduContentMetadataId,
         { timeline: JSON.stringify(timelineConfig) },
         { withCredentials: true }
@@ -87,7 +87,7 @@ export class EditorHttpService implements EditorHttpServiceInterface {
     const apiSettings: EditorHttpSettingsInterface = this.getSettings(true);
     return (
       apiSettings.apiBase +
-      '/api/eduContents/' +
+      '/eduContents/' +
       this.eduContentId +
       '/redirectURL/' +
       apiSettings.eduContentMetadataId
@@ -104,7 +104,7 @@ export class EditorHttpService implements EditorHttpServiceInterface {
     const response$ = this.http
       .post(
         apiSettings.apiBase +
-          '/api/EduContentFiles/' +
+          '/EduContentFiles/' +
           this.eduContentId +
           '/store',
         formData,
