@@ -17,7 +17,6 @@ import {
   UploadFileOutput
 } from '../slide-detail/slide-detail.component';
 import { EditorViewModel } from './../editor.viewmodel';
-import { EditorViewModel } from '../editor.viewmodel';
 
 @Component({
   selector: 'campus-editor-timeline',
@@ -85,13 +84,11 @@ export class EditorTimelineComponent implements OnInit, OnChanges {
   }
 
   public handleFileUpload(upload: UploadFileOutput) {
-    this.fileUploadResult$ = this.editorViewModel
-      .uploadFile(19, upload.file) //TODO refactor without eduContentId
-      .pipe(
-        map(storageInfo => ({
-          formControlName: upload.formControlName,
-          url: `/api/EduFiles/${storageInfo.eduFileId}/redirectURL`
-        }))
-      );
+    this.fileUploadResult$ = this.editorViewModel.uploadFile(upload.file).pipe(
+      map(storageInfo => ({
+        formControlName: upload.formControlName,
+        url: `/api/EduFiles/${storageInfo.eduFileId}/redirectURL`
+      }))
+    );
   }
 }

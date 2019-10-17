@@ -12,6 +12,7 @@ export interface StorageInfoInterface {
   checksum?: string;
   name: string;
   storageName: string;
+  eduFileId?: number;
 }
 
 export interface EditorHttpSettingsInterface {
