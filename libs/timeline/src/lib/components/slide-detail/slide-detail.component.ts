@@ -124,6 +124,14 @@ export class SlideDetailComponent implements OnInit, OnChanges {
     this.getControl('background.color').setValue(color);
   }
 
+  goBack() {
+    this.stepper.previous();
+  }
+
+  goForward() {
+    this.stepper.next();
+  }
+
   private buildForm(): FormGroup {
     // validation defaults:
     //  - type: always required

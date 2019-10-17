@@ -1,342 +1,352 @@
 <ng-container *ngIf="(chosenType$ | async) as slideType">
   <form [formGroup]="slideForm" class="timeline-slide-detail__form">
-    <mat-horizontal-stepper>
-      <ng-template matStepperIcon="edit">
-        <mat-icon [svgIcon]="'edit'"></mat-icon>
-      </ng-template>
+    <div class="form-body">
+      <mat-horizontal-stepper #stepper>
+        <ng-template matStepperIcon="edit">
+          <mat-icon [svgIcon]="'edit'"></mat-icon>
+        </ng-template>
 
-      <ng-template matStepperIcon="done">
-        <mat-icon [svgIcon]="'close'"></mat-icon>
-      </ng-template>
-      <!-- GENERAL -->
-      <mat-step formGroupName="general" label="Algemeen">
-        <div class="timeline-slide-detail__form__section">
-          <label>Welk type slide wil je maken?</label>
-          <mat-radio-group class="radio-group" formControlName="type">
-            <mat-radio-button
-              class="radio-button"
-              *ngFor="let type of slideTypes"
-              [value]="type.value"
-              [disabled]="
-                type.value === slideTypesEnum.TITLE && !canBeSavedAsTitle
-              "
-              >{{ type.label }}</mat-radio-button
-            >
-          </mat-radio-group>
-        </div>
-        <ng-container *ngIf="slideType !== slideTypesEnum.ERA">
+        <ng-template matStepperIcon="done">
+          <mat-icon [svgIcon]="'close'"></mat-icon>
+        </ng-template>
+        <!-- GENERAL -->
+        <mat-step formGroupName="general" label="Algemeen">
           <div class="timeline-slide-detail__form__section">
-            <div class="mat-h3">Groep</div>
-            <mat-form-field>
-              <input
-                matInput
-                type="string"
-                formControlName="group"
-                placeholder="Tot welke groep behoort deze gebeurtenis?"
-              />
-            </mat-form-field>
+            <label>Welk type slide wil je maken?</label>
+            <mat-radio-group class="radio-group" formControlName="type">
+              <mat-radio-button
+                class="radio-button"
+                *ngFor="let type of slideTypes"
+                [value]="type.value"
+                [disabled]="
+                  type.value === slideTypesEnum.TITLE && !canBeSavedAsTitle
+                "
+                >{{ type.label }}</mat-radio-button
+              >
+            </mat-radio-group>
           </div>
+          <ng-container *ngIf="slideType !== slideTypesEnum.ERA">
+            <div class="timeline-slide-detail__form__section">
+              <div class="mat-h3">Groep</div>
+              <mat-form-field>
+                <input
+                  matInput
+                  type="string"
+                  formControlName="group"
+                  placeholder="Tot welke groep behoort deze gebeurtenis?"
+                />
+              </mat-form-field>
+            </div>
 
-          <div class="timeline-slide-detail__form__section">
-            <div class="mat-h3">Weergavedatum</div>
-            <mat-form-field>
-              <input
-                matInput
-                type="string"
-                formControlName="display_date"
-                placeholder="Weergavedatum"
-              />
-            </mat-form-field>
-          </div>
-        </ng-container>
-        <div>
-          <button mat-button matStepperNext>Volgende</button>
-        </div>
-      </mat-step>
-      <!-- START_DATE -->
-      <mat-step label="Startdatum">
-        <div
-          class="timeline-slide-detail__form__dateTimePicker timeline-slide-detail__form__section"
-        >
-          <div class="mat-h3">Startdatum</div>
-          <ng-container
-            [ngTemplateOutlet]="timelineDateFields"
-            [ngTemplateOutletContext]="{ formGroupName: 'start_date' }"
-          ></ng-container>
-        </div>
-        <div>
-          <button mat-button matStepperPrevious>Vorige</button>
-          <button mat-button matStepperNext>Volgende</button>
-        </div>
-      </mat-step>
-      <!-- END_DATE -->
-      <mat-step label="Einddatum">
-        <div
-          class="timeline-slide-detail__form__dateTimePicker timeline-slide-detail__form__section"
-        >
-          <div class="mat-h3">Einddatum</div>
-          <ng-container
-            [ngTemplateOutlet]="timelineDateFields"
-            [ngTemplateOutletContext]="{ formGroupName: 'end_date' }"
-          ></ng-container>
-        </div>
-
-        <div>
-          <button mat-button matStepperPrevious>Vorige</button>
-          <button mat-button matStepperNext>Volgende</button>
-        </div>
-      </mat-step>
-      <!-- TEXT -->
-      <mat-step formGroupName="text" label="Tekst">
-        <div class="timeline-slide-detail__form__section">
-          <div class="mat-h3">Tekst</div>
-
-          <mat-form-field>
-            <input
-              matInput
-              type="string"
-              formControlName="headline"
-              placeholder="Titel"
-            />
-          </mat-form-field>
-          <mat-form-field *ngIf="slideType !== slideTypesEnum.ERA">
-            <textarea
-              matInput
-              type="string"
-              formControlName="text"
-              placeholder="Omschrijving"
-            >
-            </textarea>
-          </mat-form-field>
-        </div>
-        <div>
-          <button mat-button matStepperPrevious>Vorige</button>
-          <button
-            mat-button
-            matStepperNext
-            *ngIf="slideType !== slideTypesEnum.ERA"
-            >Volgende</button
+            <div class="timeline-slide-detail__form__section">
+              <div class="mat-h3">Weergavedatum</div>
+              <mat-form-field>
+                <input
+                  matInput
+                  type="string"
+                  formControlName="display_date"
+                  placeholder="Weergavedatum"
+                />
+              </mat-form-field>
+            </div>
+          </ng-container>
+        </mat-step>
+        <!-- START_DATE -->
+        <mat-step label="Startdatum">
+          <div
+            class="timeline-slide-detail__form__dateTimePicker timeline-slide-detail__form__section"
           >
-        </div>
-      </mat-step>
-      <!-- BACKGROUND -->
-      <mat-step
-        *ngIf="slideType !== slideTypesEnum.ERA"
-        formGroupName="background"
-        label="Achtergrond"
+            <div class="mat-h3">Startdatum</div>
+            <ng-container
+              [ngTemplateOutlet]="timelineDateFields"
+              [ngTemplateOutletContext]="{ formGroupName: 'start_date' }"
+            ></ng-container>
+          </div>
+        </mat-step>
+        <!-- END_DATE -->
+        <mat-step label="Einddatum">
+          <div
+            class="timeline-slide-detail__form__dateTimePicker timeline-slide-detail__form__section"
+          >
+            <div class="mat-h3">Einddatum</div>
+            <ng-container
+              [ngTemplateOutlet]="timelineDateFields"
+              [ngTemplateOutletContext]="{ formGroupName: 'end_date' }"
+            ></ng-container>
+          </div>
+        </mat-step>
+        <!-- TEXT -->
+        <mat-step formGroupName="text" label="Tekst">
+          <div class="timeline-slide-detail__form__section">
+            <div class="mat-h3">Tekst</div>
+
+            <mat-form-field>
+              <input
+                matInput
+                type="string"
+                formControlName="headline"
+                placeholder="Titel"
+              />
+            </mat-form-field>
+            <mat-form-field *ngIf="slideType !== slideTypesEnum.ERA">
+              <textarea
+                matInput
+                type="string"
+                formControlName="text"
+                placeholder="Omschrijving"
+              >
+              </textarea>
+            </mat-form-field>
+          </div>
+        </mat-step>
+        <!-- BACKGROUND -->
+        <mat-step
+          *ngIf="slideType !== slideTypesEnum.ERA"
+          formGroupName="background"
+          label="Achtergrond"
+        >
+          <div class="timeline-slide-detail__form__section">
+            <div class="mat-h3">Achtergrond</div>
+            <div class="timeline-slide-detail__form__file-upload">
+              <button mat-button mat-stroked-button (click)="backgroundUrlInput.click()"
+                >Bladeren...</button
+              >
+              <input
+                #backgroundUrlInput
+                type="file"
+                [style.display]="'none'"
+                (change)="
+                  handleFileInput($event.target.files, 'background.url')
+                "
+              />
+              <mat-form-field>
+                <input
+                  matInput
+                  type="string"
+                  formControlName="url"
+                  placeholder="url"
+                />
+              </mat-form-field>
+            </div>
+
+            <div class="timeline-slide-detail__form__color-picker">
+              <button mat-button mat-stroked-button (click)="backgroundColorInput.click()"
+                >Kies een kleur</button
+              >
+              <input
+                #backgroundColorInput
+                type="color"
+                [style.display]="'none'"
+                (change)="handleColorPick($event.target.value)"
+              />
+              <div
+                [style.background-color]="
+                  this.getControl('background.color').value
+                "
+                class="timeline-slide-detail__form__color-picker__preview"
+              ></div>
+            </div>
+          </div>
+        </mat-step>
+        <!-- MEDIA -->
+        <mat-step
+          *ngIf="slideType !== slideTypesEnum.ERA"
+          formGroupName="media"
+          label="Media"
+        >
+          <div class="timeline-slide-detail__form__section">
+            <div class="mat-h3">Media</div>
+            <div class="timeline-slide-detail__form__file-upload">
+              <button
+                mat-button
+                mat-stroked-button
+                (click)="mediaUrlInput.click()"
+                >Bladeren ...</button
+              >
+              <input
+                #mediaUrlInput
+                type="file"
+                [style.display]="'none'"
+                (change)="handleFileInput($event.target.files, 'media.url')"
+              />
+              <mat-form-field>
+                <input
+                  matInput
+                  type="string"
+                  formControlName="url"
+                  placeholder="Of plaats hier een link naar een bestand"
+                />
+              </mat-form-field>
+            </div>
+            <div class="timeline-slide-detail__form__file-upload">
+              <button mat-button mat-stroked-button (click)="mediaThumbnailUrlInput.click()"
+                >Bladeren ...</button
+              >
+              <input
+                #mediaThumbnailUrlInput
+                type="file"
+                [style.display]="'none'"
+                (change)="
+                  handleFileInput($event.target.files, 'media.thumbnail')
+                "
+              />
+              <mat-form-field>
+                <input
+                  matInput
+                  type="string"
+                  formControlName="thumbnail"
+                  placeholder="Of plaats hier een link naar een bestand"
+                />
+              </mat-form-field>
+            </div>
+            <mat-form-field>
+              <input
+                matInput
+                type="string"
+                formControlName="caption"
+                placeholder="Caption"
+              />
+            </mat-form-field>
+            <mat-form-field>
+              <input
+                matInput
+                type="string"
+                formControlName="credit"
+                placeholder="Credit"
+              />
+            </mat-form-field>
+
+            <mat-form-field>
+              <input
+                matInput
+                type="string"
+                formControlName="alt"
+                placeholder="Alt"
+              />
+            </mat-form-field>
+            <mat-form-field>
+              <input
+                matInput
+                type="string"
+                formControlName="title"
+                placeholder="Titel"
+              />
+            </mat-form-field>
+            <mat-form-field>
+              <input
+                matInput
+                type="string"
+                formControlName="link"
+                placeholder="Link"
+              />
+            </mat-form-field>
+          </div>
+        </mat-step>
+      </mat-horizontal-stepper>
+    </div>
+    <div class="form-footer">
+      <button
+        (click)="goBack()"
+        mat-icon-button
+        mat-button
+        [disabled]="stepper && stepper.selectedIndex === 0"
+        ><mat-icon>arrow_back_ios</mat-icon></button
       >
-        <div class="timeline-slide-detail__form__section">
-          <div class="mat-h3">Achtergrond</div>
-          <div class="timeline-slide-detail__form__file-upload">
-            <button mat-button (click)="backgroundUrlInput.click()"
-              >Upload een bestand ...</button
-            >
-            <input
-              #backgroundUrlInput
-              type="file"
-              [style.display]="'none'"
-              (change)="handleFileInput($event.target.files, 'background.url')"
-            />
-            <mat-form-field>
-              <input
-                matInput
-                type="string"
-                formControlName="url"
-                placeholder="url"
-              />
-            </mat-form-field>
-          </div>
-
-          <div class="timeline-slide-detail__form__color-picker">
-            <button mat-button (click)="backgroundColorInput.click()"
-              >Kies een kleur</button
-            >
-            <input
-              #backgroundColorInput
-              type="color"
-              [style.display]="'none'"
-              (change)="handleColorPick($event.target.value)"
-            />
-            <div
-              [style.background-color]="
-                this.getControl('background.color').value
-              "
-              class="timeline-slide-detail__form__color-picker__preview"
-            ></div>
-          </div>
-        </div>
-
-        <div>
-          <button mat-button matStepperPrevious>Vorige</button>
-          <button mat-button matStepperNext>Volgende</button>
-        </div>
-      </mat-step>
-      <!-- MEDIA -->
-      <mat-step
-        *ngIf="slideType !== slideTypesEnum.ERA"
-        formGroupName="media"
-        label="Media"
+      <button
+        (click)="goForward()"
+        mat-icon-button
+        mat-button
+        [disabled]="
+          stepper &&
+          stepper.selectedIndex === (slideType !== slideTypesEnum.ERA ? 5 : 3)
+        "
+        ><mat-icon>arrow_forward_ios</mat-icon></button
       >
-        <div class="timeline-slide-detail__form__section">
-          <div class="mat-h3">Media</div>
-          <div class="timeline-slide-detail__form__file-upload">
-            <button mat-button (click)="mediaUrlInput.click()"
-              >Upload een bestand ...</button
-            >
-            <input
-              #mediaUrlInput
-              type="file"
-              [style.display]="'none'"
-              (change)="handleFileInput($event.target.files, 'media.url')"
-            />
-            <mat-form-field>
-              <input
-                matInput
-                type="string"
-                formControlName="url"
-                placeholder="Of plaats hier een link naar een bestand"
-              />
-            </mat-form-field>
-          </div>
-          <div class="timeline-slide-detail__form__file-upload">
-            <button mat-button (click)="mediaThumbnailUrlInput.click()"
-              >Upload een bestand ...</button
-            >
-            <input
-              #mediaThumbnailUrlInput
-              type="file"
-              [style.display]="'none'"
-              (change)="handleFileInput($event.target.files, 'media.thumbnail')"
-            />
-            <mat-form-field>
-              <input
-                matInput
-                type="string"
-                formControlName="thumbnail"
-                placeholder="Of plaats hier een link naar een bestand"
-              />
-            </mat-form-field>
-          </div>
-          <mat-form-field>
-            <input
-              matInput
-              type="string"
-              formControlName="caption"
-              placeholder="Caption"
-            />
-          </mat-form-field>
-          <mat-form-field>
-            <input
-              matInput
-              type="string"
-              formControlName="credit"
-              placeholder="Credit"
-            />
-          </mat-form-field>
 
-          <mat-form-field>
-            <input
-              matInput
-              type="string"
-              formControlName="alt"
-              placeholder="Alt"
-            />
-          </mat-form-field>
-          <mat-form-field>
-            <input
-              matInput
-              type="string"
-              formControlName="title"
-              placeholder="Titel"
-            />
-          </mat-form-field>
-          <mat-form-field>
-            <input
-              matInput
-              type="string"
-              formControlName="link"
-              placeholder="Link"
-            />
-          </mat-form-field>
-        </div>
-        <div>
-          <button mat-button matStepperPrevious>Vorige</button>
-        </div>
-      </mat-step>
-    </mat-horizontal-stepper>
-
-    <button mat-button (click)="onSubmit()">Opslaan</button>
+      <button mat-button mat-icon-button color="primary" (click)="onSubmit()"
+        ><mat-icon>save</mat-icon></button
+      >
+    </div>
   </form>
 </ng-container>
 
 <ng-template #timelineDateFields let-formGroupName="formGroupName">
   <div [formGroup]="slideForm">
-    <div [formGroupName]="formGroupName">
-      <mat-form-field>
-        <input
-          matInput
-          type="number"
-          formControlName="year"
-          placeholder="Kies een jaar"
-        />
-      </mat-form-field>
-      <mat-form-field>
-        <input
-          matInput
-          type="number"
-          formControlName="month"
-          placeholder="Kies een maand"
-        />
-      </mat-form-field>
-      <mat-form-field>
-        <input
-          matInput
-          type="number"
-          formControlName="day"
-          placeholder="Kies een dag"
-        />
-      </mat-form-field>
-
-      <mat-form-field>
-        <input
-          matInput
-          type="number"
-          formControlName="hour"
-          placeholder="Kies een uur"
-        />
-      </mat-form-field>
-      <mat-form-field>
-        <input
-          matInput
-          type="number"
-          formControlName="minute"
-          placeholder="Kies een minuut"
-        />
-      </mat-form-field>
-      <mat-form-field>
-        <input
-          matInput
-          type="number"
-          formControlName="second"
-          placeholder="Kies een seconde"
-        />
-      </mat-form-field>
-      <mat-form-field>
-        <input
-          matInput
-          type="number"
-          formControlName="millisecond"
-          placeholder="Kies een milliseconde"
-        />
-      </mat-form-field>
-      <mat-form-field>
-        <input
-          matInput
-          type="string"
-          formControlName="displayDate"
-          placeholder="Hoe moet de datum worden weergegeven?"
-        />
-      </mat-form-field>
+    <div [formGroupName]="formGroupName" class="date-form">
+      <div class="date-form-line">
+        <mat-form-field class="char-7">
+          <input
+            matInput
+            type="number"
+            formControlName="year"
+            placeholder="JJJJ"
+          />
+        </mat-form-field>
+        /
+        <mat-form-field class="char-2">
+          <input
+            matInput
+            type="number"
+            formControlName="month"
+            placeholder="MM"
+          />
+        </mat-form-field>
+        /
+        <mat-form-field class="char-2">
+          <input
+            matInput
+            type="number"
+            formControlName="day"
+            placeholder="DD"
+          />
+        </mat-form-field>
+        &nbsp;
+        <mat-form-field class="char-2">
+          <input
+            matInput
+            type="number"
+            formControlName="hour"
+            placeholder="UU"
+          />
+        </mat-form-field>
+        :
+        <mat-form-field class="char-2">
+          <input
+            matInput
+            type="number"
+            formControlName="minute"
+            placeholder="mm"
+          />
+        </mat-form-field>
+        :
+        <mat-form-field class="char-2">
+          <input
+            matInput
+            type="number"
+            formControlName="second"
+            placeholder="ss"
+          />
+        </mat-form-field>
+        :
+        <mat-form-field class="char-3">
+          <input
+            matInput
+            type="number"
+            formControlName="millisecond"
+            placeholder="ms"
+          />
+        </mat-form-field>
+      </div>
+      <div class="date-form-line">
+        <mat-form-field class="full-width">
+          <input
+            matInput
+            type="string"
+            formControlName="displayDate"
+            placeholder="Hoe moet de datum worden weergegeven?"
+          />
+        </mat-form-field>
+      </div>
     </div>
   </div>
 </ng-template>
