@@ -7,14 +7,11 @@ import { TimelineConfigFixture } from '../+fixtures/timeline-config.fixture';
 import { TimelineConfigInterface } from '../interfaces/timeline';
 import { EDITOR_HTTP_SERVICE_TOKEN } from '../services/editor-http.service';
 import { EditorHttpServiceInterface } from '../services/editor-http.service.interface';
-import { ENVIRONMENT_API_TOKEN } from './../interfaces/environment';
 import { EditorViewModel } from './editor.viewmodel';
 
 describe('EditorViewModel', () => {
   let editorViewModel: EditorViewModel;
   let editorHttpService: EditorHttpServiceInterface;
-
-  const APIBase = 'http://api.kabas.localhost:3000';
 
   const timelineConfig = new TimelineConfigFixture();
 
@@ -30,8 +27,7 @@ describe('EditorViewModel', () => {
             getPreviewUrl: () => {},
             uploadFile: () => {}
           }
-        },
-        { provide: ENVIRONMENT_API_TOKEN, useValue: { APIBase } }
+        }
       ]
     });
   });
@@ -46,16 +42,11 @@ describe('EditorViewModel', () => {
   });
 
   describe('handlers', () => {
-    const eduContentMetadataId = 1;
-    const eduContentId = 1;
-
     it('getTimeline() should call the editorHttpService.getJson', () => {
       jest.spyOn(editorHttpService, 'getJson');
 
-      editorViewModel.getTimeline(eduContentMetadataId);
-      expect(editorHttpService.getJson).toHaveBeenCalledWith(
-        eduContentMetadataId
-      );
+      editorViewModel.getTimeline();
+      expect(editorHttpService.getJson).toHaveBeenCalled();
     });
 
     it('setTimeline() should call the editorHttpService.setJson', () => {
@@ -66,21 +57,15 @@ describe('EditorViewModel', () => {
       };
       jest.spyOn(editorHttpService, 'setJson');
 
-      editorViewModel.updateTimeline(eduContentMetadataId, data);
-      expect(editorHttpService.setJson).toHaveBeenCalledWith(
-        eduContentMetadataId,
-        data
-      );
+      editorViewModel.updateTimeline(data);
+      expect(editorHttpService.setJson).toHaveBeenCalledWith(data);
     });
 
     it('previewTimeline() should call the editorHttpService.getPreviewUrl', () => {
       jest.spyOn(editorHttpService, 'getPreviewUrl');
 
-      editorViewModel.previewTimeline(eduContentId, eduContentMetadataId);
-      expect(editorHttpService.getPreviewUrl).toHaveBeenCalledWith(
-        eduContentId,
-        eduContentMetadataId
-      );
+      editorViewModel.previewTimeline();
+      expect(editorHttpService.getPreviewUrl).toHaveBeenCalledWith();
     });
 
     it('uploadFile() should call the editorHttpService.uploadFile', () => {
@@ -88,11 +73,8 @@ describe('EditorViewModel', () => {
 
       jest.spyOn(editorHttpService, 'uploadFile');
 
-      editorViewModel.uploadFile(eduContentId, file);
-      expect(editorHttpService.uploadFile).toHaveBeenCalledWith(
-        eduContentId,
-        file
-      );
+      editorViewModel.uploadFile(file);
+      expect(editorHttpService.uploadFile).toHaveBeenCalledWith(file);
     });
   });
 });

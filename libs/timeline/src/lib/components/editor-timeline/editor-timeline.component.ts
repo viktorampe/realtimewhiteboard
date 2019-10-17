@@ -1,4 +1,11 @@
-import { Component, HostBinding, OnInit } from '@angular/core';
+import {
+  Component,
+  HostBinding,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges
+} from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import {
@@ -10,19 +17,23 @@ import {
   UploadFileOutput
 } from '../slide-detail/slide-detail.component';
 import { EditorViewModel } from './../editor.viewmodel';
+import { EditorViewModel } from '../editor.viewmodel';
 
 @Component({
   selector: 'campus-editor-timeline',
   templateUrl: './editor-timeline.component.html',
   styleUrls: ['./editor-timeline.component.scss']
 })
-export class EditorTimelineComponent implements OnInit {
+export class EditorTimelineComponent implements OnInit, OnChanges {
   public slideList$: Observable<TimelineViewSlideInterface[]>;
   public activeSlide$: Observable<TimelineViewSlideInterface>;
   public activeSlideDetail$: Observable<TimelineViewSlideInterface>;
   public settings$: Observable<TimelineSettingsInterface>;
   public isFormDirty$: Observable<boolean>;
   public fileUploadResult$: Observable<FileUploadResult>;
+
+  @Input() eduContentMetadataId: number;
+  @Input() apiBase: string;
 
   constructor(private editorViewModel: EditorViewModel) {}
 
@@ -34,6 +45,15 @@ export class EditorTimelineComponent implements OnInit {
     this.activeSlide$ = this.editorViewModel.activeSlide$;
     this.settings$ = this.editorViewModel.settings$;
     this.isFormDirty$ = this.editorViewModel.isFormDirty$;
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (this.apiBase && this.eduContentMetadataId) {
+      this.editorViewModel.setHttpSettings({
+        apiBase: this.apiBase,
+        eduContentMetadataId: this.eduContentMetadataId
+      });
+    }
   }
 
   public setActiveSlide(viewSlide: TimelineViewSlideInterface): void {

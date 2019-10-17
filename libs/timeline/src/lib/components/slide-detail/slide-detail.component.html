@@ -16,13 +16,15 @@
             <mat-radio-button
               class="radio-button"
               *ngFor="let type of slideTypes"
-              [value]="slideTypesEnum[type.toUpperCase()]"
-              [disabled]="type === 'title' && !canBeSavedAsTitle"
-              >{{ type }}</mat-radio-button
+              [value]="type.value"
+              [disabled]="
+                type.value === slideTypesEnum.TITLE && !canBeSavedAsTitle
+              "
+              >{{ type.label }}</mat-radio-button
             >
           </mat-radio-group>
         </div>
-        <ng-container *ngIf="slideType != slideTypesEnum.ERA">
+        <ng-container *ngIf="slideType !== slideTypesEnum.ERA">
           <div class="timeline-slide-detail__form__section">
             <div class="mat-h3">Groep</div>
             <mat-form-field>
@@ -97,7 +99,7 @@
               placeholder="Titel"
             />
           </mat-form-field>
-          <mat-form-field *ngIf="slideType != slideTypesEnum.ERA">
+          <mat-form-field *ngIf="slideType !== slideTypesEnum.ERA">
             <textarea
               matInput
               type="string"
@@ -109,12 +111,17 @@
         </div>
         <div>
           <button mat-button matStepperPrevious>Vorige</button>
-          <button mat-button matStepperNext>Volgende</button>
+          <button
+            mat-button
+            matStepperNext
+            *ngIf="slideType !== slideTypesEnum.ERA"
+            >Volgende</button
+          >
         </div>
       </mat-step>
       <!-- BACKGROUND -->
       <mat-step
-        *ngIf="slideType != slideTypesEnum.ERA"
+        *ngIf="slideType !== slideTypesEnum.ERA"
         formGroupName="background"
         label="Achtergrond"
       >
@@ -166,7 +173,7 @@
       </mat-step>
       <!-- MEDIA -->
       <mat-step
-        *ngIf="slideType != slideTypesEnum.ERA"
+        *ngIf="slideType !== slideTypesEnum.ERA"
         formGroupName="media"
         label="Media"
       >

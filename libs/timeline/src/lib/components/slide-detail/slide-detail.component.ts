@@ -6,7 +6,8 @@ import {
   OnChanges,
   OnInit,
   Output,
-  SimpleChanges
+  SimpleChanges,
+  ViewChild
 } from '@angular/core';
 import {
   FormBuilder,
@@ -14,6 +15,7 @@ import {
   FormGroup,
   Validators
 } from '@angular/forms';
+import { MatStepper } from '@angular/material';
 import { Observable } from 'rxjs';
 import { debounceTime, map, shareReplay, startWith, tap } from 'rxjs/operators';
 import {
@@ -67,6 +69,8 @@ export class SlideDetailComponent implements OnInit, OnChanges {
   @Output() uploadFile = new EventEmitter<UploadFileOutput>();
   @Output() isDirty$: Observable<boolean>;
 
+  @ViewChild(MatStepper) stepper: MatStepper;
+
   @HostBinding('class.campus-page')
   setCampusPageClass = true;
   @HostBinding('class.timeline-slide-detail')
@@ -76,7 +80,11 @@ export class SlideDetailComponent implements OnInit, OnChanges {
   private formData: SlideFormInterface;
 
   slideForm: FormGroup;
-  slideTypes: string[] = ['title', 'slide', 'era'];
+  slideTypes: { label: string; value: TIMELINE_SLIDE_TYPES }[] = [
+    { label: 'titelslide', value: TIMELINE_SLIDE_TYPES.TITLE },
+    { label: 'slide', value: TIMELINE_SLIDE_TYPES.SLIDE },
+    { label: 'era', value: TIMELINE_SLIDE_TYPES.ERA }
+  ];
   slideTypesEnum = TIMELINE_SLIDE_TYPES;
 
   chosenType$: Observable<string>;
@@ -91,10 +99,14 @@ export class SlideDetailComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.viewSlide)
+    if (changes.viewSlide && !changes.viewSlide.firstChange) {
+      this.stepper.reset();
       this.formData = this.mapViewSlideToFormData(
         changes.viewSlide.currentValue
       );
+      this.slideForm.patchValue(this.formData);
+    }
+
     if (changes.fileUploadResult && !changes.fileUploadResult.firstChange) {
       this.getControl(
         changes.fileUploadResult.currentValue.formControlName
@@ -185,10 +197,6 @@ export class SlideDetailComponent implements OnInit, OnChanges {
     return this.slideForm.get(name) as FormControl;
   }
 
-  private getFormGroup(name: string): FormGroup {
-    return this.slideForm.get(name) as FormGroup;
-  }
-
   private initializeStreams() {
     this.chosenType$ = this.getControl('general.type').valueChanges.pipe(
       startWith(this.formData.general.type),
@@ -202,10 +210,8 @@ export class SlideDetailComponent implements OnInit, OnChanges {
       debounceTime(300),
       map(
         updatedFormValues =>
-          !(
-            JSON.stringify(updatedFormValues) ===
-            JSON.stringify(this.initialFormValues)
-          )
+          JSON.stringify(updatedFormValues) !==
+          JSON.stringify(this.initialFormValues)
       ),
       startWith(false)
     );
@@ -252,10 +258,10 @@ export class SlideDetailComponent implements OnInit, OnChanges {
   private mapViewSlideToFormData(
     viewSlide: TimelineViewSlideInterface
   ): SlideFormInterface {
-    const formData: SlideFormInterface = {
-      ...this.getInitialSlideForm(), // set all properties
-      ...viewSlide.viewSlide // override default properties
-    };
+    const formData: SlideFormInterface = this.deepMergeObjects(
+      this.getInitialSlideForm(),
+      viewSlide.viewSlide
+    );
 
     viewSlide.viewSlide = viewSlide.viewSlide as TimelineSlideInterface;
 
@@ -267,6 +273,17 @@ export class SlideDetailComponent implements OnInit, OnChanges {
     };
 
     return formData;
+  }
+
+  private deepMergeObjects(source: object, assign: object): object {
+    Object.keys(assign).forEach(key => {
+      if (assign[key] === Object(assign[key])) {
+        // is an object?
+        return this.deepMergeObjects(source[key], assign[key]);
+      }
+      source[key] = assign[key];
+    });
+    return source;
   }
 
   private mapFormDataToViewSlide(
@@ -368,22 +385,15 @@ export class SlideDetailComponent implements OnInit, OnChanges {
 
   private removeEmpty(obj): object {
     const newObj = {};
-    // https://stackoverflow.com/questions/42736031/remove-empty-objects-from-an-object?answertab=votes#tab-top
     // delete empty properties
     Object.keys(obj).forEach(key => {
-      if (obj[key] && typeof obj[key] === 'object') {
-        newObj[key] = this.removeEmpty(obj[key]); // recurse
-      } else if (obj[key] != null && obj[key] !== '') {
-        newObj[key] = obj[key]; // copy value
-      }
-    });
-
-    // delete keys with empty objects
-    Object.keys(newObj).forEach(key => {
-      if (newObj[key] && typeof newObj[key] === 'object') {
-        if (Object.keys(newObj[key]).length === 0) {
-          delete newObj[key];
+      if (obj[key] === Object(obj[key])) {
+        const cleanedValue = this.removeEmpty(obj[key]); // recurse
+        if (Object.keys(cleanedValue).length > 0) {
+          newObj[key] = cleanedValue;
         }
+      } else if (obj[key] !== null && obj[key] !== '') {
+        newObj[key] = obj[key]; // copy value
       }
     });
 

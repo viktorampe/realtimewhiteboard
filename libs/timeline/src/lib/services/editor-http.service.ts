@@ -1,14 +1,20 @@
 import { HttpClient } from '@angular/common/http';
-import { Inject, Injectable, InjectionToken } from '@angular/core';
-import { Observable, throwError } from 'rxjs';
-import { catchError, map, mapTo, retry } from 'rxjs/operators';
+import { Injectable, InjectionToken } from '@angular/core';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import {
-  EnvironmentApiInterface,
-  ENVIRONMENT_API_TOKEN
-} from '../interfaces/environment';
+  catchError,
+  filter,
+  map,
+  mapTo,
+  retry,
+  switchMap,
+  take,
+  tap
+} from 'rxjs/operators';
 import { TimelineConfigInterface } from '../interfaces/timeline';
 import {
   EditorHttpServiceInterface,
+  EditorHttpSettingsInterface,
   StorageInfoInterface
 } from './editor-http.service.interface';
 
@@ -21,45 +27,46 @@ const RETRY_AMOUNT = 2;
   providedIn: 'root'
 })
 export class EditorHttpService implements EditorHttpServiceInterface {
-  constructor(
-    private http: HttpClient,
-    @Inject(ENVIRONMENT_API_TOKEN)
-    private environmentApi: EnvironmentApiInterface
-  ) {}
+  private apiSettings$ = new BehaviorSubject<EditorHttpSettingsInterface>(null);
+  private eduContentId: number;
 
-  public getJson(
-    eduContentMetadataId: number
-  ): Observable<TimelineConfigInterface> {
-    const response$ = this.http
-      .get<{ timeline: string }>(
-        this.environmentApi.APIBase +
-          '/api/eduContentMetadata/' +
-          eduContentMetadataId +
-          '?filter[fields]=timeline' +
-          '&access_token=2' // TODO: remove this bit
-      )
-      .pipe(
-        retry(RETRY_AMOUNT),
-        catchError(this.handleError),
-        map(
-          response => JSON.parse(response.timeline) as TimelineConfigInterface
+  constructor(private http: HttpClient) {}
+
+  public setSettings(settings: EditorHttpSettingsInterface): void {
+    this.apiSettings$.next(settings);
+  }
+
+  public getJson(): Observable<TimelineConfigInterface> {
+    const response$ = this.apiSettings$.pipe(
+      filter(settings => !!settings),
+      take(1),
+      switchMap(settings =>
+        this.http.get<{ timeline: string; eduContentId: number }>(
+          settings.apiBase +
+            '/api/eduContentMetadata/' +
+            settings.eduContentMetadataId +
+            '?filter={"fields":["timeline","eduContentId"]}',
+          { withCredentials: true }
         )
-      );
+      ),
+      retry(RETRY_AMOUNT),
+      catchError(this.handleError),
+      tap(response => (this.eduContentId = response.eduContentId)),
+      map((response): TimelineConfigInterface => JSON.parse(response.timeline))
+    );
 
     return response$;
   }
 
-  public setJson(
-    eduContentMetadataId: number,
-    timelineConfig: TimelineConfigInterface
-  ): Observable<boolean> {
+  public setJson(timelineConfig: TimelineConfigInterface): Observable<boolean> {
+    const apiSettings: EditorHttpSettingsInterface = this.getSettings();
     const response$ = this.http
       .put(
-        this.environmentApi.APIBase +
+        apiSettings.apiBase +
           '/api/eduContentMetadata/' +
-          eduContentMetadataId +
-          '?access_token=2', // TODO: remove this bit
-        { timeline: JSON.stringify(timelineConfig) }
+          apiSettings.eduContentMetadataId,
+        { timeline: JSON.stringify(timelineConfig) },
+        { withCredentials: true }
       )
       .pipe(
         retry(RETRY_AMOUNT),
@@ -70,21 +77,19 @@ export class EditorHttpService implements EditorHttpServiceInterface {
     return response$;
   }
 
-  public getPreviewUrl(eduContentId, eduContentMetadataId): string {
+  public getPreviewUrl(): string {
+    const apiSettings: EditorHttpSettingsInterface = this.getSettings(true);
     return (
-      this.environmentApi.APIBase +
+      apiSettings.apiBase +
       '/api/eduContents/' +
-      eduContentId +
-      '/redirectURL/' + // TODO: doublecheck once API is finalised
-      eduContentMetadataId +
-      '?access_token=2' // TODO: remove this bit
+      this.eduContentId +
+      '/redirectURL/' +
+      apiSettings.eduContentMetadataId
     );
   }
 
-  public uploadFile(
-    eduContentId: number,
-    file: File
-  ): Observable<StorageInfoInterface> {
+  public uploadFile(file: File): Observable<StorageInfoInterface> {
+    const apiSettings: EditorHttpSettingsInterface = this.getSettings(true);
     // expects multiple='multiple' to be set on the file input
 
     const formData: FormData = new FormData();
@@ -92,12 +97,12 @@ export class EditorHttpService implements EditorHttpServiceInterface {
 
     const response$ = this.http
       .post(
-        this.environmentApi.APIBase +
+        apiSettings.apiBase +
           '/api/EduContentFiles/' +
-          eduContentId +
-          '/store' +
-          '?access_token=2', // TODO: remove this bit
-        formData
+          this.eduContentId +
+          '/store',
+        formData,
+        { withCredentials: true }
       )
       .pipe(
         retry(RETRY_AMOUNT),
@@ -113,5 +118,15 @@ export class EditorHttpService implements EditorHttpServiceInterface {
 
   private handleError(error) {
     return throwError(error);
+  }
+
+  private getSettings(
+    eduContentIdRequired?: boolean
+  ): EditorHttpSettingsInterface {
+    const apiSettings: EditorHttpSettingsInterface = this.apiSettings$.value;
+    if (!apiSettings || (eduContentIdRequired && !this.eduContentId)) {
+      throw new Error('no_http_settings_loaded');
+    }
+    return apiSettings;
   }
 }

@@ -12,11 +12,12 @@ import {
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MockMatIconRegistry } from '@campus/testing';
 import { configureTestSuite } from 'ng-bullet';
+import { EDITOR_HTTP_SERVICE_TOKEN } from '../../services/editor-http.service';
+import { EditorViewModel } from '../editor.viewmodel';
+import { MockEditorViewModel } from '../editor.viewmodel.mock';
 import { SettingsComponent } from '../settings/settings.component';
 import { SlideDetailComponent } from '../slide-detail/slide-detail.component';
 import { SlideListComponent } from '../slide-list/slide-list.component';
-import { EditorViewModel } from './../editor.viewmodel';
-import { MockEditorViewModel } from './../editor.viewmodel.mock';
 import { EditorTimelineComponent } from './editor-timeline.component';
 
 describe('EditorTimelineComponent', () => {
@@ -43,10 +44,8 @@ describe('EditorTimelineComponent', () => {
       ],
       providers: [
         { provide: MatIconRegistry, useClass: MockMatIconRegistry },
-        {
-          provide: EditorViewModel,
-          useClass: MockEditorViewModel
-        }
+        { provide: EditorViewModel, useClass: MockEditorViewModel },
+        { provide: EDITOR_HTTP_SERVICE_TOKEN, useValue: {} }
       ]
     });
   });

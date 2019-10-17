@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { environment } from '../../environments/environment';
 
 @Component({
   // selector: 'campus-timeline-editor',
@@ -6,7 +7,13 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./timeline-editor.component.scss']
 })
 export class TimelineEditorComponent implements OnInit {
+  public apiBase: string;
+  public eduContentMetadataId: number;
+
   constructor() {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.apiBase = environment.api.APIBase;
+    this.eduContentMetadataId = 19; // example
+  }
 }
