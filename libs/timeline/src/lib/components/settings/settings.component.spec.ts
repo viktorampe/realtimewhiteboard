@@ -68,4 +68,5 @@ describe('SettingsComponent', () => {
     expect(component.settingsForm.get('relative').value).toEqual(true);
     expect(component.settingsForm.get('scale_factor').value).toEqual(3);
   });
+  //TODO: isDirty test
 });
