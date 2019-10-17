@@ -45,6 +45,13 @@
         placeholder="Schaalfactor"
       />
     </mat-form-field>
+    <div
+      class="timeline-settings__tooltip__trigger"
+      [matTooltip]="tooltips['scalefactor']"
+      [matTooltipClass]="'timeline-settings__tooltip'"
+      *ngIf="tooltips['scalefactor']"
+      >i</div
+    >
   </section>
   <button
     mat-button

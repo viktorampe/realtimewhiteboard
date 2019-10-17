@@ -9,8 +9,8 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Subscription } from 'rxjs';
 import { MAT_TOOLTIP_DEFAULT_OPTIONS } from '@angular/material';
+import { Subscription } from 'rxjs';
 import { debounceTime, map, startWith } from 'rxjs/operators';
 import { TimelineSettingsInterface } from '../../interfaces/timeline';
 @Component({
@@ -104,7 +104,9 @@ export class SettingsComponent implements OnInit, OnDestroy {
         'Absoluut komt overeen met een normale tijd.\n' +
         'Relatief komt niet overeen met een exact tijdstip, bvb: levensjaren',
       cosmological:
-        'Gebruik kosmologisch voor een tijdslijn die een heel groot bereik nodig heeft.'
+        'Gebruik kosmologisch voor een tijdslijn die een heel groot bereik nodig heeft.',
+      scalefactor:
+        'Hoeveel keer de schermbreedte zal ingenomen worden bij de eerste presentatie.'
     };
   }
 
