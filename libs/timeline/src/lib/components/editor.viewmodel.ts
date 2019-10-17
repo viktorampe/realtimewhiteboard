@@ -38,8 +38,8 @@ export class EditorViewModel {
   // emit null in setting$ when there is a value
   private newSlide$ = new BehaviorSubject<TimelineViewSlideInterface>(null);
   private showSettings$: Observable<boolean>;
-  private _activeSlide$: BehaviorSubject<TimelineViewSlideInterface>;
-  private _isFormDirty$: BehaviorSubject<boolean>;
+  private _activeSlide$ = new BehaviorSubject(null);
+  private _isFormDirty$ = new BehaviorSubject(false);
 
   public activeSlide$: Observable<TimelineViewSlideInterface>;
   public activeSlideDetail$: Observable<TimelineViewSlideInterface>;
@@ -47,6 +47,7 @@ export class EditorViewModel {
   public settings$: Observable<TimelineSettingsInterface>;
   public isFormDirty$: Observable<boolean>;
   public activeSlideDetailCanSaveAsTitle$: Observable<boolean>;
+  public errors$: Observable<Error>;
 
   // where does the eduContentId and eduContentMetadataId come from?
   // the component? DI?
@@ -210,18 +211,19 @@ export class EditorViewModel {
   private setPresentationStreams() {
     this.slideList$ = this.data$.pipe(
       filter(data => !!data),
-      map(data => this.mapToViewSlides(data.eras || [], data.events || [])),
+      map(data =>
+        this.mapToViewSlides(data.eras || [], data.events || [], data.title)
+      ),
       shareReplay(1)
     );
 
-    this._activeSlide$ = new BehaviorSubject<TimelineViewSlideInterface>(null);
     this.activeSlide$ = this._activeSlide$.asObservable();
+    this.isFormDirty$ = this._isFormDirty$.asObservable();
     this.showSettings$ = this.showSettings();
     this.activeSlideDetail$ = this.getActiveSlideDetail();
     this.settings$ = this.getSettings();
-    this._isFormDirty$ = new BehaviorSubject(false);
-    this.isFormDirty$ = this._isFormDirty$.asObservable();
     this.activeSlideDetailCanSaveAsTitle$ = this.getActiveSlideDetailCanSaveAsTitle();
+    this.errors$ = this.editorHttpService.errors$;
   }
 
   private showSettings(): Observable<boolean> {
@@ -236,7 +238,7 @@ export class EditorViewModel {
     return combineLatest([this.data$, this.activeSlideDetail$]).pipe(
       map(
         ([data, activeSlideDetail]) =>
-          !data.title || data.title === activeSlideDetail
+          !data.title || data.title === activeSlideDetail.viewSlide
       )
     );
   }
@@ -269,7 +271,6 @@ export class EditorViewModel {
       switchMapTo(this.data$),
       filter(data => !!data),
       map(data => ({
-        title: data.title,
         scale: data.scale,
         options: data.options
       }))

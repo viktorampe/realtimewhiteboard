@@ -15,7 +15,7 @@ describe('EditorHttpService', () => {
   let editorHttpService: EditorHttpServiceInterface;
   let httpClient: HttpClient;
 
-  const APIBase = 'http://some.website.address';
+  const APIBase = 'http://some.website.address/api';
   const mockTimeline = new TimelineConfigFixture();
   const apiData = { timeline: JSON.stringify(mockTimeline), eduContentId: 1 };
   const requestMetadataId = 123;
@@ -28,7 +28,7 @@ describe('EditorHttpService', () => {
           provide: HttpClient,
           useValue: {
             get: () => {},
-            put: () => {},
+            patch: () => {},
             post: () => {}
           }
         },
@@ -74,7 +74,7 @@ describe('EditorHttpService', () => {
 
       expect(httpClient.get).toHaveBeenCalledWith(
         APIBase +
-          '/api/eduContentMetadata/' +
+          '/eduContentMetadata/' +
           requestMetadataId +
           '?filter={"fields":["timeline","eduContentId"]}',
         { withCredentials: true }
@@ -86,7 +86,7 @@ describe('EditorHttpService', () => {
     beforeEach(() => {
       // actual call returns entire eduContentMetadata
       // but response is mapped to a boolean, so it doesn't matter
-      httpClient.put = jest.fn().mockReturnValue(of(apiData));
+      httpClient.patch = jest.fn().mockReturnValue(of(apiData));
     });
 
     it('should make the correct api call and return the response', () => {
@@ -94,8 +94,8 @@ describe('EditorHttpService', () => {
         cold('(a|)', { a: true })
       );
 
-      expect(httpClient.put).toHaveBeenCalledWith(
-        APIBase + '/api/eduContentMetadata/' + requestMetadataId,
+      expect(httpClient.patch).toHaveBeenCalledWith(
+        APIBase + '/eduContentMetadata/' + requestMetadataId,
         { timeline: JSON.stringify(mockTimeline) },
         { withCredentials: true }
       );
@@ -123,7 +123,7 @@ describe('EditorHttpService', () => {
       );
 
       expect(httpClient.post).toHaveBeenCalledWith(
-        APIBase + '/api/EduContentFiles/' + apiData.eduContentId + '/store',
+        APIBase + '/EduContentFiles/' + apiData.eduContentId + '/store',
         formData,
         { withCredentials: true }
       );
@@ -136,7 +136,7 @@ describe('EditorHttpService', () => {
 
       const expected =
         APIBase +
-        '/api/eduContents/' +
+        '/eduContents/' +
         apiData.eduContentId +
         '/redirectURL/' +
         requestMetadataId;
