@@ -53,6 +53,9 @@
     <campus-settings
       *ngIf="(settings$ | async) as settings"
       class="timeline-editor__main__detail--settings"
+      [settings]="settings"
+      (saveSettings)="saveSettings($event)"
+      (isDirty)="setIsFormDirty($event)"
     ></campus-settings>
   </div>
 </div>
