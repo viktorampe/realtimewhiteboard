@@ -1,9 +1,30 @@
-import { Component, EventEmitter, HostBinding, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild, ViewEncapsulation } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  Component,
+  EventEmitter,
+  HostBinding,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges,
+  ViewChild,
+  ViewEncapsulation
+} from '@angular/core';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators
+} from '@angular/forms';
 import { MatStepper, MAT_TOOLTIP_DEFAULT_OPTIONS } from '@angular/material';
 import { Observable } from 'rxjs';
 import { debounceTime, map, shareReplay, startWith, tap } from 'rxjs/operators';
-import { TimelineEraInterface, TimelineSlideInterface, TimelineViewSlideInterface, TIMELINE_SLIDE_TYPES } from '../../interfaces/timeline';
+import {
+  TimelineEraInterface,
+  TimelineSlideInterface,
+  TimelineViewSlideInterface,
+  TIMELINE_SLIDE_TYPES
+} from '../../interfaces/timeline';
 
 interface SlideFormInterface extends TimelineSlideInterface {
   general?: {
