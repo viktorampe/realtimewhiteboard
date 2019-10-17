@@ -31,10 +31,10 @@ export class EditorHttpService implements EditorHttpServiceInterface {
 
   private apiSettings$ = new BehaviorSubject<EditorHttpSettingsInterface>(null);
   private eduContentId: number;
-  private _errorMessages$ = new ReplaySubject<Error>();
+  private _errors$ = new ReplaySubject<Error>();
 
   constructor(private http: HttpClient) {
-    this.errors$ = this._errorMessages$.asObservable();
+    this.errors$ = this._errors$.asObservable();
   }
 
   public setSettings(settings: EditorHttpSettingsInterface): void {
@@ -120,7 +120,7 @@ export class EditorHttpService implements EditorHttpServiceInterface {
   }
 
   private handleError(error: Error) {
-    this._errorMessages$.next(error);
+    this._errors$.next(error);
 
     return throwError(error);
   }
