@@ -1,13 +1,40 @@
 <form [formGroup]="settingsForm">
   <section class="timeline-settings__section">
-    Human
-    <mat-slide-toggle formControlName="humanCosmological"> </mat-slide-toggle>
-    Cosmological
+    <div class="t"
+      ><h3>Visueel</h3>
+      <div
+        class="timeline-settings__tooltip__trigger"
+        [matTooltip]="tooltips['visual']"
+        [matTooltipClass]="'timeline-settings__tooltip'"
+        *ngIf="tooltips['visual']"
+        >i</div
+      >
+    </div>
+
+    Absoluut
+    <mat-slide-toggle color="primary" formControlName="relative">
+    </mat-slide-toggle>
+    Relatief
   </section>
   <section class="timeline-settings__section">
-    Absolute
-    <mat-slide-toggle formControlName="relative"> </mat-slide-toggle>
-    Relative
+    <div class="t"
+      ><h3>Schaal</h3>
+      <div
+        class="timeline-settings__tooltip__trigger"
+        [matTooltip]="tooltips['cosmological']"
+        [matTooltipClass]="'timeline-settings__tooltip'"
+        *ngIf="tooltips['cosmological']"
+        >i</div
+      >
+    </div>
+    Menselijk
+    <mat-slide-toggle
+      color="primary"
+      aria-label="hye"
+      formControlName="humanCosmological"
+    >
+    </mat-slide-toggle>
+    Kosmologisch
   </section>
   <section class="timeline-settings__section">
     <mat-form-field>
@@ -15,9 +42,9 @@
         matInput
         type="number"
         formControlName="scale_factor"
-        placeholder="Default 1"
+        placeholder="Schaalfactor"
       />
     </mat-form-field>
   </section>
-  <button mat-button (click)="onSubmit()">Opslaan</button>
+  <button mat-button id="saveButton" (click)="onSubmit()">Opslaan</button>
 </form>

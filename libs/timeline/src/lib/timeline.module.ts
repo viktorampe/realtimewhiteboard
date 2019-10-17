@@ -12,7 +12,8 @@ import {
   MatListModule,
   MatNativeDateModule,
   MatRadioModule,
-  MatStepperModule
+  MatStepperModule,
+  MatTooltipModule
 } from '@angular/material';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -56,7 +57,8 @@ export const ENVIRONMENT_ICON_MAPPING_TOKEN = new InjectionToken(
     MatInputModule,
     MatRadioModule,
     MatSlideToggleModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    MatTooltipModule
   ],
   declarations: [
     EditorTimelineComponent,
