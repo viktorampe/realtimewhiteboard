@@ -1,16 +1,6 @@
-import {
-  Component,
-  HostBinding,
-  Input,
-  OnChanges,
-  OnInit,
-  SimpleChanges
-} from '@angular/core';
+import { Component, HostBinding, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { Observable } from 'rxjs';
-import {
-  TimelineSettingsInterface,
-  TimelineViewSlideInterface
-} from '../../interfaces/timeline';
+import { TimelineSettingsInterface, TimelineViewSlideInterface } from '../../interfaces/timeline';
 import { EditorViewModel } from '../editor.viewmodel';
 
 @Component({
@@ -24,6 +14,7 @@ export class EditorTimelineComponent implements OnInit, OnChanges {
   public activeSlideDetail$: Observable<TimelineViewSlideInterface>;
   public settings$: Observable<TimelineSettingsInterface>;
   public isFormDirty$: Observable<boolean>;
+  public canBeSavedAsTitle$:Observable<boolean>;
 
   @Input() eduContentMetadataId: number;
   @Input() apiBase: string;
@@ -38,6 +29,7 @@ export class EditorTimelineComponent implements OnInit, OnChanges {
     this.activeSlide$ = this.editorViewModel.activeSlide$;
     this.settings$ = this.editorViewModel.settings$;
     this.isFormDirty$ = this.editorViewModel.isFormDirty$;
+    this.canBeSavedAsTitle$ = this.editorViewModel.activeSlideDetailCanSaveAsTitle$;
   }
 
   ngOnChanges(changes: SimpleChanges) {

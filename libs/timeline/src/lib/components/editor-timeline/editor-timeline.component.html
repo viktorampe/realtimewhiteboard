@@ -45,6 +45,7 @@
       *ngIf="(activeSlideDetail$ | async) as activeSlideDetail"
       class="timeline-editor__main__detail--slide"
       [viewSlide]="activeSlideDetail"
+      [canBeSavedAsTitle]="canBeSavedAsTitle$ | async"
     ></campus-slide-detail>
 
     <campus-settings
