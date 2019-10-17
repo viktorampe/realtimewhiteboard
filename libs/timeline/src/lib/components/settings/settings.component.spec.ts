@@ -7,8 +7,8 @@ import {
   MatInputModule
 } from '@angular/material';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { HAMMER_LOADER } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import 'hammerjs';
 import { configureTestSuite } from 'ng-bullet';
 import { TimelineSettingsInterface } from '../../interfaces/timeline';
 import { SettingsComponent } from './settings.component';
@@ -28,7 +28,13 @@ describe('SettingsComponent', () => {
         MatSlideToggleModule,
         NoopAnimationsModule
       ],
-      declarations: [SettingsComponent]
+      declarations: [SettingsComponent],
+      providers: [
+        {
+          provide: HAMMER_LOADER,
+          useValue: () => new Promise(() => {})
+        }
+      ]
     });
   });
 
