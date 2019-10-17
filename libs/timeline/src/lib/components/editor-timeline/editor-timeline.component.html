@@ -48,6 +48,7 @@
       (saveViewSlide)="saveSlide($event)"
       [fileUploadResult]="fileUploadResult$ | async"
       [viewSlide]="activeSlideDetail"
+      (isDirty)="setIsFormDirty($event)"
     ></campus-slide-detail>
 
     <campus-settings
