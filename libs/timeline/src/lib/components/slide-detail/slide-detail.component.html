@@ -281,6 +281,9 @@
           formControlName="year"
           placeholder="Kies een jaar"
         />
+        <mat-error *ngIf="getControl(formGroupName + '.year').invalid">{{
+          getErrorMessage(formGroupName + '.year')
+        }}</mat-error>
       </mat-form-field>
       <mat-form-field>
         <input
@@ -289,6 +292,9 @@
           formControlName="month"
           placeholder="Kies een maand"
         />
+        <mat-error *ngIf="getControl(formGroupName + '.month').invalid">{{
+          getErrorMessage(formGroupName + '.month')
+        }}</mat-error>
       </mat-form-field>
       <mat-form-field>
         <input
@@ -297,6 +303,9 @@
           formControlName="day"
           placeholder="Kies een dag"
         />
+        <mat-error *ngIf="getControl(formGroupName + '.day').invalid">{{
+          getErrorMessage(formGroupName + '.day')
+        }}</mat-error>
       </mat-form-field>
 
       <mat-form-field>
@@ -306,6 +315,9 @@
           formControlName="hour"
           placeholder="Kies een uur"
         />
+        <mat-error *ngIf="getControl(formGroupName + '.hour').invalid">{{
+          getErrorMessage(formGroupName + '.hour')
+        }}</mat-error>
       </mat-form-field>
       <mat-form-field>
         <input
@@ -314,6 +326,9 @@
           formControlName="minute"
           placeholder="Kies een minuut"
         />
+        <mat-error *ngIf="getControl(formGroupName + '.minute').invalid">{{
+          getErrorMessage(formGroupName + '.minute')
+        }}</mat-error>
       </mat-form-field>
       <mat-form-field>
         <input
@@ -322,6 +337,9 @@
           formControlName="second"
           placeholder="Kies een seconde"
         />
+        <mat-error *ngIf="getControl(formGroupName + '.second').invalid">{{
+          getErrorMessage(formGroupName + '.second')
+        }}</mat-error>
       </mat-form-field>
       <mat-form-field>
         <input
@@ -330,6 +348,9 @@
           formControlName="millisecond"
           placeholder="Kies een milliseconde"
         />
+        <mat-error *ngIf="getControl(formGroupName + '.millisecond').invalid">{{
+          getErrorMessage(formGroupName + '.millisecond')
+        }}</mat-error>
       </mat-form-field>
       <mat-form-field>
         <input
