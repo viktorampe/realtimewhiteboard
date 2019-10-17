@@ -7,7 +7,7 @@ export const environment = {
   production: false,
   iconMapping: icons,
   api: {
-    APIBase: 'http://api.kabas.localhost:3000'
+    APIBase: 'http://api.kabas.localhost:3000/api'
   }
 };
 

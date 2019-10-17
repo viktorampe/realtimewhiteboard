@@ -139,6 +139,10 @@ export class SlideDetailComponent implements OnInit, OnChanges {
     }
   }
 
+  public getControl(name: string): FormControl {
+    return this.slideForm.get(name) as FormControl;
+  }
+
   private buildForm(): FormGroup {
     // validation defaults:
     //  - type: always required
@@ -206,10 +210,6 @@ export class SlideDetailComponent implements OnInit, OnChanges {
       millisecond: [this.formData[formGroupKey].millisecond || null],
       displayDate: [this.formData[formGroupKey].display_date || '']
     });
-  }
-
-  private getControl(name: string): FormControl {
-    return this.slideForm.get(name) as FormControl;
   }
 
   private initializeStreams() {
