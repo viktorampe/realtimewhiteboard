@@ -6,7 +6,7 @@ import {
   OnInit,
   SimpleChanges
 } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import {
   TimelineSettingsInterface,
@@ -29,7 +29,7 @@ export class EditorTimelineComponent implements OnInit, OnChanges {
   public activeSlideDetail$: Observable<TimelineViewSlideInterface>;
   public settings$: Observable<TimelineSettingsInterface>;
   public isFormDirty$: Observable<boolean>;
-  public fileUploadResult$: Observable<FileUploadResult>;
+  public fileUploadResult$ = new Subject<FileUploadResult>();
 
   @Input() eduContentMetadataId: number;
   @Input() apiBase: string;
@@ -84,11 +84,18 @@ export class EditorTimelineComponent implements OnInit, OnChanges {
   }
 
   public handleFileUpload(upload: UploadFileOutput) {
-    this.fileUploadResult$ = this.editorViewModel.uploadFile(upload.file).pipe(
-      map(storageInfo => ({
-        formControlName: upload.formControlName,
-        url: `/api/EduFiles/${storageInfo.eduFileId}/redirectURL`
-      }))
-    );
+    this.editorViewModel
+      .uploadFile(upload.file)
+      .pipe(
+        map(
+          (storageInfo): FileUploadResult => ({
+            formControlName: upload.formControlName,
+            url: `/api/EduFiles/${storageInfo.eduFileId}/redirectURL`
+          })
+        )
+      )
+      .subscribe((result: FileUploadResult) =>
+        this.fileUploadResult$.next(result)
+      );
   }
 }
