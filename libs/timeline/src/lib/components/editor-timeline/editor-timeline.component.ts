@@ -67,7 +67,7 @@ export class EditorTimelineComponent implements OnInit, OnChanges {
     this.editorViewModel.deleteActiveSlide();
   }
 
-  public saveSlide(slide: TimelineViewSlideInterface) {
+  public saveSlide(slide: TimelineViewSlideInterface): void {
     this.editorViewModel.upsertSlide(slide);
   }
 
@@ -83,7 +83,7 @@ export class EditorTimelineComponent implements OnInit, OnChanges {
     this.editorViewModel.setFormDirty(isDirty);
   }
 
-  public handleFileUpload(upload: UploadFileOutput) {
+  public handleFileUpload(upload: UploadFileOutput): void {
     this.editorViewModel
       .uploadFile(upload.file)
       .pipe(
