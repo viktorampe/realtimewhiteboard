@@ -168,18 +168,27 @@ describe('SlideDetailComponent', () => {
         typeControl.setValue(TIMELINE_SLIDE_TYPES.ERA);
         expect(start_dateYearControl.getError('required')).toBe(true);
         expect(end_dateYearControl.getError('required')).toEqual(true);
+
+        expect(component.requiredFieldsMap['start_date.year']).toBe(true);
+        expect(component.requiredFieldsMap['end_date.year']).toBe(true);
       });
 
       it('should update validators for type slide', () => {
         typeControl.setValue(TIMELINE_SLIDE_TYPES.SLIDE);
         expect(start_dateYearControl.getError('required')).toEqual(true);
         expect(end_dateYearControl.getError('required')).toEqual(null); // optional when slide
+
+        expect(component.requiredFieldsMap['start_date.year']).toBe(true);
+        expect(component.requiredFieldsMap['end_date.year']).toBe(false);
       });
 
       it('should update validators for type title', () => {
         typeControl.setValue(TIMELINE_SLIDE_TYPES.TITLE);
         expect(start_dateYearControl.getError('required')).toEqual(null); // optional when title
         expect(end_dateYearControl.getError('required')).toEqual(null); // optional when slide
+
+        expect(component.requiredFieldsMap['start_date.year']).toBe(false);
+        expect(component.requiredFieldsMap['end_date.year']).toBe(false);
       });
     });
   });

@@ -280,6 +280,7 @@
           type="number"
           formControlName="year"
           placeholder="Kies een jaar"
+          [required]="requiredFieldsMap[formGroupName + '.year']"
         />
         <mat-error *ngIf="getControl(formGroupName + '.year').invalid">{{
           getErrorMessage(formGroupName + '.year')

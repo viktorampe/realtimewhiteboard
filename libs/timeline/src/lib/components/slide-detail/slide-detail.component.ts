@@ -1,9 +1,31 @@
-import { Component, EventEmitter, HostBinding, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  HostBinding,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges,
+  ViewChild
+} from '@angular/core';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators
+} from '@angular/forms';
 import { MatStepper } from '@angular/material';
 import { Observable } from 'rxjs';
 import { map, shareReplay, startWith, tap } from 'rxjs/operators';
-import { TimelineDateInterface, TimelineEraInterface, TimelineSlideInterface, TimelineViewSlideInterface, TIMELINE_SLIDE_TYPES } from '../../interfaces/timeline';
+import {
+  TimelineDateInterface,
+  TimelineEraInterface,
+  TimelineSlideInterface,
+  TimelineViewSlideInterface,
+  TIMELINE_SLIDE_TYPES
+} from '../../interfaces/timeline';
 
 interface SlideFormInterface extends TimelineSlideInterface {
   general?: {
@@ -69,7 +91,13 @@ export class SlideDetailComponent implements OnInit, OnChanges {
 
   chosenType$: Observable<string>;
 
-  constructor(private fb: FormBuilder) {}
+  // used for setting the required * in the template
+  requiredFieldsMap = {
+    'start_date.year': true,
+    'end_date.year': false
+  };
+
+  constructor(private fb: FormBuilder, private ref: ChangeDetectorRef) {}
 
   ngOnInit() {
     this.formData = this.mapViewSlideToFormData(this.viewSlide);
@@ -103,6 +131,68 @@ export class SlideDetailComponent implements OnInit, OnChanges {
 
   handleColorPick(color: string): void {
     this.getControl('background.color').setValue(color);
+  }
+
+  getErrorMessage(field: string): string {
+    let errorMessage = '';
+    const control = this.getControl(field);
+    switch (field) {
+      case 'start_date.year':
+        errorMessage = control.hasError('required')
+          ? 'Je moet een startjaar invullen.'
+          : 'Je hebt een ongeldig jaar ingevuld.';
+        break;
+      case 'end_date.year':
+        errorMessage = control.hasError('required')
+          ? 'Je moet een eindjaar invullen.'
+          : 'Je hebt een ongeldig jaar ingevuld.';
+        break;
+      case 'start_date.month':
+      case 'end_date.month':
+        errorMessage =
+          control.hasError('min') || control.hasError('max')
+            ? 'De maand is een getal van 1 (januari) tot en met 12 (december).'
+            : 'Je hebt een ongeldige maand ingevuld.';
+        break;
+      case 'start_date.day':
+      case 'end_date.day':
+        errorMessage =
+          control.hasError('min') || control.hasError('max')
+            ? 'De dag is een getal van 1 tot en met 31.'
+            : 'Je hebt een ongeldige dag ingevuld.';
+        break;
+      case 'start_date.hour':
+      case 'end_date.hour':
+        errorMessage =
+          control.hasError('min') || control.hasError('max')
+            ? 'Het uur is een getal van 0 tot en met 23.'
+            : 'Je hebt een ongeldig uur ingevuld.';
+        break;
+      case 'start_date.minute':
+      case 'end_date.minute':
+        errorMessage =
+          control.hasError('min') || control.hasError('max')
+            ? 'De minuut is een getal van 0 tot en met 59.'
+            : 'Je hebt een ongeldige minuut ingevuld.';
+        break;
+      case 'start_date.second':
+      case 'end_date.second':
+        errorMessage =
+          control.hasError('min') || control.hasError('max')
+            ? 'De seconde is een getal van 0 tot en met 59.'
+            : 'Je hebt een ongeldige seconde ingevuld.';
+        break;
+      case 'start_date.millisecond':
+      case 'end_date.millisecond':
+        errorMessage = control.hasError('min')
+          ? 'De milliseconde kan niet minder dan 0 zijn.'
+          : 'Je hebt een ongeldige minuut ingevuld.';
+        break;
+
+      default:
+        break;
+    }
+    return errorMessage;
   }
 
   private buildForm(): FormGroup {
@@ -185,10 +275,11 @@ export class SlideDetailComponent implements OnInit, OnChanges {
         this.formData[formGroupKey].second,
         [Validators.min(0), Validators.max(59), Validators.maxLength(2)]
       ],
-      millisecond: [this.formData[formGroupKey].millisecond, [Validators.min(0)]],
-      display_date: [
-        this.formData[formGroupKey].display_date || ''
-      ]
+      millisecond: [
+        this.formData[formGroupKey].millisecond,
+        [Validators.min(0)]
+      ],
+      display_date: [this.formData[formGroupKey].display_date || '']
     });
   }
 
@@ -220,11 +311,15 @@ export class SlideDetailComponent implements OnInit, OnChanges {
     this.setFormControlAsOptional('start_date.year');
     this.setFormControlAsOptional('end_date.year');
 
+    this.requiredFieldsMap['start_date.year'] = false;
+    this.requiredFieldsMap['end_date.year'] = false;
+
     switch (type) {
       case TIMELINE_SLIDE_TYPES.SLIDE:
         // start_date is required
         // end_date is optional
         this.setFormControlAsRequired('start_date.year');
+        this.requiredFieldsMap['start_date.year'] = true;
         break;
       case TIMELINE_SLIDE_TYPES.TITLE:
         // same as slide, except the start_date is optional
@@ -235,72 +330,12 @@ export class SlideDetailComponent implements OnInit, OnChanges {
         // media url is optional
         this.setFormControlAsRequired('start_date.year');
         this.setFormControlAsRequired('end_date.year');
+        this.requiredFieldsMap['start_date.year'] = true;
+        this.requiredFieldsMap['end_date.year'] = true;
         break;
       default:
         throw new Error('type not recognised');
     }
-  }
-
-  getErrorMessage(field: string): string {
-    let errorMessage = '';
-    const control = this.getControl(field);
-    switch (field) {
-      case 'start_date.year':
-        errorMessage = control.hasError('required')
-          ? 'Je moet een startjaar invullen.'
-          : 'Je hebt een ongeldig jaar ingevuld.';
-        break;
-      case 'end_date.year':
-        errorMessage = control.hasError('required')
-          ? 'Je moet een eindjaar invullen.'
-          : 'Je hebt een ongeldig jaar ingevuld.';
-        break;
-      case 'start_date.month':
-      case 'end_date.month':
-        errorMessage =
-          control.hasError('min') || control.hasError('max')
-            ? 'De maand is een getal van 1 (januari) tot en met 12 (december).'
-            : 'Je hebt een ongeldige maand ingevuld.';
-        break;
-      case 'start_date.day':
-      case 'end_date.day':
-        errorMessage =
-          control.hasError('min') || control.hasError('max')
-            ? 'De dag is een getal van 1 tot en met 31.'
-            : 'Je hebt een ongeldige dag ingevuld.';
-        break;
-      case 'start_date.hour':
-      case 'end_date.hour':
-        errorMessage =
-          control.hasError('min') || control.hasError('max')
-            ? 'Het uur is een getal van 0 tot en met 23.'
-            : 'Je hebt een ongeldig uur ingevuld.';
-        break;
-      case 'start_date.minute':
-      case 'end_date.minute':
-        errorMessage =
-          control.hasError('min') || control.hasError('max')
-            ? 'De minuut is een getal van 0 tot en met 59.'
-            : 'Je hebt een ongeldige minuut ingevuld.';
-        break;
-      case 'start_date.second':
-      case 'end_date.second':
-        errorMessage =
-          control.hasError('min') || control.hasError('max')
-            ? 'De seconde is een getal van 0 tot en met 59.'
-            : 'Je hebt een ongeldige seconde ingevuld.';
-        break;
-      case 'start_date.millisecond':
-      case 'end_date.millisecond':
-        errorMessage = control.hasError('min')
-          ? 'De milliseconde kan niet minder dan 0 zijn.'
-          : 'Je hebt een ongeldige minuut ingevuld.';
-        break;
-
-      default:
-        break;
-    }
-    return errorMessage;
   }
 
   private setFormControlAsOptional(formControlName: string): void {
