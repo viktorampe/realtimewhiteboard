@@ -153,8 +153,10 @@ export class SlideDetailComponent implements OnInit, OnChanges {
 
     Object.keys(timelineDate).forEach(key => {
       let isZeroPossible = true;
+      if (key === 'display_date')
+        return (timelineDate[key] = timelineDate[key]);
       if (key === 'month') isZeroPossible = false;
-      if (key === 'display_date') timelineDate[key] = timelineDate[key];
+
       timelineDate[key] = this.getDateValue(timelineDate[key], isZeroPossible);
     });
     return timelineDate;
@@ -162,33 +164,25 @@ export class SlideDetailComponent implements OnInit, OnChanges {
 
   private getDateFormGroup(formGroupKey: 'start_date' | 'end_date'): FormGroup {
     return this.fb.group({
-      year: [
-        this.getDateValue(this.formData[formGroupKey].year, true),
-        [Validators.required]
-      ],
+      year: [this.formData[formGroupKey].year, [Validators.required]],
       month: [
-        this.getDateValue(this.formData[formGroupKey].month, false),
+        this.formData[formGroupKey].month,
         [Validators.min(1), Validators.max(12), Validators.maxLength(2)]
       ],
-      day: [
-        this.getDateValue(this.formData[formGroupKey].day, true),
-        [Validators.min(1)]
-      ],
+      day: [this.formData[formGroupKey].day, [Validators.min(1)]],
       hour: [
-        this.getDateValue(this.formData[formGroupKey].hour, true),
+        this.formData[formGroupKey].hour,
         [Validators.min(0), Validators.max(23), Validators.maxLength(2)]
       ],
       minute: [
-        this.getDateValue(this.formData[formGroupKey].minute, true),
+        this.formData[formGroupKey].minute,
         [Validators.min(0), Validators.max(59), Validators.maxLength(2)]
       ],
       second: [
-        this.getDateValue(this.formData[formGroupKey].second, true),
+        this.formData[formGroupKey].second,
         [Validators.min(0), Validators.max(59), Validators.maxLength(2)]
       ],
-      millisecond: [
-        this.getDateValue(this.formData[formGroupKey].millisecond, true)
-      ],
+      millisecond: [this.formData[formGroupKey].millisecond],
       display_date: [this.formData[formGroupKey].display_date || '']
     });
   }
