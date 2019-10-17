@@ -114,7 +114,7 @@ describe('EditorHttpService', () => {
     formData.append('file', file, file.name);
 
     beforeEach(() => {
-      httpClient.post = jest.fn().mockReturnValue(of(storageInfo));
+      httpClient.post = jest.fn().mockReturnValue(of({ storageInfo }));
     });
 
     it('should make the correct api call and return the response', () => {

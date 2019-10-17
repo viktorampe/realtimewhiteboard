@@ -113,7 +113,10 @@ export class EditorHttpService implements EditorHttpServiceInterface {
       .pipe(
         retry(RETRY_AMOUNT),
         catchError(this.handleError.bind(this)),
-        map(response => response as StorageInfoInterface)
+        map(
+          (response: { storageInfo: StorageInfoInterface }) =>
+            response.storageInfo
+        )
       );
 
     return response$;

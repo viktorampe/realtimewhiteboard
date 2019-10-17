@@ -9,12 +9,17 @@ import {
   Output,
   SimpleChanges
 } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subject, Subscription } from 'rxjs';
+import { map } from 'rxjs/operators';
 import {
   TimelineSettingsInterface,
   TimelineViewSlideInterface
 } from '../../interfaces/timeline';
-import { EditorViewModel } from '../editor.viewmodel';
+import {
+  FileUploadResult,
+  UploadFileOutput
+} from '../slide-detail/slide-detail.component';
+import { EditorViewModel } from './../editor.viewmodel';
 
 @Component({
   selector: 'campus-editor-timeline',
@@ -27,6 +32,7 @@ export class EditorTimelineComponent implements OnInit, OnChanges, OnDestroy {
   public activeSlideDetail$: Observable<TimelineViewSlideInterface>;
   public settings$: Observable<TimelineSettingsInterface>;
   public isFormDirty$: Observable<boolean>;
+  public fileUploadResult$ = new Subject<FileUploadResult>();
 
   @Input() eduContentMetadataId: number;
   @Input() apiBase: string;
@@ -77,7 +83,7 @@ export class EditorTimelineComponent implements OnInit, OnChanges, OnDestroy {
     this.editorViewModel.deleteActiveSlide();
   }
 
-  public saveSlide(slide: TimelineViewSlideInterface) {
+  public saveSlide(slide: TimelineViewSlideInterface): void {
     this.editorViewModel.upsertSlide(slide);
   }
 
@@ -91,5 +97,21 @@ export class EditorTimelineComponent implements OnInit, OnChanges, OnDestroy {
 
   public setIsFormDirty(isDirty: boolean): void {
     this.editorViewModel.setFormDirty(isDirty);
+  }
+
+  public handleFileUpload(upload: UploadFileOutput): void {
+    this.editorViewModel
+      .uploadFile(upload.file)
+      .pipe(
+        map(
+          (storageInfo): FileUploadResult => ({
+            formControlName: upload.formControlName,
+            url: `/api/EduFiles/${storageInfo.eduFileId}/redirectURL`
+          })
+        )
+      )
+      .subscribe((result: FileUploadResult) =>
+        this.fileUploadResult$.next(result)
+      );
   }
 }
