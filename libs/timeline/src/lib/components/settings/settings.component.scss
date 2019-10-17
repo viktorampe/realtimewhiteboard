@@ -1,9 +1,6 @@
 .timeline-settings {
   &__section {
     margin-bottom: 16px;
-    mat-form-field {
-      width: 100px;
-    }
   }
   &__tooltip {
     &__trigger {
@@ -15,7 +12,6 @@
       width: 20px;
       height: 20px;
       margin-left: 10px;
-      margin-top: 19px;
       color: darkgray;
     }
 
@@ -27,8 +23,4 @@
 
 form {
   padding: 50px 0px 0px 50px;
-  #saveButton {
-    padding: 0 16px;
-    width: 100px;
-  }
 }
