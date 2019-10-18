@@ -1,5 +1,10 @@
 import { SimpleChange } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {
+  ComponentFixture,
+  fakeAsync,
+  TestBed,
+  tick
+} from '@angular/core/testing';
 import { AbstractControl, ReactiveFormsModule } from '@angular/forms';
 import {
   MatFormFieldModule,
@@ -448,7 +453,7 @@ describe('SlideDetailComponent', () => {
   });
 
   describe('isDirty$', () => {
-    it('should emit true if the initial form values != updated form values', () => {
+    it('should emit true if the initial form values != updated form values', fakeAsync(() => {
       let isDirty: boolean;
       component.isDirty$.subscribe(output => {
         isDirty = output;
@@ -456,8 +461,9 @@ describe('SlideDetailComponent', () => {
 
       component.slideForm.patchValue({ general: { group: 'updated value' } });
 
+      tick(300);
       expect(isDirty).toBe(true);
-    });
+    }));
 
     it('should emit false if the updated form values === initial form values', () => {
       let isDirty: boolean;

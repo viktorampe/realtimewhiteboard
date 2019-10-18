@@ -17,7 +17,7 @@ import {
 } from '@angular/forms';
 import { MatStepper } from '@angular/material';
 import { Observable } from 'rxjs';
-import { map, shareReplay, startWith, tap } from 'rxjs/operators';
+import { debounceTime, map, shareReplay, startWith, tap } from 'rxjs/operators';
 import {
   TimelineDateInterface,
   TimelineEraInterface,
@@ -222,6 +222,7 @@ export class SlideDetailComponent implements OnInit, OnChanges {
     );
 
     this.isDirty$ = this.slideForm.valueChanges.pipe(
+      debounceTime(300),
       map(
         updatedFormValues =>
           JSON.stringify(updatedFormValues) !==

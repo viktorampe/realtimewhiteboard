@@ -1,4 +1,3 @@
-//file.only
 import { HttpClientModule } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { BrowserModule } from '@angular/platform-browser';
@@ -14,11 +13,7 @@ import { TimelineSlideFixture } from '../+fixtures/timeline-slide.fixture';
 import { EDITOR_HTTP_SERVICE_TOKEN } from '../services/editor-http.service';
 import { EditorHttpServiceInterface } from '../services/editor-http.service.interface';
 import { TimelineTextFixture } from './../+fixtures/timeline-text.fixture';
-import {
-  TimelineConfigInterface,
-  TimelineViewSlideInterface,
-  TIMELINE_SLIDE_TYPES
-} from './../interfaces/timeline';
+import { TimelineConfigInterface, TimelineViewSlideInterface, TIMELINE_SLIDE_TYPES } from './../interfaces/timeline';
 import { EditorViewModel } from './editor.viewmodel';
 
 describe('EditorViewModel', () => {
