@@ -88,7 +88,7 @@ export class SlideDetailComponent implements OnInit, OnChanges, OnDestroy {
   @HostBinding('class.timeline-slide-detail')
   setTimelineSlideDetailClass = true;
 
-  private initialFormValues: string; // used for isDirty$
+  private initialFormValues: SlideFormInterface; // used for isDirty$
   private formData: SlideFormInterface;
 
   slideForm: FormGroup;
@@ -107,7 +107,6 @@ export class SlideDetailComponent implements OnInit, OnChanges, OnDestroy {
     this.formData = this.mapViewSlideToFormData(this.viewSlide);
     this.slideForm = this.buildForm(); // first time --> build form + add values
 
-    this.initialFormValues = JSON.stringify(this.slideForm.value); // used for isDirty check
     this.initializeStreams();
     this.tooltips = this.getTooltipDictionary();
 
@@ -152,7 +151,7 @@ export class SlideDetailComponent implements OnInit, OnChanges, OnDestroy {
     if (this.slideForm.valid) {
       const outputData = this.mapFormDataToViewSlide(this.slideForm.value);
       this.saveViewSlide.emit(outputData);
-      this.initialFormValues = JSON.stringify(this.slideForm.value); // used for isDirty check
+      this.initialFormValues = { ...this.slideForm.value }; // used for isDirty check
       this.isDirty.emit(false);
     }
   }
@@ -166,6 +165,7 @@ export class SlideDetailComponent implements OnInit, OnChanges, OnDestroy {
     //  - type: always required
     //  - all other properties: optional
     // validation rules are dependent on the chosen type (see updateValidatorsForType())
+
     return this.fb.group({
       general: this.fb.group({
         type: [this.formData.general.type, Validators.required],
@@ -254,7 +254,7 @@ export class SlideDetailComponent implements OnInit, OnChanges, OnDestroy {
       debounceTime(300),
       map(
         updatedFormValues =>
-          JSON.stringify(updatedFormValues) !== this.initialFormValues
+          !this.deepEquals(updatedFormValues, this.initialFormValues)
       ),
       startWith(false)
     );
@@ -318,6 +318,11 @@ export class SlideDetailComponent implements OnInit, OnChanges, OnDestroy {
       display_date: viewSlide.viewSlide.display_date || '' // // default to empty string for isDirty$
     };
 
+    //remove superfluous properties
+    delete formData.group;
+    delete formData.display_date;
+
+    this.initialFormValues = { ...formData }; // used for isDirty check
     return formData;
   }
 
@@ -500,5 +505,34 @@ export class SlideDetailComponent implements OnInit, OnChanges, OnDestroy {
         'Standaardwaarde: bijschrift, indien ingevuld',
       link: 'optioneel \n' + 'De hyperlink van het media element.'
     };
+  }
+
+  private deepEquals(x, y) {
+    if (x === y) {
+      return true; // if both x and y are null or undefined and exactly the same
+    } else if (!(x instanceof Object) || !(y instanceof Object)) {
+      return false; // if they are not strictly equal, they both need to be Objects
+    } else {
+      for (const p in x) {
+        if (!y.hasOwnProperty(p)) {
+          return false; // allows to compare x[ p ] and y[ p ] when set to undefined
+        }
+        if (x[p] === y[p]) {
+          continue; // if they have the same strict value or identity then they are equal
+        }
+        if (typeof x[p] !== 'object') {
+          return false; // Numbers, Strings, Functions, Booleans must be strictly equal
+        }
+        if (!this.deepEquals(x[p], y[p])) {
+          return false;
+        }
+      }
+      for (const p in y) {
+        if (y.hasOwnProperty(p) && !x.hasOwnProperty(p)) {
+          return false;
+        }
+      }
+      return true;
+    }
   }
 }
