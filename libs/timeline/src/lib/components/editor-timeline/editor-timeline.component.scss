@@ -6,29 +6,12 @@
 }
 
 .timeline-editor {
-  &__toolbar {
-    background-color: #e5e5e5;
-    height: 50px;
-    display: flex;
-    padding: 8px;
-
-    &__button {
-      &-container {
-        display: flex;
-        align-content: center;
-        flex-grow: 1;
-
-        :not(:last-child) {
-          margin-right: 8px;
-        }
-      }
-    }
-
-    &__form-dirty-warning {
-      background-color: orange;
-      color: white;
-      align-self: flex-end;
-    }
+  &__form-dirty-warning {
+    background-color: orange;
+    color: white;
+    align-self: flex-end;
+    padding: 5px 10px;
+    position: absolute;
   }
 
   &__main {
@@ -38,8 +21,31 @@
     flex-direction: row;
     overflow: hidden;
 
-    &__list {
+    &__left {
       min-width: 15%;
+      overflow: auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    &__button-container {
+      padding: 0 10px;
+      flex: 0 0 60px;
+      border-top: 1px solid #d3d3d3;
+      border-right: 1px solid #d3d3d3;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      align-items: center;
+      align-content: center;
+
+      &__button--delete {
+        margin-left: auto;
+      }
+    }
+
+    &__list {
       overflow: auto;
     }
 

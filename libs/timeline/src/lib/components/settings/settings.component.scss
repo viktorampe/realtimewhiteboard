@@ -1,6 +1,9 @@
-.timeline-settings {
-  &__section {
-    margin-bottom: 16px;
+form {
+  margin: 20px;
+  .timeline-settings {
+    &__section {
+      margin-bottom: 16px;
+    }
   }
   &__tooltip {
     &__trigger {
@@ -19,8 +22,4 @@
       white-space: pre-line;
     }
   }
-}
-
-form {
-  padding: 50px 0px 0px 50px;
 }

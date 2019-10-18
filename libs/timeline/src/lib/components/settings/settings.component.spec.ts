@@ -1,4 +1,9 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {
+  ComponentFixture,
+  fakeAsync,
+  TestBed,
+  tick
+} from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import {
   MatButtonModule,
@@ -76,5 +81,29 @@ describe('SettingsComponent', () => {
     expect(component.settingsForm.get('relative').value).toEqual(true);
     expect(component.settingsForm.get('scale_factor').value).toEqual(3);
   });
-  //TODO: isDirty test
+
+  it('should emit isDirty = true on changes', fakeAsync(() => {
+    jest.spyOn(component.isDirty, 'emit');
+
+    component.settingsForm.patchValue({
+      humanCosmological: true
+    });
+    tick(300);
+
+    expect(component.isDirty.emit).toHaveBeenCalledTimes(1);
+    expect(component.isDirty.emit).toHaveBeenCalledWith(true);
+  }));
+
+  it('should reset the forms initial data and emit isDirty = false on submit', fakeAsync(() => {
+    component.settingsForm.patchValue({
+      humanCosmological: true
+    });
+    tick(300);
+
+    jest.spyOn(component.isDirty, 'emit');
+    component.onSubmit();
+
+    expect(component.isDirty.emit).toHaveBeenCalledTimes(1);
+    expect(component.isDirty.emit).toHaveBeenCalledWith(false);
+  }));
 });

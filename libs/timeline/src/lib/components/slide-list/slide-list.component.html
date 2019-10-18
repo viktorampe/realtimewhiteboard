@@ -4,7 +4,10 @@
     *ngFor="let slide of viewSlides"
     (click)="setViewSlide(slide)"
     [class.active]="slide === activeViewSlide"
-    [class.slide]="slide.type === 'slide'"
-    >{{ slide.label }}</button
+    [class.slide]="slide.type === slideType"
   >
+    <mat-icon *ngIf="slide.type === slideType">video_label</mat-icon>
+    <mat-icon *ngIf="slide.type !== slideType">dynamic_feed</mat-icon>
+    {{ slide.label }}
+  </button>
 </mat-action-list>
