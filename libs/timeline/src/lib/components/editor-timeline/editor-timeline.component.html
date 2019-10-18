@@ -46,9 +46,10 @@
       class="timeline-editor__main__detail--slide"
       (uploadFile)="handleFileUpload($event)"
       (saveViewSlide)="saveSlide($event)"
+      (isDirty)="setIsFormDirty($event)"
       [fileUploadResult]="fileUploadResult$ | async"
       [viewSlide]="activeSlideDetail"
-      (isDirty)="setIsFormDirty($event)"
+      [canBeSavedAsTitle]="canBeSavedAsTitle$ | async"
     ></campus-slide-detail>
 
     <campus-settings
