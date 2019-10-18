@@ -14,7 +14,6 @@ import {
 import {
   FormBuilder,
   FormControl,
-  FormControlName,
   FormGroup,
   Validators
 } from '@angular/forms';
@@ -153,6 +152,7 @@ export class SlideDetailComponent implements OnInit, OnChanges, OnDestroy {
     if (this.slideForm.valid) {
       const outputData = this.mapFormDataToViewSlide(this.slideForm.value);
       this.saveViewSlide.emit(outputData);
+      this.initialFormValues = JSON.stringify(this.slideForm.value); // used for isDirty check
     }
   }
 

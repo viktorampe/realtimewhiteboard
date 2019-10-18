@@ -438,6 +438,46 @@ describe('SlideDetailComponent', () => {
 
         expect(saveViewSlideSpy).toHaveBeenCalledWith(expectedOutput);
       });
+
+      it('should reset the forms initial data and emit isDirty = false', fakeAsync(() => {
+        jest.spyOn(component.isDirty, 'emit');
+
+        const mockViewSlide = {
+          type: TIMELINE_SLIDE_TYPES.SLIDE,
+          viewSlide: {
+            start_date: {
+              year: 1,
+              month: 2,
+              day: 3,
+              display_date: 'foo start'
+            },
+            end_date: {
+              year: 2,
+              month: 3,
+              day: 4,
+              display_date: 'foo end'
+            },
+            group: 'foo group',
+            text: {
+              text: 'foo text',
+              headline: 'foo headline'
+            },
+            background: { color: 'foo color' }
+          } as TimelineSlideInterface,
+          label: 'foo label'
+        };
+
+        component.viewSlide = mockViewSlide; // needed because the input value won't be changed by triggering ngOnChanges!
+        component.ngOnChanges({
+          viewSlide: new SimpleChange(null, mockViewSlide, false)
+        });
+
+        component.onSubmit();
+        tick(300);
+
+        expect(component.isDirty.emit).toHaveBeenCalledTimes(1);
+        expect(component.isDirty.emit).toHaveBeenCalledWith(false);
+      }));
     });
 
     describe('when invalid', () => {
