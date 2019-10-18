@@ -38,7 +38,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
   constructor(private fb: FormBuilder) {}
 
-  @HostBinding('class.timeline-settings') private isSettings = true;
+  @HostBinding('class.timeline-settings') public isSettings = true;
 
   ngOnInit() {
     this.settingsForm = this.buildForm();
