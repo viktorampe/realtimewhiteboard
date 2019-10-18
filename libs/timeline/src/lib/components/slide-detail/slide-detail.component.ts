@@ -206,12 +206,10 @@ export class SlideDetailComponent implements OnInit, OnChanges, OnDestroy {
     if (!timelineDate) return { year: null };
 
     Object.keys(timelineDate).forEach(key => {
-      let isZeroPossible = true;
-      if (key === 'display_date')
-        return (timelineDate[key] = timelineDate[key]);
-      if (key === 'month') isZeroPossible = false;
-
-      timelineDate[key] = this.getDateValue(timelineDate[key], isZeroPossible);
+      if (key === 'display_date') {
+        return;
+      }
+      timelineDate[key] = this.getDateValue(timelineDate[key], key !=== 'month');
     });
     return timelineDate;
   }
