@@ -13,7 +13,8 @@ import {
   MatInputModule,
   MatListModule,
   MatRadioModule,
-  MatStepperModule
+  MatStepperModule,
+  MatTooltipModule
 } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MockMatIconRegistry } from '@campus/testing';
@@ -51,6 +52,7 @@ describe('SlideDetailComponent', () => {
         MatRadioModule,
         MatStepperModule,
         MatIconModule,
+        MatTooltipModule,
         NoopAnimationsModule
       ],
       declarations: [SlideDetailComponent],
@@ -297,7 +299,7 @@ describe('SlideDetailComponent', () => {
         component.onSubmit();
 
         const expectedOutput: TimelineViewSlideInterface = {
-          type: 3, // slide
+          type: TIMELINE_SLIDE_TYPES.SLIDE,
           viewSlide: {
             start_date: {
               year: 1,
@@ -360,7 +362,7 @@ describe('SlideDetailComponent', () => {
         component.onSubmit();
 
         const expectedOutput: TimelineViewSlideInterface = {
-          type: 1, // title
+          type: TIMELINE_SLIDE_TYPES.TITLE,
           viewSlide: {
             start_date: {
               year: 1,
@@ -417,7 +419,7 @@ describe('SlideDetailComponent', () => {
         component.onSubmit();
 
         const expectedOutput: TimelineViewSlideInterface = {
-          type: 2, // slide
+          type: TIMELINE_SLIDE_TYPES.ERA,
           viewSlide: {
             start_date: {
               year: 1,
