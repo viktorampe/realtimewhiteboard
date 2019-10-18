@@ -8,8 +8,7 @@ import {
   OnInit,
   Output,
   SimpleChanges,
-  ViewChild,
-  ViewEncapsulation
+  ViewChild
 } from '@angular/core';
 import {
   FormBuilder,
@@ -36,19 +35,19 @@ interface SlideFormInterface extends TimelineSlideInterface {
   };
 }
 
-export type FormControlName =
+export type FormControlPath =
   | 'media.url'
   | 'media.thumbnail'
   | 'background.url';
 
 export interface FileUploadResult {
-  formControlName: FormControlName;
+  formControlName: FormControlPath;
   url?: string;
 }
 
 export interface UploadFileOutput {
   file: File;
-  formControlName: FormControlName;
+  formControlName: FormControlPath;
 }
 
 @Component({
@@ -57,8 +56,7 @@ export interface UploadFileOutput {
   styleUrls: ['./slide-detail.component.scss'],
   providers: [
     { provide: MAT_TOOLTIP_DEFAULT_OPTIONS, useValue: { position: 'after' } }
-  ],
-  encapsulation: ViewEncapsulation.None
+  ]
 })
 export class SlideDetailComponent implements OnInit, OnChanges, OnDestroy {
   private subscriptions = new Subscription();
@@ -143,7 +141,7 @@ export class SlideDetailComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  handleFileInput(files: FileList, formControlName: FormControlName) {
+  handleFileInput(files: FileList, formControlName: FormControlPath) {
     this.fileUploadResult = { url: '', formControlName };
     const fileToUpload: File = files.item(0);
     this.uploadFile.emit({ file: fileToUpload, formControlName });
@@ -151,6 +149,14 @@ export class SlideDetailComponent implements OnInit, OnChanges, OnDestroy {
 
   handleColorPick(color: string): void {
     this.getControl('background.color').setValue(color);
+  }
+
+  goBack() {
+    this.stepper.previous();
+  }
+
+  goForward() {
+    this.stepper.next();
   }
 
   getErrorMessage(field: string): string {
