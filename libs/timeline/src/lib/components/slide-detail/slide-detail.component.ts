@@ -129,7 +129,7 @@ export class SlideDetailComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.viewSlide && !changes.viewSlide.firstChange) {
-      this.stepper.reset();
+      this.stepper.selectedIndex = 0;
       this.formData = this.mapViewSlideToFormData(
         changes.viewSlide.currentValue
       );
