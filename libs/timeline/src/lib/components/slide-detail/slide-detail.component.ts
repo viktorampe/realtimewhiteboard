@@ -1,9 +1,30 @@
-import { Component, EventEmitter, HostBinding, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  Component,
+  EventEmitter,
+  HostBinding,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges,
+  ViewChild
+} from '@angular/core';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators
+} from '@angular/forms';
 import { MatStepper } from '@angular/material';
 import { Observable } from 'rxjs';
 import { map, shareReplay, startWith, tap } from 'rxjs/operators';
-import { TimelineDateInterface, TimelineEraInterface, TimelineSlideInterface, TimelineViewSlideInterface, TIMELINE_SLIDE_TYPES } from '../../interfaces/timeline';
+import {
+  TimelineDateInterface,
+  TimelineEraInterface,
+  TimelineSlideInterface,
+  TimelineViewSlideInterface,
+  TIMELINE_SLIDE_TYPES
+} from '../../interfaces/timeline';
 
 interface SlideFormInterface extends TimelineSlideInterface {
   general?: {
@@ -176,7 +197,7 @@ export class SlideDetailComponent implements OnInit, OnChanges {
   getFormGroup(formGroupName: string): FormGroup {
     return this.slideForm.get(formGroupName) as FormGroup;
   }
-  
+
   getControl(name: string): FormControl {
     return this.slideForm.get(name) as FormControl;
   }
