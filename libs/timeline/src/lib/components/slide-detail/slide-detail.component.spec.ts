@@ -80,7 +80,6 @@ describe('SlideDetailComponent', () => {
   it('should initialize the streams and properties', () => {
     expect(component.slideForm).toBeDefined();
     expect(component.chosenType$).toBeDefined();
-    expect(component.isDirty$).toBeDefined();
   });
 
   describe('mapping viewslide data to  form data', () => {
@@ -454,25 +453,20 @@ describe('SlideDetailComponent', () => {
     });
   });
 
-  describe('isDirty$', () => {
+  describe('isDirty', () => {
+    beforeEach(() => {
+      jest.spyOn(component.isDirty, 'emit');
+    });
+
     it('should emit true if the initial form values != updated form values', fakeAsync(() => {
-      let isDirty: boolean;
-      component.isDirty$.subscribe(output => {
-        isDirty = output;
-      });
-
       component.slideForm.patchValue({ general: { group: 'updated value' } });
-
       tick(300);
-      expect(isDirty).toBe(true);
+
+      expect(component.isDirty.emit).toHaveBeenCalledTimes(1);
+      expect(component.isDirty.emit).toHaveBeenCalledWith(true);
     }));
 
-    it('should emit false if the updated form values === initial form values', () => {
-      let isDirty: boolean;
-      component.isDirty$.subscribe(output => {
-        isDirty = output;
-      });
-
+    it('should emit false if the updated form values === initial form values', fakeAsync(() => {
       // needed because TimelineEraInterface does not have a group property
       const viewSlideData = viewSlideMock.viewSlide as TimelineSlideInterface;
 
@@ -481,7 +475,9 @@ describe('SlideDetailComponent', () => {
         general: { group: viewSlideData.group }
       }); // reset group value
 
-      expect(isDirty).toBe(false);
-    });
+      tick(300);
+      expect(component.isDirty.emit).toHaveBeenCalledTimes(1);
+      expect(component.isDirty.emit).toHaveBeenCalledWith(false);
+    }));
   });
 });
