@@ -513,7 +513,7 @@ export class SlideDetailComponent implements OnInit, OnChanges, OnDestroy {
     } else if (!(x instanceof Object) || !(y instanceof Object)) {
       return false; // if they are not strictly equal, they both need to be Objects
     } else {
-      for (const p in x) {
+      for (const p of Object.keys(x)) {
         if (!y.hasOwnProperty(p)) {
           return false; // allows to compare x[ p ] and y[ p ] when set to undefined
         }
@@ -527,7 +527,7 @@ export class SlideDetailComponent implements OnInit, OnChanges, OnDestroy {
           return false;
         }
       }
-      for (const p in y) {
+      for (const p of Object.keys(y)) {
         if (y.hasOwnProperty(p) && !x.hasOwnProperty(p)) {
           return false;
         }
