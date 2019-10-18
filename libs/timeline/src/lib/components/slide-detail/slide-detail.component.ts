@@ -14,6 +14,7 @@ import {
 import {
   FormBuilder,
   FormControl,
+  FormControlName,
   FormGroup,
   Validators
 } from '@angular/forms';
@@ -21,6 +22,7 @@ import { MatStepper, MAT_TOOLTIP_DEFAULT_OPTIONS } from '@angular/material';
 import { Observable, Subscription } from 'rxjs';
 import { debounceTime, map, shareReplay, startWith, tap } from 'rxjs/operators';
 import {
+  TimelineDateInterface,
   TimelineEraInterface,
   TimelineSlideInterface,
   TimelineViewSlideInterface,
@@ -87,7 +89,7 @@ export class SlideDetailComponent implements OnInit, OnChanges, OnDestroy {
   @HostBinding('class.timeline-slide-detail')
   setTimelineSlideDetailClass = true;
 
-  private initialFormValues: any; // used for isDirty$
+  private initialFormValues: string; // used for isDirty$
   private formData: SlideFormInterface;
 
   slideForm: FormGroup;
@@ -104,8 +106,9 @@ export class SlideDetailComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnInit() {
     this.formData = this.mapViewSlideToFormData(this.viewSlide);
-    this.slideForm = this.buildForm();
-    this.initialFormValues = { ...this.slideForm.value }; // used for isDirty check
+    this.slideForm = this.buildForm(); // first time --> build form + add values
+
+    this.initialFormValues = JSON.stringify(this.slideForm.value); // used for isDirty check
     this.initializeStreams();
     this.tooltips = this.getTooltipDictionary();
 
@@ -126,9 +129,9 @@ export class SlideDetailComponent implements OnInit, OnChanges, OnDestroy {
       this.formData = this.mapViewSlideToFormData(
         changes.viewSlide.currentValue
       );
+      // form already exists --> update form values
       this.slideForm.patchValue(this.formData);
     }
-
     if (changes.fileUploadResult && !changes.fileUploadResult.firstChange) {
       this.getControl(
         changes.fileUploadResult.currentValue.formControlName
@@ -139,7 +142,7 @@ export class SlideDetailComponent implements OnInit, OnChanges, OnDestroy {
   handleFileInput(files: FileList, formControlName: FormControlName) {
     this.fileUploadResult = { url: '', formControlName };
     const fileToUpload: File = files.item(0);
-    this.uploadFile.next({ file: fileToUpload, formControlName });
+    this.uploadFile.emit({ file: fileToUpload, formControlName });
   }
 
   handleColorPick(color: string): void {
@@ -190,39 +193,50 @@ export class SlideDetailComponent implements OnInit, OnChanges, OnDestroy {
     });
   }
 
+  private getDateValue(dateValue: number, isZeroPossible: boolean): number {
+    if (isZeroPossible) {
+      return dateValue === 0 ? 0 : dateValue || null;
+    } else {
+      return dateValue || null;
+    }
+  }
+
+  private getDateValues(
+    timelineDate: TimelineDateInterface
+  ): TimelineDateInterface {
+    if (!timelineDate) return { year: null };
+
+    Object.keys(timelineDate).forEach(key => {
+      if (key === 'display_date') {
+        return;
+      }
+      timelineDate[key] = this.getDateValue(timelineDate[key], key !== 'month');
+    });
+    return timelineDate;
+  }
+
   private getDateFormGroup(formGroupKey: 'start_date' | 'end_date'): FormGroup {
     return this.fb.group({
-      year: [
-        this.formData[formGroupKey].year === 0
-          ? 0 // user has chosen number 0
-          : this.formData[formGroupKey].year || null,
-        [Validators.required]
-      ],
+      year: [this.formData[formGroupKey].year, [Validators.required]],
       month: [
-        this.formData[formGroupKey].month || null,
+        this.formData[formGroupKey].month,
         [Validators.min(1), Validators.max(12), Validators.maxLength(2)]
       ],
-      day: [this.formData[formGroupKey].day || null, [Validators.min(1)]],
+      day: [this.formData[formGroupKey].day, [Validators.min(1)]],
       hour: [
-        this.formData[formGroupKey].hour === 0
-          ? 0
-          : this.formData[formGroupKey].hour || null,
+        this.formData[formGroupKey].hour,
         [Validators.min(0), Validators.max(23), Validators.maxLength(2)]
       ],
       minute: [
-        this.formData[formGroupKey].minute === 0
-          ? 0
-          : this.formData[formGroupKey].minute || null,
+        this.formData[formGroupKey].minute,
         [Validators.min(0), Validators.max(59), Validators.maxLength(2)]
       ],
       second: [
-        this.formData[formGroupKey].second === 0
-          ? 0
-          : this.formData[formGroupKey].second || null,
+        this.formData[formGroupKey].second,
         [Validators.min(0), Validators.max(59), Validators.maxLength(2)]
       ],
-      millisecond: [this.formData[formGroupKey].millisecond || null],
-      displayDate: [this.formData[formGroupKey].display_date || '']
+      millisecond: [this.formData[formGroupKey].millisecond],
+      display_date: [this.formData[formGroupKey].display_date || '']
     });
   }
 
@@ -239,8 +253,7 @@ export class SlideDetailComponent implements OnInit, OnChanges, OnDestroy {
       debounceTime(300),
       map(
         updatedFormValues =>
-          JSON.stringify(updatedFormValues) !==
-          JSON.stringify(this.initialFormValues)
+          JSON.stringify(updatedFormValues) !== this.initialFormValues
       ),
       startWith(false)
     );
@@ -293,6 +306,9 @@ export class SlideDetailComponent implements OnInit, OnChanges, OnDestroy {
     );
 
     viewSlide.viewSlide = viewSlide.viewSlide as TimelineSlideInterface;
+
+    formData.start_date = this.getDateValues(formData.start_date);
+    formData.end_date = this.getDateValues(formData.end_date);
 
     // add properties that are used by the form, but not needed for the view slide
     formData.general = {
