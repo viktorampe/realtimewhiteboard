@@ -238,7 +238,8 @@ export class EditorViewModel {
     return combineLatest([this.data$, this.activeSlideDetail$]).pipe(
       map(
         ([data, activeSlideDetail]) =>
-          !data.title || data.title === activeSlideDetail.viewSlide
+          !data.title ||
+          (activeSlideDetail && data.title === activeSlideDetail.viewSlide)
       )
     );
   }

@@ -8,8 +8,18 @@
       <ng-template matStepperIcon="done">
         <mat-icon [svgIcon]="'close'"></mat-icon>
       </ng-template>
+
+      <ng-template matStepperIcon="warning">
+        <mat-icon [svgIcon]="'warning'"></mat-icon>
+      </ng-template>
+
       <!-- GENERAL -->
-      <mat-step formGroupName="general" label="Algemeen">
+      <mat-step
+        [stepControl]="getFormGroup('general')"
+        errorMessage="Hier is iets mis"
+        formGroupName="general"
+        label="Algemeen"
+      >
         <div class="timeline-slide-detail__form__section">
           <label>Welk type slide wil je maken?</label>
           <div
@@ -78,8 +88,13 @@
           <button mat-button matStepperNext>Volgende</button>
         </div>
       </mat-step>
+
       <!-- START_DATE -->
-      <mat-step label="Startdatum">
+      <mat-step
+        [stepControl]="getFormGroup('start_date')"
+        label="Startdatum"
+        errorMessage="Hier is iets mis"
+      >
         <div
           class="timeline-slide-detail__form__dateTimePicker timeline-slide-detail__form__section"
         >
@@ -103,8 +118,13 @@
           <button mat-button matStepperNext>Volgende</button>
         </div>
       </mat-step>
+
       <!-- END_DATE -->
-      <mat-step label="Einddatum">
+      <mat-step
+        [stepControl]="getFormGroup('end_date')"
+        errorMessage="Hier is iets mis"
+        label="Einddatum"
+      >
         <div
           class="timeline-slide-detail__form__dateTimePicker timeline-slide-detail__form__section"
         >
@@ -129,8 +149,14 @@
           <button mat-button matStepperNext>Volgende</button>
         </div>
       </mat-step>
+
       <!-- TEXT -->
-      <mat-step formGroupName="text" label="Tekst">
+      <mat-step
+        [stepControl]="getFormGroup('text')"
+        errorMessage="Hier is iets mis"
+        formGroupName="text"
+        label="Tekst"
+      >
         <div class="timeline-slide-detail__form__section">
           <div class="mat-h3">Tekst</div>
 
@@ -177,9 +203,12 @@
           >
         </div>
       </mat-step>
+
       <!-- BACKGROUND -->
       <mat-step
         *ngIf="slideType !== slideTypesEnum.ERA"
+        [stepControl]="getFormGroup('background')"
+        errorMessage="Hier is iets mis"
         formGroupName="background"
         label="Achtergrond"
       >
@@ -243,9 +272,12 @@
           <button mat-button matStepperNext>Volgende</button>
         </div>
       </mat-step>
+
       <!-- MEDIA -->
       <mat-step
         *ngIf="slideType !== slideTypesEnum.ERA"
+        [stepControl]="getFormGroup('media')"
+        errorMessage="Hier is iets mis"
         formGroupName="media"
         label="Media"
       >
@@ -388,7 +420,9 @@
       </mat-step>
     </mat-horizontal-stepper>
 
-    <button mat-button (click)="onSubmit()">Opslaan</button>
+    <button mat-button [disabled]="slideForm.invalid" (click)="onSubmit()"
+      >Opslaan</button
+    >
   </form>
 </ng-container>
 
@@ -401,7 +435,11 @@
           type="number"
           formControlName="year"
           placeholder="Kies een jaar"
+          [required]="requiredFieldsMap[formGroupName + '.year']"
         />
+        <mat-error *ngIf="getControl(formGroupName + '.year').invalid">{{
+          getErrorMessage(formGroupName + '.year')
+        }}</mat-error>
       </mat-form-field>
       <mat-form-field>
         <input
@@ -410,6 +448,9 @@
           formControlName="month"
           placeholder="Kies een maand"
         />
+        <mat-error *ngIf="getControl(formGroupName + '.month').invalid">{{
+          getErrorMessage(formGroupName + '.month')
+        }}</mat-error>
       </mat-form-field>
       <mat-form-field>
         <input
@@ -418,6 +459,9 @@
           formControlName="day"
           placeholder="Kies een dag"
         />
+        <mat-error *ngIf="getControl(formGroupName + '.day').invalid">{{
+          getErrorMessage(formGroupName + '.day')
+        }}</mat-error>
       </mat-form-field>
 
       <mat-form-field>
@@ -427,6 +471,9 @@
           formControlName="hour"
           placeholder="Kies een uur"
         />
+        <mat-error *ngIf="getControl(formGroupName + '.hour').invalid">{{
+          getErrorMessage(formGroupName + '.hour')
+        }}</mat-error>
       </mat-form-field>
       <mat-form-field>
         <input
@@ -435,6 +482,9 @@
           formControlName="minute"
           placeholder="Kies een minuut"
         />
+        <mat-error *ngIf="getControl(formGroupName + '.minute').invalid">{{
+          getErrorMessage(formGroupName + '.minute')
+        }}</mat-error>
       </mat-form-field>
       <mat-form-field>
         <input
@@ -443,6 +493,9 @@
           formControlName="second"
           placeholder="Kies een seconde"
         />
+        <mat-error *ngIf="getControl(formGroupName + '.second').invalid">{{
+          getErrorMessage(formGroupName + '.second')
+        }}</mat-error>
       </mat-form-field>
       <mat-form-field>
         <input
@@ -451,6 +504,9 @@
           formControlName="millisecond"
           placeholder="Kies een milliseconde"
         />
+        <mat-error *ngIf="getControl(formGroupName + '.millisecond').invalid">{{
+          getErrorMessage(formGroupName + '.millisecond')
+        }}</mat-error>
       </mat-form-field>
       <mat-form-field>
         <input
