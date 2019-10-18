@@ -46,6 +46,7 @@
       class="timeline-editor__main__detail--slide"
       (uploadFile)="handleFileUpload($event)"
       (saveViewSlide)="saveSlide($event)"
+      (isDirty)="setIsFormDirty($event)"
       [fileUploadResult]="fileUploadResult$ | async"
       [viewSlide]="activeSlideDetail"
       [canBeSavedAsTitle]="canBeSavedAsTitle$ | async"

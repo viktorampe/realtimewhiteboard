@@ -4,6 +4,7 @@ import {
   HostBinding,
   Input,
   OnChanges,
+  OnDestroy,
   OnInit,
   Output,
   SimpleChanges,
@@ -17,7 +18,7 @@ import {
   Validators
 } from '@angular/forms';
 import { MatStepper, MAT_TOOLTIP_DEFAULT_OPTIONS } from '@angular/material';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { debounceTime, map, shareReplay, startWith, tap } from 'rxjs/operators';
 import {
   TimelineEraInterface,
@@ -48,6 +49,7 @@ export interface UploadFileOutput {
   file: File;
   formControlName: FormControlName;
 }
+
 @Component({
   selector: 'campus-slide-detail',
   templateUrl: './slide-detail.component.html',
@@ -57,7 +59,9 @@ export interface UploadFileOutput {
   ],
   encapsulation: ViewEncapsulation.None
 })
-export class SlideDetailComponent implements OnInit, OnChanges {
+export class SlideDetailComponent implements OnInit, OnChanges, OnDestroy {
+  private subscriptions = new Subscription();
+  private isDirty$: Observable<boolean>;
   public tooltips: { [key: string]: string };
 
   @Input() viewSlide: TimelineViewSlideInterface;
@@ -74,7 +78,7 @@ export class SlideDetailComponent implements OnInit, OnChanges {
 
   @Output() saveViewSlide = new EventEmitter<TimelineViewSlideInterface>();
   @Output() uploadFile = new EventEmitter<UploadFileOutput>();
-  @Output() isDirty$: Observable<boolean>;
+  @Output() isDirty = new EventEmitter<boolean>();
 
   @ViewChild(MatStepper) stepper: MatStepper;
 
@@ -104,6 +108,16 @@ export class SlideDetailComponent implements OnInit, OnChanges {
     this.initialFormValues = { ...this.slideForm.value }; // used for isDirty check
     this.initializeStreams();
     this.tooltips = this.getTooltipDictionary();
+
+    this.subscriptions.add(
+      this.isDirty$.subscribe(isDirty => {
+        this.isDirty.emit(isDirty);
+      })
+    );
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
