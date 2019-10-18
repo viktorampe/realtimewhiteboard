@@ -1,19 +1,20 @@
 import { Injector, NgModule } from '@angular/core';
 import { createCustomElement } from '@angular/elements';
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 import {
   ENVIRONMENT_API_TOKEN,
   ENVIRONMENT_ICON_MAPPING_TOKEN,
   TimelineModule
 } from '@campus/timeline';
-import { environment } from './../environments/environment';
+import 'hammerjs';
+import { environment } from '../environments/environment';
 import { TimelineEditorComponent } from './timeline-editor/timeline-editor.component';
 
 @NgModule({
   declarations: [TimelineEditorComponent],
   imports: [
-    BrowserModule,
+    BrowserAnimationsModule,
     RouterModule.forRoot([], { initialNavigation: 'enabled' }),
     TimelineModule
   ],

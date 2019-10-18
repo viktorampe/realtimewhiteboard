@@ -1,11 +1,19 @@
+import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { InjectionToken, NgModule } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 import {
   MatButtonModule,
+  MatFormFieldModule,
   MatIconModule,
   MatIconRegistry,
-  MatListModule
+  MatInputModule,
+  MatListModule,
+  MatRadioModule,
+  MatSlideToggleModule,
+  MatStepperModule,
+  MatTooltipModule
 } from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
 import { EditorTimelineComponent } from './components/editor-timeline/editor-timeline.component';
@@ -24,10 +32,17 @@ export const ENVIRONMENT_ICON_MAPPING_TOKEN = new InjectionToken(
 @NgModule({
   imports: [
     CommonModule,
-    HttpClientModule,
     MatButtonModule,
     MatListModule,
-    MatIconModule
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatRadioModule,
+    MatStepperModule,
+    MatIconModule,
+    HttpClientModule,
+    MatSlideToggleModule,
+    MatTooltipModule
   ],
   declarations: [
     EditorTimelineComponent,
@@ -37,7 +52,13 @@ export const ENVIRONMENT_ICON_MAPPING_TOKEN = new InjectionToken(
   ],
   exports: [EditorTimelineComponent],
   providers: [
-    { provide: EDITOR_HTTP_SERVICE_TOKEN, useClass: EditorHttpService }
+    { provide: EDITOR_HTTP_SERVICE_TOKEN, useClass: EditorHttpService },
+    { provide: ENVIRONMENT_ICON_MAPPING_TOKEN, useValue: {} },
+
+    {
+      provide: STEPPER_GLOBAL_OPTIONS,
+      useValue: { showError: true }
+    }
   ]
 })
 export class TimelineModule {

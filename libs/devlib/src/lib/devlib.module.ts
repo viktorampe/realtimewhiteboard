@@ -5,6 +5,7 @@ import { MatIconModule } from '@angular/material';
 import { PagesHomeModule } from '@campus/pages/home';
 import { SearchModule } from '@campus/search';
 import { SharedModule } from '@campus/shared';
+import { TimelineModule } from '@campus/timeline';
 import { UiModule } from '@campus/ui';
 import { WhiteboardModule } from '@campus/whiteboard';
 import { DemoPageComponent } from './demo-page/demo-page.component';
@@ -23,7 +24,8 @@ import { WhiteboardDemoPageComponent } from './whiteboard-demo-page/whiteboard-d
     MatIconModule,
     SearchModule,
     PagesHomeModule,
-    WhiteboardModule
+    WhiteboardModule,
+    TimelineModule
   ],
   providers: [LoginPageViewModel],
   declarations: [
