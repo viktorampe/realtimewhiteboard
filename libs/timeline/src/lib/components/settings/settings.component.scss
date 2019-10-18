@@ -1,10 +1,29 @@
 form {
-  margin: 20px;
-  .timeline-settings {
-    &__section {
-      margin-bottom: 16px;
-    }
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 24px 0 0 24px;
+  box-sizing: border-box;
+}
+
+.form-footer {
+  flex: 0 0 60px;
+  max-height: 60px;
+  height: 60px;
+  flex-direction: row;
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: flex-end;
+  align-items: center;
+  align-content: center;
+}
+
+.timeline-settings {
+  &__section {
+    margin-bottom: 16px;
   }
+
   &__tooltip {
     &__trigger {
       border: 1px solid darkgray;
@@ -17,9 +36,13 @@ form {
       margin-left: 10px;
       color: darkgray;
     }
-
-    &.mat-tooltip {
-      white-space: pre-line;
-    }
   }
+
+  &__spacer {
+    flex-grow: 1;
+  }
+}
+
+::ng-deep .mat-tooltip {
+  white-space: pre-line;
 }
