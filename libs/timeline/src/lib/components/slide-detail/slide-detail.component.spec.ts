@@ -440,8 +440,6 @@ describe('SlideDetailComponent', () => {
       });
 
       it('should reset the forms initial data and emit isDirty = false', fakeAsync(() => {
-        jest.spyOn(component.isDirty, 'emit');
-
         const mockViewSlide = {
           type: TIMELINE_SLIDE_TYPES.SLIDE,
           viewSlide: {
@@ -471,9 +469,10 @@ describe('SlideDetailComponent', () => {
         component.ngOnChanges({
           viewSlide: new SimpleChange(null, mockViewSlide, false)
         });
-
-        component.onSubmit();
         tick(300);
+
+        jest.spyOn(component.isDirty, 'emit');
+        component.onSubmit();
 
         expect(component.isDirty.emit).toHaveBeenCalledTimes(1);
         expect(component.isDirty.emit).toHaveBeenCalledWith(false);

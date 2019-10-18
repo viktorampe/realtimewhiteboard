@@ -153,6 +153,7 @@ export class SlideDetailComponent implements OnInit, OnChanges, OnDestroy {
       const outputData = this.mapFormDataToViewSlide(this.slideForm.value);
       this.saveViewSlide.emit(outputData);
       this.initialFormValues = JSON.stringify(this.slideForm.value); // used for isDirty check
+      this.isDirty.emit(false);
     }
   }
 
