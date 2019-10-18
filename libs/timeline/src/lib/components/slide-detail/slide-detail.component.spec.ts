@@ -80,6 +80,7 @@ describe('SlideDetailComponent', () => {
   it('should initialize the streams and properties', () => {
     expect(component.slideForm).toBeDefined();
     expect(component.chosenType$).toBeDefined();
+    expect(component.isDirty).toBeDefined();
   });
 
   describe('mapping viewslide data to  form data', () => {

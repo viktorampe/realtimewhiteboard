@@ -1,13 +1,25 @@
-.timeline-slide-list__buttons {
-  button {
-    margin-left: 5px;
+:host {
+  background-color: #ededed;
+  border-right: 1px solid #d3d3d3;
+}
 
-    &:first-child {
-      margin-left: 0;
-    }
+button {
+  &:first-child {
+    margin-left: 0;
+  }
+}
+
+.mat-list-item {
+  &.active {
+    background-color: #ff4081 !important;
+    color: #fff;
   }
 }
 
 .mat-list-item.slide {
   padding-left: 10px;
+}
+
+mat-icon {
+  margin-right: 10px;
 }
