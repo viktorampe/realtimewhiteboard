@@ -23,6 +23,13 @@
         >
           <div class="timeline-slide-detail__form__section">
             <label>Welk type slide wil je maken?</label>
+            <div
+              class="timeline-slide-detail__form__tooltip__trigger"
+              [matTooltip]="tooltips['type']"
+              [matTooltipClass]="'timeline-slide-detail__form__tooltip'"
+              *ngIf="tooltips['type']"
+              >i</div
+            >
             <mat-radio-group class="radio-group" formControlName="type">
               <mat-radio-button
                 class="radio-button"
@@ -37,7 +44,17 @@
           </div>
           <ng-container *ngIf="slideType !== slideTypesEnum.ERA">
             <div class="timeline-slide-detail__form__section">
-              <div class="mat-h3">Groep</div>
+              <div class="mat-h3"
+                >Groep
+                <div
+                  class="timeline-slide-detail__form__tooltip__trigger"
+                  [matTooltip]="tooltips['group']"
+                  [matTooltipClass]="'timeline-slide-detail__form__tooltip'"
+                  *ngIf="tooltips['group']"
+                  >i</div
+                >
+              </div>
+
               <mat-form-field>
                 <input
                   matInput
@@ -49,7 +66,16 @@
             </div>
 
             <div class="timeline-slide-detail__form__section">
-              <div class="mat-h3">Weergavedatum</div>
+              <div class="mat-h3"
+                >Weergavedatum
+                <div
+                  class="timeline-slide-detail__form__tooltip__trigger"
+                  [matTooltip]="tooltips['display_date']"
+                  [matTooltipClass]="'timeline-slide-detail__form__tooltip'"
+                  *ngIf="tooltips['display_date']"
+                  >i</div
+                >
+              </div>
               <mat-form-field>
                 <input
                   matInput
@@ -70,7 +96,15 @@
           <div
             class="timeline-slide-detail__form__dateTimePicker timeline-slide-detail__form__section"
           >
-            <div class="mat-h3">Startdatum</div>
+            <div class="mat-h3"
+              >Startdatum<div
+                class="timeline-slide-detail__form__tooltip__trigger"
+                [matTooltip]="tooltips['start_date']"
+                [matTooltipClass]="'timeline-slide-detail__form__tooltip'"
+                *ngIf="tooltips['start_date']"
+                >i</div
+              ></div
+            >
             <ng-container
               [ngTemplateOutlet]="timelineDateFields"
               [ngTemplateOutletContext]="{ formGroupName: 'start_date' }"
@@ -86,7 +120,15 @@
           <div
             class="timeline-slide-detail__form__dateTimePicker timeline-slide-detail__form__section"
           >
-            <div class="mat-h3">Einddatum</div>
+            <div class="mat-h3"
+              >Einddatum<div
+                class="timeline-slide-detail__form__tooltip__trigger"
+                [matTooltip]="tooltips['end_date']"
+                [matTooltipClass]="'timeline-slide-detail__form__tooltip'"
+                *ngIf="tooltips['end_date']"
+                >i</div
+              ></div
+            >
             <ng-container
               [ngTemplateOutlet]="timelineDateFields"
               [ngTemplateOutletContext]="{ formGroupName: 'end_date' }"
@@ -111,6 +153,13 @@
                 placeholder="Titel"
               />
             </mat-form-field>
+            <div
+              class="timeline-slide-detail__form__tooltip__trigger"
+              [matTooltip]="tooltips['headline']"
+              [matTooltipClass]="'timeline-slide-detail__form__tooltip'"
+              *ngIf="tooltips['headline']"
+              >i</div
+            >
             <mat-form-field *ngIf="slideType !== slideTypesEnum.ERA">
               <textarea
                 matInput
@@ -120,6 +169,13 @@
               >
               </textarea>
             </mat-form-field>
+            <div
+              class="timeline-slide-detail__form__tooltip__trigger"
+              [matTooltip]="tooltips['text']"
+              [matTooltipClass]="'timeline-slide-detail__form__tooltip'"
+              *ngIf="tooltips['text'] && slideType !== slideTypesEnum.ERA"
+              >i</div
+            >
           </div>
         </mat-step>
         <!-- BACKGROUND -->
@@ -155,6 +211,13 @@
                   placeholder="url"
                 />
               </mat-form-field>
+              <div
+                class="timeline-slide-detail__form__tooltip__trigger"
+                [matTooltip]="tooltips['background']"
+                [matTooltipClass]="'timeline-slide-detail__form__tooltip'"
+                *ngIf="tooltips['background']"
+                >i</div
+              >
             </div>
 
             <div class="timeline-slide-detail__form__color-picker">
@@ -176,6 +239,13 @@
                 "
                 class="timeline-slide-detail__form__color-picker__preview"
               ></div>
+              <div
+                class="timeline-slide-detail__form__tooltip__trigger"
+                [matTooltip]="tooltips['color']"
+                [matTooltipClass]="'timeline-slide-detail__form__tooltip'"
+                *ngIf="tooltips['color']"
+                >i</div
+              >
             </div>
           </div>
         </mat-step>
@@ -189,6 +259,7 @@
         >
           <div class="timeline-slide-detail__form__section">
             <div class="mat-h3">Media</div>
+            <div class="mat-h5">Media element</div>
             <div class="timeline-slide-detail__form__file-upload">
               <button
                 mat-button
@@ -210,7 +281,15 @@
                   placeholder="Of plaats hier een link naar een bestand"
                 />
               </mat-form-field>
+              <div
+                class="timeline-slide-detail__form__tooltip__trigger"
+                [matTooltip]="tooltips['url']"
+                [matTooltipClass]="'timeline-slide-detail__form__tooltip'"
+                *ngIf="tooltips['url']"
+                >i</div
+              >
             </div>
+            <div class="mat-h5">Thumbnail</div>
             <div class="timeline-slide-detail__form__file-upload">
               <button
                 mat-button
@@ -234,30 +313,50 @@
                   placeholder="Of plaats hier een link naar een bestand"
                 />
               </mat-form-field>
+              <div
+                class="timeline-slide-detail__form__tooltip__trigger"
+                [matTooltip]="tooltips['thumbnail']"
+                [matTooltipClass]="'timeline-slide-detail__form__tooltip'"
+                *ngIf="tooltips['thumbnail']"
+                >i</div
+              >
             </div>
             <mat-form-field>
               <input
                 matInput
                 type="string"
                 formControlName="caption"
-                placeholder="Caption"
+                placeholder="Bijschrift"
               />
             </mat-form-field>
+            <div
+              class="timeline-slide-detail__form__tooltip__trigger"
+              [matTooltip]="tooltips['caption']"
+              [matTooltipClass]="'timeline-slide-detail__form__tooltip'"
+              *ngIf="tooltips['caption']"
+              >i</div
+            >
             <mat-form-field>
               <input
                 matInput
                 type="string"
                 formControlName="credit"
-                placeholder="Credit"
+                placeholder="Bronvermelding"
               />
             </mat-form-field>
-
+            <div
+              class="timeline-slide-detail__form__tooltip__trigger"
+              [matTooltip]="tooltips['credit']"
+              [matTooltipClass]="'timeline-slide-detail__form__tooltip'"
+              *ngIf="tooltips['credit']"
+              >i</div
+            >
             <mat-form-field>
               <input
                 matInput
                 type="string"
                 formControlName="alt"
-                placeholder="Alt"
+                placeholder="Alternatieve tekst"
               />
             </mat-form-field>
             <mat-form-field>
@@ -268,6 +367,13 @@
                 placeholder="Titel"
               />
             </mat-form-field>
+            <div
+              class="timeline-slide-detail__form__tooltip__trigger"
+              [matTooltip]="tooltips['title']"
+              [matTooltipClass]="'timeline-slide-detail__form__tooltip'"
+              *ngIf="tooltips['title']"
+              >i</div
+            >
             <mat-form-field>
               <input
                 matInput
@@ -276,6 +382,20 @@
                 placeholder="Link"
               />
             </mat-form-field>
+            <div
+              class="timeline-slide-detail__form__tooltip__trigger"
+              [matTooltip]="tooltips['link']"
+              [matTooltipClass]="'timeline-slide-detail__form__tooltip'"
+              *ngIf="tooltips['link']"
+              >i</div
+            >
+            <div
+              class="timeline-slide-detail__form__tooltip__trigger"
+              [matTooltip]="tooltips['thumbnail']"
+              [matTooltipClass]="'timeline-slide-detail__form__tooltip'"
+              *ngIf="tooltips['thumbnail']"
+              >i</div
+            >
           </div>
         </mat-step>
       </mat-horizontal-stepper>
@@ -388,6 +508,13 @@
             placeholder="Hoe moet de datum worden weergegeven?"
           />
         </mat-form-field>
+        <div
+          class="timeline-slide-detail__form__tooltip__trigger"
+          [matTooltip]="tooltips['display_date']"
+          [matTooltipClass]="'timeline-slide-detail__form__tooltip'"
+          *ngIf="tooltips['display_date']"
+          >i</div
+        >
       </div>
     </div>
     <div class="errors">
