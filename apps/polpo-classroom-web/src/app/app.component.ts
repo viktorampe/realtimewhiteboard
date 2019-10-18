@@ -23,7 +23,7 @@ export class AppComponent implements AfterViewInit {
   public useShell: boolean;
 
   /**
-   * the link to the promo website, used on the logo
+   * The link to the promo website, used on the logo
    */
   public websiteUrl: string = environment.website.url;
 

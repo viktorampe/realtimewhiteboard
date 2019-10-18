@@ -243,6 +243,12 @@ p {
   }
 }
 
+.search-results {
+  .ui-list-view__list {
+    align-items: flex-start !important;
+  }
+}
+
 .pages-home__container {
   &.no-favorites {
     padding-top: $kabas-page-vertical-padding;
