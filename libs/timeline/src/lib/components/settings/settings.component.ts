@@ -59,7 +59,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
           scale_factor: this.settingsForm.get('scale_factor').value
         }
       });
-      
+
       this.initialFormValues = JSON.stringify(this.settingsForm.value);
       this.isDirty.emit(false);
     }
