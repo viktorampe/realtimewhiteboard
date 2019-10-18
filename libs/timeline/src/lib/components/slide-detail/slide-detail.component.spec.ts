@@ -8,7 +8,8 @@ import {
   MatInputModule,
   MatListModule,
   MatRadioModule,
-  MatStepperModule
+  MatStepperModule,
+  MatTooltipModule
 } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MockMatIconRegistry } from '@campus/testing';
@@ -46,6 +47,7 @@ describe('SlideDetailComponent', () => {
         MatRadioModule,
         MatStepperModule,
         MatIconModule,
+        MatTooltipModule,
         NoopAnimationsModule
       ],
       declarations: [SlideDetailComponent],
