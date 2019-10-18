@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconModule } from '@angular/material';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import {
   ENVIRONMENT_API_TOKEN,
   ENVIRONMENT_ICON_MAPPING_TOKEN,
@@ -14,7 +15,7 @@ describe('TimelineEditorComponent', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [TimelineModule, MatIconModule],
+      imports: [TimelineModule, MatIconModule, NoopAnimationsModule],
       declarations: [TimelineEditorComponent],
       providers: [
         {
