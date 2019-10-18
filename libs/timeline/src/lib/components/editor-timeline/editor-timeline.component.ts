@@ -31,6 +31,7 @@ export class EditorTimelineComponent implements OnInit, OnChanges, OnDestroy {
   public slideList$: Observable<TimelineViewSlideInterface[]>;
   public activeSlide$: Observable<TimelineViewSlideInterface>;
   public activeSlideDetail$: Observable<TimelineViewSlideInterface>;
+  public showSettings$: Observable<boolean>;
   public settings$: Observable<TimelineSettingsInterface>;
   public isFormDirty$: Observable<boolean>;
   public canBeSavedAsTitle$: Observable<boolean>;
@@ -54,6 +55,7 @@ export class EditorTimelineComponent implements OnInit, OnChanges, OnDestroy {
     this.activeSlideDetail$ = this.editorViewModel.activeSlideDetail$;
     this.activeSlide$ = this.editorViewModel.activeSlide$;
     this.settings$ = this.editorViewModel.settings$;
+    this.showSettings$ = this.editorViewModel.showSettings$;
     this.isFormDirty$ = this.editorViewModel.isFormDirty$;
     this.canBeSavedAsTitle$ = this.editorViewModel.activeSlideDetailCanSaveAsTitle$;
 
