@@ -14,6 +14,7 @@ import {
 import {
   FormBuilder,
   FormControl,
+  FormControlName,
   FormGroup,
   Validators
 } from '@angular/forms';
@@ -88,7 +89,7 @@ export class SlideDetailComponent implements OnInit, OnChanges, OnDestroy {
   @HostBinding('class.timeline-slide-detail')
   setTimelineSlideDetailClass = true;
 
-  private initialFormValues: SlideFormInterface; // used for isDirty$
+  private initialFormValues: string; // used for isDirty$
   private formData: SlideFormInterface;
 
   slideForm: FormGroup;
@@ -107,7 +108,7 @@ export class SlideDetailComponent implements OnInit, OnChanges, OnDestroy {
     this.formData = this.mapViewSlideToFormData(this.viewSlide);
     this.slideForm = this.buildForm(); // first time --> build form + add values
 
-    this.initialFormValues = { ...this.slideForm.value }; // used for isDirty check
+    this.initialFormValues = JSON.stringify(this.slideForm.value); // used for isDirty check
     this.initializeStreams();
     this.tooltips = this.getTooltipDictionary();
 
@@ -209,7 +210,7 @@ export class SlideDetailComponent implements OnInit, OnChanges, OnDestroy {
       if (key === 'display_date') {
         return;
       }
-      timelineDate[key] = this.getDateValue(timelineDate[key], key !=== 'month');
+      timelineDate[key] = this.getDateValue(timelineDate[key], key !== 'month');
     });
     return timelineDate;
   }
@@ -252,8 +253,7 @@ export class SlideDetailComponent implements OnInit, OnChanges, OnDestroy {
       debounceTime(300),
       map(
         updatedFormValues =>
-          JSON.stringify(updatedFormValues) !==
-          JSON.stringify(this.initialFormValues)
+          JSON.stringify(updatedFormValues) !== this.initialFormValues
       ),
       startWith(false)
     );
