@@ -322,7 +322,7 @@ export class SlideDetailComponent implements OnInit, OnChanges, OnDestroy {
     delete formData.group;
     delete formData.display_date;
 
-    this.initialFormValues = { ...formData }; // used for isDirty check
+    this.initialFormValues = formData; // used for isDirty check
     return formData;
   }
 
