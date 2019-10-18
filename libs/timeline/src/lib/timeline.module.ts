@@ -1,3 +1,4 @@
+import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { InjectionToken, NgModule } from '@angular/core';
@@ -52,7 +53,12 @@ export const ENVIRONMENT_ICON_MAPPING_TOKEN = new InjectionToken(
   exports: [EditorTimelineComponent],
   providers: [
     { provide: EDITOR_HTTP_SERVICE_TOKEN, useClass: EditorHttpService },
-    { provide: ENVIRONMENT_ICON_MAPPING_TOKEN, useValue: {} }
+    { provide: ENVIRONMENT_ICON_MAPPING_TOKEN, useValue: {} },
+
+    {
+      provide: STEPPER_GLOBAL_OPTIONS,
+      useValue: { showError: true }
+    }
   ]
 })
 export class TimelineModule {
