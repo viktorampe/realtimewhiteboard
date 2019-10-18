@@ -7,7 +7,8 @@ import {
   OnInit,
   Output,
   SimpleChanges,
-  ViewChild
+  ViewChild,
+  ViewEncapsulation
 } from '@angular/core';
 import {
   FormBuilder,
@@ -15,7 +16,7 @@ import {
   FormGroup,
   Validators
 } from '@angular/forms';
-import { MatStepper } from '@angular/material';
+import { MatStepper, MAT_TOOLTIP_DEFAULT_OPTIONS } from '@angular/material';
 import { Observable } from 'rxjs';
 import { debounceTime, map, shareReplay, startWith, tap } from 'rxjs/operators';
 import {
@@ -50,9 +51,15 @@ export interface UploadFileOutput {
 @Component({
   selector: 'campus-slide-detail',
   templateUrl: './slide-detail.component.html',
-  styleUrls: ['./slide-detail.component.scss']
+  styleUrls: ['./slide-detail.component.scss'],
+  providers: [
+    { provide: MAT_TOOLTIP_DEFAULT_OPTIONS, useValue: { position: 'after' } }
+  ],
+  encapsulation: ViewEncapsulation.None
 })
 export class SlideDetailComponent implements OnInit, OnChanges {
+  public tooltips: { [key: string]: string };
+
   @Input() viewSlide: TimelineViewSlideInterface;
   @Input() fileUploadResult: FileUploadResult;
   /**
@@ -81,9 +88,9 @@ export class SlideDetailComponent implements OnInit, OnChanges {
 
   slideForm: FormGroup;
   slideTypes: { label: string; value: TIMELINE_SLIDE_TYPES }[] = [
-    { label: 'titelslide', value: TIMELINE_SLIDE_TYPES.TITLE },
-    { label: 'slide', value: TIMELINE_SLIDE_TYPES.SLIDE },
-    { label: 'era', value: TIMELINE_SLIDE_TYPES.ERA }
+    { label: 'titel', value: TIMELINE_SLIDE_TYPES.TITLE },
+    { label: 'gebeurtenis', value: TIMELINE_SLIDE_TYPES.SLIDE },
+    { label: 'tijdspanne', value: TIMELINE_SLIDE_TYPES.ERA }
   ];
   slideTypesEnum = TIMELINE_SLIDE_TYPES;
 
@@ -96,6 +103,7 @@ export class SlideDetailComponent implements OnInit, OnChanges {
     this.slideForm = this.buildForm();
     this.initialFormValues = { ...this.slideForm.value }; // used for isDirty check
     this.initializeStreams();
+    this.tooltips = this.getTooltipDictionary();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -122,6 +130,13 @@ export class SlideDetailComponent implements OnInit, OnChanges {
 
   handleColorPick(color: string): void {
     this.getControl('background.color').setValue(color);
+  }
+
+  onSubmit(): void {
+    if (this.slideForm.valid) {
+      const outputData = this.mapFormDataToViewSlide(this.slideForm.value);
+      this.saveViewSlide.emit(outputData);
+    }
   }
 
   public getControl(name: string): FormControl {
@@ -400,10 +415,59 @@ export class SlideDetailComponent implements OnInit, OnChanges {
     return newObj;
   }
 
-  onSubmit(): void {
-    if (this.slideForm.valid) {
-      const outputData = this.mapFormDataToViewSlide(this.slideForm.value);
-      this.saveViewSlide.emit(outputData);
-    }
+  private getTooltipDictionary() {
+    return {
+      type:
+        'titel: een speciaal soort gebeurtenis, wordt als eerste getoond bij het laden van een tijdslijn.\n' +
+        'Een tijdslijn heeft maximum 1 titel.\n\n' +
+        'gebeurtenis: de standaard bouwblok van een tijdslijn.\n\n' +
+        'tijdspanne: dient om in de tijdslijnbalk onderaan een periode aan te duiden.',
+      group:
+        'optioneel\n' +
+        'Gebeurtenissen en tijdspannes met de zelfde groep krijgen op de tijdslijnbalk een eigen rij.',
+      display_date:
+        'optioneel\n' +
+        'Deze tekst wordt getoond in plaats van de ingevoerde datum.',
+      start_date:
+        'optioneel voor een titel\n' +
+        'Deze datum wordt ook gebruikt om de gebeurtenissen en tijdspannes te ordenen.\n' +
+        'Een datum bevat minimaal een jaar.',
+      end_date:
+        'optioneel voor een titel en een gebeurtenis\n' +
+        'Een datum bevat minimaal een jaar.',
+      headline: 'optioneel, aangeraden \n' + 'De titel van de slide',
+      text: 'optioneel, aangeraden \n' + 'De beschrijvende tekst van de slide',
+      background:
+        'optioneel \n' +
+        'Gebruik de knop om een bestand op te laden, \n' +
+        'of vul zelf een url in. (incl. http:// )',
+      color: 'optioneel \n' + 'Gebruik de knop om een kleur te kiezen',
+      url:
+        'optioneel \n' +
+        'Gebruik de knop om een bestand op te laden, \n' +
+        'of vul zelf een url in. (incl. http:// )',
+      thumbnail:
+        'optioneel \n' +
+        'Gebruik de knop om een bestand op te laden, \n' +
+        'of vul zelf een url in. (incl. http:// )',
+      caption:
+        'optioneel \n' +
+        'Het bijschrift van het media element.\n' +
+        'Dit komt onder het media element.',
+      credit:
+        'optioneel \n' +
+        'De bronvermelding van het media element.\n' +
+        'Dit komt direct onder het media element.',
+      alt:
+        'optioneel \n' +
+        'De alternatieve tekst als het media element niet kan weergegeven worden. \n' +
+        'Standaardwaarde: bijschrift, indien ingevuld',
+      title:
+        'optioneel \n' +
+        'De titel van het media element, \n' +
+        'wordt getoond als de muisaanwijzer zweeft boven het media element \n' +
+        'Standaardwaarde: bijschrift, indien ingevuld',
+      link: 'optioneel \n' + 'De hyperlink van het media element.'
+    };
   }
 }
