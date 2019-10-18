@@ -18,7 +18,7 @@ import {
 } from '@angular/forms';
 import { MatStepper, MAT_TOOLTIP_DEFAULT_OPTIONS } from '@angular/material';
 import { Observable, Subscription } from 'rxjs';
-import { map, shareReplay, startWith, tap } from 'rxjs/operators';
+import { debounceTime, map, shareReplay, startWith, tap } from 'rxjs/operators';
 import {
   TimelineDateInterface,
   TimelineEraInterface,
@@ -35,19 +35,19 @@ interface SlideFormInterface extends TimelineSlideInterface {
   };
 }
 
-export type FormControlName =
+export type FormControlPath =
   | 'media.url'
   | 'media.thumbnail'
   | 'background.url';
 
 export interface FileUploadResult {
-  formControlName: FormControlName;
+  formControlName: FormControlPath;
   url?: string;
 }
 
 export interface UploadFileOutput {
   file: File;
-  formControlName: FormControlName;
+  formControlName: FormControlPath;
 }
 
 @Component({
@@ -86,7 +86,7 @@ export class SlideDetailComponent implements OnInit, OnChanges, OnDestroy {
   @HostBinding('class.timeline-slide-detail')
   setTimelineSlideDetailClass = true;
 
-  private initialFormValues: SlideFormInterface; // used for isDirty$
+  private initialFormValues: string; // used for isDirty$
   private formData: SlideFormInterface;
 
   slideForm: FormGroup;
@@ -111,7 +111,7 @@ export class SlideDetailComponent implements OnInit, OnChanges, OnDestroy {
     this.formData = this.mapViewSlideToFormData(this.viewSlide);
     this.slideForm = this.buildForm(); // first time --> build form + add values
 
-    this.initialFormValues = { ...this.slideForm.value }; // used for isDirty check
+    this.initialFormValues = JSON.stringify(this.slideForm.value); // used for isDirty check
     this.initializeStreams();
     this.tooltips = this.getTooltipDictionary();
 
@@ -142,7 +142,7 @@ export class SlideDetailComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  handleFileInput(files: FileList, formControlName: FormControlName) {
+  handleFileInput(files: FileList, formControlName: FormControlPath) {
     this.fileUploadResult = { url: '', formControlName };
     const fileToUpload: File = files.item(0);
     this.uploadFile.emit({ file: fileToUpload, formControlName });
@@ -284,12 +284,10 @@ export class SlideDetailComponent implements OnInit, OnChanges, OnDestroy {
     if (!timelineDate) return { year: null };
 
     Object.keys(timelineDate).forEach(key => {
-      let isZeroPossible = true;
-      if (key === 'display_date')
-        return (timelineDate[key] = timelineDate[key]);
-      if (key === 'month') isZeroPossible = false;
-
-      timelineDate[key] = this.getDateValue(timelineDate[key], isZeroPossible);
+      if (key === 'display_date') {
+        return;
+      }
+      timelineDate[key] = this.getDateValue(timelineDate[key], key !== 'month');
     });
     return timelineDate;
   }
@@ -335,10 +333,10 @@ export class SlideDetailComponent implements OnInit, OnChanges, OnDestroy {
     );
 
     this.isDirty$ = this.slideForm.valueChanges.pipe(
+      debounceTime(300),
       map(
         updatedFormValues =>
-          JSON.stringify(updatedFormValues) !==
-          JSON.stringify(this.initialFormValues)
+          JSON.stringify(updatedFormValues) !== this.initialFormValues
       ),
       startWith(false)
     );

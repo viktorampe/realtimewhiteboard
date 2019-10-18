@@ -1,4 +1,5 @@
 import {
+  ChangeDetectorRef,
   Component,
   EventEmitter,
   HostBinding,
@@ -41,7 +42,10 @@ export class EditorTimelineComponent implements OnInit, OnChanges, OnDestroy {
 
   private subscriptions = new Subscription();
 
-  constructor(private editorViewModel: EditorViewModel) {}
+  constructor(
+    private cd: ChangeDetectorRef,
+    private editorViewModel: EditorViewModel
+  ) {}
 
   @HostBinding('class.timeline-editor') public isTimelineEditor = true;
 
@@ -83,10 +87,12 @@ export class EditorTimelineComponent implements OnInit, OnChanges, OnDestroy {
 
   public deleteActiveSlide(): void {
     this.editorViewModel.deleteActiveSlide();
+    this.cd.detectChanges();
   }
 
   public saveSlide(slide: TimelineViewSlideInterface): void {
     this.editorViewModel.upsertSlide(slide);
+    this.cd.detectChanges();
   }
 
   public showSettings(): void {

@@ -1,5 +1,10 @@
 import { SimpleChange } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {
+  ComponentFixture,
+  fakeAsync,
+  TestBed,
+  tick
+} from '@angular/core/testing';
 import { AbstractControl, ReactiveFormsModule } from '@angular/forms';
 import {
   MatFormFieldModule,
@@ -75,7 +80,7 @@ describe('SlideDetailComponent', () => {
   it('should initialize the streams and properties', () => {
     expect(component.slideForm).toBeDefined();
     expect(component.chosenType$).toBeDefined();
-    expect(component.isDirty$).toBeDefined();
+    expect(component.isDirty).toBeDefined();
   });
 
   describe('mapping viewslide data to  form data', () => {
@@ -303,7 +308,7 @@ describe('SlideDetailComponent', () => {
         component.onSubmit();
 
         const expectedOutput: TimelineViewSlideInterface = {
-          type: 3, // slide
+          type: TIMELINE_SLIDE_TYPES.SLIDE,
           viewSlide: {
             start_date: {
               year: 1,
@@ -366,7 +371,7 @@ describe('SlideDetailComponent', () => {
         component.onSubmit();
 
         const expectedOutput: TimelineViewSlideInterface = {
-          type: 1, // title
+          type: TIMELINE_SLIDE_TYPES.TITLE,
           viewSlide: {
             start_date: {
               year: 1,
@@ -423,7 +428,7 @@ describe('SlideDetailComponent', () => {
         component.onSubmit();
 
         const expectedOutput: TimelineViewSlideInterface = {
-          type: 2, // slide
+          type: TIMELINE_SLIDE_TYPES.ERA,
           viewSlide: {
             start_date: {
               year: 1,
@@ -458,24 +463,20 @@ describe('SlideDetailComponent', () => {
     });
   });
 
-  describe('isDirty$', () => {
-    it('should emit true if the initial form values != updated form values', () => {
-      let isDirty: boolean;
-      component.isDirty$.subscribe(output => {
-        isDirty = output;
-      });
-
-      component.slideForm.patchValue({ general: { group: 'updated value' } });
-
-      expect(isDirty).toBe(true);
+  describe('isDirty', () => {
+    beforeEach(() => {
+      jest.spyOn(component.isDirty, 'emit');
     });
 
-    it('should emit false if the updated form values === initial form values', () => {
-      let isDirty: boolean;
-      component.isDirty$.subscribe(output => {
-        isDirty = output;
-      });
+    it('should emit true if the initial form values != updated form values', fakeAsync(() => {
+      component.slideForm.patchValue({ general: { group: 'updated value' } });
+      tick(300);
 
+      expect(component.isDirty.emit).toHaveBeenCalledTimes(1);
+      expect(component.isDirty.emit).toHaveBeenCalledWith(true);
+    }));
+
+    it('should emit false if the updated form values === initial form values', fakeAsync(() => {
       // needed because TimelineEraInterface does not have a group property
       const viewSlideData = viewSlideMock.viewSlide as TimelineSlideInterface;
 
@@ -484,7 +485,9 @@ describe('SlideDetailComponent', () => {
         general: { group: viewSlideData.group }
       }); // reset group value
 
-      expect(isDirty).toBe(false);
-    });
+      tick(300);
+      expect(component.isDirty.emit).toHaveBeenCalledTimes(1);
+      expect(component.isDirty.emit).toHaveBeenCalledWith(false);
+    }));
   });
 });
