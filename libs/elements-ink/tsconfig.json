@@ -6,7 +6,6 @@
     "moduleResolution": "node",
     "declaration": true,
     "sourceMap": false,
-    "inlineSources": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "importHelpers": true,
