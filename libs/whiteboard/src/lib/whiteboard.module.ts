@@ -5,6 +5,6 @@ import { WhiteboardComponent } from './whiteboard/whiteboard.component';
 @NgModule({
   imports: [CommonModule],
   declarations: [WhiteboardComponent],
-  exports : [WhiteboardComponent]
+  exports: [WhiteboardComponent]
 })
 export class WhiteboardModule {}
