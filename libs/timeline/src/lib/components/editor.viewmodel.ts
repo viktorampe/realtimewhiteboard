@@ -19,6 +19,7 @@ import {
 import { EDITOR_HTTP_SERVICE_TOKEN } from '../services/editor-http.service';
 import {
   EditorHttpServiceInterface,
+  EditorHttpSettingsInterface,
   StorageInfoInterface
 } from '../services/editor-http.service.interface';
 import {
@@ -30,7 +31,6 @@ import {
   providedIn: 'root'
 })
 export class EditorViewModel {
-  private eduContentId: number;
   private data$ = new BehaviorSubject<TimelineConfigInterface>(null);
 
   // stores temporary value for new slide
@@ -38,8 +38,8 @@ export class EditorViewModel {
   // emit null in setting$ when there is a value
   private newSlide$ = new BehaviorSubject<TimelineViewSlideInterface>(null);
   private showSettings$: Observable<boolean>;
-  private _activeSlide$: BehaviorSubject<TimelineViewSlideInterface>;
-  private _isFormDirty$: BehaviorSubject<boolean>;
+  private _activeSlide$ = new BehaviorSubject(null);
+  private _isFormDirty$ = new BehaviorSubject(false);
 
   public activeSlide$: Observable<TimelineViewSlideInterface>;
   public activeSlideDetail$: Observable<TimelineViewSlideInterface>;
@@ -47,6 +47,7 @@ export class EditorViewModel {
   public settings$: Observable<TimelineSettingsInterface>;
   public isFormDirty$: Observable<boolean>;
   public activeSlideDetailCanSaveAsTitle$: Observable<boolean>;
+  public errors$: Observable<Error>;
 
   // where does the eduContentId and eduContentMetadataId come from?
   // the component? DI?
@@ -57,31 +58,24 @@ export class EditorViewModel {
     this.initialise();
   }
 
-  getTimeline(
-    eduContentMetadataId: number
-  ): Observable<TimelineConfigInterface> {
-    return this.editorHttpService.getJson(eduContentMetadataId);
+  setHttpSettings(settings: EditorHttpSettingsInterface) {
+    this.editorHttpService.setSettings(settings);
   }
 
-  updateTimeline(
-    eduContentMetadataId: number,
-    data: TimelineConfigInterface
-  ): Observable<boolean> {
-    return this.editorHttpService.setJson(eduContentMetadataId, data);
+  getTimeline(): Observable<TimelineConfigInterface> {
+    return this.editorHttpService.getJson();
   }
 
-  previewTimeline(eduContentId: number, eduContentMetadataId: number): string {
-    return this.editorHttpService.getPreviewUrl(
-      eduContentId,
-      eduContentMetadataId
-    );
+  updateTimeline(data: TimelineConfigInterface): Observable<boolean> {
+    return this.editorHttpService.setJson(data);
   }
 
-  uploadFile(
-    eduContentId: number,
-    file: File
-  ): Observable<StorageInfoInterface> {
-    return this.editorHttpService.uploadFile(eduContentId, file);
+  previewTimeline(): string {
+    return this.editorHttpService.getPreviewUrl();
+  }
+
+  uploadFile(file: File): Observable<StorageInfoInterface> {
+    return this.editorHttpService.uploadFile(file);
   }
 
   public openSettings() {
@@ -89,12 +83,16 @@ export class EditorViewModel {
 
     this._activeSlide$.next(null);
     this.newSlide$.next(null);
+    this._isFormDirty$.next(false);
   }
 
   public updateSettings(newSettings: TimelineSettingsInterface) {
     const data = { ...this.data$.value, ...newSettings };
 
-    this.data$.next(data);
+    // Persist changes
+    this.updateTimeline(data).subscribe(() => {
+      this.data$.next(data);
+    });
   }
 
   public createSlide() {
@@ -129,6 +127,9 @@ export class EditorViewModel {
       data.eras.push(updatedSlide.viewSlide as TimelineEraInterface);
     }
 
+    // Persist changes
+    this.updateTimeline(data).subscribe();
+
     // Nexting data causes the slideList to be updated
     this.data$.next(data);
 
@@ -159,6 +160,9 @@ export class EditorViewModel {
       data.eras = data.eras.filter(era => era !== activeSlide.viewSlide);
     }
 
+    // Persist changes
+    this.updateTimeline(data).subscribe();
+
     // Select nothing, since the previously active slide was deleted
     this._activeSlide$.next(null);
 
@@ -170,6 +174,11 @@ export class EditorViewModel {
 
     this._activeSlide$.next(slide);
     this.newSlide$.next(null);
+    this._isFormDirty$.next(false);
+  }
+
+  public setFormDirty(value: boolean) {
+    this._isFormDirty$.next(value);
   }
 
   /**
@@ -189,13 +198,12 @@ export class EditorViewModel {
   }
 
   private initialise() {
-    this.eduContentId = 19; // TODO make variable
-    this.setSourceStreams(this.eduContentId);
+    this.setSourceStreams();
     this.setPresentationStreams();
   }
 
-  private setSourceStreams(eduContentId) {
-    this.editorHttpService.getJson(eduContentId).subscribe(timeline => {
+  private setSourceStreams() {
+    this.editorHttpService.getJson().subscribe(timeline => {
       this.data$.next(timeline);
     });
   }
@@ -203,18 +211,19 @@ export class EditorViewModel {
   private setPresentationStreams() {
     this.slideList$ = this.data$.pipe(
       filter(data => !!data),
-      map(data => this.mapToViewSlides(data.eras, data.events)),
+      map(data =>
+        this.mapToViewSlides(data.eras || [], data.events || [], data.title)
+      ),
       shareReplay(1)
     );
 
-    this._activeSlide$ = new BehaviorSubject<TimelineViewSlideInterface>(null);
     this.activeSlide$ = this._activeSlide$.asObservable();
+    this.isFormDirty$ = this._isFormDirty$.asObservable();
     this.showSettings$ = this.showSettings();
     this.activeSlideDetail$ = this.getActiveSlideDetail();
     this.settings$ = this.getSettings();
-    this._isFormDirty$ = new BehaviorSubject(false);
-    this.isFormDirty$ = this._isFormDirty$.asObservable();
     this.activeSlideDetailCanSaveAsTitle$ = this.getActiveSlideDetailCanSaveAsTitle();
+    this.errors$ = this.editorHttpService.errors$;
   }
 
   private showSettings(): Observable<boolean> {
@@ -229,7 +238,8 @@ export class EditorViewModel {
     return combineLatest([this.data$, this.activeSlideDetail$]).pipe(
       map(
         ([data, activeSlideDetail]) =>
-          !data.title || data.title === activeSlideDetail
+          !data.title ||
+          (activeSlideDetail && data.title === activeSlideDetail.viewSlide)
       )
     );
   }
@@ -262,7 +272,6 @@ export class EditorViewModel {
       switchMapTo(this.data$),
       filter(data => !!data),
       map(data => ({
-        title: data.title,
         scale: data.scale,
         options: data.options
       }))

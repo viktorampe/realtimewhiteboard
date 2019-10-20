@@ -18,5 +18,13 @@
   "[html]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "todo-tree.tree.showCountsInTree": true
+  "todo-tree.tree.showCountsInTree": true,
+  "todo-tree.general.tags": [
+    "TODO",
+    "Todo",
+    "todo",
+    "Fixme",
+    "fixme",
+    "FIXME"
+  ]
 }

@@ -1,36 +1,22 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { TimelineViewSlideInterface } from '../../interfaces/timeline';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  TimelineViewSlideInterface,
+  TIMELINE_SLIDE_TYPES
+} from '../../interfaces/timeline';
 
 @Component({
   selector: 'campus-slide-list',
   templateUrl: './slide-list.component.html',
   styleUrls: ['./slide-list.component.scss']
 })
-export class SlideListComponent implements OnInit {
+export class SlideListComponent {
   @Input() viewSlides: TimelineViewSlideInterface[];
-  @Input() activeViewSlide: number;
-
+  @Input() activeViewSlide: TimelineViewSlideInterface;
   @Output() clickSetSlide = new EventEmitter<TimelineViewSlideInterface>();
-  @Output() clickCreateSlide = new EventEmitter<boolean>();
-  @Output() clickCreateEra = new EventEmitter<boolean>();
 
-  constructor() {}
-
-  ngOnInit() {}
+  slideType = TIMELINE_SLIDE_TYPES.SLIDE;
 
   public setViewSlide(viewSlide: TimelineViewSlideInterface): void {
     this.clickSetSlide.emit(viewSlide);
-  }
-
-  public showTimelineSettings(): void {
-    this.clickSetSlide.emit(null);
-  }
-
-  public createSlide(): void {
-    this.clickCreateSlide.emit(true);
-  }
-
-  public createEra(): void {
-    this.clickCreateEra.emit(true);
   }
 }

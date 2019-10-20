@@ -1,3 +1,52 @@
-<p>
-  settings works!
-</p>
+<form [formGroup]="settingsForm">
+  <section class="timeline-settings__section">
+    <h3>Visueel</h3>
+
+    Absoluut
+    <mat-slide-toggle color="primary" formControlName="relative">
+    </mat-slide-toggle>
+    Relatief<div
+      class="timeline-settings__tooltip__trigger"
+      [matTooltip]="tooltips['visual']"
+      [matTooltipClass]="'timeline-settings__tooltip'"
+      *ngIf="tooltips['visual']"
+      >i</div
+    >
+  </section>
+  <section class="timeline-settings__section">
+    <h3>Schaal </h3>
+
+    Menselijk
+    <mat-slide-toggle
+      color="primary"
+      aria-label="hye"
+      formControlName="humanCosmological"
+    >
+    </mat-slide-toggle>
+    Kosmologisch<div
+      class="timeline-settings__tooltip__trigger"
+      [matTooltip]="tooltips['cosmological']"
+      [matTooltipClass]="'timeline-settings__tooltip'"
+      *ngIf="tooltips['cosmological']"
+      >i</div
+    >
+  </section>
+  <section class="timeline-settings__section">
+    <mat-form-field>
+      <input
+        matInput
+        type="number"
+        formControlName="scale_factor"
+        placeholder="Schaalfactor"
+      />
+    </mat-form-field>
+    <div
+      class="timeline-settings__tooltip__trigger"
+      [matTooltip]="tooltips['scalefactor']"
+      [matTooltipClass]="'timeline-settings__tooltip'"
+      *ngIf="tooltips['scalefactor']"
+      >i</div
+    >
+  </section>
+  <button mat-button mat-stroked-button (click)="onSubmit()">Opslaan</button>
+</form>

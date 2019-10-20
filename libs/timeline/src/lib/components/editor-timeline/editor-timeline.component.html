@@ -1,11 +1,61 @@
-<p>
-  editor-timeline works!
-</p>
-<mat-icon [svgIcon]="'settings'"></mat-icon>
-<campus-slide-list
-  [viewSlides]="slides$ | async"
-  [activeViewSlide]="1"
-  (clickSetSlide)="noop()"
-  (clickCreateSlide)="noop()"
-  (clickCreateEra)="noop()"
-></campus-slide-list>
+<div *ngIf="(isFormDirty$ | async)" class="timeline-editor__form-dirty-warning"
+  >Niet opgeslagen aanpassingen...</div
+>
+<div class="timeline-editor__main">
+  <div class="timeline-editor__main__left">
+    <campus-slide-list
+      class="timeline-editor__main__list"
+      [viewSlides]="slideList$ | async"
+      [activeViewSlide]="activeSlide$ | async"
+      (clickSetSlide)="setActiveSlide($event)"
+    ></campus-slide-list>
+    <div class="timeline-editor__main__button-container">
+      <button
+        mat-button
+        mat-icon-button
+        class="timeline-editor__main__button-container__button"
+        (click)="showSettings()"
+        color="primary"
+        ><mat-icon>build</mat-icon></button
+      >
+      <button
+        mat-button
+        mat-icon-button
+        class="timeline-editor__main__button-container__button"
+        (click)="createSlide()"
+        color="primary"
+        ><mat-icon>add_to_queue</mat-icon></button
+      >
+      <button
+        mat-button
+        mat-icon-button
+        *ngIf="(activeSlide$ | async)"
+        class="timeline-editor__main__button-container__button timeline-editor__main__button-container__button--delete"
+        (click)="deleteActiveSlide()"
+        color="warn"
+        ><mat-icon>remove_from_queue</mat-icon></button
+      >
+    </div>
+  </div>
+
+  <div class="timeline-editor__main__detail">
+    <campus-slide-detail
+      *ngIf="(activeSlideDetail$ | async) as activeSlideDetail"
+      class="timeline-editor__main__detail--slide"
+      (uploadFile)="handleFileUpload($event)"
+      (saveViewSlide)="saveSlide($event)"
+      (isDirty)="setIsFormDirty($event)"
+      [fileUploadResult]="fileUploadResult$ | async"
+      [viewSlide]="activeSlideDetail"
+      [canBeSavedAsTitle]="canBeSavedAsTitle$ | async"
+    ></campus-slide-detail>
+
+    <campus-settings
+      *ngIf="(settings$ | async) as settings"
+      class="timeline-editor__main__detail--settings"
+      [settings]="settings"
+      (saveSettings)="saveSettings($event)"
+      (isDirty)="setIsFormDirty($event)"
+    ></campus-settings>
+  </div>
+</div>
