@@ -51,7 +51,7 @@
     ></campus-slide-detail>
 
     <campus-settings
-      *ngIf="(settings$ | async) as settings"
+      *ngIf="(showSettings$ | async) as settings"
       class="timeline-editor__main__detail--settings"
       [settings]="settings"
       (saveSettings)="saveSettings($event)"

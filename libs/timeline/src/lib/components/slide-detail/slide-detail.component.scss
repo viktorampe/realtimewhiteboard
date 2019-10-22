@@ -114,10 +114,6 @@
         margin-left: 10px;
         color: darkgray;
       }
-
-      &.mat-tooltip {
-        white-space: pre-line;
-      }
     }
   }
 }
@@ -132,4 +128,8 @@
 
 :host ::ng-deep .mat-step-header {
   margin-bottom: 20px;
+}
+
+::ng-deep .mat-tooltip {
+  white-space: pre-line;
 }

@@ -37,13 +37,13 @@ export class EditorViewModel {
   // always emit this in activeSlide when there is a value
   // emit null in setting$ when there is a value
   private newSlide$ = new BehaviorSubject<TimelineViewSlideInterface>(null);
-  private showSettings$: Observable<boolean>;
   private _activeSlide$ = new BehaviorSubject(null);
   private _isFormDirty$ = new BehaviorSubject(false);
 
   public activeSlide$: Observable<TimelineViewSlideInterface>;
   public activeSlideDetail$: Observable<TimelineViewSlideInterface>;
   public slideList$: Observable<TimelineViewSlideInterface[]>;
+  public showSettings$: Observable<boolean>;
   public settings$: Observable<TimelineSettingsInterface>;
   public isFormDirty$: Observable<boolean>;
   public activeSlideDetailCanSaveAsTitle$: Observable<boolean>;

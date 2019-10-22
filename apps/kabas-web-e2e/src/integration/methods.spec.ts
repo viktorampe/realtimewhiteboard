@@ -52,6 +52,7 @@ describe('Methods', () => {
         .should('be', `${appPaths.methods}/${setup.kabasMethodsPages.book}`);
     });
   });
+  return;
 
   describe('method page', () => {
     beforeEach(() => {
