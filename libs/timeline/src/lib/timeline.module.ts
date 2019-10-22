@@ -7,7 +7,6 @@ import {
   MatButtonModule,
   MatFormFieldModule,
   MatIconModule,
-  MatIconRegistry,
   MatInputModule,
   MatListModule,
   MatRadioModule,
@@ -15,7 +14,6 @@ import {
   MatStepperModule,
   MatTooltipModule
 } from '@angular/material';
-import { DomSanitizer } from '@angular/platform-browser';
 import { EditorTimelineComponent } from './components/editor-timeline/editor-timeline.component';
 import { SettingsComponent } from './components/settings/settings.component';
 import { SlideDetailComponent } from './components/slide-detail/slide-detail.component';
@@ -62,27 +60,5 @@ export const ENVIRONMENT_ICON_MAPPING_TOKEN = new InjectionToken(
   ]
 })
 export class TimelineModule {
-  constructor(
-    private iconRegistry: MatIconRegistry,
-    private sanitizer: DomSanitizer
-  ) {
-    //this.setupIconRegistry();
-  }
-
-  // setupIconRegistry() {
-  //   for (const key in this.iconMapping) {
-  //     if (key.indexOf(':') > 0) {
-  //       this.iconRegistry.addSvgIconInNamespace(
-  //         key.split(':')[0],
-  //         key.split(':')[1],
-  //         this.sanitizer.bypassSecurityTrustResourceUrl(this.iconMapping[key])
-  //       );
-  //     } else {
-  //       this.iconRegistry.addSvgIcon(
-  //         key,
-  //         this.sanitizer.bypassSecurityTrustResourceUrl(this.iconMapping[key])
-  //       );
-  //     }
-  //   }
-  // }
+  constructor() {}
 }

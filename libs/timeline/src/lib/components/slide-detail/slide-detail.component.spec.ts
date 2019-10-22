@@ -9,15 +9,14 @@ import { AbstractControl, ReactiveFormsModule } from '@angular/forms';
 import {
   MatFormFieldModule,
   MatIconModule,
-  MatIconRegistry,
   MatInputModule,
   MatListModule,
   MatRadioModule,
   MatStepperModule,
   MatTooltipModule
 } from '@angular/material';
+import { HAMMER_LOADER } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { MockMatIconRegistry } from '@campus/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { TimelineSlideFixture } from '../../+fixtures/timeline-slide.fixture';
 import {
@@ -57,10 +56,13 @@ describe('SlideDetailComponent', () => {
       ],
       declarations: [SlideDetailComponent],
       providers: [
-        { provide: MatIconRegistry, useClass: MockMatIconRegistry },
         {
           provide: EditorViewModel,
           useClass: MockEditorViewModel
+        },
+        {
+          provide: HAMMER_LOADER,
+          useValue: () => new Promise(() => {})
         }
       ]
     });
