@@ -1,3 +1,4 @@
+import { MAT_STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import {
   Component,
   EventEmitter,
@@ -55,7 +56,11 @@ export interface UploadFileOutput {
   templateUrl: './slide-detail.component.html',
   styleUrls: ['./slide-detail.component.scss'],
   providers: [
-    { provide: MAT_TOOLTIP_DEFAULT_OPTIONS, useValue: { position: 'after' } }
+    { provide: MAT_TOOLTIP_DEFAULT_OPTIONS, useValue: { position: 'after' } },
+    {
+      provide: MAT_STEPPER_GLOBAL_OPTIONS,
+      useValue: { displayDefaultIndicatorType: false }
+    }
   ]
 })
 export class SlideDetailComponent implements OnInit, OnChanges, OnDestroy {

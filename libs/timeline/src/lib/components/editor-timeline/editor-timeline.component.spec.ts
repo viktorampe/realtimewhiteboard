@@ -3,7 +3,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 import {
   MatFormFieldModule,
   MatIconModule,
-  MatIconRegistry,
   MatInputModule,
   MatListModule,
   MatRadioModule,
@@ -11,8 +10,8 @@ import {
   MatStepperModule,
   MatTooltipModule
 } from '@angular/material';
+import { HAMMER_LOADER } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { MockMatIconRegistry } from '@campus/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { EDITOR_HTTP_SERVICE_TOKEN } from '../../services/editor-http.service';
 import { EditorViewModel } from '../editor.viewmodel';
@@ -47,9 +46,12 @@ describe('EditorTimelineComponent', () => {
         SettingsComponent
       ],
       providers: [
-        { provide: MatIconRegistry, useClass: MockMatIconRegistry },
         { provide: EditorViewModel, useClass: MockEditorViewModel },
-        { provide: EDITOR_HTTP_SERVICE_TOKEN, useValue: {} }
+        { provide: EDITOR_HTTP_SERVICE_TOKEN, useValue: {} },
+        {
+          provide: HAMMER_LOADER,
+          useValue: () => new Promise(() => {})
+        }
       ]
     });
   });
