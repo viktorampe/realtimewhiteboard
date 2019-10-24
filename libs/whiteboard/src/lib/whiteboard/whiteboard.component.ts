@@ -9,4 +9,10 @@ export class WhiteboardComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {}
+
+  onTap(event) {
+    if (event.tapCount >= 2) {
+      console.log('Do something');
+    }
+  }
 }
