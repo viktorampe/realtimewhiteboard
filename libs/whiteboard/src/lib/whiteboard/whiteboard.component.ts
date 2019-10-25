@@ -16,7 +16,7 @@ export class WhiteboardComponent implements OnInit {
 
   onTap(event) {
     if (event.tapCount >= 2) {
-      this.cards.push(this.c);
+      this.cards.push('item');
     }
   }
 }
