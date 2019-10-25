@@ -22,6 +22,14 @@
         mat-button
         mat-icon-button
         class="timeline-editor__main__button-container__button"
+        (click)="preview()"
+        color="primary"
+        ><mat-icon>launch</mat-icon></button
+      >
+      <button
+        mat-button
+        mat-icon-button
+        class="timeline-editor__main__button-container__button"
         (click)="createSlide()"
         color="primary"
         ><mat-icon>add_to_queue</mat-icon></button
