@@ -1,5 +1,3 @@
 <div class="workSpace" (tap)="onTap($event)">
-  <div *ngFor="let c of cards">
-    <campus-card></campus-card>
-  </div>
+  <campus-card *ngFor="let c of cards"></campus-card>
 </div>

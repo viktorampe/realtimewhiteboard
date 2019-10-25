@@ -13,13 +13,11 @@ export class WhiteboardComponent implements OnInit {
 
   ngOnInit() {
     this.cards = [];
-    this.c = '<campus-card />';
+    this.c = 'item';
   }
 
   onTap(event) {
     if (event.tapCount >= 2) {
-      console.log('Do something');
-      console.log(this.cards);
       this.cards.push(this.c);
     }
   }
