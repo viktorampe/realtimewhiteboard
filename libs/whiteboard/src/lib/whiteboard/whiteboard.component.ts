@@ -12,7 +12,6 @@ export class WhiteboardComponent implements OnInit {
 
   ngOnInit() {
     this.cards = [];
-    this.c = 'item';
   }
 
   onTap(event) {
