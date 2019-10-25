@@ -67,12 +67,12 @@
 
             <div class="timeline-slide-detail__form__section">
               <div class="mat-h3"
-                >Weergavedatum
+                >Label
                 <div
                   class="timeline-slide-detail__form__tooltip__trigger"
-                  [matTooltip]="tooltips['display_date']"
+                  [matTooltip]="tooltips['label']"
                   [matTooltipClass]="'timeline-slide-detail__form__tooltip'"
-                  *ngIf="tooltips['display_date']"
+                  *ngIf="tooltips['label']"
                   >i</div
                 >
               </div>
@@ -81,7 +81,7 @@
                   matInput
                   type="string"
                   formControlName="display_date"
-                  placeholder="Weergavedatum"
+                  placeholder="Label"
                 />
               </mat-form-field>
             </div>
