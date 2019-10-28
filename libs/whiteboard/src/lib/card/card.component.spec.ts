@@ -8,7 +8,7 @@ describe('CardComponent', () => {
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       declarations: [CardComponent]
-    }).compileComponents();
+    });
   });
 
   beforeEach(() => {
