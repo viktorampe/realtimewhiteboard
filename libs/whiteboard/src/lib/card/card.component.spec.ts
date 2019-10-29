@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatCardModule } from '@angular/material';
+import { configureTestSuite } from 'ng-bullet';
 import { CardComponent } from './card.component';
 
 describe('CardComponent', () => {
@@ -7,6 +9,7 @@ describe('CardComponent', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
+      imports: [MatCardModule],
       declarations: [CardComponent]
     });
   });
