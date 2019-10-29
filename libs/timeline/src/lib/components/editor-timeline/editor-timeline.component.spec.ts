@@ -12,18 +12,36 @@ import {
 } from '@angular/material';
 import { HAMMER_LOADER } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { hot } from '@nrwl/nx/testing';
 import { configureTestSuite } from 'ng-bullet';
+import {
+  TimelineViewSlideInterface,
+  TIMELINE_SLIDE_TYPES
+} from '../../interfaces/timeline';
 import { EDITOR_HTTP_SERVICE_TOKEN } from '../../services/editor-http.service';
-import { EditorViewModel } from '../editor.viewmodel';
 import { MockEditorViewModel } from '../editor.viewmodel.mock';
 import { SettingsComponent } from '../settings/settings.component';
-import { SlideDetailComponent } from '../slide-detail/slide-detail.component';
+import {
+  SlideDetailComponent,
+  UploadFileOutput
+} from '../slide-detail/slide-detail.component';
 import { SlideListComponent } from '../slide-list/slide-list.component';
+import { TimelineSlideFixture } from './../../+fixtures/timeline-slide.fixture';
+import { TimelineSettingsInterface } from './../../interfaces/timeline';
+import { StorageInfoInterface } from './../../services/editor-http.service.interface';
+import { EditorViewModel } from './../editor.viewmodel';
 import { EditorTimelineComponent } from './editor-timeline.component';
 
 describe('EditorTimelineComponent', () => {
   let component: EditorTimelineComponent;
   let fixture: ComponentFixture<EditorTimelineComponent>;
+  let viewmodel: EditorViewModel;
+
+  const mockViewSlide = {
+    type: TIMELINE_SLIDE_TYPES.SLIDE,
+    viewSlide: new TimelineSlideFixture(),
+    label: 'I am a label'
+  } as TimelineViewSlideInterface;
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
@@ -59,10 +77,97 @@ describe('EditorTimelineComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(EditorTimelineComponent);
     component = fixture.componentInstance;
+    viewmodel = TestBed.get(EditorViewModel);
     fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  describe('handlers', () => {
+    it('setActiveSlide', () => {
+      viewmodel.setActiveSlide = jest.fn();
+      component.setActiveSlide(mockViewSlide);
+
+      expect(viewmodel.setActiveSlide).toHaveBeenCalledWith(mockViewSlide);
+    });
+
+    it('createSlide', () => {
+      viewmodel.createSlide = jest.fn();
+      component.createSlide();
+
+      expect(viewmodel.createSlide).toHaveBeenCalled();
+    });
+
+    it('deleteActiveSlide', () => {
+      viewmodel.deleteActiveSlide = jest.fn();
+      component.deleteActiveSlide();
+
+      expect(viewmodel.deleteActiveSlide).toHaveBeenCalled();
+    });
+
+    it('saveSlide', () => {
+      viewmodel.upsertSlide = jest.fn();
+      component.saveSlide(mockViewSlide);
+
+      expect(viewmodel.upsertSlide).toHaveBeenCalledWith(mockViewSlide);
+    });
+
+    it('showSettings', () => {
+      viewmodel.openSettings = jest.fn();
+      component.showSettings();
+
+      expect(viewmodel.openSettings).toHaveBeenCalled();
+    });
+
+    it('saveSettings', () => {
+      const mockSettings = {} as TimelineSettingsInterface;
+      viewmodel.updateSettings = jest.fn();
+      component.saveSettings(mockSettings);
+
+      expect(viewmodel.updateSettings).toHaveBeenCalledWith(mockSettings);
+    });
+
+    it('setIsFormDirty', () => {
+      viewmodel.setFormDirty = jest.fn();
+      component.setIsFormDirty(true);
+
+      expect(viewmodel.setFormDirty).toHaveBeenCalledWith(true);
+    });
+
+    it('handleFileUpload', () => {
+      const mockUpload: UploadFileOutput = {
+        file: {
+          lastModified: 1,
+          name: 'blah',
+          size: 1,
+          type: 'png',
+          slice: null
+        },
+        formControlName: 'media.url'
+      };
+      const mockStorageInfo: StorageInfoInterface = {
+        name: 'foo',
+        storageName: 'foo',
+        eduFileId: 1
+      };
+
+      viewmodel.uploadFile = jest
+        .fn()
+        .mockReturnValue(hot('a', { a: mockStorageInfo }));
+
+      component.handleFileUpload(mockUpload);
+
+      expect(viewmodel.uploadFile).toHaveBeenCalledWith(mockUpload.file);
+      expect(component.fileUploadResult$).toBeObservable(
+        hot('a', {
+          a: {
+            formControlName: mockUpload.formControlName,
+            url: '/api/EduFiles/' + mockStorageInfo.eduFileId + '/redirectURL'
+          }
+        })
+      );
+    });
   });
 });
