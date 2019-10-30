@@ -26,6 +26,12 @@ describe('EditorViewModel', () => {
 
   const timelineConfig: TimelineConfigInterface = new TimelineConfigFixture();
 
+  const mockViewSlide: TimelineViewSlideInterface = {
+    label: 'foo',
+    type: TIMELINE_SLIDE_TYPES.SLIDE,
+    viewSlide: new TimelineSlideFixture()
+  };
+
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [BrowserModule, HttpClientModule],
@@ -33,6 +39,7 @@ describe('EditorViewModel', () => {
         {
           provide: EDITOR_HTTP_SERVICE_TOKEN,
           useValue: {
+            setSettings: () => {},
             getJson: () => new BehaviorSubject(timelineConfig),
             setJson: () => {},
             getPreviewUrl: () => {},
@@ -52,7 +59,17 @@ describe('EditorViewModel', () => {
     expect(editorViewModel).toBeTruthy();
   });
 
-  describe('handlers', () => {
+  describe('http handlers', () => {
+    it('setHttpSettings() should call editorHttpService.setSettings', () => {
+      const mockHttpSettings = { apiBase: 'foo', eduContentMetadataId: 123 };
+      jest.spyOn(editorHttpService, 'setSettings');
+
+      editorViewModel.setHttpSettings(mockHttpSettings);
+      expect(editorHttpService.setSettings).toHaveBeenCalledWith(
+        mockHttpSettings
+      );
+    });
+
     it('getTimeline() should call the editorHttpService.getJson', () => {
       jest.spyOn(editorHttpService, 'getJson');
 
@@ -595,6 +612,47 @@ describe('EditorViewModel', () => {
       });
     });
 
+    describe('openSettings$', () => {
+      it('should emit false when an active slide is set, while true', () => {
+        editorViewModel.openSettings();
+        editorViewModel.setActiveSlide(mockViewSlide);
+
+        expect(editorViewModel.showSettings$).toBeObservable(
+          hot('a', { a: false })
+        );
+      });
+
+      it('should emit false when a new slide is created, while true', () => {
+        editorViewModel.openSettings();
+        editorViewModel.createSlide();
+
+        expect(editorViewModel.showSettings$).toBeObservable(
+          hot('a', { a: false })
+        );
+      });
+
+      it('should emit true when openSettings is called', () => {
+        editorViewModel.createSlide();
+        editorViewModel.openSettings();
+
+        expect(editorViewModel.showSettings$).toBeObservable(
+          hot('a', { a: true })
+        );
+      });
+
+      it('should not emit if the value does not change', () => {
+        const emits = [];
+        editorViewModel.showSettings$.subscribe(value => emits.push(value));
+
+        editorViewModel.createSlide();
+        editorViewModel.setActiveSlide(mockViewSlide);
+        editorViewModel.openSettings();
+
+        // initial value === true, is first value in array
+        expect(emits).toEqual([true, false, true]);
+      });
+    });
+
     describe('settings$', () => {
       beforeEach(() => {
         timelineConfig.scale = 'cosmological';
@@ -745,5 +803,52 @@ describe('EditorViewModel', () => {
         );
       });
     });
+  });
+
+  describe('methods', () => {
+    describe('openSettings', () => {
+      let isSafeToNavigateSpy: jest.SpyInstance;
+      beforeEach(() => {
+        // private, will test separately later
+        isSafeToNavigateSpy = editorViewModel['isSafeToNavigate'] = jest.fn();
+      });
+
+      it('should check if it is safe to navigate', () => {
+        editorViewModel.openSettings();
+        expect(isSafeToNavigateSpy).toHaveBeenCalled();
+      });
+
+      it('should reset activeSlide$', () => {
+        isSafeToNavigateSpy.mockReturnValue(true);
+        editorViewModel.setActiveSlide(mockViewSlide);
+        editorViewModel.openSettings();
+
+        expect(editorViewModel.activeSlide$).toBeObservable(
+          hot('a', { a: null })
+        );
+      });
+
+      it('should reset activeSlideDetail$', () => {
+        isSafeToNavigateSpy.mockReturnValue(true);
+        editorViewModel.setActiveSlide(mockViewSlide);
+        editorViewModel.openSettings();
+
+        expect(editorViewModel.activeSlideDetail$).toBeObservable(
+          hot('a', { a: null })
+        );
+      });
+
+      it('should reset isFormDirty$', () => {
+        isSafeToNavigateSpy.mockReturnValue(true);
+        editorViewModel.setFormDirty(true);
+        editorViewModel.openSettings();
+
+        expect(editorViewModel.isFormDirty$).toBeObservable(
+          hot('a', { a: false })
+        );
+      });
+    });
+
+    describe('updateSettings', () => {});
   });
 });
