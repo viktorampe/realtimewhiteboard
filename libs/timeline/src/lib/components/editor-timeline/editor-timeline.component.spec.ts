@@ -24,6 +24,7 @@ import { EDITOR_HTTP_SERVICE_TOKEN } from '../../services/editor-http.service';
 import { MockEditorViewModel } from '../editor.viewmodel.mock';
 import { SettingsComponent } from '../settings/settings.component';
 import {
+  FileUploadResult,
   SlideDetailComponent,
   UploadFileOutput
 } from '../slide-detail/slide-detail.component';
@@ -44,6 +45,35 @@ describe('EditorTimelineComponent', () => {
     viewSlide: new TimelineSlideFixture(),
     label: 'I am a label'
   } as TimelineViewSlideInterface;
+
+  const mockFileUploadOutput: UploadFileOutput = {
+    file: {
+      lastModified: 1,
+      name: 'blah',
+      size: 1,
+      type: 'png',
+      slice: null
+    },
+    formControlName: 'media.url'
+  };
+  const mockStorageInfo: StorageInfoInterface = {
+    name: 'foo',
+    storageName: 'foo',
+    eduFileId: 1
+  };
+
+  const mockFileUploadResult: FileUploadResult = {
+    formControlName: 'media.url',
+    url: '/api/EduFiles/123/redirectURL'
+  };
+
+  const mockSettings: TimelineSettingsInterface = {
+    options: {
+      relative: true,
+      scale_factor: 2
+    },
+    scale: 'cosmological'
+  };
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
@@ -139,33 +169,19 @@ describe('EditorTimelineComponent', () => {
     });
 
     it('handleFileUpload', () => {
-      const mockUpload: UploadFileOutput = {
-        file: {
-          lastModified: 1,
-          name: 'blah',
-          size: 1,
-          type: 'png',
-          slice: null
-        },
-        formControlName: 'media.url'
-      };
-      const mockStorageInfo: StorageInfoInterface = {
-        name: 'foo',
-        storageName: 'foo',
-        eduFileId: 1
-      };
-
       viewmodel.uploadFile = jest
         .fn()
         .mockReturnValue(hot('a', { a: mockStorageInfo }));
 
-      component.handleFileUpload(mockUpload);
+      component.handleFileUpload(mockFileUploadOutput);
 
-      expect(viewmodel.uploadFile).toHaveBeenCalledWith(mockUpload.file);
+      expect(viewmodel.uploadFile).toHaveBeenCalledWith(
+        mockFileUploadOutput.file
+      );
       expect(component.fileUploadResult$).toBeObservable(
         hot('a', {
           a: {
-            formControlName: mockUpload.formControlName,
+            formControlName: mockFileUploadOutput.formControlName,
             url: '/api/EduFiles/' + mockStorageInfo.eduFileId + '/redirectURL'
           }
         })
@@ -203,121 +219,264 @@ describe('EditorTimelineComponent', () => {
   });
 
   describe('template', () => {
-    it('should show the slide list', () => {
-      const slideListDE = fixture.debugElement.query(
-        By.directive(SlideListComponent)
-      );
-      const slideList = slideListDE.componentInstance as SlideListComponent;
+    describe('timeline slide list', () => {
+      let slideList;
 
-      expect(slideList).toBeDefined();
+      beforeEach(() => {
+        const slideListDE = fixture.debugElement.query(
+          By.directive(SlideListComponent)
+        );
+        slideList = slideListDE.componentInstance as SlideListComponent;
+      });
 
-      // inputs
-      expect(slideList.viewSlides).toEqual(
-        (viewmodel.slideList$ as BehaviorSubject<TimelineViewSlideInterface[]>)
-          .value
-      );
-      expect(slideList.activeViewSlide).toEqual(
-        (viewmodel.activeSlide$ as BehaviorSubject<TimelineViewSlideInterface>)
-          .value
-      );
+      it('should show the slide list', () => {
+        expect(slideList).toBeDefined();
+      });
 
-      //output
-      component.setActiveSlide = jest.fn();
-      slideList.clickSetSlide.next(mockViewSlide);
+      it('should set the viewSlides input', () => {
+        const viewSlidesFromViewmodel = viewmodel.slideList$ as BehaviorSubject<
+          TimelineViewSlideInterface[]
+        >;
+        viewSlidesFromViewmodel.next([mockViewSlide, mockViewSlide]);
+        fixture.detectChanges();
 
-      expect(component.setActiveSlide).toHaveBeenCalledWith(mockViewSlide);
+        expect(slideList.viewSlides).toEqual([mockViewSlide, mockViewSlide]);
+      });
+
+      it('should set the activeViewSlide input', () => {
+        const activeSlideFromViewModel = viewmodel.activeSlide$ as BehaviorSubject<
+          TimelineViewSlideInterface
+        >;
+        activeSlideFromViewModel.next(mockViewSlide);
+        fixture.detectChanges();
+
+        expect(slideList.activeViewSlide).toEqual(mockViewSlide);
+      });
+
+      it('should handle the clickSetSlide output', () => {
+        component.setActiveSlide = jest.fn();
+        slideList.clickSetSlide.next(mockViewSlide);
+
+        expect(component.setActiveSlide).toHaveBeenCalledWith(mockViewSlide);
+      });
     });
 
-    it('should show the settings button', () => {
-      const buttonDEArray = fixture.debugElement.queryAll(
-        By.css('.timeline-editor__main__button-container__button')
-      );
+    describe('buttons', () => {
+      it('should show the settings button', () => {
+        const buttonDEArray = fixture.debugElement.queryAll(
+          By.css('.timeline-editor__main__button-container__button')
+        );
 
-      const settingsButtonDE = buttonDEArray[0];
-      expect(settingsButtonDE).toBeDefined();
+        const settingsButtonDE = buttonDEArray[0];
+        expect(settingsButtonDE).toBeDefined();
 
-      const iconDE = settingsButtonDE.query(By.directive(MatIcon));
-      expect(iconDE).toBeDefined();
-      expect(iconDE.nativeElement.textContent.trim()).toBe('build');
+        const iconDE = settingsButtonDE.query(By.directive(MatIcon));
+        expect(iconDE).toBeDefined();
+        expect(iconDE.nativeElement.textContent.trim()).toBe('build');
 
-      //click handler
-      component.showSettings = jest.fn();
+        //click handler
+        component.showSettings = jest.fn();
 
-      settingsButtonDE.triggerEventHandler('click', null);
-      expect(component.showSettings).toHaveBeenCalled();
+        settingsButtonDE.triggerEventHandler('click', null);
+        expect(component.showSettings).toHaveBeenCalled();
+      });
+
+      it('should show the create slide button', () => {
+        const buttonDEArray = fixture.debugElement.queryAll(
+          By.css('.timeline-editor__main__button-container__button')
+        );
+
+        const settingsButtonDE = buttonDEArray[1];
+        expect(settingsButtonDE).toBeDefined();
+
+        const iconDE = settingsButtonDE.query(By.directive(MatIcon));
+        expect(iconDE).toBeDefined();
+        expect(iconDE.nativeElement.textContent.trim()).toBe('add_to_queue');
+
+        //click handler
+        component.createSlide = jest.fn();
+
+        settingsButtonDE.triggerEventHandler('click', null);
+        expect(component.createSlide).toHaveBeenCalled();
+      });
+
+      it('should show the delete slide button', () => {
+        (viewmodel.activeSlide$ as BehaviorSubject<
+          TimelineViewSlideInterface
+        >).next(mockViewSlide);
+        fixture.detectChanges();
+
+        const buttonDEArray = fixture.debugElement.queryAll(
+          By.css('.timeline-editor__main__button-container__button')
+        );
+
+        const settingsButtonDE = buttonDEArray[2];
+        expect(settingsButtonDE).toBeDefined();
+
+        const iconDE = settingsButtonDE.query(By.directive(MatIcon));
+        expect(iconDE).toBeDefined();
+        expect(iconDE.nativeElement.textContent.trim()).toBe(
+          'remove_from_queue'
+        );
+
+        //click handler
+        component.deleteActiveSlide = jest.fn();
+
+        settingsButtonDE.triggerEventHandler('click', null);
+        expect(component.deleteActiveSlide).toHaveBeenCalled();
+      });
     });
 
-    it('should show the create slide button', () => {
-      const buttonDEArray = fixture.debugElement.queryAll(
-        By.css('.timeline-editor__main__button-container__button')
-      );
+    describe('timeline slide detail', () => {
+      let activeSlideFromViewmodel;
+      let slideDetail: SlideDetailComponent;
 
-      const settingsButtonDE = buttonDEArray[1];
-      expect(settingsButtonDE).toBeDefined();
+      beforeEach(() => {
+        activeSlideFromViewmodel = viewmodel.activeSlideDetail$ as BehaviorSubject<
+          TimelineViewSlideInterface
+        >; // this stream has a value by default
+        const slideDetailDE = fixture.debugElement.query(
+          By.directive(SlideDetailComponent)
+        );
+        slideDetail = slideDetailDE.componentInstance;
+      });
 
-      const iconDE = settingsButtonDE.query(By.directive(MatIcon));
-      expect(iconDE).toBeDefined();
-      expect(iconDE.nativeElement.textContent.trim()).toBe('add_to_queue');
+      it('should be present based on the activeSlide$', () => {
+        expect(slideDetail).toBeDefined();
 
-      //click handler
-      component.createSlide = jest.fn();
+        activeSlideFromViewmodel.next(null);
+        fixture.detectChanges();
+        const slideDetailDE = fixture.debugElement.query(
+          By.directive(SlideDetailComponent)
+        );
 
-      settingsButtonDE.triggerEventHandler('click', null);
-      expect(component.createSlide).toHaveBeenCalled();
+        expect(slideDetailDE).toBeFalsy();
+      });
+
+      it('should set the selected slide', () => {
+        activeSlideFromViewmodel.next(mockViewSlide);
+        fixture.detectChanges();
+
+        expect(slideDetail.viewSlide).toEqual(mockViewSlide);
+      });
+
+      it('should set the canBeSavedAsTitle input', () => {
+        const canBeSavedAsTitleFromViewmodel = viewmodel.activeSlideDetailCanSaveAsTitle$ as BehaviorSubject<
+          boolean
+        >;
+        canBeSavedAsTitleFromViewmodel.next(false);
+        fixture.detectChanges();
+
+        expect(slideDetail.canBeSavedAsTitle).toEqual(false);
+
+        canBeSavedAsTitleFromViewmodel.next(true);
+        fixture.detectChanges();
+
+        expect(slideDetail.canBeSavedAsTitle).toEqual(true);
+      });
+
+      it('should set the fileUploadResult input', () => {
+        component.fileUploadResult$.next(mockFileUploadResult);
+        fixture.detectChanges();
+
+        expect(slideDetail.fileUploadResult).toEqual(mockFileUploadResult);
+      });
+
+      it('should handle the uploadFile output', () => {
+        component.handleFileUpload = jest.fn();
+        slideDetail.uploadFile.emit(mockFileUploadOutput);
+
+        expect(component.handleFileUpload).toHaveBeenCalledWith(
+          mockFileUploadOutput
+        );
+      });
+
+      it('should handle the saveViewSlide output', () => {
+        component.saveSlide = jest.fn();
+        slideDetail.saveViewSlide.emit(mockViewSlide);
+
+        expect(component.saveSlide).toHaveBeenCalledWith(mockViewSlide);
+      });
+
+      it('should handle the isDirty output', () => {
+        component.setIsFormDirty = jest.fn();
+        slideDetail.isDirty.emit(true);
+
+        expect(component.setIsFormDirty).toHaveBeenCalledWith(true);
+      });
     });
 
-    it('should show the delete slide button', () => {
-      (viewmodel.activeSlide$ as BehaviorSubject<
-        TimelineViewSlideInterface
-      >).next(mockViewSlide);
+    describe('timeline settings', () => {
+      let settingsFromViewmodel, showSettingsFromViewmodel;
+      let settings: SettingsComponent;
+
+      beforeEach(() => {
+        settingsFromViewmodel = viewmodel.settings$ as BehaviorSubject<
+          TimelineSettingsInterface
+        >; // this stream has a value by default
+
+        showSettingsFromViewmodel = viewmodel.showSettings$ as BehaviorSubject<
+          boolean
+        >; // this stream has a default value of true
+
+        const settingsDE = fixture.debugElement.query(
+          By.directive(SettingsComponent)
+        );
+        settings = settingsDE.componentInstance;
+      });
+
+      it('should be present based on the showSettings$', () => {
+        expect(settings).toBeDefined();
+
+        showSettingsFromViewmodel.next(false);
+        fixture.detectChanges();
+        const settingsDE = fixture.debugElement.query(
+          By.directive(SettingsComponent)
+        );
+
+        expect(settingsDE).toBeFalsy();
+      });
+
+      it('should set the settings input', () => {
+        settingsFromViewmodel.next(mockSettings);
+        fixture.detectChanges();
+
+        expect(settings.settings).toEqual(mockSettings);
+      });
+
+      it('should handle the saveSettings output', () => {
+        component.saveSettings = jest.fn();
+        settings.saveSettings.emit(mockSettings);
+
+        expect(component.saveSettings).toHaveBeenCalledWith(mockSettings);
+      });
+
+      it('should handle the isDirty output', () => {
+        component.setIsFormDirty = jest.fn();
+        settings.isDirty.emit(true);
+
+        expect(component.setIsFormDirty).toHaveBeenCalledWith(true);
+      });
+    });
+
+    it('should show a warning if a form is dirty', () => {
+      const isFormDirtyFromViewmodel = viewmodel.isFormDirty$ as BehaviorSubject<
+        boolean
+      >; // this stream has a default value of true
+
+      let formDirtyDE = fixture.debugElement.query(
+        By.css('.timeline-editor__form-dirty-warning')
+      );
+
+      expect(formDirtyDE).toBeDefined();
+
+      isFormDirtyFromViewmodel.next(false);
       fixture.detectChanges();
-
-      const buttonDEArray = fixture.debugElement.queryAll(
-        By.css('.timeline-editor__main__button-container__button')
+      formDirtyDE = fixture.debugElement.query(
+        By.css('.timeline-editor__form-dirty-warning')
       );
 
-      const settingsButtonDE = buttonDEArray[2];
-      expect(settingsButtonDE).toBeDefined();
-
-      const iconDE = settingsButtonDE.query(By.directive(MatIcon));
-      expect(iconDE).toBeDefined();
-      expect(iconDE.nativeElement.textContent.trim()).toBe('remove_from_queue');
-
-      //click handler
-      component.deleteActiveSlide = jest.fn();
-
-      settingsButtonDE.triggerEventHandler('click', null);
-      expect(component.deleteActiveSlide).toHaveBeenCalled();
+      expect(formDirtyDE).toBeFalsy();
     });
-
-    it('should show the selected slide', () => {
-      (viewmodel.activeSlideDetail$ as BehaviorSubject<
-        TimelineViewSlideInterface
-      >).next(mockViewSlide);
-      fixture.detectChanges();
-
-      const slideDetailDE = fixture.debugElement.query(
-        By.directive(SlideDetailComponent)
-      );
-      const slideDetail = slideDetailDE.componentInstance as SlideDetailComponent;
-
-      expect(slideDetail).toBeDefined();
-
-      // inputs
-      expect(slideDetail.viewSlide).toEqual(mockViewSlide);
-      expect(slideDetail.canBeSavedAsTitle).toEqual(
-        (viewmodel.activeSlideDetailCanSaveAsTitle$ as BehaviorSubject<boolean>)
-          .value
-      );
-      // expect(slideDetail.fileUploadResult).toEqual(
-      //   component.fileUploadResult$.
-      // );
-
-      // outputs
-    });
-
-    it('should show the timeline settings', () => {});
-
-    it('should a warning if the form is dirty', () => {});
   });
 });
