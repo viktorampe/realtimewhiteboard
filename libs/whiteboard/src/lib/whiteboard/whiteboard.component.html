@@ -1,1 +1,3 @@
-<div class="whiteboard-page__workspace" (tap)="onTap($event)"> </div>
+<div class="whiteboard-page__workspace" (tap)="onTap($event)">
+  <campus-card *ngFor="let card of cards"></campus-card>
+</div>
