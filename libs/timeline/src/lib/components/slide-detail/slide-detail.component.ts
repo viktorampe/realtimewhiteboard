@@ -217,7 +217,7 @@ export class SlideDetailComponent implements OnInit, OnChanges, OnDestroy {
       case 'end_date.millisecond':
         errorMessage = control.hasError('min')
           ? 'De milliseconde kan niet minder dan 0 zijn.'
-          : 'Je hebt een ongeldige minuut ingevuld.';
+          : 'Je hebt een ongeldige milliseconde ingevuld.';
         break;
 
       default:
