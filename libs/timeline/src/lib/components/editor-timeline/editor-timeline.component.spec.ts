@@ -154,7 +154,6 @@ describe('EditorTimelineComponent', () => {
     });
 
     it('saveSettings', () => {
-      const mockSettings = {} as TimelineSettingsInterface;
       viewmodel.updateSettings = jest.fn();
       component.saveSettings(mockSettings);
 
@@ -471,7 +470,6 @@ describe('EditorTimelineComponent', () => {
 
       isFormDirtyFromViewmodel.next(true);
       fixture.detectChanges();
-
       formDirtyDE = fixture.debugElement.query(
         By.css('.timeline-editor__form-dirty-warning')
       );
