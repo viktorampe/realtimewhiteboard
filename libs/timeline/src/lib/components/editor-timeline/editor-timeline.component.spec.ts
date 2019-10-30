@@ -230,7 +230,7 @@ describe('EditorTimelineComponent', () => {
       });
 
       it('should show the slide list', () => {
-        expect(slideList).toBeDefined();
+        expect(slideList).toBeTruthy();
       });
 
       it('should set the viewSlides input', () => {
@@ -268,10 +268,10 @@ describe('EditorTimelineComponent', () => {
         );
 
         const settingsButtonDE = buttonDEArray[0];
-        expect(settingsButtonDE).toBeDefined();
+        expect(settingsButtonDE).toBeTruthy();
 
         const iconDE = settingsButtonDE.query(By.directive(MatIcon));
-        expect(iconDE).toBeDefined();
+        expect(iconDE).toBeTruthy();
         expect(iconDE.nativeElement.textContent.trim()).toBe('build');
 
         //click handler
@@ -287,10 +287,10 @@ describe('EditorTimelineComponent', () => {
         );
 
         const settingsButtonDE = buttonDEArray[1];
-        expect(settingsButtonDE).toBeDefined();
+        expect(settingsButtonDE).toBeTruthy();
 
         const iconDE = settingsButtonDE.query(By.directive(MatIcon));
-        expect(iconDE).toBeDefined();
+        expect(iconDE).toBeTruthy();
         expect(iconDE.nativeElement.textContent.trim()).toBe('add_to_queue');
 
         //click handler
@@ -311,10 +311,10 @@ describe('EditorTimelineComponent', () => {
         );
 
         const settingsButtonDE = buttonDEArray[2];
-        expect(settingsButtonDE).toBeDefined();
+        expect(settingsButtonDE).toBeTruthy();
 
         const iconDE = settingsButtonDE.query(By.directive(MatIcon));
-        expect(iconDE).toBeDefined();
+        expect(iconDE).toBeTruthy();
         expect(iconDE.nativeElement.textContent.trim()).toBe(
           'remove_from_queue'
         );
@@ -342,7 +342,7 @@ describe('EditorTimelineComponent', () => {
       });
 
       it('should be present based on the activeSlide$', () => {
-        expect(slideDetail).toBeDefined();
+        expect(slideDetail).toBeTruthy();
 
         activeSlideFromViewmodel.next(null);
         fixture.detectChanges();
@@ -426,7 +426,7 @@ describe('EditorTimelineComponent', () => {
       });
 
       it('should be present based on the showSettings$', () => {
-        expect(settings).toBeDefined();
+        expect(settings).toBeTruthy();
 
         showSettingsFromViewmodel.next(false);
         fixture.detectChanges();
@@ -462,21 +462,24 @@ describe('EditorTimelineComponent', () => {
     it('should show a warning if a form is dirty', () => {
       const isFormDirtyFromViewmodel = viewmodel.isFormDirty$ as BehaviorSubject<
         boolean
-      >; // this stream has a default value of true
-
+      >;
       let formDirtyDE = fixture.debugElement.query(
         By.css('.timeline-editor__form-dirty-warning')
       );
 
-      expect(formDirtyDE).toBeDefined();
+      expect(formDirtyDE).toBeFalsy();
 
-      isFormDirtyFromViewmodel.next(false);
+      isFormDirtyFromViewmodel.next(true);
       fixture.detectChanges();
+
       formDirtyDE = fixture.debugElement.query(
         By.css('.timeline-editor__form-dirty-warning')
       );
 
-      expect(formDirtyDE).toBeFalsy();
+      expect(formDirtyDE).toBeTruthy();
+      expect(formDirtyDE.nativeElement.textContent.trim()).toBe(
+        'Niet opgeslagen aanpassingen...'
+      );
     });
   });
 });
