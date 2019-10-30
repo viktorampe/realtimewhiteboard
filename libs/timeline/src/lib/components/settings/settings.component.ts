@@ -81,7 +81,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
     this.subscriptions = new Subscription();
     this.initialFormValues = JSON.stringify(this.settingsForm.value);
 
-    // TODO test -> see Frederic -> has/had some issues
     this.subscriptions.add(
       this.settingsForm.valueChanges
         .pipe(
