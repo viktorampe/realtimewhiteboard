@@ -11,11 +11,12 @@ import {
   MatIconModule,
   MatInputModule,
   MatListModule,
+  MatRadioButton,
   MatRadioModule,
   MatStepperModule,
   MatTooltipModule
 } from '@angular/material';
-import { HAMMER_LOADER } from '@angular/platform-browser';
+import { By, HAMMER_LOADER } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { configureTestSuite } from 'ng-bullet';
 import { TimelineSlideFixture } from '../../+fixtures/timeline-slide.fixture';
@@ -139,6 +140,25 @@ describe('SlideDetailComponent', () => {
           millisecond: 0,
           display_date: 'all 0 values'
         }
+      },
+      {
+        viewSlide: {
+          type: TIMELINE_SLIDE_TYPES.SLIDE,
+          viewSlide: {
+            start_date: null
+          },
+          label: 'foo label'
+        },
+        expected: {
+          year: null,
+          month: null,
+          day: 0,
+          hour: 0,
+          minute: 0,
+          second: 0,
+          millisecond: 0,
+          display_date: 'all 0 values'
+        }
       }
     ];
 
@@ -202,23 +222,46 @@ describe('SlideDetailComponent', () => {
     });
   });
 
-  describe('fileUploadResult input', () => {
-    it('should set the value of the correct formControl', () => {
-      const mockUploadResult: FileUploadResult = {
-        formControlName: 'background.url',
-        url: 'www.foo.url'
-      };
+  describe('inputs', () => {
+    describe('fileUploadResult', () => {
+      it('should set the value of the correct formControl', () => {
+        const mockUploadResult: FileUploadResult = {
+          formControlName: 'background.url',
+          url: 'www.foo.url'
+        };
 
-      component.ngOnChanges({
-        fileUploadResult: new SimpleChange(null, mockUploadResult, false)
+        component.ngOnChanges({
+          fileUploadResult: new SimpleChange(null, mockUploadResult, false)
+        });
+
+        expect(component.slideForm.get('background.url').value).toBe(
+          'www.foo.url'
+        );
+        // make sure the other url's aren't accidentally set
+        expect(component.slideForm.get('media.url').value).toBe('');
+        expect(component.slideForm.get('media.thumbnail').value).toBe('');
       });
+    });
 
-      expect(component.slideForm.get('background.url').value).toBe(
-        'www.foo.url'
-      );
-      // make sure the other url's aren't accidentally set
-      expect(component.slideForm.get('media.url').value).toBe('');
-      expect(component.slideForm.get('media.thumbnail').value).toBe('');
+    describe('canBeSavedAsTitle', () => {
+      it('should disable title radio-button if canBeSavedAsTitle is set to false', () => {
+        component.canBeSavedAsTitle = false;
+        fixture.detectChanges();
+
+        const formSectionDE = fixture.debugElement.query(
+          By.css('.timeline-slide-detail__form__section')
+        );
+        const radioButtonsDE = formSectionDE.queryAll(
+          By.directive(MatRadioButton)
+        );
+        const radioButtons = radioButtonsDE.map(
+          rb => rb.componentInstance as MatRadioButton
+        );
+        radioButtons.forEach(rb => {
+          // Only title should be disabled
+          expect(rb.disabled).toBe(rb.value === TIMELINE_SLIDE_TYPES.TITLE);
+        });
+      });
     });
   });
 
@@ -254,6 +297,22 @@ describe('SlideDetailComponent', () => {
       expect(component.slideForm.get('background.color').value).toBe(
         'fooColor'
       );
+    });
+  });
+
+  describe('goBack()', () => {
+    it('should call stepper.previous()', () => {
+      component.stepper.previous = jest.fn();
+      component.goBack();
+      expect(component.stepper.previous).toHaveBeenCalled();
+    });
+  });
+
+  describe('goForward()', () => {
+    it('should call stepper.next()', () => {
+      component.stepper.next = jest.fn();
+      component.goForward();
+      expect(component.stepper.next).toHaveBeenCalled();
     });
   });
 
