@@ -67,12 +67,12 @@
 
             <div class="timeline-slide-detail__form__section">
               <div class="mat-h3"
-                >Weergavedatum
+                >Label
                 <div
                   class="timeline-slide-detail__form__tooltip__trigger"
-                  [matTooltip]="tooltips['display_date']"
+                  [matTooltip]="tooltips['label']"
                   [matTooltipClass]="'timeline-slide-detail__form__tooltip'"
-                  *ngIf="tooltips['display_date']"
+                  *ngIf="tooltips['label']"
                   >i</div
                 >
               </div>
@@ -81,7 +81,7 @@
                   matInput
                   type="string"
                   formControlName="display_date"
-                  placeholder="Weergavedatum"
+                  placeholder="Label"
                 />
               </mat-form-field>
             </div>
@@ -211,6 +211,11 @@
                   placeholder="url"
                 />
               </mat-form-field>
+              <ng-container
+                *ngIf="getFormGroup('background').get('url')?.value as href"
+              >
+                <a [href]="href"><mat-icon>link</mat-icon></a>
+              </ng-container>
               <div
                 class="timeline-slide-detail__form__tooltip__trigger"
                 [matTooltip]="tooltips['background']"
@@ -281,6 +286,11 @@
                   placeholder="Of plaats hier een link naar een bestand"
                 />
               </mat-form-field>
+              <ng-container
+                *ngIf="getFormGroup('media').get('url')?.value as href"
+              >
+                <a [href]="href"><mat-icon>link</mat-icon></a>
+              </ng-container>
               <div
                 class="timeline-slide-detail__form__tooltip__trigger"
                 [matTooltip]="tooltips['url']"
@@ -313,6 +323,11 @@
                   placeholder="Of plaats hier een link naar een bestand"
                 />
               </mat-form-field>
+              <ng-container
+                *ngIf="getFormGroup('media').get('thumbnail')?.value as href"
+              >
+                <a [href]="href"><mat-icon>link</mat-icon></a>
+              </ng-container>
               <div
                 class="timeline-slide-detail__form__tooltip__trigger"
                 [matTooltip]="tooltips['thumbnail']"
