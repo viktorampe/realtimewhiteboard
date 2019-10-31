@@ -203,7 +203,7 @@ export class EditorViewModel {
   }
 
   private setSourceStreams() {
-    this.editorHttpService.getJson().subscribe(timeline => {
+    this.getTimeline().subscribe(timeline => {
       this.data$.next(timeline);
     });
   }
