@@ -8,5 +8,15 @@ import { Component, OnInit } from '@angular/core';
 export class WhiteboardComponent implements OnInit {
   constructor() {}
 
-  ngOnInit() {}
+  cards: String[];
+
+  ngOnInit() {
+    this.cards = [];
+  }
+
+  onTap(event) {
+    if (event.tapCount >= 2) {
+      this.cards.push('item');
+    }
+  }
 }
