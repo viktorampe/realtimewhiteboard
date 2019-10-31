@@ -1,4 +1,4 @@
-import { MAT_STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
+import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import {
   Component,
   EventEmitter,
@@ -58,7 +58,7 @@ export interface UploadFileOutput {
   providers: [
     { provide: MAT_TOOLTIP_DEFAULT_OPTIONS, useValue: { position: 'after' } },
     {
-      provide: MAT_STEPPER_GLOBAL_OPTIONS,
+      provide: STEPPER_GLOBAL_OPTIONS,
       useValue: { displayDefaultIndicatorType: false }
     }
   ]
