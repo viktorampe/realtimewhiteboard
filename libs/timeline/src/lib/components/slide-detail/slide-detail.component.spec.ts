@@ -84,6 +84,52 @@ describe('SlideDetailComponent', () => {
     expect(component.slideForm).toBeDefined();
     expect(component.chosenType$).toBeDefined();
     expect(component.isDirty).toBeDefined();
+    expect(component.slideTypes).toBeDefined();
+    expect(component.tooltips).toBeDefined();
+  });
+
+  it('should initialize tooltips', () => {
+    expect(Object.keys(component.tooltips)).toEqual([
+      'type',
+      'group',
+      'display_date',
+      'start_date',
+      'end_date',
+      'headline',
+      'text',
+      'background',
+      'color',
+      'url',
+      'thumbnail',
+      'caption',
+      'credit',
+      'alt',
+      'title',
+      'link'
+    ]);
+  });
+
+  it('should have slideTypes with labels', () => {
+    const expectedMap = {
+      [TIMELINE_SLIDE_TYPES.TITLE]: 'titel',
+      [TIMELINE_SLIDE_TYPES.ERA]: 'tijdspanne',
+      [TIMELINE_SLIDE_TYPES.SLIDE]: 'gebeurtenis'
+    };
+
+    const slideTypeLabelMap = component.slideTypes.reduce((acc, type) => {
+      return { ...acc, [type.value]: type.label };
+    }, {});
+
+    expect(slideTypeLabelMap).toEqual(expectedMap);
+  });
+
+  it('should have a radiobutton for each slide type', () => {
+    const formSectionDE = fixture.debugElement.query(
+      By.css('.timeline-slide-detail__form__section')
+    );
+    const radioButtonsDE = formSectionDE.queryAll(By.directive(MatRadioButton));
+
+    expect(radioButtonsDE.length).toBe(component.slideTypes.length);
   });
 
   describe('mapping viewslide data to  form data', () => {
