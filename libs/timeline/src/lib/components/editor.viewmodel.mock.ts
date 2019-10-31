@@ -33,6 +33,7 @@ export class MockEditorViewModel
   public activeSlide$ = new BehaviorSubject<TimelineViewSlideInterface>(null);
   public activeSlideDetailCanSaveAsTitle$ = new BehaviorSubject<boolean>(true);
   public errors$ = new BehaviorSubject(null);
+  public showSettings$ = new BehaviorSubject<boolean>(true);
 
   setHttpSettings(): void {}
   openSettings(): EditorHttpSettingsInterface {
