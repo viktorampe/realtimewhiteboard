@@ -280,12 +280,31 @@ describe('EditorTimelineComponent', () => {
         expect(component.showSettings).toHaveBeenCalled();
       });
 
-      it('should show the create slide button', () => {
+      it('should show the preview slide button', () => {
         const buttonDEArray = fixture.debugElement.queryAll(
           By.css('.timeline-editor__main__button-container__button')
         );
 
         const settingsButtonDE = buttonDEArray[1];
+        expect(settingsButtonDE).toBeTruthy();
+
+        const iconDE = settingsButtonDE.query(By.directive(MatIcon));
+        expect(iconDE).toBeTruthy();
+        expect(iconDE.nativeElement.textContent.trim()).toBe('launch');
+
+        //click handler
+        component.preview = jest.fn();
+
+        settingsButtonDE.triggerEventHandler('click', null);
+        expect(component.preview).toHaveBeenCalled();
+      });
+
+      it('should show the create slide button', () => {
+        const buttonDEArray = fixture.debugElement.queryAll(
+          By.css('.timeline-editor__main__button-container__button')
+        );
+
+        const settingsButtonDE = buttonDEArray[2];
         expect(settingsButtonDE).toBeTruthy();
 
         const iconDE = settingsButtonDE.query(By.directive(MatIcon));
@@ -309,7 +328,7 @@ describe('EditorTimelineComponent', () => {
           By.css('.timeline-editor__main__button-container__button')
         );
 
-        const settingsButtonDE = buttonDEArray[2];
+        const settingsButtonDE = buttonDEArray[3];
         expect(settingsButtonDE).toBeTruthy();
 
         const iconDE = settingsButtonDE.query(By.directive(MatIcon));

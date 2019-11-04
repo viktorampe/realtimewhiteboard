@@ -116,7 +116,7 @@ export class EditorViewModel {
 
     // If it's an update and not an insert, delete what we had before this
     if (activeSlide) {
-      this.deleteActiveSlide();
+      this.deleteActiveSlide(false);
     }
 
     if (updatedSlide.type === TIMELINE_SLIDE_TYPES.TITLE) {
@@ -143,7 +143,7 @@ export class EditorViewModel {
     });
   }
 
-  public deleteActiveSlide() {
+  public deleteActiveSlide(persist: boolean = true) {
     const data = this.data$.value;
     const activeSlide = this._activeSlide$.value;
 
@@ -161,7 +161,9 @@ export class EditorViewModel {
     }
 
     // Persist changes
-    this.updateTimeline(data).subscribe();
+    if (persist) {
+      this.updateTimeline(data).subscribe();
+    }
 
     // Select nothing, since the previously active slide was deleted
     this._activeSlide$.next(null);

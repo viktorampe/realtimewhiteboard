@@ -585,6 +585,10 @@ export class SlideDetailComponent implements OnInit, OnChanges, OnDestroy {
         'optioneel \n' +
         'Het bijschrift van het media element.\n' +
         'Dit komt onder het media element.',
+      label:
+        'optioneel \n' +
+        'Dit label komt in het overzicht van de slides.\n' +
+        'Dit label komt ook boven de titel en bij de knoppen links en rechts.',
       credit:
         'optioneel \n' +
         'De bronvermelding van het media element.\n' +
