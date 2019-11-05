@@ -109,6 +109,10 @@ export class EditorTimelineComponent implements OnInit, OnChanges, OnDestroy {
     this.editorViewModel.setFormDirty(isDirty);
   }
 
+  public preview(): void {
+    window.open(this.editorViewModel.previewTimeline());
+  }
+
   public handleFileUpload(upload: UploadFileOutput): void {
     this.editorViewModel
       .uploadFile(upload.file)
