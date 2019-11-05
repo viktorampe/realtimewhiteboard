@@ -348,17 +348,17 @@ describe('SlideDetailComponent', () => {
 
   describe('goBack()', () => {
     it('should call stepper.previous()', () => {
-      component.stepper.previous = jest.fn();
+      jest.spyOn(component.stepper, 'previous');
       component.goBack();
-      expect(component.stepper.previous).toHaveBeenCalled();
+      expect(component.stepper.previous).toHaveBeenCalledTimes(1);
     });
   });
 
   describe('goForward()', () => {
     it('should call stepper.next()', () => {
-      component.stepper.next = jest.fn();
+      jest.spyOn(component.stepper, 'next');
       component.goForward();
-      expect(component.stepper.next).toHaveBeenCalled();
+      expect(component.stepper.next).toHaveBeenCalledTimes(1);
     });
   });
 
