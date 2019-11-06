@@ -19,4 +19,8 @@ export class WhiteboardComponent implements OnInit {
       this.cards.push('item');
     }
   }
+
+  btnPlusClicked() {
+    console.log('clicked');
+  }
 }
