@@ -102,6 +102,7 @@ describe('SlideDetailComponent', () => {
       'url',
       'thumbnail',
       'caption',
+      'label',
       'credit',
       'alt',
       'title',
