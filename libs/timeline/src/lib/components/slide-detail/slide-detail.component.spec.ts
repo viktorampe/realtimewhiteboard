@@ -11,11 +11,12 @@ import {
   MatIconModule,
   MatInputModule,
   MatListModule,
+  MatRadioButton,
   MatRadioModule,
   MatStepperModule,
   MatTooltipModule
 } from '@angular/material';
-import { HAMMER_LOADER } from '@angular/platform-browser';
+import { By, HAMMER_LOADER } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { configureTestSuite } from 'ng-bullet';
 import { TimelineSlideFixture } from '../../+fixtures/timeline-slide.fixture';
@@ -83,6 +84,52 @@ describe('SlideDetailComponent', () => {
     expect(component.slideForm).toBeDefined();
     expect(component.chosenType$).toBeDefined();
     expect(component.isDirty).toBeDefined();
+    expect(component.slideTypes).toBeDefined();
+    expect(component.tooltips).toBeDefined();
+  });
+
+  it('should initialize tooltips', () => {
+    expect(Object.keys(component.tooltips)).toEqual([
+      'type',
+      'group',
+      'display_date',
+      'start_date',
+      'end_date',
+      'headline',
+      'text',
+      'background',
+      'color',
+      'url',
+      'thumbnail',
+      'caption',
+      'credit',
+      'alt',
+      'title',
+      'link'
+    ]);
+  });
+
+  it('should have slideTypes with labels', () => {
+    const expectedMap = {
+      [TIMELINE_SLIDE_TYPES.TITLE]: 'titel',
+      [TIMELINE_SLIDE_TYPES.ERA]: 'tijdspanne',
+      [TIMELINE_SLIDE_TYPES.SLIDE]: 'gebeurtenis'
+    };
+
+    const slideTypeLabelMap = component.slideTypes.reduce((acc, type) => {
+      return { ...acc, [type.value]: type.label };
+    }, {});
+
+    expect(slideTypeLabelMap).toEqual(expectedMap);
+  });
+
+  it('should have a radiobutton for each slide type', () => {
+    const formSectionDE = fixture.debugElement.query(
+      By.css('.timeline-slide-detail__form__section')
+    );
+    const radioButtonsDE = formSectionDE.queryAll(By.directive(MatRadioButton));
+
+    expect(radioButtonsDE.length).toBe(component.slideTypes.length);
   });
 
   describe('mapping viewslide data to  form data', () => {
@@ -131,6 +178,25 @@ describe('SlideDetailComponent', () => {
         },
         expected: {
           year: 0,
+          month: null,
+          day: 0,
+          hour: 0,
+          minute: 0,
+          second: 0,
+          millisecond: 0,
+          display_date: 'all 0 values'
+        }
+      },
+      {
+        viewSlide: {
+          type: TIMELINE_SLIDE_TYPES.SLIDE,
+          viewSlide: {
+            start_date: null
+          },
+          label: 'foo label'
+        },
+        expected: {
+          year: null,
           month: null,
           day: 0,
           hour: 0,
@@ -202,23 +268,46 @@ describe('SlideDetailComponent', () => {
     });
   });
 
-  describe('fileUploadResult input', () => {
-    it('should set the value of the correct formControl', () => {
-      const mockUploadResult: FileUploadResult = {
-        formControlName: 'background.url',
-        url: 'www.foo.url'
-      };
+  describe('inputs', () => {
+    describe('fileUploadResult', () => {
+      it('should set the value of the correct formControl', () => {
+        const mockUploadResult: FileUploadResult = {
+          formControlName: 'background.url',
+          url: 'www.foo.url'
+        };
 
-      component.ngOnChanges({
-        fileUploadResult: new SimpleChange(null, mockUploadResult, false)
+        component.ngOnChanges({
+          fileUploadResult: new SimpleChange(null, mockUploadResult, false)
+        });
+
+        expect(component.slideForm.get('background.url').value).toBe(
+          'www.foo.url'
+        );
+        // make sure the other url's aren't accidentally set
+        expect(component.slideForm.get('media.url').value).toBe('');
+        expect(component.slideForm.get('media.thumbnail').value).toBe('');
       });
+    });
 
-      expect(component.slideForm.get('background.url').value).toBe(
-        'www.foo.url'
-      );
-      // make sure the other url's aren't accidentally set
-      expect(component.slideForm.get('media.url').value).toBe('');
-      expect(component.slideForm.get('media.thumbnail').value).toBe('');
+    describe('canBeSavedAsTitle', () => {
+      it('should disable title radio-button if canBeSavedAsTitle is set to false', () => {
+        component.canBeSavedAsTitle = false;
+        fixture.detectChanges();
+
+        const formSectionDE = fixture.debugElement.query(
+          By.css('.timeline-slide-detail__form__section')
+        );
+        const radioButtonsDE = formSectionDE.queryAll(
+          By.directive(MatRadioButton)
+        );
+        const radioButtons = radioButtonsDE.map(
+          rb => rb.componentInstance as MatRadioButton
+        );
+        radioButtons.forEach(rb => {
+          // Only title should be disabled
+          expect(rb.disabled).toBe(rb.value === TIMELINE_SLIDE_TYPES.TITLE);
+        });
+      });
     });
   });
 
@@ -254,6 +343,22 @@ describe('SlideDetailComponent', () => {
       expect(component.slideForm.get('background.color').value).toBe(
         'fooColor'
       );
+    });
+  });
+
+  describe('goBack()', () => {
+    it('should call stepper.previous()', () => {
+      jest.spyOn(component.stepper, 'previous');
+      component.goBack();
+      expect(component.stepper.previous).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('goForward()', () => {
+    it('should call stepper.next()', () => {
+      jest.spyOn(component.stepper, 'next');
+      component.goForward();
+      expect(component.stepper.next).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -530,5 +635,103 @@ describe('SlideDetailComponent', () => {
       expect(component.isDirty.emit).toHaveBeenCalledTimes(1);
       expect(component.isDirty.emit).toHaveBeenCalledWith(false);
     }));
+  });
+
+  describe('getErrorMessage', () => {
+    let controlFn;
+    const mockControl = hasError => ({
+      hasError: () => hasError
+    });
+
+    beforeEach(() => {
+      controlFn = jest.fn();
+      component.getControl = controlFn;
+    });
+
+    const dates = ['start_date', 'end_date'];
+    const props = ['month', 'day', 'hour', 'minute', 'second', 'millisecond'];
+    const minMaxErrorMessages = [
+      'De maand is een getal van 1 (januari) tot en met 12 (december).',
+      'De dag is een getal van 1 tot en met 31.',
+      'Het uur is een getal van 0 tot en met 23.',
+      'De minuut is een getal van 0 tot en met 59.',
+      'De seconde is een getal van 0 tot en met 59.',
+      'De milliseconde kan niet minder dan 0 zijn.'
+    ];
+    const fallbackErrorMessages = [
+      'Je hebt een ongeldige maand ingevuld.',
+      'Je hebt een ongeldige dag ingevuld.',
+      'Je hebt een ongeldig uur ingevuld.',
+      'Je hebt een ongeldige minuut ingevuld.',
+      'Je hebt een ongeldige seconde ingevuld.',
+      'Je hebt een ongeldige milliseconde ingevuld.'
+    ];
+    const yearErrorMessages = [
+      'Je moet een startjaar invullen.',
+      'Je moet een eindjaar invullen.',
+      'Je hebt een ongeldig jaar ingevuld.'
+    ];
+    const errorDictionnary = {
+      min: minMaxErrorMessages,
+      max: minMaxErrorMessages,
+      other: fallbackErrorMessages
+    };
+
+    // Building testCase array with [{errorName: 'min', field: 'start_date', prop: 'millisecond', expect: '<The expected error message>'}, {...}]
+    let testCases = dates.reduce((dateAcc, field) => {
+      return [
+        ...dateAcc,
+        ...Object.keys(errorDictionnary).reduce((errorAcc, errorName) => {
+          return [
+            ...errorAcc,
+            ...props.reduce((testAcc, prop, index) => {
+              return [
+                ...testAcc,
+                {
+                  field,
+                  prop,
+                  errorName,
+                  expect: errorDictionnary[errorName][index]
+                }
+              ];
+            }, [])
+          ];
+        }, [])
+      ];
+    }, []);
+
+    testCases = [
+      ...testCases,
+      ...dates.reduce((dateAcc, field, index) => {
+        const prop = 'year';
+        return [
+          ...dateAcc,
+          {
+            field,
+            prop,
+            errorName: 'required',
+            expect: yearErrorMessages[index]
+          },
+          { field, prop, errorName: 'other', expect: yearErrorMessages[2] }
+        ];
+      }, [])
+    ];
+
+    testCases.forEach(tc => {
+      // prettier-ignore
+      it(`should return error message for ${tc.field}.${tc.prop} where control has ${tc.errorName} error`, () => { 
+        const mock = mockControl(tc.errorName !== 'other')
+        controlFn.mockReturnValue(mock);
+
+        const result = component.getErrorMessage(`${tc.field}.${tc.prop}`);
+        expect(result).toEqual(tc.expect);
+      });
+    });
+    it('should return empty string if field was not found', () => {
+      controlFn.mockReturnValue(null);
+
+      const result = component.getErrorMessage('unknown');
+      expect(result).toEqual('');
+    });
   });
 });
