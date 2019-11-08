@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material';
+import { By } from '@angular/platform-browser';
 import { configureTestSuite } from 'ng-bullet';
 import { CardComponent } from './card.component';
 
@@ -23,5 +24,14 @@ describe('CardComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should create with correct input', () => {
+    component.cardContent = 'Test content';
+    fixture.detectChanges();
+    const contentParagraph = fixture.debugElement.query(By.css('p'));
+    expect(contentParagraph.nativeElement.textContent.trim()).toBe(
+      'Test content'
+    );
   });
 });
