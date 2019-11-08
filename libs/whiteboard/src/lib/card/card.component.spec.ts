@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material';
 import { configureTestSuite } from 'ng-bullet';
 import { CardComponent } from './card.component';
@@ -9,7 +10,7 @@ describe('CardComponent', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [MatCardModule],
+      imports: [MatCardModule, FormsModule],
       declarations: [CardComponent]
     });
   });
