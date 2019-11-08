@@ -14,7 +14,7 @@ import {
 export class CardComponent implements OnInit, AfterViewInit {
   @ViewChild('inputContent') inputContent: ElementRef;
   cardContent: String = '';
-  isInputSelected: boolean = true;
+  isInputSelected = true;
 
   constructor() {}
 
