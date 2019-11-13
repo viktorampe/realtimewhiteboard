@@ -28,10 +28,14 @@ export class CardComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.inputContent.nativeElement.focus();
+    this.focusInput();
   }
 
   toggleInput() {
     this.card.isInputSelected = !this.card.isInputSelected;
+  }
+
+  focusInput() {
+    this.inputContent.nativeElement.focus();
   }
 }
