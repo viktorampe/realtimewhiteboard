@@ -5,6 +5,7 @@ import {
   OnInit,
   ViewChild
 } from '@angular/core';
+import Card from '../../interfaces/Card';
 
 @Component({
   selector: 'campus-card',
@@ -13,18 +14,24 @@ import {
 })
 export class CardComponent implements OnInit, AfterViewInit {
   @ViewChild('inputContent') inputContent: ElementRef;
-  cardContent: String = '';
-  isInputSelected = true;
+
+  card: Card;
 
   constructor() {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.card = {
+      color: '',
+      cardContent: null,
+      isInputSelected: true
+    };
+  }
 
   ngAfterViewInit() {
     this.inputContent.nativeElement.focus();
   }
 
   toggleInput() {
-    this.isInputSelected = !this.isInputSelected;
+    this.card.isInputSelected = !this.card.isInputSelected;
   }
 }
