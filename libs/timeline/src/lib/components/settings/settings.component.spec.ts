@@ -10,10 +10,11 @@ import {
   MatFormFieldModule,
   MatIconModule,
   MatInputModule,
+  MatTooltip,
   MatTooltipModule
 } from '@angular/material';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { HAMMER_LOADER } from '@angular/platform-browser';
+import { By, HAMMER_LOADER } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { configureTestSuite } from 'ng-bullet';
 import { TimelineSettingsInterface } from '../../interfaces/timeline';
@@ -106,4 +107,17 @@ describe('SettingsComponent', () => {
     expect(component.isDirty.emit).toHaveBeenCalledTimes(1);
     expect(component.isDirty.emit).toHaveBeenCalledWith(false);
   }));
+
+  it('should show the tooltips', () => {
+    const tooltips: MatTooltip[] = fixture.debugElement
+      .queryAll(By.directive(MatTooltip))
+      .map(DE => DE.componentInstance);
+
+    expect(tooltips.length).toBe(Object.keys(component.tooltips).length);
+    Object.keys(component.tooltips).forEach(key => {
+      expect(
+        tooltips.some(tooltip => tooltip.message === component.tooltips[key])
+      );
+    });
+  });
 });

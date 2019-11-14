@@ -167,6 +167,16 @@ describe('EditorTimelineComponent', () => {
       expect(viewmodel.setFormDirty).toHaveBeenCalledWith(true);
     });
 
+    it('should open timeline in preview', () => {
+      const mockUrl = 'https://time.line';
+      viewmodel.previewTimeline = jest.fn().mockReturnValue(mockUrl);
+      window.open = jest.fn();
+
+      component.preview();
+
+      expect(window.open).toHaveBeenCalledWith(mockUrl);
+    });
+
     it('handleFileUpload', () => {
       viewmodel.uploadFile = jest
         .fn()
