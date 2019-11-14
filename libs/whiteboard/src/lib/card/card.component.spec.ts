@@ -36,9 +36,11 @@ describe('CardComponent', () => {
     );
   });
 
-  it('should create with correct input', () => {
+  it('should create with correct input', async () => {
     component.card.cardContent = 'Test content';
+    component.card.isInputSelected = true;
     fixture.detectChanges();
+    await fixture.whenStable();
     const inputContent = fixture.debugElement.query(By.css('input'));
     expect(inputContent.nativeElement.value.trim()).toBe('Test content');
   });
