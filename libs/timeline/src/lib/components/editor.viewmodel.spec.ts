@@ -15,6 +15,7 @@ import { EditorHttpServiceInterface } from '../services/editor-http.service.inte
 import { TimelineTextFixture } from './../+fixtures/timeline-text.fixture';
 import {
   TimelineConfigInterface,
+  TimelineSettingsInterface,
   TimelineViewSlideInterface,
   TIMELINE_SLIDE_TYPES
 } from './../interfaces/timeline';
@@ -24,7 +25,19 @@ describe('EditorViewModel', () => {
   let editorViewModel: EditorViewModel;
   let editorHttpService: EditorHttpServiceInterface;
 
-  const timelineConfig: TimelineConfigInterface = new TimelineConfigFixture();
+  const timelineConfig: TimelineConfigInterface = new TimelineConfigFixture({
+    scale: 'cosmological',
+    options: new TimelineOptionsFixture({
+      scale_factor: 789,
+      relative: true
+    })
+  });
+
+  const mockViewSlide: TimelineViewSlideInterface = {
+    label: 'valentijn',
+    type: TIMELINE_SLIDE_TYPES.SLIDE,
+    viewSlide: new TimelineSlideFixture()
+  };
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
@@ -33,6 +46,7 @@ describe('EditorViewModel', () => {
         {
           provide: EDITOR_HTTP_SERVICE_TOKEN,
           useValue: {
+            setSettings: () => {},
             getJson: () => new BehaviorSubject(timelineConfig),
             setJson: () => {},
             getPreviewUrl: () => {},
@@ -48,11 +62,32 @@ describe('EditorViewModel', () => {
     editorHttpService = TestBed.get(EDITOR_HTTP_SERVICE_TOKEN);
   });
 
+  afterEach(() => {
+    timelineConfig.title = undefined;
+    timelineConfig.eras = [];
+    timelineConfig.events = [];
+    timelineConfig.scale = 'cosmological';
+    timelineConfig.options = new TimelineOptionsFixture({
+      scale_factor: 789,
+      relative: true
+    });
+  });
+
   it('should create', () => {
     expect(editorViewModel).toBeTruthy();
   });
 
-  describe('handlers', () => {
+  describe('http handlers', () => {
+    it('setHttpSettings() should call editorHttpService.setSettings', () => {
+      const mockHttpSettings = { apiBase: 'foo', eduContentMetadataId: 123 };
+      jest.spyOn(editorHttpService, 'setSettings');
+
+      editorViewModel.setHttpSettings(mockHttpSettings);
+      expect(editorHttpService.setSettings).toHaveBeenCalledWith(
+        mockHttpSettings
+      );
+    });
+
     it('getTimeline() should call the editorHttpService.getJson', () => {
       jest.spyOn(editorHttpService, 'getJson');
 
@@ -595,15 +630,48 @@ describe('EditorViewModel', () => {
       });
     });
 
-    describe('settings$', () => {
-      beforeEach(() => {
-        timelineConfig.scale = 'cosmological';
-        timelineConfig.options = new TimelineOptionsFixture({
-          scale_factor: 123,
-          relative: true
-        });
+    describe('openSettings$', () => {
+      it('should emit false when an active slide is set, while true', () => {
+        editorViewModel.openSettings();
+        editorViewModel.setActiveSlide(mockViewSlide);
+
+        expect(editorViewModel.showSettings$).toBeObservable(
+          hot('a', { a: false })
+        );
       });
 
+      it('should emit false when a new slide is created, while true', () => {
+        editorViewModel.openSettings();
+        editorViewModel.createSlide();
+
+        expect(editorViewModel.showSettings$).toBeObservable(
+          hot('a', { a: false })
+        );
+      });
+
+      it('should emit true when openSettings is called', () => {
+        editorViewModel.createSlide();
+        editorViewModel.openSettings();
+
+        expect(editorViewModel.showSettings$).toBeObservable(
+          hot('a', { a: true })
+        );
+      });
+
+      it('should not emit if the value does not change', () => {
+        const emits = [];
+        editorViewModel.showSettings$.subscribe(value => emits.push(value));
+
+        editorViewModel.createSlide();
+        editorViewModel.setActiveSlide(mockViewSlide);
+        editorViewModel.openSettings();
+
+        // initial value === true, is first value in array
+        expect(emits).toEqual([true, false, true]);
+      });
+    });
+
+    describe('settings$', () => {
       it('should contain the timelineConfig settings', () => {
         expect(editorViewModel.settings$).toBeObservable(
           hot('a', {
@@ -680,7 +748,7 @@ describe('EditorViewModel', () => {
         expect(editorViewModel.activeSlideDetail$).toBeObservable(
           hot('a', {
             a: {
-              type: 3,
+              type: 1,
               viewSlide: {},
               label: 'Naamloos'
             }
@@ -743,6 +811,288 @@ describe('EditorViewModel', () => {
         expect(editorViewModel.activeSlideDetailCanSaveAsTitle$).toBeObservable(
           hot('a', { a: false })
         );
+      });
+    });
+  });
+
+  describe('methods', () => {
+    describe('openSettings', () => {
+      let isSafeToNavigateSpy: jest.SpyInstance;
+      beforeEach(() => {
+        // private, will test separately later
+        isSafeToNavigateSpy = editorViewModel['isSafeToNavigate'] = jest.fn();
+      });
+
+      it('should check if it is safe to navigate', () => {
+        editorViewModel.openSettings();
+        expect(isSafeToNavigateSpy).toHaveBeenCalled();
+      });
+
+      it('should reset activeSlide$', () => {
+        isSafeToNavigateSpy.mockReturnValue(true);
+        editorViewModel.setActiveSlide(mockViewSlide);
+        editorViewModel.openSettings();
+
+        expect(editorViewModel.activeSlide$).toBeObservable(
+          hot('a', { a: null })
+        );
+      });
+
+      it('should reset activeSlideDetail$', () => {
+        isSafeToNavigateSpy.mockReturnValue(true);
+        editorViewModel.setActiveSlide(mockViewSlide);
+        editorViewModel.openSettings();
+
+        expect(editorViewModel.activeSlideDetail$).toBeObservable(
+          hot('a', { a: null })
+        );
+      });
+
+      it('should reset isFormDirty$', () => {
+        isSafeToNavigateSpy.mockReturnValue(true);
+        editorViewModel.setFormDirty(true);
+        editorViewModel.openSettings();
+
+        expect(editorViewModel.isFormDirty$).toBeObservable(
+          hot('a', { a: false })
+        );
+      });
+    });
+
+    describe('updateSettings', () => {
+      beforeEach(() => {
+        editorHttpService.setJson = jest.fn(() => hot('a|', { a: true }));
+      });
+
+      it('should trigger an emit with the new settings', () => {
+        const mockSettings: TimelineSettingsInterface = {
+          scale: 'human',
+          options: new TimelineOptionsFixture({
+            scale_factor: 456,
+            relative: true
+          })
+        };
+
+        const intialSettings = {
+          scale: timelineConfig.scale,
+          options: timelineConfig.options
+        };
+
+        editorViewModel.updateSettings(mockSettings);
+
+        expect(editorViewModel.settings$).toBeObservable(
+          hot('(ab)', { a: intialSettings, b: mockSettings })
+        );
+      });
+    });
+
+    describe('createSlide', () => {
+      let isSafeToNavigateSpy: jest.SpyInstance;
+      beforeEach(() => {
+        // private, will test separately later
+        isSafeToNavigateSpy = editorViewModel[
+          'isSafeToNavigate'
+        ] = jest.fn().mockReturnValue(true);
+      });
+
+      it('should check if it is safe to navigate', () => {
+        editorViewModel.createSlide();
+        expect(isSafeToNavigateSpy).toHaveBeenCalled();
+      });
+
+      it('should emit a new slide - title', () => {
+        editorViewModel.createSlide();
+
+        const expected = { label: 'Naamloos', type: 1, viewSlide: {} };
+        expect(editorViewModel.activeSlideDetail$).toBeObservable(
+          hot('a', { a: expected })
+        );
+      });
+
+      it('should emit a new slide - slide', () => {
+        timelineConfig.title = mockViewSlide.viewSlide;
+        editorViewModel.createSlide();
+
+        const expected = { label: 'Naamloos', type: 3, viewSlide: {} };
+        expect(editorViewModel.activeSlideDetail$).toBeObservable(
+          hot('a', { a: expected })
+        );
+      });
+    });
+
+    describe('upsertSlide', () => {
+      beforeEach(() => {
+        editorHttpService.setJson = jest.fn(() => hot('a|', { a: true }));
+      });
+
+      it('should update the timeline - slide', () => {
+        const newTimelineConfig = {
+          events: [mockViewSlide.viewSlide],
+          eras: [],
+          title: timelineConfig.title,
+          scale: timelineConfig.scale,
+          options: timelineConfig.options
+        };
+
+        editorViewModel.upsertSlide(mockViewSlide);
+        expect(editorHttpService.setJson).toHaveBeenCalledWith(
+          newTimelineConfig
+        );
+
+        const expected = [mockViewSlide];
+        expect(editorViewModel.slideList$).toBeObservable(
+          hot('a', { a: expected })
+        );
+      });
+
+      it('should update the timeline - era', () => {
+        const mockViewSlideEra = {
+          ...mockViewSlide,
+          type: 2,
+          label: 'foo'
+        };
+
+        const newTimelineConfig = {
+          events: [],
+          eras: [mockViewSlideEra.viewSlide],
+          title: timelineConfig.title,
+          scale: timelineConfig.scale,
+          options: timelineConfig.options
+        };
+
+        editorViewModel.upsertSlide(mockViewSlideEra);
+        expect(editorHttpService.setJson).toHaveBeenCalledWith(
+          newTimelineConfig
+        );
+
+        const expected = [mockViewSlideEra];
+        expect(editorViewModel.slideList$).toBeObservable(
+          hot('a', { a: expected })
+        );
+      });
+
+      it('should update the timeline - title', () => {
+        const mockViewSlideTitle = {
+          ...mockViewSlide,
+          type: 1
+        };
+
+        const newTimelineConfig = {
+          events: [],
+          eras: [],
+          title: mockViewSlideTitle.viewSlide,
+          scale: timelineConfig.scale,
+          options: timelineConfig.options
+        };
+
+        editorViewModel.upsertSlide(mockViewSlideTitle);
+        expect(editorHttpService.setJson).toHaveBeenCalledWith(
+          newTimelineConfig
+        );
+
+        const expected = [mockViewSlideTitle];
+        expect(editorViewModel.slideList$).toBeObservable(
+          hot('a', { a: expected })
+        );
+      });
+
+      it('should replace the active slide', () => {
+        const activeSlideEmits = [];
+        editorViewModel.activeSlide$.subscribe(emit =>
+          activeSlideEmits.push(emit)
+        );
+
+        // save new
+        editorViewModel.upsertSlide(mockViewSlide);
+
+        // update existing
+        const updatedViewSlide = {
+          ...mockViewSlide,
+          label: 'updated value',
+          viewSlide: {
+            ...mockViewSlide.viewSlide,
+            start_date: {
+              ...mockViewSlide.viewSlide.start_date,
+              display_date: 'updated value'
+            }
+          }
+        };
+        editorViewModel.upsertSlide(updatedViewSlide);
+
+        expect(activeSlideEmits).toEqual([
+          null, // initual value
+          mockViewSlide, // first upsert
+          null, // remove old value
+          updatedViewSlide // second upsert
+        ]);
+
+        // slidelist should only contain updated value
+        expect(editorViewModel.slideList$).toBeObservable(
+          hot('a', { a: [updatedViewSlide] })
+        );
+      });
+    });
+
+    describe('deleteActiveSlide', () => {
+      beforeEach(() => {
+        editorHttpService.setJson = jest.fn(() => hot('a|', { a: true }));
+        timelineConfig.events = [mockViewSlide.viewSlide];
+        editorViewModel.setActiveSlide(mockViewSlide);
+      });
+
+      it('should update the timeline', () => {
+        const newTimelineConfig = {
+          events: [],
+          eras: [],
+          title: timelineConfig.title,
+          scale: timelineConfig.scale,
+          options: timelineConfig.options
+        };
+
+        editorViewModel.deleteActiveSlide();
+        expect(editorHttpService.setJson).toHaveBeenCalledWith(
+          newTimelineConfig
+        );
+
+        const expected = [];
+        expect(editorViewModel.slideList$).toBeObservable(
+          hot('a', { a: expected })
+        );
+      });
+
+      it('should replace the active slide', () => {
+        editorViewModel.deleteActiveSlide();
+
+        // slidelist should only contain updated value
+        expect(editorViewModel.activeSlide$).toBeObservable(
+          hot('a', { a: null })
+        );
+      });
+    });
+
+    describe('isSafeToNavigate', () => {
+      // I know it's private, but I stubbed it for the tests earlier
+
+      it('should ask for confirmation if the form is dirty', () => {
+        window.confirm = jest.fn().mockReturnValue(false);
+
+        editorViewModel.setFormDirty(true);
+        const response = editorViewModel['isSafeToNavigate']();
+
+        expect(window.confirm).toHaveBeenCalledWith(
+          'Let op! Er zijn niet opgeslagen wijzigingen. Doorgaan zonder wijzigingen op te slaan?'
+        );
+        expect(response).toBe(false);
+      });
+
+      it('should not as for confirmation if the form is not dirty', () => {
+        window.confirm = jest.fn().mockReturnValue(false);
+
+        editorViewModel.setFormDirty(false);
+        const response = editorViewModel['isSafeToNavigate']();
+
+        expect(window.confirm).not.toHaveBeenCalled();
+        expect(response).toBe(true);
       });
     });
   });
