@@ -9,6 +9,7 @@ export class WhiteboardComponent implements OnInit {
   constructor() {}
 
   cards: String[];
+  // maak array van Cards
 
   ngOnInit() {
     this.cards = [];

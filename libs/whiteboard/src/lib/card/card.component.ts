@@ -1,10 +1,4 @@
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  OnInit,
-  ViewChild
-} from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import Card from '../../interfaces/Card';
 
 @Component({
@@ -12,9 +6,8 @@ import Card from '../../interfaces/Card';
   templateUrl: './card.component.html',
   styleUrls: ['./card.component.scss']
 })
-export class CardComponent implements OnInit, AfterViewInit {
+export class CardComponent implements OnInit {
   @ViewChild('inputContent') inputContent: ElementRef;
-
   card: Card;
 
   constructor() {}
@@ -27,15 +20,9 @@ export class CardComponent implements OnInit, AfterViewInit {
     };
   }
 
-  ngAfterViewInit() {
-    this.focusInput();
-  }
-
   toggleInput() {
-    this.card.isInputSelected = !this.card.isInputSelected;
-  }
-
-  focusInput() {
-    this.inputContent.nativeElement.focus();
+    if (this.card.cardContent != null) {
+      this.card.isInputSelected = !this.card.isInputSelected;
+    }
   }
 }

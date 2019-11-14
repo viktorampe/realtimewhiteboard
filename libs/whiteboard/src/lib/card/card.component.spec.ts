@@ -27,7 +27,8 @@ describe('CardComponent', () => {
   });
 
   it('should create with correct input', () => {
-    component.cardContent = 'Test content';
+    component.card.cardContent = 'Test content';
+    component.card.isInputSelected = false;
     fixture.detectChanges();
     const contentParagraph = fixture.debugElement.query(By.css('p'));
     expect(contentParagraph.nativeElement.textContent.trim()).toBe(
@@ -36,7 +37,7 @@ describe('CardComponent', () => {
   });
 
   it('should create with correct input', () => {
-    component.cardContent = 'Test content';
+    component.card.cardContent = 'Test content';
     fixture.detectChanges();
     const inputContent = fixture.debugElement.query(By.css('input'));
     expect(inputContent.nativeElement.value.trim()).toBe('Test content');
