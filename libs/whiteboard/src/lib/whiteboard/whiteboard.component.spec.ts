@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatCardModule } from '@angular/material';
-import { HAMMER_LOADER } from '@angular/platform-browser';
+import { By, HAMMER_LOADER } from '@angular/platform-browser';
 import { configureTestSuite } from 'ng-bullet';
 import { CardComponent } from '../card/card.component';
 import { WhiteboardComponent } from './whiteboard.component';
@@ -30,5 +30,19 @@ describe('WhiteboardComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should create a card on plus button clicked', () => {
+    const cardsSizeBeforeClicked = component.cards.length;
+
+    const btnPlus = fixture.debugElement.query(
+      By.css('.whiteboard-page__btnPlus')
+    );
+
+    btnPlus.nativeElement.click();
+
+    const cardsSizeAfterClicked = component.cards.length;
+
+    expect(cardsSizeAfterClicked).toBe(cardsSizeBeforeClicked + 1);
   });
 });
