@@ -6,6 +6,10 @@
     display: flex;
     flex-wrap: wrap;
   }
+  &__card {
+    margin: 20px;
+    height: fit-content;
+  }
   &__btnPlus {
     position: absolute;
     bottom: 30px;
