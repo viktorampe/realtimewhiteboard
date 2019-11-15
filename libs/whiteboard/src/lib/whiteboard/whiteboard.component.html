@@ -1,3 +1,11 @@
 <div class="whiteboard-page__workspace" (tap)="onTap($event)">
   <campus-card *ngFor="let card of cards" cdkDrag></campus-card>
+  <button
+    mat-raised-button
+    color="primary"
+    class="whiteboard-page__btnPlus"
+    (click)="btnPlusClicked()"
+  >
+    +
+  </button>
 </div>
