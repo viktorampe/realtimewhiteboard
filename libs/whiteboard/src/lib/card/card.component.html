@@ -1,4 +1,11 @@
 <div class="card">
+  <div class="card__actions">
+    <ul>
+      <li>
+        <mat-icon svgIcon="cancel" (click)="onDeleteCard()"></mat-icon>
+      </li>
+    </ul>
+  </div>
   <div class="card__content">
     <p *ngIf="!card.isInputSelected" (click)="toggleInput()">
       {{ card.cardContent }}

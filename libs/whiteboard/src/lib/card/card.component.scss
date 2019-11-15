@@ -4,6 +4,21 @@
   background: white;
   margin: 20px;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-direction: column;
+
+  &__actions {
+    align-self: flex-end;
+
+    ul > li {
+      list-style: none;
+      margin: 0px 10px;
+    }
+  }
+
+  &__content {
+    width: 90%;
+    margin: 0 auto;
+  }
 }

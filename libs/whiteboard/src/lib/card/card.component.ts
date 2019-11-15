@@ -1,4 +1,12 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild
+} from '@angular/core';
 import Card from '../../interfaces/Card';
 
 @Component({
@@ -8,21 +16,20 @@ import Card from '../../interfaces/Card';
 })
 export class CardComponent implements OnInit {
   @ViewChild('inputContent') inputContent: ElementRef;
-  card: Card;
+  @Input() card: Card;
+  @Output() deleteCard = new EventEmitter();
 
   constructor() {}
 
-  ngOnInit() {
-    this.card = {
-      color: '',
-      cardContent: null,
-      isInputSelected: true
-    };
-  }
+  ngOnInit() {}
 
   toggleInput() {
     if (this.card.cardContent != null) {
       this.card.isInputSelected = !this.card.isInputSelected;
     }
+  }
+
+  onDeleteCard() {
+    this.deleteCard.emit();
   }
 }

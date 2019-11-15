@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import Card from '../../interfaces/Card';
 
 @Component({
   selector: 'campus-whiteboard',
@@ -8,7 +9,7 @@ import { Component, OnInit } from '@angular/core';
 export class WhiteboardComponent implements OnInit {
   constructor() {}
 
-  cards: string[];
+  cards: Card[];
   // maak array van Cards
 
   ngOnInit() {
@@ -17,11 +18,23 @@ export class WhiteboardComponent implements OnInit {
 
   onTap(event) {
     if (event.tapCount >= 2) {
-      this.cards.push('item');
+      this.addEmptyCard();
     }
   }
 
   btnPlusClicked() {
-    this.cards.push('item');
+    this.addEmptyCard();
+  }
+
+  addEmptyCard() {
+    this.cards.push({
+      color: 'white',
+      cardContent: 'test',
+      isInputSelected: true
+    });
+  }
+
+  onDeleteCard(index) {
+    this.cards.splice(index, 1);
   }
 }

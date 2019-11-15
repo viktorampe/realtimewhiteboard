@@ -1,5 +1,10 @@
 <div class="whiteboard-page__workspace" (tap)="onTap($event)">
-  <campus-card *ngFor="let card of cards" cdkDrag></campus-card>
+  <campus-card
+    *ngFor="let card of cards; let i = index"
+    cdkDrag
+    [card]="card"
+    (deleteCard)="onDeleteCard(i)"
+  ></campus-card>
   <button
     mat-raised-button
     color="primary"
