@@ -26,7 +26,7 @@ describe('CardComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should create with correct input', () => {
+  it('should show the card content when not editing', () => {
     component.card.cardContent = 'Test content';
     component.card.isInputSelected = false;
     fixture.detectChanges();
