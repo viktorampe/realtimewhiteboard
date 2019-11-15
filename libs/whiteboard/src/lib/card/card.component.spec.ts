@@ -1,5 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material';
+import { By } from '@angular/platform-browser';
 import { configureTestSuite } from 'ng-bullet';
 import { CardComponent } from './card.component';
 
@@ -9,7 +11,7 @@ describe('CardComponent', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [MatCardModule],
+      imports: [MatCardModule, FormsModule],
       declarations: [CardComponent]
     });
   });
@@ -22,5 +24,24 @@ describe('CardComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should show the card content when not editing', () => {
+    component.card.cardContent = 'Test content';
+    component.card.isInputSelected = false;
+    fixture.detectChanges();
+    const contentParagraph = fixture.debugElement.query(By.css('p'));
+    expect(contentParagraph.nativeElement.textContent.trim()).toBe(
+      'Test content'
+    );
+  });
+
+  it('should display the card content in the input when editing', async () => {
+    component.card.cardContent = 'Test content';
+    component.card.isInputSelected = true;
+    fixture.detectChanges();
+    await fixture.whenStable();
+    const inputContent = fixture.debugElement.query(By.css('input'));
+    expect(inputContent.nativeElement.value.trim()).toBe('Test content');
   });
 });

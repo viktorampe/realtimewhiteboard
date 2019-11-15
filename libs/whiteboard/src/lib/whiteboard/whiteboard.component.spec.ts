@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material';
 import { By, HAMMER_LOADER } from '@angular/platform-browser';
 import { configureTestSuite } from 'ng-bullet';
@@ -11,7 +12,7 @@ describe('WhiteboardComponent', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [MatCardModule],
+      imports: [MatCardModule, FormsModule],
       declarations: [WhiteboardComponent, CardComponent],
       providers: [
         {
