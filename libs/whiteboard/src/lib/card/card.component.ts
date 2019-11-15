@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import Card from '../../interfaces/Card';
 
 @Component({
   selector: 'campus-card',
@@ -6,7 +7,22 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./card.component.scss']
 })
 export class CardComponent implements OnInit {
+  @ViewChild('inputContent') inputContent: ElementRef;
+  card: Card;
+
   constructor() {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.card = {
+      color: '',
+      cardContent: null,
+      isInputSelected: true
+    };
+  }
+
+  toggleInput() {
+    if (this.card.cardContent != null) {
+      this.card.isInputSelected = !this.card.isInputSelected;
+    }
+  }
 }
