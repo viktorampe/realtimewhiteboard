@@ -1,5 +1,5 @@
 export default interface Card {
-  color: String;
+  color: string;
   cardContent: any;
   isInputSelected: Boolean;
 }
