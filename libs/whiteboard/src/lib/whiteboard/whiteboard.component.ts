@@ -20,4 +20,8 @@ export class WhiteboardComponent implements OnInit {
       this.cards.push('item');
     }
   }
+
+  btnPlusClicked() {
+    this.cards.push('item');
+  }
 }
