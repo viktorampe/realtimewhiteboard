@@ -8,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 export class WhiteboardComponent implements OnInit {
   constructor() {}
 
-  cards: String[];
+  cards: string[];
   // maak array van Cards
 
   ngOnInit() {
