@@ -36,7 +36,7 @@ describe('CardComponent', () => {
     );
   });
 
-  it('should create with correct input', async () => {
+  it('should display the card content in the input when editing', async () => {
     component.card.cardContent = 'Test content';
     component.card.isInputSelected = true;
     fixture.detectChanges();
