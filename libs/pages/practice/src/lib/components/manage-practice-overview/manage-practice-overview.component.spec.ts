@@ -15,18 +15,18 @@ import { configureTestSuite } from 'ng-bullet';
 import { BehaviorSubject } from 'rxjs';
 import { PracticeViewModel } from '../practice.viewmodel';
 import { MockPracticeViewModel } from '../practice.viewmodel.mock';
-import { PracticeOverviewComponent } from './practice-overview.component';
+import { ManagePracticeOverviewComponent } from './manage-practice-overview.component';
 
-describe('PracticeOverviewComponent', () => {
-  let component: PracticeOverviewComponent;
-  let fixture: ComponentFixture<PracticeOverviewComponent>;
+describe('ManagePracticeOverviewComponent', () => {
+  let component: ManagePracticeOverviewComponent;
+  let fixture: ComponentFixture<ManagePracticeOverviewComponent>;
   let viewmodel: PracticeViewModel;
   let allowedBooks$: BehaviorSubject<any>;
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [UiModule, SharedModule, RouterTestingModule],
-      declarations: [PracticeOverviewComponent],
+      declarations: [ManagePracticeOverviewComponent],
       providers: [
         { provide: PracticeViewModel, useClass: MockPracticeViewModel },
         { provide: MatIconRegistry, useClass: MockMatIconRegistry },
@@ -40,7 +40,7 @@ describe('PracticeOverviewComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PracticeOverviewComponent);
+    fixture = TestBed.createComponent(ManagePracticeOverviewComponent);
     component = fixture.componentInstance;
 
     viewmodel = TestBed.get(PracticeViewModel);

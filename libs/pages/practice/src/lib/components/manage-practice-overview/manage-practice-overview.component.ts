@@ -5,10 +5,10 @@ import { PracticeViewModel } from '../practice.viewmodel';
 
 @Component({
   selector: 'campus-practice-overview',
-  templateUrl: './practice-overview.component.html',
-  styleUrls: ['./practice-overview.component.scss']
+  templateUrl: './manage-practice-overview.component.html',
+  styleUrls: ['./manage-practice-overview.component.scss']
 })
-export class PracticeOverviewComponent implements OnInit {
+export class ManagePracticeOverviewComponent implements OnInit {
   public allowedBooks$: Observable<MethodYearsInterface[]>;
   constructor(private practiceViewmodel: PracticeViewModel) {}
 
