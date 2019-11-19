@@ -5,12 +5,12 @@ import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
-import { METHOD_LEVEL_SERVICE_TOKEN } from '../../method-level/method-level.service.interface';
 import { MethodLevelReducer } from '.';
+import { METHOD_LEVEL_SERVICE_TOKEN } from '../../metadata/method-level.service.interface';
 import {
+  LoadMethodLevels,
   MethodLevelsLoaded,
-  MethodLevelsLoadError,
-  LoadMethodLevels
+  MethodLevelsLoadError
 } from './method-level.actions';
 import { MethodLevelEffects } from './method-level.effects';
 
@@ -18,7 +18,6 @@ describe('MethodLevelEffects', () => {
   let actions: Observable<any>;
   let effects: MethodLevelEffects;
   let usedState: any;
-
 
   const expectInAndOut = (
     effect: Observable<any>,
@@ -61,9 +60,13 @@ describe('MethodLevelEffects', () => {
       imports: [
         NxModule.forRoot(),
         StoreModule.forRoot({}),
-        StoreModule.forFeature(MethodLevelReducer.NAME , MethodLevelReducer.reducer, {
-          initialState: usedState
-        }),
+        StoreModule.forFeature(
+          MethodLevelReducer.NAME,
+          MethodLevelReducer.reducer,
+          {
+            initialState: usedState
+          }
+        ),
         EffectsModule.forRoot([]),
         EffectsModule.forFeature([MethodLevelEffects])
       ],

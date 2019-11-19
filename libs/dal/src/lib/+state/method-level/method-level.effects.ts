@@ -2,14 +2,17 @@ import { Inject, Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
 import { DataPersistence } from '@nrwl/nx';
 import { map } from 'rxjs/operators';
-import { MethodLevelServiceInterface, METHOD_LEVEL_SERVICE_TOKEN } from '../../method-level/method-level.service.interface';
-import {
-  MethodLevelsActionTypes,
-  MethodLevelsLoadError,
-  LoadMethodLevels,
-  MethodLevelsLoaded
-} from './method-level.actions';
 import { DalState } from '..';
+import {
+  MethodLevelServiceInterface,
+  METHOD_LEVEL_SERVICE_TOKEN
+} from '../../metadata/method-level.service.interface';
+import {
+  LoadMethodLevels,
+  MethodLevelsActionTypes,
+  MethodLevelsLoaded,
+  MethodLevelsLoadError
+} from './method-level.actions';
 
 @Injectable()
 export class MethodLevelEffects {
