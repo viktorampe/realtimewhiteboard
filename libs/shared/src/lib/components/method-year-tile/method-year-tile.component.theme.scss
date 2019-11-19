@@ -1,10 +1,10 @@
 @mixin shared-method-year-tile {
   $shared-method-year-tile-margin-right: 32px !default;
 
-  $shared-method-year-tile_title-background-color: $shared-bg-color-3 !default;
+  $shared-method-year-tile_title-background-color: $shared-bg-color-1 !default;
   $shared-method-year-tile_title-text-color: $shared-color-1 !default;
   $shared-method-year-tile_image-background-color: $shared_image-bg-color !default;
-  $shared-method-year-tile_button_container_button-background-color: $shared-bg-color-3 !default;
+  $shared-method-year-tile_button_container_button-background-color: $shared-bg-color-1 !default;
   $shared-method-year-tile_button_container_button-focus-background-color: $shared-bg-color-1 !default;
   $shared-method-year-tile_button_container_button-hover-background-color: $shared-bg-color-2 !default;
   $shared-method-year-tile_button_container_button-hover-color: $shared-color-3 !default;
