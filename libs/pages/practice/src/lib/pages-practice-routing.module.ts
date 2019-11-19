@@ -4,6 +4,7 @@ import { MethodQueries } from '@campus/dal';
 import { AllowedMethodGuard } from '@campus/guards';
 import { ManagePracticeOverviewComponent } from './components/manage-practice-overview/manage-practice-overview.component';
 import { PracticeMethodDetailComponent } from './components/practice-method-detail/practice-method-detail.component';
+import { PracticeOverviewComponent } from './components/practice-overview/practice-overview.component';
 import { ManagePracticeResolver } from './resolvers/pages-manage-practice.resolver';
 import { PracticeMethodDetailResolver } from './resolvers/pages-practice-method-detail.resolver';
 import { PracticeOverviewResolver } from './resolvers/pages-practice-overview.resolver';
@@ -11,7 +12,7 @@ import { PracticeOverviewResolver } from './resolvers/pages-practice-overview.re
 const routes: Routes = [
   {
     path: '',
-    component: null
+    component: PracticeOverviewComponent
   },
   {
     path: 'manage',
