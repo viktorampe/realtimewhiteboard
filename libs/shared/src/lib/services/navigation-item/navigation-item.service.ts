@@ -20,7 +20,7 @@ export class NavigationItemService implements NavigationItemServiceInterface {
     private appNavigationTree: AppNavTreeInterface,
     @Inject(PERMISSION_SERVICE_TOKEN)
     private permissionService: PermissionServiceInterface
-  ) { }
+  ) {}
 
   getNavItemsForTree(
     tree: AppNavTreeKeys,
@@ -35,16 +35,13 @@ export class NavigationItemService implements NavigationItemServiceInterface {
             navItem.hideWhenRequiredPermissions,
             userPermissions
           )
-        )
-        &&
-        (
-          // if the nav item doesn't have a requiredPermissions key --> return true
-          !navItem.requiredPermissions ||
+        ) &&
+        // if the nav item doesn't have a requiredPermissions key --> return true
+        (!navItem.requiredPermissions ||
           this.permissionService.hasPermission(
             navItem.requiredPermissions,
             userPermissions
-          )
-        )
+          ))
       );
     });
   }
