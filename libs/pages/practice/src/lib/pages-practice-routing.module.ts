@@ -12,7 +12,7 @@ import { ManagePracticeResolver } from './resolvers/pages-manage-practice.resolv
 const routes: Routes = [
   {
     path: '',
-    component: PracticeOverviewComponent
+    children: [{ path: '', component: PracticeOverviewComponent }]
   },
   {
     path: 'manage',
