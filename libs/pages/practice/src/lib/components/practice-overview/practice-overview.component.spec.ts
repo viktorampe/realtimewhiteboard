@@ -1,17 +1,16 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { configureTestSuite } from 'ng-bullet';
 import { PracticeOverviewComponent } from './practice-overview.component';
 
 describe('PracticeOverviewComponent', () => {
   let component: PracticeOverviewComponent;
   let fixture: ComponentFixture<PracticeOverviewComponent>;
 
-  beforeEach(async(() => {
+  configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [ PracticeOverviewComponent ]
-    })
-    .compileComponents();
-  }));
+      declarations: [PracticeOverviewComponent]
+    });
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PracticeOverviewComponent);
