@@ -8,6 +8,7 @@ import { ManagePracticeOverviewComponent } from './components/manage-practice-ov
 import { PracticeMethodDetailComponent } from './components/practice-method-detail/practice-method-detail.component';
 import { PracticeViewModel } from './components/practice.viewmodel';
 import { PagesPracticeRoutingModule } from './pages-practice-routing.module';
+import { PracticeOverviewComponent } from './components/practice-overview/practice-overview.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -19,7 +20,8 @@ import { PagesPracticeRoutingModule } from './pages-practice-routing.module';
   ],
   declarations: [
     ManagePracticeOverviewComponent,
-    PracticeMethodDetailComponent
+    PracticeMethodDetailComponent,
+    PracticeOverviewComponent
   ],
   providers: [PracticeViewModel],
   exports: []
