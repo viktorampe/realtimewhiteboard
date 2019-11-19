@@ -5,9 +5,9 @@ import { AllowedMethodGuard } from '@campus/guards';
 import { ManagePracticeOverviewComponent } from './components/manage-practice-overview/manage-practice-overview.component';
 import { PracticeMethodDetailComponent } from './components/practice-method-detail/practice-method-detail.component';
 import { PracticeOverviewComponent } from './components/practice-overview/practice-overview.component';
+import { ManagePracticeMethodDetailResolver } from './resolvers/pages-manage-practice-method-detail.resolver';
+import { ManagePracticeOverviewResolver } from './resolvers/pages-manage-practice-overview.resolver';
 import { ManagePracticeResolver } from './resolvers/pages-manage-practice.resolver';
-import { PracticeMethodDetailResolver } from './resolvers/pages-practice-method-detail.resolver';
-import { PracticeOverviewResolver } from './resolvers/pages-practice-overview.resolver';
 
 const routes: Routes = [
   {
@@ -22,13 +22,13 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        resolve: { isResolved: PracticeOverviewResolver },
+        resolve: { isResolved: ManagePracticeOverviewResolver },
         runGuardsAndResolvers: 'always',
         component: ManagePracticeOverviewComponent
       },
       {
         path: ':book',
-        resolve: { isResolved: PracticeMethodDetailResolver },
+        resolve: { isResolved: ManagePracticeMethodDetailResolver },
         canActivate: [AllowedMethodGuard],
         data: {
           selector: MethodQueries.getMethodWithYearByBookId
