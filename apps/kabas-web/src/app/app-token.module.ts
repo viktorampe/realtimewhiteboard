@@ -30,6 +30,8 @@ import {
   METHOD_SERVICE_TOKEN,
   PersonService,
   PERSON_SERVICE_TOKEN,
+  ResultsService,
+  RESULTS_SERVICE_TOKEN,
   TocService,
   TOC_SERVICE_TOKEN,
   UndoService,
@@ -90,6 +92,7 @@ import { kabasConfig } from './app.config';
     },
     { provide: FAVORITE_SERVICE_TOKEN, useClass: FavoriteService },
     { provide: HISTORY_SERVICE_TOKEN, useClass: HistoryService },
+    { provide: RESULTS_SERVICE_TOKEN, useClass: ResultsService },
     {
       provide: ALERT_SERVICE_TOKEN,
       useClass: AlertService
