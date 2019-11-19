@@ -53,6 +53,7 @@ export * from './Message.interface';
 export * from './MessagePerson.interface';
 export * from './Method.interface';
 export * from './MethodGoal.interface';
+export * from './MethodLevel.interface';
 export * from './Notification.interface';
 export * from './PassportUserCredential.interface';
 export * from './PassportUserIdentity.interface';
