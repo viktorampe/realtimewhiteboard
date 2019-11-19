@@ -16,6 +16,7 @@ import {
   LearningDomainReducer,
   LearningPlanGoalProgressReducer,
   LearningPlanGoalReducer,
+  MethodLevelReducer,
   MethodReducer,
   TaskReducer,
   UiReducer,
@@ -155,6 +156,13 @@ import { environment } from '../environments/environment';
       UnlockedFreePracticeReducer.reducer,
       {
         initialState: UnlockedFreePracticeReducer.initialState
+      }
+    ),
+    StoreModule.forFeature(
+      MethodLevelReducer.NAME,
+      MethodLevelReducer.reducer,
+      {
+        initialState: MethodLevelReducer.initialState
       }
     ),
 
