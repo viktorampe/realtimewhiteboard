@@ -52,7 +52,6 @@ describe('Methods', () => {
         .should('be', `${appPaths.methods}/${setup.kabasMethodsPages.book}`);
     });
   });
-  return;
 
   describe('method page', () => {
     beforeEach(() => {
@@ -282,8 +281,9 @@ describe('Methods', () => {
 
       clickBulkLPGCheckbox(1);
 
+      // Since the first chapter is selected, we can assume the first lesson link is the 2nd child (= index 1)
       dataCy('lesson-link')
-        .last()
+        .eq(1)
         .click();
 
       for (let i = 0; i <= 2; i++) {
