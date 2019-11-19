@@ -27,48 +27,15 @@ export function reducer(
   action: MethodLevelsActions
 ): State {
   switch (action.type) {
-    case MethodLevelsActionTypes.AddMethodLevel: {
-      return adapter.addOne(action.payload.methodLevel, state);
-    }
-
-    case MethodLevelsActionTypes.UpsertMethodLevel: {
-      return adapter.upsertOne(action.payload.methodLevel, state);
-    }
-
-    case MethodLevelsActionTypes.AddMethodLevels: {
-      return adapter.addMany(action.payload.methodLevels, state);
-    }
-
-    case MethodLevelsActionTypes.UpsertMethodLevels: {
-      return adapter.upsertMany(action.payload.methodLevels, state);
-    }
-
-    case MethodLevelsActionTypes.UpdateMethodLevel: {
-      return adapter.updateOne(action.payload.methodLevel, state);
-    }
-
-    case MethodLevelsActionTypes.UpdateMethodLevels: {
-      return adapter.updateMany(action.payload.methodLevels, state);
-    }
-
-    case MethodLevelsActionTypes.DeleteMethodLevel: {
-      return adapter.removeOne(action.payload.id, state);
-    }
-
-    case MethodLevelsActionTypes.DeleteMethodLevels: {
-      return adapter.removeMany(action.payload.ids, state);
-    }
-
     case MethodLevelsActionTypes.MethodLevelsLoaded: {
-      return adapter.addAll(action.payload.methodLevels, { ...state, loaded: true });
+      return adapter.addAll(action.payload.methodLevels, {
+        ...state,
+        loaded: true
+      });
     }
 
     case MethodLevelsActionTypes.MethodLevelsLoadError: {
       return { ...state, error: action.payload, loaded: false };
-    }
-
-    case MethodLevelsActionTypes.ClearMethodLevels: {
-      return adapter.removeAll(state);
     }
 
     default: {
