@@ -189,8 +189,7 @@ describe('TocService', () => {
     });
   });
 
-  // file.only
-  fdescribe('getEduContentTocEduContentForBookId', () => {
+  describe('getEduContentTocEduContentForBookId', () => {
     it('should return EduContentTocEduContents', () => {
       const mockData = [
         new EduContentTOCEduContentFixture({
