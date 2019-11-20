@@ -28,8 +28,6 @@ export class PracticeResolver extends StateResolver {
   }
 
   protected getResolvedQueries(): Selector<object, boolean>[] {
-    return [
-      UnlockedFreePracticeQueries.getLoaded
-    ];
+    return [UnlockedFreePracticeQueries.getLoaded];
   }
 }
