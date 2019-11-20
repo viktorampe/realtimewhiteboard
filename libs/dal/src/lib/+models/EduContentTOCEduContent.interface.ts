@@ -3,8 +3,8 @@ import { EduContentTOCInterface } from './EduContentTOC.interface';
 
 export interface EduContentTOCEduContentInterface {
   id?: string; // eduContentTOCId +'-'+ eduContentId
-  eduContentTOCId?: number;
+  eduContentTOCId: number;
   eduContentTOC?: EduContentTOCInterface;
-  eduContentId?: number;
+  eduContentId: number;
   eduContent?: EduContentInterface[];
 }
