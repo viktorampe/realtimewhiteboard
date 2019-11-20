@@ -24,6 +24,10 @@ describe('NavigationItemService', () => {
       },
       {
         title: 'nav item that does not have requiredPermissions key' // should always be returned
+      },
+      {
+        title: 'nav item that has an empty required permissions array',
+        hideWhenRequiredPermissions: ['permissionA']
       }
     ],
     settingsNav: [
@@ -84,7 +88,8 @@ describe('NavigationItemService', () => {
           mockAppNavTree.sideNav[1],
           mockAppNavTree.sideNav[2],
           mockAppNavTree.sideNav[3],
-          mockAppNavTree.sideNav[4]
+          mockAppNavTree.sideNav[4],
+          mockAppNavTree.sideNav[5]
         ]
       },
       {
@@ -101,12 +106,12 @@ describe('NavigationItemService', () => {
       {
         tree: 'sideNav',
         userPermissions: ['permissionC'],
-        expected: [mockAppNavTree.sideNav[3], mockAppNavTree.sideNav[4]]
+        expected: [mockAppNavTree.sideNav[3], mockAppNavTree.sideNav[4], mockAppNavTree.sideNav[5]]
       },
       {
         tree: 'sideNav',
         userPermissions: [],
-        expected: [mockAppNavTree.sideNav[3], mockAppNavTree.sideNav[4]]
+        expected: [mockAppNavTree.sideNav[3], mockAppNavTree.sideNav[4], mockAppNavTree.sideNav[5]]
       },
       {
         tree: 'settingsNav',
