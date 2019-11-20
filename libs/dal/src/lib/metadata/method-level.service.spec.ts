@@ -16,7 +16,7 @@ describe('MethodLevelService', () => {
         {
           provide: PersonApi,
           useValue: {
-            getData: (id, fields) => mockData$
+            getData: () => mockData$
           }
         }
       ]
@@ -26,8 +26,7 @@ describe('MethodLevelService', () => {
   });
 
   it('should be created', () => {
-    const service: MethodLevelService = TestBed.get(MethodLevelService);
-    expect(service).toBeTruthy();
+    expect(methodLevelService).toBeTruthy();
   });
 
   it('should return methodlevels', () => {

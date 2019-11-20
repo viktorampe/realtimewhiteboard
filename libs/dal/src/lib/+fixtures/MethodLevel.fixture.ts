@@ -6,9 +6,9 @@ export class MethodLevelFixture implements MethodLevelInterface {
   label = 'Knikker';
   levelId = 1;
   methodId = 34;
-  icon: 'katapult-knikker.svg';
+  icon = 'katapult-knikker.svg';
 
-  constructor(props: Partial<MethodLevelFixture> = {}) {
+  constructor(props: Partial<MethodLevelInterface> = {}) {
     // overwrite defaults
     Object.assign(this, props);
   }
