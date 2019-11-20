@@ -4,7 +4,8 @@ import { GuardsModule } from '@campus/guards';
 import { PagesSharedModule } from '@campus/pages/shared';
 import { SharedModule } from '@campus/shared';
 import { UiModule } from '@campus/ui';
-import { PracticeMethodDetailComponent } from './components/practice-method-detail/practice-method-detail.component';
+import { ManagePracticeMethodDetailComponent } from './components/manage-practice-method-detail/manage-practice-method-detail.component';
+import { ManagePracticeOverviewComponent } from './components/manage-practice-overview/manage-practice-overview.component';
 import { PracticeOverviewComponent } from './components/practice-overview/practice-overview.component';
 import { PracticeViewModel } from './components/practice.viewmodel';
 import { PagesPracticeRoutingModule } from './pages-practice-routing.module';
@@ -17,7 +18,11 @@ import { PagesPracticeRoutingModule } from './pages-practice-routing.module';
     SharedModule,
     GuardsModule
   ],
-  declarations: [PracticeOverviewComponent, PracticeMethodDetailComponent],
+  declarations: [
+    ManagePracticeOverviewComponent,
+    ManagePracticeMethodDetailComponent,
+    PracticeOverviewComponent
+  ],
   providers: [PracticeViewModel],
   exports: []
 })
