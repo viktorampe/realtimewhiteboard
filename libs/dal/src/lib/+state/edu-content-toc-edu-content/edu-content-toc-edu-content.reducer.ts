@@ -48,4 +48,9 @@ export function reducer(
   }
 }
 
-export const { selectIds } = adapter.getSelectors();
+export const {
+  selectIds,
+  selectAll,
+  selectEntities,
+  selectTotal
+} = adapter.getSelectors();

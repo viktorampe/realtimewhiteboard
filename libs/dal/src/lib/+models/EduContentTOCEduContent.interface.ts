@@ -7,4 +7,6 @@ export interface EduContentTOCEduContentInterface {
   eduContentTOC?: EduContentTOCInterface;
   eduContentId: number;
   eduContent?: EduContentInterface;
+  // TODO replace by ENUM
+  type: string;
 }

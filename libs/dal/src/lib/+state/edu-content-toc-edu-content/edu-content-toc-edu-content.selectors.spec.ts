@@ -4,10 +4,16 @@ import { State } from './edu-content-toc-edu-content.reducer';
 
 describe('EduContentTocEduContent Selectors', () => {
   function createEduContentTocEduContent(
-    id: number
+    id: string,
+    eduContentTOCId: number,
+    eduContentId: number,
+    type: string = 'exercise'
   ): EduContentTOCEduContentInterface | any {
     return {
-      id: id
+      id,
+      eduContentTOCId,
+      eduContentId,
+      type
     };
   }
 
@@ -43,10 +49,11 @@ describe('EduContentTocEduContent Selectors', () => {
     beforeEach(() => {
       eduContentTocEduContentState = createState(
         [
-          createEduContentTocEduContent(4),
-          createEduContentTocEduContent(1),
-          createEduContentTocEduContent(2),
-          createEduContentTocEduContent(3)
+          createEduContentTocEduContent('1-4', 1, 4),
+          createEduContentTocEduContent('1-1', 1, 1),
+          createEduContentTocEduContent('1-2', 1, 2),
+          createEduContentTocEduContent('1-3', 1, 3, 'other'),
+          createEduContentTocEduContent('2-3', 2, 3)
         ],
         [1],
         'no error'
@@ -59,33 +66,75 @@ describe('EduContentTocEduContent Selectors', () => {
       expect(results).toBe(eduContentTocEduContentState.error);
     });
 
+    it('getAll() should return an array of the entities in the order from the ids', () => {
+      const results = EduContentTocEduContentQueries.getAll(storeState);
+      expect(results).toEqual([
+        createEduContentTocEduContent('1-4', 1, 4),
+        createEduContentTocEduContent('1-1', 1, 1),
+        createEduContentTocEduContent('1-2', 1, 2),
+        createEduContentTocEduContent('1-3', 1, 3, 'other'),
+        createEduContentTocEduContent('2-3', 2, 3)
+      ]);
+    });
+
+    it('getAllByType() should return an array of the entities filtered by type', () => {
+      const results = EduContentTocEduContentQueries.getAllByType(storeState, {
+        type: 'exercise'
+      });
+      expect(results).toEqual([
+        createEduContentTocEduContent('1-4', 1, 4),
+        createEduContentTocEduContent('1-1', 1, 1),
+        createEduContentTocEduContent('1-2', 1, 2),
+        createEduContentTocEduContent('2-3', 2, 3)
+      ]);
+    });
+
+    it('getAllByTypeAndToc() should return an array of the entities filtered by type', () => {
+      const props = { type: 'exercise', tocId: 2 };
+      const results = EduContentTocEduContentQueries.getAllByTypeAndToc(
+        storeState,
+        props
+      );
+      expect(results).toEqual([createEduContentTocEduContent('2-3', 2, 3)]);
+    });
+
+    it('getCount() should return number of entities', () => {
+      const results = EduContentTocEduContentQueries.getCount(storeState);
+      expect(results).toBe(5);
+    });
+
+    it('getAllEntities() should return a key value object with all the entities', () => {
+      const results = EduContentTocEduContentQueries.getAllEntities(storeState);
+      expect(results).toEqual(eduContentTocEduContentState.entities);
+    });
+
     it('getIds() should return an array with ids in the correct order', () => {
       const results = EduContentTocEduContentQueries.getIds(storeState);
-      expect(results).toEqual([4, 1, 2, 3]);
+      expect(results).toEqual(['1-4', '1-1', '1-2', '1-3', '2-3']);
     });
 
     it('getByIds() should return an array of the requested entities in order and undefined if the id is not present', () => {
       const results = EduContentTocEduContentQueries.getByIds(storeState, {
-        ids: [3, 1, 90, 2]
+        ids: ['1-3', '1-1', '2-90', '1-2']
       });
       expect(results).toEqual([
-        createEduContentTocEduContent(3),
-        createEduContentTocEduContent(1),
+        createEduContentTocEduContent('1-3', 1, 3, 'other'),
+        createEduContentTocEduContent('1-1', 1, 1),
         undefined,
-        createEduContentTocEduContent(2)
+        createEduContentTocEduContent('1-2', 1, 2)
       ]);
     });
 
     it('getById() should return the desired entity', () => {
       const results = EduContentTocEduContentQueries.getById(storeState, {
-        id: 2
+        id: '1-2'
       });
-      expect(results).toEqual(createEduContentTocEduContent(2));
+      expect(results).toEqual(createEduContentTocEduContent('1-2', 1, 2));
     });
 
     it('getById() should return undefined if the entity is not present', () => {
       const results = EduContentTocEduContentQueries.getById(storeState, {
-        id: 9
+        id: '9'
       });
       expect(results).toBe(undefined);
     });
