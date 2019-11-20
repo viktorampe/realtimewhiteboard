@@ -36,6 +36,7 @@ import {
   UserReducer,
   YearReducer
 } from '../..';
+import { MethodLevelReducer } from './method-level';
 
 export interface DalState {
   ui: UiReducer.UiState;
@@ -74,4 +75,5 @@ export interface DalState {
   learningPlanGoals: LearningPlanGoalReducer.State;
   classGroups: ClassGroupReducer.State;
   unlockedFreePractices: UnlockedFreePracticeReducer.State;
+  methodLevels: MethodLevelReducer.State;
 }
