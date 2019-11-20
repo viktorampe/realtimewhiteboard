@@ -14,4 +14,5 @@ export interface TocServiceInterface {
   getBooksByMethodIds(
     methodIds: number[]
   ): Observable<EduContentBookInterface[]>;
+  getBooksByIds(bookIds: number[]): Observable<EduContentBookInterface[]>;
 }
