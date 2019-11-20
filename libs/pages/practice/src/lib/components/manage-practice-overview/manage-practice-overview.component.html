@@ -1,6 +1,6 @@
 <campus-page-bar> </campus-page-bar>
 <div
-  class="pages-practice__container pages-practice-overview campus-page"
+  class="pages-practice__container pages-manage-practice-overview campus-page"
   *ngIf="(allowedBooks$ | async) as books"
 >
   <campus-page-header [title]="'Met welke methode wil je vrij oefenen?'">
@@ -15,11 +15,11 @@
 
   <div *ngIf="books.length; else noBooks" class="pages-practice__book-list">
     <ng-container *ngFor="let book of books">
-      <campus-method-year-tile
+      <campus-method-books-tile
         [logoUrl]="book.logoUrl"
         [name]="book.name"
         [years]="book.years"
-      ></campus-method-year-tile>
+      ></campus-method-books-tile>
     </ng-container>
   </div>
 </div>

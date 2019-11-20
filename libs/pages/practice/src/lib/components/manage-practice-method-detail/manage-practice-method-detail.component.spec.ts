@@ -22,11 +22,11 @@ import { hot } from '@nrwl/nx/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { PracticeViewModel } from '../practice.viewmodel';
 import { MockPracticeViewModel } from '../practice.viewmodel.mock';
-import { PracticeMethodDetailComponent } from './practice-method-detail.component';
+import { ManagePracticeMethodDetailComponent } from './manage-practice-method-detail.component';
 
-describe('PracticeMethodDetailComponent', () => {
-  let component: PracticeMethodDetailComponent;
-  let fixture: ComponentFixture<PracticeMethodDetailComponent>;
+describe('ManagePracticeMethodDetailComponent', () => {
+  let component: ManagePracticeMethodDetailComponent;
+  let fixture: ComponentFixture<ManagePracticeMethodDetailComponent>;
   let viewModel: MockPracticeViewModel;
   const mockBook: EduContentBookInterface = new EduContentBookFixture({
     id: 5
@@ -37,7 +37,7 @@ describe('PracticeMethodDetailComponent', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [PracticeMethodDetailComponent],
+      declarations: [ManagePracticeMethodDetailComponent],
       providers: [
         { provide: PracticeViewModel, useClass: MockPracticeViewModel }
       ],
@@ -46,7 +46,7 @@ describe('PracticeMethodDetailComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PracticeMethodDetailComponent);
+    fixture = TestBed.createComponent(ManagePracticeMethodDetailComponent);
     component = fixture.componentInstance;
     viewModel = TestBed.get(PracticeViewModel);
     viewModel.currentPracticeParams$.next({ book: mockBook.id });
