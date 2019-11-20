@@ -2,7 +2,7 @@ import { EduContentTOCEduContentInterface } from '../+models/EduContentTOCEduCon
 
 export class EduContentTOCEduContentFixture
   implements EduContentTOCEduContentInterface {
-  id = 1;
+  id = '1-1';
   eduContentId = 1;
   eduContentTOCId = 1;
 

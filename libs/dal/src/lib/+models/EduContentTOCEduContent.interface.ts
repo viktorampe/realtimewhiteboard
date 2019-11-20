@@ -2,7 +2,7 @@ import { EduContentInterface } from './EduContent.interface';
 import { EduContentTOCInterface } from './EduContentTOC.interface';
 
 export interface EduContentTOCEduContentInterface {
-  id?: number;
+  id?: string; // eduContentTOCId +'-'+ eduContentId
   eduContentTOCId?: number;
   eduContentTOC?: EduContentTOCInterface;
   eduContentId?: number;
