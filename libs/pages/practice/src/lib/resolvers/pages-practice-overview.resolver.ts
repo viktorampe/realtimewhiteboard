@@ -1,7 +1,5 @@
-import { Inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import {
-  AuthServiceInterface,
-  AUTH_SERVICE_TOKEN,
   DalState,
   EduContentBookActions,
   StateResolver,
@@ -14,14 +12,10 @@ import { take } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class PracticeOverviewResolver extends StateResolver {
-  constructor(
-    private store: Store<DalState>,
-    @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface
-  ) {
+  constructor(private store: Store<DalState>) {
     super(store);
   }
   protected getLoadableActions(): Action[] {
-    const userId = this.authService.userId;
     let bookIds: number[];
     this.store
       .pipe(
