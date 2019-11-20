@@ -203,9 +203,10 @@ describe('TocService', () => {
           eduContentTOCId: 2
         })
       ];
-      eduContentTOCApi.getEduContentTocsWithEduContentIdsRemote = jest
-        .fn()
-        .mockReturnValue(of(mockData));
+      // TODO: Replace with function call when SDK update is published!
+      eduContentTOCApi[
+        'getEduContentTocsWithEduContentIdsRemote'
+      ] = jest.fn().mockReturnValue(of(mockData));
       const response = service.getEduContentTocEduContentForBookId(1);
       expect(response).toBeObservable(
         hot('(a|)', {
