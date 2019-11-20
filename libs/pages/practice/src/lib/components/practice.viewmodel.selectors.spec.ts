@@ -16,7 +16,7 @@ describe('PracticeViewModel selectors', () => {
   configureTestSuite(() => {
     TestBed.configureTestingModule({});
   });
-  //file.only
+
   describe('getUnlockedBooks', () => {
     const projector: Function = getUnlockedBooks.projector;
 
