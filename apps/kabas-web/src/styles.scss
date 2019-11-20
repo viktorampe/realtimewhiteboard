@@ -41,8 +41,8 @@ body {
 @include pages-home-theme();
 @import 'libs/pages/settings/pages-settings.theme';
 @include pages-settings-theme();
-@import 'libs/pages/practice/src/lib/components/practice-method-detail/practice-method-detail.component.theme';
-@include pages-practice-method-detail();
+@import 'libs/pages/practice/src/lib/components/manage-practice-method-detail/manage-practice-method-detail.component.theme';
+@include pages-manage-practice-method-detail();
 
 // include shared lib scss
 @import 'libs/shared/src/lib/shared-theme';
@@ -211,7 +211,7 @@ p {
 /* page specifics */
 .pages-home__container,
 .pages-methods-overview,
-.pages-practice-overview,
+.pages-manage-practice-overview,
 .pages-settings-profile,
 .pages-settings-dashboard,
 .pages-settings-alerts {

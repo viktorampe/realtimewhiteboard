@@ -12,7 +12,7 @@ import { Action, Selector, Store } from '@ngrx/store';
 @Injectable({
   providedIn: 'root'
 })
-export class PracticeResolver extends StateResolver {
+export class ManagePracticeResolver extends StateResolver {
   constructor(
     private store: Store<DalState>,
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface
