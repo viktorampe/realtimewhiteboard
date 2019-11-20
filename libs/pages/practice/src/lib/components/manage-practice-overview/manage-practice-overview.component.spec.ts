@@ -5,7 +5,6 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { MethodYearsInterface } from '@campus/dal';
 import {
   ENVIRONMENT_ICON_MAPPING_TOKEN,
-  ENVIRONMENT_SEARCHMODES_TOKEN,
   ENVIRONMENT_TESTING_TOKEN,
   MethodBooksTileComponent,
   SharedModule
@@ -14,26 +13,22 @@ import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
 import { configureTestSuite } from 'ng-bullet';
 import { BehaviorSubject } from 'rxjs';
-import { MethodViewModel } from '../method.viewmodel';
-import { MockMethodViewModel } from '../method.viewmodel.mock';
-import { MethodsOverviewComponent } from './methods-overview.component';
+import { PracticeViewModel } from '../practice.viewmodel';
+import { MockPracticeViewModel } from '../practice.viewmodel.mock';
+import { ManagePracticeOverviewComponent } from './manage-practice-overview.component';
 
-describe('MethodsOverviewComponent', () => {
-  let component: MethodsOverviewComponent;
-  let fixture: ComponentFixture<MethodsOverviewComponent>;
-  let viewmodel: MethodViewModel;
+describe('ManagePracticeOverviewComponent', () => {
+  let component: ManagePracticeOverviewComponent;
+  let fixture: ComponentFixture<ManagePracticeOverviewComponent>;
+  let viewmodel: PracticeViewModel;
   let allowedBooks$: BehaviorSubject<any>;
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [UiModule, SharedModule, RouterTestingModule],
-      declarations: [MethodsOverviewComponent],
+      declarations: [ManagePracticeOverviewComponent],
       providers: [
-        {
-          provide: ENVIRONMENT_SEARCHMODES_TOKEN,
-          useValue: {}
-        },
-        { provide: MethodViewModel, useClass: MockMethodViewModel },
+        { provide: PracticeViewModel, useClass: MockPracticeViewModel },
         { provide: MatIconRegistry, useClass: MockMatIconRegistry },
         {
           provide: ENVIRONMENT_ICON_MAPPING_TOKEN,
@@ -45,10 +40,10 @@ describe('MethodsOverviewComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MethodsOverviewComponent);
+    fixture = TestBed.createComponent(ManagePracticeOverviewComponent);
     component = fixture.componentInstance;
 
-    viewmodel = TestBed.get(MethodViewModel);
+    viewmodel = TestBed.get(PracticeViewModel);
     allowedBooks$ = viewmodel.methodYears$ as BehaviorSubject<
       MethodYearsInterface[]
     >;
@@ -66,12 +61,12 @@ describe('MethodsOverviewComponent', () => {
       fixture.detectChanges();
 
       const booksOnPage = fixture.debugElement.queryAll(
-        By.css('campus-method-books-tile')
+        By.css('campus-method-year-tile')
       );
       expect(booksOnPage.length).toBe(0);
 
       const textOnPage = fixture.debugElement.query(
-        By.css('.pages-methods__no-books')
+        By.css('.pages-practice__no-books')
       ).nativeElement.textContent;
 
       expect(textOnPage).toBe(
@@ -81,7 +76,7 @@ describe('MethodsOverviewComponent', () => {
 
     it('should show the allowedBooks', () => {
       const booksOnPage = fixture.debugElement.queryAll(
-        By.css('campus-method-books-tile')
+        By.directive(MethodBooksTileComponent)
       );
 
       const booksOnPageNames = booksOnPage.map(
