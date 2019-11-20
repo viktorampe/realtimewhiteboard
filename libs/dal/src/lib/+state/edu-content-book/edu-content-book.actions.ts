@@ -16,6 +16,14 @@ export class LoadEduContentBooks implements Action {
   ) {}
 }
 
+export class LoadEduContentBooksFromIds implements Action {
+  readonly type = EduContentBooksActionTypes.LoadEduContentBooks;
+
+  constructor(
+    public payload: { force?: boolean; bookIds: number[] } = { bookIds: [] }
+  ) {}
+}
+
 export class EduContentBooksLoaded implements Action {
   readonly type = EduContentBooksActionTypes.EduContentBooksLoaded;
 
@@ -35,4 +43,5 @@ export type EduContentBooksActions =
   | LoadEduContentBooks
   | EduContentBooksLoaded
   | EduContentBooksLoadError
+  | LoadEduContentBooksFromIds
   | ClearEduContentBooks;
