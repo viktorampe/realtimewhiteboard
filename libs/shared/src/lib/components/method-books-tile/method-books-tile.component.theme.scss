@@ -1,0 +1,81 @@
+@mixin shared-method-books-tile {
+  $shared-method-books-tile-margin-right: 32px !default;
+
+  $shared-method-books-tile_title-background-color: $shared-bg-color-1 !default;
+  $shared-method-books-tile_title-text-color: $shared-color-1 !default;
+  $shared-method-books-tile_image-background-color: $shared_image-bg-color !default;
+  $shared-method-books-tile_button_container_button-background-color: $shared-bg-color-1 !default;
+  $shared-method-books-tile_button_container_button-focus-background-color: $shared-bg-color-1 !default;
+  $shared-method-books-tile_button_container_button-hover-background-color: $shared-bg-color-2 !default;
+  $shared-method-books-tile_button_container_button-hover-color: $shared-color-3 !default;
+  $shared-method-books-tile_container-box-shadow-color: $shared-bg-color-2 !default;
+  $shared-method-books-tile_button_container_button-box-shadow-color: $shared-bg-color-2 !default;
+
+  $shared-method-books-tile_image-margin-top: 8px !default;
+  $shared-method-books-tile_image-height: 124px !default; // container-width * 2/3 - image-margin-top
+  $shared-method-books-tile_title-font-size: 20px !default; // title-height / 2
+  $shared-method-books-tile_title-padding-horizontal: 10px !default; // title-height / 4, vertical align handled by line height
+  $shared-method-books-tile_title-padding-vertical: 0px !default;
+  $shared-method-books-tile_button_container-padding: 4px !default;
+  $shared-method-books-tile_button_container_button-box-shadow-offset: 0 2px !default;
+  $shared-method-books-tile_button_container_button-box-shadow-blur: 4px !default;
+  $shared-method-books-tile_button_container_button-box-shadow-spread: 0 !default;
+  $shared-method-books-tile_button_container_button-height: 24px !default;
+  $shared-method-books-tile_button_container_button-width: 24px !default;
+  $shared-method-books-tile_button_container_button-font-size: 14px !default;
+  $shared-method-books-tile_button_container-margin-bottom: 8px !default;
+  $shared-method-books-tile_container-width: 200px !default;
+  $shared-method-books-tile_container-box-shadow-offset: 0 0 !default;
+  $shared-method-books-tile_container-box-shadow-blur: 8px !default;
+  $shared-method-books-tile_container-box-shadow-spread: 2px !default;
+
+  .shared-method-books-tile {
+    width: $shared-method-books-tile_container-width;
+    background-color: $shared-method-books-tile_title-background-color;
+    color: $shared-method-books-tile_title-text-color;
+    margin-right: $shared-method-books-tile-margin-right;
+    box-shadow: $shared-method-books-tile_container-box-shadow-offset
+      $shared-method-books-tile_container-box-shadow-blur
+      $shared-method-books-tile_container-box-shadow-spread
+      $shared-method-books-tile_container-box-shadow-color;
+
+    &:last-child {
+      margin-right: 0;
+    }
+
+    &__image {
+      background-color: $shared-method-books-tile_image-background-color;
+      margin-top: $shared-method-books-tile_image-margin-top;
+      height: $shared-method-books-tile_image-height;
+    }
+
+    &__title {
+      font-size: $shared-method-books-tile_title-font-size;
+      padding: $shared-method-books-tile_title-padding-horizontal
+        $shared-method-books-tile_title-padding-vertical;
+    }
+
+    &__button__container {
+      padding: $shared-method-books-tile_button_container-padding;
+      margin-bottom: $shared-method-books-tile_button_container-margin-bottom;
+
+      .ui-button {
+        background-color: $shared-method-books-tile_button_container_button-background-color;
+        box-shadow: $shared-method-books-tile_button_container_button-box-shadow-offset
+          $shared-method-books-tile_button_container_button-box-shadow-blur
+          $shared-method-books-tile_button_container_button-box-shadow-spread
+          $shared-method-books-tile_button_container_button-box-shadow-color;
+        width: $shared-method-books-tile_button_container_button-width;
+        height: $shared-method-books-tile_button_container_button-height;
+        font-size: $shared-method-books-tile_button_container_button-font-size;
+        padding: 0; //Internet Exploder Fix
+
+        &:hover {
+          color: $shared-method-books-tile_button_container_button-hover-color;
+          background-color: $shared-method-books-tile_button_container_button-hover-background-color;
+          font-weight: bold;
+        }
+      }
+    }
+  }
+}

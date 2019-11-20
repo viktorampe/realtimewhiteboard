@@ -42,10 +42,10 @@ describe('Methods', () => {
       cy.visit(`${appPaths.methods}`);
     });
     it('should show methods', () => {
-      dataCy('method-year-title').contains(
+      dataCy('method-books-title').contains(
         setup.kabasMethodsPages.expected.method.name
       );
-      dataCy('method-year-link')
+      dataCy('method-books-link')
         .contains(setup.kabasMethodsPages.expected.method.year)
         .click()
         .location('pathname')
