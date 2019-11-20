@@ -26,6 +26,7 @@ export * from './LearningPlanGoal.fixture';
 export * from './LearningPlanGoalProgress.fixture';
 export * from './Method.fixture';
 export * from './MethodGoal.fixture';
+export * from './MethodLevel.fixture';
 export * from './Person.fixture';
 export * from './Result.fixture';
 export * from './Role.fixture';

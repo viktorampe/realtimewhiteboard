@@ -18,6 +18,8 @@ export {
   LearningDomainServiceInterface,
   LEARNING_DOMAIN_SERVICE_TOKEN
 } from './learning-domain.service.interface';
+export * from './method-level.service';
+export * from './method-level.service.interface';
 export * from './method.service';
 export {
   MethodServiceInterface,
