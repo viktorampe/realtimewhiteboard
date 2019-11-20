@@ -3,7 +3,6 @@ import { MethodLevelInterface } from '../../+models';
 import { initialState, reducer, State } from './method-level.reducer';
 
 const labelInitialValue = 'knikker';
-const labelUpdatedValue = 'kei';
 
 /**
  * Creates a MethodLevel.
