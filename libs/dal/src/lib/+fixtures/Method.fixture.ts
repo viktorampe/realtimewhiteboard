@@ -1,16 +1,12 @@
-import { LearningAreaInterface, MethodInterface } from '../+models';
+import { MethodInterface } from '../+models';
 
 export class MethodFixture implements MethodInterface {
-  name: string;
-  icon?: string;
-  logoUrl?: string;
-  experimental?: boolean;
-  code?: string;
-  id?: number;
-  learningAreaId?: number;
-  learningArea?: LearningAreaInterface;
+  // defaults
+  id = 1;
+  name = 'Katapult';
+  learningAreaId = 19;
 
-  constructor(props: Partial<MethodFixture> = {}) {
+  constructor(props: Partial<MethodInterface> = {}) {
     // overwrite defaults
     Object.assign(this, props);
   }

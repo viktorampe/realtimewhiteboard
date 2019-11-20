@@ -2,21 +2,21 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { UiModule } from '@campus/ui';
 import { configureTestSuite } from 'ng-bullet';
-import { MethodYearTileComponent } from './method-year-tile.component';
+import { MethodBooksTileComponent } from './method-books-tile.component';
 
-describe('MethodYearTileComponent', () => {
-  let component: MethodYearTileComponent;
-  let fixture: ComponentFixture<MethodYearTileComponent>;
+describe('MethodBooksTileComponent', () => {
+  let component: MethodBooksTileComponent;
+  let fixture: ComponentFixture<MethodBooksTileComponent>;
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [UiModule, RouterTestingModule],
-      declarations: [MethodYearTileComponent]
+      declarations: [MethodBooksTileComponent]
     });
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MethodYearTileComponent);
+    fixture = TestBed.createComponent(MethodBooksTileComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
