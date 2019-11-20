@@ -6,7 +6,7 @@ import { MethodYearsInterface } from '@campus/dal';
 import {
   ENVIRONMENT_ICON_MAPPING_TOKEN,
   ENVIRONMENT_TESTING_TOKEN,
-  MethodYearTileComponent,
+  MethodBooksTileComponent,
   SharedModule
 } from '@campus/shared';
 import { MockMatIconRegistry } from '@campus/testing';
@@ -76,11 +76,11 @@ describe('ManagePracticeOverviewComponent', () => {
 
     it('should show the allowedBooks', () => {
       const booksOnPage = fixture.debugElement.queryAll(
-        By.css('campus-method-year-tile')
+        By.directive(MethodBooksTileComponent)
       );
 
       const booksOnPageNames = booksOnPage.map(
-        bookDE => (bookDE.componentInstance as MethodYearTileComponent).name
+        bookDE => (bookDE.componentInstance as MethodBooksTileComponent).name
       );
 
       const allowedBooks = allowedBooks$.value;
