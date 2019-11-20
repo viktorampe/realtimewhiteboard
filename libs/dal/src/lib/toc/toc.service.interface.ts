@@ -1,6 +1,10 @@
 import { InjectionToken } from '@angular/core';
 import { Observable } from 'rxjs';
-import { EduContentBookInterface, EduContentTOCInterface } from '../+models';
+import {
+  EduContentBookInterface,
+  EduContentTOCEduContentInterface,
+  EduContentTOCInterface
+} from '../+models';
 
 export const TOC_SERVICE_TOKEN = new InjectionToken('TocService');
 
@@ -14,4 +18,8 @@ export interface TocServiceInterface {
   getBooksByMethodIds(
     methodIds: number[]
   ): Observable<EduContentBookInterface[]>;
+  getBooksByIds(bookIds: number[]): Observable<EduContentBookInterface[]>;
+  getEduContentTocEduContentForBookId(
+    bookId: number
+  ): Observable<EduContentTOCEduContentInterface[]>;
 }

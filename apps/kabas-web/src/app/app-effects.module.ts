@@ -16,6 +16,7 @@ import {
   LearningPlanGoalEffects,
   LearningPlanGoalProgressEffects,
   MethodEffects,
+  MethodLevelEffects,
   ResultEffects,
   UiEffects,
   UnlockedFreePracticeEffects,
@@ -50,7 +51,8 @@ import { EffectsModule } from '@ngrx/effects';
       HistoryEffects,
       FavoriteEffects,
       AlertsEffects,
-      UnlockedFreePracticeEffects
+      UnlockedFreePracticeEffects,
+      MethodLevelEffects
     ])
   ]
 })
