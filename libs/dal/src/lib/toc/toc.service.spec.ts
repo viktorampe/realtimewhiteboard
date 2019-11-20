@@ -7,6 +7,7 @@ import { hot } from '@nrwl/nx/testing';
 import { of } from 'rxjs';
 import {
   EduContentBookFixture,
+  EduContentTOCEduContentFixture,
   EduContentTOCFixture,
   YearFixture
 } from '../+fixtures';
@@ -181,6 +182,33 @@ describe('TocService', () => {
 
       // passed parameter is not evaluated -> mocks
       expect(service.getBooksByIds([1, 2, 3])).toBeObservable(
+        hot('(a|)', {
+          a: mockData
+        })
+      );
+    });
+  });
+
+  // file.only
+  fdescribe('getEduContentTocEduContentForBookId', () => {
+    it('should return EduContentTocEduContents', () => {
+      const mockData = [
+        new EduContentTOCEduContentFixture({
+          id: '1-1',
+          eduContentId: 1,
+          eduContentTOCId: 1
+        }),
+        new EduContentTOCEduContentFixture({
+          id: '1-2',
+          eduContentId: 1,
+          eduContentTOCId: 2
+        })
+      ];
+      eduContentTOCApi.getEduContentTocsWithEduContentIdsRemote = jest
+        .fn()
+        .mockReturnValue(of(mockData));
+      const response = service.getEduContentTocEduContentForBookId(1);
+      expect(response).toBeObservable(
         hot('(a|)', {
           a: mockData
         })
