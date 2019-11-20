@@ -6,7 +6,7 @@ export class MethodFixture implements MethodInterface {
   name = 'Katapult';
   learningAreaId = 19;
 
-  constructor(props: Partial<MethodFixture> = {}) {
+  constructor(props: Partial<MethodInterface> = {}) {
     // overwrite defaults
     Object.assign(this, props);
   }

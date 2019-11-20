@@ -48,6 +48,7 @@ export * from './LearningPlan.interface';
 export * from './LearningPlanAssignment.interface';
 export * from './LearningPlanGoal.interface';
 export * from './LearningPlanGoalProgress.interface';
+export * from './Level.interface';
 export * from './License.interface';
 export * from './Message.interface';
 export * from './MessagePerson.interface';

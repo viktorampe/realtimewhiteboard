@@ -6,8 +6,8 @@ export interface MethodLevelInterface {
   label: string;
   color?: string;
   icon?: string;
-  methodId?: number;
+  methodId: number;
   method?: MethodInterface;
-  levelId?: number;
+  levelId: number;
   level?: LevelInterface;
 }
