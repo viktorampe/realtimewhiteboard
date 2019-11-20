@@ -14,11 +14,11 @@
 
   <div *ngIf="books.length; else noBooks" class="pages-methods__book-list">
     <ng-container *ngFor="let book of books">
-      <campus-method-year-tile
+      <campus-method-books-tile
         [logoUrl]="book.logoUrl"
         [name]="book.name"
         [years]="book.years"
-      ></campus-method-year-tile>
+      ></campus-method-books-tile>
     </ng-container>
   </div>
 </div>
