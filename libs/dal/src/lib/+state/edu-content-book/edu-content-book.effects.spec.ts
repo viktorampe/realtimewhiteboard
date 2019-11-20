@@ -10,7 +10,8 @@ import { TOC_SERVICE_TOKEN } from '../../toc/toc.service.interface';
 import {
   EduContentBooksLoaded,
   EduContentBooksLoadError,
-  LoadEduContentBooks
+  LoadEduContentBooks,
+  LoadEduContentBooksFromIds
 } from './edu-content-book.actions';
 import { EduContentBookEffects } from './edu-content-book.effects';
 
@@ -74,7 +75,8 @@ describe('EduContentBookEffects', () => {
         {
           provide: TOC_SERVICE_TOKEN,
           useValue: {
-            getBooksByMethodIds: () => {}
+            getBooksByMethodIds: () => {},
+            getBooksByIds: () => {}
           }
         },
         EduContentBookEffects,
@@ -177,6 +179,104 @@ describe('EduContentBookEffects', () => {
       it('should return a error action if force is true', () => {
         expectInAndOut(
           effects.loadEduContentBooks$,
+          forcedLoadAction,
+          loadErrorAction
+        );
+      });
+    });
+  });
+
+  describe('loadEduContentBooksFromIds$', () => {
+    const unforcedLoadAction = new LoadEduContentBooksFromIds({
+      bookIds: [1, 2, 3]
+    });
+    const forcedLoadAction = new LoadEduContentBooksFromIds({
+      force: true,
+      bookIds: [1, 2, 3]
+    });
+    const filledLoadedAction = new EduContentBooksLoaded({
+      eduContentBooks: []
+    });
+    const loadErrorAction = new EduContentBooksLoadError(new Error('failed'));
+    describe('with initialState', () => {
+      beforeAll(() => {
+        usedState = EduContentBookReducer.initialState;
+      });
+      beforeEach(() => {
+        mockServiceMethodReturnValue('getBooksByIds', []);
+      });
+      it('should trigger an api call with the initialState if force is not true', () => {
+        expectInAndOut(
+          effects.loadEduContentBooksFromIds$,
+          unforcedLoadAction,
+          filledLoadedAction
+        );
+      });
+      it('should trigger an api call with the initialState if force is true', () => {
+        expectInAndOut(
+          effects.loadEduContentBooksFromIds$,
+          forcedLoadAction,
+          filledLoadedAction
+        );
+      });
+    });
+    describe('with loaded state', () => {
+      beforeAll(() => {
+        usedState = { ...EduContentBookReducer.initialState, loaded: true };
+      });
+      beforeEach(() => {
+        mockServiceMethodReturnValue('getBooksByIds', []);
+      });
+      it('should not trigger an api call with the loaded state if force is not true', () => {
+        expectInNoOut(effects.loadEduContentBooksFromIds$, unforcedLoadAction);
+      });
+      it('should trigger an api call with the loaded state if force is true', () => {
+        expectInAndOut(
+          effects.loadEduContentBooksFromIds$,
+          forcedLoadAction,
+          filledLoadedAction
+        );
+      });
+    });
+    describe('with initialState and failing api call', () => {
+      beforeAll(() => {
+        usedState = EduContentBookReducer.initialState;
+      });
+      beforeEach(() => {
+        mockServiceMethodError('getBooksByIds', 'failed');
+      });
+      it('should return a error action if force is not true', () => {
+        expectInAndOut(
+          effects.loadEduContentBooksFromIds$,
+          unforcedLoadAction,
+          loadErrorAction
+        );
+      });
+      it('should return a error action if force is true', () => {
+        expectInAndOut(
+          effects.loadEduContentBooksFromIds$,
+          forcedLoadAction,
+          loadErrorAction
+        );
+      });
+    });
+    describe('with loaded and failing api call', () => {
+      beforeAll(() => {
+        usedState = {
+          ...EduContentBookReducer.initialState,
+          loaded: true,
+          list: []
+        };
+      });
+      beforeEach(() => {
+        mockServiceMethodError('getBooksByIds', 'failed');
+      });
+      it('should return nothing action if force is not true', () => {
+        expectInNoOut(effects.loadEduContentBooksFromIds$, unforcedLoadAction);
+      });
+      it('should return a error action if force is true', () => {
+        expectInAndOut(
+          effects.loadEduContentBooksFromIds$,
           forcedLoadAction,
           loadErrorAction
         );
