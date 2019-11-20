@@ -3,6 +3,7 @@ import {
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
   DalState,
+  EduContentBookActions,
   StateResolver,
   UnlockedFreePracticeQueries
 } from '@campus/dal';
@@ -29,9 +30,7 @@ export class PracticeOverviewResolver extends StateResolver {
       )
       .subscribe(ufps => (bookIds = ufps.map(ufp => ufp.eduContentBookId)));
 
-    return [
-      //new EduContentBookActions.LoadEduContentBooks.LoadUnlockedFreePractices({ userId }),
-    ];
+    return [new EduContentBookActions.LoadEduContentBooksFromIds({ bookIds })];
   }
 
   protected getResolvedQueries(): Selector<object, boolean>[] {
