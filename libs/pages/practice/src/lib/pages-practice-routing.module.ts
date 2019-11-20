@@ -8,12 +8,9 @@ import { PracticeOverviewComponent } from './components/practice-overview/practi
 import { ManagePracticeMethodDetailResolver } from './resolvers/pages-manage-practice-method-detail.resolver';
 import { ManagePracticeOverviewResolver } from './resolvers/pages-manage-practice-overview.resolver';
 import { ManagePracticeResolver } from './resolvers/pages-manage-practice.resolver';
+import { PracticeResolver } from './resolvers/pages-practice.resolver';
 
 const routes: Routes = [
-  {
-    path: '',
-    children: [{ path: '', component: PracticeOverviewComponent }]
-  },
   {
     path: 'manage',
     resolve: { isResolved: ManagePracticeResolver },
@@ -42,6 +39,21 @@ const routes: Routes = [
         ]
       }
     ]
+  },
+  {
+    path: '',
+    resolve: { isResolved: PracticeResolver },
+    runGuardsAndResolvers: 'always',
+    children: [
+      {
+        path: '',
+        component: PracticeOverviewComponent
+      },
+      {
+        path: ':book',
+        component: PracticeOverviewComponent // TODO: change to new component
+      }
+    ]
   }
 ];
 
@@ -49,4 +61,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class PagesPracticeRoutingModule {}
+export class PagesPracticeRoutingModule { }
