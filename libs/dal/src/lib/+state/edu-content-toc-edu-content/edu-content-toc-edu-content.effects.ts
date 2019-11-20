@@ -1,12 +1,12 @@
 import { Inject, Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
 import { DataPersistence } from '@nrwl/nx';
+import { map } from 'rxjs/operators';
 import { DalState } from '..';
 import {
   TocServiceInterface,
   TOC_SERVICE_TOKEN
 } from '../../toc/toc.service.interface';
-import { isBookLoaded } from '../edu-content-toc/edu-content-toc.selectors';
 import {
   AddEduContentTocEduContentsForBook,
   AddLoadedBook,
@@ -14,6 +14,7 @@ import {
   EduContentTocEduContentsLoadError,
   LoadEduContentTocEduContentsForBook
 } from './edu-content-toc-edu-content.actions';
+import { isBookLoaded } from './edu-content-toc-edu-content.selectors';
 
 @Injectable()
 export class EduContentTocEduContentEffects {
@@ -28,11 +29,8 @@ export class EduContentTocEduContentEffects {
           return;
         }
 
-        /* @TODO
-        --------------
-        
         return this.tocService
-          .getEduContentTOCEduContentForBookId(requestedBookId)
+          .getEduContentTocEduContentForBookId(requestedBookId)
           .pipe(
             map(
               eduContentTocEduContents =>
@@ -42,7 +40,6 @@ export class EduContentTocEduContentEffects {
                 })
             )
           );
-        */
       },
       onError: (action: LoadEduContentTocEduContentsForBook, error) => {
         return new EduContentTocEduContentsLoadError(error);

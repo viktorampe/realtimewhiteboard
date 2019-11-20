@@ -7,9 +7,9 @@ import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
 import { EduContentTocEduContentReducer } from '.';
 import { TOC_SERVICE_TOKEN } from '../../toc/toc.service.interface';
-import { AddLoadedBook } from '../edu-content-toc/edu-content-toc.actions';
 import {
   AddEduContentTocEduContentsForBook,
+  AddLoadedBook,
   EduContentTocEduContentsLoadError,
   LoadEduContentTocEduContentsForBook
 } from './edu-content-toc-edu-content.actions';
@@ -72,7 +72,7 @@ describe('EduContentTocEduContentEffects', () => {
       providers: [
         {
           provide: TOC_SERVICE_TOKEN,
-          useValue: { getEduContentTocEduContentsForBookId: () => {} }
+          useValue: { getEduContentTocEduContentForBookId: () => {} }
         },
         EduContentTocEduContentEffects,
         DataPersistence,
@@ -96,7 +96,7 @@ describe('EduContentTocEduContentEffects', () => {
     );
 
     beforeEach(() => {
-      mockServiceMethodReturnValue('getEduContentTocEduContentsForBookId', []);
+      mockServiceMethodReturnValue('getEduContentTocEduContentForBookId', []);
     });
 
     describe('the book has not been loaded', () => {
@@ -113,12 +113,12 @@ describe('EduContentTocEduContentEffects', () => {
       describe('api call fails', () => {
         beforeEach(() => {
           mockServiceMethodError(
-            'getEduContentTocEduContentsForBookId',
+            'getEduContentTocEduContentForBookId',
             'failed'
           );
         });
 
-        it('should trigger an pai call and return an error action', () => {
+        it('should trigger an api call and return an error action', () => {
           expectInAndOut(
             effects.loadEduContentTocEduContents$,
             loadEduContentTocEduContentsForBookAction,
@@ -147,7 +147,7 @@ describe('EduContentTocEduContentEffects', () => {
       describe('api call fails', () => {
         beforeEach(() => {
           mockServiceMethodError(
-            'getEduContentTocEduContentsForBookId',
+            'getEduContentTocEduContentForBookId',
             'failed'
           );
         });
