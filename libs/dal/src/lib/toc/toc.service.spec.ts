@@ -166,4 +166,25 @@ describe('TocService', () => {
       );
     });
   });
+
+  describe('getBooksByIds', () => {
+    it('should return books', () => {
+      const eduContentApi = TestBed.get(EduContentBookApi);
+
+      const mockData = [
+        new EduContentBookFixture({ id: 1 }),
+        new EduContentBookFixture({ id: 2 }),
+        new EduContentBookFixture({ id: 3 })
+      ];
+
+      eduContentApi.find = jest.fn().mockReturnValue(of(mockData));
+
+      // passed parameter is not evaluated -> mocks
+      expect(service.getBooksByIds([1, 2, 3])).toBeObservable(
+        hot('(a|)', {
+          a: mockData
+        })
+      );
+    });
+  });
 });
