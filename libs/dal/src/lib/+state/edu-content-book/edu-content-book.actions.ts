@@ -5,7 +5,8 @@ export enum EduContentBooksActionTypes {
   LoadEduContentBooks = '[EduContentBooks] Load EduContentBooks',
   EduContentBooksLoaded = '[EduContentBooks] EduContentBooks Loaded',
   EduContentBooksLoadError = '[EduContentBooks] Load Error',
-  ClearEduContentBooks = '[EduContentBooks] Clear EduContentBooks'
+  ClearEduContentBooks = '[EduContentBooks] Clear EduContentBooks',
+  LoadEduContentBooksFromIds = '[EduContentBooks] Load EduContentBooks from Ids'
 }
 
 export class LoadEduContentBooks implements Action {
@@ -13,6 +14,14 @@ export class LoadEduContentBooks implements Action {
 
   constructor(
     public payload: { force?: boolean; methodIds: number[] } = { methodIds: [] }
+  ) {}
+}
+
+export class LoadEduContentBooksFromIds implements Action {
+  readonly type = EduContentBooksActionTypes.LoadEduContentBooksFromIds;
+
+  constructor(
+    public payload: { force?: boolean; bookIds: number[] } = { bookIds: [] }
   ) {}
 }
 
@@ -35,4 +44,5 @@ export type EduContentBooksActions =
   | LoadEduContentBooks
   | EduContentBooksLoaded
   | EduContentBooksLoadError
+  | LoadEduContentBooksFromIds
   | ClearEduContentBooks;
