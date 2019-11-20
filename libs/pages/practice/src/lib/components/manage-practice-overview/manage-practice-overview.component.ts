@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { PracticeViewModel } from '../practice.viewmodel';
 
 @Component({
-  selector: 'campus-practice-overview',
+  selector: 'campus-manage-practice-overview',
   templateUrl: './manage-practice-overview.component.html',
   styleUrls: ['./manage-practice-overview.component.scss']
 })
