@@ -20,11 +20,11 @@ import {
 } from '../practice.viewmodel';
 
 @Component({
-  selector: 'campus-practice-method-detail',
-  templateUrl: './practice-method-detail.component.html',
-  styleUrls: ['./practice-method-detail.component.scss']
+  selector: 'campus-manage-practice-method-detail',
+  templateUrl: './manage-practice-method-detail.component.html',
+  styleUrls: ['./manage-practice-method-detail.component.scss']
 })
-export class PracticeMethodDetailComponent implements OnInit {
+export class ManagePracticeMethodDetailComponent implements OnInit {
   private bookId$: Observable<number>;
   private filteredClassGroups$: Observable<ClassGroupInterface[]>;
   private unlockedFreePracticeByEduContentBookId$: Observable<

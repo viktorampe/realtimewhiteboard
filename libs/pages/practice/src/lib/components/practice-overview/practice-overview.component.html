@@ -1,25 +1,3 @@
-<campus-page-bar> </campus-page-bar>
-<div
-  class="pages-practice__container pages-practice-overview campus-page"
-  *ngIf="(allowedBooks$ | async) as books"
->
-  <campus-page-header [title]="'Met welke methode wil je vrij oefenen?'">
-  </campus-page-header>
-  <p>Kies hieronder het jaar waarvoor je de oefeningen wil vrijgeven.</p>
-
-  <ng-template #noBooks>
-    <div class="pages-practice__no-books"
-      >Er zijn momenteel geen methodes aan jou toegekend.</div
-    >
-  </ng-template>
-
-  <div *ngIf="books.length; else noBooks" class="pages-practice__book-list">
-    <ng-container *ngFor="let book of books">
-      <campus-method-books-tile
-        [logoUrl]="book.logoUrl"
-        [name]="book.name"
-        [years]="book.years"
-      ></campus-method-books-tile>
-    </ng-container>
-  </div>
-</div>
+<p>
+  practice-overview works!
+</p>
