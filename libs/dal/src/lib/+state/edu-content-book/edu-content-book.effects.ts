@@ -39,7 +39,7 @@ export class EduContentBookEffects {
 
   @Effect()
   loadEduContentBooksFromIds$ = this.dataPersistence.fetch(
-    EduContentBooksActionTypes.LoadEduContentBooks,
+    EduContentBooksActionTypes.LoadEduContentBooksFromIds,
     {
       run: (action: LoadEduContentBooksFromIds, state: DalState) => {
         if (!action.payload.force && state.eduContentBooks.loaded) return;
