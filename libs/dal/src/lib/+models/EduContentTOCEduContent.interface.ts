@@ -6,5 +6,5 @@ export interface EduContentTOCEduContentInterface {
   eduContentTOCId: number;
   eduContentTOC?: EduContentTOCInterface;
   eduContentId: number;
-  eduContent?: EduContentInterface[];
+  eduContent?: EduContentInterface;
 }
