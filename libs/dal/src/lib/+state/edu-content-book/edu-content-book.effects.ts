@@ -11,7 +11,8 @@ import {
   EduContentBooksActionTypes,
   EduContentBooksLoaded,
   EduContentBooksLoadError,
-  LoadEduContentBooks
+  LoadEduContentBooks,
+  LoadEduContentBooksFromIds
 } from './edu-content-book.actions';
 
 @Injectable()
@@ -31,6 +32,26 @@ export class EduContentBookEffects {
           );
       },
       onError: (action: LoadEduContentBooks, error) => {
+        return new EduContentBooksLoadError(error);
+      }
+    }
+  );
+
+  @Effect()
+  loadEduContentBooksFromIds$ = this.dataPersistence.fetch(
+    EduContentBooksActionTypes.LoadEduContentBooksFromIds,
+    {
+      run: (action: LoadEduContentBooksFromIds, state: DalState) => {
+        if (!action.payload.force && state.eduContentBooks.loaded) return;
+        return this.tocService
+          .getBooksByIds(action.payload.bookIds)
+          .pipe(
+            map(
+              eduContentBooks => new EduContentBooksLoaded({ eduContentBooks })
+            )
+          );
+      },
+      onError: (action: LoadEduContentBooksFromIds, error) => {
         return new EduContentBooksLoadError(error);
       }
     }
