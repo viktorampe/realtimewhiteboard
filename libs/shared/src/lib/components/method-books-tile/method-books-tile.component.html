@@ -1,0 +1,16 @@
+<div class="shared-method-books-tile__image__container">
+  <img [src]="logoUrl" class="shared-method-books-tile__image" />
+</div>
+<div data-cy="method-books-title" class="shared-method-books-tile__title">{{
+  name
+}}</div>
+<div class="shared-method-books-tile__button__container">
+  <campus-button
+    data-cy="method-books-link"
+    *ngFor="let year of years"
+    class="shared-method-books-tile__button__container__button"
+    [routerLink]="year.bookId"
+  >
+    {{ year.name }}
+  </campus-button>
+</div>

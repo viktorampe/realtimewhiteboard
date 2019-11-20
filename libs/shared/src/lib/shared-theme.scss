@@ -11,10 +11,10 @@ $shared_image-bg-color: lightskyblue !default;
 
 @import './components/header/header.component.theme';
 @import './components/quick-link/quick-link.component.theme';
-@import './components/method-year-tile/method-year-tile.component.theme';
+@import './components/method-books-tile/method-books-tile.component.theme';
 
 @mixin shared-theme() {
   @include shared-header();
   @include shared-quick-link();
-  @include shared-method-year-tile();
+  @include shared-method-books-tile();
 }
