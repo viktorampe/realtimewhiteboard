@@ -5,7 +5,11 @@ import {
 } from '@diekeure/polpo-api-angular-sdk';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { EduContentBookInterface, EduContentTOCInterface } from '../+models';
+import {
+  EduContentBookInterface,
+  EduContentTOCEduContentInterface,
+  EduContentTOCInterface
+} from '../+models';
 import { TocServiceInterface } from './toc.service.interface';
 
 @Injectable({
@@ -52,5 +56,11 @@ export class TocService implements TocServiceInterface {
 
   getBooksByIds(bookIds: number[]): Observable<EduContentBookInterface[]> {
     return this.eduContentBookApi.find({ where: { id: { inq: bookIds } } });
+  }
+
+  getEduContentTocEduContentForBookId(
+    bookId: number
+  ): Observable<EduContentTOCEduContentInterface[]> {
+    return this.eduContentBookApi.getUnlockedExercisesRemote(bookId);
   }
 }
