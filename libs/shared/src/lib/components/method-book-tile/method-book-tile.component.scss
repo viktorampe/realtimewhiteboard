@@ -6,26 +6,15 @@
 .shared-method-book-tile {
   &__image {
     display: block;
-    width: 100%;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
   }
 
   &__title {
     flex-direction: column;
-    width: 100%;
-    background-color: black;
-    color: white;
     text-align: right;
-    padding: 3px 5px 3px 0;
   }
 
   &__subtitle {
     flex-direction: column;
-    width: 100%;
-    background-color: black;
-    color: white;
     text-align: right;
-    padding: 0px 5px 3px 0;
   }
 }
