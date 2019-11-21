@@ -17,8 +17,8 @@ import { combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { FilterQueryInterface } from '../filter-query.interface';
 
-export const CHAPTER_LESSON_FILTER_FACTORY_TOKEN = new InjectionToken(
-  'ChapterLessonFilterFactory'
+export const UNLOCKED_EXERCISE_FILTER_FACTORY_TOKEN = new InjectionToken(
+  'UnlockedExerciseFilterFactory'
 );
 
 @Injectable({
