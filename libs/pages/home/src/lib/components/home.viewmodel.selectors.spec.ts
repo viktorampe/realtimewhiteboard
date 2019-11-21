@@ -9,7 +9,7 @@ import {
 import { configureTestSuite } from 'ng-bullet';
 import { getFavoritesWithEduContent } from './home.viewmodel.selectors';
 
-describe('PracticeViewModel', () => {
+describe('HomeViewModel', () => {
   configureTestSuite(() => {
     TestBed.configureTestingModule({});
   });
