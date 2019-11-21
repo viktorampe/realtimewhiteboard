@@ -1,5 +1,8 @@
 import { EduContentTocEduContentActions } from '.';
-import { EduContentTOCEduContentInterface } from '../../+models';
+import {
+  EduContentTOCEduContentInterface,
+  EDU_CONTENT_TYPE
+} from '../../+models';
 import {
   initialState,
   reducer,
@@ -12,10 +15,16 @@ import {
  * @returns {EduContentTOCEduContentInterface}
  */
 function createEduContentTocEduContent(
-  id: number
+  id: string,
+  eduContentTOCId: number,
+  eduContentId: number,
+  type: EDU_CONTENT_TYPE = EDU_CONTENT_TYPE.EXERCISE
 ): EduContentTOCEduContentInterface | any {
   return {
-    id: id // only track ids
+    id,
+    eduContentTOCId,
+    eduContentId,
+    type
   };
 }
 
@@ -59,9 +68,10 @@ describe('EduContentTocEduContents Reducer', () => {
   beforeEach(() => {
     bookId = 1;
     eduContentTocEduContents = [
-      createEduContentTocEduContent(1),
-      createEduContentTocEduContent(2),
-      createEduContentTocEduContent(3)
+      createEduContentTocEduContent('1-1', 1, 1),
+      createEduContentTocEduContent('1-2', 1, 2),
+      createEduContentTocEduContent('1-3', 1, 3),
+      createEduContentTocEduContent('2-3', 2, 3, EDU_CONTENT_TYPE.FILE)
     ];
   });
 
@@ -95,6 +105,19 @@ describe('EduContentTocEduContents Reducer', () => {
       const result = reducer(initialState, action);
 
       expect(result).toEqual(createState([], [bookId]));
+    });
+
+    it('should add multiple eduContentEduContents for a book', () => {
+      const action = new EduContentTocEduContentActions.AddEduContentTocEduContentsForBook(
+        {
+          bookId,
+          eduContentTocEduContents
+        }
+      );
+
+      const result = reducer(initialState, action);
+
+      expect(result).toEqual(createState(eduContentTocEduContents, []));
     });
   });
 });
