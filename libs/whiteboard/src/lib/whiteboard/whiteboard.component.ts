@@ -17,7 +17,10 @@ export class WhiteboardComponent implements OnInit {
 
   onTap(event) {
     if (event.tapCount >= 2) {
-      this.cards.push('item');
+      console.log(event);
+      if (event.target.className == 'whiteboard-page__workspace') {
+        this.cards.push('item');
+      }
     }
   }
 

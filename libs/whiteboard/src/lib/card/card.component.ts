@@ -25,4 +25,12 @@ export class CardComponent implements OnInit {
       this.card.isInputSelected = !this.card.isInputSelected;
     }
   }
+
+  onTap(event) {
+    if (event.tapCount >= 2) {
+      if (event.target.className == 'card') {
+        this.toggleInput();
+      }
+    }
+  }
 }
