@@ -98,9 +98,11 @@ describe('EduContentTocEduContents Reducer', () => {
 
   describe('add actions', () => {
     it('should add a book to the loadedBooks', () => {
-      const action = new EduContentTocEduContentActions.AddLoadedBook({
-        bookId
-      });
+      const action = new EduContentTocEduContentActions.AddLoadedBookForEduContentTocEduContent(
+        {
+          bookId
+        }
+      );
 
       const result = reducer(initialState, action);
 

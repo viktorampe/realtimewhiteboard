@@ -32,7 +32,7 @@ export class AddEduContentTocEduContentsForBook implements Action {
     }
   ) {}
 }
-export class AddLoadedBook implements Action {
+export class AddLoadedBookForEduContentTocEduContent implements Action {
   readonly type = EduContentTocEduContentsActionTypes.AddLoadedBook;
 
   constructor(public payload: { bookId: number }) {}
@@ -42,4 +42,4 @@ export type EduContentTocEduContentsActions =
   | LoadEduContentTocEduContentsForBook
   | EduContentTocEduContentsLoadError
   | AddEduContentTocEduContentsForBook
-  | AddLoadedBook;
+  | AddLoadedBookForEduContentTocEduContent;

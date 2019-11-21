@@ -9,7 +9,7 @@ import {
 } from '../../toc/toc.service.interface';
 import {
   AddEduContentTocEduContentsForBook,
-  AddLoadedBook,
+  AddLoadedBookForEduContentTocEduContent,
   EduContentTocEduContentsActionTypes,
   EduContentTocEduContentsLoadError,
   LoadEduContentTocEduContentsForBook
@@ -54,7 +54,7 @@ export class EduContentTocEduContentEffects {
       run: (action: AddEduContentTocEduContentsForBook, state: DalState) => {
         const addedBookId = action.payload.bookId;
 
-        return new AddLoadedBook({
+        return new AddLoadedBookForEduContentTocEduContent({
           bookId: addedBookId
         });
       },

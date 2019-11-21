@@ -9,7 +9,7 @@ import { EduContentTocEduContentReducer } from '.';
 import { TOC_SERVICE_TOKEN } from '../../toc/toc.service.interface';
 import {
   AddEduContentTocEduContentsForBook,
-  AddLoadedBook,
+  AddLoadedBookForEduContentTocEduContent,
   EduContentTocEduContentsLoadError,
   LoadEduContentTocEduContentsForBook
 } from './edu-content-toc-edu-content.actions';
@@ -170,7 +170,9 @@ describe('EduContentTocEduContentEffects', () => {
       }
     );
 
-    const addLoadedBookAction = new AddLoadedBook({ bookId });
+    const addLoadedBookAction = new AddLoadedBookForEduContentTocEduContent({
+      bookId
+    });
 
     it('should add the book to the loadedBooks when the eduContentTocEduContents are added to the state', () => {
       expectInAndOut(
