@@ -1,6 +1,6 @@
 import { ContentInterface } from './Content.interface';
 import { DiaboloPhaseInterface } from './DiaboloPhase.interface';
-import { EduContentInterface } from './EduContent.interface';
+import { EduContentInterface, EDU_CONTENT_TYPE } from './EduContent.interface';
 import { EduContentMetadataInterface } from './EduContentMetadata.interface';
 import { EduContentNoteInterface } from './EduContentNote.interface';
 import { FavoriteInterface } from './Favorite.interface';
@@ -14,7 +14,7 @@ import { UnlockedContentInterface } from './UnlockedContent.interface';
 export class EduContent implements EduContentInterface, ContentInterface {
   contentType: string;
   id?: number;
-  type: string;
+  type: EDU_CONTENT_TYPE;
   publishedEduContentMetadataId?: number;
   productContents?: ProductContentInterface[];
   unlockedContents?: UnlockedContentInterface[];
@@ -62,7 +62,7 @@ export class EduContent implements EduContentInterface, ContentInterface {
   }
   get methodLogos(): string[] {
     return this.publishedEduContentMetadata &&
-    this.publishedEduContentMetadata.methods && // always return an array with an element
+      this.publishedEduContentMetadata.methods && // always return an array with an element
       this.publishedEduContentMetadata.methods[0] // but element can be undefined
       ? this.publishedEduContentMetadata.methods.map(m => 'method:' + m.icon)
       : [];
