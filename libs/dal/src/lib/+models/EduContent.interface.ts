@@ -15,7 +15,7 @@ export enum EDU_CONTENT_TYPE {
   FILE = 'file',
   PAPER_EXERCISE = 'paper-exercise',
   WEB_APP = 'web-app',
-  TIMELINE = 'timeline',
+  TIMELINE = 'timeline'
 }
 
 export interface EduContentInterface {

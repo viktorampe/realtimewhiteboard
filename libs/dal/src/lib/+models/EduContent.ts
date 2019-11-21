@@ -62,7 +62,7 @@ export class EduContent implements EduContentInterface, ContentInterface {
   }
   get methodLogos(): string[] {
     return this.publishedEduContentMetadata &&
-      this.publishedEduContentMetadata.methods && // always return an array with an element
+    this.publishedEduContentMetadata.methods && // always return an array with an element
       this.publishedEduContentMetadata.methods[0] // but element can be undefined
       ? this.publishedEduContentMetadata.methods.map(m => 'method:' + m.icon)
       : [];
