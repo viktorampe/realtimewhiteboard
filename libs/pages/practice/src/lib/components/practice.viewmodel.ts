@@ -30,9 +30,15 @@ import {
   switchMap,
   take
 } from 'rxjs/operators';
+import {
+  getUnlockedBooks,
+  UnlockedBookInterface
+} from './practice.viewmodel.selectors';
+
 export interface CurrentPracticeParams {
   book?: number;
 }
+
 @Injectable({
   providedIn: 'root'
 })
@@ -49,6 +55,7 @@ export class PracticeViewModel {
   public unlockedFreePracticeByEduContentBookId$: Observable<
     Dictionary<UnlockedFreePracticeInterface[]>
   >;
+  public unlockedBooks$: Observable<UnlockedBookInterface[]>;
 
   //Source streams
   private routerState$: Observable<RouterReducerState<RouterStateUrl>>;
@@ -86,6 +93,7 @@ export class PracticeViewModel {
     this.methodYears$ = this.store.pipe(
       select(MethodQueries.getAllowedMethodYears)
     );
+    this.unlockedBooks$ = this.store.pipe(select(getUnlockedBooks));
   }
 
   private getCurrentPracticeParamsStream(): Observable<CurrentPracticeParams> {
