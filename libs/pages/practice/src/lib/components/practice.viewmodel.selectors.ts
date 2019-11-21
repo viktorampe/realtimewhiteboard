@@ -34,9 +34,9 @@ export const getUnlockedBooks = createSelector(
 
       const learningAreaName = learningAreas[bookMethod.learningAreaId].name;
 
-      const name = `${book.title} - ${book.years
+      const name = `${book.title} ${book.years
         .map(year => year.label)
-        .join(',')}`;
+        .join(', ')}`;
 
       return {
         bookId: book.id,

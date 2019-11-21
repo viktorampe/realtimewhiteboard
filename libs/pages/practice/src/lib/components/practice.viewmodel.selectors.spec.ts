@@ -72,19 +72,19 @@ describe('PracticeViewModel selectors', () => {
           bookId: 3,
           logoUrl: 'assets/methods/foo.jpg',
           learningAreaName: 'Rekenen',
-          name: 'Katapult - 1'
+          name: 'Katapult 1'
         },
         {
           bookId: 4,
           logoUrl: 'assets/methods/bar.jpg',
           learningAreaName: 'Spelling',
-          name: 'Kameleon - 2'
+          name: 'Kameleon 2'
         },
         {
           bookId: 5,
           logoUrl: 'assets/methods/foo.jpg',
           learningAreaName: 'Rekenen',
-          name: 'Katapult - 1,2'
+          name: 'Katapult 1, 2'
         }
       ]);
     });
