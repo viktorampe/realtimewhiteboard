@@ -21,7 +21,13 @@ export class CardComponent implements OnInit {
 
   constructor() {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.card = {
+      cardContent: null,
+      color: null,
+      isInputSelected: null
+    };
+  }
 
   toggleInput() {
     if (this.card.cardContent != null) {
