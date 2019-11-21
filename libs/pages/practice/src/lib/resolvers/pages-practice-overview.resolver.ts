@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {
   DalState,
   EduContentBookActions,
+  EduContentBookQueries,
   StateResolver,
   UnlockedFreePracticeQueries
 } from '@campus/dal';
@@ -29,8 +30,8 @@ export class PracticeOverviewResolver extends StateResolver {
 
   protected getResolvedQueries(): Selector<object, boolean>[] {
     return [
-        UnlockedFreePracticeQueries.getLoaded,
-        EduContentBookQueries.getLoaded
+      UnlockedFreePracticeQueries.getLoaded,
+      EduContentBookQueries.getLoaded
     ];
   }
 }
