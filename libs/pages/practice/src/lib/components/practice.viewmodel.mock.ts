@@ -16,6 +16,7 @@ import {
 import { Dictionary } from '@ngrx/entity';
 import { BehaviorSubject } from 'rxjs';
 import { CurrentPracticeParams, PracticeViewModel } from './practice.viewmodel';
+import { UnlockedBookInterface } from './practice.viewmodel.selectors';
 @Injectable({
   providedIn: 'root'
 })
@@ -33,6 +34,9 @@ export class MockPracticeViewModel
   );
   public filteredClassGroups$ = new BehaviorSubject<ClassGroupInterface[]>(
     this.getClassGroups()
+  );
+  public unlockedBooks$ = new BehaviorSubject<UnlockedBookInterface[]>(
+    this.getUnlockedBooks()
   );
 
   //Multi-check-box-table streams
@@ -130,6 +134,23 @@ export class MockPracticeViewModel
             bookId: 5
           }
         ]
+      }
+    ];
+  }
+
+  private getUnlockedBooks() {
+    return [
+      {
+        bookId: 1,
+        logoUrl: 'assets/methods/beaufort.jpg',
+        name: 'Beaufort',
+        learningAreaName: 'Frans'
+      },
+      {
+        bookId: 1,
+        logoUrl: 'assets/methods/katapult.jpg',
+        name: 'Katapult',
+        learningAreaName: 'Wiskunde'
       }
     ];
   }

@@ -1,0 +1,32 @@
+<campus-page-bar> </campus-page-bar>
+
+<div class="practice-book-lessons practice-book-lessons__container">
+  <campus-collapsible-sheet>
+    <div aside>
+      <mat-nav-list *ngIf="(currentBookLessonsParams$ | async) as params">
+        <div class="practice-book-lessons__list-header" matSubheader>
+          <campus-button class="" [iconClass]="'arrow-back'"></campus-button>
+        </div>
+
+        <mat-list-item
+          data-cy="lesson-link"
+          *ngFor="let toc of (tocsForToc$ | async)"
+          (click)="clickOpenToc(toc.id)"
+          class="practice-book-lessons__lesson-link"
+          [ngClass]="'practice-book-lessons__lesson-link--depth-' + toc.depth"
+          [class.practice-book-lessons__lesson-link--selected]="
+            toc.id === params.chapter
+          "
+        >
+          <span class="practice-book-lessons__lesson-link__title">{{
+            toc.title
+          }}</span>
+        </mat-list-item>
+      </mat-nav-list>
+    </div>
+
+    <div main>
+      CONTENT HERE
+    </div>
+  </campus-collapsible-sheet>
+</div>

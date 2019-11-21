@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { MethodQueries } from '@campus/dal';
 import { AllowedMethodGuard } from '@campus/guards';
+import { BookLessonsComponent } from './components/book-lessons/book-lessons.component';
 import { ManagePracticeMethodDetailComponent } from './components/manage-practice-method-detail/manage-practice-method-detail.component';
 import { ManagePracticeOverviewComponent } from './components/manage-practice-overview/manage-practice-overview.component';
 import { PracticeOverviewComponent } from './components/practice-overview/practice-overview.component';
@@ -16,7 +17,6 @@ const routes: Routes = [
     resolve: { isResolved: ManagePracticeResolver },
     runGuardsAndResolvers: 'always',
     data: { breadcrumbText: 'Beheren' },
-    canActivate: [AllowedMethodGuard],
     children: [
       {
         path: '',
@@ -25,6 +25,7 @@ const routes: Routes = [
         component: ManagePracticeOverviewComponent
       },
       {
+        canActivate: [AllowedMethodGuard],
         path: ':book',
         resolve: { isResolved: ManagePracticeMethodDetailResolver },
         data: {
@@ -50,8 +51,15 @@ const routes: Routes = [
         component: PracticeOverviewComponent
       },
       {
-        path: ':book',
-        component: PracticeOverviewComponent // TODO: change to new component
+        path: ':book', // TODO: change to new component BookChaptersComponent
+        runGuardsAndResolvers: 'always',
+        children: [
+          {
+            path: '',
+            component: PracticeOverviewComponent
+          },
+          { path: ':chapter', component: BookLessonsComponent }
+        ]
       }
     ]
   }
