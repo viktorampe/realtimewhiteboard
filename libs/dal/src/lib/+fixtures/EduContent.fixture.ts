@@ -1,14 +1,10 @@
-import {
-  EduContent,
-  EduContentMetadataInterface,
-  EDU_CONTENT_TYPE
-} from '../+models';
+import { EduContent, EduContentMetadataInterface } from '../+models';
 import { EduContentMetadataFixture } from './EduContentMetadata.fixture';
 
 export class EduContentFixture extends EduContent {
   // defaults
   contentType = 'exercise';
-  type = EDU_CONTENT_TYPE.LINK;
+  type = 'foo';
   id = 1;
   publishedEduContentMetadataId: 1;
   publishedEduContentMetadata: EduContentMetadataInterface = new EduContentMetadataFixture(
