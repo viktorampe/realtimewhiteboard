@@ -1,11 +1,10 @@
 import { forwardRef, Inject, Injectable } from '@angular/core';
-import { EduContent } from '@campus/dal';
+import { EduContent, EDU_CONTENT_TYPE } from '@campus/dal';
 import {
   ContentActionInterface,
   ContentActionsServiceInterface,
   ContentOpenerInterface,
-  CONTENT_OPENER_TOKEN,
-  EduContentTypeEnum
+  CONTENT_OPENER_TOKEN
 } from './content-actions.service.interface';
 
 @Injectable({
@@ -75,10 +74,10 @@ export class ContentActionsService implements ContentActionsServiceInterface {
     eduContent: EduContent
   ): ContentActionInterface[] {
     switch (eduContent.type) {
-      case EduContentTypeEnum.BOEKE:
+      case EDU_CONTENT_TYPE.BOEKE:
         return [this.contentActionDictionary.openBoeke];
 
-      case EduContentTypeEnum.EXERCISE:
+      case EDU_CONTENT_TYPE.EXERCISE:
         return [
           this.contentActionDictionary.openEduContentAsExercise,
           this.contentActionDictionary.openEduContentAsSolution

@@ -1,12 +1,11 @@
 import { inject, TestBed } from '@angular/core/testing';
-import { EduContentFixture } from '@campus/dal';
+import { EduContentFixture, EDU_CONTENT_TYPE } from '@campus/dal';
 import { configureTestSuite } from 'ng-bullet';
 import { ContentActionsService } from './content-actions.service';
 import {
   ContentActionsServiceInterface,
   ContentOpenerInterface,
-  CONTENT_OPENER_TOKEN,
-  EduContentTypeEnum
+  CONTENT_OPENER_TOKEN
 } from './content-actions.service.interface';
 
 describe('ContentActionsServiceInterface', () => {
@@ -48,13 +47,13 @@ describe('ContentActionsServiceInterface', () => {
       const tests = [
         {
           mockEduContent: new EduContentFixture({
-            type: EduContentTypeEnum.BOEKE
+            type: EDU_CONTENT_TYPE.BOEKE
           }),
           expected: [contentActionsService.contentActionDictionary['openBoeke']]
         },
         {
           mockEduContent: new EduContentFixture({
-            type: EduContentTypeEnum.EXERCISE
+            type: EDU_CONTENT_TYPE.EXERCISE
           }),
           expected: [
             contentActionsService.contentActionDictionary[
