@@ -34,9 +34,11 @@ import {
   getUnlockedBooks,
   UnlockedBookInterface
 } from './practice.viewmodel.selectors';
+
 export interface CurrentPracticeParams {
   book?: number;
 }
+
 @Injectable({
   providedIn: 'root'
 })
@@ -92,9 +94,6 @@ export class PracticeViewModel {
       select(MethodQueries.getAllowedMethodYears)
     );
     this.unlockedBooks$ = this.store.pipe(select(getUnlockedBooks));
-
-    // TODO remove
-    this.unlockedBooks$.subscribe(x => console.log(x));
   }
 
   private getCurrentPracticeParamsStream(): Observable<CurrentPracticeParams> {
