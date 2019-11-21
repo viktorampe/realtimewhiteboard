@@ -1,0 +1,51 @@
+import { Component, HostBinding, Inject, Input, OnInit } from '@angular/core';
+import { Result } from '@campus/dal';
+import { ResultItemBase } from '@campus/search';
+import {
+  ContentActionInterface,
+  ContentActionsServiceInterface,
+  CONTENT_ACTIONS_SERVICE_TOKEN,
+  EduContentSearchResultInterface
+} from '@campus/shared';
+
+@Component({
+  // tslint:disable-next-line
+  selector: 'practice-search-result',
+  templateUrl: './practice-search-result.component.html',
+  styleUrls: ['./practice-search-result.component.scss']
+})
+export class PracticeSearchResultComponent extends ResultItemBase
+  implements OnInit {
+  @Input() data: EduContentSearchResultInterface;
+
+  actions: ContentActionInterface[];
+
+  @HostBinding('class.app-practice-searchresult')
+  appPracticeSearchResultClass = true;
+
+  constructor(
+    @Inject(CONTENT_ACTIONS_SERVICE_TOKEN)
+    private contentActionsServiceInterface: ContentActionsServiceInterface
+  ) {
+    super();
+  }
+
+  ngOnInit() {
+    super.ngOnInit();
+    this.setupActions();
+  }
+
+  private setupActions(): void {
+    this.actions = this.contentActionsServiceInterface.getActionsForEduContent(
+      this.data.eduContent
+    );
+  }
+
+  onActionClick(action: ContentActionInterface) {
+    action.handler(this.data.eduContent);
+  }
+
+  getStars(result: Result): number[] {
+    return new Array(result.stars);
+  }
+}

@@ -1,0 +1,54 @@
+<campus-file-icon
+  class="app-practice-searchresult__extension"
+  classModifier="product-type-zoekresultaat-algemeen-bestand"
+  [icon]="
+    data.eduContent.fileExtension != 'ludo.zip' ? 'general-file' : 'exercise'
+  "
+  [label]="
+    data.eduContent.fileExtension != 'ludo.zip'
+      ? data.eduContent.fileExtension
+      : ''
+  "
+>
+</campus-file-icon>
+
+<div class="app-practice-searchresult__content">
+  <div class="app-practice-searchresult__content__header">
+    <span class="app-practice-searchresult__content__header__title">{{
+      data.eduContent.name
+    }}</span>
+  </div>
+  <div class="app-practice-searchresult__content__body">
+    <span class="app-practice-searchresult__content__body__description">{{
+      data.eduContent.description
+    }}</span>
+  </div>
+  <ng-container *ngFor="let action of actions; let last = last">
+    <a
+      class="app-practice-searchresult__content__header__action"
+      campusClickStopPropagation
+      (click)="onActionClick(action)"
+      >{{ data.result ? 'maak opnieuw' : action.label }}</a
+    >
+    <span class="after" *ngIf="!last"></span>
+  </ng-container>
+</div>
+
+<mat-icon
+  *ngIf="data.methodLevel.icon; else methodLabel"
+  class="app-practice-searchresult__level"
+  svgIcon="{{ data.methodLevel.icon }}"
+></mat-icon>
+<ng-template #methodLabel>
+  <span class="app-practice-searchresult__level">{{
+    data.methodLevel.label
+  }}</span>
+</ng-template>
+
+<div *ngIf="data.result" class="app-practice-searchresult__stars">
+  <mat-icon
+    *ngFor="let i of getStars(data.result)"
+    class="app-practice-searchresult__stars__star"
+    svgIcon="{{ data.methodLevel.icon }}"
+  ></mat-icon>
+</div>

@@ -26,6 +26,7 @@ import {
   SearchStateInterface
 } from '@campus/search';
 import {
+  EduContentSearchResultInterface,
   EnvironmentSearchModesInterface,
   ENVIRONMENT_SEARCHMODES_TOKEN
 } from '@campus/shared';
@@ -262,7 +263,9 @@ export class EduContentsViewModel {
         return {
           ...searchResult,
           results: searchResult.results.map(
-            (searchResultItem: EduContentInterface) => {
+            (
+              searchResultItem: EduContentInterface
+            ): EduContentSearchResultInterface => {
               const eduContent = Object.assign<EduContent, EduContentInterface>(
                 new EduContent(),
                 searchResultItem
