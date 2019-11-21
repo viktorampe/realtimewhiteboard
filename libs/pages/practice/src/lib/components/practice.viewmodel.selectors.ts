@@ -1,3 +1,6 @@
+import { EduContentTOCInterface, EduContentTocQueries } from '@campus/dal';
+import { createSelector } from '@ngrx/store';
+
 export interface ChapterWithStatus {
   title: string;
   exercises: {
@@ -6,3 +9,10 @@ export interface ChapterWithStatus {
   };
   kwetonsRemaining: number;
 }
+
+export const getChaptersWithStatuses = createSelector(
+  [EduContentTocQueries.getTreeForBook],
+  (tocsForBook: EduContentTOCInterface[], props: { bookId: number }) => {
+    return tocsForBook;
+  }
+);

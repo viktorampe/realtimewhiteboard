@@ -30,6 +30,7 @@ import {
   switchMap,
   take
 } from 'rxjs/operators';
+import { getChaptersWithStatuses } from './practice.viewmodel.selectors';
 export interface CurrentPracticeParams {
   book?: number;
 }
@@ -69,6 +70,10 @@ export class PracticeViewModel {
   private setSourceStreams() {
     this.routerState$ = this.store.pipe(select(getRouterState));
     this.currentPracticeParams$ = this.getCurrentPracticeParamsStream();
+
+    this.store
+      .pipe(select(getChaptersWithStatuses, { bookId: 34 }))
+      .subscribe(console.log);
 
     this.currentBook$ = this.getCurrentBookStream();
     this.unlockedFreePracticeByEduContentTOCId$ = this.store.pipe(
