@@ -19,7 +19,7 @@ export enum EDU_CONTENT_TYPE {
 }
 
 export interface EduContentInterface {
-  type: EDU_CONTENT_TYPE;
+  type: EDU_CONTENT_TYPE | string;
   id?: number;
   publishedEduContentMetadataId?: number;
   productContents?: ProductContentInterface[];

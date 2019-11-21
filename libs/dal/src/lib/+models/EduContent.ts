@@ -14,7 +14,7 @@ import { UnlockedContentInterface } from './UnlockedContent.interface';
 export class EduContent implements EduContentInterface, ContentInterface {
   contentType: string;
   id?: number;
-  type: EDU_CONTENT_TYPE;
+  type: EDU_CONTENT_TYPE | string;
   publishedEduContentMetadataId?: number;
   productContents?: ProductContentInterface[];
   unlockedContents?: UnlockedContentInterface[];

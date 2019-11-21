@@ -13,6 +13,7 @@ import {
   DalState,
   EduContent,
   EduContentQueries,
+  EDU_CONTENT_TYPE,
   HistoryActions,
   LearningAreaInterface,
   LearningAreaQueries,
@@ -174,7 +175,7 @@ export class BundlesViewModel {
     });
 
     if (unlockedContent.eduContentId) {
-      if (unlockedContent.eduContent.type === 'exercise') {
+      if (unlockedContent.eduContent.type === EDU_CONTENT_TYPE.EXERCISE) {
         if (this.authService.userId === unlockedContent.teacherId) {
           //own bundle -> teacher -> dialog with or without answers
           return;
