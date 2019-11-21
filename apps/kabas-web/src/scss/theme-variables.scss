@@ -108,6 +108,9 @@ $shared-header__quicklink-bg-color: transparent;
 $shared-header__quicklink-icon-size: 24px;
 $shared-header__quicklink-icon-size-small: 20px;
 
+// shared tiles
+$shared-bg-color-1: $color-white-1 !default;
+
 // pages
 $pages-padding: $kabas-page-vertical-padding $kabas-page-horizontal-padding;
 
@@ -201,7 +204,7 @@ $ui-file-icon__label-text-weight: bold;
 $ui-file-icon__label-top: 35%;
 $ui-file-icon__label-text-color: $secondary-font-color-accent;
 
-$shared-method-year-tile_button_container_button-box-shadow-color: $primary-font-color-2;
+$shared-method-books-tile_button_container_button-box-shadow-color: $primary-font-color-2;
 
 // home
 $pages-home-text-color--primary: $primary-font-color-2;

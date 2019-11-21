@@ -2,27 +2,33 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { MethodQueries } from '@campus/dal';
 import { AllowedMethodGuard } from '@campus/guards';
-import { PracticeMethodDetailComponent } from './components/practice-method-detail/practice-method-detail.component';
+import { ManagePracticeMethodDetailComponent } from './components/manage-practice-method-detail/manage-practice-method-detail.component';
+import { ManagePracticeOverviewComponent } from './components/manage-practice-overview/manage-practice-overview.component';
 import { PracticeOverviewComponent } from './components/practice-overview/practice-overview.component';
-import { PracticeMethodDetailResolver } from './resolvers/pages-practice-method-detail.resolver';
-import { PracticeOverviewResolver } from './resolvers/pages-practice-overview.resolver';
-import { PracticeResolver } from './resolvers/pages-practice.resolver';
+import { ManagePracticeMethodDetailResolver } from './resolvers/pages-manage-practice-method-detail.resolver';
+import { ManagePracticeOverviewResolver } from './resolvers/pages-manage-practice-overview.resolver';
+import { ManagePracticeResolver } from './resolvers/pages-manage-practice.resolver';
 
 const routes: Routes = [
   {
     path: '',
-    resolve: { isResolved: PracticeResolver },
+    children: [{ path: '', component: PracticeOverviewComponent }]
+  },
+  {
+    path: 'manage',
+    resolve: { isResolved: ManagePracticeResolver },
     runGuardsAndResolvers: 'always',
+    data: { breadcrumbText: 'Beheren' },
     children: [
       {
         path: '',
-        resolve: { isResolved: PracticeOverviewResolver },
+        resolve: { isResolved: ManagePracticeOverviewResolver },
         runGuardsAndResolvers: 'always',
-        component: PracticeOverviewComponent
+        component: ManagePracticeOverviewComponent
       },
       {
         path: ':book',
-        resolve: { isResolved: PracticeMethodDetailResolver },
+        resolve: { isResolved: ManagePracticeMethodDetailResolver },
         canActivate: [AllowedMethodGuard],
         data: {
           selector: MethodQueries.getMethodWithYearByBookId
@@ -31,7 +37,7 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            component: PracticeMethodDetailComponent
+            component: ManagePracticeMethodDetailComponent
           }
         ]
       }

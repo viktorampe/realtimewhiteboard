@@ -12,6 +12,8 @@ import {
   LearningAreaActions,
   LearningAreaQueries,
   MethodActions,
+  MethodLevelActions,
+  MethodLevelQueries,
   MethodQueries,
   StateResolver,
   UiActions,
@@ -38,6 +40,9 @@ export class AppResolver extends StateResolver {
       new LearningAreaActions.LoadLearningAreas(),
       new FavoriteActions.LoadFavorites({ userId: this.authService.userId }),
       new HistoryActions.LoadHistory({ userId: this.authService.userId }),
+      new MethodLevelActions.LoadMethodLevels({
+        userId: this.authService.userId
+      }),
       new UiActions.LoadUi()
     ];
   }
@@ -49,6 +54,7 @@ export class AppResolver extends StateResolver {
       LearningAreaQueries.getLoaded,
       FavoriteQueries.getLoaded,
       HistoryQueries.getLoaded,
+      MethodLevelQueries.getLoaded,
       UiQuery.getLoaded
     ];
   }

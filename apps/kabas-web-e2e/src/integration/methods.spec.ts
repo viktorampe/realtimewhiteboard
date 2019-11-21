@@ -42,17 +42,16 @@ describe('Methods', () => {
       cy.visit(`${appPaths.methods}`);
     });
     it('should show methods', () => {
-      dataCy('method-year-title').contains(
+      dataCy('method-books-title').contains(
         setup.kabasMethodsPages.expected.method.name
       );
-      dataCy('method-year-link')
+      dataCy('method-books-link')
         .contains(setup.kabasMethodsPages.expected.method.year)
         .click()
         .location('pathname')
         .should('be', `${appPaths.methods}/${setup.kabasMethodsPages.book}`);
     });
   });
-  return;
 
   describe('method page', () => {
     beforeEach(() => {
@@ -282,8 +281,9 @@ describe('Methods', () => {
 
       clickBulkLPGCheckbox(1);
 
+      // Since the first chapter is selected, we can assume the first lesson link is the 2nd child (= index 1)
       dataCy('lesson-link')
-        .last()
+        .eq(1)
         .click();
 
       for (let i = 0; i <= 2; i++) {

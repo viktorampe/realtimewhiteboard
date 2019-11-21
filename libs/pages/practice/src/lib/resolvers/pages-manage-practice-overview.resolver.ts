@@ -12,7 +12,7 @@ import { take } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root'
 })
-export class PracticeOverviewResolver extends StateResolver {
+export class ManagePracticeOverviewResolver extends StateResolver {
   constructor(private store: Store<DalState>) {
     super(store);
   }
