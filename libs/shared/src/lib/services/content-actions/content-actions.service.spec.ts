@@ -1,12 +1,11 @@
 import { inject, TestBed } from '@angular/core/testing';
-import { EduContentFixture } from '@campus/dal';
+import { EduContentFixture, EduContentTypeEnum } from '@campus/dal';
 import { configureTestSuite } from 'ng-bullet';
 import { ContentActionsService } from './content-actions.service';
 import {
   ContentActionsServiceInterface,
   ContentOpenerInterface,
-  CONTENT_OPENER_TOKEN,
-  EduContentTypeEnum
+  CONTENT_OPENER_TOKEN
 } from './content-actions.service.interface';
 
 describe('ContentActionsServiceInterface', () => {

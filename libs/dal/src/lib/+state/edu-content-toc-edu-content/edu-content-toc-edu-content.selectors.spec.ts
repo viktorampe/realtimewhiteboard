@@ -1,7 +1,7 @@
 import { EduContentTocEduContentQueries } from '.';
 import {
   EduContentTOCEduContentInterface,
-  EDU_CONTENT_TYPE
+  EduContentTypeEnum
 } from '../../+models';
 import { State } from './edu-content-toc-edu-content.reducer';
 
@@ -10,7 +10,7 @@ describe('EduContentTocEduContent Selectors', () => {
     id: string,
     eduContentTOCId: number,
     eduContentId: number,
-    type: EDU_CONTENT_TYPE = EDU_CONTENT_TYPE.EXERCISE
+    type: EduContentTypeEnum = EduContentTypeEnum.EXERCISE
   ): EduContentTOCEduContentInterface | any {
     return {
       id,
@@ -55,8 +55,8 @@ describe('EduContentTocEduContent Selectors', () => {
           createEduContentTocEduContent('1-4', 1, 4),
           createEduContentTocEduContent('1-1', 1, 1),
           createEduContentTocEduContent('1-2', 1, 2),
-          createEduContentTocEduContent('1-3', 1, 3, EDU_CONTENT_TYPE.FILE),
-          createEduContentTocEduContent('1-5', 1, 5, EDU_CONTENT_TYPE.BOEKE),
+          createEduContentTocEduContent('1-3', 1, 3, EduContentTypeEnum.FILE),
+          createEduContentTocEduContent('1-5', 1, 5, EduContentTypeEnum.BOEKE),
           createEduContentTocEduContent('2-3', 2, 3)
         ],
         [1],
@@ -76,15 +76,15 @@ describe('EduContentTocEduContent Selectors', () => {
         createEduContentTocEduContent('1-4', 1, 4),
         createEduContentTocEduContent('1-1', 1, 1),
         createEduContentTocEduContent('1-2', 1, 2),
-        createEduContentTocEduContent('1-3', 1, 3, EDU_CONTENT_TYPE.FILE),
-        createEduContentTocEduContent('1-5', 1, 5, EDU_CONTENT_TYPE.BOEKE),
+        createEduContentTocEduContent('1-3', 1, 3, EduContentTypeEnum.FILE),
+        createEduContentTocEduContent('1-5', 1, 5, EduContentTypeEnum.BOEKE),
         createEduContentTocEduContent('2-3', 2, 3)
       ]);
     });
 
     it('getAllByType() should return an array of the entities filtered by type', () => {
       const results = EduContentTocEduContentQueries.getAllByType(storeState, {
-        type: EDU_CONTENT_TYPE.EXERCISE
+        type: EduContentTypeEnum.EXERCISE
       });
       expect(results).toEqual([
         createEduContentTocEduContent('1-4', 1, 4),
@@ -95,13 +95,13 @@ describe('EduContentTocEduContent Selectors', () => {
     });
 
     it('getAllByTypeAndToc() should return an array of the entities filtered by type', () => {
-      const props = { type: EDU_CONTENT_TYPE.FILE, tocId: 1 };
+      const props = { type: EduContentTypeEnum.FILE, tocId: 1 };
       const results = EduContentTocEduContentQueries.getAllByTypeAndToc(
         storeState,
         props
       );
       expect(results).toEqual([
-        createEduContentTocEduContent('1-3', 1, 3, EDU_CONTENT_TYPE.FILE)
+        createEduContentTocEduContent('1-3', 1, 3, EduContentTypeEnum.FILE)
       ]);
     });
     it('getCount() should return number of entities', () => {
@@ -110,7 +110,7 @@ describe('EduContentTocEduContent Selectors', () => {
     });
 
     it('getCountByTypeAndToc()  should return number of entities filtered by type', () => {
-      const props = { type: EDU_CONTENT_TYPE.FILE, tocId: 1 };
+      const props = { type: EduContentTypeEnum.FILE, tocId: 1 };
       const results = EduContentTocEduContentQueries.getCountByTypeAndToc(
         storeState,
         props
@@ -133,7 +133,7 @@ describe('EduContentTocEduContent Selectors', () => {
         ids: ['1-3', '1-1', '2-90', '1-2']
       });
       expect(results).toEqual([
-        createEduContentTocEduContent('1-3', 1, 3, EDU_CONTENT_TYPE.FILE),
+        createEduContentTocEduContent('1-3', 1, 3, EduContentTypeEnum.FILE),
         createEduContentTocEduContent('1-1', 1, 1),
         undefined,
         createEduContentTocEduContent('1-2', 1, 2)
