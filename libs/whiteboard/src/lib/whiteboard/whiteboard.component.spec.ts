@@ -59,5 +59,5 @@ describe('WhiteboardComponent', () => {
     component.onDeleteCard(0);
 
     expect(component.cards.length).toBe(cardsSizeBeforeAdding);
-  })
+  });
 });
