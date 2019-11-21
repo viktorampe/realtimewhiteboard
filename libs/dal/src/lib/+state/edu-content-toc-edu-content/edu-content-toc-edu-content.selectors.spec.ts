@@ -104,7 +104,6 @@ describe('EduContentTocEduContent Selectors', () => {
         createEduContentTocEduContent('1-3', 1, 3, EDU_CONTENT_TYPE.FILE)
       ]);
     });
-    // file.only
     it('getCount() should return number of entities', () => {
       const results = EduContentTocEduContentQueries.getCount(storeState);
       expect(results).toBe(6);
