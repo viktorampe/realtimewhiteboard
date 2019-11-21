@@ -1,4 +1,4 @@
-import { EduContentInterface } from './EduContent.interface';
+import { EduContentInterface, EDU_CONTENT_TYPE } from './EduContent.interface';
 import { EduContentTOCInterface } from './EduContentTOC.interface';
 
 export interface EduContentTOCEduContentInterface {
@@ -8,5 +8,5 @@ export interface EduContentTOCEduContentInterface {
   eduContentId: number;
   eduContent?: EduContentInterface;
   // TODO replace by ENUM
-  type: string;
+  type: EDU_CONTENT_TYPE;
 }

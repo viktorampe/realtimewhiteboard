@@ -1,5 +1,8 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { EduContentTOCEduContentInterface } from '../../+models';
+import {
+  EduContentTOCEduContentInterface,
+  EDU_CONTENT_TYPE
+} from '../../+models';
 import {
   NAME,
   selectAll,
@@ -39,15 +42,17 @@ export const getCount = createSelector(
 
 export const getAllByType = createSelector(
   getAll,
-  (entities: EduContentTOCEduContentInterface[], props: { type: string }) =>
-    entities.filter(entity => entity.type === props.type)
+  (
+    entities: EduContentTOCEduContentInterface[],
+    props: { type: EDU_CONTENT_TYPE }
+  ) => entities.filter(entity => entity.type === props.type)
 );
 
 export const getAllByTypeAndToc = createSelector(
   getAllByType,
   (
     entities: EduContentTOCEduContentInterface[],
-    props: { type: string; tocId: number }
+    props: { type: EDU_CONTENT_TYPE; tocId: number }
   ) => entities.filter(entity => entity.eduContentTOCId === props.tocId)
 );
 
@@ -55,7 +60,7 @@ export const getCountByTypeAndToc = createSelector(
   getAllByTypeAndToc,
   (
     entities: EduContentTOCEduContentInterface[],
-    props: { type: string; tocId: number }
+    props: { type: EDU_CONTENT_TYPE; tocId: number }
   ) => entities.length
 );
 

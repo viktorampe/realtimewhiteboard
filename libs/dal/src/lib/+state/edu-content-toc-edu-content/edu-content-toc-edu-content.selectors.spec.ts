@@ -1,5 +1,8 @@
 import { EduContentTocEduContentQueries } from '.';
-import { EduContentTOCEduContentInterface } from '../../+models';
+import {
+  EduContentTOCEduContentInterface,
+  EDU_CONTENT_TYPE
+} from '../../+models';
 import { State } from './edu-content-toc-edu-content.reducer';
 
 describe('EduContentTocEduContent Selectors', () => {
@@ -7,7 +10,7 @@ describe('EduContentTocEduContent Selectors', () => {
     id: string,
     eduContentTOCId: number,
     eduContentId: number,
-    type: string = 'exercise'
+    type: EDU_CONTENT_TYPE = EDU_CONTENT_TYPE.EXERCISE
   ): EduContentTOCEduContentInterface | any {
     return {
       id,
@@ -52,7 +55,7 @@ describe('EduContentTocEduContent Selectors', () => {
           createEduContentTocEduContent('1-4', 1, 4),
           createEduContentTocEduContent('1-1', 1, 1),
           createEduContentTocEduContent('1-2', 1, 2),
-          createEduContentTocEduContent('1-3', 1, 3, 'other'),
+          createEduContentTocEduContent('1-3', 1, 3, EDU_CONTENT_TYPE.FILE),
           createEduContentTocEduContent('2-3', 2, 3)
         ],
         [1],
@@ -72,14 +75,14 @@ describe('EduContentTocEduContent Selectors', () => {
         createEduContentTocEduContent('1-4', 1, 4),
         createEduContentTocEduContent('1-1', 1, 1),
         createEduContentTocEduContent('1-2', 1, 2),
-        createEduContentTocEduContent('1-3', 1, 3, 'other'),
+        createEduContentTocEduContent('1-3', 1, 3, EDU_CONTENT_TYPE.FILE),
         createEduContentTocEduContent('2-3', 2, 3)
       ]);
     });
 
     it('getAllByType() should return an array of the entities filtered by type', () => {
       const results = EduContentTocEduContentQueries.getAllByType(storeState, {
-        type: 'exercise'
+        type: EDU_CONTENT_TYPE.EXERCISE
       });
       expect(results).toEqual([
         createEduContentTocEduContent('1-4', 1, 4),
@@ -90,7 +93,7 @@ describe('EduContentTocEduContent Selectors', () => {
     });
 
     it('getAllByTypeAndToc() should return an array of the entities filtered by type', () => {
-      const props = { type: 'exercise', tocId: 2 };
+      const props = { type: EDU_CONTENT_TYPE.EXERCISE, tocId: 2 };
       const results = EduContentTocEduContentQueries.getAllByTypeAndToc(
         storeState,
         props
@@ -118,7 +121,7 @@ describe('EduContentTocEduContent Selectors', () => {
         ids: ['1-3', '1-1', '2-90', '1-2']
       });
       expect(results).toEqual([
-        createEduContentTocEduContent('1-3', 1, 3, 'other'),
+        createEduContentTocEduContent('1-3', 1, 3, EDU_CONTENT_TYPE.FILE),
         createEduContentTocEduContent('1-1', 1, 1),
         undefined,
         createEduContentTocEduContent('1-2', 1, 2)
