@@ -56,15 +56,16 @@ steps:
       rm -rf dist junit coverage reportgenerator
     displayName: 'Clear junit, coverage reports, build output'
   - task: Npm@1
+    command: ci
     displayName: 'Npm install'
     inputs:
       customEndpoint: diekeure-registry
-  - script: |
-      npm run lint
-    displayName: 'Lint all'
-  - script: |
-      npm run format:check
-    displayName: 'Format check'
+  # - script: |
+  #     npm run lint
+  #   displayName: 'Lint all'
+  # - script: |
+  #     npm run format:check
+  #   displayName: 'Format check'
   - script: npm run test
     displayName: 'Test all'
   - script: |
