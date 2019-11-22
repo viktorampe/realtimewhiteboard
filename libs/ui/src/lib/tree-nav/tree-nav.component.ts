@@ -15,6 +15,7 @@ export interface NavItem {
   children?: NavItem[];
   expanded?: boolean;
   requiredPermissions?: (string | string[])[];
+  hideWhenRequiredPermissions?: (string | string[])[];
 }
 
 /**
