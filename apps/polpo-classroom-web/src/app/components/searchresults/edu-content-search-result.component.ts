@@ -11,7 +11,6 @@ import {
   createHistoryFromEduContent,
   EduContentBookInterface,
   EduContentTOCInterface,
-  EduContentTypeEnum,
   FavoriteInterface,
   FavoriteTypesEnum
 } from '@campus/dal';
