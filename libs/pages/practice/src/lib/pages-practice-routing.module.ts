@@ -29,6 +29,7 @@ const routes: Routes = [
         canActivate: [AllowedMethodGuard],
         path: ':book',
         resolve: { isResolved: ManagePracticeMethodDetailResolver },
+        canActivate: [AllowedMethodGuard],
         data: {
           selector: MethodQueries.getMethodWithYearByBookId
         },
