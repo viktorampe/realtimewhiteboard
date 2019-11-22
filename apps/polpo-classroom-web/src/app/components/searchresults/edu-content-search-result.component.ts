@@ -11,6 +11,7 @@ import {
   createHistoryFromEduContent,
   EduContentBookInterface,
   EduContentTOCInterface,
+  EduContentTypeEnum,
   FavoriteInterface,
   FavoriteTypesEnum
 } from '@campus/dal';
@@ -21,16 +22,6 @@ import {
   EduContentSearchResultItemServiceInterface,
   EDUCONTENT_SEARCH_RESULT_ITEM_SERVICE_TOKEN
 } from './edu-content-search-result.service.interface';
-
-enum EduContentTypeEnum {
-  BOEKE = 'boek-e',
-  LINK = 'link',
-  EXERCISE = 'exercise',
-  FILE = 'file',
-  PAPER_EXERCISE = 'paper-exercise',
-  WEB_APP = 'web-app',
-  TIMELINE = 'timeline'
-}
 
 @Component({
   // tslint:disable-next-line
