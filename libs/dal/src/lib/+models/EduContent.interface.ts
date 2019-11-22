@@ -8,7 +8,7 @@ import { UnlockedBoekeGroupInterface } from './UnlockedBoekeGroup.interface';
 import { UnlockedBoekeStudentInterface } from './UnlockedBoekeStudent.interface';
 import { UnlockedContentInterface } from './UnlockedContent.interface';
 
-export enum EduContentTypeEnum {
+export const enum EduContentTypeEnum {
   BOEKE = 'boek-e',
   LINK = 'link',
   EXERCISE = 'exercise',
