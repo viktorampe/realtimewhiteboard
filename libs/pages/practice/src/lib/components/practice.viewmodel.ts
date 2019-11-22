@@ -20,7 +20,7 @@ import {
 import { Dictionary } from '@ngrx/entity';
 import { RouterReducerState } from '@ngrx/router-store';
 import { select, Store } from '@ngrx/store';
-import { merge, Observable, zip } from 'rxjs';
+import { merge, Observable, of, zip } from 'rxjs';
 import {
   distinctUntilChanged,
   filter,
@@ -31,6 +31,7 @@ import {
   take
 } from 'rxjs/operators';
 import {
+  ChapterWithStatusInterface,
   getUnlockedBooks,
   UnlockedBookInterface
 } from './practice.viewmodel.selectors';
@@ -56,6 +57,7 @@ export class PracticeViewModel {
     Dictionary<UnlockedFreePracticeInterface[]>
   >;
   public unlockedBooks$: Observable<UnlockedBookInterface[]>;
+  public bookChaptersWithStatus$: Observable<ChapterWithStatusInterface[]>;
 
   //Source streams
   private routerState$: Observable<RouterReducerState<RouterStateUrl>>;
@@ -94,6 +96,7 @@ export class PracticeViewModel {
       select(MethodQueries.getAllowedMethodYears)
     );
     this.unlockedBooks$ = this.store.pipe(select(getUnlockedBooks));
+    this.bookChaptersWithStatus$ = of([]); //TODO use selector
   }
 
   private getCurrentPracticeParamsStream(): Observable<CurrentPracticeParams> {
