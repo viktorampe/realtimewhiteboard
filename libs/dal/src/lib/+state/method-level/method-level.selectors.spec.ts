@@ -1,4 +1,5 @@
 import { MethodLevelQueries } from '.';
+import { MethodLevelFixture } from '../../+fixtures';
 import { MethodLevelInterface } from '../../+models';
 import { State } from './method-level.reducer';
 
@@ -94,6 +95,89 @@ describe('MethodLevel Selectors', () => {
     it('getById() should return undefined if the entity is not present', () => {
       const results = MethodLevelQueries.getById(storeState, { id: 9 });
       expect(results).toBe(undefined);
+    });
+  });
+
+  describe('find', () => {
+    const methodLevelArray = [
+      new MethodLevelFixture({
+        id: 1,
+        levelId: 5,
+        methodId: 10
+      }),
+      new MethodLevelFixture({
+        id: 2,
+        levelId: 5,
+        methodId: 11
+      }),
+      new MethodLevelFixture({
+        id: 3,
+        levelId: 6,
+        methodId: 10
+      }),
+      new MethodLevelFixture({
+        id: 4,
+        levelId: 6,
+        methodId: 11
+      })
+    ];
+
+    beforeEach(() => {
+      methodLevelState = createState(methodLevelArray, true, 'no error');
+      storeState = {
+        methodLevels: methodLevelState
+      };
+    });
+
+    describe('findMany', () => {
+      it('should return all MethodLevels', () => {
+        const results = MethodLevelQueries.findMany(storeState, {});
+        expect(results.length).toBe(4);
+        expect(results).toEqual(methodLevelArray);
+      });
+
+      it('should return the correct MethodLevels for levelId', () => {
+        const results = MethodLevelQueries.findMany(storeState, {
+          levelId: 5
+        });
+        expect(results.length).toBe(2);
+        expect(results).toEqual([methodLevelArray[0], methodLevelArray[1]]);
+      });
+
+      it('should return the correct MethodLevels for methodId', () => {
+        const results = MethodLevelQueries.findMany(storeState, {
+          methodId: 10
+        });
+        expect(results.length).toBe(2);
+        expect(results).toEqual([methodLevelArray[0], methodLevelArray[2]]);
+      });
+    });
+
+    describe('findOne', () => {
+      it('should return the correct MethodLevel for levelId', () => {
+        const result = MethodLevelQueries.findOne(storeState, {
+          levelId: 5
+        });
+
+        expect(result).toEqual(methodLevelArray[0]);
+      });
+
+      it('should return the correct MethodLevel for methodId', () => {
+        const result = MethodLevelQueries.findOne(storeState, {
+          methodId: 11
+        });
+
+        expect(result).toEqual(methodLevelArray[1]);
+      });
+
+      it('should return the correct MethodLevel for levelId and methodId', () => {
+        const result = MethodLevelQueries.findOne(storeState, {
+          levelId: 6,
+          methodId: 11
+        });
+
+        expect(result).toEqual(methodLevelArray[3]);
+      });
     });
   });
 });
