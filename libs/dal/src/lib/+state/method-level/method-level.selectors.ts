@@ -1,4 +1,5 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
+import { MethodLevelInterface } from '../../+models';
 import {
   NAME,
   selectAll,
@@ -64,4 +65,26 @@ export const getByIds = createSelector(
 export const getById = createSelector(
   selectMethodLevelState,
   (state: State, props: { id: number }) => state.entities[props.id]
+);
+
+export const findOne = createSelector(
+  selectMethodLevelState,
+  (state: State, props: Partial<MethodLevelInterface>) => {
+    return Object.values(state.entities).find(methodLevel => {
+      return Object.keys(props).every(
+        prop => !props[prop] || methodLevel[prop] === props[prop]
+      );
+    });
+  }
+);
+
+export const findMany = createSelector(
+  selectMethodLevelState,
+  (state: State, props: Partial<MethodLevelInterface>) => {
+    return Object.values(state.entities).filter(methodLevel => {
+      return Object.keys(props).every(
+        prop => !props[prop] || methodLevel[prop] === props[prop]
+      );
+    });
+  }
 );
