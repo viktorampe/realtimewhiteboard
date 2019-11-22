@@ -15,7 +15,10 @@ import {
   FavoriteTypesEnum
 } from '@campus/dal';
 import { ResultItemBase } from '@campus/search';
-import { EduContentSearchResultInterface } from '@campus/shared';
+import {
+  EduContentSearchResultInterface,
+  EduContentTypeEnum
+} from '@campus/shared';
 import { Observable } from 'rxjs';
 import {
   EduContentSearchResultItemServiceInterface,
@@ -83,7 +86,7 @@ export class EduContentSearchResultComponent extends ResultItemBase
     const favorite: FavoriteInterface = {
       name: this.data.eduContent.name,
       type:
-        this.data.eduContent.type === 'boek-e'
+        this.data.eduContent.type === EduContentTypeEnum.BOEKE
           ? FavoriteTypesEnum.BOEKE
           : FavoriteTypesEnum.EDUCONTENT,
       eduContentId: this.data.eduContent.id,
