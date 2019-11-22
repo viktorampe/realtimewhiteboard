@@ -30,7 +30,7 @@ export class Result implements ResultInterface {
       if (this.score === 100) {
         return 3;
       }
-      if (this.score >= 70) {
+      if (this.score >= 75) {
         return 2;
       }
       if (this.score >= 50) {
