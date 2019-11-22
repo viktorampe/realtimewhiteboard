@@ -2,7 +2,7 @@ import { createFeatureSelector, createSelector } from '@ngrx/store';
 import {
   EduContent,
   EduContentInterface,
-  EDU_CONTENT_TYPE
+  EduContentTypeEnum
 } from '../../+models';
 import {
   NAME,
@@ -85,7 +85,7 @@ export const getBoekeByBookId = createSelector(
           eduContent.publishedEduContentMetadata &&
           eduContent.publishedEduContentMetadata.eduContentBookId ===
             props.bookId &&
-          eduContent.type === EDU_CONTENT_TYPE.BOEKE
+          eduContent.type === EduContentTypeEnum.BOEKE
       )
     );
   }

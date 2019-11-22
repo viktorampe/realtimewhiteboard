@@ -11,7 +11,7 @@ import {
   createHistoryFromEduContent,
   EduContentBookInterface,
   EduContentTOCInterface,
-  EDU_CONTENT_TYPE,
+  EduContentTypeEnum,
   FavoriteInterface,
   FavoriteTypesEnum
 } from '@campus/dal';
@@ -84,7 +84,7 @@ export class EduContentSearchResultComponent extends ResultItemBase
     const favorite: FavoriteInterface = {
       name: this.data.eduContent.name,
       type:
-        this.data.eduContent.type === EDU_CONTENT_TYPE.BOEKE
+        this.data.eduContent.type === EduContentTypeEnum.BOEKE
           ? FavoriteTypesEnum.BOEKE
           : FavoriteTypesEnum.EDUCONTENT,
       eduContentId: this.data.eduContent.id,

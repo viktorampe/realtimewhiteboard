@@ -8,7 +8,7 @@ import {
   DalState,
   EduContent,
   EduContentQueries,
-  EDU_CONTENT_TYPE,
+  EduContentTypeEnum,
   EffectFeedbackActions,
   EffectFeedbackInterface,
   EffectFeedbackQueries,
@@ -326,7 +326,7 @@ export class QuickLinkViewModel {
       case FavoriteTypesEnum.EDUCONTENT:
       case 'educontent':
         const eduContent = quickLink.eduContent as EduContent;
-        if (eduContent.type === EDU_CONTENT_TYPE.EXERCISE) {
+        if (eduContent.type === EduContentTypeEnum.EXERCISE) {
           return quickLinkActionDictionary.openEduContentAsExercise;
         } else if (eduContent.streamable) {
           return quickLinkActionDictionary.openEduContentAsStream;
@@ -352,7 +352,7 @@ export class QuickLinkViewModel {
       case FavoriteTypesEnum.EDUCONTENT:
       case 'educontent':
         const eduContent = quickLink.eduContent as EduContent;
-        if (eduContent.type === EDU_CONTENT_TYPE.EXERCISE) {
+        if (eduContent.type === EduContentTypeEnum.EXERCISE) {
           return [quickLinkActionDictionary.openEduContentAsSolution];
         } else if (eduContent.streamable) {
           return [quickLinkActionDictionary.openEduContentAsDownload];

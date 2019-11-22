@@ -1,5 +1,5 @@
 import { forwardRef, Inject, Injectable } from '@angular/core';
-import { EduContent, EDU_CONTENT_TYPE } from '@campus/dal';
+import { EduContent, EduContentTypeEnum } from '@campus/dal';
 import {
   ContentActionInterface,
   ContentActionsServiceInterface,
@@ -74,10 +74,10 @@ export class ContentActionsService implements ContentActionsServiceInterface {
     eduContent: EduContent
   ): ContentActionInterface[] {
     switch (eduContent.type) {
-      case EDU_CONTENT_TYPE.BOEKE:
+      case EduContentTypeEnum.BOEKE:
         return [this.contentActionDictionary.openBoeke];
 
-      case EDU_CONTENT_TYPE.EXERCISE:
+      case EduContentTypeEnum.EXERCISE:
         return [
           this.contentActionDictionary.openEduContentAsExercise,
           this.contentActionDictionary.openEduContentAsSolution
