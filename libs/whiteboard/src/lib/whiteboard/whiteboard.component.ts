@@ -16,7 +16,7 @@ export class WhiteboardComponent implements OnInit {
   }
 
   onDblClick(event) {
-    if (event.target.className == 'whiteboard-page__workspace') {
+    if (event.target.className === 'whiteboard-page__workspace') {
       this.cards.push('item');
     }
   }
