@@ -175,6 +175,43 @@ describe('Result Selectors', () => {
       });
     });
   });
+
+  describe('getBestResultByEduContentId', () => {
+    const mockResults = [
+      new ResultFixture({ id: 1, eduContentId: 10, score: 100 }),
+      new ResultFixture({ id: 2, eduContentId: 10, score: 50 }),
+      new ResultFixture({ id: 3, eduContentId: 12, score: 30 }),
+      new ResultFixture({ id: 4, eduContentId: 10, score: 0 }),
+      new ResultFixture({ id: 5, eduContentId: 10, score: undefined }),
+      new ResultFixture({ id: 6, eduContentId: 11, score: undefined }),
+      new ResultFixture({ id: 7, eduContentId: 11, score: 0 }),
+      new ResultFixture({ id: 8, eduContentId: 12, score: undefined }),
+      new ResultFixture({ id: 9, eduContentId: 11, score: 50 }),
+      new ResultFixture({ id: 10, eduContentId: 12, score: 95 }),
+      new ResultFixture({ id: 11, eduContentId: 11, score: 100 }),
+      new ResultFixture({ id: 12, eduContentId: 12, score: 0 }),
+      new ResultFixture({ id: 13, eduContentId: 11, score: 100 }),
+      new ResultFixture({ id: 14, eduContentId: 13, score: undefined }),
+      new ResultFixture({ id: 15, eduContentId: 13, score: 0 }),
+      new ResultFixture({ id: 16, eduContentId: 14, score: undefined })
+    ];
+
+    beforeEach(() => {
+      resultState = createState(mockResults, true, 'no error');
+      storeState = { results: resultState };
+    });
+
+    it('should return the best results per eduContentId', () => {
+      const result = ResultQueries.getBestResultByEduContentId(storeState);
+      expect(result).toEqual({
+        10: mockResults[0],
+        11: mockResults[10],
+        12: mockResults[9],
+        13: mockResults[14],
+        14: mockResults[15]
+      });
+    });
+  });
 });
 
 function getMockTaskResults(): ResultInterface[] {

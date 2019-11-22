@@ -124,3 +124,29 @@ export const getResultsGroupedByArea = createSelector(
     return groupArrayByKey(Object.values(state.entities), 'learningAreaId');
   }
 );
+
+export const getBestResultByEduContentId = createSelector(
+  selectResultState,
+  (state: State) => {
+    const ids: number[] = <number[]>state.ids;
+
+    return ids.reduce((acc, id): {
+      [eduContentId: number]: ResultInterface;
+    } => {
+      const result = state.entities[id];
+      const eduContentId = result.eduContentId;
+
+      if (
+        !acc[eduContentId] ||
+        // treat 0 as a better value than undefined
+        (Number.isInteger(acc[eduContentId].score)
+          ? acc[eduContentId].score
+          : -1) < (Number.isInteger(result.score) ? result.score : -1)
+      ) {
+        acc[eduContentId] = result;
+      }
+
+      return acc;
+    }, {});
+  }
+);
