@@ -1,8 +1,5 @@
 import { EduContentTocEduContentActions } from '.';
-import {
-  EduContentTOCEduContentInterface,
-  EduContentTypeEnum
-} from '../../+models';
+import { EduContentTOCEduContentInterface } from '../../+models';
 import {
   initialState,
   reducer,
@@ -18,7 +15,7 @@ function createEduContentTocEduContent(
   id: string,
   eduContentTOCId: number,
   eduContentId: number,
-  type: EduContentTypeEnum = EduContentTypeEnum.EXERCISE
+  type: string = 'exercise'
 ): EduContentTOCEduContentInterface | any {
   return {
     id,
@@ -71,7 +68,7 @@ describe('EduContentTocEduContents Reducer', () => {
       createEduContentTocEduContent('1-1', 1, 1),
       createEduContentTocEduContent('1-2', 1, 2),
       createEduContentTocEduContent('1-3', 1, 3),
-      createEduContentTocEduContent('2-3', 2, 3, EduContentTypeEnum.FILE)
+      createEduContentTocEduContent('2-3', 2, 3, 'file')
     ];
   });
 
