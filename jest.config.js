@@ -1,7 +1,5 @@
 module.exports = {
-  testMatch: [
-    '**/apps/polpo-classroom-web/src/app/components/searchresults/edu-content-search-result.component.spec.ts'
-  ],
+  testMatch: ['**/+(*.)+(spec|test).+(ts|js)?(x)'],
   transform: {
     '^.+\\.(ts|js|html)$': 'ts-jest'
   },

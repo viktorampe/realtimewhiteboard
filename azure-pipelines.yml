@@ -60,12 +60,12 @@ steps:
     inputs:
       command: ci
       customEndpoint: diekeure-registry
-  # - script: |
-  #     npm run lint
-  #   displayName: 'Lint all'
-  # - script: |
-  #     npm run format:check
-  #   displayName: 'Format check'
+  - script: |
+      npm run lint
+    displayName: 'Lint all'
+  - script: |
+      npm run format:check
+    displayName: 'Format check'
   - script: npm run test
     displayName: 'Test all'
   - script: |

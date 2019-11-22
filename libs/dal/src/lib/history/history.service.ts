@@ -13,12 +13,10 @@ export class HistoryService implements HistoryServiceInterface {
 
   getAllForUser(userId: number): Observable<HistoryInterface[]> {
     return this.personApi.getHistory(userId).pipe(
-      map(
-        (history): HistoryInterface[] => {
-          history.forEach(item => (item.created = new Date(item.created)));
-          return history;
-        }
-      )
+      map(history => {
+        history.forEach(item => (item.created = new Date(item.created)));
+        return history;
+      })
     );
   }
 
