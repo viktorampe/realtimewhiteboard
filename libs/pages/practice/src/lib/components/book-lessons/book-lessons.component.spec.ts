@@ -1,5 +1,11 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatCardModule, MatIconRegistry } from '@angular/material';
+import {
+  ComponentFixture,
+  fakeAsync,
+  TestBed,
+  tick
+} from '@angular/core/testing';
+import { MatCardModule, MatIconRegistry, MatListItem } from '@angular/material';
+import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -51,7 +57,7 @@ describe('BookLessonsComponent', () => {
 
   beforeEach(() => {
     practiceViewModel = TestBed.get(PracticeViewModel);
-    practiceViewModel.currentPracticeParams$.next({ book: 1, chapter: 2 });
+    practiceViewModel.currentPracticeParams$.next({ book: 1, chapter: 1 });
     router = TestBed.get(Router);
     fixture = TestBed.createComponent(BookLessonsComponent);
     component = fixture.componentInstance;
@@ -60,5 +66,32 @@ describe('BookLessonsComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should show the chapter links', () => {
+    const navDE = fixture.debugElement.query(By.css('div[aside]'));
+    const chapters = navDE.queryAll(By.directive(MatListItem));
+    expect(chapters.length).toBe(5); // one chapter, 4 lessons
+  });
+
+  describe('click handlers', () => {
+    it('should navigate to the bookChapter when clickToBookChapter is called', fakeAsync(() => {
+      component.clickToBookChapter(1);
+      tick();
+
+      expect(router.navigate).toHaveBeenCalledWith(['/practice', 1]);
+    }));
+
+    it('should navigate to the lesson when openToc is called with lessonId', fakeAsync(() => {
+      component.clickOpenToc(1, 2, 3);
+      tick();
+      expect(router.navigate).toHaveBeenCalledWith(['/practice', 1, 2, 3]);
+    }));
+
+    it('should navigate to the chapter when openToc is called without lessonId', fakeAsync(() => {
+      component.clickOpenToc(1, 2);
+      tick();
+      expect(router.navigate).toHaveBeenCalledWith(['/practice', 1, 2]);
+    }));
   });
 });

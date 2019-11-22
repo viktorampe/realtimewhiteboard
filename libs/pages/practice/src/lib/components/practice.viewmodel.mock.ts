@@ -29,6 +29,13 @@ export class MockPracticeViewModel
     {}
   );
   public bookTitle$ = new BehaviorSubject<string>('Katapult 1');
+  public currentChapter$ = new BehaviorSubject<EduContentTOCInterface>(
+    this.getBookChapters()[0]
+  );
+  public chapterLessons$ = new BehaviorSubject<EduContentTOCInterface[]>(
+    this.getLessons()
+  );
+
   public bookChapters$ = new BehaviorSubject<EduContentTOCInterface[]>(
     this.getBookChapters()
   );
@@ -164,9 +171,51 @@ export class MockPracticeViewModel
 
   private getBookChapters() {
     return [
-      new EduContentTOCFixture({ id: 1, title: 'Hoofdstuk 1' }),
-      new EduContentTOCFixture({ id: 2, title: 'Hoofdstuk 2' }),
+      new EduContentTOCFixture({
+        id: 1,
+        title: 'Hoofdstuk 1',
+        lft: 1,
+        rgt: 10
+      }),
+      new EduContentTOCFixture({ id: 6, title: 'Hoofdstuk 2' }),
       new EduContentTOCFixture({ id: 3, title: 'Hoofdstuk 3' })
+    ];
+  }
+
+  private getLessons() {
+    return [
+      new EduContentTOCFixture({
+        id: 2,
+        title: 'Les 1',
+        lft: 2,
+        rgt: 9,
+        treeId: 1,
+        depth: 1
+      }),
+      new EduContentTOCFixture({
+        id: 3,
+        title: 'Les 2',
+        lft: 3,
+        rgt: 8,
+        treeId: 1,
+        depth: 1
+      }),
+      new EduContentTOCFixture({
+        id: 4,
+        title: 'Les 3',
+        lft: 4,
+        rgt: 7,
+        treeId: 1,
+        depth: 1
+      }),
+      new EduContentTOCFixture({
+        id: 5,
+        title: 'Les 4',
+        lft: 5,
+        rgt: 6,
+        treeId: 1,
+        depth: 1
+      })
     ];
   }
 }
