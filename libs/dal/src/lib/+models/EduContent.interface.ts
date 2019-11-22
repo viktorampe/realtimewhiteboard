@@ -8,14 +8,14 @@ import { UnlockedBoekeGroupInterface } from './UnlockedBoekeGroup.interface';
 import { UnlockedBoekeStudentInterface } from './UnlockedBoekeStudent.interface';
 import { UnlockedContentInterface } from './UnlockedContent.interface';
 
-export const enum EduContentTypeEnum {
-  BOEKE = 'boek-e',
-  LINK = 'link',
-  EXERCISE = 'exercise',
-  FILE = 'file',
-  PAPER_EXERCISE = 'paper-exercise',
-  WEB_APP = 'web-app',
-  TIMELINE = 'timeline'
+export class EduContentTypeEnum {
+  static BOEKE = 'boek-e';
+  static LINK = 'link';
+  static EXERCISE = 'exercise';
+  static FILE = 'file';
+  static PAPER_EXERCISE = 'paper-exercise';
+  static WEB_APP = 'web-app';
+  static TIMELINE = 'timeline';
 }
 
 export interface EduContentInterface {
