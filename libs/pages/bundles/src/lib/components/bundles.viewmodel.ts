@@ -13,7 +13,6 @@ import {
   DalState,
   EduContent,
   EduContentQueries,
-  EduContentTypeEnum,
   HistoryActions,
   LearningAreaInterface,
   LearningAreaQueries,
@@ -33,6 +32,7 @@ import {
   UserContentQueries
 } from '@campus/dal';
 import {
+  EduContentTypeEnum,
   OpenStaticContentServiceInterface,
   OPEN_STATIC_CONTENT_SERVICE_TOKEN,
   PermissionServiceInterface,

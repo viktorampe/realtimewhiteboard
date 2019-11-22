@@ -8,18 +8,8 @@ import { UnlockedBoekeGroupInterface } from './UnlockedBoekeGroup.interface';
 import { UnlockedBoekeStudentInterface } from './UnlockedBoekeStudent.interface';
 import { UnlockedContentInterface } from './UnlockedContent.interface';
 
-export class EduContentTypeEnum {
-  static BOEKE = 'boek-e';
-  static LINK = 'link';
-  static EXERCISE = 'exercise';
-  static FILE = 'file';
-  static PAPER_EXERCISE = 'paper-exercise';
-  static WEB_APP = 'web-app';
-  static TIMELINE = 'timeline';
-}
-
 export interface EduContentInterface {
-  type: EduContentTypeEnum | string;
+  type: string;
   id?: number;
   publishedEduContentMetadataId?: number;
   productContents?: ProductContentInterface[];

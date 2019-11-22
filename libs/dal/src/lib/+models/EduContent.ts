@@ -1,9 +1,6 @@
 import { ContentInterface } from './Content.interface';
 import { DiaboloPhaseInterface } from './DiaboloPhase.interface';
-import {
-  EduContentInterface,
-  EduContentTypeEnum
-} from './EduContent.interface';
+import { EduContentInterface } from './EduContent.interface';
 import { EduContentMetadataInterface } from './EduContentMetadata.interface';
 import { EduContentNoteInterface } from './EduContentNote.interface';
 import { FavoriteInterface } from './Favorite.interface';
@@ -17,7 +14,7 @@ import { UnlockedContentInterface } from './UnlockedContent.interface';
 export class EduContent implements EduContentInterface, ContentInterface {
   contentType: string;
   id?: number;
-  type: EduContentTypeEnum | string;
+  type: string;
   publishedEduContentMetadataId?: number;
   productContents?: ProductContentInterface[];
   unlockedContents?: UnlockedContentInterface[];

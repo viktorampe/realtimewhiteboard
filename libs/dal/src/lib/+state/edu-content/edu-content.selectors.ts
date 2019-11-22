@@ -1,9 +1,5 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import {
-  EduContent,
-  EduContentInterface,
-  EduContentTypeEnum
-} from '../../+models';
+import { EduContent, EduContentInterface } from '../../+models';
 import {
   NAME,
   selectAll,
@@ -85,7 +81,7 @@ export const getBoekeByBookId = createSelector(
           eduContent.publishedEduContentMetadata &&
           eduContent.publishedEduContentMetadata.eduContentBookId ===
             props.bookId &&
-          eduContent.type === EduContentTypeEnum.BOEKE
+          eduContent.type === 'boek-e'
       )
     );
   }

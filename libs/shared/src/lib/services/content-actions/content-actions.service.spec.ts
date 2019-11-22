@@ -1,6 +1,7 @@
 import { inject, TestBed } from '@angular/core/testing';
-import { EduContentFixture, EduContentTypeEnum } from '@campus/dal';
+import { EduContentFixture } from '@campus/dal';
 import { configureTestSuite } from 'ng-bullet';
+import { EduContentTypeEnum } from '../../enums';
 import { ContentActionsService } from './content-actions.service';
 import {
   ContentActionsServiceInterface,

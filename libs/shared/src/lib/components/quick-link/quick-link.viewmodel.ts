@@ -8,7 +8,6 @@ import {
   DalState,
   EduContent,
   EduContentQueries,
-  EduContentTypeEnum,
   EffectFeedbackActions,
   EffectFeedbackInterface,
   EffectFeedbackQueries,
@@ -28,6 +27,7 @@ import { Update } from '@ngrx/entity';
 import { Action, select, Store } from '@ngrx/store';
 import { combineLatest, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { EduContentTypeEnum } from '../../enums';
 import {
   EnvironmentFavoritesFeatureInterface,
   ENVIRONMENT_FAVORITES_FEATURE_TOKEN

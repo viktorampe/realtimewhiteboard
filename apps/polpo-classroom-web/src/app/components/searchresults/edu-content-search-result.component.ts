@@ -11,12 +11,14 @@ import {
   createHistoryFromEduContent,
   EduContentBookInterface,
   EduContentTOCInterface,
-  EduContentTypeEnum,
   FavoriteInterface,
   FavoriteTypesEnum
 } from '@campus/dal';
 import { ResultItemBase } from '@campus/search';
-import { EduContentSearchResultInterface } from '@campus/shared';
+import {
+  EduContentSearchResultInterface,
+  EduContentTypeEnum
+} from '@campus/shared';
 import { Observable } from 'rxjs';
 import {
   EduContentSearchResultItemServiceInterface,

@@ -1,10 +1,7 @@
 import { BundleInterface } from './Bundle.interface';
 import { ContentInterface } from './Content.interface';
 import { EduContent } from './EduContent';
-import {
-  EduContentInterface,
-  EduContentTypeEnum
-} from './EduContent.interface';
+import { EduContentInterface } from './EduContent.interface';
 import { HistoryInterface } from './History.interface';
 import { TaskInterface } from './Task.interface';
 
@@ -25,7 +22,7 @@ export function createHistoryFromEduContent(
       ? eduContent.publishedEduContentMetadata.title
       : '',
     type:
-      eduContent.type === EduContentTypeEnum.BOEKE
+      eduContent.type === 'boek-e'
         ? HistoryTypesEnum.BOEKE
         : HistoryTypesEnum.EDUCONTENT,
     eduContentId: eduContent.id,
