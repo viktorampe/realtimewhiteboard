@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import {
   DalState,
   EduContentTOCInterface,
@@ -8,7 +8,7 @@ import {
 } from '@campus/dal';
 import { RouterReducerState } from '@ngrx/router-store';
 import { select, Store } from '@ngrx/store';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, shareReplay } from 'rxjs/operators';
 import { PracticeViewModel } from '../practice.viewmodel';
 
@@ -24,6 +24,7 @@ export interface CurrentBookLessonsParams {
   styleUrls: ['./book-lessons.component.scss']
 })
 export class BookLessonsComponent {
+  public currentChapter$: Observable<EduContentTOCInterface>;
   public tocsForToc$: Observable<EduContentTOCInterface[]>;
   public currentBookLessonsParams$: Observable<CurrentBookLessonsParams>;
 
@@ -33,13 +34,16 @@ export class BookLessonsComponent {
   constructor(
     private store: Store<DalState>,
     private viewModel: PracticeViewModel,
-    private route: ActivatedRoute
+    private router: Router
   ) {
     this.initialize();
   }
 
   clickOpenToc(id: number) {
-    alert(id);
+    console.log(`selected toc ${id}`);
+  }
+  clickToBookChapter(bookId: number) {
+    this.router.navigate(['/practice', bookId]);
   }
 
   private initialize() {
@@ -47,15 +51,8 @@ export class BookLessonsComponent {
   }
 
   private setSourceStreams() {
-    //TODO: this.tocsForToc$ = this.viewModel.chapterLessons$.pipe(
-
-    this.tocsForToc$ = of([
-      { title: 'Hoofdstuk 1', id: 1, treeId: 1, lft: 1, rgt: 8, depth: 0 },
-      { title: 'Les 1', id: 2, treeId: 1, lft: 2, rgt: 7, depth: 1 },
-      { title: 'Les 2', id: 3, treeId: 1, lft: 3, rgt: 6, depth: 1 },
-      { title: 'Les 3', id: 4, treeId: 1, lft: 4, rgt: 5, depth: 1 }
-    ]);
-
+    this.currentChapter$ = this.viewModel.currentChapter$;
+    this.tocsForToc$ = this.viewModel.chapterLessons$;
     this.routerState$ = this.store.pipe(select(getRouterState));
     this.currentBookLessonsParams$ = this.getCurrentBookLessonsParams();
   }

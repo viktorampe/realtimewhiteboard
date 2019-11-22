@@ -28,8 +28,7 @@ import {
   mapTo,
   shareReplay,
   switchMap,
-  take,
-  tap
+  take
 } from 'rxjs/operators';
 import {
   getUnlockedBooks,
@@ -50,6 +49,7 @@ export class PracticeViewModel {
   public currentPracticeParams$: Observable<CurrentPracticeParams>;
   public bookTitle$: Observable<string>;
   public bookChapters$: Observable<EduContentTOCInterface[]>;
+  public currentChapter$: Observable<EduContentTOCInterface>;
   public chapterLessons$: Observable<EduContentTOCInterface[]>;
   public filteredClassGroups$: Observable<ClassGroupInterface[]>;
   public methodYears$: Observable<MethodYearsInterface[]>;
@@ -93,6 +93,7 @@ export class PracticeViewModel {
   private setPresentationStreams() {
     this.bookTitle$ = this.getBookTitleStream();
     this.bookChapters$ = this.getBookChaptersStream();
+    this.currentChapter$ = this.getCurrentBookChapterStream();
     this.chapterLessons$ = this.getChapterLessonStream();
     this.filteredClassGroups$ = this.getFilteredClassGroupsStream();
     this.methodYears$ = this.store.pipe(
@@ -177,9 +178,31 @@ export class PracticeViewModel {
     return merge(chaptersStreamWhenNoBookId$, chaptersStreamWhenBookId$);
   }
 
+  private getCurrentBookChapterStream(): Observable<EduContentTOCInterface> {
+    const currentChapterStreamWhenNoChapterId$ = this.currentPracticeParams$.pipe(
+      filter(params => !params.chapter),
+      mapTo(null)
+    );
+
+    const currentChapterStreamWhenChapterId$ = this.currentPracticeParams$.pipe(
+      filter(params => !!params.chapter),
+      switchMap(params => {
+        return this.store.pipe(
+          select(EduContentTocQueries.getById, {
+            id: params.chapter
+          })
+        );
+      })
+    );
+
+    return merge(
+      currentChapterStreamWhenNoChapterId$,
+      currentChapterStreamWhenChapterId$
+    );
+  }
+
   private getChapterLessonStream(): Observable<EduContentTOCInterface[]> {
     const lessonsStreamWhenNoChapterId$ = this.currentPracticeParams$.pipe(
-      tap(console.log),
       filter(params => !params.chapter),
       mapTo([])
     );

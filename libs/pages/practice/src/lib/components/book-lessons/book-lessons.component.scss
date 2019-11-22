@@ -1,4 +1,14 @@
-.book-lessons {
-  &__container {
+.practice-book-lessons {
+  &__list-header {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  &__lesson-link {
+    &__title {
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+    }
   }
 }

@@ -5,8 +5,25 @@
     <div aside>
       <mat-nav-list *ngIf="(currentBookLessonsParams$ | async) as params">
         <div class="practice-book-lessons__list-header" matSubheader>
-          <campus-button class="" [iconClass]="'arrow-back'"></campus-button>
+          <campus-button
+            class="practice-book-lessons__back-link "
+            [iconClass]="'arrow-back'"
+            (click)="clickToBookChapter(params.book)"
+          ></campus-button>
         </div>
+
+        <mat-list-item
+          *ngIf="(currentChapter$ | async) as chapter"
+          data-cy="chapter-item"
+          class="practice-book-lessons__lesson-link practice-book-lessons__lesson-link--selected"
+          [ngClass]="
+            'practice-book-lessons__lesson-link--depth-' + chapter.depth
+          "
+        >
+          <span class="practice-book-lessons__lesson-link__title">{{
+            chapter.title
+          }}</span>
+        </mat-list-item>
 
         <mat-list-item
           data-cy="lesson-link"
