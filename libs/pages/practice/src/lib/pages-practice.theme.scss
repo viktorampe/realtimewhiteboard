@@ -1,0 +1,16 @@
+@import './components/practice-book-chapters/practice-book-chapters.component.theme.scss';
+@import './components/manage-practice-method-detail/manage-practice-method-detail.component.theme';
+
+// color palette
+$pages-practice-text-color--primary: black !default;
+$pages-practice-text-color--primary--accent: darkred !default;
+$pages-practice-background-color--primary: white !default;
+$pages-practice-border-color--primary: lightgrey !default;
+
+$pages-practice-text-color--secondary: darkgray !default;
+$pages-practice-background-color--secondary: whitesmoke !default;
+
+@mixin pages-practice-theme() {
+  @include pages-manage-practice-method-detail();
+  @include pages-practice-book-chapters();
+}
