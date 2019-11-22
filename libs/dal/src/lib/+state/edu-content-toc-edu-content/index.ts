@@ -3,4 +3,9 @@ import { EduContentTocEduContentEffects } from './edu-content-toc-edu-content.ef
 import * as EduContentTocEduContentReducer from './edu-content-toc-edu-content.reducer';
 import * as EduContentTocEduContentQueries from './edu-content-toc-edu-content.selectors';
 
-export { EduContentTocEduContentActions, EduContentTocEduContentReducer, EduContentTocEduContentQueries, EduContentTocEduContentEffects };
+export {
+  EduContentTocEduContentActions,
+  EduContentTocEduContentReducer,
+  EduContentTocEduContentQueries,
+  EduContentTocEduContentEffects
+};
