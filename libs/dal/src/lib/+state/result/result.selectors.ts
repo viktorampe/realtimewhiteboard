@@ -136,12 +136,13 @@ export const getBestResultByEduContentId = createSelector(
       const result = state.entities[id];
       const eduContentId = result.eduContentId;
 
+      // treat 0 as a better value than undefined
+      const asInteger = (score?: number) =>
+        Number.isInteger(score) ? score : -1;
+
       if (
         !acc[eduContentId] ||
-        // treat 0 as a better value than undefined
-        (Number.isInteger(acc[eduContentId].score)
-          ? acc[eduContentId].score
-          : -1) < (Number.isInteger(result.score) ? result.score : -1)
+        asInteger(acc[eduContentId].score) < asInteger(result.score)
       ) {
         acc[eduContentId] = result;
       }
