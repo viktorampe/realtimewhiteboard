@@ -1,5 +1,6 @@
 import { forwardRef, Inject, Injectable } from '@angular/core';
-import { EduContent, EduContentTypeEnum } from '@campus/dal';
+import { EduContent } from '@campus/dal';
+import { EduContentTypeEnum } from '../../enums';
 import {
   ContentActionInterface,
   ContentActionsServiceInterface,

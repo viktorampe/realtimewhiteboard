@@ -5,6 +5,7 @@ export class EduContentTOCEduContentFixture
   id = '1-1';
   eduContentId = 1;
   eduContentTOCId = 1;
+  type = 'exercise';
 
   constructor(props: Partial<EduContentTOCEduContentInterface> = {}) {
     // overwrite defaults

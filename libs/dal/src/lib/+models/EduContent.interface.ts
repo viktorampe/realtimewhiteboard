@@ -8,16 +8,8 @@ import { UnlockedBoekeGroupInterface } from './UnlockedBoekeGroup.interface';
 import { UnlockedBoekeStudentInterface } from './UnlockedBoekeStudent.interface';
 import { UnlockedContentInterface } from './UnlockedContent.interface';
 
-export enum EduContentTypeEnum {
-  BOEKE = 'boek-e',
-  LINK = 'link',
-  EXERCISE = 'exercise',
-  FILE = 'file',
-  PAPER_EXERCISE = 'paper exercise'
-}
-
 export interface EduContentInterface {
-  type: EduContentTypeEnum;
+  type: string;
   id?: number;
   publishedEduContentMetadataId?: number;
   productContents?: ProductContentInterface[];

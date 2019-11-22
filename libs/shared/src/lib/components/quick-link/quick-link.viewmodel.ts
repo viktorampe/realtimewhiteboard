@@ -27,6 +27,7 @@ import { Update } from '@ngrx/entity';
 import { Action, select, Store } from '@ngrx/store';
 import { combineLatest, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { EduContentTypeEnum } from '../../enums';
 import {
   EnvironmentFavoritesFeatureInterface,
   ENVIRONMENT_FAVORITES_FEATURE_TOKEN
@@ -325,7 +326,7 @@ export class QuickLinkViewModel {
       case FavoriteTypesEnum.EDUCONTENT:
       case 'educontent':
         const eduContent = quickLink.eduContent as EduContent;
-        if (eduContent.type === 'exercise') {
+        if (eduContent.type === EduContentTypeEnum.EXERCISE) {
           return quickLinkActionDictionary.openEduContentAsExercise;
         } else if (eduContent.streamable) {
           return quickLinkActionDictionary.openEduContentAsStream;
@@ -351,7 +352,7 @@ export class QuickLinkViewModel {
       case FavoriteTypesEnum.EDUCONTENT:
       case 'educontent':
         const eduContent = quickLink.eduContent as EduContent;
-        if (eduContent.type === 'exercise') {
+        if (eduContent.type === EduContentTypeEnum.EXERCISE) {
           return [quickLinkActionDictionary.openEduContentAsSolution];
         } else if (eduContent.streamable) {
           return [quickLinkActionDictionary.openEduContentAsDownload];
