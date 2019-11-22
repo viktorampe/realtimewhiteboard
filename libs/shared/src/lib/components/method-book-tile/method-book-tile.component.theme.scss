@@ -63,15 +63,9 @@
       background-color: $shared-method-book-tile_container-background-color;
       color: $shared-method-book-tile_title-text-color;
       width: $shared-method-book-tile-width;
-    }
-
-    &__subtitle {
-      font-size: $shared-method-book-tile_subtitle-font-size;
-      padding: $shared-method-book-tile_title-padding-horizontal
-        $shared-method-book-tile_title-padding-vertical;
-      background-color: $shared-method-book-tile_container-background-color;
-      color: $shared-method-book-tile_title-text-color;
-      width: $shared-method-book-tile-width;
+      span {
+        font-size: $shared-method-book-tile_subtitle-font-size;
+      }
     }
   }
 }
