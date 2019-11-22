@@ -16,7 +16,6 @@ const routes: Routes = [
     resolve: { isResolved: ManagePracticeResolver },
     runGuardsAndResolvers: 'always',
     data: { breadcrumbText: 'Beheren' },
-    canActivate: [AllowedMethodGuard],
     children: [
       {
         path: '',
@@ -27,6 +26,7 @@ const routes: Routes = [
       {
         path: ':book',
         resolve: { isResolved: ManagePracticeMethodDetailResolver },
+        canActivate: [AllowedMethodGuard],
         data: {
           selector: MethodQueries.getMethodWithYearByBookId
         },
