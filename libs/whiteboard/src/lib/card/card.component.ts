@@ -26,11 +26,9 @@ export class CardComponent implements OnInit {
     }
   }
 
-  onTap(event) {
-    if (event.tapCount >= 2) {
-      if (event.target.className == 'card') {
-        this.toggleInput();
-      }
+  onDblClick(event) {
+    if (event.target.className == 'card') {
+      this.toggleInput();
     }
   }
 }

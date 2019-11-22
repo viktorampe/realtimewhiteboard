@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material';
-import { By } from '@angular/platform-browser';
+import { By, HAMMER_LOADER } from '@angular/platform-browser';
 import { configureTestSuite } from 'ng-bullet';
 import { CardComponent } from './card.component';
 
@@ -12,7 +12,13 @@ describe('CardComponent', () => {
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [MatCardModule, FormsModule],
-      declarations: [CardComponent]
+      declarations: [CardComponent],
+      providers: [
+        {
+          provide: HAMMER_LOADER,
+          useValue: () => new Promise(() => {})
+        }
+      ]
     });
   });
 
@@ -44,4 +50,18 @@ describe('CardComponent', () => {
     const inputContent = fixture.debugElement.query(By.css('input'));
     expect(inputContent.nativeElement.value.trim()).toBe('Test content');
   });
+
+  /*
+  it('should toggle to edit mode when double click.', <any>fakeAsync(() => {
+    component.card.isInputSelected = false;
+
+    const myCard = fixture.debugElement.query(By.css('.card'));
+    myCard.triggerEventHandler('click', new MouseEvent('click'));
+    tick(25);
+    myCard.triggerEventHandler('click', new MouseEvent('click'));
+    fixture.detectChanges();
+
+    expect(component.card.isInputSelected).toBe(true);
+  }));
+  */
 });
