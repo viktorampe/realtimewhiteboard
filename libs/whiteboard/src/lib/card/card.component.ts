@@ -25,7 +25,7 @@ export class CardComponent implements OnInit {
     this.card = {
       cardContent: null,
       color: null,
-      isInputSelected: null
+      isInputSelected: true
     };
   }
 
