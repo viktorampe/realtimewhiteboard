@@ -19,6 +19,7 @@ import { BookLessonsComponent } from './book-lessons.component';
 describe('BookLessonsComponent', () => {
   let component: BookLessonsComponent;
   let fixture: ComponentFixture<BookLessonsComponent>;
+  let practiceViewModel: MockPracticeViewModel;
   let router: Router;
 
   configureTestSuite(() => {
@@ -49,6 +50,8 @@ describe('BookLessonsComponent', () => {
   });
 
   beforeEach(() => {
+    practiceViewModel = TestBed.get(PracticeViewModel);
+    practiceViewModel.currentPracticeParams$.next({ book: 1, chapter: 2 });
     router = TestBed.get(Router);
     fixture = TestBed.createComponent(BookLessonsComponent);
     component = fixture.componentInstance;
