@@ -16,6 +16,7 @@
           *ngIf="(currentChapter$ | async) as chapter"
           data-cy="chapter-item"
           class="practice-book-lessons__lesson-link practice-book-lessons__lesson-link--selected"
+          (click)="clickOpenToc(params.book, params.chapter)"
           [ngClass]="
             'practice-book-lessons__lesson-link--depth-' + chapter.depth
           "
@@ -28,7 +29,7 @@
         <mat-list-item
           data-cy="lesson-link"
           *ngFor="let toc of (tocsForToc$ | async)"
-          (click)="clickOpenToc(toc.id)"
+          (click)="clickOpenToc(params.book, params.chapter, toc.id)"
           class="practice-book-lessons__lesson-link"
           [ngClass]="'practice-book-lessons__lesson-link--depth-' + toc.depth"
           [class.practice-book-lessons__lesson-link--selected]="

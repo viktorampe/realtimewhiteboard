@@ -39,8 +39,9 @@ export class BookLessonsComponent {
     this.initialize();
   }
 
-  clickOpenToc(id: number) {
-    console.log(`selected toc ${id}`);
+  clickOpenToc(bookId: number, chapterId: number, lessonId?: number) {
+    const dynamicParams = [bookId, chapterId, lessonId].filter(Number);
+    this.router.navigate(['/practice', ...dynamicParams]);
   }
   clickToBookChapter(bookId: number) {
     this.router.navigate(['/practice', bookId]);

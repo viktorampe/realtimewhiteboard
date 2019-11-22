@@ -60,7 +60,18 @@ const routes: Routes = [
             path: '',
             component: PracticeOverviewComponent
           },
-          { path: ':chapter', component: BookLessonsComponent }
+          {
+            path: ':chapter',
+            runGuardsAndResolvers: 'always',
+            children: [
+              { path: '', component: BookLessonsComponent },
+              {
+                path: ':lesson',
+                runGuardsAndResolvers: 'always',
+                component: BookLessonsComponent
+              }
+            ]
+          }
         ]
       }
     ]
