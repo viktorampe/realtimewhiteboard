@@ -9,19 +9,23 @@ import Card from '../../interfaces/Card';
 export class CardComponent implements OnInit {
   @ViewChild('inputContent') inputContent: ElementRef;
   card: Card;
+  maxCharacters = 300;
 
   constructor() {}
 
   ngOnInit() {
     this.card = {
       color: '',
-      cardContent: null,
+      cardContent: '',
       isInputSelected: true
     };
   }
 
   toggleInput() {
-    if (this.card.cardContent != null) {
+    if (
+      this.card.cardContent != null &&
+      this.card.cardContent.length < this.maxCharacters
+    ) {
       this.card.isInputSelected = !this.card.isInputSelected;
     }
   }

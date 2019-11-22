@@ -11,5 +11,11 @@
       type="text"
       name="card-content"
     />
+    <div
+      *ngIf="card.isInputSelected && card.cardContent.length > maxCharacters"
+      class="card__content__errorMessage"
+    >
+      Text is too long
+    </div>
   </div>
 </div>
