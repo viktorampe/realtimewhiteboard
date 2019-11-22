@@ -3,8 +3,8 @@
   $shared-method-book-tile-width: 100% !default;
 
   $shared-method-book-tile_title-background-color: $shared-bg-color-1 !default;
-  $shared-method-book-tile_title-subtitle-background-color: $shared-color-2 !default;
-  $shared-method-book-tile_title-text-color: $shared-color-3 !default;
+  $shared-method-book-tile_title-subtitle-background-color: $shared-color-1 !default;
+  $shared-method-book-tile_title-text-color: $shared-color-1 !default;
   $shared-method-book-tile_image-background-color: $shared_image-bg-color !default;
   $shared-method-book-tile_button_container_button-background-color: $shared-bg-color-1 !default;
   $shared-method-book-tile_button_container_button-focus-background-color: $shared-bg-color-1 !default;
@@ -17,10 +17,10 @@
   $shared-method-book-tile_image-height: 118px !default;
   $shared-method-book-tile_image-border-radius-left: 10px !default;
   $shared-method-book-tile_image-border-radius-right: 10px !default;
-  $shared-method-book-tile_title-font-size: 14px !default; // title-height / 2
-  $shared-method-book-tile_subtitle-font-size: 12px !default; // title-height / 2
-  $shared-method-book-tile_title-padding-horizontal: 2px !default; // title-height / 4, vertical align handled by line height
-  $shared-method-book-tile_title-padding-vertical: 8px !default;
+  $shared-method-book-tile_title-font-size: 20px !default;
+  $shared-method-book-tile_subtitle-font-size: 14px !default;
+  $shared-method-book-tile_title-padding-horizontal: 6px !default; // title-height / 4, vertical align handled by line height
+  $shared-method-book-tile_title-padding-vertical: 0px !default;
   $shared-method-book-tile_button_container-padding: 4px !default;
   $shared-method-book-tile_button_container_button-box-shadow-offset: 0 2px !default;
   $shared-method-book-tile_button_container_button-box-shadow-blur: 4px !default;
@@ -33,12 +33,17 @@
   $shared-method-book-tile_container-box-shadow-offset: 0 0 !default;
   $shared-method-book-tile_container-box-shadow-blur: 8px !default;
   $shared-method-book-tile_container-box-shadow-spread: 2px !default;
+  $shared-method-book-tile_container-background-color: $shared-color-3;
 
   .shared-method-book-tile {
     width: $shared-method-book-tile_container-width;
-    background-color: $shared-method-book-tile_title-background-color;
+    background-color: $shared-method-book-tile_container-background-color;
     color: $shared-method-book-tile_title-text-color;
     margin-right: $shared-method-book-tile-margin-right;
+    box-shadow: $shared-method-book-tile_container-box-shadow-offset
+      $shared-method-book-tile_container-box-shadow-blur
+      $shared-method-book-tile_container-box-shadow-spread
+      $shared-method-book-tile_container-box-shadow-color;
 
     &:last-child {
       margin-right: 0;
@@ -49,24 +54,22 @@
       margin-top: $shared-method-book-tile_image-margin-top;
       height: $shared-method-book-tile_image-height;
       width: $shared-method-book-tile-width;
-      border-top-left-radius: $shared-method-book-tile_image-border-radius-left;
-      border-top-right-radius: $shared-method-book-tile_image-border-radius-right;
     }
 
     &__title {
       font-size: $shared-method-book-tile_title-font-size;
       padding: $shared-method-book-tile_title-padding-horizontal
         $shared-method-book-tile_title-padding-vertical;
-      background-color: $shared-method-book-tile_title-subtitle-background-color;
+      background-color: $shared-method-book-tile_container-background-color;
       color: $shared-method-book-tile_title-text-color;
       width: $shared-method-book-tile-width;
     }
 
     &__subtitle {
-      font-size: $shared-method-book-tile_title-font-size;
+      font-size: $shared-method-book-tile_subtitle-font-size;
       padding: $shared-method-book-tile_title-padding-horizontal
         $shared-method-book-tile_title-padding-vertical;
-      background-color: $shared-method-book-tile_title-subtitle-background-color;
+      background-color: $shared-method-book-tile_container-background-color;
       color: $shared-method-book-tile_title-text-color;
       width: $shared-method-book-tile-width;
     }

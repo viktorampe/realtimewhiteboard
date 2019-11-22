@@ -10,11 +10,14 @@
 
   &__title {
     flex-direction: column;
-    text-align: right;
+    text-align: center;
+    font-weight: bold;
+    line-height: 1;
   }
 
   &__subtitle {
     flex-direction: column;
-    text-align: right;
+    text-align: center;
+    line-height: 1;
   }
 }
