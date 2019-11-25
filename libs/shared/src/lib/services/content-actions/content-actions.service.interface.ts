@@ -16,14 +16,6 @@ export interface ContentOpenerInterface {
   openBoeke(eduContent: EduContent): void;
 }
 
-export enum EduContentTypeEnum {
-  BOEKE = 'boek-e',
-  LINK = 'link',
-  EXERCISE = 'exercise',
-  FILE = 'file',
-  PAPER_EXERCISE = 'paper exercise'
-}
-
 export const CONTENT_ACTIONS_SERVICE_TOKEN = new InjectionToken(
   'ContentActionsService'
 );
