@@ -35,14 +35,14 @@ body {
 @include pages-theme();
 @import 'libs/pages/methods/src/lib/pages-methods.theme';
 @include pages-methods-theme();
+@import 'libs/pages/practice/src/lib/pages-practice.theme';
+@include pages-practice-theme();
 @import 'libs/pages/global-search/src/lib/pages-global-search.theme';
 @include pages-global-search-theme();
 @import 'libs/pages/home/src/lib/pages-home.theme';
 @include pages-home-theme();
 @import 'libs/pages/settings/pages-settings.theme';
 @include pages-settings-theme();
-@import 'libs/pages/practice/src/lib/components/manage-practice-method-detail/manage-practice-method-detail.component.theme';
-@include pages-manage-practice-method-detail();
 
 // include shared lib scss
 @import 'libs/shared/src/lib/shared-theme';

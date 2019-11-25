@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { MethodQueries } from '@campus/dal';
 import { AllowedMethodGuard } from '@campus/guards';
+import { BookLessonsComponent } from './components/book-lessons/book-lessons.component';
 import { ManagePracticeMethodDetailComponent } from './components/manage-practice-method-detail/manage-practice-method-detail.component';
 import { ManagePracticeOverviewComponent } from './components/manage-practice-overview/manage-practice-overview.component';
 import { PracticeOverviewComponent } from './components/practice-overview/practice-overview.component';
@@ -58,7 +59,28 @@ const routes: Routes = [
         resolve: { isResolved: PracticeBookChaptersResolver },
         data: {
           selector: MethodQueries.getMethodWithLearningAreaAndYearByBookId
-        }
+        },
+
+        runGuardsAndResolvers: 'always',
+
+        children: [
+          {
+            path: '',
+            component: PracticeOverviewComponent
+          },
+          {
+            path: ':chapter',
+            runGuardsAndResolvers: 'always',
+            children: [
+              { path: '', component: BookLessonsComponent },
+              {
+                path: ':lesson',
+                runGuardsAndResolvers: 'always',
+                component: BookLessonsComponent
+              }
+            ]
+          }
+        ]
       }
     ]
   }
