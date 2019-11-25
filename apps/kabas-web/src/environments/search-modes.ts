@@ -45,6 +45,17 @@ export const searchModes: EnvironmentSearchModesInterface = {
       pageSize: 20
     }
   },
+  'practice-chapter-lesson': {
+    name: 'practice-chapter-lesson',
+    label: 'Zoeken op <b>hoofdstuk</b>',
+    dynamicFilters: false,
+    searchFilterFactory: UnlockedExerciseFilterFactory, // see PR#1325
+    results: {
+      component: PracticeSearchResultComponent, // see PR#1333
+      sortModes: [],
+      pageSize: 20
+    }
+  },
   global: {
     name: 'global',
     label: 'Zoeken in alle inhoud',
