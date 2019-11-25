@@ -243,9 +243,9 @@ describe('Method Selectors', () => {
 
     describe('combined-state selectors', () => {
       const mockMethods = [
-        new MethodFixture({ id: 1, name: 'foo method' }),
-        new MethodFixture({ id: 2, name: 'bar method' }),
-        new MethodFixture({ id: 3, name: ' baz method' })
+        new MethodFixture({ id: 1, name: 'foo method', learningAreaId: 1 }),
+        new MethodFixture({ id: 2, name: 'bar method', learningAreaId: 2 }),
+        new MethodFixture({ id: 3, name: ' baz method', learningAreaId: 1 })
       ];
 
       const customMethodState = createState(mockMethods, true, [], 'no error');

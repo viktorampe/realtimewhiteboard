@@ -9,6 +9,7 @@ import { ManagePracticeMethodDetailResolver } from './resolvers/pages-manage-pra
 import { ManagePracticeOverviewResolver } from './resolvers/pages-manage-practice-overview.resolver';
 import { ManagePracticeResolver } from './resolvers/pages-manage-practice.resolver';
 import { PracticeBookChaptersResolver } from './resolvers/pages-practice-book-chapters.resolver';
+import { PracticeOverviewResolver } from './resolvers/pages-practice-overview.resolver';
 import { PracticeResolver } from './resolvers/pages-practice.resolver';
 
 const routes: Routes = [
@@ -48,7 +49,8 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        component: PracticeOverviewComponent
+        component: PracticeOverviewComponent,
+        resolve: { isResolved: PracticeOverviewResolver }
       },
       {
         path: ':book',
