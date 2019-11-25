@@ -2,13 +2,10 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { EduContentTOCInterface } from '@campus/dal';
 import { Observable } from 'rxjs';
-import { PracticeViewModel } from '../practice.viewmodel';
-
-export interface CurrentBookLessonsParams {
-  book?: number;
-  chapter?: number;
-  lesson?: number;
-}
+import {
+  CurrentPracticeParams,
+  PracticeViewModel
+} from '../practice.viewmodel';
 
 @Component({
   selector: 'campus-book-lessons',
@@ -18,7 +15,7 @@ export interface CurrentBookLessonsParams {
 export class BookLessonsComponent {
   public currentChapter$: Observable<EduContentTOCInterface>;
   public tocsForToc$: Observable<EduContentTOCInterface[]>;
-  public currentBookLessonsParams$: Observable<CurrentBookLessonsParams>;
+  public currentPracticeParams$: Observable<CurrentPracticeParams>;
 
   constructor(private viewModel: PracticeViewModel, private router: Router) {
     this.initialize();
@@ -28,13 +25,13 @@ export class BookLessonsComponent {
     const dynamicParams = [bookId, chapterId, lessonId].filter(Number);
     this.router.navigate(['/practice', ...dynamicParams]);
   }
-  clickToBookChapter(bookId: number) {
+  clickToBookChapters(bookId: number) {
     this.router.navigate(['/practice', bookId]);
   }
 
   private initialize() {
     this.currentChapter$ = this.viewModel.currentChapter$;
     this.tocsForToc$ = this.viewModel.chapterLessons$;
-    this.currentBookLessonsParams$ = this.viewModel.currentPracticeParams$;
+    this.currentPracticeParams$ = this.viewModel.currentPracticeParams$;
   }
 }

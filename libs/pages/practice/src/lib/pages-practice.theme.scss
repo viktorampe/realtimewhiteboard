@@ -2,13 +2,13 @@
 @import './components/book-lessons/book-lessons.component.theme.scss';
 
 // color palette
-$practice-practice-text-color--primary: black !default;
-$practice-practice-text-color--primary--accent: darkred !default;
-$practice-practice-background-color--primary: white !default;
-$practice-practice-border-color--primary: lightgrey !default;
+$pages-practice-text-color--primary: black !default;
+$pages-practice-text-color--primary--accent: darkred !default;
+$pages-practice-background-color--primary: white !default;
+$pages-practice-border-color--primary: lightgrey !default;
 
-$practice-practice-text-color--secondary: darkgray !default;
-$practice-practice-background-color--secondary: whitesmoke !default;
+$pages-practice-text-color--secondary: darkgray !default;
+$pages-practice-background-color--secondary: whitesmoke !default;
 
 // measurements
 $pages-practice__chapter-padding-left: 40px !default; // = breadcrumb padding left

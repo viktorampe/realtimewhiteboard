@@ -26,7 +26,6 @@ const routes: Routes = [
         component: ManagePracticeOverviewComponent
       },
       {
-        canActivate: [AllowedMethodGuard],
         path: ':book',
         resolve: { isResolved: ManagePracticeMethodDetailResolver },
         canActivate: [AllowedMethodGuard],

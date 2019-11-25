@@ -75,8 +75,8 @@ describe('BookLessonsComponent', () => {
   });
 
   describe('click handlers', () => {
-    it('should navigate to the bookChapter when clickToBookChapter is called', fakeAsync(() => {
-      component.clickToBookChapter(1);
+    it('should navigate to the bookChapter when clickToBookChapters is called', fakeAsync(() => {
+      component.clickToBookChapters(1);
       tick();
 
       expect(router.navigate).toHaveBeenCalledWith(['/practice', 1]);
