@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { MethodQueries } from '@campus/dal';
-import { AllowedMethodGuard } from '@campus/guards';
+import { AllowedMethodGuard, PermissionGuard } from '@campus/guards';
 import { ManagePracticeMethodDetailComponent } from './components/manage-practice-method-detail/manage-practice-method-detail.component';
 import { ManagePracticeOverviewComponent } from './components/manage-practice-overview/manage-practice-overview.component';
 import { PracticeOverviewComponent } from './components/practice-overview/practice-overview.component';
@@ -15,7 +15,11 @@ const routes: Routes = [
     path: 'manage',
     resolve: { isResolved: ManagePracticeResolver },
     runGuardsAndResolvers: 'always',
-    data: { breadcrumbText: 'Beheren' },
+    data: {
+      breadcrumbText: 'Beheren',
+      requiredPermissions: 'manageUnlockedFreePractices'
+    },
+    canActivate: [PermissionGuard],
     children: [
       {
         path: '',
