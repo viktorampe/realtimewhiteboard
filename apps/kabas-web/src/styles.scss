@@ -52,8 +52,11 @@ body {
 @import 'libs/search/src/lib/search-theme';
 @include search-theme();
 
-@import './app/components/searchresults/edu-content-search-result.component.theme';
+@import './app/components/searchresults/edu-content-search-result/edu-content-search-result.component.theme';
 @include app-edu-content-search-result();
+
+@import './app/components/searchresults/practice-search-result/practice-search-result.component.theme';
+@include app-practice-search-result();
 
 [ng-reflect-router-link] {
   cursor: pointer;
