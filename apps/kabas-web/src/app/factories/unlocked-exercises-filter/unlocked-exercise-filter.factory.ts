@@ -2,17 +2,11 @@ import { Injectable, InjectionToken } from '@angular/core';
 import { DalState, MethodLevelQueries } from '@campus/dal';
 import {
   ButtonToggleFilterComponent,
-  SearchFilterCriteriaInterface,
   SearchFilterFactory,
   SearchFilterInterface,
   SearchStateInterface
 } from '@campus/search';
-import {
-  MemoizedSelector,
-  MemoizedSelectorWithProps,
-  select,
-  Store
-} from '@ngrx/store';
+import { MemoizedSelectorWithProps, select, Store } from '@ngrx/store';
 import { combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { FilterQueryInterface } from '../filter-query.interface';
@@ -51,11 +45,9 @@ export class UnlockedExerciseFilterFactory implements SearchFilterFactory {
   ): Observable<SearchFilterInterface[]> {
     return combineLatest(this.createFilters(searchState)).pipe(
       map(searchFilters =>
-        searchFilters
-          .filter(f => {
-            return f.criteria.values.length > 0;
-          })
-          .sort((a, b) => this.filterSorter(a, b, this.filterSortOrder))
+        searchFilters.filter(f => {
+          return f.criteria.values.length > 0;
+        })
       )
     );
   }
@@ -87,11 +79,7 @@ export class UnlockedExerciseFilterFactory implements SearchFilterFactory {
         displayProperty: filterQuery.displayProperty || this.displayProperty,
         values: entities.map(entity => ({
           data: entity,
-          visible: true,
-          child: (entity as any).children
-            ? this.getFilter((entity as any).children, filterQuery, searchState)
-                .criteria
-            : undefined
+          visible: true
         }))
       },
       component: filterQuery.component || this.component,
@@ -101,48 +89,20 @@ export class UnlockedExerciseFilterFactory implements SearchFilterFactory {
     return searchFilter;
   }
 
-  private filterSorter(
-    a: SearchFilterInterface,
-    b: SearchFilterInterface,
-    order: string[]
-  ): number {
-    let aIndex = order.indexOf(
-      (a.criteria as SearchFilterCriteriaInterface).name
-    );
-    aIndex = aIndex === -1 ? order.length : aIndex; // not found -> add at end
-
-    let bIndex = order.indexOf(
-      (b.criteria as SearchFilterCriteriaInterface).name
-    );
-    bIndex = bIndex === -1 ? order.length : bIndex; // not found -> add at end
-
-    return aIndex - bIndex;
-  }
-
   protected buildFilter(
     name: string,
     searchState: SearchStateInterface
   ): Observable<SearchFilterInterface> {
     const filterQuery = this.filterQueries[name];
-    if (filterQuery.methodDependent) {
-      return this.store.pipe(
-        select(
-          filterQuery.query as MemoizedSelectorWithProps<Object, any, any>,
-          { methodIds: searchState.filterCriteriaSelections.get('method') }
-        ),
-        // TODO -> waiting for selector
-        // map((dict: { [id: string]: MethodLevelInterface }) =>
-        //   this.getFilter(Object.values(dict), filterQuery, searchState)
-        // )
-        map(entities => this.getFilter(entities, filterQuery, searchState))
-      );
-    } else {
-      return this.store.pipe(
-        select(filterQuery.query as MemoizedSelector<Object, any[]>),
-        map(entities => {
-          return this.getFilter(entities, filterQuery, searchState);
-        })
-      );
-    }
+    return this.store.pipe(
+      select(filterQuery.query as MemoizedSelectorWithProps<Object, any, any>, {
+        methodIds: searchState.filterCriteriaSelections.get('method')
+      }),
+      // TODO -> waiting for selector
+      // map((dict: { [id: string]: MethodLevelInterface }) =>
+      //   this.getFilter(Object.values(dict), filterQuery, searchState)
+      // )
+      map(entities => this.getFilter(entities, filterQuery, searchState))
+    );
   }
 }
