@@ -299,7 +299,7 @@ describe('PracticeViewModel', () => {
     });
   }
 
-  fdescribe('open eduContent', () => {
+  describe('open eduContent', () => {
     it('should open a boek-e', () => {
       const eduContent = new EduContentFixture({
         id: 4
