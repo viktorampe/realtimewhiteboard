@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { MethodQueries } from '@campus/dal';
 import { AllowedMethodGuard } from '@campus/guards';
+import { BookLessonsComponent } from './components/book-lessons/book-lessons.component';
 import { ManagePracticeMethodDetailComponent } from './components/manage-practice-method-detail/manage-practice-method-detail.component';
 import { ManagePracticeOverviewComponent } from './components/manage-practice-overview/manage-practice-overview.component';
 import { PracticeBookChaptersComponent } from './components/practice-book-chapters/practice-book-chapters.component';
@@ -9,6 +10,7 @@ import { PracticeOverviewComponent } from './components/practice-overview/practi
 import { ManagePracticeMethodDetailResolver } from './resolvers/pages-manage-practice-method-detail.resolver';
 import { ManagePracticeOverviewResolver } from './resolvers/pages-manage-practice-overview.resolver';
 import { ManagePracticeResolver } from './resolvers/pages-manage-practice.resolver';
+import { PracticeBookChaptersResolver } from './resolvers/pages-practice-book-chapters.resolver';
 import { PracticeResolver } from './resolvers/pages-practice.resolver';
 
 const routes: Routes = [
@@ -52,7 +54,26 @@ const routes: Routes = [
       },
       {
         path: ':book',
-        component: PracticeBookChaptersComponent
+        runGuardsAndResolvers: 'always',
+        resolve: { isResolved: PracticeBookChaptersResolver },
+        children: [
+          {
+            path: '',
+            component: PracticeBookChaptersComponent
+          },
+          {
+            path: ':chapter',
+            runGuardsAndResolvers: 'always',
+            children: [
+              { path: '', component: BookLessonsComponent },
+              {
+                path: ':lesson',
+                runGuardsAndResolvers: 'always',
+                component: BookLessonsComponent
+              }
+            ]
+          }
+        ]
       }
     ]
   }

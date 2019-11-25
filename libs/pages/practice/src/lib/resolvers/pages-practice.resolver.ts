@@ -7,7 +7,7 @@ import {
   UnlockedFreePracticeActions,
   UnlockedFreePracticeQueries
 } from '@campus/dal';
-import { Action, Selector, Store } from '@ngrx/store';
+import { Action, Store } from '@ngrx/store';
 
 @Injectable({
   providedIn: 'root'
@@ -27,7 +27,7 @@ export class PracticeResolver extends StateResolver {
     ];
   }
 
-  protected getResolvedQueries(): Selector<object, boolean>[] {
+  protected getResolvedQueries() {
     return [UnlockedFreePracticeQueries.getLoaded];
   }
 }

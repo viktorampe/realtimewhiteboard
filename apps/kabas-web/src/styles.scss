@@ -35,6 +35,8 @@ body {
 @include pages-theme();
 @import 'libs/pages/methods/src/lib/pages-methods.theme';
 @include pages-methods-theme();
+@import 'libs/pages/practice/src/lib/pages-practice.theme';
+@include pages-practice-theme();
 @import 'libs/pages/global-search/src/lib/pages-global-search.theme';
 @include pages-global-search-theme();
 @import 'libs/pages/home/src/lib/pages-home.theme';
