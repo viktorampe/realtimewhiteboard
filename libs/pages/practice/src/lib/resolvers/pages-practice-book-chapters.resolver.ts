@@ -33,6 +33,7 @@ export class PracticeBookChaptersResolver extends StateResolver {
       new EduContentTocEduContentActions.LoadEduContentTocEduContentsForBook({
         bookId: +this.params.book
       }),
+
       new ResultActions.LoadResults({ userId: this.authService.userId })
     ];
   }
