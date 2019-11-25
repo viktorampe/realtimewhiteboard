@@ -15,6 +15,7 @@ export * from './lib/+state/edu-content';
 export * from './lib/+state/edu-content-book';
 export * from './lib/+state/edu-content-product-type';
 export * from './lib/+state/edu-content-toc';
+export * from './lib/+state/edu-content-toc-edu-content';
 export * from './lib/+state/edu-net';
 export * from './lib/+state/effect-feedback';
 export * from './lib/+state/favorite';
