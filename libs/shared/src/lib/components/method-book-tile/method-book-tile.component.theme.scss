@@ -16,7 +16,6 @@
   $shared-method-book-tile_container-box-shadow-spread: 2px !default;
 
   .shared-method-book-tile {
-    background-color: white;
     width: $shared-method-book-tile_container-width;
     color: $shared-method-book-tile_title-text-color;
     margin-right: $shared-method-book-tile-margin-right;
@@ -38,8 +37,6 @@
       font-size: $shared-method-book-tile_title-font-size;
       padding: $shared-method-book-tile_title-padding-horizontal
         $shared-method-book-tile_title-padding-vertical;
-      &__container {
-      }
     }
   }
 }
