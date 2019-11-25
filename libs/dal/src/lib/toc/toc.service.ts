@@ -61,6 +61,6 @@ export class TocService implements TocServiceInterface {
   getEduContentTocEduContentForBookId(
     bookId: number
   ): Observable<EduContentTOCEduContentInterface[]> {
-    return this.eduContentBookApi['getUnlockedExercisesRemote'](bookId);
+    return this.eduContentBookApi.getUnlockedExercisesRemote(bookId);
   }
 }
