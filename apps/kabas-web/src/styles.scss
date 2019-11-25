@@ -43,6 +43,8 @@ body {
 @include pages-home-theme();
 @import 'libs/pages/settings/pages-settings.theme';
 @include pages-settings-theme();
+@import 'libs/pages/practice/src/lib/pages-practice.theme';
+@include pages-practice-theme();
 
 // include shared lib scss
 @import 'libs/shared/src/lib/shared-theme';

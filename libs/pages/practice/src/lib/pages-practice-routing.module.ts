@@ -5,6 +5,7 @@ import { AllowedMethodGuard } from '@campus/guards';
 import { BookLessonsComponent } from './components/book-lessons/book-lessons.component';
 import { ManagePracticeMethodDetailComponent } from './components/manage-practice-method-detail/manage-practice-method-detail.component';
 import { ManagePracticeOverviewComponent } from './components/manage-practice-overview/manage-practice-overview.component';
+import { PracticeBookChaptersComponent } from './components/practice-book-chapters/practice-book-chapters.component';
 import { PracticeOverviewComponent } from './components/practice-overview/practice-overview.component';
 import { ManagePracticeMethodDetailResolver } from './resolvers/pages-manage-practice-method-detail.resolver';
 import { ManagePracticeOverviewResolver } from './resolvers/pages-manage-practice-overview.resolver';
@@ -52,13 +53,13 @@ const routes: Routes = [
         component: PracticeOverviewComponent
       },
       {
-        path: ':book', // TODO: change to new component BookChaptersComponent
+        path: ':book',
         runGuardsAndResolvers: 'always',
         resolve: { isResolved: PracticeBookChaptersResolver },
         children: [
           {
             path: '',
-            component: PracticeOverviewComponent
+            component: PracticeBookChaptersComponent
           },
           {
             path: ':chapter',
