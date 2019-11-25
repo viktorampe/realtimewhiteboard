@@ -1,12 +1,17 @@
 import {
   EduContentBookInterface,
   EduContentBookQueries,
+  EduContentTOCEduContentInterface,
+  EduContentTocEduContentQueries,
   EduContentTOCInterface,
   EduContentTocQueries,
   LearningAreaInterface,
   LearningAreaQueries,
   MethodInterface,
-  MethodQueries
+  MethodQueries,
+  Result,
+  ResultInterface,
+  ResultQueries
 } from '@campus/dal';
 import { createSelector } from '@ngrx/store';
 
@@ -21,9 +26,61 @@ export interface ChapterWithStatus {
 }
 
 export const getChaptersWithStatuses = createSelector(
-  [EduContentTocQueries.getTreeForBook],
-  (treeForBook: EduContentTOCInterface[], props: { bookId: number }) => {
-    return treeForBook;
+  [
+    EduContentTocQueries.getTreeForBook,
+    // TODO: this can be more efficient, can't use the count selectors or getAllByType
+    // because it doesn't match with the props:
+    EduContentTocEduContentQueries.getAll,
+    ResultQueries.getBestResultByEduContentId
+  ],
+  (
+    treeForBook: EduContentTOCInterface[],
+    eduContentTocEduContent: EduContentTOCEduContentInterface[],
+    bestResultByEduContentId: { [id: number]: ResultInterface },
+    props: { bookId: number }
+  ) => {
+    return treeForBook.map(chapter => {
+      const tocId = chapter.id;
+      const title = chapter.title;
+
+      const childrenTocIds = chapter.children.map(child => child.id);
+      const relatedTOCEduContent = eduContentTocEduContent.filter(
+        tocEduContent => {
+          return childrenTocIds.includes(tocEduContent.eduContentTOCId);
+        }
+      );
+      const relatedResults = relatedTOCEduContent.reduce(
+        (acc, relatedContent) => {
+          if (bestResultByEduContentId[relatedContent.eduContentId]) {
+            acc.push(bestResultByEduContentId[relatedContent.eduContentId]);
+          }
+
+          return acc;
+        },
+        []
+      );
+
+      const availableExercises = relatedTOCEduContent.length;
+      const completedExercises = relatedResults.length;
+
+      const earnedKwetons = relatedResults.reduce((acc, relatedResult) => {
+        const result = relatedResult as Result;
+
+        return acc + result.stars * 10;
+      }, 0);
+
+      const kwetonsRemaining = availableExercises * 30 - earnedKwetons;
+
+      return {
+        tocId,
+        title,
+        exercises: {
+          available: availableExercises,
+          completed: completedExercises
+        },
+        kwetonsRemaining
+      } as ChapterWithStatus;
+    });
   }
 );
 
