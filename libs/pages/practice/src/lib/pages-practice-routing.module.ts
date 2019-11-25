@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { MethodQueries } from '@campus/dal';
+import { EduContentTocQueries, MethodQueries } from '@campus/dal';
 import { AllowedMethodGuard } from '@campus/guards';
 import { BookLessonsComponent } from './components/book-lessons/book-lessons.component';
 import { ManagePracticeMethodDetailComponent } from './components/manage-practice-method-detail/manage-practice-method-detail.component';
@@ -64,12 +64,20 @@ const routes: Routes = [
           {
             path: ':chapter',
             runGuardsAndResolvers: 'always',
+            data: {
+              selector: EduContentTocQueries.getById,
+              displayProperty: 'title'
+            },
             children: [
               { path: '', component: BookLessonsComponent },
               {
                 path: ':lesson',
                 runGuardsAndResolvers: 'always',
-                component: BookLessonsComponent
+                component: BookLessonsComponent,
+                data: {
+                  selector: EduContentTocQueries.getById,
+                  displayProperty: 'title'
+                }
               }
             ]
           }
