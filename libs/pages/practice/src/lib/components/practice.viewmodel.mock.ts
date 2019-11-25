@@ -160,13 +160,13 @@ export class MockPracticeViewModel
 
   private getChaptersWithStatus(amount: number = 10) {
     return Array.from(new Array(amount).keys()).map(key => ({
-      tocId: +key + 1,
-      title: 'Hoofdstuk ' + (+key + 1),
+      tocId: key + 1,
+      title: 'Hoofdstuk ' + (key + 1),
       exercises: {
         available: amount,
-        completed: amount - +key
+        completed: amount - key
       },
-      kwetonsRemaining: +key * 3 * 10
+      kwetonsRemaining: key * 3 * 10
     }));
   }
 }

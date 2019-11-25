@@ -27,6 +27,6 @@ import { PagesPracticeRoutingModule } from './pages-practice-routing.module';
     PracticeBookChaptersComponent
   ],
   providers: [PracticeViewModel],
-  exports: [PracticeBookChaptersComponent]
+  exports: []
 })
 export class PagesPracticeModule {}
