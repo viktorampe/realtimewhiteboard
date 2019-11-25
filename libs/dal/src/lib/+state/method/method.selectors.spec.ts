@@ -286,7 +286,7 @@ describe('Method Selectors', () => {
           methodId: 1,
           years: [mockYears[0]]
         }),
-        new EduContentBookFixture({ id: 2, methodId: 2 })
+        new EduContentBookFixture({ id: 2, methodId: 2, years: [mockYears[1]] })
       ];
       const eduContentBookState: EduContentBookState = {
         ids: [1, 2],
@@ -320,10 +320,10 @@ describe('Method Selectors', () => {
             customMethodState,
             yearState,
             learningAreaState,
-            eduContentBookState.entities[1]
+            eduContentBookState.entities[2]
           );
 
-          expect(result).toBe('foo method foo year (foo learning area)');
+          expect(result).toBe('bar method bar year (bar learning area)');
         });
       });
     });
