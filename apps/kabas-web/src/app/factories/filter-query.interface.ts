@@ -11,7 +11,13 @@ export interface FilterQueryInterface {
   label: string;
   component?: Type<SearchFilterComponentInterface>;
   displayProperty?: string;
-  learningAreaDependent?: boolean;
   domHost?: string;
   options?: any;
+
+  // are the filter values dependent on a filterCriteriaSelection value?
+  // this will add a prop to the store select -> use a selector that takes a prop
+  // Important! At the moment, the filter can only be dependent on 1 thing
+  // see buildFilter()
+  learningAreaDependent?: boolean;
+  methodDependent?: boolean;
 }
