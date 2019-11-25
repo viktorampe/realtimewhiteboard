@@ -10,6 +10,7 @@ import {
   DalState,
   EduContentBookFixture,
   EduContentBookQueries,
+  EduContentFixture,
   EduContentTOCFixture,
   EduContentTocQueries,
   getStoreModuleForFeatures,
@@ -19,6 +20,12 @@ import {
   UnlockedFreePracticeInterface,
   UnlockedFreePracticeQueries
 } from '@campus/dal';
+import {
+  OpenStaticContentServiceInterface,
+  OPEN_STATIC_CONTENT_SERVICE_TOKEN,
+  ScormExerciseServiceInterface,
+  SCORM_EXERCISE_SERVICE_TOKEN
+} from '@campus/shared';
 import {
   NavigationActionTiming,
   RouterNavigationAction,
@@ -49,6 +56,8 @@ describe('PracticeViewModel', () => {
 
   const userId = 1;
   const storeState = jasmine.anything();
+  let openStaticContentService: OpenStaticContentServiceInterface;
+  let scormExerciseService: ScormExerciseServiceInterface;
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
@@ -64,7 +73,18 @@ describe('PracticeViewModel', () => {
       providers: [
         Store,
         { provide: RouterStateSerializer, useClass: CustomSerializer },
-        { provide: AUTH_SERVICE_TOKEN, useValue: { userId } }
+        { provide: AUTH_SERVICE_TOKEN, useValue: { userId } },
+        {
+          provide: OPEN_STATIC_CONTENT_SERVICE_TOKEN,
+          useValue: { open: jest.fn() }
+        },
+        {
+          provide: SCORM_EXERCISE_SERVICE_TOKEN,
+          useValue: {
+            startExerciseFromUnlockedContent: jest.fn(),
+            previewExerciseFromUnlockedContent: jest.fn()
+          }
+        }
       ]
     });
   });
@@ -76,6 +96,8 @@ describe('PracticeViewModel', () => {
     store = TestBed.get(Store);
     router = TestBed.get(Router);
     zone = TestBed.get(NgZone);
+    openStaticContentService = TestBed.get(OPEN_STATIC_CONTENT_SERVICE_TOKEN);
+    scormExerciseService = TestBed.get(SCORM_EXERCISE_SERVICE_TOKEN);
   });
 
   function setupSelectorSpies() {
@@ -276,4 +298,66 @@ describe('PracticeViewModel', () => {
       store.dispatch(navigationAction);
     });
   }
+
+  fdescribe('open eduContent', () => {
+    it('should open a boek-e', () => {
+      const eduContent = new EduContentFixture({
+        id: 4
+      });
+      const spy = jest.spyOn(openStaticContentService, 'open');
+      practiceViewModel.openBoeke(eduContent);
+
+      expect(spy).toHaveBeenCalledWith(eduContent);
+    });
+
+    it('should open eduContent as a download', () => {
+      const eduContent = new EduContentFixture({
+        id: 4
+      });
+      const spy = jest.spyOn(openStaticContentService, 'open');
+
+      practiceViewModel.openEduContentAsDownload(eduContent);
+
+      expect(spy).toHaveBeenCalledWith(eduContent, false);
+    });
+
+    it('should open eduContent as a stream', () => {
+      const eduContent = new EduContentFixture({
+        id: 4
+      });
+      const spy = jest.spyOn(openStaticContentService, 'open');
+
+      practiceViewModel.openEduContentAsStream(eduContent);
+
+      expect(spy).toHaveBeenCalledWith(eduContent, true);
+    });
+
+    it('should open an exercise', () => {
+      const eduContent = new EduContentFixture({
+        id: 4
+      });
+      const spy = jest.spyOn(
+        scormExerciseService,
+        'startExerciseFromUnlockedContent'
+      );
+
+      practiceViewModel.openEduContentAsExercise(eduContent, 7);
+
+      expect(spy).toHaveBeenCalledWith(userId, eduContent.id, 7);
+    });
+
+    it('should open an exercise with solutions', () => {
+      const eduContent = new EduContentFixture({
+        id: 4
+      });
+      const spy = jest.spyOn(
+        scormExerciseService,
+        'previewExerciseFromUnlockedContent'
+      );
+
+      practiceViewModel.openEduContentAsSolution(eduContent);
+
+      expect(spy).toHaveBeenCalledWith(null, eduContent.id, null, true);
+    });
+  });
 });
