@@ -46,15 +46,15 @@ describe('PracticeViewModel selectors', () => {
         ]
       }),
       new EduContentTOCFixture({
-        id: 3,
+        id: 4,
         title: 'Chapter 2',
         children: [
           new EduContentTOCFixture({
-            id: 4,
+            id: 5,
             title: 'Lesson 3'
           }),
           new EduContentTOCFixture({
-            id: 5,
+            id: 6,
             title: 'Lesson 4'
           })
         ]
@@ -80,19 +80,19 @@ describe('PracticeViewModel selectors', () => {
         type: 'boek-e'
       }),
       new EduContentTOCEduContentFixture({
-        eduContentTOCId: 4,
+        eduContentTOCId: 5,
         eduContentId: 104
       }),
       new EduContentTOCEduContentFixture({
-        eduContentTOCId: 4,
+        eduContentTOCId: 5,
         eduContentId: 105
       }),
       new EduContentTOCEduContentFixture({
-        eduContentTOCId: 5,
+        eduContentTOCId: 6,
         eduContentId: 106
       }),
       new EduContentTOCEduContentFixture({
-        eduContentTOCId: 5,
+        eduContentTOCId: 6,
         eduContentId: 107
       })
     ];
@@ -131,7 +131,7 @@ describe('PracticeViewModel selectors', () => {
             kwetonsRemaining: 80
           },
           {
-            tocId: 3,
+            tocId: 4,
             title: 'Chapter 2',
             exercises: {
               available: 4,
@@ -159,7 +159,7 @@ describe('PracticeViewModel selectors', () => {
             kwetonsRemaining: 90
           },
           {
-            tocId: 3,
+            tocId: 4,
             title: 'Chapter 2',
             exercises: {
               available: 4,

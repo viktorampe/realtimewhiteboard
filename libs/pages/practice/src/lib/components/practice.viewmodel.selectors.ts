@@ -35,7 +35,7 @@ export const getChaptersWithStatuses = createSelector(
   ],
   (
     treeForBook: EduContentTOCInterface[],
-    eduContentTocEduContent: EduContentTOCEduContentInterface[],
+    eduContentTocEduContents: EduContentTOCEduContentInterface[],
     bestResultByEduContentId: { [id: number]: ResultInterface },
     props: { bookId: number }
   ) => {
@@ -47,21 +47,30 @@ export const getChaptersWithStatuses = createSelector(
       let earnedKwetons = 0;
 
       const childrenTocIds = chapter.children.map(child => child.id);
-      eduContentTocEduContent.forEach(tocEduContent => {
-        if (
-          tocEduContent.type === 'exercise' &&
-          childrenTocIds.includes(tocEduContent.eduContentTOCId)
-        ) {
-          availableExercises++;
 
-          if (bestResultByEduContentId[tocEduContent.eduContentId]) {
-            const result = bestResultByEduContentId[
-              tocEduContent.eduContentId
-            ] as Result;
+      const uniqueExerciseIds = Array.from(
+        new Set(
+          eduContentTocEduContents.reduce((acc, tocEduContent) => {
+            if (
+              tocEduContent.type === 'exercise' &&
+              (tocEduContent.eduContentTOCId === chapter.id ||
+                childrenTocIds.includes(tocEduContent.eduContentTOCId))
+            ) {
+              acc.push(tocEduContent.eduContentId);
+            }
+            return acc;
+          }, [])
+        )
+      );
 
-            completedExercises++;
-            earnedKwetons += result.stars * 10;
-          }
+      availableExercises = uniqueExerciseIds.length;
+
+      uniqueExerciseIds.forEach(exId => {
+        if (bestResultByEduContentId[exId]) {
+          const result = bestResultByEduContentId[exId] as Result;
+
+          completedExercises++;
+          earnedKwetons += result.stars * 10;
         }
       });
 
