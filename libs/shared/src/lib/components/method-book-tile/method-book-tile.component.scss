@@ -4,17 +4,21 @@
 }
 
 .shared-method-book-tile {
-  &__image {
-    display: block;
-  }
+  width: 100%;
 
   &__title {
     flex-direction: column;
     text-align: center;
     font-weight: bold;
     line-height: 1;
-    span {
-      font-weight: normal;
-    }
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  &__areaName {
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }

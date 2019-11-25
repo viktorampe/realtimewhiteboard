@@ -1,6 +1,9 @@
 <div class="shared-method-book-tile__image__container">
   <img [src]="logoUrl" class="shared-method-book-tile__image"
 /></div>
-<div data-cy="method-book-title" class="shared-method-book-tile__title"
-  >{{ title }} <span>({{ areaName }})</span></div
+<div
+  data-cy="method-book-title"
+  class="shared-method-book-tile__title__container"
+  ><div class="shared-method-book-tile__title">{{ name }}</div>
+  <div class="shared-method-book-tile__areaName">({{ areaName }})</div></div
 >

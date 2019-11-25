@@ -7,7 +7,7 @@ import { Component, HostBinding, Input, OnInit } from '@angular/core';
 })
 export class MethodBookTileComponent implements OnInit {
   @Input() areaName: string;
-  @Input() title: string;
+  @Input() name: string;
   @Input() logoUrl: string;
   @Input() bookId: number;
 
