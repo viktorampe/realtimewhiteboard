@@ -23,9 +23,9 @@
           "
           [class.practice-book-lessons__lesson-link--selected]="!params.lesson"
         >
-          <span class="practice-book-lessons__lesson-link__title">{{
-            chapter.title
-          }}</span>
+          <span class="practice-book-lessons__lesson-link__title">
+            {{ chapter.title }}
+          </span>
         </mat-list-item>
 
         <mat-list-item
@@ -35,12 +35,12 @@
           class="practice-book-lessons__lesson-link"
           [ngClass]="'practice-book-lessons__lesson-link--depth-' + toc.depth"
           [class.practice-book-lessons__lesson-link--selected]="
-            toc.id === params.lesson 
+            toc.id === params.lesson
           "
         >
-          <span class="practice-book-lessons__lesson-link__title">{{
-            toc.title
-          }}</span>
+          <span class="practice-book-lessons__lesson-link__title">
+            {{ toc.title }}
+          </span>
         </mat-list-item>
       </mat-nav-list>
     </div>
