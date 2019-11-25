@@ -5,6 +5,7 @@ import {
   ClassGroupInterface,
   ClassGroupQueries,
   DalState,
+  EduContent,
   EduContentBookInterface,
   EduContentBookQueries,
   EduContentTOCInterface,
@@ -17,6 +18,10 @@ import {
   UnlockedFreePracticeInterface,
   UnlockedFreePracticeQueries
 } from '@campus/dal';
+import {
+  ScormExerciseServiceInterface,
+  SCORM_EXERCISE_SERVICE_TOKEN
+} from '@campus/shared';
 import { Dictionary } from '@ngrx/entity';
 import { RouterReducerState } from '@ngrx/router-store';
 import { select, Store } from '@ngrx/store';
@@ -63,7 +68,9 @@ export class PracticeViewModel {
 
   constructor(
     private store: Store<DalState>,
-    @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface
+    @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
+    @Inject(SCORM_EXERCISE_SERVICE_TOKEN)
+    private scormExerciseService: ScormExerciseServiceInterface
   ) {
     this.initialize();
   }
@@ -178,6 +185,16 @@ export class PracticeViewModel {
           })
         );
       })
+    );
+  }
+  public openEduContentAsExercise(
+    eduContent: EduContent,
+    unlockedFreePractice: UnlockedFreePracticeInterface
+  ): void {
+    this.scormExerciseService.startExerciseFromUnlockedContent(
+      this.authService.userId,
+      eduContent.id,
+      unlockedFreePractice.id
     );
   }
 
