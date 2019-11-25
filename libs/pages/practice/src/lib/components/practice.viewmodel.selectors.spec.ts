@@ -168,6 +168,94 @@ describe('PracticeViewModel selectors', () => {
             kwetonsRemaining: 120
           }
         ]
+      },
+      {
+        it:
+          'should return correct statuses for each chapter - include parent with educontent',
+        input: {
+          treeForBook,
+          eduContentTOCEduContent: [
+            new EduContentTOCEduContentFixture({
+              eduContentTOCId: 1,
+              eduContentId: 100
+            }),
+            new EduContentTOCEduContentFixture({
+              eduContentTOCId: 2,
+              eduContentId: 101
+            }),
+            new EduContentTOCEduContentFixture({
+              eduContentTOCId: 4,
+              eduContentId: 102
+            })
+          ],
+          bestResultByEduContentId
+        },
+        expected: [
+          {
+            tocId: 1,
+            title: 'Chapter 1',
+            exercises: {
+              available: 2,
+              completed: 1
+            },
+            kwetonsRemaining: 60
+          },
+          {
+            tocId: 4,
+            title: 'Chapter 2',
+            exercises: {
+              available: 1,
+              completed: 1
+            },
+            kwetonsRemaining: 20
+          }
+        ]
+      },
+      {
+        it:
+          'should return correct statuses for each chapter - ignore duplicate educontent for chapter',
+        input: {
+          treeForBook,
+          eduContentTOCEduContent: [
+            new EduContentTOCEduContentFixture({
+              eduContentTOCId: 1,
+              eduContentId: 100
+            }),
+            new EduContentTOCEduContentFixture({
+              eduContentTOCId: 2,
+              eduContentId: 100
+            }),
+            new EduContentTOCEduContentFixture({
+              eduContentTOCId: 3,
+              eduContentId: 100
+            }),
+            new EduContentTOCEduContentFixture({
+              eduContentTOCId: 4,
+              eduContentId: 100
+            })
+          ],
+          bestResultByEduContentId
+        },
+        expected: [
+          {
+            tocId: 1,
+            title: 'Chapter 1',
+            exercises: {
+              available: 1,
+              completed: 1
+            },
+            kwetonsRemaining: 30
+          },
+          {
+            tocId: 4,
+            title: 'Chapter 2',
+            exercises: {
+              available: 1,
+              completed: 1
+            },
+            kwetonsRemaining: 30
+          }
+        ]
       }
     ];
 
