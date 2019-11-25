@@ -2,7 +2,11 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { GuardsModule } from '@campus/guards';
 import { PagesSharedModule } from '@campus/pages/shared';
-import { SharedModule } from '@campus/shared';
+import {
+  ContentActionsStudentService,
+  CONTENT_ACTIONS_SERVICE_TOKEN,
+  SharedModule
+} from '@campus/shared';
 import { UiModule } from '@campus/ui';
 import { ManagePracticeMethodDetailComponent } from './components/manage-practice-method-detail/manage-practice-method-detail.component';
 import { ManagePracticeOverviewComponent } from './components/manage-practice-overview/manage-practice-overview.component';
@@ -23,7 +27,13 @@ import { PagesPracticeRoutingModule } from './pages-practice-routing.module';
     ManagePracticeMethodDetailComponent,
     PracticeOverviewComponent
   ],
-  providers: [PracticeViewModel],
+  providers: [
+    PracticeViewModel,
+    {
+      provide: CONTENT_ACTIONS_SERVICE_TOKEN,
+      useClass: ContentActionsStudentService
+    }
+  ],
   exports: []
 })
 export class PagesPracticeModule {}
