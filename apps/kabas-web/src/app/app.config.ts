@@ -20,7 +20,13 @@ const standardSideNavItems: NavItem[] = [
   },
   {
     title: 'Vrij oefenen',
-    link: '/practice'
+    link: '/practice',
+    hideWhenRequiredPermissions: ['manageUnlockedFreePractices']
+  },
+  {
+    title: 'Vrij oefenen',
+    link: '/practice/manage',
+    requiredPermissions: ['manageUnlockedFreePractices']
   },
   {
     title: 'Differentiëren',

@@ -3,12 +3,12 @@
 # Add steps that analyze code, save build artifacts, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
 
-# Run build on PRs to..
+# Run build on PRs to:
 pr:
   - develop
   - master
 
-# Run build on push to..
+# Run build on push to:
 trigger:
   - develop
   - master
@@ -58,6 +58,7 @@ steps:
   - task: Npm@1
     displayName: 'Npm install'
     inputs:
+      command: ci
       customEndpoint: diekeure-registry
   - script: |
       npm run lint
