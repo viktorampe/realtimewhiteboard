@@ -4,6 +4,8 @@ import {
   AUTH_SERVICE_TOKEN,
   DalState,
   EduContentTocActions,
+  EduContentTocEduContentActions,
+  EduContentTocEduContentQueries,
   EduContentTocQueries,
   QueryWithProps,
   ResultActions,
@@ -28,6 +30,10 @@ export class PracticeBookChaptersResolver extends StateResolver {
       new EduContentTocActions.LoadEduContentTocsForBook({
         bookId: +this.params.book
       }),
+      new EduContentTocEduContentActions.LoadEduContentTocEduContentsForBook({
+        bookId: +this.params.book
+      }),
+
       new ResultActions.LoadResults({ userId: this.authService.userId })
     ];
   }
@@ -35,6 +41,9 @@ export class PracticeBookChaptersResolver extends StateResolver {
   protected getResolvedQueries() {
     return [
       new QueryWithProps(EduContentTocQueries.isBookLoaded, {
+        bookId: +this.params.book
+      }),
+      new QueryWithProps(EduContentTocEduContentQueries.isBookLoaded, {
         bookId: +this.params.book
       }),
       ResultQueries.getLoaded

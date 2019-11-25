@@ -31,7 +31,6 @@ describe('BookLessonsComponent', () => {
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [
-        MatCardModule,
         NoopAnimationsModule,
         RouterTestingModule,
         UiModule,
