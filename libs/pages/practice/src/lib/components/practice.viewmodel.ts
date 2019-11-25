@@ -19,6 +19,9 @@ import {
   UnlockedFreePracticeQueries
 } from '@campus/dal';
 import {
+  ContentOpenerInterface,
+  OpenStaticContentServiceInterface,
+  OPEN_STATIC_CONTENT_SERVICE_TOKEN,
   ScormExerciseServiceInterface,
   SCORM_EXERCISE_SERVICE_TOKEN
 } from '@campus/shared';
@@ -47,7 +50,7 @@ export interface CurrentPracticeParams {
 @Injectable({
   providedIn: 'root'
 })
-export class PracticeViewModel {
+export class PracticeViewModel implements ContentOpenerInterface {
   //Presentation streams
   public currentPracticeParams$: Observable<CurrentPracticeParams>;
   public bookTitle$: Observable<string>;
@@ -70,7 +73,9 @@ export class PracticeViewModel {
     private store: Store<DalState>,
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
     @Inject(SCORM_EXERCISE_SERVICE_TOKEN)
-    private scormExerciseService: ScormExerciseServiceInterface
+    private scormExerciseService: ScormExerciseServiceInterface,
+    @Inject(OPEN_STATIC_CONTENT_SERVICE_TOKEN)
+    private openStaticContentService: OpenStaticContentServiceInterface
   ) {
     this.initialize();
   }
@@ -189,13 +194,34 @@ export class PracticeViewModel {
   }
   public openEduContentAsExercise(
     eduContent: EduContent,
-    unlockedFreePractice: UnlockedFreePracticeInterface
+    unlockedFreePracticeId: number
   ): void {
     this.scormExerciseService.startExerciseFromUnlockedContent(
       this.authService.userId,
       eduContent.id,
-      unlockedFreePractice.id
+      unlockedFreePracticeId
     );
+  }
+
+  public openEduContentAsSolution(eduContent: EduContent): void {
+    this.scormExerciseService.previewExerciseFromUnlockedContent(
+      null,
+      eduContent.id,
+      null,
+      true
+    );
+  }
+
+  public openEduContentAsStream(eduContent: EduContent): void {
+    this.openStaticContentService.open(eduContent, true);
+  }
+
+  public openEduContentAsDownload(eduContent: EduContent): void {
+    this.openStaticContentService.open(eduContent, false);
+  }
+
+  public openBoeke(eduContent: EduContent): void {
+    this.openStaticContentService.open(eduContent);
   }
 
   public toggleUnlockedFreePractice(
