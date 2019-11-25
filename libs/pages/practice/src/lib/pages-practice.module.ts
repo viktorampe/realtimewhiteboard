@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { GuardsModule } from '@campus/guards';
 import { PagesSharedModule } from '@campus/pages/shared';
+import { SearchModule } from '@campus/search';
 import {
   ContentActionsStudentService,
   CONTENT_ACTIONS_SERVICE_TOKEN,
@@ -20,6 +21,7 @@ import { PagesPracticeRoutingModule } from './pages-practice-routing.module';
     PagesPracticeRoutingModule,
     UiModule,
     PagesSharedModule,
+    SearchModule,
     SharedModule,
     GuardsModule
   ],

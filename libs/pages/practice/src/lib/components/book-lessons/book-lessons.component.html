@@ -46,7 +46,25 @@
     </div>
 
     <div main>
-      CONTENT HERE
+      <div data-cy="search-filters" class="method-chapter--filters">
+        <ng-container searchPortal="searchTerm"></ng-container>
+        <ng-container searchPortal="hostTop"></ng-container>
+        <campus-button
+          class="method-chapter--reset-filters"
+          iconClass="reset-filters"
+          (click)="clearSearchFilters()"
+        ></campus-button>
+      </div>
+
+      <campus-search
+        [autoCompleteValues]="autoCompleteValues$ | async"
+        (searchTermChangeForAutoComplete)="onAutoCompleteRequest($event)"
+        [autoFocusSearchTerm]="true"
+        [searchMode]="searchMode$ | async"
+        [initialState]="initialSearchState$ | async"
+        [searchResults]="searchResults$ | async"
+        (searchState$)="onSearchStateChange($event)"
+      ></campus-search>
     </div>
   </campus-collapsible-sheet>
 </div>

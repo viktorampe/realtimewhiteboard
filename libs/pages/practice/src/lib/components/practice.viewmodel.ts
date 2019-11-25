@@ -5,22 +5,38 @@ import {
   ClassGroupInterface,
   ClassGroupQueries,
   DalState,
+  EduContent,
   EduContentBookInterface,
   EduContentBookQueries,
+  EduContentInterface,
+  EduContentServiceInterface,
   EduContentTOCInterface,
   EduContentTocQueries,
+  EDU_CONTENT_SERVICE_TOKEN,
   getRouterState,
+  MethodLevelFixture,
   MethodQueries,
   MethodYearsInterface,
+  Result,
+  ResultFixture,
   RouterStateUrl,
   UnlockedFreePracticeActions,
   UnlockedFreePracticeInterface,
   UnlockedFreePracticeQueries
 } from '@campus/dal';
+import {
+  SearchModeInterface,
+  SearchResultInterface,
+  SearchStateInterface
+} from '@campus/search';
+import {
+  EnvironmentSearchModesInterface,
+  ENVIRONMENT_SEARCHMODES_TOKEN
+} from '@campus/shared';
 import { Dictionary } from '@ngrx/entity';
 import { RouterReducerState } from '@ngrx/router-store';
 import { select, Store } from '@ngrx/store';
-import { merge, Observable, zip } from 'rxjs';
+import { BehaviorSubject, merge, Observable, zip } from 'rxjs';
 import {
   distinctUntilChanged,
   filter,
@@ -28,7 +44,8 @@ import {
   mapTo,
   shareReplay,
   switchMap,
-  take
+  take,
+  withLatestFrom
 } from 'rxjs/operators';
 import {
   getUnlockedBooks,
@@ -61,23 +78,132 @@ export class PracticeViewModel {
   >;
   public unlockedBooks$: Observable<UnlockedBookInterface[]>;
 
+  public searchResults$: Observable<SearchResultInterface>;
+  public searchState$: Observable<SearchStateInterface>;
+
+  private _searchState$: BehaviorSubject<SearchStateInterface>;
+
   //Source streams
   private routerState$: Observable<RouterReducerState<RouterStateUrl>>;
   private currentBook$: Observable<EduContentBookInterface>;
 
   constructor(
     private store: Store<DalState>,
-    @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface
+    @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
+    @Inject(EDU_CONTENT_SERVICE_TOKEN)
+    private eduContentService: EduContentServiceInterface,
+    @Inject(ENVIRONMENT_SEARCHMODES_TOKEN)
+    private searchModes: EnvironmentSearchModesInterface
   ) {
     this.initialize();
+  }
+
+  /*
+   * let the page component pass through the updated state from the search component
+   */
+  public updateState(state: SearchStateInterface) {
+    this._searchState$.next(state);
+  }
+
+  public toggleUnlockedFreePractice(
+    unlockedFreePractices: UnlockedFreePracticeInterface[],
+    checked: boolean
+  ): void {
+    if (checked) {
+      this.store.dispatch(
+        new UnlockedFreePracticeActions.StartAddManyUnlockedFreePractices({
+          userId: this.authService.userId,
+          unlockedFreePractices
+        })
+      );
+    } else {
+      const ufps$ = unlockedFreePractices.map(ufp => {
+        return this.store.pipe(
+          select(UnlockedFreePracticeQueries.findOne, ufp),
+          take(1)
+        );
+      });
+
+      zip(...ufps$).subscribe(ufps => {
+        const ids = ufps.filter(ufp => !!ufp).map(ufp => ufp.id);
+
+        this.store.dispatch(
+          new UnlockedFreePracticeActions.DeleteUnlockedFreePractices({
+            userId: this.authService.userId,
+            ids
+          })
+        );
+      });
+    }
+  }
+
+  /*
+   * determine the searchMode for a given string
+   */
+  public getSearchMode(mode: string): Observable<SearchModeInterface> {
+    return this.currentBook$.pipe(
+      map(currentBook => {
+        if (currentBook && currentBook.diabolo && mode === 'chapter-lesson') {
+          return this.searchModes['diabolo-chapter-lesson'];
+        } else {
+          return this.searchModes[mode];
+        }
+      })
+    );
+  }
+
+  /*
+   * determine the initial searchState from the router state store
+   */
+  public getInitialSearchState(): Observable<SearchStateInterface> {
+    return this.currentPracticeParams$.pipe(
+      withLatestFrom(this.currentBook$, this.currentChapter$),
+      map(([currentPracticeParams, currentBook, currentChapter]) => {
+        const initialSearchState: SearchStateInterface = {
+          searchTerm: '',
+          filterCriteriaSelections: new Map<string, (number | string)[]>()
+        };
+
+        // if (currentBook) {
+        //   initialSearchState.filterCriteriaSelections.set(
+        //     'years',
+        //     currentBook.years.map(year => year.id)
+        //   );
+
+        //   initialSearchState.filterCriteriaSelections.set('methods', [
+        //     currentBook.methodId
+        //   ]);
+        // }
+
+        // if (currentChapter) {
+        //   initialSearchState.filterCriteriaSelections.set('learningArea', [
+        //     currentMethod.learningAreaId
+        //   ]);
+        // }
+
+        if (currentPracticeParams && currentPracticeParams.chapter) {
+          initialSearchState.filterCriteriaSelections.set('eduContentTOC', [
+            currentPracticeParams.lesson
+              ? currentPracticeParams.lesson
+              : currentPracticeParams.chapter
+          ]);
+        }
+
+        return initialSearchState;
+      })
+    );
   }
 
   private initialize() {
     this.setSourceStreams();
     this.setPresentationStreams();
+    this.setupSearchResults();
   }
 
   private setSourceStreams() {
+    this._searchState$ = new BehaviorSubject<SearchStateInterface>(null);
+    this.searchState$ = this._searchState$;
+
     this.routerState$ = this.store.pipe(select(getRouterState));
     this.currentPracticeParams$ = this.getCurrentPracticeParamsStream();
 
@@ -235,35 +361,42 @@ export class PracticeViewModel {
     );
   }
 
-  public toggleUnlockedFreePractice(
-    unlockedFreePractices: UnlockedFreePracticeInterface[],
-    checked: boolean
-  ): void {
-    if (checked) {
-      this.store.dispatch(
-        new UnlockedFreePracticeActions.StartAddManyUnlockedFreePractices({
-          userId: this.authService.userId,
-          unlockedFreePractices
-        })
-      );
-    } else {
-      const ufps$ = unlockedFreePractices.map(ufp => {
-        return this.store.pipe(
-          select(UnlockedFreePracticeQueries.findOne, ufp),
-          take(1)
-        );
-      });
+  private setupSearchResults(): void {
+    this.searchResults$ = this.searchState$.pipe(
+      withLatestFrom(this.getInitialSearchState()),
+      filter(([searchState, initialSearchState]) => searchState !== null),
+      map(([searchState, initialSearchState]) => ({
+        ...initialSearchState,
+        ...searchState,
+        filterCriteriaSelections: new Map([
+          ...Array.from(searchState.filterCriteriaSelections.entries()),
+          ...Array.from(initialSearchState.filterCriteriaSelections.entries())
+        ])
+      })),
+      switchMap(searchState => this.eduContentService.search(searchState)),
+      map(searchResult => {
+        return {
+          ...searchResult,
+          results: searchResult.results.map(
+            (searchResultItem: EduContentInterface, i: number) => {
+              const eduContent = Object.assign<EduContent, EduContentInterface>(
+                new EduContent(),
+                searchResultItem
+              );
 
-      zip(...ufps$).subscribe(ufps => {
-        const ids = ufps.filter(ufp => !!ufp).map(ufp => ufp.id);
-
-        this.store.dispatch(
-          new UnlockedFreePracticeActions.DeleteUnlockedFreePractices({
-            userId: this.authService.userId,
-            ids
-          })
-        );
-      });
-    }
+              return {
+                eduContent: eduContent,
+                // add additional props for the resultItemComponent here
+                result: Object.assign(
+                  new Result(),
+                  new ResultFixture({ score: Math.round(Math.random() * 100) })
+                ),
+                methodLevel: new MethodLevelFixture(i % 2 ? { icon: null } : {})
+              };
+            }
+          )
+        };
+      })
+    );
   }
 }

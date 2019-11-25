@@ -25,6 +25,27 @@ export const searchModes: EnvironmentSearchModesInterface = {
       pageSize: 20
     }
   },
+  // TODO Remove this when https://github.com/diekeure/campus/pull/1337 is merged
+  'practice-chapter-lesson': {
+    name: 'practice-chapter-lesson',
+    label: 'Zoeken op <b>hoofdstuk</b>',
+    dynamicFilters: false,
+    searchTerm: {
+      domHost: 'searchTerm'
+    },
+    searchFilterFactory: DiaboloChapterLessonFilterFactory,
+    results: {
+      component: EduContentSearchResultComponent,
+      sortModes: [
+        {
+          description: 'alfabetisch',
+          name: 'title.raw',
+          icon: 'sort-alpha-down'
+        }
+      ],
+      pageSize: 20
+    }
+  },
   'diabolo-chapter-lesson': {
     name: 'diabolo-chapter-lesson',
     label: 'Zoeken op <b>hoofdstuk</b>',
