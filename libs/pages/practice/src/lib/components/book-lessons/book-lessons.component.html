@@ -35,7 +35,7 @@
           class="practice-book-lessons__lesson-link"
           [ngClass]="'practice-book-lessons__lesson-link--depth-' + toc.depth"
           [class.practice-book-lessons__lesson-link--selected]="
-            toc.id === (params.lesson ? params.lesson : params.chapter)
+            toc.id === params.lesson 
           "
         >
           <span class="practice-book-lessons__lesson-link__title">{{
