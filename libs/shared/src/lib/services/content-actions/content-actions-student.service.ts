@@ -23,7 +23,7 @@ export class ContentActionsStudentService implements ContentActionsServiceInterf
     openEduContentAsExercise: {
       label: 'Openen',
       icon: 'exercise:open',
-      tooltip: 'Open oefening zonder oplossingen',
+      tooltip: 'Open oefening',
       handler: this.contentOpener.openEduContentAsExercise.bind(
         this.contentOpener
       )
