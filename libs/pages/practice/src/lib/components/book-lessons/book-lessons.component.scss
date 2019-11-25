@@ -1,0 +1,22 @@
+.practice-book-lessons {
+  &__list-header {
+    display: flex;
+    justify-content: flex-start;
+    padding: 0;
+  }
+
+  &__back-link {
+    font-weight: normal;
+    width: 100%;
+    height: 100%;
+    justify-content: flex-start;
+  }
+
+  &__lesson-link {
+    &__title {
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+  }
+}

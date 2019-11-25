@@ -1,0 +1,52 @@
+<campus-page-bar> </campus-page-bar>
+
+<div class="practice-book-lessons practice-book-lessons__container">
+  <campus-collapsible-sheet>
+    <div aside>
+      <mat-nav-list *ngIf="(currentPracticeParams$ | async) as params">
+        <div class="practice-book-lessons__list-header" matSubheader>
+          <campus-button
+            class="practice-book-lessons__back-link"
+            [iconClass]="'arrow-back'"
+            (click)="clickToBookChapters(params.book)"
+            >terug naar boek</campus-button
+          >
+        </div>
+
+        <mat-list-item
+          *ngIf="(currentChapter$ | async) as chapter"
+          data-cy="chapter-item"
+          class="practice-book-lessons__lesson-link"
+          (click)="clickOpenToc(params.book, params.chapter)"
+          [ngClass]="
+            'practice-book-lessons__lesson-link--depth-' + chapter.depth
+          "
+          [class.practice-book-lessons__lesson-link--selected]="!params.lesson"
+        >
+          <span class="practice-book-lessons__lesson-link__title">
+            {{ chapter.title }}
+          </span>
+        </mat-list-item>
+
+        <mat-list-item
+          data-cy="lesson-link"
+          *ngFor="let toc of (tocsForToc$ | async)"
+          (click)="clickOpenToc(params.book, params.chapter, toc.id)"
+          class="practice-book-lessons__lesson-link"
+          [ngClass]="'practice-book-lessons__lesson-link--depth-' + toc.depth"
+          [class.practice-book-lessons__lesson-link--selected]="
+            toc.id === params.lesson
+          "
+        >
+          <span class="practice-book-lessons__lesson-link__title">
+            {{ toc.title }}
+          </span>
+        </mat-list-item>
+      </mat-nav-list>
+    </div>
+
+    <div main>
+      CONTENT HERE
+    </div>
+  </campus-collapsible-sheet>
+</div>
