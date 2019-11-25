@@ -73,6 +73,7 @@ export * from './PurchaseAddress.interface';
 export * from './PurchaseDiscount.interface';
 export * from './PurchaseProduct.interface';
 export * from './ReportConfig.interface';
+export * from './Result';
 export * from './Result.interface';
 export * from './Role.interface';
 export * from './RoleMapping.interface';
