@@ -8,6 +8,7 @@ import {
   EduContentBookReducer,
   EduContentProductTypeReducer,
   EduContentReducer,
+  EduContentTocEduContentReducer,
   EduContentTocReducer,
   EffectFeedbackReducer,
   FavoriteReducer,
@@ -155,6 +156,13 @@ import { environment } from '../environments/environment';
     StoreModule.forFeature(HistoryReducer.NAME, HistoryReducer.reducer, {
       initialState: HistoryReducer.initialState
     }),
+    StoreModule.forFeature(
+      EduContentTocEduContentReducer.NAME,
+      EduContentTocEduContentReducer.reducer,
+      {
+        initialState: EduContentTocEduContentReducer.initialState
+      }
+    ),
     StoreModule.forFeature(
       UnlockedFreePracticeReducer.NAME,
       UnlockedFreePracticeReducer.reducer,
