@@ -44,8 +44,4 @@ export class PracticeSearchResultComponent extends ResultItemBase
   onActionClick(action: ContentActionInterface) {
     action.handler(this.data.eduContent);
   }
-
-  getStars(result: Result): number[] {
-    return new Array(result.stars);
-  }
 }
