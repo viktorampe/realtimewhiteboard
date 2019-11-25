@@ -22,8 +22,8 @@ export interface ChapterWithStatus {
 
 export const getChaptersWithStatuses = createSelector(
   [EduContentTocQueries.getTreeForBook],
-  (tocsForBook: EduContentTOCInterface[], props: { bookId: number }) => {
-    return tocsForBook;
+  (treeForBook: EduContentTOCInterface[], props: { bookId: number }) => {
+    return treeForBook;
   }
 );
 
