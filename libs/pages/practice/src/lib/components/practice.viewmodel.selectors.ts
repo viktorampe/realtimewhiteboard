@@ -42,32 +42,25 @@ export const getChaptersWithStatuses = createSelector(
     return treeForBook.map(chapter => {
       const tocId = chapter.id;
       const title = chapter.title;
+      let availableExercises = 0;
+      let completedExercises = 0;
+      let earnedKwetons = 0;
 
       const childrenTocIds = chapter.children.map(child => child.id);
-      const relatedTOCEduContent = eduContentTocEduContent.filter(
-        tocEduContent => {
-          return childrenTocIds.includes(tocEduContent.eduContentTOCId);
-        }
-      );
-      const relatedResults = relatedTOCEduContent.reduce(
-        (acc, relatedContent) => {
-          if (bestResultByEduContentId[relatedContent.eduContentId]) {
-            acc.push(bestResultByEduContentId[relatedContent.eduContentId]);
+      eduContentTocEduContent.forEach(tocEduContent => {
+        if (childrenTocIds.includes(tocEduContent.eduContentTOCId)) {
+          availableExercises++;
+
+          if (bestResultByEduContentId[tocEduContent.eduContentId]) {
+            const result = bestResultByEduContentId[
+              tocEduContent.eduContentId
+            ] as Result;
+
+            completedExercises++;
+            earnedKwetons += result.stars * 10;
           }
-
-          return acc;
-        },
-        []
-      );
-
-      const availableExercises = relatedTOCEduContent.length;
-      const completedExercises = relatedResults.length;
-
-      const earnedKwetons = relatedResults.reduce((acc, relatedResult) => {
-        const result = relatedResult as Result;
-
-        return acc + result.stars * 10;
-      }, 0);
+        }
+      });
 
       const kwetonsRemaining = availableExercises * 30 - earnedKwetons;
 
