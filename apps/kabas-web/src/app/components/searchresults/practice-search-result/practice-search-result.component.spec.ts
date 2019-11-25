@@ -218,7 +218,7 @@ describe('PracticeSearchResultComponent', () => {
 
     it('should show the possible actions for the eduContent', () => {
       const actionDEs = fixture.debugElement.queryAll(
-        By.css('.app-practice-searchresult__content__header__action')
+        By.css('.app-practice-searchresult__content__action')
       );
 
       expect(actionDEs.length).toBe(mockActions.length);
