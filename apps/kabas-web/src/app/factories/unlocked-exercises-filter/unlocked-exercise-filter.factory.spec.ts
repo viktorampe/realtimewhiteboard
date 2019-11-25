@@ -91,17 +91,7 @@ describe('ChapterLessonFilterFactory', () => {
         displayProperty: displayProperty,
         values: values.map(val => ({
           data: val,
-          visible: true,
-          child: (val as any).children
-            ? getExpectedFilter(
-                name,
-                label,
-                keyProperty,
-                displayProperty,
-                (val as any).children,
-                component
-              ).criteria
-            : undefined
+          visible: true
         }))
       },
       component: component,
@@ -117,7 +107,7 @@ describe('ChapterLessonFilterFactory', () => {
       'Type',
       'id',
       'label',
-      mockMethodLevels, // TODO: change to [mockMethodLevels[2], mockMethodLevels[3]]
+      [mockMethodLevels[2], mockMethodLevels[3]],
       ButtonToggleFilterComponent
     );
   }

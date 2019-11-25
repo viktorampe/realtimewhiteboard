@@ -30,8 +30,7 @@ export class UnlockedExerciseFilterFactory implements SearchFilterFactory {
     [key: string]: FilterQueryInterface;
   } = {
     methodLevel: {
-      // TODO: getAllForMethodId -> need to create this one -> dict
-      query: MethodLevelQueries.getAll,
+      query: MethodLevelQueries.findMany,
       name: 'methodLevel',
       label: 'Type',
       methodDependent: true
@@ -96,12 +95,8 @@ export class UnlockedExerciseFilterFactory implements SearchFilterFactory {
     const filterQuery = this.filterQueries[name];
     return this.store.pipe(
       select(filterQuery.query as MemoizedSelectorWithProps<Object, any, any>, {
-        methodIds: searchState.filterCriteriaSelections.get('method')
+        methodId: searchState.filterCriteriaSelections.get('method')[0] // only a single value allowed
       }),
-      // TODO -> waiting for selector
-      // map((dict: { [id: string]: MethodLevelInterface }) =>
-      //   this.getFilter(Object.values(dict), filterQuery, searchState)
-      // )
       map(entities => this.getFilter(entities, filterQuery, searchState))
     );
   }
