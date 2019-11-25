@@ -1,5 +1,4 @@
 import { Component, HostBinding, Inject, Input, OnInit } from '@angular/core';
-import { Result } from '@campus/dal';
 import { ResultItemBase } from '@campus/search';
 import {
   ContentActionInterface,
@@ -25,7 +24,7 @@ export class PracticeSearchResultComponent extends ResultItemBase
 
   constructor(
     @Inject(CONTENT_ACTIONS_SERVICE_TOKEN)
-    private contentActionsServiceInterface: ContentActionsServiceInterface
+    private contentActionsService: ContentActionsServiceInterface
   ) {
     super();
   }
@@ -36,7 +35,7 @@ export class PracticeSearchResultComponent extends ResultItemBase
   }
 
   private setupActions(): void {
-    this.actions = this.contentActionsServiceInterface.getActionsForEduContent(
+    this.actions = this.contentActionsService.getActionsForEduContent(
       this.data.eduContent
     );
   }

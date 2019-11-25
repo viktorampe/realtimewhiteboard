@@ -27,7 +27,6 @@ export class EduContent implements EduContentInterface, ContentInterface {
   notes?: EduContentNoteInterface[];
   favorites?: FavoriteInterface[];
   minimal?: EduContentInterface;
-  levelId?: number;
   get name(): string {
     return this.publishedEduContentMetadata
       ? this.publishedEduContentMetadata.title
@@ -78,6 +77,12 @@ export class EduContent implements EduContentInterface, ContentInterface {
     return (
       this.publishedEduContentMetadata &&
       this.publishedEduContentMetadata.diaboloPhase
+    );
+  }
+  get levelId(): number {
+    return (
+      this.publishedEduContentMetadata &&
+      this.publishedEduContentMetadata.levelId
     );
   }
 }

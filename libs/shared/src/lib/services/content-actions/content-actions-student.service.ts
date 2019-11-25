@@ -11,7 +11,8 @@ import {
 @Injectable({
   providedIn: 'root'
 })
-export class ContentActionsStudentService implements ContentActionsServiceInterface {
+export class ContentActionsStudentService
+  implements ContentActionsServiceInterface {
   constructor(
     @Inject(forwardRef(() => CONTENT_OPENER_TOKEN))
     private contentOpener: ContentOpenerInterface

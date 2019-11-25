@@ -35,7 +35,7 @@
   </div>
   <ng-container *ngFor="let action of actions; let last = last">
     <a
-      class="app-practice-searchresult__content__header__action"
+      class="app-practice-searchresult__content__action"
       campusClickStopPropagation
       (click)="onActionClick(action)"
       >{{ data.result ? 'maak opnieuw' : action.label }}</a
@@ -44,10 +44,10 @@
   </ng-container>
 </div>
 
-<div *ngIf="data.result" class="app-practice-searchresult__stars">
-  <mat-icon
+<div *ngIf="data.result" class="app-practice-searchresult__stars"
+  ><mat-icon
     *ngFor="let i of [1, 2, 3]"
     class="app-practice-searchresult__stars__star"
-    svgIcon="{{ data.result.stars >= i ? 'star' : 'star-outline' }}"
-  ></mat-icon>
-</div>
+    [svgIcon]="data.result.stars >= i ? 'star' : 'star-outline'"
+  ></mat-icon
+></div>
