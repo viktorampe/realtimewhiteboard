@@ -48,7 +48,10 @@ export const getChaptersWithStatuses = createSelector(
 
       const childrenTocIds = chapter.children.map(child => child.id);
       eduContentTocEduContent.forEach(tocEduContent => {
-        if (childrenTocIds.includes(tocEduContent.eduContentTOCId)) {
+        if (
+          tocEduContent.type === 'exercise' &&
+          childrenTocIds.includes(tocEduContent.eduContentTOCId)
+        ) {
           availableExercises++;
 
           if (bestResultByEduContentId[tocEduContent.eduContentId]) {
