@@ -13,10 +13,20 @@
 </campus-file-icon>
 
 <div class="app-practice-searchresult__content">
-  <div class="app-practice-searchresult__content__header">
-    <span class="app-practice-searchresult__content__header__title">{{
-      data.eduContent.name
-    }}</span>
+  <div class="app-practice-searchresult__content__header"
+    >{{ data.eduContent.name }}
+    <span
+      *ngIf="data.methodLevel"
+      class="app-practice-searchresult__content__header__level"
+    >
+      <mat-icon
+        *ngIf="data.methodLevel.icon; else methodLevel"
+        svgIcon="{{ data.methodLevel.icon }}"
+      ></mat-icon>
+      <ng-template #methodLevel>
+        {{ data.methodLevel.label }}
+      </ng-template>
+    </span>
   </div>
   <div class="app-practice-searchresult__content__body">
     <span class="app-practice-searchresult__content__body__description">{{
@@ -34,21 +44,10 @@
   </ng-container>
 </div>
 
-<mat-icon
-  *ngIf="data.methodLevel.icon; else methodLabel"
-  class="app-practice-searchresult__level"
-  svgIcon="{{ data.methodLevel.icon }}"
-></mat-icon>
-<ng-template #methodLabel>
-  <span class="app-practice-searchresult__level">{{
-    data.methodLevel.label
-  }}</span>
-</ng-template>
-
 <div *ngIf="data.result" class="app-practice-searchresult__stars">
   <mat-icon
-    *ngFor="let i of getStars(data.result)"
+    *ngFor="let i of [1, 2, 3]"
     class="app-practice-searchresult__stars__star"
-    svgIcon="{{ data.methodLevel.icon }}"
+    svgIcon="{{ data.result.stars >= i ? 'star' : 'star-outline' }}"
   ></mat-icon>
 </div>

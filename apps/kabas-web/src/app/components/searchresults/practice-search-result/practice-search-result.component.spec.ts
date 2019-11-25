@@ -9,25 +9,23 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import {
   DiaboloPhaseFixture,
   EduContentFixture,
-  EduContentMetadataFixture
+  EduContentMetadataFixture,
+  MethodLevelFixture,
+  Result
 } from '@campus/dal';
 import {
   ContentActionInterface,
-  ContentActionsServiceInterface,
   CONTENT_ACTIONS_SERVICE_TOKEN,
   EduContentSearchResultInterface
 } from '@campus/shared';
 import { MockDate, MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
 import { configureTestSuite } from 'ng-bullet';
-import { BehaviorSubject } from 'rxjs';
 import { PracticeSearchResultComponent } from './practice-search-result.component';
 
 describe('PracticeSearchResultComponent', () => {
   let component: PracticeSearchResultComponent;
   let fixture: ComponentFixture<PracticeSearchResultComponent>;
-  let contentActionsServiceInterface: ContentActionsServiceInterface;
-  const mockIsFavorite = new BehaviorSubject(false);
   let dateMock: MockDate;
 
   const mockEduContent = new EduContentFixture({
@@ -88,8 +86,6 @@ describe('PracticeSearchResultComponent', () => {
         }
       ]
     });
-
-    contentActionsServiceInterface = TestBed.get(CONTENT_ACTIONS_SERVICE_TOKEN);
   });
 
   beforeEach(() => {
@@ -110,7 +106,7 @@ describe('PracticeSearchResultComponent', () => {
   describe('template', () => {
     it('should set file icon label to the eduContent fileExtension', () => {
       const extensionDE = fixture.debugElement.query(
-        By.css('.app-educontentsearchresult__extension')
+        By.css('.app-practice-searchresult__extension')
       );
 
       expect(extensionDE.componentInstance.label).toBe(
@@ -120,7 +116,7 @@ describe('PracticeSearchResultComponent', () => {
 
     it('should clear the file icon label if the eduContent is an exercise', () => {
       const extensionDE = fixture.debugElement.query(
-        By.css('.app-educontentsearchresult__extension')
+        By.css('.app-practice-searchresult__extension')
       );
 
       component.data = {
@@ -145,33 +141,84 @@ describe('PracticeSearchResultComponent', () => {
 
     it('should show the title and description of the eduContent', () => {
       const titleDE = fixture.debugElement.query(
-        By.css('.app-educontentsearchresult__content__header__title')
+        By.css('.app-practice-searchresult__content__header')
       );
 
       const descriptionDE = fixture.debugElement.query(
-        By.css('.app-educontentsearchresult__content__body__description')
+        By.css('.app-practice-searchresult__content__body__description')
       );
 
-      expect(titleDE.nativeElement.textContent).toBe(mockEduContent.name);
+      expect(titleDE.nativeElement.textContent).toContain(mockEduContent.name);
 
       expect(descriptionDE.nativeElement.textContent).toBe(
         mockEduContent.description
       );
     });
 
-    it('should show the diabolo phase icon of the eduContent', () => {
-      const diaboloIconDE = fixture.debugElement.query(
-        By.css('.app-educontentsearchresult__content__header__diabolo-phase')
+    it('should not show the methodLevel icon', () => {
+      const methodLevelDE = fixture.debugElement.query(
+        By.css('.app-practice-searchresult__content__header__level')
       );
 
-      expect(diaboloIconDE.componentInstance.svgIcon).toBe(
-        mockEduContent.diaboloPhase.icon
+      expect(methodLevelDE).toBeNull();
+    });
+
+    it('should show the methodLevel icon', () => {
+      component.data = {
+        ...component.data,
+        methodLevel: new MethodLevelFixture({ icon: 'foo' })
+      };
+      fixture.detectChanges();
+
+      const diaboloIconDE = fixture.debugElement.query(
+        By.css('.app-practice-searchresult__content__header__level .mat-icon')
       );
+
+      expect(diaboloIconDE.componentInstance.svgIcon).toBe('foo');
+    });
+
+    it('should show the methodLevel label when there is no icon', () => {
+      component.data = {
+        ...component.data,
+        methodLevel: new MethodLevelFixture({ icon: null, label: 'bar' })
+      };
+      fixture.detectChanges();
+
+      const methodLevelDE = fixture.debugElement.query(
+        By.css('.app-practice-searchresult__content__header__level')
+      );
+
+      expect(methodLevelDE.nativeElement.textContent).toContain('bar');
+    });
+
+    it('should not show stars when no result is available', () => {
+      const starsDE = fixture.debugElement.query(
+        By.css('.app-practice-searchresult__stars')
+      );
+
+      expect(starsDE).toBeNull();
+    });
+
+    it('should show the stars when a result is available', () => {
+      component.data = {
+        ...component.data,
+        result: { stars: 2 } as Result
+      };
+      fixture.detectChanges();
+
+      const starsDE = fixture.debugElement.queryAll(
+        By.css('.app-practice-searchresult__stars .mat-icon')
+      );
+
+      expect(starsDE.length).toBe(3);
+      expect(starsDE[0].componentInstance.svgIcon).toBe('star');
+      expect(starsDE[1].componentInstance.svgIcon).toBe('star');
+      expect(starsDE[2].componentInstance.svgIcon).toBe('star-outline');
     });
 
     it('should show the possible actions for the eduContent', () => {
       const actionDEs = fixture.debugElement.queryAll(
-        By.css('.app-educontentsearchresult__content__header__action')
+        By.css('.app-practice-searchresult__content__header__action')
       );
 
       expect(actionDEs.length).toBe(mockActions.length);
