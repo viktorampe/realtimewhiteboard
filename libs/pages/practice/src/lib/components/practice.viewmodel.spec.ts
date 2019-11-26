@@ -342,7 +342,19 @@ describe('PracticeViewModel', () => {
           new UnlockedFreePracticeFixture({
             id: 7,
             eduContentBookId: 24,
+            eduContentTOCId: 6,
+            classGroupId: 1
+          }),
+          new UnlockedFreePracticeFixture({
+            id: 7,
+            eduContentBookId: 24,
             eduContentTOCId: 7,
+            classGroupId: 1
+          }),
+          new UnlockedFreePracticeFixture({
+            id: 7,
+            eduContentBookId: 24,
+            eduContentTOCId: 8,
             classGroupId: 1
           })
         ]
@@ -379,7 +391,7 @@ describe('PracticeViewModel', () => {
         ]
       };
 
-      practiceViewModel.currentPracticeParams$ = of({ book: 24 });
+      practiceViewModel.currentPracticeParams$ = of({ book: 24, chapter: 7 });
       practiceViewModel.unlockedFreePracticeByEduContentBookId$ = of(
         unlockedFreePracticeByEduContentBookId
       );

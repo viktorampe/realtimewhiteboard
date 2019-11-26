@@ -257,14 +257,18 @@ export class PracticeViewModel implements ContentOpenerInterface {
       .pipe(
         map(
           ([routeParams, ufpByBookId]): UnlockedFreePracticeInterface => {
-            return ufpByBookId[routeParams.book].find(ufp =>
-              routeParams.chapter
-                ? ufp.eduContentTOCId === routeParams.chapter
-                : ufp.eduContentTOCId === null
-            );
+            // can be either shared by book or by chapter
+            return ufpByBookId[routeParams.book].reduce((bestMatch, ufp) => {
+              if (bestMatch === null && ufp.eduContentTOCId === null) {
+                return ufp;
+              }
+              if (ufp.eduContentTOCId === routeParams.chapter) {
+                return ufp;
+              }
+              return bestMatch;
+            }, null);
           }
         ),
-
         take(1)
       )
       .subscribe(ufp => {
