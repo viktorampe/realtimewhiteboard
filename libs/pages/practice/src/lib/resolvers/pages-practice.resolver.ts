@@ -5,9 +5,11 @@ import {
   DalState,
   StateResolver,
   UnlockedFreePracticeActions,
-  UnlockedFreePracticeQueries
+  UnlockedFreePracticeQueries,
+  YearActions,
+  YearQueries
 } from '@campus/dal';
-import { Action, Store } from '@ngrx/store';
+import { Action, Selector, Store } from '@ngrx/store';
 
 @Injectable({
   providedIn: 'root'
@@ -23,11 +25,12 @@ export class PracticeResolver extends StateResolver {
   protected getLoadableActions(): Action[] {
     const userId = this.authService.userId;
     return [
-      new UnlockedFreePracticeActions.LoadUnlockedFreePractices({ userId })
+      new UnlockedFreePracticeActions.LoadUnlockedFreePractices({ userId }),
+      new YearActions.LoadYears({ userId })
     ];
   }
 
-  protected getResolvedQueries() {
-    return [UnlockedFreePracticeQueries.getLoaded];
+  protected getResolvedQueries(): Selector<object, boolean>[] {
+    return [UnlockedFreePracticeQueries.getLoaded, YearQueries.getLoaded];
   }
 }

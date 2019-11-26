@@ -11,6 +11,7 @@ import { ManagePracticeMethodDetailResolver } from './resolvers/pages-manage-pra
 import { ManagePracticeOverviewResolver } from './resolvers/pages-manage-practice-overview.resolver';
 import { ManagePracticeResolver } from './resolvers/pages-manage-practice.resolver';
 import { PracticeBookChaptersResolver } from './resolvers/pages-practice-book-chapters.resolver';
+import { PracticeOverviewResolver } from './resolvers/pages-practice-overview.resolver';
 import { PracticeResolver } from './resolvers/pages-practice.resolver';
 
 const routes: Routes = [
@@ -54,34 +55,38 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        component: PracticeOverviewComponent
-      },
-      {
-        path: ':book',
         runGuardsAndResolvers: 'always',
-        resolve: { isResolved: PracticeBookChaptersResolver },
+        resolve: { isResolved: PracticeOverviewResolver },
         children: [
+          { path: '', component: PracticeOverviewComponent },
           {
-            path: '',
-            component: PracticeBookChaptersComponent
-          },
-          {
-            path: ':chapter',
+            path: ':book',
             runGuardsAndResolvers: 'always',
+            resolve: { isResolved: PracticeBookChaptersResolver },
             data: {
-              selector: EduContentTocQueries.getById,
-              displayProperty: 'title'
+              selector: MethodQueries.getMethodWithLearningAreaAndYearByBookId
             },
             children: [
-              { path: '', component: BookLessonsComponent },
+              { path: '', component: PracticeBookChaptersComponent },
               {
-                path: ':lesson',
+                path: ':chapter',
                 runGuardsAndResolvers: 'always',
-                component: BookLessonsComponent,
                 data: {
                   selector: EduContentTocQueries.getById,
                   displayProperty: 'title'
-                }
+                },
+                children: [
+                  { path: '', component: BookLessonsComponent },
+                  {
+                    path: ':lesson',
+                    runGuardsAndResolvers: 'always',
+                    component: BookLessonsComponent,
+                    data: {
+                      selector: EduContentTocQueries.getById,
+                      displayProperty: 'title'
+                    }
+                  }
+                ]
               }
             ]
           }
