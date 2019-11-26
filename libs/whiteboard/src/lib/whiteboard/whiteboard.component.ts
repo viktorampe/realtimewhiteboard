@@ -18,7 +18,9 @@ export class WhiteboardComponent implements OnInit {
 
   onTap(event) {
     if (event.tapCount >= 2) {
-      this.addEmptyCard();
+      const top = event.center.y - event.target.offsetTop - 20;
+      const left = event.center.x - event.target.offsetLeft - 20;
+      this.addEmptyCard(top, left);
     }
   }
 
@@ -26,11 +28,13 @@ export class WhiteboardComponent implements OnInit {
     this.addEmptyCard();
   }
 
-  addEmptyCard() {
+  addEmptyCard(top: number = 0, left: number = 0) {
     this.cards.push({
       color: 'white',
       cardContent: 'test',
-      isInputSelected: true
+      isInputSelected: true,
+      top: top,
+      left: left
     });
   }
 
