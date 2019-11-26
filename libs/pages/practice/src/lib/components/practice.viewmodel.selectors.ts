@@ -15,6 +15,17 @@ export interface UnlockedBookInterface {
   learningAreaName: string;
 }
 
+// copy/paste from selector branch, feel free to overwrite
+export interface ChapterWithStatusInterface {
+  tocId: number;
+  title: string;
+  exercises: {
+    available: number;
+    completed: number;
+  };
+  kwetonsRemaining: number;
+}
+
 export const getUnlockedBooks = createSelector(
   [
     EduContentBookQueries.getAll,
