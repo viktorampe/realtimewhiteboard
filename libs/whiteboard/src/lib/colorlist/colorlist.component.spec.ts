@@ -8,9 +8,8 @@ describe('ColorlistComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ColorlistComponent ]
-    })
-    .compileComponents();
+      declarations: [ColorlistComponent]
+    }).compileComponents();
   }));
 
   beforeEach(() => {

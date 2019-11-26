@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { MatCardModule, MatIconModule } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { configureTestSuite } from 'ng-bullet';
+import { ColorlistComponent } from '../colorlist/colorlist.component';
 import { ToolbarComponent } from '../toolbar/toolbar.component';
 import { CardComponent } from './card.component';
 
@@ -13,7 +14,7 @@ describe('CardComponent', () => {
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [MatCardModule, FormsModule, MatIconModule],
-      declarations: [CardComponent, ToolbarComponent]
+      declarations: [CardComponent, ToolbarComponent, ColorlistComponent]
     });
   });
 
