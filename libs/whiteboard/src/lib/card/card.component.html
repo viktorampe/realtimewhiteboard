@@ -1,5 +1,6 @@
 <div class="card">
-  <campus-toolbar></campus-toolbar>
+  <campus-toolbar (clickColorIcon)="showColor($event)"></campus-toolbar>
+  <campus-colorlist [hidden]="showColorList"></campus-colorlist>
   <div class="card__content">
     <p *ngIf="!card.isInputSelected" (click)="toggleInput()">
       {{ card.cardContent }}
