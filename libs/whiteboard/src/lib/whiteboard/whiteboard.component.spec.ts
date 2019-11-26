@@ -53,7 +53,9 @@ describe('WhiteboardComponent', () => {
     component.cards.push({
       cardContent: '',
       color: null,
-      isInputSelected: false
+      isInputSelected: false,
+      top: 0,
+      left: 0
     });
 
     component.onDeleteCard(0);
