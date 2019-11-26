@@ -151,6 +151,7 @@
 <ng-template #globalSearch>
   <campus-button
     id="global-search-btn"
+    *hasPermission="Permissions.GLOBAL_SEARCH"
     [iconClass]="'magnifier'"
     [routerLink]="['search']"
     ><span>Zoeken</span></campus-button
