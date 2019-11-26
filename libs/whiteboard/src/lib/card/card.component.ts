@@ -19,7 +19,7 @@ export class CardComponent implements OnInit {
   ngOnInit() {
     this.showColorList = true;
     this.card = {
-      color: '',
+      color: 'white',
       cardContent: null,
       isInputSelected: true
     };
@@ -36,5 +36,9 @@ export class CardComponent implements OnInit {
     if (this.colorIconClicked === true) {
       this.showColorList = !this.showColorList;
     }
+  }
+  selectColor(color: string) {
+    this.showColorList = !this.showColorList;
+    this.card.color = color;
   }
 }
