@@ -1,0 +1,8 @@
+.pages-practice-book-chapters {
+  &__chapter {
+    text-decoration: none;
+    &:not(:last-child) {
+      margin-bottom: 4px;
+    }
+  }
+}
