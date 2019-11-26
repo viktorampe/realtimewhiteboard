@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
-import { MatCardModule, MatIconModule } from '@angular/material';
+import { MatCardModule } from '@angular/material';
+import { MatIconModule } from '@angular/material/icon';
 import { By } from '@angular/platform-browser';
 import { configureTestSuite } from 'ng-bullet';
 import { ColorlistComponent } from '../colorlist/colorlist.component';
@@ -45,5 +46,25 @@ describe('CardComponent', () => {
     await fixture.whenStable();
     const inputContent = fixture.debugElement.query(By.css('input'));
     expect(inputContent.nativeElement.value.trim()).toBe('Test content');
+  });
+
+  it('should show the colorlist when the coloricon is clicked', () => {
+    component.colorIconClicked = true;
+    fixture.detectChanges();
+    expect(component.showColorList).toBe(true);
+  });
+
+  it('should close the colorlist when a color is clicked', () => {
+    component.colorIconClicked = true;
+    fixture.detectChanges();
+    component.selectColor('#ffffff');
+    fixture.detectChanges();
+    expect(component.showColorList).toBe(false);
+  });
+
+  it('should change the cardcolor when a color is picked', () => {
+    component.selectColor('black');
+    fixture.detectChanges();
+    expect(component.card.color).toBe('black');
   });
 });
