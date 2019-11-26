@@ -252,6 +252,12 @@ p {
   }
 }
 
+.pages-practice__container {
+  .pages-practice__book-list {
+    margin-bottom: $kabas-page-horizontal-padding;
+  }
+}
+
 .pages-home__container {
   &.no-favorites {
     padding-top: $kabas-page-vertical-padding;

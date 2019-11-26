@@ -2,7 +2,7 @@
   class="pages-practice__container pages-practice-overview campus-page"
   *ngIf="(unlockedBooks$ | async) as books"
 >
-  <campus-page-header [title]="'Kies wat je wil oefenen'"> </campus-page-header>
+  <campus-page-header title="Kies wat je wil oefenen"> </campus-page-header>
 
   <ng-template #noBooks>
     <div class="pages-practice__no-books"
@@ -20,4 +20,23 @@
       ></campus-method-book-tile>
     </ng-container>
   </div>
+
+  <campus-page-header
+    title="Verdien kwetons met oefenen en speel op Kweetet.be!"
+  >
+  </campus-page-header>
+
+  <p>
+    Door oefeningen te maken kun je virtuele centjes verdienen!<br />
+    Per behaalde ster krijg je 10 kwetons waarmee je allerlei leuke dingen kan
+    beleven op kweetet.be!
+  </p>
+
+  <campus-button
+    primary
+    campusRouterLink="https://www.kweetet.be"
+    target="_blank"
+  >
+    Ga naar Kweetet.be
+  </campus-button>
 </div>
