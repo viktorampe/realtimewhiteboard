@@ -1,3 +1,23 @@
-<p>
-  practice-overview works!
-</p>
+<div
+  class="pages-practice__container pages-practice-overview campus-page"
+  *ngIf="(unlockedBooks$ | async) as books"
+>
+  <campus-page-header [title]="'Kies wat je wil oefenen'"> </campus-page-header>
+
+  <ng-template #noBooks>
+    <div class="pages-practice__no-books"
+      >Er zijn momenteel geen boeken voor jou vrijgegeven.</div
+    >
+  </ng-template>
+
+  <div *ngIf="books.length; else noBooks" class="pages-practice__book-list">
+    <ng-container *ngFor="let book of books">
+      <campus-method-book-tile
+        [areaName]="book.learningAreaName"
+        [name]="book.name"
+        [logoUrl]="book.logoUrl"
+        [bookId]="book.bookId"
+      ></campus-method-book-tile>
+    </ng-container>
+  </div>
+</div>
