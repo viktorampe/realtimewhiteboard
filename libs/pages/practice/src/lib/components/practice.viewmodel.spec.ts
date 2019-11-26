@@ -26,6 +26,7 @@ import {
   ScormExerciseServiceInterface,
   SCORM_EXERCISE_SERVICE_TOKEN
 } from '@campus/shared';
+import { Dictionary } from '@ngrx/entity';
 import {
   NavigationActionTiming,
   RouterNavigationAction,
@@ -38,6 +39,7 @@ import {
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
 import { configureTestSuite } from 'ng-bullet';
+import { of } from 'rxjs';
 import { CurrentPracticeParams, PracticeViewModel } from './practice.viewmodel';
 
 describe('PracticeViewModel', () => {
@@ -332,7 +334,24 @@ describe('PracticeViewModel', () => {
       expect(spy).toHaveBeenCalledWith(eduContent, true);
     });
 
-    it('should open an exercise', () => {
+    it('should open an exercise with eduContentTOCId', () => {
+      const unlockedFreePracticeByEduContentBookId: Dictionary<
+        UnlockedFreePracticeInterface[]
+      > = {
+        24: [
+          new UnlockedFreePracticeFixture({
+            id: 7,
+            eduContentBookId: 24,
+            eduContentTOCId: 7,
+            classGroupId: 1
+          })
+        ]
+      };
+
+      practiceViewModel.currentPracticeParams$ = of({ book: 24, chapter: 7 });
+      practiceViewModel.unlockedFreePracticeByEduContentBookId$ = of(
+        unlockedFreePracticeByEduContentBookId
+      );
       const eduContent = new EduContentFixture({
         id: 4
       });
@@ -344,6 +363,37 @@ describe('PracticeViewModel', () => {
       practiceViewModel.openEduContentAsExercise(eduContent);
 
       expect(spy).toHaveBeenCalledWith(userId, eduContent.id, 7);
+    });
+
+    it('should open an exercise without eduContentTOCId', () => {
+      const unlockedFreePracticeByEduContentBookId: Dictionary<
+        UnlockedFreePracticeInterface[]
+      > = {
+        24: [
+          new UnlockedFreePracticeFixture({
+            id: 8,
+            eduContentBookId: 24,
+            eduContentTOCId: null,
+            classGroupId: 1
+          })
+        ]
+      };
+
+      practiceViewModel.currentPracticeParams$ = of({ book: 24 });
+      practiceViewModel.unlockedFreePracticeByEduContentBookId$ = of(
+        unlockedFreePracticeByEduContentBookId
+      );
+      const eduContent = new EduContentFixture({
+        id: 4
+      });
+      const spy = jest.spyOn(
+        scormExerciseService,
+        'startExerciseFromUnlockedContent'
+      );
+
+      practiceViewModel.openEduContentAsExercise(eduContent);
+
+      expect(spy).toHaveBeenCalledWith(userId, eduContent.id, 8);
     });
   });
 });

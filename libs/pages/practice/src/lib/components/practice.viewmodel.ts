@@ -36,8 +36,7 @@ import {
   mapTo,
   shareReplay,
   switchMap,
-  take,
-  tap
+  take
 } from 'rxjs/operators';
 import {
   ChapterWithStatusInterface,
@@ -265,7 +264,7 @@ export class PracticeViewModel implements ContentOpenerInterface {
             );
           }
         ),
-        tap(ufp => console.log(ufp)),
+
         take(1)
       )
       .subscribe(ufp => {
