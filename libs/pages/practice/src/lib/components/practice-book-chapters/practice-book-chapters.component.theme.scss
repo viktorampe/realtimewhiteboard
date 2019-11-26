@@ -1,0 +1,26 @@
+@mixin pages-practice-book-chapters() {
+  // color palette
+  $pages-practice-color: $pages-practice-text-color--primary !default;
+  $pages-practice-color--accent: $pages-practice-text-color--primary--accent !default;
+  $pages-practice-background-color: $pages-practice-background-color--primary !default;
+  $pages-practice-background-color--accent: $pages-practice-background-color--secondary !default;
+  $pages-practice-border-color: $pages-practice-border-color--primary !default;
+
+  .pages-practice-book-chapters {
+    &__chapter {
+      color: $pages-practice-color;
+      background-color: $pages-practice-background-color;
+
+      border: 1px solid $pages-practice-border-color;
+
+      &:hover {
+        color: $pages-practice-color--accent;
+        background-color: $pages-practice-background-color--accent;
+      }
+    }
+
+    .ui-page-header {
+      margin-bottom: 12px; // page padding - mat-list padding
+    }
+  }
+}

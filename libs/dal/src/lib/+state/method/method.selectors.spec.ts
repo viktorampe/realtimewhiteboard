@@ -1,11 +1,18 @@
 import { MethodQueries } from '.';
-import { LearningAreaFixture, YearFixture } from '../../+fixtures';
+import {
+  EduContentBookFixture,
+  LearningAreaFixture,
+  YearFixture
+} from '../../+fixtures';
 import { MethodInterface } from '../../+models';
 import {
   createEduContentBook,
   createState as createBookState
 } from '../edu-content-book/edu-content-book.helpers';
-import { State as BookState } from '../edu-content-book/edu-content-book.reducer';
+import {
+  State as BookState,
+  State as EduContentBookState
+} from '../edu-content-book/edu-content-book.reducer';
 import { State as LearningAreaState } from '../learning-area/learning-area.reducer';
 import { State as YearState } from '../year/year.reducer';
 import { MethodFixture } from './../../+fixtures/Method.fixture';
@@ -236,12 +243,12 @@ describe('Method Selectors', () => {
 
     describe('combined-state selectors', () => {
       const mockMethods = [
-        new MethodFixture({ id: 1, name: 'foo method' }),
-        new MethodFixture({ id: 2, name: 'bar method' }),
-        new MethodFixture({ id: 3, name: ' baz method' })
+        new MethodFixture({ id: 1, name: 'foo method', learningAreaId: 1 }),
+        new MethodFixture({ id: 2, name: 'bar method', learningAreaId: 2 }),
+        new MethodFixture({ id: 3, name: ' baz method', learningAreaId: 1 })
       ];
 
-      methodState = createState(mockMethods, true, [], 'no error');
+      const customMethodState = createState(mockMethods, true, [], 'no error');
 
       const mockYears = [
         new YearFixture({ id: 1, label: 'foo year' }),
@@ -273,32 +280,34 @@ describe('Method Selectors', () => {
         loaded: true
       };
 
-      const eduContentBooks = createBookState([
-        createEduContentBook(10, {
+      const mockEduContentBooks = [
+        new EduContentBookFixture({
+          id: 1,
           methodId: 1,
-          years: [{ id: 1, name: 'Y1' }]
+          years: [mockYears[0]]
         }),
-        createEduContentBook(20, {
-          methodId: 2,
-          years: [{ id: 2, name: 'Y2' }]
-        }),
-        createEduContentBook(30, {
-          methodId: 3,
-          years: [{ id: 1, name: 'Y1' }]
-        })
-      ]);
+        new EduContentBookFixture({ id: 2, methodId: 2, years: [mockYears[1]] })
+      ];
+      const eduContentBookState: EduContentBookState = {
+        ids: [1, 2],
+        entities: {
+          1: mockEduContentBooks[0],
+          2: mockEduContentBooks[1]
+        },
+        loaded: true
+      };
 
       const mockAppState = {
         years: yearState,
-        methods: methodState,
-        eduContentBooks: eduContentBooks,
+        methods: customMethodState,
+        eduContentBooks: eduContentBookState,
         learningAreas: learningAreaState
       };
 
       describe('getMethodWithYear', () => {
         it('should return the method name and year name combination', () => {
           const result = MethodQueries.getMethodWithYearByBookId(mockAppState, {
-            id: 10
+            id: 1
           });
 
           expect(result).toBe('foo method foo year');
@@ -307,12 +316,14 @@ describe('Method Selectors', () => {
 
       describe('getMethodWithLearningAreaAndYearByBookId', () => {
         it('should return a method name, learning area name and year combination', () => {
-          const result = MethodQueries.getMethodWithLearningAreaAndYearByBookId(
-            mockAppState,
-            { id: 10 }
+          const result = MethodQueries.getMethodWithLearningAreaAndYearByBookId.projector(
+            customMethodState,
+            yearState,
+            learningAreaState,
+            eduContentBookState.entities[2]
           );
 
-          expect(result).toBe('foo method foo year (foo learning area)');
+          expect(result).toBe('bar method bar year (bar learning area)');
         });
       });
     });
