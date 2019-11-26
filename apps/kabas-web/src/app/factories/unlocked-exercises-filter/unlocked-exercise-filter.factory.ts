@@ -31,9 +31,11 @@ export class UnlockedExerciseFilterFactory implements SearchFilterFactory {
   } = {
     methodLevel: {
       query: MethodLevelQueries.findMany,
-      name: 'methodLevel',
+      name: 'levels',
       label: 'Type',
-      methodDependent: true
+      methodDependent: true,
+      displayProperty: 'icon',
+      keyProperty: 'levelId'
     }
   };
 
@@ -74,7 +76,7 @@ export class UnlockedExerciseFilterFactory implements SearchFilterFactory {
       criteria: {
         name: filterQuery.name,
         label: filterQuery.label,
-        keyProperty: this.keyProperty,
+        keyProperty: filterQuery.keyProperty || this.keyProperty,
         displayProperty: filterQuery.displayProperty || this.displayProperty,
         values: entities.map(entity => ({
           data: entity,
