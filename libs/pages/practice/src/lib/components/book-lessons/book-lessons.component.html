@@ -57,9 +57,6 @@
       </div>
 
       <campus-search
-        [autoCompleteValues]="autoCompleteValues$ | async"
-        (searchTermChangeForAutoComplete)="onAutoCompleteRequest($event)"
-        [autoFocusSearchTerm]="true"
         [searchMode]="searchMode$ | async"
         [initialState]="initialSearchState$ | async"
         [searchResults]="searchResults$ | async"

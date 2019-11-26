@@ -1,56 +1,13 @@
 import { Inject, Injectable } from '@angular/core';
-import {
-  AuthServiceInterface,
-  AUTH_SERVICE_TOKEN,
-  ClassGroupInterface,
-  ClassGroupQueries,
-  DalState,
-  EduContent,
-  EduContentBookInterface,
-  EduContentBookQueries,
-  EduContentInterface,
-  EduContentServiceInterface,
-  EduContentTOCInterface,
-  EduContentTocQueries,
-  EDU_CONTENT_SERVICE_TOKEN,
-  getRouterState,
-  MethodLevelFixture,
-  MethodQueries,
-  MethodYearsInterface,
-  Result,
-  ResultFixture,
-  RouterStateUrl,
-  UnlockedFreePracticeActions,
-  UnlockedFreePracticeInterface,
-  UnlockedFreePracticeQueries
-} from '@campus/dal';
-import {
-  SearchModeInterface,
-  SearchResultInterface,
-  SearchStateInterface
-} from '@campus/search';
-import {
-  EnvironmentSearchModesInterface,
-  ENVIRONMENT_SEARCHMODES_TOKEN
-} from '@campus/shared';
+import { AuthServiceInterface, AUTH_SERVICE_TOKEN, ClassGroupInterface, ClassGroupQueries, DalState, EduContent, EduContentBookInterface, EduContentBookQueries, EduContentInterface, EduContentServiceInterface, EduContentTOCInterface, EduContentTocQueries, EDU_CONTENT_SERVICE_TOKEN, getRouterState, MethodLevelQueries, MethodQueries, MethodYearsInterface, ResultQueries, RouterStateUrl, UnlockedFreePracticeActions, UnlockedFreePracticeInterface, UnlockedFreePracticeQueries } from '@campus/dal';
+import { SearchModeInterface, SearchResultInterface, SearchStateInterface } from '@campus/search';
+import { EnvironmentSearchModesInterface, ENVIRONMENT_SEARCHMODES_TOKEN } from '@campus/shared';
 import { Dictionary } from '@ngrx/entity';
 import { RouterReducerState } from '@ngrx/router-store';
 import { select, Store } from '@ngrx/store';
-import { BehaviorSubject, merge, Observable, zip } from 'rxjs';
-import {
-  distinctUntilChanged,
-  filter,
-  map,
-  mapTo,
-  shareReplay,
-  switchMap,
-  take,
-  withLatestFrom
-} from 'rxjs/operators';
-import {
-  getUnlockedBooks,
-  UnlockedBookInterface
-} from './practice.viewmodel.selectors';
+import { BehaviorSubject, merge, Observable, of, zip } from 'rxjs';
+import { distinctUntilChanged, filter, map, mapTo, shareReplay, switchMap, take, withLatestFrom } from 'rxjs/operators';
+import { getUnlockedBooks, UnlockedBookInterface } from './practice.viewmodel.selectors';
 
 export interface CurrentPracticeParams {
   book?: number;
@@ -141,15 +98,7 @@ export class PracticeViewModel {
    * determine the searchMode for a given string
    */
   public getSearchMode(mode: string): Observable<SearchModeInterface> {
-    return this.currentBook$.pipe(
-      map(currentBook => {
-        if (currentBook && currentBook.diabolo && mode === 'chapter-lesson') {
-          return this.searchModes['diabolo-chapter-lesson'];
-        } else {
-          return this.searchModes[mode];
-        }
-      })
-    );
+    return of(this.searchModes[mode]);
   }
 
   /*
@@ -160,26 +109,11 @@ export class PracticeViewModel {
       withLatestFrom(this.currentBook$, this.currentChapter$),
       map(([currentPracticeParams, currentBook, currentChapter]) => {
         const initialSearchState: SearchStateInterface = {
-          searchTerm: '',
+          searchTerm: null,
           filterCriteriaSelections: new Map<string, (number | string)[]>()
         };
 
-        // if (currentBook) {
-        //   initialSearchState.filterCriteriaSelections.set(
-        //     'years',
-        //     currentBook.years.map(year => year.id)
-        //   );
-
-        //   initialSearchState.filterCriteriaSelections.set('methods', [
-        //     currentBook.methodId
-        //   ]);
-        // }
-
-        // if (currentChapter) {
-        //   initialSearchState.filterCriteriaSelections.set('learningArea', [
-        //     currentMethod.learningAreaId
-        //   ]);
-        // }
+        initialSearchState.filterCriteriaSelections.set('methods', [34]);
 
         if (currentPracticeParams && currentPracticeParams.chapter) {
           initialSearchState.filterCriteriaSelections.set('eduContentTOC', [
@@ -253,6 +187,7 @@ export class PracticeViewModel {
     const currentBookWhenExists$ = this.currentPracticeParams$.pipe(
       filter(params => !!params.book),
       switchMap(params => {
+        console.log(params);
         return this.store.pipe(
           select(EduContentBookQueries.getById, {
             id: params.book
@@ -363,8 +298,8 @@ export class PracticeViewModel {
 
   private setupSearchResults(): void {
     this.searchResults$ = this.searchState$.pipe(
+      filter(searchState => searchState !== null),
       withLatestFrom(this.getInitialSearchState()),
-      filter(([searchState, initialSearchState]) => searchState !== null),
       map(([searchState, initialSearchState]) => ({
         ...initialSearchState,
         ...searchState,
@@ -374,24 +309,31 @@ export class PracticeViewModel {
         ])
       })),
       switchMap(searchState => this.eduContentService.search(searchState)),
-      map(searchResult => {
+      withLatestFrom(
+        this.store.pipe(select(ResultQueries.getBestResultByEduContentId)),
+        this.currentBook$,
+        this.store.pipe(select(MethodLevelQueries.getAll))
+      ),
+      map(([searchResult, resultDict, currentBook, methodLevels]) => {
         return {
           ...searchResult,
           results: searchResult.results.map(
-            (searchResultItem: EduContentInterface, i: number) => {
+            (searchResultItem: EduContentInterface) => {
               const eduContent = Object.assign<EduContent, EduContentInterface>(
                 new EduContent(),
                 searchResultItem
               );
 
+              const methodLevel = methodLevels.find(
+                ml =>
+                  ml.methodId === currentBook.methodId &&
+                  ml.levelId === eduContent.levelId
+              );
+
               return {
-                eduContent: eduContent,
-                // add additional props for the resultItemComponent here
-                result: Object.assign(
-                  new Result(),
-                  new ResultFixture({ score: Math.round(Math.random() * 100) })
-                ),
-                methodLevel: new MethodLevelFixture(i % 2 ? { icon: null } : {})
+                eduContent,
+                result: resultDict[eduContent.id],
+                methodLevel
               };
             }
           )

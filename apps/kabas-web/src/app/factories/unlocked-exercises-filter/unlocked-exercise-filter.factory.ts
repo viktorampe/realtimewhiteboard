@@ -95,7 +95,7 @@ export class UnlockedExerciseFilterFactory implements SearchFilterFactory {
     const filterQuery = this.filterQueries[name];
     return this.store.pipe(
       select(filterQuery.query as MemoizedSelectorWithProps<Object, any, any>, {
-        methodId: searchState.filterCriteriaSelections.get('method')[0] // only a single value allowed
+        methodId: searchState.filterCriteriaSelections.get('methods')[0] // only a single value allowed
       }),
       map(entities => this.getFilter(entities, filterQuery, searchState))
     );
