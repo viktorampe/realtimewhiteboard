@@ -44,4 +44,17 @@ describe('CardComponent', () => {
     const inputContent = fixture.debugElement.query(By.css('input'));
     expect(inputContent.nativeElement.value.trim()).toBe('Test content');
   });
+
+  it('should set the correct top style on creation', async () => {
+    component.card.top = 500;
+
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    expect(fixture.debugElement.nativeElement.style.top).toBe('500px');
+
+    // expect(
+    //   window.getComputedStyle(fixture.debugElement.nativeElement).top
+    // ).toBe('500px');
+  });
 });
