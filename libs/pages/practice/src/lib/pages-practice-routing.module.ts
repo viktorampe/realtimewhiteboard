@@ -55,12 +55,6 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        component: PracticeOverviewComponent,
-        resolve: { isResolved: PracticeOverviewResolver },
-        runGuardsAndResolvers: 'always'
-      },
-      {
-        path: ':book',
         runGuardsAndResolvers: 'always',
         resolve: { isResolved: PracticeOverviewResolver },
         children: [
