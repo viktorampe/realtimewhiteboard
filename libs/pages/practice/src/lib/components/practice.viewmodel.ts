@@ -49,7 +49,6 @@ import {
   shareReplay,
   switchMap,
   take,
-  tap,
   withLatestFrom
 } from 'rxjs/operators';
 import {
@@ -353,7 +352,6 @@ export class PracticeViewModel implements ContentOpenerInterface {
   }
 
   private setupSearchResults(): void {
-    this.searchState$.pipe(tap(s => console.log(s)));
     this.searchResults$ = this.searchState$.pipe(
       withLatestFrom(this.getInitialSearchState()),
       filter(([searchState, initialSearchState]) => searchState !== null),

@@ -25,10 +25,10 @@ import {
   MethodActions,
   MethodFixture,
   MethodInterface,
+  MethodLevelReducer,
   MethodQueries,
   MethodReducer,
-  SearchResultInterface,
-  SearchStateInterface,
+  ResultReducer,
   UnlockedFreePracticeActions,
   UnlockedFreePracticeFixture,
   UnlockedFreePracticeInterface,
@@ -38,7 +38,12 @@ import {
   YearFixture,
   YearReducer
 } from '@campus/dal';
-import { FilterFactoryFixture, SearchModeInterface } from '@campus/search';
+import {
+  FilterFactoryFixture,
+  SearchModeInterface,
+  SearchResultInterface,
+  SearchStateInterface
+} from '@campus/search';
 import {
   EduContentSearchResultFixture,
   EnvironmentSearchModesInterface,
@@ -192,7 +197,9 @@ describe('PracticeViewModel', () => {
           EduContentBookReducer,
           MethodReducer,
           YearReducer,
-          EduContentReducer
+          EduContentReducer,
+          MethodLevelReducer,
+          ResultReducer
         ]),
         RouterTestingModule.withRoutes([]),
         StoreRouterConnectingModule.forRoot({
@@ -421,6 +428,25 @@ describe('PracticeViewModel', () => {
         expect(eduContentService.search).toHaveBeenCalledWith(
           expectedSearchState
         );
+      });
+
+      it('should return the found results', () => {
+        const searchState = {
+          searchTerm: null,
+          filterCriteriaSelections: new Map([])
+        } as SearchStateInterface;
+
+        const searchResults$ = practiceViewModel.searchResults$;
+        const expected = {
+          ...mockSearchResult,
+          results: mockSearchResult.results.map(result => ({
+            eduContent: result
+          }))
+        };
+
+        practiceViewModel.updateState(searchState);
+
+        expect(searchResults$).toBeObservable(hot('a', { a: expected }));
       });
     });
   });
