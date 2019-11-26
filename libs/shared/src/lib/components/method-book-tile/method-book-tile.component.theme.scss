@@ -7,8 +7,13 @@
   $shared-method-book-tile_image-margin-top: 8px !default;
   $shared-method-book-tile_image-height: 124px !default;
   $shared-method-book-tile_title-font-size: 20px !default;
-  $shared-method-book-tile_title-padding-vertical: 0px !default;
-  $shared-method-book-tile_title-padding-horizontal: 10px !default; // title-height / 4, vertical align handled by line height
+  $shared-method-book-tile_title-padding-vertical: 10px !default;
+  $shared-method-book-tile_title-padding-horizontal: 0px !default; // title-height / 4, vertical align handled by line height
+
+  $shared-method-book-tile_areaName-padding-vertical: 8px !default;
+  $shared-method-book-tile_areaName-padding-horizontal: 0px !default;
+
+  $shared-method-book-tile_title-area-spacing: 2px !default;
 
   $shared-method-book-tile_container-width: 200px !default;
   $shared-method-book-tile_container-box-shadow-offset: 0 0 !default;
@@ -36,8 +41,17 @@
 
     &__title {
       font-size: $shared-method-book-tile_title-font-size;
-      padding: $shared-method-book-tile_title-padding-horizontal
-        $shared-method-book-tile_title-padding-vertical;
+      padding: $shared-method-book-tile_title-padding-vertical
+        $shared-method-book-tile_title-padding-horizontal
+        $shared-method-book-tile_title-area-spacing
+        $shared-method-book-tile_title-padding-horizontal;
+    }
+
+    &__areaName {
+      padding: $shared-method-book-tile_title-area-spacing
+        $shared-method-book-tile_areaName-padding-horizontal
+        $shared-method-book-tile_areaName-padding-vertical
+        $shared-method-book-tile_areaName-padding-horizontal;
     }
   }
 }

@@ -12,6 +12,6 @@ export class PracticeOverviewComponent {
   public unlockedBooks$: Observable<UnlockedBookInterface[]>;
 
   constructor(private practiceViewModel: PracticeViewModel) {
-    this.unlockedBooks$ = practiceViewModel.unlockedBooks$;
+    this.unlockedBooks$ = this.practiceViewModel.unlockedBooks$;
   }
 }
