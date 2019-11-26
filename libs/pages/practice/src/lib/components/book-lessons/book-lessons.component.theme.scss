@@ -1,0 +1,142 @@
+@mixin pages-practice-book-lessons() {
+  // color palette
+  $pages-practice-book-lessons-color: $pages-practice-text-color--primary !default;
+  $pages-practice-book-lessons-color--accent: $pages-practice-text-color--primary--accent !default;
+  $pages-practice-book-lessons-background-color: $pages-practice-background-color--primary !default;
+  $pages-practice-book-lessons-background-color--accent: $pages-practice-background-color--secondary !default;
+  $pages-practice-book-lessons-color--secondary: $pages-practice-text-color--secondary !default;
+  $pages-practice-book-lessons__filters-box-shadow-color: $pages-practice-text-color--secondary !default;
+  $pages-practice-book-lessons__filters-border-color: $pages-practice-text-color--secondary !default;
+
+  // measurements
+  $pages-practice-book-lessons__mat-list-padding-left--override: $pages-practice__chapter-padding-left !default;
+  $pages-practice-book-lessons__mat-list-content-margin-left--override: 16px !default; // = used for list indentation -> depth
+  $pages-practice-book-lessons__mat-list-item--selected-border-width: 4px !default;
+  $pages-practice-book-lessons__mat-list__chapter-font-weight: $pages-practice__chapter-font-weight !default;
+  $pages-practice-book-lessons__filters-margin-right: 16px !default;
+  $pages-practice-book-lessons__filters-margin-top: 16px !default;
+  $pages-practice-book-lessons__filters-padding-top: 8px !default;
+  $pages-practice-book-lessons__filters-padding-right: 8px !default;
+  $pages-practice-book-lessons__filters-padding-bottom: 8px !default;
+  $pages-practice-book-lessons__filters-padding-left: 8px !default;
+  $pages-practice-book-lessons__filters-box-shadow-offset: 0 0 !default;
+  $pages-practice-book-lessons__filters-box-shadow-blur: 2px !default;
+  $pages-practice-book-lessons__filters-box-shadow-spread: 0 !default;
+  $pages-practice-book-lessons__filters-border-width: 1px !default;
+
+  $pages-practice-book-lessons__reset-filters-width: 32px !default;
+  $pages-practice-book-lessons__reset-filters-height: 32px !default;
+  $pages-practice-book-lessons__reset-filters-border-width: 1px !default;
+  $pages-practice-book-lessons__reset-filters-border-color: $pages-practice-text-color--secondary !default;
+  $pages-practice-book-lessons__reset-filters-background-color: $pages-practice-background-color--secondary !default;
+  $pages-practice-book-lessons__reset-filters-hover-background-color: $pages-practice-text-color--primary--accent !default;
+  $pages-practice-book-lessons__reset-filters-hover-color: $pages-practice-text-color--secondary !default;
+
+  $pages-practice-book-lessons__back-link__icon-width: 16px !default;
+  $pages-practice-book-lessons__back-link__icon-height: 16px !default;
+  $pages-practice-book-lessons__back-link__icon-margin-right: 5px !default;
+  $pages-practice-book-lessons__back-link__color: $pages-practice-text-color--secondary !default;
+  $pages-practice-book-lessons__back-link__hover-color: $pages-practice-text-color--secondary !default;
+  $pages-practice-book-lessons__back-link__background-color: $pages-practice-background-color--primary !default;
+  $pages-practice-book-lessons__back-link__hover-background-color: $pages-practice-background-color--secondary !default;
+
+  .practice-book-lessons {
+    .select-filter-component {
+      width: 150px;
+    }
+
+    &--reset-filters {
+      width: $pages-practice-book-lessons__reset-filters-width;
+      height: $pages-practice-book-lessons__reset-filters-height;
+      background-color: $pages-practice-book-lessons__reset-filters-background-color;
+      border: $pages-practice-book-lessons__reset-filters-border-width solid
+        $pages-practice-book-lessons__reset-filters-border-color;
+
+      &:hover {
+        color: $pages-practice-book-lessons__reset-filters-hover-color;
+        background-color: $pages-practice-book-lessons__reset-filters-hover-background-color;
+      }
+    }
+
+    &--filters {
+      margin-top: $pages-practice-book-lessons__filters-margin-top;
+
+      > :not(:last-child) {
+        margin-right: $pages-practice-book-lessons__filters-margin-right;
+      }
+
+      padding: $pages-practice-book-lessons__filters-padding-top
+        $pages-practice-book-lessons__filters-padding-right
+        $pages-practice-book-lessons__filters-padding-bottom
+        $pages-practice-book-lessons__filters-padding-left;
+
+      border-bottom: $pages-practice-book-lessons__filters-border-width solid
+        $pages-practice-book-lessons__filters-border-color;
+      box-shadow: $pages-practice-book-lessons__filters-box-shadow-offset
+        $pages-practice-book-lessons__filters-box-shadow-blur
+        $pages-practice-book-lessons__filters-box-shadow-spread
+        $pages-practice-book-lessons__filters-box-shadow-color;
+    }
+
+    .practice-book-lessons__lesson-link {
+      &.mat-list-item .mat-list-item-content {
+        padding-left: $pages-practice-book-lessons__mat-list-padding-left--override;
+        color: $pages-practice-book-lessons-color;
+        background-color: $pages-practice-book-lessons-background-color;
+      }
+
+      &:hover {
+        &.mat-list-item .mat-list-item-content {
+          background-color: $pages-practice-book-lessons-background-color--accent;
+        }
+      }
+
+      &--selected {
+        &.mat-list-item .mat-list-item-content {
+          background-color: $pages-practice-book-lessons-background-color--accent;
+          padding-left: $pages-practice-book-lessons__mat-list-padding-left--override -
+            $pages-practice-book-lessons__mat-list-item--selected-border-width;
+        }
+
+        border-left: $pages-practice-book-lessons__mat-list-item--selected-border-width
+          $pages-practice-book-lessons-color--accent solid;
+      }
+
+      &--depth-0 {
+        .practice-book-lessons__lesson-link__title {
+          margin-left: 0px;
+          font-weight: $pages-practice-book-lessons__mat-list__chapter-font-weight;
+        }
+      }
+
+      &--depth-1 {
+        .practice-book-lessons__lesson-link__title {
+          margin-left: $pages-practice-book-lessons__mat-list-content-margin-left--override;
+        }
+      }
+    }
+
+    .practice-book-lessons__list-header {
+      &.mat-subheader {
+        padding-left: 0; //$pages-practice-book-lessons__mat-list-padding-left--override;
+        color: $pages-practice-book-lessons-color--secondary;
+        background-color: $pages-practice-book-lessons-background-color;
+      }
+
+      .practice-book-lessons__back-link {
+        color: $pages-practice-book-lessons__back-link__color;
+        background-color: $pages-practice-book-lessons__back-link__background-color;
+
+        &:hover {
+          background-color: $pages-practice-book-lessons__back-link__hover-background-color;
+        }
+
+        > .mat-icon {
+          width: $pages-practice-book-lessons__back-link__icon-width;
+          height: $pages-practice-book-lessons__back-link__icon-height;
+          margin-right: $pages-practice-book-lessons__back-link__icon-margin-right;
+        }
+      }
+    }
+  }
+}
