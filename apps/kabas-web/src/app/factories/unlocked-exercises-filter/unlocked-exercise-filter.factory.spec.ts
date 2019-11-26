@@ -103,9 +103,9 @@ describe('ChapterLessonFilterFactory', () => {
 
   function getExpectedMethodLevelFilter() {
     return getExpectedFilter(
-      'methodLevel',
+      'level',
       'Type',
-      'id',
+      'levelId',
       'label',
       [mockMethodLevels[2], mockMethodLevels[3]],
       ButtonToggleFilterComponent
