@@ -90,6 +90,21 @@ export const getTocsForBook = createSelector(
   ) => tocsByBook[props.bookId] || []
 );
 
+export const getTreeForBook = createSelector(
+  getTocsByBook,
+  (
+    tocsByBook: Dictionary<EduContentTOCInterface[]>,
+    props: { bookId: number }
+  ) => {
+    // The tocs must be ordered by their lfts in order for makeTree to work
+    const tocs = tocsByBook[props.bookId].sort(
+      (aToc, bToc) => aToc.lft - bToc.lft
+    );
+
+    return makeTree(tocs);
+  }
+);
+
 export const getChaptersForBook = createSelector(
   selectEduContentTocState,
   (state: State, props: { bookId: number }) =>
@@ -172,4 +187,33 @@ function findParentTOC(currentToc, tocsToSearch) {
       currentToc.lft > parentToc.lft &&
       currentToc.rgt < parentToc.rgt
   );
+}
+
+// copied from the API, see edu-content-toc.js makeTree
+// convert a 'nested set' result to an object tree structure
+function makeTree(data: EduContentTOCInterface[]) {
+  const branch: EduContentTOCInterface[] = [];
+
+  // check if there are leaves (children) in the tree we passed
+  while (data.length) {
+    // get the first element to process and remove it from the tree
+    const currentTOC: EduContentTOCInterface = { ...data.shift() };
+
+    // find the number of leaves in our branch (including sub-branches)
+    // when there are no more sub-branches this will be 0
+    const leaves: number = (currentTOC.rgt - currentTOC.lft - 1) / 2;
+
+    // since we ordered by 'lft', the next x (= leaves) rows contain all child nodes
+    // we get those nodes and remove them from the tree
+    const children: EduContentTOCInterface[] = data.splice(0, leaves);
+
+    // build the subtree with our child rows and append it to the current element
+    currentTOC.children = makeTree(children);
+
+    // append the current element (with sub-branches) to the current branch
+    branch.push(currentTOC);
+  }
+
+  // return the (sub)tree
+  return branch;
 }

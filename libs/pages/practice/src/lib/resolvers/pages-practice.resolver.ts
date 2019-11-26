@@ -5,7 +5,9 @@ import {
   DalState,
   StateResolver,
   UnlockedFreePracticeActions,
-  UnlockedFreePracticeQueries
+  UnlockedFreePracticeQueries,
+  YearActions,
+  YearQueries
 } from '@campus/dal';
 import { Action, Selector, Store } from '@ngrx/store';
 
@@ -23,11 +25,12 @@ export class PracticeResolver extends StateResolver {
   protected getLoadableActions(): Action[] {
     const userId = this.authService.userId;
     return [
-      new UnlockedFreePracticeActions.LoadUnlockedFreePractices({ userId })
+      new UnlockedFreePracticeActions.LoadUnlockedFreePractices({ userId }),
+      new YearActions.LoadYears({ userId })
     ];
   }
 
   protected getResolvedQueries(): Selector<object, boolean>[] {
-    return [UnlockedFreePracticeQueries.getLoaded];
+    return [UnlockedFreePracticeQueries.getLoaded, YearQueries.getLoaded];
   }
 }
