@@ -20,7 +20,7 @@ import {
 import { Dictionary } from '@ngrx/entity';
 import { RouterReducerState } from '@ngrx/router-store';
 import { select, Store } from '@ngrx/store';
-import { merge, Observable, zip } from 'rxjs';
+import { merge, Observable, of, zip } from 'rxjs';
 import {
   distinctUntilChanged,
   filter,
@@ -31,12 +31,15 @@ import {
   take
 } from 'rxjs/operators';
 import {
+  ChapterWithStatusInterface,
   getUnlockedBooks,
   UnlockedBookInterface
 } from './practice.viewmodel.selectors';
 
 export interface CurrentPracticeParams {
   book?: number;
+  chapter?: number;
+  lesson?: number;
 }
 
 @Injectable({
@@ -47,6 +50,8 @@ export class PracticeViewModel {
   public currentPracticeParams$: Observable<CurrentPracticeParams>;
   public bookTitle$: Observable<string>;
   public bookChapters$: Observable<EduContentTOCInterface[]>;
+  public currentChapter$: Observable<EduContentTOCInterface>;
+  public chapterLessons$: Observable<EduContentTOCInterface[]>;
   public filteredClassGroups$: Observable<ClassGroupInterface[]>;
   public methodYears$: Observable<MethodYearsInterface[]>;
   public unlockedFreePracticeByEduContentTOCId$: Observable<
@@ -56,6 +61,7 @@ export class PracticeViewModel {
     Dictionary<UnlockedFreePracticeInterface[]>
   >;
   public unlockedBooks$: Observable<UnlockedBookInterface[]>;
+  public bookChaptersWithStatus$: Observable<ChapterWithStatusInterface[]>;
 
   //Source streams
   private routerState$: Observable<RouterReducerState<RouterStateUrl>>;
@@ -89,20 +95,28 @@ export class PracticeViewModel {
   private setPresentationStreams() {
     this.bookTitle$ = this.getBookTitleStream();
     this.bookChapters$ = this.getBookChaptersStream();
+    this.currentChapter$ = this.getCurrentBookChapterStream();
+    this.chapterLessons$ = this.getChapterLessonStream();
     this.filteredClassGroups$ = this.getFilteredClassGroupsStream();
     this.methodYears$ = this.store.pipe(
       select(MethodQueries.getAllowedMethodYears)
     );
     this.unlockedBooks$ = this.store.pipe(select(getUnlockedBooks));
+    this.bookChaptersWithStatus$ = of([]); //TODO use selector
   }
 
   private getCurrentPracticeParamsStream(): Observable<CurrentPracticeParams> {
     return this.routerState$.pipe(
       filter(routerState => !!routerState),
       map((routerState: RouterReducerState<RouterStateUrl>) => ({
-        book: +routerState.state.params.book || undefined
+        book: +routerState.state.params.book || undefined,
+        chapter: +routerState.state.params.chapter || undefined,
+        lesson: +routerState.state.params.lesson || undefined
       })),
-      distinctUntilChanged((a, b) => a.book === b.book),
+      distinctUntilChanged(
+        (a, b) =>
+          a.book === b.book && a.chapter === b.chapter && a.lesson === b.lesson
+      ),
       shareReplay(1)
     );
   }
@@ -165,6 +179,49 @@ export class PracticeViewModel {
     );
 
     return merge(chaptersStreamWhenNoBookId$, chaptersStreamWhenBookId$);
+  }
+
+  private getCurrentBookChapterStream(): Observable<EduContentTOCInterface> {
+    const currentChapterStreamWhenNoChapterId$ = this.currentPracticeParams$.pipe(
+      filter(params => !params.chapter),
+      mapTo(null)
+    );
+
+    const currentChapterStreamWhenChapterId$ = this.currentPracticeParams$.pipe(
+      filter(params => !!params.chapter),
+      switchMap(params => {
+        return this.store.pipe(
+          select(EduContentTocQueries.getById, {
+            id: params.chapter
+          })
+        );
+      })
+    );
+
+    return merge(
+      currentChapterStreamWhenNoChapterId$,
+      currentChapterStreamWhenChapterId$
+    );
+  }
+
+  private getChapterLessonStream(): Observable<EduContentTOCInterface[]> {
+    const lessonsStreamWhenNoChapterId$ = this.currentPracticeParams$.pipe(
+      filter(params => !params.chapter),
+      mapTo([])
+    );
+
+    const lessonsStreamWhenChapterId$ = this.currentPracticeParams$.pipe(
+      filter(params => !!params.chapter),
+      switchMap(params => {
+        return this.store.pipe(
+          select(EduContentTocQueries.getTocsForToc, {
+            tocId: params.chapter
+          })
+        );
+      })
+    );
+
+    return merge(lessonsStreamWhenNoChapterId$, lessonsStreamWhenChapterId$);
   }
 
   private getFilteredClassGroupsStream(): Observable<ClassGroupInterface[]> {

@@ -32,6 +32,7 @@ import {
   UserContentQueries
 } from '@campus/dal';
 import {
+  EduContentTypeEnum,
   OpenStaticContentServiceInterface,
   OPEN_STATIC_CONTENT_SERVICE_TOKEN,
   PermissionServiceInterface,
@@ -174,7 +175,7 @@ export class BundlesViewModel {
     });
 
     if (unlockedContent.eduContentId) {
-      if (unlockedContent.eduContent.type === 'exercise') {
+      if (unlockedContent.eduContent.type === EduContentTypeEnum.EXERCISE) {
         if (this.authService.userId === unlockedContent.teacherId) {
           //own bundle -> teacher -> dialog with or without answers
           return;

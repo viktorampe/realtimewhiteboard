@@ -1,7 +1,7 @@
-import { ResultInterface } from '../+models';
 import { ScormStatus } from '../+external-interfaces/scorm-api.interface';
+import { Result, ResultInterface } from '../+models';
 
-export class ResultFixture implements ResultInterface {
+export class ResultFixture extends Result {
   // defaults
   score = 75;
   time = 10000;
@@ -20,6 +20,7 @@ export class ResultFixture implements ResultInterface {
 
   constructor(props: Partial<ResultInterface> = {}) {
     // overwrite defaults
+    super();
     Object.assign(this, props);
   }
 }

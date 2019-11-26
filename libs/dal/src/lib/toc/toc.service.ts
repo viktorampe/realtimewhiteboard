@@ -55,7 +55,10 @@ export class TocService implements TocServiceInterface {
   }
 
   getBooksByIds(bookIds: number[]): Observable<EduContentBookInterface[]> {
-    return this.eduContentBookApi.find({ where: { id: { inq: bookIds } } });
+    return this.eduContentBookApi.find({
+      where: { id: { inq: bookIds } },
+      include: [{ relation: 'years' }]
+    });
   }
 
   getEduContentTocEduContentForBookId(
