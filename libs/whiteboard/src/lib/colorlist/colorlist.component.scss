@@ -5,4 +5,16 @@
   position: absolute;
   bottom: 0;
   left: 0;
+  display: flex;
+  flex-wrap: wrap;
+  overflow-y: scroll;
+
+  &__swatches {
+    height: 40px;
+    width: 40px;
+    box-sizing: border-box;
+    border-radius: 100%;
+    border: 1px solid #dadada;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.14);
+  }
 }

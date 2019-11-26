@@ -1,3 +1,7 @@
 <div class="colorlist">
-  <div class="swatches"></div>
+  <div
+    *ngFor="let swatch of defaultColors"
+    class="colorlist__swatches"
+    [ngStyle]="{ background: swatch }"
+  ></div>
 </div>
