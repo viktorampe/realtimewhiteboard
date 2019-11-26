@@ -16,7 +16,11 @@ import {
 import { Dictionary } from '@ngrx/entity';
 import { BehaviorSubject } from 'rxjs';
 import { CurrentPracticeParams, PracticeViewModel } from './practice.viewmodel';
-import { UnlockedBookInterface } from './practice.viewmodel.selectors';
+import {
+  ChapterWithStatusInterface,
+  UnlockedBookInterface
+} from './practice.viewmodel.selectors';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -86,6 +90,10 @@ export class MockPracticeViewModel
       content: { 1: false, 2: false }
     }
   ]);
+
+  public bookChaptersWithStatus$ = new BehaviorSubject<
+    ChapterWithStatusInterface[]
+  >(this.getChaptersWithStatus(20));
 
   constructor() {}
 
@@ -180,6 +188,18 @@ export class MockPracticeViewModel
       new EduContentTOCFixture({ id: 6, title: 'Hoofdstuk 2' }),
       new EduContentTOCFixture({ id: 3, title: 'Hoofdstuk 3' })
     ];
+  }
+
+  private getChaptersWithStatus(amount: number = 10) {
+    return Array.from(new Array(amount).keys()).map(key => ({
+      tocId: key + 1,
+      title: 'Hoofdstuk ' + (key + 1),
+      exercises: {
+        available: amount,
+        completed: amount - key
+      },
+      kwetonsRemaining: key * 3 * 10
+    }));
   }
 
   private getLessons() {

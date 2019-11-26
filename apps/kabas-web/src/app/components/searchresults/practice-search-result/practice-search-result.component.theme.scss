@@ -3,6 +3,8 @@
   $app-practice-search-result-selected-border-color: $primary-color-accent !default;
   $app-practice-search-result-icon-color: $primary-color-accent !default;
   $app-practice-search-result-even-background-color: $secondary-bg-color !default;
+  $app-practice-search-result-header-color: $primary-font-color !default;
+  $app-practice-search-result-action-color: $primary-font-color-2 !default;
 
   .app-practice-searchresult {
     &.ui-list-view__list__item--selected,
@@ -25,6 +27,20 @@
 
     &__extension {
       color: $app-practice-search-result-icon-color;
+    }
+
+    &__content {
+      &__header {
+        color: $app-practice-search-result-header-color;
+      }
+
+      &__action {
+        color: $app-practice-search-result-action-color;
+
+        & + .after {
+          background-color: $app-practice-search-result-action-color;
+        }
+      }
     }
   }
 }

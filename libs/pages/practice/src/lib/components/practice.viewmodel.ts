@@ -1,13 +1,56 @@
 import { Inject, Injectable } from '@angular/core';
-import { AuthServiceInterface, AUTH_SERVICE_TOKEN, ClassGroupInterface, ClassGroupQueries, DalState, EduContent, EduContentBookInterface, EduContentBookQueries, EduContentInterface, EduContentServiceInterface, EduContentTOCInterface, EduContentTocQueries, EDU_CONTENT_SERVICE_TOKEN, getRouterState, MethodLevelQueries, MethodQueries, MethodYearsInterface, ResultQueries, RouterStateUrl, UnlockedFreePracticeActions, UnlockedFreePracticeInterface, UnlockedFreePracticeQueries } from '@campus/dal';
-import { SearchModeInterface, SearchResultInterface, SearchStateInterface } from '@campus/search';
-import { EnvironmentSearchModesInterface, ENVIRONMENT_SEARCHMODES_TOKEN } from '@campus/shared';
+import {
+  AuthServiceInterface,
+  AUTH_SERVICE_TOKEN,
+  ClassGroupInterface,
+  ClassGroupQueries,
+  DalState,
+  EduContent,
+  EduContentBookInterface,
+  EduContentBookQueries,
+  EduContentInterface,
+  EduContentServiceInterface,
+  EduContentTOCInterface,
+  EduContentTocQueries,
+  EDU_CONTENT_SERVICE_TOKEN,
+  getRouterState,
+  MethodLevelQueries,
+  MethodQueries,
+  MethodYearsInterface,
+  ResultQueries,
+  RouterStateUrl,
+  UnlockedFreePracticeActions,
+  UnlockedFreePracticeInterface,
+  UnlockedFreePracticeQueries
+} from '@campus/dal';
+import {
+  SearchModeInterface,
+  SearchResultInterface,
+  SearchStateInterface
+} from '@campus/search';
+import {
+  EnvironmentSearchModesInterface,
+  ENVIRONMENT_SEARCHMODES_TOKEN
+} from '@campus/shared';
 import { Dictionary } from '@ngrx/entity';
 import { RouterReducerState } from '@ngrx/router-store';
 import { select, Store } from '@ngrx/store';
 import { BehaviorSubject, merge, Observable, of, zip } from 'rxjs';
-import { distinctUntilChanged, filter, map, mapTo, shareReplay, switchMap, take, withLatestFrom } from 'rxjs/operators';
-import { getUnlockedBooks, UnlockedBookInterface } from './practice.viewmodel.selectors';
+import {
+  distinctUntilChanged,
+  filter,
+  map,
+  mapTo,
+  shareReplay,
+  switchMap,
+  take,
+  withLatestFrom
+} from 'rxjs/operators';
+import {
+  ChapterWithStatusInterface,
+  getUnlockedBooks,
+  UnlockedBookInterface
+} from './practice.viewmodel.selectors';
 
 export interface CurrentPracticeParams {
   book?: number;
@@ -34,6 +77,7 @@ export class PracticeViewModel {
     Dictionary<UnlockedFreePracticeInterface[]>
   >;
   public unlockedBooks$: Observable<UnlockedBookInterface[]>;
+  public bookChaptersWithStatus$: Observable<ChapterWithStatusInterface[]>;
 
   public searchResults$: Observable<SearchResultInterface>;
   public searchState$: Observable<SearchStateInterface>;
@@ -160,6 +204,7 @@ export class PracticeViewModel {
       select(MethodQueries.getAllowedMethodYears)
     );
     this.unlockedBooks$ = this.store.pipe(select(getUnlockedBooks));
+    this.bookChaptersWithStatus$ = of([]); //TODO use selector
   }
 
   private getCurrentPracticeParamsStream(): Observable<CurrentPracticeParams> {

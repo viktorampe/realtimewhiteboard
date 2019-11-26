@@ -170,11 +170,11 @@ describe('PracticeSearchResultComponent', () => {
       };
       fixture.detectChanges();
 
-      const diaboloIconDE = fixture.debugElement.query(
+      const methodLevelIconDE = fixture.debugElement.query(
         By.css('.app-practice-searchresult__content__header__level .mat-icon')
       );
 
-      expect(diaboloIconDE.componentInstance.svgIcon).toBe('foo');
+      expect(methodLevelIconDE.componentInstance.svgIcon).toBe('foo');
     });
 
     it('should show the methodLevel label when there is no icon', () => {
@@ -218,7 +218,7 @@ describe('PracticeSearchResultComponent', () => {
 
     it('should show the possible actions for the eduContent', () => {
       const actionDEs = fixture.debugElement.queryAll(
-        By.css('.app-practice-searchresult__content__header__action')
+        By.css('.app-practice-searchresult__content__action')
       );
 
       expect(actionDEs.length).toBe(mockActions.length);
