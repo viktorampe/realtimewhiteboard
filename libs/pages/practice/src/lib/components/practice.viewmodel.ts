@@ -29,8 +29,13 @@ import {
   SearchStateInterface
 } from '@campus/search';
 import {
+  ContentOpenerInterface,
   EnvironmentSearchModesInterface,
-  ENVIRONMENT_SEARCHMODES_TOKEN
+  ENVIRONMENT_SEARCHMODES_TOKEN,
+  OpenStaticContentServiceInterface,
+  OPEN_STATIC_CONTENT_SERVICE_TOKEN,
+  ScormExerciseServiceInterface,
+  SCORM_EXERCISE_SERVICE_TOKEN
 } from '@campus/shared';
 import { Dictionary } from '@ngrx/entity';
 import { RouterReducerState } from '@ngrx/router-store';
@@ -61,7 +66,7 @@ export interface CurrentPracticeParams {
 @Injectable({
   providedIn: 'root'
 })
-export class PracticeViewModel {
+export class PracticeViewModel implements ContentOpenerInterface {
   //Presentation streams
   public currentPracticeParams$: Observable<CurrentPracticeParams>;
   public bookTitle$: Observable<string>;
@@ -94,7 +99,11 @@ export class PracticeViewModel {
     @Inject(EDU_CONTENT_SERVICE_TOKEN)
     private eduContentService: EduContentServiceInterface,
     @Inject(ENVIRONMENT_SEARCHMODES_TOKEN)
-    private searchModes: EnvironmentSearchModesInterface
+    private searchModes: EnvironmentSearchModesInterface,
+    @Inject(OPEN_STATIC_CONTENT_SERVICE_TOKEN)
+    private openStaticContentService: OpenStaticContentServiceInterface,
+    @Inject(SCORM_EXERCISE_SERVICE_TOKEN)
+    private scormExerciseService: ScormExerciseServiceInterface
   ) {
     this.initialize();
   }
@@ -232,7 +241,6 @@ export class PracticeViewModel {
     const currentBookWhenExists$ = this.currentPracticeParams$.pipe(
       filter(params => !!params.book),
       switchMap(params => {
-        console.log(params);
         return this.store.pipe(
           select(EduContentBookQueries.getById, {
             id: params.book
@@ -385,5 +393,21 @@ export class PracticeViewModel {
         };
       })
     );
+  }
+
+  openEduContentAsExercise(eduContent: EduContent): void {
+    throw new Error('Method not implemented.');
+  }
+  openEduContentAsSolution(eduContent: EduContent): void {
+    throw new Error('Method not implemented.');
+  }
+  openEduContentAsStream(eduContent: EduContent): void {
+    throw new Error('Method not implemented.');
+  }
+  openEduContentAsDownload(eduContent: EduContent): void {
+    throw new Error('Method not implemented.');
+  }
+  openBoeke(eduContent: EduContent): void {
+    throw new Error('Method not implemented.');
   }
 }

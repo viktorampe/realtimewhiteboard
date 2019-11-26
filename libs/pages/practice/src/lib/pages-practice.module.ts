@@ -6,6 +6,7 @@ import { SearchModule } from '@campus/search';
 import {
   ContentActionsStudentService,
   CONTENT_ACTIONS_SERVICE_TOKEN,
+  CONTENT_OPENER_TOKEN,
   SharedModule
 } from '@campus/shared';
 import { UiModule } from '@campus/ui';
@@ -39,6 +40,10 @@ import { PagesPracticeRoutingModule } from './pages-practice-routing.module';
     {
       provide: CONTENT_ACTIONS_SERVICE_TOKEN,
       useClass: ContentActionsStudentService
+    },
+    {
+      provide: CONTENT_OPENER_TOKEN,
+      useClass: PracticeViewModel
     }
   ],
   exports: []
