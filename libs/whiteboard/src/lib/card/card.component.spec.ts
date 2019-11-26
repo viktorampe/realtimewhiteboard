@@ -41,7 +41,7 @@ describe('CardComponent', () => {
     component.card.isInputSelected = true;
     fixture.detectChanges();
     await fixture.whenStable();
-    const inputContent = fixture.debugElement.query(By.css('input'));
+    const inputContent = fixture.debugElement.query(By.css('textarea'));
     expect(inputContent.nativeElement.value.trim()).toBe('Test content');
   });
 });
