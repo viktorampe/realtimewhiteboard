@@ -49,6 +49,7 @@ import {
   shareReplay,
   switchMap,
   take,
+  tap,
   withLatestFrom
 } from 'rxjs/operators';
 import {
@@ -159,8 +160,8 @@ export class PracticeViewModel implements ContentOpenerInterface {
    */
   public getInitialSearchState(): Observable<SearchStateInterface> {
     return this.currentPracticeParams$.pipe(
-      withLatestFrom(this.currentBook$, this.currentChapter$),
-      map(([currentPracticeParams, currentBook, currentChapter]) => {
+      withLatestFrom(this.currentBook$),
+      map(([currentPracticeParams, currentBook]) => {
         const initialSearchState: SearchStateInterface = {
           searchTerm: null,
           filterCriteriaSelections: new Map<string, (number | string)[]>()
@@ -352,9 +353,10 @@ export class PracticeViewModel implements ContentOpenerInterface {
   }
 
   private setupSearchResults(): void {
+    this.searchState$.pipe(tap(s => console.log(s)));
     this.searchResults$ = this.searchState$.pipe(
-      filter(searchState => searchState !== null),
       withLatestFrom(this.getInitialSearchState()),
+      filter(([searchState, initialSearchState]) => searchState !== null),
       map(([searchState, initialSearchState]) => ({
         ...initialSearchState,
         ...searchState,
