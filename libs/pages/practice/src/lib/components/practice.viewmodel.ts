@@ -166,7 +166,9 @@ export class PracticeViewModel implements ContentOpenerInterface {
           filterCriteriaSelections: new Map<string, (number | string)[]>()
         };
 
-        initialSearchState.filterCriteriaSelections.set('methods', [34]);
+        initialSearchState.filterCriteriaSelections.set('methods', [
+          currentBook.methodId
+        ]);
 
         if (currentPracticeParams && currentPracticeParams.chapter) {
           initialSearchState.filterCriteriaSelections.set('eduContentTOC', [
