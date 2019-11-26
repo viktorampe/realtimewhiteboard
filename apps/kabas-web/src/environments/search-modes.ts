@@ -1,5 +1,5 @@
 import { EnvironmentSearchModesInterface } from '@campus/shared';
-import { EduContentSearchResultComponent } from '../app/components/searchresults/edu-content-search-result.component';
+import { EduContentSearchResultComponent } from '../app/components/searchresults/edu-content-search-result/edu-content-search-result.component';
 import { ChapterLessonFilterFactory } from '../app/factories/chapter-lesson-filter/chapter-lesson-filter.factory';
 import { DiaboloChapterLessonFilterFactory } from '../app/factories/chapter-lesson-filter/diabolo-chapter-lesson-filter.factory';
 import { GlobalFilterFactory } from '../app/factories/global-filter/global-filter.factory';

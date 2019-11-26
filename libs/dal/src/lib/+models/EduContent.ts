@@ -79,4 +79,10 @@ export class EduContent implements EduContentInterface, ContentInterface {
       this.publishedEduContentMetadata.diaboloPhase
     );
   }
+  get levelId(): number {
+    return (
+      this.publishedEduContentMetadata &&
+      this.publishedEduContentMetadata.levelId
+    );
+  }
 }
