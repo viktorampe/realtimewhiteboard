@@ -276,6 +276,95 @@ describe('EduContentToc Selectors', () => {
     });
   });
 
+  describe('getTreeForBook', () => {
+    let mockTOCs: EduContentTOCInterface[];
+
+    beforeEach(() => {
+      mockTOCs = [
+        new EduContentTOCFixture({
+          id: 1,
+          treeId: 1,
+          depth: 0,
+          lft: 1,
+          rgt: 6,
+          children: []
+        }),
+        new EduContentTOCFixture({
+          id: 2,
+          treeId: 1,
+          depth: 1,
+          lft: 2,
+          rgt: 3,
+          children: []
+        }),
+        new EduContentTOCFixture({
+          id: 3,
+          treeId: 1,
+          depth: 1,
+          lft: 4,
+          rgt: 5,
+          children: []
+        }),
+        new EduContentTOCFixture({
+          id: 4,
+          treeId: 1,
+          depth: 0,
+          lft: 7,
+          rgt: 12,
+          children: []
+        }),
+        new EduContentTOCFixture({
+          id: 5,
+          treeId: 1,
+          depth: 1,
+          lft: 8,
+          rgt: 11,
+          children: []
+        }),
+        new EduContentTOCFixture({
+          id: 6,
+          treeId: 1,
+          depth: 2,
+          lft: 9,
+          rgt: 10,
+          children: []
+        }),
+        // Unrelated book:
+        new EduContentTOCFixture({
+          id: 7,
+          treeId: 2,
+          depth: 0,
+          lft: 1,
+          rgt: 1,
+          children: []
+        })
+      ];
+
+      eduContentTocState = createState(mockTOCs, [1], 'no error');
+      storeState = { eduContentTocs: eduContentTocState };
+    });
+
+    it('should return the correct tocs', () => {
+      const results = EduContentTocQueries.getTreeForBook(storeState, {
+        bookId: 1
+      });
+      const expected = [
+        Object.assign(mockTOCs[0], {
+          children: [mockTOCs[1], mockTOCs[2]]
+        }),
+        Object.assign(mockTOCs[3], {
+          children: [
+            Object.assign(mockTOCs[4], {
+              children: [mockTOCs[5]]
+            })
+          ]
+        })
+      ];
+
+      expect(results).toEqual(expected);
+    });
+  });
+
   describe('getTocsForBookAndLearningPlanGoal', () => {
     let mockTOCs: EduContentTOCInterface[];
 
