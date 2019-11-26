@@ -1,0 +1,60 @@
+:host {
+  width: 100%;
+  padding: 18px 40px 18px 36px;
+  display: flex !important;
+  flex-direction: row;
+}
+
+.app-practice-searchresult {
+  &__extension {
+    margin: 0 18px 0 0;
+  }
+
+  &__stars {
+    display: flex;
+    width: 60px;
+    flex-wrap: wrap-reverse;
+    justify-content: center;
+  }
+
+  &__content {
+    width: 100%;
+    margin-right: 18px;
+
+    &__header {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+
+      font-size: 14px;
+      line-height: 14px;
+      font-weight: bold;
+      margin-bottom: 4px;
+
+      &__level {
+        margin-left: 8px;
+      }
+    }
+
+    &__action {
+      font-size: 12px;
+
+      & + .after {
+        width: 1px;
+        margin: 0 5px 0 5px;
+        height: 10px;
+        display: inline-block;
+      }
+    }
+
+    &__body {
+      display: flex;
+      flex-direction: row;
+
+      &__description {
+        font-size: 13px;
+        margin-bottom: 4px;
+      }
+    }
+  }
+}
