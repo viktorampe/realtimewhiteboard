@@ -341,23 +341,9 @@ describe('PracticeViewModel', () => {
         'startExerciseFromUnlockedContent'
       );
 
-      practiceViewModel.openEduContentAsExercise(eduContent, 7);
+      practiceViewModel.openEduContentAsExercise(eduContent);
 
       expect(spy).toHaveBeenCalledWith(userId, eduContent.id, 7);
-    });
-
-    it('should open an exercise with solutions', () => {
-      const eduContent = new EduContentFixture({
-        id: 4
-      });
-      const spy = jest.spyOn(
-        scormExerciseService,
-        'previewExerciseFromUnlockedContent'
-      );
-
-      practiceViewModel.openEduContentAsSolution(eduContent);
-
-      expect(spy).toHaveBeenCalledWith(null, eduContent.id, null, true);
     });
   });
 });

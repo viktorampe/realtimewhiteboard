@@ -9,10 +9,7 @@ export interface ContentActionInterface {
 }
 
 export interface ContentOpenerInterface {
-  openEduContentAsExercise(
-    eduContent: EduContent,
-    unlockedContentId?: number
-  ): void;
+  openEduContentAsExercise(eduContent: EduContent): void;
   openEduContentAsSolution(eduContent: EduContent): void;
   openEduContentAsStream(eduContent: EduContent): void;
   openEduContentAsDownload(eduContent: EduContent): void;

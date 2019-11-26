@@ -28,7 +28,7 @@ import {
 import { Dictionary } from '@ngrx/entity';
 import { RouterReducerState } from '@ngrx/router-store';
 import { select, Store } from '@ngrx/store';
-import { merge, Observable, of, zip } from 'rxjs';
+import { combineLatest, merge, Observable, of, zip } from 'rxjs';
 import {
   distinctUntilChanged,
   filter,
@@ -36,7 +36,8 @@ import {
   mapTo,
   shareReplay,
   switchMap,
-  take
+  take,
+  tap
 } from 'rxjs/operators';
 import {
   ChapterWithStatusInterface,
@@ -249,24 +250,35 @@ export class PracticeViewModel implements ContentOpenerInterface {
       })
     );
   }
-  public openEduContentAsExercise(
-    eduContent: EduContent,
-    unlockedFreePracticeId: number
-  ): void {
-    this.scormExerciseService.startExerciseFromUnlockedContent(
-      this.authService.userId,
-      eduContent.id,
-      unlockedFreePracticeId
-    );
+  public openEduContentAsExercise(eduContent: EduContent): void {
+    combineLatest([
+      this.currentPracticeParams$,
+      this.unlockedFreePracticeByEduContentBookId$
+    ])
+      .pipe(
+        map(
+          ([routeParams, ufpByBookId]): UnlockedFreePracticeInterface => {
+            return ufpByBookId[routeParams.book].find(ufp =>
+              routeParams.chapter
+                ? ufp.eduContentTOCId === routeParams.chapter
+                : ufp.eduContentTOCId === null
+            );
+          }
+        ),
+        tap(ufp => console.log(ufp)),
+        take(1)
+      )
+      .subscribe(ufp => {
+        this.scormExerciseService.startExerciseFromUnlockedContent(
+          this.authService.userId,
+          eduContent.id,
+          ufp.id
+        );
+      });
   }
 
   public openEduContentAsSolution(eduContent: EduContent): void {
-    this.scormExerciseService.previewExerciseFromUnlockedContent(
-      null,
-      eduContent.id,
-      null,
-      true
-    );
+    // students can't open with solution
   }
 
   public openEduContentAsStream(eduContent: EduContent): void {
