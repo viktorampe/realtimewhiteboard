@@ -2,7 +2,9 @@ import {
   Component,
   ElementRef,
   EventEmitter,
+  HostBinding,
   Input,
+  OnChanges,
   OnInit,
   Output,
   ViewChild
@@ -14,10 +16,13 @@ import Card from '../../interfaces/Card';
   templateUrl: './card.component.html',
   styleUrls: ['./card.component.scss']
 })
-export class CardComponent implements OnInit {
+export class CardComponent implements OnInit, OnChanges {
   @ViewChild('inputContent') inputContent: ElementRef;
   @Input() card: Card;
   @Output() deleteCard = new EventEmitter();
+
+  @HostBinding('style.top') topStyle: string;
+  @HostBinding('style.left') leftStyle: string;
 
   constructor() {}
 
@@ -25,8 +30,15 @@ export class CardComponent implements OnInit {
     this.card = {
       cardContent: null,
       color: null,
-      isInputSelected: true
+      isInputSelected: true,
+      top: 0,
+      left: 0
     };
+  }
+
+  ngOnChanges() {
+    this.topStyle = this.card.top + 'px';
+    this.leftStyle = this.card.left + 'px';
   }
 
   toggleInput() {
