@@ -4,6 +4,8 @@ import {
   getAll as getAllEduContentBooks,
   getById as getByIdEduContentBooks
 } from '../edu-content-book/edu-content-book.selectors';
+import { State as LearningAreaState } from '../learning-area/learning-area.reducer';
+import { selectLearningAreaState } from '../learning-area/learning-area.selectors';
 import { State as YearState } from '../year/year.reducer';
 import { selectYearState } from '../year/year.selectors';
 import {
@@ -159,6 +161,28 @@ export const getMethodWithYearByBookId = createSelector(
       ' ' +
       yearState.entities[eduContentBook.years[0].id].label
     );
+  }
+);
+
+/**
+ * returns a string representation of the method with it's year and learning area
+ * e.g. 'Katapult 1 (wiskunde)'
+ */
+export const getMethodWithLearningAreaAndYearByBookId = createSelector(
+  selectMethodState,
+  selectYearState,
+  selectLearningAreaState,
+  getByIdEduContentBooks,
+  (
+    methodState: State,
+    yearState: YearState,
+    learningAreaState: LearningAreaState,
+    eduContentBook: EduContentBookInterface
+  ) => {
+    const method = methodState.entities[eduContentBook.methodId];
+    return `${method.name} ${
+      yearState.entities[eduContentBook.years[0].id].label
+    } (${learningAreaState.entities[method.learningAreaId].name})`;
   }
 );
 
