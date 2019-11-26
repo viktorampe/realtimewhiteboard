@@ -16,12 +16,7 @@ import {
   SearchFilterInterface,
   SearchStateInterface
 } from '@campus/search';
-import {
-  MemoizedSelector,
-  MemoizedSelectorWithProps,
-  select,
-  Store
-} from '@ngrx/store';
+import { MemoizedSelector, select, Store } from '@ngrx/store';
 import { combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { FilterQueryInterface } from '../filter-query.interface';
@@ -166,22 +161,11 @@ export class GlobalFilterFactory implements SearchFilterFactory {
     searchState: SearchStateInterface
   ): Observable<SearchFilterInterface> {
     const filterQuery = this.filterQueries[name];
-    if (filterQuery.learningAreaDependent) {
-      return this.store.pipe(
-        select(filterQuery.query as MemoizedSelectorWithProps<
-          Object,
-          any,
-          any[]
-        >),
-        map(entities => this.getFilter(entities, filterQuery, searchState))
-      );
-    } else {
-      return this.store.pipe(
-        select(filterQuery.query as MemoizedSelector<Object, any[]>),
-        map(entities => {
-          return this.getFilter(entities, filterQuery, searchState);
-        })
-      );
-    }
+    return this.store.pipe(
+      select(filterQuery.query as MemoizedSelector<Object, any[]>),
+      map(entities => {
+        return this.getFilter(entities, filterQuery, searchState);
+      })
+    );
   }
 }

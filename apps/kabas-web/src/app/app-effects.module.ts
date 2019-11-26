@@ -7,6 +7,7 @@ import {
   EduContentBookEffects,
   EduContentProductTypeEffects,
   EduContentsEffects,
+  EduContentTocEduContentEffects,
   EduContentTocEffects,
   EffectFeedbackEffects,
   FavoriteEffects,
@@ -52,7 +53,8 @@ import { EffectsModule } from '@ngrx/effects';
       FavoriteEffects,
       AlertsEffects,
       UnlockedFreePracticeEffects,
-      MethodLevelEffects
+      MethodLevelEffects,
+      EduContentTocEduContentEffects
     ])
   ]
 })

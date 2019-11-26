@@ -44,6 +44,10 @@ export const icons = {
   'breadcrumb-separator': 'assets/icons/material/chevron-right.svg',
   'collapsible-sheet-back': 'assets/icons/material/arrow-back.svg',
   file: 'assets/icons/general-file.svg',
+  star: 'assets/icons/star.svg',
+  'star-outline': 'assets/icons/star-border.svg',
+  'katapult-knikker.svg': 'assets/icons/magnifier.svg', //Temp icon
+  color: 'assets/icons/color_lens.svg',
 
   // search: sort modes
   'sort-numeric-down': 'assets/icons/sort-numeric-down.svg',
