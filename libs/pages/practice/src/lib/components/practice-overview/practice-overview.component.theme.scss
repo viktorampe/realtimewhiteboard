@@ -1,13 +1,2 @@
 @mixin pages-practice-practice-overview() {
-  $pages-practice-practice-overview__book-list-margin: 32px !default;
-
-  .pages-practice {
-    &-method-book-tile {
-      margin-right: $pages-practice-practice-overview__book-list-margin;
-
-      &:last-child {
-        margin-right: 0;
-      }
-    }
-  }
 }
