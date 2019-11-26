@@ -23,4 +23,5 @@ export interface EduContentInterface {
   notes?: EduContentNoteInterface[];
   favorites?: FavoriteInterface[];
   previewImage?: string;
+  levelId?: number;
 }
