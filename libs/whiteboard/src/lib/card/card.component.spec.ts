@@ -45,16 +45,21 @@ describe('CardComponent', () => {
     expect(inputContent.nativeElement.value.trim()).toBe('Test content');
   });
 
-  it('should set the correct top style on creation', async () => {
+  it('should set the correct top style on creation', () => {
     component.card.top = 500;
 
+    component.ngOnChanges();
     fixture.detectChanges();
-    await fixture.whenStable();
 
     expect(fixture.debugElement.nativeElement.style.top).toBe('500px');
+  });
 
-    // expect(
-    //   window.getComputedStyle(fixture.debugElement.nativeElement).top
-    // ).toBe('500px');
+  it('should set the correct left style on creation', () => {
+    component.card.left = 500;
+
+    component.ngOnChanges();
+    fixture.detectChanges();
+
+    expect(fixture.debugElement.nativeElement.style.left).toBe('500px');
   });
 });
