@@ -50,41 +50,38 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        component: PracticeOverviewComponent,
-        resolve: { isResolved: PracticeOverviewResolver }
-      },
-      {
-        path: ':book',
-        component: PracticeOverviewComponent, // TODO: change to new component
-        resolve: { isResolved: PracticeBookChaptersResolver },
-        data: {
-          selector: MethodQueries.getMethodWithLearningAreaAndYearByBookId
-        },
-
         runGuardsAndResolvers: 'always',
-
+        resolve: { isResolved: PracticeOverviewResolver },
         children: [
+          { path: '', component: PracticeOverviewComponent },
           {
-            path: '',
-            component: PracticeOverviewComponent
-          },
-          {
-            path: ':chapter',
+            path: ':book',
             runGuardsAndResolvers: 'always',
+            resolve: { isResolved: PracticeBookChaptersResolver },
             data: {
-              selector: EduContentTocQueries.getById,
-              displayProperty: 'title'
+              selector: MethodQueries.getMethodWithLearningAreaAndYearByBookId
             },
             children: [
-              { path: '', component: BookLessonsComponent },
+              { path: '', component: PracticeOverviewComponent },
               {
-                path: ':lesson',
+                path: ':chapter',
                 runGuardsAndResolvers: 'always',
-                component: BookLessonsComponent,
                 data: {
                   selector: EduContentTocQueries.getById,
                   displayProperty: 'title'
-                }
+                },
+                children: [
+                  { path: '', component: BookLessonsComponent },
+                  {
+                    path: ':lesson',
+                    runGuardsAndResolvers: 'always',
+                    component: BookLessonsComponent,
+                    data: {
+                      selector: EduContentTocQueries.getById,
+                      displayProperty: 'title'
+                    }
+                  }
+                ]
               }
             ]
           }
