@@ -1,8 +1,10 @@
 import { EnvironmentSearchModesInterface } from '@campus/shared';
 import { EduContentSearchResultComponent } from '../app/components/searchresults/edu-content-search-result/edu-content-search-result.component';
+import { PracticeSearchResultComponent } from '../app/components/searchresults/practice-search-result/practice-search-result.component';
 import { ChapterLessonFilterFactory } from '../app/factories/chapter-lesson-filter/chapter-lesson-filter.factory';
 import { DiaboloChapterLessonFilterFactory } from '../app/factories/chapter-lesson-filter/diabolo-chapter-lesson-filter.factory';
 import { GlobalFilterFactory } from '../app/factories/global-filter/global-filter.factory';
+import { UnlockedExerciseFilterFactory } from '../app/factories/unlocked-exercises-filter/unlocked-exercise-filter.factory';
 
 export const searchModes: EnvironmentSearchModesInterface = {
   'chapter-lesson': {
@@ -35,6 +37,23 @@ export const searchModes: EnvironmentSearchModesInterface = {
     searchFilterFactory: DiaboloChapterLessonFilterFactory,
     results: {
       component: EduContentSearchResultComponent,
+      sortModes: [
+        {
+          description: 'alfabetisch',
+          name: 'title.raw',
+          icon: 'sort-alpha-down'
+        }
+      ],
+      pageSize: 20
+    }
+  },
+  'practice-chapter-lesson': {
+    name: 'practice-chapter-lesson',
+    label: 'Zoeken op <b>hoofdstuk</b>',
+    dynamicFilters: false,
+    searchFilterFactory: UnlockedExerciseFilterFactory,
+    results: {
+      component: PracticeSearchResultComponent,
       sortModes: [
         {
           description: 'alfabetisch',
