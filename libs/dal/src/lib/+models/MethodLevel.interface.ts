@@ -10,4 +10,5 @@ export interface MethodLevelInterface {
   method?: MethodInterface;
   levelId: number;
   level?: LevelInterface;
+  iconKey?: string;
 }
