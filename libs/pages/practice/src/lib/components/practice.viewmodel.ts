@@ -40,7 +40,14 @@ import {
 import { Dictionary } from '@ngrx/entity';
 import { RouterReducerState } from '@ngrx/router-store';
 import { select, Store } from '@ngrx/store';
-import { BehaviorSubject, merge, Observable, of, zip } from 'rxjs';
+import {
+  BehaviorSubject,
+  combineLatest,
+  merge,
+  Observable,
+  of,
+  zip
+} from 'rxjs';
 import {
   distinctUntilChanged,
   filter,
@@ -350,6 +357,52 @@ export class PracticeViewModel implements ContentOpenerInterface {
       })
     );
   }
+  public openEduContentAsExercise(eduContent: EduContent): void {
+    combineLatest([
+      this.currentPracticeParams$,
+      this.unlockedFreePracticeByEduContentBookId$
+    ])
+      .pipe(
+        map(
+          ([routeParams, ufpByBookId]): UnlockedFreePracticeInterface => {
+            // can be either shared by book or by chapter
+            return ufpByBookId[routeParams.book].reduce((bestMatch, ufp) => {
+              if (bestMatch === null && ufp.eduContentTOCId === null) {
+                return ufp;
+              }
+              if (ufp.eduContentTOCId === routeParams.chapter) {
+                return ufp;
+              }
+              return bestMatch;
+            }, null);
+          }
+        ),
+        take(1)
+      )
+      .subscribe(ufp => {
+        this.scormExerciseService.startExerciseFromUnlockedContent(
+          this.authService.userId,
+          eduContent.id,
+          ufp.id
+        );
+      });
+  }
+
+  public openEduContentAsSolution(eduContent: EduContent): void {
+    // students can't open with solution
+  }
+
+  public openEduContentAsStream(eduContent: EduContent): void {
+    this.openStaticContentService.open(eduContent, true);
+  }
+
+  public openEduContentAsDownload(eduContent: EduContent): void {
+    this.openStaticContentService.open(eduContent, false);
+  }
+
+  public openBoeke(eduContent: EduContent): void {
+    this.openStaticContentService.open(eduContent);
+  }
 
   private setupSearchResults(): void {
     this.searchResults$ = this.searchState$.pipe(
@@ -395,21 +448,5 @@ export class PracticeViewModel implements ContentOpenerInterface {
         };
       })
     );
-  }
-
-  openEduContentAsExercise(eduContent: EduContent): void {
-    throw new Error('Method not implemented.');
-  }
-  openEduContentAsSolution(eduContent: EduContent): void {
-    throw new Error('Method not implemented.');
-  }
-  openEduContentAsStream(eduContent: EduContent): void {
-    throw new Error('Method not implemented.');
-  }
-  openEduContentAsDownload(eduContent: EduContent): void {
-    throw new Error('Method not implemented.');
-  }
-  openBoeke(eduContent: EduContent): void {
-    throw new Error('Method not implemented.');
   }
 }

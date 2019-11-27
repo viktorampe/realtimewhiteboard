@@ -53,6 +53,7 @@ import {
   ScormExerciseServiceInterface,
   SCORM_EXERCISE_SERVICE_TOKEN
 } from '@campus/shared';
+import { Dictionary } from '@ngrx/entity';
 import {
   NavigationActionTiming,
   RouterNavigationAction,
@@ -231,7 +232,10 @@ describe('PracticeViewModel', () => {
         },
         {
           provide: SCORM_EXERCISE_SERVICE_TOKEN,
-          useValue: { previewExerciseFromUnlockedContent: jest.fn() }
+          useValue: {
+            startExerciseFromUnlockedContent: jest.fn(),
+            previewExerciseFromUnlockedContent: jest.fn()
+          }
         }
       ]
     });
@@ -622,4 +626,112 @@ describe('PracticeViewModel', () => {
       store.dispatch(navigationAction);
     });
   }
+
+  describe('open eduContent', () => {
+    it('should open a boek-e', () => {
+      const eduContent = new EduContentFixture({
+        id: 4
+      });
+      const spy = jest.spyOn(openStaticContentService, 'open');
+      practiceViewModel.openBoeke(eduContent);
+
+      expect(spy).toHaveBeenCalledWith(eduContent);
+    });
+
+    it('should open eduContent as a download', () => {
+      const eduContent = new EduContentFixture({
+        id: 4
+      });
+      const spy = jest.spyOn(openStaticContentService, 'open');
+
+      practiceViewModel.openEduContentAsDownload(eduContent);
+
+      expect(spy).toHaveBeenCalledWith(eduContent, false);
+    });
+
+    it('should open eduContent as a stream', () => {
+      const eduContent = new EduContentFixture({
+        id: 4
+      });
+      const spy = jest.spyOn(openStaticContentService, 'open');
+
+      practiceViewModel.openEduContentAsStream(eduContent);
+
+      expect(spy).toHaveBeenCalledWith(eduContent, true);
+    });
+
+    it('should open an exercise with eduContentTOCId', () => {
+      const unlockedFreePracticeByEduContentBookId: Dictionary<
+        UnlockedFreePracticeInterface[]
+      > = {
+        24: [
+          new UnlockedFreePracticeFixture({
+            id: 7,
+            eduContentBookId: 24,
+            eduContentTOCId: 6,
+            classGroupId: 1
+          }),
+          new UnlockedFreePracticeFixture({
+            id: 7,
+            eduContentBookId: 24,
+            eduContentTOCId: 7,
+            classGroupId: 1
+          }),
+          new UnlockedFreePracticeFixture({
+            id: 7,
+            eduContentBookId: 24,
+            eduContentTOCId: 8,
+            classGroupId: 1
+          })
+        ]
+      };
+
+      practiceViewModel.currentPracticeParams$ = of({ book: 24, chapter: 7 });
+      practiceViewModel.unlockedFreePracticeByEduContentBookId$ = of(
+        unlockedFreePracticeByEduContentBookId
+      );
+      const eduContent = new EduContentFixture({
+        id: 4
+      });
+      const spy = jest.spyOn(
+        scormExerciseService,
+        'startExerciseFromUnlockedContent'
+      );
+
+      practiceViewModel.openEduContentAsExercise(eduContent);
+
+      expect(spy).toHaveBeenCalledWith(userId, eduContent.id, 7);
+    });
+
+    it('should open an exercise without eduContentTOCId', () => {
+      const unlockedFreePracticeByEduContentBookId: Dictionary<
+        UnlockedFreePracticeInterface[]
+      > = {
+        24: [
+          new UnlockedFreePracticeFixture({
+            id: 8,
+            eduContentBookId: 24,
+            eduContentTOCId: null,
+            classGroupId: 1
+          })
+        ]
+      };
+
+      practiceViewModel.currentPracticeParams$ = of({ book: 24, chapter: 7 });
+      practiceViewModel.unlockedFreePracticeByEduContentBookId$ = of(
+        unlockedFreePracticeByEduContentBookId
+      );
+      const eduContent = new EduContentFixture({
+        id: 4
+      });
+      const spy = jest.spyOn(
+        scormExerciseService,
+        'startExerciseFromUnlockedContent'
+      );
+
+      practiceViewModel.openEduContentAsExercise(eduContent);
+
+      expect(spy).toHaveBeenCalledWith(userId, eduContent.id, 8);
+    });
+  });
 });
