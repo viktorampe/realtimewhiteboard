@@ -57,7 +57,7 @@ export class BookLessonsComponent implements AfterViewInit {
 
   clearSearchFilters(): void {
     if (this.searchComponent) {
-      this.searchComponent.reset(undefined, true);
+      this.searchComponent.reset(undefined);
     }
   }
 

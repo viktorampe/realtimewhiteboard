@@ -191,12 +191,15 @@ describe('PracticeSearchResultComponent', () => {
       expect(methodLevelDE.nativeElement.textContent).toContain('bar');
     });
 
-    it('should not show stars when no result is available', () => {
-      const starsDE = fixture.debugElement.query(
-        By.css('.app-practice-searchresult__stars')
+    it('should not empty stars when no result is available', () => {
+      const starsDE = fixture.debugElement.queryAll(
+        By.css('.app-practice-searchresult__stars__star')
       );
 
-      expect(starsDE).toBeNull();
+      expect(starsDE.length).toBe(3);
+      expect(starsDE[0].componentInstance.svgIcon).toBe('star-outline');
+      expect(starsDE[1].componentInstance.svgIcon).toBe('star-outline');
+      expect(starsDE[2].componentInstance.svgIcon).toBe('star-outline');
     });
 
     it('should show the stars when a result is available', () => {
