@@ -46,7 +46,21 @@
     </div>
 
     <div main>
-      CONTENT HERE
+      <div data-cy="search-filters" class="practice-book-lessons--filters">
+        <ng-container searchPortal="hostTop"></ng-container>
+        <campus-button
+          class="practice-book-lessons--reset-filters"
+          iconClass="reset-filters"
+          (click)="clearSearchFilters()"
+        ></campus-button>
+      </div>
+
+      <campus-search
+        [searchMode]="searchMode$ | async"
+        [initialState]="initialSearchState$ | async"
+        [searchResults]="searchResults$ | async"
+        (searchState$)="onSearchStateChange($event)"
+      ></campus-search>
     </div>
   </campus-collapsible-sheet>
 </div>

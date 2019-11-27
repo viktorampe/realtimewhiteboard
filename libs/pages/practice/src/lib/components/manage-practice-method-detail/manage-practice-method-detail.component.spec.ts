@@ -9,6 +9,7 @@ import {
   UnlockedFreePracticeFixture,
   UnlockedFreePracticeInterface
 } from '@campus/dal';
+import { ENVIRONMENT_SEARCHMODES_TOKEN } from '@campus/shared';
 import {
   MultiCheckBoxTableColumnChangeEventInterface,
   MultiCheckBoxTableComponent,
@@ -39,7 +40,11 @@ describe('ManagePracticeMethodDetailComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ManagePracticeMethodDetailComponent],
       providers: [
-        { provide: PracticeViewModel, useClass: MockPracticeViewModel }
+        { provide: PracticeViewModel, useClass: MockPracticeViewModel },
+        {
+          provide: ENVIRONMENT_SEARCHMODES_TOKEN,
+          useValue: {}
+        }
       ],
       imports: [UiModule]
     }).compileComponents();

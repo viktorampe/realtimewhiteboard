@@ -5,6 +5,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { MethodYearsInterface } from '@campus/dal';
 import {
   ENVIRONMENT_ICON_MAPPING_TOKEN,
+  ENVIRONMENT_SEARCHMODES_TOKEN,
   ENVIRONMENT_TESTING_TOKEN,
   MethodBooksTileComponent,
   SharedModule
@@ -34,7 +35,11 @@ describe('ManagePracticeOverviewComponent', () => {
           provide: ENVIRONMENT_ICON_MAPPING_TOKEN,
           useValue: {}
         },
-        { provide: ENVIRONMENT_TESTING_TOKEN, useValue: {} }
+        { provide: ENVIRONMENT_TESTING_TOKEN, useValue: {} },
+        {
+          provide: ENVIRONMENT_SEARCHMODES_TOKEN,
+          useValue: {}
+        }
       ]
     });
   });

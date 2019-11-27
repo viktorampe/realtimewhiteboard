@@ -52,7 +52,7 @@ describe('ChapterLessonFilterFactory', () => {
     const mockSearchState: SearchStateInterface = {
       searchTerm: '',
       filterCriteriaSelections: new Map<string, (number | string)[]>([
-        ['method', [2]]
+        ['methods', [2]]
       ])
     };
 
@@ -70,7 +70,7 @@ describe('ChapterLessonFilterFactory', () => {
   describe('getPredictionFilterNames', () => {
     it('should return the correct filter names', () => {
       const filternames = factory.getPredictionFilterNames();
-      expect(filternames).toEqual(['methodLevel']);
+      expect(filternames).toEqual(['level']);
     });
   });
 

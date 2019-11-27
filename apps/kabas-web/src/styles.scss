@@ -216,6 +216,7 @@ p {
 /* page specifics */
 .pages-home__container,
 .pages-methods-overview,
+.pages-practice-overview,
 .pages-manage-practice-overview,
 .pages-settings-profile,
 .pages-settings-dashboard,
@@ -251,6 +252,12 @@ p {
 .search-results {
   .ui-list-view__list {
     align-items: flex-start !important;
+  }
+}
+
+.pages-practice__container {
+  .pages-practice__book-list {
+    margin-bottom: $kabas-page-horizontal-padding;
   }
 }
 

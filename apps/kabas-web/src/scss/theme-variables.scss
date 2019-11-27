@@ -178,6 +178,13 @@ $pages-method-chapter__reset-filters-background-color: transparent;
 $pages-method-chapter__reset-filters-hover-background-color: $color-orange-1;
 $pages-method-chapter__reset-filters-hover-color: $color-white-1;
 
+$pages-practice-book-lessons__reset-filters-border-color: $primary-font-color-2;
+$pages-practice-book-lessons__reset-filters-width: $search-filter-height;
+$pages-practice-book-lessons__reset-filters-height: $search-filter-height;
+$pages-practice-book-lessons__reset-filters-background-color: transparent;
+$pages-practice-book-lessons__reset-filters-hover-background-color: $color-orange-1;
+$pages-practice-book-lessons__reset-filters-hover-color: $color-white-1;
+
 // method chapter filters
 $pages-method-chapter__filters-padding-top: 32px;
 $pages-method-chapter__filters-padding-right: $kabas-page-horizontal-padding;
@@ -185,6 +192,13 @@ $pages-method-chapter__filters-padding-bottom: 18px;
 $pages-method-chapter__filters-padding-left: $kabas-page-horizontal-padding;
 $pages-method-chapter__filters-border-color: $secondary-bg-color;
 $pages-method-chapter__filters-box-shadow-color: $color-gray-5;
+// practice book lessons filters
+$pages-practice-book-lessons__filters-padding-top: 32px;
+$pages-practice-book-lessons__filters-padding-right: $kabas-page-horizontal-padding;
+$pages-practice-book-lessons__filters-padding-bottom: 18px;
+$pages-practice-book-lessons__filters-padding-left: $kabas-page-horizontal-padding;
+$pages-practice-book-lessons__filters-border-color: $secondary-bg-color;
+$pages-practice-book-lessons__filters-box-shadow-color: $color-gray-5;
 
 // search > results list
 $search-results-list__info-height: auto;
