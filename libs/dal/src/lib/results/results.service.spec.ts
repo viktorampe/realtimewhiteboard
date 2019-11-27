@@ -2,12 +2,12 @@ import { inject, TestBed } from '@angular/core/testing';
 import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { hot } from '@nrwl/nx/testing';
 import { Observable } from 'rxjs';
-import { ResultFixture } from '../+fixtures';
-import { ResultInterface } from '../+models';
 import {
   ScormCmiMode,
   ScormStatus
 } from '../+external-interfaces/scorm-api.interface';
+import { ResultFixture } from '../+fixtures';
+import { ResultInterface } from '../+models';
 import { ResultsService } from './results.service';
 import { ResultsServiceInterface } from './results.service.interface';
 
@@ -24,6 +24,7 @@ describe('ResultsService', () => {
             getData: () => mockData$,
             resultForTask: () => mockData$,
             resultForUnlockedContent: () => mockData$,
+            resultForUnlockedFreePractice: () => mockData$,
             saveResult: () => mockData$
           }
         },
@@ -80,6 +81,29 @@ describe('ResultsService', () => {
       a: response
     });
     expect(service.getResultForUnlockedContent(6, 1, 1)).toBeObservable(
+      hot('-a-|', {
+        a: (response as unknown) as ResultInterface
+      })
+    );
+  });
+
+  it('should return results for unlockedFreePractice', () => {
+    const response = {
+      score: null,
+      time: null,
+      status: 'incomplete',
+      cm: null,
+      created: new Date('2018-11-07T16:06:15.000Z'),
+      id: 2,
+      eduContentId: 1,
+      personId: 6,
+      unlockedFreePracticeId: 1
+    };
+
+    mockData$ = hot('-a-|', {
+      a: response
+    });
+    expect(service.getResultForUnlockedFreePractice(6, 1, 1)).toBeObservable(
       hot('-a-|', {
         a: (response as unknown) as ResultInterface
       })

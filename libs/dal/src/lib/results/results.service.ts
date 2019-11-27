@@ -59,6 +59,30 @@ export class ResultsService implements ResultsServiceInterface {
   }
 
   /**
+   * Checks the polpo-api if a result exists and returns it if it is in progress.
+   * Creates a new result if it doesn't exist (or is completed) and returns it.
+   *
+   * @param {number} userId
+   * @param {number} unlockedContentId
+   * @param {number} eduContentId
+   * @returns {Observable<ResultInterface>}
+   * @memberof ScormResultsService
+   */
+  public getResultForUnlockedFreePractice(
+    userId: number,
+    unlockedFreePracticeId: number,
+    eduContentId: number
+  ): Observable<ResultInterface> {
+    // @TODO: replace this when SDK is published:
+    // @see https://dev.azure.com/diekeure-webdev/LK2020/_sprints/taskboard/LK2020/LK2020/27.%20Student%20-%20vrij%20oefenen?workitem=2520
+    return this.personApi['resultForUnlockedFreePractice'](
+      userId,
+      unlockedFreePracticeId,
+      eduContentId
+    ).pipe(map(res => res as ResultInterface));
+  }
+
+  /**
    * Saves a result to the Api, returns the saved result
    */
   public saveResult(

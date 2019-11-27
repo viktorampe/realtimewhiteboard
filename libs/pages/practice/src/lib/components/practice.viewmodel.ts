@@ -272,7 +272,7 @@ export class PracticeViewModel implements ContentOpenerInterface {
         take(1)
       )
       .subscribe(ufp => {
-        this.scormExerciseService.startExerciseFromUnlockedContent(
+        this.scormExerciseService.startExerciseFromUnlockedFreePractice(
           this.authService.userId,
           eduContent.id,
           ufp.id
