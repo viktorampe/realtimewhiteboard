@@ -2,9 +2,11 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { GuardsModule } from '@campus/guards';
 import { PagesSharedModule } from '@campus/pages/shared';
+import { SearchModule } from '@campus/search';
 import {
   ContentActionsStudentService,
   CONTENT_ACTIONS_SERVICE_TOKEN,
+  CONTENT_OPENER_TOKEN,
   SharedModule
 } from '@campus/shared';
 import { UiModule } from '@campus/ui';
@@ -22,6 +24,7 @@ import { PagesPracticeRoutingModule } from './pages-practice-routing.module';
     PagesPracticeRoutingModule,
     UiModule,
     PagesSharedModule,
+    SearchModule,
     SharedModule,
     GuardsModule
   ],
@@ -37,6 +40,10 @@ import { PagesPracticeRoutingModule } from './pages-practice-routing.module';
     {
       provide: CONTENT_ACTIONS_SERVICE_TOKEN,
       useClass: ContentActionsStudentService
+    },
+    {
+      provide: CONTENT_OPENER_TOKEN,
+      useClass: PracticeViewModel
     }
   ],
   exports: []
