@@ -5,6 +5,7 @@ import {
   ClassGroupInterface,
   ClassGroupQueries,
   DalState,
+  EduContent,
   EduContentBookInterface,
   EduContentBookQueries,
   EduContentTOCInterface,
@@ -17,10 +18,17 @@ import {
   UnlockedFreePracticeInterface,
   UnlockedFreePracticeQueries
 } from '@campus/dal';
+import {
+  ContentOpenerInterface,
+  OpenStaticContentServiceInterface,
+  OPEN_STATIC_CONTENT_SERVICE_TOKEN,
+  ScormExerciseServiceInterface,
+  SCORM_EXERCISE_SERVICE_TOKEN
+} from '@campus/shared';
 import { Dictionary } from '@ngrx/entity';
 import { RouterReducerState } from '@ngrx/router-store';
 import { select, Store } from '@ngrx/store';
-import { merge, Observable, of, zip } from 'rxjs';
+import { combineLatest, merge, Observable, of, zip } from 'rxjs';
 import {
   distinctUntilChanged,
   filter,
@@ -45,7 +53,7 @@ export interface CurrentPracticeParams {
 @Injectable({
   providedIn: 'root'
 })
-export class PracticeViewModel {
+export class PracticeViewModel implements ContentOpenerInterface {
   //Presentation streams
   public currentPracticeParams$: Observable<CurrentPracticeParams>;
   public bookTitle$: Observable<string>;
@@ -69,7 +77,11 @@ export class PracticeViewModel {
 
   constructor(
     private store: Store<DalState>,
-    @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface
+    @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
+    @Inject(SCORM_EXERCISE_SERVICE_TOKEN)
+    private scormExerciseService: ScormExerciseServiceInterface,
+    @Inject(OPEN_STATIC_CONTENT_SERVICE_TOKEN)
+    private openStaticContentService: OpenStaticContentServiceInterface
   ) {
     this.initialize();
   }
@@ -236,6 +248,52 @@ export class PracticeViewModel {
         );
       })
     );
+  }
+  public openEduContentAsExercise(eduContent: EduContent): void {
+    combineLatest([
+      this.currentPracticeParams$,
+      this.unlockedFreePracticeByEduContentBookId$
+    ])
+      .pipe(
+        map(
+          ([routeParams, ufpByBookId]): UnlockedFreePracticeInterface => {
+            // can be either shared by book or by chapter
+            return ufpByBookId[routeParams.book].reduce((bestMatch, ufp) => {
+              if (bestMatch === null && ufp.eduContentTOCId === null) {
+                return ufp;
+              }
+              if (ufp.eduContentTOCId === routeParams.chapter) {
+                return ufp;
+              }
+              return bestMatch;
+            }, null);
+          }
+        ),
+        take(1)
+      )
+      .subscribe(ufp => {
+        this.scormExerciseService.startExerciseFromUnlockedContent(
+          this.authService.userId,
+          eduContent.id,
+          ufp.id
+        );
+      });
+  }
+
+  public openEduContentAsSolution(eduContent: EduContent): void {
+    // students can't open with solution
+  }
+
+  public openEduContentAsStream(eduContent: EduContent): void {
+    this.openStaticContentService.open(eduContent, true);
+  }
+
+  public openEduContentAsDownload(eduContent: EduContent): void {
+    this.openStaticContentService.open(eduContent, false);
+  }
+
+  public openBoeke(eduContent: EduContent): void {
+    this.openStaticContentService.open(eduContent);
   }
 
   public toggleUnlockedFreePractice(
