@@ -14,7 +14,6 @@ export class ToolbarComponent implements OnInit {
   ngOnInit() {}
 
   showColor() {
-    this.colorIconClicked = true;
     this.clickColorIcon.emit(this.colorIconClicked);
   }
 }
