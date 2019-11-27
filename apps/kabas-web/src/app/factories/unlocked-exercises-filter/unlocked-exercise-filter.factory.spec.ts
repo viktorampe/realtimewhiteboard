@@ -106,7 +106,7 @@ describe('ChapterLessonFilterFactory', () => {
       'level',
       'Type',
       'levelId',
-      'label',
+      'icon',
       [mockMethodLevels[2], mockMethodLevels[3]],
       ButtonToggleFilterComponent
     );
