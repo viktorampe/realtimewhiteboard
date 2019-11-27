@@ -52,7 +52,16 @@ describe('CardComponent', () => {
   });
 
   /*
-  it('should toggle to edit mode when double click.', <any>fakeAsync(() => {
+it('should toggle to edit mode when double click.', () => {
+    component.card.isInputSelected = false;
+    component.card.cardContent = 'something that is not null';
+
+    const myCard = fixture.debugElement.query(By.css('.card'));
+    myCard.nativeElement.dispatchEvent(new MouseEvent('dblclick')); // use nativeElement so target is set
+    fixture.detectChanges();
+
+    expect(component.card.isInputSelected).toBe(true);
+  });
     component.card.isInputSelected = false;
 
     const myCard = fixture.debugElement.query(By.css('.card'));
