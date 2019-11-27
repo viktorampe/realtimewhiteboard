@@ -9,7 +9,7 @@ import {
   Output,
   ViewChild
 } from '@angular/core';
-import Card from '../../interfaces/Card';
+import Card from '../../interfaces/card.interface';
 
 @Component({
   selector: 'campus-card',

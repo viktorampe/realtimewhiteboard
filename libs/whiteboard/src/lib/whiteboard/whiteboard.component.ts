@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import Card from '../../interfaces/Card';
+import Card from '../../interfaces/card.interface';
 
 @Component({
   selector: 'campus-whiteboard',
