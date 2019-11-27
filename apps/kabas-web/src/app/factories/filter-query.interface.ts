@@ -10,6 +10,7 @@ export interface FilterQueryInterface {
   name: string;
   label: string;
   component?: Type<SearchFilterComponentInterface>;
+  keyProperty?: string;
   displayProperty?: string;
   domHost?: string;
   options?: any;
