@@ -70,7 +70,7 @@ describe('ChapterLessonFilterFactory', () => {
   describe('getPredictionFilterNames', () => {
     it('should return the correct filter names', () => {
       const filternames = factory.getPredictionFilterNames();
-      expect(filternames).toEqual(['methodLevel']);
+      expect(filternames).toEqual(['level']);
     });
   });
 
@@ -103,9 +103,9 @@ describe('ChapterLessonFilterFactory', () => {
 
   function getExpectedMethodLevelFilter() {
     return getExpectedFilter(
-      'methodLevel',
+      'level',
       'Type',
-      'id',
+      'levelId',
       'label',
       [mockMethodLevels[2], mockMethodLevels[3]],
       ButtonToggleFilterComponent
