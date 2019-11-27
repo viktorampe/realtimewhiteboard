@@ -1,5 +1,5 @@
 <div class="card">
-  <campus-toolbar (delete)="onDeleteCard()"></campus-toolbar>
+  <campus-toolbar class="card__toolbar" (delete)="onDeleteCard()"></campus-toolbar>
   <div class="card__content">
     <p *ngIf="!card.isInputSelected" (click)="toggleInput()">
       {{ card.cardContent }}

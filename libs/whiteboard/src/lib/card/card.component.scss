@@ -8,6 +8,13 @@
   align-items: center;
   flex-direction: column;
 
+  &__toolbar {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 8px;
+  }
+
   &__content {
     padding: 0 16px;
     width: 100%;
