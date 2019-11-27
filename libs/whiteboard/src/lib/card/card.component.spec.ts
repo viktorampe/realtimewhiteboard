@@ -51,8 +51,7 @@ describe('CardComponent', () => {
     expect(inputContent.nativeElement.value.trim()).toBe('Test content');
   });
 
-  /*
-it('should toggle to edit mode when double click.', () => {
+  it('should toggle to edit mode when double click.', () => {
     component.card.isInputSelected = false;
     component.card.cardContent = 'something that is not null';
 
@@ -62,15 +61,4 @@ it('should toggle to edit mode when double click.', () => {
 
     expect(component.card.isInputSelected).toBe(true);
   });
-    component.card.isInputSelected = false;
-
-    const myCard = fixture.debugElement.query(By.css('.card'));
-    myCard.triggerEventHandler('click', new MouseEvent('click'));
-    tick(25);
-    myCard.triggerEventHandler('click', new MouseEvent('click'));
-    fixture.detectChanges();
-
-    expect(component.card.isInputSelected).toBe(true);
-  }));
-  */
 });
