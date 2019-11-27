@@ -2,7 +2,7 @@
   <campus-toolbar (clickColorIcon)="showColor($event)"></campus-toolbar>
   <campus-colorlist
     (selectedColor)="selectColor($event)"
-    [hidden]="showColorList"
+    [hidden]="colorlistHidden"
   ></campus-colorlist>
   <div class="card__content">
     <p *ngIf="!card.isInputSelected" (click)="toggleInput()">

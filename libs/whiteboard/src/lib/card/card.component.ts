@@ -12,12 +12,12 @@ export class CardComponent implements OnInit {
   card: Card;
   colorIconClicked: boolean;
   colorlist: ColorlistComponent;
-  showColorList: boolean;
+  colorlistHidden: boolean;
 
   constructor() {}
 
   ngOnInit() {
-    this.showColorList = true;
+    this.colorlistHidden = true;
     this.card = {
       color: 'white',
       cardContent: null,
@@ -34,11 +34,11 @@ export class CardComponent implements OnInit {
   showColor(clicked: boolean) {
     this.colorIconClicked = clicked;
     if (this.colorIconClicked === true) {
-      this.showColorList = !this.showColorList;
+      this.colorlistHidden = !this.colorlistHidden;
     }
   }
   selectColor(color: string) {
-    this.showColorList = !this.showColorList;
+    this.colorlistHidden = !this.colorlistHidden;
     this.card.color = color;
   }
 }
