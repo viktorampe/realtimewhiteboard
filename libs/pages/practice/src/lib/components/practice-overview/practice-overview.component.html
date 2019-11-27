@@ -11,14 +11,13 @@
   </ng-template>
 
   <div *ngIf="books.length; else noBooks" class="pages-practice__book-list">
-    <ng-container *ngFor="let book of books">
-      <campus-method-book-tile
-        [areaName]="book.learningAreaName"
-        [name]="book.name"
-        [logoUrl]="book.logoUrl"
-        [bookId]="book.bookId"
-      ></campus-method-book-tile>
-    </ng-container>
+    <campus-method-book-tile
+      *ngFor="let book of books"
+      [areaName]="book.learningAreaName"
+      [name]="book.name"
+      [logoUrl]="book.logoUrl"
+      [bookId]="book.bookId"
+    ></campus-method-book-tile>
   </div>
 
   <campus-page-header
