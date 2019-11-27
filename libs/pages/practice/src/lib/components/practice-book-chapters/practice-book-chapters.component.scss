@@ -1,4 +1,10 @@
 .pages-practice-book-chapters {
+  &__header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+
   &__chapter {
     text-decoration: none;
     &:not(:last-child) {

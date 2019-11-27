@@ -1,4 +1,10 @@
-<campus-page-header [title]="'Kies een hoofdstuk'"> </campus-page-header>
+<div class="pages-practice-book-chapters__header">
+  <campus-button
+    iconClass="arrow-back"
+    (click)="clickBackLink()"
+  ></campus-button>
+  <campus-page-header [title]="'Kies een hoofdstuk'"> </campus-page-header>
+</div>
 <mat-list
   *ngIf="(chaptersWithStatus$ | async) as chaptersWithStatus"
   class="pages-practice-book-chapters__chapter__container"

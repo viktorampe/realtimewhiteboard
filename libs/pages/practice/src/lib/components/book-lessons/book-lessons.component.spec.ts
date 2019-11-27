@@ -4,7 +4,7 @@ import {
   TestBed,
   tick
 } from '@angular/core/testing';
-import { MatCardModule, MatIconRegistry, MatListItem } from '@angular/material';
+import { MatIconRegistry, MatListItem } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Router } from '@angular/router';
