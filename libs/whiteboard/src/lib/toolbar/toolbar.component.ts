@@ -6,7 +6,7 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
   styleUrls: ['./toolbar.component.scss']
 })
 export class ToolbarComponent implements OnInit {
-  @Output() clickColorIcon = new EventEmitter<boolean>();
+  @Output() clickColorIcon = new EventEmitter<void>();
 
   constructor() {}
 
