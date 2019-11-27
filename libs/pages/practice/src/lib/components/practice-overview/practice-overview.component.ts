@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import { Observable } from 'rxjs';
+import { PracticeViewModel } from '../practice.viewmodel';
+import { UnlockedBookInterface } from '../practice.viewmodel.selectors';
 
 @Component({
   selector: 'campus-practice-overview',
@@ -6,5 +9,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./practice-overview.component.scss']
 })
 export class PracticeOverviewComponent {
-  constructor() {}
+  public unlockedBooks$: Observable<UnlockedBookInterface[]>;
+
+  constructor(private practiceViewModel: PracticeViewModel) {
+    this.unlockedBooks$ = this.practiceViewModel.unlockedBooks$;
+  }
 }

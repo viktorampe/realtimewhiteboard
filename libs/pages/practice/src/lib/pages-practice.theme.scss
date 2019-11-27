@@ -2,6 +2,7 @@
 @import './components/manage-practice-method-detail/manage-practice-method-detail.component.theme.scss';
 @import './components/practice-book-chapters/practice-book-chapters.component.theme.scss';
 @import './components/book-lessons/book-lessons.component.theme.scss';
+@import './components/practice-overview/practice-overview.component.theme.scss';
 
 // color palette
 $pages-practice-text-color--primary: black !default;
@@ -47,6 +48,7 @@ $pages-practice__list-section-title-font-size: 16px !default;
 
 @mixin pages-practice-theme() {
   @include pages-manage-practice-method-detail();
+  @include pages-practice-practice-overview();
   @include pages-practice-book-chapters();
   @include pages-practice-book-lessons();
 }
