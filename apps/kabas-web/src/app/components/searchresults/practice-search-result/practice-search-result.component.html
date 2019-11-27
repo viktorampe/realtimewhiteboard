@@ -44,7 +44,9 @@
   </ng-container>
 </div>
 
-<div class="app-practice-searchresult__stars"
+<div
+  class="app-practice-searchresult__stars"
+  *ngIf="data.eduContent.type === 'exercise'"
   ><mat-icon
     *ngFor="let i of [1, 2, 3]"
     class="app-practice-searchresult__stars__star"

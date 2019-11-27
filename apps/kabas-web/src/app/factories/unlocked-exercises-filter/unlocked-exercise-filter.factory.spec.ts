@@ -52,7 +52,7 @@ describe('ChapterLessonFilterFactory', () => {
     const mockSearchState: SearchStateInterface = {
       searchTerm: '',
       filterCriteriaSelections: new Map<string, (number | string)[]>([
-        ['method', [2]]
+        ['methods', [2]]
       ])
     };
 
