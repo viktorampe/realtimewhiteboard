@@ -1,0 +1,9 @@
+@mixin pages-practice-practice-overview() {
+  $pages-practice-practice-overview__book-list-margin: 32px !default;
+
+  .pages-practice-overview {
+    campus-method-book-tile {
+      margin-bottom: $pages-practice-practice-overview__book-list-margin;
+    }
+  }
+}

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {
   ClassGroupFixture,
   ClassGroupInterface,
+  EduContent,
   EduContentTOCFixture,
   EduContentTOCInterface,
   MethodYearsInterface,
@@ -201,6 +202,11 @@ export class MockPracticeViewModel
       kwetonsRemaining: key * 3 * 10
     }));
   }
+  openEduContentAsExercise(eduContent: any): void {}
+  openEduContentAsSolution(eduContent: EduContent): void {}
+  openEduContentAsStream(eduContent: EduContent): void {}
+  openEduContentAsDownload(eduContent: EduContent): void {}
+  openBoeke(eduContent: EduContent): void {}
 
   private getLessons() {
     return [
