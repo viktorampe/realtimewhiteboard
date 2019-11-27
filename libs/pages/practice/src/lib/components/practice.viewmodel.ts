@@ -177,6 +177,10 @@ export class PracticeViewModel implements ContentOpenerInterface {
           currentBook.methodId
         ]);
 
+        initialSearchState.filterCriteriaSelections.set('eduContent.type', [
+          'exercise'
+        ]);
+
         if (currentPracticeParams && currentPracticeParams.chapter) {
           initialSearchState.filterCriteriaSelections.set('eduContentTOC', [
             currentPracticeParams.lesson

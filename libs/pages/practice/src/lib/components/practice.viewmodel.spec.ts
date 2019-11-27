@@ -336,8 +336,9 @@ describe('PracticeViewModel', () => {
             params: { book: bookId, chapter: chapterTocs[0].id }
           },
           expected: {
-            selections: new Map<string, number[]>([
+            selections: new Map<string, (number | string)[]>([
               ['methods', [bookMethodId]],
+              ['eduContent.type', ['exercise']],
               ['eduContentTOC', [chapterTocs[0].id]]
             ])
           }
@@ -352,8 +353,9 @@ describe('PracticeViewModel', () => {
             }
           },
           expected: {
-            selections: new Map<string, number[]>([
+            selections: new Map<string, (number | string)[]>([
               ['methods', [bookMethodId]],
+              ['eduContent.type', ['exercise']],
               ['eduContentTOC', [lessonTocs[0].id]]
             ])
           }
@@ -424,6 +426,7 @@ describe('PracticeViewModel', () => {
           filterCriteriaSelections: new Map([
             ['methodLevel', [1]],
             ['methods', [bookMethodId]],
+            ['eduContent.type', ['exercise']],
             ['eduContentTOC', [lessonTocs[0].id]]
           ])
         };
