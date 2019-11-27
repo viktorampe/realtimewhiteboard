@@ -1,9 +1,4 @@
-import {
-  ComponentFixture,
-  fakeAsync,
-  TestBed,
-  tick
-} from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
 import { MatListItem } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { Router } from '@angular/router';
@@ -28,12 +23,6 @@ describe('PracticeBookChaptersComponent', () => {
       imports: [RouterTestingModule, UiModule],
       declarations: [PracticeBookChaptersComponent],
       providers: [
-        {
-          provide: Router,
-          useValue: {
-            navigate: jest.fn()
-          }
-        },
         { provide: PracticeViewModel, useClass: MockPracticeViewModel },
         { provide: ENVIRONMENT_TESTING_TOKEN, useValue: {} }
       ]
@@ -54,8 +43,9 @@ describe('PracticeBookChaptersComponent', () => {
 
   describe('click handlers', () => {
     it('should navigate to the bookChapter when clickToBookChapters is called', fakeAsync(() => {
+      router.navigate = jest.fn();
       component.clickBackLink();
-      tick();
+
       expect(router.navigate).toHaveBeenCalledWith(['/practice']);
     }));
   });
