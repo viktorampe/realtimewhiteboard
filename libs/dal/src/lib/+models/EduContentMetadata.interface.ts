@@ -73,4 +73,5 @@ export interface EduContentMetadataInterface {
   methodIds?: number[];
   streamable?: boolean;
   eduContentBookId?: number;
+  levelId?: number;
 }

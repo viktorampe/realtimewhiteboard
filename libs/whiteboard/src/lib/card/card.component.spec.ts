@@ -1,8 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
-import { MatCardModule } from '@angular/material';
+import { MatCardModule, MatIconModule } from '@angular/material';
 import { By, HAMMER_LOADER } from '@angular/platform-browser';
 import { configureTestSuite } from 'ng-bullet';
+import { ToolbarComponent } from '../toolbar/toolbar.component';
 import { CardComponent } from './card.component';
 
 describe('CardComponent', () => {
@@ -11,8 +12,8 @@ describe('CardComponent', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [MatCardModule, FormsModule],
-      declarations: [CardComponent],
+      imports: [MatCardModule, FormsModule, MatIconModule],
+      declarations: [CardComponent, ToolbarComponent],
       providers: [
         {
           provide: HAMMER_LOADER,

@@ -1,0 +1,19 @@
+<campus-page-header [title]="'Kies een hoofdstuk'"> </campus-page-header>
+<mat-list
+  *ngIf="(chaptersWithStatus$ | async) as chaptersWithStatus"
+  class="pages-practice-book-chapters__chapter__container"
+>
+  <a
+    mat-list-item
+    *ngFor="let chapter of chaptersWithStatus"
+    class="pages-practice-book-chapters__chapter"
+    [routerLink]="[chapter.tocId]"
+  >
+    <div matLine>{{ chapter.title }}</div>
+    <div matLine>
+      <span>{{ chapter.exercises.available }} oefeningen</span> -
+      <span>{{ chapter.exercises.completed }} gemaakt</span> -
+      <span>nog {{ chapter.kwetonsRemaining }} kwetons te behalen</span>
+    </div>
+  </a>
+</mat-list>
