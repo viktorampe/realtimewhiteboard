@@ -7,7 +7,6 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 })
 export class ToolbarComponent implements OnInit {
   @Output() clickColorIcon = new EventEmitter<boolean>();
-  colorIconClicked: boolean;
 
   constructor() {}
 
