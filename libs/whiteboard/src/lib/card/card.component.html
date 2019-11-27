@@ -1,5 +1,5 @@
 <div class="card" [style.background-color]="this.card.color">
-  <campus-toolbar (clickColorIcon)="showColor($event)"></campus-toolbar>
+  <campus-toolbar (clickColorIcon)="showColor()"></campus-toolbar>
   <campus-colorlist
     (selectedColor)="selectColor($event)"
     [hidden]="colorlistHidden"

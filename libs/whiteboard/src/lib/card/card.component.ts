@@ -31,10 +31,10 @@ export class CardComponent implements OnInit {
     }
   }
 
-  showColor(clicked: boolean) {
-      this.colorlistHidden = !this.colorlistHidden;
-    }
+  showColor() {
+    this.colorlistHidden = !this.colorlistHidden;
   }
+
   selectColor(color: string) {
     this.colorlistHidden = true;
     this.card.color = color;
