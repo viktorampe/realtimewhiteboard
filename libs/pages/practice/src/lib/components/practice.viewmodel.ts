@@ -28,7 +28,7 @@ import {
 import { Dictionary } from '@ngrx/entity';
 import { RouterReducerState } from '@ngrx/router-store';
 import { select, Store } from '@ngrx/store';
-import { combineLatest, merge, Observable, of, zip } from 'rxjs';
+import { combineLatest, merge, Observable, zip } from 'rxjs';
 import {
   distinctUntilChanged,
   filter,
@@ -40,6 +40,7 @@ import {
 } from 'rxjs/operators';
 import {
   ChapterWithStatusInterface,
+  getChaptersWithStatuses,
   getUnlockedBooks,
   UnlockedBookInterface
 } from './practice.viewmodel.selectors';
@@ -114,7 +115,13 @@ export class PracticeViewModel implements ContentOpenerInterface {
       select(MethodQueries.getAllowedMethodYears)
     );
     this.unlockedBooks$ = this.store.pipe(select(getUnlockedBooks));
-    this.bookChaptersWithStatus$ = of([]); //TODO use selector
+    this.bookChaptersWithStatus$ = this.currentPracticeParams$.pipe(
+      switchMap(params =>
+        this.store.pipe(
+          select(getChaptersWithStatuses, { bookId: params.book })
+        )
+      )
+    );
   }
 
   private getCurrentPracticeParamsStream(): Observable<CurrentPracticeParams> {
