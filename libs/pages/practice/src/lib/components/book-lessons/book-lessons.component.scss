@@ -1,8 +1,18 @@
 .practice-book-lessons {
+  campus-search {
+    flex: 1 1 auto;
+  }
+
   &__list-header {
     display: flex;
     justify-content: flex-start;
     padding: 0;
+  }
+
+  &--filters {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
   }
 
   &__back-link {

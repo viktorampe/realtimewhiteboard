@@ -6,9 +6,16 @@ import {
 } from '@angular/core/testing';
 import { MatIconRegistry, MatListItem } from '@angular/material';
 import { By } from '@angular/platform-browser';
+import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
+import { SearchStateInterface } from '@campus/dal';
+import {
+  ResultItemMockComponent,
+  SearchComponent,
+  SearchTestModule
+} from '@campus/search';
 import {
   ENVIRONMENT_ICON_MAPPING_TOKEN,
   ENVIRONMENT_SEARCHMODES_TOKEN,
@@ -24,6 +31,7 @@ import { BookLessonsComponent } from './book-lessons.component';
 
 describe('BookLessonsComponent', () => {
   let component: BookLessonsComponent;
+  let searchComponent;
   let fixture: ComponentFixture<BookLessonsComponent>;
   let practiceViewModel: MockPracticeViewModel;
   let router: Router;
@@ -31,6 +39,7 @@ describe('BookLessonsComponent', () => {
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [
+        SearchTestModule,
         NoopAnimationsModule,
         RouterTestingModule,
         UiModule,
@@ -51,15 +60,19 @@ describe('BookLessonsComponent', () => {
         { provide: ENVIRONMENT_ICON_MAPPING_TOKEN, useValue: {} },
         { provide: ENVIRONMENT_TESTING_TOKEN, useValue: {} }
       ]
+    }).overrideModule(BrowserDynamicTestingModule, {
+      set: { entryComponents: [ResultItemMockComponent] }
     });
   });
 
   beforeEach(() => {
     practiceViewModel = TestBed.get(PracticeViewModel);
+    searchComponent = TestBed.get(SearchComponent);
     practiceViewModel.currentPracticeParams$.next({ book: 1, chapter: 1 });
     router = TestBed.get(Router);
     fixture = TestBed.createComponent(BookLessonsComponent);
     component = fixture.componentInstance;
+    component.searchComponent = searchComponent;
     fixture.detectChanges();
   });
 
@@ -92,5 +105,37 @@ describe('BookLessonsComponent', () => {
       tick();
       expect(router.navigate).toHaveBeenCalledWith(['/practice', 1, 2]);
     }));
+  });
+
+  describe('search', () => {
+    let mockSearchState;
+
+    beforeEach(() => {
+      mockSearchState = {
+        searchTerm: null,
+        filterCriteriaSelections: new Map<string, (number | string)[]>([
+          ['methods', [34]],
+          ['eduContentTOC', [24]]
+        ])
+      } as SearchStateInterface;
+    });
+
+    it('should reset search filters when clearSearchFilters is called', () => {
+      component.searchComponent.reset = jest.fn();
+      component.clearSearchFilters();
+
+      expect(component.searchComponent.reset).toHaveBeenCalledTimes(1);
+    });
+
+    it('should send searchState to viewmodel on change', () => {
+      jest.spyOn(practiceViewModel, 'updateState');
+
+      component.onSearchStateChange(mockSearchState);
+
+      expect(practiceViewModel.updateState).toHaveBeenCalledTimes(1);
+      expect(practiceViewModel.updateState).toHaveBeenCalledWith(
+        mockSearchState
+      );
+    });
   });
 });
