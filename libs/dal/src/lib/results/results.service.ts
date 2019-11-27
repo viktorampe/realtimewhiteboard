@@ -39,14 +39,9 @@ export class ResultsService implements ResultsServiceInterface {
   }
 
   /**
-   * Checks the polpo-api if a result exists and returns it if it is in progress.
+   * Checks the polpo-api if a result exists for unlockedContent and returns it if it is in progress.
    * Creates a new result if it doesn't exist (or is completed) and returns it.
    *
-   * @param {number} userId
-   * @param {number} unlockedContentId
-   * @param {number} eduContentId
-   * @returns {Observable<ResultInterface>}
-   * @memberof ScormResultsService
    */
   public getResultForUnlockedContent(
     userId: number,
@@ -59,14 +54,9 @@ export class ResultsService implements ResultsServiceInterface {
   }
 
   /**
-   * Checks the polpo-api if a result exists and returns it if it is in progress.
+   * Checks the polpo-api if a result exists for unlockedFreePractice and returns it if it is in progress.
    * Creates a new result if it doesn't exist (or is completed) and returns it.
    *
-   * @param {number} userId
-   * @param {number} unlockedContentId
-   * @param {number} eduContentId
-   * @returns {Observable<ResultInterface>}
-   * @memberof ScormResultsService
    */
   public getResultForUnlockedFreePractice(
     userId: number,
