@@ -40,7 +40,14 @@ import {
 import { Dictionary } from '@ngrx/entity';
 import { RouterReducerState } from '@ngrx/router-store';
 import { select, Store } from '@ngrx/store';
-import { combineLatest, merge, Observable, zip } from 'rxjs';
+import {
+  BehaviorSubject,
+  combineLatest,
+  merge,
+  Observable,
+  of,
+  zip
+} from 'rxjs';
 import {
   distinctUntilChanged,
   filter,
