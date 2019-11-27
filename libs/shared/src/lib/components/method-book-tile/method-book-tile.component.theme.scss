@@ -1,0 +1,57 @@
+@mixin shared-method-book-tile {
+  $shared-method-book-tile-margin-right: 32px !default;
+
+  $shared-method-book-tile_title-text-color: $shared-color-1 !default;
+  $shared-method-book-tile_container-box-shadow-color: $shared-bg-color-2 !default;
+  $shared-method-book-tile_background-color: $shared-bg-color-1 !default;
+  $shared-method-book-tile_image-margin-top: 8px !default;
+  $shared-method-book-tile_image-height: 124px !default;
+  $shared-method-book-tile_title-font-size: 20px !default;
+  $shared-method-book-tile_title-padding-vertical: 10px !default;
+  $shared-method-book-tile_title-padding-horizontal: 0px !default; // title-height / 4, vertical align handled by line height
+
+  $shared-method-book-tile_areaname-padding-vertical: 8px !default;
+  $shared-method-book-tile_areaname-padding-horizontal: 0px !default;
+
+  $shared-method-book-tile_title-area-spacing: 2px !default;
+
+  $shared-method-book-tile_container-width: 200px !default;
+  $shared-method-book-tile_container-box-shadow-offset: 0 0 !default;
+  $shared-method-book-tile_container-box-shadow-blur: 8px !default;
+  $shared-method-book-tile_container-box-shadow-spread: 2px !default;
+
+  .shared-method-book-tile {
+    background-color: $shared-method-book-tile_background-color;
+    width: $shared-method-book-tile_container-width;
+    color: $shared-method-book-tile_title-text-color;
+    margin-right: $shared-method-book-tile-margin-right;
+    box-shadow: $shared-method-book-tile_container-box-shadow-offset
+      $shared-method-book-tile_container-box-shadow-blur
+      $shared-method-book-tile_container-box-shadow-spread
+      $shared-method-book-tile_container-box-shadow-color;
+
+    &:last-child {
+      margin-right: 0;
+    }
+
+    &__image {
+      margin-top: $shared-method-book-tile_image-margin-top;
+      height: $shared-method-book-tile_image-height;
+    }
+
+    &__title {
+      font-size: $shared-method-book-tile_title-font-size;
+      padding: $shared-method-book-tile_title-padding-vertical
+        $shared-method-book-tile_title-padding-horizontal
+        $shared-method-book-tile_title-area-spacing
+        $shared-method-book-tile_title-padding-horizontal;
+    }
+
+    &__areaName {
+      padding: $shared-method-book-tile_title-area-spacing
+        $shared-method-book-tile_areaname-padding-horizontal
+        $shared-method-book-tile_areaname-padding-vertical
+        $shared-method-book-tile_areaname-padding-horizontal;
+    }
+  }
+}

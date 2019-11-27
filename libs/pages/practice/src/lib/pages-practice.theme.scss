@@ -1,0 +1,54 @@
+@import './components/manage-practice-method-detail/manage-practice-method-detail.component.theme';
+@import './components/manage-practice-method-detail/manage-practice-method-detail.component.theme.scss';
+@import './components/practice-book-chapters/practice-book-chapters.component.theme.scss';
+@import './components/book-lessons/book-lessons.component.theme.scss';
+@import './components/practice-overview/practice-overview.component.theme.scss';
+
+// color palette
+$pages-practice-text-color--primary: black !default;
+$pages-practice-text-color--primary--accent: darkred !default;
+$pages-practice-background-color--primary: white !default;
+$pages-practice-border-color--primary: lightgrey !default;
+
+$pages-practice-text-color--secondary: darkgray !default;
+$pages-practice-background-color--secondary: whitesmoke !default;
+
+// measurements
+$pages-practice__chapter-padding-left: 40px !default; // = breadcrumb padding left
+$pages-practice__chapter-font-weight: 600 !default; // = somewhat lighter than left column
+$pages-practice__list-section-title-font-size: 16px !default;
+
+.practice-book-lessons__container {
+  height: 100%;
+  display: flex;
+  flex-flow: column nowrap;
+
+  campus-collapsible-sheet {
+    height: 0px;
+    flex: 1 0 auto;
+
+    div[aside] {
+      height: 100%;
+      overflow: auto;
+      padding: 0px;
+    }
+
+    div[main] {
+      display: flex;
+      flex-direction: column;
+      flex: 1 1 auto;
+    }
+  }
+
+  .collapsible-sheet__main {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+@mixin pages-practice-theme() {
+  @include pages-manage-practice-method-detail();
+  @include pages-practice-practice-overview();
+  @include pages-practice-book-chapters();
+  @include pages-practice-book-lessons();
+}

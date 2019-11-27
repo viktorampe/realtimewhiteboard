@@ -5,6 +5,7 @@ import {
   CurrentExerciseInterface,
   CurrentExerciseQueries,
   DalState,
+  ResultActions,
   ResultInterface
 } from '@campus/dal';
 import {
@@ -150,8 +151,7 @@ export class ScormExerciseService implements ScormExerciseServiceInterface {
     currentExercise: CurrentExerciseInterface
   ) {
     const cmi = JSON.parse(currentExercise.result.cmi);
-    // since the exercise is constantly saved, we only want to display feedback when the exercise is completed
-    const displayResponse = cmi
+    const exerciseCompleted = cmi
       ? cmi.core.lesson_status === ScormStatus.STATUS_COMPLETED
       : false;
 
@@ -159,9 +159,18 @@ export class ScormExerciseService implements ScormExerciseServiceInterface {
       new CurrentExerciseActions.SaveCurrentExercise({
         userId: userId,
         exercise: currentExercise,
-        customFeedbackHandlers: { useCustomSuccessHandler: !displayResponse }
+        // since the exercise is constantly saved, we only want to display feedback when the exercise is completed
+        customFeedbackHandlers: { useCustomSuccessHandler: !exerciseCompleted }
       })
     );
+
+    // this won't update the state if a student does not complete an exercise
+    // the alternative is always updating the results store, but that would be execessive
+    if (exerciseCompleted && currentExercise.saveToApi) {
+      this.store.dispatch(
+        new ResultActions.UpsertResult({ result: currentExercise.result })
+      );
+    }
   }
 
   private loadNewExerciseToStore(

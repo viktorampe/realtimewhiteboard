@@ -14,12 +14,17 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppStoreModule } from './app-store.module';
 import { AppTokenModule } from './app-token.module';
 import { AppComponent } from './app.component';
-import { EduContentSearchResultComponent } from './components/searchresults/edu-content-search-result.component';
+import { EduContentSearchResultComponent } from './components/searchresults/edu-content-search-result/edu-content-search-result.component';
+import { PracticeSearchResultComponent } from './components/searchresults/practice-search-result/practice-search-result.component';
 
 configureBufferSize(150);
 
 @NgModule({
-  declarations: [AppComponent, EduContentSearchResultComponent],
+  declarations: [
+    AppComponent,
+    EduContentSearchResultComponent,
+    PracticeSearchResultComponent
+  ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -57,6 +62,9 @@ configureBufferSize(150);
     }
   ],
   bootstrap: [AppComponent],
-  entryComponents: [EduContentSearchResultComponent]
+  entryComponents: [
+    EduContentSearchResultComponent,
+    PracticeSearchResultComponent
+  ]
 })
 export class AppModule {}
