@@ -36,7 +36,7 @@ export class CardComponent implements OnInit {
     }
   }
   selectColor(color: string) {
-    this.colorlistHidden = !this.colorlistHidden;
+    this.colorlistHidden = true;
     this.card.color = color;
   }
 }
