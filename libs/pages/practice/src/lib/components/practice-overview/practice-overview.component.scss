@@ -1,0 +1,7 @@
+.pages-practice {
+  &__book-list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+}
