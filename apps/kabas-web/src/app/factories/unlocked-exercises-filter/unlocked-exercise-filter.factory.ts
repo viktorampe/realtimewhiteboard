@@ -31,7 +31,7 @@ export class UnlockedExerciseFilterFactory implements SearchFilterFactory {
   } = {
     methodLevel: {
       query: MethodLevelQueries.findMany,
-      name: 'levels',
+      name: 'level',
       label: 'Type',
       methodDependent: true,
       displayProperty: 'icon',
