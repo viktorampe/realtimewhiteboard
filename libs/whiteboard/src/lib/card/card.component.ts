@@ -32,7 +32,6 @@ export class CardComponent implements OnInit {
   }
 
   showColor(clicked: boolean) {
-    if (this.colorIconClicked === true) {
       this.colorlistHidden = !this.colorlistHidden;
     }
   }
