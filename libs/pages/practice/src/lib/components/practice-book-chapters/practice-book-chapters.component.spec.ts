@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatListItem } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
+import { ENVIRONMENT_SEARCHMODES_TOKEN } from '@campus/shared';
 import { UiModule } from '@campus/ui';
 import { configureTestSuite } from 'ng-bullet';
 import { BehaviorSubject } from 'rxjs';
@@ -20,7 +21,14 @@ describe('PracticeBookChaptersComponent', () => {
       imports: [UiModule, RouterTestingModule],
       declarations: [PracticeBookChaptersComponent],
       providers: [
-        { provide: PracticeViewModel, useClass: MockPracticeViewModel }
+        {
+          provide: PracticeViewModel,
+          useClass: MockPracticeViewModel
+        },
+        {
+          provide: ENVIRONMENT_SEARCHMODES_TOKEN,
+          useValue: {}
+        }
       ]
     });
   });
