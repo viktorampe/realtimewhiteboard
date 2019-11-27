@@ -1,4 +1,4 @@
-<div class="card" [ngStyle]="{ background: this.card.color }">
+<div class="card" [style.background-color]="this.card.color">
   <campus-toolbar (clickColorIcon)="showColor($event)"></campus-toolbar>
   <campus-colorlist
     (selectedColor)="selectColor($event)"
