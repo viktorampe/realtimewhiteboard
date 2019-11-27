@@ -69,7 +69,6 @@ import { of } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { CurrentPracticeParams, PracticeViewModel } from './practice.viewmodel';
 
-// file.only
 describe('PracticeViewModel', () => {
   let practiceViewModel: PracticeViewModel;
   let store: Store<DalState>;
