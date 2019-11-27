@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { MatIconRegistry } from '@angular/material';
 import { EffectsModule } from '@ngrx/effects';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Action, StoreModule } from '@ngrx/store';
@@ -6,6 +7,8 @@ import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
 import { MethodLevelReducer } from '.';
+import { MethodLevelFixture } from '../../+fixtures';
+import { MethodLevelInterface } from '../../+models';
 import { METHOD_LEVEL_SERVICE_TOKEN } from '../../metadata/method-level.service.interface';
 import {
   LoadMethodLevels,
@@ -18,6 +21,7 @@ describe('MethodLevelEffects', () => {
   let actions: Observable<any>;
   let effects: MethodLevelEffects;
   let usedState: any;
+  let iconRegistry: MatIconRegistry;
 
   const expectInAndOut = (
     effect: Observable<any>,
@@ -77,6 +81,12 @@ describe('MethodLevelEffects', () => {
             getAllForUser: () => {}
           }
         },
+        {
+          provide: MatIconRegistry,
+          useValue: {
+            addSvgIcon: jest.fn()
+          }
+        },
         MethodLevelEffects,
         DataPersistence,
         provideMockActions(() => actions)
@@ -84,6 +94,7 @@ describe('MethodLevelEffects', () => {
     });
 
     effects = TestBed.get(MethodLevelEffects);
+    iconRegistry = TestBed.get(MatIconRegistry);
   });
 
   describe('loadMethodLevel$', () => {
@@ -173,6 +184,91 @@ describe('MethodLevelEffects', () => {
           forcedLoadAction,
           loadErrorAction
         );
+      });
+    });
+    describe('iconKey calculated property', () => {
+      const methodLevels = [
+        new MethodLevelFixture({
+          methodId: 10,
+          levelId: 1
+        }),
+        new MethodLevelFixture({
+          methodId: 10,
+          levelId: 2
+        })
+      ];
+
+      beforeAll(() => {
+        usedState = MethodLevelReducer.initialState;
+      });
+      beforeEach(() => {
+        mockServiceMethodReturnValue('getAllForUser', methodLevels);
+      });
+
+      it('should calculate the iconKey property when loading in method levels', () => {
+        const expectedMethodLevels = [
+          new MethodLevelFixture({
+            iconKey: 'method-10-level-1',
+            methodId: 10,
+            levelId: 1
+          }),
+          new MethodLevelFixture({
+            iconKey: 'method-10-level-2',
+            methodId: 10,
+            levelId: 2
+          })
+        ];
+
+        expectInAndOut(
+          effects.loadMethodLevels$,
+          unforcedLoadAction,
+          new MethodLevelsLoaded({ methodLevels: expectedMethodLevels })
+        );
+      });
+    });
+  });
+  describe('methodLevelsLoaded$', () => {
+    const methodLevels: MethodLevelInterface[] = [
+      new MethodLevelFixture({
+        iconKey: 'method-10-level-1',
+        methodId: 10,
+        levelId: 1
+      }),
+      new MethodLevelFixture({
+        iconKey: 'method-10-level-2',
+        methodId: 10,
+        levelId: 2
+      }),
+      new MethodLevelFixture({
+        iconKey: 'method-20-level-1',
+        methodId: 20,
+        levelId: 1
+      }),
+      new MethodLevelFixture({
+        iconKey: 'method-20-level-2',
+        methodId: 20,
+        levelId: 2
+      })
+    ];
+    const methodLevelsLoadedAction = new MethodLevelsLoaded({ methodLevels });
+
+    beforeAll(() => {
+      usedState = MethodLevelReducer.initialState;
+    });
+
+    it('should add the loaded methodlevels to the icon registry', () => {
+      expectInNoOut(effects.methodLevelsLoaded$, methodLevelsLoadedAction);
+
+      const expectedCalls = [
+        [methodLevels[0].iconKey, 'assets/icons/methodlevels/10/1.svg'],
+        [methodLevels[1].iconKey, 'assets/icons/methodlevels/10/2.svg'],
+        [methodLevels[2].iconKey, 'assets/icons/methodlevels/20/1.svg'],
+        [methodLevels[3].iconKey, 'assets/icons/methodlevels/20/2.svg']
+      ];
+
+      expect(iconRegistry.addSvgIcon).toHaveBeenCalledTimes(4);
+      expectedCalls.forEach(expectedCall => {
+        expect(iconRegistry.addSvgIcon).toHaveBeenCalledWith(...expectedCall);
       });
     });
   });

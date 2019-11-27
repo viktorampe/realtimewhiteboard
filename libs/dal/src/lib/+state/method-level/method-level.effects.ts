@@ -45,7 +45,7 @@ export class MethodLevelEffects {
     }
   );
 
-  @Effect()
+  @Effect({ dispatch: false })
   methodLevelsLoaded$ = this.dataPersistence.fetch(
     MethodLevelsActionTypes.MethodLevelsLoaded,
     {
@@ -58,10 +58,6 @@ export class MethodLevelEffects {
             }.svg`
           );
         });
-
-        console.log(this.iconRegistry);
-
-        return;
       }
     }
   );
