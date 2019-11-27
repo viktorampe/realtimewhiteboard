@@ -10,7 +10,6 @@ import { ColorlistComponent } from '../colorlist/colorlist.component';
 export class CardComponent implements OnInit {
   @ViewChild('inputContent') inputContent: ElementRef;
   card: Card;
-  colorlist: ColorlistComponent;
   colorlistHidden: boolean;
 
   constructor() {}
