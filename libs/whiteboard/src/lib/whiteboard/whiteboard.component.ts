@@ -18,8 +18,8 @@ export class WhiteboardComponent implements OnInit {
 
   onTap(event) {
     if (event.tapCount >= 2) {
-      const top = event.center.y - event.target.offsetTop - 20;
-      const left = event.center.x - event.target.offsetLeft - 20;
+      const top = event.srcEvent.offsetY;
+      const left = event.srcEvent.offsetX;
       this.addEmptyCard(top, left);
     }
   }
