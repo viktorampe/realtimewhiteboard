@@ -60,6 +60,7 @@ import {
 } from 'rxjs/operators';
 import {
   ChapterWithStatusInterface,
+  getChaptersWithStatuses,
   getUnlockedBooks,
   UnlockedBookInterface
 } from './practice.viewmodel.selectors';
@@ -226,7 +227,13 @@ export class PracticeViewModel implements ContentOpenerInterface {
       select(MethodQueries.getAllowedMethodYears)
     );
     this.unlockedBooks$ = this.store.pipe(select(getUnlockedBooks));
-    this.bookChaptersWithStatus$ = of([]); //TODO use selector
+    this.bookChaptersWithStatus$ = this.currentPracticeParams$.pipe(
+      switchMap(params =>
+        this.store.pipe(
+          select(getChaptersWithStatuses, { bookId: params.book })
+        )
+      )
+    );
   }
 
   private getCurrentPracticeParamsStream(): Observable<CurrentPracticeParams> {
