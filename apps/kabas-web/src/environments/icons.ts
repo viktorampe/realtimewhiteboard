@@ -46,7 +46,6 @@ export const icons = {
   file: 'assets/icons/general-file.svg',
   star: 'assets/icons/star.svg',
   'star-outline': 'assets/icons/star-border.svg',
-  'katapult-knikker.svg': 'assets/icons/magnifier.svg', //Temp icon
   color: 'assets/icons/color_lens.svg',
 
   // search: sort modes
