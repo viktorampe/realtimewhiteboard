@@ -8,8 +8,8 @@ import { hot } from '@nrwl/nx/testing';
 import { undo } from 'ngrx-undo';
 import { Observable, of } from 'rxjs';
 import { CurrentExerciseReducer } from '.';
-import { EXERCISE_SERVICE_TOKEN } from '../../exercise/exercise.service.interface';
 import { ScormCmiMode } from '../../+external-interfaces/scorm-api.interface';
+import { EXERCISE_SERVICE_TOKEN } from '../../exercise/exercise.service.interface';
 import {
   EffectFeedback,
   EffectFeedbackActions,
@@ -134,6 +134,13 @@ describe('ExerciseEffects', () => {
       unlockedContentId: 1,
       cmiMode: ScormCmiMode.CMI_MODE_NORMAL
     });
+    const startUnlockedFreePracticeExerciseAction = new LoadExercise({
+      userId: 6,
+      educontentId: 1,
+      saveToApi: true,
+      unlockedFreePracticeId: 2,
+      cmiMode: ScormCmiMode.CMI_MODE_NORMAL
+    });
     const filledLoadedAction = new CurrentExerciseLoaded(mockExercise);
     const loadErrorAction = new CurrentExerciseError(new Error('failed'));
     describe('with initialState', () => {
@@ -157,7 +164,15 @@ describe('ExerciseEffects', () => {
           filledLoadedAction
         );
       });
+      it('should trigger an api call for an unlockedFreePractice', () => {
+        expectInAndOut(
+          effects.loadExercise$,
+          startUnlockedFreePracticeExerciseAction,
+          filledLoadedAction
+        );
+      });
     });
+
     describe('with failing api call', () => {
       beforeAll(() => {
         usedState = CurrentExerciseReducer.initialState;

@@ -23,6 +23,11 @@ export interface ScormExerciseServiceInterface {
     educontentId: number,
     unlockedContentId: number
   ): void;
+  startExerciseFromUnlockedFreePractice(
+    userId: number,
+    eduContentId: number,
+    unlockedFreePracticeId: number
+  ): void;
   startExerciseFromTask(
     userId: number,
     educontentId: number,

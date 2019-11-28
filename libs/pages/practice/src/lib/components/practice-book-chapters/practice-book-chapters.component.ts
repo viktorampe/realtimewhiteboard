@@ -1,4 +1,5 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { PracticeViewModel } from '../practice.viewmodel';
 import { ChapterWithStatusInterface } from '../practice.viewmodel.selectors';
@@ -16,12 +17,19 @@ export class PracticeBookChaptersComponent implements OnInit {
   @HostBinding('class.campus-page')
   practiceBookChaptersClass = true;
 
-  constructor(private practiceViewmodel: PracticeViewModel) {}
+  constructor(
+    private practiceViewmodel: PracticeViewModel,
+    private router: Router
+  ) {}
 
   private setupStreams() {
     this.chaptersWithStatus$ = this.practiceViewmodel.bookChaptersWithStatus$;
   }
   ngOnInit() {
     this.setupStreams();
+  }
+
+  clickBackLink() {
+    this.router.navigate(['/practice']);
   }
 }
