@@ -291,7 +291,10 @@ describe('MethodLevelEffects', () => {
           methodLevels[2].icon,
           { trustedUrl: 'assets/icons/methodlevels/method-20-level-1.svg' }
         ],
-        [methodLevels[3].icon, 'assets/icons/methodlevels/katapult.svg']
+        [
+          methodLevels[3].icon,
+          { trustedUrl: 'assets/icons/methodlevels/katapult.svg' }
+        ]
       ];
 
       expect(iconRegistry.addSvgIcon).toHaveBeenCalledTimes(4);
