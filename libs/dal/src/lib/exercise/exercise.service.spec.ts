@@ -3,6 +3,7 @@ import { EduContentApi, PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
 import { Observable } from 'rxjs';
+import { ScormCmiMode } from '../+external-interfaces/scorm-api.interface';
 import { CurrentExerciseFixture, EduContentFixture } from '../+fixtures';
 import { EduContent } from '../+models';
 import { DalState } from '../+state';
@@ -15,7 +16,6 @@ import { ResultsServiceInterface } from '../results/results.service.interface';
 import { ResultFixture } from './../+fixtures/Result.fixture';
 import { ExerciseService } from './exercise.service';
 import { ExerciseServiceInterface } from './exercise.service.interface';
-import { ScormCmiMode } from '../+external-interfaces/scorm-api.interface';
 
 describe('ExerciseService', () => {
   let exerciseService: ExerciseServiceInterface;
@@ -31,6 +31,7 @@ describe('ExerciseService', () => {
     unlockedContentId?: number;
     url?: string;
     cmiMode: ScormCmiMode.CMI_MODE_NORMAL;
+    unlockedFreePracticeId?: number;
   };
 
   let mockExercise: CurrentExerciseInterface;
@@ -51,6 +52,7 @@ describe('ExerciseService', () => {
           useValue: {
             getResultForTask: () => mockResult$,
             getResultForUnlockedContent: () => mockResult$,
+            getResultForUnlockedFreePractice: () => mockResult$,
             saveResult: () => mockResult$
           }
         },
@@ -156,6 +158,43 @@ describe('ExerciseService', () => {
       );
     });
 
+    it('should return an exercise for an unlockedFreePractice', () => {
+      mockData = {
+        userId: 6,
+        eduContentId: 1,
+        saveToApi: true,
+        cmiMode: ScormCmiMode.CMI_MODE_NORMAL,
+        unlockedContentId: 1,
+        url: 'tempurl',
+        unlockedFreePracticeId: 1
+      };
+
+      mockResult$ = hot('-a-|', {
+        a: new ResultFixture({ cmi: "{ mode: 'normal' }" })
+      });
+
+      mockUrl$ = hot('-a-|', {
+        a: mockData.url
+      });
+
+      expect(
+        exerciseService.loadExercise(
+          mockData.userId,
+          mockData.eduContentId,
+          mockData.saveToApi,
+          mockData.cmiMode,
+          null,
+          null,
+          null,
+          mockData.unlockedFreePracticeId
+        )
+      ).toBeObservable(
+        hot('-(a|)', {
+          a: mockExercise
+        })
+      );
+    });
+
     it('should throw an error on invalid input', () => {
       mockData = {
         userId: 6,
@@ -164,6 +203,7 @@ describe('ExerciseService', () => {
         cmiMode: ScormCmiMode.CMI_MODE_NORMAL,
         taskId: 1,
         unlockedContentId: 1,
+        unlockedFreePracticeId: 1,
         url: 'tempurl'
       };
 
@@ -184,9 +224,43 @@ describe('ExerciseService', () => {
           null,
           null
         )
-      ).toThrowError('Provide either a taskId or an unlockedContentId');
+      ).toThrowError(
+        'Provide either a taskId, an unlockedContentId or an unlockedFreePracticeId'
+      );
 
-      // both parameters
+      // all parameters
+      expect(() =>
+        exerciseService.loadExercise(
+          mockData.userId,
+          mockData.eduContentId,
+          mockData.saveToApi,
+          mockData.cmiMode,
+          mockData.taskId,
+          mockData.unlockedContentId,
+          null,
+          mockData.unlockedFreePracticeId
+        )
+      ).toThrowError(
+        'Provide either a taskId, an unlockedContentId or an unlockedFreePracticeId'
+      );
+
+      //task and freepractice
+      expect(() =>
+        exerciseService.loadExercise(
+          mockData.userId,
+          mockData.eduContentId,
+          mockData.saveToApi,
+          mockData.cmiMode,
+          mockData.taskId,
+          null,
+          null,
+          mockData.unlockedFreePracticeId
+        )
+      ).toThrowError(
+        'Provide either a taskId, an unlockedContentId or an unlockedFreePracticeId'
+      );
+
+      //task and unlocked
       expect(() =>
         exerciseService.loadExercise(
           mockData.userId,
@@ -196,7 +270,25 @@ describe('ExerciseService', () => {
           mockData.taskId,
           mockData.unlockedContentId
         )
-      ).toThrowError('Provide either a taskId or an unlockedContentId');
+      ).toThrowError(
+        'Provide either a taskId, an unlockedContentId or an unlockedFreePracticeId'
+      );
+
+      //unlocked and freepractice
+      expect(() =>
+        exerciseService.loadExercise(
+          mockData.userId,
+          mockData.eduContentId,
+          mockData.saveToApi,
+          mockData.cmiMode,
+          null,
+          mockData.unlockedContentId,
+          null,
+          mockData.unlockedFreePracticeId
+        )
+      ).toThrowError(
+        'Provide either a taskId, an unlockedContentId or an unlockedFreePracticeId'
+      );
     });
 
     it('should load a new exercice as review from result', () => {
