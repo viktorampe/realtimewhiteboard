@@ -56,7 +56,6 @@ describe('PracticeBookChaptersComponent', () => {
 
     it('should show the chapters', () => {
       const chapters = chapterStream.value;
-
       const listItems = fixture.debugElement.queryAll(
         By.directive(MatListItem)
       );

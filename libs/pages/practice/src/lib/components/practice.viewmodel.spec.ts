@@ -234,6 +234,7 @@ describe('PracticeViewModel', () => {
           provide: SCORM_EXERCISE_SERVICE_TOKEN,
           useValue: {
             startExerciseFromUnlockedContent: jest.fn(),
+            startExerciseFromUnlockedFreePractice: jest.fn(),
             previewExerciseFromUnlockedContent: jest.fn()
           }
         }
@@ -675,13 +676,13 @@ describe('PracticeViewModel', () => {
             classGroupId: 1
           }),
           new UnlockedFreePracticeFixture({
-            id: 7,
+            id: 8,
             eduContentBookId: 24,
             eduContentTOCId: 7,
             classGroupId: 1
           }),
           new UnlockedFreePracticeFixture({
-            id: 7,
+            id: 9,
             eduContentBookId: 24,
             eduContentTOCId: 8,
             classGroupId: 1
@@ -698,12 +699,12 @@ describe('PracticeViewModel', () => {
       });
       const spy = jest.spyOn(
         scormExerciseService,
-        'startExerciseFromUnlockedContent'
+        'startExerciseFromUnlockedFreePractice'
       );
 
       practiceViewModel.openEduContentAsExercise(eduContent);
 
-      expect(spy).toHaveBeenCalledWith(userId, eduContent.id, 7);
+      expect(spy).toHaveBeenCalledWith(userId, eduContent.id, 8);
     });
 
     it('should open an exercise without eduContentTOCId', () => {
@@ -729,7 +730,7 @@ describe('PracticeViewModel', () => {
       });
       const spy = jest.spyOn(
         scormExerciseService,
-        'startExerciseFromUnlockedContent'
+        'startExerciseFromUnlockedFreePractice'
       );
 
       practiceViewModel.openEduContentAsExercise(eduContent);
