@@ -1,8 +1,8 @@
 import { InjectionToken } from '@angular/core';
 import { Observable } from 'rxjs';
+import { ScormCmiMode } from '../+external-interfaces/scorm-api.interface';
 import { ResultInterface } from '../+models';
 import { CurrentExerciseInterface } from './../+state/current-exercise/current-exercise.reducer';
-import { ScormCmiMode } from '../+external-interfaces/scorm-api.interface';
 
 export const EXERCISE_SERVICE_TOKEN = new InjectionToken('ExerciseService');
 
@@ -14,7 +14,8 @@ export interface ExerciseServiceInterface {
     mode: ScormCmiMode,
     taskId?: number,
     unlockedContentId?: number,
-    result?: ResultInterface
+    result?: ResultInterface,
+    unlockedFreePracticeId?: number
   ): Observable<CurrentExerciseInterface>;
 
   saveExercise(

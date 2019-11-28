@@ -81,7 +81,8 @@ describe('ScormExerciseService', () => {
         unlockedContentId: 3,
         saveToApi: false,
         cmiMode: ScormCmiMode.CMI_MODE_PREVIEW,
-        taskId: null
+        taskId: null,
+        unlockedFreePracticeId: null
       })
     );
   });
@@ -95,7 +96,8 @@ describe('ScormExerciseService', () => {
         unlockedContentId: null,
         saveToApi: false,
         cmiMode: ScormCmiMode.CMI_MODE_PREVIEW,
-        taskId: 3
+        taskId: 3,
+        unlockedFreePracticeId: null
       })
     );
   });
@@ -109,7 +111,8 @@ describe('ScormExerciseService', () => {
         unlockedContentId: 3,
         saveToApi: false,
         cmiMode: ScormCmiMode.CMI_MODE_NORMAL,
-        taskId: null
+        taskId: null,
+        unlockedFreePracticeId: null
       })
     );
   });
@@ -123,7 +126,8 @@ describe('ScormExerciseService', () => {
         unlockedContentId: null,
         saveToApi: false,
         cmiMode: ScormCmiMode.CMI_MODE_NORMAL,
-        taskId: 3
+        taskId: 3,
+        unlockedFreePracticeId: null
       })
     );
   });
@@ -146,7 +150,8 @@ describe('ScormExerciseService', () => {
         saveToApi: false,
         cmiMode: ScormCmiMode.CMI_MODE_REVIEW,
         taskId: 3,
-        result: res
+        result: res,
+        unlockedFreePracticeId: null
       })
     );
   });
@@ -160,12 +165,13 @@ describe('ScormExerciseService', () => {
         unlockedContentId: null,
         saveToApi: true,
         cmiMode: ScormCmiMode.CMI_MODE_BROWSE,
-        taskId: 3
+        taskId: 3,
+        unlockedFreePracticeId: null
       })
     );
   });
 
-  it('should start a exercise', () => {
+  it('should start an exercise fromUnlockedContent', () => {
     scormExerciseService.startExerciseFromUnlockedContent(1, 2, 3);
     expect(store.dispatch).toHaveBeenCalledWith(
       new CurrentExerciseActions.LoadExercise({
@@ -174,7 +180,24 @@ describe('ScormExerciseService', () => {
         unlockedContentId: 3,
         saveToApi: true,
         cmiMode: ScormCmiMode.CMI_MODE_NORMAL,
-        taskId: null
+        taskId: null,
+        unlockedFreePracticeId: null
+      })
+    );
+  });
+
+  it('should start an exercise from unlockedFreePractice (students)', () => {
+    scormExerciseService.startExerciseFromUnlockedFreePractice(1, 2, 3);
+    expect(store.dispatch).toHaveBeenCalledWith(
+      new CurrentExerciseActions.LoadExercise({
+        userId: 1,
+        educontentId: 2,
+        unlockedContentId: null,
+        saveToApi: true,
+        cmiMode: ScormCmiMode.CMI_MODE_NORMAL,
+        taskId: null,
+        result: null,
+        unlockedFreePracticeId: 3
       })
     );
   });
