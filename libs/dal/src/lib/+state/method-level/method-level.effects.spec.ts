@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { MatIconRegistry } from '@angular/material';
+import { DomSanitizer } from '@angular/platform-browser';
 import { EffectsModule } from '@ngrx/effects';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Action, StoreModule } from '@ngrx/store';
@@ -75,6 +76,12 @@ describe('MethodLevelEffects', () => {
         EffectsModule.forFeature([MethodLevelEffects])
       ],
       providers: [
+        {
+          provide: DomSanitizer,
+          useValue: {
+            bypassSecurityTrustResourceUrl: url => ({ trustedUrl: url })
+          }
+        },
         {
           provide: METHOD_LEVEL_SERVICE_TOKEN,
           useValue: {
@@ -274,17 +281,20 @@ describe('MethodLevelEffects', () => {
       const expectedCalls = [
         [
           methodLevels[0].icon,
-          'assets/icons/methodlevels/method-10-level-1.svg'
+          { trustedUrl: 'assets/icons/methodlevels/method-10-level-1.svg' }
         ],
         [
           methodLevels[1].icon,
-          'assets/icons/methodlevels/method-10-level-2.svg'
+          { trustedUrl: 'assets/icons/methodlevels/method-10-level-2.svg' }
         ],
         [
           methodLevels[2].icon,
-          'assets/icons/methodlevels/method-20-level-1.svg'
+          { trustedUrl: 'assets/icons/methodlevels/method-20-level-1.svg' }
         ],
-        [methodLevels[3].icon, 'assets/icons/methodlevels/katapult.svg']
+        [
+          methodLevels[3].icon,
+          { trustedUrl: 'assets/icons/methodlevels/katapult.svg' }
+        ]
       ];
 
       expect(iconRegistry.addSvgIcon).toHaveBeenCalledTimes(4);

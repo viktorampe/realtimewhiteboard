@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
 import { MatIconRegistry } from '@angular/material';
+import { DomSanitizer } from '@angular/platform-browser';
 import { Actions, Effect } from '@ngrx/effects';
 import { DataPersistence } from '@nrwl/nx';
 import { map } from 'rxjs/operators';
@@ -55,7 +56,9 @@ export class MethodLevelEffects {
         action.payload.methodLevels.forEach(methodLevel => {
           this.iconRegistry.addSvgIcon(
             methodLevel.icon,
-            `assets/icons/methodlevels/${methodLevel.icon}.svg`
+            this.domSanitizer.bypassSecurityTrustResourceUrl(
+              `assets/icons/methodlevels/${methodLevel.icon}.svg`
+            )
           );
         });
       }
@@ -66,6 +69,7 @@ export class MethodLevelEffects {
     private actions: Actions,
     private dataPersistence: DataPersistence<DalState>,
     private iconRegistry: MatIconRegistry,
+    private domSanitizer: DomSanitizer,
     @Inject(METHOD_LEVEL_SERVICE_TOKEN)
     private methodLevelService: MethodLevelServiceInterface
   ) {}
