@@ -186,15 +186,22 @@ describe('MethodLevelEffects', () => {
         );
       });
     });
-    describe('iconKey calculated property', () => {
+    describe('icon calculated property', () => {
       const methodLevels = [
         new MethodLevelFixture({
+          icon: undefined,
           methodId: 10,
           levelId: 1
         }),
         new MethodLevelFixture({
+          icon: undefined,
           methodId: 10,
           levelId: 2
+        }),
+        new MethodLevelFixture({
+          icon: 'katapult',
+          methodId: 34,
+          levelId: 1
         })
       ];
 
@@ -205,17 +212,22 @@ describe('MethodLevelEffects', () => {
         mockServiceMethodReturnValue('getAllForUser', methodLevels);
       });
 
-      it('should calculate the iconKey property when loading in method levels', () => {
+      it('should calculate the icon property if it is not already set', () => {
         const expectedMethodLevels = [
           new MethodLevelFixture({
-            iconKey: 'method-10-level-1',
+            icon: 'method-10-level-1',
             methodId: 10,
             levelId: 1
           }),
           new MethodLevelFixture({
-            iconKey: 'method-10-level-2',
+            icon: 'method-10-level-2',
             methodId: 10,
             levelId: 2
+          }),
+          new MethodLevelFixture({
+            icon: 'katapult',
+            methodId: 34,
+            levelId: 1
           })
         ];
 
@@ -230,24 +242,24 @@ describe('MethodLevelEffects', () => {
   describe('methodLevelsLoaded$', () => {
     const methodLevels: MethodLevelInterface[] = [
       new MethodLevelFixture({
-        iconKey: 'method-10-level-1',
+        icon: 'method-10-level-1',
         methodId: 10,
         levelId: 1
       }),
       new MethodLevelFixture({
-        iconKey: 'method-10-level-2',
+        icon: 'method-10-level-2',
         methodId: 10,
         levelId: 2
       }),
       new MethodLevelFixture({
-        iconKey: 'method-20-level-1',
+        icon: 'method-20-level-1',
         methodId: 20,
         levelId: 1
       }),
       new MethodLevelFixture({
-        iconKey: 'method-20-level-2',
-        methodId: 20,
-        levelId: 2
+        icon: 'katapult',
+        methodId: 34,
+        levelId: 1
       })
     ];
     const methodLevelsLoadedAction = new MethodLevelsLoaded({ methodLevels });
@@ -260,10 +272,19 @@ describe('MethodLevelEffects', () => {
       expectInNoOut(effects.methodLevelsLoaded$, methodLevelsLoadedAction);
 
       const expectedCalls = [
-        [methodLevels[0].iconKey, 'assets/icons/methodlevels/10/1.svg'],
-        [methodLevels[1].iconKey, 'assets/icons/methodlevels/10/2.svg'],
-        [methodLevels[2].iconKey, 'assets/icons/methodlevels/20/1.svg'],
-        [methodLevels[3].iconKey, 'assets/icons/methodlevels/20/2.svg']
+        [
+          methodLevels[0].icon,
+          'assets/icons/methodlevels/method-10-level-1.svg'
+        ],
+        [
+          methodLevels[1].icon,
+          'assets/icons/methodlevels/method-10-level-2.svg'
+        ],
+        [
+          methodLevels[2].icon,
+          'assets/icons/methodlevels/method-20-level-1.svg'
+        ],
+        [methodLevels[3].icon, 'assets/icons/methodlevels/katapult.svg']
       ];
 
       expect(iconRegistry.addSvgIcon).toHaveBeenCalledTimes(4);

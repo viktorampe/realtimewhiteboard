@@ -30,9 +30,11 @@ export class MethodLevelEffects {
               methodLevels.map(methodLevel => {
                 return {
                   ...methodLevel,
-                  iconKey: `method-${methodLevel.methodId}-level-${
-                    methodLevel.levelId
-                  }`
+                  icon:
+                    methodLevel.icon ||
+                    `method-${methodLevel.methodId}-level-${
+                      methodLevel.levelId
+                    }`
                 };
               })
             ),
@@ -52,10 +54,8 @@ export class MethodLevelEffects {
       run: (action: MethodLevelsLoaded, state: DalState) => {
         action.payload.methodLevels.forEach(methodLevel => {
           this.iconRegistry.addSvgIcon(
-            methodLevel.iconKey,
-            `assets/icons/methodlevels/${methodLevel.methodId}/${
-              methodLevel.levelId
-            }.svg`
+            methodLevel.icon,
+            `assets/icons/methodlevels/${methodLevel.icon}.svg`
           );
         });
       }
