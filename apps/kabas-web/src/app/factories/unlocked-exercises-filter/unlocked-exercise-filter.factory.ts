@@ -19,21 +19,23 @@ export const UNLOCKED_EXERCISE_FILTER_FACTORY_TOKEN = new InjectionToken(
   providedIn: 'root'
 })
 export class UnlockedExerciseFilterFactory implements SearchFilterFactory {
-  private keyProperty = 'id';
+  private keyProperty = 'levelId';
   private displayProperty = 'label';
   private component = ButtonToggleFilterComponent;
   private domHost = 'hostTop';
 
-  protected filterSortOrder = ['methodLevel'];
+  protected filterSortOrder = ['level'];
 
   protected filterQueries: {
     [key: string]: FilterQueryInterface;
   } = {
-    methodLevel: {
+    level: {
       query: MethodLevelQueries.findMany,
-      name: 'methodLevel',
+      name: 'level',
       label: 'Type',
-      methodDependent: true
+      methodDependent: true,
+      displayProperty: 'icon',
+      keyProperty: 'levelId'
     }
   };
 
@@ -59,7 +61,7 @@ export class UnlockedExerciseFilterFactory implements SearchFilterFactory {
     searchState: SearchStateInterface
   ): Observable<SearchFilterInterface>[] {
     const filters: Observable<SearchFilterInterface>[] = [];
-    const methodLevelFilter = this.buildFilter('methodLevel', searchState);
+    const methodLevelFilter = this.buildFilter('level', searchState);
     filters.push(methodLevelFilter);
 
     return filters;
@@ -74,7 +76,7 @@ export class UnlockedExerciseFilterFactory implements SearchFilterFactory {
       criteria: {
         name: filterQuery.name,
         label: filterQuery.label,
-        keyProperty: this.keyProperty,
+        keyProperty: filterQuery.keyProperty || this.keyProperty,
         displayProperty: filterQuery.displayProperty || this.displayProperty,
         values: entities.map(entity => ({
           data: entity,
@@ -95,7 +97,7 @@ export class UnlockedExerciseFilterFactory implements SearchFilterFactory {
     const filterQuery = this.filterQueries[name];
     return this.store.pipe(
       select(filterQuery.query as MemoizedSelectorWithProps<Object, any, any>, {
-        methodId: searchState.filterCriteriaSelections.get('method')[0] // only a single value allowed
+        methodId: searchState.filterCriteriaSelections.get('methods')[0] // only a single value allowed
       }),
       map(entities => this.getFilter(entities, filterQuery, searchState))
     );

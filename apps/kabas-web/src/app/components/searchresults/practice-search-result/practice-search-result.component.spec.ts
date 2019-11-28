@@ -30,6 +30,7 @@ describe('PracticeSearchResultComponent', () => {
 
   const mockEduContent = new EduContentFixture({
     id: 1,
+    type: 'exercise',
     publishedEduContentMetadata: new EduContentMetadataFixture({
       title: 'De breuken',
       description: 'mock description',
@@ -191,12 +192,15 @@ describe('PracticeSearchResultComponent', () => {
       expect(methodLevelDE.nativeElement.textContent).toContain('bar');
     });
 
-    it('should not show stars when no result is available', () => {
-      const starsDE = fixture.debugElement.query(
-        By.css('.app-practice-searchresult__stars')
+    it('should show empty stars when no result is available', () => {
+      const starsDE = fixture.debugElement.queryAll(
+        By.css('.app-practice-searchresult__stars__star')
       );
 
-      expect(starsDE).toBeNull();
+      expect(starsDE.length).toBe(3);
+      expect(starsDE[0].componentInstance.svgIcon).toBe('star-outline');
+      expect(starsDE[1].componentInstance.svgIcon).toBe('star-outline');
+      expect(starsDE[2].componentInstance.svgIcon).toBe('star-outline');
     });
 
     it('should show the stars when a result is available', () => {
@@ -214,6 +218,17 @@ describe('PracticeSearchResultComponent', () => {
       expect(starsDE[0].componentInstance.svgIcon).toBe('star');
       expect(starsDE[1].componentInstance.svgIcon).toBe('star');
       expect(starsDE[2].componentInstance.svgIcon).toBe('star-outline');
+    });
+
+    it('should not show the stars when a searchresult is not an exercise', () => {
+      component.data.eduContent = new EduContentFixture({ type: 'foo' });
+      fixture.detectChanges();
+
+      const starsDE = fixture.debugElement.query(
+        By.css('.app-practice-searchresult__stars')
+      );
+
+      expect(starsDE).toBeNull();
     });
 
     it('should show the possible actions for the eduContent', () => {

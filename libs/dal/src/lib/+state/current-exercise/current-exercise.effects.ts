@@ -36,7 +36,8 @@ export class CurrentExerciseEffects {
             action.payload.cmiMode,
             action.payload.taskId,
             action.payload.unlockedContentId,
-            action.payload.result
+            action.payload.result,
+            action.payload.unlockedFreePracticeId
           )
           .pipe(map(ex => new CurrentExerciseLoaded(ex)));
       },

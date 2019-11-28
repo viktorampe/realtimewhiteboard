@@ -75,6 +75,22 @@ export class ScormExerciseService implements ScormExerciseServiceInterface {
       ScormCmiMode.CMI_MODE_NORMAL
     );
   }
+  startExerciseFromUnlockedFreePractice(
+    userId: number,
+    eduContentId: number,
+    unlockedFreePracticeId: number
+  ): void {
+    this.loadNewExerciseToStore(
+      userId,
+      eduContentId,
+      true,
+      null,
+      null,
+      ScormCmiMode.CMI_MODE_NORMAL,
+      null,
+      unlockedFreePracticeId
+    );
+  }
   startExerciseFromTask(
     userId: number,
     educontentId: number,
@@ -180,7 +196,8 @@ export class ScormExerciseService implements ScormExerciseServiceInterface {
     taskId: number = null,
     unlockedContentId: number = null,
     mode: ScormCmiMode,
-    result?: ResultInterface
+    result?: ResultInterface,
+    unlockedFreePracticeId: number = null
   ) {
     this.store.dispatch(
       new CurrentExerciseActions.LoadExercise({
@@ -190,7 +207,8 @@ export class ScormExerciseService implements ScormExerciseServiceInterface {
         taskId: taskId,
         unlockedContentId: unlockedContentId,
         cmiMode: mode,
-        result: result
+        result: result,
+        unlockedFreePracticeId
       })
     );
   }
