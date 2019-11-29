@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatCardModule, MatIconModule } from '@angular/material';
 import { CardComponent } from './card/card.component';
+import { ColorlistComponent } from './colorlist/colorlist.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { WhiteboardComponent } from './whiteboard/whiteboard.component';
 
@@ -15,7 +16,12 @@ import { WhiteboardComponent } from './whiteboard/whiteboard.component';
     FormsModule,
     MatIconModule
   ],
-  declarations: [WhiteboardComponent, CardComponent, ToolbarComponent],
+  declarations: [
+    WhiteboardComponent,
+    CardComponent,
+    ToolbarComponent,
+    ColorlistComponent
+  ],
   exports: [WhiteboardComponent]
 })
 export class WhiteboardModule {}

@@ -21,6 +21,12 @@ export interface ResultsServiceInterface {
     eduContentId: number
   ): Observable<ResultInterface>;
 
+  getResultForUnlockedFreePractice(
+    userId: number,
+    unlockedFreePracticeId: number,
+    eduContentId: number
+  ): Observable<ResultInterface>;
+
   saveResult(
     userId: number,
     result: ResultInterface

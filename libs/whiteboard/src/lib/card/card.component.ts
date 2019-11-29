@@ -23,13 +23,15 @@ export class CardComponent implements OnInit, OnChanges {
 
   @HostBinding('style.top') topStyle: string;
   @HostBinding('style.left') leftStyle: string;
+  colorlistHidden: boolean;
 
   constructor() {}
 
   ngOnInit() {
+    this.colorlistHidden = true;
     this.card = {
+      color: 'white',
       cardContent: null,
-      color: null,
       isInputSelected: true,
       top: 0,
       left: 0
@@ -49,5 +51,13 @@ export class CardComponent implements OnInit, OnChanges {
 
   onDeleteCard() {
     this.deleteCard.emit();
+  }
+  showColor() {
+    this.colorlistHidden = !this.colorlistHidden;
+  }
+
+  selectColor(color: string) {
+    this.colorlistHidden = true;
+    this.card.color = color;
   }
 }

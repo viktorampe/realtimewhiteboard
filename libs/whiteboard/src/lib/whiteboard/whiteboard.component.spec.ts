@@ -4,6 +4,7 @@ import { MatCardModule, MatIconModule } from '@angular/material';
 import { By, HAMMER_LOADER } from '@angular/platform-browser';
 import { configureTestSuite } from 'ng-bullet';
 import { CardComponent } from '../card/card.component';
+import { ColorlistComponent } from '../colorlist/colorlist.component';
 import { ToolbarComponent } from '../toolbar/toolbar.component';
 import { WhiteboardComponent } from './whiteboard.component';
 
@@ -14,7 +15,12 @@ describe('WhiteboardComponent', () => {
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [MatCardModule, FormsModule, MatIconModule],
-      declarations: [WhiteboardComponent, CardComponent, ToolbarComponent],
+      declarations: [
+        WhiteboardComponent,
+        CardComponent,
+        ToolbarComponent,
+        ColorlistComponent
+      ],
       providers: [
         {
           provide: HAMMER_LOADER,

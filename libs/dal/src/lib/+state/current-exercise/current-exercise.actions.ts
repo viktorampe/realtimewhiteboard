@@ -1,6 +1,6 @@
 import { Action } from '@ngrx/store';
-import { ResultInterface } from '../../+models';
 import { ScormCmiMode } from '../../+external-interfaces/scorm-api.interface';
+import { ResultInterface } from '../../+models';
 import {
   CustomFeedbackHandlersInterface,
   FeedbackTriggeringAction
@@ -26,6 +26,7 @@ export class LoadExercise implements Action {
       taskId?: number;
       unlockedContentId?: number;
       result?: ResultInterface;
+      unlockedFreePracticeId?: number;
     }
   ) {}
 }

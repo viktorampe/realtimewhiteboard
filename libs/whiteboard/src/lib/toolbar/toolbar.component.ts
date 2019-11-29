@@ -7,6 +7,7 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 })
 export class ToolbarComponent implements OnInit {
   @Output() delete = new EventEmitter();
+  @Output() clickColorIcon = new EventEmitter<void>();
 
   constructor() {}
 
@@ -14,5 +15,8 @@ export class ToolbarComponent implements OnInit {
 
   onDeleteClicked() {
     this.delete.emit();
+  }
+  showColor() {
+    this.clickColorIcon.emit();
   }
 }

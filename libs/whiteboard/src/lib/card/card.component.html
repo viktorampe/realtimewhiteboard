@@ -1,8 +1,13 @@
-<div class="card">
+<div class="card" [style.background-color]="this.card.color">
   <campus-toolbar
     class="card__toolbar"
     (delete)="onDeleteCard()"
+    (clickColorIcon)="showColor()"
   ></campus-toolbar>
+  <campus-colorlist
+    (selectedColor)="selectColor($event)"
+    [hidden]="colorlistHidden"
+  ></campus-colorlist>
   <div class="card__content">
     <p *ngIf="!card.isInputSelected" (click)="toggleInput()">
       {{ card.cardContent }}
