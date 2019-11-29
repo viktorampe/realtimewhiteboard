@@ -34,7 +34,7 @@ export class CardComponent implements OnInit {
       this.toggleInput();
     }
   }
-  
+
   showColor() {
     this.colorlistHidden = !this.colorlistHidden;
   }
@@ -43,5 +43,4 @@ export class CardComponent implements OnInit {
     this.colorlistHidden = true;
     this.card.color = color;
   }
-  
 }
