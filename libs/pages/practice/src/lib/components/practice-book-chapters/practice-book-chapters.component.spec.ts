@@ -1,8 +1,12 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
 import { MatListItem } from '@angular/material';
 import { By } from '@angular/platform-browser';
+import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { ENVIRONMENT_SEARCHMODES_TOKEN } from '@campus/shared';
+import {
+  ENVIRONMENT_SEARCHMODES_TOKEN,
+  ENVIRONMENT_TESTING_TOKEN
+} from '@campus/shared';
 import { UiModule } from '@campus/ui';
 import { configureTestSuite } from 'ng-bullet';
 import { BehaviorSubject } from 'rxjs';
@@ -14,17 +18,16 @@ import { PracticeBookChaptersComponent } from './practice-book-chapters.componen
 describe('PracticeBookChaptersComponent', () => {
   let component: PracticeBookChaptersComponent;
   let fixture: ComponentFixture<PracticeBookChaptersComponent>;
-  let practiceViewmodel: PracticeViewModel;
+  let practiceViewmodel: MockPracticeViewModel;
+  let router: Router;
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [UiModule, RouterTestingModule],
+      imports: [RouterTestingModule, UiModule],
       declarations: [PracticeBookChaptersComponent],
       providers: [
-        {
-          provide: PracticeViewModel,
-          useClass: MockPracticeViewModel
-        },
+        { provide: PracticeViewModel, useClass: MockPracticeViewModel },
+        { provide: ENVIRONMENT_TESTING_TOKEN, useValue: {} },
         {
           provide: ENVIRONMENT_SEARCHMODES_TOKEN,
           useValue: {}
@@ -34,15 +37,24 @@ describe('PracticeBookChaptersComponent', () => {
   });
 
   beforeEach(() => {
+    router = TestBed.get(Router);
+    practiceViewmodel = TestBed.get(PracticeViewModel);
     fixture = TestBed.createComponent(PracticeBookChaptersComponent);
     component = fixture.componentInstance;
-    practiceViewmodel = TestBed.get(PracticeViewModel);
-
     fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  describe('click handlers', () => {
+    it('should navigate to the bookChapter when clickToBookChapters is called', fakeAsync(() => {
+      router.navigate = jest.fn();
+      component.clickBackLink();
+
+      expect(router.navigate).toHaveBeenCalledWith(['/practice']);
+    }));
   });
 
   describe('template', () => {
@@ -56,7 +68,6 @@ describe('PracticeBookChaptersComponent', () => {
 
     it('should show the chapters', () => {
       const chapters = chapterStream.value;
-
       const listItems = fixture.debugElement.queryAll(
         By.directive(MatListItem)
       );

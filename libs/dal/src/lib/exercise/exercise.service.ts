@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
+import { ScormCmiMode } from '../+external-interfaces/scorm-api.interface';
 import { ResultInterface } from '../+models';
 import { ResultsService } from '../results/results.service';
 import { CurrentExerciseInterface } from './../+state/current-exercise/current-exercise.reducer';
 import { ContentRequestService } from './../content-request/content-request.service';
 import { ExerciseServiceInterface } from './exercise.service.interface';
-import { ScormCmiMode } from '../+external-interfaces/scorm-api.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +19,8 @@ export class ExerciseService implements ExerciseServiceInterface {
     mode: ScormCmiMode,
     taskId?: number,
     unlockedContentId?: number,
-    result?: ResultInterface
+    result?: ResultInterface,
+    unlockedFreePracticeId?: number
   ): Observable<CurrentExerciseInterface> {
     if (result) {
       return this.reviewExercise(result);
@@ -36,7 +37,8 @@ export class ExerciseService implements ExerciseServiceInterface {
       saveToApi,
       mode,
       taskId,
-      unlockedContentId
+      unlockedContentId,
+      unlockedFreePracticeId
     );
   }
 
@@ -107,12 +109,16 @@ export class ExerciseService implements ExerciseServiceInterface {
     saveToApi: boolean,
     mode: ScormCmiMode,
     taskId?: number,
-    unlockedContentId?: number
+    unlockedContentId?: number,
+    unlockedFreePracticeId?: number
   ): Observable<CurrentExerciseInterface> {
     let result$: Observable<ResultInterface>;
 
-    if (!(taskId || unlockedContentId) || (taskId && unlockedContentId)) {
-      throw new Error('Provide either a taskId or an unlockedContentId');
+    const params = [taskId, unlockedContentId, unlockedFreePracticeId];
+    if (params.filter(Number).length !== 1) {
+      throw new Error(
+        'Provide either a taskId, an unlockedContentId or an unlockedFreePracticeId'
+      );
     }
 
     if (taskId) {
@@ -121,10 +127,16 @@ export class ExerciseService implements ExerciseServiceInterface {
         taskId,
         educontentId
       );
-    } else {
+    } else if (unlockedContentId) {
       result$ = this.resultsService.getResultForUnlockedContent(
         userId,
         unlockedContentId,
+        educontentId
+      );
+    } else if (unlockedFreePracticeId) {
+      result$ = this.resultsService.getResultForUnlockedFreePractice(
+        userId,
+        unlockedFreePracticeId,
         educontentId
       );
     }

@@ -1,8 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
-import { MatCardModule, MatIconModule } from '@angular/material';
-import { By, HAMMER_LOADER } from '@angular/platform-browser';
+import { MatCardModule } from '@angular/material';
+import { MatIconModule } from '@angular/material/icon';
+import { By,HAMMER_LOADER } from '@angular/platform-browser';
 import { configureTestSuite } from 'ng-bullet';
+import { ColorlistComponent } from '../colorlist/colorlist.component';
 import { ToolbarComponent } from '../toolbar/toolbar.component';
 import { CardComponent } from './card.component';
 
@@ -13,7 +15,7 @@ describe('CardComponent', () => {
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [MatCardModule, FormsModule, MatIconModule],
-      declarations: [CardComponent, ToolbarComponent],
+      declarations: [CardComponent, ToolbarComponent, ColorlistComponent]
       providers: [
         {
           provide: HAMMER_LOADER,
@@ -60,6 +62,37 @@ describe('CardComponent', () => {
     myCard.nativeElement.dispatchEvent(new MouseEvent('dblclick')); // use nativeElement so target is set
     fixture.detectChanges();
 
-    expect(component.card.isInputSelected).toBe(true);
+    expect(component.card.isInputSelected).toBe(true); 
   });
+
+it('should show the colorlist when the coloricon is clicked', () => {
+    component.showColor();
+    fixture.detectChanges();
+    expect(component.colorlistHidden).toBe(false);
+ });
+
+it('should hide the colorlist when the coloricon is clicked twice', () => {
+  component.showColor();
+  fixture.detectChanges();
+  component.showColor();
+  fixture.detectChanges();
+  expect(component.colorlistHidden).toBe(true);
+});
+
+it('should close the colorlist when a color is clicked', () => {
+  component.showColor();
+  fixture.detectChanges();
+  component.selectColor('white');
+  fixture.detectChanges();
+  expect(component.colorlistHidden).toBe(true);
+});
+
+it('should change the cardcolor when a color is picked', () => {
+  component.showColor();
+  fixture.detectChanges();
+  component.selectColor('black');
+  fixture.detectChanges();
+  expect(component.card.color).toBe('black');
+});
+
 });
