@@ -1,5 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import Card from '../../interfaces/Card';
+import { ColorlistComponent } from '../colorlist/colorlist.component';
 
 @Component({
   selector: 'campus-card',
@@ -10,13 +11,15 @@ export class CardComponent implements OnInit {
   @ViewChild('inputContent') inputContent: ElementRef;
   card: Card;
   maxCharacters = 300;
+  colorlistHidden: boolean;
 
   constructor() {}
 
   ngOnInit() {
+    this.colorlistHidden = true;
     this.card = {
-      color: '',
       cardContent: '',
+      color: 'white',
       isInputSelected: true
     };
   }
@@ -28,5 +31,14 @@ export class CardComponent implements OnInit {
     ) {
       this.card.isInputSelected = !this.card.isInputSelected;
     }
+  }
+
+  showColor() {
+    this.colorlistHidden = !this.colorlistHidden;
+  }
+
+  selectColor(color: string) {
+    this.colorlistHidden = true;
+    this.card.color = color;
   }
 }
