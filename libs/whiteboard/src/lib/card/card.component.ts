@@ -24,7 +24,7 @@ export class CardComponent implements OnInit {
   toggleInput() {
     if (
       this.card.cardContent !== '' &&
-      this.card.cardContent.length < this.maxCharacters
+      this.card.cardContent.length <= this.maxCharacters
     ) {
       this.card.isInputSelected = !this.card.isInputSelected;
     }
