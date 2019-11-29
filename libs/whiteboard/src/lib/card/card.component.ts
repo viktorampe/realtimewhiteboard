@@ -10,23 +10,34 @@ export class CardComponent implements OnInit {
   @ViewChild('inputContent') inputContent: ElementRef;
   card: Card;
   maxCharacters = 300;
+  colorlistHidden: boolean;
 
   constructor() {}
 
   ngOnInit() {
+    this.colorlistHidden = true;
     this.card = {
-      color: '',
       cardContent: '',
+      color: 'white',
       isInputSelected: true
     };
   }
 
   toggleInput() {
     if (
-      this.card.cardContent != null &&
+      this.card.cardContent !== '' &&
       this.card.cardContent.length <= this.maxCharacters
     ) {
       this.card.isInputSelected = !this.card.isInputSelected;
     }
+  }
+
+  showColor() {
+    this.colorlistHidden = !this.colorlistHidden;
+  }
+
+  selectColor(color: string) {
+    this.colorlistHidden = true;
+    this.card.color = color;
   }
 }
