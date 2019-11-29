@@ -45,4 +45,8 @@ describe('CardComponent', () => {
     const inputContent = fixture.debugElement.query(By.css('textarea'));
     expect(inputContent.nativeElement.value.trim()).toBe('Test content');
   });
+
+  it('should create card with cardcontent empty', () => {
+    expect(component.card.cardContent).toBe('');
+  });
 });
