@@ -1,6 +1,13 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild
+} from '@angular/core';
 import Card from '../../interfaces/Card';
-import { ColorlistComponent } from '../colorlist/colorlist.component';
 
 @Component({
   selector: 'campus-card',
@@ -11,13 +18,15 @@ export class CardComponent implements OnInit {
   @ViewChild('inputContent') inputContent: ElementRef;
   card: Card;
   colorlistHidden: boolean;
+  @Output() lastColor = new EventEmitter<string>();
+  @Input() savedLastColor: string;
 
   constructor() {}
 
   ngOnInit() {
     this.colorlistHidden = true;
     this.card = {
-      color: 'white',
+      color: this.savedLastColor,
       cardContent: null,
       isInputSelected: true
     };
@@ -36,5 +45,6 @@ export class CardComponent implements OnInit {
   selectColor(color: string) {
     this.colorlistHidden = true;
     this.card.color = color;
+    this.lastColor.emit(color);
   }
 }

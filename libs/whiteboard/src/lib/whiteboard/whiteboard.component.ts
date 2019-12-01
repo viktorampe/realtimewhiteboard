@@ -10,9 +10,11 @@ export class WhiteboardComponent implements OnInit {
 
   cards: string[];
   // maak array van Cards
+  lastColor: string;
 
   ngOnInit() {
     this.cards = [];
+    this.lastColor = 'white';
   }
 
   onTap(event) {
@@ -23,5 +25,9 @@ export class WhiteboardComponent implements OnInit {
 
   btnPlusClicked() {
     this.cards.push('item');
+  }
+
+  saveLastColor(color: string) {
+    this.lastColor = color;
   }
 }

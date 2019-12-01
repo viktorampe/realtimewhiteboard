@@ -3,6 +3,8 @@
     class="whiteboard-page__card"
     *ngFor="let card of cards"
     cdkDrag
+    [savedLastColor]="lastColor"
+    (lastColor)="saveLastColor($event)"
   ></campus-card>
   <button
     mat-raised-button
