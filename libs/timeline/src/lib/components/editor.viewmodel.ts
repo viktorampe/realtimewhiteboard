@@ -60,6 +60,10 @@ export class EditorViewModel {
 
   setHttpSettings(settings: EditorHttpSettingsInterface) {
     this.editorHttpService.setSettings(settings);
+
+    // Altering the http settings means we should reload the timeline
+    // For example, when the EduContentMetadata id was changed
+    this.loadTimeline();
   }
 
   getTimeline(): Observable<TimelineConfigInterface> {
@@ -200,11 +204,11 @@ export class EditorViewModel {
   }
 
   private initialise() {
-    this.setSourceStreams();
+    this.loadTimeline();
     this.setPresentationStreams();
   }
 
-  private setSourceStreams() {
+  private loadTimeline() {
     this.getTimeline().subscribe(timeline => {
       this.data$.next(timeline);
     });
