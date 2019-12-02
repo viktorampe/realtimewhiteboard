@@ -11,7 +11,9 @@ import {
   MethodQueries,
   Result,
   ResultInterface,
-  ResultQueries
+  ResultQueries,
+  UnlockedFreePracticeInterface,
+  UnlockedFreePracticeQueries
 } from '@campus/dal';
 import { createSelector } from '@ngrx/store';
 
@@ -31,15 +33,28 @@ export const getChaptersWithStatuses = createSelector(
     // TODO: this can be more efficient, can't use the count selectors or getAllByType
     // because it doesn't match with the props:
     EduContentTocEduContentQueries.getAll,
-    ResultQueries.getBestResultByEduContentId
+    ResultQueries.getBestResultByEduContentId,
+    UnlockedFreePracticeQueries.getAll
   ],
   (
     treeForBook: EduContentTOCInterface[],
     eduContentTocEduContents: EduContentTOCEduContentInterface[],
     bestResultByEduContentId: { [id: number]: ResultInterface },
+    unlockedFreePractices: UnlockedFreePracticeInterface[],
     props: { bookId: number }
   ) => {
-    return treeForBook.map(chapter => {
+    const chaptersUnlockedForBook = unlockedFreePractices
+      .filter(
+        ufp => ufp.eduContentBookId === props.bookId && ufp.eduContentTOCId
+      )
+      .map(val => val.eduContentTOCId);
+    let bookTree = treeForBook;
+    if (chaptersUnlockedForBook.length) {
+      bookTree = bookTree.filter(chapter =>
+        chaptersUnlockedForBook.includes(chapter.id)
+      );
+    }
+    return bookTree.map(chapter => {
       const tocId = chapter.id;
       const title = chapter.title;
       let availableExercises = 0;
