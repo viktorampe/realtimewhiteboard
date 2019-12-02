@@ -63,13 +63,13 @@ export class ResultsService implements ResultsServiceInterface {
     unlockedFreePracticeId: number,
     eduContentId: number
   ): Observable<ResultInterface> {
-    // @TODO: replace this when SDK is published:
-    // @see https://dev.azure.com/diekeure-webdev/LK2020/_sprints/taskboard/LK2020/LK2020/27.%20Student%20-%20vrij%20oefenen?workitem=2520
-    return this.personApi['resultForUnlockedFreePractice'](
-      userId,
-      unlockedFreePracticeId,
-      eduContentId
-    ).pipe(map(res => res as ResultInterface));
+    return this.personApi
+      .resultForUnlockedFreePractice(
+        userId,
+        unlockedFreePracticeId,
+        eduContentId
+      )
+      .pipe(map(res => res as ResultInterface));
   }
 
   /**
