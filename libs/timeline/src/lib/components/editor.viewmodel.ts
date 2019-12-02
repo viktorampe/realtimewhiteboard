@@ -204,7 +204,6 @@ export class EditorViewModel {
   }
 
   private initialise() {
-    this.loadTimeline();
     this.setPresentationStreams();
   }
 
