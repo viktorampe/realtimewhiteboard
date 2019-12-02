@@ -34,21 +34,9 @@ describe('PracticeViewModel selectors', () => {
 
     const unlockedFreePractices = [
       new UnlockedFreePracticeFixture({
-        id: 7,
+        id: 1,
         eduContentBookId: 24,
-        eduContentTOCId: 6,
-        classGroupId: 1
-      }),
-      new UnlockedFreePracticeFixture({
-        id: 8,
-        eduContentBookId: 24,
-        eduContentTOCId: 7,
-        classGroupId: 1
-      }),
-      new UnlockedFreePracticeFixture({
-        id: 9,
-        eduContentBookId: 24,
-        eduContentTOCId: 8,
+        eduContentTOCId: null,
         classGroupId: 1
       })
     ];
@@ -119,7 +107,7 @@ describe('PracticeViewModel selectors', () => {
       })
     ];
 
-    const props = { bookId: 7 };
+    const props = { bookId: 24 };
 
     const bestResultByEduContentId = {
       100: new ResultFixture({ score: 0 }),
@@ -288,6 +276,34 @@ describe('PracticeViewModel selectors', () => {
               completed: 1
             },
             kwetonsRemaining: 30
+          }
+        ]
+      },
+      {
+        it: 'should return allowed chapters',
+        input: {
+          treeForBook,
+          eduContentTOCEduContent,
+          bestResultByEduContentId: {},
+          unlockedFreePractices: [
+            new UnlockedFreePracticeFixture({
+              id: 1,
+              eduContentBookId: 24,
+              eduContentTOCId: 1,
+              classGroupId: 1
+            })
+          ],
+          props
+        },
+        expected: [
+          {
+            tocId: 1,
+            title: 'Chapter 1',
+            exercises: {
+              available: 3,
+              completed: 0
+            },
+            kwetonsRemaining: 90
           }
         ]
       }
