@@ -187,6 +187,12 @@ export class EditorViewModel {
     this._isFormDirty$.next(value);
   }
 
+  public loadTimeline() {
+    this.getTimeline().subscribe(timeline => {
+      this.data$.next(timeline);
+    });
+  }
+
   /**
    * Returns true only when it's safe to proceed.
    * This means: the user has no unsaved changes or the user agreed to discard any unsaved changes.
@@ -205,12 +211,6 @@ export class EditorViewModel {
 
   private initialise() {
     this.setPresentationStreams();
-  }
-
-  private loadTimeline() {
-    this.getTimeline().subscribe(timeline => {
-      this.data$.next(timeline);
-    });
   }
 
   private setPresentationStreams() {
