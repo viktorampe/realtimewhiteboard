@@ -17,6 +17,7 @@ import {
   YearFixture,
   YearInterface
 } from '@campus/dal';
+import { Dictionary } from '@ngrx/entity';
 import { configureTestSuite } from 'ng-bullet';
 import {
   ChapterWithStatus,
@@ -32,39 +33,47 @@ describe('PracticeViewModel selectors', () => {
   describe('getChaptersWithStatuses', () => {
     const projector: Function = getChaptersWithStatuses.projector;
 
-    const unlockedFreePractices = [
-      new UnlockedFreePracticeFixture({
-        id: 1,
-        eduContentBookId: 24,
-        eduContentTOCId: null,
-        classGroupId: 1
-      })
-    ];
+    const unlockedFreePractices = {
+      24: [
+        new UnlockedFreePracticeFixture({
+          id: 1,
+          eduContentBookId: 24,
+          eduContentTOCId: null,
+          classGroupId: 1
+        })
+      ]
+    };
     const treeForBook = [
       new EduContentTOCFixture({
         id: 1,
+        treeId: 24,
         title: 'Chapter 1',
         children: [
           new EduContentTOCFixture({
             id: 2,
+            treeId: 24,
             title: 'Lesson 1'
           }),
           new EduContentTOCFixture({
             id: 3,
+            treeId: 24,
             title: 'Lesson 2'
           })
         ]
       }),
       new EduContentTOCFixture({
         id: 4,
+        treeId: 24,
         title: 'Chapter 2',
         children: [
           new EduContentTOCFixture({
             id: 5,
+            treeId: 24,
             title: 'Lesson 3'
           }),
           new EduContentTOCFixture({
             id: 6,
+            treeId: 24,
             title: 'Lesson 4'
           })
         ]
@@ -122,7 +131,7 @@ describe('PracticeViewModel selectors', () => {
         treeForBook: EduContentTOCInterface[];
         eduContentTOCEduContent: EduContentTOCEduContentInterface[];
         bestResultByEduContentId: { [id: number]: ResultInterface };
-        unlockedFreePractices: UnlockedFreePracticeInterface[];
+        unlockedFreePractices: Dictionary<UnlockedFreePracticeInterface[]>;
         props: { bookId: number };
       };
       expected: ChapterWithStatus[];
@@ -285,14 +294,16 @@ describe('PracticeViewModel selectors', () => {
           treeForBook,
           eduContentTOCEduContent,
           bestResultByEduContentId: {},
-          unlockedFreePractices: [
-            new UnlockedFreePracticeFixture({
-              id: 1,
-              eduContentBookId: 24,
-              eduContentTOCId: 1,
-              classGroupId: 1
-            })
-          ],
+          unlockedFreePractices: {
+            24: [
+              new UnlockedFreePracticeFixture({
+                id: 1,
+                eduContentBookId: 24,
+                eduContentTOCId: 1,
+                classGroupId: 1
+              })
+            ]
+          },
           props
         },
         expected: [
@@ -306,6 +317,17 @@ describe('PracticeViewModel selectors', () => {
             kwetonsRemaining: 90
           }
         ]
+      },
+      {
+        it: 'should return no chapters when there are no UFPs',
+        input: {
+          treeForBook,
+          eduContentTOCEduContent,
+          bestResultByEduContentId: {},
+          unlockedFreePractices: {},
+          props
+        },
+        expected: []
       }
     ];
 
