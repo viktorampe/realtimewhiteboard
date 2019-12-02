@@ -9,7 +9,6 @@ import {
   LearningAreaQueries,
   MethodInterface,
   MethodQueries,
-  Result,
   ResultInterface,
   ResultQueries,
   UnlockedFreePracticeInterface,
@@ -93,7 +92,7 @@ export const getChaptersWithStatuses = createSelector(
 
       uniqueExerciseIds.forEach(exId => {
         if (bestResultByEduContentId[exId]) {
-          const result = bestResultByEduContentId[exId] as Result;
+          const result = bestResultByEduContentId[exId];
 
           completedExercises++;
           earnedKwetons += result.stars * 10;

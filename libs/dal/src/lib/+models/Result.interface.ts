@@ -23,4 +23,5 @@ export interface ResultInterface {
   taskInstanceId: number;
   personDisplayName: string;
   bundleId: number;
+  stars: number;
 }
