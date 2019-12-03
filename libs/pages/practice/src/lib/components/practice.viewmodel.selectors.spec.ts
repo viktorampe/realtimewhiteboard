@@ -12,9 +12,12 @@ import {
   MethodInterface,
   ResultFixture,
   ResultInterface,
+  UnlockedFreePracticeFixture,
+  UnlockedFreePracticeInterface,
   YearFixture,
   YearInterface
 } from '@campus/dal';
+import { Dictionary } from '@ngrx/entity';
 import { configureTestSuite } from 'ng-bullet';
 import {
   ChapterWithStatus,
@@ -30,31 +33,47 @@ describe('PracticeViewModel selectors', () => {
   describe('getChaptersWithStatuses', () => {
     const projector: Function = getChaptersWithStatuses.projector;
 
+    const unlockedFreePractices = {
+      24: [
+        new UnlockedFreePracticeFixture({
+          id: 1,
+          eduContentBookId: 24,
+          eduContentTOCId: null,
+          classGroupId: 1
+        })
+      ]
+    };
     const treeForBook = [
       new EduContentTOCFixture({
         id: 1,
+        treeId: 24,
         title: 'Chapter 1',
         children: [
           new EduContentTOCFixture({
             id: 2,
+            treeId: 24,
             title: 'Lesson 1'
           }),
           new EduContentTOCFixture({
             id: 3,
+            treeId: 24,
             title: 'Lesson 2'
           })
         ]
       }),
       new EduContentTOCFixture({
         id: 4,
+        treeId: 24,
         title: 'Chapter 2',
         children: [
           new EduContentTOCFixture({
             id: 5,
+            treeId: 24,
             title: 'Lesson 3'
           }),
           new EduContentTOCFixture({
             id: 6,
+            treeId: 24,
             title: 'Lesson 4'
           })
         ]
@@ -97,6 +116,8 @@ describe('PracticeViewModel selectors', () => {
       })
     ];
 
+    const props = { bookId: 24 };
+
     const bestResultByEduContentId = {
       100: new ResultFixture({ score: 0 }),
       102: new ResultFixture({ score: 50 }),
@@ -110,6 +131,8 @@ describe('PracticeViewModel selectors', () => {
         treeForBook: EduContentTOCInterface[];
         eduContentTOCEduContent: EduContentTOCEduContentInterface[];
         bestResultByEduContentId: { [id: number]: ResultInterface };
+        unlockedFreePractices: Dictionary<UnlockedFreePracticeInterface[]>;
+        props: { bookId: number };
       };
       expected: ChapterWithStatus[];
     }[] = [
@@ -118,7 +141,9 @@ describe('PracticeViewModel selectors', () => {
         input: {
           treeForBook,
           eduContentTOCEduContent,
-          bestResultByEduContentId
+          bestResultByEduContentId,
+          unlockedFreePractices,
+          props
         },
         expected: [
           {
@@ -146,7 +171,9 @@ describe('PracticeViewModel selectors', () => {
         input: {
           treeForBook,
           eduContentTOCEduContent,
-          bestResultByEduContentId: {}
+          bestResultByEduContentId: {},
+          unlockedFreePractices,
+          props
         },
         expected: [
           {
@@ -188,7 +215,9 @@ describe('PracticeViewModel selectors', () => {
               eduContentId: 102
             })
           ],
-          bestResultByEduContentId
+          bestResultByEduContentId,
+          unlockedFreePractices,
+          props
         },
         expected: [
           {
@@ -234,7 +263,9 @@ describe('PracticeViewModel selectors', () => {
               eduContentId: 100
             })
           ],
-          bestResultByEduContentId
+          bestResultByEduContentId,
+          unlockedFreePractices,
+          props
         },
         expected: [
           {
@@ -256,6 +287,47 @@ describe('PracticeViewModel selectors', () => {
             kwetonsRemaining: 30
           }
         ]
+      },
+      {
+        it: 'should return allowed chapters',
+        input: {
+          treeForBook,
+          eduContentTOCEduContent,
+          bestResultByEduContentId: {},
+          unlockedFreePractices: {
+            24: [
+              new UnlockedFreePracticeFixture({
+                id: 1,
+                eduContentBookId: 24,
+                eduContentTOCId: 1,
+                classGroupId: 1
+              })
+            ]
+          },
+          props
+        },
+        expected: [
+          {
+            tocId: 1,
+            title: 'Chapter 1',
+            exercises: {
+              available: 3,
+              completed: 0
+            },
+            kwetonsRemaining: 90
+          }
+        ]
+      },
+      {
+        it: 'should return no chapters when there are no UFPs',
+        input: {
+          treeForBook,
+          eduContentTOCEduContent,
+          bestResultByEduContentId: {},
+          unlockedFreePractices: {},
+          props
+        },
+        expected: []
       }
     ];
 
@@ -264,7 +336,9 @@ describe('PracticeViewModel selectors', () => {
         const result = projector(
           testCase.input.treeForBook,
           testCase.input.eduContentTOCEduContent,
-          testCase.input.bestResultByEduContentId
+          testCase.input.bestResultByEduContentId,
+          testCase.input.unlockedFreePractices,
+          testCase.input.props
         );
 
         expect(result).toEqual(testCase.expected);
