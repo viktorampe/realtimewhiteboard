@@ -8,9 +8,8 @@ describe('ManageTasksOverviewComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ManageTasksOverviewComponent ]
-    })
-    .compileComponents();
+      declarations: [ManageTasksOverviewComponent]
+    }).compileComponents();
   }));
 
   beforeEach(() => {
