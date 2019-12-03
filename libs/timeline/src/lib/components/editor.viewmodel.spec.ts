@@ -60,6 +60,8 @@ describe('EditorViewModel', () => {
   beforeEach(() => {
     editorViewModel = TestBed.get(EditorViewModel);
     editorHttpService = TestBed.get(EDITOR_HTTP_SERVICE_TOKEN);
+
+    editorViewModel.loadTimeline();
   });
 
   afterEach(() => {
@@ -78,14 +80,24 @@ describe('EditorViewModel', () => {
   });
 
   describe('http handlers', () => {
-    it('setHttpSettings() should call editorHttpService.setSettings', () => {
+    describe('setHttpSettings()', () => {
       const mockHttpSettings = { apiBase: 'foo', eduContentMetadataId: 123 };
-      jest.spyOn(editorHttpService, 'setSettings');
 
-      editorViewModel.setHttpSettings(mockHttpSettings);
-      expect(editorHttpService.setSettings).toHaveBeenCalledWith(
-        mockHttpSettings
-      );
+      it('should call editorHttpService.setSettings', () => {
+        jest.spyOn(editorHttpService, 'setSettings');
+
+        editorViewModel.setHttpSettings(mockHttpSettings);
+        expect(editorHttpService.setSettings).toHaveBeenCalledWith(
+          mockHttpSettings
+        );
+      });
+
+      it('should call loadTimeline', () => {
+        jest.spyOn(editorViewModel, 'loadTimeline');
+
+        editorViewModel.setHttpSettings(mockHttpSettings);
+        expect(editorViewModel.loadTimeline).toHaveBeenCalled();
+      });
     });
 
     it('getTimeline() should call the editorHttpService.getJson', () => {

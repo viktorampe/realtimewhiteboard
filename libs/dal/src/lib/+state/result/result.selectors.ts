@@ -1,6 +1,6 @@
 import { groupArrayByKey } from '@campus/utils';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { ResultInterface } from '../../+models';
+import { Result, ResultInterface } from '../../+models';
 import {
   NAME,
   selectAll,
@@ -144,7 +144,7 @@ export const getBestResultByEduContentId = createSelector(
         !acc[eduContentId] ||
         asInteger(acc[eduContentId].score) < asInteger(result.score)
       ) {
-        acc[eduContentId] = result;
+        acc[eduContentId] = Object.assign(new Result(), result) as Result;
       }
 
       return acc;
