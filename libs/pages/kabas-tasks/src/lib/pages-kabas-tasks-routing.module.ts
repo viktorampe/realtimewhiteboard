@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ManageTasksOverviewComponent } from './components/manage-tasks-overview/manage-tasks-overview.component';
+import { ManageKabasTasksOverviewComponent } from './components/manage-kabas-tasks-overview/manage-kabas-tasks-overview.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: ManageTasksOverviewComponent
+    component: ManageKabasTasksOverviewComponent
   }
 ];
 
