@@ -29,6 +29,12 @@ export class CardComponent implements OnInit {
     }
   }
 
+  onDblClick(event) {
+    if (event.target.className === 'card') {
+      this.toggleInput();
+    }
+  }
+
   showColor() {
     this.colorlistHidden = !this.colorlistHidden;
   }
