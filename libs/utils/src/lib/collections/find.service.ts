@@ -7,7 +7,7 @@ export function findOneInArray<T>(entities: T[], props: Partial<T>) {
 }
 
 export function findManyInArray<T>(entities: T[], props: Partial<T>) {
-  return Object.values(entities).filter(entity => {
+  return entities.filter(entity => {
     return Object.keys(props).every(
       prop => !props[prop] || entity[prop] === props[prop]
     );
