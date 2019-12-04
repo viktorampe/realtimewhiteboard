@@ -19,6 +19,7 @@ import {
   MethodEffects,
   MethodLevelEffects,
   ResultEffects,
+  TaskGroupEffects,
   UiEffects,
   UnlockedFreePracticeEffects,
   UserEffects,
@@ -26,7 +27,6 @@ import {
   YearEffects
 } from '@campus/dal';
 import { EffectsModule } from '@ngrx/effects';
-import { TaskGroupEffects } from 'libs/dal/src/lib/+state/task-group';
 
 @NgModule({
   imports: [
