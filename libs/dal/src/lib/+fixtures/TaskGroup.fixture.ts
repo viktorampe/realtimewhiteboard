@@ -4,7 +4,7 @@ export class TaskGroupFixture implements TaskGroupInterface {
   // defaults
   start = new Date(2019, 9, 1);
   end = new Date(2020, 08, 31);
-  instantiated = true;
+  instantiated = false;
   id = 1;
   taskId = 1;
   groupId = 1;
