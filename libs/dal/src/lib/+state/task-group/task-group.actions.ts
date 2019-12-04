@@ -21,7 +21,7 @@ export class LoadTaskGroups implements Action {
   readonly type = TaskGroupsActionTypes.LoadTaskGroups;
 
   constructor(
-    public payload: { force?: boolean, userId: number } = { userId: null }
+    public payload: { force?: boolean; userId: number } = { userId: null }
   ) {}
 }
 
