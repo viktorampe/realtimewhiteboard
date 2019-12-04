@@ -8,7 +8,7 @@
   display: flex;
   flex-wrap: wrap;
   overflow-y: scroll;
-
+  z-index: 1;
   &__swatches {
     height: 40px;
     width: 40px;

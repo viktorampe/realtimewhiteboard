@@ -7,6 +7,7 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 })
 export class ToolbarComponent implements OnInit {
   @Output() clickColorIcon = new EventEmitter<void>();
+  @Output() clickToggleIcon = new EventEmitter<void>();
 
   constructor() {}
 
@@ -14,5 +15,9 @@ export class ToolbarComponent implements OnInit {
 
   showColor() {
     this.clickColorIcon.emit();
+  }
+
+  toggleModus() {
+    this.clickToggleIcon.emit();
   }
 }

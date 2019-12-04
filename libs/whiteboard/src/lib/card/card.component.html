@@ -3,7 +3,10 @@
   (dblclick)="onDblClick($event)"
   [style.background-color]="this.card.color"
 >
-  <campus-toolbar (clickColorIcon)="showColor()"></campus-toolbar>
+  <campus-toolbar
+    (clickColorIcon)="showColor()"
+    (clickToggleIcon)="toggleEditMode()"
+  ></campus-toolbar>
   <campus-colorlist
     (selectedColor)="selectColor($event)"
     [hidden]="colorlistHidden"
@@ -12,6 +15,7 @@
     <p *ngIf="!card.isInputSelected" (click)="toggleInput()">
       {{ card.cardContent }}
     </p>
+    <campus-cardimage [hidden]="card.editMode"></campus-cardimage>
     <input
       #inputContent
       *ngIf="card.isInputSelected"
