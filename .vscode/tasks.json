@@ -23,7 +23,7 @@
   "inputs": [
     {
       "id": "wallabyProject",
-      "description": "Project choises to run wallaby with",
+      "description": "Project choices to run wallaby with",
       "type": "pickString",
       "options": [
         "polpo-classroom-web",
@@ -48,6 +48,7 @@
         "pages-reports",
         "pages-shared",
         "pages-tasks",
+        "pages-kabas-tasks",
         "pages-practice",
         "pages-settings-alerts",
         "pages-settings-coupled-teachers",
