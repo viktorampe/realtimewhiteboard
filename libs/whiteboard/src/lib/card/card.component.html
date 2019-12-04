@@ -1,4 +1,8 @@
-<div class="card" [style.background-color]="this.card.color">
+<div
+  class="card"
+  (dblclick)="onDblClick($event)"
+  [style.background-color]="this.card.color"
+>
   <campus-toolbar (clickColorIcon)="showColor()"></campus-toolbar>
   <campus-colorlist
     (selectedColor)="selectColor($event)"
