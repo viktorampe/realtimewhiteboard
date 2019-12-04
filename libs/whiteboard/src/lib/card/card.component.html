@@ -12,17 +12,21 @@
     [hidden]="colorlistHidden"
   ></campus-colorlist>
   <div class="card__content">
-    <p *ngIf="!card.isInputSelected" (click)="toggleInput()">
-      {{ card.cardContent }}
-    </p>
-    <campus-cardimage [hidden]="card.editMode"></campus-cardimage>
-    <input
-      #inputContent
-      *ngIf="card.isInputSelected"
-      [(ngModel)]="card.cardContent"
-      (focusout)="toggleInput()"
-      type="text"
-      name="card-content"
-    />
+    <campus-cardimage></campus-cardimage>
+    <div class="card__input">
+      <textarea
+        #inputContent
+        *ngIf="card.isInputSelected"
+        [(ngModel)]="card.cardContent"
+        (focusout)="toggleInput()"
+        type="text"
+        name="card-content"
+        cols="40"
+        rows="5"
+      ></textarea>
+      <p *ngIf="!card.isInputSelected" (click)="toggleInput()">
+        {{ card.cardContent }}
+      </p>
+    </div>
   </div>
 </div>

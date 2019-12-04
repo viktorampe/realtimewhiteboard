@@ -5,10 +5,13 @@
     min-height: 100%;
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
   }
   &__card {
     margin: 20px;
-    height: fit-content;
+    height: 350px;
+    width: 300px;
+    box-sizing: border-box;
   }
   &__btnPlus {
     position: absolute;

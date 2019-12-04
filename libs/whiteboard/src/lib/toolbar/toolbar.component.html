@@ -1,7 +1,12 @@
 <div class="toolbar">
-  <ul>
-    <li><mat-icon [svgIcon]="'color'" (click)="showColor()"></mat-icon></li>
-    <li><mat-icon [svgIcon]="'edit'"></mat-icon></li>
-    <li><mat-icon [svgIcon]="'edit'" (click)="toggleModus()"></mat-icon></li>
-  </ul>
+  <mat-icon
+    class="toolbar_icon"
+    [svgIcon]="'edit'"
+    (click)="toggleModus()"
+  ></mat-icon>
+  <mat-icon
+    class="toolbar_icon"
+    [svgIcon]="'color'"
+    (click)="showColor()"
+  ></mat-icon>
 </div>
