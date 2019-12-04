@@ -6,14 +6,18 @@
   <campus-toolbar
     (clickColorIcon)="showColor()"
     (clickToggleIcon)="toggleEditMode()"
+    (clickToggleView)="toggleView()"
   ></campus-toolbar>
   <campus-colorlist
     (selectedColor)="selectColor($event)"
     [hidden]="colorlistHidden"
   ></campus-colorlist>
   <div class="card__content">
-    <campus-cardimage></campus-cardimage>
-    <div class="card__input">
+    <campus-cardimage [hidden]="!this.viewModeImage"></campus-cardimage>
+    <div
+      class="card__input"
+      [ngClass]="{ viewModeText: this.card.editMode == false }"
+    >
       <textarea
         #inputContent
         *ngIf="card.isInputSelected"

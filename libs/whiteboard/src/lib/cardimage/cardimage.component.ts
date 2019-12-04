@@ -6,10 +6,13 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./cardimage.component.scss']
 })
 export class CardimageComponent implements OnInit {
+  editMode: boolean;
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit() {
+  ngOnInit() {}
+
+  setEditMode(editMode: boolean) {
+    this.editMode = editMode;
   }
-
 }
