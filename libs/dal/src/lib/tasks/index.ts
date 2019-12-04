@@ -4,5 +4,7 @@ export * from './task-group.service';
 export * from './task-group.service.interface';
 export * from './task-instance.service';
 export * from './task-instance.service.interface';
+export * from './task-student.service';
+export * from './task-student.service.interface';
 export * from './task.service.interface';
 export * from './tasks.service';
