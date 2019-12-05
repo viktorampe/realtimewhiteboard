@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import Card from '../../interfaces/card.interface';
 
 @Component({
   selector: 'campus-whiteboard',
@@ -8,7 +9,7 @@ import { Component, OnInit } from '@angular/core';
 export class WhiteboardComponent implements OnInit {
   constructor() {}
 
-  cards: string[];
+  cards: Card[];
   // maak array van Cards
 
   ngOnInit() {
@@ -17,11 +18,27 @@ export class WhiteboardComponent implements OnInit {
 
   onDblClick(event) {
     if (event.target.className === 'whiteboard-page__workspace') {
-      this.cards.push('item');
+      const top = event.srcEvent.offsetY;
+      const left = event.srcEvent.offsetX;
+      this.addEmptyCard(top, left);
     }
   }
 
   btnPlusClicked() {
-    this.cards.push('item');
+    this.addEmptyCard();
+  }
+
+  addEmptyCard(top: number = 0, left: number = 0) {
+    this.cards.push({
+      color: 'white',
+      cardContent: 'test',
+      isInputSelected: true,
+      top: top,
+      left: left
+    });
+  }
+
+  onDeleteCard(index) {
+    this.cards.splice(index, 1);
   }
 }
