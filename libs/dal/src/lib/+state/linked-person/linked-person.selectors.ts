@@ -69,7 +69,7 @@ export const getById = createSelector(
 export const getStudents = createSelector(
   selectLinkedPersonState,
   (state: State) => {
-    (state.ids as number[]).reduce((students, id) => {
+    return (state.ids as number[]).reduce((students, id) => {
       const person = state.entities[id];
       if (person.type === 'student') {
         students.push(person);
