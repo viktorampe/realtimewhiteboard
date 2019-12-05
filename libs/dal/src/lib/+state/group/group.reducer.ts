@@ -1,9 +1,6 @@
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 import { GroupInterface } from '../../+models';
-import {
-  GroupsActions,
-  GroupsActionTypes
-} from './group.actions';
+import { GroupsActions, GroupsActionTypes } from './group.actions';
 
 export const NAME = 'groups';
 
@@ -22,10 +19,7 @@ export const initialState: State = adapter.getInitialState({
   loaded: false
 });
 
-export function reducer(
-  state = initialState,
-  action: GroupsActions
-): State {
+export function reducer(state = initialState, action: GroupsActions): State {
   switch (action.type) {
     case GroupsActionTypes.AddGroup: {
       return adapter.addOne(action.payload.group, state);

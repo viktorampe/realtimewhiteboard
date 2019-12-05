@@ -36,12 +36,7 @@ describe('Group Selectors', () => {
   describe('Group Selectors', () => {
     beforeEach(() => {
       groupState = createState(
-        [
-          createGroup(4),
-          createGroup(1),
-          createGroup(2),
-          createGroup(3)
-        ],
+        [createGroup(4), createGroup(1), createGroup(2), createGroup(3)],
         true,
         'no error'
       );

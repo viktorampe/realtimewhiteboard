@@ -7,18 +7,13 @@ import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
 import { GROUP_SERVICE_TOKEN } from '../../group/group.service.interface';
 import { GroupReducer } from '.';
-import {
-  GroupsLoaded,
-  GroupsLoadError,
-  LoadGroups
-} from './group.actions';
+import { GroupsLoaded, GroupsLoadError, LoadGroups } from './group.actions';
 import { GroupEffects } from './group.effects';
 
 describe('GroupEffects', () => {
   let actions: Observable<any>;
   let effects: GroupEffects;
   let usedState: any;
-
 
   const expectInAndOut = (
     effect: Observable<any>,
@@ -61,7 +56,7 @@ describe('GroupEffects', () => {
       imports: [
         NxModule.forRoot(),
         StoreModule.forRoot({}),
-        StoreModule.forFeature(GroupReducer.NAME , GroupReducer.reducer, {
+        StoreModule.forFeature(GroupReducer.NAME, GroupReducer.reducer, {
           initialState: usedState
         }),
         EffectsModule.forRoot([]),
@@ -143,11 +138,7 @@ describe('GroupEffects', () => {
         );
       });
       it('should return a error action if force is true', () => {
-        expectInAndOut(
-          effects.loadGroups$,
-          forcedLoadAction,
-          loadErrorAction
-        );
+        expectInAndOut(effects.loadGroups$, forcedLoadAction, loadErrorAction);
       });
     });
     describe('with loaded and failing api call', () => {
@@ -165,11 +156,7 @@ describe('GroupEffects', () => {
         expectInNoOut(effects.loadGroups$, unforcedLoadAction);
       });
       it('should return a error action if force is true', () => {
-        expectInAndOut(
-          effects.loadGroups$,
-          forcedLoadAction,
-          loadErrorAction
-        );
+        expectInAndOut(effects.loadGroups$, forcedLoadAction, loadErrorAction);
       });
     });
   });
