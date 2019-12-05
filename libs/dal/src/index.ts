@@ -38,6 +38,7 @@ export * from './lib/+state/school-type';
 export * from './lib/+state/student-content-status';
 export * from './lib/+state/task';
 export * from './lib/+state/task-edu-content';
+export * from './lib/+state/task-group';
 export * from './lib/+state/task-instance';
 export * from './lib/+state/teacher-student';
 export * from './lib/+state/ui';
