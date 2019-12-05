@@ -1,0 +1,20 @@
+@mixin date-filter-component() {
+  $date-filter_mat-select-trigger-height: 1.125em !default;
+  $date-filter_mat-select-trigger-padding: 0px !default;
+  $date-filter_mat-select-trigger-border-width: 0px !default;
+  $date-filter_mat-select-trigger-border-color: transparent !default;
+  $date-filter_mat-select-value-vertical-align: baseline !default;
+
+  .date-filter-component {
+    .mat-select-trigger {
+      padding: $date-filter_mat-select-trigger-padding;
+      border: $date-filter_mat-select-trigger-border-width solid
+        $date-filter_mat-select-trigger-border-color;
+      height: 50px;
+    }
+
+    .mat-select-value {
+      vertical-align: $date-filter_mat-select-value-vertical-align;
+    }
+  }
+}

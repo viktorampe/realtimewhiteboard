@@ -16,6 +16,7 @@ import {
 } from '@angular/material';
 import { UiModule } from '@campus/ui';
 import { UtilsModule } from '@campus/utils';
+import { DateFilterComponent } from './components';
 import { BreadcrumbFilterComponent } from './components/breadcrumb-filter/breadcrumb-filter.component';
 import { ButtonToggleFilterComponent } from './components/button-toggle-filter-component/button-toggle-filter.component';
 import { CheckboxLineFilterComponent } from './components/checkbox-line-filter/checkbox-line-filter-component';
@@ -59,6 +60,7 @@ import { SearchPortalDirective } from './directives/search-portal.directive';
     ResultItemBase,
     BreadcrumbFilterComponent,
     SelectFilterComponent,
+    DateFilterComponent,
     SearchTermComponent,
     ResultsListComponent,
     ResultListDirective,
@@ -73,6 +75,7 @@ import { SearchPortalDirective } from './directives/search-portal.directive';
   exports: [
     BreadcrumbFilterComponent,
     SelectFilterComponent,
+    DateFilterComponent,
     SearchTermComponent,
     ResultsListComponent,
     CheckboxLineFilterComponent,
@@ -92,6 +95,7 @@ import { SearchPortalDirective } from './directives/search-portal.directive';
     BreadcrumbFilterComponent,
     ColumnFilterComponent,
     SelectFilterComponent,
+    DateFilterComponent,
     SearchTermComponent,
     ButtonToggleFilterComponent
   ]

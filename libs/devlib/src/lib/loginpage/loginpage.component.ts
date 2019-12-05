@@ -1,5 +1,5 @@
 // tslint:disable: member-ordering
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import {
   AlertReducer,
@@ -19,6 +19,11 @@ import {
   UnlockedFreePracticeActions,
   UserActions
 } from '@campus/dal';
+import {
+  SearchFilterCriteriaFixture,
+  SearchFilterCriteriaValuesFixture,
+  SelectFilterComponent
+} from '@campus/search';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
@@ -34,6 +39,9 @@ export class LoginpageComponent implements OnInit {
   currentUser: Observable<any>;
   route$: Observable<string[]>;
   response: Observable<any>;
+
+  @ViewChild('selectFilter')
+  selectFilterComponent: SelectFilterComponent;
 
   constructor(
     public loginPageviewModel: LoginPageViewModel,
@@ -57,6 +65,18 @@ export class LoginpageComponent implements OnInit {
     if (this.currentUser) {
       this.loadStore();
     }
+
+    // Select filter component testing
+    this.selectFilterComponent.filterCriteria = new SearchFilterCriteriaFixture(
+      {},
+      [
+        new SearchFilterCriteriaValuesFixture(),
+        new SearchFilterCriteriaValuesFixture()
+      ]
+    );
+    this.selectFilterComponent.filterSelectionChange.subscribe(v => {
+      console.log('FilterSelectionChange', v);
+    });
   }
 
   getCurrentUser() {
