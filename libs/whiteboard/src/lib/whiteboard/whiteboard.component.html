@@ -1,4 +1,4 @@
-<div class="whiteboard-page__workspace" (tap)="onTap($event)">
+<div class="whiteboard-page__workspace" (dblclick)="onDblClick($event)">
   <campus-card
     *ngFor="let card of cards; let i = index"
     cdkDrag

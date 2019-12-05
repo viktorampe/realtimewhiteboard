@@ -26,6 +26,11 @@ const routes: Routes = [
         data: { breadcrumbText: 'Methodes' }
       },
       {
+        path: 'tasks',
+        loadChildren: '@campus/pages/kabas-tasks#PagesKabasTasksModule',
+        data: { breadcrumbText: 'Taken' }
+      },
+      {
         path: 'practice',
         loadChildren: '@campus/pages/practice#PagesPracticeModule',
         data: { breadcrumbText: 'Vrij oefenen' }

@@ -16,8 +16,8 @@ export class WhiteboardComponent implements OnInit {
     this.cards = [];
   }
 
-  onTap(event) {
-    if (event.tapCount >= 2) {
+  onDblClick(event) {
+    if (event.target.className === 'whiteboard-page__workspace') {
       const top = event.srcEvent.offsetY;
       const left = event.srcEvent.offsetX;
       this.addEmptyCard(top, left);
