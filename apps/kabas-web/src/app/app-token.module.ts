@@ -119,8 +119,6 @@ import { kabasConfig } from './app.config';
 
     { provide: GROUP_SERVICE_TOKEN, useClass: GroupService },
     { provide: TASK_GROUP_SERVICE_TOKEN, useClass: TaskGroupService },
-
-    { provide: TASK_GROUP_SERVICE_TOKEN, useClass: TaskGroupService },
     { provide: TASK_STUDENT_SERVICE_TOKEN, useClass: TaskStudentService }
   ]
 })
