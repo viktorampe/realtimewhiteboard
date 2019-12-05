@@ -28,4 +28,5 @@ export interface TaskInterface {
   learningArea?: LearningAreaInterface;
   bundles?: BundleInterface[];
   taskInstances?: TaskInstanceInterface[];
+  isPaperTask?: boolean;
 }
