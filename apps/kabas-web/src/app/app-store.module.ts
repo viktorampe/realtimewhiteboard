@@ -20,6 +20,7 @@ import {
   MethodLevelReducer,
   MethodReducer,
   ResultReducer,
+  TaskClassGroupReducer,
   TaskGroupReducer,
   TaskReducer,
   TaskStudentReducer,
@@ -182,6 +183,13 @@ import { environment } from '../environments/environment';
     StoreModule.forFeature(TaskGroupReducer.NAME, TaskGroupReducer.reducer, {
       initialState: TaskGroupReducer.initialState
     }),
+    StoreModule.forFeature(
+      TaskClassGroupReducer.NAME,
+      TaskClassGroupReducer.reducer,
+      {
+        initialState: TaskClassGroupReducer.initialState
+      }
+    ),
     StoreModule.forFeature(
       TaskStudentReducer.NAME,
       TaskStudentReducer.reducer,
