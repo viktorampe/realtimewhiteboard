@@ -1,3 +1,5 @@
+export * from './task-class-group.service';
+export * from './task-class-group.service.interface';
 export * from './task-edu-content.service';
 export * from './task-edu-content.service.interface';
 export * from './task-group.service';
