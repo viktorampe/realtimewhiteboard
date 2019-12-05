@@ -37,6 +37,7 @@ export * from './lib/+state/router/router.selectors';
 export * from './lib/+state/school-type';
 export * from './lib/+state/student-content-status';
 export * from './lib/+state/task';
+export * from './lib/+state/task-class-group';
 export * from './lib/+state/task-edu-content';
 export * from './lib/+state/task-group';
 export * from './lib/+state/task-instance';
