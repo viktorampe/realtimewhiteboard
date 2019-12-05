@@ -26,6 +26,8 @@ import {
   LEARNING_DOMAIN_SERVICE_TOKEN,
   LEARNING_PLAN_GOAL_PROGRESS_SERVICE_TOKEN,
   LEARNING_PLAN_GOAL_SERVICE_TOKEN,
+  LinkedPersonService,
+  LINKED_PERSON_SERVICE_TOKEN,
   MethodLevelService,
   MethodService,
   METHOD_LEVEL_SERVICE_TOKEN,
@@ -112,7 +114,9 @@ import { kabasConfig } from './app.config';
     },
     { provide: SCORM_API_SERVICE_TOKEN, useClass: ScormApiService },
     { provide: METHOD_LEVEL_SERVICE_TOKEN, useClass: MethodLevelService },
-    { provide: TASK_GROUP_SERVICE_TOKEN, useClass: TaskGroupService }
+    { provide: TASK_GROUP_SERVICE_TOKEN, useClass: TaskGroupService },
+    { provide: GROUP_SERVICE_TOKEN, useClass: GroupService },
+    { provide: LINKED_PERSON_SERVICE_TOKEN, useClass: LinkedPersonService }
   ]
 })
 export class AppTokenModule {}

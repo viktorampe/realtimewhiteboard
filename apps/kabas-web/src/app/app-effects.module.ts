@@ -16,6 +16,7 @@ import {
   LearningDomainEffects,
   LearningPlanGoalEffects,
   LearningPlanGoalProgressEffects,
+  LinkedPersonEffects,
   MethodEffects,
   MethodLevelEffects,
   ResultEffects,
@@ -56,7 +57,8 @@ import { EffectsModule } from '@ngrx/effects';
       UnlockedFreePracticeEffects,
       MethodLevelEffects,
       EduContentTocEduContentEffects,
-      TaskGroupEffects
+      TaskGroupEffects,
+      LinkedPersonEffects
     ])
   ]
 })
