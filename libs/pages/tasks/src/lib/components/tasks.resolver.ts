@@ -7,6 +7,8 @@ import {
   DalState,
   EduContentActions,
   EduContentQueries,
+  GroupActions,
+  GroupQueries,
   LearningAreaActions,
   LearningAreaQueries,
   LinkedPersonActions,
@@ -15,6 +17,8 @@ import {
   MethodQueries,
   StateResolver,
   TaskActions,
+  TaskClassGroupActions,
+  TaskClassGroupQueries,
   TaskEduContentActions,
   TaskEduContentQueries,
   TaskGroupActions,
@@ -59,10 +63,12 @@ export class TasksResolver extends StateResolver {
       new TaskStudentActions.LoadTaskStudents({
         userId: this.authService.userId
       }),
-      //TODO: groups, taskclassgroup
-      // new Taskclassgroup.LoadTaskStudents({
-      //   userId: this.authService.userId
-      // }),
+      new TaskClassGroupActions.LoadTaskClassGroups({
+        userId: this.authService.userId
+      }),
+      new GroupActions.LoadGroups({
+        userId: this.authService.userId
+      }),
       new ClassGroupActions.LoadClassGroups({
         userId: this.authService.userId
       }),
@@ -87,7 +93,9 @@ export class TasksResolver extends StateResolver {
       TaskStudentQueries.getLoaded,
       ClassGroupQueries.getLoaded,
       LinkedPersonQueries.getLoaded,
-      ClassGroupQueries.getLoaded
+      ClassGroupQueries.getLoaded,
+      GroupQueries.getLoaded,
+      TaskClassGroupQueries.getLoaded
     ];
   }
 }
