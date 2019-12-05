@@ -1,26 +1,29 @@
 import { Update } from '@ngrx/entity';
-import {TaskStudentActions } from '.';
-import { initialState, reducer, State } from './task-student.reducer';
+import { TaskStudentActions } from '.';
 import { TaskStudentInterface } from '../../+models';
+import { initialState, reducer, State } from './task-student.reducer';
 
-/** 
+/**
  * This file is scaffolded, but needs some special attention:
  * - find and replace '__EXTRA__PROPERTY_NAME' and replace this with a property name of the TaskStudent entity.
  * - set the initial property value via '[__EXTRA__PROPERTY_NAME]InitialValue'.
  * - set the updated property value via '[__EXTRA__PROPERTY_NAME]UpdatedValue'.
-*/
-const __EXTRA__PROPERTY_NAMEInitialValue = ;
-const __EXTRA__PROPERTY_NAMEUpdatedValue = ;
+ */
+const taskIdInitialValue = 1;
+const taskIdUpdatedValue = 2;
 
 /**
  * Creates a TaskStudent.
  * @param {number} id
  * @returns {TaskStudentInterface}
  */
-function createTaskStudent(id: number, __EXTRA__PROPERTY_NAME:any = __EXTRA__PROPERTY_NAMEInitialValue): TaskStudentInterface | any {
+function createTaskStudent(
+  id: number,
+  __EXTRA__PROPERTY_NAME: any = taskIdInitialValue
+): TaskStudentInterface | any {
   return {
     id: id,
-    __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAME
+    taskId: taskIdInitialValue
   };
 }
 
@@ -54,7 +57,6 @@ function createState(
   return state;
 }
 
-
 describe('TaskStudents Reducer', () => {
   let taskStudents: TaskStudentInterface[];
   beforeEach(() => {
@@ -77,7 +79,9 @@ describe('TaskStudents Reducer', () => {
 
   describe('loaded action', () => {
     it('should load all taskStudents', () => {
-      const action = new TaskStudentActions.TaskStudentsLoaded({ taskStudents });
+      const action = new TaskStudentActions.TaskStudentsLoaded({
+        taskStudents
+      });
       const result = reducer(initialState, action);
       expect(result).toEqual(createState(taskStudents, true));
     });
@@ -111,7 +115,7 @@ describe('TaskStudents Reducer', () => {
   describe('upsert actions', () => {
     it('should upsert one taskStudent', () => {
       const originalTaskStudent = taskStudents[0];
-      
+
       const startState = reducer(
         initialState,
         new TaskStudentActions.AddTaskStudent({
@@ -119,16 +123,17 @@ describe('TaskStudents Reducer', () => {
         })
       );
 
-    
       const updatedTaskStudent = createTaskStudent(taskStudents[0].id, 'test');
-     
+
       const action = new TaskStudentActions.UpsertTaskStudent({
         taskStudent: updatedTaskStudent
       });
 
       const result = reducer(startState, action);
 
-      expect(result.entities[updatedTaskStudent.id]).toEqual(updatedTaskStudent);
+      expect(result.entities[updatedTaskStudent.id]).toEqual(
+        updatedTaskStudent
+      );
     });
 
     it('should upsert many taskStudents', () => {
@@ -146,9 +151,7 @@ describe('TaskStudents Reducer', () => {
 
       const result = reducer(startState, action);
 
-      expect(result).toEqual(
-        createState(taskStudentsToInsert)
-      );
+      expect(result).toEqual(createState(taskStudentsToInsert));
     });
   });
 
@@ -159,31 +162,32 @@ describe('TaskStudents Reducer', () => {
       const update: Update<TaskStudentInterface> = {
         id: 1,
         changes: {
-          __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAMEUpdatedValue
-        } 
+          taskId: taskIdUpdatedValue
+        }
       };
       const action = new TaskStudentActions.UpdateTaskStudent({
         taskStudent: update
       });
       const result = reducer(startState, action);
-      expect(result).toEqual(createState([createTaskStudent(1, __EXTRA__PROPERTY_NAMEUpdatedValue)]));
+      expect(result).toEqual(
+        createState([createTaskStudent(1, taskIdUpdatedValue)])
+      );
     });
 
     it('should update multiple taskStudents', () => {
       const startState = createState(taskStudents);
       const updates: Update<TaskStudentInterface>[] = [
-        
         {
           id: 1,
           changes: {
-            __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAMEUpdatedValue
-          } 
+            taskId: taskIdUpdatedValue
+          }
         },
         {
           id: 2,
           changes: {
-            __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAMEUpdatedValue
-          }  
+            taskId: taskIdUpdatedValue
+          }
         }
       ];
       const action = new TaskStudentActions.UpdateTaskStudents({
@@ -192,7 +196,11 @@ describe('TaskStudents Reducer', () => {
       const result = reducer(startState, action);
 
       expect(result).toEqual(
-        createState([createTaskStudent(1, __EXTRA__PROPERTY_NAMEUpdatedValue), createTaskStudent(2, __EXTRA__PROPERTY_NAMEUpdatedValue), taskStudents[2]])
+        createState([
+          createTaskStudent(1, taskIdUpdatedValue),
+          createTaskStudent(2, taskIdUpdatedValue),
+          taskStudents[2]
+        ])
       );
     });
   });
@@ -220,7 +228,11 @@ describe('TaskStudents Reducer', () => {
 
   describe('clear action', () => {
     it('should clear the taskStudents collection', () => {
-      const startState = createState(taskStudents, true, 'something went wrong');
+      const startState = createState(
+        taskStudents,
+        true,
+        'something went wrong'
+      );
       const action = new TaskStudentActions.ClearTaskStudents();
       const result = reducer(startState, action);
       expect(result).toEqual(createState([], true, 'something went wrong'));
