@@ -17,6 +17,7 @@ import {
   LearningDomainReducer,
   LearningPlanGoalProgressReducer,
   LearningPlanGoalReducer,
+  LinkedPersonReducer,
   MethodLevelReducer,
   MethodReducer,
   ResultReducer,
@@ -183,6 +184,13 @@ import { environment } from '../environments/environment';
     StoreModule.forFeature(TaskGroupReducer.NAME, TaskGroupReducer.reducer, {
       initialState: TaskGroupReducer.initialState
     }),
+    StoreModule.forFeature(
+      LinkedPersonReducer.NAME,
+      LinkedPersonReducer.reducer,
+      {
+        initialState: LinkedPersonReducer.initialState
+      }
+    ),
     StoreModule.forFeature(
       TaskClassGroupReducer.NAME,
       TaskClassGroupReducer.reducer,

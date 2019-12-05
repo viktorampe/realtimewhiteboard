@@ -28,6 +28,8 @@ import {
   LEARNING_DOMAIN_SERVICE_TOKEN,
   LEARNING_PLAN_GOAL_PROGRESS_SERVICE_TOKEN,
   LEARNING_PLAN_GOAL_SERVICE_TOKEN,
+  LinkedPersonService,
+  LINKED_PERSON_SERVICE_TOKEN,
   MethodLevelService,
   MethodService,
   METHOD_LEVEL_SERVICE_TOKEN,
@@ -119,6 +121,9 @@ import { kabasConfig } from './app.config';
 
     { provide: GROUP_SERVICE_TOKEN, useClass: GroupService },
     { provide: TASK_GROUP_SERVICE_TOKEN, useClass: TaskGroupService },
+
+    { provide: LINKED_PERSON_SERVICE_TOKEN, useClass: LinkedPersonService },
+
     { provide: TASK_STUDENT_SERVICE_TOKEN, useClass: TaskStudentService }
   ]
 })
