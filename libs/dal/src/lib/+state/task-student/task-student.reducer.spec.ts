@@ -3,12 +3,6 @@ import { TaskStudentActions } from '.';
 import { TaskStudentInterface } from '../../+models';
 import { initialState, reducer, State } from './task-student.reducer';
 
-/**
- * This file is scaffolded, but needs some special attention:
- * - find and replace '__EXTRA__PROPERTY_NAME' and replace this with a property name of the TaskStudent entity.
- * - set the initial property value via '[__EXTRA__PROPERTY_NAME]InitialValue'.
- * - set the updated property value via '[__EXTRA__PROPERTY_NAME]UpdatedValue'.
- */
 const taskIdInitialValue = 1;
 const taskIdUpdatedValue = 2;
 
@@ -19,11 +13,11 @@ const taskIdUpdatedValue = 2;
  */
 function createTaskStudent(
   id: number,
-  __EXTRA__PROPERTY_NAME: any = taskIdInitialValue
+  taskId: any = taskIdInitialValue
 ): TaskStudentInterface | any {
   return {
     id: id,
-    taskId: taskIdInitialValue
+    taskId: taskId
   };
 }
 
