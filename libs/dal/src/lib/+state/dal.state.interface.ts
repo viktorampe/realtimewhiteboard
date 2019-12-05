@@ -82,6 +82,6 @@ export interface DalState {
   classGroups: ClassGroupReducer.State;
   unlockedFreePractices: UnlockedFreePracticeReducer.State;
   methodLevels: MethodLevelReducer.State;
-  taskClassGroups: TaskClassGroupReducer.State;
   groups: GroupReducer.State;
+  taskClassGroups: TaskClassGroupReducer.State;
 }

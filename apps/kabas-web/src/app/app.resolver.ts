@@ -11,6 +11,8 @@ import {
   HistoryQueries,
   LearningAreaActions,
   LearningAreaQueries,
+  LinkedPersonActions,
+  LinkedPersonQueries,
   MethodActions,
   MethodLevelActions,
   MethodLevelQueries,
@@ -43,7 +45,10 @@ export class AppResolver extends StateResolver {
       new MethodLevelActions.LoadMethodLevels({
         userId: this.authService.userId
       }),
-      new UiActions.LoadUi()
+      new UiActions.LoadUi(),
+      new LinkedPersonActions.LoadLinkedPersons({
+        userId: this.authService.userId
+      })
     ];
   }
   protected getResolvedQueries(): Selector<object, boolean>[] {
@@ -55,7 +60,8 @@ export class AppResolver extends StateResolver {
       FavoriteQueries.getLoaded,
       HistoryQueries.getLoaded,
       MethodLevelQueries.getLoaded,
-      UiQuery.getLoaded
+      UiQuery.getLoaded,
+      LinkedPersonQueries.getLoaded
     ];
   }
 }

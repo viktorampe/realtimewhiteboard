@@ -59,7 +59,7 @@ describe('findInArray util', () => {
   });
 
   describe('findOneInArray', () => {
-    it('should return all object', () => {
+    it('should return first object', () => {
       const result = findOneInArray(array, {});
       expect(result).toEqual(array[0]);
     });
