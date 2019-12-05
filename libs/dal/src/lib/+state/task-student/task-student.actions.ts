@@ -21,7 +21,7 @@ export class LoadTaskStudents implements Action {
   readonly type = TaskStudentsActionTypes.LoadTaskStudents;
 
   constructor(
-    public payload: { force?: boolean, userId: number } = { userId: null }
+    public payload: { force?: boolean; userId: number } = { userId: null }
   ) {}
 }
 
@@ -69,7 +69,9 @@ export class UpdateTaskStudent implements Action {
 export class UpdateTaskStudents implements Action {
   readonly type = TaskStudentsActionTypes.UpdateTaskStudents;
 
-  constructor(public payload: { taskStudents: Update<TaskStudentInterface>[] }) {}
+  constructor(
+    public payload: { taskStudents: Update<TaskStudentInterface>[] }
+  ) {}
 }
 
 export class DeleteTaskStudent implements Action {

@@ -60,7 +60,10 @@ export function reducer(
     }
 
     case TaskStudentsActionTypes.TaskStudentsLoaded: {
-      return adapter.addAll(action.payload.taskStudents, { ...state, loaded: true });
+      return adapter.addAll(action.payload.taskStudents, {
+        ...state,
+        loaded: true
+      });
     }
 
     case TaskStudentsActionTypes.TaskStudentsLoadError: {
