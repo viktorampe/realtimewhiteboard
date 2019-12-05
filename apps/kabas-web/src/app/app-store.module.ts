@@ -23,6 +23,7 @@ import {
   TaskClassGroupReducer,
   TaskGroupReducer,
   TaskReducer,
+  TaskStudentReducer,
   UiReducer,
   UnlockedFreePracticeReducer,
   UserLessonReducer,
@@ -189,7 +190,13 @@ import { environment } from '../environments/environment';
         initialState: TaskClassGroupReducer.initialState
       }
     ),
-
+    StoreModule.forFeature(
+      TaskStudentReducer.NAME,
+      TaskStudentReducer.reducer,
+      {
+        initialState: TaskStudentReducer.initialState
+      }
+    ),
     !environment.production ? StoreDevtoolsModule.instrument() : []
   ]
 })
