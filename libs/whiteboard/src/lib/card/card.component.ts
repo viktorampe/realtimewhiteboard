@@ -59,3 +59,6 @@ export class CardComponent implements OnInit {
     this.viewModeImage = !this.viewModeImage;
   }
 }
+
+//TODO: in edit mode is toggle hidden.
+//TODO: in edit mode is cardimage altijd not hidden
