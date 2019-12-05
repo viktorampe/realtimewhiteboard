@@ -20,6 +20,7 @@ import {
   MethodLevelReducer,
   MethodReducer,
   ResultReducer,
+  TaskGroupReducer,
   TaskReducer,
   UiReducer,
   UnlockedFreePracticeReducer,
@@ -177,6 +178,9 @@ import { environment } from '../environments/environment';
         initialState: MethodLevelReducer.initialState
       }
     ),
+    StoreModule.forFeature(TaskGroupReducer.NAME, TaskGroupReducer.reducer, {
+      initialState: TaskGroupReducer.initialState
+    }),
 
     !environment.production ? StoreDevtoolsModule.instrument() : []
   ]
