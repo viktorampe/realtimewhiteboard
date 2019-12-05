@@ -38,6 +38,7 @@ import {
 } from '../..';
 import { MethodLevelReducer } from './method-level';
 import { TaskGroupReducer } from './task-group';
+import { TaskStudentReducer } from './task-student';
 
 export interface DalState {
   ui: UiReducer.UiState;
@@ -59,6 +60,7 @@ export interface DalState {
   taskInstances: TaskInstanceReducer.State;
   taskEduContents: TaskEduContentReducer.State;
   taskGroups: TaskGroupReducer.State;
+  taskStudents: TaskStudentReducer.State;
   results: ResultReducer.State;
   linkedPersons: LinkedPersonReducer.State;
   teacherStudents: TeacherStudentReducer.State;

@@ -35,7 +35,9 @@ import {
   ResultsService,
   RESULTS_SERVICE_TOKEN,
   TaskGroupService,
+  TaskStudentService,
   TASK_GROUP_SERVICE_TOKEN,
+  TASK_STUDENT_SERVICE_TOKEN,
   TocService,
   TOC_SERVICE_TOKEN,
   UndoService,
@@ -112,7 +114,8 @@ import { kabasConfig } from './app.config';
     },
     { provide: SCORM_API_SERVICE_TOKEN, useClass: ScormApiService },
     { provide: METHOD_LEVEL_SERVICE_TOKEN, useClass: MethodLevelService },
-    { provide: TASK_GROUP_SERVICE_TOKEN, useClass: TaskGroupService }
+    { provide: TASK_GROUP_SERVICE_TOKEN, useClass: TaskGroupService },
+    { provide: TASK_STUDENT_SERVICE_TOKEN, useClass: TaskStudentService }
   ]
 })
 export class AppTokenModule {}
