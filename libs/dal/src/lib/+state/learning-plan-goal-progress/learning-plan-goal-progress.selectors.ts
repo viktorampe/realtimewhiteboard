@@ -1,4 +1,8 @@
-import { groupArrayByKey } from '@campus/utils';
+import {
+  findManyInArray,
+  findOneInArray,
+  groupArrayByKey
+} from '@campus/utils';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { LearningPlanGoalProgressInterface } from '../../+models';
 import {
@@ -72,24 +76,14 @@ export const getById = createSelector(
 
 export const findOne = createSelector(
   selectLearningPlanGoalProgressState,
-  (state: State, props: Partial<LearningPlanGoalProgressInterface>) => {
-    return Object.values(state.entities).find(learningPlanGoalProgress => {
-      return Object.keys(props).every(
-        prop => !props[prop] || learningPlanGoalProgress[prop] === props[prop]
-      );
-    });
-  }
+  (state: State, props: Partial<LearningPlanGoalProgressInterface>) =>
+    findOneInArray(Object.values(state.entities), props)
 );
 
 export const findMany = createSelector(
   selectLearningPlanGoalProgressState,
-  (state: State, props: Partial<LearningPlanGoalProgressInterface>) => {
-    return Object.values(state.entities).filter(learningPlanGoalProgress => {
-      return Object.keys(props).every(
-        prop => !props[prop] || learningPlanGoalProgress[prop] === props[prop]
-      );
-    });
-  }
+  (state: State, props: Partial<LearningPlanGoalProgressInterface>) =>
+    findManyInArray(Object.values(state.entities), props)
 );
 
 export const getGroupedByLearningPlanGoalId = createSelector(
