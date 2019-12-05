@@ -11,6 +11,7 @@ import {
   EduContentTocEffects,
   EffectFeedbackEffects,
   FavoriteEffects,
+  GroupEffects,
   HistoryEffects,
   LearningAreasEffects,
   LearningDomainEffects,
@@ -27,7 +28,6 @@ import {
   YearEffects
 } from '@campus/dal';
 import { EffectsModule } from '@ngrx/effects';
-import { GroupEffects } from 'libs/dal/src/lib/+state/group';
 
 @NgModule({
   imports: [
