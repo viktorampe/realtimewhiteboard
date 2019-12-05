@@ -2,14 +2,17 @@ import { Inject, Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
 import { DataPersistence } from '@nrwl/nx';
 import { map } from 'rxjs/operators';
-import { TaskClassGroupServiceInterface, TASK_CLASS_GROUP_SERVICE_TOKEN } from '../../task-class-group/task-class-group.service.interface';
-import {
-  TaskClassGroupsActionTypes,
-  TaskClassGroupsLoadError,
-  LoadTaskClassGroups,
-  TaskClassGroupsLoaded
-} from './task-class-group.actions';
 import { DalState } from '..';
+import {
+  TaskClassGroupServiceInterface,
+  TASK_CLASS_GROUP_SERVICE_TOKEN
+} from '../../tasks/task-class-group.service.interface';
+import {
+  LoadTaskClassGroups,
+  TaskClassGroupsActionTypes,
+  TaskClassGroupsLoaded,
+  TaskClassGroupsLoadError
+} from './task-class-group.actions';
 
 @Injectable()
 export class TaskClassGroupEffects {
@@ -21,7 +24,11 @@ export class TaskClassGroupEffects {
         if (!action.payload.force && state.taskClassGroups.loaded) return;
         return this.taskClassGroupService
           .getAllForUser(action.payload.userId)
-          .pipe(map(taskClassGroups => new TaskClassGroupsLoaded({ taskClassGroups })));
+          .pipe(
+            map(
+              taskClassGroups => new TaskClassGroupsLoaded({ taskClassGroups })
+            )
+          );
       },
       onError: (action: LoadTaskClassGroups, error) => {
         return new TaskClassGroupsLoadError(error);

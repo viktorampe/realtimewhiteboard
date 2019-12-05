@@ -19,6 +19,7 @@ import {
   MethodEffects,
   MethodLevelEffects,
   ResultEffects,
+  TaskClassGroupEffects,
   TaskGroupEffects,
   UiEffects,
   UnlockedFreePracticeEffects,
@@ -56,7 +57,8 @@ import { EffectsModule } from '@ngrx/effects';
       UnlockedFreePracticeEffects,
       MethodLevelEffects,
       EduContentTocEduContentEffects,
-      TaskGroupEffects
+      TaskGroupEffects,
+      TaskClassGroupEffects
     ])
   ]
 })

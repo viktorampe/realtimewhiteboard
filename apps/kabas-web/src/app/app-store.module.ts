@@ -35,6 +35,7 @@ import {
 } from '@ngrx/router-store';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { TaskClassGroupReducer } from 'libs/dal/src/lib/+state/task-class-group';
 import { storeFreeze } from 'ngrx-store-freeze';
 import { handleUndo } from 'ngrx-undo';
 import { environment } from '../environments/environment';
@@ -181,6 +182,13 @@ import { environment } from '../environments/environment';
     StoreModule.forFeature(TaskGroupReducer.NAME, TaskGroupReducer.reducer, {
       initialState: TaskGroupReducer.initialState
     }),
+    StoreModule.forFeature(
+      TaskClassGroupReducer.NAME,
+      TaskClassGroupReducer.reducer,
+      {
+        initialState: TaskClassGroupReducer.initialState
+      }
+    ),
 
     !environment.production ? StoreDevtoolsModule.instrument() : []
   ]

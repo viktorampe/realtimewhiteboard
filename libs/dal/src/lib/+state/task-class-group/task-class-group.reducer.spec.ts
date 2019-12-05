@@ -1,26 +1,23 @@
 import { Update } from '@ngrx/entity';
-import {TaskClassGroupActions } from '.';
-import { initialState, reducer, State } from './task-class-group.reducer';
+import { TaskClassGroupActions } from '.';
 import { TaskClassGroupInterface } from '../../+models';
+import { initialState, reducer, State } from './task-class-group.reducer';
 
-/** 
- * This file is scaffolded, but needs some special attention:
- * - find and replace '__EXTRA__PROPERTY_NAME' and replace this with a property name of the TaskClassGroup entity.
- * - set the initial property value via '[__EXTRA__PROPERTY_NAME]InitialValue'.
- * - set the updated property value via '[__EXTRA__PROPERTY_NAME]UpdatedValue'.
-*/
-const __EXTRA__PROPERTY_NAMEInitialValue = ;
-const __EXTRA__PROPERTY_NAMEUpdatedValue = ;
+const taskIdInitialValue = 123;
+const taskIdUpdatedValue = 456;
 
 /**
  * Creates a TaskClassGroup.
  * @param {number} id
  * @returns {TaskClassGroupInterface}
  */
-function createTaskClassGroup(id: number, __EXTRA__PROPERTY_NAME:any = __EXTRA__PROPERTY_NAMEInitialValue): TaskClassGroupInterface | any {
+function createTaskClassGroup(
+  id: number,
+  taskId: any = taskIdInitialValue
+): TaskClassGroupInterface | any {
   return {
     id: id,
-    __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAME
+    taskId: taskId
   };
 }
 
@@ -38,7 +35,9 @@ function createState(
   error?: any
 ): State {
   const state: any = {
-    ids: taskClassGroups ? taskClassGroups.map(taskClassGroup => taskClassGroup.id) : [],
+    ids: taskClassGroups
+      ? taskClassGroups.map(taskClassGroup => taskClassGroup.id)
+      : [],
     entities: taskClassGroups
       ? taskClassGroups.reduce(
           (entityMap, taskClassGroup) => ({
@@ -53,7 +52,6 @@ function createState(
   if (error !== undefined) state.error = error;
   return state;
 }
-
 
 describe('TaskClassGroups Reducer', () => {
   let taskClassGroups: TaskClassGroupInterface[];
@@ -77,7 +75,9 @@ describe('TaskClassGroups Reducer', () => {
 
   describe('loaded action', () => {
     it('should load all taskClassGroups', () => {
-      const action = new TaskClassGroupActions.TaskClassGroupsLoaded({ taskClassGroups });
+      const action = new TaskClassGroupActions.TaskClassGroupsLoaded({
+        taskClassGroups
+      });
       const result = reducer(initialState, action);
       expect(result).toEqual(createState(taskClassGroups, true));
     });
@@ -102,7 +102,9 @@ describe('TaskClassGroups Reducer', () => {
     });
 
     it('should add multiple taskClassGroups', () => {
-      const action = new TaskClassGroupActions.AddTaskClassGroups({ taskClassGroups });
+      const action = new TaskClassGroupActions.AddTaskClassGroups({
+        taskClassGroups
+      });
       const result = reducer(initialState, action);
 
       expect(result).toEqual(createState(taskClassGroups, false));
@@ -111,7 +113,7 @@ describe('TaskClassGroups Reducer', () => {
   describe('upsert actions', () => {
     it('should upsert one taskClassGroup', () => {
       const originalTaskClassGroup = taskClassGroups[0];
-      
+
       const startState = reducer(
         initialState,
         new TaskClassGroupActions.AddTaskClassGroup({
@@ -119,16 +121,20 @@ describe('TaskClassGroups Reducer', () => {
         })
       );
 
-    
-      const updatedTaskClassGroup = createTaskClassGroup(taskClassGroups[0].id, 'test');
-     
+      const updatedTaskClassGroup = createTaskClassGroup(
+        taskClassGroups[0].id,
+        'test'
+      );
+
       const action = new TaskClassGroupActions.UpsertTaskClassGroup({
         taskClassGroup: updatedTaskClassGroup
       });
 
       const result = reducer(startState, action);
 
-      expect(result.entities[updatedTaskClassGroup.id]).toEqual(updatedTaskClassGroup);
+      expect(result.entities[updatedTaskClassGroup.id]).toEqual(
+        updatedTaskClassGroup
+      );
     });
 
     it('should upsert many taskClassGroups', () => {
@@ -146,9 +152,7 @@ describe('TaskClassGroups Reducer', () => {
 
       const result = reducer(startState, action);
 
-      expect(result).toEqual(
-        createState(taskClassGroupsToInsert)
-      );
+      expect(result).toEqual(createState(taskClassGroupsToInsert));
     });
   });
 
@@ -159,31 +163,32 @@ describe('TaskClassGroups Reducer', () => {
       const update: Update<TaskClassGroupInterface> = {
         id: 1,
         changes: {
-          __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAMEUpdatedValue
-        } 
+          taskId: taskIdUpdatedValue
+        }
       };
       const action = new TaskClassGroupActions.UpdateTaskClassGroup({
         taskClassGroup: update
       });
       const result = reducer(startState, action);
-      expect(result).toEqual(createState([createTaskClassGroup(1, __EXTRA__PROPERTY_NAMEUpdatedValue)]));
+      expect(result).toEqual(
+        createState([createTaskClassGroup(1, taskIdUpdatedValue)])
+      );
     });
 
     it('should update multiple taskClassGroups', () => {
       const startState = createState(taskClassGroups);
       const updates: Update<TaskClassGroupInterface>[] = [
-        
         {
           id: 1,
           changes: {
-            __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAMEUpdatedValue
-          } 
+            taskId: taskIdUpdatedValue
+          }
         },
         {
           id: 2,
           changes: {
-            __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAMEUpdatedValue
-          }  
+            taskId: taskIdUpdatedValue
+          }
         }
       ];
       const action = new TaskClassGroupActions.UpdateTaskClassGroups({
@@ -192,7 +197,11 @@ describe('TaskClassGroups Reducer', () => {
       const result = reducer(startState, action);
 
       expect(result).toEqual(
-        createState([createTaskClassGroup(1, __EXTRA__PROPERTY_NAMEUpdatedValue), createTaskClassGroup(2, __EXTRA__PROPERTY_NAMEUpdatedValue), taskClassGroups[2]])
+        createState([
+          createTaskClassGroup(1, taskIdUpdatedValue),
+          createTaskClassGroup(2, taskIdUpdatedValue),
+          taskClassGroups[2]
+        ])
       );
     });
   });
@@ -220,7 +229,11 @@ describe('TaskClassGroups Reducer', () => {
 
   describe('clear action', () => {
     it('should clear the taskClassGroups collection', () => {
-      const startState = createState(taskClassGroups, true, 'something went wrong');
+      const startState = createState(
+        taskClassGroups,
+        true,
+        'something went wrong'
+      );
       const action = new TaskClassGroupActions.ClearTaskClassGroups();
       const result = reducer(startState, action);
       expect(result).toEqual(createState([], true, 'something went wrong'));

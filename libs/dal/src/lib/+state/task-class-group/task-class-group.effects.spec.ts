@@ -5,12 +5,12 @@ import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
-import { TASK_CLASS_GROUP_SERVICE_TOKEN } from '../../task-class-group/task-class-group.service.interface';
 import { TaskClassGroupReducer } from '.';
+import { TASK_CLASS_GROUP_SERVICE_TOKEN } from '../../tasks/task-class-group.service.interface';
 import {
+  LoadTaskClassGroups,
   TaskClassGroupsLoaded,
-  TaskClassGroupsLoadError,
-  LoadTaskClassGroups
+  TaskClassGroupsLoadError
 } from './task-class-group.actions';
 import { TaskClassGroupEffects } from './task-class-group.effects';
 
@@ -18,7 +18,6 @@ describe('TaskClassGroupEffects', () => {
   let actions: Observable<any>;
   let effects: TaskClassGroupEffects;
   let usedState: any;
-
 
   const expectInAndOut = (
     effect: Observable<any>,
@@ -61,9 +60,13 @@ describe('TaskClassGroupEffects', () => {
       imports: [
         NxModule.forRoot(),
         StoreModule.forRoot({}),
-        StoreModule.forFeature(TaskClassGroupReducer.NAME , TaskClassGroupReducer.reducer, {
-          initialState: usedState
-        }),
+        StoreModule.forFeature(
+          TaskClassGroupReducer.NAME,
+          TaskClassGroupReducer.reducer,
+          {
+            initialState: usedState
+          }
+        ),
         EffectsModule.forRoot([]),
         EffectsModule.forFeature([TaskClassGroupEffects])
       ],
@@ -85,8 +88,13 @@ describe('TaskClassGroupEffects', () => {
 
   describe('loadTaskClassGroup$', () => {
     const unforcedLoadAction = new LoadTaskClassGroups({ userId: 1 });
-    const forcedLoadAction = new LoadTaskClassGroups({ force: true, userId: 1 });
-    const filledLoadedAction = new TaskClassGroupsLoaded({ taskClassGroups: [] });
+    const forcedLoadAction = new LoadTaskClassGroups({
+      force: true,
+      userId: 1
+    });
+    const filledLoadedAction = new TaskClassGroupsLoaded({
+      taskClassGroups: []
+    });
     const loadErrorAction = new TaskClassGroupsLoadError(new Error('failed'));
     describe('with initialState', () => {
       beforeAll(() => {

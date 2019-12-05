@@ -37,6 +37,7 @@ import {
   YearReducer
 } from '../..';
 import { MethodLevelReducer } from './method-level';
+import { TaskClassGroupReducer } from './task-class-group';
 import { TaskGroupReducer } from './task-group';
 
 export interface DalState {
@@ -78,4 +79,5 @@ export interface DalState {
   classGroups: ClassGroupReducer.State;
   unlockedFreePractices: UnlockedFreePracticeReducer.State;
   methodLevels: MethodLevelReducer.State;
+  taskClassGroups: TaskClassGroupReducer.State;
 }
