@@ -7,10 +7,12 @@ import {
   MatBadgeModule,
   MatButtonToggleModule,
   MatCheckboxModule,
+  MatDatepickerModule,
   MatFormFieldModule,
   MatIconModule,
   MatInputModule,
   MatListModule,
+  MatNativeDateModule,
   MatSelectModule,
   MatTooltipModule
 } from '@angular/material';
@@ -52,6 +54,8 @@ import { SearchPortalDirective } from './directives/search-portal.directive';
     MatIconModule,
     MatAutocompleteModule,
     MatButtonToggleModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
     MatTooltipModule,
     FormsModule,
     UtilsModule

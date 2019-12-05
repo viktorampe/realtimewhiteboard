@@ -5,6 +5,10 @@
   $date-filter_mat-select-trigger-border-color: transparent !default;
   $date-filter_mat-select-value-vertical-align: baseline !default;
 
+  $date-filter_mat-form-field_outline-opacity: 0 !default;
+  $date-filter_mat-form-field_outline-border-right-width: 0px !default;
+  $date-filter_mat-form-field_outline-border-color: inherit !default;
+
   .date-filter-component {
     .mat-select-trigger {
       padding: $date-filter_mat-select-trigger-padding;
@@ -15,6 +19,68 @@
 
     .mat-select-value {
       vertical-align: $date-filter_mat-select-value-vertical-align;
+    }
+
+    &__select-panel {
+      .mat-form-field-appearance-outline .mat-form-field-outline-thick {
+        opacity: $date-filter_mat-form-field_outline-opacity;
+      }
+
+      mat-form-field {
+        width: 100%;
+
+        .mat-form-field-appearance-outline,
+        .mat-form-field-infix {
+          padding: 0px;
+        }
+
+        &.mat-form-field-should-float {
+          .mat-form-field-appearance-outline,
+          .mat-form-field-label {
+            top: 1.84375em !important; //is mat-default
+          }
+        }
+
+        .mat-form-field-label {
+          height: 15px; // font size + border width -> scales 0.75
+          top: $search-filter-height/2;
+        }
+
+        input {
+          height: $search-filter-height;
+          margin-top: -8px; // +/- 60% of font size
+        }
+
+        &:not(.mat-focused) {
+          .mat-form-field-outline-thick,
+          .mat-form-field-outline {
+            color: $date-filter_mat-form-field_outline-border-color;
+          }
+        }
+
+        &.mat-form-field-appearance-outline {
+          .mat-form-field-outline-thick,
+          .mat-form-field-outline {
+            > div {
+              opacity: 1;
+              border-width: 1px;
+              border-radius: 0px;
+
+              border-right-width: $date-filter_mat-form-field_outline-border-right-width;
+            }
+          }
+
+          .mat-form-field-wrapper {
+            margin: 0px;
+            padding-bottom: 0px;
+          }
+        }
+      }
+
+      .mat-form-field-suffix {
+        align-self: stretch;
+        height: $search-filter-height;
+      }
     }
   }
 }

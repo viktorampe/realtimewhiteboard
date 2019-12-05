@@ -5,9 +5,18 @@
   [matBadge]="count"
   [matBadgeHidden]="count === 0"
   matBadgePosition="above after"
+  panelClass="date-filter-component date-filter-component__select-panel"
 >
   <mat-option *ngIf="resetLabel" [value]="null">{{ resetLabel }}</mat-option>
   <mat-option *ngFor="let option of options" [value]="option.value">
     {{ option.viewValue }}
   </mat-option>
+  <mat-form-field [appearance]="'outline'">
+    <input matInput [matDatepicker]="myDatepicker" />
+    <mat-datepicker-toggle
+      matSuffix
+      [for]="myDatepicker"
+    ></mat-datepicker-toggle>
+    <mat-datepicker #myDatepicker></mat-datepicker>
+  </mat-form-field>
 </mat-select>
