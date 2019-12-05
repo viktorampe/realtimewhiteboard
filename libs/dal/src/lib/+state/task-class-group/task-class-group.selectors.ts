@@ -6,49 +6,49 @@ import {
   selectIds,
   selectTotal,
   State
-} from './linked-person.reducer';
+} from './task-class-group.reducer';
 
-export const selectLinkedPersonState = createFeatureSelector<State>(NAME);
+export const selectTaskClassGroupState = createFeatureSelector<State>(NAME);
 
 export const getError = createSelector(
-  selectLinkedPersonState,
+  selectTaskClassGroupState,
   (state: State) => state.error
 );
 
 export const getLoaded = createSelector(
-  selectLinkedPersonState,
+  selectTaskClassGroupState,
   (state: State) => state.loaded
 );
 
 export const getAll = createSelector(
-  selectLinkedPersonState,
+  selectTaskClassGroupState,
   selectAll
 );
 
 export const getCount = createSelector(
-  selectLinkedPersonState,
+  selectTaskClassGroupState,
   selectTotal
 );
 
 export const getIds = createSelector(
-  selectLinkedPersonState,
+  selectTaskClassGroupState,
   selectIds
 );
 
 export const getAllEntities = createSelector(
-  selectLinkedPersonState,
+  selectTaskClassGroupState,
   selectEntities
 );
 
 /**
  * returns array of objects in the order of the given ids
  * @example
- * person$: PersonInterface[] = this.store.pipe(
-    select(PersonQueries.getByIds, { ids: [2, 1, 3] })
+ * taskClassGroup$: TaskClassGroupInterface[] = this.store.pipe(
+    select(TaskClassGroupQueries.getByIds, { ids: [2, 1, 3] })
   );
  */
 export const getByIds = createSelector(
-  selectLinkedPersonState,
+  selectTaskClassGroupState,
   (state: State, props: { ids: number[] }) => {
     return props.ids.map(id => state.entities[id]);
   }
@@ -57,24 +57,11 @@ export const getByIds = createSelector(
 /**
  * returns array of objects in the order of the given ids
  * @example
- * person$: PersonInterface = this.store.pipe(
-    select(PersonQueries.getById, { id: 3 })
+ * taskClassGroup$: TaskClassGroupInterface = this.store.pipe(
+    select(TaskClassGroupQueries.getById, { id: 3 })
   );
  */
 export const getById = createSelector(
-  selectLinkedPersonState,
+  selectTaskClassGroupState,
   (state: State, props: { id: number }) => state.entities[props.id]
-);
-
-export const getStudents = createSelector(
-  selectLinkedPersonState,
-  (state: State) => {
-    return (state.ids as number[]).reduce((students, id) => {
-      const person = state.entities[id];
-      if (person.type === 'student') {
-        students.push(person);
-      }
-      return students;
-    }, []);
-  }
 );
