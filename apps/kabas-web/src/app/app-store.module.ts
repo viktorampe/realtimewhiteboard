@@ -12,6 +12,7 @@ import {
   EduContentTocReducer,
   EffectFeedbackReducer,
   FavoriteReducer,
+  GroupReducer,
   HistoryReducer,
   LearningAreaReducer,
   LearningDomainReducer,
@@ -197,6 +198,9 @@ import { environment } from '../environments/environment';
         initialState: TaskClassGroupReducer.initialState
       }
     ),
+    StoreModule.forFeature(GroupReducer.NAME, GroupReducer.reducer, {
+      initialState: GroupReducer.initialState
+    }),
 
     !environment.production ? StoreDevtoolsModule.instrument() : []
   ]
