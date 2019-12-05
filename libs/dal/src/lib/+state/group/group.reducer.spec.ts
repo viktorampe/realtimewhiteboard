@@ -1,26 +1,23 @@
 import { Update } from '@ngrx/entity';
-import {GroupActions } from '.';
-import { initialState, reducer, State } from './group.reducer';
+import { GroupActions } from '.';
 import { GroupInterface } from '../../+models';
+import { initialState, reducer, State } from './group.reducer';
 
-/** 
- * This file is scaffolded, but needs some special attention:
- * - find and replace '__EXTRA__PROPERTY_NAME' and replace this with a property name of the Group entity.
- * - set the initial property value via '[__EXTRA__PROPERTY_NAME]InitialValue'.
- * - set the updated property value via '[__EXTRA__PROPERTY_NAME]UpdatedValue'.
-*/
-const __EXTRA__PROPERTY_NAMEInitialValue = ;
-const __EXTRA__PROPERTY_NAMEUpdatedValue = ;
+const teacherIdInitialValue = 123;
+const teacherIdUpdatedValue = 456;
 
 /**
  * Creates a Group.
  * @param {number} id
  * @returns {GroupInterface}
  */
-function createGroup(id: number, __EXTRA__PROPERTY_NAME:any = __EXTRA__PROPERTY_NAMEInitialValue): GroupInterface | any {
+function createGroup(
+  id: number,
+  teacherId: any = teacherIdInitialValue
+): GroupInterface | any {
   return {
     id: id,
-    __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAME
+    teacherId: teacherId
   };
 }
 
@@ -54,15 +51,10 @@ function createState(
   return state;
 }
 
-
 describe('Groups Reducer', () => {
   let groups: GroupInterface[];
   beforeEach(() => {
-    groups = [
-      createGroup(1),
-      createGroup(2),
-      createGroup(3)
-    ];
+    groups = [createGroup(1), createGroup(2), createGroup(3)];
   });
 
   describe('unknown action', () => {
@@ -111,7 +103,7 @@ describe('Groups Reducer', () => {
   describe('upsert actions', () => {
     it('should upsert one group', () => {
       const originalGroup = groups[0];
-      
+
       const startState = reducer(
         initialState,
         new GroupActions.AddGroup({
@@ -119,9 +111,8 @@ describe('Groups Reducer', () => {
         })
       );
 
-    
       const updatedGroup = createGroup(groups[0].id, 'test');
-     
+
       const action = new GroupActions.UpsertGroup({
         group: updatedGroup
       });
@@ -146,9 +137,7 @@ describe('Groups Reducer', () => {
 
       const result = reducer(startState, action);
 
-      expect(result).toEqual(
-        createState(groupsToInsert)
-      );
+      expect(result).toEqual(createState(groupsToInsert));
     });
   });
 
@@ -159,31 +148,32 @@ describe('Groups Reducer', () => {
       const update: Update<GroupInterface> = {
         id: 1,
         changes: {
-          __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAMEUpdatedValue
-        } 
+          teacherId: teacherIdUpdatedValue
+        }
       };
       const action = new GroupActions.UpdateGroup({
         group: update
       });
       const result = reducer(startState, action);
-      expect(result).toEqual(createState([createGroup(1, __EXTRA__PROPERTY_NAMEUpdatedValue)]));
+      expect(result).toEqual(
+        createState([createGroup(1, teacherIdUpdatedValue)])
+      );
     });
 
     it('should update multiple groups', () => {
       const startState = createState(groups);
       const updates: Update<GroupInterface>[] = [
-        
         {
           id: 1,
           changes: {
-            __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAMEUpdatedValue
-          } 
+            teacherId: teacherIdUpdatedValue
+          }
         },
         {
           id: 2,
           changes: {
-            __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAMEUpdatedValue
-          }  
+            teacherId: teacherIdUpdatedValue
+          }
         }
       ];
       const action = new GroupActions.UpdateGroups({
@@ -192,7 +182,11 @@ describe('Groups Reducer', () => {
       const result = reducer(startState, action);
 
       expect(result).toEqual(
-        createState([createGroup(1, __EXTRA__PROPERTY_NAMEUpdatedValue), createGroup(2, __EXTRA__PROPERTY_NAMEUpdatedValue), groups[2]])
+        createState([
+          createGroup(1, teacherIdUpdatedValue),
+          createGroup(2, teacherIdUpdatedValue),
+          groups[2]
+        ])
       );
     });
   });
