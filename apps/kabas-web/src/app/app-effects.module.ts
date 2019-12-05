@@ -11,6 +11,7 @@ import {
   EduContentTocEffects,
   EffectFeedbackEffects,
   FavoriteEffects,
+  GroupEffects,
   HistoryEffects,
   LearningAreasEffects,
   LearningDomainEffects,
@@ -60,6 +61,7 @@ import { EffectsModule } from '@ngrx/effects';
       MethodLevelEffects,
       EduContentTocEduContentEffects,
       TaskGroupEffects,
+      GroupEffects,
       LinkedPersonEffects,
       TaskClassGroupEffects,
       TaskStudentEffects
