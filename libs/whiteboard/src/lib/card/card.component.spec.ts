@@ -54,6 +54,24 @@ describe('CardComponent', () => {
     expect(inputContent.nativeElement.value.trim()).toBe('Test content');
   });
 
+  it('should set the correct top style on creation', () => {
+    component.card.top = 500;
+
+    component.ngOnChanges();
+    fixture.detectChanges();
+
+    expect(fixture.debugElement.nativeElement.style.top).toBe('500px');
+  });
+
+  it('should set the correct left style on creation', () => {
+    component.card.left = 500;
+
+    component.ngOnChanges();
+    fixture.detectChanges();
+
+    expect(fixture.debugElement.nativeElement.style.left).toBe('500px');
+  });
+
   it('should toggle to edit mode when double click.', () => {
     component.card.isInputSelected = false;
     component.card.cardContent = 'something that is not null';

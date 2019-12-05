@@ -16,6 +16,8 @@ import {
   EXERCISE_SERVICE_TOKEN,
   FavoriteService,
   FAVORITE_SERVICE_TOKEN,
+  GroupService,
+  GROUP_SERVICE_TOKEN,
   HistoryService,
   HISTORY_SERVICE_TOKEN,
   LearningAreaService,
@@ -116,6 +118,8 @@ import { kabasConfig } from './app.config';
     },
     { provide: SCORM_API_SERVICE_TOKEN, useClass: ScormApiService },
     { provide: METHOD_LEVEL_SERVICE_TOKEN, useClass: MethodLevelService },
+
+    { provide: GROUP_SERVICE_TOKEN, useClass: GroupService },
     { provide: TASK_GROUP_SERVICE_TOKEN, useClass: TaskGroupService },
 
     { provide: LINKED_PERSON_SERVICE_TOKEN, useClass: LinkedPersonService },
