@@ -40,6 +40,9 @@ import {
   YearReducer
 } from '../..';
 
+import { TaskClassGroupReducer } from './task-class-group';
+import { TaskStudentReducer } from './task-student';
+
 export interface DalState {
   ui: UiReducer.UiState;
   learningAreas: LearningAreaReducer.State;
@@ -60,6 +63,7 @@ export interface DalState {
   taskInstances: TaskInstanceReducer.State;
   taskEduContents: TaskEduContentReducer.State;
   taskGroups: TaskGroupReducer.State;
+  taskStudents: TaskStudentReducer.State;
   results: ResultReducer.State;
   linkedPersons: LinkedPersonReducer.State;
   teacherStudents: TeacherStudentReducer.State;
@@ -80,4 +84,5 @@ export interface DalState {
   unlockedFreePractices: UnlockedFreePracticeReducer.State;
   methodLevels: MethodLevelReducer.State;
   groups: GroupReducer.State;
+  taskClassGroups: TaskClassGroupReducer.State;
 }
