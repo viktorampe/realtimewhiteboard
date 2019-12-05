@@ -40,6 +40,7 @@ export * from './lib/+state/task';
 export * from './lib/+state/task-edu-content';
 export * from './lib/+state/task-group';
 export * from './lib/+state/task-instance';
+export * from './lib/+state/task-student';
 export * from './lib/+state/teacher-student';
 export * from './lib/+state/ui';
 export * from './lib/+state/unlocked-boeke-group';
