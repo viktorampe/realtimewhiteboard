@@ -2,20 +2,28 @@ import { Inject, Injectable } from '@angular/core';
 import {
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
+  ClassGroupActions,
+  ClassGroupQueries,
   DalState,
   EduContentActions,
   EduContentQueries,
   LearningAreaActions,
   LearningAreaQueries,
+  LinkedPersonActions,
+  LinkedPersonQueries,
   MethodActions,
   MethodQueries,
   StateResolver,
   TaskActions,
   TaskEduContentActions,
   TaskEduContentQueries,
+  TaskGroupActions,
+  TaskGroupQueries,
   TaskInstanceActions,
   TaskInstanceQueries,
-  TaskQueries
+  TaskQueries,
+  TaskStudentActions,
+  TaskStudentQueries
 } from '@campus/dal';
 import { Action, Selector, Store } from '@ngrx/store';
 
@@ -44,6 +52,25 @@ export class TasksResolver extends StateResolver {
       }),
       new TaskInstanceActions.LoadTaskInstances({
         userId: this.authService.userId
+      }),
+      new TaskGroupActions.LoadTaskGroups({
+        userId: this.authService.userId
+      }),
+      new TaskStudentActions.LoadTaskStudents({
+        userId: this.authService.userId
+      }),
+      //TODO: groups, taskclassgroup
+      // new Taskclassgroup.LoadTaskStudents({
+      //   userId: this.authService.userId
+      // }),
+      new ClassGroupActions.LoadClassGroups({
+        userId: this.authService.userId
+      }),
+      new LinkedPersonActions.LoadLinkedPersons({
+        userId: this.authService.userId
+      }),
+      new ClassGroupActions.LoadClassGroups({
+        userId: this.authService.userId
       })
     ];
   }
@@ -55,7 +82,12 @@ export class TasksResolver extends StateResolver {
       EduContentQueries.getLoaded,
       TaskQueries.getLoaded,
       TaskInstanceQueries.getLoaded,
-      TaskEduContentQueries.getLoaded
+      TaskEduContentQueries.getLoaded,
+      TaskGroupQueries.getLoaded,
+      TaskStudentQueries.getLoaded,
+      ClassGroupQueries.getLoaded,
+      LinkedPersonQueries.getLoaded,
+      ClassGroupQueries.getLoaded
     ];
   }
 }
