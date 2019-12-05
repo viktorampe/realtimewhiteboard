@@ -20,7 +20,9 @@ import {
   MethodLevelReducer,
   MethodReducer,
   ResultReducer,
+  TaskGroupReducer,
   TaskReducer,
+  TaskStudentReducer,
   UiReducer,
   UnlockedFreePracticeReducer,
   UserLessonReducer,
@@ -177,7 +179,16 @@ import { environment } from '../environments/environment';
         initialState: MethodLevelReducer.initialState
       }
     ),
-
+    StoreModule.forFeature(TaskGroupReducer.NAME, TaskGroupReducer.reducer, {
+      initialState: TaskGroupReducer.initialState
+    }),
+    StoreModule.forFeature(
+      TaskStudentReducer.NAME,
+      TaskStudentReducer.reducer,
+      {
+        initialState: TaskStudentReducer.initialState
+      }
+    ),
     !environment.production ? StoreDevtoolsModule.instrument() : []
   ]
 })
