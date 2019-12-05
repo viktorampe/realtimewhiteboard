@@ -58,6 +58,7 @@ export * from './lib/dal.module';
 export * from './lib/edu-content';
 export * from './lib/exercise';
 export * from './lib/favorite';
+export * from './lib/group';
 export * from './lib/history';
 export * from './lib/learning-area';
 export * from './lib/learning-plan';

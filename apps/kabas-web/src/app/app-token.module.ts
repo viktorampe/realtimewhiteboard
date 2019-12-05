@@ -16,6 +16,8 @@ import {
   EXERCISE_SERVICE_TOKEN,
   FavoriteService,
   FAVORITE_SERVICE_TOKEN,
+  GroupService,
+  GROUP_SERVICE_TOKEN,
   HistoryService,
   HISTORY_SERVICE_TOKEN,
   LearningAreaService,
@@ -109,7 +111,8 @@ import { kabasConfig } from './app.config';
       useClass: UnlockedFreePracticeService
     },
     { provide: SCORM_API_SERVICE_TOKEN, useClass: ScormApiService },
-    { provide: METHOD_LEVEL_SERVICE_TOKEN, useClass: MethodLevelService }
+    { provide: METHOD_LEVEL_SERVICE_TOKEN, useClass: MethodLevelService },
+    { provide: GROUP_SERVICE_TOKEN, useClass: GroupService }
   ]
 })
 export class AppTokenModule {}
