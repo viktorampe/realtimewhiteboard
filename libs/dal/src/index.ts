@@ -19,6 +19,7 @@ export * from './lib/+state/edu-content-toc-edu-content';
 export * from './lib/+state/edu-net';
 export * from './lib/+state/effect-feedback';
 export * from './lib/+state/favorite';
+export * from './lib/+state/group';
 export * from './lib/+state/history';
 export * from './lib/+state/learning-area';
 export * from './lib/+state/learning-domain';

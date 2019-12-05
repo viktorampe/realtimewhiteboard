@@ -27,6 +27,7 @@ import {
   YearEffects
 } from '@campus/dal';
 import { EffectsModule } from '@ngrx/effects';
+import { GroupEffects } from 'libs/dal/src/lib/+state/group';
 
 @NgModule({
   imports: [
@@ -56,7 +57,8 @@ import { EffectsModule } from '@ngrx/effects';
       UnlockedFreePracticeEffects,
       MethodLevelEffects,
       EduContentTocEduContentEffects,
-      TaskGroupEffects
+      TaskGroupEffects,
+      GroupEffects
     ])
   ]
 })
