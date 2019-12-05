@@ -62,3 +62,4 @@ export class CardComponent implements OnInit {
 
 //TODO: in edit mode is toggle hidden.
 //TODO: in edit mode is cardimage altijd not hidden
+//TODO: edit mode active op double tap
