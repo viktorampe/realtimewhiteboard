@@ -3,4 +3,9 @@ import { TaskClassGroupEffects } from './task-class-group.effects';
 import * as TaskClassGroupReducer from './task-class-group.reducer';
 import * as TaskClassGroupQueries from './task-class-group.selectors';
 
-export { TaskClassGroupActions, TaskClassGroupReducer, TaskClassGroupQueries, TaskClassGroupEffects };
+export {
+  TaskClassGroupActions,
+  TaskClassGroupReducer,
+  TaskClassGroupQueries,
+  TaskClassGroupEffects
+};

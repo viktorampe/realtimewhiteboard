@@ -15,7 +15,9 @@ describe('TaskClassGroup Selectors', () => {
     error?: any
   ): State {
     return {
-      ids: taskClassGroups ? taskClassGroups.map(taskClassGroup => taskClassGroup.id) : [],
+      ids: taskClassGroups
+        ? taskClassGroups.map(taskClassGroup => taskClassGroup.id)
+        : [],
       entities: taskClassGroups
         ? taskClassGroups.reduce(
             (entityMap, taskClassGroup) => ({

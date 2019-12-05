@@ -21,7 +21,7 @@ export class LoadTaskClassGroups implements Action {
   readonly type = TaskClassGroupsActionTypes.LoadTaskClassGroups;
 
   constructor(
-    public payload: { force?: boolean, userId: number } = { userId: null }
+    public payload: { force?: boolean; userId: number } = { userId: null }
   ) {}
 }
 
@@ -63,13 +63,17 @@ export class UpsertTaskClassGroups implements Action {
 export class UpdateTaskClassGroup implements Action {
   readonly type = TaskClassGroupsActionTypes.UpdateTaskClassGroup;
 
-  constructor(public payload: { taskClassGroup: Update<TaskClassGroupInterface> }) {}
+  constructor(
+    public payload: { taskClassGroup: Update<TaskClassGroupInterface> }
+  ) {}
 }
 
 export class UpdateTaskClassGroups implements Action {
   readonly type = TaskClassGroupsActionTypes.UpdateTaskClassGroups;
 
-  constructor(public payload: { taskClassGroups: Update<TaskClassGroupInterface>[] }) {}
+  constructor(
+    public payload: { taskClassGroups: Update<TaskClassGroupInterface>[] }
+  ) {}
 }
 
 export class DeleteTaskClassGroup implements Action {

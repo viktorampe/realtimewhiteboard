@@ -13,9 +13,9 @@ export interface State extends EntityState<TaskClassGroupInterface> {
   error?: any;
 }
 
-export const adapter: EntityAdapter<TaskClassGroupInterface> = createEntityAdapter<
+export const adapter: EntityAdapter<
   TaskClassGroupInterface
->();
+> = createEntityAdapter<TaskClassGroupInterface>();
 
 export const initialState: State = adapter.getInitialState({
   // additional entity state properties
@@ -60,7 +60,10 @@ export function reducer(
     }
 
     case TaskClassGroupsActionTypes.TaskClassGroupsLoaded: {
-      return adapter.addAll(action.payload.taskClassGroups, { ...state, loaded: true });
+      return adapter.addAll(action.payload.taskClassGroups, {
+        ...state,
+        loaded: true
+      });
     }
 
     case TaskClassGroupsActionTypes.TaskClassGroupsLoadError: {
