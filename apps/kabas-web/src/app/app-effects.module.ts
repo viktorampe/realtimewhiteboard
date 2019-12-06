@@ -63,9 +63,9 @@ import { EffectsModule } from '@ngrx/effects';
       MethodLevelEffects,
       EduContentTocEduContentEffects,
       TaskGroupEffects,
+      TaskClassGroupEffects,
       GroupEffects,
       LinkedPersonEffects,
-      TaskClassGroupEffects,
       TaskStudentEffects,
       TaskEduContentEffects,
       TaskEffects

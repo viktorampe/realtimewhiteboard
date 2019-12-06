@@ -124,7 +124,6 @@ import { kabasConfig } from './app.config';
     },
     { provide: SCORM_API_SERVICE_TOKEN, useClass: ScormApiService },
     { provide: METHOD_LEVEL_SERVICE_TOKEN, useClass: MethodLevelService },
-
     { provide: GROUP_SERVICE_TOKEN, useClass: GroupService },
     { provide: TASK_GROUP_SERVICE_TOKEN, useClass: TaskGroupService },
     {
