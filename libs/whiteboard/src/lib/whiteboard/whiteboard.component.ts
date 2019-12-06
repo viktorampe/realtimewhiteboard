@@ -7,11 +7,15 @@ import Card from '../../interfaces/card.interface';
   styleUrls: ['./whiteboard.component.scss']
 })
 export class WhiteboardComponent implements OnInit {
-  constructor() {}
+  constructor() {
+    this.title = '';
+  }
 
   cards: Card[];
   // maak array van Cards
   lastColor: string;
+
+  title: string;
 
   ngOnInit() {
     this.cards = [];
