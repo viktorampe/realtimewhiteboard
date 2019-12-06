@@ -137,4 +137,10 @@ describe('CardComponent', () => {
     fixture.detectChanges();
     expect(component.card.color).toBe('black');
   });
+
+  it('should emit the right color when a cardcolor is picked', () => {
+    spyOn(component.lastColor, 'emit');
+    component.selectColor('black');
+    expect(component.lastColor.emit).toHaveBeenCalledWith('black');
+  });
 });
