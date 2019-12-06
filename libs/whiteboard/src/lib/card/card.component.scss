@@ -5,6 +5,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+
   flex-direction: column;
 
   &__toolbar {
@@ -17,6 +18,10 @@
   &__content {
     padding: 0 16px;
     width: 100%;
+
+    &__errorMessage {
+      color: #dc3545;
+    }
 
     input {
       width: 100%;
