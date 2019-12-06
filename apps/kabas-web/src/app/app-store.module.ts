@@ -23,6 +23,7 @@ import {
   MethodReducer,
   ResultReducer,
   TaskClassGroupReducer,
+  TaskEduContentReducer,
   TaskGroupReducer,
   TaskReducer,
   TaskStudentReducer,
@@ -209,6 +210,13 @@ import { environment } from '../environments/environment';
       TaskStudentReducer.reducer,
       {
         initialState: TaskStudentReducer.initialState
+      }
+    ),
+    StoreModule.forFeature(
+      TaskEduContentReducer.NAME,
+      TaskEduContentReducer.reducer,
+      {
+        initialState: TaskEduContentReducer.initialState
       }
     ),
     !environment.production ? StoreDevtoolsModule.instrument() : []
