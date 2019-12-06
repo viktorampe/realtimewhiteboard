@@ -21,7 +21,7 @@ export class MockKabasTasksViewModel
     this.tasksWithAssignments$ = of(tasks);
 
     this.paperTasksWithAssignments$ = of(
-      tasks.map(task => {
+      tasks.slice(0, 3).map(task => {
         return {
           ...task,
           isPaperTask: true,
@@ -39,10 +39,12 @@ export class MockKabasTasksViewModel
     const nextWeek = new Date(today.setDate(today.getDate() + 7));
     const prevWeek = new Date(today.setDate(today.getDate() - 7));
     const prevMonth = new Date(today.setMonth(today.getMonth() - 1));
+
     return [
       //Task runs for all assignees from yesterday to next week
       {
         ...new TaskFixture({ archivedAt: null, archivedYear: null }),
+        name: 'Titel van de eerste oefening',
         eduContentAmount: 3,
         learningArea: new LearningAreaFixture({ name: 'wiskunde' }),
         assignees: [
@@ -75,6 +77,7 @@ export class MockKabasTasksViewModel
       //Task runs for all assignees in different timespans
       {
         ...new TaskFixture({ archivedAt: null, archivedYear: null }),
+        name: 'Titel van de tweede oefening',
         eduContentAmount: 5,
         learningArea: new LearningAreaFixture({ name: 'wiskunde' }),
         assignees: [
@@ -101,6 +104,7 @@ export class MockKabasTasksViewModel
       //active
       {
         ...new TaskFixture({ archivedAt: null, archivedYear: null }),
+        name: 'Actieve oefening voor één klasgroep',
         eduContentAmount: 3,
         learningArea: new LearningAreaFixture({ name: 'nederlands' }),
         assignees: [
@@ -115,6 +119,7 @@ export class MockKabasTasksViewModel
       //pending
       {
         ...new TaskFixture({ archivedAt: null, archivedYear: null }),
+        name: 'Pending oefening voor één klasgroep',
         eduContentAmount: 5,
         learningArea: new LearningAreaFixture({ name: 'nederlands' }),
         assignees: [
@@ -129,6 +134,7 @@ export class MockKabasTasksViewModel
       //finished
       {
         ...new TaskFixture({ archivedAt: null, archivedYear: null }),
+        name: 'Finished oefening',
         eduContentAmount: 5,
         learningArea: new LearningAreaFixture({ name: 'nederlands' }),
         assignees: [
@@ -146,6 +152,7 @@ export class MockKabasTasksViewModel
           archivedAt: prevWeek,
           archivedYear: prevWeek.getFullYear()
         }),
+        name: 'Gearchiveerde oefening',
         eduContentAmount: 2,
         learningArea: new LearningAreaFixture({ name: 'wiskunde' }),
         assignees: [
