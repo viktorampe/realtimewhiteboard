@@ -18,11 +18,11 @@
       maxlength="{{ maxCharacters }}"
     >
     </textarea>
-    <div
+    <p
       *ngIf="card.isInputSelected && card.cardContent.length === maxCharacters"
       class="card__content__errorMessage"
     >
       Je hebt het maximaal aantal karakters gebruikt.
-    </div>
+    </p>
   </div>
 </div>
