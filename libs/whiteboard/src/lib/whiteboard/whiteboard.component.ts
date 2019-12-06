@@ -9,6 +9,7 @@ import Card from '../../interfaces/card.interface';
 export class WhiteboardComponent implements OnInit {
   constructor() {
     this.title = '';
+    this.isTitleInputSelected = this.title === '';
   }
 
   cards: Card[];
@@ -16,6 +17,7 @@ export class WhiteboardComponent implements OnInit {
   lastColor: string;
 
   title: string;
+  isTitleInputSelected: boolean;
 
   ngOnInit() {
     this.cards = [];
