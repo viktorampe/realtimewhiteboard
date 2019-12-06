@@ -1,6 +1,6 @@
 <div class="whiteboard-page__header">
-  <h2 *ngIf="!isTitleInputSelected" class="whiteboard-page__header__title">{{title}}</h2>
-  <input *ngIf="isTitleInputSelected" type="text" [(ngModel)]="title">
+  <h2 (click)="showTitleInput()" *ngIf="!isTitleInputSelected" class="whiteboard-page__header__title">{{title}}</h2>
+  <input #titleInput (keyup.enter)="hideTitleInput()" (focusout)="hideTitleInput()" *ngIf="isTitleInputSelected" type="text" [(ngModel)]="title">
 </div>
 <div class="whiteboard-page__workspace" (dblclick)="onDblClick($event)">
   <campus-card
