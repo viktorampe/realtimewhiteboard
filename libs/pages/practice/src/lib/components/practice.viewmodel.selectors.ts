@@ -9,10 +9,12 @@ import {
   LearningAreaQueries,
   MethodInterface,
   MethodQueries,
-  Result,
   ResultInterface,
-  ResultQueries
+  ResultQueries,
+  UnlockedFreePracticeInterface,
+  UnlockedFreePracticeQueries
 } from '@campus/dal';
+import { Dictionary } from '@ngrx/entity';
 import { createSelector } from '@ngrx/store';
 
 export interface ChapterWithStatus {
@@ -31,15 +33,38 @@ export const getChaptersWithStatuses = createSelector(
     // TODO: this can be more efficient, can't use the count selectors or getAllByType
     // because it doesn't match with the props:
     EduContentTocEduContentQueries.getAll,
-    ResultQueries.getBestResultByEduContentId
+    ResultQueries.getBestResultByEduContentId,
+    UnlockedFreePracticeQueries.getGroupedByEduContentBookId
   ],
   (
     treeForBook: EduContentTOCInterface[],
     eduContentTocEduContents: EduContentTOCEduContentInterface[],
     bestResultByEduContentId: { [id: number]: ResultInterface },
+    unlockedFreePractices: Dictionary<UnlockedFreePracticeInterface[]>,
     props: { bookId: number }
   ) => {
-    return treeForBook.map(chapter => {
+    if (
+      !unlockedFreePractices[props.bookId] ||
+      unlockedFreePractices[props.bookId].length === 0
+    ) {
+      return [];
+    }
+    const chaptersUnlockedForBook = unlockedFreePractices[props.bookId].reduce(
+      (acc, ufp) => {
+        if (ufp.eduContentTOCId) {
+          acc.push(ufp.eduContentTOCId);
+        }
+        return acc;
+      },
+      []
+    );
+    let bookTree = treeForBook;
+    if (chaptersUnlockedForBook.length) {
+      bookTree = bookTree.filter(chapter =>
+        chaptersUnlockedForBook.includes(chapter.id)
+      );
+    }
+    return bookTree.map(chapter => {
       const tocId = chapter.id;
       const title = chapter.title;
       let availableExercises = 0;
@@ -67,7 +92,7 @@ export const getChaptersWithStatuses = createSelector(
 
       uniqueExerciseIds.forEach(exId => {
         if (bestResultByEduContentId[exId]) {
-          const result = bestResultByEduContentId[exId] as Result;
+          const result = bestResultByEduContentId[exId];
 
           completedExercises++;
           earnedKwetons += result.stars * 10;

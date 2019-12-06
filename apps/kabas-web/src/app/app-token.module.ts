@@ -16,6 +16,8 @@ import {
   EXERCISE_SERVICE_TOKEN,
   FavoriteService,
   FAVORITE_SERVICE_TOKEN,
+  GroupService,
+  GROUP_SERVICE_TOKEN,
   HistoryService,
   HISTORY_SERVICE_TOKEN,
   LearningAreaService,
@@ -26,6 +28,8 @@ import {
   LEARNING_DOMAIN_SERVICE_TOKEN,
   LEARNING_PLAN_GOAL_PROGRESS_SERVICE_TOKEN,
   LEARNING_PLAN_GOAL_SERVICE_TOKEN,
+  LinkedPersonService,
+  LINKED_PERSON_SERVICE_TOKEN,
   MethodLevelService,
   MethodService,
   METHOD_LEVEL_SERVICE_TOKEN,
@@ -34,6 +38,10 @@ import {
   PERSON_SERVICE_TOKEN,
   ResultsService,
   RESULTS_SERVICE_TOKEN,
+  TaskGroupService,
+  TaskStudentService,
+  TASK_GROUP_SERVICE_TOKEN,
+  TASK_STUDENT_SERVICE_TOKEN,
   TocService,
   TOC_SERVICE_TOKEN,
   UndoService,
@@ -109,7 +117,14 @@ import { kabasConfig } from './app.config';
       useClass: UnlockedFreePracticeService
     },
     { provide: SCORM_API_SERVICE_TOKEN, useClass: ScormApiService },
-    { provide: METHOD_LEVEL_SERVICE_TOKEN, useClass: MethodLevelService }
+    { provide: METHOD_LEVEL_SERVICE_TOKEN, useClass: MethodLevelService },
+
+    { provide: GROUP_SERVICE_TOKEN, useClass: GroupService },
+    { provide: TASK_GROUP_SERVICE_TOKEN, useClass: TaskGroupService },
+
+    { provide: LINKED_PERSON_SERVICE_TOKEN, useClass: LinkedPersonService },
+
+    { provide: TASK_STUDENT_SERVICE_TOKEN, useClass: TaskStudentService }
   ]
 })
 export class AppTokenModule {}

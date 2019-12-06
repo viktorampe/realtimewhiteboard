@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material';
 import { MatIconModule } from '@angular/material/icon';
-import { By } from '@angular/platform-browser';
+import { By, HAMMER_LOADER } from '@angular/platform-browser';
 import { configureTestSuite } from 'ng-bullet';
 import { ColorlistComponent } from '../colorlist/colorlist.component';
 import { ToolbarComponent } from '../toolbar/toolbar.component';
@@ -15,7 +15,13 @@ describe('CardComponent', () => {
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [MatCardModule, FormsModule, MatIconModule],
-      declarations: [CardComponent, ToolbarComponent, ColorlistComponent]
+      declarations: [CardComponent, ToolbarComponent, ColorlistComponent],
+      providers: [
+        {
+          provide: HAMMER_LOADER,
+          useValue: () => new Promise(() => {})
+        }
+      ]
     });
   });
 
@@ -46,6 +52,35 @@ describe('CardComponent', () => {
     await fixture.whenStable();
     const inputContent = fixture.debugElement.query(By.css('input'));
     expect(inputContent.nativeElement.value.trim()).toBe('Test content');
+  });
+
+  it('should set the correct top style on creation', () => {
+    component.card.top = 500;
+
+    component.ngOnChanges();
+    fixture.detectChanges();
+
+    expect(fixture.debugElement.nativeElement.style.top).toBe('500px');
+  });
+
+  it('should set the correct left style on creation', () => {
+    component.card.left = 500;
+
+    component.ngOnChanges();
+    fixture.detectChanges();
+
+    expect(fixture.debugElement.nativeElement.style.left).toBe('500px');
+  });
+
+  it('should toggle to edit mode when double click.', () => {
+    component.card.isInputSelected = false;
+    component.card.cardContent = 'something that is not null';
+
+    const myCard = fixture.debugElement.query(By.css('.card'));
+    myCard.nativeElement.dispatchEvent(new MouseEvent('dblclick')); // use nativeElement so target is set
+    fixture.detectChanges();
+
+    expect(component.card.isInputSelected).toBe(true);
   });
 
   it('should show the colorlist when the coloricon is clicked', () => {
