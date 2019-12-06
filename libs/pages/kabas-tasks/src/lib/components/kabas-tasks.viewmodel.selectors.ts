@@ -28,7 +28,7 @@ interface AssigneeInterface {
   end: Date;
 }
 
-interface TaskWithAssigneesInterface extends TaskInterface {
+export interface TaskWithAssigneesInterface extends TaskInterface {
   eduContentAmount: number;
   assignees: AssigneeInterface[];
 }
