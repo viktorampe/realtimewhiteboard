@@ -38,8 +38,10 @@ import {
   PERSON_SERVICE_TOKEN,
   ResultsService,
   RESULTS_SERVICE_TOKEN,
+  TaskClassGroupService,
   TaskGroupService,
   TaskStudentService,
+  TASK_CLASS_GROUP_SERVICE_TOKEN,
   TASK_GROUP_SERVICE_TOKEN,
   TASK_STUDENT_SERVICE_TOKEN,
   TocService,
@@ -121,6 +123,10 @@ import { kabasConfig } from './app.config';
 
     { provide: GROUP_SERVICE_TOKEN, useClass: GroupService },
     { provide: TASK_GROUP_SERVICE_TOKEN, useClass: TaskGroupService },
+    {
+      provide: TASK_CLASS_GROUP_SERVICE_TOKEN,
+      useClass: TaskClassGroupService
+    },
 
     { provide: LINKED_PERSON_SERVICE_TOKEN, useClass: LinkedPersonService },
 
