@@ -20,8 +20,8 @@ export class WhiteboardComponent implements OnInit {
 
   onDblClick(event) {
     if (event.target.className === 'whiteboard-page__workspace') {
-      const top = event.srcEvent.offsetY;
-      const left = event.srcEvent.offsetX;
+      const top = event.offsetY;
+      const left = event.offsetX;
       this.addEmptyCard(top, left);
     }
   }
@@ -32,8 +32,8 @@ export class WhiteboardComponent implements OnInit {
 
   addEmptyCard(top: number = 0, left: number = 0) {
     this.cards.push({
-      color: 'white',
-      cardContent: 'test',
+      color: this.lastColor,
+      cardContent: '',
       isInputSelected: true,
       top: top,
       left: left

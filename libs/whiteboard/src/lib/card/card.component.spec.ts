@@ -114,6 +114,13 @@ describe('CardComponent', () => {
   });
 
   it('should emit the right color when a cardcolor is picked', () => {
+    component.card = {
+      color: this.lastColor,
+      cardContent: '',
+      isInputSelected: true,
+      top: 0,
+      left: 0
+    };
     spyOn(component.lastColor, 'emit');
     component.selectColor('black');
     expect(component.lastColor.emit).toHaveBeenCalledWith('black');

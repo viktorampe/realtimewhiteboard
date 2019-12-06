@@ -20,13 +20,21 @@ export class CardComponent implements OnInit, OnChanges {
   @ViewChild('inputContent') inputContent: ElementRef;
   @Input() card: Card;
   @Output() deleteCard = new EventEmitter();
+  @Output() lastColor = new EventEmitter<string>();
 
   @HostBinding('style.top') topStyle: string;
   @HostBinding('style.left') leftStyle: string;
   colorlistHidden: boolean;
-  @Output() lastColor = new EventEmitter<string>();
 
-  constructor() {}
+  constructor() {
+    this.card = {
+      color: 'white',
+      cardContent: '',
+      isInputSelected: true,
+      top: 0,
+      left: 0
+    };
+  }
 
   ngOnInit() {
     this.colorlistHidden = true;
