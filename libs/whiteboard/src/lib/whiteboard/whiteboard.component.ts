@@ -54,7 +54,6 @@ export class WhiteboardComponent implements OnInit {
 
   showTitleInput() {
     this.isTitleInputSelected = true;
-    // this.titleInput.nativeElement.focus();
   }
 
   hideTitleInput() {
