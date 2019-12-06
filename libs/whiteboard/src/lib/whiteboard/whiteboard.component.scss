@@ -1,8 +1,22 @@
 .whiteboard-page {
+  &__header {
+    height: 3rem;
+    background: #b1b1b1;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &__title {
+      margin: 0;
+      padding: 0;
+    }
+  }
+
   &__workspace {
     background: lightgray;
     width: 100%;
-    min-height: 100%;
+    min-height: calc(100% - 3rem);
     display: flex;
     flex-wrap: wrap;
     position: relative;
