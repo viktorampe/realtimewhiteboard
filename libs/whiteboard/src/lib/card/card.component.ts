@@ -25,11 +25,12 @@ export class CardComponent implements OnInit, OnChanges {
   @HostBinding('style.top') topStyle: string;
   @HostBinding('style.left') leftStyle: string;
   colorlistHidden: boolean;
+  maxCharacters = 300;
 
   constructor() {
     this.card = {
-      color: 'white',
       cardContent: '',
+      color: 'white',
       isInputSelected: true,
       top: 0,
       left: 0
@@ -46,7 +47,10 @@ export class CardComponent implements OnInit, OnChanges {
   }
 
   toggleInput() {
-    if (this.card.cardContent != null) {
+    if (
+      this.card.cardContent !== '' &&
+      this.card.cardContent.length <= this.maxCharacters
+    ) {
       this.card.isInputSelected = !this.card.isInputSelected;
     }
   }

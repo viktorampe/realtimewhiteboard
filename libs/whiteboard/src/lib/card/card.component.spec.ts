@@ -35,6 +35,27 @@ describe('CardComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  it('should toggle input where input is valid', () => {
+    component.card.cardContent = 'Valid';
+    component.toggleInput();
+    expect(component.card.isInputSelected).toBe(false);
+  });
+
+  it('should toggle input where input is empty', () => {
+    component.card.cardContent = '';
+    component.toggleInput();
+    expect(component.card.isInputSelected).toBe(true);
+  });
+
+  it('should show errormessage when input is maximal', () => {
+    component.card.cardContent = 'a'.repeat(component.maxCharacters);
+    fixture.detectChanges();
+    const errorMessage = fixture.debugElement.query(
+      By.css('.card__content__errorMessage')
+    );
+    expect(errorMessage).not.toBeNull();
+  });
+
   it('should show the card content when not editing', () => {
     component.card.cardContent = 'Test content';
     component.card.isInputSelected = false;
@@ -50,8 +71,12 @@ describe('CardComponent', () => {
     component.card.isInputSelected = true;
     fixture.detectChanges();
     await fixture.whenStable();
-    const inputContent = fixture.debugElement.query(By.css('input'));
+    const inputContent = fixture.debugElement.query(By.css('textarea'));
     expect(inputContent.nativeElement.value.trim()).toBe('Test content');
+  });
+
+  it('should create card with cardcontent empty', () => {
+    expect(component.card.cardContent).toBe('');
   });
 
   it('should set the correct top style on creation', () => {
