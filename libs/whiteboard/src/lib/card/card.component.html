@@ -4,6 +4,7 @@
   [style.background-color]="this.card.color"
 >
   <campus-toolbar
+    [editMode]="this.card.editMode"
     (clickColorIcon)="showColor()"
     (clickToggleIcon)="toggleEditMode()"
     (clickToggleView)="toggleView()"
@@ -13,7 +14,10 @@
     [hidden]="colorlistHidden"
   ></campus-colorlist>
   <div class="card__content">
-    <campus-cardimage [hidden]="!this.viewModeImage"></campus-cardimage>
+    <campus-cardimage
+      [editMode]="this.card.editMode"
+      [hidden]="!this.viewModeImage"
+    ></campus-cardimage>
     <div
       class="card__input"
       [ngClass]="{ viewModeText: this.card.editMode == false }"

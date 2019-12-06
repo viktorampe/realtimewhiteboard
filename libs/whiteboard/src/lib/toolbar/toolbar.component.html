@@ -9,7 +9,10 @@
     [svgIcon]="'color'"
     (click)="showColor()"
   ></mat-icon>
-  <mat-icon class="toolbar_icon" [svgIcon]="'toggle'" (click)="toggleView()"
-    ><strong>T</strong></mat-icon
-  >
+  <mat-icon
+    *ngIf="!editMode"
+    class="toolbar_icon"
+    [svgIcon]="'toggle'"
+    (click)="toggleView()"
+  ></mat-icon>
 </div>

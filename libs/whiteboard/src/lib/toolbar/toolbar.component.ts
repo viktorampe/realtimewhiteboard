@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'campus-toolbar',
@@ -9,6 +9,8 @@ export class ToolbarComponent implements OnInit {
   @Output() clickColorIcon = new EventEmitter<void>();
   @Output() clickToggleIcon = new EventEmitter<void>();
   @Output() clickToggleView = new EventEmitter<void>();
+
+  @Input() editMode: boolean;
 
   constructor() {}
 

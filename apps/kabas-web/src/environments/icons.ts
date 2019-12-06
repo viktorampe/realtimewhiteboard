@@ -47,6 +47,7 @@ export const icons = {
   star: 'assets/icons/star.svg',
   'star-outline': 'assets/icons/star-border.svg',
   color: 'assets/icons/color_lens.svg',
+  toggle: 'assets/icons/toggle.svg',
 
   // search: sort modes
   'sort-numeric-down': 'assets/icons/sort-numeric-down.svg',

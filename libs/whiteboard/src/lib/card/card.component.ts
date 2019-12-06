@@ -1,6 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import Card from '../../interfaces/Card';
-import { CardimageComponent } from '../cardimage/cardimage.component';
 
 @Component({
   selector: 'campus-card',
@@ -9,7 +8,7 @@ import { CardimageComponent } from '../cardimage/cardimage.component';
 })
 export class CardComponent implements OnInit {
   @ViewChild('inputContent') inputContent: ElementRef;
-  @ViewChild(CardimageComponent) cardImageComponent: CardimageComponent;
+
   card: Card;
   colorlistHidden: boolean;
   viewModeImage: boolean;
@@ -51,15 +50,13 @@ export class CardComponent implements OnInit {
 
   toggleEditMode() {
     this.card.editMode = !this.card.editMode;
-    this.cardImageComponent.setEditMode(this.card.editMode);
+    this.viewModeImage = true;
+    //TODO: in edit mode is cardimage altijd not hidden
   }
 
   toggleView() {
-    console.log('hide image, show text');
     this.viewModeImage = !this.viewModeImage;
   }
 }
 
-//TODO: in edit mode is toggle hidden.
-//TODO: in edit mode is cardimage altijd not hidden
 //TODO: edit mode active op double tap

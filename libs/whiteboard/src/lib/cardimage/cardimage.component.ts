@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'campus-cardimage',
@@ -6,13 +6,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./cardimage.component.scss']
 })
 export class CardimageComponent implements OnInit {
-  editMode: boolean;
+  @Input() editMode: boolean;
 
   constructor() {}
 
   ngOnInit() {}
-
-  setEditMode(editMode: boolean) {
-    this.editMode = editMode;
-  }
 }
