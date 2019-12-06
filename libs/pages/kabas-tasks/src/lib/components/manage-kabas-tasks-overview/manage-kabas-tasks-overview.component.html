@@ -13,7 +13,7 @@
           nieuwe taak
         </mat-list-item>
 
-        <mat-list-option *ngFor="let task of (tasksWithAssignments$ | async)">
+        <mat-list-option *ngFor="let task of (tasksWithAssignments$ | async)" checkboxPosition="before">
           {{ task.name }}
         </mat-list-option>
       </mat-selection-list>
@@ -31,6 +31,7 @@
 
         <mat-list-option
           *ngFor="let task of (paperTasksWithAssignments$ | async)"
+        checkboxPosition="before"
         >
           {{ task.name }}
         </mat-list-option>
