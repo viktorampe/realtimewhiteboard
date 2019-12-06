@@ -8,6 +8,7 @@ import {
   Output
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { DateFunctions } from '@campus/utils';
 import { Subscription } from 'rxjs';
 import { distinctUntilChanged } from 'rxjs/operators';
 import { SearchFilterComponentInterface } from '../../interfaces/search-filter-component-interface';
@@ -31,20 +32,18 @@ export class DateFilterComponent
   criteria: SearchFilterCriteriaInterface;
   options: SelectOption[];
   selectControl: FormControl = new FormControl();
+  startDate: FormControl = new FormControl();
+  endDate: FormControl = new FormControl();
   count = 0;
+  customDisplayLabel: string;
 
   private subscriptions: Subscription = new Subscription();
 
-  @Input() multiple = false;
   @Input() resetLabel: string;
   @Input()
   public set filterCriteria(criteria: SearchFilterCriteriaInterface) {
     this.criteria = criteria;
-    this.options = this.criteriaToOptions(criteria);
-    const selection = this.options
-      .filter(option => option.value.selected)
-      .map(option => option.value);
-    this.updateView(selection);
+    this.options = this.getSelectOptions();
   }
   public get filterCriteria() {
     return this.criteria;
@@ -62,26 +61,31 @@ export class DateFilterComponent
   ngOnInit() {
     this.subscriptions.add(
       this.selectControl.valueChanges.pipe(distinctUntilChanged()).subscribe(
-        (
-          selection:
-            | SearchFilterCriteriaValuesInterface
-            | SearchFilterCriteriaValuesInterface[]
-        ): void => {
-          if (Array.isArray(selection)) {
-            // multiple === true
-            if (selection.includes(null)) {
-              // resetLabel was clicked
-              this.selectControl.setValue([]);
-              return;
-            }
-          } else {
-            selection = selection === null ? [] : [selection];
-          }
-          this.updateView(selection);
-          this.updateCriteriaWithSelected(this.criteria.values, selection);
+        (selection: SearchFilterCriteriaValuesInterface): void => {
+          this.criteria.values = selection
+            ? [selection]
+            : ([] as SearchFilterCriteriaValuesInterface[]);
+
+          this.startDate.setValue(null, { emitEvent: false });
+          this.endDate.setValue(null, { emitEvent: false });
+          this.customDisplayLabel = null;
+
+          this.updateView();
           this.filterSelectionChange.emit([this.criteria]);
         }
       )
+    );
+
+    this.subscriptions.add(
+      this.startDate.valueChanges
+        .pipe(distinctUntilChanged())
+        .subscribe(this.onDateChange.bind(this))
+    );
+
+    this.subscriptions.add(
+      this.endDate.valueChanges
+        .pipe(distinctUntilChanged())
+        .subscribe(this.onDateChange.bind(this))
     );
   }
 
@@ -89,42 +93,83 @@ export class DateFilterComponent
     this.subscriptions.unsubscribe();
   }
 
-  private criteriaToOptions(
-    criteria: SearchFilterCriteriaInterface
-  ): SelectOption[] {
-    return criteria.values
-      .filter(value => value.visible)
-      .map(
-        (value: SearchFilterCriteriaValuesInterface): SelectOption => {
-          let viewValue = value.data[criteria.displayProperty];
-          if (value.prediction !== undefined) {
-            viewValue += ' (' + value.prediction + ')';
+  private updateView(): void {
+    this.count = this.criteria.values.length;
+  }
+
+  private onDateChange() {
+    const startDateValue: Date =
+      this.startDate.value && new Date(this.startDate.value);
+    const endDateValue: Date =
+      this.endDate.value && new Date(this.endDate.value);
+
+    // clear the selection (visual) and don't trigger our own handler
+    this.selectControl.setValue(null, { emitEvent: false });
+
+    // startDate or endDate can be null if it's an invalid date
+    if (startDateValue || endDateValue) {
+      // normalize the times to actually be the very start or end of the day
+      if (startDateValue) {
+        startDateValue.setHours(0, 0, 0, 0);
+      }
+
+      if (endDateValue) {
+        endDateValue.setHours(23, 59, 59, 999);
+      }
+
+      this.criteria.values = [
+        {
+          data: {
+            gte: startDateValue,
+            lte: endDateValue
           }
-          return { value, viewValue };
         }
-      );
-  }
+      ];
 
-  private updateView(selection: SearchFilterCriteriaValuesInterface[]): void {
-    this.count = selection.length;
-    if (this.multiple) {
-      this.selectControl.setValue(selection);
+      if (startDateValue && endDateValue) {
+        this.customDisplayLabel =
+          'Vanaf ' +
+          startDateValue.toLocaleDateString() +
+          ' tot en met ' +
+          endDateValue.toLocaleDateString();
+      } else if (startDateValue) {
+        this.customDisplayLabel =
+          'Vanaf ' + startDateValue.toLocaleDateString();
+      } else if (endDateValue) {
+        this.customDisplayLabel =
+          'Tot en met ' + endDateValue.toLocaleDateString();
+      }
     } else {
-      this.selectControl.setValue(selection[0] || null);
+      this.criteria.values = [];
+      this.customDisplayLabel = null;
     }
+
+    this.updateView();
+    this.filterSelectionChange.emit([this.criteria]);
   }
 
-  private updateCriteriaWithSelected(
-    values: SearchFilterCriteriaValuesInterface[],
-    selection: SearchFilterCriteriaValuesInterface[]
-  ): void {
-    // uncheck everything
-    values.forEach(value => {
-      value.selected = false;
-    });
-    // then check selected
-    selection.forEach(selected => {
-      selected.selected = true;
-    });
+  private getSelectOptions(): SelectOption[] {
+    const now = new Date();
+
+    return [
+      {
+        viewValue: 'Deze week',
+        value: {
+          data: {
+            gte: DateFunctions.startOfWeek(now),
+            lte: DateFunctions.endOfWeek(now)
+          }
+        }
+      },
+      {
+        viewValue: 'Vorige week',
+        value: {
+          data: {
+            gte: DateFunctions.lastWeek(now),
+            lte: DateFunctions.endOfWeek(DateFunctions.lastWeek(now))
+          }
+        }
+      }
+    ];
   }
 }

@@ -1,4 +1,6 @@
 @mixin date-filter-component() {
+  $date-filter_mat-select-custom-display-label-color: black !default;
+
   $date-filter_mat-select-trigger-height: 1.125em !default;
   $date-filter_mat-select-trigger-padding: 0px !default;
   $date-filter_mat-select-trigger-border-width: 0px !default;
@@ -21,13 +23,26 @@
       vertical-align: $date-filter_mat-select-value-vertical-align;
     }
 
+    &__select {
+      &--custom-display-label {
+        .mat-select-placeholder {
+          color: $date-filter_mat-select-custom-display-label-color;
+        }
+      }
+    }
+
     &__select-panel {
+      &__date-range {
+        display: flex;
+        flex-direction: row;
+      }
+
       .mat-form-field-appearance-outline .mat-form-field-outline-thick {
         opacity: $date-filter_mat-form-field_outline-opacity;
       }
 
       mat-form-field {
-        width: 100%;
+        width: 50%;
 
         .mat-form-field-appearance-outline,
         .mat-form-field-infix {

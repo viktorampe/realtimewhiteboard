@@ -1,22 +1,45 @@
 <mat-select
-  [placeholder]="criteria?.label"
-  [multiple]="multiple"
+  [placeholder]="customDisplayLabel || criteria?.label"
   [formControl]="selectControl"
   [matBadge]="count"
   [matBadgeHidden]="count === 0"
   matBadgePosition="above after"
   panelClass="date-filter-component date-filter-component__select-panel"
+  [class.date-filter-component__select--custom-display-label]="
+    customDisplayLabel
+  "
 >
   <mat-option *ngIf="resetLabel" [value]="null">{{ resetLabel }}</mat-option>
   <mat-option *ngFor="let option of options" [value]="option.value">
     {{ option.viewValue }}
   </mat-option>
-  <mat-form-field [appearance]="'outline'">
-    <input matInput [matDatepicker]="myDatepicker" />
-    <mat-datepicker-toggle
-      matSuffix
-      [for]="myDatepicker"
-    ></mat-datepicker-toggle>
-    <mat-datepicker #myDatepicker></mat-datepicker>
-  </mat-form-field>
+  <div class="date-filter-component__select-panel__date-range">
+    <mat-form-field [appearance]="'outline'">
+      <mat-label>Vanaf</mat-label>
+      <input
+        matInput
+        [matDatepicker]="startDatePicker"
+        [formControl]="startDate"
+      />
+      <mat-datepicker-toggle
+        matSuffix
+        [for]="startDatePicker"
+      ></mat-datepicker-toggle>
+      <mat-datepicker #startDatePicker></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field [appearance]="'outline'">
+      <mat-label>t.e.m.</mat-label>
+      <input
+        [value]="null"
+        matInput
+        [matDatepicker]="endDatePicker"
+        [formControl]="endDate"
+      />
+      <mat-datepicker-toggle
+        matSuffix
+        [for]="endDatePicker"
+      ></mat-datepicker-toggle>
+      <mat-datepicker #endDatePicker></mat-datepicker>
+    </mat-form-field>
+  </div>
 </mat-select>

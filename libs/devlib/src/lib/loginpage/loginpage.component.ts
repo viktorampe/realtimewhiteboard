@@ -21,7 +21,6 @@ import {
 } from '@campus/dal';
 import {
   SearchFilterCriteriaFixture,
-  SearchFilterCriteriaValuesFixture,
   SelectFilterComponent
 } from '@campus/search';
 import { Store } from '@ngrx/store';
@@ -68,11 +67,11 @@ export class LoginpageComponent implements OnInit {
 
     // Select filter component testing
     this.selectFilterComponent.filterCriteria = new SearchFilterCriteriaFixture(
-      {},
-      [
-        new SearchFilterCriteriaValuesFixture(),
-        new SearchFilterCriteriaValuesFixture()
-      ]
+      {
+        name: 'createdAt',
+        label: 'Aanmaakdatum'
+      },
+      []
     );
     this.selectFilterComponent.filterSelectionChange.subscribe(v => {
       console.log('FilterSelectionChange', v);
