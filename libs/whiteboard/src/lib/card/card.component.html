@@ -16,13 +16,21 @@
     <p *ngIf="!card.isInputSelected" (click)="toggleInput()">
       {{ card.cardContent }}
     </p>
-    <input
+    <textarea
       #inputContent
       *ngIf="card.isInputSelected"
       [(ngModel)]="card.cardContent"
       (focusout)="toggleInput()"
       type="text"
       name="card-content"
-    />
+      maxlength="{{ maxCharacters }}"
+    >
+    </textarea>
+    <p
+      *ngIf="card.isInputSelected && card.cardContent.length === maxCharacters"
+      class="card__content__errorMessage"
+    >
+      Je hebt het maximaal aantal karakters gebruikt.
+    </p>
   </div>
 </div>
