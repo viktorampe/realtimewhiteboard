@@ -1,3 +1,28 @@
+<campus-page-bar>
+  <campus-button
+    class="shared-header__quicklink__button smallIcon"
+    data-cy="nav-new-task"
+    [iconClass]="'tasks'"
+    (click)="clickNewTask()"
+    ><span>nieuw</span></campus-button
+  >
+  <ng-container *ngIf="(selectedTasks$ | async)">
+    <campus-button
+      class="shared-header__quicklink__button smallIcon"
+      data-cy="nav-archive-task"
+      [iconClass]="'archive'"
+      (click)="clickArchiveTasks()"
+      ><span>archiveer</span></campus-button
+    >
+    <campus-button
+      class="shared-header__quicklink__button smallIcon"
+      data-cy="nav-delete-task"
+      [iconClass]="'delete'"
+      (click)="clickDeleteTasks()"
+      ><span>verwijder</span></campus-button
+    >
+  </ng-container>
+</campus-page-bar>
 <p>
   manage-kabas-tasks-overview works!
 </p>

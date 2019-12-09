@@ -39,6 +39,7 @@
   $shared-header__quicklink-icon-size-small: 20px !default;
   $shared-header__quicklink-font-size: $shared-header-font-size !default;
   $shared-header__quicklink-font-weight: $shared-header-font-weight !default;
+  $shared-header__quicklink__label-margin-top: 10px !default;
 
   .shared-header {
     &__app-bar {
@@ -125,6 +126,9 @@
       .mat-icon {
         width: $shared-header__quicklink-icon-size;
         height: $shared-header__quicklink-icon-size;
+      }
+      span {
+        margin-top: $shared-header__quicklink__label-margin-top;
       }
     }
     :not(.smallIcon) {
