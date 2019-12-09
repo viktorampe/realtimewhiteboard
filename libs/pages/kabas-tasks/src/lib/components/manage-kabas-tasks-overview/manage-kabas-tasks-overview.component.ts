@@ -5,7 +5,6 @@ import { map } from 'rxjs/operators';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
 import { MockKabasTasksViewModel } from '../kabas-tasks.viewmodel.mock';
 import { TaskWithAssigneesInterface } from '../kabas-tasks.viewmodel.selectors';
-
 @Component({
   selector: 'campus-manage-kabas-tasks-overview',
   templateUrl: './manage-kabas-tasks-overview.component.html',
