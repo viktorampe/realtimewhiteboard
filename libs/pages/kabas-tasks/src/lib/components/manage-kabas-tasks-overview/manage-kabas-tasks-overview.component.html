@@ -9,9 +9,7 @@
         <campus-select-filter></campus-select-filter>
         <!--<date-filter-component></date-filter-component>-->
         <campus-select-filter></campus-select-filter>
-        <campus-button-toggle-filter label="test"
-          >test</campus-button-toggle-filter
-        >
+        <campus-button-toggle-filter></campus-button-toggle-filter>
       </div>
       <mat-selection-list #digital>
         <mat-list-item
@@ -32,9 +30,13 @@
     </mat-tab>
 
     <mat-tab label="Papieren taken">
-      <div class="manage-kabas-tasks-overview__toolbar">
-        <campus-filter-text-input></campus-filter-text-input
-      ></div>
+      <div class="manage-kabas-tasks-overview__filterbar">
+        <campus-filter-text-input></campus-filter-text-input>
+        <campus-select-filter></campus-select-filter>
+        <!--<date-filter-component></date-filter-component>-->
+        <campus-select-filter></campus-select-filter>
+        <campus-button-toggle-filter></campus-button-toggle-filter>
+      </div>
       <mat-selection-list #paper>
         <mat-list-item
           (click)="clickAddPaperTask()"
