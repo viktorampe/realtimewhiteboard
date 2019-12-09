@@ -18,9 +18,13 @@ export class MockKabasTasksViewModel
 
   constructor() {
     const tasks = this.setupTaskWithAssignments();
-    this.tasksWithAssignments$ = new BehaviorSubject<TaskWithAssigneesInterface>(tasks);
+    this.tasksWithAssignments$ = new BehaviorSubject<
+      TaskWithAssigneesInterface
+    >(tasks);
 
-    this.paperTasksWithAssignments$ = new BehaviorSubject<TaskWithAssigneesInterface>(
+    this.paperTasksWithAssignments$ = new BehaviorSubject<
+      TaskWithAssigneesInterface
+    >(
       tasks.map(task => {
         return {
           ...task,
