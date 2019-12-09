@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
+import { TaskWithAssigneesInterface } from '../kabas-tasks.viewmodel.selectors';
 
 @Component({
   selector: 'campus-manage-kabas-tasks-overview',
@@ -6,7 +9,13 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./manage-kabas-tasks-overview.component.scss']
 })
 export class ManageKabasTasksOverviewComponent implements OnInit {
-  constructor() {}
+  public tasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
+  public paperTasksWithAssignments: Observable<TaskWithAssigneesInterface[]>;
 
-  ngOnInit() {}
+  constructor(private viewModel: KabasTasksViewModel) {}
+
+  ngOnInit() {
+    this.tasksWithAssignments$ = this.viewModel.tasksWithAssignments$;
+    this.paperTasksWithAssignments = this.viewModel.paperTasksWithAssignments$;
+  }
 }
