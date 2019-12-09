@@ -4,19 +4,6 @@
     (selectedIndexChange)="onSelectedTabIndexChanged($event)"
   >
     <mat-tab label="Digitale taken">
-      <campus-task-list-item
-        [title]="'titel van eerste oef wiskunde'"
-        learningArea="wiskunde"
-        [archived]="true"
-        icon="educontent-product-type:evaluatie"
-        exerciseCount="4"
-        [startDate]="taskItem.startDate"
-        [endDate]="taskItem.endDate"
-        status="active"
-        [actions]="taskItem.actions"
-        [assignees]="taskItem.assignees"
-      ></campus-task-list-item>
-
       <mat-selection-list #digital>
         <mat-list-item
           (click)="clickAddDigitalTask()"
@@ -30,7 +17,19 @@
           *ngFor="let task of (tasksWithAssignments$ | async)"
           checkboxPosition="before"
         >
-          {{ task.name }}
+          <!-- TODO: set correct inputs -->
+          <campus-task-list-item
+            [title]="task.name"
+            learningArea="task.learningArea.title"
+            [archived]="true"
+            icon="educontent-product-type:evaluatie"
+            exerciseCount="4"
+            [startDate]="taskItem.startDate"
+            [endDate]="taskItem.endDate"
+            status="active"
+            [actions]="taskItem.actions"
+            [assignees]="taskItem.assignees"
+          ></campus-task-list-item>
         </mat-list-option>
       </mat-selection-list>
     </mat-tab>
