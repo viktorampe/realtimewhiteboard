@@ -15,9 +15,9 @@ import { TaskWithAssigneesInterface } from '../kabas-tasks.viewmodel.selectors';
   ]
 })
 export class ManageKabasTasksOverviewComponent implements OnInit {
-  public currentTab$: Observable<number>;
   public tasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
   public paperTasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
+  public currentTab$: Observable<number>;
 
   constructor(
     private viewModel: KabasTasksViewModel,
