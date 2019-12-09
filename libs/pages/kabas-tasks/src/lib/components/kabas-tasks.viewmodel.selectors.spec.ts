@@ -69,7 +69,7 @@ describe('Kabas-tasks viewmodel selectors', () => {
       hydrateStore(store, date);
     });
 
-    it('should return digital taksWithAssignments', () => {
+    it('should return digital tasksWithAssignments', () => {
       const stream = store.pipe(
         select(getTasksWithAssignments, { isPaper: false })
       );
@@ -113,7 +113,7 @@ describe('Kabas-tasks viewmodel selectors', () => {
       expect(stream).toBeObservable(hot('a', { a: expected }));
     });
 
-    it('should return paper taksWithAssignments', () => {
+    it('should return paper tasksWithAssignments', () => {
       const stream = store.pipe(
         select(getTasksWithAssignments, { isPaper: true })
       );
