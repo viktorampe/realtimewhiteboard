@@ -4,6 +4,10 @@
     (selectedIndexChange)="onSelectedTabIndexChanged($event)"
   >
     <mat-tab label="Digitale taken">
+      <campus-filter-text-input
+        #digitalTasksTextFilter
+        [source]="tasksWithAssignments$ | async"
+      ></campus-filter-text-input>
       <mat-selection-list #digital>
         <mat-list-item
           (click)="clickAddDigitalTask()"
@@ -13,16 +17,35 @@
           nieuwe taak
         </mat-list-item>
 
-        <mat-list-option
-          *ngFor="let task of (tasksWithAssignments$ | async)"
-          checkboxPosition="before"
+        <ng-template #allDigitalTasks>
+          <mat-list-option
+            *ngFor="let task of (tasksWithAssignments$ | async)"
+            checkboxPosition="before"
+          >
+            {{ task.name }}
+          </mat-list-option>
+        </ng-template>
+        <ng-container
+          *ngIf="
+            (digitalTasksFilterTextInput.result$ | async) as filteredTasks;
+            else allDigitalTasks
+          "
         >
-          {{ task.name }}
-        </mat-list-option>
+          <mat-list-option
+            *ngFor="let task of filteredTasks"
+            checkboxPosition="before"
+          >
+            {{ task.name }}
+          </mat-list-option>
+        </ng-container>
       </mat-selection-list>
     </mat-tab>
 
     <mat-tab label="Papieren taken">
+      <campus-filter-text-input
+        #paperTasksTextFilter
+        [source]="paperTasksWithAssignments$ | async"
+      ></campus-filter-text-input>
       <mat-selection-list #paper>
         <mat-list-item
           (click)="clickAddPaperTask()"
@@ -32,12 +55,28 @@
           nieuwe taak
         </mat-list-item>
 
-        <mat-list-option
-          *ngFor="let task of (paperTasksWithAssignments$ | async)"
-          checkboxPosition="before"
+        <ng-template #allPaperTasks>
+          <mat-list-option
+            *ngFor="let task of (paperTasksWithAssignments$ | async)"
+            checkboxPosition="before"
+          >
+            {{ task.name }}
+          </mat-list-option>
+        </ng-template>
+
+        <ng-container
+          *ngIf="
+            (paperTasksFilterTextInput.result$ | async) as filteredTasks;
+            else allPaperTasks
+          "
         >
-          {{ task.name }}
-        </mat-list-option>
+          <mat-list-option
+            *ngFor="let task of filteredTasks"
+            checkboxPosition="before"
+          >
+            {{ task.name }}
+          </mat-list-option>
+        </ng-container>
       </mat-selection-list>
     </mat-tab>
   </mat-tab-group>

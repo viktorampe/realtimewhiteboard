@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FilterTextInputComponent } from '@campus/ui';
+import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/utils';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
@@ -20,16 +22,30 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
   public paperTasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
   public currentTab$: Observable<number>;
 
+  @ViewChild('digitalTasksTextFilter')
+  digitalTasksFilterTextInput: FilterTextInputComponent<
+    TaskWithAssigneesInterface[],
+    TaskWithAssigneesInterface
+  >;
+  @ViewChild('paperTasksTextFilter')
+  paperTasksFilterTextInput: FilterTextInputComponent<
+    TaskWithAssigneesInterface[],
+    TaskWithAssigneesInterface
+  >;
+
   constructor(
     private viewModel: KabasTasksViewModel,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    @Inject(FILTER_SERVICE_TOKEN) private filterService: FilterServiceInterface
   ) {}
 
   ngOnInit() {
     this.currentTab$ = this.getCurrentTab();
     this.tasksWithAssignments$ = this.viewModel.tasksWithAssignments$;
     this.paperTasksWithAssignments$ = this.viewModel.paperTasksWithAssignments$;
+    this.digitalTasksFilterTextInput.setFilterableItem(this);
+    this.paperTasksFilterTextInput.setFilterableItem(this);
   }
 
   clickAddDigitalTask() {
@@ -45,7 +61,18 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
     });
   }
 
+  // TODO:
+  // text filter: use source stream based on active tab
+  // merge all filter results in one stream 'filteredTasks$'
+
   private getCurrentTab(): Observable<number> {
     return this.route.queryParams.pipe(map(queryParam => queryParam.tab));
+  }
+
+  filterFn(
+    source: TaskWithAssigneesInterface[],
+    searchText: string
+  ): TaskWithAssigneesInterface[] {
+    return this.filterService.filter(source, { name: searchText });
   }
 }
