@@ -1,7 +1,4 @@
-import {
-  AssigneeInterface,
-  AssigneeTypesEnum
-} from '../+models/Assignee.interface';
+import { AssigneeInterface, AssigneeTypesEnum } from './Assignee.interface';
 
 export class AssigneeFixture implements AssigneeInterface {
   type = AssigneeTypesEnum.CLASSGROUP;
