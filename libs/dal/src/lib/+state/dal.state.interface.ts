@@ -24,10 +24,12 @@ import {
   ResultReducer,
   SchoolTypeReducer,
   StudentContentStatusReducer,
+  TaskClassGroupReducer,
   TaskEduContentReducer,
   TaskGroupReducer,
   TaskInstanceReducer,
   TaskReducer,
+  TaskStudentReducer,
   TeacherStudentReducer,
   UiReducer,
   UnlockedBoekeGroupReducer,
@@ -39,9 +41,6 @@ import {
   UserReducer,
   YearReducer
 } from '../..';
-
-import { TaskClassGroupReducer } from './task-class-group';
-import { TaskStudentReducer } from './task-student';
 
 export interface DalState {
   ui: UiReducer.UiState;
