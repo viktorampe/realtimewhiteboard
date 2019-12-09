@@ -18,9 +18,9 @@ import { TaskWithAssigneesInterface } from '../kabas-tasks.viewmodel.selectors';
 })
 export class ManageKabasTasksOverviewComponent implements OnInit {
   public isTaskSelected$: Observable<boolean>;
-  public currentTab$: Observable<number>;
   public tasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
   public paperTasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
+  public currentTab$: Observable<number>;
 
   @ViewChild(MatSelectionList)
   private matSelectionList: MatSelectionList;
