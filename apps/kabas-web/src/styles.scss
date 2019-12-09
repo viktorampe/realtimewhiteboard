@@ -45,6 +45,8 @@ body {
 @include pages-settings-theme();
 @import 'libs/pages/practice/src/lib/pages-practice.theme';
 @include pages-practice-theme();
+@import 'libs/pages/kabas-tasks/src/lib/pages-kabas-tasks.theme';
+@include pages-kabas-tasks-theme();
 
 // include shared lib scss
 @import 'libs/shared/src/lib/shared-theme';

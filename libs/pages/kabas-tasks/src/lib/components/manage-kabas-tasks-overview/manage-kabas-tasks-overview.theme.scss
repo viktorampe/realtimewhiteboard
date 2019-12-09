@@ -1,0 +1,22 @@
+@mixin manage-kabas-tasks-overview-theme() {
+  .manage-kabas-tasks-overview {
+    &__container {
+      .mat-tab-body-content {
+        padding: 0;
+      }
+    }
+
+    &__list__primary-action {
+      .mat-list-item-content {
+        background-color: $secondary-bg-color;
+        color: $primary-color-accent;
+        font-weight: bold;
+        cursor: pointer;
+
+        .mat-icon {
+          margin: 0 20px;
+        }
+      }
+    }
+  }
+}
