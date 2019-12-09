@@ -1,17 +1,8 @@
 import { Component, HostBinding, Input, OnInit } from '@angular/core';
-
-// TODO import interfaces when PR #1376 is merged
-export enum AssigneeType {
-  'CLASSGROUP' = 'classGroup',
-  'GROUP' = 'group',
-  'STUDENT' = 'student'
-}
-export interface AssigneeInterface {
-  type: AssigneeType;
-  label: string;
-  start: Date;
-  end: Date;
-}
+import {
+  AssigneeInterface,
+  AssigneeType
+} from '../kabas-tasks.viewmodel.selectors';
 
 export type Status = 'pending' | 'active' | 'finished';
 

@@ -21,7 +21,7 @@ export enum AssigneeType {
   'STUDENT' = 'student'
 }
 
-interface AssigneeInterface {
+export interface AssigneeInterface {
   type: AssigneeType;
   label: string;
   start: Date;

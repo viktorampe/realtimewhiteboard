@@ -4,8 +4,10 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
 import { MockKabasTasksViewModel } from '../kabas-tasks.viewmodel.mock';
-import { TaskWithAssigneesInterface } from '../kabas-tasks.viewmodel.selectors';
-import { AssigneeType } from '../task-list-item/task-list-item.component';
+import {
+  AssigneeType,
+  TaskWithAssigneesInterface
+} from '../kabas-tasks.viewmodel.selectors';
 
 @Component({
   selector: 'campus-manage-kabas-tasks-overview',
