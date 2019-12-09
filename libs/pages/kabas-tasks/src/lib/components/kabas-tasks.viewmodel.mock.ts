@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { LearningAreaFixture, TaskFixture } from '@campus/dal';
 import { ViewModelInterface } from '@campus/testing';
-import { Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { KabasTasksViewModel } from './kabas-tasks.viewmodel';
 import {
   AssigneeType,
@@ -18,9 +18,13 @@ export class MockKabasTasksViewModel
 
   constructor() {
     const tasks = this.setupTaskWithAssignments();
-    this.tasksWithAssignments$ = new BehaviorSubject<TaskWithAssigneesInterface>(tasks);
+    this.tasksWithAssignments$ = new BehaviorSubject<
+      TaskWithAssigneesInterface[]
+    >(tasks);
 
-    this.paperTasksWithAssignments$ = new BehaviorSubject<TaskWithAssigneesInterface>(
+    this.paperTasksWithAssignments$ = new BehaviorSubject<
+      TaskWithAssigneesInterface[]
+    >(
       tasks.map(task => {
         return {
           ...task,
