@@ -6,7 +6,7 @@
     (click)="clickNewTask()"
     ><span>nieuw</span></campus-button
   >
-  <ng-container *ngIf="(selectedTasks$ | async)">
+  <ng-container *ngIf="(isTaskSelected$ | async)">
     <campus-button
       class="shared-header__quicklink__button smallIcon"
       data-cy="nav-archive-task"

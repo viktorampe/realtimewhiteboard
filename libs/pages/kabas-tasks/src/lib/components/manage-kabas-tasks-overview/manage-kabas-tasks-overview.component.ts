@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatSelectionList, MatSelectionListChange } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
 import { MockKabasTasksViewModel } from '../kabas-tasks.viewmodel.mock';
@@ -16,11 +17,13 @@ import { TaskWithAssigneesInterface } from '../kabas-tasks.viewmodel.selectors';
   ]
 })
 export class ManageKabasTasksOverviewComponent implements OnInit {
-  // TODO: use the list component to determine if there are tasks selected
-  public selectedTasks$ = of(true);
+  public isTaskSelected$: Observable<boolean>;
   public currentTab$: Observable<number>;
   public tasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
   public paperTasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
+
+  @ViewChild(MatSelectionList)
+  private matSelectionList: MatSelectionList;
 
   constructor(
     private viewModel: KabasTasksViewModel,
@@ -32,6 +35,11 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
     this.currentTab$ = this.getCurrentTab();
     this.tasksWithAssignments$ = this.viewModel.tasksWithAssignments$;
     this.paperTasksWithAssignments$ = this.viewModel.paperTasksWithAssignments$;
+    this.isTaskSelected$ = this.matSelectionList.selectionChange.pipe(
+      map((event: MatSelectionListChange) => {
+        return !!event.source.selectedOptions.selected.length;
+      })
+    );
   }
 
   clickAddDigitalTask() {
