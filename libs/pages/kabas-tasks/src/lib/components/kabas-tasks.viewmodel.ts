@@ -17,6 +17,7 @@ export class KabasTasksViewModel {
     this.tasksWithAssignments$ = this.store.pipe(
       select(getTasksWithAssignments, { isPaper: false })
     );
+
     this.paperTasksWithAssignments$ = this.store.pipe(
       select(getTasksWithAssignments, { isPaper: true })
     );

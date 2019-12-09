@@ -10,12 +10,12 @@ import { TaskWithAssigneesInterface } from '../kabas-tasks.viewmodel.selectors';
 })
 export class ManageKabasTasksOverviewComponent implements OnInit {
   public tasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
-  public paperTasksWithAssignments: Observable<TaskWithAssigneesInterface[]>;
+  public paperTasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
 
   constructor(private viewModel: KabasTasksViewModel) {}
 
   ngOnInit() {
     this.tasksWithAssignments$ = this.viewModel.tasksWithAssignments$;
-    this.paperTasksWithAssignments = this.viewModel.paperTasksWithAssignments$;
+    this.paperTasksWithAssignments$ = this.viewModel.paperTasksWithAssignments$;
   }
 }
