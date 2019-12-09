@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import {
+  SearchFilterCriteriaInterface,
+  SearchFilterCriteriaValuesInterface
+} from '@campus/search';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
@@ -18,6 +22,7 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
   public tasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
   public paperTasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
   public currentTab$: Observable<number>;
+  public learningAreaFilter$: Observable<SearchFilterCriteriaInterface>;
 
   constructor(
     private viewModel: KabasTasksViewModel,
@@ -29,6 +34,26 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
     this.currentTab$ = this.getCurrentTab();
     this.tasksWithAssignments$ = this.viewModel.tasksWithAssignments$;
     this.paperTasksWithAssignments$ = this.viewModel.paperTasksWithAssignments$;
+
+    this.learningAreaFilter$ = this.tasksWithAssignments$.pipe(
+      map(tasksWithAssignments => {
+        const uniqueLearningAreas = {};
+        tasksWithAssignments.forEach(twa => {
+          uniqueLearningAreas[twa.learningAreaId] = twa.learningArea;
+        });
+        return {
+          name: 'learningArea',
+          label: 'Leergebieden',
+          keyProperty: 'id',
+          displayProperty: 'label',
+          values: Object.values(uniqueLearningAreas).map(la => {
+            return {
+              data: la
+            } as SearchFilterCriteriaValuesInterface;
+          })
+        } as SearchFilterCriteriaInterface;
+      })
+    );
   }
 
   clickAddDigitalTask() {
