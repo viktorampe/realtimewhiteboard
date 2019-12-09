@@ -24,6 +24,7 @@ export const icons = {
   account: 'assets/icons/account-circle.svg',
   cancel: 'assets/icons/cancel.svg',
   delete: 'assets/icons/material/delete.svg',
+  add: 'assets/icons/material/add-circle-outline.svg',
   edit: 'assets/icons/material/edit.svg',
   filter: 'assets/icons/filter.svg',
   context_menu: 'assets/icons/material/more_vert.svg',
