@@ -1,9 +1,19 @@
 @mixin manage-kabas-tasks-overview-theme() {
+  $pages-home-method-favorite-tile_title-background-color: $pages-home-background-color--secondary !default;
+  $manage-kabas-tasks-overview_toolbar-margin-top: 15px !default;
+  $manage-kabas-tasks-overview_toolbar-margin-bottom: 10px !default;
+  $manage-kabas-tasks-overview_toolbar-margin-left: 45px !default;
+
   .manage-kabas-tasks-overview {
     &__container {
       .mat-tab-body-content {
         padding: 0;
       }
+    }
+    &__toolbar {
+      margin: $manage-kabas-tasks-overview_toolbar-margin-top 0px
+        $manage-kabas-tasks-overview_toolbar-margin-bottom
+        $manage-kabas-tasks-overview_toolbar-margin-left;
     }
 
     &__list__primary-action {
