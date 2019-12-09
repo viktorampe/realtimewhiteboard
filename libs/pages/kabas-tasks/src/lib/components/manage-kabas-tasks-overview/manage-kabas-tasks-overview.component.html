@@ -1,3 +1,41 @@
-<p>
-  manage-kabas-tasks-overview works!
-</p>
+<div class="manage-kabas-tasks-overview__container">
+  <mat-tab-group
+    [selectedIndex]="currentTab$ | async"
+    (selectedIndexChange)="onSelectedTabIndexChanged($event)"
+  >
+    <mat-tab label="Digitale taken">
+      <mat-selection-list #digital>
+        <mat-list-item
+          (click)="clickAddDigitalTask()"
+          class="manage-kabas-tasks-overview__list__primary-action"
+        >
+          <mat-icon svgIcon="add"></mat-icon>
+          nieuwe taak
+        </mat-list-item>
+
+        <mat-list-option *ngFor="let task of (tasksWithAssignments$ | async)" checkboxPosition="before">
+          {{ task.name }}
+        </mat-list-option>
+      </mat-selection-list>
+    </mat-tab>
+
+    <mat-tab label="Papieren taken">
+      <mat-selection-list #paper>
+        <mat-list-item
+          (click)="clickAddPaperTask()"
+          class="manage-kabas-tasks-overview__list__primary-action"
+        >
+          <mat-icon svgIcon="add"></mat-icon>
+          nieuwe taak
+        </mat-list-item>
+
+        <mat-list-option
+          *ngFor="let task of (paperTasksWithAssignments$ | async)"
+        checkboxPosition="before"
+        >
+          {{ task.name }}
+        </mat-list-option>
+      </mat-selection-list>
+    </mat-tab>
+  </mat-tab-group>
+</div>
