@@ -1,17 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { MatSelectModule } from '@angular/material';
-import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { GuardsModule } from '@campus/guards';
 import { PagesSharedModule } from '@campus/pages/shared';
-import {
-  ButtonToggleFilterComponent,
-  SelectFilterComponent
-} from '@campus/search';
+import { SearchModule } from '@campus/search';
 import { SharedModule } from '@campus/shared';
 import { UiModule } from '@campus/ui';
 import { ManageKabasTasksOverviewComponent } from './components/manage-kabas-tasks-overview/manage-kabas-tasks-overview.component';
 import { PagesKabasTasksRoutingModule } from './pages-kabas-tasks-routing.module';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -20,14 +16,9 @@ import { PagesKabasTasksRoutingModule } from './pages-kabas-tasks-routing.module
     PagesSharedModule,
     SharedModule,
     GuardsModule,
-    MatSelectModule,
-    MatButtonToggleModule
+    SearchModule
   ],
-  declarations: [
-    ManageKabasTasksOverviewComponent,
-    ButtonToggleFilterComponent,
-    SelectFilterComponent
-  ],
+  declarations: [ManageKabasTasksOverviewComponent],
   providers: [],
   exports: []
 })

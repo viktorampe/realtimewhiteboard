@@ -4,12 +4,14 @@
     (selectedIndexChange)="onSelectedTabIndexChanged($event)"
   >
     <mat-tab label="Digitale taken">
-      <div class="manage-kabas-tasks-overview__toolbar">
+      <div class="manage-kabas-tasks-overview__filterbar">
         <campus-filter-text-input></campus-filter-text-input>
         <campus-select-filter></campus-select-filter>
         <!--<date-filter-component></date-filter-component>-->
         <campus-select-filter></campus-select-filter>
-        <campus-button-toggle-filter></campus-button-toggle-filter>
+        <campus-button-toggle-filter label="test"
+          >test</campus-button-toggle-filter
+        >
       </div>
       <mat-selection-list #digital>
         <mat-list-item
