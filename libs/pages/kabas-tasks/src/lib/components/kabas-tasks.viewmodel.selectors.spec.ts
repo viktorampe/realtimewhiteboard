@@ -74,32 +74,43 @@ describe('Kabas-tasks viewmodel selectors', () => {
         select(getTasksWithAssignments, { isPaper: false })
       );
 
-      const expected = {
-        ...new TaskFixture({ id: 1, name: 'een digitale taak' }),
-        eduContentAmount: 3,
-        learningArea: new LearningAreaFixture({ name: 'wiskunde' }),
-        assignees: [
-          {
-            type: AssigneeType.CLASSGROUP,
-            label: '1A',
-            start: new Date(date - 2),
-            end: new Date(date + 2)
-          },
-          {
-            type: AssigneeType.GROUP,
-            label: 'Remediëring 2c',
-            start: new Date(date - 1),
-            end: new Date(date + 1)
-          },
-          {
-            type: AssigneeType.STUDENT,
-            label: 'Polleke',
-            start: new Date(date - 3),
-            end: new Date(date + 3)
-          }
-        ]
-      };
-      expect(stream).toBeObservable(hot('a', { a: [expected] }));
+      const expected = [
+        {
+          ...new TaskFixture({ id: 1, name: 'een digitale taak' }),
+          eduContentAmount: 3,
+          learningArea: new LearningAreaFixture({ name: 'wiskunde' }),
+          assignees: [
+            {
+              type: AssigneeType.CLASSGROUP,
+              label: '1A',
+              start: new Date(date - 2),
+              end: new Date(date + 2)
+            },
+            {
+              type: AssigneeType.GROUP,
+              label: 'Remediëring 2c',
+              start: new Date(date - 1),
+              end: new Date(date + 1)
+            },
+            {
+              type: AssigneeType.STUDENT,
+              label: 'Polleke',
+              start: new Date(date - 3),
+              end: new Date(date + 3)
+            }
+          ]
+        },
+        {
+          ...new TaskFixture({
+            id: 3,
+            name: 'een taak zonder assignees of content'
+          }),
+          eduContentAmount: 0,
+          learningArea: new LearningAreaFixture({ name: 'wiskunde' }),
+          assignees: []
+        }
+      ];
+      expect(stream).toBeObservable(hot('a', { a: expected }));
     });
 
     it('should return paper taksWithAssignments', () => {
@@ -107,36 +118,38 @@ describe('Kabas-tasks viewmodel selectors', () => {
         select(getTasksWithAssignments, { isPaper: true })
       );
 
-      const expected = {
-        ...new TaskFixture({
-          id: 2,
-          name: 'een taak op dode bomen',
-          isPaperTask: true
-        }),
-        eduContentAmount: 1,
-        learningArea: new LearningAreaFixture({ name: 'wiskunde' }),
-        assignees: [
-          {
-            type: AssigneeType.CLASSGROUP,
-            label: '1A',
-            start: new Date(date - 2),
-            end: new Date(date + 2)
-          },
-          {
-            type: AssigneeType.GROUP,
-            label: 'Remediëring 2c',
-            start: new Date(date - 1),
-            end: new Date(date + 1)
-          },
-          {
-            type: AssigneeType.STUDENT,
-            label: 'Polleke',
-            start: new Date(date - 3),
-            end: new Date(date + 3)
-          }
-        ]
-      };
-      expect(stream).toBeObservable(hot('a', { a: [expected] }));
+      const expected = [
+        {
+          ...new TaskFixture({
+            id: 2,
+            name: 'een taak op dode bomen',
+            isPaperTask: true
+          }),
+          eduContentAmount: 1,
+          learningArea: new LearningAreaFixture({ name: 'wiskunde' }),
+          assignees: [
+            {
+              type: AssigneeType.CLASSGROUP,
+              label: '1A',
+              start: new Date(date - 22),
+              end: new Date(date + 22)
+            },
+            {
+              type: AssigneeType.GROUP,
+              label: 'Remediëring 2c',
+              start: new Date(date - 11),
+              end: new Date(date + 11)
+            },
+            {
+              type: AssigneeType.STUDENT,
+              label: 'Polleke',
+              start: new Date(date - 33),
+              end: new Date(date + 33)
+            }
+          ]
+        }
+      ];
+      expect(stream).toBeObservable(hot('a', { a: expected }));
     });
   });
 });
@@ -164,6 +177,10 @@ function getLoadTasksAction() {
         id: 2,
         name: 'een taak op dode bomen',
         isPaperTask: true
+      }),
+      new TaskFixture({
+        id: 3,
+        name: 'een taak zonder assignees of content'
       })
     ]
   });
@@ -204,16 +221,18 @@ function getLoadTaskGroupsAction(date) {
   return new TaskGroupActions.TaskGroupsLoaded({
     taskGroups: [
       new TaskGroupFixture({
+        id: 1,
         taskId: 1,
         groupId: 1,
         start: new Date(date - 1),
         end: new Date(date + 1)
       }),
       new TaskGroupFixture({
+        id: 2,
         taskId: 2,
         groupId: 1,
-        start: new Date(date - 1),
-        end: new Date(date + 1)
+        start: new Date(date - 11),
+        end: new Date(date + 11)
       })
     ]
   });
@@ -222,16 +241,18 @@ function getLoadTaskClassGroupsAction(date) {
   return new TaskClassGroupActions.TaskClassGroupsLoaded({
     taskClassGroups: [
       new TaskClassGroupFixture({
+        id: 1,
         taskId: 1,
         classGroupId: 1,
         start: new Date(date - 2),
         end: new Date(date + 2)
       }),
       new TaskClassGroupFixture({
+        id: 2,
         taskId: 2,
         classGroupId: 1,
-        start: new Date(date - 2),
-        end: new Date(date + 2)
+        start: new Date(date - 22),
+        end: new Date(date + 22)
       })
     ]
   });
@@ -240,16 +261,18 @@ function getLoadTaskStudentsAction(date) {
   return new TaskStudentActions.TaskStudentsLoaded({
     taskStudents: [
       new TaskStudentFixture({
+        id: 1,
         taskId: 1,
         personId: 1,
         start: new Date(date - 3),
         end: new Date(date + 3)
       }),
       new TaskStudentFixture({
+        id: 2,
         taskId: 2,
         personId: 1,
-        start: new Date(date - 3),
-        end: new Date(date + 3)
+        start: new Date(date - 33),
+        end: new Date(date + 33)
       })
     ]
   });
