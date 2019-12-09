@@ -62,46 +62,86 @@ describe('Kabas-tasks viewmodel selectors', () => {
 
   describe('Store', () => {
     let store: Store<DalState>;
+    const date = Date.now();
 
     beforeEach(() => {
       store = TestBed.get(Store);
-      hydrateStore(store);
+      hydrateStore(store, date);
     });
 
-    it('should use the data in the store', () => {
+    it('should return digital taksWithAssignments', () => {
       const stream = store.pipe(
         select(getTasksWithAssignments, { isPaper: false })
       );
 
       const expected = {
-        ...new TaskFixture(),
+        ...new TaskFixture({ id: 1, name: 'een digitale taak' }),
         eduContentAmount: 3,
         learningArea: new LearningAreaFixture({ name: 'wiskunde' }),
         assignees: [
-          jasmine.objectContaining({
+          {
             type: AssigneeType.CLASSGROUP,
-            label: '1A'
-          }),
-          jasmine.objectContaining({
+            label: '1A',
+            start: new Date(date - 2),
+            end: new Date(date + 2)
+          },
+          {
             type: AssigneeType.GROUP,
-            label: 'Remediëring 2c'
-          }),
-          jasmine.objectContaining({
+            label: 'Remediëring 2c',
+            start: new Date(date - 1),
+            end: new Date(date + 1)
+          },
+          {
             type: AssigneeType.STUDENT,
-            label: 'Polleke'
-          })
+            label: 'Polleke',
+            start: new Date(date - 3),
+            end: new Date(date + 3)
+          }
+        ]
+      };
+      expect(stream).toBeObservable(hot('a', { a: [expected] }));
+    });
+
+    it('should return paper taksWithAssignments', () => {
+      const stream = store.pipe(
+        select(getTasksWithAssignments, { isPaper: true })
+      );
+
+      const expected = {
+        ...new TaskFixture({
+          id: 2,
+          name: 'een taak op dode bomen',
+          isPaperTask: true
+        }),
+        eduContentAmount: 1,
+        learningArea: new LearningAreaFixture({ name: 'wiskunde' }),
+        assignees: [
+          {
+            type: AssigneeType.CLASSGROUP,
+            label: '1A',
+            start: new Date(date - 2),
+            end: new Date(date + 2)
+          },
+          {
+            type: AssigneeType.GROUP,
+            label: 'Remediëring 2c',
+            start: new Date(date - 1),
+            end: new Date(date + 1)
+          },
+          {
+            type: AssigneeType.STUDENT,
+            label: 'Polleke',
+            start: new Date(date - 3),
+            end: new Date(date + 3)
+          }
         ]
       };
       expect(stream).toBeObservable(hot('a', { a: [expected] }));
     });
   });
-
-  describe('getTasksWithAssignments', () => {
-    const projector: Function = getTasksWithAssignments.projector;
-  });
 });
 
-function hydrateStore(store) {
+function hydrateStore(store, date) {
   const actions: Action[] = [
     getLoadTasksAction(),
     getLoadLearningAreasAction(),
@@ -109,15 +149,24 @@ function hydrateStore(store) {
     getLoadTaskEduContentsAction(),
     getLoadGroupsAction(),
     getLoadLinkedPersonsAction(),
-    getLoadTaskClassGroupsAction(),
-    getLoadTaskGroupsAction(),
-    getLoadTaskStudentsAction()
+    getLoadTaskClassGroupsAction(date),
+    getLoadTaskGroupsAction(date),
+    getLoadTaskStudentsAction(date)
   ];
   actions.forEach(action => store.dispatch(action));
 }
 
 function getLoadTasksAction() {
-  return new TaskActions.TasksLoaded({ tasks: [new TaskFixture()] });
+  return new TaskActions.TasksLoaded({
+    tasks: [
+      new TaskFixture({ id: 1, name: 'een digitale taak' }),
+      new TaskFixture({
+        id: 2,
+        name: 'een taak op dode bomen',
+        isPaperTask: true
+      })
+    ]
+  });
 }
 
 function getLoadLearningAreasAction() {
@@ -127,7 +176,10 @@ function getLoadLearningAreasAction() {
 }
 function getLoadClassGroupsAction() {
   return new ClassGroupActions.ClassGroupsLoaded({
-    classGroups: [new ClassGroupFixture()]
+    classGroups: [
+      new ClassGroupFixture({ id: 1, name: '1A' }),
+      new ClassGroupFixture({ id: 2, name: '2c' })
+    ]
   });
 }
 function getLoadTaskEduContentsAction() {
@@ -135,7 +187,8 @@ function getLoadTaskEduContentsAction() {
     taskEduContents: [
       new TaskEduContentFixture({ id: 123, taskId: 1, eduContentId: 1 }),
       new TaskEduContentFixture({ id: 456, taskId: 1, eduContentId: 2 }),
-      new TaskEduContentFixture({ id: 789, taskId: 1, eduContentId: 3 })
+      new TaskEduContentFixture({ id: 789, taskId: 1, eduContentId: 3 }),
+      new TaskEduContentFixture({ id: 666, taskId: 2, eduContentId: 3 })
     ]
   });
 }
@@ -147,18 +200,57 @@ function getLoadLinkedPersonsAction() {
     persons: [new PersonFixture({ name: 'Polleke' })]
   });
 }
-function getLoadTaskGroupsAction() {
+function getLoadTaskGroupsAction(date) {
   return new TaskGroupActions.TaskGroupsLoaded({
-    taskGroups: [new TaskGroupFixture({ taskId: 1, groupId: 1 })]
+    taskGroups: [
+      new TaskGroupFixture({
+        taskId: 1,
+        groupId: 1,
+        start: new Date(date - 1),
+        end: new Date(date + 1)
+      }),
+      new TaskGroupFixture({
+        taskId: 2,
+        groupId: 1,
+        start: new Date(date - 1),
+        end: new Date(date + 1)
+      })
+    ]
   });
 }
-function getLoadTaskClassGroupsAction() {
+function getLoadTaskClassGroupsAction(date) {
   return new TaskClassGroupActions.TaskClassGroupsLoaded({
-    taskClassGroups: [new TaskClassGroupFixture({ taskId: 1, classGroupId: 1 })]
+    taskClassGroups: [
+      new TaskClassGroupFixture({
+        taskId: 1,
+        classGroupId: 1,
+        start: new Date(date - 2),
+        end: new Date(date + 2)
+      }),
+      new TaskClassGroupFixture({
+        taskId: 2,
+        classGroupId: 1,
+        start: new Date(date - 2),
+        end: new Date(date + 2)
+      })
+    ]
   });
 }
-function getLoadTaskStudentsAction() {
+function getLoadTaskStudentsAction(date) {
   return new TaskStudentActions.TaskStudentsLoaded({
-    taskStudents: [new TaskStudentFixture({ taskId: 1, personId: 1 })]
+    taskStudents: [
+      new TaskStudentFixture({
+        taskId: 1,
+        personId: 1,
+        start: new Date(date - 3),
+        end: new Date(date + 3)
+      }),
+      new TaskStudentFixture({
+        taskId: 2,
+        personId: 1,
+        start: new Date(date - 3),
+        end: new Date(date + 3)
+      })
+    ]
   });
 }
