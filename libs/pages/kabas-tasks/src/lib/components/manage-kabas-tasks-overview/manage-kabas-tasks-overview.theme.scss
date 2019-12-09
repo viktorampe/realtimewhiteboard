@@ -1,8 +1,38 @@
 @mixin manage-kabas-tasks-overview-theme() {
+  $pages-kabas-tasks__list-option-color: $pages-kabas-tasks-text-color--primary !default;
+  $pages-kabas-tasks__list-option-color--accent: $pages-kabas-tasks-text-color--primary--accent !default;
+  $pages-kabas-tasks__list-option-background-color: $pages-kabas-tasks-background-color--primary !default;
+  $pages-kabas-tasks__list-option-background-color--accent: $pages-kabas-tasks-background-color--secondary !default;
+  $pages-kabas-tasks__list-option-color--secondary: $pages-kabas-tasks-text-color--secondary !default;
+
+  // measurements
+  $pages-kabas-tasks__list-option--selected-border-width: 4px !default;
+  $pages-kabas-tasks__list-option-padding-left: 16px !default;
+
   .manage-kabas-tasks-overview {
     &__container {
       .mat-tab-body-content {
         padding: 0;
+      }
+
+      .mat-list-option {
+        &:nth-child(odd) {
+          background-color: $secondary-bg-color;
+        }
+
+        border-left: $pages-kabas-tasks__list-option--selected-border-width
+          transparent solid;
+
+        &[aria-selected='true'] {
+          .mat-list-option-content {
+            background-color: $pages-kabas-tasks__list-option-background-color--accent;
+            padding-left: $pages-kabas-tasks__list-option-padding-left -
+              $pages-kabas-tasks__list-option--selected-border-width;
+          }
+
+          border-left: $pages-kabas-tasks__list-option--selected-border-width
+            $pages-kabas-tasks__list-option-color--accent solid;
+        }
       }
     }
 
@@ -11,6 +41,7 @@
         background-color: $secondary-bg-color;
         color: $primary-color-accent;
         font-weight: bold;
+        padding-left: 35px !important;
         cursor: pointer;
 
         .mat-icon {
