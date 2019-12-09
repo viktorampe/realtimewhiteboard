@@ -87,7 +87,7 @@ const taskStudentAssigneeByTask = createSelector(
     }, {})
 );
 
-const assigneesByTask = createSelector(
+const combinedAssigneesByTask = createSelector(
   [
     taskClassGroupAssigneeByTask,
     taskGroupAssigneeByTask,
@@ -118,7 +118,7 @@ export const getTasksWithAssignments = createSelector(
     TaskQueries.getAll,
     LearningAreaQueries.getAllEntities,
     TaskEduContentQueries.getAllGroupedByTaskId,
-    assigneesByTask
+    combinedAssigneesByTask
   ],
   (
     tasks: TaskInterface[],
