@@ -1,3 +1,34 @@
-<p>
-  task-list-item works!
-</p>
+<mat-icon
+  class="manage-kabas-tasks-task-list-item__icon"
+  [svgIcon]="icon"
+></mat-icon>
+<div class="manage-kabas-tasks-task-list-item__title"
+  >{{ title }}
+  <div
+    *ngIf="actions.length"
+    class="manage-kabas-tasks-task-list-item__title__actions"
+    ><span *ngFor="let action of actions" (click)="action.handler()">{{
+      action.label
+    }}</span></div
+  >
+</div>
+<mat-icon
+  class="manage-kabas-tasks-task-list-item__archived"
+  [class.manage-kabas-tasks-task-list-item__archived--visible]="archived"
+  svgIcon="archive"
+></mat-icon>
+<mat-icon
+  class="manage-kabas-tasks-task-list-item__status"
+  [svgIcon]="'task:' + status"
+></mat-icon>
+<div class="manage-kabas-tasks-task-list-item__dates"
+  ><span *ngIf="startDate">{{ startDate | date: 'd/MM/yy' }}</span
+  ><span *ngIf="endDate"> - {{ endDate | date: 'd/MM/yy' }}</span></div
+>
+<div class="manage-kabas-tasks-task-list-item__assignees">
+  <span *ngFor="let classGroup of classGroups">{{ classGroup.label }}</span>
+  <span *ngIf="groups.length" [matTooltip]="groups.join('\n')">groepen</span>
+  <span *ngIf="students.length" [matTooltip]="students.join('\n')"
+    >individuele leerlingen</span
+  >
+</div>

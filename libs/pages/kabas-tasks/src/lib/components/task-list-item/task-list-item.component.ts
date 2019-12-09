@@ -1,19 +1,19 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, HostBinding, Input, OnInit } from '@angular/core';
 
 // TODO import interfaces when PR #1376 is merged
-enum AssigneeType {
+export enum AssigneeType {
   'CLASSGROUP' = 'classGroup',
   'GROUP' = 'group',
   'STUDENT' = 'student'
 }
-interface AssigneeInterface {
+export interface AssigneeInterface {
   type: AssigneeType;
   label: string;
   start: Date;
   end: Date;
 }
 
-type Status = 'pending' | 'active' | 'finished';
+export type Status = 'pending' | 'active' | 'finished';
 
 @Component({
   selector: 'campus-task-list-item',
@@ -21,18 +21,13 @@ type Status = 'pending' | 'active' | 'finished';
   styleUrls: ['./task-list-item.component.scss']
 })
 export class TaskListItemComponent implements OnInit {
-  public dates: { startDate: Date; endDate: Date; status: Status };
+  public classGroups: AssigneeInterface[] = [];
+  public groups: string[] = [];
+  public students: string[] = [];
 
   private _assignees: AssigneeInterface[];
 
   @Input() title: string;
-  @Input()
-  set assignees(assignees: AssigneeInterface[]) {
-    this._assignees = assignees.sort(this.sortByType);
-  }
-  get assignees() {
-    return this._assignees;
-  }
   @Input() learningArea: string;
   @Input() archived: boolean;
   @Input() icon: string;
@@ -40,6 +35,26 @@ export class TaskListItemComponent implements OnInit {
   @Input() startDate: Date;
   @Input() endDate: Date;
   @Input() status: Status;
+  @Input() actions: { label: string; handler: Function }[];
+  @Input()
+  set assignees(assignees: AssigneeInterface[]) {
+    this._assignees = assignees.sort(this.sortByType);
+    this.classGroups = assignees.filter(
+      assignee => assignee.type === AssigneeType.CLASSGROUP
+    );
+    this.groups = assignees
+      .filter(assignee => assignee.type === AssigneeType.GROUP)
+      .map(assignee => assignee.label);
+    this.students = assignees
+      .filter(assignee => assignee.type === AssigneeType.STUDENT)
+      .map(assignee => assignee.label);
+  }
+  get assignees() {
+    return this._assignees;
+  }
+
+  @HostBinding('class.manage-kabas-tasks-task-list-item')
+  taskListItemClass = true;
 
   ngOnInit() {}
 

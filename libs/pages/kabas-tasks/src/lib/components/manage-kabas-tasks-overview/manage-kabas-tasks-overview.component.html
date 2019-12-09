@@ -1,3 +1,15 @@
 <p>
   manage-kabas-tasks-overview works!
 </p>
+<campus-task-list-item
+  [title]="'titel van eerste oef wiskunde'"
+  learningArea="wiskunde"
+  [archived]="true"
+  icon="educontent-product-type:evaluatie"
+  exerciseCount="4"
+  [startDate]="taskItem.startDate"
+  [endDate]="taskItem.endDate"
+  status="active"
+  [actions]="taskItem.actions"
+  [assignees]="taskItem.assignees"
+></campus-task-list-item>

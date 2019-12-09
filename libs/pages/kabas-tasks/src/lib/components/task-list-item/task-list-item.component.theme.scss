@@ -1,0 +1,13 @@
+@mixin pages-manage-kabas-tasks-task-list-item-theme() {
+  $pages-manage-kabas-tasks__task-list-item__status-color: inherit !default;
+  $pages-manage-kabas-tasks__task-list-item__archive-color: inherit !default;
+
+  .manage-kabas-tasks-task-list-item {
+    &__status {
+      color: $pages-manage-kabas-tasks__task-list-item__status-color;
+    }
+    &__archived {
+      color: $pages-manage-kabas-tasks__task-list-item__archived-color;
+    }
+  }
+}

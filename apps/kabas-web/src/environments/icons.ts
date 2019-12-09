@@ -47,6 +47,9 @@ export const icons = {
   star: 'assets/icons/star.svg',
   'star-outline': 'assets/icons/star-border.svg',
   color: 'assets/icons/color_lens.svg',
+  'task:active': 'assets/icons/play_circle_outline-24px.svg',
+  'task:pending': 'assets/icons/pause_circle_outline-24px.svg',
+  'task:finished': 'assets/icons/not_interested-24px.svg',
 
   // search: sort modes
   'sort-numeric-down': 'assets/icons/sort-numeric-down.svg',

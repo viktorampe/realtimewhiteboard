@@ -1,0 +1,71 @@
+:host {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 5px 0;
+}
+
+.manage-kabas-tasks-task-list-item {
+  &__icon {
+    flex: 0 0 50px;
+  }
+
+  &__archived {
+    flex: 0 0 50px;
+    visibility: hidden;
+
+    &--visible {
+      visibility: visible;
+    }
+  }
+
+  &__status {
+    flex: 0 0 50px;
+  }
+
+  &__title {
+    flex: 0 0 50%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    align-self: flex-start;
+
+    &__actions {
+      white-space: normal;
+
+      span {
+        cursor: pointer;
+        position: relative;
+        margin-right: 15px;
+
+        &:after {
+          content: '•';
+          pointer-events: none;
+          position: absolute;
+          right: -10px;
+        }
+
+        &:last-child:after {
+          content: '';
+        }
+      }
+    }
+  }
+
+  &__dates {
+    flex: 0 0 140px;
+    text-align: center;
+  }
+
+  &__assignees {
+    span {
+      &:after {
+        content: ', ';
+      }
+
+      &:last-child:after {
+        content: '';
+      }
+    }
+  }
+}
