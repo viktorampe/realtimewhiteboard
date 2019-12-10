@@ -1,7 +1,10 @@
 .manage-kabas-tasks-overview {
   &__filterbar {
-    width: 400px;
+    width: 800px;
     display: flex;
     justify-content: space-evenly;
+    .select-filter-component {
+      width: 150px;
+    }
   }
 }

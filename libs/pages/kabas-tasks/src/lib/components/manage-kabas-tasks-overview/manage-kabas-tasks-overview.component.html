@@ -6,10 +6,19 @@
     <mat-tab label="Digitale taken">
       <div class="manage-kabas-tasks-overview__filterbar">
         <campus-filter-text-input></campus-filter-text-input>
-        <campus-select-filter></campus-select-filter>
+        <campus-select-filter
+          *ngIf="(learningAreaFilter$ | async) as learningAreaFilter"
+          [filterCriteria]="learningAreaFilter"
+          [resetLabel]="'reset'"
+        ></campus-select-filter>
         <!--<date-filter-component></date-filter-component>-->
         <campus-select-filter></campus-select-filter>
-        <campus-button-toggle-filter></campus-button-toggle-filter>
+        <campus-button-toggle-filter [filterCriteria]="taskStatusFilter">
+        </campus-button-toggle-filter>
+        <campus-button
+          class="practice-book-lessons--reset-filters"
+          iconClass="reset-filters"
+        ></campus-button>
       </div>
       <mat-selection-list #digital>
         <mat-list-item
@@ -32,10 +41,19 @@
     <mat-tab label="Papieren taken">
       <div class="manage-kabas-tasks-overview__filterbar">
         <campus-filter-text-input></campus-filter-text-input>
-        <campus-select-filter></campus-select-filter>
+        <campus-select-filter
+          *ngIf="(learningAreaFilter$ | async) as learningAreaFilter"
+          [filterCriteria]="learningAreaFilter"
+          [resetLabel]="'reset'"
+        ></campus-select-filter>
         <!--<date-filter-component></date-filter-component>-->
         <campus-select-filter></campus-select-filter>
-        <campus-button-toggle-filter></campus-button-toggle-filter>
+        <campus-button-toggle-filter [filterCriteria]="taskStatusFilter">
+        </campus-button-toggle-filter>
+        <campus-button
+          class="practice-book-lessons--reset-filters"
+          iconClass="reset-filters"
+        ></campus-button>
       </div>
       <mat-selection-list #paper>
         <mat-list-item

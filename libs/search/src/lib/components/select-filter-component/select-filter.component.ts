@@ -40,6 +40,7 @@ export class SelectFilterComponent
   @Input()
   public set filterCriteria(criteria: SearchFilterCriteriaInterface) {
     this.criteria = criteria;
+    console.log(this.criteria);
     this.options = this.criteriaToOptions(criteria);
     const selection = this.options
       .filter(option => option.value.selected)

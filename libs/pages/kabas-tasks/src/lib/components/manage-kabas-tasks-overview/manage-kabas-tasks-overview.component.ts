@@ -23,6 +23,7 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
   public paperTasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
   public currentTab$: Observable<number>;
   public learningAreaFilter$: Observable<SearchFilterCriteriaInterface>;
+  public taskStatusFilter: SearchFilterCriteriaInterface;
 
   constructor(
     private viewModel: KabasTasksViewModel,
@@ -45,15 +46,67 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
           name: 'learningArea',
           label: 'Leergebieden',
           keyProperty: 'id',
-          displayProperty: 'label',
+          displayProperty: 'name',
           values: Object.values(uniqueLearningAreas).map(la => {
             return {
-              data: la
+              data: la,
+              visible: true
             } as SearchFilterCriteriaValuesInterface;
           })
         } as SearchFilterCriteriaInterface;
       })
     );
+
+    this.learningAreaFilter$ = this.tasksWithAssignments$.pipe(
+      map(tasksWithAssignments => {
+        const uniqueLearningAreas = {};
+        tasksWithAssignments.forEach(twa => {
+          uniqueLearningAreas[twa.learningAreaId] = twa.learningArea;
+        });
+        return {
+          name: 'learningArea',
+          label: 'Leergebieden',
+          keyProperty: 'id',
+          displayProperty: 'name',
+          values: Object.values(uniqueLearningAreas).map(la => {
+            return {
+              data: la,
+              visible: true
+            } as SearchFilterCriteriaValuesInterface;
+          })
+        } as SearchFilterCriteriaInterface;
+      })
+    );
+    //todo swap for real icons
+    this.taskStatusFilter = {
+      name: 'taskStatus',
+      label: 'taak status',
+      keyProperty: 'status',
+      displayProperty: 'icon',
+      values: [
+        {
+          data: {
+            status: 'pending',
+            icon: 'pending'
+          },
+          visible: true
+        },
+        {
+          data: {
+            status: 'started',
+            icon: 'start'
+          },
+          visible: true
+        },
+        {
+          data: {
+            status: 'closed',
+            icon: 'stop'
+          },
+          visible: true
+        }
+      ]
+    };
   }
 
   clickAddDigitalTask() {
