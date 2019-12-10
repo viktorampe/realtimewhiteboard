@@ -3,9 +3,12 @@ import { DalState } from '@campus/dal';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import {
-  getTasksWithAssignments,
+  TaskDatesInterface,
+  TaskStatusEnum,
   TaskWithAssigneesInterface
-} from './kabas-tasks.viewmodel.selectors';
+} from '../interfaces/TaskWithAssignees.interface';
+import { getTasksWithAssignments } from './kabas-tasks.viewmodel.selectors';
+
 @Injectable({
   providedIn: 'root'
 })
