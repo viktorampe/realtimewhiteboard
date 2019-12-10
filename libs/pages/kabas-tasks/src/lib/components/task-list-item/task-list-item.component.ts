@@ -1,8 +1,8 @@
 import { Component, HostBinding, Input, OnInit } from '@angular/core';
 import {
   AssigneeInterface,
-  AssigneeType
-} from '../kabas-tasks.viewmodel.selectors';
+  AssigneeTypesEnum
+} from '../../interfaces/Assignee.interface';
 
 export type Status = 'pending' | 'active' | 'finished';
 
@@ -31,13 +31,13 @@ export class TaskListItemComponent implements OnInit {
   set assignees(assignees: AssigneeInterface[]) {
     this._assignees = assignees.sort(this.sortByType);
     this.classGroups = assignees.filter(
-      assignee => assignee.type === AssigneeType.CLASSGROUP
+      assignee => assignee.type === AssigneeTypesEnum.CLASSGROUP
     );
     this.groups = assignees
-      .filter(assignee => assignee.type === AssigneeType.GROUP)
+      .filter(assignee => assignee.type === AssigneeTypesEnum.GROUP)
       .map(assignee => assignee.label);
     this.students = assignees
-      .filter(assignee => assignee.type === AssigneeType.STUDENT)
+      .filter(assignee => assignee.type === AssigneeTypesEnum.STUDENT)
       .map(assignee => assignee.label);
   }
   get assignees() {
@@ -51,9 +51,9 @@ export class TaskListItemComponent implements OnInit {
 
   private sortByType(a: AssigneeInterface, b: AssigneeInterface): number {
     const order = {
-      [AssigneeType.CLASSGROUP]: 1,
-      [AssigneeType.GROUP]: 2,
-      [AssigneeType.STUDENT]: 3
+      [AssigneeTypesEnum.CLASSGROUP]: 1,
+      [AssigneeTypesEnum.GROUP]: 2,
+      [AssigneeTypesEnum.STUDENT]: 3
     };
     if (order[a.type] === order[b.type]) {
       // same group: sort alphabetically
