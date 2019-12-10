@@ -42,7 +42,7 @@ describe('ManageKabasTasksOverviewComponent', () => {
         PagesKabasTasksModule,
         UiModule
       ],
-      declarations: [ManageKabasTasksOverviewComponent],
+      declarations: [],
       providers: [
         { provide: MatIconRegistry, useClass: MockMatIconRegistry },
         {
