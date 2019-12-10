@@ -17,10 +17,10 @@ import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
 import { hot } from '@nrwl/nx/testing';
 import { BehaviorSubject } from 'rxjs';
-import { KabasTasksViewModel } from './components/kabas-tasks.viewmodel';
-import { MockKabasTasksViewModel } from './components/kabas-tasks.viewmodel.mock';
+import { PagesKabasTasksModule } from '../../pages-kabas-tasks.module';
+import { KabasTasksViewModel } from './../kabas-tasks.viewmodel';
+import { MockKabasTasksViewModel } from './../kabas-tasks.viewmodel.mock';
 import { ManageKabasTasksOverviewComponent } from './manage-kabas-tasks-overview.component';
-import { PagesKabasTasksModule } from './pages-kabas-tasks.module';
 
 describe('ManageKabasTasksOverviewComponent', () => {
   let component: ManageKabasTasksOverviewComponent;
@@ -32,6 +32,7 @@ describe('ManageKabasTasksOverviewComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
+        PagesKabasTasksModule,
         NoopAnimationsModule,
         MatListModule,
         MatTabsModule,
