@@ -39,7 +39,7 @@ describe('ManageKabasTasksOverviewComponent', () => {
         { provide: ENVIRONMENT_TESTING_TOKEN, useValue: {} }
       ],
       declarations: []
-    }).compileComponents();
+    });
   }));
 
   beforeEach(() => {
