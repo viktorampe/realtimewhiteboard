@@ -48,4 +48,13 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
   private getCurrentTab(): Observable<number> {
     return this.route.queryParams.pipe(map(queryParam => queryParam.tab));
   }
+
+  // TODO: implement handler
+  clickDeleteTasks() {}
+
+  // TODO: implement handler
+  clickArchiveTasks() {}
+
+  // TODO: implement handler
+  clickNewTask() {}
 }
