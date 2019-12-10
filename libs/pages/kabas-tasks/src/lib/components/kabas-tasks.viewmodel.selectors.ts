@@ -14,24 +14,11 @@ import {
 } from '@campus/dal';
 import { Dictionary } from '@ngrx/entity';
 import { createSelector } from '@ngrx/store';
-
-export enum AssigneeType {
-  'CLASSGROUP' = 'classGroup',
-  'GROUP' = 'group',
-  'STUDENT' = 'student'
-}
-
-interface AssigneeInterface {
-  type: AssigneeType;
-  label: string;
-  start: Date;
-  end: Date;
-}
-
-export interface TaskWithAssigneesInterface extends TaskInterface {
-  eduContentAmount: number;
-  assignees: AssigneeInterface[];
-}
+import {
+  AssigneeInterface,
+  AssigneeTypesEnum
+} from '../interfaces/Assignee.interface';
+import { TaskWithAssigneesInterface } from './../interfaces/TaskWithAssignees.interface';
 
 const taskClassGroupAssigneeByTask = createSelector(
   [TaskClassGroupQueries.getAll, ClassGroupQueries.getAllEntities],
@@ -41,7 +28,7 @@ const taskClassGroupAssigneeByTask = createSelector(
         dict[tcg.taskId] = [];
       }
       dict[tcg.taskId].push({
-        type: AssigneeType.CLASSGROUP,
+        type: AssigneeTypesEnum.CLASSGROUP,
         id: tcg.id,
         label: classGroupDict[tcg.classGroupId].name,
         start: tcg.start,
@@ -60,7 +47,7 @@ const taskGroupAssigneeByTask = createSelector(
         dict[tg.taskId] = [];
       }
       dict[tg.taskId].push({
-        type: AssigneeType.GROUP,
+        type: AssigneeTypesEnum.GROUP,
         id: tg.id,
         label: groupDict[tg.groupId].name,
         start: tg.start,
@@ -79,7 +66,7 @@ const taskStudentAssigneeByTask = createSelector(
         dict[ts.taskId] = [];
       }
       dict[ts.taskId].push({
-        type: AssigneeType.STUDENT,
+        type: AssigneeTypesEnum.STUDENT,
         id: ts.id,
         label: personDict[ts.personId].name,
         start: ts.start,

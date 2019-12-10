@@ -34,10 +34,8 @@ import { routerReducer } from '@ngrx/router-store';
 import { Action, select, Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
 import { configureTestSuite } from 'ng-bullet';
-import {
-  AssigneeType,
-  getTasksWithAssignments
-} from './kabas-tasks.viewmodel.selectors';
+import { AssigneeTypesEnum } from '../interfaces/Assignee.interface';
+import { getTasksWithAssignments } from './kabas-tasks.viewmodel.selectors';
 
 describe('Kabas-tasks viewmodel selectors', () => {
   configureTestSuite(() => {
@@ -81,21 +79,21 @@ describe('Kabas-tasks viewmodel selectors', () => {
           learningArea: new LearningAreaFixture({ name: 'wiskunde' }),
           assignees: [
             {
-              type: AssigneeType.CLASSGROUP,
+              type: AssigneeTypesEnum.CLASSGROUP,
               id: 1,
               label: '1A',
               start: new Date(date - 2),
               end: new Date(date + 2)
             },
             {
-              type: AssigneeType.GROUP,
+              type: AssigneeTypesEnum.GROUP,
               id: 1,
               label: 'Remediëring 2c',
               start: new Date(date - 1),
               end: new Date(date + 1)
             },
             {
-              type: AssigneeType.STUDENT,
+              type: AssigneeTypesEnum.STUDENT,
               id: 1,
               label: 'Polleke',
               start: new Date(date - 3),
@@ -132,21 +130,21 @@ describe('Kabas-tasks viewmodel selectors', () => {
           learningArea: new LearningAreaFixture({ name: 'wiskunde' }),
           assignees: [
             {
-              type: AssigneeType.CLASSGROUP,
+              type: AssigneeTypesEnum.CLASSGROUP,
               id: 2,
               label: '1A',
               start: new Date(date - 22),
               end: new Date(date + 22)
             },
             {
-              type: AssigneeType.GROUP,
+              type: AssigneeTypesEnum.GROUP,
               id: 2,
               label: 'Remediëring 2c',
               start: new Date(date - 11),
               end: new Date(date + 11)
             },
             {
-              type: AssigneeType.STUDENT,
+              type: AssigneeTypesEnum.STUDENT,
               id: 2,
               label: 'Polleke',
               start: new Date(date - 33),
