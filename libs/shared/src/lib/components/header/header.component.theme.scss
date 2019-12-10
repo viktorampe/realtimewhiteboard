@@ -31,14 +31,15 @@
   $shared-header__page-bar__mat-badge__content-background-color: $secondary-bg-color-badge !default;
   $shared-header__page-bar__right-color-hover: $shared-button-color-accent !default;
   $shared_header__page-bar_background: none !default;
-  $shared-header__quicklink-color: $shared-header__app-bar-color !default;
-  $shared-header__quicklink-color-hover: $shared-header__page-bar__right-color-hover !default;
-  $shared-header__quicklink-bg-color: $shared-header__page-bar-background-color !default;
-  $shared-header__quicklink-width: 115px !default;
-  $shared-header__quicklink-icon-size: 24px !default;
-  $shared-header__quicklink-icon-size-small: 20px !default;
-  $shared-header__quicklink-font-size: $shared-header-font-size !default;
-  $shared-header__quicklink-font-weight: $shared-header-font-weight !default;
+  $shared-header__contextual-button-color: $shared-header__app-bar-color !default;
+  $shared-header__contextual-button-color-hover: $shared-header__page-bar__right-color-hover !default;
+  $shared-header__contextual-button-bg-color: $shared-header__page-bar-background-color !default;
+  $shared-header__contextual-button-width: 115px !default;
+  $shared-header__contextual-button-icon-size: 24px !default;
+  $shared-header__contextual-button-icon-size-small: 20px !default;
+  $shared-header__contextual-button-font-size: $shared-header-font-size !default;
+  $shared-header__contextual-button-font-weight: $shared-header-font-weight !default;
+  $shared-header__contextual-button__label-margin-top: 10px !default;
 
   .shared-header {
     &__app-bar {
@@ -107,30 +108,36 @@
       }
     }
 
-    &__quicklink__button {
-      font-size: $shared-header__quicklink-font-size;
-      font-weight: $shared-header__quicklink-font-weight;
+    &__contextual__button {
+      font-size: $shared-header__contextual-button-font-size;
+      font-weight: $shared-header__contextual-button-font-weight;
       text-align: center;
-      color: $shared-header__quicklink-color;
-      background-color: $shared-header__quicklink-bg-color;
+      color: $shared-header__contextual-button-color;
+      background-color: $shared-header__contextual-button-bg-color;
       flex-direction: column;
       height: $shared-header__page-bar-height;
-      width: $shared-header__quicklink-width;
+      width: $shared-header__contextual-button-width;
 
       &:hover {
-        color: $shared-header__quicklink-color-hover;
-        background-color: $shared-header__quicklink-bg-color;
+        color: $shared-header__contextual-button-color-hover;
+        background-color: $shared-header__contextual-button-bg-color;
       }
 
       .mat-icon {
-        width: $shared-header__quicklink-icon-size;
-        height: $shared-header__quicklink-icon-size;
+        width: $shared-header__contextual-button-icon-size;
+        height: $shared-header__contextual-button-icon-size;
+      }
+      span {
+        margin-top: $shared-header__contextual-button__label-margin-top;
+        &::first-letter {
+          text-transform: uppercase;
+        }
       }
     }
     :not(.smallIcon) {
       .smallIcon .mat-icon {
-        width: $shared-header__quicklink-icon-size-small;
-        height: $shared-header__quicklink-icon-size-small;
+        width: $shared-header__contextual-button-icon-size-small;
+        height: $shared-header__contextual-button-icon-size-small;
       }
     }
     .shared-header__alerts {
