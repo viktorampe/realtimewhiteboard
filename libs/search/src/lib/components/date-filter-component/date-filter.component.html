@@ -1,3 +1,8 @@
+<mat-menu #dateSelectionPopup="matMenu">
+  somebody once told me
+</mat-menu>
+
+<button [matMenuTriggerFor]="dateSelectionPopup">Aanmaakdatum</button>
 <mat-select
   [placeholder]="customDisplayLabel || criteria?.label"
   [formControl]="selectControl"

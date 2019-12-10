@@ -12,6 +12,7 @@ import {
   MatIconModule,
   MatInputModule,
   MatListModule,
+  MatMenuModule,
   MatNativeDateModule,
   MatSelectModule,
   MatTooltipModule
@@ -56,6 +57,7 @@ import { SearchPortalDirective } from './directives/search-portal.directive';
     MatButtonToggleModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatMenuModule,
     MatTooltipModule,
     FormsModule,
     UtilsModule
