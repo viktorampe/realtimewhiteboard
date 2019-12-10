@@ -77,25 +77,25 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
         const values = [
           ...Array.from(assignees[AssigneeTypesEnum.CLASSGROUP])
             .sort()
-            .map(cg => {
+            .map(classgroup => {
               return {
-                data: { label: cg },
+                data: { label: classgroup },
                 visible: true
               } as SearchFilterCriteriaValuesInterface;
             }),
           ...Array.from(assignees[AssigneeTypesEnum.GROUP])
             .sort()
-            .map(cg => {
+            .map(group => {
               return {
-                data: { label: cg },
+                data: { label: group },
                 visible: true
               } as SearchFilterCriteriaValuesInterface;
             }),
           ...Array.from(assignees[AssigneeTypesEnum.STUDENT])
             .sort()
-            .map(cg => {
+            .map(student => {
               return {
-                data: { label: cg },
+                data: { label: student },
                 visible: true
               } as SearchFilterCriteriaValuesInterface;
             })
