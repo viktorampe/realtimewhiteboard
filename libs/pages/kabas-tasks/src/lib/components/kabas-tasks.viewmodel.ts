@@ -25,4 +25,41 @@ export class KabasTasksViewModel {
       select(getTasksWithAssignments, { isPaper: true })
     );
   }
+
+  public getTaskDates(
+    task: TaskWithAssigneesInterface,
+    now: Date = new Date()
+  ): TaskDatesInterface {
+    let startDate: Date;
+    let endDate: Date;
+
+    task.assignees.forEach(assignee => {
+      if (!startDate || assignee.start < startDate) {
+        startDate = assignee.start;
+      }
+      if (!endDate || assignee.end > endDate) {
+        endDate = assignee.end;
+      }
+    });
+
+    const status = this.getTaskStatus(startDate, endDate, now);
+    return { startDate, endDate, status };
+  }
+
+  public getTaskStatus(
+    startDate: Date,
+    endDate: Date,
+    now: Date = new Date()
+  ): TaskStatusEnum {
+    let status = TaskStatusEnum.PENDING;
+
+    if (startDate && endDate) {
+      if (endDate < now) {
+        status = TaskStatusEnum.FINISHED;
+      } else if (startDate <= now) {
+        status = TaskStatusEnum.ACTIVE;
+      }
+    }
+    return status;
+  }
 }
