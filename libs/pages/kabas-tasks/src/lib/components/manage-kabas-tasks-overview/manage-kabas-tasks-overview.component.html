@@ -15,6 +15,7 @@
         <campus-select-filter
           *ngIf="(assigneeFilter$ | async) as assigneeFilter"
           [filterCriteria]="assigneeFilter"
+          [resetLabel]="'reset'"
         ></campus-select-filter>
         <campus-button-toggle-filter [filterCriteria]="taskStatusFilter">
         </campus-button-toggle-filter>

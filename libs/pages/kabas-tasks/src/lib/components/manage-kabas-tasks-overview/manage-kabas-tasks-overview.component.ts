@@ -49,6 +49,7 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
           keyProperty: 'id',
           displayProperty: 'name',
           values: Object.values(uniqueLearningAreas).map(la => {
+            console.log(la);
             return {
               data: la,
               visible: true
@@ -60,17 +61,19 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
 
     this.assigneeFilter$ = this.tasksWithAssignments$.pipe(
       map(tasksWithAssignments => {
-        const uniqueLearningAreas = {};
+        console.log(tasksWithAssignments);
+        const assignees = {};
         tasksWithAssignments.forEach(twa => {
-          console.log(twa);
-          uniqueLearningAreas[twa.learningAreaId] = twa.learningArea;
+          twa.assignees.forEach(ass => {
+            assignees[ass.label] = ass;
+          });
         });
         return {
-          name: 'learningArea',
-          label: 'Leergebieden',
+          name: 'assignee',
+          label: 'Toegekend aan',
           keyProperty: 'label',
-          displayProperty: 'name',
-          values: Object.values(uniqueLearningAreas).map(la => {
+          displayProperty: 'label',
+          values: Object.values(assignees).map(la => {
             return {
               data: la,
               visible: true
@@ -96,14 +99,14 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
         },
         {
           data: {
-            status: 'started',
+            status: 'active',
             icon: 'start'
           },
           visible: true
         },
         {
           data: {
-            status: 'closed',
+            status: 'finished',
             icon: 'stop'
           },
           visible: true
