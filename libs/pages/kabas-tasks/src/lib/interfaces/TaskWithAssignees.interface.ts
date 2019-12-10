@@ -1,4 +1,4 @@
-import { TaskInterface } from './../../../../../dal/src/lib/+models/Task.interface';
+import { TaskInterface } from '@campus/dal';
 import { AssigneeInterface } from './Assignee.interface';
 
 export enum TaskStatusEnum {
