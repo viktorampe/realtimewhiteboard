@@ -1,9 +1,10 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { MatSelectionList } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FilterTextInputComponent } from '@campus/ui';
 import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/utils';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
 import { MockKabasTasksViewModel } from '../kabas-tasks.viewmodel.mock';
 import { TaskWithAssigneesInterface } from '../kabas-tasks.viewmodel.selectors';
@@ -32,6 +33,9 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
     TaskWithAssigneesInterface[],
     TaskWithAssigneesInterface
   >;
+
+  @ViewChild('paper') paperTaskList: MatSelectionList;
+  @ViewChild('digital') digitalTaskList: MatSelectionList;
 
   constructor(
     private viewModel: KabasTasksViewModel,
@@ -62,11 +66,62 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
   }
 
   // TODO:
-  // text filter: use source stream based on active tab
-  // merge all filter results in one stream 'filteredTasks$'
+  // - merge all filter results in one stream 'filteredTasks$'
 
   private getCurrentTab(): Observable<number> {
-    return this.route.queryParams.pipe(map(queryParam => queryParam.tab));
+    return this.route.queryParams.pipe(
+      map(queryParam => {
+        if (queryParam.tab === undefined) return 0;
+        return +queryParam.tab;
+      }),
+      tap(tabIndex => {
+        this.cleanUpTab(this.getInvisibleTabIndex(tabIndex));
+      })
+    );
+  }
+
+  private getInvisibleTabIndex(currentTabIndex: number): number {
+    return currentTabIndex === 0 ? 1 : 0;
+  }
+
+  /**
+   * When navigating to a different tab, the invisible tab should perform some clean up.
+   * E.g. reset filters, selections etc.
+   *
+   * @private
+   * @param {number} tabIndex
+   * @memberof ManageKabasTasksOverviewComponent
+   */
+  private cleanUpTab(tabIndex: number): void {
+    this.clearSelectionOnTab(tabIndex);
+    this.clearFiltersOnTab(tabIndex);
+  }
+
+  private clearFiltersOnTab(tabIndex: number): void {
+    if (tabIndex === 0) {
+      if (this.digitalTasksFilterTextInput)
+        this.digitalTasksFilterTextInput.clear();
+    } else if (tabIndex === 1) {
+      if (this.paperTasksFilterTextInput)
+        this.paperTasksFilterTextInput.clear();
+    }
+  }
+
+  /**
+   * Clears the selected options of the mat-selection-list on the provided tab.
+   * Reason: contextual actions are shown when selecting one or multiple tasks.
+   * E.g. If tab A has a selected task and we navigate to tab B (which doesn't have a task selected), the contextual actions would still be visible.
+   *
+   * @private
+   * @param {number} tabIndex
+   * @memberof ManageKabasTasksOverviewComponent
+   */
+  private clearSelectionOnTab(tabIndex: number): void {
+    if (tabIndex === 0) {
+      if (this.digitalTaskList) this.digitalTaskList.selectedOptions.clear();
+    } else if (tabIndex === 1) {
+      if (this.paperTaskList) this.paperTaskList.selectedOptions.clear();
+    }
   }
 
   filterFn(
