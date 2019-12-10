@@ -98,16 +98,16 @@ const combinedAssigneesByTask = createSelector(
     const taskGroupAssigneesKeys = Object.keys(tGA);
     const taskStudentAssigneesKeys = Object.keys(tSA);
 
-    const dict = Object.assign(
-      {},
-      ...taskClassGroupAssigneesKeys.map(tId => ({ [tId]: [] })),
-      ...taskGroupAssigneesKeys.map(tId => ({ [tId]: [] })),
-      ...taskStudentAssigneesKeys.map(tId => ({ [tId]: [] }))
-    );
-
-    taskClassGroupAssigneesKeys.forEach(key => dict[key].push(...tCGA[key]));
-    taskGroupAssigneesKeys.forEach(key => dict[key].push(...tGA[key]));
-    taskStudentAssigneesKeys.forEach(key => dict[key].push(...tSA[key]));
+    const dict = [
+      ...taskClassGroupAssigneesKeys,
+      ...taskGroupAssigneesKeys,
+      ...taskStudentAssigneesKeys
+    ].reduce((acc, key) => {
+      if (!acc[key]) {
+        acc[key] = [].concat(tCGA[key] || [], tGA[key] || [], tSA[key] || []);
+      }
+      return acc;
+    }, {});
 
     return dict;
   }
