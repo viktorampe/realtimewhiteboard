@@ -23,7 +23,7 @@
         border-left: $pages-kabas-tasks__list-option--selected-border-width
           transparent solid;
 
-        &[aria-selected='true'] {
+        &--selected {
           .mat-list-option-content {
             background-color: $pages-kabas-tasks__list-option-background-color--accent;
             padding-left: $pages-kabas-tasks__list-option-padding-left -

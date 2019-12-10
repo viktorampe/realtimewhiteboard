@@ -1,9 +1,9 @@
 @import './components/manage-kabas-tasks-overview/manage-kabas-tasks-overview.theme';
 
-// $pages-kabas-tasks-text-color--primary: black !default;
-// $pages-kabas-tasks-text-color--primary--accent: darkred !default;
-// $pages-kabas-tasks-background-color--primary: white !default;
-// $pages-kabas-tasks-border-color--primary: lightgrey !default;
+$pages-kabas-tasks-text-color--primary: black !default;
+$pages-kabas-tasks-text-color--primary--accent: darkred !default;
+$pages-kabas-tasks-background-color--primary: white !default;
+$pages-kabas-tasks-border-color--primary: lightgrey !default;
 
 @mixin pages-kabas-tasks-theme() {
   @include manage-kabas-tasks-overview-theme();

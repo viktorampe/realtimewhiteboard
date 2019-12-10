@@ -53,7 +53,7 @@ describe('ManageKabasTasksOverviewComponent', () => {
         { provide: ENVIRONMENT_ICON_MAPPING_TOKEN, useValue: {} },
         { provide: ENVIRONMENT_TESTING_TOKEN, useValue: {} }
       ]
-    }).compileComponents();
+    });
   }));
 
   beforeEach(() => {
