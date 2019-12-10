@@ -1,3 +1,5 @@
+import { TaskStatusEnum } from './TaskWithAssignees.interface';
+
 export enum AssigneeTypesEnum {
   CLASSGROUP = 'classgroup',
   GROUP = 'group',
@@ -9,4 +11,5 @@ export interface AssigneeInterface {
   label: string;
   start: Date;
   end: Date;
+  status?: TaskStatusEnum;
 }
