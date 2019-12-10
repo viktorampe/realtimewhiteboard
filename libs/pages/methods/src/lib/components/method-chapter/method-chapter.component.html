@@ -1,7 +1,7 @@
 <campus-page-bar>
   <ng-container *ngIf="(boeke$ | async) as boeke">
     <campus-button
-      class="shared-header__quicklink__button"
+      class="shared-header__contextual__button"
       data-cy="nav-open-boeke"
       [iconClass]="'boardbook'"
       (click)="clickOpenBoeke(boeke)"
@@ -10,7 +10,7 @@
     >
     <!--todo styling favorites-->
     <campus-button
-      class="shared-header__quicklink__button"
+      class="shared-header__contextual__button"
       data-cy="nav-toggle-boeke-favorite"
       [iconClass]="
         (isBoekeFavorite$ | async)

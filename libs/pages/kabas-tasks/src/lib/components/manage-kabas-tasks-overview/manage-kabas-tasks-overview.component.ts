@@ -6,9 +6,11 @@ import {
 } from '@campus/search';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { AssigneeTypesEnum } from '../../interfaces/Assignee.interface';
+import { TaskWithAssigneesInterface } from '../../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
 import { MockKabasTasksViewModel } from '../kabas-tasks.viewmodel.mock';
-import { TaskWithAssigneesInterface } from '../kabas-tasks.viewmodel.selectors';
+
 @Component({
   selector: 'campus-manage-kabas-tasks-overview',
   templateUrl: './manage-kabas-tasks-overview.component.html',
@@ -62,23 +64,49 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
     this.assigneeFilter$ = this.tasksWithAssignments$.pipe(
       map(tasksWithAssignments => {
         console.log(tasksWithAssignments);
-        const assignees = {};
+        const assignees = {
+          [AssigneeTypesEnum.CLASSGROUP]: new Set(),
+          [AssigneeTypesEnum.GROUP]: new Set(),
+          [AssigneeTypesEnum.STUDENT]: new Set()
+        };
         tasksWithAssignments.forEach(twa => {
           twa.assignees.forEach(ass => {
-            assignees[ass.label] = ass;
+            assignees[ass.type].add(ass.label);
           });
         });
+        const values = [
+          ...Array.from(assignees[AssigneeTypesEnum.CLASSGROUP])
+            .sort()
+            .map(cg => {
+              return {
+                data: { label: cg },
+                visible: true
+              } as SearchFilterCriteriaValuesInterface;
+            }),
+          ...Array.from(assignees[AssigneeTypesEnum.GROUP])
+            .sort()
+            .map(cg => {
+              return {
+                data: { label: cg },
+                visible: true
+              } as SearchFilterCriteriaValuesInterface;
+            }),
+          ...Array.from(assignees[AssigneeTypesEnum.STUDENT])
+            .sort()
+            .map(cg => {
+              return {
+                data: { label: cg },
+                visible: true
+              } as SearchFilterCriteriaValuesInterface;
+            })
+        ];
+
         return {
           name: 'assignee',
           label: 'Toegekend aan',
           keyProperty: 'label',
           displayProperty: 'label',
-          values: Object.values(assignees).map(la => {
-            return {
-              data: la,
-              visible: true
-            } as SearchFilterCriteriaValuesInterface;
-          })
+          values
         } as SearchFilterCriteriaInterface;
       })
     );
@@ -131,4 +159,13 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
   private getCurrentTab(): Observable<number> {
     return this.route.queryParams.pipe(map(queryParam => queryParam.tab));
   }
+
+  // TODO: implement handler
+  clickDeleteTasks() {}
+
+  // TODO: implement handler
+  clickArchiveTasks() {}
+
+  // TODO: implement handler
+  clickNewTask() {}
 }

@@ -2,11 +2,12 @@ import { Injectable } from '@angular/core';
 import { LearningAreaFixture, TaskFixture } from '@campus/dal';
 import { ViewModelInterface } from '@campus/testing';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { KabasTasksViewModel } from './kabas-tasks.viewmodel';
+import { AssigneeTypesEnum } from '../interfaces/Assignee.interface';
 import {
-  AssigneeType,
+  TaskStatusEnum,
   TaskWithAssigneesInterface
-} from './kabas-tasks.viewmodel.selectors';
+} from '../interfaces/TaskWithAssignees.interface';
+import { KabasTasksViewModel } from './kabas-tasks.viewmodel';
 
 @Injectable({
   providedIn: 'root'
@@ -53,25 +54,25 @@ export class MockKabasTasksViewModel
         learningArea: new LearningAreaFixture({ name: 'wiskunde' }),
         assignees: [
           {
-            type: AssigneeType.CLASSGROUP,
+            type: AssigneeTypesEnum.CLASSGROUP,
             label: '1A',
             start: yesterday,
             end: nextWeek
           },
           {
-            type: AssigneeType.GROUP,
+            type: AssigneeTypesEnum.GROUP,
             label: 'Remediëring 2c',
             start: yesterday,
             end: nextWeek
           },
           {
-            type: AssigneeType.STUDENT,
+            type: AssigneeTypesEnum.STUDENT,
             label: 'Polleke',
             start: yesterday,
             end: nextWeek
           },
           {
-            type: AssigneeType.STUDENT,
+            type: AssigneeTypesEnum.STUDENT,
             label: 'Anneke',
             start: yesterday,
             end: nextWeek
@@ -86,19 +87,19 @@ export class MockKabasTasksViewModel
         learningArea: new LearningAreaFixture({ name: 'wiskunde' }),
         assignees: [
           {
-            type: AssigneeType.CLASSGROUP,
+            type: AssigneeTypesEnum.CLASSGROUP,
             label: '2A',
             start: yesterday,
             end: tomorrow
           },
           {
-            type: AssigneeType.GROUP,
+            type: AssigneeTypesEnum.GROUP,
             label: 'Remediëring 2c',
             start: yesterday,
             end: nextWeek
           },
           {
-            type: AssigneeType.STUDENT,
+            type: AssigneeTypesEnum.STUDENT,
             label: 'Polleke',
             start: prevWeek,
             end: nextWeek
@@ -113,7 +114,7 @@ export class MockKabasTasksViewModel
         learningArea: new LearningAreaFixture({ name: 'nederlands' }),
         assignees: [
           {
-            type: AssigneeType.CLASSGROUP,
+            type: AssigneeTypesEnum.CLASSGROUP,
             label: '2A',
             start: prevMonth,
             end: nextWeek
@@ -128,7 +129,7 @@ export class MockKabasTasksViewModel
         learningArea: new LearningAreaFixture({ name: 'nederlands' }),
         assignees: [
           {
-            type: AssigneeType.CLASSGROUP,
+            type: AssigneeTypesEnum.CLASSGROUP,
             label: '2A',
             start: tomorrow,
             end: nextWeek
@@ -143,7 +144,7 @@ export class MockKabasTasksViewModel
         learningArea: new LearningAreaFixture({ name: 'nederlands' }),
         assignees: [
           {
-            type: AssigneeType.CLASSGROUP,
+            type: AssigneeTypesEnum.CLASSGROUP,
             label: '2A',
             start: prevMonth,
             end: prevWeek
@@ -161,7 +162,7 @@ export class MockKabasTasksViewModel
         learningArea: new LearningAreaFixture({ name: 'wiskunde' }),
         assignees: [
           {
-            type: AssigneeType.CLASSGROUP,
+            type: AssigneeTypesEnum.CLASSGROUP,
             label: '2A',
             start: prevMonth,
             end: prevWeek
