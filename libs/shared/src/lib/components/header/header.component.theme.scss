@@ -129,6 +129,9 @@
       }
       span {
         margin-top: $shared-header__quicklink__label-margin-top;
+        &::first-letter {
+          text-transform: uppercase;
+        }
       }
     }
     :not(.smallIcon) {
