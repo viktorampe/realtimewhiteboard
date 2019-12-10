@@ -23,6 +23,7 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
   public paperTasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
   public currentTab$: Observable<number>;
   public learningAreaFilter$: Observable<SearchFilterCriteriaInterface>;
+  public assigneeFilter$: Observable<SearchFilterCriteriaInterface>;
   public taskStatusFilter: SearchFilterCriteriaInterface;
 
   constructor(
@@ -57,16 +58,17 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
       })
     );
 
-    this.learningAreaFilter$ = this.tasksWithAssignments$.pipe(
+    this.assigneeFilter$ = this.tasksWithAssignments$.pipe(
       map(tasksWithAssignments => {
         const uniqueLearningAreas = {};
         tasksWithAssignments.forEach(twa => {
+          console.log(twa);
           uniqueLearningAreas[twa.learningAreaId] = twa.learningArea;
         });
         return {
           name: 'learningArea',
           label: 'Leergebieden',
-          keyProperty: 'id',
+          keyProperty: 'label',
           displayProperty: 'name',
           values: Object.values(uniqueLearningAreas).map(la => {
             return {
@@ -77,6 +79,7 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
         } as SearchFilterCriteriaInterface;
       })
     );
+
     //todo swap for real icons
     this.taskStatusFilter = {
       name: 'taskStatus',

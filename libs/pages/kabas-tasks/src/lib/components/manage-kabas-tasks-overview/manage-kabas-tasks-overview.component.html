@@ -12,7 +12,10 @@
           [resetLabel]="'reset'"
         ></campus-select-filter>
         <!--<date-filter-component></date-filter-component>-->
-        <campus-select-filter></campus-select-filter>
+        <campus-select-filter
+          *ngIf="(assigneeFilter$ | async) as assigneeFilter"
+          [filterCriteria]="assigneeFilter"
+        ></campus-select-filter>
         <campus-button-toggle-filter [filterCriteria]="taskStatusFilter">
         </campus-button-toggle-filter>
         <campus-button
