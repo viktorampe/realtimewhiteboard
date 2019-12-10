@@ -1,8 +1,15 @@
-<mat-menu #dateSelectionPopup="matMenu">
-  somebody once told me
+<mat-menu
+  #datepickerMenu="matMenu"
+  campusClickStopPropagation
+  campusClickPreventDefault
+>
+  <div (click)="$event.stopPropagation()">
+    <mat-calendar (selectedChange)="testEvent($event)"></mat-calendar>
+    <mat-calendar></mat-calendar>
+  </div>
 </mat-menu>
+<button [matMenuTriggerFor]="datepickerMenu">Yegh clcikc me</button>
 
-<button [matMenuTriggerFor]="dateSelectionPopup">Aanmaakdatum</button>
 <mat-select
   [placeholder]="customDisplayLabel || criteria?.label"
   [formControl]="selectControl"

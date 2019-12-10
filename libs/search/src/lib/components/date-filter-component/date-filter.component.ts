@@ -1,13 +1,17 @@
+import { Overlay } from '@angular/cdk/overlay';
 import {
   Component,
+  ElementRef,
   EventEmitter,
   HostBinding,
   Input,
   OnDestroy,
   OnInit,
-  Output
+  Output,
+  ViewChild
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { MatCalendar } from '@angular/material';
 import { DateFunctions } from '@campus/utils';
 import { Subscription } from 'rxjs';
 import { distinctUntilChanged } from 'rxjs/operators';
@@ -39,6 +43,8 @@ export class DateFilterComponent
 
   private subscriptions: Subscription = new Subscription();
 
+  @ViewChild(MatCalendar) child: MatCalendar<Date>;
+
   @Input() resetLabel: string;
   @Input()
   public set filterCriteria(criteria: SearchFilterCriteriaInterface) {
@@ -56,7 +62,7 @@ export class DateFilterComponent
   @HostBinding('class.date-filter-component')
   dateFilterComponentClass = true;
 
-  constructor() {}
+  constructor(private ref: ElementRef, private overlay: Overlay) {}
 
   ngOnInit() {
     this.subscriptions.add(
@@ -91,6 +97,11 @@ export class DateFilterComponent
 
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
+  }
+
+  private testEvent(event: any) {
+    console.log(event);
+    this.child.selected = new Date('9 december 2019');
   }
 
   private updateView(): void {
