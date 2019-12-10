@@ -82,18 +82,21 @@ describe('Kabas-tasks viewmodel selectors', () => {
           assignees: [
             {
               type: AssigneeType.CLASSGROUP,
+              id: 1,
               label: '1A',
               start: new Date(date - 2),
               end: new Date(date + 2)
             },
             {
               type: AssigneeType.GROUP,
+              id: 1,
               label: 'Remediëring 2c',
               start: new Date(date - 1),
               end: new Date(date + 1)
             },
             {
               type: AssigneeType.STUDENT,
+              id: 1,
               label: 'Polleke',
               start: new Date(date - 3),
               end: new Date(date + 3)
@@ -130,18 +133,21 @@ describe('Kabas-tasks viewmodel selectors', () => {
           assignees: [
             {
               type: AssigneeType.CLASSGROUP,
+              id: 2,
               label: '1A',
               start: new Date(date - 22),
               end: new Date(date + 22)
             },
             {
               type: AssigneeType.GROUP,
+              id: 2,
               label: 'Remediëring 2c',
               start: new Date(date - 11),
               end: new Date(date + 11)
             },
             {
               type: AssigneeType.STUDENT,
+              id: 2,
               label: 'Polleke',
               start: new Date(date - 33),
               end: new Date(date + 33)

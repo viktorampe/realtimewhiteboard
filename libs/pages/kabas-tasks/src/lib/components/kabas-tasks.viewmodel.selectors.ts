@@ -42,6 +42,7 @@ const taskClassGroupAssigneeByTask = createSelector(
       }
       dict[tcg.taskId].push({
         type: AssigneeType.CLASSGROUP,
+        id: tcg.id,
         label: classGroupDict[tcg.classGroupId].name,
         start: tcg.start,
         end: tcg.end
@@ -60,6 +61,7 @@ const taskGroupAssigneeByTask = createSelector(
       }
       dict[tg.taskId].push({
         type: AssigneeType.GROUP,
+        id: tg.id,
         label: groupDict[tg.groupId].name,
         start: tg.start,
         end: tg.end
@@ -78,6 +80,7 @@ const taskStudentAssigneeByTask = createSelector(
       }
       dict[ts.taskId].push({
         type: AssigneeType.STUDENT,
+        id: ts.id,
         label: personDict[ts.personId].name,
         start: ts.start,
         end: ts.end
