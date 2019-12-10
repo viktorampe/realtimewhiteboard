@@ -3,11 +3,19 @@ import {
   MatIconModule,
   MatIconRegistry,
   MatListModule,
-  MatTabsModule
+  MatTabsModule,
+  MatTooltipModule
 } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
+import {
+  ENVIRONMENT_ICON_MAPPING_TOKEN,
+  ENVIRONMENT_TESTING_TOKEN,
+  SharedModule
+} from '@campus/shared';
 import { MockMatIconRegistry } from '@campus/testing';
+import { UiModule } from '@campus/ui';
+import { PagesKabasTasksModule } from '../../pages-kabas-tasks.module';
 import { ManageKabasTasksOverviewComponent } from './manage-kabas-tasks-overview.component';
 
 describe('ManageKabasTasksOverviewComponent', () => {
@@ -17,15 +25,23 @@ describe('ManageKabasTasksOverviewComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
+        PagesKabasTasksModule,
         NoopAnimationsModule,
         MatListModule,
         MatTabsModule,
         MatIconModule,
-        RouterTestingModule
+        UiModule,
+        SharedModule,
+        RouterTestingModule,
+        MatTooltipModule
       ],
-      providers: [{ provide: MatIconRegistry, useClass: MockMatIconRegistry }],
-      declarations: [ManageKabasTasksOverviewComponent]
-    }).compileComponents();
+      providers: [
+        { provide: MatIconRegistry, useClass: MockMatIconRegistry },
+        { provide: ENVIRONMENT_ICON_MAPPING_TOKEN, useValue: {} },
+        { provide: ENVIRONMENT_TESTING_TOKEN, useValue: {} }
+      ],
+      declarations: []
+    });
   }));
 
   beforeEach(() => {

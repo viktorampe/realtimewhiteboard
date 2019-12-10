@@ -14,30 +14,17 @@ import {
 } from '@campus/dal';
 import { Dictionary } from '@ngrx/entity';
 import { createSelector } from '@ngrx/store';
-
-export enum AssigneeType {
-  'CLASSGROUP' = 'classGroup',
-  'GROUP' = 'group',
-  'STUDENT' = 'student'
-}
-
-export interface AssigneeInterface {
-  type: AssigneeType;
-  label: string;
-  start: Date;
-  end: Date;
-}
-
-export interface TaskWithAssigneesInterface extends TaskInterface {
-  eduContentAmount: number;
-  assignees: AssigneeInterface[];
-}
+import {
+  AssigneeInterface,
+  AssigneeTypesEnum
+} from '../interfaces/Assignee.interface';
+import { TaskWithAssigneesInterface } from './../interfaces/TaskWithAssignees.interface';
 
 const taskClassGroupAssignees = createSelector(
   [TaskClassGroupQueries.getAll, ClassGroupQueries.getAllEntities],
   (taskClassGroups, classGroupDict, props) =>
     taskClassGroups.map(tcg => ({
-      type: AssigneeType.CLASSGROUP,
+      type: AssigneeTypesEnum.CLASSGROUP,
       label: classGroupDict[tcg.classGroupId].name,
       start: tcg.start,
       end: tcg.end
@@ -48,7 +35,7 @@ const taskGroupAssignees = createSelector(
   [TaskGroupQueries.getAll, GroupQueries.getAllEntities],
   (taskGroups, groupDict, props) =>
     taskGroups.map(tg => ({
-      type: AssigneeType.GROUP,
+      type: AssigneeTypesEnum.GROUP,
       label: groupDict[tg.groupId].name,
       start: tg.start,
       end: tg.end
@@ -59,7 +46,7 @@ const taskStudentAssignees = createSelector(
   [TaskStudentQueries.getAll, LinkedPersonQueries.getAllEntities],
   (taskStudents, personDict, props) =>
     taskStudents.map(ts => ({
-      type: AssigneeType.STUDENT,
+      type: AssigneeTypesEnum.STUDENT,
       label: personDict[ts.personId].name,
       start: ts.start,
       end: ts.end

@@ -51,6 +51,7 @@ export const icons = {
   'task:active': 'assets/icons/play_circle_outline-24px.svg',
   'task:pending': 'assets/icons/pause_circle_outline-24px.svg',
   'task:finished': 'assets/icons/not_interested-24px.svg',
+  archive: 'assets/icons/archive.svg',
 
   // search: sort modes
   'sort-numeric-down': 'assets/icons/sort-numeric-down.svg',
