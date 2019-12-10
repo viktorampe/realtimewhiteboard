@@ -54,6 +54,10 @@ export class KabasTasksViewModel {
     let status = TaskStatusEnum.PENDING;
 
     if (startDate && endDate) {
+      // make sure dates are compared correctly
+      startDate = new Date(startDate);
+      endDate = new Date(endDate);
+
       if (endDate < now) {
         status = TaskStatusEnum.FINISHED;
       } else if (startDate <= now) {
