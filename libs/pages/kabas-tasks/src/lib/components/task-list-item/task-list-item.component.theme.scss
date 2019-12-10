@@ -1,13 +1,60 @@
 @mixin pages-manage-kabas-tasks-task-list-item-theme() {
+  $pages-manage-kabas-tasks__task-list-item-font-size: 14px !default;
+  $pages-manage-kabas-tasks__task-list-item-secondary-font-size: 11px !default;
+
+  $pages-manage-kabas-tasks__task-list-item__title-color: inherit !default;
+  $pages-manage-kabas-tasks__task-list-item__title-font-weight: bold !default;
+
+  $pages-manage-kabas-tasks__task-list-item__actions-color: #898989 !default;
+  $pages-manage-kabas-tasks__task-list-item__actions-font-size: 11px !default;
+
+  $pages-manage-kabas-tasks__task-list-item__dates-font-size: 11px !default;
+
   $pages-manage-kabas-tasks__task-list-item__status-color: inherit !default;
   $pages-manage-kabas-tasks__task-list-item__archive-color: inherit !default;
 
+  $pages-manage-kabas-tasks__task-list-item__assignees-color: inherit !default;
+  $pages-manage-kabas-tasks__task-list-item__assignees-secondary-color: #898989;
+  $pages-manage-kabas-tasks__task-list-item__assignees-font-size: 14px !default;
+  $pages-manage-kabas-tasks__task-list-item__assignees-secondary-font-size: 12px !default;
+
+  $pages-manage-kabas-tasks__task-list-item__second-line-spacer: 3px !default;
+
   .manage-kabas-tasks-task-list-item {
+    &__container {
+      &__title {
+        color: $pages-manage-kabas-tasks__task-list-item__title-color;
+        font-weight: $pages-manage-kabas-tasks__task-list-item__title-font-weight;
+        margin-bottom: $pages-manage-kabas-tasks__task-list-item__second-line-spacer;
+      }
+
+      &__actions {
+        color: $pages-manage-kabas-tasks__task-list-item__actions-color;
+        font-size: $pages-manage-kabas-tasks__task-list-item__actions-font-size;
+      }
+    }
+
     &__status {
       color: $pages-manage-kabas-tasks__task-list-item__status-color;
     }
     &__archived {
       color: $pages-manage-kabas-tasks__task-list-item__archived-color;
+    }
+    &__dates {
+      font-size: $pages-manage-kabas-tasks__task-list-item__dates-font-size;
+    }
+    &__assignees {
+      &-class-groups {
+        color: $pages-manage-kabas-tasks__task-list-item__assignees-color;
+        font-size: $pages-manage-kabas-tasks__task-list-item__assignees-font-size;
+        margin: 0 0
+          $pages-manage-kabas-tasks__task-list-item__second-line-spacer 0;
+      }
+      &-groups,
+      &-students {
+        font-size: $pages-manage-kabas-tasks__task-list-item__assignees-secondary-font-size;
+        color: $pages-manage-kabas-tasks__task-list-item__assignees-secondary-color;
+      }
     }
   }
 }

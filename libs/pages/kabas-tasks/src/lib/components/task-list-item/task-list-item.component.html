@@ -2,11 +2,13 @@
   class="manage-kabas-tasks-task-list-item__icon"
   [svgIcon]="icon"
 ></mat-icon>
-<div class="manage-kabas-tasks-task-list-item__title"
-  >{{ title }}
+<div class="manage-kabas-tasks-task-list-item__container">
+  <div class="manage-kabas-tasks-task-list-item__container__title">{{
+    title
+  }}</div>
   <div
     *ngIf="actions.length"
-    class="manage-kabas-tasks-task-list-item__title__actions"
+    class="manage-kabas-tasks-task-list-item__container__actions"
     ><span *ngFor="let action of actions" (click)="action.handler()">{{
       action.label
     }}</span></div
@@ -26,9 +28,24 @@
   ><span *ngIf="endDate"> - {{ endDate | date: 'd/MM/yy' }}</span></div
 >
 <div class="manage-kabas-tasks-task-list-item__assignees">
-  <span *ngFor="let classGroup of classGroups">{{ classGroup.label }}</span>
-  <span *ngIf="groups.length" [matTooltip]="groups.join('\n')">groepen</span>
-  <span *ngIf="students.length" [matTooltip]="students.join('\n')"
-    >individuele leerlingen</span
+  <ul class="manage-kabas-tasks-task-list-item__assignees-class-groups">
+    <li *ngFor="let classGroup of classGroups">{{ classGroup.label }}</li>
+  </ul>
+
+  <span
+    *ngIf="groups.length"
+    [matTooltip]="groups.join('\n')"
+    class="manage-kabas-tasks-task-list-item__assignees-groups"
   >
+    + {{ groups.length }} groep{{ groups.length === 1 ? '' : 'en' }}
+  </span>
+  <span
+    *ngIf="students.length"
+    [matTooltip]="students.join('\n')"
+    class="manage-kabas-tasks-task-list-item__assignees-students"
+  >
+    + {{ students.length }} individuele leerling{{
+      students.length === 1 ? '' : 'en'
+    }}
+  </span>
 </div>

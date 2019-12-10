@@ -23,12 +23,11 @@
     flex: 0 0 50px;
   }
 
-  &__title {
-    flex: 0 0 50%;
+  &__container {
+    flex: 1 0 50%;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    align-self: flex-start;
 
     &__actions {
       white-space: normal;
@@ -58,13 +57,30 @@
   }
 
   &__assignees {
-    span {
-      &:after {
-        content: ', ';
-      }
+    flex: 0 0 250px;
 
-      &:last-child:after {
-        content: '';
+    &-class-groups {
+      list-style: none;
+      padding: 0;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+
+      li {
+        display: inline;
+        &:after {
+          content: ', ';
+        }
+
+        &:last-child:after {
+          content: '';
+        }
+      }
+    }
+
+    span + span {
+      &:before {
+        content: '|';
       }
     }
   }
