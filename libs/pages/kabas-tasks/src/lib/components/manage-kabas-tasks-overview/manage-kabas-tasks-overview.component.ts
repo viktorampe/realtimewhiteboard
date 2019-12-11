@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { LearningAreaInterface } from '@campus/dal';
 import {
   SearchFilterCriteriaInterface,
   SearchFilterCriteriaValuesInterface
@@ -40,144 +41,25 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
     this.paperTasksWithAssignments$ = this.viewModel.paperTasksWithAssignments$;
 
     this.learningAreaFilter$ = this.tasksWithAssignments$.pipe(
-      map(tasksWithAssignments => {
-        const uniqueLearningAreas = {};
-        tasksWithAssignments.forEach(twa => {
-          uniqueLearningAreas[twa.learningAreaId] = twa.learningArea;
-        });
-        return {
-          name: 'learningArea',
-          label: 'Leergebieden',
-          keyProperty: 'id',
-          displayProperty: 'name',
-          values: Object.values(uniqueLearningAreas).map(la => {
-            return {
-              data: la,
-              visible: true
-            } as SearchFilterCriteriaValuesInterface;
-          })
-        } as SearchFilterCriteriaInterface;
-      })
+      map(tasksWithAssignments =>
+        this.sortAndCreateForLearningAreaFilter(tasksWithAssignments)
+      )
     );
-
     this.assigneeFilter$ = this.tasksWithAssignments$.pipe(
-      map(tasksWithAssignments => {
-        const assigns = [];
-        tasksWithAssignments.forEach(twa => {
-          twa.assignees.forEach(ass => {
-            assigns.push({
-              type: ass.type,
-              id: ass.id,
-              label: ass.label
-            });
-          });
-        });
-
-        const identifiers = [];
-        const values = assigns.reduce((acc, assignee) => {
-          const identifier = `${assignee.type}-${assignee.id}`;
-          if (identifiers.includes(identifier)) {
-            return acc;
-          }
-          identifiers.push(identifier);
-          return [
-            ...acc,
-            {
-              data: {
-                label: assignee.label,
-                id: { type: assignee.type, id: assignee.id }
-              },
-              visible: true
-            } as SearchFilterCriteriaValuesInterface
-          ];
-        }, []);
-        values.sort(function(a, b) {
-          return a.data.label > b.data.label
-            ? 1
-            : b.data.label > a.data.label
-            ? -1
-            : 0;
-        });
-
-        return {
-          name: 'assignee',
-          label: 'Toegekend aan',
-          keyProperty: 'label',
-          displayProperty: 'label',
-          values
-        } as SearchFilterCriteriaInterface;
-      })
+      map(tasksWithAssignments =>
+        this.sortAndCreateForAssigneeFilter(tasksWithAssignments)
+      )
     );
-
     this.learningAreaFilterPaper$ = this.paperTasksWithAssignments$.pipe(
-      map(tasksWithAssignments => {
-        const uniqueLearningAreas = {};
-        tasksWithAssignments.forEach(twa => {
-          uniqueLearningAreas[twa.learningAreaId] = twa.learningArea;
-        });
-        console.log(uniqueLearningAreas);
-        return {
-          name: 'learningArea',
-          label: 'Leergebieden',
-          keyProperty: 'id',
-          displayProperty: 'name',
-          values: Object.values(uniqueLearningAreas).map(la => {
-            console.log(la);
-
-            return {
-              data: la,
-              visible: true
-            } as SearchFilterCriteriaValuesInterface;
-          })
-        } as SearchFilterCriteriaInterface;
-      })
+      map(tasksWithAssignments =>
+        this.sortAndCreateForLearningAreaFilter(tasksWithAssignments)
+      )
     );
 
     this.assigneeFilterPaper$ = this.paperTasksWithAssignments$.pipe(
-      map(tasksWithAssignments => {
-        const assigns = [];
-        tasksWithAssignments.forEach(twa => {
-          twa.assignees.forEach(ass => {
-            assigns.push({
-              type: ass.type,
-              id: ass.id,
-              label: ass.label
-            });
-          });
-        });
-        const identifiers = [];
-        const values = assigns.reduce((acc, assignee) => {
-          const identifier = `${assignee.type}-${assignee.id}`;
-          if (identifiers.includes(identifier)) {
-            return acc;
-          }
-          identifiers.push(identifier);
-          return [
-            ...acc,
-            {
-              data: {
-                label: assignee.label,
-                id: { type: assignee.type, id: assignee.id }
-              },
-              visible: true
-            } as SearchFilterCriteriaValuesInterface
-          ];
-        }, []);
-        values.sort(function(a, b) {
-          return a.data.label > b.data.label
-            ? 1
-            : b.data.label > a.data.label
-            ? -1
-            : 0;
-        });
-        return {
-          name: 'assignee',
-          label: 'Toegekend aan',
-          keyProperty: 'label',
-          displayProperty: 'label',
-          values
-        } as SearchFilterCriteriaInterface;
-      })
+      map(tasksWithAssignments =>
+        this.sortAndCreateForAssigneeFilter(tasksWithAssignments)
+      )
     );
 
     //todo swap for real icons
@@ -211,7 +93,77 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
       ]
     };
   }
+  public sortAndCreateForAssigneeFilter(tasksWithAssignments) {
+    const assigns = [];
+    tasksWithAssignments.forEach(twa => {
+      twa.assignees.forEach(ass => {
+        assigns.push({
+          type: ass.type,
+          id: ass.id,
+          label: ass.label
+        });
+      });
+    });
+    const identifiers = [];
+    const values = assigns.reduce((acc, assignee) => {
+      const identifier = `${assignee.type}-${assignee.id}`;
+      if (identifiers.includes(identifier)) {
+        return acc;
+      }
+      identifiers.push(identifier);
+      return [
+        ...acc,
+        {
+          data: {
+            label: assignee.label,
+            id: { type: assignee.type, id: assignee.id }
+          },
+          visible: true
+        } as SearchFilterCriteriaValuesInterface
+      ];
+    }, []);
+    values.sort(function(a, b) {
+      return a.data.label > b.data.label
+        ? 1
+        : b.data.label > a.data.label
+        ? -1
+        : 0;
+    });
+    return {
+      name: 'assignee',
+      label: 'Toegekend aan',
+      keyProperty: 'label',
+      displayProperty: 'label',
+      values
+    } as SearchFilterCriteriaInterface;
+  }
 
+  public sortAndCreateForLearningAreaFilter(tasksWithAssignments) {
+    const uniqueLearningAreas: {
+      [key: string]: LearningAreaInterface;
+    } = {};
+    tasksWithAssignments.forEach(twa => {
+      uniqueLearningAreas[twa.learningAreaId] = twa.learningArea;
+    });
+
+    const uniqueLearningAreasArray = Object.values(uniqueLearningAreas);
+    uniqueLearningAreasArray.sort((a, b) =>
+      a.name > b.name ? 1 : b.name > a.name ? -1 : 0
+    );
+
+    return {
+      name: 'learningArea',
+      label: 'Leergebieden',
+      keyProperty: 'id',
+      displayProperty: 'name',
+      values: uniqueLearningAreasArray.map(la => {
+        return {
+          data: la,
+          visible: true
+        } as SearchFilterCriteriaValuesInterface;
+      })
+    } as SearchFilterCriteriaInterface;
+  }
   clickAddDigitalTask() {
     console.log('TODO: adding digital task');
   }
