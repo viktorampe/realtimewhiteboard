@@ -16,7 +16,7 @@
   &__workspace {
     background: lightgray;
     width: 100%;
-    min-height: calc(100% - 3rem);
+    flex: 1 1 100%;
     display: flex;
     flex-wrap: wrap;
     position: relative;
