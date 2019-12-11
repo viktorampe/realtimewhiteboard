@@ -144,7 +144,10 @@ $ui-form-item-margin-bottom: 10px;
 $ui-collapsible-sheet-button-bg-color: $color-gray-2;
 $ui-collapsible-sheet-border-color: $color-gray-2;
 
-// search filters
+// search filters,
+$filters-active-background-color: $color-gray-2 !default;
+$filters-hover-background-color: #f5f5f5 !default; // material button hover default
+
 $search-filter-height: 50px;
 
 // search filters > search term

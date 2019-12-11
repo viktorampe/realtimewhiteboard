@@ -13,8 +13,10 @@
   $manage-kabas-tasks-overview__reset-filters-height: 50px !default;
   $manage-kabas-tasks-overview__reset-filters-border-width: 1px !default;
   $manage-kabas-tasks-overview__reset-filters-border-color: $pages-methods-text-color--secondary !default;
-  $manage-kabas-tasks-overview__reset-filters-background-color: $pages-methods-background-color--secondary !default;
-  $filters-hover-background-color: #e0e0e0 !default;
+  $manage-kabas-tasks-overview__reset-filters-background-color: transparent !default;
+  $filters-hover-background-color: inherit !default;
+  $filters-active-background-color: inherit !default;
+
   $manage-kabas-tasks-overview__reset-filters-hover-color: $pages-methods-text-color--secondary !default;
 
   .manage-kabas-tasks-overview {
@@ -57,8 +59,10 @@
         $manage-kabas-tasks-overview__reset-filters-border-color;
 
       &:hover {
-        color: $manage-kabas-tasks-overview__reset-filters-hover-color;
         background-color: $filters-hover-background-color;
+      }
+      &:active {
+        background-color: $filters-active-background-color;
       }
     }
     &__archive-toggle {
