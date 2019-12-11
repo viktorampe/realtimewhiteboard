@@ -50,7 +50,6 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
           keyProperty: 'id',
           displayProperty: 'name',
           values: Object.values(uniqueLearningAreas).map(la => {
-            console.log(la);
             return {
               data: la,
               visible: true
