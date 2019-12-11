@@ -9,6 +9,14 @@
   $manage-kabas-tasks-overview_filterbar-filter-padding-left: 8px !default;
   $manage-kabas-tasks-overview_filterbar-filter-toggle-margin-top: 12.5px;
 
+  $manage-kabas-tasks-overview__reset-filters-width: 50px !default;
+  $manage-kabas-tasks-overview__reset-filters-height: 50px !default;
+  $manage-kabas-tasks-overview__reset-filters-border-width: 1px !default;
+  $manage-kabas-tasks-overview__reset-filters-border-color: $pages-methods-text-color--secondary !default;
+  $manage-kabas-tasks-overview__reset-filters-background-color: $pages-methods-background-color--secondary !default;
+  $filters-hover-background-color: #e0e0e0 !default;
+  $manage-kabas-tasks-overview__reset-filters-hover-color: $pages-methods-text-color--secondary !default;
+
   .manage-kabas-tasks-overview {
     &__container {
       .mat-tab-body-content {
@@ -39,6 +47,18 @@
       }
       .select-filter-component {
         width: $manage-kabas-tasks-overview_filterbar-filter-width;
+      }
+    }
+    &--reset-filters {
+      width: $manage-kabas-tasks-overview__reset-filters-width;
+      height: $manage-kabas-tasks-overview__reset-filters-height;
+      background-color: $manage-kabas-tasks-overview__reset-filters-background-color;
+      border: $manage-kabas-tasks-overview__reset-filters-border-width solid
+        $manage-kabas-tasks-overview__reset-filters-border-color;
+
+      &:hover {
+        color: $manage-kabas-tasks-overview__reset-filters-hover-color;
+        background-color: $filters-hover-background-color;
       }
     }
     &__archive-toggle {

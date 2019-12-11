@@ -29,7 +29,7 @@
   $pages-method-chapter__reset-filters-border-width: 1px !default;
   $pages-method-chapter__reset-filters-border-color: $pages-methods-text-color--secondary !default;
   $pages-method-chapter__reset-filters-background-color: $pages-methods-background-color--secondary !default;
-  $pages-method-chapter__reset-filters-hover-background-color: $pages-methods-text-color--primary--accent !default;
+  $filters-hover-background-color: #e0e0e0 !default;
   $pages-method-chapter__reset-filters-hover-color: $pages-methods-text-color--secondary !default;
 
   .method-chapter {
@@ -50,7 +50,7 @@
 
       &:hover {
         color: $pages-method-chapter__reset-filters-hover-color;
-        background-color: $pages-method-chapter__reset-filters-hover-background-color;
+        background-color: $filters-hover-background-color;
       }
     }
 
