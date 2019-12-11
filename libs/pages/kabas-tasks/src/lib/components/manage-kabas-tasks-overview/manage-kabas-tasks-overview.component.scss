@@ -1,7 +1,6 @@
 .manage-kabas-tasks-overview {
   &__filterbar {
-    width: 900px;
     display: flex;
-    justify-content: space-evenly;
+    flex-wrap: wrap;
   }
 }

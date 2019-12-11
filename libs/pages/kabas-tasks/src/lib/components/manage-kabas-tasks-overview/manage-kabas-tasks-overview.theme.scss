@@ -19,6 +19,11 @@
       margin: $manage-kabas-tasks-overview_filterbar-margin-top 0px
         $manage-kabas-tasks-overview_filterbar-margin-bottom
         $manage-kabas-tasks-overview_filterbar-margin-left;
+
+      > * {
+        margin-right: 20px;
+      }
+
       campus-button-toggle-filter {
         div.button-toggle-filter {
           &__title {

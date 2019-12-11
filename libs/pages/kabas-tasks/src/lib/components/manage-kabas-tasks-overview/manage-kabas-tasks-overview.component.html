@@ -35,7 +35,7 @@
   >
     <mat-tab label="Digitale taken">
       <div class="manage-kabas-tasks-overview__filterbar">
-        <campus-filter-text-input></campus-filter-text-input>
+        <campus-search-term></campus-search-term>
         <campus-select-filter
           *ngIf="(learningAreaFilter$ | async) as learningAreaFilter"
           [filterCriteria]="learningAreaFilter"
@@ -79,7 +79,8 @@
 
     <mat-tab label="Papieren taken">
       <div class="manage-kabas-tasks-overview__filterbar">
-        <campus-filter-text-input></campus-filter-text-input>
+        <campus-search-term></campus-search-term>
+
         <campus-select-filter
           *ngIf="(learningAreaFilterPaper$ | async) as learningAreaFilterPaper"
           [filterCriteria]="learningAreaFilterPaper"
