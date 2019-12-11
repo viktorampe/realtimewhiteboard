@@ -8,7 +8,7 @@ import Card from '../../interfaces/card.interface';
 })
 export class WhiteboardComponent implements OnInit {
   @ViewChild('titleInput') set titleInput(titleInput: ElementRef) {
-    if (titleInput !== undefined) {
+    if (titleInput) {
       titleInput.nativeElement.focus();
     }
   }
