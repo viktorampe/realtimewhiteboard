@@ -34,7 +34,25 @@
     (selectedIndexChange)="onSelectedTabIndexChanged($event)"
   >
     <mat-tab label="Digitale taken">
-      <div class="manage-kabas-tasks-overview"></div>
+      <div class="manage-kabas-tasks-overview__container--sorting">
+        <mat-form-field>
+          <mat-label>Sorteren</mat-label>
+          <mat-select
+            (selectionChange)="setSortMode($event.value)"
+            #digitalSorting
+          >
+            <mat-option [value]="TaskSortEnum.NAME">
+              Alfabetisch
+            </mat-option>
+            <mat-option [value]="TaskSortEnum.LEARNINGAREA">
+              Leergebied
+            </mat-option>
+            <mat-option [value]="TaskSortEnum.STARTDATE">
+              Start datum
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
       <mat-selection-list #digital>
         <mat-list-item
           (click)="clickAddDigitalTask()"
@@ -54,6 +72,22 @@
     </mat-tab>
 
     <mat-tab label="Papieren taken">
+      <div class="manage-kabas-tasks-overview__container--sorting">
+        <mat-form-field>
+          <mat-label>Sorteren</mat-label>
+          <mat-select
+            (selectionChange)="setSortMode($event.value)"
+            #paperSorting
+          >
+            <mat-option [value]="TaskSortEnum.NAME">
+              Alfabetisch
+            </mat-option>
+            <mat-option [value]="TaskSortEnum.LEARNINGAREA">
+              Leergebied
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
       <mat-selection-list #paper>
         <mat-list-item
           (click)="clickAddPaperTask()"

@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatSelect } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { combineLatest, map } from 'rxjs/operators';
@@ -16,10 +17,14 @@ import { MockKabasTasksViewModel } from '../kabas-tasks.viewmodel.mock';
   ]
 })
 export class ManageKabasTasksOverviewComponent implements OnInit {
+  public TaskSortEnum = TaskSortEnum;
   public tasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
   public paperTasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
   public currentTab$: Observable<number>;
   private currentSortMode$ = new BehaviorSubject(TaskSortEnum.NAME);
+
+  @ViewChild('digitalSorting') private digitalSorting: MatSelect;
+  @ViewChild('paperSorting') private paperSorting: MatSelect;
 
   constructor(
     private viewModel: KabasTasksViewModel,
@@ -50,20 +55,9 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
     this.router.navigate([], {
       queryParams: { tab }
     });
+
+    this.resetSorting();
   }
-
-  private getCurrentTab(): Observable<number> {
-    return this.route.queryParams.pipe(map(queryParam => queryParam.tab));
-  }
-
-  // TODO: implement handler
-  clickDeleteTasks() {}
-
-  // TODO: implement handler
-  clickArchiveTasks() {}
-
-  // TODO: implement handler
-  clickNewTask() {}
 
   public setSortMode(sortMode: TaskSortEnum) {
     this.currentSortMode$.next(sortMode);
@@ -85,6 +79,25 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
     return tasks;
   }
 
+  private getCurrentTab(): Observable<number> {
+    return this.route.queryParams.pipe(map(queryParam => queryParam.tab));
+  }
+
+  private resetSorting() {
+    this.setSortMode(TaskSortEnum.NAME);
+    this.digitalSorting.value = undefined;
+    this.paperSorting.value = undefined;
+  }
+
+  // TODO: implement handler
+  clickDeleteTasks() {}
+
+  // TODO: implement handler
+  clickArchiveTasks() {}
+
+  // TODO: implement handler
+  clickNewTask() {}
+
   private sortByName(tasks: TaskWithAssigneesInterface[]) {
     return tasks.sort((a, b) => {
       const taskA = a.name.toLowerCase();
@@ -105,8 +118,12 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
 
   private sortByStartDate(tasks: TaskWithAssigneesInterface[]) {
     return tasks.sort((a, b) => {
-      const taskA = a.taskDates.startDate;
-      const taskB = b.taskDates.startDate;
+      const taskA = a.startDate;
+      const taskB = b.startDate;
+
+      // undefined dates at the front of the list
+      if (!taskA) return -1;
+      if (!taskB) return 1;
 
       return taskA < taskB ? -1 : taskA > taskB ? 1 : 0;
     });

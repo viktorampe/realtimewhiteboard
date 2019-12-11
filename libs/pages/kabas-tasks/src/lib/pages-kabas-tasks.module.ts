@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { MatSelectModule } from '@angular/material';
 import { GuardsModule } from '@campus/guards';
 import { PagesSharedModule } from '@campus/pages/shared';
 import { SharedModule } from '@campus/shared';
@@ -14,7 +15,8 @@ import { PagesKabasTasksRoutingModule } from './pages-kabas-tasks-routing.module
     UiModule,
     PagesSharedModule,
     SharedModule,
-    GuardsModule
+    GuardsModule,
+    MatSelectModule
   ],
   declarations: [ManageKabasTasksOverviewComponent],
   providers: [],
