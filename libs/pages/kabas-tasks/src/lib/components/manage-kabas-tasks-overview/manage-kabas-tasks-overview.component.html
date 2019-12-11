@@ -1,106 +1,111 @@
-<p>{{ filterState$ | async | json }}</p>
-<campus-page-bar>
-  <campus-button
-    class="shared-header__contextual__button smallIcon"
-    data-cy="nav-new-task"
-    iconClass="tasks"
-    (click)="clickNewTask()"
-    ><span>nieuw</span></campus-button
-  >
-  <ng-container
-    *ngIf="
-      digital.selectedOptions.hasValue() || paper.selectedOptions.hasValue()
-    "
-  >
+<ng-container *ngIf="(filteredTasks$ | async) as filteredTasks">
+  <campus-page-bar>
     <campus-button
       class="shared-header__contextual__button smallIcon"
-      data-cy="nav-archive-task"
-      iconClass="archive"
-      (click)="clickArchiveTasks()"
-      ><span>archiveer</span></campus-button
+      data-cy="nav-new-task"
+      iconClass="tasks"
+      (click)="clickNewTask()"
+      ><span>nieuw</span></campus-button
     >
-    <campus-button
-      class="shared-header__contextual__button smallIcon"
-      data-cy="nav-delete-task"
-      iconClass="delete"
-      (click)="clickDeleteTasks()"
-      ><span>verwijder</span></campus-button
+    <ng-container
+      *ngIf="
+        digital.selectedOptions.hasValue() || paper.selectedOptions.hasValue()
+      "
     >
-  </ng-container>
-</campus-page-bar>
-<div class="manage-kabas-tasks-overview__container">
-  <mat-tab-group
-    [selectedIndex]="currentTab$ | async"
-    (selectedIndexChange)="onSelectedTabIndexChanged($event)"
-  >
-    <mat-tab label="Digitale taken">
-      <campus-search-term
-        placeholder="Zoeken op titel"
-        [autoComplete]="false"
-        (valueChange)="searchTermUpdated($event)"
-      ></campus-search-term>
-      <campus-select-filter
-        multiple="true"
-        resetLabel="reset"
-        [filterCriteria]="this.mockFilterCriteria"
-        (filterSelectionChange)="selectionChanged($event, 'learningArea')"
-      ></campus-select-filter>
-      <!--<date-filter-component></date-filter-component>-->
-      <campus-select-filter
-        multiple="true"
-        resetLabel="reset"
-        [filterCriteria]="this.mockFilterCriteria"
-        (filterSelectionChange)="selectionChanged($event, 'assignee')"
-        resetLabel="reset"
-      ></campus-select-filter>
-      <!-- <campus-button-toggle-filter> </campus-button-toggle-filter> -->
       <campus-button
-        class="practice-book-lessons--reset-filters"
-        iconClass="reset-filters"
-      ></campus-button>
+        class="shared-header__contextual__button smallIcon"
+        data-cy="nav-archive-task"
+        iconClass="archive"
+        (click)="clickArchiveTasks()"
+        ><span>archiveer</span></campus-button
+      >
+      <campus-button
+        class="shared-header__contextual__button smallIcon"
+        data-cy="nav-delete-task"
+        iconClass="delete"
+        (click)="clickDeleteTasks()"
+        ><span>verwijder</span></campus-button
+      >
+    </ng-container>
+  </campus-page-bar>
+  <div class="manage-kabas-tasks-overview__container">
+    <mat-tab-group
+      [selectedIndex]="currentTab$ | async"
+      (selectedIndexChange)="onSelectedTabIndexChanged($event)"
+    >
+      <mat-tab label="Digitale taken">
+        <campus-search-term
+          placeholder="Zoeken op titel"
+          [autoComplete]="false"
+          (valueChange)="searchTermUpdated($event)"
+        ></campus-search-term>
+        <campus-select-filter
+          multiple="true"
+          resetLabel="reset"
+          [filterCriteria]="mockFilterCriteria"
+          (filterSelectionChange)="selectionChanged($event, 'learningArea')"
+        ></campus-select-filter>
+        <!--<date-filter-component></date-filter-component>-->
+        <campus-select-filter
+          multiple="true"
+          resetLabel="reset"
+          [filterCriteria]="mockFilterCriteria"
+          (filterSelectionChange)="selectionChanged($event, 'assignee')"
+          resetLabel="reset"
+        ></campus-select-filter>
+        <!-- <campus-button-toggle-filter
+        [multiple]="true"
+        (filterSelectionChange)="selectionChanged($event, 'status')"
+      >
+      </campus-button-toggle-filter> -->
+        <campus-button
+          class="practice-book-lessons--reset-filters"
+          iconClass="reset-filters"
+        ></campus-button>
 
-      <mat-selection-list #digital>
-        <mat-list-item
-          (click)="clickAddDigitalTask()"
-          class="manage-kabas-tasks-overview__list__primary-action"
-        >
-          <mat-icon svgIcon="add"></mat-icon>
-          nieuwe taak
-        </mat-list-item>
+        <mat-selection-list #digital>
+          <mat-list-item
+            (click)="clickAddDigitalTask()"
+            class="manage-kabas-tasks-overview__list__primary-action"
+          >
+            <mat-icon svgIcon="add"></mat-icon>
+            nieuwe taak
+          </mat-list-item>
 
-        <mat-list-option
-          *ngFor="let task of (filteredTasks$ | async)"
-          checkboxPosition="before"
-        >
-          {{ task.name }}
-        </mat-list-option>
-      </mat-selection-list>
-    </mat-tab>
+          <mat-list-option
+            *ngFor="let task of filteredTasks"
+            checkboxPosition="before"
+          >
+            {{ task.name }}
+          </mat-list-option>
+        </mat-selection-list>
+      </mat-tab>
 
-    <mat-tab label="Papieren taken">
-      <campus-select-filter
-        multiple="true"
-        resetLabel="reset"
-        [filterCriteria]="this.mockFilterCriteria"
-        (filterSelectionChange)="selectionChanged($event, 'learningArea')"
-      ></campus-select-filter>
+      <mat-tab label="Papieren taken">
+        <campus-select-filter
+          multiple="true"
+          resetLabel="reset"
+          [filterCriteria]="this.mockFilterCriteria"
+          (filterSelectionChange)="selectionChanged($event, 'learningArea')"
+        ></campus-select-filter>
 
-      <mat-selection-list #paper>
-        <mat-list-item
-          (click)="clickAddPaperTask()"
-          class="manage-kabas-tasks-overview__list__primary-action"
-        >
-          <mat-icon svgIcon="add"></mat-icon>
-          nieuwe taak
-        </mat-list-item>
+        <mat-selection-list #paper>
+          <mat-list-item
+            (click)="clickAddPaperTask()"
+            class="manage-kabas-tasks-overview__list__primary-action"
+          >
+            <mat-icon svgIcon="add"></mat-icon>
+            nieuwe taak
+          </mat-list-item>
 
-        <mat-list-option
-          *ngFor="let task of (filteredTasks$ | async)"
-          checkboxPosition="before"
-        >
-          {{ task.name }}
-        </mat-list-option>
-      </mat-selection-list>
-    </mat-tab>
-  </mat-tab-group>
-</div>
+          <mat-list-option
+            *ngFor="let task of filteredTasks"
+            checkboxPosition="before"
+          >
+            {{ task.name }}
+          </mat-list-option>
+        </mat-selection-list>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+</ng-container>

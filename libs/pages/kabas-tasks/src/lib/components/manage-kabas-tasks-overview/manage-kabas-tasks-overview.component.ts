@@ -1,5 +1,5 @@
 import {
-  AfterViewInit,
+  AfterContentInit,
   ChangeDetectorRef,
   Component,
   Inject,
@@ -29,6 +29,7 @@ interface FilterState {
   learningArea?: number[];
   dateInterval?: { start: Date; end: Date };
   assignee?: { id: number; type: AssigneeTypesEnum }[];
+  status?: string[];
 }
 
 @Component({
@@ -41,7 +42,7 @@ interface FilterState {
   ]
 })
 export class ManageKabasTasksOverviewComponent
-  implements OnInit, AfterViewInit {
+  implements OnInit, AfterContentInit {
   public mockFilterCriteria = new SearchFilterCriteriaFixture({}, [
     new SearchFilterCriteriaValuesFixture()
   ]);
@@ -72,9 +73,9 @@ export class ManageKabasTasksOverviewComponent
     this.tasksWithAssignments$ = this.viewModel.tasksWithAssignments$;
     this.paperTasksWithAssignments$ = this.viewModel.paperTasksWithAssignments$;
   }
-  ngAfterViewInit(): void {
-    this.filteredTasks$ = this.getFilteredTasks();
 
+  ngAfterContentInit(): void {
+    this.filteredTasks$ = this.getFilteredTasks();
     this.cd.detectChanges();
   }
 
@@ -163,6 +164,8 @@ export class ManageKabasTasksOverviewComponent
 
     let filteredTasks = [...tasks];
 
+    // apply filters ...
+
     if (filterState.learningArea && filterState.learningArea.length) {
       // filter on learning areas
       filteredTasks = tasks.filter(task => {
@@ -193,6 +196,14 @@ export class ManageKabasTasksOverviewComponent
           );
         })
       );
+    }
+
+    if (filterState.status && filterState.status.length) {
+      filteredTasks = filteredTasks.filter(task => {
+        return task.assignees.some(assignee => {
+          return filterState.status.includes(assignee.status);
+        });
+      });
     }
 
     return filteredTasks;
