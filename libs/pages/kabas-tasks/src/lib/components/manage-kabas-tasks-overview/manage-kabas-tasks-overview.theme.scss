@@ -15,6 +15,21 @@
         padding: 0;
       }
 
+      .mat-list-base {
+        .mat-list-item,
+        .mat-list-item.mat-list-option {
+          height: 64px;
+
+          .mat-pseudo-checkbox {
+            display: none;
+          }
+
+          .mat-list-item-content .mat-list-text {
+            padding-left: 0;
+          }
+        }
+      }
+
       .mat-list-option {
         &:nth-child(odd) {
           background-color: $secondary-bg-color;
@@ -34,18 +49,18 @@
             $pages-kabas-tasks__list-option-color--accent solid;
         }
       }
-    }
 
-    &__list__primary-action {
-      .mat-list-item-content {
-        background-color: $secondary-bg-color;
-        color: $primary-color-accent;
-        font-weight: bold;
-        padding-left: 35px !important;
-        cursor: pointer;
+      &__list__primary-action {
+        .mat-list-item-content {
+          background-color: $secondary-bg-color;
+          color: $primary-color-accent;
+          font-weight: bold;
+          padding-left: 35px !important;
+          cursor: pointer;
 
-        .mat-icon {
-          margin: 0 20px;
+          .mat-icon {
+            margin: 0 20px;
+          }
         }
       }
     }

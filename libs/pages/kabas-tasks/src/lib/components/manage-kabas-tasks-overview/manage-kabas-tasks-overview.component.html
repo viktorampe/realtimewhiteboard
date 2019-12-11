@@ -49,7 +49,19 @@
           checkboxPosition="before"
           [class.mat-list-option--selected]="option.selected"
         >
-          {{ task.name }}
+          <!-- TODO: set correct inputs -->
+          <campus-task-list-item
+            [title]="task.name"
+            [learningArea]="task.learningArea.name"
+            [archived]="false"
+            icon="educontent-product-type:evaluatie"
+            exerciseCount="4"
+            [startDate]="taskItem.startDate"
+            [endDate]="taskItem.endDate"
+            status="active"
+            [actions]="taskItem.actions"
+            [assignees]="taskItem.assignees"
+          ></campus-task-list-item>
         </mat-list-option>
       </mat-selection-list>
     </mat-tab>

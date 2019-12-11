@@ -4,6 +4,7 @@ import { GuardsModule } from '@campus/guards';
 import { PagesSharedModule } from '@campus/pages/shared';
 import { SharedModule } from '@campus/shared';
 import { UiModule } from '@campus/ui';
+import { UtilsModule } from '@campus/utils';
 import { ManageKabasTasksOverviewComponent } from './components/manage-kabas-tasks-overview/manage-kabas-tasks-overview.component';
 import { PagesKabasTasksRoutingModule } from './pages-kabas-tasks-routing.module';
 
@@ -14,7 +15,8 @@ import { PagesKabasTasksRoutingModule } from './pages-kabas-tasks-routing.module
     UiModule,
     PagesSharedModule,
     SharedModule,
-    GuardsModule
+    GuardsModule,
+    UtilsModule
   ],
   declarations: [ManageKabasTasksOverviewComponent],
   providers: [],
