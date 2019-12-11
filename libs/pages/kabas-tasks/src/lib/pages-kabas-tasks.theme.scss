@@ -1,0 +1,5 @@
+@import './components/manage-kabas-tasks-overview/manage-kabas-tasks-overview.theme';
+
+@mixin pages-kabas-tasks-theme() {
+  @include manage-kabas-tasks-overview-theme();
+}

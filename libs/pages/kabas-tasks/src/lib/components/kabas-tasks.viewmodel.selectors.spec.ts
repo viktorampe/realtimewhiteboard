@@ -34,10 +34,8 @@ import { routerReducer } from '@ngrx/router-store';
 import { Action, select, Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
 import { configureTestSuite } from 'ng-bullet';
-import {
-  AssigneeType,
-  getTasksWithAssignments
-} from './kabas-tasks.viewmodel.selectors';
+import { AssigneeTypesEnum } from '../interfaces/Assignee.interface';
+import { getTasksWithAssignments } from './kabas-tasks.viewmodel.selectors';
 
 describe('Kabas-tasks viewmodel selectors', () => {
   configureTestSuite(() => {
@@ -79,15 +77,15 @@ describe('Kabas-tasks viewmodel selectors', () => {
         learningArea: new LearningAreaFixture({ name: 'wiskunde' }),
         assignees: [
           jasmine.objectContaining({
-            type: AssigneeType.CLASSGROUP,
+            type: AssigneeTypesEnum.CLASSGROUP,
             label: '1A'
           }),
           jasmine.objectContaining({
-            type: AssigneeType.GROUP,
+            type: AssigneeTypesEnum.GROUP,
             label: 'Remediëring 2c'
           }),
           jasmine.objectContaining({
-            type: AssigneeType.STUDENT,
+            type: AssigneeTypesEnum.STUDENT,
             label: 'Polleke'
           })
         ]
