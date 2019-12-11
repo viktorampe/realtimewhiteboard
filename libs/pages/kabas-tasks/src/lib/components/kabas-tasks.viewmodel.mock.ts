@@ -3,10 +3,7 @@ import { LearningAreaFixture, TaskFixture } from '@campus/dal';
 import { ViewModelInterface } from '@campus/testing';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { AssigneeTypesEnum } from '../interfaces/Assignee.interface';
-import {
-  TaskStatusEnum,
-  TaskWithAssigneesInterface
-} from '../interfaces/TaskWithAssignees.interface';
+import { TaskWithAssigneesInterface } from '../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from './kabas-tasks.viewmodel';
 
 @Injectable({
@@ -57,25 +54,29 @@ export class MockKabasTasksViewModel
             type: AssigneeTypesEnum.CLASSGROUP,
             label: '1A',
             start: yesterday,
-            end: nextWeek
+            end: nextWeek,
+            id: 1
           },
           {
             type: AssigneeTypesEnum.GROUP,
             label: 'Remediëring 2c',
             start: yesterday,
-            end: nextWeek
+            end: nextWeek,
+            id: 2
           },
           {
             type: AssigneeTypesEnum.STUDENT,
             label: 'Polleke',
             start: yesterday,
-            end: nextWeek
+            end: nextWeek,
+            id: 3
           },
           {
             type: AssigneeTypesEnum.STUDENT,
             label: 'Anneke',
             start: yesterday,
-            end: nextWeek
+            end: nextWeek,
+            id: 4
           }
         ]
       },
@@ -90,19 +91,22 @@ export class MockKabasTasksViewModel
             type: AssigneeTypesEnum.CLASSGROUP,
             label: '2A',
             start: yesterday,
-            end: tomorrow
+            end: tomorrow,
+            id: 1
           },
           {
             type: AssigneeTypesEnum.GROUP,
             label: 'Remediëring 2c',
             start: yesterday,
-            end: nextWeek
+            end: nextWeek,
+            id: 2
           },
           {
             type: AssigneeTypesEnum.STUDENT,
             label: 'Polleke',
             start: prevWeek,
-            end: nextWeek
+            end: nextWeek,
+            id: 3
           }
         ]
       },
@@ -117,7 +121,8 @@ export class MockKabasTasksViewModel
             type: AssigneeTypesEnum.CLASSGROUP,
             label: '2A',
             start: prevMonth,
-            end: nextWeek
+            end: nextWeek,
+            id: 1
           }
         ]
       },
@@ -132,7 +137,8 @@ export class MockKabasTasksViewModel
             type: AssigneeTypesEnum.CLASSGROUP,
             label: '2A',
             start: tomorrow,
-            end: nextWeek
+            end: nextWeek,
+            id: 1
           }
         ]
       },
@@ -147,7 +153,8 @@ export class MockKabasTasksViewModel
             type: AssigneeTypesEnum.CLASSGROUP,
             label: '2A',
             start: prevMonth,
-            end: prevWeek
+            end: prevWeek,
+            id: 2
           }
         ]
       },
@@ -165,7 +172,8 @@ export class MockKabasTasksViewModel
             type: AssigneeTypesEnum.CLASSGROUP,
             label: '2A',
             start: prevMonth,
-            end: prevWeek
+            end: prevWeek,
+            id: 3
           }
         ]
       }

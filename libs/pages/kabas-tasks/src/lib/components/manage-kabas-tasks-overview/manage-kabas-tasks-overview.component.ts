@@ -6,7 +6,6 @@ import {
 } from '@campus/search';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { AssigneeTypesEnum } from '../../interfaces/Assignee.interface';
 import { TaskWithAssigneesInterface } from '../../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
 import { MockKabasTasksViewModel } from '../kabas-tasks.viewmodel.mock';
@@ -63,42 +62,26 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
 
     this.assigneeFilter$ = this.tasksWithAssignments$.pipe(
       map(tasksWithAssignments => {
-        const assignees = {
-          [AssigneeTypesEnum.CLASSGROUP]: new Set(),
-          [AssigneeTypesEnum.GROUP]: new Set(),
-          [AssigneeTypesEnum.STUDENT]: new Set()
-        };
+        let assigns = [];
         tasksWithAssignments.forEach(twa => {
           twa.assignees.forEach(ass => {
-            assignees[ass.type].add(ass.label);
+            assigns.push({
+              type: ass.type,
+              id: ass.id,
+              label: ass.label
+            });
           });
         });
-        const values = [
-          ...Array.from(assignees[AssigneeTypesEnum.CLASSGROUP])
-            .sort()
-            .map(classgroup => {
-              return {
-                data: { label: classgroup },
-                visible: true
-              } as SearchFilterCriteriaValuesInterface;
-            }),
-          ...Array.from(assignees[AssigneeTypesEnum.GROUP])
-            .sort()
-            .map(group => {
-              return {
-                data: { label: group },
-                visible: true
-              } as SearchFilterCriteriaValuesInterface;
-            }),
-          ...Array.from(assignees[AssigneeTypesEnum.STUDENT])
-            .sort()
-            .map(student => {
-              return {
-                data: { label: student },
-                visible: true
-              } as SearchFilterCriteriaValuesInterface;
-            })
-        ];
+        assigns = assigns.filter(
+          (v, i, a) =>
+            a.findIndex(t => t.type === v.type && t.id === v.id) === i
+        );
+        const values = assigns.map(e => {
+          return {
+            data: { label: e.label, id: { type: e.type, id: e.id } },
+            visible: true
+          } as SearchFilterCriteriaValuesInterface;
+        });
 
         return {
           name: 'assignee',
@@ -131,44 +114,28 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
       })
     );
 
-    this.assigneeFilterPaper$ = this.paperTasksWithAssignments$.pipe(
+    this.assigneeFilter$ = this.paperTasksWithAssignments$.pipe(
       map(tasksWithAssignments => {
-        const assignees = {
-          [AssigneeTypesEnum.CLASSGROUP]: new Set(),
-          [AssigneeTypesEnum.GROUP]: new Set(),
-          [AssigneeTypesEnum.STUDENT]: new Set()
-        };
+        let assigns = [];
         tasksWithAssignments.forEach(twa => {
           twa.assignees.forEach(ass => {
-            assignees[ass.type].add(ass.label);
+            assigns.push({
+              type: ass.type,
+              id: ass.id,
+              label: ass.label
+            });
           });
         });
-        const values = [
-          ...Array.from(assignees[AssigneeTypesEnum.CLASSGROUP])
-            .sort()
-            .map(classgroup => {
-              return {
-                data: { label: classgroup },
-                visible: true
-              } as SearchFilterCriteriaValuesInterface;
-            }),
-          ...Array.from(assignees[AssigneeTypesEnum.GROUP])
-            .sort()
-            .map(group => {
-              return {
-                data: { label: group },
-                visible: true
-              } as SearchFilterCriteriaValuesInterface;
-            }),
-          ...Array.from(assignees[AssigneeTypesEnum.STUDENT])
-            .sort()
-            .map(student => {
-              return {
-                data: { label: student },
-                visible: true
-              } as SearchFilterCriteriaValuesInterface;
-            })
-        ];
+        assigns = assigns.filter(
+          (v, i, a) =>
+            a.findIndex(t => t.type === v.type && t.id === v.id) === i
+        );
+        const values = assigns.map(e => {
+          return {
+            data: { label: e.label, id: { type: e.type, id: e.id } },
+            visible: true
+          } as SearchFilterCriteriaValuesInterface;
+        });
 
         return {
           name: 'assignee',
