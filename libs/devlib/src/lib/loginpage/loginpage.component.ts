@@ -74,7 +74,10 @@ export class LoginpageComponent implements OnInit {
       []
     );
     this.selectFilterComponent.filterSelectionChange.subscribe(v => {
-      console.log('FilterSelectionChange', v);
+      console.log(
+        'FilterSelectionChange',
+        v[0].values[0] && v[0].values[0].data
+      );
     });
   }
 

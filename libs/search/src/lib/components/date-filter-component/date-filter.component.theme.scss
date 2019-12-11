@@ -32,6 +32,10 @@
     }
 
     &__select-panel {
+      &.mat-menu-panel {
+        max-width: none;
+      }
+
       &__date-range {
         display: flex;
         flex-direction: row;
@@ -39,6 +43,15 @@
 
       .mat-form-field-appearance-outline .mat-form-field-outline-thick {
         opacity: $date-filter_mat-form-field_outline-opacity;
+      }
+
+      .mat-menu-content {
+        padding: 8px;
+      }
+
+      mat-radio-group {
+        display: flex;
+        flex-direction: column;
       }
 
       mat-form-field {

@@ -14,6 +14,7 @@ import {
   MatListModule,
   MatMenuModule,
   MatNativeDateModule,
+  MatRadioModule,
   MatSelectModule,
   MatTooltipModule
 } from '@angular/material';
@@ -59,6 +60,7 @@ import { SearchPortalDirective } from './directives/search-portal.directive';
     MatNativeDateModule,
     MatMenuModule,
     MatTooltipModule,
+    MatRadioModule,
     FormsModule,
     UtilsModule
   ],

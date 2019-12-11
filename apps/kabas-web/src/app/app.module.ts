@@ -1,5 +1,8 @@
 import { NgModule } from '@angular/core';
-import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material';
+import {
+  MAT_DATE_LOCALE,
+  MAT_FORM_FIELD_DEFAULT_OPTIONS
+} from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DalModule } from '@campus/dal';
@@ -59,7 +62,8 @@ configureBufferSize(150);
     {
       provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
       useValue: { appearance: 'fill' }
-    }
+    },
+    { provide: MAT_DATE_LOCALE, useValue: 'nl-BE' }
   ],
   bootstrap: [AppComponent],
   entryComponents: [

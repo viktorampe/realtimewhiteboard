@@ -1,7 +1,5 @@
-import { Overlay } from '@angular/cdk/overlay';
 import {
   Component,
-  ElementRef,
   EventEmitter,
   HostBinding,
   Input,
@@ -11,7 +9,7 @@ import {
   ViewChild
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { MatCalendar } from '@angular/material';
+import { MatMenuTrigger } from '@angular/material';
 import { DateFunctions } from '@campus/utils';
 import { Subscription } from 'rxjs';
 import { distinctUntilChanged } from 'rxjs/operators';
@@ -21,9 +19,20 @@ import {
   SearchFilterCriteriaValuesInterface
 } from '../../interfaces/search-filter-criteria.interface';
 
+enum SelectOptionValueType {
+  FilterCriteriaValue,
+  CustomRange,
+  NoFilter
+}
+
 interface SelectOption {
-  value: SearchFilterCriteriaValuesInterface;
+  value: SelectOptionValue;
   viewValue: string | number;
+}
+
+interface SelectOptionValue {
+  type: SelectOptionValueType;
+  contents?: SearchFilterCriteriaValuesInterface;
 }
 
 @Component({
@@ -33,19 +42,31 @@ interface SelectOption {
 })
 export class DateFilterComponent
   implements SearchFilterComponentInterface, OnInit, OnDestroy {
+  SelectOptionValueType = SelectOptionValueType;
+
   criteria: SearchFilterCriteriaInterface;
   options: SelectOption[];
   selectControl: FormControl = new FormControl();
   startDate: FormControl = new FormControl();
   endDate: FormControl = new FormControl();
+  dateSelection: FormControl = new FormControl();
   count = 0;
   customDisplayLabel: string;
+  resetOptionLabel: string;
 
   private subscriptions: Subscription = new Subscription();
 
-  @ViewChild(MatCalendar) child: MatCalendar<Date>;
+  @ViewChild(MatMenuTrigger) matMenuTrigger: MatMenuTrigger;
 
-  @Input() resetLabel: string;
+  @Input()
+  public set resetLabel(label: string) {
+    this.resetOptionLabel = label;
+    this.options = this.getSelectOptions();
+  }
+  public get resetLabel() {
+    return this.resetOptionLabel;
+  }
+
   @Input()
   public set filterCriteria(criteria: SearchFilterCriteriaInterface) {
     this.criteria = criteria;
@@ -62,24 +83,33 @@ export class DateFilterComponent
   @HostBinding('class.date-filter-component')
   dateFilterComponentClass = true;
 
-  constructor(private ref: ElementRef, private overlay: Overlay) {}
+  constructor() {}
 
   ngOnInit() {
     this.subscriptions.add(
-      this.selectControl.valueChanges.pipe(distinctUntilChanged()).subscribe(
-        (selection: SearchFilterCriteriaValuesInterface): void => {
-          this.criteria.values = selection
-            ? [selection]
-            : ([] as SearchFilterCriteriaValuesInterface[]);
+      this.dateSelection.valueChanges
+        .pipe(distinctUntilChanged())
+        .subscribe((optionValue: SelectOptionValue) => {
+          switch (optionValue.type) {
+            case SelectOptionValueType.CustomRange:
+              this.startDate.enable({ emitEvent: false });
+              this.endDate.enable({ emitEvent: false });
 
-          this.startDate.setValue(null, { emitEvent: false });
-          this.endDate.setValue(null, { emitEvent: false });
-          this.customDisplayLabel = null;
+              // Trigger it ourselves to prevent two consecutive date
+              // change events from firing when both inputs are enabled
+              this.onDateChange();
+              break;
+            case SelectOptionValueType.FilterCriteriaValue:
+              this.startDate.disable({ emitEvent: false });
+              this.endDate.disable({ emitEvent: false });
 
-          this.updateView();
-          this.filterSelectionChange.emit([this.criteria]);
-        }
-      )
+              this.filterCriteria.values = [optionValue.contents];
+              break;
+            default:
+              this.filterCriteria.values = [];
+              break;
+          }
+        })
     );
 
     this.subscriptions.add(
@@ -93,13 +123,50 @@ export class DateFilterComponent
         .pipe(distinctUntilChanged())
         .subscribe(this.onDateChange.bind(this))
     );
+
+    this.startDate.disable({ emitEvent: false });
+    this.endDate.disable({ emitEvent: false });
   }
 
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }
 
+  public applyFilter(cancel: boolean): void {
+    this.matMenuTrigger.closeMenu();
+
+    if (cancel) {
+      return;
+    }
+
+    this.filterSelectionChange.emit([this.criteria]);
+    this.updateView();
+  }
+
   private updateView(): void {
+    const startDateValue: Date =
+      this.criteria.values[0] && this.criteria.values[0].data.gte;
+    const endDateValue: Date =
+      this.criteria.values[0] && this.criteria.values[0].data.lte;
+
+    if (startDateValue || endDateValue) {
+      if (startDateValue && endDateValue) {
+        this.customDisplayLabel =
+          'Vanaf ' +
+          startDateValue.toLocaleDateString() +
+          ' tot en met ' +
+          endDateValue.toLocaleDateString();
+      } else if (startDateValue) {
+        this.customDisplayLabel =
+          'Vanaf ' + startDateValue.toLocaleDateString();
+      } else if (endDateValue) {
+        this.customDisplayLabel =
+          'Tot en met ' + endDateValue.toLocaleDateString();
+      }
+    } else {
+      this.customDisplayLabel = null;
+    }
+
     this.count = this.criteria.values.length;
   }
 
@@ -131,51 +198,53 @@ export class DateFilterComponent
           }
         }
       ];
-
-      if (startDateValue && endDateValue) {
-        this.customDisplayLabel =
-          'Vanaf ' +
-          startDateValue.toLocaleDateString() +
-          ' tot en met ' +
-          endDateValue.toLocaleDateString();
-      } else if (startDateValue) {
-        this.customDisplayLabel =
-          'Vanaf ' + startDateValue.toLocaleDateString();
-      } else if (endDateValue) {
-        this.customDisplayLabel =
-          'Tot en met ' + endDateValue.toLocaleDateString();
-      }
     } else {
       this.criteria.values = [];
       this.customDisplayLabel = null;
     }
-
-    this.updateView();
-    this.filterSelectionChange.emit([this.criteria]);
   }
 
   private getSelectOptions(): SelectOption[] {
     const now = new Date();
-
-    return [
+    let options: SelectOption[] = [
       {
         viewValue: 'Deze week',
         value: {
-          data: {
-            gte: DateFunctions.startOfWeek(now),
-            lte: DateFunctions.endOfWeek(now)
+          type: SelectOptionValueType.FilterCriteriaValue,
+          contents: {
+            data: {
+              gte: DateFunctions.startOfWeek(now),
+              lte: DateFunctions.endOfWeek(now)
+            }
           }
         }
       },
       {
         viewValue: 'Vorige week',
         value: {
-          data: {
-            gte: DateFunctions.lastWeek(now),
-            lte: DateFunctions.endOfWeek(DateFunctions.lastWeek(now))
+          type: SelectOptionValueType.FilterCriteriaValue,
+          contents: {
+            data: {
+              gte: DateFunctions.lastWeek(now),
+              lte: DateFunctions.endOfWeek(DateFunctions.lastWeek(now))
+            }
           }
         }
       }
     ];
+
+    if (this.resetLabel) {
+      options = [
+        {
+          viewValue: this.resetLabel,
+          value: {
+            type: SelectOptionValueType.NoFilter
+          }
+        },
+        ...options
+      ];
+    }
+
+    return options;
   }
 }

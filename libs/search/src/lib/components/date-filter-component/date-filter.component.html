@@ -1,55 +1,56 @@
 <mat-menu
   #datepickerMenu="matMenu"
-  campusClickStopPropagation
-  campusClickPreventDefault
+  class="date-filter-component date-filter-component__select-panel"
 >
   <div (click)="$event.stopPropagation()">
-    <div class="date-filter-component__select-panel__date-range">
-      <mat-form-field [appearance]="'outline'">
-        <mat-label>Vanaf</mat-label>
-        <input
-          matInput
-          [matDatepicker]="startDatePicker"
-          [formControl]="startDate"
-        />
-        <mat-datepicker-toggle
-          matSuffix
-          [for]="startDatePicker"
-        ></mat-datepicker-toggle>
-        <mat-datepicker #startDatePicker></mat-datepicker>
-      </mat-form-field>
-      <mat-form-field [appearance]="'outline'">
-        <mat-label>t.e.m.</mat-label>
-        <input
-          [value]="null"
-          matInput
-          [matDatepicker]="endDatePicker"
-          [formControl]="endDate"
-        />
-        <mat-datepicker-toggle
-          matSuffix
-          [for]="endDatePicker"
-        ></mat-datepicker-toggle>
-        <mat-datepicker #endDatePicker></mat-datepicker>
-      </mat-form-field>
-    </div>
+    <div>Selecteer een periode:</div>
+    <mat-radio-group
+      [formControl]="dateSelection"
+      aria-label="Select an option"
+    >
+      <mat-radio-button *ngFor="let option of options" [value]="option.value">{{
+        option.viewValue
+      }}</mat-radio-button>
+      <mat-radio-button [value]="{ type: SelectOptionValueType.CustomRange }">
+        <div class="date-filter-component__select-panel__date-range">
+          <mat-form-field [appearance]="'outline'">
+            <mat-label>Vanaf</mat-label>
+            <input
+              matInput
+              [matDatepicker]="startDatePicker"
+              [formControl]="startDate"
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="startDatePicker"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #startDatePicker></mat-datepicker>
+          </mat-form-field>
+          <mat-form-field [appearance]="'outline'">
+            <mat-label>t.e.m.</mat-label>
+            <input
+              [value]="null"
+              matInput
+              [matDatepicker]="endDatePicker"
+              [formControl]="endDate"
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="endDatePicker"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #endDatePicker></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </mat-radio-button>
+    </mat-radio-group>
+    <campus-button primary (click)="applyFilter()">Filteren</campus-button>
+    <campus-button (click)="applyFilter(true)">Annuleren</campus-button>
   </div>
 </mat-menu>
-<button [matMenuTriggerFor]="datepickerMenu">Yegh clcikc me</button>
-
-<mat-select
-  [placeholder]="customDisplayLabel || criteria?.label"
-  [formControl]="selectControl"
+<campus-button
   [matBadge]="count"
   [matBadgeHidden]="count === 0"
   matBadgePosition="above after"
-  panelClass="date-filter-component date-filter-component__select-panel"
-  [class.date-filter-component__select--custom-display-label]="
-    customDisplayLabel
-  "
+  [matMenuTriggerFor]="datepickerMenu"
+  >{{ customDisplayLabel || criteria.label }}</campus-button
 >
-  <mat-option *ngIf="resetLabel" [value]="null">{{ resetLabel }}</mat-option>
-  <mat-option *ngFor="let option of options" [value]="option.value">
-    {{ option.viewValue }}
-  </mat-option>
-</mat-select>
