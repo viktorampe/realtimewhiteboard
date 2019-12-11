@@ -17,9 +17,9 @@ import { FilterTextInputComponent } from '@campus/ui';
 import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/utils';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { map, shareReplay, tap } from 'rxjs/operators';
+import { TaskWithAssigneesInterface } from '../../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
 import { MockKabasTasksViewModel } from '../kabas-tasks.viewmodel.mock';
-import { TaskWithAssigneesInterface } from '../kabas-tasks.viewmodel.selectors';
 
 interface FilterState {
   searchText?: string;
@@ -226,4 +226,13 @@ export class ManageKabasTasksOverviewComponent
   ): TaskWithAssigneesInterface[] {
     return this.filterService.filter(source, { name: searchText });
   }
+
+  // TODO: implement handler
+  clickDeleteTasks() {}
+
+  // TODO: implement handler
+  clickArchiveTasks() {}
+
+  // TODO: implement handler
+  clickNewTask() {}
 }
