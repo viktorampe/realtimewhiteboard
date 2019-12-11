@@ -8,6 +8,14 @@
 
   flex-direction: column;
 
+  &__checkbox {
+    position: absolute;
+    top: 13px;
+    left: 13px;
+    margin: 1px;
+    transform: scale(2);
+  }
+
   &__toolbar {
     position: absolute;
     top: 0;
