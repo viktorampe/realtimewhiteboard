@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { combineLatest, map } from 'rxjs/operators';
 import { TaskWithAssigneesInterface } from '../../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
 import { MockKabasTasksViewModel } from '../kabas-tasks.viewmodel.mock';
@@ -19,6 +19,7 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
   public tasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
   public paperTasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
   public currentTab$: Observable<number>;
+  private currentSortMode$ = new BehaviorSubject(TaskSortEnum.NAME);
 
   constructor(
     private viewModel: KabasTasksViewModel,
@@ -28,8 +29,14 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
 
   ngOnInit() {
     this.currentTab$ = this.getCurrentTab();
-    this.tasksWithAssignments$ = this.viewModel.tasksWithAssignments$;
-    this.paperTasksWithAssignments$ = this.viewModel.paperTasksWithAssignments$;
+    this.tasksWithAssignments$ = this.viewModel.tasksWithAssignments$.pipe(
+      combineLatest(this.currentSortMode$),
+      map(([tasks, sortMode]) => this.sortTasks(tasks, sortMode))
+    );
+    this.paperTasksWithAssignments$ = this.viewModel.paperTasksWithAssignments$.pipe(
+      combineLatest(this.currentSortMode$),
+      map(([tasks, sortMode]) => this.sortTasks(tasks, sortMode))
+    );
   }
 
   clickAddDigitalTask() {
@@ -57,4 +64,57 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
 
   // TODO: implement handler
   clickNewTask() {}
+
+  public setSortMode(sortMode: TaskSortEnum) {
+    this.currentSortMode$.next(sortMode);
+  }
+
+  public sortTasks(
+    tasks: TaskWithAssigneesInterface[],
+    sortMode: TaskSortEnum
+  ) {
+    switch (sortMode) {
+      case TaskSortEnum.NAME:
+        return this.sortByName(tasks);
+      case TaskSortEnum.LEARNINGAREA:
+        return this.sortByLearningArea(tasks);
+      case TaskSortEnum.STARTDATE:
+        return this.sortByStartDate(tasks);
+    }
+    // no sortMode -> no sorting
+    return tasks;
+  }
+
+  private sortByName(tasks: TaskWithAssigneesInterface[]) {
+    return tasks.sort((a, b) => {
+      const taskA = a.name.toLowerCase();
+      const taskB = b.name.toLowerCase();
+
+      return taskA < taskB ? -1 : taskA > taskB ? 1 : 0;
+    });
+  }
+
+  private sortByLearningArea(tasks: TaskWithAssigneesInterface[]) {
+    return tasks.sort((a, b) => {
+      const taskA = a.learningArea.name.toLowerCase();
+      const taskB = b.learningArea.name.toLowerCase();
+
+      return taskA < taskB ? -1 : taskA > taskB ? 1 : 0;
+    });
+  }
+
+  private sortByStartDate(tasks: TaskWithAssigneesInterface[]) {
+    return tasks.sort((a, b) => {
+      const taskA = a.taskDates.startDate;
+      const taskB = b.taskDates.startDate;
+
+      return taskA < taskB ? -1 : taskA > taskB ? 1 : 0;
+    });
+  }
+}
+
+enum TaskSortEnum {
+  'NAME' = 'NAME',
+  'LEARNINGAREA' = 'LEARNINGAREA',
+  'STARTDATE' = 'STARTDATE'
 }
