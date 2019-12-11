@@ -102,13 +102,13 @@ const routes: Routes = [
         loadChildren: '@campus/pages/bundles#PagesBundlesModule',
         data: { breadcrumbText: 'Bundels' },
         canActivate: [CoupledTeacherGuard]
-      },
-      {
-        path: 'login',
-        loadChildren: '@campus/pages/login#PagesLoginModule',
-        data: { breadcrumbText: 'Login' }
       }
     ]
+  },
+  {
+    path: 'login',
+    loadChildren: '@campus/pages/login#PagesLoginModule',
+    data: { breadcrumbText: 'Login' }
   },
   {
     path: 'error',

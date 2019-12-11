@@ -71,15 +71,14 @@ const routes: Routes = [
             data: { breadcrumbText: 'Meldingen' }
           }
         ]
-      },
-      {
-        path: 'login',
-        loadChildren: '@campus/pages/login#PagesLoginModule',
-        data: { breadcrumbText: 'Login' }
       }
     ]
   },
-
+  {
+    path: 'login',
+    loadChildren: '@campus/pages/login#PagesLoginModule',
+    data: { breadcrumbText: 'Login' }
+  },
   {
     path: 'error',
     loadChildren: '@campus/pages/error#PagesErrorModule',
