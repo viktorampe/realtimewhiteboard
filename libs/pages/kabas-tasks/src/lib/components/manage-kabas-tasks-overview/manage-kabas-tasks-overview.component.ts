@@ -27,7 +27,9 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
   public learningAreaFilter$: Observable<SearchFilterCriteriaInterface>;
   public assigneeFilter$: Observable<SearchFilterCriteriaInterface>;
   public taskStatusFilter: SearchFilterCriteriaInterface;
-
+  color = 'accent';
+  checked = false;
+  disabled = false;
   constructor(
     private viewModel: KabasTasksViewModel,
     private router: Router,

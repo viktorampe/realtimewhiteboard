@@ -28,6 +28,13 @@
         }
       }
     }
+    &__archive-toggle {
+      border: 1px solid #808080;
+      padding: 0 5px 0px 5px;
+      mat-slide-toggle {
+        margin-top: 12.5px;
+      }
+    }
 
     &__list__primary-action {
       .mat-list-item-content {
