@@ -14,61 +14,93 @@ import {
 } from '@campus/dal';
 import { Dictionary } from '@ngrx/entity';
 import { createSelector } from '@ngrx/store';
+import {
+  AssigneeInterface,
+  AssigneeTypesEnum
+} from '../interfaces/Assignee.interface';
+import { TaskWithAssigneesInterface } from './../interfaces/TaskWithAssignees.interface';
 
-export enum AssigneeType {
-  'CLASSGROUP' = 'classGroup',
-  'GROUP' = 'group',
-  'STUDENT' = 'student'
-}
-
-interface AssigneeInterface {
-  type: AssigneeType;
-  label: string;
-  start: Date;
-  end: Date;
-}
-
-export interface TaskWithAssigneesInterface extends TaskInterface {
-  eduContentAmount: number;
-  assignees: AssigneeInterface[];
-}
-
-const taskClassGroupAssignees = createSelector(
+const taskClassGroupAssigneeByTask = createSelector(
   [TaskClassGroupQueries.getAll, ClassGroupQueries.getAllEntities],
   (taskClassGroups, classGroupDict, props) =>
-    taskClassGroups.map(tcg => ({
-      type: AssigneeType.CLASSGROUP,
-      label: classGroupDict[tcg.classGroupId].name,
-      start: tcg.start,
-      end: tcg.end
-    }))
+    taskClassGroups.reduce((dict, tcg) => {
+      if (!dict[tcg.taskId]) {
+        dict[tcg.taskId] = [];
+      }
+      dict[tcg.taskId].push({
+        type: AssigneeTypesEnum.CLASSGROUP,
+        id: tcg.id,
+        label: classGroupDict[tcg.classGroupId].name,
+        start: tcg.start,
+        end: tcg.end
+      });
+
+      return dict;
+    }, {})
 );
 
-const taskGroupAssignees = createSelector(
+const taskGroupAssigneeByTask = createSelector(
   [TaskGroupQueries.getAll, GroupQueries.getAllEntities],
   (taskGroups, groupDict, props) =>
-    taskGroups.map(tg => ({
-      type: AssigneeType.GROUP,
-      label: groupDict[tg.groupId].name,
-      start: tg.start,
-      end: tg.end
-    }))
+    taskGroups.reduce((dict, tg) => {
+      if (!dict[tg.taskId]) {
+        dict[tg.taskId] = [];
+      }
+      dict[tg.taskId].push({
+        type: AssigneeTypesEnum.GROUP,
+        id: tg.id,
+        label: groupDict[tg.groupId].name,
+        start: tg.start,
+        end: tg.end
+      });
+
+      return dict;
+    }, {})
 );
 
-const taskStudentAssignees = createSelector(
+const taskStudentAssigneeByTask = createSelector(
   [TaskStudentQueries.getAll, LinkedPersonQueries.getAllEntities],
   (taskStudents, personDict, props) =>
-    taskStudents.map(ts => ({
-      type: AssigneeType.STUDENT,
-      label: personDict[ts.personId].name,
-      start: ts.start,
-      end: ts.end
-    }))
+    taskStudents.reduce((dict, ts) => {
+      if (!dict[ts.taskId]) {
+        dict[ts.taskId] = [];
+      }
+      dict[ts.taskId].push({
+        type: AssigneeTypesEnum.STUDENT,
+        id: ts.id,
+        label: personDict[ts.personId].name,
+        start: ts.start,
+        end: ts.end
+      });
+
+      return dict;
+    }, {})
 );
 
-const taskAssignees = createSelector(
-  [taskClassGroupAssignees, taskGroupAssignees, taskStudentAssignees],
-  (tCGA, tGA, tSA, props) => [...tCGA, ...tGA, ...tSA]
+const combinedAssigneesByTask = createSelector(
+  [
+    taskClassGroupAssigneeByTask,
+    taskGroupAssigneeByTask,
+    taskStudentAssigneeByTask
+  ],
+  (tCGA, tGA, tSA, props) => {
+    const taskClassGroupAssigneesKeys = Object.keys(tCGA);
+    const taskGroupAssigneesKeys = Object.keys(tGA);
+    const taskStudentAssigneesKeys = Object.keys(tSA);
+
+    const dict = [
+      ...taskClassGroupAssigneesKeys,
+      ...taskGroupAssigneesKeys,
+      ...taskStudentAssigneesKeys
+    ].reduce((acc, key) => {
+      if (!acc[key]) {
+        acc[key] = [].concat(tCGA[key] || [], tGA[key] || [], tSA[key] || []);
+      }
+      return acc;
+    }, {});
+
+    return dict;
+  }
 );
 
 export const getTasksWithAssignments = createSelector(
@@ -76,13 +108,13 @@ export const getTasksWithAssignments = createSelector(
     TaskQueries.getAll,
     LearningAreaQueries.getAllEntities,
     TaskEduContentQueries.getAllGroupedByTaskId,
-    taskAssignees
+    combinedAssigneesByTask
   ],
   (
     tasks: TaskInterface[],
     learningAreaDict: Dictionary<LearningAreaInterface>,
     taskEduContentByTask: Dictionary<TaskEduContentInterface[]>,
-    assignees: AssigneeInterface[],
+    assigneesByTask: Dictionary<AssigneeInterface[]>,
     props: { isPaper?: boolean }
   ) =>
     tasks
@@ -94,7 +126,7 @@ export const getTasksWithAssignments = createSelector(
           eduContentAmount: taskEduContentByTask[task.id]
             ? taskEduContentByTask[task.id].length
             : 0,
-          assignees
+          assignees: assigneesByTask[task.id] || []
         })
       )
 );

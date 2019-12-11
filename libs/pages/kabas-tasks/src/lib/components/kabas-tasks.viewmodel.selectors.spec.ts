@@ -34,10 +34,8 @@ import { routerReducer } from '@ngrx/router-store';
 import { Action, select, Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
 import { configureTestSuite } from 'ng-bullet';
-import {
-  AssigneeType,
-  getTasksWithAssignments
-} from './kabas-tasks.viewmodel.selectors';
+import { AssigneeTypesEnum } from '../interfaces/Assignee.interface';
+import { getTasksWithAssignments } from './kabas-tasks.viewmodel.selectors';
 
 describe('Kabas-tasks viewmodel selectors', () => {
   configureTestSuite(() => {
@@ -62,46 +60,105 @@ describe('Kabas-tasks viewmodel selectors', () => {
 
   describe('Store', () => {
     let store: Store<DalState>;
+    const date = Date.now();
 
     beforeEach(() => {
       store = TestBed.get(Store);
-      hydrateStore(store);
+      hydrateStore(store, date);
     });
 
-    it('should use the data in the store', () => {
+    it('should return digital tasksWithAssignments', () => {
       const stream = store.pipe(
         select(getTasksWithAssignments, { isPaper: false })
       );
 
-      const expected = {
-        ...new TaskFixture(),
-        eduContentAmount: 3,
-        learningArea: new LearningAreaFixture({ name: 'wiskunde' }),
-        assignees: [
-          jasmine.objectContaining({
-            type: AssigneeType.CLASSGROUP,
-            label: '1A'
+      const expected = [
+        {
+          ...new TaskFixture({ id: 1, name: 'een digitale taak' }),
+          eduContentAmount: 3,
+          learningArea: new LearningAreaFixture({ name: 'wiskunde' }),
+          assignees: [
+            {
+              type: AssigneeTypesEnum.CLASSGROUP,
+              id: 1,
+              label: '1A',
+              start: new Date(date - 2),
+              end: new Date(date + 2)
+            },
+            {
+              type: AssigneeTypesEnum.GROUP,
+              id: 1,
+              label: 'Remediëring 2c',
+              start: new Date(date - 1),
+              end: new Date(date + 1)
+            },
+            {
+              type: AssigneeTypesEnum.STUDENT,
+              id: 1,
+              label: 'Polleke',
+              start: new Date(date - 3),
+              end: new Date(date + 3)
+            }
+          ]
+        },
+        {
+          ...new TaskFixture({
+            id: 3,
+            name: 'een taak zonder assignees of content'
           }),
-          jasmine.objectContaining({
-            type: AssigneeType.GROUP,
-            label: 'Remediëring 2c'
-          }),
-          jasmine.objectContaining({
-            type: AssigneeType.STUDENT,
-            label: 'Polleke'
-          })
-        ]
-      };
-      expect(stream).toBeObservable(hot('a', { a: [expected] }));
+          eduContentAmount: 0,
+          learningArea: new LearningAreaFixture({ name: 'wiskunde' }),
+          assignees: []
+        }
+      ];
+      expect(stream).toBeObservable(hot('a', { a: expected }));
     });
-  });
 
-  describe('getTasksWithAssignments', () => {
-    const projector: Function = getTasksWithAssignments.projector;
+    it('should return paper tasksWithAssignments', () => {
+      const stream = store.pipe(
+        select(getTasksWithAssignments, { isPaper: true })
+      );
+
+      const expected = [
+        {
+          ...new TaskFixture({
+            id: 2,
+            name: 'een taak op dode bomen',
+            isPaperTask: true
+          }),
+          eduContentAmount: 1,
+          learningArea: new LearningAreaFixture({ name: 'wiskunde' }),
+          assignees: [
+            {
+              type: AssigneeTypesEnum.CLASSGROUP,
+              id: 2,
+              label: '1A',
+              start: new Date(date - 22),
+              end: new Date(date + 22)
+            },
+            {
+              type: AssigneeTypesEnum.GROUP,
+              id: 2,
+              label: 'Remediëring 2c',
+              start: new Date(date - 11),
+              end: new Date(date + 11)
+            },
+            {
+              type: AssigneeTypesEnum.STUDENT,
+              id: 2,
+              label: 'Polleke',
+              start: new Date(date - 33),
+              end: new Date(date + 33)
+            }
+          ]
+        }
+      ];
+      expect(stream).toBeObservable(hot('a', { a: expected }));
+    });
   });
 });
 
-function hydrateStore(store) {
+function hydrateStore(store, date) {
   const actions: Action[] = [
     getLoadTasksAction(),
     getLoadLearningAreasAction(),
@@ -109,15 +166,28 @@ function hydrateStore(store) {
     getLoadTaskEduContentsAction(),
     getLoadGroupsAction(),
     getLoadLinkedPersonsAction(),
-    getLoadTaskClassGroupsAction(),
-    getLoadTaskGroupsAction(),
-    getLoadTaskStudentsAction()
+    getLoadTaskClassGroupsAction(date),
+    getLoadTaskGroupsAction(date),
+    getLoadTaskStudentsAction(date)
   ];
   actions.forEach(action => store.dispatch(action));
 }
 
 function getLoadTasksAction() {
-  return new TaskActions.TasksLoaded({ tasks: [new TaskFixture()] });
+  return new TaskActions.TasksLoaded({
+    tasks: [
+      new TaskFixture({ id: 1, name: 'een digitale taak' }),
+      new TaskFixture({
+        id: 2,
+        name: 'een taak op dode bomen',
+        isPaperTask: true
+      }),
+      new TaskFixture({
+        id: 3,
+        name: 'een taak zonder assignees of content'
+      })
+    ]
+  });
 }
 
 function getLoadLearningAreasAction() {
@@ -127,7 +197,10 @@ function getLoadLearningAreasAction() {
 }
 function getLoadClassGroupsAction() {
   return new ClassGroupActions.ClassGroupsLoaded({
-    classGroups: [new ClassGroupFixture()]
+    classGroups: [
+      new ClassGroupFixture({ id: 1, name: '1A' }),
+      new ClassGroupFixture({ id: 2, name: '2c' })
+    ]
   });
 }
 function getLoadTaskEduContentsAction() {
@@ -135,7 +208,8 @@ function getLoadTaskEduContentsAction() {
     taskEduContents: [
       new TaskEduContentFixture({ id: 123, taskId: 1, eduContentId: 1 }),
       new TaskEduContentFixture({ id: 456, taskId: 1, eduContentId: 2 }),
-      new TaskEduContentFixture({ id: 789, taskId: 1, eduContentId: 3 })
+      new TaskEduContentFixture({ id: 789, taskId: 1, eduContentId: 3 }),
+      new TaskEduContentFixture({ id: 666, taskId: 2, eduContentId: 3 })
     ]
   });
 }
@@ -147,18 +221,63 @@ function getLoadLinkedPersonsAction() {
     persons: [new PersonFixture({ name: 'Polleke' })]
   });
 }
-function getLoadTaskGroupsAction() {
+function getLoadTaskGroupsAction(date) {
   return new TaskGroupActions.TaskGroupsLoaded({
-    taskGroups: [new TaskGroupFixture({ taskId: 1, groupId: 1 })]
+    taskGroups: [
+      new TaskGroupFixture({
+        id: 1,
+        taskId: 1,
+        groupId: 1,
+        start: new Date(date - 1),
+        end: new Date(date + 1)
+      }),
+      new TaskGroupFixture({
+        id: 2,
+        taskId: 2,
+        groupId: 1,
+        start: new Date(date - 11),
+        end: new Date(date + 11)
+      })
+    ]
   });
 }
-function getLoadTaskClassGroupsAction() {
+function getLoadTaskClassGroupsAction(date) {
   return new TaskClassGroupActions.TaskClassGroupsLoaded({
-    taskClassGroups: [new TaskClassGroupFixture({ taskId: 1, classGroupId: 1 })]
+    taskClassGroups: [
+      new TaskClassGroupFixture({
+        id: 1,
+        taskId: 1,
+        classGroupId: 1,
+        start: new Date(date - 2),
+        end: new Date(date + 2)
+      }),
+      new TaskClassGroupFixture({
+        id: 2,
+        taskId: 2,
+        classGroupId: 1,
+        start: new Date(date - 22),
+        end: new Date(date + 22)
+      })
+    ]
   });
 }
-function getLoadTaskStudentsAction() {
+function getLoadTaskStudentsAction(date) {
   return new TaskStudentActions.TaskStudentsLoaded({
-    taskStudents: [new TaskStudentFixture({ taskId: 1, personId: 1 })]
+    taskStudents: [
+      new TaskStudentFixture({
+        id: 1,
+        taskId: 1,
+        personId: 1,
+        start: new Date(date - 3),
+        end: new Date(date + 3)
+      }),
+      new TaskStudentFixture({
+        id: 2,
+        taskId: 2,
+        personId: 1,
+        start: new Date(date - 33),
+        end: new Date(date + 33)
+      })
+    ]
   });
 }
