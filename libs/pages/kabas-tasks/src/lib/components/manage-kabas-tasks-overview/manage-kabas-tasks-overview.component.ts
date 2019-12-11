@@ -114,7 +114,7 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
       })
     );
 
-    this.assigneeFilter$ = this.paperTasksWithAssignments$.pipe(
+    this.assigneeFilterPaper$ = this.paperTasksWithAssignments$.pipe(
       map(tasksWithAssignments => {
         let assigns = [];
         tasksWithAssignments.forEach(twa => {
