@@ -39,13 +39,13 @@
         <campus-select-filter
           *ngIf="(learningAreaFilter$ | async) as learningAreaFilter"
           [filterCriteria]="learningAreaFilter"
-          [resetLabel]="'reset'"
+          [resetLabel]="'Geen'"
         ></campus-select-filter>
         <!--<date-filter-component></date-filter-component>-->
         <campus-select-filter
           *ngIf="(assigneeFilter$ | async) as assigneeFilter"
           [filterCriteria]="assigneeFilter"
-          [resetLabel]="'reset'"
+          [resetLabel]="'Niemand'"
         ></campus-select-filter>
         <campus-button-toggle-filter [filterCriteria]="taskStatusFilter">
         </campus-button-toggle-filter>
@@ -84,12 +84,12 @@
         <campus-select-filter
           *ngIf="(learningAreaFilterPaper$ | async) as learningAreaFilterPaper"
           [filterCriteria]="learningAreaFilterPaper"
-          [resetLabel]="'reset'"
+          [resetLabel]="'Geen'"
         ></campus-select-filter>
         <campus-select-filter
           *ngIf="(assigneeFilterPaper$ | async) as assigneeFilterPaper"
           [filterCriteria]="assigneeFilterPaper"
-          [resetLabel]="'reset'"
+          [resetLabel]="'Niemand'"
         ></campus-select-filter>
         <campus-button-toggle-filter [filterCriteria]="taskStatusFilter">
         </campus-button-toggle-filter>
