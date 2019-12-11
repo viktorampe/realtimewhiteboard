@@ -5,16 +5,11 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { combineLatest, map } from 'rxjs/operators';
 import { TaskWithAssigneesInterface } from '../../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
-import { MockKabasTasksViewModel } from '../kabas-tasks.viewmodel.mock';
 
 @Component({
   selector: 'campus-manage-kabas-tasks-overview',
   templateUrl: './manage-kabas-tasks-overview.component.html',
-  styleUrls: ['./manage-kabas-tasks-overview.component.scss'],
-
-  providers: [
-    { provide: KabasTasksViewModel, useClass: MockKabasTasksViewModel }
-  ]
+  styleUrls: ['./manage-kabas-tasks-overview.component.scss']
 })
 export class ManageKabasTasksOverviewComponent implements OnInit {
   public TaskSortEnum = TaskSortEnum;
@@ -130,7 +125,7 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
   }
 }
 
-enum TaskSortEnum {
+export enum TaskSortEnum {
   'NAME' = 'NAME',
   'LEARNINGAREA' = 'LEARNINGAREA',
   'STARTDATE' = 'STARTDATE'
