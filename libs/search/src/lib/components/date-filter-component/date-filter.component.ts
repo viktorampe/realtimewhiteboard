@@ -99,11 +99,6 @@ export class DateFilterComponent
     this.subscriptions.unsubscribe();
   }
 
-  private testEvent(event: any) {
-    console.log(event);
-    this.child.selected = new Date('9 december 2019');
-  }
-
   private updateView(): void {
     this.count = this.criteria.values.length;
   }
