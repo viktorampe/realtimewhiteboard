@@ -1,39 +1,26 @@
 @mixin date-filter-component() {
-  $date-filter_mat-select-custom-display-label-color: black !default;
-
-  $date-filter_mat-select-trigger-height: 1.125em !default;
-  $date-filter_mat-select-trigger-padding: 0px !default;
-  $date-filter_mat-select-trigger-border-width: 0px !default;
-  $date-filter_mat-select-trigger-border-color: transparent !default;
-  $date-filter_mat-select-value-vertical-align: baseline !default;
-
-  $date-filter_date-range_day--in-range-background-color: transparent !default;
+  $date-filter_menu-panel_title-font-size: 18px !default;
+  $date-filter_menu-panel_title-margin-bottom: 16px !default;
+  $date-filter_menu-panel-padding: 16px !default;
+  $date-filter_menu-panel_radio-button-margin-bottom: 16px !default;
+  $date-filter_menu-panel_mat-form-field-margin-right: 16px !default;
 
   $date-filter_mat-form-field_outline-opacity: 0 !default;
   $date-filter_mat-form-field_outline-border-right-width: 0px !default;
   $date-filter_mat-form-field_outline-border-color: inherit !default;
 
+  $date-filter_date-range_day--in-range-background-color: transparent !default;
+
   .date-filter-component {
-    .mat-select-trigger {
-      padding: $date-filter_mat-select-trigger-padding;
-      border: $date-filter_mat-select-trigger-border-width solid
-        $date-filter_mat-select-trigger-border-color;
-      height: 50px;
+    &__open-datepicker-button {
+      height: $search-filter-height;
     }
-
-    .mat-select-value {
-      vertical-align: $date-filter_mat-select-value-vertical-align;
-    }
-
-    &__select {
-      &--custom-display-label {
-        .mat-select-placeholder {
-          color: $date-filter_mat-select-custom-display-label-color;
-        }
+    &__menu-panel {
+      &__title {
+        font-size: $date-filter_menu-panel_title-font-size;
+        margin-bottom: $date-filter_menu-panel_title-margin-bottom;
       }
-    }
 
-    &__select-panel {
       &.mat-menu-panel {
         max-width: none;
       }
@@ -44,8 +31,24 @@
 
         &__day {
           &--in-range {
-            .mat-calendar-body-cell-content {
+            background-color: $date-filter_date-range_day--in-range-background-color;
+
+            &-single,
+            &-first,
+            &-last {
               background-color: $date-filter_date-range_day--in-range-background-color;
+            }
+
+            &-single {
+              border-radius: 50%;
+            }
+
+            &-first {
+              border-radius: 50% 0% 0% 50%;
+            }
+
+            &-last {
+              border-radius: 0% 50% 50% 0%;
             }
           }
         }
@@ -56,16 +59,20 @@
       }
 
       .mat-menu-content {
-        padding: 8px;
+        padding: $date-filter_menu-panel-padding !important;
       }
 
       mat-radio-group {
         display: flex;
         flex-direction: column;
+
+        mat-radio-button {
+          margin-bottom: $date-filter_menu-panel_radio-button-margin-bottom;
+        }
       }
 
       mat-form-field {
-        width: 50%;
+        margin-right: $date-filter_menu-panel_mat-form-field-margin-right;
 
         .mat-form-field-appearance-outline,
         .mat-form-field-infix {

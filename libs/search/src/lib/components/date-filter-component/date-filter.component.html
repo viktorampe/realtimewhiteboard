@@ -1,9 +1,11 @@
 <mat-menu
   #datepickerMenu="matMenu"
-  class="date-filter-component date-filter-component__select-panel"
+  class="date-filter-component date-filter-component__menu-panel"
 >
   <div (click)="$event.stopPropagation()">
-    <div>Selecteer een periode:</div>
+    <div class="date-filter-component__menu-panel__title"
+      >Selecteer een periode</div
+    >
     <mat-radio-group
       [formControl]="dateSelection"
       aria-label="Select an option"
@@ -11,19 +13,16 @@
       <mat-radio-button *ngFor="let option of options" [value]="option.value">{{
         option.viewValue
       }}</mat-radio-button>
-      <mat-radio-button [value]="{ type: SelectOptionValueType.CustomRange }">
-        <div class="date-filter-component__select-panel__date-range">
+      <mat-radio-button [value]="{ type: RadioOptionValueType.CustomRange }">
+        <div class="date-filter-component__menu-panel__date-range">
           <mat-form-field [appearance]="'outline'">
             <mat-label>Vanaf</mat-label>
             <input
               matInput
               [matDatepicker]="startDatePicker"
               [formControl]="startDate"
+              (focus)="startDatePicker.open()"
             />
-            <mat-datepicker-toggle
-              matSuffix
-              [for]="startDatePicker"
-            ></mat-datepicker-toggle>
             <mat-datepicker
               #startDatePicker
               [dateClass]="applyClassToDateInRange.bind(this)"
@@ -36,11 +35,8 @@
               matInput
               [matDatepicker]="endDatePicker"
               [formControl]="endDate"
+              (focus)="endDatePicker.open()"
             />
-            <mat-datepicker-toggle
-              matSuffix
-              [for]="endDatePicker"
-            ></mat-datepicker-toggle>
             <mat-datepicker
               #endDatePicker
               [dateClass]="applyClassToDateInRange.bind(this)"
@@ -58,5 +54,6 @@
   [matBadgeHidden]="count === 0"
   matBadgePosition="above after"
   [matMenuTriggerFor]="datepickerMenu"
+  class="date-filter-component__open-datepicker-button"
   >{{ customDisplayLabel || criteria.label }}</campus-button
 >

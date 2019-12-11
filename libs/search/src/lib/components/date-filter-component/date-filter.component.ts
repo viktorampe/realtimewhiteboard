@@ -19,19 +19,19 @@ import {
   SearchFilterCriteriaValuesInterface
 } from '../../interfaces/search-filter-criteria.interface';
 
-enum SelectOptionValueType {
+enum RadioOptionValueType {
   FilterCriteriaValue,
   CustomRange,
   NoFilter
 }
 
-interface SelectOption {
-  value: SelectOptionValue;
+interface RadioOption {
+  value: RadioOptionValue;
   viewValue: string | number;
 }
 
-interface SelectOptionValue {
-  type: SelectOptionValueType;
+interface RadioOptionValue {
+  type: RadioOptionValueType;
   contents?: SearchFilterCriteriaValuesInterface;
 }
 
@@ -42,11 +42,10 @@ interface SelectOptionValue {
 })
 export class DateFilterComponent
   implements SearchFilterComponentInterface, OnInit, OnDestroy {
-  SelectOptionValueType = SelectOptionValueType;
+  RadioOptionValueType = RadioOptionValueType;
 
   criteria: SearchFilterCriteriaInterface;
-  options: SelectOption[];
-  selectControl: FormControl = new FormControl();
+  options: RadioOption[];
   startDate: FormControl = new FormControl();
   endDate: FormControl = new FormControl();
   dateSelection: FormControl = new FormControl();
@@ -61,7 +60,7 @@ export class DateFilterComponent
   @Input()
   public set resetLabel(label: string) {
     this.resetOptionLabel = label;
-    this.options = this.getSelectOptions();
+    this.options = this.getRadioOptions();
   }
   public get resetLabel() {
     return this.resetOptionLabel;
@@ -70,7 +69,7 @@ export class DateFilterComponent
   @Input()
   public set filterCriteria(criteria: SearchFilterCriteriaInterface) {
     this.criteria = criteria;
-    this.options = this.getSelectOptions();
+    this.options = this.getRadioOptions();
   }
   public get filterCriteria() {
     return this.criteria;
@@ -89,9 +88,9 @@ export class DateFilterComponent
     this.subscriptions.add(
       this.dateSelection.valueChanges
         .pipe(distinctUntilChanged())
-        .subscribe((optionValue: SelectOptionValue) => {
+        .subscribe((optionValue: RadioOptionValue) => {
           switch (optionValue.type) {
-            case SelectOptionValueType.CustomRange:
+            case RadioOptionValueType.CustomRange:
               this.startDate.enable({ emitEvent: false });
               this.endDate.enable({ emitEvent: false });
 
@@ -99,7 +98,7 @@ export class DateFilterComponent
               // change events from firing when both inputs are enabled
               this.onDateChange();
               break;
-            case SelectOptionValueType.FilterCriteriaValue:
+            case RadioOptionValueType.FilterCriteriaValue:
               this.startDate.disable({ emitEvent: false });
               this.endDate.disable({ emitEvent: false });
 
@@ -147,13 +146,34 @@ export class DateFilterComponent
     const startDateValue: Date = this.startDate.value;
     const endDateValue: Date = this.endDate.value;
 
+    const sameDay = (a: Date, b: Date) => {
+      return (
+        a.getDate() === b.getDate() &&
+        a.getMonth() === b.getMonth() &&
+        a.getFullYear() === b.getFullYear()
+      );
+    };
+
     if (
       startDateValue &&
       endDateValue &&
       date >= startDateValue &&
       date <= endDateValue
     ) {
-      return 'date-filter-component__select-panel__date-range__day--in-range';
+      if (sameDay(date, startDateValue) && sameDay(date, endDateValue)) {
+        return 'date-filter-component__menu-panel__date-range__day--in-range-single';
+      } else if (sameDay(date, startDateValue)) {
+        return 'date-filter-component__menu-panel__date-range__day--in-range-first';
+      } else if (sameDay(date, endDateValue)) {
+        return 'date-filter-component__menu-panel__date-range__day--in-range-last';
+      } else {
+        return 'date-filter-component__menu-panel__date-range__day--in-range';
+      }
+    } else if (
+      (startDateValue && sameDay(date, startDateValue)) ||
+      (endDateValue && sameDay(date, endDateValue))
+    ) {
+      return 'date-filter-component__menu-panel__date-range__day--in-range-single';
     }
   }
 
@@ -181,16 +201,20 @@ export class DateFilterComponent
       this.customDisplayLabel = null;
     }
 
-    this.count = this.criteria.values.length;
+    const hasDates =
+      !!this.criteria.values.length &&
+      !!this.criteria.values[0] &&
+      (!!this.criteria.values[0].data.gte ||
+        !!this.criteria.values[0].data.lte);
+
+    this.count = +hasDates;
+    console.log(this.count);
   }
 
   private onDateChange(trigger?: FormControl) {
     let startDateValue: Date =
       this.startDate.value && new Date(this.startDate.value);
     let endDateValue: Date = this.endDate.value && new Date(this.endDate.value);
-
-    // clear the selection (visual) and don't trigger our own handler
-    this.selectControl.setValue(null, { emitEvent: false });
 
     // startDate or endDate can be null if it's an invalid date
     if (startDateValue || endDateValue) {
@@ -227,17 +251,16 @@ export class DateFilterComponent
       ];
     } else {
       this.criteria.values = [];
-      this.customDisplayLabel = null;
     }
   }
 
-  private getSelectOptions(): SelectOption[] {
+  private getRadioOptions(): RadioOption[] {
     const now = new Date();
-    let options: SelectOption[] = [
+    let options: RadioOption[] = [
       {
         viewValue: 'Deze week',
         value: {
-          type: SelectOptionValueType.FilterCriteriaValue,
+          type: RadioOptionValueType.FilterCriteriaValue,
           contents: {
             data: {
               gte: DateFunctions.startOfWeek(now),
@@ -249,7 +272,7 @@ export class DateFilterComponent
       {
         viewValue: 'Vorige week',
         value: {
-          type: SelectOptionValueType.FilterCriteriaValue,
+          type: RadioOptionValueType.FilterCriteriaValue,
           contents: {
             data: {
               gte: DateFunctions.lastWeek(now),
@@ -265,7 +288,7 @@ export class DateFilterComponent
         {
           viewValue: this.resetLabel,
           value: {
-            type: SelectOptionValueType.NoFilter
+            type: RadioOptionValueType.NoFilter
           }
         },
         ...options
