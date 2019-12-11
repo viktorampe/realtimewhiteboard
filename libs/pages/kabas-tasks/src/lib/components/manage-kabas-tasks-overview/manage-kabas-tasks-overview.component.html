@@ -44,8 +44,10 @@
         </mat-list-item>
 
         <mat-list-option
+          #option
           *ngFor="let task of (tasksWithAssignments$ | async)"
           checkboxPosition="before"
+          [class.mat-list-option--selected]="option.selected"
         >
           {{ task.name }}
         </mat-list-option>
@@ -63,8 +65,10 @@
         </mat-list-item>
 
         <mat-list-option
+          #option
           *ngFor="let task of (paperTasksWithAssignments$ | async)"
           checkboxPosition="before"
+          [class.mat-list-option--selected]="option.selected"
         >
           {{ task.name }}
         </mat-list-option>
