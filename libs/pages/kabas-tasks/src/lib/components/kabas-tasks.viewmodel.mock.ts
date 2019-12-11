@@ -3,7 +3,10 @@ import { LearningAreaFixture, TaskFixture } from '@campus/dal';
 import { ViewModelInterface } from '@campus/testing';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { AssigneeTypesEnum } from '../interfaces/Assignee.interface';
-import { TaskWithAssigneesInterface } from '../interfaces/TaskWithAssignees.interface';
+import {
+  TaskStatusEnum,
+  TaskWithAssigneesInterface
+} from '../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from './kabas-tasks.viewmodel';
 
 @Injectable({
@@ -59,7 +62,8 @@ export class MockKabasTasksViewModel
         ...new TaskFixture({ archivedAt: null, archivedYear: null }),
         name: 'Titel van de eerste oefening',
         eduContentAmount: 3,
-        learningArea: new LearningAreaFixture({ name: 'wiskunde' }),
+        learningArea: new LearningAreaFixture({ id: 1, name: 'wiskunde' }),
+        learningAreaId: 1,
         assignees: [
           {
             type: AssigneeTypesEnum.CLASSGROUP,
@@ -96,7 +100,8 @@ export class MockKabasTasksViewModel
         ...new TaskFixture({ archivedAt: null, archivedYear: null }),
         name: 'Titel van de tweede oefening',
         eduContentAmount: 5,
-        learningArea: new LearningAreaFixture({ name: 'wiskunde' }),
+        learningArea: new LearningAreaFixture({ id: 2, name: 'frans' }),
+        learningAreaId: 2,
         assignees: [
           {
             type: AssigneeTypesEnum.CLASSGROUP,
@@ -126,7 +131,8 @@ export class MockKabasTasksViewModel
         ...new TaskFixture({ archivedAt: null, archivedYear: null }),
         name: 'Actieve oefening voor één klasgroep',
         eduContentAmount: 3,
-        learningArea: new LearningAreaFixture({ name: 'nederlands' }),
+        learningArea: new LearningAreaFixture({ id: 3, name: 'nederlands' }),
+        learningAreaId: 3,
         assignees: [
           {
             type: AssigneeTypesEnum.CLASSGROUP,
@@ -142,7 +148,8 @@ export class MockKabasTasksViewModel
         ...new TaskFixture({ archivedAt: null, archivedYear: null }),
         name: 'Pending oefening voor één klasgroep',
         eduContentAmount: 5,
-        learningArea: new LearningAreaFixture({ name: 'nederlands' }),
+        learningArea: new LearningAreaFixture({ id: 3, name: 'nederlands' }),
+        learningAreaId: 3,
         assignees: [
           {
             type: AssigneeTypesEnum.CLASSGROUP,
@@ -158,7 +165,8 @@ export class MockKabasTasksViewModel
         ...new TaskFixture({ archivedAt: null, archivedYear: null }),
         name: 'Finished oefening',
         eduContentAmount: 5,
-        learningArea: new LearningAreaFixture({ name: 'nederlands' }),
+        learningArea: new LearningAreaFixture({ id: 3, name: 'nederlands' }),
+        learningAreaId: 3,
         assignees: [
           {
             type: AssigneeTypesEnum.CLASSGROUP,
@@ -177,7 +185,8 @@ export class MockKabasTasksViewModel
         }),
         name: 'Gearchiveerde oefening',
         eduContentAmount: 2,
-        learningArea: new LearningAreaFixture({ name: 'wiskunde' }),
+        learningArea: new LearningAreaFixture({ id: 1, name: 'wiskunde' }),
+        learningAreaId: 1,
         assignees: [
           {
             type: AssigneeTypesEnum.CLASSGROUP,

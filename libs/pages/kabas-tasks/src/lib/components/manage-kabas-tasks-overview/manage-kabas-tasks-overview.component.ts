@@ -115,12 +115,15 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
         tasksWithAssignments.forEach(twa => {
           uniqueLearningAreas[twa.learningAreaId] = twa.learningArea;
         });
+        console.log(uniqueLearningAreas);
         return {
           name: 'learningArea',
           label: 'Leergebieden',
           keyProperty: 'id',
           displayProperty: 'name',
           values: Object.values(uniqueLearningAreas).map(la => {
+            console.log(la);
+
             return {
               data: la,
               visible: true
