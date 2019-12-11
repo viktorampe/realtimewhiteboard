@@ -1,34 +1,36 @@
-<div class="whiteboard-page__header">
-  <h2
-    (click)="showTitleInput()"
-    *ngIf="!isTitleInputSelected"
-    class="whiteboard-page__header__title"
-    >{{ title }}</h2
-  >
-  <input
-    #titleInput
-    (keyup.enter)="hideTitleInput()"
-    (focusout)="hideTitleInput()"
-    *ngIf="isTitleInputSelected"
-    type="text"
-    [(ngModel)]="title"
-  />
-</div>
-<div class="whiteboard-page__workspace" (dblclick)="onDblClick($event)">
-  <campus-card
-    *ngFor="let card of cards; let i = index"
-    cdkDrag
-    (lastColor)="saveLastColor($event)"
-    [card]="card"
-    (deleteCard)="onDeleteCard(i)"
-    class="whiteboard-page__card"
-  ></campus-card>
-  <button
-    mat-raised-button
-    color="primary"
-    class="whiteboard-page__btnPlus"
-    (click)="btnPlusClicked()"
-  >
-    +
-  </button>
+<div class="whiteboard-page">
+  <div class="whiteboard-page__header">
+    <h2
+      (click)="showTitleInput()"
+      *ngIf="!isTitleInputSelected"
+      class="whiteboard-page__header__title"
+      >{{ title }}</h2
+    >
+    <input
+      #titleInput
+      (keyup.enter)="hideTitleInput()"
+      (focusout)="hideTitleInput()"
+      *ngIf="isTitleInputSelected"
+      type="text"
+      [(ngModel)]="title"
+    />
+  </div>
+  <div class="whiteboard-page__workspace" (dblclick)="onDblClick($event)">
+    <campus-card
+      *ngFor="let card of cards; let i = index"
+      cdkDrag
+      (lastColor)="saveLastColor($event)"
+      [card]="card"
+      (deleteCard)="onDeleteCard(i)"
+      class="whiteboard-page__card"
+    ></campus-card>
+    <button
+      mat-raised-button
+      color="primary"
+      class="whiteboard-page__btnPlus"
+      (click)="btnPlusClicked()"
+    >
+      +
+    </button>
+  </div>
 </div>
