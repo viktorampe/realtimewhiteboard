@@ -1,3 +1,4 @@
+<p>{{ filterState$ | async | json }}</p>
 <campus-page-bar>
   <campus-button
     class="shared-header__contextual__button smallIcon"
@@ -33,19 +34,26 @@
     (selectedIndexChange)="onSelectedTabIndexChanged($event)"
   >
     <mat-tab label="Digitale taken">
-      <campus-filter-text-input
-        #digitalTasksTextFilter
-        [source]="tasksWithAssignments$ | async"
-      ></campus-filter-text-input>
+      <campus-search-term
+        placeholder="Zoeken op titel"
+        [autoComplete]="false"
+        (valueChange)="searchTermUpdated($event)"
+      ></campus-search-term>
       <campus-select-filter
         multiple="true"
         resetLabel="reset"
         [filterCriteria]="this.mockFilterCriteria"
-        (filterSelectionChange)="selectionChanged($event)"
+        (filterSelectionChange)="selectionChanged($event, 'learningArea')"
       ></campus-select-filter>
       <!--<date-filter-component></date-filter-component>-->
-      <!-- <campus-select-filter></campus-select-filter>
-      <campus-button-toggle-filter> </campus-button-toggle-filter> -->
+      <campus-select-filter
+        multiple="true"
+        resetLabel="reset"
+        [filterCriteria]="this.mockFilterCriteria"
+        (filterSelectionChange)="selectionChanged($event, 'assignee')"
+        resetLabel="reset"
+      ></campus-select-filter>
+      <!-- <campus-button-toggle-filter> </campus-button-toggle-filter> -->
       <campus-button
         class="practice-book-lessons--reset-filters"
         iconClass="reset-filters"
@@ -70,15 +78,11 @@
     </mat-tab>
 
     <mat-tab label="Papieren taken">
-      <campus-filter-text-input
-        #paperTasksTextFilter
-        [source]="paperTasksWithAssignments$ | async"
-      ></campus-filter-text-input>
       <campus-select-filter
         multiple="true"
         resetLabel="reset"
         [filterCriteria]="this.mockFilterCriteria"
-        (filterSelectionChange)="selectionChanged($event)"
+        (filterSelectionChange)="selectionChanged($event, 'learningArea')"
       ></campus-select-filter>
 
       <mat-selection-list #paper>

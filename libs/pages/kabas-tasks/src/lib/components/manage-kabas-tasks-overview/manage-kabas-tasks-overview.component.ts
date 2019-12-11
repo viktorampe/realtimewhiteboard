@@ -4,28 +4,31 @@ import {
   Component,
   Inject,
   OnInit,
-  ViewChild
+  QueryList,
+  ViewChild,
+  ViewChildren
 } from '@angular/core';
 import { MatSelectionList } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   SearchFilterCriteriaFixture,
   SearchFilterCriteriaInterface,
-  SearchFilterCriteriaValuesFixture
+  SearchFilterCriteriaValuesFixture,
+  SearchTermComponent
 } from '@campus/search';
-import { FilterTextInputComponent } from '@campus/ui';
 import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/utils';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { map, shareReplay, tap } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
+import { AssigneeTypesEnum } from '../../interfaces/Assignee.interface';
 import { TaskWithAssigneesInterface } from '../../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
 import { MockKabasTasksViewModel } from '../kabas-tasks.viewmodel.mock';
 
 interface FilterState {
-  searchText?: string;
+  searchTerm?: string;
   learningArea?: number[];
   dateInterval?: { start: Date; end: Date };
-  assignees?: number[];
+  assignee?: { id: number; type: AssigneeTypesEnum }[];
 }
 
 @Component({
@@ -50,19 +53,11 @@ export class ManageKabasTasksOverviewComponent
 
   private filterState$ = new BehaviorSubject<FilterState>({});
 
-  @ViewChild('digitalTasksTextFilter')
-  digitalTasksFilterTextInput: FilterTextInputComponent<
-    TaskWithAssigneesInterface[],
-    TaskWithAssigneesInterface
-  >;
-  @ViewChild('paperTasksTextFilter')
-  paperTasksFilterTextInput: FilterTextInputComponent<
-    TaskWithAssigneesInterface[],
-    TaskWithAssigneesInterface
-  >;
-
   @ViewChild('paper') paperTaskList: MatSelectionList;
   @ViewChild('digital') digitalTaskList: MatSelectionList;
+  @ViewChildren(SearchTermComponent) searchTermFilters: QueryList<
+    SearchTermComponent
+  >;
 
   constructor(
     private viewModel: KabasTasksViewModel,
@@ -76,12 +71,10 @@ export class ManageKabasTasksOverviewComponent
     this.currentTab$ = this.getCurrentTab();
     this.tasksWithAssignments$ = this.viewModel.tasksWithAssignments$;
     this.paperTasksWithAssignments$ = this.viewModel.paperTasksWithAssignments$;
-
-    this.digitalTasksFilterTextInput.setFilterableItem(this);
-    this.paperTasksFilterTextInput.setFilterableItem(this);
   }
   ngAfterViewInit(): void {
     this.filteredTasks$ = this.getFilteredTasks();
+
     this.cd.detectChanges();
   }
 
@@ -91,6 +84,15 @@ export class ManageKabasTasksOverviewComponent
   clickAddPaperTask() {
     console.log('TODO: adding paper task');
   }
+
+  // TODO: implement handler
+  clickDeleteTasks() {}
+
+  // TODO: implement handler
+  clickArchiveTasks() {}
+
+  // TODO: implement handler
+  clickNewTask() {}
 
   public onSelectedTabIndexChanged(tab: number) {
     this.router.navigate([], {
@@ -107,7 +109,10 @@ export class ManageKabasTasksOverviewComponent
   //  - assignee
   //  - stopped/started/not yet started
 
-  public selectionChanged(criteria: SearchFilterCriteriaInterface[]) {
+  public selectionChanged(
+    criteria: SearchFilterCriteriaInterface[],
+    filterName: string
+  ) {
     // array is emitted, but there is only one value
     const criterium = criteria[0];
     // extract selected options from filter
@@ -115,9 +120,21 @@ export class ManageKabasTasksOverviewComponent
       .filter(value => value.selected)
       .map(selectedValue => selectedValue.data.id);
 
+    const updatedFilter = {};
+    updatedFilter[filterName] = selectedOptions;
+
+    this.updateFilterState(updatedFilter);
+  }
+
+  public searchTermUpdated(term: string) {
+    const updatedFilter = { searchTerm: term };
+    this.updateFilterState(updatedFilter);
+  }
+
+  private updateFilterState(updatedFilter: FilterState): void {
     const currentFilterState = this.filterState$.value;
-    const newFilterState = { ...currentFilterState };
-    newFilterState[criterium.name] = selectedOptions;
+    const newFilterState = { ...currentFilterState, ...updatedFilter };
+
     this.filterState$.next(newFilterState);
   }
 
@@ -125,25 +142,16 @@ export class ManageKabasTasksOverviewComponent
     return combineLatest([
       this.currentTab$,
       this.filterState$,
-      this.digitalTasksFilterTextInput.result$,
-      this.paperTasksFilterTextInput.result$
+      this.tasksWithAssignments$,
+      this.paperTasksWithAssignments$
     ]).pipe(
-      map(
-        ([
-          currentTabIndex, // to know which task stream we should use
+      map(([currentTabIndex, filterState, digitalTasks, paperTasks]) => {
+        // to know which task stream we should use
+        return this.filterTasks(
           filterState,
-          textFilteredDigitalTasks,
-          textFilteredPaperTasks
-        ]) => {
-          return this.filterTasks(
-            filterState,
-            currentTabIndex === 0
-              ? textFilteredDigitalTasks
-              : textFilteredPaperTasks
-          );
-        }
-      ),
-      shareReplay(1)
+          currentTabIndex === 0 ? digitalTasks : paperTasks
+        );
+      })
     );
   }
 
@@ -152,12 +160,39 @@ export class ManageKabasTasksOverviewComponent
     tasks: TaskWithAssigneesInterface[]
   ): TaskWithAssigneesInterface[] {
     if (tasks.length === 0) return [];
+
     let filteredTasks = [...tasks];
+
     if (filterState.learningArea && filterState.learningArea.length) {
       // filter on learning areas
       filteredTasks = tasks.filter(task => {
         return filterState.learningArea.includes(task.learningAreaId);
       });
+    }
+
+    if (filterState.searchTerm) {
+      // filter on term
+      filteredTasks = this.filterService.filter(filteredTasks, {
+        name: filterState.searchTerm
+      });
+    }
+
+    if (filterState.assignee && filterState.assignee.length) {
+      const assigneeIdsByTypeMap = filterState.assignee.reduce((acc, cur) => {
+        if (!acc[cur.type]) acc[cur.type] = [];
+        acc[cur.type].push(cur.id);
+
+        return acc;
+      }, {});
+
+      filteredTasks = filteredTasks.filter(task =>
+        task.assignees.some(taskAssignee => {
+          return (
+            assigneeIdsByTypeMap[taskAssignee.type] &&
+            assigneeIdsByTypeMap[taskAssignee.type].includes(task.id)
+          );
+        })
+      );
     }
 
     return filteredTasks;
@@ -194,13 +229,8 @@ export class ManageKabasTasksOverviewComponent
   }
 
   private clearFiltersOnTab(tabIndex: number): void {
-    if (tabIndex === 0) {
-      if (this.digitalTasksFilterTextInput)
-        this.digitalTasksFilterTextInput.clear();
-    } else if (tabIndex === 1) {
-      if (this.paperTasksFilterTextInput)
-        this.paperTasksFilterTextInput.clear();
-    }
+    if (this.searchTermFilters)
+      this.searchTermFilters.forEach(filter => (filter.currentValue = ''));
   }
 
   /**
@@ -219,20 +249,4 @@ export class ManageKabasTasksOverviewComponent
       if (this.paperTaskList) this.paperTaskList.selectedOptions.clear();
     }
   }
-
-  filterFn(
-    source: TaskWithAssigneesInterface[],
-    searchText: string
-  ): TaskWithAssigneesInterface[] {
-    return this.filterService.filter(source, { name: searchText });
-  }
-
-  // TODO: implement handler
-  clickDeleteTasks() {}
-
-  // TODO: implement handler
-  clickArchiveTasks() {}
-
-  // TODO: implement handler
-  clickNewTask() {}
 }
