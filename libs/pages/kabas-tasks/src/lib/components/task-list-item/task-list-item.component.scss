@@ -10,13 +10,12 @@
     flex: 0 0 50px;
   }
 
+  &__learning-area {
+    flex: 0 0 auto;
+  }
+
   &__archived {
     flex: 0 0 50px;
-    visibility: hidden;
-
-    &--visible {
-      visibility: visible;
-    }
   }
 
   &__status {
@@ -24,7 +23,7 @@
   }
 
   &__container {
-    flex: 1 0 50%;
+    flex: 1 0 30%;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -57,7 +56,7 @@
   }
 
   &__assignees {
-    flex: 0 0 250px;
+    flex: 1 0 250px;
 
     &-class-groups {
       list-style: none;
@@ -75,12 +74,6 @@
         &:last-child:after {
           content: '';
         }
-      }
-    }
-
-    span + span {
-      &:before {
-        content: '|';
       }
     }
   }
