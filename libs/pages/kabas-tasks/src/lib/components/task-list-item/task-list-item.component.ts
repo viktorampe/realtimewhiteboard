@@ -44,7 +44,7 @@ export class TaskListItemComponent implements OnInit {
     return this._assignees;
   }
 
-  @HostBinding('class.manage-kabas-tasks-task-list-item')
+  @HostBinding('class.manage-kabas-tasks__task-list-item')
   taskListItemClass = true;
 
   ngOnInit() {}
