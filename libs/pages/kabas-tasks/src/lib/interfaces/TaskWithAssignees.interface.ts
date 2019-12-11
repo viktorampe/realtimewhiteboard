@@ -7,14 +7,10 @@ export enum TaskStatusEnum {
   'FINISHED' = 'finished'
 }
 
-export interface TaskDatesInterface {
-  startDate: Date;
-  endDate: Date;
-  status: TaskStatusEnum;
-}
-
 export interface TaskWithAssigneesInterface extends TaskInterface {
   eduContentAmount: number;
   assignees: AssigneeInterface[];
-  taskDates?: TaskDatesInterface;
+  startDate?: Date;
+  endDate?: Date;
+  status?: TaskStatusEnum;
 }
