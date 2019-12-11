@@ -1,4 +1,8 @@
 .whiteboard-page {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  
   &__header {
     height: 3rem;
     background: #b1b1b1;
