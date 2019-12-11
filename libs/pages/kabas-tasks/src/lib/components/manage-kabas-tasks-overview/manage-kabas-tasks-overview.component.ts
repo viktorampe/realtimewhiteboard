@@ -63,7 +63,26 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
     this.currentSortMode$.next(sortMode);
   }
 
-  public sortTasks(
+  private getCurrentTab(): Observable<number> {
+    return this.route.queryParams.pipe(map(queryParam => queryParam.tab));
+  }
+
+  // TODO: implement handler
+  clickDeleteTasks() {}
+
+  // TODO: implement handler
+  clickArchiveTasks() {}
+
+  // TODO: implement handler
+  clickNewTask() {}
+
+  private resetSorting() {
+    this.setSortMode(TaskSortEnum.NAME);
+    this.digitalSorting.value = undefined;
+    this.paperSorting.value = undefined;
+  }
+
+  private sortTasks(
     tasks: TaskWithAssigneesInterface[],
     sortMode: TaskSortEnum
   ) {
@@ -78,25 +97,6 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
     // no sortMode -> no sorting
     return tasks;
   }
-
-  private getCurrentTab(): Observable<number> {
-    return this.route.queryParams.pipe(map(queryParam => queryParam.tab));
-  }
-
-  private resetSorting() {
-    this.setSortMode(TaskSortEnum.NAME);
-    this.digitalSorting.value = undefined;
-    this.paperSorting.value = undefined;
-  }
-
-  // TODO: implement handler
-  clickDeleteTasks() {}
-
-  // TODO: implement handler
-  clickArchiveTasks() {}
-
-  // TODO: implement handler
-  clickNewTask() {}
 
   private sortByName(tasks: TaskWithAssigneesInterface[]) {
     return tasks.sort((a, b) => {
