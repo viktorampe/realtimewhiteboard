@@ -62,7 +62,7 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
 
     this.assigneeFilter$ = this.tasksWithAssignments$.pipe(
       map(tasksWithAssignments => {
-        let assigns = [];
+        const assigns = [];
         tasksWithAssignments.forEach(twa => {
           twa.assignees.forEach(ass => {
             assigns.push({
@@ -72,15 +72,31 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
             });
           });
         });
-        assigns = assigns.filter(
-          (v, i, a) =>
-            a.findIndex(t => t.type === v.type && t.id === v.id) === i
-        );
-        const values = assigns.map(e => {
-          return {
-            data: { label: e.label, id: { type: e.type, id: e.id } },
-            visible: true
-          } as SearchFilterCriteriaValuesInterface;
+
+        const identifiers = [];
+        const values = assigns.reduce((acc, assignee) => {
+          const identifier = `${assignee.type}-${assignee.id}`;
+          if (identifiers.includes(identifier)) {
+            return acc;
+          }
+          identifiers.push(identifier);
+          return [
+            ...acc,
+            {
+              data: {
+                label: assignee.label,
+                id: { type: assignee.type, id: assignee.id }
+              },
+              visible: true
+            } as SearchFilterCriteriaValuesInterface
+          ];
+        }, []);
+        values.sort(function(a, b) {
+          return a.data.label > b.data.label
+            ? 1
+            : b.data.label > a.data.label
+            ? -1
+            : 0;
         });
 
         return {
@@ -116,7 +132,7 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
 
     this.assigneeFilterPaper$ = this.paperTasksWithAssignments$.pipe(
       map(tasksWithAssignments => {
-        let assigns = [];
+        const assigns = [];
         tasksWithAssignments.forEach(twa => {
           twa.assignees.forEach(ass => {
             assigns.push({
@@ -126,17 +142,31 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
             });
           });
         });
-        assigns = assigns.filter(
-          (v, i, a) =>
-            a.findIndex(t => t.type === v.type && t.id === v.id) === i
-        );
-        const values = assigns.map(e => {
-          return {
-            data: { label: e.label, id: { type: e.type, id: e.id } },
-            visible: true
-          } as SearchFilterCriteriaValuesInterface;
+        const identifiers = [];
+        const values = assigns.reduce((acc, assignee) => {
+          const identifier = `${assignee.type}-${assignee.id}`;
+          if (identifiers.includes(identifier)) {
+            return acc;
+          }
+          identifiers.push(identifier);
+          return [
+            ...acc,
+            {
+              data: {
+                label: assignee.label,
+                id: { type: assignee.type, id: assignee.id }
+              },
+              visible: true
+            } as SearchFilterCriteriaValuesInterface
+          ];
+        }, []);
+        values.sort(function(a, b) {
+          return a.data.label > b.data.label
+            ? 1
+            : b.data.label > a.data.label
+            ? -1
+            : 0;
         });
-
         return {
           name: 'assignee',
           label: 'Toegekend aan',
@@ -191,6 +221,8 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
       queryParams: { tab }
     });
   }
+
+  public tasksWithAssignments(stream: string) {}
 
   private getCurrentTab(): Observable<number> {
     return this.route.queryParams.pipe(map(queryParam => queryParam.tab));
