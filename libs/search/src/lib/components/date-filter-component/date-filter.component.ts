@@ -46,6 +46,9 @@ export class DateFilterComponent
 
   criteria: SearchFilterCriteriaInterface;
   options: RadioOption[];
+  customRangeOptionValue: RadioOptionValue = {
+    type: RadioOptionValueType.CustomRange
+  };
   startDate: FormControl = new FormControl();
   endDate: FormControl = new FormControl();
   dateSelection: FormControl = new FormControl();
@@ -91,23 +94,14 @@ export class DateFilterComponent
         .subscribe((optionValue: RadioOptionValue) => {
           switch (optionValue.type) {
             case RadioOptionValueType.CustomRange:
-              this.startDate.enable({ emitEvent: false });
-              this.endDate.enable({ emitEvent: false });
-
               // Trigger it ourselves to prevent two consecutive date
               // change events from firing when both inputs are enabled
               this.onDateChange();
               break;
             case RadioOptionValueType.FilterCriteriaValue:
-              this.startDate.disable({ emitEvent: false });
-              this.endDate.disable({ emitEvent: false });
-
               this.criteria.values = [optionValue.contents];
               break;
             default:
-              this.startDate.disable({ emitEvent: false });
-              this.endDate.disable({ emitEvent: false });
-
               this.criteria.values = [];
               break;
           }
@@ -125,9 +119,6 @@ export class DateFilterComponent
         .pipe(distinctUntilChanged())
         .subscribe(this.onDateChange.bind(this, this.endDate))
     );
-
-    this.startDate.disable({ emitEvent: false });
-    this.endDate.disable({ emitEvent: false });
   }
 
   ngOnDestroy(): void {
@@ -143,6 +134,10 @@ export class DateFilterComponent
 
     this.filterSelectionChange.emit([this.criteria]);
     this.updateView();
+  }
+
+  public clickDateInput() {
+    this.dateSelection.setValue(this.customRangeOptionValue);
   }
 
   /**

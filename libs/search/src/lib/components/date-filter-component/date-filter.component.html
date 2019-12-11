@@ -13,7 +13,7 @@
       <mat-radio-button *ngFor="let option of options" [value]="option.value">{{
         option.viewValue
       }}</mat-radio-button>
-      <mat-radio-button [value]="{ type: RadioOptionValueType.CustomRange }">
+      <mat-radio-button [value]="customRangeOptionValue">
         <div class="date-filter-component__menu-panel__date-range">
           <mat-form-field [appearance]="'outline'">
             <mat-label>Vanaf</mat-label>
@@ -22,7 +22,7 @@
               matInput
               [matDatepicker]="startDatePicker"
               [formControl]="startDate"
-              (click)="startDatePicker.open()"
+              (click)="startDatePicker.open(); clickDateInput()"
             />
             <mat-datepicker
               #startDatePicker
@@ -37,7 +37,7 @@
               matInput
               [matDatepicker]="endDatePicker"
               [formControl]="endDate"
-              (click)="endDatePicker.open()"
+              (click)="endDatePicker.open(); clickDateInput()"
             />
             <mat-datepicker
               #endDatePicker

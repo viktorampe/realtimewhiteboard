@@ -135,16 +135,9 @@ describe('DateFilterComponent', () => {
     describe('value changes', () => {
       describe('fixed option', () => {
         beforeEach(() => {
-          component.startDate.enable();
-          component.endDate.enable();
           component.dateSelection.setValue(expectedOptions[0].value);
 
           fixture.detectChanges();
-        });
-
-        it('should disable startDate and endDate', () => {
-          expect(component.startDate.disabled).toBeTruthy();
-          expect(component.endDate.disabled).toBeTruthy();
         });
 
         it('should set criteria values to the selected value', () => {
@@ -156,18 +149,11 @@ describe('DateFilterComponent', () => {
 
       describe('reset option', () => {
         beforeEach(() => {
-          component.startDate.enable();
-          component.endDate.enable();
           component.dateSelection.setValue({
             type: RadioOptionValueType.NoFilter
           });
 
           fixture.detectChanges();
-        });
-
-        it('should disable startDate and endDate', () => {
-          expect(component.startDate.disabled).toBeTruthy();
-          expect(component.endDate.disabled).toBeTruthy();
         });
 
         it('should set criteria values to an empty array', () => {
@@ -179,18 +165,11 @@ describe('DateFilterComponent', () => {
         beforeEach(() => {
           jest.spyOn(component, 'onDateChange');
 
-          component.startDate.disable();
-          component.endDate.disable();
           component.dateSelection.setValue({
             type: RadioOptionValueType.CustomRange
           });
 
           fixture.detectChanges();
-        });
-
-        it('should enable startDate and endDate', () => {
-          expect(component.startDate.enabled).toBeTruthy();
-          expect(component.endDate.enabled).toBeTruthy();
         });
 
         it('should call date change once', () => {
@@ -201,6 +180,16 @@ describe('DateFilterComponent', () => {
   });
 
   describe('date range selection', () => {
+    it('should change the option to custom date range when clicking the input', () => {
+      component.dateSelection.setValue(expectedOptions[0].value);
+
+      component.clickDateInput();
+
+      expect(component.dateSelection.value).toBe(
+        component.customRangeOptionValue
+      );
+    });
+
     describe('value changes', () => {
       it('should set start date to end date when end date is lower than start date', () => {
         component.startDate.setValue(someEndDate);
