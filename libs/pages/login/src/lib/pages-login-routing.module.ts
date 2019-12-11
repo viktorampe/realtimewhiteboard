@@ -1,13 +1,11 @@
-import { LoginViewModel } from './components/login.viewmodel';
-import { LoginComponent } from './components/login.component';
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
+import { LoginComponent } from './components/login.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: LoginComponent,
-    resolve: { isResolved: LoginViewModel }
+    component: LoginComponent
   }
 ];
 
