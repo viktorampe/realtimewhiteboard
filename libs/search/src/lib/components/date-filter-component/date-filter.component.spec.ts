@@ -1,57 +1,66 @@
-import { DebugElement } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import {
-  MatBadge,
   MatBadgeModule,
   MatDatepickerModule,
   MatInputModule,
+  MatMenuModule,
   MatNativeDateModule,
-  MatSelect,
-  MatSelectModule
+  MatRadioModule
 } from '@angular/material';
-import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MockDate } from '@campus/testing';
+import { UiModule } from '@campus/ui';
 import { UtilsModule } from '@campus/utils';
 import { configureTestSuite } from 'ng-bullet';
 import { SearchFilterCriteriaFixture } from '../../+fixtures/search-filter-criteria.fixture';
-import { DateFilterComponent } from './date-filter.component';
+import {
+  DateFilterComponent,
+  RadioOption,
+  RadioOptionValueType
+} from './date-filter.component';
 
 describe('DateFilterComponent', () => {
   let component: DateFilterComponent;
   let fixture: ComponentFixture<DateFilterComponent>;
-  let matSelect: DebugElement;
-  let matSelectComponent: MatSelect;
-  let matBadge: DebugElement;
 
   const fakeDate = new Date(2019, 11, 11, 8, 16, 32, 64);
   const startOfWeek = new Date(2019, 11, 9, 0, 0, 0, 0);
+  const startOfWeekPlusOneDay = new Date(2019, 11, 10, 0, 0, 0, 0);
   const endOfWeek = new Date(2019, 11, 15, 23, 59, 59, 999);
   const startOfLastWeek = new Date(2019, 11, 2, 0, 0, 0, 0);
   const endOfLastWeek = new Date(2019, 11, 8, 23, 59, 59, 999);
+  const startOfNextWeek = new Date(2019, 11, 16, 0, 0, 0, 0);
   const someStartDate = new Date(2019, 0, 5, 8, 16, 32, 64);
-  const someStartDateNormalized = new Date(2019, 0, 5, 0, 0, 0, 0);
-  const someEndDate = new Date(2019, 0, 5, 16, 16, 32, 64);
-  const someEndDateNormalized = new Date(2019, 0, 5, 23, 59, 59, 999);
+  const someStartDateAtStartOfDay = new Date(2019, 0, 5, 0, 0, 0, 0);
+  const someStartDateAtEndOfDay = new Date(2019, 0, 5, 23, 59, 59, 999);
+  const someEndDate = new Date(2019, 0, 8, 8, 16, 32, 64);
+  const someEndDateAtStartOfDay = new Date(2019, 0, 8, 0, 0, 0, 0);
+  const someEndDateAtEndOfDay = new Date(2019, 0, 8, 23, 59, 59, 999);
   let mockDate: MockDate;
 
-  const expectedOptions = [
+  const expectedOptions: RadioOption[] = [
     {
       viewValue: 'Deze week',
       value: {
-        data: {
-          gte: startOfWeek,
-          lte: endOfWeek
+        type: RadioOptionValueType.FilterCriteriaValue,
+        contents: {
+          data: {
+            gte: startOfWeek,
+            lte: endOfWeek
+          }
         }
       }
     },
     {
       viewValue: 'Vorige week',
       value: {
-        data: {
-          gte: startOfLastWeek,
-          lte: endOfLastWeek
+        type: RadioOptionValueType.FilterCriteriaValue,
+        contents: {
+          data: {
+            gte: startOfLastWeek,
+            lte: endOfLastWeek
+          }
         }
       }
     }
@@ -68,12 +77,14 @@ describe('DateFilterComponent', () => {
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [
-        MatSelectModule,
         ReactiveFormsModule,
         MatBadgeModule,
         MatDatepickerModule,
         MatNativeDateModule,
         MatInputModule,
+        MatMenuModule,
+        MatRadioModule,
+        UiModule,
         NoopAnimationsModule,
         UtilsModule
       ],
@@ -85,9 +96,6 @@ describe('DateFilterComponent', () => {
     fixture = TestBed.createComponent(DateFilterComponent);
     component = fixture.componentInstance;
     component.filterCriteria = mockCriteria;
-    matSelect = fixture.debugElement.query(By.directive(MatSelect));
-    matSelectComponent = matSelect.componentInstance as MatSelect;
-    matBadge = fixture.debugElement.query(By.directive(MatBadge));
 
     fixture.detectChanges();
 
@@ -102,192 +110,426 @@ describe('DateFilterComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should set the right fixed options in the mat-select component', () => {
-    const matSelectOptions = matSelectComponent.options.map(option => {
-      return {
-        value: option.value,
-        viewValue: option.viewValue
-      };
+  describe('radio options', () => {
+    it('should have the correct options', () => {
+      expect(component.options).toEqual(expectedOptions);
     });
 
-    expect(matSelectOptions).toEqual(expectedOptions);
+    it('should have a reset option when the reset label is set', () => {
+      const label = 'Geen';
+
+      component.resetLabel = label;
+      fixture.detectChanges();
+
+      expect(component.options).toEqual([
+        {
+          viewValue: label,
+          value: {
+            type: RadioOptionValueType.NoFilter
+          }
+        },
+        ...expectedOptions
+      ]);
+    });
+
+    describe('value changes', () => {
+      describe('fixed option', () => {
+        beforeEach(() => {
+          component.startDate.enable();
+          component.endDate.enable();
+          component.dateSelection.setValue(expectedOptions[0].value);
+
+          fixture.detectChanges();
+        });
+
+        it('should disable startDate and endDate', () => {
+          expect(component.startDate.disabled).toBeTruthy();
+          expect(component.endDate.disabled).toBeTruthy();
+        });
+
+        it('should set criteria values to the selected value', () => {
+          expect(component.criteria.values).toEqual([
+            expectedOptions[0].value.contents
+          ]);
+        });
+      });
+
+      describe('reset option', () => {
+        beforeEach(() => {
+          component.startDate.enable();
+          component.endDate.enable();
+          component.dateSelection.setValue({
+            type: RadioOptionValueType.NoFilter
+          });
+
+          fixture.detectChanges();
+        });
+
+        it('should disable startDate and endDate', () => {
+          expect(component.startDate.disabled).toBeTruthy();
+          expect(component.endDate.disabled).toBeTruthy();
+        });
+
+        it('should set criteria values to an empty array', () => {
+          expect(component.criteria.values).toEqual([]);
+        });
+      });
+
+      describe('range option', () => {
+        beforeEach(() => {
+          jest.spyOn(component, 'onDateChange');
+
+          component.startDate.disable();
+          component.endDate.disable();
+          component.dateSelection.setValue({
+            type: RadioOptionValueType.CustomRange
+          });
+
+          fixture.detectChanges();
+        });
+
+        it('should enable startDate and endDate', () => {
+          expect(component.startDate.enabled).toBeTruthy();
+          expect(component.endDate.enabled).toBeTruthy();
+        });
+
+        it('should call date change once', () => {
+          expect(component.onDateChange).toHaveBeenCalledTimes(1);
+        });
+      });
+    });
   });
 
-  it('should clear the selected date range and custom label when selecting a fixed option', () => {
-    component.startDate.setValue(someStartDate);
-    component.endDate.setValue(someEndDate);
+  describe('date range selection', () => {
+    describe('value changes', () => {
+      it('should set start date to end date when end date is lower than start date', () => {
+        component.startDate.setValue(someEndDate);
+        component.endDate.setValue(someStartDate);
 
-    component.selectControl.setValue(expectedOptions[0].value);
+        expect(component.startDate.value).toEqual(someStartDateAtStartOfDay);
+        expect(component.endDate.value).toEqual(someStartDateAtEndOfDay);
+      });
 
-    expect(component.startDate.value).toBe(null);
-    expect(component.endDate.value).toBe(null);
-    expect(component.customDisplayLabel).toBeFalsy();
+      it('should set end date to start date when start date is higher than end date', () => {
+        component.endDate.setValue(someStartDate);
+        component.startDate.setValue(someEndDate);
+
+        expect(component.startDate.value).toEqual(someEndDateAtStartOfDay);
+        expect(component.endDate.value).toEqual(someEndDateAtEndOfDay);
+      });
+
+      it('should set criteria values correctly', () => {
+        component.startDate.setValue(someStartDate);
+        component.endDate.setValue(someEndDate);
+
+        expect(component.criteria.values).toEqual([
+          {
+            data: {
+              gte: someStartDateAtStartOfDay,
+              lte: someEndDateAtEndOfDay
+            }
+          }
+        ]);
+      });
+
+      it('should set criteria values correctly - no dates entered', () => {
+        component.startDate.setValue(null);
+        component.endDate.setValue(null);
+
+        expect(component.criteria.values).toEqual([]);
+      });
+    });
   });
 
-  it('should emit the selected option with its value', () => {
-    jest.spyOn(component.filterSelectionChange, 'emit');
+  describe('applyFilter', () => {
+    it('should close the mat menu', () => {
+      jest.spyOn(component.matMenuTrigger, 'closeMenu');
 
-    component.selectControl.setValue(expectedOptions[0].value);
+      component.applyFilter();
 
-    expect(component.filterSelectionChange.emit).toHaveBeenCalledWith([
-      {
-        ...mockCriteria,
-        values: [expectedOptions[0].value]
-      }
-    ]);
-  });
+      expect(component.matMenuTrigger.closeMenu).toHaveBeenCalled();
+    });
 
-  describe('date range selection - from only', () => {
-    beforeEach(() => {
+    it('should emit the filter criteria', () => {
+      component.criteria.values = [expectedOptions[0].value.contents];
       jest.spyOn(component.filterSelectionChange, 'emit');
 
-      component.startDate.setValue(someStartDate);
+      component.applyFilter();
 
-      fixture.detectChanges();
-    });
-
-    it('should emit the selected date range', () => {
       expect(component.filterSelectionChange.emit).toHaveBeenCalledWith([
         {
           ...mockCriteria,
-          values: [
-            {
-              data: {
-                gte: someStartDateNormalized,
-                lte: null
-              }
-            }
-          ]
+          values: [expectedOptions[0].value.contents]
         }
       ]);
     });
 
-    it('should show the correct display label', () => {
-      expect(matSelectComponent.placeholder).toBe(
-        'Vanaf ' + someStartDateNormalized.toLocaleDateString()
-      );
+    it('should update the view', () => {
+      jest.spyOn(component, 'updateView');
+
+      component.applyFilter();
+
+      expect(component.updateView).toHaveBeenCalled();
+    });
+
+    describe('cancel = true', () => {
+      it('should close the mat menu', () => {
+        jest.spyOn(component.matMenuTrigger, 'closeMenu');
+
+        component.applyFilter(true);
+
+        expect(component.matMenuTrigger.closeMenu).toHaveBeenCalled();
+      });
+
+      it('should emit the filter criteria', () => {
+        jest.spyOn(component.filterSelectionChange, 'emit');
+
+        component.applyFilter(true);
+
+        expect(component.filterSelectionChange.emit).not.toHaveBeenCalled();
+      });
+
+      it('should update the view', () => {
+        jest.spyOn(component, 'updateView');
+
+        component.applyFilter(true);
+
+        expect(component.updateView).not.toHaveBeenCalled();
+      });
     });
   });
 
-  describe('date range selection - to only', () => {
-    beforeEach(() => {
-      jest.spyOn(component.filterSelectionChange, 'emit');
+  describe('updateView', () => {
+    describe('customDisplayLabel', () => {
+      it('should be null when the chosen option is no filter', () => {
+        component.dateSelection.setValue({
+          type: RadioOptionValueType.NoFilter
+        });
 
-      component.endDate.setValue(someStartDate);
+        component.updateView();
 
-      fixture.detectChanges();
-    });
+        expect(component.customDisplayLabel).toBe(null);
+      });
 
-    it('should emit the selected date range', () => {
-      expect(component.filterSelectionChange.emit).toHaveBeenCalledWith([
-        {
-          ...mockCriteria,
-          values: [
-            {
-              data: {
-                gte: null,
-                lte: someEndDateNormalized
-              }
-            }
-          ]
-        }
-      ]);
-    });
+      it('should be the date range when the chosen option is a fixed option', () => {
+        component.dateSelection.setValue(expectedOptions[0].value);
 
-    it('should show the correct display label', () => {
-      expect(matSelectComponent.placeholder).toBe(
-        'Tot en met ' + someEndDateNormalized.toLocaleDateString()
-      );
-    });
-  });
+        component.updateView();
 
-  describe('date range selection - from and to', () => {
-    beforeEach(() => {
-      jest.spyOn(component.filterSelectionChange, 'emit');
+        expect(component.customDisplayLabel).toBe(
+          'Vanaf ' +
+            startOfWeek.toLocaleDateString() +
+            ' tot en met ' +
+            endOfWeek.toLocaleDateString()
+        );
+      });
 
-      component.startDate.setValue(someStartDate);
-      component.endDate.setValue(someEndDate);
+      it('should be the date range when the chosen option is a custom range', () => {
+        component.dateSelection.setValue({
+          type: RadioOptionValueType.CustomRange
+        });
+        component.startDate.setValue(startOfWeek);
+        component.endDate.setValue(endOfWeek);
 
-      fixture.detectChanges();
-    });
+        component.updateView();
 
-    it('should emit the selected date range', () => {
-      expect(component.filterSelectionChange.emit).toHaveBeenCalledWith([
-        {
-          ...mockCriteria,
-          values: [
-            {
-              data: {
-                gte: someStartDateNormalized,
-                lte: someEndDateNormalized
-              }
-            }
-          ]
-        }
-      ]);
-    });
+        expect(component.customDisplayLabel).toBe(
+          'Vanaf ' +
+            startOfWeek.toLocaleDateString() +
+            ' tot en met ' +
+            endOfWeek.toLocaleDateString()
+        );
+      });
 
-    it('should show the correct display label', () => {
-      expect(matSelectComponent.placeholder).toBe(
-        'Vanaf ' +
-          someStartDateNormalized.toLocaleDateString() +
-          ' tot en met ' +
-          someEndDateNormalized.toLocaleDateString()
-      );
-    });
-  });
+      it('should be null when the chosen option is a custom range - no dates selected', () => {
+        component.dateSelection.setValue({
+          type: RadioOptionValueType.CustomRange
+        });
+        component.startDate.setValue(null);
+        component.endDate.setValue(null);
 
-  describe('counter for badge', () => {
-    it('should be 0 when nothing is selected', () => {
-      expect(component.count).toBe(0);
-    });
+        component.updateView();
 
-    it('should be 1 when an option is selected', () => {
-      component.selectControl.setValue(expectedOptions[0].value);
-      expect(component.count).toBe(1);
-    });
+        expect(component.customDisplayLabel).toBe(null);
+      });
 
-    it('should be 1 when a date range is selected', () => {
-      component.startDate.setValue(someStartDate);
-      component.endDate.setValue(someEndDate);
+      it('should be the start date when the chosen option is a custom range - only start date', () => {
+        component.dateSelection.setValue({
+          type: RadioOptionValueType.CustomRange
+        });
+        component.startDate.setValue(startOfWeek);
+        component.endDate.setValue(null);
 
-      expect(component.count).toBe(1);
-    });
-  });
+        component.updateView();
 
-  describe('reset option', () => {
-    let matSelectOptions;
+        expect(component.customDisplayLabel).toBe(
+          'Vanaf ' + startOfWeek.toLocaleDateString()
+        );
+      });
 
-    beforeEach(() => {
-      component.resetLabel = 'resetFoo';
-      fixture.detectChanges();
+      it('should be the end date when the chosen option is a custom range - only end date', () => {
+        component.dateSelection.setValue({
+          type: RadioOptionValueType.CustomRange
+        });
+        component.startDate.setValue(null);
+        component.endDate.setValue(endOfWeek);
 
-      matSelectOptions = matSelectComponent.options.map(option => {
-        return {
-          value: option.value,
-          viewValue: option.viewValue
-        };
+        component.updateView();
+
+        expect(component.customDisplayLabel).toBe(
+          'Tot en met ' + endOfWeek.toLocaleDateString()
+        );
       });
     });
 
-    it('should add the reset option to the select list when it is set', () => {
-      expect(matSelectOptions[0]).toEqual({
-        viewValue: 'resetFoo',
-        value: null
+    describe('count', () => {
+      it('should be 0 when the chosen option is no filter', () => {
+        component.dateSelection.setValue({
+          type: RadioOptionValueType.NoFilter
+        });
+
+        component.updateView();
+
+        expect(component.count).toBe(0);
+      });
+
+      it('should be 1 when the chosen option is a fixed option', () => {
+        component.dateSelection.setValue(expectedOptions[0].value);
+
+        component.updateView();
+
+        expect(component.count).toBe(1);
+      });
+
+      it('should be 1 when the chosen option is a custom range', () => {
+        component.dateSelection.setValue({
+          type: RadioOptionValueType.CustomRange
+        });
+        component.startDate.setValue(startOfWeek);
+        component.endDate.setValue(endOfWeek);
+
+        component.updateView();
+
+        expect(component.count).toBe(1);
+      });
+
+      it('should be 0 when the chosen option is a custom range - no dates selected', () => {
+        component.dateSelection.setValue({
+          type: RadioOptionValueType.CustomRange
+        });
+        component.startDate.setValue(null);
+        component.endDate.setValue(null);
+
+        component.updateView();
+
+        expect(component.count).toBe(0);
+      });
+
+      it('should be 1 the chosen option is a custom range - only start date', () => {
+        component.dateSelection.setValue({
+          type: RadioOptionValueType.CustomRange
+        });
+        component.startDate.setValue(startOfWeek);
+        component.endDate.setValue(null);
+
+        component.updateView();
+
+        expect(component.count).toBe(1);
+      });
+
+      it('should be 1 when the chosen option is a custom range - only end date', () => {
+        component.dateSelection.setValue({
+          type: RadioOptionValueType.CustomRange
+        });
+        component.startDate.setValue(null);
+        component.endDate.setValue(endOfWeek);
+
+        component.updateView();
+
+        expect(component.count).toBe(1);
+      });
+    });
+  });
+
+  describe('applyClassToDateRange', () => {
+    describe('range selected', () => {
+      beforeEach(() => {
+        component.startDate.setValue(startOfWeek);
+        component.endDate.setValue(endOfWeek);
+      });
+
+      it('should calculate right class - under range', () => {
+        const classValue = component.applyClassToDateInRange(startOfLastWeek);
+
+        expect(classValue).toBeUndefined();
+      });
+
+      it('should calculate right class - above range', () => {
+        const classValue = component.applyClassToDateInRange(startOfNextWeek);
+
+        expect(classValue).toBeUndefined();
+      });
+
+      it('should calculate right class - on range start', () => {
+        const classValue = component.applyClassToDateInRange(startOfWeek);
+
+        expect(classValue).toEqual(
+          'date-filter-component__menu-panel__date-range__day--in-range-first'
+        );
+      });
+
+      it('should calculate right class - on range end', () => {
+        const classValue = component.applyClassToDateInRange(endOfWeek);
+
+        expect(classValue).toEqual(
+          'date-filter-component__menu-panel__date-range__day--in-range-last'
+        );
+      });
+
+      it('should calculate right class - same day as start and end', () => {
+        component.startDate.setValue(startOfWeek);
+        component.endDate.setValue(startOfWeek);
+
+        const classValue = component.applyClassToDateInRange(startOfWeek);
+
+        expect(classValue).toEqual(
+          'date-filter-component__menu-panel__date-range__day--in-range-single'
+        );
+      });
+
+      it('should calculate right class - inside range', () => {
+        const classValue = component.applyClassToDateInRange(
+          startOfWeekPlusOneDay
+        );
+
+        expect(classValue).toEqual(
+          'date-filter-component__menu-panel__date-range__day--in-range'
+        );
       });
     });
 
-    it('should clear the filter when reset is chosen', () => {
-      jest.spyOn(component.filterSelectionChange, 'emit');
+    describe('one date selected', () => {
+      it('should calculate right class - only start date specified', () => {
+        component.startDate.setValue(startOfWeek);
+        component.endDate.setValue(null);
 
-      component.selectControl.setValue(matSelectOptions[0].value);
+        const classValue = component.applyClassToDateInRange(startOfWeek);
 
-      expect(component.filterSelectionChange.emit).toHaveBeenCalledWith([
-        {
-          ...mockCriteria,
-          values: []
-        }
-      ]);
+        expect(classValue).toEqual(
+          'date-filter-component__menu-panel__date-range__day--in-range-single'
+        );
+      });
+
+      it('should calculate right class - only end date specified', () => {
+        component.startDate.setValue(null);
+        component.endDate.setValue(endOfWeek);
+
+        const classValue = component.applyClassToDateInRange(endOfWeek);
+
+        expect(classValue).toEqual(
+          'date-filter-component__menu-panel__date-range__day--in-range-single'
+        );
+      });
     });
   });
 });

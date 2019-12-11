@@ -19,18 +19,18 @@ import {
   SearchFilterCriteriaValuesInterface
 } from '../../interfaces/search-filter-criteria.interface';
 
-enum RadioOptionValueType {
+export enum RadioOptionValueType {
   FilterCriteriaValue,
   CustomRange,
   NoFilter
 }
 
-interface RadioOption {
+export interface RadioOption {
   value: RadioOptionValue;
   viewValue: string | number;
 }
 
-interface RadioOptionValue {
+export interface RadioOptionValue {
   type: RadioOptionValueType;
   contents?: SearchFilterCriteriaValuesInterface;
 }
@@ -102,10 +102,13 @@ export class DateFilterComponent
               this.startDate.disable({ emitEvent: false });
               this.endDate.disable({ emitEvent: false });
 
-              this.filterCriteria.values = [optionValue.contents];
+              this.criteria.values = [optionValue.contents];
               break;
             default:
-              this.filterCriteria.values = [];
+              this.startDate.disable({ emitEvent: false });
+              this.endDate.disable({ emitEvent: false });
+
+              this.criteria.values = [];
               break;
           }
         })
@@ -131,7 +134,7 @@ export class DateFilterComponent
     this.subscriptions.unsubscribe();
   }
 
-  public applyFilter(cancel: boolean): void {
+  public applyFilter(cancel?: boolean): void {
     this.matMenuTrigger.closeMenu();
 
     if (cancel) {
@@ -142,6 +145,9 @@ export class DateFilterComponent
     this.updateView();
   }
 
+  /**
+   * Fed to the date pickers so they know which dates to highlight
+   */
   public applyClassToDateInRange(date: Date) {
     const startDateValue: Date = this.startDate.value;
     const endDateValue: Date = this.endDate.value;
@@ -177,7 +183,51 @@ export class DateFilterComponent
     }
   }
 
-  private updateView(): void {
+  public onDateChange(trigger?: FormControl) {
+    let startDateValue: Date =
+      this.startDate.value && new Date(this.startDate.value);
+    let endDateValue: Date = this.endDate.value && new Date(this.endDate.value);
+
+    // startDate or endDate can be null if it's an invalid date
+    if (startDateValue || endDateValue) {
+      if (startDateValue && endDateValue) {
+        // If we pick an end date lower than the start date, the start date becomes the end date
+        if (trigger === this.endDate && endDateValue < startDateValue) {
+          startDateValue = new Date(endDateValue);
+        }
+
+        // If we pick a start date higher than the end date, the end date becomes the start date
+        if (trigger === this.startDate && startDateValue > endDateValue) {
+          endDateValue = new Date(startDateValue);
+        }
+      }
+
+      // normalize the times to actually be the very start or end of the day
+      if (startDateValue) {
+        startDateValue.setHours(0, 0, 0, 0);
+      }
+
+      if (endDateValue) {
+        endDateValue.setHours(23, 59, 59, 999);
+      }
+
+      this.startDate.setValue(startDateValue, { emitEvent: false });
+      this.endDate.setValue(endDateValue, { emitEvent: false });
+
+      this.criteria.values = [
+        {
+          data: {
+            gte: startDateValue,
+            lte: endDateValue
+          }
+        }
+      ];
+    } else {
+      this.criteria.values = [];
+    }
+  }
+
+  public updateView(): void {
     const startDateValue: Date =
       this.criteria.values[0] && this.criteria.values[0].data.gte;
     const endDateValue: Date =
@@ -208,50 +258,6 @@ export class DateFilterComponent
         !!this.criteria.values[0].data.lte);
 
     this.count = +hasDates;
-    console.log(this.count);
-  }
-
-  private onDateChange(trigger?: FormControl) {
-    let startDateValue: Date =
-      this.startDate.value && new Date(this.startDate.value);
-    let endDateValue: Date = this.endDate.value && new Date(this.endDate.value);
-
-    // startDate or endDate can be null if it's an invalid date
-    if (startDateValue || endDateValue) {
-      // normalize the times to actually be the very start or end of the day
-      if (startDateValue) {
-        startDateValue.setHours(0, 0, 0, 0);
-      }
-
-      if (endDateValue) {
-        endDateValue.setHours(23, 59, 59, 999);
-      }
-
-      if (startDateValue && endDateValue) {
-        // If we pick an end date lower than the start date, the start date becomes the end date
-        if (trigger === this.endDate && endDateValue < startDateValue) {
-          startDateValue = endDateValue;
-          this.startDate.setValue(startDateValue, { emitEvent: false });
-        }
-
-        // If we pick a start date higher than the end date, the end date becomes the start date
-        if (trigger === this.startDate && startDateValue > endDateValue) {
-          endDateValue = startDateValue;
-          this.endDate.setValue(endDateValue, { emitEvent: false });
-        }
-      }
-
-      this.criteria.values = [
-        {
-          data: {
-            gte: startDateValue,
-            lte: endDateValue
-          }
-        }
-      ];
-    } else {
-      this.criteria.values = [];
-    }
   }
 
   private getRadioOptions(): RadioOption[] {
