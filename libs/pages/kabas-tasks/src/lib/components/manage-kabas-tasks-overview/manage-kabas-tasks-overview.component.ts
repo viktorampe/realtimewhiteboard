@@ -27,9 +27,6 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
   public learningAreaFilter$: Observable<SearchFilterCriteriaInterface>;
   public assigneeFilter$: Observable<SearchFilterCriteriaInterface>;
   public taskStatusFilter: SearchFilterCriteriaInterface;
-  color = 'accent';
-  checked = false;
-  disabled = false;
   constructor(
     private viewModel: KabasTasksViewModel,
     private router: Router,
@@ -65,7 +62,6 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
 
     this.assigneeFilter$ = this.tasksWithAssignments$.pipe(
       map(tasksWithAssignments => {
-        console.log(tasksWithAssignments);
         const assignees = {
           [AssigneeTypesEnum.CLASSGROUP]: new Set(),
           [AssigneeTypesEnum.GROUP]: new Set(),
