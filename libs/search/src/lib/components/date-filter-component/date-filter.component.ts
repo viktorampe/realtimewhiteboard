@@ -115,13 +115,13 @@ export class DateFilterComponent
     this.subscriptions.add(
       this.startDate.valueChanges
         .pipe(distinctUntilChanged())
-        .subscribe(this.onDateChange.bind(this))
+        .subscribe(this.onDateChange.bind(this, this.startDate))
     );
 
     this.subscriptions.add(
       this.endDate.valueChanges
         .pipe(distinctUntilChanged())
-        .subscribe(this.onDateChange.bind(this))
+        .subscribe(this.onDateChange.bind(this, this.endDate))
     );
 
     this.startDate.disable({ emitEvent: false });
@@ -141,6 +141,20 @@ export class DateFilterComponent
 
     this.filterSelectionChange.emit([this.criteria]);
     this.updateView();
+  }
+
+  public applyClassToDateInRange(date: Date) {
+    const startDateValue: Date = this.startDate.value;
+    const endDateValue: Date = this.endDate.value;
+
+    if (
+      startDateValue &&
+      endDateValue &&
+      date >= startDateValue &&
+      date <= endDateValue
+    ) {
+      return 'date-filter-component__select-panel__date-range__day--in-range';
+    }
   }
 
   private updateView(): void {
@@ -170,11 +184,10 @@ export class DateFilterComponent
     this.count = this.criteria.values.length;
   }
 
-  private onDateChange() {
-    const startDateValue: Date =
+  private onDateChange(trigger?: FormControl) {
+    let startDateValue: Date =
       this.startDate.value && new Date(this.startDate.value);
-    const endDateValue: Date =
-      this.endDate.value && new Date(this.endDate.value);
+    let endDateValue: Date = this.endDate.value && new Date(this.endDate.value);
 
     // clear the selection (visual) and don't trigger our own handler
     this.selectControl.setValue(null, { emitEvent: false });
@@ -188,6 +201,20 @@ export class DateFilterComponent
 
       if (endDateValue) {
         endDateValue.setHours(23, 59, 59, 999);
+      }
+
+      if (startDateValue && endDateValue) {
+        // If we pick an end date lower than the start date, the start date becomes the end date
+        if (trigger === this.endDate && endDateValue < startDateValue) {
+          startDateValue = endDateValue;
+          this.startDate.setValue(startDateValue, { emitEvent: false });
+        }
+
+        // If we pick a start date higher than the end date, the end date becomes the start date
+        if (trigger === this.startDate && startDateValue > endDateValue) {
+          endDateValue = startDateValue;
+          this.endDate.setValue(endDateValue, { emitEvent: false });
+        }
       }
 
       this.criteria.values = [

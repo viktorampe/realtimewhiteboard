@@ -24,7 +24,10 @@
               matSuffix
               [for]="startDatePicker"
             ></mat-datepicker-toggle>
-            <mat-datepicker #startDatePicker></mat-datepicker>
+            <mat-datepicker
+              #startDatePicker
+              [dateClass]="applyClassToDateInRange.bind(this)"
+            ></mat-datepicker>
           </mat-form-field>
           <mat-form-field [appearance]="'outline'">
             <mat-label>t.e.m.</mat-label>
@@ -38,7 +41,10 @@
               matSuffix
               [for]="endDatePicker"
             ></mat-datepicker-toggle>
-            <mat-datepicker #endDatePicker></mat-datepicker>
+            <mat-datepicker
+              #endDatePicker
+              [dateClass]="applyClassToDateInRange.bind(this)"
+            ></mat-datepicker>
           </mat-form-field>
         </div>
       </mat-radio-button>

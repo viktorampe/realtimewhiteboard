@@ -7,6 +7,8 @@
   $date-filter_mat-select-trigger-border-color: transparent !default;
   $date-filter_mat-select-value-vertical-align: baseline !default;
 
+  $date-filter_date-range_day--in-range-background-color: transparent !default;
+
   $date-filter_mat-form-field_outline-opacity: 0 !default;
   $date-filter_mat-form-field_outline-border-right-width: 0px !default;
   $date-filter_mat-form-field_outline-border-color: inherit !default;
@@ -39,6 +41,14 @@
       &__date-range {
         display: flex;
         flex-direction: row;
+
+        &__day {
+          &--in-range {
+            .mat-calendar-body-cell-content {
+              background-color: $date-filter_date-range_day--in-range-background-color;
+            }
+          }
+        }
       }
 
       .mat-form-field-appearance-outline .mat-form-field-outline-thick {
