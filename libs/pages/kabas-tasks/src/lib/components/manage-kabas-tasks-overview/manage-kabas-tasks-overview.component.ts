@@ -11,13 +11,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import {
   SearchFilterCriteriaFixture,
   SearchFilterCriteriaInterface,
-  SearchFilterCriteriaValuesFixture,
-  SelectFilterComponent
+  SearchFilterCriteriaValuesFixture
 } from '@campus/search';
 import { FilterTextInputComponent } from '@campus/ui';
 import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/utils';
-import { combineLatest, Observable } from 'rxjs';
-import { map, shareReplay, startWith, tap } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { map, shareReplay, tap } from 'rxjs/operators';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
 import { MockKabasTasksViewModel } from '../kabas-tasks.viewmodel.mock';
 import { TaskWithAssigneesInterface } from '../kabas-tasks.viewmodel.selectors';
@@ -49,8 +48,7 @@ export class ManageKabasTasksOverviewComponent
   public currentTab$: Observable<number>;
   public filteredTasks$: Observable<TaskWithAssigneesInterface[]>;
 
-  private learningAreaFilter: SelectFilterComponent;
-  private learningAreaFilterSelection$: Observable<number[]>;
+  private filterState$ = new BehaviorSubject<FilterState>({});
 
   @ViewChild('digitalTasksTextFilter')
   digitalTasksFilterTextInput: FilterTextInputComponent<
@@ -65,14 +63,6 @@ export class ManageKabasTasksOverviewComponent
 
   @ViewChild('paper') paperTaskList: MatSelectionList;
   @ViewChild('digital') digitalTaskList: MatSelectionList;
-  @ViewChild('learningAreaSelectFilter')
-  set learningAreaSelectFilter(
-    learningAreaSelectFilter: SelectFilterComponent
-  ) {
-    this.learningAreaFilter = learningAreaSelectFilter;
-    this.learningAreaFilterSelection$ = this.getLearningAreaSelections();
-    if (!this.filteredTasks$) this.filteredTasks$ = this.getFilteredTasks();
-  }
 
   constructor(
     private viewModel: KabasTasksViewModel,
@@ -90,9 +80,8 @@ export class ManageKabasTasksOverviewComponent
     this.digitalTasksFilterTextInput.setFilterableItem(this);
     this.paperTasksFilterTextInput.setFilterableItem(this);
   }
-
   ngAfterViewInit(): void {
-    this.learningAreaFilter.filterCriteria = this.mockFilterCriteria;
+    this.filteredTasks$ = this.getFilteredTasks();
     this.cd.detectChanges();
   }
 
@@ -118,40 +107,36 @@ export class ManageKabasTasksOverviewComponent
   //  - assignee
   //  - stopped/started/not yet started
 
-  private getLearningAreaSelections() {
-    return this.learningAreaFilter.filterSelectionChange.pipe(
-      map((filterCriteria: SearchFilterCriteriaInterface[]) => {
-        // array is emitted, but there is only one value
-        const criterium = filterCriteria[0];
-        // extract selected options from filter
-        const selectedOptions = criterium.values
-          .filter(value => value.selected)
-          .map(selectedValue => selectedValue.data.id);
-        return selectedOptions;
-      })
-    );
+  public selectionChanged(criteria: SearchFilterCriteriaInterface[]) {
+    // array is emitted, but there is only one value
+    const criterium = criteria[0];
+    // extract selected options from filter
+    const selectedOptions = criterium.values
+      .filter(value => value.selected)
+      .map(selectedValue => selectedValue.data.id);
+
+    const currentFilterState = this.filterState$.value;
+    const newFilterState = { ...currentFilterState };
+    newFilterState[criterium.name] = selectedOptions;
+    this.filterState$.next(newFilterState);
   }
 
   private getFilteredTasks(): Observable<TaskWithAssigneesInterface[]> {
     return combineLatest([
       this.currentTab$,
-      this.learningAreaFilterSelection$.pipe(startWith([])),
+      this.filterState$,
       this.digitalTasksFilterTextInput.result$,
       this.paperTasksFilterTextInput.result$
     ]).pipe(
       map(
         ([
-          currentTabIndex,
-          selectedLearningAreas,
+          currentTabIndex, // to know which task stream we should use
+          filterState,
           textFilteredDigitalTasks,
           textFilteredPaperTasks
         ]) => {
-          const newFilterState: FilterState = {
-            learningArea: selectedLearningAreas
-          };
-
           return this.filterTasks(
-            newFilterState,
+            filterState,
             currentTabIndex === 0
               ? textFilteredDigitalTasks
               : textFilteredPaperTasks
@@ -203,6 +188,7 @@ export class ManageKabasTasksOverviewComponent
    * @memberof ManageKabasTasksOverviewComponent
    */
   private cleanUpTab(tabIndex: number): void {
+    this.filterState$.next({});
     this.clearSelectionOnTab(tabIndex);
     this.clearFiltersOnTab(tabIndex);
   }

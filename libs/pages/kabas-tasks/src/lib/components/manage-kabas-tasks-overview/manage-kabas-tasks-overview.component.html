@@ -1,3 +1,5 @@
+<p>{{ filterState$ | async | json }}</p>
+
 <div class="manage-kabas-tasks-overview__container">
   <mat-tab-group
     [selectedIndex]="currentTab$ | async"
@@ -8,7 +10,19 @@
         #digitalTasksTextFilter
         [source]="tasksWithAssignments$ | async"
       ></campus-filter-text-input>
-      <ng-container *ngTemplateOutlet="filters"></ng-container>
+      <campus-select-filter
+        multiple="true"
+        resetLabel="reset"
+        [filterCriteria]="this.mockFilterCriteria"
+        (filterSelectionChange)="selectionChanged($event)"
+      ></campus-select-filter>
+      <!--<date-filter-component></date-filter-component>-->
+      <!-- <campus-select-filter></campus-select-filter>
+      <campus-button-toggle-filter> </campus-button-toggle-filter> -->
+      <campus-button
+        class="practice-book-lessons--reset-filters"
+        iconClass="reset-filters"
+      ></campus-button>
 
       <mat-selection-list #digital>
         <mat-list-item
@@ -33,7 +47,12 @@
         #paperTasksTextFilter
         [source]="paperTasksWithAssignments$ | async"
       ></campus-filter-text-input>
-      <ng-container *ngTemplateOutlet="filters"></ng-container>
+      <campus-select-filter
+        multiple="true"
+        resetLabel="reset"
+        [filterCriteria]="this.mockFilterCriteria"
+        (filterSelectionChange)="selectionChanged($event)"
+      ></campus-select-filter>
 
       <mat-selection-list #paper>
         <mat-list-item
@@ -54,11 +73,3 @@
     </mat-tab>
   </mat-tab-group>
 </div>
-
-<ng-template #filters>
-  <campus-select-filter
-    #learningAreaSelectFilter
-    multiple="true"
-    resetLabel="leergebied"
-  ></campus-select-filter>
-</ng-template>
