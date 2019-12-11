@@ -4,6 +4,8 @@ $pages-kabas-tasks-text-color--primary: black !default;
 $pages-kabas-tasks-text-color--primary--accent: darkred !default;
 $pages-kabas-tasks-background-color--primary: white !default;
 $pages-kabas-tasks-border-color--primary: lightgrey !default;
+$pages-kabas-tasks-text-color--secondary: grey !default;
+$pages-kabas-tasks-background-color--secondary: white !default;
 
 @mixin pages-kabas-tasks-theme() {
   @include manage-kabas-tasks-overview-theme();
