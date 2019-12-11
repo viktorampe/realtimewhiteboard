@@ -25,7 +25,9 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
   public paperTasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
   public currentTab$: Observable<number>;
   public learningAreaFilter$: Observable<SearchFilterCriteriaInterface>;
+  public learningAreaFilterPaper$: Observable<SearchFilterCriteriaInterface>;
   public assigneeFilter$: Observable<SearchFilterCriteriaInterface>;
+  public assigneeFilterPaper$: Observable<SearchFilterCriteriaInterface>;
   public taskStatusFilter: SearchFilterCriteriaInterface;
   constructor(
     private viewModel: KabasTasksViewModel,
@@ -60,6 +62,76 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
     );
 
     this.assigneeFilter$ = this.tasksWithAssignments$.pipe(
+      map(tasksWithAssignments => {
+        const assignees = {
+          [AssigneeTypesEnum.CLASSGROUP]: new Set(),
+          [AssigneeTypesEnum.GROUP]: new Set(),
+          [AssigneeTypesEnum.STUDENT]: new Set()
+        };
+        tasksWithAssignments.forEach(twa => {
+          twa.assignees.forEach(ass => {
+            assignees[ass.type].add(ass.label);
+          });
+        });
+        const values = [
+          ...Array.from(assignees[AssigneeTypesEnum.CLASSGROUP])
+            .sort()
+            .map(classgroup => {
+              return {
+                data: { label: classgroup },
+                visible: true
+              } as SearchFilterCriteriaValuesInterface;
+            }),
+          ...Array.from(assignees[AssigneeTypesEnum.GROUP])
+            .sort()
+            .map(group => {
+              return {
+                data: { label: group },
+                visible: true
+              } as SearchFilterCriteriaValuesInterface;
+            }),
+          ...Array.from(assignees[AssigneeTypesEnum.STUDENT])
+            .sort()
+            .map(student => {
+              return {
+                data: { label: student },
+                visible: true
+              } as SearchFilterCriteriaValuesInterface;
+            })
+        ];
+
+        return {
+          name: 'assignee',
+          label: 'Toegekend aan',
+          keyProperty: 'label',
+          displayProperty: 'label',
+          values
+        } as SearchFilterCriteriaInterface;
+      })
+    );
+
+    this.learningAreaFilterPaper$ = this.paperTasksWithAssignments$.pipe(
+      map(tasksWithAssignments => {
+        const uniqueLearningAreas = {};
+        tasksWithAssignments.forEach(twa => {
+          uniqueLearningAreas[twa.learningAreaId] = twa.learningArea;
+        });
+        return {
+          name: 'learningArea',
+          label: 'Leergebieden',
+          keyProperty: 'id',
+          displayProperty: 'name',
+          values: Object.values(uniqueLearningAreas).map(la => {
+            return {
+              data: la,
+              visible: true
+            } as SearchFilterCriteriaValuesInterface;
+          })
+        } as SearchFilterCriteriaInterface;
+      })
+    );
+
+    this.assigneeFilterPaper$ = this.paperTasksWithAssignments$.pipe(
       map(tasksWithAssignments => {
         const assignees = {
           [AssigneeTypesEnum.CLASSGROUP]: new Set(),
