@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { DalState } from '@campus/dal';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import {
   TaskDatesInterface,
   TaskStatusEnum,
@@ -18,11 +19,13 @@ export class KabasTasksViewModel {
 
   constructor(private store: Store<DalState>) {
     this.tasksWithAssignments$ = this.store.pipe(
-      select(getTasksWithAssignments, { isPaper: false })
+      select(getTasksWithAssignments, { isPaper: false }),
+      map(tasks => tasks.map(task => ({ ...task, ...this.getTaskDates(task) })))
     );
 
     this.paperTasksWithAssignments$ = this.store.pipe(
-      select(getTasksWithAssignments, { isPaper: true })
+      select(getTasksWithAssignments, { isPaper: true }),
+      map(tasks => tasks.map(task => ({ ...task, ...this.getTaskDates(task) })))
     );
   }
 
