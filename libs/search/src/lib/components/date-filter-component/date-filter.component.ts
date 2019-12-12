@@ -85,8 +85,6 @@ export class DateFilterComponent
   @HostBinding('class.date-filter-component')
   dateFilterComponentClass = true;
 
-  constructor() {}
-
   ngOnInit() {
     this.subscriptions.add(
       this.dateSelection.valueChanges

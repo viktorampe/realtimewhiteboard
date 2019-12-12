@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
+  DateAdapter,
   MatAutocompleteModule,
   MatBadgeModule,
   MatButtonToggleModule,
@@ -20,7 +21,6 @@ import {
 } from '@angular/material';
 import { UiModule } from '@campus/ui';
 import { UtilsModule } from '@campus/utils';
-import { DateFilterComponent } from './components';
 import { BreadcrumbFilterComponent } from './components/breadcrumb-filter/breadcrumb-filter.component';
 import { ButtonToggleFilterComponent } from './components/button-toggle-filter-component/button-toggle-filter.component';
 import { CheckboxLineFilterComponent } from './components/checkbox-line-filter/checkbox-line-filter-component';
@@ -28,6 +28,8 @@ import { CheckboxFilterComponent } from './components/checkbox-list-filter/check
 import { CheckboxListFilterComponent } from './components/checkbox-list-filter/checkbox-list-filter.component';
 import { ColumnFilterComponent } from './components/column-filter/column-filter.component';
 import { ColumnFilterService } from './components/column-filter/column-filter.service';
+import { BeDateAdapter } from './components/date-filter-component/be-date-adapter';
+import { DateFilterComponent } from './components/date-filter-component/date-filter.component';
 import { ResultItemBase } from './components/results-list/result.component.base';
 import {
   ResultListDirective,
@@ -95,7 +97,10 @@ import { SearchPortalDirective } from './directives/search-portal.directive';
     ButtonToggleFilterComponent,
     SearchPortalDirective
   ],
-  providers: [ColumnFilterService],
+  providers: [
+    ColumnFilterService,
+    { provide: DateAdapter, useClass: BeDateAdapter }
+  ],
   entryComponents: [
     CheckboxFilterComponent,
     CheckboxLineFilterComponent,
