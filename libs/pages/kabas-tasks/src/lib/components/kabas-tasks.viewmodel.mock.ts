@@ -92,6 +92,13 @@ export class MockKabasTasksViewModel
             start: yesterday,
             end: nextWeek,
             id: 4
+          },
+          {
+            type: AssigneeTypesEnum.STUDENT,
+            label: 'Ronny',
+            start: yesterday,
+            end: nextWeek,
+            id: 5
           }
         ]
       },
@@ -108,7 +115,7 @@ export class MockKabasTasksViewModel
             label: '2A',
             start: yesterday,
             end: tomorrow,
-            id: 1
+            id: 2
           },
           {
             type: AssigneeTypesEnum.GROUP,
@@ -139,7 +146,7 @@ export class MockKabasTasksViewModel
             label: '2A',
             start: prevMonth,
             end: nextWeek,
-            id: 1
+            id: 2
           }
         ]
       },
@@ -156,7 +163,7 @@ export class MockKabasTasksViewModel
             label: '2A',
             start: tomorrow,
             end: nextWeek,
-            id: 1
+            id: 2
           }
         ]
       },
@@ -193,7 +200,7 @@ export class MockKabasTasksViewModel
             label: '2A',
             start: prevMonth,
             end: prevWeek,
-            id: 3
+            id: 2
           }
         ]
       }

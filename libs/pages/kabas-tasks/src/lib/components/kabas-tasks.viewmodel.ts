@@ -4,7 +4,6 @@ import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import {
-  TaskDatesInterface,
   TaskStatusEnum,
   TaskWithAssigneesInterface
 } from '../interfaces/TaskWithAssignees.interface';
@@ -32,7 +31,7 @@ export class KabasTasksViewModel {
   public getTaskDates(
     task: TaskWithAssigneesInterface,
     now: Date = new Date()
-  ): TaskDatesInterface {
+  ) {
     let startDate: Date;
     let endDate: Date;
 

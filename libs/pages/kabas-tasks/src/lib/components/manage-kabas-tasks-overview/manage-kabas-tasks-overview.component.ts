@@ -7,6 +7,7 @@ import {
 } from '@campus/search';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { AssigneeTypesEnum } from '../../interfaces/Assignee.interface';
 import { TaskWithAssigneesInterface } from '../../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
 import { MockKabasTasksViewModel } from '../kabas-tasks.viewmodel.mock';
@@ -108,18 +109,22 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
         {
           data: {
             label: assignee.label,
-            id: { type: assignee.type, id: assignee.id }
+            identifier: { type: assignee.type, id: assignee.id }
           },
           visible: true
         } as SearchFilterCriteriaValuesInterface
       ];
     }, []);
     values.sort(function(a, b) {
-      return a.data.label > b.data.label
-        ? 1
-        : b.data.label > a.data.label
-        ? -1
-        : 0;
+      const order = {
+        [AssigneeTypesEnum.CLASSGROUP]: 1,
+        [AssigneeTypesEnum.GROUP]: 2,
+        [AssigneeTypesEnum.STUDENT]: 3
+      };
+      return (
+        order[a.data.identifier.type] - order[b.data.identifier.type] ||
+        (a.data.label > b.data.label ? 1 : b.data.label > a.data.label ? -1 : 0)
+      );
     });
     return {
       name: 'assignee',
