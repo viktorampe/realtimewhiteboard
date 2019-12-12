@@ -129,3 +129,7 @@
 :host ::ng-deep .mat-step-header {
   margin-bottom: 20px;
 }
+
+::ng-deep .mat-tooltip {
+  white-space: pre-line;
+}

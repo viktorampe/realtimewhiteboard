@@ -40,9 +40,10 @@ describe('ManageKabasTasksOverviewComponent', () => {
         MatIconModule,
         RouterTestingModule,
         SharedModule,
+        RouterTestingModule,
+        MatTooltipModule,
         PagesKabasTasksModule,
-        UiModule,
-        MatTooltipModule
+        UiModule
       ],
       declarations: [],
       providers: [
