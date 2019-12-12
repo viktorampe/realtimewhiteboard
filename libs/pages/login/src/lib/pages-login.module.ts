@@ -7,15 +7,8 @@ import { LoginViewModel } from './components/login.viewmodel';
 import { PagesLoginRoutingModule } from './pages-login-routing.module';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    PagesLoginRoutingModule,
-    UiModule,
-    PagesSharedModule
-  ],
-  declarations: [
-    LoginComponent,
-  ],
+  imports: [CommonModule, PagesLoginRoutingModule, UiModule, PagesSharedModule],
+  declarations: [LoginComponent],
   providers: [LoginViewModel]
 })
 export class PagesLoginModule {}
