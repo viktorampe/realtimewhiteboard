@@ -1,4 +1,5 @@
 import {
+  AfterContentChecked,
   AfterContentInit,
   ChangeDetectorRef,
   Component,
@@ -45,7 +46,7 @@ export interface FilterStateInterface {
   styleUrls: ['./manage-kabas-tasks-overview.component.scss']
 })
 export class ManageKabasTasksOverviewComponent
-  implements OnInit, AfterContentInit {
+  implements OnInit, AfterContentInit, AfterContentChecked {
   // TODO: remove
   public mockFilterCriteria = new SearchFilterCriteriaFixture({}, [
     new SearchFilterCriteriaValuesFixture()
@@ -182,6 +183,9 @@ export class ManageKabasTasksOverviewComponent
 
   ngAfterContentInit(): void {
     this.filteredTasks$ = this.getFilteredTasks();
+  }
+
+  ngAfterContentChecked(): void {
     this.cd.detectChanges();
   }
 
