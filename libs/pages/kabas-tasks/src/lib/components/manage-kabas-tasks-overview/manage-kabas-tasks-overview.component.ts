@@ -27,7 +27,7 @@ import { MockKabasTasksViewModel } from '../kabas-tasks.viewmodel.mock';
 export interface FilterStateInterface {
   searchTerm?: string;
   learningArea?: number[];
-  dateInterval?: { start: Date; end: Date };
+  dateInterval?: { gte: Date; lte: Date };
   assignee?: { id: number; type: AssigneeTypesEnum }[];
   status?: string[];
 }
@@ -121,15 +121,34 @@ export class ManageKabasTasksOverviewComponent
     criteria: SearchFilterCriteriaInterface[],
     filterName: string
   ) {
+    const updatedFilter = {};
+
     // array is emitted, but there is only one value
     const criterium = criteria[0];
-    // extract selected options from filter
-    const selectedOptions = criterium.values
-      .filter(value => value.selected)
-      .map(selectedValue => selectedValue.data.id);
 
-    const updatedFilter = {};
-    updatedFilter[filterName] = selectedOptions;
+    if (filterName === 'dateInterval') {
+      updatedFilter[filterName] = {
+        gte: criterium.values[0].data.gte,
+        lte: criterium.values[0].data.lte
+      };
+    } else if (filterName === 'assignee') {
+      updatedFilter[filterName] = criterium.values
+        .filter(value => value.selected)
+        .map(selectedValue => ({
+          id: selectedValue.data.id.id,
+          label: selectedValue.data.id.type
+        }));
+    } else if (filterName === 'status') {
+      updatedFilter[filterName] = criterium.values
+        .filter(value => value.selected)
+        .map(selectedValue => selectedValue.data.status);
+    } else {
+      const selectedOptions = criterium.values
+        .filter(value => value.selected)
+        .map(selectedValue => selectedValue.data.id);
+
+      updatedFilter[filterName] = selectedOptions;
+    }
 
     this.updateFilterState(updatedFilter);
   }
@@ -242,6 +261,18 @@ export class ManageKabasTasksOverviewComponent
             assigneeIdsByTypeMap[taskAssignee.type] &&
             assigneeIdsByTypeMap[taskAssignee.type].includes(taskAssignee.id)
         )
+      );
+    }
+
+    if (filterState.dateInterval) {
+      console.log(filteredTasks);
+      filteredTasks = filteredTasks.filter(task =>
+        task.assignees.some(assignee => {
+          return (
+            assignee.start <= filterState.dateInterval.lte &&
+            assignee.end >= filterState.dateInterval.gte
+          );
+        })
       );
     }
 

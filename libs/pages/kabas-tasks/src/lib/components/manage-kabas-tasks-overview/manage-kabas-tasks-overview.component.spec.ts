@@ -170,6 +170,61 @@ describe('ManageKabasTasksOverviewComponent', () => {
       ]);
     });
 
+    it('should filter on dateInterval', () => {
+      const filterState: FilterStateInterface = {
+        dateInterval: { gte: new Date(2000, 5, 10), lte: new Date(2000, 5, 20) }
+      };
+
+      const mockTasks: TaskWithAssigneesInterface[] = [
+        {
+          assignees: [
+            { start: new Date(2000, 5, 11), end: new Date(2000, 5, 14) } // matches
+          ]
+        },
+        {
+          assignees: [
+            { start: new Date(2000, 5, 10), end: new Date(2000, 5, 20) } // matches
+          ]
+        },
+        {
+          assignees: [
+            { start: new Date(2000, 5, 5), end: new Date(2000, 5, 25) } // matches
+          ]
+        },
+        {
+          assignees: [
+            { start: new Date(2000, 5, 14), end: new Date(2000, 5, 25) } // matches
+          ]
+        },
+        {
+          assignees: [
+            { start: new Date(2000, 5, 21), end: new Date(2000, 5, 28) } // no match
+          ]
+        },
+        {
+          assignees: [
+            { start: new Date(2000, 5, 1), end: new Date(2000, 5, 5) } // no match
+          ]
+        },
+        {
+          assignees: [
+            { start: new Date(2000, 5, 21), end: new Date(2000, 5, 28) }, // no match
+            { start: new Date(2000, 5, 12), end: new Date(2000, 5, 19) } // matches
+          ]
+        }
+      ] as TaskWithAssigneesInterface[];
+
+      const result = component['filterTasks'](filterState, mockTasks);
+
+      expect(result).toEqual([
+        mockTasks[0],
+        mockTasks[1],
+        mockTasks[2],
+        mockTasks[3],
+        mockTasks[6]
+      ]);
+    });
+
     it('should combine multiple filters', () => {
       const filterState: FilterStateInterface = {
         searchTerm: 'foo',
@@ -178,7 +233,8 @@ describe('ManageKabasTasksOverviewComponent', () => {
         assignee: [
           { type: AssigneeTypesEnum.GROUP, id: 1 },
           { type: AssigneeTypesEnum.CLASSGROUP, id: 2 }
-        ]
+        ],
+        dateInterval: { gte: new Date(2000, 1, 1), lte: new Date(2000, 1, 10) }
       };
 
       const mockTasks = [
@@ -187,6 +243,8 @@ describe('ManageKabasTasksOverviewComponent', () => {
           learningAreaId: 1,
           assignees: [
             {
+              start: new Date(2000, 1, 2),
+              end: new Date(2000, 1, 9),
               type: AssigneeTypesEnum.GROUP,
               id: 1,
               status: TaskStatusEnum.ACTIVE
@@ -198,6 +256,8 @@ describe('ManageKabasTasksOverviewComponent', () => {
           learningAreaId: 1,
           assignees: [
             {
+              start: new Date(2000, 1, 2),
+              end: new Date(2000, 1, 9),
               type: AssigneeTypesEnum.GROUP,
               id: 1,
               status: TaskStatusEnum.ACTIVE
@@ -209,6 +269,8 @@ describe('ManageKabasTasksOverviewComponent', () => {
           learningAreaId: 2, // does not match
           assignees: [
             {
+              start: new Date(2000, 1, 2),
+              end: new Date(2000, 1, 9),
               type: AssigneeTypesEnum.GROUP,
               id: 1,
               status: TaskStatusEnum.ACTIVE
@@ -220,6 +282,8 @@ describe('ManageKabasTasksOverviewComponent', () => {
           learningAreaId: 1,
           assignees: [
             {
+              start: new Date(2000, 1, 2),
+              end: new Date(2000, 1, 9),
               type: AssigneeTypesEnum.CLASSGROUP, // does not match
               id: 1,
               status: TaskStatusEnum.ACTIVE
@@ -231,6 +295,8 @@ describe('ManageKabasTasksOverviewComponent', () => {
           learningAreaId: 1,
           assignees: [
             {
+              start: new Date(2000, 1, 2),
+              end: new Date(2000, 1, 9),
               type: AssigneeTypesEnum.GROUP,
               id: 2, // does not match
               status: TaskStatusEnum.ACTIVE
@@ -242,9 +308,24 @@ describe('ManageKabasTasksOverviewComponent', () => {
           learningAreaId: 1,
           assignees: [
             {
+              start: new Date(2000, 1, 2),
+              end: new Date(2000, 1, 9),
               type: AssigneeTypesEnum.GROUP,
               id: 1,
               status: TaskStatusEnum.FINISHED // does not match
+            }
+          ]
+        },
+        {
+          name: 'foo', // does not match all filters
+          learningAreaId: 1,
+          assignees: [
+            {
+              start: new Date(2000, 1, 15), // no match
+              end: new Date(2000, 1, 20), // no match
+              type: AssigneeTypesEnum.GROUP,
+              id: 1,
+              status: TaskStatusEnum.PENDING
             }
           ]
         },
@@ -253,11 +334,15 @@ describe('ManageKabasTasksOverviewComponent', () => {
           learningAreaId: 1,
           assignees: [
             {
+              start: new Date(2000, 1, 2),
+              end: new Date(2000, 1, 9),
               type: AssigneeTypesEnum.GROUP,
               id: 1,
               status: TaskStatusEnum.FINISHED // does not match
             },
             {
+              start: new Date(2000, 1, 2),
+              end: new Date(2000, 1, 9),
               type: AssigneeTypesEnum.GROUP,
               id: 1,
               status: TaskStatusEnum.PENDING // matches --> include
@@ -269,11 +354,15 @@ describe('ManageKabasTasksOverviewComponent', () => {
           learningAreaId: 1,
           assignees: [
             {
+              start: new Date(2000, 1, 2),
+              end: new Date(2000, 1, 9),
               type: AssigneeTypesEnum.GROUP, //matches
               id: 666, // does not match
               status: TaskStatusEnum.PENDING
             },
             {
+              start: new Date(2000, 1, 2),
+              end: new Date(2000, 1, 9),
               type: AssigneeTypesEnum.CLASSGROUP, //matches
               id: 2, // matches
               status: TaskStatusEnum.PENDING // matches
@@ -284,7 +373,7 @@ describe('ManageKabasTasksOverviewComponent', () => {
 
       const result = component['filterTasks'](filterState, mockTasks);
 
-      expect(result).toEqual([mockTasks[0], mockTasks[6], mockTasks[7]]);
+      expect(result).toEqual([mockTasks[0], mockTasks[7], mockTasks[8]]);
     });
   });
 });

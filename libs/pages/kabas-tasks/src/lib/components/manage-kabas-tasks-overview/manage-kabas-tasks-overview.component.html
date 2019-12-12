@@ -35,7 +35,7 @@
     >
       <mat-tab label="Digitale taken">
         <campus-search-term
-          placeholder="Zoeken op titel"
+          placeholder="Filter op naam"
           [autoComplete]="false"
           (valueChange)="searchTermUpdated($event)"
         ></campus-search-term>
@@ -47,7 +47,9 @@
           (filterSelectionChange)="selectionChanged($event, 'learningArea')"
         ></campus-select-filter>
 
-        <!--<date-filter-component></date-filter-component>-->
+        <!-- <date-filter-component
+          (filterSelectionChange)="selectionChanged($event, 'dateInterval')"
+        ></date-filter-component> -->
 
         <campus-select-filter
           multiple="true"
