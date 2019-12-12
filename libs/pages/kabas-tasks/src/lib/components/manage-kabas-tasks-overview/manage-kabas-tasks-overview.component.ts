@@ -22,6 +22,7 @@ import { map, tap } from 'rxjs/operators';
 import { AssigneeTypesEnum } from '../../interfaces/Assignee.interface';
 import { TaskWithAssigneesInterface } from '../../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
+import { MockKabasTasksViewModel } from '../kabas-tasks.viewmodel.mock';
 
 export interface FilterStateInterface {
   searchTerm?: string;
@@ -34,10 +35,14 @@ export interface FilterStateInterface {
 @Component({
   selector: 'campus-manage-kabas-tasks-overview',
   templateUrl: './manage-kabas-tasks-overview.component.html',
-  styleUrls: ['./manage-kabas-tasks-overview.component.scss']
+  styleUrls: ['./manage-kabas-tasks-overview.component.scss'],
+  providers: [
+    { provide: KabasTasksViewModel, useClass: MockKabasTasksViewModel }
+  ]
 })
 export class ManageKabasTasksOverviewComponent
   implements OnInit, AfterContentInit {
+  // TODO: remove
   public mockFilterCriteria = new SearchFilterCriteriaFixture({}, [
     new SearchFilterCriteriaValuesFixture()
   ]);
@@ -100,7 +105,7 @@ export class ManageKabasTasksOverviewComponent
   // - number of results$
   // - no results view
   // - filter based on:
-  //  - stopped/started/not yet started
+  //  - date interval
 
   public selectionChanged(
     criteria: SearchFilterCriteriaInterface[],
