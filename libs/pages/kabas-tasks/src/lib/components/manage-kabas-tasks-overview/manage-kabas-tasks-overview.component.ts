@@ -113,10 +113,6 @@ export class ManageKabasTasksOverviewComponent
     });
   }
 
-  // TODO:
-  // - filter based on:
-  //  - date interval
-
   public selectionChanged(
     criteria: SearchFilterCriteriaInterface[],
     filterName: string
