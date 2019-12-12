@@ -31,7 +31,7 @@ export class KabasTasksViewModel {
   public getTaskDates(
     task: TaskWithAssigneesInterface,
     now: Date = new Date()
-  ) {
+  ): Pick<TaskWithAssigneesInterface, 'startDate' | 'endDate' | 'status'> {
     let startDate: Date;
     let endDate: Date;
 
