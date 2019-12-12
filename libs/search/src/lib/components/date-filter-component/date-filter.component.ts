@@ -1,7 +1,9 @@
+import { formatDate } from '@angular/common';
 import {
   Component,
   EventEmitter,
   HostBinding,
+  Inject,
   Input,
   OnDestroy,
   OnInit,
@@ -9,7 +11,7 @@ import {
   ViewChild
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { MatMenuTrigger } from '@angular/material';
+import { MatMenuTrigger, MAT_DATE_LOCALE } from '@angular/material';
 import { Subscription } from 'rxjs';
 import { distinctUntilChanged } from 'rxjs/operators';
 import { SearchFilterComponentInterface } from '../../interfaces/search-filter-component-interface';
@@ -47,8 +49,6 @@ export interface DateFilterComponentFormValues {
 })
 export class DateFilterComponent
   implements SearchFilterComponentInterface, OnInit, OnDestroy {
-  RadioOptionValueType = RadioOptionValueType;
-
   criteria: SearchFilterCriteriaInterface;
   radioOptions: RadioOption[];
   customRangeOptionValue: RadioOptionValue = {
@@ -100,6 +100,8 @@ export class DateFilterComponent
 
   @HostBinding('class.date-filter-component')
   dateFilterComponentClass = true;
+
+  constructor(@Inject(MAT_DATE_LOCALE) private locale: string) {}
 
   ngOnInit() {
     this.subscriptions.add(
@@ -254,30 +256,29 @@ export class DateFilterComponent
       if (startDateValue && endDateValue) {
         this.customDisplayLabel =
           'Vanaf ' +
-          startDateValue.toLocaleDateString() +
+          formatDate(startDateValue, 'd/MM/yy', this.locale) +
           ' tot en met ' +
-          endDateValue.toLocaleDateString();
+          formatDate(endDateValue, 'd/MM/yy', this.locale);
       } else if (startDateValue) {
         this.customDisplayLabel =
-          'Vanaf ' + startDateValue.toLocaleDateString();
+          'Vanaf ' + formatDate(startDateValue, 'd/MM/yy', this.locale);
       } else if (endDateValue) {
         this.customDisplayLabel =
-          'Tot en met ' + endDateValue.toLocaleDateString();
+          'Tot en met ' + formatDate(endDateValue, 'd/MM/yy', this.locale);
       }
     } else {
       this.customDisplayLabel = null;
     }
 
-    const hasDates =
+    const hasDates: boolean =
       !!this.criteria.values.length &&
       !!this.criteria.values[0] &&
-      (!!this.criteria.values[0].data.gte ||
-        !!this.criteria.values[0].data.lte);
+      !!(this.criteria.values[0].data.gte || this.criteria.values[0].data.lte);
 
     this.count = +hasDates;
   }
 
-  public storeFormValues(): void {
+  private storeFormValues(): void {
     this.formValues = {
       dateSelection: this.dateSelection.value,
       startDate: this.startDate.value,
@@ -296,7 +297,6 @@ export class DateFilterComponent
   }
 
   private getRadioOptions(): RadioOption[] {
-    const now = new Date();
     let options = this.fixedOptions;
 
     if (this.resetLabel) {

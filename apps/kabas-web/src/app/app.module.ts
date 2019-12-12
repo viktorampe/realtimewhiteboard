@@ -1,3 +1,5 @@
+import { registerLocaleData } from '@angular/common';
+import localeBe from '@angular/common/locales/nl-BE';
 import { NgModule } from '@angular/core';
 import {
   MAT_DATE_LOCALE,
@@ -21,6 +23,8 @@ import { EduContentSearchResultComponent } from './components/searchresults/edu-
 import { PracticeSearchResultComponent } from './components/searchresults/practice-search-result/practice-search-result.component';
 
 configureBufferSize(150);
+
+registerLocaleData(localeBe, 'nl-BE');
 
 @NgModule({
   declarations: [

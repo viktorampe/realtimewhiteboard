@@ -9,7 +9,6 @@ import {
   MatRadioModule
 } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { MockDate } from '@campus/testing';
 import { UiModule } from '@campus/ui';
 import { UtilsModule } from '@campus/utils';
 import { configureTestSuite } from 'ng-bullet';
@@ -24,7 +23,6 @@ describe('DateFilterComponent', () => {
   let component: DateFilterComponent;
   let fixture: ComponentFixture<DateFilterComponent>;
 
-  const fakeDate = new Date(2019, 11, 11, 8, 16, 32, 64);
   const startOfWeek = new Date(2019, 11, 9, 0, 0, 0, 0);
   const startOfWeekPlusOneDay = new Date(2019, 11, 10, 0, 0, 0, 0);
   const endOfWeek = new Date(2019, 11, 15, 23, 59, 59, 999);
@@ -37,7 +35,6 @@ describe('DateFilterComponent', () => {
   const someEndDate = new Date(2019, 0, 8, 8, 16, 32, 64);
   const someEndDateAtStartOfDay = new Date(2019, 0, 8, 0, 0, 0, 0);
   const someEndDateAtEndOfDay = new Date(2019, 0, 8, 23, 59, 59, 999);
-  let mockDate: MockDate;
 
   const expectedOptions: RadioOption[] = [
     {
@@ -100,11 +97,11 @@ describe('DateFilterComponent', () => {
 
     fixture.detectChanges();
 
-    mockDate = new MockDate(fakeDate);
+    //mockDate = new MockDate(fakeDate);
   });
 
   afterAll(() => {
-    mockDate.returnRealDate();
+    //mockDate.returnRealDate();
   });
 
   it('should create', () => {
@@ -337,10 +334,7 @@ describe('DateFilterComponent', () => {
         component.updateView();
 
         expect(component.customDisplayLabel).toBe(
-          'Vanaf ' +
-            startOfWeek.toLocaleDateString() +
-            ' tot en met ' +
-            endOfWeek.toLocaleDateString()
+          'Vanaf 9/12/19 tot en met 15/12/19'
         );
       });
 
@@ -354,10 +348,7 @@ describe('DateFilterComponent', () => {
         component.updateView();
 
         expect(component.customDisplayLabel).toBe(
-          'Vanaf ' +
-            startOfWeek.toLocaleDateString() +
-            ' tot en met ' +
-            endOfWeek.toLocaleDateString()
+          'Vanaf 9/12/19 tot en met 15/12/19'
         );
       });
 
@@ -382,9 +373,7 @@ describe('DateFilterComponent', () => {
 
         component.updateView();
 
-        expect(component.customDisplayLabel).toBe(
-          'Vanaf ' + startOfWeek.toLocaleDateString()
-        );
+        expect(component.customDisplayLabel).toBe('Vanaf 9/12/19');
       });
 
       it('should be the end date when the chosen option is a custom range - only end date', () => {
@@ -396,9 +385,7 @@ describe('DateFilterComponent', () => {
 
         component.updateView();
 
-        expect(component.customDisplayLabel).toBe(
-          'Tot en met ' + endOfWeek.toLocaleDateString()
-        );
+        expect(component.customDisplayLabel).toBe('Tot en met 15/12/19');
       });
     });
 
