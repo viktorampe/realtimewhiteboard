@@ -10,6 +10,20 @@
   $pages-kabas-tasks__list-option-padding-left: 16px !default;
 
   .manage-kabas-tasks-overview {
+    &__list__primary-action {
+      .mat-list-item-content {
+        background-color: $secondary-bg-color;
+        color: $primary-color-accent;
+        font-weight: bold;
+        padding-left: 45px !important;
+        cursor: pointer;
+
+        .mat-icon {
+          margin: 0 20px;
+        }
+      }
+    }
+
     &__container {
       .mat-tab-body-content {
         padding: 0;
@@ -47,20 +61,6 @@
 
           border-left: $pages-kabas-tasks__list-option--selected-border-width
             $pages-kabas-tasks__list-option-color--accent solid;
-        }
-      }
-
-      &__list__primary-action {
-        .mat-list-item-content {
-          background-color: $secondary-bg-color;
-          color: $primary-color-accent;
-          font-weight: bold;
-          padding-left: 35px !important;
-          cursor: pointer;
-
-          .mat-icon {
-            margin: 0 20px;
-          }
         }
       }
     }
