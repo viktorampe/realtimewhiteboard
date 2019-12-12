@@ -24,6 +24,7 @@ export const icons = {
   account: 'assets/icons/account-circle.svg',
   cancel: 'assets/icons/cancel.svg',
   delete: 'assets/icons/material/delete.svg',
+  add: 'assets/icons/material/add-circle-outline.svg',
   edit: 'assets/icons/material/edit.svg',
   filter: 'assets/icons/filter.svg',
   context_menu: 'assets/icons/material/more_vert.svg',
@@ -47,6 +48,10 @@ export const icons = {
   star: 'assets/icons/star.svg',
   'star-outline': 'assets/icons/star-border.svg',
   color: 'assets/icons/color_lens.svg',
+  'task:active': 'assets/icons/play_circle_outline-24px.svg',
+  'task:pending': 'assets/icons/pause_circle_outline-24px.svg',
+  'task:finished': 'assets/icons/not_interested-24px.svg',
+  archive: 'assets/icons/archive.svg',
 
   // search: sort modes
   'sort-numeric-down': 'assets/icons/sort-numeric-down.svg',

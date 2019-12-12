@@ -11,14 +11,19 @@ import {
   EduContentTocEffects,
   EffectFeedbackEffects,
   FavoriteEffects,
+  GroupEffects,
   HistoryEffects,
   LearningAreasEffects,
   LearningDomainEffects,
   LearningPlanGoalEffects,
   LearningPlanGoalProgressEffects,
+  LinkedPersonEffects,
   MethodEffects,
   MethodLevelEffects,
   ResultEffects,
+  TaskClassGroupEffects,
+  TaskEduContentEffects,
+  TaskEffects,
   TaskGroupEffects,
   TaskStudentEffects,
   UiEffects,
@@ -58,7 +63,12 @@ import { EffectsModule } from '@ngrx/effects';
       MethodLevelEffects,
       EduContentTocEduContentEffects,
       TaskGroupEffects,
-      TaskStudentEffects
+      TaskClassGroupEffects,
+      GroupEffects,
+      LinkedPersonEffects,
+      TaskStudentEffects,
+      TaskEduContentEffects,
+      TaskEffects
     ])
   ]
 })

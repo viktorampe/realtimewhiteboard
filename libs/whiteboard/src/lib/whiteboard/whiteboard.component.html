@@ -2,6 +2,7 @@
   <campus-card
     *ngFor="let card of cards; let i = index"
     cdkDrag
+    (lastColor)="saveLastColor($event)"
     [card]="card"
     (deleteCard)="onDeleteCard(i)"
     class="whiteboard-page__card"

@@ -102,11 +102,11 @@ $shared_header__page-bar_background: linear-gradient(
   $color-blue-2,
   $color-blue-3
 );
-$shared-header__quicklink-color: $secondary-font-color;
-$shared-header__quicklink-color-hover: $secondary-font-color-accent;
-$shared-header__quicklink-bg-color: transparent;
-$shared-header__quicklink-icon-size: 24px;
-$shared-header__quicklink-icon-size-small: 20px;
+$shared-header__contextual-button-color: $secondary-font-color;
+$shared-header__contextual-button-color-hover: $primary-bg-color;
+$shared-header__contextual-button-bg-color: transparent;
+$shared-header__contextual-button-icon-size: 24px;
+$shared-header__contextual-button-icon-size-small: 20px;
 
 // shared tiles
 $shared-bg-color-1: $color-white-1 !default;
@@ -244,6 +244,14 @@ $pages-methods-border-color--primary: $color-gray-2;
 $pages-methods-text-color--secondary: $primary-font-color-2;
 $pages-methods-background-color--secondary: $secondary-bg-color;
 
+// kabas-tasks
+$pages-kabas-tasks-text-color--primary: $primary-font-color;
+$pages-kabas-tasks-text-color--primary--accent: $secondary-font-color-accent;
+$pages-kabas-tasks-background-color--primary: $primary-bg-color;
+$pages-kabas-tasks-border-color--primary: $color-gray-2;
+$pages-kabas-tasks-text-color--secondary: $primary-font-color-2;
+$pages-kabas-tasks-background-color--secondary: $secondary-bg-color;
+
 // practice
 $pages-practice-text-color--primary: $primary-font-color;
 $pages-practice-text-color--primary--accent: $secondary-font-color-accent;
@@ -273,3 +281,7 @@ $pages-settings_form__title-margin-bottom: 32px;
 $pages-settings-profile__form-box-shadow: $pages-settings_container-box-shadow;
 $pages-settings-profile__form-color: $color-gray-4;
 $pages-settings-profile__form-width: 500px;
+
+// tasks
+$pages-manage-kabas-tasks__task-list-item__status-color: $color-lila-1;
+$pages-manage-kabas-tasks__task-list-item__archived-color: $color-green-1;
