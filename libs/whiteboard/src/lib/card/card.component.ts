@@ -34,8 +34,11 @@ export class CardComponent implements OnInit {
   }
 
   onDblClick(event) {
-    if (event.target.className === 'card') {
-      this.toggleInput();
+    if (
+      event.target.className.includes('cardImage') ||
+      event.target.className.includes('card__input')
+    ) {
+      this.toggleEditMode();
     }
   }
 
