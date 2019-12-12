@@ -5,6 +5,7 @@ export class AssigneeFixture implements AssigneeInterface {
   label = 'foo';
   start = new Date();
   end = new Date();
+  id = 1;
 
   constructor(props: Partial<AssigneeInterface> = {}) {
     // overwrite defaults
