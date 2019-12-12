@@ -108,21 +108,21 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
         {
           data: {
             status: 'pending',
-            icon: 'pending'
+            icon: 'task:pending'
           },
           visible: true
         },
         {
           data: {
             status: 'active',
-            icon: 'start'
+            icon: 'task:active'
           },
           visible: true
         },
         {
           data: {
             status: 'finished',
-            icon: 'stop'
+            icon: 'task:finished'
           },
           visible: true
         }
