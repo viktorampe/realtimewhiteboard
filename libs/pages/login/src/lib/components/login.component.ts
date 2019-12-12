@@ -3,9 +3,8 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { PersonInterface } from '@campus/dal';
 import { Observable } from 'rxjs';
 import { LoginViewModel } from './login.viewmodel';
-DeviceMotionEvent;
 @Component({
-  selector: 'pages-login',
+  selector: 'campus-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
