@@ -1,4 +1,5 @@
 @import './components/manage-kabas-tasks-overview/manage-kabas-tasks-overview.theme';
+@import './components/task-list-item/task-list-item.component.theme.scss';
 
 $pages-kabas-tasks-text-color--primary: black !default;
 $pages-kabas-tasks-text-color--primary--accent: darkred !default;
@@ -9,4 +10,5 @@ $pages-kabas-tasks-background-color--secondary: white !default;
 
 @mixin pages-kabas-tasks-theme() {
   @include manage-kabas-tasks-overview-theme();
+  @include pages-manage-kabas-tasks-task-list-item-theme();
 }

@@ -1,0 +1,80 @@
+:host {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 5px 0;
+}
+
+.manage-kabas-tasks-task-list-item {
+  &__icon {
+    flex: 0 0 50px;
+  }
+
+  &__learning-area {
+    flex: 0 0 auto;
+  }
+
+  &__archived {
+    flex: 0 0 50px;
+  }
+
+  &__status {
+    flex: 0 0 50px;
+  }
+
+  &__container {
+    flex: 1 0 30%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    &__actions {
+      white-space: normal;
+
+      span {
+        cursor: pointer;
+        position: relative;
+        margin-right: 15px;
+
+        &:after {
+          content: '•';
+          pointer-events: none;
+          position: absolute;
+          right: -10px;
+        }
+
+        &:last-child:after {
+          content: '';
+        }
+      }
+    }
+  }
+
+  &__dates {
+    flex: 0 0 140px;
+    text-align: center;
+  }
+
+  &__assignees {
+    flex: 1 0 250px;
+
+    &-class-groups {
+      list-style: none;
+      padding: 0;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+
+      li {
+        display: inline;
+        &:after {
+          content: ', ';
+        }
+
+        &:last-child:after {
+          content: '';
+        }
+      }
+    }
+  }
+}
