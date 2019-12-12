@@ -61,7 +61,15 @@
         <campus-button
           class="practice-book-lessons--reset-filters"
           iconClass="reset-filters"
+          (click)="clickResetFilters()"
         ></campus-button>
+
+        <p *ngIf="filteredTasks.length; else noResults"
+          >Je hebt {{ filteredTasks.length }} resultaten.</p
+        >
+        <ng-template #noResults>
+          <p>De toegepaste filter bevat geen resultaten.</p>
+        </ng-template>
 
         <mat-selection-list #digital>
           <mat-list-item

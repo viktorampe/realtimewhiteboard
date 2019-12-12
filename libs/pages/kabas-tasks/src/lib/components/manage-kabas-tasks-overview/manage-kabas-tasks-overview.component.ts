@@ -5,7 +5,6 @@ import {
   Inject,
   OnInit,
   QueryList,
-  ViewChild,
   ViewChildren
 } from '@angular/core';
 import { MatSelectionList } from '@angular/material';
@@ -14,11 +13,12 @@ import {
   SearchFilterCriteriaFixture,
   SearchFilterCriteriaInterface,
   SearchFilterCriteriaValuesFixture,
-  SearchTermComponent
+  SearchTermComponent,
+  SelectFilterComponent
 } from '@campus/search';
 import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/utils';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { AssigneeTypesEnum } from '../../interfaces/Assignee.interface';
 import { TaskWithAssigneesInterface } from '../../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
@@ -54,10 +54,14 @@ export class ManageKabasTasksOverviewComponent
 
   private filterState$ = new BehaviorSubject<FilterStateInterface>({});
 
-  @ViewChild('paper') paperTaskList: MatSelectionList;
-  @ViewChild('digital') digitalTaskList: MatSelectionList;
+  @ViewChildren(MatSelectionList) taskLists: QueryList<MatSelectionList>;
+
   @ViewChildren(SearchTermComponent) searchTermFilters: QueryList<
     SearchTermComponent
+  >;
+
+  @ViewChildren(SelectFilterComponent) selectFilters: QueryList<
+    SelectFilterComponent
   >;
 
   constructor(
@@ -95,15 +99,21 @@ export class ManageKabasTasksOverviewComponent
   // TODO: implement handler
   clickNewTask() {}
 
+  clickResetFilters() {
+    // reset state
+    this.resetFilterState();
+    // visually clear selections
+    this.clearFilters();
+  }
+
   public onSelectedTabIndexChanged(tab: number) {
+    this.cleanUpPage();
     this.router.navigate([], {
       queryParams: { tab }
     });
   }
 
   // TODO:
-  // - number of results$
-  // - no results view
   // - filter based on:
   //  - date interval
 
@@ -129,6 +139,23 @@ export class ManageKabasTasksOverviewComponent
     this.updateFilterState(updatedFilter);
   }
 
+  /**
+   * Resets all filters.
+   *
+   * @private
+   * @memberof ManageKabasTasksOverviewComponent
+   */
+  private resetFilterState(): void {
+    this.filterState$.next({});
+  }
+
+  /**
+   * Patches the old filter state with the new filter values.
+   *
+   * @private
+   * @param {FilterStateInterface} updatedFilter
+   * @memberof ManageKabasTasksOverviewComponent
+   */
   private updateFilterState(updatedFilter: FilterStateInterface): void {
     const currentFilterState = this.filterState$.value;
     const newFilterState = { ...currentFilterState, ...updatedFilter };
@@ -136,6 +163,13 @@ export class ManageKabasTasksOverviewComponent
     this.filterState$.next(newFilterState);
   }
 
+  /**
+   * Assembles the filtered tasks stream.
+   *
+   * @private
+   * @returns {Observable<TaskWithAssigneesInterface[]>}
+   * @memberof ManageKabasTasksOverviewComponent
+   */
   private getFilteredTasks(): Observable<TaskWithAssigneesInterface[]> {
     return combineLatest([
       this.currentTab$,
@@ -153,6 +187,15 @@ export class ManageKabasTasksOverviewComponent
     );
   }
 
+  /**
+   * Filters the task array based on the filter state.
+   *
+   * @private
+   * @param {FilterStateInterface} filterState
+   * @param {TaskWithAssigneesInterface[]} tasks
+   * @returns {TaskWithAssigneesInterface[]}
+   * @memberof ManageKabasTasksOverviewComponent
+   */
   private filterTasks(
     filterState: FilterStateInterface,
     tasks: TaskWithAssigneesInterface[]
@@ -210,34 +253,35 @@ export class ManageKabasTasksOverviewComponent
       map(queryParam => {
         if (queryParam.tab === undefined) return 0;
         return +queryParam.tab;
-      }),
-      tap(tabIndex => {
-        this.cleanUpTab(this.getInvisibleTabIndex(tabIndex));
       })
     );
   }
 
-  private getInvisibleTabIndex(currentTabIndex: number): number {
-    return currentTabIndex === 0 ? 1 : 0;
-  }
-
   /**
-   * When navigating to a different tab, the invisible tab should perform some clean up.
+   * When navigating to a different tab, the page should perform some clean up.
    * E.g. reset filters, selections etc.
    *
    * @private
-   * @param {number} tabIndex
    * @memberof ManageKabasTasksOverviewComponent
    */
-  private cleanUpTab(tabIndex: number): void {
-    this.filterState$.next({});
-    this.clearSelectionOnTab(tabIndex);
-    this.clearFiltersOnTab(tabIndex);
+  private cleanUpPage(): void {
+    this.resetFilterState();
+    this.clearListSelections();
+    this.clearFilters();
   }
 
-  private clearFiltersOnTab(tabIndex: number): void {
+  /**
+   * This will visually clear the filters.
+   * E.g. search term wil be empty, selected boxes will be unchecked etc.
+   *
+   * @private
+   * @memberof ManageKabasTasksOverviewComponent
+   */
+  private clearFilters(): void {
     if (this.searchTermFilters)
       this.searchTermFilters.forEach(filter => (filter.currentValue = ''));
+    if (this.selectFilters)
+      this.selectFilters.forEach(filter => filter.selectControl.reset());
   }
 
   /**
@@ -249,11 +293,8 @@ export class ManageKabasTasksOverviewComponent
    * @param {number} tabIndex
    * @memberof ManageKabasTasksOverviewComponent
    */
-  private clearSelectionOnTab(tabIndex: number): void {
-    if (tabIndex === 0) {
-      if (this.digitalTaskList) this.digitalTaskList.selectedOptions.clear();
-    } else if (tabIndex === 1) {
-      if (this.paperTaskList) this.paperTaskList.selectedOptions.clear();
-    }
+  private clearListSelections(): void {
+    if (this.taskLists)
+      this.taskLists.forEach(list => list.selectedOptions.clear());
   }
 }
