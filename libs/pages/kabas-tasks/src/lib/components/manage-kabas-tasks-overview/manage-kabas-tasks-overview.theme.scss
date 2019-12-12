@@ -33,13 +33,29 @@
         .mat-list-item,
         .mat-list-item.mat-list-option {
           height: 64px;
+          &:hover {
+            .mat-pseudo-checkbox {
+              opacity: 1;
+            }
+          }
 
           .mat-pseudo-checkbox {
-            display: none;
+            transform: scale(0.8);
+            opacity: 0.3;
+            transition: opacity 150ms ease-out;
           }
 
           .mat-list-item-content .mat-list-text {
             padding-left: 0;
+          }
+        }
+
+        &.mat-selection-list--has-selection {
+          .mat-list-item,
+          .mat-list-item.mat-list-option {
+            .mat-pseudo-checkbox {
+              opacity: 1;
+            }
           }
         }
       }

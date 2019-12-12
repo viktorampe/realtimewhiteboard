@@ -34,7 +34,12 @@
     (selectedIndexChange)="onSelectedTabIndexChanged($event)"
   >
     <mat-tab label="Digitale taken">
-      <mat-selection-list #digital>
+      <mat-selection-list
+        #digital
+        [class.mat-selection-list--has-selection]="
+          !digital.selectedOptions.isEmpty()
+        "
+      >
         <mat-list-item
           (click)="clickAddDigitalTask()"
           class="manage-kabas-tasks-overview__list__primary-action"
