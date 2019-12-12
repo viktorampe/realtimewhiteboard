@@ -1,3 +1,4 @@
+{{ filterState$ | async | json }}
 <ng-container *ngIf="(filteredTasks$ | async) as filteredTasks">
   <campus-page-bar>
     <campus-button
@@ -49,7 +50,10 @@
             (filterSelectionChange)="selectionChanged($event, 'learningArea')"
           ></campus-select-filter>
 
-          <!--<date-filter-component></date-filter-component>-->
+          <campus-date-filter
+            [filterCriteria]="mockFilterCriteria"
+            (filterSelectionChange)="selectionChanged($event, 'dateInterval')"
+          ></campus-date-filter>
           <campus-select-filter
             multiple="true"
             *ngIf="(assigneeFilter$ | async) as assigneeFilter"
@@ -106,11 +110,11 @@
               [archived]="task.archivedYear"
               icon="educontent-product-type:evaluatie"
               exerciseCount="4"
-              [startDate]="taskItem.startDate"
-              [endDate]="taskItem.endDate"
-              status="active"
+              [startDate]="task.startDate"
+              [endDate]="task.endDate"
+              [status]="task.status"
               [actions]="taskItem.actions"
-              [assignees]="taskItem.assignees"
+              [assignees]="task.assignees"
             ></campus-task-list-item>
           </mat-list-option>
         </mat-selection-list>
@@ -185,11 +189,11 @@
               [archived]="task.archivedYear"
               icon="educontent-product-type:evaluatie"
               exerciseCount="4"
-              [startDate]="taskItem.startDate"
-              [endDate]="taskItem.endDate"
-              status="active"
+              [startDate]="task.startDate"
+              [endDate]="task.endDate"
+              [status]="task.status"
               [actions]="taskItem.actions"
-              [assignees]="taskItem.assignees"
+              [assignees]="task.assignees"
             ></campus-task-list-item>
           </mat-list-option>
         </mat-selection-list>

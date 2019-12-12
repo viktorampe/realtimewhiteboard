@@ -447,13 +447,10 @@ export class ManageKabasTasksOverviewComponent
     }
 
     if (filterState.dateInterval) {
-      filteredTasks = filteredTasks.filter(task =>
-        task.assignees.some(assignee => {
-          return (
-            assignee.start <= filterState.dateInterval.lte &&
-            assignee.end >= filterState.dateInterval.gte
-          );
-        })
+      filteredTasks = filteredTasks.filter(
+        task =>
+          new Date(task.startDate) <= filterState.dateInterval.lte &&
+          new Date(task.endDate) >= filterState.dateInterval.gte
       );
     }
 
