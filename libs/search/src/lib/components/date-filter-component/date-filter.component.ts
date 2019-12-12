@@ -101,8 +101,6 @@ export class DateFilterComponent
   @HostBinding('class.date-filter-component')
   dateFilterComponentClass = true;
 
-  constructor() {}
-
   ngOnInit() {
     this.subscriptions.add(
       this.matMenuTrigger.menuClosed.subscribe(this.cancelFormValues.bind(this))
