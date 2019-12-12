@@ -70,7 +70,19 @@ export class UserEffects {
         );
       },
       onError: (action: LogInUser, error) => {
-        return new UserRemoveError(error);
+        const effectFeedback = new EffectFeedback({
+          id: this.uuid(),
+          triggerAction: action,
+          message: 'De gebruikersnaam of het wachtwoord is niet correct.',
+          userActions: [],
+          type: 'error',
+          priority: Priority.HIGH
+        });
+        const feedbackAction = new EffectFeedbackActions.AddEffectFeedback({
+          effectFeedback
+        });
+        return feedbackAction;
+        //return new UserRemoveError(error);
       }
     }
   );

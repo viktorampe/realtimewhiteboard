@@ -16,10 +16,10 @@ export const environment: EnvironmentInterface = {
     favicon: 'assets/icons/favicon.ico'
   },
   logout: {
-    url: 'http://www.kabas.localhost:3020/dev'
+    url: 'http://www.kabas.localhost:3020/login'
   },
   login: {
-    url: 'http://www.kabas.localhost:3020/dev'
+    url: 'http://www.kabas.localhost:3020/login'
   },
   termPrivacy: {
     url: 'http://www.kabas.localhost:3020/dev'

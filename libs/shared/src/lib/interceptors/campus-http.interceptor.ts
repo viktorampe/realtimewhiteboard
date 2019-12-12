@@ -7,6 +7,8 @@ import {
 } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { DalState } from '@campus/dal';
+import { Store } from '@ngrx/store';
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 import {
@@ -17,6 +19,8 @@ import {
 @Injectable()
 export class CampusHttpInterceptor implements HttpInterceptor {
   constructor(
+    @Inject('uuid') private uuid: Function,
+    private store: Store<DalState>,
     private router: Router,
     @Inject(ENVIRONMENT_ERROR_MANAGEMENT_FEATURE_TOKEN)
     private environmentErrorManagementFeature: EnvironmentErrorManagementFeatureInterface
@@ -29,7 +33,11 @@ export class CampusHttpInterceptor implements HttpInterceptor {
     return next.handle(request).pipe(
       retry(1),
       catchError((error: HttpErrorResponse) => {
-        if (this.isManagedError(error) && !this.isAllowedError(error)) {
+        if (
+          this.isManagedError(error) &&
+          !this.isAllowedError(error) &&
+          !request.url.includes('People/login')
+        ) {
           this.router.navigate(['/error', error.status]);
         }
         return throwError(error);

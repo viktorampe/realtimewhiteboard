@@ -18,28 +18,34 @@
 
 <ng-template #notLoggedIn>
   <div class="pages-login__form__container">
-    <form [formGroup]="loginForm" class="pages-login__form">
+    <form
+      [formGroup]="loginForm"
+      class="pages-login__form"
+      [class.pages-login__form--unauthorized]="hasError$ | async"
+    >
       <div class="pages-login__form__title">Vul uw gebruikersgegevens in</div>
-
+      <p class="mat-error" *ngIf="(errorFeedback$ | async) as error">{{
+        error.message
+      }}</p>
       <mat-form-field>
-        <mat-label>Vul uw gebruikernaam in</mat-label>
+        <mat-label>Gebruikersnaam</mat-label>
         <input
           type="text"
           matInput
-          placeholder="Gebruikersnaam"
           formControlName="username"
           required
+          (keydown)="clearError()"
         />
       </mat-form-field>
 
       <mat-form-field>
-        <mat-label>Vul uw wachtwoord in</mat-label>
+        <mat-label>Wachtwoord</mat-label>
         <input
           type="password"
           matInput
-          placeholder="Wachtwoord"
           formControlName="password"
           required
+          (keydown)="clearError()"
         />
       </mat-form-field>
 
