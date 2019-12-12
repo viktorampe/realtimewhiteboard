@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatIconRegistry } from '@angular/material';
+import { MatIconRegistry, MatSlideToggleModule } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { GuardsModule } from '@campus/guards';
 import { PagesSharedModule } from '@campus/pages/shared';
@@ -13,6 +14,8 @@ import {
 } from '@campus/shared';
 import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
+import { hot } from '@nrwl/nx/testing';
+import { BehaviorSubject } from 'rxjs';
 import { AssigneeTypesEnum } from '../../interfaces/Assignee.interface';
 import {
   TaskStatusEnum,
@@ -20,6 +23,7 @@ import {
 } from '../../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
 import { MockKabasTasksViewModel } from '../kabas-tasks.viewmodel.mock';
+import { TaskListItemComponent } from '../task-list-item/task-list-item.component';
 import {
   FilterStateInterface,
   ManageKabasTasksOverviewComponent
@@ -28,7 +32,10 @@ import {
 describe('ManageKabasTasksOverviewComponent', () => {
   let component: ManageKabasTasksOverviewComponent;
   let fixture: ComponentFixture<ManageKabasTasksOverviewComponent>;
-  let viewModel: KabasTasksViewModel;
+
+  const queryParams: BehaviorSubject<Params> = new BehaviorSubject<Params>({});
+  let kabasTasksViewModel: KabasTasksViewModel;
+  let router: Router;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -40,7 +47,8 @@ describe('ManageKabasTasksOverviewComponent', () => {
         SharedModule,
         SearchModule,
         GuardsModule,
-        RouterTestingModule
+        RouterTestingModule,
+        MatSlideToggleModule
       ],
       providers: [
         {
@@ -48,17 +56,24 @@ describe('ManageKabasTasksOverviewComponent', () => {
           useClass: MockKabasTasksViewModel
         },
         { provide: MatIconRegistry, useClass: MockMatIconRegistry },
+        {
+          provide: Router,
+          useValue: { navigate: jest.fn() }
+        },
+        { provide: ActivatedRoute, useValue: { queryParams } },
+        { provide: KabasTasksViewModel, useClass: MockKabasTasksViewModel },
         { provide: ENVIRONMENT_ICON_MAPPING_TOKEN, useValue: {} },
         { provide: ENVIRONMENT_TESTING_TOKEN, useValue: {} }
       ],
-      declarations: [ManageKabasTasksOverviewComponent]
+      declarations: [ManageKabasTasksOverviewComponent, TaskListItemComponent]
     });
   }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ManageKabasTasksOverviewComponent);
     component = fixture.componentInstance;
-    viewModel = TestBed.get(KabasTasksViewModel);
+    kabasTasksViewModel = TestBed.get(KabasTasksViewModel);
+    router = TestBed.get(Router);
     fixture.detectChanges();
   });
 
@@ -374,6 +389,28 @@ describe('ManageKabasTasksOverviewComponent', () => {
       const result = component['filterTasks'](filterState, mockTasks);
 
       expect(result).toEqual([mockTasks[0], mockTasks[7], mockTasks[8]]);
+    });
+  });
+
+  describe('tabs', () => {
+    describe('onSelectedTabIndexChanged', () => {
+      it('should navigate with the new tab index in the queryParams', () => {
+        const tab = 1;
+
+        component.onSelectedTabIndexChanged(tab);
+
+        expect(router.navigate).toHaveBeenCalled();
+        expect(router.navigate).toHaveBeenCalledWith([], {
+          queryParams: { tab }
+        });
+      });
+    });
+    it('should open correct tab when navigating with tab in queryParams', () => {
+      const tab = 1;
+
+      queryParams.next({ tab });
+
+      expect(component.currentTab$).toBeObservable(hot('a', { a: tab }));
     });
   });
 });

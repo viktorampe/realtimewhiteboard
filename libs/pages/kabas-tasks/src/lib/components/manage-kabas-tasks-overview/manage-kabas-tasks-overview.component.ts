@@ -9,10 +9,12 @@ import {
 } from '@angular/core';
 import { MatSelectionList } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
+import { LearningAreaInterface } from '@campus/dal';
 import {
   SearchFilterCriteriaFixture,
   SearchFilterCriteriaInterface,
   SearchFilterCriteriaValuesFixture,
+  SearchFilterCriteriaValuesInterface,
   SearchTermComponent,
   SelectFilterComponent
 } from '@campus/search';
@@ -22,7 +24,6 @@ import { map } from 'rxjs/operators';
 import { AssigneeTypesEnum } from '../../interfaces/Assignee.interface';
 import { TaskWithAssigneesInterface } from '../../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
-import { MockKabasTasksViewModel } from '../kabas-tasks.viewmodel.mock';
 
 export interface FilterStateInterface {
   searchTerm?: string;
@@ -35,10 +36,7 @@ export interface FilterStateInterface {
 @Component({
   selector: 'campus-manage-kabas-tasks-overview',
   templateUrl: './manage-kabas-tasks-overview.component.html',
-  styleUrls: ['./manage-kabas-tasks-overview.component.scss'],
-  providers: [
-    { provide: KabasTasksViewModel, useClass: MockKabasTasksViewModel }
-  ]
+  styleUrls: ['./manage-kabas-tasks-overview.component.scss']
 })
 export class ManageKabasTasksOverviewComponent
   implements OnInit, AfterContentInit {
@@ -46,6 +44,49 @@ export class ManageKabasTasksOverviewComponent
   public mockFilterCriteria = new SearchFilterCriteriaFixture({}, [
     new SearchFilterCriteriaValuesFixture()
   ]);
+
+  public taskItem = {
+    startDate: new Date(2019, 11, 1),
+    endDate: new Date(2019, 11, 21),
+    actions: [
+      { label: 'bekijken', handler: () => console.log('bekijken') },
+      { label: 'archiveren', handler: () => console.log('archiveren') },
+      { label: 'resultaten', handler: () => console.log('resultaten') },
+      { label: 'doelenmatrix', handler: () => console.log('doelenmatrix') }
+    ],
+    assignees: [
+      {
+        type: AssigneeTypesEnum.CLASSGROUP,
+        label: 'Klas 1',
+        start: new Date(2019, 11, 1),
+        end: new Date(2019, 11, 8)
+      },
+      {
+        type: AssigneeTypesEnum.CLASSGROUP,
+        label: 'Klas 2',
+        start: new Date(2019, 11, 8),
+        end: new Date(2019, 11, 21)
+      },
+      {
+        type: AssigneeTypesEnum.STUDENT,
+        label: 'Leerling 1',
+        start: new Date(2019, 11, 1),
+        end: new Date(2019, 11, 8)
+      },
+      {
+        type: AssigneeTypesEnum.STUDENT,
+        label: 'Leerling 2',
+        start: new Date(2019, 11, 1),
+        end: new Date(2019, 11, 8)
+      },
+      {
+        type: AssigneeTypesEnum.GROUP,
+        label: 'Groep 1',
+        start: new Date(2019, 11, 8),
+        end: new Date(2019, 11, 21)
+      }
+    ]
+  };
 
   public tasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
   public paperTasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
@@ -64,6 +105,12 @@ export class ManageKabasTasksOverviewComponent
     SelectFilterComponent
   >;
 
+  public learningAreaFilter$: Observable<SearchFilterCriteriaInterface>;
+  public learningAreaFilterPaper$: Observable<SearchFilterCriteriaInterface>;
+  public assigneeFilter$: Observable<SearchFilterCriteriaInterface>;
+  public assigneeFilterPaper$: Observable<SearchFilterCriteriaInterface>;
+  public taskStatusFilter: SearchFilterCriteriaInterface;
+
   constructor(
     private viewModel: KabasTasksViewModel,
     private router: Router,
@@ -76,6 +123,99 @@ export class ManageKabasTasksOverviewComponent
     this.currentTab$ = this.getCurrentTab();
     this.tasksWithAssignments$ = this.viewModel.tasksWithAssignments$;
     this.paperTasksWithAssignments$ = this.viewModel.paperTasksWithAssignments$;
+
+    this.learningAreaFilter$ = this.tasksWithAssignments$.pipe(
+      map(this.sortAndCreateForLearningAreaFilter)
+    );
+    this.assigneeFilter$ = this.tasksWithAssignments$.pipe(
+      map(this.sortAndCreateForAssigneeFilter)
+    );
+    this.learningAreaFilterPaper$ = this.paperTasksWithAssignments$.pipe(
+      map(this.sortAndCreateForLearningAreaFilter)
+    );
+
+    this.assigneeFilterPaper$ = this.paperTasksWithAssignments$.pipe(
+      map(this.sortAndCreateForAssigneeFilter)
+    );
+
+    //todo swap for real icons
+    this.taskStatusFilter = {
+      name: 'taskStatus',
+      label: 'taak status',
+      keyProperty: 'status',
+      displayProperty: 'icon',
+      values: [
+        {
+          data: {
+            status: 'pending',
+            icon: 'task:pending'
+          },
+          visible: true
+        },
+        {
+          data: {
+            status: 'active',
+            icon: 'task:active'
+          },
+          visible: true
+        },
+        {
+          data: {
+            status: 'finished',
+            icon: 'task:finished'
+          },
+          visible: true
+        }
+      ]
+    };
+  }
+  public sortAndCreateForAssigneeFilter(tasksWithAssignments) {
+    const assigns = [];
+    tasksWithAssignments.forEach(twa => {
+      twa.assignees.forEach(ass => {
+        assigns.push({
+          type: ass.type,
+          id: ass.id,
+          label: ass.label
+        });
+      });
+    });
+    const identifiers = [];
+    const values = assigns.reduce((acc, assignee) => {
+      const identifier = `${assignee.type}-${assignee.id}`;
+      if (identifiers.includes(identifier)) {
+        return acc;
+      }
+      identifiers.push(identifier);
+      return [
+        ...acc,
+        {
+          data: {
+            label: assignee.label,
+            identifier: { type: assignee.type, id: assignee.id }
+          },
+          visible: true
+        } as SearchFilterCriteriaValuesInterface
+      ];
+    }, []);
+    values.sort(function(a, b) {
+      const order = {
+        [AssigneeTypesEnum.CLASSGROUP]: 1,
+        [AssigneeTypesEnum.GROUP]: 2,
+        [AssigneeTypesEnum.STUDENT]: 3
+      };
+      return (
+        order[a.data.identifier.type] - order[b.data.identifier.type] ||
+        (a.data.label > b.data.label ? 1 : b.data.label > a.data.label ? -1 : 0)
+      );
+    });
+    return {
+      name: 'assignee',
+      label: 'Toegekend aan',
+      keyProperty: 'label',
+      displayProperty: 'label',
+      values
+    } as SearchFilterCriteriaInterface;
   }
 
   ngAfterContentInit(): void {
@@ -83,6 +223,33 @@ export class ManageKabasTasksOverviewComponent
     this.cd.detectChanges();
   }
 
+  public sortAndCreateForLearningAreaFilter(tasksWithAssignments) {
+    const uniqueLearningAreas = tasksWithAssignments.reduce(
+      (acc, twa) => ({
+        ...acc,
+        [twa.learningAreaId]: twa.learningArea
+      }),
+      {}
+    ) as LearningAreaInterface;
+
+    const uniqueLearningAreasArray = Object.values(uniqueLearningAreas);
+    uniqueLearningAreasArray.sort((a, b) =>
+      a.name > b.name ? 1 : b.name > a.name ? -1 : 0
+    );
+
+    return {
+      name: 'learningArea',
+      label: 'Leergebieden',
+      keyProperty: 'id',
+      displayProperty: 'name',
+      values: uniqueLearningAreasArray.map(la => {
+        return {
+          data: la,
+          visible: true
+        } as SearchFilterCriteriaValuesInterface;
+      })
+    } as SearchFilterCriteriaInterface;
+  }
   clickAddDigitalTask() {
     console.log('TODO: adding digital task');
   }
@@ -131,8 +298,8 @@ export class ManageKabasTasksOverviewComponent
       updatedFilter[filterName] = criterium.values
         .filter(value => value.selected)
         .map(selectedValue => ({
-          id: selectedValue.data.id.id,
-          label: selectedValue.data.id.type
+          id: selectedValue.data.identifier.id,
+          label: selectedValue.data.identifier.type
         }));
     } else if (filterName === 'status') {
       updatedFilter[filterName] = criterium.values
@@ -238,7 +405,7 @@ export class ManageKabasTasksOverviewComponent
     if (filterState.status && filterState.status.length) {
       filteredTasks = filteredTasks.filter(task =>
         task.assignees.some(assignee =>
-          filterState.status.includes(assignee.status)
+          filterState.status.includes(task.status)
         )
       );
     }

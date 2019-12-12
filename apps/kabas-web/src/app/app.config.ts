@@ -21,7 +21,7 @@ const standardSideNavItems: NavItem[] = [
   {
     title: 'Vrij oefenen',
     link: '/practice',
-    hideWhenRequiredPermissions: ['manageUnlockedFreePractices']
+    requiredPermissions: ['openUnlockedFreePractices']
   },
   {
     title: 'Vrij oefenen',

@@ -52,6 +52,10 @@ const routes: Routes = [
     path: '',
     resolve: { isResolved: PracticeResolver },
     runGuardsAndResolvers: 'always',
+    data: {
+      requiredPermissions: 'openUnlockedFreePractices'
+    },
+    canActivate: [PermissionGuard],
     children: [
       {
         path: '',
