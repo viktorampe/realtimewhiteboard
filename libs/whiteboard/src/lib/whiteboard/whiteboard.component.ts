@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import Card from '../../interfaces/card.interface';
 
 @Component({
@@ -7,11 +7,23 @@ import Card from '../../interfaces/card.interface';
   styleUrls: ['./whiteboard.component.scss']
 })
 export class WhiteboardComponent implements OnInit {
-  constructor() {}
+  @ViewChild('titleInput') set titleInput(titleInput: ElementRef) {
+    if (titleInput) {
+      titleInput.nativeElement.focus();
+    }
+  }
+
+  constructor() {
+    this.title = '';
+    this.isTitleInputSelected = this.title === '';
+  }
 
   cards: Card[];
   // maak array van Cards
   lastColor: string;
+
+  title: string;
+  isTitleInputSelected: boolean;
 
   ngOnInit() {
     this.cards = [];
@@ -38,6 +50,16 @@ export class WhiteboardComponent implements OnInit {
       top: top,
       left: left
     });
+  }
+
+  showTitleInput() {
+    this.isTitleInputSelected = true;
+  }
+
+  hideTitleInput() {
+    if (this.title !== '') {
+      this.isTitleInputSelected = false;
+    }
   }
 
   onDeleteCard(index) {
