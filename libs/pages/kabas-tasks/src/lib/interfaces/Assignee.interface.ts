@@ -12,4 +12,5 @@ export interface AssigneeInterface {
   start: Date;
   end: Date;
   status?: TaskStatusEnum;
+  id: number;
 }

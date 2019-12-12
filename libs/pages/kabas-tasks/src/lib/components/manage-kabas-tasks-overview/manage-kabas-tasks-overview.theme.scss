@@ -4,7 +4,25 @@
   $pages-kabas-tasks__list-option-background-color: $pages-kabas-tasks-background-color--primary !default;
   $pages-kabas-tasks__list-option-background-color--accent: $pages-kabas-tasks-background-color--secondary !default;
   $pages-kabas-tasks__list-option-color--secondary: $pages-kabas-tasks-text-color--secondary !default;
+  $manage-kabas-tasks-overview_filterbar-margin-top: 15px !default;
+  $manage-kabas-tasks-overview_filterbar-margin-left: 45px !default;
+  $manage-kabas-tasks-overview_filterbar-filter-width: 150px !default;
+  $manage-kabas-tasks-overview_filterbar-filter-heigth: 50px !default;
+  $manage-kabas-tasks-overview_filterbar-filter-padding-width: 8px !default;
+  $manage-kabas-tasks-overview_filterbar-filter-padding-height: 12px;
+  $manage-kabas-tasks-overview__reset-margin-right: 20px;
+  $manage-kabas-tasks-overview__reset-margin-bottom: 10px;
+  $pages-kabas-tasks-filters-hover-foreground-color: $color-black-1;
+  $manage-kabas-tasks-overview_filterbar-archive-toggle: $color-gray-4;
+  $manage-kabas-tasks-overview_filterbar-border-bottom: $color-gray-1;
 
+  $manage-kabas-tasks-overview__reset-filters-width: 50px !default;
+  $manage-kabas-tasks-overview__reset-filters-height: 50px !default;
+  $manage-kabas-tasks-overview__reset-filters-border-width: 1px !default;
+  $manage-kabas-tasks-overview__reset-filters-border-color: $primary-font-color-2 !default;
+  $manage-kabas-tasks-overview__reset-filters-background-color: transparent !default;
+  $filters-hover-background-color: inherit !default;
+  $filters-active-background-color: inherit !default;
   // measurements
   $pages-kabas-tasks__list-option--selected-border-width: 4px !default;
   $pages-kabas-tasks__list-option-padding-left: 16px !default;
@@ -34,6 +52,64 @@
             $pages-kabas-tasks__list-option-color--accent solid;
         }
       }
+    }
+    &__filterbar {
+      border-bottom: 1px solid
+        $manage-kabas-tasks-overview_filterbar-border-bottom;
+      margin: $manage-kabas-tasks-overview_filterbar-margin-top 0px 0px
+        $manage-kabas-tasks-overview_filterbar-margin-left;
+
+      > * {
+        margin-right: $manage-kabas-tasks-overview__reset-margin-right;
+        margin-bottom: $manage-kabas-tasks-overview__reset-margin-bottom;
+      }
+
+      campus-button-toggle-filter {
+        div.button-toggle-filter {
+          &__title {
+            display: none !important;
+          }
+        }
+      }
+      .ui-filter-text-input {
+        &__input {
+          width: $manage-kabas-tasks-overview_filterbar-filter-width;
+          height: $manage-kabas-tasks-overview_filterbar-filter-heigth;
+        }
+      }
+      .select-filter-component {
+        width: $manage-kabas-tasks-overview_filterbar-filter-width;
+      }
+      .search-term campus-button {
+        &:hover {
+          background-color: $pages-method-filters-hover-background-color;
+          mat-icon {
+            color: $pages-kabas-tasks-filters-hover-foreground-color;
+          }
+        }
+      }
+    }
+    &--reset-filters {
+      width: $manage-kabas-tasks-overview__reset-filters-width;
+      height: $manage-kabas-tasks-overview__reset-filters-height;
+      background-color: $manage-kabas-tasks-overview__reset-filters-background-color;
+      border: $manage-kabas-tasks-overview__reset-filters-border-width solid
+        $manage-kabas-tasks-overview__reset-filters-border-color;
+
+      &:hover {
+        background-color: $pages-method-filters-hover-background-color;
+        color: $pages-kabas-tasks-filters-hover-foreground-color;
+      }
+      &:active {
+        background-color: $filters-active-background-color;
+      }
+    }
+    &__archive-toggle {
+      border: 1px solid $manage-kabas-tasks-overview_filterbar-archive-toggle;
+      padding: $manage-kabas-tasks-overview_filterbar-filter-padding-height
+        $manage-kabas-tasks-overview_filterbar-filter-padding-width
+        $manage-kabas-tasks-overview_filterbar-filter-padding-height
+        $manage-kabas-tasks-overview_filterbar-filter-padding-width;
     }
 
     &__list__primary-action {

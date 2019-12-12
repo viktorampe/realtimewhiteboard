@@ -62,31 +62,43 @@ export class MockKabasTasksViewModel
         ...new TaskFixture({ archivedAt: null, archivedYear: null }),
         name: 'Titel van de eerste oefening',
         eduContentAmount: 3,
-        learningArea: new LearningAreaFixture({ name: 'wiskunde' }),
+        learningArea: new LearningAreaFixture({ id: 1, name: 'wiskunde' }),
+        learningAreaId: 1,
         assignees: [
           {
             type: AssigneeTypesEnum.CLASSGROUP,
             label: '1A',
             start: yesterday,
-            end: nextWeek
+            end: nextWeek,
+            id: 1
           },
           {
             type: AssigneeTypesEnum.GROUP,
             label: 'Remediëring 2c',
             start: yesterday,
-            end: nextWeek
+            end: nextWeek,
+            id: 2
           },
           {
             type: AssigneeTypesEnum.STUDENT,
             label: 'Polleke',
             start: yesterday,
-            end: nextWeek
+            end: nextWeek,
+            id: 3
           },
           {
             type: AssigneeTypesEnum.STUDENT,
             label: 'Anneke',
             start: yesterday,
-            end: nextWeek
+            end: nextWeek,
+            id: 4
+          },
+          {
+            type: AssigneeTypesEnum.STUDENT,
+            label: 'Ronny',
+            start: yesterday,
+            end: nextWeek,
+            id: 5
           }
         ]
       },
@@ -95,25 +107,29 @@ export class MockKabasTasksViewModel
         ...new TaskFixture({ archivedAt: null, archivedYear: null }),
         name: 'Titel van de tweede oefening',
         eduContentAmount: 5,
-        learningArea: new LearningAreaFixture({ name: 'wiskunde' }),
+        learningArea: new LearningAreaFixture({ id: 2, name: 'frans' }),
+        learningAreaId: 2,
         assignees: [
           {
             type: AssigneeTypesEnum.CLASSGROUP,
             label: '2A',
             start: yesterday,
-            end: tomorrow
+            end: tomorrow,
+            id: 2
           },
           {
             type: AssigneeTypesEnum.GROUP,
             label: 'Remediëring 2c',
             start: yesterday,
-            end: nextWeek
+            end: nextWeek,
+            id: 2
           },
           {
             type: AssigneeTypesEnum.STUDENT,
             label: 'Polleke',
             start: prevWeek,
-            end: nextWeek
+            end: nextWeek,
+            id: 3
           }
         ]
       },
@@ -122,13 +138,15 @@ export class MockKabasTasksViewModel
         ...new TaskFixture({ archivedAt: null, archivedYear: null }),
         name: 'Actieve oefening voor één klasgroep',
         eduContentAmount: 3,
-        learningArea: new LearningAreaFixture({ name: 'nederlands' }),
+        learningArea: new LearningAreaFixture({ id: 3, name: 'nederlands' }),
+        learningAreaId: 3,
         assignees: [
           {
             type: AssigneeTypesEnum.CLASSGROUP,
             label: '2A',
             start: prevMonth,
-            end: nextWeek
+            end: nextWeek,
+            id: 2
           }
         ]
       },
@@ -137,13 +155,15 @@ export class MockKabasTasksViewModel
         ...new TaskFixture({ archivedAt: null, archivedYear: null }),
         name: 'Pending oefening voor één klasgroep',
         eduContentAmount: 5,
-        learningArea: new LearningAreaFixture({ name: 'nederlands' }),
+        learningArea: new LearningAreaFixture({ id: 3, name: 'nederlands' }),
+        learningAreaId: 3,
         assignees: [
           {
             type: AssigneeTypesEnum.CLASSGROUP,
             label: '2A',
             start: tomorrow,
-            end: nextWeek
+            end: nextWeek,
+            id: 2
           }
         ]
       },
@@ -152,13 +172,15 @@ export class MockKabasTasksViewModel
         ...new TaskFixture({ archivedAt: null, archivedYear: null }),
         name: 'Finished oefening',
         eduContentAmount: 5,
-        learningArea: new LearningAreaFixture({ name: 'nederlands' }),
+        learningArea: new LearningAreaFixture({ id: 3, name: 'nederlands' }),
+        learningAreaId: 3,
         assignees: [
           {
             type: AssigneeTypesEnum.CLASSGROUP,
             label: '2A',
             start: prevMonth,
-            end: prevWeek
+            end: prevWeek,
+            id: 2
           }
         ]
       },
@@ -170,13 +192,15 @@ export class MockKabasTasksViewModel
         }),
         name: 'Gearchiveerde oefening',
         eduContentAmount: 2,
-        learningArea: new LearningAreaFixture({ name: 'wiskunde' }),
+        learningArea: new LearningAreaFixture({ id: 1, name: 'wiskunde' }),
+        learningAreaId: 1,
         assignees: [
           {
             type: AssigneeTypesEnum.CLASSGROUP,
             label: '2A',
             start: prevMonth,
-            end: prevWeek
+            end: prevWeek,
+            id: 2
           }
         ]
       }
