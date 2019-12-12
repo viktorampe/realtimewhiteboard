@@ -53,6 +53,31 @@
           </mat-select>
         </mat-form-field>
       </div>
+      <div class="manage-kabas-tasks-overview__filterbar">
+        <campus-search-term [placeholder]="'Filteren'"></campus-search-term>
+        <campus-select-filter
+          *ngIf="(learningAreaFilter$ | async) as learningAreaFilter"
+          [filterCriteria]="learningAreaFilter"
+          [resetLabel]="'Geen'"
+        ></campus-select-filter>
+        <!--<date-filter-component></date-filter-component>-->
+        <campus-select-filter
+          *ngIf="(assigneeFilter$ | async) as assigneeFilter"
+          [filterCriteria]="assigneeFilter"
+          [resetLabel]="'Niemand'"
+        ></campus-select-filter>
+        <campus-button-toggle-filter [filterCriteria]="taskStatusFilter">
+        </campus-button-toggle-filter>
+        <div class="manage-kabas-tasks-overview__archive-toggle">
+          <mat-slide-toggle color="primary">
+            Gearchiveerd
+          </mat-slide-toggle>
+        </div>
+        <campus-button
+          class="manage-kabas-tasks-overview--reset-filters"
+          iconClass="reset-filters"
+        ></campus-button>
+      </div>
       <mat-selection-list #digital>
         <mat-list-item
           (click)="clickAddDigitalTask()"
@@ -63,10 +88,24 @@
         </mat-list-item>
 
         <mat-list-option
+          #option
           *ngFor="let task of (tasksWithAssignments$ | async)"
           checkboxPosition="before"
+          [class.mat-list-option--selected]="option.selected"
         >
-          {{ task.name }}
+          <!-- TODO: set correct inputs -->
+          <campus-task-list-item
+            [title]="task.name"
+            [learningArea]="task.learningArea.name"
+            [archived]="task.archivedYear"
+            icon="educontent-product-type:evaluatie"
+            exerciseCount="4"
+            [startDate]="task.startDate"
+            [endDate]="task.endDate"
+            status="active"
+            [actions]="actions"
+            [assignees]="task.assignees"
+          ></campus-task-list-item>
         </mat-list-option>
       </mat-selection-list>
     </mat-tab>
@@ -88,6 +127,31 @@
           </mat-select>
         </mat-form-field>
       </div>
+      <div class="manage-kabas-tasks-overview__filterbar">
+        <campus-search-term [placeholder]="'Filteren'"></campus-search-term>
+
+        <campus-select-filter
+          *ngIf="(learningAreaFilterPaper$ | async) as learningAreaFilterPaper"
+          [filterCriteria]="learningAreaFilterPaper"
+          [resetLabel]="'Geen'"
+        ></campus-select-filter>
+        <campus-select-filter
+          *ngIf="(assigneeFilterPaper$ | async) as assigneeFilterPaper"
+          [filterCriteria]="assigneeFilterPaper"
+          [resetLabel]="'Niemand'"
+        ></campus-select-filter>
+        <campus-button-toggle-filter [filterCriteria]="taskStatusFilter">
+        </campus-button-toggle-filter>
+        <div class="manage-kabas-tasks-overview__archive-toggle">
+          <mat-slide-toggle color="primary">
+            Gearchiveerd
+          </mat-slide-toggle>
+        </div>
+        <campus-button
+          class="manage-kabas-tasks-overview--reset-filters"
+          iconClass="reset-filters"
+        ></campus-button>
+      </div>
       <mat-selection-list #paper>
         <mat-list-item
           (click)="clickAddPaperTask()"
@@ -98,8 +162,10 @@
         </mat-list-item>
 
         <mat-list-option
+          #option
           *ngFor="let task of (paperTasksWithAssignments$ | async)"
           checkboxPosition="before"
+          [class.mat-list-option--selected]="option.selected"
         >
           {{ task.name }}
         </mat-list-option>
