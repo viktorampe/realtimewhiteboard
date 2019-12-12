@@ -43,6 +43,7 @@ import { DropdownMenuItemComponent } from './dropdown-menu-item/dropdown-menu-it
 import { DropdownMenuComponent } from './dropdown-menu/dropdown-menu.component';
 import { EditableInlineTagListComponent } from './editable-inline-tag-list/editable-inline-tag-list.component';
 import { FileExtensionComponent } from './file-extension/file-extension.component';
+import { FileIconComponent } from './file-icon/file-icon.component';
 import { FilterTextInputComponent } from './filter-text-input/filter-text-input.component';
 import { FolderDetailsDirective } from './folder/directives/folder-details.directive';
 import { FolderComponent } from './folder/folder.component';
@@ -81,7 +82,6 @@ import { HumanDateTimePipe } from './utils/pipes/human-date-time/human-date-time
 import { JoinPipe } from './utils/pipes/join/join.pipe';
 import { RemovePrefixStringPipe } from './utils/pipes/remove-prefix-string/remove-prefix-string.pipe';
 import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-string.pipe';
-import { FileIconComponent } from './file-icon/file-icon.component';
 @NgModule({
   imports: [
     OverlayModule,
