@@ -41,25 +41,17 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
     this.paperTasksWithAssignments$ = this.viewModel.paperTasksWithAssignments$;
 
     this.learningAreaFilter$ = this.tasksWithAssignments$.pipe(
-      map(tasksWithAssignments =>
-        this.sortAndCreateForLearningAreaFilter(tasksWithAssignments)
-      )
+      map(this.sortAndCreateForLearningAreaFilter)
     );
     this.assigneeFilter$ = this.tasksWithAssignments$.pipe(
-      map(tasksWithAssignments =>
-        this.sortAndCreateForAssigneeFilter(tasksWithAssignments)
-      )
+      map(this.sortAndCreateForAssigneeFilter)
     );
     this.learningAreaFilterPaper$ = this.paperTasksWithAssignments$.pipe(
-      map(tasksWithAssignments =>
-        this.sortAndCreateForLearningAreaFilter(tasksWithAssignments)
-      )
+      map(this.sortAndCreateForLearningAreaFilter)
     );
 
     this.assigneeFilterPaper$ = this.paperTasksWithAssignments$.pipe(
-      map(tasksWithAssignments =>
-        this.sortAndCreateForAssigneeFilter(tasksWithAssignments)
-      )
+      map(this.sortAndCreateForAssigneeFilter)
     );
 
     //todo swap for real icons
@@ -139,12 +131,13 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
   }
 
   public sortAndCreateForLearningAreaFilter(tasksWithAssignments) {
-    const uniqueLearningAreas: {
-      [key: string]: LearningAreaInterface;
-    } = {};
-    tasksWithAssignments.forEach(twa => {
-      uniqueLearningAreas[twa.learningAreaId] = twa.learningArea;
-    });
+    const uniqueLearningAreas = tasksWithAssignments.reduce(
+      (acc, twa) => ({
+        ...acc,
+        [twa.learningAreaId]: twa.learningArea
+      }),
+      {}
+    ) as LearningAreaInterface;
 
     const uniqueLearningAreasArray = Object.values(uniqueLearningAreas);
     uniqueLearningAreasArray.sort((a, b) =>
