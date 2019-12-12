@@ -22,9 +22,8 @@ import { map, tap } from 'rxjs/operators';
 import { AssigneeTypesEnum } from '../../interfaces/Assignee.interface';
 import { TaskWithAssigneesInterface } from '../../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
-import { MockKabasTasksViewModel } from '../kabas-tasks.viewmodel.mock';
 
-interface FilterState {
+export interface FilterStateInterface {
   searchTerm?: string;
   learningArea?: number[];
   dateInterval?: { start: Date; end: Date };
@@ -35,11 +34,7 @@ interface FilterState {
 @Component({
   selector: 'campus-manage-kabas-tasks-overview',
   templateUrl: './manage-kabas-tasks-overview.component.html',
-  styleUrls: ['./manage-kabas-tasks-overview.component.scss'],
-
-  providers: [
-    { provide: KabasTasksViewModel, useClass: MockKabasTasksViewModel }
-  ]
+  styleUrls: ['./manage-kabas-tasks-overview.component.scss']
 })
 export class ManageKabasTasksOverviewComponent
   implements OnInit, AfterContentInit {
@@ -52,7 +47,7 @@ export class ManageKabasTasksOverviewComponent
   public currentTab$: Observable<number>;
   public filteredTasks$: Observable<TaskWithAssigneesInterface[]>;
 
-  private filterState$ = new BehaviorSubject<FilterState>({});
+  private filterState$ = new BehaviorSubject<FilterStateInterface>({});
 
   @ViewChild('paper') paperTaskList: MatSelectionList;
   @ViewChild('digital') digitalTaskList: MatSelectionList;
@@ -102,12 +97,9 @@ export class ManageKabasTasksOverviewComponent
   }
 
   // TODO:
-  // - merge all filter results in one stream 'filteredTasks$'
+  // - number of results$
+  // - no results view
   // - filter based on:
-  //  - text
-  //  - learningArea
-  //  - date
-  //  - assignee
   //  - stopped/started/not yet started
 
   public selectionChanged(
@@ -132,7 +124,7 @@ export class ManageKabasTasksOverviewComponent
     this.updateFilterState(updatedFilter);
   }
 
-  private updateFilterState(updatedFilter: FilterState): void {
+  private updateFilterState(updatedFilter: FilterStateInterface): void {
     const currentFilterState = this.filterState$.value;
     const newFilterState = { ...currentFilterState, ...updatedFilter };
 
@@ -157,7 +149,7 @@ export class ManageKabasTasksOverviewComponent
   }
 
   private filterTasks(
-    filterState: FilterState,
+    filterState: FilterStateInterface,
     tasks: TaskWithAssigneesInterface[]
   ): TaskWithAssigneesInterface[] {
     if (tasks.length === 0) return [];
@@ -180,6 +172,14 @@ export class ManageKabasTasksOverviewComponent
       });
     }
 
+    if (filterState.status && filterState.status.length) {
+      filteredTasks = filteredTasks.filter(task =>
+        task.assignees.some(assignee =>
+          filterState.status.includes(assignee.status)
+        )
+      );
+    }
+
     if (filterState.assignee && filterState.assignee.length) {
       const assigneeIdsByTypeMap = filterState.assignee.reduce((acc, cur) => {
         if (!acc[cur.type]) acc[cur.type] = [];
@@ -189,21 +189,12 @@ export class ManageKabasTasksOverviewComponent
       }, {});
 
       filteredTasks = filteredTasks.filter(task =>
-        task.assignees.some(taskAssignee => {
-          return (
+        task.assignees.some(
+          taskAssignee =>
             assigneeIdsByTypeMap[taskAssignee.type] &&
-            assigneeIdsByTypeMap[taskAssignee.type].includes(task.id)
-          );
-        })
+            assigneeIdsByTypeMap[taskAssignee.type].includes(taskAssignee.id)
+        )
       );
-    }
-
-    if (filterState.status && filterState.status.length) {
-      filteredTasks = filteredTasks.filter(task => {
-        return task.assignees.some(assignee => {
-          return filterState.status.includes(assignee.status);
-        });
-      });
     }
 
     return filteredTasks;

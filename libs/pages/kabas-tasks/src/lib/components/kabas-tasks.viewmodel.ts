@@ -2,11 +2,7 @@ import { Injectable } from '@angular/core';
 import { DalState } from '@campus/dal';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import {
-  TaskDatesInterface,
-  TaskStatusEnum,
-  TaskWithAssigneesInterface
-} from '../interfaces/TaskWithAssignees.interface';
+import { TaskWithAssigneesInterface } from '../interfaces/TaskWithAssignees.interface';
 import { getTasksWithAssignments } from './kabas-tasks.viewmodel.selectors';
 
 @Injectable({
