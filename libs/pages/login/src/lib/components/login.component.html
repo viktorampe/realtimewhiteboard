@@ -1,3 +1,70 @@
-<div>
-  login page works!
-</div>
+<campus-page-header
+  [title]="'Log in'"
+  [subtitle]="'Mijn gegevens'"
+  [iconClass]="'profile'"
+>
+</campus-page-header>
+
+<ng-container *ngIf="(currentUser$ | async) as currentUser; else notLoggedIn">
+  <div class="pages-login__form ">
+    <div class="pages-login__form__title"
+      >Je bent ingelogd als {{ currentUser.displayName }}</div
+    >
+    <div>
+      <campus-button campusPrimary (click)="logout()">Log uit</campus-button>
+    </div>
+  </div>
+</ng-container>
+
+<ng-template #notLoggedIn>
+  <div class="pages-login__form__container">
+    <form [formGroup]="loginForm" class="pages-login__form">
+      <div class="pages-login__form__title">Vul uw gebruikersgegevens in</div>
+
+      <mat-form-field>
+        <mat-label>Vul uw gebruikernaam in</mat-label>
+        <input
+          type="text"
+          matInput
+          placeholder="Gebruikersnaam"
+          formControlName="username"
+          required
+        />
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Vul uw wachtwoord in</mat-label>
+        <input
+          type="password"
+          matInput
+          placeholder="Wachtwoord"
+          formControlName="password"
+          required
+        />
+      </mat-form-field>
+
+      <campus-button
+        campusPrimary
+        (click)="submit()"
+        [ngClass]="{ 'ui-button--disabled': !loginForm.valid }"
+        >Login</campus-button
+      >
+    </form>
+
+    <div
+      class="pages-login__form pages-login__form--presets"
+      *ngIf="loginPresets && loginPresets.length"
+    >
+      <div class="pages-login__form__title">Vooraf ingestelde logins</div>
+
+      <ng-container *ngFor="let preset of loginPresets">
+        <campus-button
+          campusPrimary
+          (click)="login(preset.username, preset.password)"
+        >
+          {{ preset.label }}
+        </campus-button>
+      </ng-container>
+    </div>
+  </div>
+</ng-template>

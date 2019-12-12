@@ -1,0 +1,18 @@
+.pages-login {
+  &__form {
+    &__container {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+
+      & > :not(:last-child) {
+        margin-right: 16px;
+        margin-bottom: 16px;
+      }
+    }
+
+    &--presets {
+      height: fit-content;
+    }
+  }
+}
