@@ -36,7 +36,8 @@ export class CardComponent implements OnInit {
   onDblClick(event) {
     if (
       event.target.className.includes('cardImage') ||
-      event.target.className.includes('card__input')
+      event.target.className.includes('card__input') ||
+      event.target.className.includes('card')
     ) {
       this.toggleEditMode();
     }
@@ -54,12 +55,9 @@ export class CardComponent implements OnInit {
   toggleEditMode() {
     this.card.editMode = !this.card.editMode;
     this.viewModeImage = true;
-    //TODO: in edit mode is cardimage altijd not hidden
   }
 
   toggleView() {
     this.viewModeImage = !this.viewModeImage;
   }
 }
-
-//TODO: edit mode active op double tap

@@ -4,6 +4,7 @@ import { MatCardModule } from '@angular/material';
 import { MatIconModule } from '@angular/material/icon';
 import { By, HAMMER_LOADER } from '@angular/platform-browser';
 import { configureTestSuite } from 'ng-bullet';
+import { CardimageComponent } from '../cardimage/cardimage.component';
 import { ColorlistComponent } from '../colorlist/colorlist.component';
 import { ToolbarComponent } from '../toolbar/toolbar.component';
 import { CardComponent } from './card.component';
@@ -15,7 +16,12 @@ describe('CardComponent', () => {
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [MatCardModule, FormsModule, MatIconModule],
-      declarations: [CardComponent, ToolbarComponent, ColorlistComponent],
+      declarations: [
+        CardComponent,
+        ToolbarComponent,
+        ColorlistComponent,
+        CardimageComponent
+      ],
       providers: [
         {
           provide: HAMMER_LOADER,
@@ -50,19 +56,19 @@ describe('CardComponent', () => {
     component.card.isInputSelected = true;
     fixture.detectChanges();
     await fixture.whenStable();
-    const inputContent = fixture.debugElement.query(By.css('input'));
+    const inputContent = fixture.debugElement.query(By.css('textarea'));
     expect(inputContent.nativeElement.value.trim()).toBe('Test content');
   });
 
   it('should toggle to edit mode when double click.', () => {
-    component.card.isInputSelected = false;
+    component.card.editMode = false;
     component.card.cardContent = 'something that is not null';
 
     const myCard = fixture.debugElement.query(By.css('.card'));
     myCard.nativeElement.dispatchEvent(new MouseEvent('dblclick')); // use nativeElement so target is set
     fixture.detectChanges();
 
-    expect(component.card.isInputSelected).toBe(true);
+    expect(component.card.editMode).toBe(true);
   });
 
   it('should show the colorlist when the coloricon is clicked', () => {
