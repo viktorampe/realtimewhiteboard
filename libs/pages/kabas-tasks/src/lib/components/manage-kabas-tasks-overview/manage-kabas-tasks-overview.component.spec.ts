@@ -170,7 +170,7 @@ describe('ManageKabasTasksOverviewComponent', () => {
       ]);
     });
 
-    it.only('should combine multiple filters', () => {
+    it('should combine multiple filters', () => {
       const filterState: FilterStateInterface = {
         searchTerm: 'foo',
         learningArea: [1],
