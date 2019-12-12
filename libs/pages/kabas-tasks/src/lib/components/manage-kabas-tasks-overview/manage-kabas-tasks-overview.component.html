@@ -34,25 +34,6 @@
     (selectedIndexChange)="onSelectedTabIndexChanged($event)"
   >
     <mat-tab label="Digitale taken">
-      <div class="manage-kabas-tasks-overview__container--sorting">
-        <mat-form-field>
-          <mat-label>Sorteren</mat-label>
-          <mat-select
-            (selectionChange)="setSortMode($event.value)"
-            #digitalSorting
-          >
-            <mat-option [value]="TaskSortEnum.NAME">
-              Alfabetisch
-            </mat-option>
-            <mat-option [value]="TaskSortEnum.LEARNINGAREA">
-              Leergebied
-            </mat-option>
-            <mat-option [value]="TaskSortEnum.STARTDATE">
-              Start datum
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
       <div class="manage-kabas-tasks-overview__filterbar">
         <campus-search-term [placeholder]="'Filteren'"></campus-search-term>
         <campus-select-filter
@@ -77,6 +58,24 @@
           class="manage-kabas-tasks-overview--reset-filters"
           iconClass="reset-filters"
         ></campus-button>
+        <div style="flex-grow: 1;"></div>
+
+        <mat-select
+          class="manage-kabas-tasks-overview--sorting"
+          (selectionChange)="setSortMode($event.value)"
+          #digitalSorting
+          [placeholder]="'Sorteren'"
+        >
+          <mat-option [value]="TaskSortEnum.NAME">
+            Alfabetisch
+          </mat-option>
+          <mat-option [value]="TaskSortEnum.LEARNINGAREA">
+            Leergebied
+          </mat-option>
+          <mat-option [value]="TaskSortEnum.STARTDATE">
+            Start datum
+          </mat-option>
+        </mat-select>
       </div>
       <mat-selection-list #digital>
         <mat-list-item
@@ -111,22 +110,6 @@
     </mat-tab>
 
     <mat-tab label="Papieren taken">
-      <div class="manage-kabas-tasks-overview__container--sorting">
-        <mat-form-field>
-          <mat-label>Sorteren</mat-label>
-          <mat-select
-            (selectionChange)="setSortMode($event.value)"
-            #paperSorting
-          >
-            <mat-option [value]="TaskSortEnum.NAME">
-              Alfabetisch
-            </mat-option>
-            <mat-option [value]="TaskSortEnum.LEARNINGAREA">
-              Leergebied
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
       <div class="manage-kabas-tasks-overview__filterbar">
         <campus-search-term [placeholder]="'Filteren'"></campus-search-term>
 
@@ -151,6 +134,21 @@
           class="manage-kabas-tasks-overview--reset-filters"
           iconClass="reset-filters"
         ></campus-button>
+        <div style="flex-grow: 1;"></div>
+
+        <mat-select
+          class="manage-kabas-tasks-overview--sorting"
+          (selectionChange)="setSortMode($event.value)"
+          #paperSorting
+          [placeholder]="'Sorteren'"
+        >
+          <mat-option [value]="TaskSortEnum.NAME">
+            Alfabetisch
+          </mat-option>
+          <mat-option [value]="TaskSortEnum.LEARNINGAREA">
+            Leergebied
+          </mat-option>
+        </mat-select>
       </div>
       <mat-selection-list #paper>
         <mat-list-item
