@@ -7,7 +7,11 @@ import {
   QueryList,
   ViewChildren
 } from '@angular/core';
-import { MatSelectionList } from '@angular/material';
+import {
+  MatSelectionList,
+  MatSlideToggle,
+  MatSlideToggleChange
+} from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LearningAreaInterface } from '@campus/dal';
 import {
@@ -32,6 +36,7 @@ export interface FilterStateInterface {
   dateInterval?: { gte: Date; lte: Date };
   assignee?: { id: number; type: AssigneeTypesEnum }[];
   status?: string[];
+  isArchived?: boolean;
 }
 
 @Component({
@@ -108,6 +113,7 @@ export class ManageKabasTasksOverviewComponent
   @ViewChildren(ButtonToggleFilterComponent) buttonToggleFilters: QueryList<
     ButtonToggleFilterComponent
   >;
+  @ViewChildren(MatSlideToggle) slideToggleFilters: QueryList<MatSlideToggle>;
 
   public learningAreaFilter$: Observable<SearchFilterCriteriaInterface>;
   public learningAreaFilterPaper$: Observable<SearchFilterCriteriaInterface>;
@@ -286,6 +292,11 @@ export class ManageKabasTasksOverviewComponent
     });
   }
 
+  public archivedFilterToggled(data: MatSlideToggleChange) {
+    const updatedFilter: FilterStateInterface = { isArchived: data.checked };
+    this.updateFilterState(updatedFilter);
+  }
+
   public selectionChanged(
     criteria: SearchFilterCriteriaInterface[],
     filterName: string
@@ -442,6 +453,10 @@ export class ManageKabasTasksOverviewComponent
       );
     }
 
+    if (filterState.isArchived) {
+      filteredTasks = filteredTasks.filter(task => !!task.archivedYear);
+    }
+
     return filteredTasks;
   }
 
@@ -481,6 +496,8 @@ export class ManageKabasTasksOverviewComponent
       this.selectFilters.forEach(filter => filter.selectControl.reset());
     if (this.buttonToggleFilters)
       this.buttonToggleFilters.forEach(filter => filter.toggleControl.reset());
+    if (this.slideToggleFilters)
+      this.slideToggleFilters.forEach(filter => (filter.checked = false));
   }
 
   /**
