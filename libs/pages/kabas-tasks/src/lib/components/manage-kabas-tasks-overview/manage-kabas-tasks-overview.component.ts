@@ -198,6 +198,7 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
     });
 
     this.resetSorting();
+    console.log('here');
   }
 
   public setSortMode(sortMode: TaskSortEnum) {

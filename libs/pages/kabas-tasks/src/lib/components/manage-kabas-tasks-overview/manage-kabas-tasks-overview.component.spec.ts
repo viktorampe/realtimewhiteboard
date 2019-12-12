@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import {
   MatIconModule,
   MatIconRegistry,
@@ -19,6 +19,7 @@ import {
 import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
 import { hot } from '@nrwl/nx/testing';
+import { configureTestSuite } from 'ng-bullet';
 import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { TaskWithAssigneesInterface } from '../../interfaces/TaskWithAssignees.interface';
@@ -37,7 +38,7 @@ describe('ManageKabasTasksOverviewComponent', () => {
   let kabasTasksViewModel: KabasTasksViewModel;
   let router: Router;
 
-  beforeEach(async(() => {
+  configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [
         PagesKabasTasksModule,
@@ -65,7 +66,7 @@ describe('ManageKabasTasksOverviewComponent', () => {
         { provide: ENVIRONMENT_TESTING_TOKEN, useValue: {} }
       ]
     });
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ManageKabasTasksOverviewComponent);
@@ -170,8 +171,9 @@ describe('ManageKabasTasksOverviewComponent', () => {
       it('should call setSortMode', async () => {
         component.setSortMode = jest.fn();
 
-        const matSelect = fixture.debugElement.query(By.directive(MatSelect))
-          .componentInstance as MatSelect;
+        const matSelect = fixture.debugElement.query(
+          By.css('.manage-kabas-tasks-overview--sorting')
+        ).componentInstance as MatSelect;
         matSelect.selectionChange.emit({
           source: undefined,
           value: TaskSortEnum.LEARNINGAREA
@@ -183,8 +185,9 @@ describe('ManageKabasTasksOverviewComponent', () => {
       });
 
       it('should reset the sorting when switching tabs', () => {
-        const matSelect = fixture.debugElement.query(By.directive(MatSelect))
-          .componentInstance as MatSelect;
+        const matSelect = fixture.debugElement.query(
+          By.css('.manage-kabas-tasks-overview--sorting')
+        ).componentInstance as MatSelect;
         matSelect.value = TaskSortEnum.LEARNINGAREA;
 
         component.setSortMode = jest.fn();
