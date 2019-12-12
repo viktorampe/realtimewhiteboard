@@ -37,6 +37,17 @@ export class MockKabasTasksViewModel
     );
   }
 
+  public getTaskDates() {
+    return {
+      startDate: new Date(),
+      endDate: new Date(),
+      status: this.getTaskStatus()
+    };
+  }
+  public getTaskStatus() {
+    return TaskStatusEnum.ACTIVE;
+  }
+
   private setupTaskWithAssignments(): TaskWithAssigneesInterface[] {
     const today = new Date();
     const yesterday = new Date(today.setDate(today.getDate() - 1));

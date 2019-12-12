@@ -214,6 +214,24 @@ p {
   width: 24px;
 }
 
+// mat-pseudo-checkbox
+/* Material checkboxes */
+.mat-pseudo-checkbox {
+  width: 24px !important;
+  height: 24px !important;
+  background-color: transparent !important;
+  border-radius: 50% !important;
+  border: 2px solid $primary-color-accent !important;
+
+  &-checked:after {
+    color: $primary-color-accent !important;
+    width: 11px !important;
+    height: 4px !important;
+    top: 6px !important;
+    left: 4px !important;
+  }
+}
+
 /* ng material tabs */
 .mat-tab-body-content {
   padding: $kabas-page-vertical-padding $kabas-page-horizontal-padding;
