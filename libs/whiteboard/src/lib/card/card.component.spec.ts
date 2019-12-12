@@ -60,6 +60,48 @@ describe('CardComponent', () => {
     expect(inputContent.nativeElement.value.trim()).toBe('Test content');
   });
 
+  it('should hide image when view mode image is false', () => {
+    component.viewModeImage = true;
+    component.toggleView();
+    fixture.detectChanges();
+    const cardImageComponent = fixture.debugElement.query(
+      By.css('campus-cardimage')
+    );
+    expect(cardImageComponent.nativeElement.getAttribute('hidden')).toBe('');
+  });
+
+  it('should show image when view mode image is true', () => {
+    component.viewModeImage = false;
+    component.toggleView();
+    fixture.detectChanges();
+    const cardImageComponent = fixture.debugElement.query(
+      By.css('campus-cardimage')
+    );
+    expect(cardImageComponent.nativeElement.getAttribute('hidden')).toBe(null);
+  });
+
+  it('should hide toggle icon in editmode', () => {
+    component.card.editMode = false;
+    component.toggleEditMode();
+
+    fixture.detectChanges();
+
+    const toggleicon = fixture.debugElement.query(By.css('#toggle_icon'));
+
+    expect(toggleicon).toBe(null);
+  });
+
+  it('should show toggle icon when not in editmode', () => {
+    component.card.editMode = true;
+    component.toggleEditMode();
+
+    fixture.detectChanges();
+
+    const toggleicon = fixture.debugElement.query(By.css('#toggle_icon'));
+
+    expect(toggleicon).not.toBe(null);
+  });
+
   it('should toggle to edit mode when double click.', () => {
     component.card.editMode = false;
     component.card.cardContent = 'something that is not null';
@@ -69,6 +111,20 @@ describe('CardComponent', () => {
     fixture.detectChanges();
 
     expect(component.card.editMode).toBe(true);
+  });
+
+  it('should toggle edit mode when the editicon is clicked', () => {
+    component.card.editMode = false;
+    component.toggleEditMode();
+    fixture.detectChanges();
+    expect(component.card.editMode).toBe(true);
+  });
+
+  it('should toggle to view mode image when toggel icon is clicked', () => {
+    component.viewModeImage = false;
+    component.toggleView();
+    fixture.detectChanges();
+    expect(component.viewModeImage).toBe(true);
   });
 
   it('should show the colorlist when the coloricon is clicked', () => {
