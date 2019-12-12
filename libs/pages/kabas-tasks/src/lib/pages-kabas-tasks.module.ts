@@ -5,6 +5,7 @@ import { PagesSharedModule } from '@campus/pages/shared';
 import { SharedModule } from '@campus/shared';
 import { UiModule } from '@campus/ui';
 import { ManageKabasTasksOverviewComponent } from './components/manage-kabas-tasks-overview/manage-kabas-tasks-overview.component';
+import { TaskListItemComponent } from './components/task-list-item/task-list-item.component';
 import { PagesKabasTasksRoutingModule } from './pages-kabas-tasks-routing.module';
 
 @NgModule({
@@ -16,7 +17,7 @@ import { PagesKabasTasksRoutingModule } from './pages-kabas-tasks-routing.module
     SharedModule,
     GuardsModule
   ],
-  declarations: [ManageKabasTasksOverviewComponent],
+  declarations: [ManageKabasTasksOverviewComponent, TaskListItemComponent],
   providers: [],
   exports: []
 })
