@@ -102,13 +102,10 @@ describe('ManageKabasTasksOverviewComponent', () => {
 
       const mockTasks = [
         {
-          assignees: [
-            { status: TaskStatusEnum.ACTIVE }, // matches
-            { status: TaskStatusEnum.PENDING } // no match
-          ]
+          status: TaskStatusEnum.ACTIVE // matches
         },
-        { assignees: [{ status: TaskStatusEnum.PENDING }] }, // no match
-        { assignees: [{ status: TaskStatusEnum.FINISHED }] } // matches
+        { status: TaskStatusEnum.PENDING }, // no match
+        { status: TaskStatusEnum.FINISHED } // matches
       ] as TaskWithAssigneesInterface[];
 
       const result = component['filterTasks'](filterState, mockTasks);
@@ -256,131 +253,129 @@ describe('ManageKabasTasksOverviewComponent', () => {
         {
           name: 'foo', //matches all filters
           learningAreaId: 1,
+          status: TaskStatusEnum.ACTIVE,
           assignees: [
             {
               start: new Date(2000, 1, 2),
               end: new Date(2000, 1, 9),
               type: AssigneeTypesEnum.GROUP,
-              id: 1,
-              status: TaskStatusEnum.ACTIVE
+              id: 1
             }
           ]
         },
         {
           name: 'bar', // does not match search term filter
           learningAreaId: 1,
+          status: TaskStatusEnum.ACTIVE,
           assignees: [
             {
               start: new Date(2000, 1, 2),
               end: new Date(2000, 1, 9),
               type: AssigneeTypesEnum.GROUP,
-              id: 1,
-              status: TaskStatusEnum.ACTIVE
+              id: 1
             }
           ]
         },
         {
           name: 'foo', // does not match all filters
           learningAreaId: 2, // does not match
+          status: TaskStatusEnum.ACTIVE,
           assignees: [
             {
               start: new Date(2000, 1, 2),
               end: new Date(2000, 1, 9),
               type: AssigneeTypesEnum.GROUP,
-              id: 1,
-              status: TaskStatusEnum.ACTIVE
+              id: 1
             }
           ]
         },
         {
           name: 'foo', // does not match all filters
           learningAreaId: 1,
+          status: TaskStatusEnum.ACTIVE,
           assignees: [
             {
               start: new Date(2000, 1, 2),
               end: new Date(2000, 1, 9),
               type: AssigneeTypesEnum.CLASSGROUP, // does not match
-              id: 1,
-              status: TaskStatusEnum.ACTIVE
+              id: 1
             }
           ]
         },
         {
           name: 'foo', // does not match all filters
           learningAreaId: 1,
+          status: TaskStatusEnum.ACTIVE,
           assignees: [
             {
               start: new Date(2000, 1, 2),
               end: new Date(2000, 1, 9),
               type: AssigneeTypesEnum.GROUP,
-              id: 2, // does not match
-              status: TaskStatusEnum.ACTIVE
+              id: 2 // does not match
             }
           ]
         },
         {
           name: 'foo', // does not match all filters
           learningAreaId: 1,
+          status: TaskStatusEnum.FINISHED, // does not match
           assignees: [
             {
               start: new Date(2000, 1, 2),
               end: new Date(2000, 1, 9),
               type: AssigneeTypesEnum.GROUP,
-              id: 1,
-              status: TaskStatusEnum.FINISHED // does not match
+              id: 1
             }
           ]
         },
         {
           name: 'foo', // does not match all filters
           learningAreaId: 1,
+          status: TaskStatusEnum.PENDING,
           assignees: [
             {
               start: new Date(2000, 1, 15), // no match
               end: new Date(2000, 1, 20), // no match
               type: AssigneeTypesEnum.GROUP,
-              id: 1,
-              status: TaskStatusEnum.PENDING
+              id: 1
             }
           ]
         },
         {
           name: 'foobar', //matches all filters
           learningAreaId: 1,
+          status: TaskStatusEnum.PENDING, // matches --> include
           assignees: [
             {
               start: new Date(2000, 1, 2),
               end: new Date(2000, 1, 9),
               type: AssigneeTypesEnum.GROUP,
-              id: 1,
-              status: TaskStatusEnum.FINISHED // does not match
+              id: 1
             },
             {
               start: new Date(2000, 1, 2),
               end: new Date(2000, 1, 9),
               type: AssigneeTypesEnum.GROUP,
-              id: 1,
-              status: TaskStatusEnum.PENDING // matches --> include
+              id: 1
             }
           ]
         },
         {
           name: 'foobar', //matches all filters
           learningAreaId: 1,
+          status: TaskStatusEnum.PENDING,
           assignees: [
             {
               start: new Date(2000, 1, 2),
               end: new Date(2000, 1, 9),
               type: AssigneeTypesEnum.GROUP, //matches
-              id: 666, // does not match
-              status: TaskStatusEnum.PENDING
+              id: 666 // does not match
             },
             {
               start: new Date(2000, 1, 2),
               end: new Date(2000, 1, 9),
               type: AssigneeTypesEnum.CLASSGROUP, //matches
-              id: 2, // matches
-              status: TaskStatusEnum.PENDING // matches
+              id: 2 // matches
             }
           ]
         }

@@ -11,6 +11,7 @@ import { MatSelectionList } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LearningAreaInterface } from '@campus/dal';
 import {
+  ButtonToggleFilterComponent,
   SearchFilterCriteriaFixture,
   SearchFilterCriteriaInterface,
   SearchFilterCriteriaValuesFixture,
@@ -104,6 +105,9 @@ export class ManageKabasTasksOverviewComponent
   @ViewChildren(SelectFilterComponent) selectFilters: QueryList<
     SelectFilterComponent
   >;
+  @ViewChildren(ButtonToggleFilterComponent) buttonToggleFilters: QueryList<
+    ButtonToggleFilterComponent
+  >;
 
   public learningAreaFilter$: Observable<SearchFilterCriteriaInterface>;
   public learningAreaFilterPaper$: Observable<SearchFilterCriteriaInterface>;
@@ -169,6 +173,12 @@ export class ManageKabasTasksOverviewComponent
       ]
     };
   }
+
+  ngAfterContentInit(): void {
+    this.filteredTasks$ = this.getFilteredTasks();
+    this.cd.detectChanges();
+  }
+
   public sortAndCreateForAssigneeFilter(tasksWithAssignments) {
     const assigns = [];
     tasksWithAssignments.forEach(twa => {
@@ -218,11 +228,6 @@ export class ManageKabasTasksOverviewComponent
     } as SearchFilterCriteriaInterface;
   }
 
-  ngAfterContentInit(): void {
-    this.filteredTasks$ = this.getFilteredTasks();
-    this.cd.detectChanges();
-  }
-
   public sortAndCreateForLearningAreaFilter(tasksWithAssignments) {
     const uniqueLearningAreas = tasksWithAssignments.reduce(
       (acc, twa) => ({
@@ -250,6 +255,7 @@ export class ManageKabasTasksOverviewComponent
       })
     } as SearchFilterCriteriaInterface;
   }
+
   clickAddDigitalTask() {
     console.log('TODO: adding digital task');
   }
@@ -404,9 +410,7 @@ export class ManageKabasTasksOverviewComponent
 
     if (filterState.status && filterState.status.length) {
       filteredTasks = filteredTasks.filter(task =>
-        task.assignees.some(assignee =>
-          filterState.status.includes(task.status)
-        )
+        filterState.status.includes(task.status)
       );
     }
 
@@ -475,6 +479,8 @@ export class ManageKabasTasksOverviewComponent
       this.searchTermFilters.forEach(filter => (filter.currentValue = ''));
     if (this.selectFilters)
       this.selectFilters.forEach(filter => filter.selectControl.reset());
+    if (this.buttonToggleFilters)
+      this.buttonToggleFilters.forEach(filter => filter.toggleControl.reset());
   }
 
   /**
