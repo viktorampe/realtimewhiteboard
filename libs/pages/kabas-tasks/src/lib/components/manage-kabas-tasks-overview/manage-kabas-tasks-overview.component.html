@@ -39,13 +39,16 @@
           [autoComplete]="false"
           (valueChange)="searchTermUpdated($event)"
         ></campus-search-term>
+
         <campus-select-filter
           multiple="true"
           resetLabel="reset"
           [filterCriteria]="mockFilterCriteria"
           (filterSelectionChange)="selectionChanged($event, 'learningArea')"
         ></campus-select-filter>
+
         <!--<date-filter-component></date-filter-component>-->
+
         <campus-select-filter
           multiple="true"
           resetLabel="reset"
@@ -53,11 +56,13 @@
           (filterSelectionChange)="selectionChanged($event, 'assignee')"
           resetLabel="reset"
         ></campus-select-filter>
+
         <!-- <campus-button-toggle-filter
         [multiple]="true"
         (filterSelectionChange)="selectionChanged($event, 'status')"
       >
       </campus-button-toggle-filter> -->
+
         <campus-button
           class="practice-book-lessons--reset-filters"
           iconClass="reset-filters"
@@ -90,13 +95,39 @@
       </mat-tab>
 
       <mat-tab label="Papieren taken">
+        <campus-search-term
+          placeholder="Zoeken op titel"
+          [autoComplete]="false"
+          (valueChange)="searchTermUpdated($event)"
+        ></campus-search-term>
+
         <campus-select-filter
           multiple="true"
           resetLabel="reset"
-          [filterCriteria]="this.mockFilterCriteria"
+          [filterCriteria]="mockFilterCriteria"
           (filterSelectionChange)="selectionChanged($event, 'learningArea')"
         ></campus-select-filter>
 
+        <campus-select-filter
+          multiple="true"
+          resetLabel="reset"
+          [filterCriteria]="mockFilterCriteria"
+          (filterSelectionChange)="selectionChanged($event, 'assignee')"
+          resetLabel="reset"
+        ></campus-select-filter>
+
+        <campus-button
+          class="practice-book-lessons--reset-filters"
+          iconClass="reset-filters"
+          (click)="clickResetFilters()"
+        ></campus-button>
+
+        <p *ngIf="filteredTasks.length; else noResults"
+          >Je hebt {{ filteredTasks.length }} resultaten.</p
+        >
+        <ng-template #noResults>
+          <p>De toegepaste filter bevat geen resultaten.</p>
+        </ng-template>
         <mat-selection-list #paper>
           <mat-list-item
             (click)="clickAddPaperTask()"
