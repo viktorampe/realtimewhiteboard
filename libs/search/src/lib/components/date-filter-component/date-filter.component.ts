@@ -10,7 +10,6 @@ import {
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatMenuTrigger } from '@angular/material';
-import { DateFunctions } from '@campus/utils';
 import { Subscription } from 'rxjs';
 import { distinctUntilChanged } from 'rxjs/operators';
 import { SearchFilterComponentInterface } from '../../interfaces/search-filter-component-interface';
@@ -35,6 +34,12 @@ export interface RadioOptionValue {
   contents?: SearchFilterCriteriaValuesInterface;
 }
 
+export interface DateFilterComponentFormValues {
+  dateSelection?: RadioOptionValue;
+  startDate?: Date;
+  endDate?: Date;
+}
+
 @Component({
   selector: 'campus-date-filter',
   templateUrl: './date-filter.component.html',
@@ -45,7 +50,7 @@ export class DateFilterComponent
   RadioOptionValueType = RadioOptionValueType;
 
   criteria: SearchFilterCriteriaInterface;
-  options: RadioOption[];
+  radioOptions: RadioOption[];
   customRangeOptionValue: RadioOptionValue = {
     type: RadioOptionValueType.CustomRange
   };
@@ -57,22 +62,33 @@ export class DateFilterComponent
   resetOptionLabel: string;
 
   private subscriptions: Subscription = new Subscription();
+  private formValues: DateFilterComponentFormValues = {};
+  private fixedOptions: RadioOption[] = [];
 
-  @ViewChild(MatMenuTrigger) matMenuTrigger: MatMenuTrigger;
+  @ViewChild(MatMenuTrigger)
+  matMenuTrigger: MatMenuTrigger;
 
   @Input()
   public set resetLabel(label: string) {
     this.resetOptionLabel = label;
-    this.options = this.getRadioOptions();
+    this.radioOptions = this.getRadioOptions();
   }
   public get resetLabel() {
     return this.resetOptionLabel;
   }
 
   @Input()
+  public set options(options: RadioOption[]) {
+    this.fixedOptions = options;
+    this.radioOptions = this.getRadioOptions();
+  }
+  public get options() {
+    return this.fixedOptions;
+  }
+
+  @Input()
   public set filterCriteria(criteria: SearchFilterCriteriaInterface) {
     this.criteria = criteria;
-    this.options = this.getRadioOptions();
   }
   public get filterCriteria() {
     return this.criteria;
@@ -88,6 +104,10 @@ export class DateFilterComponent
   constructor() {}
 
   ngOnInit() {
+    this.subscriptions.add(
+      this.matMenuTrigger.menuClosed.subscribe(this.cancelFormValues.bind(this))
+    );
+
     this.subscriptions.add(
       this.dateSelection.valueChanges
         .pipe(distinctUntilChanged())
@@ -126,14 +146,18 @@ export class DateFilterComponent
   }
 
   public applyFilter(cancel?: boolean): void {
-    this.matMenuTrigger.closeMenu();
-
     if (cancel) {
+      this.matMenuTrigger.closeMenu();
       return;
     }
 
+    // Order is important here, must store values before closing the mat-menu
+    this.storeFormValues();
+
     this.filterSelectionChange.emit([this.criteria]);
     this.updateView();
+
+    this.matMenuTrigger.closeMenu();
   }
 
   public clickDateInput() {
@@ -255,34 +279,27 @@ export class DateFilterComponent
     this.count = +hasDates;
   }
 
+  public storeFormValues(): void {
+    this.formValues = {
+      dateSelection: this.dateSelection.value,
+      startDate: this.startDate.value,
+      endDate: this.endDate.value
+    };
+  }
+
+  private cancelFormValues(): void {
+    this.dateSelection.setValue(this.formValues.dateSelection, {
+      emitEvent: false
+    });
+    this.startDate.setValue(this.formValues.startDate, {
+      emitEvent: false
+    });
+    this.endDate.setValue(this.formValues.endDate, { emitEvent: false });
+  }
+
   private getRadioOptions(): RadioOption[] {
     const now = new Date();
-    let options: RadioOption[] = [
-      {
-        viewValue: 'Deze week',
-        value: {
-          type: RadioOptionValueType.FilterCriteriaValue,
-          contents: {
-            data: {
-              gte: DateFunctions.startOfWeek(now),
-              lte: DateFunctions.endOfWeek(now)
-            }
-          }
-        }
-      },
-      {
-        viewValue: 'Vorige week',
-        value: {
-          type: RadioOptionValueType.FilterCriteriaValue,
-          contents: {
-            data: {
-              gte: DateFunctions.lastWeek(now),
-              lte: DateFunctions.endOfWeek(DateFunctions.lastWeek(now))
-            }
-          }
-        }
-      }
-    ];
+    let options = this.fixedOptions;
 
     if (this.resetLabel) {
       options = [

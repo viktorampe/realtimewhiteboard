@@ -10,9 +10,11 @@
       [formControl]="dateSelection"
       aria-label="Select an option"
     >
-      <mat-radio-button *ngFor="let option of options" [value]="option.value">{{
-        option.viewValue
-      }}</mat-radio-button>
+      <mat-radio-button
+        *ngFor="let option of radioOptions"
+        [value]="option.value"
+        >{{ option.viewValue }}</mat-radio-button
+      >
       <mat-radio-button [value]="customRangeOptionValue">
         <div class="date-filter-component__menu-panel__date-range">
           <mat-form-field [appearance]="'outline'">

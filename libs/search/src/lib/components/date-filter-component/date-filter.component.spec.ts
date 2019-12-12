@@ -96,6 +96,7 @@ describe('DateFilterComponent', () => {
     fixture = TestBed.createComponent(DateFilterComponent);
     component = fixture.componentInstance;
     component.filterCriteria = mockCriteria;
+    component.options = expectedOptions;
 
     fixture.detectChanges();
 
@@ -110,6 +111,36 @@ describe('DateFilterComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  describe('form value saving', () => {
+    beforeEach(() => {
+      component.startDate.setValue(startOfWeek);
+      component.endDate.setValue(endOfWeek);
+      component.dateSelection.setValue({
+        type: RadioOptionValueType.CustomRange
+      });
+
+      component.matMenuTrigger.openMenu();
+      component.applyFilter();
+    });
+
+    it('should reset form values when cancelling', () => {
+      component.startDate.setValue(null);
+      component.endDate.setValue(null);
+      component.dateSelection.setValue({
+        type: RadioOptionValueType.FilterCriteriaValue
+      });
+
+      component.matMenuTrigger.openMenu();
+      component.applyFilter(true);
+
+      expect(component.startDate.value).toEqual(startOfWeek);
+      expect(component.endDate.value).toEqual(endOfWeek);
+      expect(component.dateSelection.value).toEqual({
+        type: RadioOptionValueType.CustomRange
+      });
+    });
+  });
+
   describe('radio options', () => {
     it('should have the correct options', () => {
       expect(component.options).toEqual(expectedOptions);
@@ -121,7 +152,7 @@ describe('DateFilterComponent', () => {
       component.resetLabel = label;
       fixture.detectChanges();
 
-      expect(component.options).toEqual([
+      expect(component.radioOptions).toEqual([
         {
           viewValue: label,
           value: {

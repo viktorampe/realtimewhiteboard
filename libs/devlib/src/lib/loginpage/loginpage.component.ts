@@ -20,9 +20,12 @@ import {
   UserActions
 } from '@campus/dal';
 import {
+  RadioOption,
+  RadioOptionValueType,
   SearchFilterCriteriaFixture,
   SelectFilterComponent
 } from '@campus/search';
+import { DateFunctions } from '@campus/utils';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
@@ -38,6 +41,32 @@ export class LoginpageComponent implements OnInit {
   currentUser: Observable<any>;
   route$: Observable<string[]>;
   response: Observable<any>;
+  fixedOptions: RadioOption[] = [
+    {
+      viewValue: 'Deze week',
+      value: {
+        type: RadioOptionValueType.FilterCriteriaValue,
+        contents: {
+          data: {
+            gte: DateFunctions.startOfWeek(new Date()),
+            lte: DateFunctions.endOfWeek(new Date())
+          }
+        }
+      }
+    },
+    {
+      viewValue: 'Vorige week',
+      value: {
+        type: RadioOptionValueType.FilterCriteriaValue,
+        contents: {
+          data: {
+            gte: DateFunctions.lastWeek(new Date()),
+            lte: DateFunctions.endOfWeek(DateFunctions.lastWeek(new Date()))
+          }
+        }
+      }
+    }
+  ];
 
   @ViewChild('selectFilter')
   selectFilterComponent: SelectFilterComponent;
@@ -74,10 +103,7 @@ export class LoginpageComponent implements OnInit {
       []
     );
     this.selectFilterComponent.filterSelectionChange.subscribe(v => {
-      console.log(
-        'FilterSelectionChange',
-        v[0].values[0] && v[0].values[0].data
-      );
+      console.log(v);
     });
   }
 
