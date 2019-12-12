@@ -6,14 +6,24 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { GuardsModule } from '@campus/guards';
 import { PagesSharedModule } from '@campus/pages/shared';
 import { SearchModule } from '@campus/search';
-import { ENVIRONMENT_ICON_MAPPING_TOKEN, ENVIRONMENT_TESTING_TOKEN, SharedModule } from '@campus/shared';
+import {
+  ENVIRONMENT_ICON_MAPPING_TOKEN,
+  ENVIRONMENT_TESTING_TOKEN,
+  SharedModule
+} from '@campus/shared';
 import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
 import { AssigneeTypesEnum } from '../../interfaces/Assignee.interface';
-import { TaskStatusEnum, TaskWithAssigneesInterface } from '../../interfaces/TaskWithAssignees.interface';
+import {
+  TaskStatusEnum,
+  TaskWithAssigneesInterface
+} from '../../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
 import { MockKabasTasksViewModel } from '../kabas-tasks.viewmodel.mock';
-import { FilterStateInterface, ManageKabasTasksOverviewComponent } from './manage-kabas-tasks-overview.component';
+import {
+  FilterStateInterface,
+  ManageKabasTasksOverviewComponent
+} from './manage-kabas-tasks-overview.component';
 
 describe('ManageKabasTasksOverviewComponent', () => {
   let component: ManageKabasTasksOverviewComponent;
@@ -160,21 +170,121 @@ describe('ManageKabasTasksOverviewComponent', () => {
       ]);
     });
 
-    it('should combine multiple filters', () => {
+    it.only('should combine multiple filters', () => {
       const filterState: FilterStateInterface = {
         searchTerm: 'foo',
-        status: [TaskStatusEnum.ACTIVE]
-
+        learningArea: [1],
+        status: [TaskStatusEnum.ACTIVE, TaskStatusEnum.PENDING],
+        assignee: [
+          { type: AssigneeTypesEnum.GROUP, id: 1 },
+          { type: AssigneeTypesEnum.CLASSGROUP, id: 2 }
+        ]
       };
 
       const mockTasks = [
-        { name: 'foo' },
-        { name: 'bar' }
+        {
+          name: 'foo', //matches all filters
+          learningAreaId: 1,
+          assignees: [
+            {
+              type: AssigneeTypesEnum.GROUP,
+              id: 1,
+              status: TaskStatusEnum.ACTIVE
+            }
+          ]
+        },
+        {
+          name: 'bar', // does not match search term filter
+          learningAreaId: 1,
+          assignees: [
+            {
+              type: AssigneeTypesEnum.GROUP,
+              id: 1,
+              status: TaskStatusEnum.ACTIVE
+            }
+          ]
+        },
+        {
+          name: 'foo', // does not match all filters
+          learningAreaId: 2, // does not match
+          assignees: [
+            {
+              type: AssigneeTypesEnum.GROUP,
+              id: 1,
+              status: TaskStatusEnum.ACTIVE
+            }
+          ]
+        },
+        {
+          name: 'foo', // does not match all filters
+          learningAreaId: 1,
+          assignees: [
+            {
+              type: AssigneeTypesEnum.CLASSGROUP, // does not match
+              id: 1,
+              status: TaskStatusEnum.ACTIVE
+            }
+          ]
+        },
+        {
+          name: 'foo', // does not match all filters
+          learningAreaId: 1,
+          assignees: [
+            {
+              type: AssigneeTypesEnum.GROUP,
+              id: 2, // does not match
+              status: TaskStatusEnum.ACTIVE
+            }
+          ]
+        },
+        {
+          name: 'foo', // does not match all filters
+          learningAreaId: 1,
+          assignees: [
+            {
+              type: AssigneeTypesEnum.GROUP,
+              id: 1,
+              status: TaskStatusEnum.FINISHED // does not match
+            }
+          ]
+        },
+        {
+          name: 'foobar', //matches all filters
+          learningAreaId: 1,
+          assignees: [
+            {
+              type: AssigneeTypesEnum.GROUP,
+              id: 1,
+              status: TaskStatusEnum.FINISHED // does not match
+            },
+            {
+              type: AssigneeTypesEnum.GROUP,
+              id: 1,
+              status: TaskStatusEnum.PENDING // matches --> include
+            }
+          ]
+        },
+        {
+          name: 'foobar', //matches all filters
+          learningAreaId: 1,
+          assignees: [
+            {
+              type: AssigneeTypesEnum.GROUP, //matches
+              id: 666, // does not match
+              status: TaskStatusEnum.PENDING
+            },
+            {
+              type: AssigneeTypesEnum.CLASSGROUP, //matches
+              id: 2, // matches
+              status: TaskStatusEnum.PENDING // matches
+            }
+          ]
+        }
       ] as TaskWithAssigneesInterface[];
 
       const result = component['filterTasks'](filterState, mockTasks);
 
-      expect(result).toEqual([]);
+      expect(result).toEqual([mockTasks[0], mockTasks[6], mockTasks[7]]);
     });
   });
 });
