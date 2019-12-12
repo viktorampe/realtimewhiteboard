@@ -6,11 +6,17 @@ import {
   SearchFilterCriteriaInterface,
   SearchFilterCriteriaValuesInterface
 } from '@campus/search';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { combineLatest, map } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { AssigneeTypesEnum } from '../../interfaces/Assignee.interface';
 import { TaskWithAssigneesInterface } from '../../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
+
+export enum TaskSortEnum {
+  'NAME' = 'NAME',
+  'LEARNINGAREA' = 'LEARNINGAREA',
+  'STARTDATE' = 'STARTDATE'
+}
 
 @Component({
   selector: 'campus-manage-kabas-tasks-overview',
@@ -48,14 +54,16 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
 
   ngOnInit() {
     this.currentTab$ = this.getCurrentTab();
-    this.tasksWithAssignments$ = this.viewModel.tasksWithAssignments$.pipe(
-      combineLatest(this.currentSortMode$),
-      map(([tasks, sortMode]) => this.sortTasks(tasks, sortMode))
-    );
-    this.paperTasksWithAssignments$ = this.viewModel.paperTasksWithAssignments$.pipe(
-      combineLatest(this.currentSortMode$),
-      map(([tasks, sortMode]) => this.sortTasks(tasks, sortMode))
-    );
+
+    this.tasksWithAssignments$ = combineLatest([
+      this.viewModel.tasksWithAssignments$,
+      this.currentSortMode$
+    ]).pipe(map(([tasks, sortMode]) => this.sortTasks(tasks, sortMode)));
+
+    this.paperTasksWithAssignments$ = combineLatest([
+      this.viewModel.paperTasksWithAssignments$,
+      this.currentSortMode$
+    ]).pipe(map(([tasks, sortMode]) => this.sortTasks(tasks, sortMode)));
 
     this.learningAreaFilter$ = this.tasksWithAssignments$.pipe(
       map(this.sortAndCreateForLearningAreaFilter)
@@ -263,10 +271,4 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
       return taskA < taskB ? -1 : taskA > taskB ? 1 : 0;
     });
   }
-}
-
-export enum TaskSortEnum {
-  'NAME' = 'NAME',
-  'LEARNINGAREA' = 'LEARNINGAREA',
-  'STARTDATE' = 'STARTDATE'
 }

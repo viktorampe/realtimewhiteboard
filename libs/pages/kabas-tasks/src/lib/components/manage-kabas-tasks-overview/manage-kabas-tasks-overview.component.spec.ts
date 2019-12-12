@@ -95,8 +95,7 @@ describe('ManageKabasTasksOverviewComponent', () => {
 
     describe('sort modes', () => {
       it('should order by name', () => {
-        let id = 0;
-        const tasks = [
+        const mockTasks = [
           { id: 1, name: 'zzzzzz' },
           { id: 2, name: 'Aaa' },
           { id: 3, name: 'aaa' },
@@ -105,8 +104,8 @@ describe('ManageKabasTasksOverviewComponent', () => {
         ] as TaskWithAssigneesInterface[];
 
         component.setSortMode(TaskSortEnum.NAME);
-        digitalTasks$.next(tasks);
-        paperTasks$.next(tasks);
+        digitalTasks$.next(mockTasks);
+        paperTasks$.next(mockTasks);
 
         expect(
           component.tasksWithAssignments$.pipe(
@@ -122,8 +121,7 @@ describe('ManageKabasTasksOverviewComponent', () => {
       });
 
       it('should order by learningArea', () => {
-        let id = 0;
-        const tasks = [
+        const mockTasks = [
           { id: 1, learningArea: { name: 'zzzzzz' } },
           { id: 2, learningArea: { name: 'Aaa' } },
           { id: 3, learningArea: { name: 'aaa' } },
@@ -132,8 +130,8 @@ describe('ManageKabasTasksOverviewComponent', () => {
         ] as TaskWithAssigneesInterface[];
 
         component.setSortMode(TaskSortEnum.LEARNINGAREA);
-        digitalTasks$.next(tasks);
-        paperTasks$.next(tasks);
+        digitalTasks$.next(mockTasks);
+        paperTasks$.next(mockTasks);
 
         expect(
           component.tasksWithAssignments$.pipe(
@@ -149,8 +147,7 @@ describe('ManageKabasTasksOverviewComponent', () => {
       });
 
       it('should order by startDate', () => {
-        let id = 0;
-        const tasks = [
+        const mockTasks = [
           { id: 1, startDate: undefined },
           { id: 2, startDate: new Date('1-1-2018') },
           { id: 3, startDate: new Date('1-1-2018') },
@@ -159,7 +156,7 @@ describe('ManageKabasTasksOverviewComponent', () => {
         ] as TaskWithAssigneesInterface[];
 
         component.setSortMode(TaskSortEnum.STARTDATE);
-        digitalTasks$.next(tasks);
+        digitalTasks$.next(mockTasks);
 
         expect(
           component.tasksWithAssignments$.pipe(
