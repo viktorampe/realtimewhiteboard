@@ -265,7 +265,6 @@ export class ManageKabasTasksOverviewComponent
     }
 
     if (filterState.dateInterval) {
-      console.log(filteredTasks);
       filteredTasks = filteredTasks.filter(task =>
         task.assignees.some(assignee => {
           return (
