@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { AssigneeTypesEnum } from '../../interfaces/Assignee.interface';
 import { TaskWithAssigneesInterface } from '../../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
 import { MockKabasTasksViewModel } from '../kabas-tasks.viewmodel.mock';
@@ -16,6 +17,49 @@ import { MockKabasTasksViewModel } from '../kabas-tasks.viewmodel.mock';
   ]
 })
 export class ManageKabasTasksOverviewComponent implements OnInit {
+  public taskItem = {
+    startDate: new Date(2019, 11, 1),
+    endDate: new Date(2019, 11, 21),
+    actions: [
+      { label: 'bekijken', handler: () => console.log('bekijken') },
+      { label: 'archiveren', handler: () => console.log('archiveren') },
+      { label: 'resultaten', handler: () => console.log('resultaten') },
+      { label: 'doelenmatrix', handler: () => console.log('doelenmatrix') }
+    ],
+    assignees: [
+      {
+        type: AssigneeTypesEnum.CLASSGROUP,
+        label: 'Klas 1',
+        start: new Date(2019, 11, 1),
+        end: new Date(2019, 11, 8)
+      },
+      {
+        type: AssigneeTypesEnum.CLASSGROUP,
+        label: 'Klas 2',
+        start: new Date(2019, 11, 8),
+        end: new Date(2019, 11, 21)
+      },
+      {
+        type: AssigneeTypesEnum.STUDENT,
+        label: 'Leerling 1',
+        start: new Date(2019, 11, 1),
+        end: new Date(2019, 11, 8)
+      },
+      {
+        type: AssigneeTypesEnum.STUDENT,
+        label: 'Leerling 2',
+        start: new Date(2019, 11, 1),
+        end: new Date(2019, 11, 8)
+      },
+      {
+        type: AssigneeTypesEnum.GROUP,
+        label: 'Groep 1',
+        start: new Date(2019, 11, 8),
+        end: new Date(2019, 11, 21)
+      }
+    ]
+  };
+
   public tasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
   public paperTasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
   public currentTab$: Observable<number>;
