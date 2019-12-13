@@ -6,6 +6,7 @@ import { configureTestSuite } from 'ng-bullet';
 import { CardComponent } from '../card/card.component';
 import { ColorlistComponent } from '../colorlist/colorlist.component';
 import { ToolbarComponent } from '../toolbar/toolbar.component';
+import { WhiteboardToolsComponent } from '../whiteboard-tools/whiteboard-tools.component';
 import { WhiteboardComponent } from './whiteboard.component';
 
 describe('WhiteboardComponent', () => {
@@ -19,7 +20,8 @@ describe('WhiteboardComponent', () => {
         WhiteboardComponent,
         CardComponent,
         ToolbarComponent,
-        ColorlistComponent
+        ColorlistComponent,
+        WhiteboardToolsComponent
       ],
       providers: [
         {
@@ -44,7 +46,7 @@ describe('WhiteboardComponent', () => {
     const cardsSizeBeforeClicked = component.cards.length;
 
     const btnPlus = fixture.debugElement.query(
-      By.css('.whiteboard-page__btnPlus')
+      By.css('.whiteboard-tools__btnPlus')
     );
 
     btnPlus.nativeElement.click();

@@ -24,13 +24,8 @@
       (deleteCard)="onDeleteCard(i)"
       class="whiteboard-page__card"
     ></campus-card>
-    <button
-      mat-raised-button
-      color="primary"
-      class="whiteboard-page__btnPlus"
-      (click)="btnPlusClicked()"
-    >
-      +
-    </button>
   </div>
+  <campus-whiteboard-tools
+    (createCard)="btnPlusClicked()"
+  ></campus-whiteboard-tools>
 </div>
