@@ -17,9 +17,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { LearningAreaInterface } from '@campus/dal';
 import {
   ButtonToggleFilterComponent,
-  SearchFilterCriteriaFixture,
+  DateFilterComponent,
   SearchFilterCriteriaInterface,
-  SearchFilterCriteriaValuesFixture,
   SearchFilterCriteriaValuesInterface,
   SearchTermComponent,
   SelectFilterComponent
@@ -47,11 +46,6 @@ export interface FilterStateInterface {
 })
 export class ManageKabasTasksOverviewComponent
   implements OnInit, AfterContentInit, AfterContentChecked {
-  // TODO: remove
-  public mockFilterCriteria = new SearchFilterCriteriaFixture({}, [
-    new SearchFilterCriteriaValuesFixture()
-  ]);
-
   public taskItem = {
     startDate: new Date(2019, 11, 1),
     endDate: new Date(2019, 11, 21),
@@ -115,12 +109,16 @@ export class ManageKabasTasksOverviewComponent
     ButtonToggleFilterComponent
   >;
   @ViewChildren(MatSlideToggle) slideToggleFilters: QueryList<MatSlideToggle>;
+  @ViewChildren(DateFilterComponent) dateFilters: QueryList<
+    DateFilterComponent
+  >;
 
   public learningAreaFilter$: Observable<SearchFilterCriteriaInterface>;
   public learningAreaFilterPaper$: Observable<SearchFilterCriteriaInterface>;
   public assigneeFilter$: Observable<SearchFilterCriteriaInterface>;
   public assigneeFilterPaper$: Observable<SearchFilterCriteriaInterface>;
   public taskStatusFilter: SearchFilterCriteriaInterface;
+  public dateFilterCriteria: SearchFilterCriteriaInterface;
 
   constructor(
     private viewModel: KabasTasksViewModel,
@@ -148,6 +146,18 @@ export class ManageKabasTasksOverviewComponent
     this.assigneeFilterPaper$ = this.paperTasksWithAssignments$.pipe(
       map(this.sortAndCreateForAssigneeFilter)
     );
+
+    this.dateFilterCriteria = {
+      name: 'taskDate',
+      label: 'Actief van',
+      keyProperty: '',
+      displayProperty: 'icon',
+      values: [
+        {
+          data: {}
+        }
+      ]
+    };
 
     //todo swap for real icons
     this.taskStatusFilter = {
@@ -499,6 +509,7 @@ export class ManageKabasTasksOverviewComponent
       this.buttonToggleFilters.forEach(filter => filter.toggleControl.reset());
     if (this.slideToggleFilters)
       this.slideToggleFilters.forEach(filter => (filter.checked = false));
+    if (this.dateFilters) this.dateFilters.forEach(filter => filter.reset());
   }
 
   /**

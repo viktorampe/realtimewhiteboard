@@ -189,40 +189,28 @@ describe('ManageKabasTasksOverviewComponent', () => {
 
       const mockTasks: TaskWithAssigneesInterface[] = [
         {
-          assignees: [
-            { start: new Date(2000, 5, 11), end: new Date(2000, 5, 14) } // matches
-          ]
+          startDate: new Date(2000, 5, 11),
+          endDate: new Date(2000, 5, 14) // matches
         },
         {
-          assignees: [
-            { start: new Date(2000, 5, 10), end: new Date(2000, 5, 20) } // matches
-          ]
+          startDate: new Date(2000, 5, 10),
+          endDate: new Date(2000, 5, 20) // matches
         },
         {
-          assignees: [
-            { start: new Date(2000, 5, 5), end: new Date(2000, 5, 25) } // matches
-          ]
+          startDate: new Date(2000, 5, 5),
+          endDate: new Date(2000, 5, 25) // matches
         },
         {
-          assignees: [
-            { start: new Date(2000, 5, 14), end: new Date(2000, 5, 25) } // matches
-          ]
+          startDate: new Date(2000, 5, 14),
+          endDate: new Date(2000, 5, 25) // matches
         },
         {
-          assignees: [
-            { start: new Date(2000, 5, 21), end: new Date(2000, 5, 28) } // no match
-          ]
+          startDate: new Date(2000, 5, 21),
+          endDate: new Date(2000, 5, 28) // no match
         },
         {
-          assignees: [
-            { start: new Date(2000, 5, 1), end: new Date(2000, 5, 5) } // no match
-          ]
-        },
-        {
-          assignees: [
-            { start: new Date(2000, 5, 21), end: new Date(2000, 5, 28) }, // no match
-            { start: new Date(2000, 5, 12), end: new Date(2000, 5, 19) } // matches
-          ]
+          startDate: new Date(2000, 5, 1),
+          endDate: new Date(2000, 5, 5) // no match
         }
       ] as TaskWithAssigneesInterface[];
 
@@ -232,8 +220,7 @@ describe('ManageKabasTasksOverviewComponent', () => {
         mockTasks[0],
         mockTasks[1],
         mockTasks[2],
-        mockTasks[3],
-        mockTasks[6]
+        mockTasks[3]
       ]);
     });
 
@@ -254,10 +241,10 @@ describe('ManageKabasTasksOverviewComponent', () => {
           name: 'foo', //matches all filters
           learningAreaId: 1,
           status: TaskStatusEnum.ACTIVE,
+          startDate: new Date(2000, 1, 2),
+          endDate: new Date(2000, 1, 9),
           assignees: [
             {
-              start: new Date(2000, 1, 2),
-              end: new Date(2000, 1, 9),
               type: AssigneeTypesEnum.GROUP,
               id: 1
             }
@@ -267,10 +254,10 @@ describe('ManageKabasTasksOverviewComponent', () => {
           name: 'bar', // does not match search term filter
           learningAreaId: 1,
           status: TaskStatusEnum.ACTIVE,
+          startDate: new Date(2000, 1, 2),
+          endDate: new Date(2000, 1, 9),
           assignees: [
             {
-              start: new Date(2000, 1, 2),
-              end: new Date(2000, 1, 9),
               type: AssigneeTypesEnum.GROUP,
               id: 1
             }
@@ -280,10 +267,10 @@ describe('ManageKabasTasksOverviewComponent', () => {
           name: 'foo', // does not match all filters
           learningAreaId: 2, // does not match
           status: TaskStatusEnum.ACTIVE,
+          startDate: new Date(2000, 1, 2),
+          endDate: new Date(2000, 1, 9),
           assignees: [
             {
-              start: new Date(2000, 1, 2),
-              end: new Date(2000, 1, 9),
               type: AssigneeTypesEnum.GROUP,
               id: 1
             }
@@ -293,10 +280,10 @@ describe('ManageKabasTasksOverviewComponent', () => {
           name: 'foo', // does not match all filters
           learningAreaId: 1,
           status: TaskStatusEnum.ACTIVE,
+          startDate: new Date(2000, 1, 2),
+          endDate: new Date(2000, 1, 9),
           assignees: [
             {
-              start: new Date(2000, 1, 2),
-              end: new Date(2000, 1, 9),
               type: AssigneeTypesEnum.CLASSGROUP, // does not match
               id: 1
             }
@@ -306,10 +293,10 @@ describe('ManageKabasTasksOverviewComponent', () => {
           name: 'foo', // does not match all filters
           learningAreaId: 1,
           status: TaskStatusEnum.ACTIVE,
+          startDate: new Date(2000, 1, 2),
+          endDate: new Date(2000, 1, 9),
           assignees: [
             {
-              start: new Date(2000, 1, 2),
-              end: new Date(2000, 1, 9),
               type: AssigneeTypesEnum.GROUP,
               id: 2 // does not match
             }
@@ -319,10 +306,10 @@ describe('ManageKabasTasksOverviewComponent', () => {
           name: 'foo', // does not match all filters
           learningAreaId: 1,
           status: TaskStatusEnum.FINISHED, // does not match
+          startDate: new Date(2000, 1, 2),
+          endDate: new Date(2000, 1, 9),
           assignees: [
             {
-              start: new Date(2000, 1, 2),
-              end: new Date(2000, 1, 9),
               type: AssigneeTypesEnum.GROUP,
               id: 1
             }
@@ -332,10 +319,10 @@ describe('ManageKabasTasksOverviewComponent', () => {
           name: 'foo', // does not match all filters
           learningAreaId: 1,
           status: TaskStatusEnum.PENDING,
+          startDate: new Date(2000, 1, 15), // no match
+          endDate: new Date(2000, 1, 20), // no match
           assignees: [
             {
-              start: new Date(2000, 1, 15), // no match
-              end: new Date(2000, 1, 20), // no match
               type: AssigneeTypesEnum.GROUP,
               id: 1
             }
@@ -345,16 +332,14 @@ describe('ManageKabasTasksOverviewComponent', () => {
           name: 'foobar', //matches all filters
           learningAreaId: 1,
           status: TaskStatusEnum.PENDING, // matches --> include
+          startDate: new Date(2000, 1, 2),
+          endDate: new Date(2000, 1, 9),
           assignees: [
             {
-              start: new Date(2000, 1, 2),
-              end: new Date(2000, 1, 9),
               type: AssigneeTypesEnum.GROUP,
               id: 1
             },
             {
-              start: new Date(2000, 1, 2),
-              end: new Date(2000, 1, 9),
               type: AssigneeTypesEnum.GROUP,
               id: 1
             }
@@ -364,16 +349,14 @@ describe('ManageKabasTasksOverviewComponent', () => {
           name: 'foobar', //matches all filters
           learningAreaId: 1,
           status: TaskStatusEnum.PENDING,
+          startDate: new Date(2000, 1, 2),
+          endDate: new Date(2000, 1, 9),
           assignees: [
             {
-              start: new Date(2000, 1, 2),
-              end: new Date(2000, 1, 9),
               type: AssigneeTypesEnum.GROUP, //matches
               id: 666 // does not match
             },
             {
-              start: new Date(2000, 1, 2),
-              end: new Date(2000, 1, 9),
               type: AssigneeTypesEnum.CLASSGROUP, //matches
               id: 2 // matches
             }
