@@ -54,6 +54,18 @@ describe('CardComponent', () => {
     expect(errorMessage).not.toBeNull();
   });
 
+  it('should show errormessage when no image or text is provided', () => {
+    component.card.cardContent = '';
+    component.txtContent.markAsDirty();
+
+    fixture.detectChanges();
+
+    const errorMessage = fixture.debugElement.query(
+      By.css('#errorMissingContent')
+    );
+    expect(errorMessage).not.toBeNull();
+  });
+
   it('should show the card content when not editing', () => {
     component.card.cardContent = 'Test content';
     component.card.isInputSelected = false;
