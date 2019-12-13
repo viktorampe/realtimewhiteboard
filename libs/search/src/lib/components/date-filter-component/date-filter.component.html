@@ -1,0 +1,63 @@
+<mat-menu
+  #datepickerMenu="matMenu"
+  class="date-filter-component date-filter-component__menu-panel"
+>
+  <div clickStopPropagation>
+    <div class="date-filter-component__menu-panel__title"
+      >Selecteer een periode</div
+    >
+    <mat-radio-group
+      [formControl]="dateSelection"
+      aria-label="Select an option"
+    >
+      <mat-radio-button
+        *ngFor="let option of radioOptions"
+        [value]="option.value"
+        >{{ option.viewValue }}</mat-radio-button
+      >
+      <mat-radio-button [value]="customRangeOptionValue">
+        <div class="date-filter-component__menu-panel__date-range">
+          <mat-form-field [appearance]="'outline'">
+            <mat-label>Vanaf</mat-label>
+            <input
+              autocomplete="off"
+              matInput
+              [matDatepicker]="startDatePicker"
+              [formControl]="startDate"
+              (click)="startDatePicker.open(); clickDateInput()"
+            />
+            <mat-datepicker
+              #startDatePicker
+              [dateClass]="applyClassToDateInRange.bind(this)"
+            ></mat-datepicker>
+          </mat-form-field>
+          <mat-form-field [appearance]="'outline'">
+            <mat-label>t.e.m.</mat-label>
+            <input
+              autocomplete="off"
+              [value]="null"
+              matInput
+              [matDatepicker]="endDatePicker"
+              [formControl]="endDate"
+              (click)="endDatePicker.open(); clickDateInput()"
+            />
+            <mat-datepicker
+              #endDatePicker
+              [dateClass]="applyClassToDateInRange.bind(this)"
+            ></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </mat-radio-button>
+    </mat-radio-group>
+    <campus-button primary (click)="applyFilter()">Filteren</campus-button>
+    <campus-button (click)="applyFilter(true)">Annuleren</campus-button>
+  </div>
+</mat-menu>
+<campus-button
+  [matBadge]="count"
+  [matBadgeHidden]="count === 0"
+  matBadgePosition="above after"
+  [matMenuTriggerFor]="datepickerMenu"
+  class="date-filter-component__open-datepicker-button"
+  >{{ customDisplayLabel || criteria.label }}</campus-button
+>
