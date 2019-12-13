@@ -51,6 +51,8 @@
           ></campus-select-filter>
 
           <campus-date-filter
+            [options]="fixedDateFilterOptions"
+            resetLabel="Het volledige schooljaar"
             [filterCriteria]="dateFilterCriteria"
             (filterSelectionChange)="selectionChanged($event, 'dateInterval')"
           ></campus-date-filter>

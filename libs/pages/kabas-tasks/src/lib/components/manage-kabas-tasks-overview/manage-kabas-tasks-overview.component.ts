@@ -18,12 +18,18 @@ import { LearningAreaInterface } from '@campus/dal';
 import {
   ButtonToggleFilterComponent,
   DateFilterComponent,
+  RadioOption,
+  RadioOptionValueType,
   SearchFilterCriteriaInterface,
   SearchFilterCriteriaValuesInterface,
   SearchTermComponent,
   SelectFilterComponent
 } from '@campus/search';
-import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/utils';
+import {
+  DateFunctions,
+  FilterServiceInterface,
+  FILTER_SERVICE_TOKEN
+} from '@campus/utils';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { debounceTime, map } from 'rxjs/operators';
 import { AssigneeTypesEnum } from '../../interfaces/Assignee.interface';
@@ -119,6 +125,33 @@ export class ManageKabasTasksOverviewComponent
   public assigneeFilterPaper$: Observable<SearchFilterCriteriaInterface>;
   public taskStatusFilter: SearchFilterCriteriaInterface;
   public dateFilterCriteria: SearchFilterCriteriaInterface;
+
+  public fixedDateFilterOptions: RadioOption[] = [
+    {
+      viewValue: 'Deze week',
+      value: {
+        type: RadioOptionValueType.FilterCriteriaValue,
+        contents: {
+          data: {
+            gte: DateFunctions.startOfWeek(new Date()),
+            lte: DateFunctions.endOfWeek(new Date())
+          }
+        }
+      }
+    },
+    {
+      viewValue: 'Vorige week',
+      value: {
+        type: RadioOptionValueType.FilterCriteriaValue,
+        contents: {
+          data: {
+            gte: DateFunctions.lastWeek(new Date()),
+            lte: DateFunctions.endOfWeek(DateFunctions.lastWeek(new Date()))
+          }
+        }
+      }
+    }
+  ];
 
   constructor(
     private viewModel: KabasTasksViewModel,
@@ -321,7 +354,13 @@ export class ManageKabasTasksOverviewComponent
     const criterium = criteria[0];
 
     if (filterName === 'dateInterval') {
-      if (criterium.values[0].data.gte || criterium.values[0].data.lte) {
+      if (!criterium.values.length) {
+        // "volledig schooljaar" option is selected
+        updatedFilter[filterName] = {
+          gte: new Date(new Date().getFullYear(), 9, 1),
+          lte: new Date(new Date().getFullYear() + 1, 6, 30)
+        };
+      } else if (criterium.values[0].data.gte || criterium.values[0].data.lte) {
         updatedFilter[filterName] = {
           gte: criterium.values[0].data.gte,
           lte: criterium.values[0].data.lte
