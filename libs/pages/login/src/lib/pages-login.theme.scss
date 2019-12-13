@@ -1,0 +1,5 @@
+@import './components/login.component.theme.scss';
+
+@mixin pages-login-theme() {
+  @include pages-login-component-theme();
+}
