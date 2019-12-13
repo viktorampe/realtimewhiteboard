@@ -128,6 +128,18 @@ export class ManageKabasTasksOverviewComponent
 
   public fixedDateFilterOptions: RadioOption[] = [
     {
+      viewValue: 'Het volledige schooljaar',
+      value: {
+        type: RadioOptionValueType.FilterCriteriaValue,
+        contents: {
+          data: {
+            gte: new Date(new Date().getFullYear(), 8, 1),
+            lte: new Date(new Date().getFullYear() + 1, 5, 30)
+          }
+        }
+      }
+    },
+    {
       viewValue: 'Deze week',
       value: {
         type: RadioOptionValueType.FilterCriteriaValue,
@@ -354,13 +366,7 @@ export class ManageKabasTasksOverviewComponent
     const criterium = criteria[0];
 
     if (filterName === 'dateInterval') {
-      if (!criterium.values.length) {
-        // "volledig schooljaar" option is selected
-        updatedFilter[filterName] = {
-          gte: new Date(new Date().getFullYear(), 9, 1),
-          lte: new Date(new Date().getFullYear() + 1, 6, 30)
-        };
-      } else if (criterium.values[0].data.gte || criterium.values[0].data.lte) {
+      if (criterium.values[0].data.gte || criterium.values[0].data.lte) {
         updatedFilter[filterName] = {
           gte: criterium.values[0].data.gte,
           lte: criterium.values[0].data.lte
