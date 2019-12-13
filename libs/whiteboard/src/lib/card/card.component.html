@@ -30,12 +30,14 @@
     <p
       *ngIf="card.isInputSelected && card.cardContent.length === maxCharacters"
       class="card__content__errorMessage"
+      id="errorMaximum"
     >
       Je hebt het maximaal aantal karakters gebruikt.
     </p>
     <p
       *ngIf="card.isInputSelected && !card.cardContent && txtContent.dirty"
       class="card__content__errorMessage"
+      id="errorMissingContent"
     >
       Er moet een foto gekozen zijn of tekst ingevuld zijn.
     </p>
