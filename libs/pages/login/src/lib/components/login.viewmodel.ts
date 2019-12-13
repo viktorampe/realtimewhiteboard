@@ -9,7 +9,6 @@ import {
   UserQueries
 } from '@campus/dal';
 import { select, Store } from '@ngrx/store';
-import { UserActionTypes } from 'libs/dal/src/lib/+state/user/user.actions';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 
@@ -29,7 +28,7 @@ export class LoginViewModel {
     this.setupStreams();
     this.errorFeedback$ = this.store.pipe(
       select(EffectFeedbackQueries.getFeedbackForAction, {
-        actionType: UserActionTypes.LogInUser
+        actionType: UserActions.UserActionTypes.LogInUser
       })
     );
   }

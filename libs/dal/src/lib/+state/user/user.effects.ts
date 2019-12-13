@@ -82,7 +82,6 @@ export class UserEffects {
           effectFeedback
         });
         return feedbackAction;
-        //return new UserRemoveError(error);
       }
     }
   );
