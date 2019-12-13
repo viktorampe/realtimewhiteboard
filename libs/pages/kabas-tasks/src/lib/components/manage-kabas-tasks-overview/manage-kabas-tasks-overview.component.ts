@@ -25,7 +25,7 @@ import {
 } from '@campus/search';
 import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/utils';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { debounceTime, map } from 'rxjs/operators';
 import { AssigneeTypesEnum } from '../../interfaces/Assignee.interface';
 import { TaskWithAssigneesInterface } from '../../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
@@ -294,7 +294,7 @@ export class ManageKabasTasksOverviewComponent
 
   clickResetFilters() {
     // reset state
-    this.resetFilterState();
+    // this.resetFilterState();
     // visually clear selections
     this.clearFilters();
   }
@@ -315,22 +315,26 @@ export class ManageKabasTasksOverviewComponent
     criteria: SearchFilterCriteriaInterface[],
     filterName: string
   ) {
-    const updatedFilter = {};
+    const updatedFilter: FilterStateInterface = {};
 
     // array is emitted, but there is only one value
     const criterium = criteria[0];
 
     if (filterName === 'dateInterval') {
-      updatedFilter[filterName] = {
-        gte: criterium.values[0].data.gte,
-        lte: criterium.values[0].data.lte
-      };
+      if (criterium.values[0].data.gte || criterium.values[0].data.lte) {
+        updatedFilter[filterName] = {
+          gte: criterium.values[0].data.gte,
+          lte: criterium.values[0].data.lte
+        };
+      } else {
+        updatedFilter.dateInterval = null;
+      }
     } else if (filterName === 'assignee') {
       updatedFilter[filterName] = criterium.values
         .filter(value => value.selected)
         .map(selectedValue => ({
           id: selectedValue.data.identifier.id,
-          label: selectedValue.data.identifier.type
+          type: selectedValue.data.identifier.type
         }));
     } else if (filterName === 'status') {
       updatedFilter[filterName] = criterium.values
@@ -350,16 +354,6 @@ export class ManageKabasTasksOverviewComponent
   public searchTermUpdated(term: string) {
     const updatedFilter = { searchTerm: term };
     this.updateFilterState(updatedFilter);
-  }
-
-  /**
-   * Resets all filters.
-   *
-   * @private
-   * @memberof ManageKabasTasksOverviewComponent
-   */
-  private resetFilterState(): void {
-    this.filterState$.next({});
   }
 
   /**
@@ -390,6 +384,7 @@ export class ManageKabasTasksOverviewComponent
       this.tasksWithAssignments$,
       this.paperTasksWithAssignments$
     ]).pipe(
+      debounceTime(10),
       map(([currentTabIndex, filterState, digitalTasks, paperTasks]) => {
         // to know which task stream we should use
         return this.filterTasks(
@@ -457,11 +452,22 @@ export class ManageKabasTasksOverviewComponent
     }
 
     if (filterState.dateInterval) {
-      filteredTasks = filteredTasks.filter(
-        task =>
-          new Date(task.startDate) <= filterState.dateInterval.lte &&
-          new Date(task.endDate) >= filterState.dateInterval.gte
-      );
+      filteredTasks = filteredTasks.filter(task => {
+        if (filterState.dateInterval.gte && filterState.dateInterval.lte) {
+          return (
+            task.startDate <= filterState.dateInterval.lte &&
+            task.endDate >= filterState.dateInterval.gte
+          );
+        }
+
+        if (filterState.dateInterval.gte) {
+          return task.endDate >= filterState.dateInterval.gte;
+        }
+
+        if (filterState.dateInterval.lte) {
+          return task.startDate <= filterState.dateInterval.lte;
+        }
+      });
     }
 
     if (filterState.isArchived) {
@@ -488,7 +494,6 @@ export class ManageKabasTasksOverviewComponent
    * @memberof ManageKabasTasksOverviewComponent
    */
   private cleanUpPage(): void {
-    this.resetFilterState();
     this.clearListSelections();
     this.clearFilters();
   }
@@ -502,13 +507,19 @@ export class ManageKabasTasksOverviewComponent
    */
   private clearFilters(): void {
     if (this.searchTermFilters)
-      this.searchTermFilters.forEach(filter => (filter.currentValue = ''));
+      this.searchTermFilters.forEach(filter => {
+        filter.currentValue = '';
+        filter.valueChange.next('');
+      });
     if (this.selectFilters)
       this.selectFilters.forEach(filter => filter.selectControl.reset());
     if (this.buttonToggleFilters)
       this.buttonToggleFilters.forEach(filter => filter.toggleControl.reset());
     if (this.slideToggleFilters)
-      this.slideToggleFilters.forEach(filter => (filter.checked = false));
+      this.slideToggleFilters.forEach(filter => {
+        filter.checked = false;
+        filter.change.emit({ checked: false, source: filter });
+      });
     if (this.dateFilters) this.dateFilters.forEach(filter => filter.reset());
   }
 
