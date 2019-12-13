@@ -3,14 +3,19 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
+  DateAdapter,
   MatAutocompleteModule,
   MatBadgeModule,
   MatButtonToggleModule,
   MatCheckboxModule,
+  MatDatepickerModule,
   MatFormFieldModule,
   MatIconModule,
   MatInputModule,
   MatListModule,
+  MatMenuModule,
+  MatNativeDateModule,
+  MatRadioModule,
   MatSelectModule,
   MatTooltipModule
 } from '@angular/material';
@@ -23,6 +28,8 @@ import { CheckboxFilterComponent } from './components/checkbox-list-filter/check
 import { CheckboxListFilterComponent } from './components/checkbox-list-filter/checkbox-list-filter.component';
 import { ColumnFilterComponent } from './components/column-filter/column-filter.component';
 import { ColumnFilterService } from './components/column-filter/column-filter.service';
+import { BeDateAdapter } from './components/date-filter-component/be-date-adapter';
+import { DateFilterComponent } from './components/date-filter-component/date-filter.component';
 import { ResultItemBase } from './components/results-list/result.component.base';
 import {
   ResultListDirective,
@@ -51,7 +58,11 @@ import { SearchPortalDirective } from './directives/search-portal.directive';
     MatIconModule,
     MatAutocompleteModule,
     MatButtonToggleModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatMenuModule,
     MatTooltipModule,
+    MatRadioModule,
     FormsModule,
     UtilsModule
   ],
@@ -59,6 +70,7 @@ import { SearchPortalDirective } from './directives/search-portal.directive';
     ResultItemBase,
     BreadcrumbFilterComponent,
     SelectFilterComponent,
+    DateFilterComponent,
     SearchTermComponent,
     ResultsListComponent,
     ResultListDirective,
@@ -73,6 +85,7 @@ import { SearchPortalDirective } from './directives/search-portal.directive';
   exports: [
     BreadcrumbFilterComponent,
     SelectFilterComponent,
+    DateFilterComponent,
     SearchTermComponent,
     ResultsListComponent,
     CheckboxLineFilterComponent,
@@ -84,7 +97,10 @@ import { SearchPortalDirective } from './directives/search-portal.directive';
     ButtonToggleFilterComponent,
     SearchPortalDirective
   ],
-  providers: [ColumnFilterService],
+  providers: [
+    ColumnFilterService,
+    { provide: DateAdapter, useClass: BeDateAdapter }
+  ],
   entryComponents: [
     CheckboxFilterComponent,
     CheckboxLineFilterComponent,
@@ -92,6 +108,7 @@ import { SearchPortalDirective } from './directives/search-portal.directive';
     BreadcrumbFilterComponent,
     ColumnFilterComponent,
     SelectFilterComponent,
+    DateFilterComponent,
     SearchTermComponent,
     ButtonToggleFilterComponent
   ]

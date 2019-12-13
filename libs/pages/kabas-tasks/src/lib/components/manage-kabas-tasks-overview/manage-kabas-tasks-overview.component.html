@@ -34,6 +34,31 @@
     (selectedIndexChange)="onSelectedTabIndexChanged($event)"
   >
     <mat-tab label="Digitale taken">
+      <div class="manage-kabas-tasks-overview__filterbar">
+        <campus-search-term [placeholder]="'Filteren'"></campus-search-term>
+        <campus-select-filter
+          *ngIf="(learningAreaFilter$ | async) as learningAreaFilter"
+          [filterCriteria]="learningAreaFilter"
+          [resetLabel]="'Geen'"
+        ></campus-select-filter>
+        <!--<date-filter-component></date-filter-component>-->
+        <campus-select-filter
+          *ngIf="(assigneeFilter$ | async) as assigneeFilter"
+          [filterCriteria]="assigneeFilter"
+          [resetLabel]="'Niemand'"
+        ></campus-select-filter>
+        <campus-button-toggle-filter [filterCriteria]="taskStatusFilter">
+        </campus-button-toggle-filter>
+        <div class="manage-kabas-tasks-overview__archive-toggle">
+          <mat-slide-toggle color="primary">
+            Gearchiveerd
+          </mat-slide-toggle>
+        </div>
+        <campus-button
+          class="manage-kabas-tasks-overview--reset-filters"
+          iconClass="reset-filters"
+        ></campus-button>
+      </div>
       <mat-selection-list
         #digital
         [class.mat-selection-list--has-selection]="
@@ -72,6 +97,31 @@
     </mat-tab>
 
     <mat-tab label="Papieren taken">
+      <div class="manage-kabas-tasks-overview__filterbar">
+        <campus-search-term [placeholder]="'Filteren'"></campus-search-term>
+
+        <campus-select-filter
+          *ngIf="(learningAreaFilterPaper$ | async) as learningAreaFilterPaper"
+          [filterCriteria]="learningAreaFilterPaper"
+          [resetLabel]="'Geen'"
+        ></campus-select-filter>
+        <campus-select-filter
+          *ngIf="(assigneeFilterPaper$ | async) as assigneeFilterPaper"
+          [filterCriteria]="assigneeFilterPaper"
+          [resetLabel]="'Niemand'"
+        ></campus-select-filter>
+        <campus-button-toggle-filter [filterCriteria]="taskStatusFilter">
+        </campus-button-toggle-filter>
+        <div class="manage-kabas-tasks-overview__archive-toggle">
+          <mat-slide-toggle color="primary">
+            Gearchiveerd
+          </mat-slide-toggle>
+        </div>
+        <campus-button
+          class="manage-kabas-tasks-overview--reset-filters"
+          iconClass="reset-filters"
+        ></campus-button>
+      </div>
       <mat-selection-list #paper>
         <mat-list-item
           (click)="clickAddPaperTask()"

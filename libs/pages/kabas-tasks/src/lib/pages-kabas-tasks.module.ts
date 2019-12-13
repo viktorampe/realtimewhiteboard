@@ -1,14 +1,15 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { GuardsModule } from '@campus/guards';
 import { PagesSharedModule } from '@campus/pages/shared';
+import { SearchModule } from '@campus/search';
 import { SharedModule } from '@campus/shared';
 import { UiModule } from '@campus/ui';
 import { UtilsModule } from '@campus/utils';
 import { ManageKabasTasksOverviewComponent } from './components/manage-kabas-tasks-overview/manage-kabas-tasks-overview.component';
 import { TaskListItemComponent } from './components/task-list-item/task-list-item.component';
 import { PagesKabasTasksRoutingModule } from './pages-kabas-tasks-routing.module';
-
 @NgModule({
   imports: [
     CommonModule,
@@ -17,7 +18,9 @@ import { PagesKabasTasksRoutingModule } from './pages-kabas-tasks-routing.module
     PagesSharedModule,
     SharedModule,
     GuardsModule,
-    UtilsModule
+    UtilsModule,
+    SearchModule,
+    MatSlideToggleModule
   ],
   declarations: [ManageKabasTasksOverviewComponent, TaskListItemComponent],
   providers: [],
