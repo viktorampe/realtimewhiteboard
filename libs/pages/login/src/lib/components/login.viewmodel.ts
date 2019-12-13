@@ -36,7 +36,7 @@ export class LoginViewModel {
   public login(username: string, password: string) {
     this.store.dispatch(
       new UserActions.LogInUser({
-        username,
+        ...this.prepareLogin(username),
         password,
         customFeedbackHandlers: {
           useCustomErrorHandler: true,
@@ -45,6 +45,7 @@ export class LoginViewModel {
       })
     );
   }
+
   public logout() {
     this.store.dispatch(new UserActions.RemoveUser());
   }
@@ -63,5 +64,11 @@ export class LoginViewModel {
 
   private setupStreams() {
     this.currentUser$ = this.store.pipe(select(UserQueries.getCurrentUser));
+  }
+
+  private prepareLogin(emailOrUsername: string) {
+    return emailOrUsername.includes('@')
+      ? { email: emailOrUsername }
+      : { username: emailOrUsername };
   }
 }
