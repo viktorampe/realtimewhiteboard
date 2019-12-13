@@ -24,9 +24,11 @@
       [class.pages-login__form--unauthorized]="hasError$ | async"
     >
       <div class="pages-login__form__title">Vul uw gebruikersgegevens in</div>
-      <p class="mat-error" *ngIf="(errorFeedback$ | async) as error">{{
-        error.message
-      }}</p>
+      <div class="mat-error">
+        <span *ngIf="(errorFeedback$ | async) as error">
+          {{ error.message }}
+        </span>
+      </div>
       <mat-form-field>
         <mat-label>Gebruikersnaam</mat-label>
         <input
