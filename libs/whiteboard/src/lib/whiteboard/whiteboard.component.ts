@@ -69,4 +69,8 @@ export class WhiteboardComponent implements OnInit {
   saveLastColor(color: string) {
     this.lastColor = color;
   }
+
+  btnDelClicked() {
+    console.log('delete button clicked');
+  }
 }

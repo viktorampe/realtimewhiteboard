@@ -1,6 +1,25 @@
 .whiteboard-tools {
+  background-color: lightgray;
+  height: 50px;
+  width: 100%;
+
   &__btnPlus {
-    position: absolute;
+    bottom: 30px;
+    left: 30px;
+    width: 50px;
+    height: 50px;
+  }
+
+  &__btnDel {
+    margin-left: 10px;
+    bottom: 30px;
+    left: 30px;
+    width: 50px;
+    height: 50px;
+  }
+
+  &__btnEdit {
+    margin-left: 10px;
     bottom: 30px;
     left: 30px;
     width: 50px;
