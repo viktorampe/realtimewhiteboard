@@ -1355,6 +1355,32 @@
           "styleext": "scss"
         }
       }
+    },
+    "pages-login": {
+      "root": "libs/pages/login",
+      "sourceRoot": "libs/pages/login/src",
+      "projectType": "library",
+      "prefix": "campus",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/pages/login/tsconfig.lib.json",
+              "libs/pages/login/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/builders:jest",
+          "options": {
+            "jestConfig": "libs/pages/login/jest.config.js",
+            "tsConfig": "libs/pages/login/tsconfig.spec.json",
+            "setupFile": "libs/pages/login/src/test-setup.ts"
+          }
+        }
+      }
     }
   },
   "cli": {

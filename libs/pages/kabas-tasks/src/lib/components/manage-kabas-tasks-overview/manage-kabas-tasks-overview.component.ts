@@ -4,9 +4,11 @@ import {
   Inject,
   OnInit,
   QueryList,
+  ViewChild,
   ViewChildren
 } from '@angular/core';
 import {
+  MatSelect,
   MatSelectionList,
   MatSlideToggle,
   MatSlideToggleChange
@@ -43,6 +45,12 @@ export interface FilterStateInterface {
   isArchived?: boolean;
 }
 
+export enum TaskSortEnum {
+  'NAME' = 'NAME',
+  'LEARNINGAREA' = 'LEARNINGAREA',
+  'STARTDATE' = 'STARTDATE'
+}
+
 @Component({
   selector: 'campus-manage-kabas-tasks-overview',
   templateUrl: './manage-kabas-tasks-overview.component.html',
@@ -50,49 +58,7 @@ export interface FilterStateInterface {
 })
 export class ManageKabasTasksOverviewComponent
   implements OnInit, AfterContentInit {
-  public taskItem = {
-    startDate: new Date(2019, 11, 1),
-    endDate: new Date(2019, 11, 21),
-    actions: [
-      { label: 'bekijken', handler: () => console.log('bekijken') },
-      { label: 'archiveren', handler: () => console.log('archiveren') },
-      { label: 'resultaten', handler: () => console.log('resultaten') },
-      { label: 'doelenmatrix', handler: () => console.log('doelenmatrix') }
-    ],
-    assignees: [
-      {
-        type: AssigneeTypesEnum.CLASSGROUP,
-        label: 'Klas 1',
-        start: new Date(2019, 11, 1),
-        end: new Date(2019, 11, 8)
-      },
-      {
-        type: AssigneeTypesEnum.CLASSGROUP,
-        label: 'Klas 2',
-        start: new Date(2019, 11, 8),
-        end: new Date(2019, 11, 21)
-      },
-      {
-        type: AssigneeTypesEnum.STUDENT,
-        label: 'Leerling 1',
-        start: new Date(2019, 11, 1),
-        end: new Date(2019, 11, 8)
-      },
-      {
-        type: AssigneeTypesEnum.STUDENT,
-        label: 'Leerling 2',
-        start: new Date(2019, 11, 1),
-        end: new Date(2019, 11, 8)
-      },
-      {
-        type: AssigneeTypesEnum.GROUP,
-        label: 'Groep 1',
-        start: new Date(2019, 11, 8),
-        end: new Date(2019, 11, 21)
-      }
-    ]
-  };
-
+  public TaskSortEnum = TaskSortEnum;
   public tasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
   public paperTasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
   public currentTab$: Observable<number>;
@@ -164,6 +130,18 @@ export class ManageKabasTasksOverviewComponent
     DateFilterComponent
   >;
 
+  private currentSortMode$ = new BehaviorSubject(TaskSortEnum.NAME);
+
+  @ViewChild('digitalSorting') private digitalSorting: MatSelect;
+  @ViewChild('paperSorting') private paperSorting: MatSelect;
+
+  public actions = [
+    { label: 'bekijken', handler: () => console.log('bekijken') },
+    { label: 'archiveren', handler: () => console.log('archiveren') },
+    { label: 'resultaten', handler: () => console.log('resultaten') },
+    { label: 'doelenmatrix', handler: () => console.log('doelenmatrix') }
+  ];
+
   constructor(
     private viewModel: KabasTasksViewModel,
     private router: Router,
@@ -173,9 +151,16 @@ export class ManageKabasTasksOverviewComponent
 
   ngOnInit() {
     this.currentTab$ = this.getCurrentTab();
-    console.log(this.viewModel);
-    this.tasksWithAssignments$ = this.viewModel.tasksWithAssignments$;
-    this.paperTasksWithAssignments$ = this.viewModel.paperTasksWithAssignments$;
+
+    this.tasksWithAssignments$ = combineLatest([
+      this.viewModel.tasksWithAssignments$,
+      this.currentSortMode$
+    ]).pipe(map(([tasks, sortMode]) => this.sortTasks(tasks, sortMode)));
+
+    this.paperTasksWithAssignments$ = combineLatest([
+      this.viewModel.paperTasksWithAssignments$,
+      this.currentSortMode$
+    ]).pipe(map(([tasks, sortMode]) => this.sortTasks(tasks, sortMode)));
 
     this.learningAreaFilter$ = this.tasksWithAssignments$.pipe(
       map(this.sortAndCreateForLearningAreaFilter)
@@ -342,6 +327,8 @@ export class ManageKabasTasksOverviewComponent
     this.router.navigate([], {
       queryParams: { tab }
     });
+
+    this.resetSorting();
   }
 
   public archivedFilterToggled(data: MatSlideToggleChange) {
@@ -361,6 +348,10 @@ export class ManageKabasTasksOverviewComponent
   public searchTermUpdated(term: string) {
     const updatedFilter = { searchTerm: term };
     this.updateFilterState(updatedFilter);
+  }
+
+  public setSortMode(sortMode: TaskSortEnum) {
+    this.currentSortMode$.next(sortMode);
   }
 
   private mapSearchFilterCriteriaToFilterState(
@@ -632,5 +623,56 @@ export class ManageKabasTasksOverviewComponent
   private clearListSelections(): void {
     if (this.taskLists)
       this.taskLists.forEach(list => list.selectedOptions.clear());
+  }
+
+  private resetSorting() {
+    this.setSortMode(TaskSortEnum.NAME);
+    this.digitalSorting.value = undefined;
+    this.paperSorting.value = undefined;
+  }
+
+  private sortTasks(
+    tasks: TaskWithAssigneesInterface[],
+    sortMode: TaskSortEnum
+  ) {
+    switch (sortMode) {
+      case TaskSortEnum.NAME:
+        return this.sortByName(tasks);
+      case TaskSortEnum.LEARNINGAREA:
+        return this.sortByLearningArea(tasks);
+      case TaskSortEnum.STARTDATE:
+        return this.sortByStartDate(tasks);
+    }
+    // no sortMode -> no sorting
+    return tasks;
+  }
+
+  private sortByName(tasks: TaskWithAssigneesInterface[]) {
+    return tasks.sort((a, b) =>
+      a.name.localeCompare(b.name, 'be-nl', {
+        sensitivity: 'base'
+      })
+    );
+  }
+
+  private sortByLearningArea(tasks: TaskWithAssigneesInterface[]) {
+    return tasks.sort((a, b) =>
+      a.learningArea.name.localeCompare(b.learningArea.name, 'be-nl', {
+        sensitivity: 'base'
+      })
+    );
+  }
+
+  private sortByStartDate(tasks: TaskWithAssigneesInterface[]) {
+    return tasks.sort((a, b) => {
+      const taskA = a.startDate;
+      const taskB = b.startDate;
+
+      // undefined dates at the front of the list
+      if (!taskA) return -1;
+      if (!taskB) return 1;
+
+      return taskA.getTime() - taskB.getTime();
+    });
   }
 }
