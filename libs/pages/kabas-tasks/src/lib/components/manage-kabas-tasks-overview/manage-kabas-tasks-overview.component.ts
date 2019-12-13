@@ -204,8 +204,6 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
     this.currentSortMode$.next(sortMode);
   }
 
-  public tasksWithAssignments(stream: string) {}
-
   private getCurrentTab(): Observable<number> {
     return this.route.queryParams.pipe(map(queryParam => queryParam.tab));
   }
@@ -242,21 +240,19 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
   }
 
   private sortByName(tasks: TaskWithAssigneesInterface[]) {
-    return tasks.sort((a, b) => {
-      const taskA = a.name.toLowerCase();
-      const taskB = b.name.toLowerCase();
-
-      return taskA < taskB ? -1 : taskA > taskB ? 1 : 0;
-    });
+    return tasks.sort((a, b) =>
+      a.name.localeCompare(b.name, 'be-nl', {
+        sensitivity: 'base'
+      })
+    );
   }
 
   private sortByLearningArea(tasks: TaskWithAssigneesInterface[]) {
-    return tasks.sort((a, b) => {
-      const taskA = a.learningArea.name.toLowerCase();
-      const taskB = b.learningArea.name.toLowerCase();
-
-      return taskA < taskB ? -1 : taskA > taskB ? 1 : 0;
-    });
+    return tasks.sort((a, b) =>
+      a.learningArea.name.localeCompare(b.learningArea.name, 'be-nl', {
+        sensitivity: 'base'
+      })
+    );
   }
 
   private sortByStartDate(tasks: TaskWithAssigneesInterface[]) {
@@ -268,7 +264,7 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
       if (!taskA) return -1;
       if (!taskB) return 1;
 
-      return taskA < taskB ? -1 : taskA > taskB ? 1 : 0;
+      return taskA.getTime() - taskB.getTime();
     });
   }
 }
