@@ -6,11 +6,12 @@
   justify-content: center;
   align-items: center;
 
-  .card__content {
+  &__content {
     width: 100%;
     height: 100%;
   }
-  .card__input {
+
+  &__input {
     width: 100%;
     height: 40%;
     display: flex;
@@ -24,11 +25,6 @@
       textarea {
         height: 100%;
       }
-    }
-
-    input {
-      width: 100%;
-      height: 100%;
     }
   }
 }
