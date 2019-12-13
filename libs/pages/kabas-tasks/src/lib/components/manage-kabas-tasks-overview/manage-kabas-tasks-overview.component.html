@@ -36,55 +36,59 @@
     >
       <mat-tab label="Digitale taken">
         <div class="manage-kabas-tasks-overview__filterbar">
-          <campus-search-term
-            placeholder="Filter op naam"
-            [autoComplete]="false"
-            (valueChange)="searchTermUpdated($event)"
-          ></campus-search-term>
-          <campus-select-filter
-            multiple="true"
-            *ngIf="(learningAreaFilter$ | async) as learningAreaFilter"
-            [filterCriteria]="learningAreaFilter"
-            [resetLabel]="'Geen'"
-            (filterSelectionChange)="selectionChanged($event, 'learningArea')"
-          ></campus-select-filter>
+          <div class="manage-kabas-tasks-overview__filterbar__filters">
+            <campus-search-term
+              placeholder="Filter op naam"
+              [autoComplete]="false"
+              (valueChange)="searchTermUpdated($event)"
+            ></campus-search-term>
+            <campus-select-filter
+              multiple="true"
+              *ngIf="(learningAreaFilter$ | async) as learningAreaFilter"
+              [filterCriteria]="learningAreaFilter"
+              [resetLabel]="'Geen'"
+              (filterSelectionChange)="selectionChanged($event, 'learningArea')"
+            ></campus-select-filter>
 
-          <campus-date-filter
-            [options]="fixedDateFilterOptions"
-            [filterCriteria]="dateFilterCriteria"
-            (filterSelectionChange)="selectionChanged($event, 'dateInterval')"
-          ></campus-date-filter>
-          <campus-select-filter
-            multiple="true"
-            *ngIf="(assigneeFilter$ | async) as assigneeFilter"
-            [filterCriteria]="assigneeFilter"
-            [resetLabel]="'Niemand'"
-            (filterSelectionChange)="selectionChanged($event, 'assignee')"
-          ></campus-select-filter>
+            <campus-date-filter
+              [options]="fixedDateFilterOptions"
+              [filterCriteria]="dateFilterCriteria"
+              (filterSelectionChange)="selectionChanged($event, 'dateInterval')"
+            ></campus-date-filter>
+            <campus-select-filter
+              multiple="true"
+              *ngIf="(assigneeFilter$ | async) as assigneeFilter"
+              [filterCriteria]="assigneeFilter"
+              [resetLabel]="'Niemand'"
+              (filterSelectionChange)="selectionChanged($event, 'assignee')"
+            ></campus-select-filter>
 
-          <campus-button-toggle-filter
-            [multiple]="true"
-            (filterSelectionChange)="selectionChanged($event, 'status')"
-            [filterCriteria]="taskStatusFilter"
-          >
-          </campus-button-toggle-filter>
-
-          <div class="manage-kabas-tasks-overview__archive-toggle">
-            <mat-slide-toggle
-              color="primary"
-              (change)="archivedFilterToggled($event)"
+            <campus-button-toggle-filter
+              [multiple]="true"
+              (filterSelectionChange)="selectionChanged($event, 'status')"
+              [filterCriteria]="taskStatusFilter"
             >
-              Gearchiveerd
-            </mat-slide-toggle>
-          </div>
-          <campus-button
-            class="manage-kabas-tasks-overview--reset-filters"
-            iconClass="reset-filters"
-            (click)="clickResetFilters()"
-          ></campus-button>
+            </campus-button-toggle-filter>
 
-          <p *ngIf="filteredTasks.length; else noResults"
-            >Je hebt {{ filteredTasks.length }} resultaten.</p
+            <div class="manage-kabas-tasks-overview__archive-toggle">
+              <mat-slide-toggle
+                color="primary"
+                (change)="archivedFilterToggled($event)"
+              >
+                Gearchiveerd
+              </mat-slide-toggle>
+            </div>
+            <campus-button
+              class="manage-kabas-tasks-overview--reset-filters"
+              iconClass="reset-filters"
+              (click)="clickResetFilters()"
+            ></campus-button>
+          </div>
+          <div
+            class="manage-kabas-tasks-overview__filterbar__result"
+            *ngIf="filteredTasks.length; else noResults"
+            >Je hebt {{ filteredTasks.length }}
+            {{ filteredTasks.length > 1 ? 'resultaten' : 'resultaat' }}.</div
           >
         </div>
 
@@ -122,45 +126,51 @@
 
       <mat-tab label="Papieren taken">
         <div class="manage-kabas-tasks-overview__filterbar">
-          <campus-search-term
-            placeholder="Zoeken op titel"
-            [autoComplete]="false"
-            (valueChange)="searchTermUpdated($event)"
-          ></campus-search-term>
+          <div class="manage-kabas-tasks-overview__filterbar__filters">
+            <campus-search-term
+              placeholder="Zoeken op titel"
+              [autoComplete]="false"
+              (valueChange)="searchTermUpdated($event)"
+            ></campus-search-term>
 
-          <campus-select-filter
-            multiple="true"
-            [resetLabel]="'Geen'"
-            *ngIf="
-              (learningAreaFilterPaper$ | async) as learningAreaFilterPaper
-            "
-            [filterCriteria]="learningAreaFilterPaper"
-            (filterSelectionChange)="selectionChanged($event, 'learningArea')"
-          ></campus-select-filter>
+            <campus-select-filter
+              multiple="true"
+              [resetLabel]="'Geen'"
+              *ngIf="
+                (learningAreaFilterPaper$ | async) as learningAreaFilterPaper
+              "
+              [filterCriteria]="learningAreaFilterPaper"
+              (filterSelectionChange)="selectionChanged($event, 'learningArea')"
+            ></campus-select-filter>
 
-          <campus-select-filter
-            multiple="true"
-            *ngIf="(assigneeFilterPaper$ | async) as assigneeFilterPaper"
-            [filterCriteria]="assigneeFilterPaper"
-            [resetLabel]="'Niemand'"
-            (filterSelectionChange)="selectionChanged($event, 'assignee')"
-          ></campus-select-filter>
+            <campus-select-filter
+              multiple="true"
+              *ngIf="(assigneeFilterPaper$ | async) as assigneeFilterPaper"
+              [filterCriteria]="assigneeFilterPaper"
+              [resetLabel]="'Niemand'"
+              (filterSelectionChange)="selectionChanged($event, 'assignee')"
+            ></campus-select-filter>
 
-          <div class="manage-kabas-tasks-overview__archive-toggle">
-            <mat-slide-toggle
-              color="primary"
-              (change)="archivedFilterToggled($event)"
-            >
-              Gearchiveerd
-            </mat-slide-toggle>
+            <div class="manage-kabas-tasks-overview__archive-toggle">
+              <mat-slide-toggle
+                color="primary"
+                (change)="archivedFilterToggled($event)"
+              >
+                Gearchiveerd
+              </mat-slide-toggle>
+            </div>
+            <campus-button
+              class="manage-kabas-tasks-overview--reset-filters"
+              iconClass="reset-filters"
+              (click)="clickResetFilters()"
+            ></campus-button>
           </div>
-          <campus-button
-            class="manage-kabas-tasks-overview--reset-filters"
-            iconClass="reset-filters"
-            (click)="clickResetFilters()"
-          ></campus-button>
-          <p *ngIf="filteredTasks.length; else noResults"
-            >Je hebt {{ filteredTasks.length }} resultaten.</p
+
+          <div
+            class="manage-kabas-tasks-overview__filterbar__result"
+            *ngIf="filteredTasks.length; else noResults"
+            >Je hebt {{ filteredTasks.length }}
+            {{ filteredTasks.length > 1 ? 'resultaten' : 'resultaat' }}.</div
           >
           <ng-template #noResults>
             <p>De toegepaste filter bevat geen resultaten.</p>

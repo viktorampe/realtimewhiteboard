@@ -144,20 +144,23 @@ export class ManageKabasTasksOverviewComponent
 
   private filterState$ = new BehaviorSubject<FilterStateInterface>({});
 
-  @ViewChildren(MatSelectionList) taskLists: QueryList<MatSelectionList>;
+  @ViewChildren(MatSelectionList) private taskLists: QueryList<
+    MatSelectionList
+  >;
 
-  @ViewChildren(SearchTermComponent) searchTermFilters: QueryList<
+  @ViewChildren(SearchTermComponent) private searchTermFilters: QueryList<
     SearchTermComponent
   >;
 
-  @ViewChildren(SelectFilterComponent) selectFilters: QueryList<
+  @ViewChildren(SelectFilterComponent) private selectFilters: QueryList<
     SelectFilterComponent
   >;
-  @ViewChildren(ButtonToggleFilterComponent) buttonToggleFilters: QueryList<
-    ButtonToggleFilterComponent
+  @ViewChildren(ButtonToggleFilterComponent)
+  private buttonToggleFilters: QueryList<ButtonToggleFilterComponent>;
+  @ViewChildren(MatSlideToggle) private slideToggleFilters: QueryList<
+    MatSlideToggle
   >;
-  @ViewChildren(MatSlideToggle) slideToggleFilters: QueryList<MatSlideToggle>;
-  @ViewChildren(DateFilterComponent) dateFilters: QueryList<
+  @ViewChildren(DateFilterComponent) private dateFilters: QueryList<
     DateFilterComponent
   >;
 

@@ -58,10 +58,11 @@
         $manage-kabas-tasks-overview_filterbar-border-bottom;
       margin: $manage-kabas-tasks-overview_filterbar-margin-top 0px 0px
         $manage-kabas-tasks-overview_filterbar-margin-left;
-
-      > * {
-        margin-right: $manage-kabas-tasks-overview__reset-margin-right;
-        margin-bottom: $manage-kabas-tasks-overview__reset-margin-bottom;
+      &__filters {
+        > * {
+          margin-right: $manage-kabas-tasks-overview__reset-margin-right;
+          margin-bottom: $manage-kabas-tasks-overview__reset-margin-bottom;
+        }
       }
 
       campus-button-toggle-filter {
