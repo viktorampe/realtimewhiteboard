@@ -53,7 +53,7 @@ describe('ManageKabasTasksOverviewComponent', () => {
       providers: [
         {
           provide: KabasTasksViewModel,
-          useClass: MockKabasTasksViewModel
+          useValue: MockKabasTasksViewModel
         },
         { provide: MatIconRegistry, useClass: MockMatIconRegistry },
         {
@@ -61,7 +61,7 @@ describe('ManageKabasTasksOverviewComponent', () => {
           useValue: { navigate: jest.fn() }
         },
         { provide: ActivatedRoute, useValue: { queryParams } },
-        { provide: KabasTasksViewModel, useClass: MockKabasTasksViewModel },
+
         { provide: ENVIRONMENT_ICON_MAPPING_TOKEN, useValue: {} },
         { provide: ENVIRONMENT_TESTING_TOKEN, useValue: {} }
       ],
@@ -80,6 +80,40 @@ describe('ManageKabasTasksOverviewComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  // describe.only('handlers', () => {
+  //   beforeEach(() => {});
+  //   it('archivedFilterToggled should update the filter state', () => {
+  //     kabasTasksViewModel.tasksWithAssignments$ = new BehaviorSubject<
+  //       TaskWithAssigneesInterface[]
+  //     >([]);
+  //     kabasTasksViewModel.paperTasksWithAssignments$ = new BehaviorSubject<
+  //       TaskWithAssigneesInterface[]
+  //     >([]);
+
+  //     const mockTasks = [
+  //       { archivedYear: 2000 }, // matches
+  //       { archivedYear: null }, // no match
+  //       { learningAreaId: 3 } // no match
+  //     ] as TaskWithAssigneesInterface[];
+
+  //     const tasks$ = kabasTasksViewModel.tasksWithAssignments$ as BehaviorSubject<
+  //       TaskWithAssigneesInterface[]
+  //     >;
+  //     tasks$.next(mockTasks);
+
+  //     component.archivedFilterToggled({
+  //       checked: true,
+  //       source: null
+  //     });
+
+  //     expect(component.filteredTasks$).toBeObservable(
+  //       hot('a', {
+  //         a: [mockTasks[0]]
+  //       })
+  //     );
+  //   });
+  // });
 
   describe('filteredTasks$', () => {
     it('should filter on searchTerm', () => {
@@ -182,46 +216,148 @@ describe('ManageKabasTasksOverviewComponent', () => {
       ]);
     });
 
-    it('should filter on dateInterval', () => {
-      const filterState: FilterStateInterface = {
-        dateInterval: { gte: new Date(2000, 5, 10), lte: new Date(2000, 5, 20) }
-      };
+    describe('dateIntervalFilter', () => {
+      it('should filter on start and end date', () => {
+        const filterState: FilterStateInterface = {
+          dateInterval: {
+            gte: new Date(2000, 5, 10),
+            lte: new Date(2000, 5, 20)
+          }
+        };
 
-      const mockTasks: TaskWithAssigneesInterface[] = [
-        {
-          startDate: new Date(2000, 5, 11),
-          endDate: new Date(2000, 5, 14) // matches
-        },
-        {
-          startDate: new Date(2000, 5, 10),
-          endDate: new Date(2000, 5, 20) // matches
-        },
-        {
-          startDate: new Date(2000, 5, 5),
-          endDate: new Date(2000, 5, 25) // matches
-        },
-        {
-          startDate: new Date(2000, 5, 14),
-          endDate: new Date(2000, 5, 25) // matches
-        },
-        {
-          startDate: new Date(2000, 5, 21),
-          endDate: new Date(2000, 5, 28) // no match
-        },
-        {
-          startDate: new Date(2000, 5, 1),
-          endDate: new Date(2000, 5, 5) // no match
-        }
+        const mockTasks: TaskWithAssigneesInterface[] = [
+          {
+            startDate: new Date(2000, 5, 11),
+            endDate: new Date(2000, 5, 14) // matches
+          },
+          {
+            startDate: new Date(2000, 5, 10),
+            endDate: new Date(2000, 5, 20) // matches
+          },
+          {
+            startDate: new Date(2000, 5, 5),
+            endDate: new Date(2000, 5, 25) // matches
+          },
+          {
+            startDate: new Date(2000, 5, 14),
+            endDate: new Date(2000, 5, 25) // matches
+          },
+          {
+            startDate: new Date(2000, 5, 21),
+            endDate: new Date(2000, 5, 28) // no match
+          },
+          {
+            startDate: new Date(2000, 5, 1),
+            endDate: new Date(2000, 5, 5) // no match
+          }
+        ] as TaskWithAssigneesInterface[];
+
+        const result = component['filterTasks'](filterState, mockTasks);
+
+        expect(result).toEqual([
+          mockTasks[0],
+          mockTasks[1],
+          mockTasks[2],
+          mockTasks[3]
+        ]);
+      });
+
+      it('should filter on start date', () => {
+        const filterState: FilterStateInterface = {
+          dateInterval: {
+            gte: new Date(2000, 5, 10)
+          }
+        };
+
+        const mockTasks: TaskWithAssigneesInterface[] = [
+          {
+            startDate: new Date(2000, 5, 11),
+            endDate: new Date(2000, 5, 14) // matches
+          },
+          {
+            startDate: new Date(2000, 5, 10),
+            endDate: new Date(2000, 5, 20) // matches
+          },
+          {
+            startDate: new Date(2000, 5, 5),
+            endDate: new Date(2000, 5, 25) // matches
+          },
+          {
+            startDate: new Date(2000, 5, 14),
+            endDate: new Date(2000, 5, 25) // matches
+          },
+          {
+            startDate: new Date(2000, 5, 21),
+            endDate: new Date(2000, 5, 28) // matches
+          },
+          {
+            startDate: new Date(2000, 5, 1),
+            endDate: new Date(2000, 5, 5) // no match
+          }
+        ] as TaskWithAssigneesInterface[];
+
+        const result = component['filterTasks'](filterState, mockTasks);
+
+        expect(result).toEqual([
+          mockTasks[0],
+          mockTasks[1],
+          mockTasks[2],
+          mockTasks[3],
+          mockTasks[4]
+        ]);
+      });
+
+      it('should filter on end date', () => {
+        const filterState: FilterStateInterface = {
+          dateInterval: {
+            lte: new Date(2000, 5, 10)
+          }
+        };
+
+        const mockTasks: TaskWithAssigneesInterface[] = [
+          {
+            startDate: new Date(2000, 5, 11), // no match
+            endDate: new Date(2000, 5, 14)
+          },
+          {
+            startDate: new Date(2000, 5, 10), //  match
+            endDate: new Date(2000, 5, 20)
+          },
+          {
+            startDate: new Date(2000, 5, 5), // match
+            endDate: new Date(2000, 5, 25)
+          },
+          {
+            startDate: new Date(2000, 5, 14), // no match
+            endDate: new Date(2000, 5, 25)
+          },
+          {
+            startDate: new Date(2000, 5, 21), // no match
+            endDate: new Date(2000, 5, 28)
+          },
+          {
+            startDate: new Date(2000, 5, 1), // match
+            endDate: new Date(2000, 5, 5)
+          }
+        ] as TaskWithAssigneesInterface[];
+
+        const result = component['filterTasks'](filterState, mockTasks);
+
+        expect(result).toEqual([mockTasks[1], mockTasks[2], mockTasks[5]]);
+      });
+    });
+
+    it('should filter on archived', () => {
+      const filterState: FilterStateInterface = { isArchived: true };
+      const mockTasks = [
+        { archivedYear: 2000 }, // matches
+        { archivedYear: null }, // no match
+        { learningAreaId: 3 } // no match
       ] as TaskWithAssigneesInterface[];
 
       const result = component['filterTasks'](filterState, mockTasks);
 
-      expect(result).toEqual([
-        mockTasks[0],
-        mockTasks[1],
-        mockTasks[2],
-        mockTasks[3]
-      ]);
+      expect(result).toEqual([mockTasks[0]]);
     });
 
     it('should combine multiple filters', () => {

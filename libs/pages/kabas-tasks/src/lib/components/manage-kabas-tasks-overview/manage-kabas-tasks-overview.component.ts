@@ -37,7 +37,7 @@ import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
 export interface FilterStateInterface {
   searchTerm?: string;
   learningArea?: number[];
-  dateInterval?: { gte: Date; lte: Date };
+  dateInterval?: { gte?: Date; lte?: Date };
   assignee?: { id: number; type: AssigneeTypesEnum }[];
   status?: string[];
   isArchived?: boolean;
@@ -173,6 +173,7 @@ export class ManageKabasTasksOverviewComponent
 
   ngOnInit() {
     this.currentTab$ = this.getCurrentTab();
+    console.log(this.viewModel);
     this.tasksWithAssignments$ = this.viewModel.tasksWithAssignments$;
     this.paperTasksWithAssignments$ = this.viewModel.paperTasksWithAssignments$;
 
