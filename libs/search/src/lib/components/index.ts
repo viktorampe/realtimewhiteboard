@@ -4,6 +4,7 @@ export * from './checkbox-line-filter/checkbox-line-filter-component';
 export * from './checkbox-list-filter/checkbox-filter/checkbox-filter.component';
 export * from './checkbox-list-filter/checkbox-list-filter.component';
 export * from './column-filter/column-filter.component';
+export * from './date-filter-component/date-filter.component';
 export * from './results-list/result.component.base';
 export * from './search-term/search-term.component';
 export * from './search.viewmodel.mock';

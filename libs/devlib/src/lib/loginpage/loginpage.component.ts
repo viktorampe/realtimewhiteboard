@@ -1,5 +1,5 @@
 // tslint:disable: member-ordering
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import {
   AlertReducer,
@@ -19,6 +19,13 @@ import {
   UnlockedFreePracticeActions,
   UserActions
 } from '@campus/dal';
+import {
+  RadioOption,
+  RadioOptionValueType,
+  SearchFilterCriteriaFixture,
+  SelectFilterComponent
+} from '@campus/search';
+import { DateFunctions } from '@campus/utils';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
@@ -34,6 +41,35 @@ export class LoginpageComponent implements OnInit {
   currentUser: Observable<any>;
   route$: Observable<string[]>;
   response: Observable<any>;
+  fixedOptions: RadioOption[] = [
+    {
+      viewValue: 'Deze week',
+      value: {
+        type: RadioOptionValueType.FilterCriteriaValue,
+        contents: {
+          data: {
+            gte: DateFunctions.startOfWeek(new Date()),
+            lte: DateFunctions.endOfWeek(new Date())
+          }
+        }
+      }
+    },
+    {
+      viewValue: 'Vorige week',
+      value: {
+        type: RadioOptionValueType.FilterCriteriaValue,
+        contents: {
+          data: {
+            gte: DateFunctions.lastWeek(new Date()),
+            lte: DateFunctions.endOfWeek(DateFunctions.lastWeek(new Date()))
+          }
+        }
+      }
+    }
+  ];
+
+  @ViewChild('selectFilter')
+  selectFilterComponent: SelectFilterComponent;
 
   constructor(
     public loginPageviewModel: LoginPageViewModel,
@@ -57,6 +93,18 @@ export class LoginpageComponent implements OnInit {
     if (this.currentUser) {
       this.loadStore();
     }
+
+    // Select filter component testing
+    this.selectFilterComponent.filterCriteria = new SearchFilterCriteriaFixture(
+      {
+        name: 'createdAt',
+        label: 'Aanmaakdatum'
+      },
+      []
+    );
+    this.selectFilterComponent.filterSelectionChange.subscribe(v => {
+      console.log(v);
+    });
   }
 
   getCurrentUser() {
