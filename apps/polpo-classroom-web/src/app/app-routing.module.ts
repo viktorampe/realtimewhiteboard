@@ -107,7 +107,8 @@ const routes: Routes = [
   },
   {
     path: 'login',
-    redirectTo: 'dev/login'
+    loadChildren: '@campus/pages/login#PagesLoginModule',
+    data: { breadcrumbText: 'Login' }
   },
   {
     path: 'error',
