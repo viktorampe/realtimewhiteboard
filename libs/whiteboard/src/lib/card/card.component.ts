@@ -32,7 +32,7 @@ export class CardComponent implements OnInit, OnChanges {
   constructor() {
     this.card = {
       color: 'white',
-      cardContent: null,
+      cardContent: '',
       isInputSelected: true,
       editMode: true,
       top: 0,
