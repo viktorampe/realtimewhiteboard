@@ -1,19 +1,35 @@
-import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ReactiveFormsModule } from '@angular/forms';
+import {
+  MatFormFieldModule,
+  MatIconModule,
+  MatInputModule
+} from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { UiModule } from '@campus/ui';
+import { configureTestSuite } from 'ng-bullet';
 import { LoginComponent } from './login.component';
+import { LoginViewModel } from './login.viewmodel';
+import { MockLoginViewModel } from './login.viewmodel.mock';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
-  beforeEach(async(() => {
+
+  configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [UiModule, NoopAnimationsModule],
+      imports: [
+        UiModule,
+        NoopAnimationsModule,
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatIconModule
+      ],
       declarations: [LoginComponent],
-      schemas: [NO_ERRORS_SCHEMA]
-    }).compileComponents();
-  }));
+      providers: [{ provide: LoginViewModel, useClass: MockLoginViewModel }]
+    });
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(LoginComponent);
