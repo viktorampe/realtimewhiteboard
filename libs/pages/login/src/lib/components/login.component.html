@@ -52,7 +52,7 @@
       <campus-button
         campusPrimary
         (click)="submit()"
-        [ngClass]="{ 'ui-button--disabled': !loginForm.valid }"
+        [class.ui-button--disabled]="!loginForm.valid"
         >Login</campus-button
       >
     </form>
