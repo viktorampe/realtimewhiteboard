@@ -490,9 +490,10 @@ export class ManageKabasTasksOverviewComponent
     }
 
     // filter on archived
-    if (filterState.isArchived) {
-      filteredTasks = this.filterOnArchived(filteredTasks);
-    }
+    filteredTasks = this.filterOnArchived(
+      filteredTasks,
+      filterState.isArchived
+    );
 
     return filteredTasks;
   }
@@ -563,9 +564,12 @@ export class ManageKabasTasksOverviewComponent
   }
 
   private filterOnArchived(
-    tasks: TaskWithAssigneesInterface[]
+    tasks: TaskWithAssigneesInterface[],
+    archived?: boolean
   ): TaskWithAssigneesInterface[] {
-    return tasks.filter(task => !!task.archivedYear);
+    return archived
+      ? tasks.filter(task => !!task.archivedYear)
+      : tasks.filter(task => !task.archivedYear);
   }
 
   private getCurrentTab(): Observable<number> {
