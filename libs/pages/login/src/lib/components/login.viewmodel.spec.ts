@@ -67,10 +67,12 @@ describe('LoginViewModel', () => {
 
       loginViewModel.login(username, password);
       expect(store.dispatch).toHaveBeenCalledWith(
-        new UserActions.LogInUser({
-          username,
-          password
-        })
+        new UserActions.LogInUser(
+          jasmine.objectContaining({
+            username,
+            password
+          })
+        )
       );
     });
 

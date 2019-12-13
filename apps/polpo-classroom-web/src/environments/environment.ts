@@ -21,10 +21,10 @@ export const environment: EnvironmentInterface = {
     favicon: 'assets/icons/favicon.ico'
   },
   logout: {
-    url: 'http://student.polpo.localhost:3014/dev'
+    url: 'http://student.polpo.localhost:3014/login'
   },
   login: {
-    url: 'http://student.polpo.localhost:3014/dev',
+    url: 'http://student.polpo.localhost:3014/login',
     loginPresets: [
       { label: 'Student', username: 'student1', password: 'testje' },
       { label: 'Leerkracht', username: 'teacher1', password: 'testje' }
@@ -57,6 +57,11 @@ export const environment: EnvironmentInterface = {
         {
           status: 404,
           messageRegex: 'no_teacher_found_for_given_key'
+        },
+        {
+          // if login page get's HTTP 401, it handles error on the login page
+          status: 401,
+          urlRegex: 'http.*\\/People/login*'
         }
       ]
     },
