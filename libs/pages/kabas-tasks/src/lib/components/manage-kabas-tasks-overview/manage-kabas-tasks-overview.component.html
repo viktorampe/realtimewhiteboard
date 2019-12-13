@@ -58,6 +58,24 @@
           class="manage-kabas-tasks-overview--reset-filters"
           iconClass="reset-filters"
         ></campus-button>
+        <div style="flex-grow: 1;"></div>
+
+        <mat-select
+          class="manage-kabas-tasks-overview--sorting"
+          (selectionChange)="setSortMode($event.value)"
+          #digitalSorting
+          [placeholder]="'Sorteren'"
+        >
+          <mat-option [value]="TaskSortEnum.NAME">
+            Alfabetisch
+          </mat-option>
+          <mat-option [value]="TaskSortEnum.LEARNINGAREA">
+            Leergebied
+          </mat-option>
+          <mat-option [value]="TaskSortEnum.STARTDATE">
+            Start datum
+          </mat-option>
+        </mat-select>
       </div>
       <mat-selection-list #digital>
         <mat-list-item
@@ -81,11 +99,11 @@
             [archived]="task.archivedYear"
             icon="educontent-product-type:evaluatie"
             exerciseCount="4"
-            [startDate]="taskItem.startDate"
-            [endDate]="taskItem.endDate"
+            [startDate]="task.startDate"
+            [endDate]="task.endDate"
             status="active"
-            [actions]="taskItem.actions"
-            [assignees]="taskItem.assignees"
+            [actions]="actions"
+            [assignees]="task.assignees"
           ></campus-task-list-item>
         </mat-list-option>
       </mat-selection-list>
@@ -116,6 +134,21 @@
           class="manage-kabas-tasks-overview--reset-filters"
           iconClass="reset-filters"
         ></campus-button>
+        <div style="flex-grow: 1;"></div>
+
+        <mat-select
+          class="manage-kabas-tasks-overview--sorting"
+          (selectionChange)="setSortMode($event.value)"
+          #paperSorting
+          [placeholder]="'Sorteren'"
+        >
+          <mat-option [value]="TaskSortEnum.NAME">
+            Alfabetisch
+          </mat-option>
+          <mat-option [value]="TaskSortEnum.LEARNINGAREA">
+            Leergebied
+          </mat-option>
+        </mat-select>
       </div>
       <mat-selection-list #paper>
         <mat-list-item
