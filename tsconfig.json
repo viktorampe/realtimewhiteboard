@@ -57,7 +57,8 @@
       "@campus/pages/home": ["libs/pages/home/src/index.ts"],
       "@campus/timeline": ["libs/timeline/src/index.ts"],
       "@campus/elements-ink": ["libs/elements-ink/src/index.ts"],
-      "@campus/whiteboard": ["libs/whiteboard/src/index.ts"]
+      "@campus/whiteboard": ["libs/whiteboard/src/index.ts"],
+      "@campus/pages/login": ["libs/pages/login/src/index.ts"]
     },
     "module": "es2015"
   },
