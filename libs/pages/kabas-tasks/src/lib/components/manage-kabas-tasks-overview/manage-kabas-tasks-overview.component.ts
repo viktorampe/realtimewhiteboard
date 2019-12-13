@@ -1,74 +1,30 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatSelect } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LearningAreaInterface } from '@campus/dal';
 import {
   SearchFilterCriteriaInterface,
   SearchFilterCriteriaValuesInterface
 } from '@campus/search';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AssigneeTypesEnum } from '../../interfaces/Assignee.interface';
 import { TaskWithAssigneesInterface } from '../../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
-import { MockKabasTasksViewModel } from '../kabas-tasks.viewmodel.mock';
+
+export enum TaskSortEnum {
+  'NAME' = 'NAME',
+  'LEARNINGAREA' = 'LEARNINGAREA',
+  'STARTDATE' = 'STARTDATE'
+}
 
 @Component({
   selector: 'campus-manage-kabas-tasks-overview',
   templateUrl: './manage-kabas-tasks-overview.component.html',
-  styleUrls: ['./manage-kabas-tasks-overview.component.scss'],
-
-  providers: [
-    { provide: KabasTasksViewModel, useClass: MockKabasTasksViewModel }
-  ]
+  styleUrls: ['./manage-kabas-tasks-overview.component.scss']
 })
 export class ManageKabasTasksOverviewComponent implements OnInit {
-  public taskItem = {
-    startDate: new Date(2019, 11, 1),
-    endDate: new Date(2019, 11, 21),
-    learningArea: {
-      id: 1,
-      title: 'Wiskunde'
-    },
-    actions: [
-      { label: 'bekijken', handler: () => console.log('bekijken') },
-      { label: 'archiveren', handler: () => console.log('archiveren') },
-      { label: 'resultaten', handler: () => console.log('resultaten') },
-      { label: 'doelenmatrix', handler: () => console.log('doelenmatrix') }
-    ],
-    assignees: [
-      {
-        type: AssigneeTypesEnum.CLASSGROUP,
-        label: 'Klas 1',
-        start: new Date(2019, 11, 1),
-        end: new Date(2019, 11, 8)
-      },
-      {
-        type: AssigneeTypesEnum.CLASSGROUP,
-        label: 'Klas 2',
-        start: new Date(2019, 11, 8),
-        end: new Date(2019, 11, 21)
-      },
-      {
-        type: AssigneeTypesEnum.STUDENT,
-        label: 'Leerling 1',
-        start: new Date(2019, 11, 1),
-        end: new Date(2019, 11, 8)
-      },
-      {
-        type: AssigneeTypesEnum.STUDENT,
-        label: 'Leerling 2',
-        start: new Date(2019, 11, 1),
-        end: new Date(2019, 11, 8)
-      },
-      {
-        type: AssigneeTypesEnum.GROUP,
-        label: 'Groep 1',
-        start: new Date(2019, 11, 8),
-        end: new Date(2019, 11, 21)
-      }
-    ]
-  };
-
+  public TaskSortEnum = TaskSortEnum;
   public tasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
   public paperTasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
   public currentTab$: Observable<number>;
@@ -77,6 +33,19 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
   public assigneeFilter$: Observable<SearchFilterCriteriaInterface>;
   public assigneeFilterPaper$: Observable<SearchFilterCriteriaInterface>;
   public taskStatusFilter: SearchFilterCriteriaInterface;
+
+  private currentSortMode$ = new BehaviorSubject(TaskSortEnum.NAME);
+
+  @ViewChild('digitalSorting') private digitalSorting: MatSelect;
+  @ViewChild('paperSorting') private paperSorting: MatSelect;
+
+  public actions = [
+    { label: 'bekijken', handler: () => console.log('bekijken') },
+    { label: 'archiveren', handler: () => console.log('archiveren') },
+    { label: 'resultaten', handler: () => console.log('resultaten') },
+    { label: 'doelenmatrix', handler: () => console.log('doelenmatrix') }
+  ];
+
   constructor(
     private viewModel: KabasTasksViewModel,
     private router: Router,
@@ -85,8 +54,16 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
 
   ngOnInit() {
     this.currentTab$ = this.getCurrentTab();
-    this.tasksWithAssignments$ = this.viewModel.tasksWithAssignments$;
-    this.paperTasksWithAssignments$ = this.viewModel.paperTasksWithAssignments$;
+
+    this.tasksWithAssignments$ = combineLatest([
+      this.viewModel.tasksWithAssignments$,
+      this.currentSortMode$
+    ]).pipe(map(([tasks, sortMode]) => this.sortTasks(tasks, sortMode)));
+
+    this.paperTasksWithAssignments$ = combineLatest([
+      this.viewModel.paperTasksWithAssignments$,
+      this.currentSortMode$
+    ]).pipe(map(([tasks, sortMode]) => this.sortTasks(tasks, sortMode)));
 
     this.learningAreaFilter$ = this.tasksWithAssignments$.pipe(
       map(this.sortAndCreateForLearningAreaFilter)
@@ -102,7 +79,6 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
       map(this.sortAndCreateForAssigneeFilter)
     );
 
-    //todo swap for real icons
     this.taskStatusFilter = {
       name: 'taskStatus',
       label: 'taak status',
@@ -220,9 +196,13 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
     this.router.navigate([], {
       queryParams: { tab }
     });
+
+    this.resetSorting();
   }
 
-  public tasksWithAssignments(stream: string) {}
+  public setSortMode(sortMode: TaskSortEnum) {
+    this.currentSortMode$.next(sortMode);
+  }
 
   private getCurrentTab(): Observable<number> {
     return this.route.queryParams.pipe(map(queryParam => queryParam.tab));
@@ -236,4 +216,55 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
 
   // TODO: implement handler
   clickNewTask() {}
+
+  private resetSorting() {
+    this.setSortMode(TaskSortEnum.NAME);
+    this.digitalSorting.value = undefined;
+    this.paperSorting.value = undefined;
+  }
+
+  private sortTasks(
+    tasks: TaskWithAssigneesInterface[],
+    sortMode: TaskSortEnum
+  ) {
+    switch (sortMode) {
+      case TaskSortEnum.NAME:
+        return this.sortByName(tasks);
+      case TaskSortEnum.LEARNINGAREA:
+        return this.sortByLearningArea(tasks);
+      case TaskSortEnum.STARTDATE:
+        return this.sortByStartDate(tasks);
+    }
+    // no sortMode -> no sorting
+    return tasks;
+  }
+
+  private sortByName(tasks: TaskWithAssigneesInterface[]) {
+    return tasks.sort((a, b) =>
+      a.name.localeCompare(b.name, 'be-nl', {
+        sensitivity: 'base'
+      })
+    );
+  }
+
+  private sortByLearningArea(tasks: TaskWithAssigneesInterface[]) {
+    return tasks.sort((a, b) =>
+      a.learningArea.name.localeCompare(b.learningArea.name, 'be-nl', {
+        sensitivity: 'base'
+      })
+    );
+  }
+
+  private sortByStartDate(tasks: TaskWithAssigneesInterface[]) {
+    return tasks.sort((a, b) => {
+      const taskA = a.startDate;
+      const taskB = b.startDate;
+
+      // undefined dates at the front of the list
+      if (!taskA) return -1;
+      if (!taskB) return 1;
+
+      return taskA.getTime() - taskB.getTime();
+    });
+  }
 }

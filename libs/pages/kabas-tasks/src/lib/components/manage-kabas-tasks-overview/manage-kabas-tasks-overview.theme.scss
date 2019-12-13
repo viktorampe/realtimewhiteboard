@@ -125,11 +125,16 @@
       .select-filter-component {
         width: $manage-kabas-tasks-overview_filterbar-filter-width;
       }
-      .search-term campus-button {
-        &:hover {
-          background-color: $pages-method-filters-hover-background-color;
-          mat-icon {
-            color: $pages-kabas-tasks-filters-hover-foreground-color;
+
+      .search-term {
+        width: $manage-kabas-tasks-overview_filterbar-filter-width;
+
+        & campus-button {
+          &:hover {
+            background-color: $pages-method-filters-hover-background-color;
+            mat-icon {
+              color: $pages-kabas-tasks-filters-hover-foreground-color;
+            }
           }
         }
       }
@@ -168,6 +173,24 @@
         .mat-icon {
           margin: 0 20px;
         }
+      }
+    }
+
+    &--sorting.mat-select {
+      border: 1px solid $manage-kabas-tasks-overview_filterbar-archive-toggle;
+      padding: $manage-kabas-tasks-overview_filterbar-filter-padding-height
+        $manage-kabas-tasks-overview_filterbar-filter-padding-width
+        $manage-kabas-tasks-overview_filterbar-filter-padding-height
+        $manage-kabas-tasks-overview_filterbar-filter-padding-width;
+
+      width: $manage-kabas-tasks-overview_filterbar-filter-width;
+      height: $manage-kabas-tasks-overview_filterbar-filter-heigth;
+
+      display: flex;
+      align-items: center;
+
+      .mat-select-trigger {
+        width: 100%;
       }
     }
   }
