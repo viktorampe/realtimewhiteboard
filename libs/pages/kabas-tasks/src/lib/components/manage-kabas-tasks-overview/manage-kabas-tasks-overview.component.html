@@ -81,8 +81,25 @@
             <campus-button
               class="manage-kabas-tasks-overview--reset-filters"
               iconClass="reset-filters"
-              (click)="clickResetFilters()"
             ></campus-button>
+            <div style="flex-grow: 1;"></div>
+
+            <mat-select
+              class="manage-kabas-tasks-overview--sorting"
+              (selectionChange)="setSortMode($event.value)"
+              #digitalSorting
+              [placeholder]="'Sorteren'"
+            >
+              <mat-option [value]="TaskSortEnum.NAME">
+                Alfabetisch
+              </mat-option>
+              <mat-option [value]="TaskSortEnum.LEARNINGAREA">
+                Leergebied
+              </mat-option>
+              <mat-option [value]="TaskSortEnum.STARTDATE">
+                Start datum
+              </mat-option>
+            </mat-select>
           </div>
           <div
             class="manage-kabas-tasks-overview__filterbar__result"
@@ -103,7 +120,7 @@
 
           <mat-list-option
             #option
-            *ngFor="let task of filteredTasks"
+            *ngFor="let task of (tasksWithAssignments$ | async)"
             checkboxPosition="before"
             [class.mat-list-option--selected]="option.selected"
           >
@@ -116,8 +133,8 @@
               exerciseCount="4"
               [startDate]="task.startDate"
               [endDate]="task.endDate"
-              [status]="task.status"
-              [actions]="taskItem.actions"
+              status="active"
+              [actions]="actions"
               [assignees]="task.assignees"
             ></campus-task-list-item>
           </mat-list-option>
@@ -162,8 +179,22 @@
             <campus-button
               class="manage-kabas-tasks-overview--reset-filters"
               iconClass="reset-filters"
-              (click)="clickResetFilters()"
             ></campus-button>
+            <div style="flex-grow: 1;"></div>
+
+            <mat-select
+              class="manage-kabas-tasks-overview--sorting"
+              (selectionChange)="setSortMode($event.value)"
+              #paperSorting
+              [placeholder]="'Sorteren'"
+            >
+              <mat-option [value]="TaskSortEnum.NAME">
+                Alfabetisch
+              </mat-option>
+              <mat-option [value]="TaskSortEnum.LEARNINGAREA">
+                Leergebied
+              </mat-option>
+            </mat-select>
           </div>
 
           <div
@@ -202,7 +233,7 @@
               [startDate]="task.startDate"
               [endDate]="task.endDate"
               [status]="task.status"
-              [actions]="taskItem.actions"
+              [actions]="actions"
               [assignees]="task.assignees"
             ></campus-task-list-item>
           </mat-list-option>

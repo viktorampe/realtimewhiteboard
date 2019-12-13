@@ -16,10 +16,10 @@ export const environment: EnvironmentInterface = {
     favicon: 'assets/icons/favicon.ico'
   },
   logout: {
-    url: 'http://www.kabas.localhost:3020/dev'
+    url: 'http://www.kabas.localhost:3020/login'
   },
   login: {
-    url: 'http://www.kabas.localhost:3020/dev'
+    url: 'http://www.kabas.localhost:3020/login'
   },
   termPrivacy: {
     url: 'http://www.kabas.localhost:3020/dev'
@@ -44,6 +44,11 @@ export const environment: EnvironmentInterface = {
           status: 404,
           statusText: 'Not Found',
           urlRegex: 'http.*assets\\/icons.*.svg'
+        },
+        {
+          // if login page get's HTTP 401, it handles error on the login page
+          status: 401,
+          urlRegex: 'http.*\\/People/login*'
         }
       ]
     },
