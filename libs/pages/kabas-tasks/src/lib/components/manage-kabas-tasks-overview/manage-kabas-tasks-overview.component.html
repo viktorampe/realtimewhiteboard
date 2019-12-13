@@ -1,11 +1,4 @@
 <campus-page-bar>
-  <campus-button
-    class="shared-header__contextual__button smallIcon"
-    data-cy="nav-new-task"
-    iconClass="tasks"
-    (click)="clickNewTask()"
-    ><span>nieuw</span></campus-button
-  >
   <ng-container
     *ngIf="
       digital.selectedOptions.hasValue() || paper.selectedOptions.hasValue()
@@ -26,6 +19,14 @@
       ><span>verwijder</span></campus-button
     >
   </ng-container>
+
+  <campus-button
+    class="shared-header__contextual__button smallIcon"
+    data-cy="nav-new-task"
+    iconClass="tasks"
+    (click)="clickNewTask()"
+    ><span>nieuw</span></campus-button
+  >
 </campus-page-bar>
 
 <div class="manage-kabas-tasks-overview__container">
@@ -60,6 +61,7 @@
         ></campus-button>
       </div>
       <mat-selection-list
+        disableRipple
         #digital
         [class.mat-selection-list--has-selection]="
           !digital.selectedOptions.isEmpty()
