@@ -336,8 +336,6 @@ export class ManageKabasTasksOverviewComponent
   clickNewTask() {}
 
   clickResetFilters() {
-    // reset state
-    // this.resetFilterState();
     // visually clear selections
     this.clearFilters();
   }
@@ -358,10 +356,24 @@ export class ManageKabasTasksOverviewComponent
     criteria: SearchFilterCriteriaInterface[],
     filterName: string
   ) {
+    this.updateFilterState(
+      this.mapSearchFilterCriteriaToFilterState(criteria, filterName)
+    );
+  }
+
+  public searchTermUpdated(term: string) {
+    const updatedFilter = { searchTerm: term };
+    this.updateFilterState(updatedFilter);
+  }
+
+  private mapSearchFilterCriteriaToFilterState(
+    filterCriteria: SearchFilterCriteriaInterface[],
+    filterName: string
+  ): FilterStateInterface {
     const updatedFilter: FilterStateInterface = {};
 
     // array is emitted, but there is only one value
-    const criterium = criteria[0];
+    const criterium = filterCriteria[0];
 
     if (filterName === 'dateInterval') {
       if (criterium.values[0].data.gte || criterium.values[0].data.lte) {
@@ -391,12 +403,7 @@ export class ManageKabasTasksOverviewComponent
       updatedFilter[filterName] = selectedOptions;
     }
 
-    this.updateFilterState(updatedFilter);
-  }
-
-  public searchTermUpdated(term: string) {
-    const updatedFilter = { searchTerm: term };
-    this.updateFilterState(updatedFilter);
+    return updatedFilter;
   }
 
   /**
@@ -493,10 +500,7 @@ export class ManageKabasTasksOverviewComponent
 
     // filter on archived
     if (filterState.isArchived) {
-      filteredTasks = this.filterOnArchived(
-        filterState.isArchived,
-        filteredTasks
-      );
+      filteredTasks = this.filterOnArchived(filteredTasks);
     }
 
     return filteredTasks;
@@ -568,7 +572,6 @@ export class ManageKabasTasksOverviewComponent
   }
 
   private filterOnArchived(
-    isArchived: boolean,
     tasks: TaskWithAssigneesInterface[]
   ): TaskWithAssigneesInterface[] {
     return tasks.filter(task => !!task.archivedYear);
