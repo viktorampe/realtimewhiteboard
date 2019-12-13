@@ -50,9 +50,7 @@ describe('CardComponent', () => {
   it('should show errormessage when input is maximal', () => {
     component.card.cardContent = 'a'.repeat(component.maxCharacters);
     fixture.detectChanges();
-    const errorMessage = fixture.debugElement.query(
-      By.css('.card__content__errorMessage')
-    );
+    const errorMessage = fixture.debugElement.query(By.css('#errorMaximum'));
     expect(errorMessage).not.toBeNull();
   });
 
