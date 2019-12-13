@@ -1,7 +1,5 @@
 import {
-  AfterContentChecked,
   AfterContentInit,
-  ChangeDetectorRef,
   Component,
   Inject,
   OnInit,
@@ -51,7 +49,7 @@ export interface FilterStateInterface {
   styleUrls: ['./manage-kabas-tasks-overview.component.scss']
 })
 export class ManageKabasTasksOverviewComponent
-  implements OnInit, AfterContentInit, AfterContentChecked {
+  implements OnInit, AfterContentInit {
   public taskItem = {
     startDate: new Date(2019, 11, 1),
     endDate: new Date(2019, 11, 21),
@@ -167,8 +165,7 @@ export class ManageKabasTasksOverviewComponent
     private viewModel: KabasTasksViewModel,
     private router: Router,
     private route: ActivatedRoute,
-    @Inject(FILTER_SERVICE_TOKEN) private filterService: FilterServiceInterface,
-    private cd: ChangeDetectorRef
+    @Inject(FILTER_SERVICE_TOKEN) private filterService: FilterServiceInterface
   ) {}
 
   ngOnInit() {
@@ -236,10 +233,6 @@ export class ManageKabasTasksOverviewComponent
 
   ngAfterContentInit(): void {
     this.filteredTasks$ = this.getFilteredTasks();
-  }
-
-  ngAfterContentChecked(): void {
-    this.cd.detectChanges();
   }
 
   public sortAndCreateForAssigneeFilter(tasksWithAssignments) {
