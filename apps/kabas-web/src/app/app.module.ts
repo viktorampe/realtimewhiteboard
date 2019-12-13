@@ -1,5 +1,10 @@
+import { registerLocaleData } from '@angular/common';
+import localeBe from '@angular/common/locales/nl-BE';
 import { NgModule } from '@angular/core';
-import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material';
+import {
+  MAT_DATE_LOCALE,
+  MAT_FORM_FIELD_DEFAULT_OPTIONS
+} from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DalModule } from '@campus/dal';
@@ -18,6 +23,8 @@ import { EduContentSearchResultComponent } from './components/searchresults/edu-
 import { PracticeSearchResultComponent } from './components/searchresults/practice-search-result/practice-search-result.component';
 
 configureBufferSize(150);
+
+registerLocaleData(localeBe, 'nl-BE');
 
 @NgModule({
   declarations: [
@@ -59,7 +66,8 @@ configureBufferSize(150);
     {
       provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
       useValue: { appearance: 'fill' }
-    }
+    },
+    { provide: MAT_DATE_LOCALE, useValue: 'nl-BE' }
   ],
   bootstrap: [AppComponent],
   entryComponents: [

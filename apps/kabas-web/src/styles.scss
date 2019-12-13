@@ -87,6 +87,14 @@ p {
   border-right: none;
 }
 
+.mat-tooltip {
+  white-space: pre-line;
+}
+
+.mat-selection-list {
+  outline: none;
+}
+
 .ui-shell {
   &__logo {
     img {

@@ -3,7 +3,8 @@ import {
   MatIconModule,
   MatIconRegistry,
   MatListModule,
-  MatTabsModule
+  MatTabsModule,
+  MatTooltipModule
 } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute, Params, Router } from '@angular/router';
@@ -39,6 +40,8 @@ describe('ManageKabasTasksOverviewComponent', () => {
         MatIconModule,
         RouterTestingModule,
         SharedModule,
+        RouterTestingModule,
+        MatTooltipModule,
         PagesKabasTasksModule,
         UiModule
       ],
