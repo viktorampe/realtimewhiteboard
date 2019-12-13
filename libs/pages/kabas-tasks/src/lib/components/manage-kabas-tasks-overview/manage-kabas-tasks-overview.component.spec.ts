@@ -63,7 +63,7 @@ describe('ManageKabasTasksOverviewComponent', () => {
       providers: [
         {
           provide: KabasTasksViewModel,
-          useValue: MockKabasTasksViewModel
+          useClass: MockKabasTasksViewModel
         },
         { provide: MatIconRegistry, useClass: MockMatIconRegistry },
         {

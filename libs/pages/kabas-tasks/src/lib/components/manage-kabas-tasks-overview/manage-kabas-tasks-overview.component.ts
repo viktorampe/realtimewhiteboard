@@ -31,7 +31,7 @@ import {
   FILTER_SERVICE_TOKEN
 } from '@campus/utils';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { debounceTime, map } from 'rxjs/operators';
+import { debounceTime, map, skip, startWith } from 'rxjs/operators';
 import { AssigneeTypesEnum } from '../../interfaces/Assignee.interface';
 import { TaskWithAssigneesInterface } from '../../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
@@ -418,11 +418,14 @@ export class ManageKabasTasksOverviewComponent
   private getFilteredTasks(): Observable<TaskWithAssigneesInterface[]> {
     return combineLatest([
       this.currentTab$,
-      this.filterState$,
+      this.filterState$.pipe(
+        skip(1), // ignore first emit
+        debounceTime(10),
+        startWith({})
+      ),
       this.tasksWithAssignments$,
       this.paperTasksWithAssignments$
     ]).pipe(
-      debounceTime(10),
       map(([currentTabIndex, filterState, digitalTasks, paperTasks]) => {
         return this.filterTasks(
           filterState,
