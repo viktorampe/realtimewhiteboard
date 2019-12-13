@@ -15,9 +15,6 @@ export class MockLoginViewModel implements ViewModelInterface<LoginViewModel> {
   public errorFeedback$: BehaviorSubject<
     EffectFeedbackInterface
   > = new BehaviorSubject<EffectFeedbackInterface>(null);
-  public hasError$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
-    false
-  );
   public currentUser$ = new BehaviorSubject<PersonInterface>(
     new PersonFixture()
   );

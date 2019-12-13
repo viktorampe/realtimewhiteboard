@@ -44,6 +44,11 @@ export const environment: EnvironmentInterface = {
           status: 404,
           statusText: 'Not Found',
           urlRegex: 'http.*assets\\/icons.*.svg'
+        },
+        {
+          // if login page get's HTTP 401, it handles error on the login page
+          status: 401,
+          urlRegex: 'http.*\\/People/login*'
         }
       ]
     },

@@ -29,11 +29,7 @@ export class CampusHttpInterceptor implements HttpInterceptor {
     return next.handle(request).pipe(
       retry(1),
       catchError((error: HttpErrorResponse) => {
-        if (
-          this.isManagedError(error) &&
-          !this.isAllowedError(error) &&
-          !request.url.includes('People/login')
-        ) {
+        if (this.isManagedError(error) && !this.isAllowedError(error)) {
           this.router.navigate(['/error', error.status]);
         }
         return throwError(error);
