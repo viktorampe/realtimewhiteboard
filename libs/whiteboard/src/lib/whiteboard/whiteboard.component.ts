@@ -48,7 +48,8 @@ export class WhiteboardComponent implements OnInit {
       cardContent: '',
       isInputSelected: true,
       top: top,
-      left: left
+      left: left,
+      editMode: true
     });
   }
 

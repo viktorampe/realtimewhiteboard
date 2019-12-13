@@ -5,6 +5,7 @@
     (click)="toggleModus()"
   ></mat-icon>
   <mat-icon
+    *ngIf="editMode"
     class="toolbar_icon"
     [svgIcon]="'color'"
     (click)="showColor()"
@@ -17,6 +18,7 @@
     (click)="toggleView()"
   ></mat-icon>
   <mat-icon
+    *ngIf="editMode"
     class="toolbar_icon"
     (click)="onDeleteClicked()"
     [svgIcon]="'cancel'"

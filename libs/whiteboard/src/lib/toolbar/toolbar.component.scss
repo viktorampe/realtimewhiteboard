@@ -2,12 +2,14 @@
   text-align: right;
   position: absolute;
   top: 0;
+  right: 0;
   height: auto;
   width: auto;
   z-index: 1;
   width: 100%;
   display: flex;
-  flex-direction: row-reverse;
+  flex-direction: row;
+  justify-content: flex-end;
 
   .toolbar_icon {
     margin-top: 10px;
