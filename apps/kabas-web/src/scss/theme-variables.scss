@@ -7,6 +7,7 @@ $color-blue-1: #65c1ea;
 $color-red-2: #ec727c;
 $color-green-1: #70c5a3;
 $color-orange-1: #f2a248;
+$color-black-1: #000000;
 
 // > sidebar
 $color-gray-1: #f8f8f8; // bg       / table rows
@@ -19,7 +20,7 @@ $color-blue-3: #15adb9; // right gradient color + accent color (borders / links 
 $color-gray-4: #808080; // icons + text
 $color-gray-5: #dcdcdc; // border between boek | methode buttons
 $color-gray-6: #898989; // font color home + toc subnav
-
+$color-gray-7: #e0e0e0;
 $kabas-page-vertical-padding: 20px;
 $kabas-page-horizontal-padding: 40px;
 
@@ -102,11 +103,11 @@ $shared_header__page-bar_background: linear-gradient(
   $color-blue-2,
   $color-blue-3
 );
-$shared-header__quicklink-color: $secondary-font-color;
-$shared-header__quicklink-color-hover: $secondary-font-color-accent;
-$shared-header__quicklink-bg-color: transparent;
-$shared-header__quicklink-icon-size: 24px;
-$shared-header__quicklink-icon-size-small: 20px;
+$shared-header__contextual-button-color: $secondary-font-color;
+$shared-header__contextual-button-color-hover: $primary-bg-color;
+$shared-header__contextual-button-bg-color: transparent;
+$shared-header__contextual-button-icon-size: 24px;
+$shared-header__contextual-button-icon-size-small: 20px;
 
 // shared tiles
 $shared-bg-color-1: $color-white-1 !default;
@@ -144,7 +145,10 @@ $ui-form-item-margin-bottom: 10px;
 $ui-collapsible-sheet-button-bg-color: $color-gray-2;
 $ui-collapsible-sheet-border-color: $color-gray-2;
 
-// search filters
+// search filters,
+$filters-active-background-color: $color-gray-2 !default;
+$filters-hover-background-color: #f5f5f5 !default; // material button hover default
+
 $search-filter-height: 50px;
 
 // search filters > search term
@@ -192,6 +196,7 @@ $pages-method-chapter__filters-padding-bottom: 18px;
 $pages-method-chapter__filters-padding-left: $kabas-page-horizontal-padding;
 $pages-method-chapter__filters-border-color: $secondary-bg-color;
 $pages-method-chapter__filters-box-shadow-color: $color-gray-5;
+$pages-method-filters-hover-background-color: $color-gray-7 !default;
 // practice book lessons filters
 $pages-practice-book-lessons__filters-padding-top: 32px;
 $pages-practice-book-lessons__filters-padding-right: $kabas-page-horizontal-padding;
@@ -199,6 +204,27 @@ $pages-practice-book-lessons__filters-padding-bottom: 18px;
 $pages-practice-book-lessons__filters-padding-left: $kabas-page-horizontal-padding;
 $pages-practice-book-lessons__filters-border-color: $secondary-bg-color;
 $pages-practice-book-lessons__filters-box-shadow-color: $color-gray-5;
+
+//manage kabas tasks overview filters
+$manage-kabas-tasks-overview_filterbar-margin-top: 15px;
+$manage-kabas-tasks-overview_filterbar-margin-left: 45px;
+$manage-kabas-tasks-overview_filterbar-filter-width: 150px;
+$manage-kabas-tasks-overview_filterbar-filter-heigth: 50px;
+$manage-kabas-tasks-overview_filterbar-filter-padding-width: 8px;
+$manage-kabas-tasks-overview_filterbar-filter-padding-height: 12px;
+$manage-kabas-tasks-overview__reset-margin-right: 20px;
+$manage-kabas-tasks-overview__reset-margin-bottom: 10px;
+$pages-kabas-tasks-filters-hover-foreground-color: $color-black-1;
+$manage-kabas-tasks-overview_filterbar-archive-toggle: $color-gray-4;
+$manage-kabas-tasks-overview_filterbar-border-bottom: $color-gray-1;
+
+$manage-kabas-tasks-overview__reset-filters-width: 50px;
+$manage-kabas-tasks-overview__reset-filters-height: 50px;
+$manage-kabas-tasks-overview__reset-filters-border-width: 1px;
+$manage-kabas-tasks-overview__reset-filters-border-color: $primary-font-color-2;
+$manage-kabas-tasks-overview__reset-filters-background-color: transparent;
+$filters-hover-background-color: inherit;
+$filters-active-background-color: inherit;
 
 // search > results list
 $search-results-list__info-height: auto;
@@ -238,6 +264,14 @@ $pages-methods-border-color--primary: $color-gray-2;
 $pages-methods-text-color--secondary: $primary-font-color-2;
 $pages-methods-background-color--secondary: $secondary-bg-color;
 
+// kabas-tasks
+$pages-kabas-tasks-text-color--primary: $primary-font-color;
+$pages-kabas-tasks-text-color--primary--accent: $secondary-font-color-accent;
+$pages-kabas-tasks-background-color--primary: $primary-bg-color;
+$pages-kabas-tasks-border-color--primary: $color-gray-2;
+$pages-kabas-tasks-text-color--secondary: $primary-font-color-2;
+$pages-kabas-tasks-background-color--secondary: $secondary-bg-color;
+
 // practice
 $pages-practice-text-color--primary: $primary-font-color;
 $pages-practice-text-color--primary--accent: $secondary-font-color-accent;
@@ -267,3 +301,7 @@ $pages-settings_form__title-margin-bottom: 32px;
 $pages-settings-profile__form-box-shadow: $pages-settings_container-box-shadow;
 $pages-settings-profile__form-color: $color-gray-4;
 $pages-settings-profile__form-width: 500px;
+
+// tasks
+$pages-manage-kabas-tasks__task-list-item__status-color: $color-lila-1;
+$pages-manage-kabas-tasks__task-list-item__archived-color: $color-green-1;

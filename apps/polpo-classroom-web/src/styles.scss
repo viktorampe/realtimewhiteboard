@@ -129,6 +129,10 @@ body {
   color: $primary-font-color;
 }
 
+.mat-tooltip {
+  white-space: pre-line;
+}
+
 .shared-header__app-bar {
   campus-button {
     span {
@@ -137,7 +141,7 @@ body {
   }
 }
 
-.shared-header__quicklink__button {
+.shared-header__contextual__button {
   span {
     display: none;
   }

@@ -1,4 +1,8 @@
-import { groupArrayByKey } from '@campus/utils';
+import {
+  findManyInArray,
+  findOneInArray,
+  groupArrayByKey
+} from '@campus/utils';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { UnlockedFreePracticeInterface } from '../../+models';
 import {
@@ -72,24 +76,14 @@ export const getById = createSelector(
 
 export const findOne = createSelector(
   selectUnlockedFreePracticeState,
-  (state: State, props: Partial<UnlockedFreePracticeInterface>) => {
-    return Object.values(state.entities).find(unlockedFreePractice => {
-      return Object.keys(props).every(
-        prop => !props[prop] || unlockedFreePractice[prop] === props[prop]
-      );
-    });
-  }
+  (state: State, props: Partial<UnlockedFreePracticeInterface>) =>
+    findOneInArray(Object.values(state.entities), props)
 );
 
 export const findMany = createSelector(
   selectUnlockedFreePracticeState,
-  (state: State, props: Partial<UnlockedFreePracticeInterface>) => {
-    return Object.values(state.entities).filter(unlockedFreePractice => {
-      return Object.keys(props).every(
-        prop => !props[prop] || unlockedFreePractice[prop] === props[prop]
-      );
-    });
-  }
+  (state: State, props: Partial<UnlockedFreePracticeInterface>) =>
+    findManyInArray(Object.values(state.entities), props)
 );
 
 export const getGroupedByEduContentTOCId = createSelector(

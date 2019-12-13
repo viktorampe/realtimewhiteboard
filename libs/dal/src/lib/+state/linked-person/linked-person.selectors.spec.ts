@@ -3,9 +3,10 @@ import { PersonInterface } from '../../+models';
 import { State } from './linked-person.reducer';
 
 describe('Person Selectors', () => {
-  function createPerson(id: number): PersonInterface | any {
+  function createPerson(id: number, type: string): PersonInterface | any {
     return {
-      id: id
+      id: id,
+      type: type
     };
   }
 
@@ -36,7 +37,12 @@ describe('Person Selectors', () => {
   describe('Person Selectors', () => {
     beforeEach(() => {
       personState = createState(
-        [createPerson(4), createPerson(1), createPerson(2), createPerson(3)],
+        [
+          createPerson(4, 'student'),
+          createPerson(1, 'student'),
+          createPerson(2, 'student'),
+          createPerson(3, 'teacher')
+        ],
         true,
         'no error'
       );
@@ -53,10 +59,10 @@ describe('Person Selectors', () => {
     it('getAll() should return an array of the entities in the order from the ids', () => {
       const results = LinkedPersonQueries.getAll(storeState);
       expect(results).toEqual([
-        createPerson(4),
-        createPerson(1),
-        createPerson(2),
-        createPerson(3)
+        createPerson(4, 'student'),
+        createPerson(1, 'student'),
+        createPerson(2, 'student'),
+        createPerson(3, 'teacher')
       ]);
     });
     it('getCount() should return number of entities', () => {
@@ -76,19 +82,28 @@ describe('Person Selectors', () => {
         ids: [3, 1, 90, 2]
       });
       expect(results).toEqual([
-        createPerson(3),
-        createPerson(1),
+        createPerson(3, 'teacher'),
+        createPerson(1, 'student'),
         undefined,
-        createPerson(2)
+        createPerson(2, 'student')
       ]);
     });
     it('getById() should return the desired entity', () => {
       const results = LinkedPersonQueries.getById(storeState, { id: 2 });
-      expect(results).toEqual(createPerson(2));
+      expect(results).toEqual(createPerson(2, 'student'));
     });
     it('getById() should return undefined if the entity is not present', () => {
       const results = LinkedPersonQueries.getById(storeState, { id: 9 });
       expect(results).toBe(undefined);
+    });
+    it('getStudents() should return filtered linkedPersons on student type', () => {
+      const results = LinkedPersonQueries.getStudents(storeState);
+
+      expect(results).toEqual([
+        createPerson(4, 'student'),
+        createPerson(1, 'student'),
+        createPerson(2, 'student')
+      ]);
     });
   });
 });

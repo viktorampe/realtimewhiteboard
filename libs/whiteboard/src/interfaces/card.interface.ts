@@ -3,4 +3,6 @@ export default interface Card {
   cardContent: any;
   isInputSelected: boolean;
   editMode: boolean;
+  top: number;
+  left: number;
 }

@@ -12,19 +12,24 @@ import {
   EduContentTocReducer,
   EduNetReducer,
   FavoriteReducer,
+  GroupReducer,
   HistoryReducer,
   LearningAreaReducer,
   LearningDomainReducer,
   LearningPlanGoalProgressReducer,
   LearningPlanGoalReducer,
   LinkedPersonReducer,
+  MethodLevelReducer,
   MethodReducer,
   ResultReducer,
   SchoolTypeReducer,
   StudentContentStatusReducer,
+  TaskClassGroupReducer,
   TaskEduContentReducer,
+  TaskGroupReducer,
   TaskInstanceReducer,
   TaskReducer,
+  TaskStudentReducer,
   TeacherStudentReducer,
   UiReducer,
   UnlockedBoekeGroupReducer,
@@ -36,7 +41,6 @@ import {
   UserReducer,
   YearReducer
 } from '../..';
-import { MethodLevelReducer } from './method-level';
 
 export interface DalState {
   ui: UiReducer.UiState;
@@ -57,6 +61,8 @@ export interface DalState {
   currentExercise: CurrentExerciseReducer.State;
   taskInstances: TaskInstanceReducer.State;
   taskEduContents: TaskEduContentReducer.State;
+  taskGroups: TaskGroupReducer.State;
+  taskStudents: TaskStudentReducer.State;
   results: ResultReducer.State;
   linkedPersons: LinkedPersonReducer.State;
   teacherStudents: TeacherStudentReducer.State;
@@ -76,4 +82,6 @@ export interface DalState {
   classGroups: ClassGroupReducer.State;
   unlockedFreePractices: UnlockedFreePracticeReducer.State;
   methodLevels: MethodLevelReducer.State;
+  groups: GroupReducer.State;
+  taskClassGroups: TaskClassGroupReducer.State;
 }

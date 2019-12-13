@@ -55,4 +55,20 @@ describe('WhiteboardComponent', () => {
 
     expect(cardsSizeAfterClicked).toBe(cardsSizeBeforeClicked + 1);
   });
+
+  it('should remove a created card from the array of cards', () => {
+    const cardsSizeBeforeAdding = component.cards.length;
+
+    component.cards.push({
+      cardContent: '',
+      color: null,
+      isInputSelected: false,
+      top: 0,
+      left: 0
+    });
+
+    component.onDeleteCard(0);
+
+    expect(component.cards.length).toBe(cardsSizeBeforeAdding);
+  });
 });

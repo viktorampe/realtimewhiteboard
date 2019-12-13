@@ -1,36 +1,67 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import Card from '../../interfaces/Card';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  HostBinding,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  ViewChild
+} from '@angular/core';
+import Card from '../../interfaces/card.interface';
 
 @Component({
   selector: 'campus-card',
   templateUrl: './card.component.html',
   styleUrls: ['./card.component.scss']
 })
-export class CardComponent implements OnInit {
+export class CardComponent implements OnInit, OnChanges {
   @ViewChild('inputContent') inputContent: ElementRef;
 
-  card: Card;
+  @Input() card: Card;
+  @Output() deleteCard = new EventEmitter();
+  @Output() lastColor = new EventEmitter<string>();
+
+  @HostBinding('style.top') topStyle: string;
+  @HostBinding('style.left') leftStyle: string;
   colorlistHidden: boolean;
   viewModeImage: boolean;
+  maxCharacters = 300;
 
   constructor() {
+    this.card = {
+      color: 'white',
+      cardContent: null,
+      isInputSelected: true,
+      editMode: true,
+      top: 0,
+      left: 0
+    };
+
     this.viewModeImage = true;
   }
 
   ngOnInit() {
     this.colorlistHidden = true;
-    this.card = {
-      color: 'white',
-      cardContent: null,
-      isInputSelected: true,
-      editMode: true
-    };
+  }
+
+  ngOnChanges() {
+    this.topStyle = this.card.top + 'px';
+    this.leftStyle = this.card.left + 'px';
   }
 
   toggleInput() {
-    if (this.card.cardContent != null) {
+    if (
+      this.card.cardContent !== '' &&
+      this.card.cardContent.length <= this.maxCharacters
+    ) {
       this.card.isInputSelected = !this.card.isInputSelected;
     }
+  }
+
+  onDeleteCard() {
+    this.deleteCard.emit();
   }
 
   onDblClick(event) {
@@ -50,6 +81,7 @@ export class CardComponent implements OnInit {
   selectColor(color: string) {
     this.colorlistHidden = true;
     this.card.color = color;
+    this.lastColor.emit(color);
   }
 
   toggleEditMode() {

@@ -41,6 +41,27 @@ describe('CardComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  it('should toggle input where input is valid', () => {
+    component.card.cardContent = 'Valid';
+    component.toggleInput();
+    expect(component.card.isInputSelected).toBe(false);
+  });
+
+  it('should toggle input where input is empty', () => {
+    component.card.cardContent = '';
+    component.toggleInput();
+    expect(component.card.isInputSelected).toBe(true);
+  });
+
+  it('should show errormessage when input is maximal', () => {
+    component.card.cardContent = 'a'.repeat(component.maxCharacters);
+    fixture.detectChanges();
+    const errorMessage = fixture.debugElement.query(
+      By.css('.card__content__errorMessage')
+    );
+    expect(errorMessage).not.toBeNull();
+  });
+
   it('should show the card content when not editing', () => {
     component.card.cardContent = 'Test content';
     component.card.isInputSelected = false;
@@ -89,6 +110,28 @@ describe('CardComponent', () => {
     const toggleicon = fixture.debugElement.query(By.css('#toggle_icon'));
 
     expect(toggleicon).toBe(null);
+  });
+
+  it('should create card with cardcontent empty', () => {
+    expect(component.card.cardContent).toBe('');
+  });
+
+  it('should set the correct top style on creation', () => {
+    component.card.top = 500;
+
+    component.ngOnChanges();
+    fixture.detectChanges();
+
+    expect(fixture.debugElement.nativeElement.style.top).toBe('500px');
+  });
+
+  it('should set the correct left style on creation', () => {
+    component.card.left = 500;
+
+    component.ngOnChanges();
+    fixture.detectChanges();
+
+    expect(fixture.debugElement.nativeElement.style.left).toBe('500px');
   });
 
   it('should show toggle icon when not in editmode', () => {
@@ -155,5 +198,11 @@ describe('CardComponent', () => {
     component.selectColor('black');
     fixture.detectChanges();
     expect(component.card.color).toBe('black');
+  });
+
+  it('should emit the right color when a cardcolor is picked', () => {
+    spyOn(component.lastColor, 'emit');
+    component.selectColor('black');
+    expect(component.lastColor.emit).toHaveBeenCalledWith('black');
   });
 });

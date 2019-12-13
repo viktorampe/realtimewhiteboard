@@ -1,3 +1,140 @@
-<p>
-  manage-kabas-tasks-overview works!
-</p>
+<campus-page-bar>
+  <campus-button
+    class="shared-header__contextual__button smallIcon"
+    data-cy="nav-new-task"
+    iconClass="tasks"
+    (click)="clickNewTask()"
+    ><span>nieuw</span></campus-button
+  >
+  <ng-container
+    *ngIf="
+      digital.selectedOptions.hasValue() || paper.selectedOptions.hasValue()
+    "
+  >
+    <campus-button
+      class="shared-header__contextual__button smallIcon"
+      data-cy="nav-archive-task"
+      iconClass="archive"
+      (click)="clickArchiveTasks()"
+      ><span>archiveer</span></campus-button
+    >
+    <campus-button
+      class="shared-header__contextual__button smallIcon"
+      data-cy="nav-delete-task"
+      iconClass="delete"
+      (click)="clickDeleteTasks()"
+      ><span>verwijder</span></campus-button
+    >
+  </ng-container>
+</campus-page-bar>
+
+<div class="manage-kabas-tasks-overview__container">
+  <mat-tab-group
+    [selectedIndex]="currentTab$ | async"
+    (selectedIndexChange)="onSelectedTabIndexChanged($event)"
+  >
+    <mat-tab label="Digitale taken">
+      <div class="manage-kabas-tasks-overview__filterbar">
+        <campus-search-term [placeholder]="'Filteren'"></campus-search-term>
+        <campus-select-filter
+          *ngIf="(learningAreaFilter$ | async) as learningAreaFilter"
+          [filterCriteria]="learningAreaFilter"
+          [resetLabel]="'Geen'"
+        ></campus-select-filter>
+        <!--<date-filter-component></date-filter-component>-->
+        <campus-select-filter
+          *ngIf="(assigneeFilter$ | async) as assigneeFilter"
+          [filterCriteria]="assigneeFilter"
+          [resetLabel]="'Niemand'"
+        ></campus-select-filter>
+        <campus-button-toggle-filter [filterCriteria]="taskStatusFilter">
+        </campus-button-toggle-filter>
+        <div class="manage-kabas-tasks-overview__archive-toggle">
+          <mat-slide-toggle color="primary">
+            Gearchiveerd
+          </mat-slide-toggle>
+        </div>
+        <campus-button
+          class="manage-kabas-tasks-overview--reset-filters"
+          iconClass="reset-filters"
+        ></campus-button>
+      </div>
+      <mat-selection-list #digital>
+        <mat-list-item
+          (click)="clickAddDigitalTask()"
+          class="manage-kabas-tasks-overview__list__primary-action"
+        >
+          <mat-icon svgIcon="add"></mat-icon>
+          nieuwe taak
+        </mat-list-item>
+
+        <mat-list-option
+          #option
+          *ngFor="let task of (tasksWithAssignments$ | async)"
+          checkboxPosition="before"
+          [class.mat-list-option--selected]="option.selected"
+        >
+          <!-- TODO: set correct inputs -->
+          <campus-task-list-item
+            [title]="task.name"
+            [learningArea]="task.learningArea.name"
+            [archived]="task.archivedYear"
+            icon="educontent-product-type:evaluatie"
+            exerciseCount="4"
+            [startDate]="taskItem.startDate"
+            [endDate]="taskItem.endDate"
+            status="active"
+            [actions]="taskItem.actions"
+            [assignees]="taskItem.assignees"
+          ></campus-task-list-item>
+        </mat-list-option>
+      </mat-selection-list>
+    </mat-tab>
+
+    <mat-tab label="Papieren taken">
+      <div class="manage-kabas-tasks-overview__filterbar">
+        <campus-search-term [placeholder]="'Filteren'"></campus-search-term>
+
+        <campus-select-filter
+          *ngIf="(learningAreaFilterPaper$ | async) as learningAreaFilterPaper"
+          [filterCriteria]="learningAreaFilterPaper"
+          [resetLabel]="'Geen'"
+        ></campus-select-filter>
+        <campus-select-filter
+          *ngIf="(assigneeFilterPaper$ | async) as assigneeFilterPaper"
+          [filterCriteria]="assigneeFilterPaper"
+          [resetLabel]="'Niemand'"
+        ></campus-select-filter>
+        <campus-button-toggle-filter [filterCriteria]="taskStatusFilter">
+        </campus-button-toggle-filter>
+        <div class="manage-kabas-tasks-overview__archive-toggle">
+          <mat-slide-toggle color="primary">
+            Gearchiveerd
+          </mat-slide-toggle>
+        </div>
+        <campus-button
+          class="manage-kabas-tasks-overview--reset-filters"
+          iconClass="reset-filters"
+        ></campus-button>
+      </div>
+      <mat-selection-list #paper>
+        <mat-list-item
+          (click)="clickAddPaperTask()"
+          class="manage-kabas-tasks-overview__list__primary-action"
+        >
+          <mat-icon svgIcon="add"></mat-icon>
+          nieuwe taak
+        </mat-list-item>
+
+        <mat-list-option
+          #option
+          *ngFor="let task of (paperTasksWithAssignments$ | async)"
+          checkboxPosition="before"
+          [class.mat-list-option--selected]="option.selected"
+        >
+          {{ task.name }}
+        </mat-list-option>
+      </mat-selection-list>
+    </mat-tab>
+  </mat-tab-group>
+</div>
