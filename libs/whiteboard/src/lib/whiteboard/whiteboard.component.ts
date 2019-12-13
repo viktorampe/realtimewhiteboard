@@ -70,7 +70,7 @@ export class WhiteboardComponent implements OnInit {
     this.lastColor = color;
   }
 
-  btnDelClicked() {
-    console.log('delete button clicked');
-  }
+  btnDelClicked() {}
+
+  btnEditClicked() {}
 }
