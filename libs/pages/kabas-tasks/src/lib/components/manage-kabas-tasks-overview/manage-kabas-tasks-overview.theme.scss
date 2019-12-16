@@ -103,10 +103,11 @@
         $manage-kabas-tasks-overview_filterbar-border-bottom;
       margin: $manage-kabas-tasks-overview_filterbar-margin-top 0px 0px
         $manage-kabas-tasks-overview_filterbar-margin-left;
-
-      > * {
-        margin-right: $manage-kabas-tasks-overview__reset-margin-right;
-        margin-bottom: $manage-kabas-tasks-overview__reset-margin-bottom;
+      &__filters {
+        > * {
+          margin-right: $manage-kabas-tasks-overview__reset-margin-right;
+          margin-bottom: $manage-kabas-tasks-overview__reset-margin-bottom;
+        }
       }
 
       campus-button-toggle-filter {
@@ -154,6 +155,20 @@
         background-color: $filters-active-background-color;
       }
     }
+
+    &__date-filter {
+      .date-filter-component__open-datepicker-button {
+        background-color: $manage-kabas-tasks-overview__reset-filters-background-color;
+        border: $manage-kabas-tasks-overview__reset-filters-border-width solid
+          $manage-kabas-tasks-overview__reset-filters-border-color;
+        font-weight: normal;
+        color: rgba(0, 0, 0, 0.42);
+      }
+      .date-filter-component__date--selected {
+        color: $pages-kabas-tasks-text-color--primary;
+      }
+    }
+
     &__archive-toggle {
       border: 1px solid $manage-kabas-tasks-overview_filterbar-archive-toggle;
       padding: $manage-kabas-tasks-overview_filterbar-filter-padding-height

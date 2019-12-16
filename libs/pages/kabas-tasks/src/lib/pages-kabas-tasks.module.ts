@@ -22,6 +22,7 @@ import { PagesKabasTasksRoutingModule } from './pages-kabas-tasks-routing.module
     UtilsModule,
     MatSelectModule,
     SearchModule,
+    GuardsModule,
     MatSlideToggleModule
   ],
   declarations: [ManageKabasTasksOverviewComponent, TaskListItemComponent],
