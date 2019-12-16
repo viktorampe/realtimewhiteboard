@@ -304,12 +304,7 @@ describe('ManageKabasTasksOverviewComponent', () => {
         ] as TaskWithAssigneesInterface[];
 
         beforeEach(() => {
-          if (source === 'digital') {
-            digitalTasks$.next(mockTasks);
-          }
-          if (source === 'paper') {
-            paperTasks$.next(mockTasks);
-          }
+          getTasks$(source).next(mockTasks);
         });
 
         it('should filter on start and end date', () => {
