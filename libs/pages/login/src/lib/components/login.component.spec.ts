@@ -17,6 +17,7 @@ import { MockLoginViewModel } from './login.viewmodel.mock';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
+  let viewmodel: MockLoginViewModel;
   let fixture: ComponentFixture<LoginComponent>;
   let loginViewModel: LoginViewModel;
 
@@ -37,6 +38,7 @@ describe('LoginComponent', () => {
 
   beforeEach(() => {
     fixture = TestBed.createComponent(LoginComponent);
+    viewmodel = TestBed.get(LoginViewModel);
     component = fixture.componentInstance;
     loginViewModel = TestBed.get(LoginViewModel);
     fixture.detectChanges();
@@ -122,6 +124,27 @@ describe('LoginComponent', () => {
           ).toBe(preset.label);
         });
       });
+    });
+
+    it('should call clearError on keydown', () => {
+      jest.spyOn(component, 'clearError');
+      viewmodel.currentUser$.next(null);
+      fixture.detectChanges();
+
+      const event = new KeyboardEvent('keydown', {
+        bubbles: true,
+        cancelable: true,
+        shiftKey: false
+      });
+
+      const inputFields = fixture.debugElement.queryAll(By.css('input'));
+
+      inputFields.forEach(field => {
+        const inputElement = field.nativeElement;
+        inputElement.dispatchEvent(event);
+      });
+
+      expect(component.clearError).toHaveBeenCalledTimes(2);
     });
   });
 });
