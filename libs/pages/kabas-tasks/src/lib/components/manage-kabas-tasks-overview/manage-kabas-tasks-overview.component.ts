@@ -31,7 +31,7 @@ import {
   FILTER_SERVICE_TOKEN
 } from '@campus/utils';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { debounceTime, map, skip, startWith } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { AssigneeTypesEnum } from '../../interfaces/Assignee.interface';
 import { TaskWithAssigneesInterface } from '../../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
@@ -403,6 +403,7 @@ export class ManageKabasTasksOverviewComponent
     const currentFilterState = this.filterState$.value;
     const newFilterState = { ...currentFilterState, ...updatedFilter };
 
+    console.log('log: newFilterState', newFilterState);
     this.filterState$.next(newFilterState);
   }
 
@@ -415,14 +416,10 @@ export class ManageKabasTasksOverviewComponent
    */
   private getFilteredTasks(): Observable<TaskWithAssigneesInterface[]> {
     return combineLatest([
-      this.currentTab$,
-      this.filterState$.pipe(
-        skip(1), // ignore first emit
-        debounceTime(10),
-        startWith({})
-      ),
-      this.tasksWithAssignments$,
-      this.paperTasksWithAssignments$
+      this.currentTab$.pipe(tap(x => console.log('tab', x))),
+      this.filterState$,
+      this.tasksWithAssignments$.pipe(tap(x => console.log(x))),
+      this.paperTasksWithAssignments$.pipe(tap(x => console.log(x)))
     ]).pipe(
       map(([currentTabIndex, filterState, digitalTasks, paperTasks]) => {
         return this.filterTasks(
@@ -448,7 +445,9 @@ export class ManageKabasTasksOverviewComponent
   ): TaskWithAssigneesInterface[] {
     if (tasks.length === 0) return [];
 
+    console.log('log: filterState', filterState);
     let filteredTasks = [...tasks];
+    console.log('log: filteredTasks before', filteredTasks);
 
     // apply filters ...
 
@@ -490,9 +489,11 @@ export class ManageKabasTasksOverviewComponent
     // filter on archived
     filteredTasks = this.filterOnArchived(
       filteredTasks,
-      filterState.isArchived
+      !!filterState.isArchived
     );
 
+    if (filterState.searchTerm)
+      console.log('log: filteredTasks', filteredTasks);
     return filteredTasks;
   }
 
@@ -643,11 +644,11 @@ export class ManageKabasTasksOverviewComponent
   ) {
     switch (sortMode) {
       case TaskSortEnum.NAME:
-        return this.sortByName(tasks);
+        return this.sortByName([...tasks]);
       case TaskSortEnum.LEARNINGAREA:
-        return this.sortByLearningArea(tasks);
+        return this.sortByLearningArea([...tasks]);
       case TaskSortEnum.STARTDATE:
-        return this.sortByStartDate(tasks);
+        return this.sortByStartDate([...tasks]);
     }
     // no sortMode -> no sorting
     return tasks;
