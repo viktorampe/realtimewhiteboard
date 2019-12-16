@@ -11,7 +11,7 @@
       >Je bent ingelogd als {{ currentUser.displayName }}</div
     >
     <div>
-      <campus-button campusPrimary (click)="logout()">Log uit</campus-button>
+      <campus-button campusPrimary (click)="logout()">Afmelden</campus-button>
     </div>
   </div>
 </ng-container>
@@ -55,7 +55,7 @@
         campusPrimary
         (click)="submit()"
         [class.ui-button--disabled]="!loginForm.valid"
-        >Login</campus-button
+        >Aanmelden</campus-button
       >
     </form>
 
