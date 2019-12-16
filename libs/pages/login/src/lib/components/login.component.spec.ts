@@ -78,7 +78,7 @@ describe('LoginComponent', () => {
           By.directive(ButtonComponent)
         );
 
-        expect(buttonDE.nativeElement.textContent.trim()).toBe('Log uit');
+        expect(buttonDE.nativeElement.textContent.trim()).toBe('Afmelden');
       });
     });
 
@@ -103,7 +103,7 @@ describe('LoginComponent', () => {
           By.directive(ButtonComponent)
         );
 
-        expect(buttonDE.nativeElement.textContent.trim()).toBe('Log in');
+        expect(buttonDE.nativeElement.textContent.trim()).toBe('Aanmelden');
       });
 
       it('should show the login presets', () => {
