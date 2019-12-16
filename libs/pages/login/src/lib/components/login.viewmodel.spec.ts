@@ -55,7 +55,11 @@ describe('LoginViewModel', () => {
       expect(store.dispatch).toHaveBeenCalledWith(
         new UserActions.LogInUser({
           username,
-          password
+          password,
+          customFeedbackHandlers: {
+            useCustomErrorHandler: true,
+            useCustomSuccessHandler: 'useNoHandler'
+          }
         })
       );
     });
