@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import {
   DalState,
   EffectFeedbackActions,
@@ -8,6 +8,10 @@ import {
   UserActions,
   UserQueries
 } from '@campus/dal';
+import {
+  EnvironmentLoginInterface,
+  ENVIRONMENT_LOGIN_TOKEN
+} from '@campus/shared';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
@@ -17,14 +21,14 @@ import { take } from 'rxjs/operators';
 })
 export class LoginViewModel {
   public currentUser$: Observable<PersonInterface>;
+  public loginPresets = this.environmentLogin.loginPresets;
   public errorFeedback$: Observable<EffectFeedbackInterface>;
 
-  public loginPresets = [
-    { label: 'Student', username: 'student1', password: 'testje' },
-    { label: 'Leerkracht', username: 'teacher1', password: 'testje' }
-  ];
-
-  constructor(private store: Store<DalState>) {
+  constructor(
+    private store: Store<DalState>,
+    @Inject(ENVIRONMENT_LOGIN_TOKEN)
+    private environmentLogin: EnvironmentLoginInterface
+  ) {
     this.setupStreams();
     this.errorFeedback$ = this.store.pipe(
       select(EffectFeedbackQueries.getFeedbackForAction, {

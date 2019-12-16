@@ -24,7 +24,11 @@ export const environment: EnvironmentInterface = {
     url: 'http://student.polpo.localhost:3014/login'
   },
   login: {
-    url: 'http://student.polpo.localhost:3014/login'
+    url: 'http://student.polpo.localhost:3014/login',
+    loginPresets: [
+      { label: 'Student', username: 'student1', password: 'testje' },
+      { label: 'Leerkracht', username: 'teacher1', password: 'testje' }
+    ]
   },
   termPrivacy: {
     url: 'http://student.polpo.localhost:3014/dev'

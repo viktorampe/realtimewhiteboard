@@ -278,6 +278,12 @@ export class DateFilterComponent
     this.count = +hasDates;
   }
 
+  public reset(): void {
+    this.filterCriteria.values = [{ data: {} }];
+    this.filterSelectionChange.next([this.filterCriteria]);
+    this.updateView();
+  }
+
   private storeFormValues(): void {
     this.formValues = {
       dateSelection: this.dateSelection.value,
