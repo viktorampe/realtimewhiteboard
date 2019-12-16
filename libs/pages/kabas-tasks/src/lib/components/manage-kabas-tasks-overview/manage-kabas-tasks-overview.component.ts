@@ -1,6 +1,4 @@
 import {
-  AfterContentInit,
-  AfterViewInit,
   ChangeDetectorRef,
   Component,
   Inject,
@@ -60,8 +58,7 @@ type Source = 'digital' | 'paper';
   templateUrl: './manage-kabas-tasks-overview.component.html',
   styleUrls: ['./manage-kabas-tasks-overview.component.scss']
 })
-export class ManageKabasTasksOverviewComponent
-  implements OnInit, AfterContentInit, AfterViewInit {
+export class ManageKabasTasksOverviewComponent implements OnInit {
   public TaskSortEnum = TaskSortEnum;
   public tasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
   public paperTasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
@@ -233,12 +230,6 @@ export class ManageKabasTasksOverviewComponent
     };
   }
 
-  ngAfterContentInit(): void {}
-
-  ngAfterViewInit() {
-    this.selectFilters.changes.subscribe(x => console.log(x));
-  }
-
   public sortAndCreateForAssigneeFilter(tasksWithAssignments) {
     const assigns = [];
     tasksWithAssignments.forEach(twa => {
@@ -342,6 +333,16 @@ export class ManageKabasTasksOverviewComponent
     this.router.navigate([], {
       queryParams: { tab }
     });
+
+    // needed because tab switching causes
+    // expression changed after view checked
+    // re-attach when animtion is done
+    this.cd.detach();
+  }
+
+  public onTabAnimationDone() {
+    this.cd.reattach();
+    this.cd.detectChanges();
   }
 
   public archivedFilterToggled(data: MatSlideToggleChange, type: Source) {
@@ -424,7 +425,6 @@ export class ManageKabasTasksOverviewComponent
    * @memberof ManageKabasTasksOverviewComponent
    */
   private updateDigitalFilterState(updatedFilter: FilterStateInterface): void {
-    console.log('here digital');
     const currentFilterState = this.digitalFilterState$.value;
     const newFilterState = { ...currentFilterState, ...updatedFilter };
 
@@ -432,7 +432,6 @@ export class ManageKabasTasksOverviewComponent
   }
 
   private updatePaperFilterState(updatedFilter: FilterStateInterface): void {
-    console.log('here paper');
     const currentFilterState = this.paperFilterState$.value;
     const newFilterState = { ...currentFilterState, ...updatedFilter };
 
@@ -483,9 +482,7 @@ export class ManageKabasTasksOverviewComponent
   ): TaskWithAssigneesInterface[] {
     if (tasks.length === 0) return [];
 
-    console.log('log: filterState', filterState);
     let filteredTasks = [...tasks];
-    console.log('log: filteredTasks before', filteredTasks);
 
     // apply filters ...
 
@@ -530,8 +527,6 @@ export class ManageKabasTasksOverviewComponent
       !!filterState.isArchived
     );
 
-    if (filterState.searchTerm)
-      console.log('log: filteredTasks', filteredTasks);
     return filteredTasks;
   }
 
