@@ -63,6 +63,22 @@ describe('LoginViewModel', () => {
         })
       );
     });
+    it('should log in with email address', () => {
+      store.dispatch = jest.fn();
+      const username = 'admin@god.be';
+      const password = 'god';
+      loginViewModel.login(username, password);
+      expect(store.dispatch).toHaveBeenCalledWith(
+        new UserActions.LogInUser({
+          email: username,
+          password,
+          customFeedbackHandlers: {
+            useCustomErrorHandler: true,
+            useCustomSuccessHandler: 'useNoHandler'
+          }
+        })
+      );
+    });
     it('should log out', () => {
       store.dispatch = jest.fn();
       loginViewModel.logout();
