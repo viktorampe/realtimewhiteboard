@@ -1,5 +1,7 @@
 import {
   AfterContentInit,
+  AfterViewInit,
+  ChangeDetectorRef,
   Component,
   Inject,
   OnInit,
@@ -31,7 +33,7 @@ import {
   FILTER_SERVICE_TOKEN
 } from '@campus/utils';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { map, shareReplay } from 'rxjs/operators';
 import { AssigneeTypesEnum } from '../../interfaces/Assignee.interface';
 import { TaskWithAssigneesInterface } from '../../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
@@ -51,18 +53,21 @@ export enum TaskSortEnum {
   'STARTDATE' = 'STARTDATE'
 }
 
+type Source = 'digital' | 'paper';
+
 @Component({
   selector: 'campus-manage-kabas-tasks-overview',
   templateUrl: './manage-kabas-tasks-overview.component.html',
   styleUrls: ['./manage-kabas-tasks-overview.component.scss']
 })
 export class ManageKabasTasksOverviewComponent
-  implements OnInit, AfterContentInit {
+  implements OnInit, AfterContentInit, AfterViewInit {
   public TaskSortEnum = TaskSortEnum;
   public tasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
   public paperTasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
   public currentTab$: Observable<number>;
-  public filteredTasks$: Observable<TaskWithAssigneesInterface[]>;
+  public digitalFilteredTasks$: Observable<TaskWithAssigneesInterface[]>;
+  public paperFilteredTasks$: Observable<TaskWithAssigneesInterface[]>;
   public learningAreaFilter$: Observable<SearchFilterCriteriaInterface>;
   public learningAreaFilterPaper$: Observable<SearchFilterCriteriaInterface>;
   public assigneeFilter$: Observable<SearchFilterCriteriaInterface>;
@@ -108,7 +113,8 @@ export class ManageKabasTasksOverviewComponent
     }
   ];
 
-  private filterState$ = new BehaviorSubject<FilterStateInterface>({});
+  private digitalFilterState$ = new BehaviorSubject<FilterStateInterface>({});
+  private paperFilterState$ = new BehaviorSubject<FilterStateInterface>({});
 
   @ViewChildren(MatSelectionList) private taskLists: QueryList<
     MatSelectionList
@@ -146,33 +152,40 @@ export class ManageKabasTasksOverviewComponent
     private viewModel: KabasTasksViewModel,
     private router: Router,
     private route: ActivatedRoute,
-    @Inject(FILTER_SERVICE_TOKEN) private filterService: FilterServiceInterface
+    @Inject(FILTER_SERVICE_TOKEN) private filterService: FilterServiceInterface,
+    private cd: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
     this.currentTab$ = this.getCurrentTab();
+    this.digitalFilteredTasks$ = this.getFilteredDigitalTasks().pipe(
+      shareReplay(1)
+    );
+    this.paperFilteredTasks$ = this.getFilteredPaperTasks().pipe(
+      shareReplay(1)
+    );
 
     this.tasksWithAssignments$ = combineLatest([
-      this.viewModel.tasksWithAssignments$,
+      this.digitalFilteredTasks$,
       this.currentSortMode$
     ]).pipe(map(([tasks, sortMode]) => this.sortTasks(tasks, sortMode)));
 
     this.paperTasksWithAssignments$ = combineLatest([
-      this.viewModel.paperTasksWithAssignments$,
+      this.paperFilteredTasks$,
       this.currentSortMode$
     ]).pipe(map(([tasks, sortMode]) => this.sortTasks(tasks, sortMode)));
 
-    this.learningAreaFilter$ = this.tasksWithAssignments$.pipe(
+    this.learningAreaFilter$ = this.viewModel.tasksWithAssignments$.pipe(
       map(this.sortAndCreateForLearningAreaFilter)
     );
-    this.assigneeFilter$ = this.tasksWithAssignments$.pipe(
+    this.assigneeFilter$ = this.viewModel.tasksWithAssignments$.pipe(
       map(this.sortAndCreateForAssigneeFilter)
     );
-    this.learningAreaFilterPaper$ = this.paperTasksWithAssignments$.pipe(
+    this.learningAreaFilterPaper$ = this.viewModel.paperTasksWithAssignments$.pipe(
       map(this.sortAndCreateForLearningAreaFilter)
     );
 
-    this.assigneeFilterPaper$ = this.paperTasksWithAssignments$.pipe(
+    this.assigneeFilterPaper$ = this.viewModel.paperTasksWithAssignments$.pipe(
       map(this.sortAndCreateForAssigneeFilter)
     );
 
@@ -220,8 +233,10 @@ export class ManageKabasTasksOverviewComponent
     };
   }
 
-  ngAfterContentInit(): void {
-    this.filteredTasks$ = this.getFilteredTasks();
+  ngAfterContentInit(): void {}
+
+  ngAfterViewInit() {
+    this.selectFilters.changes.subscribe(x => console.log(x));
   }
 
   public sortAndCreateForAssigneeFilter(tasksWithAssignments) {
@@ -323,29 +338,38 @@ export class ManageKabasTasksOverviewComponent
   }
 
   public onSelectedTabIndexChanged(tab: number) {
-    this.cleanUpPage();
+    this.cleanUpTab(1 ? 'digital' : 'paper');
     this.router.navigate([], {
       queryParams: { tab }
     });
   }
 
-  public archivedFilterToggled(data: MatSlideToggleChange) {
-    const updatedFilter: FilterStateInterface = { isArchived: data.checked };
-    this.updateFilterState(updatedFilter);
+  public archivedFilterToggled(data: MatSlideToggleChange, type: Source) {
+    const filterValues: FilterStateInterface = { isArchived: data.checked };
+
+    if (type === 'digital') this.updateDigitalFilterState(filterValues);
+    if (type === 'paper') this.updatePaperFilterState(filterValues);
   }
 
   public selectionChanged(
     criteria: SearchFilterCriteriaInterface[],
-    filterName: string
+    filterName: string,
+    type: Source
   ) {
-    this.updateFilterState(
-      this.mapSearchFilterCriteriaToFilterState(criteria, filterName)
+    const filterValues = this.mapSearchFilterCriteriaToFilterState(
+      criteria,
+      filterName
     );
+    if (type === 'digital') this.updateDigitalFilterState(filterValues);
+    if (type === 'paper') this.updatePaperFilterState(filterValues);
   }
 
-  public searchTermUpdated(term: string) {
-    const updatedFilter = { searchTerm: term };
-    this.updateFilterState(updatedFilter);
+  public searchTermUpdated(term: string, type: Source) {
+    console.log('handler');
+    const filterValues = { searchTerm: term };
+
+    if (type === 'digital') this.updateDigitalFilterState(filterValues);
+    if (type === 'paper') this.updatePaperFilterState(filterValues);
   }
 
   public setSortMode(sortMode: TaskSortEnum) {
@@ -399,12 +423,20 @@ export class ManageKabasTasksOverviewComponent
    * @param {FilterStateInterface} updatedFilter
    * @memberof ManageKabasTasksOverviewComponent
    */
-  private updateFilterState(updatedFilter: FilterStateInterface): void {
-    const currentFilterState = this.filterState$.value;
+  private updateDigitalFilterState(updatedFilter: FilterStateInterface): void {
+    console.log('here digital');
+    const currentFilterState = this.digitalFilterState$.value;
     const newFilterState = { ...currentFilterState, ...updatedFilter };
 
-    console.log('log: newFilterState', newFilterState);
-    this.filterState$.next(newFilterState);
+    this.digitalFilterState$.next(newFilterState);
+  }
+
+  private updatePaperFilterState(updatedFilter: FilterStateInterface): void {
+    console.log('here paper');
+    const currentFilterState = this.paperFilterState$.value;
+    const newFilterState = { ...currentFilterState, ...updatedFilter };
+
+    this.paperFilterState$.next(newFilterState);
   }
 
   /**
@@ -414,18 +446,24 @@ export class ManageKabasTasksOverviewComponent
    * @returns {Observable<TaskWithAssigneesInterface[]>}
    * @memberof ManageKabasTasksOverviewComponent
    */
-  private getFilteredTasks(): Observable<TaskWithAssigneesInterface[]> {
+  private getFilteredDigitalTasks(): Observable<TaskWithAssigneesInterface[]> {
     return combineLatest([
-      this.currentTab$.pipe(tap(x => console.log('tab', x))),
-      this.filterState$,
-      this.tasksWithAssignments$.pipe(tap(x => console.log(x))),
-      this.paperTasksWithAssignments$.pipe(tap(x => console.log(x)))
+      this.digitalFilterState$,
+      this.viewModel.tasksWithAssignments$
     ]).pipe(
-      map(([currentTabIndex, filterState, digitalTasks, paperTasks]) => {
-        return this.filterTasks(
-          filterState,
-          currentTabIndex === 0 ? digitalTasks : paperTasks
-        );
+      map(([filterState, digitalTasks]) => {
+        return this.filterTasks(filterState, digitalTasks);
+      })
+    );
+  }
+
+  private getFilteredPaperTasks(): Observable<TaskWithAssigneesInterface[]> {
+    return combineLatest([
+      this.paperFilterState$,
+      this.viewModel.paperTasksWithAssignments$
+    ]).pipe(
+      map(([filterState, paperTasks]) => {
+        return this.filterTasks(filterState, paperTasks);
       })
     );
   }
@@ -587,7 +625,7 @@ export class ManageKabasTasksOverviewComponent
    * @private
    * @memberof ManageKabasTasksOverviewComponent
    */
-  private cleanUpPage(): void {
+  private cleanUpTab(type: Source): void {
     this.clearListSelections();
     this.clearFilters();
     this.resetSorting();
