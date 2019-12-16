@@ -33,8 +33,8 @@ import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
 import { MockKabasTasksViewModel } from '../kabas-tasks.viewmodel.mock';
 import { TaskListItemComponent } from '../task-list-item/task-list-item.component';
 import {
-  FilterStateInterface,
   ManageKabasTasksOverviewComponent,
+  Source,
   TaskSortEnum
 } from './manage-kabas-tasks-overview.component';
 
@@ -104,497 +104,516 @@ describe('ManageKabasTasksOverviewComponent', () => {
       >;
     });
 
-    it('should filter on searchTerm', () => {
-      const mockTasks = [
-        { name: 'foo' },
-        { name: 'bar' }
-      ] as TaskWithAssigneesInterface[];
-
-      digitalTasks$.next(mockTasks);
-      component.searchTermUpdated('foo', 'digital');
-
-      expect(component.digitalFilteredTasks$).toBeObservable(
-        hot('a', { a: [mockTasks[0]] })
-      );
-    });
-
-    it('should filter on status', () => {
-      const mockTasks = [
-        {
-          status: TaskStatusEnum.ACTIVE // matches
-        },
-        { status: TaskStatusEnum.PENDING }, // no match
-        { status: TaskStatusEnum.FINISHED } // matches
-      ] as TaskWithAssigneesInterface[];
-
-      digitalTasks$.next(mockTasks);
-      component.selectionChanged(
-        [
-          {
-            values: [
-              { data: { status: TaskStatusEnum.ACTIVE }, selected: true },
-              { data: { status: TaskStatusEnum.FINISHED }, selected: true }
-            ]
-          } as any
-        ],
-        'status',
-        'digital'
-      );
-
-      expect(component.digitalFilteredTasks$).toBeObservable(
-        hot('a', { a: [mockTasks[0], mockTasks[2]] })
-      );
-    });
-
-    it('should filter on learningArea', () => {
-      const mockTasks = [
-        { learningAreaId: 1 },
-        { learningAreaId: 2 },
-        { learningAreaId: 3 },
-        { learningAreaId: 2 }
-      ] as TaskWithAssigneesInterface[];
-
-      digitalTasks$.next(mockTasks);
-      component.selectionChanged(
-        [
-          {
-            values: [
-              { data: { id: 2 }, selected: true },
-              { data: { id: 3 }, selected: true }
-            ]
-          } as any
-        ],
-        'learningArea',
-        'digital'
-      );
-
-      expect(component.digitalFilteredTasks$).toBeObservable(
-        hot('a', {
-          a: [mockTasks[1], mockTasks[2], mockTasks[3]]
-        })
-      );
-    });
-
-    it('should filter on assignee', () => {
-      const mockTasks: TaskWithAssigneesInterface[] = [
-        {
-          assignees: [
-            { type: AssigneeTypesEnum.GROUP, id: 1 }, // matches filter
-            { type: AssigneeTypesEnum.STUDENT, id: 3 }, // does not match
-            { type: AssigneeTypesEnum.CLASSGROUP, id: 3 } // does not match
-          ]
-        },
-        {
-          assignees: [
-            { type: AssigneeTypesEnum.GROUP, id: 2 }, // does not match filter
-            { type: AssigneeTypesEnum.STUDENT, id: 1 } // matches filter --> task should be included in result
-          ]
-        },
-        {
-          assignees: [{ type: AssigneeTypesEnum.STUDENT, id: 1 }]
-        },
-        {
-          assignees: [{ type: AssigneeTypesEnum.STUDENT, id: 2 }] // does not match
-        },
-        {
-          assignees: [{ type: AssigneeTypesEnum.CLASSGROUP, id: 1 }] // matches
-        },
-        {
-          assignees: [{ type: AssigneeTypesEnum.CLASSGROUP, id: 2 }] // does not match
-        },
-        {
-          assignees: [
-            { type: AssigneeTypesEnum.STUDENT, id: 666 }, // does not match
-            { type: AssigneeTypesEnum.GROUP, id: 666 }, // does not match
-            { type: AssigneeTypesEnum.GROUP, id: 1 }, // matches --> should be included
-            { type: AssigneeTypesEnum.CLASSGROUP, id: 666 } // does not match
-          ]
+    ['digital', 'paper'].forEach((source: Source) => {
+      function getTasks$(source) {
+        if (source === 'digital') {
+          return digitalTasks$;
         }
-      ] as TaskWithAssigneesInterface[];
-
-      digitalTasks$.next(mockTasks);
-      component.selectionChanged(
-        [
-          {
-            values: [
-              {
-                data: { identifier: { type: AssigneeTypesEnum.GROUP, id: 1 } },
-                selected: true
-              },
-              {
-                data: {
-                  identifier: { type: AssigneeTypesEnum.STUDENT, id: 1 }
-                },
-                selected: true
-              },
-              {
-                data: {
-                  identifier: { type: AssigneeTypesEnum.CLASSGROUP, id: 1 }
-                },
-                selected: true
-              }
-            ]
-          } as any
-        ],
-        'assignee',
-        'digital'
-      );
-
-      expect(component.digitalFilteredTasks$).toBeObservable(
-        hot('a', {
-          a: [
-            mockTasks[0],
-            mockTasks[1],
-            mockTasks[2],
-            mockTasks[4],
-            mockTasks[6]
-          ]
-        })
-      );
-    });
-
-    describe('dateIntervalFilter', () => {
-      const mockTasks: TaskWithAssigneesInterface[] = [
-        {
-          startDate: new Date(2000, 5, 11),
-          endDate: new Date(2000, 5, 14) // matches
-        },
-        {
-          startDate: new Date(2000, 5, 10),
-          endDate: new Date(2000, 5, 20) // matches
-        },
-        {
-          startDate: new Date(2000, 5, 5),
-          endDate: new Date(2000, 5, 25) // matches
-        },
-        {
-          startDate: new Date(2000, 5, 14),
-          endDate: new Date(2000, 5, 25) // matches
-        },
-        {
-          startDate: new Date(2000, 5, 21),
-          endDate: new Date(2000, 5, 28) // no match
-        },
-        {
-          startDate: new Date(2000, 5, 1),
-          endDate: new Date(2000, 5, 5) // no match
+        if (source === 'paper') {
+          return paperTasks$;
         }
-      ] as TaskWithAssigneesInterface[];
+      }
 
-      beforeEach(() => {
-        digitalTasks$.next(mockTasks);
+      function getComponentTasks$(source) {
+        if (source === 'digital') {
+          return component.digitalFilteredTasks$;
+        }
+        if (source === 'paper') {
+          return component.paperFilteredTasks$;
+        }
+      }
+
+      it('should filter on searchTerm', () => {
+        const mockTasks = [
+          { name: 'foo' },
+          { name: 'bar' }
+        ] as TaskWithAssigneesInterface[];
+
+        getTasks$(source).next(mockTasks);
+
+        component.searchTermUpdated('foo', source);
+
+        expect(getComponentTasks$(source)).toBeObservable(
+          hot('a', { a: [mockTasks[0]] })
+        );
       });
 
-      it('should filter on start and end date', () => {
+      it('should filter on status', () => {
+        const mockTasks = [
+          {
+            status: TaskStatusEnum.ACTIVE // matches
+          },
+          { status: TaskStatusEnum.PENDING }, // no match
+          { status: TaskStatusEnum.FINISHED } // matches
+        ] as TaskWithAssigneesInterface[];
+
+        getTasks$(source).next(mockTasks);
         component.selectionChanged(
           [
             {
               values: [
-                {
-                  data: {
-                    gte: new Date(2000, 5, 10),
-                    lte: new Date(2000, 5, 20)
-                  }
-                }
+                { data: { status: TaskStatusEnum.ACTIVE }, selected: true },
+                { data: { status: TaskStatusEnum.FINISHED }, selected: true }
               ]
             } as any
           ],
-          'dateInterval',
-          'digital'
+          'status',
+          source
         );
 
-        expect(component.digitalFilteredTasks$).toBeObservable(
+        expect(getComponentTasks$(source)).toBeObservable(
+          hot('a', { a: [mockTasks[0], mockTasks[2]] })
+        );
+      });
+
+      it('should filter on learningArea', () => {
+        const mockTasks = [
+          { learningAreaId: 1 },
+          { learningAreaId: 2 },
+          { learningAreaId: 3 },
+          { learningAreaId: 2 }
+        ] as TaskWithAssigneesInterface[];
+
+        getTasks$(source).next(mockTasks);
+        component.selectionChanged(
+          [
+            {
+              values: [
+                { data: { id: 2 }, selected: true },
+                { data: { id: 3 }, selected: true }
+              ]
+            } as any
+          ],
+          'learningArea',
+          source
+        );
+
+        expect(getComponentTasks$(source)).toBeObservable(
           hot('a', {
-            a: [mockTasks[0], mockTasks[1], mockTasks[2], mockTasks[3]]
+            a: [mockTasks[1], mockTasks[2], mockTasks[3]]
           })
         );
       });
 
-      it('should filter on start date', () => {
+      it('should filter on assignee', () => {
+        const mockTasks: TaskWithAssigneesInterface[] = [
+          {
+            assignees: [
+              { type: AssigneeTypesEnum.GROUP, id: 1 }, // matches filter
+              { type: AssigneeTypesEnum.STUDENT, id: 3 }, // does not match
+              { type: AssigneeTypesEnum.CLASSGROUP, id: 3 } // does not match
+            ]
+          },
+          {
+            assignees: [
+              { type: AssigneeTypesEnum.GROUP, id: 2 }, // does not match filter
+              { type: AssigneeTypesEnum.STUDENT, id: 1 } // matches filter --> task should be included in result
+            ]
+          },
+          {
+            assignees: [{ type: AssigneeTypesEnum.STUDENT, id: 1 }]
+          },
+          {
+            assignees: [{ type: AssigneeTypesEnum.STUDENT, id: 2 }] // does not match
+          },
+          {
+            assignees: [{ type: AssigneeTypesEnum.CLASSGROUP, id: 1 }] // matches
+          },
+          {
+            assignees: [{ type: AssigneeTypesEnum.CLASSGROUP, id: 2 }] // does not match
+          },
+          {
+            assignees: [
+              { type: AssigneeTypesEnum.STUDENT, id: 666 }, // does not match
+              { type: AssigneeTypesEnum.GROUP, id: 666 }, // does not match
+              { type: AssigneeTypesEnum.GROUP, id: 1 }, // matches --> should be included
+              { type: AssigneeTypesEnum.CLASSGROUP, id: 666 } // does not match
+            ]
+          }
+        ] as TaskWithAssigneesInterface[];
+
+        getTasks$(source).next(mockTasks);
         component.selectionChanged(
           [
             {
               values: [
                 {
                   data: {
-                    gte: new Date(2000, 5, 10)
-                  }
+                    identifier: { type: AssigneeTypesEnum.GROUP, id: 1 }
+                  },
+                  selected: true
+                },
+                {
+                  data: {
+                    identifier: { type: AssigneeTypesEnum.STUDENT, id: 1 }
+                  },
+                  selected: true
+                },
+                {
+                  data: {
+                    identifier: { type: AssigneeTypesEnum.CLASSGROUP, id: 1 }
+                  },
+                  selected: true
                 }
               ]
             } as any
           ],
-          'dateInterval',
-          'digital'
+          'assignee',
+          source
         );
 
-        expect(component.digitalFilteredTasks$).toBeObservable(
+        expect(getComponentTasks$(source)).toBeObservable(
           hot('a', {
             a: [
               mockTasks[0],
               mockTasks[1],
               mockTasks[2],
-              mockTasks[3],
-              mockTasks[4]
+              mockTasks[4],
+              mockTasks[6]
             ]
           })
         );
       });
 
-      it('should filter on end date', () => {
+      describe('dateIntervalFilter', () => {
+        const mockTasks: TaskWithAssigneesInterface[] = [
+          {
+            startDate: new Date(2000, 5, 11),
+            endDate: new Date(2000, 5, 14) // matches
+          },
+          {
+            startDate: new Date(2000, 5, 10),
+            endDate: new Date(2000, 5, 20) // matches
+          },
+          {
+            startDate: new Date(2000, 5, 5),
+            endDate: new Date(2000, 5, 25) // matches
+          },
+          {
+            startDate: new Date(2000, 5, 14),
+            endDate: new Date(2000, 5, 25) // matches
+          },
+          {
+            startDate: new Date(2000, 5, 21),
+            endDate: new Date(2000, 5, 28) // no match
+          },
+          {
+            startDate: new Date(2000, 5, 1),
+            endDate: new Date(2000, 5, 5) // no match
+          }
+        ] as TaskWithAssigneesInterface[];
+
+        beforeEach(() => {
+          if (source === 'digital') {
+            digitalTasks$.next(mockTasks);
+          }
+          if (source === 'paper') {
+            paperTasks$.next(mockTasks);
+          }
+        });
+
+        it('should filter on start and end date', () => {
+          component.selectionChanged(
+            [
+              {
+                values: [
+                  {
+                    data: {
+                      gte: new Date(2000, 5, 10),
+                      lte: new Date(2000, 5, 20)
+                    }
+                  }
+                ]
+              } as any
+            ],
+            'dateInterval',
+            source
+          );
+
+          expect(getComponentTasks$(source)).toBeObservable(
+            hot('a', {
+              a: [mockTasks[0], mockTasks[1], mockTasks[2], mockTasks[3]]
+            })
+          );
+        });
+
+        it('should filter on start date', () => {
+          component.selectionChanged(
+            [
+              {
+                values: [
+                  {
+                    data: {
+                      gte: new Date(2000, 5, 10)
+                    }
+                  }
+                ]
+              } as any
+            ],
+            'dateInterval',
+            source
+          );
+
+          expect(getComponentTasks$(source)).toBeObservable(
+            hot('a', {
+              a: [
+                mockTasks[0],
+                mockTasks[1],
+                mockTasks[2],
+                mockTasks[3],
+                mockTasks[4]
+              ]
+            })
+          );
+        });
+
+        it('should filter on end date', () => {
+          component.selectionChanged(
+            [
+              {
+                values: [
+                  {
+                    data: {
+                      lte: new Date(2000, 5, 10)
+                    }
+                  }
+                ]
+              } as any
+            ],
+            'dateInterval',
+            source
+          );
+
+          expect(getComponentTasks$(source)).toBeObservable(
+            hot('a', {
+              a: [mockTasks[1], mockTasks[2], mockTasks[5]]
+            })
+          );
+        });
+      });
+
+      it('should filter on archived', () => {
+        const mockTasks = [
+          { archivedYear: 2000 }, // matches
+          { archivedYear: null }, // no match
+          { learningAreaId: 3 } // no match
+        ] as TaskWithAssigneesInterface[];
+
+        getTasks$(source).next(mockTasks);
+        component.archivedFilterToggled(
+          { source: null, checked: true },
+          source
+        );
+
+        expect(getComponentTasks$(source)).toBeObservable(
+          hot('a', {
+            a: [mockTasks[0]]
+          })
+        );
+      });
+
+      it('should combine multiple filters', () => {
+        const mockTasks = [
+          {
+            name: 'foo', //matches all filters
+            learningAreaId: 1,
+            status: TaskStatusEnum.ACTIVE,
+            startDate: new Date(2000, 1, 2),
+            endDate: new Date(2000, 1, 9),
+            assignees: [
+              {
+                type: AssigneeTypesEnum.GROUP,
+                id: 1
+              }
+            ]
+          },
+          {
+            name: 'bar', // does not match search term filter
+            learningAreaId: 1,
+            status: TaskStatusEnum.ACTIVE,
+            startDate: new Date(2000, 1, 2),
+            endDate: new Date(2000, 1, 9),
+            assignees: [
+              {
+                type: AssigneeTypesEnum.GROUP,
+                id: 1
+              }
+            ]
+          },
+          {
+            name: 'foo', // does not match all filters
+            learningAreaId: 2, // does not match
+            status: TaskStatusEnum.ACTIVE,
+            startDate: new Date(2000, 1, 2),
+            endDate: new Date(2000, 1, 9),
+            assignees: [
+              {
+                type: AssigneeTypesEnum.GROUP,
+                id: 1
+              }
+            ]
+          },
+          {
+            name: 'foo', // does not match all filters
+            learningAreaId: 1,
+            status: TaskStatusEnum.ACTIVE,
+            startDate: new Date(2000, 1, 2),
+            endDate: new Date(2000, 1, 9),
+            assignees: [
+              {
+                type: AssigneeTypesEnum.CLASSGROUP, // does not match
+                id: 1
+              }
+            ]
+          },
+          {
+            name: 'foo', // does not match all filters
+            learningAreaId: 1,
+            status: TaskStatusEnum.ACTIVE,
+            startDate: new Date(2000, 1, 2),
+            endDate: new Date(2000, 1, 9),
+            assignees: [
+              {
+                type: AssigneeTypesEnum.GROUP,
+                id: 2 // does not match
+              }
+            ]
+          },
+          {
+            name: 'foo', // does not match all filters
+            learningAreaId: 1,
+            status: TaskStatusEnum.FINISHED, // does not match
+            startDate: new Date(2000, 1, 2),
+            endDate: new Date(2000, 1, 9),
+            assignees: [
+              {
+                type: AssigneeTypesEnum.GROUP,
+                id: 1
+              }
+            ]
+          },
+          {
+            name: 'foo', // does not match all filters
+            learningAreaId: 1,
+            status: TaskStatusEnum.PENDING,
+            startDate: new Date(2000, 1, 15), // no match
+            endDate: new Date(2000, 1, 20), // no match
+            assignees: [
+              {
+                type: AssigneeTypesEnum.GROUP,
+                id: 1
+              }
+            ]
+          },
+          {
+            name: 'foobar', //matches all filters
+            learningAreaId: 1,
+            status: TaskStatusEnum.PENDING, // matches --> include
+            startDate: new Date(2000, 1, 2),
+            endDate: new Date(2000, 1, 9),
+            assignees: [
+              {
+                type: AssigneeTypesEnum.GROUP,
+                id: 1
+              },
+              {
+                type: AssigneeTypesEnum.GROUP,
+                id: 1
+              }
+            ]
+          },
+          {
+            name: 'foobar', //matches all filters
+            learningAreaId: 1,
+            status: TaskStatusEnum.PENDING,
+            startDate: new Date(2000, 1, 2),
+            endDate: new Date(2000, 1, 9),
+            assignees: [
+              {
+                type: AssigneeTypesEnum.GROUP, //matches
+                id: 666 // does not match
+              },
+              {
+                type: AssigneeTypesEnum.CLASSGROUP, //matches
+                id: 2 // matches
+              }
+            ]
+          }
+        ] as TaskWithAssigneesInterface[];
+        getTasks$(source).next(mockTasks);
+
+        //searchTerm
+        component.searchTermUpdated('foo', source);
+
+        // learningArea
+        component.selectionChanged(
+          [{ values: [{ data: { id: 1 }, selected: true }] } as any],
+          'learningArea',
+          source
+        );
+
+        //status
+        component.selectionChanged(
+          [
+            {
+              values: [
+                { data: { status: TaskStatusEnum.ACTIVE }, selected: true },
+                { data: { status: TaskStatusEnum.PENDING }, selected: true }
+              ]
+            } as any
+          ],
+          'status',
+          source
+        );
+
+        // assignees
         component.selectionChanged(
           [
             {
               values: [
                 {
                   data: {
-                    lte: new Date(2000, 5, 10)
+                    identifier: { type: AssigneeTypesEnum.GROUP, id: 1 }
+                  },
+                  selected: true
+                },
+                {
+                  data: {
+                    identifier: { type: AssigneeTypesEnum.CLASSGROUP, id: 2 }
+                  },
+                  selected: true
+                }
+              ]
+            } as any
+          ],
+          'assignee',
+          source
+        );
+
+        //dateInterval
+        component.selectionChanged(
+          [
+            {
+              values: [
+                {
+                  data: {
+                    gte: new Date(2000, 1, 1),
+                    lte: new Date(2000, 1, 10)
                   }
                 }
               ]
             } as any
           ],
           'dateInterval',
-          'digital'
+          source
         );
 
-        expect(component.digitalFilteredTasks$).toBeObservable(
+        expect(getComponentTasks$(source)).toBeObservable(
           hot('a', {
-            a: [mockTasks[1], mockTasks[2], mockTasks[5]]
+            a: [mockTasks[0], mockTasks[7], mockTasks[8]]
           })
         );
       });
-    });
-
-    it('should filter on archived', () => {
-      const mockTasks = [
-        { archivedYear: 2000 }, // matches
-        { archivedYear: null }, // no match
-        { learningAreaId: 3 } // no match
-      ] as TaskWithAssigneesInterface[];
-
-      digitalTasks$.next(mockTasks);
-      component.archivedFilterToggled(
-        { source: null, checked: true },
-        'digital'
-      );
-
-      expect(component.digitalFilteredTasks$).toBeObservable(
-        hot('a', {
-          a: [mockTasks[0]]
-        })
-      );
-    });
-
-    it('should combine multiple filters', () => {
-      const filterState: FilterStateInterface = {
-        searchTerm: 'foo',
-        learningArea: [1],
-        status: [TaskStatusEnum.ACTIVE, TaskStatusEnum.PENDING],
-        assignee: [
-          { type: AssigneeTypesEnum.GROUP, id: 1 },
-          { type: AssigneeTypesEnum.CLASSGROUP, id: 2 }
-        ],
-        dateInterval: { gte: new Date(2000, 1, 1), lte: new Date(2000, 1, 10) }
-      };
-
-      const mockTasks = [
-        {
-          name: 'foo', //matches all filters
-          learningAreaId: 1,
-          status: TaskStatusEnum.ACTIVE,
-          startDate: new Date(2000, 1, 2),
-          endDate: new Date(2000, 1, 9),
-          assignees: [
-            {
-              type: AssigneeTypesEnum.GROUP,
-              id: 1
-            }
-          ]
-        },
-        {
-          name: 'bar', // does not match search term filter
-          learningAreaId: 1,
-          status: TaskStatusEnum.ACTIVE,
-          startDate: new Date(2000, 1, 2),
-          endDate: new Date(2000, 1, 9),
-          assignees: [
-            {
-              type: AssigneeTypesEnum.GROUP,
-              id: 1
-            }
-          ]
-        },
-        {
-          name: 'foo', // does not match all filters
-          learningAreaId: 2, // does not match
-          status: TaskStatusEnum.ACTIVE,
-          startDate: new Date(2000, 1, 2),
-          endDate: new Date(2000, 1, 9),
-          assignees: [
-            {
-              type: AssigneeTypesEnum.GROUP,
-              id: 1
-            }
-          ]
-        },
-        {
-          name: 'foo', // does not match all filters
-          learningAreaId: 1,
-          status: TaskStatusEnum.ACTIVE,
-          startDate: new Date(2000, 1, 2),
-          endDate: new Date(2000, 1, 9),
-          assignees: [
-            {
-              type: AssigneeTypesEnum.CLASSGROUP, // does not match
-              id: 1
-            }
-          ]
-        },
-        {
-          name: 'foo', // does not match all filters
-          learningAreaId: 1,
-          status: TaskStatusEnum.ACTIVE,
-          startDate: new Date(2000, 1, 2),
-          endDate: new Date(2000, 1, 9),
-          assignees: [
-            {
-              type: AssigneeTypesEnum.GROUP,
-              id: 2 // does not match
-            }
-          ]
-        },
-        {
-          name: 'foo', // does not match all filters
-          learningAreaId: 1,
-          status: TaskStatusEnum.FINISHED, // does not match
-          startDate: new Date(2000, 1, 2),
-          endDate: new Date(2000, 1, 9),
-          assignees: [
-            {
-              type: AssigneeTypesEnum.GROUP,
-              id: 1
-            }
-          ]
-        },
-        {
-          name: 'foo', // does not match all filters
-          learningAreaId: 1,
-          status: TaskStatusEnum.PENDING,
-          startDate: new Date(2000, 1, 15), // no match
-          endDate: new Date(2000, 1, 20), // no match
-          assignees: [
-            {
-              type: AssigneeTypesEnum.GROUP,
-              id: 1
-            }
-          ]
-        },
-        {
-          name: 'foobar', //matches all filters
-          learningAreaId: 1,
-          status: TaskStatusEnum.PENDING, // matches --> include
-          startDate: new Date(2000, 1, 2),
-          endDate: new Date(2000, 1, 9),
-          assignees: [
-            {
-              type: AssigneeTypesEnum.GROUP,
-              id: 1
-            },
-            {
-              type: AssigneeTypesEnum.GROUP,
-              id: 1
-            }
-          ]
-        },
-        {
-          name: 'foobar', //matches all filters
-          learningAreaId: 1,
-          status: TaskStatusEnum.PENDING,
-          startDate: new Date(2000, 1, 2),
-          endDate: new Date(2000, 1, 9),
-          assignees: [
-            {
-              type: AssigneeTypesEnum.GROUP, //matches
-              id: 666 // does not match
-            },
-            {
-              type: AssigneeTypesEnum.CLASSGROUP, //matches
-              id: 2 // matches
-            }
-          ]
-        }
-      ] as TaskWithAssigneesInterface[];
-      digitalTasks$.next(mockTasks);
-
-      //searchTerm
-      component.searchTermUpdated('foo', 'digital');
-
-      // learningArea
-      component.selectionChanged(
-        [{ values: [{ data: { id: 1 }, selected: true }] } as any],
-        'learningArea',
-        'digital'
-      );
-
-      //status
-      component.selectionChanged(
-        [
-          {
-            values: [
-              { data: { status: TaskStatusEnum.ACTIVE }, selected: true },
-              { data: { status: TaskStatusEnum.PENDING }, selected: true }
-            ]
-          } as any
-        ],
-        'status',
-        'digital'
-      );
-
-      // assignees
-      component.selectionChanged(
-        [
-          {
-            values: [
-              {
-                data: { identifier: { type: AssigneeTypesEnum.GROUP, id: 1 } },
-                selected: true
-              },
-              {
-                data: {
-                  identifier: { type: AssigneeTypesEnum.CLASSGROUP, id: 2 }
-                },
-                selected: true
-              }
-            ]
-          } as any
-        ],
-        'assignee',
-        'digital'
-      );
-
-      //dateInterval
-      component.selectionChanged(
-        [
-          {
-            values: [
-              {
-                data: {
-                  gte: new Date(2000, 1, 1),
-                  lte: new Date(2000, 1, 10)
-                }
-              }
-            ]
-          } as any
-        ],
-        'dateInterval',
-        'digital'
-      );
-
-      expect(component.digitalFilteredTasks$).toBeObservable(
-        hot('a', {
-          a: [mockTasks[0], mockTasks[7], mockTasks[8]]
-        })
-      );
     });
   });
 
@@ -623,6 +642,7 @@ describe('ManageKabasTasksOverviewComponent', () => {
 
         component.setSortMode(TaskSortEnum.NAME);
         digitalTasks$.next(mockTasks);
+
         paperTasks$.next(mockTasks);
 
         expect(
