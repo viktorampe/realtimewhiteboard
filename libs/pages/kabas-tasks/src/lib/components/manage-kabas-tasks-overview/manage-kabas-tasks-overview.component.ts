@@ -327,8 +327,6 @@ export class ManageKabasTasksOverviewComponent
     this.router.navigate([], {
       queryParams: { tab }
     });
-
-    this.resetSorting();
   }
 
   public archivedFilterToggled(data: MatSlideToggleChange) {
@@ -591,6 +589,7 @@ export class ManageKabasTasksOverviewComponent
   private cleanUpPage(): void {
     this.clearListSelections();
     this.clearFilters();
+    this.resetSorting();
   }
 
   /**

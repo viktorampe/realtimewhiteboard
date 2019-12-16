@@ -603,7 +603,7 @@ describe('ManageKabasTasksOverviewComponent', () => {
     });
 
     describe('page events', () => {
-      it('should call setSortMode', async () => {
+      it('should call setSortMode', () => {
         component.setSortMode = jest.fn();
 
         const matSelect = fixture.debugElement.query(
