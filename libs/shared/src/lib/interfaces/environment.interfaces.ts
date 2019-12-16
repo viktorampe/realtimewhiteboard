@@ -70,6 +70,7 @@ export interface EnvironmentLogoutInterface {
 
 export interface EnvironmentLoginInterface {
   url: string;
+  loginPresets?: { label: string; username: string; password: string }[];
 }
 
 export interface EnvironmentTermPrivacyInterface {

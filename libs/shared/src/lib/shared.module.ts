@@ -33,8 +33,8 @@ import { PERMISSION_SERVICE_TOKEN } from './auth/permission.service.interface';
 import {
   LearningPlanGoalProgressManagementComponent,
   MethodBooksTileComponent,
-  QuickLinkComponent,
-  MethodBookTileComponent
+  MethodBookTileComponent,
+  QuickLinkComponent
 } from './components';
 import { HeaderComponent } from './components/header/header.component';
 import { PageBarContainerComponent } from './components/page-bar-container/page-bar-container.component';
