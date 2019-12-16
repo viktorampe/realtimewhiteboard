@@ -22,11 +22,60 @@
       background-color: $pages-settings-profile__form-bg-color;
       padding: $pages-settings-profile__form-padding;
 
+      .mat-error {
+        max-height: 0;
+        opacity: 0;
+        transform: translateY(-20px);
+        box-sizing: content-box;
+        padding: 10px 0;
+        margin-top: -16px;
+        transition: transform 150ms ease-out, max-height 150ms ease-out,
+          opacity 200ms ease 50ms;
+      }
+
+      .mat-form-field {
+        transform: translate3d(0, 0, 0);
+      }
+      &--unauthorized {
+        .mat-error {
+          opacity: 1;
+          max-height: 16px;
+          transform: translateY(0);
+        }
+
+        .mat-form-field {
+          animation: shake 0.62s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+        }
+      }
+
       &__title {
         font-size: $pages-settings-profile__form__title-font-size;
         font-weight: $pages-settings-profile__form__title-font-weight;
         margin-bottom: $pages-settings-profile__form__title-margin-bottom;
       }
     }
+  }
+}
+
+@keyframes shake {
+  10%,
+  90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+
+  20%,
+  80% {
+    transform: translate3d(2px, 0, 0);
+  }
+
+  30%,
+  50%,
+  70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+
+  40%,
+  60% {
+    transform: translate3d(4px, 0, 0);
   }
 }
