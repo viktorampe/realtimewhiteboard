@@ -366,7 +366,6 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
   }
 
   public searchTermUpdated(term: string, type: Source) {
-    console.log('handler');
     const filterValues = { searchTerm: term };
 
     if (type === 'digital') this.updateDigitalFilterState(filterValues);

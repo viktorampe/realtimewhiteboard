@@ -1,5 +1,4 @@
 import { CommonModule } from '@angular/common';
-import { DebugElement } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import {
   MatIconRegistry,
@@ -92,44 +91,9 @@ describe('ManageKabasTasksOverviewComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  // describe.only('handlers', () => {
-  //   beforeEach(() => {});
-  //   it('archivedFilterToggled should update the filter state', () => {
-  //     kabasTasksViewModel.tasksWithAssignments$ = new BehaviorSubject<
-  //       TaskWithAssigneesInterface[]
-  //     >([]);
-  //     kabasTasksViewModel.paperTasksWithAssignments$ = new BehaviorSubject<
-  //       TaskWithAssigneesInterface[]
-  //     >([]);
-
-  //     const mockTasks = [
-  //       { archivedYear: 2000 }, // matches
-  //       { archivedYear: null }, // no match
-  //       { learningAreaId: 3 } // no match
-  //     ] as TaskWithAssigneesInterface[];
-
-  //     const tasks$ = kabasTasksViewModel.tasksWithAssignments$ as BehaviorSubject<
-  //       TaskWithAssigneesInterface[]
-  //     >;
-  //     tasks$.next(mockTasks);
-
-  //     component.archivedFilterToggled({
-  //       checked: true,
-  //       source: null
-  //     });
-
-  //     expect(component.filteredTasks$).toBeObservable(
-  //       hot('a', {
-  //         a: [mockTasks[0]]
-  //       })
-  //     );
-  //   });
-  // });
-
   describe('filteredTasks$', () => {
     let digitalTasks$: BehaviorSubject<TaskWithAssigneesInterface[]>;
     let paperTasks$: BehaviorSubject<TaskWithAssigneesInterface[]>;
-    let filtersDE: DebugElement;
 
     beforeEach(() => {
       digitalTasks$ = kabasTasksViewModel.tasksWithAssignments$ as BehaviorSubject<
@@ -138,56 +102,23 @@ describe('ManageKabasTasksOverviewComponent', () => {
       paperTasks$ = kabasTasksViewModel.paperTasksWithAssignments$ as BehaviorSubject<
         TaskWithAssigneesInterface[]
       >;
-      // paperTasks$.next([]);
+    });
 
-      filtersDE = fixture.debugElement.query(
-        By.css('.manage-kabas-tasks-overview__filterbar__filters')
+    it('should filter on searchTerm', () => {
+      const mockTasks = [
+        { name: 'foo' },
+        { name: 'bar' }
+      ] as TaskWithAssigneesInterface[];
+
+      digitalTasks$.next(mockTasks);
+      component.searchTermUpdated('foo', 'digital');
+
+      expect(component.digitalFilteredTasks$).toBeObservable(
+        hot('a', { a: [mockTasks[0]] })
       );
     });
 
-    // fit('should filter on searchTerm', fakeAsync(() => {
-    //   const mockTasks = [
-    //     {
-    //       ...new TaskFixture({
-    //         id: 1,
-    //         name: 'foo',
-    //         learningArea: new LearningAreaFixture(),
-    //         archivedYear: undefined
-    //       }),
-    //       assignees: [],
-    //       status: TaskStatusEnum.ACTIVE
-    //     },
-    //     {
-    //       ...new TaskFixture({
-    //         id: 2,
-    //         name: 'bar',
-    //         learningArea: new LearningAreaFixture(),
-    //         archivedYear: undefined
-    //       }),
-    //       assignees: [],
-    //       status: TaskStatusEnum.ACTIVE
-    //     },
-    //     ,
-    //   ] as TaskWithAssigneesInterface[];
-
-    //   digitalTasks$.next(mockTasks);
-
-    //   const searchTermFilter = filtersDE.query(
-    //     By.directive(SearchTermComponent)
-    //   ).componentInstance as SearchTermComponent;
-
-    //   searchTermFilter.valueChange.next('foo');
-
-    //   expect(component.filteredTasks$).toBeObservable(
-    //     hot('a', { a: [mockTasks[0]] })
-    //   );
-    // }));
-
     it('should filter on status', () => {
-      const filterState: FilterStateInterface = {
-        status: [TaskStatusEnum.ACTIVE, TaskStatusEnum.FINISHED]
-      };
-
       const mockTasks = [
         {
           status: TaskStatusEnum.ACTIVE // matches
@@ -196,33 +127,55 @@ describe('ManageKabasTasksOverviewComponent', () => {
         { status: TaskStatusEnum.FINISHED } // matches
       ] as TaskWithAssigneesInterface[];
 
-      const result = component['filterTasks'](filterState, mockTasks);
+      digitalTasks$.next(mockTasks);
+      component.selectionChanged(
+        [
+          {
+            values: [
+              { data: { status: TaskStatusEnum.ACTIVE }, selected: true },
+              { data: { status: TaskStatusEnum.FINISHED }, selected: true }
+            ]
+          } as any
+        ],
+        'status',
+        'digital'
+      );
 
-      expect(result).toEqual([mockTasks[0], mockTasks[2]]);
+      expect(component.digitalFilteredTasks$).toBeObservable(
+        hot('a', { a: [mockTasks[0], mockTasks[2]] })
+      );
     });
 
     it('should filter on learningArea', () => {
-      const filterState: FilterStateInterface = { learningArea: [2, 3] };
       const mockTasks = [
         { learningAreaId: 1 },
         { learningAreaId: 2 },
         { learningAreaId: 3 },
         { learningAreaId: 2 }
       ] as TaskWithAssigneesInterface[];
-      const result = component['filterTasks'](filterState, mockTasks);
 
-      expect(result).toEqual([mockTasks[1], mockTasks[2], mockTasks[3]]);
+      digitalTasks$.next(mockTasks);
+      component.selectionChanged(
+        [
+          {
+            values: [
+              { data: { id: 2 }, selected: true },
+              { data: { id: 3 }, selected: true }
+            ]
+          } as any
+        ],
+        'learningArea',
+        'digital'
+      );
+
+      expect(component.digitalFilteredTasks$).toBeObservable(
+        hot('a', {
+          a: [mockTasks[1], mockTasks[2], mockTasks[3]]
+        })
+      );
     });
 
     it('should filter on assignee', () => {
-      const filterState: FilterStateInterface = {
-        assignee: [
-          { type: AssigneeTypesEnum.GROUP, id: 1 },
-          { type: AssigneeTypesEnum.STUDENT, id: 1 },
-          { type: AssigneeTypesEnum.CLASSGROUP, id: 1 }
-        ]
-      };
-
       const mockTasks: TaskWithAssigneesInterface[] = [
         {
           assignees: [
@@ -259,159 +212,177 @@ describe('ManageKabasTasksOverviewComponent', () => {
         }
       ] as TaskWithAssigneesInterface[];
 
-      const result = component['filterTasks'](filterState, mockTasks);
+      digitalTasks$.next(mockTasks);
+      component.selectionChanged(
+        [
+          {
+            values: [
+              {
+                data: { identifier: { type: AssigneeTypesEnum.GROUP, id: 1 } },
+                selected: true
+              },
+              {
+                data: {
+                  identifier: { type: AssigneeTypesEnum.STUDENT, id: 1 }
+                },
+                selected: true
+              },
+              {
+                data: {
+                  identifier: { type: AssigneeTypesEnum.CLASSGROUP, id: 1 }
+                },
+                selected: true
+              }
+            ]
+          } as any
+        ],
+        'assignee',
+        'digital'
+      );
 
-      expect(result).toEqual([
-        mockTasks[0],
-        mockTasks[1],
-        mockTasks[2],
-        mockTasks[4],
-        mockTasks[6]
-      ]);
+      expect(component.digitalFilteredTasks$).toBeObservable(
+        hot('a', {
+          a: [
+            mockTasks[0],
+            mockTasks[1],
+            mockTasks[2],
+            mockTasks[4],
+            mockTasks[6]
+          ]
+        })
+      );
     });
 
     describe('dateIntervalFilter', () => {
+      const mockTasks: TaskWithAssigneesInterface[] = [
+        {
+          startDate: new Date(2000, 5, 11),
+          endDate: new Date(2000, 5, 14) // matches
+        },
+        {
+          startDate: new Date(2000, 5, 10),
+          endDate: new Date(2000, 5, 20) // matches
+        },
+        {
+          startDate: new Date(2000, 5, 5),
+          endDate: new Date(2000, 5, 25) // matches
+        },
+        {
+          startDate: new Date(2000, 5, 14),
+          endDate: new Date(2000, 5, 25) // matches
+        },
+        {
+          startDate: new Date(2000, 5, 21),
+          endDate: new Date(2000, 5, 28) // no match
+        },
+        {
+          startDate: new Date(2000, 5, 1),
+          endDate: new Date(2000, 5, 5) // no match
+        }
+      ] as TaskWithAssigneesInterface[];
+
+      beforeEach(() => {
+        digitalTasks$.next(mockTasks);
+      });
+
       it('should filter on start and end date', () => {
-        const filterState: FilterStateInterface = {
-          dateInterval: {
-            gte: new Date(2000, 5, 10),
-            lte: new Date(2000, 5, 20)
-          }
-        };
+        component.selectionChanged(
+          [
+            {
+              values: [
+                {
+                  data: {
+                    gte: new Date(2000, 5, 10),
+                    lte: new Date(2000, 5, 20)
+                  }
+                }
+              ]
+            } as any
+          ],
+          'dateInterval',
+          'digital'
+        );
 
-        const mockTasks: TaskWithAssigneesInterface[] = [
-          {
-            startDate: new Date(2000, 5, 11),
-            endDate: new Date(2000, 5, 14) // matches
-          },
-          {
-            startDate: new Date(2000, 5, 10),
-            endDate: new Date(2000, 5, 20) // matches
-          },
-          {
-            startDate: new Date(2000, 5, 5),
-            endDate: new Date(2000, 5, 25) // matches
-          },
-          {
-            startDate: new Date(2000, 5, 14),
-            endDate: new Date(2000, 5, 25) // matches
-          },
-          {
-            startDate: new Date(2000, 5, 21),
-            endDate: new Date(2000, 5, 28) // no match
-          },
-          {
-            startDate: new Date(2000, 5, 1),
-            endDate: new Date(2000, 5, 5) // no match
-          }
-        ] as TaskWithAssigneesInterface[];
-
-        const result = component['filterTasks'](filterState, mockTasks);
-
-        expect(result).toEqual([
-          mockTasks[0],
-          mockTasks[1],
-          mockTasks[2],
-          mockTasks[3]
-        ]);
+        expect(component.digitalFilteredTasks$).toBeObservable(
+          hot('a', {
+            a: [mockTasks[0], mockTasks[1], mockTasks[2], mockTasks[3]]
+          })
+        );
       });
 
       it('should filter on start date', () => {
-        const filterState: FilterStateInterface = {
-          dateInterval: {
-            gte: new Date(2000, 5, 10)
-          }
-        };
+        component.selectionChanged(
+          [
+            {
+              values: [
+                {
+                  data: {
+                    gte: new Date(2000, 5, 10)
+                  }
+                }
+              ]
+            } as any
+          ],
+          'dateInterval',
+          'digital'
+        );
 
-        const mockTasks: TaskWithAssigneesInterface[] = [
-          {
-            startDate: new Date(2000, 5, 11),
-            endDate: new Date(2000, 5, 14) // matches
-          },
-          {
-            startDate: new Date(2000, 5, 10),
-            endDate: new Date(2000, 5, 20) // matches
-          },
-          {
-            startDate: new Date(2000, 5, 5),
-            endDate: new Date(2000, 5, 25) // matches
-          },
-          {
-            startDate: new Date(2000, 5, 14),
-            endDate: new Date(2000, 5, 25) // matches
-          },
-          {
-            startDate: new Date(2000, 5, 21),
-            endDate: new Date(2000, 5, 28) // matches
-          },
-          {
-            startDate: new Date(2000, 5, 1),
-            endDate: new Date(2000, 5, 5) // no match
-          }
-        ] as TaskWithAssigneesInterface[];
-
-        const result = component['filterTasks'](filterState, mockTasks);
-
-        expect(result).toEqual([
-          mockTasks[0],
-          mockTasks[1],
-          mockTasks[2],
-          mockTasks[3],
-          mockTasks[4]
-        ]);
+        expect(component.digitalFilteredTasks$).toBeObservable(
+          hot('a', {
+            a: [
+              mockTasks[0],
+              mockTasks[1],
+              mockTasks[2],
+              mockTasks[3],
+              mockTasks[4]
+            ]
+          })
+        );
       });
 
       it('should filter on end date', () => {
-        const filterState: FilterStateInterface = {
-          dateInterval: {
-            lte: new Date(2000, 5, 10)
-          }
-        };
+        component.selectionChanged(
+          [
+            {
+              values: [
+                {
+                  data: {
+                    lte: new Date(2000, 5, 10)
+                  }
+                }
+              ]
+            } as any
+          ],
+          'dateInterval',
+          'digital'
+        );
 
-        const mockTasks: TaskWithAssigneesInterface[] = [
-          {
-            startDate: new Date(2000, 5, 11), // no match
-            endDate: new Date(2000, 5, 14)
-          },
-          {
-            startDate: new Date(2000, 5, 10), //  match
-            endDate: new Date(2000, 5, 20)
-          },
-          {
-            startDate: new Date(2000, 5, 5), // match
-            endDate: new Date(2000, 5, 25)
-          },
-          {
-            startDate: new Date(2000, 5, 14), // no match
-            endDate: new Date(2000, 5, 25)
-          },
-          {
-            startDate: new Date(2000, 5, 21), // no match
-            endDate: new Date(2000, 5, 28)
-          },
-          {
-            startDate: new Date(2000, 5, 1), // match
-            endDate: new Date(2000, 5, 5)
-          }
-        ] as TaskWithAssigneesInterface[];
-
-        const result = component['filterTasks'](filterState, mockTasks);
-
-        expect(result).toEqual([mockTasks[1], mockTasks[2], mockTasks[5]]);
+        expect(component.digitalFilteredTasks$).toBeObservable(
+          hot('a', {
+            a: [mockTasks[1], mockTasks[2], mockTasks[5]]
+          })
+        );
       });
     });
 
     it('should filter on archived', () => {
-      const filterState: FilterStateInterface = { isArchived: true };
       const mockTasks = [
         { archivedYear: 2000 }, // matches
         { archivedYear: null }, // no match
         { learningAreaId: 3 } // no match
       ] as TaskWithAssigneesInterface[];
 
-      const result = component['filterTasks'](filterState, mockTasks);
+      digitalTasks$.next(mockTasks);
+      component.archivedFilterToggled(
+        { source: null, checked: true },
+        'digital'
+      );
 
-      expect(result).toEqual([mockTasks[0]]);
+      expect(component.digitalFilteredTasks$).toBeObservable(
+        hot('a', {
+          a: [mockTasks[0]]
+        })
+      );
     });
 
     it('should combine multiple filters', () => {
@@ -553,10 +524,77 @@ describe('ManageKabasTasksOverviewComponent', () => {
           ]
         }
       ] as TaskWithAssigneesInterface[];
+      digitalTasks$.next(mockTasks);
 
-      const result = component['filterTasks'](filterState, mockTasks);
+      //searchTerm
+      component.searchTermUpdated('foo', 'digital');
 
-      expect(result).toEqual([mockTasks[0], mockTasks[7], mockTasks[8]]);
+      // learningArea
+      component.selectionChanged(
+        [{ values: [{ data: { id: 1 }, selected: true }] } as any],
+        'learningArea',
+        'digital'
+      );
+
+      //status
+      component.selectionChanged(
+        [
+          {
+            values: [
+              { data: { status: TaskStatusEnum.ACTIVE }, selected: true },
+              { data: { status: TaskStatusEnum.PENDING }, selected: true }
+            ]
+          } as any
+        ],
+        'status',
+        'digital'
+      );
+
+      // assignees
+      component.selectionChanged(
+        [
+          {
+            values: [
+              {
+                data: { identifier: { type: AssigneeTypesEnum.GROUP, id: 1 } },
+                selected: true
+              },
+              {
+                data: {
+                  identifier: { type: AssigneeTypesEnum.CLASSGROUP, id: 2 }
+                },
+                selected: true
+              }
+            ]
+          } as any
+        ],
+        'assignee',
+        'digital'
+      );
+
+      //dateInterval
+      component.selectionChanged(
+        [
+          {
+            values: [
+              {
+                data: {
+                  gte: new Date(2000, 1, 1),
+                  lte: new Date(2000, 1, 10)
+                }
+              }
+            ]
+          } as any
+        ],
+        'dateInterval',
+        'digital'
+      );
+
+      expect(component.digitalFilteredTasks$).toBeObservable(
+        hot('a', {
+          a: [mockTasks[0], mockTasks[7], mockTasks[8]]
+        })
+      );
     });
   });
 
