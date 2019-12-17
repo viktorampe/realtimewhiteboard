@@ -134,7 +134,7 @@
           <mat-icon svgIcon="add"></mat-icon>
           nieuwe taak
         </mat-list-item>
-        <ng-container *ngIf="(digitalFilteredTasks$ | async) as digitalTasks">
+        <ng-container *ngIf="(tasksWithAssignments$ | async) as digitalTasks">
           <mat-list-option
             #option
             *ngFor="let task of digitalTasks"
@@ -245,7 +245,9 @@
           <mat-icon svgIcon="add"></mat-icon>
           nieuwe taak
         </mat-list-item>
-        <ng-container *ngIf="(paperFilteredTasks$ | async) as paperTasks">
+        <ng-container
+          *ngIf="(paperTasksWithAssignments$ | async) as paperTasks"
+        >
           <mat-list-option
             #option
             *ngFor="let task of paperTasks"
