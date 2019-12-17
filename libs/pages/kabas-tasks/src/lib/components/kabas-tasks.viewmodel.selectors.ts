@@ -68,7 +68,7 @@ const taskStudentAssigneeByTask = createSelector(
       dict[ts.taskId].push({
         type: AssigneeTypesEnum.STUDENT,
         id: ts.personId,
-        label: personDict[ts.personId].name,
+        label: personDict[ts.personId].displayName,
         start: ts.start,
         end: ts.end
       });
