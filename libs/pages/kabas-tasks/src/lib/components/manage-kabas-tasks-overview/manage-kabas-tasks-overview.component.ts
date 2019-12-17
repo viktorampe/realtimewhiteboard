@@ -660,9 +660,7 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
 
   private clearButtonToggleFilters(): void {
     if (this.buttonToggleFilters)
-      this.buttonToggleFilters.forEach(filter =>
-        filter.toggleControl.reset(null)
-      );
+      this.buttonToggleFilters.forEach(filter => filter.toggleControl.reset());
   }
 
   /**
