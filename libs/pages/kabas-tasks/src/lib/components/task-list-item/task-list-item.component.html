@@ -60,7 +60,8 @@
     [matTooltip]="students.join('\n')"
     class="manage-kabas-tasks-task-list-item__assignees-students"
   >
-    <span *ngIf="classGroups.length && !groups.length">+ </span><span> | </span>
+    <span *ngIf="classGroups.length && !groups.length">+ </span>
+    <span *ngIf="groups.length"> | </span>
     <span *ngIf="!classGroups.length && groups.length"> en </span>
     {{ students.length }} individuele leerling{{
       students.length === 1 ? '' : 'en'
