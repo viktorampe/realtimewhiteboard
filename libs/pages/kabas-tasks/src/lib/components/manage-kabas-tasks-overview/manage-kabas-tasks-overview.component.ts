@@ -140,13 +140,6 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
   @ViewChild('digitalSorting') private digitalSorting: MatSelect;
   @ViewChild('paperSorting') private paperSorting: MatSelect;
 
-  public actions = [
-    { label: 'bekijken', handler: () => console.log('bekijken') },
-    { label: 'archiveren', handler: () => console.log('archiveren') },
-    { label: 'resultaten', handler: () => console.log('resultaten') },
-    { label: 'doelenmatrix', handler: () => console.log('doelenmatrix') }
-  ];
-
   constructor(
     private viewModel: KabasTasksViewModel,
     private router: Router,
@@ -307,6 +300,18 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
         } as SearchFilterCriteriaValuesInterface;
       })
     } as SearchFilterCriteriaInterface;
+  }
+
+  public getActions() {
+    return [
+      { label: 'bekijken', handler: () => console.log('bekijken') },
+      {
+        label: this.isArchivedFilterActive ? 'dearchiveren' : 'archiveren',
+        handler: () => console.log('archiveren')
+      },
+      { label: 'resultaten', handler: () => console.log('resultaten') },
+      { label: 'doelenmatrix', handler: () => console.log('doelenmatrix') }
+    ];
   }
 
   clickAddDigitalTask() {
