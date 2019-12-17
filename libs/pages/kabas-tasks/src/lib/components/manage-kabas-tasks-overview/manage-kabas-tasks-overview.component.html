@@ -1,11 +1,4 @@
 <campus-page-bar>
-  <campus-button
-    class="shared-header__contextual__button smallIcon"
-    data-cy="nav-new-task"
-    iconClass="tasks"
-    (click)="clickNewTask()"
-    ><span>nieuw</span></campus-button
-  >
   <ng-container
     *ngIf="
       digital.selectedOptions.hasValue() || paper.selectedOptions.hasValue()
@@ -26,6 +19,13 @@
       ><span>verwijder</span></campus-button
     >
   </ng-container>
+  <campus-button
+    class="shared-header__contextual__button smallIcon"
+    data-cy="nav-new-task"
+    iconClass="tasks"
+    (click)="clickNewTask()"
+    ><span>nieuw</span></campus-button
+  >
 </campus-page-bar>
 
 <div class="manage-kabas-tasks-overview__container">
@@ -46,7 +46,7 @@
             multiple="true"
             *ngIf="(learningAreaFilter$ | async) as learningAreaFilter"
             [filterCriteria]="learningAreaFilter"
-            [resetLabel]="'Geen'"
+            [resetLabel]="'Selectie wissen'"
             (filterSelectionChange)="
               selectionChanged($event, 'learningArea', 'digital')
             "
@@ -64,7 +64,7 @@
             multiple="true"
             *ngIf="(assigneeFilter$ | async) as assigneeFilter"
             [filterCriteria]="assigneeFilter"
-            [resetLabel]="'Niemand'"
+            [resetLabel]="'Selectie wissen'"
             (filterSelectionChange)="
               selectionChanged($event, 'assignee', 'digital')
             "
@@ -134,7 +134,7 @@
           <mat-icon svgIcon="add"></mat-icon>
           nieuwe taak
         </mat-list-item>
-        <ng-container *ngIf="(digitalFilteredTasks$ | async) as digitalTasks">
+        <ng-container *ngIf="(tasksWithAssignments$ | async) as digitalTasks">
           <mat-list-option
             #option
             *ngFor="let task of digitalTasks"
@@ -169,7 +169,7 @@
 
           <campus-select-filter
             multiple="true"
-            [resetLabel]="'Geen'"
+            [resetLabel]="'Selectie wissen'"
             *ngIf="
               (learningAreaFilterPaper$ | async) as learningAreaFilterPaper
             "
@@ -183,7 +183,7 @@
             multiple="true"
             *ngIf="(assigneeFilterPaper$ | async) as assigneeFilterPaper"
             [filterCriteria]="assigneeFilterPaper"
-            [resetLabel]="'Niemand'"
+            [resetLabel]="'Selectie wissen'"
             (filterSelectionChange)="
               selectionChanged($event, 'assignee', 'paper')
             "
@@ -245,7 +245,9 @@
           <mat-icon svgIcon="add"></mat-icon>
           nieuwe taak
         </mat-list-item>
-        <ng-container *ngIf="(paperFilteredTasks$ | async) as paperTasks">
+        <ng-container
+          *ngIf="(paperTasksWithAssignments$ | async) as paperTasks"
+        >
           <mat-list-option
             #option
             *ngFor="let task of paperTasks"

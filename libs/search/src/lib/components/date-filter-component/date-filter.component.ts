@@ -279,6 +279,7 @@ export class DateFilterComponent
   }
 
   public reset(): void {
+    this.dateSelection.setValue({}, { emitEvent: false });
     this.filterCriteria.values = [{ data: {} }];
     this.filterSelectionChange.next([this.filterCriteria]);
     this.updateView();
