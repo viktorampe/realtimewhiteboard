@@ -11,8 +11,10 @@
         [(ngModel)]="currentValue"
         [placeholder]="placeholder"
         (keyup.enter)="onChange()"
+        (input)="onTextChange()"
       />
       <campus-button
+        *ngIf="!emitOnTextChange"
         [iconClass]="'magnifier'"
         (click)="onChange()"
         matSuffix
@@ -31,7 +33,7 @@
         [placeholder]="placeholder"
         [matAutocomplete]="auto"
         (keyup.enter)="onChange(); trigger.closePanel()"
-        (input)="getAutoCompleteValues()"
+        (input)="onTextChange(); getAutoCompleteValues()"
       />
 
       <mat-autocomplete
@@ -46,6 +48,7 @@
         >
       </mat-autocomplete>
       <campus-button
+        *ngIf="!emitOnTextChange"
         [iconClass]="'magnifier'"
         (click)="onChange()"
         matSuffix

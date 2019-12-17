@@ -16,6 +16,7 @@ export class SearchTermComponent implements OnInit {
   // string => external reference TODO: figure this out, when required
   @Input() public autoComplete: string | boolean = true;
   @Input() public autoCompleteValues: string[] = [];
+  @Input() public emitOnTextChange = false;
 
   @Output() public valueChange = new EventEmitter<string>();
   @Output() public valueChangeForAutoComplete = new EventEmitter<string>();
@@ -32,6 +33,11 @@ export class SearchTermComponent implements OnInit {
     if (this.currentValue.length < 2 || !this.autoComplete) return;
 
     this.valueChangeForAutoComplete.emit(this.currentValue);
+  }
+  onTextChange() {
+    if (this.emitOnTextChange) {
+      this.onChange();
+    }
   }
 
   getAutoFocusValue() {
