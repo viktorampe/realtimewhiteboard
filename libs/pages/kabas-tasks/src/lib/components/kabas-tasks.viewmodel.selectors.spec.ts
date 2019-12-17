@@ -95,7 +95,7 @@ describe('Kabas-tasks viewmodel selectors', () => {
             {
               type: AssigneeTypesEnum.STUDENT,
               id: 1,
-              label: 'Polleke',
+              label: 'Polleke Enkeltje',
               start: new Date(date - 3),
               end: new Date(date + 3)
             }
@@ -146,7 +146,7 @@ describe('Kabas-tasks viewmodel selectors', () => {
             {
               type: AssigneeTypesEnum.STUDENT,
               id: 2,
-              label: 'Mieke',
+              label: 'Mieke Mokke',
               start: new Date(date - 33),
               end: new Date(date + 33)
             }
@@ -224,8 +224,12 @@ function getLoadGroupsAction() {
 function getLoadLinkedPersonsAction() {
   return new LinkedPersonActions.LinkedPersonsLoaded({
     persons: [
-      new PersonFixture({ id: 1, name: 'Polleke' }),
-      new PersonFixture({ id: 2, name: 'Mieke' })
+      new PersonFixture({
+        id: 1,
+        name: 'Polleke',
+        displayName: 'Polleke Enkeltje'
+      }),
+      new PersonFixture({ id: 2, name: 'Mieke', displayName: 'Mieke Mokke' })
     ]
   });
 }
