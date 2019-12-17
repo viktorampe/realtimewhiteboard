@@ -105,20 +105,20 @@ describe('ManageKabasTasksOverviewComponent', () => {
     });
 
     ['digital', 'paper'].forEach((source: Source) => {
-      function getTasks$(source) {
-        if (source === 'digital') {
+      function getTasks$(taskSource) {
+        if (taskSource === 'digital') {
           return digitalTasks$;
         }
-        if (source === 'paper') {
+        if (taskSource === 'paper') {
           return paperTasks$;
         }
       }
 
-      function getComponentTasks$(source) {
-        if (source === 'digital') {
+      function getComponentTasks$(taskSource) {
+        if (taskSource === 'digital') {
           return component.digitalFilteredTasks$;
         }
-        if (source === 'paper') {
+        if (taskSource === 'paper') {
           return component.paperFilteredTasks$;
         }
       }
