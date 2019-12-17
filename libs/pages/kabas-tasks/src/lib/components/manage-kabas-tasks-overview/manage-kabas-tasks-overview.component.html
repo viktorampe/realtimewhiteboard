@@ -12,12 +12,23 @@
     "
   >
     <campus-button
+      *ngIf="(isArchivedFilterActive$ | async); else archiveAction"
       class="shared-header__contextual__button smallIcon"
       data-cy="nav-archive-task"
       iconClass="archive"
-      (click)="clickArchiveTasks()"
-      ><span>archiveer</span></campus-button
+      (click)="clickUnarchiveTasks()"
+      ><span>dearchiveer</span></campus-button
     >
+    <ng-template #archiveAction>
+      <campus-button
+        class="shared-header__contextual__button smallIcon"
+        data-cy="nav-archive-task"
+        iconClass="archive"
+        (click)="clickArchiveTasks()"
+        ><span>archiveer</span></campus-button
+      >
+    </ng-template>
+
     <campus-button
       class="shared-header__contextual__button smallIcon"
       data-cy="nav-delete-task"

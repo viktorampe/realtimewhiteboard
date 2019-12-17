@@ -109,6 +109,7 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
       }
     }
   ];
+  public isArchivedFilterActive$: Observable<boolean>;
 
   private digitalFilterState$ = new BehaviorSubject<FilterStateInterface>({});
   private paperFilterState$ = new BehaviorSubject<FilterStateInterface>({});
@@ -228,6 +229,16 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
         }
       ]
     };
+
+    this.isArchivedFilterActive$ = combineLatest([
+      this.digitalFilterState$,
+      this.paperFilterState$
+    ]).pipe(
+      map(
+        ([digitalFilterState, paperFilterState]) =>
+          !!digitalFilterState.isArchived || !!paperFilterState.isArchived
+      )
+    );
   }
 
   public sortAndCreateForAssigneeFilter(tasksWithAssignments) {
@@ -319,6 +330,9 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
 
   // TODO: implement handler
   clickArchiveTasks() {}
+
+  // TODO: implement handler
+  clickUnarchiveTasks() {}
 
   // TODO: implement handler
   clickNewTask() {}
