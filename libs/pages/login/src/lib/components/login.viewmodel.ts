@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import {
   DalState,
   EffectFeedbackActions,
@@ -14,7 +15,7 @@ import {
 } from '@campus/shared';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { take } from 'rxjs/operators';
+import { filter, skip, take } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -27,7 +28,8 @@ export class LoginViewModel {
   constructor(
     private store: Store<DalState>,
     @Inject(ENVIRONMENT_LOGIN_TOKEN)
-    private environmentLogin: EnvironmentLoginInterface
+    private environmentLogin: EnvironmentLoginInterface,
+    private router: Router
   ) {
     this.setupStreams();
     this.errorFeedback$ = this.store.pipe(
@@ -38,6 +40,8 @@ export class LoginViewModel {
   }
 
   public login(username: string, password: string) {
+    this.redirectAfterLogin();
+
     this.store.dispatch(
       new UserActions.LogInUser({
         ...this.prepareLogin(username),
@@ -74,5 +78,17 @@ export class LoginViewModel {
     return emailOrUsername.includes('@')
       ? { email: emailOrUsername }
       : { username: emailOrUsername };
+  }
+
+  private redirectAfterLogin(route = ['']) {
+    this.currentUser$
+      .pipe(
+        skip(1), // skip value before login
+        take(1), // complete after 1 login
+        filter(user => !!user) // only redirect when login is succesful
+      )
+      .subscribe(() => {
+        this.router.navigate(route);
+      });
   }
 }
