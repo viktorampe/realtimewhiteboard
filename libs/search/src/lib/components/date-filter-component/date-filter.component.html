@@ -59,5 +59,6 @@
   matBadgePosition="above after"
   [matMenuTriggerFor]="datepickerMenu"
   class="date-filter-component__open-datepicker-button"
+  [class.date-filter-component__date--selected]="count"
   >{{ customDisplayLabel || criteria.label }}</campus-button
 >

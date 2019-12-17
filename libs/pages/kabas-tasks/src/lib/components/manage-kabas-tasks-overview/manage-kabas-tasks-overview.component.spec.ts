@@ -704,7 +704,7 @@ describe('ManageKabasTasksOverviewComponent', () => {
         component.setSortMode = jest.fn();
 
         const matSelect = fixture.debugElement.query(
-          By.css('.manage-kabas-tasks-overview--sorting')
+          By.css('.manage-kabas-tasks-overview__sorting')
         ).componentInstance as MatSelect;
         matSelect.selectionChange.emit({
           source: undefined,
@@ -718,7 +718,7 @@ describe('ManageKabasTasksOverviewComponent', () => {
 
       it('should reset the sorting when switching tabs', () => {
         const matSelect = fixture.debugElement.query(
-          By.css('.manage-kabas-tasks-overview--sorting')
+          By.css('.manage-kabas-tasks-overview__sorting')
         ).componentInstance as MatSelect;
         matSelect.value = TaskSortEnum.LEARNINGAREA;
 
