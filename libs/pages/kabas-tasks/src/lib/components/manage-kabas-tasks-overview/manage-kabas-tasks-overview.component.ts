@@ -109,7 +109,8 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
       }
     }
   ];
-  public isArchivedFilterActive$: Observable<boolean>;
+
+  public isArchivedFilterActive: boolean;
 
   private digitalFilterState$ = new BehaviorSubject<FilterStateInterface>({});
   private paperFilterState$ = new BehaviorSubject<FilterStateInterface>({});
@@ -229,16 +230,6 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
         }
       ]
     };
-
-    this.isArchivedFilterActive$ = combineLatest([
-      this.digitalFilterState$,
-      this.paperFilterState$
-    ]).pipe(
-      map(
-        ([digitalFilterState, paperFilterState]) =>
-          !!digitalFilterState.isArchived || !!paperFilterState.isArchived
-      )
-    );
   }
 
   public sortAndCreateForAssigneeFilter(tasksWithAssignments) {
@@ -343,7 +334,7 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
   }
 
   public onSelectedTabIndexChanged(tab: number) {
-    this.cleanUpTab(1 ? 'digital' : 'paper');
+    this.cleanUpTab();
     this.router.navigate([], {
       queryParams: { tab }
     });
@@ -361,6 +352,10 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
 
   public archivedFilterToggled(data: MatSlideToggleChange, type: Source) {
     const filterValues: FilterStateInterface = { isArchived: data.checked };
+
+    // when archived is active, the status filter should be reset and disabled
+    this.clearButtonToggleFilters();
+    this.isArchivedFilterActive = data.checked;
 
     if (type === 'digital') this.updateDigitalFilterState(filterValues);
     if (type === 'paper') this.updatePaperFilterState(filterValues);
@@ -633,7 +628,7 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
    * @private
    * @memberof ManageKabasTasksOverviewComponent
    */
-  private cleanUpTab(type: Source): void {
+  private cleanUpTab(): void {
     this.clearListSelections();
     this.clearFilters();
     this.resetSorting();
@@ -654,14 +649,20 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
       });
     if (this.selectFilters)
       this.selectFilters.forEach(filter => filter.selectControl.reset());
-    if (this.buttonToggleFilters)
-      this.buttonToggleFilters.forEach(filter => filter.toggleControl.reset());
+    this.clearButtonToggleFilters();
     if (this.slideToggleFilters)
       this.slideToggleFilters.forEach(filter => {
         filter.checked = false;
         filter.change.emit({ checked: false, source: filter });
       });
     if (this.dateFilters) this.dateFilters.forEach(filter => filter.reset());
+  }
+
+  private clearButtonToggleFilters(): void {
+    if (this.buttonToggleFilters)
+      this.buttonToggleFilters.forEach(filter =>
+        filter.toggleControl.reset(null)
+      );
   }
 
   /**

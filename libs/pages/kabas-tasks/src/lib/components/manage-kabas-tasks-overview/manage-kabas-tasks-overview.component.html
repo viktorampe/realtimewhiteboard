@@ -12,7 +12,7 @@
     "
   >
     <campus-button
-      *ngIf="(isArchivedFilterActive$ | async); else archiveAction"
+      *ngIf="isArchivedFilterActive; else archiveAction"
       class="shared-header__contextual__button smallIcon"
       data-cy="nav-archive-task"
       iconClass="archive"
@@ -82,6 +82,7 @@
           ></campus-select-filter>
 
           <campus-button-toggle-filter
+            [disabled]="isArchivedFilterActive"
             [multiple]="true"
             (filterSelectionChange)="
               selectionChanged($event, 'status', 'digital')
