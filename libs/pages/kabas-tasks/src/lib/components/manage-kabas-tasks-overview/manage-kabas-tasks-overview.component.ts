@@ -307,7 +307,10 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
       { label: 'bekijken', handler: () => console.log('bekijken') },
       {
         label: this.isArchivedFilterActive ? 'dearchiveren' : 'archiveren',
-        handler: () => console.log('archiveren')
+        handler: () =>
+          console.log(
+            this.isArchivedFilterActive ? 'dearchiveren' : 'archiveren'
+          )
       },
       { label: 'resultaten', handler: () => console.log('resultaten') },
       { label: 'doelenmatrix', handler: () => console.log('doelenmatrix') }

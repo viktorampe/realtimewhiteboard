@@ -276,7 +276,7 @@
               [startDate]="task.startDate"
               [endDate]="task.endDate"
               [status]="task.status"
-              [actions]="actions"
+              [actions]="getActions()"
               [assignees]="task.assignees"
             ></campus-task-list-item>
           </mat-list-option>
