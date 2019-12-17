@@ -1,11 +1,24 @@
 import { formatDate } from '@angular/common';
-import { Component, EventEmitter, HostBinding, Inject, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  HostBinding,
+  Inject,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewChild
+} from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatMenuTrigger, MAT_DATE_LOCALE } from '@angular/material';
 import { Subscription } from 'rxjs';
 import { distinctUntilChanged } from 'rxjs/operators';
 import { SearchFilterComponentInterface } from '../../interfaces/search-filter-component-interface';
-import { SearchFilterCriteriaInterface, SearchFilterCriteriaValuesInterface } from '../../interfaces/search-filter-criteria.interface';
+import {
+  SearchFilterCriteriaInterface,
+  SearchFilterCriteriaValuesInterface
+} from '../../interfaces/search-filter-criteria.interface';
 
 export enum RadioOptionValueType {
   FilterCriteriaValue,
@@ -266,7 +279,7 @@ export class DateFilterComponent
   }
 
   public reset(): void {
-    this.dateSelection.setValue({}, {emitEvent: false})
+    this.dateSelection.setValue({}, { emitEvent: false });
     this.filterCriteria.values = [{ data: {} }];
     this.filterSelectionChange.next([this.filterCriteria]);
     this.updateView();
