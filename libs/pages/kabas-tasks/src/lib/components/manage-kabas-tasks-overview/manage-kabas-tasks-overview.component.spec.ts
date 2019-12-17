@@ -602,11 +602,11 @@ describe('ManageKabasTasksOverviewComponent', () => {
 
       it('should order by learningArea', () => {
         const mockTasks = [
-          { id: 1, learningArea: { name: 'zzzzzz' } },
-          { id: 2, learningArea: { name: 'Aaa' } },
-          { id: 3, learningArea: { name: 'aaa' } },
-          { id: 4, learningArea: { name: 'Aaa' } },
-          { id: 5, learningArea: { name: '' } }
+          { id: 1, learningArea: { name: 'zzzzzz' }, name: 'abc' },
+          { id: 2, learningArea: { name: 'Aaa' }, name: 'baa' },
+          { id: 3, learningArea: { name: 'aaa' }, name: 'akc' },
+          { id: 4, learningArea: { name: 'Aaa' }, name: 'foo' },
+          { id: 5, learningArea: { name: '' }, name: 'bar' }
         ] as TaskWithAssigneesInterface[];
 
         component.setSortMode(TaskSortEnum.LEARNINGAREA);
@@ -617,13 +617,13 @@ describe('ManageKabasTasksOverviewComponent', () => {
           component.tasksWithAssignments$.pipe(
             map(tasks => tasks.map(task => task.id))
           )
-        ).toBeObservable(hot('a', { a: [5, 2, 3, 4, 1] }));
+        ).toBeObservable(hot('a', { a: [5, 3, 2, 4, 1] }));
 
         expect(
           component.paperTasksWithAssignments$.pipe(
             map(tasks => tasks.map(task => task.id))
           )
-        ).toBeObservable(hot('a', { a: [5, 2, 3, 4, 1] }));
+        ).toBeObservable(hot('a', { a: [5, 3, 2, 4, 1] }));
       });
 
       it('should order by startDate', () => {
