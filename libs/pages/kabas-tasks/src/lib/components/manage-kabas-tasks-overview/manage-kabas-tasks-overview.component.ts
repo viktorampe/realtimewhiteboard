@@ -51,7 +51,7 @@ export enum TaskSortEnum {
   'STARTDATE' = 'STARTDATE'
 }
 
-type Source = 'digital' | 'paper';
+export type Source = 'digital' | 'paper';
 
 @Component({
   selector: 'campus-manage-kabas-tasks-overview',
