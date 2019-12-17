@@ -188,7 +188,7 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
 
     this.dateFilterCriteria = {
       name: 'taskDate',
-      label: 'Actief van',
+      label: 'Actief vanaf',
       keyProperty: '',
       displayProperty: 'icon',
       values: [

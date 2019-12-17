@@ -53,6 +53,7 @@
           ></campus-select-filter>
 
           <campus-date-filter
+            class="manage-kabas-tasks-overview__date-filter"
             [options]="fixedDateFilterOptions"
             [filterCriteria]="dateFilterCriteria"
             (filterSelectionChange)="
@@ -88,13 +89,13 @@
           </div>
           <campus-button
             (click)="clickResetFilters('digital')"
-            class="manage-kabas-tasks-overview--reset-filters"
+            class="manage-kabas-tasks-overview__reset-filters"
             iconClass="reset-filters"
           ></campus-button>
           <div style="flex-grow: 1;"></div>
 
           <mat-select
-            class="manage-kabas-tasks-overview--sorting"
+            class="manage-kabas-tasks-overview__sorting"
             (selectionChange)="setSortMode($event.value)"
             #digitalSorting
             [placeholder]="'Sorteren'"
@@ -120,7 +121,12 @@
         </ng-container>
       </div>
 
-      <mat-selection-list #digital>
+      <mat-selection-list
+        #digital
+        [class.mat-selection-list--has-selection]="
+          !digital.selectedOptions.isEmpty()
+        "
+      >
         <mat-list-item
           (click)="clickAddDigitalTask()"
           class="manage-kabas-tasks-overview__list__primary-action"
@@ -135,7 +141,6 @@
             checkboxPosition="before"
             [class.mat-list-option--selected]="option.selected"
           >
-            <!-- TODO: set correct inputs -->
             <campus-task-list-item
               [title]="task.name"
               [learningArea]="task.learningArea.name"
@@ -194,13 +199,13 @@
           </div>
           <campus-button
             (click)="clickResetFilters()"
-            class="manage-kabas-tasks-overview--reset-filters"
+            class="manage-kabas-tasks-overview__reset-filters"
             iconClass="reset-filters"
           ></campus-button>
           <div style="flex-grow: 1;"></div>
 
           <mat-select
-            class="manage-kabas-tasks-overview--sorting"
+            class="manage-kabas-tasks-overview__sorting"
             (selectionChange)="setSortMode($event.value)"
             #paperSorting
             [placeholder]="'Sorteren'"
@@ -227,7 +232,12 @@
         </ng-template>
       </div>
 
-      <mat-selection-list #paper>
+      <mat-selection-list
+        #paper
+        [class.mat-selection-list--has-selection]="
+          !digital.selectedOptions.isEmpty()
+        "
+      >
         <mat-list-item
           (click)="clickAddPaperTask()"
           class="manage-kabas-tasks-overview__list__primary-action"
@@ -242,7 +252,6 @@
             checkboxPosition="before"
             [class.mat-list-option--selected]="option.selected"
           >
-            <!-- TODO: set correct inputs -->
             <campus-task-list-item
               [title]="task.name"
               [learningArea]="task.learningArea.name"
