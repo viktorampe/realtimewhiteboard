@@ -703,12 +703,12 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
           sensitivity: 'base'
         }
       );
-
-      return lA
-        ? lA
-        : a.name.localeCompare(b.name, 'be-nl', {
-            sensitivity: 'base'
-          });
+      return (
+        lA ||
+        a.name.localeCompare(b.name, 'be-nl', {
+          sensitivity: 'base'
+        })
+      );
     });
   }
 
