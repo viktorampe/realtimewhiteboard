@@ -166,6 +166,7 @@
             placeholder="Zoeken op titel"
             [autoComplete]="false"
             (valueChange)="searchTermUpdated($event, 'paper')"
+            [emitOnTextChange]="true"
           ></campus-search-term>
 
           <campus-select-filter
