@@ -695,11 +695,21 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
   }
 
   private sortByLearningArea(tasks: TaskWithAssigneesInterface[]) {
-    return tasks.sort((a, b) =>
-      a.learningArea.name.localeCompare(b.learningArea.name, 'be-nl', {
-        sensitivity: 'base'
-      })
-    );
+    return tasks.sort((a, b) => {
+      const lA = a.learningArea.name.localeCompare(
+        b.learningArea.name,
+        'be-nl',
+        {
+          sensitivity: 'base'
+        }
+      );
+
+      return lA
+        ? lA
+        : a.name.localeCompare(b.name, 'be-nl', {
+            sensitivity: 'base'
+          });
+    });
   }
 
   private sortByStartDate(tasks: TaskWithAssigneesInterface[]) {
