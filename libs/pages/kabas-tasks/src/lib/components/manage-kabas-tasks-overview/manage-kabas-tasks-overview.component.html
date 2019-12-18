@@ -41,6 +41,7 @@
             placeholder="Filter op naam"
             [autoComplete]="false"
             (valueChange)="searchTermUpdated($event, 'digital')"
+            [emitOnTextChange]="true"
           ></campus-search-term>
           <campus-select-filter
             multiple="true"
@@ -165,6 +166,7 @@
             placeholder="Zoeken op titel"
             [autoComplete]="false"
             (valueChange)="searchTermUpdated($event, 'paper')"
+            [emitOnTextChange]="true"
           ></campus-search-term>
 
           <campus-select-filter
