@@ -10,9 +10,12 @@
 ></mat-icon>
 
 <div class="manage-kabas-tasks-task-list-item__container">
-  <span class="manage-kabas-tasks-task-list-item__container__title">{{
-    title
-  }}</span>
+  <div
+    class="manage-kabas-tasks-task-list-item__container__title"
+    (click)="actions[0].handler()"
+    campusClickStopPropagation
+    >{{ title }}</div
+  >
   <div
     *ngIf="actions.length"
     class="manage-kabas-tasks-task-list-item__container__actions"
@@ -29,10 +32,13 @@
   {{ learningArea }}
 </div>
 
-<div class="manage-kabas-tasks-task-list-item__dates"
-  ><span *ngIf="startDate">{{ startDate | date: 'd/MM/yy' }}</span
-  ><span *ngIf="endDate"> - {{ endDate | date: 'd/MM/yy' }}</span></div
->
+<div class="manage-kabas-tasks-task-list-item__dates">
+  <div matLine>
+    <span *ngIf="startDate">{{ startDate | date: 'd/MM/yy' }}</span>
+    <span *ngIf="endDate"> - {{ endDate | date: 'd/MM/yy' }}</span>
+  </div>
+  <div matLine></div>
+</div>
 <div class="manage-kabas-tasks-task-list-item__assignees">
   <ul
     class="manage-kabas-tasks-task-list-item__assignees-class-groups"
@@ -55,6 +61,7 @@
     class="manage-kabas-tasks-task-list-item__assignees-students"
   >
     <span *ngIf="classGroups.length && !groups.length">+ </span>
+    <span *ngIf="groups.length"> | </span>
     <span *ngIf="!classGroups.length && groups.length"> en </span>
     {{ students.length }} individuele leerling{{
       students.length === 1 ? '' : 'en'

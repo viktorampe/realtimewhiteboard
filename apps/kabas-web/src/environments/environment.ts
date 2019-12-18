@@ -19,7 +19,11 @@ export const environment: EnvironmentInterface = {
     url: 'http://www.kabas.localhost:3020/login'
   },
   login: {
-    url: 'http://www.kabas.localhost:3020/login'
+    url: 'http://www.kabas.localhost:3020/login',
+    loginPresets: [
+      { label: 'Student', username: 'student1', password: 'testje' },
+      { label: 'Leerkracht', username: 'teacher1', password: 'testje' }
+    ]
   },
   termPrivacy: {
     url: 'http://www.kabas.localhost:3020/dev'

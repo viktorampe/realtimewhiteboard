@@ -11,13 +11,14 @@ export class TaskClassGroupService {
   constructor(private personApi: PersonApi) {}
 
   public getAllForUser(userId: number): Observable<TaskClassGroupInterface[]> {
-    return this.personApi
-      .getData(userId, 'taskClassGroups')
-      .pipe(
-        map(
-          (res: { taskClassGroups: TaskClassGroupInterface[] }) =>
-            res.taskClassGroups
-        )
-      );
+    return this.personApi.getData(userId, 'taskClassGroups').pipe(
+      map((res: { taskClassGroups: TaskClassGroupInterface[] }) =>
+        res.taskClassGroups.map(taskClassGroup => ({
+          ...taskClassGroup,
+          end: new Date(taskClassGroup.end),
+          start: new Date(taskClassGroup.start)
+        }))
+      )
+    );
   }
 }

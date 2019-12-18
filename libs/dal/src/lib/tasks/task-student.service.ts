@@ -12,10 +12,14 @@ export class TaskStudentService implements TaskStudentServiceInterface {
   constructor(private personApi: PersonApi) {}
 
   public getAllForUser(userId: number): Observable<TaskStudentInterface[]> {
-    return this.personApi
-      .getData(userId, 'taskStudents')
-      .pipe(
-        map((res: { taskStudents: TaskStudentInterface[] }) => res.taskStudents)
-      );
+    return this.personApi.getData(userId, 'taskStudents').pipe(
+      map((res: { taskStudents: TaskStudentInterface[] }) =>
+        res.taskStudents.map(taskStudent => ({
+          ...taskStudent,
+          end: new Date(taskStudent.end),
+          start: new Date(taskStudent.start)
+        }))
+      )
+    );
   }
 }
