@@ -23,7 +23,7 @@ export class LoginComponent implements OnInit {
 
   public loginPresets = this.loginViewModel.loginPresets;
 
-  public redirecting = false;
+  public isRedirecting = false;
 
   @HostBinding('class.pages-login') isCampusLogin = true;
   @HostBinding('class.campus-page') isCampusPage = true;
@@ -65,7 +65,7 @@ export class LoginComponent implements OnInit {
       )
       .subscribe(() => {
         this.router.navigate(route);
-        this.redirecting = true;
+        this.isRedirecting = true;
       });
   }
 }
