@@ -12,7 +12,7 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { GuardsModule } from '@campus/guards';
 import { PagesSharedModule } from '@campus/pages/shared';
-import { SearchModule } from '@campus/search';
+import { ButtonToggleFilterComponent, SearchModule } from '@campus/search';
 import {
   ENVIRONMENT_ICON_MAPPING_TOKEN,
   ENVIRONMENT_TESTING_TOKEN,
@@ -89,6 +89,68 @@ describe('ManageKabasTasksOverviewComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  describe('filter selection changed handlers', () => {
+    describe('archivedFilterToggled()', () => {
+      it('should clear and disable the status filter', () => {
+        const statusToggleButton: ButtonToggleFilterComponent = fixture.debugElement.query(
+          By.directive(ButtonToggleFilterComponent)
+        ).componentInstance;
+
+        // select multiple statuses
+        statusToggleButton.toggleControl.setValue(
+          [
+            {
+              ...component.taskStatusFilter,
+              ...{
+                values: [
+                  {
+                    data: {
+                      status: 'pending',
+                      icon: 'task:pending'
+                    },
+                    visible: true,
+                    selected: true // select value
+                  },
+                  {
+                    data: {
+                      status: 'active',
+                      icon: 'task:active'
+                    },
+                    visible: true,
+                    selected: true // select value
+                  },
+                  {
+                    data: {
+                      status: 'finished',
+                      icon: 'task:finished'
+                    },
+                    visible: true,
+                    selected: true // select value
+                  }
+                ]
+              }
+            }
+          ],
+          { emitEvent: true }
+        );
+
+        const noOptionsSelected = { ...component.taskStatusFilter };
+
+        // toggle archived filter
+        component.archivedFilterToggled(
+          { checked: true, source: null },
+          'digital'
+        );
+
+        fixture.detectChanges();
+
+        expect(component.isArchivedFilterActive).toBe(true);
+        expect(statusToggleButton.disabled).toBe(true);
+        expect(statusToggleButton.filterCriteria).toEqual(noOptionsSelected);
+      });
+    });
   });
 
   describe('filteredTasks$', () => {

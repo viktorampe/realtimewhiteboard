@@ -65,73 +65,6 @@ describe('LoginViewModel', () => {
   describe('user', () => {
     it('should log in', () => {
       store.dispatch = jest.fn();
-
-      const username = 'admin';
-      const password = 'god';
-
-      loginViewModel.login(username, password);
-      expect(store.dispatch).toHaveBeenCalledWith(
-        new UserActions.LogInUser(
-          jasmine.objectContaining({
-            username,
-            password
-          })
-        )
-      );
-    });
-
-    it('should log out', () => {
-      store.dispatch = jest.fn();
-
-      loginViewModel.logout();
-      expect(store.dispatch).toHaveBeenCalledWith(new UserActions.RemoveUser());
-    });
-
-    it('currentUser$', () => {
-      store.dispatch(new UserActions.UserLoaded(new PersonFixture()));
-
-      expect(loginViewModel.currentUser$).toBeObservable(
-        hot('a', { a: new PersonFixture() })
-      );
-    });
-  });
-
-  describe('login presets', () => {
-    it('should contain the environment values', () => {
-      expect(loginViewModel.loginPresets).toEqual(
-        mockEnvironmentValues.loginPresets
-      );
-    });
-  });
-});
-
-describe('LoginViewModel', () => {
-  let loginViewModel: LoginViewModel;
-  let store: Store<DalState>;
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
-      imports: [
-        StoreModule.forRoot({ router: routerReducer }),
-        ...getStoreModuleForFeatures([UserReducer])
-      ],
-      providers: [
-        LoginViewModel,
-        { provide: ENVIRONMENT_LOGIN_TOKEN, useValue: {} }
-      ]
-    });
-  });
-  beforeEach(() => {
-    loginViewModel = TestBed.get(LoginViewModel);
-    store = TestBed.get(Store);
-  });
-  describe('creation', () => {
-    it('should be defined', () => {
-      expect(loginViewModel).toBeDefined();
-    });
-  });
-  describe('user', () => {
-    it('should log in', () => {
-      store.dispatch = jest.fn();
       const username = 'admin';
       const password = 'god';
       loginViewModel.login(username, password);
@@ -146,6 +79,7 @@ describe('LoginViewModel', () => {
         })
       );
     });
+
     it('should log in with email address', () => {
       store.dispatch = jest.fn();
       const username = 'admin@god.be';
@@ -162,18 +96,24 @@ describe('LoginViewModel', () => {
         })
       );
     });
+
     it('should log out', () => {
       store.dispatch = jest.fn();
+
       loginViewModel.logout();
       expect(store.dispatch).toHaveBeenCalledWith(new UserActions.RemoveUser());
     });
+
     it('currentUser$', () => {
       store.dispatch(new UserActions.UserLoaded(new PersonFixture()));
+
       expect(loginViewModel.currentUser$).toBeObservable(
         hot('a', { a: new PersonFixture() })
       );
     });
+  });
 
+  describe('feedback', () => {
     it('should delete effectFeedback on clear error', () => {
       store.dispatch = jest.fn();
       const id = 'foo-id';
@@ -193,6 +133,14 @@ describe('LoginViewModel', () => {
 
       expect(store.dispatch).toHaveBeenCalledWith(
         new EffectFeedbackActions.DeleteEffectFeedback({ id })
+      );
+    });
+  });
+
+  describe('login presets', () => {
+    it('should contain the environment values', () => {
+      expect(loginViewModel.loginPresets).toEqual(
+        mockEnvironmentValues.loginPresets
       );
     });
   });
