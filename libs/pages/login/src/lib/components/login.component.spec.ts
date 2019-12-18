@@ -7,6 +7,8 @@ import {
 } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { Router } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 import { PersonFixture, PersonInterface } from '@campus/dal';
 import { ButtonComponent, UiModule } from '@campus/ui';
 import { configureTestSuite } from 'ng-bullet';
@@ -20,6 +22,8 @@ describe('LoginComponent', () => {
   let viewmodel: MockLoginViewModel;
   let fixture: ComponentFixture<LoginComponent>;
   let loginViewModel: LoginViewModel;
+  let router: Router;
+  let currentUser$: BehaviorSubject<PersonInterface>;
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
@@ -29,7 +33,8 @@ describe('LoginComponent', () => {
         ReactiveFormsModule,
         MatFormFieldModule,
         MatInputModule,
-        MatIconModule
+        MatIconModule,
+        RouterTestingModule
       ],
       declarations: [LoginComponent],
       providers: [{ provide: LoginViewModel, useClass: MockLoginViewModel }]
@@ -41,7 +46,12 @@ describe('LoginComponent', () => {
     viewmodel = TestBed.get(LoginViewModel);
     component = fixture.componentInstance;
     loginViewModel = TestBed.get(LoginViewModel);
+    router = TestBed.get(Router);
     fixture.detectChanges();
+
+    currentUser$ = loginViewModel.currentUser$ as BehaviorSubject<
+      PersonInterface
+    >;
   });
 
   it('should create', () => {
@@ -49,14 +59,6 @@ describe('LoginComponent', () => {
   });
 
   describe('template', () => {
-    let currentUser$: BehaviorSubject<PersonInterface>;
-
-    beforeEach(() => {
-      currentUser$ = loginViewModel.currentUser$ as BehaviorSubject<
-        PersonInterface
-      >;
-    });
-
     describe('logged in', () => {
       const person = new PersonFixture();
 
@@ -145,6 +147,30 @@ describe('LoginComponent', () => {
       });
 
       expect(component.clearError).toHaveBeenCalledTimes(2);
+    });
+  });
+
+  describe('logging in', () => {
+    beforeEach(() => {
+      currentUser$.next(undefined);
+      fixture.detectChanges();
+    });
+    it('should redirect after a succesful login', () => {
+      router.navigate = jest.fn();
+
+      component.login('foo', 'bar');
+      expect(router.navigate).not.toHaveBeenCalled();
+
+      currentUser$.next(new PersonFixture());
+      expect(router.navigate).toHaveBeenCalled();
+
+      fixture.detectChanges();
+      const redirectDE = fixture.debugElement.query(
+        By.css('.pages-login__form--redirecting')
+      );
+      expect(redirectDE.nativeElement.textContent.trim()).toContain(
+        'Even geduld, u wordt doorverwezen'
+      );
     });
   });
 });
