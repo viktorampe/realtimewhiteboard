@@ -1,6 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-import { Router } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
 import {
   DalState,
   EffectFeedback,
@@ -26,7 +24,6 @@ describe('LoginViewModel', () => {
   let loginViewModel: LoginViewModel;
   let store: Store<DalState>;
   let mockEnvironmentValues: EnvironmentLoginInterface;
-  let router: Router;
 
   beforeAll(() => {
     mockEnvironmentValues = {
@@ -45,8 +42,7 @@ describe('LoginViewModel', () => {
     TestBed.configureTestingModule({
       imports: [
         StoreModule.forRoot({ router: routerReducer }),
-        ...getStoreModuleForFeatures([UserReducer]),
-        RouterTestingModule
+        ...getStoreModuleForFeatures([UserReducer])
       ],
       providers: [
         LoginViewModel,
@@ -58,7 +54,6 @@ describe('LoginViewModel', () => {
   beforeEach(() => {
     loginViewModel = TestBed.get(LoginViewModel);
     store = TestBed.get(Store);
-    router = TestBed.get(Router);
   });
 
   describe('creation', () => {
@@ -100,22 +95,6 @@ describe('LoginViewModel', () => {
           }
         })
       );
-    });
-
-    it('should redirect after a succesful login', () => {
-      router.navigate = jest.fn();
-      const dispatchSpy = jest
-        .spyOn(store, 'dispatch')
-        .mockImplementation(() => {}); // block login action dispatch
-
-      loginViewModel.login('foo', 'bar');
-      expect(router.navigate).not.toHaveBeenCalled();
-
-      // simulate succesful login
-      dispatchSpy.mockRestore();
-      store.dispatch(new UserActions.UserLoaded(new PersonFixture()));
-
-      expect(router.navigate).toHaveBeenCalled();
     });
 
     it('should log out', () => {

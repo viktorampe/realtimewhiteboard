@@ -10,8 +10,11 @@
     <div class="pages-login__form__title"
       >Je bent ingelogd als {{ currentUser.displayName }}</div
     >
-    <div>
+    <div ngif="!isRedirecting" class="pages-login__form--logout">
       <campus-button campusPrimary (click)="logout()">Afmelden</campus-button>
+    </div>
+    <div ngif="isRedirecting" class="pages-login__form--redirecting">
+      Even geduld, u wordt doorverwezen
     </div>
   </div>
 </ng-container>
