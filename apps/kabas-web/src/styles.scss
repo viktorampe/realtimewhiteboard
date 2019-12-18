@@ -47,6 +47,8 @@ body {
 @include pages-practice-theme();
 @import 'libs/pages/kabas-tasks/src/lib/pages-kabas-tasks.theme';
 @include pages-kabas-tasks-theme();
+@import 'libs/pages/login/src/lib/pages-login.theme';
+@include pages-login-theme();
 
 // include shared lib scss
 @import 'libs/shared/src/lib/shared-theme';
@@ -248,7 +250,8 @@ p {
 .pages-manage-practice-overview,
 .pages-settings-profile,
 .pages-settings-dashboard,
-.pages-settings-alerts {
+.pages-settings-alerts,
+.pages-login {
   position: relative;
   padding-top: 10px;
 

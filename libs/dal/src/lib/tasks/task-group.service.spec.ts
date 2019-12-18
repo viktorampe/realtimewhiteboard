@@ -30,11 +30,11 @@ describe('TaskGroupService', () => {
 
   it('should return taskGroups', () => {
     mockData$ = hot('-a-|', {
-      a: { taskGroups: [{ id: 12331 }] }
+      a: { taskGroups: [{ id: 12331, start: 1, end: 1 }] }
     });
     expect(service.getAllForUser(1)).toBeObservable(
       hot('-a-|', {
-        a: [{ id: 12331 }]
+        a: [{ id: 12331, start: new Date(1), end: new Date(1) }]
       })
     );
   });
