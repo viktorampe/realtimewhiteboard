@@ -110,6 +110,8 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
     }
   ];
 
+  public isArchivedFilterActive: boolean;
+
   private digitalFilterState$ = new BehaviorSubject<FilterStateInterface>({});
   private paperFilterState$ = new BehaviorSubject<FilterStateInterface>({});
 
@@ -137,13 +139,6 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
 
   @ViewChild('digitalSorting') private digitalSorting: MatSelect;
   @ViewChild('paperSorting') private paperSorting: MatSelect;
-
-  public actions = [
-    { label: 'bekijken', handler: () => console.log('bekijken') },
-    { label: 'archiveren', handler: () => console.log('archiveren') },
-    { label: 'resultaten', handler: () => console.log('resultaten') },
-    { label: 'doelenmatrix', handler: () => console.log('doelenmatrix') }
-  ];
 
   constructor(
     private viewModel: KabasTasksViewModel,
@@ -307,6 +302,19 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
     } as SearchFilterCriteriaInterface;
   }
 
+  public getActions(task?: TaskWithAssigneesInterface) {
+    return [
+      { label: 'bekijken', handler: () => console.log('bekijken') },
+      {
+        label: task && task.archivedYear ? 'dearchiveren' : 'archiveren',
+        handler: () =>
+          console.log(task.archivedYear ? 'dearchiveren' : 'archiveren')
+      },
+      { label: 'resultaten', handler: () => console.log('resultaten') },
+      { label: 'doelenmatrix', handler: () => console.log('doelenmatrix') }
+    ];
+  }
+
   clickAddDigitalTask() {
     console.log('TODO: adding digital task');
   }
@@ -321,6 +329,9 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
   clickArchiveTasks() {}
 
   // TODO: implement handler
+  clickUnarchiveTasks() {}
+
+  // TODO: implement handler
   clickNewTask() {}
 
   clickResetFilters() {
@@ -329,7 +340,7 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
   }
 
   public onSelectedTabIndexChanged(tab: number) {
-    this.cleanUpTab(1 ? 'digital' : 'paper');
+    this.cleanUpTab();
     this.router.navigate([], {
       queryParams: { tab }
     });
@@ -347,6 +358,10 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
 
   public archivedFilterToggled(data: MatSlideToggleChange, type: Source) {
     const filterValues: FilterStateInterface = { isArchived: data.checked };
+
+    // when archived is active, the status filter should be reset and disabled
+    this.clearButtonToggleFilters();
+    this.isArchivedFilterActive = data.checked;
 
     if (type === 'digital') this.updateDigitalFilterState(filterValues);
     if (type === 'paper') this.updatePaperFilterState(filterValues);
@@ -619,7 +634,7 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
    * @private
    * @memberof ManageKabasTasksOverviewComponent
    */
-  private cleanUpTab(type: Source): void {
+  private cleanUpTab(): void {
     this.clearListSelections();
     this.clearFilters();
     this.resetSorting();
@@ -640,14 +655,18 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
       });
     if (this.selectFilters)
       this.selectFilters.forEach(filter => filter.selectControl.reset());
-    if (this.buttonToggleFilters)
-      this.buttonToggleFilters.forEach(filter => filter.toggleControl.reset());
+    this.clearButtonToggleFilters();
     if (this.slideToggleFilters)
       this.slideToggleFilters.forEach(filter => {
         filter.checked = false;
         filter.change.emit({ checked: false, source: filter });
       });
     if (this.dateFilters) this.dateFilters.forEach(filter => filter.reset());
+  }
+
+  private clearButtonToggleFilters(): void {
+    if (this.buttonToggleFilters)
+      this.buttonToggleFilters.forEach(filter => filter.toggleControl.reset());
   }
 
   /**

@@ -35,6 +35,7 @@ export class ButtonToggleFilterComponent
   private subscriptions: Subscription = new Subscription();
 
   @Input() multiple = false;
+  @Input() disabled = false;
   @Input()
   public set filterCriteria(criteria: SearchFilterCriteriaInterface) {
     this.criteria = criteria;

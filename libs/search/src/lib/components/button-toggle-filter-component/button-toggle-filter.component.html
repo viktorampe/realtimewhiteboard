@@ -10,7 +10,9 @@
     *ngFor="let option of options"
     [value]="option.value"
     [matTooltip]="option.tooltip"
-    [disabled]="option.value.prediction === 0 && !option.value.selected"
+    [disabled]="
+      (option.value.prediction === 0 && !option.value.selected) || disabled
+    "
     class="button-toggle-filter-component__button"
     [class.button-toggle-filter-component__button--disabled]="
       option.value.prediction === 0 && option.value.selected
