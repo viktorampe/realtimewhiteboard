@@ -18,7 +18,8 @@
         "ludoAssets": "api/educontent-assets-ludo"
       },
       "appPaths": {
-        "methods": "methods"
+        "methods": "methods",
+        "practice": "practice"
       },
       "username": "teacher1",
       "password": "testje"
@@ -30,7 +31,8 @@
         "ludoAssets": "api/educontent-assets-ludo"
       },
       "appPaths": {
-        "methods": "methods"
+        "methods": "methods",
+        "practice": "practice"
       },
       "username": "teacher1",
       "password": "testje"

@@ -44,3 +44,39 @@ export interface KabasMethodsPagesInterface {
     };
   };
 }
+
+export interface KabasPracticePagesInterface {
+  kabasUnlockedFreePracticePages: {
+    loginTeacher: { username: string; password: string };
+    loginStudent: { username: string; password: string };
+    book: number;
+    chapter: number;
+    lesson: number;
+    expected: {
+      methodStudent: {
+        name: string;
+        areaName: string;
+      };
+      methodTeacher: {
+        name: string;
+        year: string;
+      };
+      classGroups: string[];
+      chaptersTeacher: {
+        count: number;
+      };
+      chaptersStudent: {
+        count: number;
+      };
+      lessons: {
+        count: number;
+      };
+      chapterSearchNoFilters: {
+        results: number;
+      };
+      lessonSearchNoFilters: {
+        results: number;
+      };
+    };
+  };
+}
