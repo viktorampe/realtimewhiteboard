@@ -8,7 +8,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 export class ToolbarComponent implements OnInit {
   @Output() delete = new EventEmitter();
   @Output() clickColorIcon = new EventEmitter<void>();
-  @Output() clickToggleIcon = new EventEmitter<void>();
+  @Output() clickToggleEditIcon = new EventEmitter<void>();
   @Output() clickToggleView = new EventEmitter<void>();
 
   @Input() editMode: boolean;
@@ -25,7 +25,7 @@ export class ToolbarComponent implements OnInit {
   }
 
   toggleModus() {
-    this.clickToggleIcon.emit();
+    this.clickToggleEditIcon.emit();
   }
 
   toggleView() {
