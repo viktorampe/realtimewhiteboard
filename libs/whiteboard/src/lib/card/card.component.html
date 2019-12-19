@@ -3,6 +3,7 @@
   (dblclick)="onDblClick($event)"
   [style.background-color]="this.card.color"
 >
+  <input type="checkbox" class="card__checkbox" />
   <campus-toolbar
     [editMode]="this.card.editMode"
     (clickColorIcon)="showColor()"

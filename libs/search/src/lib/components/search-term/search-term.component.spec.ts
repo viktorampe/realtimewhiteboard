@@ -92,6 +92,24 @@ describe('SearchTermComponent', () => {
       expect(component.valueChange.emit).toHaveBeenCalledWith(searchTerm);
     });
 
+    it('should emit the search term when there is input', () => {
+      spyOn(component.valueChange, 'emit');
+      component.emitOnTextChange = true;
+      const searchTerm = 'rekenen';
+      const inputEl = fixture.debugElement.query(By.css('input')).nativeElement;
+      inputEl.value = searchTerm;
+      inputEl.dispatchEvent(new Event('input'));
+      expect(component.valueChange.emit).toHaveBeenCalled();
+      expect(component.valueChange.emit).toHaveBeenCalledWith('rekenen');
+    });
+
+    it('should hide the search icon when emitOnTextChange is true', () => {
+      component.emitOnTextChange = true;
+      fixture.detectChanges();
+
+      expect(fixture.debugElement.query(By.css('campus-button'))).toBeNull();
+    });
+
     it('should emit the search term when the user clicks search button', () => {
       spyOn(component.valueChange, 'emit');
 

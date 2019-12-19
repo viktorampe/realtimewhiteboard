@@ -23,7 +23,8 @@ export class LogInUser implements FeedbackTriggeringAction {
   readonly type = UserActionTypes.LogInUser;
   constructor(
     public payload: {
-      username: string;
+      username?: string;
+      email?: string;
       password: string;
       customFeedbackHandlers?: CustomFeedbackHandlersInterface;
     }

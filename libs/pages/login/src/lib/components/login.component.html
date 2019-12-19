@@ -10,8 +10,11 @@
     <div class="pages-login__form__title"
       >Je bent ingelogd als {{ currentUser.displayName }}</div
     >
-    <div>
-      <campus-button campusPrimary (click)="logout()">Log uit</campus-button>
+    <div *ngIf="!isRedirecting" class="pages-login__form--logout">
+      <campus-button campusPrimary (click)="logout()">Afmelden</campus-button>
+    </div>
+    <div *ngIf="isRedirecting" class="pages-login__form--redirecting">
+      Even geduld, u wordt doorverwezen
     </div>
   </div>
 </ng-container>
@@ -55,7 +58,7 @@
         campusPrimary
         (click)="submit()"
         [class.ui-button--disabled]="!loginForm.valid"
-        >Login</campus-button
+        >Aanmelden</campus-button
       >
     </form>
 
