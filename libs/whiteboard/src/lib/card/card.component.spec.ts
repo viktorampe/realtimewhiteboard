@@ -163,7 +163,7 @@ describe('CardComponent', () => {
     expect(component.card.editMode).toBe(true);
   });
 
-  it('should toggle to view mode image when toggel icon is clicked', () => {
+  it('should toggle to view mode image when toggle icon is clicked', () => {
     component.viewModeImage = false;
     component.toggleView();
     fixture.detectChanges();
