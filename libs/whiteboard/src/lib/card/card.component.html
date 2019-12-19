@@ -17,7 +17,7 @@
   ></campus-colorlist>
   <div class="card__content">
     <campus-cardimage
-      [editMode]="this.card.editMode"
+      [ngClass]="{ viewModeImage: this.card.editMode == false }"
       [hidden]="!this.viewModeImage"
     ></campus-cardimage>
     <div
