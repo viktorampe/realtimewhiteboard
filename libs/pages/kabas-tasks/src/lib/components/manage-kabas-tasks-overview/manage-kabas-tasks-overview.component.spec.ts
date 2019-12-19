@@ -1,11 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import {
-  MatIconRegistry,
-  MatSelect,
-  MatSelectModule,
-  MatSlideToggleModule
-} from '@angular/material';
+import { MatIconRegistry, MatSelect, MatSelectModule, MatSlideToggleModule } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute, Params, Router } from '@angular/router';
@@ -13,11 +8,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { GuardsModule } from '@campus/guards';
 import { PagesSharedModule } from '@campus/pages/shared';
 import { ButtonToggleFilterComponent, SearchModule } from '@campus/search';
-import {
-  ENVIRONMENT_ICON_MAPPING_TOKEN,
-  ENVIRONMENT_TESTING_TOKEN,
-  SharedModule
-} from '@campus/shared';
+import { ENVIRONMENT_ICON_MAPPING_TOKEN, ENVIRONMENT_TESTING_TOKEN, SharedModule } from '@campus/shared';
 import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
 import { hot } from '@nrwl/nx/testing';
@@ -25,18 +16,11 @@ import { configureTestSuite } from 'ng-bullet';
 import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AssigneeTypesEnum } from '../../interfaces/Assignee.interface';
-import {
-  TaskStatusEnum,
-  TaskWithAssigneesInterface
-} from '../../interfaces/TaskWithAssignees.interface';
+import { TaskStatusEnum, TaskWithAssigneesInterface } from '../../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
 import { MockKabasTasksViewModel } from '../kabas-tasks.viewmodel.mock';
 import { TaskListItemComponent } from '../task-list-item/task-list-item.component';
-import {
-  ManageKabasTasksOverviewComponent,
-  Source,
-  TaskSortEnum
-} from './manage-kabas-tasks-overview.component';
+import { ManageKabasTasksOverviewComponent, Source, TaskSortEnum } from './manage-kabas-tasks-overview.component';
 
 describe('ManageKabasTasksOverviewComponent', () => {
   let component: ManageKabasTasksOverviewComponent;
@@ -108,7 +92,7 @@ describe('ManageKabasTasksOverviewComponent', () => {
                   {
                     data: {
                       status: 'pending',
-                      icon: 'task:pending'
+                      icon: 'filter:pending'
                     },
                     visible: true,
                     selected: true // select value
@@ -116,7 +100,7 @@ describe('ManageKabasTasksOverviewComponent', () => {
                   {
                     data: {
                       status: 'active',
-                      icon: 'task:active'
+                      icon: 'filter:active'
                     },
                     visible: true,
                     selected: true // select value
@@ -124,7 +108,7 @@ describe('ManageKabasTasksOverviewComponent', () => {
                   {
                     data: {
                       status: 'finished',
-                      icon: 'task:finished'
+                      icon: 'filter:finished'
                     },
                     visible: true,
                     selected: true // select value
