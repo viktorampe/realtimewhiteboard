@@ -1,4 +1,4 @@
-import { CdkPortal, DomPortalHost, PortalHost } from '@angular/cdk/portal';
+import { CdkPortal, DomPortalOutlet, PortalOutlet } from '@angular/cdk/portal';
 import {
   AfterViewInit,
   ApplicationRef,
@@ -40,8 +40,8 @@ import {
   styleUrls: ['./page-bar-container.component.scss']
 })
 export class PageBarContainerComponent implements AfterViewInit, OnDestroy {
-  private portalHost: PortalHost;
-  @ViewChild(CdkPortal, { static: true }) portal;
+  private portalHost: PortalOutlet;
+  @ViewChild(CdkPortal, { static: false }) portal;
 
   constructor(
     private componentFactoryResolver: ComponentFactoryResolver,
@@ -68,7 +68,7 @@ export class PageBarContainerComponent implements AfterViewInit, OnDestroy {
     //TODO  e2e test, see https://github.com/diekeure/campus/issues/206
     const element = document.querySelector(selector);
     if (element === null) return null;
-    return new DomPortalHost(
+    return new DomPortalOutlet(
       element,
       this.componentFactoryResolver,
       this.appRef,
