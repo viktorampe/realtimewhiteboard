@@ -40,7 +40,6 @@ import {
 } from '@ngrx/router-store';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-
 import { handleUndo } from 'ngrx-undo';
 import { environment } from '../environments/environment';
 
@@ -49,9 +48,11 @@ import { environment } from '../environments/environment';
     StoreModule.forRoot(
       { app: undefined, router: routerReducer },
       {
-        metaReducers: !environment.production
-          ? [handleUndo]
-          : [handleUndo], runtimeChecks: { strictStateImmutability: true, strictActionImmutability: true }
+        metaReducers: !environment.production ? [handleUndo] : [handleUndo],
+        runtimeChecks: {
+          strictStateImmutability: true,
+          strictActionImmutability: true
+        }
       }
     ),
     StoreRouterConnectingModule.forRoot({

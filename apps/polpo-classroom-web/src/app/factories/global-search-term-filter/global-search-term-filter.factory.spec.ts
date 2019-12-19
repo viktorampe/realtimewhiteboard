@@ -1,35 +1,6 @@
 import { TestBed } from '@angular/core/testing';
-import {
-  DalState,
-  EduContentProductTypeActions,
-  EduContentProductTypeFixture,
-  EduContentProductTypeReducer,
-  EduNetActions,
-  EduNetFixture,
-  EduNetReducer,
-  getStoreModuleForFeatures,
-  LearningAreaActions,
-  LearningAreaFixture,
-  LearningAreaReducer,
-  LearningDomainActions,
-  LearningDomainFixture,
-  LearningDomainReducer,
-  MethodActions,
-  MethodFixture,
-  MethodReducer,
-  SchoolTypeActions,
-  SchoolTypeFixture,
-  SchoolTypeReducer,
-  YearActions,
-  YearFixture,
-  YearReducer
-} from '@campus/dal';
-import {
-  CheckboxLineFilterComponent,
-  CheckboxListFilterComponent,
-  SearchFilterInterface,
-  SearchStateInterface
-} from '@campus/search';
+import { DalState, EduContentProductTypeActions, EduContentProductTypeFixture, EduContentProductTypeReducer, EduNetActions, EduNetFixture, EduNetReducer, getStoreModuleForFeatures, LearningAreaActions, LearningAreaFixture, LearningAreaReducer, LearningDomainActions, LearningDomainFixture, LearningDomainReducer, MethodActions, MethodFixture, MethodReducer, SchoolTypeActions, SchoolTypeFixture, SchoolTypeReducer, YearActions, YearFixture, YearReducer } from '@campus/dal';
+import { CheckboxLineFilterComponent, CheckboxListFilterComponent, SearchFilterInterface, SearchStateInterface } from '@campus/search';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/angular/testing';
 import { configureTestSuite } from 'ng-bullet';
@@ -100,7 +71,11 @@ describe('GlobalSearchTermFilterFactory', () => {
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [
-        StoreModule.forRoot({}),
+                StoreModule.forRoot({},{
+          runtimeChecks: {
+            strictStateImmutability: false,
+            strictActionImmutability: false
+          }}),
         ...getStoreModuleForFeatures([
           LearningAreaReducer,
           MethodReducer,

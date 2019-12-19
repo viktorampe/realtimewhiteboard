@@ -9,20 +9,10 @@ import { Observable, of } from 'rxjs';
 import { BundleReducer } from '.';
 import { UnlockedContentFixture } from '../../+fixtures';
 import { BUNDLE_SERVICE_TOKEN } from '../../bundle/bundle.service.interface';
-import {
-  EffectFeedback,
-  EffectFeedbackActions,
-  Priority
-} from '../effect-feedback';
+import { EffectFeedback, EffectFeedbackActions, Priority } from '../effect-feedback';
 import { AddEffectFeedback } from '../effect-feedback/effect-feedback.actions';
 import { AddUnlockedContent } from '../unlocked-content/unlocked-content.actions';
-import {
-  BundlesLoaded,
-  BundlesLoadError,
-  LinkEduContent,
-  LinkUserContent,
-  LoadBundles
-} from './bundle.actions';
+import { BundlesLoaded, BundlesLoadError, LinkEduContent, LinkUserContent, LoadBundles } from './bundle.actions';
 import { BundlesEffects } from './bundle.effects';
 
 describe('BundleEffects', () => {
@@ -72,7 +62,11 @@ describe('BundleEffects', () => {
     TestBed.configureTestingModule({
       imports: [
         NxModule.forRoot(),
-        StoreModule.forRoot({}),
+                StoreModule.forRoot({},{
+          runtimeChecks: {
+            strictStateImmutability: false,
+            strictActionImmutability: false
+          }}),
         StoreModule.forFeature(BundleReducer.NAME, BundleReducer.reducer, {
           initialState: usedState
         }),

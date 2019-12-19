@@ -199,7 +199,15 @@ describe('QuickLinkViewModel', () => {
     TestBed.configureTestingModule({
       imports: [
         RouterTestingModule,
-        StoreModule.forRoot({}),
+        StoreModule.forRoot(
+          {},
+          {
+            runtimeChecks: {
+              strictStateImmutability: true,
+              strictActionImmutability: true
+            }
+          }
+        ),
         ...getStoreModuleForFeatures([
           FavoriteReducer,
           LearningAreaReducer,

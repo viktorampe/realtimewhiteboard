@@ -1,38 +1,11 @@
 import { TestBed } from '@angular/core/testing';
-import {
-  EduNetActions,
-  EduNetFixture,
-  EduNetReducer,
-  getStoreModuleForFeatures,
-  LearningAreaActions,
-  LearningAreaFixture,
-  LearningAreaReducer,
-  LEARNING_PLAN_SERVICE_TOKEN,
-  SchoolTypeActions,
-  SchoolTypeFixture,
-  SchoolTypeReducer,
-  SpecialtyFixture,
-  SpecialtyInterface,
-  YearFixture,
-  YearInterface
-} from '@campus/dal';
-import {
-  BreadcrumbFilterComponent,
-  ColumnFilterComponent,
-  SearchFilterCriteriaInterface,
-  SearchStateInterface
-} from '@campus/search';
+import { EduNetActions, EduNetFixture, EduNetReducer, getStoreModuleForFeatures, LearningAreaActions, LearningAreaFixture, LearningAreaReducer, LEARNING_PLAN_SERVICE_TOKEN, SchoolTypeActions, SchoolTypeFixture, SchoolTypeReducer, SpecialtyFixture, SpecialtyInterface, YearFixture, YearInterface } from '@campus/dal';
+import { BreadcrumbFilterComponent, ColumnFilterComponent, SearchFilterCriteriaInterface, SearchStateInterface } from '@campus/search';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/angular/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { of } from 'rxjs';
-import {
-  EDU_NETS_FILTER_PROPS,
-  LEARNING_AREA_FILTER_PROPS,
-  SCHOOL_TYPES_FILTER_PROPS,
-  SPECIALITIES_FILTER_PROPS,
-  YEARS_FILTER_PROPS
-} from './learning-plan-filter-props';
+import { EDU_NETS_FILTER_PROPS, LEARNING_AREA_FILTER_PROPS, SCHOOL_TYPES_FILTER_PROPS, SPECIALITIES_FILTER_PROPS, YEARS_FILTER_PROPS } from './learning-plan-filter-props';
 import { LearningPlanFilterFactory } from './learning-plan-filter.factory';
 
 const expectedOutputFilters = [
@@ -77,7 +50,11 @@ describe('LearningPlanFilterFactory', () => {
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [
-        StoreModule.forRoot({}),
+                StoreModule.forRoot({},{
+          runtimeChecks: {
+            strictStateImmutability: false,
+            strictActionImmutability: false
+          }}),
         ...getStoreModuleForFeatures([
           LearningAreaReducer,
           EduNetReducer,

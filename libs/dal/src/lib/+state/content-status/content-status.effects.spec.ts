@@ -7,11 +7,7 @@ import { hot } from '@nrwl/angular/testing';
 import { Observable, of } from 'rxjs';
 import { ContentStatusReducer } from '.';
 import { STUDENT_CONTENT_STATUS_SERVICE_TOKEN } from '../../student-content-status/student-content-status.service.interface';
-import {
-  ContentStatusesLoaded,
-  ContentStatusesLoadError,
-  LoadContentStatuses
-} from './content-status.actions';
+import { ContentStatusesLoaded, ContentStatusesLoadError, LoadContentStatuses } from './content-status.actions';
 import { ContentStatusesEffects } from './content-status.effects';
 
 describe('ContentStatusEffects', () => {
@@ -59,7 +55,11 @@ describe('ContentStatusEffects', () => {
     TestBed.configureTestingModule({
       imports: [
         NxModule.forRoot(),
-        StoreModule.forRoot({}),
+                StoreModule.forRoot({},{
+          runtimeChecks: {
+            strictStateImmutability: false,
+            strictActionImmutability: false
+          }}),
         StoreModule.forFeature(
           ContentStatusReducer.NAME,
           ContentStatusReducer.reducer,

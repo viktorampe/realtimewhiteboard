@@ -1,26 +1,6 @@
 import { inject, TestBed } from '@angular/core/testing';
-import {
-  DalState,
-  EduContentActions,
-  EduContentFixture,
-  EduContentInterface,
-  FavoriteActions,
-  FavoriteFixture,
-  FavoriteReducer,
-  getStoreModuleForFeatures,
-  HistoryActions,
-  HistoryFixture
-} from '@campus/dal';
-import {
-  EduContentCollectionManagerServiceInterface,
-  EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN,
-  OpenStaticContentServiceInterface,
-  OPEN_STATIC_CONTENT_SERVICE_TOKEN,
-  PermissionServiceInterface,
-  PERMISSION_SERVICE_TOKEN,
-  ScormExerciseServiceInterface,
-  SCORM_EXERCISE_SERVICE_TOKEN
-} from '@campus/shared';
+import { DalState, EduContentActions, EduContentFixture, EduContentInterface, FavoriteActions, FavoriteFixture, FavoriteReducer, getStoreModuleForFeatures, HistoryActions, HistoryFixture } from '@campus/dal';
+import { EduContentCollectionManagerServiceInterface, EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN, OpenStaticContentServiceInterface, OPEN_STATIC_CONTENT_SERVICE_TOKEN, PermissionServiceInterface, PERMISSION_SERVICE_TOKEN, ScormExerciseServiceInterface, SCORM_EXERCISE_SERVICE_TOKEN } from '@campus/shared';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/angular/testing';
 import { configureTestSuite } from 'ng-bullet';
@@ -40,7 +20,11 @@ describe('EduContentSearchResultItemService', () => {
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [
-        StoreModule.forRoot({}),
+                StoreModule.forRoot({},{
+          runtimeChecks: {
+            strictStateImmutability: false,
+            strictActionImmutability: false
+          }}),
         ...getStoreModuleForFeatures([FavoriteReducer])
       ],
       providers: [

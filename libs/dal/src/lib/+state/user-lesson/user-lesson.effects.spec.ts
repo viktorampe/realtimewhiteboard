@@ -9,21 +9,10 @@ import { Observable, of } from 'rxjs';
 import { UserLessonReducer } from '.';
 import { UserLessonFixture } from '../../+fixtures';
 import { USER_LESSON_SERVICE_TOKEN } from '../../user-lesson/user-lesson.service.interface';
-import {
-  EffectFeedback,
-  EffectFeedbackActions,
-  Priority
-} from '../effect-feedback';
+import { EffectFeedback, EffectFeedbackActions, Priority } from '../effect-feedback';
 import { AddEffectFeedback } from '../effect-feedback/effect-feedback.actions';
 import { StartAddManyLearningPlanGoalProgresses } from '../learning-plan-goal-progress/learning-plan-goal-progress.actions';
-import {
-  AddUserLesson,
-  CreateUserLesson,
-  CreateUserLessonWithLearningPlanGoalProgresses,
-  LoadUserLessons,
-  UserLessonsLoaded,
-  UserLessonsLoadError
-} from './user-lesson.actions';
+import { AddUserLesson, CreateUserLesson, CreateUserLessonWithLearningPlanGoalProgresses, LoadUserLessons, UserLessonsLoaded, UserLessonsLoadError } from './user-lesson.actions';
 import { UserLessonEffects } from './user-lesson.effects';
 
 describe('UserLessonEffects', () => {
@@ -74,7 +63,11 @@ describe('UserLessonEffects', () => {
     TestBed.configureTestingModule({
       imports: [
         NxModule.forRoot(),
-        StoreModule.forRoot({}),
+                StoreModule.forRoot({},{
+          runtimeChecks: {
+            strictStateImmutability: false,
+            strictActionImmutability: false
+          }}),
         StoreModule.forFeature(
           UserLessonReducer.NAME,
           UserLessonReducer.reducer,

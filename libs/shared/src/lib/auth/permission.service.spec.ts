@@ -3,10 +3,7 @@ import { UserReducer } from '@campus/dal';
 import { StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/angular/testing';
 import { PermissionService } from './permission.service';
-import {
-  PermissionServiceInterface,
-  PERMISSION_SERVICE_TOKEN
-} from './permission.service.interface';
+import { PermissionServiceInterface, PERMISSION_SERVICE_TOKEN } from './permission.service.interface';
 
 describe('PermissionService', () => {
   let service: PermissionServiceInterface;
@@ -24,7 +21,11 @@ describe('PermissionService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
-        StoreModule.forRoot({}),
+                StoreModule.forRoot({},{
+          runtimeChecks: {
+            strictStateImmutability: false,
+            strictActionImmutability: false
+          }}),
         StoreModule.forFeature(UserReducer.NAME, UserReducer.reducer, {
           initialState: userState
         })

@@ -76,7 +76,15 @@ describe('headerViewModel', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
-        StoreModule.forRoot({}),
+        StoreModule.forRoot(
+          {},
+          {
+            runtimeChecks: {
+              strictStateImmutability: true,
+              strictActionImmutability: true
+            }
+          }
+        ),
         ...StateFeatureBuilder.getModuleWithForFeatureProviders([
           {
             NAME: UserReducer.NAME,

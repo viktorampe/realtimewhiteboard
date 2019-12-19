@@ -1,18 +1,8 @@
 import { TestBed } from '@angular/core/testing';
-import {
-  ActivatedRouteSnapshot,
-  Router,
-  RouterStateSnapshot
-} from '@angular/router';
+import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { WINDOW } from '@campus/browser';
-import {
-  DalState,
-  PersonFixture,
-  StateFeatureBuilder,
-  UserActions,
-  UserReducer
-} from '@campus/dal';
+import { DalState, PersonFixture, StateFeatureBuilder, UserActions, UserReducer } from '@campus/dal';
 import { ENVIRONMENT_TERM_PRIVACY_TOKEN } from '@campus/shared';
 import { MockWindow } from '@campus/testing';
 import { Store, StoreModule } from '@ngrx/store';
@@ -34,7 +24,11 @@ describe('TermPrivacyGuard', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
-        StoreModule.forRoot({}),
+                StoreModule.forRoot({},{
+          runtimeChecks: {
+            strictStateImmutability: false,
+            strictActionImmutability: false
+          }}),
         ...StateFeatureBuilder.getStoreModuleForFeatures([UserReducer]),
         RouterTestingModule
       ],

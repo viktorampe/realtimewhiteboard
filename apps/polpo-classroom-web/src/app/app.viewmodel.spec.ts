@@ -143,7 +143,15 @@ describe('AppViewModel', () => {
             pathMatch: 'full'
           }
         ]),
-        StoreModule.forRoot({ router: routerReducer }),
+        StoreModule.forRoot(
+          { router: routerReducer },
+          {
+            runtimeChecks: {
+              strictStateImmutability: false,
+              strictActionImmutability: false
+            }
+          }
+        ),
         ...StateFeatureBuilder.getModuleWithForFeatureProviders([
           {
             NAME: UserReducer.NAME,

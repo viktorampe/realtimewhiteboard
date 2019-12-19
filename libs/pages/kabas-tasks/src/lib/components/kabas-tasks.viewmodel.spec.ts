@@ -23,7 +23,15 @@ describe('KabasTaskViewModel', () => {
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [
-        StoreModule.forRoot({ router: routerReducer }),
+        StoreModule.forRoot(
+          { router: routerReducer },
+          {
+            runtimeChecks: {
+              strictStateImmutability: false,
+              strictActionImmutability: false
+            }
+          }
+        ),
         ...getStoreModuleForFeatures([TaskReducer]),
         RouterTestingModule.withRoutes([]),
         StoreRouterConnectingModule.forRoot({

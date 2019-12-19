@@ -7,11 +7,7 @@ import { hot } from '@nrwl/angular/testing';
 import { Observable, of } from 'rxjs';
 import { SchoolTypeReducer } from '.';
 import { SCHOOL_TYPE_SERVICE_TOKEN } from '../../metadata/school-type.service.interface';
-import {
-  LoadSchoolTypes,
-  SchoolTypesLoaded,
-  SchoolTypesLoadError
-} from './school-type.actions';
+import { LoadSchoolTypes, SchoolTypesLoaded, SchoolTypesLoadError } from './school-type.actions';
 import { SchoolTypeEffects } from './school-type.effects';
 
 describe('SchoolTypeEffects', () => {
@@ -59,7 +55,11 @@ describe('SchoolTypeEffects', () => {
     TestBed.configureTestingModule({
       imports: [
         NxModule.forRoot(),
-        StoreModule.forRoot({}),
+                StoreModule.forRoot({},{
+          runtimeChecks: {
+            strictStateImmutability: false,
+            strictActionImmutability: false
+          }}),
         StoreModule.forFeature(
           SchoolTypeReducer.NAME,
           SchoolTypeReducer.reducer,

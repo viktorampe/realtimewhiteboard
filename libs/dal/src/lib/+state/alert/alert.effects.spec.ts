@@ -15,22 +15,8 @@ import { ALERT_SERVICE_TOKEN } from '../../alert/alert.service.interface';
 import { EffectFeedbackActions, Priority } from '../effect-feedback';
 import { AddEffectFeedback } from '../effect-feedback/effect-feedback.actions';
 import { ActionSuccessful } from './../dal.actions';
-import {
-  EffectFeedback,
-  EffectFeedbackInterface
-} from './../effect-feedback/effect-feedback.model';
-import {
-  AlertsLoaded,
-  AlertsLoadError,
-  DeleteAlert,
-  LoadAlerts,
-  LoadNewAlerts,
-  NewAlertsLoaded,
-  SetAlertReadByFilter,
-  SetReadAlert,
-  StartPollAlerts,
-  StopPollAlerts
-} from './alert.actions';
+import { EffectFeedback, EffectFeedbackInterface } from './../effect-feedback/effect-feedback.model';
+import { AlertsLoaded, AlertsLoadError, DeleteAlert, LoadAlerts, LoadNewAlerts, NewAlertsLoaded, SetAlertReadByFilter, SetReadAlert, StartPollAlerts, StopPollAlerts } from './alert.actions';
 import { AlertsEffects } from './alert.effects';
 import { initialState, reducer, State as AlertState } from './alert.reducer';
 
@@ -107,7 +93,11 @@ describe('AlertEffects', () => {
     TestBed.configureTestingModule({
       imports: [
         NxModule.forRoot(),
-        StoreModule.forRoot({}),
+                StoreModule.forRoot({},{
+          runtimeChecks: {
+            strictStateImmutability: false,
+            strictActionImmutability: false
+          }}),
         StoreModule.forFeature('alerts', reducer, {
           initialState: usedState
         }),

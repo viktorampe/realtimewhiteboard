@@ -55,7 +55,11 @@ describe('YearEffects', () => {
     TestBed.configureTestingModule({
       imports: [
         NxModule.forRoot(),
-        StoreModule.forRoot({}),
+                StoreModule.forRoot({},{
+          runtimeChecks: {
+            strictStateImmutability: false,
+            strictActionImmutability: false
+          }}),
         StoreModule.forFeature(YearReducer.NAME, YearReducer.reducer, {
           initialState: usedState
         }),

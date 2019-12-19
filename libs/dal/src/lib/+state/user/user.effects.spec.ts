@@ -104,7 +104,15 @@ describe('UserEffects', () => {
     TestBed.configureTestingModule({
       imports: [
         NxModule.forRoot(),
-        StoreModule.forRoot({}),
+        StoreModule.forRoot(
+          {},
+          {
+            runtimeChecks: {
+              strictStateImmutability: true,
+              strictActionImmutability: true
+            }
+          }
+        ),
         EffectsModule.forRoot([]),
         DalModule.forRoot({ apiBaseUrl: '' })
       ],

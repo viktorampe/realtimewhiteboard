@@ -7,11 +7,7 @@ import { hot } from '@nrwl/angular/testing';
 import { Observable, of } from 'rxjs';
 import { TaskStudentReducer } from '.';
 import { TASK_STUDENT_SERVICE_TOKEN } from '../../tasks/task-student.service.interface';
-import {
-  LoadTaskStudents,
-  TaskStudentsLoaded,
-  TaskStudentsLoadError
-} from './task-student.actions';
+import { LoadTaskStudents, TaskStudentsLoaded, TaskStudentsLoadError } from './task-student.actions';
 import { TaskStudentEffects } from './task-student.effects';
 
 describe('TaskStudentEffects', () => {
@@ -59,7 +55,11 @@ describe('TaskStudentEffects', () => {
     TestBed.configureTestingModule({
       imports: [
         NxModule.forRoot(),
-        StoreModule.forRoot({}),
+                StoreModule.forRoot({},{
+          runtimeChecks: {
+            strictStateImmutability: false,
+            strictActionImmutability: false
+          }}),
         StoreModule.forFeature(
           TaskStudentReducer.NAME,
           TaskStudentReducer.reducer,

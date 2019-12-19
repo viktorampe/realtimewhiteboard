@@ -8,13 +8,7 @@ import { DataPersistence, NxModule } from '@nrwl/angular';
 import { hot } from '@nrwl/angular/testing';
 import { Observable, of } from 'rxjs';
 import { ListFormat } from '../../+external-interfaces';
-import {
-  LoadUi,
-  SaveUi,
-  SetBreadcrumbs,
-  SetListFormat,
-  UiLoaded
-} from './ui.actions';
+import { LoadUi, SaveUi, SetBreadcrumbs, SetListFormat, UiLoaded } from './ui.actions';
 import { UiEffects } from './ui.effects';
 import { initialState, reducer } from './ui.reducer';
 
@@ -28,7 +22,11 @@ describe('UiEffects', () => {
     TestBed.configureTestingModule({
       imports: [
         NxModule.forRoot(),
-        StoreModule.forRoot({}),
+                StoreModule.forRoot({},{
+          runtimeChecks: {
+            strictStateImmutability: false,
+            strictActionImmutability: false
+          }}),
         EffectsModule.forRoot([])
       ],
       providers: [

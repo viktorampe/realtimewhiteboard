@@ -8,19 +8,12 @@ import { hot } from '@nrwl/angular/testing';
 import { Observable, of } from 'rxjs';
 import { TeacherStudentReducer } from '.';
 import { DalState } from '..';
-import {
-  PersonFixture,
-  TaskFixture,
-  TeacherStudentFixture
-} from '../../+fixtures';
+import { PersonFixture, TaskFixture, TeacherStudentFixture } from '../../+fixtures';
 import { LINKED_PERSON_SERVICE_TOKEN } from '../../persons/linked-persons.service';
 import { BundleReducer } from '../bundle';
 import { EffectFeedback, Priority } from '../effect-feedback';
 import { AddEffectFeedback } from '../effect-feedback/effect-feedback.actions';
-import {
-  AddLinkedPerson,
-  DeleteLinkedPerson
-} from '../linked-person/linked-person.actions';
+import { AddLinkedPerson, DeleteLinkedPerson } from '../linked-person/linked-person.actions';
 import { TaskReducer } from '../task';
 import { TasksLoaded } from '../task/task.actions';
 import { UserReducer } from '../user';
@@ -28,14 +21,7 @@ import { UserLoaded } from '../user/user.actions';
 import { BundleFixture } from './../../+fixtures/Bundle.fixture';
 import { LinkedPersonServiceInterface } from './../../persons/linked-persons.service';
 import { BundlesLoaded } from './../bundle/bundle.actions';
-import {
-  DeleteTeacherStudent,
-  LinkTeacherStudent,
-  LoadTeacherStudents,
-  TeacherStudentsLoaded,
-  TeacherStudentsLoadError,
-  UnlinkTeacherStudent
-} from './teacher-student.actions';
+import { DeleteTeacherStudent, LinkTeacherStudent, LoadTeacherStudents, TeacherStudentsLoaded, TeacherStudentsLoadError, UnlinkTeacherStudent } from './teacher-student.actions';
 import { TeacherStudentEffects } from './teacher-student.effects';
 
 describe('TeacherStudentsEffects', () => {
@@ -84,7 +70,11 @@ describe('TeacherStudentsEffects', () => {
     TestBed.configureTestingModule({
       imports: [
         NxModule.forRoot(),
-        StoreModule.forRoot({}),
+                StoreModule.forRoot({},{
+          runtimeChecks: {
+            strictStateImmutability: false,
+            strictActionImmutability: false
+          }}),
         StoreModule.forFeature(
           TeacherStudentReducer.NAME,
           TeacherStudentReducer.reducer,

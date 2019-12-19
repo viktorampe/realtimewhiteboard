@@ -1,63 +1,8 @@
 import { ModuleWithProviders } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { WINDOW } from '@campus/browser';
-import {
-  AlertActions,
-  AUTH_SERVICE_TOKEN,
-  BundleActions,
-  BundleFixture,
-  BundleInterface,
-  BundleReducer,
-  ContentStatusActions,
-  ContentStatusFixture,
-  ContentStatusInterface,
-  ContentStatusLabel,
-  ContentStatusReducer,
-  DalState,
-  EduContent,
-  EduContentActions,
-  EduContentFixture,
-  EduContentInterface,
-  EduContentReducer,
-  HistoryActions,
-  HistoryInterface,
-  HistoryTypesEnum,
-  LearningAreaActions,
-  LearningAreaFixture,
-  LearningAreaInterface,
-  LearningAreaReducer,
-  LinkedPersonActions,
-  LinkedPersonReducer,
-  PersonFixture,
-  PersonInterface,
-  StateFeatureBuilder,
-  StudentContentStatusActions,
-  StudentContentStatusFixture,
-  StudentContentStatusInterface,
-  StudentContentStatusReducer,
-  UiActions,
-  UiReducer,
-  UnlockedBoekeGroupActions,
-  UnlockedBoekeGroupFixture,
-  UnlockedBoekeGroupInterface,
-  UnlockedBoekeGroupReducer,
-  UnlockedBoekeStudentActions,
-  UnlockedBoekeStudentInterface,
-  UnlockedBoekeStudentReducer,
-  UnlockedContentActions,
-  UnlockedContentFixture,
-  UnlockedContentInterface,
-  UnlockedContentReducer,
-  UserContentActions,
-  UserContentReducer
-} from '@campus/dal';
-import {
-  OpenStaticContentServiceInterface,
-  OPEN_STATIC_CONTENT_SERVICE_TOKEN,
-  PERMISSION_SERVICE_TOKEN,
-  ScormExerciseServiceInterface,
-  SCORM_EXERCISE_SERVICE_TOKEN
-} from '@campus/shared';
+import { AlertActions, AUTH_SERVICE_TOKEN, BundleActions, BundleFixture, BundleInterface, BundleReducer, ContentStatusActions, ContentStatusFixture, ContentStatusInterface, ContentStatusLabel, ContentStatusReducer, DalState, EduContent, EduContentActions, EduContentFixture, EduContentInterface, EduContentReducer, HistoryActions, HistoryInterface, HistoryTypesEnum, LearningAreaActions, LearningAreaFixture, LearningAreaInterface, LearningAreaReducer, LinkedPersonActions, LinkedPersonReducer, PersonFixture, PersonInterface, StateFeatureBuilder, StudentContentStatusActions, StudentContentStatusFixture, StudentContentStatusInterface, StudentContentStatusReducer, UiActions, UiReducer, UnlockedBoekeGroupActions, UnlockedBoekeGroupFixture, UnlockedBoekeGroupInterface, UnlockedBoekeGroupReducer, UnlockedBoekeStudentActions, UnlockedBoekeStudentInterface, UnlockedBoekeStudentReducer, UnlockedContentActions, UnlockedContentFixture, UnlockedContentInterface, UnlockedContentReducer, UserContentActions, UserContentReducer } from '@campus/dal';
+import { OpenStaticContentServiceInterface, OPEN_STATIC_CONTENT_SERVICE_TOKEN, PERMISSION_SERVICE_TOKEN, ScormExerciseServiceInterface, SCORM_EXERCISE_SERVICE_TOKEN } from '@campus/shared';
 import { MockDate, MockWindow } from '@campus/testing';
 import { ListFormat } from '@campus/ui';
 import { UnlockedContent } from '@diekeure/polpo-api-angular-sdk';
@@ -103,7 +48,11 @@ describe('BundlesViewModel', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [StoreModule.forRoot({}), ...getModuleWithForFeatureProviders()],
+      imports: [        StoreModule.forRoot({},{
+          runtimeChecks: {
+            strictStateImmutability: false,
+            strictActionImmutability: false
+          }}), ...getModuleWithForFeatureProviders()],
       providers: [
         BundlesViewModel,
         Store,

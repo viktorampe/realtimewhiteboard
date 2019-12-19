@@ -7,11 +7,7 @@ import { hot } from '@nrwl/angular/testing';
 import { Observable, of } from 'rxjs';
 import { DiaboloPhaseReducer } from '.';
 import { DIABOLO_PHASE_SERVICE_TOKEN } from '../../metadata/diabolo-phase.service.interface';
-import {
-  DiaboloPhasesLoaded,
-  DiaboloPhasesLoadError,
-  LoadDiaboloPhases
-} from './diabolo-phase.actions';
+import { DiaboloPhasesLoaded, DiaboloPhasesLoadError, LoadDiaboloPhases } from './diabolo-phase.actions';
 import { DiaboloPhaseEffects } from './diabolo-phase.effects';
 
 describe('DiaboloPhaseEffects', () => {
@@ -59,7 +55,11 @@ describe('DiaboloPhaseEffects', () => {
     TestBed.configureTestingModule({
       imports: [
         NxModule.forRoot(),
-        StoreModule.forRoot({}),
+                StoreModule.forRoot({},{
+          runtimeChecks: {
+            strictStateImmutability: false,
+            strictActionImmutability: false
+          }}),
         StoreModule.forFeature(
           DiaboloPhaseReducer.NAME,
           DiaboloPhaseReducer.reducer,

@@ -18,7 +18,15 @@ describe('PersonAlreadyLinkedValidator', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
-        StoreModule.forRoot({}),
+        StoreModule.forRoot(
+          {},
+          {
+            runtimeChecks: {
+              strictStateImmutability: false,
+              strictActionImmutability: false
+            }
+          }
+        ),
         ...getStoreModuleForFeatures([LinkedPersonReducer])
       ],
       providers: [PersonAlreadyLinkedValidator]

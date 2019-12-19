@@ -12,25 +12,10 @@ import { HistoryEffects, HistoryReducer } from '.';
 import { HistoryFixture } from '../../+fixtures';
 import { HistoryInterface } from '../../+models';
 import { HistoryServiceInterface, HISTORY_SERVICE_TOKEN } from '../../history';
-import {
-  UndoService,
-  UndoServiceInterface,
-  UNDO_SERVICE_TOKEN
-} from '../../undo';
+import { UndoService, UndoServiceInterface, UNDO_SERVICE_TOKEN } from '../../undo';
 import { DalState } from '../dal.state.interface';
-import {
-  EffectFeedback,
-  EffectFeedbackActions,
-  Priority
-} from '../effect-feedback';
-import {
-  DeleteHistory,
-  HistoryLoaded,
-  HistoryLoadError,
-  LoadHistory,
-  StartUpsertHistory,
-  UpsertHistory
-} from './history.actions';
+import { EffectFeedback, EffectFeedbackActions, Priority } from '../effect-feedback';
+import { DeleteHistory, HistoryLoaded, HistoryLoadError, LoadHistory, StartUpsertHistory, UpsertHistory } from './history.actions';
 
 describe('HistoryEffects', () => {
   let actions: Observable<any>;
@@ -81,7 +66,11 @@ describe('HistoryEffects', () => {
     TestBed.configureTestingModule({
       imports: [
         NxModule.forRoot(),
-        StoreModule.forRoot({}),
+                StoreModule.forRoot({},{
+          runtimeChecks: {
+            strictStateImmutability: false,
+            strictActionImmutability: false
+          }}),
         StoreModule.forFeature(HistoryReducer.NAME, HistoryReducer.reducer, {
           initialState: usedState
         }),

@@ -7,11 +7,7 @@ import { hot } from '@nrwl/angular/testing';
 import { Observable, of } from 'rxjs';
 import { EduNetReducer } from '.';
 import { EDU_NET_SERVICE_TOKEN } from '../../metadata/edu-net.service.interface';
-import {
-  EduNetsLoaded,
-  EduNetsLoadError,
-  LoadEduNets
-} from './edu-net.actions';
+import { EduNetsLoaded, EduNetsLoadError, LoadEduNets } from './edu-net.actions';
 import { EduNetEffects } from './edu-net.effects';
 
 describe('EduNetEffects', () => {
@@ -59,7 +55,11 @@ describe('EduNetEffects', () => {
     TestBed.configureTestingModule({
       imports: [
         NxModule.forRoot(),
-        StoreModule.forRoot({}),
+                StoreModule.forRoot({},{
+          runtimeChecks: {
+            strictStateImmutability: false,
+            strictActionImmutability: false
+          }}),
         StoreModule.forFeature(EduNetReducer.NAME, EduNetReducer.reducer, {
           initialState: usedState
         }),

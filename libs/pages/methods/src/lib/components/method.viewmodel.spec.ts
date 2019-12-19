@@ -4,78 +4,11 @@ import { MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { WINDOW } from '@campus/browser';
-import {
-  AUTH_SERVICE_TOKEN,
-  ClassGroupActions,
-  ClassGroupFixture,
-  ClassGroupInterface,
-  ClassGroupQueries,
-  ClassGroupReducer,
-  CustomSerializer,
-  DalState,
-  EduContent,
-  EduContentActions,
-  EduContentBookActions,
-  EduContentBookFixture,
-  EduContentBookInterface,
-  EduContentBookReducer,
-  EduContentFixture,
-  EduContentQueries,
-  EduContentReducer,
-  EduContentServiceInterface,
-  EduContentTocActions,
-  EduContentTOCFixture,
-  EduContentTocReducer,
-  EDU_CONTENT_SERVICE_TOKEN,
-  FavoriteActions,
-  FavoriteQueries,
-  FavoriteTypesEnum,
-  getStoreModuleForFeatures,
-  LearningPlanGoalActions,
-  LearningPlanGoalFixture,
-  LearningPlanGoalInterface,
-  LearningPlanGoalProgressActions,
-  LearningPlanGoalProgressFixture,
-  LearningPlanGoalProgressInterface,
-  LearningPlanGoalProgressReducer,
-  LearningPlanGoalReducer,
-  MethodActions,
-  MethodFixture,
-  MethodInterface,
-  MethodQueries,
-  MethodReducer,
-  UserReducer,
-  YearActions,
-  YearFixture,
-  YearReducer
-} from '@campus/dal';
-import {
-  FilterFactoryFixture,
-  SearchModeInterface,
-  SearchResultInterface,
-  SearchStateInterface
-} from '@campus/search';
-import {
-  EduContentSearchResultFixture,
-  EnvironmentSearchModesInterface,
-  ENVIRONMENT_API_TOKEN,
-  ENVIRONMENT_SEARCHMODES_TOKEN,
-  LearningPlanGoalProgressManagementComponent,
-  OpenStaticContentServiceInterface,
-  OPEN_STATIC_CONTENT_SERVICE_TOKEN,
-  ScormExerciseServiceInterface,
-  SCORM_EXERCISE_SERVICE_TOKEN
-} from '@campus/shared';
+import { AUTH_SERVICE_TOKEN, ClassGroupActions, ClassGroupFixture, ClassGroupInterface, ClassGroupQueries, ClassGroupReducer, CustomSerializer, DalState, EduContent, EduContentActions, EduContentBookActions, EduContentBookFixture, EduContentBookInterface, EduContentBookReducer, EduContentFixture, EduContentQueries, EduContentReducer, EduContentServiceInterface, EduContentTocActions, EduContentTOCFixture, EduContentTocReducer, EDU_CONTENT_SERVICE_TOKEN, FavoriteActions, FavoriteQueries, FavoriteTypesEnum, getStoreModuleForFeatures, LearningPlanGoalActions, LearningPlanGoalFixture, LearningPlanGoalInterface, LearningPlanGoalProgressActions, LearningPlanGoalProgressFixture, LearningPlanGoalProgressInterface, LearningPlanGoalProgressReducer, LearningPlanGoalReducer, MethodActions, MethodFixture, MethodInterface, MethodQueries, MethodReducer, UserReducer, YearActions, YearFixture, YearReducer } from '@campus/dal';
+import { FilterFactoryFixture, SearchModeInterface, SearchResultInterface, SearchStateInterface } from '@campus/search';
+import { EduContentSearchResultFixture, EnvironmentSearchModesInterface, ENVIRONMENT_API_TOKEN, ENVIRONMENT_SEARCHMODES_TOKEN, LearningPlanGoalProgressManagementComponent, OpenStaticContentServiceInterface, OPEN_STATIC_CONTENT_SERVICE_TOKEN, ScormExerciseServiceInterface, SCORM_EXERCISE_SERVICE_TOKEN } from '@campus/shared';
 import { MockDate, MockWindow } from '@campus/testing';
-import {
-  NavigationActionTiming,
-  RouterNavigationAction,
-  RouterNavigationPayload,
-  routerReducer,
-  RouterStateSerializer,
-  ROUTER_NAVIGATION,
-  StoreRouterConnectingModule
-} from '@ngrx/router-store';
+import { NavigationActionTiming, RouterNavigationAction, RouterNavigationPayload, routerReducer, RouterStateSerializer, ROUTER_NAVIGATION, StoreRouterConnectingModule } from '@ngrx/router-store';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/angular/testing';
 import { configureTestSuite } from 'ng-bullet';
@@ -269,7 +202,11 @@ describe('MethodViewModel', () => {
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [
-        StoreModule.forRoot({ router: routerReducer }),
+                StoreModule.forRoot({router: routerReducer},{
+          runtimeChecks: {
+            strictStateImmutability: false,
+            strictActionImmutability: false
+          }}),
         ...getStoreModuleForFeatures([
           UserReducer,
           EduContentTocReducer,

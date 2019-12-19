@@ -66,7 +66,11 @@ describe('EffectFeedbackEffects', () => {
     TestBed.configureTestingModule({
       imports: [
         NxModule.forRoot(),
-        StoreModule.forRoot({}),
+                StoreModule.forRoot({},{
+          runtimeChecks: {
+            strictStateImmutability: false,
+            strictActionImmutability: false
+          }}),
         StoreModule.forFeature(
           EffectFeedbackReducer.NAME,
           EffectFeedbackReducer.reducer,

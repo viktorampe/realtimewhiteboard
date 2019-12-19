@@ -5,8 +5,8 @@ import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/angular';
 import { hot } from '@nrwl/angular/testing';
 import { Observable, of } from 'rxjs';
-import { GROUP_SERVICE_TOKEN } from '../../group/group.service.interface';
 import { GroupReducer } from '.';
+import { GROUP_SERVICE_TOKEN } from '../../group/group.service.interface';
 import { GroupsLoaded, GroupsLoadError, LoadGroups } from './group.actions';
 import { GroupEffects } from './group.effects';
 
@@ -55,7 +55,11 @@ describe('GroupEffects', () => {
     TestBed.configureTestingModule({
       imports: [
         NxModule.forRoot(),
-        StoreModule.forRoot({}),
+                StoreModule.forRoot({},{
+          runtimeChecks: {
+            strictStateImmutability: false,
+            strictActionImmutability: false
+          }}),
         StoreModule.forFeature(GroupReducer.NAME, GroupReducer.reducer, {
           initialState: usedState
         }),

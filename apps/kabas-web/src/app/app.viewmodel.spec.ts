@@ -1,24 +1,7 @@
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { TestBed } from '@angular/core/testing';
-import {
-  DalActions,
-  DalState,
-  EffectFeedbackActions,
-  EffectFeedbackFixture,
-  EffectFeedbackInterface,
-  EffectFeedbackReducer,
-  Priority,
-  StateFeatureBuilder,
-  UiReducer,
-  UserActions,
-  UserReducer
-} from '@campus/dal';
-import {
-  FeedBackServiceInterface,
-  FEEDBACK_SERVICE_TOKEN,
-  NavigationItemServiceInterface,
-  NAVIGATION_ITEM_SERVICE_TOKEN
-} from '@campus/shared';
+import { DalActions, DalState, EffectFeedbackActions, EffectFeedbackFixture, EffectFeedbackInterface, EffectFeedbackReducer, Priority, StateFeatureBuilder, UiReducer, UserActions, UserReducer } from '@campus/dal';
+import { FeedBackServiceInterface, FEEDBACK_SERVICE_TOKEN, NavigationItemServiceInterface, NAVIGATION_ITEM_SERVICE_TOKEN } from '@campus/shared';
 import { NavItem } from '@campus/ui';
 import { Action, Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/angular/testing';
@@ -72,8 +55,11 @@ describe('AppViewModel', () => {
 
     TestBed.configureTestingModule({
       imports: [
-        StoreModule.forRoot({}),
-
+        StoreModule.forRoot({},{
+          runtimeChecks: {
+            strictStateImmutability: false,
+            strictActionImmutability: false
+          }}),
         ...StateFeatureBuilder.getModuleWithForFeatureProviders([
           EffectFeedbackReducer,
           UserReducer,

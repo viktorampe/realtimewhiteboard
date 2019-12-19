@@ -2,43 +2,10 @@ import { Component, NgZone } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import {
-  CustomSerializer,
-  DalState,
-  EduContentBookReducer,
-  EduContentFixture,
-  EduContentReducer,
-  EduContentServiceInterface,
-  EduContentTocReducer,
-  EDU_CONTENT_SERVICE_TOKEN,
-  getStoreModuleForFeatures,
-  MethodReducer,
-  UserReducer
-} from '@campus/dal';
-import {
-  FilterFactoryFixture,
-  SearchModeInterface,
-  SearchResultInterface,
-  SearchStateInterface
-} from '@campus/search';
-import {
-  EduContentSearchResultFixture,
-  EnvironmentSearchModesInterface,
-  ENVIRONMENT_SEARCHMODES_TOKEN,
-  OpenStaticContentServiceInterface,
-  OPEN_STATIC_CONTENT_SERVICE_TOKEN,
-  ScormExerciseServiceInterface,
-  SCORM_EXERCISE_SERVICE_TOKEN
-} from '@campus/shared';
-import {
-  NavigationActionTiming,
-  RouterNavigationAction,
-  RouterNavigationPayload,
-  routerReducer,
-  RouterStateSerializer,
-  ROUTER_NAVIGATION,
-  StoreRouterConnectingModule
-} from '@ngrx/router-store';
+import { CustomSerializer, DalState, EduContentBookReducer, EduContentFixture, EduContentReducer, EduContentServiceInterface, EduContentTocReducer, EDU_CONTENT_SERVICE_TOKEN, getStoreModuleForFeatures, MethodReducer, UserReducer } from '@campus/dal';
+import { FilterFactoryFixture, SearchModeInterface, SearchResultInterface, SearchStateInterface } from '@campus/search';
+import { EduContentSearchResultFixture, EnvironmentSearchModesInterface, ENVIRONMENT_SEARCHMODES_TOKEN, OpenStaticContentServiceInterface, OPEN_STATIC_CONTENT_SERVICE_TOKEN, ScormExerciseServiceInterface, SCORM_EXERCISE_SERVICE_TOKEN } from '@campus/shared';
+import { NavigationActionTiming, RouterNavigationAction, RouterNavigationPayload, routerReducer, RouterStateSerializer, ROUTER_NAVIGATION, StoreRouterConnectingModule } from '@ngrx/router-store';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/angular/testing';
 import { configureTestSuite } from 'ng-bullet';
@@ -82,7 +49,11 @@ describe('GlobalSearchViewModel', () => {
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [
-        StoreModule.forRoot({ router: routerReducer }),
+                StoreModule.forRoot({router: routerReducer},{
+          runtimeChecks: {
+            strictStateImmutability: false,
+            strictActionImmutability: false
+          }}),
         ...getStoreModuleForFeatures([
           UserReducer,
           EduContentTocReducer,

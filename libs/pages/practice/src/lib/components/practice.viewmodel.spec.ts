@@ -2,67 +2,11 @@ import { NgZone } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import {
-  AUTH_SERVICE_TOKEN,
-  ClassGroupFixture,
-  ClassGroupQueries,
-  CustomSerializer,
-  DalState,
-  EduContentBookActions,
-  EduContentBookFixture,
-  EduContentBookInterface,
-  EduContentBookQueries,
-  EduContentBookReducer,
-  EduContentFixture,
-  EduContentReducer,
-  EduContentServiceInterface,
-  EduContentTocActions,
-  EduContentTOCFixture,
-  EduContentTocQueries,
-  EduContentTocReducer,
-  EDU_CONTENT_SERVICE_TOKEN,
-  getStoreModuleForFeatures,
-  MethodActions,
-  MethodFixture,
-  MethodInterface,
-  MethodLevelReducer,
-  MethodQueries,
-  MethodReducer,
-  ResultReducer,
-  UnlockedFreePracticeActions,
-  UnlockedFreePracticeFixture,
-  UnlockedFreePracticeInterface,
-  UnlockedFreePracticeQueries,
-  UserReducer,
-  YearActions,
-  YearFixture,
-  YearReducer
-} from '@campus/dal';
-import {
-  FilterFactoryFixture,
-  SearchModeInterface,
-  SearchResultInterface,
-  SearchStateInterface
-} from '@campus/search';
-import {
-  EduContentSearchResultFixture,
-  EnvironmentSearchModesInterface,
-  ENVIRONMENT_SEARCHMODES_TOKEN,
-  OpenStaticContentServiceInterface,
-  OPEN_STATIC_CONTENT_SERVICE_TOKEN,
-  ScormExerciseServiceInterface,
-  SCORM_EXERCISE_SERVICE_TOKEN
-} from '@campus/shared';
+import { AUTH_SERVICE_TOKEN, ClassGroupFixture, ClassGroupQueries, CustomSerializer, DalState, EduContentBookActions, EduContentBookFixture, EduContentBookInterface, EduContentBookQueries, EduContentBookReducer, EduContentFixture, EduContentReducer, EduContentServiceInterface, EduContentTocActions, EduContentTOCFixture, EduContentTocQueries, EduContentTocReducer, EDU_CONTENT_SERVICE_TOKEN, getStoreModuleForFeatures, MethodActions, MethodFixture, MethodInterface, MethodLevelReducer, MethodQueries, MethodReducer, ResultReducer, UnlockedFreePracticeActions, UnlockedFreePracticeFixture, UnlockedFreePracticeInterface, UnlockedFreePracticeQueries, UserReducer, YearActions, YearFixture, YearReducer } from '@campus/dal';
+import { FilterFactoryFixture, SearchModeInterface, SearchResultInterface, SearchStateInterface } from '@campus/search';
+import { EduContentSearchResultFixture, EnvironmentSearchModesInterface, ENVIRONMENT_SEARCHMODES_TOKEN, OpenStaticContentServiceInterface, OPEN_STATIC_CONTENT_SERVICE_TOKEN, ScormExerciseServiceInterface, SCORM_EXERCISE_SERVICE_TOKEN } from '@campus/shared';
 import { Dictionary } from '@ngrx/entity';
-import {
-  NavigationActionTiming,
-  RouterNavigationAction,
-  RouterNavigationPayload,
-  routerReducer,
-  RouterStateSerializer,
-  ROUTER_NAVIGATION,
-  StoreRouterConnectingModule
-} from '@ngrx/router-store';
+import { NavigationActionTiming, RouterNavigationAction, RouterNavigationPayload, routerReducer, RouterStateSerializer, ROUTER_NAVIGATION, StoreRouterConnectingModule } from '@ngrx/router-store';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/angular/testing';
 import { configureTestSuite } from 'ng-bullet';
@@ -190,7 +134,11 @@ describe('PracticeViewModel', () => {
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [
-        StoreModule.forRoot({ router: routerReducer }),
+                StoreModule.forRoot({router: routerReducer},{
+          runtimeChecks: {
+            strictStateImmutability: false,
+            strictActionImmutability: false
+          }}),
         ...getStoreModuleForFeatures([
           UserReducer,
           EduContentTocReducer,

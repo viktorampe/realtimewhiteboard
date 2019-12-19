@@ -11,21 +11,9 @@ import { TaskEduContentReducer } from '.';
 import { EffectFeedbackFixture, TaskEduContentFixture } from '../../+fixtures';
 import { TASK_EDU_CONTENT_SERVICE_TOKEN } from '../../tasks/task-edu-content.service.interface';
 import { TASK_SERVICE_TOKEN } from '../../tasks/task.service.interface';
-import {
-  EffectFeedback,
-  EffectFeedbackActions,
-  EffectFeedbackInterface,
-  Priority
-} from '../effect-feedback';
+import { EffectFeedback, EffectFeedbackActions, EffectFeedbackInterface, Priority } from '../effect-feedback';
 import { AddEffectFeedback } from '../effect-feedback/effect-feedback.actions';
-import {
-  AddTaskEduContent,
-  DeleteTaskEduContent,
-  LinkTaskEduContent,
-  LoadTaskEduContents,
-  TaskEduContentsLoaded,
-  TaskEduContentsLoadError
-} from './task-edu-content.actions';
+import { AddTaskEduContent, DeleteTaskEduContent, LinkTaskEduContent, LoadTaskEduContents, TaskEduContentsLoaded, TaskEduContentsLoadError } from './task-edu-content.actions';
 import { TaskEduContentEffects } from './task-edu-content.effects';
 
 describe('TaskEduContentEffects', () => {
@@ -111,7 +99,11 @@ describe('TaskEduContentEffects', () => {
     TestBed.configureTestingModule({
       imports: [
         NxModule.forRoot(),
-        StoreModule.forRoot({}),
+                StoreModule.forRoot({},{
+          runtimeChecks: {
+            strictStateImmutability: false,
+            strictActionImmutability: false
+          }}),
         StoreModule.forFeature(
           TaskEduContentReducer.NAME,
           TaskEduContentReducer.reducer,

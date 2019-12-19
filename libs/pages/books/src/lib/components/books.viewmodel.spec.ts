@@ -1,32 +1,6 @@
 import { ModuleWithProviders } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import {
-  AUTH_SERVICE_TOKEN,
-  DalState,
-  EduContentActions,
-  EduContentFixture,
-  EduContentInterface,
-  EduContentReducer,
-  LearningAreaActions,
-  LearningAreaFixture,
-  LearningAreaInterface,
-  LearningAreaReducer,
-  MethodActions,
-  MethodFixture,
-  MethodInterface,
-  MethodReducer,
-  StateFeatureBuilder,
-  UiActions,
-  UiReducer,
-  UnlockedBoekeGroupActions,
-  UnlockedBoekeGroupFixture,
-  UnlockedBoekeGroupInterface,
-  UnlockedBoekeGroupReducer,
-  UnlockedBoekeStudentActions,
-  UnlockedBoekeStudentFixture,
-  UnlockedBoekeStudentInterface,
-  UnlockedBoekeStudentReducer
-} from '@campus/dal';
+import { AUTH_SERVICE_TOKEN, DalState, EduContentActions, EduContentFixture, EduContentInterface, EduContentReducer, LearningAreaActions, LearningAreaFixture, LearningAreaInterface, LearningAreaReducer, MethodActions, MethodFixture, MethodInterface, MethodReducer, StateFeatureBuilder, UiActions, UiReducer, UnlockedBoekeGroupActions, UnlockedBoekeGroupFixture, UnlockedBoekeGroupInterface, UnlockedBoekeGroupReducer, UnlockedBoekeStudentActions, UnlockedBoekeStudentFixture, UnlockedBoekeStudentInterface, UnlockedBoekeStudentReducer } from '@campus/dal';
 import { OPEN_STATIC_CONTENT_SERVICE_TOKEN } from '@campus/shared';
 import { ListFormat } from '@campus/ui';
 import { Store, StoreModule } from '@ngrx/store';
@@ -57,7 +31,11 @@ describe('BooksViewModel', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [StoreModule.forRoot({}), ...getModuleWithForFeatureProviders()],
+      imports: [        StoreModule.forRoot({},{
+          runtimeChecks: {
+            strictStateImmutability: false,
+            strictActionImmutability: false
+          }}), ...getModuleWithForFeatureProviders()],
       providers: [
         BooksViewModel,
         Store,

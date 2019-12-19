@@ -2,10 +2,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { WINDOW_SERVICE_TOKEN } from '@campus/browser';
 import { StateFeatureBuilder, UserReducer } from '@campus/dal';
-import {
-  EnvironmentLogoutInterface,
-  ENVIRONMENT_LOGOUT_TOKEN
-} from '@campus/shared';
+import { EnvironmentLogoutInterface, ENVIRONMENT_LOGOUT_TOKEN } from '@campus/shared';
 import { StoreModule } from '@ngrx/store';
 import { LogoutComponent } from './logout.component';
 import { LogoutViewModel } from './logout.viewmodel';
@@ -17,7 +14,11 @@ describe('LogoutComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        StoreModule.forRoot({}),
+                StoreModule.forRoot({},{
+          runtimeChecks: {
+            strictStateImmutability: false,
+            strictActionImmutability: false
+          }}),
         ...StateFeatureBuilder.getModuleWithForFeatureProviders([UserReducer])
       ],
       providers: [

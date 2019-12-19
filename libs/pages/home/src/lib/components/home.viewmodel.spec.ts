@@ -1,14 +1,6 @@
 import { TestBed } from '@angular/core/testing';
-import {
-  EduContentFixture,
-  getStoreModuleForFeatures,
-  PersonFixture,
-  UserQueries
-} from '@campus/dal';
-import {
-  OpenStaticContentServiceInterface,
-  OPEN_STATIC_CONTENT_SERVICE_TOKEN
-} from '@campus/shared';
+import { EduContentFixture, getStoreModuleForFeatures, PersonFixture, UserQueries } from '@campus/dal';
+import { OpenStaticContentServiceInterface, OPEN_STATIC_CONTENT_SERVICE_TOKEN } from '@campus/shared';
 import { routerReducer } from '@ngrx/router-store';
 import { StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/angular/testing';
@@ -25,7 +17,11 @@ describe('HomeViewModel', () => {
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [
-        StoreModule.forRoot({ router: routerReducer }),
+                StoreModule.forRoot({router: routerReducer},{
+          runtimeChecks: {
+            strictStateImmutability: false,
+            strictActionImmutability: false
+          }}),
         ...getStoreModuleForFeatures([])
       ],
       providers: [

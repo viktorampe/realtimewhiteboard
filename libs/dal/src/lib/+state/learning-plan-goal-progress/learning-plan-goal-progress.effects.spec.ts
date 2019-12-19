@@ -9,28 +9,10 @@ import { undo } from 'ngrx-undo';
 import { Observable, of } from 'rxjs';
 import { LearningPlanGoalProgressReducer } from '.';
 import { LearningPlanGoalProgressFixture } from '../../+fixtures';
-import {
-  LearningPlanGoalProgressServiceInterface,
-  LEARNING_PLAN_GOAL_PROGRESS_SERVICE_TOKEN
-} from '../../learning-plan-goal-progress/learning-plan-goal-progress.service.interface';
+import { LearningPlanGoalProgressServiceInterface, LEARNING_PLAN_GOAL_PROGRESS_SERVICE_TOKEN } from '../../learning-plan-goal-progress/learning-plan-goal-progress.service.interface';
 import { UndoService, UNDO_SERVICE_TOKEN } from '../../undo';
-import {
-  EffectFeedback,
-  EffectFeedbackActions,
-  Priority
-} from '../effect-feedback';
-import {
-  AddLearningPlanGoalProgresses,
-  BulkAddLearningPlanGoalProgresses,
-  DeleteLearningPlanGoalProgress,
-  DeleteLearningPlanGoalProgresses,
-  LearningPlanGoalProgressesLoaded,
-  LearningPlanGoalProgressesLoadError,
-  LoadLearningPlanGoalProgresses,
-  StartAddLearningPlanGoalProgresses,
-  StartAddManyLearningPlanGoalProgresses,
-  ToggleLearningPlanGoalProgress
-} from './learning-plan-goal-progress.actions';
+import { EffectFeedback, EffectFeedbackActions, Priority } from '../effect-feedback';
+import { AddLearningPlanGoalProgresses, BulkAddLearningPlanGoalProgresses, DeleteLearningPlanGoalProgress, DeleteLearningPlanGoalProgresses, LearningPlanGoalProgressesLoaded, LearningPlanGoalProgressesLoadError, LoadLearningPlanGoalProgresses, StartAddLearningPlanGoalProgresses, StartAddManyLearningPlanGoalProgresses, ToggleLearningPlanGoalProgress } from './learning-plan-goal-progress.actions';
 import { LearningPlanGoalProgressEffects } from './learning-plan-goal-progress.effects';
 
 describe('LearningPlanGoalProgressEffects', () => {
@@ -90,7 +72,11 @@ describe('LearningPlanGoalProgressEffects', () => {
     TestBed.configureTestingModule({
       imports: [
         NxModule.forRoot(),
-        StoreModule.forRoot({}),
+                StoreModule.forRoot({},{
+          runtimeChecks: {
+            strictStateImmutability: false,
+            strictActionImmutability: false
+          }}),
         StoreModule.forFeature(
           LearningPlanGoalProgressReducer.NAME,
           LearningPlanGoalProgressReducer.reducer,

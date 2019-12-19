@@ -12,22 +12,8 @@ import { StudentContentStatusReducer } from '.';
 import { StudentContentStatusFixture } from '../../+fixtures';
 import { StudentContentStatusInterface } from '../../+models';
 import { STUDENT_CONTENT_STATUS_SERVICE_TOKEN } from '../../student-content-status/student-content-status.service.interface';
-import {
-  EffectFeedback,
-  EffectFeedbackActions,
-  EffectFeedbackInterface,
-  Priority
-} from '../effect-feedback';
-import {
-  AddStudentContentStatus,
-  LoadStudentContentStatuses,
-  StudentContentStatusAdded,
-  StudentContentStatusesLoaded,
-  StudentContentStatusesLoadError,
-  StudentContentStatusUpserted,
-  UpdateStudentContentStatus,
-  UpsertStudentContentStatus
-} from './student-content-status.actions';
+import { EffectFeedback, EffectFeedbackActions, EffectFeedbackInterface, Priority } from '../effect-feedback';
+import { AddStudentContentStatus, LoadStudentContentStatuses, StudentContentStatusAdded, StudentContentStatusesLoaded, StudentContentStatusesLoadError, StudentContentStatusUpserted, UpdateStudentContentStatus, UpsertStudentContentStatus } from './student-content-status.actions';
 import { StudentContentStatusesEffects } from './student-content-status.effects';
 
 function createStudentContentStatus(
@@ -92,7 +78,11 @@ describe('StudentContentStatusEffects', () => {
     TestBed.configureTestingModule({
       imports: [
         NxModule.forRoot(),
-        StoreModule.forRoot({}),
+                StoreModule.forRoot({},{
+          runtimeChecks: {
+            strictStateImmutability: false,
+            strictActionImmutability: false
+          }}),
         StoreModule.forFeature(
           StudentContentStatusReducer.NAME,
           StudentContentStatusReducer.reducer,

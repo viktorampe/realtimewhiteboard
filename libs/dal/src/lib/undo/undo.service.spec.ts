@@ -25,7 +25,15 @@ describe('UndoService', () => {
     TestBed.configureTestingModule({
       imports: [
         NxModule.forRoot(),
-        StoreModule.forRoot({}),
+        StoreModule.forRoot(
+          {},
+          {
+            runtimeChecks: {
+              strictStateImmutability: false,
+              strictActionImmutability: false
+            }
+          }
+        ),
         EffectsModule.forRoot([])
       ],
       providers: [

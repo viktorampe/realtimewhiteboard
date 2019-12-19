@@ -1,12 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import {
-  AlertActions,
-  AlertFixture,
-  AlertReducer,
-  AUTH_SERVICE_TOKEN,
-  DalState,
-  StateFeatureBuilder
-} from '@campus/dal';
+import { AlertActions, AlertFixture, AlertReducer, AUTH_SERVICE_TOKEN, DalState, StateFeatureBuilder } from '@campus/dal';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from 'jasmine-marbles';
 import { AlertsViewModel } from './alerts.viewmodel';
@@ -17,7 +10,15 @@ let store: Store<DalState>;
 beforeEach(() => {
   TestBed.configureTestingModule({
     imports: [
-      StoreModule.forRoot({}),
+      StoreModule.forRoot(
+        {},
+        {
+          runtimeChecks: {
+            strictStateImmutability: false,
+            strictActionImmutability: false
+          }
+        }
+      ),
       ...StateFeatureBuilder.getModuleWithForFeatureProviders([AlertReducer])
     ],
     providers: [

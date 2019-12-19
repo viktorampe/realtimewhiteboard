@@ -1,35 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import {
-  ClassGroupActions,
-  ClassGroupFixture,
-  ClassGroupReducer,
-  DalState,
-  getStoreModuleForFeatures,
-  GroupActions,
-  GroupFixture,
-  GroupReducer,
-  LearningAreaActions,
-  LearningAreaFixture,
-  LearningAreaReducer,
-  LinkedPersonActions,
-  LinkedPersonReducer,
-  PersonFixture,
-  TaskActions,
-  TaskClassGroupActions,
-  TaskClassGroupFixture,
-  TaskClassGroupReducer,
-  TaskEduContentActions,
-  TaskEduContentFixture,
-  TaskEduContentReducer,
-  TaskFixture,
-  TaskGroupActions,
-  TaskGroupFixture,
-  TaskGroupReducer,
-  TaskReducer,
-  TaskStudentActions,
-  TaskStudentFixture,
-  TaskStudentReducer
-} from '@campus/dal';
+import { ClassGroupActions, ClassGroupFixture, ClassGroupReducer, DalState, getStoreModuleForFeatures, GroupActions, GroupFixture, GroupReducer, LearningAreaActions, LearningAreaFixture, LearningAreaReducer, LinkedPersonActions, LinkedPersonReducer, PersonFixture, TaskActions, TaskClassGroupActions, TaskClassGroupFixture, TaskClassGroupReducer, TaskEduContentActions, TaskEduContentFixture, TaskEduContentReducer, TaskFixture, TaskGroupActions, TaskGroupFixture, TaskGroupReducer, TaskReducer, TaskStudentActions, TaskStudentFixture, TaskStudentReducer } from '@campus/dal';
 import { routerReducer } from '@ngrx/router-store';
 import { Action, select, Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/angular/testing';
@@ -41,7 +11,11 @@ describe('Kabas-tasks viewmodel selectors', () => {
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [
-        StoreModule.forRoot({ router: routerReducer }),
+                StoreModule.forRoot({router: routerReducer},{
+          runtimeChecks: {
+            strictStateImmutability: false,
+            strictActionImmutability: false
+          }}),
         ...getStoreModuleForFeatures([
           ClassGroupReducer,
           GroupReducer,

@@ -11,11 +11,7 @@ import { MethodLevelReducer } from '.';
 import { MethodLevelFixture } from '../../+fixtures';
 import { MethodLevelInterface } from '../../+models';
 import { METHOD_LEVEL_SERVICE_TOKEN } from '../../metadata/method-level.service.interface';
-import {
-  LoadMethodLevels,
-  MethodLevelsLoaded,
-  MethodLevelsLoadError
-} from './method-level.actions';
+import { LoadMethodLevels, MethodLevelsLoaded, MethodLevelsLoadError } from './method-level.actions';
 import { MethodLevelEffects } from './method-level.effects';
 
 describe('MethodLevelEffects', () => {
@@ -64,7 +60,11 @@ describe('MethodLevelEffects', () => {
     TestBed.configureTestingModule({
       imports: [
         NxModule.forRoot(),
-        StoreModule.forRoot({}),
+                StoreModule.forRoot({},{
+          runtimeChecks: {
+            strictStateImmutability: false,
+            strictActionImmutability: false
+          }}),
         StoreModule.forFeature(
           MethodLevelReducer.NAME,
           MethodLevelReducer.reducer,

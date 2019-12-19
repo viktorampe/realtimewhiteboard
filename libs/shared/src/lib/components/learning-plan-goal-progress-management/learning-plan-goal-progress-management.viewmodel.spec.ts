@@ -24,7 +24,15 @@ describe('LearningPlanGoalProgressViewModel', () => {
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [
-        StoreModule.forRoot({}),
+        StoreModule.forRoot(
+          {},
+          {
+            runtimeChecks: {
+              strictStateImmutability: true,
+              strictActionImmutability: true
+            }
+          }
+        ),
         ...getStoreModuleForFeatures([
           EduContentTocReducer,
           UserReducer,

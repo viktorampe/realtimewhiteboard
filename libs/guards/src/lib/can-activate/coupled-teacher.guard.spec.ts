@@ -1,22 +1,7 @@
 import { TestBed } from '@angular/core/testing';
-import {
-  ActivatedRouteSnapshot,
-  Router,
-  RouterStateSnapshot
-} from '@angular/router';
+import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import {
-  DalState,
-  LinkedPersonActions,
-  LinkedPersonReducer,
-  PersonFixture,
-  StateFeatureBuilder,
-  TeacherStudentActions,
-  TeacherStudentFixture,
-  TeacherStudentReducer,
-  UserActions,
-  UserReducer
-} from '@campus/dal';
+import { DalState, LinkedPersonActions, LinkedPersonReducer, PersonFixture, StateFeatureBuilder, TeacherStudentActions, TeacherStudentFixture, TeacherStudentReducer, UserActions, UserReducer } from '@campus/dal';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/angular/testing';
 import { CoupledTeacherGuard } from '.';
@@ -35,7 +20,11 @@ describe('coupledTeacherGuard', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
-        StoreModule.forRoot({}),
+                StoreModule.forRoot({},{
+          runtimeChecks: {
+            strictStateImmutability: false,
+            strictActionImmutability: false
+          }}),
         ...StateFeatureBuilder.getStoreModuleForFeatures([
           UserReducer,
           TeacherStudentReducer,

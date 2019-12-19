@@ -142,7 +142,15 @@ describe('EduContentsViewModel', () => {
             ]
           }
         ]),
-        StoreModule.forRoot({ router: routerReducer }),
+        StoreModule.forRoot(
+          { router: routerReducer },
+          {
+            runtimeChecks: {
+              strictStateImmutability: true,
+              strictActionImmutability: true
+            }
+          }
+        ),
         ...getStoreModuleForFeatures([
           FavoriteReducer,
           LearningAreaReducer,

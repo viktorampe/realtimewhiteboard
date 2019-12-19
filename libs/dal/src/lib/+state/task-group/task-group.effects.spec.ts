@@ -7,11 +7,7 @@ import { hot } from '@nrwl/angular/testing';
 import { Observable, of } from 'rxjs';
 import { TaskGroupReducer } from '.';
 import { TASK_GROUP_SERVICE_TOKEN } from '../../tasks/task-group.service.interface';
-import {
-  LoadTaskGroups,
-  TaskGroupsLoaded,
-  TaskGroupsLoadError
-} from './task-group.actions';
+import { LoadTaskGroups, TaskGroupsLoaded, TaskGroupsLoadError } from './task-group.actions';
 import { TaskGroupEffects } from './task-group.effects';
 
 describe('TaskGroupEffects', () => {
@@ -59,7 +55,11 @@ describe('TaskGroupEffects', () => {
     TestBed.configureTestingModule({
       imports: [
         NxModule.forRoot(),
-        StoreModule.forRoot({}),
+                StoreModule.forRoot({},{
+          runtimeChecks: {
+            strictStateImmutability: false,
+            strictActionImmutability: false
+          }}),
         StoreModule.forFeature(
           TaskGroupReducer.NAME,
           TaskGroupReducer.reducer,

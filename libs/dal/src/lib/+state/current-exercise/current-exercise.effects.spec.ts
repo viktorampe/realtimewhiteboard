@@ -10,24 +10,12 @@ import { Observable, of } from 'rxjs';
 import { CurrentExerciseReducer } from '.';
 import { ScormCmiMode } from '../../+external-interfaces/scorm-api.interface';
 import { EXERCISE_SERVICE_TOKEN } from '../../exercise/exercise.service.interface';
-import {
-  EffectFeedback,
-  EffectFeedbackActions,
-  Priority
-} from '../effect-feedback';
+import { EffectFeedback, EffectFeedbackActions, Priority } from '../effect-feedback';
 import { AddEffectFeedback } from '../effect-feedback/effect-feedback.actions';
 import { LoadTaskEduContents } from '../task-edu-content/task-edu-content.actions';
-import {
-  CurrentExerciseError,
-  CurrentExerciseLoaded,
-  LoadExercise,
-  SaveCurrentExercise
-} from './current-exercise.actions';
+import { CurrentExerciseError, CurrentExerciseLoaded, LoadExercise, SaveCurrentExercise } from './current-exercise.actions';
 import { CurrentExerciseEffects } from './current-exercise.effects';
-import {
-  CurrentExerciseInterface,
-  initialState
-} from './current-exercise.reducer';
+import { CurrentExerciseInterface, initialState } from './current-exercise.reducer';
 
 describe('ExerciseEffects', () => {
   let actions: Observable<any>;
@@ -77,7 +65,11 @@ describe('ExerciseEffects', () => {
     TestBed.configureTestingModule({
       imports: [
         NxModule.forRoot(),
-        StoreModule.forRoot({}),
+                StoreModule.forRoot({},{
+          runtimeChecks: {
+            strictStateImmutability: false,
+            strictActionImmutability: false
+          }}),
         StoreModule.forFeature(
           CurrentExerciseReducer.NAME,
           CurrentExerciseReducer.reducer,
