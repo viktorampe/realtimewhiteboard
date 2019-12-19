@@ -21,18 +21,19 @@ describe('Practice', () => {
   let setup: KabasPracticePagesInterface;
 
   before(() => {
-    performSetup('kabasUnlockedFreePracticePages').then(res => {
+    Cypress.Cookies.debug(true);
+    Cypress.Cookies.preserveOnce();
+    return performSetup('kabasUnlockedFreePracticePages').then(res => {
       setup = res.body;
-    });
-  });
-
-  describe('teacher', () => {
-    beforeEach(() => {
-      login(
+      return login(
         setup.kabasUnlockedFreePracticePages.loginTeacher.username,
         setup.kabasUnlockedFreePracticePages.loginTeacher.password
       );
     });
+  });
+
+  describe('teacher', () => {
+    beforeEach(() => {});
 
     describe('practice manage page', () => {
       beforeEach(() => {

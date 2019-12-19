@@ -30,8 +30,17 @@ export const login = (username?: string, password?: string) => {
       cy.setCookie('$LoopBackSDK$id', resp.body.id);
       cy.setCookie('$LoopBackSDK$rememberMe', 'true');
       cy.setCookie('$LoopBackSDK$ttl', resp.body.ttl + '');
-      cy.setCookie('$LoopBackSDK$user', JSON.stringify(resp.body.user));
       cy.setCookie('$LoopBackSDK$userId', resp.body.userId + '');
+
+      cy.document().then(document => {
+        const encodedUser = encodeURI(JSON.stringify(resp.body.user));
+        const future = new Date();
+        future.setFullYear(future.getFullYear() + 2);
+
+        document.cookie = `$LoopBackSDK$user=${encodedUser}; path=/; domain=.kabas.localhost; expires=${future}`;
+
+        return true;
+      });
     });
 };
 
