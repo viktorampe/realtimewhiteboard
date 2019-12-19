@@ -6,6 +6,13 @@ import {
   AppPathsInterface,
   KabasPracticePagesInterface
 } from '../support/interfaces';
+import {
+  checkItemPracticeCheckboxDisabled,
+  checkItemPracticeCheckboxEnabled,
+  checkItemPracticeCheckboxUnchecked,
+  clickBulkPracticeCheckbox,
+  clickItemPracticeCheckbox
+} from './practice';
 
 describe('Practice', () => {
   const apiUrl = cyEnv('apiUrl');
@@ -27,7 +34,7 @@ describe('Practice', () => {
       );
     });
 
-    /*describe('practice manage page', () => {
+    describe('practice manage page', () => {
       beforeEach(() => {
         cy.visit(`${appPaths.practice}/manage`);
       });
@@ -48,7 +55,7 @@ describe('Practice', () => {
             }`
           );
       });
-    });*/
+    });
 
     describe('practice manage page - in book', () => {
       beforeEach(() => {
@@ -58,42 +65,42 @@ describe('Practice', () => {
           }`
         );
       });
-      /*it('should show classgroup columns', () => {
-        cy.get('.ui-multi-check-box-table__header--item').each(
-          ($item, index) => {
-            expect($item).to.have.text(
-              setup.kabasUnlockedFreePracticePages.expected.classGroups[index]
-            );
-          }
-        );
-      });
-      it('should show chapter row headers', () => {
-        cy.get('.ui-multi-check-box-table__body__row__cell--row-header').should(
+
+      it('should allow enabling and disabling chapters for students', () => {
+        dataCy('check-box-table-item-column-header').each(($item, index) => {
+          expect($item).to.have.text(
+            setup.kabasUnlockedFreePracticePages.expected.classGroups[index]
+          );
+        });
+
+        dataCy('check-box-table-row-header').should(
           'have.length',
           setup.kabasUnlockedFreePracticePages.expected.chaptersTeacher.count
         );
-      });*/
 
-      it('should show disable chapter checkboxes when checking all for classgroup', () => {
-        cy.server();
-        cy.route(
-          apiUrl + 'api/People/468/data?fields=unlockedFreePractices'
-        ).as('dataUFP');
+        clickItemPracticeCheckbox(1);
+        clickBulkPracticeCheckbox(1);
+        checkItemPracticeCheckboxDisabled(1);
+        clickBulkPracticeCheckbox(1);
+        checkItemPracticeCheckboxEnabled(1);
+        checkItemPracticeCheckboxUnchecked(1);
 
-        dataCy('practice-check-box-table')
-          .find('mat-checkbox')
-          .eq(1)
-          .click();
+        clickBulkPracticeCheckbox(0);
+        checkItemPracticeCheckboxEnabled(0);
 
-        cy.wait('@dataUFP');
+        clickItemPracticeCheckbox(0);
+        clickItemPracticeCheckbox(2);
+        clickItemPracticeCheckbox(4);
 
-        dataCy('practice-check-box-table')
-          .find('mat-checkbox')
-          .eq(3)
-          .should('have.class', 'mat-checkbox-disabled');
+        checkItemPracticeCheckboxEnabled(0);
+        checkItemPracticeCheckboxEnabled(2);
+        checkItemPracticeCheckboxEnabled(4);
+      });
 
-        //clickPracticeCheckbox(1);
-        //checkPracticeDisabled(3);
+      it('should persist changes to the unlocked chapters', () => {
+        checkItemPracticeCheckboxEnabled(0);
+        checkItemPracticeCheckboxEnabled(2);
+        checkItemPracticeCheckboxEnabled(4);
       });
     });
   });
