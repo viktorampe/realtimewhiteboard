@@ -193,7 +193,6 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
       ]
     };
 
-    //todo swap for real icons
     this.taskStatusFilter = {
       name: 'taskStatus',
       label: 'taak status',
@@ -203,21 +202,21 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
         {
           data: {
             status: 'pending',
-            icon: 'task:pending'
+            icon: 'filter:pending'
           },
           visible: true
         },
         {
           data: {
             status: 'active',
-            icon: 'task:active'
+            icon: 'filter:active'
           },
           visible: true
         },
         {
           data: {
             status: 'finished',
-            icon: 'task:finished'
+            icon: 'filter:finished'
           },
           visible: true
         }
