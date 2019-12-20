@@ -70,7 +70,7 @@ export class SideSheetComponent implements OnInit, OnDestroy {
    * @type {SideSheetHeaderDirective}
    * @memberof SideSheetComponent
    */
-  @ContentChild(SideSheetHeaderDirective, /* TODO: add static flag */ {})
+  @ContentChild(SideSheetHeaderDirective, { static: true })
   public header: SideSheetHeaderDirective;
 
   /**
