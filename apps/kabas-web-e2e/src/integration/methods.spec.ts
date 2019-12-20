@@ -1,6 +1,12 @@
 /// <reference types="cypress" />
 
-import { cyEnv, dataCy, login, performSetup } from '../support/commands';
+import {
+  cyEnv,
+  dataCy,
+  disableCookieValueValidation,
+  login,
+  performSetup
+} from '../support/commands';
 import {
   ApiPathsInterface,
   AppPathsInterface,
@@ -31,6 +37,7 @@ describe('Methods', () => {
   });
 
   beforeEach(() => {
+    disableCookieValueValidation();
     login(
       setup.kabasMethodsPages.login.username,
       setup.kabasMethodsPages.login.password
