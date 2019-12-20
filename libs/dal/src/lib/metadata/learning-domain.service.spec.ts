@@ -1,6 +1,6 @@
 import { inject, TestBed } from '@angular/core/testing';
 import { LearningDomainApi } from '@diekeure/polpo-api-angular-sdk';
-import { hot } from '@nrwl/nx/testing';
+import { hot } from '@nrwl/angular/testing';
 import { LearningDomainFixture } from '../+fixtures/LearningDomain.fixture';
 import { LearningDomainService } from './learning-domain.service';
 import { LearningDomainServiceInterface } from './learning-domain.service.interface';

@@ -215,7 +215,7 @@ class DirectiveWithViewContainer {
   `
 })
 class ComponentWithChildViewContainer {
-  @ViewChild(DirectiveWithViewContainer)
+  @ViewChild(DirectiveWithViewContainer, /* TODO: add static flag */ {})
   childWithViewContainer: DirectiveWithViewContainer;
 
   get childViewContainer() {

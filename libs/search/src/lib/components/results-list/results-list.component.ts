@@ -106,9 +106,9 @@ export class ResultsListComponent implements OnDestroy, AfterViewInit {
   @Output() sortBy: EventEmitter<SortModeInterface> = new EventEmitter();
   @Output() getNextPage: EventEmitter<any> = new EventEmitter();
 
-  @ViewChild(ResultListDirective) resultListHost: ResultListDirective;
-  @ViewChild(ListViewComponent) listview: ListViewComponent<any>;
-  @ViewChild(CdkScrollable) viewPort: CdkScrollable;
+  @ViewChild(ResultListDirective, { static: true }) resultListHost: ResultListDirective;
+  @ViewChild(ListViewComponent, { static: true }) listview: ListViewComponent<any>;
+  @ViewChild(CdkScrollable, { static: true }) viewPort: CdkScrollable;
 
   constructor(
     private ngZone: NgZone,

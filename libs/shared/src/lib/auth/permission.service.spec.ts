@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { UserReducer } from '@campus/dal';
 import { StoreModule } from '@ngrx/store';
-import { hot } from '@nrwl/nx/testing';
+import { hot } from '@nrwl/angular/testing';
 import { PermissionService } from './permission.service';
 import {
   PermissionServiceInterface,

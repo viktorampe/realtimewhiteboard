@@ -11,7 +11,7 @@ import {
 } from '@campus/shared';
 import { routerReducer } from '@ngrx/router-store';
 import { StoreModule } from '@ngrx/store';
-import { hot } from '@nrwl/nx/testing';
+import { hot } from '@nrwl/angular/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { HomeViewModel } from './home.viewmodel';
 

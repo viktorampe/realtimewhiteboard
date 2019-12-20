@@ -18,7 +18,7 @@ import {
 } from '@campus/dal';
 import { MockDate } from '@campus/testing';
 import { Store, StoreModule } from '@ngrx/store';
-import { hot } from '@nrwl/nx/testing';
+import { hot } from '@nrwl/angular/testing';
 import {
   ENVIRONMENT_ALERTS_FEATURE_TOKEN,
   ENVIRONMENT_GLOBAL_SEARCH_FEATURE_TOKEN

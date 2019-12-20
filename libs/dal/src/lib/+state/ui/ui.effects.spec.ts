@@ -4,8 +4,8 @@ import { EffectsModule } from '@ngrx/effects';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { ROUTER_NAVIGATION } from '@ngrx/router-store';
 import { StoreModule } from '@ngrx/store';
-import { DataPersistence, NxModule } from '@nrwl/nx';
-import { hot } from '@nrwl/nx/testing';
+import { DataPersistence, NxModule } from '@nrwl/angular';
+import { hot } from '@nrwl/angular/testing';
 import { Observable, of } from 'rxjs';
 import { ListFormat } from '../../+external-interfaces';
 import {

@@ -49,7 +49,7 @@ import {
   StoreRouterConnectingModule
 } from '@ngrx/router-store';
 import { Store, StoreModule } from '@ngrx/store';
-import { cold, hot } from '@nrwl/nx/testing';
+import { cold, hot } from '@nrwl/angular/testing';
 import { Observable, of } from 'rxjs';
 import { EduContentsViewModel } from './edu-contents.viewmodel';
 

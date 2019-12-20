@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { HistoryApi, PersonApi } from '@diekeure/polpo-api-angular-sdk';
-import { cold } from '@nrwl/nx/testing';
+import { cold } from '@nrwl/angular/testing';
 import { of } from 'rxjs';
 import { HistoryFixture } from '../+fixtures/History.fixture';
 import { HistoryService } from './history.service';

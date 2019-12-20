@@ -18,7 +18,7 @@ import {
   UserReducer
 } from '@campus/dal';
 import { Store, StoreModule } from '@ngrx/store';
-import { hot } from '@nrwl/nx/testing';
+import { hot } from '@nrwl/angular/testing';
 import { CoupledTeacherGuard } from '.';
 
 describe('coupledTeacherGuard', () => {

@@ -22,7 +22,7 @@ export class TasksComponent implements OnInit {
   taskInstances$: Observable<TasksWithInfoInterface>;
   learningArea$: Observable<LearningAreaInterface>;
 
-  @ViewChild(FilterTextInputComponent)
+  @ViewChild(FilterTextInputComponent, { static: true })
   filterTextInput: FilterTextInputComponent<
     TasksWithInfoInterface,
     TaskWithInfoInterface

@@ -9,7 +9,7 @@ import {
   FILE_READER
 } from '@campus/browser';
 import { AUTH_SERVICE_TOKEN } from '@campus/dal';
-import { hot } from '@nrwl/nx/testing';
+import { hot } from '@nrwl/angular/testing';
 import { ImageCroppedEvent } from 'ngx-image-cropper';
 import { BehaviorSubject } from 'rxjs';
 import { ProfileViewModel } from '../profile.viewmodel';

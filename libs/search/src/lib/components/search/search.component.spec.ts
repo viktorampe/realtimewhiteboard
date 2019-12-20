@@ -75,7 +75,7 @@ export class TestContainerComponent implements AfterViewInit {
   @ViewChildren(SearchPortalDirective)
   private portalHosts: QueryList<SearchPortalDirective>;
 
-  @ViewChild(SearchComponent) private searchComponent: SearchComponent;
+  @ViewChild(SearchComponent, /* TODO: add static flag */ {}) private searchComponent: SearchComponent;
 
   ngAfterViewInit() {
     this.searchComponent.searchPortals = this.portalHosts;

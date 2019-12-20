@@ -7,7 +7,7 @@ import Card from '../../interfaces/card.interface';
   styleUrls: ['./whiteboard.component.scss']
 })
 export class WhiteboardComponent implements OnInit {
-  @ViewChild('titleInput') set titleInput(titleInput: ElementRef) {
+  @ViewChild('titleInput', { static: false }) set titleInput(titleInput: ElementRef) {
     if (titleInput) {
       titleInput.nativeElement.focus();
     }

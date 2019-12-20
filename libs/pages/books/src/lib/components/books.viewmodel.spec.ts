@@ -30,7 +30,7 @@ import {
 import { OPEN_STATIC_CONTENT_SERVICE_TOKEN } from '@campus/shared';
 import { ListFormat } from '@campus/ui';
 import { Store, StoreModule } from '@ngrx/store';
-import { hot } from '@nrwl/nx/testing';
+import { hot } from '@nrwl/angular/testing';
 import { BooksViewModel } from './books.viewmodel';
 
 describe('BooksViewModel', () => {

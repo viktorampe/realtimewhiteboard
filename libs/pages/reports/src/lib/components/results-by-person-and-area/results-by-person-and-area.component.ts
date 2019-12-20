@@ -12,7 +12,7 @@ import { AssignmentResultInterface } from '../reports.viewmodel.interfaces';
   styleUrls: ['./results-by-person-and-area.component.scss']
 })
 export class ResultsByPersonAndAreaComponent implements OnInit {
-  @ViewChild('header') private header: ElementRef;
+  @ViewChild('header', { static: false }) private header: ElementRef;
 
   //input streams
   private routerParams$: Observable<Params>;

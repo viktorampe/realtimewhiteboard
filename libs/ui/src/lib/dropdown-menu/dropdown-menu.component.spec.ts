@@ -34,7 +34,7 @@ const mockData = {
   `
 })
 export class HostComponent implements OnInit {
-  @ViewChild(DropdownMenuComponent) dropdown: DropdownMenuComponent;
+  @ViewChild(DropdownMenuComponent, /* TODO: add static flag */ {}) dropdown: DropdownMenuComponent;
   constructor() {}
 
   ngOnInit() {}

@@ -40,7 +40,7 @@ import {
 import { MockDate } from '@campus/testing';
 import { Update } from '@ngrx/entity';
 import { Action, Store, StoreModule } from '@ngrx/store';
-import { hot } from '@nrwl/nx/testing';
+import { hot } from '@nrwl/angular/testing';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ENVIRONMENT_FAVORITES_FEATURE_TOKEN } from '../../interfaces';

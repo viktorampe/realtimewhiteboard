@@ -62,7 +62,7 @@ import { MockDate, MockWindow } from '@campus/testing';
 import { ListFormat } from '@campus/ui';
 import { UnlockedContent } from '@diekeure/polpo-api-angular-sdk';
 import { Store, StoreModule } from '@ngrx/store';
-import { hot } from '@nrwl/nx/testing';
+import { hot } from '@nrwl/angular/testing';
 import { BehaviorSubject, of } from 'rxjs';
 import { BundlesViewModel } from './bundles.viewmodel';
 import { LearningAreasWithBundlesInfoInterface } from './bundles.viewmodel.interfaces';

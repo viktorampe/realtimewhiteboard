@@ -41,7 +41,7 @@ import {
 })
 export class PageBarContainerComponent implements AfterViewInit, OnDestroy {
   private portalHost: PortalHost;
-  @ViewChild(CdkPortal) portal;
+  @ViewChild(CdkPortal, { static: true }) portal;
 
   constructor(
     private componentFactoryResolver: ComponentFactoryResolver,

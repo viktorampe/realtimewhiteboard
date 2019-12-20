@@ -42,7 +42,7 @@ import {
 import { MockDate } from '@campus/testing';
 import { ListFormat } from '@campus/ui';
 import { Store, StoreModule } from '@ngrx/store';
-import { hot } from '@nrwl/nx/testing';
+import { hot } from '@nrwl/angular/testing';
 import { of } from 'rxjs';
 import { TasksResolver } from './tasks.resolver';
 import { TasksViewModel } from './tasks.viewmodel';

@@ -13,7 +13,7 @@ import { ENVIRONMENT_WEBSITE_TOKEN } from '@campus/shared';
 import { MockActivatedRoute, MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
 import { Store, StoreModule } from '@ngrx/store';
-import { hot } from '@nrwl/nx/testing';
+import { hot } from '@nrwl/angular/testing';
 import { ErrorComponent } from './error.component';
 
 describe('ErrorComponent', () => {

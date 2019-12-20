@@ -16,7 +16,7 @@ import {
   SelectFilterComponent
 } from '@campus/search';
 import { Store, StoreModule } from '@ngrx/store';
-import { cold } from '@nrwl/nx/testing';
+import { cold } from '@nrwl/angular/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { DiaboloChapterLessonFilterFactory } from './diabolo-chapter-lesson-filter.factory';
 

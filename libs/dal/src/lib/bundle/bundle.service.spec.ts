@@ -1,6 +1,6 @@
 import { inject, TestBed } from '@angular/core/testing';
 import { BundleApi, PersonApi } from '@diekeure/polpo-api-angular-sdk';
-import { hot } from '@nrwl/nx/testing';
+import { hot } from '@nrwl/angular/testing';
 import { Observable } from 'rxjs';
 import { UnlockedContentFixture, UserContentFixture } from '../+fixtures';
 import { UnlockedContent } from '../+models';

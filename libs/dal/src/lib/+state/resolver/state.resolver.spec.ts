@@ -9,7 +9,7 @@ import {
   Store,
   StoreModule
 } from '@ngrx/store';
-import { hot } from '@nrwl/nx/testing';
+import { hot } from '@nrwl/angular/testing';
 import { Observable } from 'rxjs';
 import { DalState } from '..';
 import { QueryWithProps, StateResolver } from './state.resolver';
