@@ -1,11 +1,10 @@
 /// <reference types="cypress" />
 
 import { cyEnv, dataCy } from '../support/commands';
-import { ApiPathsInterface, WaitTimesInterface } from '../support/interfaces';
+import { ApiPathsInterface } from '../support/interfaces';
 
 const apiUrl = cyEnv('apiUrl');
 const apiPaths = cyEnv('apiPaths') as ApiPathsInterface;
-const waitTimes = cyEnv('waitTimes') as WaitTimesInterface;
 
 /**
  * Clicks the n-th bulk practice checkbox

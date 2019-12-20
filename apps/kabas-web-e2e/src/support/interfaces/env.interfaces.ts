@@ -7,7 +7,3 @@ export interface AppPathsInterface {
   methods: string;
   practice: string;
 }
-
-export interface WaitTimesInterface {
-  short: number;
-}
