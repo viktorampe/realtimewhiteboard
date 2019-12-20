@@ -1,4 +1,10 @@
-import { Component, NgModule, NO_ERRORS_SCHEMA, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  NgModule,
+  NO_ERRORS_SCHEMA,
+  OnInit,
+  ViewChild
+} from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
@@ -8,6 +14,12 @@ import { MockMatIconRegistry } from '@campus/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { UiModule } from '../ui.module';
 import { DropdownMenuComponent } from './dropdown-menu.component';
+
+const mockData = {
+  showHeader: false,
+  headerIcon: 'test-icon',
+  itemType: 'tests',
+  newItemCount: '2',
   linkText: 'alle tests',
   linkUrl: '/tests'
 };
@@ -22,7 +34,8 @@ import { DropdownMenuComponent } from './dropdown-menu.component';
   `
 })
 export class HostComponent implements OnInit {
-  @ViewChild(DropdownMenuComponent, {static:false}) dropdown: DropdownMenuComponent;
+  @ViewChild(DropdownMenuComponent, { static: false })
+  dropdown: DropdownMenuComponent;
   constructor() {}
 
   ngOnInit() {}
