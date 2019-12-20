@@ -53,6 +53,14 @@ export const icons = {
   'task:pending': 'assets/icons/pause_circle_outline-24px.svg',
   'task:finished': 'assets/icons/not_interested-24px.svg',
   archive: 'assets/icons/archive.svg',
+  'filter:active': 'assets/icons/play_circle_outline-24px.svg',
+  'filter:pending': 'assets/icons/pause_circle_outline-24px.svg',
+  'filter:finished': 'assets/icons/not_interested-24px.svg',
+  'task:archived': 'assets/icons/archive.svg',
+  'task:active': 'assets/icons/task-active.svg',
+  'task:pending': 'assets/icons/task-pending.svg',
+  'task:finished': 'assets/icons/task-finished.svg',
+  'task:paper': 'assets/icons/task-paper.svg',
 
   // search: sort modes
   'sort-numeric-down': 'assets/icons/sort-numeric-down.svg',

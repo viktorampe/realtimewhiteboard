@@ -4,7 +4,7 @@ import {
   AssigneeTypesEnum
 } from '../../interfaces/Assignee.interface';
 
-export type Status = 'pending' | 'active' | 'finished';
+export type Status = 'pending' | 'active' | 'finished' | 'paper';
 
 @Component({
   selector: 'campus-task-list-item',
