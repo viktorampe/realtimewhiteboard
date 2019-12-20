@@ -1,6 +1,12 @@
 /// <reference types="cypress" />
 
-import { cyEnv, dataCy, login, performSetup } from '../support/commands';
+import {
+  cyEnv,
+  dataCy,
+  disableCookieValueValidation,
+  login,
+  performSetup
+} from '../support/commands';
 import {
   ApiPathsInterface,
   AppPathsInterface,
@@ -21,24 +27,28 @@ describe('Practice', () => {
   let setup: KabasPracticePagesInterface;
 
   before(() => {
-    Cypress.Cookies.debug(true);
-    Cypress.Cookies.preserveOnce();
-    return performSetup('kabasUnlockedFreePracticePages').then(res => {
+    performSetup('kabasUnlockedFreePracticePages').then(res => {
       setup = res.body;
-      return login(
+    });
+  });
+
+  beforeEach(() => {
+    disableCookieValueValidation();
+  });
+
+  describe('teacher', () => {
+    beforeEach(() => {
+      login(
         setup.kabasUnlockedFreePracticePages.loginTeacher.username,
         setup.kabasUnlockedFreePracticePages.loginTeacher.password
       );
     });
-  });
-
-  describe('teacher', () => {
-    beforeEach(() => {});
 
     describe('practice manage page', () => {
       beforeEach(() => {
         cy.visit(`${appPaths.practice}/manage`);
       });
+
       it('should show methods', () => {
         dataCy('method-books-title').contains(
           setup.kabasUnlockedFreePracticePages.expected.methodTeacher.name
