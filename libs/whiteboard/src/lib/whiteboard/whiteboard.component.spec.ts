@@ -45,11 +45,13 @@ describe('WhiteboardComponent', () => {
   it('should create a card on plus button clicked', () => {
     const cardsSizeBeforeClicked = component.cards.length;
 
-    const btnPlus = fixture.debugElement.query(
-      By.css('.whiteboard-tools__btnPlus')
+    const btns = fixture.debugElement.queryAll(
+      By.css('.whiteboard-tools__btn')
     );
 
-    btnPlus.nativeElement.click();
+    const btnPlus = btns[0].nativeElement;
+
+    btnPlus.click();
 
     const cardsSizeAfterClicked = component.cards.length;
 
