@@ -43,6 +43,7 @@
 
     &.view-mode-text {
       height: 100%;
+      background-color: white;
 
       textarea {
         height: 100%;
@@ -57,9 +58,10 @@ campus-cardimage {
   height: 60%;
 }
 
-.viewModeImage {
+.view-mode-image {
   height: 100%;
   background-size: cover;
+  z-index: 1;
 }
 
 campus-toolbar {
@@ -67,4 +69,5 @@ campus-toolbar {
   top: 0;
   right: 0;
   width: 100%;
+  z-index: 2;
 }
