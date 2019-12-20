@@ -13,8 +13,7 @@ const waitTimes = cyEnv('waitTimes') as WaitTimesInterface;
  */
 export function clickBulkPracticeCheckbox(index: number) {
   getBulkPracticeCheckbox(index).click();
-
-  return cy.wait(waitTimes.short);
+  cy.wait('@api');
 }
 
 /**
@@ -23,8 +22,7 @@ export function clickBulkPracticeCheckbox(index: number) {
  */
 export function clickItemPracticeCheckbox(index: number) {
   getItemPracticeCheckbox(index).click();
-
-  return cy.wait(waitTimes.short);
+  cy.wait('@api');
 }
 
 /**

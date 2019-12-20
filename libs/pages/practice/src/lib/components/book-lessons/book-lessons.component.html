@@ -6,6 +6,7 @@
       <mat-nav-list *ngIf="(currentPracticeParams$ | async) as params">
         <div class="practice-book-lessons__list-header" matSubheader>
           <campus-button
+            data-cy="back-link"
             class="practice-book-lessons__back-link"
             [iconClass]="'arrow-back'"
             (click)="clickToBookChapters(params.book)"

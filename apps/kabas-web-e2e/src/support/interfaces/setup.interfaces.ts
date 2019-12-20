@@ -67,6 +67,12 @@ export interface KabasPracticePagesInterface {
       };
       chaptersStudent: {
         count: number;
+        firstChapter: {
+          name: string;
+          exercisesAvailable: number;
+          exercisesCompleted: number;
+          kwetonsRemaining: number;
+        };
       };
       lessons: {
         count: number;
