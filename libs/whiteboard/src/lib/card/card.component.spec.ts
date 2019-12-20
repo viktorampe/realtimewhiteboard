@@ -143,4 +143,9 @@ describe('CardComponent', () => {
     component.selectColor('black');
     expect(component.lastColor.emit).toHaveBeenCalledWith('black');
   });
+
+  it('should emit the right card when a card is selected', () => {
+    spyOn(component.addSelectedToList, 'emit');
+    expect(component.addSelectedToList.emit);
+  });
 });

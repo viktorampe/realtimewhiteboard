@@ -18,8 +18,9 @@ export class WhiteboardComponent implements OnInit {
     this.isTitleInputSelected = this.title === '';
   }
 
-  cards: Card[];
-  // maak array van Cards
+  cards: Card[]; // maak array van Cards
+  selectedCards: Card[]; // maak array van Cards waar de checkbox selected is
+
   lastColor: string;
 
   title: string;
@@ -27,6 +28,7 @@ export class WhiteboardComponent implements OnInit {
 
   ngOnInit() {
     this.cards = [];
+    this.selectedCards = [];
     this.lastColor = 'white';
   }
 
@@ -68,5 +70,9 @@ export class WhiteboardComponent implements OnInit {
 
   saveLastColor(color: string) {
     this.lastColor = color;
+  }
+
+  addSelectedCard(card: Card) {
+    this.selectedCards.push(card);
   }
 }

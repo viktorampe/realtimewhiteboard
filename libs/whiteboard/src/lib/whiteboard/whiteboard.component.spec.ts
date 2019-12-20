@@ -69,4 +69,20 @@ describe('WhiteboardComponent', () => {
 
     expect(component.cards.length).toBe(cardsSizeBeforeAdding);
   });
+
+  it('should add a card when checkbox is selected', () => {
+    const cardsSizeBeforeAdding = component.selectedCards.length;
+
+    component.cards.push({
+      cardContent: '',
+      color: null,
+      isInputSelected: false,
+      top: 0,
+      left: 0
+    });
+
+    component.addSelectedCard(component.cards[0]);
+
+    expect(component.cards.length).toBe(cardsSizeBeforeAdding + 1);
+  });
 });

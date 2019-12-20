@@ -3,7 +3,11 @@
   (dblclick)="onDblClick($event)"
   [style.background-color]="this.card.color"
 >
-  <input type="checkbox" class="card__checkbox" />
+  <input
+    type="checkbox"
+    class="card__checkbox"
+    (onchange)="onCheckboxChecked($event)"
+  />
   <campus-toolbar
     class="card__toolbar"
     (delete)="onDeleteCard()"
