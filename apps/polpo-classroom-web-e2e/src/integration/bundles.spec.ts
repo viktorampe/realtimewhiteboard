@@ -1,7 +1,13 @@
 /// <reference types="cypress" />
 
 import { getContentDisplayData } from '../support/bundles.po';
-import { cyEnv, dataCy, login, performSetup } from '../support/commands';
+import {
+  cyEnv,
+  dataCy,
+  disableCookieValueValidation,
+  login,
+  performSetup
+} from '../support/commands';
 import {
   ApiPathsInterface,
   AppPathsInterface,
@@ -19,6 +25,7 @@ describe('Bundles', () => {
     });
   });
   beforeEach(() => {
+    disableCookieValueValidation();
     login(
       setup.polpoStudentOpenBundleContent.login.username,
       setup.polpoStudentOpenBundleContent.login.password
