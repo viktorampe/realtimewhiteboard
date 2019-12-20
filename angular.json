@@ -109,7 +109,7 @@
               "apps/polpo-classroom-web/tsconfig.app.json",
               "apps/polpo-classroom-web/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!apps/polpo-classroom-web/**"]
           }
         },
         "test": {
@@ -146,7 +146,7 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": "apps/polpo-classroom-web-e2e/tsconfig.e2e.json",
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!apps/polpo-classroom-web-e2e/**"]
           }
         }
       }
@@ -165,7 +165,7 @@
               "libs/devlib/tsconfig.spec.json",
               "libs/devlib/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!libs/devlib/**"]
           }
         }
       }
@@ -184,7 +184,7 @@
               "libs/pages/bundles/tsconfig.spec.json",
               "libs/pages/bundles/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!libs/pages/bundles/**"]
           }
         },
         "test": {
@@ -211,7 +211,7 @@
               "libs/pages/edu-contents/tsconfig.spec.json",
               "libs/pages/edu-contents/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!libs/pages/edu-contents/**"]
           }
         },
         "test": {
@@ -238,7 +238,7 @@
               "libs/pages/logout/tsconfig.spec.json",
               "libs/pages/logout/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!libs/pages/logout/**"]
           }
         },
         "test": {
@@ -265,7 +265,7 @@
               "libs/pages/messages/tsconfig.spec.json",
               "libs/pages/messages/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!libs/pages/messages/**"]
           }
         },
         "test": {
@@ -292,7 +292,7 @@
               "libs/pages/reports/tsconfig.spec.json",
               "libs/pages/reports/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!libs/pages/reports/**"]
           }
         },
         "test": {
@@ -319,7 +319,7 @@
               "libs/pages/tasks/tsconfig.spec.json",
               "libs/pages/tasks/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!libs/pages/tasks/**"]
           }
         },
         "test": {
@@ -346,7 +346,7 @@
               "libs/pages/kabas-tasks/tsconfig.spec.json",
               "libs/pages/kabas-tasks/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!libs/pages/kabas-tasks/**"]
           }
         },
         "test": {
@@ -373,7 +373,7 @@
               "libs/pages/books/tsconfig.spec.json",
               "libs/pages/books/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!libs/pages/books/**"]
           }
         },
         "test": {
@@ -400,7 +400,7 @@
               "libs/ui/tsconfig.spec.json",
               "libs/ui/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!libs/ui/**"]
           }
         },
         "test": {
@@ -427,7 +427,7 @@
               "libs/dal/tsconfig.spec.json",
               "libs/dal/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!libs/dal/**"]
           }
         },
         "test": {
@@ -453,7 +453,7 @@
               "libs/pages/shared/tsconfig.lib.json",
               "libs/pages/shared/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!libs/pages/shared/**"]
           }
         },
         "test": {
@@ -479,7 +479,7 @@
               "libs/browser/tsconfig.lib.json",
               "libs/browser/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!libs/browser/**"]
           }
         },
         "test": {
@@ -505,7 +505,7 @@
               "libs/shared/tsconfig.lib.json",
               "libs/shared/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!libs/shared/**"]
           }
         },
         "test": {
@@ -531,7 +531,7 @@
               "libs/scorm/tsconfig.lib.json",
               "libs/scorm/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!libs/scorm/**"]
           }
         },
         "test": {
@@ -557,7 +557,7 @@
               "libs/pages/error/tsconfig.lib.json",
               "libs/pages/error/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!libs/pages/error/**"]
           }
         },
         "test": {
@@ -583,7 +583,7 @@
               "libs/testing/tsconfig.lib.json",
               "libs/testing/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!libs/testing/**"]
           }
         },
         "test": {
@@ -609,7 +609,7 @@
               "libs/utils/tsconfig.lib.json",
               "libs/utils/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!libs/utils/**"]
           }
         },
         "test": {
@@ -635,7 +635,7 @@
               "libs/guards/tsconfig.lib.json",
               "libs/guards/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!libs/guards/**"]
           }
         },
         "test": {
@@ -661,7 +661,7 @@
               "libs/pages/settings/dashboard/tsconfig.lib.json",
               "libs/pages/settings/dashboard/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!libs/pages/settings/dashboard/**"]
           }
         },
         "test": {
@@ -687,7 +687,7 @@
               "libs/pages/settings/profile/tsconfig.lib.json",
               "libs/pages/settings/profile/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!libs/pages/settings/profile/**"]
           }
         },
         "test": {
@@ -713,7 +713,7 @@
               "libs/pages/settings/credentials/tsconfig.lib.json",
               "libs/pages/settings/credentials/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!libs/pages/settings/credentials/**"]
           }
         },
         "test": {
@@ -739,7 +739,7 @@
               "libs/pages/settings/coupled-teachers/tsconfig.lib.json",
               "libs/pages/settings/coupled-teachers/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!libs/pages/settings/coupled-teachers/**"]
           }
         },
         "test": {
@@ -765,7 +765,7 @@
               "libs/pages/settings/alerts/tsconfig.lib.json",
               "libs/pages/settings/alerts/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!libs/pages/settings/alerts/**"]
           }
         },
         "test": {
@@ -791,7 +791,7 @@
               "libs/search/tsconfig.lib.json",
               "libs/search/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!libs/search/**"]
           }
         },
         "test": {
@@ -910,7 +910,7 @@
               "apps/kabas-web/tsconfig.app.json",
               "apps/kabas-web/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!apps/kabas-web/**"]
           }
         },
         "test": {
@@ -953,7 +953,7 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": "apps/kabas-web-e2e/tsconfig.e2e.json",
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!apps/kabas-web-e2e/**"]
           }
         }
       }
@@ -971,7 +971,7 @@
               "libs/pages/methods/tsconfig.lib.json",
               "libs/pages/methods/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!libs/pages/methods/**"]
           }
         },
         "test": {
@@ -994,7 +994,7 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": ["./tsconfig.json", "./tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!libs/**"]
           }
         }
       }
@@ -1009,7 +1009,7 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": ["./tsconfig.json", "./tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!apps/**"]
           }
         }
       }
@@ -1027,7 +1027,7 @@
               "libs/pages/global-search/tsconfig.lib.json",
               "libs/pages/global-search/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!libs/pages/global-search/**"]
           }
         },
         "test": {
@@ -1058,7 +1058,7 @@
               "libs/pages/practice/tsconfig.lib.json",
               "libs/pages/practice/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!libs/pages/practice/**"]
           }
         },
         "test": {
@@ -1084,7 +1084,7 @@
               "libs/pages/home/tsconfig.lib.json",
               "libs/pages/home/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!libs/pages/home/**"]
           }
         },
         "test": {
@@ -1204,7 +1204,7 @@
               "apps/timeline-editor/tsconfig.app.json",
               "apps/timeline-editor/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!apps/timeline-editor/**"]
           }
         },
         "test": {
@@ -1243,7 +1243,7 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": "apps/timeline-editor-e2e/tsconfig.e2e.json",
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!apps/timeline-editor-e2e/**"]
           }
         }
       }
@@ -1261,7 +1261,7 @@
               "libs/timeline/tsconfig.lib.json",
               "libs/timeline/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!libs/timeline/**"]
           }
         },
         "test": {
@@ -1292,7 +1292,7 @@
               "libs/whiteboard/tsconfig.lib.json",
               "libs/whiteboard/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!libs/whiteboard/**"]
           }
         },
         "test": {
@@ -1338,7 +1338,7 @@
               "libs/elements-ink/tsconfig.lib.json",
               "libs/elements-ink/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!libs/elements-ink/**"]
           }
         },
         "test": {
@@ -1369,7 +1369,7 @@
               "libs/pages/login/tsconfig.lib.json",
               "libs/pages/login/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!libs/pages/login/**"]
           }
         },
         "test": {
