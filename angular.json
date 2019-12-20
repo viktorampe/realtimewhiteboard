@@ -146,7 +146,10 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": "apps/polpo-classroom-web-e2e/tsconfig.e2e.json",
-            "exclude": ["**/node_modules/**", "!apps/polpo-classroom-web-e2e/**"]
+            "exclude": [
+              "**/node_modules/**",
+              "!apps/polpo-classroom-web-e2e/**"
+            ]
           }
         }
       }
@@ -162,7 +165,6 @@
           "options": {
             "tsConfig": [
               "libs/devlib/tsconfig.lib.json",
-              "libs/devlib/tsconfig.spec.json",
               "libs/devlib/tsconfig.spec.json"
             ],
             "exclude": ["**/node_modules/**", "!libs/devlib/**"]
@@ -181,7 +183,6 @@
           "options": {
             "tsConfig": [
               "libs/pages/bundles/tsconfig.lib.json",
-              "libs/pages/bundles/tsconfig.spec.json",
               "libs/pages/bundles/tsconfig.spec.json"
             ],
             "exclude": ["**/node_modules/**", "!libs/pages/bundles/**"]
@@ -208,7 +209,6 @@
           "options": {
             "tsConfig": [
               "libs/pages/edu-contents/tsconfig.lib.json",
-              "libs/pages/edu-contents/tsconfig.spec.json",
               "libs/pages/edu-contents/tsconfig.spec.json"
             ],
             "exclude": ["**/node_modules/**", "!libs/pages/edu-contents/**"]
@@ -235,7 +235,6 @@
           "options": {
             "tsConfig": [
               "libs/pages/logout/tsconfig.lib.json",
-              "libs/pages/logout/tsconfig.spec.json",
               "libs/pages/logout/tsconfig.spec.json"
             ],
             "exclude": ["**/node_modules/**", "!libs/pages/logout/**"]
@@ -262,7 +261,6 @@
           "options": {
             "tsConfig": [
               "libs/pages/messages/tsconfig.lib.json",
-              "libs/pages/messages/tsconfig.spec.json",
               "libs/pages/messages/tsconfig.spec.json"
             ],
             "exclude": ["**/node_modules/**", "!libs/pages/messages/**"]
@@ -289,7 +287,6 @@
           "options": {
             "tsConfig": [
               "libs/pages/reports/tsconfig.lib.json",
-              "libs/pages/reports/tsconfig.spec.json",
               "libs/pages/reports/tsconfig.spec.json"
             ],
             "exclude": ["**/node_modules/**", "!libs/pages/reports/**"]
@@ -316,7 +313,6 @@
           "options": {
             "tsConfig": [
               "libs/pages/tasks/tsconfig.lib.json",
-              "libs/pages/tasks/tsconfig.spec.json",
               "libs/pages/tasks/tsconfig.spec.json"
             ],
             "exclude": ["**/node_modules/**", "!libs/pages/tasks/**"]
@@ -343,7 +339,6 @@
           "options": {
             "tsConfig": [
               "libs/pages/kabas-tasks/tsconfig.lib.json",
-              "libs/pages/kabas-tasks/tsconfig.spec.json",
               "libs/pages/kabas-tasks/tsconfig.spec.json"
             ],
             "exclude": ["**/node_modules/**", "!libs/pages/kabas-tasks/**"]
@@ -370,7 +365,6 @@
           "options": {
             "tsConfig": [
               "libs/pages/books/tsconfig.lib.json",
-              "libs/pages/books/tsconfig.spec.json",
               "libs/pages/books/tsconfig.spec.json"
             ],
             "exclude": ["**/node_modules/**", "!libs/pages/books/**"]
@@ -397,7 +391,6 @@
           "options": {
             "tsConfig": [
               "libs/ui/tsconfig.lib.json",
-              "libs/ui/tsconfig.spec.json",
               "libs/ui/tsconfig.spec.json"
             ],
             "exclude": ["**/node_modules/**", "!libs/ui/**"]
@@ -424,7 +417,6 @@
           "options": {
             "tsConfig": [
               "libs/dal/tsconfig.lib.json",
-              "libs/dal/tsconfig.spec.json",
               "libs/dal/tsconfig.spec.json"
             ],
             "exclude": ["**/node_modules/**", "!libs/dal/**"]
@@ -661,7 +653,10 @@
               "libs/pages/settings/dashboard/tsconfig.lib.json",
               "libs/pages/settings/dashboard/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/pages/settings/dashboard/**"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/pages/settings/dashboard/**"
+            ]
           }
         },
         "test": {
@@ -713,7 +708,10 @@
               "libs/pages/settings/credentials/tsconfig.lib.json",
               "libs/pages/settings/credentials/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/pages/settings/credentials/**"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/pages/settings/credentials/**"
+            ]
           }
         },
         "test": {
@@ -739,7 +737,10 @@
               "libs/pages/settings/coupled-teachers/tsconfig.lib.json",
               "libs/pages/settings/coupled-teachers/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/pages/settings/coupled-teachers/**"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/pages/settings/coupled-teachers/**"
+            ]
           }
         },
         "test": {
