@@ -12,4 +12,8 @@ export class ProgressBarComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {}
+
+  getProgressPercentage() {
+    return (this.amountCompleted / this.amountOfImages) * 100 + '%';
+  }
 }
