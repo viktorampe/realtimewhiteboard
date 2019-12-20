@@ -7,6 +7,7 @@ import { CardComponent } from './card/card.component';
 import { ColorlistComponent } from './colorlist/colorlist.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { WhiteboardComponent } from './whiteboard/whiteboard.component';
+import { ImageDragDirective } from './image-drag.directive';
 
 @NgModule({
   imports: [
@@ -20,7 +21,8 @@ import { WhiteboardComponent } from './whiteboard/whiteboard.component';
     WhiteboardComponent,
     CardComponent,
     ToolbarComponent,
-    ColorlistComponent
+    ColorlistComponent,
+    ImageDragDirective
   ],
   exports: [WhiteboardComponent]
 })
