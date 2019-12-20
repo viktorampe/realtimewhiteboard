@@ -81,16 +81,6 @@ describe('CardComponent', () => {
     expect(inputContent.nativeElement.value.trim()).toBe('Test content');
   });
 
-  it('should hide image when view mode image is false', () => {
-    component.viewModeImage = true;
-    component.toggleView();
-    fixture.detectChanges();
-    const cardImageComponent = fixture.debugElement.query(
-      By.css('campus-cardimage')
-    );
-    expect(cardImageComponent.nativeElement.getAttribute('hidden')).toBe('');
-  });
-
   it('should show image when view mode image is true', () => {
     component.viewModeImage = false;
     component.toggleView();
