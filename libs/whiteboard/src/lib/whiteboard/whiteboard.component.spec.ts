@@ -5,6 +5,7 @@ import { By, HAMMER_LOADER } from '@angular/platform-browser';
 import { configureTestSuite } from 'ng-bullet';
 import { CardComponent } from '../card/card.component';
 import { ColorlistComponent } from '../colorlist/colorlist.component';
+import { ProgressBarComponent } from '../progress-bar/progress-bar.component';
 import { ToolbarComponent } from '../toolbar/toolbar.component';
 import { WhiteboardComponent } from './whiteboard.component';
 
@@ -19,7 +20,8 @@ describe('WhiteboardComponent', () => {
         WhiteboardComponent,
         CardComponent,
         ToolbarComponent,
-        ColorlistComponent
+        ColorlistComponent,
+        ProgressBarComponent
       ],
       providers: [
         {
