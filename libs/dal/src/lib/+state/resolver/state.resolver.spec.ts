@@ -50,7 +50,17 @@ describe('stateResolver', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [StoreModule.forRoot({})],
+      imports: [
+        StoreModule.forRoot(
+          {},
+          {
+            runtimeChecks: {
+              strictStateImmutability: true,
+              strictActionImmutability: true
+            }
+          }
+        )
+      ],
       providers: [MockStateResolver, Store]
     });
     stateResolver = TestBed.get(MockStateResolver);
