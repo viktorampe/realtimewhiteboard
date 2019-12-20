@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { EduContentTocQueries, MethodQueries } from '@campus/dal';
-import { AllowedMethodGuard } from '@campus/guards';
+import { AllowedMethodGuard, PermissionGuard } from '@campus/guards';
 import { MethodChapterComponent } from './components/method-chapter/method-chapter.component';
 import { MethodComponent } from './components/method/method.component';
 import { MethodsOverviewComponent } from './components/methods-overview/methods-overview.component';
@@ -16,6 +16,10 @@ const routes: Routes = [
     path: '',
     resolve: { isResolved: MethodResolver },
     runGuardsAndResolvers: 'always',
+    canActivate: [PermissionGuard],
+    data: {
+      requiredPermissions: 'manageMethods'
+    },
     children: [
       {
         path: '',
