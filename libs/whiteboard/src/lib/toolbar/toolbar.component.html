@@ -1,8 +1,8 @@
 <div class="toolbar">
   <mat-icon
     class="toolbar_icon"
-    [svgIcon]="'edit'"
     (click)="toggleModus()"
+    [svgIcon]="'edit'"
   ></mat-icon>
   <mat-icon
     *ngIf="editMode"
@@ -22,6 +22,5 @@
     class="toolbar_icon"
     (click)="onDeleteClicked()"
     [svgIcon]="'cancel'"
-  >
-  </mat-icon>
+  ></mat-icon>
 </div>
