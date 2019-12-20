@@ -23,7 +23,9 @@ const routes: Routes = [
       {
         path: 'methods',
         loadChildren: '@campus/pages/methods#PagesMethodsModule',
-        data: { breadcrumbText: 'Methodes' }
+        data: {
+          breadcrumbText: 'Methodes'
+        }
       },
       {
         path: 'tasks',
