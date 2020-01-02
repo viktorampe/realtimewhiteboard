@@ -15,7 +15,7 @@ const mockRootReducer: ActionReducer<any> = (state, action) => {
 };
 
 describe('clear state meta reducer', () => {
-  it('should clear the app state when the user removed action is dispatched', () => {
+  it('should clear the app state when the dispatched action = user removed', () => {
     const result = clearState(mockRootReducer);
 
     expect(result(hydratedState, userRemovedAction)).toBe(undefined);
