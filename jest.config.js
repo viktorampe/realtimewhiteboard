@@ -20,13 +20,16 @@ module.exports = {
     : ['default'],
   bail: true,
   logHeapUsage: true,
-  restoreMocks: true
-  // globals: {
-  //   'ts-jest': {
-  //     isolatedModules: true,
-  //     diagnostics: {
-  //       warnOnly: true
-  //     }
-  //   }
-  // }
+  restoreMocks: true,
+  testPathIgnorePatterns: ['e2e/'],
+  setupFilesAfterEnv: ['./wallaby-test-setup.ts'],
+  globals: {
+    'ts-jest': {
+      tsConfig: './tsconfig.spec.json',
+      diagnostics: { warnOnly: true },
+      stringifyContentPathRegex: '\\.html$',
+      astTransformers: ['jest-preset-angular/InlineHtmlStripStylesTransformer'],
+      isolatedModules: true
+    }
+  }
 };

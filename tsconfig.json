@@ -61,7 +61,8 @@
       "@campus/pages/login": ["libs/pages/login/src/index.ts"]
     },
     "module": "es2015",
-    "rootDir": "."
+    "rootDir": ".",
+    "esModuleInterop": true
   },
   "exclude": ["node_modules", "tmp", "apps/*e2e*"],
   "include": ["**/*.ts"]
