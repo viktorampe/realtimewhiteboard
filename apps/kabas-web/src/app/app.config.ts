@@ -8,7 +8,8 @@ const standardSideNavItems: NavItem[] = [
   },
   {
     title: 'Methodes',
-    link: '/methods'
+    link: '/methods',
+    requiredPermissions: ['manageMethods']
   },
   {
     title: 'Taken',
