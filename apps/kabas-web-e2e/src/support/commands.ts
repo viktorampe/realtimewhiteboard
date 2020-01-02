@@ -54,6 +54,12 @@ export const performSetup = (scenarioName: SetupScenarioType) => {
   return cy.request(`${apiUrl}e2e/setup/${scenarioName}`);
 };
 
+/**
+ *
+ * TODO refactor all commands to use Cypress.Commands.add
+ *
+ */
+
 // eslint-disable-next-line @typescript-eslint/no-namespace
 declare namespace Cypress {
   interface Chainable<Subject> {
