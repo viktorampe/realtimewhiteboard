@@ -35,10 +35,6 @@ const standardSideNavItems: NavItem[] = [
   {
     title: 'Instellingen',
     link: '/settings'
-  },
-  {
-    title: 'Afmelden',
-    link: '/logout'
   }
 ];
 
