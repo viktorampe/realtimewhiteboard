@@ -20,13 +20,13 @@ module.exports = {
     : ['default'],
   bail: true,
   logHeapUsage: true,
-  restoreMocks: true,
-  globals: {
-    'ts-jest': {
-      isolatedModules: true,
-      diagnostics: {
-        warnOnly: true
-      }
-    }
-  }
+  restoreMocks: true
+  // globals: {
+  //   'ts-jest': {
+  //     isolatedModules: true,
+  //     diagnostics: {
+  //       warnOnly: true
+  //     }
+  //   }
+  // }
 };
