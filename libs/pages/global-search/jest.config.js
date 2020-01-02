@@ -6,4 +6,5 @@ module.exports = {
     'jest-preset-angular/AngularSnapshotSerializer.js',
     'jest-preset-angular/HTMLCommentSerializer.js'
   ]
+,globals: require('../../../jest.global.config')
 };
