@@ -13,6 +13,7 @@
 // https://on.cypress.io/configuration
 // ***********************************************************
 // Import commands.js using ES2015 syntax:
-import './commands';
-import './interfaces';
-import './types';
+export * from './commands';
+export * from './interfaces';
+export * from './types';
+

@@ -10,7 +10,7 @@
     "lint": "./node_modules/.bin/nx workspace-lint && ng lint all-apps-files && ng lint all-libs-files",
     "e2e:polpo:development": "cross-env CYPRESS_ENVIRONMENT=development ng e2e polpo-classroom-web-e2e --watch",
     "e2e:polpo:staging": "node ./node_modules/cross-env/dist/bin/cross-env CYPRESS_ENVIRONMENT=staging node --max_old_space_size=12000 ./node_modules/@angular/cli/bin/ng e2e polpo-classroom-web-e2e --headless --configuration staging",
-    "e2e:kabas:development": "cross-env CYPRESS_ENVIRONMENT=development ng e2e kabas-web-e2e --watch",
+    "e2e:kabas:development": "cross-env CYPRESS_ENVIRONMENT=development ng e2e kabas-web --watch",
     "e2e:kabas:staging": "node ./node_modules/cross-env/dist/bin/cross-env CYPRESS_ENVIRONMENT=staging node --max_old_space_size=12000 ./node_modules/@angular/cli/bin/ng e2e kabas-web-e2e --headless --configuration staging",
     "e2e:timeline-editor:development": "cross-env CYPRESS_ENVIRONMENT=development ng e2e timeline-editor-e2e --watch",
     "e2e:timeline-editor:staging": "node ./node_modules/cross-env/dist/bin/cross-env CYPRESS_ENVIRONMENT=staging node --max_old_space_size=12000 ./node_modules/@angular/cli/bin/ng e2e timeline-editor-e2e --headless --configuration staging",

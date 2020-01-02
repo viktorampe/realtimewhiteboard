@@ -926,14 +926,7 @@
               "maxWorkers": 2
             }
           }
-        }
-      }
-    },
-    "kabas-web-e2e": {
-      "root": "apps/kabas-web-e2e",
-      "projectType": "application",
-      "prefix": "",
-      "architect": {
+        },
         "e2e": {
           "builder": "@nrwl/cypress:cypress",
           "options": {
@@ -948,13 +941,6 @@
             "production": {
               "devServerTarget": "kabas-web:serve:production"
             }
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": "apps/kabas-web-e2e/tsconfig.e2e.json",
-            "exclude": ["**/node_modules/**", "!apps/kabas-web-e2e/**"]
           }
         }
       }

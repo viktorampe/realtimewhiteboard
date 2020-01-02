@@ -53,3 +53,15 @@ export const logoutByUI = () => {
 export const performSetup = (scenarioName: SetupScenarioType) => {
   return cy.request(`${apiUrl}e2e/setup/${scenarioName}`);
 };
+
+// eslint-disable-next-line @typescript-eslint/no-namespace
+declare namespace Cypress {
+  interface Chainable<Subject> {
+    login(email: string, password: string): void;
+  }
+}
+//
+// -- This is a parent command --
+Cypress.Commands.add('login', (email, password) => {
+  console.log('Custom command example: Login', email, password);
+});

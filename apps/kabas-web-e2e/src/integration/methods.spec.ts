@@ -1,11 +1,14 @@
 /// <reference types="cypress" />
 
-import { cyEnv, dataCy, login, performSetup } from '../support/commands';
 import {
   ApiPathsInterface,
   AppPathsInterface,
-  KabasMethodsPagesInterface
-} from '../support/interfaces';
+  cyEnv,
+  dataCy,
+  KabasMethodsPagesInterface,
+  login,
+  performSetup
+} from '../support';
 import {
   checkLPGChecked,
   checkLPGUnchecked,

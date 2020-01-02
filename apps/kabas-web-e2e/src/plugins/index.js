@@ -1,4 +1,5 @@
-const { preprocessTypescript } = require('@nrwl/cypress/plugins/preprocessor'); // ***********************************************************
+const preprocessTypescript = require('@nrwl/cypress/plugins/preprocessor')
+  .preprocessTypescript; // ***********************************************************
 // This example plugins/index.js can be used to load plugins
 //
 // You can change the location of this file or turn off loading
@@ -14,3 +15,4 @@ module.exports = function(on, config) {
   // `on` is used to hook into various events Cypress emits
   // `config` is the resolved Cypress config
 };
+//# sourceMappingURL=index.js.map
