@@ -43,6 +43,14 @@ describe('KabasTaskViewModel', () => {
     });
   });
 
+  beforeAll(() => {
+    dateMock = new MockDate();
+  });
+
+  afterAll(() => {
+    dateMock.returnRealDate();
+  });
+
   beforeEach(() => {
     kabasTasksViewModel = TestBed.get(KabasTasksViewModel);
   });
@@ -54,14 +62,6 @@ describe('KabasTaskViewModel', () => {
   });
 
   describe('getTaskDates', () => {
-    beforeAll(() => {
-      dateMock = new MockDate();
-    });
-
-    afterAll(() => {
-      dateMock.returnRealDate();
-    });
-
     const testCases = [
       {
         it: 'should use the correct start and end date',
