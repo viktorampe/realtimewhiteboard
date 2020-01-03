@@ -82,6 +82,10 @@ const routes: Routes = [
     data: { breadcrumbText: 'Login' }
   },
   {
+    path: 'logout',
+    loadChildren: '@campus/pages/logout#PagesLogoutModule'
+  },
+  {
     path: 'error',
     loadChildren: '@campus/pages/error#PagesErrorModule',
     data: {

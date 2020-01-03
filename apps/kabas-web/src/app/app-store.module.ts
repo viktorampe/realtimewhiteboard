@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import {
   AlertReducer,
   ClassGroupReducer,
+  clearState,
   CurrentExerciseReducer,
   CustomSerializer,
   DiaboloPhaseReducer,
@@ -48,7 +49,7 @@ import { environment } from '../environments/environment';
     StoreModule.forRoot(
       { app: undefined, router: routerReducer },
       {
-        metaReducers: !environment.production ? [handleUndo] : [handleUndo],
+        metaReducers: [handleUndo, clearState],
         runtimeChecks: {
           strictStateImmutability: true,
           strictActionImmutability: true

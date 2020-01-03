@@ -7,6 +7,7 @@ import {
   EffectFeedbackFixture,
   EffectFeedbackInterface,
   EffectFeedbackReducer,
+  PersonFixture,
   Priority,
   StateFeatureBuilder,
   UiReducer,
@@ -132,21 +133,34 @@ describe('AppViewModel', () => {
   });
 
   describe('navigationItems$', () => {
-    beforeEach(() => {
-      jest.spyOn(navigationItemService, 'getNavItemsForTree');
+    let getNavItemsForTreeSpy: jest.SpyInstance;
 
-      store.dispatch(new UserActions.PermissionsLoaded(['permissionA']));
+    beforeEach(() => {
+      getNavItemsForTreeSpy = jest.spyOn(
+        navigationItemService,
+        'getNavItemsForTree'
+      );
     });
 
-    it('should stream the values returned from the navigation item service', () => {
+    it('should stream the values returned from the navigation item service when a user is logged in', () => {
+      store.dispatch(new UserActions.PermissionsLoaded(['permissionA']));
+      store.dispatch(new UserActions.UserLoaded(new PersonFixture()));
+
       expect(viewModel.sideNavItems$).toBeObservable(
         hot('a', { a: mockNavItems })
       );
-      expect(navigationItemService.getNavItemsForTree).toHaveBeenCalledTimes(1);
-      expect(navigationItemService.getNavItemsForTree).toHaveBeenCalledWith(
+      expect(getNavItemsForTreeSpy).toHaveBeenCalledTimes(1);
+      expect(getNavItemsForTreeSpy).toHaveBeenCalledWith(
         'sideNav',
-        ['permissionA']
+        ['permissionA'],
+        true
       );
+    });
+
+    it('should stream an empty array when the user is not logged in', () => {
+      store.dispatch(new UserActions.UserRemoved());
+
+      expect(viewModel.sideNavItems$).toBeObservable(hot('a', { a: [] }));
     });
   });
 

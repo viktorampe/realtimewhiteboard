@@ -46,6 +46,7 @@ export class UserLoaded implements Action {
   constructor(public payload: PersonInterface) {}
 }
 
+// the RemoveUser action will trigger the clear-state meta-reducer which will reset the store to it's initial state
 export class RemoveUser implements Action {
   readonly type = UserActionTypes.RemoveUser;
   constructor() {}
