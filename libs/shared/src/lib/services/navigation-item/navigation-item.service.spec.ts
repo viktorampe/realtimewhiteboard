@@ -148,5 +148,15 @@ describe('NavigationItemService', () => {
         expect(result).toEqual(testCase.expected);
       });
     });
+
+    it('should add a logout nav item when addLogoutNav === true', () => {
+      const result = service.getNavItemsForTree('sideNav', [], true);
+      const logoutNavItem = {
+        title: 'Afmelden',
+        link: '/logout'
+      };
+
+      expect(result.pop()).toEqual(logoutNavItem);
+    });
   });
 });

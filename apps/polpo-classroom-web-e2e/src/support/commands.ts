@@ -27,24 +27,19 @@ export const login = (username?: string, password?: string) => {
     })
     .then(resp => {
       // set the cookies that the loopback sdk needs
-      cy.setCookie('$LoopBackSDK$created', resp.body.created, {
+      const options = {
         domain: cookieDomain
-      });
-      cy.setCookie('$LoopBackSDK$id', resp.body.id, {
-        domain: cookieDomain
-      });
-      cy.setCookie('$LoopBackSDK$rememberMe', 'true', {
-        domain: cookieDomain
-      });
-      cy.setCookie('$LoopBackSDK$ttl', resp.body.ttl + '', {
-        domain: cookieDomain
-      });
-      cy.setCookie('$LoopBackSDK$user', JSON.stringify(resp.body.user), {
-        domain: cookieDomain
-      });
-      cy.setCookie('$LoopBackSDK$userId', resp.body.userId + '', {
-        domain: cookieDomain
-      });
+      };
+      cy.setCookie('$LoopBackSDK$created', resp.body.created, options);
+      cy.setCookie('$LoopBackSDK$id', resp.body.id, options);
+      cy.setCookie('$LoopBackSDK$rememberMe', 'true', options);
+      cy.setCookie('$LoopBackSDK$ttl', resp.body.ttl + '', options);
+      cy.setCookie(
+        '$LoopBackSDK$user',
+        JSON.stringify(resp.body.user),
+        options
+      );
+      cy.setCookie('$LoopBackSDK$userId', resp.body.userId + '', options);
     });
 };
 
@@ -65,12 +60,4 @@ export const logoutByUI = () => {
 
 export const performSetup = (scenarioName: SetupScenarioType) => {
   return cy.request(`${apiUrl}e2e/setup/${scenarioName}`);
-};
-
-export const disableCookieValueValidation = () => {
-  // TODO: workaround for Cypress >= 3.5.0, remove when they disable Cookie RFC validation
-  cy.stub(Cypress['utils'], 'throwErrByPath')
-    .callThrough() // still throw other types of errors
-    .withArgs('setCookie.invalid_value')
-    .returns(undefined); // suppress invalid value errors
 };
