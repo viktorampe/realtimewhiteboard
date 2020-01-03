@@ -6,6 +6,7 @@ module.exports = {
   resolver: '@nrwl/jest/plugins/resolver',
   moduleFileExtensions: ['ts', 'js', 'html'],
   coverageReporters: ['cobertura'],
+  collectCoverage: true,
   reporters: process.env.CI
     ? [
         'default',
