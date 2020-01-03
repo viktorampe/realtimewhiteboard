@@ -1,8 +1,18 @@
 /// <reference types="cypress" />
 
 import { cyEnv, dataCy, login, performSetup } from '../support/commands';
-import { ApiPathsInterface, AppPathsInterface, KabasPracticePagesInterface } from '../support/interfaces';
-import { checkItemPracticeCheckboxDisabled, checkItemPracticeCheckboxEnabled, checkItemPracticeCheckboxUnchecked, clickBulkPracticeCheckbox, clickItemPracticeCheckbox } from './practice';
+import {
+  ApiPathsInterface,
+  AppPathsInterface,
+  KabasPracticePagesInterface
+} from '../support/interfaces';
+import {
+  checkItemPracticeCheckboxDisabled,
+  checkItemPracticeCheckboxEnabled,
+  checkItemPracticeCheckboxUnchecked,
+  clickBulkPracticeCheckbox,
+  clickItemPracticeCheckbox
+} from './practice';
 
 describe('Practice', () => {
   const apiUrl = cyEnv('apiUrl');

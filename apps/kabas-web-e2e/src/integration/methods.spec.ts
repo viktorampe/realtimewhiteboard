@@ -1,8 +1,22 @@
 /// <reference types="cypress" />
 
 import { cyEnv, dataCy, login, performSetup } from '../support/commands';
-import { ApiPathsInterface, AppPathsInterface, KabasMethodsPagesInterface } from '../support/interfaces';
-import { checkLPGChecked, checkLPGUnchecked, checkNavOpenBoeke, checkSearchResultCount, clickBulkLPGCheckbox, clickDiaboloOutroFilter, clickLPGCheckbox, enterSearchTerm, getActiveTab } from './methods';
+import {
+  ApiPathsInterface,
+  AppPathsInterface,
+  KabasMethodsPagesInterface
+} from '../support/interfaces';
+import {
+  checkLPGChecked,
+  checkLPGUnchecked,
+  checkNavOpenBoeke,
+  checkSearchResultCount,
+  clickBulkLPGCheckbox,
+  clickDiaboloOutroFilter,
+  clickLPGCheckbox,
+  enterSearchTerm,
+  getActiveTab
+} from './methods';
 
 describe('Methods', () => {
   const apiUrl = cyEnv('apiUrl');
