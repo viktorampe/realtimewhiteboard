@@ -119,13 +119,7 @@
             "tsConfig": "apps/polpo-classroom-web/tsconfig.spec.json",
             "setupFile": "apps/polpo-classroom-web/src/test-setup.ts"
           }
-        }
-      }
-    },
-    "polpo-classroom-web-e2e": {
-      "root": "apps/polpo-classroom-web-e2e/",
-      "projectType": "application",
-      "architect": {
+        },
         "e2e": {
           "builder": "@nrwl/cypress:cypress",
           "options": {
@@ -140,16 +134,6 @@
             "production": {
               "devServerTarget": "polpo-classroom-web:serve:production"
             }
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": "apps/polpo-classroom-web-e2e/tsconfig.e2e.json",
-            "exclude": [
-              "**/node_modules/**",
-              "!apps/polpo-classroom-web-e2e/**"
-            ]
           }
         }
       }
@@ -1202,14 +1186,7 @@
             "tsConfig": "apps/timeline-editor/tsconfig.spec.json",
             "setupFile": "apps/timeline-editor/src/test-setup.ts"
           }
-        }
-      }
-    },
-    "timeline-editor-e2e": {
-      "root": "apps/timeline-editor-e2e",
-      "projectType": "application",
-      "prefix": "",
-      "architect": {
+        },
         "e2e": {
           "builder": "@nrwl/cypress:cypress",
           "options": {
@@ -1224,13 +1201,6 @@
             "production": {
               "devServerTarget": "timeline-editor:serve:production"
             }
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": "apps/timeline-editor-e2e/tsconfig.e2e.json",
-            "exclude": ["**/node_modules/**", "!apps/timeline-editor-e2e/**"]
           }
         }
       }
