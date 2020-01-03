@@ -1,28 +1,8 @@
 /// <reference types="cypress" />
 
-import {
-  cyEnv,
-  dataCy,
-  disableCookieValueValidation,
-  login,
-  performSetup
-} from '../support/commands';
-import {
-  ApiPathsInterface,
-  AppPathsInterface,
-  KabasMethodsPagesInterface
-} from '../support/interfaces';
-import {
-  checkLPGChecked,
-  checkLPGUnchecked,
-  checkNavOpenBoeke,
-  checkSearchResultCount,
-  clickBulkLPGCheckbox,
-  clickDiaboloOutroFilter,
-  clickLPGCheckbox,
-  enterSearchTerm,
-  getActiveTab
-} from './methods';
+import { cyEnv, dataCy, login, performSetup } from '../support/commands';
+import { ApiPathsInterface, AppPathsInterface, KabasMethodsPagesInterface } from '../support/interfaces';
+import { checkLPGChecked, checkLPGUnchecked, checkNavOpenBoeke, checkSearchResultCount, clickBulkLPGCheckbox, clickDiaboloOutroFilter, clickLPGCheckbox, enterSearchTerm, getActiveTab } from './methods';
 
 describe('Methods', () => {
   const apiUrl = cyEnv('apiUrl');
@@ -37,7 +17,6 @@ describe('Methods', () => {
   });
 
   beforeEach(() => {
-    disableCookieValueValidation();
     login(
       setup.kabasMethodsPages.login.username,
       setup.kabasMethodsPages.login.password
