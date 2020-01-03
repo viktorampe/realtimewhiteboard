@@ -22,7 +22,7 @@ module.exports = {
   logHeapUsage: true,
   restoreMocks: true,
   testPathIgnorePatterns: ['e2e/'],
-  setupFilesAfterEnv: ['./wallaby-test-setup.ts'],
+  setupFilesAfterEnv: ['./jest-test-setup.ts'],
   globals: {
     'ts-jest': {
       tsConfig: './tsconfig.spec.json',
