@@ -1,11 +1,17 @@
-<div [routerLink]="bookId">
+<div data-cy="method-book-tile" [routerLink]="bookId">
   <div class="shared-method-book-tile__image__container">
     <img [src]="logoUrl" class="shared-method-book-tile__image"
   /></div>
-  <div
-    data-cy="method-book-title"
-    class="shared-method-book-tile__title__container"
-    ><div class="shared-method-book-tile__title">{{ name }}</div>
-    <div class="shared-method-book-tile__areaName">({{ areaName }})</div></div
+  <div class="shared-method-book-tile__title__container"
+    ><div
+      data-cy="method-book-tile-title"
+      class="shared-method-book-tile__title"
+      >{{ name }}</div
+    >
+    <div
+      data-cy="method-book-tile-area-name"
+      class="shared-method-book-tile__areaName"
+      >({{ areaName }})</div
+    ></div
   >
 </div>
