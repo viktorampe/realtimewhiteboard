@@ -84,7 +84,7 @@ export class SlideDetailComponent implements OnInit, OnChanges, OnDestroy {
   @Output() uploadFile = new EventEmitter<UploadFileOutput>();
   @Output() isDirty = new EventEmitter<boolean>();
 
-  @ViewChild(MatStepper) stepper: MatStepper;
+  @ViewChild(MatStepper, { static: false }) stepper: MatStepper;
 
   @HostBinding('class.campus-page')
   setCampusPageClass = true;

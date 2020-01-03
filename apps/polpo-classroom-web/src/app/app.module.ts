@@ -9,7 +9,7 @@ import { SearchModule } from '@campus/search';
 import { SharedModule } from '@campus/shared';
 import { ManageCollectionComponent, UiModule } from '@campus/ui';
 import { UtilsModule } from '@campus/utils';
-import { NxModule } from '@nrwl/nx';
+import { NxModule } from '@nrwl/angular';
 import { configureBufferSize } from 'ngrx-undo';
 import { environment } from '../environments/environment';
 import { AppEffectsModule } from './app-effects.module';

@@ -73,7 +73,7 @@ export class ShellComponent implements OnInit, OnDestroy {
    *
    * @type {MatDrawer}
    */
-  @ViewChild(MatDrawer) public readonly sidebar: MatDrawer;
+  @ViewChild(MatDrawer, { static: true }) public readonly sidebar: MatDrawer;
 
   constructor(private breakPointObserver: BreakpointObserver) {}
 

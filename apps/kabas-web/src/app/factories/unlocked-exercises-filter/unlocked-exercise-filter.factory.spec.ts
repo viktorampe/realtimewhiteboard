@@ -12,7 +12,7 @@ import {
   SearchStateInterface
 } from '@campus/search';
 import { Store, StoreModule } from '@ngrx/store';
-import { cold } from '@nrwl/nx/testing';
+import { cold } from '@nrwl/angular/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { UnlockedExerciseFilterFactory } from './unlocked-exercise-filter.factory';
 
@@ -30,7 +30,15 @@ describe('ChapterLessonFilterFactory', () => {
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [
-        StoreModule.forRoot({}),
+        StoreModule.forRoot(
+          {},
+          {
+            runtimeChecks: {
+              strictStateImmutability: false,
+              strictActionImmutability: false
+            }
+          }
+        ),
         ...getStoreModuleForFeatures([MethodLevelReducer])
       ],
       providers: [UnlockedExerciseFilterFactory, Store]

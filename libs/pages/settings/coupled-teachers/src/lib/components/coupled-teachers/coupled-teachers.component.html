@@ -78,10 +78,7 @@
     [titleIcon]="'coupled-teachers'"
   >
     <ng-container
-      *ngIf="
-        (linkedPersons$ | async) as coupledTeachers;
-        else noCoupledTeachers
-      "
+      *ngIf="linkedPersons$ | async as coupledTeachers; else noCoupledTeachers"
     >
       <ng-container
         *ngIf="coupledTeachers.length > 0; else noCoupledTeachers"

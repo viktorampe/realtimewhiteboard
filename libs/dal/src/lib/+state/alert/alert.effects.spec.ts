@@ -3,8 +3,8 @@ import { MockDate } from '@campus/testing';
 import { EffectsModule } from '@ngrx/effects';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Action, StoreModule } from '@ngrx/store';
-import { DataPersistence, NxModule } from '@nrwl/nx';
-import { getTestScheduler, hot } from '@nrwl/nx/testing';
+import { DataPersistence, NxModule } from '@nrwl/angular';
+import { getTestScheduler, hot } from '@nrwl/angular/testing';
 import { undo } from 'ngrx-undo';
 import { from, Observable, of } from 'rxjs';
 import { take } from 'rxjs/operators';
@@ -107,7 +107,15 @@ describe('AlertEffects', () => {
     TestBed.configureTestingModule({
       imports: [
         NxModule.forRoot(),
-        StoreModule.forRoot({}),
+        StoreModule.forRoot(
+          {},
+          {
+            runtimeChecks: {
+              strictStateImmutability: false,
+              strictActionImmutability: false
+            }
+          }
+        ),
         StoreModule.forFeature('alerts', reducer, {
           initialState: usedState
         }),

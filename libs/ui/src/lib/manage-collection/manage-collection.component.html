@@ -27,7 +27,7 @@
         </mat-list-option>
         <mat-divider></mat-divider>
       </div>
-      <ng-container *ngIf="(filterTextInput.result$ | async) as filteredItems">
+      <ng-container *ngIf="filterTextInput.result$ | async as filteredItems">
         <div
           class="ui-manage-collection__all-items"
           *ngIf="filteredItems.length; else noResultsTemplate"

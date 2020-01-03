@@ -21,9 +21,8 @@ export class OpenStaticContentService
   open(content: ContentInterface, stream?: boolean): void {
     if (content instanceof EduContent) {
       const url =
-        `${this.environmentApi.APIBase}/api/eduContents/${
-          content.id
-        }/redirectURL` + (stream ? '?stream=true' : '');
+        `${this.environmentApi.APIBase}/api/eduContents/${content.id}/redirectURL` +
+        (stream ? '?stream=true' : '');
       this.window.open(url);
     } else if (content instanceof UserContent) {
       this.window.open(content.link);

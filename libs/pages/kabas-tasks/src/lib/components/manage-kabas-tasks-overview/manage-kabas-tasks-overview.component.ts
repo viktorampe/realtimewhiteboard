@@ -137,8 +137,9 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
 
   private currentSortMode$ = new BehaviorSubject(TaskSortEnum.NAME);
 
-  @ViewChild('digitalSorting') private digitalSorting: MatSelect;
-  @ViewChild('paperSorting') private paperSorting: MatSelect;
+  @ViewChild('digitalSorting', { static: true })
+  private digitalSorting: MatSelect;
+  @ViewChild('paperSorting', { static: true }) private paperSorting: MatSelect;
 
   constructor(
     private viewModel: KabasTasksViewModel,

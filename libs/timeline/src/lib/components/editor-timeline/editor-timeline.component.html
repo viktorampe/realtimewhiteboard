@@ -1,4 +1,4 @@
-<div *ngIf="(isFormDirty$ | async)" class="timeline-editor__form-dirty-warning"
+<div *ngIf="isFormDirty$ | async" class="timeline-editor__form-dirty-warning"
   >Niet opgeslagen aanpassingen...</div
 >
 <div class="timeline-editor__main">
@@ -37,7 +37,7 @@
       <button
         mat-button
         mat-icon-button
-        *ngIf="(activeSlide$ | async)"
+        *ngIf="activeSlide$ | async"
         class="timeline-editor__main__button-container__button timeline-editor__main__button-container__button--delete"
         (click)="deleteActiveSlide()"
         color="warn"
@@ -48,7 +48,7 @@
 
   <div class="timeline-editor__main__detail">
     <campus-slide-detail
-      *ngIf="(activeSlideDetail$ | async) as activeSlideDetail"
+      *ngIf="activeSlideDetail$ | async as activeSlideDetail"
       class="timeline-editor__main__detail--slide"
       (uploadFile)="handleFileUpload($event)"
       (saveViewSlide)="saveSlide($event)"
@@ -59,7 +59,7 @@
     ></campus-slide-detail>
 
     <campus-settings
-      *ngIf="(showSettings$ | async)"
+      *ngIf="showSettings$ | async"
       class="timeline-editor__main__detail--settings"
       [settings]="settings$ | async"
       (saveSettings)="saveSettings($event)"

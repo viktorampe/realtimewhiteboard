@@ -65,7 +65,7 @@ export class DateFilterComponent
   private formValues: DateFilterComponentFormValues = {};
   private fixedOptions: RadioOption[] = [];
 
-  @ViewChild(MatMenuTrigger)
+  @ViewChild(MatMenuTrigger, { static: true })
   matMenuTrigger: MatMenuTrigger;
 
   @Input()

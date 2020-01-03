@@ -1,7 +1,7 @@
 <campus-page-bar> </campus-page-bar>
 <div
   class="pages-practice__container pages-manage-practice-overview campus-page"
-  *ngIf="(allowedBooks$ | async) as books"
+  *ngIf="allowedBooks$ | async as books"
 >
   <campus-page-header [title]="'Met welke methode wil je vrij oefenen?'">
   </campus-page-header>

@@ -39,18 +39,14 @@ describe('Bundles', () => {
         .location('pathname')
         .should(
           'be',
-          `${appPaths.bundles}/${
-            setup.polpoStudentOpenBundleContent.learningArea.id
-          }`
+          `${appPaths.bundles}/${setup.polpoStudentOpenBundleContent.learningArea.id}`
         );
     });
   });
   describe('bundles page', () => {
     beforeEach(() => {
       cy.visit(
-        `${appPaths.bundles}/${
-          setup.polpoStudentOpenBundleContent.learningArea.id
-        }`,
+        `${appPaths.bundles}/${setup.polpoStudentOpenBundleContent.learningArea.id}`,
         {
           onBeforeLoad(win) {
             cy.stub(win, 'open');
@@ -67,16 +63,12 @@ describe('Bundles', () => {
         .location('pathname')
         .should(
           'be',
-          `${appPaths.bundles}/${
-            setup.polpoStudentOpenBundleContent.bundle.learningAreaId
-          }/${setup.polpoStudentOpenBundleContent.bundle.id}`
+          `${appPaths.bundles}/${setup.polpoStudentOpenBundleContent.bundle.learningAreaId}/${setup.polpoStudentOpenBundleContent.bundle.id}`
         );
     });
     it('should show the boeke', () => {
       dataCy('boeke-count').contains(
-        `Je hebt 1 boek voor ${
-          setup.polpoStudentOpenBundleContent.learningArea.name
-        }`
+        `Je hebt 1 boek voor ${setup.polpoStudentOpenBundleContent.learningArea.name}`
       );
       dataCy('boeke').as('boeke');
       cy.get('@boeke').contains(
@@ -92,19 +84,14 @@ describe('Bundles', () => {
         .its('open')
         .should(
           'be.calledWithExactly',
-          `${apiUrl}${apiPaths.eduContent}/${
-            setup.polpoStudentOpenBundleContent.boeke
-              .publishedEduContentMetadata.eduContentId
-          }/redirectURL`
+          `${apiUrl}${apiPaths.eduContent}/${setup.polpoStudentOpenBundleContent.boeke.publishedEduContentMetadata.eduContentId}/redirectURL`
         );
     });
   });
   describe('bundle details page', () => {
     beforeEach(() => {
       cy.visit(
-        `${appPaths.bundles}/${
-          setup.polpoStudentOpenBundleContent.learningArea.id
-        }/${setup.polpoStudentOpenBundleContent.bundle.id}`,
+        `${appPaths.bundles}/${setup.polpoStudentOpenBundleContent.learningArea.id}/${setup.polpoStudentOpenBundleContent.bundle.id}`,
         {
           onBeforeLoad(win) {
             cy.stub(win, 'open');
@@ -151,9 +138,7 @@ describe('Bundles', () => {
         .should('have.attr', 'src')
         .and(
           'contain',
-          `${apiUrl}${apiPaths.ludoAssets}/${
-            setup.polpoStudentOpenBundleContent.contentExercise.id
-          }`
+          `${apiUrl}${apiPaths.ludoAssets}/${setup.polpoStudentOpenBundleContent.contentExercise.id}`
         );
     });
     it('should call open with the correct url for non exercise content', () => {
@@ -164,10 +149,7 @@ describe('Bundles', () => {
         .its('open')
         .should(
           'be.calledWithExactly',
-          `${apiUrl}${apiPaths.eduContent}/${
-            setup.polpoStudentOpenBundleContent.contentDownloadable
-              .publishedEduContentMetadata.eduContentId
-          }/redirectURL`
+          `${apiUrl}${apiPaths.eduContent}/${setup.polpoStudentOpenBundleContent.contentDownloadable.publishedEduContentMetadata.eduContentId}/redirectURL`
         );
       dataCy('content-view-content')
         .last()

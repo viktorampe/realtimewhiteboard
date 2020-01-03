@@ -49,7 +49,15 @@ describe('HasPermissionDirective', () => {
     TestBed.configureTestingModule({
       imports: [
         TestModule,
-        StoreModule.forRoot({}),
+        StoreModule.forRoot(
+          {},
+          {
+            runtimeChecks: {
+              strictStateImmutability: false,
+              strictActionImmutability: false
+            }
+          }
+        ),
         StoreModule.forFeature('user', UserReducer.reducer, {
           initialState: {
             currentUser: new PersonFixture(),

@@ -29,7 +29,7 @@ export class LearningAreasComponent
   listFormat$: Observable<ListFormat>;
   sharedInfo$: Observable<LearningAreasWithBundlesInfoInterface>;
 
-  @ViewChild(FilterTextInputComponent)
+  @ViewChild(FilterTextInputComponent, { static: true })
   filterTextInput: FilterTextInputComponent<
     LearningAreasWithBundlesInfoInterface,
     LearningAreaInfoInterface

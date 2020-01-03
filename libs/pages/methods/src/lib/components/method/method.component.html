@@ -1,5 +1,5 @@
 <campus-page-bar>
-  <ng-container *ngIf="(boeke$ | async) as boeke">
+  <ng-container *ngIf="boeke$ | async as boeke">
     <campus-button
       class="shared-header__contextual__button smallIcon"
       data-cy="nav-open-boeke"
@@ -20,7 +20,7 @@
       (click)="toggleBoekeFavorite(boeke)"
     >
       <ng-container
-        *ngIf="(isBoekeFavorite$ | async) as isBoekeFavorite; else notFavorite"
+        *ngIf="isBoekeFavorite$ | async as isBoekeFavorite; else notFavorite"
         ><span>Verwijder uit favorieten</span></ng-container
       >
       <ng-template #notFavorite>
@@ -49,7 +49,7 @@
           data-cy="chapter-link"
           mat-list-item
           class="method-chapter-link"
-          *ngFor="let chapter of (chapters$ | async)"
+          *ngFor="let chapter of chapters$ | async"
           (click)="clickOpenChapter(chapter.id)"
           >{{ chapter.title }}</a
         >
@@ -64,14 +64,14 @@
         <mat-tab label="Lesmateriaal">
           <mat-card
             class="method-method__container__boeke"
-            *ngIf="(boeke$ | async) as boeke"
+            *ngIf="boeke$ | async as boeke"
           >
             <div class="banner-container">
               <div class="banner-text">Bordboek</div>
               <img class="banner-image" src="assets/icons/book-label.svg" />
             </div>
 
-            <mat-card-content *ngIf="(method$ | async) as method">
+            <mat-card-content *ngIf="method$ | async as method">
               <img
                 class="method-method__container__boeke__image"
                 [src]="'assets/icons/method/' + method.logoUrl"
@@ -103,10 +103,10 @@
           </mat-card>
 
           <div
-            *ngIf="(generalFilesByType$ | async) as generalFilesByType"
+            *ngIf="generalFilesByType$ | async as generalFilesByType"
             class="method-method__container__files"
           >
-            <ng-container *ngFor="let productType of (productTypes$ | async)">
+            <ng-container *ngFor="let productType of productTypes$ | async">
               <ng-container
                 *ngIf="generalFilesByType[productType.id] as generalFiles"
               >

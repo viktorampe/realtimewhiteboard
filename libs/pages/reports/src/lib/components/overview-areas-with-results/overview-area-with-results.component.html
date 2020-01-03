@@ -26,9 +26,7 @@
   >
   </campus-page-header>
 
-  <div
-    *ngIf="(filterTextInput.result$ | async) as filteredLearningAreaInstances"
-  >
+  <div *ngIf="filterTextInput.result$ | async as filteredLearningAreaInstances">
     <div class="pages-reports__container__learning-areas-count">
       {{ filteredLearningAreaInstances.length }} van
       <u

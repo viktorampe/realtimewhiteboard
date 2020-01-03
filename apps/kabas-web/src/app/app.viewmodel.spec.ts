@@ -22,7 +22,7 @@ import {
 } from '@campus/shared';
 import { NavItem } from '@campus/ui';
 import { Action, Store, StoreModule } from '@ngrx/store';
-import { hot } from '@nrwl/nx/testing';
+import { hot } from '@nrwl/angular/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { BehaviorSubject, of } from 'rxjs';
 import { AppViewModel } from './app.viewmodel';
@@ -73,8 +73,15 @@ describe('AppViewModel', () => {
 
     TestBed.configureTestingModule({
       imports: [
-        StoreModule.forRoot({}),
-
+        StoreModule.forRoot(
+          {},
+          {
+            runtimeChecks: {
+              strictStateImmutability: false,
+              strictActionImmutability: false
+            }
+          }
+        ),
         ...StateFeatureBuilder.getModuleWithForFeatureProviders([
           EffectFeedbackReducer,
           UserReducer,
