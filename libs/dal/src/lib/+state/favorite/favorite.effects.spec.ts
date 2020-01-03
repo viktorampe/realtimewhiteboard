@@ -12,10 +12,23 @@ import { FavoriteTypesEnum } from '../../+models';
 import { FAVORITE_SERVICE_TOKEN } from '../../favorite/favorite.service.interface';
 import { AUTH_SERVICE_TOKEN } from '../../persons';
 import { UndoService, UNDO_SERVICE_TOKEN } from '../../undo';
-import { EffectFeedback, EffectFeedbackActions, Priority } from '../effect-feedback';
+import {
+  EffectFeedback,
+  EffectFeedbackActions,
+  Priority
+} from '../effect-feedback';
 import { AddEffectFeedback } from '../effect-feedback/effect-feedback.actions';
 import { FavoriteServiceInterface } from './../../favorite/favorite.service.interface';
-import { AddFavorite, DeleteFavorite, FavoritesLoaded, FavoritesLoadError, LoadFavorites, StartAddFavorite, ToggleFavorite, UpdateFavorite } from './favorite.actions';
+import {
+  AddFavorite,
+  DeleteFavorite,
+  FavoritesLoaded,
+  FavoritesLoadError,
+  LoadFavorites,
+  StartAddFavorite,
+  ToggleFavorite,
+  UpdateFavorite
+} from './favorite.actions';
 import { FavoriteEffects } from './favorite.effects';
 
 describe('FavoriteEffects', () => {
@@ -65,11 +78,15 @@ describe('FavoriteEffects', () => {
     TestBed.configureTestingModule({
       imports: [
         NxModule.forRoot(),
-                StoreModule.forRoot({},{
-          runtimeChecks: {
-            strictStateImmutability: false,
-            strictActionImmutability: false
-          }}),
+        StoreModule.forRoot(
+          {},
+          {
+            runtimeChecks: {
+              strictStateImmutability: false,
+              strictActionImmutability: false
+            }
+          }
+        ),
         StoreModule.forFeature(FavoriteReducer.NAME, FavoriteReducer.reducer, {
           initialState: usedState
         }),

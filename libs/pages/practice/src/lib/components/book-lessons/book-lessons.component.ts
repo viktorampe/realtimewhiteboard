@@ -37,7 +37,8 @@ export class BookLessonsComponent implements AfterViewInit {
 
   @ViewChildren(SearchPortalDirective)
   private portalHosts: QueryList<SearchPortalDirective>;
-  @ViewChild(SearchComponent, { static: true }) public searchComponent: SearchComponent;
+  @ViewChild(SearchComponent, { static: true })
+  public searchComponent: SearchComponent;
 
   constructor(private viewModel: PracticeViewModel, private router: Router) {
     this.initialize();

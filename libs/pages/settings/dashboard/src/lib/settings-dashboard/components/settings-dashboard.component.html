@@ -10,7 +10,7 @@
 
     <div class="pages-settings-dashboard__avatar">
       <campus-person-badge
-        *ngIf="(user$ | async) as user"
+        *ngIf="user$ | async as user"
         [person]="user.badgeInfo"
         [subText]="user.subText"
         [align]="'bottom'"
@@ -32,7 +32,7 @@
 <!-- campus -->
 <ng-template #buttonTemplate>
   <campus-button
-    *ngFor="let link of (links$ | async)"
+    *ngFor="let link of links$ | async"
     large
     bordered
     [routerLink]="link.link"
@@ -44,7 +44,7 @@
 
 <!-- kabas -->
 <ng-template #navItemTemplate>
-  <ng-container *ngFor="let link of (links$ | async); last as isLast">
+  <ng-container *ngFor="let link of links$ | async; last as isLast">
     <mat-divider></mat-divider>
     <mat-list-item
       class="pages-settings-dashboard__mat-list__item"

@@ -2,7 +2,13 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
-import { DalState, PersonFixture, StateFeatureBuilder, UserActions, UserReducer } from '@campus/dal';
+import {
+  DalState,
+  PersonFixture,
+  StateFeatureBuilder,
+  UserActions,
+  UserReducer
+} from '@campus/dal';
 import { ENVIRONMENT_WEBSITE_TOKEN } from '@campus/shared';
 import { MockActivatedRoute, MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
@@ -29,11 +35,15 @@ describe('ErrorComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-                StoreModule.forRoot({},{
-          runtimeChecks: {
-            strictStateImmutability: false,
-            strictActionImmutability: false
-          }}),
+        StoreModule.forRoot(
+          {},
+          {
+            runtimeChecks: {
+              strictStateImmutability: false,
+              strictActionImmutability: false
+            }
+          }
+        ),
         ...StateFeatureBuilder.getModuleWithForFeatureProviders([
           {
             NAME: UserReducer.NAME,

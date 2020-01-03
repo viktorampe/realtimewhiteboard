@@ -1,6 +1,16 @@
 import { TestBed } from '@angular/core/testing';
-import { DalState, getStoreModuleForFeatures, MethodLevelActions, MethodLevelFixture, MethodLevelReducer } from '@campus/dal';
-import { ButtonToggleFilterComponent, SearchFilterInterface, SearchStateInterface } from '@campus/search';
+import {
+  DalState,
+  getStoreModuleForFeatures,
+  MethodLevelActions,
+  MethodLevelFixture,
+  MethodLevelReducer
+} from '@campus/dal';
+import {
+  ButtonToggleFilterComponent,
+  SearchFilterInterface,
+  SearchStateInterface
+} from '@campus/search';
 import { Store, StoreModule } from '@ngrx/store';
 import { cold } from '@nrwl/angular/testing';
 import { configureTestSuite } from 'ng-bullet';
@@ -20,11 +30,15 @@ describe('ChapterLessonFilterFactory', () => {
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [
-                StoreModule.forRoot({},{
-          runtimeChecks: {
-            strictStateImmutability: false,
-            strictActionImmutability: false
-          }}),
+        StoreModule.forRoot(
+          {},
+          {
+            runtimeChecks: {
+              strictStateImmutability: false,
+              strictActionImmutability: false
+            }
+          }
+        ),
         ...getStoreModuleForFeatures([MethodLevelReducer])
       ],
       providers: [UnlockedExerciseFilterFactory, Store]

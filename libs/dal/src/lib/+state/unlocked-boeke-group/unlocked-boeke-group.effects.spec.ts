@@ -7,7 +7,11 @@ import { hot } from '@nrwl/angular/testing';
 import { Observable, of } from 'rxjs';
 import { UnlockedBoekeGroupReducer } from '.';
 import { UNLOCKED_BOEKE_GROUP_SERVICE_TOKEN } from '../../boeke/unlocked-boeke-group.service.interface';
-import { LoadUnlockedBoekeGroups, UnlockedBoekeGroupsLoaded, UnlockedBoekeGroupsLoadError } from './unlocked-boeke-group.actions';
+import {
+  LoadUnlockedBoekeGroups,
+  UnlockedBoekeGroupsLoaded,
+  UnlockedBoekeGroupsLoadError
+} from './unlocked-boeke-group.actions';
 import { UnlockedBoekeGroupsEffects } from './unlocked-boeke-group.effects';
 
 describe('UnlockedBoekeGroupEffects', () => {
@@ -55,11 +59,15 @@ describe('UnlockedBoekeGroupEffects', () => {
     TestBed.configureTestingModule({
       imports: [
         NxModule.forRoot(),
-                StoreModule.forRoot({},{
-          runtimeChecks: {
-            strictStateImmutability: false,
-            strictActionImmutability: false
-          }}),
+        StoreModule.forRoot(
+          {},
+          {
+            runtimeChecks: {
+              strictStateImmutability: false,
+              strictActionImmutability: false
+            }
+          }
+        ),
         StoreModule.forFeature(
           UnlockedBoekeGroupReducer.NAME,
           UnlockedBoekeGroupReducer.reducer,

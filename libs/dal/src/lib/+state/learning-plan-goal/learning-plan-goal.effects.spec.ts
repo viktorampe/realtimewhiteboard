@@ -7,7 +7,11 @@ import { hot } from '@nrwl/angular/testing';
 import { Observable, of } from 'rxjs';
 import { LearningPlanGoalReducer } from '.';
 import { LEARNING_PLAN_GOAL_SERVICE_TOKEN } from '../../learning-plan-goal/learning-plan-goal.service.interface';
-import { AddLearningPlanGoalsForBook, LearningPlanGoalsLoadError, LoadLearningPlanGoalsForBook } from './learning-plan-goal.actions';
+import {
+  AddLearningPlanGoalsForBook,
+  LearningPlanGoalsLoadError,
+  LoadLearningPlanGoalsForBook
+} from './learning-plan-goal.actions';
 import { LearningPlanGoalEffects } from './learning-plan-goal.effects';
 
 describe('LearningPlanGoalEffects', () => {
@@ -55,11 +59,15 @@ describe('LearningPlanGoalEffects', () => {
     TestBed.configureTestingModule({
       imports: [
         NxModule.forRoot(),
-                StoreModule.forRoot({},{
-          runtimeChecks: {
-            strictStateImmutability: false,
-            strictActionImmutability: false
-          }}),
+        StoreModule.forRoot(
+          {},
+          {
+            runtimeChecks: {
+              strictStateImmutability: false,
+              strictActionImmutability: false
+            }
+          }
+        ),
         StoreModule.forFeature(
           LearningPlanGoalReducer.NAME,
           LearningPlanGoalReducer.reducer,

@@ -151,9 +151,7 @@ describe('LearningPlanGoalProgressManagementComponent', () => {
         By.css('.learning-plan-goal-progress-management__title')
       );
       expect(title.nativeElement.textContent).toBe(
-        `Markeer een doel als behandeld voor ${
-          mockInjectedData.classGroup.name
-        }`
+        `Markeer een doel als behandeld voor ${mockInjectedData.classGroup.name}`
       );
     });
 
@@ -162,9 +160,7 @@ describe('LearningPlanGoalProgressManagementComponent', () => {
         By.css('.learning-plan-goal-progress-management__lpg')
       );
       expect(lpg.nativeElement.textContent).toBe(
-        `${mockInjectedData.learningPlanGoal.prefix} ${
-          mockInjectedData.learningPlanGoal.goal
-        }`
+        `${mockInjectedData.learningPlanGoal.prefix} ${mockInjectedData.learningPlanGoal.goal}`
       );
     });
 

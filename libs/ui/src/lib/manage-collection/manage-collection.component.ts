@@ -41,7 +41,8 @@ export class ManageCollectionComponent
     ItemToggledInCollectionInterface
   >();
 
-  @ViewChild(MatSelectionList, { static: true }) private selectionList: MatSelectionList;
+  @ViewChild(MatSelectionList, { static: true })
+  private selectionList: MatSelectionList;
 
   @ViewChild(FilterTextInputComponent, { static: true })
   filterTextInput: FilterTextInputComponent<

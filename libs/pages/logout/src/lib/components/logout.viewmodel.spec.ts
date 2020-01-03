@@ -1,7 +1,16 @@
 import { TestBed } from '@angular/core/testing';
 import { WINDOW } from '@campus/browser';
-import { DalState, PersonFixture, StateFeatureBuilder, UserActions, UserReducer } from '@campus/dal';
-import { EnvironmentLogoutInterface, ENVIRONMENT_LOGOUT_TOKEN } from '@campus/shared';
+import {
+  DalState,
+  PersonFixture,
+  StateFeatureBuilder,
+  UserActions,
+  UserReducer
+} from '@campus/dal';
+import {
+  EnvironmentLogoutInterface,
+  ENVIRONMENT_LOGOUT_TOKEN
+} from '@campus/shared';
 import { MockWindow } from '@campus/testing';
 import { Store, StoreModule } from '@ngrx/store';
 import { LogoutViewModel } from './logout.viewmodel';
@@ -15,11 +24,15 @@ beforeEach(() => {
   mockData = { logoutUrl: 'http://some.link' };
   TestBed.configureTestingModule({
     imports: [
-              StoreModule.forRoot({},{
+      StoreModule.forRoot(
+        {},
+        {
           runtimeChecks: {
             strictStateImmutability: false,
             strictActionImmutability: false
-          }}),
+          }
+        }
+      ),
       ...StateFeatureBuilder.getModuleWithForFeatureProviders([UserReducer])
     ],
     providers: [

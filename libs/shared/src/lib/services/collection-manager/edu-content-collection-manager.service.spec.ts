@@ -1,10 +1,49 @@
 import { inject, TestBed } from '@angular/core/testing';
-import { BundleActions, BundleFixture, BundleInterface, BundleReducer, ContentInterface, DalState, EduContentFixture, FavoriteActions, FavoriteFixture, FavoriteInterface, FavoriteReducer, FavoriteTypesEnum, getStoreModuleForFeatures, HistoryActions, HistoryInterface, HistoryReducer, HistoryTypesEnum, TaskActions, TaskEduContentActions, TaskEduContentFixture, TaskEduContentInterface, TaskEduContentReducer, TaskFixture, TaskInterface, TaskReducer, UnlockedContentActions, UnlockedContentFixture, UnlockedContentInterface, UnlockedContentReducer, UserContentFixture } from '@campus/dal';
-import { CollectionManagerServiceInterface, COLLECTION_MANAGER_SERVICE_TOKEN, ItemToggledInCollectionInterface, ManageCollectionItemInterface } from '@campus/ui';
+import {
+  BundleActions,
+  BundleFixture,
+  BundleInterface,
+  BundleReducer,
+  ContentInterface,
+  DalState,
+  EduContentFixture,
+  FavoriteActions,
+  FavoriteFixture,
+  FavoriteInterface,
+  FavoriteReducer,
+  FavoriteTypesEnum,
+  getStoreModuleForFeatures,
+  HistoryActions,
+  HistoryInterface,
+  HistoryReducer,
+  HistoryTypesEnum,
+  TaskActions,
+  TaskEduContentActions,
+  TaskEduContentFixture,
+  TaskEduContentInterface,
+  TaskEduContentReducer,
+  TaskFixture,
+  TaskInterface,
+  TaskReducer,
+  UnlockedContentActions,
+  UnlockedContentFixture,
+  UnlockedContentInterface,
+  UnlockedContentReducer,
+  UserContentFixture
+} from '@campus/dal';
+import {
+  CollectionManagerServiceInterface,
+  COLLECTION_MANAGER_SERVICE_TOKEN,
+  ItemToggledInCollectionInterface,
+  ManageCollectionItemInterface
+} from '@campus/ui';
 import { Store, StoreModule } from '@ngrx/store';
 import { of } from 'rxjs';
 import { EduContentCollectionManagerService } from './edu-content-collection-manager.service';
-import { EduContentCollectionManagerServiceInterface, EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN } from './edu-content-collection-manager.service.interface';
+import {
+  EduContentCollectionManagerServiceInterface,
+  EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN
+} from './edu-content-collection-manager.service.interface';
 
 describe('EduContentCollectionManagerService', () => {
   let service: EduContentCollectionManagerServiceInterface;
@@ -84,11 +123,15 @@ describe('EduContentCollectionManagerService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
-                StoreModule.forRoot({},{
-          runtimeChecks: {
-            strictStateImmutability: false,
-            strictActionImmutability: false
-          }}),
+        StoreModule.forRoot(
+          {},
+          {
+            runtimeChecks: {
+              strictStateImmutability: false,
+              strictActionImmutability: false
+            }
+          }
+        ),
         ...getStoreModuleForFeatures([
           BundleReducer,
           UnlockedContentReducer,

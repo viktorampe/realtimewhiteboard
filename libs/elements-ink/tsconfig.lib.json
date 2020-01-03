@@ -1,1 +1,29 @@
-{"compilerOptions":{"outDir":"../../dist/out-tsc","target":"es6","module":"commonjs","moduleResolution":"node","declaration":true,"sourceMap":false,"emitDecoratorMetadata":true,"experimentalDecorators":true,"importHelpers":true,"types":["node"],"lib":["dom","es6"],"baseUrl":".","typeRoots":["node_modules/@types"],"paths":{"@campus/testing":["../testing/src/index.ts"],"@campus/timeline":["../timeline/src/index.ts"]}},"angularCompilerOptions":{"annotateForClosureCompiler":false,"skipTemplateCodegen":true,"strictMetadataEmit":true,"fullTemplateTypeCheck":true,"strictInjectionParameters":true},"exclude":["src/test-setup.ts","**/*.spec.ts"]}
+{
+  "compilerOptions": {
+    "outDir": "../../dist/out-tsc",
+    "target": "es6",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "declaration": true,
+    "sourceMap": false,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "types": ["node"],
+    "lib": ["dom", "es6"],
+    "baseUrl": ".",
+    "typeRoots": ["node_modules/@types"],
+    "paths": {
+      "@campus/testing": ["../testing/src/index.ts"],
+      "@campus/timeline": ["../timeline/src/index.ts"]
+    }
+  },
+  "angularCompilerOptions": {
+    "annotateForClosureCompiler": false,
+    "skipTemplateCodegen": true,
+    "strictMetadataEmit": true,
+    "fullTemplateTypeCheck": true,
+    "strictInjectionParameters": true
+  },
+  "exclude": ["src/test-setup.ts", "**/*.spec.ts"]
+}

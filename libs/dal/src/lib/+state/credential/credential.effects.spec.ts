@@ -10,10 +10,23 @@ import { Observable, of } from 'rxjs';
 import { CredentialEffects, CredentialReducer } from '.';
 import { DalActions } from '..';
 import { PassportUserCredentialInterface } from '../../+models';
-import { CredentialServiceInterface, CREDENTIAL_SERVICE_TOKEN } from '../../persons';
-import { EffectFeedback, EffectFeedbackActions, Priority } from '../effect-feedback';
+import {
+  CredentialServiceInterface,
+  CREDENTIAL_SERVICE_TOKEN
+} from '../../persons';
+import {
+  EffectFeedback,
+  EffectFeedbackActions,
+  Priority
+} from '../effect-feedback';
 import { LoadUser } from '../user/user.actions';
-import { CredentialsLoaded, CredentialsLoadError, LoadCredentials, UnlinkCredential, UseCredentialProfilePicture } from './credential.actions';
+import {
+  CredentialsLoaded,
+  CredentialsLoadError,
+  LoadCredentials,
+  UnlinkCredential,
+  UseCredentialProfilePicture
+} from './credential.actions';
 
 describe('CredentialEffects', () => {
   let actions: Observable<any>;
@@ -62,11 +75,15 @@ describe('CredentialEffects', () => {
     TestBed.configureTestingModule({
       imports: [
         NxModule.forRoot(),
-                StoreModule.forRoot({},{
-          runtimeChecks: {
-            strictStateImmutability: false,
-            strictActionImmutability: false
-          }}),
+        StoreModule.forRoot(
+          {},
+          {
+            runtimeChecks: {
+              strictStateImmutability: false,
+              strictActionImmutability: false
+            }
+          }
+        ),
         StoreModule.forFeature(
           CredentialReducer.NAME,
           CredentialReducer.reducer,

@@ -7,7 +7,12 @@ import { hot } from '@nrwl/angular/testing';
 import { Observable, of } from 'rxjs';
 import { EduContentTocReducer } from '.';
 import { TOC_SERVICE_TOKEN } from '../../toc/toc.service.interface';
-import { AddEduContentTocsForBook, AddLoadedBook, EduContentTocsLoadError, LoadEduContentTocsForBook } from './edu-content-toc.actions';
+import {
+  AddEduContentTocsForBook,
+  AddLoadedBook,
+  EduContentTocsLoadError,
+  LoadEduContentTocsForBook
+} from './edu-content-toc.actions';
 import { EduContentTocEffects } from './edu-content-toc.effects';
 
 describe('EduContentTocEffects', () => {
@@ -55,11 +60,15 @@ describe('EduContentTocEffects', () => {
     TestBed.configureTestingModule({
       imports: [
         NxModule.forRoot(),
-                StoreModule.forRoot({},{
-          runtimeChecks: {
-            strictStateImmutability: false,
-            strictActionImmutability: false
-          }}),
+        StoreModule.forRoot(
+          {},
+          {
+            runtimeChecks: {
+              strictStateImmutability: false,
+              strictActionImmutability: false
+            }
+          }
+        ),
         StoreModule.forFeature(
           EduContentTocReducer.NAME,
           EduContentTocReducer.reducer,

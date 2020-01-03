@@ -7,7 +7,11 @@ import { hot } from '@nrwl/angular/testing';
 import { Observable, of } from 'rxjs';
 import { EduContentReducer } from '.';
 import { EDU_CONTENT_SERVICE_TOKEN } from '../../edu-content/edu-content.service.interface';
-import { EduContentsLoaded, EduContentsLoadError, LoadEduContents } from './edu-content.actions';
+import {
+  EduContentsLoaded,
+  EduContentsLoadError,
+  LoadEduContents
+} from './edu-content.actions';
 import { EduContentsEffects } from './edu-content.effects';
 
 describe('EduContentEffects', () => {
@@ -55,11 +59,15 @@ describe('EduContentEffects', () => {
     TestBed.configureTestingModule({
       imports: [
         NxModule.forRoot(),
-                StoreModule.forRoot({},{
-          runtimeChecks: {
-            strictStateImmutability: false,
-            strictActionImmutability: false
-          }}),
+        StoreModule.forRoot(
+          {},
+          {
+            runtimeChecks: {
+              strictStateImmutability: false,
+              strictActionImmutability: false
+            }
+          }
+        ),
         StoreModule.forFeature(
           EduContentReducer.NAME,
           EduContentReducer.reducer,

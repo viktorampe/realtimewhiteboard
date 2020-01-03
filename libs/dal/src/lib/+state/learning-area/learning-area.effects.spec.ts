@@ -7,7 +7,11 @@ import { hot } from '@nrwl/angular/testing';
 import { Observable, of } from 'rxjs';
 import { LearningAreaReducer } from '.';
 import { LEARNINGAREA_SERVICE_TOKEN } from '../../learning-area/learning-area.service.interface';
-import { LearningAreasLoaded, LearningAreasLoadError, LoadLearningAreas } from './learning-area.actions';
+import {
+  LearningAreasLoaded,
+  LearningAreasLoadError,
+  LoadLearningAreas
+} from './learning-area.actions';
 import { LearningAreasEffects } from './learning-area.effects';
 
 describe('LearningAreaEffects', () => {
@@ -55,11 +59,15 @@ describe('LearningAreaEffects', () => {
     TestBed.configureTestingModule({
       imports: [
         NxModule.forRoot(),
-                StoreModule.forRoot({},{
-          runtimeChecks: {
-            strictStateImmutability: false,
-            strictActionImmutability: false
-          }}),
+        StoreModule.forRoot(
+          {},
+          {
+            runtimeChecks: {
+              strictStateImmutability: false,
+              strictActionImmutability: false
+            }
+          }
+        ),
         StoreModule.forFeature(
           LearningAreaReducer.NAME,
           LearningAreaReducer.reducer,

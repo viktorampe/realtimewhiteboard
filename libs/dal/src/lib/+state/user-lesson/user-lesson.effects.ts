@@ -68,9 +68,7 @@ export class UserLessonEffects {
           effectFeedback: EffectFeedback.generateErrorFeedback(
             this.uuid(),
             action,
-            `Het is niet gelukt om les "${
-              action.payload.userLesson.description
-            }" toe te voegen.`
+            `Het is niet gelukt om les "${action.payload.userLesson.description}" toe te voegen.`
           )
         });
       }
@@ -125,9 +123,7 @@ export class UserLessonEffects {
           effectFeedback: EffectFeedback.generateErrorFeedback(
             this.uuid(),
             action,
-            `Het is niet gelukt om les "${
-              action.payload.userLesson.description
-            }" toe te voegen.`
+            `Het is niet gelukt om les "${action.payload.userLesson.description}" toe te voegen.`
           )
         });
       }

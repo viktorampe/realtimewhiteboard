@@ -1,6 +1,18 @@
 import { TestBed } from '@angular/core/testing';
-import { DalState, EffectFeedback, EffectFeedbackActions, EffectFeedbackInterface, getStoreModuleForFeatures, PersonFixture, UserActions, UserReducer } from '@campus/dal';
-import { EnvironmentLoginInterface, ENVIRONMENT_LOGIN_TOKEN } from '@campus/shared';
+import {
+  DalState,
+  EffectFeedback,
+  EffectFeedbackActions,
+  EffectFeedbackInterface,
+  getStoreModuleForFeatures,
+  PersonFixture,
+  UserActions,
+  UserReducer
+} from '@campus/dal';
+import {
+  EnvironmentLoginInterface,
+  ENVIRONMENT_LOGIN_TOKEN
+} from '@campus/shared';
 import { routerReducer } from '@ngrx/router-store';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/angular/testing';
@@ -29,11 +41,15 @@ describe('LoginViewModel', () => {
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [
-                StoreModule.forRoot({router: routerReducer},{
-          runtimeChecks: {
-            strictStateImmutability: false,
-            strictActionImmutability: false
-          }}),
+        StoreModule.forRoot(
+          { router: routerReducer },
+          {
+            runtimeChecks: {
+              strictStateImmutability: false,
+              strictActionImmutability: false
+            }
+          }
+        ),
         ...getStoreModuleForFeatures([UserReducer])
       ],
       providers: [

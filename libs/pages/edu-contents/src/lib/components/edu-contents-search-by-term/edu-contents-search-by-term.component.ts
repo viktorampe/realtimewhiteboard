@@ -33,7 +33,8 @@ export class EduContentSearchByTermComponent implements OnInit, AfterViewInit {
 
   @ViewChildren(SearchPortalDirective)
   private portalHosts: QueryList<SearchPortalDirective>;
-  @ViewChild(SearchComponent, { static: true }) public searchComponent: SearchComponent;
+  @ViewChild(SearchComponent, { static: true })
+  public searchComponent: SearchComponent;
 
   constructor(
     private eduContentsViewModel: EduContentsViewModel,

@@ -7,7 +7,11 @@ import { hot } from '@nrwl/angular/testing';
 import { Observable, of } from 'rxjs';
 import { LearningDomainReducer } from '.';
 import { LEARNING_DOMAIN_SERVICE_TOKEN } from '../../metadata/learning-domain.service.interface';
-import { LearningDomainsLoaded, LearningDomainsLoadError, LoadLearningDomains } from './learning-domain.actions';
+import {
+  LearningDomainsLoaded,
+  LearningDomainsLoadError,
+  LoadLearningDomains
+} from './learning-domain.actions';
 import { LearningDomainEffects } from './learning-domain.effects';
 
 describe('LearningDomainEffects', () => {
@@ -55,11 +59,15 @@ describe('LearningDomainEffects', () => {
     TestBed.configureTestingModule({
       imports: [
         NxModule.forRoot(),
-                StoreModule.forRoot({},{
-          runtimeChecks: {
-            strictStateImmutability: false,
-            strictActionImmutability: false
-          }}),
+        StoreModule.forRoot(
+          {},
+          {
+            runtimeChecks: {
+              strictStateImmutability: false,
+              strictActionImmutability: false
+            }
+          }
+        ),
         StoreModule.forFeature(
           LearningDomainReducer.NAME,
           LearningDomainReducer.reducer,

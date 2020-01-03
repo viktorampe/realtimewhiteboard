@@ -8,10 +8,20 @@ import { hot } from '@nrwl/angular/testing';
 import { undo } from 'ngrx-undo';
 import { Observable, of } from 'rxjs';
 import { UnlockedContentReducer } from '.';
-import { EffectFeedbackFixture, EffectFeedbackInterface, Priority } from '../../..';
+import {
+  EffectFeedbackFixture,
+  EffectFeedbackInterface,
+  Priority
+} from '../../..';
 import { UNLOCKED_CONTENT_SERVICE_TOKEN } from '../../bundle/unlocked-content.service.interface';
 import { AddEffectFeedback } from '../effect-feedback/effect-feedback.actions';
-import { DeleteUnlockedContent, DeleteUnlockedContents, LoadUnlockedContents, UnlockedContentsLoaded, UnlockedContentsLoadError } from './unlocked-content.actions';
+import {
+  DeleteUnlockedContent,
+  DeleteUnlockedContents,
+  LoadUnlockedContents,
+  UnlockedContentsLoaded,
+  UnlockedContentsLoadError
+} from './unlocked-content.actions';
 import { UnlockedContentsEffects } from './unlocked-content.effects';
 
 describe('UnlockedContentEffects', () => {
@@ -69,11 +79,15 @@ describe('UnlockedContentEffects', () => {
     TestBed.configureTestingModule({
       imports: [
         NxModule.forRoot(),
-                StoreModule.forRoot({},{
-          runtimeChecks: {
-            strictStateImmutability: false,
-            strictActionImmutability: false
-          }}),
+        StoreModule.forRoot(
+          {},
+          {
+            runtimeChecks: {
+              strictStateImmutability: false,
+              strictActionImmutability: false
+            }
+          }
+        ),
         StoreModule.forFeature(
           UnlockedContentReducer.NAME,
           UnlockedContentReducer.reducer,

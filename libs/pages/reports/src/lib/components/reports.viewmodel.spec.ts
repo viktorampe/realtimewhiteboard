@@ -1,11 +1,33 @@
 import { TestBed } from '@angular/core/testing';
-import { AuthServiceInterface, AUTH_SERVICE_TOKEN, DalState, EduContent, EduContentActions, EduContentFixture, EduContentReducer, getStoreModuleForFeatures, LearningAreaActions, LearningAreaFixture, LearningAreaReducer, ResultActions, ResultFixture, ResultInterface, ResultReducer } from '@campus/dal';
-import { ScormExerciseServiceInterface, SCORM_EXERCISE_SERVICE_TOKEN } from '@campus/shared';
+import {
+  AuthServiceInterface,
+  AUTH_SERVICE_TOKEN,
+  DalState,
+  EduContent,
+  EduContentActions,
+  EduContentFixture,
+  EduContentReducer,
+  getStoreModuleForFeatures,
+  LearningAreaActions,
+  LearningAreaFixture,
+  LearningAreaReducer,
+  ResultActions,
+  ResultFixture,
+  ResultInterface,
+  ResultReducer
+} from '@campus/dal';
+import {
+  ScormExerciseServiceInterface,
+  SCORM_EXERCISE_SERVICE_TOKEN
+} from '@campus/shared';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/angular/testing';
 import { ReportService } from './../services/report.service';
 import { ReportsViewModel } from './reports.viewmodel';
-import { AssignmentResultInterface, LearningAreasWithResultsInterface } from './reports.viewmodel.interfaces';
+import {
+  AssignmentResultInterface,
+  LearningAreasWithResultsInterface
+} from './reports.viewmodel.interfaces';
 
 let reportsViewModel: ReportsViewModel;
 let store: Store<DalState>;
@@ -15,11 +37,15 @@ describe('ReportsViewModel', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
-                StoreModule.forRoot({},{
-          runtimeChecks: {
-            strictStateImmutability: false,
-            strictActionImmutability: false
-          }}),
+        StoreModule.forRoot(
+          {},
+          {
+            runtimeChecks: {
+              strictStateImmutability: false,
+              strictActionImmutability: false
+            }
+          }
+        ),
         ...getStoreModuleForFeatures([
           LearningAreaReducer,
           EduContentReducer,

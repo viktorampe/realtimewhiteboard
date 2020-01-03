@@ -7,7 +7,11 @@ import { hot } from '@nrwl/angular/testing';
 import { Observable, of } from 'rxjs';
 import { UserContentReducer } from '.';
 import { USER_CONTENT_SERVICE_TOKEN } from '../../bundle/user-content.service.interface';
-import { LoadUserContents, UserContentsLoaded, UserContentsLoadError } from './user-content.actions';
+import {
+  LoadUserContents,
+  UserContentsLoaded,
+  UserContentsLoadError
+} from './user-content.actions';
 import { UserContentsEffects } from './user-content.effects';
 
 describe('UserContentEffects', () => {
@@ -55,11 +59,15 @@ describe('UserContentEffects', () => {
     TestBed.configureTestingModule({
       imports: [
         NxModule.forRoot(),
-                StoreModule.forRoot({},{
-          runtimeChecks: {
-            strictStateImmutability: false,
-            strictActionImmutability: false
-          }}),
+        StoreModule.forRoot(
+          {},
+          {
+            runtimeChecks: {
+              strictStateImmutability: false,
+              strictActionImmutability: false
+            }
+          }
+        ),
         StoreModule.forFeature(
           UserContentReducer.NAME,
           UserContentReducer.reducer,

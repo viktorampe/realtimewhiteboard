@@ -7,7 +7,14 @@ import { hot } from '@nrwl/angular/testing';
 import { Observable, of } from 'rxjs';
 import { MethodReducer } from '.';
 import { METHOD_SERVICE_TOKEN } from '../../metadata/method.service.interface';
-import { AllowedMethodsLoaded, AllowedMethodsLoadError, LoadAllowedMethods, LoadMethods, MethodsLoaded, MethodsLoadError } from './method.actions';
+import {
+  AllowedMethodsLoaded,
+  AllowedMethodsLoadError,
+  LoadAllowedMethods,
+  LoadMethods,
+  MethodsLoaded,
+  MethodsLoadError
+} from './method.actions';
 import { MethodEffects } from './method.effects';
 
 describe('MethodEffects', () => {
@@ -55,11 +62,15 @@ describe('MethodEffects', () => {
     TestBed.configureTestingModule({
       imports: [
         NxModule.forRoot(),
-                StoreModule.forRoot({},{
-          runtimeChecks: {
-            strictStateImmutability: false,
-            strictActionImmutability: false
-          }}),
+        StoreModule.forRoot(
+          {},
+          {
+            runtimeChecks: {
+              strictStateImmutability: false,
+              strictActionImmutability: false
+            }
+          }
+        ),
         StoreModule.forFeature(MethodReducer.NAME, MethodReducer.reducer, {
           initialState: usedState
         }),

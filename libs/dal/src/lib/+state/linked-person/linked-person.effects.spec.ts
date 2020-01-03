@@ -7,7 +7,11 @@ import { hot } from '@nrwl/angular/testing';
 import { Observable, of } from 'rxjs';
 import { LinkedPersonReducer } from '.';
 import { LINKED_PERSON_SERVICE_TOKEN } from '../../persons/linked-persons.service';
-import { LinkedPersonsLoaded, LinkedPersonsLoadError, LoadLinkedPersons } from './linked-person.actions';
+import {
+  LinkedPersonsLoaded,
+  LinkedPersonsLoadError,
+  LoadLinkedPersons
+} from './linked-person.actions';
 import { LinkedPersonEffects } from './linked-person.effects';
 
 describe('LinkedPersonEffects', () => {
@@ -55,11 +59,15 @@ describe('LinkedPersonEffects', () => {
     TestBed.configureTestingModule({
       imports: [
         NxModule.forRoot(),
-                StoreModule.forRoot({},{
-          runtimeChecks: {
-            strictStateImmutability: false,
-            strictActionImmutability: false
-          }}),
+        StoreModule.forRoot(
+          {},
+          {
+            runtimeChecks: {
+              strictStateImmutability: false,
+              strictActionImmutability: false
+            }
+          }
+        ),
         StoreModule.forFeature(
           LinkedPersonReducer.NAME,
           LinkedPersonReducer.reducer,

@@ -1,6 +1,44 @@
 import { TestBed } from '@angular/core/testing';
-import { AlertActions, AlertService, AUTH_SERVICE_TOKEN, DalState, EduContentActions, EduContentFixture, EduContentInterface, EduContentReducer, getStoreModuleForFeatures, HistoryActions, HistoryInterface, HistoryTypesEnum, LearningAreaActions, LearningAreaFixture, LearningAreaInterface, LearningAreaReducer, LinkedPersonActions, LinkedPersonReducer, PersonFixture, PersonInterface, TaskActions, TaskEduContentActions, TaskEduContentFixture, TaskEduContentInterface, TaskEduContentReducer, TaskFixture, TaskInstanceActions, TaskInstanceFixture, TaskInstanceInterface, TaskInstanceReducer, TaskInterface, TaskReducer, UiActions, UiReducer } from '@campus/dal';
-import { PERMISSION_SERVICE_TOKEN, SCORM_EXERCISE_SERVICE_TOKEN } from '@campus/shared';
+import {
+  AlertActions,
+  AlertService,
+  AUTH_SERVICE_TOKEN,
+  DalState,
+  EduContentActions,
+  EduContentFixture,
+  EduContentInterface,
+  EduContentReducer,
+  getStoreModuleForFeatures,
+  HistoryActions,
+  HistoryInterface,
+  HistoryTypesEnum,
+  LearningAreaActions,
+  LearningAreaFixture,
+  LearningAreaInterface,
+  LearningAreaReducer,
+  LinkedPersonActions,
+  LinkedPersonReducer,
+  PersonFixture,
+  PersonInterface,
+  TaskActions,
+  TaskEduContentActions,
+  TaskEduContentFixture,
+  TaskEduContentInterface,
+  TaskEduContentReducer,
+  TaskFixture,
+  TaskInstanceActions,
+  TaskInstanceFixture,
+  TaskInstanceInterface,
+  TaskInstanceReducer,
+  TaskInterface,
+  TaskReducer,
+  UiActions,
+  UiReducer
+} from '@campus/dal';
+import {
+  PERMISSION_SERVICE_TOKEN,
+  SCORM_EXERCISE_SERVICE_TOKEN
+} from '@campus/shared';
 import { MockDate } from '@campus/testing';
 import { ListFormat } from '@campus/ui';
 import { Store, StoreModule } from '@ngrx/store';
@@ -20,11 +58,15 @@ describe('TasksViewModel met State', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
-                StoreModule.forRoot({},{
-          runtimeChecks: {
-            strictStateImmutability: false,
-            strictActionImmutability: false
-          }}),
+        StoreModule.forRoot(
+          {},
+          {
+            runtimeChecks: {
+              strictStateImmutability: false,
+              strictActionImmutability: false
+            }
+          }
+        ),
         ...getStoreModuleForFeatures([
           LearningAreaReducer,
           EduContentReducer,

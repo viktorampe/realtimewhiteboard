@@ -9,10 +9,23 @@ import { undo } from 'ngrx-undo';
 import { Observable, of } from 'rxjs';
 import { UnlockedFreePracticeReducer } from '.';
 import { UnlockedFreePracticeFixture } from '../../+fixtures';
-import { UnlockedFreePracticeServiceInterface, UNLOCKED_FREE_PRACTICE_SERVICE_TOKEN } from '../../unlocked-free-practice/unlocked-free-practice.service.interface';
-import { EffectFeedback, EffectFeedbackActions, Priority } from '../effect-feedback';
+import {
+  UnlockedFreePracticeServiceInterface,
+  UNLOCKED_FREE_PRACTICE_SERVICE_TOKEN
+} from '../../unlocked-free-practice/unlocked-free-practice.service.interface';
+import {
+  EffectFeedback,
+  EffectFeedbackActions,
+  Priority
+} from '../effect-feedback';
 import { AddEffectFeedback } from '../effect-feedback/effect-feedback.actions';
-import { DeleteUnlockedFreePractices, LoadUnlockedFreePractices, StartAddManyUnlockedFreePractices, UnlockedFreePracticesLoaded, UnlockedFreePracticesLoadError } from './unlocked-free-practice.actions';
+import {
+  DeleteUnlockedFreePractices,
+  LoadUnlockedFreePractices,
+  StartAddManyUnlockedFreePractices,
+  UnlockedFreePracticesLoaded,
+  UnlockedFreePracticesLoadError
+} from './unlocked-free-practice.actions';
 import { UnlockedFreePracticeEffects } from './unlocked-free-practice.effects';
 
 describe('UnlockedFreePracticeEffects', () => {
@@ -70,11 +83,15 @@ describe('UnlockedFreePracticeEffects', () => {
     TestBed.configureTestingModule({
       imports: [
         NxModule.forRoot(),
-                StoreModule.forRoot({},{
-          runtimeChecks: {
-            strictStateImmutability: false,
-            strictActionImmutability: false
-          }}),
+        StoreModule.forRoot(
+          {},
+          {
+            runtimeChecks: {
+              strictStateImmutability: false,
+              strictActionImmutability: false
+            }
+          }
+        ),
         StoreModule.forFeature(
           UnlockedFreePracticeReducer.NAME,
           UnlockedFreePracticeReducer.reducer,

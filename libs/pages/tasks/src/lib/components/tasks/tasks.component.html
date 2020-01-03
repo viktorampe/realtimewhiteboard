@@ -18,12 +18,10 @@
   ></campus-button>
 </campus-page-bar>
 
-<ng-container
-  *ngIf="(filterTextInput.result$ | async) as filteredTaskInstances"
->
+<ng-container *ngIf="filterTextInput.result$ | async as filteredTaskInstances">
   <div class="campus-page pages-tasks__container">
     <campus-page-header
-      *ngIf="(learningArea$ | async) as learningArea"
+      *ngIf="learningArea$ | async as learningArea"
       [title]="learningArea.name"
       [subtitle]="'Taken'"
       [iconClass]="learningArea.icon"

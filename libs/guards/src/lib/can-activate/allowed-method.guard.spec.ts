@@ -1,7 +1,20 @@
 import { TestBed } from '@angular/core/testing';
-import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
+import {
+  ActivatedRouteSnapshot,
+  Router,
+  RouterStateSnapshot
+} from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { AUTH_SERVICE_TOKEN, DalState, EduContentBookActions, EduContentBookInterface, EduContentBookReducer, MethodActions, MethodReducer, StateFeatureBuilder } from '@campus/dal';
+import {
+  AUTH_SERVICE_TOKEN,
+  DalState,
+  EduContentBookActions,
+  EduContentBookInterface,
+  EduContentBookReducer,
+  MethodActions,
+  MethodReducer,
+  StateFeatureBuilder
+} from '@campus/dal';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from 'jasmine-marbles';
 import { AllowedMethodGuard } from './allowed-method.guard';
@@ -38,11 +51,15 @@ describe('AllowedMethodGuard', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
-                StoreModule.forRoot({},{
-          runtimeChecks: {
-            strictStateImmutability: false,
-            strictActionImmutability: false
-          }}),
+        StoreModule.forRoot(
+          {},
+          {
+            runtimeChecks: {
+              strictStateImmutability: false,
+              strictActionImmutability: false
+            }
+          }
+        ),
         ...StateFeatureBuilder.getStoreModuleForFeatures([
           EduContentBookReducer,
           MethodReducer

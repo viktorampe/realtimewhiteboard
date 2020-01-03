@@ -7,7 +7,11 @@ import { hot } from '@nrwl/angular/testing';
 import { Observable, of } from 'rxjs';
 import { ClassGroupReducer } from '.';
 import { CLASS_GROUP_SERVICE_TOKEN } from '../../class-group/class-group.service.interface';
-import { ClassGroupsLoaded, ClassGroupsLoadError, LoadClassGroups } from './class-group.actions';
+import {
+  ClassGroupsLoaded,
+  ClassGroupsLoadError,
+  LoadClassGroups
+} from './class-group.actions';
 import { ClassGroupEffects } from './class-group.effects';
 
 describe('ClassGroupEffects', () => {
@@ -55,11 +59,15 @@ describe('ClassGroupEffects', () => {
     TestBed.configureTestingModule({
       imports: [
         NxModule.forRoot(),
-                StoreModule.forRoot({},{
-          runtimeChecks: {
-            strictStateImmutability: false,
-            strictActionImmutability: false
-          }}),
+        StoreModule.forRoot(
+          {},
+          {
+            runtimeChecks: {
+              strictStateImmutability: false,
+              strictActionImmutability: false
+            }
+          }
+        ),
         StoreModule.forFeature(
           ClassGroupReducer.NAME,
           ClassGroupReducer.reducer,

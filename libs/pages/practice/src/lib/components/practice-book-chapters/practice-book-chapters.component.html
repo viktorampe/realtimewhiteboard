@@ -6,7 +6,7 @@
   <campus-page-header [title]="'Kies een hoofdstuk'"> </campus-page-header>
 </div>
 <mat-list
-  *ngIf="(chaptersWithStatus$ | async) as chaptersWithStatus"
+  *ngIf="chaptersWithStatus$ | async as chaptersWithStatus"
   class="pages-practice-book-chapters__chapter__container"
 >
   <a

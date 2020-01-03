@@ -1,6 +1,30 @@
 import { TestBed } from '@angular/core/testing';
-import { DalState, EduContentBookFixture, EduContentBookInterface, EduContentTOCFixture, EduContentTOCInterface, getStoreModuleForFeatures, LearningAreaActions, LearningAreaFixture, LearningAreaReducer, MethodActions, MethodFixture, MethodReducer, TocServiceInterface, TOC_SERVICE_TOKEN, YearActions, YearFixture, YearReducer } from '@campus/dal';
-import { BreadcrumbFilterComponent, ColumnFilterComponent, SearchFilterCriteriaInterface, SearchFilterInterface, SearchStateInterface } from '@campus/search';
+import {
+  DalState,
+  EduContentBookFixture,
+  EduContentBookInterface,
+  EduContentTOCFixture,
+  EduContentTOCInterface,
+  getStoreModuleForFeatures,
+  LearningAreaActions,
+  LearningAreaFixture,
+  LearningAreaReducer,
+  MethodActions,
+  MethodFixture,
+  MethodReducer,
+  TocServiceInterface,
+  TOC_SERVICE_TOKEN,
+  YearActions,
+  YearFixture,
+  YearReducer
+} from '@campus/dal';
+import {
+  BreadcrumbFilterComponent,
+  ColumnFilterComponent,
+  SearchFilterCriteriaInterface,
+  SearchFilterInterface,
+  SearchStateInterface
+} from '@campus/search';
 import { Store, StoreModule } from '@ngrx/store';
 import { cold, hot } from 'jasmine-marbles';
 import { configureTestSuite } from 'ng-bullet';
@@ -118,11 +142,15 @@ describe('TocFilterFactory', () => {
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [
-                StoreModule.forRoot({},{
-          runtimeChecks: {
-            strictStateImmutability: false,
-            strictActionImmutability: false
-          }}),
+        StoreModule.forRoot(
+          {},
+          {
+            runtimeChecks: {
+              strictStateImmutability: false,
+              strictActionImmutability: false
+            }
+          }
+        ),
         ...getStoreModuleForFeatures([
           LearningAreaReducer,
           YearReducer,

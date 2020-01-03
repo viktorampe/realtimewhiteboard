@@ -23,7 +23,7 @@
   </div>
   <div class="shared-header__page-bar">
     <campus-button
-      *ngIf="(backLink$ | async) as link; else hamburgerMenu"
+      *ngIf="backLink$ | async as link; else hamburgerMenu"
       [routerLink]="link"
       class="shared-header__page-bar__nav-button"
       [iconClass]="'arrow-back'"
@@ -58,7 +58,7 @@
 
 <ng-template #profilemenu>
   <div class="shared-header__profile-menu">
-    <ng-container *ngIf="(currentUser$ | async) as user">
+    <ng-container *ngIf="currentUser$ | async as user">
       <campus-person-badge
         (click)="dropDownProfile.toggle()"
         [person]="user"
@@ -73,7 +73,7 @@
       [smallWidth]="true"
     >
       <campus-dropdown-menu-item
-        *ngFor="let menuItem of (profileMenuItems$ | async)"
+        *ngFor="let menuItem of profileMenuItems$ | async"
         [icon]="menuItem.icon"
         [description]="menuItem.description"
         [header]="menuItem.header"
@@ -114,7 +114,7 @@
       linkText="Alle meldingen"
       linkUrl="/settings/alerts"
     >
-      <ng-container *ngIf="(alertNotifications$ | async) as notifications">
+      <ng-container *ngIf="alertNotifications$ | async as notifications">
         <campus-notification
           *ngFor="let notification of notifications"
           dropdown

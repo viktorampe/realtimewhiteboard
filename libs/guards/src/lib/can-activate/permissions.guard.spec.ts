@@ -1,7 +1,16 @@
 import { TestBed } from '@angular/core/testing';
-import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
+import {
+  ActivatedRouteSnapshot,
+  Router,
+  RouterStateSnapshot
+} from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { DalState, StateFeatureBuilder, UserActions, UserReducer } from '@campus/dal';
+import {
+  DalState,
+  StateFeatureBuilder,
+  UserActions,
+  UserReducer
+} from '@campus/dal';
 import { PermissionService, PERMISSION_SERVICE_TOKEN } from '@campus/shared';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/angular/testing';
@@ -21,11 +30,15 @@ describe('PermissionGuard', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
-                StoreModule.forRoot({},{
-          runtimeChecks: {
-            strictStateImmutability: false,
-            strictActionImmutability: false
-          }}),
+        StoreModule.forRoot(
+          {},
+          {
+            runtimeChecks: {
+              strictStateImmutability: false,
+              strictActionImmutability: false
+            }
+          }
+        ),
         ...StateFeatureBuilder.getStoreModuleForFeatures([UserReducer]),
         RouterTestingModule
       ],

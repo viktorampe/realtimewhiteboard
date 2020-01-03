@@ -7,7 +7,11 @@ import { hot } from '@nrwl/angular/testing';
 import { Observable, of } from 'rxjs';
 import { TaskClassGroupReducer } from '.';
 import { TASK_CLASS_GROUP_SERVICE_TOKEN } from '../../tasks/task-class-group.service.interface';
-import { LoadTaskClassGroups, TaskClassGroupsLoaded, TaskClassGroupsLoadError } from './task-class-group.actions';
+import {
+  LoadTaskClassGroups,
+  TaskClassGroupsLoaded,
+  TaskClassGroupsLoadError
+} from './task-class-group.actions';
 import { TaskClassGroupEffects } from './task-class-group.effects';
 
 describe('TaskClassGroupEffects', () => {
@@ -55,11 +59,15 @@ describe('TaskClassGroupEffects', () => {
     TestBed.configureTestingModule({
       imports: [
         NxModule.forRoot(),
-                StoreModule.forRoot({},{
-          runtimeChecks: {
-            strictStateImmutability: false,
-            strictActionImmutability: false
-          }}),
+        StoreModule.forRoot(
+          {},
+          {
+            runtimeChecks: {
+              strictStateImmutability: false,
+              strictActionImmutability: false
+            }
+          }
+        ),
         StoreModule.forFeature(
           TaskClassGroupReducer.NAME,
           TaskClassGroupReducer.reducer,

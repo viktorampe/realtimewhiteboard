@@ -288,9 +288,8 @@ export class EduContentsViewModel {
   private getFavoriteLearningAreas(): Observable<LearningAreaInterface[]> {
     return this.store.pipe(
       select(FavoriteQueries.getByType, { type: 'area' }),
-      map(
-        (favorites): number[] =>
-          favorites.map(favorite => favorite.learningAreaId)
+      map((favorites): number[] =>
+        favorites.map(favorite => favorite.learningAreaId)
       ),
       switchMap(
         (learningAreaIds): Observable<LearningAreaInterface[]> =>

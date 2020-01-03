@@ -33,7 +33,8 @@ export class EduContentSearchByColumnComponent
 
   private subscriptions = new Subscription();
 
-  @ViewChild(SearchComponent, { static: true }) public searchComponent: SearchComponent;
+  @ViewChild(SearchComponent, { static: true })
+  public searchComponent: SearchComponent;
 
   @ViewChildren(SearchPortalDirective)
   private portalHosts: QueryList<SearchPortalDirective>;

@@ -47,9 +47,11 @@ import { environment } from '../environments/environment';
     StoreModule.forRoot(
       { app: undefined, router: routerReducer },
       {
-        metaReducers: !environment.production
-          ? [handleUndo]
-          : [handleUndo], runtimeChecks: { strictStateImmutability: true, strictActionImmutability: true }
+        metaReducers: !environment.production ? [handleUndo] : [handleUndo],
+        runtimeChecks: {
+          strictStateImmutability: true,
+          strictActionImmutability: true
+        }
       }
     ),
     StoreModule.forFeature(

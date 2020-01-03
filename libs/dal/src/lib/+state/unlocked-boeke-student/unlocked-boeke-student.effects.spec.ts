@@ -7,7 +7,11 @@ import { hot } from '@nrwl/angular/testing';
 import { Observable, of } from 'rxjs';
 import { UnlockedBoekeStudentReducer } from '.';
 import { UNLOCKED_BOEKE_STUDENT_SERVICE_TOKEN } from '../../boeke/unlocked-boeke-student.service.interface';
-import { LoadUnlockedBoekeStudents, UnlockedBoekeStudentsLoaded, UnlockedBoekeStudentsLoadError } from './unlocked-boeke-student.actions';
+import {
+  LoadUnlockedBoekeStudents,
+  UnlockedBoekeStudentsLoaded,
+  UnlockedBoekeStudentsLoadError
+} from './unlocked-boeke-student.actions';
 import { UnlockedBoekeStudentsEffects } from './unlocked-boeke-student.effects';
 
 describe('UnlockedBoekeStudentEffects', () => {
@@ -55,11 +59,15 @@ describe('UnlockedBoekeStudentEffects', () => {
     TestBed.configureTestingModule({
       imports: [
         NxModule.forRoot(),
-                StoreModule.forRoot({},{
-          runtimeChecks: {
-            strictStateImmutability: false,
-            strictActionImmutability: false
-          }}),
+        StoreModule.forRoot(
+          {},
+          {
+            runtimeChecks: {
+              strictStateImmutability: false,
+              strictActionImmutability: false
+            }
+          }
+        ),
         StoreModule.forFeature(
           UnlockedBoekeStudentReducer.NAME,
           UnlockedBoekeStudentReducer.reducer,
