@@ -26,7 +26,7 @@
     },
     "staging": {
       "apiUrl": "https://api.staging.lk2020.be/",
-      "cookieDomain": ".kabas.localhost",
+      "cookieDomain": ".staging.lk2020.be",
       "apiPaths": {
         "eduContent": "api/eduContents",
         "ludoAssets": "api/educontent-assets-ludo"

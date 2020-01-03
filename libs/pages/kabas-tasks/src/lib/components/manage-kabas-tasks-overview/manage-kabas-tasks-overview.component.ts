@@ -333,7 +333,7 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
   // TODO: implement handler
   clickNewTask() {}
 
-  clickResetFilters() {
+  clickResetFilters(mode?: string) {
     // visually clear selections
     this.clearFilters();
   }
