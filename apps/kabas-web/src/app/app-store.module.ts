@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import {
   AlertReducer,
   ClassGroupReducer,
+  clearState,
   CurrentExerciseReducer,
   CustomSerializer,
   DiaboloPhaseReducer,
@@ -50,8 +51,8 @@ import { environment } from '../environments/environment';
       { app: undefined, router: routerReducer },
       {
         metaReducers: !environment.production
-          ? [storeFreeze, handleUndo]
-          : [handleUndo]
+          ? [storeFreeze, handleUndo, clearState]
+          : [handleUndo, clearState]
       }
     ),
     StoreRouterConnectingModule.forRoot({
