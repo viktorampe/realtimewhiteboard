@@ -1,6 +1,6 @@
 import { ActionReducer } from '@ngrx/store';
 import { UserActions } from '../user';
-import { clearState } from './clear-state';
+import { clearState } from './clear-state.reducer';
 
 const hydratedState = {
   foo: {

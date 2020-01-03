@@ -1,1 +1,1 @@
-export * from './clear-state';
+export * from './clear-state.reducer';
