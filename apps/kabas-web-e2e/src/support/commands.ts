@@ -61,11 +61,3 @@ export const logoutByUI = () => {
 export const performSetup = (scenarioName: SetupScenarioType) => {
   return cy.request(`${apiUrl}e2e/setup/${scenarioName}`);
 };
-
-export const disableCookieValueValidation = () => {
-  // TODO: workaround for Cypress >= 3.5.0, remove when they disable Cookie RFC validation
-  cy.stub(Cypress['utils'], 'throwErrByPath')
-    .callThrough() // still throw other types of errors
-    .withArgs('setCookie.invalid_value')
-    .returns(undefined); // suppress invalid value errors
-};
