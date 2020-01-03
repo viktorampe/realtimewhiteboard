@@ -65,11 +65,11 @@ export class ResultsByPersonAndAreaComponent implements OnInit {
     this.reportsViewModel.openContentForReview(result);
   }
 
-  public onScroll(event: Event) {
+  public onScroll(event) {
     if (!this.header) return;
 
     const scrollOptions = {
-      left: event.srcElement.scrollLeft
+      left: event.currentTarget.scrollLeft
     } as ScrollToOptions;
 
     this.header.nativeElement.scrollTo(scrollOptions);
