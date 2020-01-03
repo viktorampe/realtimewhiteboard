@@ -13,6 +13,7 @@
   "env": {
     "development": {
       "apiUrl": "http://api.polpo.localhost:3000/",
+      "cookieDomain": ".polpo.localhost",
       "apiPaths": {
         "eduContent": "api/eduContents",
         "ludoAssets": "api/educontent-assets-ludo"
@@ -25,6 +26,7 @@
     },
     "staging": {
       "apiUrl": "https://api.staging.polpo.be/",
+      "cookieDomain": ".polpo.localhost",
       "apiPaths": {
         "eduContent": "api/eduContents",
         "ludoAssets": "api/educontent-assets-ludo"

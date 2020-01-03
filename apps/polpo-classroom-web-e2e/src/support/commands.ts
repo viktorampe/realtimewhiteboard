@@ -7,6 +7,7 @@ export const cyEnv = (prop: string) => {
 };
 
 const apiUrl = cyEnv('apiUrl');
+const cookieDomain = cyEnv('cookieDomain');
 const defaultUsername = cyEnv('username');
 const defaultPassword = cyEnv('password');
 
@@ -26,12 +27,19 @@ export const login = (username?: string, password?: string) => {
     })
     .then(resp => {
       // set the cookies that the loopback sdk needs
-      cy.setCookie('$LoopBackSDK$created', resp.body.created);
-      cy.setCookie('$LoopBackSDK$id', resp.body.id);
-      cy.setCookie('$LoopBackSDK$rememberMe', 'true');
-      cy.setCookie('$LoopBackSDK$ttl', resp.body.ttl + '');
-      cy.setCookie('$LoopBackSDK$user', JSON.stringify(resp.body.user));
-      cy.setCookie('$LoopBackSDK$userId', resp.body.userId + '');
+      const options = {
+        domain: cookieDomain
+      };
+      cy.setCookie('$LoopBackSDK$created', resp.body.created, options);
+      cy.setCookie('$LoopBackSDK$id', resp.body.id, options);
+      cy.setCookie('$LoopBackSDK$rememberMe', 'true', options);
+      cy.setCookie('$LoopBackSDK$ttl', resp.body.ttl + '', options);
+      cy.setCookie(
+        '$LoopBackSDK$user',
+        JSON.stringify(resp.body.user),
+        options
+      );
+      cy.setCookie('$LoopBackSDK$userId', resp.body.userId + '', options);
     });
 };
 

@@ -11,6 +11,7 @@
   "env": {
     "development": {
       "apiUrl": "http://api.kabas.localhost:3000/",
+      "cookieDomain": ".kabas.localhost",
       "apiPaths": {
         "eduContent": "api/eduContents",
         "ludoAssets": "api/educontent-assets-ludo"
@@ -23,6 +24,7 @@
     },
     "staging": {
       "apiUrl": "https://api.staging.lk2020.be/",
+      "cookieDomain": ".kabas.localhost",
       "apiPaths": {
         "eduContent": "api/eduContents",
         "ludoAssets": "api/educontent-assets-ludo"
