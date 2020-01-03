@@ -160,7 +160,7 @@
 
 <ng-template #profileLink>
   <campus-button
-    *ngIf="(currentUser$ | async)"
+    *ngIf="currentUser$ | async"
     id="global-profile-btn"
     [iconClass]="'profile'"
     [routerLink]="['settings']"
