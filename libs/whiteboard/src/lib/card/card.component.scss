@@ -13,6 +13,7 @@
     left: 13px;
     margin: 1px;
     transform: scale(2);
+    z-index: 3;
   }
 
   &__toolbar {
@@ -56,12 +57,12 @@ campus-cardimage {
   position: absolute;
   width: 100%;
   height: 60%;
-}
 
-.view-mode-image {
-  height: 100%;
-  background-size: cover;
-  z-index: 1;
+  &.view-mode-image {
+    height: 100%;
+    background-size: cover;
+    z-index: 1;
+  }
 }
 
 campus-toolbar {

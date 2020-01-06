@@ -91,6 +91,5 @@ export class CardComponent implements OnInit, OnChanges {
 
   toggleView() {
     this.viewModeImage = !this.viewModeImage;
-    console.log('viewModeImage: ' + this.viewModeImage);
   }
 }
