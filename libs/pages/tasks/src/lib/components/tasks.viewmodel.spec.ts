@@ -42,7 +42,7 @@ import {
 import { MockDate } from '@campus/testing';
 import { ListFormat } from '@campus/ui';
 import { Store, StoreModule } from '@ngrx/store';
-import { hot } from '@nrwl/nx/testing';
+import { hot } from '@nrwl/angular/testing';
 import { of } from 'rxjs';
 import { TasksResolver } from './tasks.resolver';
 import { TasksViewModel } from './tasks.viewmodel';
@@ -58,7 +58,15 @@ describe('TasksViewModel met State', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
-        StoreModule.forRoot({}),
+        StoreModule.forRoot(
+          {},
+          {
+            runtimeChecks: {
+              strictStateImmutability: false,
+              strictActionImmutability: false
+            }
+          }
+        ),
         ...getStoreModuleForFeatures([
           LearningAreaReducer,
           EduContentReducer,

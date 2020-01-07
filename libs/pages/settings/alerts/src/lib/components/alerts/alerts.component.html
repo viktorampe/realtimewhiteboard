@@ -17,7 +17,7 @@
       [svgIcon]="'arrow-back'"
     ></mat-icon>
     <div title__right>Instellingen</div>
-    <ng-container *ngIf="(notifications$ | async) as notifications">
+    <ng-container *ngIf="notifications$ | async as notifications">
       <ng-container *ngIf="notifications.length > 0; else noAlerts">
         <div
           *ngFor="let notification of notifications"

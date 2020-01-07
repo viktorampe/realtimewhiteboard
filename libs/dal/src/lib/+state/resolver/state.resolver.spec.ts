@@ -9,7 +9,7 @@ import {
   Store,
   StoreModule
 } from '@ngrx/store';
-import { hot } from '@nrwl/nx/testing';
+import { hot } from '@nrwl/angular/testing';
 import { Observable } from 'rxjs';
 import { DalState } from '..';
 import { QueryWithProps, StateResolver } from './state.resolver';
@@ -50,7 +50,17 @@ describe('stateResolver', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [StoreModule.forRoot({})],
+      imports: [
+        StoreModule.forRoot(
+          {},
+          {
+            runtimeChecks: {
+              strictStateImmutability: true,
+              strictActionImmutability: true
+            }
+          }
+        )
+      ],
       providers: [MockStateResolver, Store]
     });
     stateResolver = TestBed.get(MockStateResolver);

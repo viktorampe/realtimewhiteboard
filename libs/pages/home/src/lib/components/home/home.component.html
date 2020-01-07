@@ -1,6 +1,6 @@
 <div
   class="pages-home__container campus-page"
-  *ngIf="(favoritesWithEduContent$ | async) as favorites"
+  *ngIf="favoritesWithEduContent$ | async as favorites"
   [class.no-favorites]="favorites.length === 0"
 >
   <div *ngIf="favorites.length" class="pages-home__container__favorites">

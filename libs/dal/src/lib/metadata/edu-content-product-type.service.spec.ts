@@ -1,6 +1,6 @@
 import { inject, TestBed } from '@angular/core/testing';
 import { EduContentProductTypeApi } from '@diekeure/polpo-api-angular-sdk';
-import { hot } from '@nrwl/nx/testing';
+import { hot } from '@nrwl/angular/testing';
 import { EduContentProductTypeFixture } from '../+fixtures/EduContentProductType.fixture';
 import { EduContentProductTypeService } from './edu-content-product-type.service';
 import { EduContentProductTypeServiceInterface } from './edu-content-product-type.service.interface';

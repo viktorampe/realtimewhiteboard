@@ -30,7 +30,7 @@ export class OverviewAreaWithResultsComponent
   listFormat$ = this.reportsViewmodel.listFormat$;
   listFormat = ListFormat;
 
-  @ViewChild(FilterTextInputComponent)
+  @ViewChild(FilterTextInputComponent, { static: true })
   filterTextInput: FilterTextInputComponent<
     LearningAreasWithResultsInterface,
     LearningAreaWithResultsInterface

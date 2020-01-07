@@ -29,7 +29,8 @@ export class GlobalSearchComponent implements OnInit, AfterViewInit {
 
   @ViewChildren(SearchPortalDirective)
   private portalHosts: QueryList<SearchPortalDirective>;
-  @ViewChild(SearchComponent) public searchComponent: SearchComponent;
+  @ViewChild(SearchComponent, { static: true })
+  public searchComponent: SearchComponent;
 
   constructor(private globalSearchViewModel: GlobalSearchViewModel) {}
 

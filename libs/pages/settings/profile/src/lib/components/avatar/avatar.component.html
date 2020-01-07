@@ -1,4 +1,4 @@
-<div *ngIf="(currentUser$ | async) as user" class="campus-page">
+<div *ngIf="currentUser$ | async as user" class="campus-page">
   <campus-page-header
     [title]="'Instellingen'"
     [subtitle]="'Mijn profielfoto'"
@@ -39,14 +39,14 @@
               (click)="$event.stopPropagation()"
               (change)="selectFileListener($event)"
             />
-            <div *ngIf="(loadError$ | async) as error"
+            <div *ngIf="loadError$ | async as error"
               ><span class="warning">{{ error }}</span></div
             >
           </form>
         </ng-template>
 
         <ng-container
-          *ngIf="(selectedImg$ | async) as selectedImg; else selectImg"
+          *ngIf="selectedImg$ | async as selectedImg; else selectImg"
         >
           <div class="pages-settings-profile-avatar__result">
             <img *ngIf="croppedImg" [src]="croppedImg" />

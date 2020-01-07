@@ -21,7 +21,7 @@
 <campus-side-sheet
   #bundleSidesheet
   [isOpenOnInit]="true"
-  *ngIf="(bundle$ | async) as bundle; else noBundle"
+  *ngIf="bundle$ | async as bundle; else noBundle"
 >
   <campus-side-sheet-header
     *ngIf="!(list && (list.selectedItems$ | async)?.length)"
@@ -30,7 +30,7 @@
   <campus-side-sheet-body>
     <ng-container *ngIf="list">
       <ng-container
-        *ngIf="(list.selectedItems$ | async) as selectedItems"
+        *ngIf="list.selectedItems$ | async as selectedItems"
         [ngSwitch]="selectedItems.length"
       >
         <campus-info-panel-bundle
@@ -58,16 +58,16 @@
   <campus-side-sheet-page>
     <campus-page-header
       data-cy="bundle-header"
-      *ngIf="(learningArea$ | async) as learningArea"
+      *ngIf="learningArea$ | async as learningArea"
       [title]="bundle.name"
       [subtitle]="bundle.description"
       [iconClass]="learningArea.icon"
     >
     </campus-page-header>
 
-    <ng-container *ngIf="(unlockedContents$ | async) as unlockedContents">
+    <ng-container *ngIf="unlockedContents$ | async as unlockedContents">
       <ng-container
-        *ngIf="(filterTextInput.result$ | async) as filteredUnlockedContents"
+        *ngIf="filterTextInput.result$ | async as filteredUnlockedContents"
       >
         <div class="itemsAmount" data-cy="bundle-count">
           {{ filteredUnlockedContents.length }} van

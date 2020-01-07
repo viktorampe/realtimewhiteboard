@@ -17,10 +17,10 @@
   ></campus-button>
 </campus-page-bar>
 
-<ng-container *ngIf="(learningArea$ | async) as learningArea">
+<ng-container *ngIf="learningArea$ | async as learningArea">
   <div
     class="campus-page pages-bundles__container"
-    *ngIf="(sharedInfo$ | async) as sharedInfo"
+    *ngIf="sharedInfo$ | async as sharedInfo"
   >
     <campus-page-header
       [title]="learningArea.name"
@@ -34,7 +34,7 @@
     >
     <ng-container *ngIf="sharedInfo.bundles.length > 0; else noSharedInfo">
       <ng-container
-        *ngIf="(filterTextInput.result$ | async) as filteredBundlesInfo"
+        *ngIf="filterTextInput.result$ | async as filteredBundlesInfo"
       >
         <div
           class="pages-bundles__container__bundles-count"

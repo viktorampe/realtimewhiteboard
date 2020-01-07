@@ -31,7 +31,7 @@ export class BundlesComponent implements OnInit {
   learningArea$: Observable<LearningAreaInterface>;
   sharedInfo$: Observable<BundlesWithContentInfoInterface>;
 
-  @ViewChild(FilterTextInputComponent)
+  @ViewChild(FilterTextInputComponent, { static: true })
   filterTextInput: FilterTextInputComponent<
     BundlesWithContentInfoInterface,
     BundleInfoInterface

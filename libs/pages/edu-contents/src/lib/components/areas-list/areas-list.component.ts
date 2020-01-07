@@ -23,7 +23,7 @@ export class AreasListComponent implements OnInit, OnChanges {
 
   displayedLearningAreas: LearningAreaInterface[];
 
-  @ViewChild(FilterTextInputComponent)
+  @ViewChild(FilterTextInputComponent, { static: true })
   filterTextInput: FilterTextInputComponent<
     LearningAreaInterface[],
     LearningAreaInterface
