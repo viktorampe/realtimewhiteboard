@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
-import { DataPersistence } from '@nrwl/nx';
+import { DataPersistence } from '@nrwl/angular';
 import { undo } from 'ngrx-undo';
 import { from } from 'rxjs';
 import { map, mapTo } from 'rxjs/operators';
@@ -70,7 +70,18 @@ export class UserEffects {
         );
       },
       onError: (action: LogInUser, error) => {
-        return new UserRemoveError(error);
+        const effectFeedback = new EffectFeedback({
+          id: this.uuid(),
+          triggerAction: action,
+          message: 'De gebruikersnaam of het wachtwoord is niet correct.',
+          userActions: [],
+          type: 'error',
+          priority: Priority.HIGH
+        });
+        const feedbackAction = new EffectFeedbackActions.AddEffectFeedback({
+          effectFeedback
+        });
+        return feedbackAction;
       }
     }
   );

@@ -43,7 +43,7 @@ import {
   ROUTER_NAVIGATION
 } from '@ngrx/router-store';
 import { Action, Store, StoreModule } from '@ngrx/store';
-import { hot } from '@nrwl/nx/testing';
+import { hot } from '@nrwl/angular/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { BehaviorSubject, of } from 'rxjs';
 import { AppViewModel } from './app.viewmodel';
@@ -143,7 +143,15 @@ describe('AppViewModel', () => {
             pathMatch: 'full'
           }
         ]),
-        StoreModule.forRoot({ router: routerReducer }),
+        StoreModule.forRoot(
+          { router: routerReducer },
+          {
+            runtimeChecks: {
+              strictStateImmutability: false,
+              strictActionImmutability: false
+            }
+          }
+        ),
         ...StateFeatureBuilder.getModuleWithForFeatureProviders([
           {
             NAME: UserReducer.NAME,

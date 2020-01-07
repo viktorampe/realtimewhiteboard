@@ -54,16 +54,16 @@ export class BundleDetailComponent
     Dictionary<StudentContentStatusInterface[]>
   >;
 
-  @ViewChild(FilterTextInputComponent)
+  @ViewChild(FilterTextInputComponent, { static: true })
   filterTextInput: FilterTextInputComponent<UnlockedContent[], UnlockedContent>;
 
   list: ListViewComponent<UnlockedContent>;
-  @ViewChild('bundleListview')
+  @ViewChild('bundleListview', { static: false })
   set listViewComponent(list: ListViewComponent<UnlockedContent>) {
     this.list = list;
   }
   private sideSheet: SideSheetComponent;
-  @ViewChild('bundleSidesheet')
+  @ViewChild('bundleSidesheet', { static: false })
   set sideSheetComponent(sidesheet: SideSheetComponent) {
     this.sideSheet = sidesheet;
   }

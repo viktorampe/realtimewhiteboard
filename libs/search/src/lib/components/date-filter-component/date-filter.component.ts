@@ -65,7 +65,7 @@ export class DateFilterComponent
   private formValues: DateFilterComponentFormValues = {};
   private fixedOptions: RadioOption[] = [];
 
-  @ViewChild(MatMenuTrigger)
+  @ViewChild(MatMenuTrigger, { static: true })
   matMenuTrigger: MatMenuTrigger;
 
   @Input()
@@ -276,6 +276,13 @@ export class DateFilterComponent
       !!(this.criteria.values[0].data.gte || this.criteria.values[0].data.lte);
 
     this.count = +hasDates;
+  }
+
+  public reset(): void {
+    this.dateSelection.setValue({}, { emitEvent: false });
+    this.filterCriteria.values = [{ data: {} }];
+    this.filterSelectionChange.next([this.filterCriteria]);
+    this.updateView();
   }
 
   private storeFormValues(): void {

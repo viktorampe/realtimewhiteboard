@@ -8,9 +8,9 @@
   $pages-manage-kabas-tasks__task-list-item__actions-color: $primary-font-color-2 !default;
   $pages-manage-kabas-tasks__task-list-item__actions-font-size: 0.8rem !default;
 
-  $pages-manage-kabas-tasks__task-list-item__dates-font-size: 0.8rem !default;
+  $pages-manage-kabas-tasks__task-list-item__dates-font-size: 0.9rem !default;
 
-  $pages-manage-kabas-tasks__task-list-item__learning-area-font-size: 0.8rem !default;
+  $pages-manage-kabas-tasks__task-list-item__learning-area-font-size: 0.9rem !default;
   $pages-manage-kabas-tasks__task-list-item__learning-area-color: $primary-font-color !default;
 
   $pages-manage-kabas-tasks__task-list-item__status-color: $primary-font-color !default;
@@ -39,6 +39,7 @@
 
     &__status {
       color: $pages-manage-kabas-tasks__task-list-item__status-color;
+      height: 36px !important; // task:*** icons are 36px by 24px
     }
     &__archived {
       color: $pages-manage-kabas-tasks__task-list-item__archived-color;

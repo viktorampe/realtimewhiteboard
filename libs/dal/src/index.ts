@@ -26,6 +26,7 @@ export * from './lib/+state/learning-domain';
 export * from './lib/+state/learning-plan-goal';
 export * from './lib/+state/learning-plan-goal-progress';
 export * from './lib/+state/linked-person';
+export * from './lib/+state/meta-reducers';
 export * from './lib/+state/method';
 export * from './lib/+state/method-level';
 export * from './lib/+state/resolver';

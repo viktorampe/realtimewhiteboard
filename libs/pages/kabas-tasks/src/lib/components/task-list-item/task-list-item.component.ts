@@ -4,7 +4,7 @@ import {
   AssigneeTypesEnum
 } from '../../interfaces/Assignee.interface';
 
-export type Status = 'pending' | 'active' | 'finished';
+export type Status = 'pending' | 'active' | 'finished' | 'paper';
 
 @Component({
   selector: 'campus-task-list-item',
@@ -26,7 +26,10 @@ export class TaskListItemComponent implements OnInit {
   @Input() startDate: Date;
   @Input() endDate: Date;
   @Input() status: Status;
-  @Input() actions: { label: string; handler: Function }[];
+  @Input() actions: {
+    label: string;
+    handler: () => any; //prevents warning "Member handler is not callable in template"
+  }[];
   @Input()
   set assignees(assignees: AssigneeInterface[]) {
     this._assignees = assignees.sort(this.sortByType);

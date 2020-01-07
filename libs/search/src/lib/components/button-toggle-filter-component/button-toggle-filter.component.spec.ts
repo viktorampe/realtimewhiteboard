@@ -163,6 +163,20 @@ describe('ButtonToggleFilterComponent', () => {
     expect(buttonComponents[2].disabled).toBe(false);
   });
 
+  it('should disable all buttons when the disabled input === true', () => {
+    mockFilterCriteria.values[1].prediction = 1;
+    component.disabled = true;
+
+    const buttons = getButtonsForCriteria();
+    const buttonComponents = buttons.map(
+      button => button.componentInstance as MatButtonToggle
+    );
+
+    expect(buttonComponents[0].disabled).toBe(true);
+    expect(buttonComponents[1].disabled).toBe(true);
+    expect(buttonComponents[2].disabled).toBe(true);
+  });
+
   function getButtonsForCriteria(
     criteria: SearchFilterCriteriaInterface = mockFilterCriteria
   ): DebugElement[] {

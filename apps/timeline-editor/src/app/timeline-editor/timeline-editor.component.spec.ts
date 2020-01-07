@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconModule } from '@angular/material';
+import { HAMMER_LOADER } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import {
   ENVIRONMENT_API_TOKEN,
@@ -22,7 +23,11 @@ describe('TimelineEditorComponent', () => {
           provide: ENVIRONMENT_ICON_MAPPING_TOKEN,
           useValue: {}
         },
-        { provide: ENVIRONMENT_API_TOKEN, useValue: { APIBase: '' } }
+        { provide: ENVIRONMENT_API_TOKEN, useValue: { APIBase: '' } },
+        {
+          provide: HAMMER_LOADER,
+          useValue: () => new Promise(() => {})
+        }
       ]
     });
   });

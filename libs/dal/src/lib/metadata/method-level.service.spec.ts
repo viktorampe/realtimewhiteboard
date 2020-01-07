@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
-import { hot } from '@nrwl/nx/testing';
+import { hot } from '@nrwl/angular/testing';
 import { MethodLevelServiceInterface } from '.';
 import { MethodLevelFixture } from '../+fixtures';
 import { MethodLevelService } from './method-level.service';

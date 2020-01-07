@@ -13,7 +13,8 @@ export const NAVIGATION_ITEM_SERVICE_TOKEN = new InjectionToken<
 export interface NavigationItemServiceInterface {
   getNavItemsForTree(
     tree: AppNavTreeKeys,
-    userPermissions: string[]
+    userPermissions: string[],
+    addLogoutNav?: boolean
   ): NavItem[];
 }
 

@@ -1,4 +1,5 @@
 # Campus
+
 [![Build Status](https://dev.azure.com/diekeure-webdev/LK2020/_apis/build/status/diekeure.campus?branchName=develop)](https://dev.azure.com/diekeure-webdev/LK2020/_build/latest?definitionId=2&branchName=develop)
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) using [Nrwl Nx](https://nrwl.io/nx).
@@ -37,8 +38,7 @@ Run `ng test` to execute the unit tests via [Jest](https://jestjs.io/).
 
 ## Running end-to-end tests
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-Before running the tests make sure you are serving the app via `ng serve`.
+Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/). Before running the tests make sure you are serving the app via `ng serve`.
 
 ## Further help
 
@@ -48,9 +48,7 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
     ng g @diekeure/angular-schematics:page --name=some-name-in-snake-case
 
-optional parameter
---project ==> project in which the new route should be added, if not entered, the default project from angular.json will be used
---directory ==> name of the route if it should not be 'pages'
+optional parameter --project ==> project in which the new route should be added, if not entered, the default project from angular.json will be used --directory ==> name of the route if it should not be 'pages'
 
 the route will be added to the libs folder
 

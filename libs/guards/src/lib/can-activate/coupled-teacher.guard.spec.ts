@@ -18,7 +18,7 @@ import {
   UserReducer
 } from '@campus/dal';
 import { Store, StoreModule } from '@ngrx/store';
-import { hot } from '@nrwl/nx/testing';
+import { hot } from '@nrwl/angular/testing';
 import { CoupledTeacherGuard } from '.';
 
 describe('coupledTeacherGuard', () => {
@@ -35,7 +35,15 @@ describe('coupledTeacherGuard', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
-        StoreModule.forRoot({}),
+        StoreModule.forRoot(
+          {},
+          {
+            runtimeChecks: {
+              strictStateImmutability: false,
+              strictActionImmutability: false
+            }
+          }
+        ),
         ...StateFeatureBuilder.getStoreModuleForFeatures([
           UserReducer,
           TeacherStudentReducer,

@@ -2,8 +2,8 @@ import { TestBed } from '@angular/core/testing';
 import { EffectsModule } from '@ngrx/effects';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Action, StoreModule } from '@ngrx/store';
-import { DataPersistence, NxModule } from '@nrwl/nx';
-import { hot } from '@nrwl/nx/testing';
+import { DataPersistence, NxModule } from '@nrwl/angular';
+import { hot } from '@nrwl/angular/testing';
 import { Observable, of } from 'rxjs';
 import { LearningPlanGoalReducer } from '.';
 import { LEARNING_PLAN_GOAL_SERVICE_TOKEN } from '../../learning-plan-goal/learning-plan-goal.service.interface';
@@ -59,7 +59,15 @@ describe('LearningPlanGoalEffects', () => {
     TestBed.configureTestingModule({
       imports: [
         NxModule.forRoot(),
-        StoreModule.forRoot({}),
+        StoreModule.forRoot(
+          {},
+          {
+            runtimeChecks: {
+              strictStateImmutability: false,
+              strictActionImmutability: false
+            }
+          }
+        ),
         StoreModule.forFeature(
           LearningPlanGoalReducer.NAME,
           LearningPlanGoalReducer.reducer,

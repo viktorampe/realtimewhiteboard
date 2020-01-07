@@ -24,9 +24,10 @@ export class NavigationItemService implements NavigationItemServiceInterface {
 
   getNavItemsForTree(
     tree: AppNavTreeKeys,
-    userPermissions: string[]
+    userPermissions: string[],
+    addLogoutNav: boolean = false
   ): NavItem[] {
-    return this.appNavigationTree[tree].filter(navItem => {
+    const navItems = this.appNavigationTree[tree].filter(navItem => {
       return (
         // hide nav item when a userPermissions is found in hideWhenRequiredPermissions
         !(
@@ -44,5 +45,13 @@ export class NavigationItemService implements NavigationItemServiceInterface {
           ))
       );
     });
+
+    if (addLogoutNav)
+      navItems.push({
+        title: 'Afmelden',
+        link: '/logout'
+      });
+
+    return navItems;
   }
 }

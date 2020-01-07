@@ -14,9 +14,6 @@
     "polpo-classroom-web": {
       "tags": ["scope:app"]
     },
-    "polpo-classroom-web-e2e": {
-      "tags": ["scope:app"]
-    },
     "pages-bundles": {
       "tags": []
     },
@@ -92,9 +89,6 @@
     "kabas-web": {
       "tags": ["scope:app"]
     },
-    "kabas-web-e2e": {
-      "tags": ["scope:app"]
-    },
     "pages-methods": {
       "tags": []
     },
@@ -114,9 +108,6 @@
       "tags": []
     },
     "timeline-editor": {
-      "tags": []
-    },
-    "timeline-editor-e2e": {
       "tags": []
     },
     "timeline": {

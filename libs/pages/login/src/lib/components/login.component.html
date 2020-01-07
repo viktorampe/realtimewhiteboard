@@ -5,41 +5,52 @@
 >
 </campus-page-header>
 
-<ng-container *ngIf="(currentUser$ | async) as currentUser; else notLoggedIn">
+<ng-container *ngIf="currentUser$ | async as currentUser; else notLoggedIn">
   <div class="pages-login__form ">
     <div class="pages-login__form__title"
       >Je bent ingelogd als {{ currentUser.displayName }}</div
     >
-    <div>
-      <campus-button campusPrimary (click)="logout()">Log uit</campus-button>
+    <div *ngIf="!isRedirecting" class="pages-login__form--logout">
+      <campus-button campusPrimary (click)="logout()">Afmelden</campus-button>
+    </div>
+    <div *ngIf="isRedirecting" class="pages-login__form--redirecting">
+      Even geduld, u wordt doorverwezen
     </div>
   </div>
 </ng-container>
 
 <ng-template #notLoggedIn>
   <div class="pages-login__form__container">
-    <form [formGroup]="loginForm" class="pages-login__form">
+    <form
+      [formGroup]="loginForm"
+      class="pages-login__form"
+      [class.pages-login__form--unauthorized]="hasError$ | async"
+    >
       <div class="pages-login__form__title">Vul uw gebruikersgegevens in</div>
-
+      <div class="mat-error">
+        <span *ngIf="errorFeedback$ | async as error">
+          {{ error.message }}
+        </span>
+      </div>
       <mat-form-field>
-        <mat-label>Vul uw gebruikernaam in</mat-label>
+        <mat-label>Gebruikersnaam</mat-label>
         <input
           type="text"
           matInput
-          placeholder="Gebruikersnaam"
           formControlName="username"
           required
+          (keydown)="clearError()"
         />
       </mat-form-field>
 
       <mat-form-field>
-        <mat-label>Vul uw wachtwoord in</mat-label>
+        <mat-label>Wachtwoord</mat-label>
         <input
           type="password"
           matInput
-          placeholder="Wachtwoord"
           formControlName="password"
           required
+          (keydown)="clearError()"
         />
       </mat-form-field>
 
@@ -47,7 +58,7 @@
         campusPrimary
         (click)="submit()"
         [class.ui-button--disabled]="!loginForm.valid"
-        >Login</campus-button
+        >Aanmelden</campus-button
       >
     </form>
 

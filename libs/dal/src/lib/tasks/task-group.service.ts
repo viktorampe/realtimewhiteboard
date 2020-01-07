@@ -12,8 +12,14 @@ export class TaskGroupService implements TaskGroupServiceInterface {
   constructor(private personApi: PersonApi) {}
 
   public getAllForUser(userId: number): Observable<TaskGroupInterface[]> {
-    return this.personApi
-      .getData(userId, 'taskGroups')
-      .pipe(map((res: { taskGroups: TaskGroupInterface[] }) => res.taskGroups));
+    return this.personApi.getData(userId, 'taskGroups').pipe(
+      map((res: { taskGroups: TaskGroupInterface[] }) =>
+        res.taskGroups.map(taskGroup => ({
+          ...taskGroup,
+          end: new Date(taskGroup.end),
+          start: new Date(taskGroup.start)
+        }))
+      )
+    );
   }
 }

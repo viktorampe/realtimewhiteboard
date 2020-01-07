@@ -76,7 +76,15 @@ describe('EduContentLearningAreaOverviewComponent', () => {
         NoopAnimationsModule,
         SearchModule,
         SharedModule,
-        StoreModule.forRoot({}),
+        StoreModule.forRoot(
+          {},
+          {
+            runtimeChecks: {
+              strictStateImmutability: true,
+              strictActionImmutability: true
+            }
+          }
+        ),
         ...getStoreModuleForFeatures([LearningAreaReducer, FavoriteReducer])
       ],
       declarations: [

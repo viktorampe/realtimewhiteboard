@@ -43,20 +43,20 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
   taskInfo$: Observable<TaskWithInfoInterface>;
 
   //viewChildren
-  @ViewChild(FilterTextInputComponent)
+  @ViewChild(FilterTextInputComponent, { static: true })
   filterTextInput: FilterTextInputComponent<
     TaskWithInfoInterface,
     TaskEduContentInterface
   >;
 
   list: ListViewComponent<EduContent>;
-  @ViewChild('taskInstanceListview')
+  @ViewChild('taskInstanceListview', { static: false })
   set listViewComponent(list: ListViewComponent<EduContent>) {
     this.list = list;
   }
 
   private sideSheet: SideSheetComponent;
-  @ViewChild('taskInstanceSidesheet')
+  @ViewChild('taskInstanceSidesheet', { static: false })
   set sideSheetComponent(sidesheet: SideSheetComponent) {
     this.sideSheet = sidesheet;
   }

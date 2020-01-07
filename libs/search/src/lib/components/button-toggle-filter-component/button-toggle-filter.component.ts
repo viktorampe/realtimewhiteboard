@@ -35,6 +35,7 @@ export class ButtonToggleFilterComponent
   private subscriptions: Subscription = new Subscription();
 
   @Input() multiple = false;
+  @Input() disabled = false;
   @Input()
   public set filterCriteria(criteria: SearchFilterCriteriaInterface) {
     this.criteria = criteria;
@@ -64,20 +65,22 @@ export class ButtonToggleFilterComponent
 
   ngOnInit() {
     this.subscriptions.add(
-      this.toggleControl.valueChanges.pipe(distinctUntilChanged()).subscribe(
-        (
-          selection:
-            | SearchFilterCriteriaValuesInterface
-            | SearchFilterCriteriaValuesInterface[]
-        ): void => {
-          if (!Array.isArray(selection)) {
-            selection = selection === null ? [] : [selection];
+      this.toggleControl.valueChanges
+        .pipe(distinctUntilChanged())
+        .subscribe(
+          (
+            selection:
+              | SearchFilterCriteriaValuesInterface
+              | SearchFilterCriteriaValuesInterface[]
+          ): void => {
+            if (!Array.isArray(selection)) {
+              selection = selection === null ? [] : [selection];
+            }
+            this.updateView(selection);
+            this.updateCriteriaWithSelected(this.criteria.values, selection);
+            this.filterSelectionChange.emit([this.criteria]);
           }
-          this.updateView(selection);
-          this.updateCriteriaWithSelected(this.criteria.values, selection);
-          this.filterSelectionChange.emit([this.criteria]);
-        }
-      )
+        )
     );
   }
 

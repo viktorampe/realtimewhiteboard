@@ -1,5 +1,9 @@
 import { Injectable } from '@angular/core';
-import { PersonFixture, PersonInterface } from '@campus/dal';
+import {
+  EffectFeedbackInterface,
+  PersonFixture,
+  PersonInterface
+} from '@campus/dal';
 import { ViewModelInterface } from '@campus/testing';
 import { BehaviorSubject } from 'rxjs';
 import { LoginViewModel } from './login.viewmodel';
@@ -8,6 +12,9 @@ import { LoginViewModel } from './login.viewmodel';
   providedIn: 'root'
 })
 export class MockLoginViewModel implements ViewModelInterface<LoginViewModel> {
+  public errorFeedback$: BehaviorSubject<
+    EffectFeedbackInterface
+  > = new BehaviorSubject<EffectFeedbackInterface>(null);
   public currentUser$ = new BehaviorSubject<PersonInterface>(
     new PersonFixture()
   );
@@ -19,4 +26,5 @@ export class MockLoginViewModel implements ViewModelInterface<LoginViewModel> {
 
   public login(username: string, password: string) {}
   public logout() {}
+  public clearError() {}
 }

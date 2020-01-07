@@ -8,7 +8,8 @@ const standardSideNavItems: NavItem[] = [
   },
   {
     title: 'Methodes',
-    link: '/methods'
+    link: '/methods',
+    requiredPermissions: ['manageMethods']
   },
   {
     title: 'Taken',
@@ -35,10 +36,6 @@ const standardSideNavItems: NavItem[] = [
   {
     title: 'Instellingen',
     link: '/settings'
-  },
-  {
-    title: 'Afmelden',
-    link: '/logout'
   }
 ];
 

@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
-import { hot } from '@nrwl/nx/testing';
+import { hot } from '@nrwl/angular/testing';
 import { Observable } from 'rxjs';
 import { TaskStudentService } from './task-student.service';
 import { TaskStudentServiceInterface } from './task-student.service.interface';
@@ -30,11 +30,11 @@ describe('TaskStudentService', () => {
 
   it('should return taskStudents', () => {
     mockData$ = hot('-a-|', {
-      a: { taskStudents: [{ id: 12331 }] }
+      a: { taskStudents: [{ id: 12331, start: 1, end: 1 }] }
     });
     expect(service.getAllForUser(1)).toBeObservable(
       hot('-a-|', {
-        a: [{ id: 12331 }]
+        a: [{ id: 12331, start: new Date(1), end: new Date(1) }]
       })
     );
   });

@@ -10,7 +10,7 @@
     class="pages-edu-contents-areas-list__filter"
     autocomplete="off"
   ></campus-filter-text-input>
-  <ng-container *ngIf="(filterTextInput.result$ | async) as filteredAreas">
+  <ng-container *ngIf="filterTextInput.result$ | async as filteredAreas">
     <div
       cdkDropList
       [cdkDropListConnectedTo]="[connectedDropList]"

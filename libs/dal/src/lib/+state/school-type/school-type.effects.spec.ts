@@ -2,8 +2,8 @@ import { TestBed } from '@angular/core/testing';
 import { EffectsModule } from '@ngrx/effects';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Action, StoreModule } from '@ngrx/store';
-import { DataPersistence, NxModule } from '@nrwl/nx';
-import { hot } from '@nrwl/nx/testing';
+import { DataPersistence, NxModule } from '@nrwl/angular';
+import { hot } from '@nrwl/angular/testing';
 import { Observable, of } from 'rxjs';
 import { SchoolTypeReducer } from '.';
 import { SCHOOL_TYPE_SERVICE_TOKEN } from '../../metadata/school-type.service.interface';
@@ -59,7 +59,15 @@ describe('SchoolTypeEffects', () => {
     TestBed.configureTestingModule({
       imports: [
         NxModule.forRoot(),
-        StoreModule.forRoot({}),
+        StoreModule.forRoot(
+          {},
+          {
+            runtimeChecks: {
+              strictStateImmutability: false,
+              strictActionImmutability: false
+            }
+          }
+        ),
         StoreModule.forFeature(
           SchoolTypeReducer.NAME,
           SchoolTypeReducer.reducer,

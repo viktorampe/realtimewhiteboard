@@ -18,7 +18,7 @@
   ></campus-button>
 </campus-page-bar>
 
-<div class="pages-books__container" *ngIf="(books$ | async) as books">
+<div class="pages-books__container" *ngIf="books$ | async as books">
   <campus-page-header [title]="'Boeken'" [iconClass]="'book'">
   </campus-page-header>
 
@@ -27,7 +27,7 @@
   </ng-template>
 
   <ng-container *ngIf="books.length; else noBooks">
-    <ng-container *ngIf="(filterTextInput.result$ | async) as filteredBooks">
+    <ng-container *ngIf="filterTextInput.result$ | async as filteredBooks">
       <div
         class="pages-books__container__books-count"
         *ngIf="

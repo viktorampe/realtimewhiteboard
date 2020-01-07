@@ -51,7 +51,15 @@ describe('AllowedMethodGuard', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
-        StoreModule.forRoot({}),
+        StoreModule.forRoot(
+          {},
+          {
+            runtimeChecks: {
+              strictStateImmutability: false,
+              strictActionImmutability: false
+            }
+          }
+        ),
         ...StateFeatureBuilder.getStoreModuleForFeatures([
           EduContentBookReducer,
           MethodReducer

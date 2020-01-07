@@ -18,7 +18,7 @@ export class TasksAreaComponent implements OnInit {
   listFormat$: Observable<ListFormat>;
   learningAreasWithInfo$: Observable<LearningAreasWithTaskInfoInterface>;
 
-  @ViewChild('filterInput')
+  @ViewChild('filterInput', { static: true })
   filterTextInput: FilterTextInputComponent<
     LearningAreasWithTaskInfoInterface,
     LearningAreaWithTaskInfoInterface

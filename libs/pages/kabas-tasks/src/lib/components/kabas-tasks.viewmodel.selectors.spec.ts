@@ -32,7 +32,7 @@ import {
 } from '@campus/dal';
 import { routerReducer } from '@ngrx/router-store';
 import { Action, select, Store, StoreModule } from '@ngrx/store';
-import { hot } from '@nrwl/nx/testing';
+import { hot } from '@nrwl/angular/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { AssigneeTypesEnum } from '../interfaces/Assignee.interface';
 import { getTasksWithAssignments } from './kabas-tasks.viewmodel.selectors';
@@ -41,7 +41,15 @@ describe('Kabas-tasks viewmodel selectors', () => {
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [
-        StoreModule.forRoot({ router: routerReducer }),
+        StoreModule.forRoot(
+          { router: routerReducer },
+          {
+            runtimeChecks: {
+              strictStateImmutability: false,
+              strictActionImmutability: false
+            }
+          }
+        ),
         ...getStoreModuleForFeatures([
           ClassGroupReducer,
           GroupReducer,
@@ -95,7 +103,7 @@ describe('Kabas-tasks viewmodel selectors', () => {
             {
               type: AssigneeTypesEnum.STUDENT,
               id: 1,
-              label: 'Polleke',
+              label: 'Polleke Enkeltje',
               start: new Date(date - 3),
               end: new Date(date + 3)
             }
@@ -132,21 +140,21 @@ describe('Kabas-tasks viewmodel selectors', () => {
             {
               type: AssigneeTypesEnum.CLASSGROUP,
               id: 2,
-              label: '1A',
+              label: '2c',
               start: new Date(date - 22),
               end: new Date(date + 22)
             },
             {
               type: AssigneeTypesEnum.GROUP,
               id: 2,
-              label: 'Remediëring 2c',
+              label: 'Frederic Gryspeerdt fanclub',
               start: new Date(date - 11),
               end: new Date(date + 11)
             },
             {
               type: AssigneeTypesEnum.STUDENT,
               id: 2,
-              label: 'Polleke',
+              label: 'Mieke Mokke',
               start: new Date(date - 33),
               end: new Date(date + 33)
             }
@@ -214,11 +222,23 @@ function getLoadTaskEduContentsAction() {
   });
 }
 function getLoadGroupsAction() {
-  return new GroupActions.GroupsLoaded({ groups: [new GroupFixture()] });
+  return new GroupActions.GroupsLoaded({
+    groups: [
+      new GroupFixture({ id: 1 }),
+      new GroupFixture({ id: 2, name: 'Frederic Gryspeerdt fanclub' })
+    ]
+  });
 }
 function getLoadLinkedPersonsAction() {
   return new LinkedPersonActions.LinkedPersonsLoaded({
-    persons: [new PersonFixture({ name: 'Polleke' })]
+    persons: [
+      new PersonFixture({
+        id: 1,
+        name: 'Polleke',
+        displayName: 'Polleke Enkeltje'
+      }),
+      new PersonFixture({ id: 2, name: 'Mieke', displayName: 'Mieke Mokke' })
+    ]
   });
 }
 function getLoadTaskGroupsAction(date) {
@@ -234,7 +254,7 @@ function getLoadTaskGroupsAction(date) {
       new TaskGroupFixture({
         id: 2,
         taskId: 2,
-        groupId: 1,
+        groupId: 2,
         start: new Date(date - 11),
         end: new Date(date + 11)
       })
@@ -254,7 +274,7 @@ function getLoadTaskClassGroupsAction(date) {
       new TaskClassGroupFixture({
         id: 2,
         taskId: 2,
-        classGroupId: 1,
+        classGroupId: 2,
         start: new Date(date - 22),
         end: new Date(date + 22)
       })
@@ -274,7 +294,7 @@ function getLoadTaskStudentsAction(date) {
       new TaskStudentFixture({
         id: 2,
         taskId: 2,
-        personId: 1,
+        personId: 2,
         start: new Date(date - 33),
         end: new Date(date + 33)
       })

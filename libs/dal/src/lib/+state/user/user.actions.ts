@@ -19,9 +19,16 @@ export enum UserActionTypes {
   PermissionsLoadError = '[User] Permissions Load error'
 }
 
-export class LogInUser implements Action {
+export class LogInUser implements FeedbackTriggeringAction {
   readonly type = UserActionTypes.LogInUser;
-  constructor(public payload: { username: string; password: string }) {}
+  constructor(
+    public payload: {
+      username?: string;
+      email?: string;
+      password: string;
+      customFeedbackHandlers?: CustomFeedbackHandlersInterface;
+    }
+  ) {}
 }
 
 export class LoadUser implements Action {
@@ -39,6 +46,7 @@ export class UserLoaded implements Action {
   constructor(public payload: PersonInterface) {}
 }
 
+// the RemoveUser action will trigger the clear-state meta-reducer which will reset the store to it's initial state
 export class RemoveUser implements Action {
   readonly type = UserActionTypes.RemoveUser;
   constructor() {}

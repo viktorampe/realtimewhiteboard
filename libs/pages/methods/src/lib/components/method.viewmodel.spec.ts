@@ -77,7 +77,7 @@ import {
   StoreRouterConnectingModule
 } from '@ngrx/router-store';
 import { Store, StoreModule } from '@ngrx/store';
-import { hot } from '@nrwl/nx/testing';
+import { hot } from '@nrwl/angular/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { of } from 'rxjs';
 import { take } from 'rxjs/operators';
@@ -269,7 +269,15 @@ describe('MethodViewModel', () => {
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [
-        StoreModule.forRoot({ router: routerReducer }),
+        StoreModule.forRoot(
+          { router: routerReducer },
+          {
+            runtimeChecks: {
+              strictStateImmutability: false,
+              strictActionImmutability: false
+            }
+          }
+        ),
         ...getStoreModuleForFeatures([
           UserReducer,
           EduContentTocReducer,
@@ -715,9 +723,7 @@ describe('MethodViewModel', () => {
       it('should be the method year title > toc title when a book and chapter is selected', () => {
         navigateWithParams({ book: bookId, chapter: 1 });
 
-        const expectedResult = `${method.name} ${bookYears[0].label} > ${
-          chapterTocs[0].title
-        }`;
+        const expectedResult = `${method.name} ${bookYears[0].label} > ${chapterTocs[0].title}`;
 
         expect(methodViewModel.breadCrumbTitles$).toBeObservable(
           hot('a', {
