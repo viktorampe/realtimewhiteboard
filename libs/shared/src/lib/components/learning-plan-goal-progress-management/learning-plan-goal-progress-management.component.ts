@@ -27,10 +27,10 @@ export class LearningPlanGoalProgressManagementComponent implements OnInit {
   protected userLessons$: Observable<UserLessonInterface[]>;
   protected book: EduContentBookInterface;
 
-  @ViewChild(MatInput)
+  @ViewChild(MatInput, { static: true })
   private matInput: MatInput;
 
-  @ViewChild('selectionList', { read: MatSelectionList })
+  @ViewChild('selectionList', { read: MatSelectionList, static: true })
   private matSelectionList: MatSelectionList;
 
   public learningPlanGoal: LearningPlanGoalInterface;

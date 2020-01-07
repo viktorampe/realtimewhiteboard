@@ -5,7 +5,7 @@ import {
 } from '@campus/browser';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { RouterNavigationAction, ROUTER_NAVIGATION } from '@ngrx/router-store';
-import { DataPersistence } from '@nrwl/nx';
+import { DataPersistence } from '@nrwl/angular';
 import { filter, map } from 'rxjs/operators';
 import { DalState } from '..';
 import { ActionSuccessful } from '../dal.actions';

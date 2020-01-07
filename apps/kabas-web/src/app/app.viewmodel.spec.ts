@@ -7,6 +7,7 @@ import {
   EffectFeedbackFixture,
   EffectFeedbackInterface,
   EffectFeedbackReducer,
+  PersonFixture,
   Priority,
   StateFeatureBuilder,
   UiReducer,
@@ -21,7 +22,7 @@ import {
 } from '@campus/shared';
 import { NavItem } from '@campus/ui';
 import { Action, Store, StoreModule } from '@ngrx/store';
-import { hot } from '@nrwl/nx/testing';
+import { hot } from '@nrwl/angular/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { BehaviorSubject, of } from 'rxjs';
 import { AppViewModel } from './app.viewmodel';
@@ -72,8 +73,15 @@ describe('AppViewModel', () => {
 
     TestBed.configureTestingModule({
       imports: [
-        StoreModule.forRoot({}),
-
+        StoreModule.forRoot(
+          {},
+          {
+            runtimeChecks: {
+              strictStateImmutability: false,
+              strictActionImmutability: false
+            }
+          }
+        ),
         ...StateFeatureBuilder.getModuleWithForFeatureProviders([
           EffectFeedbackReducer,
           UserReducer,
@@ -125,21 +133,34 @@ describe('AppViewModel', () => {
   });
 
   describe('navigationItems$', () => {
-    beforeEach(() => {
-      jest.spyOn(navigationItemService, 'getNavItemsForTree');
+    let getNavItemsForTreeSpy: jest.SpyInstance;
 
-      store.dispatch(new UserActions.PermissionsLoaded(['permissionA']));
+    beforeEach(() => {
+      getNavItemsForTreeSpy = jest.spyOn(
+        navigationItemService,
+        'getNavItemsForTree'
+      );
     });
 
-    it('should stream the values returned from the navigation item service', () => {
+    it('should stream the values returned from the navigation item service when a user is logged in', () => {
+      store.dispatch(new UserActions.PermissionsLoaded(['permissionA']));
+      store.dispatch(new UserActions.UserLoaded(new PersonFixture()));
+
       expect(viewModel.sideNavItems$).toBeObservable(
         hot('a', { a: mockNavItems })
       );
-      expect(navigationItemService.getNavItemsForTree).toHaveBeenCalledTimes(1);
-      expect(navigationItemService.getNavItemsForTree).toHaveBeenCalledWith(
+      expect(getNavItemsForTreeSpy).toHaveBeenCalledTimes(1);
+      expect(getNavItemsForTreeSpy).toHaveBeenCalledWith(
         'sideNav',
-        ['permissionA']
+        ['permissionA'],
+        true
       );
+    });
+
+    it('should stream an empty array when the user is not logged in', () => {
+      store.dispatch(new UserActions.UserRemoved());
+
+      expect(viewModel.sideNavItems$).toBeObservable(hot('a', { a: [] }));
     });
   });
 

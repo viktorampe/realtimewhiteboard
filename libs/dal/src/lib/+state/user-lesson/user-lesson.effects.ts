@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
-import { DataPersistence } from '@nrwl/nx';
+import { DataPersistence } from '@nrwl/angular';
 import { from } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { DalState } from '..';
@@ -68,9 +68,7 @@ export class UserLessonEffects {
           effectFeedback: EffectFeedback.generateErrorFeedback(
             this.uuid(),
             action,
-            `Het is niet gelukt om les "${
-              action.payload.userLesson.description
-            }" toe te voegen.`
+            `Het is niet gelukt om les "${action.payload.userLesson.description}" toe te voegen.`
           )
         });
       }
@@ -125,9 +123,7 @@ export class UserLessonEffects {
           effectFeedback: EffectFeedback.generateErrorFeedback(
             this.uuid(),
             action,
-            `Het is niet gelukt om les "${
-              action.payload.userLesson.description
-            }" toe te voegen.`
+            `Het is niet gelukt om les "${action.payload.userLesson.description}" toe te voegen.`
           )
         });
       }

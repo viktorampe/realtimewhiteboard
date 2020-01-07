@@ -22,7 +22,7 @@
 <campus-side-sheet
   #taskInstanceSidesheet
   [isOpenOnInit]="true"
-  *ngIf="(taskInfo$ | async) as taskInfo; else noTaskInfo"
+  *ngIf="taskInfo$ | async as taskInfo; else noTaskInfo"
 >
   <campus-side-sheet-header></campus-side-sheet-header>
   <campus-side-sheet-body>
@@ -52,7 +52,7 @@
     <ng-container *ngIf="(taskInfo$ | async).taskEduContents as contents">
       <ng-container *ngIf="contents.length > 0; else noTaskInstanceContents">
         <ng-container
-          *ngIf="(filterTextInput.result$ | async) as filteredContents"
+          *ngIf="filterTextInput.result$ | async as filteredContents"
         >
           <div class="itemsAmount">
             {{ filteredContents.length }} van

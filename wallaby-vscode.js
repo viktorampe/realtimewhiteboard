@@ -1,60 +1,68 @@
-module.exports = function(wallaby) {
-  var wallabyConfig = require('./.vscode/wallaby/wallaby-used');
+const wallabyConfig = require('./.vscode/wallaby/wallaby-used');
 
-  return {
-    files: wallabyConfig.files,
+module.exports = wallaby => ({
+  autoDetect: true,
+  files: wallabyConfig.files,
+  tests: wallabyConfig.tests
+});
 
-    tests: wallabyConfig.tests,
+// module.exports = function(wallaby) {
+//   var wallabyConfig = require('./.vscode/wallaby/wallaby-used');
 
-    env: {
-      type: 'node',
-      runner: 'node'
-    },
+//   return {
+//     files: wallabyConfig.files,
 
-    testFramework: 'jest',
+//     tests: wallabyConfig.tests,
 
-    compilers: {
-      '**/*.ts?(x)': wallaby.compilers.typeScript({
-        module: 'commonjs',
-        getCustomTransformers: () => {
-          return {
-            before: [
-              require('jest-preset-angular/InlineHtmlStripStylesTransformer').factory(
-                { compilerModule: require('typescript') }
-              )
-            ]
-          };
-        }
-      }),
-      '**/*.html': file => ({
-        code: require('ts-jest').process(file.content, file.path, {
-          globals: { 'ts-jest': { stringifyContentPathRegex: '\\.html$' } }
-        }),
-        map: { version: 3, sources: [], names: [], mappings: [] },
-        ranges: []
-      })
-    },
+//     env: {
+//       type: 'node',
+//       runner: 'node'
+//     },
 
-    setup: function(wallaby) {
-      var jestConfig = require('./jest.config');
-      jestConfig = Object.assign(
-        require('jest-preset-angular/jest-preset'),
-        jestConfig
-      );
-      delete jestConfig.moduleNameMapper;
-      jestConfig.transformIgnorePatterns.push('instrumented.*.(jsx?|html)$');
-      jestConfig.setupFilesAfterEnv = ['<rootDir>/wallaby-test-setup.js'];
-      if (!jestConfig.moduleNameMapper) {
-        var paths = require('./tsconfig').compilerOptions.paths;
-        var jestModuleMaps = {};
-        Object.keys(paths).forEach(key => {
-          jestModuleMaps[key] =
-            '<rootDir>/' + paths[key][0].replace('.ts', '.js');
-        });
-        jestConfig.moduleNameMapper = jestModuleMaps;
-      }
-      jestConfig.globals['ts-jest'].tsConfig = '<rootDir>/tsconfig.spec.json';
-      wallaby.testFramework.configure(jestConfig);
-    }
-  };
-};
+//     testFramework: 'jest',
+
+//     compilers: {
+//       '**/*.ts?(x)': wallaby.compilers.typeScript({
+//         module: 'commonjs',
+//         getCustomTransformers: () => {
+//           return {
+//             before: [
+//               require('jest-preset-angular/InlineHtmlStripStylesTransformer').factory(
+//                 { compilerModule: require('typescript') }
+//               )
+//             ]
+//           };
+//         }
+//       }),
+//       '**/*.html': file => ({
+//         code: require('ts-jest').process(file.content, file.path, {
+//           globals: { 'ts-jest': { stringifyContentPathRegex: '\\.html$' } }
+//         }),
+//         map: { version: 3, sources: [], names: [], mappings: [] },
+//         ranges: []
+//       })
+//     },
+
+//     setup: function(wallaby) {
+//       var jestConfig = require('./jest.config');
+//       jestConfig = Object.assign(
+//         require('jest-preset-angular/jest-preset'),
+//         jestConfig
+//       );
+//       delete jestConfig.moduleNameMapper;
+//       jestConfig.transformIgnorePatterns.push('instrumented.*.(jsx?|html)$');
+//       jestConfig.setupFilesAfterEnv = ['<rootDir>/wallaby-test-setup.js'];
+//       if (!jestConfig.moduleNameMapper) {
+//         var paths = require('./tsconfig').compilerOptions.paths;
+//         var jestModuleMaps = {};
+//         Object.keys(paths).forEach(key => {
+//           jestModuleMaps[key] =
+//             '<rootDir>/' + paths[key][0].replace('.ts', '.js');
+//         });
+//         jestConfig.moduleNameMapper = jestModuleMaps;
+//       }
+//       jestConfig.globals['ts-jest'].tsConfig = '<rootDir>/tsconfig.spec.json';
+//       wallaby.testFramework.configure(jestConfig);
+//     }
+//   };
+// };

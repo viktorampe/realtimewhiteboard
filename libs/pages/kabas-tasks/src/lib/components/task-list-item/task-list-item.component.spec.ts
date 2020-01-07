@@ -4,7 +4,7 @@ import {
   MatIconRegistry,
   MatTooltipModule
 } from '@angular/material';
-import { By } from '@angular/platform-browser';
+import { By, HAMMER_LOADER } from '@angular/platform-browser';
 import { ENVIRONMENT_ICON_MAPPING_TOKEN } from '@campus/shared';
 import { MockMatIconRegistry } from '@campus/testing';
 import { AssigneeFixture } from '../../interfaces/Assignee.fixture';
@@ -55,7 +55,11 @@ describe('TaskListItemComponent', () => {
       declarations: [TaskListItemComponent],
       providers: [
         { provide: MatIconRegistry, useClass: MockMatIconRegistry },
-        { provide: ENVIRONMENT_ICON_MAPPING_TOKEN, useValue: {} }
+        { provide: ENVIRONMENT_ICON_MAPPING_TOKEN, useValue: {} },
+        {
+          provide: HAMMER_LOADER,
+          useValue: () => new Promise(() => {})
+        }
       ]
     });
   }));

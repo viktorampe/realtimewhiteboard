@@ -5,7 +5,7 @@ export const OBJECT_PATH_SERVICE_TOKEN = new InjectionToken(
 );
 
 export type ObjPathProxy<TRoot, T> = {
-  [P in keyof T]: ObjPathProxy<TRoot, T[P]>
+  [P in keyof T]: ObjPathProxy<TRoot, T[P]>;
 };
 
 export type ObjProxyArg<TRoot, T> =

@@ -11,7 +11,7 @@ import { DalModule } from '@campus/dal';
 import { AuthenticationGuard, TermPrivacyGuard } from '@campus/guards';
 import { SharedModule } from '@campus/shared';
 import { UiModule } from '@campus/ui';
-import { NxModule } from '@nrwl/nx';
+import { NxModule } from '@nrwl/angular';
 import { configureBufferSize } from 'ngrx-undo';
 import { environment } from '../environments/environment';
 import { AppEffectsModule } from './app-effects.module';

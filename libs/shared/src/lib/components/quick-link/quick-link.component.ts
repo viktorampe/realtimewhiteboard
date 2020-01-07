@@ -36,7 +36,7 @@ export class QuickLinkComponent implements OnInit {
   private contentEditables: QueryList<ContentEditableComponent>;
   private activeContentEditable: ContentEditableComponent;
 
-  @ViewChild(FilterTextInputComponent)
+  @ViewChild(FilterTextInputComponent, { static: true })
   filterTextInput: FilterTextInputComponent<
     QuickLinkCategoryInterface[],
     QuickLinkCategoryInterface

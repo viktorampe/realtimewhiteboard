@@ -20,6 +20,7 @@ export class LogoutViewModel {
   ) {}
 
   logout(): void {
+    // this will trigger the clear-state meta-reducer which will reset the store to it's initial state
     this.store.dispatch(new UserActions.RemoveUser());
     this.store
       .pipe(

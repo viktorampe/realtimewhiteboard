@@ -18,7 +18,7 @@ import {
 } from '@campus/shared';
 import { NavItem } from '@campus/ui';
 import { Action, select, Store } from '@ngrx/store';
-import { Observable, Subscription } from 'rxjs';
+import { combineLatest, Observable, Subscription } from 'rxjs';
 import { filter, map, switchMap } from 'rxjs/operators';
 
 @Injectable({
@@ -27,6 +27,7 @@ import { filter, map, switchMap } from 'rxjs/operators';
 export class AppViewModel implements OnDestroy {
   // source streams
   private userPermissions$: Observable<string[]>;
+  private isLoggedIn$: Observable<boolean>;
 
   // presentation streams
   public sideNavOpen$: Observable<boolean>;
@@ -67,13 +68,25 @@ export class AppViewModel implements OnDestroy {
 
   private setSourceStreams() {
     this.userPermissions$ = this.store.pipe(select(UserQueries.getPermissions));
+    this.isLoggedIn$ = this.store.pipe(
+      select(UserQueries.getCurrentUser),
+      map(user => !!user)
+    );
   }
 
   private setNavItems() {
-    this.sideNavItems$ = this.userPermissions$.pipe(
-      map(permissions =>
-        this.navigationItemService.getNavItemsForTree('sideNav', permissions)
-      )
+    this.sideNavItems$ = combineLatest([
+      this.userPermissions$,
+      this.isLoggedIn$
+    ]).pipe(
+      map(([permissions, isLoggedIn]) => {
+        if (!isLoggedIn) return [];
+        return this.navigationItemService.getNavItemsForTree(
+          'sideNav',
+          permissions,
+          isLoggedIn
+        );
+      })
     );
 
     // get sideNav opened state

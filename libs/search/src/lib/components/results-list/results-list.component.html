@@ -1,6 +1,8 @@
 <div class="search-results-list">
   <div class="search-results-list__info">
-    <div>{{ count + (count === 1 ? ' resultaat' : ' resultaten') }}.</div>
+    <div data-cy="search-results-count"
+      >{{ count + (count === 1 ? ' resultaat' : ' resultaten') }}.</div
+    >
     <div
       *ngIf="sortModes && sortModes.length > 1"
       class="search-results-list__sorting"

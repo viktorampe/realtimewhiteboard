@@ -1,6 +1,6 @@
 import { inject, TestBed } from '@angular/core/testing';
 import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
-import { hot } from '@nrwl/nx/testing';
+import { hot } from '@nrwl/angular/testing';
 import { UnlockedBoekeGroupService } from './unlocked-boeke-group.service';
 import { UnlockedBoekeGroupServiceInterface } from './unlocked-boeke-group.service.interface';
 

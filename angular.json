@@ -109,25 +109,19 @@
               "apps/polpo-classroom-web/tsconfig.app.json",
               "apps/polpo-classroom-web/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!apps/polpo-classroom-web/**"]
           }
         },
         "test": {
-          "builder": "@nrwl/builders:jest",
+          "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "apps/polpo-classroom-web/jest.config.js",
             "tsConfig": "apps/polpo-classroom-web/tsconfig.spec.json",
             "setupFile": "apps/polpo-classroom-web/src/test-setup.ts"
           }
-        }
-      }
-    },
-    "polpo-classroom-web-e2e": {
-      "root": "apps/polpo-classroom-web-e2e/",
-      "projectType": "application",
-      "architect": {
+        },
         "e2e": {
-          "builder": "@nrwl/builders:cypress",
+          "builder": "@nrwl/cypress:cypress",
           "options": {
             "cypressConfig": "apps/polpo-classroom-web-e2e/cypress.json",
             "tsConfig": "apps/polpo-classroom-web-e2e/tsconfig.e2e.json",
@@ -140,13 +134,6 @@
             "production": {
               "devServerTarget": "polpo-classroom-web:serve:production"
             }
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": "apps/polpo-classroom-web-e2e/tsconfig.e2e.json",
-            "exclude": ["**/node_modules/**"]
           }
         }
       }
@@ -162,10 +149,9 @@
           "options": {
             "tsConfig": [
               "libs/devlib/tsconfig.lib.json",
-              "libs/devlib/tsconfig.spec.json",
               "libs/devlib/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!libs/devlib/**"]
           }
         }
       }
@@ -181,14 +167,13 @@
           "options": {
             "tsConfig": [
               "libs/pages/bundles/tsconfig.lib.json",
-              "libs/pages/bundles/tsconfig.spec.json",
               "libs/pages/bundles/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!libs/pages/bundles/**"]
           }
         },
         "test": {
-          "builder": "@nrwl/builders:jest",
+          "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/pages/bundles/jest.config.js",
             "tsConfig": "libs/pages/bundles/tsconfig.spec.json",
@@ -208,14 +193,13 @@
           "options": {
             "tsConfig": [
               "libs/pages/edu-contents/tsconfig.lib.json",
-              "libs/pages/edu-contents/tsconfig.spec.json",
               "libs/pages/edu-contents/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!libs/pages/edu-contents/**"]
           }
         },
         "test": {
-          "builder": "@nrwl/builders:jest",
+          "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/pages/edu-contents/jest.config.js",
             "tsConfig": "libs/pages/edu-contents/tsconfig.spec.json",
@@ -235,14 +219,13 @@
           "options": {
             "tsConfig": [
               "libs/pages/logout/tsconfig.lib.json",
-              "libs/pages/logout/tsconfig.spec.json",
               "libs/pages/logout/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!libs/pages/logout/**"]
           }
         },
         "test": {
-          "builder": "@nrwl/builders:jest",
+          "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/pages/logout/jest.config.js",
             "tsConfig": "libs/pages/logout/tsconfig.spec.json",
@@ -262,14 +245,13 @@
           "options": {
             "tsConfig": [
               "libs/pages/messages/tsconfig.lib.json",
-              "libs/pages/messages/tsconfig.spec.json",
               "libs/pages/messages/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!libs/pages/messages/**"]
           }
         },
         "test": {
-          "builder": "@nrwl/builders:jest",
+          "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/pages/messages/jest.config.js",
             "tsConfig": "libs/pages/messages/tsconfig.spec.json",
@@ -289,14 +271,13 @@
           "options": {
             "tsConfig": [
               "libs/pages/reports/tsconfig.lib.json",
-              "libs/pages/reports/tsconfig.spec.json",
               "libs/pages/reports/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!libs/pages/reports/**"]
           }
         },
         "test": {
-          "builder": "@nrwl/builders:jest",
+          "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/pages/reports/jest.config.js",
             "tsConfig": "libs/pages/reports/tsconfig.spec.json",
@@ -316,14 +297,13 @@
           "options": {
             "tsConfig": [
               "libs/pages/tasks/tsconfig.lib.json",
-              "libs/pages/tasks/tsconfig.spec.json",
               "libs/pages/tasks/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!libs/pages/tasks/**"]
           }
         },
         "test": {
-          "builder": "@nrwl/builders:jest",
+          "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/pages/tasks/jest.config.js",
             "tsConfig": "libs/pages/tasks/tsconfig.spec.json",
@@ -343,14 +323,13 @@
           "options": {
             "tsConfig": [
               "libs/pages/kabas-tasks/tsconfig.lib.json",
-              "libs/pages/kabas-tasks/tsconfig.spec.json",
               "libs/pages/kabas-tasks/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!libs/pages/kabas-tasks/**"]
           }
         },
         "test": {
-          "builder": "@nrwl/builders:jest",
+          "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/pages/kabas-tasks/jest.config.js",
             "tsConfig": "libs/pages/kabas-tasks/tsconfig.spec.json",
@@ -370,14 +349,13 @@
           "options": {
             "tsConfig": [
               "libs/pages/books/tsconfig.lib.json",
-              "libs/pages/books/tsconfig.spec.json",
               "libs/pages/books/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!libs/pages/books/**"]
           }
         },
         "test": {
-          "builder": "@nrwl/builders:jest",
+          "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/pages/books/jest.config.js",
             "tsConfig": "libs/pages/books/tsconfig.spec.json",
@@ -397,14 +375,13 @@
           "options": {
             "tsConfig": [
               "libs/ui/tsconfig.lib.json",
-              "libs/ui/tsconfig.spec.json",
               "libs/ui/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!libs/ui/**"]
           }
         },
         "test": {
-          "builder": "@nrwl/builders:jest",
+          "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/ui/jest.config.js",
             "tsConfig": "libs/ui/tsconfig.spec.json",
@@ -424,14 +401,13 @@
           "options": {
             "tsConfig": [
               "libs/dal/tsconfig.lib.json",
-              "libs/dal/tsconfig.spec.json",
               "libs/dal/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!libs/dal/**"]
           }
         },
         "test": {
-          "builder": "@nrwl/builders:jest",
+          "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/dal/jest.config.js",
             "tsConfig": "libs/dal/tsconfig.spec.json",
@@ -453,11 +429,11 @@
               "libs/pages/shared/tsconfig.lib.json",
               "libs/pages/shared/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!libs/pages/shared/**"]
           }
         },
         "test": {
-          "builder": "@nrwl/builders:jest",
+          "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/pages/shared/jest.config.js",
             "tsConfig": "libs/pages/shared/tsconfig.spec.json",
@@ -479,11 +455,11 @@
               "libs/browser/tsconfig.lib.json",
               "libs/browser/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!libs/browser/**"]
           }
         },
         "test": {
-          "builder": "@nrwl/builders:jest",
+          "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/browser/jest.config.js",
             "tsConfig": "libs/browser/tsconfig.spec.json",
@@ -505,11 +481,11 @@
               "libs/shared/tsconfig.lib.json",
               "libs/shared/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!libs/shared/**"]
           }
         },
         "test": {
-          "builder": "@nrwl/builders:jest",
+          "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/shared/jest.config.js",
             "tsConfig": "libs/shared/tsconfig.spec.json",
@@ -531,11 +507,11 @@
               "libs/scorm/tsconfig.lib.json",
               "libs/scorm/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!libs/scorm/**"]
           }
         },
         "test": {
-          "builder": "@nrwl/builders:jest",
+          "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/scorm/jest.config.js",
             "tsConfig": "libs/scorm/tsconfig.spec.json",
@@ -557,11 +533,11 @@
               "libs/pages/error/tsconfig.lib.json",
               "libs/pages/error/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!libs/pages/error/**"]
           }
         },
         "test": {
-          "builder": "@nrwl/builders:jest",
+          "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/pages/error/jest.config.js",
             "tsConfig": "libs/pages/error/tsconfig.spec.json",
@@ -583,11 +559,11 @@
               "libs/testing/tsconfig.lib.json",
               "libs/testing/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!libs/testing/**"]
           }
         },
         "test": {
-          "builder": "@nrwl/builders:jest",
+          "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/testing/jest.config.js",
             "tsConfig": "libs/testing/tsconfig.spec.json",
@@ -609,11 +585,11 @@
               "libs/utils/tsconfig.lib.json",
               "libs/utils/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!libs/utils/**"]
           }
         },
         "test": {
-          "builder": "@nrwl/builders:jest",
+          "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/utils/jest.config.js",
             "tsConfig": "libs/utils/tsconfig.spec.json",
@@ -635,11 +611,11 @@
               "libs/guards/tsconfig.lib.json",
               "libs/guards/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!libs/guards/**"]
           }
         },
         "test": {
-          "builder": "@nrwl/builders:jest",
+          "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/guards/jest.config.js",
             "tsConfig": "libs/guards/tsconfig.spec.json",
@@ -661,11 +637,14 @@
               "libs/pages/settings/dashboard/tsconfig.lib.json",
               "libs/pages/settings/dashboard/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/pages/settings/dashboard/**"
+            ]
           }
         },
         "test": {
-          "builder": "@nrwl/builders:jest",
+          "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/pages/settings/dashboard/jest.config.js",
             "tsConfig": "libs/pages/settings/dashboard/tsconfig.spec.json",
@@ -687,11 +666,11 @@
               "libs/pages/settings/profile/tsconfig.lib.json",
               "libs/pages/settings/profile/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!libs/pages/settings/profile/**"]
           }
         },
         "test": {
-          "builder": "@nrwl/builders:jest",
+          "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/pages/settings/profile/jest.config.js",
             "tsConfig": "libs/pages/settings/profile/tsconfig.spec.json",
@@ -713,11 +692,14 @@
               "libs/pages/settings/credentials/tsconfig.lib.json",
               "libs/pages/settings/credentials/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/pages/settings/credentials/**"
+            ]
           }
         },
         "test": {
-          "builder": "@nrwl/builders:jest",
+          "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/pages/settings/credentials/jest.config.js",
             "tsConfig": "libs/pages/settings/credentials/tsconfig.spec.json",
@@ -739,11 +721,14 @@
               "libs/pages/settings/coupled-teachers/tsconfig.lib.json",
               "libs/pages/settings/coupled-teachers/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/pages/settings/coupled-teachers/**"
+            ]
           }
         },
         "test": {
-          "builder": "@nrwl/builders:jest",
+          "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/pages/settings/coupled-teachers/jest.config.js",
             "tsConfig": "libs/pages/settings/coupled-teachers/tsconfig.spec.json",
@@ -765,11 +750,11 @@
               "libs/pages/settings/alerts/tsconfig.lib.json",
               "libs/pages/settings/alerts/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!libs/pages/settings/alerts/**"]
           }
         },
         "test": {
-          "builder": "@nrwl/builders:jest",
+          "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/pages/settings/alerts/jest.config.js",
             "tsConfig": "libs/pages/settings/alerts/tsconfig.spec.json",
@@ -791,11 +776,11 @@
               "libs/search/tsconfig.lib.json",
               "libs/search/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!libs/search/**"]
           }
         },
         "test": {
-          "builder": "@nrwl/builders:jest",
+          "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/search/jest.config.js",
             "tsConfig": "libs/search/tsconfig.spec.json",
@@ -910,11 +895,11 @@
               "apps/kabas-web/tsconfig.app.json",
               "apps/kabas-web/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!apps/kabas-web/**"]
           }
         },
         "test": {
-          "builder": "@nrwl/builders:jest",
+          "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "apps/kabas-web/jest.config.js",
             "tsConfig": "apps/kabas-web/tsconfig.spec.json",
@@ -925,16 +910,9 @@
               "maxWorkers": 2
             }
           }
-        }
-      }
-    },
-    "kabas-web-e2e": {
-      "root": "apps/kabas-web-e2e",
-      "projectType": "application",
-      "prefix": "",
-      "architect": {
+        },
         "e2e": {
-          "builder": "@nrwl/builders:cypress",
+          "builder": "@nrwl/cypress:cypress",
           "options": {
             "cypressConfig": "apps/kabas-web-e2e/cypress.json",
             "tsConfig": "apps/kabas-web-e2e/tsconfig.e2e.json",
@@ -947,13 +925,6 @@
             "production": {
               "devServerTarget": "kabas-web:serve:production"
             }
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": "apps/kabas-web-e2e/tsconfig.e2e.json",
-            "exclude": ["**/node_modules/**"]
           }
         }
       }
@@ -971,11 +942,11 @@
               "libs/pages/methods/tsconfig.lib.json",
               "libs/pages/methods/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!libs/pages/methods/**"]
           }
         },
         "test": {
-          "builder": "@nrwl/builders:jest",
+          "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/pages/methods/jest.config.js",
             "tsConfig": "libs/pages/methods/tsconfig.spec.json",
@@ -994,7 +965,7 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": ["./tsconfig.json", "./tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!libs/**"]
           }
         }
       }
@@ -1009,7 +980,7 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": ["./tsconfig.json", "./tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!apps/**"]
           }
         }
       }
@@ -1027,11 +998,11 @@
               "libs/pages/global-search/tsconfig.lib.json",
               "libs/pages/global-search/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!libs/pages/global-search/**"]
           }
         },
         "test": {
-          "builder": "@nrwl/builders:jest",
+          "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/pages/global-search/jest.config.js",
             "tsConfig": "libs/pages/global-search/tsconfig.spec.json",
@@ -1058,11 +1029,11 @@
               "libs/pages/practice/tsconfig.lib.json",
               "libs/pages/practice/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!libs/pages/practice/**"]
           }
         },
         "test": {
-          "builder": "@nrwl/builders:jest",
+          "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/pages/practice/jest.config.js",
             "tsConfig": "libs/pages/practice/tsconfig.spec.json",
@@ -1084,11 +1055,11 @@
               "libs/pages/home/tsconfig.lib.json",
               "libs/pages/home/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!libs/pages/home/**"]
           }
         },
         "test": {
-          "builder": "@nrwl/builders:jest",
+          "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/pages/home/jest.config.js",
             "tsConfig": "libs/pages/home/tsconfig.spec.json",
@@ -1204,27 +1175,20 @@
               "apps/timeline-editor/tsconfig.app.json",
               "apps/timeline-editor/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!apps/timeline-editor/**"]
           }
         },
         "test": {
-          "builder": "@nrwl/builders:jest",
+          "builder": "@nrwl/jest:jest",
           "options": {
             "main": "apps/timeline-editor/src/test.ts",
             "jestConfig": "apps/timeline-editor/jest.config.js",
             "tsConfig": "apps/timeline-editor/tsconfig.spec.json",
             "setupFile": "apps/timeline-editor/src/test-setup.ts"
           }
-        }
-      }
-    },
-    "timeline-editor-e2e": {
-      "root": "apps/timeline-editor-e2e",
-      "projectType": "application",
-      "prefix": "",
-      "architect": {
+        },
         "e2e": {
-          "builder": "@nrwl/builders:cypress",
+          "builder": "@nrwl/cypress:cypress",
           "options": {
             "cypressConfig": "apps/timeline-editor-e2e/cypress.json",
             "tsConfig": "apps/timeline-editor-e2e/tsconfig.e2e.json",
@@ -1237,13 +1201,6 @@
             "production": {
               "devServerTarget": "timeline-editor:serve:production"
             }
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": "apps/timeline-editor-e2e/tsconfig.e2e.json",
-            "exclude": ["**/node_modules/**"]
           }
         }
       }
@@ -1261,11 +1218,11 @@
               "libs/timeline/tsconfig.lib.json",
               "libs/timeline/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!libs/timeline/**"]
           }
         },
         "test": {
-          "builder": "@nrwl/builders:jest",
+          "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/timeline/jest.config.js",
             "tsConfig": "libs/timeline/tsconfig.spec.json",
@@ -1292,11 +1249,11 @@
               "libs/whiteboard/tsconfig.lib.json",
               "libs/whiteboard/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!libs/whiteboard/**"]
           }
         },
         "test": {
-          "builder": "@nrwl/builders:jest",
+          "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/whiteboard/jest.config.js",
             "tsConfig": "libs/whiteboard/tsconfig.spec.json",
@@ -1338,11 +1295,11 @@
               "libs/elements-ink/tsconfig.lib.json",
               "libs/elements-ink/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!libs/elements-ink/**"]
           }
         },
         "test": {
-          "builder": "@nrwl/builders:jest",
+          "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/elements-ink/jest.config.js",
             "tsConfig": "libs/elements-ink/tsconfig.spec.json",
@@ -1369,11 +1326,11 @@
               "libs/pages/login/tsconfig.lib.json",
               "libs/pages/login/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!libs/pages/login/**"]
           }
         },
         "test": {
-          "builder": "@nrwl/builders:jest",
+          "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/pages/login/jest.config.js",
             "tsConfig": "libs/pages/login/tsconfig.spec.json",
@@ -1388,7 +1345,7 @@
       "typescriptMismatch": false,
       "versionMismatch": false
     },
-    "defaultCollection": "@nrwl/schematics"
+    "defaultCollection": "@nrwl/angular"
   },
   "defaultProject": "polpo-classroom-web",
   "schematics": {

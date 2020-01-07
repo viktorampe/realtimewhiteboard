@@ -1,6 +1,6 @@
 import { inject, TestBed } from '@angular/core/testing';
 import { EduNetApi } from '@diekeure/polpo-api-angular-sdk';
-import { hot } from '@nrwl/nx/testing';
+import { hot } from '@nrwl/angular/testing';
 import { EduNetFixture } from './../+fixtures/EduNet.fixture';
 import { EduNetService } from './edu-net.service';
 import { EduNetServiceInterface } from './edu-net.service.interface';

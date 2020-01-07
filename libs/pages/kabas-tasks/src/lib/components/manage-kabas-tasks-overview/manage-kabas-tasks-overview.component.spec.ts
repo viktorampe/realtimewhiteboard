@@ -6,7 +6,7 @@ import {
   MatSelectModule,
   MatSlideToggleModule
 } from '@angular/material';
-import { By } from '@angular/platform-browser';
+import { By, HAMMER_LOADER } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -20,7 +20,7 @@ import {
 } from '@campus/shared';
 import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
-import { hot } from '@nrwl/nx/testing';
+import { hot } from '@nrwl/angular/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -73,7 +73,11 @@ describe('ManageKabasTasksOverviewComponent', () => {
         { provide: ActivatedRoute, useValue: { queryParams } },
 
         { provide: ENVIRONMENT_ICON_MAPPING_TOKEN, useValue: {} },
-        { provide: ENVIRONMENT_TESTING_TOKEN, useValue: {} }
+        { provide: ENVIRONMENT_TESTING_TOKEN, useValue: {} },
+        {
+          provide: HAMMER_LOADER,
+          useValue: () => new Promise(() => {})
+        }
       ],
       declarations: [ManageKabasTasksOverviewComponent, TaskListItemComponent]
     });

@@ -9,7 +9,7 @@ import {
   FilterServiceInterface,
   FILTER_SERVICE_TOKEN
 } from '@campus/utils';
-import { hot } from '@nrwl/nx/testing';
+import { hot } from '@nrwl/angular/testing';
 import { BehaviorSubject } from 'rxjs';
 import { TasksViewModel } from '../tasks.viewmodel';
 import { LearningAreasWithTaskInfoInterface } from '../tasks.viewmodel.interfaces';

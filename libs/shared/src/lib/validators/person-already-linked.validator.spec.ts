@@ -8,7 +8,7 @@ import {
   PersonFixture
 } from '@campus/dal';
 import { Store, StoreModule } from '@ngrx/store';
-import { hot } from '@nrwl/nx/testing';
+import { hot } from '@nrwl/angular/testing';
 import { PersonAlreadyLinkedValidator } from './person-already-linked.validator';
 
 describe('PersonAlreadyLinkedValidator', () => {
@@ -18,7 +18,15 @@ describe('PersonAlreadyLinkedValidator', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
-        StoreModule.forRoot({}),
+        StoreModule.forRoot(
+          {},
+          {
+            runtimeChecks: {
+              strictStateImmutability: false,
+              strictActionImmutability: false
+            }
+          }
+        ),
         ...getStoreModuleForFeatures([LinkedPersonReducer])
       ],
       providers: [PersonAlreadyLinkedValidator]

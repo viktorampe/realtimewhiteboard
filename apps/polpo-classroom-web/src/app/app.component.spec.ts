@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { async, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
+import { By, HAMMER_LOADER } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { WINDOW } from '@campus/browser';
@@ -41,6 +41,10 @@ describe('AppComponent', () => {
               search: ''
             }
           }
+        },
+        {
+          provide: HAMMER_LOADER,
+          useValue: () => new Promise(() => {})
         }
       ]
     });

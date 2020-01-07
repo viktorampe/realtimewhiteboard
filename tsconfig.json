@@ -60,7 +60,9 @@
       "@campus/whiteboard": ["libs/whiteboard/src/index.ts"],
       "@campus/pages/login": ["libs/pages/login/src/index.ts"]
     },
-    "module": "es2015"
+    "module": "es2015",
+    "rootDir": ".",
+    "esModuleInterop": true
   },
   "exclude": ["node_modules", "tmp", "apps/*e2e*"],
   "include": ["**/*.ts"]

@@ -19,7 +19,7 @@ import {
 } from '@campus/ui';
 import { EduContentBookInterface } from '@diekeure/polpo-api-angular-sdk';
 import { Dictionary } from '@ngrx/entity';
-import { hot } from '@nrwl/nx/testing';
+import { hot } from '@nrwl/angular/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { PracticeViewModel } from '../practice.viewmodel';
 import { MockPracticeViewModel } from '../practice.viewmodel.mock';

@@ -6,7 +6,7 @@ import { ActivatedRoute } from '@angular/router';
 import { LearningAreaInterface, ResultFixture } from '@campus/dal';
 import { MockActivatedRoute, MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
-import { hot } from '@nrwl/nx/testing';
+import { hot } from '@nrwl/angular/testing';
 import { BehaviorSubject } from 'rxjs';
 import { ReportsViewModel } from '../reports.viewmodel';
 import { AssignmentResultInterface } from '../reports.viewmodel.interfaces';
