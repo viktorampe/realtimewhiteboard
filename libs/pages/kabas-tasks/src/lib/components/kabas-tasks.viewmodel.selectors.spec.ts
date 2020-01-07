@@ -32,7 +32,7 @@ import {
 } from '@campus/dal';
 import { routerReducer } from '@ngrx/router-store';
 import { Action, select, Store, StoreModule } from '@ngrx/store';
-import { hot } from '@nrwl/nx/testing';
+import { hot } from '@nrwl/angular/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { AssigneeTypesEnum } from '../interfaces/Assignee.interface';
 import { getTasksWithAssignments } from './kabas-tasks.viewmodel.selectors';
@@ -41,7 +41,15 @@ describe('Kabas-tasks viewmodel selectors', () => {
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [
-        StoreModule.forRoot({ router: routerReducer }),
+        StoreModule.forRoot(
+          { router: routerReducer },
+          {
+            runtimeChecks: {
+              strictStateImmutability: false,
+              strictActionImmutability: false
+            }
+          }
+        ),
         ...getStoreModuleForFeatures([
           ClassGroupReducer,
           GroupReducer,

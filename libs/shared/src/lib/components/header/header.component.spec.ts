@@ -9,7 +9,7 @@ import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
-import { hot } from '@nrwl/nx/testing';
+import { hot } from '@nrwl/angular/testing';
 import { BehaviorSubject, of, Subject } from 'rxjs';
 import { PERMISSION_SERVICE_TOKEN } from '../../auth';
 import { HasPermissionDirective } from '../../auth/has-permission.directive';

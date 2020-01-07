@@ -1,5 +1,5 @@
 <campus-page-bar>
-  <ng-container *ngIf="(boeke$ | async) as boeke">
+  <ng-container *ngIf="boeke$ | async as boeke">
     <campus-button
       class="shared-header__contextual__button"
       data-cy="nav-open-boeke"
@@ -20,7 +20,7 @@
       (click)="toggleBoekeFavorite(boeke)"
     >
       <ng-container
-        *ngIf="(isBoekeFavorite$ | async) as isBoekeFavorite; else notFavorite"
+        *ngIf="isBoekeFavorite$ | async as isBoekeFavorite; else notFavorite"
         ><span>Verwijder uit favorieten</span></ng-container
       >
       <ng-template #notFavorite>
@@ -33,13 +33,13 @@
 <div class="method-chapter">
   <campus-collapsible-sheet>
     <div aside>
-      <mat-nav-list *ngIf="(currentMethodParams$ | async) as params">
+      <mat-nav-list *ngIf="currentMethodParams$ | async as params">
         <div class="method-chapter__list-header" matSubheader
           >Kies een hoofdstuk</div
         >
         <mat-list-item
           data-cy="lesson-link"
-          *ngFor="let toc of (lessonsForChapter$ | async)"
+          *ngFor="let toc of lessonsForChapter$ | async"
           (click)="clickOpenToc(toc.id, toc.depth)"
           class="method-chapter__lesson-link"
           [ngClass]="'method-chapter__lesson-link--depth-' + toc.depth"

@@ -1,8 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
-import { MatCardModule } from '@angular/material';
+import { MatCardModule, MatIconRegistry } from '@angular/material';
 import { MatIconModule } from '@angular/material/icon';
 import { By, HAMMER_LOADER } from '@angular/platform-browser';
+import { MockMatIconRegistry } from '@campus/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { CardimageComponent } from '../cardimage/cardimage.component';
 import { ColorlistComponent } from '../colorlist/colorlist.component';
@@ -26,7 +27,8 @@ describe('CardComponent', () => {
         {
           provide: HAMMER_LOADER,
           useValue: () => new Promise(() => {})
-        }
+        },
+        { provide: MatIconRegistry, useClass: MockMatIconRegistry }
       ]
     });
   });

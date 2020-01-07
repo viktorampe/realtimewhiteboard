@@ -5,10 +5,10 @@
     [iconClass]="'warning'"
   >
   </campus-page-header>
-  <ng-container *ngIf="(statusCode$ | async) as statusCode">
+  <ng-container *ngIf="statusCode$ | async as statusCode">
     <div [ngSwitch]="statusCode">
       <ng-container *ngSwitchCase="401">
-        <ng-container *ngIf="(currentUser$ | async) as user; else noUser">
+        <ng-container *ngIf="currentUser$ | async as user; else noUser">
           <p
             >Je hebt niet de juiste bevoegdheden om deze actie uit te voeren. Je
             ben aangemeld als {{ user.displayName }}.</p

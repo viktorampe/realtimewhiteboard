@@ -36,7 +36,7 @@
 
   <ng-container *ngIf="learningAreas.length > 0; else noLearningAreas">
     <ng-container
-      *ngIf="(filterTextInput.result$ | async) as filteredLearningAreas"
+      *ngIf="filterTextInput.result$ | async as filteredLearningAreas"
     >
       <div class="pages-tasks__container__learning-areas-count">
         {{ filteredLearningAreas.length }} van

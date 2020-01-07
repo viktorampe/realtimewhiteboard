@@ -1,36 +1,38 @@
 {
-  "fileServerFolder": "../../dist/out-tsc/apps/kabas-web-e2e",
-  "fixturesFolder": "../../dist/out-tsc/apps/kabas-web-e2e/src/fixtures",
-  "integrationFolder": "../../dist/out-tsc/apps/kabas-web-e2e/src/integration",
-  "pluginsFile": "../../dist/out-tsc/apps/kabas-web-e2e/src/plugins/index.js",
-  "supportFile": false,
+  "fileServerFolder": ".",
+  "fixturesFolder": "./src/fixtures",
+  "integrationFolder": "./src/integration",
+  "pluginsFile": "./src/plugins/index",
+  "supportFile": "./src/support/index.ts",
   "video": false,
-  "videosFolder": "../../dist/out-tsc/apps/kabas-web-e2e/videos",
-  "screenshotsFolder": "../../dist/out-tsc/apps/kabas-web-e2e/screenshots",
   "chromeWebSecurity": false,
   "defaultCommandTimeout": 10000,
-  "testFiles": "**/*.spec.js",
+  "testFiles": "**/*.spec.ts",
   "env": {
     "development": {
       "apiUrl": "http://api.kabas.localhost:3000/",
+      "cookieDomain": ".kabas.localhost",
       "apiPaths": {
         "eduContent": "api/eduContents",
         "ludoAssets": "api/educontent-assets-ludo"
       },
       "appPaths": {
-        "methods": "methods"
+        "methods": "methods",
+        "practice": "practice"
       },
       "username": "teacher1",
       "password": "testje"
     },
     "staging": {
       "apiUrl": "https://api.staging.lk2020.be/",
+      "cookieDomain": ".kabas.localhost",
       "apiPaths": {
         "eduContent": "api/eduContents",
         "ludoAssets": "api/educontent-assets-ludo"
       },
       "appPaths": {
-        "methods": "methods"
+        "methods": "methods",
+        "practice": "practice"
       },
       "username": "teacher1",
       "password": "testje"

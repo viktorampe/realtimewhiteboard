@@ -1,6 +1,6 @@
 import { InjectionToken } from '@angular/core';
 import { Action } from '@ngrx/store';
-import { DataPersistence } from '@nrwl/nx';
+import { DataPersistence } from '@nrwl/angular';
 import { Observable } from 'rxjs';
 import { DalState } from '../+state';
 import { FeedbackTriggeringAction } from '../+state/effect-feedback';

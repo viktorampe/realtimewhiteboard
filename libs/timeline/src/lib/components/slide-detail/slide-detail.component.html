@@ -1,4 +1,4 @@
-<ng-container *ngIf="(chosenType$ | async) as slideType">
+<ng-container *ngIf="chosenType$ | async as slideType">
   <form [formGroup]="slideForm" class="timeline-slide-detail__form">
     <div class="form-body">
       <mat-horizontal-stepper #stepper>

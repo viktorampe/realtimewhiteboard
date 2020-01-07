@@ -1,6 +1,6 @@
 <h1>Welcome to the dev side</h1>
 
-<ng-container *ngIf="(route$ | async) as route">
+<ng-container *ngIf="route$ | async as route">
   <h2 style="color:#E75480">PARAMS IN THIS ROUTE:</h2>
   <ul>
     <li style="color:#E75480" *ngFor="let routeParam of route">{{

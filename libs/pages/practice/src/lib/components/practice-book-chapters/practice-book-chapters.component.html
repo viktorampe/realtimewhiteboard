@@ -1,25 +1,35 @@
 <div class="pages-practice-book-chapters__header">
   <campus-button
+    data-cy="back-link"
     iconClass="arrow-back"
     (click)="clickBackLink()"
   ></campus-button>
   <campus-page-header [title]="'Kies een hoofdstuk'"> </campus-page-header>
 </div>
 <mat-list
-  *ngIf="(chaptersWithStatus$ | async) as chaptersWithStatus"
+  *ngIf="chaptersWithStatus$ | async as chaptersWithStatus"
   class="pages-practice-book-chapters__chapter__container"
 >
   <a
+    data-cy="chapter-block"
     mat-list-item
     *ngFor="let chapter of chaptersWithStatus"
     class="pages-practice-book-chapters__chapter"
     [routerLink]="[chapter.tocId]"
   >
-    <div matLine>{{ chapter.title }}</div>
+    <div data-cy="chapter-block-title" matLine>{{ chapter.title }}</div>
     <div matLine>
-      <span>{{ chapter.exercises.available }} oefeningen</span> -
-      <span>{{ chapter.exercises.completed }} gemaakt</span> -
-      <span>nog {{ chapter.kwetonsRemaining }} kwetons te behalen</span>
+      <span data-cy="chapter-block-exercises-available"
+        >{{ chapter.exercises.available }} oefeningen</span
+      >
+      -
+      <span data-cy="chapter-block-exercises-completed"
+        >{{ chapter.exercises.completed }} gemaakt</span
+      >
+      -
+      <span data-cy="chapter-block-kwetons-remaining"
+        >nog {{ chapter.kwetonsRemaining }} kwetons te behalen</span
+      >
     </div>
   </a>
 </mat-list>

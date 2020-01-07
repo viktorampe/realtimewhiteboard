@@ -1,6 +1,6 @@
-<div *ngIf="(ownResults$ | async) as ownResults" class="page-results">
+<div *ngIf="ownResults$ | async as ownResults" class="page-results">
   <campus-page-header
-    *ngIf="(learningArea$ | async) as learningArea"
+    *ngIf="learningArea$ | async as learningArea"
     [layout]="'centered'"
     [title]="learningArea.name"
     [subtitle]="'Taken &amp; oefeningen in bundels'"

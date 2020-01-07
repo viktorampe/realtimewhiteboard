@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
-import { hot } from '@nrwl/nx/testing';
+import { hot } from '@nrwl/angular/testing';
 import { Observable } from 'rxjs';
 import { TaskClassGroupServiceInterface } from '.';
 import { TaskClassGroupService } from './task-class-group.service';

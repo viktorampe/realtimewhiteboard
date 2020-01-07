@@ -32,7 +32,7 @@ import {
   MultiCheckBoxTableItemColumnInterface,
   UiModule
 } from '@campus/ui';
-import { hot } from '@nrwl/nx/testing';
+import { hot } from '@nrwl/angular/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { MethodViewModel } from '../method.viewmodel';
 import { MockMethodViewModel } from '../method.viewmodel.mock';

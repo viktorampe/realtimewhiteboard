@@ -17,8 +17,7 @@ import Card from '../../interfaces/card.interface';
   styleUrls: ['./card.component.scss']
 })
 export class CardComponent implements OnInit, OnChanges {
-  @ViewChild('inputContent') inputContent: ElementRef;
-
+  @ViewChild('inputContent', { static: false }) inputContent: ElementRef;
   @Input() card: Card;
   @Output() deleteCard = new EventEmitter();
   @Output() lastColor = new EventEmitter<string>();

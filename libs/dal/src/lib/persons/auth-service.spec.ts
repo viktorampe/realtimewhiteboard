@@ -4,7 +4,7 @@ import {
   PersonApi,
   SDKToken
 } from '@diekeure/polpo-api-angular-sdk';
-import { hot } from '@nrwl/nx/testing';
+import { hot } from '@nrwl/angular/testing';
 import { Observable, of } from 'rxjs';
 import { PersonInterface } from '../+models/Person.interface';
 import { AuthService } from './auth-service';

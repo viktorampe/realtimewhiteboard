@@ -22,7 +22,7 @@
       quicklinkPosition="page-right"
     ></campus-header>
     <campus-banner
-      *ngIf="(bannerFeedback$ | async) as bannerFeedback"
+      *ngIf="bannerFeedback$ | async as bannerFeedback"
       [id]="bannerFeedback.id"
       [message]="bannerFeedback.message"
       [icon]="bannerFeedback.icon"

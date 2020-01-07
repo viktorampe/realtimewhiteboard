@@ -1,5 +1,5 @@
 import { fakeAsync, TestBed } from '@angular/core/testing';
-import { hot } from '@nrwl/nx/testing';
+import { hot } from '@nrwl/angular/testing';
 import {
   FileReaderError,
   FileReaderService,

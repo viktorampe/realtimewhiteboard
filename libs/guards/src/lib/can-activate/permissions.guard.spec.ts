@@ -13,7 +13,7 @@ import {
 } from '@campus/dal';
 import { PermissionService, PERMISSION_SERVICE_TOKEN } from '@campus/shared';
 import { Store, StoreModule } from '@ngrx/store';
-import { hot } from '@nrwl/nx/testing';
+import { hot } from '@nrwl/angular/testing';
 import { PermissionGuard } from './permission.guard';
 
 describe('PermissionGuard', () => {
@@ -30,7 +30,15 @@ describe('PermissionGuard', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
-        StoreModule.forRoot({}),
+        StoreModule.forRoot(
+          {},
+          {
+            runtimeChecks: {
+              strictStateImmutability: false,
+              strictActionImmutability: false
+            }
+          }
+        ),
         ...StateFeatureBuilder.getStoreModuleForFeatures([UserReducer]),
         RouterTestingModule
       ],

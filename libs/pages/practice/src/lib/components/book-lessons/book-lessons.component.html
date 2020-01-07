@@ -3,9 +3,10 @@
 <div class="practice-book-lessons practice-book-lessons__container">
   <campus-collapsible-sheet>
     <div aside>
-      <mat-nav-list *ngIf="(currentPracticeParams$ | async) as params">
+      <mat-nav-list *ngIf="currentPracticeParams$ | async as params">
         <div class="practice-book-lessons__list-header" matSubheader>
           <campus-button
+            data-cy="back-link"
             class="practice-book-lessons__back-link"
             [iconClass]="'arrow-back'"
             (click)="clickToBookChapters(params.book)"
@@ -14,7 +15,7 @@
         </div>
 
         <mat-list-item
-          *ngIf="(currentChapter$ | async) as chapter"
+          *ngIf="currentChapter$ | async as chapter"
           data-cy="chapter-item"
           class="practice-book-lessons__lesson-link"
           (click)="clickOpenToc(params.book, params.chapter)"
@@ -30,7 +31,7 @@
 
         <mat-list-item
           data-cy="lesson-link"
-          *ngFor="let toc of (tocsForToc$ | async)"
+          *ngFor="let toc of tocsForToc$ | async"
           (click)="clickOpenToc(params.book, params.chapter, toc.id)"
           class="practice-book-lessons__lesson-link"
           [ngClass]="'practice-book-lessons__lesson-link--depth-' + toc.depth"

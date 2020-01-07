@@ -75,7 +75,8 @@ export class TestContainerComponent implements AfterViewInit {
   @ViewChildren(SearchPortalDirective)
   private portalHosts: QueryList<SearchPortalDirective>;
 
-  @ViewChild(SearchComponent) private searchComponent: SearchComponent;
+  @ViewChild(SearchComponent, { static: true })
+  private searchComponent: SearchComponent;
 
   ngAfterViewInit() {
     this.searchComponent.searchPortals = this.portalHosts;
@@ -522,11 +523,7 @@ describe('SearchComponent', () => {
         expect(() => {
           hostFixture.detectChanges();
         }).toThrowError(
-          `Portal ${
-            newSearchMode.searchTerm.domHost
-          } not found! Did you add a 'searchPortal="${
-            newSearchMode.searchTerm.domHost
-          }"' to the page?'`
+          `Portal ${newSearchMode.searchTerm.domHost} not found! Did you add a 'searchPortal="${newSearchMode.searchTerm.domHost}"' to the page?'`
         );
 
         const searchTermComponent = hostFixture.debugElement.query(
@@ -715,11 +712,7 @@ describe('SearchComponent', () => {
 
     it('should throw error when target portal is not found', () => {
       const filter = { domHost: 'iDontExist' } as SearchFilterInterface;
-      const expectedError = `Portal ${
-        filter.domHost
-      } not found! Did you add a 'searchPortal="${
-        filter.domHost
-      }"' to the page?'`;
+      const expectedError = `Portal ${filter.domHost} not found! Did you add a 'searchPortal="${filter.domHost}"' to the page?'`;
       expect(() => searchComponent['addSearchFilter'](filter)).toThrow(
         expectedError
       );

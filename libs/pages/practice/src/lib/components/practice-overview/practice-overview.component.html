@@ -1,6 +1,6 @@
 <div
   class="pages-practice__container pages-practice-overview campus-page"
-  *ngIf="(unlockedBooks$ | async) as books"
+  *ngIf="unlockedBooks$ | async as books"
 >
   <campus-page-header title="Kies wat je wil oefenen"> </campus-page-header>
 
@@ -35,6 +35,7 @@
     primary
     campusRouterLink="https://www.kweetet.be"
     target="_blank"
+    data-cy="kweetet-link"
   >
     Ga naar Kweetet.be
   </campus-button>

@@ -1,6 +1,6 @@
 import { inject, TestBed } from '@angular/core/testing';
 import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
-import { hot } from '@nrwl/nx/testing';
+import { hot } from '@nrwl/angular/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { ClassGroupServiceInterface } from '.';
 import { ClassGroupFixture } from '../+fixtures';

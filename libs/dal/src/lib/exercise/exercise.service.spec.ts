@@ -1,7 +1,7 @@
 import { inject, TestBed } from '@angular/core/testing';
 import { EduContentApi, PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { Store, StoreModule } from '@ngrx/store';
-import { hot } from '@nrwl/nx/testing';
+import { hot } from '@nrwl/angular/testing';
 import { Observable } from 'rxjs';
 import { ScormCmiMode } from '../+external-interfaces/scorm-api.interface';
 import { CurrentExerciseFixture, EduContentFixture } from '../+fixtures';
@@ -41,7 +41,15 @@ describe('ExerciseService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
-        StoreModule.forRoot({}),
+        StoreModule.forRoot(
+          {},
+          {
+            runtimeChecks: {
+              strictStateImmutability: false,
+              strictActionImmutability: false
+            }
+          }
+        ),
         ...getStoreModuleForFeatures([EduContentReducer])
       ],
       providers: [

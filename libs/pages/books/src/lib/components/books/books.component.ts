@@ -15,7 +15,7 @@ export class BooksComponent implements OnInit {
   listFormat$: Observable<ListFormat> = this.viewModel.listFormat$;
   books$: Observable<EduContent[]>;
 
-  @ViewChild(FilterTextInputComponent)
+  @ViewChild(FilterTextInputComponent, { static: true })
   filterTextInput: FilterTextInputComponent<EduContent[], EduContent>;
 
   constructor(

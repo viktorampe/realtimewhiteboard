@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, TestBed } from '@angular/core/testing';
-import { cold } from '@nrwl/nx/testing';
+import { cold } from '@nrwl/angular/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { of } from 'rxjs';
 import { TimelineConfigFixture } from '../+fixtures/timeline-config.fixture';

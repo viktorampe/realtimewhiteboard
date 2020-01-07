@@ -12,6 +12,7 @@
         [class.ui-multi-check-box-table__header--row-header--last]="last"
         >{{ columnHeader.caption }}</th
       ><th
+        data-cy="check-box-table-item-column-header"
         *ngFor="let columnHeader of itemColumns"
         class="ui-multi-check-box-table__header--item"
         >{{ columnHeader.item[columnHeader.label] }}</th
@@ -28,6 +29,7 @@
         class="ui-multi-check-box-table__body__row__cell--checkbox"
       >
         <mat-checkbox
+          data-cy="check-box-table-select-all"
           #selectAllForColumnCheckBox
           campusClickPreventDefault
           (click)="
@@ -99,6 +101,7 @@
         [class.ui-multi-check-box-table__body__row--odd]="!even"
       >
         <td
+          data-cy="check-box-table-row-header"
           *ngFor="let rowHeaderColumn of rowHeaderColumns"
           class="ui-multi-check-box-table__body__row__cell
            ui-multi-check-box-table__body__row__cell--row-header"
@@ -110,6 +113,7 @@
           ui-multi-check-box-table__body__row__cell--checkbox"
         >
           <mat-checkbox
+            data-cy="check-box-table-select-item"
             #checkbox
             color="primary"
             [checked]="
