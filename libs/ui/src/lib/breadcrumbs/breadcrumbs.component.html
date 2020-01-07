@@ -13,7 +13,7 @@
   </div>
   <div
     class="ui-breadcrumbs__holder__breadcrumbs"
-    *ngFor="let breadCrumb of (breadCrumbs | slice: -maxLength)"
+    *ngFor="let breadCrumb of breadCrumbs | slice: -maxLength"
   >
     <mat-icon [svgIcon]="seperator"></mat-icon>
     <a [routerLink]="breadCrumb.link">{{ breadCrumb.displayText }}</a>

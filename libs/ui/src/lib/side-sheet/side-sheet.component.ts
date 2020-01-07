@@ -61,7 +61,7 @@ export class SideSheetComponent implements OnInit, OnDestroy {
    * @type {MatDrawer}
    * @memberof SideSheetComponent
    */
-  @ViewChild(MatDrawer) private sheet: MatDrawer;
+  @ViewChild(MatDrawer, { static: true }) private sheet: MatDrawer;
   /**
    * Reference to the header directive;
    * Used to show/hide the default header text.
@@ -70,7 +70,7 @@ export class SideSheetComponent implements OnInit, OnDestroy {
    * @type {SideSheetHeaderDirective}
    * @memberof SideSheetComponent
    */
-  @ContentChild(SideSheetHeaderDirective)
+  @ContentChild(SideSheetHeaderDirective, { static: true })
   public header: SideSheetHeaderDirective;
 
   /**

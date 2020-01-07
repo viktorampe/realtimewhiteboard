@@ -3,6 +3,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import {
   MatFormFieldModule,
   MatIconModule,
+  MatIconRegistry,
   MatInputModule
 } from '@angular/material';
 import { By } from '@angular/platform-browser';
@@ -10,6 +11,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { PersonFixture, PersonInterface } from '@campus/dal';
+import { MockMatIconRegistry } from '@campus/testing';
 import { ButtonComponent, UiModule } from '@campus/ui';
 import { configureTestSuite } from 'ng-bullet';
 import { BehaviorSubject } from 'rxjs';
@@ -37,7 +39,10 @@ describe('LoginComponent', () => {
         RouterTestingModule
       ],
       declarations: [LoginComponent],
-      providers: [{ provide: LoginViewModel, useClass: MockLoginViewModel }]
+      providers: [
+        { provide: LoginViewModel, useClass: MockLoginViewModel },
+        { provide: MatIconRegistry, useClass: MockMatIconRegistry }
+      ]
     });
   });
 

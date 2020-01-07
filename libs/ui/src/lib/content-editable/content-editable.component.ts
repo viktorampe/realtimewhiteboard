@@ -38,7 +38,7 @@ export class ContentEditableComponent {
   @Input() multiline = false;
   @Output() textChanged: EventEmitter<string> = new EventEmitter();
 
-  @ViewChild(MatInput)
+  @ViewChild(MatInput, { static: false })
   private inputField: MatInput;
 
   constructor(private cd: ChangeDetectorRef) {}

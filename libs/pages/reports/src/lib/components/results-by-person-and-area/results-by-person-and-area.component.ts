@@ -12,7 +12,7 @@ import { AssignmentResultInterface } from '../reports.viewmodel.interfaces';
   styleUrls: ['./results-by-person-and-area.component.scss']
 })
 export class ResultsByPersonAndAreaComponent implements OnInit {
-  @ViewChild('header') private header: ElementRef;
+  @ViewChild('header', { static: false }) private header: ElementRef;
 
   //input streams
   private routerParams$: Observable<Params>;
@@ -65,11 +65,11 @@ export class ResultsByPersonAndAreaComponent implements OnInit {
     this.reportsViewModel.openContentForReview(result);
   }
 
-  public onScroll(event: Event) {
+  public onScroll(event) {
     if (!this.header) return;
 
     const scrollOptions = {
-      left: event.srcElement.scrollLeft
+      left: event.currentTarget.scrollLeft
     } as ScrollToOptions;
 
     this.header.nativeElement.scrollTo(scrollOptions);

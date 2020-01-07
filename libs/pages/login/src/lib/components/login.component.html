@@ -5,7 +5,7 @@
 >
 </campus-page-header>
 
-<ng-container *ngIf="(currentUser$ | async) as currentUser; else notLoggedIn">
+<ng-container *ngIf="currentUser$ | async as currentUser; else notLoggedIn">
   <div class="pages-login__form ">
     <div class="pages-login__form__title"
       >Je bent ingelogd als {{ currentUser.displayName }}</div
@@ -28,7 +28,7 @@
     >
       <div class="pages-login__form__title">Vul uw gebruikersgegevens in</div>
       <div class="mat-error">
-        <span *ngIf="(errorFeedback$ | async) as error">
+        <span *ngIf="errorFeedback$ | async as error">
           {{ error.message }}
         </span>
       </div>

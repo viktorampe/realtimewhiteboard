@@ -3,7 +3,7 @@ import {
   EduContentBookApi,
   EduContentTOCApi
 } from '@diekeure/polpo-api-angular-sdk';
-import { hot } from '@nrwl/nx/testing';
+import { hot } from '@nrwl/angular/testing';
 import { of } from 'rxjs';
 import {
   EduContentBookFixture,

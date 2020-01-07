@@ -39,6 +39,7 @@
 
     &__status {
       color: $pages-manage-kabas-tasks__task-list-item__status-color;
+      height: 36px !important; // task:*** icons are 36px by 24px
     }
     &__archived {
       color: $pages-manage-kabas-tasks__task-list-item__archived-color;

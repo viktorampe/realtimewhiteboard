@@ -39,7 +39,7 @@ export class DropdownMenuComponent {
   @Input() linkUrl: string;
   @Input() smallWidth: boolean;
 
-  @ViewChild(MatMenuTrigger) private trigger: MatMenuTrigger;
+  @ViewChild(MatMenuTrigger, { static: true }) private trigger: MatMenuTrigger;
 
   toggle() {
     this.trigger.openMenu();

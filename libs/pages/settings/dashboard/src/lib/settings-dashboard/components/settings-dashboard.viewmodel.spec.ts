@@ -14,7 +14,17 @@ describe('SettingsDashboardViewModel', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [StoreModule.forRoot({})],
+      imports: [
+        StoreModule.forRoot(
+          {},
+          {
+            runtimeChecks: {
+              strictActionImmutability: false,
+              strictStateImmutability: false
+            }
+          }
+        )
+      ],
       providers: [
         SettingsDashboardViewModel,
         Store,

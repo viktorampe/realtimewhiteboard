@@ -1,6 +1,6 @@
 import { inject, TestBed } from '@angular/core/testing';
 import { PersonApi, TaskEduContentApi } from '@diekeure/polpo-api-angular-sdk';
-import { hot } from '@nrwl/nx/testing';
+import { hot } from '@nrwl/angular/testing';
 import { Observable } from 'rxjs';
 import { TaskEduContentService } from './task-edu-content.service';
 import { TaskEduContentServiceInterface } from './task-edu-content.service.interface';

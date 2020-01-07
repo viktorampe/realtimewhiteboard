@@ -23,7 +23,9 @@ const routes: Routes = [
       {
         path: 'methods',
         loadChildren: '@campus/pages/methods#PagesMethodsModule',
-        data: { breadcrumbText: 'Methodes' }
+        data: {
+          breadcrumbText: 'Methodes'
+        }
       },
       {
         path: 'tasks',
@@ -78,6 +80,10 @@ const routes: Routes = [
     path: 'login',
     loadChildren: '@campus/pages/login#PagesLoginModule',
     data: { breadcrumbText: 'Login' }
+  },
+  {
+    path: 'logout',
+    loadChildren: '@campus/pages/logout#PagesLogoutModule'
   },
   {
     path: 'error',

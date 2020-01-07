@@ -137,8 +137,9 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
 
   private currentSortMode$ = new BehaviorSubject(TaskSortEnum.NAME);
 
-  @ViewChild('digitalSorting') private digitalSorting: MatSelect;
-  @ViewChild('paperSorting') private paperSorting: MatSelect;
+  @ViewChild('digitalSorting', { static: true })
+  private digitalSorting: MatSelect;
+  @ViewChild('paperSorting', { static: true }) private paperSorting: MatSelect;
 
   constructor(
     private viewModel: KabasTasksViewModel,
@@ -193,7 +194,6 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
       ]
     };
 
-    //todo swap for real icons
     this.taskStatusFilter = {
       name: 'taskStatus',
       label: 'taak status',
@@ -203,21 +203,21 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
         {
           data: {
             status: 'pending',
-            icon: 'task:pending'
+            icon: 'filter:pending'
           },
           visible: true
         },
         {
           data: {
             status: 'active',
-            icon: 'task:active'
+            icon: 'filter:active'
           },
           visible: true
         },
         {
           data: {
             status: 'finished',
-            icon: 'task:finished'
+            icon: 'filter:finished'
           },
           visible: true
         }
@@ -334,7 +334,7 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
   // TODO: implement handler
   clickNewTask() {}
 
-  clickResetFilters() {
+  clickResetFilters(mode?: string) {
     // visually clear selections
     this.clearFilters();
   }

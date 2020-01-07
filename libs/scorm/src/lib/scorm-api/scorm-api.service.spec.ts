@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { WINDOW } from '@campus/browser';
-import { hot } from '@nrwl/nx/testing';
+import { hot } from '@nrwl/angular/testing';
 import { ScormCmiFixture } from './+fixtures/ScormCmi.fixture';
 import { ScormApi } from './scorm-api';
 import { ScormCmiMode } from './scorm-api.interface';

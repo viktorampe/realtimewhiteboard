@@ -12,7 +12,7 @@
   ></campus-filter-text-input>
   <campus-banner
     class="ui-banner--dialog"
-    *ngIf="(feedback$ | async) as feedback"
+    *ngIf="feedback$ | async as feedback"
     [id]="feedback.id"
     [message]="feedback.message"
     [icon]="feedback.icon"
@@ -20,7 +20,7 @@
     (afterDismiss)="onBannerDismiss($event)"
   ></campus-banner>
   <mat-dialog-content>
-    <mat-action-list *ngIf="(filterTextInput.result$ | async) as categories">
+    <mat-action-list *ngIf="filterTextInput.result$ | async as categories">
       <ng-container *ngIf="categories.length; else noContentTemplate">
         <ng-container
           *ngIf="categories[0].quickLinks.length; else noResultsTemplate"

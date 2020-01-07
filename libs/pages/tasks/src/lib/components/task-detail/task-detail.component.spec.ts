@@ -12,7 +12,7 @@ import {
 import { MockActivatedRoute, MockMatIconRegistry } from '@campus/testing';
 import { ListFormat, ListViewItemDirective, UiModule } from '@campus/ui';
 import { FilterService, FILTER_SERVICE_TOKEN } from '@campus/utils';
-import { hot } from '@nrwl/nx/testing';
+import { hot } from '@nrwl/angular/testing';
 import { BehaviorSubject, of } from 'rxjs';
 import { TasksViewModel } from '../tasks.viewmodel';
 import { TaskWithInfoInterface } from '../tasks.viewmodel.interfaces';

@@ -1,7 +1,7 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "outDir": "../../dist/out-tsc/apps/kabas-web",
+    "outDir": "../../dist/out-tsc",
     "types": []
   },
   "exclude": ["src/test-setup.ts", "**/*.spec.ts"],
@@ -23,6 +23,7 @@
     "../../libs/pages/settings/coupled-teachers/src/index.ts",
     "../../libs/pages/settings/avatar/src/index.ts",
     "../../libs/pages/settings/alerts/src/index.ts",
-    "../../libs/pages/login/src/index.ts"
+    "../../libs/pages/login/src/index.ts",
+    "../../libs/pages/logout/src/index.ts"
   ]
 }
