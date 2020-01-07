@@ -2,8 +2,8 @@ import { TestBed } from '@angular/core/testing';
 import { EffectsModule } from '@ngrx/effects';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { StoreModule } from '@ngrx/store';
-import { NxModule } from '@nrwl/nx';
-import { hot } from '@nrwl/nx/testing';
+import { NxModule } from '@nrwl/angular';
+import { hot } from '@nrwl/angular/testing';
 import { Observable } from 'rxjs';
 import { EffectFeedbackActions, EffectFeedbackReducer } from '.';
 import { EffectFeedbackEffects } from './effect-feedback.effects';
@@ -66,7 +66,15 @@ describe('EffectFeedbackEffects', () => {
     TestBed.configureTestingModule({
       imports: [
         NxModule.forRoot(),
-        StoreModule.forRoot({}),
+        StoreModule.forRoot(
+          {},
+          {
+            runtimeChecks: {
+              strictStateImmutability: false,
+              strictActionImmutability: false
+            }
+          }
+        ),
         StoreModule.forFeature(
           EffectFeedbackReducer.NAME,
           EffectFeedbackReducer.reducer,

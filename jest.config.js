@@ -3,10 +3,10 @@ module.exports = {
   transform: {
     '^.+\\.(ts|js|html)$': 'ts-jest'
   },
-  resolver: '@nrwl/builders/plugins/jest/resolver',
+  resolver: '@nrwl/jest/plugins/resolver',
   moduleFileExtensions: ['ts', 'js', 'html'],
-  collectCoverage: process.env.CI,
   coverageReporters: ['cobertura'],
+  collectCoverage: true,
   reporters: process.env.CI
     ? [
         'default',
@@ -21,5 +21,16 @@ module.exports = {
     : ['default'],
   bail: true,
   logHeapUsage: true,
-  restoreMocks: true
+  restoreMocks: true,
+  testPathIgnorePatterns: ['e2e/'],
+  setupFilesAfterEnv: ['./jest-test-setup.ts'],
+  globals: {
+    'ts-jest': {
+      tsConfig: './tsconfig.spec.json',
+      diagnostics: { warnOnly: true },
+      stringifyContentPathRegex: '\\.html$',
+      astTransformers: ['jest-preset-angular/InlineHtmlStripStylesTransformer'],
+      isolatedModules: true
+    }
+  }
 };

@@ -26,7 +26,7 @@ import {
   SearchStateInterface
 } from '@campus/search';
 import { Store, StoreModule } from '@ngrx/store';
-import { cold } from '@nrwl/nx/testing';
+import { cold } from '@nrwl/angular/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { GlobalFilterFactory } from './global-filter.factory';
 
@@ -70,7 +70,15 @@ describe('DiaboloChapterLessonFilterFactory', () => {
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [
-        StoreModule.forRoot({}),
+        StoreModule.forRoot(
+          {},
+          {
+            runtimeChecks: {
+              strictStateImmutability: false,
+              strictActionImmutability: false
+            }
+          }
+        ),
         ...getStoreModuleForFeatures([
           EduContentProductTypeReducer,
           DiaboloPhaseReducer,

@@ -1,6 +1,6 @@
 import { inject, TestBed } from '@angular/core/testing';
 import { SchoolTypeApi } from '@diekeure/polpo-api-angular-sdk';
-import { hot } from '@nrwl/nx/testing';
+import { hot } from '@nrwl/angular/testing';
 import { SchoolTypeFixture } from './../+fixtures/SchoolType.fixture';
 import { SchoolTypeService } from './school-type.service';
 import { SchoolTypeServiceInterface } from './school-type.service.interface';

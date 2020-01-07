@@ -2,7 +2,7 @@
 
 <div
   class="pages-methods__container pages-methods-overview campus-page"
-  *ngIf="(allowedBooks$ | async) as books"
+  *ngIf="allowedBooks$ | async as books"
 >
   <campus-page-header [title]="'Beschikbare methodes'"> </campus-page-header>
 

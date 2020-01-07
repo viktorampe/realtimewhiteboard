@@ -1,1 +1,3 @@
-export type SetupScenarioType = 'kabasMethodsPages';
+export type SetupScenarioType =
+  | 'kabasMethodsPages'
+  | 'kabasUnlockedFreePracticePages';

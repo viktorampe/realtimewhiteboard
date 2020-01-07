@@ -8,7 +8,7 @@
   ></campus-search-term>
 </campus-page-bar>
 
-<div class="campus-page" *ngIf="(favoriteLearningAreas$ | async) as favorites">
+<div class="campus-page" *ngIf="favoriteLearningAreas$ | async as favorites">
   <campus-favorite-areas
     id="{{ favoritesDropListId }}"
     cdkDropList
@@ -19,7 +19,7 @@
     [favoriteLearningAreas]="favorites"
     (removeAreaFromFavorites)="onFavoriteRemoved($event)"
   ></campus-favorite-areas>
-  <ng-container *ngIf="(learningAreas$ | async) as learningAreas">
+  <ng-container *ngIf="learningAreas$ | async as learningAreas">
     <campus-areas-list
       [favoriteLearningAreas]="favorites"
       [learningAreas]="learningAreas"

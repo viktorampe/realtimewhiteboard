@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "outDir": "../../dist/out-tsc/libs/elements-ink",
+    "outDir": "../../dist/out-tsc",
     "target": "es6",
     "module": "commonjs",
     "moduleResolution": "node",

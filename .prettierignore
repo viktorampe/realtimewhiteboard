@@ -1,0 +1,8 @@
+/dist
+/tmp
+/out-tsc
+
+
+/.github
+/.vscode
+/coverage

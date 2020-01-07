@@ -1,6 +1,6 @@
 import { inject, TestBed } from '@angular/core/testing';
 import { MethodApi, PersonApi } from '@diekeure/polpo-api-angular-sdk';
-import { hot } from '@nrwl/nx/testing';
+import { hot } from '@nrwl/angular/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { MethodFixture } from '../+fixtures';
 import { MethodService } from './method.service';

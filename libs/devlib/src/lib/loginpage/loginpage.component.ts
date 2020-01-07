@@ -68,7 +68,7 @@ export class LoginpageComponent implements OnInit {
     }
   ];
 
-  @ViewChild('selectFilter')
+  @ViewChild('selectFilter', { static: true })
   selectFilterComponent: SelectFilterComponent;
 
   constructor(

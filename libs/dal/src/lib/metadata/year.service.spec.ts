@@ -1,6 +1,6 @@
 import { inject, TestBed } from '@angular/core/testing';
 import { EduContentBookApi, YearApi } from '@diekeure/polpo-api-angular-sdk';
-import { hot } from '@nrwl/nx/testing';
+import { hot } from '@nrwl/angular/testing';
 import { YearFixture } from './../+fixtures/Year.fixture';
 import { YearService } from './year.service';
 import { YearServiceInterface } from './year.service.interface';

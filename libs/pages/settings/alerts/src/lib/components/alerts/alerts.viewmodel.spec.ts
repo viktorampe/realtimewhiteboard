@@ -17,7 +17,15 @@ let store: Store<DalState>;
 beforeEach(() => {
   TestBed.configureTestingModule({
     imports: [
-      StoreModule.forRoot({}),
+      StoreModule.forRoot(
+        {},
+        {
+          runtimeChecks: {
+            strictStateImmutability: false,
+            strictActionImmutability: false
+          }
+        }
+      ),
       ...StateFeatureBuilder.getModuleWithForFeatureProviders([AlertReducer])
     ],
     providers: [

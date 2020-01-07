@@ -19,7 +19,7 @@
 
 <div
   class="campus-page pages-bundles__container"
-  *ngIf="(sharedInfo$ | async) as sharedInfo"
+  *ngIf="sharedInfo$ | async as sharedInfo"
 >
   <campus-page-header
     [title]="'Mijn bundels'"
@@ -32,9 +32,7 @@
   >
   <ng-container *ngIf="sharedInfo.learningAreas.length > 0; else noSharedInfo">
     <ng-container
-      *ngIf="
-        (filterTextInput.result$ | async) as filteredSharedLearningAreaInfo
-      "
+      *ngIf="filterTextInput.result$ | async as filteredSharedLearningAreaInfo"
     >
       <div
         class="pages-bundles__container__learning-areas-count"

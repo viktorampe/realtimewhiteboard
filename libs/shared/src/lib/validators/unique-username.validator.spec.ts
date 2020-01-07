@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { AbstractControl } from '@angular/forms';
 import { AUTH_SERVICE_TOKEN, PERSON_SERVICE_TOKEN } from '@campus/dal';
-import { hot } from '@nrwl/nx/testing';
+import { hot } from '@nrwl/angular/testing';
 import { Observable } from 'rxjs';
 import { UniqueUsernameValidator } from './unique-username.validator';
 

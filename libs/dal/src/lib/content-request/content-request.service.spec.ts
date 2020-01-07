@@ -1,6 +1,6 @@
 import { inject, TestBed } from '@angular/core/testing';
 import { EduContentApi } from '@diekeure/polpo-api-angular-sdk';
-import { hot } from '@nrwl/nx/testing';
+import { hot } from '@nrwl/angular/testing';
 import { ContentRequestService } from './content-request.service';
 import { ContentRequestServiceInterface } from './content-request.service.interface';
 
