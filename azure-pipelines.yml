@@ -14,122 +14,127 @@ trigger:
   - master
   - test/mock-master
 
-variables:
-  dkRanTests: false
-  dkBuild: false
-  dkE2E: false
+- job: 'ParallelTesting'
+  pool: 'Hosted Linux Preview'
+  strategy:
+    parallel: 3
+    
+  variables:
+    dkRanTests: false
+    dkBuild: false
+    dkE2E: false
 
-pool:
-  name: 'Campus'
+  pool:
+    name: 'Campus'
 
-steps:
-  - script: |
-      echo '##vso[task.setvariable variable=CI]1'
-    displayName: 'Export environment variables'
-  - script: |
-      echo '##vso[task.setvariable variable=dkBuild]true'
-    condition: and(in(variables['Build.SourceBranch'], 'refs/heads/master', 'refs/heads/test/mock-master'), in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI'))
-    displayName: '(Check) Enable dkBuild (artifacts) if pushing to master'
-  - script: |
-      echo '##vso[task.setvariable variable=dkE2E]true'
-    condition: or(in(variables['System.PullRequest.TargetBranch'], 'master', 'test/mock-master'), eq(variables['dkBuild'], 'true'), and(in(variables['Build.SourceBranch'], 'refs/heads/develop'), in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI')))
-    displayName: '(Check) Enable dkE2E (end-to-end tests) if building, target is master or merge to develop'
-  - script: |
-      echo Build information
-      echo -----------------
-      echo Build.Reason = $(Build.Reason)
-      echo Build.SourceBranch	= $(Build.SourceBranch)
-      echo System.PullRequest.TargetBranch = $(System.PullRequest.TargetBranch)
-      echo Build.SourcesDirectory = $(Build.SourcesDirectory)
-      echo dkRanTests = $(dkRanTests)
-      echo dkBuild = $(dkBuild)
-      echo
-      echo Environment
-      echo -----------
-      env
-    displayName: 'Build information'
-  - task: NodeTool@0
-    displayName: 'Install Node.js'
-    inputs:
-      versionSpec: '10.x'
-  - script: |
-      rm -rf dist junit coverage reportgenerator
-    displayName: 'Clear junit, coverage reports, build output'
-  - task: Npm@1
-    displayName: 'Npm install'
-    inputs:
-      command: ci
-      customEndpoint: diekeure-registry
-  - script: |
-      npm run lint
-    displayName: 'Lint all'
-  - script: |
-      npm run format:check
-    displayName: 'Format check'
-  - script: npm run test
-    displayName: 'Test all'
-  - script: |
-      npm run e2e:polpo:staging
-    displayName: 'End-to-end all polpo'
-    condition: and(succeeded(), eq(variables['dkE2E'], 'true'))
-  - script: |
-      npm run e2e:kabas:staging
-    displayName: 'End-to-end all kabas'
-    condition: and(succeeded(), eq(variables['dkE2E'], 'true'))
-  - bash: |
-      if [ -d "coverage" ]; then
-        echo "##vso[task.setVariable variable=dkRanTests]true"
-        echo Tests ran
-      fi
-    displayName: '(Check) Set dkRanTests to true if coverage folder exists'
-  - task: PublishTestResults@2
-    displayName: 'Publish test results'
-    condition: eq(variables['dkRanTests'], 'true')
-    inputs:
-      testResultsFormat: 'JUnit'
-      testResultsFiles: 'junit/*.xml'
-  - task: Palmmedia.reportgenerator.reportgenerator-build-release-task.reportgenerator@4
-    displayName: 'ReportGenerator: combine coverage reports'
-    condition: eq(variables['dkRanTests'], 'true')
-    inputs:
-      reports: $(Build.SourcesDirectory)/coverage/**/cobertura-coverage.xml
-      targetdir: $(Build.SourcesDirectory)/reportgenerator
-      reporttypes: 'Cobertura'
-      verbosity: 'Off'
-  - task: PublishCodeCoverageResults@1
-    displayName: 'Publish code coverage summary'
-    condition: eq(variables['dkRanTests'], 'true')
-    inputs:
-      codeCoverageTool: 'cobertura'
-      summaryFileLocation: $(Build.SourcesDirectory)/reportgenerator/Cobertura.xml
-  - script: |
-      npm run build:polpo:staging
-    displayName: '[Build] polpo:staging'
-    condition: and(succeeded(), eq(variables['dkBuild'], 'true'))
-  - script: |
-      npm run build:polpo:production
-    displayName: '[Build] polpo:production'
-    condition: and(succeeded(), eq(variables['dkBuild'], 'true'))
-  - script: |
-      npm run build:kabas:staging
-    displayName: '[Build] kabas:staging'
-    condition: and(succeeded(), eq(variables['dkBuild'], 'true'))
-  - script: |
-      npm run build:kabas:production
-    displayName: '[Build] kabas:production'
-    condition: and(succeeded(), eq(variables['dkBuild'], 'true'))
-  - script: |
-      npm run build:elements-ink
-    displayName: '[Build] timeline-editor'
-    condition: and(succeeded(), eq(variables['dkBuild'], 'true'))
-  - script: |
-      rm -rf dist/out-tsc
-    displayName: 'Remove e2e screenshots and videos from dist before copying'
-  - task: CopyFiles@2
-    displayName: 'Copy builds to artifacts'
-    condition: and(succeeded(), eq(variables['dkBuild'], 'true'))
-    inputs:
-      contents: 'dist/**'
-      targetFolder: $(Build.ArtifactStagingDirectory)
-  - task: PublishBuildArtifacts@1
-    condition: and(succeeded(), eq(variables['dkBuild'], 'true'))
+  steps:
+    - script: |
+        echo '##vso[task.setvariable variable=CI]1'
+      displayName: 'Export environment variables'
+    - script: |
+        echo '##vso[task.setvariable variable=dkBuild]true'
+      condition: and(in(variables['Build.SourceBranch'], 'refs/heads/master', 'refs/heads/test/mock-master'), in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI'))
+      displayName: '(Check) Enable dkBuild (artifacts) if pushing to master'
+    - script: |
+        echo '##vso[task.setvariable variable=dkE2E]true'
+      condition: or(in(variables['System.PullRequest.TargetBranch'], 'master', 'test/mock-master'), eq(variables['dkBuild'], 'true'), and(in(variables['Build.SourceBranch'], 'refs/heads/develop'), in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI')))
+      displayName: '(Check) Enable dkE2E (end-to-end tests) if building, target is master or merge to develop'
+    - script: |
+        echo Build information
+        echo -----------------
+        echo Build.Reason = $(Build.Reason)
+        echo Build.SourceBranch	= $(Build.SourceBranch)
+        echo System.PullRequest.TargetBranch = $(System.PullRequest.TargetBranch)
+        echo Build.SourcesDirectory = $(Build.SourcesDirectory)
+        echo dkRanTests = $(dkRanTests)
+        echo dkBuild = $(dkBuild)
+        echo
+        echo Environment
+        echo -----------
+        env
+      displayName: 'Build information'
+    - task: NodeTool@0
+      displayName: 'Install Node.js'
+      inputs:
+        versionSpec: '10.x'
+    - script: |
+        rm -rf dist junit coverage reportgenerator
+      displayName: 'Clear junit, coverage reports, build output'
+    - task: Npm@1
+      displayName: 'Npm install'
+      inputs:
+        command: ci
+        customEndpoint: diekeure-registry
+    - script: |
+        npm run lint
+      displayName: 'Lint all'
+    - script: |
+        npm run format:check
+      displayName: 'Format check'
+    - script: npm run test
+      displayName: 'Test all'
+    - script: |
+        npm run e2e:polpo:staging
+      displayName: 'End-to-end all polpo'
+      condition: and(succeeded(), eq(variables['dkE2E'], 'true'))
+    - script: |
+        npm run e2e:kabas:staging
+      displayName: 'End-to-end all kabas'
+      condition: and(succeeded(), eq(variables['dkE2E'], 'true'))
+    - bash: |
+        if [ -d "coverage" ]; then
+          echo "##vso[task.setVariable variable=dkRanTests]true"
+          echo Tests ran
+        fi
+      displayName: '(Check) Set dkRanTests to true if coverage folder exists'
+    - task: PublishTestResults@2
+      displayName: 'Publish test results'
+      condition: eq(variables['dkRanTests'], 'true')
+      inputs:
+        testResultsFormat: 'JUnit'
+        testResultsFiles: 'junit/*.xml'
+    - task: Palmmedia.reportgenerator.reportgenerator-build-release-task.reportgenerator@4
+      displayName: 'ReportGenerator: combine coverage reports'
+      condition: eq(variables['dkRanTests'], 'true')
+      inputs:
+        reports: $(Build.SourcesDirectory)/coverage/**/cobertura-coverage.xml
+        targetdir: $(Build.SourcesDirectory)/reportgenerator
+        reporttypes: 'Cobertura'
+        verbosity: 'Off'
+    - task: PublishCodeCoverageResults@1
+      displayName: 'Publish code coverage summary'
+      condition: eq(variables['dkRanTests'], 'true')
+      inputs:
+        codeCoverageTool: 'cobertura'
+        summaryFileLocation: $(Build.SourcesDirectory)/reportgenerator/Cobertura.xml
+    - script: |
+        npm run build:polpo:staging
+      displayName: '[Build] polpo:staging'
+      condition: and(succeeded(), eq(variables['dkBuild'], 'true'))
+    - script: |
+        npm run build:polpo:production
+      displayName: '[Build] polpo:production'
+      condition: and(succeeded(), eq(variables['dkBuild'], 'true'))
+    - script: |
+        npm run build:kabas:staging
+      displayName: '[Build] kabas:staging'
+      condition: and(succeeded(), eq(variables['dkBuild'], 'true'))
+    - script: |
+        npm run build:kabas:production
+      displayName: '[Build] kabas:production'
+      condition: and(succeeded(), eq(variables['dkBuild'], 'true'))
+    - script: |
+        npm run build:elements-ink
+      displayName: '[Build] timeline-editor'
+      condition: and(succeeded(), eq(variables['dkBuild'], 'true'))
+    - script: |
+        rm -rf dist/out-tsc
+      displayName: 'Remove e2e screenshots and videos from dist before copying'
+    - task: CopyFiles@2
+      displayName: 'Copy builds to artifacts'
+      condition: and(succeeded(), eq(variables['dkBuild'], 'true'))
+      inputs:
+        contents: 'dist/**'
+        targetFolder: $(Build.ArtifactStagingDirectory)
+    - task: PublishBuildArtifacts@1
+      condition: and(succeeded(), eq(variables['dkBuild'], 'true'))
