@@ -302,7 +302,9 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
     } as SearchFilterCriteriaInterface;
   }
 
-  public getActions(task?: TaskWithAssigneesInterface) {
+  public getActions(
+    task?: TaskWithAssigneesInterface
+  ): { label: string; handler: Function }[] {
     return [
       {
         label: 'bekijken',
