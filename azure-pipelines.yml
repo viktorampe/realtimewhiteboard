@@ -15,7 +15,9 @@ trigger:
   - test/mock-master
 
 - job: 'ParallelTesting'
-  pool: 'Hosted Linux Preview'
+  pool:
+    name: 'Campus'
+
   strategy:
     parallel: 3
     
@@ -23,10 +25,7 @@ trigger:
     dkRanTests: false
     dkBuild: false
     dkE2E: false
-
-  pool:
-    name: 'Campus'
-
+  
   steps:
     - script: |
         echo '##vso[task.setvariable variable=CI]1'
