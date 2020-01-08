@@ -61,7 +61,7 @@ steps:
       customEndpoint: diekeure-registry
 
   # Runs nx affected for all feature PRs.
-  - script: ./node_modules/.bin/nx affected:lint  --base=remotes/origin/developnpm run affected:lint
+  - script: ./node_modules/.bin/nx affected:lint  --base=remotes/origin/develop
     displayName: 'Affected Format Check'
     condition: and(succeeded(), eq(variables['dkFeaturePR'], 'true'))
 
