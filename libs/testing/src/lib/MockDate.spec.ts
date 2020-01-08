@@ -29,15 +29,11 @@ describe('MockDate', () => {
   });
 
   it('should return the real date', () => {
-    const defaultDate = new Date();
+    const defaultDate = new Date(10000);
 
     const mock = new MockDate(defaultDate);
 
     mock.returnRealDate();
-
-    for (let index = 0; index < 100000; index++) {
-      // let some time pass
-    }
 
     const realDate = new Date();
 
