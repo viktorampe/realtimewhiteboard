@@ -11,13 +11,13 @@ export class ManageKabasTasksDetailComponent implements OnInit {
 
   ngOnInit() {}
 
-  public setArchivedTasks(taskIds, isArchived) {
+  public setArchivedTasks(taskIds: number[], isArchived: boolean) {
     this.viewModel.setArchivedTasks(taskIds, isArchived);
   }
-  public removeTasks(taskIds) {
+  public removeTasks(taskIds: number[]) {
     this.viewModel.removeTasks(taskIds);
   }
-  public toggleFavorite(taskId) {
+  public toggleFavorite(taskId: number) {
     this.viewModel.toggleFavorite(taskId);
   }
 }
