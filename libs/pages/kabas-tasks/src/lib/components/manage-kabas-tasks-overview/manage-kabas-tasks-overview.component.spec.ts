@@ -825,8 +825,11 @@ describe('ManageKabasTasksOverviewComponent', () => {
     const mockTask = new TaskFixture({ id: 666 }) as TaskWithAssigneesInterface;
     let actions: { label: string; handler: Function }[];
 
-    beforeAll(() => {
+    beforeEach(() => {
       jest.resetAllMocks();
+    });
+
+    beforeAll(() => {
       actions = component.getActions(mockTask);
     });
 
