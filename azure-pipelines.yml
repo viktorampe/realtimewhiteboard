@@ -31,7 +31,7 @@ steps:
     displayName: '(Check) Enable dkE2E (end-to-end tests) if building, target is master or merge to develop'
   - script: |
       echo '##vso[task.setvariable variable=dkFeaturePR]true'
-    condition: and(eq(variables['Build.Reason'], 'PullRequest'), startsWith(variables['Build.SourceBranch'], 'refs/heads/feature/'))
+    condition: and(eq(variables['Build.Reason'], 'PullRequest'), eq(variables['System.PullRequest.TargetBranch'], 'refs/heads/develop'), startsWith(variables['System.PullRequest.SourceBranch'], 'refs/heads/feature'))
     displayName: '(Check) Enable dkFeaturePR (nx affected) if starting a pull request from a feature branch'
   - script: |
       echo Build information
