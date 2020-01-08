@@ -573,12 +573,13 @@ describe('PracticeViewModel', () => {
           })
         );
 
-        expect(
-          ClassGroupQueries.getClassGroupsForBook
-        ).toHaveBeenCalledWith(storeState, {
-          id: mockBook.id,
-          filterByYear: false
-        });
+        expect(ClassGroupQueries.getClassGroupsForBook).toHaveBeenCalledWith(
+          storeState,
+          {
+            id: mockBook.id,
+            filterByYear: false
+          }
+        );
       });
     });
   });
