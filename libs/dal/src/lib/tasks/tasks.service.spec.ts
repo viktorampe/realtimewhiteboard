@@ -105,7 +105,12 @@ describe('TaskService', () => {
           a: mockTask
         })
       );
-      expect(spy).toHaveBeenCalledWith(2);
+      expect(spy).toHaveBeenCalledWith(
+        2,
+        mockTask.taskGroups,
+        mockTask.taskStudents,
+        mockTask.taskClassGroups
+      );
     });
   });
 });
