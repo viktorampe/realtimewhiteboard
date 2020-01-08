@@ -22,4 +22,19 @@ export class TaskService implements TaskServiceInterface {
   ): Observable<TaskEduContentInterface> {
     return this.taskApi.linkEduContents(taskId, eduContentId);
   }
+
+  updateTasks(
+    userId: number,
+    update: Partial<TaskInterface>[]
+  ): Observable<TaskInterface[]> {
+    throw new Error('Method not implemented.');
+  }
+
+  createTask(userId: number, task: TaskInterface): Observable<TaskInterface> {
+    throw new Error('Method not implemented.');
+  }
+
+  deleteTasks(userId: number, taskIds: number[]) {
+    throw new Error('Method not implemented.');
+  }
 }
