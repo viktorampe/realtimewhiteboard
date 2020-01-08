@@ -64,33 +64,28 @@ export class EduContentCollectionManagerService
     } else {
       bundles$ = this.store.pipe(select(BundleQueries.getAll));
     }
-    const bundlesCollection$: Observable<
-      ManageCollectionItemInterface[]
-    > = bundles$.pipe(
-      map(
-        (bundles: BundleInterface[]): ManageCollectionItemInterface[] => {
-          return bundles.map(
-            (bundle): ManageCollectionItemInterface => ({
-              id: bundle.id,
-              label: bundle.name,
-              icon: 'bundle'
-            })
-          );
-        }
-      ),
+    const bundlesCollection$: Observable<ManageCollectionItemInterface[]> = bundles$.pipe(
+      map((bundles: BundleInterface[]): ManageCollectionItemInterface[] => {
+        return bundles.map(
+          (bundle): ManageCollectionItemInterface => ({
+            id: bundle.id,
+            label: bundle.name,
+            icon: 'bundle'
+          })
+        );
+      }),
       shareReplay(1)
     );
     const linkedBundleIds$: Observable<number[]> = this.store.pipe(
       select(UnlockedContentQueries.getByEduContentId, {
         eduContentId: content.id
       }),
-      map(
-        (unlockedContents: UnlockedContent[]): number[] =>
-          Array.from(
-            new Set(
-              unlockedContents.map(unlockedContent => unlockedContent.bundleId)
-            )
+      map((unlockedContents: UnlockedContent[]): number[] =>
+        Array.from(
+          new Set(
+            unlockedContents.map(unlockedContent => unlockedContent.bundleId)
           )
+        )
       ),
       shareReplay(1)
     );
@@ -151,30 +146,25 @@ export class EduContentCollectionManagerService
     // prepare streams
     const learningAreaId: number =
       content.publishedEduContentMetadata.learningAreaId;
-    const tasksCollection$: Observable<
-      ManageCollectionItemInterface[]
-    > = this.store.pipe(
+    const tasksCollection$: Observable<ManageCollectionItemInterface[]> = this.store.pipe(
       select(TaskQueries.getForLearningAreaId, { learningAreaId }),
-      map(
-        (tasks: TaskInterface[]): ManageCollectionItemInterface[] => {
-          return tasks.map(
-            (task): ManageCollectionItemInterface => ({
-              id: task.id,
-              label: task.name,
-              icon: 'task'
-            })
-          );
-        }
-      ),
+      map((tasks: TaskInterface[]): ManageCollectionItemInterface[] => {
+        return tasks.map(
+          (task): ManageCollectionItemInterface => ({
+            id: task.id,
+            label: task.name,
+            icon: 'task'
+          })
+        );
+      }),
       shareReplay(1)
     );
     const linkedTaskIds$: Observable<number[]> = this.store.pipe(
       select(TaskEduContentQueries.getByEduContentId, {
         eduContentId: content.id
       }),
-      map(
-        (taskEduContents: TaskEduContentInterface[]): number[] =>
-          taskEduContents.map(taskEduContent => taskEduContent.taskId)
+      map((taskEduContents: TaskEduContentInterface[]): number[] =>
+        taskEduContents.map(taskEduContent => taskEduContent.taskId)
       ),
       shareReplay(1)
     );
@@ -184,9 +174,7 @@ export class EduContentCollectionManagerService
     );
 
     // subscribe to changeEvent
-    const itemToggle$: Observable<
-      ItemToggledInCollectionInterface
-    > = this.getItemToggleStream(
+    const itemToggle$: Observable<ItemToggledInCollectionInterface> = this.getItemToggleStream(
       '"' + item.label + '" toevoegen aan je taken',
       item,
       tasksCollection$,

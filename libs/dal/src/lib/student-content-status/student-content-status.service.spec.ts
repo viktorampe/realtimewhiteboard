@@ -61,10 +61,11 @@ describe('StudentContentStatusService', () => {
 
     service.updateStudentContentStatus(studentContentStatus);
 
-    expect(studentContentStatusApi.patchAttributes).toHaveBeenCalledWith(
-      studentContentStatus.id,
-      { contentStatusId: studentContentStatus.contentStatusId }
-    );
+    expect(
+      studentContentStatusApi.patchAttributes
+    ).toHaveBeenCalledWith(studentContentStatus.id, {
+      contentStatusId: studentContentStatus.contentStatusId
+    });
   });
 
   it('addStudentContentStatus should call personApi.createStudentContentStatuses', () => {

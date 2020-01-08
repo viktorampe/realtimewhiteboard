@@ -21,25 +21,13 @@ export const getLoaded = createSelector(
   (state: State) => state.loaded
 );
 
-export const getAll = createSelector(
-  selectBundleState,
-  selectAll
-);
+export const getAll = createSelector(selectBundleState, selectAll);
 
-export const getCount = createSelector(
-  selectBundleState,
-  selectTotal
-);
+export const getCount = createSelector(selectBundleState, selectTotal);
 
-export const getIds = createSelector(
-  selectBundleState,
-  selectIds
-);
+export const getIds = createSelector(selectBundleState, selectIds);
 
-export const getAllEntities = createSelector(
-  selectBundleState,
-  selectEntities
-);
+export const getAllEntities = createSelector(selectBundleState, selectEntities);
 
 /**
  * returns array of objects in the order of the given ids

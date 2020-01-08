@@ -17,20 +17,11 @@ export const getError = createSelector(
   (state: State) => state.error
 );
 
-export const getAll = createSelector(
-  selectEduContentTocState,
-  selectAll
-);
+export const getAll = createSelector(selectEduContentTocState, selectAll);
 
-export const getCount = createSelector(
-  selectEduContentTocState,
-  selectTotal
-);
+export const getCount = createSelector(selectEduContentTocState, selectTotal);
 
-export const getIds = createSelector(
-  selectEduContentTocState,
-  selectIds
-);
+export const getIds = createSelector(selectEduContentTocState, selectIds);
 
 export const getAllEntities = createSelector(
   selectEduContentTocState,
@@ -129,7 +120,7 @@ export const getTocsForToc = createSelector(
 
       if (
         currentToc.treeId === parentToc.treeId && // same book
-        (currentToc.lft > parentToc.lft && currentToc.rgt < parentToc.rgt) && //is a child of parentToc
+        currentToc.lft > parentToc.lft && currentToc.rgt < parentToc.rgt && //is a child of parentToc
         currentToc.depth === parentToc.depth + 1 // correct depth
       ) {
         acc.push(currentToc);

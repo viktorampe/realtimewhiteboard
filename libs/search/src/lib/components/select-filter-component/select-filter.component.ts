@@ -61,27 +61,29 @@ export class SelectFilterComponent
 
   ngOnInit() {
     this.subscriptions.add(
-      this.selectControl.valueChanges.pipe(distinctUntilChanged()).subscribe(
-        (
-          selection:
-            | SearchFilterCriteriaValuesInterface
-            | SearchFilterCriteriaValuesInterface[]
-        ): void => {
-          if (Array.isArray(selection)) {
-            // multiple === true
-            if (selection.includes(null)) {
-              // resetLabel was clicked
-              this.selectControl.setValue([]);
-              return;
+      this.selectControl.valueChanges
+        .pipe(distinctUntilChanged())
+        .subscribe(
+          (
+            selection:
+              | SearchFilterCriteriaValuesInterface
+              | SearchFilterCriteriaValuesInterface[]
+          ): void => {
+            if (Array.isArray(selection)) {
+              // multiple === true
+              if (selection.includes(null)) {
+                // resetLabel was clicked
+                this.selectControl.setValue([]);
+                return;
+              }
+            } else {
+              selection = selection === null ? [] : [selection];
             }
-          } else {
-            selection = selection === null ? [] : [selection];
+            this.updateView(selection);
+            this.updateCriteriaWithSelected(this.criteria.values, selection);
+            this.filterSelectionChange.emit([this.criteria]);
           }
-          this.updateView(selection);
-          this.updateCriteriaWithSelected(this.criteria.values, selection);
-          this.filterSelectionChange.emit([this.criteria]);
-        }
-      )
+        )
     );
   }
 

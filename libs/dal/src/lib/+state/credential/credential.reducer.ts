@@ -13,9 +13,9 @@ export interface State extends EntityState<PassportUserCredentialInterface> {
   error?: any;
 }
 
-export const adapter: EntityAdapter<
+export const adapter: EntityAdapter<PassportUserCredentialInterface> = createEntityAdapter<
   PassportUserCredentialInterface
-> = createEntityAdapter<PassportUserCredentialInterface>();
+>();
 
 export const initialState: State = adapter.getInitialState({
   // additional entity state properties

@@ -137,7 +137,10 @@ describe('ResultsListComponentComponent', () => {
     });
 
     it('should append results', () => {
-      const results = [{ id: 1, title: 'foo' }, { id: 2, title: 'bar' }];
+      const results = [
+        { id: 1, title: 'foo' },
+        { id: 2, title: 'bar' }
+      ];
       component.resultsPage = { results } as SearchResultInterface;
       fixture.detectChanges();
 
@@ -161,7 +164,10 @@ describe('ResultsListComponentComponent', () => {
 
     it('should replace results', () => {
       component.searchState = { from: 0 } as SearchStateInterface;
-      const results = [{ id: 1, title: 'foo' }, { id: 2, title: 'bar' }];
+      const results = [
+        { id: 1, title: 'foo' },
+        { id: 2, title: 'bar' }
+      ];
       component.resultsPage = { results } as SearchResultInterface;
       fixture.detectChanges();
 

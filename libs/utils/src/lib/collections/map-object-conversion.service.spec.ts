@@ -33,7 +33,11 @@ describe('MapObjectConversionService', () => {
       });
     });
     it('should return an object if the map type is number', () => {
-      const map = new Map<number, number>([[1, 23], [2, 838], [3, 847]]);
+      const map = new Map<number, number>([
+        [1, 23],
+        [2, 838],
+        [3, 847]
+      ]);
       const obj = mapObjectConversionService.mapToObject(map);
       expect(obj).toEqual({
         1: 23,
@@ -45,7 +49,10 @@ describe('MapObjectConversionService', () => {
       const map = new Map<string, Map<string, string>>([
         [
           'one',
-          new Map([['some', 'value for some'], ['foo', 'value for foo']])
+          new Map([
+            ['some', 'value for some'],
+            ['foo', 'value for foo']
+          ])
         ],
         ['two', new Map([['bar', 'value for bar']])],
         [
@@ -80,7 +87,11 @@ describe('MapObjectConversionService', () => {
         three: 847
       };
       expect(mapObjectConversionService.objectToMap(obj)).toEqual(
-        new Map<string, number>([['one', 23], ['two', 838], ['three', 847]])
+        new Map<string, number>([
+          ['one', 23],
+          ['two', 838],
+          ['three', 847]
+        ])
       );
     });
     it('should convert a number object to a map', () => {
@@ -90,7 +101,11 @@ describe('MapObjectConversionService', () => {
         3: 847
       };
       expect(mapObjectConversionService.objectToMap(obj, true)).toEqual(
-        new Map<number, number>([[1, 23], [2, 838], [3, 847]])
+        new Map<number, number>([
+          [1, 23],
+          [2, 838],
+          [3, 847]
+        ])
       );
     });
     it('should convert a string object to a map<string, any> if force is false', () => {
@@ -100,7 +115,11 @@ describe('MapObjectConversionService', () => {
         3: 847
       };
       expect(mapObjectConversionService.objectToMap(obj, false)).toEqual(
-        new Map<string, number>([['1', 23], ['2', 838], ['3', 847]])
+        new Map<string, number>([
+          ['1', 23],
+          ['2', 838],
+          ['3', 847]
+        ])
       );
     });
     it('should convert a multilevel string and number object to a map<string, Map<number, number>>', () => {

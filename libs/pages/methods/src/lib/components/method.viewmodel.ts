@@ -301,9 +301,7 @@ export class MethodViewModel implements ContentOpenerInterface {
 
   public exportLearningPlanGoalProgress() {
     this.currentMethodParams$.pipe(take(1)).subscribe(currentMethodParams => {
-      this.window.location.href = `${this.environmentApi.APIBase}/api/People/${
-        this.authService.userId
-      }/downloadLearningPlanGoalProgressByBookId/${currentMethodParams.book}`;
+      this.window.location.href = `${this.environmentApi.APIBase}/api/People/${this.authService.userId}/downloadLearningPlanGoalProgressByBookId/${currentMethodParams.book}`;
     });
   }
 
@@ -730,19 +728,16 @@ export class MethodViewModel implements ContentOpenerInterface {
   private getGeneralFilesByType(): Observable<Dictionary<EduContent[]>> {
     return this.generalFiles$.pipe(
       map(eduContents => {
-        return eduContents.reduce(
-          (acc, eduContent) => {
-            const productType: number =
-              eduContent.publishedEduContentMetadata.eduContentProductTypeId;
-            if (!acc[productType]) {
-              acc[productType] = [];
-            }
-            acc[productType].push(eduContent);
+        return eduContents.reduce((acc, eduContent) => {
+          const productType: number =
+            eduContent.publishedEduContentMetadata.eduContentProductTypeId;
+          if (!acc[productType]) {
+            acc[productType] = [];
+          }
+          acc[productType].push(eduContent);
 
-            return acc;
-          },
-          {} as Dictionary<EduContent[]>
-        );
+          return acc;
+        }, {} as Dictionary<EduContent[]>);
       })
     );
   }

@@ -13,9 +13,9 @@ export interface State extends EntityState<TaskClassGroupInterface> {
   error?: any;
 }
 
-export const adapter: EntityAdapter<
+export const adapter: EntityAdapter<TaskClassGroupInterface> = createEntityAdapter<
   TaskClassGroupInterface
-> = createEntityAdapter<TaskClassGroupInterface>();
+>();
 
 export const initialState: State = adapter.getInitialState({
   // additional entity state properties

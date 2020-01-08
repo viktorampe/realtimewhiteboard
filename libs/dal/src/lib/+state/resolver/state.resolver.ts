@@ -76,7 +76,8 @@ export abstract class StateResolver implements Resolve<boolean> {
   protected abstract getLoadableActions(): Action[];
   protected abstract getResolvedQueries(): (
     | Selector<object, boolean>
-    | QueryWithProps<any>)[];
+    | QueryWithProps<any>
+  )[];
 
   private loadActions(actions: Action[]): void {
     actions.forEach(action => {

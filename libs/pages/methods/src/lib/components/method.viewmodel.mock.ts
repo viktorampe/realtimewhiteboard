@@ -365,7 +365,13 @@ export class MockMethodViewModel
       count: mockResults.length,
       results: mockResults,
       filterCriteriaPredictions: new Map([
-        ['LearningArea', new Map([[1, 100], [2, 50]])]
+        [
+          'LearningArea',
+          new Map([
+            [1, 100],
+            [2, 50]
+          ])
+        ]
       ])
     });
   }
