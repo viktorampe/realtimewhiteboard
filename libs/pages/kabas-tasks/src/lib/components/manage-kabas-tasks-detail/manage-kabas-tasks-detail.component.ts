@@ -1,10 +1,5 @@
-import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
-import { MatSelectionList, MatSlideToggle } from '@angular/material';
-import {
-  ButtonToggleFilterComponent,
-  SearchFilterCriteriaInterface,
-  SearchTermComponent
-} from '@campus/search';
+import { Component, OnInit } from '@angular/core';
+import { SearchFilterCriteriaInterface } from '@campus/search';
 
 export enum TaskSortEnum {
   'NAME' = 'NAME',
@@ -21,16 +16,6 @@ export class ManageKabasTasksDetailComponent implements OnInit {
   public TaskSortEnum = TaskSortEnum;
   public diaboloPhaseFilter: SearchFilterCriteriaInterface;
 
-  @ViewChildren(MatSelectionList) private taskLists: QueryList<
-    MatSelectionList
-  >;
-
-  @ViewChildren(SearchTermComponent) private searchTermFilters: QueryList<
-    SearchTermComponent
-  >;
-
-  @ViewChildren(ButtonToggleFilterComponent)
-  @ViewChildren(MatSlideToggle)
   istaskDigital = false; // replace w/ stream
   constructor() {}
 
