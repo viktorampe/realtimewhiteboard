@@ -62,62 +62,52 @@ describe('KabasTaskViewModel', () => {
   });
 
   describe('getTaskDates', () => {
-    const originalStartDate = new Date();
-    const originalEndDate = new Date();
-
-    const startDateBeforeOriginal = new Date(
-      originalStartDate.getTime() - 1000
-    );
-    const startDateAfterOriginal = new Date(originalStartDate.getTime() + 1000);
-    const endDateAfterOriginal = new Date(originalEndDate.getTime() + 1000);
-    const endDateBeforeOriginal = new Date(originalEndDate.getTime() - 1000);
-
     const testCases = [
       {
         it: 'should use the correct start and end date',
-        assignees: [{ start: originalStartDate, end: originalEndDate }],
-        expectedStart: originalStartDate,
-        expectedEnd: originalEndDate
+        assignees: [{ start: new Date(), end: new Date() }],
+        expectedStart: new Date(),
+        expectedEnd: new Date()
       },
       {
         it: 'should use the correct start and end date',
         assignees: [
-          { start: originalStartDate, end: originalEndDate },
+          { start: new Date(), end: new Date() },
           {
-            start: startDateBeforeOriginal,
-            end: endDateAfterOriginal
+            start: new Date(Date.now() - 1000),
+            end: new Date(Date.now() + 1000)
           }
         ],
-        expectedStart: startDateBeforeOriginal,
-        expectedEnd: endDateAfterOriginal
+        expectedStart: new Date(Date.now() - 1000),
+        expectedEnd: new Date(Date.now() + 1000)
       },
       {
         it: 'should use the correct start and end date',
         assignees: [
-          { start: originalStartDate, end: originalEndDate },
+          { start: new Date(), end: new Date() },
           {
-            start: startDateAfterOriginal,
-            end: endDateAfterOriginal
+            start: new Date(Date.now() + 1000),
+            end: new Date(Date.now() + 1000)
           }
         ],
-        expectedStart: originalStartDate,
-        expectedEnd: endDateAfterOriginal
+        expectedStart: new Date(),
+        expectedEnd: new Date(Date.now() + 1000)
       },
       {
         it: 'should use the correct start and end date',
         assignees: [
-          { start: originalStartDate, end: originalEndDate },
+          { start: new Date(), end: new Date() },
           {
-            start: startDateAfterOriginal,
-            end: endDateAfterOriginal
+            start: new Date(Date.now() + 1000),
+            end: new Date(Date.now() + 1000)
           },
           {
-            start: startDateBeforeOriginal,
-            end: endDateBeforeOriginal
+            start: new Date(Date.now() - 1000),
+            end: new Date(Date.now() - 1000)
           }
         ],
-        expectedStart: startDateBeforeOriginal,
-        expectedEnd: endDateAfterOriginal
+        expectedStart: new Date(Date.now() - 1000),
+        expectedEnd: new Date(Date.now() + 1000)
       },
       {
         it: 'should use the correct start and end date - no assignees',
