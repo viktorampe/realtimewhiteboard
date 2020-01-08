@@ -1,4 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { MatSelectionList, MatSlideToggle } from '@angular/material';
+import {
+  ButtonToggleFilterComponent,
+  SearchFilterCriteriaInterface,
+  SearchTermComponent
+} from '@campus/search';
+
+export enum TaskSortEnum {
+  'NAME' = 'NAME',
+  'LEARNINGAREA' = 'LEARNINGAREA',
+  'STARTDATE' = 'STARTDATE'
+}
 
 @Component({
   selector: 'campus-manage-kabas-tasks-detail',
@@ -6,10 +18,51 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./manage-kabas-tasks-detail.component.scss']
 })
 export class ManageKabasTasksDetailComponent implements OnInit {
+  public TaskSortEnum = TaskSortEnum;
+  public diaboloPhaseFilter: SearchFilterCriteriaInterface;
 
-  constructor() { }
+  @ViewChildren(MatSelectionList) private taskLists: QueryList<
+    MatSelectionList
+  >;
+
+  @ViewChildren(SearchTermComponent) private searchTermFilters: QueryList<
+    SearchTermComponent
+  >;
+
+  @ViewChildren(ButtonToggleFilterComponent)
+  @ViewChildren(MatSlideToggle)
+  istaskDigital = false; // replace w/ stream
+  constructor() {}
 
   ngOnInit() {
+    this.diaboloPhaseFilter = {
+      name: 'diaboloPhase',
+      label: 'Diabolo-fase',
+      keyProperty: 'id',
+      displayProperty: 'icon',
+      values: [
+        {
+          data: {
+            id: 1,
+            icon: 'diabolo-intro'
+          },
+          visible: true
+        },
+        {
+          data: {
+            id: 2,
+            icon: 'diabolo-midden'
+          },
+          visible: true
+        },
+        {
+          data: {
+            id: 3,
+            icon: 'diabolo-outro'
+          },
+          visible: true
+        }
+      ]
+    };
   }
-
 }
