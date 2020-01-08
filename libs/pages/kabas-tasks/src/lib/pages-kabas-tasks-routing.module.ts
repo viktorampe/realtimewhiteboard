@@ -23,6 +23,14 @@ const routes: Routes = [
         component: ManageKabasTasksOverviewComponent
       },
       {
+        path: 'new',
+        runGuardsAndResolvers: 'always',
+        component: ManageKabasTasksDetailComponent,
+        data: {
+          breadcrumbText: 'Nieuw'
+        }
+      },
+      {
         path: ':id',
         component: ManageKabasTasksDetailComponent,
         data: {
