@@ -21,7 +21,4 @@ describe('ManageKabasTasksDetailComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-  it('should test kabas-tasks only', () => {
-    expect(true).toBeTruthy();
-  });
 });
