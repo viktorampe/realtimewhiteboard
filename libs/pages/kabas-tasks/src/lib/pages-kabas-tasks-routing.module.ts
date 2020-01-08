@@ -24,7 +24,10 @@ const routes: Routes = [
       {
         path: 'new',
         runGuardsAndResolvers: 'always',
-        component: ManageKabasTasksDetailComponent
+        component: ManageKabasTasksDetailComponent,
+        data: {
+          breadcrumbText: 'Nieuw'
+        }
       }
     ]
   },
