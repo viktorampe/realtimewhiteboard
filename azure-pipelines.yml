@@ -62,7 +62,7 @@ steps:
 
   # Runs nx affected for all feature PRs.
   - script: ./node_modules/.bin/nx affected:lint  --base=remotes/origin/develop
-    displayName: 'Affected Format Check'
+    displayName: 'Lint affected'
     condition: and(succeeded(), eq(variables['dkFeaturePR'], 'true'))
 
   # All linting for develop and master
@@ -78,7 +78,7 @@ steps:
 
   # Runs nx affected for all feature PRs.
   - script: ./node_modules/.bin/nx affected:test  --base=remotes/origin/develop
-    displayName: 'Affected Test'
+    displayName: 'Test affected'
     condition: and(succeeded(), eq(variables['dkFeaturePR'], 'true'))
 
   # All tests for develop and master
