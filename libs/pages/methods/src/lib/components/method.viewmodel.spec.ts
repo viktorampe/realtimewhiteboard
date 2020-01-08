@@ -723,7 +723,9 @@ describe('MethodViewModel', () => {
       it('should be the method year title > toc title when a book and chapter is selected', () => {
         navigateWithParams({ book: bookId, chapter: 1 });
 
-        const expectedResult = `${method.name} ${bookYears[0].label} > ${chapterTocs[0].title}`;
+        const expectedResult = `${method.name} ${bookYears[0].label} > ${
+          chapterTocs[0].title
+        }`;
 
         expect(methodViewModel.breadCrumbTitles$).toBeObservable(
           hot('a', {

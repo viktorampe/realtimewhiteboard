@@ -65,22 +65,20 @@ export class ButtonToggleFilterComponent
 
   ngOnInit() {
     this.subscriptions.add(
-      this.toggleControl.valueChanges
-        .pipe(distinctUntilChanged())
-        .subscribe(
-          (
-            selection:
-              | SearchFilterCriteriaValuesInterface
-              | SearchFilterCriteriaValuesInterface[]
-          ): void => {
-            if (!Array.isArray(selection)) {
-              selection = selection === null ? [] : [selection];
-            }
-            this.updateView(selection);
-            this.updateCriteriaWithSelected(this.criteria.values, selection);
-            this.filterSelectionChange.emit([this.criteria]);
+      this.toggleControl.valueChanges.pipe(distinctUntilChanged()).subscribe(
+        (
+          selection:
+            | SearchFilterCriteriaValuesInterface
+            | SearchFilterCriteriaValuesInterface[]
+        ): void => {
+          if (!Array.isArray(selection)) {
+            selection = selection === null ? [] : [selection];
           }
-        )
+          this.updateView(selection);
+          this.updateCriteriaWithSelected(this.criteria.values, selection);
+          this.filterSelectionChange.emit([this.criteria]);
+        }
+      )
     );
   }
 

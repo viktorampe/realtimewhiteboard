@@ -180,7 +180,9 @@ export const getMethodWithLearningAreaAndYearByBookId = createSelector(
     eduContentBook: EduContentBookInterface
   ) => {
     const method = methodState.entities[eduContentBook.methodId];
-    return `${method.name} ${yearState.entities[eduContentBook.years[0].id].label} (${learningAreaState.entities[method.learningAreaId].name})`;
+    return `${method.name} ${
+      yearState.entities[eduContentBook.years[0].id].label
+    } (${learningAreaState.entities[method.learningAreaId].name})`;
   }
 );
 

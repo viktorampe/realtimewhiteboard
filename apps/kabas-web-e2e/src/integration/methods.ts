@@ -17,7 +17,9 @@ export function checkNavOpenBoeke(setup: KabasMethodsPagesInterface) {
     .its('open')
     .should(
       'be.calledWithExactly',
-      `${apiUrl}${apiPaths.eduContent}/${setup.kabasMethodsPages.expected.boeke.eduContentId}/redirectURL`
+      `${apiUrl}${apiPaths.eduContent}/${
+        setup.kabasMethodsPages.expected.boeke.eduContentId
+      }/redirectURL`
     );
 }
 

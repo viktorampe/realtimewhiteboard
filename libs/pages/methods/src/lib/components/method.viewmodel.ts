@@ -301,7 +301,9 @@ export class MethodViewModel implements ContentOpenerInterface {
 
   public exportLearningPlanGoalProgress() {
     this.currentMethodParams$.pipe(take(1)).subscribe(currentMethodParams => {
-      this.window.location.href = `${this.environmentApi.APIBase}/api/People/${this.authService.userId}/downloadLearningPlanGoalProgressByBookId/${currentMethodParams.book}`;
+      this.window.location.href = `${this.environmentApi.APIBase}/api/People/${
+        this.authService.userId
+      }/downloadLearningPlanGoalProgressByBookId/${currentMethodParams.book}`;
     });
   }
 

@@ -66,14 +66,18 @@ describe('Methods', () => {
     });
     it('should show the boeke card', () => {
       dataCy('diabolo-info').contains(
-        `${setup.kabasMethodsPages.expected.method.name} is een diabolo methode.`
+        `${
+          setup.kabasMethodsPages.expected.method.name
+        } is een diabolo methode.`
       );
       dataCy('open-boeke').click();
       cy.window()
         .its('open')
         .should(
           'be.calledWithExactly',
-          `${apiUrl}${apiPaths.eduContent}/${setup.kabasMethodsPages.expected.boeke.eduContentId}/redirectURL`
+          `${apiUrl}${apiPaths.eduContent}/${
+            setup.kabasMethodsPages.expected.boeke.eduContentId
+          }/redirectURL`
         );
     });
     it('should show the boeke link in the top bar', () => {
@@ -93,7 +97,9 @@ describe('Methods', () => {
         .location('pathname')
         .should(
           'be',
-          `${appPaths.methods}/${setup.kabasMethodsPages.book}/${setup.kabasMethodsPages.chapter}`
+          `${appPaths.methods}/${setup.kabasMethodsPages.book}/${
+            setup.kabasMethodsPages.chapter
+          }`
         );
     });
   });
@@ -101,7 +107,9 @@ describe('Methods', () => {
   describe('method chapter page', () => {
     beforeEach(() => {
       cy.visit(
-        `${appPaths.methods}/${setup.kabasMethodsPages.book}/${setup.kabasMethodsPages.chapter}`,
+        `${appPaths.methods}/${setup.kabasMethodsPages.book}/${
+          setup.kabasMethodsPages.chapter
+        }`,
         {
           onBeforeLoad(win) {
             cy.stub(win, 'open');
@@ -124,7 +132,9 @@ describe('Methods', () => {
         .location('pathname')
         .should(
           'be',
-          `${appPaths.methods}/${setup.kabasMethodsPages.book}/${setup.kabasMethodsPages.chapter}/${setup.kabasMethodsPages.lesson}`
+          `${appPaths.methods}/${setup.kabasMethodsPages.book}/${
+            setup.kabasMethodsPages.chapter
+          }/${setup.kabasMethodsPages.lesson}`
         );
     });
     it('should show search results', () => {
@@ -150,7 +160,9 @@ describe('Methods', () => {
   describe('method lesson page', () => {
     beforeEach(() => {
       cy.visit(
-        `${appPaths.methods}/${setup.kabasMethodsPages.book}/${setup.kabasMethodsPages.chapter}/${setup.kabasMethodsPages.lesson}`,
+        `${appPaths.methods}/${setup.kabasMethodsPages.book}/${
+          setup.kabasMethodsPages.chapter
+        }/${setup.kabasMethodsPages.lesson}`,
         {
           onBeforeLoad(win) {
             cy.stub(win, 'open');
@@ -173,7 +185,9 @@ describe('Methods', () => {
         .location('pathname')
         .should(
           'be',
-          `${appPaths.methods}/${setup.kabasMethodsPages.book}/${setup.kabasMethodsPages.chapter}/${setup.kabasMethodsPages.lessonLast}`
+          `${appPaths.methods}/${setup.kabasMethodsPages.book}/${
+            setup.kabasMethodsPages.chapter
+          }/${setup.kabasMethodsPages.lessonLast}`
         );
     });
     it('should show search results', () => {
@@ -199,7 +213,9 @@ describe('Methods', () => {
   describe('method learningplangoals chapter + lesson', () => {
     beforeEach(() => {
       cy.visit(
-        `${appPaths.methods}/${setup.kabasMethodsPages.book}/${setup.kabasMethodsPages.chapter}/${setup.kabasMethodsPages.lesson}?tab=1`
+        `${appPaths.methods}/${setup.kabasMethodsPages.book}/${
+          setup.kabasMethodsPages.chapter
+        }/${setup.kabasMethodsPages.lesson}?tab=1`
       );
     });
 
@@ -207,7 +223,9 @@ describe('Methods', () => {
       clickLPGCheckbox(0);
 
       cy.visit(
-        `${appPaths.methods}/${setup.kabasMethodsPages.book}/${setup.kabasMethodsPages.chapter}?tab=1`
+        `${appPaths.methods}/${setup.kabasMethodsPages.book}/${
+          setup.kabasMethodsPages.chapter
+        }?tab=1`
       );
 
       checkLPGChecked(0);
@@ -217,7 +235,9 @@ describe('Methods', () => {
       clickLPGCheckbox(1);
 
       cy.visit(
-        `${appPaths.methods}/${setup.kabasMethodsPages.book}/${setup.kabasMethodsPages.chapter}?tab=1`
+        `${appPaths.methods}/${setup.kabasMethodsPages.book}/${
+          setup.kabasMethodsPages.chapter
+        }?tab=1`
       );
 
       clickLPGCheckbox(1);
@@ -233,7 +253,9 @@ describe('Methods', () => {
       getActiveTab().should('have.text', 'Leerplandoelen');
 
       cy.visit(
-        `${appPaths.methods}/${setup.kabasMethodsPages.book}/${setup.kabasMethodsPages.chapter}?tab=1`
+        `${appPaths.methods}/${setup.kabasMethodsPages.book}/${
+          setup.kabasMethodsPages.chapter
+        }?tab=1`
       );
 
       getActiveTab().should('have.text', 'Leerplandoelen');
@@ -243,7 +265,9 @@ describe('Methods', () => {
       clickBulkLPGCheckbox(0);
 
       cy.visit(
-        `${appPaths.methods}/${setup.kabasMethodsPages.book}/${setup.kabasMethodsPages.chapter}?tab=1`
+        `${appPaths.methods}/${setup.kabasMethodsPages.book}/${
+          setup.kabasMethodsPages.chapter
+        }?tab=1`
       );
 
       for (let i = 0; i <= 2; i++) {
@@ -253,7 +277,9 @@ describe('Methods', () => {
 
     it('should bulk check learning plan goals in chapter', () => {
       cy.visit(
-        `${appPaths.methods}/${setup.kabasMethodsPages.book}/${setup.kabasMethodsPages.chapter}?tab=1`
+        `${appPaths.methods}/${setup.kabasMethodsPages.book}/${
+          setup.kabasMethodsPages.chapter
+        }?tab=1`
       );
 
       clickBulkLPGCheckbox(1);
@@ -283,13 +309,17 @@ describe('Methods', () => {
         .location('pathname')
         .should(
           'be',
-          `${appPaths.methods}/${setup.kabasMethodsPages.book}/${setup.kabasMethodsPages.chapter}?tab=1`
+          `${appPaths.methods}/${setup.kabasMethodsPages.book}/${
+            setup.kabasMethodsPages.chapter
+          }?tab=1`
         );
     });
 
     it('should keep the tab selected from chapter to lesson', () => {
       cy.visit(
-        `${appPaths.methods}/${setup.kabasMethodsPages.book}/${setup.kabasMethodsPages.chapter}`
+        `${appPaths.methods}/${setup.kabasMethodsPages.book}/${
+          setup.kabasMethodsPages.chapter
+        }`
       );
 
       cy.get('.mat-tab-label')
@@ -302,7 +332,9 @@ describe('Methods', () => {
         .location('pathname')
         .should(
           'be',
-          `${appPaths.methods}/${setup.kabasMethodsPages.book}/${setup.kabasMethodsPages.chapter}/${setup.kabasMethodsPages.lesson}?tab=1`
+          `${appPaths.methods}/${setup.kabasMethodsPages.book}/${
+            setup.kabasMethodsPages.chapter
+          }/${setup.kabasMethodsPages.lesson}?tab=1`
         );
     });
   });

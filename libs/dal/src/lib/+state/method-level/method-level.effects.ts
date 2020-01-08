@@ -33,7 +33,9 @@ export class MethodLevelEffects {
                   ...methodLevel,
                   icon:
                     methodLevel.icon ||
-                    `method-${methodLevel.methodId}-level-${methodLevel.levelId}`
+                    `method-${methodLevel.methodId}-level-${
+                      methodLevel.levelId
+                    }`
                 };
               })
             ),
