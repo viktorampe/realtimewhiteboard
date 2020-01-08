@@ -304,7 +304,10 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
 
   public getActions(task?: TaskWithAssigneesInterface) {
     return [
-      { label: 'bekijken', handler: () => console.log('bekijken') },
+      {
+        label: 'bekijken',
+        handler: () => this.router.navigate(['tasks', 'manage', task.id])
+      },
       {
         label: task && task.archivedYear ? 'dearchiveren' : 'archiveren',
         handler: () =>
