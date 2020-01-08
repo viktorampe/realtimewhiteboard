@@ -955,6 +955,36 @@
         }
       }
     },
+    "all-libs-files": {
+      "root": "libs",
+      "sourceRoot": "libs",
+      "projectType": "library",
+      "prefix": "campus",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": ["./tsconfig.json", "./tsconfig.spec.json"],
+            "exclude": ["**/node_modules/**", "!libs/**"]
+          }
+        }
+      }
+    },
+    "all-apps-files": {
+      "root": "apps",
+      "sourceRoot": "apps",
+      "projectType": "application",
+      "prefix": "campus",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": ["./tsconfig.json", "./tsconfig.spec.json"],
+            "exclude": ["**/node_modules/**", "!apps/**"]
+          }
+        }
+      }
+    },
     "pages-global-search": {
       "root": "libs/pages/global-search",
       "sourceRoot": "libs/pages/global-search/src",
