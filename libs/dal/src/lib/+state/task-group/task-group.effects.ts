@@ -24,7 +24,7 @@ export class TaskGroupEffects {
         .pipe(map(taskGroups => taskGroupsLoaded({ taskGroups })));
     },
     onError: (action: ReturnType<typeof loadTaskGroups>, error) => {
-      return taskGroupsLoadError(error);
+      return taskGroupsLoadError({ error });
     }
   });
 
