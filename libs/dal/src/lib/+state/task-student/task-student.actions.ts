@@ -1,105 +1,65 @@
 import { Update } from '@ngrx/entity';
-import { Action } from '@ngrx/store';
+import { createAction, props } from '@ngrx/store';
 import { TaskStudentInterface } from '../../+models';
 
-export enum TaskStudentsActionTypes {
-  TaskStudentsLoaded = '[TaskStudents] TaskStudents Loaded',
-  TaskStudentsLoadError = '[TaskStudents] Load Error',
-  LoadTaskStudents = '[TaskStudents] Load TaskStudents',
-  AddTaskStudent = '[TaskStudents] Add TaskStudent',
-  UpsertTaskStudent = '[TaskStudents] Upsert TaskStudent',
-  AddTaskStudents = '[TaskStudents] Add TaskStudents',
-  UpsertTaskStudents = '[TaskStudents] Upsert TaskStudents',
-  UpdateTaskStudent = '[TaskStudents] Update TaskStudent',
-  UpdateTaskStudents = '[TaskStudents] Update TaskStudents',
-  DeleteTaskStudent = '[TaskStudents] Delete TaskStudent',
-  DeleteTaskStudents = '[TaskStudents] Delete TaskStudents',
-  ClearTaskStudents = '[TaskStudents] Clear TaskStudents'
-}
+export const loadTaskStudents = createAction(
+  '[TaskStudent/API] Load TaskStudents',
+  (userId: number = null, force: boolean = false) => ({
+    userId,
+    force
+  })
+);
 
-export class LoadTaskStudents implements Action {
-  readonly type = TaskStudentsActionTypes.LoadTaskStudents;
+export const taskStudentsLoaded = createAction(
+  '[TaskStudent/API] TaskStudents loaded',
+  props<{ taskStudents: TaskStudentInterface[] }>()
+);
 
-  constructor(
-    public payload: { force?: boolean; userId: number } = { userId: null }
-  ) {}
-}
+export const taskStudentsLoadError = createAction(
+  '[TaskStudent/API] Load Error',
+  props<{ error: any }>()
+);
 
-export class TaskStudentsLoaded implements Action {
-  readonly type = TaskStudentsActionTypes.TaskStudentsLoaded;
+export const addTaskStudent = createAction(
+  '[TaskStudent/API] Add TaskStudent',
+  props<{ taskStudent: TaskStudentInterface }>()
+);
 
-  constructor(public payload: { taskStudents: TaskStudentInterface[] }) {}
-}
+export const upsertTaskStudent = createAction(
+  '[TaskStudent/API] Upsert TaskStudent',
+  props<{ taskStudent: TaskStudentInterface }>()
+);
 
-export class TaskStudentsLoadError implements Action {
-  readonly type = TaskStudentsActionTypes.TaskStudentsLoadError;
-  constructor(public payload: any) {}
-}
+export const addTaskStudents = createAction(
+  '[TaskStudent/API] Add TaskStudents',
+  props<{ taskStudents: TaskStudentInterface[] }>()
+);
 
-export class AddTaskStudent implements Action {
-  readonly type = TaskStudentsActionTypes.AddTaskStudent;
+export const upsertTaskStudents = createAction(
+  '[TaskStudent/API] Upsert TaskStudents',
+  props<{ taskStudents: TaskStudentInterface[] }>()
+);
 
-  constructor(public payload: { taskStudent: TaskStudentInterface }) {}
-}
+export const updateTaskStudent = createAction(
+  '[TaskStudent/API] Update TaskStudent',
+  props<{ taskStudent: Update<TaskStudentInterface> }>()
+);
 
-export class UpsertTaskStudent implements Action {
-  readonly type = TaskStudentsActionTypes.UpsertTaskStudent;
+export const updateTaskStudents = createAction(
+  '[TaskStudent/API] Update TaskStudents',
+  props<{ taskStudents: Update<TaskStudentInterface>[] }>()
+);
 
-  constructor(public payload: { taskStudent: TaskStudentInterface }) {}
-}
+export const deleteTaskStudent = createAction(
+  '[TaskStudent/API] Delete TaskStudent',
+  props<{ id: number }>()
+);
 
-export class AddTaskStudents implements Action {
-  readonly type = TaskStudentsActionTypes.AddTaskStudents;
+export const deleteTaskStudents = createAction(
+  '[TaskStudent/API] Delete TaskStudents',
+  props<{ ids: number[] }>()
+);
 
-  constructor(public payload: { taskStudents: TaskStudentInterface[] }) {}
-}
-
-export class UpsertTaskStudents implements Action {
-  readonly type = TaskStudentsActionTypes.UpsertTaskStudents;
-
-  constructor(public payload: { taskStudents: TaskStudentInterface[] }) {}
-}
-
-export class UpdateTaskStudent implements Action {
-  readonly type = TaskStudentsActionTypes.UpdateTaskStudent;
-
-  constructor(public payload: { taskStudent: Update<TaskStudentInterface> }) {}
-}
-
-export class UpdateTaskStudents implements Action {
-  readonly type = TaskStudentsActionTypes.UpdateTaskStudents;
-
-  constructor(
-    public payload: { taskStudents: Update<TaskStudentInterface>[] }
-  ) {}
-}
-
-export class DeleteTaskStudent implements Action {
-  readonly type = TaskStudentsActionTypes.DeleteTaskStudent;
-
-  constructor(public payload: { id: number }) {}
-}
-
-export class DeleteTaskStudents implements Action {
-  readonly type = TaskStudentsActionTypes.DeleteTaskStudents;
-
-  constructor(public payload: { ids: number[] }) {}
-}
-
-export class ClearTaskStudents implements Action {
-  readonly type = TaskStudentsActionTypes.ClearTaskStudents;
-}
-
-export type TaskStudentsActions =
-  | LoadTaskStudents
-  | TaskStudentsLoaded
-  | TaskStudentsLoadError
-  | AddTaskStudent
-  | UpsertTaskStudent
-  | AddTaskStudents
-  | UpsertTaskStudents
-  | UpdateTaskStudent
-  | UpdateTaskStudents
-  | DeleteTaskStudent
-  | DeleteTaskStudents
-  | ClearTaskStudents;
+export const clearTaskStudents = createAction(
+  '[TaskStudent/API] Clear TaskStudents'
+);

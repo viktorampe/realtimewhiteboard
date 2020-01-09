@@ -282,7 +282,7 @@ function getLoadTaskClassGroupsAction(date) {
   });
 }
 function getLoadTaskStudentsAction(date) {
-  return new TaskStudentActions.TaskStudentsLoaded({
+  return TaskStudentActions.taskStudentsLoaded({
     taskStudents: [
       new TaskStudentFixture({
         id: 1,
