@@ -77,6 +77,9 @@ steps:
       npm run format:check
     displayName: 'Format check'
 
+  - script: |
+      rm -rf dist junit coverage reportgenerator
+    displayName: 'Clear junit, coverage reports, build output'
   # Runs nx affected for all feature PRs.
   - script: ./node_modules/.bin/nx affected:test  --base=remotes/origin/develop --passWithNoTests
     displayName: 'Test affected'
