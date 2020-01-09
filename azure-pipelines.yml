@@ -53,8 +53,8 @@ steps:
     inputs:
       versionSpec: '10.x'
   - script: |
-      rm -rf dist junit coverage reportgenerator
-    displayName: 'Clear junit, coverage reports, build output'
+      rm -rf dist
+    displayName: 'Clear build output'
   - task: Npm@1
     displayName: 'Npm install'
     inputs:
