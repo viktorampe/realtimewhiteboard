@@ -49,9 +49,7 @@ export class KabasTasksResolver extends StateResolver {
         userId: this.authService.userId
       }),
       TaskClassGroupActions.loadTaskClassGroups(this.authService.userId),
-      new TaskGroupActions.LoadTaskGroups({
-        userId: this.authService.userId
-      }),
+      TaskGroupActions.loadTaskGroups(this.authService.userId),
       TaskStudentActions.loadTaskStudents(this.authService.userId),
       new TaskEduContentActions.LoadTaskEduContents({
         userId: this.authService.userId
