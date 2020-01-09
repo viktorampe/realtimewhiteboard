@@ -56,7 +56,6 @@
     "@ngrx/router-store": "8.6.0",
     "@ngrx/store": "8.6.0",
     "@nrwl/angular": "8.10.1",
-    "@nrwl/schematics": "^8.10.1",
     "@webcomponents/webcomponentsjs": "^2.3.0",
     "classlist.js": "^1.1.20150312",
     "core-js": "^2.5.4",
