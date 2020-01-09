@@ -22,7 +22,6 @@ import {
   TaskEduContentFixture,
   TaskEduContentReducer,
   TaskFixture,
-  TaskGroupActions,
   TaskGroupFixture,
   TaskGroupReducer,
   TaskReducer,
@@ -33,6 +32,7 @@ import {
 import { routerReducer } from '@ngrx/router-store';
 import { Action, select, Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/angular/testing';
+import { taskGroupsLoaded } from 'libs/dal/src/lib/+state/task-group/task-group.actions';
 import { configureTestSuite } from 'ng-bullet';
 import { AssigneeTypesEnum } from '../interfaces/Assignee.interface';
 import { getTasksWithAssignments } from './kabas-tasks.viewmodel.selectors';
@@ -242,7 +242,7 @@ function getLoadLinkedPersonsAction() {
   });
 }
 function getLoadTaskGroupsAction(date) {
-  return new TaskGroupActions.TaskGroupsLoaded({
+  return taskGroupsLoaded({
     taskGroups: [
       new TaskGroupFixture({
         id: 1,
