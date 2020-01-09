@@ -62,7 +62,7 @@ steps:
       customEndpoint: diekeure-registry
 
   # Runs nx affected for all feature PRs.
-  - script: ./node_modules/.bin/nx affected:lint  --base=remotes/origin/develop
+  - script: ./node_modules/.bin/nx affected:lint  --base=remotes/origin/develop --parallel
     displayName: 'Lint affected'
     condition: and(succeeded(), eq(variables['dkFeaturePR'], 'true'))
 
@@ -78,7 +78,7 @@ steps:
     displayName: 'Format check'
 
   # Runs nx affected for all feature PRs.
-  - script: ./node_modules/.bin/nx affected:test  --base=remotes/origin/develop --passWithNoTests
+  - script: ./node_modules/.bin/nx affected:test  --base=remotes/origin/develop --passWithNoTests --parallel
     displayName: 'Test affected'
     condition: and(succeeded(), eq(variables['dkFeaturePR'], 'true'))
 
