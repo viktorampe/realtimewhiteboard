@@ -262,7 +262,7 @@ function getLoadTaskGroupsAction(date) {
   });
 }
 function getLoadTaskClassGroupsAction(date) {
-  return new TaskClassGroupActions.TaskClassGroupsLoaded({
+  return TaskClassGroupActions.taskClassGroupsLoaded({
     taskClassGroups: [
       new TaskClassGroupFixture({
         id: 1,

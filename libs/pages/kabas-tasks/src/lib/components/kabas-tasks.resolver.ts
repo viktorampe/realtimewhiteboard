@@ -48,7 +48,7 @@ export class KabasTasksResolver extends StateResolver {
       new LinkedPersonActions.LoadLinkedPersons({
         userId: this.authService.userId
       }),
-      new TaskClassGroupActions.LoadTaskClassGroups({
+      TaskClassGroupActions.loadTaskClassGroups({
         userId: this.authService.userId
       }),
       new TaskGroupActions.LoadTaskGroups({
