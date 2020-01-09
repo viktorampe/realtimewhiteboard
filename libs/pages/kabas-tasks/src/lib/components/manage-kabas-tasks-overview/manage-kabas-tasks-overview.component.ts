@@ -302,9 +302,14 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
     } as SearchFilterCriteriaInterface;
   }
 
-  public getActions(task?: TaskWithAssigneesInterface) {
+  public getActions(
+    task?: TaskWithAssigneesInterface
+  ): { label: string; handler: Function }[] {
     return [
-      { label: 'bekijken', handler: () => console.log('bekijken') },
+      {
+        label: 'bekijken',
+        handler: () => this.router.navigate(['tasks', 'manage', task.id])
+      },
       {
         label: task && task.archivedYear ? 'dearchiveren' : 'archiveren',
         handler: () =>

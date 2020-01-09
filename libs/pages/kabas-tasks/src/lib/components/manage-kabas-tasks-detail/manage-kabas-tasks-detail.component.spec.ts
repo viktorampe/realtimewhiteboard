@@ -4,6 +4,8 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { SearchModule } from '@campus/search';
 import { UiModule } from '@campus/ui';
 import { configureTestSuite } from 'ng-bullet';
+import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
+import { MockKabasTasksViewModel } from '../kabas-tasks.viewmodel.mock';
 import { ManageKabasTasksDetailComponent } from './manage-kabas-tasks-detail.component';
 
 describe('ManageKabasTasksDetailComponent', () => {
@@ -19,7 +21,10 @@ describe('ManageKabasTasksDetailComponent', () => {
         UiModule,
         NoopAnimationsModule
       ],
-      declarations: [ManageKabasTasksDetailComponent]
+      declarations: [ManageKabasTasksDetailComponent],
+      providers: [
+        { provide: KabasTasksViewModel, useClass: MockKabasTasksViewModel }
+      ]
     });
   });
 
