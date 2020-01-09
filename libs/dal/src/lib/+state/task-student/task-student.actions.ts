@@ -63,3 +63,8 @@ export const deleteTaskStudents = createAction(
 export const clearTaskStudents = createAction(
   '[TaskStudent/API] Clear TaskStudents'
 );
+
+export const updateTaskStudentsAccess = createAction(
+  '[TaskStudent/API] Update Access',
+  props<{ taskStudents: TaskStudentInterface[] }>()
+);
