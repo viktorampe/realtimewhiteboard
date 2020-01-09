@@ -62,7 +62,7 @@ steps:
       customEndpoint: diekeure-registry
 
   # Runs nx affected for all feature PRs.
-  - script: ./node_modules/.bin/nx affected:lint  --base=remotes/origin/develop --parallel
+  - script: ./node_modules/.bin/nx affected:lint  --base=remotes/origin/develop
     displayName: 'Lint affected'
     condition: and(succeeded(), eq(variables['dkFeaturePR'], 'true'))
 
