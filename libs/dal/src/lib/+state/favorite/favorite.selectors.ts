@@ -21,20 +21,11 @@ export const getLoaded = createSelector(
   (state: State) => state.loaded
 );
 
-export const getAll = createSelector(
-  selectFavoriteState,
-  selectAll
-);
+export const getAll = createSelector(selectFavoriteState, selectAll);
 
-export const getCount = createSelector(
-  selectFavoriteState,
-  selectTotal
-);
+export const getCount = createSelector(selectFavoriteState, selectTotal);
 
-export const getIds = createSelector(
-  selectFavoriteState,
-  selectIds
-);
+export const getIds = createSelector(selectFavoriteState, selectIds);
 
 export const getAllEntities = createSelector(
   selectFavoriteState,

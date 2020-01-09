@@ -20,20 +20,11 @@ export const getLoaded = createSelector(
   (state: State) => state.loaded
 );
 
-export const getAll = createSelector(
-  selectTaskGroupState,
-  selectAll
-);
+export const getAll = createSelector(selectTaskGroupState, selectAll);
 
-export const getCount = createSelector(
-  selectTaskGroupState,
-  selectTotal
-);
+export const getCount = createSelector(selectTaskGroupState, selectTotal);
 
-export const getIds = createSelector(
-  selectTaskGroupState,
-  selectIds
-);
+export const getIds = createSelector(selectTaskGroupState, selectIds);
 
 export const getAllEntities = createSelector(
   selectTaskGroupState,

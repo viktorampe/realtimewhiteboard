@@ -20,9 +20,9 @@ export function sortDiaboloPhases(
   return a.phase - b.phase;
 }
 
-export const adapter: EntityAdapter<
+export const adapter: EntityAdapter<DiaboloPhaseInterface> = createEntityAdapter<
   DiaboloPhaseInterface
-> = createEntityAdapter<DiaboloPhaseInterface>({
+>({
   sortComparer: sortDiaboloPhases
 });
 

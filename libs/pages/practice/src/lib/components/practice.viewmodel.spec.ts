@@ -509,10 +509,9 @@ describe('PracticeViewModel', () => {
           })
         );
 
-        expect(MethodQueries.getMethodWithYearByBookId).toHaveBeenCalledWith(
-          storeState,
-          { id: 1 }
-        );
+        expect(
+          MethodQueries.getMethodWithYearByBookId
+        ).toHaveBeenCalledWith(storeState, { id: 1 });
       });
     });
 
@@ -546,10 +545,9 @@ describe('PracticeViewModel', () => {
           })
         );
 
-        expect(EduContentTocQueries.getChaptersForBook).toHaveBeenCalledWith(
-          storeState,
-          { bookId: 1 }
-        );
+        expect(
+          EduContentTocQueries.getChaptersForBook
+        ).toHaveBeenCalledWith(storeState, { bookId: 1 });
       });
     });
 
@@ -577,7 +575,10 @@ describe('PracticeViewModel', () => {
 
         expect(ClassGroupQueries.getClassGroupsForBook).toHaveBeenCalledWith(
           storeState,
-          { id: mockBook.id, filterByYear: false }
+          {
+            id: mockBook.id,
+            filterByYear: false
+          }
         );
       });
     });
@@ -675,9 +676,7 @@ describe('PracticeViewModel', () => {
     });
 
     it('should open an exercise with eduContentTOCId', () => {
-      const unlockedFreePracticeByEduContentBookId: Dictionary<
-        UnlockedFreePracticeInterface[]
-      > = {
+      const unlockedFreePracticeByEduContentBookId: Dictionary<UnlockedFreePracticeInterface[]> = {
         24: [
           new UnlockedFreePracticeFixture({
             id: 7,
@@ -718,9 +717,7 @@ describe('PracticeViewModel', () => {
     });
 
     it('should open an exercise without eduContentTOCId', () => {
-      const unlockedFreePracticeByEduContentBookId: Dictionary<
-        UnlockedFreePracticeInterface[]
-      > = {
+      const unlockedFreePracticeByEduContentBookId: Dictionary<UnlockedFreePracticeInterface[]> = {
         24: [
           new UnlockedFreePracticeFixture({
             id: 8,

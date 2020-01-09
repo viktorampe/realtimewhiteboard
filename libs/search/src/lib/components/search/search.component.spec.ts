@@ -273,7 +273,13 @@ describe('SearchComponent', () => {
         count: 2,
         results: [{ id: 1 }, { id: 2 }],
         filterCriteriaPredictions: new Map([
-          ['LearningArea', new Map([[1, 100], [2, 50]])]
+          [
+            'LearningArea',
+            new Map([
+              [1, 100],
+              [2, 50]
+            ])
+          ]
         ])
       };
     });
@@ -303,7 +309,14 @@ describe('SearchComponent', () => {
         count: 3,
         results: [{ id: 1 }, { id: 2 }, { id: 3 }],
         filterCriteriaPredictions: new Map([
-          ['LearningArea', new Map([[1, 100], [2, 50], [3, 0]])]
+          [
+            'LearningArea',
+            new Map([
+              [1, 100],
+              [2, 50],
+              [3, 0]
+            ])
+          ]
         ])
       } as SearchResultInterface;
 

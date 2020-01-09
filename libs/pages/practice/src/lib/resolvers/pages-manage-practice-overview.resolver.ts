@@ -20,10 +20,7 @@ export class ManagePracticeOverviewResolver extends StateResolver {
   protected getLoadableActions(): Action[] {
     let methodIds: number[];
     this.store
-      .pipe(
-        select(MethodQueries.getAllowedMethodIds),
-        take(1)
-      )
+      .pipe(select(MethodQueries.getAllowedMethodIds), take(1))
       .subscribe(ids => (methodIds = ids)); // methodsIds resolved in app resolver
     return [new EduContentBookActions.LoadEduContentBooks({ methodIds })];
   }

@@ -53,8 +53,8 @@ steps:
     inputs:
       versionSpec: '10.x'
   - script: |
-      rm -rf dist junit coverage reportgenerator
-    displayName: 'Clear junit, coverage reports, build output'
+      rm -rf dist
+    displayName: 'Clear build output'
   - task: Npm@1
     displayName: 'Npm install'
     inputs:
@@ -62,7 +62,7 @@ steps:
       customEndpoint: diekeure-registry
 
   # Runs nx affected for all feature PRs.
-  - script: ./node_modules/.bin/nx affected:lint  --base=remotes/origin/develop --parallel
+  - script: ./node_modules/.bin/nx affected:lint  --base=remotes/origin/develop
     displayName: 'Lint affected'
     condition: and(succeeded(), eq(variables['dkFeaturePR'], 'true'))
 
@@ -77,8 +77,11 @@ steps:
       npm run format:check
     displayName: 'Format check'
 
+  - script: |
+      rm -rf dist junit coverage reportgenerator
+    displayName: 'Clear junit, coverage reports, build output'
   # Runs nx affected for all feature PRs.
-  - script: ./node_modules/.bin/nx affected:test  --base=remotes/origin/develop --passWithNoTests --parallel
+  - script: ./node_modules/.bin/nx affected:test  --base=remotes/origin/develop --passWithNoTests
     displayName: 'Test affected'
     condition: and(succeeded(), eq(variables['dkFeaturePR'], 'true'))
 

@@ -72,9 +72,7 @@ describe('ManagePracticeMethodDetailComponent', () => {
       new ClassGroupFixture({ id: 2, name: '1b' })
     ];
 
-    const unlockedFreePracticeByEduContentBookId: Dictionary<
-      UnlockedFreePracticeInterface[]
-    > = {
+    const unlockedFreePracticeByEduContentBookId: Dictionary<UnlockedFreePracticeInterface[]> = {
       5: [
         new UnlockedFreePracticeFixture({
           id: 1,
@@ -91,9 +89,7 @@ describe('ManagePracticeMethodDetailComponent', () => {
       new EduContentTOCFixture({ id: 3 })
     ];
 
-    const unlockedFreePracticeByEduContentTOCId: Dictionary<
-      UnlockedFreePracticeInterface[]
-    > = {
+    const unlockedFreePracticeByEduContentTOCId: Dictionary<UnlockedFreePracticeInterface[]> = {
       1: [
         new UnlockedFreePracticeFixture({
           id: 1,
