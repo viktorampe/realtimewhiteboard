@@ -68,4 +68,8 @@ export class KabasTasksViewModel {
     }
     return status;
   }
+
+  public setArchivedTasks(taskIds: number[], isArchived: boolean): void {}
+  public removeTasks(taskIds: number[]): void {}
+  public toggleFavorite(taskId: number): void {}
 }
