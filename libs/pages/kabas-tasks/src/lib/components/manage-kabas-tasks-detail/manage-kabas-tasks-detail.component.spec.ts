@@ -1,5 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { configureTestSuite } from 'ng-bullet';
+import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
+import { MockKabasTasksViewModel } from '../kabas-tasks.viewmodel.mock';
 import { ManageKabasTasksDetailComponent } from './manage-kabas-tasks-detail.component';
 
 describe('ManageKabasTasksDetailComponent', () => {
@@ -8,7 +10,10 @@ describe('ManageKabasTasksDetailComponent', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [ManageKabasTasksDetailComponent]
+      declarations: [ManageKabasTasksDetailComponent],
+      providers: [
+        { provide: KabasTasksViewModel, useClass: MockKabasTasksViewModel }
+      ]
     });
   });
 
