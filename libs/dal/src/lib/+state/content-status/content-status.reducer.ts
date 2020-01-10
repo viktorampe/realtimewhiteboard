@@ -13,9 +13,9 @@ export interface State extends EntityState<ContentStatusInterface> {
   error?: any;
 }
 
-export const adapter: EntityAdapter<
+export const adapter: EntityAdapter<ContentStatusInterface> = createEntityAdapter<
   ContentStatusInterface
-> = createEntityAdapter<ContentStatusInterface>();
+>();
 
 export const initialState: State = adapter.getInitialState({
   // additional entity state properties

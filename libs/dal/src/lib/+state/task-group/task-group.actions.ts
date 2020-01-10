@@ -1,103 +1,68 @@
 import { Update } from '@ngrx/entity';
-import { Action } from '@ngrx/store';
+import { createAction, props } from '@ngrx/store';
 import { TaskGroupInterface } from '../../+models';
 
-export enum TaskGroupsActionTypes {
-  TaskGroupsLoaded = '[TaskGroups] TaskGroups Loaded',
-  TaskGroupsLoadError = '[TaskGroups] Load Error',
-  LoadTaskGroups = '[TaskGroups] Load TaskGroups',
-  AddTaskGroup = '[TaskGroups] Add TaskGroup',
-  UpsertTaskGroup = '[TaskGroups] Upsert TaskGroup',
-  AddTaskGroups = '[TaskGroups] Add TaskGroups',
-  UpsertTaskGroups = '[TaskGroups] Upsert TaskGroups',
-  UpdateTaskGroup = '[TaskGroups] Update TaskGroup',
-  UpdateTaskGroups = '[TaskGroups] Update TaskGroups',
-  DeleteTaskGroup = '[TaskGroups] Delete TaskGroup',
-  DeleteTaskGroups = '[TaskGroups] Delete TaskGroups',
-  ClearTaskGroups = '[TaskGroups] Clear TaskGroups'
-}
+export const loadTaskGroups = createAction(
+  '[TaskGroup] Load TaskGroups',
+  (userId: number = null, force: boolean = false) => ({
+    userId,
+    force
+  })
+);
 
-export class LoadTaskGroups implements Action {
-  readonly type = TaskGroupsActionTypes.LoadTaskGroups;
+export const taskGroupsLoaded = createAction(
+  '[TaskGroup] TaskGroups loaded',
+  props<{ taskGroups: TaskGroupInterface[] }>()
+);
 
-  constructor(
-    public payload: { force?: boolean; userId: number } = { userId: null }
-  ) {}
-}
+export const taskGroupsLoadError = createAction(
+  '[TaskGroup] Load Error',
+  props<{ error: any }>()
+);
 
-export class TaskGroupsLoaded implements Action {
-  readonly type = TaskGroupsActionTypes.TaskGroupsLoaded;
+export const addTaskGroup = createAction(
+  '[TaskGroup] Add TaskGroup',
+  props<{ taskGroup: TaskGroupInterface }>()
+);
 
-  constructor(public payload: { taskGroups: TaskGroupInterface[] }) {}
-}
+export const upsertTaskGroup = createAction(
+  '[TaskGroup] Upsert TaskGroup',
+  props<{ taskGroup: TaskGroupInterface }>()
+);
 
-export class TaskGroupsLoadError implements Action {
-  readonly type = TaskGroupsActionTypes.TaskGroupsLoadError;
-  constructor(public payload: any) {}
-}
+export const addTaskGroups = createAction(
+  '[TaskGroup] Add TaskGroups',
+  props<{ taskGroups: TaskGroupInterface[] }>()
+);
 
-export class AddTaskGroup implements Action {
-  readonly type = TaskGroupsActionTypes.AddTaskGroup;
+export const upsertTaskGroups = createAction(
+  '[TaskGroup] Upsert TaskGroups',
+  props<{ taskGroups: TaskGroupInterface[] }>()
+);
 
-  constructor(public payload: { taskGroup: TaskGroupInterface }) {}
-}
+export const updateTaskGroup = createAction(
+  '[TaskGroup] Update TaskGroup',
+  props<{ taskGroup: Update<TaskGroupInterface> }>()
+);
 
-export class UpsertTaskGroup implements Action {
-  readonly type = TaskGroupsActionTypes.UpsertTaskGroup;
+export const updateTaskGroups = createAction(
+  '[TaskGroup] Update TaskGroups',
+  props<{ taskGroups: Update<TaskGroupInterface>[] }>()
+);
 
-  constructor(public payload: { taskGroup: TaskGroupInterface }) {}
-}
+export const deleteTaskGroup = createAction(
+  '[TaskGroup] Delete TaskGroup',
+  props<{ id: number }>()
+);
 
-export class AddTaskGroups implements Action {
-  readonly type = TaskGroupsActionTypes.AddTaskGroups;
+export const deleteTaskGroups = createAction(
+  '[TaskGroup] Delete TaskGroups',
+  props<{ ids: number[] }>()
+);
 
-  constructor(public payload: { taskGroups: TaskGroupInterface[] }) {}
-}
+export const clearTaskGroups = createAction('[TaskGroup] Clear TaskGroups');
 
-export class UpsertTaskGroups implements Action {
-  readonly type = TaskGroupsActionTypes.UpsertTaskGroups;
-
-  constructor(public payload: { taskGroups: TaskGroupInterface[] }) {}
-}
-
-export class UpdateTaskGroup implements Action {
-  readonly type = TaskGroupsActionTypes.UpdateTaskGroup;
-
-  constructor(public payload: { taskGroup: Update<TaskGroupInterface> }) {}
-}
-
-export class UpdateTaskGroups implements Action {
-  readonly type = TaskGroupsActionTypes.UpdateTaskGroups;
-
-  constructor(public payload: { taskGroups: Update<TaskGroupInterface>[] }) {}
-}
-
-export class DeleteTaskGroup implements Action {
-  readonly type = TaskGroupsActionTypes.DeleteTaskGroup;
-
-  constructor(public payload: { id: number }) {}
-}
-
-export class DeleteTaskGroups implements Action {
-  readonly type = TaskGroupsActionTypes.DeleteTaskGroups;
-
-  constructor(public payload: { ids: number[] }) {}
-}
-
-export class ClearTaskGroups implements Action {
-  readonly type = TaskGroupsActionTypes.ClearTaskGroups;
-}
-
-export type TaskGroupsActions =
-  | LoadTaskGroups
-  | TaskGroupsLoaded
-  | TaskGroupsLoadError
-  | AddTaskGroup
-  | UpsertTaskGroup
-  | AddTaskGroups
-  | UpsertTaskGroups
-  | UpdateTaskGroup
-  | UpdateTaskGroups
-  | DeleteTaskGroup
-  | DeleteTaskGroups
-  | ClearTaskGroups;
+export const updateTaskGroupsAccess = createAction(
+  '[TaskGroup] Update Access',
+  props<{ taskGroups: TaskGroupInterface[] }>()
+);

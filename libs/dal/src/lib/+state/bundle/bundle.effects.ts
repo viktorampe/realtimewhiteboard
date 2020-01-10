@@ -49,7 +49,8 @@ export class BundlesEffects {
             switchMap((unlockedContents: UnlockedContentInterface[]) => {
               const actions: (
                 | AddEffectFeedback
-                | AddUnlockedContent)[] = unlockedContents.map(
+                | AddUnlockedContent
+              )[] = unlockedContents.map(
                 unlockedContent => new AddUnlockedContent({ unlockedContent })
               );
               const effectFeedback = EffectFeedback.generateSuccessFeedback(
@@ -86,7 +87,8 @@ export class BundlesEffects {
             switchMap((unlockedContents: UnlockedContentInterface[]) => {
               const actions: (
                 | AddEffectFeedback
-                | AddUnlockedContent)[] = unlockedContents.map(
+                | AddUnlockedContent
+              )[] = unlockedContents.map(
                 unlockedContent => new AddUnlockedContent({ unlockedContent })
               );
               const effectFeedback = EffectFeedback.generateSuccessFeedback(

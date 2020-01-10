@@ -38,6 +38,7 @@ export interface LearningPlanGoalProgressServiceInterface {
     userId: number,
     learningGoalProgresses: (
       | LearningPlanGoalProgressWithEduContentTocInterface
-      | LearningPlanGoalProgressWithUserLessonInterface)[]
+      | LearningPlanGoalProgressWithUserLessonInterface
+    )[]
   ): Observable<LearningPlanGoalProgressInterface[]>;
 }

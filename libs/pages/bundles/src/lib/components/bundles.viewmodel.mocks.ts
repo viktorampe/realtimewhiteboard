@@ -61,7 +61,10 @@ export class MockViewModel implements ViewModelInterface<BundlesViewModel> {
 
   contentStatusOptions$: Observable<SelectOption[]> = new BehaviorSubject<
     SelectOption[]
-  >([{ value: 1, viewValue: 'foo' }, { value: 2, viewValue: 'bar' }]);
+  >([
+    { value: 1, viewValue: 'foo' },
+    { value: 2, viewValue: 'bar' }
+  ]);
 
   currentUserHasWriteAccessToBundle(): boolean {
     return true;
@@ -152,6 +155,9 @@ export class MockViewModel implements ViewModelInterface<BundlesViewModel> {
   }
 
   getContentStatusOptions(): Observable<SelectOption[]> {
-    return of([{ value: 1, viewValue: 'foo' }, { value: 2, viewValue: 'bar' }]);
+    return of([
+      { value: 1, viewValue: 'foo' },
+      { value: 2, viewValue: 'bar' }
+    ]);
   }
 }

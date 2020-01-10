@@ -90,7 +90,8 @@ export class UserLessonEffects {
               let actions: (
                 | AddEffectFeedback
                 | AddUserLesson
-                | StartAddManyLearningPlanGoalProgresses)[];
+                | StartAddManyLearningPlanGoalProgresses
+              )[];
 
               actions = [
                 new AddUserLesson({ userLesson }),

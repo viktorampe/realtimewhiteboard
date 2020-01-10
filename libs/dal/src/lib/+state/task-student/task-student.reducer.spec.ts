@@ -1,6 +1,18 @@
 import { Update } from '@ngrx/entity';
-import { TaskStudentActions } from '.';
 import { TaskStudentInterface } from '../../+models';
+import {
+  addTaskStudent,
+  addTaskStudents,
+  clearTaskStudents,
+  deleteTaskStudent,
+  deleteTaskStudents,
+  taskStudentsLoaded,
+  taskStudentsLoadError,
+  updateTaskStudent,
+  updateTaskStudents,
+  upsertTaskStudent,
+  upsertTaskStudents
+} from './task-student.actions';
 import { initialState, reducer, State } from './task-student.reducer';
 
 const taskIdInitialValue = 1;
@@ -73,7 +85,7 @@ describe('TaskStudents Reducer', () => {
 
   describe('loaded action', () => {
     it('should load all taskStudents', () => {
-      const action = new TaskStudentActions.TaskStudentsLoaded({
+      const action = taskStudentsLoaded({
         taskStudents
       });
       const result = reducer(initialState, action);
@@ -82,7 +94,7 @@ describe('TaskStudents Reducer', () => {
 
     it('should error', () => {
       const error = 'Something went wrong';
-      const action = new TaskStudentActions.TaskStudentsLoadError(error);
+      const action = taskStudentsLoadError({ error });
       const result = reducer(initialState, action);
       expect(result).toEqual(createState([], false, error));
     });
@@ -91,7 +103,7 @@ describe('TaskStudents Reducer', () => {
   describe('add actions', () => {
     it('should add one taskStudent', () => {
       const taskStudent = taskStudents[0];
-      const action = new TaskStudentActions.AddTaskStudent({
+      const action = addTaskStudent({
         taskStudent
       });
 
@@ -100,7 +112,7 @@ describe('TaskStudents Reducer', () => {
     });
 
     it('should add multiple taskStudents', () => {
-      const action = new TaskStudentActions.AddTaskStudents({ taskStudents });
+      const action = addTaskStudents({ taskStudents });
       const result = reducer(initialState, action);
 
       expect(result).toEqual(createState(taskStudents, false));
@@ -112,14 +124,14 @@ describe('TaskStudents Reducer', () => {
 
       const startState = reducer(
         initialState,
-        new TaskStudentActions.AddTaskStudent({
+        addTaskStudent({
           taskStudent: originalTaskStudent
         })
       );
 
       const updatedTaskStudent = createTaskStudent(taskStudents[0].id, 'test');
 
-      const action = new TaskStudentActions.UpsertTaskStudent({
+      const action = upsertTaskStudent({
         taskStudent: updatedTaskStudent
       });
 
@@ -139,7 +151,7 @@ describe('TaskStudents Reducer', () => {
         createTaskStudent(3),
         createTaskStudent(4)
       ];
-      const action = new TaskStudentActions.UpsertTaskStudents({
+      const action = upsertTaskStudents({
         taskStudents: taskStudentsToInsert
       });
 
@@ -159,7 +171,7 @@ describe('TaskStudents Reducer', () => {
           taskId: taskIdUpdatedValue
         }
       };
-      const action = new TaskStudentActions.UpdateTaskStudent({
+      const action = updateTaskStudent({
         taskStudent: update
       });
       const result = reducer(startState, action);
@@ -184,7 +196,7 @@ describe('TaskStudents Reducer', () => {
           }
         }
       ];
-      const action = new TaskStudentActions.UpdateTaskStudents({
+      const action = updateTaskStudents({
         taskStudents: updates
       });
       const result = reducer(startState, action);
@@ -203,7 +215,7 @@ describe('TaskStudents Reducer', () => {
     it('should delete one taskStudent ', () => {
       const taskStudent = taskStudents[0];
       const startState = createState([taskStudent]);
-      const action = new TaskStudentActions.DeleteTaskStudent({
+      const action = deleteTaskStudent({
         id: taskStudent.id
       });
       const result = reducer(startState, action);
@@ -212,7 +224,7 @@ describe('TaskStudents Reducer', () => {
 
     it('should delete multiple taskStudents', () => {
       const startState = createState(taskStudents);
-      const action = new TaskStudentActions.DeleteTaskStudents({
+      const action = deleteTaskStudents({
         ids: [taskStudents[0].id, taskStudents[1].id]
       });
       const result = reducer(startState, action);
@@ -227,7 +239,7 @@ describe('TaskStudents Reducer', () => {
         true,
         'something went wrong'
       );
-      const action = new TaskStudentActions.ClearTaskStudents();
+      const action = clearTaskStudents();
       const result = reducer(startState, action);
       expect(result).toEqual(createState([], true, 'something went wrong'));
     });

@@ -76,10 +76,7 @@ export class MethodComponent implements OnInit {
 
   public clickOpenChapter(chapterId: number) {
     this.currentTab$
-      .pipe(
-        take(1),
-        withLatestFrom(this.currentMethodParams$)
-      )
+      .pipe(take(1), withLatestFrom(this.currentMethodParams$))
       .subscribe(([tab, currentMethodParams]) => {
         this.router.navigate(['methods', currentMethodParams.book, chapterId], {
           queryParams: {

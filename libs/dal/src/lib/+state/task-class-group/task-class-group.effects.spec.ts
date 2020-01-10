@@ -8,9 +8,9 @@ import { Observable, of } from 'rxjs';
 import { TaskClassGroupReducer } from '.';
 import { TASK_CLASS_GROUP_SERVICE_TOKEN } from '../../tasks/task-class-group.service.interface';
 import {
-  LoadTaskClassGroups,
-  TaskClassGroupsLoaded,
-  TaskClassGroupsLoadError
+  loadTaskClassGroups,
+  taskClassGroupsLoaded,
+  taskClassGroupsLoadError
 } from './task-class-group.actions';
 import { TaskClassGroupEffects } from './task-class-group.effects';
 
@@ -95,15 +95,14 @@ describe('TaskClassGroupEffects', () => {
   });
 
   describe('loadTaskClassGroup$', () => {
-    const unforcedLoadAction = new LoadTaskClassGroups({ userId: 1 });
-    const forcedLoadAction = new LoadTaskClassGroups({
-      force: true,
-      userId: 1
-    });
-    const filledLoadedAction = new TaskClassGroupsLoaded({
+    const unforcedLoadAction = loadTaskClassGroups(1);
+    const forcedLoadAction = loadTaskClassGroups(1, true);
+    const filledLoadedAction = taskClassGroupsLoaded({
       taskClassGroups: []
     });
-    const loadErrorAction = new TaskClassGroupsLoadError(new Error('failed'));
+    const loadErrorAction = taskClassGroupsLoadError({
+      error: new Error('failed')
+    });
     describe('with initialState', () => {
       beforeAll(() => {
         usedState = TaskClassGroupReducer.initialState;

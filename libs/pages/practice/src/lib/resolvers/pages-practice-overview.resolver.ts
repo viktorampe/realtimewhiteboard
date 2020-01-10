@@ -19,10 +19,7 @@ export class PracticeOverviewResolver extends StateResolver {
   protected getLoadableActions(): Action[] {
     let bookIds: number[];
     this.store
-      .pipe(
-        select(UnlockedFreePracticeQueries.getAll),
-        take(1)
-      )
+      .pipe(select(UnlockedFreePracticeQueries.getAll), take(1))
       .subscribe(ufps => (bookIds = ufps.map(ufp => ufp.eduContentBookId)));
 
     return [new EduContentBookActions.LoadEduContentBooksFromIds({ bookIds })];

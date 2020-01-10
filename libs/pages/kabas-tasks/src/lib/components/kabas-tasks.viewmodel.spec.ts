@@ -17,8 +17,13 @@ import { TaskStatusEnum } from '../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from './kabas-tasks.viewmodel';
 
 describe('KabasTaskViewModel', () => {
+  const dateMock = new MockDate();
+
+  afterAll(() => {
+    dateMock.returnRealDate();
+  });
+
   let kabasTasksViewModel: KabasTasksViewModel;
-  let dateMock: MockDate;
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
@@ -41,14 +46,6 @@ describe('KabasTaskViewModel', () => {
       ],
       providers: [KabasTasksViewModel]
     });
-  });
-
-  beforeAll(() => {
-    dateMock = new MockDate();
-  });
-
-  afterAll(() => {
-    dateMock.returnRealDate();
   });
 
   beforeEach(() => {
