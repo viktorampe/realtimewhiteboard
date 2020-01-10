@@ -17,8 +17,8 @@ export enum TaskSortEnum {
 export class ManageKabasTasksDetailComponent implements OnInit {
   public TaskSortEnum = TaskSortEnum;
   public diaboloPhaseFilter: SearchFilterCriteriaInterface;
-  istaskDigital = false; // replace w/ stream
-  public selections$ = new BehaviorSubject<any>({});
+  isPaperTask = true; // replace w/ stream
+  public selections$ = new BehaviorSubject<any[]>([]);
 
   constructor(private viewModel: KabasTasksViewModel) {}
 

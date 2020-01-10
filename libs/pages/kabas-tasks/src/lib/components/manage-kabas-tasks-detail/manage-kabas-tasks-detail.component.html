@@ -1,44 +1,48 @@
 <campus-page-bar>
-  <ng-container>
-    <campus-button
-      *ngIf="!(selections$ | async).length"
-      class="shared-header__contextual__button smallIcon"
-      iconClass=""
-      ><span>Lesmateriaal toevoegen</span></campus-button
-    >
-    <campus-button
-      *ngIf="istaskDigital && !(selections$ | async).length"
-      class="shared-header__contextual__button smallIcon"
-      iconClass="results"
-      ><span>Resultaten bekijken</span></campus-button
-    >
-    <campus-button
-      *ngIf="!(selections$ | async).length"
-      class="shared-header__contextual__button smallIcon"
-      iconClass=""
-      ><span>Doelenmatrix</span></campus-button
-    >
-    <campus-button
-      *ngIf="!istaskDigital"
-      class="shared-header__contextual__button smallIcon"
-      iconClass=""
-      ><span>Print</span></campus-button
-    >
-  </ng-container>
-  <ng-container>
-    <campus-button
-      *ngIf="istaskDigital && (selections$ | async).length === 1"
-      class="shared-header__contextual__button smallIcon"
-      iconClass=""
-      ><span>Preview</span></campus-button
-    >
-
-    <campus-button
-      *ngIf="(selections$ | async).length"
-      class="shared-header__contextual__button smallIcon"
-      iconClass="delete"
-      ><span>Verwijderen</span></campus-button
-    >
+  <ng-container *ngIf="selections$ | async as selectedTasks">
+    <ng-container *ngIf="selectedTasks.length === 0; else tasksSelected">
+      <campus-button
+        class="shared-header__contextual__button smallIcon"
+        iconClass=""
+        ><span>Lesmateriaal toevoegen</span></campus-button
+      >
+      <campus-button
+        *ngIf="!isPaperTask"
+        class="shared-header__contextual__button smallIcon"
+        iconClass="results"
+        ><span>Resultaten bekijken</span></campus-button
+      >
+      <campus-button
+        class="shared-header__contextual__button smallIcon"
+        iconClass=""
+        ><span>Doelenmatrix</span></campus-button
+      >
+      <campus-button
+        *ngIf="isPaperTask"
+        class="shared-header__contextual__button smallIcon"
+        iconClass=""
+        ><span>Print</span></campus-button
+      >
+    </ng-container>
+    <ng-template #tasksSelected>
+      <campus-button
+        *ngIf="!isPaperTask && selectedTasks.length === 1"
+        class="shared-header__contextual__button smallIcon"
+        iconClass=""
+        ><span>Preview</span></campus-button
+      >
+      <campus-button
+        *ngIf="isPaperTask"
+        class="shared-header__contextual__button smallIcon"
+        iconClass=""
+        ><span>Print</span></campus-button
+      >
+      <campus-button
+        class="shared-header__contextual__button smallIcon"
+        iconClass="delete"
+        ><span>Verwijderen</span></campus-button
+      >
+    </ng-template>
   </ng-container>
 </campus-page-bar>
 <div class="manage-kabas-tasks"
@@ -52,7 +56,7 @@
         ></campus-search-term>
 
         <div
-          *ngIf="istaskDigital"
+          *ngIf="!isPaperTask"
           class="manage-kabas-tasks-detail__moetje-toggle"
         >
           Moetje
