@@ -50,17 +50,17 @@
 <div class="manage-kabas-tasks"
   ><div class="manage-kabas-tasks-detail__container">
     <div class="manage-kabas-tasks-detail__filterbar">
-      <div
-        *ngIf="istaskDigital"
-        class="manage-kabas-tasks-detail__filterbar__filters"
-      >
+      <div class="manage-kabas-tasks-detail__filterbar__filters">
         <campus-search-term
           placeholder="Filter op titel"
           [autoComplete]="false"
           [emitOnTextChange]="true"
         ></campus-search-term>
 
-        <div class="manage-kabas-tasks-detail__moetje-toggle">
+        <div
+          *ngIf="istaskDigital"
+          class="manage-kabas-tasks-detail__moetje-toggle"
+        >
           Moetje
           <mat-slide-toggle color="primary"> </mat-slide-toggle>
           Magje
@@ -76,48 +76,6 @@
           class="manage-kabas-tasks-detail__reset-filters"
           iconClass="reset-filters"
         ></campus-button>
-        <div style="flex-grow: 1;"></div>
-
-        <mat-select
-          class="manage-kabas-tasks-detail__sorting"
-          #digitalSorting
-          [placeholder]="'Sorteren'"
-        >
-          <mat-option [value]="TaskSortEnum.NAME">
-            Alfabetisch
-          </mat-option>
-        </mat-select>
-      </div>
-      <div
-        *ngIf="!istaskDigital"
-        class="manage-kabas-tasks-detail__filterbar__filters"
-      >
-        <campus-search-term
-          placeholder="Filter op titel"
-          [autoComplete]="false"
-          [emitOnTextChange]="true"
-        ></campus-search-term>
-
-        <campus-button-toggle-filter
-          [multiple]="true"
-          [filterCriteria]="diaboloPhaseFilter"
-        >
-        </campus-button-toggle-filter>
-
-        <campus-button
-          class="manage-kabas-tasks-detail__reset-filters"
-          iconClass="reset-filters"
-        ></campus-button>
-        <div style="flex-grow: 1;"></div>
-
-        <mat-select
-          class="manage-kabas-tasks-detail__sorting"
-          [placeholder]="'Sorteren'"
-        >
-          <mat-option [value]="TaskSortEnum.NAME">
-            Alfabetisch
-          </mat-option>
-        </mat-select>
       </div>
     </div>
 

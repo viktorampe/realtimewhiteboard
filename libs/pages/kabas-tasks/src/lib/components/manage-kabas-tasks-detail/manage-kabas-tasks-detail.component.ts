@@ -18,23 +18,9 @@ export class ManageKabasTasksDetailComponent implements OnInit {
   public TaskSortEnum = TaskSortEnum;
   public diaboloPhaseFilter: SearchFilterCriteriaInterface;
   istaskDigital = false; // replace w/ stream
-  public selectedItems = [];
   public selections$ = new BehaviorSubject<any>({});
+
   constructor(private viewModel: KabasTasksViewModel) {}
-
-  public setArchivedTasks(taskIds: number[], isArchived: boolean) {
-    this.viewModel.setArchivedTasks(taskIds, isArchived);
-  }
-  public removeTasks(taskIds: number[]) {
-    this.viewModel.removeTasks(taskIds);
-  }
-  public toggleFavorite(taskId: number) {
-    this.viewModel.toggleFavorite(taskId);
-  }
-
-  public clickedListItem(clickedOptions) {
-    this.selections$.next(clickedOptions.selectedOptions.selected);
-  }
 
   ngOnInit() {
     this.diaboloPhaseFilter = {
@@ -66,5 +52,18 @@ export class ManageKabasTasksDetailComponent implements OnInit {
         }
       ]
     };
+  }
+
+  public setArchivedTasks(taskIds: number[], isArchived: boolean) {
+    this.viewModel.setArchivedTasks(taskIds, isArchived);
+  }
+  public removeTasks(taskIds: number[]) {
+    this.viewModel.removeTasks(taskIds);
+  }
+  public toggleFavorite(taskId: number) {
+    this.viewModel.toggleFavorite(taskId);
+  }
+  public clickedListItem(clickedOptions) {
+    this.selections$.next(clickedOptions.selectedOptions.selected);
   }
 }
