@@ -31,7 +31,7 @@
   </ng-container>
   <ng-container>
     <campus-button
-      *ngIf="istaskDigital && selectedItems.length === 1"
+      *ngIf="istaskDigital && (selectedItems$ | async).length"
       class="shared-header__contextual__button smallIcon"
       data-cy="nav-archive-task"
       iconClass=""

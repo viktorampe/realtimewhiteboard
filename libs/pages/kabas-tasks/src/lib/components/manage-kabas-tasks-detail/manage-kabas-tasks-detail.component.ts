@@ -17,9 +17,9 @@ export enum TaskSortEnum {
 export class ManageKabasTasksDetailComponent implements OnInit {
   public TaskSortEnum = TaskSortEnum;
   public diaboloPhaseFilter: SearchFilterCriteriaInterface;
-  istaskDigital = false; // replace w/ stream
+  istaskDigital = true; // replace w/ stream
   public selectedItems = [];
-  private selectedItems$ = new BehaviorSubject<any>({});
+  public selectedItems$ = new BehaviorSubject<any>({});
   constructor(private viewModel: KabasTasksViewModel) {}
 
   public setArchivedTasks(taskIds: number[], isArchived: boolean) {
@@ -33,7 +33,10 @@ export class ManageKabasTasksDetailComponent implements OnInit {
   }
 
   public clickedListItem(clickedOptions) {
-    this.selectedItems = clickedOptions.selectedOptions.selected;
+    this.selectedItems$.next(clickedOptions.selectedOptions.selected);
+    console.log(this.selectedItems$.value);
+    console.log(this.selectedItems);
+    //this.selectedItems = clickedOptions.selectedOptions.selected;
   }
 
   ngOnInit() {
