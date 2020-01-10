@@ -1,28 +1,28 @@
 <campus-page-bar>
   <ng-container>
     <campus-button
-      *ngIf="!selectedItems.length"
+      *ngIf="!(selections$ | async).length"
       class="shared-header__contextual__button smallIcon"
       data-cy="nav-archive-task"
       iconClass=""
       ><span>Lesmateriaal toevoegen</span></campus-button
     >
     <campus-button
-      *ngIf="istaskDigital && !selectedItems.length"
+      *ngIf="istaskDigital && !(selections$ | async).length"
       class="shared-header__contextual__button smallIcon"
       data-cy="nav-archive-task"
       iconClass="results"
       ><span>Resultaten bekijken</span></campus-button
     >
     <campus-button
-      *ngIf="!selectedItems.length"
+      *ngIf="!(selections$ | async).length"
       class="shared-header__contextual__button smallIcon"
       data-cy="nav-delete-task"
       iconClass=""
       ><span>Doelenmatrix</span></campus-button
     >
     <campus-button
-      *ngIf="!istaskDigital && !selectedItems.length"
+      *ngIf="!istaskDigital"
       class="shared-header__contextual__button smallIcon"
       data-cy="nav-delete-task"
       iconClass=""
@@ -31,7 +31,7 @@
   </ng-container>
   <ng-container>
     <campus-button
-      *ngIf="istaskDigital && (selections$ | async).length"
+      *ngIf="istaskDigital && (selections$ | async).length === 1"
       class="shared-header__contextual__button smallIcon"
       data-cy="nav-archive-task"
       iconClass=""
@@ -39,20 +39,13 @@
     >
 
     <campus-button
-      *ngIf="selectedItems.length"
+      *ngIf="(selections$ | async).length"
       class="shared-header__contextual__button smallIcon"
       data-cy="nav-archive-task"
       iconClass="delete"
       ><span>Verwijderen</span></campus-button
     >
-    <campus-button
-      *ngIf="!istaskDigital && selectedItems.length"
-      class="shared-header__contextual__button smallIcon"
-      data-cy="nav-delete-task"
-      iconClass=""
-      ><span>Print</span></campus-button
-    ></ng-container
-  >
+  </ng-container>
 </campus-page-bar>
 <div class="manage-kabas-tasks"
   ><div class="manage-kabas-tasks-detail__container">

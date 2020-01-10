@@ -17,7 +17,7 @@ export enum TaskSortEnum {
 export class ManageKabasTasksDetailComponent implements OnInit {
   public TaskSortEnum = TaskSortEnum;
   public diaboloPhaseFilter: SearchFilterCriteriaInterface;
-  istaskDigital = true; // replace w/ stream
+  istaskDigital = false; // replace w/ stream
   public selectedItems = [];
   public selections$ = new BehaviorSubject<any>({});
   constructor(private viewModel: KabasTasksViewModel) {}
@@ -34,9 +34,6 @@ export class ManageKabasTasksDetailComponent implements OnInit {
 
   public clickedListItem(clickedOptions) {
     this.selections$.next(clickedOptions.selectedOptions.selected);
-    console.log(this.selections$.value);
-    console.log(this.selectedItems);
-    //this.selectedItems = clickedOptions.selectedOptions.selected;
   }
 
   ngOnInit() {
