@@ -197,8 +197,8 @@
         class="app-educontentsearchresult__bottom__buttonbar__linktask"
         *ngIf="
           !data.currentBundle &&
-          (!data.inTask &&
-            data.eduContent.publishedEduContentMetadata.taskAllowed)
+          !data.inTask &&
+          data.eduContent.publishedEduContentMetadata.taskAllowed
         "
         (click)="linkTask()"
         iconClass="task"
