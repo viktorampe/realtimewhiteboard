@@ -8,29 +8,25 @@ import {
   TASK_STUDENT_SERVICE_TOKEN
 } from '../../tasks/task-student.service.interface';
 import {
-  LoadTaskStudents,
-  TaskStudentsActionTypes,
-  TaskStudentsLoaded,
-  TaskStudentsLoadError
+  loadTaskStudents,
+  taskStudentsLoaded,
+  taskStudentsLoadError
 } from './task-student.actions';
 
 @Injectable()
 export class TaskStudentEffects {
   @Effect()
-  loadTaskStudents$ = this.dataPersistence.fetch(
-    TaskStudentsActionTypes.LoadTaskStudents,
-    {
-      run: (action: LoadTaskStudents, state: DalState) => {
-        if (!action.payload.force && state.taskStudents.loaded) return;
-        return this.taskStudentService
-          .getAllForUser(action.payload.userId)
-          .pipe(map(taskStudents => new TaskStudentsLoaded({ taskStudents })));
-      },
-      onError: (action: LoadTaskStudents, error) => {
-        return new TaskStudentsLoadError(error);
-      }
+  loadTaskStudents$ = this.dataPersistence.fetch(loadTaskStudents, {
+    run: (action: ReturnType<typeof loadTaskStudents>, state: DalState) => {
+      if (!action.force && state.taskStudents.loaded) return;
+      return this.taskStudentService
+        .getAllForUser(action.userId)
+        .pipe(map(taskStudents => taskStudentsLoaded({ taskStudents })));
+    },
+    onError: (action: ReturnType<typeof loadTaskStudents>, error) => {
+      return taskStudentsLoadError({ error });
     }
-  );
+  });
 
   constructor(
     private actions: Actions,

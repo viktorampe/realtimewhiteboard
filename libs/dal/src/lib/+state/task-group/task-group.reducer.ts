@@ -1,6 +1,7 @@
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
+import { Action, createReducer, on } from '@ngrx/store';
 import { TaskGroupInterface } from '../../+models';
-import { TaskGroupsActions, TaskGroupsActionTypes } from './task-group.actions';
+import * as TaskGroupActions from './task-group.actions';
 
 export const NAME = 'taskGroups';
 
@@ -19,62 +20,47 @@ export const initialState: State = adapter.getInitialState({
   loaded: false
 });
 
-export function reducer(
-  state = initialState,
-  action: TaskGroupsActions
-): State {
-  switch (action.type) {
-    case TaskGroupsActionTypes.AddTaskGroup: {
-      return adapter.addOne(action.payload.taskGroup, state);
-    }
+const TaskGroupReducer = createReducer(
+  initialState,
+  on(TaskGroupActions.addTaskGroup, (state, action) =>
+    adapter.addOne(action.taskGroup, state)
+  ),
+  on(TaskGroupActions.upsertTaskGroup, (state, action) =>
+    adapter.upsertOne(action.taskGroup, state)
+  ),
+  on(TaskGroupActions.addTaskGroups, (state, action) =>
+    adapter.addMany(action.taskGroups, state)
+  ),
+  on(TaskGroupActions.upsertTaskGroups, (state, action) =>
+    adapter.upsertMany(action.taskGroups, state)
+  ),
+  on(TaskGroupActions.updateTaskGroup, (state, action) =>
+    adapter.updateOne(action.taskGroup, state)
+  ),
+  on(TaskGroupActions.updateTaskGroups, (state, action) =>
+    adapter.updateMany(action.taskGroups, state)
+  ),
+  on(TaskGroupActions.deleteTaskGroup, (state, action) =>
+    adapter.removeOne(action.id, state)
+  ),
+  on(TaskGroupActions.deleteTaskGroups, (state, action) =>
+    adapter.removeMany(action.ids, state)
+  ),
+  on(TaskGroupActions.clearTaskGroups, state => adapter.removeAll(state)),
+  on(TaskGroupActions.taskGroupsLoaded, (state, action) =>
+    adapter.addAll(action.taskGroups, { ...state, loaded: true })
+  ),
+  on(TaskGroupActions.taskGroupsLoadError, (state, action) => {
+    return {
+      ...state,
+      ...{ error: action.error },
+      loaded: false
+    };
+  })
+);
 
-    case TaskGroupsActionTypes.UpsertTaskGroup: {
-      return adapter.upsertOne(action.payload.taskGroup, state);
-    }
-
-    case TaskGroupsActionTypes.AddTaskGroups: {
-      return adapter.addMany(action.payload.taskGroups, state);
-    }
-
-    case TaskGroupsActionTypes.UpsertTaskGroups: {
-      return adapter.upsertMany(action.payload.taskGroups, state);
-    }
-
-    case TaskGroupsActionTypes.UpdateTaskGroup: {
-      return adapter.updateOne(action.payload.taskGroup, state);
-    }
-
-    case TaskGroupsActionTypes.UpdateTaskGroups: {
-      return adapter.updateMany(action.payload.taskGroups, state);
-    }
-
-    case TaskGroupsActionTypes.DeleteTaskGroup: {
-      return adapter.removeOne(action.payload.id, state);
-    }
-
-    case TaskGroupsActionTypes.DeleteTaskGroups: {
-      return adapter.removeMany(action.payload.ids, state);
-    }
-
-    case TaskGroupsActionTypes.TaskGroupsLoaded: {
-      return adapter.addAll(action.payload.taskGroups, {
-        ...state,
-        loaded: true
-      });
-    }
-
-    case TaskGroupsActionTypes.TaskGroupsLoadError: {
-      return { ...state, error: action.payload, loaded: false };
-    }
-
-    case TaskGroupsActionTypes.ClearTaskGroups: {
-      return adapter.removeAll(state);
-    }
-
-    default: {
-      return state;
-    }
-  }
+export function reducer(state: State | undefined, action: Action) {
+  return TaskGroupReducer(state, action);
 }
 
 export const {
