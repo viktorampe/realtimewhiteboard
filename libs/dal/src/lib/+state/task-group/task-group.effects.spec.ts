@@ -161,7 +161,7 @@ describe('TaskGroupEffects', () => {
         );
       });
     });
-    fdescribe('with loaded and failing api call', () => {
+    describe('with loaded and failing api call', () => {
       beforeAll(() => {
         usedState = {
           ...TaskGroupReducer.initialState,
