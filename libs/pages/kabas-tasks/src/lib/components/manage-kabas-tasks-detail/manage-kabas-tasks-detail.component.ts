@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { SearchFilterCriteriaInterface } from '@campus/search';
-import { BehaviorSubject } from 'rxjs';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
 
 export enum TaskSortEnum {
@@ -18,7 +17,6 @@ export class ManageKabasTasksDetailComponent implements OnInit {
   public TaskSortEnum = TaskSortEnum;
   public diaboloPhaseFilter: SearchFilterCriteriaInterface;
   istaskDigital = false; // replace w/ stream
-  public selections$ = new BehaviorSubject<any>({});
 
   constructor(private viewModel: KabasTasksViewModel) {}
 
@@ -62,8 +60,5 @@ export class ManageKabasTasksDetailComponent implements OnInit {
   }
   public toggleFavorite(taskId: number) {
     this.viewModel.toggleFavorite(taskId);
-  }
-  public clickedListItem(clickedOptions) {
-    this.selections$.next(clickedOptions.selectedOptions.selected);
   }
 }

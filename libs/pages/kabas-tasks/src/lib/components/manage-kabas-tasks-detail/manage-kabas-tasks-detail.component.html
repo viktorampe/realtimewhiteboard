@@ -1,19 +1,19 @@
 <campus-page-bar>
   <ng-container>
     <campus-button
-      *ngIf="!(selections$ | async).length"
+      *ngIf="!content.selectedOptions.selected.length"
       class="shared-header__contextual__button smallIcon"
       iconClass=""
       ><span>Lesmateriaal toevoegen</span></campus-button
     >
     <campus-button
-      *ngIf="istaskDigital && !(selections$ | async).length"
+      *ngIf="istaskDigital && !content.selectedOptions.selected.length"
       class="shared-header__contextual__button smallIcon"
       iconClass="results"
       ><span>Resultaten bekijken</span></campus-button
     >
     <campus-button
-      *ngIf="!(selections$ | async).length"
+      *ngIf="!content.selectedOptions.selected.length"
       class="shared-header__contextual__button smallIcon"
       iconClass=""
       ><span>Doelenmatrix</span></campus-button
@@ -27,14 +27,14 @@
   </ng-container>
   <ng-container>
     <campus-button
-      *ngIf="istaskDigital && (selections$ | async).length === 1"
+      *ngIf="istaskDigital && content.selectedOptions.selected.length === 1"
       class="shared-header__contextual__button smallIcon"
       iconClass=""
       ><span>Preview</span></campus-button
     >
 
     <campus-button
-      *ngIf="(selections$ | async).length"
+      *ngIf="content.selectedOptions.selected.length"
       class="shared-header__contextual__button smallIcon"
       iconClass="delete"
       ><span>Verwijderen</span></campus-button
@@ -74,9 +74,9 @@
     </div>
 
     <mat-selection-list
-      #digital
+      #content
       [class.mat-selection-list--has-selection]="
-        !digital.selectedOptions.isEmpty()
+        !content.selectedOptions.isEmpty()
       "
     >
       <mat-list-item class="manage-kabas-tasks-detail__list__primary-action">
@@ -89,7 +89,6 @@
           *ngFor="let i of [].constructor(6)"
           checkboxPosition="before"
           [class.mat-list-option--selected]="option.selected"
-          (click)="clickedListItem(digital)"
         >
           testje
         </mat-list-option>
