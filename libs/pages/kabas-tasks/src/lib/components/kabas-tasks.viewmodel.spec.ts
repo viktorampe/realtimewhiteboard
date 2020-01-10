@@ -13,7 +13,10 @@ import {
 } from '@ngrx/router-store';
 import { StoreModule } from '@ngrx/store';
 import { configureTestSuite } from 'ng-bullet';
-import { TaskStatusEnum } from '../interfaces/TaskWithAssignees.interface';
+import {
+  TaskStatusEnum,
+  TaskWithAssigneesInterface
+} from '../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from './kabas-tasks.viewmodel';
 
 describe('KabasTaskViewModel', () => {
@@ -207,5 +210,45 @@ describe('KabasTaskViewModel', () => {
         expect(result).toBe(testCase.expected);
       })
     );
+  });
+
+  describe('canArchive', () => {
+    let taskAssignee;
+    beforeEach(() => {
+      taskAssignee = {
+        name: 'Task',
+        eduContentAmount: 1,
+        assignees: [],
+        status: TaskStatusEnum.FINISHED,
+        isPaperTask: false
+      } as TaskWithAssigneesInterface;
+    });
+
+    it('should return false if pending', () => {
+      taskAssignee.status = TaskStatusEnum.PENDING;
+      const result = kabasTasksViewModel.canArchive(taskAssignee);
+
+      expect(result).toBeFalsy();
+    });
+    it('should return false if active', () => {
+      taskAssignee.status = TaskStatusEnum.ACTIVE;
+      const result = kabasTasksViewModel.canArchive(taskAssignee);
+
+      expect(result).toBeFalsy();
+    });
+    it('should return true if paper task', () => {
+      taskAssignee = {
+        ...taskAssignee,
+        status: TaskStatusEnum.PENDING,
+        isPaperTask: true
+      } as TaskWithAssigneesInterface;
+      const result = kabasTasksViewModel.canArchive(taskAssignee);
+
+      expect(result).toBeTruthy();
+    });
+    it('should return true if finished', () => {
+      const result = kabasTasksViewModel.canArchive(taskAssignee);
+      expect(result).toBeTruthy();
+    });
   });
 });
