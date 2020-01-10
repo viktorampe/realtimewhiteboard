@@ -21,20 +21,11 @@ export const getLoaded = createSelector(
   (state: State) => state.loaded
 );
 
-export const getAll = createSelector(
-  selectEduContentBookState,
-  selectAll
-);
+export const getAll = createSelector(selectEduContentBookState, selectAll);
 
-export const getCount = createSelector(
-  selectEduContentBookState,
-  selectTotal
-);
+export const getCount = createSelector(selectEduContentBookState, selectTotal);
 
-export const getIds = createSelector(
-  selectEduContentBookState,
-  selectIds
-);
+export const getIds = createSelector(selectEduContentBookState, selectIds);
 
 export const getAllEntities = createSelector(
   selectEduContentBookState,

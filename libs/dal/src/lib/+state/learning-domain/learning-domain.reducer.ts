@@ -13,9 +13,9 @@ export interface State extends EntityState<LearningDomainInterface> {
   error?: any;
 }
 
-export const adapter: EntityAdapter<
+export const adapter: EntityAdapter<LearningDomainInterface> = createEntityAdapter<
   LearningDomainInterface
-> = createEntityAdapter<LearningDomainInterface>();
+>();
 
 export const initialState: State = adapter.getInitialState({
   // additional entity state properties

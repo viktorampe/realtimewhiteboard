@@ -13,9 +13,9 @@ export interface State extends EntityState<EduContentTOCInterface> {
   loadedBooks: number[];
 }
 
-export const adapter: EntityAdapter<
+export const adapter: EntityAdapter<EduContentTOCInterface> = createEntityAdapter<
   EduContentTOCInterface
-> = createEntityAdapter<EduContentTOCInterface>();
+>();
 
 export const initialState: State = adapter.getInitialState({
   // additional entity state properties
