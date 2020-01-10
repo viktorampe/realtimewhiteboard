@@ -19,7 +19,7 @@ export class ManageKabasTasksDetailComponent implements OnInit {
   public diaboloPhaseFilter: SearchFilterCriteriaInterface;
   istaskDigital = true; // replace w/ stream
   public selectedItems = [];
-  public selectedItems$ = new BehaviorSubject<any>({});
+  public selections$ = new BehaviorSubject<any>({});
   constructor(private viewModel: KabasTasksViewModel) {}
 
   public setArchivedTasks(taskIds: number[], isArchived: boolean) {
@@ -33,8 +33,8 @@ export class ManageKabasTasksDetailComponent implements OnInit {
   }
 
   public clickedListItem(clickedOptions) {
-    this.selectedItems$.next(clickedOptions.selectedOptions.selected);
-    console.log(this.selectedItems$.value);
+    this.selections$.next(clickedOptions.selectedOptions.selected);
+    console.log(this.selections$.value);
     console.log(this.selectedItems);
     //this.selectedItems = clickedOptions.selectedOptions.selected;
   }
