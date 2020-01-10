@@ -7,6 +7,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   MatButtonModule,
   MatCheckboxModule,
+  MatDatepickerModule,
   MatDialogModule,
   MatFormFieldModule,
   MatIconModule,
@@ -14,6 +15,7 @@ import {
   MatListModule,
   MatMenuModule,
   MatProgressSpinnerModule,
+  MatRadioModule,
   MatSelectModule,
   MatSidenavModule,
   MatTooltipModule
@@ -101,6 +103,8 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     MatTooltipModule,
     MatIconModule,
     MatMenuModule,
+    MatRadioModule,
+    MatDatepickerModule,
     UtilsModule,
     MatDialogModule,
     MatListModule,

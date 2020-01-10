@@ -209,6 +209,15 @@ $ui-tile-height: 105px !default;
   }
 }
 
+$ui-input-height: 40px !default;
+
+campus-date-range-picker {
+  .mat-form-field,
+  .mat-form-field-outline {
+    height: $ui-input-height;
+  }
+}
+
 @mixin ui-icons {
   svg {
     pointer-events: none; //remove native tooltip

@@ -1,5 +1,5 @@
 // tslint:disable: member-ordering
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import {
   AlertReducer,
@@ -19,12 +19,7 @@ import {
   UnlockedFreePracticeActions,
   UserActions
 } from '@campus/dal';
-import {
-  RadioOption,
-  RadioOptionValueType,
-  SearchFilterCriteriaFixture,
-  SelectFilterComponent
-} from '@campus/search';
+import { RadioOption, RadioOptionValueType } from '@campus/search';
 import { DateFunctions } from '@campus/utils';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
@@ -68,9 +63,6 @@ export class LoginpageComponent implements OnInit {
     }
   ];
 
-  @ViewChild('selectFilter', { static: true })
-  selectFilterComponent: SelectFilterComponent;
-
   constructor(
     public loginPageviewModel: LoginPageViewModel,
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
@@ -93,18 +85,6 @@ export class LoginpageComponent implements OnInit {
     if (this.currentUser) {
       this.loadStore();
     }
-
-    // Select filter component testing
-    this.selectFilterComponent.filterCriteria = new SearchFilterCriteriaFixture(
-      {
-        name: 'createdAt',
-        label: 'Aanmaakdatum'
-      },
-      []
-    );
-    this.selectFilterComponent.filterSelectionChange.subscribe(v => {
-      console.log(v);
-    });
   }
 
   getCurrentUser() {
