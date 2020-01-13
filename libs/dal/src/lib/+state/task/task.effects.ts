@@ -47,7 +47,7 @@ export class TaskEffects {
           effectFeedback: EffectFeedback.generateErrorFeedback(
             this.uuid(),
             action,
-            ' Het is niet gelukt om de taak te maken.'
+            'Het is niet gelukt om de taak te maken.'
           )
         });
       }
