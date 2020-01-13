@@ -65,18 +65,47 @@ export class DateRangePickerComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    // These changes require the formgroup to be recreated
-    if (
-      changes.requireStart ||
-      changes.requireEnd ||
-      changes.useTime ||
-      changes.initialStartDate ||
-      changes.initialStartTime ||
-      changes.initialEndDate ||
-      changes.initialEndTime
-    ) {
-      this.subscriptions.unsubscribe();
-      this.setupForm();
+    if (this.dateRangeForm) {
+      if (changes.initialStartDate) {
+        this.dateRangeForm
+          .get('startDate')
+          .setValue(changes.initialStartDate.currentValue);
+      }
+
+      if (changes.initialStartTime) {
+        this.dateRangeForm
+          .get('startTime')
+          .setValue(changes.initialStartTime.currentValue);
+      }
+
+      if (changes.initialEndDate) {
+        this.dateRangeForm
+          .get('endDate')
+          .setValue(changes.initialEndDate.currentValue);
+      }
+
+      if (changes.initialEndTime) {
+        this.dateRangeForm
+          .get('endTime')
+          .setValue(changes.initialEndTime.currentValue);
+      }
+
+      if (changes.requireStart || changes.requireEnd || changes.useTime) {
+        const validators = this.getValidators();
+
+        this.dateRangeForm
+          .get('startDate')
+          .setValidators(validators.startDateValidators);
+        this.dateRangeForm
+          .get('startTime')
+          .setValidators(validators.startTimeValidators);
+        this.dateRangeForm
+          .get('endDate')
+          .setValidators(validators.endDateValidators);
+        this.dateRangeForm
+          .get('endTime')
+          .setValidators(validators.endTimeValidators);
+      }
     }
   }
 
@@ -84,7 +113,7 @@ export class DateRangePickerComponent implements OnInit, OnChanges, OnDestroy {
     this.subscriptions.unsubscribe();
   }
 
-  private setupForm() {
+  private getValidators() {
     const startDateValidators = this.requireStart ? [Validators.required] : [];
     const startTimeValidators =
       this.useTime && this.requireStart ? [Validators.required] : [];
@@ -92,12 +121,23 @@ export class DateRangePickerComponent implements OnInit, OnChanges, OnDestroy {
     const endTimeValidators =
       this.useTime && this.requireEnd ? [Validators.required] : [];
 
+    return {
+      startDateValidators,
+      startTimeValidators,
+      endDateValidators,
+      endTimeValidators
+    };
+  }
+
+  private setupForm() {
+    const validators = this.getValidators();
+
     this.dateRangeForm = this.formBuilder.group(
       {
-        startDate: [this.initialStartDate, ...startDateValidators],
-        startTime: [this.initialStartTime, ...startTimeValidators],
-        endDate: [this.initialEndDate, ...endDateValidators],
-        endTime: [this.initialEndTime, ...endTimeValidators]
+        startDate: [this.initialStartDate, ...validators.startDateValidators],
+        startTime: [this.initialStartTime, ...validators.startTimeValidators],
+        endDate: [this.initialEndDate, ...validators.endDateValidators],
+        endTime: [this.initialEndTime, ...validators.endTimeValidators]
       },
       {
         validators: dateTimeRangeValidator(

@@ -9,7 +9,6 @@ import {
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { BeDateAdapter } from '@campus/utils';
-import { hot } from '@nrwl/angular/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { DateRangePickerComponent } from './date-range-picker.component';
 
@@ -231,22 +230,83 @@ describe('DateRangePickerComponent', () => {
 
   describe('outputs', () => {
     describe('valueChanged', () => {
-      it('should emit the selected date and time ranges', () => {
-        component.dateRangeForm
-          .get('startDate')
-          .setValue(new Date('1 sept 2000'));
-        component.dateRangeForm.get('startTime').setValue('10:00');
-        component.dateRangeForm
-          .get('endDate')
-          .setValue(new Date('2 sept 2000'));
-        component.dateRangeForm.get('endTime').setValue('11:00');
-        fixture.detectChanges();
+      const someStartDate = new Date('1 sept 2000');
+      const someStartTime = '10:00';
+      const someEndDate = new Date('2 sept 2000');
+      const someEndTime = '11:00';
 
-        expect(component.valueChanged).toBeObservable(
-          hot('a', {
-            a: null
-          })
-        );
+      const someStartDateFull = new Date('1 sept 2000 10:00');
+      const someEndDateFull = new Date('2 sept 2000 11:00');
+
+      beforeEach(() => {
+        jest.spyOn(component.valueChanged, 'emit');
+      });
+
+      it('should not emit when the form is invalid', () => {
+        // End and start were swapped here
+        component.dateRangeForm.get('startDate').setValue(someEndDate);
+        component.dateRangeForm.get('startTime').setValue(someStartTime);
+        component.dateRangeForm.get('endDate').setValue(someStartDate);
+        component.dateRangeForm.get('endTime').setValue(someEndTime);
+
+        expect(component.valueChanged.emit).not.toHaveBeenCalled();
+      });
+
+      it('should emit the selected date and time ranges', () => {
+        component.dateRangeForm.get('startDate').setValue(someStartDate);
+        component.dateRangeForm.get('startTime').setValue(someStartTime);
+        component.dateRangeForm.get('endDate').setValue(someEndDate);
+        component.dateRangeForm.get('endTime').setValue(someEndTime);
+
+        expect(component.valueChanged.emit).toHaveBeenCalledWith({
+          start: someStartDateFull,
+          end: someEndDateFull
+        });
+      });
+
+      it('should emit the selected date and time ranges - only times set', () => {
+        setInput('requireStart', false);
+        setInput('requireEnd', false);
+
+        component.dateRangeForm.get('startDate').setValue(null);
+        component.dateRangeForm.get('startTime').setValue(someStartTime);
+        component.dateRangeForm.get('endDate').setValue(null);
+        component.dateRangeForm.get('endTime').setValue(someEndTime);
+
+        expect(component.valueChanged.emit).toHaveBeenCalledWith({
+          start: null,
+          end: null
+        });
+      });
+
+      it('should emit the selected date and time ranges - only start datetime set', () => {
+        setInput('requireStart', false);
+        setInput('requireEnd', false);
+
+        component.dateRangeForm.get('startDate').setValue(someStartDate);
+        component.dateRangeForm.get('startTime').setValue(someStartTime);
+        component.dateRangeForm.get('endDate').setValue(null);
+        component.dateRangeForm.get('endTime').setValue(someEndTime);
+
+        expect(component.valueChanged.emit).toHaveBeenCalledWith({
+          start: someStartDateFull,
+          end: null
+        });
+      });
+
+      it('should emit the selected date and time ranges - only dates set', () => {
+        setInput('requireStart', false);
+        setInput('requireEnd', false);
+
+        component.dateRangeForm.get('startDate').setValue(someStartDate);
+        component.dateRangeForm.get('startTime').setValue(null);
+        component.dateRangeForm.get('endDate').setValue(someEndDate);
+        component.dateRangeForm.get('endTime').setValue(null);
+
+        expect(component.valueChanged.emit).toHaveBeenCalledWith({
+          start: someStartDate,
+          end: someEndDate
+        });
       });
     });
   });
