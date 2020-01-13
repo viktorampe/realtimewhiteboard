@@ -1,5 +1,11 @@
 import { Injectable } from '@angular/core';
-import { DalState, TaskActions } from '@campus/dal';
+import {
+  DalState,
+  FavoriteActions,
+  FavoriteInterface,
+  FavoriteTypesEnum,
+  TaskActions
+} from '@campus/dal';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -82,7 +88,13 @@ export class KabasTasksViewModel {
 
   public removeTasks(tasks: TaskWithAssigneesInterface[]): void {}
   public toggleFavorite(task: TaskWithAssigneesInterface): void {
-    console.log('toggle favorite', task);
+    const favorite: FavoriteInterface = {
+      created: new Date(),
+      name: task.name,
+      taskId: task.id,
+      type: FavoriteTypesEnum.TASK
+    };
+    this.store.dispatch(new FavoriteActions.ToggleFavorite({ favorite }));
   }
 
   public canArchive(task: TaskWithAssigneesInterface): boolean {
