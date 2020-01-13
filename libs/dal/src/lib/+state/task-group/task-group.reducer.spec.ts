@@ -10,6 +10,7 @@ import {
   taskGroupsLoadError,
   updateTaskGroup,
   updateTaskGroups,
+  updateTaskGroupsAccess,
   upsertTaskGroup,
   upsertTaskGroups
 } from './task-group.actions';
@@ -21,8 +22,8 @@ import { initialState, reducer, State } from './task-group.reducer';
  * - set the initial property value via '[__EXTRA__PROPERTY_NAME]InitialValue'.
  * - set the updated property value via '[__EXTRA__PROPERTY_NAME]UpdatedValue'.
  */
-const groupIdInitialValue = 1;
-const groudIdUpdatedValue = 2;
+const taskIdInitialValue = 1;
+const taskIdUpdatedValue = 2;
 
 /**
  * Creates a TaskGroup.
@@ -31,11 +32,11 @@ const groudIdUpdatedValue = 2;
  */
 function createTaskGroup(
   id: number,
-  groupId: any = groupIdInitialValue
+  taskId: any = taskIdInitialValue
 ): TaskGroupInterface | any {
   return {
     id: id,
-    groupId: groupId
+    taskId: taskId
   };
 }
 
@@ -166,7 +167,7 @@ describe('TaskGroups Reducer', () => {
       const update: Update<TaskGroupInterface> = {
         id: 1,
         changes: {
-          groupId: groudIdUpdatedValue
+          taskId: taskIdUpdatedValue
         }
       };
       const action = updateTaskGroup({
@@ -174,7 +175,7 @@ describe('TaskGroups Reducer', () => {
       });
       const result = reducer(startState, action);
       expect(result).toEqual(
-        createState([createTaskGroup(1, groudIdUpdatedValue)])
+        createState([createTaskGroup(1, taskIdUpdatedValue)])
       );
     });
 
@@ -184,13 +185,13 @@ describe('TaskGroups Reducer', () => {
         {
           id: 1,
           changes: {
-            groupId: groudIdUpdatedValue
+            taskId: taskIdUpdatedValue
           }
         },
         {
           id: 2,
           changes: {
-            groupId: groudIdUpdatedValue
+            taskId: taskIdUpdatedValue
           }
         }
       ];
@@ -201,8 +202,8 @@ describe('TaskGroups Reducer', () => {
 
       expect(result).toEqual(
         createState([
-          createTaskGroup(1, groudIdUpdatedValue),
-          createTaskGroup(2, groudIdUpdatedValue),
+          createTaskGroup(1, taskIdUpdatedValue),
+          createTaskGroup(2, taskIdUpdatedValue),
           taskGroups[2]
         ])
       );
@@ -236,6 +237,35 @@ describe('TaskGroups Reducer', () => {
       const action = clearTaskGroups();
       const result = reducer(startState, action);
       expect(result).toEqual(createState([], true, 'something went wrong'));
+    });
+  });
+
+  describe('updateTaskGroupsAccess action', () => {
+    it('should clear the taskGroups collection and add the updated records', () => {
+      const startTaskGroups = [
+        createTaskGroup(1, 1),
+        createTaskGroup(2, 1),
+        createTaskGroup(3, 1),
+        createTaskGroup(4, 1),
+        createTaskGroup(5, 2),
+        createTaskGroup(6, 2),
+        createTaskGroup(7, 2)
+      ];
+      const expectedTaskGroups = [
+        createTaskGroup(5, 2),
+        createTaskGroup(6, 2),
+        createTaskGroup(7, 2),
+        createTaskGroup(2, 1),
+        createTaskGroup(8, 1)
+      ];
+
+      const startState = createState(startTaskGroups);
+      const action = updateTaskGroupsAccess({
+        taskId: 1,
+        taskGroups: [createTaskGroup(2, 1), createTaskGroup(8, 1)]
+      });
+      const result = reducer(startState, action);
+      expect(result).toEqual(createState(expectedTaskGroups));
     });
   });
 });
