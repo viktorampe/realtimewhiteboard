@@ -76,11 +76,11 @@
 
       .mat-form-field-label {
         height: 15px; // font size + border width -> scales 0.75
-        top: $ui-input-height/2;
+        top: $ui-form-field-height/2;
       }
 
       input {
-        height: $ui-input-height;
+        height: $ui-form-field-height;
         margin-top: -8px; // +/- 60% of font size
         font-weight: normal;
       }
@@ -113,7 +113,7 @@
 
     .mat-form-field-suffix {
       align-self: stretch;
-      height: $ui-input-height;
+      height: $ui-form-field-height;
     }
   }
 }
