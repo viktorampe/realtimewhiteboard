@@ -55,15 +55,15 @@ export class ManageKabasTasksDetailComponent implements OnInit {
   }
 
   public setArchivedTasks(
-    taskIds: TaskWithAssigneesInterface[],
+    tasks: TaskWithAssigneesInterface[],
     isArchived: boolean
   ) {
-    this.viewModel.setArchivedTasks(taskIds, isArchived);
+    this.viewModel.setArchivedTasks(tasks, isArchived);
   }
-  public removeTasks(taskIds: TaskWithAssigneesInterface[]) {
-    this.viewModel.removeTasks(taskIds);
+  public removeTasks(tasks: TaskWithAssigneesInterface[]) {
+    this.viewModel.removeTasks(tasks);
   }
-  public toggleFavorite(taskId: TaskWithAssigneesInterface) {
-    this.viewModel.toggleFavorite(taskId);
+  public toggleFavorite(tasks: TaskWithAssigneesInterface) {
+    this.viewModel.toggleFavorite(tasks);
   }
 }
