@@ -326,4 +326,79 @@ describe('KabasTaskViewModel', () => {
       expect(spy).toHaveBeenCalledWith(expected);
     });
   });
+
+  describe('canDelete', () => {
+    let taskAssignee;
+    beforeEach(() => {
+      taskAssignee = {
+        name: 'Task',
+        eduContentAmount: 1,
+        assignees: [],
+        status: TaskStatusEnum.FINISHED,
+        isPaperTask: false
+      } as TaskWithAssigneesInterface;
+    });
+
+    it('should return false if pending', () => {
+      taskAssignee.status = TaskStatusEnum.PENDING;
+      const result = kabasTasksViewModel.canDelete(taskAssignee);
+
+      expect(result).toBeFalsy();
+    });
+    it('should return false if active', () => {
+      taskAssignee.status = TaskStatusEnum.ACTIVE;
+      const result = kabasTasksViewModel.canDelete(taskAssignee);
+
+      expect(result).toBeFalsy();
+    });
+
+    it('should return true if finished', () => {
+      const result = kabasTasksViewModel.canDelete(taskAssignee);
+      expect(result).toBeTruthy();
+    });
+  });
+  describe('deleteTasks', () => {
+    let taskAssignees;
+    beforeEach(() => {
+      taskAssignees = [
+        {
+          id: 1,
+          name: 'Finished Task',
+          eduContentAmount: 1,
+          assignees: [],
+          status: TaskStatusEnum.FINISHED,
+          isPaperTask: false
+        },
+        {
+          id: 2,
+          name: 'Pending Task',
+          eduContentAmount: 1,
+          assignees: [],
+          status: TaskStatusEnum.PENDING,
+          isPaperTask: false
+        },
+        {
+          id: 3,
+          name: 'Active Task',
+          eduContentAmount: 1,
+          assignees: [],
+          status: TaskStatusEnum.ACTIVE,
+          isPaperTask: false
+        }
+      ] as TaskWithAssigneesInterface[];
+    });
+
+    it('should call dispatch with all tasks that can be deleted', () => {
+      const spy = jest.spyOn(store, 'dispatch');
+      const expected = new TaskActions.DeleteTasks({
+        ids: taskAssignees
+          .filter(task => task.status === TaskStatusEnum.FINISHED)
+          .map(task => task.id)
+      });
+
+      kabasTasksViewModel.removeTasks(taskAssignees);
+
+      expect(spy).toHaveBeenCalledWith(expected);
+    });
+  });
 });
