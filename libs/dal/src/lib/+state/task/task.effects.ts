@@ -11,7 +11,8 @@ import {
   LoadTasks,
   TasksActionTypes,
   TasksLoaded,
-  TasksLoadError
+  TasksLoadError,
+  UpdateTasks
 } from './task.actions';
 
 @Injectable()
@@ -28,6 +29,16 @@ export class TaskEffects {
       return new TasksLoadError(error);
     }
   });
+
+  @Effect()
+  updateTasks$ = this.dataPersistence.optimisticUpdate(
+    TasksActionTypes.UpdateTasks,
+    {
+      run: (action: UpdateTasks, state: DalState) => {
+        return this.taskService.updateTasks(action.payload);
+      }
+    }
+  );
 
   constructor(
     private actions: Actions,
