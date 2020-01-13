@@ -1,6 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { dateTimeRangeValidator } from '@campus/utils';
+
+export interface DateRangeValue {
+  start?: Date;
+  end?: Date;
+}
 
 @Component({
   selector: 'campus-date-range-picker',
@@ -8,8 +13,6 @@ import { dateTimeRangeValidator } from '@campus/utils';
   styleUrls: ['./date-range-picker.component.scss']
 })
 export class DateRangePickerComponent implements OnInit {
-  protected dateRangeForm: FormGroup;
-
   // Is the start date and time required?
   @Input()
   public requireStart = true;
@@ -26,6 +29,23 @@ export class DateRangePickerComponent implements OnInit {
   @Input()
   public vertical = false;
 
+  @Input()
+  public initialStartDate: Date = null;
+
+  @Input()
+  public initialStartTime: string = null;
+
+  @Input()
+  public initialEndDate: Date = null;
+
+  @Input()
+  public initialEndTime: string = null;
+
+  @Output()
+  public valueChanged = new EventEmitter<DateRangeValue>();
+
+  protected dateRangeForm: FormGroup;
+
   constructor(private formBuilder: FormBuilder) {}
 
   ngOnInit() {
@@ -38,10 +58,10 @@ export class DateRangePickerComponent implements OnInit {
 
     this.dateRangeForm = this.formBuilder.group(
       {
-        startDate: [null, ...startDateValidators],
-        startTime: [null, ...startTimeValidators],
-        endDate: [null, ...endDateValidators],
-        endTime: [null, ...endTimeValidators]
+        startDate: [this.initialStartDate, ...startDateValidators],
+        startTime: [this.initialStartTime, ...startTimeValidators],
+        endDate: [this.initialEndDate, ...endDateValidators],
+        endTime: [this.initialEndTime, ...endTimeValidators]
       },
       {
         validators: dateTimeRangeValidator(
@@ -53,9 +73,40 @@ export class DateRangePickerComponent implements OnInit {
       }
     );
 
-    this.dateRangeForm.valueChanges.subscribe(v => {
+    this.dateRangeForm.valueChanges.subscribe(values => {
       if (this.dateRangeForm.valid) {
-        console.log(v);
+        // Incorporate the times into the dates to create the final value
+        // Dates can be optional, so they could be null
+        const fullStartDate = values.startDate
+          ? new Date(values.startDate)
+          : null;
+        const fullEndDate = values.endDate ? new Date(values.endDate) : null;
+
+        const applyTimeToDate = (time: string, date: Date) => {
+          // Times can be optional, so we default to zero if we don't have a time
+          const splitTime = time ? time.split(':') : [0, 0];
+
+          // Time input values are strings of the format HH:mm:ss.sss, see:
+          // https://html.spec.whatwg.org/multipage/common-microsyntaxes.html#times
+
+          date.setHours(+splitTime[0]);
+          date.setMinutes(+splitTime[1]);
+        };
+
+        if (fullStartDate) {
+          applyTimeToDate(values.startTime, fullStartDate);
+        }
+
+        if (fullEndDate) {
+          applyTimeToDate(values.endTime, fullEndDate);
+        }
+
+        const result: DateRangeValue = {
+          start: fullStartDate,
+          end: fullEndDate
+        };
+
+        this.valueChanged.emit(result);
       }
     });
   }

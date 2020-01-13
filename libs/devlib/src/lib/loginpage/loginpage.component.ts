@@ -20,6 +20,7 @@ import {
   UserActions
 } from '@campus/dal';
 import { RadioOption, RadioOptionValueType } from '@campus/search';
+import { DateRangeValue } from '@campus/ui';
 import { DateFunctions } from '@campus/utils';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
@@ -32,6 +33,9 @@ import { LoginPageViewModel } from './loginpage.viewmodel';
   styleUrls: ['./loginpage.component.css']
 })
 export class LoginpageComponent implements OnInit {
+  protected startDate: Date = new Date('2 sept 2012');
+  protected endDate: Date = new Date('3 sept 2012');
+
   educontents: Observable<EduContentInterface[]>;
   currentUser: Observable<any>;
   route$: Observable<string[]>;
@@ -85,6 +89,10 @@ export class LoginpageComponent implements OnInit {
     if (this.currentUser) {
       this.loadStore();
     }
+  }
+
+  dateChanged(dateRange: DateRangeValue) {
+    console.log(dateRange);
   }
 
   getCurrentUser() {

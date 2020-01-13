@@ -80,7 +80,15 @@
 </div>
 
 <div style="width: 600px; margin-top: 16px">
-  <campus-date-range-picker [vertical]="true"> </campus-date-range-picker>
+  <campus-date-range-picker
+    (valueChanged)="dateChanged($event)"
+    [vertical]="true"
+    [initialStartTime]="'13:37'"
+    [initialEndTime]="'14:37'"
+    [initialStartDate]="startDate"
+    [initialEndDate]="endDate"
+  >
+  </campus-date-range-picker>
 </div>
 
 <div>

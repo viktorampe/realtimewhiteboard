@@ -28,11 +28,11 @@ export function dateTimeRangeValidator(
       const splitStartTime = startTime.split(':');
       const splitEndTime = endTime.split(':');
 
-      fullStartDate.setHours(splitStartTime[0]);
-      fullStartDate.setMinutes(splitStartTime[1]);
+      fullStartDate.setHours(+splitStartTime[0]);
+      fullStartDate.setMinutes(+splitStartTime[1]);
 
-      fullEndDate.setHours(splitEndTime[0]);
-      fullEndDate.setMinutes(splitEndTime[1]);
+      fullEndDate.setHours(+splitEndTime[0]);
+      fullEndDate.setMinutes(+splitEndTime[1]);
     }
 
     return fullStartDate <= fullEndDate ? null : { dateTimeRange: true };
