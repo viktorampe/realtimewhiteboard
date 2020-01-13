@@ -87,6 +87,7 @@ export class KabasTasksViewModel {
   }
 
   public removeTasks(tasks: TaskWithAssigneesInterface[]): void {}
+
   public toggleFavorite(task: TaskWithAssigneesInterface): void {
     const favorite: FavoriteInterface = {
       created: new Date(),
