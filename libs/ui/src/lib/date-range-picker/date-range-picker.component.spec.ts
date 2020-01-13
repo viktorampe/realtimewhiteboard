@@ -9,6 +9,7 @@ import {
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { BeDateAdapter } from '@campus/utils';
+import { hot } from '@nrwl/angular/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { DateRangePickerComponent } from './date-range-picker.component';
 
@@ -224,6 +225,28 @@ describe('DateRangePickerComponent', () => {
         fixture.detectChanges();
 
         expect(component.dateRangeForm.get('endTime').value).toBe(someTime);
+      });
+    });
+  });
+
+  describe('outputs', () => {
+    describe('valueChanged', () => {
+      it('should emit the selected date and time ranges', () => {
+        component.dateRangeForm
+          .get('startDate')
+          .setValue(new Date('1 sept 2000'));
+        component.dateRangeForm.get('startTime').setValue('10:00');
+        component.dateRangeForm
+          .get('endDate')
+          .setValue(new Date('2 sept 2000'));
+        component.dateRangeForm.get('endTime').setValue('11:00');
+        fixture.detectChanges();
+
+        expect(component.valueChanged).toBeObservable(
+          hot('a', {
+            a: null
+          })
+        );
       });
     });
   });
