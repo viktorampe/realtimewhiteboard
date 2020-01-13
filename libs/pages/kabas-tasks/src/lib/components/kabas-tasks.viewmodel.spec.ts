@@ -18,7 +18,12 @@ import { KabasTasksViewModel } from './kabas-tasks.viewmodel';
 
 describe('KabasTaskViewModel', () => {
   let kabasTasksViewModel: KabasTasksViewModel;
-  let dateMock: MockDate;
+
+  const dateMock = new MockDate();
+
+  afterAll(() => {
+    dateMock.returnRealDate();
+  });
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
@@ -41,14 +46,6 @@ describe('KabasTaskViewModel', () => {
       ],
       providers: [KabasTasksViewModel]
     });
-  });
-
-  beforeAll(() => {
-    dateMock = new MockDate();
-  });
-
-  afterAll(() => {
-    dateMock.returnRealDate();
   });
 
   beforeEach(() => {
