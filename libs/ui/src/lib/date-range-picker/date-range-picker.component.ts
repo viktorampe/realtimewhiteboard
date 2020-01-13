@@ -1,6 +1,16 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Output,
+  SimpleChanges
+} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { dateTimeRangeValidator } from '@campus/utils';
+import { Subscription } from 'rxjs';
 
 export interface DateRangeValue {
   start?: Date;
@@ -12,7 +22,7 @@ export interface DateRangeValue {
   templateUrl: './date-range-picker.component.html',
   styleUrls: ['./date-range-picker.component.scss']
 })
-export class DateRangePickerComponent implements OnInit {
+export class DateRangePickerComponent implements OnInit, OnChanges, OnDestroy {
   // Is the start date and time required?
   @Input()
   public requireStart = true;
@@ -44,11 +54,37 @@ export class DateRangePickerComponent implements OnInit {
   @Output()
   public valueChanged = new EventEmitter<DateRangeValue>();
 
-  protected dateRangeForm: FormGroup;
+  public dateRangeForm: FormGroup;
+
+  private subscriptions: Subscription = new Subscription();
 
   constructor(private formBuilder: FormBuilder) {}
 
   ngOnInit() {
+    this.setupForm();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    // These changes require the formgroup to be recreated
+    if (
+      changes.requireStart ||
+      changes.requireEnd ||
+      changes.useTime ||
+      changes.initialStartDate ||
+      changes.initialStartTime ||
+      changes.initialEndDate ||
+      changes.initialEndTime
+    ) {
+      this.subscriptions.unsubscribe();
+      this.setupForm();
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
+  }
+
+  private setupForm() {
     const startDateValidators = this.requireStart ? [Validators.required] : [];
     const startTimeValidators =
       this.useTime && this.requireStart ? [Validators.required] : [];
@@ -73,42 +109,46 @@ export class DateRangePickerComponent implements OnInit {
       }
     );
 
-    this.dateRangeForm.valueChanges.subscribe(values => {
-      if (this.dateRangeForm.valid) {
-        // Incorporate the times into the dates to create the final value
-        // Dates can be optional, so they could be null
-        const fullStartDate = values.startDate
-          ? new Date(values.startDate)
-          : null;
-        const fullEndDate = values.endDate ? new Date(values.endDate) : null;
-
-        const applyTimeToDate = (time: string, date: Date) => {
-          // Times can be optional, so we default to zero if we don't have a time
-          const splitTime = time ? time.split(':') : [0, 0];
-
-          // Time input values are strings of the format HH:mm:ss.sss, see:
-          // https://html.spec.whatwg.org/multipage/common-microsyntaxes.html#times
-
-          date.setHours(+splitTime[0]);
-          date.setMinutes(+splitTime[1]);
-        };
-
-        if (fullStartDate) {
-          applyTimeToDate(values.startTime, fullStartDate);
+    this.subscriptions.add(
+      this.dateRangeForm.valueChanges.subscribe(values => {
+        if (this.dateRangeForm.valid) {
+          this.emitFormValues(values);
         }
+      })
+    );
+  }
 
-        if (fullEndDate) {
-          applyTimeToDate(values.endTime, fullEndDate);
-        }
+  private emitFormValues(values: any) {
+    // Incorporate the times into the dates to create the final value
+    // Dates can be optional, so they could be null
+    const fullStartDate = values.startDate ? new Date(values.startDate) : null;
+    const fullEndDate = values.endDate ? new Date(values.endDate) : null;
 
-        const result: DateRangeValue = {
-          start: fullStartDate,
-          end: fullEndDate
-        };
+    const applyTimeToDate = (time: string, date: Date) => {
+      // Times can be optional, so we default to zero if we don't have a time
+      const splitTime = time ? time.split(':') : [0, 0];
 
-        this.valueChanged.emit(result);
-      }
-    });
+      // Time input values are strings of the format HH:mm:ss.sss, see:
+      // https://html.spec.whatwg.org/multipage/common-microsyntaxes.html#times
+
+      date.setHours(+splitTime[0]);
+      date.setMinutes(+splitTime[1]);
+    };
+
+    if (fullStartDate) {
+      applyTimeToDate(values.startTime, fullStartDate);
+    }
+
+    if (fullEndDate) {
+      applyTimeToDate(values.endTime, fullEndDate);
+    }
+
+    const result: DateRangeValue = {
+      start: fullStartDate,
+      end: fullEndDate
+    };
+
+    this.valueChanged.emit(result);
   }
 
   /**

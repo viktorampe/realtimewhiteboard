@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
+  DateAdapter,
   MatButtonModule,
   MatCheckboxModule,
   MatDatepickerModule,
@@ -40,6 +41,7 @@ import { ConfirmableSelectComponent } from './confirmable-select/confirmable-sel
 import { ContentEditableComponent } from './content-editable/content-editable.component';
 import { ContentPreviewComponent } from './content-preview/content-preview.component';
 import { ContentThumbnailComponent } from './content-thumbnail/content-thumbnail.component';
+import { BeDateAdapter } from './date-range-picker/be-date-adapter';
 import { DateRangePickerComponent } from './date-range-picker/date-range-picker.component';
 import { DropAreaComponent } from './drop-area/drop-area.component';
 import { DropdownMenuItemComponent } from './dropdown-menu-item/dropdown-menu-item.component';
@@ -240,6 +242,7 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
       provide: COLLECTION_MANAGER_SERVICE_TOKEN,
       useClass: CollectionManagerService
     },
+    { provide: DateAdapter, useClass: BeDateAdapter },
     ManageCollectionComponent
   ]
 })

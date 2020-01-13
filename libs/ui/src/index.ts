@@ -4,6 +4,7 @@ export { ButtonComponent } from './lib/button/button.component';
 export { CollapsibleBreakpointsInterface } from './lib/collapsible-sheet/collapsible-sheet.component';
 export { SelectOption } from './lib/confirmable-select/confirmable-select.component';
 export { ContentEditableComponent } from './lib/content-editable/content-editable.component';
+export { BeDateAdapter } from './lib/date-range-picker/be-date-adapter';
 export {
   DateRangePickerComponent,
   DateRangeValue
