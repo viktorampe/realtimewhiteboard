@@ -242,7 +242,7 @@ function getLoadLinkedPersonsAction() {
   });
 }
 function getLoadTaskGroupsAction(date) {
-  return new TaskGroupActions.TaskGroupsLoaded({
+  return TaskGroupActions.taskGroupsLoaded({
     taskGroups: [
       new TaskGroupFixture({
         id: 1,
@@ -262,7 +262,7 @@ function getLoadTaskGroupsAction(date) {
   });
 }
 function getLoadTaskClassGroupsAction(date) {
-  return new TaskClassGroupActions.TaskClassGroupsLoaded({
+  return TaskClassGroupActions.taskClassGroupsLoaded({
     taskClassGroups: [
       new TaskClassGroupFixture({
         id: 1,
@@ -282,7 +282,7 @@ function getLoadTaskClassGroupsAction(date) {
   });
 }
 function getLoadTaskStudentsAction(date) {
-  return new TaskStudentActions.TaskStudentsLoaded({
+  return TaskStudentActions.taskStudentsLoaded({
     taskStudents: [
       new TaskStudentFixture({
         id: 1,

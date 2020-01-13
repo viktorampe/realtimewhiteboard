@@ -1,9 +1,7 @@
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
+import { Action, createReducer, on } from '@ngrx/store';
 import { TaskStudentInterface } from '../../+models';
-import {
-  TaskStudentsActions,
-  TaskStudentsActionTypes
-} from './task-student.actions';
+import * as TaskStudentActions from './task-student.actions';
 
 export const NAME = 'taskStudents';
 
@@ -22,62 +20,47 @@ export const initialState: State = adapter.getInitialState({
   loaded: false
 });
 
-export function reducer(
-  state = initialState,
-  action: TaskStudentsActions
-): State {
-  switch (action.type) {
-    case TaskStudentsActionTypes.AddTaskStudent: {
-      return adapter.addOne(action.payload.taskStudent, state);
-    }
+const taskStudentReducer = createReducer(
+  initialState,
+  on(TaskStudentActions.addTaskStudent, (state, action) =>
+    adapter.addOne(action.taskStudent, state)
+  ),
+  on(TaskStudentActions.upsertTaskStudent, (state, action) =>
+    adapter.upsertOne(action.taskStudent, state)
+  ),
+  on(TaskStudentActions.addTaskStudents, (state, action) =>
+    adapter.addMany(action.taskStudents, state)
+  ),
+  on(TaskStudentActions.upsertTaskStudents, (state, action) =>
+    adapter.upsertMany(action.taskStudents, state)
+  ),
+  on(TaskStudentActions.updateTaskStudent, (state, action) =>
+    adapter.updateOne(action.taskStudent, state)
+  ),
+  on(TaskStudentActions.updateTaskStudents, (state, action) =>
+    adapter.updateMany(action.taskStudents, state)
+  ),
+  on(TaskStudentActions.deleteTaskStudent, (state, action) =>
+    adapter.removeOne(action.id, state)
+  ),
+  on(TaskStudentActions.deleteTaskStudents, (state, action) =>
+    adapter.removeMany(action.ids, state)
+  ),
+  on(TaskStudentActions.clearTaskStudents, state => adapter.removeAll(state)),
+  on(TaskStudentActions.taskStudentsLoaded, (state, action) =>
+    adapter.addAll(action.taskStudents, { ...state, loaded: true })
+  ),
+  on(TaskStudentActions.taskStudentsLoadError, (state, action) => {
+    return {
+      ...state,
+      ...{ error: action.error },
+      loaded: false
+    };
+  })
+);
 
-    case TaskStudentsActionTypes.UpsertTaskStudent: {
-      return adapter.upsertOne(action.payload.taskStudent, state);
-    }
-
-    case TaskStudentsActionTypes.AddTaskStudents: {
-      return adapter.addMany(action.payload.taskStudents, state);
-    }
-
-    case TaskStudentsActionTypes.UpsertTaskStudents: {
-      return adapter.upsertMany(action.payload.taskStudents, state);
-    }
-
-    case TaskStudentsActionTypes.UpdateTaskStudent: {
-      return adapter.updateOne(action.payload.taskStudent, state);
-    }
-
-    case TaskStudentsActionTypes.UpdateTaskStudents: {
-      return adapter.updateMany(action.payload.taskStudents, state);
-    }
-
-    case TaskStudentsActionTypes.DeleteTaskStudent: {
-      return adapter.removeOne(action.payload.id, state);
-    }
-
-    case TaskStudentsActionTypes.DeleteTaskStudents: {
-      return adapter.removeMany(action.payload.ids, state);
-    }
-
-    case TaskStudentsActionTypes.TaskStudentsLoaded: {
-      return adapter.addAll(action.payload.taskStudents, {
-        ...state,
-        loaded: true
-      });
-    }
-
-    case TaskStudentsActionTypes.TaskStudentsLoadError: {
-      return { ...state, error: action.payload, loaded: false };
-    }
-
-    case TaskStudentsActionTypes.ClearTaskStudents: {
-      return adapter.removeAll(state);
-    }
-
-    default: {
-      return state;
-    }
-  }
+export function reducer(state: State | undefined, action: Action) {
+  return taskStudentReducer(state, action);
 }
 
 export const {

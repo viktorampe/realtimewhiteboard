@@ -30,4 +30,5 @@ export interface TaskInterface {
   taskInstances?: TaskInstanceInterface[];
   isPaperTask?: boolean;
   isfavorite?: boolean;
+  archived?: boolean;
 }
