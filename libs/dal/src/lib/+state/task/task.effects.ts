@@ -1,7 +1,9 @@
 import { Inject, Injectable } from '@angular/core';
-import { Actions, createEffect, Effect } from '@ngrx/effects';
+import { Router } from '@angular/router';
+import { Actions, createEffect, Effect, ofType } from '@ngrx/effects';
 import { DataPersistence } from '@nrwl/angular';
-import { map } from 'rxjs/operators';
+import { from } from 'rxjs';
+import { map, switchMap, tap } from 'rxjs/operators';
 import { DalState } from '..';
 import { TaskInterface } from '../../+models';
 import {
@@ -13,6 +15,7 @@ import { AddEffectFeedback } from '../effect-feedback/effect-feedback.actions';
 import {
   AddTask,
   LoadTasks,
+  NavigateToTaskDetail,
   StartAddTask,
   TasksActionTypes,
   TasksLoaded,
@@ -39,7 +42,9 @@ export class TaskEffects {
       run: (action: StartAddTask, state: DalState) => {
         // TODO: don't avoid typescript
         return this.taskService['createTask'](action.payload.task).pipe(
-          map((task: TaskInterface) => new AddTask({ task }))
+          switchMap((task: TaskInterface) =>
+            from([new AddTask({ task }), new NavigateToTaskDetail({ task })])
+          )
         );
       },
       onError: (action: StartAddTask, error) => {
@@ -54,10 +59,27 @@ export class TaskEffects {
     })
   );
 
+  redirectToTask$ = createEffect(
+    () =>
+      this.actions.pipe(
+        ofType(TasksActionTypes.NavigateToTaskDetail),
+        tap((action: NavigateToTaskDetail) => {
+          this.router.navigate([
+            '/',
+            'tasks',
+            'manage',
+            action.payload.task.id
+          ]);
+        })
+      ),
+    { dispatch: false }
+  );
+
   constructor(
     private actions: Actions,
     private dataPersistence: DataPersistence<DalState>,
     @Inject('uuid') private uuid: Function,
-    @Inject(TASK_SERVICE_TOKEN) private taskService: TaskServiceInterface
+    @Inject(TASK_SERVICE_TOKEN) private taskService: TaskServiceInterface,
+    private router: Router
   ) {}
 }

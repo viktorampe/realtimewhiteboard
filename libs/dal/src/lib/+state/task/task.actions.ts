@@ -19,7 +19,8 @@ export enum TasksActionTypes {
   DeleteTask = '[Tasks] Delete Task',
   DeleteTasks = '[Tasks] Delete Tasks',
   ClearTasks = '[Tasks] Clear Tasks',
-  StartAddTask = '[Tasks] Start Add Task'
+  StartAddTask = '[Tasks] Start Add Task',
+  NavigateToTaskDetail = '[Tasks] Navigate To Task Detail'
 }
 
 export class LoadTasks implements Action {
@@ -104,6 +105,16 @@ export class StartAddTask implements FeedbackTriggeringAction {
   ) {}
 }
 
+export class NavigateToTaskDetail implements Action {
+  readonly type = TasksActionTypes.NavigateToTaskDetail;
+
+  constructor(
+    public payload: {
+      task: TaskInterface;
+    }
+  ) {}
+}
+
 export type TasksActions =
   | LoadTasks
   | TasksLoaded
@@ -117,4 +128,5 @@ export type TasksActions =
   | DeleteTask
   | DeleteTasks
   | ClearTasks
-  | StartAddTask;
+  | StartAddTask
+  | NavigateToTaskDetail;

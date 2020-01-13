@@ -1,4 +1,7 @@
 import { TestBed } from '@angular/core/testing';
+import { Router } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
+import { TaskFixture } from '@campus/dal';
 import { MockDate } from '@campus/testing';
 import { EffectsModule } from '@ngrx/effects';
 import { provideMockActions } from '@ngrx/effects/testing';
@@ -7,7 +10,6 @@ import { DataPersistence, NxModule } from '@nrwl/angular';
 import { hot } from '@nrwl/angular/testing';
 import { Observable, of } from 'rxjs';
 import { TaskReducer } from '.';
-import { TaskFixture } from '../../+fixtures';
 import {
   TaskServiceInterface,
   TASK_SERVICE_TOKEN
@@ -17,6 +19,7 @@ import { AddEffectFeedback } from '../effect-feedback/effect-feedback.actions';
 import {
   AddTask,
   LoadTasks,
+  NavigateToTaskDetail,
   StartAddTask,
   TasksLoaded,
   TasksLoadError
@@ -29,6 +32,7 @@ describe('TaskEffects', () => {
   let usedState: any;
   let uuid: Function;
   let taskService: TaskServiceInterface;
+  let router: Router;
 
   const mockDate = new MockDate();
 
@@ -89,7 +93,8 @@ describe('TaskEffects', () => {
           initialState: usedState
         }),
         EffectsModule.forRoot([]),
-        EffectsModule.forFeature([TaskEffects])
+        EffectsModule.forFeature([TaskEffects]),
+        RouterTestingModule
       ],
       providers: [
         {
@@ -112,6 +117,7 @@ describe('TaskEffects', () => {
     effects = TestBed.get(TaskEffects);
     uuid = TestBed.get('uuid');
     taskService = TestBed.get(TASK_SERVICE_TOKEN);
+    router = TestBed.get(Router);
   });
 
   describe('loadTask$', () => {
@@ -195,7 +201,7 @@ describe('TaskEffects', () => {
 
   describe('createTask$', () => {
     const taskToCreate = { name: 'foo' };
-    const newTask = new TaskFixture();
+    const newTask = new TaskFixture(taskToCreate);
 
     let createTaskSpy: jest.SpyInstance;
     beforeEach(() => {
@@ -206,10 +212,15 @@ describe('TaskEffects', () => {
     it('should call the service and dispatch an action to add the result to the store', () => {
       createTaskSpy.mockReturnValue(of(newTask));
 
-      expectInAndOut(
-        effects.startAddTask$,
-        new StartAddTask({ task: taskToCreate }),
-        new AddTask({ task: newTask })
+      actions = hot('a', {
+        a: new StartAddTask({ task: taskToCreate })
+      });
+
+      expect(effects.startAddTask$).toBeObservable(
+        hot('(ab)', {
+          a: new AddTask({ task: newTask }),
+          b: new NavigateToTaskDetail({ task: newTask })
+        })
       );
 
       expect(createTaskSpy).toHaveBeenCalledWith(taskToCreate);
@@ -238,6 +249,25 @@ describe('TaskEffects', () => {
         new StartAddTask({ task: taskToCreate }),
         addFeedbackAction
       );
+    });
+  });
+
+  describe('NavigateToTaskDetail', () => {
+    let navigateSpy: jest.SpyInstance;
+    const id = 123;
+
+    beforeEach(() => {
+      navigateSpy = router.navigate = jest.fn();
+    });
+
+    it('should navigate', () => {
+      actions = hot('a', {
+        a: new NavigateToTaskDetail({ task: new TaskFixture({ id }) })
+      });
+
+      effects.redirectToTask$.subscribe(() => {
+        expect(navigateSpy).toHaveBeenCalledWith(['tasks', 'manage', id]);
+      });
     });
   });
 });
