@@ -22,7 +22,7 @@ export function dateTimeRangeValidator(
     // If we have times set, we must incorporate them into the date
     // The date values themselves should never already contain time info, see:
     // https://html.spec.whatwg.org/multipage/common-microsyntaxes.html#dates
-    if (startTime || endTime) {
+    if (startTime && endTime) {
       // Time input values are strings of the format HH:mm:ss.sss, see:
       // https://html.spec.whatwg.org/multipage/common-microsyntaxes.html#times
       const splitStartTime = startTime.split(':');

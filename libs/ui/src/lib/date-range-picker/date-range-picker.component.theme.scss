@@ -1,4 +1,5 @@
 @mixin ui-date-range-picker {
+  $ui-date-range-picker--vertical_margin-bottom: 16px !default;
   $ui-date-range-picker_mat-form-field-margin-right: 16px !default;
   $ui-date-range-picker_mat-form-field_outline-opacity: 0 !default;
   $ui-date-range-picker_mat-form-field_outline-border-right-width: 0px !default;
@@ -7,19 +8,17 @@
   $ui-date-range-picker_date-range_day--in-range-background-color: transparent !default;
 
   .ui-date-range-picker {
-    display: flex;
-    flex-direction: row;
+    &--vertical {
+      .ui-date-range-picker__section {
+        margin-bottom: $ui-date-range-picker--vertical_margin-bottom;
+      }
+    }
 
-    // Remove time arrows for this component
+    // Remove time arrows from the time component
     input[type='time']::-webkit-inner-spin-button,
     input[type='time']::-webkit-outer-spin-button {
       -webkit-appearance: none;
       margin: 0;
-    }
-
-    &__section {
-      display: block;
-      width: 100%;
     }
 
     &__mat-form-field--date {
@@ -83,6 +82,7 @@
       input {
         height: $ui-input-height;
         margin-top: -8px; // +/- 60% of font size
+        font-weight: normal;
       }
 
       &:not(.mat-focused) {

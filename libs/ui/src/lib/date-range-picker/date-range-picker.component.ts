@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { dateTimeRangeValidator } from '@campus/utils';
 
@@ -10,15 +10,38 @@ import { dateTimeRangeValidator } from '@campus/utils';
 export class DateRangePickerComponent implements OnInit {
   protected dateRangeForm: FormGroup;
 
+  // Is the start date and time required?
+  @Input()
+  public requireStart = true;
+
+  // Is the end date and time required?
+  @Input()
+  public requireEnd = true;
+
+  // Are time input fields used?
+  @Input()
+  public useTime = true;
+
+  // Should there be a vertical layout for the two range controls?
+  @Input()
+  public vertical = false;
+
   constructor(private formBuilder: FormBuilder) {}
 
   ngOnInit() {
+    const startDateValidators = this.requireStart ? [Validators.required] : [];
+    const startTimeValidators =
+      this.useTime && this.requireStart ? [Validators.required] : [];
+    const endDateValidators = this.requireEnd ? [Validators.required] : [];
+    const endTimeValidators =
+      this.useTime && this.requireEnd ? [Validators.required] : [];
+
     this.dateRangeForm = this.formBuilder.group(
       {
-        startDate: [null, Validators.required],
-        startTime: [null, Validators.required],
-        endDate: [null, Validators.required],
-        endTime: [null, Validators.required]
+        startDate: [null, ...startDateValidators],
+        startTime: [null, ...startTimeValidators],
+        endDate: [null, ...endDateValidators],
+        endTime: [null, ...endTimeValidators]
       },
       {
         validators: dateTimeRangeValidator(
@@ -39,6 +62,8 @@ export class DateRangePickerComponent implements OnInit {
 
   /**
    * Fed to the date pickers so they know which dates to highlight
+   *
+   * @param date The current date the datePicker is iterating over
    */
   public applyClassToDateInRange(date: Date) {
     const startDateValue: Date = this.dateRangeForm.get('startDate').value;
