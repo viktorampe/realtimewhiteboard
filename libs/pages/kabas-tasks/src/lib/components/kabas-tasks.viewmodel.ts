@@ -80,10 +80,20 @@ export class KabasTasksViewModel {
     this.store.dispatch(new TaskActions.UpdateTasks({ tasks: updates }));
   }
 
-  public removeTasks(tasks: TaskWithAssigneesInterface[]): void {}
+  public removeTasks(tasks: TaskWithAssigneesInterface[]): void {
+    const tasksToRemove = tasks
+      .filter(task => this.canDelete(task))
+      .map(task => task.id);
+    this.store.dispatch(new TaskActions.DeleteTasks({ ids: tasksToRemove }));
+  }
+
   public toggleFavorite(task: TaskWithAssigneesInterface): void {}
 
   public canArchive(task: TaskWithAssigneesInterface): boolean {
     return task.isPaperTask || task.status === TaskStatusEnum.FINISHED;
+  }
+
+  public canDelete(task: TaskWithAssigneesInterface): boolean {
+    return task.status === TaskStatusEnum.FINISHED;
   }
 }
