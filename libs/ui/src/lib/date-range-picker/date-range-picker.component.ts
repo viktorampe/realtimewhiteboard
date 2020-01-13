@@ -1,21 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
-
-export enum DateOptionValueType {
-  PresetValue,
-  CustomRange
-}
-
-export interface DateOption {
-  type: DateOptionValueType;
-  displayLabel?: string | number;
-  value?: DateRangeValue;
-}
-
-export interface DateRangeValue {
-  start?: Date;
-  end?: Date;
-}
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { dateTimeRangeValidator } from '@campus/utils';
 
 @Component({
   selector: 'campus-date-range-picker',
@@ -23,38 +8,41 @@ export interface DateRangeValue {
   styleUrls: ['./date-range-picker.component.scss']
 })
 export class DateRangePickerComponent implements OnInit {
-  // Expose enum to template
-  protected dateOptionValueType = DateOptionValueType;
+  protected dateRangeForm: FormGroup;
 
-  protected selectedDateOption: FormControl = new FormControl();
-  protected customRangeStartDate: FormControl = new FormControl();
-  protected customRangeEndDate: FormControl = new FormControl();
-
-  protected dateOptions: DateOption[];
-
-  @Input()
-  public buttonDisplayLabel = 'Kies een datum';
-
-  constructor() {}
+  constructor(private formBuilder: FormBuilder) {}
 
   ngOnInit() {
-    this.dateOptions = [
+    this.dateRangeForm = this.formBuilder.group(
       {
-        type: DateOptionValueType.CustomRange
+        startDate: [null, Validators.required],
+        startTime: [null, Validators.required],
+        endDate: [null, Validators.required],
+        endTime: [null, Validators.required]
+      },
+      {
+        validators: dateTimeRangeValidator(
+          'startDate',
+          'startTime',
+          'endDate',
+          'endTime'
+        )
       }
-    ];
+    );
+
+    this.dateRangeForm.valueChanges.subscribe(v => {
+      if (this.dateRangeForm.valid) {
+        console.log(v);
+      }
+    });
   }
-
-  public clickApply() {}
-
-  public clickCancel() {}
 
   /**
    * Fed to the date pickers so they know which dates to highlight
    */
   public applyClassToDateInRange(date: Date) {
-    const startDateValue: Date = this.customRangeStartDate.value;
-    const endDateValue: Date = this.customRangeEndDate.value;
+    const startDateValue: Date = this.dateRangeForm.get('startDate').value;
+    const endDateValue: Date = this.dateRangeForm.get('endDate').value;
 
     const sameDay = (a: Date, b: Date) => {
       return (

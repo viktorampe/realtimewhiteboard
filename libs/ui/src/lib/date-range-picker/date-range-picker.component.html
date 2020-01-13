@@ -1,4 +1,4 @@
-<div class="ui-date-range-picker">
+<form class="ui-date-range-picker" [formGroup]="dateRangeForm">
   <mat-form-field
     class="ui-date-range-picker__mat-form-field--date"
     appearance="outline"
@@ -8,7 +8,7 @@
       autocomplete="off"
       matInput
       [matDatepicker]="startDatePicker"
-      [formControl]="customRangeStartDate"
+      formControlName="startDate"
       (click)="startDatePicker.open()"
     />
     <mat-datepicker
@@ -21,7 +21,12 @@
     appearance="outline"
   >
     <mat-label>Tijd</mat-label>
-    <input autocomplete="off" matInput type="time" />
+    <input
+      formControlName="startTime"
+      autocomplete="off"
+      matInput
+      type="time"
+    />
   </mat-form-field>
   <mat-form-field
     class="ui-date-range-picker__mat-form-field--date"
@@ -33,7 +38,7 @@
       [value]="null"
       matInput
       [matDatepicker]="endDatePicker"
-      [formControl]="customRangeEndDate"
+      formControlName="endDate"
       (click)="endDatePicker.open()"
     />
     <mat-datepicker
@@ -46,6 +51,6 @@
     appearance="outline"
   >
     <mat-label>Tijd</mat-label>
-    <input autocomplete="off" matInput type="time" />
+    <input autocomplete="off" formControlName="endTime" matInput type="time" />
   </mat-form-field>
-</div>
+</form>
