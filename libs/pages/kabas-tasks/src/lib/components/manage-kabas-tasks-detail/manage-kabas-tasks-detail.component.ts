@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { SearchFilterCriteriaInterface } from '@campus/search';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
+
 export enum TaskSortEnum {
   'NAME' = 'NAME',
   'LEARNINGAREA' = 'LEARNINGAREA',
   'STARTDATE' = 'STARTDATE'
 }
+
 @Component({
   selector: 'campus-manage-kabas-tasks-detail',
   templateUrl: './manage-kabas-tasks-detail.component.html',
@@ -15,7 +17,8 @@ export class ManageKabasTasksDetailComponent implements OnInit {
   public TaskSortEnum = TaskSortEnum;
   public diaboloPhaseFilter: SearchFilterCriteriaInterface;
 
-  istaskDigital = false; // replace w/ stream
+  isPaperTask = true; // replace w/ stream
+
   constructor(private viewModel: KabasTasksViewModel) {}
 
   ngOnInit() {
