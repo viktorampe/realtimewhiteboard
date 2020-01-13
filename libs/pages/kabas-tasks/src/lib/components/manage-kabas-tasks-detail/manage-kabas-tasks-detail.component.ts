@@ -63,7 +63,7 @@ export class ManageKabasTasksDetailComponent implements OnInit {
   public removeTasks(tasks: TaskWithAssigneesInterface[]) {
     this.viewModel.removeTasks(tasks);
   }
-  public toggleFavorite(tasks: TaskWithAssigneesInterface) {
-    this.viewModel.toggleFavorite(tasks);
+  public toggleFavorite(task: TaskWithAssigneesInterface) {
+    this.viewModel.toggleFavorite(task);
   }
 }
