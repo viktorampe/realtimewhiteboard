@@ -1,7 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { TaskFixture } from '@campus/dal';
 import { MockDate } from '@campus/testing';
 import { EffectsModule } from '@ngrx/effects';
 import { provideMockActions } from '@ngrx/effects/testing';
@@ -10,6 +9,7 @@ import { DataPersistence, NxModule } from '@nrwl/angular';
 import { hot } from '@nrwl/angular/testing';
 import { Observable, of } from 'rxjs';
 import { TaskReducer } from '.';
+import { TaskFixture } from '../../+fixtures';
 import {
   TaskServiceInterface,
   TASK_SERVICE_TOKEN
@@ -212,8 +212,20 @@ describe('TaskEffects', () => {
     it('should call the service and dispatch an action to add the result to the store', () => {
       createTaskSpy.mockReturnValue(of(newTask));
 
+      expectInAndOut(
+        effects.startAddTask$,
+        new StartAddTask({ task: taskToCreate, navigateAfterCreate: false }),
+        new AddTask({ task: newTask })
+      );
+
+      expect(createTaskSpy).toHaveBeenCalledWith(taskToCreate);
+    });
+
+    it('should call the service and dispatch an action to add the result to the store and navigate', () => {
+      createTaskSpy.mockReturnValue(of(newTask));
+
       actions = hot('a', {
-        a: new StartAddTask({ task: taskToCreate })
+        a: new StartAddTask({ task: taskToCreate, navigateAfterCreate: true })
       });
 
       expect(effects.startAddTask$).toBeObservable(

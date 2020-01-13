@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Actions, createEffect, Effect, ofType } from '@ngrx/effects';
+import { Action } from '@ngrx/store';
 import { DataPersistence } from '@nrwl/angular';
 import { from } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
@@ -42,9 +43,13 @@ export class TaskEffects {
       run: (action: StartAddTask, state: DalState) => {
         // TODO: don't avoid typescript
         return this.taskService['createTask'](action.payload.task).pipe(
-          switchMap((task: TaskInterface) =>
-            from([new AddTask({ task }), new NavigateToTaskDetail({ task })])
-          )
+          switchMap((task: TaskInterface) => {
+            const actionsToDispatch: Action[] = [new AddTask({ task })];
+            if (action.payload.navigateAfterCreate) {
+              actionsToDispatch.push(new NavigateToTaskDetail({ task }));
+            }
+            return from(actionsToDispatch);
+          })
         );
       },
       onError: (action: StartAddTask, error) => {
@@ -64,12 +69,7 @@ export class TaskEffects {
       this.actions.pipe(
         ofType(TasksActionTypes.NavigateToTaskDetail),
         tap((action: NavigateToTaskDetail) => {
-          this.router.navigate([
-            '/',
-            'tasks',
-            'manage',
-            action.payload.task.id
-          ]);
+          this.router.navigate(['tasks', 'manage', action.payload.task.id]);
         })
       ),
     { dispatch: false }
