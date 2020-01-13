@@ -70,8 +70,9 @@
   &__hover-actions {
     flex: 1 0 10%;
     flex-direction: row nowrap;
+    align-self: center;
     mat-icon {
-      display: none;
+      // display: none;
       &.favorite {
         fill: red; // TODO: what color?
       }
