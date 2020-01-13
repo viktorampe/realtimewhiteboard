@@ -1,4 +1,11 @@
-import { Component, HostBinding, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  HostBinding,
+  Input,
+  OnInit,
+  Output
+} from '@angular/core';
 import {
   AssigneeInterface,
   AssigneeTypesEnum
@@ -47,6 +54,8 @@ export class TaskListItemComponent implements OnInit {
     return this._assignees;
   }
 
+  @Output() clickToggleFavorite = new EventEmitter();
+
   @HostBinding('class.manage-kabas-tasks__task-list-item')
   taskListItemClass = true;
 
@@ -66,5 +75,9 @@ export class TaskListItemComponent implements OnInit {
       return 1;
     }
     return order[a.type] - order[b.type];
+  }
+
+  toggleFavorite() {
+    this.clickToggleFavorite.emit();
   }
 }

@@ -81,7 +81,9 @@ export class KabasTasksViewModel {
   }
 
   public removeTasks(tasks: TaskWithAssigneesInterface[]): void {}
-  public toggleFavorite(task: TaskWithAssigneesInterface): void {}
+  public toggleFavorite(task: TaskWithAssigneesInterface): void {
+    console.log('toggle favorite', task);
+  }
 
   public canArchive(task: TaskWithAssigneesInterface): boolean {
     return task.isPaperTask || task.status === TaskStatusEnum.FINISHED;

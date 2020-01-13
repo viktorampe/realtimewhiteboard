@@ -56,7 +56,7 @@
           ></campus-search-term>
           <campus-select-filter
             multiple="true"
-            *ngIf="learningAreaFilter$ | async as learningAreaFilter"
+            *ngIf="(learningAreaFilter$ | async) as learningAreaFilter"
             [filterCriteria]="learningAreaFilter"
             [resetLabel]="'Selectie wissen'"
             (filterSelectionChange)="
@@ -74,7 +74,7 @@
           ></campus-date-filter>
           <campus-select-filter
             multiple="true"
-            *ngIf="assigneeFilter$ | async as assigneeFilter"
+            *ngIf="(assigneeFilter$ | async) as assigneeFilter"
             [filterCriteria]="assigneeFilter"
             [resetLabel]="'Selectie wissen'"
             (filterSelectionChange)="
@@ -124,7 +124,7 @@
             </mat-option>
           </mat-select>
         </div>
-        <ng-container *ngIf="digitalFilteredTasks$ | async as digitalTasks">
+        <ng-container *ngIf="(digitalFilteredTasks$ | async) as digitalTasks">
           <div
             class="manage-kabas-tasks-overview__filterbar__result"
             *ngIf="digitalTasks.length; else noResults"
@@ -147,7 +147,7 @@
           <mat-icon svgIcon="add"></mat-icon>
           nieuwe taak
         </mat-list-item>
-        <ng-container *ngIf="tasksWithAssignments$ | async as digitalTasks">
+        <ng-container *ngIf="(tasksWithAssignments$ | async) as digitalTasks">
           <mat-list-option
             #option
             *ngFor="let task of digitalTasks"
@@ -165,6 +165,7 @@
               [status]="task.status"
               [actions]="getActions(task)"
               [assignees]="task.assignees"
+              (clickToggleFavorite)="clickToggleFavorite(task)"
             ></campus-task-list-item>
           </mat-list-option>
         </ng-container>
@@ -184,7 +185,9 @@
           <campus-select-filter
             multiple="true"
             [resetLabel]="'Selectie wissen'"
-            *ngIf="learningAreaFilterPaper$ | async as learningAreaFilterPaper"
+            *ngIf="
+              (learningAreaFilterPaper$ | async) as learningAreaFilterPaper
+            "
             [filterCriteria]="learningAreaFilterPaper"
             (filterSelectionChange)="
               selectionChanged($event, 'learningArea', 'paper')
@@ -193,7 +196,7 @@
 
           <campus-select-filter
             multiple="true"
-            *ngIf="assigneeFilterPaper$ | async as assigneeFilterPaper"
+            *ngIf="(assigneeFilterPaper$ | async) as assigneeFilterPaper"
             [filterCriteria]="assigneeFilterPaper"
             [resetLabel]="'Selectie wissen'"
             (filterSelectionChange)="
@@ -230,7 +233,7 @@
             </mat-option>
           </mat-select>
         </div>
-        <ng-container *ngIf="paperFilteredTasks$ | async as paperTasks">
+        <ng-container *ngIf="(paperFilteredTasks$ | async) as paperTasks">
           <div
             class="manage-kabas-tasks-overview__filterbar__result"
             *ngIf="paperTasks.length; else noResults"
@@ -257,7 +260,9 @@
           <mat-icon svgIcon="add"></mat-icon>
           nieuwe taak
         </mat-list-item>
-        <ng-container *ngIf="paperTasksWithAssignments$ | async as paperTasks">
+        <ng-container
+          *ngIf="(paperTasksWithAssignments$ | async) as paperTasks"
+        >
           <mat-list-option
             #option
             *ngFor="let task of paperTasks"
@@ -275,6 +280,7 @@
               [status]="'paper'"
               [actions]="getActions(task)"
               [assignees]="task.assignees"
+              (clickToggleFavorite)="clickToggleFavorite(task)"
             ></campus-task-list-item>
           </mat-list-option>
         </ng-container>
