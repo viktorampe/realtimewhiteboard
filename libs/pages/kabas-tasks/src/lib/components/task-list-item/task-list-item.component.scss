@@ -3,6 +3,13 @@
   flex-direction: row;
   align-items: flex-start;
   padding: 5px 0;
+  &:hover {
+    .manage-kabas-tasks-task-list-item__hover-actions {
+      mat-icon {
+        display: inline-block;
+      }
+    }
+  }
 }
 
 .manage-kabas-tasks-task-list-item {
@@ -58,6 +65,14 @@
     margin: 0 10px;
     min-width: 140px;
     text-align: center;
+  }
+
+  &__hover-actions {
+    flex: 1 0 10%;
+    flex-direction: row nowrap;
+    mat-icon {
+      display: none;
+    }
   }
 
   &__assignees {
