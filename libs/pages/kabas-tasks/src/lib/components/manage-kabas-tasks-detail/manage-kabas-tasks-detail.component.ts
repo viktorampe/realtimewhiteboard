@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SearchFilterCriteriaInterface } from '@campus/search';
+import { TaskWithAssigneesInterface } from '../../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
 
 export enum TaskSortEnum {
@@ -53,13 +54,16 @@ export class ManageKabasTasksDetailComponent implements OnInit {
     };
   }
 
-  public setArchivedTasks(taskIds: number[], isArchived: boolean) {
+  public setArchivedTasks(
+    taskIds: TaskWithAssigneesInterface[],
+    isArchived: boolean
+  ) {
     this.viewModel.setArchivedTasks(taskIds, isArchived);
   }
-  public removeTasks(taskIds: number[]) {
+  public removeTasks(taskIds: TaskWithAssigneesInterface[]) {
     this.viewModel.removeTasks(taskIds);
   }
-  public toggleFavorite(taskId: number) {
+  public toggleFavorite(taskId: TaskWithAssigneesInterface) {
     this.viewModel.toggleFavorite(taskId);
   }
 }
