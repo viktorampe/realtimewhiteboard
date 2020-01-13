@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { MockDate } from '@campus/testing';
 import { EffectsModule } from '@ngrx/effects';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Action, StoreModule } from '@ngrx/store';
@@ -6,14 +7,34 @@ import { DataPersistence, NxModule } from '@nrwl/angular';
 import { hot } from '@nrwl/angular/testing';
 import { Observable, of } from 'rxjs';
 import { TaskReducer } from '.';
-import { TASK_SERVICE_TOKEN } from '../../tasks/task.service.interface';
-import { LoadTasks, TasksLoaded, TasksLoadError } from './task.actions';
+import { TaskFixture } from '../../+fixtures';
+import {
+  TaskServiceInterface,
+  TASK_SERVICE_TOKEN
+} from '../../tasks/task.service.interface';
+import { EffectFeedback, Priority } from '../effect-feedback';
+import { AddEffectFeedback } from '../effect-feedback/effect-feedback.actions';
+import {
+  AddTask,
+  LoadTasks,
+  StartAddTask,
+  TasksLoaded,
+  TasksLoadError
+} from './task.actions';
 import { TaskEffects } from './task.effects';
 
 describe('TaskEffects', () => {
   let actions: Observable<any>;
   let effects: TaskEffects;
   let usedState: any;
+  let uuid: Function;
+  let taskService: TaskServiceInterface;
+
+  const mockDate = new MockDate();
+
+  afterAll(() => {
+    mockDate.returnRealDate();
+  });
 
   const expectInAndOut = (
     effect: Observable<any>,
@@ -74,16 +95,23 @@ describe('TaskEffects', () => {
         {
           provide: TASK_SERVICE_TOKEN,
           useValue: {
-            getAllForUser: () => {}
+            getAllForUser: () => {},
+            createTask: () => {}
           }
         },
         TaskEffects,
         DataPersistence,
-        provideMockActions(() => actions)
+        provideMockActions(() => actions),
+        {
+          provide: 'uuid',
+          useValue: () => '123-totally-a-uuid-123'
+        }
       ]
     });
 
     effects = TestBed.get(TaskEffects);
+    uuid = TestBed.get('uuid');
+    taskService = TestBed.get(TASK_SERVICE_TOKEN);
   });
 
   describe('loadTask$', () => {
@@ -162,6 +190,54 @@ describe('TaskEffects', () => {
       it('should return a error action if force is true', () => {
         expectInAndOut(effects.loadTasks$, forcedLoadAction, loadErrorAction);
       });
+    });
+  });
+
+  describe('createTask$', () => {
+    const taskToCreate = { name: 'foo' };
+    const newTask = new TaskFixture();
+
+    let createTaskSpy: jest.SpyInstance;
+    beforeEach(() => {
+      // TODO: don't avoid typescript
+      createTaskSpy = taskService['createTask'] = jest.fn();
+    });
+
+    it('should call the service and dispatch an action to add the result to the store', () => {
+      createTaskSpy.mockReturnValue(of(newTask));
+
+      expectInAndOut(
+        effects.startAddTask$,
+        new StartAddTask({ task: taskToCreate }),
+        new AddTask({ task: newTask })
+      );
+
+      expect(createTaskSpy).toHaveBeenCalledWith(taskToCreate);
+    });
+
+    it('should dispatch feedback on error', () => {
+      createTaskSpy.mockRejectedValue(new Error('did not work'));
+
+      const effectFeedback = new EffectFeedback({
+        id: uuid(),
+        triggerAction: new StartAddTask({ task: taskToCreate }),
+        message: 'Het is niet gelukt om de taak te maken.',
+        type: 'error',
+        userActions: [
+          {
+            title: 'Opnieuw proberen',
+            userAction: new StartAddTask({ task: taskToCreate })
+          }
+        ],
+        priority: Priority.HIGH
+      });
+      const addFeedbackAction = new AddEffectFeedback({ effectFeedback });
+
+      expectInAndOut(
+        effects.startAddTask$,
+        new StartAddTask({ task: taskToCreate }),
+        addFeedbackAction
+      );
     });
   });
 });
