@@ -64,5 +64,5 @@ export const clearTaskGroups = createAction('[TaskGroup] Clear TaskGroups');
 
 export const updateTaskGroupsAccess = createAction(
   '[TaskGroup] Update Access',
-  props<{ taskGroups: TaskGroupInterface[] }>()
+  props<{ taskId: number; taskGroups: TaskGroupInterface[] }>()
 );
