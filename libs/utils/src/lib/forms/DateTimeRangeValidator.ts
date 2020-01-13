@@ -12,6 +12,7 @@ export function dateTimeRangeValidator(
     const endDate = fg.get(endDateControlName).value;
     const endTime = fg.get(endTimeControlName).value;
 
+    // Both dates should be set to trigger this validator, else it's not a range
     if (!startDate || !endDate) {
       return null;
     }
@@ -19,7 +20,7 @@ export function dateTimeRangeValidator(
     const fullStartDate = new Date(startDate);
     const fullEndDate = new Date(endDate);
 
-    // If we have times set, we must incorporate them into the date
+    // If we have times set (they can be optional), we must incorporate them into the date
     // The date values themselves should never already contain time info, see:
     // https://html.spec.whatwg.org/multipage/common-microsyntaxes.html#dates
     if (startTime && endTime) {

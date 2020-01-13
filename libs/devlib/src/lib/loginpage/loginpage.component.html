@@ -83,10 +83,8 @@
   <campus-date-range-picker
     (valueChanged)="dateChanged($event)"
     [vertical]="true"
-    [initialStartTime]="'13:37'"
-    [initialEndTime]="'14:37'"
-    [initialStartDate]="startDate"
-    [initialEndDate]="endDate"
+    [requireStart]="false"
+    [requireEnd]="false"
   >
   </campus-date-range-picker>
 </div>
