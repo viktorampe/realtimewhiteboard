@@ -22,7 +22,7 @@ import {
 
 interface TaskDestroyInfoInterface {
   tasks: {
-    taskId: number;
+    id: number;
   }[];
   errors: {
     task: string;
@@ -59,7 +59,7 @@ export class TaskEffects {
             if (Array.isArray(tasks) && tasks.length) {
               actions.push(
                 new DeleteTasks({
-                  ids: tasks.map(task => task.taskId)
+                  ids: tasks.map(task => task.id)
                 })
               );
 

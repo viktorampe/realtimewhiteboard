@@ -206,7 +206,7 @@ describe('TaskEffects', () => {
 
     it('should call the service and dispatch feedback, no errors', () => {
       deleteTasksSpy.mockReturnValue(
-        of({ tasks: taskIds.map(taskId => ({ taskId })), errors: [] })
+        of({ tasks: taskIds.map(id => ({ id })), errors: [] })
       );
       const expectedMessage = 'De taken werden verwijderd.';
 
@@ -295,7 +295,7 @@ describe('TaskEffects', () => {
 
       deleteTasksSpy.mockReturnValue(
         of({
-          tasks: [{ taskId: 2 }],
+          tasks: [{ id: 2 }],
           errors: taskDestroyErrors
         })
       );
