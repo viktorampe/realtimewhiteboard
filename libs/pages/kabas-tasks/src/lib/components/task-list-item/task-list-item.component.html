@@ -73,5 +73,9 @@
   class="manage-kabas-tasks-task-list-item__hover-actions"
   campusClickStopPropagation
 >
-  <mat-icon (click)="toggleFavorite()" svgIcon="favorites"></mat-icon>
+  <mat-icon
+    [class.favorite]="isFavorite"
+    (click)="toggleFavorite()"
+    svgIcon="favorites"
+  ></mat-icon>
 </div>

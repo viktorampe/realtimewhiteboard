@@ -33,6 +33,7 @@ export class TaskListItemComponent implements OnInit {
   @Input() startDate: Date;
   @Input() endDate: Date;
   @Input() status: Status;
+  @Input() isFavorite: boolean;
   @Input() actions: {
     label: string;
     handler: () => any; //prevents warning "Member handler is not callable in template"

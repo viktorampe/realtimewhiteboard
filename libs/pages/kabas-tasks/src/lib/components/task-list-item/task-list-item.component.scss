@@ -72,6 +72,9 @@
     flex-direction: row nowrap;
     mat-icon {
       display: none;
+      &.favorite {
+        fill: red; // TODO: what color?
+      }
     }
   }
 
