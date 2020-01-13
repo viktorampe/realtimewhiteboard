@@ -1,3 +1,62 @@
-<p>
-  manage-kabas-tasks-detail works!
-</p>
+<div class="manage-kabas-tasks"
+  ><div class="manage-kabas-tasks-detail__container">
+    <div class="manage-kabas-tasks-detail__filterbar">
+      <div class="manage-kabas-tasks-detail__filterbar__filters">
+        <campus-search-term
+          placeholder="Filter op titel"
+          [autoComplete]="false"
+          [emitOnTextChange]="true"
+        ></campus-search-term>
+
+        <div
+          *ngIf="istaskDigital"
+          class="manage-kabas-tasks-detail__moetje-toggle"
+        >
+          Moetje
+          <mat-slide-toggle color="primary"> </mat-slide-toggle>
+          Magje
+        </div>
+
+        <campus-button-toggle-filter
+          [multiple]="true"
+          [filterCriteria]="diaboloPhaseFilter"
+        >
+        </campus-button-toggle-filter>
+
+        <campus-button
+          class="manage-kabas-tasks-detail__reset-filters"
+          iconClass="reset-filters"
+        ></campus-button>
+      </div>
+    </div>
+
+    <mat-selection-list
+      #digital
+      [class.mat-selection-list--has-selection]="
+        !digital.selectedOptions.isEmpty()
+      "
+    >
+      <mat-list-item class="manage-kabas-tasks-detail__list__primary-action">
+        <mat-icon svgIcon="add"></mat-icon>
+        Lesmateriaal toevoegen aan deze taak
+      </mat-list-item>
+      <ng-container>
+        <mat-list-option
+          #option
+          *ngFor="let i of [].constructor(6)"
+          checkboxPosition="before"
+          [class.mat-list-option--selected]="option.selected"
+        >
+          testje
+        </mat-list-option>
+      </ng-container>
+    </mat-selection-list>
+
+    <ng-template #noResults>
+      <p>De toegepaste filter bevat geen resultaten.</p>
+    </ng-template>
+  </div>
+  <div class="manage-kabas-tasks-detail__info"
+    >Over deze oefening: dit gaat over de oefening
+  </div>
+</div>

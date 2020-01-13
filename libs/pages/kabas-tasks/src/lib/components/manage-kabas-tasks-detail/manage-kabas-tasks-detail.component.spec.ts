@@ -1,4 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatSelectModule, MatSlideToggleModule } from '@angular/material';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { SearchModule } from '@campus/search';
+import { UiModule } from '@campus/ui';
 import { configureTestSuite } from 'ng-bullet';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
 import { MockKabasTasksViewModel } from '../kabas-tasks.viewmodel.mock';
@@ -10,6 +14,13 @@ describe('ManageKabasTasksDetailComponent', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
+      imports: [
+        MatSlideToggleModule,
+        MatSelectModule,
+        SearchModule,
+        UiModule,
+        NoopAnimationsModule
+      ],
       declarations: [ManageKabasTasksDetailComponent],
       providers: [
         { provide: KabasTasksViewModel, useClass: MockKabasTasksViewModel }
