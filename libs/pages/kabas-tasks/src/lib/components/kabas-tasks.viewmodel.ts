@@ -73,10 +73,8 @@ export class KabasTasksViewModel {
     tasks: TaskWithAssigneesInterface[],
     isArchived: boolean
   ): void {
-    const self = this;
-
     const updates = tasks
-      .filter(task => !isArchived || self.canArchive(task))
+      .filter(task => !isArchived || this.canArchive(task))
       .map(task => ({ id: task.id, changes: { archived: isArchived } }));
 
     this.store.dispatch(new TaskActions.UpdateTasks({ tasks: updates }));
