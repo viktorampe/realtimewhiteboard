@@ -23,7 +23,7 @@ import {
 } from '@angular/material';
 import { MatTabsModule } from '@angular/material/tabs';
 import { RouterModule } from '@angular/router';
-import { UtilsModule } from '@campus/utils';
+import { BeDateAdapter, UtilsModule } from '@campus/utils';
 import { AppBarComponent } from './app-bar/app-bar.component';
 import { BannerComponent } from './banner/banner.component';
 import { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.component';
@@ -41,7 +41,6 @@ import { ConfirmableSelectComponent } from './confirmable-select/confirmable-sel
 import { ContentEditableComponent } from './content-editable/content-editable.component';
 import { ContentPreviewComponent } from './content-preview/content-preview.component';
 import { ContentThumbnailComponent } from './content-thumbnail/content-thumbnail.component';
-import { BeDateAdapter } from './date-range-picker/be-date-adapter';
 import { DateRangePickerComponent } from './date-range-picker/date-range-picker.component';
 import { DropAreaComponent } from './drop-area/drop-area.component';
 import { DropdownMenuItemComponent } from './dropdown-menu-item/dropdown-menu-item.component';

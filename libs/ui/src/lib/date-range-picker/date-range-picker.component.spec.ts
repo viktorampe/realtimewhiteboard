@@ -8,8 +8,8 @@ import {
 } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { BeDateAdapter } from '@campus/utils';
 import { configureTestSuite } from 'ng-bullet';
-import { BeDateAdapter } from './be-date-adapter';
 import { DateRangePickerComponent } from './date-range-picker.component';
 
 describe('DateRangePickerComponent', () => {
