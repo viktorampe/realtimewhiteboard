@@ -47,40 +47,39 @@
     </ng-template>
   </ng-container>
 </campus-page-bar>
-<div class="manage-kabas-tasks"
+<div class="manage-kabas-tasks-detail"
   ><div class="manage-kabas-tasks-detail__container">
     <div class="manage-kabas-tasks-detail__filterbar">
-      <div class="manage-kabas-tasks-detail__filterbar__filters">
-        <campus-search-term
-          placeholder="Filter op titel"
-          [autoComplete]="false"
-          [emitOnTextChange]="true"
-        ></campus-search-term>
+      <campus-search-term
+        placeholder="Filter op titel"
+        [autoComplete]="false"
+        [emitOnTextChange]="true"
+      ></campus-search-term>
 
-        <div
-          *ngIf="!isPaperTask"
-          class="manage-kabas-tasks-detail__moetje-toggle"
-        >
-          Moetje
-          <mat-slide-toggle color="primary"> </mat-slide-toggle>
-          Magje
-        </div>
-
-        <campus-button-toggle-filter
-          [multiple]="true"
-          [filterCriteria]="diaboloPhaseFilter"
-        >
-        </campus-button-toggle-filter>
-
-        <campus-button
-          class="manage-kabas-tasks-detail__reset-filters"
-          iconClass="reset-filters"
-        ></campus-button>
+      <div
+        *ngIf="!isPaperTask"
+        class="manage-kabas-tasks-detail__moetje-toggle"
+      >
+        Moetje
+        <mat-slide-toggle color="primary"> </mat-slide-toggle>
+        Magje
       </div>
+
+      <campus-button-toggle-filter
+        [multiple]="true"
+        [filterCriteria]="diaboloPhaseFilter"
+      >
+      </campus-button-toggle-filter>
+
+      <campus-button
+        class="manage-kabas-tasks-detail__reset-filters"
+        iconClass="reset-filters"
+      ></campus-button>
     </div>
 
     <mat-selection-list
       #content
+      class="manage-kabas-tasks-detail__list"
       [class.mat-selection-list--has-selection]="
         !content.selectedOptions.isEmpty()
       "
@@ -89,7 +88,7 @@
         <mat-icon svgIcon="add"></mat-icon>
         Lesmateriaal toevoegen aan deze taak
       </mat-list-item>
-      <ng-container>
+      <ng-container *ngIf="content.options; else noResults">
         <mat-list-option
           #option
           *ngFor="let i of [].constructor(6)"
