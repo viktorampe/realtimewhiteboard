@@ -14,7 +14,8 @@ export enum TasksActionTypes {
   UpdateTasks = '[Tasks] Update Tasks',
   DeleteTask = '[Tasks] Delete Task',
   DeleteTasks = '[Tasks] Delete Tasks',
-  ClearTasks = '[Tasks] Clear Tasks'
+  ClearTasks = '[Tasks] Clear Tasks',
+  UpdateAccess = '[Tasks] Update Access'
 }
 
 export class LoadTasks implements Action {
@@ -88,6 +89,10 @@ export class ClearTasks implements Action {
   readonly type = TasksActionTypes.ClearTasks;
 }
 
+export class UpdateAccess implements Action {
+  readonly type = TasksActionTypes.UpdateAccess;
+}
+
 export type TasksActions =
   | LoadTasks
   | TasksLoaded
@@ -100,4 +105,5 @@ export type TasksActions =
   | UpdateTasks
   | DeleteTask
   | DeleteTasks
-  | ClearTasks;
+  | ClearTasks
+  | UpdateAccess;
