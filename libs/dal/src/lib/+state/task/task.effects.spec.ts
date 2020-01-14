@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { MAT_DATE_LOCALE } from '@angular/material';
 import { MockDate } from '@campus/testing';
 import { EffectsModule } from '@ngrx/effects';
 import { provideMockActions } from '@ngrx/effects/testing';
@@ -6,7 +7,6 @@ import { Update } from '@ngrx/entity';
 import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/angular';
 import { hot } from '@nrwl/angular/testing';
-import { undo } from 'ngrx-undo';
 import { Observable, of } from 'rxjs';
 import { TaskReducer } from '.';
 import { TaskInterface } from '../../+models';
@@ -19,10 +19,11 @@ import {
   UndoServiceInterface,
   UNDO_SERVICE_TOKEN
 } from '../../undo';
-import { EffectFeedback } from '../effect-feedback';
+import { EffectFeedback, Priority } from '../effect-feedback';
 import { AddEffectFeedback } from '../effect-feedback/effect-feedback.actions';
 import {
   LoadTasks,
+  StartUpdateTasks,
   TasksLoaded,
   TasksLoadError,
   UpdateTasks
@@ -36,7 +37,7 @@ describe('TaskEffects', () => {
   let uuid: Function;
   let taskService: TaskServiceInterface;
   let undoService: UndoServiceInterface;
-  let dateMock: MockDate = new MockDate();
+  let dateMock: MockDate = new MockDate(new Date('2020-1-14'));
 
   afterAll(() => {
     dateMock.returnRealDate();
@@ -109,6 +110,7 @@ describe('TaskEffects', () => {
           provide: UNDO_SERVICE_TOKEN,
           useClass: UndoService
         },
+        { provide: MAT_DATE_LOCALE, useValue: 'nl-BE' },
         TaskEffects,
         DataPersistence,
         provideMockActions(() => actions),
@@ -205,42 +207,120 @@ describe('TaskEffects', () => {
   });
 
   //file.only
-  describe('updateTasks$', () => {
+  describe('startUpdateTasks$', () => {
     const tasksToUpdate: Update<TaskInterface>[] = [
       { id: 1, changes: { id: 1, name: 'Taak 1' } },
       { id: 2, changes: { id: 2, name: 'Taak 2' } }
     ];
-    const updateAction = new UpdateTasks({ tasks: tasksToUpdate });
-    const updateUndoAction = undo(updateAction);
+    const triggerAction = new StartUpdateTasks({ tasks: tasksToUpdate });
 
-    describe('when success', () => {
-      beforeEach(() => {
-        mockServiceMethodReturnValue('updateTasks', []);
+    it('should call the service and dispatch feedback, no errors', () => {
+      mockServiceMethodReturnValue('updateTasks', {
+        tasks: tasksToUpdate.map(task => task.changes),
+        errors: []
       });
 
-      it('should trigger an api call', () => {});
+      const expectedMessage = 'De taken werden opgeslagen.';
+      const updateAction = new UpdateTasks({ tasks: tasksToUpdate });
+      const feedbackAction = new AddEffectFeedback({
+        effectFeedback: {
+          id: uuid(),
+          display: true,
+          message: expectedMessage,
+          timeStamp: Date.now(),
+          triggerAction,
+          priority: Priority.NORM,
+          type: 'success',
+          useDefaultCancel: true,
+          userActions: []
+        } as EffectFeedback
+      });
+      actions = hot('a', { a: triggerAction });
+      expect(effects.startUpdateTasks$).toBeObservable(
+        hot('(ab)', {
+          a: updateAction,
+          b: feedbackAction
+        })
+      );
     });
-
-    describe('when errored', () => {
-      beforeEach(() => {
-        mockServiceMethodError('updateTasks', 'failed');
+    it('should call the service and dispatch feedback, only errors', () => {
+      const taskUpdateErrors = [
+        {
+          task: 'Huiswerk',
+          user: 'Hubert Stroganovski',
+          activeUntil: new Date()
+        },
+        {
+          task: 'Huiswerk2',
+          user: 'Hubert Stroganovski',
+          activeUntil: new Date()
+        }
+      ];
+      mockServiceMethodReturnValue('updateTasks', {
+        tasks: [],
+        errors: taskUpdateErrors
       });
-      it('should return an undo and feedback action', () => {
-        const feedbackAction = new AddEffectFeedback({
-          effectFeedback: EffectFeedback.generateErrorFeedback(
-            uuid(),
-            updateAction,
-            'Het is niet gelukt om de taken te updaten.'
-          )
-        });
-        actions = hot('a', { a: updateAction });
-        expect(effects.updateTasks$).toBeObservable(
-          hot('(ab)', {
-            a: updateUndoAction,
-            b: feedbackAction
-          })
-        );
+      const expectedMessage =
+        '<p>Er werden geen taken opgeslagen.</p>' +
+        '<p>De volgende taken zijn nog in gebruik:</p>' +
+        '<ul>' +
+        '<li><strong>Huiswerk</strong> is nog in gebruik door Hubert Stroganovski tot 2020-1-14.</li>' +
+        '<li><strong>Huiswerk2</strong> is nog in gebruik door Hubert Stroganovski tot 2020-1-14.</li>' +
+        '</ul>';
+      const feedbackAction = new AddEffectFeedback({
+        effectFeedback: {
+          id: uuid(),
+          triggerAction,
+          message: expectedMessage,
+          type: 'error',
+          userActions: [],
+          priority: Priority.HIGH,
+          display: true,
+          timeStamp: Date.now(),
+          useDefaultCancel: true
+        }
       });
+      actions = hot('a', { a: triggerAction });
+      expect(effects.startUpdateTasks$).toBeObservable(
+        hot('a', { a: feedbackAction })
+      );
+    });
+    it('should call the service and dispatch feedback, mixed', () => {
+      const taskUpdateErrors = [
+        {
+          task: 'Huiswerk',
+          user: 'Hubert Stroganovski',
+          activeUntil: new Date()
+        }
+      ];
+      mockServiceMethodReturnValue('updateTasks', {
+        tasks: tasksToUpdate.slice(1).map(task => task.changes),
+        errors: taskUpdateErrors
+      });
+      const updateAction = new UpdateTasks({ tasks: tasksToUpdate.slice(1) });
+      const expectedMessage =
+        '<p>De taak werd opgeslagen.</p>' +
+        '<p>De volgende taken zijn nog in gebruik:</p>' +
+        '<ul>' +
+        '<li><strong>Huiswerk</strong> is nog in gebruik door Hubert Stroganovski tot 2020-1-14.</li>' +
+        '</ul>';
+      const feedbackAction = new AddEffectFeedback({
+        effectFeedback: {
+          id: uuid(),
+          triggerAction,
+          message: expectedMessage,
+          type: 'error',
+          userActions: [],
+          priority: Priority.HIGH,
+          display: true,
+          timeStamp: Date.now(),
+          useDefaultCancel: true
+        }
+      });
+      actions = hot('a', { a: triggerAction });
+      expect(effects.startUpdateTasks$).toBeObservable(
+        hot('(ab)', { a: updateAction, b: feedbackAction })
+      );
     });
   });
 });
