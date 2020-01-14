@@ -23,3 +23,12 @@ export interface TaskServiceInterface {
     taskIds: number[]
   ): Observable<TaskUpdateInfoInterface>;
 }
+
+export interface TaskUpdateInfoInterface {
+  tasks: Partial<TaskInterface>[];
+  errors: {
+    task: string;
+    activeUntil: Date;
+    user: string;
+  };
+}
