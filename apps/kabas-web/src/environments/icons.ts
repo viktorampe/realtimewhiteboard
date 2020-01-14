@@ -29,6 +29,7 @@ export const icons = {
   filter: 'assets/icons/filter.svg',
   context_menu: 'assets/icons/material/more_vert.svg',
   favorites: 'assets/icons/favorite.svg',
+  'favorites-filled': 'assets/icons/material/favorite-filled.svg',
   check: 'assets/icons/check.svg',
   close: 'assets/icons/close.svg',
   history: 'assets/icons/history.svg',

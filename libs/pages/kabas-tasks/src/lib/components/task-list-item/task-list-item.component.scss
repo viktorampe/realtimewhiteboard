@@ -74,6 +74,7 @@
     mat-icon {
       display: none;
       &.favorite {
+        display: inline-block;
         fill: red; // TODO: what color?
       }
     }
