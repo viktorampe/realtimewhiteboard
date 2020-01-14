@@ -5,7 +5,8 @@ import {
   DalState,
   getStoreModuleForFeatures,
   TaskActions,
-  TaskReducer
+  TaskReducer,
+  UserQueries
 } from '@campus/dal';
 import { MockDate } from '@campus/testing';
 import {
@@ -19,6 +20,7 @@ import {
   TaskStatusEnum,
   TaskWithAssigneesInterface
 } from '../interfaces/TaskWithAssignees.interface';
+import { PersonFixture } from './../../../../../dal/src/lib/+fixtures/Person.fixture';
 import { KabasTasksViewModel } from './kabas-tasks.viewmodel';
 
 describe('KabasTaskViewModel', () => {
@@ -324,6 +326,44 @@ describe('KabasTaskViewModel', () => {
       kabasTasksViewModel.setArchivedTasks(taskAssignees, true);
 
       expect(spy).toHaveBeenCalledWith(expected);
+    });
+  });
+
+  describe('createTask', () => {
+    let dispatchSpy: jest.SpyInstance;
+
+    const currentUser = new PersonFixture();
+    beforeEach(() => {
+      dispatchSpy = store.dispatch = jest.fn();
+      UserQueries.getCurrentUser.projector = jest
+        .fn()
+        .mockReturnValue(currentUser);
+    });
+
+    it('should dispatch an action', () => {
+      kabasTasksViewModel.createTask('foo', 123, 'digital');
+
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        // TODO typescript
+        new TaskActions['StartAddTask']({
+          task: { name: 'foo', learningAreaId: 123, isPaperTask: false },
+          navigateAfterCreate: true,
+          userId: currentUser.id
+        })
+      );
+    });
+
+    it('should dispatch an action', () => {
+      kabasTasksViewModel.createTask('foo', 123, 'paper');
+
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        // TODO typescript
+        new TaskActions['StartAddTask']({
+          task: { name: 'foo', learningAreaId: 123, isPaperTask: true },
+          navigateAfterCreate: true,
+          userId: currentUser.id
+        })
+      );
     });
   });
 });

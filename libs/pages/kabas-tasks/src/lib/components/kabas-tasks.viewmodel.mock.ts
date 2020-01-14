@@ -215,4 +215,9 @@ export class MockKabasTasksViewModel
   public canArchive(task: TaskWithAssigneesInterface): boolean {
     return true;
   }
+  public createTask(
+    name: string,
+    learningAreaId: number,
+    type: 'paper' | 'digital'
+  ) {}
 }
