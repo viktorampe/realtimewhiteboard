@@ -128,7 +128,7 @@ export class TaskEffects {
         );
       },
       onError: (action: StartDeleteTasks, error) => {
-        return this.getTaskUpdateOnErrorFeedback(action, 'delete');
+        return this.getTaskUpdateOnErrorFeedbackAction(action, 'delete');
       }
     })
   );
@@ -186,7 +186,7 @@ export class TaskEffects {
         );
       },
       onError: (action: StartArchiveTasks, error: any) => {
-        return this.getTaskUpdateOnErrorFeedback(
+        return this.getTaskUpdateOnErrorFeedbackAction(
           action,
           this.intentToArchive(action) ? 'archive' : 'dearchive'
         );
@@ -194,9 +194,20 @@ export class TaskEffects {
     })
   );
 
-  private intentToArchive = action =>
-    action.payload.tasks.some(task => task.changes.archived);
-  private isFilled = arr => Array.isArray(arr) && arr.length;
+  private getTaskUpdateSuccessMessage(
+    tasksLength: number,
+    method: 'archive' | 'dearchive' | 'delete'
+  ): string {
+    const methodVerbs = {
+      archive: 'gearchiveerd',
+      dearchive: 'gedearchiveerd',
+      delete: 'verwijderd'
+    };
+
+    return `De ${tasksLength === 1 ? 'taak werd' : 'taken werden'} ${
+      methodVerbs[method]
+    }.`;
+  }
 
   private getTaskUpdateErrorMessageHTML(
     taskUpdateInfo: TaskUpdateInfoInterface,
@@ -256,22 +267,7 @@ export class TaskEffects {
     });
   }
 
-  private getTaskUpdateSuccessMessage(
-    tasksLength: number,
-    method: 'archive' | 'dearchive' | 'delete'
-  ): string {
-    const methodVerbs = {
-      archive: 'gearchiveerd',
-      dearchive: 'gedearchiveerd',
-      delete: 'verwijderd'
-    };
-
-    return `De ${tasksLength === 1 ? 'taak werd' : 'taken werden'} ${
-      methodVerbs[method]
-    }.`;
-  }
-
-  private getTaskUpdateOnErrorFeedback(
+  private getTaskUpdateOnErrorFeedbackAction(
     action: FeedbackTriggeringAction,
     method: 'archive' | 'dearchive' | 'delete'
   ) {
@@ -289,6 +285,11 @@ export class TaskEffects {
     });
     return feedbackAction;
   }
+
+  /* Small helpers */
+  private intentToArchive = action =>
+    action.payload.tasks.some(task => task.changes.archived);
+  private isFilled = arr => Array.isArray(arr) && arr.length;
 
   constructor(
     private actions: Actions,

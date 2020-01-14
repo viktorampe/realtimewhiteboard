@@ -34,7 +34,6 @@ import {
 } from './task.actions';
 import { TaskEffects } from './task.effects';
 
-//file.only
 describe('TaskEffects', () => {
   let actions: Observable<any>;
   let effects: TaskEffects;
