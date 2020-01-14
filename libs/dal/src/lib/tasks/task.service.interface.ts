@@ -11,3 +11,12 @@ export interface TaskServiceInterface {
     eduContentId: number
   ): Observable<TaskEduContentInterface>;
 }
+
+export interface TaskUpdateInfoInterface {
+  tasks: Partial<TaskInterface>[];
+  errors: {
+    task: string;
+    activeUntil: Date;
+    user: string;
+  }[];
+}
