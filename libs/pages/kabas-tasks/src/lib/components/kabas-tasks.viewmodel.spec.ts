@@ -256,7 +256,7 @@ describe('KabasTaskViewModel', () => {
     });
   });
 
-  describe('setArchivedTasks', () => {
+  describe('setTaskAsArchived', () => {
     let taskAssignees;
     beforeEach(() => {
       taskAssignees = [
