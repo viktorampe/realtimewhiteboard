@@ -13,11 +13,25 @@ import { Observable, of } from 'rxjs';
 import { TaskReducer } from '.';
 import { TaskFixture } from '../../+fixtures';
 import { TaskInterface } from '../../+models';
-import { TaskServiceInterface, TASK_SERVICE_TOKEN } from '../../tasks/task.service.interface';
+import {
+  TaskServiceInterface,
+  TASK_SERVICE_TOKEN
+} from '../../tasks/task.service.interface';
 import { UndoService, UNDO_SERVICE_TOKEN } from '../../undo';
 import { EffectFeedback, Priority } from '../effect-feedback';
 import { AddEffectFeedback } from '../effect-feedback/effect-feedback.actions';
-import { AddTask, DeleteTasks, LoadTasks, NavigateToTaskDetail, StartAddTask, StartArchiveTasks, StartDeleteTasks, TasksLoaded, TasksLoadError, UpdateTasks } from './task.actions';
+import {
+  AddTask,
+  DeleteTasks,
+  LoadTasks,
+  NavigateToTaskDetail,
+  StartAddTask,
+  StartArchiveTasks,
+  StartDeleteTasks,
+  TasksLoaded,
+  TasksLoadError,
+  UpdateTasks
+} from './task.actions';
 import { TaskEffects } from './task.effects';
 
 describe('TaskEffects', () => {
