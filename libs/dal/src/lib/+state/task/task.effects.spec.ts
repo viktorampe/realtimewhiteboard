@@ -303,7 +303,7 @@ describe('TaskEffects', () => {
       taskStudents: [new TaskStudentFixture({ id: 1 })]
     });
 
-    const updateAccesAction = new UpdateAccess({
+    const updateAccessAction = new UpdateAccess({
       userId,
       taskId,
       taskGroups: updatedTask.taskGroups,
@@ -336,7 +336,7 @@ describe('TaskEffects', () => {
       updateAccessSpy.mockReturnValue(of(updatedTask));
 
       actions = hot('a', {
-        a: updateAccesAction
+        a: updateAccessAction
       });
 
       expect(effects.updateAccess$).toBeObservable(
@@ -360,13 +360,13 @@ describe('TaskEffects', () => {
       updateAccessSpy.mockRejectedValue(new Error('Intruder alert!'));
       const effectFeedback = new EffectFeedback({
         id: uuid(),
-        triggerAction: updateAccesAction,
+        triggerAction: updateAccessAction,
         message: 'Het is niet gelukt om de taak toe te wijzen.',
         type: 'error',
         userActions: [
           {
             title: 'Opnieuw proberen',
-            userAction: updateAccesAction
+            userAction: updateAccessAction
           }
         ],
         priority: Priority.HIGH
@@ -374,7 +374,7 @@ describe('TaskEffects', () => {
       const addFeedbackAction = new AddEffectFeedback({ effectFeedback });
       expectInAndOut(
         effects.updateAccess$,
-        updateAccesAction,
+        updateAccessAction,
         addFeedbackAction
       );
     });
