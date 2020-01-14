@@ -15,6 +15,9 @@ import {
   LearningPlanGoalProgressActions,
   TaskActions,
   TaskEduContentActions,
+  TaskInterface,
+  TaskServiceInterface,
+  TASK_SERVICE_TOKEN,
   UnlockedContentActions,
   UnlockedFreePracticeActions,
   UserActions
@@ -75,7 +78,8 @@ export class LoginpageComponent implements OnInit {
     public loginPageviewModel: LoginPageViewModel,
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
     private store: Store<AlertReducer.State>,
-    private router: Router
+    private router: Router,
+    @Inject(TASK_SERVICE_TOKEN) private taskService: TaskServiceInterface
   ) {}
 
   ngOnInit() {
@@ -144,5 +148,46 @@ export class LoginpageComponent implements OnInit {
         userId
       })
     );
+  }
+
+  private newTaskId: number;
+
+  createTask() {
+    const userId = this.authService.userId;
+    const task = {
+      name: 'Web developement for dummies',
+      learningAreaId: 7
+    } as TaskInterface;
+    this.taskService.createTask(userId, task).subscribe(newTask => {
+      console.log(newTask);
+      this.newTaskId = newTask.id;
+    });
+  }
+
+  updateTask() {
+    const userId = this.authService.userId;
+    const task = {
+      name: 'Web developement for dummies part 2',
+      id: this.newTaskId || 1
+    } as TaskInterface;
+    console.log(
+      'log: LoginpageComponent -> updateTask -> this.newTaskId ',
+      this.newTaskId
+    );
+
+    this.taskService.updateTasks(userId, [task]).subscribe(res => {
+      console.log(res);
+    });
+  }
+
+  deleteTask() {
+    const userId = this.authService.userId;
+    const task = {
+      name: 'Web developement for dummies part 2',
+      id: this.newTaskId || 1
+    } as TaskInterface;
+    this.taskService.deleteTasks(userId, [task.id]).subscribe(res => {
+      console.log(res);
+    });
   }
 }
