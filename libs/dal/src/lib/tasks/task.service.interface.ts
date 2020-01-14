@@ -18,5 +18,5 @@ export interface TaskUpdateInfoInterface {
     task: string;
     activeUntil: Date;
     user: string;
-  };
+  }[];
 }
