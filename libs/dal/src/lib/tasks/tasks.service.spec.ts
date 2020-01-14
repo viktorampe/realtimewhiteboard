@@ -4,11 +4,11 @@ import { hot } from '@nrwl/angular/testing';
 import { Observable } from 'rxjs';
 import {
   TaskClassGroupFixture,
+  TaskFixture,
   TaskGroupFixture,
   TaskStudentFixture
 } from '../+fixtures';
 import { TaskEduContentInterface, TaskInterface } from '../+models';
-import { TaskFixture } from './../+fixtures/Task.fixture';
 import { TaskServiceInterface } from './task.service.interface';
 import { TaskService } from './tasks.service';
 

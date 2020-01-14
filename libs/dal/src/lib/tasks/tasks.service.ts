@@ -36,27 +36,24 @@ export class TaskService implements TaskServiceInterface {
     userId: number,
     update: Partial<TaskInterface>[]
   ): Observable<TaskUpdateInfoInterface> {
-    return this.taskApi
-      .updateTasks(update)
-      .pipe(map(response => response as TaskUpdateInfoInterface));
+    return this.taskApi.updateTasks(update) as Observable<
+      TaskUpdateInfoInterface
+    >;
   }
 
-  createTask(
-    userId: number,
-    task: Partial<TaskInterface>
-  ): Observable<TaskInterface> {
-    return this.personApi
-      .createTeacherTasks(userId, task)
-      .pipe(map(response => response as TaskInterface));
+  createTask(userId: number, task: TaskInterface): Observable<TaskInterface> {
+    return this.personApi.createTeacherTasks(userId, task) as Observable<
+      TaskInterface
+    >;
   }
 
   deleteTasks(
     userId: number,
     taskIds: number[]
   ): Observable<TaskUpdateInfoInterface> {
-    return this.taskApi
-      .destroyTasks(taskIds)
-      .pipe(map(response => response as TaskUpdateInfoInterface));
+    return this.taskApi.destroyTasks(taskIds) as Observable<
+      TaskUpdateInfoInterface
+    >;
   }
 
   updateAccess(
