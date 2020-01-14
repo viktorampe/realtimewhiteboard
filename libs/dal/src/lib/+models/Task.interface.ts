@@ -1,9 +1,11 @@
 import { BundleInterface } from './Bundle.interface';
+import { ClassGroupInterface } from './ClassGroup.interface';
 import { EduContentInterface } from './EduContent.interface';
 import { GroupInterface } from './Group.interface';
 import { LearningAreaInterface } from './LearningArea.interface';
 import { PersonInterface } from './Person.interface';
 import { ResultInterface } from './Result.interface';
+import { TaskClassGroupInterface } from './TaskClassGroup.interface';
 import { TaskEduContentInterface } from './TaskEduContent.interface';
 import { TaskGroupInterface } from './TaskGroup.interface';
 import { TaskInstanceInterface } from './TaskInstance.interface';
@@ -24,6 +26,8 @@ export interface TaskInterface {
   taskStudents?: TaskStudentInterface[];
   eduContents?: EduContentInterface[];
   taskEduContents?: TaskEduContentInterface[];
+  classGroups?: ClassGroupInterface[];
+  taskClassGroups?: TaskClassGroupInterface[];
   results?: ResultInterface[];
   learningArea?: LearningAreaInterface;
   bundles?: BundleInterface[];
