@@ -1,6 +1,15 @@
 import { Update } from '@ngrx/entity';
 import { Action } from '@ngrx/store';
-import { TaskInterface } from '../../+models';
+import {
+  TaskClassGroupInterface,
+  TaskGroupInterface,
+  TaskInterface,
+  TaskStudentInterface
+} from '../../+models';
+import {
+  CustomFeedbackHandlersInterface,
+  FeedbackTriggeringAction
+} from '../effect-feedback';
 
 export enum TasksActionTypes {
   TasksLoaded = '[Tasks] Tasks Loaded',
@@ -89,8 +98,18 @@ export class ClearTasks implements Action {
   readonly type = TasksActionTypes.ClearTasks;
 }
 
-export class UpdateAccess implements Action {
+export class UpdateAccess implements FeedbackTriggeringAction {
   readonly type = TasksActionTypes.UpdateAccess;
+  constructor(
+    public payload: {
+      userId: number;
+      taskId: number;
+      taskGroups: TaskGroupInterface[];
+      taskStudents: TaskStudentInterface[];
+      taskClassGroups: TaskClassGroupInterface[];
+      customFeedbackHandlers?: CustomFeedbackHandlersInterface;
+    }
+  ) {}
 }
 
 export type TasksActions =
