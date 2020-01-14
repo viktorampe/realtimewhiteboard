@@ -101,6 +101,7 @@ export class StartDeleteTasks implements FeedbackTriggeringAction {
   constructor(
     public payload: {
       ids: number[];
+      userId: number;
       customFeedbackHandlers?: CustomFeedbackHandlersInterface;
     }
   ) {}
