@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
+import { TaskClassGroupActions, TaskStudentActions } from '@campus/dal';
 import { MockDate } from '@campus/testing';
 import { EffectsModule } from '@ngrx/effects';
 import { provideMockActions } from '@ngrx/effects/testing';
@@ -9,20 +10,27 @@ import { DataPersistence, NxModule } from '@nrwl/angular';
 import { hot } from '@nrwl/angular/testing';
 import { Observable, of } from 'rxjs';
 import { TaskReducer } from '.';
-import { TaskFixture } from '../../+fixtures';
+import {
+  TaskClassGroupFixture,
+  TaskFixture,
+  TaskGroupFixture,
+  TaskStudentFixture
+} from '../../+fixtures';
 import {
   TaskServiceInterface,
   TASK_SERVICE_TOKEN
 } from '../../tasks/task.service.interface';
 import { EffectFeedback, Priority } from '../effect-feedback';
 import { AddEffectFeedback } from '../effect-feedback/effect-feedback.actions';
+import { TaskGroupActions } from '../task-group';
 import {
   AddTask,
   LoadTasks,
   NavigateToTaskDetail,
   StartAddTask,
   TasksLoaded,
-  TasksLoadError
+  TasksLoadError,
+  UpdateAccess
 } from './task.actions';
 import { TaskEffects } from './task.effects';
 
@@ -101,7 +109,8 @@ describe('TaskEffects', () => {
           provide: TASK_SERVICE_TOKEN,
           useValue: {
             getAllForUser: () => {},
-            createTask: () => {}
+            createTask: () => {},
+            updateTask: () => {}
           }
         },
         TaskEffects,
@@ -268,6 +277,94 @@ describe('TaskEffects', () => {
       expectInAndOut(
         effects.startAddTask$,
         new StartAddTask({ task: taskToCreate, userId }),
+        addFeedbackAction
+      );
+    });
+  });
+
+  describe('updateAccess$', () => {
+    const taskId = 2;
+    const userId = 123;
+
+    const updatedTask = new TaskFixture({
+      id: taskId,
+      taskClassGroups: [new TaskClassGroupFixture({ id: 1 })],
+      taskGroups: [new TaskGroupFixture({ id: 1 })],
+      taskStudents: [new TaskStudentFixture({ id: 1 })]
+    });
+
+    const updateAccesAction = new UpdateAccess({
+      userId,
+      taskId,
+      taskGroups: updatedTask.taskGroups,
+      taskStudents: updatedTask.taskStudents,
+      taskClassGroups: updatedTask.taskClassGroups
+    });
+
+    const outPutActions = [
+      TaskGroupActions.updateTaskGroupsAccess({
+        taskId,
+        taskGroups: updatedTask.taskGroups
+      }),
+      TaskClassGroupActions.updateTaskClassGroupsAccess({
+        taskId: taskId,
+        taskClassGroups: updatedTask.taskClassGroups
+      }),
+      TaskStudentActions.updateTaskStudentsAccess({
+        taskId: taskId,
+        taskStudents: updatedTask.taskStudents
+      })
+    ];
+
+    let updateAccessSpy: jest.SpyInstance;
+
+    beforeEach(() => {
+      updateAccessSpy = taskService.updateAccess = jest.fn();
+    });
+
+    it('should call the service and dispatch actions to update the task students/groups/classgroups access', () => {
+      updateAccessSpy.mockReturnValue(of(updatedTask));
+
+      actions = hot('a', {
+        a: updateAccesAction
+      });
+
+      expect(effects.updateAccess$).toBeObservable(
+        hot('(abc)', {
+          a: outPutActions[0],
+          b: outPutActions[1],
+          c: outPutActions[2]
+        })
+      );
+
+      expect(updateAccessSpy).toHaveBeenCalledWith(
+        userId,
+        taskId,
+        updatedTask.taskGroups,
+        updatedTask.taskStudents,
+        updatedTask.taskClassGroups
+      );
+    });
+
+    it('should dispatch feedback on error', () => {
+      updateAccessSpy.mockRejectedValue(new Error('Intruder alert!'));
+      const effectFeedback = new EffectFeedback({
+        id: uuid(),
+        triggerAction: updateAccesAction,
+        message: 'Het is niet gelukt om de taak toe te wijzen.',
+        type: 'error',
+        userActions: [
+          {
+            title: 'Opnieuw proberen',
+            userAction: updateAccesAction
+          }
+        ],
+        priority: Priority.HIGH
+      });
+      const addFeedbackAction = new AddEffectFeedback({ effectFeedback });
+      expectInAndOut(
+        effects.updateAccess$,
+        updateAccesAction,
         addFeedbackAction
       );
     });

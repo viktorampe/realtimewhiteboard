@@ -5,7 +5,6 @@ import { Action } from '@ngrx/store';
 import { DataPersistence } from '@nrwl/angular';
 import { from } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
-import { TaskActions } from '.';
 import { DalState } from '..';
 import { TaskInterface } from '../../+models';
 import {
@@ -24,7 +23,8 @@ import {
   StartAddTask,
   TasksActionTypes,
   TasksLoaded,
-  TasksLoadError
+  TasksLoadError,
+  UpdateAccess
 } from './task.actions';
 
 @Injectable()
@@ -42,11 +42,9 @@ export class TaskEffects {
     }
   });
 
-  @Effect()
-  updateAccess$ = this.dataPersistence.pessimisticUpdate(
-    TasksActionTypes.UpdateAccess,
-    {
-      run: (action: TaskActions.UpdateAccess, state: DalState) => {
+  updateAccess$ = createEffect(() =>
+    this.dataPersistence.pessimisticUpdate(TasksActionTypes.UpdateAccess, {
+      run: (action: UpdateAccess, state: DalState) => {
         return this.taskService
           .updateAccess(
             action.payload.userId,
@@ -74,7 +72,7 @@ export class TaskEffects {
             )
           );
       },
-      onError: (action: TaskActions.UpdateAccess, error: any) => {
+      onError: (action: UpdateAccess, error: any) => {
         const effectFeedback = EffectFeedback.generateErrorFeedback(
           this.uuid(),
           action,
@@ -86,7 +84,7 @@ export class TaskEffects {
         );
         return effectFeedbackAction;
       }
-    }
+    })
   );
 
   startAddTask$ = createEffect(() =>
