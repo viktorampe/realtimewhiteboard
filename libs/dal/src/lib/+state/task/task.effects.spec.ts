@@ -1,5 +1,10 @@
 import { TestBed } from '@angular/core/testing';
+<<<<<<< HEAD
 import { MAT_DATE_LOCALE } from '@angular/material';
+=======
+import { Router } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
+>>>>>>> develop
 import { MockDate } from '@campus/testing';
 import { EffectsModule } from '@ngrx/effects';
 import { provideMockActions } from '@ngrx/effects/testing';
@@ -8,6 +13,7 @@ import { DataPersistence, NxModule } from '@nrwl/angular';
 import { hot } from '@nrwl/angular/testing';
 import { Observable, of } from 'rxjs';
 import { TaskReducer } from '.';
+<<<<<<< HEAD
 import { TASK_SERVICE_TOKEN } from '../../tasks/task.service.interface';
 import { Priority } from '../effect-feedback';
 import { TaskServiceInterface } from './../../tasks/task.service.interface';
@@ -17,6 +23,20 @@ import {
   DeleteTasks,
   LoadTasks,
   StartDeleteTasks,
+=======
+import { TaskFixture } from '../../+fixtures';
+import {
+  TaskServiceInterface,
+  TASK_SERVICE_TOKEN
+} from '../../tasks/task.service.interface';
+import { EffectFeedback, Priority } from '../effect-feedback';
+import { AddEffectFeedback } from '../effect-feedback/effect-feedback.actions';
+import {
+  AddTask,
+  LoadTasks,
+  NavigateToTaskDetail,
+  StartAddTask,
+>>>>>>> develop
   TasksLoaded,
   TasksLoadError
 } from './task.actions';
@@ -26,10 +46,18 @@ describe('TaskEffects', () => {
   let actions: Observable<any>;
   let effects: TaskEffects;
   let usedState: any;
+<<<<<<< HEAD
   let taskService: TaskServiceInterface;
   let uuid: Function;
 
   const mockDate = new MockDate(new Date('2020-1-13'));
+=======
+  let uuid: Function;
+  let taskService: TaskServiceInterface;
+  let router: Router;
+
+  const mockDate = new MockDate();
+>>>>>>> develop
 
   afterAll(() => {
     mockDate.returnRealDate();
@@ -88,14 +116,19 @@ describe('TaskEffects', () => {
           initialState: usedState
         }),
         EffectsModule.forRoot([]),
-        EffectsModule.forFeature([TaskEffects])
+        EffectsModule.forFeature([TaskEffects]),
+        RouterTestingModule
       ],
       providers: [
         {
           provide: TASK_SERVICE_TOKEN,
           useValue: {
             getAllForUser: () => {},
+<<<<<<< HEAD
             deleteTasks: () => {}
+=======
+            createTask: () => {}
+>>>>>>> develop
           }
         },
         { provide: MAT_DATE_LOCALE, useValue: 'nl-BE' },
@@ -105,7 +138,11 @@ describe('TaskEffects', () => {
         },
         TaskEffects,
         DataPersistence,
-        provideMockActions(() => actions)
+        provideMockActions(() => actions),
+        {
+          provide: 'uuid',
+          useValue: () => '123-totally-a-uuid-123'
+        }
       ]
     });
 
@@ -113,6 +150,10 @@ describe('TaskEffects', () => {
     effects = TestBed.get(TaskEffects);
     uuid = TestBed.get('uuid');
     taskService = TestBed.get(TASK_SERVICE_TOKEN);
+<<<<<<< HEAD
+=======
+    router = TestBed.get(Router);
+>>>>>>> develop
   });
 
   describe('loadTask$', () => {
@@ -194,6 +235,7 @@ describe('TaskEffects', () => {
     });
   });
 
+<<<<<<< HEAD
   describe('deleteTasks$', () => {
     let deleteTasksSpy: jest.SpyInstance;
     const taskIds = [1, 2];
@@ -327,6 +369,98 @@ describe('TaskEffects', () => {
       expect(effects.deleteTasks$).toBeObservable(
         hot('(ab)', { a: deleteAction, b: feedbackAction })
       );
+=======
+  describe('createTask$', () => {
+    const taskToCreate = { name: 'foo' };
+    const newTask = new TaskFixture(taskToCreate);
+    const userId = 123;
+
+    let createTaskSpy: jest.SpyInstance;
+    beforeEach(() => {
+      // TODO: don't avoid typescript
+      createTaskSpy = taskService['createTask'] = jest.fn();
+    });
+
+    it('should call the service and dispatch an action to add the result to the store', () => {
+      createTaskSpy.mockReturnValue(of(newTask));
+
+      expectInAndOut(
+        effects.startAddTask$,
+        new StartAddTask({
+          task: taskToCreate,
+          userId,
+          navigateAfterCreate: false
+        }),
+        new AddTask({ task: newTask })
+      );
+
+      expect(createTaskSpy).toHaveBeenCalledWith(userId, taskToCreate);
+    });
+
+    it('should call the service and dispatch an action to add the result to the store and navigate', () => {
+      createTaskSpy.mockReturnValue(of(newTask));
+
+      actions = hot('a', {
+        a: new StartAddTask({
+          task: taskToCreate,
+          userId,
+          navigateAfterCreate: true
+        })
+      });
+
+      expect(effects.startAddTask$).toBeObservable(
+        hot('(ab)', {
+          a: new AddTask({ task: newTask }),
+          b: new NavigateToTaskDetail({ task: newTask })
+        })
+      );
+
+      expect(createTaskSpy).toHaveBeenCalledWith(userId, taskToCreate);
+    });
+
+    it('should dispatch feedback on error', () => {
+      createTaskSpy.mockRejectedValue(new Error('did not work'));
+
+      const effectFeedback = new EffectFeedback({
+        id: uuid(),
+        triggerAction: new StartAddTask({ task: taskToCreate, userId }),
+        message: 'Het is niet gelukt om de taak te maken.',
+        type: 'error',
+        userActions: [
+          {
+            title: 'Opnieuw proberen',
+            userAction: new StartAddTask({ task: taskToCreate, userId })
+          }
+        ],
+        priority: Priority.HIGH
+      });
+      const addFeedbackAction = new AddEffectFeedback({ effectFeedback });
+
+      expectInAndOut(
+        effects.startAddTask$,
+        new StartAddTask({ task: taskToCreate, userId }),
+        addFeedbackAction
+      );
+    });
+  });
+
+  describe('NavigateToTaskDetail', () => {
+    let navigateSpy: jest.SpyInstance;
+    const id = 123;
+
+    beforeEach(() => {
+      navigateSpy = router.navigate = jest.fn();
+    });
+
+    it('should navigate', () => {
+      actions = hot('a', {
+        a: new NavigateToTaskDetail({ task: new TaskFixture({ id }) })
+      });
+
+      effects.redirectToTask$.subscribe(() => {
+        expect(navigateSpy).toHaveBeenCalledWith(['tasks', 'manage', id]);
+      });
+>>>>>>> develop
     });
   });
 });

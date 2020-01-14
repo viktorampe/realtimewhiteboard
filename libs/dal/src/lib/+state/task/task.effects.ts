@@ -1,10 +1,13 @@
 import { Inject, Injectable } from '@angular/core';
 import { MAT_DATE_LOCALE } from '@angular/material';
-import { Actions, createEffect, Effect } from '@ngrx/effects';
+import { Router } from '@angular/router';
+import { Actions, createEffect, Effect, ofType } from '@ngrx/effects';
+import { Action } from '@ngrx/store';
 import { DataPersistence } from '@nrwl/angular';
 import { from } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { map, switchMap, tap } from 'rxjs/operators';
 import { DalState } from '..';
+import { TaskInterface } from '../../+models';
 import {
   TaskServiceInterface,
   TASK_SERVICE_TOKEN
@@ -15,6 +18,9 @@ import {
   DeleteTasks,
   LoadTasks,
   StartDeleteTasks,
+  AddTask,
+  NavigateToTaskDetail,
+  StartAddTask,
   TasksActionTypes,
   TasksLoaded,
   TasksLoadError
@@ -33,6 +39,35 @@ interface TaskDestroyInfoInterface {
 
 @Injectable()
 export class TaskEffects {
+  startAddTask$ = createEffect(() =>
+    this.dataPersistence.pessimisticUpdate(TasksActionTypes.StartAddTask, {
+      run: (action: StartAddTask, state: DalState) => {
+        // TODO: don't avoid typescript
+        return this.taskService['createTask'](
+          action.payload.userId,
+          action.payload.task
+        ).pipe(
+          switchMap((task: TaskInterface) => {
+            const actionsToDispatch: Action[] = [new AddTask({ task })];
+            if (action.payload.navigateAfterCreate) {
+              actionsToDispatch.push(new NavigateToTaskDetail({ task }));
+            }
+            return from(actionsToDispatch);
+          })
+        );
+      },
+      onError: (action: StartAddTask, error) => {
+        return new AddEffectFeedback({
+          effectFeedback: EffectFeedback.generateErrorFeedback(
+            this.uuid(),
+            action,
+            'Het is niet gelukt om de taak te maken.'
+          )
+        });
+      }
+    })
+  );
+
   @Effect()
   loadTasks$ = this.dataPersistence.fetch(TasksActionTypes.LoadTasks, {
     run: (action: LoadTasks, state: DalState) => {
@@ -114,9 +149,21 @@ export class TaskEffects {
     })
   );
 
+  redirectToTask$ = createEffect(
+    () =>
+      this.actions.pipe(
+        ofType(TasksActionTypes.NavigateToTaskDetail),
+        tap((action: NavigateToTaskDetail) => {
+          this.router.navigate(['tasks', 'manage', action.payload.task.id]);
+        })
+      ),
+    { dispatch: false }
+  );
+
   constructor(
     private actions: Actions,
     private dataPersistence: DataPersistence<DalState>,
+    private router: Router,
     @Inject(MAT_DATE_LOCALE) private dateLocale,
     @Inject('uuid') private uuid: Function,
     @Inject(TASK_SERVICE_TOKEN) private taskService: TaskServiceInterface
@@ -130,7 +177,9 @@ export class TaskEffects {
     } else if (taskDestroyResult.tasks.length === 1) {
       errorHTML += '<p>De taak werd verwijderd.</p>';
     } else {
-      errorHTML += `<p>Er werden ${taskDestroyResult.tasks.length} taken verwijderd.</p>`;
+      errorHTML += `<p>Er werden ${
+        taskDestroyResult.tasks.length
+      } taken verwijderd.</p>`;
     }
 
     errorHTML += '<p>De volgende taken zijn nog in gebruik:</p>';
