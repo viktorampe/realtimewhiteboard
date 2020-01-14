@@ -14,9 +14,12 @@ export interface TaskServiceInterface {
   updateTasks(
     userId: number,
     update: Partial<TaskInterface>[]
-  ): Observable<TaskInterface[]>;
+  ): Observable<TaskUpdateInfoInterface>;
 
   createTask(userId: number, task: TaskInterface): Observable<TaskInterface>;
 
-  deleteTasks(userId: number, taskIds: number[]);
+  deleteTasks(
+    userId: number,
+    taskIds: number[]
+  ): Observable<TaskUpdateInfoInterface>;
 }

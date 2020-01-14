@@ -2,8 +2,12 @@ import { Injectable } from '@angular/core';
 import { PersonApi, TaskApi } from '@diekeure/polpo-api-angular-sdk';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { TaskEduContentInterface, TaskInterface } from '../+models';
-import { TaskServiceInterface } from './task.service.interface';
+import { TaskEduContentInterface } from '../+models';
+import { TaskInterface } from './../+models/Task.interface';
+import {
+  TaskServiceInterface,
+  TaskUpdateInfoInterface
+} from './task.service.interface';
 @Injectable({
   providedIn: 'root'
 })
@@ -26,15 +30,22 @@ export class TaskService implements TaskServiceInterface {
   updateTasks(
     userId: number,
     update: Partial<TaskInterface>[]
-  ): Observable<TaskInterface[]> {
-    throw new Error('Method not implemented.');
+  ): Observable<TaskUpdateInfoInterface> {
+    return this.taskApi
+      .updateTasks(update)
+      .pipe(map(response => response as TaskUpdateInfoInterface));
   }
 
   createTask(userId: number, task: TaskInterface): Observable<TaskInterface> {
     throw new Error('Method not implemented.');
   }
 
-  deleteTasks(userId: number, taskIds: number[]) {
-    throw new Error('Method not implemented.');
+  deleteTasks(
+    userId: number,
+    taskIds: number[]
+  ): Observable<TaskUpdateInfoInterface> {
+    return this.taskApi
+      .destroyTasks(taskIds)
+      .pipe(map(response => response as TaskUpdateInfoInterface));
   }
 }
