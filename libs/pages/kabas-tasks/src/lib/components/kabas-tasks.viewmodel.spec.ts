@@ -224,19 +224,21 @@ describe('KabasTaskViewModel', () => {
         eduContentAmount: 1,
         assignees: [],
         status: TaskStatusEnum.FINISHED,
+        startDate: new Date(Date.now() - 2000),
+        endDate: new Date(Date.now() - 1000),
         isPaperTask: false
       } as TaskWithAssigneesInterface;
     });
 
     it('should return false if pending', () => {
       taskAssignee.status = TaskStatusEnum.PENDING;
-      const result = kabasTasksViewModel.canArchive(taskAssignee);
+      const result = kabasTasksViewModel.canBeArchivedOrDeleted(taskAssignee);
 
       expect(result).toBeFalsy();
     });
     it('should return false if active', () => {
       taskAssignee.status = TaskStatusEnum.ACTIVE;
-      const result = kabasTasksViewModel.canArchive(taskAssignee);
+      const result = kabasTasksViewModel.canBeArchivedOrDeleted(taskAssignee);
 
       expect(result).toBeFalsy();
     });
@@ -246,12 +248,12 @@ describe('KabasTaskViewModel', () => {
         status: TaskStatusEnum.PENDING,
         isPaperTask: true
       } as TaskWithAssigneesInterface;
-      const result = kabasTasksViewModel.canArchive(taskAssignee);
+      const result = kabasTasksViewModel.canBeArchivedOrDeleted(taskAssignee);
 
       expect(result).toBeTruthy();
     });
     it('should return true if finished', () => {
-      const result = kabasTasksViewModel.canArchive(taskAssignee);
+      const result = kabasTasksViewModel.canBeArchivedOrDeleted(taskAssignee);
       expect(result).toBeTruthy();
     });
   });
@@ -313,7 +315,10 @@ describe('KabasTaskViewModel', () => {
       const expected = new TaskActions.UpdateTasks({
         tasks: taskAssignees
           .filter(
-            task => task.isPaperTask || task.status === TaskStatusEnum.FINISHED
+            task =>
+              task.isPaperTask ||
+              task.status === TaskStatusEnum.FINISHED ||
+              (!task.endDate && !task.startDate)
           )
           .map(task => ({
             id: task.id,
@@ -328,35 +333,74 @@ describe('KabasTaskViewModel', () => {
   });
 
   describe('canDelete', () => {
-    let taskAssignee;
+    let taskAssignees;
     beforeEach(() => {
-      taskAssignee = {
-        name: 'Task',
-        eduContentAmount: 1,
-        assignees: [],
-        status: TaskStatusEnum.FINISHED,
-        isPaperTask: false
-      } as TaskWithAssigneesInterface;
+      taskAssignees = [
+        {
+          name: 'Task',
+          eduContentAmount: 1,
+          assignees: [],
+          status: TaskStatusEnum.FINISHED,
+          isPaperTask: false,
+          startDate: new Date(Date.now() - 2000),
+          endDate: new Date(Date.now() - 1000)
+        },
+        {
+          name: 'Task2',
+          eduContentAmount: 1,
+          assignees: [],
+          status: TaskStatusEnum.FINISHED,
+          isPaperTask: false
+        },
+
+        {
+          name: 'Task3',
+          eduContentAmount: 1,
+          assignees: [],
+          status: TaskStatusEnum.ACTIVE,
+          isPaperTask: false,
+          startDate: new Date(Date.now() - 2000)
+        },
+        {
+          name: 'Task4',
+          eduContentAmount: 1,
+          assignees: [],
+          status: TaskStatusEnum.PENDING,
+          isPaperTask: false,
+          startDate: new Date(Date.now() - 2000)
+        }
+      ] as TaskWithAssigneesInterface[];
     });
 
     it('should return false if pending', () => {
-      taskAssignee.status = TaskStatusEnum.PENDING;
-      const result = kabasTasksViewModel.canDelete(taskAssignee);
-
+      const result = kabasTasksViewModel.canBeArchivedOrDeleted(
+        taskAssignees[3]
+      );
       expect(result).toBeFalsy();
     });
     it('should return false if active', () => {
-      taskAssignee.status = TaskStatusEnum.ACTIVE;
-      const result = kabasTasksViewModel.canDelete(taskAssignee);
+      const result = kabasTasksViewModel.canBeArchivedOrDeleted(
+        taskAssignees[2]
+      );
 
       expect(result).toBeFalsy();
     });
 
     it('should return true if finished', () => {
-      const result = kabasTasksViewModel.canDelete(taskAssignee);
+      const result = kabasTasksViewModel.canBeArchivedOrDeleted(
+        taskAssignees[0]
+      );
+      expect(result).toBeTruthy();
+    });
+
+    it('should return true if no date is set', () => {
+      const result = kabasTasksViewModel.canBeArchivedOrDeleted(
+        taskAssignees[1]
+      );
       expect(result).toBeTruthy();
     });
   });
+
   describe('deleteTasks', () => {
     let taskAssignees;
     beforeEach(() => {
@@ -392,7 +436,11 @@ describe('KabasTaskViewModel', () => {
       const spy = jest.spyOn(store, 'dispatch');
       const expected = new TaskActions.DeleteTasks({
         ids: taskAssignees
-          .filter(task => task.status === TaskStatusEnum.FINISHED)
+          .filter(
+            task =>
+              task.status === TaskStatusEnum.FINISHED ||
+              (!task.startDate && !task.endDate)
+          )
           .map(task => task.id)
       });
 

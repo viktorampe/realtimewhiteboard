@@ -74,7 +74,7 @@ export class KabasTasksViewModel {
     isArchived: boolean
   ): void {
     const updates = tasks
-      .filter(task => !isArchived || this.canArchive(task))
+      .filter(task => !isArchived || this.canBeArchivedOrDeleted(task))
       .map(task => ({ id: task.id, changes: { archived: isArchived } }));
 
     this.store.dispatch(new TaskActions.UpdateTasks({ tasks: updates }));
@@ -82,18 +82,18 @@ export class KabasTasksViewModel {
 
   public removeTasks(tasks: TaskWithAssigneesInterface[]): void {
     const tasksToRemove = tasks
-      .filter(task => this.canDelete(task))
+      .filter(task => this.canBeArchivedOrDeleted(task))
       .map(task => task.id);
     this.store.dispatch(new TaskActions.DeleteTasks({ ids: tasksToRemove }));
   }
 
   public toggleFavorite(task: TaskWithAssigneesInterface): void {}
 
-  public canArchive(task: TaskWithAssigneesInterface): boolean {
-    return task.isPaperTask || task.status === TaskStatusEnum.FINISHED;
-  }
-
-  public canDelete(task: TaskWithAssigneesInterface): boolean {
-    return task.status === TaskStatusEnum.FINISHED;
+  public canBeArchivedOrDeleted(task: TaskWithAssigneesInterface): boolean {
+    return (
+      task.isPaperTask ||
+      task.status === TaskStatusEnum.FINISHED ||
+      (!task.endDate && !task.startDate)
+    );
   }
 }
