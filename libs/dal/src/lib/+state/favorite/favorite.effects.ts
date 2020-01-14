@@ -5,7 +5,7 @@ import { DataPersistence } from '@nrwl/angular';
 import { undo } from 'ngrx-undo';
 import { from, Observable } from 'rxjs';
 import { map, switchMap, take } from 'rxjs/operators';
-import { DalState } from '..';
+import { DalActions, DalState } from '..';
 import {
   FavoriteServiceInterface,
   FAVORITE_SERVICE_TOKEN
@@ -80,16 +80,12 @@ export class FavoriteEffects {
         return this.favoriteService
           .deleteFavorite(action.payload.userId, action.payload.id)
           .pipe(
-            map(() => {
-              const effectFeedback = EffectFeedback.generateSuccessFeedback(
-                this.uuid(),
-                action,
-                'Favoriet is verwijderd.'
-              );
-              return new EffectFeedbackActions.AddEffectFeedback({
-                effectFeedback
-              });
-            })
+            map(
+              result =>
+                new DalActions.ActionSuccessful({
+                  successfulAction: '[Favorite] deleted'
+                })
+            )
           );
       },
       undoAction: (action: DeleteFavorite, error) => {
