@@ -1,0 +1,26 @@
+<campus-info-panel
+  titleText="Nieuwe taak"
+  titleIcon="tasks"
+  [displayAsRows]="false"
+  class="pages-kabas-tasks-new-task__info-panel"
+>
+  <form>
+    <mat-form-field>
+      <mat-label>Titel</mat-label>
+      <input autocomplete="off" matInput />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-select placeholder="Vakgebied">
+        <mat-option *ngFor="let option of [].constructor(6)" [value]="option">
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </form>
+  <mat-dialog-actions class="pages-kabas-tasks-new-task__dialog__actions">
+    <campus-button
+      primary
+      class="pages-kabas-tasks-new-task__dialog__actions__button"
+      >Aanmaken</campus-button
+    >
+  </mat-dialog-actions>
+</campus-info-panel>
