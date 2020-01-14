@@ -1,5 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { MAT_DATE_LOCALE } from '@angular/material';
+import { Router } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 import { MockDate } from '@campus/testing';
 import { EffectsModule } from '@ngrx/effects';
 import { provideMockActions } from '@ngrx/effects/testing';
@@ -9,20 +11,22 @@ import { DataPersistence, NxModule } from '@nrwl/angular';
 import { hot } from '@nrwl/angular/testing';
 import { Observable, of } from 'rxjs';
 import { TaskReducer } from '.';
+import { TaskFixture } from '../../+fixtures';
 import { TaskInterface } from '../../+models';
 import {
   TaskServiceInterface,
   TASK_SERVICE_TOKEN
 } from '../../tasks/task.service.interface';
-import {
-  UndoService,
-  UndoServiceInterface,
-  UNDO_SERVICE_TOKEN
-} from '../../undo';
+import { UndoService, UNDO_SERVICE_TOKEN } from '../../undo';
 import { EffectFeedback, Priority } from '../effect-feedback';
 import { AddEffectFeedback } from '../effect-feedback/effect-feedback.actions';
 import {
+  AddTask,
+  DeleteTasks,
   LoadTasks,
+  NavigateToTaskDetail,
+  StartAddTask,
+  StartDeleteTasks,
   StartUpdateTasks,
   TasksLoaded,
   TasksLoadError,
@@ -36,11 +40,12 @@ describe('TaskEffects', () => {
   let usedState: any;
   let uuid: Function;
   let taskService: TaskServiceInterface;
-  let undoService: UndoServiceInterface;
-  let dateMock: MockDate = new MockDate(new Date('2020-1-14'));
+  let router: Router;
+
+  const mockDate = new MockDate();
 
   afterAll(() => {
-    dateMock.returnRealDate();
+    mockDate.returnRealDate();
   });
 
   const expectInAndOut = (
@@ -96,14 +101,17 @@ describe('TaskEffects', () => {
           initialState: usedState
         }),
         EffectsModule.forRoot([]),
-        EffectsModule.forFeature([TaskEffects])
+        EffectsModule.forFeature([TaskEffects]),
+        RouterTestingModule
       ],
       providers: [
         {
           provide: TASK_SERVICE_TOKEN,
           useValue: {
             getAllForUser: () => {},
-            updateTasks: () => {}
+            updateTasks: () => {},
+            deleteTasks: () => {},
+            createTask: () => {}
           }
         },
         {
@@ -121,10 +129,11 @@ describe('TaskEffects', () => {
       ]
     });
 
+    const locale = TestBed.get(MAT_DATE_LOCALE);
     effects = TestBed.get(TaskEffects);
     uuid = TestBed.get('uuid');
     taskService = TestBed.get(TASK_SERVICE_TOKEN);
-    undoService = TestBed.get(UNDO_SERVICE_TOKEN);
+    router = TestBed.get(Router);
   });
 
   describe('loadTask$', () => {
@@ -206,7 +215,219 @@ describe('TaskEffects', () => {
     });
   });
 
-  //file.only
+  describe('createTask$', () => {
+    const taskToCreate = { name: 'foo' };
+    const newTask = new TaskFixture(taskToCreate);
+    const userId = 123;
+
+    let createTaskSpy: jest.SpyInstance;
+    beforeEach(() => {
+      // TODO: don't avoid typescript
+      createTaskSpy = taskService['createTask'] = jest.fn();
+    });
+
+    it('should call the service and dispatch an action to add the result to the store', () => {
+      createTaskSpy.mockReturnValue(of(newTask));
+
+      expectInAndOut(
+        effects.startAddTask$,
+        new StartAddTask({
+          task: taskToCreate,
+          userId,
+          navigateAfterCreate: false
+        }),
+        new AddTask({ task: newTask })
+      );
+
+      expect(createTaskSpy).toHaveBeenCalledWith(userId, taskToCreate);
+    });
+
+    it('should call the service and dispatch an action to add the result to the store and navigate', () => {
+      createTaskSpy.mockReturnValue(of(newTask));
+
+      actions = hot('a', {
+        a: new StartAddTask({
+          task: taskToCreate,
+          userId,
+          navigateAfterCreate: true
+        })
+      });
+
+      expect(effects.startAddTask$).toBeObservable(
+        hot('(ab)', {
+          a: new AddTask({ task: newTask }),
+          b: new NavigateToTaskDetail({ task: newTask })
+        })
+      );
+
+      expect(createTaskSpy).toHaveBeenCalledWith(userId, taskToCreate);
+    });
+
+    it('should dispatch feedback on error', () => {
+      createTaskSpy.mockRejectedValue(new Error('did not work'));
+
+      const effectFeedback = new EffectFeedback({
+        id: uuid(),
+        triggerAction: new StartAddTask({ task: taskToCreate, userId }),
+        message: 'Het is niet gelukt om de taak te maken.',
+        type: 'error',
+        userActions: [
+          {
+            title: 'Opnieuw proberen',
+            userAction: new StartAddTask({ task: taskToCreate, userId })
+          }
+        ],
+        priority: Priority.HIGH
+      });
+      const addFeedbackAction = new AddEffectFeedback({ effectFeedback });
+
+      expectInAndOut(
+        effects.startAddTask$,
+        new StartAddTask({ task: taskToCreate, userId }),
+        addFeedbackAction
+      );
+    });
+  });
+
+  describe('NavigateToTaskDetail', () => {
+    let navigateSpy: jest.SpyInstance;
+    const id = 123;
+
+    beforeEach(() => {
+      navigateSpy = router.navigate = jest.fn();
+    });
+
+    it('should navigate', () => {
+      actions = hot('a', {
+        a: new NavigateToTaskDetail({ task: new TaskFixture({ id }) })
+      });
+
+      effects.redirectToTask$.subscribe(() => {
+        expect(navigateSpy).toHaveBeenCalledWith(['tasks', 'manage', id]);
+      });
+    });
+  });
+
+  describe('deleteTasks$', () => {
+    let deleteTasksSpy: jest.SpyInstance;
+    const taskIds = [1, 2];
+    const triggerAction = new StartDeleteTasks({ ids: taskIds });
+    beforeEach(() => {
+      // TODO typescript
+      deleteTasksSpy = taskService['deleteTasks'] = jest.fn();
+    });
+    it('should call the service and dispatch feedback, no errors', () => {
+      deleteTasksSpy.mockReturnValue(
+        of({ tasks: taskIds.map(id => ({ id })), errors: [] })
+      );
+      const expectedMessage = 'De taken werden verwijderd.';
+      const deleteAction = new DeleteTasks({ ids: taskIds });
+      const feedbackAction = new AddEffectFeedback({
+        effectFeedback: {
+          id: uuid(),
+          display: true,
+          message: expectedMessage,
+          timeStamp: Date.now(),
+          triggerAction,
+          priority: Priority.NORM,
+          type: 'success',
+          useDefaultCancel: true,
+          userActions: []
+        } as EffectFeedback
+      });
+      actions = hot('a', { a: triggerAction });
+      expect(effects.deleteTasks$).toBeObservable(
+        hot('(ab)', {
+          a: deleteAction,
+          b: feedbackAction
+        })
+      );
+    });
+    it('should call the service and dispatch feedback, only errors', () => {
+      const taskDestroyErrors = [
+        {
+          task: 'Huiswerk',
+          user: 'Hubert Stroganovski',
+          activeUntil: new Date()
+        },
+        {
+          task: 'Huiswerk2',
+          user: 'Hubert Stroganovski',
+          activeUntil: new Date()
+        }
+      ];
+      deleteTasksSpy.mockReturnValue(
+        of({
+          tasks: [],
+          errors: taskDestroyErrors
+        })
+      );
+      const expectedMessage =
+        '<p>Er werden geen taken verwijderd.</p>' +
+        '<p>De volgende taken zijn nog in gebruik:</p>' +
+        '<ul>' +
+        '<li><strong>Huiswerk</strong> is nog in gebruik door Hubert Stroganovski tot 2020-1-14.</li>' +
+        '<li><strong>Huiswerk2</strong> is nog in gebruik door Hubert Stroganovski tot 2020-1-14.</li>' +
+        '</ul>';
+      const feedbackAction = new AddEffectFeedback({
+        effectFeedback: {
+          id: uuid(),
+          triggerAction,
+          message: expectedMessage,
+          type: 'error',
+          userActions: [],
+          priority: Priority.HIGH,
+          display: true,
+          timeStamp: Date.now(),
+          useDefaultCancel: true
+        }
+      });
+      actions = hot('a', { a: triggerAction });
+      expect(effects.deleteTasks$).toBeObservable(
+        hot('a', { a: feedbackAction })
+      );
+    });
+    it('should call the service and dispatch feedback, mixed', () => {
+      const taskDestroyErrors = [
+        {
+          task: 'Huiswerk',
+          user: 'Hubert Stroganovski',
+          activeUntil: new Date()
+        }
+      ];
+      deleteTasksSpy.mockReturnValue(
+        of({
+          tasks: [{ id: 2 }],
+          errors: taskDestroyErrors
+        })
+      );
+      const deleteAction = new DeleteTasks({ ids: [2] });
+      const expectedMessage =
+        '<p>De taak werd verwijderd.</p>' +
+        '<p>De volgende taken zijn nog in gebruik:</p>' +
+        '<ul>' +
+        '<li><strong>Huiswerk</strong> is nog in gebruik door Hubert Stroganovski tot 2020-1-14.</li>' +
+        '</ul>';
+      const feedbackAction = new AddEffectFeedback({
+        effectFeedback: {
+          id: uuid(),
+          triggerAction,
+          message: expectedMessage,
+          type: 'error',
+          userActions: [],
+          priority: Priority.HIGH,
+          display: true,
+          timeStamp: Date.now(),
+          useDefaultCancel: true
+        }
+      });
+      actions = hot('a', { a: triggerAction });
+      expect(effects.deleteTasks$).toBeObservable(
+        hot('(ab)', { a: deleteAction, b: feedbackAction })
+      );
+    });
+  });
+
   describe('startUpdateTasks$', () => {
     const tasksToUpdate: Update<TaskInterface>[] = [
       { id: 1, changes: { id: 1, name: 'Taak 1' } },

@@ -19,7 +19,10 @@ export enum TasksActionTypes {
   StartUpdateTasks = '[Tasks] Start Update Tasks',
   DeleteTask = '[Tasks] Delete Task',
   DeleteTasks = '[Tasks] Delete Tasks',
-  ClearTasks = '[Tasks] Clear Tasks'
+  ClearTasks = '[Tasks] Clear Tasks',
+  StartDeleteTasks = '[Tasks] Start Delete Tasks',
+  StartAddTask = '[Tasks] Start Add Task',
+  NavigateToTaskDetail = '[Tasks] Navigate To Task Detail'
 }
 
 export class LoadTasks implements Action {
@@ -107,6 +110,39 @@ export class ClearTasks implements Action {
   readonly type = TasksActionTypes.ClearTasks;
 }
 
+export class StartDeleteTasks implements FeedbackTriggeringAction {
+  readonly type = TasksActionTypes.StartDeleteTasks;
+
+  constructor(
+    public payload: {
+      ids: number[];
+      customFeedbackHandlers?: CustomFeedbackHandlersInterface;
+    }
+  ) {}
+}
+export class StartAddTask implements FeedbackTriggeringAction {
+  readonly type = TasksActionTypes.StartAddTask;
+
+  constructor(
+    public payload: {
+      task: Partial<TaskInterface>;
+      userId: number;
+      navigateAfterCreate?: boolean;
+      customFeedbackHandlers?: CustomFeedbackHandlersInterface;
+    }
+  ) {}
+}
+
+export class NavigateToTaskDetail implements Action {
+  readonly type = TasksActionTypes.NavigateToTaskDetail;
+
+  constructor(
+    public payload: {
+      task: TaskInterface;
+    }
+  ) {}
+}
+
 export type TasksActions =
   | LoadTasks
   | TasksLoaded
@@ -119,4 +155,7 @@ export type TasksActions =
   | UpdateTasks
   | DeleteTask
   | DeleteTasks
-  | ClearTasks;
+  | ClearTasks
+  | StartDeleteTasks
+  | StartAddTask
+  | NavigateToTaskDetail;

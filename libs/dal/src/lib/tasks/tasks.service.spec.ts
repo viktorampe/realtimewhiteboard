@@ -2,7 +2,13 @@ import { inject, TestBed } from '@angular/core/testing';
 import { PersonApi, TaskApi } from '@diekeure/polpo-api-angular-sdk';
 import { hot } from '@nrwl/angular/testing';
 import { Observable } from 'rxjs';
-import { TaskEduContentInterface } from '../+models';
+import {
+  TaskClassGroupFixture,
+  TaskFixture,
+  TaskGroupFixture,
+  TaskStudentFixture
+} from '../+fixtures';
+import { TaskEduContentInterface, TaskInterface } from '../+models';
 import { TaskServiceInterface } from './task.service.interface';
 import { TaskService } from './tasks.service';
 
@@ -11,6 +17,7 @@ describe('TaskService', () => {
   let taskApi: TaskApi;
   let mockGetData$: Observable<object>;
   let mockLinkEduContentsResult$: Observable<TaskEduContentInterface>;
+  let mockUpdatedAccessResult$: Observable<TaskInterface>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -25,7 +32,8 @@ describe('TaskService', () => {
         {
           provide: TaskApi,
           useValue: {
-            linkEduContents: () => mockLinkEduContentsResult$
+            linkEduContents: () => mockLinkEduContentsResult$,
+            updateAccess: () => mockUpdatedAccessResult$
           }
         }
       ]
@@ -70,6 +78,39 @@ describe('TaskService', () => {
         })
       );
       expect(spy).toHaveBeenCalledWith(1, 9);
+    });
+  });
+
+  describe('updateAccess', () => {
+    it('should return the task with updated relations', () => {
+      const mockTask: TaskInterface = new TaskFixture({
+        taskGroups: [new TaskGroupFixture()],
+        taskStudents: [new TaskStudentFixture()],
+        taskClassGroups: [new TaskClassGroupFixture()]
+      });
+      mockUpdatedAccessResult$ = hot('-a-|', {
+        a: mockTask
+      });
+      const spy = jest.spyOn(taskApi, 'updateAccess');
+      expect(
+        service.updateAccess(
+          1,
+          2,
+          mockTask.taskGroups,
+          mockTask.taskStudents,
+          mockTask.taskClassGroups
+        )
+      ).toBeObservable(
+        hot('-a-|', {
+          a: mockTask
+        })
+      );
+      expect(spy).toHaveBeenCalledWith(
+        2,
+        mockTask.taskGroups,
+        mockTask.taskStudents,
+        mockTask.taskClassGroups
+      );
     });
   });
 });
