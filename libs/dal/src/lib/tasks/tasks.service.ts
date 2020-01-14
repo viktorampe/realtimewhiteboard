@@ -37,7 +37,9 @@ export class TaskService implements TaskServiceInterface {
   }
 
   createTask(userId: number, task: TaskInterface): Observable<TaskInterface> {
-    throw new Error('Method not implemented.');
+    return this.personApi
+      .createTeacherTasks(userId, task)
+      .pipe(map(response => response as TaskInterface));
   }
 
   deleteTasks(
