@@ -83,7 +83,7 @@ describe('TaskService', () => {
 
   describe('updateAccess', () => {
     it('should return the task with updated relations', () => {
-      const mockTask = new TaskFixture({
+      const mockTask: TaskInterface = new TaskFixture({
         taskGroups: [new TaskGroupFixture()],
         taskStudents: [new TaskStudentFixture()],
         taskClassGroups: [new TaskClassGroupFixture()]
