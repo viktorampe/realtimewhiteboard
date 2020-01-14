@@ -7,7 +7,10 @@ import {
   TaskStatusEnum,
   TaskWithAssigneesInterface
 } from '../interfaces/TaskWithAssignees.interface';
-import { KabasTasksViewModel } from './kabas-tasks.viewmodel';
+import {
+  CurrentTaskParams,
+  KabasTasksViewModel
+} from './kabas-tasks.viewmodel';
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +19,7 @@ export class MockKabasTasksViewModel
   implements ViewModelInterface<KabasTasksViewModel> {
   public tasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
   public paperTasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
+  public currentTaskParams$: Observable<CurrentTaskParams>;
 
   constructor() {
     const tasks = this.setupTaskWithAssignments();
@@ -35,6 +39,10 @@ export class MockKabasTasksViewModel
         };
       })
     );
+
+    this.currentTaskParams$ = new BehaviorSubject<CurrentTaskParams>({
+      id: 1
+    });
   }
 
   public getTaskDates() {

@@ -1,0 +1,43 @@
+@import 'libs/ui/src/lib/breakpoints.scss';
+
+:host {
+  .mat-dialog-content {
+    min-height: 33vh;
+    width: 50vw;
+    max-width: 800px;
+  }
+}
+
+.pages-kabas-tasks-new-task {
+  &__info-panel {
+    max-height: 100%;
+  }
+
+  &__dialog__actions {
+    padding: 15px;
+    display: flex;
+    justify-content: flex-end;
+    align-content: center;
+  }
+}
+
+@media #{$ui-breakpoint-xsmall} {
+  :host {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    .mat-dialog-content {
+      width: 100%;
+      max-width: 100%;
+    }
+  }
+
+  .pages-kabas-tasks-new-task {
+    &__dialog__actions {
+      &__button {
+        width: 100%;
+      }
+    }
+  }
+}
