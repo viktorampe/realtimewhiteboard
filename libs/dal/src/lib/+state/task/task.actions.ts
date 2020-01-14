@@ -101,6 +101,7 @@ export class StartDeleteTasks implements FeedbackTriggeringAction {
   constructor(
     public payload: {
       ids: number[];
+      userId: number;
       customFeedbackHandlers?: CustomFeedbackHandlersInterface;
     }
   ) {}
@@ -110,7 +111,7 @@ export class StartAddTask implements FeedbackTriggeringAction {
 
   constructor(
     public payload: {
-      task: Partial<TaskInterface>;
+      task: TaskInterface;
       userId: number;
       navigateAfterCreate?: boolean;
       customFeedbackHandlers?: CustomFeedbackHandlersInterface;
