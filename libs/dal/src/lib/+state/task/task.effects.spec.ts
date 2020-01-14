@@ -29,7 +29,7 @@ describe('TaskEffects', () => {
   let taskService: TaskServiceInterface;
   let uuid: Function;
 
-  const mockDate = new MockDate();
+  const mockDate = new MockDate(new Date('2020-1-13'));
 
   afterAll(() => {
     mockDate.returnRealDate();
