@@ -73,7 +73,8 @@ export class LearningPlanGoalProgressService
     userId: number,
     learningGoalPlanProgresses: (
       | LearningPlanGoalProgressWithEduContentTocInterface
-      | LearningPlanGoalProgressWithUserLessonInterface)[]
+      | LearningPlanGoalProgressWithUserLessonInterface
+    )[]
   ): Observable<LearningPlanGoalProgressInterface[]> {
     return this.personApi.createLearningPlanGoalProgresses(
       userId,

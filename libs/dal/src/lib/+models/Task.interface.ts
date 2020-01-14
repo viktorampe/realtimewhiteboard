@@ -33,4 +33,6 @@ export interface TaskInterface {
   bundles?: BundleInterface[];
   taskInstances?: TaskInstanceInterface[];
   isPaperTask?: boolean;
+  isfavorite?: boolean;
+  archived?: boolean;
 }

@@ -13,9 +13,9 @@ export interface State extends EntityState<UnlockedBoekeStudentInterface> {
   error?: any;
 }
 
-export const adapter: EntityAdapter<
+export const adapter: EntityAdapter<UnlockedBoekeStudentInterface> = createEntityAdapter<
   UnlockedBoekeStudentInterface
-> = createEntityAdapter<UnlockedBoekeStudentInterface>();
+>();
 
 export const initialState: State = adapter.getInitialState({
   // additional entity state properties

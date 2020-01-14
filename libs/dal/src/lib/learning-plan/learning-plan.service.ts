@@ -69,18 +69,15 @@ export class LearningPlanService implements LearningPlanServiceInterface {
   private toSpecialitiesMap(
     learningPlans: LearningPlanInterface[]
   ): Map<SpecialtyInterface, LearningPlanAssignmentInterface[]> {
-    const learningPlanAssignments = learningPlans.reduce(
-      (acc, plan) => {
-        plan.assignments.forEach(assignment => {
-          assignment.learningPlan = plan;
-          assignment.learningPlan.assignments = null;
-          assignment.learningPlanId = plan.id;
-          acc.push(assignment);
-        });
-        return acc;
-      },
-      [] as LearningPlanAssignmentInterface[]
-    );
+    const learningPlanAssignments = learningPlans.reduce((acc, plan) => {
+      plan.assignments.forEach(assignment => {
+        assignment.learningPlan = plan;
+        assignment.learningPlan.assignments = null;
+        assignment.learningPlanId = plan.id;
+        acc.push(assignment);
+      });
+      return acc;
+    }, [] as LearningPlanAssignmentInterface[]);
 
     const specialitiesMap = learningPlanAssignments.reduce(
       (sMap, assignment) => {

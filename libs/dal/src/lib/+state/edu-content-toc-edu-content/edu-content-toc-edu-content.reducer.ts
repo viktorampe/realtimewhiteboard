@@ -13,9 +13,9 @@ export interface State extends EntityState<EduContentTOCEduContentInterface> {
   loadedBooks: number[];
 }
 
-export const adapter: EntityAdapter<
+export const adapter: EntityAdapter<EduContentTOCEduContentInterface> = createEntityAdapter<
   EduContentTOCEduContentInterface
-> = createEntityAdapter<EduContentTOCEduContentInterface>();
+>();
 
 export const initialState: State = adapter.getInitialState({
   // additional entity state properties
