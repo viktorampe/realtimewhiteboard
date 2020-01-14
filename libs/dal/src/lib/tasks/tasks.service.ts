@@ -2,7 +2,12 @@ import { Injectable } from '@angular/core';
 import { PersonApi, TaskApi } from '@diekeure/polpo-api-angular-sdk';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { TaskEduContentInterface } from '../+models';
+import {
+  TaskClassGroupInterface,
+  TaskEduContentInterface,
+  TaskGroupInterface,
+  TaskStudentInterface
+} from '../+models';
 import { TaskInterface } from './../+models/Task.interface';
 import {
   TaskServiceInterface,
@@ -49,5 +54,20 @@ export class TaskService implements TaskServiceInterface {
     return this.taskApi
       .destroyTasks(taskIds)
       .pipe(map(response => response as TaskUpdateInfoInterface));
+  }
+
+  updateAccess(
+    userId: number,
+    taskId: number,
+    taskGroups: TaskGroupInterface[],
+    taskStudents: TaskStudentInterface[],
+    taskClassGroups?: TaskClassGroupInterface[]
+  ): Observable<TaskInterface> {
+    return this.taskApi.updateAccess(
+      taskId,
+      taskGroups,
+      taskStudents,
+      taskClassGroups
+    ) as Observable<TaskInterface>;
   }
 }

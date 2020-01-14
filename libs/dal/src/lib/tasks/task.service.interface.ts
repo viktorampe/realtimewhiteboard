@@ -1,6 +1,12 @@
 import { InjectionToken } from '@angular/core';
 import { Observable } from 'rxjs';
-import { TaskEduContentInterface, TaskInterface } from '../+models';
+import {
+  TaskClassGroupInterface,
+  TaskEduContentInterface,
+  TaskGroupInterface,
+  TaskInterface,
+  TaskStudentInterface
+} from '../+models';
 
 export const TASK_SERVICE_TOKEN = new InjectionToken('TaskService');
 
@@ -22,6 +28,14 @@ export interface TaskServiceInterface {
     userId: number,
     taskIds: number[]
   ): Observable<TaskUpdateInfoInterface>;
+
+  updateAccess(
+    userId: number,
+    taskId: number,
+    taskGroups: TaskGroupInterface[],
+    taskStudents: TaskStudentInterface[],
+    taskClassGroups?: TaskClassGroupInterface[]
+  ): Observable<TaskInterface>;
 }
 
 export interface TaskUpdateInfoInterface {
