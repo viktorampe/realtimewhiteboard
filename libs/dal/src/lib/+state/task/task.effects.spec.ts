@@ -216,8 +216,7 @@ describe('TaskEffects', () => {
 
     let createTaskSpy: jest.SpyInstance;
     beforeEach(() => {
-      // TODO: don't avoid typescript
-      createTaskSpy = taskService['createTask'] = jest.fn();
+      createTaskSpy = taskService.createTask = jest.fn();
     });
 
     it('should call the service and dispatch an action to add the result to the store', () => {
@@ -305,10 +304,10 @@ describe('TaskEffects', () => {
   describe('deleteTasks$', () => {
     let deleteTasksSpy: jest.SpyInstance;
     const taskIds = [1, 2];
-    const triggerAction = new StartDeleteTasks({ ids: taskIds });
+    const userId = 123;
+    const triggerAction = new StartDeleteTasks({ userId, ids: taskIds });
 
     beforeEach(() => {
-      // TODO typescript
       deleteTasksSpy = taskService['deleteTasks'] = jest.fn();
     });
 
