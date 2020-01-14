@@ -7,7 +7,10 @@ import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { TaskWithAssigneesInterface } from '../../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
-import { NewTaskComponent } from '../new-task/new-task.component';
+import {
+  NewTaskComponent,
+  NewTaskFormValues
+} from '../new-task/new-task.component';
 
 export enum TaskSortEnum {
   'NAME' = 'NAME',
@@ -33,11 +36,11 @@ export class ManageKabasTasksDetailComponent implements OnInit {
     private dialog: MatDialog,
     private router: Router
   ) {
-    this.isNewTask$ = viewModel.currentTaskParams$.pipe(
+    this.isNewTask$ = this.viewModel.currentTaskParams$.pipe(
       map(currentTaskParams => !currentTaskParams.id)
     );
 
-    this.selectableLearningAreas$ = viewModel.selectableLearningAreas$;
+    this.selectableLearningAreas$ = this.viewModel.selectableLearningAreas$;
   }
 
   ngOnInit() {
@@ -71,25 +74,7 @@ export class ManageKabasTasksDetailComponent implements OnInit {
       ]
     };
 
-    this.isNewTask$.pipe(take(1)).subscribe(isNewTask => {
-      if (isNewTask) {
-        this.selectableLearningAreas$.pipe(take(1)).subscribe(learningAreas => {
-          this.dialog
-            .open(NewTaskComponent, {
-              data: {
-                learningAreas
-              },
-              panelClass: 'pages-kabas-tasks-new-task__dialog'
-            })
-            .afterClosed()
-            .pipe(take(1))
-            .subscribe(data => {
-              console.log(data);
-              this.router.navigate(['tasks', 'manage']);
-            });
-        });
-      }
-    });
+    this.isNewTask$.pipe(take(1)).subscribe(this.openNewTaskDialog.bind(this));
   }
 
   public setArchivedTasks(
@@ -103,5 +88,26 @@ export class ManageKabasTasksDetailComponent implements OnInit {
   }
   public toggleFavorite(task: TaskWithAssigneesInterface) {
     this.viewModel.toggleFavorite(task);
+  }
+
+  private openNewTaskDialog() {
+    this.selectableLearningAreas$.pipe(take(1)).subscribe(learningAreas => {
+      this.dialog
+        .open(NewTaskComponent, {
+          data: {
+            learningAreas
+          },
+          panelClass: 'pages-kabas-tasks-new-task__dialog'
+        })
+        .afterClosed()
+        .pipe(take(1))
+        .subscribe((formData: NewTaskFormValues) => {
+          if (formData) {
+            console.log('submitted form with: ', formData);
+          } else {
+            this.router.navigate(['tasks', 'manage']);
+          }
+        });
+    });
   }
 }

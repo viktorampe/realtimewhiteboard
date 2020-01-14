@@ -4,13 +4,13 @@
   [displayAsRows]="false"
   class="pages-kabas-tasks-new-task__info-panel"
 >
-  <form>
+  <form [formGroup]="newTaskForm">
     <mat-form-field>
       <mat-label>Titel</mat-label>
-      <input autocomplete="off" matInput />
+      <input autocomplete="off" formControlName="title" matInput />
     </mat-form-field>
     <mat-form-field>
-      <mat-select placeholder="Vakgebied">
+      <mat-select placeholder="Vakgebied" formControlName="learningArea">
         <mat-option
           *ngFor="let learningArea of data.learningAreas"
           [value]="learningArea"
@@ -19,7 +19,7 @@
         </mat-option>
       </mat-select>
     </mat-form-field>
-    <mat-radio-group>
+    <mat-radio-group formControlName="type">
       <mat-radio-button value="digital">Digitaal</mat-radio-button>
       <mat-radio-button value="paper">Papier</mat-radio-button>
     </mat-radio-group>
@@ -29,9 +29,13 @@
     <campus-button
       primary
       class="pages-kabas-tasks-new-task__dialog__actions__button"
+      *ngIf="newTaskForm.valid"
+      (click)="submit()"
       >Aanmaken</campus-button
     >
-    <campus-button class="pages-kabas-tasks-new-task__dialog__actions__button"
+    <campus-button
+      (click)="cancel()"
+      class="pages-kabas-tasks-new-task__dialog__actions__button"
       >Annuleren</campus-button
     >
   </mat-dialog-actions>
