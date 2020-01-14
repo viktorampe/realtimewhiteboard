@@ -3,6 +3,8 @@ import { RouterTestingModule } from '@angular/router/testing';
 import {
   CustomSerializer,
   DalState,
+  FavoriteActions,
+  FavoriteTypesEnum,
   getStoreModuleForFeatures,
   TaskActions,
   TaskReducer
@@ -322,6 +324,34 @@ describe('KabasTaskViewModel', () => {
       });
 
       kabasTasksViewModel.setTaskAsArchived(taskAssignees, true);
+
+      expect(spy).toHaveBeenCalledWith(expected);
+    });
+  });
+
+  describe('toggleFavorite', () => {
+    it('should dispatch a toggleFavorite action', () => {
+      const taskAssignee = {
+        id: 1,
+        name: 'favorite task',
+        eduContentAmount: 1,
+        assignees: [],
+        status: TaskStatusEnum.FINISHED,
+        isPaperTask: false
+      } as TaskWithAssigneesInterface;
+
+      const spy = jest.spyOn(store, 'dispatch');
+
+      const expected = new FavoriteActions.ToggleFavorite({
+        favorite: {
+          created: new Date(),
+          taskId: taskAssignee.id,
+          name: taskAssignee.name,
+          type: FavoriteTypesEnum.TASK
+        }
+      });
+
+      kabasTasksViewModel.toggleFavorite(taskAssignee);
 
       expect(spy).toHaveBeenCalledWith(expected);
     });
