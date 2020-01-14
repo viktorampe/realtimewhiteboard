@@ -37,7 +37,7 @@ describe('TaskEffects', () => {
   let taskService: TaskServiceInterface;
   let router: Router;
 
-  const mockDate = new MockDate();
+  const mockDate = new MockDate(new Date('2020-01-13'));
 
   afterAll(() => {
     mockDate.returnRealDate();
