@@ -177,9 +177,7 @@ export class TaskEffects {
     } else if (taskDestroyResult.tasks.length === 1) {
       errorHTML += '<p>De taak werd verwijderd.</p>';
     } else {
-      errorHTML += `<p>Er werden ${
-        taskDestroyResult.tasks.length
-      } taken verwijderd.</p>`;
+      errorHTML += `<p>Er werden ${taskDestroyResult.tasks.length} taken verwijderd.</p>`;
     }
 
     errorHTML += '<p>De volgende taken zijn nog in gebruik:</p>';
