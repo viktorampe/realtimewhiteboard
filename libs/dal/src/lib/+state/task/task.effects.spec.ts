@@ -206,8 +206,7 @@ describe('TaskEffects', () => {
 
     let createTaskSpy: jest.SpyInstance;
     beforeEach(() => {
-      // TODO: don't avoid typescript
-      createTaskSpy = taskService['createTask'] = jest.fn();
+      createTaskSpy = taskService.createTask = jest.fn();
     });
 
     it('should call the service and dispatch an action to add the result to the store', () => {

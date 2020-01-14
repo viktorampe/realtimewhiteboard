@@ -41,7 +41,10 @@ export class TaskService implements TaskServiceInterface {
       .pipe(map(response => response as TaskUpdateInfoInterface));
   }
 
-  createTask(userId: number, task: TaskInterface): Observable<TaskInterface> {
+  createTask(
+    userId: number,
+    task: Partial<TaskInterface>
+  ): Observable<TaskInterface> {
     return this.personApi
       .createTeacherTasks(userId, task)
       .pipe(map(response => response as TaskInterface));
