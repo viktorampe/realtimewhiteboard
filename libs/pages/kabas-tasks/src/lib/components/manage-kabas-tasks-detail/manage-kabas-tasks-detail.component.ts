@@ -1,11 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { SearchFilterCriteriaInterface } from '@campus/search';
+import { TaskWithAssigneesInterface } from '../../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
+
 export enum TaskSortEnum {
   'NAME' = 'NAME',
   'LEARNINGAREA' = 'LEARNINGAREA',
   'STARTDATE' = 'STARTDATE'
 }
+
 @Component({
   selector: 'campus-manage-kabas-tasks-detail',
   templateUrl: './manage-kabas-tasks-detail.component.html',
@@ -15,7 +18,8 @@ export class ManageKabasTasksDetailComponent implements OnInit {
   public TaskSortEnum = TaskSortEnum;
   public diaboloPhaseFilter: SearchFilterCriteriaInterface;
 
-  istaskDigital = false; // replace w/ stream
+  isPaperTask = true; // replace w/ stream
+
   constructor(private viewModel: KabasTasksViewModel) {}
 
   ngOnInit() {
@@ -50,13 +54,16 @@ export class ManageKabasTasksDetailComponent implements OnInit {
     };
   }
 
-  public setArchivedTasks(taskIds: number[], isArchived: boolean) {
-    this.viewModel.setArchivedTasks(taskIds, isArchived);
+  public setArchivedTasks(
+    tasks: TaskWithAssigneesInterface[],
+    isArchived: boolean
+  ) {
+    this.viewModel.setArchivedTasks(tasks, isArchived);
   }
-  public removeTasks(taskIds: number[]) {
-    this.viewModel.removeTasks(taskIds);
+  public removeTasks(tasks: TaskWithAssigneesInterface[]) {
+    this.viewModel.removeTasks(tasks);
   }
-  public toggleFavorite(taskId: number) {
-    this.viewModel.toggleFavorite(taskId);
+  public toggleFavorite(task: TaskWithAssigneesInterface) {
+    this.viewModel.toggleFavorite(task);
   }
 }

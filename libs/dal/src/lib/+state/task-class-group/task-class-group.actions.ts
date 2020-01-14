@@ -65,5 +65,5 @@ export const clearTaskClassGroups = createAction(
 
 export const updateTaskClassGroupsAccess = createAction(
   '[TaskClassGroups] Update Access',
-  props<{ taskClassGroups: TaskClassGroupInterface[] }>()
+  props<{ taskId: number; taskClassGroups: TaskClassGroupInterface[] }>()
 );

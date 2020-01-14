@@ -1,46 +1,94 @@
-<div class="manage-kabas-tasks"
+<campus-page-bar>
+  <ng-container *ngIf="content.selectedOptions.selected">
+    <ng-container
+      *ngIf="content.selectedOptions.selected.length === 0; else tasksSelected"
+    >
+      <campus-button
+        class="shared-header__contextual__button smallIcon"
+        iconClass=""
+        ><span>Lesmateriaal toevoegen</span></campus-button
+      >
+      <campus-button
+        *ngIf="!isPaperTask"
+        class="shared-header__contextual__button smallIcon"
+        iconClass="results"
+        ><span>Resultaten bekijken</span></campus-button
+      >
+      <campus-button
+        class="shared-header__contextual__button smallIcon"
+        iconClass=""
+        ><span>Doelenmatrix</span></campus-button
+      >
+      <campus-button
+        *ngIf="isPaperTask"
+        class="shared-header__contextual__button smallIcon"
+        iconClass=""
+        ><span>Print</span></campus-button
+      >
+    </ng-container>
+    <ng-template #tasksSelected>
+      <campus-button
+        *ngIf="!isPaperTask && content.selectedOptions.selected.length === 1"
+        class="shared-header__contextual__button smallIcon"
+        iconClass=""
+        ><span>Preview</span></campus-button
+      >
+      <campus-button
+        *ngIf="isPaperTask"
+        class="shared-header__contextual__button smallIcon"
+        iconClass=""
+        ><span>Print</span></campus-button
+      >
+      <campus-button
+        class="shared-header__contextual__button smallIcon"
+        iconClass="delete"
+        ><span>Verwijderen</span></campus-button
+      >
+    </ng-template>
+  </ng-container>
+</campus-page-bar>
+<div class="manage-kabas-tasks-detail"
   ><div class="manage-kabas-tasks-detail__container">
     <div class="manage-kabas-tasks-detail__filterbar">
-      <div class="manage-kabas-tasks-detail__filterbar__filters">
-        <campus-search-term
-          placeholder="Filter op titel"
-          [autoComplete]="false"
-          [emitOnTextChange]="true"
-        ></campus-search-term>
+      <campus-search-term
+        placeholder="Filter op titel"
+        [autoComplete]="false"
+        [emitOnTextChange]="true"
+      ></campus-search-term>
 
-        <div
-          *ngIf="istaskDigital"
-          class="manage-kabas-tasks-detail__moetje-toggle"
-        >
-          Moetje
-          <mat-slide-toggle color="primary"> </mat-slide-toggle>
-          Magje
-        </div>
-
-        <campus-button-toggle-filter
-          [multiple]="true"
-          [filterCriteria]="diaboloPhaseFilter"
-        >
-        </campus-button-toggle-filter>
-
-        <campus-button
-          class="manage-kabas-tasks-detail__reset-filters"
-          iconClass="reset-filters"
-        ></campus-button>
+      <div
+        *ngIf="!isPaperTask"
+        class="manage-kabas-tasks-detail__moetje-toggle"
+      >
+        Moetje
+        <mat-slide-toggle color="primary"> </mat-slide-toggle>
+        Magje
       </div>
+
+      <campus-button-toggle-filter
+        [multiple]="true"
+        [filterCriteria]="diaboloPhaseFilter"
+      >
+      </campus-button-toggle-filter>
+
+      <campus-button
+        class="manage-kabas-tasks-detail__reset-filters"
+        iconClass="reset-filters"
+      ></campus-button>
     </div>
 
     <mat-selection-list
-      #digital
+      #content
+      class="manage-kabas-tasks-detail__list"
       [class.mat-selection-list--has-selection]="
-        !digital.selectedOptions.isEmpty()
+        !content.selectedOptions.isEmpty()
       "
     >
       <mat-list-item class="manage-kabas-tasks-detail__list__primary-action">
         <mat-icon svgIcon="add"></mat-icon>
         Lesmateriaal toevoegen aan deze taak
       </mat-list-item>
-      <ng-container>
+      <ng-container *ngIf="true; else noResults">
         <mat-list-option
           #option
           *ngFor="let i of [].constructor(6)"

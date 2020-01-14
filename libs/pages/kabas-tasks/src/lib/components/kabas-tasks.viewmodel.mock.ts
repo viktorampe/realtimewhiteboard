@@ -213,6 +213,6 @@ export class MockKabasTasksViewModel
   public removeTasks(tasks: TaskWithAssigneesInterface[]): void {}
   public toggleFavorite(task: TaskWithAssigneesInterface): void {}
   public canArchive(task: TaskWithAssigneesInterface): boolean {
-    return task.isPaperTask || task.status === TaskStatusEnum.FINISHED;
+    return true;
   }
 }
