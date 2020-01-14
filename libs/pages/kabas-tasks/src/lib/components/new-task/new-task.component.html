@@ -11,11 +11,18 @@
     </mat-form-field>
     <mat-form-field>
       <mat-select placeholder="Vakgebied">
-        <mat-option *ngFor="let option of [1, 2, 3, 4]" [value]="option">
-          {{ option }}
+        <mat-option
+          *ngFor="let learningArea of data.learningAreas"
+          [value]="learningArea"
+        >
+          {{ learningArea.name }}
         </mat-option>
       </mat-select>
     </mat-form-field>
+    <mat-radio-group>
+      <mat-radio-button value="digital">Digitaal</mat-radio-button>
+      <mat-radio-button value="paper">Papier</mat-radio-button>
+    </mat-radio-group>
   </form>
 
   <mat-dialog-actions class="pages-kabas-tasks-new-task__dialog__actions">
@@ -23,6 +30,9 @@
       primary
       class="pages-kabas-tasks-new-task__dialog__actions__button"
       >Aanmaken</campus-button
+    >
+    <campus-button class="pages-kabas-tasks-new-task__dialog__actions__button"
+      >Annuleren</campus-button
     >
   </mat-dialog-actions>
 </campus-info-panel>

@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA } from '@angular/material';
+import { LearningAreaInterface } from '@campus/dal';
 
 @Component({
   selector: 'campus-new-task',
@@ -6,7 +8,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./new-task.component.scss']
 })
 export class NewTaskComponent implements OnInit {
-  constructor() {}
+  constructor(
+    @Inject(MAT_DIALOG_DATA)
+    public data: {
+      learningAreas: LearningAreaInterface[];
+    }
+  ) {}
 
   ngOnInit() {}
 }

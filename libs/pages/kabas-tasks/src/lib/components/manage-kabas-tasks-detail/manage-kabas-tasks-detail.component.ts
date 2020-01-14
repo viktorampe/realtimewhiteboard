@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
+import { LearningAreaInterface } from '@campus/dal';
 import { SearchFilterCriteriaInterface } from '@campus/search';
 import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
@@ -23,6 +24,7 @@ export class ManageKabasTasksDetailComponent implements OnInit {
   public TaskSortEnum = TaskSortEnum;
   public diaboloPhaseFilter: SearchFilterCriteriaInterface;
   public isNewTask$: Observable<boolean>;
+  public selectableLearningAreas$: Observable<LearningAreaInterface[]>;
 
   isPaperTask = true; // replace w/ stream
 
@@ -34,6 +36,8 @@ export class ManageKabasTasksDetailComponent implements OnInit {
     this.isNewTask$ = viewModel.currentTaskParams$.pipe(
       map(currentTaskParams => !currentTaskParams.id)
     );
+
+    this.selectableLearningAreas$ = viewModel.selectableLearningAreas$;
   }
 
   ngOnInit() {
@@ -69,16 +73,21 @@ export class ManageKabasTasksDetailComponent implements OnInit {
 
     this.isNewTask$.pipe(take(1)).subscribe(isNewTask => {
       if (isNewTask) {
-        this.dialog
-          .open(NewTaskComponent, {
-            panelClass: 'pages-kabas-tasks-new-task__dialog'
-          })
-          .afterClosed()
-          .pipe(take(1))
-          .subscribe(data => {
-            console.log(data);
-            this.router.navigate(['tasks', 'manage']);
-          });
+        this.selectableLearningAreas$.pipe(take(1)).subscribe(learningAreas => {
+          this.dialog
+            .open(NewTaskComponent, {
+              data: {
+                learningAreas
+              },
+              panelClass: 'pages-kabas-tasks-new-task__dialog'
+            })
+            .afterClosed()
+            .pipe(take(1))
+            .subscribe(data => {
+              console.log(data);
+              this.router.navigate(['tasks', 'manage']);
+            });
+        });
       }
     });
   }

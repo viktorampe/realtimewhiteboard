@@ -1,8 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   MatDialogModule,
   MatInputModule,
+  MatRadioModule,
   MatSelectModule
 } from '@angular/material';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
@@ -31,7 +33,10 @@ import { PagesKabasTasksRoutingModule } from './pages-kabas-tasks-routing.module
     GuardsModule,
     MatSlideToggleModule,
     MatDialogModule,
-    MatInputModule
+    MatInputModule,
+    MatRadioModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   declarations: [
     ManageKabasTasksOverviewComponent,

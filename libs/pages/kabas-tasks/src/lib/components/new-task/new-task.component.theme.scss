@@ -1,4 +1,6 @@
 @mixin pages-kabas-tasks-new-task-theme {
+  $pages-kabas-tasks-new-task-theme__mat-radio-button-margin-right: 16px !default;
+
   .pages-kabas-tasks-new-task {
     &__dialog {
       .mat-dialog {
@@ -32,6 +34,10 @@
 
         &__body {
           padding: 0px;
+        }
+
+        mat-radio-button {
+          margin-right: 16px;
         }
       }
     }

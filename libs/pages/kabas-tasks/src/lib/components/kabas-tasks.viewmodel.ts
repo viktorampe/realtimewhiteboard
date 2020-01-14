@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {
   DalState,
   getRouterState,
+  LearningAreaInterface,
   RouterStateUrl,
   TaskActions
 } from '@campus/dal';
@@ -13,7 +14,10 @@ import {
   TaskStatusEnum,
   TaskWithAssigneesInterface
 } from '../interfaces/TaskWithAssignees.interface';
-import { getTasksWithAssignments } from './kabas-tasks.viewmodel.selectors';
+import {
+  allowedLearningAreas,
+  getTasksWithAssignments
+} from './kabas-tasks.viewmodel.selectors';
 
 export interface CurrentTaskParams {
   id?: number;
@@ -26,6 +30,7 @@ export class KabasTasksViewModel {
   public tasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
   public paperTasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
   public currentTaskParams$: Observable<CurrentTaskParams>;
+  public selectableLearningAreas$: Observable<LearningAreaInterface[]>;
 
   private routerState$: Observable<RouterReducerState<RouterStateUrl>>;
 
@@ -48,6 +53,10 @@ export class KabasTasksViewModel {
       })),
       distinctUntilChanged((a, b) => a.id === b.id),
       shareReplay(1)
+    );
+
+    this.selectableLearningAreas$ = this.store.pipe(
+      select(allowedLearningAreas)
     );
   }
 
