@@ -411,7 +411,9 @@ describe('KabasTaskViewModel', () => {
           eduContentAmount: 1,
           assignees: [],
           status: TaskStatusEnum.FINISHED,
-          isPaperTask: false
+          isPaperTask: false,
+          startDate: new Date(Date.now() - 2000),
+          endDate: new Date(Date.now() - 1000)
         },
         {
           id: 2,
@@ -419,14 +421,14 @@ describe('KabasTaskViewModel', () => {
           eduContentAmount: 1,
           assignees: [],
           status: TaskStatusEnum.PENDING,
-          isPaperTask: false
+          isPaperTask: false,
+          startDate: new Date(Date.now() - 2000)
         },
         {
           id: 3,
           name: 'Active Task',
           eduContentAmount: 1,
           assignees: [],
-          status: TaskStatusEnum.ACTIVE,
           isPaperTask: false
         }
       ] as TaskWithAssigneesInterface[];
@@ -434,15 +436,7 @@ describe('KabasTaskViewModel', () => {
 
     it('should call dispatch with all tasks that can be deleted', () => {
       const spy = jest.spyOn(store, 'dispatch');
-      const expected = new TaskActions.DeleteTasks({
-        ids: taskAssignees
-          .filter(
-            task =>
-              task.status === TaskStatusEnum.FINISHED ||
-              (!task.startDate && !task.endDate)
-          )
-          .map(task => task.id)
-      });
+      const expected = new TaskActions.DeleteTasks({ ids: [1, 3] });
 
       kabasTasksViewModel.removeTasks(taskAssignees);
 
