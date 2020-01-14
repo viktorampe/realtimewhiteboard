@@ -17,6 +17,7 @@ import {
   TaskGroupFixture,
   TaskStudentFixture
 } from '../../+fixtures';
+import { TaskInterface } from '../../+models';
 import {
   TaskServiceInterface,
   TASK_SERVICE_TOKEN
@@ -296,7 +297,7 @@ describe('TaskEffects', () => {
     const taskId = 2;
     const userId = 123;
 
-    const updatedTask = new TaskFixture({
+    const updatedTask: TaskInterface = new TaskFixture({
       id: taskId,
       taskClassGroups: [new TaskClassGroupFixture({ id: 1 })],
       taskGroups: [new TaskGroupFixture({ id: 1 })],

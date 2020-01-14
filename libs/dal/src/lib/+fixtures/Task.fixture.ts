@@ -8,9 +8,6 @@ export class TaskFixture implements TaskInterface {
   archivedAt = new Date(2018, 11 - 1, 20);
   archivedYear = 2018;
   learningAreaId = 1;
-  taskGroups = [];
-  taskStudents = [];
-  taskClassGroups = [];
 
   constructor(props: Partial<TaskInterface> = {}) {
     // overwrite defaults
