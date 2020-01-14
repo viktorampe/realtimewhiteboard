@@ -96,8 +96,7 @@ export class KabasTasksViewModel {
       .pipe(select(UserQueries.getCurrentUser), take(1))
       .subscribe(user =>
         this.store.dispatch(
-          // TODO typescript
-          new TaskActions['StartAddTask']({
+          new TaskActions.StartAddTask({
             task: { name, learningAreaId, isPaperTask: type === 'paper' },
             navigateAfterCreate: true,
             userId: user.id

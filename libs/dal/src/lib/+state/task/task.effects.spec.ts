@@ -37,7 +37,7 @@ describe('TaskEffects', () => {
   let taskService: TaskServiceInterface;
   let router: Router;
 
-  const mockDate = new MockDate();
+  const mockDate = new MockDate(new Date('2020-01-13'));
 
   afterAll(() => {
     mockDate.returnRealDate();
@@ -108,7 +108,7 @@ describe('TaskEffects', () => {
             createTask: () => {}
           }
         },
-        { provide: MAT_DATE_LOCALE, useValue: 'nl-BE' },
+        { provide: MAT_DATE_LOCALE, useValue: 'en-US' },
         {
           provide: 'uuid',
           useValue: () => '123-totally-a-uuid-123'
@@ -368,8 +368,8 @@ describe('TaskEffects', () => {
         '<p>Er werden geen taken verwijderd.</p>' +
         '<p>De volgende taken zijn nog in gebruik:</p>' +
         '<ul>' +
-        '<li><b>Huiswerk</b> is nog in gebruik door Hubert Stroganovski tot 2020-1-13. </li>' +
-        '<li><b>Huiswerk2</b> is nog in gebruik door Hubert Stroganovski tot 2020-1-13. </li>' +
+        '<li><b>Huiswerk</b> is nog in gebruik door Hubert Stroganovski tot 1/13/2020. </li>' +
+        '<li><b>Huiswerk2</b> is nog in gebruik door Hubert Stroganovski tot 1/13/2020. </li>' +
         '</ul>';
 
       const feedbackAction = new AddEffectFeedback({
@@ -414,7 +414,7 @@ describe('TaskEffects', () => {
         '<p>De taak werd verwijderd.</p>' +
         '<p>De volgende taken zijn nog in gebruik:</p>' +
         '<ul>' +
-        '<li><b>Huiswerk</b> is nog in gebruik door Hubert Stroganovski tot 2020-1-13. </li>' +
+        '<li><b>Huiswerk</b> is nog in gebruik door Hubert Stroganovski tot 1/13/2020. </li>' +
         '</ul>';
 
       const feedbackAction = new AddEffectFeedback({
