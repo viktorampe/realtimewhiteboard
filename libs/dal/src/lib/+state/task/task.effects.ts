@@ -22,8 +22,8 @@ import {
   LoadTasks,
   NavigateToTaskDetail,
   StartAddTask,
+  StartArchiveTasks,
   StartDeleteTasks,
-  StartUpdateTasks,
   TasksActionTypes,
   TasksLoaded,
   TasksLoadError,
@@ -128,7 +128,7 @@ export class TaskEffects {
         );
       },
       onError: (action: StartDeleteTasks, error) => {
-        return this.getTaskUpdateOnErrorFeedback(action, 'update');
+        return this.getTaskUpdateOnErrorFeedback(action, 'delete');
       }
     })
   );
@@ -144,11 +144,10 @@ export class TaskEffects {
     { dispatch: false }
   );
 
-  @Effect()
-  startUpdateTasks$ = this.dataPersistence.pessimisticUpdate(
-    TasksActionTypes.StartUpdateTasks,
-    {
-      run: (action: StartUpdateTasks, state: DalState) => {
+  startArchiveTasks$ = createEffect(() =>
+    this.dataPersistence.pessimisticUpdate(TasksActionTypes.StartArchiveTasks, {
+      run: (action: StartArchiveTasks, state: DalState) => {
+        // @TODO: typescript
         return this.taskService['updateTasks'](action.payload).pipe(
           switchMap((taskUpdateInfo: TaskUpdateInfoInterface) => {
             const { tasks, errors } = taskUpdateInfo;
@@ -165,7 +164,7 @@ export class TaskEffects {
               if (!this.isFilled(errors)) {
                 const message = this.getTaskUpdateSuccessMessage(
                   tasks.length,
-                  'update'
+                  this.intentToArchive(action) ? 'archive' : 'dearchive'
                 );
                 actions.push(
                   this.getTaskUpdateFeedbackAction(action, message, 'success')
@@ -176,7 +175,7 @@ export class TaskEffects {
             if (this.isFilled(errors)) {
               const errorMessage = this.getTaskUpdateErrorMessageHTML(
                 taskUpdateInfo,
-                'update'
+                this.intentToArchive(action) ? 'archive' : 'dearchive'
               );
               actions.push(
                 this.getTaskUpdateFeedbackAction(action, errorMessage, 'error')
@@ -186,23 +185,28 @@ export class TaskEffects {
           })
         );
       },
-      onError: (action: StartUpdateTasks, error: any) => {
-        return this.getTaskUpdateOnErrorFeedback(action, 'update');
+      onError: (action: StartArchiveTasks, error: any) => {
+        return this.getTaskUpdateOnErrorFeedback(
+          action,
+          this.intentToArchive(action) ? 'archive' : 'dearchive'
+        );
       }
-    }
+    })
   );
 
+  private intentToArchive = action =>
+    action.payload.tasks.some(task => task.changes.archived);
   private isFilled = arr => Array.isArray(arr) && arr.length;
 
   private getTaskUpdateErrorMessageHTML(
     taskUpdateInfo: TaskUpdateInfoInterface,
-    method: 'archive' | 'delete' | 'update'
+    method: 'archive' | 'dearchive' | 'delete'
   ) {
     const { tasks, errors } = taskUpdateInfo;
     const methodVerbs = {
       archive: 'gearchiveerd',
-      delete: 'verwijderd',
-      update: 'opgeslagen'
+      dearchive: 'gedearchiveerd',
+      delete: 'verwijderd'
     };
     const verb = methodVerbs[method];
 
@@ -254,12 +258,12 @@ export class TaskEffects {
 
   private getTaskUpdateSuccessMessage(
     tasksLength: number,
-    method: 'archive' | 'update' | 'delete'
+    method: 'archive' | 'dearchive' | 'delete'
   ): string {
     const methodVerbs = {
       archive: 'gearchiveerd',
-      delete: 'verwijderd',
-      update: 'opgeslagen'
+      dearchive: 'gedearchiveerd',
+      delete: 'verwijderd'
     };
 
     return `De ${tasksLength === 1 ? 'taak werd' : 'taken werden'} ${
@@ -269,12 +273,12 @@ export class TaskEffects {
 
   private getTaskUpdateOnErrorFeedback(
     action: FeedbackTriggeringAction,
-    method: 'archive' | 'update' | 'delete'
+    method: 'archive' | 'dearchive' | 'delete'
   ) {
     const methodVerbs = {
       archive: 'te archiveren',
-      delete: 'te verwijderen',
-      update: 'op te slaan'
+      dearchive: 'te dearchiveren',
+      delete: 'te verwijderen'
     };
     const feedbackAction = new AddEffectFeedback({
       effectFeedback: EffectFeedback.generateErrorFeedback(

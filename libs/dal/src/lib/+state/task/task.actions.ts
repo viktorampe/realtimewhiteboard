@@ -16,7 +16,7 @@ export enum TasksActionTypes {
   UpsertTasks = '[Tasks] Upsert Tasks',
   UpdateTask = '[Tasks] Update Task',
   UpdateTasks = '[Tasks] Update Tasks',
-  StartUpdateTasks = '[Tasks] Start Update Tasks',
+  StartArchiveTasks = '[Tasks] Start Archive Tasks',
   DeleteTask = '[Tasks] Delete Task',
   DeleteTasks = '[Tasks] Delete Tasks',
   ClearTasks = '[Tasks] Clear Tasks',
@@ -83,8 +83,8 @@ export class UpdateTasks implements Action {
     }
   ) {}
 }
-export class StartUpdateTasks implements FeedbackTriggeringAction {
-  readonly type = TasksActionTypes.StartUpdateTasks;
+export class StartArchiveTasks implements FeedbackTriggeringAction {
+  readonly type = TasksActionTypes.StartArchiveTasks;
 
   constructor(
     public payload: {

@@ -26,14 +26,15 @@ import {
   LoadTasks,
   NavigateToTaskDetail,
   StartAddTask,
+  StartArchiveTasks,
   StartDeleteTasks,
-  StartUpdateTasks,
   TasksLoaded,
   TasksLoadError,
   UpdateTasks
 } from './task.actions';
 import { TaskEffects } from './task.effects';
 
+//file.only
 describe('TaskEffects', () => {
   let actions: Observable<any>;
   let effects: TaskEffects;
@@ -362,13 +363,14 @@ describe('TaskEffects', () => {
           errors: taskDestroyErrors
         })
       );
-      const expectedMessage =
-        '<p>Er werden geen taken verwijderd.</p>' +
-        '<p>De volgende taken zijn nog in gebruik:</p>' +
-        '<ul>' +
-        '<li><strong>Huiswerk</strong> is nog in gebruik door Hubert Stroganovski tot 2020-1-14.</li>' +
-        '<li><strong>Huiswerk2</strong> is nog in gebruik door Hubert Stroganovski tot 2020-1-14.</li>' +
-        '</ul>';
+      const expectedMessage = [
+        '<p>Er werden geen taken verwijderd.</p>',
+        '<p>De volgende taken zijn nog in gebruik:</p>',
+        '<ul>',
+        '<li><strong>Huiswerk</strong> is nog in gebruik door Hubert Stroganovski tot 2020-1-14.</li>',
+        '<li><strong>Huiswerk2</strong> is nog in gebruik door Hubert Stroganovski tot 2020-1-14.</li>',
+        '</ul>'
+      ].join('');
       const feedbackAction = new AddEffectFeedback({
         effectFeedback: {
           id: uuid(),
@@ -402,12 +404,13 @@ describe('TaskEffects', () => {
         })
       );
       const deleteAction = new DeleteTasks({ ids: [2] });
-      const expectedMessage =
-        '<p>De taak werd verwijderd.</p>' +
-        '<p>De volgende taken zijn nog in gebruik:</p>' +
-        '<ul>' +
-        '<li><strong>Huiswerk</strong> is nog in gebruik door Hubert Stroganovski tot 2020-1-14.</li>' +
-        '</ul>';
+      const expectedMessage = [
+        '<p>De taak werd verwijderd.</p>',
+        '<p>De volgende taken zijn nog in gebruik:</p>',
+        '<ul>',
+        '<li><strong>Huiswerk</strong> is nog in gebruik door Hubert Stroganovski tot 2020-1-14.</li>',
+        '</ul>'
+      ].join('');
       const feedbackAction = new AddEffectFeedback({
         effectFeedback: {
           id: uuid(),
@@ -428,120 +431,124 @@ describe('TaskEffects', () => {
     });
   });
 
-  describe('startUpdateTasks$', () => {
-    const tasksToUpdate: Update<TaskInterface>[] = [
-      { id: 1, changes: { id: 1, name: 'Taak 1' } },
-      { id: 2, changes: { id: 2, name: 'Taak 2' } }
-    ];
-    const triggerAction = new StartUpdateTasks({ tasks: tasksToUpdate });
-
-    it('should call the service and dispatch feedback, no errors', () => {
-      mockServiceMethodReturnValue('updateTasks', {
-        tasks: tasksToUpdate.map(task => task.changes),
-        errors: []
-      });
-
-      const expectedMessage = 'De taken werden opgeslagen.';
-      const updateAction = new UpdateTasks({ tasks: tasksToUpdate });
-      const feedbackAction = new AddEffectFeedback({
-        effectFeedback: {
-          id: uuid(),
-          display: true,
-          message: expectedMessage,
-          timeStamp: Date.now(),
-          triggerAction,
-          priority: Priority.NORM,
-          type: 'success',
-          useDefaultCancel: true,
-          userActions: []
-        } as EffectFeedback
-      });
-      actions = hot('a', { a: triggerAction });
-      expect(effects.startUpdateTasks$).toBeObservable(
-        hot('(ab)', {
-          a: updateAction,
-          b: feedbackAction
-        })
-      );
-    });
-    it('should call the service and dispatch feedback, only errors', () => {
-      const taskUpdateErrors = [
-        {
-          task: 'Huiswerk',
-          user: 'Hubert Stroganovski',
-          activeUntil: new Date()
-        },
-        {
-          task: 'Huiswerk2',
-          user: 'Hubert Stroganovski',
-          activeUntil: new Date()
-        }
+  for (const verb of ['gearchiveerd', 'gedearchiveerd']) {
+    describe('startArchiveTasks$', () => {
+      const archived = verb === 'gearchiveerd';
+      const tasksToUpdate: Update<TaskInterface>[] = [
+        { id: 1, changes: { id: 1, name: 'Taak 1', archived } },
+        { id: 2, changes: { id: 2, name: 'Taak 2', archived } }
       ];
-      mockServiceMethodReturnValue('updateTasks', {
-        tasks: [],
-        errors: taskUpdateErrors
+      const triggerAction = new StartArchiveTasks({ tasks: tasksToUpdate });
+
+      it('should call the service and dispatch feedback, no errors', () => {
+        mockServiceMethodReturnValue('updateTasks', {
+          tasks: tasksToUpdate.map(task => task.changes),
+          errors: []
+        });
+
+        const expectedMessage = `De taken werden ${verb}.`;
+        const updateAction = new UpdateTasks({ tasks: tasksToUpdate });
+        const feedbackAction = new AddEffectFeedback({
+          effectFeedback: {
+            id: uuid(),
+            display: true,
+            message: expectedMessage,
+            timeStamp: Date.now(),
+            triggerAction,
+            priority: Priority.NORM,
+            type: 'success',
+            useDefaultCancel: true,
+            userActions: []
+          } as EffectFeedback
+        });
+        actions = hot('a', { a: triggerAction });
+        expect(effects.startArchiveTasks$).toBeObservable(
+          hot('(ab)', {
+            a: updateAction,
+            b: feedbackAction
+          })
+        );
       });
-      const expectedMessage =
-        '<p>Er werden geen taken opgeslagen.</p>' +
-        '<p>De volgende taken zijn nog in gebruik:</p>' +
-        '<ul>' +
-        '<li><strong>Huiswerk</strong> is nog in gebruik door Hubert Stroganovski tot 2020-1-14.</li>' +
-        '<li><strong>Huiswerk2</strong> is nog in gebruik door Hubert Stroganovski tot 2020-1-14.</li>' +
-        '</ul>';
-      const feedbackAction = new AddEffectFeedback({
-        effectFeedback: {
-          id: uuid(),
-          triggerAction,
-          message: expectedMessage,
-          type: 'error',
-          userActions: [],
-          priority: Priority.HIGH,
-          display: true,
-          timeStamp: Date.now(),
-          useDefaultCancel: true
-        }
+      it('should call the service and dispatch feedback for archiving, only errors', () => {
+        const taskUpdateErrors = [
+          {
+            task: 'Huiswerk',
+            user: 'Hubert Stroganovski',
+            activeUntil: new Date()
+          },
+          {
+            task: 'Huiswerk2',
+            user: 'Hubert Stroganovski',
+            activeUntil: new Date()
+          }
+        ];
+        mockServiceMethodReturnValue('updateTasks', {
+          tasks: [],
+          errors: taskUpdateErrors
+        });
+        const expectedMessage = [
+          `<p>Er werden geen taken ${verb}.</p>`,
+          '<p>De volgende taken zijn nog in gebruik:</p>',
+          '<ul>',
+          '<li><strong>Huiswerk</strong> is nog in gebruik door Hubert Stroganovski tot 2020-1-14.</li>',
+          '<li><strong>Huiswerk2</strong> is nog in gebruik door Hubert Stroganovski tot 2020-1-14.</li>',
+          '</ul>'
+        ].join('');
+        const feedbackAction = new AddEffectFeedback({
+          effectFeedback: {
+            id: uuid(),
+            triggerAction,
+            message: expectedMessage,
+            type: 'error',
+            userActions: [],
+            priority: Priority.HIGH,
+            display: true,
+            timeStamp: Date.now(),
+            useDefaultCancel: true
+          }
+        });
+        actions = hot('a', { a: triggerAction });
+        expect(effects.startArchiveTasks$).toBeObservable(
+          hot('a', { a: feedbackAction })
+        );
       });
-      actions = hot('a', { a: triggerAction });
-      expect(effects.startUpdateTasks$).toBeObservable(
-        hot('a', { a: feedbackAction })
-      );
+      it('should call the service and dispatch feedback, mixed', () => {
+        const taskUpdateErrors = [
+          {
+            task: 'Huiswerk',
+            user: 'Hubert Stroganovski',
+            activeUntil: new Date()
+          }
+        ];
+        mockServiceMethodReturnValue('updateTasks', {
+          tasks: tasksToUpdate.slice(1).map(task => task.changes),
+          errors: taskUpdateErrors
+        });
+        const updateAction = new UpdateTasks({ tasks: tasksToUpdate.slice(1) });
+        const expectedMessage =
+          `<p>De taak werd ${verb}.</p>` +
+          '<p>De volgende taken zijn nog in gebruik:</p>' +
+          '<ul>' +
+          '<li><strong>Huiswerk</strong> is nog in gebruik door Hubert Stroganovski tot 2020-1-14.</li>' +
+          '</ul>';
+        const feedbackAction = new AddEffectFeedback({
+          effectFeedback: {
+            id: uuid(),
+            triggerAction,
+            message: expectedMessage,
+            type: 'error',
+            userActions: [],
+            priority: Priority.HIGH,
+            display: true,
+            timeStamp: Date.now(),
+            useDefaultCancel: true
+          }
+        });
+        actions = hot('a', { a: triggerAction });
+        expect(effects.startArchiveTasks$).toBeObservable(
+          hot('(ab)', { a: updateAction, b: feedbackAction })
+        );
+      });
     });
-    it('should call the service and dispatch feedback, mixed', () => {
-      const taskUpdateErrors = [
-        {
-          task: 'Huiswerk',
-          user: 'Hubert Stroganovski',
-          activeUntil: new Date()
-        }
-      ];
-      mockServiceMethodReturnValue('updateTasks', {
-        tasks: tasksToUpdate.slice(1).map(task => task.changes),
-        errors: taskUpdateErrors
-      });
-      const updateAction = new UpdateTasks({ tasks: tasksToUpdate.slice(1) });
-      const expectedMessage =
-        '<p>De taak werd opgeslagen.</p>' +
-        '<p>De volgende taken zijn nog in gebruik:</p>' +
-        '<ul>' +
-        '<li><strong>Huiswerk</strong> is nog in gebruik door Hubert Stroganovski tot 2020-1-14.</li>' +
-        '</ul>';
-      const feedbackAction = new AddEffectFeedback({
-        effectFeedback: {
-          id: uuid(),
-          triggerAction,
-          message: expectedMessage,
-          type: 'error',
-          userActions: [],
-          priority: Priority.HIGH,
-          display: true,
-          timeStamp: Date.now(),
-          useDefaultCancel: true
-        }
-      });
-      actions = hot('a', { a: triggerAction });
-      expect(effects.startUpdateTasks$).toBeObservable(
-        hot('(ab)', { a: updateAction, b: feedbackAction })
-      );
-    });
-  });
+  }
 });
