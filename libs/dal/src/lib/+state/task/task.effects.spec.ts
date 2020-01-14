@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { MAT_DATE_LOCALE } from '@angular/material';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TaskClassGroupActions, TaskStudentActions } from '@campus/dal';
@@ -25,9 +26,11 @@ import { AddEffectFeedback } from '../effect-feedback/effect-feedback.actions';
 import { TaskGroupActions } from '../task-group';
 import {
   AddTask,
+  DeleteTasks,
   LoadTasks,
   NavigateToTaskDetail,
   StartAddTask,
+  StartDeleteTasks,
   TasksLoaded,
   TasksLoadError,
   UpdateAccess
@@ -110,8 +113,14 @@ describe('TaskEffects', () => {
           useValue: {
             getAllForUser: () => {},
             createTask: () => {},
-            updateTask: () => {}
+            updateTask: () => {},
+            deleteTasks: () => {}
           }
+        },
+        { provide: MAT_DATE_LOCALE, useValue: 'nl-BE' },
+        {
+          provide: 'uuid',
+          useValue: () => '123-totally-a-uuid-123'
         },
         TaskEffects,
         DataPersistence,
@@ -123,6 +132,7 @@ describe('TaskEffects', () => {
       ]
     });
 
+    const locale = TestBed.get(MAT_DATE_LOCALE);
     effects = TestBed.get(TaskEffects);
     uuid = TestBed.get('uuid');
     taskService = TestBed.get(TASK_SERVICE_TOKEN);
@@ -386,6 +396,142 @@ describe('TaskEffects', () => {
       effects.redirectToTask$.subscribe(() => {
         expect(navigateSpy).toHaveBeenCalledWith(['tasks', 'manage', id]);
       });
+    });
+  });
+
+  describe('deleteTasks$', () => {
+    let deleteTasksSpy: jest.SpyInstance;
+    const taskIds = [1, 2];
+    const triggerAction = new StartDeleteTasks({ ids: taskIds });
+
+    beforeEach(() => {
+      // TODO typescript
+      deleteTasksSpy = taskService['deleteTasks'] = jest.fn();
+    });
+
+    it('should call the service and dispatch feedback, no errors', () => {
+      deleteTasksSpy.mockReturnValue(
+        of({ tasks: taskIds.map(id => ({ id })), errors: [] })
+      );
+      const expectedMessage = 'De taken werden verwijderd.';
+
+      const deleteAction = new DeleteTasks({ ids: taskIds });
+      const feedbackAction = new AddEffectFeedback({
+        effectFeedback: {
+          id: uuid(),
+          display: true,
+          message: expectedMessage,
+          timeStamp: Date.now(),
+          triggerAction,
+          priority: Priority.NORM,
+          type: 'success',
+          useDefaultCancel: true,
+          userActions: []
+        } as EffectFeedback
+      });
+
+      actions = hot('a', { a: triggerAction });
+
+      expect(effects.deleteTasks$).toBeObservable(
+        hot('(ab)', {
+          a: deleteAction,
+          b: feedbackAction
+        })
+      );
+    });
+
+    it('should call the service and dispatch feedback, only errors', () => {
+      const taskDestroyErrors = [
+        {
+          task: 'Huiswerk',
+          user: 'Hubert Stroganovski',
+          activeUntil: new Date()
+        },
+        {
+          task: 'Huiswerk2',
+          user: 'Hubert Stroganovski',
+          activeUntil: new Date()
+        }
+      ];
+
+      deleteTasksSpy.mockReturnValue(
+        of({
+          tasks: [],
+          errors: taskDestroyErrors
+        })
+      );
+
+      const expectedMessage =
+        '<p>Er werden geen taken verwijderd.</p>' +
+        '<p>De volgende taken zijn nog in gebruik:</p>' +
+        '<ul>' +
+        '<li><b>Huiswerk</b> is nog in gebruik door Hubert Stroganovski tot 2020-1-13. </li>' +
+        '<li><b>Huiswerk2</b> is nog in gebruik door Hubert Stroganovski tot 2020-1-13. </li>' +
+        '</ul>';
+
+      const feedbackAction = new AddEffectFeedback({
+        effectFeedback: {
+          id: uuid(),
+          triggerAction,
+          message: expectedMessage,
+          type: 'error',
+          userActions: [],
+          priority: Priority.HIGH,
+          display: true,
+          timeStamp: Date.now(),
+          useDefaultCancel: true
+        }
+      });
+
+      actions = hot('a', { a: triggerAction });
+      expect(effects.deleteTasks$).toBeObservable(
+        hot('a', { a: feedbackAction })
+      );
+    });
+
+    it('should call the service and dispatch feedback, mixed', () => {
+      const taskDestroyErrors = [
+        {
+          task: 'Huiswerk',
+          user: 'Hubert Stroganovski',
+          activeUntil: new Date()
+        }
+      ];
+
+      deleteTasksSpy.mockReturnValue(
+        of({
+          tasks: [{ id: 2 }],
+          errors: taskDestroyErrors
+        })
+      );
+
+      const deleteAction = new DeleteTasks({ ids: [2] });
+
+      const expectedMessage =
+        '<p>De taak werd verwijderd.</p>' +
+        '<p>De volgende taken zijn nog in gebruik:</p>' +
+        '<ul>' +
+        '<li><b>Huiswerk</b> is nog in gebruik door Hubert Stroganovski tot 2020-1-13. </li>' +
+        '</ul>';
+
+      const feedbackAction = new AddEffectFeedback({
+        effectFeedback: {
+          id: uuid(),
+          triggerAction,
+          message: expectedMessage,
+          type: 'error',
+          userActions: [],
+          priority: Priority.HIGH,
+          display: true,
+          timeStamp: Date.now(),
+          useDefaultCancel: true
+        }
+      });
+
+      actions = hot('a', { a: triggerAction });
+      expect(effects.deleteTasks$).toBeObservable(
+        hot('(ab)', { a: deleteAction, b: feedbackAction })
+      );
     });
   });
 });
