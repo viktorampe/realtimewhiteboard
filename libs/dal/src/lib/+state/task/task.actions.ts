@@ -1,6 +1,10 @@
 import { Update } from '@ngrx/entity';
 import { Action } from '@ngrx/store';
 import { TaskInterface } from '../../+models';
+import {
+  CustomFeedbackHandlersInterface,
+  FeedbackTriggeringAction
+} from '../effect-feedback';
 
 export enum TasksActionTypes {
   TasksLoaded = '[Tasks] Tasks Loaded',
@@ -14,7 +18,9 @@ export enum TasksActionTypes {
   UpdateTasks = '[Tasks] Update Tasks',
   DeleteTask = '[Tasks] Delete Task',
   DeleteTasks = '[Tasks] Delete Tasks',
-  ClearTasks = '[Tasks] Clear Tasks'
+  ClearTasks = '[Tasks] Clear Tasks',
+  StartAddTask = '[Tasks] Start Add Task',
+  NavigateToTaskDetail = '[Tasks] Navigate To Task Detail'
 }
 
 export class LoadTasks implements Action {
@@ -88,6 +94,29 @@ export class ClearTasks implements Action {
   readonly type = TasksActionTypes.ClearTasks;
 }
 
+export class StartAddTask implements FeedbackTriggeringAction {
+  readonly type = TasksActionTypes.StartAddTask;
+
+  constructor(
+    public payload: {
+      task: Partial<TaskInterface>;
+      userId: number;
+      navigateAfterCreate?: boolean;
+      customFeedbackHandlers?: CustomFeedbackHandlersInterface;
+    }
+  ) {}
+}
+
+export class NavigateToTaskDetail implements Action {
+  readonly type = TasksActionTypes.NavigateToTaskDetail;
+
+  constructor(
+    public payload: {
+      task: TaskInterface;
+    }
+  ) {}
+}
+
 export type TasksActions =
   | LoadTasks
   | TasksLoaded
@@ -100,4 +129,6 @@ export type TasksActions =
   | UpdateTasks
   | DeleteTask
   | DeleteTasks
-  | ClearTasks;
+  | ClearTasks
+  | StartAddTask
+  | NavigateToTaskDetail;

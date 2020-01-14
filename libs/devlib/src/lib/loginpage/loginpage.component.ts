@@ -145,4 +145,12 @@ export class LoginpageComponent implements OnInit {
       })
     );
   }
+
+  navigate(taskId) {
+    console.log('log: LoginpageComponent -> navigate -> taskId', taskId);
+
+    this.store.dispatch(
+      new TaskActions.NavigateToTaskDetail({ task: { id: taskId } as any })
+    );
+  }
 }
