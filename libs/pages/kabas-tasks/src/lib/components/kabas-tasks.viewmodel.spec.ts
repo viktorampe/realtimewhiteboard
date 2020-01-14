@@ -258,7 +258,7 @@ describe('KabasTaskViewModel', () => {
     });
   });
 
-  describe('setArchivedTasks', () => {
+  describe('setTaskAsArchived', () => {
     let taskAssignees;
     beforeEach(() => {
       taskAssignees = [
@@ -305,7 +305,7 @@ describe('KabasTaskViewModel', () => {
         }))
       });
 
-      kabasTasksViewModel.setArchivedTasks(taskAssignees, false);
+      kabasTasksViewModel.setTaskAsArchived(taskAssignees, false);
 
       expect(spy).toHaveBeenCalledWith(expected);
     });
@@ -323,7 +323,7 @@ describe('KabasTaskViewModel', () => {
           }))
       });
 
-      kabasTasksViewModel.setArchivedTasks(taskAssignees, true);
+      kabasTasksViewModel.setTaskAsArchived(taskAssignees, true);
 
       expect(spy).toHaveBeenCalledWith(expected);
     });
