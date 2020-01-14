@@ -22,25 +22,13 @@ export const getLoaded = createSelector(
   (state: State) => state.loaded
 );
 
-export const getAll = createSelector(
-  selectTaskState,
-  selectAll
-);
+export const getAll = createSelector(selectTaskState, selectAll);
 
-export const getCount = createSelector(
-  selectTaskState,
-  selectTotal
-);
+export const getCount = createSelector(selectTaskState, selectTotal);
 
-export const getIds = createSelector(
-  selectTaskState,
-  selectIds
-);
+export const getIds = createSelector(selectTaskState, selectIds);
 
-export const getAllEntities = createSelector(
-  selectTaskState,
-  selectEntities
-);
+export const getAllEntities = createSelector(selectTaskState, selectEntities);
 
 /**
  * returns array of objects in the order of the given ids

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { DalState } from '@campus/dal';
+import { DalState, TaskActions } from '@campus/dal';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -67,5 +67,23 @@ export class KabasTasksViewModel {
       }
     }
     return status;
+  }
+
+  public setArchivedTasks(
+    tasks: TaskWithAssigneesInterface[],
+    isArchived: boolean
+  ): void {
+    const updates = tasks
+      .filter(task => !isArchived || this.canArchive(task))
+      .map(task => ({ id: task.id, changes: { archived: isArchived } }));
+
+    this.store.dispatch(new TaskActions.UpdateTasks({ tasks: updates }));
+  }
+
+  public removeTasks(tasks: TaskWithAssigneesInterface[]): void {}
+  public toggleFavorite(task: TaskWithAssigneesInterface): void {}
+
+  public canArchive(task: TaskWithAssigneesInterface): boolean {
+    return task.isPaperTask || task.status === TaskStatusEnum.FINISHED;
   }
 }

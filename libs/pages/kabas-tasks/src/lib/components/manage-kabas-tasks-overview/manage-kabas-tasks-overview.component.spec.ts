@@ -10,6 +10,7 @@ import { By, HAMMER_LOADER } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
+import { TaskFixture } from '@campus/dal';
 import { GuardsModule } from '@campus/guards';
 import { PagesSharedModule } from '@campus/pages/shared';
 import { ButtonToggleFilterComponent, SearchModule } from '@campus/search';
@@ -817,6 +818,29 @@ describe('ManageKabasTasksOverviewComponent', () => {
       queryParams.next({ tab });
 
       expect(component.currentTab$).toBeObservable(hot('a', { a: tab }));
+    });
+  });
+
+  describe('getActions()', () => {
+    const mockTask = new TaskFixture({ id: 666 }) as TaskWithAssigneesInterface;
+    let actions: { label: string; handler: Function }[];
+
+    beforeEach(() => {
+      jest.resetAllMocks();
+    });
+
+    beforeAll(() => {
+      actions = component.getActions(mockTask);
+    });
+
+    it('first action should navigate to task-detail', () => {
+      actions[0].handler();
+      expect(router.navigate).toHaveBeenCalledTimes(1);
+      expect(router.navigate).toHaveBeenCalledWith([
+        'tasks',
+        'manage',
+        mockTask.id
+      ]);
     });
   });
 });

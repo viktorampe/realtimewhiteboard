@@ -23,20 +23,11 @@ export const getLoaded = createSelector(
   (state: State) => state.loaded
 );
 
-export const getAll = createSelector(
-  selectClassGroupState,
-  selectAll
-);
+export const getAll = createSelector(selectClassGroupState, selectAll);
 
-export const getCount = createSelector(
-  selectClassGroupState,
-  selectTotal
-);
+export const getCount = createSelector(selectClassGroupState, selectTotal);
 
-export const getIds = createSelector(
-  selectClassGroupState,
-  selectIds
-);
+export const getIds = createSelector(selectClassGroupState, selectIds);
 
 export const getAllEntities = createSelector(
   selectClassGroupState,
@@ -75,27 +66,24 @@ export const getClassGroupsByMethodId = createSelector(
     classGroups: ClassGroupInterface[],
     props: {} //It's necessary to accept empty props for the getClassGroupsForBook selector
   ): Dictionary<ClassGroupInterface[]> => {
-    return classGroups.reduce(
-      (acc, currentClassGroup) => {
-        currentClassGroup.licenses.forEach(license => {
-          license.product.productContents.forEach(productContent => {
-            if (
-              productContent.licenseType === 'method' &&
-              productContent.methodId
-            ) {
-              if (!acc[productContent.methodId]) {
-                acc[productContent.methodId] = [];
-              }
-
-              acc[productContent.methodId].push(currentClassGroup);
+    return classGroups.reduce((acc, currentClassGroup) => {
+      currentClassGroup.licenses.forEach(license => {
+        license.product.productContents.forEach(productContent => {
+          if (
+            productContent.licenseType === 'method' &&
+            productContent.methodId
+          ) {
+            if (!acc[productContent.methodId]) {
+              acc[productContent.methodId] = [];
             }
-          });
-        });
 
-        return acc;
-      },
-      {} as Dictionary<ClassGroupInterface[]>
-    );
+            acc[productContent.methodId].push(currentClassGroup);
+          }
+        });
+      });
+
+      return acc;
+    }, {} as Dictionary<ClassGroupInterface[]>);
   }
 );
 

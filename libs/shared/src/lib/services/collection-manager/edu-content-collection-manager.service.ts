@@ -64,9 +64,7 @@ export class EduContentCollectionManagerService
     } else {
       bundles$ = this.store.pipe(select(BundleQueries.getAll));
     }
-    const bundlesCollection$: Observable<
-      ManageCollectionItemInterface[]
-    > = bundles$.pipe(
+    const bundlesCollection$: Observable<ManageCollectionItemInterface[]> = bundles$.pipe(
       map((bundles: BundleInterface[]): ManageCollectionItemInterface[] => {
         return bundles.map(
           (bundle): ManageCollectionItemInterface => ({
@@ -148,9 +146,7 @@ export class EduContentCollectionManagerService
     // prepare streams
     const learningAreaId: number =
       content.publishedEduContentMetadata.learningAreaId;
-    const tasksCollection$: Observable<
-      ManageCollectionItemInterface[]
-    > = this.store.pipe(
+    const tasksCollection$: Observable<ManageCollectionItemInterface[]> = this.store.pipe(
       select(TaskQueries.getForLearningAreaId, { learningAreaId }),
       map((tasks: TaskInterface[]): ManageCollectionItemInterface[] => {
         return tasks.map(
@@ -178,9 +174,7 @@ export class EduContentCollectionManagerService
     );
 
     // subscribe to changeEvent
-    const itemToggle$: Observable<
-      ItemToggledInCollectionInterface
-    > = this.getItemToggleStream(
+    const itemToggle$: Observable<ItemToggledInCollectionInterface> = this.getItemToggleStream(
       '"' + item.label + '" toevoegen aan je taken',
       item,
       tasksCollection$,

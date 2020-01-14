@@ -1,0 +1,18 @@
+.manage-kabas-tasks-detail {
+  display: flex;
+  flex-shrink: 0;
+  flex-grow: 0;
+  &__container {
+    flex-grow: 1;
+  }
+  &__filterbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  &__info {
+    display: flex;
+    flex: 0 0 auto;
+  }
+}

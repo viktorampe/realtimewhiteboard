@@ -22,9 +22,9 @@ export interface State extends EntityState<EffectFeedbackInterface> {
   // additional entities state properties
 }
 
-export const adapter: EntityAdapter<
+export const adapter: EntityAdapter<EffectFeedbackInterface> = createEntityAdapter<
   EffectFeedbackInterface
-> = createEntityAdapter<EffectFeedbackInterface>({
+>({
   sortComparer: sortByPriority
 });
 

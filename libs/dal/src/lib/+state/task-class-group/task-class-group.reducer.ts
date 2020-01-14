@@ -1,9 +1,7 @@
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
+import { Action, createReducer, on } from '@ngrx/store';
 import { TaskClassGroupInterface } from '../../+models';
-import {
-  TaskClassGroupsActions,
-  TaskClassGroupsActionTypes
-} from './task-class-group.actions';
+import * as TaskClassGroupActions from './task-class-group.actions';
 
 export const NAME = 'taskClassGroups';
 
@@ -13,71 +11,72 @@ export interface State extends EntityState<TaskClassGroupInterface> {
   error?: any;
 }
 
-export const adapter: EntityAdapter<
+export const adapter: EntityAdapter<TaskClassGroupInterface> = createEntityAdapter<
   TaskClassGroupInterface
-> = createEntityAdapter<TaskClassGroupInterface>();
+>();
 
 export const initialState: State = adapter.getInitialState({
   // additional entity state properties
   loaded: false
 });
 
-export function reducer(
-  state = initialState,
-  action: TaskClassGroupsActions
-): State {
-  switch (action.type) {
-    case TaskClassGroupsActionTypes.AddTaskClassGroup: {
-      return adapter.addOne(action.payload.taskClassGroup, state);
+const taskClassGroupReducer = createReducer(
+  initialState,
+  on(TaskClassGroupActions.addTaskClassGroup, (state, { taskClassGroup }) =>
+    adapter.addOne(taskClassGroup, state)
+  ),
+  on(TaskClassGroupActions.upsertTaskClassGroup, (state, { taskClassGroup }) =>
+    adapter.upsertOne(taskClassGroup, state)
+  ),
+  on(TaskClassGroupActions.addTaskClassGroups, (state, { taskClassGroups }) =>
+    adapter.addMany(taskClassGroups, state)
+  ),
+  on(
+    TaskClassGroupActions.upsertTaskClassGroups,
+    (state, { taskClassGroups }) => adapter.upsertMany(taskClassGroups, state)
+  ),
+  on(TaskClassGroupActions.updateTaskClassGroup, (state, { taskClassGroup }) =>
+    adapter.updateOne(taskClassGroup, state)
+  ),
+  on(
+    TaskClassGroupActions.updateTaskClassGroups,
+    (state, { taskClassGroups }) => adapter.updateMany(taskClassGroups, state)
+  ),
+  on(TaskClassGroupActions.deleteTaskClassGroup, (state, { id }) =>
+    adapter.removeOne(id, state)
+  ),
+  on(TaskClassGroupActions.deleteTaskClassGroups, (state, { ids }) =>
+    adapter.removeMany(ids, state)
+  ),
+  on(
+    TaskClassGroupActions.taskClassGroupsLoaded,
+    (state, { taskClassGroups }) =>
+      adapter.addAll(taskClassGroups, { ...state, loaded: true })
+  ),
+  on(TaskClassGroupActions.taskClassGroupsLoadError, (state, { error }) => ({
+    ...state,
+    error,
+    loaded: false
+  })),
+  on(TaskClassGroupActions.clearTaskClassGroups, state =>
+    adapter.removeAll(state)
+  ),
+  on(
+    TaskClassGroupActions.updateTaskClassGroupsAccess,
+    (state, { taskId, taskClassGroups }) => {
+      const cleanedState = adapter.removeMany(
+        (taskClassGroup: TaskClassGroupInterface) =>
+          taskClassGroup.taskId === taskId,
+        state
+      );
+      const updatedState = adapter.addMany(taskClassGroups, cleanedState);
+      return updatedState;
     }
+  )
+);
 
-    case TaskClassGroupsActionTypes.UpsertTaskClassGroup: {
-      return adapter.upsertOne(action.payload.taskClassGroup, state);
-    }
-
-    case TaskClassGroupsActionTypes.AddTaskClassGroups: {
-      return adapter.addMany(action.payload.taskClassGroups, state);
-    }
-
-    case TaskClassGroupsActionTypes.UpsertTaskClassGroups: {
-      return adapter.upsertMany(action.payload.taskClassGroups, state);
-    }
-
-    case TaskClassGroupsActionTypes.UpdateTaskClassGroup: {
-      return adapter.updateOne(action.payload.taskClassGroup, state);
-    }
-
-    case TaskClassGroupsActionTypes.UpdateTaskClassGroups: {
-      return adapter.updateMany(action.payload.taskClassGroups, state);
-    }
-
-    case TaskClassGroupsActionTypes.DeleteTaskClassGroup: {
-      return adapter.removeOne(action.payload.id, state);
-    }
-
-    case TaskClassGroupsActionTypes.DeleteTaskClassGroups: {
-      return adapter.removeMany(action.payload.ids, state);
-    }
-
-    case TaskClassGroupsActionTypes.TaskClassGroupsLoaded: {
-      return adapter.addAll(action.payload.taskClassGroups, {
-        ...state,
-        loaded: true
-      });
-    }
-
-    case TaskClassGroupsActionTypes.TaskClassGroupsLoadError: {
-      return { ...state, error: action.payload, loaded: false };
-    }
-
-    case TaskClassGroupsActionTypes.ClearTaskClassGroups: {
-      return adapter.removeAll(state);
-    }
-
-    default: {
-      return state;
-    }
-  }
+export function reducer(state: State | undefined, action: Action) {
+  return taskClassGroupReducer(state, action);
 }
 
 export const {

@@ -206,4 +206,13 @@ export class MockKabasTasksViewModel
       }
     ];
   }
+  public setArchivedTasks(
+    tasks: TaskWithAssigneesInterface[],
+    isArchived: boolean
+  ): void {}
+  public removeTasks(tasks: TaskWithAssigneesInterface[]): void {}
+  public toggleFavorite(task: TaskWithAssigneesInterface): void {}
+  public canArchive(task: TaskWithAssigneesInterface): boolean {
+    return true;
+  }
 }
