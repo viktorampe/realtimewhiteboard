@@ -1,6 +1,10 @@
 import { Update } from '@ngrx/entity';
 import { Action } from '@ngrx/store';
 import { TaskInterface } from '../../+models';
+import {
+  CustomFeedbackHandlersInterface,
+  FeedbackTriggeringAction
+} from '../effect-feedback';
 
 export enum TasksActionTypes {
   TasksLoaded = '[Tasks] Tasks Loaded',
@@ -12,6 +16,7 @@ export enum TasksActionTypes {
   UpsertTasks = '[Tasks] Upsert Tasks',
   UpdateTask = '[Tasks] Update Task',
   UpdateTasks = '[Tasks] Update Tasks',
+  StartUpdateTasks = '[Tasks] Start Update Tasks',
   DeleteTask = '[Tasks] Delete Task',
   DeleteTasks = '[Tasks] Delete Tasks',
   ClearTasks = '[Tasks] Clear Tasks'
@@ -69,7 +74,21 @@ export class UpdateTask implements Action {
 export class UpdateTasks implements Action {
   readonly type = TasksActionTypes.UpdateTasks;
 
-  constructor(public payload: { tasks: Update<TaskInterface>[] }) {}
+  constructor(
+    public payload: {
+      tasks: Update<TaskInterface>[];
+    }
+  ) {}
+}
+export class StartUpdateTasks implements FeedbackTriggeringAction {
+  readonly type = TasksActionTypes.StartUpdateTasks;
+
+  constructor(
+    public payload: {
+      tasks: Update<TaskInterface>[];
+      customFeedbackHandlers?: CustomFeedbackHandlersInterface;
+    }
+  ) {}
 }
 
 export class DeleteTask implements Action {

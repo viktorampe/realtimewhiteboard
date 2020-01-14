@@ -1,19 +1,46 @@
 import { TestBed } from '@angular/core/testing';
+import { MockDate } from '@campus/testing';
 import { EffectsModule } from '@ngrx/effects';
 import { provideMockActions } from '@ngrx/effects/testing';
+import { Update } from '@ngrx/entity';
 import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/angular';
 import { hot } from '@nrwl/angular/testing';
+import { undo } from 'ngrx-undo';
 import { Observable, of } from 'rxjs';
 import { TaskReducer } from '.';
-import { TASK_SERVICE_TOKEN } from '../../tasks/task.service.interface';
-import { LoadTasks, TasksLoaded, TasksLoadError } from './task.actions';
+import { TaskInterface } from '../../+models';
+import {
+  TaskServiceInterface,
+  TASK_SERVICE_TOKEN
+} from '../../tasks/task.service.interface';
+import {
+  UndoService,
+  UndoServiceInterface,
+  UNDO_SERVICE_TOKEN
+} from '../../undo';
+import { EffectFeedback } from '../effect-feedback';
+import { AddEffectFeedback } from '../effect-feedback/effect-feedback.actions';
+import {
+  LoadTasks,
+  TasksLoaded,
+  TasksLoadError,
+  UpdateTasks
+} from './task.actions';
 import { TaskEffects } from './task.effects';
 
 describe('TaskEffects', () => {
   let actions: Observable<any>;
   let effects: TaskEffects;
   let usedState: any;
+  let uuid: Function;
+  let taskService: TaskServiceInterface;
+  let undoService: UndoServiceInterface;
+  let dateMock: MockDate = new MockDate();
+
+  afterAll(() => {
+    dateMock.returnRealDate();
+  });
 
   const expectInAndOut = (
     effect: Observable<any>,
@@ -74,16 +101,28 @@ describe('TaskEffects', () => {
         {
           provide: TASK_SERVICE_TOKEN,
           useValue: {
-            getAllForUser: () => {}
+            getAllForUser: () => {},
+            updateTasks: () => {}
           }
+        },
+        {
+          provide: UNDO_SERVICE_TOKEN,
+          useClass: UndoService
         },
         TaskEffects,
         DataPersistence,
-        provideMockActions(() => actions)
+        provideMockActions(() => actions),
+        {
+          provide: 'uuid',
+          useValue: () => '123-totally-a-uuid-123'
+        }
       ]
     });
 
     effects = TestBed.get(TaskEffects);
+    uuid = TestBed.get('uuid');
+    taskService = TestBed.get(TASK_SERVICE_TOKEN);
+    undoService = TestBed.get(UNDO_SERVICE_TOKEN);
   });
 
   describe('loadTask$', () => {
@@ -161,6 +200,46 @@ describe('TaskEffects', () => {
       });
       it('should return a error action if force is true', () => {
         expectInAndOut(effects.loadTasks$, forcedLoadAction, loadErrorAction);
+      });
+    });
+  });
+
+  //file.only
+  describe('updateTasks$', () => {
+    const tasksToUpdate: Update<TaskInterface>[] = [
+      { id: 1, changes: { id: 1, name: 'Taak 1' } },
+      { id: 2, changes: { id: 2, name: 'Taak 2' } }
+    ];
+    const updateAction = new UpdateTasks({ tasks: tasksToUpdate });
+    const updateUndoAction = undo(updateAction);
+
+    describe('when success', () => {
+      beforeEach(() => {
+        mockServiceMethodReturnValue('updateTasks', []);
+      });
+
+      it('should trigger an api call', () => {});
+    });
+
+    describe('when errored', () => {
+      beforeEach(() => {
+        mockServiceMethodError('updateTasks', 'failed');
+      });
+      it('should return an undo and feedback action', () => {
+        const feedbackAction = new AddEffectFeedback({
+          effectFeedback: EffectFeedback.generateErrorFeedback(
+            uuid(),
+            updateAction,
+            'Het is niet gelukt om de taken te updaten.'
+          )
+        });
+        actions = hot('a', { a: updateAction });
+        expect(effects.updateTasks$).toBeObservable(
+          hot('(ab)', {
+            a: updateUndoAction,
+            b: feedbackAction
+          })
+        );
       });
     });
   });
