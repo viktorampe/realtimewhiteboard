@@ -10,6 +10,7 @@ import {
   taskStudentsLoadError,
   updateTaskStudent,
   updateTaskStudents,
+  updateTaskStudentsAccess,
   upsertTaskStudent,
   upsertTaskStudents
 } from './task-student.actions';
@@ -242,6 +243,35 @@ describe('TaskStudents Reducer', () => {
       const action = clearTaskStudents();
       const result = reducer(startState, action);
       expect(result).toEqual(createState([], true, 'something went wrong'));
+    });
+  });
+
+  describe('updateTaskStudentsAccess action', () => {
+    it('should clear the taskStudents collection and add the updated records', () => {
+      const startTaskStudents = [
+        createTaskStudent(1, 1),
+        createTaskStudent(2, 1),
+        createTaskStudent(3, 1),
+        createTaskStudent(4, 1),
+        createTaskStudent(5, 2),
+        createTaskStudent(6, 2),
+        createTaskStudent(7, 2)
+      ];
+      const expectedTaskStudents = [
+        createTaskStudent(5, 2),
+        createTaskStudent(6, 2),
+        createTaskStudent(7, 2),
+        createTaskStudent(2, 1),
+        createTaskStudent(8, 1)
+      ];
+
+      const startState = createState(startTaskStudents);
+      const action = updateTaskStudentsAccess({
+        taskId: 1,
+        taskStudents: [createTaskStudent(2, 1), createTaskStudent(8, 1)]
+      });
+      const result = reducer(startState, action);
+      expect(result).toEqual(createState(expectedTaskStudents));
     });
   });
 });

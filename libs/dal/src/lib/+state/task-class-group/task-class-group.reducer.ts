@@ -60,6 +60,18 @@ const taskClassGroupReducer = createReducer(
   })),
   on(TaskClassGroupActions.clearTaskClassGroups, state =>
     adapter.removeAll(state)
+  ),
+  on(
+    TaskClassGroupActions.updateTaskClassGroupsAccess,
+    (state, { taskId, taskClassGroups }) => {
+      const cleanedState = adapter.removeMany(
+        (taskClassGroup: TaskClassGroupInterface) =>
+          taskClassGroup.taskId === taskId,
+        state
+      );
+      const updatedState = adapter.addMany(taskClassGroups, cleanedState);
+      return updatedState;
+    }
   )
 );
 

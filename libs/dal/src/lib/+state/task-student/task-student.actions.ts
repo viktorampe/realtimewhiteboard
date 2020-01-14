@@ -66,5 +66,5 @@ export const clearTaskStudents = createAction(
 
 export const updateTaskStudentsAccess = createAction(
   '[TaskStudent] Update Access',
-  props<{ taskStudents: TaskStudentInterface[] }>()
+  props<{ taskId: number; taskStudents: TaskStudentInterface[] }>()
 );
