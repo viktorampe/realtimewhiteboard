@@ -13,25 +13,11 @@ import { Observable, of } from 'rxjs';
 import { TaskReducer } from '.';
 import { TaskFixture } from '../../+fixtures';
 import { TaskInterface } from '../../+models';
-import {
-  TaskServiceInterface,
-  TASK_SERVICE_TOKEN
-} from '../../tasks/task.service.interface';
+import { TaskServiceInterface, TASK_SERVICE_TOKEN } from '../../tasks/task.service.interface';
 import { UndoService, UNDO_SERVICE_TOKEN } from '../../undo';
 import { EffectFeedback, Priority } from '../effect-feedback';
 import { AddEffectFeedback } from '../effect-feedback/effect-feedback.actions';
-import {
-  AddTask,
-  DeleteTasks,
-  LoadTasks,
-  NavigateToTaskDetail,
-  StartAddTask,
-  StartArchiveTasks,
-  StartDeleteTasks,
-  TasksLoaded,
-  TasksLoadError,
-  UpdateTasks
-} from './task.actions';
+import { AddTask, DeleteTasks, LoadTasks, NavigateToTaskDetail, StartAddTask, StartArchiveTasks, StartDeleteTasks, TasksLoaded, TasksLoadError, UpdateTasks } from './task.actions';
 import { TaskEffects } from './task.effects';
 
 describe('TaskEffects', () => {
@@ -366,8 +352,8 @@ describe('TaskEffects', () => {
         '<p>Er werden geen taken verwijderd.</p>',
         '<p>De volgende taken zijn nog in gebruik:</p>',
         '<ul>',
-        '<li><strong>Huiswerk</strong> is nog in gebruik door Hubert Stroganovski tot 2020-1-14.</li>',
-        '<li><strong>Huiswerk2</strong> is nog in gebruik door Hubert Stroganovski tot 2020-1-14.</li>',
+        '<li><strong>Huiswerk</strong> is nog in gebruik door Hubert Stroganovski tot 1/14/2020.</li>',
+        '<li><strong>Huiswerk2</strong> is nog in gebruik door Hubert Stroganovski tot 1/14/2020.</li>',
         '</ul>'
       ].join('');
       const feedbackAction = new AddEffectFeedback({
