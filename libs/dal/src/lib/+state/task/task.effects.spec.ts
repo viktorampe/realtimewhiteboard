@@ -42,7 +42,7 @@ describe('TaskEffects', () => {
   let taskService: TaskServiceInterface;
   let router: Router;
 
-  const mockDate = new MockDate();
+  const mockDate = new MockDate(new Date('2020-1-14'));
 
   afterAll(() => {
     mockDate.returnRealDate();
@@ -118,7 +118,7 @@ describe('TaskEffects', () => {
           provide: UNDO_SERVICE_TOKEN,
           useClass: UndoService
         },
-        { provide: MAT_DATE_LOCALE, useValue: 'nl-BE' },
+        { provide: MAT_DATE_LOCALE, useValue: 'en-US' },
         TaskEffects,
         DataPersistence,
         provideMockActions(() => actions),
@@ -407,7 +407,7 @@ describe('TaskEffects', () => {
         '<p>De taak werd verwijderd.</p>',
         '<p>De volgende taken zijn nog in gebruik:</p>',
         '<ul>',
-        '<li><strong>Huiswerk</strong> is nog in gebruik door Hubert Stroganovski tot 2020-1-14.</li>',
+        '<li><strong>Huiswerk</strong> is nog in gebruik door Hubert Stroganovski tot 1/14/2020.</li>',
         '</ul>'
       ].join('');
       const feedbackAction = new AddEffectFeedback({
@@ -489,8 +489,8 @@ describe('TaskEffects', () => {
           `<p>Er werden geen taken ${verb}.</p>`,
           '<p>De volgende taken zijn nog in gebruik:</p>',
           '<ul>',
-          '<li><strong>Huiswerk</strong> is nog in gebruik door Hubert Stroganovski tot 2020-1-14.</li>',
-          '<li><strong>Huiswerk2</strong> is nog in gebruik door Hubert Stroganovski tot 2020-1-14.</li>',
+          '<li><strong>Huiswerk</strong> is nog in gebruik door Hubert Stroganovski tot 1/14/2020.</li>',
+          '<li><strong>Huiswerk2</strong> is nog in gebruik door Hubert Stroganovski tot 1/14/2020.</li>',
           '</ul>'
         ].join('');
         const feedbackAction = new AddEffectFeedback({
@@ -528,7 +528,7 @@ describe('TaskEffects', () => {
           `<p>De taak werd ${verb}.</p>` +
           '<p>De volgende taken zijn nog in gebruik:</p>' +
           '<ul>' +
-          '<li><strong>Huiswerk</strong> is nog in gebruik door Hubert Stroganovski tot 2020-1-14.</li>' +
+          '<li><strong>Huiswerk</strong> is nog in gebruik door Hubert Stroganovski tot 1/14/2020.</li>' +
           '</ul>';
         const feedbackAction = new AddEffectFeedback({
           effectFeedback: {
