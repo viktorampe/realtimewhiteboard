@@ -1,5 +1,12 @@
 import { TestBed } from '@angular/core/testing';
-import { DalState, PersonFixture, TaskActions, UserQueries } from '@campus/dal';
+import {
+  DalState,
+  FavoriteActions,
+  FavoriteTypesEnum,
+  PersonFixture,
+  TaskActions,
+  UserQueries
+} from '@campus/dal';
 import { MockDate } from '@campus/testing';
 import { Store } from '@ngrx/store';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
@@ -331,6 +338,34 @@ describe('KabasTaskViewModel', () => {
           userId: currentUser.id
         })
       );
+    });
+  });
+
+  describe('toggleFavorite', () => {
+    it('should dispatch a toggleFavorite action', () => {
+      const taskAssignee = {
+        id: 1,
+        name: 'favorite task',
+        eduContentAmount: 1,
+        assignees: [],
+        status: TaskStatusEnum.FINISHED,
+        isPaperTask: false
+      } as TaskWithAssigneesInterface;
+
+      const spy = jest.spyOn(store, 'dispatch');
+
+      const expected = new FavoriteActions.ToggleFavorite({
+        favorite: {
+          created: new Date(),
+          taskId: taskAssignee.id,
+          name: taskAssignee.name,
+          type: FavoriteTypesEnum.TASK
+        }
+      });
+
+      kabasTasksViewModel.toggleFavorite(taskAssignee);
+
+      expect(spy).toHaveBeenCalledWith(expected);
     });
   });
 });
