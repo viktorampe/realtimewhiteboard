@@ -100,6 +100,7 @@ export class StartAddTask implements FeedbackTriggeringAction {
   constructor(
     public payload: {
       task: Partial<TaskInterface>;
+      userId: number;
       navigateAfterCreate?: boolean;
       customFeedbackHandlers?: CustomFeedbackHandlersInterface;
     }

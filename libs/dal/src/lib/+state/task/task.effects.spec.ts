@@ -202,6 +202,7 @@ describe('TaskEffects', () => {
   describe('createTask$', () => {
     const taskToCreate = { name: 'foo' };
     const newTask = new TaskFixture(taskToCreate);
+    const userId = 123;
 
     let createTaskSpy: jest.SpyInstance;
     beforeEach(() => {
@@ -214,18 +215,26 @@ describe('TaskEffects', () => {
 
       expectInAndOut(
         effects.startAddTask$,
-        new StartAddTask({ task: taskToCreate, navigateAfterCreate: false }),
+        new StartAddTask({
+          task: taskToCreate,
+          userId,
+          navigateAfterCreate: false
+        }),
         new AddTask({ task: newTask })
       );
 
-      expect(createTaskSpy).toHaveBeenCalledWith(taskToCreate);
+      expect(createTaskSpy).toHaveBeenCalledWith(userId, taskToCreate);
     });
 
     it('should call the service and dispatch an action to add the result to the store and navigate', () => {
       createTaskSpy.mockReturnValue(of(newTask));
 
       actions = hot('a', {
-        a: new StartAddTask({ task: taskToCreate, navigateAfterCreate: true })
+        a: new StartAddTask({
+          task: taskToCreate,
+          userId,
+          navigateAfterCreate: true
+        })
       });
 
       expect(effects.startAddTask$).toBeObservable(
@@ -235,7 +244,7 @@ describe('TaskEffects', () => {
         })
       );
 
-      expect(createTaskSpy).toHaveBeenCalledWith(taskToCreate);
+      expect(createTaskSpy).toHaveBeenCalledWith(userId, taskToCreate);
     });
 
     it('should dispatch feedback on error', () => {
@@ -243,13 +252,13 @@ describe('TaskEffects', () => {
 
       const effectFeedback = new EffectFeedback({
         id: uuid(),
-        triggerAction: new StartAddTask({ task: taskToCreate }),
+        triggerAction: new StartAddTask({ task: taskToCreate, userId }),
         message: 'Het is niet gelukt om de taak te maken.',
         type: 'error',
         userActions: [
           {
             title: 'Opnieuw proberen',
-            userAction: new StartAddTask({ task: taskToCreate })
+            userAction: new StartAddTask({ task: taskToCreate, userId })
           }
         ],
         priority: Priority.HIGH
@@ -258,7 +267,7 @@ describe('TaskEffects', () => {
 
       expectInAndOut(
         effects.startAddTask$,
-        new StartAddTask({ task: taskToCreate }),
+        new StartAddTask({ task: taskToCreate, userId }),
         addFeedbackAction
       );
     });

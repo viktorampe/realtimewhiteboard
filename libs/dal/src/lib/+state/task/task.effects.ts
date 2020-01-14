@@ -42,7 +42,10 @@ export class TaskEffects {
     this.dataPersistence.pessimisticUpdate(TasksActionTypes.StartAddTask, {
       run: (action: StartAddTask, state: DalState) => {
         // TODO: don't avoid typescript
-        return this.taskService['createTask'](action.payload.task).pipe(
+        return this.taskService['createTask'](
+          action.payload.userId,
+          action.payload.task
+        ).pipe(
           switchMap((task: TaskInterface) => {
             const actionsToDispatch: Action[] = [new AddTask({ task })];
             if (action.payload.navigateAfterCreate) {
