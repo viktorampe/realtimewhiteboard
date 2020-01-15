@@ -11,11 +11,11 @@ import { DalState } from '..';
 import { TaskInterface } from '../../+models';
 import {
   TaskServiceInterface,
+  TaskUpdateInfoInterface,
   TASK_SERVICE_TOKEN
 } from '../../tasks/task.service.interface';
 import { EffectFeedback, FeedbackTriggeringAction } from '../effect-feedback';
 import { AddEffectFeedback } from '../effect-feedback/effect-feedback.actions';
-import { TaskUpdateInfoInterface } from './../../tasks/task.service.interface';
 import {
   AddTask,
   DeleteTasks,
@@ -30,35 +30,22 @@ import {
   UpdateTasks
 } from './task.actions';
 
-interface TaskDestroyInfoInterface {
-  tasks: {
-    id: number;
-  }[];
-  errors: {
-    task: string;
-    activeUntil: Date;
-    user: string;
-  }[];
-}
-
 @Injectable()
 export class TaskEffects {
   startAddTask$ = createEffect(() =>
     this.dataPersistence.pessimisticUpdate(TasksActionTypes.StartAddTask, {
       run: (action: StartAddTask, state: DalState) => {
-        // TODO: don't avoid typescript
-        return this.taskService['createTask'](
-          action.payload.userId,
-          action.payload.task
-        ).pipe(
-          switchMap((task: TaskInterface) => {
-            const actionsToDispatch: Action[] = [new AddTask({ task })];
-            if (action.payload.navigateAfterCreate) {
-              actionsToDispatch.push(new NavigateToTaskDetail({ task }));
-            }
-            return from(actionsToDispatch);
-          })
-        );
+        return this.taskService
+          .createTask(action.payload.userId, action.payload.task)
+          .pipe(
+            switchMap((task: TaskInterface) => {
+              const actionsToDispatch: Action[] = [new AddTask({ task })];
+              if (action.payload.navigateAfterCreate) {
+                actionsToDispatch.push(new NavigateToTaskDetail({ task }));
+              }
+              return from(actionsToDispatch);
+            })
+          );
       },
       onError: (action: StartAddTask, error) => {
         return new AddEffectFeedback({
@@ -88,44 +75,49 @@ export class TaskEffects {
   deleteTasks$ = createEffect(() =>
     this.dataPersistence.pessimisticUpdate(TasksActionTypes.StartDeleteTasks, {
       run: (action: StartDeleteTasks, state: DalState) => {
-        // TODO typescript
-        return this.taskService['deleteTasks'](action.payload.ids).pipe(
-          switchMap((taskDestroyResult: TaskDestroyInfoInterface) => {
-            const actions = [];
-            const { tasks, errors } = taskDestroyResult;
+        return this.taskService
+          .deleteTasks(action.payload.userId, action.payload.ids)
+          .pipe(
+            switchMap((taskDestroyResult: TaskUpdateInfoInterface) => {
+              const actions = [];
+              const { tasks, errors } = taskDestroyResult;
 
-            // remove the destroyed ones from the store
-            if (this.isFilled(tasks)) {
-              actions.push(
-                new DeleteTasks({
-                  ids: tasks.map(task => task.id)
-                })
-              );
+              // remove the destroyed ones from the store
+              if (this.isFilled(tasks)) {
+                actions.push(
+                  new DeleteTasks({
+                    ids: tasks.map(task => task.id)
+                  })
+                );
 
-              // show a snackbar if there is no other feedback (i.e. no errors)
-              if (!this.isFilled(errors)) {
-                const message = this.getTaskUpdateSuccessMessage(
-                  tasks.length,
+                // show a snackbar if there is no other feedback (i.e. no errors)
+                if (!this.isFilled(errors)) {
+                  const message = this.getTaskUpdateSuccessMessage(
+                    tasks.length,
+                    'delete'
+                  );
+                  actions.push(
+                    this.getTaskUpdateFeedbackAction(action, message, 'success')
+                  );
+                }
+              }
+              // show feedback for the ones still in use
+              if (this.isFilled(errors)) {
+                const errorMessage = this.getTaskUpdateErrorMessageHTML(
+                  taskDestroyResult,
                   'delete'
                 );
                 actions.push(
-                  this.getTaskUpdateFeedbackAction(action, message, 'success')
+                  this.getTaskUpdateFeedbackAction(
+                    action,
+                    errorMessage,
+                    'error'
+                  )
                 );
               }
-            }
-            // show feedback for the ones still in use
-            if (this.isFilled(errors)) {
-              const errorMessage = this.getTaskUpdateErrorMessageHTML(
-                taskDestroyResult,
-                'delete'
-              );
-              actions.push(
-                this.getTaskUpdateFeedbackAction(action, errorMessage, 'error')
-              );
-            }
-            return from(actions);
-          })
-        );
+              return from(actions);
+            })
+          );
       },
       onError: (action: StartDeleteTasks, error) => {
         return this.getTaskUpdateOnErrorFeedbackAction(action, 'delete');
@@ -147,43 +139,53 @@ export class TaskEffects {
   startArchiveTasks$ = createEffect(() =>
     this.dataPersistence.pessimisticUpdate(TasksActionTypes.StartArchiveTasks, {
       run: (action: StartArchiveTasks, state: DalState) => {
-        // @TODO: typescript
-        return this.taskService['updateTasks'](action.payload).pipe(
-          switchMap((taskUpdateInfo: TaskUpdateInfoInterface) => {
-            const { tasks, errors } = taskUpdateInfo;
-            const actions = [];
+        return this.taskService
+          .updateTasks(
+            action.payload.userId,
+            action.payload.tasks.map(updateTask => {
+              return { ...updateTask.changes, id: +updateTask.id };
+            })
+          )
+          .pipe(
+            switchMap((taskUpdateInfo: TaskUpdateInfoInterface) => {
+              const { tasks, errors } = taskUpdateInfo;
+              const actions = [];
 
-            if (this.isFilled(tasks)) {
-              const partialUpdates = tasks.reduce(
-                (acc, task) => [...acc, { id: task.id, changes: task }],
-                []
-              ) as Update<TaskInterface>[];
+              if (this.isFilled(tasks)) {
+                const partialUpdates = tasks.reduce(
+                  (acc, task) => [...acc, { id: task.id, changes: task }],
+                  []
+                ) as Update<TaskInterface>[];
 
-              actions.push(new UpdateTasks({ tasks: partialUpdates }));
+                actions.push(new UpdateTasks({ tasks: partialUpdates }));
 
-              if (!this.isFilled(errors)) {
-                const message = this.getTaskUpdateSuccessMessage(
-                  tasks.length,
+                if (!this.isFilled(errors)) {
+                  const message = this.getTaskUpdateSuccessMessage(
+                    tasks.length,
+                    this.intentToArchive(action) ? 'archive' : 'dearchive'
+                  );
+                  actions.push(
+                    this.getTaskUpdateFeedbackAction(action, message, 'success')
+                  );
+                }
+              }
+
+              if (this.isFilled(errors)) {
+                const errorMessage = this.getTaskUpdateErrorMessageHTML(
+                  taskUpdateInfo,
                   this.intentToArchive(action) ? 'archive' : 'dearchive'
                 );
                 actions.push(
-                  this.getTaskUpdateFeedbackAction(action, message, 'success')
+                  this.getTaskUpdateFeedbackAction(
+                    action,
+                    errorMessage,
+                    'error'
+                  )
                 );
               }
-            }
-
-            if (this.isFilled(errors)) {
-              const errorMessage = this.getTaskUpdateErrorMessageHTML(
-                taskUpdateInfo,
-                this.intentToArchive(action) ? 'archive' : 'dearchive'
-              );
-              actions.push(
-                this.getTaskUpdateFeedbackAction(action, errorMessage, 'error')
-              );
-            }
-            return from(actions);
-          })
-        );
+              return from(actions);
+            })
+          );
       },
       onError: (action: StartArchiveTasks, error: any) => {
         return this.getTaskUpdateOnErrorFeedbackAction(
