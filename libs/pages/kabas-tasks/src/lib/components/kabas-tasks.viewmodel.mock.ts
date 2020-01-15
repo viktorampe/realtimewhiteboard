@@ -1,7 +1,11 @@
 import { Injectable } from '@angular/core';
-import { LearningAreaFixture, TaskFixture } from '@campus/dal';
+import {
+  EduContentFixture,
+  LearningAreaFixture,
+  TaskFixture
+} from '@campus/dal';
 import { ViewModelInterface } from '@campus/testing';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { AssigneeTypesEnum } from '../interfaces/Assignee.interface';
 import {
   TaskStatusEnum,
@@ -16,6 +20,7 @@ export class MockKabasTasksViewModel
   implements ViewModelInterface<KabasTasksViewModel> {
   public tasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
   public paperTasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
+  public currentTask$: Observable<TaskWithAssigneesInterface>;
 
   constructor() {
     const tasks = this.setupTaskWithAssignments();
@@ -35,6 +40,8 @@ export class MockKabasTasksViewModel
         };
       })
     );
+
+    this.currentTask$ = of(tasks[0]);
   }
 
   public getTaskDates() {
@@ -62,6 +69,11 @@ export class MockKabasTasksViewModel
         ...new TaskFixture({ archivedAt: null, archivedYear: null }),
         name: 'Titel van de eerste oefening',
         eduContentAmount: 3,
+        eduContents: [
+          new EduContentFixture({ id: 1 }, { id: 1, title: 'oefening 1' }),
+          new EduContentFixture({ id: 2 }, { id: 2, title: 'oefening 2' }),
+          new EduContentFixture({ id: 3 }, { id: 3, title: 'oefening 3' })
+        ],
         learningArea: new LearningAreaFixture({ id: 1, name: 'wiskunde' }),
         learningAreaId: 1,
         assignees: [

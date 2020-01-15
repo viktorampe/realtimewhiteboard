@@ -15,6 +15,7 @@ import { getTasksWithAssignments } from './kabas-tasks.viewmodel.selectors';
 export class KabasTasksViewModel {
   public tasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
   public paperTasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
+  public currentTask$: Observable<TaskWithAssigneesInterface>;
 
   constructor(private store: Store<DalState>) {
     this.tasksWithAssignments$ = this.store.pipe(

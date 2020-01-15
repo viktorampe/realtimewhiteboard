@@ -1,7 +1,7 @@
 .manage-kabas-tasks-detail {
   display: flex;
-  flex-shrink: 0;
-  flex-grow: 0;
+  flex-direction: column;
+
   &__container {
     flex-grow: 1;
   }

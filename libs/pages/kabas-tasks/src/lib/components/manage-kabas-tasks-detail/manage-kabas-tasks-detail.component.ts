@@ -1,7 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatSelectionList } from '@angular/material';
+import { EduContentInterface } from '@campus/dal';
 import { SearchFilterCriteriaInterface } from '@campus/search';
+import { SideSheetComponent } from '@campus/ui';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { TaskWithAssigneesInterface } from '../../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
+import { MockKabasTasksViewModel } from '../kabas-tasks.viewmodel.mock';
 
 export enum TaskSortEnum {
   'NAME' = 'NAME',
@@ -12,17 +17,30 @@ export enum TaskSortEnum {
 @Component({
   selector: 'campus-manage-kabas-tasks-detail',
   templateUrl: './manage-kabas-tasks-detail.component.html',
-  styleUrls: ['./manage-kabas-tasks-detail.component.scss']
+  styleUrls: ['./manage-kabas-tasks-detail.component.scss'],
+  providers: [
+    { provide: KabasTasksViewModel, useClass: MockKabasTasksViewModel }
+  ]
 })
 export class ManageKabasTasksDetailComponent implements OnInit {
   public TaskSortEnum = TaskSortEnum;
   public diaboloPhaseFilter: SearchFilterCriteriaInterface;
+  public selectedContents$ = new BehaviorSubject<EduContentInterface[]>([]);
+  public task$: Observable<TaskWithAssigneesInterface>;
 
-  isPaperTask = true; // replace w/ stream
+  @ViewChild('taskContent', { static: false })
+  private contentSelectionList: MatSelectionList;
+
+  private sideSheet: SideSheetComponent;
+  @ViewChild('taskSidesheet', { static: false })
+  set sideSheetComponent(sidesheet: SideSheetComponent) {
+    this.sideSheet = sidesheet;
+  }
 
   constructor(private viewModel: KabasTasksViewModel) {}
 
   ngOnInit() {
+    this.task$ = this.viewModel.currentTask$;
     this.diaboloPhaseFilter = {
       name: 'diaboloPhase',
       label: 'Diabolo-fase',
@@ -52,6 +70,19 @@ export class ManageKabasTasksDetailComponent implements OnInit {
         }
       ]
     };
+  }
+
+  public onSelectionChange() {
+    const selected: EduContentInterface[] = this.contentSelectionList.selectedOptions.selected
+      .map(option => option.value as EduContentInterface)
+      .sort((a, b) =>
+        a.publishedEduContentMetadata.title <
+        b.publishedEduContentMetadata.title
+          ? -1
+          : 1
+      );
+    this.selectedContents$.next(selected);
+    this.sideSheet.toggle(true);
   }
 
   public setTaskAsArchived(
