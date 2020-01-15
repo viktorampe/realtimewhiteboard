@@ -342,7 +342,7 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
     dialogRef.componentInstance.actions = [
       {
         label: 'annuleren',
-        handler: dialogRef.close,
+        handler: dialogRef.close.bind(dialogRef),
         icon: 'cancel'
       },
       {
