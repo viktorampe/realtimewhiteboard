@@ -49,7 +49,6 @@ export class LoginPageViewModel {
     }
     return;
   }
-  m;
 
   /**
    * logs out the user
