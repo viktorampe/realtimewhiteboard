@@ -121,18 +121,22 @@ export class KabasTasksViewModel {
     );
   }
 
-  private getAssigneesByType(assignees: AssigneeInterface[]) {
+  private getAssigneeTypeToKeyMap() {
     return {
-      taskGroups: assignees.filter(
-        assignee => assignee.type === AssigneeTypesEnum.GROUP
-      ),
-      taskStudents: assignees.filter(
-        assignee => assignee.type === AssigneeTypesEnum.STUDENT
-      ),
-      taskClassGroups: assignees.filter(
-        assignee => assignee.type === AssigneeTypesEnum.CLASSGROUP
-      )
+      [AssigneeTypesEnum.GROUP]: 'taskGroups',
+      [AssigneeTypesEnum.STUDENT]: 'taskStudents',
+      [AssigneeTypesEnum.CLASSGROUP]: 'taskClassGroups'
     };
+  }
+  private getAssigneesByType(assignees: AssigneeInterface[]) {
+    const keyMap = this.getAssigneeTypeToKeyMap();
+    return assignees.reduce(
+      (acc, assignee) => ({
+        ...acc,
+        [keyMap[assignee.type]]: [...acc[keyMap[assignee.type]], assignee]
+      }),
+      { taskGroups: [], taskStudents: [], taskClassGroups: [] }
+    );
   }
 
   public removeTasks(tasks: TaskWithAssigneesInterface[]): void {}
