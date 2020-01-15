@@ -93,7 +93,7 @@ export class KabasTasksViewModel {
       .pipe(select(UserQueries.getCurrentUser), take(1))
       .subscribe(user =>
         this.store.dispatch(
-          new TaskActions.StartArchiveTasks({
+          new TaskActions.UpdateTasks({
             tasks: updates,
             userId: user.id
           })
@@ -107,8 +107,8 @@ export class KabasTasksViewModel {
       .subscribe(user => {
         this.store.dispatch(
           new TaskActions.UpdateTask({
-            task: { id: task.id, changes: task }
-            //userId: user.id
+            task: { id: task.id, changes: task },
+            userId: user.id
           })
         );
         this.store.dispatch(
@@ -116,7 +116,7 @@ export class KabasTasksViewModel {
             userId: user.id,
             taskId: task.id,
             taskGroups: assignees.filter(
-              assignee => assignee.type === AssigneeTypesEnum.CLASSGROUP
+              assignee => assignee.type === AssigneeTypesEnum.GROUP
             ),
             taskStudents: assignees.filter(
               assignee => assignee.type === AssigneeTypesEnum.STUDENT
