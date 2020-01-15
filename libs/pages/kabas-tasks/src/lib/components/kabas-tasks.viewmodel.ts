@@ -5,11 +5,16 @@ import {
   FavoriteInterface,
   FavoriteTypesEnum,
   TaskActions,
+  TaskInterface,
   UserQueries
 } from '@campus/dal';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
+import {
+  AssigneeInterface,
+  AssigneeTypesEnum
+} from '../interfaces/Assignee.interface';
 import {
   TaskStatusEnum,
   TaskWithAssigneesInterface
@@ -84,7 +89,44 @@ export class KabasTasksViewModel {
       .filter(task => !shouldArchive || this.canArchive(task))
       .map(task => ({ id: task.id, changes: { archived: shouldArchive } }));
 
-    this.store.dispatch(new TaskActions.UpdateTasks({ tasks: updates }));
+    this.store
+      .pipe(select(UserQueries.getCurrentUser), take(1))
+      .subscribe(user =>
+        this.store.dispatch(
+          new TaskActions.StartArchiveTasks({
+            tasks: updates,
+            userId: user.id
+          })
+        )
+      );
+  }
+
+  public updateTask(task: TaskInterface, assignees: AssigneeInterface[]) {
+    this.store
+      .pipe(select(UserQueries.getCurrentUser), take(1))
+      .subscribe(user => {
+        this.store.dispatch(
+          new TaskActions.UpdateTask({
+            task: { id: task.id, changes: task }
+            //userId: user.id
+          })
+        );
+        this.store.dispatch(
+          new TaskActions.UpdateAccess({
+            userId: user.id,
+            taskId: task.id,
+            taskGroups: assignees.filter(
+              assignee => assignee.type === AssigneeTypesEnum.CLASSGROUP
+            ),
+            taskStudents: assignees.filter(
+              assignee => assignee.type === AssigneeTypesEnum.STUDENT
+            ),
+            taskClassGroups: assignees.filter(
+              assignee => assignee.type === AssigneeTypesEnum.CLASSGROUP
+            )
+          })
+        );
+      });
   }
 
   public removeTasks(tasks: TaskWithAssigneesInterface[]): void {}
