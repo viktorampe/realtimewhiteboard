@@ -1,26 +1,39 @@
 <campus-info-panel
-  titleText="Nieuwe taak"
-  titleIcon="tasks"
+  titleText="Assignee toevoegen"
+  titleIcon="account"
   [displayAsRows]="false"
   class="pages-kabas-tasks-new-task__info-panel"
 >
-  <form>
-    <mat-form-field>
-      <mat-label>Titel</mat-label>
-      <input autocomplete="off" matInput />
-    </mat-form-field>
-    <mat-form-field>
-      <mat-select placeholder="Vakgebied">
-        <mat-option *ngFor="let option of [].constructor(6)" [value]="option">
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-  </form>
+  <campus-search-term
+    placeholder="Filter op assignee"
+    [autoComplete]="false"
+    (valueChange)="updateLabelFilter($event)"
+    [emitOnTextChange]="true"
+  ></campus-search-term>
+  <campus-button
+    (click)="(true)"
+    class="manage-kabas-tasks-overview__reset-filters"
+    iconClass="reset-filters"
+  ></campus-button>
+  <div *ngFor="let assignees of filteredAssignees$ | async | keyvalue">
+    <span
+      *ngIf="
+        assignees.value && assignees.value.length && assignees.key !== 'results'
+      "
+      >{{ assignees.key }}</span
+    >
+    <mat-selection-list>
+      <mat-list-option *ngFor="let assignee of assignees.value">
+        {{ assignee.label }}</mat-list-option
+      >
+    </mat-selection-list>
+  </div>
+
   <mat-dialog-actions class="pages-kabas-tasks-new-task__dialog__actions">
     <campus-button
       primary
       class="pages-kabas-tasks-new-task__dialog__actions__button"
-      >Aanmaken</campus-button
+      >Toevoegen</campus-button
     >
   </mat-dialog-actions>
 </campus-info-panel>

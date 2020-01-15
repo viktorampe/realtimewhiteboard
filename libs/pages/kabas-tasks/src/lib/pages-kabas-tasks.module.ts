@@ -34,6 +34,7 @@ import { PagesKabasTasksRoutingModule } from './pages-kabas-tasks-routing.module
     ManageKabasTasksDetailComponent,
     AddAssigneeComponent
   ],
+  entryComponents: [AddAssigneeComponent],
   providers: [],
   exports: []
 })
