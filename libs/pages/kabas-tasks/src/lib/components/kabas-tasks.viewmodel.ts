@@ -4,11 +4,12 @@ import {
   FavoriteActions,
   FavoriteInterface,
   FavoriteTypesEnum,
-  TaskActions
+  TaskActions,
+  UserQueries
 } from '@campus/dal';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
 import {
   TaskStatusEnum,
   TaskWithAssigneesInterface
@@ -83,7 +84,16 @@ export class KabasTasksViewModel {
       .filter(task => !shouldArchive || this.canArchive(task))
       .map(task => ({ id: task.id, changes: { archived: shouldArchive } }));
 
-    this.store.dispatch(new TaskActions.UpdateTasks({ tasks: updates }));
+    this.store
+      .pipe(select(UserQueries.getCurrentUser), take(1))
+      .subscribe(user =>
+        this.store.dispatch(
+          new TaskActions.StartArchiveTasks({
+            tasks: updates,
+            userId: user.id
+          })
+        )
+      );
   }
 
   public removeTasks(tasks: TaskWithAssigneesInterface[]): void {}
