@@ -1,3 +1,4 @@
+export * from './lib/adapters';
 export { FilterService } from './lib/collections/filter.service';
 export {
   FilterServiceInterface,

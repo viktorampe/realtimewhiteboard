@@ -344,6 +344,10 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
     this.clearFilters();
   }
 
+  clickToggleFavorite(task: TaskWithAssigneesInterface) {
+    this.viewModel.toggleFavorite(task);
+  }
+
   public onSelectedTabIndexChanged(tab: number) {
     this.cleanUpTab();
     this.router.navigate([], {
