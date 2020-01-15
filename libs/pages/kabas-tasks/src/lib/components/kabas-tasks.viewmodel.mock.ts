@@ -212,7 +212,7 @@ export class MockKabasTasksViewModel
   ): void {}
   public removeTasks(tasks: TaskWithAssigneesInterface[]): void {}
   public toggleFavorite(task: TaskWithAssigneesInterface): void {}
-  public canArchive(task: TaskWithAssigneesInterface): boolean {
+  public canBeArchivedOrDeleted(task: TaskWithAssigneesInterface): boolean {
     return true;
   }
   public createTask(
