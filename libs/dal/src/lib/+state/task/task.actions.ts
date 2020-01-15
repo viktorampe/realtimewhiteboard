@@ -77,7 +77,9 @@ export class UpsertTasks implements Action {
 export class UpdateTask implements Action {
   readonly type = TasksActionTypes.UpdateTask;
 
-  constructor(public payload: { task: Update<TaskInterface> }) {}
+  constructor(
+    public payload: { userId: number; task: Update<TaskInterface> }
+  ) {}
 }
 
 export class UpdateTasks implements Action {
@@ -85,6 +87,7 @@ export class UpdateTasks implements Action {
 
   constructor(
     public payload: {
+      userId: number;
       tasks: Update<TaskInterface>[];
     }
   ) {}

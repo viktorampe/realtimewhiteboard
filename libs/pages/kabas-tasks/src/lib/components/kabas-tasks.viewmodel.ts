@@ -1,15 +1,21 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import {
+  AuthServiceInterface,
+  AUTH_SERVICE_TOKEN,
   DalState,
   FavoriteActions,
   FavoriteInterface,
   FavoriteTypesEnum,
   TaskActions,
-  UserQueries
+  TaskInterface
 } from '@campus/dal';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { map, take } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
+import {
+  AssigneeInterface,
+  AssigneeTypesEnum
+} from '../interfaces/Assignee.interface';
 import {
   TaskStatusEnum,
   TaskWithAssigneesInterface
@@ -23,7 +29,10 @@ export class KabasTasksViewModel {
   public tasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
   public paperTasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
 
-  constructor(private store: Store<DalState>) {
+  constructor(
+    private store: Store<DalState>,
+    @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface
+  ) {
     this.tasksWithAssignments$ = this.store.pipe(
       select(getTasksWithAssignments, { isPaper: false }),
       map(tasks => tasks.map(task => ({ ...task, ...this.getTaskDates(task) })))
@@ -76,27 +85,66 @@ export class KabasTasksViewModel {
     return status;
   }
 
+  // TODO replace with correct implementation
+  // from PR https://diekeure-webdev@dev.azure.com/diekeure-webdev/LK2020/_git/campus/pullrequest/110?view=discussion
+  // Refactored the necessary parts here to fix tests
+  // NO REVIEW REQUIRED HERE
   public setTaskAsArchived(
     tasks: TaskWithAssigneesInterface[],
     shouldArchive: boolean
   ): void {
     const updates = tasks
-      .filter(task => !shouldArchive || this.canArchive(task))
+      .filter(task => !shouldArchive || this.canBeArchivedOrDeleted(task))
       .map(task => ({ id: task.id, changes: { archived: shouldArchive } }));
 
-    this.store
-      .pipe(select(UserQueries.getCurrentUser), take(1))
-      .subscribe(user =>
-        this.store.dispatch(
-          new TaskActions.StartArchiveTasks({
-            tasks: updates,
-            userId: user.id
-          })
-        )
-      );
+    this.store.dispatch(
+      new TaskActions.UpdateTasks({
+        tasks: updates,
+        userId: this.authService.userId
+      })
+    );
   }
 
-  public removeTasks(tasks: TaskWithAssigneesInterface[]): void {}
+  public updateTask(task: TaskInterface, assignees: AssigneeInterface[]) {
+    this.store.dispatch(
+      new TaskActions.UpdateTask({
+        task: { id: task.id, changes: task },
+        userId: this.authService.userId
+      })
+    );
+    this.store.dispatch(
+      new TaskActions.UpdateAccess({
+        userId: this.authService.userId,
+        taskId: task.id,
+        ...this.getAssigneesByType(assignees)
+      })
+    );
+  }
+
+  private getAssigneeTypeToKeyMap() {
+    return {
+      [AssigneeTypesEnum.GROUP]: 'taskGroups',
+      [AssigneeTypesEnum.STUDENT]: 'taskStudents',
+      [AssigneeTypesEnum.CLASSGROUP]: 'taskClassGroups'
+    };
+  }
+  private getAssigneesByType(assignees: AssigneeInterface[]) {
+    const keyMap = this.getAssigneeTypeToKeyMap();
+    return assignees.reduce(
+      (acc, assignee) => ({
+        ...acc,
+        [keyMap[assignee.type]]: [...acc[keyMap[assignee.type]], assignee]
+      }),
+      { taskGroups: [], taskStudents: [], taskClassGroups: [] }
+    );
+  }
+
+  public removeTasks(tasks: TaskWithAssigneesInterface[]): void {
+    const tasksToRemove = tasks
+      .filter(task => this.canBeArchivedOrDeleted(task))
+      .map(task => task.id);
+    this.store.dispatch(new TaskActions.DeleteTasks({ ids: tasksToRemove }));
+  }
 
   public toggleFavorite(task: TaskWithAssigneesInterface): void {
     const favorite: FavoriteInterface = {
@@ -108,8 +156,12 @@ export class KabasTasksViewModel {
     this.store.dispatch(new FavoriteActions.ToggleFavorite({ favorite }));
   }
 
-  public canArchive(task: TaskWithAssigneesInterface): boolean {
-    return task.isPaperTask || task.status === TaskStatusEnum.FINISHED;
+  public canBeArchivedOrDeleted(task: TaskWithAssigneesInterface): boolean {
+    return (
+      task.isPaperTask ||
+      task.status === TaskStatusEnum.FINISHED ||
+      (!task.endDate && !task.startDate)
+    );
   }
 
   public createTask(
@@ -117,16 +169,12 @@ export class KabasTasksViewModel {
     learningAreaId: number,
     type: 'paper' | 'digital'
   ): void {
-    this.store
-      .pipe(select(UserQueries.getCurrentUser), take(1))
-      .subscribe(user =>
-        this.store.dispatch(
-          new TaskActions.StartAddTask({
-            task: { name, learningAreaId, isPaperTask: type === 'paper' },
-            navigateAfterCreate: true,
-            userId: user.id
-          })
-        )
-      );
+    this.store.dispatch(
+      new TaskActions.StartAddTask({
+        task: { name, learningAreaId, isPaperTask: type === 'paper' },
+        navigateAfterCreate: true,
+        userId: this.authService.userId
+      })
+    );
   }
 }
