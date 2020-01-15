@@ -4,6 +4,7 @@ import {
   FavoriteActions,
   FavoriteInterface,
   FavoriteTypesEnum,
+  PersonInterface,
   TaskActions,
   TaskInterface,
   UserQueries
@@ -89,44 +90,46 @@ export class KabasTasksViewModel {
       .filter(task => !shouldArchive || this.canArchive(task))
       .map(task => ({ id: task.id, changes: { archived: shouldArchive } }));
 
-    this.store
-      .pipe(select(UserQueries.getCurrentUser), take(1))
-      .subscribe(user =>
-        this.store.dispatch(
-          new TaskActions.UpdateTasks({
-            tasks: updates,
-            userId: user.id
-          })
-        )
-      );
+    this.currentUser$().subscribe(user =>
+      this.store.dispatch(
+        new TaskActions.UpdateTasks({
+          tasks: updates,
+          userId: user.id
+        })
+      )
+    );
   }
 
   public updateTask(task: TaskInterface, assignees: AssigneeInterface[]) {
-    this.store
-      .pipe(select(UserQueries.getCurrentUser), take(1))
-      .subscribe(user => {
-        this.store.dispatch(
-          new TaskActions.UpdateTask({
-            task: { id: task.id, changes: task },
-            userId: user.id
-          })
-        );
-        this.store.dispatch(
-          new TaskActions.UpdateAccess({
-            userId: user.id,
-            taskId: task.id,
-            taskGroups: assignees.filter(
-              assignee => assignee.type === AssigneeTypesEnum.GROUP
-            ),
-            taskStudents: assignees.filter(
-              assignee => assignee.type === AssigneeTypesEnum.STUDENT
-            ),
-            taskClassGroups: assignees.filter(
-              assignee => assignee.type === AssigneeTypesEnum.CLASSGROUP
-            )
-          })
-        );
-      });
+    this.currentUser$().subscribe(user => {
+      this.store.dispatch(
+        new TaskActions.UpdateTask({
+          task: { id: task.id, changes: task },
+          userId: user.id
+        })
+      );
+      this.store.dispatch(
+        new TaskActions.UpdateAccess({
+          userId: user.id,
+          taskId: task.id,
+          ...this.getAssigneesByType(assignees)
+        })
+      );
+    });
+  }
+
+  private getAssigneesByType(assignees: AssigneeInterface[]) {
+    return {
+      taskGroups: assignees.filter(
+        assignee => assignee.type === AssigneeTypesEnum.GROUP
+      ),
+      taskStudents: assignees.filter(
+        assignee => assignee.type === AssigneeTypesEnum.STUDENT
+      ),
+      taskClassGroups: assignees.filter(
+        assignee => assignee.type === AssigneeTypesEnum.CLASSGROUP
+      )
+    };
   }
 
   public removeTasks(tasks: TaskWithAssigneesInterface[]): void {}
@@ -150,16 +153,18 @@ export class KabasTasksViewModel {
     learningAreaId: number,
     type: 'paper' | 'digital'
   ): void {
-    this.store
-      .pipe(select(UserQueries.getCurrentUser), take(1))
-      .subscribe(user =>
-        this.store.dispatch(
-          new TaskActions.StartAddTask({
-            task: { name, learningAreaId, isPaperTask: type === 'paper' },
-            navigateAfterCreate: true,
-            userId: user.id
-          })
-        )
-      );
+    this.currentUser$().subscribe(user =>
+      this.store.dispatch(
+        new TaskActions.StartAddTask({
+          task: { name, learningAreaId, isPaperTask: type === 'paper' },
+          navigateAfterCreate: true,
+          userId: user.id
+        })
+      )
+    );
+  }
+
+  private currentUser$(): Observable<PersonInterface> {
+    return this.store.pipe(select(UserQueries.getCurrentUser), take(1));
   }
 }
