@@ -7,14 +7,12 @@ import {
   FavoriteTypesEnum,
   PersonFixture,
   TaskActions,
-  TaskFixture
+  UserQueries
 } from '@campus/dal';
 import { MockDate } from '@campus/testing';
 import { Store } from '@ngrx/store';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { configureTestSuite } from 'ng-bullet';
-import { AssigneeFixture } from '../interfaces/Assignee.fixture';
-import { AssigneeTypesEnum } from '../interfaces/Assignee.interface';
 import {
   TaskStatusEnum,
   TaskWithAssigneesInterface
@@ -38,18 +36,15 @@ describe('KabasTaskViewModel', () => {
       providers: [
         KabasTasksViewModel,
         provideMockStore(),
-        {
-          provide: AUTH_SERVICE_TOKEN,
-          useValue: { userId: 1 }
-        }
+        { provide: AUTH_SERVICE_TOKEN, useValue: { userId: 1 } }
       ]
     });
   });
 
   beforeEach(() => {
     kabasTasksViewModel = TestBed.get(KabasTasksViewModel);
-    store = TestBed.get(Store);
     authService = TestBed.get(AUTH_SERVICE_TOKEN);
+    store = TestBed.get(Store);
   });
 
   describe('creation', () => {
@@ -209,7 +204,7 @@ describe('KabasTaskViewModel', () => {
     );
   });
 
-  describe('canArchive', () => {
+  describe('canBeArchivedOrDeleted', () => {
     let taskAssignee;
     beforeEach(() => {
       taskAssignee = {
@@ -217,9 +212,9 @@ describe('KabasTaskViewModel', () => {
         eduContentAmount: 1,
         assignees: [],
         status: TaskStatusEnum.FINISHED,
-        startDate: new Date(Date.now() - 2000),
-        endDate: new Date(Date.now() - 1000),
-        isPaperTask: false
+        isPaperTask: false,
+        endDate: new Date(),
+        startDate: new Date()
       } as TaskWithAssigneesInterface;
     });
 
@@ -234,6 +229,17 @@ describe('KabasTaskViewModel', () => {
       const result = kabasTasksViewModel.canBeArchivedOrDeleted(taskAssignee);
 
       expect(result).toBeFalsy();
+    });
+    it('should return true if no end or start date set, while active', () => {
+      const withoutDate = {
+        ...taskAssignee,
+        endDate: undefined,
+        startDate: undefined
+      };
+
+      const result = kabasTasksViewModel.canBeArchivedOrDeleted(withoutDate);
+
+      expect(result).toBeTruthy();
     });
     it('should return true if paper task', () => {
       taskAssignee = {
@@ -253,12 +259,9 @@ describe('KabasTaskViewModel', () => {
 
   describe('setTaskAsArchived', () => {
     let taskAssignees;
-    let dispatchSpy: jest.SpyInstance;
-
     const currentUser = new PersonFixture();
     beforeEach(() => {
-      dispatchSpy = store.dispatch = jest.fn();
-
+      store.overrideSelector(UserQueries.getCurrentUser, currentUser);
       taskAssignees = [
         {
           id: 1,
@@ -266,7 +269,9 @@ describe('KabasTaskViewModel', () => {
           eduContentAmount: 1,
           assignees: [],
           status: TaskStatusEnum.FINISHED,
-          isPaperTask: false
+          isPaperTask: false,
+          startDate: new Date(Date.now() - 1000),
+          endDate: new Date(Date.now() + 1000)
         },
         {
           id: 2,
@@ -274,7 +279,9 @@ describe('KabasTaskViewModel', () => {
           eduContentAmount: 1,
           assignees: [],
           status: TaskStatusEnum.PENDING,
-          isPaperTask: false
+          isPaperTask: false,
+          startDate: new Date(Date.now() - 1000),
+          endDate: new Date(Date.now() + 1000)
         },
         {
           id: 3,
@@ -282,20 +289,24 @@ describe('KabasTaskViewModel', () => {
           eduContentAmount: 1,
           assignees: [],
           status: TaskStatusEnum.ACTIVE,
-          isPaperTask: false
+          isPaperTask: false,
+          startDate: new Date(Date.now() - 1000),
+          endDate: new Date(Date.now() + 1000)
         },
         {
           id: 3,
           name: 'Paper Task',
           eduContentAmount: 1,
           assignees: [],
-          isPaperTask: true
+          isPaperTask: true,
+          startDate: new Date(Date.now() - 1000),
+          endDate: new Date(Date.now() + 1000)
         }
       ] as TaskWithAssigneesInterface[];
     });
-
     it('should call dispatch with all tasks when tasks will be unarchived', () => {
-      const expected = new TaskActions.UpdateTasks({
+      const spy = jest.spyOn(store, 'dispatch');
+      const expected = new TaskActions.StartArchiveTasks({
         userId: currentUser.id,
         tasks: taskAssignees.map(task => ({
           id: task.id,
@@ -305,18 +316,16 @@ describe('KabasTaskViewModel', () => {
 
       kabasTasksViewModel.setTaskAsArchived(taskAssignees, false);
 
-      expect(dispatchSpy).toHaveBeenCalledWith(expected);
+      expect(spy).toHaveBeenCalledWith(expected);
     });
 
     it('should call dispatch with all tasks that can be archived', () => {
-      const expected = new TaskActions.UpdateTasks({
+      const spy = jest.spyOn(store, 'dispatch');
+      const expected = new TaskActions.StartArchiveTasks({
         userId: currentUser.id,
         tasks: taskAssignees
           .filter(
-            task =>
-              task.isPaperTask ||
-              task.status === TaskStatusEnum.FINISHED ||
-              (!task.endDate && !task.startDate)
+            task => task.isPaperTask || task.status === TaskStatusEnum.FINISHED
           )
           .map(task => ({
             id: task.id,
@@ -326,50 +335,7 @@ describe('KabasTaskViewModel', () => {
 
       kabasTasksViewModel.setTaskAsArchived(taskAssignees, true);
 
-      expect(dispatchSpy).toHaveBeenCalledWith(expected);
-    });
-  });
-
-  describe('updateTask', () => {
-    let dispatchSpy: jest.SpyInstance;
-
-    const currentUser = new PersonFixture();
-    beforeEach(() => {
-      dispatchSpy = store.dispatch = jest.fn();
-    });
-
-    it('should dispatch updateTask and updateAccess', () => {
-      const task = new TaskFixture();
-      const assignees = [
-        new AssigneeFixture({ type: AssigneeTypesEnum.GROUP }),
-        new AssigneeFixture({
-          type: AssigneeTypesEnum.STUDENT
-        }),
-        new AssigneeFixture({
-          type: AssigneeTypesEnum.CLASSGROUP
-        })
-      ];
-      const [taskGroup, taskStudent, taskClassGroup] = assignees;
-
-      kabasTasksViewModel.updateTask(task, assignees);
-
-      expect(dispatchSpy.mock.calls).toEqual([
-        [
-          new TaskActions.UpdateTask({
-            userId: currentUser.id,
-            task: { id: task.id, changes: task }
-          })
-        ],
-        [
-          new TaskActions.UpdateAccess({
-            userId: currentUser.id,
-            taskId: task.id,
-            taskGroups: [taskGroup],
-            taskClassGroups: [taskClassGroup],
-            taskStudents: [taskStudent]
-          })
-        ]
-      ]);
+      expect(spy).toHaveBeenCalledWith(expected);
     });
   });
 
@@ -379,6 +345,7 @@ describe('KabasTaskViewModel', () => {
     const currentUser = new PersonFixture();
     beforeEach(() => {
       dispatchSpy = store.dispatch = jest.fn();
+      store.overrideSelector(UserQueries.getCurrentUser, currentUser);
     });
 
     it('should dispatch an action', () => {
@@ -429,118 +396,6 @@ describe('KabasTaskViewModel', () => {
       });
 
       kabasTasksViewModel.toggleFavorite(taskAssignee);
-
-      expect(spy).toHaveBeenCalledWith(expected);
-    });
-  });
-
-  describe('canDelete', () => {
-    let taskAssignees;
-    beforeEach(() => {
-      taskAssignees = [
-        {
-          name: 'Task',
-          eduContentAmount: 1,
-          assignees: [],
-          status: TaskStatusEnum.FINISHED,
-          isPaperTask: false,
-          startDate: new Date(Date.now() - 2000),
-          endDate: new Date(Date.now() - 1000)
-        },
-        {
-          name: 'Task2',
-          eduContentAmount: 1,
-          assignees: [],
-          status: TaskStatusEnum.FINISHED,
-          isPaperTask: false
-        },
-
-        {
-          name: 'Task3',
-          eduContentAmount: 1,
-          assignees: [],
-          status: TaskStatusEnum.ACTIVE,
-          isPaperTask: false,
-          startDate: new Date(Date.now() - 2000)
-        },
-        {
-          name: 'Task4',
-          eduContentAmount: 1,
-          assignees: [],
-          status: TaskStatusEnum.PENDING,
-          isPaperTask: false,
-          startDate: new Date(Date.now() - 2000)
-        }
-      ] as TaskWithAssigneesInterface[];
-    });
-
-    it('should return false if pending', () => {
-      const result = kabasTasksViewModel.canBeArchivedOrDeleted(
-        taskAssignees[3]
-      );
-      expect(result).toBeFalsy();
-    });
-    it('should return false if active', () => {
-      const result = kabasTasksViewModel.canBeArchivedOrDeleted(
-        taskAssignees[2]
-      );
-
-      expect(result).toBeFalsy();
-    });
-
-    it('should return true if finished', () => {
-      const result = kabasTasksViewModel.canBeArchivedOrDeleted(
-        taskAssignees[0]
-      );
-      expect(result).toBeTruthy();
-    });
-
-    it('should return true if no date is set', () => {
-      const result = kabasTasksViewModel.canBeArchivedOrDeleted(
-        taskAssignees[1]
-      );
-      expect(result).toBeTruthy();
-    });
-  });
-
-  describe('deleteTasks', () => {
-    let taskAssignees;
-    beforeEach(() => {
-      taskAssignees = [
-        {
-          id: 1,
-          name: 'Finished Task',
-          eduContentAmount: 1,
-          assignees: [],
-          status: TaskStatusEnum.FINISHED,
-          isPaperTask: false,
-          startDate: new Date(Date.now() - 2000),
-          endDate: new Date(Date.now() - 1000)
-        },
-        {
-          id: 2,
-          name: 'Pending Task',
-          eduContentAmount: 1,
-          assignees: [],
-          status: TaskStatusEnum.PENDING,
-          isPaperTask: false,
-          startDate: new Date(Date.now() - 2000)
-        },
-        {
-          id: 3,
-          name: 'Active Task',
-          eduContentAmount: 1,
-          assignees: [],
-          isPaperTask: false
-        }
-      ] as TaskWithAssigneesInterface[];
-    });
-
-    it('should call dispatch with all tasks that can be deleted', () => {
-      const spy = jest.spyOn(store, 'dispatch');
-      const expected = new TaskActions.DeleteTasks({ ids: [1, 3] });
-
-      kabasTasksViewModel.removeTasks(taskAssignees);
 
       expect(spy).toHaveBeenCalledWith(expected);
     });
