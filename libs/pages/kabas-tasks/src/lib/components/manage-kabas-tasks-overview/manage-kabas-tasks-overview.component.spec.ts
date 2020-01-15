@@ -764,6 +764,24 @@ describe('ManageKabasTasksOverviewComponent', () => {
           )
         ).toBeObservable(hot('a', { a: [1, 5, 4, 2, 3] }));
       });
+
+      it('should order by favorite, then by name', () => {
+        const mockTasks = [
+          { id: 1, name: 'b', isFavorite: true },
+          { id: 2, name: 'a', isFavorite: true },
+          { id: 3, name: 'c', isFavorite: false },
+          { id: 4, name: 'd', isFavorite: false }
+        ] as TaskWithAssigneesInterface[];
+
+        component.setSortMode(TaskSortEnum.FAVORITE);
+        digitalTasks$.next(mockTasks);
+
+        expect(
+          component.tasksWithAssignments$.pipe(
+            map(tasks => tasks.map(task => task.id))
+          )
+        ).toBeObservable(hot('a', { a: [2, 1, 3, 4] }));
+      });
     });
 
     describe('page events', () => {
