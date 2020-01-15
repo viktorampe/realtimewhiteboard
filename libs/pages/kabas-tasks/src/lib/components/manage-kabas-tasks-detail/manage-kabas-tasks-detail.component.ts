@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material';
 import { SearchFilterCriteriaInterface } from '@campus/search';
+import { take } from 'rxjs/operators';
 import { TaskWithAssigneesInterface } from '../../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
+import { ManageKabasTasksAssigneeModalComponent } from '../manage-kabas-tasks-assignee-modal/manage-kabas-tasks-assignee-modal.component';
 
 export enum TaskSortEnum {
   'NAME' = 'NAME',
@@ -20,9 +23,14 @@ export class ManageKabasTasksDetailComponent implements OnInit {
 
   isPaperTask = true; // replace w/ stream
 
-  constructor(private viewModel: KabasTasksViewModel) {}
+  constructor(
+    private viewModel: KabasTasksViewModel,
+    private dialog: MatDialog
+  ) {}
 
   ngOnInit() {
+    this.openAssigneeModal();
+
     this.diaboloPhaseFilter = {
       name: 'diaboloPhase',
       label: 'Diabolo-fase',
@@ -65,5 +73,35 @@ export class ManageKabasTasksDetailComponent implements OnInit {
   }
   public toggleFavorite(task: TaskWithAssigneesInterface) {
     this.viewModel.toggleFavorite(task);
+  }
+
+  private openAssigneeModal() {
+    let currentTaskAssignees;
+
+    this.viewModel.tasksWithAssignments$
+      .pipe(take(1))
+      .subscribe(tasksWithAssignments => {
+        currentTaskAssignees = tasksWithAssignments[0].assignees;
+      });
+
+    const data = {
+      title: 'Taak naam',
+      // all available taskAssignees
+      // these need to include related data (classGroup, group, person)
+      taskClassGroups: [],
+      taskGroups: [],
+      taskStudents: [],
+      // current values in page
+      currentTaskAssignees
+    };
+
+    this.dialog
+      .open(ManageKabasTasksAssigneeModalComponent, {
+        data,
+        // autoFocus: false
+        panelClass: 'manage-task-assignees'
+      })
+      .afterClosed()
+      .subscribe(res => console.log(res));
   }
 }

@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import {
-  MatDialog,
   MatIconRegistry,
   MatSelect,
   MatSelectModule,
@@ -24,7 +23,7 @@ import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
 import { hot } from '@nrwl/angular/testing';
 import { configureTestSuite } from 'ng-bullet';
-import { BehaviorSubject, of } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AssigneeTypesEnum } from '../../interfaces/Assignee.interface';
 import {
@@ -79,14 +78,6 @@ describe('ManageKabasTasksOverviewComponent', () => {
         {
           provide: HAMMER_LOADER,
           useValue: () => new Promise(() => {})
-        },
-        {
-          provide: MatDialog,
-          useValue: {
-            open: () => ({
-              afterClosed: () => of('test')
-            })
-          }
         }
       ],
       declarations: [ManageKabasTasksOverviewComponent, TaskListItemComponent]

@@ -1,0 +1,80 @@
+.manage-task-assignees {
+  &__title {
+    &__name {
+    }
+
+    &__date-picker {
+      padding: 4px;
+    }
+  }
+
+  &__content {
+    &__add-assignees {
+      border: 1px solid black;
+      padding: 4px;
+
+      &__container {
+        margin-bottom: 4px;
+      }
+    }
+
+    &__list {
+      min-height: 300px;
+      &__item {
+        height: auto;
+        width: 100%;
+        &:nth-child(odd) {
+          background-color: whitesmoke;
+        }
+
+        &:not(:hover) {
+          .manage-task-assignees__content__list__item {
+            &__action {
+              &--show-on-hover {
+                display: none;
+              }
+            }
+          }
+        }
+
+        &__content {
+          display: flex;
+          flex-direction: column;
+          width: 100%;
+
+          &__basic {
+            width: 100%;
+            display: flex;
+            padding: 4px;
+            align-items: center;
+            min-height: 32px;
+
+            & .manage-task-assignees__content__list__item__content__caption {
+              flex-grow: 1;
+            }
+          }
+
+          &__advanced {
+            width: 100%;
+            display: flex;
+            padding: 4px;
+            padding-left: 16px;
+            align-items: center;
+          }
+        }
+
+        &__action {
+          color: darkgray;
+        }
+      }
+
+      &--no-content {
+        min-height: 300px;
+      }
+    }
+  }
+
+  &__actions {
+    justify-content: flex-end;
+  }
+}

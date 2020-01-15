@@ -1,5 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatSelectModule, MatSlideToggleModule } from '@angular/material';
+import {
+  MatDialog,
+  MatSelectModule,
+  MatSlideToggleModule
+} from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { SearchModule } from '@campus/search';
 import {
@@ -9,6 +13,7 @@ import {
 } from '@campus/shared';
 import { UiModule } from '@campus/ui';
 import { configureTestSuite } from 'ng-bullet';
+import { of } from 'rxjs';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
 import { MockKabasTasksViewModel } from '../kabas-tasks.viewmodel.mock';
 import { ManageKabasTasksDetailComponent } from './manage-kabas-tasks-detail.component';
@@ -34,7 +39,15 @@ describe('ManageKabasTasksDetailComponent', () => {
           provide: ENVIRONMENT_ICON_MAPPING_TOKEN,
           useValue: {}
         },
-        { provide: ENVIRONMENT_TESTING_TOKEN, useValue: {} }
+        { provide: ENVIRONMENT_TESTING_TOKEN, useValue: {} },
+        {
+          provide: MatDialog,
+          useValue: {
+            open: () => ({
+              afterClosed: () => of('test')
+            })
+          }
+        }
       ]
     });
   });
