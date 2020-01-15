@@ -79,12 +79,14 @@
   </campus-method-book-tile>
 </div>
 
-<div style="width: 400px; margin-top: 16px">
-  <campus-date-filter
-    [options]="fixedOptions"
-    resetLabel="Het volledige schooljaar"
-    #selectFilter
-  ></campus-date-filter>
+<div style="width: 600px; margin-top: 16px">
+  <campus-date-range-picker
+    (valueChanged)="dateChanged($event)"
+    [vertical]="true"
+    [requireStart]="false"
+    [requireEnd]="false"
+  >
+  </campus-date-range-picker>
 </div>
 
 <div><campus-button (click)="createTask()">create task</campus-button></div>
