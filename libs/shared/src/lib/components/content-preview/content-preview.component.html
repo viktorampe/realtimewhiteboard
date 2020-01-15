@@ -1,0 +1,17 @@
+<campus-info-panel
+  titleText="Voorbeeld"
+  [displayAsRows]="false"
+  class="content-preview__info-panel"
+>
+  <mat-dialog-content>
+    <img [src]="data.url" />
+  </mat-dialog-content>
+</campus-info-panel>
+<mat-dialog-actions class="content-preview__dialog__actions">
+  <campus-button
+    primary
+    class="content-preview__dialog__actions__button"
+    (click)="close()"
+    >Sluiten</campus-button
+  >
+</mat-dialog-actions>
