@@ -1,5 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import {
+  AuthServiceInterface,
+  AUTH_SERVICE_TOKEN,
   DalState,
   FavoriteActions,
   FavoriteTypesEnum,
@@ -26,16 +28,22 @@ describe('KabasTaskViewModel', () => {
 
   let kabasTasksViewModel: KabasTasksViewModel;
   let store: MockStore<DalState>;
+  let authService: AuthServiceInterface;
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [],
-      providers: [KabasTasksViewModel, provideMockStore()]
+      providers: [
+        KabasTasksViewModel,
+        provideMockStore(),
+        { provide: AUTH_SERVICE_TOKEN, useValue: { userId: 1 } }
+      ]
     });
   });
 
   beforeEach(() => {
     kabasTasksViewModel = TestBed.get(KabasTasksViewModel);
+    authService = TestBed.get(AUTH_SERVICE_TOKEN);
     store = TestBed.get(Store);
   });
 
@@ -196,7 +204,7 @@ describe('KabasTaskViewModel', () => {
     );
   });
 
-  describe('canArchive', () => {
+  describe('canBeArchivedOrDeleted', () => {
     let taskAssignee;
     beforeEach(() => {
       taskAssignee = {
@@ -204,21 +212,34 @@ describe('KabasTaskViewModel', () => {
         eduContentAmount: 1,
         assignees: [],
         status: TaskStatusEnum.FINISHED,
-        isPaperTask: false
+        isPaperTask: false,
+        endDate: new Date(),
+        startDate: new Date()
       } as TaskWithAssigneesInterface;
     });
 
     it('should return false if pending', () => {
       taskAssignee.status = TaskStatusEnum.PENDING;
-      const result = kabasTasksViewModel.canArchive(taskAssignee);
+      const result = kabasTasksViewModel.canBeArchivedOrDeleted(taskAssignee);
 
       expect(result).toBeFalsy();
     });
     it('should return false if active', () => {
       taskAssignee.status = TaskStatusEnum.ACTIVE;
-      const result = kabasTasksViewModel.canArchive(taskAssignee);
+      const result = kabasTasksViewModel.canBeArchivedOrDeleted(taskAssignee);
 
       expect(result).toBeFalsy();
+    });
+    it('should return true if no end or start date set, while active', () => {
+      const withoutDate = {
+        ...taskAssignee,
+        endDate: undefined,
+        startDate: undefined
+      };
+
+      const result = kabasTasksViewModel.canBeArchivedOrDeleted(withoutDate);
+
+      expect(result).toBeTruthy();
     });
     it('should return true if paper task', () => {
       taskAssignee = {
@@ -226,12 +247,12 @@ describe('KabasTaskViewModel', () => {
         status: TaskStatusEnum.PENDING,
         isPaperTask: true
       } as TaskWithAssigneesInterface;
-      const result = kabasTasksViewModel.canArchive(taskAssignee);
+      const result = kabasTasksViewModel.canBeArchivedOrDeleted(taskAssignee);
 
       expect(result).toBeTruthy();
     });
     it('should return true if finished', () => {
-      const result = kabasTasksViewModel.canArchive(taskAssignee);
+      const result = kabasTasksViewModel.canBeArchivedOrDeleted(taskAssignee);
       expect(result).toBeTruthy();
     });
   });
@@ -248,7 +269,9 @@ describe('KabasTaskViewModel', () => {
           eduContentAmount: 1,
           assignees: [],
           status: TaskStatusEnum.FINISHED,
-          isPaperTask: false
+          isPaperTask: false,
+          startDate: new Date(Date.now() - 1000),
+          endDate: new Date(Date.now() + 1000)
         },
         {
           id: 2,
@@ -256,7 +279,9 @@ describe('KabasTaskViewModel', () => {
           eduContentAmount: 1,
           assignees: [],
           status: TaskStatusEnum.PENDING,
-          isPaperTask: false
+          isPaperTask: false,
+          startDate: new Date(Date.now() - 1000),
+          endDate: new Date(Date.now() + 1000)
         },
         {
           id: 3,
@@ -264,14 +289,18 @@ describe('KabasTaskViewModel', () => {
           eduContentAmount: 1,
           assignees: [],
           status: TaskStatusEnum.ACTIVE,
-          isPaperTask: false
+          isPaperTask: false,
+          startDate: new Date(Date.now() - 1000),
+          endDate: new Date(Date.now() + 1000)
         },
         {
           id: 3,
           name: 'Paper Task',
           eduContentAmount: 1,
           assignees: [],
-          isPaperTask: true
+          isPaperTask: true,
+          startDate: new Date(Date.now() - 1000),
+          endDate: new Date(Date.now() + 1000)
         }
       ] as TaskWithAssigneesInterface[];
     });

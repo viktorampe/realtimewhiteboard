@@ -98,7 +98,7 @@ export class KabasTasksViewModel {
       .map(task => ({ id: task.id, changes: { archived: shouldArchive } }));
 
     this.store.dispatch(
-      new TaskActions.UpdateTasks({
+      new TaskActions.StartArchiveTasks({
         tasks: updates,
         userId: this.authService.userId
       })
