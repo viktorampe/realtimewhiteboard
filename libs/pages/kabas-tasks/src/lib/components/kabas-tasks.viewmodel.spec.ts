@@ -1,16 +1,20 @@
 import { TestBed } from '@angular/core/testing';
 import {
+  AuthServiceInterface,
+  AUTH_SERVICE_TOKEN,
   DalState,
   FavoriteActions,
   FavoriteTypesEnum,
   PersonFixture,
   TaskActions,
-  UserQueries
+  TaskFixture
 } from '@campus/dal';
 import { MockDate } from '@campus/testing';
 import { Store } from '@ngrx/store';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { configureTestSuite } from 'ng-bullet';
+import { AssigneeFixture } from '../interfaces/Assignee.fixture';
+import { AssigneeTypesEnum } from '../interfaces/Assignee.interface';
 import {
   TaskStatusEnum,
   TaskWithAssigneesInterface
@@ -26,17 +30,26 @@ describe('KabasTaskViewModel', () => {
 
   let kabasTasksViewModel: KabasTasksViewModel;
   let store: MockStore<DalState>;
+  let authService: AuthServiceInterface;
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [],
-      providers: [KabasTasksViewModel, provideMockStore()]
+      providers: [
+        KabasTasksViewModel,
+        provideMockStore(),
+        {
+          provide: AUTH_SERVICE_TOKEN,
+          useValue: { userId: 1 }
+        }
+      ]
     });
   });
 
   beforeEach(() => {
     kabasTasksViewModel = TestBed.get(KabasTasksViewModel);
     store = TestBed.get(Store);
+    authService = TestBed.get(AUTH_SERVICE_TOKEN);
   });
 
   describe('creation', () => {
@@ -240,7 +253,12 @@ describe('KabasTaskViewModel', () => {
 
   describe('setTaskAsArchived', () => {
     let taskAssignees;
+    let dispatchSpy: jest.SpyInstance;
+
+    const currentUser = new PersonFixture();
     beforeEach(() => {
+      dispatchSpy = store.dispatch = jest.fn();
+
       taskAssignees = [
         {
           id: 1,
@@ -277,8 +295,8 @@ describe('KabasTaskViewModel', () => {
     });
 
     it('should call dispatch with all tasks when tasks will be unarchived', () => {
-      const spy = jest.spyOn(store, 'dispatch');
       const expected = new TaskActions.UpdateTasks({
+        userId: currentUser.id,
         tasks: taskAssignees.map(task => ({
           id: task.id,
           changes: { archived: false }
@@ -287,12 +305,12 @@ describe('KabasTaskViewModel', () => {
 
       kabasTasksViewModel.setTaskAsArchived(taskAssignees, false);
 
-      expect(spy).toHaveBeenCalledWith(expected);
+      expect(dispatchSpy).toHaveBeenCalledWith(expected);
     });
 
     it('should call dispatch with all tasks that can be archived', () => {
-      const spy = jest.spyOn(store, 'dispatch');
       const expected = new TaskActions.UpdateTasks({
+        userId: currentUser.id,
         tasks: taskAssignees
           .filter(
             task =>
@@ -308,7 +326,50 @@ describe('KabasTaskViewModel', () => {
 
       kabasTasksViewModel.setTaskAsArchived(taskAssignees, true);
 
-      expect(spy).toHaveBeenCalledWith(expected);
+      expect(dispatchSpy).toHaveBeenCalledWith(expected);
+    });
+  });
+
+  describe('updateTask', () => {
+    let dispatchSpy: jest.SpyInstance;
+
+    const currentUser = new PersonFixture();
+    beforeEach(() => {
+      dispatchSpy = store.dispatch = jest.fn();
+    });
+
+    it('should dispatch updateTask and updateAccess', () => {
+      const task = new TaskFixture();
+      const assignees = [
+        new AssigneeFixture({ type: AssigneeTypesEnum.GROUP }),
+        new AssigneeFixture({
+          type: AssigneeTypesEnum.STUDENT
+        }),
+        new AssigneeFixture({
+          type: AssigneeTypesEnum.CLASSGROUP
+        })
+      ];
+      const [taskGroup, taskStudent, taskClassGroup] = assignees;
+
+      kabasTasksViewModel.updateTask(task, assignees);
+
+      expect(dispatchSpy.mock.calls).toEqual([
+        [
+          new TaskActions.UpdateTask({
+            userId: currentUser.id,
+            task: { id: task.id, changes: task }
+          })
+        ],
+        [
+          new TaskActions.UpdateAccess({
+            userId: currentUser.id,
+            taskId: task.id,
+            taskGroups: [taskGroup],
+            taskClassGroups: [taskClassGroup],
+            taskStudents: [taskStudent]
+          })
+        ]
+      ]);
     });
   });
 
@@ -318,7 +379,6 @@ describe('KabasTaskViewModel', () => {
     const currentUser = new PersonFixture();
     beforeEach(() => {
       dispatchSpy = store.dispatch = jest.fn();
-      store.overrideSelector(UserQueries.getCurrentUser, currentUser);
     });
 
     it('should dispatch an action', () => {
