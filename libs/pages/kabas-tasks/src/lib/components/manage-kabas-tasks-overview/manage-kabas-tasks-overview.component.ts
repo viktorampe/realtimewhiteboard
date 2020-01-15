@@ -48,7 +48,8 @@ export interface FilterStateInterface {
 export enum TaskSortEnum {
   'NAME' = 'NAME',
   'LEARNINGAREA' = 'LEARNINGAREA',
-  'STARTDATE' = 'STARTDATE'
+  'STARTDATE' = 'STARTDATE',
+  'FAVORITE' = 'FAVORITE'
 }
 
 export type Source = 'digital' | 'paper';
@@ -709,6 +710,8 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
         return this.sortByLearningArea([...tasks]);
       case TaskSortEnum.STARTDATE:
         return this.sortByStartDate([...tasks]);
+      case TaskSortEnum.FAVORITE:
+        return this.sortByFavorite([...tasks]);
     }
     // no sortMode -> no sorting
     return tasks;
@@ -750,6 +753,21 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
       if (!taskB) return 1;
 
       return taskA.getTime() - taskB.getTime();
+    });
+  }
+
+  private sortByFavorite(
+    tasks: TaskWithAssigneesInterface[]
+  ): TaskWithAssigneesInterface[] {
+    return tasks.sort((a, b) => {
+      const taskA = a.isFavorite;
+      const taskB = b.isFavorite;
+
+      if (taskA && !taskB) return -1;
+
+      if (!taskA && taskB) return 1;
+
+      if (taskA === taskB) return 0;
     });
   }
 }
