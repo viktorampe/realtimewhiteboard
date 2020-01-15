@@ -206,7 +206,7 @@ export class MockKabasTasksViewModel
       }
     ];
   }
-  public setArchivedTasks(
+  public setTaskAsArchived(
     tasks: TaskWithAssigneesInterface[],
     isArchived: boolean
   ): void {}
@@ -215,4 +215,9 @@ export class MockKabasTasksViewModel
   public canBeArchivedOrDeleted(task: TaskWithAssigneesInterface): boolean {
     return true;
   }
+  public createTask(
+    name: string,
+    learningAreaId: number,
+    type: 'paper' | 'digital'
+  ) {}
 }

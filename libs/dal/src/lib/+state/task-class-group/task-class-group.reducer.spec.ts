@@ -10,6 +10,7 @@ import {
   taskClassGroupsLoadError,
   updateTaskClassGroup,
   updateTaskClassGroups,
+  updateTaskClassGroupsAccess,
   upsertTaskClassGroup,
   upsertTaskClassGroups
 } from './task-class-group.actions';
@@ -250,6 +251,38 @@ describe('TaskClassGroups Reducer', () => {
       const action = clearTaskClassGroups();
       const result = reducer(startState, action);
       expect(result).toEqual(createState([], true, 'something went wrong'));
+    });
+  });
+
+  describe('updateTaskClassGroupsAccess action', () => {
+    it('should clear the taskClassGroups collection and add the updated records', () => {
+      const startTaskClassGroups = [
+        createTaskClassGroup(1, 1),
+        createTaskClassGroup(2, 1),
+        createTaskClassGroup(3, 1),
+        createTaskClassGroup(4, 1),
+        createTaskClassGroup(5, 2),
+        createTaskClassGroup(6, 2),
+        createTaskClassGroup(7, 2)
+      ];
+      const expectedTaskClassGroups = [
+        createTaskClassGroup(5, 2),
+        createTaskClassGroup(6, 2),
+        createTaskClassGroup(7, 2),
+        createTaskClassGroup(2, 1),
+        createTaskClassGroup(8, 1)
+      ];
+
+      const startState = createState(startTaskClassGroups);
+      const action = updateTaskClassGroupsAccess({
+        taskId: 1,
+        taskClassGroups: [
+          createTaskClassGroup(2, 1),
+          createTaskClassGroup(8, 1)
+        ]
+      });
+      const result = reducer(startState, action);
+      expect(result).toEqual(createState(expectedTaskClassGroups));
     });
   });
 });

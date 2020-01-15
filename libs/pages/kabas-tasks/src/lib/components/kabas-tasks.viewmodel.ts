@@ -1,8 +1,15 @@
 import { Injectable } from '@angular/core';
-import { DalState, TaskActions } from '@campus/dal';
+import {
+  DalState,
+  FavoriteActions,
+  FavoriteInterface,
+  FavoriteTypesEnum,
+  TaskActions,
+  UserQueries
+} from '@campus/dal';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
 import {
   TaskStatusEnum,
   TaskWithAssigneesInterface
@@ -69,13 +76,13 @@ export class KabasTasksViewModel {
     return status;
   }
 
-  public setArchivedTasks(
+  public setTaskAsArchived(
     tasks: TaskWithAssigneesInterface[],
-    isArchived: boolean
+    shouldArchive: boolean
   ): void {
     const updates = tasks
-      .filter(task => !isArchived || this.canBeArchivedOrDeleted(task))
-      .map(task => ({ id: task.id, changes: { archived: isArchived } }));
+      .filter(task => !shouldArchive || this.canBeArchivedOrDeleted(task))
+      .map(task => ({ id: task.id, changes: { archived: shouldArchive } }));
 
     this.store.dispatch(new TaskActions.UpdateTasks({ tasks: updates }));
   }
@@ -87,7 +94,15 @@ export class KabasTasksViewModel {
     this.store.dispatch(new TaskActions.DeleteTasks({ ids: tasksToRemove }));
   }
 
-  public toggleFavorite(task: TaskWithAssigneesInterface): void {}
+  public toggleFavorite(task: TaskWithAssigneesInterface): void {
+    const favorite: FavoriteInterface = {
+      created: new Date(),
+      name: task.name,
+      taskId: task.id,
+      type: FavoriteTypesEnum.TASK
+    };
+    this.store.dispatch(new FavoriteActions.ToggleFavorite({ favorite }));
+  }
 
   public canBeArchivedOrDeleted(task: TaskWithAssigneesInterface): boolean {
     return (
@@ -95,5 +110,23 @@ export class KabasTasksViewModel {
       task.status === TaskStatusEnum.FINISHED ||
       (!task.endDate && !task.startDate)
     );
+  }
+
+  public createTask(
+    name: string,
+    learningAreaId: number,
+    type: 'paper' | 'digital'
+  ): void {
+    this.store
+      .pipe(select(UserQueries.getCurrentUser), take(1))
+      .subscribe(user =>
+        this.store.dispatch(
+          new TaskActions.StartAddTask({
+            task: { name, learningAreaId, isPaperTask: type === 'paper' },
+            navigateAfterCreate: true,
+            userId: user.id
+          })
+        )
+      );
   }
 }

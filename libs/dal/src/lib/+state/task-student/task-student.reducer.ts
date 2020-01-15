@@ -56,7 +56,18 @@ const taskStudentReducer = createReducer(
       ...{ error: action.error },
       loaded: false
     };
-  })
+  }),
+  on(
+    TaskStudentActions.updateTaskStudentsAccess,
+    (state, { taskId, taskStudents }) => {
+      const cleanedState = adapter.removeMany(
+        (taskStudent: TaskStudentInterface) => taskStudent.taskId === taskId,
+        state
+      );
+      const updatedState = adapter.addMany(taskStudents, cleanedState);
+      return updatedState;
+    }
+  )
 );
 
 export function reducer(state: State | undefined, action: Action) {

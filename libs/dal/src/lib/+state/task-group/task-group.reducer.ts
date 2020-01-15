@@ -56,7 +56,18 @@ const TaskGroupReducer = createReducer(
       ...{ error: action.error },
       loaded: false
     };
-  })
+  }),
+  on(
+    TaskGroupActions.updateTaskGroupsAccess,
+    (state, { taskId, taskGroups }) => {
+      const cleanedState = adapter.removeMany(
+        (taskGroup: TaskGroupInterface) => taskGroup.taskId === taskId,
+        state
+      );
+      const updatedState = adapter.addMany(taskGroups, cleanedState);
+      return updatedState;
+    }
+  )
 );
 
 export function reducer(state: State | undefined, action: Action) {
