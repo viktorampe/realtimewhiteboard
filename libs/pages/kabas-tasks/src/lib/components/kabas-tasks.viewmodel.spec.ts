@@ -3,6 +3,7 @@ import {
   DalState,
   FavoriteActions,
   FavoriteTypesEnum,
+  getRouterState,
   PersonFixture,
   TaskActions,
   UserQueries
@@ -10,6 +11,7 @@ import {
 import { MockDate } from '@campus/testing';
 import { Store } from '@ngrx/store';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
+import { hot } from '@nrwl/angular/testing';
 import { configureTestSuite } from 'ng-bullet';
 import {
   TaskStatusEnum,
@@ -19,11 +21,6 @@ import { KabasTasksViewModel } from './kabas-tasks.viewmodel';
 
 describe('KabasTaskViewModel', () => {
   const dateMock = new MockDate();
-
-  afterAll(() => {
-    dateMock.returnRealDate();
-  });
-
   let kabasTasksViewModel: KabasTasksViewModel;
   let store: MockStore<DalState>;
 
@@ -37,6 +34,10 @@ describe('KabasTaskViewModel', () => {
   beforeEach(() => {
     kabasTasksViewModel = TestBed.get(KabasTasksViewModel);
     store = TestBed.get(Store);
+  });
+
+  afterAll(() => {
+    dateMock.returnRealDate();
   });
 
   describe('creation', () => {
@@ -366,6 +367,42 @@ describe('KabasTaskViewModel', () => {
       kabasTasksViewModel.toggleFavorite(taskAssignee);
 
       expect(spy).toHaveBeenCalledWith(expected);
+    });
+  });
+
+  describe('currentTaskParams', () => {
+    it('should contain the id of the current task when in a task', () => {
+      store.overrideSelector(getRouterState, {
+        navigationId: 1,
+        state: {
+          url: '',
+          params: {
+            id: '1'
+          }
+        }
+      });
+
+      expect(kabasTasksViewModel.currentTaskParams$).toBeObservable(
+        hot('a', {
+          a: { id: 1 }
+        })
+      );
+    });
+
+    it('should contain undefined for the id if not set', () => {
+      store.overrideSelector(getRouterState, {
+        navigationId: 1,
+        state: {
+          url: '',
+          params: {}
+        }
+      });
+
+      expect(kabasTasksViewModel.currentTaskParams$).toBeObservable(
+        hot('a', {
+          a: { id: undefined }
+        })
+      );
     });
   });
 });
