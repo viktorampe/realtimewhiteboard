@@ -238,7 +238,9 @@ describe('KabasTaskViewModel', () => {
 
   describe('setTaskAsArchived', () => {
     let taskAssignees;
+    const currentUser = new PersonFixture();
     beforeEach(() => {
+      store.overrideSelector(UserQueries.getCurrentUser, currentUser);
       taskAssignees = [
         {
           id: 1,
@@ -273,10 +275,10 @@ describe('KabasTaskViewModel', () => {
         }
       ] as TaskWithAssigneesInterface[];
     });
-
     it('should call dispatch with all tasks when tasks will be unarchived', () => {
       const spy = jest.spyOn(store, 'dispatch');
-      const expected = new TaskActions.UpdateTasks({
+      const expected = new TaskActions.StartArchiveTasks({
+        userId: currentUser.id,
         tasks: taskAssignees.map(task => ({
           id: task.id,
           changes: { archived: false }
@@ -290,7 +292,8 @@ describe('KabasTaskViewModel', () => {
 
     it('should call dispatch with all tasks that can be archived', () => {
       const spy = jest.spyOn(store, 'dispatch');
-      const expected = new TaskActions.UpdateTasks({
+      const expected = new TaskActions.StartArchiveTasks({
+        userId: currentUser.id,
         tasks: taskAssignees
           .filter(
             task => task.isPaperTask || task.status === TaskStatusEnum.FINISHED
