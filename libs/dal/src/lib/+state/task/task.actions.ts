@@ -1,6 +1,11 @@
 import { Update } from '@ngrx/entity';
 import { Action } from '@ngrx/store';
-import { TaskInterface } from '../../+models';
+import {
+  TaskClassGroupInterface,
+  TaskGroupInterface,
+  TaskInterface,
+  TaskStudentInterface
+} from '../../+models';
 import {
   CustomFeedbackHandlersInterface,
   FeedbackTriggeringAction
@@ -20,6 +25,7 @@ export enum TasksActionTypes {
   DeleteTask = '[Tasks] Delete Task',
   DeleteTasks = '[Tasks] Delete Tasks',
   ClearTasks = '[Tasks] Clear Tasks',
+  UpdateAccess = '[Tasks] Update Access',
   StartDeleteTasks = '[Tasks] Start Delete Tasks',
   StartAddTask = '[Tasks] Start Add Task',
   NavigateToTaskDetail = '[Tasks] Navigate To Task Detail'
@@ -111,6 +117,19 @@ export class ClearTasks implements Action {
   readonly type = TasksActionTypes.ClearTasks;
 }
 
+export class UpdateAccess implements FeedbackTriggeringAction {
+  readonly type = TasksActionTypes.UpdateAccess;
+  constructor(
+    public payload: {
+      userId: number;
+      taskId: number;
+      taskGroups: TaskGroupInterface[];
+      taskStudents: TaskStudentInterface[];
+      taskClassGroups: TaskClassGroupInterface[];
+      customFeedbackHandlers?: CustomFeedbackHandlersInterface;
+    }
+  ) {}
+}
 export class StartDeleteTasks implements FeedbackTriggeringAction {
   readonly type = TasksActionTypes.StartDeleteTasks;
 
@@ -158,6 +177,7 @@ export type TasksActions =
   | DeleteTask
   | DeleteTasks
   | ClearTasks
+  | UpdateAccess
   | StartDeleteTasks
   | StartAddTask
   | NavigateToTaskDetail;

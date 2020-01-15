@@ -5,8 +5,10 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
+  DateAdapter,
   MatButtonModule,
   MatCheckboxModule,
+  MatDatepickerModule,
   MatDialogModule,
   MatFormFieldModule,
   MatIconModule,
@@ -14,13 +16,14 @@ import {
   MatListModule,
   MatMenuModule,
   MatProgressSpinnerModule,
+  MatRadioModule,
   MatSelectModule,
   MatSidenavModule,
   MatTooltipModule
 } from '@angular/material';
 import { MatTabsModule } from '@angular/material/tabs';
 import { RouterModule } from '@angular/router';
-import { UtilsModule } from '@campus/utils';
+import { BeDateAdapter, UtilsModule } from '@campus/utils';
 import { AppBarComponent } from './app-bar/app-bar.component';
 import { BannerComponent } from './banner/banner.component';
 import { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.component';
@@ -38,6 +41,7 @@ import { ConfirmableSelectComponent } from './confirmable-select/confirmable-sel
 import { ContentEditableComponent } from './content-editable/content-editable.component';
 import { ContentPreviewComponent } from './content-preview/content-preview.component';
 import { ContentThumbnailComponent } from './content-thumbnail/content-thumbnail.component';
+import { DateRangePickerComponent } from './date-range-picker/date-range-picker.component';
 import { DropAreaComponent } from './drop-area/drop-area.component';
 import { DropdownMenuItemComponent } from './dropdown-menu-item/dropdown-menu-item.component';
 import { DropdownMenuComponent } from './dropdown-menu/dropdown-menu.component';
@@ -100,6 +104,8 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     MatTooltipModule,
     MatIconModule,
     MatMenuModule,
+    MatRadioModule,
+    MatDatepickerModule,
     UtilsModule,
     MatDialogModule,
     MatListModule,
@@ -164,7 +170,8 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     ManageCollectionComponent,
     MultiCheckBoxTableComponent,
     ShellBottomDirective,
-    FileIconComponent
+    FileIconComponent,
+    DateRangePickerComponent
   ],
   exports: [
     FilterTextInputComponent,
@@ -226,13 +233,15 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     MatIconModule,
     MultiCheckBoxTableComponent,
     MatCheckboxModule,
-    FileIconComponent
+    FileIconComponent,
+    DateRangePickerComponent
   ],
   providers: [
     {
       provide: COLLECTION_MANAGER_SERVICE_TOKEN,
       useClass: CollectionManagerService
     },
+    { provide: DateAdapter, useClass: BeDateAdapter },
     ManageCollectionComponent
   ]
 })

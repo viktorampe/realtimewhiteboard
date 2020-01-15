@@ -14,8 +14,15 @@ import {
   TaskUpdateInfoInterface,
   TASK_SERVICE_TOKEN
 } from '../../tasks/task.service.interface';
-import { EffectFeedback, FeedbackTriggeringAction } from '../effect-feedback';
+import {
+  EffectFeedback,
+  EffectFeedbackActions,
+  FeedbackTriggeringAction
+} from '../effect-feedback';
 import { AddEffectFeedback } from '../effect-feedback/effect-feedback.actions';
+import { TaskClassGroupActions } from '../task-class-group';
+import { TaskGroupActions } from '../task-group';
+import { TaskStudentActions } from '../task-student';
 import {
   AddTask,
   DeleteTasks,
@@ -27,11 +34,70 @@ import {
   TasksActionTypes,
   TasksLoaded,
   TasksLoadError,
+  UpdateAccess,
   UpdateTasks
 } from './task.actions';
 
 @Injectable()
 export class TaskEffects {
+  @Effect()
+  loadTasks$ = this.dataPersistence.fetch(TasksActionTypes.LoadTasks, {
+    run: (action: LoadTasks, state: DalState) => {
+      if (!action.payload.force && state.tasks.loaded) return;
+      return this.taskService
+        .getAllForUser(action.payload.userId)
+        .pipe(map(tasks => new TasksLoaded({ tasks })));
+    },
+    onError: (action: LoadTasks, error) => {
+      return new TasksLoadError(error);
+    }
+  });
+
+  updateAccess$ = createEffect(() =>
+    this.dataPersistence.pessimisticUpdate(TasksActionTypes.UpdateAccess, {
+      run: (action: UpdateAccess, state: DalState) => {
+        return this.taskService
+          .updateAccess(
+            action.payload.userId,
+            action.payload.taskId,
+            action.payload.taskGroups,
+            action.payload.taskStudents,
+            action.payload.taskClassGroups
+          )
+          .pipe(
+            switchMap(response =>
+              from([
+                TaskGroupActions.updateTaskGroupsAccess({
+                  taskId: action.payload.taskId,
+                  taskGroups: response.taskGroups
+                }),
+                TaskClassGroupActions.updateTaskClassGroupsAccess({
+                  taskId: action.payload.taskId,
+                  taskClassGroups: response.taskClassGroups
+                }),
+                TaskStudentActions.updateTaskStudentsAccess({
+                  taskId: action.payload.taskId,
+                  taskStudents: response.taskStudents
+                })
+              ])
+            )
+          );
+      },
+      onError: (action: UpdateAccess, error: any) => {
+        const effectFeedback = EffectFeedback.generateErrorFeedback(
+          this.uuid(),
+          action,
+          'Het is niet gelukt om de taak toe te wijzen.'
+        );
+
+        const effectFeedbackAction = new EffectFeedbackActions.AddEffectFeedback(
+          { effectFeedback }
+        );
+        return effectFeedbackAction;
+      }
+    })
+  );
+
   startAddTask$ = createEffect(() =>
     this.dataPersistence.pessimisticUpdate(TasksActionTypes.StartAddTask, {
       run: (action: StartAddTask, state: DalState) => {
@@ -58,19 +124,6 @@ export class TaskEffects {
       }
     })
   );
-
-  @Effect()
-  loadTasks$ = this.dataPersistence.fetch(TasksActionTypes.LoadTasks, {
-    run: (action: LoadTasks, state: DalState) => {
-      if (!action.payload.force && state.tasks.loaded) return;
-      return this.taskService
-        .getAllForUser(action.payload.userId)
-        .pipe(map(tasks => new TasksLoaded({ tasks })));
-    },
-    onError: (action: LoadTasks, error) => {
-      return new TasksLoadError(error);
-    }
-  });
 
   deleteTasks$ = createEffect(() =>
     this.dataPersistence.pessimisticUpdate(TasksActionTypes.StartDeleteTasks, {

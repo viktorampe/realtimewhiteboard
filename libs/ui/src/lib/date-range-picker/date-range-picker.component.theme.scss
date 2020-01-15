@@ -1,0 +1,119 @@
+@mixin ui-date-range-picker {
+  $ui-date-range-picker--vertical_margin-bottom: 16px !default;
+  $ui-date-range-picker_mat-form-field-margin-right: 16px !default;
+  $ui-date-range-picker_mat-form-field_outline-opacity: 0 !default;
+  $ui-date-range-picker_mat-form-field_outline-border-right-width: 0px !default;
+  $ui-date-range-picker_mat-form-field_outline-border-color: inherit !default;
+
+  $ui-date-range-picker_date-range_day--in-range-background-color: transparent !default;
+
+  .ui-date-range-picker {
+    &--vertical {
+      .ui-date-range-picker__section {
+        margin-bottom: $ui-date-range-picker--vertical_margin-bottom;
+      }
+    }
+
+    // Remove time arrows from the time component
+    input[type='time']::-webkit-inner-spin-button,
+    input[type='time']::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    &__mat-form-field--date {
+      width: 100px;
+      display: none;
+    }
+
+    &__mat-form-field--time {
+      width: 80px;
+      display: none;
+    }
+
+    &__day {
+      &--in-range {
+        background-color: $ui-date-range-picker_date-range_day--in-range-background-color;
+
+        &-single,
+        &-first,
+        &-last {
+          background-color: $ui-date-range-picker_date-range_day--in-range-background-color;
+        }
+
+        &-single {
+          border-radius: 50%;
+        }
+
+        &-first {
+          border-radius: 50% 0% 0% 50%;
+        }
+
+        &-last {
+          border-radius: 0% 50% 50% 0%;
+        }
+      }
+    }
+
+    .mat-form-field-appearance-outline .mat-form-field-outline-thick {
+      opacity: $ui-date-range-picker_mat-form-field_outline-opacity;
+    }
+
+    mat-form-field {
+      margin-right: $ui-date-range-picker_mat-form-field-margin-right;
+
+      .mat-form-field-appearance-outline,
+      .mat-form-field-infix {
+        padding: 0px;
+      }
+
+      &.mat-form-field-should-float {
+        .mat-form-field-appearance-outline,
+        .mat-form-field-label {
+          top: 1.84375em !important; //is mat-default
+        }
+      }
+
+      .mat-form-field-label {
+        height: 15px; // font size + border width -> scales 0.75
+        top: $ui-form-field-height/2;
+      }
+
+      input {
+        height: $ui-form-field-height;
+        margin-top: -8px; // +/- 60% of font size
+        font-weight: normal;
+      }
+
+      &:not(.mat-focused) {
+        .mat-form-field-outline-thick,
+        .mat-form-field-outline {
+          color: $ui-date-range-picker_mat-form-field_outline-border-color;
+        }
+      }
+
+      &.mat-form-field-appearance-outline {
+        .mat-form-field-outline-thick,
+        .mat-form-field-outline {
+          > div {
+            opacity: 1;
+            border-width: 1px;
+            border-radius: 0px;
+
+            border-right-width: $ui-date-range-picker_mat-form-field_outline-border-right-width;
+          }
+        }
+
+        .mat-form-field-wrapper {
+          margin: 0px;
+          padding-bottom: 0px;
+        }
+      }
+    }
+
+    .mat-form-field-suffix {
+      align-self: stretch;
+      height: $ui-form-field-height;
+    }
+  }
+}
