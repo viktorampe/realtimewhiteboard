@@ -120,9 +120,9 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
   >;
 
   @ViewChild('digital', { read: MatSelectionList, static: true })
-  private digitalSelectionlist: MatSelectionList;
+  public digitalSelectionlist: MatSelectionList;
   @ViewChild('paper', { read: MatSelectionList, static: true })
-  private paperSelectionlist: MatSelectionList;
+  public paperSelectionlist: MatSelectionList;
 
   @ViewChildren(SearchTermComponent) private searchTermFilters: QueryList<
     SearchTermComponent

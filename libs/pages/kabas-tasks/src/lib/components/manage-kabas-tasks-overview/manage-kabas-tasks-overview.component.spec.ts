@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import {
   MatIconRegistry,
   MatSelect,
+  MatSelectionList,
   MatSelectModule,
   MatSlideToggleModule
 } from '@angular/material';
@@ -843,4 +844,52 @@ describe('ManageKabasTasksOverviewComponent', () => {
       ]);
     });
   });
+
+  describe('clickDeleteTasks()', () => {
+    const selectedDigitalTasks = [{ id: 1, name: 'foo' }];
+    const selectedPaperTasks = [{ id: 2, name: 'bar' }];
+
+    const digitalSelectionList = getSelectionListWithSelectedValues(
+      selectedDigitalTasks
+    );
+    const paperSelectionList = getSelectionListWithSelectedValues(
+      selectedPaperTasks
+    );
+
+    beforeEach(() => {
+      component.digitalSelectionlist = digitalSelectionList;
+      component.paperSelectionlist = paperSelectionList;
+      fixture.detectChanges();
+    });
+
+    it('should call vm.removeTasks with the selected digital tasks', () => {
+      const removeTasksSpy = jest.spyOn(kabasTasksViewModel, 'removeTasks');
+
+      component.clickDeleteTasks(0); // digital tasks tab
+      expect(removeTasksSpy).toHaveBeenCalledTimes(1);
+      expect(removeTasksSpy).toHaveBeenCalledWith(selectedDigitalTasks);
+    });
+
+    it('should call vm.removeTasks with the selected paper tasks', () => {
+      const removeTasksSpy = jest.spyOn(kabasTasksViewModel, 'removeTasks');
+
+      component.clickDeleteTasks(1); // paper tasks tab
+      expect(removeTasksSpy).toHaveBeenCalledTimes(1);
+      expect(removeTasksSpy).toHaveBeenCalledWith(selectedPaperTasks);
+    });
+  });
+
+  function getSelectionListWithSelectedValues(
+    selectedValues
+  ): MatSelectionList {
+    const mockSelectionList: MatSelectionList = {
+      selectedOptions: {
+        selected: selectedValues.map(task => {
+          return { value: task };
+        })
+      }
+    } as MatSelectionList;
+
+    return mockSelectionList;
+  }
 });
