@@ -26,7 +26,7 @@
       class="shared-header__contextual__button smallIcon"
       data-cy="nav-delete-task"
       iconClass="delete"
-      (click)="clickDeleteTasks()"
+      (click)="clickDeleteTasks(tabGroup.selectedIndex)"
       ><span>verwijder</span></campus-button
     >
   </ng-container>
@@ -41,6 +41,7 @@
 
 <div class="manage-kabas-tasks-overview__container">
   <mat-tab-group
+    #tabGroup
     [selectedIndex]="currentTab$ | async"
     (selectedIndexChange)="onSelectedTabIndexChanged($event)"
     (animationDone)="onTabAnimationDone()"
@@ -152,6 +153,7 @@
             #option
             *ngFor="let task of digitalTasks"
             checkboxPosition="before"
+            [value]="task"
             [class.mat-list-option--selected]="option.selected"
           >
             <campus-task-list-item
@@ -263,6 +265,7 @@
           <mat-list-option
             #option
             *ngFor="let task of paperTasks"
+            [value]="task"
             checkboxPosition="before"
             [class.mat-list-option--selected]="option.selected"
           >
