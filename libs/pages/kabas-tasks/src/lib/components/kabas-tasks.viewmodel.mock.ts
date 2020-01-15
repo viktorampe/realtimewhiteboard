@@ -226,7 +226,7 @@ export class MockKabasTasksViewModel
       }
     ];
   }
-  public setArchivedTasks(
+  public setTaskAsArchived(
     tasks: TaskWithAssigneesInterface[],
     isArchived: boolean
   ): void {}

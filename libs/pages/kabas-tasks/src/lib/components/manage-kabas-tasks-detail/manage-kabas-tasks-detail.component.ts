@@ -77,11 +77,11 @@ export class ManageKabasTasksDetailComponent implements OnInit {
     this.isNewTask$.pipe(take(1)).subscribe(this.openNewTaskDialog.bind(this));
   }
 
-  public setArchivedTasks(
+  public setTaskAsArchived(
     tasks: TaskWithAssigneesInterface[],
     isArchived: boolean
   ) {
-    this.viewModel.setArchivedTasks(tasks, isArchived);
+    this.viewModel.setTaskAsArchived(tasks, isArchived);
   }
   public removeTasks(tasks: TaskWithAssigneesInterface[]) {
     this.viewModel.removeTasks(tasks);

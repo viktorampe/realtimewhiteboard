@@ -165,6 +165,8 @@
               [status]="task.status"
               [actions]="getActions(task)"
               [assignees]="task.assignees"
+              [isFavorite]="task.isFavorite"
+              (clickToggleFavorite)="clickToggleFavorite(task)"
             ></campus-task-list-item>
           </mat-list-option>
         </ng-container>
@@ -275,6 +277,8 @@
               [status]="'paper'"
               [actions]="getActions(task)"
               [assignees]="task.assignees"
+              [isFavorite]="task.isFavorite"
+              (clickToggleFavorite)="clickToggleFavorite(task)"
             ></campus-task-list-item>
           </mat-list-option>
         </ng-container>

@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import {
   DalState,
+  FavoriteActions,
+  FavoriteInterface,
+  FavoriteTypesEnum,
   getRouterState,
   LearningAreaInterface,
   RouterStateUrl,
@@ -101,19 +104,28 @@ export class KabasTasksViewModel {
     return status;
   }
 
-  public setArchivedTasks(
+  public setTaskAsArchived(
     tasks: TaskWithAssigneesInterface[],
-    isArchived: boolean
+    shouldArchive: boolean
   ): void {
     const updates = tasks
-      .filter(task => !isArchived || this.canArchive(task))
-      .map(task => ({ id: task.id, changes: { archived: isArchived } }));
+      .filter(task => !shouldArchive || this.canArchive(task))
+      .map(task => ({ id: task.id, changes: { archived: shouldArchive } }));
 
     this.store.dispatch(new TaskActions.UpdateTasks({ tasks: updates }));
   }
 
   public removeTasks(tasks: TaskWithAssigneesInterface[]): void {}
-  public toggleFavorite(task: TaskWithAssigneesInterface): void {}
+
+  public toggleFavorite(task: TaskWithAssigneesInterface): void {
+    const favorite: FavoriteInterface = {
+      created: new Date(),
+      name: task.name,
+      taskId: task.id,
+      type: FavoriteTypesEnum.TASK
+    };
+    this.store.dispatch(new FavoriteActions.ToggleFavorite({ favorite }));
+  }
 
   public canArchive(task: TaskWithAssigneesInterface): boolean {
     return task.isPaperTask || task.status === TaskStatusEnum.FINISHED;
