@@ -1,12 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 import {
+  AuthServiceInterface,
+  AUTH_SERVICE_TOKEN,
   DalState,
   FavoriteActions,
   FavoriteTypesEnum,
   PersonFixture,
   TaskActions,
-  TaskFixture,
-  UserQueries
+  TaskFixture
 } from '@campus/dal';
 import { MockDate } from '@campus/testing';
 import { Store } from '@ngrx/store';
@@ -29,17 +30,26 @@ describe('KabasTaskViewModel', () => {
 
   let kabasTasksViewModel: KabasTasksViewModel;
   let store: MockStore<DalState>;
+  let authService: AuthServiceInterface;
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [],
-      providers: [KabasTasksViewModel, provideMockStore()]
+      providers: [
+        KabasTasksViewModel,
+        provideMockStore(),
+        {
+          provide: AUTH_SERVICE_TOKEN,
+          useValue: { userId: 1 }
+        }
+      ]
     });
   });
 
   beforeEach(() => {
     kabasTasksViewModel = TestBed.get(KabasTasksViewModel);
     store = TestBed.get(Store);
+    authService = TestBed.get(AUTH_SERVICE_TOKEN);
   });
 
   describe('creation', () => {
@@ -246,7 +256,6 @@ describe('KabasTaskViewModel', () => {
     const currentUser = new PersonFixture();
     beforeEach(() => {
       dispatchSpy = store.dispatch = jest.fn();
-      store.overrideSelector(UserQueries.getCurrentUser, currentUser);
 
       taskAssignees = [
         {
@@ -322,7 +331,6 @@ describe('KabasTaskViewModel', () => {
     const currentUser = new PersonFixture();
     beforeEach(() => {
       dispatchSpy = store.dispatch = jest.fn();
-      store.overrideSelector(UserQueries.getCurrentUser, currentUser);
     });
 
     it('should dispatch updateTask and updateAccess', () => {
@@ -366,7 +374,6 @@ describe('KabasTaskViewModel', () => {
     const currentUser = new PersonFixture();
     beforeEach(() => {
       dispatchSpy = store.dispatch = jest.fn();
-      store.overrideSelector(UserQueries.getCurrentUser, currentUser);
     });
 
     it('should dispatch an action', () => {

@@ -1,17 +1,17 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import {
+  AuthServiceInterface,
+  AUTH_SERVICE_TOKEN,
   DalState,
   FavoriteActions,
   FavoriteInterface,
   FavoriteTypesEnum,
-  PersonInterface,
   TaskActions,
-  TaskInterface,
-  UserQueries
+  TaskInterface
 } from '@campus/dal';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { map, take } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import {
   AssigneeInterface,
   AssigneeTypesEnum
@@ -29,7 +29,10 @@ export class KabasTasksViewModel {
   public tasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
   public paperTasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
 
-  constructor(private store: Store<DalState>) {
+  constructor(
+    private store: Store<DalState>,
+    @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface
+  ) {
     this.tasksWithAssignments$ = this.store.pipe(
       select(getTasksWithAssignments, { isPaper: false }),
       map(tasks => tasks.map(task => ({ ...task, ...this.getTaskDates(task) })))
@@ -94,32 +97,28 @@ export class KabasTasksViewModel {
       .filter(task => !shouldArchive || this.canArchive(task))
       .map(task => ({ id: task.id, changes: { archived: shouldArchive } }));
 
-    this.currentUser$().subscribe(user =>
-      this.store.dispatch(
-        new TaskActions.UpdateTasks({
-          tasks: updates,
-          userId: user.id
-        })
-      )
+    this.store.dispatch(
+      new TaskActions.UpdateTasks({
+        tasks: updates,
+        userId: this.authService.userId
+      })
     );
   }
 
   public updateTask(task: TaskInterface, assignees: AssigneeInterface[]) {
-    this.currentUser$().subscribe(user => {
-      this.store.dispatch(
-        new TaskActions.UpdateTask({
-          task: { id: task.id, changes: task },
-          userId: user.id
-        })
-      );
-      this.store.dispatch(
-        new TaskActions.UpdateAccess({
-          userId: user.id,
-          taskId: task.id,
-          ...this.getAssigneesByType(assignees)
-        })
-      );
-    });
+    this.store.dispatch(
+      new TaskActions.UpdateTask({
+        task: { id: task.id, changes: task },
+        userId: this.authService.userId
+      })
+    );
+    this.store.dispatch(
+      new TaskActions.UpdateAccess({
+        userId: this.authService.userId,
+        taskId: task.id,
+        ...this.getAssigneesByType(assignees)
+      })
+    );
   }
 
   private getAssigneesByType(assignees: AssigneeInterface[]) {
@@ -157,18 +156,12 @@ export class KabasTasksViewModel {
     learningAreaId: number,
     type: 'paper' | 'digital'
   ): void {
-    this.currentUser$().subscribe(user =>
-      this.store.dispatch(
-        new TaskActions.StartAddTask({
-          task: { name, learningAreaId, isPaperTask: type === 'paper' },
-          navigateAfterCreate: true,
-          userId: user.id
-        })
-      )
+    this.store.dispatch(
+      new TaskActions.StartAddTask({
+        task: { name, learningAreaId, isPaperTask: type === 'paper' },
+        navigateAfterCreate: true,
+        userId: this.authService.userId
+      })
     );
-  }
-
-  private currentUser$(): Observable<PersonInterface> {
-    return this.store.pipe(select(UserQueries.getCurrentUser), take(1));
   }
 }
