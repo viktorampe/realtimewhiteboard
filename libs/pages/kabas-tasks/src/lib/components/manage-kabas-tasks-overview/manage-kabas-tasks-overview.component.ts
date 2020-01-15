@@ -334,28 +334,27 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
   }
   // TODO: implement handler
   clickDeleteTasks() {
-    this.confirmDialog = this.matDialog.open(ConfirmationPopUpComponent);
-    this.confirmDialog.componentInstance.title = 'Taken verwijderen';
-    this.confirmDialog.componentInstance.message =
+    const dialogRef = this.matDialog.open(ConfirmationPopUpComponent);
+    dialogRef.componentInstance.title = 'Taken verwijderen';
+    dialogRef.componentInstance.message =
       'Ben je zeker dat je deze taken wil verwijderen?';
-    this.confirmDialog.componentInstance.title = 'Taken verwijderen';
-    this.confirmDialog.componentInstance.actions = [
+    dialogRef.componentInstance.title = 'Taken verwijderen';
+    dialogRef.componentInstance.actions = [
       {
         label: 'annuleren',
-        handler: this.confirmDialog.close,
+        handler: dialogRef.close,
         icon: 'cancel'
       },
       {
         label: 'OK',
-        handler: this.deleteTasks.bind(this),
+        handler: this.deleteTasks.bind(this, dialogRef),
         icon: 'delete'
       }
     ];
   }
 
-  private deleteTasks() {
-    this.confirmDialog.close();
-
+  private deleteTasks(dialog: MatDialogRef<ConfirmationPopUpComponent>) {
+    dialog.close();
     console.log('GO AHEAD AND DELETE MY TASKS PLEASE!');
   }
 
@@ -375,6 +374,17 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
 
   clickToggleFavorite(task: TaskWithAssigneesInterface) {
     this.viewModel.toggleFavorite(task);
+  }
+
+  public getSelectedTasks(): TaskWithAssigneesInterface[] {
+    if (this.taskLists) {
+      return this.taskLists.reduce((acc, list) => {
+        return [
+          ...acc,
+          ...list.selectedOptions.selected.map(option => option.value)
+        ];
+      }, []);
+    }
   }
 
   public onSelectedTabIndexChanged(tab: number) {
