@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatSelectModule, MatSlideToggleModule } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { Router } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 import { SearchModule } from '@campus/search';
 import {
   ENVIRONMENT_ICON_MAPPING_TOKEN,
@@ -25,7 +27,8 @@ describe('ManageKabasTasksDetailComponent', () => {
         MatSelectModule,
         SearchModule,
         UiModule,
-        NoopAnimationsModule
+        NoopAnimationsModule,
+        RouterTestingModule
       ],
       declarations: [ManageKabasTasksDetailComponent],
       providers: [
@@ -34,7 +37,8 @@ describe('ManageKabasTasksDetailComponent', () => {
           provide: ENVIRONMENT_ICON_MAPPING_TOKEN,
           useValue: {}
         },
-        { provide: ENVIRONMENT_TESTING_TOKEN, useValue: {} }
+        { provide: ENVIRONMENT_TESTING_TOKEN, useValue: {} },
+        { provide: Router, useValue: { navigate: jest.fn() } }
       ]
     });
   });

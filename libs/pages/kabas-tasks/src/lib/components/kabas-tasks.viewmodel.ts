@@ -7,12 +7,19 @@ import {
   getRouterState,
   LearningAreaInterface,
   RouterStateUrl,
-  TaskActions
+  TaskActions,
+  UserQueries
 } from '@campus/dal';
 import { RouterReducerState } from '@ngrx/router-store';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, shareReplay } from 'rxjs/operators';
+import {
+  distinctUntilChanged,
+  filter,
+  map,
+  shareReplay,
+  take
+} from 'rxjs/operators';
 import {
   TaskStatusEnum,
   TaskWithAssigneesInterface
@@ -129,5 +136,23 @@ export class KabasTasksViewModel {
 
   public canArchive(task: TaskWithAssigneesInterface): boolean {
     return task.isPaperTask || task.status === TaskStatusEnum.FINISHED;
+  }
+
+  public createTask(
+    name: string,
+    learningAreaId: number,
+    type: 'paper' | 'digital'
+  ): void {
+    this.store
+      .pipe(select(UserQueries.getCurrentUser), take(1))
+      .subscribe(user =>
+        this.store.dispatch(
+          new TaskActions.StartAddTask({
+            task: { name, learningAreaId, isPaperTask: type === 'paper' },
+            navigateAfterCreate: true,
+            userId: user.id
+          })
+        )
+      );
   }
 }
