@@ -116,13 +116,18 @@ export class KabasTasksViewModel {
     shouldArchive: boolean
   ): void {
     const updates = tasks
-      .filter(task => !shouldArchive || this.canArchive(task))
+      .filter(task => !shouldArchive || this.canBeArchivedOrDeleted(task))
       .map(task => ({ id: task.id, changes: { archived: shouldArchive } }));
 
     this.store.dispatch(new TaskActions.UpdateTasks({ tasks: updates }));
   }
 
-  public removeTasks(tasks: TaskWithAssigneesInterface[]): void {}
+  public removeTasks(tasks: TaskWithAssigneesInterface[]): void {
+    const tasksToRemove = tasks
+      .filter(task => this.canBeArchivedOrDeleted(task))
+      .map(task => task.id);
+    this.store.dispatch(new TaskActions.DeleteTasks({ ids: tasksToRemove }));
+  }
 
   public toggleFavorite(task: TaskWithAssigneesInterface): void {
     const favorite: FavoriteInterface = {
@@ -134,8 +139,12 @@ export class KabasTasksViewModel {
     this.store.dispatch(new FavoriteActions.ToggleFavorite({ favorite }));
   }
 
-  public canArchive(task: TaskWithAssigneesInterface): boolean {
-    return task.isPaperTask || task.status === TaskStatusEnum.FINISHED;
+  public canBeArchivedOrDeleted(task: TaskWithAssigneesInterface): boolean {
+    return (
+      task.isPaperTask ||
+      task.status === TaskStatusEnum.FINISHED ||
+      (!task.endDate && !task.startDate)
+    );
   }
 
   public createTask(
