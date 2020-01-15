@@ -4,27 +4,28 @@
   [displayAsRows]="false"
   class="pages-kabas-tasks-new-task__info-panel"
 >
-  <form [formGroup]="newTaskForm">
-    <mat-form-field>
-      <mat-label>Titel</mat-label>
-      <input autocomplete="off" formControlName="title" matInput />
-    </mat-form-field>
-    <mat-form-field>
-      <mat-select placeholder="Vakgebied" formControlName="learningArea">
-        <mat-option
-          *ngFor="let learningArea of data.learningAreas"
-          [value]="learningArea"
-        >
-          {{ learningArea.name }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-    <mat-radio-group formControlName="type">
-      <mat-radio-button value="digital">Digitaal</mat-radio-button>
-      <mat-radio-button value="paper">Papier</mat-radio-button>
-    </mat-radio-group>
-  </form>
-
+  <mat-dialog-content>
+    <form [formGroup]="newTaskForm">
+      <mat-form-field>
+        <mat-label>Titel</mat-label>
+        <input autocomplete="off" formControlName="title" matInput />
+      </mat-form-field>
+      <mat-form-field>
+        <mat-select placeholder="Vakgebied" formControlName="learningArea">
+          <mat-option
+            *ngFor="let learningArea of data.learningAreas"
+            [value]="learningArea"
+          >
+            {{ learningArea.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-radio-group formControlName="type">
+        <mat-radio-button value="digital">Digitaal</mat-radio-button>
+        <mat-radio-button value="paper">Papier</mat-radio-button>
+      </mat-radio-group>
+    </form>
+  </mat-dialog-content>
   <mat-dialog-actions class="pages-kabas-tasks-new-task__dialog__actions">
     <campus-button
       primary
