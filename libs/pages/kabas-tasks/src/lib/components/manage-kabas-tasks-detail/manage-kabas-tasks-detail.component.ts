@@ -74,7 +74,11 @@ export class ManageKabasTasksDetailComponent implements OnInit {
       ]
     };
 
-    this.isNewTask$.pipe(take(1)).subscribe(this.openNewTaskDialog.bind(this));
+    this.isNewTask$.pipe(take(1)).subscribe(isNewTask => {
+      if (isNewTask) {
+        this.openNewTaskDialog();
+      }
+    });
   }
 
   public setTaskAsArchived(
@@ -90,7 +94,7 @@ export class ManageKabasTasksDetailComponent implements OnInit {
     this.viewModel.toggleFavorite(task);
   }
 
-  private openNewTaskDialog() {
+  public openNewTaskDialog() {
     this.selectableLearningAreas$.pipe(take(1)).subscribe(learningAreas => {
       this.dialog
         .open(NewTaskComponent, {
@@ -103,7 +107,11 @@ export class ManageKabasTasksDetailComponent implements OnInit {
         .pipe(take(1))
         .subscribe((formData: NewTaskFormValues) => {
           if (formData) {
-            console.log('submitted form with: ', formData);
+            this.viewModel.createTask(
+              formData.title,
+              formData.learningArea.id,
+              formData.type
+            );
           } else {
             this.router.navigate(['tasks', 'manage']);
           }
