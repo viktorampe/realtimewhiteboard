@@ -711,18 +711,14 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
       case TaskSortEnum.STARTDATE:
         return this.sortByStartDate([...tasks]);
       case TaskSortEnum.FAVORITE:
-        return this.sortByFavorite([...tasks]);
+        return tasks.sort(this.nameComparer).sort(this.favoriteComparer);
     }
     // no sortMode -> no sorting
     return tasks;
   }
 
   private sortByName(tasks: TaskWithAssigneesInterface[]) {
-    return tasks.sort((a, b) =>
-      a.name.localeCompare(b.name, 'be-nl', {
-        sensitivity: 'base'
-      })
-    );
+    return tasks.sort(this.nameComparer);
   }
 
   private sortByLearningArea(tasks: TaskWithAssigneesInterface[]) {
@@ -756,10 +752,8 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
     });
   }
 
-  private sortByFavorite(
-    tasks: TaskWithAssigneesInterface[]
-  ): TaskWithAssigneesInterface[] {
-    return tasks.sort((a, b) => {
+  private favoriteComparer(a, b): number {
+    {
       const taskA = a.isFavorite;
       const taskB = b.isFavorite;
 
@@ -768,6 +762,12 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
       if (!taskA && taskB) return 1;
 
       if (taskA === taskB) return 0;
+    }
+  }
+
+  private nameComparer(a, b): number {
+    return a.name.localeCompare(b.name, 'be-nl', {
+      sensitivity: 'base'
     });
   }
 }
