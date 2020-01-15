@@ -1,21 +1,15 @@
 import { TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 import {
-  CustomSerializer,
   DalState,
   FavoriteActions,
   FavoriteTypesEnum,
-  getStoreModuleForFeatures,
+  PersonFixture,
   TaskActions,
-  TaskReducer
+  UserQueries
 } from '@campus/dal';
 import { MockDate } from '@campus/testing';
-import {
-  NavigationActionTiming,
-  routerReducer,
-  StoreRouterConnectingModule
-} from '@ngrx/router-store';
-import { Store, StoreModule } from '@ngrx/store';
+import { Store } from '@ngrx/store';
+import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { configureTestSuite } from 'ng-bullet';
 import {
   TaskStatusEnum,
@@ -31,28 +25,12 @@ describe('KabasTaskViewModel', () => {
   });
 
   let kabasTasksViewModel: KabasTasksViewModel;
-  let store: Store<DalState>;
+  let store: MockStore<DalState>;
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [
-        StoreModule.forRoot(
-          { router: routerReducer },
-          {
-            runtimeChecks: {
-              strictStateImmutability: false,
-              strictActionImmutability: false
-            }
-          }
-        ),
-        ...getStoreModuleForFeatures([TaskReducer]),
-        RouterTestingModule.withRoutes([]),
-        StoreRouterConnectingModule.forRoot({
-          navigationActionTiming: NavigationActionTiming.PostActivation,
-          serializer: CustomSerializer
-        })
-      ],
-      providers: [KabasTasksViewModel, Store]
+      imports: [],
+      providers: [KabasTasksViewModel, provideMockStore()]
     });
   });
 
@@ -326,6 +304,40 @@ describe('KabasTaskViewModel', () => {
       kabasTasksViewModel.setTaskAsArchived(taskAssignees, true);
 
       expect(spy).toHaveBeenCalledWith(expected);
+    });
+  });
+
+  describe('createTask', () => {
+    let dispatchSpy: jest.SpyInstance;
+
+    const currentUser = new PersonFixture();
+    beforeEach(() => {
+      dispatchSpy = store.dispatch = jest.fn();
+      store.overrideSelector(UserQueries.getCurrentUser, currentUser);
+    });
+
+    it('should dispatch an action', () => {
+      kabasTasksViewModel.createTask('foo', 123, 'digital');
+
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        new TaskActions.StartAddTask({
+          task: { name: 'foo', learningAreaId: 123, isPaperTask: false },
+          navigateAfterCreate: true,
+          userId: currentUser.id
+        })
+      );
+    });
+
+    it('should dispatch an action', () => {
+      kabasTasksViewModel.createTask('foo', 123, 'paper');
+
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        new TaskActions.StartAddTask({
+          task: { name: 'foo', learningAreaId: 123, isPaperTask: true },
+          navigateAfterCreate: true,
+          userId: currentUser.id
+        })
+      );
     });
   });
 

@@ -150,6 +150,7 @@ $filters-active-background-color: $color-gray-2 !default;
 $filters-hover-background-color: #f5f5f5 !default; // material button hover default
 
 $search-filter-height: 50px;
+$ui-form-field-height: 50px;
 
 // search filters > search term
 $search-search-term-border-width: 0px;
@@ -179,6 +180,12 @@ $date-filter_mat-form-field_outline-opacity: 1;
 $date-filter_mat-form-field_outline-border-right-width: 1px;
 $date-filter_mat-form-field_outline-border-color: $primary-font-color-2;
 $date-filter_date-range_day--in-range-background-color: $secondary-bg-color-accent;
+
+// ui > date range picker component
+$ui-date-range-picker_mat-form-field_outline-opacity: 1;
+$ui-date-range-picker_mat-form-field_outline-border-right-width: 1px;
+$ui-date-range-picker_mat-form-field_outline-border-color: $primary-font-color-2;
+$ui-date-range-picker_date-range_day--in-range-background-color: $secondary-bg-color-accent;
 
 // search > reset filters button
 $pages-method-chapter__reset-filters-border-color: $primary-font-color-2;
