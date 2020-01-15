@@ -4,6 +4,7 @@ import { EduContentInterface } from '@campus/dal';
 import { SearchFilterCriteriaInterface } from '@campus/search';
 import { SideSheetComponent } from '@campus/ui';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { AssigneeTypesEnum } from '../../interfaces/Assignee.interface';
 import { TaskWithAssigneesInterface } from '../../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
 import { MockKabasTasksViewModel } from '../kabas-tasks.viewmodel.mock';
@@ -27,6 +28,8 @@ export class ManageKabasTasksDetailComponent implements OnInit {
   public diaboloPhaseFilter: SearchFilterCriteriaInterface;
   public selectedContents$ = new BehaviorSubject<EduContentInterface[]>([]);
   public task$: Observable<TaskWithAssigneesInterface>;
+
+  public assigneeTypesEnum: typeof AssigneeTypesEnum = AssigneeTypesEnum;
 
   @ViewChild('taskContent', { static: false })
   private contentSelectionList: MatSelectionList;

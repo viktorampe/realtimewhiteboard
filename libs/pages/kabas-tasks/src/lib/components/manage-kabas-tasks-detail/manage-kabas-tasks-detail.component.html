@@ -55,9 +55,9 @@
 >
   <campus-side-sheet-header>
     <ng-container [ngSwitch]="(selectedContents$ | async)?.length">
-      <ng-container *ngSwitchCase="0">Over deze taak</ng-container>
-      <ng-container *ngSwitchCase="1">Over deze oefening</ng-container>
-      <ng-container *ngSwitchDefault>Over deze oefeningen</ng-container>
+      <ng-container *ngSwitchCase="0">Over deze taak:</ng-container>
+      <ng-container *ngSwitchCase="1">Over deze oefening:</ng-container>
+      <ng-container *ngSwitchDefault>Over deze oefeningen:</ng-container>
     </ng-container>
   </campus-side-sheet-header>
 
@@ -66,7 +66,7 @@
       *ngIf="selectedContents$ | async as selectedContents"
       class="manage-kabas-tasks-detail__info"
     >
-      <div *ngIf="selectedContents.length === 0; else contentDetails">
+      <ng-container *ngIf="selectedContents.length === 0; else contentDetails">
         <input type="text" placeholder="Titel" [value]="task.name" />
         <textarea placeholder="Omschrijving">{{ task.description }}</textarea>
         <p>{{ task.learningArea.name }}</p>
@@ -79,30 +79,65 @@
             {{ task.endDate | humanDateTime }}</p
           >
         </ng-template>
-      </div>
+
+        <div class="manage-kabas-tasks-detail__info__container">
+          <div>
+            <campus-button
+              class="manage-kabas-tasks-detail__info__add-assignees"
+              >+</campus-button
+            >
+            leerlingen toevoegen voor deze taak:
+          </div>
+          <div>
+            <span
+              *ngFor="let assignee of task.assignees"
+              class="manage-kabas-tasks-detail__info__assignee"
+              [class.classgroup]="
+                assignee.type === assigneeTypesEnum.CLASSGROUP
+              "
+              [class.group]="assignee.type === assigneeTypesEnum.GROUP"
+              [class.student]="assignee.type === assigneeTypesEnum.STUDENT"
+              >{{ assignee.label }}</span
+            >
+          </div>
+        </div>
+
+        <campus-button primary>+ oefening toevoegen</campus-button>
+        <campus-button danger>verwijder taak</campus-button>
+      </ng-container>
+
       <ng-template #contentDetails>
-        <p *ngFor="let selectedContent of selectedContents">
+        <div
+          class="manage-kabas-tasks-detail__info__container"
+          *ngFor="let selectedContent of selectedContents"
+        >
           <ng-container
             *ngIf="selectedContent.publishedEduContentMetadata as metadata"
           >
             <h2>{{ metadata.title }}</h2>
             <p>{{ metadata.description }}</p>
             <div>{{ metadata.learningArea.name }}</div>
-            <div *ngIf="metadata.methods">
+            <div *ngIf="metadata.methods" class="list-split">
               <span *ngFor="let method of metadata.methods">{{
                 method.name
               }}</span>
             </div>
-            <campus-button>Preview</campus-button>
+            <campus-button>preview</campus-button>
           </ng-container>
-        </p>
+        </div>
+
         <div
           *ngIf="!task.isPaperTask"
-          class="manage-kabas-tasks-detail__moetje-toggle"
+          class="manage-kabas-tasks-detail__info__container"
         >
-          Moetje <mat-slide-toggle color="primary"></mat-slide-toggle> Magje
+          <mat-radio-group>
+            <mat-radio-button [value]="true">Moetje</mat-radio-button>
+            <br /><mat-radio-button [value]="false">Magje</mat-radio-button>
+          </mat-radio-group>
+          <campus-button>opslaan</campus-button>
         </div>
-        <campus-button>Verwijderen</campus-button>
+
+        <campus-button danger>verwijder oefeningen</campus-button>
       </ng-template>
     </div>
   </campus-side-sheet-body>

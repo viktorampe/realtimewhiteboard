@@ -1,10 +1,11 @@
 @mixin ui-side-sheet() {
-  $ui-side-sheet-sheet-background-color: $ui-tertiary-bg-color;
-  $ui-side-sheet-header-background-color: $ui-tertiary-bg-color-2;
-  $ui-side-sheet-header-font-color: $ui-tertiary-font-color-2;
+  $ui-side-sheet-sheet-background-color: $ui-tertiary-bg-color !default;
+  $ui-side-sheet-header-background-color: $ui-tertiary-bg-color-2 !default;
+  $ui-side-sheet-header-font-color: $ui-tertiary-font-color-2 !default;
 
-  $ui-side-sheet-title-font-family: $primary-font-family-2;
-  $ui-side-sheet-font-color: $ui-tertiary-font-color;
+  $ui-side-sheet-title-font-family: $primary-font-family-2 !default;
+  $ui-side-sheet-font-color: $ui-tertiary-font-color !default;
+  $ui-side-sheet-font-size: inherit !default;
 
   .ui-side-sheet {
     &__drawer {
@@ -20,6 +21,10 @@
       &__title {
         font-family: $ui-side-sheet-title-font-family;
       }
+    }
+
+    &__body {
+      font-size: $ui-side-sheet-font-size;
     }
   }
 }

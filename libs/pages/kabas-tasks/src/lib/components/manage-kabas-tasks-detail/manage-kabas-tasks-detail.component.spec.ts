@@ -1,5 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatSelectModule, MatSlideToggleModule } from '@angular/material';
+import {
+  MatRadioModule,
+  MatSelectModule,
+  MatSlideToggleModule
+} from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { SearchModule } from '@campus/search';
 import {
@@ -25,7 +29,8 @@ describe('ManageKabasTasksDetailComponent', () => {
         MatSelectModule,
         SearchModule,
         UiModule,
-        NoopAnimationsModule
+        NoopAnimationsModule,
+        MatRadioModule
       ],
       declarations: [ManageKabasTasksDetailComponent],
       providers: [

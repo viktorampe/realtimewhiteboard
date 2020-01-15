@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { MatSelectModule } from '@angular/material';
+import { MatRadioModule, MatSelectModule } from '@angular/material';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { GuardsModule } from '@campus/guards';
 import { PagesSharedModule } from '@campus/pages/shared';
@@ -24,7 +24,8 @@ import { PagesKabasTasksRoutingModule } from './pages-kabas-tasks-routing.module
     MatSelectModule,
     SearchModule,
     GuardsModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    MatRadioModule
   ],
   declarations: [
     ManageKabasTasksOverviewComponent,

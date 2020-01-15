@@ -5,7 +5,8 @@ import {
   TaskFixture
 } from '@campus/dal';
 import { ViewModelInterface } from '@campus/testing';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { AssigneeTypesEnum } from '../interfaces/Assignee.interface';
 import {
   TaskStatusEnum,
@@ -41,7 +42,9 @@ export class MockKabasTasksViewModel
       })
     );
 
-    this.currentTask$ = of(tasks[0]);
+    this.currentTask$ = this.tasksWithAssignments$.pipe(
+      map(tasksWithAssignees => tasksWithAssignees[0])
+    );
   }
 
   public getTaskDates() {
@@ -70,9 +73,36 @@ export class MockKabasTasksViewModel
         name: 'Titel van de eerste oefening',
         eduContentAmount: 3,
         eduContents: [
-          new EduContentFixture({ id: 1 }, { id: 1, title: 'oefening 1' }),
-          new EduContentFixture({ id: 2 }, { id: 2, title: 'oefening 2' }),
-          new EduContentFixture({ id: 3 }, { id: 3, title: 'oefening 3' })
+          new EduContentFixture(
+            { id: 1 },
+            {
+              id: 1,
+              title: 'oefening 1',
+              learningArea: new LearningAreaFixture({ id: 1, name: 'Wiskunde' })
+            }
+          ),
+          new EduContentFixture(
+            { id: 2 },
+            {
+              id: 2,
+              title: 'oefening 2',
+              learningArea: new LearningAreaFixture({
+                id: 2,
+                name: 'Geschiedenis'
+              })
+            }
+          ),
+          new EduContentFixture(
+            { id: 3 },
+            {
+              id: 3,
+              title: 'oefening 3',
+              learningArea: new LearningAreaFixture({
+                id: 3,
+                name: 'Nederlands'
+              })
+            }
+          )
         ],
         learningArea: new LearningAreaFixture({ id: 1, name: 'wiskunde' }),
         learningAreaId: 1,
