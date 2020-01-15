@@ -843,4 +843,30 @@ describe('ManageKabasTasksOverviewComponent', () => {
       ]);
     });
   });
+
+  describe('click handlers', () => {
+    describe('clickAddDigitalTask', () => {
+      it('should navigate to the correct route', () => {
+        component.clickAddDigitalTask();
+
+        expect(router.navigate).toHaveBeenCalledWith([
+          'tasks',
+          'manage',
+          'new'
+        ]);
+      });
+    });
+
+    describe('clickAddPaperTask', () => {
+      it('should navigate to the correct route', () => {
+        component.clickAddPaperTask();
+
+        expect(router.navigate).toHaveBeenCalledWith([
+          'tasks',
+          'manage',
+          'new'
+        ]);
+      });
+    });
+  });
 });
