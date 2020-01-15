@@ -1,1 +1,5 @@
-<p>confirmation-pop-up works!</p>
+<p>{{ title }}</p>
+<p>{{ message }}</p>
+<button *ngFor="let action of actions" (click)="action.handler()">{{
+  action.label
+}}</button>

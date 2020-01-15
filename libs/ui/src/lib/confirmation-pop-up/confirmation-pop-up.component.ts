@@ -1,4 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+
+export interface ConfirmationActionInterface {
+  icon: string;
+  label: string;
+  handler: () => any;
+}
 
 @Component({
   selector: 'campus-confirmation-pop-up',
@@ -6,10 +12,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./confirmation-pop-up.component.scss']
 })
 export class ConfirmationPopUpComponent implements OnInit {
+  @Input() title: string;
+  @Input() message: string;
 
-  constructor() { }
+  @Input() actions: ConfirmationActionInterface[];
 
-  ngOnInit() {
-  }
+  constructor() {}
 
+  ngOnInit() {}
 }

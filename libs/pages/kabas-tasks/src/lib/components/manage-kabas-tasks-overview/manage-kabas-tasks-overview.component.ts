@@ -8,6 +8,8 @@ import {
   ViewChildren
 } from '@angular/core';
 import {
+  MatDialog,
+  MatDialogRef,
   MatSelect,
   MatSelectionList,
   MatSlideToggle,
@@ -25,6 +27,7 @@ import {
   SearchTermComponent,
   SelectFilterComponent
 } from '@campus/search';
+import { ConfirmationPopUpComponent } from '@campus/ui';
 import {
   DateFunctions,
   FilterServiceInterface,
@@ -115,6 +118,8 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
   private digitalFilterState$ = new BehaviorSubject<FilterStateInterface>({});
   private paperFilterState$ = new BehaviorSubject<FilterStateInterface>({});
 
+  private confirmDialog: MatDialogRef<ConfirmationPopUpComponent>;
+
   @ViewChildren(MatSelectionList) private taskLists: QueryList<
     MatSelectionList
   >;
@@ -146,7 +151,8 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     @Inject(FILTER_SERVICE_TOKEN) private filterService: FilterServiceInterface,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private matDialog: MatDialog
   ) {}
 
   ngOnInit() {
@@ -326,9 +332,32 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
   clickAddPaperTask() {
     console.log('TODO: adding paper task');
   }
-
   // TODO: implement handler
-  clickDeleteTasks() {}
+  clickDeleteTasks() {
+    this.confirmDialog = this.matDialog.open(ConfirmationPopUpComponent);
+    this.confirmDialog.componentInstance.title = 'Taken verwijderen';
+    this.confirmDialog.componentInstance.message =
+      'Ben je zeker dat je deze taken wil verwijderen?';
+    this.confirmDialog.componentInstance.title = 'Taken verwijderen';
+    this.confirmDialog.componentInstance.actions = [
+      {
+        label: 'annuleren',
+        handler: this.confirmDialog.close,
+        icon: 'cancel'
+      },
+      {
+        label: 'OK',
+        handler: this.deleteTasks.bind(this),
+        icon: 'delete'
+      }
+    ];
+  }
+
+  private deleteTasks() {
+    this.confirmDialog.close();
+
+    console.log('GO AHEAD AND DELETE MY TASKS PLEASE!');
+  }
 
   // TODO: implement handler
   clickArchiveTasks() {}
