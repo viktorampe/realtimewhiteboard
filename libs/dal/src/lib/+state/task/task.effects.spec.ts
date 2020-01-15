@@ -6,6 +6,7 @@ import { TaskClassGroupActions, TaskStudentActions } from '@campus/dal';
 import { MockDate } from '@campus/testing';
 import { EffectsModule } from '@ngrx/effects';
 import { provideMockActions } from '@ngrx/effects/testing';
+import { Update } from '@ngrx/entity';
 import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/angular';
 import { hot } from '@nrwl/angular/testing';
@@ -22,6 +23,7 @@ import {
   TaskServiceInterface,
   TASK_SERVICE_TOKEN
 } from '../../tasks/task.service.interface';
+import { UndoService, UNDO_SERVICE_TOKEN } from '../../undo';
 import { EffectFeedback, Priority } from '../effect-feedback';
 import { AddEffectFeedback } from '../effect-feedback/effect-feedback.actions';
 import { TaskGroupActions } from '../task-group';
@@ -31,10 +33,12 @@ import {
   LoadTasks,
   NavigateToTaskDetail,
   StartAddTask,
+  StartArchiveTasks,
   StartDeleteTasks,
   TasksLoaded,
   TasksLoadError,
-  UpdateAccess
+  UpdateAccess,
+  UpdateTasks
 } from './task.actions';
 import { TaskEffects } from './task.effects';
 
@@ -46,7 +50,7 @@ describe('TaskEffects', () => {
   let taskService: TaskServiceInterface;
   let router: Router;
 
-  const mockDate = new MockDate(new Date('2020-01-13'));
+  const mockDate = new MockDate(new Date('2020-1-14'));
 
   afterAll(() => {
     mockDate.returnRealDate();
@@ -113,16 +117,17 @@ describe('TaskEffects', () => {
           provide: TASK_SERVICE_TOKEN,
           useValue: {
             getAllForUser: () => {},
+            updateTasks: () => {},
+            deleteTasks: () => {},
             createTask: () => {},
-            updateTask: () => {},
-            deleteTasks: () => {}
+            updateTask: () => {}
           }
         },
-        { provide: MAT_DATE_LOCALE, useValue: 'en-US' },
         {
-          provide: 'uuid',
-          useValue: () => '123-totally-a-uuid-123'
+          provide: UNDO_SERVICE_TOKEN,
+          useClass: UndoService
         },
+        { provide: MAT_DATE_LOCALE, useValue: 'en-US' },
         TaskEffects,
         DataPersistence,
         provideMockActions(() => actions),
@@ -408,13 +413,11 @@ describe('TaskEffects', () => {
     beforeEach(() => {
       deleteTasksSpy = taskService['deleteTasks'] = jest.fn();
     });
-
     it('should call the service and dispatch feedback, no errors', () => {
       deleteTasksSpy.mockReturnValue(
         of({ tasks: taskIds.map(id => ({ id })), errors: [] })
       );
       const expectedMessage = 'De taken werden verwijderd.';
-
       const deleteAction = new DeleteTasks({ ids: taskIds });
       const feedbackAction = new AddEffectFeedback({
         effectFeedback: {
@@ -429,9 +432,7 @@ describe('TaskEffects', () => {
           userActions: []
         } as EffectFeedback
       });
-
       actions = hot('a', { a: triggerAction });
-
       expect(effects.deleteTasks$).toBeObservable(
         hot('(ab)', {
           a: deleteAction,
@@ -439,7 +440,6 @@ describe('TaskEffects', () => {
         })
       );
     });
-
     it('should call the service and dispatch feedback, only errors', () => {
       const taskDestroyErrors = [
         {
@@ -453,22 +453,20 @@ describe('TaskEffects', () => {
           activeUntil: new Date()
         }
       ];
-
       deleteTasksSpy.mockReturnValue(
         of({
           tasks: [],
           errors: taskDestroyErrors
         })
       );
-
-      const expectedMessage =
-        '<p>Er werden geen taken verwijderd.</p>' +
-        '<p>De volgende taken zijn nog in gebruik:</p>' +
-        '<ul>' +
-        '<li><b>Huiswerk</b> is nog in gebruik door Hubert Stroganovski tot 1/13/2020. </li>' +
-        '<li><b>Huiswerk2</b> is nog in gebruik door Hubert Stroganovski tot 1/13/2020. </li>' +
-        '</ul>';
-
+      const expectedMessage = [
+        '<p>Er werden geen taken verwijderd.</p>',
+        '<p>De volgende taken zijn nog in gebruik:</p>',
+        '<ul>',
+        '<li><strong>Huiswerk</strong> is nog in gebruik door Hubert Stroganovski tot 1/14/2020.</li>',
+        '<li><strong>Huiswerk2</strong> is nog in gebruik door Hubert Stroganovski tot 1/14/2020.</li>',
+        '</ul>'
+      ].join('');
       const feedbackAction = new AddEffectFeedback({
         effectFeedback: {
           id: uuid(),
@@ -482,13 +480,11 @@ describe('TaskEffects', () => {
           useDefaultCancel: true
         }
       });
-
       actions = hot('a', { a: triggerAction });
       expect(effects.deleteTasks$).toBeObservable(
         hot('a', { a: feedbackAction })
       );
     });
-
     it('should call the service and dispatch feedback, mixed', () => {
       const taskDestroyErrors = [
         {
@@ -497,23 +493,20 @@ describe('TaskEffects', () => {
           activeUntil: new Date()
         }
       ];
-
       deleteTasksSpy.mockReturnValue(
         of({
           tasks: [{ id: 2 }],
           errors: taskDestroyErrors
         })
       );
-
       const deleteAction = new DeleteTasks({ ids: [2] });
-
-      const expectedMessage =
-        '<p>De taak werd verwijderd.</p>' +
-        '<p>De volgende taken zijn nog in gebruik:</p>' +
-        '<ul>' +
-        '<li><b>Huiswerk</b> is nog in gebruik door Hubert Stroganovski tot 1/13/2020. </li>' +
-        '</ul>';
-
+      const expectedMessage = [
+        '<p>De taak werd verwijderd.</p>',
+        '<p>De volgende taken zijn nog in gebruik:</p>',
+        '<ul>',
+        '<li><strong>Huiswerk</strong> is nog in gebruik door Hubert Stroganovski tot 1/14/2020.</li>',
+        '</ul>'
+      ].join('');
       const feedbackAction = new AddEffectFeedback({
         effectFeedback: {
           id: uuid(),
@@ -527,11 +520,134 @@ describe('TaskEffects', () => {
           useDefaultCancel: true
         }
       });
-
       actions = hot('a', { a: triggerAction });
       expect(effects.deleteTasks$).toBeObservable(
         hot('(ab)', { a: deleteAction, b: feedbackAction })
       );
     });
   });
+
+  for (const verb of ['gearchiveerd', 'gedearchiveerd']) {
+    describe('startArchiveTasks$', () => {
+      const archived = verb === 'gearchiveerd';
+      const tasksToUpdate: Update<TaskInterface>[] = [
+        { id: 1, changes: { id: 1, name: 'Taak 1', archived } },
+        { id: 2, changes: { id: 2, name: 'Taak 2', archived } }
+      ];
+      const triggerAction = new StartArchiveTasks({
+        userId: 1,
+        tasks: tasksToUpdate
+      });
+
+      it('should call the service and dispatch feedback, no errors', () => {
+        mockServiceMethodReturnValue('updateTasks', {
+          tasks: tasksToUpdate.map(task => task.changes),
+          errors: []
+        });
+
+        const expectedMessage = `De taken werden ${verb}.`;
+        const updateAction = new UpdateTasks({ tasks: tasksToUpdate });
+        const feedbackAction = new AddEffectFeedback({
+          effectFeedback: {
+            id: uuid(),
+            display: true,
+            message: expectedMessage,
+            timeStamp: Date.now(),
+            triggerAction,
+            priority: Priority.NORM,
+            type: 'success',
+            useDefaultCancel: true,
+            userActions: []
+          } as EffectFeedback
+        });
+        actions = hot('a', { a: triggerAction });
+        expect(effects.startArchiveTasks$).toBeObservable(
+          hot('(ab)', {
+            a: updateAction,
+            b: feedbackAction
+          })
+        );
+      });
+      it('should call the service and dispatch feedback for archiving, only errors', () => {
+        const taskUpdateErrors = [
+          {
+            task: 'Huiswerk',
+            user: 'Hubert Stroganovski',
+            activeUntil: new Date()
+          },
+          {
+            task: 'Huiswerk2',
+            user: 'Hubert Stroganovski',
+            activeUntil: new Date()
+          }
+        ];
+        mockServiceMethodReturnValue('updateTasks', {
+          tasks: [],
+          errors: taskUpdateErrors
+        });
+        const expectedMessage = [
+          `<p>Er werden geen taken ${verb}.</p>`,
+          '<p>De volgende taken zijn nog in gebruik:</p>',
+          '<ul>',
+          '<li><strong>Huiswerk</strong> is nog in gebruik door Hubert Stroganovski tot 1/14/2020.</li>',
+          '<li><strong>Huiswerk2</strong> is nog in gebruik door Hubert Stroganovski tot 1/14/2020.</li>',
+          '</ul>'
+        ].join('');
+        const feedbackAction = new AddEffectFeedback({
+          effectFeedback: {
+            id: uuid(),
+            triggerAction,
+            message: expectedMessage,
+            type: 'error',
+            userActions: [],
+            priority: Priority.HIGH,
+            display: true,
+            timeStamp: Date.now(),
+            useDefaultCancel: true
+          }
+        });
+        actions = hot('a', { a: triggerAction });
+        expect(effects.startArchiveTasks$).toBeObservable(
+          hot('a', { a: feedbackAction })
+        );
+      });
+      it('should call the service and dispatch feedback, mixed', () => {
+        const taskUpdateErrors = [
+          {
+            task: 'Huiswerk',
+            user: 'Hubert Stroganovski',
+            activeUntil: new Date()
+          }
+        ];
+        mockServiceMethodReturnValue('updateTasks', {
+          tasks: tasksToUpdate.slice(1).map(task => task.changes),
+          errors: taskUpdateErrors
+        });
+        const updateAction = new UpdateTasks({ tasks: tasksToUpdate.slice(1) });
+        const expectedMessage =
+          `<p>De taak werd ${verb}.</p>` +
+          '<p>De volgende taken zijn nog in gebruik:</p>' +
+          '<ul>' +
+          '<li><strong>Huiswerk</strong> is nog in gebruik door Hubert Stroganovski tot 1/14/2020.</li>' +
+          '</ul>';
+        const feedbackAction = new AddEffectFeedback({
+          effectFeedback: {
+            id: uuid(),
+            triggerAction,
+            message: expectedMessage,
+            type: 'error',
+            userActions: [],
+            priority: Priority.HIGH,
+            display: true,
+            timeStamp: Date.now(),
+            useDefaultCancel: true
+          }
+        });
+        actions = hot('a', { a: triggerAction });
+        expect(effects.startArchiveTasks$).toBeObservable(
+          hot('(ab)', { a: updateAction, b: feedbackAction })
+        );
+      });
+    });
+  }
 });
