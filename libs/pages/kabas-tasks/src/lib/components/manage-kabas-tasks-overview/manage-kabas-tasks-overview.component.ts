@@ -8,6 +8,7 @@ import {
   ViewChildren
 } from '@angular/core';
 import {
+  MatDialog,
   MatSelect,
   MatSelectionList,
   MatSlideToggle,
@@ -34,6 +35,7 @@ import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { AssigneeTypesEnum } from '../../interfaces/Assignee.interface';
 import { TaskWithAssigneesInterface } from '../../interfaces/TaskWithAssignees.interface';
+import { ManageKabasTasksAssigneeModalComponent } from '../../manage-kabas-tasks-assignee-modal/manage-kabas-tasks-assignee-modal.component';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
 
 export interface FilterStateInterface {
@@ -146,10 +148,13 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     @Inject(FILTER_SERVICE_TOKEN) private filterService: FilterServiceInterface,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit() {
+    this.openAssigneeModal();
+
     this.currentTab$ = this.getCurrentTab();
     this.digitalFilteredTasks$ = this.getFilteredDigitalTasks().pipe(
       shareReplay(1)
@@ -751,5 +756,17 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
 
       return taskA.getTime() - taskB.getTime();
     });
+  }
+
+  private openAssigneeModal() {
+    const data = {};
+
+    this.dialog
+      .open(ManageKabasTasksAssigneeModalComponent, {
+        data
+        // autoFocus: false
+      })
+      .afterClosed()
+      .subscribe(res => console.log(res));
   }
 }

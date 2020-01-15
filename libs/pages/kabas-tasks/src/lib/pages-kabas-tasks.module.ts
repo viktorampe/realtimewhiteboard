@@ -11,8 +11,8 @@ import { UtilsModule } from '@campus/utils';
 import { ManageKabasTasksDetailComponent } from './components/manage-kabas-tasks-detail/manage-kabas-tasks-detail.component';
 import { ManageKabasTasksOverviewComponent } from './components/manage-kabas-tasks-overview/manage-kabas-tasks-overview.component';
 import { TaskListItemComponent } from './components/task-list-item/task-list-item.component';
-import { PagesKabasTasksRoutingModule } from './pages-kabas-tasks-routing.module';
 import { ManageKabasTasksAssigneeModalComponent } from './manage-kabas-tasks-assignee-modal/manage-kabas-tasks-assignee-modal.component';
+import { PagesKabasTasksRoutingModule } from './pages-kabas-tasks-routing.module';
 @NgModule({
   imports: [
     CommonModule,
@@ -34,6 +34,7 @@ import { ManageKabasTasksAssigneeModalComponent } from './manage-kabas-tasks-ass
     ManageKabasTasksAssigneeModalComponent
   ],
   providers: [],
-  exports: [ManageKabasTasksAssigneeModalComponent]
+  exports: [ManageKabasTasksAssigneeModalComponent],
+  entryComponents: [ManageKabasTasksAssigneeModalComponent]
 })
 export class PagesKabasTasksModule {}
