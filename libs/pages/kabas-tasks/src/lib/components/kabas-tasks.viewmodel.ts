@@ -82,6 +82,10 @@ export class KabasTasksViewModel {
     return status;
   }
 
+  // TODO replace with correct implementation
+  // from PR https://diekeure-webdev@dev.azure.com/diekeure-webdev/LK2020/_git/campus/pullrequest/110?view=discussion
+  // Refactored the necessary parts here to fix tests
+  // NO REVIEW REQUIRED HERE
   public setTaskAsArchived(
     tasks: TaskWithAssigneesInterface[],
     shouldArchive: boolean
