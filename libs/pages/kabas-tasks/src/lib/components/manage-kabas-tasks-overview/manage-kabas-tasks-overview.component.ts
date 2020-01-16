@@ -691,24 +691,32 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
    */
   private clearFilters(): void {
     if (this.searchTermFilters)
-      this.searchTermFilters.forEach(filter => {
-        filter.currentValue = '';
-        filter.valueChange.next('');
+      this.searchTermFilters.forEach(searchTermFilter => {
+        searchTermFilter.currentValue = '';
+        searchTermFilter.valueChange.next('');
       });
     if (this.selectFilters)
-      this.selectFilters.forEach(filter => filter.selectControl.reset());
+      this.selectFilters.forEach(selectFilter =>
+        selectFilter.selectControl.reset()
+      );
     this.clearButtonToggleFilters();
     if (this.slideToggleFilters)
-      this.slideToggleFilters.forEach(filter => {
-        filter.checked = false;
-        filter.change.emit({ checked: false, source: filter });
+      this.slideToggleFilters.forEach(slideToggleFilter => {
+        slideToggleFilter.checked = false;
+        slideToggleFilter.change.emit({
+          checked: false,
+          source: slideToggleFilter
+        });
       });
-    if (this.dateFilters) this.dateFilters.forEach(filter => filter.reset());
+    if (this.dateFilters)
+      this.dateFilters.forEach(dateFilter => dateFilter.reset());
   }
 
   private clearButtonToggleFilters(): void {
     if (this.buttonToggleFilters)
-      this.buttonToggleFilters.forEach(filter => filter.toggleControl.reset());
+      this.buttonToggleFilters.forEach(buttonToggleFilter =>
+        buttonToggleFilter.toggleControl.reset()
+      );
   }
 
   /**
