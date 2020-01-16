@@ -348,7 +348,7 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
       .subscribe(() => this.deleteTasks());
   }
 
-  private deleteTasks() {
+  public deleteTasks() {
     this.viewModel.removeTasks(this.getSelectedTasks());
   }
 
