@@ -73,6 +73,7 @@
           [required]="true"
           [icon]="'edit'"
           (textChanged)="('TODO updateTask')"
+          data-cy="task-title"
         ></campus-content-editable>
         <campus-content-editable
           [text]="task.description"
@@ -102,13 +103,18 @@
             <span
               *ngFor="let assignee of task.assignees"
               class="manage-kabas-tasks-detail__info__assignee"
+              [matTooltip]="
+                (assignee.start | date: 'dd-MM-yy') +
+                ' - ' +
+                (assignee.end | date: 'dd-MM-yy')
+              "
               [class.classgroup]="
                 assignee.type === assigneeTypesEnum.CLASSGROUP
               "
               [class.group]="assignee.type === assigneeTypesEnum.GROUP"
               [class.student]="assignee.type === assigneeTypesEnum.STUDENT"
-              >{{ assignee.label }}</span
-            >
+              >{{ assignee.label }} <mat-icon svgIcon="close"></mat-icon
+            ></span>
           </div>
         </div>
 
@@ -123,6 +129,7 @@
         <div
           class="manage-kabas-tasks-detail__info__container"
           *ngFor="let selectedContent of selectedContents"
+          data-cy="educontent-detail"
         >
           <ng-container
             *ngIf="selectedContent.publishedEduContentMetadata as metadata"

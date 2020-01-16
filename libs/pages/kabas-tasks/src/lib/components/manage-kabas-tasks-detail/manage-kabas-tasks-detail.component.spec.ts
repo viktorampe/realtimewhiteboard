@@ -5,10 +5,15 @@ import {
   MatSelectModule,
   MatSlideToggleModule
 } from '@angular/material';
+import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { LearningAreaFixture, LearningAreaInterface } from '@campus/dal';
+import {
+  EduContentFixture,
+  LearningAreaFixture,
+  LearningAreaInterface
+} from '@campus/dal';
 import { SearchModule } from '@campus/search';
 import {
   ENVIRONMENT_ICON_MAPPING_TOKEN,
@@ -192,6 +197,41 @@ describe('ManageKabasTasksDetailComponent', () => {
         mockFormData.learningArea.id,
         mockFormData.type
       );
+    });
+  });
+
+  describe('sidepanel content', () => {
+    it('should show the task info in the sidepanel when selection is empty', () => {
+      component.selectedContents$.next([]);
+      fixture.detectChanges();
+
+      const taskInfoDE = fixture.debugElement.query(
+        By.css('[data-cy="task-title"]')
+      );
+      const eduContentInfoDE = fixture.debugElement.queryAll(
+        By.css('[data-cy="educontent-detail"]')
+      );
+
+      expect(taskInfoDE).toBeTruthy();
+      expect(eduContentInfoDE.length).toBe(0);
+    });
+
+    it('should show the task info in the sidepanel when selection is empty', () => {
+      component.selectedContents$.next([
+        new EduContentFixture(),
+        new EduContentFixture()
+      ]);
+      fixture.detectChanges();
+
+      const taskInfoDE = fixture.debugElement.query(
+        By.css('[data-cy="task-title"]')
+      );
+      const eduContentInfoDE = fixture.debugElement.queryAll(
+        By.css('[data-cy="educontent-detail"]')
+      );
+
+      expect(taskInfoDE).toBeFalsy();
+      expect(eduContentInfoDE.length).toBe(2);
     });
   });
 });
