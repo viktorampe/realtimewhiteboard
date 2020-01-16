@@ -20,5 +20,7 @@ export interface TaskEduContentServiceInterface {
 }
 
 export interface UpdateTaskEduContentError {
-  // TODO : not implemented yets
+  message: string;
+  // TODO : not implemented yet
+  // added a default message type, to prevent linting errors
 }
