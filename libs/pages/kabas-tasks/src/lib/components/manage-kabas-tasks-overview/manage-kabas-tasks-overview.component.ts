@@ -753,9 +753,7 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
   }
 
   private favoriteComparer(a, b): number {
-    {
-      return b.isFavorite - a.isFavorite;
-    }
+    return b.isFavorite - a.isFavorite;
   }
 
   private nameComparer(a, b): number {
