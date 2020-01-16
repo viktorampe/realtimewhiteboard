@@ -3,7 +3,6 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { UiModule } from '../ui.module';
 import { ConfirmationModalComponent } from './confirmation-modal.component';
 
-// file.only
 describe('ConfirmationPopUpComponent', () => {
   let component: ConfirmationModalComponent;
   let fixture: ComponentFixture<ConfirmationModalComponent>;
