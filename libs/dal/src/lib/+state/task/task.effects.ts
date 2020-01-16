@@ -210,7 +210,12 @@ export class TaskEffects {
                   []
                 ) as Update<TaskInterface>[];
 
-                actions.push(new UpdateTasks({ tasks: partialUpdates }));
+                actions.push(
+                  new UpdateTasks({
+                    userId: action.payload.userId,
+                    tasks: partialUpdates
+                  })
+                );
 
                 if (!this.isFilled(errors)) {
                   const message = this.getTaskUpdateSuccessMessage(
