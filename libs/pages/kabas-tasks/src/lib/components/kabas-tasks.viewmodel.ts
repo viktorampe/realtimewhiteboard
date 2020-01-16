@@ -10,7 +10,8 @@ import {
   LearningAreaInterface,
   RouterStateUrl,
   TaskActions,
-  TaskInterface
+  TaskInterface,
+  TaskEduContentInterface
 } from '@campus/dal';
 import { RouterReducerState } from '@ngrx/router-store';
 import { select, Store } from '@ngrx/store';
@@ -50,7 +51,13 @@ export class KabasTasksViewModel {
   ) {
     this.tasksWithAssignments$ = this.store.pipe(
       select(getTasksWithAssignments, { isPaper: false }),
-      map(tasks => tasks.map(task => ({ ...task, ...this.getTaskDates(task) })))
+      map(tasks =>
+        tasks.map(task => ({
+          ...task,
+          ...this.getTaskDates(task),
+          isFavorite: task.id % 2 === 0
+        }))
+      )
     );
 
     this.paperTasksWithAssignments$ = this.store.pipe(
@@ -205,5 +212,12 @@ export class KabasTasksViewModel {
         userId: this.authService.userId
       })
     );
+  }
+
+  public updateTaskEduContent(
+    taskEduContents: TaskEduContentInterface[],
+    updatedValues: Partial<TaskEduContentInterface>
+  ): void {
+    throw new Error('Not implemented yet');
   }
 }
