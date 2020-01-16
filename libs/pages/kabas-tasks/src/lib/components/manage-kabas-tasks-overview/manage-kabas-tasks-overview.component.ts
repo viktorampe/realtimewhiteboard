@@ -117,9 +117,7 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
   private digitalFilterState$ = new BehaviorSubject<FilterStateInterface>({});
   private paperFilterState$ = new BehaviorSubject<FilterStateInterface>({});
 
-  @ViewChildren(MatSelectionList) private taskLists: QueryList<
-    MatSelectionList
-  >;
+  @ViewChildren(MatSelectionList) public taskLists: QueryList<MatSelectionList>;
 
   @ViewChildren(SearchTermComponent) private searchTermFilters: QueryList<
     SearchTermComponent
@@ -346,11 +344,11 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
         filter(confirmed => confirmed),
         take(1)
       )
-      .subscribe(this.deleteTasks);
+      .subscribe(() => this.deleteTasks());
   }
 
   private deleteTasks() {
-    console.log('GO AHEAD AND DELETE MY TASKS PLEASE!');
+    this.viewModel.removeTasks(this.getSelectedTasks());
   }
 
   // TODO: implement handler
@@ -371,7 +369,7 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
     this.viewModel.toggleFavorite(task);
   }
 
-  public getSelectedTasks(): TaskWithAssigneesInterface[] {
+  private getSelectedTasks(): TaskWithAssigneesInterface[] {
     if (this.taskLists) {
       return this.taskLists.reduce((acc, list) => {
         return [

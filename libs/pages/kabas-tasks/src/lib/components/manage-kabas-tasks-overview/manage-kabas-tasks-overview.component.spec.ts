@@ -1,8 +1,10 @@
 import { CommonModule } from '@angular/common';
+import { QueryList } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import {
   MatIconRegistry,
   MatSelect,
+  MatSelectionList,
   MatSelectModule,
   MatSlideToggleModule
 } from '@angular/material';
@@ -843,4 +845,61 @@ describe('ManageKabasTasksOverviewComponent', () => {
       ]);
     });
   });
+
+  describe('clickDeleteTasks()', () => {
+    const selectedDigitalTasks = [{ id: 1, name: 'foo' }];
+    const selectedPaperTasks = [{ id: 2, name: 'bar' }];
+
+    const digitalSelectionList = getSelectionListWithSelectedValues(
+      selectedDigitalTasks
+    );
+    const paperSelectionList = getSelectionListWithSelectedValues(
+      selectedPaperTasks
+    );
+
+    let removeTasksSpy;
+
+    beforeEach(() => {
+      removeTasksSpy = jest.spyOn(kabasTasksViewModel, 'removeTasks');
+    });
+
+    it('should call vm.removeTasks with the selected digital tasks', () => {
+      setSelectionList(digitalSelectionList);
+
+      component.clickDeleteTasks();
+
+      expect(removeTasksSpy).toHaveBeenCalledTimes(1);
+      expect(removeTasksSpy).toHaveBeenCalledWith(selectedDigitalTasks);
+    });
+
+    it('should call vm.removeTasks with the selected paper tasks', () => {
+      setSelectionList(paperSelectionList);
+
+      component.clickDeleteTasks();
+
+      expect(removeTasksSpy).toHaveBeenCalledTimes(1);
+      expect(removeTasksSpy).toHaveBeenCalledWith(selectedPaperTasks);
+    });
+  });
+
+  function setSelectionList(selection: MatSelectionList) {
+    const queryList = new QueryList<MatSelectionList>();
+    queryList.reset([selection]);
+    component.taskLists = queryList;
+    fixture.detectChanges();
+  }
+
+  function getSelectionListWithSelectedValues(
+    selectedValues
+  ): MatSelectionList {
+    const mockSelectionList: MatSelectionList = {
+      selectedOptions: {
+        selected: selectedValues.map(task => {
+          return { value: task };
+        })
+      }
+    } as MatSelectionList;
+
+    return mockSelectionList;
+  }
 });

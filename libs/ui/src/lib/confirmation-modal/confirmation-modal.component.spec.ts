@@ -1,9 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import {
-  MatDialogModule,
-  MatDialogRef,
-  MAT_DIALOG_DATA
-} from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { UiModule } from '../ui.module';
 import { ConfirmationModalComponent } from './confirmation-modal.component';
 
 // file.only
@@ -13,7 +10,7 @@ describe('ConfirmationPopUpComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [MatDialogModule],
+      imports: [UiModule],
       providers: [
         {
           provide: MAT_DIALOG_DATA,
@@ -26,8 +23,7 @@ describe('ConfirmationPopUpComponent', () => {
           provide: MatDialogRef,
           useValue: { close: jest.fn() }
         }
-      ],
-      declarations: [ConfirmationModalComponent]
+      ]
     }).compileComponents();
   }));
 
