@@ -2,12 +2,8 @@ import { Injectable } from '@angular/core';
 import { PersonApi, TaskEduContentApi } from '@diekeure/polpo-api-angular-sdk';
 import { forkJoin, Observable } from 'rxjs';
 import { map, mapTo } from 'rxjs/operators';
-import { BulkUpdateInfoInterface } from '../+external-interfaces/bulk-update-info.interface';
 import { TaskEduContentInterface } from '../+models';
-import {
-  TaskEduContentServiceInterface,
-  UpdateTaskEduContentError
-} from './task-edu-content.service.interface';
+import { TaskEduContentServiceInterface } from './task-edu-content.service.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -44,9 +40,7 @@ export class TaskEduContentService implements TaskEduContentServiceInterface {
   updateTaskEduContents(
     userId: number,
     update: Partial<TaskEduContentInterface>[]
-  ): Observable<
-    BulkUpdateInfoInterface<TaskEduContentInterface, UpdateTaskEduContentError>
-  > {
+  ): Observable<TaskEduContentInterface[]> {
     throw new Error('Not implemented yet');
   }
 }
