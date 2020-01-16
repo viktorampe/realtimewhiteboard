@@ -12,7 +12,8 @@ import {
   TaskActions,
   TaskInterface
 } from '@campus/dal';
-import { select, Store } from '@ngrx/store';
+import { Update } from '@ngrx/entity';
+import { Action, select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import {
@@ -94,8 +95,9 @@ export class KabasTasksViewModel {
     tasks: TaskWithAssigneesInterface[],
     shouldArchive: boolean
   ): void {
-    const updates = [];
-    const errors = [];
+    const updates: Update<TaskInterface>[] = [];
+    const errors: TaskWithAssigneesInterface[] = [];
+
     tasks.forEach(task => {
       if (!shouldArchive || this.canBeArchivedOrDeleted(task)) {
         updates.push({ id: task.id, changes: { archived: shouldArchive } });
@@ -103,9 +105,11 @@ export class KabasTasksViewModel {
         errors.push(task);
       }
     });
+
     this.store.dispatch(this.getArchivingAction(updates, errors));
   }
-  private getArchivingAction(updates, errors) {
+
+  private getArchivingAction(updates, errors): Action {
     const updateAction = new TaskActions.StartArchiveTasks({
       userId: this.authService.userId,
       tasks: updates
@@ -126,6 +130,7 @@ export class KabasTasksViewModel {
     }
     return updateAction;
   }
+
   private getFeedbackUserActions(numberOfUpdates: number, userAction) {
     return numberOfUpdates > 0
       ? [
@@ -136,7 +141,10 @@ export class KabasTasksViewModel {
         ]
       : [];
   }
-  private getArchiveFeedbackMessage(errors: TaskWithAssigneesInterface[]) {
+
+  private getArchiveFeedbackMessage(
+    errors: TaskWithAssigneesInterface[]
+  ): string {
     return errors
       .map(task => {
         const activeUntil = task.endDate
@@ -172,7 +180,13 @@ export class KabasTasksViewModel {
       [AssigneeTypesEnum.CLASSGROUP]: 'taskClassGroups'
     };
   }
-  private getAssigneesByType(assignees: AssigneeInterface[]) {
+  private getAssigneesByType(
+    assignees: AssigneeInterface[]
+  ): {
+    taskGroups: AssigneeInterface[];
+    taskStudents: AssigneeInterface[];
+    taskClassGroups: AssigneeInterface[];
+  } {
     const keyMap = this.getAssigneeTypeToKeyMap();
     return assignees.reduce(
       (acc, assignee) => ({
