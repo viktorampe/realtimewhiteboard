@@ -22,7 +22,10 @@
       "
       >{{ assignees.key }}</span
     >
-    <mat-selection-list>
+    <mat-selection-list
+      [class.mat-selection-list--has-selection]="true"
+      class="manage-kabas-tasks-detail__list"
+    >
       <mat-list-option
         [value]="assignee"
         *ngFor="let assignee of assignees.value"
