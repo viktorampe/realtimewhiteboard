@@ -41,7 +41,6 @@
 
 <div class="manage-kabas-tasks-overview__container">
   <mat-tab-group
-    #tabGroup
     [selectedIndex]="currentTab$ | async"
     (selectedIndexChange)="onSelectedTabIndexChanged($event)"
     (animationDone)="onTabAnimationDone()"
