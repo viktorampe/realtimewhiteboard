@@ -19,6 +19,11 @@ interface AddAssigneeFilterState {
   label?: string;
 }
 
+interface AssigneeToAdd {
+  label: string;
+  type: AssigneeTypesEnum;
+}
+
 interface AssigneesByType {
   students: AssigneeInterface[];
   groups: AssigneeInterface[];
@@ -134,10 +139,10 @@ export class AddAssigneeComponent implements OnInit {
   }
 
   addAssignees() {
-    const optionsSelected = this.selectedAssignees.forEach(element =>
-      element.selectedOptions.selected.map(option => console.log(option.value))
-    );
-
-    //this.addedAssignees.emit(optionsSelected);
+    const optionsSelected = this.selectedAssignees.forEach(element => {
+      return element.selectedOptions.selected.map(option =>
+        console.log(option.value)
+      );
+    });
   }
 }
