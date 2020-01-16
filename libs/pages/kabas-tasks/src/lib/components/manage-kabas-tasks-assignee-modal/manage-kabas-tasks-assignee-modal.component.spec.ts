@@ -1,14 +1,23 @@
-//file.only
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatDialogModule, MatDialogRef, MatList, MatListItem, MatNativeDateModule, MAT_DIALOG_DATA } from '@angular/material';
+import {
+  MatDialogModule,
+  MatDialogRef,
+  MatList,
+  MatListItem,
+  MatNativeDateModule,
+  MAT_DIALOG_DATA
+} from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { UiModule } from '@campus/ui';
+import { MockDate } from '@campus/testing';
+import { DateRangePickerComponent, UiModule } from '@campus/ui';
 import { configureTestSuite } from 'ng-bullet';
-import { AssigneeInterface, AssigneeTypesEnum } from '../../interfaces/Assignee.interface';
+import {
+  AssigneeInterface,
+  AssigneeTypesEnum
+} from '../../interfaces/Assignee.interface';
 import { ManageKabasTasksAssigneeDataInterface } from './manage-kabas-tasks-assignee-data.interface';
 import { ManageKabasTasksAssigneeModalComponent } from './manage-kabas-tasks-assignee-modal.component';
-
 describe('ManageKabasTasksAssigneeModalComponent', () => {
   let component: ManageKabasTasksAssigneeModalComponent;
   let fixture: ComponentFixture<ManageKabasTasksAssigneeModalComponent>;
@@ -94,11 +103,13 @@ describe('ManageKabasTasksAssigneeModalComponent', () => {
     });
 
     it('should show a date picker for the default date', () => {
-      const datePickerDE = fixture.debugElement.query(
+      const datePicker = fixture.debugElement.query(
         By.css('.manage-task-assignees__title__date-picker')
-      );
-      expect(datePickerDE).toBeTruthy();
+      ).componentInstance as DateRangePickerComponent;
 
+      expect(datePicker.initialStartDate).toBe(component.default.start);
+      expect(datePicker.initialEndDate).toBe(component.default.end);
+      expect(datePicker.useTime).toBe(false);
     });
 
     it('should show a search button', () => {
@@ -357,11 +368,81 @@ describe('ManageKabasTasksAssigneeModalComponent', () => {
     });
   });
 
-  describe('initial values', ()=>{
-    describe('default boundaries date picker', ()=>{
+  describe('initial values', () => {
+    describe('default boundaries date picker', () => {
+      const dec31 = new Date(2019, 11, 31);
+      const jan1 = new Date(2020, 0, 1);
+      const jun30 = new Date(2020, 5, 30);
+      const sept1 = new Date(2019, 8, 1);
 
-    })
-  })
+      // random dates
+      const date1 = new Date(2019, 10, 15);
+      const date2 = new Date(2019, 10, 30);
+
+      const testCases = [
+        {
+          it:
+            'should use the rest of the schoolyear when there are no assignees, january',
+          currentTaskAssignees: [],
+          today: jan1,
+          expected: { start: jan1, end: jun30 }
+        },
+        {
+          it:
+            'should use the rest of the schoolyear when there are no assignees, december',
+          currentTaskAssignees: [],
+          today: dec31,
+          expected: { start: dec31, end: jun30 }
+        },
+        {
+          it: 'should use the single assignee value',
+          currentTaskAssignees: [{ start: date1, end: date2 }],
+          today: sept1, // not used
+          expected: { start: date1, end: date2 }
+        },
+        {
+          it: 'should use the most frequent assigned values',
+          currentTaskAssignees: [
+            { start: date1, end: date2 },
+            { start: date1, end: date2 },
+            { start: date1, end: dec31 },
+            { start: date2, end: dec31 },
+            { start: date2, end: dec31 },
+            { start: sept1, end: date1 }
+          ],
+          today: sept1, // not used
+          expected: { start: date1, end: dec31 }
+        },
+        {
+          it: 'should use the most frequent assigned values, ties',
+          currentTaskAssignees: [
+            { start: date1, end: date2 },
+            { start: date2, end: date2 },
+            { start: date1, end: dec31 },
+            { start: date2, end: dec31 },
+            { start: date1, end: dec31 },
+            { start: date2, end: date2 }
+          ],
+          today: sept1, // not used
+          // note: since the values are sorted
+          // these end up being the ones that appear earliest in the assignees array
+          expected: { start: date1, end: date2 }
+        }
+      ];
+
+      testCases.forEach(testCase => {
+        it(testCase.it, () => {
+          component[
+            'data'
+          ].currentTaskAssignees = testCase.currentTaskAssignees as any;
+          const mockDate = new MockDate(testCase.today);
+          component.ngOnInit();
+          expect(component.default).toEqual(testCase.expected);
+          mockDate.returnRealDate();
+        });
+      });
+    });
+  });
 
   describe('addAssigneeComponent', () => {
     // TODO
