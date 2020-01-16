@@ -1,10 +1,11 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { TaskStudentFixture } from '@campus/dal';
 import {
-  AssigneeInterface,
-  AssigneeTypesEnum
-} from '../../interfaces/Assignee.interface';
+  ClassGroupInterface,
+  GroupInterface,
+  PersonInterface
+} from '@campus/dal';
+import { AssigneeInterface } from '../../interfaces/Assignee.interface';
 
 @Component({
   selector: 'campus-manage-kabas-tasks-assignee-modal',
@@ -15,23 +16,26 @@ export class ManageKabasTasksAssigneeModalComponent implements OnInit {
   public showAddAssignees = false;
   public currentTaskName: string;
   public currentTaskAssignees: AssigneeInterface[];
-  public defaultStartDate: Date;
-  public defaultEndDate: Date;
+  public default: { start: Date; end: Date };
   public showAdvancedBoundaries = false;
+
+  public availableClassGroups: ClassGroupInterface[] = [];
+  public availableGroups: GroupInterface[] = [];
+  public availableStudents: PersonInterface[] = [];
 
   constructor(
     @Inject(MAT_DIALOG_DATA) private data: any,
     private dialogRef: MatDialogRef<ManageKabasTasksAssigneeModalComponent>
-  ) {
+  ) {}
+
+  ngOnInit() {
     // page assignees shouldn't be affected -> clone
-    this.currentTaskAssignees = data.currentTaskAssignees.map(cTA => ({
+    this.currentTaskAssignees = this.data.currentTaskAssignees.map(cTA => ({
       ...cTA
     }));
-    this.currentTaskName = data.title;
+    this.currentTaskName = this.data.title;
     this.determineDefaultDateInterval();
   }
-
-  ngOnInit() {}
 
   public toggleAdvancedBoundaries() {
     this.showAdvancedBoundaries = !this.showAdvancedBoundaries;
@@ -41,40 +45,30 @@ export class ManageKabasTasksAssigneeModalComponent implements OnInit {
     this.currentTaskAssignees
       .filter(
         cTA =>
-          cTA.start.getTime() === this.defaultStartDate.getTime() &&
-          cTA.end.getTime() === this.defaultEndDate.getTime()
+          cTA.start.getTime() === this.default.start.getTime() &&
+          cTA.end.getTime() === this.default.end.getTime()
       )
       .forEach(cTA => {
         cTA.start = event.start;
         cTA.end = event.end;
       });
 
-    this.defaultStartDate = event.start;
-    this.defaultEndDate = event.end;
+    this.default = event;
   }
 
-  public openAddAssignees() {
+  public toggleAddAssignees() {
     this.showAddAssignees = !this.showAddAssignees;
   }
 
-  public addAssignees(event) {
+  public addAssignees(assignees: AssigneeInterface[]) {
     // TODO event is click, for now
     // TODO use actual input
 
-    const newTaskStudent = new TaskStudentFixture();
-
-    const assigneesToAdd = [newTaskStudent].map(tA => ({
+    const assigneesToAdd = assignees.map(tA => ({
       ...tA,
-      label: 'Alfred Jodocus',
-      type: AssigneeTypesEnum.STUDENT,
-      start: this.defaultStartDate,
-      end: this.defaultEndDate
+      ...this.default
     }));
     this.currentTaskAssignees.push(...assigneesToAdd);
-
-    if (this.currentTaskAssignees.length === 1) {
-      this.showAdvancedBoundaries = false;
-    }
   }
 
   public removeAssignee(assignee: AssigneeInterface) {
@@ -92,8 +86,7 @@ export class ManageKabasTasksAssigneeModalComponent implements OnInit {
   }
 
   public setDefaultDate(assignee: AssigneeInterface) {
-    assignee.start = this.defaultStartDate;
-    assignee.end = this.defaultEndDate;
+    Object.assign(assignee, this.default);
   }
 
   public onOKButtonClick() {
@@ -106,55 +99,31 @@ export class ManageKabasTasksAssigneeModalComponent implements OnInit {
 
   public isDefaultDate(start: Date, end: Date): boolean {
     return (
-      start.getTime() === this.defaultStartDate.getTime() &&
-      end.getTime() === this.defaultEndDate.getTime()
-    );
-  }
-
-  private getCanToggleAdvancedBoundaries() {
-    // can always change to advanced
-    if (!this.showAdvancedBoundaries) {
-      return true;
-    }
-
-    const aggregatedBoundaries = this.aggregateAssigneeBoundaries();
-
-    return (
-      // 1 value
-      aggregatedBoundaries.startAmount === 1 &&
-      aggregatedBoundaries.endAmount === 1 &&
-      // matches default
-      this.isDefaultDate(
-        aggregatedBoundaries.mostFrequentStartDate,
-        aggregatedBoundaries.mostFrequentEndDate
-      )
+      start.getTime() === this.default.start.getTime() &&
+      end.getTime() === this.default.end.getTime()
     );
   }
 
   private determineDefaultDateInterval() {
+    let start, end;
+
     // no assignees -> rest of schoolyear
     if (this.currentTaskAssignees.length === 0) {
       const today = new Date();
       const schoolYear = this.getSchoolYearBoundaries(today);
 
-      this.defaultStartDate = today;
-      this.defaultEndDate = schoolYear.end;
-      return;
+      start = today;
+      end = schoolYear.end;
+    } else {
+      const aggregatedBoundaries = this.aggregateAssigneeBoundaries();
+
+      // all assignees use same interval -> use he most frequent (i.e. only) value
+      // if differing boundaries -> use the most frequent
+      start = aggregatedBoundaries.mostFrequentStartDate;
+      end = aggregatedBoundaries.mostFrequentEndDate;
     }
 
-    const aggregatedBoundaries = this.aggregateAssigneeBoundaries();
-
-    // all assignees use same interval -> use he most frequent (i.e. only) value
-    // if differing boundaries -> use the most frequent and show advanced
-    this.defaultStartDate = aggregatedBoundaries.mostFrequentStartDate;
-    this.defaultEndDate = aggregatedBoundaries.mostFrequentEndDate;
-
-    if (
-      aggregatedBoundaries.startAmount !== 1 ||
-      aggregatedBoundaries.endAmount !== 1
-    ) {
-      this.showAdvancedBoundaries = true;
-    }
+    this.default = { start, end };
   }
 
   // return start- and endDate of schoolyear

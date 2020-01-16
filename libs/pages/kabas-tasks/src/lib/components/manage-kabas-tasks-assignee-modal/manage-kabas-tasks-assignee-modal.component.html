@@ -6,8 +6,8 @@
   <campus-date-range-picker
     class="manage-task-assignees__title__date-picker"
     [useTime]="false"
-    [initialStartDate]="defaultStartDate"
-    [initialEndDate]="defaultEndDate"
+    [initialStartDate]="default.start"
+    [initialEndDate]="default.end"
     (valueChanged)="setDefaultDateRange($event)"
   ></campus-date-range-picker>
 </div>
@@ -17,13 +17,13 @@
     ><campus-button
       primary
       class="manage-task-assignees__content__add-assignees__container__button"
-      (click)="openAddAssignees()"
+      (click)="toggleAddAssignees()"
       >Zoeken</campus-button
     >
     <div
       *ngIf="showAddAssignees"
       class="manage-task-assignees__content__add-assignees"
-      (click)="addAssignees($event)"
+      (click)="addAssignees([{ type: 'student', label: 'Alfred Jodocus' }])"
       >Insert assignees by clicking here</div
     >
   </div>

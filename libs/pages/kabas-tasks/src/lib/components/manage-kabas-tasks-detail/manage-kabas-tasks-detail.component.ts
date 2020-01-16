@@ -4,6 +4,7 @@ import { SearchFilterCriteriaInterface } from '@campus/search';
 import { take } from 'rxjs/operators';
 import { TaskWithAssigneesInterface } from '../../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
+import { ManageKabasTasksAssigneeDataInterface } from '../manage-kabas-tasks-assignee-modal/manage-kabas-tasks-assignee-data.interface';
 import { ManageKabasTasksAssigneeModalComponent } from '../manage-kabas-tasks-assignee-modal/manage-kabas-tasks-assignee-modal.component';
 
 export enum TaskSortEnum {
@@ -84,13 +85,13 @@ export class ManageKabasTasksDetailComponent implements OnInit {
         currentTaskAssignees = tasksWithAssignments[0].assignees;
       });
 
-    const data = {
+    const data: ManageKabasTasksAssigneeDataInterface = {
       title: 'Taak naam',
       // all available taskAssignees
       // these need to include related data (classGroup, group, person)
-      taskClassGroups: [],
-      taskGroups: [],
-      taskStudents: [],
+      classGroups: [],
+      groups: [],
+      students: [],
       // current values in page
       currentTaskAssignees
     };

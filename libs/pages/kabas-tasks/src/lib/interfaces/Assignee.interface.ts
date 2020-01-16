@@ -8,9 +8,10 @@ export enum AssigneeTypesEnum {
 
 export interface AssigneeInterface {
   type: AssigneeTypesEnum;
-  id: number;
+  id?: number;
   label: string;
-  start: Date;
-  end: Date;
+  start?: Date;
+  end?: Date;
   status?: TaskStatusEnum;
+  relationId?: number;
 }

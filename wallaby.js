@@ -1,6 +1,7 @@
 // https://wallabyjs.com/docs/intro/config.html#overriding-automatic-defaults
 module.exports = wallaby => ({
-  autoDetect: true
+  autoDetect: true,
+  runSelectedTestsOnly: true
 });
 
 // module.exports = function(wallaby) {
