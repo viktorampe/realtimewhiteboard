@@ -1,11 +1,24 @@
 import { TestBed } from '@angular/core/testing';
-import { AuthServiceInterface, AUTH_SERVICE_TOKEN, DalState, FavoriteActions, FavoriteTypesEnum, getRouterState, PersonFixture, TaskActions, UserQueries } from '@campus/dal';
+import {
+  AuthServiceInterface,
+  AUTH_SERVICE_TOKEN,
+  DalState,
+  FavoriteActions,
+  FavoriteTypesEnum,
+  getRouterState,
+  PersonFixture,
+  TaskActions,
+  UserQueries
+} from '@campus/dal';
 import { MockDate } from '@campus/testing';
 import { Store } from '@ngrx/store';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { hot } from '@nrwl/angular/testing';
 import { configureTestSuite } from 'ng-bullet';
-import { TaskStatusEnum, TaskWithAssigneesInterface } from '../interfaces/TaskWithAssignees.interface';
+import {
+  TaskStatusEnum,
+  TaskWithAssigneesInterface
+} from '../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from './kabas-tasks.viewmodel';
 
 describe('KabasTaskViewModel', () => {
