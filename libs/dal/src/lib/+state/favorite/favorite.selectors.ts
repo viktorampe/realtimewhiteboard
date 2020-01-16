@@ -59,7 +59,7 @@ export const getById = createSelector(
 );
 
 // TODO: Investigate why this causes an infinite loop when used for SideNav
-export const getByType = (type?: FavoriteTypesEnum) =>
+export const getByType = (type: FavoriteTypesEnum) =>
   createSelector(selectFavoriteState, (state: State) =>
     Object.values(state.entities).filter(value => value.type === type)
   );
