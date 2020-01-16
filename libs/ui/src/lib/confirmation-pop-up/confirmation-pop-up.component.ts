@@ -1,4 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Inject } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 export interface ConfirmationActionInterface {
   icon: string;
@@ -11,13 +12,23 @@ export interface ConfirmationActionInterface {
   templateUrl: './confirmation-pop-up.component.html',
   styleUrls: ['./confirmation-pop-up.component.scss']
 })
-export class ConfirmationPopUpComponent implements OnInit {
-  @Input() title: string;
-  @Input() message: string;
+export class ConfirmationPopUpComponent {
+  title: string;
+  message: string;
 
-  @Input() actions: ConfirmationActionInterface[];
+  constructor(
+    @Inject(MAT_DIALOG_DATA) private data: any,
+    private dialogRef: MatDialogRef<ConfirmationPopUpComponent>
+  ) {
+    this.title = data.title;
+    this.message = data.message;
+  }
 
-  constructor() {}
+  cancel() {
+    this.dialogRef.close(false);
+  }
 
-  ngOnInit() {}
+  confirm() {
+    this.dialogRef.close(true);
+  }
 }

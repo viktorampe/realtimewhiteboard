@@ -1,5 +1,4 @@
 <p>{{ title }}</p>
 <p>{{ message }}</p>
-<button *ngFor="let action of actions" (click)="action.handler()">{{
-  action.label
-}}</button>
+<button (click)="cancel()">Annuleren</button>
+<button (click)="confirm()">Ja</button>

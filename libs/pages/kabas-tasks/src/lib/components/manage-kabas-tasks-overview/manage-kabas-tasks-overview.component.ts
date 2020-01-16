@@ -34,7 +34,7 @@ import {
   FILTER_SERVICE_TOKEN
 } from '@campus/utils';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { map, shareReplay } from 'rxjs/operators';
+import { filter, map, shareReplay, take } from 'rxjs/operators';
 import { AssigneeTypesEnum } from '../../interfaces/Assignee.interface';
 import { TaskWithAssigneesInterface } from '../../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
@@ -334,27 +334,25 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
   }
   // TODO: implement handler
   clickDeleteTasks() {
-    const dialogRef = this.matDialog.open(ConfirmationPopUpComponent);
-    dialogRef.componentInstance.title = 'Taken verwijderen';
-    dialogRef.componentInstance.message =
-      'Ben je zeker dat je deze taken wil verwijderen?';
-    dialogRef.componentInstance.title = 'Taken verwijderen';
-    dialogRef.componentInstance.actions = [
-      {
-        label: 'annuleren',
-        handler: dialogRef.close.bind(dialogRef),
-        icon: 'cancel'
-      },
-      {
-        label: 'OK',
-        handler: this.deleteTasks.bind(this, dialogRef),
-        icon: 'delete'
-      }
-    ];
+    const dialogData = {
+      title: 'Taken verwijderen',
+      message: 'Ben je zeker dat je deze taken wil verwijderen?'
+    };
+
+    const dialogRef = this.matDialog.open(ConfirmationPopUpComponent, {
+      data: dialogData
+    });
+
+    dialogRef
+      .afterClosed()
+      .pipe(
+        filter(confirmed => confirmed),
+        take(1)
+      )
+      .subscribe(this.deleteTasks);
   }
 
-  private deleteTasks(dialog: MatDialogRef<ConfirmationPopUpComponent>) {
-    dialog.close();
+  private deleteTasks() {
     console.log('GO AHEAD AND DELETE MY TASKS PLEASE!');
   }
 
