@@ -122,6 +122,9 @@
             <mat-option [value]="TaskSortEnum.STARTDATE">
               Start datum
             </mat-option>
+            <mat-option [value]="TaskSortEnum.FAVORITE">
+              Favoriet
+            </mat-option>
           </mat-select>
         </div>
         <ng-container *ngIf="digitalFilteredTasks$ | async as digitalTasks">
@@ -230,6 +233,9 @@
             </mat-option>
             <mat-option [value]="TaskSortEnum.LEARNINGAREA">
               Leergebied
+            </mat-option>
+            <mat-option [value]="TaskSortEnum.FAVORITE">
+              Favoriet
             </mat-option>
           </mat-select>
         </div>
