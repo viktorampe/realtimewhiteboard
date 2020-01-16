@@ -1,4 +1,8 @@
-<p>{{ title }}</p>
-<p>{{ message }}</p>
-<button (click)="cancel()">Annuleren</button>
-<button (click)="confirm()">Ja</button>
+<h1 mat-dialog-title>{{ title }}</h1>
+<div mat-dialog-content>
+  <p>{{ message }}</p>
+</div>
+<div mat-dialog-actions>
+  <campus-button (click)="cancel()">Annuleren</campus-button>
+  <campus-button primary (click)="confirm()">Ja</campus-button>
+</div>

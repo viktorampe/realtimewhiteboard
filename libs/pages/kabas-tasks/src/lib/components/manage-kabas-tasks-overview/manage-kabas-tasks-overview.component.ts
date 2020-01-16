@@ -333,7 +333,7 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
   clickDeleteTasks() {
     const dialogData = {
       title: 'Taken verwijderen',
-      message: 'Ben je zeker dat je deze taken wil verwijderen?'
+      message: 'Ben je zeker dat je de geselecteerde taken wil verwijderen?'
     };
 
     const dialogRef = this.matDialog.open(ConfirmationModalComponent, {
