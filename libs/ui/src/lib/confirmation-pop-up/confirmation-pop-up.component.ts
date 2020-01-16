@@ -18,7 +18,7 @@ export class ConfirmationPopUpComponent {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) private data: any,
-    private dialogRef: MatDialogRef<ConfirmationPopUpComponent>
+    public dialogRef: MatDialogRef<ConfirmationPopUpComponent>
   ) {
     this.title = data.title;
     this.message = data.message;
