@@ -11,7 +11,7 @@
     [emitOnTextChange]="true"
   ></campus-search-term>
   <campus-button
-    (click)="(true)"
+    (click)="resetFilter()"
     class="manage-kabas-tasks-overview__reset-filters"
     iconClass="reset-filters"
   ></campus-button>
@@ -23,7 +23,10 @@
       >{{ assignees.key }}</span
     >
     <mat-selection-list>
-      <mat-list-option *ngFor="let assignee of assignees.value">
+      <mat-list-option
+        [value]="assignee"
+        *ngFor="let assignee of assignees.value"
+      >
         {{ assignee.label }}</mat-list-option
       >
     </mat-selection-list>
@@ -32,6 +35,7 @@
   <mat-dialog-actions class="pages-kabas-tasks-new-task__dialog__actions">
     <campus-button
       primary
+      (click)="addAssignees()"
       class="pages-kabas-tasks-new-task__dialog__actions__button"
       >Toevoegen</campus-button
     >

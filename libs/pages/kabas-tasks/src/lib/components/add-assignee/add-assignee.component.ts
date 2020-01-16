@@ -1,11 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewChildren } from '@angular/core';
+import { MatSelectionList } from '@angular/material';
+import { SearchTermComponent } from '@campus/search';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import {
   AssigneeInterface,
   AssigneeTypesEnum
 } from '../../interfaces/Assignee.interface';
-import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
 
 interface AddAssigneeFilterState {
   label?: string;
@@ -25,8 +26,11 @@ interface AssigneesByType {
 })
 export class AddAssigneeComponent implements OnInit {
   public filteredAssignees$: Observable<AssigneesByType>;
-
   private filterState$ = new BehaviorSubject<AddAssigneeFilterState>({});
+  @ViewChildren(MatSelectionList)
+  private selectedAssignees: MatSelectionList[];
+  @ViewChild(SearchTermComponent, { static: false })
+  private searchTermFilter: SearchTermComponent;
 
   students: AssigneeInterface[] = [
     {
@@ -63,7 +67,7 @@ export class AddAssigneeComponent implements OnInit {
     }
   ];
 
-  constructor(private viewModel: KabasTasksViewModel) {}
+  constructor() {}
 
   ngOnInit() {
     this.filteredAssignees$ = this.filterState$.pipe(
@@ -93,6 +97,11 @@ export class AddAssigneeComponent implements OnInit {
     });
   }
 
+  public resetFilter() {
+    this.filterState$.next({ label: '' });
+    this.searchTermFilter.currentValue = '';
+  }
+
   private filter(
     assignees: AssigneeInterface[],
     filterState: AddAssigneeFilterState
@@ -115,17 +124,11 @@ export class AddAssigneeComponent implements OnInit {
     };
   }
 
-  // public sortAssignees(students, groups, classgroups) {
-  //   this.allDataTogether.sort(function(a, b) {
-  //     const order = {
-  //       [AssigneeTypesEnum.CLASSGROUP]: 1,
-  //       [AssigneeTypesEnum.GROUP]: 2,
-  //       [AssigneeTypesEnum.STUDENT]: 3
-  //     };
-  //     return (
-  //       order[a.type] - order[b.type] ||
-  //       (a.label > b.label ? 1 : b.label > a.label ? -1 : 0)
-  //     );
-  //   });
-  // }
+  addAssignees() {
+    const optionsSelected = this.selectedAssignees.map(element =>
+      element.selectedOptions.selected.forEach(option => {
+        console.log(option.value);
+      })
+    );
+  }
 }
