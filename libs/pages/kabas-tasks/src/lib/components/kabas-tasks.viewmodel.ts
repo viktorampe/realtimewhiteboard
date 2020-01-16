@@ -50,7 +50,13 @@ export class KabasTasksViewModel {
   ) {
     this.tasksWithAssignments$ = this.store.pipe(
       select(getTasksWithAssignments, { isPaper: false }),
-      map(tasks => tasks.map(task => ({ ...task, ...this.getTaskDates(task) })))
+      map(tasks =>
+        tasks.map(task => ({
+          ...task,
+          ...this.getTaskDates(task),
+          isFavorite: task.id % 2 === 0
+        }))
+      )
     );
 
     this.paperTasksWithAssignments$ = this.store.pipe(
