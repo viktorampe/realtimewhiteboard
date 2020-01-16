@@ -319,10 +319,10 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
   }
 
   clickAddDigitalTask() {
-    console.log('TODO: adding digital task');
+    this.router.navigate(['tasks', 'manage', 'new']);
   }
   clickAddPaperTask() {
-    console.log('TODO: adding paper task');
+    this.router.navigate(['tasks', 'manage', 'new']);
   }
 
   clickDeleteTasks() {
