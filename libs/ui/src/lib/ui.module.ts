@@ -38,7 +38,7 @@ import { RoundedCornersDirective } from './button/directives/button-rounded-corn
 import { WarningDirective } from './button/directives/button-warning.directive';
 import { CollapsibleSheetComponent } from './collapsible-sheet/collapsible-sheet.component';
 import { ConfirmableSelectComponent } from './confirmable-select/confirmable-select.component';
-import { ConfirmationPopUpComponent } from './confirmation-pop-up/confirmation-pop-up.component';
+import { ConfirmationModalComponent } from './confirmation-modal/confirmation-pop-up.component';
 import { ContentEditableComponent } from './content-editable/content-editable.component';
 import { ContentPreviewComponent } from './content-preview/content-preview.component';
 import { ContentThumbnailComponent } from './content-thumbnail/content-thumbnail.component';
@@ -173,7 +173,7 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     ShellBottomDirective,
     FileIconComponent,
     DateRangePickerComponent,
-    ConfirmationPopUpComponent
+    ConfirmationModalComponent
   ],
   exports: [
     FilterTextInputComponent,
@@ -247,6 +247,6 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     { provide: DateAdapter, useClass: BeDateAdapter },
     ManageCollectionComponent
   ],
-  entryComponents: [ConfirmationPopUpComponent]
+  entryComponents: [ConfirmationModalComponent]
 })
 export class UiModule {}

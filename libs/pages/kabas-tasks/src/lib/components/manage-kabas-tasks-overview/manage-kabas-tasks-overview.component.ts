@@ -9,7 +9,6 @@ import {
 } from '@angular/core';
 import {
   MatDialog,
-  MatDialogRef,
   MatSelect,
   MatSelectionList,
   MatSlideToggle,
@@ -27,7 +26,7 @@ import {
   SearchTermComponent,
   SelectFilterComponent
 } from '@campus/search';
-import { ConfirmationPopUpComponent } from '@campus/ui';
+import { ConfirmationModalComponent } from '@campus/ui';
 import {
   DateFunctions,
   FilterServiceInterface,
@@ -117,8 +116,6 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
 
   private digitalFilterState$ = new BehaviorSubject<FilterStateInterface>({});
   private paperFilterState$ = new BehaviorSubject<FilterStateInterface>({});
-
-  private confirmDialog: MatDialogRef<ConfirmationPopUpComponent>;
 
   @ViewChildren(MatSelectionList) private taskLists: QueryList<
     MatSelectionList
@@ -339,7 +336,7 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
       message: 'Ben je zeker dat je deze taken wil verwijderen?'
     };
 
-    const dialogRef = this.matDialog.open(ConfirmationPopUpComponent, {
+    const dialogRef = this.matDialog.open(ConfirmationModalComponent, {
       data: dialogData
     });
 

@@ -4,12 +4,12 @@ import {
   MatDialogRef,
   MAT_DIALOG_DATA
 } from '@angular/material';
-import { ConfirmationPopUpComponent } from './confirmation-pop-up.component';
+import { ConfirmationModalComponent } from './confirmation-modal.component';
 
 // file.only
 describe('ConfirmationPopUpComponent', () => {
-  let component: ConfirmationPopUpComponent;
-  let fixture: ComponentFixture<ConfirmationPopUpComponent>;
+  let component: ConfirmationModalComponent;
+  let fixture: ComponentFixture<ConfirmationModalComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -27,12 +27,12 @@ describe('ConfirmationPopUpComponent', () => {
           useValue: { close: jest.fn() }
         }
       ],
-      declarations: [ConfirmationPopUpComponent]
+      declarations: [ConfirmationModalComponent]
     }).compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ConfirmationPopUpComponent);
+    fixture = TestBed.createComponent(ConfirmationModalComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
