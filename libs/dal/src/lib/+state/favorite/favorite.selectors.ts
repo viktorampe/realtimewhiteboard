@@ -65,6 +65,14 @@ export const getByType = createSelector(
     Object.values(state.entities).filter(value => value.type === props.type)
 );
 
+export const getFavoriteTasks = createSelector(
+  getByType,
+  (
+    favoriteTasks: FavoriteInterface[],
+    props = { type: FavoriteTypesEnum.TASK }
+  ) => favoriteTasks
+);
+
 export const getByTypeAndId = createSelector(
   selectFavoriteState,
   (state: State, props: { type: FavoriteTypesEnum; id: number }) => {
