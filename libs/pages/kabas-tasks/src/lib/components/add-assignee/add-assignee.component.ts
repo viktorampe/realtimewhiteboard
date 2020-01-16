@@ -111,6 +111,23 @@ export class AddAssigneeComponent implements OnInit {
     this.searchTermFilter.currentValue = '';
   }
 
+  public clearList() {
+    this.selectedAssignees.forEach(list => list.selectedOptions.clear());
+    this.resetFilter();
+  }
+
+  addAssignees() {
+    const assignees = this.selectedAssignees.reduce((acc, element) => {
+      return [
+        ...acc,
+        ...element.selectedOptions.selected.map(selection => selection.value)
+      ];
+    }, []);
+
+    this.addedAssignees.emit(assignees);
+    this.clearList();
+  }
+
   private filter(
     assignees: AssigneeInterface[],
     filterState: AddAssigneeFilterState
@@ -131,17 +148,5 @@ export class AddAssigneeComponent implements OnInit {
       classgroups: [],
       results: filteredAssignees
     };
-  }
-
-  addAssignees() {
-    const assignees = this.selectedAssignees.reduce((acc, element) => {
-      return [
-        ...acc,
-        ...element.selectedOptions.selected.map(selection => selection.value)
-      ];
-    }, []);
-
-    this.addedAssignees.emit(assignees);
-    this.selectedAssignees.forEach(list => list.selectedOptions.clear());
   }
 }
