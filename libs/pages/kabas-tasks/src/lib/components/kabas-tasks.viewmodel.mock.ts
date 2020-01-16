@@ -42,6 +42,7 @@ export class MockKabasTasksViewModel
       })
     );
 
+    // this.currentTask$ = this.paperTasksWithAssignments$.pipe(
     this.currentTask$ = this.tasksWithAssignments$.pipe(
       map(tasksWithAssignees => tasksWithAssignees[0])
     );
@@ -142,7 +143,9 @@ export class MockKabasTasksViewModel
             end: nextWeek,
             id: 5
           }
-        ]
+        ],
+        startDate: yesterday,
+        endDate: nextWeek
       },
       //Task runs for all assignees in different timespans
       {

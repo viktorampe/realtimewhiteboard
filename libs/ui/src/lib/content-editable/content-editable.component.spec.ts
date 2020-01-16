@@ -57,6 +57,24 @@ describe('ContentEditableComponent', () => {
     expect(buttons).toBeFalsy();
   });
 
+  it('should not display an edit button when icon input is empty', () => {
+    const buttons = fixture.debugElement.query(
+      By.css('.ui-content-editable__edit')
+    );
+
+    expect(buttons).toBeFalsy();
+  });
+
+  it('should display an edit button when icon input is set', () => {
+    component.icon = 'foo';
+    fixture.detectChanges();
+    const buttons = fixture.debugElement.query(
+      By.css('.ui-content-editable__edit')
+    );
+
+    expect(buttons).toBeTruthy();
+  });
+
   describe('begin editing (= setting active to true)', () => {
     const text = 'hello';
 
@@ -198,11 +216,19 @@ describe('ContentEditableComponent', () => {
       expect(component.saveChanges).not.toHaveBeenCalled();
     });
 
-    it('should not show confirm button if new text is empty', () => {
+    it('should not show confirm button if new text is empty and required is not false', () => {
       enterText(inputEl, '');
       fixture.detectChanges();
 
       expect(getConfirmButton()).toBeFalsy();
+    });
+
+    it('should show confirm button if new text is empty and required is false', () => {
+      component.required = false;
+      enterText(inputEl, '');
+      fixture.detectChanges();
+
+      expect(getConfirmButton()).toBeTruthy();
     });
 
     it('should emit event when changes are confirmed', () => {

@@ -67,16 +67,26 @@
       class="manage-kabas-tasks-detail__info"
     >
       <ng-container *ngIf="selectedContents.length === 0; else contentDetails">
-        <input type="text" placeholder="Titel" [value]="task.name" />
-        <textarea placeholder="Omschrijving">{{ task.description }}</textarea>
+        <campus-content-editable
+          [text]="task.name"
+          [placeholder]="'Titel'"
+          [required]="true"
+          [icon]="'edit'"
+          (textChanged)="('TODO updateTask')"
+        ></campus-content-editable>
+        <campus-content-editable
+          [text]="task.description"
+          [placeholder]="'Omschrijving'"
+          [multiline]="true"
+          [required]="false"
+          [icon]="'edit'"
+          (textChanged)="('TODO updateTask')"
+        ></campus-content-editable>
         <p>{{ task.learningArea.name }}</p>
-        <ng-container *ngIf="task.isPaperTask; else showDates">
-          <campus-button>Print</campus-button>
-        </ng-container>
         <ng-template #showDates>
           <p *ngIf="task.startDate"
-            >{{ task.startDate | humanDateTime }} -
-            {{ task.endDate | humanDateTime }}</p
+            >{{ task.startDate | date: 'dd-MM-yy' }} -
+            {{ task.endDate | date: 'dd-MM-yy' }}</p
           >
         </ng-template>
 
@@ -102,6 +112,9 @@
           </div>
         </div>
 
+        <ng-container *ngIf="task.isPaperTask; else showDates">
+          <campus-button>Print</campus-button>
+        </ng-container>
         <campus-button primary>+ oefening toevoegen</campus-button>
         <campus-button danger>verwijder taak</campus-button>
       </ng-container>
@@ -134,7 +147,6 @@
             <mat-radio-button [value]="true">Moetje</mat-radio-button>
             <br /><mat-radio-button [value]="false">Magje</mat-radio-button>
           </mat-radio-group>
-          <campus-button>opslaan</campus-button>
         </div>
 
         <campus-button danger>verwijder oefeningen</campus-button>
