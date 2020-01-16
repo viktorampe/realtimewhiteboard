@@ -754,19 +754,12 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
 
   private favoriteComparer(a, b): number {
     {
-      const taskA = a.isFavorite;
-      const taskB = b.isFavorite;
-
-      if (taskA && !taskB) return -1;
-
-      if (!taskA && taskB) return 1;
-
-      if (taskA === taskB) return 0;
+      return b.isFavorite - a.isFavorite;
     }
   }
 
   private nameComparer(a, b): number {
-    return a.name.localeCompare(b.name, 'be-nl', {
+    return a.name.localeCompare(b.name, 'nl-BE', {
       sensitivity: 'base'
     });
   }

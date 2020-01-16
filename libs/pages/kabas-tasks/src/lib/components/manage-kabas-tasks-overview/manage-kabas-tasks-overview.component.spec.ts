@@ -768,9 +768,9 @@ describe('ManageKabasTasksOverviewComponent', () => {
       it('should order by favorite, then by name', () => {
         const mockTasks = [
           { id: 1, name: 'b', isFavorite: true },
-          { id: 2, name: 'a', isFavorite: true },
+          { id: 2, name: 'd', isFavorite: false },
           { id: 3, name: 'c', isFavorite: false },
-          { id: 4, name: 'd', isFavorite: false }
+          { id: 4, name: 'a', isFavorite: true }
         ] as TaskWithAssigneesInterface[];
 
         component.setSortMode(TaskSortEnum.FAVORITE);
@@ -780,7 +780,7 @@ describe('ManageKabasTasksOverviewComponent', () => {
           component.tasksWithAssignments$.pipe(
             map(tasks => tasks.map(task => task.id))
           )
-        ).toBeObservable(hot('a', { a: [2, 1, 3, 4] }));
+        ).toBeObservable(hot('a', { a: [4, 1, 3, 2] }));
       });
     });
 
