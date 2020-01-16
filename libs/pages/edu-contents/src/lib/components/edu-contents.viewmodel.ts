@@ -73,7 +73,7 @@ export class EduContentsViewModel {
     this.learningAreas$ = this.store.pipe(select(LearningAreaQueries.getAll));
     this.favoriteLearningAreas$ = this.getFavoriteLearningAreas();
     this.eduContentFavorites$ = this.store.pipe(
-      select(FavoriteQueries.getByType(FavoriteTypesEnum.EDUCONTENT))
+      select(FavoriteQueries.getByType, { type: FavoriteTypesEnum.EDUCONTENT })
     );
 
     this.setupSearchResults();
@@ -287,7 +287,7 @@ export class EduContentsViewModel {
 
   private getFavoriteLearningAreas(): Observable<LearningAreaInterface[]> {
     return this.store.pipe(
-      select(FavoriteQueries.getByType(FavoriteTypesEnum.AREA)),
+      select(FavoriteQueries.getByType, { type: FavoriteTypesEnum.AREA }),
       map((favorites): number[] =>
         favorites.map(favorite => favorite.learningAreaId)
       ),

@@ -88,7 +88,9 @@ describe('Kabas-tasks viewmodel selectors', () => {
     });
 
     it('should return digital tasksWithAssignments', () => {
-      const stream = store.pipe(select(getTasksWithAssignments(false)));
+      const stream = store.pipe(
+        select(getTasksWithAssignments, { isPaper: false })
+      );
 
       const expected = [
         {
@@ -138,7 +140,9 @@ describe('Kabas-tasks viewmodel selectors', () => {
     });
 
     it('should return paper tasksWithAssignments', () => {
-      const stream = store.pipe(select(getTasksWithAssignments(true)));
+      const stream = store.pipe(
+        select(getTasksWithAssignments, { isPaper: true })
+      );
 
       const expected = [
         {
@@ -146,7 +150,7 @@ describe('Kabas-tasks viewmodel selectors', () => {
             id: 2,
             name: 'een taak op dode bomen',
             isPaperTask: true,
-            isFavorite: true
+            isFavorite: false
           }),
           eduContentAmount: 1,
           learningArea: new LearningAreaFixture({ name: 'wiskunde' }),
