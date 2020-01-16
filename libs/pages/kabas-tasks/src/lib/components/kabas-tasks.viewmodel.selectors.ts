@@ -4,6 +4,8 @@ import {
   LearningAreaInterface,
   LearningAreaQueries,
   LinkedPersonQueries,
+  MethodInterface,
+  MethodQueries,
   TaskClassGroupQueries,
   TaskEduContentInterface,
   TaskEduContentQueries,
@@ -100,6 +102,32 @@ const combinedAssigneesByTask = createSelector(
     }, {});
 
     return dict;
+  }
+);
+
+export const allowedLearningAreas = createSelector(
+  [MethodQueries.getAllowedMethods, LearningAreaQueries.getAllEntities],
+  (
+    allowedMethods: MethodInterface[],
+    learningAreas: Dictionary<LearningAreaInterface>
+  ) => {
+    return allowedMethods.reduce(
+      (acc, allowedMethod) => {
+        if (!acc.addedLearningAreasMap[allowedMethod.learningAreaId]) {
+          acc.allowedLearningAreas.push(
+            learningAreas[allowedMethod.learningAreaId]
+          );
+
+          acc.addedLearningAreasMap[allowedMethod.learningAreaId] = true;
+        }
+
+        return acc;
+      },
+      {
+        addedLearningAreasMap: {},
+        allowedLearningAreas: []
+      }
+    ).allowedLearningAreas;
   }
 );
 

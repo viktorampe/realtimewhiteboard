@@ -9,13 +9,17 @@ import {
   FavoriteActions,
   FavoriteInterface,
   FavoriteTypesEnum,
+  getRouterState,
+  LearningAreaInterface,
+  RouterStateUrl,
   TaskActions,
   TaskInterface
 } from '@campus/dal';
 import { Update } from '@ngrx/entity';
+import { RouterReducerState } from '@ngrx/router-store';
 import { Action, select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, shareReplay } from 'rxjs/operators';
 import {
   AssigneeInterface,
   AssigneeTypesEnum
@@ -24,7 +28,14 @@ import {
   TaskStatusEnum,
   TaskWithAssigneesInterface
 } from '../interfaces/TaskWithAssignees.interface';
-import { getTasksWithAssignments } from './kabas-tasks.viewmodel.selectors';
+import {
+  allowedLearningAreas,
+  getTasksWithAssignments
+} from './kabas-tasks.viewmodel.selectors';
+
+export interface CurrentTaskParams {
+  id?: number;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -32,6 +43,10 @@ import { getTasksWithAssignments } from './kabas-tasks.viewmodel.selectors';
 export class KabasTasksViewModel {
   public tasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
   public paperTasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
+  public currentTaskParams$: Observable<CurrentTaskParams>;
+  public selectableLearningAreas$: Observable<LearningAreaInterface[]>;
+
+  private routerState$: Observable<RouterReducerState<RouterStateUrl>>;
 
   constructor(
     private store: Store<DalState>,
@@ -41,12 +56,32 @@ export class KabasTasksViewModel {
   ) {
     this.tasksWithAssignments$ = this.store.pipe(
       select(getTasksWithAssignments, { isPaper: false }),
-      map(tasks => tasks.map(task => ({ ...task, ...this.getTaskDates(task) })))
+      map(tasks =>
+        tasks.map(task => ({
+          ...task,
+          ...this.getTaskDates(task),
+          isFavorite: task.id % 2 === 0
+        }))
+      )
     );
 
     this.paperTasksWithAssignments$ = this.store.pipe(
       select(getTasksWithAssignments, { isPaper: true }),
       map(tasks => tasks.map(task => ({ ...task, ...this.getTaskDates(task) })))
+    );
+
+    this.routerState$ = this.store.pipe(select(getRouterState));
+    this.currentTaskParams$ = this.routerState$.pipe(
+      filter(routerState => !!routerState),
+      map((routerState: RouterReducerState<RouterStateUrl>) => ({
+        id: +routerState.state.params.id || undefined
+      })),
+      distinctUntilChanged((a, b) => a.id === b.id),
+      shareReplay(1)
+    );
+
+    this.selectableLearningAreas$ = this.store.pipe(
+      select(allowedLearningAreas)
     );
   }
 
