@@ -20,7 +20,10 @@ import {
   AssigneeInterface,
   AssigneeTypesEnum
 } from '../interfaces/Assignee.interface';
-import { TaskWithAssigneesInterface } from './../interfaces/TaskWithAssignees.interface';
+import {
+  TaskStatusEnum,
+  TaskWithAssigneesInterface
+} from './../interfaces/TaskWithAssignees.interface';
 
 const taskClassGroupAssigneeByTask = createSelector(
   [TaskClassGroupQueries.getAll, ClassGroupQueries.getAllEntities],
@@ -144,8 +147,8 @@ export const getTasksWithAssignments = createSelector(
     taskEduContentByTask: Dictionary<TaskEduContentInterface[]>,
     assigneesByTask: Dictionary<AssigneeInterface[]>,
     props: { isPaper?: boolean }
-  ) =>
-    tasks
+  ) => {
+    return tasks
       .filter(task => !!task.isPaperTask === !!props.isPaper)
       .map(
         (task): TaskWithAssigneesInterface => ({
@@ -157,4 +160,30 @@ export const getTasksWithAssignments = createSelector(
           assignees: assigneesByTask[task.id] || []
         })
       )
+      .map(
+        (taskWithAssignees): TaskWithAssigneesInterface => {
+          const now = new Date();
+          const { assignees } = taskWithAssignees;
+          let status = TaskStatusEnum.PENDING;
+
+          const maxDate = dates =>
+            dates.length ? new Date(Math.max(...dates)) : undefined;
+          const minDate = dates =>
+            dates.length ? new Date(Math.min(...dates)) : undefined;
+
+          const startDate = minDate(assignees.map(a => +a.start));
+          const endDate = maxDate(assignees.map(a => +a.end));
+
+          if (startDate && endDate) {
+            if (endDate < now) {
+              status = TaskStatusEnum.FINISHED;
+            } else if (startDate <= now) {
+              status = TaskStatusEnum.ACTIVE;
+            }
+          }
+
+          return { ...taskWithAssignees, startDate, endDate, status };
+        }
+      );
+  }
 );

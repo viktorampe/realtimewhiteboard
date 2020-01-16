@@ -33,6 +33,7 @@ import {
   TaskStudentFixture,
   TaskStudentReducer
 } from '@campus/dal';
+import { MockDate } from '@campus/testing';
 import { routerReducer } from '@ngrx/router-store';
 import { Action, select, Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/angular/testing';
@@ -44,6 +45,8 @@ import {
 } from './kabas-tasks.viewmodel.selectors';
 
 describe('Kabas-tasks viewmodel selectors', () => {
+  const dateMock = new MockDate();
+
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [
@@ -73,9 +76,13 @@ describe('Kabas-tasks viewmodel selectors', () => {
     });
   });
 
+  afterAll(() => {
+    dateMock.returnRealDate();
+  });
+
   describe('Store', () => {
     let store: Store<DalState>;
-    const date = Date.now();
+    const date = new Date().getTime();
 
     beforeEach(() => {
       store = TestBed.get(Store);
@@ -92,6 +99,9 @@ describe('Kabas-tasks viewmodel selectors', () => {
           ...new TaskFixture({ id: 1, name: 'een digitale taak' }),
           eduContentAmount: 3,
           learningArea: new LearningAreaFixture({ name: 'wiskunde' }),
+          startDate: new Date(date - 3),
+          endDate: new Date(date + 3),
+          status: 'active',
           assignees: [
             {
               type: AssigneeTypesEnum.CLASSGROUP,
@@ -123,6 +133,9 @@ describe('Kabas-tasks viewmodel selectors', () => {
           }),
           eduContentAmount: 0,
           learningArea: new LearningAreaFixture({ name: 'wiskunde' }),
+          startDate: undefined,
+          endDate: undefined,
+          status: 'pending',
           assignees: []
         }
       ];
@@ -143,6 +156,9 @@ describe('Kabas-tasks viewmodel selectors', () => {
           }),
           eduContentAmount: 1,
           learningArea: new LearningAreaFixture({ name: 'wiskunde' }),
+          startDate: new Date(date - 33),
+          endDate: new Date(date + 33),
+          status: 'active',
           assignees: [
             {
               type: AssigneeTypesEnum.CLASSGROUP,
