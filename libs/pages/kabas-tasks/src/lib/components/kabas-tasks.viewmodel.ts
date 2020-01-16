@@ -1,8 +1,11 @@
 import { Inject, Injectable } from '@angular/core';
+import { MAT_DATE_LOCALE } from '@angular/material';
 import {
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
   DalState,
+  EffectFeedback,
+  EffectFeedbackActions,
   FavoriteActions,
   FavoriteInterface,
   FavoriteTypesEnum,
@@ -31,7 +34,9 @@ export class KabasTasksViewModel {
 
   constructor(
     private store: Store<DalState>,
-    @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface
+    @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
+    @Inject(MAT_DATE_LOCALE) private dateLocale,
+    @Inject('uuid') private uuid: Function
   ) {
     this.tasksWithAssignments$ = this.store.pipe(
       select(getTasksWithAssignments, { isPaper: false }),
@@ -140,10 +145,16 @@ export class KabasTasksViewModel {
   }
 
   public removeTasks(tasks: TaskWithAssigneesInterface[]): void {
-    const tasksToRemove = tasks
-      .filter(task => this.canBeArchivedOrDeleted(task))
-      .map(task => task.id);
-    this.store.dispatch(new TaskActions.DeleteTasks({ ids: tasksToRemove }));
+    const deleteIds = [];
+    const errors = [];
+    tasks.forEach(task => {
+      if (this.canBeArchivedOrDeleted(task)) {
+        deleteIds.push({ taskId: task.id });
+      } else {
+        errors.push(task);
+      }
+    });
+    this.store.dispatch(this.getDestroyingAction(deleteIds, errors));
   }
 
   public toggleFavorite(task: TaskWithAssigneesInterface): void {
@@ -176,5 +187,78 @@ export class KabasTasksViewModel {
         userId: this.authService.userId
       })
     );
+  }
+
+  private getDestroyingAction(deleteIds, errors) {
+    const destroyAction = new TaskActions.StartDeleteTasks({
+      ids: deleteIds,
+      userId: this.authService.userId
+    });
+    if (errors.length) {
+      const effectFeedback = new EffectFeedback({
+        id: this.uuid(),
+        triggerAction: destroyAction,
+        message: this.stillActiveTaskFeedbackMessage(errors, 'delete'),
+        userActions: this.getFeedbackUserActions(
+          deleteIds.length,
+          destroyAction,
+          'delete'
+        ),
+        type: 'error'
+      });
+
+      const feedbackAction = new EffectFeedbackActions.AddEffectFeedback({
+        effectFeedback
+      });
+      return feedbackAction;
+    }
+    return destroyAction;
+  }
+
+  private getFeedbackUserActions(
+    numberOfUpdates: number,
+    userAction,
+    method: 'delete' | 'archive'
+  ) {
+    const methodVerbs = {
+      delete: 'Verwijder',
+      archive: 'Archiveer'
+    };
+
+    return numberOfUpdates > 0
+      ? [
+          {
+            title: `${methodVerbs[method]} de andere taken`,
+            userAction
+          }
+        ]
+      : [];
+  }
+
+  private stillActiveTaskFeedbackMessage(
+    errors: TaskWithAssigneesInterface[],
+    method: 'delete' | 'archive'
+  ) {
+    const methodVerbs = {
+      delete: 'verwijderd',
+      archive: 'gearchiveerd'
+    };
+
+    const list = errors.map(task => {
+      const activeUntil = task.endDate
+        ? ` Deze taak is nog actief tot ${task.endDate.toLocaleDateString(
+            this.dateLocale
+          )}`
+        : '';
+      return `<li>${task.name} kan niet worden ${methodVerbs[method]}.${activeUntil}</li>`;
+    });
+
+    const message = [
+      `<p>Niet alle taken kunnen ${methodVerbs[method]} worden:</p>`
+    ];
+    message.push('<ul>');
+    message.push(...list);
+    message.push('</ul>');
+    return message.join('');
   }
 }

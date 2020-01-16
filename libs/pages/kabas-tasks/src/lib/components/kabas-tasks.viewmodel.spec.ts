@@ -1,8 +1,11 @@
 import { TestBed } from '@angular/core/testing';
+import { MAT_DATE_LOCALE } from '@angular/material';
 import {
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
   DalState,
+  EffectFeedback,
+  EffectFeedbackActions,
   FavoriteActions,
   FavoriteTypesEnum,
   PersonFixture,
@@ -29,6 +32,8 @@ describe('KabasTaskViewModel', () => {
   let kabasTasksViewModel: KabasTasksViewModel;
   let store: MockStore<DalState>;
   let authService: AuthServiceInterface;
+  let uuid: Function;
+  let dateLocale;
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
@@ -36,7 +41,9 @@ describe('KabasTaskViewModel', () => {
       providers: [
         KabasTasksViewModel,
         provideMockStore(),
-        { provide: AUTH_SERVICE_TOKEN, useValue: { userId: 1 } }
+        { provide: AUTH_SERVICE_TOKEN, useValue: { userId: 1 } },
+        { provide: 'uuid', useValue: () => 'foo' },
+        { provide: MAT_DATE_LOCALE, useValue: 'en-US' }
       ]
     });
   });
@@ -44,6 +51,8 @@ describe('KabasTaskViewModel', () => {
   beforeEach(() => {
     kabasTasksViewModel = TestBed.get(KabasTasksViewModel);
     authService = TestBed.get(AUTH_SERVICE_TOKEN);
+    uuid = TestBed.get('uuid');
+    dateLocale = TestBed.get(MAT_DATE_LOCALE);
     store = TestBed.get(Store);
   });
 
@@ -398,6 +407,129 @@ describe('KabasTaskViewModel', () => {
       kabasTasksViewModel.toggleFavorite(taskAssignee);
 
       expect(spy).toHaveBeenCalledWith(expected);
+    });
+  });
+
+  describe('removeTasks', () => {
+    let taskAssignees;
+    beforeEach(() => {
+      taskAssignees = [
+        {
+          id: 1,
+          name: 'Finished Task',
+          eduContentAmount: 1,
+          assignees: [],
+          status: TaskStatusEnum.FINISHED,
+          startDate: new Date(Date.now() - 1000),
+          endDate: new Date(Date.now() - 500),
+          isPaperTask: false
+        },
+        {
+          id: 2,
+          name: 'Pending Task',
+          eduContentAmount: 1,
+          assignees: [],
+          status: TaskStatusEnum.PENDING,
+          startDate: new Date(Date.now() - 1000),
+          endDate: new Date(Date.now() + 1000),
+          isPaperTask: false
+        },
+        {
+          id: 3,
+          name: 'Active Task',
+          eduContentAmount: 1,
+          assignees: [],
+          status: TaskStatusEnum.ACTIVE,
+          startDate: new Date(Date.now() - 1000),
+          endDate: new Date(Date.now() + 1000),
+          isPaperTask: false
+        },
+        {
+          id: 3,
+          name: 'Paper Task',
+          eduContentAmount: 1,
+          assignees: [],
+          isPaperTask: true
+        }
+      ] as TaskWithAssigneesInterface[];
+    });
+    /* -- HELPERS -- */
+    const mapToTaskIds = task => ({ taskId: task.id });
+    const canDelete = ta =>
+      ta.status === TaskStatusEnum.FINISHED || (!ta.endDate && !ta.startDate);
+    const messages = errors =>
+      errors
+        .map(error => {
+          const activeUntil = error.endDate
+            ? ` Deze taak is nog actief tot ${error.endDate.toLocaleDateString(
+                dateLocale
+              )}`
+            : '';
+          return `<li>${error.name} kan niet worden verwijderd.${activeUntil}</li>`;
+        })
+        .join('');
+    // file.only
+    it('should dispatch delete when no errors deteted', () => {
+      const spy = jest.spyOn(store, 'dispatch');
+      const tasks = taskAssignees.filter(
+        ta => ta.status === TaskStatusEnum.FINISHED
+      );
+      const destroyAction = new TaskActions.StartDeleteTasks({
+        userId: authService.userId,
+        ids: tasks.map(mapToTaskIds)
+      });
+      kabasTasksViewModel.removeTasks(tasks);
+      expect(spy).toHaveBeenCalledWith(destroyAction);
+    });
+
+    it('should dispatch feedback with userAction when mixed errors and deleteIds', () => {
+      const spy = jest.spyOn(store, 'dispatch');
+      const tasks = taskAssignees.filter(ta => !ta.isPaperTask);
+      const errors = tasks.filter(ta => !canDelete(ta));
+      const destroyAction = new TaskActions.StartDeleteTasks({
+        userId: authService.userId,
+        ids: tasks.filter(canDelete).map(mapToTaskIds)
+      });
+      const effectFeedback = new EffectFeedback({
+        id: uuid(),
+        triggerAction: destroyAction,
+        message:
+          `<p>Niet alle taken kunnen verwijderd worden:</p>` +
+          `<ul>${messages(errors)}</ul>`,
+        userActions: [
+          { title: 'Verwijder de andere taken', userAction: destroyAction }
+        ],
+        type: 'error'
+      });
+
+      const feedbackAction = new EffectFeedbackActions.AddEffectFeedback({
+        effectFeedback
+      });
+
+      kabasTasksViewModel.removeTasks(tasks);
+      expect(spy).toHaveBeenCalledWith(feedbackAction);
+    });
+    it('should dispatch feedback without userActions when only errors occurred', () => {
+      const spy = jest.spyOn(store, 'dispatch');
+      const errors = taskAssignees.filter(ta => !canDelete(ta));
+      const destroyAction = new TaskActions.StartDeleteTasks({
+        userId: authService.userId,
+        ids: []
+      });
+      const effectFeedback = new EffectFeedback({
+        id: uuid(),
+        triggerAction: destroyAction,
+        message:
+          `<p>Niet alle taken kunnen verwijderd worden:</p>` +
+          `<ul>${messages(errors)}</ul>`,
+        userActions: [],
+        type: 'error'
+      });
+      const feedbackAction = new EffectFeedbackActions.AddEffectFeedback({
+        effectFeedback
+      });
+      kabasTasksViewModel.removeTasks(errors);
+      expect(spy).toHaveBeenCalledWith(feedbackAction);
     });
   });
 });
