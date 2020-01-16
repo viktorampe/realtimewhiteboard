@@ -21,6 +21,7 @@ export enum TasksActionTypes {
   UpsertTasks = '[Tasks] Upsert Tasks',
   UpdateTask = '[Tasks] Update Task',
   UpdateTasks = '[Tasks] Update Tasks',
+  StartArchiveTasks = '[Tasks] Start Archive Tasks',
   DeleteTask = '[Tasks] Delete Task',
   DeleteTasks = '[Tasks] Delete Tasks',
   ClearTasks = '[Tasks] Clear Tasks',
@@ -76,13 +77,31 @@ export class UpsertTasks implements Action {
 export class UpdateTask implements Action {
   readonly type = TasksActionTypes.UpdateTask;
 
-  constructor(public payload: { task: Update<TaskInterface> }) {}
+  constructor(
+    public payload: { userId: number; task: Update<TaskInterface> }
+  ) {}
 }
 
 export class UpdateTasks implements Action {
   readonly type = TasksActionTypes.UpdateTasks;
 
-  constructor(public payload: { tasks: Update<TaskInterface>[] }) {}
+  constructor(
+    public payload: {
+      userId: number;
+      tasks: Update<TaskInterface>[];
+    }
+  ) {}
+}
+export class StartArchiveTasks implements FeedbackTriggeringAction {
+  readonly type = TasksActionTypes.StartArchiveTasks;
+
+  constructor(
+    public payload: {
+      userId: number;
+      tasks: Update<TaskInterface>[];
+      customFeedbackHandlers?: CustomFeedbackHandlersInterface;
+    }
+  ) {}
 }
 
 export class DeleteTask implements Action {

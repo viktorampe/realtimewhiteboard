@@ -122,6 +122,9 @@
             <mat-option [value]="TaskSortEnum.STARTDATE">
               Start datum
             </mat-option>
+            <mat-option [value]="TaskSortEnum.FAVORITE">
+              Favoriet
+            </mat-option>
           </mat-select>
         </div>
         <ng-container *ngIf="digitalFilteredTasks$ | async as digitalTasks">
@@ -152,6 +155,7 @@
             #option
             *ngFor="let task of digitalTasks"
             checkboxPosition="before"
+            [value]="task"
             [class.mat-list-option--selected]="option.selected"
           >
             <campus-task-list-item
@@ -230,6 +234,9 @@
             <mat-option [value]="TaskSortEnum.LEARNINGAREA">
               Leergebied
             </mat-option>
+            <mat-option [value]="TaskSortEnum.FAVORITE">
+              Favoriet
+            </mat-option>
           </mat-select>
         </div>
         <ng-container *ngIf="paperFilteredTasks$ | async as paperTasks">
@@ -263,6 +270,7 @@
           <mat-list-option
             #option
             *ngFor="let task of paperTasks"
+            [value]="task"
             checkboxPosition="before"
             [class.mat-list-option--selected]="option.selected"
           >

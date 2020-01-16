@@ -1,12 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
+import { Router } from '@angular/router';
 import {
   ClassGroupInterface,
   GroupInterface,
+  LearningAreaInterface,
   PersonInterface
 } from '@campus/dal';
 import { SearchFilterCriteriaInterface } from '@campus/search';
-import { take } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { map, take } from 'rxjs/operators';
 import {
   AssigneeInterface,
   AssigneeTypesEnum
@@ -15,6 +18,10 @@ import { TaskWithAssigneesInterface } from '../../interfaces/TaskWithAssignees.i
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
 import { ManageKabasTasksAssigneeDataInterface } from '../manage-kabas-tasks-assignee-modal/manage-kabas-tasks-assignee-data.interface';
 import { ManageKabasTasksAssigneeModalComponent } from '../manage-kabas-tasks-assignee-modal/manage-kabas-tasks-assignee-modal.component';
+import {
+  NewTaskComponent,
+  NewTaskFormValues
+} from '../new-task/new-task.component';
 
 export enum TaskSortEnum {
   'NAME' = 'NAME',
@@ -30,13 +37,22 @@ export enum TaskSortEnum {
 export class ManageKabasTasksDetailComponent implements OnInit {
   public TaskSortEnum = TaskSortEnum;
   public diaboloPhaseFilter: SearchFilterCriteriaInterface;
+  public isNewTask$: Observable<boolean>;
+  public selectableLearningAreas$: Observable<LearningAreaInterface[]>;
 
   isPaperTask = true; // replace w/ stream
 
   constructor(
     private viewModel: KabasTasksViewModel,
-    private dialog: MatDialog
-  ) {}
+    private dialog: MatDialog,
+    private router: Router
+  ) {
+    this.isNewTask$ = this.viewModel.currentTaskParams$.pipe(
+      map(currentTaskParams => !currentTaskParams.id)
+    );
+
+    this.selectableLearningAreas$ = this.viewModel.selectableLearningAreas$;
+  }
 
   ngOnInit() {
     this.openAssigneeModal();
@@ -70,6 +86,12 @@ export class ManageKabasTasksDetailComponent implements OnInit {
         }
       ]
     };
+
+    this.isNewTask$.pipe(take(1)).subscribe(isNewTask => {
+      if (isNewTask) {
+        this.openNewTaskDialog();
+      }
+    });
   }
 
   public setTaskAsArchived(
@@ -138,5 +160,30 @@ export class ManageKabasTasksDetailComponent implements OnInit {
         // TODO update assignees
         console.log(res);
       });
+  }
+
+  public openNewTaskDialog() {
+    this.selectableLearningAreas$.pipe(take(1)).subscribe(learningAreas => {
+      this.dialog
+        .open(NewTaskComponent, {
+          data: {
+            learningAreas
+          },
+          panelClass: 'pages-kabas-tasks-new-task__dialog'
+        })
+        .afterClosed()
+        .pipe(take(1))
+        .subscribe((formData: NewTaskFormValues) => {
+          if (formData) {
+            this.viewModel.createTask(
+              formData.title,
+              formData.learningArea.id,
+              formData.type
+            );
+          } else {
+            this.router.navigate(['tasks', 'manage']);
+          }
+        });
+    });
   }
 }
