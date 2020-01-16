@@ -92,13 +92,13 @@ export class KabasTasksViewModel {
 
   public startArchivingTasks(
     tasks: TaskWithAssigneesInterface[],
-    isArchived: boolean
+    shouldArchive: boolean
   ): void {
     const updates = [];
     const errors = [];
     tasks.forEach(task => {
-      if (!isArchived || this.canBeArchivedOrDeleted(task)) {
-        updates.push({ id: task.id, changes: { archived: isArchived } });
+      if (!shouldArchive || this.canBeArchivedOrDeleted(task)) {
+        updates.push({ id: task.id, changes: { archived: shouldArchive } });
       } else {
         errors.push(task);
       }
