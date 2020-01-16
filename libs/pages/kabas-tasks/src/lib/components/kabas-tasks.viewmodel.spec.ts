@@ -1,54 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 import { MAT_DATE_LOCALE } from '@angular/material';
-import {
-  AuthServiceInterface,
-  AUTH_SERVICE_TOKEN,
-  DalState,
-  EffectFeedback,
-  EffectFeedbackActions,
-  FavoriteActions,
-  FavoriteTypesEnum,
-  PersonFixture,
-  TaskActions,
-  UserQueries
-} from '@campus/dal';
-import { MockDate } from '@campus/testing';
+import { AUTH_SERVICE_TOKEN, EffectFeedback, EffectFeedbackActions, FavoriteActions, FavoriteTypesEnum, PersonFixture, TaskActions, UserQueries } from '@campus/dal';
 import { Store } from '@ngrx/store';
-import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import { configureTestSuite } from 'ng-bullet';
-import {
-  TaskStatusEnum,
-  TaskWithAssigneesInterface
-} from '../interfaces/TaskWithAssignees.interface';
+import { TaskStatusEnum, TaskWithAssigneesInterface } from '../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from './kabas-tasks.viewmodel';
-
-describe('KabasTaskViewModel', () => {
-  const dateMock = new MockDate();
-
-  afterAll(() => {
-    dateMock.returnRealDate();
-  });
-
-  let kabasTasksViewModel: KabasTasksViewModel;
-  let store: MockStore<DalState>;
-  let authService: AuthServiceInterface;
-  let uuid: Function;
-  let dateLocale;
-
-  configureTestSuite(() => {
-    TestBed.configureTestingModule({
-      imports: [],
-      providers: [
-        KabasTasksViewModel,
-        provideMockStore(),
-        { provide: AUTH_SERVICE_TOKEN, useValue: { userId: 1 } },
-        { provide: 'uuid', useValue: () => 'foo' },
-        { provide: MAT_DATE_LOCALE, useValue: 'en-US' }
-      ]
-    });
-  });
-
-  beforeEach(() => {
     kabasTasksViewModel = TestBed.get(KabasTasksViewModel);
     authService = TestBed.get(AUTH_SERVICE_TOKEN);
     uuid = TestBed.get('uuid');
@@ -468,7 +423,7 @@ describe('KabasTaskViewModel', () => {
           return `<li>${error.name} kan niet worden verwijderd.${activeUntil}</li>`;
         })
         .join('');
-    // file.only
+
     it('should dispatch delete when no errors deteted', () => {
       const spy = jest.spyOn(store, 'dispatch');
       const tasks = taskAssignees.filter(
