@@ -1,4 +1,11 @@
-import { Component, OnInit, ViewChild, ViewChildren } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  OnInit,
+  Output,
+  ViewChild,
+  ViewChildren
+} from '@angular/core';
 import { MatSelectionList } from '@angular/material';
 import { SearchTermComponent } from '@campus/search';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -15,7 +22,7 @@ interface AddAssigneeFilterState {
 interface AssigneesByType {
   students: AssigneeInterface[];
   groups: AssigneeInterface[];
-  classGroups: AssigneeInterface[];
+  classgroups: AssigneeInterface[];
   results?: AssigneeInterface[];
 }
 
@@ -31,7 +38,9 @@ export class AddAssigneeComponent implements OnInit {
   private selectedAssignees: MatSelectionList[];
   @ViewChild(SearchTermComponent, { static: false })
   private searchTermFilter: SearchTermComponent;
+  @Output() addedAssignees = new EventEmitter<AssigneeInterface[]>();
 
+  //test data must be replaced w/ inputs
   students: AssigneeInterface[] = [
     {
       type: AssigneeTypesEnum.STUDENT,
@@ -82,7 +91,7 @@ export class AddAssigneeComponent implements OnInit {
             return {
               students: this.students,
               groups: this.groups,
-              classGroups: this.classgroups
+              classgroups: this.classgroups
             };
           }
         }
@@ -119,16 +128,16 @@ export class AddAssigneeComponent implements OnInit {
     return {
       students: [],
       groups: [],
-      classGroups: [],
+      classgroups: [],
       results: filteredAssignees
     };
   }
 
   addAssignees() {
-    const optionsSelected = this.selectedAssignees.map(element =>
-      element.selectedOptions.selected.forEach(option => {
-        console.log(option.value);
-      })
+    const optionsSelected = this.selectedAssignees.forEach(element =>
+      element.selectedOptions.selected.map(option => console.log(option.value))
     );
+
+    //this.addedAssignees.emit(optionsSelected);
   }
 }
