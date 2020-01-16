@@ -1,10 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
-import {
-  DalState,
-  EduContent,
-  FavoriteTypesEnum,
-  UserQueries
-} from '@campus/dal';
+import { DalState, EduContent, UserQueries } from '@campus/dal';
 import {
   OpenStaticContentServiceInterface,
   OPEN_STATIC_CONTENT_SERVICE_TOKEN
@@ -47,7 +42,7 @@ export class HomeViewModel {
       map(user => user.firstName || user.displayName)
     );
     this.favoritesWithEduContent$ = this.store.pipe(
-      select(getFavoritesWithEduContent, { type: FavoriteTypesEnum.BOEKE })
+      select(getFavoritesWithEduContent)
     );
   }
 }

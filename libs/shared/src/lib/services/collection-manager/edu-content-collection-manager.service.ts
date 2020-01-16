@@ -297,7 +297,7 @@ export class EduContentCollectionManagerService
     key: string
   ): Observable<number[]> {
     return combineLatest([
-      this.store.select(FavoriteQueries.getByType, { type }),
+      this.store.select(FavoriteQueries.getByType(type as FavoriteTypesEnum)),
       this.store.select(HistoryQueries.getByType, { type })
     ]).pipe(
       map(

@@ -59,19 +59,10 @@ export const getById = createSelector(
 );
 
 // TODO: Investigate why this causes an infinite loop when used for SideNav
-export const getByType = createSelector(
-  selectFavoriteState,
-  (state: State, props: { type: FavoriteTypesEnum }) =>
-    Object.values(state.entities).filter(value => value.type === props.type)
-);
-
-export const getFavoriteTasks = createSelector(
-  getByType,
-  (
-    favoriteTasks: FavoriteInterface[],
-    props = { type: FavoriteTypesEnum.TASK }
-  ) => favoriteTasks
-);
+export const getByType = (type?: FavoriteTypesEnum) =>
+  createSelector(selectFavoriteState, (state: State) =>
+    Object.values(state.entities).filter(value => value.type === type)
+  );
 
 export const getByTypeAndId = createSelector(
   selectFavoriteState,

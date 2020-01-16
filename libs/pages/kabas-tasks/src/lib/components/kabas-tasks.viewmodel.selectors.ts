@@ -134,40 +134,35 @@ export const allowedLearningAreas = createSelector(
   }
 );
 
-export const getTasksWithAssignments = createSelector(
-  [
-    TaskQueries.getAll,
-    LearningAreaQueries.getAllEntities,
-    TaskEduContentQueries.getAllGroupedByTaskId,
-    combinedAssigneesByTask,
-    FavoriteQueries.getByType
-  ],
-  (
-    tasks: TaskInterface[],
-    learningAreaDict: Dictionary<LearningAreaInterface>,
-    taskEduContentByTask: Dictionary<TaskEduContentInterface[]>,
-    assigneesByTask: Dictionary<AssigneeInterface[]>,
-    favoriteTasks: FavoriteInterface[],
-    props: { isPaper: boolean; type: FavoriteTypesEnum.TASK }
-  ) => {
-    const favoriteTaskIds = favoriteTasks.map(fav => fav.taskId);
-    return tasks
-      .filter(task => !!task.isPaperTask === !!props.isPaper)
-      .map(
-        (task): TaskWithAssigneesInterface => ({
-          ...task,
-          learningArea: learningAreaDict[task.learningAreaId],
-          eduContentAmount: taskEduContentByTask[task.id]
-            ? taskEduContentByTask[task.id].length
-            : 0,
-          assignees: assigneesByTask[task.id] || [],
-          isFavorite: favoriteTaskIds.includes(task.id)
-        })
-      );
-  }
-);
-
-export const getTasksWithAssignmentsAndFavorite = createSelector(
-  [getTasksWithAssignments, FavoriteQueries.getByType],
-  (tasks, favoriteTasks) => {}
-);
+export const getTasksWithAssignments = (isPaper: boolean) =>
+  createSelector(
+    [
+      TaskQueries.getAll,
+      LearningAreaQueries.getAllEntities,
+      TaskEduContentQueries.getAllGroupedByTaskId,
+      combinedAssigneesByTask,
+      FavoriteQueries.getByType(FavoriteTypesEnum.TASK)
+    ],
+    (
+      tasks: TaskInterface[],
+      learningAreaDict: Dictionary<LearningAreaInterface>,
+      taskEduContentByTask: Dictionary<TaskEduContentInterface[]>,
+      assigneesByTask: Dictionary<AssigneeInterface[]>,
+      favoriteTasks: FavoriteInterface[]
+    ) => {
+      const favoriteTaskIds = favoriteTasks.map(fav => fav.taskId);
+      return tasks
+        .filter(task => !!task.isPaperTask === !!isPaper)
+        .map(
+          (task): TaskWithAssigneesInterface => ({
+            ...task,
+            learningArea: learningAreaDict[task.learningAreaId],
+            eduContentAmount: taskEduContentByTask[task.id]
+              ? taskEduContentByTask[task.id].length
+              : 0,
+            assignees: assigneesByTask[task.id] || [],
+            isFavorite: favoriteTaskIds.includes(task.id)
+          })
+        );
+    }
+  );

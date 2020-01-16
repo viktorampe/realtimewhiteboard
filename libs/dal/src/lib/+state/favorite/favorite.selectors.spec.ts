@@ -117,9 +117,9 @@ describe('Favorite Selectors', () => {
 
       storeState = { favorites: favoriteState };
 
-      const results = FavoriteQueries.getByType(storeState, {
-        type: FavoriteTypesEnum.BOEKE
-      });
+      const results = FavoriteQueries.getByType(FavoriteTypesEnum.BOEKE)(
+        storeState
+      );
 
       expect(results).toEqual([
         createFavorite(2, FavoriteTypesEnum.BOEKE),

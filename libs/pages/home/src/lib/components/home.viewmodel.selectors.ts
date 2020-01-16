@@ -20,7 +20,7 @@ export interface FavoriteMethodWithEduContent {
 
 export const getFavoritesWithEduContent = createSelector(
   [
-    FavoriteQueries.getByType,
+    FavoriteQueries.getByType(FavoriteTypesEnum.BOEKE),
     EduContentQueries.getAllEntities,
     MethodQueries.getAllEntities,
     EduContentBookQueries.getAllEntities

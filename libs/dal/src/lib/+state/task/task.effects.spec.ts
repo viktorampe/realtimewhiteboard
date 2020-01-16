@@ -546,7 +546,10 @@ describe('TaskEffects', () => {
         });
 
         const expectedMessage = `De taken werden ${verb}.`;
-        const updateAction = new UpdateTasks({ tasks: tasksToUpdate });
+        const updateAction = new UpdateTasks({
+          userId: 1,
+          tasks: tasksToUpdate
+        });
         const feedbackAction = new AddEffectFeedback({
           effectFeedback: {
             id: uuid(),
@@ -623,7 +626,10 @@ describe('TaskEffects', () => {
           tasks: tasksToUpdate.slice(1).map(task => task.changes),
           errors: taskUpdateErrors
         });
-        const updateAction = new UpdateTasks({ tasks: tasksToUpdate.slice(1) });
+        const updateAction = new UpdateTasks({
+          userId: 1,
+          tasks: tasksToUpdate.slice(1)
+        });
         const expectedMessage =
           `<p>De taak werd ${verb}.</p>` +
           '<p>De volgende taken zijn nog in gebruik:</p>' +
