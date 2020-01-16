@@ -9,7 +9,6 @@ import { map, take } from 'rxjs/operators';
 import { AssigneeTypesEnum } from '../../interfaces/Assignee.interface';
 import { TaskWithAssigneesInterface } from '../../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
-import { MockKabasTasksViewModel } from '../kabas-tasks.viewmodel.mock';
 import {
   NewTaskComponent,
   NewTaskFormValues
@@ -24,10 +23,7 @@ export enum TaskSortEnum {
 @Component({
   selector: 'campus-manage-kabas-tasks-detail',
   templateUrl: './manage-kabas-tasks-detail.component.html',
-  styleUrls: ['./manage-kabas-tasks-detail.component.scss'],
-  providers: [
-    { provide: KabasTasksViewModel, useClass: MockKabasTasksViewModel }
-  ]
+  styleUrls: ['./manage-kabas-tasks-detail.component.scss']
 })
 export class ManageKabasTasksDetailComponent implements OnInit {
   public TaskSortEnum = TaskSortEnum;
@@ -101,7 +97,7 @@ export class ManageKabasTasksDetailComponent implements OnInit {
 
   public onSelectionChange() {
     const selected: EduContentInterface[] = this.contentSelectionList.selectedOptions.selected
-      .map(option => option.value as EduContentInterface)
+      .map(option => option.value.eduContent as EduContentInterface)
       .sort((a, b) =>
         a.publishedEduContentMetadata.title <
         b.publishedEduContentMetadata.title

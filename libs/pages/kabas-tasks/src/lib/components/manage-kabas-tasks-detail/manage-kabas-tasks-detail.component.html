@@ -199,15 +199,15 @@
             <mat-icon svgIcon="add"></mat-icon>
             Lesmateriaal toevoegen aan deze taak
           </mat-list-item>
-          <ng-container *ngIf="task.eduContents.length; else noResults">
+          <ng-container *ngIf="task.taskEduContents.length; else noResults">
             <mat-list-option
               #option
-              *ngFor="let eduContent of task.eduContents"
+              *ngFor="let taskEduContent of task.taskEduContents"
               checkboxPosition="before"
               [class.mat-list-option--selected]="option.selected"
-              [value]="eduContent"
+              [value]="taskEduContent"
             >
-              {{ eduContent.publishedEduContentMetadata.title }}
+              {{ taskEduContent.eduContent.publishedEduContentMetadata.title }}
             </mat-list-option>
           </ng-container>
         </mat-selection-list>

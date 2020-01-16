@@ -3,6 +3,7 @@ import {
   EduContentFixture,
   LearningAreaFixture,
   LearningAreaInterface,
+  TaskEduContentFixture,
   TaskFixture,
   TaskInterface
 } from '@campus/dal';
@@ -53,9 +54,7 @@ export class MockKabasTasksViewModel
     );
 
     // this.currentTask$ = this.paperTasksWithAssignments$.pipe(
-    this.currentTask$ = this.tasksWithAssignments$.pipe(
-      map(tasksWithAssignees => tasksWithAssignees[0])
-    );
+    this.currentTask$ = this.getCurrentTask();
     this.currentTaskParams$ = new BehaviorSubject<CurrentTaskParams>({
       id: 1
     });
@@ -286,4 +285,30 @@ export class MockKabasTasksViewModel
     type: 'paper' | 'digital'
   ) {}
   public updateTask(task: TaskInterface, assignees: AssigneeInterface[]) {}
+
+  private getCurrentTask(): Observable<TaskWithAssigneesInterface> {
+    // return this.paperTasksWithAssignments$.pipe(
+    return this.tasksWithAssignments$.pipe(
+      map(tasks => ({
+        ...tasks[0],
+        taskEduContents: [1, 2, 3].map(
+          id =>
+            new TaskEduContentFixture({
+              eduContentId: id,
+              eduContent: new EduContentFixture(
+                { id },
+                {
+                  id,
+                  title: 'oefening ' + id,
+                  learningArea: new LearningAreaFixture({
+                    id: 1,
+                    name: 'Wiskunde'
+                  })
+                }
+              )
+            })
+        )
+      }))
+    );
+  }
 }

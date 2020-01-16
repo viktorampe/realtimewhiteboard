@@ -3,13 +3,16 @@ import {
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
   DalState,
+  EduContentFixture,
   FavoriteActions,
   FavoriteInterface,
   FavoriteTypesEnum,
   getRouterState,
+  LearningAreaFixture,
   LearningAreaInterface,
   RouterStateUrl,
   TaskActions,
+  TaskEduContentFixture,
   TaskInterface
 } from '@campus/dal';
 import { RouterReducerState } from '@ngrx/router-store';
@@ -68,6 +71,8 @@ export class KabasTasksViewModel {
       distinctUntilChanged((a, b) => a.id === b.id),
       shareReplay(1)
     );
+
+    this.currentTask$ = this.getCurrentTask();
 
     this.selectableLearningAreas$ = this.store.pipe(
       select(allowedLearningAreas)
@@ -205,6 +210,33 @@ export class KabasTasksViewModel {
         navigateAfterCreate: true,
         userId: this.authService.userId
       })
+    );
+  }
+
+  private getCurrentTask(): Observable<TaskWithAssigneesInterface> {
+    // TODO
+    // return this.paperTasksWithAssignments$.pipe(
+    return this.tasksWithAssignments$.pipe(
+      map(tasks => ({
+        ...tasks[0],
+        taskEduContents: [1, 2, 3].map(
+          id =>
+            new TaskEduContentFixture({
+              eduContentId: id,
+              eduContent: new EduContentFixture(
+                { id },
+                {
+                  id,
+                  title: 'oefening ' + id,
+                  learningArea: new LearningAreaFixture({
+                    id: 1,
+                    name: 'Wiskunde'
+                  })
+                }
+              )
+            })
+        )
+      }))
     );
   }
 }
