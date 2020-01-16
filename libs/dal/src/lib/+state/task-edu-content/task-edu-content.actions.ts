@@ -15,6 +15,7 @@ export enum TaskEduContentsActionTypes {
   AddTaskEduContents = '[TaskEduContents] Add TaskEduContents',
   UpsertTaskEduContents = '[TaskEduContents] Upsert TaskEduContents',
   UpdateTaskEduContent = '[TaskEduContents] Update TaskEduContent',
+  StartUpdateTaskEduContents = '[TaskEduContents] Update StartUpdateTaskEduContents',
   UpdateTaskEduContents = '[TaskEduContents] Update TaskEduContents',
   DeleteTaskEduContent = '[TaskEduContents] Delete TaskEduContent',
   DeleteTaskEduContents = '[TaskEduContents] Delete TaskEduContents',
@@ -78,6 +79,18 @@ export class UpdateTaskEduContents implements Action {
 
   constructor(
     public payload: { taskEduContents: Update<TaskEduContentInterface>[] }
+  ) {}
+}
+
+export class StartUpdateTaskEduContents implements FeedbackTriggeringAction {
+  readonly type = TaskEduContentsActionTypes.StartUpdateTaskEduContents;
+
+  constructor(
+    public payload: {
+      userId: number;
+      taskEduContents: Update<TaskEduContentInterface>[];
+      customFeedbackHandlers?: CustomFeedbackHandlersInterface;
+    }
   ) {}
 }
 

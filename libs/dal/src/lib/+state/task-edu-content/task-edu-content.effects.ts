@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
-import { Actions, Effect } from '@ngrx/effects';
+import { Actions, createEffect, Effect } from '@ngrx/effects';
 import { Action } from '@ngrx/store';
 import { DataPersistence } from '@nrwl/angular';
 import { undo } from 'ngrx-undo';
@@ -21,6 +21,7 @@ import {
   DeleteTaskEduContent,
   LinkTaskEduContent,
   LoadTaskEduContents,
+  StartUpdateTaskEduContents,
   TaskEduContentsActionTypes,
   TaskEduContentsLoaded,
   TaskEduContentsLoadError
@@ -132,6 +133,20 @@ export class TaskEduContentEffects {
         return from<Action[]>([undoAction, feedbackAction]);
       }
     }
+  );
+
+  startUpdateTaskEduContents$ = createEffect(() =>
+    this.dataPersistence.pessimisticUpdate(
+      TaskEduContentsActionTypes.StartUpdateTaskEduContents,
+      {
+        run: (action: StartUpdateTaskEduContents, state: DalState) => {
+          throw new Error('not implemented yet');
+        },
+        onError: (action: StartUpdateTaskEduContents, error: any) => {
+          throw new Error('not implemented yet');
+        }
+      }
+    )
   );
 
   constructor(
