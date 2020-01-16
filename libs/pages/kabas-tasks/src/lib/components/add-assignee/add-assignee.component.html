@@ -1,46 +1,37 @@
-<campus-info-panel
-  titleText="Assignee toevoegen"
-  titleIcon="account"
-  [displayAsRows]="false"
-  class="pages-kabas-tasks-new-task__info-panel"
->
-  <campus-search-term
-    placeholder="Filter op assignee"
-    [autoComplete]="false"
-    (valueChange)="updateLabelFilter($event)"
-    [emitOnTextChange]="true"
-  ></campus-search-term>
-  <campus-button
-    (click)="resetFilter()"
-    class="manage-kabas-tasks-overview__reset-filters"
-    iconClass="reset-filters"
-  ></campus-button>
-  <div *ngFor="let assignees of filteredAssignees$ | async | keyvalue">
-    <span
-      *ngIf="
-        assignees.value && assignees.value.length && assignees.key !== 'results'
-      "
-      >{{ assignees.key }}</span
+<campus-search-term
+  placeholder="Filter op assignee"
+  [autoComplete]="false"
+  (valueChange)="updateLabelFilter($event)"
+  [emitOnTextChange]="true"
+></campus-search-term>
+<campus-button
+  (click)="resetFilter()"
+  class="manage-kabas-tasks-overview__reset-filters"
+  iconClass="reset-filters"
+></campus-button>
+<div *ngFor="let assignees of filteredAssignees$ | async | keyvalue">
+  <span
+    *ngIf="
+      assignees.value && assignees.value.length && assignees.key !== 'results'
+    "
+    >{{ assignees.key }}</span
+  >
+  <mat-selection-list
+    [class.mat-selection-list--has-selection]="true"
+    class="manage-kabas-tasks-detail__list"
+  >
+    <mat-list-option
+      [value]="assignee"
+      *ngFor="let assignee of assignees.value"
     >
-    <mat-selection-list
-      [class.mat-selection-list--has-selection]="true"
-      class="manage-kabas-tasks-detail__list"
+      {{ assignee.label }}</mat-list-option
     >
-      <mat-list-option
-        [value]="assignee"
-        *ngFor="let assignee of assignees.value"
-      >
-        {{ assignee.label }}</mat-list-option
-      >
-    </mat-selection-list>
-  </div>
+  </mat-selection-list>
+</div>
 
-  <mat-dialog-actions class="pages-kabas-tasks-new-task__dialog__actions">
-    <campus-button
-      primary
-      (click)="addAssignees()"
-      class="pages-kabas-tasks-new-task__dialog__actions__button"
-      >Toevoegen</campus-button
-    >
-  </mat-dialog-actions>
-</campus-info-panel>
+<campus-button
+  primary
+  (click)="addAssignees()"
+  class="pages-kabas-tasks-new-task__dialog__actions__button"
+  >Toevoegen</campus-button
+>

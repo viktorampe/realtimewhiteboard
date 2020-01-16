@@ -33,7 +33,7 @@ interface AssigneesByType {
 })
 export class AddAssigneeComponent implements OnInit {
   public filteredAssignees$: Observable<AssigneesByType>;
-  private filterState$ = new BehaviorSubject<AddAssigneeFilterState>({});
+  public filterState$ = new BehaviorSubject<AddAssigneeFilterState>({});
   @ViewChildren(MatSelectionList)
   private selectedAssignees: MatSelectionList[];
   @ViewChild(SearchTermComponent, { static: false })

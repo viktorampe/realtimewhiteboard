@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material';
 import { SearchFilterCriteriaInterface } from '@campus/search';
-import { AssigneeInterface } from '../../interfaces/Assignee.interface';
 import { TaskWithAssigneesInterface } from '../../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
 
@@ -21,10 +19,7 @@ export class ManageKabasTasksDetailComponent implements OnInit {
   public diaboloPhaseFilter: SearchFilterCriteriaInterface;
   isPaperTask = true; // replace w/ stream
 
-  constructor(
-    private viewModel: KabasTasksViewModel,
-    private dialog: MatDialog
-  ) {}
+  constructor(private viewModel: KabasTasksViewModel) {}
 
   ngOnInit() {
     this.diaboloPhaseFilter = {
@@ -69,9 +64,5 @@ export class ManageKabasTasksDetailComponent implements OnInit {
   }
   public toggleFavorite(task: TaskWithAssigneesInterface) {
     this.viewModel.toggleFavorite(task);
-  }
-
-  public addedAssigneesTest(assignees: AssigneeInterface[]) {
-    console.log(assignees);
   }
 }
