@@ -8,6 +8,7 @@ import {
   ViewChildren
 } from '@angular/core';
 import {
+  MatDialog,
   MatSelect,
   MatSelectionList,
   MatSlideToggle,
@@ -25,13 +26,14 @@ import {
   SearchTermComponent,
   SelectFilterComponent
 } from '@campus/search';
+import { ConfirmationModalComponent } from '@campus/ui';
 import {
   DateFunctions,
   FilterServiceInterface,
   FILTER_SERVICE_TOKEN
 } from '@campus/utils';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { map, shareReplay } from 'rxjs/operators';
+import { filter, map, shareReplay, take } from 'rxjs/operators';
 import { AssigneeTypesEnum } from '../../interfaces/Assignee.interface';
 import { TaskWithAssigneesInterface } from '../../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
@@ -145,7 +147,8 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     @Inject(FILTER_SERVICE_TOKEN) private filterService: FilterServiceInterface,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private matDialog: MatDialog
   ) {}
 
   ngOnInit() {
@@ -325,8 +328,27 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
   clickAddPaperTask() {
     this.router.navigate(['tasks', 'manage', 'new']);
   }
-
+  // TODO: implement handler
   clickDeleteTasks() {
+    const dialogData = {
+      title: 'Taken verwijderen',
+      message: 'Ben je zeker dat je de geselecteerde taken wil verwijderen?'
+    };
+
+    const dialogRef = this.matDialog.open(ConfirmationModalComponent, {
+      data: dialogData
+    });
+
+    dialogRef
+      .afterClosed()
+      .pipe(
+        filter(confirmed => confirmed),
+        take(1)
+      )
+      .subscribe(() => this.deleteTasks());
+  }
+
+  public deleteTasks() {
     this.viewModel.removeTasks(this.getSelectedTasks());
   }
 
@@ -346,6 +368,17 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
 
   clickToggleFavorite(task: TaskWithAssigneesInterface) {
     this.viewModel.toggleFavorite(task);
+  }
+
+  private getSelectedTasks(): TaskWithAssigneesInterface[] {
+    if (this.taskLists) {
+      return this.taskLists.reduce((acc, list) => {
+        return [
+          ...acc,
+          ...list.selectedOptions.selected.map(option => option.value)
+        ];
+      }, []);
+    }
   }
 
   public onSelectedTabIndexChanged(tab: number) {
@@ -398,17 +431,6 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
 
   public setSortMode(sortMode: TaskSortEnum) {
     this.currentSortMode$.next(sortMode);
-  }
-
-  private getSelectedTasks(): TaskWithAssigneesInterface[] {
-    if (this.taskLists) {
-      return this.taskLists.reduce((acc, list) => {
-        return [
-          ...acc,
-          ...list.selectedOptions.selected.map(option => option.value)
-        ];
-      }, []);
-    }
   }
 
   private mapSearchFilterCriteriaToFilterState(
@@ -669,24 +691,32 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
    */
   private clearFilters(): void {
     if (this.searchTermFilters)
-      this.searchTermFilters.forEach(filter => {
-        filter.currentValue = '';
-        filter.valueChange.next('');
+      this.searchTermFilters.forEach(searchTermFilter => {
+        searchTermFilter.currentValue = '';
+        searchTermFilter.valueChange.next('');
       });
     if (this.selectFilters)
-      this.selectFilters.forEach(filter => filter.selectControl.reset());
+      this.selectFilters.forEach(selectFilter =>
+        selectFilter.selectControl.reset()
+      );
     this.clearButtonToggleFilters();
     if (this.slideToggleFilters)
-      this.slideToggleFilters.forEach(filter => {
-        filter.checked = false;
-        filter.change.emit({ checked: false, source: filter });
+      this.slideToggleFilters.forEach(slideToggleFilter => {
+        slideToggleFilter.checked = false;
+        slideToggleFilter.change.emit({
+          checked: false,
+          source: slideToggleFilter
+        });
       });
-    if (this.dateFilters) this.dateFilters.forEach(filter => filter.reset());
+    if (this.dateFilters)
+      this.dateFilters.forEach(dateFilter => dateFilter.reset());
   }
 
   private clearButtonToggleFilters(): void {
     if (this.buttonToggleFilters)
-      this.buttonToggleFilters.forEach(filter => filter.toggleControl.reset());
+      this.buttonToggleFilters.forEach(buttonToggleFilter =>
+        buttonToggleFilter.toggleControl.reset()
+      );
   }
 
   /**
