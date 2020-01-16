@@ -18,7 +18,6 @@ export class ManageKabasTasksAssigneeModalComponent implements OnInit {
   public defaultStartDate: Date;
   public defaultEndDate: Date;
   public showAdvancedBoundaries = false;
-  public canToggleAdvanceBoundaries = false;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) private data: any,
@@ -30,16 +29,12 @@ export class ManageKabasTasksAssigneeModalComponent implements OnInit {
     }));
     this.currentTaskName = data.title;
     this.determineDefaultDateInterval();
-    this.canToggleAdvanceBoundaries = this.getCanToggleAdvancedBoundaries();
   }
 
   ngOnInit() {}
 
   public toggleAdvancedBoundaries() {
-    if (!this.canToggleAdvanceBoundaries) return;
-
     this.showAdvancedBoundaries = !this.showAdvancedBoundaries;
-    this.canToggleAdvanceBoundaries = this.getCanToggleAdvancedBoundaries();
   }
 
   public setDefaultDateRange(event: { start: Date; end: Date }) {
@@ -80,15 +75,12 @@ export class ManageKabasTasksAssigneeModalComponent implements OnInit {
     if (this.currentTaskAssignees.length === 1) {
       this.showAdvancedBoundaries = false;
     }
-
-    this.canToggleAdvanceBoundaries = this.getCanToggleAdvancedBoundaries();
   }
 
   public removeAssignee(assignee: AssigneeInterface) {
     this.currentTaskAssignees = this.currentTaskAssignees.filter(
       cTA => cTA !== assignee
     );
-    this.canToggleAdvanceBoundaries = this.getCanToggleAdvancedBoundaries();
   }
 
   public setAssignmentDate(
@@ -97,14 +89,11 @@ export class ManageKabasTasksAssigneeModalComponent implements OnInit {
   ) {
     assignee.start = event.start;
     assignee.end = event.end;
-
-    this.canToggleAdvanceBoundaries = this.getCanToggleAdvancedBoundaries();
   }
 
   public setDefaultDate(assignee: AssigneeInterface) {
     assignee.start = this.defaultStartDate;
     assignee.end = this.defaultEndDate;
-    this.canToggleAdvanceBoundaries = this.getCanToggleAdvancedBoundaries();
   }
 
   public onOKButtonClick() {

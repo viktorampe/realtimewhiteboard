@@ -31,7 +31,6 @@
     <campus-button
       primary
       class="manage-task-assignees__content__show-advanced__button"
-      [class.ui-button--disabled]="!canToggleAdvanceBoundaries"
       (click)="toggleAdvancedBoundaries()"
       >{{
         showAdvancedBoundaries ? 'Toon eenvoudig' : 'Toon geavanceerd'
@@ -51,7 +50,15 @@
           >
             <div
               class="manage-task-assignees__content__list__item__content__caption"
-              >{{ assignee.type }} - {{ assignee.id }}</div
+              >{{ assignee.type }} - {{ assignee.label }}</div
+            >
+            <div
+              *ngIf="
+                !showAdvancedBoundaries &&
+                !isDefaultDate(assignee.start, assignee.end)
+              "
+              class="manage-task-assignees__content__list__item__content__boundaries"
+              >{{ assignee.start | date }} - {{ assignee.end | date }}</div
             >
             <mat-icon
               class="manage-task-assignees__content__list__item__action

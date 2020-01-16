@@ -50,7 +50,11 @@
             min-height: 32px;
 
             & .manage-task-assignees__content__list__item__content__caption {
-              flex-grow: 1;
+              flex: 1 1 25%;
+            }
+            & .manage-task-assignees__content__list__item__content__boundaries {
+              flex: 2 1 25%;
+              font-style: italic;
             }
           }
 
