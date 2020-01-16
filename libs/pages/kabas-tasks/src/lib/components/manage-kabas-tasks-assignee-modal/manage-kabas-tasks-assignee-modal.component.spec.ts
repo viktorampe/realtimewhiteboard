@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import {
   MatDialogModule,
   MatDialogRef,
+  MatIconRegistry,
   MatList,
   MatListItem,
   MatNativeDateModule,
@@ -9,13 +10,10 @@ import {
 } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { MockDate } from '@campus/testing';
+import { MockDate, MockMatIconRegistry } from '@campus/testing';
 import { DateRangePickerComponent, UiModule } from '@campus/ui';
 import { configureTestSuite } from 'ng-bullet';
-import {
-  AssigneeInterface,
-  AssigneeTypesEnum
-} from '../../interfaces/Assignee.interface';
+import { AssigneeTypesEnum } from '../../interfaces/Assignee.interface';
 import { ManageKabasTasksAssigneeDataInterface } from './manage-kabas-tasks-assignee-data.interface';
 import { ManageKabasTasksAssigneeModalComponent } from './manage-kabas-tasks-assignee-modal.component';
 describe('ManageKabasTasksAssigneeModalComponent', () => {
@@ -25,29 +23,51 @@ describe('ManageKabasTasksAssigneeModalComponent', () => {
   const mockStudentAssignee = {
     type: AssigneeTypesEnum.STUDENT,
     label: 'Pol',
-    start: new Date(2020, 0, 1),
-    end: new Date(2020, 5, 30)
+    relationId: 1
+  };
+
+  const mockStudentAssignee2 = {
+    type: AssigneeTypesEnum.STUDENT,
+    label: 'Bob',
+    relationId: 123
   };
 
   const mockGroupAssignee = {
     type: AssigneeTypesEnum.GROUP,
     label: 'zootje ongeregeld',
-    start: new Date(2020, 3, 1),
-    end: new Date(2020, 3, 30)
+    relationId: 456
+  };
+
+  const mockClassGroupAssignee = {
+    type: AssigneeTypesEnum.CLASSGROUP,
+    label: '2c',
+    relationId: 789
   };
 
   const data: ManageKabasTasksAssigneeDataInterface = {
     title: 'Taak naam',
     // all available taskAssignees
-    // these need to include related data (classGroup, group, person)
-    classGroups: [],
-    groups: [],
-    students: [],
+    possibleTaskAssignees: [
+      mockClassGroupAssignee,
+      mockGroupAssignee,
+      mockStudentAssignee,
+      mockStudentAssignee2
+    ],
     // current values in page
     currentTaskAssignees: [
-      { id: 1, ...mockStudentAssignee },
-      { id: 1, ...mockGroupAssignee }
-    ] as AssigneeInterface[]
+      {
+        id: 1,
+        start: new Date(2020, 0, 1),
+        end: new Date(2020, 5, 30),
+        ...mockStudentAssignee
+      },
+      {
+        id: 1,
+        start: new Date(2020, 3, 1),
+        end: new Date(2020, 3, 30),
+        ...mockGroupAssignee
+      }
+    ]
   };
 
   configureTestSuite(() => {
@@ -60,7 +80,11 @@ describe('ManageKabasTasksAssigneeModalComponent', () => {
       ],
       providers: [
         { provide: MAT_DIALOG_DATA, useValue: { ...data } },
-        { provide: MatDialogRef, useValue: { close: () => {} } }
+        { provide: MatDialogRef, useValue: { close: () => {} } },
+        {
+          provide: MatIconRegistry,
+          useClass: MockMatIconRegistry
+        }
       ],
       declarations: [ManageKabasTasksAssigneeModalComponent]
     });
@@ -77,12 +101,11 @@ describe('ManageKabasTasksAssigneeModalComponent', () => {
   });
 
   it('should inject the dialogData', () => {
-    expect(component.currentTaskName).toBe(data.title);
-    expect(component.currentTaskAssignees).toEqual(data.currentTaskAssignees);
-    // TODO these will probably be filtered at some point
-    expect(component.availableClassGroups).toEqual(data.classGroups);
-    expect(component.availableGroups).toEqual(data.groups);
-    expect(component.availableStudents).toEqual(data.students);
+    // yes, I know testing privates
+    // but because of ng-bullet, I can't update the injected data
+    // so later on I need to change the values in the component.data directly
+    // so, for certainty -> the injection actually happens
+    expect(component['data']).toEqual(data);
   });
 
   describe('UI elements', () => {
@@ -245,10 +268,7 @@ describe('ManageKabasTasksAssigneeModalComponent', () => {
     });
 
     describe('addAssignees', () => {
-      const assigneeToAdd = {
-        type: AssigneeTypesEnum.STUDENT,
-        label: 'Archibald NotInList'
-      };
+      const assigneeToAdd = mockStudentAssignee2;
 
       it('should add the assignees to the list', () => {
         const getMatListOptions = () =>
@@ -278,6 +298,18 @@ describe('ManageKabasTasksAssigneeModalComponent', () => {
         expect(lastAssignee.start).toBe(component.default.start);
         expect(lastAssignee.end).toBe(component.default.end);
       });
+
+      it('should update the available assignees', () => {
+        component.addAssignees([assigneeToAdd]);
+
+        expect(
+          component.availableTaskAssignees.every(
+            aTA =>
+              aTA.type !== assigneeToAdd.type &&
+              aTA.relationId !== assigneeToAdd.relationId
+          )
+        ).toBe(true);
+      });
     });
 
     describe('removeAssignee', () => {
@@ -298,6 +330,20 @@ describe('ManageKabasTasksAssigneeModalComponent', () => {
             assigneeToRemove.label
           );
         });
+      });
+
+      it('should update the available assignees', () => {
+        const assigneeToRemove = component.currentTaskAssignees[0];
+
+        component.removeAssignee(assigneeToRemove);
+
+        expect(
+          component.availableTaskAssignees.some(
+            aTA =>
+              aTA.type === assigneeToRemove.type &&
+              aTA.relationId === assigneeToRemove.relationId
+          )
+        ).toBe(true);
       });
     });
 
@@ -369,6 +415,12 @@ describe('ManageKabasTasksAssigneeModalComponent', () => {
   });
 
   describe('initial values', () => {
+    beforeEach(() => {
+      // will need to directly manipulate this -> can't affect injected data
+      // makes sure every test is isolated
+      component['data'] = data;
+    });
+
     describe('default boundaries date picker', () => {
       const dec31 = new Date(2019, 11, 31);
       const jan1 = new Date(2020, 0, 1);
@@ -438,8 +490,27 @@ describe('ManageKabasTasksAssigneeModalComponent', () => {
           const mockDate = new MockDate(testCase.today);
           component.ngOnInit();
           expect(component.default).toEqual(testCase.expected);
+
+          // restore everything to normal
           mockDate.returnRealDate();
         });
+      });
+    });
+
+    describe('available assignees', () => {
+      it('should only contain values that are not currently selected', () => {
+        expect(component.availableTaskAssignees).toEqual([
+          mockClassGroupAssignee,
+          mockStudentAssignee2
+        ]);
+      });
+
+      it('should contain all possible assignees', () => {
+        component['data'].currentTaskAssignees = [];
+        component.ngOnInit();
+        expect(component.availableTaskAssignees).toEqual(
+          data.possibleTaskAssignees
+        );
       });
     });
   });

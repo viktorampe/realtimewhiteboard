@@ -1,11 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import {
-  ClassGroupInterface,
-  GroupInterface,
-  PersonInterface
-} from '@campus/dal';
 import { AssigneeInterface } from '../../interfaces/Assignee.interface';
+import { ManageKabasTasksAssigneeDataInterface } from './manage-kabas-tasks-assignee-data.interface';
 
 @Component({
   selector: 'campus-manage-kabas-tasks-assignee-modal',
@@ -16,15 +12,13 @@ export class ManageKabasTasksAssigneeModalComponent implements OnInit {
   public showAddAssignees = false;
   public currentTaskName: string;
   public currentTaskAssignees: AssigneeInterface[];
+  public availableTaskAssignees: AssigneeInterface[];
   public default: { start: Date; end: Date };
   public showAdvancedBoundaries = false;
 
-  public availableClassGroups: ClassGroupInterface[] = [];
-  public availableGroups: GroupInterface[] = [];
-  public availableStudents: PersonInterface[] = [];
-
   constructor(
-    @Inject(MAT_DIALOG_DATA) private data: any,
+    @Inject(MAT_DIALOG_DATA)
+    private data: ManageKabasTasksAssigneeDataInterface,
     private dialogRef: MatDialogRef<ManageKabasTasksAssigneeModalComponent>
   ) {}
 
@@ -35,6 +29,7 @@ export class ManageKabasTasksAssigneeModalComponent implements OnInit {
     }));
     this.currentTaskName = this.data.title;
     this.determineDefaultDateInterval();
+    this.updateAvailableTaskAssignees();
   }
 
   public toggleAdvancedBoundaries() {
@@ -69,12 +64,14 @@ export class ManageKabasTasksAssigneeModalComponent implements OnInit {
       ...this.default
     }));
     this.currentTaskAssignees.push(...assigneesToAdd);
+    this.updateAvailableTaskAssignees();
   }
 
   public removeAssignee(assignee: AssigneeInterface) {
     this.currentTaskAssignees = this.currentTaskAssignees.filter(
       cTA => cTA !== assignee
     );
+    this.updateAvailableTaskAssignees();
   }
 
   public setAssignmentDate(
@@ -101,6 +98,15 @@ export class ManageKabasTasksAssigneeModalComponent implements OnInit {
     return (
       start.getTime() === this.default.start.getTime() &&
       end.getTime() === this.default.end.getTime()
+    );
+  }
+
+  private updateAvailableTaskAssignees() {
+    this.availableTaskAssignees = this.data.possibleTaskAssignees.filter(
+      pTA =>
+        !this.currentTaskAssignees.some(
+          cTA => cTA.relationId === pTA.relationId && cTA.type === pTA.type
+        )
     );
   }
 

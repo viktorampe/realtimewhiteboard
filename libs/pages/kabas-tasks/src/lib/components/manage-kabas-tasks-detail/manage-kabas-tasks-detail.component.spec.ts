@@ -61,4 +61,8 @@ describe('ManageKabasTasksDetailComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  describe('task assignee modal', () => {
+    // TODO
+  });
 });

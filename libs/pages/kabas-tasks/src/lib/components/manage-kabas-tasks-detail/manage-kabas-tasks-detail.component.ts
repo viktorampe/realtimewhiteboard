@@ -1,7 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
+import {
+  ClassGroupInterface,
+  GroupInterface,
+  PersonInterface
+} from '@campus/dal';
 import { SearchFilterCriteriaInterface } from '@campus/search';
 import { take } from 'rxjs/operators';
+import {
+  AssigneeInterface,
+  AssigneeTypesEnum
+} from '../../interfaces/Assignee.interface';
 import { TaskWithAssigneesInterface } from '../../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
 import { ManageKabasTasksAssigneeDataInterface } from '../manage-kabas-tasks-assignee-modal/manage-kabas-tasks-assignee-data.interface';
@@ -77,21 +86,44 @@ export class ManageKabasTasksDetailComponent implements OnInit {
   }
 
   private openAssigneeModal() {
-    let currentTaskAssignees;
+    let currentTaskAssignees: AssigneeInterface[];
+    let possibleTaskAssignees: AssigneeInterface[];
 
+    // TODO use currentTaskWithAssignment
     this.viewModel.tasksWithAssignments$
       .pipe(take(1))
       .subscribe(tasksWithAssignments => {
         currentTaskAssignees = tasksWithAssignments[0].assignees;
       });
 
+    // TODO get actual values from store
+    const classGroups: ClassGroupInterface[] = [];
+    const groups: GroupInterface[] = [];
+    const students: PersonInterface[] = [];
+
+    possibleTaskAssignees = [
+      ...classGroups.map(cG => ({
+        type: AssigneeTypesEnum.CLASSGROUP,
+        label: cG.name,
+        relationId: cG.id
+      })),
+      ...groups.map(group => ({
+        type: AssigneeTypesEnum.GROUP,
+        label: group.name,
+        relationId: group.id
+      })),
+      ...students.map(student => ({
+        type: AssigneeTypesEnum.STUDENT,
+        label: student.displayName,
+        relationId: student.id
+      }))
+    ];
+
     const data: ManageKabasTasksAssigneeDataInterface = {
       title: 'Taak naam',
       // all available taskAssignees
-      // these need to include related data (classGroup, group, person)
-      classGroups: [],
-      groups: [],
-      students: [],
+      possibleTaskAssignees,
+
       // current values in page
       currentTaskAssignees
     };
@@ -99,10 +131,12 @@ export class ManageKabasTasksDetailComponent implements OnInit {
     this.dialog
       .open(ManageKabasTasksAssigneeModalComponent, {
         data,
-        // autoFocus: false
         panelClass: 'manage-task-assignees'
       })
       .afterClosed()
-      .subscribe(res => console.log(res));
+      .subscribe(res => {
+        // TODO update assignees
+        console.log(res);
+      });
   }
 }
