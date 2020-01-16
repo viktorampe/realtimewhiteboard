@@ -150,7 +150,7 @@ export class KabasTasksViewModel {
         const activeUntil = task.endDate
           ? ` Deze taak is nog actief tot ${task.endDate.toLocaleDateString(
               this.dateLocale
-            )}`
+            )}.`
           : '';
         return `<li>${task.name} kan niet worden gearchiveerd.${activeUntil}</li>`;
       })
