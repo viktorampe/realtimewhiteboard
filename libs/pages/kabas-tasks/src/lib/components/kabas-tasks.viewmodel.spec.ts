@@ -5,6 +5,7 @@ import {
   DalState,
   FavoriteActions,
   FavoriteTypesEnum,
+  getRouterState,
   PersonFixture,
   TaskActions,
   UserQueries
@@ -12,6 +13,7 @@ import {
 import { MockDate } from '@campus/testing';
 import { Store } from '@ngrx/store';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
+import { hot } from '@nrwl/angular/testing';
 import { configureTestSuite } from 'ng-bullet';
 import {
   TaskStatusEnum,
@@ -21,11 +23,6 @@ import { KabasTasksViewModel } from './kabas-tasks.viewmodel';
 
 describe('KabasTaskViewModel', () => {
   const dateMock = new MockDate();
-
-  afterAll(() => {
-    dateMock.returnRealDate();
-  });
-
   let kabasTasksViewModel: KabasTasksViewModel;
   let store: MockStore<DalState>;
   let authService: AuthServiceInterface;
@@ -45,6 +42,10 @@ describe('KabasTaskViewModel', () => {
     kabasTasksViewModel = TestBed.get(KabasTasksViewModel);
     authService = TestBed.get(AUTH_SERVICE_TOKEN);
     store = TestBed.get(Store);
+  });
+
+  afterAll(() => {
+    dateMock.returnRealDate();
   });
 
   describe('creation', () => {
@@ -396,6 +397,154 @@ describe('KabasTaskViewModel', () => {
       });
 
       kabasTasksViewModel.toggleFavorite(taskAssignee);
+
+      expect(spy).toHaveBeenCalledWith(expected);
+    });
+  });
+
+  describe('currentTaskParams', () => {
+    it('should contain the id of the current task when in a task', () => {
+      store.overrideSelector(getRouterState, {
+        navigationId: 1,
+        state: {
+          url: '',
+          params: {
+            id: '1'
+          }
+        }
+      });
+
+      expect(kabasTasksViewModel.currentTaskParams$).toBeObservable(
+        hot('a', {
+          a: { id: 1 }
+        })
+      );
+    });
+
+    it('should contain undefined for the id if not set', () => {
+      store.overrideSelector(getRouterState, {
+        navigationId: 1,
+        state: {
+          url: '',
+          params: {}
+        }
+      });
+
+      expect(kabasTasksViewModel.currentTaskParams$).toBeObservable(
+        hot('a', {
+          a: { id: undefined }
+        })
+      );
+    });
+  });
+
+  describe('canDelete', () => {
+    let taskAssignees;
+    beforeEach(() => {
+      taskAssignees = [
+        {
+          name: 'Task',
+          eduContentAmount: 1,
+          assignees: [],
+          status: TaskStatusEnum.FINISHED,
+          isPaperTask: false,
+          startDate: new Date(Date.now() - 2000),
+          endDate: new Date(Date.now() - 1000)
+        },
+        {
+          name: 'Task2',
+          eduContentAmount: 1,
+          assignees: [],
+          status: TaskStatusEnum.FINISHED,
+          isPaperTask: false
+        },
+
+        {
+          name: 'Task3',
+          eduContentAmount: 1,
+          assignees: [],
+          status: TaskStatusEnum.ACTIVE,
+          isPaperTask: false,
+          startDate: new Date(Date.now() - 2000)
+        },
+        {
+          name: 'Task4',
+          eduContentAmount: 1,
+          assignees: [],
+          status: TaskStatusEnum.PENDING,
+          isPaperTask: false,
+          startDate: new Date(Date.now() - 2000)
+        }
+      ] as TaskWithAssigneesInterface[];
+    });
+
+    it('should return false if pending', () => {
+      const result = kabasTasksViewModel.canBeArchivedOrDeleted(
+        taskAssignees[3]
+      );
+      expect(result).toBeFalsy();
+    });
+    it('should return false if active', () => {
+      const result = kabasTasksViewModel.canBeArchivedOrDeleted(
+        taskAssignees[2]
+      );
+
+      expect(result).toBeFalsy();
+    });
+
+    it('should return true if finished', () => {
+      const result = kabasTasksViewModel.canBeArchivedOrDeleted(
+        taskAssignees[0]
+      );
+      expect(result).toBeTruthy();
+    });
+
+    it('should return true if no date is set', () => {
+      const result = kabasTasksViewModel.canBeArchivedOrDeleted(
+        taskAssignees[1]
+      );
+      expect(result).toBeTruthy();
+    });
+  });
+
+  describe('deleteTasks', () => {
+    let taskAssignees;
+    beforeEach(() => {
+      taskAssignees = [
+        {
+          id: 1,
+          name: 'Finished Task',
+          eduContentAmount: 1,
+          assignees: [],
+          status: TaskStatusEnum.FINISHED,
+          isPaperTask: false,
+          startDate: new Date(Date.now() - 2000),
+          endDate: new Date(Date.now() - 1000)
+        },
+        {
+          id: 2,
+          name: 'Pending Task',
+          eduContentAmount: 1,
+          assignees: [],
+          status: TaskStatusEnum.PENDING,
+          isPaperTask: false,
+          startDate: new Date(Date.now() - 2000)
+        },
+        {
+          id: 3,
+          name: 'Active Task',
+          eduContentAmount: 1,
+          assignees: [],
+          isPaperTask: false
+        }
+      ] as TaskWithAssigneesInterface[];
+    });
+
+    it('should call dispatch with all tasks that can be deleted', () => {
+      const spy = jest.spyOn(store, 'dispatch');
+      const expected = new TaskActions.DeleteTasks({ ids: [1, 3] });
+
+      kabasTasksViewModel.removeTasks(taskAssignees);
 
       expect(spy).toHaveBeenCalledWith(expected);
     });

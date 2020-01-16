@@ -13,6 +13,9 @@ import {
   LearningAreaReducer,
   LinkedPersonActions,
   LinkedPersonReducer,
+  MethodActions,
+  MethodFixture,
+  MethodReducer,
   PersonFixture,
   TaskActions,
   TaskClassGroupActions,
@@ -35,7 +38,10 @@ import { Action, select, Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/angular/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { AssigneeTypesEnum } from '../interfaces/Assignee.interface';
-import { getTasksWithAssignments } from './kabas-tasks.viewmodel.selectors';
+import {
+  allowedLearningAreas,
+  getTasksWithAssignments
+} from './kabas-tasks.viewmodel.selectors';
 
 describe('Kabas-tasks viewmodel selectors', () => {
   configureTestSuite(() => {
@@ -59,7 +65,8 @@ describe('Kabas-tasks viewmodel selectors', () => {
           TaskReducer,
           TaskClassGroupReducer,
           TaskGroupReducer,
-          TaskStudentReducer
+          TaskStudentReducer,
+          MethodReducer
         ])
       ],
       providers: [Store]
@@ -163,6 +170,21 @@ describe('Kabas-tasks viewmodel selectors', () => {
       ];
       expect(stream).toBeObservable(hot('a', { a: expected }));
     });
+
+    it('should return allowedLearningAreas', () => {
+      const stream = store.pipe(select(allowedLearningAreas));
+
+      const expected = [
+        new LearningAreaFixture({ id: 2, name: 'frans' }),
+        new LearningAreaFixture({ id: 1, name: 'wiskunde' })
+      ];
+
+      expect(stream).toBeObservable(
+        hot('a', {
+          a: expected
+        })
+      );
+    });
   });
 });
 
@@ -176,7 +198,9 @@ function hydrateStore(store, date) {
     getLoadLinkedPersonsAction(),
     getLoadTaskClassGroupsAction(date),
     getLoadTaskGroupsAction(date),
-    getLoadTaskStudentsAction(date)
+    getLoadTaskStudentsAction(date),
+    getLoadMethodsAction(),
+    getLoadAllowedMethodsAction()
   ];
   actions.forEach(action => store.dispatch(action));
 }
@@ -200,9 +224,34 @@ function getLoadTasksAction() {
 
 function getLoadLearningAreasAction() {
   return new LearningAreaActions.LearningAreasLoaded({
-    learningAreas: [new LearningAreaFixture({ name: 'wiskunde' })]
+    learningAreas: [
+      new LearningAreaFixture({ id: 1, name: 'wiskunde' }),
+      new LearningAreaFixture({ id: 2, name: 'frans' }),
+      new LearningAreaFixture({ id: 3, name: 'nederlands' })
+    ]
   });
 }
+
+function getLoadMethodsAction() {
+  return new MethodActions.MethodsLoaded({
+    methods: [
+      new MethodFixture({ id: 1, name: 'Hon³', learningAreaId: 2 }),
+      new MethodFixture({ id: 2, name: 'Baguette', learningAreaId: 2 }),
+      new MethodFixture({
+        id: 3,
+        name: 'Drie maal drie is negen',
+        learningAreaId: 1
+      })
+    ]
+  });
+}
+
+function getLoadAllowedMethodsAction() {
+  return new MethodActions.AllowedMethodsLoaded({
+    methodIds: [1, 2, 3]
+  });
+}
+
 function getLoadClassGroupsAction() {
   return new ClassGroupActions.ClassGroupsLoaded({
     classGroups: [

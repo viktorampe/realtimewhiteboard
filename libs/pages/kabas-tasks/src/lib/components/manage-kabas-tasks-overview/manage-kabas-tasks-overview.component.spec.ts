@@ -766,6 +766,24 @@ describe('ManageKabasTasksOverviewComponent', () => {
           )
         ).toBeObservable(hot('a', { a: [1, 5, 4, 2, 3] }));
       });
+
+      it('should order by favorite, then by name', () => {
+        const mockTasks = [
+          { id: 1, name: 'b', isFavorite: true },
+          { id: 2, name: 'd', isFavorite: false },
+          { id: 3, name: 'c', isFavorite: false },
+          { id: 4, name: 'a', isFavorite: true }
+        ] as TaskWithAssigneesInterface[];
+
+        component.setSortMode(TaskSortEnum.FAVORITE);
+        digitalTasks$.next(mockTasks);
+
+        expect(
+          component.tasksWithAssignments$.pipe(
+            map(tasks => tasks.map(task => task.id))
+          )
+        ).toBeObservable(hot('a', { a: [4, 1, 3, 2] }));
+      });
     });
 
     describe('page events', () => {
@@ -846,39 +864,65 @@ describe('ManageKabasTasksOverviewComponent', () => {
     });
   });
 
-  describe('clickDeleteTasks()', () => {
-    const selectedDigitalTasks = [{ id: 1, name: 'foo' }];
-    const selectedPaperTasks = [{ id: 2, name: 'bar' }];
+  describe('click handlers', () => {
+    describe('clickAddDigitalTask', () => {
+      it('should navigate to the correct route', () => {
+        component.clickAddDigitalTask();
 
-    const digitalSelectionList = getSelectionListWithSelectedValues(
-      selectedDigitalTasks
-    );
-    const paperSelectionList = getSelectionListWithSelectedValues(
-      selectedPaperTasks
-    );
-
-    let removeTasksSpy;
-
-    beforeEach(() => {
-      removeTasksSpy = jest.spyOn(kabasTasksViewModel, 'removeTasks');
+        expect(router.navigate).toHaveBeenCalledWith([
+          'tasks',
+          'manage',
+          'new'
+        ]);
+      });
     });
 
-    it('should call vm.removeTasks with the selected digital tasks', () => {
-      setSelectionList(digitalSelectionList);
+    describe('clickAddPaperTask', () => {
+      it('should navigate to the correct route', () => {
+        component.clickAddPaperTask();
 
-      component.clickDeleteTasks();
-
-      expect(removeTasksSpy).toHaveBeenCalledTimes(1);
-      expect(removeTasksSpy).toHaveBeenCalledWith(selectedDigitalTasks);
+        expect(router.navigate).toHaveBeenCalledWith([
+          'tasks',
+          'manage',
+          'new'
+        ]);
+      });
     });
 
-    it('should call vm.removeTasks with the selected paper tasks', () => {
-      setSelectionList(paperSelectionList);
+    describe('clickDeleteTasks()', () => {
+      const selectedDigitalTasks = [{ id: 1, name: 'foo' }];
+      const selectedPaperTasks = [{ id: 2, name: 'bar' }];
 
-      component.clickDeleteTasks();
+      const digitalSelectionList = getSelectionListWithSelectedValues(
+        selectedDigitalTasks
+      );
+      const paperSelectionList = getSelectionListWithSelectedValues(
+        selectedPaperTasks
+      );
 
-      expect(removeTasksSpy).toHaveBeenCalledTimes(1);
-      expect(removeTasksSpy).toHaveBeenCalledWith(selectedPaperTasks);
+      let removeTasksSpy;
+
+      beforeEach(() => {
+        removeTasksSpy = jest.spyOn(kabasTasksViewModel, 'removeTasks');
+      });
+
+      it('should call vm.removeTasks with the selected digital tasks', () => {
+        setSelectionList(digitalSelectionList);
+
+        component.clickDeleteTasks();
+
+        expect(removeTasksSpy).toHaveBeenCalledTimes(1);
+        expect(removeTasksSpy).toHaveBeenCalledWith(selectedDigitalTasks);
+      });
+
+      it('should call vm.removeTasks with the selected paper tasks', () => {
+        setSelectionList(paperSelectionList);
+
+        component.clickDeleteTasks();
+
+        expect(removeTasksSpy).toHaveBeenCalledTimes(1);
+        expect(removeTasksSpy).toHaveBeenCalledWith(selectedPaperTasks);
+      });
     });
   });
 

@@ -50,7 +50,8 @@ export interface FilterStateInterface {
 export enum TaskSortEnum {
   'NAME' = 'NAME',
   'LEARNINGAREA' = 'LEARNINGAREA',
-  'STARTDATE' = 'STARTDATE'
+  'STARTDATE' = 'STARTDATE',
+  'FAVORITE' = 'FAVORITE'
 }
 
 export type Source = 'digital' | 'paper';
@@ -322,10 +323,10 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
   }
 
   clickAddDigitalTask() {
-    console.log('TODO: adding digital task');
+    this.router.navigate(['tasks', 'manage', 'new']);
   }
   clickAddPaperTask() {
-    console.log('TODO: adding paper task');
+    this.router.navigate(['tasks', 'manage', 'new']);
   }
   // TODO: implement handler
   clickDeleteTasks() {
@@ -741,17 +742,15 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
         return this.sortByLearningArea([...tasks]);
       case TaskSortEnum.STARTDATE:
         return this.sortByStartDate([...tasks]);
+      case TaskSortEnum.FAVORITE:
+        return tasks.sort(this.nameComparer).sort(this.favoriteComparer);
     }
     // no sortMode -> no sorting
     return tasks;
   }
 
   private sortByName(tasks: TaskWithAssigneesInterface[]) {
-    return tasks.sort((a, b) =>
-      a.name.localeCompare(b.name, 'be-nl', {
-        sensitivity: 'base'
-      })
-    );
+    return tasks.sort(this.nameComparer);
   }
 
   private sortByLearningArea(tasks: TaskWithAssigneesInterface[]) {
@@ -782,6 +781,16 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
       if (!taskB) return 1;
 
       return taskA.getTime() - taskB.getTime();
+    });
+  }
+
+  private favoriteComparer(a, b): number {
+    return b.isFavorite - a.isFavorite;
+  }
+
+  private nameComparer(a, b): number {
+    return a.name.localeCompare(b.name, 'nl-BE', {
+      sensitivity: 'base'
     });
   }
 }
