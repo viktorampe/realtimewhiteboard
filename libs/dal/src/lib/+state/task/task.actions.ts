@@ -1,6 +1,11 @@
 import { Update } from '@ngrx/entity';
 import { Action } from '@ngrx/store';
-import { TaskInterface } from '../../+models';
+import {
+  TaskClassGroupInterface,
+  TaskGroupInterface,
+  TaskInterface,
+  TaskStudentInterface
+} from '../../+models';
 import {
   CustomFeedbackHandlersInterface,
   FeedbackTriggeringAction
@@ -16,9 +21,12 @@ export enum TasksActionTypes {
   UpsertTasks = '[Tasks] Upsert Tasks',
   UpdateTask = '[Tasks] Update Task',
   UpdateTasks = '[Tasks] Update Tasks',
+  StartArchiveTasks = '[Tasks] Start Archive Tasks',
   DeleteTask = '[Tasks] Delete Task',
   DeleteTasks = '[Tasks] Delete Tasks',
   ClearTasks = '[Tasks] Clear Tasks',
+  UpdateAccess = '[Tasks] Update Access',
+  StartDeleteTasks = '[Tasks] Start Delete Tasks',
   StartAddTask = '[Tasks] Start Add Task',
   NavigateToTaskDetail = '[Tasks] Navigate To Task Detail'
 }
@@ -69,13 +77,31 @@ export class UpsertTasks implements Action {
 export class UpdateTask implements Action {
   readonly type = TasksActionTypes.UpdateTask;
 
-  constructor(public payload: { task: Update<TaskInterface> }) {}
+  constructor(
+    public payload: { userId: number; task: Update<TaskInterface> }
+  ) {}
 }
 
 export class UpdateTasks implements Action {
   readonly type = TasksActionTypes.UpdateTasks;
 
-  constructor(public payload: { tasks: Update<TaskInterface>[] }) {}
+  constructor(
+    public payload: {
+      userId: number;
+      tasks: Update<TaskInterface>[];
+    }
+  ) {}
+}
+export class StartArchiveTasks implements FeedbackTriggeringAction {
+  readonly type = TasksActionTypes.StartArchiveTasks;
+
+  constructor(
+    public payload: {
+      userId: number;
+      tasks: Update<TaskInterface>[];
+      customFeedbackHandlers?: CustomFeedbackHandlersInterface;
+    }
+  ) {}
 }
 
 export class DeleteTask implements Action {
@@ -94,12 +120,36 @@ export class ClearTasks implements Action {
   readonly type = TasksActionTypes.ClearTasks;
 }
 
+export class UpdateAccess implements FeedbackTriggeringAction {
+  readonly type = TasksActionTypes.UpdateAccess;
+  constructor(
+    public payload: {
+      userId: number;
+      taskId: number;
+      taskGroups: TaskGroupInterface[];
+      taskStudents: TaskStudentInterface[];
+      taskClassGroups: TaskClassGroupInterface[];
+      customFeedbackHandlers?: CustomFeedbackHandlersInterface;
+    }
+  ) {}
+}
+export class StartDeleteTasks implements FeedbackTriggeringAction {
+  readonly type = TasksActionTypes.StartDeleteTasks;
+
+  constructor(
+    public payload: {
+      ids: number[];
+      userId: number;
+      customFeedbackHandlers?: CustomFeedbackHandlersInterface;
+    }
+  ) {}
+}
 export class StartAddTask implements FeedbackTriggeringAction {
   readonly type = TasksActionTypes.StartAddTask;
 
   constructor(
     public payload: {
-      task: Partial<TaskInterface>;
+      task: TaskInterface;
       userId: number;
       navigateAfterCreate?: boolean;
       customFeedbackHandlers?: CustomFeedbackHandlersInterface;
@@ -130,5 +180,7 @@ export type TasksActions =
   | DeleteTask
   | DeleteTasks
   | ClearTasks
+  | UpdateAccess
+  | StartDeleteTasks
   | StartAddTask
   | NavigateToTaskDetail;

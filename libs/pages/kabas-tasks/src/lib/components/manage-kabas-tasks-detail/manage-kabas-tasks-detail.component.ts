@@ -1,13 +1,19 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatSelectionList } from '@angular/material';
-import { EduContentInterface } from '@campus/dal';
+import { MatDialog, MatSelectionList } from '@angular/material';
+import { Router } from '@angular/router';
+import { EduContentInterface, LearningAreaInterface } from '@campus/dal';
 import { SearchFilterCriteriaInterface } from '@campus/search';
 import { SideSheetComponent } from '@campus/ui';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { map, take } from 'rxjs/operators';
 import { AssigneeTypesEnum } from '../../interfaces/Assignee.interface';
 import { TaskWithAssigneesInterface } from '../../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
 import { MockKabasTasksViewModel } from '../kabas-tasks.viewmodel.mock';
+import {
+  NewTaskComponent,
+  NewTaskFormValues
+} from '../new-task/new-task.component';
 
 export enum TaskSortEnum {
   'NAME' = 'NAME',
@@ -28,6 +34,8 @@ export class ManageKabasTasksDetailComponent implements OnInit {
   public diaboloPhaseFilter: SearchFilterCriteriaInterface;
   public selectedContents$ = new BehaviorSubject<EduContentInterface[]>([]);
   public task$: Observable<TaskWithAssigneesInterface>;
+  public isNewTask$: Observable<boolean>;
+  public selectableLearningAreas$: Observable<LearningAreaInterface[]>;
 
   public assigneeTypesEnum: typeof AssigneeTypesEnum = AssigneeTypesEnum;
 
@@ -40,7 +48,17 @@ export class ManageKabasTasksDetailComponent implements OnInit {
     this.sideSheet = sidesheet;
   }
 
-  constructor(private viewModel: KabasTasksViewModel) {}
+  constructor(
+    private viewModel: KabasTasksViewModel,
+    private dialog: MatDialog,
+    private router: Router
+  ) {
+    this.isNewTask$ = this.viewModel.currentTaskParams$.pipe(
+      map(currentTaskParams => !currentTaskParams.id)
+    );
+
+    this.selectableLearningAreas$ = this.viewModel.selectableLearningAreas$;
+  }
 
   ngOnInit() {
     this.task$ = this.viewModel.currentTask$;
@@ -73,6 +91,12 @@ export class ManageKabasTasksDetailComponent implements OnInit {
         }
       ]
     };
+
+    this.isNewTask$.pipe(take(1)).subscribe(isNewTask => {
+      if (isNewTask) {
+        this.openNewTaskDialog();
+      }
+    });
   }
 
   public onSelectionChange() {
@@ -99,5 +123,30 @@ export class ManageKabasTasksDetailComponent implements OnInit {
   }
   public toggleFavorite(task: TaskWithAssigneesInterface) {
     this.viewModel.toggleFavorite(task);
+  }
+
+  public openNewTaskDialog() {
+    this.selectableLearningAreas$.pipe(take(1)).subscribe(learningAreas => {
+      this.dialog
+        .open(NewTaskComponent, {
+          data: {
+            learningAreas
+          },
+          panelClass: 'pages-kabas-tasks-new-task__dialog'
+        })
+        .afterClosed()
+        .pipe(take(1))
+        .subscribe((formData: NewTaskFormValues) => {
+          if (formData) {
+            this.viewModel.createTask(
+              formData.title,
+              formData.learningArea.id,
+              formData.type
+            );
+          } else {
+            this.router.navigate(['tasks', 'manage']);
+          }
+        });
+    });
   }
 }

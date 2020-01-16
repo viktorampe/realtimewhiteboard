@@ -152,6 +152,7 @@
             #option
             *ngFor="let task of digitalTasks"
             checkboxPosition="before"
+            [value]="task"
             [class.mat-list-option--selected]="option.selected"
           >
             <campus-task-list-item
@@ -165,6 +166,8 @@
               [status]="task.status"
               [actions]="getActions(task)"
               [assignees]="task.assignees"
+              [isFavorite]="task.isFavorite"
+              (clickToggleFavorite)="clickToggleFavorite(task)"
             ></campus-task-list-item>
           </mat-list-option>
         </ng-container>
@@ -261,6 +264,7 @@
           <mat-list-option
             #option
             *ngFor="let task of paperTasks"
+            [value]="task"
             checkboxPosition="before"
             [class.mat-list-option--selected]="option.selected"
           >
@@ -275,6 +279,8 @@
               [status]="'paper'"
               [actions]="getActions(task)"
               [assignees]="task.assignees"
+              [isFavorite]="task.isFavorite"
+              (clickToggleFavorite)="clickToggleFavorite(task)"
             ></campus-task-list-item>
           </mat-list-option>
         </ng-container>

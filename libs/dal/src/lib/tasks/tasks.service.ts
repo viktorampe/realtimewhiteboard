@@ -6,10 +6,13 @@ import {
   TaskClassGroupInterface,
   TaskEduContentInterface,
   TaskGroupInterface,
-  TaskInterface,
   TaskStudentInterface
 } from '../+models';
-import { TaskServiceInterface } from './task.service.interface';
+import { TaskInterface } from './../+models/Task.interface';
+import {
+  TaskServiceInterface,
+  TaskUpdateInfoInterface
+} from './task.service.interface';
 @Injectable({
   providedIn: 'root'
 })
@@ -27,6 +30,30 @@ export class TaskService implements TaskServiceInterface {
     eduContentId: number
   ): Observable<TaskEduContentInterface> {
     return this.taskApi.linkEduContents(taskId, eduContentId);
+  }
+
+  updateTasks(
+    userId: number,
+    update: Partial<TaskInterface>[]
+  ): Observable<TaskUpdateInfoInterface> {
+    return this.taskApi.updateTasks(update) as Observable<
+      TaskUpdateInfoInterface
+    >;
+  }
+
+  createTask(userId: number, task: TaskInterface): Observable<TaskInterface> {
+    return this.personApi.createTeacherTasks(userId, task) as Observable<
+      TaskInterface
+    >;
+  }
+
+  deleteTasks(
+    userId: number,
+    taskIds: number[]
+  ): Observable<TaskUpdateInfoInterface> {
+    return this.taskApi.destroyTasks(taskIds) as Observable<
+      TaskUpdateInfoInterface
+    >;
   }
 
   updateAccess(

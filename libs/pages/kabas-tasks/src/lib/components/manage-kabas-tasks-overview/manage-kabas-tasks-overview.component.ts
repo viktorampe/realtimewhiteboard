@@ -115,9 +115,7 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
   private digitalFilterState$ = new BehaviorSubject<FilterStateInterface>({});
   private paperFilterState$ = new BehaviorSubject<FilterStateInterface>({});
 
-  @ViewChildren(MatSelectionList) private taskLists: QueryList<
-    MatSelectionList
-  >;
+  @ViewChildren(MatSelectionList) public taskLists: QueryList<MatSelectionList>;
 
   @ViewChildren(SearchTermComponent) private searchTermFilters: QueryList<
     SearchTermComponent
@@ -321,14 +319,15 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
   }
 
   clickAddDigitalTask() {
-    console.log('TODO: adding digital task');
+    this.router.navigate(['tasks', 'manage', 'new']);
   }
   clickAddPaperTask() {
-    console.log('TODO: adding paper task');
+    this.router.navigate(['tasks', 'manage', 'new']);
   }
 
-  // TODO: implement handler
-  clickDeleteTasks() {}
+  clickDeleteTasks() {
+    this.viewModel.removeTasks(this.getSelectedTasks());
+  }
 
   // TODO: implement handler
   clickArchiveTasks() {}
@@ -342,6 +341,10 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
   clickResetFilters(mode?: string) {
     // visually clear selections
     this.clearFilters();
+  }
+
+  clickToggleFavorite(task: TaskWithAssigneesInterface) {
+    this.viewModel.toggleFavorite(task);
   }
 
   public onSelectedTabIndexChanged(tab: number) {
@@ -394,6 +397,17 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
 
   public setSortMode(sortMode: TaskSortEnum) {
     this.currentSortMode$.next(sortMode);
+  }
+
+  private getSelectedTasks(): TaskWithAssigneesInterface[] {
+    if (this.taskLists) {
+      return this.taskLists.reduce((acc, list) => {
+        return [
+          ...acc,
+          ...list.selectedOptions.selected.map(option => option.value)
+        ];
+      }, []);
+    }
   }
 
   private mapSearchFilterCriteriaToFilterState(
