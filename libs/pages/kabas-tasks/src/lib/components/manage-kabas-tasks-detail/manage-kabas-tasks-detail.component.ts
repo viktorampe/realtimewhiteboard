@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { SearchFilterCriteriaInterface } from '@campus/search';
+import { AssigneeInterface } from '../../interfaces/Assignee.interface';
 import { TaskWithAssigneesInterface } from '../../interfaces/TaskWithAssignees.interface';
-import { AddAssigneeComponent } from '../add-assignee/add-assignee.component';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
 
 export enum TaskSortEnum {
@@ -70,10 +70,8 @@ export class ManageKabasTasksDetailComponent implements OnInit {
   public toggleFavorite(task: TaskWithAssigneesInterface) {
     this.viewModel.toggleFavorite(task);
   }
-  public iClicked() {
-    this.dialog.open(AddAssigneeComponent, {
-      data: {},
-      panelClass: 'pages-kabas-tasks-new-task__dialog'
-    });
+
+  public addedAssigneesTest(assignees: AssigneeInterface[]) {
+    console.log(assignees);
   }
 }

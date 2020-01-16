@@ -139,10 +139,13 @@ export class AddAssigneeComponent implements OnInit {
   }
 
   addAssignees() {
-    const optionsSelected = this.selectedAssignees.forEach(element => {
-      return element.selectedOptions.selected.map(option =>
-        console.log(option.value)
-      );
-    });
+    const assignees = this.selectedAssignees.reduce((acc, element) => {
+      return [
+        ...acc,
+        ...element.selectedOptions.selected.map(selection => selection.value)
+      ];
+    }, []);
+
+    this.addedAssignees.emit(assignees);
   }
 }
