@@ -115,14 +115,7 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
   private digitalFilterState$ = new BehaviorSubject<FilterStateInterface>({});
   private paperFilterState$ = new BehaviorSubject<FilterStateInterface>({});
 
-  @ViewChildren(MatSelectionList) private taskLists: QueryList<
-    MatSelectionList
-  >;
-
-  @ViewChild('digital', { read: MatSelectionList, static: true })
-  public digitalSelectionlist: MatSelectionList;
-  @ViewChild('paper', { read: MatSelectionList, static: true })
-  public paperSelectionlist: MatSelectionList;
+  @ViewChildren(MatSelectionList) public taskLists: QueryList<MatSelectionList>;
 
   @ViewChildren(SearchTermComponent) private searchTermFilters: QueryList<
     SearchTermComponent
@@ -332,8 +325,8 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
     console.log('TODO: adding paper task');
   }
 
-  clickDeleteTasks(currentTab: number) {
-    this.viewModel.removeTasks(this.getSelectedTasks(currentTab));
+  clickDeleteTasks() {
+    this.viewModel.removeTasks(this.getSelectedTasks());
   }
 
   // TODO: implement handler
@@ -406,20 +399,15 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
     this.currentSortMode$.next(sortMode);
   }
 
-  private getSelectedTasks(currentTab: number): TaskWithAssigneesInterface[] {
-    let selectedTasks: TaskWithAssigneesInterface[];
-    if (currentTab === 0) {
-      // digital
-      selectedTasks = this.digitalSelectionlist.selectedOptions.selected.map(
-        option => option.value
-      );
-    } else if (currentTab === 1) {
-      // paper
-      selectedTasks = this.paperSelectionlist.selectedOptions.selected.map(
-        option => option.value
-      );
+  private getSelectedTasks(): TaskWithAssigneesInterface[] {
+    if (this.taskLists) {
+      return this.taskLists.reduce((acc, list) => {
+        return [
+          ...acc,
+          ...list.selectedOptions.selected.map(option => option.value)
+        ];
+      }, []);
     }
-    return selectedTasks;
   }
 
   private mapSearchFilterCriteriaToFilterState(

@@ -1,4 +1,5 @@
 import { CommonModule } from '@angular/common';
+import { QueryList } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import {
   MatIconRegistry,
@@ -856,28 +857,37 @@ describe('ManageKabasTasksOverviewComponent', () => {
       selectedPaperTasks
     );
 
+    let removeTasksSpy;
+
     beforeEach(() => {
-      component.digitalSelectionlist = digitalSelectionList;
-      component.paperSelectionlist = paperSelectionList;
-      fixture.detectChanges();
+      removeTasksSpy = jest.spyOn(kabasTasksViewModel, 'removeTasks');
     });
 
     it('should call vm.removeTasks with the selected digital tasks', () => {
-      const removeTasksSpy = jest.spyOn(kabasTasksViewModel, 'removeTasks');
+      setSelectionList(digitalSelectionList);
 
-      component.clickDeleteTasks(0); // digital tasks tab
+      component.clickDeleteTasks();
+
       expect(removeTasksSpy).toHaveBeenCalledTimes(1);
       expect(removeTasksSpy).toHaveBeenCalledWith(selectedDigitalTasks);
     });
 
     it('should call vm.removeTasks with the selected paper tasks', () => {
-      const removeTasksSpy = jest.spyOn(kabasTasksViewModel, 'removeTasks');
+      setSelectionList(paperSelectionList);
 
-      component.clickDeleteTasks(1); // paper tasks tab
+      component.clickDeleteTasks();
+
       expect(removeTasksSpy).toHaveBeenCalledTimes(1);
       expect(removeTasksSpy).toHaveBeenCalledWith(selectedPaperTasks);
     });
   });
+
+  function setSelectionList(selection: MatSelectionList) {
+    const queryList = new QueryList<MatSelectionList>();
+    queryList.reset([selection]);
+    component.taskLists = queryList;
+    fixture.detectChanges();
+  }
 
   function getSelectionListWithSelectedValues(
     selectedValues
