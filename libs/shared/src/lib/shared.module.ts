@@ -31,7 +31,7 @@ import { HasPermissionDirective } from './auth/has-permission.directive';
 import { PermissionService } from './auth/permission.service';
 import { PERMISSION_SERVICE_TOKEN } from './auth/permission.service.interface';
 import {
-  ContentPreviewComponent,
+  ContentPreviewDialogComponent,
   LearningPlanGoalProgressManagementComponent,
   MethodBooksTileComponent,
   MethodBookTileComponent,
@@ -123,7 +123,7 @@ import { SCORM_EXERCISE_SERVICE_TOKEN } from './services/scorm/scorm-exercise.se
     DataCyDirective,
     AlertToNotificationItemPipe,
     QuickLinkComponent,
-    ContentPreviewComponent,
+    ContentPreviewDialogComponent,
     LearningPlanGoalProgressManagementComponent,
     MethodBooksTileComponent,
     MethodBookTileComponent
@@ -140,7 +140,7 @@ import { SCORM_EXERCISE_SERVICE_TOKEN } from './services/scorm/scorm-exercise.se
     DataCyDirective,
     AlertToNotificationItemPipe,
     QuickLinkComponent,
-    ContentPreviewComponent,
+    ContentPreviewDialogComponent,
     MethodBooksTileComponent,
     MethodBookTileComponent
   ],
@@ -172,7 +172,7 @@ import { SCORM_EXERCISE_SERVICE_TOKEN } from './services/scorm/scorm-exercise.se
   ],
   entryComponents: [
     QuickLinkComponent,
-    ContentPreviewComponent,
+    ContentPreviewDialogComponent,
     LearningPlanGoalProgressManagementComponent
   ]
 })

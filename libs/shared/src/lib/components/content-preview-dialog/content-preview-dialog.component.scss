@@ -8,7 +8,7 @@
   }
 }
 
-.content-preview {
+.content-preview-dialog {
   &__info-panel {
     max-height: 100%;
   }
@@ -33,7 +33,7 @@
     }
   }
 
-  .content-preview {
+  .content-preview-dialog {
     &__item {
       &__actions {
         &__context-menu {
@@ -42,7 +42,7 @@
       }
 
       &:hover {
-        .content-preview {
+        .content-preview-dialog {
           &__item {
             &__actions {
               &--hover {

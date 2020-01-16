@@ -1,20 +1,20 @@
-@mixin shared-content-preview {
-  $shared-content-preview_filter-font-size: $ui-primary-font-size !default;
-  $shared-content-preview__no-results-padding: 24px !default;
+@mixin shared-content-preview-dialog {
+  $shared-content-preview-dialog_filter-font-size: $ui-primary-font-size !default;
+  $shared-content-preview-dialog__no-results-padding: 24px !default;
 
   // extract material colors from theme
-  $shared-content-preview_item_icon-color: map-get(
+  $shared-content-preview-dialog_item_icon-color: map-get(
     map-get($app-theme, foreground),
     secondary-text
   ) !default;
-  $shared-content-preview_item_hover-color: map-get(
+  $shared-content-preview-dialog_item_hover-color: map-get(
     map-get($app-theme, background),
     hover
   ) !default;
 
-  .content-preview {
+  .content-preview-dialog {
     &__no-results {
-      padding: $shared-content-preview__no-results-padding;
+      padding: $shared-content-preview-dialog__no-results-padding;
     }
 
     &__dialog {
@@ -52,7 +52,7 @@
 }
 
 @media #{$ui-breakpoint-xsmall} {
-  .content-preview {
+  .content-preview-dialog {
     &__dialog {
       max-width: 100vw !important;
       max-height: 100vh;
@@ -65,7 +65,7 @@
         height: 100%;
       }
 
-      .content-preview__info-panel {
+      .content-preview-dialog__info-panel {
         display: flex;
         flex-direction: column;
         flex: 1 1 0;

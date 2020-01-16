@@ -1,4 +1,4 @@
-export * from './content-preview';
+export * from './content-preview-dialog';
 export * from './learning-plan-goal-progress-management';
 export * from './method-book-tile';
 export * from './method-books-tile';

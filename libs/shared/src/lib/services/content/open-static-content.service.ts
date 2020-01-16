@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { WINDOW } from '@campus/browser';
 import { ContentInterface, EduContent, UserContent } from '@campus/dal';
-import { ContentPreviewComponent } from '../../components';
+import { ContentPreviewDialogComponent } from '../../components';
 import {
   EnvironmentApiInterface,
   ENVIRONMENT_API_TOKEN
@@ -21,6 +21,13 @@ export class OpenStaticContentService
     private environmentApi: EnvironmentApiInterface
   ) {}
 
+  /**
+   * Opens any object that implements ContentInterface
+   *
+   * @param content The content that is being opened
+   * @param stream Should the content be streamed instead of downloaded? (used for video content)
+   * @param openDialog Should the content open in a preview dialog on the page, instead of a new window?
+   */
   open(
     content: ContentInterface,
     stream?: boolean,
@@ -32,7 +39,7 @@ export class OpenStaticContentService
         (stream ? '?stream=true' : '');
 
       if (openDialog) {
-        this.matDialog.open(ContentPreviewComponent, {
+        this.matDialog.open(ContentPreviewDialogComponent, {
           data: {
             url
           }
