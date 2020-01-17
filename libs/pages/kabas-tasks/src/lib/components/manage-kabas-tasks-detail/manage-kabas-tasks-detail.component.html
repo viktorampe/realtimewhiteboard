@@ -72,16 +72,17 @@
           [placeholder]="'Titel'"
           [required]="true"
           [icon]="'edit'"
-          (textChanged)="('TODO updateTask')"
+          (textChanged)="updateTask(task)"
           data-cy="task-title"
         ></campus-content-editable>
+        <!-- @TODO: discuss updateTask to allow only partial / property changed update instead of entire task update -->
         <campus-content-editable
           [text]="task.description"
           [placeholder]="'Omschrijving'"
           [multiline]="true"
           [required]="false"
           [icon]="'edit'"
-          (textChanged)="('TODO updateTask')"
+          (textChanged)="updateTask(task)"
         ></campus-content-editable>
         <p>{{ task.learningArea.name }}</p>
         <ng-template #showDates>
