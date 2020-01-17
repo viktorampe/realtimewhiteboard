@@ -88,7 +88,7 @@ export class ManageKabasTasksAddAssigneesComponent implements OnInit {
         } else {
           return [
             ...(this.students.length
-              ? [{ label: 'Resultaten', value: this.students, order: 1 }]
+              ? [{ label: 'Studenten', value: this.students, order: 1 }]
               : []),
             ...(this.groups.length
               ? [{ label: 'Groepen', value: this.groups, order: 2 }]

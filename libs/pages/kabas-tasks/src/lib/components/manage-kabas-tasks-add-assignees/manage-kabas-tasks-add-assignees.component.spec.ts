@@ -73,14 +73,16 @@ describe('AddAssigneeComponent', () => {
   describe('filteredAssignees$', () => {
     it('should filter on searchTerm', () => {
       component.filterState$.next({
-        label: 'a'
+        label: 'ro'
       });
 
-      const expected = {
-        label: 'Resultaten',
-        value: [mockStudents[0], mockClassgroups[0]],
-        order: 1
-      };
+      const expected = [
+        {
+          label: 'Resultaten',
+          value: [mockStudents[1]],
+          order: 1
+        }
+      ];
 
       expect(component.filteredAssignees$).toBeObservable(
         hot('a', {
@@ -92,11 +94,34 @@ describe('AddAssigneeComponent', () => {
     it('should return students, groups and classGroups when there is no filter', () => {
       component.filterState$.next({});
 
-      const expected = {
-        students: mockStudents,
-        groups: mockGroups,
-        classgroups: mockClassgroups
-      };
+      const expected = [
+        {
+          label: 'Studenten',
+          value: mockStudents,
+          order: 1
+        },
+        {
+          label: 'Groepen',
+          value: mockGroups,
+          order: 2
+        },
+        {
+          label: 'Klasgroepen',
+          value: mockClassgroups,
+          order: 3
+        }
+      ];
+
+      expect(component.filteredAssignees$).toBeObservable(
+        hot('a', {
+          a: expected
+        })
+      );
+    });
+    it('should return empty results if filtertext is not included in a name', () => {
+      component.filterState$.next({ label: 'akq' });
+
+      const expected = [];
 
       expect(component.filteredAssignees$).toBeObservable(
         hot('a', {
