@@ -3,6 +3,7 @@ export * from './lib/breadcrumbs';
 export { ButtonComponent } from './lib/button/button.component';
 export { CollapsibleBreakpointsInterface } from './lib/collapsible-sheet/collapsible-sheet.component';
 export { SelectOption } from './lib/confirmable-select/confirmable-select.component';
+export { ConfirmationModalComponent } from './lib/confirmation-modal/confirmation-modal.component';
 export { ContentEditableComponent } from './lib/content-editable/content-editable.component';
 export {
   DateRangePickerComponent,

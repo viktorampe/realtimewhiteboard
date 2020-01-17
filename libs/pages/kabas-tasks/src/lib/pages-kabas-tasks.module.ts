@@ -1,6 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { MatDialogModule, MatSelectModule } from '@angular/material';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {
+  MatDialogModule,
+  MatInputModule,
+  MatRadioModule,
+  MatSelectModule
+} from '@angular/material';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { GuardsModule } from '@campus/guards';
 import { PagesSharedModule } from '@campus/pages/shared';
@@ -11,8 +17,10 @@ import { UtilsModule } from '@campus/utils';
 import { AddAssigneeComponent } from './components/add-assignee/add-assignee.component';
 import { ManageKabasTasksDetailComponent } from './components/manage-kabas-tasks-detail/manage-kabas-tasks-detail.component';
 import { ManageKabasTasksOverviewComponent } from './components/manage-kabas-tasks-overview/manage-kabas-tasks-overview.component';
+import { NewTaskComponent } from './components/new-task/new-task.component';
 import { TaskListItemComponent } from './components/task-list-item/task-list-item.component';
 import { PagesKabasTasksRoutingModule } from './pages-kabas-tasks-routing.module';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -26,15 +34,24 @@ import { PagesKabasTasksRoutingModule } from './pages-kabas-tasks-routing.module
     SearchModule,
     GuardsModule,
     MatSlideToggleModule,
-    MatDialogModule
+
+    MatDialogModule,
+    MatInputModule,
+    MatRadioModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   declarations: [
     ManageKabasTasksOverviewComponent,
     TaskListItemComponent,
     ManageKabasTasksDetailComponent,
-    AddAssigneeComponent
+
+    AddAssigneeComponent,
+
+    NewTaskComponent
   ],
   providers: [],
-  exports: []
+  exports: [],
+  entryComponents: [NewTaskComponent]
 })
 export class PagesKabasTasksModule {}

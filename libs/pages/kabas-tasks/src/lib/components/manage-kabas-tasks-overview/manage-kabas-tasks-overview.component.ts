@@ -8,6 +8,7 @@ import {
   ViewChildren
 } from '@angular/core';
 import {
+  MatDialog,
   MatSelect,
   MatSelectionList,
   MatSlideToggle,
@@ -25,13 +26,14 @@ import {
   SearchTermComponent,
   SelectFilterComponent
 } from '@campus/search';
+import { ConfirmationModalComponent } from '@campus/ui';
 import {
   DateFunctions,
   FilterServiceInterface,
   FILTER_SERVICE_TOKEN
 } from '@campus/utils';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { map, shareReplay } from 'rxjs/operators';
+import { filter, map, shareReplay, take } from 'rxjs/operators';
 import { AssigneeTypesEnum } from '../../interfaces/Assignee.interface';
 import { TaskWithAssigneesInterface } from '../../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
@@ -48,7 +50,8 @@ export interface FilterStateInterface {
 export enum TaskSortEnum {
   'NAME' = 'NAME',
   'LEARNINGAREA' = 'LEARNINGAREA',
-  'STARTDATE' = 'STARTDATE'
+  'STARTDATE' = 'STARTDATE',
+  'FAVORITE' = 'FAVORITE'
 }
 
 export type Source = 'digital' | 'paper';
@@ -115,9 +118,7 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
   private digitalFilterState$ = new BehaviorSubject<FilterStateInterface>({});
   private paperFilterState$ = new BehaviorSubject<FilterStateInterface>({});
 
-  @ViewChildren(MatSelectionList) private taskLists: QueryList<
-    MatSelectionList
-  >;
+  @ViewChildren(MatSelectionList) public taskLists: QueryList<MatSelectionList>;
 
   @ViewChildren(SearchTermComponent) private searchTermFilters: QueryList<
     SearchTermComponent
@@ -146,7 +147,8 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     @Inject(FILTER_SERVICE_TOKEN) private filterService: FilterServiceInterface,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private matDialog: MatDialog
   ) {}
 
   ngOnInit() {
@@ -321,14 +323,34 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
   }
 
   clickAddDigitalTask() {
-    console.log('TODO: adding digital task');
+    this.router.navigate(['tasks', 'manage', 'new']);
   }
   clickAddPaperTask() {
-    console.log('TODO: adding paper task');
+    this.router.navigate(['tasks', 'manage', 'new']);
+  }
+  // TODO: implement handler
+  clickDeleteTasks() {
+    const dialogData = {
+      title: 'Taken verwijderen',
+      message: 'Ben je zeker dat je de geselecteerde taken wil verwijderen?'
+    };
+
+    const dialogRef = this.matDialog.open(ConfirmationModalComponent, {
+      data: dialogData
+    });
+
+    dialogRef
+      .afterClosed()
+      .pipe(
+        filter(confirmed => confirmed),
+        take(1)
+      )
+      .subscribe(() => this.deleteTasks());
   }
 
-  // TODO: implement handler
-  clickDeleteTasks() {}
+  public deleteTasks() {
+    this.viewModel.removeTasks(this.getSelectedTasks());
+  }
 
   // TODO: implement handler
   clickArchiveTasks() {}
@@ -346,6 +368,17 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
 
   clickToggleFavorite(task: TaskWithAssigneesInterface) {
     this.viewModel.toggleFavorite(task);
+  }
+
+  private getSelectedTasks(): TaskWithAssigneesInterface[] {
+    if (this.taskLists) {
+      return this.taskLists.reduce((acc, list) => {
+        return [
+          ...acc,
+          ...list.selectedOptions.selected.map(option => option.value)
+        ];
+      }, []);
+    }
   }
 
   public onSelectedTabIndexChanged(tab: number) {
@@ -658,24 +691,32 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
    */
   private clearFilters(): void {
     if (this.searchTermFilters)
-      this.searchTermFilters.forEach(filter => {
-        filter.currentValue = '';
-        filter.valueChange.next('');
+      this.searchTermFilters.forEach(searchTermFilter => {
+        searchTermFilter.currentValue = '';
+        searchTermFilter.valueChange.next('');
       });
     if (this.selectFilters)
-      this.selectFilters.forEach(filter => filter.selectControl.reset());
+      this.selectFilters.forEach(selectFilter =>
+        selectFilter.selectControl.reset()
+      );
     this.clearButtonToggleFilters();
     if (this.slideToggleFilters)
-      this.slideToggleFilters.forEach(filter => {
-        filter.checked = false;
-        filter.change.emit({ checked: false, source: filter });
+      this.slideToggleFilters.forEach(slideToggleFilter => {
+        slideToggleFilter.checked = false;
+        slideToggleFilter.change.emit({
+          checked: false,
+          source: slideToggleFilter
+        });
       });
-    if (this.dateFilters) this.dateFilters.forEach(filter => filter.reset());
+    if (this.dateFilters)
+      this.dateFilters.forEach(dateFilter => dateFilter.reset());
   }
 
   private clearButtonToggleFilters(): void {
     if (this.buttonToggleFilters)
-      this.buttonToggleFilters.forEach(filter => filter.toggleControl.reset());
+      this.buttonToggleFilters.forEach(buttonToggleFilter =>
+        buttonToggleFilter.toggleControl.reset()
+      );
   }
 
   /**
@@ -709,17 +750,15 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
         return this.sortByLearningArea([...tasks]);
       case TaskSortEnum.STARTDATE:
         return this.sortByStartDate([...tasks]);
+      case TaskSortEnum.FAVORITE:
+        return tasks.sort(this.nameComparer).sort(this.favoriteComparer);
     }
     // no sortMode -> no sorting
     return tasks;
   }
 
   private sortByName(tasks: TaskWithAssigneesInterface[]) {
-    return tasks.sort((a, b) =>
-      a.name.localeCompare(b.name, 'be-nl', {
-        sensitivity: 'base'
-      })
-    );
+    return tasks.sort(this.nameComparer);
   }
 
   private sortByLearningArea(tasks: TaskWithAssigneesInterface[]) {
@@ -750,6 +789,16 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
       if (!taskB) return 1;
 
       return taskA.getTime() - taskB.getTime();
+    });
+  }
+
+  private favoriteComparer(a, b): number {
+    return b.isFavorite - a.isFavorite;
+  }
+
+  private nameComparer(a, b): number {
+    return a.name.localeCompare(b.name, 'nl-BE', {
+      sensitivity: 'base'
     });
   }
 }
