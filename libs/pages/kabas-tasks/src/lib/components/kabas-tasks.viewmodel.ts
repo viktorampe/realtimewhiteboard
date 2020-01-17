@@ -10,8 +10,8 @@ import {
   LearningAreaInterface,
   RouterStateUrl,
   TaskActions,
-  TaskInterface,
-  TaskEduContentInterface
+  TaskEduContentInterface,
+  TaskInterface
 } from '@campus/dal';
 import { RouterReducerState } from '@ngrx/router-store';
 import { select, Store } from '@ngrx/store';
@@ -50,7 +50,10 @@ export class KabasTasksViewModel {
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface
   ) {
     this.tasksWithAssignments$ = this.store.pipe(
-      select(getTasksWithAssignments, { isPaper: false }),
+      select(getTasksWithAssignments, {
+        isPaper: false,
+        type: FavoriteTypesEnum.TASK
+      }),
       map(tasks =>
         tasks.map(task => ({
           ...task,
@@ -60,7 +63,10 @@ export class KabasTasksViewModel {
     );
 
     this.paperTasksWithAssignments$ = this.store.pipe(
-      select(getTasksWithAssignments, { isPaper: true })
+      select(getTasksWithAssignments, {
+        isPaper: true,
+        type: FavoriteTypesEnum.TASK
+      })
     );
 
     this.routerState$ = this.store.pipe(select(getRouterState));
