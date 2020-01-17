@@ -36,4 +36,11 @@ export class TaskEduContentService implements TaskEduContentServiceInterface {
       mapTo(true)
     );
   }
+
+  updateTaskEduContents(
+    userId: number,
+    update: Partial<TaskEduContentInterface>[]
+  ): Observable<TaskEduContentInterface[]> {
+    throw new Error('Not implemented yet');
+  }
 }
