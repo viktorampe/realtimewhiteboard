@@ -323,10 +323,10 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
   }
 
   clickAddDigitalTask() {
-    this.router.navigate(['tasks', 'manage', 'new']);
+    this.navigateToNew();
   }
   clickAddPaperTask() {
-    this.router.navigate(['tasks', 'manage', 'new']);
+    this.navigateToNew();
   }
   // TODO: implement handler
   clickDeleteTasks() {
@@ -352,18 +352,21 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
     this.viewModel.removeTasks(this.getSelectedTasks());
   }
 
-  // TODO: implement handler
   clickArchiveTasks() {
     this.viewModel.startArchivingTasks(this.getSelectedTasks(), true);
   }
 
-  // TODO: implement handler
   clickUnarchiveTasks() {
     this.viewModel.startArchivingTasks(this.getSelectedTasks(), false);
   }
 
-  // TODO: implement handler
-  clickNewTask() {}
+  clickNewTask() {
+    this.navigateToNew();
+  }
+
+  private navigateToNew() {
+    this.router.navigate(['tasks', 'manage', 'new']);
+  }
 
   clickResetFilters(mode?: string) {
     // visually clear selections
