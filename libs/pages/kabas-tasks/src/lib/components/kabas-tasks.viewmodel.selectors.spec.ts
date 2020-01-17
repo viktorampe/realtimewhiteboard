@@ -135,7 +135,7 @@ describe('Kabas-tasks viewmodel selectors', () => {
           learningArea: new LearningAreaFixture({ name: 'wiskunde' }),
           startDate: undefined,
           endDate: undefined,
-          status: 'pending',
+          status: 'finished',
           assignees: []
         }
       ];
