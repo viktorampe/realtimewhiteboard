@@ -46,7 +46,7 @@ import {
   allowedLearningAreas,
   getTasksWithAssignments
 } from './kabas-tasks.viewmodel.selectors';
-// file.only
+
 describe('Kabas-tasks viewmodel selectors', () => {
   configureTestSuite(() => {
     TestBed.configureTestingModule({
@@ -89,7 +89,10 @@ describe('Kabas-tasks viewmodel selectors', () => {
 
     it('should return digital tasksWithAssignments', () => {
       const stream = store.pipe(
-        select(getTasksWithAssignments, { isPaper: false })
+        select(getTasksWithAssignments, {
+          isPaper: false,
+          type: FavoriteTypesEnum.TASK
+        })
       );
 
       const expected = [
