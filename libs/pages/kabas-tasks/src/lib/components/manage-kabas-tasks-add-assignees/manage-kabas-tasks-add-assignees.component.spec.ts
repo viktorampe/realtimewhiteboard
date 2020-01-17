@@ -1,7 +1,8 @@
 //file.only
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatListModule } from '@angular/material';
+import { MatListModule, MatSelectionList } from '@angular/material';
+import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { SearchModule } from '@campus/search';
 import { UiModule } from '@campus/ui';
@@ -131,8 +132,18 @@ describe('AddAssigneeComponent', () => {
     });
   });
   describe('emitValues', () => {
-    {
-      it('should emit the correct values when clicked add', () => {});
-    }
+    it('should emit the correct values when clicked add', () => {
+      const result = [mockStudents[0]];
+
+      const selectionList = fixture.debugElement.query(
+        By.css('mat-selection-list')
+      ).componentInstance as MatSelectionList;
+
+      selectionList.selectedOptions.select(selectionList.options.first);
+
+      jest.spyOn(component.addedAssignees, 'emit');
+      component.addAssignees();
+      expect(component.addedAssignees.emit).toHaveBeenCalledWith(result);
+    });
   });
 });
