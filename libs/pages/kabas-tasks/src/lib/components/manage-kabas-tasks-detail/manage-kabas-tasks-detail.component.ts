@@ -7,10 +7,7 @@ import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { TaskWithAssigneesInterface } from '../../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
-import {
-  NewTaskComponent,
-  NewTaskFormValues
-} from '../new-task/new-task.component';
+import { NewTaskComponent, NewTaskFormValues } from '../new-task/new-task.component';
 
 export enum TaskSortEnum {
   'NAME' = 'NAME',

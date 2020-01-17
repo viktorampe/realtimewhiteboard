@@ -20,19 +20,18 @@ interface AddAssigneeFilterState {
 }
 
 interface AssigneesByType {
-  students: AssigneeInterface[];
-  groups: AssigneeInterface[];
-  classgroups: AssigneeInterface[];
-  results?: AssigneeInterface[];
+  label: string;
+  value: AssigneeInterface[];
+  order: number;
 }
 
 @Component({
-  selector: 'campus-add-assignees',
-  templateUrl: './add-assignee.component.html',
-  styleUrls: ['./add-assignee.component.scss']
+  selector: 'campus-manage-kabas-tasks-add-assignees',
+  templateUrl: './manage-kabas-tasks-add-assignees.component.html',
+  styleUrls: ['./manage-kabas-tasks-add-assignees.component.scss']
 })
-export class AddAssigneeComponent implements OnInit {
-  public filteredAssignees$: Observable<AssigneesByType>;
+export class ManageKabasTasksAddAssigneesComponent implements OnInit {
+  public filteredAssignees$: Observable<AssigneesByType[]>;
   public filterState$ = new BehaviorSubject<AddAssigneeFilterState>({});
   @ViewChildren(MatSelectionList)
   private selectedAssignees: MatSelectionList[];
@@ -80,22 +79,26 @@ export class AddAssigneeComponent implements OnInit {
 
   ngOnInit() {
     this.filteredAssignees$ = this.filterState$.pipe(
-      map(
-        (filterState: AddAssigneeFilterState): AssigneesByType => {
-          if (filterState.label) {
-            return this.filter(
-              [...this.students, ...this.groups, ...this.classgroups],
-              filterState
-            );
-          } else {
-            return {
-              students: this.students,
-              groups: this.groups,
-              classgroups: this.classgroups
-            };
-          }
+      map((filterState: AddAssigneeFilterState): AssigneesByType[] => {
+        if (filterState.label) {
+          return this.filter(
+            [...this.students, ...this.groups, ...this.classgroups],
+            filterState
+          );
+        } else {
+          return [
+            ...(this.students.length
+              ? [{ label: 'Resultaten', value: this.students, order: 1 }]
+              : []),
+            ...(this.groups.length
+              ? [{ label: 'Groepen', value: this.groups, order: 2 }]
+              : []),
+            ...(this.classgroups.length
+              ? [{ label: 'Klasgroepen', value: this.classgroups, order: 3 }]
+              : [])
+          ];
         }
-      )
+      })
     );
   }
 
@@ -111,7 +114,7 @@ export class AddAssigneeComponent implements OnInit {
     this.searchTermFilter.currentValue = '';
   }
 
-  public clearList() {
+  public clearSelection() {
     this.selectedAssignees.forEach(list => list.selectedOptions.clear());
     this.resetFilter();
   }
@@ -124,14 +127,14 @@ export class AddAssigneeComponent implements OnInit {
       ];
     }, []);
 
+    this.clearSelection();
     this.addedAssignees.emit(assignees);
-    this.clearList();
   }
 
   private filter(
     assignees: AssigneeInterface[],
     filterState: AddAssigneeFilterState
-  ): AssigneesByType {
+  ): AssigneesByType[] {
     let filteredAssignees = [...assignees];
 
     if (filterState.label) {
@@ -142,11 +145,10 @@ export class AddAssigneeComponent implements OnInit {
       });
     }
 
-    return {
-      students: [],
-      groups: [],
-      classgroups: [],
-      results: filteredAssignees
-    };
+    return [
+      ...(filteredAssignees.length
+        ? [{ label: 'Resultaten', value: filteredAssignees, order: 1 }]
+        : [])
+    ];
   }
 }

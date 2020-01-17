@@ -1,9 +1,8 @@
 //file.only
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatDialogModule, MatListModule } from '@angular/material';
+import { MatListModule } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { ActivatedRoute, Router } from '@angular/router';
 import { SearchModule } from '@campus/search';
 import { UiModule } from '@campus/ui';
 import { hot } from '@nrwl/angular/testing';
@@ -12,11 +11,11 @@ import {
   AssigneeInterface,
   AssigneeTypesEnum
 } from '../../interfaces/Assignee.interface';
-import { AddAssigneeComponent } from './add-assignee.component';
+import { ManageKabasTasksAddAssigneesComponent } from './manage-kabas-tasks-add-assignees.component';
 
 describe('AddAssigneeComponent', () => {
-  let component: AddAssigneeComponent;
-  let fixture: ComponentFixture<AddAssigneeComponent>;
+  let component: ManageKabasTasksAddAssigneesComponent;
+  let fixture: ComponentFixture<ManageKabasTasksAddAssigneesComponent>;
   const mockStudents: AssigneeInterface[] = [
     {
       type: AssigneeTypesEnum.STUDENT,
@@ -53,23 +52,14 @@ describe('AddAssigneeComponent', () => {
   ];
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [
-        UiModule,
-        MatDialogModule,
-        MatListModule,
-        SearchModule,
-        NoopAnimationsModule
-      ],
-      declarations: [AddAssigneeComponent],
-      providers: [
-        { provide: Router, useValue: {} },
-        { provide: ActivatedRoute, useValue: {} }
-      ]
+      imports: [UiModule, MatListModule, SearchModule, NoopAnimationsModule],
+      declarations: [ManageKabasTasksAddAssigneesComponent],
+      providers: []
     });
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AddAssigneeComponent);
+    fixture = TestBed.createComponent(ManageKabasTasksAddAssigneesComponent);
     component = fixture.componentInstance;
     component.students = mockStudents;
     component.groups = mockGroups;
@@ -80,9 +70,6 @@ describe('AddAssigneeComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  //
-  // Test output emit with right data when clicking add
-
   describe('filteredAssignees$', () => {
     it('should filter on searchTerm', () => {
       component.filterState$.next({
@@ -90,10 +77,9 @@ describe('AddAssigneeComponent', () => {
       });
 
       const expected = {
-        students: [],
-        groups: [],
-        classgroups: [],
-        results: [mockStudents[0], mockClassgroups[0]]
+        label: 'Resultaten',
+        value: [mockStudents[0], mockClassgroups[0]],
+        order: 1
       };
 
       expect(component.filteredAssignees$).toBeObservable(
@@ -118,5 +104,10 @@ describe('AddAssigneeComponent', () => {
         })
       );
     });
+  });
+  describe('emitValues', () => {
+    {
+      it('should emit the correct values when clicked add', () => {});
+    }
   });
 });
