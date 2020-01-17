@@ -46,7 +46,7 @@ import {
   allowedLearningAreas,
   getTasksWithAssignments
 } from './kabas-tasks.viewmodel.selectors';
-
+// file.only
 describe('Kabas-tasks viewmodel selectors', () => {
   configureTestSuite(() => {
     TestBed.configureTestingModule({
@@ -141,7 +141,10 @@ describe('Kabas-tasks viewmodel selectors', () => {
 
     it('should return paper tasksWithAssignments', () => {
       const stream = store.pipe(
-        select(getTasksWithAssignments, { isPaper: true })
+        select(getTasksWithAssignments, {
+          isPaper: true,
+          type: FavoriteTypesEnum.TASK
+        })
       );
 
       const expected = [
@@ -150,7 +153,7 @@ describe('Kabas-tasks viewmodel selectors', () => {
             id: 2,
             name: 'een taak op dode bomen',
             isPaperTask: true,
-            isFavorite: false
+            isFavorite: true
           }),
           eduContentAmount: 1,
           learningArea: new LearningAreaFixture({ name: 'wiskunde' }),
