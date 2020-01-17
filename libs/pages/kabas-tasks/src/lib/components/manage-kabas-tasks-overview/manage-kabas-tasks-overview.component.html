@@ -155,7 +155,6 @@
             #option
             *ngFor="let task of digitalTasks"
             checkboxPosition="before"
-            [value]="task"
             [class.mat-list-option--selected]="option.selected"
             [value]="task"
           >
@@ -271,7 +270,6 @@
           <mat-list-option
             #option
             *ngFor="let task of paperTasks"
-            [value]="task"
             checkboxPosition="before"
             [class.mat-list-option--selected]="option.selected"
             [value]="task"
