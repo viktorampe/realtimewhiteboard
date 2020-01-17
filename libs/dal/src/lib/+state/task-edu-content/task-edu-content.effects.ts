@@ -21,10 +21,10 @@ import {
   DeleteTaskEduContent,
   LinkTaskEduContent,
   LoadTaskEduContents,
-  StartUpdateTaskEduContents,
   TaskEduContentsActionTypes,
   TaskEduContentsLoaded,
-  TaskEduContentsLoadError
+  TaskEduContentsLoadError,
+  UpdateTaskEduContents
 } from './task-edu-content.actions';
 
 @Injectable()
@@ -135,14 +135,14 @@ export class TaskEduContentEffects {
     }
   );
 
-  startUpdateTaskEduContents$ = createEffect(() =>
-    this.dataPersistence.pessimisticUpdate(
-      TaskEduContentsActionTypes.StartUpdateTaskEduContents,
+  updateTaskEduContents$ = createEffect(() =>
+    this.dataPersistence.optimisticUpdate(
+      TaskEduContentsActionTypes.UpdateTaskEduContents,
       {
-        run: (action: StartUpdateTaskEduContents, state: DalState) => {
+        run: (action: UpdateTaskEduContents, state: DalState) => {
           throw new Error('not implemented yet');
         },
-        onError: (action: StartUpdateTaskEduContents, error: any) => {
+        undoAction: (action: UpdateTaskEduContents, error: any) => {
           throw new Error('not implemented yet');
         }
       }
