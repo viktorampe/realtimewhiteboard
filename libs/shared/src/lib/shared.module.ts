@@ -15,6 +15,7 @@ import {
   MatInputModule,
   MatListModule,
   MatMenuModule,
+  MatProgressSpinnerModule,
   MatSnackBarModule,
   MatTooltipModule
 } from '@angular/material';
@@ -111,7 +112,8 @@ import { SCORM_EXERCISE_SERVICE_TOKEN } from './services/scorm/scorm-exercise.se
     MatFormFieldModule,
     HttpClientModule,
     MatInputModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatProgressSpinnerModule
   ],
   declarations: [
     HeaderComponent,

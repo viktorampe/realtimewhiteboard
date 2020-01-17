@@ -1,7 +1,10 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+//file.only
+
+import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
 import {
   MatDialogModule,
   MatDialogRef,
+  MatProgressSpinnerModule,
   MAT_DIALOG_DATA
 } from '@angular/material';
 import { By } from '@angular/platform-browser';
@@ -19,7 +22,7 @@ describe('ContentPreviewDialogComponent', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [UiModule, MatDialogModule],
+      imports: [UiModule, MatDialogModule, MatProgressSpinnerModule],
       declarations: [ContentPreviewDialogComponent],
       providers: [
         {
@@ -63,6 +66,69 @@ describe('ContentPreviewDialogComponent', () => {
 
       expect(component.close).toHaveBeenCalled();
     });
+
+    it('should show the spinner while the image is loading', fakeAsync(() => {
+      component.loading = true;
+      fixture.detectChanges();
+
+      const spinner = fixture.debugElement.query(By.css('mat-spinner'));
+
+      expect(spinner).toBeTruthy();
+    }));
+
+    it('should hide the spinner when the image finishes loading', fakeAsync(() => {
+      component.loading = false;
+      fixture.detectChanges();
+
+      const spinner = fixture.debugElement.query(By.css('mat-spinner'));
+
+      expect(spinner).toBeFalsy();
+    }));
+
+    it('should hide the image while it is loading', fakeAsync(() => {
+      component.loading = true;
+      fixture.detectChanges();
+
+      const image = fixture.debugElement.query(By.css('img'));
+
+      expect(image.nativeElement.attributes['hidden']).toBeTruthy();
+    }));
+
+    it('should hide the image when it errored', fakeAsync(() => {
+      component.errored = true;
+      fixture.detectChanges();
+
+      const image = fixture.debugElement.query(By.css('img'));
+
+      expect(image.nativeElement.attributes['hidden']).toBeTruthy();
+    }));
+
+    it('should show the image when it loaded', fakeAsync(() => {
+      component.loading = false;
+      component.errored = false;
+      fixture.detectChanges();
+
+      const image = fixture.debugElement.query(By.css('img'));
+
+      expect(image.attributes['hidden']).toBeFalsy();
+    }));
+
+    it('should show an error message when the image loading errors', fakeAsync(() => {
+      let errorMessage = fixture.debugElement.query(
+        By.css('.content-preview__info-panel__load-error')
+      );
+
+      expect(errorMessage).toBeFalsy();
+
+      component.errored = true;
+      fixture.detectChanges();
+
+      errorMessage = fixture.debugElement.query(
+        By.css('.content-preview__info-panel__load-error')
+      );
+
+      expect(errorMessage).toBeTruthy();
+    }));
   });
 
   describe('methods', () => {
@@ -73,6 +139,24 @@ describe('ContentPreviewDialogComponent', () => {
         component.close();
 
         expect(matDialogRef.close).toHaveBeenCalled();
+      });
+    });
+
+    describe('imageErrored()', () => {
+      it('should set errored to true and loading to false', () => {
+        component.imageErrored();
+
+        expect(component.errored).toBeTruthy();
+        expect(component.loading).toBeFalsy();
+      });
+    });
+
+    describe('imageLoaded()', () => {
+      it('should set loading to false', () => {
+        component.loading = true;
+        component.imageLoaded();
+
+        expect(component.loading).toBeFalsy();
       });
     });
   });
