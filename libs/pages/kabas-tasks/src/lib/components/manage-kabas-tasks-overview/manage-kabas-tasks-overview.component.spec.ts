@@ -2,6 +2,8 @@ import { CommonModule } from '@angular/common';
 import { QueryList } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import {
+  MatDialog,
+  MatDialogRef,
   MatIconRegistry,
   MatSelect,
   MatSelectionList,
@@ -22,10 +24,10 @@ import {
   SharedModule
 } from '@campus/shared';
 import { MockMatIconRegistry } from '@campus/testing';
-import { UiModule } from '@campus/ui';
+import { ConfirmationModalComponent, UiModule } from '@campus/ui';
 import { hot } from '@nrwl/angular/testing';
 import { configureTestSuite } from 'ng-bullet';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AssigneeTypesEnum } from '../../interfaces/Assignee.interface';
 import {
@@ -48,6 +50,7 @@ describe('ManageKabasTasksOverviewComponent', () => {
   const queryParams: BehaviorSubject<Params> = new BehaviorSubject<Params>({});
   let kabasTasksViewModel: KabasTasksViewModel;
   let router: Router;
+  let matDialog: MatDialog;
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
@@ -64,6 +67,12 @@ describe('ManageKabasTasksOverviewComponent', () => {
         MatSelectModule
       ],
       providers: [
+        {
+          provide: MatDialog,
+          useValue: {
+            open: jest.fn
+          }
+        },
         {
           provide: KabasTasksViewModel,
           useClass: MockKabasTasksViewModel
@@ -91,6 +100,7 @@ describe('ManageKabasTasksOverviewComponent', () => {
     component = fixture.componentInstance;
     kabasTasksViewModel = TestBed.get(KabasTasksViewModel);
     router = TestBed.get(Router);
+    matDialog = TestBed.get(MatDialog);
     fixture.detectChanges();
   });
 
@@ -900,28 +910,62 @@ describe('ManageKabasTasksOverviewComponent', () => {
         selectedPaperTasks
       );
 
-      let removeTasksSpy;
+      let openDialogSpy: jest.SpyInstance;
 
       beforeEach(() => {
-        removeTasksSpy = jest.spyOn(kabasTasksViewModel, 'removeTasks');
+        openDialogSpy = jest.spyOn(matDialog, 'open');
       });
 
-      it('should call vm.removeTasks with the selected digital tasks', () => {
-        setSelectionList(digitalSelectionList);
+      it('should open a confirmation dialog', () => {
+        const mockDialogRef = {
+          afterClosed: () => of(false),
+          close: null
+        } as MatDialogRef<ConfirmationModalComponent>;
+        openDialogSpy.mockReturnValue(mockDialogRef);
 
         component.clickDeleteTasks();
 
-        expect(removeTasksSpy).toHaveBeenCalledTimes(1);
-        expect(removeTasksSpy).toHaveBeenCalledWith(selectedDigitalTasks);
+        expect(openDialogSpy).toHaveBeenCalledTimes(1);
+        expect(openDialogSpy).toHaveBeenCalledWith(ConfirmationModalComponent, {
+          data: {
+            title: 'Taken verwijderen',
+            message:
+              'Ben je zeker dat je de geselecteerde taken wil verwijderen?'
+          }
+        });
       });
 
-      it('should call vm.removeTasks with the selected paper tasks', () => {
+      it('should call vm.removeTasks when the user confirms', () => {
+        const removeTasksSpy = jest.spyOn(kabasTasksViewModel, 'removeTasks');
+
         setSelectionList(paperSelectionList);
+
+        const mockDialogRef = {
+          afterClosed: () => of(true), // fake confirmation
+          close: null
+        } as MatDialogRef<ConfirmationModalComponent>;
+        openDialogSpy.mockReturnValue(mockDialogRef);
 
         component.clickDeleteTasks();
 
         expect(removeTasksSpy).toHaveBeenCalledTimes(1);
         expect(removeTasksSpy).toHaveBeenCalledWith(selectedPaperTasks);
+      });
+
+      it('should not call vm.removeTasks when the user cancels', () => {
+        const removeTasksSpy = jest.spyOn(kabasTasksViewModel, 'removeTasks');
+
+        setSelectionList(paperSelectionList);
+
+        const mockDialogRef = {
+          afterClosed: () => of(false), // fake cancel
+          close: null
+        } as MatDialogRef<ConfirmationModalComponent>;
+        openDialogSpy.mockReturnValue(mockDialogRef);
+
+        component.clickDeleteTasks();
+
+        expect(removeTasksSpy).not.toHaveBeenCalled();
       });
     });
   });
