@@ -80,7 +80,6 @@ export class UpdateTaskEduContents implements Action {
     public payload: { taskEduContents: Update<TaskEduContentInterface>[] }
   ) {}
 }
-
 export class DeleteTaskEduContent implements FeedbackTriggeringAction {
   readonly type = TaskEduContentsActionTypes.DeleteTaskEduContent;
 
