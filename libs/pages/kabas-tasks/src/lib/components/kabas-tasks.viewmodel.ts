@@ -1,9 +1,12 @@
 import { Inject, Injectable } from '@angular/core';
+import { MAT_DATE_LOCALE } from '@angular/material';
 import {
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
   DalState,
   EduContentFixture,
+  EffectFeedback,
+  EffectFeedbackActions,
   FavoriteActions,
   FavoriteInterface,
   FavoriteTypesEnum,
@@ -13,10 +16,12 @@ import {
   RouterStateUrl,
   TaskActions,
   TaskEduContentFixture,
+  TaskEduContentInterface,
   TaskInterface
 } from '@campus/dal';
+import { Update } from '@ngrx/entity';
 import { RouterReducerState } from '@ngrx/router-store';
-import { select, Store } from '@ngrx/store';
+import { Action, select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, shareReplay } from 'rxjs/operators';
 import {
@@ -50,15 +55,28 @@ export class KabasTasksViewModel {
 
   constructor(
     private store: Store<DalState>,
-    @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface
+    @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
+    @Inject('uuid') private uuid: Function,
+    @Inject(MAT_DATE_LOCALE) private dateLocale
   ) {
     this.tasksWithAssignments$ = this.store.pipe(
-      select(getTasksWithAssignments, { isPaper: false }),
-      map(tasks => tasks.map(task => ({ ...task, ...this.getTaskDates(task) })))
+      select(getTasksWithAssignments, {
+        isPaper: false,
+        type: FavoriteTypesEnum.TASK
+      }),
+      map(tasks =>
+        tasks.map(task => ({
+          ...task,
+          ...this.getTaskDates(task)
+        }))
+      )
     );
 
     this.paperTasksWithAssignments$ = this.store.pipe(
-      select(getTasksWithAssignments, { isPaper: true }),
+      select(getTasksWithAssignments, {
+        isPaper: true,
+        type: FavoriteTypesEnum.TASK
+      }),
       map(tasks => tasks.map(task => ({ ...task, ...this.getTaskDates(task) })))
     );
 
@@ -120,24 +138,70 @@ export class KabasTasksViewModel {
     return status;
   }
 
-  // TODO replace with correct implementation
-  // from PR https://diekeure-webdev@dev.azure.com/diekeure-webdev/LK2020/_git/campus/pullrequest/110?view=discussion
-  // Refactored the necessary parts here to fix tests
-  // NO REVIEW REQUIRED HERE
-  public setTaskAsArchived(
+  public startArchivingTasks(
     tasks: TaskWithAssigneesInterface[],
     shouldArchive: boolean
   ): void {
-    const updates = tasks
-      .filter(task => !shouldArchive || this.canBeArchivedOrDeleted(task))
-      .map(task => ({ id: task.id, changes: { archived: shouldArchive } }));
+    const updates: Update<TaskInterface>[] = [];
+    const errors: TaskWithAssigneesInterface[] = [];
 
-    this.store.dispatch(
-      new TaskActions.StartArchiveTasks({
-        tasks: updates,
-        userId: this.authService.userId
+    tasks.forEach(task => {
+      if (!shouldArchive || this.canBeArchivedOrDeleted(task)) {
+        updates.push({ id: task.id, changes: { archived: shouldArchive } });
+      } else {
+        errors.push(task);
+      }
+    });
+
+    this.store.dispatch(this.getArchivingAction(updates, errors));
+  }
+
+  private getArchivingAction(updates, errors): Action {
+    const updateAction = new TaskActions.StartArchiveTasks({
+      userId: this.authService.userId,
+      tasks: updates
+    });
+    if (errors.length) {
+      const messages = this.getArchiveFeedbackMessage(errors);
+      const effectFeedback = new EffectFeedback({
+        id: this.uuid(),
+        triggerAction: updateAction,
+        message: `<p>Niet alle taken kunnen gearchiveerd worden:</p><ul>${messages}</ul>`,
+        userActions: this.getFeedbackUserActions(updates.length, updateAction),
+        type: 'error'
+      });
+      const feedbackAction = new EffectFeedbackActions.AddEffectFeedback({
+        effectFeedback
+      });
+      return feedbackAction;
+    }
+    return updateAction;
+  }
+
+  private getFeedbackUserActions(numberOfUpdates: number, userAction) {
+    return numberOfUpdates > 0
+      ? [
+          {
+            title: 'Archiveer de andere taken',
+            userAction
+          }
+        ]
+      : [];
+  }
+
+  private getArchiveFeedbackMessage(
+    errors: TaskWithAssigneesInterface[]
+  ): string {
+    return errors
+      .map(task => {
+        const activeUntil = task.endDate
+          ? ` Deze taak is nog actief tot ${task.endDate.toLocaleDateString(
+              this.dateLocale
+            )}.`
+          : '';
+        return `<li>${task.name} kan niet worden gearchiveerd.${activeUntil}</li>`;
       })
-    );
+      .join('');
   }
 
   public updateTask(task: TaskInterface, assignees: AssigneeInterface[]) {
@@ -163,7 +227,13 @@ export class KabasTasksViewModel {
       [AssigneeTypesEnum.CLASSGROUP]: 'taskClassGroups'
     };
   }
-  private getAssigneesByType(assignees: AssigneeInterface[]) {
+  private getAssigneesByType(
+    assignees: AssigneeInterface[]
+  ): {
+    taskGroups: AssigneeInterface[];
+    taskStudents: AssigneeInterface[];
+    taskClassGroups: AssigneeInterface[];
+  } {
     const keyMap = this.getAssigneeTypeToKeyMap();
     return assignees.reduce(
       (acc, assignee) => ({
@@ -238,5 +308,12 @@ export class KabasTasksViewModel {
         )
       }))
     );
+  }
+
+  public updateTaskEduContent(
+    taskEduContents: TaskEduContentInterface[],
+    updatedValues: Partial<TaskEduContentInterface>
+  ): void {
+    throw new Error('Not implemented yet');
   }
 }

@@ -4,6 +4,7 @@ import {
   LearningAreaFixture,
   LearningAreaInterface,
   TaskEduContentFixture,
+  TaskEduContentInterface,
   TaskFixture,
   TaskInterface
 } from '@campus/dal';
@@ -270,9 +271,9 @@ export class MockKabasTasksViewModel
       }
     ];
   }
-  public setTaskAsArchived(
+  public startArchivingTasks(
     tasks: TaskWithAssigneesInterface[],
-    isArchived: boolean
+    shouldArchive: boolean
   ): void {}
   public removeTasks(tasks: TaskWithAssigneesInterface[]): void {}
   public toggleFavorite(task: TaskWithAssigneesInterface): void {}
@@ -284,6 +285,7 @@ export class MockKabasTasksViewModel
     learningAreaId: number,
     type: 'paper' | 'digital'
   ) {}
+
   public updateTask(task: TaskInterface, assignees: AssigneeInterface[]) {}
 
   private getCurrentTask(): Observable<TaskWithAssigneesInterface> {
@@ -311,4 +313,9 @@ export class MockKabasTasksViewModel
       }))
     );
   }
+
+  public updateTaskEduContent(
+    taskEduContents: TaskEduContentInterface[],
+    updatedValues: Partial<TaskEduContentInterface>
+  ): void {}
 }
