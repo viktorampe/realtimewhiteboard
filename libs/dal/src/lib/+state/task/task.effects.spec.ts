@@ -547,6 +547,7 @@ describe('TaskEffects', () => {
         });
 
         const expectedMessage = `De taken werden ${verb}.`;
+
         const updateAction = new UpdateTasks({ userId, tasks: tasksToUpdate });
         const feedbackAction = new AddEffectFeedback({
           effectFeedback: {
