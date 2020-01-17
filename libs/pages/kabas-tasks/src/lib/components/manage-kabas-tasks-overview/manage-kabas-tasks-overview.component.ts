@@ -351,15 +351,7 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
   clickToggleFavorite(task: TaskWithAssigneesInterface) {
     this.viewModel.toggleFavorite(task);
   }
-  private getSelectedTasks() {
-    return this.taskLists.reduce(
-      (acc, list) => [
-        ...acc,
-        ...list.selectedOptions.selected.map(o => o.value)
-      ],
-      []
-    );
-  }
+
   public onSelectedTabIndexChanged(tab: number) {
     this.cleanUpTab();
     this.router.navigate([], {
