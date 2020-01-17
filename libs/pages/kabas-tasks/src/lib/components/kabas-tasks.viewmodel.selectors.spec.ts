@@ -4,6 +4,10 @@ import {
   ClassGroupFixture,
   ClassGroupReducer,
   DalState,
+  FavoriteActions,
+  FavoriteFixture,
+  FavoriteReducer,
+  FavoriteTypesEnum,
   getStoreModuleForFeatures,
   GroupActions,
   GroupFixture,
@@ -66,7 +70,8 @@ describe('Kabas-tasks viewmodel selectors', () => {
           TaskClassGroupReducer,
           TaskGroupReducer,
           TaskStudentReducer,
-          MethodReducer
+          MethodReducer,
+          FavoriteReducer
         ])
       ],
       providers: [Store]
@@ -84,12 +89,19 @@ describe('Kabas-tasks viewmodel selectors', () => {
 
     it('should return digital tasksWithAssignments', () => {
       const stream = store.pipe(
-        select(getTasksWithAssignments, { isPaper: false })
+        select(getTasksWithAssignments, {
+          isPaper: false,
+          type: FavoriteTypesEnum.TASK
+        })
       );
 
       const expected = [
         {
-          ...new TaskFixture({ id: 1, name: 'een digitale taak' }),
+          ...new TaskFixture({
+            id: 1,
+            name: 'een digitale taak',
+            isFavorite: false
+          }),
           eduContentAmount: 3,
           learningArea: new LearningAreaFixture({ name: 'wiskunde' }),
           assignees: [
@@ -119,7 +131,8 @@ describe('Kabas-tasks viewmodel selectors', () => {
         {
           ...new TaskFixture({
             id: 3,
-            name: 'een taak zonder assignees of content'
+            name: 'een taak zonder assignees of content',
+            isFavorite: false
           }),
           eduContentAmount: 0,
           learningArea: new LearningAreaFixture({ name: 'wiskunde' }),
@@ -131,7 +144,10 @@ describe('Kabas-tasks viewmodel selectors', () => {
 
     it('should return paper tasksWithAssignments', () => {
       const stream = store.pipe(
-        select(getTasksWithAssignments, { isPaper: true })
+        select(getTasksWithAssignments, {
+          isPaper: true,
+          type: FavoriteTypesEnum.TASK
+        })
       );
 
       const expected = [
@@ -139,7 +155,8 @@ describe('Kabas-tasks viewmodel selectors', () => {
           ...new TaskFixture({
             id: 2,
             name: 'een taak op dode bomen',
-            isPaperTask: true
+            isPaperTask: true,
+            isFavorite: true
           }),
           eduContentAmount: 1,
           learningArea: new LearningAreaFixture({ name: 'wiskunde' }),
@@ -200,9 +217,18 @@ function hydrateStore(store, date) {
     getLoadTaskGroupsAction(date),
     getLoadTaskStudentsAction(date),
     getLoadMethodsAction(),
-    getLoadAllowedMethodsAction()
+    getLoadAllowedMethodsAction(),
+    getLoadFavoritesAction()
   ];
   actions.forEach(action => store.dispatch(action));
+}
+
+function getLoadFavoritesAction() {
+  return new FavoriteActions.FavoritesLoaded({
+    favorites: [
+      new FavoriteFixture({ type: FavoriteTypesEnum.TASK, taskId: 2 })
+    ]
+  });
 }
 
 function getLoadTasksAction() {

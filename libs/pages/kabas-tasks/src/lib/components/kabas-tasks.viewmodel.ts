@@ -50,18 +50,23 @@ export class KabasTasksViewModel {
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface
   ) {
     this.tasksWithAssignments$ = this.store.pipe(
-      select(getTasksWithAssignments, { isPaper: false }),
+      select(getTasksWithAssignments, {
+        isPaper: false,
+        type: FavoriteTypesEnum.TASK
+      }),
       map(tasks =>
         tasks.map(task => ({
           ...task,
-          ...this.getTaskDates(task),
-          isFavorite: task.id % 2 === 0
+          ...this.getTaskDates(task)
         }))
       )
     );
 
     this.paperTasksWithAssignments$ = this.store.pipe(
-      select(getTasksWithAssignments, { isPaper: true }),
+      select(getTasksWithAssignments, {
+        isPaper: true,
+        type: FavoriteTypesEnum.TASK
+      }),
       map(tasks => tasks.map(task => ({ ...task, ...this.getTaskDates(task) })))
     );
 
