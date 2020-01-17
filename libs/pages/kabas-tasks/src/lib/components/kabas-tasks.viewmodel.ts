@@ -4,15 +4,18 @@ import {
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
   DalState,
+  EduContentFixture,
   EffectFeedback,
   EffectFeedbackActions,
   FavoriteActions,
   FavoriteInterface,
   FavoriteTypesEnum,
   getRouterState,
+  LearningAreaFixture,
   LearningAreaInterface,
   RouterStateUrl,
   TaskActions,
+  TaskEduContentFixture,
   TaskEduContentInterface,
   TaskInterface
 } from '@campus/dal';
@@ -44,6 +47,7 @@ export interface CurrentTaskParams {
 export class KabasTasksViewModel {
   public tasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
   public paperTasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
+  public currentTask$: Observable<TaskWithAssigneesInterface>;
   public currentTaskParams$: Observable<CurrentTaskParams>;
   public selectableLearningAreas$: Observable<LearningAreaInterface[]>;
 
@@ -63,7 +67,7 @@ export class KabasTasksViewModel {
       map(tasks =>
         tasks.map(task => ({
           ...task,
-          ...this.getTaskDates(task)
+          isFavorite: task.id % 2 === 0
         }))
       )
     );
@@ -72,8 +76,7 @@ export class KabasTasksViewModel {
       select(getTasksWithAssignments, {
         isPaper: true,
         type: FavoriteTypesEnum.TASK
-      }),
-      map(tasks => tasks.map(task => ({ ...task, ...this.getTaskDates(task) })))
+      })
     );
 
     this.routerState$ = this.store.pipe(select(getRouterState));
@@ -86,50 +89,11 @@ export class KabasTasksViewModel {
       shareReplay(1)
     );
 
+    this.currentTask$ = this.getCurrentTask();
+
     this.selectableLearningAreas$ = this.store.pipe(
       select(allowedLearningAreas)
     );
-  }
-
-  public getTaskDates(
-    task: TaskWithAssigneesInterface,
-    now: Date = new Date()
-  ): Pick<TaskWithAssigneesInterface, 'startDate' | 'endDate' | 'status'> {
-    let startDate: Date;
-    let endDate: Date;
-
-    task.assignees.forEach(assignee => {
-      if (!startDate || assignee.start < startDate) {
-        startDate = assignee.start;
-      }
-      if (!endDate || assignee.end > endDate) {
-        endDate = assignee.end;
-      }
-    });
-
-    const status = this.getTaskStatus(startDate, endDate, now);
-    return { startDate, endDate, status };
-  }
-
-  public getTaskStatus(
-    startDate: Date,
-    endDate: Date,
-    now: Date = new Date()
-  ): TaskStatusEnum {
-    let status = TaskStatusEnum.PENDING;
-
-    if (startDate && endDate) {
-      // make sure dates are compared correctly
-      startDate = new Date(startDate);
-      endDate = new Date(endDate);
-
-      if (endDate < now) {
-        status = TaskStatusEnum.FINISHED;
-      } else if (startDate <= now) {
-        status = TaskStatusEnum.ACTIVE;
-      }
-    }
-    return status;
   }
 
   public startArchivingTasks(
@@ -233,6 +197,33 @@ export class KabasTasksViewModel {
         navigateAfterCreate: true,
         userId: this.authService.userId
       })
+    );
+  }
+
+  private getCurrentTask(): Observable<TaskWithAssigneesInterface> {
+    // TODO
+    // return this.paperTasksWithAssignments$.pipe(
+    return this.tasksWithAssignments$.pipe(
+      map(tasks => ({
+        ...tasks[0],
+        taskEduContents: [1, 2, 3].map(
+          id =>
+            new TaskEduContentFixture({
+              eduContentId: id,
+              eduContent: new EduContentFixture(
+                { id },
+                {
+                  id,
+                  title: 'oefening ' + id,
+                  learningArea: new LearningAreaFixture({
+                    id: 1,
+                    name: 'Wiskunde'
+                  })
+                }
+              )
+            })
+        )
+      }))
     );
   }
 

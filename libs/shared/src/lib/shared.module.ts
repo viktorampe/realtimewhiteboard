@@ -15,6 +15,7 @@ import {
   MatInputModule,
   MatListModule,
   MatMenuModule,
+  MatProgressSpinnerModule,
   MatSnackBarModule,
   MatTooltipModule
 } from '@angular/material';
@@ -31,6 +32,7 @@ import { HasPermissionDirective } from './auth/has-permission.directive';
 import { PermissionService } from './auth/permission.service';
 import { PERMISSION_SERVICE_TOKEN } from './auth/permission.service.interface';
 import {
+  ContentPreviewDialogComponent,
   LearningPlanGoalProgressManagementComponent,
   MethodBooksTileComponent,
   MethodBookTileComponent,
@@ -110,7 +112,8 @@ import { SCORM_EXERCISE_SERVICE_TOKEN } from './services/scorm/scorm-exercise.se
     MatFormFieldModule,
     HttpClientModule,
     MatInputModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatProgressSpinnerModule
   ],
   declarations: [
     HeaderComponent,
@@ -122,6 +125,7 @@ import { SCORM_EXERCISE_SERVICE_TOKEN } from './services/scorm/scorm-exercise.se
     DataCyDirective,
     AlertToNotificationItemPipe,
     QuickLinkComponent,
+    ContentPreviewDialogComponent,
     LearningPlanGoalProgressManagementComponent,
     MethodBooksTileComponent,
     MethodBookTileComponent
@@ -138,6 +142,7 @@ import { SCORM_EXERCISE_SERVICE_TOKEN } from './services/scorm/scorm-exercise.se
     DataCyDirective,
     AlertToNotificationItemPipe,
     QuickLinkComponent,
+    ContentPreviewDialogComponent,
     MethodBooksTileComponent,
     MethodBookTileComponent
   ],
@@ -169,6 +174,7 @@ import { SCORM_EXERCISE_SERVICE_TOKEN } from './services/scorm/scorm-exercise.se
   ],
   entryComponents: [
     QuickLinkComponent,
+    ContentPreviewDialogComponent,
     LearningPlanGoalProgressManagementComponent
   ]
 })

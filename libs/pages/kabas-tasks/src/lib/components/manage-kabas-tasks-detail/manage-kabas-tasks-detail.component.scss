@@ -1,10 +1,10 @@
 .manage-kabas-tasks-detail {
   display: flex;
-  flex-shrink: 0;
-  flex-grow: 0;
+
   &__container {
     flex-grow: 1;
   }
+
   &__filterbar {
     display: flex;
     flex-wrap: wrap;
@@ -13,6 +13,81 @@
 
   &__info {
     display: flex;
+    flex-direction: column;
     flex: 0 0 auto;
+
+    h2 {
+      margin: 0;
+    }
+
+    input,
+    textarea {
+      margin-bottom: 5px;
+      font-size: inherit;
+      font-family: inherit;
+    }
+
+    campus-button {
+      margin: 5px 0;
+    }
+
+    &__container {
+      display: flex;
+      flex-direction: column;
+      flex: 0 0 auto;
+      padding-bottom: 15px;
+    }
+
+    &__add-assignees {
+      float: right;
+      padding: 0 4px;
+      margin: 0 0 0 5px !important;
+    }
+
+    &__assignee {
+      display: inline-block;
+      padding: 1px 4px;
+      border: solid 1px grey;
+      background-color: white;
+      margin: 5px 5px 0 0;
+
+      &:last-child {
+        margin-right: 0;
+      }
+
+      &.classgroup {
+        color: orange;
+      }
+      &.group {
+        color: green;
+      }
+      &.student {
+        color: blue;
+      }
+
+      mat-icon {
+        width: 10px;
+        height: 10px;
+        line-height: 10px;
+        margin: 2px 0;
+        vertical-align: top;
+        border-radius: 50%;
+        background-color: gray;
+        color: white;
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+.list-split {
+  span {
+    &:after {
+      content: ' - ';
+    }
+
+    &:last-child:after {
+      display: none;
+    }
   }
 }
