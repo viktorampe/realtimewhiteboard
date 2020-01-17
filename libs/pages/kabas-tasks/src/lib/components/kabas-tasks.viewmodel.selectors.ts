@@ -164,7 +164,7 @@ export const getTasksWithAssignments = createSelector(
         (taskWithAssignees): TaskWithAssigneesInterface => {
           const now = new Date();
           const { assignees } = taskWithAssignees;
-          let status = TaskStatusEnum.PENDING;
+          let status = TaskStatusEnum.FINISHED;
 
           const maxDate = dates =>
             dates.length ? new Date(Math.max(...dates)) : undefined;
@@ -175,9 +175,9 @@ export const getTasksWithAssignments = createSelector(
           const endDate = maxDate(assignees.map(a => +a.end));
 
           if (startDate && endDate) {
-            if (endDate < now) {
-              status = TaskStatusEnum.FINISHED;
-            } else if (startDate <= now) {
+            if (startDate > now) {
+              status = TaskStatusEnum.PENDING;
+            } else if (endDate > now) {
               status = TaskStatusEnum.ACTIVE;
             }
           }
