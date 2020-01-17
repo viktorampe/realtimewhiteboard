@@ -47,6 +47,8 @@
     </ng-template>
   </ng-container>
 </campus-page-bar>
+<div> {{ viewModel.currentTask$ | async | json }}</div>
+
 <div class="manage-kabas-tasks-detail"
   ><div class="manage-kabas-tasks-detail__container">
     <div class="manage-kabas-tasks-detail__filterbar">

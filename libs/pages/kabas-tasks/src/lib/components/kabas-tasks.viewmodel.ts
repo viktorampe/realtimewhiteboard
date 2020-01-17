@@ -13,14 +13,20 @@ import {
   LearningAreaInterface,
   RouterStateUrl,
   TaskActions,
-  TaskInterface,
-  TaskEduContentInterface
+  TaskEduContentInterface,
+  TaskInterface
 } from '@campus/dal';
 import { Update } from '@ngrx/entity';
 import { RouterReducerState } from '@ngrx/router-store';
 import { Action, select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, shareReplay } from 'rxjs/operators';
+import {
+  distinctUntilChanged,
+  filter,
+  map,
+  shareReplay,
+  switchMap
+} from 'rxjs/operators';
 import {
   AssigneeInterface,
   AssigneeTypesEnum
@@ -31,7 +37,8 @@ import {
 } from '../interfaces/TaskWithAssignees.interface';
 import {
   allowedLearningAreas,
-  getTasksWithAssignments
+  getTasksWithAssignments,
+  getTaskWithAssignmentsById
 } from './kabas-tasks.viewmodel.selectors';
 
 export interface CurrentTaskParams {
@@ -46,6 +53,7 @@ export class KabasTasksViewModel {
   public paperTasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
   public currentTaskParams$: Observable<CurrentTaskParams>;
   public selectableLearningAreas$: Observable<LearningAreaInterface[]>;
+  public currentTask$: Observable<TaskWithAssigneesInterface>;
 
   private routerState$: Observable<RouterReducerState<RouterStateUrl>>;
 
@@ -88,6 +96,14 @@ export class KabasTasksViewModel {
 
     this.selectableLearningAreas$ = this.store.pipe(
       select(allowedLearningAreas)
+    );
+
+    this.currentTask$ = this.currentTaskParams$.pipe(
+      switchMap(taskParams =>
+        this.store.pipe(
+          select(getTaskWithAssignmentsById, { taskId: taskParams.id })
+        )
+      )
     );
   }
 
