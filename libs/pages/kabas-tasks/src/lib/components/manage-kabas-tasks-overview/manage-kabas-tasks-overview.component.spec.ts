@@ -875,6 +875,18 @@ describe('ManageKabasTasksOverviewComponent', () => {
   });
 
   describe('click handlers', () => {
+    describe('clickNewTask', () => {
+      it('should navigate to the correct route', () => {
+        component.clickNewTask();
+
+        expect(router.navigate).toHaveBeenCalledWith([
+          'tasks',
+          'manage',
+          'new'
+        ]);
+      });
+    });
+
     describe('clickAddDigitalTask', () => {
       it('should navigate to the correct route', () => {
         component.clickAddDigitalTask();
