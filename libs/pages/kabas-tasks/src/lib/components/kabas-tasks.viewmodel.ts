@@ -4,17 +4,20 @@ import {
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
   DalState,
+  EduContentFixture,
   EffectFeedback,
   EffectFeedbackActions,
   FavoriteActions,
   FavoriteInterface,
   FavoriteTypesEnum,
   getRouterState,
+  LearningAreaFixture,
   LearningAreaInterface,
   RouterStateUrl,
   TaskActions,
-  TaskInterface,
-  TaskEduContentInterface
+  TaskEduContentFixture,
+  TaskEduContentInterface,
+  TaskInterface
 } from '@campus/dal';
 import { Update } from '@ngrx/entity';
 import { RouterReducerState } from '@ngrx/router-store';
@@ -44,6 +47,7 @@ export interface CurrentTaskParams {
 export class KabasTasksViewModel {
   public tasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
   public paperTasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
+  public currentTask$: Observable<TaskWithAssigneesInterface>;
   public currentTaskParams$: Observable<CurrentTaskParams>;
   public selectableLearningAreas$: Observable<LearningAreaInterface[]>;
 
@@ -85,6 +89,8 @@ export class KabasTasksViewModel {
       distinctUntilChanged((a, b) => a.id === b.id),
       shareReplay(1)
     );
+
+    this.currentTask$ = this.getCurrentTask();
 
     this.selectableLearningAreas$ = this.store.pipe(
       select(allowedLearningAreas)
@@ -274,6 +280,33 @@ export class KabasTasksViewModel {
         navigateAfterCreate: true,
         userId: this.authService.userId
       })
+    );
+  }
+
+  private getCurrentTask(): Observable<TaskWithAssigneesInterface> {
+    // TODO
+    // return this.paperTasksWithAssignments$.pipe(
+    return this.tasksWithAssignments$.pipe(
+      map(tasks => ({
+        ...tasks[0],
+        taskEduContents: [1, 2, 3].map(
+          id =>
+            new TaskEduContentFixture({
+              eduContentId: id,
+              eduContent: new EduContentFixture(
+                { id },
+                {
+                  id,
+                  title: 'oefening ' + id,
+                  learningArea: new LearningAreaFixture({
+                    id: 1,
+                    name: 'Wiskunde'
+                  })
+                }
+              )
+            })
+        )
+      }))
     );
   }
 

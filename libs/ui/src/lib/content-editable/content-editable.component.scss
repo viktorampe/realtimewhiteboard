@@ -36,4 +36,18 @@
       }
     }
   }
+
+  &__edit {
+    display: none;
+    cursor: pointer;
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+
+  &:hover {
+    .ui-content-editable__edit {
+      display: block;
+    }
+  }
 }

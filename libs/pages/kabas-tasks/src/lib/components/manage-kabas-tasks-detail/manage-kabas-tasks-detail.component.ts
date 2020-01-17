@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatDialog, MatSelectionList } from '@angular/material';
 import { Router } from '@angular/router';
-import { LearningAreaInterface } from '@campus/dal';
+import { EduContentInterface, LearningAreaInterface } from '@campus/dal';
 import { SearchFilterCriteriaInterface } from '@campus/search';
-import { Observable } from 'rxjs';
+import { SideSheetComponent } from '@campus/ui';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
+import { AssigneeTypesEnum } from '../../interfaces/Assignee.interface';
 import { TaskWithAssigneesInterface } from '../../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
 import {
@@ -26,10 +28,21 @@ export enum TaskSortEnum {
 export class ManageKabasTasksDetailComponent implements OnInit {
   public TaskSortEnum = TaskSortEnum;
   public diaboloPhaseFilter: SearchFilterCriteriaInterface;
+  public selectedContents$ = new BehaviorSubject<EduContentInterface[]>([]);
+  public task$: Observable<TaskWithAssigneesInterface>;
   public isNewTask$: Observable<boolean>;
   public selectableLearningAreas$: Observable<LearningAreaInterface[]>;
 
-  isPaperTask = true; // replace w/ stream
+  public assigneeTypesEnum: typeof AssigneeTypesEnum = AssigneeTypesEnum;
+
+  @ViewChild('taskContent', { static: false })
+  private contentSelectionList: MatSelectionList;
+
+  private sideSheet: SideSheetComponent;
+  @ViewChild('taskSidesheet', { static: false })
+  set sideSheetComponent(sidesheet: SideSheetComponent) {
+    this.sideSheet = sidesheet;
+  }
 
   constructor(
     private viewModel: KabasTasksViewModel,
@@ -44,6 +57,7 @@ export class ManageKabasTasksDetailComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.task$ = this.viewModel.currentTask$;
     this.diaboloPhaseFilter = {
       name: 'diaboloPhase',
       label: 'Diabolo-fase',
@@ -79,6 +93,19 @@ export class ManageKabasTasksDetailComponent implements OnInit {
         this.openNewTaskDialog();
       }
     });
+  }
+
+  public onSelectionChange() {
+    const selected: EduContentInterface[] = this.contentSelectionList.selectedOptions.selected
+      .map(option => option.value.eduContent as EduContentInterface)
+      .sort((a, b) =>
+        a.publishedEduContentMetadata.title <
+        b.publishedEduContentMetadata.title
+          ? -1
+          : 1
+      );
+    this.selectedContents$.next(selected);
+    this.sideSheet.toggle(true);
   }
 
   public setTaskAsArchived(

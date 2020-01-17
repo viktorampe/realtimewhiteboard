@@ -13,6 +13,7 @@
       [(ngModel)]="text"
       (keydown.enter)="saveChanges()"
       (keydown.escape)="cancelChanges()"
+      [placeholder]="placeholder"
     />
     <textarea
       *ngIf="multiline"
@@ -20,10 +21,11 @@
       (focus)="onFocus($event)"
       [(ngModel)]="text"
       (keydown.escape)="cancelChanges()"
+      [placeholder]="placeholder"
     >
     </textarea>
   </mat-form-field>
-  <span *ngIf="active" class="ui-content-editable__actions">
+  <span *ngIf="active; else inactive" class="ui-content-editable__actions">
     <campus-button
       circle
       class="ui-content-editable__actions__confirm"
@@ -40,4 +42,12 @@
       campusClickStopPropagation
     ></campus-button>
   </span>
+  <ng-template #inactive
+    ><mat-icon
+      *ngIf="icon"
+      [svgIcon]="icon"
+      class="ui-content-editable__edit"
+      (click)="active = true"
+    ></mat-icon
+  ></ng-template>
 </div>
