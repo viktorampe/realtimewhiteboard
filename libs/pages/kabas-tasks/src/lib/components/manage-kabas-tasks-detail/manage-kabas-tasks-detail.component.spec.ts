@@ -216,7 +216,7 @@ describe('ManageKabasTasksDetailComponent', () => {
       expect(eduContentInfoDE.length).toBe(0);
     });
 
-    it('should show the task info in the sidepanel when selection is empty', () => {
+    it('should show the educontent info in the sidepanel when there is a selection', () => {
       component.selectedContents$.next([
         new EduContentFixture(),
         new EduContentFixture()
