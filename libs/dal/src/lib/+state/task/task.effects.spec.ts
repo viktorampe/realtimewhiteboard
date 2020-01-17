@@ -529,7 +529,7 @@ describe('TaskEffects', () => {
 
   for (const verb of ['gearchiveerd', 'gedearchiveerd']) {
     describe('startArchiveTasks$', () => {
-      const userId = 1;
+      const userId = 123;
       const archived = verb === 'gearchiveerd';
       const tasksToUpdate: Update<TaskInterface>[] = [
         { id: 1, changes: { id: 1, name: 'Taak 1', archived } },
@@ -547,7 +547,7 @@ describe('TaskEffects', () => {
         });
 
         const expectedMessage = `De taken werden ${verb}.`;
-        const updateAction = new UpdateTasks({ tasks: tasksToUpdate, userId });
+        const updateAction = new UpdateTasks({ userId, tasks: tasksToUpdate });
         const feedbackAction = new AddEffectFeedback({
           effectFeedback: {
             id: uuid(),
@@ -625,8 +625,8 @@ describe('TaskEffects', () => {
           errors: taskUpdateErrors
         });
         const updateAction = new UpdateTasks({
-          tasks: tasksToUpdate.slice(1),
-          userId
+          userId,
+          tasks: tasksToUpdate.slice(1)
         });
         const expectedMessage =
           `<p>De taak werd ${verb}.</p>` +

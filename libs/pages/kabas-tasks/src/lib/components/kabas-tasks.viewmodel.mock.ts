@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {
   LearningAreaFixture,
   LearningAreaInterface,
+  TaskEduContentInterface,
   TaskFixture
 } from '@campus/dal';
 import { ViewModelInterface } from '@campus/testing';
@@ -240,4 +241,8 @@ export class MockKabasTasksViewModel
     learningAreaId: number,
     type: 'paper' | 'digital'
   ) {}
+  public updateTaskEduContent(
+    taskEduContents: TaskEduContentInterface[],
+    updatedValues: Partial<TaskEduContentInterface>
+  ): void {}
 }

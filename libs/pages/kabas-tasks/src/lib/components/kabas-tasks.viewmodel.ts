@@ -13,7 +13,8 @@ import {
   LearningAreaInterface,
   RouterStateUrl,
   TaskActions,
-  TaskInterface
+  TaskInterface,
+  TaskEduContentInterface
 } from '@campus/dal';
 import { Update } from '@ngrx/entity';
 import { RouterReducerState } from '@ngrx/router-store';
@@ -269,5 +270,12 @@ export class KabasTasksViewModel {
         userId: this.authService.userId
       })
     );
+  }
+
+  public updateTaskEduContent(
+    taskEduContents: TaskEduContentInterface[],
+    updatedValues: Partial<TaskEduContentInterface>
+  ): void {
+    throw new Error('Not implemented yet');
   }
 }
