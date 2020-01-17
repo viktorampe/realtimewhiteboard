@@ -1,9 +1,13 @@
 import {
   ClassGroupQueries,
+  FavoriteInterface,
+  FavoriteQueries,
   GroupQueries,
   LearningAreaInterface,
   LearningAreaQueries,
   LinkedPersonQueries,
+  MethodInterface,
+  MethodQueries,
   TaskClassGroupQueries,
   TaskEduContentInterface,
   TaskEduContentQueries,
@@ -103,21 +107,50 @@ const combinedAssigneesByTask = createSelector(
   }
 );
 
+export const allowedLearningAreas = createSelector(
+  [MethodQueries.getAllowedMethods, LearningAreaQueries.getAllEntities],
+  (
+    allowedMethods: MethodInterface[],
+    learningAreas: Dictionary<LearningAreaInterface>
+  ) => {
+    return allowedMethods.reduce(
+      (acc, allowedMethod) => {
+        if (!acc.addedLearningAreasMap[allowedMethod.learningAreaId]) {
+          acc.allowedLearningAreas.push(
+            learningAreas[allowedMethod.learningAreaId]
+          );
+
+          acc.addedLearningAreasMap[allowedMethod.learningAreaId] = true;
+        }
+
+        return acc;
+      },
+      {
+        addedLearningAreasMap: {},
+        allowedLearningAreas: []
+      }
+    ).allowedLearningAreas;
+  }
+);
+
 export const getTasksWithAssignments = createSelector(
   [
     TaskQueries.getAll,
     LearningAreaQueries.getAllEntities,
     TaskEduContentQueries.getAllGroupedByTaskId,
-    combinedAssigneesByTask
+    combinedAssigneesByTask,
+    FavoriteQueries.getByType
   ],
   (
     tasks: TaskInterface[],
     learningAreaDict: Dictionary<LearningAreaInterface>,
     taskEduContentByTask: Dictionary<TaskEduContentInterface[]>,
     assigneesByTask: Dictionary<AssigneeInterface[]>,
-    props: { isPaper?: boolean }
-  ) =>
-    tasks
+    favoriteTasks: FavoriteInterface[],
+    props
+  ) => {
+    const favoriteTaskIds = favoriteTasks.map(fav => fav.taskId);
+    return tasks
       .filter(task => !!task.isPaperTask === !!props.isPaper)
       .map(
         (task): TaskWithAssigneesInterface => ({
@@ -126,7 +159,9 @@ export const getTasksWithAssignments = createSelector(
           eduContentAmount: taskEduContentByTask[task.id]
             ? taskEduContentByTask[task.id].length
             : 0,
-          assignees: assigneesByTask[task.id] || []
+          assignees: assigneesByTask[task.id] || [],
+          isFavorite: favoriteTaskIds.includes(task.id)
         })
-      )
+      );
+  }
 );

@@ -1,14 +1,60 @@
 import { TestBed } from '@angular/core/testing';
 import { MAT_DATE_LOCALE } from '@angular/material';
-import { AUTH_SERVICE_TOKEN, EffectFeedback, EffectFeedbackActions, FavoriteActions, FavoriteTypesEnum, PersonFixture, TaskActions, UserQueries } from '@campus/dal';
+import {
+  AuthServiceInterface,
+  AUTH_SERVICE_TOKEN,
+  DalState,
+  EffectFeedback,
+  EffectFeedbackActions,
+  FavoriteActions,
+  FavoriteTypesEnum,
+  getRouterState,
+  PersonFixture,
+  TaskActions,
+  UserQueries
+} from '@campus/dal';
+import { MockDate } from '@campus/testing';
 import { Store } from '@ngrx/store';
-import { TaskStatusEnum, TaskWithAssigneesInterface } from '../interfaces/TaskWithAssignees.interface';
+import { MockStore, provideMockStore } from '@ngrx/store/testing';
+import { hot } from 'jasmine-marbles';
+import { configureTestSuite } from 'ng-bullet';
+import {
+  TaskStatusEnum,
+  TaskWithAssigneesInterface
+} from '../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from './kabas-tasks.viewmodel';
+
+describe('KabasTaskViewModel', () => {
+  const dateMock = new MockDate();
+  let kabasTasksViewModel: KabasTasksViewModel;
+  let store: MockStore<DalState>;
+  let authService: AuthServiceInterface;
+  let uuid: Function;
+  let dateLocale;
+
+  configureTestSuite(() => {
+    TestBed.configureTestingModule({
+      imports: [],
+      providers: [
+        KabasTasksViewModel,
+        provideMockStore(),
+        { provide: AUTH_SERVICE_TOKEN, useValue: { userId: 1 } },
+        { provide: 'uuid', useValue: () => 'foo' },
+        { provide: MAT_DATE_LOCALE, useValue: 'en-US' }
+      ]
+    });
+  });
+
+  beforeEach(() => {
     kabasTasksViewModel = TestBed.get(KabasTasksViewModel);
     authService = TestBed.get(AUTH_SERVICE_TOKEN);
     uuid = TestBed.get('uuid');
-    dateLocale = TestBed.get(MAT_DATE_LOCALE);
     store = TestBed.get(Store);
+    dateLocale = TestBed.get(MAT_DATE_LOCALE);
+  });
+
+  afterAll(() => {
+    dateMock.returnRealDate();
   });
 
   describe('creation', () => {
@@ -221,88 +267,6 @@ import { KabasTasksViewModel } from './kabas-tasks.viewmodel';
     });
   });
 
-  describe('setTaskAsArchived', () => {
-    let taskAssignees;
-    const currentUser = new PersonFixture();
-    beforeEach(() => {
-      store.overrideSelector(UserQueries.getCurrentUser, currentUser);
-      taskAssignees = [
-        {
-          id: 1,
-          name: 'Finished Task',
-          eduContentAmount: 1,
-          assignees: [],
-          status: TaskStatusEnum.FINISHED,
-          isPaperTask: false,
-          startDate: new Date(Date.now() - 1000),
-          endDate: new Date(Date.now() + 1000)
-        },
-        {
-          id: 2,
-          name: 'Pending Task',
-          eduContentAmount: 1,
-          assignees: [],
-          status: TaskStatusEnum.PENDING,
-          isPaperTask: false,
-          startDate: new Date(Date.now() - 1000),
-          endDate: new Date(Date.now() + 1000)
-        },
-        {
-          id: 3,
-          name: 'Active Task',
-          eduContentAmount: 1,
-          assignees: [],
-          status: TaskStatusEnum.ACTIVE,
-          isPaperTask: false,
-          startDate: new Date(Date.now() - 1000),
-          endDate: new Date(Date.now() + 1000)
-        },
-        {
-          id: 3,
-          name: 'Paper Task',
-          eduContentAmount: 1,
-          assignees: [],
-          isPaperTask: true,
-          startDate: new Date(Date.now() - 1000),
-          endDate: new Date(Date.now() + 1000)
-        }
-      ] as TaskWithAssigneesInterface[];
-    });
-    it('should call dispatch with all tasks when tasks will be unarchived', () => {
-      const spy = jest.spyOn(store, 'dispatch');
-      const expected = new TaskActions.StartArchiveTasks({
-        userId: currentUser.id,
-        tasks: taskAssignees.map(task => ({
-          id: task.id,
-          changes: { archived: false }
-        }))
-      });
-
-      kabasTasksViewModel.setTaskAsArchived(taskAssignees, false);
-
-      expect(spy).toHaveBeenCalledWith(expected);
-    });
-
-    it('should call dispatch with all tasks that can be archived', () => {
-      const spy = jest.spyOn(store, 'dispatch');
-      const expected = new TaskActions.StartArchiveTasks({
-        userId: currentUser.id,
-        tasks: taskAssignees
-          .filter(
-            task => task.isPaperTask || task.status === TaskStatusEnum.FINISHED
-          )
-          .map(task => ({
-            id: task.id,
-            changes: { archived: true }
-          }))
-      });
-
-      kabasTasksViewModel.setTaskAsArchived(taskAssignees, true);
-
-      expect(spy).toHaveBeenCalledWith(expected);
-    });
-  });
-
   describe('createTask', () => {
     let dispatchSpy: jest.SpyInstance;
 
@@ -362,6 +326,111 @@ import { KabasTasksViewModel } from './kabas-tasks.viewmodel';
       kabasTasksViewModel.toggleFavorite(taskAssignee);
 
       expect(spy).toHaveBeenCalledWith(expected);
+    });
+  });
+
+  describe('currentTaskParams', () => {
+    it('should contain the id of the current task when in a task', () => {
+      store.overrideSelector(getRouterState, {
+        navigationId: 1,
+        state: {
+          url: '',
+          params: {
+            id: '1'
+          }
+        }
+      });
+
+      expect(kabasTasksViewModel.currentTaskParams$).toBeObservable(
+        hot('a', {
+          a: { id: 1 }
+        })
+      );
+    });
+
+    it('should contain undefined for the id if not set', () => {
+      store.overrideSelector(getRouterState, {
+        navigationId: 1,
+        state: {
+          url: '',
+          params: {}
+        }
+      });
+
+      expect(kabasTasksViewModel.currentTaskParams$).toBeObservable(
+        hot('a', {
+          a: { id: undefined }
+        })
+      );
+    });
+  });
+
+  describe('canDelete', () => {
+    let taskAssignees;
+    beforeEach(() => {
+      taskAssignees = [
+        {
+          name: 'Task',
+          eduContentAmount: 1,
+          assignees: [],
+          status: TaskStatusEnum.FINISHED,
+          isPaperTask: false,
+          startDate: new Date(Date.now() - 2000),
+          endDate: new Date(Date.now() - 1000)
+        },
+        {
+          name: 'Task2',
+          eduContentAmount: 1,
+          assignees: [],
+          status: TaskStatusEnum.FINISHED,
+          isPaperTask: false
+        },
+
+        {
+          name: 'Task3',
+          eduContentAmount: 1,
+          assignees: [],
+          status: TaskStatusEnum.ACTIVE,
+          isPaperTask: false,
+          startDate: new Date(Date.now() - 2000)
+        },
+        {
+          name: 'Task4',
+          eduContentAmount: 1,
+          assignees: [],
+          status: TaskStatusEnum.PENDING,
+          isPaperTask: false,
+          startDate: new Date(Date.now() - 2000)
+        }
+      ] as TaskWithAssigneesInterface[];
+    });
+
+    it('should return false if pending', () => {
+      const result = kabasTasksViewModel.canBeArchivedOrDeleted(
+        taskAssignees[3]
+      );
+      expect(result).toBeFalsy();
+    });
+    it('should return false if active', () => {
+      const result = kabasTasksViewModel.canBeArchivedOrDeleted(
+        taskAssignees[2]
+      );
+
+      expect(result).toBeFalsy();
+    });
+
+    it('should return true if finished', () => {
+      const result = kabasTasksViewModel.canBeArchivedOrDeleted(
+        taskAssignees[0]
+      );
+      expect(result).toBeTruthy();
+    });
+
+    it('should return true if no date is set', () => {
+      const result = kabasTasksViewModel.canBeArchivedOrDeleted(
+        taskAssignees[1]
+      );
+      expect(result).toBeTruthy();
     });
   });
 
@@ -464,6 +533,7 @@ import { KabasTasksViewModel } from './kabas-tasks.viewmodel';
       kabasTasksViewModel.removeTasks(tasks);
       expect(spy).toHaveBeenCalledWith(feedbackAction);
     });
+
     it('should dispatch feedback without userActions when only errors occurred', () => {
       const spy = jest.spyOn(store, 'dispatch');
       const errors = taskAssignees.filter(ta => !canDelete(ta));
@@ -485,6 +555,146 @@ import { KabasTasksViewModel } from './kabas-tasks.viewmodel';
       });
       kabasTasksViewModel.removeTasks(errors);
       expect(spy).toHaveBeenCalledWith(feedbackAction);
+    });
+  });
+
+  describe('startArchivingTasks', () => {
+    let taskAssignees;
+    beforeEach(() => {
+      taskAssignees = [
+        {
+          id: 1,
+          name: 'Finished Task',
+          eduContentAmount: 1,
+          assignees: [],
+          status: TaskStatusEnum.FINISHED,
+          startDate: new Date(Date.now() - 1000),
+          endDate: new Date(Date.now() - 500),
+          isPaperTask: false
+        },
+        {
+          id: 2,
+          name: 'Pending Task',
+          eduContentAmount: 1,
+          assignees: [],
+          status: TaskStatusEnum.PENDING,
+          startDate: new Date(Date.now() - 1000),
+          endDate: new Date(Date.now() + 1000),
+          isPaperTask: false
+        },
+        {
+          id: 3,
+          name: 'Active Task',
+          eduContentAmount: 1,
+          assignees: [],
+          status: TaskStatusEnum.ACTIVE,
+          startDate: new Date(Date.now() - 1000),
+          endDate: new Date(Date.now() + 1000),
+          isPaperTask: false
+        },
+        {
+          id: 3,
+          name: 'Paper Task',
+          eduContentAmount: 1,
+          assignees: [],
+          isPaperTask: true
+        }
+      ] as TaskWithAssigneesInterface[];
+    });
+    /* -- HELPERS -- */
+    const mapToUpdate = task => ({ id: task.id, changes: { archived: true } });
+    const canArchive = ta =>
+      ta.status === TaskStatusEnum.FINISHED || (!ta.endDate && !ta.startDate);
+    const messages = errors =>
+      errors
+        .map(error => {
+          const activeUntil = error.endDate
+            ? ` Deze taak is nog actief tot ${error.endDate.toLocaleDateString(
+                dateLocale
+              )}.`
+            : '';
+          return `<li>${error.name} kan niet worden gearchiveerd.${activeUntil}</li>`;
+        })
+        .join('');
+
+    describe('archive', () => {
+      it('should dispatch update when no errors detected', () => {
+        const spy = jest.spyOn(store, 'dispatch');
+        const tasks = taskAssignees.filter(
+          ta => ta.status === TaskStatusEnum.FINISHED
+        );
+        const updateAction = new TaskActions.StartArchiveTasks({
+          userId: authService.userId,
+          tasks: tasks.map(mapToUpdate)
+        });
+        kabasTasksViewModel.startArchivingTasks(tasks, true);
+        expect(spy).toHaveBeenCalledWith(updateAction);
+      });
+
+      it('should dispatch feedback with userActions when mixed errors and updates', () => {
+        const spy = jest.spyOn(store, 'dispatch');
+        const updates = taskAssignees.filter(ta => !ta.isPaperTask);
+        const errors = updates.filter(ta => !canArchive(ta));
+        const updateAction = new TaskActions.StartArchiveTasks({
+          userId: authService.userId,
+          tasks: updates.filter(canArchive).map(mapToUpdate)
+        });
+        const effectFeedback = new EffectFeedback({
+          id: uuid(),
+          triggerAction: updateAction,
+          message:
+            `<p>Niet alle taken kunnen gearchiveerd worden:</p>` +
+            `<ul>${messages(errors)}</ul>`,
+          userActions: [
+            { title: 'Archiveer de andere taken', userAction: updateAction }
+          ],
+          type: 'error'
+        });
+        const feedbackAction = new EffectFeedbackActions.AddEffectFeedback({
+          effectFeedback
+        });
+        kabasTasksViewModel.startArchivingTasks(updates, true);
+        expect(spy).toHaveBeenCalledWith(feedbackAction);
+      });
+
+      it('should dispatch feedback without userActions when only errors occurred', () => {
+        const spy = jest.spyOn(store, 'dispatch');
+        const errors = taskAssignees.filter(ta => !canArchive(ta));
+        const updateAction = new TaskActions.StartArchiveTasks({
+          userId: authService.userId,
+          tasks: []
+        });
+        const effectFeedback = new EffectFeedback({
+          id: uuid(),
+          triggerAction: updateAction,
+          message:
+            `<p>Niet alle taken kunnen gearchiveerd worden:</p>` +
+            `<ul>${messages(errors)}</ul>`,
+          userActions: [],
+          type: 'error'
+        });
+        const feedbackAction = new EffectFeedbackActions.AddEffectFeedback({
+          effectFeedback
+        });
+        kabasTasksViewModel.startArchivingTasks(errors, true);
+        expect(spy).toHaveBeenCalledWith(feedbackAction);
+      });
+    });
+
+    describe('dearchive', () => {
+      it('should dispatch update, all tasks should pass', () => {
+        const spy = jest.spyOn(store, 'dispatch');
+        const tasks = taskAssignees;
+        const updateAction = new TaskActions.StartArchiveTasks({
+          userId: authService.userId,
+          tasks: tasks.map(task => ({
+            id: task.id,
+            changes: { archived: false }
+          }))
+        });
+        kabasTasksViewModel.startArchivingTasks(tasks, false);
+        expect(spy).toHaveBeenCalledWith(updateAction);
+      });
     });
   });
 });

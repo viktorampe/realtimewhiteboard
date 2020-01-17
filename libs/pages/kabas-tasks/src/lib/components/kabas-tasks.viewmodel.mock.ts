@@ -1,5 +1,10 @@
 import { Injectable } from '@angular/core';
-import { LearningAreaFixture, TaskFixture } from '@campus/dal';
+import {
+  LearningAreaFixture,
+  LearningAreaInterface,
+  TaskEduContentInterface,
+  TaskFixture
+} from '@campus/dal';
 import { ViewModelInterface } from '@campus/testing';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { AssigneeTypesEnum } from '../interfaces/Assignee.interface';
@@ -7,7 +12,10 @@ import {
   TaskStatusEnum,
   TaskWithAssigneesInterface
 } from '../interfaces/TaskWithAssignees.interface';
-import { KabasTasksViewModel } from './kabas-tasks.viewmodel';
+import {
+  CurrentTaskParams,
+  KabasTasksViewModel
+} from './kabas-tasks.viewmodel';
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +24,8 @@ export class MockKabasTasksViewModel
   implements ViewModelInterface<KabasTasksViewModel> {
   public tasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
   public paperTasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
+  public currentTaskParams$: Observable<CurrentTaskParams>;
+  public selectableLearningAreas$: Observable<LearningAreaInterface[]>;
 
   constructor() {
     const tasks = this.setupTaskWithAssignments();
@@ -35,6 +45,17 @@ export class MockKabasTasksViewModel
         };
       })
     );
+
+    this.currentTaskParams$ = new BehaviorSubject<CurrentTaskParams>({
+      id: 1
+    });
+
+    this.selectableLearningAreas$ = new BehaviorSubject<
+      LearningAreaInterface[]
+    >([
+      new LearningAreaFixture({ name: 'Wiskunde' }),
+      new LearningAreaFixture({ name: 'Frans' })
+    ]);
   }
 
   public getTaskDates() {
@@ -206,9 +227,9 @@ export class MockKabasTasksViewModel
       }
     ];
   }
-  public setTaskAsArchived(
+  public startArchivingTasks(
     tasks: TaskWithAssigneesInterface[],
-    isArchived: boolean
+    shouldArchive: boolean
   ): void {}
   public removeTasks(tasks: TaskWithAssigneesInterface[]): void {}
   public toggleFavorite(task: TaskWithAssigneesInterface): void {}
@@ -220,4 +241,8 @@ export class MockKabasTasksViewModel
     learningAreaId: number,
     type: 'paper' | 'digital'
   ) {}
+  public updateTaskEduContent(
+    taskEduContents: TaskEduContentInterface[],
+    updatedValues: Partial<TaskEduContentInterface>
+  ): void {}
 }
