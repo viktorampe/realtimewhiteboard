@@ -487,7 +487,7 @@ describe('KabasTaskViewModel', () => {
           const activeUntil = error.endDate
             ? ` Deze taak is nog actief tot ${error.endDate.toLocaleDateString(
                 dateLocale
-              )}`
+              )}.`
             : '';
           return `<li>${error.name} kan niet worden verwijderd.${activeUntil}</li>`;
         })

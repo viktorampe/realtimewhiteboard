@@ -1,14 +1,38 @@
 import { Inject, Injectable } from '@angular/core';
 import { MAT_DATE_LOCALE } from '@angular/material';
-import { AuthServiceInterface, AUTH_SERVICE_TOKEN, DalState, EffectFeedback, EffectFeedbackActions, FavoriteActions, FavoriteInterface, FavoriteTypesEnum, getRouterState, LearningAreaInterface, RouterStateUrl, TaskActions, TaskEduContentInterface, TaskInterface } from '@campus/dal';
+import {
+  AuthServiceInterface,
+  AUTH_SERVICE_TOKEN,
+  DalState,
+  EffectFeedback,
+  EffectFeedbackActions,
+  FavoriteActions,
+  FavoriteInterface,
+  FavoriteTypesEnum,
+  getRouterState,
+  LearningAreaInterface,
+  RouterStateUrl,
+  TaskActions,
+  TaskEduContentInterface,
+  TaskInterface
+} from '@campus/dal';
 import { Update } from '@ngrx/entity';
 import { RouterReducerState } from '@ngrx/router-store';
 import { Action, select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, shareReplay } from 'rxjs/operators';
-import { AssigneeInterface, AssigneeTypesEnum } from '../interfaces/Assignee.interface';
-import { TaskStatusEnum, TaskWithAssigneesInterface } from '../interfaces/TaskWithAssignees.interface';
-import { allowedLearningAreas, getTasksWithAssignments } from './kabas-tasks.viewmodel.selectors';
+import {
+  AssigneeInterface,
+  AssigneeTypesEnum
+} from '../interfaces/Assignee.interface';
+import {
+  TaskStatusEnum,
+  TaskWithAssigneesInterface
+} from '../interfaces/TaskWithAssignees.interface';
+import {
+  allowedLearningAreas,
+  getTasksWithAssignments
+} from './kabas-tasks.viewmodel.selectors';
 
 export interface CurrentTaskParams {
   id?: number;
@@ -126,30 +150,6 @@ export class KabasTasksViewModel {
     this.store.dispatch(this.getArchivingAction(updates, errors));
   }
 
-  private getArchivingAction(updates, errors): Action {
-    const updateAction = new TaskActions.StartArchiveTasks({
-      userId: this.authService.userId,
-      tasks: updates
-    });
-    if (errors.length) {
-      const messages = this.stillActiveTaskFeedbackMessage(errors, 'archive');
-      const effectFeedback = new EffectFeedback({
-        id: this.uuid(),
-        triggerAction: updateAction,
-        message: `<p>Niet alle taken kunnen gearchiveerd worden:</p><ul>${messages}</ul>`,
-        userActions: this.getFeedbackUserActions(updates.length, updateAction, 'archive'),
-        type: 'error'
-      });
-      const feedbackAction = new EffectFeedbackActions.AddEffectFeedback({
-        effectFeedback
-      });
-      return feedbackAction;
-    }
-    return updateAction;
-  }
-
-
-
   public updateTask(task: TaskInterface, assignees: AssigneeInterface[]) {
     this.store.dispatch(
       new TaskActions.UpdateTask({
@@ -173,6 +173,7 @@ export class KabasTasksViewModel {
       [AssigneeTypesEnum.CLASSGROUP]: 'taskClassGroups'
     };
   }
+
   private getAssigneesByType(
     assignees: AssigneeInterface[]
   ): {
@@ -235,6 +236,38 @@ export class KabasTasksViewModel {
     );
   }
 
+  public updateTaskEduContent(
+    taskEduContents: TaskEduContentInterface[],
+    updatedValues: Partial<TaskEduContentInterface>
+  ): void {
+    throw new Error('Not implemented yet');
+  }
+
+  private getArchivingAction(updates, errors): Action {
+    const updateAction = new TaskActions.StartArchiveTasks({
+      userId: this.authService.userId,
+      tasks: updates
+    });
+    if (errors.length) {
+      const effectFeedback = new EffectFeedback({
+        id: this.uuid(),
+        triggerAction: updateAction,
+        message: this.stillActiveTaskFeedbackMessage(errors, 'archive'),
+        userActions: this.getFeedbackUserActions(
+          updates.length,
+          updateAction,
+          'archive'
+        ),
+        type: 'error'
+      });
+      const feedbackAction = new EffectFeedbackActions.AddEffectFeedback({
+        effectFeedback
+      });
+      return feedbackAction;
+    }
+    return updateAction;
+  }
+
   private getDestroyingAction(deleteIds, errors) {
     const destroyAction = new TaskActions.StartDeleteTasks({
       ids: deleteIds,
@@ -294,7 +327,7 @@ export class KabasTasksViewModel {
       const activeUntil = task.endDate
         ? ` Deze taak is nog actief tot ${task.endDate.toLocaleDateString(
             this.dateLocale
-          )}`
+          )}.`
         : '';
       return `<li>${task.name} kan niet worden ${methodVerbs[method]}.${activeUntil}</li>`;
     });
@@ -306,10 +339,5 @@ export class KabasTasksViewModel {
     message.push(...list);
     message.push('</ul>');
     return message.join('');
-  public updateTaskEduContent(
-    taskEduContents: TaskEduContentInterface[],
-    updatedValues: Partial<TaskEduContentInterface>
-  ): void {
-    throw new Error('Not implemented yet');
   }
 }
