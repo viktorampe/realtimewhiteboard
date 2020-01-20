@@ -162,18 +162,20 @@ export class KabasTasksViewModel {
       .join('');
   }
 
-  public updateTask(task: TaskInterface, assignees: AssigneeInterface[]) {
-    this.store.dispatch(
-      new TaskActions.UpdateTask({
-        task: { id: task.id, changes: task },
-        userId: this.authService.userId
-      })
-    );
+  public updateTaskAccess(task: TaskInterface, assignees: AssigneeInterface[]) {
     this.store.dispatch(
       new TaskActions.UpdateAccess({
         userId: this.authService.userId,
         taskId: task.id,
         ...this.getAssigneesByType(assignees)
+      })
+    );
+  }
+  public updateTask(task: TaskInterface) {
+    this.store.dispatch(
+      new TaskActions.UpdateTask({
+        task: { id: task.id, changes: task },
+        userId: this.authService.userId
       })
     );
   }
