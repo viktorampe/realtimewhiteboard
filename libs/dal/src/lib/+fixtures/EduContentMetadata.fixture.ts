@@ -45,8 +45,8 @@ export class EduContentMetadataFixture implements EduContentMetadataInterface {
   fileExt = 'oefening';
   fileLabel = 'oefening';
   methods = [
-    new MethodFixture({ icon: 'topos', id: 6 }),
-    new MethodFixture({ icon: 'nando', id: 5 })
+    new MethodFixture({ icon: 'topos', id: 6, name: 'Topos' }),
+    new MethodFixture({ icon: 'nando', id: 5, name: 'Nando' })
   ];
   eduContentProductType = new EduContentProductTypeFixture({ id: 33 });
   years = [new YearFixture({ name: '5' }), new YearFixture({ name: '6' })];

@@ -1,5 +1,7 @@
 import {
   ClassGroupQueries,
+  FavoriteInterface,
+  FavoriteQueries,
   GroupQueries,
   LearningAreaInterface,
   LearningAreaQueries,
@@ -20,7 +22,10 @@ import {
   AssigneeInterface,
   AssigneeTypesEnum
 } from '../interfaces/Assignee.interface';
-import { TaskWithAssigneesInterface } from './../interfaces/TaskWithAssignees.interface';
+import {
+  TaskStatusEnum,
+  TaskWithAssigneesInterface
+} from './../interfaces/TaskWithAssignees.interface';
 
 const taskClassGroupAssigneeByTask = createSelector(
   [TaskClassGroupQueries.getAll, ClassGroupQueries.getAllEntities],
@@ -136,16 +141,19 @@ export const getTasksWithAssignments = createSelector(
     TaskQueries.getAll,
     LearningAreaQueries.getAllEntities,
     TaskEduContentQueries.getAllGroupedByTaskId,
-    combinedAssigneesByTask
+    combinedAssigneesByTask,
+    FavoriteQueries.getByType
   ],
   (
     tasks: TaskInterface[],
     learningAreaDict: Dictionary<LearningAreaInterface>,
     taskEduContentByTask: Dictionary<TaskEduContentInterface[]>,
     assigneesByTask: Dictionary<AssigneeInterface[]>,
-    props: { isPaper?: boolean }
-  ) =>
-    tasks
+    favoriteTasks: FavoriteInterface[],
+    props
+  ) => {
+    const favoriteTaskIds = favoriteTasks.map(fav => fav.taskId);
+    return tasks
       .filter(task => !!task.isPaperTask === !!props.isPaper)
       .map(
         (task): TaskWithAssigneesInterface => ({
@@ -154,7 +162,34 @@ export const getTasksWithAssignments = createSelector(
           eduContentAmount: taskEduContentByTask[task.id]
             ? taskEduContentByTask[task.id].length
             : 0,
-          assignees: assigneesByTask[task.id] || []
+          assignees: assigneesByTask[task.id] || [],
+          isFavorite: favoriteTaskIds.includes(task.id)
         })
       )
+      .map(
+        (taskWithAssignees): TaskWithAssigneesInterface => {
+          const now = new Date();
+          const { assignees } = taskWithAssignees;
+          let status = TaskStatusEnum.FINISHED;
+
+          const maxDate = dates =>
+            dates.length ? new Date(Math.max(...dates)) : undefined;
+          const minDate = dates =>
+            dates.length ? new Date(Math.min(...dates)) : undefined;
+
+          const startDate = minDate(assignees.map(a => +a.start));
+          const endDate = maxDate(assignees.map(a => +a.end));
+
+          if (startDate && endDate) {
+            if (startDate > now) {
+              status = TaskStatusEnum.PENDING;
+            } else if (endDate > now) {
+              status = TaskStatusEnum.ACTIVE;
+            }
+          }
+
+          return { ...taskWithAssignees, startDate, endDate, status };
+        }
+      );
+  }
 );
