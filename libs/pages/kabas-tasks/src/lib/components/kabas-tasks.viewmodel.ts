@@ -158,16 +158,15 @@ export class KabasTasksViewModel {
   }
 
   public removeTasks(tasks: TaskWithAssigneesInterface[]): void {
-    const deleteIds = [];
-    const errors = [];
-    tasks.forEach(task => {
-      if (this.canBeArchivedOrDeleted(task)) {
-        deleteIds.push({ taskId: task.id });
-      } else {
-        errors.push(task);
-      }
-    });
-    this.store.dispatch(this.getDestroyingAction(deleteIds, errors));
+    const tasksToRemove = tasks
+      .filter(task => this.canBeArchivedOrDeleted(task))
+      .map(task => task.id);
+    this.store.dispatch(
+      new TaskActions.StartDeleteTasks({
+        userId: this.authService.userId,
+        ids: tasksToRemove
+      })
+    );
   }
 
   public toggleFavorite(task: TaskWithAssigneesInterface): void {

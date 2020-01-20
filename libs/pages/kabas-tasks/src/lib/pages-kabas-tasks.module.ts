@@ -14,11 +14,13 @@ import { SearchModule } from '@campus/search';
 import { SharedModule } from '@campus/shared';
 import { UiModule } from '@campus/ui';
 import { UtilsModule } from '@campus/utils';
+import { ManageKabasTasksAddAssigneesComponent } from './components/manage-kabas-tasks-add-assignees/manage-kabas-tasks-add-assignees.component';
 import { ManageKabasTasksDetailComponent } from './components/manage-kabas-tasks-detail/manage-kabas-tasks-detail.component';
 import { ManageKabasTasksOverviewComponent } from './components/manage-kabas-tasks-overview/manage-kabas-tasks-overview.component';
 import { NewTaskComponent } from './components/new-task/new-task.component';
 import { TaskListItemComponent } from './components/task-list-item/task-list-item.component';
 import { PagesKabasTasksRoutingModule } from './pages-kabas-tasks-routing.module';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -32,6 +34,7 @@ import { PagesKabasTasksRoutingModule } from './pages-kabas-tasks-routing.module
     SearchModule,
     GuardsModule,
     MatSlideToggleModule,
+
     MatDialogModule,
     MatInputModule,
     MatRadioModule,
@@ -42,6 +45,9 @@ import { PagesKabasTasksRoutingModule } from './pages-kabas-tasks-routing.module
     ManageKabasTasksOverviewComponent,
     TaskListItemComponent,
     ManageKabasTasksDetailComponent,
+
+    ManageKabasTasksAddAssigneesComponent,
+
     NewTaskComponent
   ],
   providers: [],
