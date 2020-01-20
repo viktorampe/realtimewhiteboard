@@ -9,7 +9,10 @@ import { map, take } from 'rxjs/operators';
 import { AssigneeTypesEnum } from '../../interfaces/Assignee.interface';
 import { TaskWithAssigneesInterface } from '../../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
-import { NewTaskComponent, NewTaskFormValues } from '../new-task/new-task.component';
+import {
+  NewTaskComponent,
+  NewTaskFormValues
+} from '../new-task/new-task.component';
 
 export enum TaskSortEnum {
   'NAME' = 'NAME',
@@ -123,9 +126,7 @@ export class ManageKabasTasksDetailComponent implements OnInit {
     task: TaskWithAssigneesInterface,
     description: string
   ) {
-    this.viewModel.updateTask(
-      { id: task.id, name: task.name, description }
-    );
+    this.viewModel.updateTask({ id: task.id, name: task.name, description });
   }
 
   public toggleFavorite(task: TaskWithAssigneesInterface) {
