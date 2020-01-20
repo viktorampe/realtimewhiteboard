@@ -159,46 +159,10 @@ export const getTasksWithAssignments = createSelector(
           eduContentAmount: taskEduContentByTask[task.id]
             ? taskEduContentByTask[task.id].length
             : 0,
+          taskEduContents: taskEduContentByTask[task.id],
           assignees: assigneesByTask[task.id] || [],
           isFavorite: favoriteTaskIds.includes(task.id)
         })
       );
-  }
-);
-
-export const getAllTasksWithAssignments = createSelector(
-  [
-    TaskQueries.getAll,
-    LearningAreaQueries.getAllEntities,
-    TaskEduContentQueries.getAllGroupedByTaskId,
-    combinedAssigneesByTask,
-    FavoriteQueries.getByType
-  ],
-  (
-    tasks: TaskInterface[],
-    learningAreaDict: Dictionary<LearningAreaInterface>,
-    taskEduContentByTask: Dictionary<TaskEduContentInterface[]>,
-    assigneesByTask: Dictionary<AssigneeInterface[]>,
-    favoriteTasks: FavoriteInterface[]
-  ) => {
-    const favoriteTaskIds = favoriteTasks.map(fav => fav.taskId);
-    return tasks.map(
-      (task): TaskWithAssigneesInterface => ({
-        ...task,
-        learningArea: learningAreaDict[task.learningAreaId],
-        eduContentAmount: taskEduContentByTask[task.id]
-          ? taskEduContentByTask[task.id].length
-          : 0,
-        assignees: assigneesByTask[task.id] || [],
-        isFavorite: favoriteTaskIds.includes(task.id)
-      })
-    );
-  }
-);
-
-export const getTaskWithAssignmentsById = createSelector(
-  getAllTasksWithAssignments,
-  (tasks, props: { taskId: number }) => {
-    return tasks.find(task => task.id === props.taskId);
   }
 );

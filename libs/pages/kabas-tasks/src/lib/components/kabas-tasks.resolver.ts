@@ -5,6 +5,8 @@ import {
   ClassGroupActions,
   ClassGroupQueries,
   DalState,
+  EduContentActions,
+  EduContentQueries,
   GroupActions,
   GroupQueries,
   LearningAreaActions,
@@ -53,7 +55,8 @@ export class KabasTasksResolver extends StateResolver {
       TaskStudentActions.loadTaskStudents(this.authService.userId),
       new TaskEduContentActions.LoadTaskEduContents({
         userId: this.authService.userId
-      })
+      }),
+      new EduContentActions.LoadEduContents({ userId: this.authService.userId })
     ];
   }
 
@@ -67,7 +70,8 @@ export class KabasTasksResolver extends StateResolver {
       TaskClassGroupQueries.getLoaded,
       TaskGroupQueries.getLoaded,
       TaskStudentQueries.getLoaded,
-      TaskEduContentQueries.getLoaded
+      TaskEduContentQueries.getLoaded,
+      EduContentQueries.getLoaded
     ];
   }
 }

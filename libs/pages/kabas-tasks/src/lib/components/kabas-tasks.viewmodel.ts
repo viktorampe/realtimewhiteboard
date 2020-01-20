@@ -4,6 +4,7 @@ import {
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
   DalState,
+  EduContentQueries,
   EffectFeedback,
   EffectFeedbackActions,
   FavoriteActions,
@@ -20,7 +21,13 @@ import { Update } from '@ngrx/entity';
 import { RouterReducerState } from '@ngrx/router-store';
 import { Action, select, Store } from '@ngrx/store';
 import { combineLatest, Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, shareReplay } from 'rxjs/operators';
+import {
+  distinctUntilChanged,
+  filter,
+  map,
+  shareReplay,
+  switchMap
+} from 'rxjs/operators';
 import {
   AssigneeInterface,
   AssigneeTypesEnum
@@ -100,7 +107,19 @@ export class KabasTasksViewModel {
         return [...digitalTasks, ...paperTasks].find(
           task => task.id === currentTaskParams.id
         );
-      })
+      }),
+      switchMap(task =>
+        this.store
+          .select(EduContentQueries.getByIds, {
+            ids: task.taskEduContents.map(tE => tE.eduContentId)
+          })
+          .pipe(
+            map(eduContents => {
+              task.eduContents = eduContents;
+              return task;
+            })
+          )
+      )
     );
   }
 
