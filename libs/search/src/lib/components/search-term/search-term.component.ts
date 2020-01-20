@@ -1,9 +1,17 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output
+} from '@angular/core';
 
 @Component({
   selector: 'campus-search-term',
   templateUrl: './search-term.component.html',
-  styleUrls: ['./search-term.component.scss']
+  styleUrls: ['./search-term.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SearchTermComponent implements OnInit {
   public currentValue: string;
