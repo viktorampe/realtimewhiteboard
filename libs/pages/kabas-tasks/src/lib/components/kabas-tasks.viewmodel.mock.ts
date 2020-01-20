@@ -286,7 +286,11 @@ export class MockKabasTasksViewModel
     type: 'paper' | 'digital'
   ) {}
 
-  public updateTask(task: TaskInterface, assignees: AssigneeInterface[]) {}
+  public updateTask(task: TaskInterface) {}
+  public updateTaskAccess(
+    task: TaskInterface,
+    assignees: AssigneeInterface[]
+  ) {}
 
   private getCurrentTask(): Observable<TaskWithAssigneesInterface> {
     // return this.paperTasksWithAssignments$.pipe(
