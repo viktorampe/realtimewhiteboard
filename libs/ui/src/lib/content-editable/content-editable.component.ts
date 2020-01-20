@@ -18,7 +18,10 @@ export class ContentEditableComponent {
   private oldText: string;
 
   @Input() text = '';
+  @Input() placeholder = '';
+  @Input() required = true; // default true for backward compatibility
   @Input() relatedItem: any;
+  @Input() icon?: string;
 
   get active() {
     return this._active;
@@ -76,6 +79,6 @@ export class ContentEditableComponent {
   }
 
   textIsValid() {
-    return this.text.trim().length > 0;
+    return !this.required || this.text.trim().length > 0;
   }
 }

@@ -42,10 +42,10 @@ $secondary-bg-color-badge: $color-white-1; //  badge
 $secondary-font-color-badge: $color-white-1; // badge
 
 // app > panel headers
-$tertiary-bg-color: $color-white-1;
+$tertiary-bg-color: $color-gray-2;
 $tertiary-font-color: $color-gray-3;
-$tertiary-bg-color-2: $color-gray-1;
-$tertiary-font-color-2: $color-white-1;
+$tertiary-bg-color-2: $color-white-1;
+$tertiary-font-color-2: $color-gray-3;
 
 // ui > main body
 $ui-primary-bg-color: $primary-bg-color;
@@ -72,6 +72,8 @@ $ui-tertiary-bg-color: $tertiary-bg-color;
 $ui-tertiary-font-color: $tertiary-font-color;
 $ui-tertiary-bg-color-2: $tertiary-bg-color-2;
 $ui-tertiary-font-color-2: $tertiary-font-color-2;
+// ui > panel body
+$ui-side-sheet-font-size: 12px;
 
 // ui > page header
 $ui-page-header-font-size: 20px;
