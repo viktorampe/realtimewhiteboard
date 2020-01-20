@@ -193,11 +193,22 @@ export class TaskEffects {
   updateTask$ = createEffect(() =>
     this.dataPersistence.optimisticUpdate(TasksActionTypes.UpdateTask, {
       run: (action: UpdateTask, state: DalState) => {
-        this.taskService.updateTasks(action.payload.userId, [
-          { ...action.payload.task.changes, id: +action.payload.task.id }
-        ]);
+        return this.taskService
+          .updateTasks(action.payload.userId, [action.payload.task.changes])
+          .pipe(
+            map(update => {
+              return new AddEffectFeedback({
+                effectFeedback: EffectFeedback.generateSuccessFeedback(
+                  this.uuid(),
+                  action,
+                  'De taak werd bijgewerkt.'
+                )
+              });
+            })
+          );
       },
       undoAction: (action: UpdateTask, error: any) => {
+        console.log('undo', error);
         return new AddEffectFeedback({
           effectFeedback: EffectFeedback.generateErrorFeedback(
             this.uuid(),
