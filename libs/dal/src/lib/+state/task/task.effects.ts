@@ -28,6 +28,7 @@ import {
   DeleteTasks,
   LoadTasks,
   NavigateToTaskDetail,
+  NavigateToTasksOverview,
   StartAddTask,
   StartArchiveTasks,
   StartDeleteTasks,
@@ -152,6 +153,9 @@ export class TaskEffects {
                   actions.push(
                     this.getTaskUpdateFeedbackAction(action, message, 'success')
                   );
+                  if (action.payload.navigateAfterDelete) {
+                    actions.push(new NavigateToTasksOverview());
+                  }
                 }
               }
               // show feedback for the ones still in use
@@ -178,6 +182,16 @@ export class TaskEffects {
     })
   );
 
+  redirectToOverview$ = createEffect(
+    () =>
+      this.actions.pipe(
+        ofType(TasksActionTypes.NavigateToTasksOverview),
+        tap((action: NavigateToTasksOverview) => {
+          this.router.navigate(['tasks', 'manage']);
+        })
+      ),
+    { dispatch: false }
+  );
   redirectToTask$ = createEffect(
     () =>
       this.actions.pipe(
