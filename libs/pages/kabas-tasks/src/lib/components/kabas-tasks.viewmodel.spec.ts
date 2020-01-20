@@ -4,6 +4,8 @@ import {
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
   DalState,
+  EduContentFixture,
+  EduContentQueries,
   EffectFeedback,
   EffectFeedbackActions,
   FavoriteActions,
@@ -11,6 +13,8 @@ import {
   getRouterState,
   PersonFixture,
   TaskActions,
+  TaskEduContentFixture,
+  TaskFixture,
   UserQueries
 } from '@campus/dal';
 import { MockDate } from '@campus/testing';
@@ -23,6 +27,7 @@ import {
   TaskWithAssigneesInterface
 } from '../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from './kabas-tasks.viewmodel';
+import { getTasksWithAssignments } from './kabas-tasks.viewmodel.selectors';
 
 describe('KabasTaskViewModel', () => {
   const dateMock = new MockDate();
@@ -360,6 +365,58 @@ describe('KabasTaskViewModel', () => {
       expect(kabasTasksViewModel.currentTaskParams$).toBeObservable(
         hot('a', {
           a: { id: undefined }
+        })
+      );
+    });
+  });
+
+  describe('currentTask$', () => {
+    const currentTaskParams = { id: 1 };
+    const eduContents = [
+      new EduContentFixture({ id: 1 }), // this is the one should be included
+      new EduContentFixture({ id: 2 }),
+      new EduContentFixture({ id: 3 })
+    ];
+
+    const paperTasks = [
+      {
+        ...new TaskFixture({ id: 1, isPaperTask: true }), // this is the current task!!
+        eduContentAmount: 1,
+        assignees: [],
+        taskEduContents: [
+          new TaskEduContentFixture({ id: 1, eduContentId: 1 }) // this eduContent should be included
+        ]
+      }
+    ];
+
+    const digitalTasks = [
+      {
+        ...new TaskFixture({ id: 2, isPaperTask: false }),
+        eduContentAmount: 1,
+        assignees: [],
+        taskEduContents: [new TaskEduContentFixture({ id: 3, eduContentId: 2 })]
+      }
+    ];
+
+    beforeEach(() => {
+      store.overrideSelector(getRouterState, {
+        navigationId: 1,
+        state: {
+          url: '',
+          params: currentTaskParams
+        }
+      });
+      store.overrideSelector(getTasksWithAssignments, [
+        ...paperTasks,
+        ...digitalTasks
+      ]);
+      store.overrideSelector(EduContentQueries.getByIds, [eduContents[0]]);
+    });
+
+    it.only('should return the current task with related eduContents', () => {
+      expect(kabasTasksViewModel.currentTask$).toBeObservable(
+        hot('a', {
+          a: { ...paperTasks[0], eduContents: [eduContents[0]] }
         })
       );
     });

@@ -2,6 +2,7 @@ import {
   ClassGroupQueries,
   FavoriteInterface,
   FavoriteQueries,
+  FavoriteTypesEnum,
   GroupQueries,
   LearningAreaInterface,
   LearningAreaQueries,
@@ -147,7 +148,10 @@ export const getTasksWithAssignments = createSelector(
     taskEduContentByTask: Dictionary<TaskEduContentInterface[]>,
     assigneesByTask: Dictionary<AssigneeInterface[]>,
     favoriteTasks: FavoriteInterface[],
-    props
+    props: {
+      isPaper: boolean;
+      type: FavoriteTypesEnum.TASK;
+    }
   ) => {
     const favoriteTaskIds = favoriteTasks.map(fav => fav.taskId);
     return tasks

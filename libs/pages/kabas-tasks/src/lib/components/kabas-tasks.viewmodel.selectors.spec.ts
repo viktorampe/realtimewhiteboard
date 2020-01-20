@@ -103,6 +103,11 @@ describe('Kabas-tasks viewmodel selectors', () => {
             isFavorite: false
           }),
           eduContentAmount: 3,
+          taskEduContents: [
+            new TaskEduContentFixture({ id: 123, taskId: 1, eduContentId: 1 }),
+            new TaskEduContentFixture({ id: 456, taskId: 1, eduContentId: 2 }),
+            new TaskEduContentFixture({ id: 789, taskId: 1, eduContentId: 3 })
+          ],
           learningArea: new LearningAreaFixture({ name: 'wiskunde' }),
           assignees: [
             {
@@ -159,6 +164,9 @@ describe('Kabas-tasks viewmodel selectors', () => {
             isFavorite: true
           }),
           eduContentAmount: 1,
+          taskEduContents: [
+            new TaskEduContentFixture({ id: 666, taskId: 2, eduContentId: 3 })
+          ],
           learningArea: new LearningAreaFixture({ name: 'wiskunde' }),
           assignees: [
             {
