@@ -26,6 +26,7 @@ import { KabasTasksViewModel } from './kabas-tasks.viewmodel';
 
 describe('KabasTaskViewModel', () => {
   const dateMock = new MockDate();
+  const userId = 1;
   let kabasTasksViewModel: KabasTasksViewModel;
   let store: MockStore<DalState>;
   let authService: AuthServiceInterface;
@@ -38,7 +39,7 @@ describe('KabasTaskViewModel', () => {
       providers: [
         KabasTasksViewModel,
         provideMockStore(),
-        { provide: AUTH_SERVICE_TOKEN, useValue: { userId: 1 } },
+        { provide: AUTH_SERVICE_TOKEN, useValue: { userId } },
         { provide: 'uuid', useValue: () => 'foo' },
         { provide: MAT_DATE_LOCALE, useValue: 'en-US' }
       ]
@@ -318,7 +319,10 @@ describe('KabasTaskViewModel', () => {
 
     it('should call dispatch with all tasks that can be deleted', () => {
       const spy = jest.spyOn(store, 'dispatch');
-      const expected = new TaskActions.DeleteTasks({ ids: [1, 3] });
+      const expected = new TaskActions.StartDeleteTasks({
+        userId,
+        ids: [1, 3]
+      });
 
       kabasTasksViewModel.removeTasks(taskAssignees);
 
