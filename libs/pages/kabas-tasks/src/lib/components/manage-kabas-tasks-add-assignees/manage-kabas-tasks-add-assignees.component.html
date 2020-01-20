@@ -1,14 +1,16 @@
-<campus-search-term
-  placeholder="Filter op assignee"
-  [autoComplete]="false"
-  (valueChange)="updateLabelFilter($event)"
-  [emitOnTextChange]="true"
-></campus-search-term>
-<campus-button
-  (click)="resetFilter()"
-  class="manage-kabas-tasks-overview__reset-filters"
-  iconClass="reset-filters"
-></campus-button>
+<div class="manage-kabas-tasks-add-assignees__filterbar"
+  ><campus-search-term
+    placeholder="Filter op assignee"
+    [autoComplete]="false"
+    (valueChange)="updateLabelFilter($event)"
+    [emitOnTextChange]="true"
+  ></campus-search-term>
+  <campus-button
+    (click)="resetFilter()"
+    class="manage-kabas-tasks-overview__reset-filters"
+    iconClass="reset-filters"
+  ></campus-button
+></div>
 <ng-container *ngIf="filteredAssignees$ | async as filteredAssignees">
   <ng-container *ngIf="filteredAssignees.length; else noResults">
     <mat-selection-list
