@@ -206,7 +206,12 @@ export class KabasTasksViewModel {
     const tasksToRemove = tasks
       .filter(task => this.canBeArchivedOrDeleted(task))
       .map(task => task.id);
-    this.store.dispatch(new TaskActions.DeleteTasks({ ids: tasksToRemove }));
+    this.store.dispatch(
+      new TaskActions.StartDeleteTasks({
+        userId: this.authService.userId,
+        ids: tasksToRemove
+      })
+    );
   }
 
   public toggleFavorite(task: TaskWithAssigneesInterface): void {
