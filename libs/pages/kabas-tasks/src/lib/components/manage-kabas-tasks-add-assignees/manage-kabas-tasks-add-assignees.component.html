@@ -1,0 +1,37 @@
+<div class="manage-kabas-tasks-add-assignees__filterbar"
+  ><campus-search-term
+    placeholder="Filter op assignee"
+    [autoComplete]="false"
+    (valueChange)="updateLabelFilter($event)"
+    [emitOnTextChange]="true"
+  ></campus-search-term>
+  <campus-button
+    (click)="resetFilter()"
+    class="manage-kabas-tasks-overview__reset-filters"
+    iconClass="reset-filters"
+  ></campus-button
+></div>
+<ng-container *ngIf="filteredAssignees$ | async as filteredAssignees">
+  <ng-container *ngIf="filteredAssignees.length; else noResults">
+    <mat-selection-list
+      [class.mat-selection-list--has-selection]="true"
+      class="manage-kabas-tasks-detail__list"
+    >
+      <ng-container *ngFor="let assigneeType of filteredAssignees">
+        <div>{{ assigneeType.label }}</div>
+        <mat-list-option
+          [value]="assignee"
+          *ngFor="let assignee of assigneeType.value"
+          checkboxPosition="before"
+        >
+          {{ assignee.label }}</mat-list-option
+        >
+      </ng-container>
+    </mat-selection-list>
+  </ng-container>
+</ng-container>
+<campus-button primary (click)="addAssignees()">Toevoegen</campus-button>
+
+<ng-template #noResults>
+  <p>De toegepaste filter bevat geen resultaten.</p>
+</ng-template>
