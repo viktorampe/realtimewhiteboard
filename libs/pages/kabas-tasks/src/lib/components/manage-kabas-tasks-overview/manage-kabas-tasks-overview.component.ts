@@ -326,7 +326,7 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
     this.navigateToNew();
   }
   clickAddPaperTask() {
-    this.navigateToNew();
+    this.navigateToNew('paper');
   }
   // TODO: implement handler
   clickDeleteTasks() {
@@ -361,11 +361,18 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
   }
 
   clickNewTask() {
-    this.navigateToNew();
+    const { tab: currentTab } = this.route.snapshot.queryParams;
+    if (!currentTab || +currentTab === 0) {
+      this.navigateToNew('digital');
+    } else {
+      this.navigateToNew('paper');
+    }
   }
 
-  private navigateToNew() {
-    this.router.navigate(['tasks', 'manage', 'new']);
+  private navigateToNew(type: Source = 'digital') {
+    this.router.navigate(['tasks', 'manage', 'new'], {
+      queryParams: { [type]: true }
+    });
   }
 
   clickResetFilters(mode?: string) {
