@@ -1,5 +1,6 @@
 import {
   ClassGroupQueries,
+  EduContentQueries,
   FavoriteInterface,
   FavoriteQueries,
   FavoriteTypesEnum,
@@ -137,7 +138,7 @@ export const allowedLearningAreas = createSelector(
   }
 );
 
-export const getTasksWithAssignments = createSelector(
+export const getAllTasksWithAssignments = createSelector(
   [
     TaskQueries.getAll,
     LearningAreaQueries.getAllEntities,
@@ -152,22 +153,50 @@ export const getTasksWithAssignments = createSelector(
     assigneesByTask: Dictionary<AssigneeInterface[]>,
     favoriteTasks: FavoriteInterface[],
     props: {
-      isPaper: boolean;
       type: FavoriteTypesEnum.TASK;
     }
   ) => {
     const favoriteTaskIds = favoriteTasks.map(fav => fav.taskId);
-    return tasks
-      .filter(task => !!task.isPaperTask === !!props.isPaper)
-      .map(task =>
-        mapToTaskWithAssigneeInterface(
-          task,
-          learningAreaDict[task.learningAreaId],
-          taskEduContentByTask[task.id],
-          assigneesByTask,
-          favoriteTaskIds
-        )
-      );
+    return tasks.map(task =>
+      mapToTaskWithAssigneeInterface(
+        task,
+        learningAreaDict[task.learningAreaId],
+        taskEduContentByTask[task.id],
+        assigneesByTask,
+        favoriteTaskIds
+      )
+    );
+  }
+);
+
+export const getTasksWithAssignmentsByType = createSelector(
+  [getAllTasksWithAssignments],
+  (
+    tasks: TaskWithAssigneesInterface[],
+    props: {
+      isPaper: boolean;
+      type: FavoriteTypesEnum.TASK;
+    }
+  ) => {
+    return tasks.filter(task => !!task.isPaperTask === !!props.isPaper);
+  }
+);
+
+export const getTaskWithAssignmentAndEduContents = createSelector(
+  [getAllTasksWithAssignments, EduContentQueries.getAllEntities],
+  (
+    tasksWithAssignments,
+    eduContents,
+    props: { taskId: number; type: FavoriteTypesEnum.TASK }
+  ) => {
+    const foundTask = tasksWithAssignments.find(
+      task => task.id === props.taskId
+    );
+    foundTask.taskEduContents.forEach(tEdu => {
+      tEdu.eduContent = eduContents[tEdu.eduContentId];
+    });
+
+    return foundTask;
   }
 );
 

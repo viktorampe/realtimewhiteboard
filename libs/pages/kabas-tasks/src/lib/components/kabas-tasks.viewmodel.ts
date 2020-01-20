@@ -4,7 +4,6 @@ import {
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
   DalState,
-  EduContentQueries,
   EffectFeedback,
   EffectFeedbackActions,
   FavoriteActions,
@@ -20,7 +19,7 @@ import {
 import { Update } from '@ngrx/entity';
 import { RouterReducerState } from '@ngrx/router-store';
 import { Action, select, Store } from '@ngrx/store';
-import { combineLatest, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import {
   distinctUntilChanged,
   filter,
@@ -38,7 +37,8 @@ import {
 } from '../interfaces/TaskWithAssignees.interface';
 import {
   allowedLearningAreas,
-  getTasksWithAssignments
+  getTasksWithAssignmentsByType,
+  getTaskWithAssignmentAndEduContents
 } from './kabas-tasks.viewmodel.selectors';
 
 export interface CurrentTaskParams {
@@ -64,7 +64,7 @@ export class KabasTasksViewModel {
     @Inject(MAT_DATE_LOCALE) private dateLocale
   ) {
     this.tasksWithAssignments$ = this.store.pipe(
-      select(getTasksWithAssignments, {
+      select(getTasksWithAssignmentsByType, {
         isPaper: false,
         type: FavoriteTypesEnum.TASK
       }),
@@ -77,7 +77,7 @@ export class KabasTasksViewModel {
     );
 
     this.paperTasksWithAssignments$ = this.store.pipe(
-      select(getTasksWithAssignments, {
+      select(getTasksWithAssignmentsByType, {
         isPaper: true,
         type: FavoriteTypesEnum.TASK
       })
@@ -248,28 +248,15 @@ export class KabasTasksViewModel {
   }
 
   private getCurrentTask(): Observable<TaskWithAssigneesInterface> {
-    return combineLatest([
-      this.currentTaskParams$,
-      this.paperTasksWithAssignments$,
-      this.tasksWithAssignments$
-    ]).pipe(
-      map(([currentTaskParams, digitalTasks, paperTasks]) => {
-        return [...digitalTasks, ...paperTasks].find(
-          task => task.id === currentTaskParams.id
-        );
-      }),
-      switchMap(task =>
-        this.store
-          .select(EduContentQueries.getByIds, {
-            ids: task.taskEduContents.map(tE => tE.eduContentId)
+    return this.currentTaskParams$.pipe(
+      switchMap(currentTaskParams => {
+        return this.store.pipe(
+          select(getTaskWithAssignmentAndEduContents, {
+            taskId: currentTaskParams.id,
+            type: FavoriteTypesEnum.TASK
           })
-          .pipe(
-            map(eduContents => {
-              task.eduContents = eduContents;
-              return task;
-            })
-          )
-      )
+        );
+      })
     );
   }
 
