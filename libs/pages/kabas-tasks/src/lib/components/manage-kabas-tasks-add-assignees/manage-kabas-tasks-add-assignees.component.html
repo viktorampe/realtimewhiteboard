@@ -22,6 +22,7 @@
         <mat-list-option
           [value]="assignee"
           *ngFor="let assignee of assigneeType.value"
+          checkboxPosition="before"
         >
           {{ assignee.label }}</mat-list-option
         >

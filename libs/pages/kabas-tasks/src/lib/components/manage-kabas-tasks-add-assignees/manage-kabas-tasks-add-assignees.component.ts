@@ -4,8 +4,7 @@ import {
   Input,
   OnInit,
   Output,
-  ViewChild,
-  ViewChildren
+  ViewChild
 } from '@angular/core';
 import { MatSelectionList } from '@angular/material';
 import { SearchTermComponent } from '@campus/search';
@@ -34,8 +33,8 @@ interface AssigneesByType {
 export class ManageKabasTasksAddAssigneesComponent implements OnInit {
   public filteredAssignees$: Observable<AssigneesByType[]>;
   public filterState$ = new BehaviorSubject<AddAssigneeFilterState>({});
-  @ViewChildren(MatSelectionList)
-  private selectedAssignees: MatSelectionList[];
+  @ViewChild(MatSelectionList, { static: false })
+  private assigneeList: MatSelectionList;
   @ViewChild(SearchTermComponent, { static: false })
   private searchTermFilter: SearchTermComponent;
   @Input() public students: AssigneeInterface[] = [
@@ -103,7 +102,6 @@ export class ManageKabasTasksAddAssigneesComponent implements OnInit {
 
   public updateLabelFilter(text: string) {
     this.filterState$.next({
-      ...this.filterState$.value,
       label: text
     });
   }
@@ -114,17 +112,14 @@ export class ManageKabasTasksAddAssigneesComponent implements OnInit {
   }
 
   public clearSelection() {
-    this.selectedAssignees.forEach(list => list.selectedOptions.clear());
+    this.assigneeList.selectedOptions.clear();
     this.resetFilter();
   }
 
   addAssignees() {
-    const assignees = this.selectedAssignees.reduce((acc, element) => {
-      return [
-        ...acc,
-        ...element.selectedOptions.selected.map(selection => selection.value)
-      ];
-    }, []);
+    const assignees = this.assigneeList.selectedOptions.selected.map(
+      selection => selection.value
+    );
 
     this.clearSelection();
     this.addedAssignees.emit(assignees);
