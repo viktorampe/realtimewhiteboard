@@ -9,13 +9,35 @@ import { from } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
 import { DalState } from '..';
 import { TaskInterface } from '../../+models';
-import { TaskServiceInterface, TaskUpdateInfoInterface, TASK_SERVICE_TOKEN } from '../../tasks/task.service.interface';
-import { EffectFeedback, EffectFeedbackActions, FeedbackTriggeringAction } from '../effect-feedback';
+import {
+  TaskServiceInterface,
+  TaskUpdateInfoInterface,
+  TASK_SERVICE_TOKEN
+} from '../../tasks/task.service.interface';
+import {
+  EffectFeedback,
+  EffectFeedbackActions,
+  FeedbackTriggeringAction
+} from '../effect-feedback';
 import { AddEffectFeedback } from '../effect-feedback/effect-feedback.actions';
 import { TaskClassGroupActions } from '../task-class-group';
 import { TaskGroupActions } from '../task-group';
 import { TaskStudentActions } from '../task-student';
-import { AddTask, DeleteTasks, LoadTasks, NavigateToTaskDetail, NavigateToTasksOverview, StartAddTask, StartArchiveTasks, StartDeleteTasks, TasksActionTypes, TasksLoaded, TasksLoadError, UpdateAccess, UpdateTasks } from './task.actions';
+import {
+  AddTask,
+  DeleteTasks,
+  LoadTasks,
+  NavigateToTaskDetail,
+  NavigateToTasksOverview,
+  StartAddTask,
+  StartArchiveTasks,
+  StartDeleteTasks,
+  TasksActionTypes,
+  TasksLoaded,
+  TasksLoadError,
+  UpdateAccess,
+  UpdateTasks
+} from './task.actions';
 
 @Injectable()
 export class TaskEffects {
