@@ -35,6 +35,7 @@ import {
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { filter, map, shareReplay, take } from 'rxjs/operators';
 import { AssigneeTypesEnum } from '../../interfaces/Assignee.interface';
+import { Source } from '../../interfaces/Source.type';
 import { TaskWithAssigneesInterface } from '../../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
 
@@ -53,8 +54,6 @@ export enum TaskSortEnum {
   'STARTDATE' = 'STARTDATE',
   'FAVORITE' = 'FAVORITE'
 }
-
-export type Source = 'digital' | 'paper';
 
 @Component({
   selector: 'campus-manage-kabas-tasks-overview',
