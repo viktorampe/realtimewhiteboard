@@ -18,6 +18,8 @@
     &__add-assignees {
       border: 1px solid black;
       padding: 4px;
+      display: flex;
+      flex-direction: column;
 
       &__container {
         margin-bottom: 4px;

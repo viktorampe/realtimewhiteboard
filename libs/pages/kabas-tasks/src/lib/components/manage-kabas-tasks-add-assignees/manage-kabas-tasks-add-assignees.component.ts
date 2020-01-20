@@ -10,10 +10,7 @@ import { MatSelectionList } from '@angular/material';
 import { SearchTermComponent } from '@campus/search';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import {
-  AssigneeInterface,
-  AssigneeTypesEnum
-} from '../../interfaces/Assignee.interface';
+import { AssigneeInterface } from '../../interfaces/Assignee.interface';
 
 interface AddAssigneeFilterState {
   label?: string;
@@ -33,45 +30,17 @@ interface AssigneesByType {
 export class ManageKabasTasksAddAssigneesComponent implements OnInit {
   public filteredAssignees$: Observable<AssigneesByType[]>;
   public filterState$ = new BehaviorSubject<AddAssigneeFilterState>({});
+
+  @Input() public students: AssigneeInterface[] = [];
+  @Input() public groups: AssigneeInterface[] = [];
+  @Input() public classgroups: AssigneeInterface[] = [];
+
+  @Output() addedAssignees = new EventEmitter<AssigneeInterface[]>();
+
   @ViewChild(MatSelectionList, { static: false })
   private assigneeList: MatSelectionList;
   @ViewChild(SearchTermComponent, { static: false })
   private searchTermFilter: SearchTermComponent;
-  @Input() public students: AssigneeInterface[] = [
-    {
-      type: AssigneeTypesEnum.STUDENT,
-      label: 'Anneke',
-      start: new Date(),
-      end: new Date(),
-      id: 1
-    },
-    {
-      type: AssigneeTypesEnum.STUDENT,
-      label: 'Ronny',
-      start: new Date(),
-      end: new Date(),
-      id: 2
-    }
-  ];
-  @Input() public groups: AssigneeInterface[] = [
-    {
-      type: AssigneeTypesEnum.GROUP,
-      label: 'Remediëring 2c',
-      start: new Date(),
-      end: new Date(),
-      id: 2
-    }
-  ];
-  @Input() public classgroups: AssigneeInterface[] = [
-    {
-      type: AssigneeTypesEnum.CLASSGROUP,
-      label: '1A',
-      start: new Date(),
-      end: new Date(),
-      id: 1
-    }
-  ];
-  @Output() addedAssignees = new EventEmitter<AssigneeInterface[]>();
 
   constructor() {}
 

@@ -25,11 +25,17 @@
       >Zoeken</campus-button
     >
 
-    <div
+    <campus-manage-kabas-tasks-add-assignees
       *ngIf="showAddAssignees"
       class="manage-task-assignees__content__add-assignees"
-      (click)="addAssignees([{ type: 'student', label: 'Alfred Jodocus' }])"
-      >Insert assignees by clicking here</div
+      [classgroups]="availableTaskClassGroups$ | async"
+      [groups]="availableTaskGroups$ | async"
+      [students]="availableTaskStudents$ | async"
+      (addedAssignees)="
+        addAssignees([{ type: 'student', label: 'Alfred Jodocus' }])
+      "
+      >Insert assignees by clicking
+      here</campus-manage-kabas-tasks-add-assignees
     >
   </div>
 

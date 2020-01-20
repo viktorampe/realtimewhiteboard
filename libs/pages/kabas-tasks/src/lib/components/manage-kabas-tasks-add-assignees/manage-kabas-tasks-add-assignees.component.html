@@ -15,7 +15,7 @@
   <ng-container *ngIf="filteredAssignees.length; else noResults">
     <mat-selection-list
       [class.mat-selection-list--has-selection]="true"
-      class="manage-kabas-tasks-detail__list"
+      class="manage-kabas-tasks-add-assignees__list"
     >
       <ng-container *ngFor="let assigneeType of filteredAssignees">
         <div>{{ assigneeType.label }}</div>

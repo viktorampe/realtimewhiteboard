@@ -10,7 +10,7 @@ import {
 } from '@campus/dal';
 import { SearchFilterCriteriaInterface } from '@campus/search';
 import { SideSheetComponent } from '@campus/ui';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import {
   AssigneeInterface,
@@ -151,18 +151,26 @@ export class ManageKabasTasksDetailComponent implements OnInit {
 
   private openAssigneeModal() {
     let currentTaskAssignees: AssigneeInterface[];
+    let classGroups: ClassGroupInterface[] = [];
+    let groups: GroupInterface[] = [];
+    let students: PersonInterface[] = [];
 
-    // TODO use currentTaskWithAssignment
-    this.viewModel.tasksWithAssignments$
+    combineLatest([
+      // TODO use currentTaskWithAssignment
+      this.viewModel.tasksWithAssignments$,
+      this.viewModel.classGroups$,
+      this.viewModel.groups$,
+      this.viewModel.students$
+    ])
       .pipe(take(1))
-      .subscribe(tasksWithAssignments => {
-        currentTaskAssignees = tasksWithAssignments[1].assignees;
-      });
-
-    // TODO get actual values from store
-    const classGroups: ClassGroupInterface[] = [];
-    const groups: GroupInterface[] = [];
-    const students: PersonInterface[] = [];
+      .subscribe(
+        ([tasksWithAssignments, allClassGroups, allGroups, allStudents]) => {
+          currentTaskAssignees = tasksWithAssignments[1].assignees;
+          classGroups = allClassGroups;
+          groups = allGroups;
+          students = allStudents;
+        }
+      );
 
     const possibleTaskClassGroups = classGroups.map(cG => ({
       type: AssigneeTypesEnum.CLASSGROUP,

@@ -3,6 +3,8 @@ import { MAT_DATE_LOCALE } from '@angular/material';
 import {
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
+  ClassGroupInterface,
+  ClassGroupQueries,
   DalState,
   EduContentFixture,
   EffectFeedback,
@@ -11,8 +13,12 @@ import {
   FavoriteInterface,
   FavoriteTypesEnum,
   getRouterState,
+  GroupInterface,
+  GroupQueries,
   LearningAreaFixture,
   LearningAreaInterface,
+  LinkedPersonQueries,
+  PersonInterface,
   RouterStateUrl,
   TaskActions,
   TaskClassGroupInterface,
@@ -53,6 +59,10 @@ export class KabasTasksViewModel {
   public currentTask$: Observable<TaskWithAssigneesInterface>;
   public currentTaskParams$: Observable<CurrentTaskParams>;
   public selectableLearningAreas$: Observable<LearningAreaInterface[]>;
+
+  public classGroups$: Observable<ClassGroupInterface[]>;
+  public groups$: Observable<GroupInterface[]>;
+  public students$: Observable<PersonInterface[]>;
 
   private routerState$: Observable<RouterReducerState<RouterStateUrl>>;
 
@@ -97,6 +107,10 @@ export class KabasTasksViewModel {
     this.selectableLearningAreas$ = this.store.pipe(
       select(allowedLearningAreas)
     );
+
+    this.classGroups$ = this.store.pipe(select(ClassGroupQueries.getAll));
+    this.groups$ = this.store.pipe(select(GroupQueries.getAll));
+    this.students$ = this.store.pipe(select(LinkedPersonQueries.getStudents));
   }
 
   public startArchivingTasks(
