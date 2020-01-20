@@ -11,6 +11,7 @@ import {
   getRouterState,
   PersonFixture,
   TaskActions,
+  TaskFixture,
   UserQueries
 } from '@campus/dal';
 import { MockDate } from '@campus/testing';
@@ -18,6 +19,8 @@ import { Store } from '@ngrx/store';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { hot } from 'jasmine-marbles';
 import { configureTestSuite } from 'ng-bullet';
+import { AssigneeFixture } from '../interfaces/Assignee.fixture';
+import { AssigneeTypesEnum } from '../interfaces/Assignee.interface';
 import {
   TaskStatusEnum,
   TaskWithAssigneesInterface
@@ -145,6 +148,51 @@ describe('KabasTaskViewModel', () => {
           task: { name: 'foo', learningAreaId: 123, isPaperTask: true },
           navigateAfterCreate: true,
           userId: currentUser.id
+        })
+      );
+    });
+  });
+
+  describe('updateTask', () => {
+    it('should dispatch an UpdateAction', () => {
+      const spy = jest.spyOn(store, 'dispatch');
+      const task = new TaskFixture();
+      kabasTasksViewModel.updateTask(task);
+
+      expect(spy).toHaveBeenCalledWith(
+        new TaskActions.UpdateTask({
+          userId: authService.userId,
+          task: { id: task.id, changes: { ...task } }
+        })
+      );
+    });
+  });
+
+  describe('updateTaskAccess', () => {
+    it('should dispatch an UpdateAction', () => {
+      const spy = jest.spyOn(store, 'dispatch');
+      const task = new TaskFixture();
+      const taskGroup = new AssigneeFixture({ type: AssigneeTypesEnum.GROUP });
+      const taskStudent = new AssigneeFixture({
+        type: AssigneeTypesEnum.STUDENT
+      });
+      const taskClassGroup = new AssigneeFixture({
+        type: AssigneeTypesEnum.CLASSGROUP
+      });
+
+      kabasTasksViewModel.updateTaskAccess(task, [
+        taskGroup,
+        taskStudent,
+        taskClassGroup
+      ]);
+
+      expect(spy).toHaveBeenCalledWith(
+        new TaskActions.UpdateAccess({
+          userId: authService.userId,
+          taskId: task.id,
+          taskGroups: [taskGroup],
+          taskStudents: [taskStudent],
+          taskClassGroups: [taskClassGroup]
         })
       );
     });
