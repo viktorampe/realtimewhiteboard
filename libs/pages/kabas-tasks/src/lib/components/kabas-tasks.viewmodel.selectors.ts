@@ -167,8 +167,7 @@ export const getTasksWithAssignments = createSelector(
           assigneesByTask,
           favoriteTaskIds
         )
-      )
-      .map(task => addTaskDates(task));
+      );
   }
 );
 
