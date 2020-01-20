@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   Inject,
@@ -59,7 +60,8 @@ export type Source = 'digital' | 'paper';
 @Component({
   selector: 'campus-manage-kabas-tasks-overview',
   templateUrl: './manage-kabas-tasks-overview.component.html',
-  styleUrls: ['./manage-kabas-tasks-overview.component.scss']
+  styleUrls: ['./manage-kabas-tasks-overview.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ManageKabasTasksOverviewComponent implements OnInit {
   public TaskSortEnum = TaskSortEnum;
