@@ -11,13 +11,16 @@ import {
   getRouterState,
   PersonFixture,
   TaskActions,
+  TaskFixture,
   UserQueries
 } from '@campus/dal';
 import { MockDate } from '@campus/testing';
 import { Store } from '@ngrx/store';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import { hot } from '@nrwl/angular/testing';
+import { hot } from 'jasmine-marbles';
 import { configureTestSuite } from 'ng-bullet';
+import { AssigneeFixture } from '../interfaces/Assignee.fixture';
+import { AssigneeTypesEnum } from '../interfaces/Assignee.interface';
 import {
   TaskStatusEnum,
   TaskWithAssigneesInterface
@@ -146,6 +149,51 @@ describe('KabasTaskViewModel', () => {
           task: { name: 'foo', learningAreaId: 123, isPaperTask: true },
           navigateAfterCreate: true,
           userId: currentUser.id
+        })
+      );
+    });
+  });
+
+  describe('updateTask', () => {
+    it('should dispatch an UpdateAction', () => {
+      const spy = jest.spyOn(store, 'dispatch');
+      const task = new TaskFixture();
+      kabasTasksViewModel.updateTask(task);
+
+      expect(spy).toHaveBeenCalledWith(
+        new TaskActions.UpdateTask({
+          userId: authService.userId,
+          task: { id: task.id, changes: { ...task } }
+        })
+      );
+    });
+  });
+
+  describe('updateTaskAccess', () => {
+    it('should dispatch an UpdateAction', () => {
+      const spy = jest.spyOn(store, 'dispatch');
+      const task = new TaskFixture();
+      const taskGroup = new AssigneeFixture({ type: AssigneeTypesEnum.GROUP });
+      const taskStudent = new AssigneeFixture({
+        type: AssigneeTypesEnum.STUDENT
+      });
+      const taskClassGroup = new AssigneeFixture({
+        type: AssigneeTypesEnum.CLASSGROUP
+      });
+
+      kabasTasksViewModel.updateTaskAccess(task, [
+        taskGroup,
+        taskStudent,
+        taskClassGroup
+      ]);
+
+      expect(spy).toHaveBeenCalledWith(
+        new TaskActions.UpdateAccess({
+          userId: authService.userId,
+          taskId: task.id,
+          taskGroups: [taskGroup],
+          taskStudents: [taskStudent],
+          taskClassGroups: [taskClassGroup]
         })
       );
     });
@@ -284,7 +332,7 @@ describe('KabasTaskViewModel', () => {
     });
   });
 
-  describe('deleteTasks', () => {
+  describe('removeTasks', () => {
     let taskAssignees;
     beforeEach(() => {
       taskAssignees = [
@@ -294,9 +342,9 @@ describe('KabasTaskViewModel', () => {
           eduContentAmount: 1,
           assignees: [],
           status: TaskStatusEnum.FINISHED,
-          isPaperTask: false,
-          startDate: new Date(Date.now() - 2000),
-          endDate: new Date(Date.now() - 1000)
+          startDate: new Date(Date.now() - 1000),
+          endDate: new Date(Date.now() - 500),
+          isPaperTask: false
         },
         {
           id: 2,
@@ -304,29 +352,65 @@ describe('KabasTaskViewModel', () => {
           eduContentAmount: 1,
           assignees: [],
           status: TaskStatusEnum.PENDING,
-          isPaperTask: false,
-          startDate: new Date(Date.now() - 2000)
+          startDate: new Date(Date.now() - 1000),
+          endDate: new Date(Date.now() + 1000),
+          isPaperTask: false
         },
         {
           id: 3,
           name: 'Active Task',
           eduContentAmount: 1,
           assignees: [],
+          status: TaskStatusEnum.ACTIVE,
+          startDate: new Date(Date.now() - 1000),
+          endDate: new Date(Date.now() + 1000),
           isPaperTask: false
+        },
+        {
+          id: 3,
+          name: 'Paper Task',
+          eduContentAmount: 1,
+          assignees: [],
+          isPaperTask: true
         }
       ] as TaskWithAssigneesInterface[];
     });
+    /* -- HELPERS -- */
+    const mapToTaskIds = task => task.id;
+    const canDelete = ta =>
+      ta.status === TaskStatusEnum.FINISHED || (!ta.endDate && !ta.startDate);
+    const messages = errors =>
+      errors
+        .map(error => {
+          const activeUntil = error.endDate
+            ? ` Deze taak is nog actief tot ${error.endDate.toLocaleDateString(
+                dateLocale
+              )}.`
+            : '';
+          return `<li>${error.name} kan niet worden verwijderd.${activeUntil}</li>`;
+        })
+        .join('');
 
-    it('should call dispatch with all tasks that can be deleted', () => {
+    it('should dispatch delete when no errors deteted', () => {
       const spy = jest.spyOn(store, 'dispatch');
       const expected = new TaskActions.StartDeleteTasks({
         userId,
         ids: [1, 3]
       });
-
       kabasTasksViewModel.removeTasks(taskAssignees);
-
       expect(spy).toHaveBeenCalledWith(expected);
+    });
+
+    it('should dispatch feedback with userAction when mixed errors and deleteIds', () => {
+      const spy = jest.spyOn(store, 'dispatch');
+      const tasks = taskAssignees.filter(ta => !ta.isPaperTask);
+      const destroyAction = new TaskActions.StartDeleteTasks({
+        userId: authService.userId,
+        ids: tasks.filter(canDelete).map(mapToTaskIds)
+      });
+
+      kabasTasksViewModel.removeTasks(tasks);
+      expect(spy).toHaveBeenCalledWith(destroyAction);
     });
   });
 
@@ -388,6 +472,7 @@ describe('KabasTaskViewModel', () => {
           return `<li>${error.name} kan niet worden gearchiveerd.${activeUntil}</li>`;
         })
         .join('');
+
     describe('archive', () => {
       it('should dispatch update when no errors detected', () => {
         const spy = jest.spyOn(store, 'dispatch');
@@ -401,6 +486,7 @@ describe('KabasTaskViewModel', () => {
         kabasTasksViewModel.startArchivingTasks(tasks, true);
         expect(spy).toHaveBeenCalledWith(updateAction);
       });
+
       it('should dispatch feedback with userActions when mixed errors and updates', () => {
         const spy = jest.spyOn(store, 'dispatch');
         const updates = taskAssignees.filter(ta => !ta.isPaperTask);
@@ -426,6 +512,7 @@ describe('KabasTaskViewModel', () => {
         kabasTasksViewModel.startArchivingTasks(updates, true);
         expect(spy).toHaveBeenCalledWith(feedbackAction);
       });
+
       it('should dispatch feedback without userActions when only errors occurred', () => {
         const spy = jest.spyOn(store, 'dispatch');
         const errors = taskAssignees.filter(ta => !canArchive(ta));
@@ -449,6 +536,7 @@ describe('KabasTaskViewModel', () => {
         expect(spy).toHaveBeenCalledWith(feedbackAction);
       });
     });
+
     describe('dearchive', () => {
       it('should dispatch update, all tasks should pass', () => {
         const spy = jest.spyOn(store, 'dispatch');
