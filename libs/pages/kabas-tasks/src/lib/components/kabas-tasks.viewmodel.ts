@@ -4,7 +4,6 @@ import {
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
   DalState,
-  EduContentFixture,
   EduContentQueries,
   EffectFeedback,
   EffectFeedbackActions,
@@ -12,11 +11,9 @@ import {
   FavoriteInterface,
   FavoriteTypesEnum,
   getRouterState,
-  LearningAreaFixture,
   LearningAreaInterface,
   RouterStateUrl,
   TaskActions,
-  TaskEduContentFixture,
   TaskEduContentInterface,
   TaskInterface
 } from '@campus/dal';
@@ -100,30 +97,6 @@ export class KabasTasksViewModel {
 
     this.selectableLearningAreas$ = this.store.pipe(
       select(allowedLearningAreas)
-    );
-
-    this.currentTask$ = combineLatest([
-      this.currentTaskParams$,
-      this.paperTasksWithAssignments$,
-      this.tasksWithAssignments$
-    ]).pipe(
-      map(([currentTaskParams, digitalTasks, paperTasks]) => {
-        return [...digitalTasks, ...paperTasks].find(
-          task => task.id === currentTaskParams.id
-        );
-      }),
-      switchMap(task =>
-        this.store
-          .select(EduContentQueries.getByIds, {
-            ids: task.taskEduContents.map(tE => tE.eduContentId)
-          })
-          .pipe(
-            map(eduContents => {
-              task.eduContents = eduContents;
-              return task;
-            })
-          )
-      )
     );
   }
 
@@ -275,29 +248,28 @@ export class KabasTasksViewModel {
   }
 
   private getCurrentTask(): Observable<TaskWithAssigneesInterface> {
-    // TODO
-    // return this.paperTasksWithAssignments$.pipe(
-    return this.tasksWithAssignments$.pipe(
-      map(tasks => ({
-        ...tasks[0],
-        taskEduContents: [1, 2, 3].map(
-          id =>
-            new TaskEduContentFixture({
-              eduContentId: id,
-              eduContent: new EduContentFixture(
-                { id },
-                {
-                  id,
-                  title: 'oefening ' + id,
-                  learningArea: new LearningAreaFixture({
-                    id: 1,
-                    name: 'Wiskunde'
-                  })
-                }
-              )
+    return combineLatest([
+      this.currentTaskParams$,
+      this.paperTasksWithAssignments$,
+      this.tasksWithAssignments$
+    ]).pipe(
+      map(([currentTaskParams, digitalTasks, paperTasks]) => {
+        return [...digitalTasks, ...paperTasks].find(
+          task => task.id === currentTaskParams.id
+        );
+      }),
+      switchMap(task =>
+        this.store
+          .select(EduContentQueries.getByIds, {
+            ids: task.taskEduContents.map(tE => tE.eduContentId)
+          })
+          .pipe(
+            map(eduContents => {
+              task.eduContents = eduContents;
+              return task;
             })
-        )
-      }))
+          )
+      )
     );
   }
 
