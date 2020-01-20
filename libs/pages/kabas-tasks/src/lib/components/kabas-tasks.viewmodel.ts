@@ -15,9 +15,12 @@ import {
   LearningAreaInterface,
   RouterStateUrl,
   TaskActions,
+  TaskClassGroupInterface,
   TaskEduContentFixture,
   TaskEduContentInterface,
-  TaskInterface
+  TaskGroupInterface,
+  TaskInterface,
+  TaskStudentInterface
 } from '@campus/dal';
 import { Update } from '@ngrx/entity';
 import { RouterReducerState } from '@ngrx/router-store';
@@ -143,9 +146,9 @@ export class KabasTasksViewModel {
   private getAssigneesByType(
     assignees: AssigneeInterface[]
   ): {
-    taskGroups: AssigneeInterface[];
-    taskStudents: AssigneeInterface[];
-    taskClassGroups: AssigneeInterface[];
+    taskGroups: TaskGroupInterface[];
+    taskStudents: TaskStudentInterface[];
+    taskClassGroups: TaskClassGroupInterface[];
   } {
     const keyMap = this.getAssigneeTypeToKeyMap();
     return assignees.reduce(
