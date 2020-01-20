@@ -309,12 +309,17 @@ describe('KabasTaskViewModel', () => {
       store.overrideSelector(EduContentQueries.getByIds, [eduContents[0]]);
     });
 
-    it.only('should return the current task with related eduContents', () => {
+    it('should return the current task with related eduContents', () => {
+      const selectSpy = jest.spyOn(store, 'select');
       expect(kabasTasksViewModel.currentTask$).toBeObservable(
         hot('a', {
           a: { ...paperTasks[0], eduContents: [eduContents[0]] }
         })
       );
+
+      expect(selectSpy).toHaveBeenCalledWith(EduContentQueries.getByIds, {
+        ids: [1]
+      });
     });
   });
 
