@@ -352,12 +352,10 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
     this.viewModel.removeTasks(this.getSelectedTasks());
   }
 
-  // TODO: implement handler
   clickArchiveTasks() {
     this.viewModel.startArchivingTasks(this.getSelectedTasks(), true);
   }
 
-  // TODO: implement handler
   clickUnarchiveTasks() {
     this.viewModel.startArchivingTasks(this.getSelectedTasks(), false);
   }

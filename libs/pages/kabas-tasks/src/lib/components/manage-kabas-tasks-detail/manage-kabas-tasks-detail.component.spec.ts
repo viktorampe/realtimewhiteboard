@@ -297,4 +297,41 @@ describe('ManageKabasTasksDetailComponent', () => {
       expect(eduContentInfoDE.length).toBe(2);
     });
   });
+
+  describe('update actions', () => {
+    it('should update title when text changed', () => {
+      const titleComponent = fixture.debugElement.query(
+        By.css('.manage-kabas-tasks-detail__info__title')
+      );
+
+      const newText = 'You are more than who you were';
+
+      spyOn(component, 'updateTitle');
+      titleComponent.componentInstance.textChanged.emit(newText);
+
+      expect(component.updateTitle).toHaveBeenCalled();
+      expect(component.updateTitle).toHaveBeenCalledWith(
+        titleComponent.componentInstance.relatedItem,
+        newText
+      );
+    });
+
+    it('should update description when text changed', () => {
+      const descriptionComponent = fixture.debugElement.query(
+        By.css('.manage-kabas-tasks-detail__info__description')
+      );
+
+      const newText = "Time isn't the main thing. It's the only thing.";
+
+      spyOn(component, 'updateDescription');
+
+      descriptionComponent.componentInstance.textChanged.emit(newText);
+
+      expect(component.updateDescription).toHaveBeenCalled();
+      expect(component.updateDescription).toHaveBeenCalledWith(
+        descriptionComponent.componentInstance.relatedItem,
+        newText
+      );
+    });
+  });
 });

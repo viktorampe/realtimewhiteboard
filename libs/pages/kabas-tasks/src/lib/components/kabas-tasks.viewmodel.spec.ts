@@ -29,6 +29,7 @@ import { KabasTasksViewModel } from './kabas-tasks.viewmodel';
 
 describe('KabasTaskViewModel', () => {
   const dateMock = new MockDate();
+  const userId = 1;
   let kabasTasksViewModel: KabasTasksViewModel;
   let store: MockStore<DalState>;
   let authService: AuthServiceInterface;
@@ -41,7 +42,7 @@ describe('KabasTaskViewModel', () => {
       providers: [
         KabasTasksViewModel,
         provideMockStore(),
-        { provide: AUTH_SERVICE_TOKEN, useValue: { userId: 1 } },
+        { provide: AUTH_SERVICE_TOKEN, useValue: { userId } },
         { provide: 'uuid', useValue: () => 'foo' },
         { provide: MAT_DATE_LOCALE, useValue: 'en-US' }
       ]

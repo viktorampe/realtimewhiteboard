@@ -28,10 +28,13 @@ export enum TaskSortEnum {
 export class ManageKabasTasksDetailComponent implements OnInit {
   public TaskSortEnum = TaskSortEnum;
   public diaboloPhaseFilter: SearchFilterCriteriaInterface;
-  public selectedContents$ = new BehaviorSubject<EduContentInterface[]>([]);
-  public task$: Observable<TaskWithAssigneesInterface>;
+
   public isNewTask$: Observable<boolean>;
   public selectableLearningAreas$: Observable<LearningAreaInterface[]>;
+
+  isPaperTask = true; // replace w/ stream
+  public selectedContents$ = new BehaviorSubject<EduContentInterface[]>([]);
+  public task$: Observable<TaskWithAssigneesInterface>;
 
   public assigneeTypesEnum: typeof AssigneeTypesEnum = AssigneeTypesEnum;
 
@@ -133,6 +136,17 @@ export class ManageKabasTasksDetailComponent implements OnInit {
 
   public removeTask(tasks: TaskWithAssigneesInterface) {
     this.viewModel.removeTasks([tasks], true);
+  }
+
+  public updateTitle(task: TaskWithAssigneesInterface, title: string) {
+    this.viewModel.updateTask({ id: task.id, name: title });
+  }
+
+  public updateDescription(
+    task: TaskWithAssigneesInterface,
+    description: string
+  ) {
+    this.viewModel.updateTask({ id: task.id, name: task.name, description });
   }
 
   public toggleFavorite(task: TaskWithAssigneesInterface) {
