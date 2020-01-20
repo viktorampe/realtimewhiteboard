@@ -19,14 +19,8 @@ import {
 import { Update } from '@ngrx/entity';
 import { RouterReducerState } from '@ngrx/router-store';
 import { Action, select, Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
-import {
-  distinctUntilChanged,
-  filter,
-  map,
-  shareReplay,
-  switchMap
-} from 'rxjs/operators';
+import { combineLatest, Observable } from 'rxjs';
+import { distinctUntilChanged, filter, map, shareReplay } from 'rxjs/operators';
 import {
   AssigneeInterface,
   AssigneeTypesEnum
@@ -37,8 +31,7 @@ import {
 } from '../interfaces/TaskWithAssignees.interface';
 import {
   allowedLearningAreas,
-  getTasksWithAssignments,
-  getTaskWithAssignmentsById
+  getTasksWithAssignments
 } from './kabas-tasks.viewmodel.selectors';
 
 export interface CurrentTaskParams {
@@ -98,12 +91,16 @@ export class KabasTasksViewModel {
       select(allowedLearningAreas)
     );
 
-    this.currentTask$ = this.currentTaskParams$.pipe(
-      switchMap(taskParams =>
-        this.store.pipe(
-          select(getTaskWithAssignmentsById, { taskId: taskParams.id })
-        )
-      )
+    this.currentTask$ = combineLatest([
+      this.currentTaskParams$,
+      this.paperTasksWithAssignments$,
+      this.tasksWithAssignments$
+    ]).pipe(
+      map(([currentTaskParams, digitalTasks, paperTasks]) => {
+        return [...digitalTasks, ...paperTasks].find(
+          task => task.id === currentTaskParams.id
+        );
+      })
     );
   }
 
