@@ -12,6 +12,12 @@
     text-overflow: ellipsis;
     display: inline-block;
     overflow: hidden;
+    min-height: 14px;
+
+    &--placeholder {
+      font-style: italic;
+      opacity: 0.8;
+    }
   }
 
   &__form-field {
