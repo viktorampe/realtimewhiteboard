@@ -85,6 +85,15 @@ export const getIsFavoriteEduContent = createSelector(
   }
 );
 
+export const getTaskFavorites = createSelector(
+  selectFavoriteState,
+  (state: State) => {
+    return Object.values(state.entities).filter(
+      value => value.type === FavoriteTypesEnum.TASK
+    );
+  }
+);
+
 /**
  * returns an object with favorites grouped by type, ordered by date descending
  * @example

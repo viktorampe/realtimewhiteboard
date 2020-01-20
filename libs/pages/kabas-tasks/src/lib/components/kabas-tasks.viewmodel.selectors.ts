@@ -3,7 +3,6 @@ import {
   EduContentQueries,
   FavoriteInterface,
   FavoriteQueries,
-  FavoriteTypesEnum,
   GroupQueries,
   LearningAreaInterface,
   LearningAreaQueries,
@@ -144,17 +143,14 @@ export const getAllTasksWithAssignments = createSelector(
     LearningAreaQueries.getAllEntities,
     TaskEduContentQueries.getAllGroupedByTaskId,
     combinedAssigneesByTask,
-    FavoriteQueries.getByType
+    FavoriteQueries.getTaskFavorites
   ],
   (
     tasks: TaskInterface[],
     learningAreaDict: Dictionary<LearningAreaInterface>,
     taskEduContentByTask: Dictionary<TaskEduContentInterface[]>,
     assigneesByTask: Dictionary<AssigneeInterface[]>,
-    favoriteTasks: FavoriteInterface[],
-    props: {
-      type: FavoriteTypesEnum.TASK;
-    }
+    favoriteTasks: FavoriteInterface[]
   ) => {
     const favoriteTaskIds = favoriteTasks.map(fav => fav.taskId);
     return tasks.map(task =>
@@ -175,7 +171,6 @@ export const getTasksWithAssignmentsByType = createSelector(
     tasks: TaskWithAssigneesInterface[],
     props: {
       isPaper: boolean;
-      type: FavoriteTypesEnum.TASK;
     }
   ) => {
     return tasks.filter(task => !!task.isPaperTask === !!props.isPaper);
@@ -184,11 +179,7 @@ export const getTasksWithAssignmentsByType = createSelector(
 
 export const getTaskWithAssignmentAndEduContents = createSelector(
   [getAllTasksWithAssignments, EduContentQueries.getAllEntities],
-  (
-    tasksWithAssignments,
-    eduContents,
-    props: { taskId: number; type: FavoriteTypesEnum.TASK }
-  ) => {
+  (tasksWithAssignments, eduContents, props: { taskId: number }) => {
     const foundTask = tasksWithAssignments.find(
       task => task.id === props.taskId
     );

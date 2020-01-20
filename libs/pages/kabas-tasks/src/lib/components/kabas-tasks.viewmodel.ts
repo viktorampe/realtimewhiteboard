@@ -65,8 +65,7 @@ export class KabasTasksViewModel {
   ) {
     this.tasksWithAssignments$ = this.store.pipe(
       select(getTasksWithAssignmentsByType, {
-        isPaper: false,
-        type: FavoriteTypesEnum.TASK
+        isPaper: false
       }),
       map(tasks =>
         tasks.map(task => ({
@@ -78,8 +77,7 @@ export class KabasTasksViewModel {
 
     this.paperTasksWithAssignments$ = this.store.pipe(
       select(getTasksWithAssignmentsByType, {
-        isPaper: true,
-        type: FavoriteTypesEnum.TASK
+        isPaper: true
       })
     );
 
@@ -252,8 +250,7 @@ export class KabasTasksViewModel {
       switchMap(currentTaskParams => {
         return this.store.pipe(
           select(getTaskWithAssignmentAndEduContents, {
-            taskId: currentTaskParams.id,
-            type: FavoriteTypesEnum.TASK
+            taskId: currentTaskParams.id
           })
         );
       })
