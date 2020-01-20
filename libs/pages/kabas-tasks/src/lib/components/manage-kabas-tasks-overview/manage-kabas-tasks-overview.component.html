@@ -43,7 +43,7 @@
   <mat-tab-group
     [selectedIndex]="currentTab$ | async"
     (selectedIndexChange)="onSelectedTabIndexChanged($event)"
-    (animationDone)="onTabAnimationDone()"
+    animationDuration="0ms"
   >
     <mat-tab label="Digitale taken">
       <div class="manage-kabas-tasks-overview__filterbar">

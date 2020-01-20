@@ -1,6 +1,5 @@
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   Inject,
   OnInit,
@@ -149,7 +148,6 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     @Inject(FILTER_SERVICE_TOKEN) private filterService: FilterServiceInterface,
-    private cd: ChangeDetectorRef,
     private matDialog: MatDialog
   ) {}
 
@@ -390,16 +388,6 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
     this.router.navigate([], {
       queryParams: { tab }
     });
-
-    // needed because tab switching causes
-    // expression changed after view checked
-    // re-attach when animtion is done
-    this.cd.detach();
-  }
-
-  public onTabAnimationDone() {
-    this.cd.reattach();
-    this.cd.detectChanges();
   }
 
   public archivedFilterToggled(data: MatSlideToggleChange, type: Source) {
