@@ -63,13 +63,7 @@ export class KabasTasksViewModel {
       select(getTasksWithAssignments, {
         isPaper: false,
         type: FavoriteTypesEnum.TASK
-      }),
-      map(tasks =>
-        tasks.map(task => ({
-          ...task,
-          isFavorite: task.id % 2 === 0
-        }))
-      )
+      })
     );
 
     this.paperTasksWithAssignments$ = this.store.pipe(
