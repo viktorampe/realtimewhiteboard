@@ -1,6 +1,11 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { AssigneeInterface } from '../../interfaces/Assignee.interface';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import {
+  AssigneeInterface,
+  AssigneeTypesEnum
+} from './../../interfaces/Assignee.interface';
 import { ManageKabasTasksAssigneeDataInterface } from './manage-kabas-tasks-assignee-data.interface';
 
 @Component({
@@ -11,10 +16,13 @@ import { ManageKabasTasksAssigneeDataInterface } from './manage-kabas-tasks-assi
 export class ManageKabasTasksAssigneeModalComponent implements OnInit {
   public showAddAssignees = false;
   public currentTaskName: string;
-  public currentTaskAssignees: AssigneeInterface[];
-  public availableTaskAssignees: AssigneeInterface[];
+  public currentTaskAssignees$: BehaviorSubject<AssigneeInterface[]>;
+  public areCurrentTaskAssigneesValid$: Observable<boolean>;
+  public availableTaskClassGroups$: Observable<AssigneeInterface[]>;
+  public availableTaskGroups$: Observable<AssigneeInterface[]>;
+  public availableTaskStudents$: Observable<AssigneeInterface[]>;
   public default: { start: Date; end: Date };
-  public showAdvancedBoundaries = false;
+  public showAdvanced = false;
 
   constructor(
     @Inject(MAT_DIALOG_DATA)
@@ -23,32 +31,44 @@ export class ManageKabasTasksAssigneeModalComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    // page assignees shouldn't be affected -> clone
-    this.currentTaskAssignees = this.data.currentTaskAssignees.map(cTA => ({
-      ...cTA
-    }));
+    this.determineDefaultDateInterval(this.data.currentTaskAssignees);
+
     this.currentTaskName = this.data.title;
-    this.determineDefaultDateInterval();
-    this.updateAvailableTaskAssignees();
+
+    // page assignees shouldn't be affected -> clone
+    this.currentTaskAssignees$ = new BehaviorSubject(
+      this.data.currentTaskAssignees.map(cTA => ({
+        ...cTA
+      }))
+    );
+
+    this.showAdvanced = !this.currentTaskAssignees$.value.every(cTA =>
+      this.isDefaultDate(cTA.start, cTA.end)
+    );
+
+    this.areCurrentTaskAssigneesValid$ = this.getAreCurrentTaskAssigneesValid$();
+
+    this.availableTaskClassGroups$ = this.getAvailableTaskClassGroups$();
+    this.availableTaskGroups$ = this.getAvailableTaskGroups$();
+    this.availableTaskStudents$ = this.getAvailableTaskStudents$();
   }
 
-  public toggleAdvancedBoundaries() {
-    this.showAdvancedBoundaries = !this.showAdvancedBoundaries;
+  public setShowAdvanced(value) {
+    // switching back to basic view
+    if (!value) {
+      // set all date boundaries to default
+      const currentTaskAssignees = this.currentTaskAssignees$.value;
+      this.setAssignmentDate(currentTaskAssignees, this.default);
+    }
+
+    this.showAdvanced = value;
   }
 
   public setDefaultDateRange(event: { start: Date; end: Date }) {
-    this.currentTaskAssignees
-      .filter(
-        cTA =>
-          cTA.start.getTime() === this.default.start.getTime() &&
-          cTA.end.getTime() === this.default.end.getTime()
-      )
-      .forEach(cTA => {
-        cTA.start = event.start;
-        cTA.end = event.end;
-      });
-
     this.default = event;
+    const taskAssignees = this.currentTaskAssignees$.value;
+
+    this.setAssignmentDate(taskAssignees, this.default);
   }
 
   public toggleAddAssignees() {
@@ -58,75 +78,87 @@ export class ManageKabasTasksAssigneeModalComponent implements OnInit {
   public addAssignees(assignees: AssigneeInterface[]) {
     // TODO event is click, for now
     // TODO use actual input
+    let dateBoundaries;
+
+    if (!this.showAdvanced) {
+      dateBoundaries = this.default;
+    }
 
     const assigneesToAdd = assignees.map(tA => ({
       ...tA,
-      ...this.default
+      ...dateBoundaries
     }));
-    this.currentTaskAssignees.push(...assigneesToAdd);
-    this.updateAvailableTaskAssignees();
+    this.currentTaskAssignees$.next([
+      ...this.currentTaskAssignees$.value,
+      ...assigneesToAdd
+    ]);
   }
 
   public removeAssignee(assignee: AssigneeInterface) {
-    this.currentTaskAssignees = this.currentTaskAssignees.filter(
+    const newCurrentTaskAssignees = this.currentTaskAssignees$.value.filter(
       cTA => cTA !== assignee
     );
-    this.updateAvailableTaskAssignees();
+
+    this.currentTaskAssignees$.next(newCurrentTaskAssignees);
+
+    if (!newCurrentTaskAssignees.length) {
+      this.setShowAdvanced(false);
+    }
   }
 
   public setAssignmentDate(
-    assignee: AssigneeInterface,
-    event: { start: Date; end: Date }
+    assignees: AssigneeInterface[],
+    dateInterval: { start: Date; end: Date }
   ) {
-    assignee.start = event.start;
-    assignee.end = event.end;
-  }
+    const currentTaskAssignees = this.currentTaskAssignees$.value;
+    assignees.forEach(assignee => {
+      Object.assign(assignee, {
+        start: dateInterval.start,
+        end: dateInterval.end
+      });
+    });
 
-  public setDefaultDate(assignee: AssigneeInterface) {
-    Object.assign(assignee, this.default);
+    this.currentTaskAssignees$.next(currentTaskAssignees);
   }
 
   public onOKButtonClick() {
-    this.dialogRef.close(this.currentTaskAssignees);
+    this.dialogRef.close(this.currentTaskAssignees$.value);
   }
 
   public onCancelButtonClick() {
     this.dialogRef.close();
   }
 
-  public isDefaultDate(start: Date, end: Date): boolean {
+  private isDefaultDate(start: Date, end: Date): boolean {
     return (
       start.getTime() === this.default.start.getTime() &&
       end.getTime() === this.default.end.getTime()
     );
   }
 
-  private updateAvailableTaskAssignees() {
-    this.availableTaskAssignees = this.data.possibleTaskAssignees.filter(
-      pTA =>
-        !this.currentTaskAssignees.some(
-          cTA => cTA.relationId === pTA.relationId && cTA.type === pTA.type
-        )
-    );
-  }
-
-  private determineDefaultDateInterval() {
+  private determineDefaultDateInterval(currentTaskAssignees) {
     let start, end;
 
     // no assignees -> rest of schoolyear
-    if (this.currentTaskAssignees.length === 0) {
+    if (currentTaskAssignees.length === 0) {
       const today = new Date();
       const schoolYear = this.getSchoolYearBoundaries(today);
 
       start = today;
       end = schoolYear.end;
     } else {
-      const aggregatedBoundaries = this.aggregateAssigneeBoundaries();
+      const aggregatedBoundaries = this.aggregateAssigneeBoundaries(
+        currentTaskAssignees
+      );
 
       // all assignees use same interval -> use he most frequent (i.e. only) value
       // if differing boundaries -> use the most frequent
       start = aggregatedBoundaries.mostFrequentStartDate;
       end = aggregatedBoundaries.mostFrequentEndDate;
+
+      this.showAdvanced =
+        aggregatedBoundaries.startAmount !== 1 ||
+        aggregatedBoundaries.endAmount !== 1;
     }
 
     this.default = { start, end };
@@ -147,8 +179,8 @@ export class ManageKabasTasksAssigneeModalComponent implements OnInit {
   // reduce taskAssignees to object containing
   // most frequently used start- and endDates
   // amount of unique start- and endDates
-  private aggregateAssigneeBoundaries() {
-    const boundaryFrequencies = this.currentTaskAssignees.reduce(
+  private aggregateAssigneeBoundaries(currentTaskAssignees) {
+    const boundaryFrequencies = currentTaskAssignees.reduce(
       (acc, cTA) => {
         const cTAStartDate = cTA.start.toDateString();
         if (!acc.start[cTAStartDate]) {
@@ -191,5 +223,54 @@ export class ManageKabasTasksAssigneeModalComponent implements OnInit {
     return Object.keys(frequencyDict).sort(
       (date1, date2) => frequencyDict[date2] - frequencyDict[date1]
     )[0];
+  }
+
+  private getAvailableTaskClassGroups$() {
+    return this.currentTaskAssignees$.pipe(
+      map(currentTaskAssignees =>
+        this.data.possibleTaskClassGroups.filter(
+          pTA =>
+            !currentTaskAssignees.some(
+              cTA =>
+                cTA.relationId === pTA.relationId &&
+                cTA.type === AssigneeTypesEnum.CLASSGROUP
+            )
+        )
+      )
+    );
+  }
+  private getAvailableTaskGroups$() {
+    return this.currentTaskAssignees$.pipe(
+      map(currentTaskAssignees =>
+        this.data.possibleTaskGroups.filter(
+          pTA =>
+            !currentTaskAssignees.some(
+              cTA =>
+                cTA.relationId === pTA.relationId &&
+                cTA.type === AssigneeTypesEnum.GROUP
+            )
+        )
+      )
+    );
+  }
+  private getAvailableTaskStudents$() {
+    return this.currentTaskAssignees$.pipe(
+      map(currentTaskAssignees =>
+        this.data.possibleTaskStudents.filter(
+          pTA =>
+            !currentTaskAssignees.some(
+              cTA =>
+                cTA.relationId === pTA.relationId &&
+                cTA.type === AssigneeTypesEnum.STUDENT
+            )
+        )
+      )
+    );
+  }
+
+  private getAreCurrentTaskAssigneesValid$() {
+    return this.currentTaskAssignees$.pipe(
+      map(cTAs => cTAs.every(cTA => cTA.start && cTA.end))
+    );
   }
 }

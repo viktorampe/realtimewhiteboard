@@ -16,6 +16,7 @@ import {
 } from '@angular/forms';
 import { dateTimeRangeValidator } from '@campus/utils';
 import { Subscription } from 'rxjs';
+import { distinctUntilChanged } from 'rxjs/operators';
 
 export interface DateRangeValue {
   start?: Date;
@@ -78,33 +79,8 @@ export class DateRangePickerComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (this.dateRangeForm) {
-      if (changes.initialStartDate) {
-        this.dateRangeForm
-          .get('startDate')
-          .setValue(changes.initialStartDate.currentValue);
-      }
-
-      if (changes.initialStartTime) {
-        this.dateRangeForm
-          .get('startTime')
-          .setValue(changes.initialStartTime.currentValue);
-      }
-
-      if (changes.initialEndDate) {
-        this.dateRangeForm
-          .get('endDate')
-          .setValue(changes.initialEndDate.currentValue);
-      }
-
-      if (changes.initialEndTime) {
-        this.dateRangeForm
-          .get('endTime')
-          .setValue(changes.initialEndTime.currentValue);
-      }
-
       if (changes.requireStart || changes.requireEnd || changes.useTime) {
         const validators = this.getValidators();
-
         this.applyValidators(validators);
       }
     }
@@ -171,13 +147,13 @@ export class DateRangePickerComponent implements OnInit, OnChanges, OnDestroy {
     );
 
     this.subscriptions.add(
-      this.dateRangeForm.valueChanges.subscribe(
-        (values: DateRangeFormValues) => {
+      this.dateRangeForm.valueChanges
+        .pipe(distinctUntilChanged())
+        .subscribe((values: DateRangeFormValues) => {
           if (this.dateRangeForm.valid) {
             this.emitFormValues(values);
           }
-        }
-      )
+        })
     );
   }
 

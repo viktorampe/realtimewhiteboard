@@ -1,8 +1,5 @@
 .manage-task-assignees {
   &__title {
-    &__name {
-    }
-
     &__date-picker {
       padding: 4px;
 
@@ -12,6 +9,7 @@
 
       &__container {
         display: flex;
+        align-items: center;
       }
     }
   }
@@ -28,6 +26,14 @@
 
     &__list {
       min-height: 300px;
+
+      &__header {
+        &__view-toggle {
+          // text-decoration: underline;
+          font-style: italic;
+        }
+      }
+
       &__item {
         height: auto;
         width: 100%;
@@ -39,7 +45,7 @@
           .manage-task-assignees__content__list__item {
             &__action {
               &--show-on-hover {
-                display: none;
+                opacity: 0;
               }
             }
           }
@@ -47,31 +53,23 @@
 
         &__content {
           display: flex;
-          flex-direction: column;
+          flex-direction: row;
           width: 100%;
+          padding: 4px;
+          align-items: center;
+          min-height: 32px;
 
-          &__basic {
-            width: 100%;
-            display: flex;
-            padding: 4px;
-            align-items: center;
-            min-height: 32px;
-
-            & .manage-task-assignees__content__list__item__content__caption {
-              flex: 1 1 25%;
-            }
-            & .manage-task-assignees__content__list__item__content__boundaries {
-              flex: 2 1 25%;
-              font-style: italic;
-            }
+          &__caption {
+            flex: 1 1 25%;
           }
 
-          &__advanced {
-            width: 100%;
-            display: flex;
-            padding: 4px;
-            padding-left: 16px;
-            align-items: center;
+          &__boundaries {
+            flex: 2 1 25%;
+            font-style: italic;
+          }
+
+          &__date-picker {
+            flex: 2 1 25%;
           }
         }
 

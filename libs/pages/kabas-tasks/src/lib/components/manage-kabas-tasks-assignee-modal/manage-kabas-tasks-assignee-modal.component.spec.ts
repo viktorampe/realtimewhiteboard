@@ -12,6 +12,7 @@ import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MockDate, MockMatIconRegistry } from '@campus/testing';
 import { DateRangePickerComponent, UiModule } from '@campus/ui';
+import { hot } from '@nrwl/angular/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { AssigneeTypesEnum } from '../../interfaces/Assignee.interface';
 import { ManageKabasTasksAssigneeDataInterface } from './manage-kabas-tasks-assignee-data.interface';
@@ -158,10 +159,10 @@ describe('ManageKabasTasksAssigneeModalComponent', () => {
         'Toon geavanceerd'
       );
 
-      component.toggleAdvancedBoundaries = jest.fn();
+      component.setShowAdvanced = jest.fn();
       buttonDE.triggerEventHandler('click', null);
 
-      expect(component.toggleAdvancedBoundaries).toHaveBeenCalled();
+      expect(component.setShowAdvanced).toHaveBeenCalled();
     });
 
     it('should show a list of the current assignees', () => {
@@ -205,9 +206,7 @@ describe('ManageKabasTasksAssigneeModalComponent', () => {
 
     it('should not show a list if there are no assignees', () => {
       // remove all assignees
-      component.currentTaskAssignees.forEach(cTA =>
-        component.removeAssignee(cTA)
-      );
+      component.currentTaskAssignees$.next([]);
       fixture.detectChanges();
 
       const matListDE = fixture.debugElement.query(By.directive(MatList));
@@ -223,14 +222,6 @@ describe('ManageKabasTasksAssigneeModalComponent', () => {
   });
 
   describe('public methods', () => {
-    describe('toggleAdvancedBoundaries', () => {
-      it('should toggle', () => {
-        expect(component.showAdvancedBoundaries).toBe(false);
-        component.toggleAdvancedBoundaries();
-        expect(component.showAdvancedBoundaries).toBe(true);
-      });
-    });
-
     describe('setDefaultDateRange', () => {
       const start = new Date(3000, 1, 2);
       const end = new Date(3000, 2, 28);
@@ -242,8 +233,11 @@ describe('ManageKabasTasksAssigneeModalComponent', () => {
       });
 
       it('should update the assignees with the default date boundaries', () => {
-        const assigneesWithDefaults = component.currentTaskAssignees[0];
-        component.setDefaultDate(assigneesWithDefaults);
+        const assigneesWithDefaults = component.currentTaskAssignees$.value[0];
+        component.setAssignmentDate([assigneesWithDefaults], {
+          start: new Date(3000, 0, 1),
+          end: new Date(3000, 0, 1)
+        });
 
         component.setDefaultDateRange({ start, end });
         expect(assigneesWithDefaults.start).toBe(start);
@@ -291,8 +285,8 @@ describe('ManageKabasTasksAssigneeModalComponent', () => {
         component.addAssignees([assigneeToAdd]);
 
         const lastAssignee =
-          component.currentTaskAssignees[
-            component.currentTaskAssignees.length - 1
+          component.currentTaskAssignees$.value[
+            data.currentTaskAssignees.length - 1
           ];
 
         expect(lastAssignee.start).toBe(component.default.start);
@@ -302,13 +296,15 @@ describe('ManageKabasTasksAssigneeModalComponent', () => {
       it('should update the available assignees', () => {
         component.addAssignees([assigneeToAdd]);
 
-        expect(
-          component.availableTaskAssignees.every(
-            aTA =>
-              aTA.type !== assigneeToAdd.type &&
-              aTA.relationId !== assigneeToAdd.relationId
-          )
-        ).toBe(true);
+        expect(component.availableTaskAssignees$).toBeObservable(
+          hot('a', {
+            a: data.possibleTaskAssignees.filter(
+              aTA =>
+                aTA.type !== assigneeToAdd.type &&
+                aTA.relationId !== assigneeToAdd.relationId
+            )
+          })
+        );
       });
     });
 
@@ -317,7 +313,7 @@ describe('ManageKabasTasksAssigneeModalComponent', () => {
         const getMatListOptions = () =>
           fixture.debugElement.queryAll(By.directive(MatListItem));
 
-        const assigneeToRemove = component.currentTaskAssignees[0];
+        const assigneeToRemove = component.currentTaskAssignees$.value[0];
         const lengthBefore = getMatListOptions().length;
 
         component.removeAssignee(assigneeToRemove);
@@ -333,47 +329,27 @@ describe('ManageKabasTasksAssigneeModalComponent', () => {
       });
 
       it('should update the available assignees', () => {
-        const assigneeToRemove = component.currentTaskAssignees[0];
+        const assigneeToRemove = component.currentTaskAssignees$.value[0];
 
         component.removeAssignee(assigneeToRemove);
 
-        expect(
-          component.availableTaskAssignees.some(
-            aTA =>
-              aTA.type === assigneeToRemove.type &&
-              aTA.relationId === assigneeToRemove.relationId
-          )
-        ).toBe(true);
+        expect(component.availableTaskAssignees$).toBeObservable(hot('a'), {
+          a: []
+        });
       });
     });
 
     describe('setAssignmentDate', () => {
       it('should set the assignee date boundaries', () => {
-        const assignee = component.currentTaskAssignees[0];
+        const assignee = component.currentTaskAssignees$.value[0];
         // mocked values dates are in 2020
         const start = new Date(3000, 1, 2);
         const end = new Date(3000, 1, 28);
 
-        component.setAssignmentDate(assignee, { start, end });
+        component.setAssignmentDate([assignee], { start, end });
 
         expect(assignee.start).toBe(start);
         expect(assignee.end).toBe(end);
-      });
-    });
-
-    describe('setDefaultDate', () => {
-      it('should set the taskAssignee start and end date', () => {
-        const assignee = component.currentTaskAssignees[1];
-
-        component.setAssignmentDate(assignee, {
-          start: new Date(3000, 1, 2),
-          end: new Date(3000, 2, 28)
-        });
-
-        component.setDefaultDate(assignee);
-
-        expect(assignee.start).toEqual(component.default.start);
-        expect(assignee.end).toEqual(component.default.end);
       });
     });
 
@@ -384,7 +360,7 @@ describe('ManageKabasTasksAssigneeModalComponent', () => {
 
         component.onOKButtonClick();
         expect(dialogRef.close).toHaveBeenCalledWith(
-          component.currentTaskAssignees
+          component.currentTaskAssignees$.value
         );
       });
     });
@@ -396,20 +372,6 @@ describe('ManageKabasTasksAssigneeModalComponent', () => {
 
         component.onCancelButtonClick();
         expect(dialogRef.close).toHaveBeenCalledWith();
-      });
-    });
-
-    describe('isDefaultDate', () => {
-      it('should determine if an assignee uses the default boundaries', () => {
-        const start = new Date(2020, 1, 2);
-        const end = new Date(2020, 2, 30);
-        component.setDefaultDateRange({ start, end });
-
-        expect(component.isDefaultDate(start, end)).toBe(true);
-
-        expect(component.isDefaultDate(start, start)).toBe(false);
-        expect(component.isDefaultDate(end, end)).toBe(false);
-        expect(component.isDefaultDate(end, start)).toBe(false);
       });
     });
   });
@@ -499,18 +461,17 @@ describe('ManageKabasTasksAssigneeModalComponent', () => {
 
     describe('available assignees', () => {
       it('should only contain values that are not currently selected', () => {
-        expect(component.availableTaskAssignees).toEqual([
-          mockClassGroupAssignee,
-          mockStudentAssignee2
-        ]);
+        expect(component.availableTaskAssignees$).toBeObservable(hot('a'), {
+          a: [mockClassGroupAssignee, mockStudentAssignee2]
+        });
       });
 
       it('should contain all possible assignees', () => {
         component['data'].currentTaskAssignees = [];
         component.ngOnInit();
-        expect(component.availableTaskAssignees).toEqual(
-          data.possibleTaskAssignees
-        );
+        expect(component.availableTaskAssignees$).toBeObservable(hot('a'), {
+          a: data.possibleTaskAssignees
+        });
       });
     });
   });

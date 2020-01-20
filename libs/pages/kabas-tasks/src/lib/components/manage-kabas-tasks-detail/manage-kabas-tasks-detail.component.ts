@@ -109,13 +109,12 @@ export class ManageKabasTasksDetailComponent implements OnInit {
 
   private openAssigneeModal() {
     let currentTaskAssignees: AssigneeInterface[];
-    let possibleTaskAssignees: AssigneeInterface[];
 
     // TODO use currentTaskWithAssignment
     this.viewModel.tasksWithAssignments$
       .pipe(take(1))
       .subscribe(tasksWithAssignments => {
-        currentTaskAssignees = tasksWithAssignments[0].assignees;
+        currentTaskAssignees = tasksWithAssignments[1].assignees;
       });
 
     // TODO get actual values from store
@@ -123,28 +122,30 @@ export class ManageKabasTasksDetailComponent implements OnInit {
     const groups: GroupInterface[] = [];
     const students: PersonInterface[] = [];
 
-    possibleTaskAssignees = [
-      ...classGroups.map(cG => ({
-        type: AssigneeTypesEnum.CLASSGROUP,
-        label: cG.name,
-        relationId: cG.id
-      })),
-      ...groups.map(group => ({
-        type: AssigneeTypesEnum.GROUP,
-        label: group.name,
-        relationId: group.id
-      })),
-      ...students.map(student => ({
-        type: AssigneeTypesEnum.STUDENT,
-        label: student.displayName,
-        relationId: student.id
-      }))
-    ];
+    const possibleTaskClassGroups = classGroups.map(cG => ({
+      type: AssigneeTypesEnum.CLASSGROUP,
+      label: cG.name,
+      relationId: cG.id
+    }));
+
+    const possibleTaskGroups = groups.map(group => ({
+      type: AssigneeTypesEnum.GROUP,
+      label: group.name,
+      relationId: group.id
+    }));
+
+    const possibleTaskStudents = students.map(student => ({
+      type: AssigneeTypesEnum.STUDENT,
+      label: student.displayName,
+      relationId: student.id
+    }));
 
     const data: ManageKabasTasksAssigneeDataInterface = {
-      title: 'Taak naam',
+      title: 'Basic UX design',
       // all available taskAssignees
-      possibleTaskAssignees,
+      possibleTaskClassGroups,
+      possibleTaskGroups,
+      possibleTaskStudents,
 
       // current values in page
       currentTaskAssignees

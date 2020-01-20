@@ -4,7 +4,9 @@ export interface ManageKabasTasksAssigneeDataInterface {
   title: string;
 
   // all possible values, based on store values
-  possibleTaskAssignees: AssigneeInterface[];
+  possibleTaskClassGroups: AssigneeInterface[];
+  possibleTaskGroups: AssigneeInterface[];
+  possibleTaskStudents: AssigneeInterface[];
 
   // current values in page
   currentTaskAssignees: AssigneeInterface[];
