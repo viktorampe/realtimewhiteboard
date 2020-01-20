@@ -187,7 +187,7 @@ describe('ManageKabasTasksDetailComponent', () => {
       component.clickDeleteTask(taskToDelete);
 
       expect(removeTaskSpy).toHaveBeenCalledTimes(1);
-      expect(removeTaskSpy).toHaveBeenCalledWith([taskToDelete]);
+      expect(removeTaskSpy).toHaveBeenCalledWith([taskToDelete], true);
     });
 
     it('should not call vm.removeTasks when the user cancels', () => {
@@ -203,14 +203,6 @@ describe('ManageKabasTasksDetailComponent', () => {
 
       expect(removeTaskSpy).not.toHaveBeenCalled();
     });
-
-    it('should navigate back to the overview if task deleted', fakeAsync(() => {
-      jest.spyOn(router, 'navigate');
-
-      component.removeTask(taskToDelete);
-
-      expect(router.navigate).toHaveBeenCalledWith(['tasks', 'manage']);
-    }));
   });
 
   describe('openNewTaskDialog()', () => {

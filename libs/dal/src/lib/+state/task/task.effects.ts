@@ -9,34 +9,13 @@ import { from } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
 import { DalState } from '..';
 import { TaskInterface } from '../../+models';
-import {
-  TaskServiceInterface,
-  TaskUpdateInfoInterface,
-  TASK_SERVICE_TOKEN
-} from '../../tasks/task.service.interface';
-import {
-  EffectFeedback,
-  EffectFeedbackActions,
-  FeedbackTriggeringAction
-} from '../effect-feedback';
+import { TaskServiceInterface, TaskUpdateInfoInterface, TASK_SERVICE_TOKEN } from '../../tasks/task.service.interface';
+import { EffectFeedback, EffectFeedbackActions, FeedbackTriggeringAction } from '../effect-feedback';
 import { AddEffectFeedback } from '../effect-feedback/effect-feedback.actions';
 import { TaskClassGroupActions } from '../task-class-group';
 import { TaskGroupActions } from '../task-group';
 import { TaskStudentActions } from '../task-student';
-import {
-  AddTask,
-  DeleteTasks,
-  LoadTasks,
-  NavigateToTaskDetail,
-  StartAddTask,
-  StartArchiveTasks,
-  StartDeleteTasks,
-  TasksActionTypes,
-  TasksLoaded,
-  TasksLoadError,
-  UpdateAccess,
-  UpdateTasks
-} from './task.actions';
+import { AddTask, DeleteTasks, LoadTasks, NavigateToTaskDetail, NavigateToTasksOverview, StartAddTask, StartArchiveTasks, StartDeleteTasks, TasksActionTypes, TasksLoaded, TasksLoadError, UpdateAccess, UpdateTasks } from './task.actions';
 
 @Injectable()
 export class TaskEffects {
@@ -152,6 +131,9 @@ export class TaskEffects {
                   actions.push(
                     this.getTaskUpdateFeedbackAction(action, message, 'success')
                   );
+                  if (action.payload.navigateAfterDelete) {
+                    actions.push(new NavigateToTasksOverview());
+                  }
                 }
               }
               // show feedback for the ones still in use
@@ -178,6 +160,16 @@ export class TaskEffects {
     })
   );
 
+  redirectToOverview$ = createEffect(
+    () =>
+      this.actions.pipe(
+        ofType(TasksActionTypes.NavigateToTasksOverview),
+        tap((action: NavigateToTasksOverview) => {
+          this.router.navigate(['tasks', 'manage']);
+        })
+      ),
+    { dispatch: false }
+  );
   redirectToTask$ = createEffect(
     () =>
       this.actions.pipe(

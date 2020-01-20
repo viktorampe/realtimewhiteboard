@@ -127,16 +127,12 @@ export class ManageKabasTasksDetailComponent implements OnInit {
 
     dialogRef
       .afterClosed()
-      .pipe(
-        filter(confirmed => confirmed),
-        take(1)
-      )
+      .pipe(filter(confirmed => confirmed))
       .subscribe(() => this.removeTask(task));
   }
 
   public removeTask(tasks: TaskWithAssigneesInterface) {
-    this.viewModel.removeTasks([tasks]);
-    this.router.navigate(['tasks', 'manage']);
+    this.viewModel.removeTasks([tasks], true);
   }
 
   public toggleFavorite(task: TaskWithAssigneesInterface) {

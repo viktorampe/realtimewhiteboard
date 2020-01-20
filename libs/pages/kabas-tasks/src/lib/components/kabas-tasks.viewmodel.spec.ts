@@ -318,7 +318,10 @@ describe('KabasTaskViewModel', () => {
 
     it('should call dispatch with all tasks that can be deleted', () => {
       const spy = jest.spyOn(store, 'dispatch');
-      const expected = new TaskActions.DeleteTasks({ ids: [1, 3] });
+      const expected = new TaskActions.StartDeleteTasks({
+        ids: [1, 3],
+        userId: authService.userId
+      });
 
       kabasTasksViewModel.removeTasks(taskAssignees);
 

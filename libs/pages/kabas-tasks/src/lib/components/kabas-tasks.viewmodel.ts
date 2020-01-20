@@ -202,11 +202,20 @@ export class KabasTasksViewModel {
     );
   }
 
-  public removeTasks(tasks: TaskWithAssigneesInterface[]): void {
+  public removeTasks(
+    tasks: TaskWithAssigneesInterface[],
+    navigateAfterDelete?: boolean
+  ): void {
     const tasksToRemove = tasks
       .filter(task => this.canBeArchivedOrDeleted(task))
       .map(task => task.id);
-    this.store.dispatch(new TaskActions.DeleteTasks({ ids: tasksToRemove }));
+    this.store.dispatch(
+      new TaskActions.StartDeleteTasks({
+        ids: tasksToRemove,
+        userId: this.authService.userId,
+        navigateAfterDelete
+      })
+    );
   }
 
   public toggleFavorite(task: TaskWithAssigneesInterface): void {
