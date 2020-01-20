@@ -9,10 +9,7 @@ import { map, take } from 'rxjs/operators';
 import { AssigneeTypesEnum } from '../../interfaces/Assignee.interface';
 import { TaskWithAssigneesInterface } from '../../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
-import {
-  NewTaskComponent,
-  NewTaskFormValues
-} from '../new-task/new-task.component';
+import { NewTaskComponent, NewTaskFormValues } from '../new-task/new-task.component';
 
 export enum TaskSortEnum {
   'NAME' = 'NAME',
@@ -119,7 +116,7 @@ export class ManageKabasTasksDetailComponent implements OnInit {
   }
 
   public updateTitle(task: TaskWithAssigneesInterface, title: string) {
-    this.viewModel.updateTask({ id: task.id, name: title }, []);
+    this.viewModel.updateTask({ id: task.id, name: title });
   }
 
   public updateDescription(
@@ -127,8 +124,7 @@ export class ManageKabasTasksDetailComponent implements OnInit {
     description: string
   ) {
     this.viewModel.updateTask(
-      { id: task.id, name: task.name, description },
-      []
+      { id: task.id, name: task.name, description }
     );
   }
 

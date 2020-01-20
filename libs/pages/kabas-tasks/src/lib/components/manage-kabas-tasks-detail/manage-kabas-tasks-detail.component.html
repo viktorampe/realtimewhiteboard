@@ -74,6 +74,8 @@
           [icon]="'edit'"
           (textChanged)="updateTitle(task, $event)"
           data-cy="task-title"
+          [relatedItem]="task"
+          class="manage-kabas-tasks-detail__info__title"
         ></campus-content-editable>
 
         <campus-content-editable
@@ -82,7 +84,9 @@
           [multiline]="true"
           [required]="false"
           [icon]="'edit'"
-          (textChanged)="updateTitle(task, $event)"
+          (textChanged)="updateDescription(task, $event)"
+          [relatedItem]="task"
+          class="manage-kabas-tasks-detail__info__description"
         ></campus-content-editable>
 
         <p>{{ task.learningArea.name }}</p>
