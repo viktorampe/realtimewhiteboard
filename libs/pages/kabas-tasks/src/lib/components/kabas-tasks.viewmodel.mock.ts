@@ -1,12 +1,20 @@
 import { Injectable } from '@angular/core';
 import {
+  EduContentFixture,
   LearningAreaFixture,
   LearningAreaInterface,
-  TaskFixture
+  TaskEduContentFixture,
+  TaskEduContentInterface,
+  TaskFixture,
+  TaskInterface
 } from '@campus/dal';
 import { ViewModelInterface } from '@campus/testing';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { AssigneeTypesEnum } from '../interfaces/Assignee.interface';
+import { map } from 'rxjs/operators';
+import {
+  AssigneeInterface,
+  AssigneeTypesEnum
+} from '../interfaces/Assignee.interface';
 import {
   TaskStatusEnum,
   TaskWithAssigneesInterface
@@ -23,6 +31,7 @@ export class MockKabasTasksViewModel
   implements ViewModelInterface<KabasTasksViewModel> {
   public tasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
   public paperTasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
+  public currentTask$: Observable<TaskWithAssigneesInterface>;
   public currentTaskParams$: Observable<CurrentTaskParams>;
   public selectableLearningAreas$: Observable<LearningAreaInterface[]>;
 
@@ -45,6 +54,8 @@ export class MockKabasTasksViewModel
       })
     );
 
+    // this.currentTask$ = this.paperTasksWithAssignments$.pipe(
+    this.currentTask$ = this.getCurrentTask();
     this.currentTaskParams$ = new BehaviorSubject<CurrentTaskParams>({
       id: 1
     });
@@ -82,6 +93,38 @@ export class MockKabasTasksViewModel
         ...new TaskFixture({ archivedAt: null, archivedYear: null }),
         name: 'Titel van de eerste oefening',
         eduContentAmount: 3,
+        eduContents: [
+          new EduContentFixture(
+            { id: 1 },
+            {
+              id: 1,
+              title: 'oefening 1',
+              learningArea: new LearningAreaFixture({ id: 1, name: 'Wiskunde' })
+            }
+          ),
+          new EduContentFixture(
+            { id: 2 },
+            {
+              id: 2,
+              title: 'oefening 2',
+              learningArea: new LearningAreaFixture({
+                id: 2,
+                name: 'Geschiedenis'
+              })
+            }
+          ),
+          new EduContentFixture(
+            { id: 3 },
+            {
+              id: 3,
+              title: 'oefening 3',
+              learningArea: new LearningAreaFixture({
+                id: 3,
+                name: 'Nederlands'
+              })
+            }
+          )
+        ],
         learningArea: new LearningAreaFixture({ id: 1, name: 'wiskunde' }),
         learningAreaId: 1,
         assignees: [
@@ -120,7 +163,9 @@ export class MockKabasTasksViewModel
             end: nextWeek,
             id: 5
           }
-        ]
+        ],
+        startDate: yesterday,
+        endDate: nextWeek
       },
       //Task runs for all assignees in different timespans
       {
@@ -226,9 +271,9 @@ export class MockKabasTasksViewModel
       }
     ];
   }
-  public setTaskAsArchived(
+  public startArchivingTasks(
     tasks: TaskWithAssigneesInterface[],
-    isArchived: boolean
+    shouldArchive: boolean
   ): void {}
   public removeTasks(tasks: TaskWithAssigneesInterface[]): void {}
   public toggleFavorite(task: TaskWithAssigneesInterface): void {}
@@ -240,4 +285,41 @@ export class MockKabasTasksViewModel
     learningAreaId: number,
     type: 'paper' | 'digital'
   ) {}
+
+  public updateTask(task: TaskInterface) {}
+  public updateTaskAccess(
+    task: TaskInterface,
+    assignees: AssigneeInterface[]
+  ) {}
+
+  private getCurrentTask(): Observable<TaskWithAssigneesInterface> {
+    // return this.paperTasksWithAssignments$.pipe(
+    return this.tasksWithAssignments$.pipe(
+      map(tasks => ({
+        ...tasks[0],
+        taskEduContents: [1, 2, 3].map(
+          id =>
+            new TaskEduContentFixture({
+              eduContentId: id,
+              eduContent: new EduContentFixture(
+                { id },
+                {
+                  id,
+                  title: 'oefening ' + id,
+                  learningArea: new LearningAreaFixture({
+                    id: 1,
+                    name: 'Wiskunde'
+                  })
+                }
+              )
+            })
+        )
+      }))
+    );
+  }
+
+  public updateTaskEduContent(
+    taskEduContents: TaskEduContentInterface[],
+    updatedValues: Partial<TaskEduContentInterface>
+  ): void {}
 }

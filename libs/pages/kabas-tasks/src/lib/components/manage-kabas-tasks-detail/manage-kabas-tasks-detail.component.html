@@ -1,15 +1,13 @@
-<campus-page-bar>
-  <ng-container *ngIf="content.selectedOptions.selected">
-    <ng-container
-      *ngIf="content.selectedOptions.selected.length === 0; else tasksSelected"
-    >
+<campus-page-bar *ngIf="task$ | async as task">
+  <ng-container *ngIf="selectedContents$ | async as selectedContents">
+    <ng-container *ngIf="selectedContents.length === 0; else contentSelected">
       <campus-button
         class="shared-header__contextual__button smallIcon"
         iconClass=""
         ><span>Lesmateriaal toevoegen</span></campus-button
       >
       <campus-button
-        *ngIf="!isPaperTask"
+        *ngIf="!task.isPaperTask"
         class="shared-header__contextual__button smallIcon"
         iconClass="results"
         ><span>Resultaten bekijken</span></campus-button
@@ -20,21 +18,22 @@
         ><span>Doelenmatrix</span></campus-button
       >
       <campus-button
-        *ngIf="isPaperTask"
+        *ngIf="task.isPaperTask"
         class="shared-header__contextual__button smallIcon"
         iconClass=""
         ><span>Print</span></campus-button
       >
     </ng-container>
-    <ng-template #tasksSelected>
+
+    <ng-template #contentSelected>
       <campus-button
-        *ngIf="!isPaperTask && content.selectedOptions.selected.length === 1"
+        *ngIf="!task.isPaperTask && selectedContents.length === 1"
         class="shared-header__contextual__button smallIcon"
         iconClass=""
         ><span>Preview</span></campus-button
       >
       <campus-button
-        *ngIf="isPaperTask"
+        *ngIf="task.isPaperTask"
         class="shared-header__contextual__button smallIcon"
         iconClass=""
         ><span>Print</span></campus-button
@@ -47,64 +46,189 @@
     </ng-template>
   </ng-container>
 </campus-page-bar>
-<div class="manage-kabas-tasks-detail"
-  ><div class="manage-kabas-tasks-detail__container">
-    <div class="manage-kabas-tasks-detail__filterbar">
-      <campus-search-term
-        placeholder="Filter op titel"
-        [autoComplete]="false"
-        [emitOnTextChange]="true"
-      ></campus-search-term>
 
-      <div
-        *ngIf="!isPaperTask"
-        class="manage-kabas-tasks-detail__moetje-toggle"
-      >
-        Moetje
-        <mat-slide-toggle color="primary"> </mat-slide-toggle>
-        Magje
-      </div>
+<ng-template #noTask>Deze taak is niet beschikbaar.</ng-template>
+<campus-side-sheet
+  #taskSidesheet
+  *ngIf="task$ | async as task; else noTask"
+  [isOpenOnInit]="true"
+>
+  <campus-side-sheet-header>
+    <ng-container [ngSwitch]="(selectedContents$ | async)?.length">
+      <ng-container *ngSwitchCase="0">Over deze taak:</ng-container>
+      <ng-container *ngSwitchCase="1">Over deze oefening:</ng-container>
+      <ng-container *ngSwitchDefault>Over deze oefeningen:</ng-container>
+    </ng-container>
+  </campus-side-sheet-header>
 
-      <campus-button-toggle-filter
-        [multiple]="true"
-        [filterCriteria]="diaboloPhaseFilter"
-      >
-      </campus-button-toggle-filter>
-
-      <campus-button
-        class="manage-kabas-tasks-detail__reset-filters"
-        iconClass="reset-filters"
-      ></campus-button>
-    </div>
-
-    <mat-selection-list
-      #content
-      class="manage-kabas-tasks-detail__list"
-      [class.mat-selection-list--has-selection]="
-        !content.selectedOptions.isEmpty()
-      "
+  <campus-side-sheet-body>
+    <div
+      *ngIf="selectedContents$ | async as selectedContents"
+      class="manage-kabas-tasks-detail__info"
     >
-      <mat-list-item class="manage-kabas-tasks-detail__list__primary-action">
-        <mat-icon svgIcon="add"></mat-icon>
-        Lesmateriaal toevoegen aan deze taak
-      </mat-list-item>
-      <ng-container *ngIf="true; else noResults">
-        <mat-list-option
-          #option
-          *ngFor="let i of [].constructor(6)"
-          checkboxPosition="before"
-          [class.mat-list-option--selected]="option.selected"
-        >
-          testje
-        </mat-list-option>
-      </ng-container>
-    </mat-selection-list>
+      <ng-container *ngIf="selectedContents.length === 0; else contentDetails">
+        <campus-content-editable
+          [text]="task.name"
+          [placeholder]="'Titel'"
+          [required]="true"
+          [icon]="'edit'"
+          (textChanged)="updateTitle(task, $event)"
+          data-cy="task-title"
+          [relatedItem]="task"
+          class="manage-kabas-tasks-detail__info__title"
+        ></campus-content-editable>
 
-    <ng-template #noResults>
-      <p>De toegepaste filter bevat geen resultaten.</p>
-    </ng-template>
-  </div>
-  <div class="manage-kabas-tasks-detail__info"
-    >Over deze oefening: dit gaat over de oefening
-  </div>
-</div>
+        <campus-content-editable
+          [text]="task.description"
+          [placeholder]="'Omschrijving'"
+          [multiline]="true"
+          [required]="false"
+          [icon]="'edit'"
+          (textChanged)="updateDescription(task, $event)"
+          [relatedItem]="task"
+          class="manage-kabas-tasks-detail__info__description"
+        ></campus-content-editable>
+
+        <p>{{ task.learningArea.name }}</p>
+        <ng-template #showDates>
+          <p *ngIf="task.startDate"
+            >{{ task.startDate | date: 'dd-MM-yy' }} -
+            {{ task.endDate | date: 'dd-MM-yy' }}</p
+          >
+        </ng-template>
+
+        <div class="manage-kabas-tasks-detail__info__container">
+          <div>
+            <campus-button
+              class="manage-kabas-tasks-detail__info__add-assignees"
+              >+</campus-button
+            >
+            leerlingen toevoegen voor deze taak:
+          </div>
+          <div>
+            <span
+              *ngFor="let assignee of task.assignees"
+              class="manage-kabas-tasks-detail__info__assignee"
+              [matTooltip]="
+                (assignee.start | date: 'dd-MM-yy') +
+                ' - ' +
+                (assignee.end | date: 'dd-MM-yy')
+              "
+              [class.classgroup]="
+                assignee.type === assigneeTypesEnum.CLASSGROUP
+              "
+              [class.group]="assignee.type === assigneeTypesEnum.GROUP"
+              [class.student]="assignee.type === assigneeTypesEnum.STUDENT"
+              >{{ assignee.label }} <mat-icon svgIcon="close"></mat-icon
+            ></span>
+          </div>
+        </div>
+
+        <ng-container *ngIf="task.isPaperTask; else showDates">
+          <campus-button>Print</campus-button>
+        </ng-container>
+        <campus-button primary>+ oefening toevoegen</campus-button>
+        <campus-button danger>verwijder taak</campus-button>
+      </ng-container>
+
+      <ng-template #contentDetails>
+        <div
+          class="manage-kabas-tasks-detail__info__container"
+          *ngFor="let selectedContent of selectedContents"
+          data-cy="educontent-detail"
+        >
+          <ng-container
+            *ngIf="selectedContent.publishedEduContentMetadata as metadata"
+          >
+            <h2>{{ metadata.title }}</h2>
+            <p>{{ metadata.description }}</p>
+            <div>{{ metadata.learningArea.name }}</div>
+            <div *ngIf="metadata.methods" class="list-split">
+              <span *ngFor="let method of metadata.methods">{{
+                method.name
+              }}</span>
+            </div>
+            <campus-button>preview</campus-button>
+          </ng-container>
+        </div>
+
+        <div
+          *ngIf="!task.isPaperTask"
+          class="manage-kabas-tasks-detail__info__container"
+        >
+          <mat-radio-group>
+            <mat-radio-button [value]="true">Moetje</mat-radio-button>
+            <br /><mat-radio-button [value]="false">Magje</mat-radio-button>
+          </mat-radio-group>
+        </div>
+
+        <campus-button danger>verwijder oefeningen</campus-button>
+      </ng-template>
+    </div>
+  </campus-side-sheet-body>
+
+  <campus-side-sheet-page>
+    <div class="manage-kabas-tasks-detail"
+      ><div class="manage-kabas-tasks-detail__container">
+        <div class="manage-kabas-tasks-detail__filterbar">
+          <campus-search-term
+            placeholder="Filter op titel"
+            [autoComplete]="false"
+            [emitOnTextChange]="true"
+          ></campus-search-term>
+
+          <div
+            *ngIf="!task.isPaperTask"
+            class="manage-kabas-tasks-detail__moetje-toggle"
+          >
+            Moetje
+            <mat-slide-toggle color="primary"> </mat-slide-toggle>
+            Magje
+          </div>
+
+          <campus-button-toggle-filter
+            [multiple]="true"
+            [filterCriteria]="diaboloPhaseFilter"
+          >
+          </campus-button-toggle-filter>
+
+          <campus-button
+            class="manage-kabas-tasks-detail__reset-filters"
+            iconClass="reset-filters"
+          ></campus-button>
+        </div>
+
+        <mat-selection-list
+          #taskContent
+          class="manage-kabas-tasks-detail__list"
+          [class.mat-selection-list--has-selection]="
+            !taskContent.selectedOptions.isEmpty()
+          "
+          (selectionChange)="onSelectionChange()"
+        >
+          <mat-list-item
+            class="manage-kabas-tasks-detail__list__primary-action"
+          >
+            <mat-icon svgIcon="add"></mat-icon>
+            Lesmateriaal toevoegen aan deze taak
+          </mat-list-item>
+          <ng-container *ngIf="task.taskEduContents.length; else noResults">
+            <mat-list-option
+              #option
+              *ngFor="let taskEduContent of task.taskEduContents"
+              checkboxPosition="before"
+              [class.mat-list-option--selected]="option.selected"
+              [value]="taskEduContent"
+            >
+              {{ taskEduContent.eduContent.publishedEduContentMetadata.title }}
+            </mat-list-option>
+          </ng-container>
+        </mat-selection-list>
+
+        <ng-template #noResults>
+          <p>De toegepaste filter bevat geen resultaten.</p>
+        </ng-template>
+      </div>
+    </div>
+  </campus-side-sheet-page>
+</campus-side-sheet>

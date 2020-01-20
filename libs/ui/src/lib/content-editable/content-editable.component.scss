@@ -12,6 +12,12 @@
     text-overflow: ellipsis;
     display: inline-block;
     overflow: hidden;
+    min-height: 14px;
+
+    &--placeholder {
+      font-style: italic;
+      opacity: 0.8;
+    }
   }
 
   &__form-field {
@@ -34,6 +40,20 @@
           height: 18px;
         }
       }
+    }
+  }
+
+  &__edit {
+    display: none;
+    cursor: pointer;
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+
+  &:hover {
+    .ui-content-editable__edit {
+      display: block;
     }
   }
 }

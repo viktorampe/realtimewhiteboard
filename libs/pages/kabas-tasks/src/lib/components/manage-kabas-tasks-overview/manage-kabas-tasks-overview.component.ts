@@ -328,7 +328,7 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
   clickAddPaperTask() {
     this.router.navigate(['tasks', 'manage', 'new']);
   }
-  // TODO: implement handler
+
   clickDeleteTasks() {
     const dialogData = {
       title: 'Taken verwijderen',
@@ -352,11 +352,13 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
     this.viewModel.removeTasks(this.getSelectedTasks());
   }
 
-  // TODO: implement handler
-  clickArchiveTasks() {}
+  clickArchiveTasks() {
+    this.viewModel.startArchivingTasks(this.getSelectedTasks(), true);
+  }
 
-  // TODO: implement handler
-  clickUnarchiveTasks() {}
+  clickUnarchiveTasks() {
+    this.viewModel.startArchivingTasks(this.getSelectedTasks(), false);
+  }
 
   // TODO: implement handler
   clickNewTask() {}

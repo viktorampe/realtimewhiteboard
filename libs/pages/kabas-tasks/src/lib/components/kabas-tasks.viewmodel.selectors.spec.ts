@@ -4,6 +4,10 @@ import {
   ClassGroupFixture,
   ClassGroupReducer,
   DalState,
+  FavoriteActions,
+  FavoriteFixture,
+  FavoriteReducer,
+  FavoriteTypesEnum,
   getStoreModuleForFeatures,
   GroupActions,
   GroupFixture,
@@ -33,6 +37,7 @@ import {
   TaskStudentFixture,
   TaskStudentReducer
 } from '@campus/dal';
+import { MockDate } from '@campus/testing';
 import { routerReducer } from '@ngrx/router-store';
 import { Action, select, Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/angular/testing';
@@ -44,6 +49,8 @@ import {
 } from './kabas-tasks.viewmodel.selectors';
 
 describe('Kabas-tasks viewmodel selectors', () => {
+  const dateMock = new MockDate();
+
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [
@@ -66,16 +73,21 @@ describe('Kabas-tasks viewmodel selectors', () => {
           TaskClassGroupReducer,
           TaskGroupReducer,
           TaskStudentReducer,
-          MethodReducer
+          MethodReducer,
+          FavoriteReducer
         ])
       ],
       providers: [Store]
     });
   });
 
+  afterAll(() => {
+    dateMock.returnRealDate();
+  });
+
   describe('Store', () => {
     let store: Store<DalState>;
-    const date = Date.now();
+    const date = new Date().getTime();
 
     beforeEach(() => {
       store = TestBed.get(Store);
@@ -84,14 +96,24 @@ describe('Kabas-tasks viewmodel selectors', () => {
 
     it('should return digital tasksWithAssignments', () => {
       const stream = store.pipe(
-        select(getTasksWithAssignments, { isPaper: false })
+        select(getTasksWithAssignments, {
+          isPaper: false,
+          type: FavoriteTypesEnum.TASK
+        })
       );
 
       const expected = [
         {
-          ...new TaskFixture({ id: 1, name: 'een digitale taak' }),
+          ...new TaskFixture({
+            id: 1,
+            name: 'een digitale taak',
+            isFavorite: false
+          }),
           eduContentAmount: 3,
           learningArea: new LearningAreaFixture({ name: 'wiskunde' }),
+          startDate: new Date(date - 3),
+          endDate: new Date(date + 3),
+          status: 'active',
           assignees: [
             {
               type: AssigneeTypesEnum.CLASSGROUP,
@@ -119,10 +141,14 @@ describe('Kabas-tasks viewmodel selectors', () => {
         {
           ...new TaskFixture({
             id: 3,
-            name: 'een taak zonder assignees of content'
+            name: 'een taak zonder assignees of content',
+            isFavorite: false
           }),
           eduContentAmount: 0,
           learningArea: new LearningAreaFixture({ name: 'wiskunde' }),
+          startDate: undefined,
+          endDate: undefined,
+          status: 'finished',
           assignees: []
         }
       ];
@@ -131,7 +157,10 @@ describe('Kabas-tasks viewmodel selectors', () => {
 
     it('should return paper tasksWithAssignments', () => {
       const stream = store.pipe(
-        select(getTasksWithAssignments, { isPaper: true })
+        select(getTasksWithAssignments, {
+          isPaper: true,
+          type: FavoriteTypesEnum.TASK
+        })
       );
 
       const expected = [
@@ -139,10 +168,14 @@ describe('Kabas-tasks viewmodel selectors', () => {
           ...new TaskFixture({
             id: 2,
             name: 'een taak op dode bomen',
-            isPaperTask: true
+            isPaperTask: true,
+            isFavorite: true
           }),
           eduContentAmount: 1,
           learningArea: new LearningAreaFixture({ name: 'wiskunde' }),
+          startDate: new Date(date - 33),
+          endDate: new Date(date + 33),
+          status: 'active',
           assignees: [
             {
               type: AssigneeTypesEnum.CLASSGROUP,
@@ -200,9 +233,18 @@ function hydrateStore(store, date) {
     getLoadTaskGroupsAction(date),
     getLoadTaskStudentsAction(date),
     getLoadMethodsAction(),
-    getLoadAllowedMethodsAction()
+    getLoadAllowedMethodsAction(),
+    getLoadFavoritesAction()
   ];
   actions.forEach(action => store.dispatch(action));
+}
+
+function getLoadFavoritesAction() {
+  return new FavoriteActions.FavoritesLoaded({
+    favorites: [
+      new FavoriteFixture({ type: FavoriteTypesEnum.TASK, taskId: 2 })
+    ]
+  });
 }
 
 function getLoadTasksAction() {
