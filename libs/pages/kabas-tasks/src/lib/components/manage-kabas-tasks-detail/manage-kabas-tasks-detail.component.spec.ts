@@ -1,6 +1,7 @@
 import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
 import {
   MatDialog,
+  MatDialogRef,
   MatRadioModule,
   MatSelectModule,
   MatSlideToggleModule
@@ -20,10 +21,11 @@ import {
   ENVIRONMENT_TESTING_TOKEN,
   SharedModule
 } from '@campus/shared';
-import { UiModule } from '@campus/ui';
+import { ConfirmationModalComponent, UiModule } from '@campus/ui';
 import { hot } from '@nrwl/angular/testing';
 import { configureTestSuite } from 'ng-bullet';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, of } from 'rxjs';
+import { AssigneeFixture } from '../../interfaces/Assignee.fixture';
 import {
   CurrentTaskParams,
   KabasTasksViewModel
@@ -139,6 +141,67 @@ describe('ManageKabasTasksDetailComponent', () => {
       component.ngOnInit();
 
       expect(component.openNewTaskDialog).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('clickDeleteTask()', () => {
+    let openDialogSpy: jest.SpyInstance;
+    const taskToDelete = {
+      id: 1,
+      name: 'test',
+      eduContentAmount: 0,
+      assignees: [new AssigneeFixture()]
+    };
+
+    beforeEach(() => {
+      openDialogSpy = jest.spyOn(matDialog, 'open');
+    });
+
+    it('should open a confirmation dialog', () => {
+      const mockDialogRef = {
+        afterClosed: () => of(false),
+        close: null
+      } as MatDialogRef<ConfirmationModalComponent>;
+      openDialogSpy.mockReturnValue(mockDialogRef);
+
+      component.clickDeleteTask(taskToDelete);
+
+      expect(openDialogSpy).toHaveBeenCalledTimes(1);
+      expect(openDialogSpy).toHaveBeenCalledWith(ConfirmationModalComponent, {
+        data: {
+          title: 'Taak verwijderen',
+          message: 'Ben je zeker dat je de geselecteerde taak wil verwijderen?'
+        }
+      });
+    });
+
+    it('should call vm.removeTasks when the user confirms', () => {
+      const removeTaskSpy = jest.spyOn(viewModel, 'removeTasks');
+
+      const mockDialogRef = {
+        afterClosed: () => of(true), // fake confirmation
+        close: null
+      } as MatDialogRef<ConfirmationModalComponent>;
+      openDialogSpy.mockReturnValue(mockDialogRef);
+
+      component.clickDeleteTask(taskToDelete);
+
+      expect(removeTaskSpy).toHaveBeenCalledTimes(1);
+      expect(removeTaskSpy).toHaveBeenCalledWith([taskToDelete], true);
+    });
+
+    it('should not call vm.removeTasks when the user cancels', () => {
+      const removeTaskSpy = jest.spyOn(viewModel, 'removeTasks');
+
+      const mockDialogRef = {
+        afterClosed: () => of(false), // fake cancel
+        close: null
+      } as MatDialogRef<ConfirmationModalComponent>;
+      openDialogSpy.mockReturnValue(mockDialogRef);
+
+      component.clickDeleteTask(taskToDelete);
+
+      expect(removeTaskSpy).not.toHaveBeenCalled();
     });
   });
 

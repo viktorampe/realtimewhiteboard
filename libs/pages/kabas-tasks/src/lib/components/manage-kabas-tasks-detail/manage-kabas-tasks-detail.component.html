@@ -128,7 +128,9 @@
           <campus-button>Print</campus-button>
         </ng-container>
         <campus-button primary>+ oefening toevoegen</campus-button>
-        <campus-button danger>verwijder taak</campus-button>
+        <campus-button danger (click)="clickDeleteTask(task)">
+          verwijder taak
+        </campus-button>
       </ng-container>
 
       <ng-template #contentDetails>
