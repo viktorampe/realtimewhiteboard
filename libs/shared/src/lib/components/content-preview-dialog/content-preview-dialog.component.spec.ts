@@ -1,5 +1,3 @@
-//file.only
-
 import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
 import {
   MatDialogModule,
