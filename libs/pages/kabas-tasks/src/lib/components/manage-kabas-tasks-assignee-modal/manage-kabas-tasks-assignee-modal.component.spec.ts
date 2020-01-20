@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import {
   MatDialogModule,
   MatDialogRef,
+  MatIcon,
   MatIconRegistry,
   MatList,
   MatListItem,
@@ -10,13 +11,16 @@ import {
 } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { SearchModule } from '@campus/search';
 import { MockDate, MockMatIconRegistry } from '@campus/testing';
 import { DateRangePickerComponent, UiModule } from '@campus/ui';
 import { hot } from '@nrwl/angular/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { AssigneeTypesEnum } from '../../interfaces/Assignee.interface';
+import { ManageKabasTasksAddAssigneesComponent } from './../manage-kabas-tasks-add-assignees/manage-kabas-tasks-add-assignees.component';
 import { ManageKabasTasksAssigneeDataInterface } from './manage-kabas-tasks-assignee-data.interface';
 import { ManageKabasTasksAssigneeModalComponent } from './manage-kabas-tasks-assignee-modal.component';
+
 describe('ManageKabasTasksAssigneeModalComponent', () => {
   let component: ManageKabasTasksAssigneeModalComponent;
   let fixture: ComponentFixture<ManageKabasTasksAssigneeModalComponent>;
@@ -46,15 +50,14 @@ describe('ManageKabasTasksAssigneeModalComponent', () => {
   };
 
   const data: ManageKabasTasksAssigneeDataInterface = {
-    title: 'Taak naam',
+    title: 'Basic UX design',
     // all available taskAssignees
-    possibleTaskAssignees: [
-      mockClassGroupAssignee,
-      mockGroupAssignee,
-      mockStudentAssignee,
-      mockStudentAssignee2
-    ],
+    possibleTaskClassGroups: [mockClassGroupAssignee],
+    possibleTaskGroups: [mockGroupAssignee],
+    possibleTaskStudents: [mockStudentAssignee, mockStudentAssignee2],
+
     // current values in page
+    // identical start and end dates
     currentTaskAssignees: [
       {
         id: 1,
@@ -64,8 +67,8 @@ describe('ManageKabasTasksAssigneeModalComponent', () => {
       },
       {
         id: 1,
-        start: new Date(2020, 3, 1),
-        end: new Date(2020, 3, 30),
+        start: new Date(2020, 0, 1),
+        end: new Date(2020, 5, 30),
         ...mockGroupAssignee
       }
     ]
@@ -77,7 +80,8 @@ describe('ManageKabasTasksAssigneeModalComponent', () => {
         MatDialogModule,
         UiModule,
         MatNativeDateModule,
-        NoopAnimationsModule
+        NoopAnimationsModule,
+        SearchModule
       ],
       providers: [
         { provide: MAT_DIALOG_DATA, useValue: { ...data } },
@@ -87,7 +91,10 @@ describe('ManageKabasTasksAssigneeModalComponent', () => {
           useClass: MockMatIconRegistry
         }
       ],
-      declarations: [ManageKabasTasksAssigneeModalComponent]
+      declarations: [
+        ManageKabasTasksAssigneeModalComponent,
+        ManageKabasTasksAddAssigneesComponent
+      ]
     });
   });
 
@@ -102,11 +109,12 @@ describe('ManageKabasTasksAssigneeModalComponent', () => {
   });
 
   it('should inject the dialogData', () => {
-    // yes, I know testing privates
-    // but because of ng-bullet, I can't update the injected data
-    // so later on I need to change the values in the component.data directly
-    // so, for certainty -> the injection actually happens
-    expect(component['data']).toEqual(data);
+    expect(component.currentTaskName).toEqual(data.title);
+    expect(component.currentTaskAssignees$.value).toEqual(
+      data.currentTaskAssignees
+    );
+
+    // values of possibleTaskAssignees are checked is separate describe block
   });
 
   describe('UI elements', () => {
@@ -115,61 +123,84 @@ describe('ManageKabasTasksAssigneeModalComponent', () => {
         By.css('.manage-task-assignees__title')
       );
       expect(headerDE.nativeElement.textContent.trim()).toBe(
-        'Voeg leerlingen toe aan de taak'
+        'Basic UX design beheren'
       );
-    });
-
-    it('should show the task name ', () => {
-      const taskNameDE = fixture.debugElement.query(
-        By.css('.manage-task-assignees__title__name')
-      );
-      expect(taskNameDE.nativeElement.textContent.trim()).toBe(data.title);
     });
 
     it('should show a date picker for the default date', () => {
-      const datePicker = fixture.debugElement.query(
-        By.css('.manage-task-assignees__title__date-picker')
-      ).componentInstance as DateRangePickerComponent;
+      const getDatePickerDE = () =>
+        fixture.debugElement.query(
+          By.css('.manage-task-assignees__content__date-picker')
+        );
+
+      const datePicker = getDatePickerDE()
+        .componentInstance as DateRangePickerComponent;
 
       expect(datePicker.initialStartDate).toBe(component.default.start);
       expect(datePicker.initialEndDate).toBe(component.default.end);
       expect(datePicker.useTime).toBe(false);
+
+      // advanced view
+      component.showAdvanced = true;
+      fixture.detectChanges();
+      expect(getDatePickerDE()).toBe(null);
     });
 
-    it('should show a search button', () => {
-      const buttonDE = fixture.debugElement.query(
-        By.css(
-          '.manage-task-assignees__content__add-assignees__container__button'
-        )
+    it('should show an add-assignee icon', () => {
+      const iconDE = fixture.debugElement.query(
+        By.css('.manage-task-assignees__title__action')
       );
-      expect(buttonDE.nativeElement.textContent.trim()).toBe('Zoeken');
+
+      const icon = iconDE.componentInstance as MatIcon;
+      expect(icon.svgIcon).toBe('add');
 
       component.toggleAddAssignees = jest.fn();
-      buttonDE.triggerEventHandler('click', null);
+      iconDE.triggerEventHandler('click', null);
 
       expect(component.toggleAddAssignees).toHaveBeenCalled();
     });
 
-    it('should show a toggle advanced view button', () => {
-      const buttonDE = fixture.debugElement.query(
-        By.css('.manage-task-assignees__content__show-advanced__button')
-      );
+    it('should show a toggle advanced view link', () => {
+      const getLinkDE = () =>
+        fixture.debugElement.query(
+          By.css('.manage-task-assignees__content__header__view-toggle')
+        );
 
-      expect(buttonDE.nativeElement.textContent.trim()).toBe(
-        'Toon geavanceerd'
+      let linkDE = getLinkDE();
+
+      expect(linkDE.nativeElement.textContent.trim()).toBe(
+        '(Gebruik verschillende datums)'
       );
 
       component.setShowAdvanced = jest.fn();
-      buttonDE.triggerEventHandler('click', null);
+      linkDE.triggerEventHandler('click', null);
 
       expect(component.setShowAdvanced).toHaveBeenCalled();
+
+      // advanced view
+      component.showAdvanced = true;
+      fixture.detectChanges();
+
+      linkDE = getLinkDE();
+      expect(linkDE.nativeElement.textContent.trim()).toBe('(Gebruik 1 datum)');
+    });
+
+    it('should show a add assignees list item', () => {
+      const addMatListItem = fixture.debugElement.query(
+        By.css('.manage-task-assignees__content__list__item--add')
+      );
+      expect(addMatListItem.nativeElement.textContent.trim()).toBe(
+        'Deze taak toewijzen...'
+      );
     });
 
     it('should show a list of the current assignees', () => {
       const matListDE = fixture.debugElement.query(By.directive(MatList));
       expect(matListDE).toBeTruthy();
 
-      const matListItemDEs = matListDE.queryAll(By.directive(MatListItem));
+      const [addMatListItem, ...matListItemDEs] = matListDE.queryAll(
+        By.directive(MatListItem)
+      );
       expect(matListItemDEs.length).toBe(data.currentTaskAssignees.length);
       matListItemDEs.forEach((listItemDE, index) =>
         expect(listItemDE.nativeElement.textContent).toContain(
@@ -202,22 +233,6 @@ describe('ManageKabasTasksAssigneeModalComponent', () => {
       buttonDEs[1].triggerEventHandler('click', null);
 
       expect(component.onOKButtonClick).toHaveBeenCalled();
-    });
-
-    it('should not show a list if there are no assignees', () => {
-      // remove all assignees
-      component.currentTaskAssignees$.next([]);
-      fixture.detectChanges();
-
-      const matListDE = fixture.debugElement.query(By.directive(MatList));
-      expect(matListDE).toBeFalsy();
-
-      const noContentDE = fixture.debugElement.query(
-        By.css('.manage-task-assignees__content__list--no-content')
-      );
-      expect(noContentDE.nativeElement.textContent.trim()).toBe(
-        'Er zijn geen items om weer te geven.'
-      );
     });
   });
 
@@ -261,23 +276,47 @@ describe('ManageKabasTasksAssigneeModalComponent', () => {
       });
     });
 
+    describe('setShowAdvanced', () => {
+      it('should set showAdvanced', () => {
+        component.setShowAdvanced(true);
+        expect(component.showAdvanced).toBe(true);
+
+        component.setShowAdvanced(false);
+        expect(component.showAdvanced).toBe(false);
+      });
+
+      it('set to false should reset all assignees to default date values', () => {
+        component.default = {
+          start: new Date(3000, 1, 1),
+          end: new Date(3000, 2, 2)
+        };
+        component.setShowAdvanced(false);
+
+        const expected = data.currentTaskAssignees.map(cTA => ({
+          ...cTA,
+          ...component.default
+        }));
+        expect(component.currentTaskAssignees$).toBeObservable(
+          hot('a', { a: expected })
+        );
+      });
+    });
+
     describe('addAssignees', () => {
       const assigneeToAdd = mockStudentAssignee2;
 
       it('should add the assignees to the list', () => {
-        const getMatListOptions = () =>
-          fixture.debugElement.queryAll(By.directive(MatListItem));
-
-        const lengthBefore = getMatListOptions().length;
+        const currentTaskAssigneesBefore =
+          component.currentTaskAssignees$.value;
 
         component.addAssignees([assigneeToAdd]);
-        fixture.detectChanges();
 
-        const matListOptions = getMatListOptions();
-        const lastMatListOption = matListOptions[matListOptions.length - 1];
-        expect(matListOptions.length).toBe(lengthBefore + 1);
-        expect(lastMatListOption.nativeElement.textContent).toContain(
-          assigneeToAdd.label
+        const expected = [
+          ...currentTaskAssigneesBefore,
+          jasmine.objectContaining(assigneeToAdd)
+        ];
+        expect(component.currentTaskAssignees$).toBeObservable(
+          hot('a', { a: expected })
         );
       });
 
@@ -289,20 +328,16 @@ describe('ManageKabasTasksAssigneeModalComponent', () => {
             data.currentTaskAssignees.length - 1
           ];
 
-        expect(lastAssignee.start).toBe(component.default.start);
-        expect(lastAssignee.end).toBe(component.default.end);
+        expect(lastAssignee.start).toEqual(component.default.start);
+        expect(lastAssignee.end).toEqual(component.default.end);
       });
 
       it('should update the available assignees', () => {
         component.addAssignees([assigneeToAdd]);
 
-        expect(component.availableTaskAssignees$).toBeObservable(
+        expect(component.availableTaskClassGroups$).toBeObservable(
           hot('a', {
-            a: data.possibleTaskAssignees.filter(
-              aTA =>
-                aTA.type !== assigneeToAdd.type &&
-                aTA.relationId !== assigneeToAdd.relationId
-            )
+            a: data.possibleTaskClassGroups
           })
         );
       });
@@ -333,9 +368,20 @@ describe('ManageKabasTasksAssigneeModalComponent', () => {
 
         component.removeAssignee(assigneeToRemove);
 
-        expect(component.availableTaskAssignees$).toBeObservable(hot('a'), {
-          a: []
-        });
+        expect(component.availableTaskStudents$).toBeObservable(
+          hot('a', {
+            a: [mockStudentAssignee, mockStudentAssignee2]
+          })
+        );
+      });
+
+      it('should switch to basic view if the list is empty', () => {
+        component.currentTaskAssignees$.next([mockClassGroupAssignee]);
+        component.showAdvanced = true;
+
+        component.removeAssignee(mockClassGroupAssignee);
+
+        expect(component.showAdvanced).toBe(false);
       });
     });
 
@@ -377,13 +423,11 @@ describe('ManageKabasTasksAssigneeModalComponent', () => {
   });
 
   describe('initial values', () => {
-    beforeEach(() => {
-      // will need to directly manipulate this -> can't affect injected data
-      // makes sure every test is isolated
-      component['data'] = data;
-    });
-
     describe('default boundaries date picker', () => {
+      afterEach(() => {
+        component['data'].currentTaskAssignees = data.currentTaskAssignees;
+      });
+
       const dec31 = new Date(2019, 11, 31);
       const jan1 = new Date(2020, 0, 1);
       const jun30 = new Date(2020, 5, 30);
@@ -446,11 +490,13 @@ describe('ManageKabasTasksAssigneeModalComponent', () => {
 
       testCases.forEach(testCase => {
         it(testCase.it, () => {
+          const mockDate = new MockDate(testCase.today);
+
           component[
             'data'
           ].currentTaskAssignees = testCase.currentTaskAssignees as any;
-          const mockDate = new MockDate(testCase.today);
           component.ngOnInit();
+
           expect(component.default).toEqual(testCase.expected);
 
           // restore everything to normal
@@ -461,22 +507,96 @@ describe('ManageKabasTasksAssigneeModalComponent', () => {
 
     describe('available assignees', () => {
       it('should only contain values that are not currently selected', () => {
-        expect(component.availableTaskAssignees$).toBeObservable(hot('a'), {
-          a: [mockClassGroupAssignee, mockStudentAssignee2]
-        });
+        expect(component.availableTaskClassGroups$).toBeObservable(
+          hot('a', {
+            a: [mockClassGroupAssignee]
+          })
+        );
+        expect(component.availableTaskGroups$).toBeObservable(
+          hot('a', {
+            a: []
+          })
+        );
+        expect(component.availableTaskStudents$).toBeObservable(
+          hot('a', {
+            a: [mockStudentAssignee2]
+          })
+        );
       });
 
       it('should contain all possible assignees', () => {
-        component['data'].currentTaskAssignees = [];
-        component.ngOnInit();
-        expect(component.availableTaskAssignees$).toBeObservable(hot('a'), {
-          a: data.possibleTaskAssignees
-        });
+        component.currentTaskAssignees$.next([]);
+        expect(component.availableTaskClassGroups$).toBeObservable(
+          hot('a', {
+            a: data.possibleTaskClassGroups
+          })
+        );
+        expect(component.availableTaskGroups$).toBeObservable(
+          hot('a', {
+            a: data.possibleTaskGroups
+          })
+        );
+        expect(component.availableTaskStudents$).toBeObservable(
+          hot('a', {
+            a: data.possibleTaskStudents
+          })
+        );
       });
     });
   });
 
   describe('addAssigneeComponent', () => {
-    // TODO
+    beforeEach(() => {
+      component.showAddAssignees = true;
+      fixture.detectChanges();
+    });
+
+    describe('UI elements', () => {
+      it('should show a header ', () => {
+        const headerDE = fixture.debugElement.query(
+          By.css('.manage-task-assignees__title')
+        );
+        expect(headerDE.nativeElement.textContent.trim()).toBe(
+          'Basic UX design toewijzen aan'
+        );
+      });
+
+      it('should show a back icon', () => {
+        const iconDE = fixture.debugElement.query(
+          By.css('.manage-task-assignees__title__action')
+        );
+
+        const icon = iconDE.componentInstance as MatIcon;
+        expect(icon.svgIcon).toBe('arrow-back');
+
+        component.toggleAddAssignees = jest.fn();
+        iconDE.triggerEventHandler('click', null);
+
+        expect(component.toggleAddAssignees).toHaveBeenCalled();
+      });
+    });
+
+    describe('inputs', () => {
+      it('should set inputs', () => {
+        const getAddAssigneeComponentDE = () =>
+          fixture.debugElement.query(
+            By.css('.manage-task-assignees__content__add-assignees')
+          );
+
+        component.currentTaskAssignees$.next([]);
+        fixture.detectChanges();
+
+        const addAssigneesComponent = getAddAssigneeComponentDE()
+          .componentInstance as ManageKabasTasksAddAssigneesComponent;
+
+        expect(addAssigneesComponent.classgroups).toEqual(
+          data.possibleTaskClassGroups
+        );
+        expect(addAssigneesComponent.groups).toEqual(data.possibleTaskGroups);
+        expect(addAssigneesComponent.students).toEqual(
+          data.possibleTaskStudents
+        );
+      });
+    });
   });
 });

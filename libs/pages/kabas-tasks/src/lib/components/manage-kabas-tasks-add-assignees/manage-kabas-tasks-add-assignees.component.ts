@@ -19,7 +19,6 @@ interface AddAssigneeFilterState {
 interface AssigneesByType {
   label: string;
   value: AssigneeInterface[];
-  order: number;
 }
 
 @Component({
@@ -55,13 +54,13 @@ export class ManageKabasTasksAddAssigneesComponent implements OnInit {
         } else {
           return [
             ...(this.classgroups.length
-              ? [{ label: 'Klasgroepen', value: this.classgroups, order: 3 }]
+              ? [{ label: 'Klasgroepen', value: this.classgroups }]
               : []),
             ...(this.groups.length
-              ? [{ label: 'Groepen', value: this.groups, order: 2 }]
+              ? [{ label: 'Groepen', value: this.groups }]
               : []),
             ...(this.students.length
-              ? [{ label: 'Studenten', value: this.students, order: 1 }]
+              ? [{ label: 'Studenten', value: this.students }]
               : [])
           ];
         }
@@ -112,10 +111,8 @@ export class ManageKabasTasksAddAssigneesComponent implements OnInit {
       });
     }
 
-    return [
-      ...(filteredAssignees.length
-        ? [{ label: 'Resultaten', value: filteredAssignees, order: 1 }]
-        : [])
-    ];
+    return filteredAssignees.length
+      ? [{ label: 'Resultaten', value: filteredAssignees }]
+      : [];
   }
 }

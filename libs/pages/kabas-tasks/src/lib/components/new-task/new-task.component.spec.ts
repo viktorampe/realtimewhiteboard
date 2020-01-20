@@ -3,6 +3,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   MatDialogModule,
   MatDialogRef,
+  MatIconRegistry,
   MatInputModule,
   MatRadioModule,
   MatSelectModule,
@@ -12,6 +13,7 @@ import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { LearningAreaFixture } from '@campus/dal';
+import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
 import { configureTestSuite } from 'ng-bullet';
 import { NewTaskComponent } from './new-task.component';
@@ -43,7 +45,8 @@ describe('NewTaskComponent', () => {
       declarations: [NewTaskComponent],
       providers: [
         { provide: MAT_DIALOG_DATA, useValue: mockInjectedData },
-        { provide: MatDialogRef, useValue: { close: jest.fn() } }
+        { provide: MatDialogRef, useValue: { close: jest.fn() } },
+        { provide: MatIconRegistry, useClass: MockMatIconRegistry }
       ]
     });
   });

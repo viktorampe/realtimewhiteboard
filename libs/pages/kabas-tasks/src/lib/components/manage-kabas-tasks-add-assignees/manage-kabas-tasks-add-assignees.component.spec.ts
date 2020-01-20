@@ -1,8 +1,13 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatListModule, MatSelectionList } from '@angular/material';
+import {
+  MatIconRegistry,
+  MatListModule,
+  MatSelectionList
+} from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { SearchModule } from '@campus/search';
+import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
 import { hot } from '@nrwl/angular/testing';
 import { configureTestSuite } from 'ng-bullet';
@@ -15,6 +20,7 @@ import { ManageKabasTasksAddAssigneesComponent } from './manage-kabas-tasks-add-
 describe('AddAssigneeComponent', () => {
   let component: ManageKabasTasksAddAssigneesComponent;
   let fixture: ComponentFixture<ManageKabasTasksAddAssigneesComponent>;
+
   const mockStudents: AssigneeInterface[] = [
     {
       type: AssigneeTypesEnum.STUDENT,
@@ -31,6 +37,7 @@ describe('AddAssigneeComponent', () => {
       id: 2
     }
   ];
+
   const mockGroups: AssigneeInterface[] = [
     {
       type: AssigneeTypesEnum.GROUP,
@@ -40,6 +47,7 @@ describe('AddAssigneeComponent', () => {
       id: 2
     }
   ];
+
   const mockClassgroups: AssigneeInterface[] = [
     {
       type: AssigneeTypesEnum.CLASSGROUP,
@@ -49,11 +57,12 @@ describe('AddAssigneeComponent', () => {
       id: 1
     }
   ];
+
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [UiModule, MatListModule, SearchModule, NoopAnimationsModule],
       declarations: [ManageKabasTasksAddAssigneesComponent],
-      providers: []
+      providers: [{ provide: MatIconRegistry, useClass: MockMatIconRegistry }]
     });
   });
 
@@ -65,6 +74,7 @@ describe('AddAssigneeComponent', () => {
     component.classgroups = mockClassgroups;
     fixture.detectChanges();
   });
+
   it('should create', () => {
     expect(component).toBeTruthy();
   });
@@ -78,8 +88,7 @@ describe('AddAssigneeComponent', () => {
       const expected = [
         {
           label: 'Resultaten',
-          value: [mockStudents[1]],
-          order: 1
+          value: [mockStudents[1]]
         }
       ];
 
@@ -95,19 +104,16 @@ describe('AddAssigneeComponent', () => {
 
       const expected = [
         {
-          label: 'Studenten',
-          value: mockStudents,
-          order: 1
+          label: 'Klasgroepen',
+          value: mockClassgroups
         },
         {
           label: 'Groepen',
-          value: mockGroups,
-          order: 2
+          value: mockGroups
         },
         {
-          label: 'Klasgroepen',
-          value: mockClassgroups,
-          order: 3
+          label: 'Studenten',
+          value: mockStudents
         }
       ];
 
@@ -117,6 +123,7 @@ describe('AddAssigneeComponent', () => {
         })
       );
     });
+
     it('should return empty results if filtertext is not included in a name', () => {
       component.filterState$.next({ label: 'akq' });
 
@@ -129,9 +136,10 @@ describe('AddAssigneeComponent', () => {
       );
     });
   });
+
   describe('emitValues', () => {
     it('should emit the correct values when clicked add', () => {
-      const result = [mockStudents[0]];
+      const result = [mockClassgroups[0]];
 
       const selectionList = fixture.debugElement.query(
         By.css('mat-selection-list')
