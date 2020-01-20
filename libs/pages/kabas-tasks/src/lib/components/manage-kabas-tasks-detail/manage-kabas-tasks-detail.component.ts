@@ -117,8 +117,8 @@ export class ManageKabasTasksDetailComponent implements OnInit {
 
   clickDeleteTask(task: TaskWithAssigneesInterface) {
     const dialogData = {
-      title: 'Taken verwijderen',
-      message: 'Ben je zeker dat je de geselecteerde taken wil verwijderen?'
+      title: 'Taak verwijderen',
+      message: 'Ben je zeker dat je de geselecteerde taak wil verwijderen?'
     };
 
     const dialogRef = this.dialog.open(ConfirmationModalComponent, {
