@@ -159,42 +159,58 @@ export const getTasksWithAssignments = createSelector(
     const favoriteTaskIds = favoriteTasks.map(fav => fav.taskId);
     return tasks
       .filter(task => !!task.isPaperTask === !!props.isPaper)
-      .map(
-        (task): TaskWithAssigneesInterface => ({
-          ...task,
-          learningArea: learningAreaDict[task.learningAreaId],
-          eduContentAmount: taskEduContentByTask[task.id]
-            ? taskEduContentByTask[task.id].length
-            : 0,
-          taskEduContents: taskEduContentByTask[task.id],
-          assignees: assigneesByTask[task.id] || [],
-          isFavorite: favoriteTaskIds.includes(task.id)
-        })
+      .map(task =>
+        mapToTaskWithAssigneeInterface(
+          task,
+          learningAreaDict[task.learningAreaId],
+          taskEduContentByTask[task.id],
+          assigneesByTask,
+          favoriteTaskIds
+        )
       )
-      .map(
-        (taskWithAssignees): TaskWithAssigneesInterface => {
-          const now = new Date();
-          const { assignees } = taskWithAssignees;
-          let status = TaskStatusEnum.FINISHED;
-
-          const maxDate = dates =>
-            dates.length ? new Date(Math.max(...dates)) : undefined;
-          const minDate = dates =>
-            dates.length ? new Date(Math.min(...dates)) : undefined;
-
-          const startDate = minDate(assignees.map(a => +a.start));
-          const endDate = maxDate(assignees.map(a => +a.end));
-
-          if (startDate && endDate) {
-            if (startDate > now) {
-              status = TaskStatusEnum.PENDING;
-            } else if (endDate > now) {
-              status = TaskStatusEnum.ACTIVE;
-            }
-          }
-
-          return { ...taskWithAssignees, startDate, endDate, status };
-        }
-      );
+      .map(task => addTaskDates(task));
   }
 );
+
+function mapToTaskWithAssigneeInterface(
+  task: TaskInterface,
+  learningArea: LearningAreaInterface,
+  taskEduContents: TaskEduContentInterface[],
+  assigneesByTask: Dictionary<AssigneeInterface[]>,
+  favoriteTaskIds: number[]
+): TaskWithAssigneesInterface {
+  return addTaskDates({
+    ...task,
+    learningArea: learningArea,
+    eduContentAmount: taskEduContents ? taskEduContents.length : 0,
+    taskEduContents: taskEduContents,
+    assignees: assigneesByTask[task.id] || [],
+    isFavorite: favoriteTaskIds.includes(task.id)
+  });
+}
+
+function addTaskDates(
+  taskWithAssignees: TaskWithAssigneesInterface
+): TaskWithAssigneesInterface {
+  const now = new Date();
+  const { assignees } = taskWithAssignees;
+  let status = TaskStatusEnum.FINISHED;
+
+  const maxDate = dates =>
+    dates.length ? new Date(Math.max(...dates)) : undefined;
+  const minDate = dates =>
+    dates.length ? new Date(Math.min(...dates)) : undefined;
+
+  const startDate = minDate(assignees.map(a => +a.start));
+  const endDate = maxDate(assignees.map(a => +a.end));
+
+  if (startDate && endDate) {
+    if (startDate > now) {
+      status = TaskStatusEnum.PENDING;
+    } else if (endDate > now) {
+      status = TaskStatusEnum.ACTIVE;
+    }
+  }
+
+  return { ...taskWithAssignees, startDate, endDate, status };
+}
