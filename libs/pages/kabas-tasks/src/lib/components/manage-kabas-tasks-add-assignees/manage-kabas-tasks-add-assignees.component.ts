@@ -1,6 +1,7 @@
 import {
   Component,
   EventEmitter,
+  Input,
   OnInit,
   Output,
   ViewChild,
@@ -37,10 +38,7 @@ export class ManageKabasTasksAddAssigneesComponent implements OnInit {
   private selectedAssignees: MatSelectionList[];
   @ViewChild(SearchTermComponent, { static: false })
   private searchTermFilter: SearchTermComponent;
-  @Output() addedAssignees = new EventEmitter<AssigneeInterface[]>();
-
-  //test data must be replaced w/ inputs
-  students: AssigneeInterface[] = [
+  @Input() public students: AssigneeInterface[] = [
     {
       type: AssigneeTypesEnum.STUDENT,
       label: 'Anneke',
@@ -56,7 +54,7 @@ export class ManageKabasTasksAddAssigneesComponent implements OnInit {
       id: 2
     }
   ];
-  groups: AssigneeInterface[] = [
+  @Input() public groups: AssigneeInterface[] = [
     {
       type: AssigneeTypesEnum.GROUP,
       label: 'Remediëring 2c',
@@ -65,7 +63,7 @@ export class ManageKabasTasksAddAssigneesComponent implements OnInit {
       id: 2
     }
   ];
-  classgroups: AssigneeInterface[] = [
+  @Input() public classgroups: AssigneeInterface[] = [
     {
       type: AssigneeTypesEnum.CLASSGROUP,
       label: '1A',
@@ -74,6 +72,7 @@ export class ManageKabasTasksAddAssigneesComponent implements OnInit {
       id: 1
     }
   ];
+  @Output() addedAssignees = new EventEmitter<AssigneeInterface[]>();
 
   constructor() {}
 
