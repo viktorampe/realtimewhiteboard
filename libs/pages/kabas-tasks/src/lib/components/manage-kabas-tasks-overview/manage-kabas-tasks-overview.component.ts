@@ -328,7 +328,7 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
   clickAddPaperTask() {
     this.router.navigate(['tasks', 'manage', 'new']);
   }
-  // TODO: implement handler
+
   clickDeleteTasks() {
     const dialogData = {
       title: 'Taken verwijderen',
