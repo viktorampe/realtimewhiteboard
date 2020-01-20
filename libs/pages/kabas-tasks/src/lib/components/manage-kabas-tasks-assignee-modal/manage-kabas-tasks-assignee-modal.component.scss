@@ -5,6 +5,14 @@
 
     &__date-picker {
       padding: 4px;
+
+      &__label {
+        align-self: center;
+      }
+
+      &__container {
+        display: flex;
+      }
     }
   }
 

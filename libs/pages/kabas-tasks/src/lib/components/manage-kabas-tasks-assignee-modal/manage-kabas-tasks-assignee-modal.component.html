@@ -1,15 +1,20 @@
 <h2 mat-dialog-title class="manage-task-assignees__title"
-  >Voeg leerlingen toe aan de taak</h2
+  >Deze taak is toegewezen aan</h2
 >
 <div>
   <div class="manage-task-assignees__title__name">{{ currentTaskName }}</div>
-  <campus-date-range-picker
-    class="manage-task-assignees__title__date-picker"
-    [useTime]="false"
-    [initialStartDate]="default.start"
-    [initialEndDate]="default.end"
-    (valueChanged)="setDefaultDateRange($event)"
-  ></campus-date-range-picker>
+  <div class="manage-task-assignees__title__date-picker__container">
+    <div class="manage-task-assignees__title__date-picker__label"
+      >Standaard datum</div
+    >
+    <campus-date-range-picker
+      class="manage-task-assignees__title__date-picker"
+      [useTime]="false"
+      [initialStartDate]="default.start"
+      [initialEndDate]="default.end"
+      (valueChanged)="setDefaultDateRange($event)"
+    ></campus-date-range-picker>
+  </div>
 </div>
 
 <mat-dialog-content class="manage-task-assignees__content">
@@ -52,14 +57,18 @@
               class="manage-task-assignees__content__list__item__content__caption"
               >{{ assignee.type }} - {{ assignee.label }}</div
             >
-            <div
-              *ngIf="
-                !showAdvancedBoundaries &&
-                !isDefaultDate(assignee.start, assignee.end)
-              "
-              class="manage-task-assignees__content__list__item__content__boundaries"
-              >{{ assignee.start | date }} - {{ assignee.end | date }}</div
-            >
+            <ng-container *ngIf="!showAdvancedBoundaries">
+              <div
+                *ngIf="isDefaultDate(assignee.start, assignee.end)"
+                class="manage-task-assignees__content__list__item__content__boundaries"
+                >standaard datum</div
+              >
+              <div
+                *ngIf="!isDefaultDate(assignee.start, assignee.end)"
+                class="manage-task-assignees__content__list__item__content__boundaries"
+                >{{ assignee.start | date }} - {{ assignee.end | date }}</div
+              >
+            </ng-container>
             <mat-icon
               class="manage-task-assignees__content__list__item__action
           manage-task-assignees__content__list__item__action--show-on-hover"
