@@ -10,7 +10,7 @@ import { MatSelectionList } from '@angular/material';
 import { SearchTermComponent } from '@campus/search';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { AssigneeInterface } from '../../interfaces/Assignee.interface';
+import { AssigneeInterface } from './../../interfaces/Assignee.interface';
 
 interface AddAssigneeFilterState {
   label?: string;
@@ -49,19 +49,19 @@ export class ManageKabasTasksAddAssigneesComponent implements OnInit {
       map((filterState: AddAssigneeFilterState): AssigneesByType[] => {
         if (filterState.label) {
           return this.filter(
-            [...this.students, ...this.groups, ...this.classgroups],
+            [...this.classgroups, ...this.groups, ...this.students],
             filterState
           );
         } else {
           return [
-            ...(this.students.length
-              ? [{ label: 'Studenten', value: this.students, order: 1 }]
+            ...(this.classgroups.length
+              ? [{ label: 'Klasgroepen', value: this.classgroups, order: 3 }]
               : []),
             ...(this.groups.length
               ? [{ label: 'Groepen', value: this.groups, order: 2 }]
               : []),
-            ...(this.classgroups.length
-              ? [{ label: 'Klasgroepen', value: this.classgroups, order: 3 }]
+            ...(this.students.length
+              ? [{ label: 'Studenten', value: this.students, order: 1 }]
               : [])
           ];
         }
@@ -90,8 +90,12 @@ export class ManageKabasTasksAddAssigneesComponent implements OnInit {
       selection => selection.value
     );
 
+    this.close(assignees);
+  }
+
+  close(assignees: AssigneeInterface[]) {
     this.clearSelection();
-    this.addedAssignees.emit(assignees);
+    this.addedAssignees.emit(assignees || []);
   }
 
   private filter(

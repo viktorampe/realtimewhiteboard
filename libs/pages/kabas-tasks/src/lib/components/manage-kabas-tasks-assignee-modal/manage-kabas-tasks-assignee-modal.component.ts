@@ -92,6 +92,8 @@ export class ManageKabasTasksAssigneeModalComponent implements OnInit {
       ...this.currentTaskAssignees$.value,
       ...assigneesToAdd
     ]);
+
+    this.toggleAddAssignees();
   }
 
   public removeAssignee(assignee: AssigneeInterface) {

@@ -1,124 +1,138 @@
-<h2 mat-dialog-title class="manage-task-assignees__title"
-  >Beheren - {{ currentTaskName }}</h2
->
-
-<div
-  *ngIf="!showAdvanced"
-  class="manage-task-assignees__title__date-picker__container"
->
-  <div class="manage-task-assignees__title__date-picker__label">Datum</div>
-  <campus-date-range-picker
-    class="manage-task-assignees__title__date-picker"
-    [useTime]="false"
-    [initialStartDate]="default.start"
-    [initialEndDate]="default.end"
-    (valueChanged)="setDefaultDateRange($event)"
-  ></campus-date-range-picker>
-</div>
-
-<mat-dialog-content class="manage-task-assignees__content">
-  <div class="manage-task-assignees__content__add-assignees__container"
-    ><campus-button
-      primary
-      class="manage-task-assignees__content__add-assignees__container__button"
+<ng-container *ngIf="showAddAssignees; else currentAssignments">
+  <div mat-dialog-title class="manage-task-assignees__title">
+    <h2 class="manage-task-assignees__title__label"
+      >{{ currentTaskName }} toewijzen aan
+    </h2>
+    <mat-icon
+      class="manage-task-assignees__title__action"
+      [svgIcon]="'arrow-back'"
       (click)="toggleAddAssignees()"
-      >Zoeken</campus-button
-    >
-
-    <campus-manage-kabas-tasks-add-assignees
-      *ngIf="showAddAssignees"
-      class="manage-task-assignees__content__add-assignees"
-      [classgroups]="availableTaskClassGroups$ | async"
-      [groups]="availableTaskGroups$ | async"
-      [students]="availableTaskStudents$ | async"
-      (addedAssignees)="
-        addAssignees([{ type: 'student', label: 'Alfred Jodocus' }])
-      "
-      >Insert assignees by clicking
-      here</campus-manage-kabas-tasks-add-assignees
-    >
+    ></mat-icon>
   </div>
 
-  <ng-container *ngIf="currentTaskAssignees$ | async as currentTaskAssignees">
-    <mat-list
-      *ngIf="currentTaskAssignees.length; else noContentTemplate"
-      class="manage-task-assignees__content__list"
-    >
-      <div class="manage-task-assignees__content__list__header">
-        <span>Toegewezen aan </span>
-        <a
-          *ngIf="!showAdvanced"
-          (click)="setShowAdvanced(true)"
-          class="manage-task-assignees__content__list__header__view-toggle"
-          >(Gebruik verschillende datums)</a
-        >
-        <a
-          *ngIf="showAdvanced"
-          (click)="setShowAdvanced(false)"
-          class="manage-task-assignees__content__list__header__view-toggle"
-          >(Gebruik 1 datum)</a
-        >
-      </div>
+  <campus-manage-kabas-tasks-add-assignees
+    class="manage-task-assignees__content__add-assignees"
+    [classgroups]="availableTaskClassGroups$ | async"
+    [groups]="availableTaskGroups$ | async"
+    [students]="availableTaskStudents$ | async"
+    (addedAssignees)="addAssignees($event)"
+  ></campus-manage-kabas-tasks-add-assignees>
+</ng-container>
 
-      <mat-list-item
-        *ngFor="let assignee of currentTaskAssignees"
-        class="manage-task-assignees__content__list__item"
-        [ngClass]="
-          'manage-task-assignees__content__list__item--' + assignee.type
-        "
+<ng-template #currentAssignments>
+  <div mat-dialog-title class="manage-task-assignees__title">
+    <h2 class="manage-task-assignees__title__label"
+      >{{ currentTaskName }} beheren
+    </h2>
+    <mat-icon
+      class="manage-task-assignees__title__action"
+      [svgIcon]="'add'"
+      (click)="toggleAddAssignees()"
+    ></mat-icon>
+  </div>
+  <mat-dialog-content class="manage-task-assignees__content">
+    <div class="manage-task-assignees__content__header">
+      <h4 class="manage-task-assignees__content__header__label"
+        >Toegewezen aan
+      </h4>
+      <a
+        *ngIf="!showAdvanced"
+        (click)="setShowAdvanced(true)"
+        class="manage-task-assignees__content__header__view-toggle"
+        >(Gebruik verschillende datums)</a
       >
-        <div class="manage-task-assignees__content__list__item__content">
-          <div
-            class="manage-task-assignees__content__list__item__content__caption"
-            >{{ assignee.type }} - {{ assignee.label }}</div
-          >
-          <campus-date-range-picker
-            *ngIf="showAdvanced"
-            class="manage-task-assignees__content__list__item__content__date-picker"
-            [useTime]="false"
-            [initialStartDate]="assignee.start"
-            [initialEndDate]="assignee.end"
-            (valueChanged)="setAssignmentDate([assignee], $event)"
-          ></campus-date-range-picker>
+      <a
+        *ngIf="showAdvanced"
+        (click)="setShowAdvanced(false)"
+        class="manage-task-assignees__content__header__view-toggle"
+        >(Gebruik 1 datum)</a
+      >
+    </div>
 
+    <div
+      *ngIf="!showAdvanced"
+      class="manage-task-assignees__content__date-picker__container"
+    >
+      <!-- <div class="manage-task-assignees__content__date-picker__label"
+        >Datum</div
+      > -->
+      <campus-date-range-picker
+        class="manage-task-assignees__content__date-picker"
+        [useTime]="false"
+        [initialStartDate]="default.start"
+        [initialEndDate]="default.end"
+        (valueChanged)="setDefaultDateRange($event)"
+      ></campus-date-range-picker>
+    </div>
+
+    <ng-container *ngIf="currentTaskAssignees$ | async as currentTaskAssignees">
+      <mat-list class="manage-task-assignees__content__list">
+        <mat-list-item
+          class="manage-task-assignees__content__list__item manage-task-assignees__content__list__item--add"
+          (click)="toggleAddAssignees()"
+        >
           <mat-icon
-            class="manage-task-assignees__content__list__item__action
-                  manage-task-assignees__content__list__item__action--show-on-hover"
-            [svgIcon]="'delete'"
-            (click)="removeAssignee(assignee)"
-          ></mat-icon
-        ></div>
-      </mat-list-item>
-    </mat-list>
-  </ng-container>
-</mat-dialog-content>
+            svgIcon="add"
+            class="manage-task-assignees__content__list__item--add__icon"
+          ></mat-icon>
+          Deze taak toewijzen...
+        </mat-list-item>
 
-<mat-dialog-actions class="manage-task-assignees__actions">
-  <campus-button
-    primary
-    class="manage-task-assignees__actions__button"
-    (click)="onCancelButtonClick()"
-    >Annuleren</campus-button
-  >
-  <ng-container *ngIf="areCurrentTaskAssigneesValid$ | async as canEmit">
+        <mat-list-item
+          *ngFor="let assignee of currentTaskAssignees"
+          class="manage-task-assignees__content__list__item"
+          [ngClass]="
+            'manage-task-assignees__content__list__item--' + assignee.type
+          "
+        >
+          <div class="manage-task-assignees__content__list__item__content">
+            <div
+              class="manage-task-assignees__content__list__item__content__caption"
+              >{{ assignee.label }}</div
+            >
+            <campus-date-range-picker
+              *ngIf="showAdvanced"
+              class="manage-task-assignees__content__list__item__content__date-picker"
+              [useTime]="false"
+              [initialStartDate]="assignee.start"
+              [initialEndDate]="assignee.end"
+              (valueChanged)="setAssignmentDate([assignee], $event)"
+            ></campus-date-range-picker>
+
+            <mat-icon
+              class="manage-task-assignees__content__list__item__action
+                  manage-task-assignees__content__list__item__action--show-on-hover"
+              [svgIcon]="'delete'"
+              (click)="removeAssignee(assignee)"
+            ></mat-icon
+          ></div>
+        </mat-list-item>
+      </mat-list>
+    </ng-container>
+  </mat-dialog-content>
+
+  <mat-dialog-actions class="manage-task-assignees__actions">
     <campus-button
-      *ngIf="canEmit"
+      primary
+      class="manage-task-assignees__actions__button"
+      (click)="onCancelButtonClick()"
+      >Annuleren</campus-button
+    >
+
+    <campus-button
+      *ngIf="areCurrentTaskAssigneesValid$ | async; else disabledButton"
       primary
       class="manage-task-assignees__actions__button"
       (click)="onOKButtonClick()"
       >OK</campus-button
     >
-    <campus-button
-      *ngIf="!canEmit"
-      primary
-      class="manage-task-assignees__actions__button ui-button--disabled"
-      >OK</campus-button
-    >
-  </ng-container>
-</mat-dialog-actions>
+  </mat-dialog-actions>
+</ng-template>
 
-<ng-template #noContentTemplate>
-  <div class="manage-task-assignees__content__list--no-content">
-    <span>Er zijn geen items om weer te geven.</span>
-  </div>
+<ng-template #disabledButton>
+  <campus-button
+    primary
+    class="manage-task-assignees__actions__button ui-button--disabled"
+    >OK</campus-button
+  >
 </ng-template>

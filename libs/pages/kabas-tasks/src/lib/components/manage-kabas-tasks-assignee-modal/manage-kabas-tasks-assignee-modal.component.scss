@@ -1,13 +1,30 @@
 .manage-task-assignees {
   &__title {
-    &__date-picker {
-      padding: 4px;
+    display: flex;
+    align-items: center;
 
+    &__label {
+      margin-top: 0px;
+      margin-bottom: 0px;
+      flex: 1 1 auto;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+
+    &__action {
+      justify-self: flex-end;
+      flex: 0 0 auto;
+    }
+
+    &__date-picker {
       &__label {
         align-self: center;
+        margin-right: 8px;
       }
 
       &__container {
+        padding: 8px 0px;
         display: flex;
         align-items: center;
       }
@@ -15,30 +32,71 @@
   }
 
   &__content {
+    height: 65vh;
+
     &__add-assignees {
-      border: 1px solid black;
-      padding: 4px;
+      padding: 4px 0px;
       display: flex;
       flex-direction: column;
+      height: 100%;
 
       &__container {
         margin-bottom: 4px;
       }
     }
 
-    &__list {
-      min-height: 300px;
+    &__header {
+      display: flex;
+      padding-top: 8px;
 
-      &__header {
-        &__view-toggle {
-          // text-decoration: underline;
-          font-style: italic;
+      &__label {
+        margin: 0px 16px 0px 0px;
+      }
+
+      &__view-toggle {
+        font-style: italic;
+
+        &:hover {
+          text-decoration: underline;
         }
       }
+    }
+
+    &__date-picker {
+      &__label {
+        align-self: center;
+        margin-right: 8px;
+      }
+
+      &__container {
+        padding: 8px 0px;
+        display: flex;
+        align-items: center;
+        margin-left: 16px;
+        margin-top: 8px;
+      }
+    }
+
+    &__list {
+      min-height: 300px;
 
       &__item {
         height: auto;
         width: 100%;
+
+        &--add {
+          background-color: #f8f8f8;
+          color: #15adb9;
+          font-weight: bold;
+          padding-left: 32px !important;
+          cursor: pointer;
+          margin-bottom: 4px;
+
+          &__icon {
+            margin-right: 16px;
+          }
+        }
+
         &:nth-child(odd) {
           background-color: whitesmoke;
         }
@@ -72,6 +130,7 @@
 
           &__date-picker {
             flex: 2 1 25%;
+            font-size: 14px;
           }
         }
 

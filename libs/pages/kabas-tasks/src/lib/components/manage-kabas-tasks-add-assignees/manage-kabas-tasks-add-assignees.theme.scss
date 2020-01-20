@@ -1,2 +1,82 @@
-@mixin manage-kabas-tasks-add-assignee() {
+@mixin manage-kabas-tasks-add-assignee-theme() {
+  $manage-kabas-tasks-detail__list-vertical-margin: -40px !default;
+  $manage-kabas-tasks-detail_filterbar-padding-top: 15px !default;
+  $manage-kabas-tasks-detail_filterbar-padding-left: 15px !default;
+  $manage-kabas-tasks-detail_filterbar-filter-width: 150px !default;
+  $manage-kabas-tasks-detail_filterbar-filter-heigth: 50px !default;
+  $manage-kabas-tasks-detail_filterbar-filter-padding-width: 8px !default;
+  $manage-kabas-tasks-detail_filterbar-filter-padding-height: 12px !default;
+  $manage-kabas-tasks-detail__reset-margin-right: 20px !default;
+  $manage-kabas-tasks-detail__reset-margin-bottom: 10px !default;
+  $pages-kabas-tasks-filters-hover-foreground-color: $color-black-1 !default;
+  $manage-kabas-tasks-detail_filterbar-archive-toggle: $color-gray-4 !default;
+
+  $manage-kabas-tasks-detail__reset-filters-width: 50px !default;
+  $manage-kabas-tasks-detail__reset-filters-height: 50px !default;
+  $manage-kabas-tasks-detail__reset-filters-border-width: 1px !default;
+  $manage-kabas-tasks-detail__reset-filters-border-color: $primary-font-color-2 !default;
+  $manage-kabas-tasks-detail__reset-filters-background-color: transparent !default;
+  $filters-hover-background-color: inherit !default;
+  $filters-active-background-color: inherit !default;
+
+  .manage-kabas-tasks-add-assignees {
+    display: flex;
+
+    &__content {
+      &__filterbar {
+        padding: 4px 0 0 $manage-kabas-tasks-detail_filterbar-padding-left;
+
+        > *:not(:last-child) {
+          margin-right: $manage-kabas-tasks-detail__reset-margin-right;
+        }
+
+        &__reset-filters {
+          width: $manage-kabas-tasks-detail__reset-filters-width;
+          height: $manage-kabas-tasks-detail__reset-filters-height;
+          background-color: $manage-kabas-tasks-detail__reset-filters-background-color;
+          border: $manage-kabas-tasks-detail__reset-filters-border-width solid
+            $manage-kabas-tasks-detail__reset-filters-border-color;
+
+          &:hover {
+            background-color: $pages-method-filters-hover-background-color;
+            color: $pages-kabas-tasks-filters-hover-foreground-color;
+          }
+          &:active {
+            background-color: $filters-active-background-color;
+          }
+        }
+
+        .search-term {
+          width: $manage-kabas-tasks-detail_filterbar-filter-width;
+          background-color: $manage-kabas-tasks-detail__reset-filters-background-color;
+        }
+
+        .ui-filter-text-input {
+          &__input {
+            width: $manage-kabas-tasks-detail_filterbar-filter-width;
+            height: $manage-kabas-tasks-detail_filterbar-filter-heigth;
+          }
+        }
+      }
+
+      &__list {
+        &.mat-list-base {
+          .mat-list-item.mat-list-option {
+            &.mat-list-option--selected,
+            &:hover {
+              .mat-pseudo-checkbox {
+                opacity: 1;
+              }
+            }
+
+            .mat-pseudo-checkbox {
+              transform: scale(0.8);
+              opacity: 0.3;
+              transition: opacity 150ms ease-out;
+            }
+          }
+        }
+      }
+    }
+  }
 }

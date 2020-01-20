@@ -1,5 +1,6 @@
 @mixin pages-kabas-tasks-modal-theme() {
   .manage-task-assignees {
     width: 75vw;
+    max-width: 600px !important;
   }
 }

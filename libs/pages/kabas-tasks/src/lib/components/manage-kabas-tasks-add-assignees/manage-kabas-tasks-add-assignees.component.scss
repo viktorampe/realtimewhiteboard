@@ -1,8 +1,32 @@
 .manage-kabas-tasks-add-assignees {
   display: flex;
-  &__filterbar {
+
+  &__content {
+    height: 65vh;
     display: flex;
-    flex-wrap: wrap;
-    align-items: center;
+    flex-direction: column;
+    padding-right: 0px;
+
+    &__filterbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      flex: 0 0 auto;
+    }
+
+    &__list {
+      flex: 1 1 100%;
+      overflow: auto;
+      margin: 8px 0px;
+    }
+
+    &--no-results {
+      margin: 8px 0px;
+      padding: 8px 24px;
+    }
+  }
+
+  &__actions {
+    justify-content: flex-end;
   }
 }
