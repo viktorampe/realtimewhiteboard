@@ -203,7 +203,6 @@ export class KabasTasksViewModel {
   }
 
   public removeTasks(tasks: TaskWithAssigneesInterface[]): void {
-    console.log('tasks', tasks);
     const tasksToRemove = tasks
       .filter(task => this.canBeArchivedOrDeleted(task))
       .map(task => task.id);
