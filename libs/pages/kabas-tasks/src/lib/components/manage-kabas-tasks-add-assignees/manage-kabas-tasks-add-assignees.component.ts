@@ -8,13 +8,7 @@ import {
 } from '@angular/core';
 import { MatSelectionList } from '@angular/material';
 import { SearchTermComponent } from '@campus/search';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { AssigneeInterface } from './../../interfaces/Assignee.interface';
-
-interface AddAssigneeFilterState {
-  label?: string;
-}
 
 interface AssigneesByType {
   label: string;
@@ -27,8 +21,11 @@ interface AssigneesByType {
   styleUrls: ['./manage-kabas-tasks-add-assignees.component.scss']
 })
 export class ManageKabasTasksAddAssigneesComponent implements OnInit {
-  public filteredAssignees$: Observable<AssigneesByType[]>;
-  public filterState$ = new BehaviorSubject<AddAssigneeFilterState>({});
+  public filteredAssignees: {
+    map: { [id: number]: boolean };
+    isTypeInFilter: { [label: string]: boolean };
+  };
+  public assignees: AssigneesByType[];
 
   @Input() public students: AssigneeInterface[] = [];
   @Input() public groups: AssigneeInterface[] = [];
@@ -44,39 +41,26 @@ export class ManageKabasTasksAddAssigneesComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {
-    this.filteredAssignees$ = this.filterState$.pipe(
-      map((filterState: AddAssigneeFilterState): AssigneesByType[] => {
-        if (filterState.label) {
-          return this.filter(
-            [...this.classgroups, ...this.groups, ...this.students],
-            filterState
-          );
-        } else {
-          return [
-            ...(this.classgroups.length
-              ? [{ label: 'Klasgroepen', value: this.classgroups }]
-              : []),
-            ...(this.groups.length
-              ? [{ label: 'Groepen', value: this.groups }]
-              : []),
-            ...(this.students.length
-              ? [{ label: 'Studenten', value: this.students }]
-              : [])
-          ];
-        }
-      })
-    );
+    this.assignees = [
+      ...(this.classgroups.length
+        ? [{ label: 'Klasgroepen', value: this.classgroups }]
+        : []),
+      ...(this.groups.length ? [{ label: 'Groepen', value: this.groups }] : []),
+      ...(this.students.length
+        ? [{ label: 'Studenten', value: this.students }]
+        : [])
+    ];
+
+    this.filter('');
   }
 
   public updateLabelFilter(text: string) {
-    this.filterState$.next({
-      label: text
-    });
+    this.filter(text);
   }
 
   public resetFilter() {
-    this.filterState$.next({ label: '' });
     this.searchTermFilter.currentValue = '';
+    this.filter('');
   }
 
   public clearSelection() {
@@ -97,22 +81,19 @@ export class ManageKabasTasksAddAssigneesComponent implements OnInit {
     this.addedAssignees.emit(assignees || []);
   }
 
-  private filter(
-    assignees: AssigneeInterface[],
-    filterState: AddAssigneeFilterState
-  ): AssigneesByType[] {
-    let filteredAssignees = [...assignees];
+  private filter(text: string) {
+    this.filteredAssignees = this.assignees.reduce(
+      (acc, item) => {
+        item.value.forEach(assignee => {
+          if (assignee.label.toLowerCase().includes(text.toLowerCase())) {
+            acc.map[assignee.type + '-' + assignee.relationId] = true;
+            acc.isTypeInFilter[item.label] = true;
+          }
+        });
 
-    if (filterState.label) {
-      filteredAssignees = filteredAssignees.filter(assignee => {
-        return assignee.label
-          .toLowerCase()
-          .includes(filterState.label.toLowerCase());
-      });
-    }
-
-    return filteredAssignees.length
-      ? [{ label: 'Resultaten', value: filteredAssignees }]
-      : [];
+        return acc;
+      },
+      { map: {}, isTypeInFilter: {} }
+    );
   }
 }

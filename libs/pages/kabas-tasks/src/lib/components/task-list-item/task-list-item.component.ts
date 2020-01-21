@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   EventEmitter,
   HostBinding,
@@ -16,7 +17,8 @@ export type Status = 'pending' | 'active' | 'finished' | 'paper';
 @Component({
   selector: 'campus-task-list-item',
   templateUrl: './task-list-item.component.html',
-  styleUrls: ['./task-list-item.component.scss']
+  styleUrls: ['./task-list-item.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TaskListItemComponent implements OnInit {
   public classGroups: AssigneeInterface[] = [];

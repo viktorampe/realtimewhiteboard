@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   EventEmitter,
   HostBinding,
@@ -24,7 +25,8 @@ interface SelectOption {
 @Component({
   selector: 'campus-select-filter',
   templateUrl: './select-filter.component.html',
-  styleUrls: ['./select-filter.component.css']
+  styleUrls: ['./select-filter.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SelectFilterComponent
   implements SearchFilterComponentInterface, OnInit, OnDestroy {

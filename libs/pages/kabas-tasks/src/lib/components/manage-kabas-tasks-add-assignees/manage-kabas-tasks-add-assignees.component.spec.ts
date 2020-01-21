@@ -9,7 +9,6 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { SearchModule } from '@campus/search';
 import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
-import { hot } from '@nrwl/angular/testing';
 import { configureTestSuite } from 'ng-bullet';
 import {
   AssigneeInterface,
@@ -27,14 +26,14 @@ describe('AddAssigneeComponent', () => {
       label: 'Anneke',
       start: new Date(),
       end: new Date(),
-      id: 1
+      relationId: 1
     },
     {
       type: AssigneeTypesEnum.STUDENT,
       label: 'Ronny',
       start: new Date(),
       end: new Date(),
-      id: 2
+      relationId: 2
     }
   ];
 
@@ -44,7 +43,7 @@ describe('AddAssigneeComponent', () => {
       label: 'Remediëring 2c',
       start: new Date(),
       end: new Date(),
-      id: 2
+      relationId: 3
     }
   ];
 
@@ -54,7 +53,7 @@ describe('AddAssigneeComponent', () => {
       label: '1A',
       start: new Date(),
       end: new Date(),
-      id: 1
+      relationId: 4
     }
   ];
 
@@ -79,61 +78,51 @@ describe('AddAssigneeComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  describe('filteredAssignees$', () => {
+  describe('filtering', () => {
     it('should filter on searchTerm', () => {
-      component.filterState$.next({
-        label: 'ro'
-      });
+      component.updateLabelFilter('ro');
 
-      const expected = [
-        {
-          label: 'Resultaten',
-          value: [mockStudents[1]]
+      const expected = {
+        map: {
+          'student-2': true
+        },
+        isTypeInFilter: {
+          Studenten: true
         }
-      ];
+      };
 
-      expect(component.filteredAssignees$).toBeObservable(
-        hot('a', {
-          a: expected
-        })
-      );
+      expect(component.filteredAssignees).toEqual(expected);
     });
 
     it('should return students, groups and classGroups when there is no filter', () => {
-      component.filterState$.next({});
+      component.updateLabelFilter('');
 
-      const expected = [
-        {
-          label: 'Klasgroepen',
-          value: mockClassgroups
+      const expected = {
+        map: {
+          'student-1': true,
+          'student-2': true,
+          'group-3': true,
+          'classgroup-4': true
         },
-        {
-          label: 'Groepen',
-          value: mockGroups
-        },
-        {
-          label: 'Studenten',
-          value: mockStudents
+        isTypeInFilter: {
+          Studenten: true,
+          Groepen: true,
+          Klasgroepen: true
         }
-      ];
+      };
 
-      expect(component.filteredAssignees$).toBeObservable(
-        hot('a', {
-          a: expected
-        })
-      );
+      expect(component.filteredAssignees).toEqual(expected);
     });
 
     it('should return empty results if filtertext is not included in a name', () => {
-      component.filterState$.next({ label: 'akq' });
+      component.updateLabelFilter('akq');
 
-      const expected = [];
+      const expected = {
+        map: {},
+        isTypeInFilter: {}
+      };
 
-      expect(component.filteredAssignees$).toBeObservable(
-        hot('a', {
-          a: expected
-        })
-      );
+      expect(component.filteredAssignees).toEqual(expected);
     });
   });
 

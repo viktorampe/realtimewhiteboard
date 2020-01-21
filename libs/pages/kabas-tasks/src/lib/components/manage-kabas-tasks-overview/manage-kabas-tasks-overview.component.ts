@@ -1,5 +1,5 @@
 import {
-  ChangeDetectorRef,
+  ChangeDetectionStrategy,
   Component,
   Inject,
   OnInit,
@@ -58,7 +58,8 @@ export enum TaskSortEnum {
 @Component({
   selector: 'campus-manage-kabas-tasks-overview',
   templateUrl: './manage-kabas-tasks-overview.component.html',
-  styleUrls: ['./manage-kabas-tasks-overview.component.scss']
+  styleUrls: ['./manage-kabas-tasks-overview.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ManageKabasTasksOverviewComponent implements OnInit {
   public TaskSortEnum = TaskSortEnum;
@@ -146,7 +147,6 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     @Inject(FILTER_SERVICE_TOKEN) private filterService: FilterServiceInterface,
-    private cd: ChangeDetectorRef,
     private matDialog: MatDialog
   ) {}
 
@@ -412,16 +412,6 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
     this.router.navigate([], {
       queryParams: { tab }
     });
-
-    // needed because tab switching causes
-    // expression changed after view checked
-    // re-attach when animtion is done
-    this.cd.detach();
-  }
-
-  public onTabAnimationDone() {
-    this.cd.reattach();
-    this.cd.detectChanges();
   }
 
   public archivedFilterToggled(data: MatSlideToggleChange, type: Source) {
