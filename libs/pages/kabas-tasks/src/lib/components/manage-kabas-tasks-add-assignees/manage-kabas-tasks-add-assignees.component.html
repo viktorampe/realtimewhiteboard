@@ -11,24 +11,32 @@
     iconClass="reset-filters"
   ></campus-button
 ></div>
-<ng-container *ngIf="filteredAssignees$ | async as filteredAssignees">
-  <ng-container *ngIf="filteredAssignees.length; else noResults">
-    <mat-selection-list
-      [class.mat-selection-list--has-selection]="true"
-      class="manage-kabas-tasks-detail__list"
-    >
-      <ng-container *ngFor="let assigneeType of filteredAssignees">
-        <div>{{ assigneeType.label }}</div>
-        <mat-list-option
-          [value]="assignee"
-          *ngFor="let assignee of assigneeType.value"
-          checkboxPosition="before"
-        >
-          {{ assignee.label }}</mat-list-option
-        >
-      </ng-container>
-    </mat-selection-list>
-  </ng-container>
+<ng-container *ngIf="assignees.length; else noResults">
+  <div *ngIf="assigneeList.selectedOptions.selected.length"
+    >{{ assigneeList.selectedOptions.selected.length }} geselecteerd</div
+  >
+  <mat-selection-list
+    #assigneeList
+    [class.mat-selection-list--has-selection]="true"
+    class="manage-kabas-tasks-detail__list"
+  >
+    <ng-container *ngFor="let assigneeType of assignees">
+      <div
+        [style.display]="
+          filteredAssignees.isTypeInFilter[assigneeType.label] ? '' : 'none'
+        "
+        >{{ assigneeType.label }}</div
+      >
+      <mat-list-option
+        [value]="assignee"
+        [style.display]="!filteredAssignees.map[assignee.id] ? 'none' : ''"
+        *ngFor="let assignee of assigneeType.value"
+        checkboxPosition="before"
+      >
+        {{ assignee.label }}</mat-list-option
+      >
+    </ng-container>
+  </mat-selection-list>
 </ng-container>
 <campus-button primary (click)="addAssignees()">Toevoegen</campus-button>
 
