@@ -65,6 +65,11 @@
         }
       }
 
+      &__selected {
+        margin: $manage-kabas-tasks-add-assignees_list-margin !important;
+        padding-left: $manage-kabas-tasks-add-assignees_list-padding-left;
+      }
+
       &__list {
         margin: $manage-kabas-tasks-add-assignees_list-margin !important;
         padding-left: $manage-kabas-tasks-add-assignees_list-padding-left;

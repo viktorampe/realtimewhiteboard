@@ -16,6 +16,18 @@
     &__list {
       flex: 1 1 100%;
       overflow: auto;
+
+      &__header {
+        &--hidden {
+          display: none;
+        }
+      }
+
+      &__item {
+        &--hidden {
+          display: none;
+        }
+      }
     }
   }
 
