@@ -112,6 +112,7 @@ describe('ManageKabasTasksAssigneeModalComponent', () => {
 
   it('should inject the dialogData', () => {
     expect(component.currentTaskName).toEqual(data.title);
+    expect(component.currentTaskIsPaperTask).toEqual(data.isPaperTask);
     expect(component.currentTaskAssignees$.value).toEqual(
       data.currentTaskAssignees
     );
@@ -120,128 +121,165 @@ describe('ManageKabasTasksAssigneeModalComponent', () => {
   });
 
   describe('UI elements', () => {
-    it('should show a header ', () => {
-      const headerDE = fixture.debugElement.query(
-        By.css('.manage-task-assignees__title')
-      );
-      expect(headerDE.nativeElement.textContent.trim()).toBe(
-        'Basic UX design beheren'
-      );
-    });
+    describe('not a paper task', () => {
+      it('should show a header ', () => {
+        const headerDE = fixture.debugElement.query(
+          By.css('.manage-task-assignees__title')
+        );
+        expect(headerDE.nativeElement.textContent.trim()).toBe(
+          'Basic UX design beheren'
+        );
+      });
 
-    it('should show a date picker for the default date', () => {
-      const getDatePickerDE = () =>
-        fixture.debugElement.query(
-          By.css('.manage-task-assignees__content__date-picker')
+      it('should show a date picker for the default date', () => {
+        const getDatePickerDE = () =>
+          fixture.debugElement.query(
+            By.css('.manage-task-assignees__content__date-picker')
+          );
+
+        const datePicker = getDatePickerDE()
+          .componentInstance as DateRangePickerComponent;
+
+        expect(datePicker.initialStartDate).toBe(component.default.start);
+        expect(datePicker.initialEndDate).toBe(component.default.end);
+        expect(datePicker.useTime).toBe(false);
+
+        // advanced view
+        component.showAdvanced = true;
+        fixture.detectChanges();
+        expect(getDatePickerDE()).toBe(null);
+      });
+
+      it('should show a toggle advanced view link', () => {
+        const getLinkDE = () =>
+          fixture.debugElement.query(
+            By.css('.manage-task-assignees__content__header__view-toggle')
+          );
+
+        let linkDE = getLinkDE();
+
+        expect(linkDE.nativeElement.textContent.trim()).toBe(
+          '(Gebruik verschillende datums)'
         );
 
-      const datePicker = getDatePickerDE()
-        .componentInstance as DateRangePickerComponent;
+        component.setShowAdvanced = jest.fn();
+        linkDE.triggerEventHandler('click', null);
 
-      expect(datePicker.initialStartDate).toBe(component.default.start);
-      expect(datePicker.initialEndDate).toBe(component.default.end);
-      expect(datePicker.useTime).toBe(false);
+        expect(component.setShowAdvanced).toHaveBeenCalled();
 
-      // advanced view
-      component.showAdvanced = true;
-      fixture.detectChanges();
-      expect(getDatePickerDE()).toBe(null);
-    });
+        // advanced view
+        component.showAdvanced = true;
+        fixture.detectChanges();
 
-    it('should show a toggle advanced view link', () => {
-      const getLinkDE = () =>
-        fixture.debugElement.query(
-          By.css('.manage-task-assignees__content__header__view-toggle')
+        linkDE = getLinkDE();
+        expect(linkDE.nativeElement.textContent.trim()).toBe(
+          '(Gebruik 1 datum)'
+        );
+      });
+
+      it('should not show a toggle advanced view link', () => {
+        const getLinkDE = () =>
+          fixture.debugElement.query(
+            By.css('.manage-task-assignees__content__header__view-toggle')
+          );
+
+        // single value
+        component.currentTaskAssignees$.next([mockClassGroupAssignee]);
+        fixture.detectChanges();
+
+        let linkDE = getLinkDE();
+        expect(linkDE).toBe(null);
+
+        // advanced view
+        component.showAdvanced = true;
+        fixture.detectChanges();
+
+        linkDE = getLinkDE();
+        expect(linkDE.nativeElement.textContent.trim()).toBe(
+          '(Gebruik 1 datum)'
+        );
+      });
+
+      it('should show a add assignees list item', () => {
+        const addMatListItem = fixture.debugElement.query(
+          By.css('.manage-task-assignees__content__list__item--add')
+        );
+        expect(addMatListItem.nativeElement.textContent.trim()).toBe(
+          'Deze taak toewijzen...'
+        );
+      });
+
+      it('should show a list of the current assignees', () => {
+        const matListDE = fixture.debugElement.query(By.directive(MatList));
+        expect(matListDE).toBeTruthy();
+
+        const [addMatListItem, ...matListItemDEs] = matListDE.queryAll(
+          By.directive(MatListItem)
+        );
+        expect(matListItemDEs.length).toBe(data.currentTaskAssignees.length);
+        matListItemDEs.forEach((listItemDE, index) =>
+          expect(listItemDE.nativeElement.textContent).toContain(
+            data.currentTaskAssignees[index].label
+          )
+        );
+      });
+
+      it('should show a cancel button', () => {
+        const buttonDEs = fixture.debugElement.queryAll(
+          By.css('.manage-task-assignees__actions__button')
         );
 
-      let linkDE = getLinkDE();
+        expect(buttonDEs[0].nativeElement.textContent.trim()).toBe('Annuleren');
 
-      expect(linkDE.nativeElement.textContent.trim()).toBe(
-        '(Gebruik verschillende datums)'
-      );
+        component.onCancelButtonClick = jest.fn();
+        buttonDEs[0].triggerEventHandler('click', null);
 
-      component.setShowAdvanced = jest.fn();
-      linkDE.triggerEventHandler('click', null);
+        expect(component.onCancelButtonClick).toHaveBeenCalled();
+      });
 
-      expect(component.setShowAdvanced).toHaveBeenCalled();
-
-      // advanced view
-      component.showAdvanced = true;
-      fixture.detectChanges();
-
-      linkDE = getLinkDE();
-      expect(linkDE.nativeElement.textContent.trim()).toBe('(Gebruik 1 datum)');
-    });
-
-    it('should not show a toggle advanced view link', () => {
-      const getLinkDE = () =>
-        fixture.debugElement.query(
-          By.css('.manage-task-assignees__content__header__view-toggle')
+      it('should show a OK button', () => {
+        const buttonDEs = fixture.debugElement.queryAll(
+          By.css('.manage-task-assignees__actions__button')
         );
 
-      // single value
-      component.currentTaskAssignees$.next([mockClassGroupAssignee]);
-      fixture.detectChanges();
+        expect(buttonDEs[1].nativeElement.textContent.trim()).toBe('OK');
 
-      let linkDE = getLinkDE();
-      expect(linkDE).toBe(null);
+        component.onOKButtonClick = jest.fn();
+        buttonDEs[1].triggerEventHandler('click', null);
 
-      // advanced view
-      component.showAdvanced = true;
-      fixture.detectChanges();
-
-      linkDE = getLinkDE();
-      expect(linkDE.nativeElement.textContent.trim()).toBe('(Gebruik 1 datum)');
+        expect(component.onOKButtonClick).toHaveBeenCalled();
+      });
     });
 
-    it('should show a add assignees list item', () => {
-      const addMatListItem = fixture.debugElement.query(
-        By.css('.manage-task-assignees__content__list__item--add')
-      );
-      expect(addMatListItem.nativeElement.textContent.trim()).toBe(
-        'Deze taak toewijzen...'
-      );
-    });
+    describe('paper task', () => {
+      beforeEach(() => {
+        component['data'].isPaperTask = true;
+        component.ngOnInit();
+        fixture.detectChanges();
+      });
 
-    it('should show a list of the current assignees', () => {
-      const matListDE = fixture.debugElement.query(By.directive(MatList));
-      expect(matListDE).toBeTruthy();
+      afterEach(() => {
+        component['data'].isPaperTask = data.isPaperTask;
+      });
 
-      const [addMatListItem, ...matListItemDEs] = matListDE.queryAll(
-        By.directive(MatListItem)
-      );
-      expect(matListItemDEs.length).toBe(data.currentTaskAssignees.length);
-      matListItemDEs.forEach((listItemDE, index) =>
-        expect(listItemDE.nativeElement.textContent).toContain(
-          data.currentTaskAssignees[index].label
-        )
-      );
-    });
+      it('should not show a date picker for the default date', () => {
+        const getDatePickerDE = () =>
+          fixture.debugElement.query(
+            By.css('.manage-task-assignees__content__date-picker')
+          );
 
-    it('should show a cancel button', () => {
-      const buttonDEs = fixture.debugElement.queryAll(
-        By.css('.manage-task-assignees__actions__button')
-      );
+        expect(getDatePickerDE()).toBe(null);
+      });
 
-      expect(buttonDEs[0].nativeElement.textContent.trim()).toBe('Annuleren');
+      it('should not show a toggle advanced view link', () => {
+        const getLinkDE = () =>
+          fixture.debugElement.query(
+            By.css('.manage-task-assignees__content__header__view-toggle')
+          );
 
-      component.onCancelButtonClick = jest.fn();
-      buttonDEs[0].triggerEventHandler('click', null);
-
-      expect(component.onCancelButtonClick).toHaveBeenCalled();
-    });
-
-    it('should show a OK button', () => {
-      const buttonDEs = fixture.debugElement.queryAll(
-        By.css('.manage-task-assignees__actions__button')
-      );
-
-      expect(buttonDEs[1].nativeElement.textContent.trim()).toBe('OK');
-
-      component.onOKButtonClick = jest.fn();
-      buttonDEs[1].triggerEventHandler('click', null);
-
-      expect(component.onOKButtonClick).toHaveBeenCalled();
+        const linkDE = getLinkDE();
+        expect(linkDE).toBe(null);
+      });
     });
   });
 
@@ -341,12 +379,25 @@ describe('ManageKabasTasksAssigneeModalComponent', () => {
         expect(lastAssignee.end).toEqual(component.default.end);
       });
 
+      it('should use the modal default boundaries', () => {
+        component.currentTaskIsPaperTask = true;
+        component.addAssignees([assigneeToAdd]);
+
+        const lastAssignee =
+          component.currentTaskAssignees$.value[
+            data.currentTaskAssignees.length
+          ];
+
+        expect(lastAssignee.start).toEqual(undefined);
+        expect(lastAssignee.end).toEqual(undefined);
+      });
+
       it('should update the available assignees', () => {
         component.addAssignees([assigneeToAdd]);
 
-        expect(component.availableTaskClassGroups$).toBeObservable(
+        expect(component.availableTaskStudents$).toBeObservable(
           hot('a', {
-            a: data.possibleTaskClassGroups
+            a: []
           })
         );
       });
