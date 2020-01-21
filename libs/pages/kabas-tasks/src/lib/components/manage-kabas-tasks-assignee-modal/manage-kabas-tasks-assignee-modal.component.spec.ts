@@ -146,20 +146,6 @@ describe('ManageKabasTasksAssigneeModalComponent', () => {
       expect(getDatePickerDE()).toBe(null);
     });
 
-    it('should show an add-assignee icon', () => {
-      const iconDE = fixture.debugElement.query(
-        By.css('.manage-task-assignees__title__action')
-      );
-
-      const icon = iconDE.componentInstance as MatIcon;
-      expect(icon.svgIcon).toBe('add');
-
-      component.toggleAddAssignees = jest.fn();
-      iconDE.triggerEventHandler('click', null);
-
-      expect(component.toggleAddAssignees).toHaveBeenCalled();
-    });
-
     it('should show a toggle advanced view link', () => {
       const getLinkDE = () =>
         fixture.debugElement.query(

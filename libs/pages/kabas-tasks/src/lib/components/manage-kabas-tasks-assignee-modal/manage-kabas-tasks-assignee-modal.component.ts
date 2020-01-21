@@ -76,8 +76,6 @@ export class ManageKabasTasksAssigneeModalComponent implements OnInit {
   }
 
   public addAssignees(assignees: AssigneeInterface[]) {
-    // TODO event is click, for now
-    // TODO use actual input
     let dateBoundaries;
 
     if (!this.showAdvanced) {
@@ -157,10 +155,6 @@ export class ManageKabasTasksAssigneeModalComponent implements OnInit {
       // if differing boundaries -> use the most frequent
       start = aggregatedBoundaries.mostFrequentStartDate;
       end = aggregatedBoundaries.mostFrequentEndDate;
-
-      this.showAdvanced =
-        aggregatedBoundaries.startAmount !== 1 ||
-        aggregatedBoundaries.endAmount !== 1;
     }
 
     this.default = { start, end };
@@ -209,14 +203,10 @@ export class ManageKabasTasksAssigneeModalComponent implements OnInit {
     const mostFrequentEndDate = new Date(
       this.getMostFrequent(boundaryFrequencies.end)
     );
-    const startAmount = Object.keys(boundaryFrequencies.start).length;
-    const endAmount = Object.keys(boundaryFrequencies.end).length;
 
     return {
       mostFrequentStartDate,
-      mostFrequentEndDate,
-      startAmount,
-      endAmount
+      mostFrequentEndDate
     };
   }
 
