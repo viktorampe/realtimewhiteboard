@@ -35,6 +35,7 @@ import {
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { filter, map, shareReplay, take } from 'rxjs/operators';
 import { AssigneeTypesEnum } from '../../interfaces/Assignee.interface';
+import { Source } from '../../interfaces/Source.type';
 import { TaskWithAssigneesInterface } from '../../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
 
@@ -53,8 +54,6 @@ export enum TaskSortEnum {
   'STARTDATE' = 'STARTDATE',
   'FAVORITE' = 'FAVORITE'
 }
-
-export type Source = 'digital' | 'paper';
 
 @Component({
   selector: 'campus-manage-kabas-tasks-overview',
@@ -163,12 +162,22 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
     this.tasksWithAssignments$ = combineLatest([
       this.digitalFilteredTasks$,
       this.currentSortMode$
-    ]).pipe(map(([tasks, sortMode]) => this.sortTasks(tasks, sortMode)));
+    ]).pipe(
+      map(([tasks, sortMode]) => this.sortTasks(tasks, sortMode)),
+      map(tasks =>
+        tasks.map(task => ({ ...task, actions: this.getActions(task) }))
+      )
+    );
 
     this.paperTasksWithAssignments$ = combineLatest([
       this.paperFilteredTasks$,
       this.currentSortMode$
-    ]).pipe(map(([tasks, sortMode]) => this.sortTasks(tasks, sortMode)));
+    ]).pipe(
+      map(([tasks, sortMode]) => this.sortTasks(tasks, sortMode)),
+      map(tasks =>
+        tasks.map(task => ({ ...task, actions: this.getActions(task) }))
+      )
+    );
 
     this.learningAreaFilter$ = this.viewModel.tasksWithAssignments$.pipe(
       map(this.sortAndCreateForLearningAreaFilter)
@@ -304,8 +313,8 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
     } as SearchFilterCriteriaInterface;
   }
 
-  public getActions(
-    task?: TaskWithAssigneesInterface
+  private getActions(
+    task: TaskWithAssigneesInterface
   ): { label: string; handler: Function }[] {
     return [
       {
@@ -323,10 +332,10 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
   }
 
   clickAddDigitalTask() {
-    this.router.navigate(['tasks', 'manage', 'new']);
+    this.navigateToNew();
   }
   clickAddPaperTask() {
-    this.router.navigate(['tasks', 'manage', 'new']);
+    this.navigateToNew('paper');
   }
 
   clickDeleteTasks() {
@@ -360,8 +369,20 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
     this.viewModel.startArchivingTasks(this.getSelectedTasks(), false);
   }
 
-  // TODO: implement handler
-  clickNewTask() {}
+  clickNewTask() {
+    const { tab: currentTab } = this.route.snapshot.queryParams;
+    if (!currentTab || +currentTab === 0) {
+      this.navigateToNew('digital');
+    } else {
+      this.navigateToNew('paper');
+    }
+  }
+
+  private navigateToNew(type: Source = 'digital') {
+    this.router.navigate(['tasks', 'manage', 'new'], {
+      queryParams: { [type]: true }
+    });
+  }
 
   clickResetFilters(mode?: string) {
     // visually clear selections

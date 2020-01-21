@@ -11,6 +11,7 @@ import {
   getRouterState,
   PersonFixture,
   TaskActions,
+  TaskEduContentFixture,
   TaskFixture,
   UserQueries
 } from '@campus/dal';
@@ -26,6 +27,7 @@ import {
   TaskWithAssigneesInterface
 } from '../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from './kabas-tasks.viewmodel';
+import { getTaskWithAssignmentAndEduContents } from './kabas-tasks.viewmodel.selectors';
 
 describe('KabasTaskViewModel', () => {
   const dateMock = new MockDate();
@@ -263,6 +265,37 @@ describe('KabasTaskViewModel', () => {
     });
   });
 
+  describe('currentTask$', () => {
+    const currentTaskParams = { id: 1 };
+    const expectedTask = {
+      ...new TaskFixture({ id: 1, isPaperTask: true }), // this is the current task!!
+      eduContentAmount: 1,
+      assignees: [],
+      taskEduContents: [
+        new TaskEduContentFixture({ id: 1, eduContentId: 1 }) // this eduContent should be included
+      ]
+    };
+
+    beforeEach(() => {
+      store.overrideSelector(getRouterState, {
+        navigationId: 1,
+        state: {
+          url: '',
+          params: currentTaskParams
+        }
+      });
+      store.overrideSelector(getTaskWithAssignmentAndEduContents, expectedTask);
+    });
+
+    it('should return the current task with related eduContents', () => {
+      expect(kabasTasksViewModel.currentTask$).toBeObservable(
+        hot('a', {
+          a: expectedTask
+        })
+      );
+    });
+  });
+
   describe('canDelete', () => {
     let taskAssignees;
     beforeEach(() => {
@@ -367,7 +400,7 @@ describe('KabasTaskViewModel', () => {
           isPaperTask: false
         },
         {
-          id: 3,
+          id: 4,
           name: 'Paper Task',
           eduContentAmount: 1,
           assignees: [],
@@ -376,7 +409,7 @@ describe('KabasTaskViewModel', () => {
       ] as TaskWithAssigneesInterface[];
     });
     /* -- HELPERS -- */
-    const mapToTaskIds = task => task.id;
+    const mapToTaskIds = task => ({ taskId: task.id });
     const canDelete = ta =>
       ta.status === TaskStatusEnum.FINISHED || (!ta.endDate && !ta.startDate);
     const messages = errors =>
@@ -391,26 +424,65 @@ describe('KabasTaskViewModel', () => {
         })
         .join('');
 
-    it('should dispatch delete when no errors deteted', () => {
+    it('should dispatch delete when no errors detected', () => {
       const spy = jest.spyOn(store, 'dispatch');
-      const expected = new TaskActions.StartDeleteTasks({
-        userId,
-        ids: [1, 3]
+      const tasks = taskAssignees.filter(
+        ta => ta.status === TaskStatusEnum.FINISHED
+      );
+      const destroyAction = new TaskActions.StartDeleteTasks({
+        userId: authService.userId,
+        ids: tasks.map(mapToTaskIds)
       });
-      kabasTasksViewModel.removeTasks(taskAssignees);
-      expect(spy).toHaveBeenCalledWith(expected);
+      kabasTasksViewModel.removeTasks(tasks);
+      expect(spy).toHaveBeenCalledWith(destroyAction);
     });
 
     it('should dispatch feedback with userAction when mixed errors and deleteIds', () => {
       const spy = jest.spyOn(store, 'dispatch');
       const tasks = taskAssignees.filter(ta => !ta.isPaperTask);
+      const errors = tasks.filter(ta => !canDelete(ta));
       const destroyAction = new TaskActions.StartDeleteTasks({
         userId: authService.userId,
         ids: tasks.filter(canDelete).map(mapToTaskIds)
       });
-
+      const effectFeedback = new EffectFeedback({
+        id: uuid(),
+        triggerAction: destroyAction,
+        message:
+          `<p>Niet alle taken kunnen verwijderd worden:</p>` +
+          `<ul>${messages(errors)}</ul>`,
+        userActions: [
+          { title: 'Verwijder de andere taken', userAction: destroyAction }
+        ],
+        type: 'error'
+      });
+      const feedbackAction = new EffectFeedbackActions.AddEffectFeedback({
+        effectFeedback
+      });
       kabasTasksViewModel.removeTasks(tasks);
-      expect(spy).toHaveBeenCalledWith(destroyAction);
+      expect(spy).toHaveBeenCalledWith(feedbackAction);
+    });
+    it('should dispatch feedback without userActions when only errors occurred', () => {
+      const spy = jest.spyOn(store, 'dispatch');
+      const errors = taskAssignees.filter(ta => !canDelete(ta));
+      const destroyAction = new TaskActions.StartDeleteTasks({
+        userId: authService.userId,
+        ids: []
+      });
+      const effectFeedback = new EffectFeedback({
+        id: uuid(),
+        triggerAction: destroyAction,
+        message:
+          `<p>Niet alle taken kunnen verwijderd worden:</p>` +
+          `<ul>${messages(errors)}</ul>`,
+        userActions: [],
+        type: 'error'
+      });
+      const feedbackAction = new EffectFeedbackActions.AddEffectFeedback({
+        effectFeedback
+      });
+      kabasTasksViewModel.removeTasks(errors);
+      expect(spy).toHaveBeenCalledWith(feedbackAction);
     });
   });
 

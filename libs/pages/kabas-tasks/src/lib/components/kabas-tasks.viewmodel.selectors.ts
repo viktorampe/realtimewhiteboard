@@ -1,5 +1,6 @@
 import {
   ClassGroupQueries,
+  EduContentQueries,
   FavoriteInterface,
   FavoriteQueries,
   GroupQueries,
@@ -136,60 +137,105 @@ export const allowedLearningAreas = createSelector(
   }
 );
 
-export const getTasksWithAssignments = createSelector(
+export const getAllTasksWithAssignments = createSelector(
   [
     TaskQueries.getAll,
     LearningAreaQueries.getAllEntities,
     TaskEduContentQueries.getAllGroupedByTaskId,
     combinedAssigneesByTask,
-    FavoriteQueries.getByType
+    FavoriteQueries.getTaskFavorites
   ],
   (
     tasks: TaskInterface[],
     learningAreaDict: Dictionary<LearningAreaInterface>,
     taskEduContentByTask: Dictionary<TaskEduContentInterface[]>,
     assigneesByTask: Dictionary<AssigneeInterface[]>,
-    favoriteTasks: FavoriteInterface[],
-    props
+    favoriteTasks: FavoriteInterface[]
   ) => {
     const favoriteTaskIds = favoriteTasks.map(fav => fav.taskId);
-    return tasks
-      .filter(task => !!task.isPaperTask === !!props.isPaper)
-      .map(
-        (task): TaskWithAssigneesInterface => ({
-          ...task,
-          learningArea: learningAreaDict[task.learningAreaId],
-          eduContentAmount: taskEduContentByTask[task.id]
-            ? taskEduContentByTask[task.id].length
-            : 0,
-          assignees: assigneesByTask[task.id] || [],
-          isFavorite: favoriteTaskIds.includes(task.id)
-        })
+    return tasks.map(task =>
+      mapToTaskWithAssigneeInterface(
+        task,
+        learningAreaDict[task.learningAreaId],
+        taskEduContentByTask[task.id],
+        assigneesByTask,
+        favoriteTaskIds
       )
-      .map(
-        (taskWithAssignees): TaskWithAssigneesInterface => {
-          const now = new Date();
-          const { assignees } = taskWithAssignees;
-          let status = TaskStatusEnum.FINISHED;
-
-          const maxDate = dates =>
-            dates.length ? new Date(Math.max(...dates)) : undefined;
-          const minDate = dates =>
-            dates.length ? new Date(Math.min(...dates)) : undefined;
-
-          const startDate = minDate(assignees.map(a => +a.start));
-          const endDate = maxDate(assignees.map(a => +a.end));
-
-          if (startDate && endDate) {
-            if (startDate > now) {
-              status = TaskStatusEnum.PENDING;
-            } else if (endDate > now) {
-              status = TaskStatusEnum.ACTIVE;
-            }
-          }
-
-          return { ...taskWithAssignees, startDate, endDate, status };
-        }
-      );
+    );
   }
 );
+
+export const getTasksWithAssignmentsByType = createSelector(
+  [getAllTasksWithAssignments],
+  (
+    tasks: TaskWithAssigneesInterface[],
+    props: {
+      isPaper: boolean;
+    }
+  ) => {
+    return tasks.filter(task => !!task.isPaperTask === !!props.isPaper);
+  }
+);
+
+export const getTaskWithAssignmentAndEduContents = createSelector(
+  [getAllTasksWithAssignments, EduContentQueries.getAllEntities],
+  (tasksWithAssignments, eduContents, props: { taskId: number }) => {
+    const foundTask = {
+      ...tasksWithAssignments.find(task => task.id === props.taskId)
+    };
+
+    foundTask.taskEduContents = foundTask.taskEduContents.length
+      ? foundTask.taskEduContents.map(tEdu => {
+          return {
+            ...tEdu,
+            eduContent: eduContents[tEdu.eduContentId]
+          };
+        })
+      : [];
+
+    return foundTask;
+  }
+);
+
+function mapToTaskWithAssigneeInterface(
+  task: TaskInterface,
+  learningArea: LearningAreaInterface,
+  taskEduContents: TaskEduContentInterface[],
+  assigneesByTask: Dictionary<AssigneeInterface[]>,
+  favoriteTaskIds: number[]
+): TaskWithAssigneesInterface {
+  return addTaskDates({
+    ...task,
+    learningArea: learningArea,
+    eduContentAmount: taskEduContents ? taskEduContents.length : 0,
+    taskEduContents: taskEduContents,
+    assignees: assigneesByTask[task.id] || [],
+    isFavorite: favoriteTaskIds.includes(task.id)
+  });
+}
+
+function addTaskDates(
+  taskWithAssignees: TaskWithAssigneesInterface
+): TaskWithAssigneesInterface {
+  const now = new Date();
+  const { assignees } = taskWithAssignees;
+  let status = TaskStatusEnum.FINISHED;
+
+  const maxDate = dates =>
+    dates.length ? new Date(Math.max(...dates)) : undefined;
+  const minDate = dates =>
+    dates.length ? new Date(Math.min(...dates)) : undefined;
+
+  const startDate = minDate(assignees.map(a => +a.start));
+  const endDate = maxDate(assignees.map(a => +a.end));
+
+  if (startDate && endDate) {
+    if (startDate > now) {
+      status = TaskStatusEnum.PENDING;
+    } else if (endDate > now) {
+      status = TaskStatusEnum.ACTIVE;
+    }
+  }
+
+  return { ...taskWithAssignees, startDate, endDate, status };
+}

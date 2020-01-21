@@ -167,7 +167,7 @@
               [startDate]="task.startDate"
               [endDate]="task.endDate"
               [status]="task.status"
-              [actions]="getActions(task)"
+              [actions]="task.actions"
               [assignees]="task.assignees"
               [isFavorite]="task.isFavorite"
               (clickToggleFavorite)="clickToggleFavorite(task)"

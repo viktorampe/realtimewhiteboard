@@ -4,18 +4,15 @@ import {
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
   DalState,
-  EduContentFixture,
   EffectFeedback,
   EffectFeedbackActions,
   FavoriteActions,
   FavoriteInterface,
   FavoriteTypesEnum,
   getRouterState,
-  LearningAreaFixture,
   LearningAreaInterface,
   RouterStateUrl,
   TaskActions,
-  TaskEduContentFixture,
   TaskEduContentInterface,
   TaskInterface
 } from '@campus/dal';
@@ -23,7 +20,13 @@ import { Update } from '@ngrx/entity';
 import { RouterReducerState } from '@ngrx/router-store';
 import { Action, select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, shareReplay } from 'rxjs/operators';
+import {
+  distinctUntilChanged,
+  filter,
+  map,
+  shareReplay,
+  switchMap
+} from 'rxjs/operators';
 import {
   AssigneeInterface,
   AssigneeTypesEnum
@@ -34,7 +37,8 @@ import {
 } from '../interfaces/TaskWithAssignees.interface';
 import {
   allowedLearningAreas,
-  getTasksWithAssignments
+  getTasksWithAssignmentsByType,
+  getTaskWithAssignmentAndEduContents
 } from './kabas-tasks.viewmodel.selectors';
 
 export interface CurrentTaskParams {
@@ -60,16 +64,20 @@ export class KabasTasksViewModel {
     @Inject(MAT_DATE_LOCALE) private dateLocale
   ) {
     this.tasksWithAssignments$ = this.store.pipe(
-      select(getTasksWithAssignments, {
-        isPaper: false,
-        type: FavoriteTypesEnum.TASK
-      })
+      select(getTasksWithAssignmentsByType, {
+        isPaper: false
+      }),
+      map(tasks =>
+        tasks.map(task => ({
+          ...task,
+          isFavorite: task.id % 2 === 0
+        }))
+      )
     );
 
     this.paperTasksWithAssignments$ = this.store.pipe(
-      select(getTasksWithAssignments, {
-        isPaper: true,
-        type: FavoriteTypesEnum.TASK
+      select(getTasksWithAssignmentsByType, {
+        isPaper: true
       })
     );
 
@@ -151,15 +159,21 @@ export class KabasTasksViewModel {
     );
   }
 
-  public removeTasks(tasks: TaskWithAssigneesInterface[]): void {
-    const tasksToRemove = tasks
-      .filter(task => this.canBeArchivedOrDeleted(task))
-      .map(task => task.id);
+  public removeTasks(
+    tasks: TaskWithAssigneesInterface[],
+    navigateAfterDelete?: boolean
+  ): void {
+    const deleteIds = [];
+    const errors = [];
+    tasks.forEach(task => {
+      if (this.canBeArchivedOrDeleted(task)) {
+        deleteIds.push({ taskId: task.id });
+      } else {
+        errors.push(task);
+      }
+    });
     this.store.dispatch(
-      new TaskActions.StartDeleteTasks({
-        userId: this.authService.userId,
-        ids: tasksToRemove
-      })
+      this.getDestroyingAction(deleteIds, errors, navigateAfterDelete)
     );
   }
 
@@ -196,29 +210,14 @@ export class KabasTasksViewModel {
   }
 
   private getCurrentTask(): Observable<TaskWithAssigneesInterface> {
-    // TODO
-    // return this.paperTasksWithAssignments$.pipe(
-    return this.tasksWithAssignments$.pipe(
-      map(tasks => ({
-        ...tasks[0],
-        taskEduContents: [1, 2, 3].map(
-          id =>
-            new TaskEduContentFixture({
-              eduContentId: id,
-              eduContent: new EduContentFixture(
-                { id },
-                {
-                  id,
-                  title: 'oefening ' + id,
-                  learningArea: new LearningAreaFixture({
-                    id: 1,
-                    name: 'Wiskunde'
-                  })
-                }
-              )
-            })
-        )
-      }))
+    return this.currentTaskParams$.pipe(
+      switchMap(currentTaskParams => {
+        return this.store.pipe(
+          select(getTaskWithAssignmentAndEduContents, {
+            taskId: currentTaskParams.id
+          })
+        );
+      })
     );
   }
 
@@ -254,10 +253,11 @@ export class KabasTasksViewModel {
     return updateAction;
   }
 
-  private getDestroyingAction(deleteIds, errors) {
+  private getDestroyingAction(deleteIds, errors, navigateAfterDelete) {
     const destroyAction = new TaskActions.StartDeleteTasks({
       ids: deleteIds,
-      userId: this.authService.userId
+      userId: this.authService.userId,
+      navigateAfterDelete
     });
     if (errors.length) {
       const effectFeedback = new EffectFeedback({

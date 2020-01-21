@@ -1,13 +1,14 @@
 import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
 import {
   MatDialog,
+  MatDialogRef,
   MatRadioModule,
   MatSelectModule,
   MatSlideToggleModule
 } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import {
   EduContentFixture,
@@ -20,10 +21,11 @@ import {
   ENVIRONMENT_TESTING_TOKEN,
   SharedModule
 } from '@campus/shared';
-import { UiModule } from '@campus/ui';
+import { ConfirmationModalComponent, UiModule } from '@campus/ui';
 import { hot } from '@nrwl/angular/testing';
 import { configureTestSuite } from 'ng-bullet';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, of } from 'rxjs';
+import { AssigneeFixture } from '../../interfaces/Assignee.fixture';
 import {
   CurrentTaskParams,
   KabasTasksViewModel
@@ -41,6 +43,7 @@ describe('ManageKabasTasksDetailComponent', () => {
   let viewModel: MockKabasTasksViewModel;
   let matDialog: MatDialog;
   let router: Router;
+  const queryParams: BehaviorSubject<Params> = new BehaviorSubject<Params>({});
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
@@ -67,6 +70,13 @@ describe('ManageKabasTasksDetailComponent', () => {
           provide: MatDialog,
           useValue: {
             open: () => {}
+          }
+        },
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            queryParams,
+            snapshot: { queryParams: queryParams.getValue() }
           }
         }
       ]
@@ -142,6 +152,67 @@ describe('ManageKabasTasksDetailComponent', () => {
     });
   });
 
+  describe('clickDeleteTask()', () => {
+    let openDialogSpy: jest.SpyInstance;
+    const taskToDelete = {
+      id: 1,
+      name: 'test',
+      eduContentAmount: 0,
+      assignees: [new AssigneeFixture()]
+    };
+
+    beforeEach(() => {
+      openDialogSpy = jest.spyOn(matDialog, 'open');
+    });
+
+    it('should open a confirmation dialog', () => {
+      const mockDialogRef = {
+        afterClosed: () => of(false),
+        close: null
+      } as MatDialogRef<ConfirmationModalComponent>;
+      openDialogSpy.mockReturnValue(mockDialogRef);
+
+      component.clickDeleteTask(taskToDelete);
+
+      expect(openDialogSpy).toHaveBeenCalledTimes(1);
+      expect(openDialogSpy).toHaveBeenCalledWith(ConfirmationModalComponent, {
+        data: {
+          title: 'Taak verwijderen',
+          message: 'Ben je zeker dat je de geselecteerde taak wil verwijderen?'
+        }
+      });
+    });
+
+    it('should call vm.removeTasks when the user confirms', () => {
+      const removeTaskSpy = jest.spyOn(viewModel, 'removeTasks');
+
+      const mockDialogRef = {
+        afterClosed: () => of(true), // fake confirmation
+        close: null
+      } as MatDialogRef<ConfirmationModalComponent>;
+      openDialogSpy.mockReturnValue(mockDialogRef);
+
+      component.clickDeleteTask(taskToDelete);
+
+      expect(removeTaskSpy).toHaveBeenCalledTimes(1);
+      expect(removeTaskSpy).toHaveBeenCalledWith([taskToDelete], true);
+    });
+
+    it('should not call vm.removeTasks when the user cancels', () => {
+      const removeTaskSpy = jest.spyOn(viewModel, 'removeTasks');
+
+      const mockDialogRef = {
+        afterClosed: () => of(false), // fake cancel
+        close: null
+      } as MatDialogRef<ConfirmationModalComponent>;
+      openDialogSpy.mockReturnValue(mockDialogRef);
+
+      component.clickDeleteTask(taskToDelete);
+
+      expect(removeTaskSpy).not.toHaveBeenCalled();
+    });
+  });
+
   describe('openNewTaskDialog()', () => {
     const afterClosed: BehaviorSubject<any> = new BehaviorSubject(null);
     const mockFormData: NewTaskFormValues = {
@@ -183,7 +254,9 @@ describe('ManageKabasTasksDetailComponent', () => {
       afterClosed.next(null);
       component.openNewTaskDialog();
 
-      expect(router.navigate).toHaveBeenCalledWith(['tasks', 'manage']);
+      expect(router.navigate).toHaveBeenCalledWith(['tasks', 'manage'], {
+        queryParams: { tab: 0 }
+      });
     }));
 
     it('should pass new task data to the viewmodel if there was formData in the dialog result', () => {
