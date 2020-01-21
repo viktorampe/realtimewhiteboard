@@ -4,18 +4,15 @@ import {
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
   DalState,
-  EduContentFixture,
   EffectFeedback,
   EffectFeedbackActions,
   FavoriteActions,
   FavoriteInterface,
   FavoriteTypesEnum,
   getRouterState,
-  LearningAreaFixture,
   LearningAreaInterface,
   RouterStateUrl,
   TaskActions,
-  TaskEduContentFixture,
   TaskEduContentInterface,
   TaskInterface
 } from '@campus/dal';
@@ -23,7 +20,13 @@ import { Update } from '@ngrx/entity';
 import { RouterReducerState } from '@ngrx/router-store';
 import { Action, select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, shareReplay } from 'rxjs/operators';
+import {
+  distinctUntilChanged,
+  filter,
+  map,
+  shareReplay,
+  switchMap
+} from 'rxjs/operators';
 import {
   AssigneeInterface,
   AssigneeTypesEnum
@@ -34,7 +37,8 @@ import {
 } from '../interfaces/TaskWithAssignees.interface';
 import {
   allowedLearningAreas,
-  getTasksWithAssignments
+  getTasksWithAssignmentsByType,
+  getTaskWithAssignmentAndEduContents
 } from './kabas-tasks.viewmodel.selectors';
 
 export interface CurrentTaskParams {
@@ -60,16 +64,20 @@ export class KabasTasksViewModel {
     @Inject(MAT_DATE_LOCALE) private dateLocale
   ) {
     this.tasksWithAssignments$ = this.store.pipe(
-      select(getTasksWithAssignments, {
-        isPaper: false,
-        type: FavoriteTypesEnum.TASK
-      })
+      select(getTasksWithAssignmentsByType, {
+        isPaper: false
+      }),
+      map(tasks =>
+        tasks.map(task => ({
+          ...task,
+          isFavorite: task.id % 2 === 0
+        }))
+      )
     );
 
     this.paperTasksWithAssignments$ = this.store.pipe(
-      select(getTasksWithAssignments, {
-        isPaper: true,
-        type: FavoriteTypesEnum.TASK
+      select(getTasksWithAssignmentsByType, {
+        isPaper: true
       })
     );
 
@@ -202,29 +210,14 @@ export class KabasTasksViewModel {
   }
 
   private getCurrentTask(): Observable<TaskWithAssigneesInterface> {
-    // TODO
-    // return this.paperTasksWithAssignments$.pipe(
-    return this.tasksWithAssignments$.pipe(
-      map(tasks => ({
-        ...tasks[0],
-        taskEduContents: [1, 2, 3].map(
-          id =>
-            new TaskEduContentFixture({
-              eduContentId: id,
-              eduContent: new EduContentFixture(
-                { id },
-                {
-                  id,
-                  title: 'oefening ' + id,
-                  learningArea: new LearningAreaFixture({
-                    id: 1,
-                    name: 'Wiskunde'
-                  })
-                }
-              )
-            })
-        )
-      }))
+    return this.currentTaskParams$.pipe(
+      switchMap(currentTaskParams => {
+        return this.store.pipe(
+          select(getTaskWithAssignmentAndEduContents, {
+            taskId: currentTaskParams.id
+          })
+        );
+      })
     );
   }
 
