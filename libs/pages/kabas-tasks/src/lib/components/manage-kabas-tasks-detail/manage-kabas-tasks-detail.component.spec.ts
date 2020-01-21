@@ -8,7 +8,7 @@ import {
 } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import {
   EduContentFixture,
@@ -43,6 +43,7 @@ describe('ManageKabasTasksDetailComponent', () => {
   let viewModel: MockKabasTasksViewModel;
   let matDialog: MatDialog;
   let router: Router;
+  const queryParams: BehaviorSubject<Params> = new BehaviorSubject<Params>({});
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
@@ -69,6 +70,13 @@ describe('ManageKabasTasksDetailComponent', () => {
           provide: MatDialog,
           useValue: {
             open: () => {}
+          }
+        },
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            queryParams,
+            snapshot: { queryParams: queryParams.getValue() }
           }
         }
       ]
@@ -246,7 +254,9 @@ describe('ManageKabasTasksDetailComponent', () => {
       afterClosed.next(null);
       component.openNewTaskDialog();
 
-      expect(router.navigate).toHaveBeenCalledWith(['tasks', 'manage']);
+      expect(router.navigate).toHaveBeenCalledWith(['tasks', 'manage'], {
+        queryParams: { tab: 0 }
+      });
     }));
 
     it('should pass new task data to the viewmodel if there was formData in the dialog result', () => {

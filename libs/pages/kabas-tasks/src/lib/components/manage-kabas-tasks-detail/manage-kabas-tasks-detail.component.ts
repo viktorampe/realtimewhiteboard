@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatSelectionList } from '@angular/material';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { EduContentInterface, LearningAreaInterface } from '@campus/dal';
 import { SearchFilterCriteriaInterface } from '@campus/search';
 import { ConfirmationModalComponent, SideSheetComponent } from '@campus/ui';
@@ -50,7 +50,8 @@ export class ManageKabasTasksDetailComponent implements OnInit {
   constructor(
     private viewModel: KabasTasksViewModel,
     private dialog: MatDialog,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {
     this.isNewTask$ = this.viewModel.currentTaskParams$.pipe(
       map(currentTaskParams => !currentTaskParams.id)
@@ -172,7 +173,11 @@ export class ManageKabasTasksDetailComponent implements OnInit {
               formData.type
             );
           } else {
-            this.router.navigate(['tasks', 'manage']);
+            const queryParams = { tab: 0 };
+            if (this.route.snapshot.queryParams.paper) {
+              queryParams.tab = 1;
+            }
+            this.router.navigate(['tasks', 'manage'], { queryParams });
           }
         });
     });
