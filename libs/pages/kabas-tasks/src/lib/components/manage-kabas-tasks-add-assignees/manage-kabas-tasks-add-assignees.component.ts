@@ -8,15 +8,10 @@ import {
 } from '@angular/core';
 import { MatSelectionList } from '@angular/material';
 import { SearchTermComponent } from '@campus/search';
-import { BehaviorSubject } from 'rxjs';
 import {
   AssigneeInterface,
   AssigneeTypesEnum
 } from '../../interfaces/Assignee.interface';
-
-interface AddAssigneeFilterState {
-  label?: string;
-}
 
 interface AssigneesByType {
   label: string;
@@ -31,13 +26,13 @@ interface AssigneesByType {
 })
 export class ManageKabasTasksAddAssigneesComponent implements OnInit {
   public filteredAssignees: {
-    map: { [id: number]: AssigneeInterface };
-    isTypeFiltered: { [label: string]: boolean };
+    map: { [id: number]: boolean };
+    isTypeInFilter: { [label: string]: boolean };
   };
   public assignees: AssigneesByType[];
-  public filterState$ = new BehaviorSubject<AddAssigneeFilterState>({});
-  @ViewChild(MatSelectionList, { static: false })
-  private assigneeList: MatSelectionList;
+
+  @ViewChild('assigneeList', { static: false })
+  public assigneeList: MatSelectionList;
   @ViewChild(SearchTermComponent, { static: false })
   private searchTermFilter: SearchTermComponent;
   @Input() public students: AssigneeInterface[] = [
@@ -95,13 +90,12 @@ export class ManageKabasTasksAddAssigneesComponent implements OnInit {
   }
 
   public updateLabelFilter(text: string) {
-    console.log(text);
     this.filter(text);
   }
 
   public resetFilter() {
-    this.filterState$.next({ label: '' });
     this.searchTermFilter.currentValue = '';
+    this.filter('');
   }
 
   public clearSelection() {
@@ -121,24 +115,16 @@ export class ManageKabasTasksAddAssigneesComponent implements OnInit {
   private filter(text: string) {
     this.filteredAssignees = this.assignees.reduce(
       (acc, item) => {
-        const filteredValues = item.value.filter(
-          filteredItem =>
-            filteredItem.label.toLowerCase().indexOf(text.toLowerCase()) !== -1
-        );
-
-        console.log(item);
-
-        filteredValues.forEach(value => {
-          acc.map[value.id] = true;
+        item.value.forEach(assignee => {
+          if (assignee.label.toLowerCase().indexOf(text.toLowerCase()) !== -1) {
+            acc.map[assignee.id] = true;
+            acc.isTypeInFilter[item.label] = true;
+          }
         });
-
-        acc.isTypeFiltered[item.label] = filteredValues.length === 0;
 
         return acc;
       },
-      { map: {}, isTypeFiltered: {} }
+      { map: {}, isTypeInFilter: {} }
     );
-
-    console.log(this.filteredAssignees);
   }
 }

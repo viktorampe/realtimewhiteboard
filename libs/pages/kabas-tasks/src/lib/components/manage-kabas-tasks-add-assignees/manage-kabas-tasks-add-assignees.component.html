@@ -12,14 +12,18 @@
   ></campus-button
 ></div>
 <ng-container *ngIf="assignees.length; else noResults">
+  <div *ngIf="assigneeList.selectedOptions.selected.length"
+    >{{ assigneeList.selectedOptions.selected.length }} geselecteerd</div
+  >
   <mat-selection-list
+    #assigneeList
     [class.mat-selection-list--has-selection]="true"
     class="manage-kabas-tasks-detail__list"
   >
     <ng-container *ngFor="let assigneeType of assignees">
       <div
         [style.display]="
-          filteredAssignees.isTypeFiltered[assigneeType.label] ? 'none' : ''
+          filteredAssignees.isTypeInFilter[assigneeType.label] ? '' : 'none'
         "
         >{{ assigneeType.label }}</div
       >
