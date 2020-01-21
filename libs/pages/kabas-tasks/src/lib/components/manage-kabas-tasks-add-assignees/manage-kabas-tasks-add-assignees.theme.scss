@@ -23,6 +23,7 @@
     $pages-kabas-tasks_list--no-results-padding-horizontal !default;
   $manage-kabas-tasks-add-assignees_list_item_checkbox-scale: $pages-kabas-tasks_list_item_checkbox-scale !default;
   $manage-kabas-tasks-add-assignees_list_item_checkbox-opacity: $pages-kabas-tasks_list_item_checkbox-opacity !default;
+  $manage-kabas-tasks-add-assignees_list_header_color: $pages-kabas-tasks_list_header-color !default;
 
   .manage-kabas-tasks-add-assignees {
     &__content {
@@ -65,11 +66,6 @@
         }
       }
 
-      &__selected {
-        margin: $manage-kabas-tasks-add-assignees_list-margin !important;
-        padding-left: $manage-kabas-tasks-add-assignees_list-padding-left;
-      }
-
       &__list {
         margin: $manage-kabas-tasks-add-assignees_list-margin !important;
         padding-left: $manage-kabas-tasks-add-assignees_list-padding-left;
@@ -92,6 +88,15 @@
             }
           }
         }
+
+        &__header {
+          color:  $manage-kabas-tasks-add-assignees_list_header_color;
+        }
+      }
+
+      &__selected {
+        margin: $manage-kabas-tasks-add-assignees_list-margin !important;
+        padding-left: $manage-kabas-tasks-add-assignees_list-padding-left;
       }
 
       &--no-results {

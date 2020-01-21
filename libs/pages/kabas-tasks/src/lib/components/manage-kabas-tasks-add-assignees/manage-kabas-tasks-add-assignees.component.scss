@@ -18,6 +18,8 @@
       overflow: auto;
 
       &__header {
+        font-weight: bold;
+
         &--hidden {
           display: none;
         }
