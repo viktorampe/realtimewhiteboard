@@ -193,22 +193,25 @@ describe('Kabas-tasks viewmodel selectors', () => {
           status: 'active',
           assignees: [
             {
-              type: AssigneeTypesEnum.CLASSGROUP,
               id: 2,
+              type: AssigneeTypesEnum.CLASSGROUP,
+              relationId: 2,
               label: '2c',
               start: new Date(date - 22),
               end: new Date(date + 22)
             },
             {
-              type: AssigneeTypesEnum.GROUP,
               id: 2,
+              type: AssigneeTypesEnum.GROUP,
+              relationId: 2,
               label: 'Frederic Gryspeerdt fanclub',
               start: new Date(date - 11),
               end: new Date(date + 11)
             },
             {
-              type: AssigneeTypesEnum.STUDENT,
               id: 2,
+              type: AssigneeTypesEnum.STUDENT,
+              relationId: 2,
               label: 'Mieke Mokke',
               start: new Date(date - 33),
               end: new Date(date + 33)
@@ -245,22 +248,25 @@ describe('Kabas-tasks viewmodel selectors', () => {
           status: 'active',
           assignees: [
             {
-              type: AssigneeTypesEnum.CLASSGROUP,
               id: 1,
+              type: AssigneeTypesEnum.CLASSGROUP,
+              relationId: 1,
               label: '1A',
               start: new Date(date - 2),
               end: new Date(date + 2)
             },
             {
-              type: AssigneeTypesEnum.GROUP,
               id: 1,
+              type: AssigneeTypesEnum.GROUP,
+              relationId: 1,
               label: 'Remediëring 2c',
               start: new Date(date - 1),
               end: new Date(date + 1)
             },
             {
-              type: AssigneeTypesEnum.STUDENT,
               id: 1,
+              type: AssigneeTypesEnum.STUDENT,
+              relationId: 1,
               label: 'Polleke Enkeltje',
               start: new Date(date - 3),
               end: new Date(date + 3)
@@ -284,22 +290,25 @@ describe('Kabas-tasks viewmodel selectors', () => {
           status: 'active',
           assignees: [
             {
-              type: AssigneeTypesEnum.CLASSGROUP,
               id: 2,
+              type: AssigneeTypesEnum.CLASSGROUP,
+              relationId: 2,
               label: '2c',
               start: new Date(date - 22),
               end: new Date(date + 22)
             },
             {
-              type: AssigneeTypesEnum.GROUP,
               id: 2,
+              type: AssigneeTypesEnum.GROUP,
+              relationId: 2,
               label: 'Frederic Gryspeerdt fanclub',
               start: new Date(date - 11),
               end: new Date(date + 11)
             },
             {
-              type: AssigneeTypesEnum.STUDENT,
               id: 2,
+              type: AssigneeTypesEnum.STUDENT,
+              relationId: 2,
               label: 'Mieke Mokke',
               start: new Date(date - 33),
               end: new Date(date + 33)
@@ -366,22 +375,25 @@ describe('Kabas-tasks viewmodel selectors', () => {
         status: 'active',
         assignees: [
           {
-            type: AssigneeTypesEnum.CLASSGROUP,
             id: 1,
+            type: AssigneeTypesEnum.CLASSGROUP,
+            relationId: 1,
             label: '1A',
             start: new Date(date - 2),
             end: new Date(date + 2)
           },
           {
-            type: AssigneeTypesEnum.GROUP,
             id: 1,
+            type: AssigneeTypesEnum.GROUP,
+            relationId: 1,
             label: 'Remediëring 2c',
             start: new Date(date - 1),
             end: new Date(date + 1)
           },
           {
-            type: AssigneeTypesEnum.STUDENT,
             id: 1,
+            type: AssigneeTypesEnum.STUDENT,
+            relationId: 1,
             label: 'Polleke Enkeltje',
             start: new Date(date - 3),
             end: new Date(date + 3)
