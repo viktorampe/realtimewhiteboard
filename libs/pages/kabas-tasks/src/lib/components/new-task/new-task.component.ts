@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
 import { LearningAreaInterface } from '@campus/dal';
-import { Source } from '../../interfaces/source.type';
+import { Source } from '../../interfaces/Source.type';
 
 export interface NewTaskFormValues {
   title: string;
