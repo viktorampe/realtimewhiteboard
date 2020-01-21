@@ -224,7 +224,7 @@ describe('Methods', () => {
 
       dataCy('lesson-link')
         .first()
-        .click();
+        .click({ force: true });
 
       checkLPGUnchecked(1);
     });
@@ -261,7 +261,7 @@ describe('Methods', () => {
       // Since the first chapter is selected, we can assume the first lesson link is the 2nd child (= index 1)
       dataCy('lesson-link')
         .eq(1)
-        .click();
+        .click({ force: true });
 
       for (let i = 0; i <= 2; i++) {
         checkLPGChecked(i);
