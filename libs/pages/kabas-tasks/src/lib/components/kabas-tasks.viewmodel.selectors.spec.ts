@@ -156,6 +156,7 @@ describe('Kabas-tasks viewmodel selectors', () => {
             isFavorite: false
           }),
           eduContentAmount: 0,
+          taskEduContents: [],
           learningArea: new LearningAreaFixture({ name: 'wiskunde' }),
           startDate: undefined,
           endDate: undefined,
@@ -312,6 +313,7 @@ describe('Kabas-tasks viewmodel selectors', () => {
             isFavorite: false
           }),
           eduContentAmount: 0,
+          taskEduContents: [],
           learningArea: new LearningAreaFixture({ name: 'wiskunde' }),
           startDate: undefined,
           endDate: undefined,
