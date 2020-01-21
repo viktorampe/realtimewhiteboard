@@ -66,13 +66,7 @@ export class KabasTasksViewModel {
     this.tasksWithAssignments$ = this.store.pipe(
       select(getTasksWithAssignmentsByType, {
         isPaper: false
-      }),
-      map(tasks =>
-        tasks.map(task => ({
-          ...task,
-          isFavorite: task.id % 2 === 0
-        }))
-      )
+      })
     );
 
     this.paperTasksWithAssignments$ = this.store.pipe(
@@ -236,6 +230,7 @@ export class KabasTasksViewModel {
 
   private getCurrentTask(): Observable<TaskWithAssigneesInterface> {
     return this.currentTaskParams$.pipe(
+      filter(taskParams => !!taskParams.id),
       switchMap(currentTaskParams => {
         return this.store.pipe(
           select(getTaskWithAssignmentAndEduContents, {

@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   EventEmitter,
   Input,
@@ -24,7 +25,8 @@ interface ButtonOption {
 @Component({
   selector: 'campus-button-toggle-filter',
   templateUrl: './button-toggle-filter.component.html',
-  styleUrls: ['./button-toggle-filter.component.scss']
+  styleUrls: ['./button-toggle-filter.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ButtonToggleFilterComponent
   implements SearchFilterComponentInterface, OnInit, OnDestroy {

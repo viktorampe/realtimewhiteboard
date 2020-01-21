@@ -208,7 +208,7 @@ function mapToTaskWithAssigneeInterface(
     ...task,
     learningArea: learningArea,
     eduContentAmount: taskEduContents ? taskEduContents.length : 0,
-    taskEduContents: taskEduContents,
+    taskEduContents: taskEduContents || [],
     assignees: assigneesByTask[task.id] || [],
     isFavorite: favoriteTaskIds.includes(task.id)
   });
