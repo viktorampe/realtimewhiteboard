@@ -180,12 +180,18 @@ export const getTasksWithAssignmentsByType = createSelector(
 export const getTaskWithAssignmentAndEduContents = createSelector(
   [getAllTasksWithAssignments, EduContentQueries.getAllEntities],
   (tasksWithAssignments, eduContents, props: { taskId: number }) => {
-    const foundTask = tasksWithAssignments.find(
-      task => task.id === props.taskId
-    );
-    foundTask.taskEduContents.forEach(tEdu => {
-      tEdu.eduContent = eduContents[tEdu.eduContentId];
-    });
+    const foundTask = {
+      ...tasksWithAssignments.find(task => task.id === props.taskId)
+    };
+
+    foundTask.taskEduContents = foundTask.taskEduContents.length
+      ? foundTask.taskEduContents.map(tEdu => {
+          return {
+            ...tEdu,
+            eduContent: eduContents[tEdu.eduContentId]
+          };
+        })
+      : [];
 
     return foundTask;
   }
