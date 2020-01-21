@@ -330,11 +330,7 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
   }
 
   clickDeleteTasks() {
-    // first check with the viewmodel which tasks can be deleted
     const deleteInfo = this.viewModel.getDeleteInfo(this.getSelectedTasks());
-    // update message:
-    // - deze kunnen niet verwijderd worden
-    // - wil je de andere taken nog verwijderen?
 
     const dialogData = {
       title: 'Taken verwijderen',

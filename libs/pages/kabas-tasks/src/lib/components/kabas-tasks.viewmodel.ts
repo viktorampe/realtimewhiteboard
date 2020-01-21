@@ -163,20 +163,22 @@ export class KabasTasksViewModel {
       }
     });
 
-    const test = this.getDeleteMessage(nonDeletableTasks, deletableTasks);
-    const message = `${test.body} ${test.confirmQuestion}`;
+    const message = this.getDeleteConfirmationMessage(
+      nonDeletableTasks,
+      deletableTasks
+    );
 
     return {
       deletableTasks,
       message,
-      disableConfirmButton: test.disableConfirmButton
+      disableConfirmButton: nonDeletableTasks.length === tasks.length
     };
   }
 
-  getDeleteMessage(
+  getDeleteConfirmationMessage(
     errors: TaskWithAssigneesInterface[],
     deletableTasks: TaskWithAssigneesInterface[]
-  ) {
+  ): string {
     let body = '';
     let confirmQuestion =
       '<p>Ben je zeker dat je de geselecteerde taken wil verwijderen?</p>';
@@ -193,7 +195,7 @@ export class KabasTasksViewModel {
       }
     }
 
-    return { body, confirmQuestion, disableConfirmButton };
+    return `${body} ${confirmQuestion}`;
   }
 
   public removeTasks(
