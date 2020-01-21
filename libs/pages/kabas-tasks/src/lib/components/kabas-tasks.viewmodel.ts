@@ -159,7 +159,13 @@ export class KabasTasksViewModel {
     );
   }
 
-  public getDeleteInfo(tasks: TaskWithAssigneesInterface[]) {
+  public getDeleteInfo(
+    tasks: TaskWithAssigneesInterface[]
+  ): {
+    deletableTasks: TaskWithAssigneesInterface[];
+    message: string;
+    disableConfirmButton: boolean;
+  } {
     const deletableTasks = [];
     const nonDeletableTasks = [];
 
@@ -272,33 +278,6 @@ export class KabasTasksViewModel {
     return updateAction;
   }
 
-  private getDestroyingAction(deleteIds, errors, navigateAfterDelete) {
-    const destroyAction = new TaskActions.StartDeleteTasks({
-      ids: deleteIds,
-      userId: this.authService.userId,
-      navigateAfterDelete
-    });
-    if (errors.length) {
-      const effectFeedback = new EffectFeedback({
-        id: this.uuid(),
-        triggerAction: destroyAction,
-        message: this.stillActiveTaskFeedbackMessage(errors, 'delete'),
-        userActions: this.getFeedbackUserActions(
-          deleteIds.length,
-          destroyAction,
-          'delete'
-        ),
-        type: 'error'
-      });
-
-      const feedbackAction = new EffectFeedbackActions.AddEffectFeedback({
-        effectFeedback
-      });
-      return feedbackAction;
-    }
-    return destroyAction;
-  }
-
   private getFeedbackUserActions(
     numberOfUpdates: number,
     userAction,
@@ -353,19 +332,15 @@ export class KabasTasksViewModel {
     let body = '';
     let confirmQuestion =
       '<p>Ben je zeker dat je de geselecteerde taken wil verwijderen?</p>';
-    let disableConfirmButton = false;
 
     if (errors.length) {
       body = this.stillActiveTaskFeedbackMessage(errors, 'delete');
       if (deletableTasks.length) {
         confirmQuestion =
           '<p>Ben je zeker dat je de andere taken wil verwijderen?</p>';
-      } else {
-        confirmQuestion = '';
-        disableConfirmButton = true;
       }
     }
 
-    return `${body} ${confirmQuestion}`;
+    return `${body}${confirmQuestion}`;
   }
 }
