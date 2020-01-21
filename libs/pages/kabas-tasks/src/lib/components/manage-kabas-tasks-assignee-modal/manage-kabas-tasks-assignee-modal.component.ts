@@ -35,7 +35,7 @@ export class ManageKabasTasksAssigneeModalComponent implements OnInit {
     this.determineDefaultDateInterval(this.data.currentTaskAssignees);
 
     this.currentTaskName = this.data.title;
-    this.currentTaskIsPaperTask = this.data.isPapertask;
+    this.currentTaskIsPaperTask = this.data.isPaperTask;
 
     // page assignees shouldn't be affected -> clone
     this.currentTaskAssignees$ = new BehaviorSubject(
