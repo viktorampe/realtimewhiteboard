@@ -122,6 +122,112 @@ describe('KabasTaskViewModel', () => {
     });
   });
 
+  describe('getDeleteInfo()', () => {
+    function messages(errors: TaskWithAssigneesInterface[]): string {
+      return errors
+        .map(error => {
+          const activeUntil = error.endDate
+            ? ` Deze taak is nog actief tot ${error.endDate.toLocaleDateString(
+                dateLocale
+              )}.`
+            : '';
+          return `<li>${error.name} kan niet worden verwijderd.${activeUntil}</li>`;
+        })
+        .join('');
+    }
+
+    const tasksThatCanBeDeleted: TaskWithAssigneesInterface[] = [
+      {
+        id: 1,
+        name: 'Finished Task',
+        eduContentAmount: 1,
+        assignees: [],
+        status: TaskStatusEnum.FINISHED,
+        startDate: new Date(Date.now() - 1000),
+        endDate: new Date(Date.now() - 500),
+        isPaperTask: false
+      },
+      {
+        id: 4,
+        name: 'Paper Task',
+        eduContentAmount: 1,
+        assignees: [],
+        isPaperTask: true
+      }
+    ];
+
+    const tasksThatCanNotBeDeleted: TaskWithAssigneesInterface[] = [
+      {
+        id: 2,
+        name: 'Pending Task',
+        eduContentAmount: 1,
+        assignees: [],
+        status: TaskStatusEnum.PENDING,
+        startDate: new Date(Date.now() - 1000),
+        endDate: new Date(Date.now() + 1000),
+        isPaperTask: false
+      },
+      {
+        id: 3,
+        name: 'Active Task',
+        eduContentAmount: 1,
+        assignees: [],
+        status: TaskStatusEnum.ACTIVE,
+        startDate: new Date(Date.now() - 1000),
+        endDate: new Date(Date.now() + 1000),
+        isPaperTask: false
+      }
+    ];
+
+    let tasksReadyForDeletion: TaskWithAssigneesInterface[];
+
+    it('should return info for mixed tasks', () => {
+      tasksReadyForDeletion = [
+        ...tasksThatCanBeDeleted,
+        ...tasksThatCanNotBeDeleted
+      ];
+
+      const expected = {
+        deletableTasks: [tasksReadyForDeletion[0], tasksReadyForDeletion[1]],
+        message: `<p>Niet alle taken kunnen verwijderd worden:</p><ul>${messages(
+          [tasksReadyForDeletion[2], tasksReadyForDeletion[3]]
+        )}</ul><p>Ben je zeker dat je de andere taken wil verwijderen?</p>`,
+        disableConfirmButton: false
+      };
+      const result = kabasTasksViewModel.getDeleteInfo(tasksReadyForDeletion);
+
+      expect(result).toEqual(expected);
+    });
+
+    it('should return info for tasks that can be deleted', () => {
+      tasksReadyForDeletion = tasksThatCanBeDeleted;
+
+      const expected = {
+        deletableTasks: [tasksReadyForDeletion[0], tasksReadyForDeletion[1]],
+        message: `<p>Ben je zeker dat je de geselecteerde taken wil verwijderen?</p>`,
+        disableConfirmButton: false
+      };
+      const result = kabasTasksViewModel.getDeleteInfo(tasksReadyForDeletion);
+
+      expect(result).toEqual(expected);
+    });
+
+    it('should return info for tasks that can not be deleted', () => {
+      tasksReadyForDeletion = tasksThatCanNotBeDeleted;
+
+      const expected = {
+        deletableTasks: [],
+        message: `<p>Niet alle taken kunnen verwijderd worden:</p><ul>${messages(
+          tasksReadyForDeletion
+        )}</ul><p>Ben je zeker dat je de geselecteerde taken wil verwijderen?</p>`,
+        disableConfirmButton: true
+      };
+      const result = kabasTasksViewModel.getDeleteInfo(tasksReadyForDeletion);
+
+      expect(result).toEqual(expected);
+    });
+  });
+
   describe('createTask', () => {
     let dispatchSpy: jest.SpyInstance;
 
@@ -366,7 +472,7 @@ describe('KabasTaskViewModel', () => {
   });
 
   describe('removeTasks', () => {
-    let taskAssignees;
+    let taskAssignees: TaskWithAssigneesInterface[];
     beforeEach(() => {
       taskAssignees = [
         {
@@ -409,20 +515,7 @@ describe('KabasTaskViewModel', () => {
       ] as TaskWithAssigneesInterface[];
     });
     /* -- HELPERS -- */
-    const mapToTaskIds = task => ({ taskId: task.id });
-    const canDelete = ta =>
-      ta.status === TaskStatusEnum.FINISHED || (!ta.endDate && !ta.startDate);
-    const messages = errors =>
-      errors
-        .map(error => {
-          const activeUntil = error.endDate
-            ? ` Deze taak is nog actief tot ${error.endDate.toLocaleDateString(
-                dateLocale
-              )}.`
-            : '';
-          return `<li>${error.name} kan niet worden verwijderd.${activeUntil}</li>`;
-        })
-        .join('');
+    const mapToTaskIds = task => task.id as number;
 
     it('should dispatch delete when no errors detected', () => {
       const spy = jest.spyOn(store, 'dispatch');
@@ -435,54 +528,6 @@ describe('KabasTaskViewModel', () => {
       });
       kabasTasksViewModel.removeTasks(tasks);
       expect(spy).toHaveBeenCalledWith(destroyAction);
-    });
-
-    it('should dispatch feedback with userAction when mixed errors and deleteIds', () => {
-      const spy = jest.spyOn(store, 'dispatch');
-      const tasks = taskAssignees.filter(ta => !ta.isPaperTask);
-      const errors = tasks.filter(ta => !canDelete(ta));
-      const destroyAction = new TaskActions.StartDeleteTasks({
-        userId: authService.userId,
-        ids: tasks.filter(canDelete).map(mapToTaskIds)
-      });
-      const effectFeedback = new EffectFeedback({
-        id: uuid(),
-        triggerAction: destroyAction,
-        message:
-          `<p>Niet alle taken kunnen verwijderd worden:</p>` +
-          `<ul>${messages(errors)}</ul>`,
-        userActions: [
-          { title: 'Verwijder de andere taken', userAction: destroyAction }
-        ],
-        type: 'error'
-      });
-      const feedbackAction = new EffectFeedbackActions.AddEffectFeedback({
-        effectFeedback
-      });
-      kabasTasksViewModel.removeTasks(tasks);
-      expect(spy).toHaveBeenCalledWith(feedbackAction);
-    });
-    it('should dispatch feedback without userActions when only errors occurred', () => {
-      const spy = jest.spyOn(store, 'dispatch');
-      const errors = taskAssignees.filter(ta => !canDelete(ta));
-      const destroyAction = new TaskActions.StartDeleteTasks({
-        userId: authService.userId,
-        ids: []
-      });
-      const effectFeedback = new EffectFeedback({
-        id: uuid(),
-        triggerAction: destroyAction,
-        message:
-          `<p>Niet alle taken kunnen verwijderd worden:</p>` +
-          `<ul>${messages(errors)}</ul>`,
-        userActions: [],
-        type: 'error'
-      });
-      const feedbackAction = new EffectFeedbackActions.AddEffectFeedback({
-        effectFeedback
-      });
-      kabasTasksViewModel.removeTasks(errors);
-      expect(spy).toHaveBeenCalledWith(feedbackAction);
     });
   });
 
