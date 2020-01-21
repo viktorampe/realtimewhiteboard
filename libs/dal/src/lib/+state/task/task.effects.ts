@@ -208,7 +208,6 @@ export class TaskEffects {
           );
       },
       undoAction: (action: UpdateTask, error: any) => {
-        console.log('undo', error);
         return new AddEffectFeedback({
           effectFeedback: EffectFeedback.generateErrorFeedback(
             this.uuid(),

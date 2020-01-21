@@ -38,6 +38,7 @@ import {
   TasksLoaded,
   TasksLoadError,
   UpdateAccess,
+  UpdateTask,
   UpdateTasks
 } from './task.actions';
 import { TaskEffects } from './task.effects';
@@ -294,6 +295,54 @@ describe('TaskEffects', () => {
         new StartAddTask({ task: taskToCreate, userId }),
         addFeedbackAction
       );
+    });
+  });
+
+  describe('updateTask', () => {
+    const taskId = 2;
+    const userId = 123;
+
+    const partialTask: TaskInterface = { id: taskId, name: 'Updated' };
+    const task = new TaskFixture({ id: taskId });
+    const updateAction = new UpdateTask({
+      userId,
+      task: { id: taskId, changes: partialTask }
+    });
+    let updateSpy: jest.SpyInstance;
+
+    beforeEach(() => {
+      updateSpy = taskService.updateTasks = jest.fn();
+    });
+    it('should call the service and dispatch feedback', () => {
+      updateSpy.mockReturnValue(of({ ...task, ...partialTask }));
+      const effectFeedback = new EffectFeedback({
+        id: uuid(),
+        triggerAction: updateAction,
+        message: 'De taak werd bijgewerkt.',
+        type: 'success',
+        userActions: [],
+        priority: Priority.NORM
+      });
+      const addFeedbackAction = new AddEffectFeedback({ effectFeedback });
+      expectInAndOut(effects.updateTask$, updateAction, addFeedbackAction);
+    });
+    it('should dispatch feedback on error', () => {
+      updateSpy.mockRejectedValue(new Error('Helaba!'));
+      const effectFeedback = new EffectFeedback({
+        id: uuid(),
+        triggerAction: updateAction,
+        message: 'Het is niet gelukt om de taak bij te werken.',
+        type: 'error',
+        userActions: [
+          {
+            title: 'Opnieuw proberen',
+            userAction: updateAction
+          }
+        ],
+        priority: Priority.HIGH
+      });
+      const addFeedbackAction = new AddEffectFeedback({ effectFeedback });
+      expectInAndOut(effects.updateTask$, updateAction, addFeedbackAction);
     });
   });
 
