@@ -5,12 +5,63 @@
 @import './components/new-task/new-task.component.theme';
 @import './components/manage-kabas-tasks-add-assignees/manage-kabas-tasks-add-assignees.theme';
 
+// color palette
 $pages-kabas-tasks-text-color--primary: black !default;
 $pages-kabas-tasks-text-color--primary--accent: darkred !default;
-$pages-kabas-tasks-background-color--primary: white !default;
-$pages-kabas-tasks-border-color--primary: lightgrey !default;
 $pages-kabas-tasks-text-color--secondary: grey !default;
+
+$pages-kabas-tasks-border-color--primary: lightgrey !default;
+$pages-kabas-tasks-border-color--secondary: $primary-font-color-2 !default;
+
+$pages-kabas-tasks-background-color--primary: white !default;
 $pages-kabas-tasks-background-color--secondary: white !default;
+
+// default spacing unit
+$pages-kabas-tasks-spacing-unit: 4px !default;
+$pages-kabas-tasks-spacing--horizontal: $pages-kabas-tasks-spacing-unit * 2 !default;
+$pages-kabas-tasks-spacing--vertical: $pages-kabas-tasks-spacing-unit !default;
+
+// dialog dimensions
+$pages-kabas-tasks_dialog-content-width: 75vw !default;
+$pages-kabas-tasks_dialog-content-max-width: 600px !default;
+$pages-kabas-tasks_dialog-content-height: 65vh !default;
+
+// list styling
+$pages-kabas-tasks_list-margin-horizontal: $pages-kabas-tasks-spacing--horizontal !default;
+$pages-kabas-tasks_list-padding-horizontal: $pages-kabas-tasks-spacing--horizontal *
+  2 !default;
+$pages-kabas-tasks_list--no-results-padding-horizontal: $pages-kabas-tasks-spacing--horizontal *
+  2 !default;
+$pages-kabas-tasks_list--no-results-padding-vertical: $pages-kabas-tasks-spacing--vertical *
+  2 !default;
+
+$pages-kabas-tasks_list_item--action-font-weight: bold !default;
+$pages-kabas-tasks_list_item--action-padding-left: $pages-kabas-tasks-spacing--horizontal *
+  2 !default;
+$pages-kabas-tasks_list_item--action-margin-bottom: $pages-kabas-tasks-spacing--vertical !default;
+$pages-kabas-tasks_list_item_checkbox-scale: 0.8 !default;
+$pages-kabas-tasks_list_item_checkbox-opacity: 0.3 !default;
+
+// date-picker
+$pages-kabas-tasks_date-picker-font-size: 14px !default;
+
+// filters
+$pages-kabas-tasks_filter-width: 150px !default;
+$pages-kabas-tasks_filter-height: 50px !default;
+$pages-kabas-tasks_filter-margin-right: $pages-kabas-tasks-spacing--horizontal !default;
+$pages-kabas-tasks_filter--hover-color: $pages-kabas-tasks-text-color--primary !default;
+$pages-kabas-tasks_filter--hover-background-color: $pages-kabas-tasks-background-color--secondary !default;
+$pages-kabas-tasks_filter--active-background-color: $filters-active-background-color !default;
+
+$pages-kabas-tasks_filter_reset-height: $pages-kabas-tasks_filter-height !default;
+$pages-kabas-tasks_filter_reset-width: $pages-kabas-tasks_filter-height !default;
+$pages-kabas-tasks_filter_reset-border-width: 1px !default;
+$pages-kabas-tasks_filter_reset-border-color: $pages-kabas-tasks-border-color--secondary !default;
+$pages-kabas-tasks_filter_reset-background-color: transparent !default;
+
+$pages-kabas-tasks_filter_container-padding-left: $pages-kabas-tasks-spacing--horizontal *
+  2 !default;
+$pages-kabas-tasks_filter_container-padding-top: $pages-kabas-tasks-spacing--vertical !default;
 
 @mixin pages-kabas-tasks-theme() {
   @include manage-kabas-tasks-overview-theme();

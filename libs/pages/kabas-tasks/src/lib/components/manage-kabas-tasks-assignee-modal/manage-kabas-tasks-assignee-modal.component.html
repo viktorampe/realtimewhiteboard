@@ -24,13 +24,21 @@
     <h2 class="manage-task-assignees__title__label"
       >{{ currentTaskName }} beheren
     </h2>
-    <mat-icon
-      class="manage-task-assignees__title__action"
-      [svgIcon]="'add'"
-      (click)="toggleAddAssignees()"
-    ></mat-icon>
   </div>
   <mat-dialog-content class="manage-task-assignees__content">
+    <div
+      *ngIf="!showAdvanced"
+      class="manage-task-assignees__content__date-picker__container"
+    >
+      <campus-date-range-picker
+        class="manage-task-assignees__content__date-picker"
+        [useTime]="false"
+        [initialStartDate]="default.start"
+        [initialEndDate]="default.end"
+        (valueChanged)="setDefaultDateRange($event)"
+      ></campus-date-range-picker>
+    </div>
+
     <div class="manage-task-assignees__content__header">
       <h4 class="manage-task-assignees__content__header__label"
         >Toegewezen aan
@@ -47,19 +55,6 @@
         class="manage-task-assignees__content__header__view-toggle"
         >(Gebruik 1 datum)</a
       >
-    </div>
-
-    <div
-      *ngIf="!showAdvanced"
-      class="manage-task-assignees__content__date-picker__container"
-    >
-      <campus-date-range-picker
-        class="manage-task-assignees__content__date-picker"
-        [useTime]="false"
-        [initialStartDate]="default.start"
-        [initialEndDate]="default.end"
-        (valueChanged)="setDefaultDateRange($event)"
-      ></campus-date-range-picker>
     </div>
 
     <ng-container *ngIf="currentTaskAssignees$ | async as currentTaskAssignees">

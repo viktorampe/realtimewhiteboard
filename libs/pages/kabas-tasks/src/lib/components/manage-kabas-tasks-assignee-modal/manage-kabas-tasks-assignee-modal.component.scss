@@ -18,13 +18,7 @@
     }
 
     &__date-picker {
-      &__label {
-        align-self: center;
-        margin-right: 8px;
-      }
-
       &__container {
-        padding: 8px 0px;
         display: flex;
         align-items: center;
       }
@@ -32,32 +26,14 @@
   }
 
   &__content {
-    height: 65vh;
-
-    &__add-assignees {
-      padding: 4px 0px;
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-
-      &__container {
-        margin-bottom: 4px;
-      }
-    }
-
     &__header {
       display: flex;
-      padding-top: 8px;
-
-      &__label {
-        margin: 0px 16px 0px 0px;
-      }
 
       &__view-toggle {
-        font-style: italic;
+        text-decoration: underline;
 
         &:hover {
-          text-decoration: underline;
+          cursor: pointer;
         }
       }
     }
@@ -65,40 +41,21 @@
     &__date-picker {
       &__label {
         align-self: center;
-        margin-right: 8px;
       }
 
       &__container {
-        padding: 8px 0px;
         display: flex;
         align-items: center;
-        margin-left: 16px;
-        margin-top: 8px;
       }
     }
 
     &__list {
-      min-height: 300px;
-
       &__item {
         height: auto;
         width: 100%;
 
         &--add {
-          background-color: #f8f8f8;
-          color: #15adb9;
-          font-weight: bold;
-          padding-left: 32px !important;
           cursor: pointer;
-          margin-bottom: 4px;
-
-          &__icon {
-            margin-right: 16px;
-          }
-        }
-
-        &:nth-child(odd) {
-          background-color: whitesmoke;
         }
 
         &:not(:hover) {
@@ -115,9 +72,7 @@
           display: flex;
           flex-direction: row;
           width: 100%;
-          padding: 4px;
           align-items: center;
-          min-height: 32px;
 
           &__caption {
             flex: 1 1 25%;
@@ -130,17 +85,8 @@
 
           &__date-picker {
             flex: 2 1 25%;
-            font-size: 14px;
           }
         }
-
-        &__action {
-          color: darkgray;
-        }
-      }
-
-      &--no-content {
-        min-height: 300px;
       }
     }
   }

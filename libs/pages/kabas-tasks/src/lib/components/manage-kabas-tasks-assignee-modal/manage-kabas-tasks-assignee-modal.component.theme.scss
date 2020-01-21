@@ -1,6 +1,89 @@
 @mixin pages-kabas-tasks-modal-theme() {
+  $manage-kabas-tasks-assignee-modal-color--primary--accent: $pages-kabas-tasks-text-color--primary--accent !default;
+  $manage-kabas-tasks-assignee-modal-background-color--secondary: $pages-kabas-tasks-background-color--secondary !default;
+
+  $manage-kabas-tasks-assignee-modal-horizontal-spacing: $pages-kabas-tasks-spacing--horizontal !default;
+  $manage-kabas-tasks-assignee-modal-vertical-spacing: $pages-kabas-tasks-spacing--vertical !default;
+
+  $manage-kabas-tasks-assignee-modal_dialog-width: $pages-kabas-tasks_dialog-content-width !default;
+  $manage-kabas-tasks-assignee-modal_dialog-max-width: $pages-kabas-tasks_dialog-content-max-width !default;
+  $manage-kabas-tasks-assignee-modal_dialog-content-height: $pages-kabas-tasks_dialog-content-height !default;
+
+  $manage-kabas-tasks-assignee-modal_container-padding: $manage-kabas-tasks-assignee-modal-horizontal-spacing
+    0px !default;
+
+  $manage-kabas-tasks-assignee-modal_list_primary-action-font-weight: $pages-kabas-tasks_list_item--action-font-weight !default;
+  $manage-kabas-tasks-assignee-modal_list_primary-action-padding-left: $pages-kabas-tasks_list_item--action-padding-left !default;
+  $manage-kabas-tasks-assignee-modal_list_primary-action-margin-bottom: $pages-kabas-tasks_list_item--action-margin-bottom !default;
+
+  $manage-kabas-tasks-assignee-modal_date-picker-font-size: $pages-kabas-tasks_date-picker-font-size !default;
+
   .manage-task-assignees {
-    width: 75vw;
-    max-width: 600px !important;
+    width: $manage-kabas-tasks-assignee-modal_dialog-width;
+    max-width: $manage-kabas-tasks-assignee-modal_dialog-max-width !important;
+
+    &__title {
+      &__date-picker {
+        &__container {
+          padding: $manage-kabas-tasks-assignee-modal_container-padding;
+        }
+      }
+    }
+
+    &__content {
+      height: $manage-kabas-tasks-assignee-modal_dialog-content-height;
+
+      &__header {
+        padding: $manage-kabas-tasks-assignee-modal_container-padding;
+
+        &__label {
+          margin: 0 $manage-kabas-tasks-assignee-modal-horizontal-spacing * 2 0
+            0;
+        }
+
+        &__view-toggle {
+          color: $manage-kabas-tasks-assignee-modal-color--primary--accent;
+        }
+      }
+
+      &__date-picker {
+        &__container {
+          padding: $manage-kabas-tasks-assignee-modal_container-padding;
+        }
+      }
+
+      &__list {
+        &__item {
+          &--add {
+            background-color: $manage-kabas-tasks-assignee-modal-background-color--secondary;
+            color: $manage-kabas-tasks-assignee-modal-color--primary--accent !important;
+            font-weight: $manage-kabas-tasks-assignee-modal_list_primary-action-font-weight;
+            padding-left: $manage-kabas-tasks-assignee-modal_list_primary-action-padding-left !important;
+            margin-bottom: $manage-kabas-tasks-assignee-modal_list_primary-action-margin-bottom;
+
+            &__icon {
+              margin-right: $manage-kabas-tasks-assignee-modal-horizontal-spacing *
+                2;
+            }
+          }
+
+          &:nth-child(odd) {
+            background-color: $manage-kabas-tasks-assignee-modal-background-color--secondary;
+          }
+
+          &__content {
+            padding: $manage-kabas-tasks-assignee-modal-vertical-spacing;
+
+            &__date-picker {
+              font-size: $manage-kabas-tasks-assignee-modal_date-picker-font-size;
+            }
+          }
+
+          &__action {
+            color: $manage-kabas-tasks-assignee-modal-color--primary--accent;
+          }
+        }
+      }
+    }
   }
 }

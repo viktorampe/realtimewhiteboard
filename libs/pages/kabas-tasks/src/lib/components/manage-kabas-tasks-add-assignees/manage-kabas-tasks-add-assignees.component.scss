@@ -2,7 +2,6 @@
   display: flex;
 
   &__content {
-    height: 65vh;
     display: flex;
     flex-direction: column;
     padding-right: 0px;
@@ -17,12 +16,6 @@
     &__list {
       flex: 1 1 100%;
       overflow: auto;
-      margin: 8px 0px;
-    }
-
-    &--no-results {
-      margin: 8px 0px;
-      padding: 8px 24px;
     }
   }
 
