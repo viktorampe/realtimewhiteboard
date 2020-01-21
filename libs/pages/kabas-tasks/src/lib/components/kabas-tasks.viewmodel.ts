@@ -175,29 +175,6 @@ export class KabasTasksViewModel {
     };
   }
 
-  getDeleteConfirmationMessage(
-    errors: TaskWithAssigneesInterface[],
-    deletableTasks: TaskWithAssigneesInterface[]
-  ): string {
-    let body = '';
-    let confirmQuestion =
-      '<p>Ben je zeker dat je de geselecteerde taken wil verwijderen?</p>';
-    let disableConfirmButton = false;
-
-    if (errors.length) {
-      body = this.stillActiveTaskFeedbackMessage(errors, 'delete');
-      if (deletableTasks.length) {
-        confirmQuestion =
-          '<p>Ben je zeker dat je de andere taken wil verwijderen?</p>';
-      } else {
-        confirmQuestion = '';
-        disableConfirmButton = true;
-      }
-    }
-
-    return `${body} ${confirmQuestion}`;
-  }
-
   public removeTasks(
     tasks: TaskWithAssigneesInterface[],
     navigateAfterDelete?: boolean
@@ -374,5 +351,28 @@ export class KabasTasksViewModel {
     message.push(...list);
     message.push('</ul>');
     return message.join('');
+  }
+
+  private getDeleteConfirmationMessage(
+    errors: TaskWithAssigneesInterface[],
+    deletableTasks: TaskWithAssigneesInterface[]
+  ): string {
+    let body = '';
+    let confirmQuestion =
+      '<p>Ben je zeker dat je de geselecteerde taken wil verwijderen?</p>';
+    let disableConfirmButton = false;
+
+    if (errors.length) {
+      body = this.stillActiveTaskFeedbackMessage(errors, 'delete');
+      if (deletableTasks.length) {
+        confirmQuestion =
+          '<p>Ben je zeker dat je de andere taken wil verwijderen?</p>';
+      } else {
+        confirmQuestion = '';
+        disableConfirmButton = true;
+      }
+    }
+
+    return `${body} ${confirmQuestion}`;
   }
 }

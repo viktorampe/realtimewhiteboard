@@ -910,13 +910,25 @@ describe('ManageKabasTasksOverviewComponent', () => {
         selectedPaperTasks
       );
 
+      const deleteInfoMock = {
+        message: 'foo',
+        disableConfirmButton: false,
+        deletableTasks: [selectedPaperTasks[0]]
+      };
+
       let openDialogSpy: jest.SpyInstance;
+      let getDeleteInfoSpy: jest.SpyInstance;
 
       beforeEach(() => {
         openDialogSpy = jest.spyOn(matDialog, 'open');
+        getDeleteInfoSpy = jest
+          .spyOn(kabasTasksViewModel, 'getDeleteInfo')
+          .mockReturnValue(deleteInfoMock);
       });
 
       it('should open a confirmation dialog', () => {
+        setSelectionList(digitalSelectionList);
+
         const mockDialogRef = {
           afterClosed: () => of(false),
           close: null
@@ -925,12 +937,15 @@ describe('ManageKabasTasksOverviewComponent', () => {
 
         component.clickDeleteTasks();
 
+        expect(getDeleteInfoSpy).toHaveBeenCalledTimes(1);
+        expect(getDeleteInfoSpy).toHaveBeenCalledWith(selectedDigitalTasks);
+
         expect(openDialogSpy).toHaveBeenCalledTimes(1);
         expect(openDialogSpy).toHaveBeenCalledWith(ConfirmationModalComponent, {
           data: {
             title: 'Taken verwijderen',
-            message:
-              'Ben je zeker dat je de geselecteerde taken wil verwijderen?'
+            message: deleteInfoMock.message,
+            disableConfirm: deleteInfoMock.disableConfirmButton
           }
         });
       });
@@ -949,7 +964,7 @@ describe('ManageKabasTasksOverviewComponent', () => {
         component.clickDeleteTasks();
 
         expect(removeTasksSpy).toHaveBeenCalledTimes(1);
-        expect(removeTasksSpy).toHaveBeenCalledWith(selectedPaperTasks);
+        expect(removeTasksSpy).toHaveBeenCalledWith([selectedPaperTasks[0]]);
       });
 
       it('should not call vm.removeTasks when the user cancels', () => {
