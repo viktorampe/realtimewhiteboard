@@ -32,6 +32,7 @@ import {
   DeleteTasks,
   LoadTasks,
   NavigateToTaskDetail,
+  NavigateToTasksOverview,
   StartAddTask,
   StartArchiveTasks,
   StartDeleteTasks,
@@ -457,17 +458,22 @@ describe('TaskEffects', () => {
     let deleteTasksSpy: jest.SpyInstance;
     const taskIds = [1, 2];
     const userId = 123;
-    const triggerAction = new StartDeleteTasks({ userId, ids: taskIds });
+    const triggerAction = new StartDeleteTasks({
+      userId,
+      ids: taskIds,
+      navigateAfterDelete: true
+    });
 
     beforeEach(() => {
       deleteTasksSpy = taskService['deleteTasks'] = jest.fn();
     });
-    it('should call the service and dispatch feedback, no errors', () => {
+    it('should call the service, redirect and dispatch feedback, no errors', () => {
       deleteTasksSpy.mockReturnValue(
         of({ tasks: taskIds.map(id => ({ id })), errors: [] })
       );
       const expectedMessage = 'De taken werden verwijderd.';
       const deleteAction = new DeleteTasks({ ids: taskIds });
+      const redirectAction = new NavigateToTasksOverview();
       const feedbackAction = new AddEffectFeedback({
         effectFeedback: {
           id: uuid(),
@@ -483,9 +489,10 @@ describe('TaskEffects', () => {
       });
       actions = hot('a', { a: triggerAction });
       expect(effects.deleteTasks$).toBeObservable(
-        hot('(ab)', {
+        hot('(abc)', {
           a: deleteAction,
-          b: feedbackAction
+          b: feedbackAction,
+          c: redirectAction
         })
       );
     });

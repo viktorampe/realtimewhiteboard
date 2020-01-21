@@ -3,9 +3,9 @@ import { MatDialog, MatSelectionList } from '@angular/material';
 import { Router } from '@angular/router';
 import { EduContentInterface, LearningAreaInterface } from '@campus/dal';
 import { SearchFilterCriteriaInterface } from '@campus/search';
-import { SideSheetComponent } from '@campus/ui';
+import { ConfirmationModalComponent, SideSheetComponent } from '@campus/ui';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { map, take } from 'rxjs/operators';
+import { filter, map, take } from 'rxjs/operators';
 import { AssigneeTypesEnum } from '../../interfaces/Assignee.interface';
 import { TaskWithAssigneesInterface } from '../../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
@@ -117,8 +117,25 @@ export class ManageKabasTasksDetailComponent implements OnInit {
   ) {
     this.viewModel.startArchivingTasks(tasks, isArchived);
   }
-  public removeTasks(tasks: TaskWithAssigneesInterface[]) {
-    this.viewModel.removeTasks(tasks);
+
+  clickDeleteTask(task: TaskWithAssigneesInterface) {
+    const dialogData = {
+      title: 'Taak verwijderen',
+      message: 'Ben je zeker dat je de geselecteerde taak wil verwijderen?'
+    };
+
+    const dialogRef = this.dialog.open(ConfirmationModalComponent, {
+      data: dialogData
+    });
+
+    dialogRef
+      .afterClosed()
+      .pipe(filter(confirmed => confirmed))
+      .subscribe(() => this.removeTask(task));
+  }
+
+  public removeTask(tasks: TaskWithAssigneesInterface) {
+    this.viewModel.removeTasks([tasks], true);
   }
 
   public updateTitle(task: TaskWithAssigneesInterface, title: string) {

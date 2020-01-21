@@ -367,7 +367,7 @@ describe('KabasTaskViewModel', () => {
           isPaperTask: false
         },
         {
-          id: 3,
+          id: 4,
           name: 'Paper Task',
           eduContentAmount: 1,
           assignees: [],
@@ -379,37 +379,18 @@ describe('KabasTaskViewModel', () => {
     const mapToTaskIds = task => task.id;
     const canDelete = ta =>
       ta.status === TaskStatusEnum.FINISHED || (!ta.endDate && !ta.startDate);
-    const messages = errors =>
-      errors
-        .map(error => {
-          const activeUntil = error.endDate
-            ? ` Deze taak is nog actief tot ${error.endDate.toLocaleDateString(
-                dateLocale
-              )}.`
-            : '';
-          return `<li>${error.name} kan niet worden verwijderd.${activeUntil}</li>`;
-        })
-        .join('');
 
-    it('should dispatch delete when no errors deteted', () => {
-      const spy = jest.spyOn(store, 'dispatch');
-      const expected = new TaskActions.StartDeleteTasks({
-        userId,
-        ids: [1, 3]
-      });
-      kabasTasksViewModel.removeTasks(taskAssignees);
-      expect(spy).toHaveBeenCalledWith(expected);
-    });
-
-    it('should dispatch feedback with userAction when mixed errors and deleteIds', () => {
+    it('should dispatch StartDeleteTasks with userId, task ids and navigateAfterDelete', () => {
       const spy = jest.spyOn(store, 'dispatch');
       const tasks = taskAssignees.filter(ta => !ta.isPaperTask);
+
       const destroyAction = new TaskActions.StartDeleteTasks({
         userId: authService.userId,
-        ids: tasks.filter(canDelete).map(mapToTaskIds)
+        ids: tasks.filter(task => canDelete(task)).map(mapToTaskIds),
+        navigateAfterDelete: true
       });
 
-      kabasTasksViewModel.removeTasks(tasks);
+      kabasTasksViewModel.removeTasks(tasks, true);
       expect(spy).toHaveBeenCalledWith(destroyAction);
     });
   });
