@@ -72,17 +72,23 @@
           [placeholder]="'Titel'"
           [required]="true"
           [icon]="'edit'"
-          (textChanged)="('TODO updateTask')"
+          (textChanged)="updateTitle(task, $event)"
           data-cy="task-title"
+          [relatedItem]="task"
+          class="manage-kabas-tasks-detail__info__title"
         ></campus-content-editable>
+
         <campus-content-editable
           [text]="task.description"
           [placeholder]="'Omschrijving'"
           [multiline]="true"
           [required]="false"
           [icon]="'edit'"
-          (textChanged)="('TODO updateTask')"
+          (textChanged)="updateDescription(task, $event)"
+          [relatedItem]="task"
+          class="manage-kabas-tasks-detail__info__description"
         ></campus-content-editable>
+
         <p>{{ task.learningArea.name }}</p>
         <ng-template #showDates>
           <p *ngIf="task.startDate"
@@ -122,7 +128,9 @@
           <campus-button>Print</campus-button>
         </ng-container>
         <campus-button primary>+ oefening toevoegen</campus-button>
-        <campus-button danger>verwijder taak</campus-button>
+        <campus-button danger (click)="clickDeleteTask(task)">
+          verwijder taak
+        </campus-button>
       </ng-container>
 
       <ng-template #contentDetails>

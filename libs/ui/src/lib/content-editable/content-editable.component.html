@@ -1,5 +1,10 @@
 <div class="ui-content-editable">
-  <span class="ui-content-editable__text" *ngIf="!active">{{ text }}</span>
+  <span
+    class="ui-content-editable__text"
+    *ngIf="!active"
+    [class.ui-content-editable__text--placeholder]="!text"
+    >{{ text || placeholder }}</span
+  >
   <mat-form-field
     class="ui-content-editable__form-field"
     [style.display]="active ? null : 'none'"

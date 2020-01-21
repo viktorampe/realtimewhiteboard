@@ -28,7 +28,8 @@ export enum TasksActionTypes {
   UpdateAccess = '[Tasks] Update Access',
   StartDeleteTasks = '[Tasks] Start Delete Tasks',
   StartAddTask = '[Tasks] Start Add Task',
-  NavigateToTaskDetail = '[Tasks] Navigate To Task Detail'
+  NavigateToTaskDetail = '[Tasks] Navigate To Task Detail',
+  NavigateToTasksOverview = '[Tasks] Navigate To Task Overview'
 }
 
 export class LoadTasks implements Action {
@@ -74,11 +75,15 @@ export class UpsertTasks implements Action {
   constructor(public payload: { tasks: TaskInterface[] }) {}
 }
 
-export class UpdateTask implements Action {
+export class UpdateTask implements FeedbackTriggeringAction {
   readonly type = TasksActionTypes.UpdateTask;
 
   constructor(
-    public payload: { userId: number; task: Update<TaskInterface> }
+    public payload: {
+      userId: number;
+      task: Update<TaskInterface>;
+      customFeedbackHandlers?: CustomFeedbackHandlersInterface;
+    }
   ) {}
 }
 
@@ -140,6 +145,7 @@ export class StartDeleteTasks implements FeedbackTriggeringAction {
     public payload: {
       ids: number[];
       userId: number;
+      navigateAfterDelete?: boolean;
       customFeedbackHandlers?: CustomFeedbackHandlersInterface;
     }
   ) {}
@@ -167,6 +173,12 @@ export class NavigateToTaskDetail implements Action {
   ) {}
 }
 
+export class NavigateToTasksOverview implements Action {
+  readonly type = TasksActionTypes.NavigateToTasksOverview;
+
+  constructor() {}
+}
+
 export type TasksActions =
   | LoadTasks
   | TasksLoaded
@@ -183,4 +195,5 @@ export type TasksActions =
   | UpdateAccess
   | StartDeleteTasks
   | StartAddTask
-  | NavigateToTaskDetail;
+  | NavigateToTaskDetail
+  | NavigateToTasksOverview;

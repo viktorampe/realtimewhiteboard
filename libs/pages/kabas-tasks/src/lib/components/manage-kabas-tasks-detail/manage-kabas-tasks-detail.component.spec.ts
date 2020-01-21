@@ -1,6 +1,7 @@
 import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
 import {
   MatDialog,
+  MatDialogRef,
   MatRadioModule,
   MatSelectModule,
   MatSlideToggleModule
@@ -20,10 +21,11 @@ import {
   ENVIRONMENT_TESTING_TOKEN,
   SharedModule
 } from '@campus/shared';
-import { UiModule } from '@campus/ui';
+import { ConfirmationModalComponent, UiModule } from '@campus/ui';
 import { hot } from '@nrwl/angular/testing';
 import { configureTestSuite } from 'ng-bullet';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, of } from 'rxjs';
+import { AssigneeFixture } from '../../interfaces/Assignee.fixture';
 import {
   CurrentTaskParams,
   KabasTasksViewModel
@@ -142,6 +144,67 @@ describe('ManageKabasTasksDetailComponent', () => {
     });
   });
 
+  describe('clickDeleteTask()', () => {
+    let openDialogSpy: jest.SpyInstance;
+    const taskToDelete = {
+      id: 1,
+      name: 'test',
+      eduContentAmount: 0,
+      assignees: [new AssigneeFixture()]
+    };
+
+    beforeEach(() => {
+      openDialogSpy = jest.spyOn(matDialog, 'open');
+    });
+
+    it('should open a confirmation dialog', () => {
+      const mockDialogRef = {
+        afterClosed: () => of(false),
+        close: null
+      } as MatDialogRef<ConfirmationModalComponent>;
+      openDialogSpy.mockReturnValue(mockDialogRef);
+
+      component.clickDeleteTask(taskToDelete);
+
+      expect(openDialogSpy).toHaveBeenCalledTimes(1);
+      expect(openDialogSpy).toHaveBeenCalledWith(ConfirmationModalComponent, {
+        data: {
+          title: 'Taak verwijderen',
+          message: 'Ben je zeker dat je de geselecteerde taak wil verwijderen?'
+        }
+      });
+    });
+
+    it('should call vm.removeTasks when the user confirms', () => {
+      const removeTaskSpy = jest.spyOn(viewModel, 'removeTasks');
+
+      const mockDialogRef = {
+        afterClosed: () => of(true), // fake confirmation
+        close: null
+      } as MatDialogRef<ConfirmationModalComponent>;
+      openDialogSpy.mockReturnValue(mockDialogRef);
+
+      component.clickDeleteTask(taskToDelete);
+
+      expect(removeTaskSpy).toHaveBeenCalledTimes(1);
+      expect(removeTaskSpy).toHaveBeenCalledWith([taskToDelete], true);
+    });
+
+    it('should not call vm.removeTasks when the user cancels', () => {
+      const removeTaskSpy = jest.spyOn(viewModel, 'removeTasks');
+
+      const mockDialogRef = {
+        afterClosed: () => of(false), // fake cancel
+        close: null
+      } as MatDialogRef<ConfirmationModalComponent>;
+      openDialogSpy.mockReturnValue(mockDialogRef);
+
+      component.clickDeleteTask(taskToDelete);
+
+      expect(removeTaskSpy).not.toHaveBeenCalled();
+    });
+  });
+
   describe('openNewTaskDialog()', () => {
     const afterClosed: BehaviorSubject<any> = new BehaviorSubject(null);
     const mockFormData: NewTaskFormValues = {
@@ -232,6 +295,43 @@ describe('ManageKabasTasksDetailComponent', () => {
 
       expect(taskInfoDE).toBeFalsy();
       expect(eduContentInfoDE.length).toBe(2);
+    });
+  });
+
+  describe('update actions', () => {
+    it('should update title when text changed', () => {
+      const titleComponent = fixture.debugElement.query(
+        By.css('.manage-kabas-tasks-detail__info__title')
+      );
+
+      const newText = 'You are more than who you were';
+
+      spyOn(component, 'updateTitle');
+      titleComponent.componentInstance.textChanged.emit(newText);
+
+      expect(component.updateTitle).toHaveBeenCalled();
+      expect(component.updateTitle).toHaveBeenCalledWith(
+        titleComponent.componentInstance.relatedItem,
+        newText
+      );
+    });
+
+    it('should update description when text changed', () => {
+      const descriptionComponent = fixture.debugElement.query(
+        By.css('.manage-kabas-tasks-detail__info__description')
+      );
+
+      const newText = "Time isn't the main thing. It's the only thing.";
+
+      spyOn(component, 'updateDescription');
+
+      descriptionComponent.componentInstance.textChanged.emit(newText);
+
+      expect(component.updateDescription).toHaveBeenCalled();
+      expect(component.updateDescription).toHaveBeenCalledWith(
+        descriptionComponent.componentInstance.relatedItem,
+        newText
+      );
     });
   });
 });

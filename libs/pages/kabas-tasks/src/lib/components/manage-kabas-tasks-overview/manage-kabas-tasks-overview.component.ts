@@ -163,12 +163,22 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
     this.tasksWithAssignments$ = combineLatest([
       this.digitalFilteredTasks$,
       this.currentSortMode$
-    ]).pipe(map(([tasks, sortMode]) => this.sortTasks(tasks, sortMode)));
+    ]).pipe(
+      map(([tasks, sortMode]) => this.sortTasks(tasks, sortMode)),
+      map(tasks =>
+        tasks.map(task => ({ ...task, actions: this.getActions(task) }))
+      )
+    );
 
     this.paperTasksWithAssignments$ = combineLatest([
       this.paperFilteredTasks$,
       this.currentSortMode$
-    ]).pipe(map(([tasks, sortMode]) => this.sortTasks(tasks, sortMode)));
+    ]).pipe(
+      map(([tasks, sortMode]) => this.sortTasks(tasks, sortMode)),
+      map(tasks =>
+        tasks.map(task => ({ ...task, actions: this.getActions(task) }))
+      )
+    );
 
     this.learningAreaFilter$ = this.viewModel.tasksWithAssignments$.pipe(
       map(this.sortAndCreateForLearningAreaFilter)
@@ -304,8 +314,8 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
     } as SearchFilterCriteriaInterface;
   }
 
-  public getActions(
-    task?: TaskWithAssigneesInterface
+  private getActions(
+    task: TaskWithAssigneesInterface
   ): { label: string; handler: Function }[] {
     return [
       {
@@ -328,7 +338,7 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
   clickAddPaperTask() {
     this.router.navigate(['tasks', 'manage', 'new']);
   }
-  // TODO: implement handler
+
   clickDeleteTasks() {
     const dialogData = {
       title: 'Taken verwijderen',
@@ -352,12 +362,10 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
     this.viewModel.removeTasks(this.getSelectedTasks());
   }
 
-  // TODO: implement handler
   clickArchiveTasks() {
     this.viewModel.startArchivingTasks(this.getSelectedTasks(), true);
   }
 
-  // TODO: implement handler
   clickUnarchiveTasks() {
     this.viewModel.startArchivingTasks(this.getSelectedTasks(), false);
   }
