@@ -2,7 +2,6 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { UiModule } from '../ui.module';
 import { ConfirmationModalComponent } from './confirmation-modal.component';
-
 describe('ConfirmationPopUpComponent', () => {
   let component: ConfirmationModalComponent;
   let fixture: ComponentFixture<ConfirmationModalComponent>;
@@ -15,7 +14,8 @@ describe('ConfirmationPopUpComponent', () => {
           provide: MAT_DIALOG_DATA,
           useValue: {
             title: 'foo',
-            message: 'bar'
+            message: 'bar',
+            disableConfirm: false
           }
         },
         {
@@ -42,7 +42,15 @@ describe('ConfirmationPopUpComponent', () => {
   });
 
   it('confirm should close the dialog with true value', () => {
+    component.disableConfirm = false;
+
     component.confirm();
     expect(component.dialogRef.close).toHaveBeenCalledWith(true);
+  });
+  it('confirm should not close the dialog when disableConfirm = true', () => {
+    component.disableConfirm = true;
+
+    component.confirm();
+    expect(component.dialogRef.close).not.toHaveBeenCalled();
   });
 });

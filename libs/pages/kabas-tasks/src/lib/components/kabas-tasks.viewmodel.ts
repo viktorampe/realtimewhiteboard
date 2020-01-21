@@ -176,21 +176,46 @@ export class KabasTasksViewModel {
     );
   }
 
+  public getDeleteInfo(
+    tasks: TaskWithAssigneesInterface[]
+  ): {
+    deletableTasks: TaskWithAssigneesInterface[];
+    message: string;
+    disableConfirmButton: boolean;
+  } {
+    const deletableTasks = [];
+    const nonDeletableTasks = [];
+
+    tasks.forEach(task => {
+      if (this.canBeArchivedOrDeleted(task)) {
+        deletableTasks.push(task);
+      } else {
+        nonDeletableTasks.push(task);
+      }
+    });
+
+    const message = this.getDeleteConfirmationMessage(
+      nonDeletableTasks,
+      deletableTasks
+    );
+
+    return {
+      deletableTasks,
+      message,
+      disableConfirmButton: nonDeletableTasks.length === tasks.length
+    };
+  }
+
   public removeTasks(
     tasks: TaskWithAssigneesInterface[],
     navigateAfterDelete?: boolean
   ): void {
-    const deleteIds = [];
-    const errors = [];
-    tasks.forEach(task => {
-      if (this.canBeArchivedOrDeleted(task)) {
-        deleteIds.push({ taskId: task.id });
-      } else {
-        errors.push(task);
-      }
-    });
     this.store.dispatch(
-      this.getDestroyingAction(deleteIds, errors, navigateAfterDelete)
+      new TaskActions.StartDeleteTasks({
+        ids: tasks.map(task => task.id),
+        userId: this.authService.userId,
+        navigateAfterDelete
+      })
     );
   }
 
@@ -270,33 +295,6 @@ export class KabasTasksViewModel {
     return updateAction;
   }
 
-  private getDestroyingAction(deleteIds, errors, navigateAfterDelete) {
-    const destroyAction = new TaskActions.StartDeleteTasks({
-      ids: deleteIds,
-      userId: this.authService.userId,
-      navigateAfterDelete
-    });
-    if (errors.length) {
-      const effectFeedback = new EffectFeedback({
-        id: this.uuid(),
-        triggerAction: destroyAction,
-        message: this.stillActiveTaskFeedbackMessage(errors, 'delete'),
-        userActions: this.getFeedbackUserActions(
-          deleteIds.length,
-          destroyAction,
-          'delete'
-        ),
-        type: 'error'
-      });
-
-      const feedbackAction = new EffectFeedbackActions.AddEffectFeedback({
-        effectFeedback
-      });
-      return feedbackAction;
-    }
-    return destroyAction;
-  }
-
   private getFeedbackUserActions(
     numberOfUpdates: number,
     userAction,
@@ -342,5 +340,24 @@ export class KabasTasksViewModel {
     message.push(...list);
     message.push('</ul>');
     return message.join('');
+  }
+
+  private getDeleteConfirmationMessage(
+    errors: TaskWithAssigneesInterface[],
+    deletableTasks: TaskWithAssigneesInterface[]
+  ): string {
+    let body = '';
+    let confirmQuestion =
+      '<p>Ben je zeker dat je de geselecteerde taken wil verwijderen?</p>';
+
+    if (errors.length) {
+      body = this.stillActiveTaskFeedbackMessage(errors, 'delete');
+      if (deletableTasks.length) {
+        confirmQuestion =
+          '<p>Ben je zeker dat je de andere taken wil verwijderen?</p>';
+      }
+    }
+
+    return `${body}${confirmQuestion}`;
   }
 }
