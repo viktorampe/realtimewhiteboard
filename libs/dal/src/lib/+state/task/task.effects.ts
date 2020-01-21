@@ -36,6 +36,7 @@ import {
   TasksLoaded,
   TasksLoadError,
   UpdateAccess,
+  UpdateTask,
   UpdateTasks
 } from './task.actions';
 
@@ -203,6 +204,34 @@ export class TaskEffects {
     { dispatch: false }
   );
 
+  updateTask$ = createEffect(() =>
+    this.dataPersistence.optimisticUpdate(TasksActionTypes.UpdateTask, {
+      run: (action: UpdateTask, state: DalState) => {
+        return this.taskService
+          .updateTasks(action.payload.userId, [action.payload.task.changes])
+          .pipe(
+            map(update => {
+              return new AddEffectFeedback({
+                effectFeedback: EffectFeedback.generateSuccessFeedback(
+                  this.uuid(),
+                  action,
+                  'De taak werd bijgewerkt.'
+                )
+              });
+            })
+          );
+      },
+      undoAction: (action: UpdateTask, error: any) => {
+        return new AddEffectFeedback({
+          effectFeedback: EffectFeedback.generateErrorFeedback(
+            this.uuid(),
+            action,
+            'Het is niet gelukt om de taak bij te werken.'
+          )
+        });
+      }
+    })
+  );
   startArchiveTasks$ = createEffect(() =>
     this.dataPersistence.pessimisticUpdate(TasksActionTypes.StartArchiveTasks, {
       run: (action: StartArchiveTasks, state: DalState) => {

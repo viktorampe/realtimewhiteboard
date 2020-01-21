@@ -11,6 +11,7 @@ import {
   getRouterState,
   PersonFixture,
   TaskActions,
+  TaskEduContentFixture,
   TaskFixture,
   UserQueries
 } from '@campus/dal';
@@ -26,6 +27,7 @@ import {
   TaskWithAssigneesInterface
 } from '../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from './kabas-tasks.viewmodel';
+import { getTaskWithAssignmentAndEduContents } from './kabas-tasks.viewmodel.selectors';
 
 describe('KabasTaskViewModel', () => {
   const dateMock = new MockDate();
@@ -258,6 +260,37 @@ describe('KabasTaskViewModel', () => {
       expect(kabasTasksViewModel.currentTaskParams$).toBeObservable(
         hot('a', {
           a: { id: undefined }
+        })
+      );
+    });
+  });
+
+  describe('currentTask$', () => {
+    const currentTaskParams = { id: 1 };
+    const expectedTask = {
+      ...new TaskFixture({ id: 1, isPaperTask: true }), // this is the current task!!
+      eduContentAmount: 1,
+      assignees: [],
+      taskEduContents: [
+        new TaskEduContentFixture({ id: 1, eduContentId: 1 }) // this eduContent should be included
+      ]
+    };
+
+    beforeEach(() => {
+      store.overrideSelector(getRouterState, {
+        navigationId: 1,
+        state: {
+          url: '',
+          params: currentTaskParams
+        }
+      });
+      store.overrideSelector(getTaskWithAssignmentAndEduContents, expectedTask);
+    });
+
+    it('should return the current task with related eduContents', () => {
+      expect(kabasTasksViewModel.currentTask$).toBeObservable(
+        hot('a', {
+          a: expectedTask
         })
       );
     });
