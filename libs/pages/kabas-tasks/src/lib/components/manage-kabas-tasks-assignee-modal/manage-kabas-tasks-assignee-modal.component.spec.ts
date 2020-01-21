@@ -1,5 +1,14 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatDialogModule, MatDialogRef, MatIcon, MatIconRegistry, MatList, MatListItem, MatNativeDateModule, MAT_DIALOG_DATA } from '@angular/material';
+import {
+  MatDialogModule,
+  MatDialogRef,
+  MatIcon,
+  MatIconRegistry,
+  MatList,
+  MatListItem,
+  MatNativeDateModule,
+  MAT_DIALOG_DATA
+} from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { SearchModule } from '@campus/search';
@@ -42,6 +51,8 @@ describe('ManageKabasTasksAssigneeModalComponent', () => {
 
   const data: ManageKabasTasksAssigneeDataInterface = {
     title: 'Basic UX design',
+    isPapertask: true,
+
     // all available taskAssignees
     possibleTaskClassGroups: [mockClassGroupAssignee],
     possibleTaskGroups: [mockGroupAssignee],
@@ -174,8 +185,7 @@ describe('ManageKabasTasksAssigneeModalComponent', () => {
       let linkDE = getLinkDE();
       expect(linkDE).toBe(null);
 
-
-      // advanced view 
+      // advanced view
       component.showAdvanced = true;
       fixture.detectChanges();
 

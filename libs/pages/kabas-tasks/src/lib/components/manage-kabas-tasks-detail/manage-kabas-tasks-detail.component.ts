@@ -208,6 +208,8 @@ export class ManageKabasTasksDetailComponent implements OnInit {
 
     const data: ManageKabasTasksAssigneeDataInterface = {
       title: 'Basic UX design',
+      isPaperTask: true,
+
       // all available taskAssignees
       possibleTaskClassGroups,
       possibleTaskGroups,

@@ -27,7 +27,7 @@
   </div>
   <mat-dialog-content class="manage-task-assignees__content">
     <div
-      *ngIf="!showAdvanced"
+      *ngIf="!showAdvanced && !currentTaskIsPaperTask"
       class="manage-task-assignees__content__date-picker__container"
     >
       <campus-date-range-picker
@@ -43,18 +43,20 @@
         <h4 class="manage-task-assignees__content__header__label"
           >Toegewezen aan
         </h4>
-        <a
-          *ngIf="!showAdvanced && currentTaskAssignees.length > 1"
-          (click)="setShowAdvanced(true)"
-          class="manage-task-assignees__content__header__view-toggle"
-          >(Gebruik verschillende datums)</a
-        >
-        <a
-          *ngIf="showAdvanced"
-          (click)="setShowAdvanced(false)"
-          class="manage-task-assignees__content__header__view-toggle"
-          >(Gebruik 1 datum)</a
-        >
+        <ng-container *ngIf="!currentTaskIsPaperTask">
+          <a
+            *ngIf="!showAdvanced && currentTaskAssignees.length > 1"
+            (click)="setShowAdvanced(true)"
+            class="manage-task-assignees__content__header__view-toggle"
+            >(Gebruik verschillende datums)</a
+          >
+          <a
+            *ngIf="showAdvanced"
+            (click)="setShowAdvanced(false)"
+            class="manage-task-assignees__content__header__view-toggle"
+            >(Gebruik 1 datum)</a
+          >
+        </ng-container>
       </div>
 
       <mat-list class="manage-task-assignees__content__list">

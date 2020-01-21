@@ -16,6 +16,7 @@ import { ManageKabasTasksAssigneeDataInterface } from './manage-kabas-tasks-assi
 export class ManageKabasTasksAssigneeModalComponent implements OnInit {
   public showAddAssignees = false;
   public currentTaskName: string;
+  public currentTaskIsPaperTask: boolean;
   public currentTaskAssignees$: BehaviorSubject<AssigneeInterface[]>;
   public areCurrentTaskAssigneesValid$: Observable<boolean>;
   public availableTaskClassGroups$: Observable<AssigneeInterface[]>;
@@ -34,6 +35,7 @@ export class ManageKabasTasksAssigneeModalComponent implements OnInit {
     this.determineDefaultDateInterval(this.data.currentTaskAssignees);
 
     this.currentTaskName = this.data.title;
+    this.currentTaskIsPaperTask = this.data.isPapertask;
 
     // page assignees shouldn't be affected -> clone
     this.currentTaskAssignees$ = new BehaviorSubject(
@@ -42,9 +44,11 @@ export class ManageKabasTasksAssigneeModalComponent implements OnInit {
       }))
     );
 
-    this.showAdvanced = !this.currentTaskAssignees$.value.every(cTA =>
-      this.isDefaultDate(cTA.start, cTA.end)
-    );
+    this.showAdvanced =
+      !this.currentTaskIsPaperTask &&
+      !this.currentTaskAssignees$.value.every(cTA =>
+        this.isDefaultDate(cTA.start, cTA.end)
+      );
 
     this.areCurrentTaskAssigneesValid$ = this.getAreCurrentTaskAssigneesValid$();
 
@@ -78,7 +82,7 @@ export class ManageKabasTasksAssigneeModalComponent implements OnInit {
   public addAssignees(assignees: AssigneeInterface[]) {
     let dateBoundaries;
 
-    if (!this.showAdvanced) {
+    if (!this.showAdvanced && !this.currentTaskIsPaperTask) {
       dateBoundaries = this.default;
     }
 
@@ -139,22 +143,28 @@ export class ManageKabasTasksAssigneeModalComponent implements OnInit {
   private determineDefaultDateInterval(currentTaskAssignees) {
     let start, end;
 
-    // no assignees -> rest of schoolyear
-    if (currentTaskAssignees.length === 0) {
-      const today = new Date();
-      const schoolYear = this.getSchoolYearBoundaries(today);
-
-      start = today;
-      end = schoolYear.end;
+    // is paper task -> no boundaries
+    if (this.currentTaskIsPaperTask) {
+      start = undefined;
+      end = undefined;
     } else {
-      const aggregatedBoundaries = this.aggregateAssigneeBoundaries(
-        currentTaskAssignees
-      );
+      // no assignees -> rest of schoolyear
+      if (currentTaskAssignees.length === 0) {
+        const today = new Date();
+        const schoolYear = this.getSchoolYearBoundaries(today);
 
-      // all assignees use same interval -> use he most frequent (i.e. only) value
-      // if differing boundaries -> use the most frequent
-      start = aggregatedBoundaries.mostFrequentStartDate;
-      end = aggregatedBoundaries.mostFrequentEndDate;
+        start = today;
+        end = schoolYear.end;
+      } else {
+        const aggregatedBoundaries = this.aggregateAssigneeBoundaries(
+          currentTaskAssignees
+        );
+
+        // all assignees use same interval -> use he most frequent (i.e. only) value
+        // if differing boundaries -> use the most frequent
+        start = aggregatedBoundaries.mostFrequentStartDate;
+        end = aggregatedBoundaries.mostFrequentEndDate;
+      }
     }
 
     this.default = { start, end };
@@ -262,8 +272,10 @@ export class ManageKabasTasksAssigneeModalComponent implements OnInit {
 
   private getAreCurrentTaskAssigneesValid$() {
     return this.currentTaskAssignees$.pipe(
-      map(cTAs =>
-        cTAs.every(cTA => cTA.start && cTA.end && cTA.start <= cTA.end)
+      map(
+        cTAs =>
+          this.currentTaskIsPaperTask ||
+          cTAs.every(cTA => cTA.start && cTA.end && cTA.start <= cTA.end)
       )
     );
   }
