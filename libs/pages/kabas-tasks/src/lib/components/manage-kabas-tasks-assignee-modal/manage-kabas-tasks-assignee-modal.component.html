@@ -38,26 +38,25 @@
         (valueChanged)="setDefaultDateRange($event)"
       ></campus-date-range-picker>
     </div>
-
-    <div class="manage-task-assignees__content__header">
-      <h4 class="manage-task-assignees__content__header__label"
-        >Toegewezen aan
-      </h4>
-      <a
-        *ngIf="!showAdvanced"
-        (click)="setShowAdvanced(true)"
-        class="manage-task-assignees__content__header__view-toggle"
-        >(Gebruik verschillende datums)</a
-      >
-      <a
-        *ngIf="showAdvanced"
-        (click)="setShowAdvanced(false)"
-        class="manage-task-assignees__content__header__view-toggle"
-        >(Gebruik 1 datum)</a
-      >
-    </div>
-
     <ng-container *ngIf="currentTaskAssignees$ | async as currentTaskAssignees">
+      <div class="manage-task-assignees__content__header">
+        <h4 class="manage-task-assignees__content__header__label"
+          >Toegewezen aan
+        </h4>
+        <a
+          *ngIf="!showAdvanced && currentTaskAssignees.length > 1"
+          (click)="setShowAdvanced(true)"
+          class="manage-task-assignees__content__header__view-toggle"
+          >(Gebruik verschillende datums)</a
+        >
+        <a
+          *ngIf="showAdvanced"
+          (click)="setShowAdvanced(false)"
+          class="manage-task-assignees__content__header__view-toggle"
+          >(Gebruik 1 datum)</a
+        >
+      </div>
+
       <mat-list class="manage-task-assignees__content__list">
         <mat-list-item
           class="manage-task-assignees__content__list__item manage-task-assignees__content__list__item--add"

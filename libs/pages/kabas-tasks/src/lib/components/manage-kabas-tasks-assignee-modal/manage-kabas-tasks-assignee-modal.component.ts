@@ -262,7 +262,9 @@ export class ManageKabasTasksAssigneeModalComponent implements OnInit {
 
   private getAreCurrentTaskAssigneesValid$() {
     return this.currentTaskAssignees$.pipe(
-      map(cTAs => cTAs.every(cTA => cTA.start && cTA.end))
+      map(cTAs =>
+        cTAs.every(cTA => cTA.start && cTA.end && cTA.start <= cTA.end)
+      )
     );
   }
 }

@@ -1,14 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import {
-  MatDialogModule,
-  MatDialogRef,
-  MatIcon,
-  MatIconRegistry,
-  MatList,
-  MatListItem,
-  MatNativeDateModule,
-  MAT_DIALOG_DATA
-} from '@angular/material';
+import { MatDialogModule, MatDialogRef, MatIcon, MatIconRegistry, MatList, MatListItem, MatNativeDateModule, MAT_DIALOG_DATA } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { SearchModule } from '@campus/search';
@@ -164,6 +155,27 @@ describe('ManageKabasTasksAssigneeModalComponent', () => {
       expect(component.setShowAdvanced).toHaveBeenCalled();
 
       // advanced view
+      component.showAdvanced = true;
+      fixture.detectChanges();
+
+      linkDE = getLinkDE();
+      expect(linkDE.nativeElement.textContent.trim()).toBe('(Gebruik 1 datum)');
+    });
+
+    it('should not show a toggle advanced view link', () => {
+      const getLinkDE = () =>
+        fixture.debugElement.query(
+          By.css('.manage-task-assignees__content__header__view-toggle')
+        );
+
+      // single value
+      component.currentTaskAssignees$.next([mockClassGroupAssignee]);
+
+      let linkDE = getLinkDE();
+      expect(linkDE).toBe(null);
+
+
+      // advanced view 
       component.showAdvanced = true;
       fixture.detectChanges();
 
