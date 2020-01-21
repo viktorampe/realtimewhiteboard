@@ -82,7 +82,13 @@ describe('ManageKabasTasksOverviewComponent', () => {
           provide: Router,
           useValue: { navigate: jest.fn() }
         },
-        { provide: ActivatedRoute, useValue: { queryParams } },
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            queryParams,
+            snapshot: { queryParams: queryParams.value }
+          }
+        },
 
         { provide: ENVIRONMENT_ICON_MAPPING_TOKEN, useValue: {} },
         { provide: ENVIRONMENT_TESTING_TOKEN, useValue: {} },
@@ -875,15 +881,26 @@ describe('ManageKabasTasksOverviewComponent', () => {
   });
 
   describe('click handlers', () => {
+    describe('clickNewTask', () => {
+      it('should navigate to the correct route', () => {
+        queryParams.next({ tab: 0 });
+        component.clickNewTask();
+
+        expect(router.navigate).toHaveBeenCalledWith(
+          ['tasks', 'manage', 'new'],
+          { queryParams: { digital: true } }
+        );
+      });
+    });
+
     describe('clickAddDigitalTask', () => {
       it('should navigate to the correct route', () => {
         component.clickAddDigitalTask();
 
-        expect(router.navigate).toHaveBeenCalledWith([
-          'tasks',
-          'manage',
-          'new'
-        ]);
+        expect(router.navigate).toHaveBeenCalledWith(
+          ['tasks', 'manage', 'new'],
+          { queryParams: { digital: true } }
+        );
       });
     });
 
@@ -891,11 +908,10 @@ describe('ManageKabasTasksOverviewComponent', () => {
       it('should navigate to the correct route', () => {
         component.clickAddPaperTask();
 
-        expect(router.navigate).toHaveBeenCalledWith([
-          'tasks',
-          'manage',
-          'new'
-        ]);
+        expect(router.navigate).toHaveBeenCalledWith(
+          ['tasks', 'manage', 'new'],
+          { queryParams: { paper: true } }
+        );
       });
     });
 

@@ -4,6 +4,9 @@ import {
   ClassGroupFixture,
   ClassGroupReducer,
   DalState,
+  EduContentActions,
+  EduContentFixture,
+  EduContentReducer,
   FavoriteActions,
   FavoriteFixture,
   FavoriteReducer,
@@ -45,7 +48,9 @@ import { configureTestSuite } from 'ng-bullet';
 import { AssigneeTypesEnum } from '../interfaces/Assignee.interface';
 import {
   allowedLearningAreas,
-  getTasksWithAssignments
+  getAllTasksWithAssignments,
+  getTasksWithAssignmentsByType,
+  getTaskWithAssignmentAndEduContents
 } from './kabas-tasks.viewmodel.selectors';
 
 describe('Kabas-tasks viewmodel selectors', () => {
@@ -74,7 +79,8 @@ describe('Kabas-tasks viewmodel selectors', () => {
           TaskGroupReducer,
           TaskStudentReducer,
           MethodReducer,
-          FavoriteReducer
+          FavoriteReducer,
+          EduContentReducer
         ])
       ],
       providers: [Store]
@@ -96,7 +102,7 @@ describe('Kabas-tasks viewmodel selectors', () => {
 
     it('should return digital tasksWithAssignments', () => {
       const stream = store.pipe(
-        select(getTasksWithAssignments, {
+        select(getTasksWithAssignmentsByType, {
           isPaper: false,
           type: FavoriteTypesEnum.TASK
         })
@@ -110,6 +116,11 @@ describe('Kabas-tasks viewmodel selectors', () => {
             isFavorite: false
           }),
           eduContentAmount: 3,
+          taskEduContents: [
+            new TaskEduContentFixture({ id: 123, taskId: 1, eduContentId: 1 }),
+            new TaskEduContentFixture({ id: 456, taskId: 1, eduContentId: 2 }),
+            new TaskEduContentFixture({ id: 789, taskId: 1, eduContentId: 3 })
+          ],
           learningArea: new LearningAreaFixture({ name: 'wiskunde' }),
           startDate: new Date(date - 3),
           endDate: new Date(date + 3),
@@ -157,7 +168,7 @@ describe('Kabas-tasks viewmodel selectors', () => {
 
     it('should return paper tasksWithAssignments', () => {
       const stream = store.pipe(
-        select(getTasksWithAssignments, {
+        select(getTasksWithAssignmentsByType, {
           isPaper: true,
           type: FavoriteTypesEnum.TASK
         })
@@ -172,6 +183,9 @@ describe('Kabas-tasks viewmodel selectors', () => {
             isFavorite: true
           }),
           eduContentAmount: 1,
+          taskEduContents: [
+            new TaskEduContentFixture({ id: 666, taskId: 2, eduContentId: 3 })
+          ],
           learningArea: new LearningAreaFixture({ name: 'wiskunde' }),
           startDate: new Date(date - 33),
           endDate: new Date(date + 33),
@@ -204,6 +218,178 @@ describe('Kabas-tasks viewmodel selectors', () => {
       expect(stream).toBeObservable(hot('a', { a: expected }));
     });
 
+    it('should return all tasksWithAssignments', () => {
+      const stream = store.pipe(
+        select(getAllTasksWithAssignments, {
+          type: FavoriteTypesEnum.TASK
+        })
+      );
+
+      const expected = [
+        {
+          ...new TaskFixture({
+            id: 1,
+            name: 'een digitale taak',
+            isFavorite: false
+          }),
+          eduContentAmount: 3,
+          taskEduContents: [
+            new TaskEduContentFixture({ id: 123, taskId: 1, eduContentId: 1 }),
+            new TaskEduContentFixture({ id: 456, taskId: 1, eduContentId: 2 }),
+            new TaskEduContentFixture({ id: 789, taskId: 1, eduContentId: 3 })
+          ],
+          learningArea: new LearningAreaFixture({ name: 'wiskunde' }),
+          startDate: new Date(date - 3),
+          endDate: new Date(date + 3),
+          status: 'active',
+          assignees: [
+            {
+              type: AssigneeTypesEnum.CLASSGROUP,
+              id: 1,
+              label: '1A',
+              start: new Date(date - 2),
+              end: new Date(date + 2)
+            },
+            {
+              type: AssigneeTypesEnum.GROUP,
+              id: 1,
+              label: 'Remediëring 2c',
+              start: new Date(date - 1),
+              end: new Date(date + 1)
+            },
+            {
+              type: AssigneeTypesEnum.STUDENT,
+              id: 1,
+              label: 'Polleke Enkeltje',
+              start: new Date(date - 3),
+              end: new Date(date + 3)
+            }
+          ]
+        },
+        {
+          ...new TaskFixture({
+            id: 2,
+            name: 'een taak op dode bomen',
+            isPaperTask: true,
+            isFavorite: true
+          }),
+          eduContentAmount: 1,
+          taskEduContents: [
+            new TaskEduContentFixture({ id: 666, taskId: 2, eduContentId: 3 })
+          ],
+          learningArea: new LearningAreaFixture({ name: 'wiskunde' }),
+          startDate: new Date(date - 33),
+          endDate: new Date(date + 33),
+          status: 'active',
+          assignees: [
+            {
+              type: AssigneeTypesEnum.CLASSGROUP,
+              id: 2,
+              label: '2c',
+              start: new Date(date - 22),
+              end: new Date(date + 22)
+            },
+            {
+              type: AssigneeTypesEnum.GROUP,
+              id: 2,
+              label: 'Frederic Gryspeerdt fanclub',
+              start: new Date(date - 11),
+              end: new Date(date + 11)
+            },
+            {
+              type: AssigneeTypesEnum.STUDENT,
+              id: 2,
+              label: 'Mieke Mokke',
+              start: new Date(date - 33),
+              end: new Date(date + 33)
+            }
+          ]
+        },
+        {
+          ...new TaskFixture({
+            id: 3,
+            name: 'een taak zonder assignees of content',
+            isFavorite: false
+          }),
+          eduContentAmount: 0,
+          learningArea: new LearningAreaFixture({ name: 'wiskunde' }),
+          startDate: undefined,
+          endDate: undefined,
+          status: 'finished',
+          assignees: []
+        }
+      ];
+
+      expect(stream).toBeObservable(hot('a', { a: expected }));
+    });
+
+    it('should return a task with assignments and eduContents', () => {
+      const stream = store.pipe(
+        select(getTaskWithAssignmentAndEduContents, {
+          taskId: 1,
+          type: FavoriteTypesEnum.TASK
+        })
+      );
+
+      const expected = {
+        ...new TaskFixture({
+          id: 1,
+          name: 'een digitale taak',
+          isFavorite: false
+        }),
+        eduContentAmount: 3,
+        taskEduContents: [
+          new TaskEduContentFixture({
+            id: 123,
+            taskId: 1,
+            eduContentId: 1,
+            eduContent: new EduContentFixture({ id: 1 })
+          }),
+          new TaskEduContentFixture({
+            id: 456,
+            taskId: 1,
+            eduContentId: 2,
+            eduContent: new EduContentFixture({ id: 2 })
+          }),
+          new TaskEduContentFixture({
+            id: 789,
+            taskId: 1,
+            eduContentId: 3,
+            eduContent: new EduContentFixture({ id: 3 })
+          })
+        ],
+        learningArea: new LearningAreaFixture({ name: 'wiskunde' }),
+        startDate: new Date(date - 3),
+        endDate: new Date(date + 3),
+        status: 'active',
+        assignees: [
+          {
+            type: AssigneeTypesEnum.CLASSGROUP,
+            id: 1,
+            label: '1A',
+            start: new Date(date - 2),
+            end: new Date(date + 2)
+          },
+          {
+            type: AssigneeTypesEnum.GROUP,
+            id: 1,
+            label: 'Remediëring 2c',
+            start: new Date(date - 1),
+            end: new Date(date + 1)
+          },
+          {
+            type: AssigneeTypesEnum.STUDENT,
+            id: 1,
+            label: 'Polleke Enkeltje',
+            start: new Date(date - 3),
+            end: new Date(date + 3)
+          }
+        ]
+      };
+
+      expect(stream).toBeObservable(hot('a', { a: expected }));
+    });
+
     it('should return allowedLearningAreas', () => {
       const stream = store.pipe(select(allowedLearningAreas));
 
@@ -226,6 +412,7 @@ function hydrateStore(store, date) {
     getLoadTasksAction(),
     getLoadLearningAreasAction(),
     getLoadClassGroupsAction(),
+    getLoadEduContentsAction(),
     getLoadTaskEduContentsAction(),
     getLoadGroupsAction(),
     getLoadLinkedPersonsAction(),
@@ -299,6 +486,16 @@ function getLoadClassGroupsAction() {
     classGroups: [
       new ClassGroupFixture({ id: 1, name: '1A' }),
       new ClassGroupFixture({ id: 2, name: '2c' })
+    ]
+  });
+}
+function getLoadEduContentsAction() {
+  return new EduContentActions.EduContentsLoaded({
+    eduContents: [
+      new EduContentFixture({ id: 1 }),
+      new EduContentFixture({ id: 2 }),
+      new EduContentFixture({ id: 3 }),
+      new EduContentFixture({ id: 4 })
     ]
   });
 }

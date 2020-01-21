@@ -75,11 +75,15 @@ export class UpsertTasks implements Action {
   constructor(public payload: { tasks: TaskInterface[] }) {}
 }
 
-export class UpdateTask implements Action {
+export class UpdateTask implements FeedbackTriggeringAction {
   readonly type = TasksActionTypes.UpdateTask;
 
   constructor(
-    public payload: { userId: number; task: Update<TaskInterface> }
+    public payload: {
+      userId: number;
+      task: Update<TaskInterface>;
+      customFeedbackHandlers?: CustomFeedbackHandlersInterface;
+    }
   ) {}
 }
 
