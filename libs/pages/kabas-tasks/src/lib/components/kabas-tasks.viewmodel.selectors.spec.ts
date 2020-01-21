@@ -131,21 +131,24 @@ describe('Kabas-tasks viewmodel selectors', () => {
               id: 1,
               label: '1A',
               start: new Date(date - 2),
-              end: new Date(date + 2)
+              end: new Date(date + 2),
+              relationId: 1
             },
             {
               type: AssigneeTypesEnum.GROUP,
               id: 1,
               label: 'Remediëring 2c',
               start: new Date(date - 1),
-              end: new Date(date + 1)
+              end: new Date(date + 1),
+              relationId: 1
             },
             {
               type: AssigneeTypesEnum.STUDENT,
               id: 1,
               label: 'Polleke Enkeltje',
               start: new Date(date - 3),
-              end: new Date(date + 3)
+              end: new Date(date + 3),
+              relationId: 1
             }
           ]
         },

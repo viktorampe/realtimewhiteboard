@@ -230,7 +230,6 @@ export class ManageKabasTasksAssigneeModalComponent implements OnInit {
   private getAvailableTaskClassGroups$() {
     return this.currentTaskAssignees$.pipe(
       map(currentTaskAssignees => {
-        console.log(currentTaskAssignees, this.data.possibleTaskClassGroups);
         return this.data.possibleTaskClassGroups.filter(
           pTA =>
             !currentTaskAssignees.some(

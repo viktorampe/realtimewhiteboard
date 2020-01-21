@@ -2,6 +2,7 @@ import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
 import {
   MatDialog,
   MatDialogRef,
+  MatIconRegistry,
   MatRadioModule,
   MatSelectModule,
   MatSlideToggleModule
@@ -21,6 +22,7 @@ import {
   ENVIRONMENT_TESTING_TOKEN,
   SharedModule
 } from '@campus/shared';
+import { MockMatIconRegistry } from '@campus/testing';
 import { ConfirmationModalComponent, UiModule } from '@campus/ui';
 import { hot } from '@nrwl/angular/testing';
 import { configureTestSuite } from 'ng-bullet';
@@ -80,7 +82,8 @@ describe('ManageKabasTasksDetailComponent', () => {
             queryParams,
             snapshot: { queryParams: queryParams.getValue() }
           }
-        }
+        },
+        { provide: MatIconRegistry, useClass: MockMatIconRegistry }
       ]
     });
   });
