@@ -51,7 +51,7 @@ describe('ManageKabasTasksAssigneeModalComponent', () => {
 
   const data: ManageKabasTasksAssigneeDataInterface = {
     title: 'Basic UX design',
-    isPapertask: true,
+    isPaperTask: false,
 
     // all available taskAssignees
     possibleTaskClassGroups: [mockClassGroupAssignee],
@@ -181,6 +181,7 @@ describe('ManageKabasTasksAssigneeModalComponent', () => {
 
       // single value
       component.currentTaskAssignees$.next([mockClassGroupAssignee]);
+      fixture.detectChanges();
 
       let linkDE = getLinkDE();
       expect(linkDE).toBe(null);
