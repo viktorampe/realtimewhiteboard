@@ -51,8 +51,6 @@ export class ManageKabasTasksAssigneeModalComponent implements OnInit {
     this.availableTaskClassGroups$ = this.getAvailableTaskClassGroups$();
     this.availableTaskGroups$ = this.getAvailableTaskGroups$();
     this.availableTaskStudents$ = this.getAvailableTaskStudents$();
-
-    this.showAddAssignees = true; //TODO remove
   }
 
   public setShowAdvanced(value) {

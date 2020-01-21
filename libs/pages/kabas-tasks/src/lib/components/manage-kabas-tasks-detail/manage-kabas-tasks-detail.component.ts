@@ -71,8 +71,6 @@ export class ManageKabasTasksDetailComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.openAssigneeModal();
-
     this.task$ = this.viewModel.currentTask$;
     this.diaboloPhaseFilter = {
       name: 'diaboloPhase',
@@ -166,14 +164,14 @@ export class ManageKabasTasksDetailComponent implements OnInit {
     this.viewModel.toggleFavorite(task);
   }
 
-  private openAssigneeModal() {
+  public openAssigneeModal() {
     let currentTaskAssignees: AssigneeInterface[];
     let classGroups: ClassGroupInterface[] = [];
     let groups: GroupInterface[] = [];
     let students: PersonInterface[] = [];
 
     combineLatest([
-      // TODO use currentTaskWithAssignment
+      // TODO use this.task$
       this.viewModel.tasksWithAssignments$,
       this.viewModel.classGroups$,
       this.viewModel.groups$,
