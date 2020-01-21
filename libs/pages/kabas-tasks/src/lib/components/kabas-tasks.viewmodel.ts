@@ -155,15 +155,17 @@ export class KabasTasksViewModel {
     tasks: TaskWithAssigneesInterface[],
     navigateAfterDelete?: boolean
   ): void {
-    const tasksToRemove = tasks
-      .filter(task => this.canBeArchivedOrDeleted(task))
-      .map(task => task.id);
+    const deleteIds = [];
+    const errors = [];
+    tasks.forEach(task => {
+      if (this.canBeArchivedOrDeleted(task)) {
+        deleteIds.push({ taskId: task.id });
+      } else {
+        errors.push(task);
+      }
+    });
     this.store.dispatch(
-      new TaskActions.StartDeleteTasks({
-        ids: tasksToRemove,
-        userId: this.authService.userId,
-        navigateAfterDelete
-      })
+      this.getDestroyingAction(deleteIds, errors, navigateAfterDelete)
     );
   }
 
@@ -258,10 +260,11 @@ export class KabasTasksViewModel {
     return updateAction;
   }
 
-  private getDestroyingAction(deleteIds, errors) {
+  private getDestroyingAction(deleteIds, errors, navigateAfterDelete) {
     const destroyAction = new TaskActions.StartDeleteTasks({
       ids: deleteIds,
-      userId: this.authService.userId
+      userId: this.authService.userId,
+      navigateAfterDelete
     });
     if (errors.length) {
       const effectFeedback = new EffectFeedback({
