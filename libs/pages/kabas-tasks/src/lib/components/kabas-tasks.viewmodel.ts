@@ -151,21 +151,61 @@ export class KabasTasksViewModel {
     );
   }
 
+  public getDeleteInfo(tasks: TaskWithAssigneesInterface[]) {
+    const deletableTasks = [];
+    const nonDeletableTasks = [];
+
+    tasks.forEach(task => {
+      if (this.canBeArchivedOrDeleted(task)) {
+        deletableTasks.push(task);
+      } else {
+        nonDeletableTasks.push(task);
+      }
+    });
+
+    const test = this.getDeleteMessage(nonDeletableTasks, deletableTasks);
+    const message = `${test.body} ${test.confirmQuestion}`;
+
+    return {
+      deletableTasks,
+      message,
+      disableConfirmButton: test.disableConfirmButton
+    };
+  }
+
+  getDeleteMessage(
+    errors: TaskWithAssigneesInterface[],
+    deletableTasks: TaskWithAssigneesInterface[]
+  ) {
+    let body = '';
+    let confirmQuestion =
+      '<p>Ben je zeker dat je de geselecteerde taken wil verwijderen?</p>';
+    let disableConfirmButton = false;
+
+    if (errors.length) {
+      body = this.stillActiveTaskFeedbackMessage(errors, 'delete');
+      if (deletableTasks.length) {
+        confirmQuestion =
+          '<p>Ben je zeker dat je de andere taken wil verwijderen?</p>';
+      } else {
+        confirmQuestion = '';
+        disableConfirmButton = true;
+      }
+    }
+
+    return { body, confirmQuestion, disableConfirmButton };
+  }
+
   public removeTasks(
     tasks: TaskWithAssigneesInterface[],
     navigateAfterDelete?: boolean
   ): void {
-    const deleteIds = [];
-    const errors = [];
-    tasks.forEach(task => {
-      if (this.canBeArchivedOrDeleted(task)) {
-        deleteIds.push({ taskId: task.id });
-      } else {
-        errors.push(task);
-      }
-    });
     this.store.dispatch(
-      this.getDestroyingAction(deleteIds, errors, navigateAfterDelete)
+      new TaskActions.StartDeleteTasks({
+        ids: tasks.map(task => task.id),
+        userId: this.authService.userId,
+        navigateAfterDelete
+      })
     );
   }
 

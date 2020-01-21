@@ -330,9 +330,16 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
   }
 
   clickDeleteTasks() {
+    // first check with the viewmodel which tasks can be deleted
+    const deleteInfo = this.viewModel.getDeleteInfo(this.getSelectedTasks());
+    // update message:
+    // - deze kunnen niet verwijderd worden
+    // - wil je de andere taken nog verwijderen?
+
     const dialogData = {
       title: 'Taken verwijderen',
-      message: 'Ben je zeker dat je de geselecteerde taken wil verwijderen?'
+      message: deleteInfo.message,
+      disableConfirm: deleteInfo.disableConfirmButton
     };
 
     const dialogRef = this.matDialog.open(ConfirmationModalComponent, {
@@ -345,11 +352,11 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
         filter(confirmed => confirmed),
         take(1)
       )
-      .subscribe(() => this.deleteTasks());
+      .subscribe(() => this.deleteTasks(deleteInfo.deletableTasks));
   }
 
-  public deleteTasks() {
-    this.viewModel.removeTasks(this.getSelectedTasks());
+  private deleteTasks(tasks: TaskWithAssigneesInterface[]) {
+    this.viewModel.removeTasks(tasks);
   }
 
   clickArchiveTasks() {

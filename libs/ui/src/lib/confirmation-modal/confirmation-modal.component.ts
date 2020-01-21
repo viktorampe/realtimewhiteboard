@@ -9,6 +9,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 export class ConfirmationModalComponent {
   title: string;
   message: string;
+  disableConfirm: boolean;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) private data: any,
@@ -16,6 +17,7 @@ export class ConfirmationModalComponent {
   ) {
     this.title = data.title;
     this.message = data.message;
+    this.disableConfirm = data.disableConfirm;
   }
 
   cancel() {
@@ -23,6 +25,7 @@ export class ConfirmationModalComponent {
   }
 
   confirm() {
+    if (this.disableConfirm) return; // workaround because stop propagation does not work
     this.dialogRef.close(true);
   }
 }
