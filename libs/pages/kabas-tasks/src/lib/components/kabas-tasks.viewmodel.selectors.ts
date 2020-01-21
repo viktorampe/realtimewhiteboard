@@ -36,8 +36,9 @@ const taskClassGroupAssigneeByTask = createSelector(
         dict[tcg.taskId] = [];
       }
       dict[tcg.taskId].push({
+        id: tcg.id,
         type: AssigneeTypesEnum.CLASSGROUP,
-        id: tcg.classGroupId,
+        relationId: tcg.classGroupId,
         label: classGroupDict[tcg.classGroupId].name,
         start: tcg.start,
         end: tcg.end
@@ -55,8 +56,9 @@ const taskGroupAssigneeByTask = createSelector(
         dict[tg.taskId] = [];
       }
       dict[tg.taskId].push({
+        id: tg.id,
         type: AssigneeTypesEnum.GROUP,
-        id: tg.groupId,
+        relationId: tg.groupId,
         label: groupDict[tg.groupId].name,
         start: tg.start,
         end: tg.end
@@ -74,8 +76,9 @@ const taskStudentAssigneeByTask = createSelector(
         dict[ts.taskId] = [];
       }
       dict[ts.taskId].push({
+        id: ts.id,
         type: AssigneeTypesEnum.STUDENT,
-        id: ts.personId,
+        relationId: ts.personId,
         label: personDict[ts.personId].displayName,
         start: ts.start,
         end: ts.end

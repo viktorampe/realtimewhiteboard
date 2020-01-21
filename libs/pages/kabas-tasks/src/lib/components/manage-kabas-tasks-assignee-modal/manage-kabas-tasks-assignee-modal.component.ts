@@ -103,7 +103,7 @@ export class ManageKabasTasksAssigneeModalComponent implements OnInit {
       cTA => cTA !== assignee
     );
 
-    this.currentTaskAssignees$.next(newCurrentTaskAssignees);
+    this.currentTaskAssignees$.next([...newCurrentTaskAssignees]);
 
     if (!newCurrentTaskAssignees.length) {
       this.setShowAdvanced(false);
@@ -114,7 +114,7 @@ export class ManageKabasTasksAssigneeModalComponent implements OnInit {
     assignees: AssigneeInterface[],
     dateInterval: { start: Date; end: Date }
   ) {
-    const currentTaskAssignees = this.currentTaskAssignees$.value;
+    // update assignee start/end by reference
     assignees.forEach(assignee => {
       Object.assign(assignee, {
         start: dateInterval.start,
@@ -122,7 +122,7 @@ export class ManageKabasTasksAssigneeModalComponent implements OnInit {
       });
     });
 
-    this.currentTaskAssignees$.next(currentTaskAssignees);
+    this.currentTaskAssignees$.next([...this.currentTaskAssignees$.value]);
   }
 
   public onOKButtonClick() {
@@ -229,16 +229,17 @@ export class ManageKabasTasksAssigneeModalComponent implements OnInit {
 
   private getAvailableTaskClassGroups$() {
     return this.currentTaskAssignees$.pipe(
-      map(currentTaskAssignees =>
-        this.data.possibleTaskClassGroups.filter(
+      map(currentTaskAssignees => {
+        console.log(currentTaskAssignees, this.data.possibleTaskClassGroups);
+        return this.data.possibleTaskClassGroups.filter(
           pTA =>
             !currentTaskAssignees.some(
               cTA =>
                 cTA.relationId === pTA.relationId &&
                 cTA.type === AssigneeTypesEnum.CLASSGROUP
             )
-        )
-      )
+        );
+      })
     );
   }
   private getAvailableTaskGroups$() {
