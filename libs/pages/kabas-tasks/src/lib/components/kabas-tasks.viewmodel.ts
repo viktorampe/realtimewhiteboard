@@ -3,6 +3,8 @@ import { MAT_DATE_LOCALE } from '@angular/material';
 import {
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
+  ClassGroupInterface,
+  ClassGroupQueries,
   DalState,
   EffectFeedback,
   EffectFeedbackActions,
@@ -10,11 +12,18 @@ import {
   FavoriteInterface,
   FavoriteTypesEnum,
   getRouterState,
+  GroupInterface,
+  GroupQueries,
   LearningAreaInterface,
+  LinkedPersonQueries,
+  PersonInterface,
   RouterStateUrl,
   TaskActions,
+  TaskClassGroupInterface,
   TaskEduContentInterface,
-  TaskInterface
+  TaskGroupInterface,
+  TaskInterface,
+  TaskStudentInterface
 } from '@campus/dal';
 import { Update } from '@ngrx/entity';
 import { RouterReducerState } from '@ngrx/router-store';
@@ -55,6 +64,10 @@ export class KabasTasksViewModel {
   public currentTaskParams$: Observable<CurrentTaskParams>;
   public selectableLearningAreas$: Observable<LearningAreaInterface[]>;
 
+  public classGroups$: Observable<ClassGroupInterface[]>;
+  public groups$: Observable<GroupInterface[]>;
+  public students$: Observable<PersonInterface[]>;
+
   private routerState$: Observable<RouterReducerState<RouterStateUrl>>;
 
   constructor(
@@ -90,6 +103,10 @@ export class KabasTasksViewModel {
     this.selectableLearningAreas$ = this.store.pipe(
       select(allowedLearningAreas)
     );
+
+    this.classGroups$ = this.store.pipe(select(ClassGroupQueries.getAll));
+    this.groups$ = this.store.pipe(select(GroupQueries.getAll));
+    this.students$ = this.store.pipe(select(LinkedPersonQueries.getStudents));
   }
 
   public startArchivingTasks(
@@ -139,9 +156,9 @@ export class KabasTasksViewModel {
   private getAssigneesByType(
     assignees: AssigneeInterface[]
   ): {
-    taskGroups: AssigneeInterface[];
-    taskStudents: AssigneeInterface[];
-    taskClassGroups: AssigneeInterface[];
+    taskGroups: TaskGroupInterface[];
+    taskStudents: TaskStudentInterface[];
+    taskClassGroups: TaskClassGroupInterface[];
   } {
     const keyMap = this.getAssigneeTypeToKeyMap();
     return assignees.reduce(

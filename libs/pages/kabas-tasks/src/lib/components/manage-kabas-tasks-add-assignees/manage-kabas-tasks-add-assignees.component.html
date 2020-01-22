@@ -1,45 +1,71 @@
-<div class="manage-kabas-tasks-add-assignees__filterbar"
-  ><campus-search-term
-    placeholder="Filter op assignee"
-    [autoComplete]="false"
-    (valueChange)="updateLabelFilter($event)"
-    [emitOnTextChange]="true"
-  ></campus-search-term>
+<div mat-dialog-content class="manage-kabas-tasks-add-assignees__content">
+  <div class="manage-kabas-tasks-add-assignees__content__filterbar"
+    ><campus-search-term
+      placeholder="Filter op assignee"
+      [autoComplete]="false"
+      (valueChange)="updateLabelFilter($event)"
+      [emitOnTextChange]="true"
+    ></campus-search-term>
+    <campus-button
+      (click)="resetFilter()"
+      class="manage-kabas-tasks-add-assignees__content__filterbar__reset-filters"
+      iconClass="reset-filters"
+    ></campus-button
+  ></div>
+
+  <ng-container *ngIf="assignees.length; else noResults">
+    <mat-selection-list
+      #assigneeList
+      class="manage-kabas-tasks-add-assignees__content__list"
+    >
+      <ng-container *ngFor="let assigneeType of assignees">
+        <div
+          [class.manage-kabas-tasks-add-assignees__content__list__header--hidden]="
+            !filteredAssignees.isTypeInFilter[assigneeType.label]
+          "
+          class="manage-kabas-tasks-add-assignees__content__list__header"
+          >{{ assigneeType.label }}</div
+        >
+        <mat-list-option
+          #option
+          [value]="assignee"
+          [class.manage-kabas-tasks-add-assignees__content__list__item--hidden]="
+            !filteredAssignees.map[assignee.type + '-' + assignee.relationId]
+          "
+          *ngFor="let assignee of assigneeType.value"
+          checkboxPosition="before"
+          [class.mat-list-option--selected]="option.selected"
+          class="manage-kabas-tasks-add-assignees__content__list__item"
+        >
+          {{ assignee.label }}</mat-list-option
+        >
+      </ng-container>
+    </mat-selection-list>
+    <div
+      *ngIf="assigneeList.selectedOptions.selected.length"
+      class="manage-kabas-tasks-add-assignees__content__selected"
+      >{{ assigneeList.selectedOptions.selected.length }} geselecteerd</div
+    >
+  </ng-container>
+</div>
+
+<div mat-dialog-actions class="manage-kabas-tasks-add-assignees__actions">
   <campus-button
-    (click)="resetFilter()"
-    class="manage-kabas-tasks-overview__reset-filters"
-    iconClass="reset-filters"
-  ></campus-button
-></div>
-<ng-container *ngIf="assignees.length; else noResults">
-  <div *ngIf="assigneeList.selectedOptions.selected.length"
-    >{{ assigneeList.selectedOptions.selected.length }} geselecteerd</div
+    primary
+    class="manage-kabas-tasks-add-assignees__actions__button"
+    (click)="close()"
+    >Annuleren</campus-button
   >
-  <mat-selection-list
-    #assigneeList
-    [class.mat-selection-list--has-selection]="true"
-    class="manage-kabas-tasks-detail__list"
+  <campus-button
+    primary
+    class="manage-kabas-tasks-add-assignees__actions__button"
+    (click)="addAssignees()"
+    >Toevoegen</campus-button
   >
-    <ng-container *ngFor="let assigneeType of assignees">
-      <div
-        [style.display]="
-          filteredAssignees.isTypeInFilter[assigneeType.label] ? '' : 'none'
-        "
-        >{{ assigneeType.label }}</div
-      >
-      <mat-list-option
-        [value]="assignee"
-        [style.display]="!filteredAssignees.map[assignee.id] ? 'none' : ''"
-        *ngFor="let assignee of assigneeType.value"
-        checkboxPosition="before"
-      >
-        {{ assignee.label }}</mat-list-option
-      >
-    </ng-container>
-  </mat-selection-list>
-</ng-container>
-<campus-button primary (click)="addAssignees()">Toevoegen</campus-button>
+</div>
 
 <ng-template #noResults>
-  <p>De toegepaste filter bevat geen resultaten.</p>
+  <div class="manage-kabas-tasks-add-assignees__content--no-results"
+    >De toegepaste filter bevat geen resultaten.</div
+  >
 </ng-template>

@@ -199,29 +199,28 @@ describe('DateRangePickerComponent', () => {
       const someTime = '13:37';
 
       it('should set the startDate value to initialStartDate if provided', () => {
-        setInput('initialStartDate', someDate);
-        fixture.detectChanges();
-
+        component.initialStartDate = someDate;
+        component.ngOnInit();
         expect(component.dateRangeForm.get('startDate').value).toBe(someDate);
       });
 
       it('should set the startTime value to initialStartTime if provided', () => {
-        setInput('initialStartTime', someTime);
-        fixture.detectChanges();
+        component.initialStartTime = someTime;
+        component.ngOnInit();
 
         expect(component.dateRangeForm.get('startTime').value).toBe(someTime);
       });
 
       it('should set the endDate value to initialEndDate if provided', () => {
-        setInput('initialEndDate', someDate);
-        fixture.detectChanges();
+        component.initialEndDate = someDate;
+        component.ngOnInit();
 
         expect(component.dateRangeForm.get('endDate').value).toBe(someDate);
       });
 
       it('should set the endTime value to initialEndTime if provided', () => {
-        setInput('initialEndTime', someTime);
-        fixture.detectChanges();
+        component.initialEndTime = someTime;
+        component.ngOnInit();
 
         expect(component.dateRangeForm.get('endTime').value).toBe(someTime);
       });

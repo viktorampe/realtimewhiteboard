@@ -1,0 +1,96 @@
+.manage-task-assignees {
+  &__title {
+    display: flex;
+    align-items: center;
+
+    &__label {
+      margin-top: 0px;
+      margin-bottom: 0px;
+      flex: 1 1 auto;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+
+    &__action {
+      justify-self: flex-end;
+      flex: 0 0 auto;
+    }
+
+    &__date-picker {
+      &__container {
+        display: flex;
+        align-items: center;
+      }
+    }
+  }
+
+  &__content {
+    &__header {
+      display: flex;
+
+      &__view-toggle {
+        text-decoration: underline;
+
+        &:hover {
+          cursor: pointer;
+        }
+      }
+    }
+
+    &__date-picker {
+      &__label {
+        align-self: center;
+      }
+
+      &__container {
+        display: flex;
+        align-items: center;
+      }
+    }
+
+    &__list {
+      &__item {
+        width: 100%;
+
+        &--add {
+          cursor: pointer;
+        }
+
+        &:not(:hover) {
+          .manage-task-assignees__content__list__item {
+            &__action {
+              &--show-on-hover {
+                opacity: 0;
+              }
+            }
+          }
+        }
+
+        &__content {
+          display: flex;
+          flex-direction: row;
+          width: 100%;
+          align-items: center;
+
+          &__caption {
+            flex: 1 1 25%;
+          }
+
+          &__boundaries {
+            flex: 2 1 25%;
+            font-style: italic;
+          }
+
+          &__date-picker {
+            flex: 2 1 25%;
+          }
+        }
+      }
+    }
+  }
+
+  &__actions {
+    justify-content: flex-end;
+  }
+}

@@ -2,6 +2,7 @@ import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
 import {
   MatDialog,
   MatDialogRef,
+  MatIconRegistry,
   MatRadioModule,
   MatSelectModule,
   MatSlideToggleModule
@@ -21,6 +22,7 @@ import {
   ENVIRONMENT_TESTING_TOKEN,
   SharedModule
 } from '@campus/shared';
+import { MockMatIconRegistry } from '@campus/testing';
 import { ConfirmationModalComponent, UiModule } from '@campus/ui';
 import { hot } from '@nrwl/angular/testing';
 import { configureTestSuite } from 'ng-bullet';
@@ -65,20 +67,23 @@ describe('ManageKabasTasksDetailComponent', () => {
           useValue: {}
         },
         { provide: ENVIRONMENT_TESTING_TOKEN, useValue: {} },
-        { provide: Router, useValue: { navigate: () => {} } },
         {
           provide: MatDialog,
           useValue: {
-            open: () => {}
+            open: () => ({
+              afterClosed: () => of('test')
+            })
           }
         },
+        { provide: Router, useValue: { navigate: () => {} } },
         {
           provide: ActivatedRoute,
           useValue: {
             queryParams,
             snapshot: { queryParams: queryParams.getValue() }
           }
-        }
+        },
+        { provide: MatIconRegistry, useClass: MockMatIconRegistry }
       ]
     });
   });
@@ -94,6 +99,10 @@ describe('ManageKabasTasksDetailComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  describe('task assignee modal', () => {
+    // TODO
   });
 
   describe('isNewTask$', () => {

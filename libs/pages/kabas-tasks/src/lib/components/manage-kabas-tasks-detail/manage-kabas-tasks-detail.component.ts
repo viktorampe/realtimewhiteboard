@@ -4,11 +4,16 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { EduContentInterface, LearningAreaInterface } from '@campus/dal';
 import { SearchFilterCriteriaInterface } from '@campus/search';
 import { ConfirmationModalComponent, SideSheetComponent } from '@campus/ui';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { filter, map, take } from 'rxjs/operators';
-import { AssigneeTypesEnum } from '../../interfaces/Assignee.interface';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { filter, map, switchMap, take } from 'rxjs/operators';
+import {
+  AssigneeInterface,
+  AssigneeTypesEnum
+} from '../../interfaces/Assignee.interface';
 import { TaskWithAssigneesInterface } from '../../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
+import { ManageKabasTasksAssigneeDataInterface } from '../manage-kabas-tasks-assignee-modal/manage-kabas-tasks-assignee-data.interface';
+import { ManageKabasTasksAssigneeModalComponent } from '../manage-kabas-tasks-assignee-modal/manage-kabas-tasks-assignee-modal.component';
 import {
   NewTaskComponent,
   NewTaskFormValues
@@ -152,6 +157,74 @@ export class ManageKabasTasksDetailComponent implements OnInit {
 
   public toggleFavorite(task: TaskWithAssigneesInterface) {
     this.viewModel.toggleFavorite(task);
+  }
+
+  public openAssigneeModal() {
+    this.getAssigneeModalData()
+      .pipe(
+        switchMap(data => {
+          return this.dialog
+            .open(ManageKabasTasksAssigneeModalComponent, {
+              data,
+              panelClass: 'manage-task-assignees'
+            })
+            .afterClosed();
+        })
+      )
+      .subscribe(res => {
+        // TODO update assignees
+        console.log(res);
+      });
+  }
+
+  private getAssigneeModalData(): Observable<
+    ManageKabasTasksAssigneeDataInterface
+  > {
+    return combineLatest([
+      this.task$,
+      this.viewModel.classGroups$,
+      this.viewModel.groups$,
+      this.viewModel.students$
+    ]).pipe(
+      map(([currentTask, classGroups, groups, students]) => {
+        const possibleTaskClassGroups: AssigneeInterface[] = classGroups.map(
+          cG => ({
+            type: AssigneeTypesEnum.CLASSGROUP,
+            label: cG.name,
+            relationId: cG.id
+          })
+        );
+
+        const possibleTaskGroups: AssigneeInterface[] = groups.map(group => ({
+          type: AssigneeTypesEnum.GROUP,
+          label: group.name,
+          relationId: group.id
+        }));
+
+        const possibleTaskStudents: AssigneeInterface[] = students.map(
+          student => ({
+            type: AssigneeTypesEnum.STUDENT,
+            label: student.displayName,
+            relationId: student.id
+          })
+        );
+
+        const data: ManageKabasTasksAssigneeDataInterface = {
+          title: 'Basic UX design',
+          // all available taskAssignees
+          possibleTaskClassGroups,
+          possibleTaskGroups,
+          possibleTaskStudents,
+
+          // current values in page
+          currentTaskAssignees: currentTask.assignees,
+
+          isPaperTask: currentTask.isPaperTask
+        };
+
+        return data;
+      })
+    );
   }
 
   public openNewTaskDialog() {
