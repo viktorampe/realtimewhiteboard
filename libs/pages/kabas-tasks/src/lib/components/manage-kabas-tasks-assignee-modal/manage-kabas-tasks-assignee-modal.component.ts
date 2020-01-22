@@ -184,35 +184,30 @@ export class ManageKabasTasksAssigneeModalComponent implements OnInit {
 
   // reduce taskAssignees to object containing
   // most frequently used start- and endDates
-  // amount of unique start- and endDates
   private aggregateAssigneeBoundaries(currentTaskAssignees) {
     const boundaryFrequencies = currentTaskAssignees.reduce(
       (acc, cTA) => {
-        const cTAStartDate = cTA.start.toDateString();
-        if (!acc.start[cTAStartDate]) {
-          acc.start[cTAStartDate] = 1;
+        if (!acc.start.has(cTA.start)) {
+          acc.start.set(cTA.start, 1);
         } else {
-          acc.start[cTAStartDate]++;
+          acc.start.set(cTA.start, acc.start.get(cTA.start) + 1);
         }
 
-        const cTAEndDate = cTA.end.toDateString();
-        if (!acc.end[cTAEndDate]) {
-          acc.end[cTAEndDate] = 1;
+        if (!acc.end.has(cTA.end)) {
+          acc.end.set(cTA.end, 1);
         } else {
-          acc.end[cTAEndDate]++;
+          acc.end.set(cTA.end, acc.end.get(cTA.end) + 1);
         }
 
         return acc;
       },
-      { start: {}, end: {} }
+      { start: new Map<Date, number>(), end: new Map<Date, number>() }
     );
 
-    const mostFrequentStartDate = new Date(
-      this.getMostFrequent(boundaryFrequencies.start)
+    const mostFrequentStartDate = this.getMostFrequent(
+      boundaryFrequencies.start
     );
-    const mostFrequentEndDate = new Date(
-      this.getMostFrequent(boundaryFrequencies.end)
-    );
+    const mostFrequentEndDate = this.getMostFrequent(boundaryFrequencies.end);
 
     return {
       mostFrequentStartDate,
@@ -220,11 +215,18 @@ export class ManageKabasTasksAssigneeModalComponent implements OnInit {
     };
   }
 
-  // sort descending in order of frequency and return first value
-  private getMostFrequent(frequencyDict) {
-    return Object.keys(frequencyDict).sort(
-      (date1, date2) => frequencyDict[date2] - frequencyDict[date1]
-    )[0];
+  private getMostFrequent(dateMap: Map<Date, number>): Date {
+    let maxValue = 0;
+    let maxKey;
+
+    dateMap.forEach((value, key) => {
+      if (value > maxValue) {
+        maxValue = value;
+        maxKey = key;
+      }
+    });
+
+    return maxKey;
   }
 
   private getAvailableTaskClassGroups$() {
