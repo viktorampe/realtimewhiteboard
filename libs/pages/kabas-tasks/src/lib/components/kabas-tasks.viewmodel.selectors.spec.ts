@@ -164,8 +164,7 @@ describe('Kabas-tasks viewmodel selectors', () => {
           startDate: undefined,
           endDate: undefined,
           status: 'finished',
-          assignees: [],
-          taskEduContents: []
+          assignees: []
         }
       ];
       expect(stream).toBeObservable(hot('a', { a: expected }));
@@ -331,8 +330,7 @@ describe('Kabas-tasks viewmodel selectors', () => {
           startDate: undefined,
           endDate: undefined,
           status: 'finished',
-          assignees: [],
-          taskEduContents: []
+          assignees: []
         }
       ];
 
