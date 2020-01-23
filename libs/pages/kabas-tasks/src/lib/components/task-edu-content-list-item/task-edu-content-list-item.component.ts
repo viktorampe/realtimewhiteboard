@@ -1,4 +1,10 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnInit
+} from '@angular/core';
+import { ContentActionInterface } from '@campus/shared';
 
 @Component({
   selector: 'campus-task-edu-content-list-item',
@@ -7,10 +13,14 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TaskEduContentListItemComponent implements OnInit {
+  @Input() title: string;
+  @Input() level: string;
+  @Input() required: boolean;
+  @Input() fileIcon: string;
+  @Input() diaboloPhaseIcon: string;
+  @Input() actions: ContentActionInterface[];
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 }
