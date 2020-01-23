@@ -4,6 +4,9 @@
   $pages-kabas-tasks__list-option-background-color: $pages-kabas-tasks-background-color--primary !default;
   $pages-kabas-tasks__list-option-background-color--accent: $pages-kabas-tasks-background-color--secondary !default;
   $pages-kabas-tasks__list-option-color--secondary: $pages-kabas-tasks-text-color--secondary !default;
+  $manage-kabas-tasks-detail__list__primary-action-line-height: 16px !default;
+  $manage-kabas-tasks-detail__list__primary-action-height: 65px !default;
+  $manage-kabas-tasks-detail__list__primary-action-margin-top: 5px !default;
 
   $manage-kabas-tasks-width: 100% !default;
 
@@ -178,16 +181,17 @@
     }
 
     &__list__primary-action {
-      .mat-list-item-content {
-        background-color: $secondary-bg-color;
-        color: $primary-color-accent;
-        font-weight: bold;
-        padding-left: 35px !important;
-        cursor: pointer;
-
-        .mat-icon {
-          margin: 0 20px;
-        }
+      display: flex;
+      align-items: center;
+      background-color: $secondary-bg-color;
+      color: $primary-color-accent;
+      font-weight: bold;
+      cursor: pointer;
+      height: $manage-kabas-tasks-detail__list__primary-action-height;
+      font-size: $manage-kabas-tasks-detail__list__primary-action-line-height;
+      margin-top: $manage-kabas-tasks-detail__list__primary-action-margin-top;
+      .mat-icon {
+        margin: 0 20px;
       }
     }
 

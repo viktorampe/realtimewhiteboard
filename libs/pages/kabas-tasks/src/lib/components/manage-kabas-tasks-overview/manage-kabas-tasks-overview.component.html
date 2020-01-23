@@ -136,20 +136,19 @@
           >
         </ng-container>
       </div>
-
+      <div
+        (click)="clickAddDigitalTask()"
+        class="manage-kabas-tasks-overview__list__primary-action"
+      >
+        <mat-icon svgIcon="add"></mat-icon>
+        nieuwe taak
+      </div>
       <mat-selection-list
         #digital
         [class.mat-selection-list--has-selection]="
           !digital.selectedOptions.isEmpty()
         "
       >
-        <mat-list-item
-          (click)="clickAddDigitalTask()"
-          class="manage-kabas-tasks-overview__list__primary-action"
-        >
-          <mat-icon svgIcon="add"></mat-icon>
-          nieuwe taak
-        </mat-list-item>
         <ng-container *ngIf="tasksWithAssignments$ | async as digitalTasks">
           <mat-list-option
             #option
@@ -252,20 +251,19 @@
           <p>De toegepaste filter bevat geen resultaten.</p>
         </ng-template>
       </div>
-
+      <div
+        (click)="clickAddPaperTask()"
+        class="manage-kabas-tasks-overview__list__primary-action"
+      >
+        <mat-icon svgIcon="add"></mat-icon>
+        nieuwe taak
+      </div>
       <mat-selection-list
         #paper
         [class.mat-selection-list--has-selection]="
           !digital.selectedOptions.isEmpty()
         "
       >
-        <mat-list-item
-          (click)="clickAddPaperTask()"
-          class="manage-kabas-tasks-overview__list__primary-action"
-        >
-          <mat-icon svgIcon="add"></mat-icon>
-          nieuwe taak
-        </mat-list-item>
         <ng-container *ngIf="paperTasksWithAssignments$ | async as paperTasks">
           <mat-list-option
             #option
