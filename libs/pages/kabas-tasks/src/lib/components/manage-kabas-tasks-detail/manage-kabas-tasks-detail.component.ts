@@ -5,7 +5,7 @@ import { EduContentInterface, LearningAreaInterface } from '@campus/dal';
 import { SearchFilterCriteriaInterface } from '@campus/search';
 import { ConfirmationModalComponent, SideSheetComponent } from '@campus/ui';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { filter, map, switchMap, take } from 'rxjs/operators';
+import { filter, map, switchMap, take, withLatestFrom } from 'rxjs/operators';
 import {
   AssigneeInterface,
   AssigneeTypesEnum
@@ -169,11 +169,11 @@ export class ManageKabasTasksDetailComponent implements OnInit {
               panelClass: 'manage-task-assignees'
             })
             .afterClosed();
-        })
+        }),
+        withLatestFrom(this.task$)
       )
-      .subscribe(res => {
-        // TODO update assignees
-        console.log(res);
+      .subscribe(([assignees, task]) => {
+        if (assignees) this.viewModel.updateTaskAccess(task, assignees);
       });
   }
 
@@ -186,12 +186,13 @@ export class ManageKabasTasksDetailComponent implements OnInit {
       this.viewModel.groups$,
       this.viewModel.students$
     ]).pipe(
+      take(1),
       map(([currentTask, classGroups, groups, students]) => {
         const possibleTaskClassGroups: AssigneeInterface[] = classGroups.map(
-          cG => ({
+          classGroup => ({
             type: AssigneeTypesEnum.CLASSGROUP,
-            label: cG.name,
-            relationId: cG.id
+            label: classGroup.name,
+            relationId: classGroup.id
           })
         );
 
@@ -210,16 +211,16 @@ export class ManageKabasTasksDetailComponent implements OnInit {
         );
 
         const data: ManageKabasTasksAssigneeDataInterface = {
-          title: 'Basic UX design',
+          title: currentTask.name,
+          isPaperTask: currentTask.isPaperTask,
+
           // all available taskAssignees
           possibleTaskClassGroups,
           possibleTaskGroups,
           possibleTaskStudents,
 
           // current values in page
-          currentTaskAssignees: currentTask.assignees,
-
-          isPaperTask: currentTask.isPaperTask
+          currentTaskAssignees: currentTask.assignees
         };
 
         return data;
@@ -228,31 +229,45 @@ export class ManageKabasTasksDetailComponent implements OnInit {
   }
 
   public openNewTaskDialog() {
-    this.selectableLearningAreas$.pipe(take(1)).subscribe(learningAreas => {
-      this.dialog
-        .open(NewTaskComponent, {
-          data: {
-            learningAreas
-          },
-          panelClass: 'pages-kabas-tasks-new-task__dialog'
-        })
-        .afterClosed()
-        .pipe(take(1))
-        .subscribe((formData: NewTaskFormValues) => {
-          if (formData) {
-            this.viewModel.createTask(
-              formData.title,
-              formData.learningArea.id,
-              formData.type
-            );
-          } else {
-            const queryParams = { tab: 0 };
-            if (this.route.snapshot.queryParams.paper) {
-              queryParams.tab = 1;
-            }
-            this.router.navigate(['tasks', 'manage'], { queryParams });
+    this.selectableLearningAreas$
+      .pipe(
+        take(1),
+        switchMap(learningAreas =>
+          this.dialog
+            .open(NewTaskComponent, {
+              data: {
+                learningAreas
+              },
+              panelClass: 'pages-kabas-tasks-new-task__dialog'
+            })
+            .afterClosed()
+        )
+      )
+      .subscribe((formData: NewTaskFormValues) => {
+        if (formData) {
+          this.viewModel.createTask(
+            formData.title,
+            formData.learningArea.id,
+            formData.type
+          );
+        } else {
+          const queryParams = { tab: 0 };
+          if (this.route.snapshot.queryParams.paper) {
+            queryParams.tab = 1;
           }
-        });
-    });
+          this.router.navigate(['tasks', 'manage'], { queryParams });
+        }
+      });
+  }
+
+  public removeAssignee(
+    task: TaskWithAssigneesInterface,
+    assignee: AssigneeInterface
+  ) {
+    const remainingAssignees = task.assignees.filter(
+      taskAssignee => taskAssignee !== assignee
+    );
+
+    this.viewModel.updateTaskAccess(task, remainingAssignees);
   }
 }
