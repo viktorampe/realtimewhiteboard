@@ -14,4 +14,5 @@ export interface TaskEduContentServiceInterface {
     userId: number,
     update: Partial<TaskEduContentInterface>[]
   ): Observable<TaskEduContentInterface[]>;
+  deleteTaskEduContents(taskEduContentIds: number[]);
 }

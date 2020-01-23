@@ -70,4 +70,7 @@ export class TaskService implements TaskServiceInterface {
       taskClassGroups
     ) as Observable<TaskInterface>;
   }
+
+  printTask(taskId: number, withNames: boolean) {}
+  printSolution(taskId: number) {}
 }

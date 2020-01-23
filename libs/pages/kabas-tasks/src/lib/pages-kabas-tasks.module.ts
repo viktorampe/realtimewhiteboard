@@ -20,6 +20,7 @@ import { ManageKabasTasksDetailComponent } from './components/manage-kabas-tasks
 import { ManageKabasTasksOverviewComponent } from './components/manage-kabas-tasks-overview/manage-kabas-tasks-overview.component';
 import { NewTaskComponent } from './components/new-task/new-task.component';
 import { TaskEduContentListItemComponent } from './components/task-edu-content-list-item/task-edu-content-list-item.component';
+import { PrintPaperTaskModalComponent } from './components/print-paper-task-modal/print-paper-task-modal.component';
 import { TaskListItemComponent } from './components/task-list-item/task-list-item.component';
 import { PagesKabasTasksRoutingModule } from './pages-kabas-tasks-routing.module';
 
@@ -49,10 +50,15 @@ import { PagesKabasTasksRoutingModule } from './pages-kabas-tasks-routing.module
     ManageKabasTasksAssigneeModalComponent,
     ManageKabasTasksAddAssigneesComponent,
     NewTaskComponent,
-    TaskEduContentListItemComponent
+    TaskEduContentListItemComponent,
+    PrintPaperTaskModalComponent
   ],
   providers: [],
   exports: [ManageKabasTasksAssigneeModalComponent],
-  entryComponents: [ManageKabasTasksAssigneeModalComponent, NewTaskComponent]
+  entryComponents: [
+    ManageKabasTasksAssigneeModalComponent,
+    NewTaskComponent,
+    PrintPaperTaskModalComponent
+  ]
 })
 export class PagesKabasTasksModule {}
