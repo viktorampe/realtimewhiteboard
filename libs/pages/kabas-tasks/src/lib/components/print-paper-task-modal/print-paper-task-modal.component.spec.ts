@@ -1,17 +1,16 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { configureTestSuite } from 'ng-bullet';
 import { PrintPaperTaskModalComponent } from './print-paper-task-modal.component';
 
 describe('PrintPaperTaskModalComponent', () => {
   let component: PrintPaperTaskModalComponent;
   let fixture: ComponentFixture<PrintPaperTaskModalComponent>;
 
-  beforeEach(async(() => {
+  configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [ PrintPaperTaskModalComponent ]
-    })
-    .compileComponents();
-  }));
+      declarations: [PrintPaperTaskModalComponent]
+    });
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PrintPaperTaskModalComponent);
