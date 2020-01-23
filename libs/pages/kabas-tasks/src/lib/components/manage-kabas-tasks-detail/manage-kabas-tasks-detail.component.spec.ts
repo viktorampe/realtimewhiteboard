@@ -37,6 +37,7 @@ import {
   NewTaskComponent,
   NewTaskFormValues
 } from '../new-task/new-task.component';
+import { ManageKabasTasksAssigneeModalComponent } from './../manage-kabas-tasks-assignee-modal/manage-kabas-tasks-assignee-modal.component';
 import { ManageKabasTasksDetailComponent } from './manage-kabas-tasks-detail.component';
 
 describe('ManageKabasTasksDetailComponent', () => {
@@ -101,8 +102,91 @@ describe('ManageKabasTasksDetailComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  describe('task assignee modal', () => {
-    // TODO
+  fdescribe('openAssigneeModal', () => {
+    it('should open the task assignees modal', () => {
+      matDialog.open = jest.fn();
+
+      const mockViewModel = viewModel as MockKabasTasksViewModel;
+      const mockCurrentTask = mockViewModel.tasksWithAssignments$.value[0];
+      const mockClassGroups = mockViewModel.classGroups$.value;
+      const mockGroups = mockViewModel.groups$.value;
+      const mockStudents = mockViewModel.students$.value;
+
+      const expectedTaskClassGroups = [
+        {
+          label: mockClassGroups[0].name,
+          relationId: 1,
+          type: 'classgroup'
+        },
+        {
+          label: mockClassGroups[1].name,
+          relationId: 2,
+          type: 'classgroup'
+        },
+        {
+          label: mockClassGroups[2].name,
+          relationId: 3,
+          type: 'classgroup'
+        }
+      ];
+      const expectedTaskGroups = [
+        {
+          label: mockGroups[0].name,
+          relationId: 1,
+          type: 'group'
+        },
+        {
+          label: mockGroups[1].name,
+          relationId: 2,
+          type: 'group'
+        },
+        {
+          label: mockGroups[2].name,
+          relationId: 3,
+          type: 'group'
+        }
+      ];
+
+      const expectedTaskStudents = [
+        {
+          label: mockStudents[0].displayName,
+          relationId: 1,
+          type: 'student'
+        },
+        {
+          label: mockStudents[1].displayName,
+          relationId: 2,
+          type: 'student'
+        },
+        {
+          label: mockStudents[2].displayName,
+          relationId: 3,
+          type: 'student'
+        }
+      ];
+
+      const expectedData = {
+        title: mockCurrentTask.name,
+        isPaperTask: mockCurrentTask.isPaperTask,
+        currentTaskAssignees: mockCurrentTask.assignees,
+        possibleTaskClassGroups: expectedTaskClassGroups,
+        possibleTaskGroups: expectedTaskGroups,
+        possibleTaskStudents: expectedTaskStudents
+      };
+      const expectedClass = 'manage-task-assignees';
+
+      component.openAssigneeModal();
+
+      expect(matDialog.open).toHaveBeenCalledWith(
+        ManageKabasTasksAssigneeModalComponent,
+        {
+          data: expectedData,
+          panelClass: expectedClass
+        }
+      );
+    });
+
+    it('should update the task assignee access on dialog close', () => {});
   });
 
   describe('isNewTask$', () => {
