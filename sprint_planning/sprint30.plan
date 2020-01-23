@@ -129,37 +129,89 @@ Development:
 	result gebruiken om page methods printTask(task, withNames) of printSolution(task)
 - [UI/UX]: ManageKabasTasksDetailComponent: tunnelen print methods naar VM [#2855]
 	doortunnelen naar viewmodel printTask(task.id, withNames: boolean) en  printSolution(task.id)
-
 Deployment:
-
 Design:
-
 Documentation:
-
 Requirements:
-
 Testing:
-
+US#2892 - PDF
+- [Scaffold]: PDF Helper [#2895]
+	* generatePaperTaskPDF(fileName, imagePaths: string[], displayNames?: string[])
+- [Scaffold]: Task Helper [#2898]
+	taskApi.getPaperTaskPDF(taskId: number, withNames: boolean, download? :boolean); + acl instellen (enkel toegang voor teacher)
+	taskApi.getPaperTaskSolutionPDF(taskId: number, download?: boolean) + acl instellen (enkel toegang voor teacher)
+- [Helper]: Task Helper [#2894]
+	* getAssignedStudentsForTask(taskId): Person[]
+- [Helper]: EduFiles Helper [#2900]
+	* getEduFilesForTask(taskId): EduFiles[]
+- [Helper]: PDF Helper [#2896]
+	* generatePaperTaskPDF(fileName, imagePaths: string[], displayNames?: string[])
+- [Remote]: Task Helper: getPaperTaskPdf [#2899]
+	* check if is paper 
+	* filename PDF
+	* hasAccess
+	* (H) getEduFilesForTask
+	* (H) getAssigneesForTask(taskId)
+	* (H) generatePaperTaskPDF(fileName, imagePaths: string[], displayNames?: string[])
+- [Remote]: Task: getPaperTaskSolutionPdf [#2897]
+	* check if is paper 
+	* hasAccess
+	* bestaan de eduFiles?
+	* (H) getEduFilesForTask
+	pastop! imagePaths zijn solutionPaths
+	* (H) generatePaperTaskPDF(fileName, imagePaths: string[], displayNames?: string[])
 US#2840 - API
 Development:
-- [TODO]: getTasks -> adapter
-- [TODO]: data -> getEduContents
-	Refactoring nodig waarin alle content wordt opgebouwd uit een array van tasks
-- [Scaffold]: TaskEduContent
-	* updateTaskEduContents
-	* destroyTaskEduContents
-	
+- [Scaffold]: TaskEduContent [#2910]
+	* updateTaskEduContents + acl instellen (enkel toegang voor teacher)
+	* destroyTaskEduContents + acl instellen (enkel toegang voor teacher)
 	cfr. TaskApi.updateTasks (success and errors)
-- [Scaffold]: Task: pdf
-	taskApi.getTaskPDF(taskId: number, withNames: boolean, download? :boolean);
-	taskApi.getSolutionPDF(taskId: number, download?: boolean)
-
+- [Scaffold]: Task Helper [#2903]
+	* function getTasksByInstances(taskIntances: TaskInstance[])
+	* function getAssignedStudentsForTask(taskId): Person[]
+- [Scaffold]: TaskIntance Helper [#2901]
+	* function getActiveTaskInstances(userId: numer)
+- [Scaffold]: TaskEduContent Helper [#2914]
+	* function getTaskEduContents(taskIds: number[])
+- [Scaffold]: EduFiles Helper [#2912]
+	* getEduFilesForTask(taskId): EduFiles[]
+- [Interface]: BulkUpdateResultInfoInterface [#2904]
+- [Helper]: Task Helper [#2905]
+	implementatie getTasksByInstances(taskIntances: TaskInstance[]): Task[]
+- [Helper]: TaskIntance Helper [#2911]
+	implementatie getActiveTaskInstances(userId: numer): TaskInstance[]
+- [Helper]: TaskEduContent Helper [#2915]
+	implementatie getTaskEduContents(taskIds: number[]): TaskEduContent[]
+- [Helper]: getTasksAssignedToUser [#2908]
+	via taskInstances die nu actief zijn voor user  
+	cfr: models/person/task.js getSharedTasks
+	{success: [], errors: []}
+- [Remote]: TaskEduContent: destroyTaskEduContents [#2902]
+	1. extract all taskIds from eduContents array
+	2. check access to all tasks (hasAccessToTask in the person adapter)
+	3. check for each task => not active (getActiveTaskAssignments in the task helper)
+	4. destroy
+	Error bag vullen met mislukte checks uit 2 en 3 of gefaalde destroys
+	return BulkUpdatResultInfoInterface
+- [Remote]: TaskEduContent: updateTaskEduContents [#2906]
+	1. extract all taskIds from eduContents array
+	2. check access to all tasks
+	3. update
+	Error bag vullen met mislukte checks uit 2 of gefaalde updates
+	return BulkUpdatResultInfoInterface
+- [Remote]: Refactor Data: Tasks [#2913]
+	* getTasksForTeacher (adapter)
+	* (H) getTasksByInstances(taskInstances)
+	=> concat 2 results hierboven als taskIds 
+	* (H) getTaskEduContents(taskIds)
+	* (H) getActiveTaskInstances(userId)
+- [Remote]: Refactor destroyTasks en archiveTasks [#2909]
+	moet BulkUpdateResultInfoInterface returnen
 Deployment:
-
 Design:
-
 Documentation:
-
+- [Research]: Kan huidige implementatie van getTasksData weg? [#2907]
+	in data.js => user.getTasksData() => models/person/tasks.js => getTasksData()
+	mag dit verwijderd worden?
 Requirements:
-
 Testing:
