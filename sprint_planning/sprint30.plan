@@ -142,6 +142,13 @@ US#2892 - PDF
 	taskApi.getPaperTaskSolutionPDF(taskId: number, download?: boolean) + acl instellen (enkel toegang voor teacher)
 - [Helper]: Task Helper [#2894]
 	* getAssignedStudentsForTask(taskId): Person[]
+	=> get Students for classgroups, groups, ... 
+	* hier zijn nog helpers nodig voor 
+		* getStudentsInClassGroup
+		* getStudentsInGroup
+	=> per klasgroep alfabetisch
+	=> dan per groep alfabetisch
+	=> daarna per leerling alfabetisch
 - [Helper]: EduFiles Helper [#2900]
 	* getEduFilesForTask(taskId): EduFiles[]
 - [Helper]: PDF Helper [#2896]
