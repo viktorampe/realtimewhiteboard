@@ -43,4 +43,5 @@ export class TaskEduContentService implements TaskEduContentServiceInterface {
   ): Observable<TaskEduContentInterface[]> {
     throw new Error('Not implemented yet');
   }
+  deleteTaskEduContents(taskEduContentIds: number[]) {}
 }
