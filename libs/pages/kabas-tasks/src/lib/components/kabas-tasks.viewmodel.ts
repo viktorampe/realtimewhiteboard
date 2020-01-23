@@ -258,10 +258,26 @@ export class KabasTasksViewModel {
     );
   }
 
-  public updateTaskEduContent(
+  public updateTaskEduContentsRequired(
     taskEduContents: TaskEduContentInterface[],
-    updatedValues: Partial<TaskEduContentInterface>
-  ): void {
+    required: boolean
+  ) {
+    throw new Error('Not implemented yet');
+  }
+
+  public updateTaskEduContentsOrder(
+    taskEduContents: TaskEduContentInterface[]
+  ) {
+    throw new Error('Not implemented yet');
+  }
+
+  public deleteTaskEduContents(taskEduContentIds: number[]) {}
+
+  public printTask(taskId: number, withNames: boolean) {
+    throw new Error('Not implemented yet');
+  }
+
+  public printSolution(taskId: number) {
     throw new Error('Not implemented yet');
   }
 
