@@ -16,6 +16,10 @@
   $manage-kabas-tasks-assignee-modal_list_primary-action-padding-left: $pages-kabas-tasks_list_item--action-padding-left !default;
   $manage-kabas-tasks-assignee-modal_list_primary-action-margin-bottom: $pages-kabas-tasks_list_item--action-margin-bottom !default;
 
+  $manage-task-assignees__content__list__item--add-line-height: 16px !default;
+  $manage-task-assignees__content__list__item--add-height: 65px !default;
+  $manage-task-assignees__content__list__item--add-margin-top: 5px !default;
+
   $manage-kabas-tasks-assignee-modal_date-picker-font-size: $pages-kabas-tasks_date-picker-font-size !default;
 
   .manage-task-assignees {
@@ -55,15 +59,13 @@
       &__list {
         &__item {
           &--add {
-            background-color: $manage-kabas-tasks-assignee-modal-background-color--secondary;
-            color: $manage-kabas-tasks-assignee-modal-color--primary--accent !important;
-            font-weight: $manage-kabas-tasks-assignee-modal_list_primary-action-font-weight;
-            padding-left: $manage-kabas-tasks-assignee-modal_list_primary-action-padding-left !important;
-            margin-bottom: $manage-kabas-tasks-assignee-modal_list_primary-action-margin-bottom;
-
-            &__icon {
-              margin-right: $manage-kabas-tasks-assignee-modal-horizontal-spacing *
-                2;
+            background-color: $secondary-bg-color;
+            color: $primary-color-accent;
+            height: $manage-task-assignees__content__list__item--add-height;
+            font-size: $manage-task-assignees__content__list__item--add-line-height;
+            margin-top: $manage-task-assignees__content__list__item--add-margin-top;
+            .mat-icon {
+              margin: 0 20px;
             }
           }
 

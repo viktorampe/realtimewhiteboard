@@ -58,19 +58,17 @@
           >
         </ng-container>
       </div>
-
+      <div
+        class="manage-task-assignees__content__list__item manage-task-assignees__content__list__item--add"
+        (click)="toggleAddAssignees()"
+      >
+        <mat-icon
+          svgIcon="add"
+          class="manage-task-assignees__content__list__item--add__icon"
+        ></mat-icon>
+        Deze taak toewijzen...
+      </div>
       <mat-list class="manage-task-assignees__content__list">
-        <mat-list-item
-          class="manage-task-assignees__content__list__item manage-task-assignees__content__list__item--add"
-          (click)="toggleAddAssignees()"
-        >
-          <mat-icon
-            svgIcon="add"
-            class="manage-task-assignees__content__list__item--add__icon"
-          ></mat-icon>
-          Deze taak toewijzen...
-        </mat-list-item>
-
         <mat-list-item
           *ngFor="let assignee of currentTaskAssignees"
           class="manage-task-assignees__content__list__item"
