@@ -4,7 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import {
   EduContentInterface,
   LearningAreaInterface,
-  TaskEduContentInterface
+  TaskEduContentInterface,
+  TaskInterface
 } from '@campus/dal';
 import { SearchFilterCriteriaInterface } from '@campus/search';
 import { ConfirmationModalComponent, SideSheetComponent } from '@campus/ui';
@@ -262,8 +263,8 @@ export class ManageKabasTasksDetailComponent implements OnInit {
   public toggleIsReordering() {}
   public saveOrder(taskEduContents: TaskEduContentInterface[]) {}
   public clickPrintTask() {}
-  public printTask(task, withNames: boolean) {}
-  public printSolution(task) {}
+  public printTask(task: TaskInterface, withNames: boolean) {}
+  public printSolution(task: TaskInterface) {}
   public preview(eduContent: EduContentInterface) {}
   public clickRemoveTaskEduContents(
     taskEduContents: TaskEduContentInterface[]
