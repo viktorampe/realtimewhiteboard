@@ -36,14 +36,12 @@ import {
   shareReplay,
   switchMap
 } from 'rxjs/operators';
-import {
-  AssigneeInterface,
-  AssigneeTypesEnum
-} from '../interfaces/Assignee.interface';
+import { AssigneeTypesEnum } from '../interfaces/Assignee.interface';
 import {
   TaskStatusEnum,
   TaskWithAssigneesInterface
 } from '../interfaces/TaskWithAssignees.interface';
+import { AssigneeInterface } from './../interfaces/Assignee.interface';
 import {
   allowedLearningAreas,
   getTasksWithAssignmentsByType,
@@ -132,7 +130,7 @@ export class KabasTasksViewModel {
       new TaskActions.UpdateAccess({
         userId: this.authService.userId,
         taskId: task.id,
-        ...this.getAssigneesByType(assignees)
+        ...this.getAssigneesByType(assignees, task.id)
       })
     );
   }
@@ -154,7 +152,8 @@ export class KabasTasksViewModel {
   }
 
   private getAssigneesByType(
-    assignees: AssigneeInterface[]
+    assignees: AssigneeInterface[],
+    taskId: number
   ): {
     taskGroups: TaskGroupInterface[];
     taskStudents: TaskStudentInterface[];
@@ -164,10 +163,39 @@ export class KabasTasksViewModel {
     return assignees.reduce(
       (acc, assignee) => ({
         ...acc,
-        [keyMap[assignee.type]]: [...acc[keyMap[assignee.type]], assignee]
+        [keyMap[assignee.type]]: [
+          ...acc[keyMap[assignee.type]],
+          this.mapAssigneeToTaskAssignee(assignee, taskId)
+        ]
       }),
       { taskGroups: [], taskStudents: [], taskClassGroups: [] }
     );
+  }
+
+  private mapAssigneeToTaskAssignee(
+    assignee: AssigneeInterface,
+    taskId: number
+  ): TaskClassGroupInterface | TaskGroupInterface | TaskStudentInterface {
+    const taskAssignee: any = {
+      id: assignee.id,
+      start: assignee.start,
+      end: assignee.end,
+      taskId
+    };
+
+    switch (assignee.type) {
+      case AssigneeTypesEnum.CLASSGROUP:
+        taskAssignee.classGroupId = assignee.relationId;
+        break;
+      case AssigneeTypesEnum.GROUP:
+        taskAssignee.groupId = assignee.relationId;
+        break;
+      case AssigneeTypesEnum.STUDENT:
+        taskAssignee.personId = assignee.relationId;
+        break;
+    }
+
+    return taskAssignee;
   }
 
   public getDeleteInfo(
