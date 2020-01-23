@@ -1,7 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatSelectionList } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
-import { EduContentInterface, LearningAreaInterface } from '@campus/dal';
+import {
+  EduContentInterface,
+  LearningAreaInterface,
+  TaskEduContentInterface,
+  TaskInterface
+} from '@campus/dal';
 import { SearchFilterCriteriaInterface } from '@campus/search';
 import { ConfirmationModalComponent, SideSheetComponent } from '@campus/ui';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
@@ -36,7 +41,7 @@ export class ManageKabasTasksDetailComponent implements OnInit {
 
   public isNewTask$: Observable<boolean>;
   public selectableLearningAreas$: Observable<LearningAreaInterface[]>;
-
+  isReordering = false;
   isPaperTask = true; // replace w/ stream
   public selectedContents$ = new BehaviorSubject<EduContentInterface[]>([]);
   public task$: Observable<TaskWithAssigneesInterface>;
@@ -255,4 +260,13 @@ export class ManageKabasTasksDetailComponent implements OnInit {
         });
     });
   }
+  public toggleIsReordering() {}
+  public saveOrder(taskEduContents: TaskEduContentInterface[]) {}
+  public clickPrintTask() {}
+  public printTask(task: TaskInterface, withNames: boolean) {}
+  public printSolution(task: TaskInterface) {}
+  public preview(eduContent: EduContentInterface) {}
+  public clickRemoveTaskEduContents(
+    taskEduContents: TaskEduContentInterface[]
+  ) {}
 }
