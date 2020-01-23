@@ -85,7 +85,7 @@ function castStartEndToDate<
 >(assignee: T): T {
   return {
     ...assignee,
-    start: new Date(assignee.start),
-    end: new Date(assignee.end)
+    start: assignee.start ? new Date(assignee.start) : undefined,
+    end: assignee.end ? new Date(assignee.end) : undefined
   };
 }
