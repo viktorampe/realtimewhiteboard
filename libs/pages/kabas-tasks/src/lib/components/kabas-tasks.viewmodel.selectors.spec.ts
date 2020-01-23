@@ -164,8 +164,7 @@ describe('Kabas-tasks viewmodel selectors', () => {
           startDate: undefined,
           endDate: undefined,
           status: 'finished',
-          assignees: [],
-          taskEduContents: []
+          assignees: []
         }
       ];
       expect(stream).toBeObservable(hot('a', { a: expected }));
@@ -242,9 +241,24 @@ describe('Kabas-tasks viewmodel selectors', () => {
           }),
           eduContentAmount: 3,
           taskEduContents: [
-            new TaskEduContentFixture({ id: 123, taskId: 1, eduContentId: 1 }),
-            new TaskEduContentFixture({ id: 456, taskId: 1, eduContentId: 2 }),
-            new TaskEduContentFixture({ id: 789, taskId: 1, eduContentId: 3 })
+            new TaskEduContentFixture({
+              id: 789,
+              index: 1,
+              taskId: 1,
+              eduContentId: 1
+            }),
+            new TaskEduContentFixture({
+              id: 456,
+              index: 2,
+              taskId: 1,
+              eduContentId: 2
+            }),
+            new TaskEduContentFixture({
+              id: 123,
+              index: 3,
+              taskId: 1,
+              eduContentId: 3
+            })
           ],
           learningArea: new LearningAreaFixture({ name: 'wiskunde' }),
           startDate: new Date(date - 3),
@@ -286,7 +300,12 @@ describe('Kabas-tasks viewmodel selectors', () => {
           }),
           eduContentAmount: 1,
           taskEduContents: [
-            new TaskEduContentFixture({ id: 666, taskId: 2, eduContentId: 3 })
+            new TaskEduContentFixture({
+              id: 666,
+              index: 6,
+              taskId: 2,
+              eduContentId: 3
+            })
           ],
           learningArea: new LearningAreaFixture({ name: 'wiskunde' }),
           startDate: new Date(date - 33),
@@ -331,8 +350,7 @@ describe('Kabas-tasks viewmodel selectors', () => {
           startDate: undefined,
           endDate: undefined,
           status: 'finished',
-          assignees: [],
-          taskEduContents: []
+          assignees: []
         }
       ];
 
@@ -356,22 +374,25 @@ describe('Kabas-tasks viewmodel selectors', () => {
         eduContentAmount: 3,
         taskEduContents: [
           new TaskEduContentFixture({
-            id: 123,
+            id: 789,
+            index: 1,
             taskId: 1,
-            eduContentId: 1,
-            eduContent: new EduContentFixture({ id: 1 })
+            eduContentId: 3,
+            eduContent: new EduContentFixture({ id: 3 })
           }),
           new TaskEduContentFixture({
             id: 456,
+            index: 2,
             taskId: 1,
             eduContentId: 2,
             eduContent: new EduContentFixture({ id: 2 })
           }),
           new TaskEduContentFixture({
-            id: 789,
+            id: 123,
+            index: 3,
             taskId: 1,
-            eduContentId: 3,
-            eduContent: new EduContentFixture({ id: 3 })
+            eduContentId: 1,
+            eduContent: new EduContentFixture({ id: 1 })
           })
         ],
         learningArea: new LearningAreaFixture({ name: 'wiskunde' }),
@@ -521,10 +542,30 @@ function getLoadEduContentsAction() {
 function getLoadTaskEduContentsAction() {
   return new TaskEduContentActions.TaskEduContentsLoaded({
     taskEduContents: [
-      new TaskEduContentFixture({ id: 123, taskId: 1, eduContentId: 1 }),
-      new TaskEduContentFixture({ id: 456, taskId: 1, eduContentId: 2 }),
-      new TaskEduContentFixture({ id: 789, taskId: 1, eduContentId: 3 }),
-      new TaskEduContentFixture({ id: 666, taskId: 2, eduContentId: 3 })
+      new TaskEduContentFixture({
+        id: 123,
+        index: 3,
+        taskId: 1,
+        eduContentId: 1
+      }),
+      new TaskEduContentFixture({
+        id: 456,
+        index: 2,
+        taskId: 1,
+        eduContentId: 2
+      }),
+      new TaskEduContentFixture({
+        id: 789,
+        index: 1,
+        taskId: 1,
+        eduContentId: 3
+      }),
+      new TaskEduContentFixture({
+        id: 666,
+        index: 6,
+        taskId: 2,
+        eduContentId: 3
+      })
     ]
   });
 }
