@@ -70,10 +70,10 @@ Development:
 	Er is al een eduContent selector in de viewmodel selector (getTaskWithAssignmentsAndEduContents)
 - [State]: Action: Refactor UpdateTaskEduContents action [#2863]
 	moet FeedbackTriggeringAction implementeren
-	optimisticUpdate
 - [State]: Effect: updateTaskEduContents$ Effect [#2873]
 	implementz tze effect. Error bag handling!
 	cfr. updateTask$ effect
+	optimisticUpdate
 - [State]: startDeleteTaskEduContents Action [#2874]
 	StartDeleteTaskEduContents(taskEduContentIds)
 	payload: {userId, ids: []}
