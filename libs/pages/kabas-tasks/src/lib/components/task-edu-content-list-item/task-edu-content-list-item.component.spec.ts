@@ -1,17 +1,16 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { configureTestSuite } from 'ng-bullet';
 import { TaskEduContentListItemComponent } from './task-edu-content-list-item.component';
 
 describe('TaskEduContentListItemComponent', () => {
   let component: TaskEduContentListItemComponent;
   let fixture: ComponentFixture<TaskEduContentListItemComponent>;
 
-  beforeEach(async(() => {
+  configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [ TaskEduContentListItemComponent ]
-    })
-    .compileComponents();
-  }));
+      declarations: [TaskEduContentListItemComponent]
+    });
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(TaskEduContentListItemComponent);

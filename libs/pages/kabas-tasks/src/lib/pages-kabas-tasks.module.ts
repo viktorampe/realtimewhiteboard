@@ -19,9 +19,9 @@ import { ManageKabasTasksAssigneeModalComponent } from './components/manage-kaba
 import { ManageKabasTasksDetailComponent } from './components/manage-kabas-tasks-detail/manage-kabas-tasks-detail.component';
 import { ManageKabasTasksOverviewComponent } from './components/manage-kabas-tasks-overview/manage-kabas-tasks-overview.component';
 import { NewTaskComponent } from './components/new-task/new-task.component';
+import { TaskEduContentListItemComponent } from './components/task-edu-content-list-item/task-edu-content-list-item.component';
 import { TaskListItemComponent } from './components/task-list-item/task-list-item.component';
 import { PagesKabasTasksRoutingModule } from './pages-kabas-tasks-routing.module';
-import { TaskEduContentListItemComponent } from './components/task-edu-content-list-item/task-edu-content-list-item.component';
 
 @NgModule({
   imports: [
@@ -36,7 +36,6 @@ import { TaskEduContentListItemComponent } from './components/task-edu-content-l
     SearchModule,
     GuardsModule,
     MatSlideToggleModule,
-
     MatDialogModule,
     MatInputModule,
     MatRadioModule,
