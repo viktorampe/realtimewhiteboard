@@ -36,6 +36,8 @@ export interface TaskServiceInterface {
     taskStudents: TaskStudentInterface[],
     taskClassGroups?: TaskClassGroupInterface[]
   ): Observable<TaskInterface>;
+  printTask(taskId: number, withNames: boolean);
+  printSolution(taskId: number);
 }
 
 export interface TaskUpdateInfoInterface {
