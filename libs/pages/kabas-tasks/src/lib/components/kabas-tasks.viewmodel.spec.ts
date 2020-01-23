@@ -295,13 +295,35 @@ describe('KabasTaskViewModel', () => {
         taskClassGroup
       ]);
 
+      const expectedTaskClassGroup = {
+        id: taskClassGroup.id,
+        start: taskClassGroup.start,
+        end: taskClassGroup.end,
+        taskId: task.id,
+        classGroupId: taskClassGroup.relationId
+      };
+      const expectedTaskGroup = {
+        id: taskGroup.id,
+        start: taskGroup.start,
+        end: taskGroup.end,
+        taskId: task.id,
+        groupId: taskGroup.relationId
+      };
+      const expectedTaskStudent = {
+        id: taskStudent.id,
+        start: taskStudent.start,
+        end: taskStudent.end,
+        taskId: task.id,
+        personId: taskStudent.relationId
+      };
+
       expect(spy).toHaveBeenCalledWith(
         new TaskActions.UpdateAccess({
           userId: authService.userId,
           taskId: task.id,
-          taskGroups: [taskGroup],
-          taskStudents: [taskStudent],
-          taskClassGroups: [taskClassGroup]
+          taskGroups: [expectedTaskGroup],
+          taskStudents: [expectedTaskStudent],
+          taskClassGroups: [expectedTaskClassGroup]
         })
       );
     });
