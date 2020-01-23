@@ -63,11 +63,29 @@ export class TaskService implements TaskServiceInterface {
     taskStudents: TaskStudentInterface[],
     taskClassGroups?: TaskClassGroupInterface[]
   ): Observable<TaskInterface> {
-    return this.taskApi.updateAccess(
-      taskId,
-      taskGroups,
-      taskStudents,
-      taskClassGroups
-    ) as Observable<TaskInterface>;
+    return this.taskApi
+      .updateAccess(taskId, taskGroups, taskStudents, taskClassGroups)
+      .pipe(
+        map(
+          (task: TaskInterface): TaskInterface => ({
+            ...task,
+            taskClassGroups: task.taskClassGroups.map(tCG =>
+              castStartEndToDate(tCG)
+            ),
+            taskGroups: task.taskGroups.map(tG => castStartEndToDate(tG)),
+            taskStudents: task.taskStudents.map(tS => castStartEndToDate(tS))
+          })
+        )
+      );
   }
+}
+
+function castStartEndToDate<
+  T extends TaskClassGroupInterface | TaskGroupInterface | TaskStudentInterface
+>(assignee: T): T {
+  return {
+    ...assignee,
+    start: new Date(assignee.start),
+    end: new Date(assignee.end)
+  };
 }
