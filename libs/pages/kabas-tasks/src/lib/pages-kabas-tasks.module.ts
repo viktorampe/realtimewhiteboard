@@ -21,6 +21,7 @@ import { ManageKabasTasksOverviewComponent } from './components/manage-kabas-tas
 import { NewTaskComponent } from './components/new-task/new-task.component';
 import { TaskListItemComponent } from './components/task-list-item/task-list-item.component';
 import { PagesKabasTasksRoutingModule } from './pages-kabas-tasks-routing.module';
+import { TaskEduContentListItemComponent } from './components/task-edu-content-list-item/task-edu-content-list-item.component';
 
 @NgModule({
   imports: [
@@ -48,7 +49,8 @@ import { PagesKabasTasksRoutingModule } from './pages-kabas-tasks-routing.module
     ManageKabasTasksDetailComponent,
     ManageKabasTasksAssigneeModalComponent,
     ManageKabasTasksAddAssigneesComponent,
-    NewTaskComponent
+    NewTaskComponent,
+    TaskEduContentListItemComponent
   ],
   providers: [],
   exports: [ManageKabasTasksAssigneeModalComponent],
