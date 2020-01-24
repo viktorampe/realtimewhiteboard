@@ -162,14 +162,14 @@ export class ManageKabasTasksDetailComponent implements OnInit {
   public openAssigneeModal() {
     this.getAssigneeModalData()
       .pipe(
-        switchMap(data => {
-          return this.dialog
+        switchMap(data =>
+          this.dialog
             .open(ManageKabasTasksAssigneeModalComponent, {
               data,
               panelClass: 'manage-task-assignees'
             })
-            .afterClosed();
-        }),
+            .afterClosed()
+        ),
         withLatestFrom(this.task$)
       )
       .subscribe(([assignees, task]) => {

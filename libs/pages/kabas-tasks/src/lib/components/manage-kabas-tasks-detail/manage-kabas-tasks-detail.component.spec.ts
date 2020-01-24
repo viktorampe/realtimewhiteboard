@@ -37,6 +37,8 @@ import {
   NewTaskComponent,
   NewTaskFormValues
 } from '../new-task/new-task.component';
+import { AssigneeInterface } from './../../interfaces/Assignee.interface';
+import { TaskWithAssigneesInterface } from './../../interfaces/TaskWithAssignees.interface';
 import { ManageKabasTasksAssigneeModalComponent } from './../manage-kabas-tasks-assignee-modal/manage-kabas-tasks-assignee-modal.component';
 import { ManageKabasTasksDetailComponent } from './manage-kabas-tasks-detail.component';
 
@@ -102,12 +104,21 @@ describe('ManageKabasTasksDetailComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  fdescribe('openAssigneeModal', () => {
-    it('should open the task assignees modal', () => {
-      matDialog.open = jest.fn();
+  describe('openAssigneeModal', () => {
+    let mockViewModel: MockKabasTasksViewModel;
+    let afterClosed$: BehaviorSubject<AssigneeInterface[]>;
+    let mockCurrentTask: TaskWithAssigneesInterface;
 
-      const mockViewModel = viewModel as MockKabasTasksViewModel;
-      const mockCurrentTask = mockViewModel.tasksWithAssignments$.value[0];
+    beforeEach(() => {
+      mockViewModel = viewModel;
+      mockCurrentTask = mockViewModel.tasksWithAssignments$.value[0];
+
+      const dialog = TestBed.get(MatDialog);
+      afterClosed$ = new BehaviorSubject<AssigneeInterface[]>([]);
+      dialog.open = jest.fn(() => ({ afterClosed: () => afterClosed$ }));
+    });
+
+    it('should open the task assignees modal', () => {
       const mockClassGroups = mockViewModel.classGroups$.value;
       const mockGroups = mockViewModel.groups$.value;
       const mockStudents = mockViewModel.students$.value;
@@ -186,7 +197,26 @@ describe('ManageKabasTasksDetailComponent', () => {
       );
     });
 
-    it('should update the task assignee access on dialog close', () => {});
+    it('should update the task assignee access on dialog close', () => {
+      const dialogResult = [new AssigneeFixture()];
+      viewModel.updateTaskAccess = jest.fn();
+
+      afterClosed$.next(dialogResult);
+      component.openAssigneeModal();
+      expect(viewModel.updateTaskAccess).toHaveBeenCalledWith(
+        { ...mockCurrentTask, taskEduContents: jasmine.anything() },
+        dialogResult
+      );
+    });
+
+    it('should not update the task assignee access on dialog close, without data', () => {
+      const dialogResult = undefined;
+      viewModel.updateTaskAccess = jest.fn();
+
+      afterClosed$.next(dialogResult);
+      component.openAssigneeModal();
+      expect(viewModel.updateTaskAccess).not.toHaveBeenCalled();
+    });
   });
 
   describe('isNewTask$', () => {
@@ -434,6 +464,30 @@ describe('ManageKabasTasksDetailComponent', () => {
       expect(component.updateDescription).toHaveBeenCalledWith(
         descriptionComponent.componentInstance.relatedItem,
         newText
+      );
+    });
+  });
+
+  describe('removeAssignee', () => {
+    let mockViewModel: MockKabasTasksViewModel;
+    let mockCurrentTask: TaskWithAssigneesInterface;
+
+    beforeEach(() => {
+      mockViewModel = viewModel;
+      mockCurrentTask = mockViewModel.tasksWithAssignments$.value[0];
+    });
+
+    it('should remove the assignee', () => {
+      viewModel.updateTaskAccess = jest.fn();
+      const [
+        assigneeToRemove,
+        ...remainingAssignees
+      ] = mockCurrentTask.assignees;
+
+      component.removeAssignee(mockCurrentTask, assigneeToRemove);
+      expect(viewModel.updateTaskAccess).toHaveBeenCalledWith(
+        mockCurrentTask,
+        remainingAssignees
       );
     });
   });
