@@ -1,1 +1,31 @@
-<p>task-edu-content-list-item works!</p>
+<mat-icon
+  class="manage-kabas-tasks-task-list-item__file-icon"
+  svgIcon="{{ fileIcon }}"
+></mat-icon>
+
+<div class="manage-kabas-tasks-task-list-item__container">
+  <div
+    class="manage-kabas-tasks-task-list-item__container__title"
+    (click)="actions[0].handler()"
+    campusClickStopPropagation
+    >{{ title }}</div
+  >
+  <div class="manage-kabas-tasks-task-list-item__container__actions"
+    ><span>{{ actions[0].label }}</span></div
+  >
+</div>
+<div class="manage-kabas-tasks-task-list-item__combined-container">
+  <div class="manage-kabas-tasks-task-list-item__level">
+    {{ level }}
+  </div>
+
+  <div class="manage-kabas-tasks-task-list-item__required">
+    <span></span> {{ required }}
+    <span></span>
+  </div>
+
+  <mat-icon
+    class="manage-kabas-tasks-task-list-item__diabolo"
+    svgIcon="{{ diaboloPhaseIcon }}"
+  ></mat-icon>
+</div>

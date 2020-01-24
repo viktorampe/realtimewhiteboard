@@ -221,7 +221,18 @@
               [class.mat-list-option--selected]="option.selected"
               [value]="taskEduContent"
             >
-              {{ taskEduContent.eduContent.publishedEduContentMetadata.title }}
+              <campus-task-edu-content-list-item
+                [title]="
+                  taskEduContent.eduContent.publishedEduContentMetadata.title
+                "
+                [actions]="[
+                  { label: 'testje', icon: 'task:paper', tooltip: 'non' }
+                ]"
+                level="inoefening"
+                [required]="true ? 'moetje' : 'magje'"
+                fileIcon="educontent-product-type:evaluatie"
+                diaboloPhaseIcon="diabolo-intro"
+              ></campus-task-edu-content-list-item>
             </mat-list-option>
           </ng-container>
         </mat-selection-list>
