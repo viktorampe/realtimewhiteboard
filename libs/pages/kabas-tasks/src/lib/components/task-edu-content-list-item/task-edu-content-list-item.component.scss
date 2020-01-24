@@ -2,16 +2,16 @@
   display: flex;
   flex-direction: row;
   padding: 5px 0;
-  &:hover {
-    .manage-kabas-tasks-task-list-item__hover-actions {
-      mat-icon {
-        display: inline-block;
-      }
-    }
-  }
 }
 
 .manage-kabas-tasks-task-list-item {
+  &__combined {
+    &-container {
+      display: flex;
+      justify-content: flex-end;
+    }
+  }
+
   &__container {
     flex: auto;
     min-width: 100px;
@@ -49,24 +49,5 @@
     flex: 0 0 50px;
     align-self: center;
     min-width: 50px;
-  }
-
-  &__hover-actions {
-    flex: 1 0 5%;
-    flex-direction: row nowrap;
-    align-self: center;
-    mat-icon {
-      display: none;
-      &.favorite {
-        display: inline-block;
-        fill: red; // TODO: what color?
-      }
-    }
-  }
-  &__combined {
-    &-container {
-      display: flex;
-      justify-content: flex-end;
-    }
   }
 }

@@ -21,7 +21,7 @@
   </div>
 
   <div class="manage-kabas-tasks-task-list-item__required">
-    <span></span> {{ required ? 'moetje' : 'magje' }}
+    <span *ngIf="actions.length"></span> {{ required ? 'moetje' : 'magje' }}
     <span></span>
   </div>
 
