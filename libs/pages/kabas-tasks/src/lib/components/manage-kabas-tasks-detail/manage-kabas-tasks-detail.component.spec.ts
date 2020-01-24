@@ -285,7 +285,7 @@ describe('ManageKabasTasksDetailComponent', () => {
     };
 
     beforeEach(() => {
-      openDialogSpy = jest.spyOn(matDialog, 'open');
+      openDialogSpy = matDialog.open = jest.fn();
     });
 
     it('should open a confirmation dialog', () => {
