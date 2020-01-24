@@ -212,19 +212,58 @@
             !taskContent.selectedOptions.isEmpty()
           "
           (selectionChange)="onSelectionChange()"
+          *ngIf="!isReordering"
         >
           <ng-container *ngIf="task.taskEduContents.length; else noResults">
             <mat-list-option
               #option
-              *ngFor="let taskEduContent of task.taskEduContents"
+              *ngFor="let tEC of task.taskEduContents"
               checkboxPosition="before"
               [class.mat-list-option--selected]="option.selected"
-              [value]="taskEduContent"
+              [value]="tEC"
             >
-              {{ taskEduContent.eduContent.publishedEduContentMetadata.title }}
+              <campus-task-edu-content-list-item
+                [title]="tEC.eduContent.publishedEduContentMetadata.title"
+                [level]="
+                  tEC.eduContent.publishedEduContentMetadata.methodLevel &&
+                  tEC.eduContent.publishedEduContentMetadata.methodLevel.label
+                "
+                [required]="tEC.required"
+                [fileIcon]="tEC.eduContent.publishedEduContentMetadata.fileExt"
+                [diaboloPhaseIcon]="
+                  tEC.eduContent.publishedEduContentMetadata.diaboloPhase &&
+                  tEC.eduContent.publishedEduContentMetadata.diaboloPhase.icon
+                "
+              >
+              </campus-task-edu-content-list-item>
             </mat-list-option>
           </ng-container>
         </mat-selection-list>
+        <mat-list
+          #taskContentReordering
+          class="manage-kabas-tasks-detail__list"
+          *ngIf="isReordering"
+          cdkDropList
+        >
+          <ng-container *ngIf="task.taskEduContents.length; else noResults">
+            <mat-list-item cdkDrag *ngFor="let tEC of task.taskEduContents">
+              <campus-task-edu-content-list-item
+                [title]="tEC.eduContent.publishedEduContentMetadata.title"
+                [level]="
+                  tEC.eduContent.publishedEduContentMetadata.methodLevel &&
+                  tEC.eduContent.publishedEduContentMetadata.methodLevel.label
+                "
+                [required]="tEC.required"
+                [fileIcon]="tEC.eduContent.publishedEduContentMetadata.fileExt"
+                [diaboloPhaseIcon]="
+                  tEC.eduContent.publishedEduContentMetadata.diaboloPhase &&
+                  tEC.eduContent.publishedEduContentMetadata.diaboloPhase.icon
+                "
+              >
+              </campus-task-edu-content-list-item>
+            </mat-list-item>
+          </ng-container>
+        </mat-list>
 
         <ng-template #noResults>
           <p>De toegepaste filter bevat geen resultaten.</p>

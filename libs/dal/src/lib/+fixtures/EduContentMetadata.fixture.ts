@@ -37,6 +37,7 @@ export class EduContentMetadataFixture implements EduContentMetadataInterface {
   publisherId = 1;
   eduContentId = 1;
   editorId = 1;
+  levelId = 1;
   learningAreaId = 1;
   learningArea = new LearningAreaFixture({ id: 1 });
   eduContentProductTypeId = 1;
@@ -96,6 +97,7 @@ export class EduContentMetadataFixture implements EduContentMetadataInterface {
       depth: 1
     })
   ];
+  diaboloPhaseId = 1;
   diaboloPhase = new DiaboloPhaseFixture();
   streamable = false;
 
