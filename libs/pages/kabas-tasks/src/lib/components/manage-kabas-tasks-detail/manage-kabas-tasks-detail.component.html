@@ -247,6 +247,10 @@
         >
           <ng-container *ngIf="task.taskEduContents.length; else noResults">
             <mat-list-item cdkDrag *ngFor="let tEC of task.taskEduContents">
+              <mat-icon
+                class="manage-kabas-tasks-detail__list__drag-handle"
+                svgIcon="drag-handle"
+              ></mat-icon>
               <campus-task-edu-content-list-item
                 [title]="tEC.eduContent.publishedEduContentMetadata.title"
                 [level]="
