@@ -13,7 +13,8 @@ import { TaskInterface } from '../../+models';
 import {
   TaskActiveErrorInterface,
   TaskServiceInterface,
-  TASK_SERVICE_TOKEN
+  TASK_SERVICE_TOKEN,
+  UpdateTaskResultInterface
 } from '../../tasks/task.service.interface';
 import {
   EffectFeedback,
@@ -134,59 +135,48 @@ export class TaskEffects {
         return this.taskService
           .deleteTasks(action.payload.userId, action.payload.ids)
           .pipe(
-            switchMap(
-              (
-                taskDestroyResult: BulkUpdateResultInfoInterface<
-                  TaskInterface,
-                  TaskActiveErrorInterface
-                >
-              ) => {
-                const actions = [];
-                const { success, errors } = taskDestroyResult;
+            switchMap((taskDestroyResult: UpdateTaskResultInterface) => {
+              const actions = [];
+              const { success, errors } = taskDestroyResult;
 
-                // remove the destroyed ones from the store
-                if (this.isFilled(success)) {
-                  actions.push(
-                    new DeleteTasks({
-                      ids: success.map(task => task.id)
-                    })
-                  );
+              // remove the destroyed ones from the store
+              if (this.isFilled(success)) {
+                actions.push(
+                  new DeleteTasks({
+                    ids: success.map(task => task.id)
+                  })
+                );
 
-                  // show a snackbar if there is no other feedback (i.e. no errors)
-                  if (!this.isFilled(errors)) {
-                    const message = this.getTaskUpdateSuccessMessage(
-                      success.length,
-                      'delete'
-                    );
-                    actions.push(
-                      this.getTaskUpdateFeedbackAction(
-                        action,
-                        message,
-                        'success'
-                      )
-                    );
-                    if (action.payload.navigateAfterDelete) {
-                      actions.push(new NavigateToTasksOverview());
-                    }
-                  }
-                }
-                // show feedback for the ones still in use
-                if (this.isFilled(errors)) {
-                  const errorMessage = this.getTaskUpdateErrorMessageHTML(
-                    taskDestroyResult,
+                // show a snackbar if there is no other feedback (i.e. no errors)
+                if (!this.isFilled(errors)) {
+                  const message = this.getTaskUpdateSuccessMessage(
+                    success.length,
                     'delete'
                   );
                   actions.push(
-                    this.getTaskUpdateFeedbackAction(
-                      action,
-                      errorMessage,
-                      'error'
-                    )
+                    this.getTaskUpdateFeedbackAction(action, message, 'success')
                   );
+                  if (action.payload.navigateAfterDelete) {
+                    actions.push(new NavigateToTasksOverview());
+                  }
                 }
-                return from(actions);
               }
-            )
+              // show feedback for the ones still in use
+              if (this.isFilled(errors)) {
+                const errorMessage = this.getTaskUpdateErrorMessageHTML(
+                  taskDestroyResult,
+                  'delete'
+                );
+                actions.push(
+                  this.getTaskUpdateFeedbackAction(
+                    action,
+                    errorMessage,
+                    'error'
+                  )
+                );
+              }
+              return from(actions);
+            })
           );
       },
       onError: (action: StartDeleteTasks, error) => {
@@ -336,10 +326,7 @@ export class TaskEffects {
   }
 
   private getTaskUpdateErrorMessageHTML(
-    taskUpdateInfo: BulkUpdateResultInfoInterface<
-      TaskInterface,
-      TaskActiveErrorInterface
-    >,
+    taskUpdateInfo: UpdateTaskResultInterface,
     method: 'archive' | 'dearchive' | 'delete'
   ) {
     const { success, errors } = taskUpdateInfo;
