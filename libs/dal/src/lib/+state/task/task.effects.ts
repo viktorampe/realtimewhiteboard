@@ -8,10 +8,11 @@ import { DataPersistence } from '@nrwl/angular';
 import { from } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
 import { DalState } from '..';
+import { BulkUpdateResultInfoInterface } from '../../+external-interfaces/bulk-update-result-info';
 import { TaskInterface } from '../../+models';
 import {
+  TaskActiveErrorInterface,
   TaskServiceInterface,
-  TaskUpdateInfoInterface,
   TASK_SERVICE_TOKEN
 } from '../../tasks/task.service.interface';
 import {
@@ -133,48 +134,59 @@ export class TaskEffects {
         return this.taskService
           .deleteTasks(action.payload.userId, action.payload.ids)
           .pipe(
-            switchMap((taskDestroyResult: TaskUpdateInfoInterface) => {
-              const actions = [];
-              const { tasks, errors } = taskDestroyResult;
+            switchMap(
+              (
+                taskDestroyResult: BulkUpdateResultInfoInterface<
+                  TaskInterface,
+                  TaskActiveErrorInterface
+                >
+              ) => {
+                const actions = [];
+                const { success, errors } = taskDestroyResult;
 
-              // remove the destroyed ones from the store
-              if (this.isFilled(tasks)) {
-                actions.push(
-                  new DeleteTasks({
-                    ids: tasks.map(task => task.id)
-                  })
-                );
+                // remove the destroyed ones from the store
+                if (this.isFilled(success)) {
+                  actions.push(
+                    new DeleteTasks({
+                      ids: success.map(task => task.id)
+                    })
+                  );
 
-                // show a snackbar if there is no other feedback (i.e. no errors)
-                if (!this.isFilled(errors)) {
-                  const message = this.getTaskUpdateSuccessMessage(
-                    tasks.length,
+                  // show a snackbar if there is no other feedback (i.e. no errors)
+                  if (!this.isFilled(errors)) {
+                    const message = this.getTaskUpdateSuccessMessage(
+                      success.length,
+                      'delete'
+                    );
+                    actions.push(
+                      this.getTaskUpdateFeedbackAction(
+                        action,
+                        message,
+                        'success'
+                      )
+                    );
+                    if (action.payload.navigateAfterDelete) {
+                      actions.push(new NavigateToTasksOverview());
+                    }
+                  }
+                }
+                // show feedback for the ones still in use
+                if (this.isFilled(errors)) {
+                  const errorMessage = this.getTaskUpdateErrorMessageHTML(
+                    taskDestroyResult,
                     'delete'
                   );
                   actions.push(
-                    this.getTaskUpdateFeedbackAction(action, message, 'success')
+                    this.getTaskUpdateFeedbackAction(
+                      action,
+                      errorMessage,
+                      'error'
+                    )
                   );
-                  if (action.payload.navigateAfterDelete) {
-                    actions.push(new NavigateToTasksOverview());
-                  }
                 }
+                return from(actions);
               }
-              // show feedback for the ones still in use
-              if (this.isFilled(errors)) {
-                const errorMessage = this.getTaskUpdateErrorMessageHTML(
-                  taskDestroyResult,
-                  'delete'
-                );
-                actions.push(
-                  this.getTaskUpdateFeedbackAction(
-                    action,
-                    errorMessage,
-                    'error'
-                  )
-                );
-              }
-              return from(actions);
-            })
+            )
           );
       },
       onError: (action: StartDeleteTasks, error) => {
@@ -243,49 +255,60 @@ export class TaskEffects {
             })
           )
           .pipe(
-            switchMap((taskUpdateInfo: TaskUpdateInfoInterface) => {
-              const { tasks, errors } = taskUpdateInfo;
-              const actions = [];
+            switchMap(
+              (
+                taskUpdateInfo: BulkUpdateResultInfoInterface<
+                  TaskInterface,
+                  TaskActiveErrorInterface
+                >
+              ) => {
+                const { success, errors } = taskUpdateInfo;
+                const actions = [];
 
-              if (this.isFilled(tasks)) {
-                const partialUpdates = tasks.reduce(
-                  (acc, task) => [...acc, { id: task.id, changes: task }],
-                  []
-                ) as Update<TaskInterface>[];
+                if (this.isFilled(success)) {
+                  const partialUpdates = success.reduce(
+                    (acc, task) => [...acc, { id: task.id, changes: task }],
+                    []
+                  ) as Update<TaskInterface>[];
 
-                actions.push(
-                  new UpdateTasks({
-                    userId: action.payload.userId,
-                    tasks: partialUpdates
-                  })
-                );
+                  actions.push(
+                    new UpdateTasks({
+                      userId: action.payload.userId,
+                      tasks: partialUpdates
+                    })
+                  );
 
-                if (!this.isFilled(errors)) {
-                  const message = this.getTaskUpdateSuccessMessage(
-                    tasks.length,
+                  if (!this.isFilled(errors)) {
+                    const message = this.getTaskUpdateSuccessMessage(
+                      success.length,
+                      this.intentToArchive(action) ? 'archive' : 'dearchive'
+                    );
+                    actions.push(
+                      this.getTaskUpdateFeedbackAction(
+                        action,
+                        message,
+                        'success'
+                      )
+                    );
+                  }
+                }
+
+                if (this.isFilled(errors)) {
+                  const errorMessage = this.getTaskUpdateErrorMessageHTML(
+                    taskUpdateInfo,
                     this.intentToArchive(action) ? 'archive' : 'dearchive'
                   );
                   actions.push(
-                    this.getTaskUpdateFeedbackAction(action, message, 'success')
+                    this.getTaskUpdateFeedbackAction(
+                      action,
+                      errorMessage,
+                      'error'
+                    )
                   );
                 }
+                return from(actions);
               }
-
-              if (this.isFilled(errors)) {
-                const errorMessage = this.getTaskUpdateErrorMessageHTML(
-                  taskUpdateInfo,
-                  this.intentToArchive(action) ? 'archive' : 'dearchive'
-                );
-                actions.push(
-                  this.getTaskUpdateFeedbackAction(
-                    action,
-                    errorMessage,
-                    'error'
-                  )
-                );
-              }
-              return from(actions);
-            })
+            )
           );
       },
       onError: (action: StartArchiveTasks, error: any) => {
@@ -313,10 +336,13 @@ export class TaskEffects {
   }
 
   private getTaskUpdateErrorMessageHTML(
-    taskUpdateInfo: TaskUpdateInfoInterface,
+    taskUpdateInfo: BulkUpdateResultInfoInterface<
+      TaskInterface,
+      TaskActiveErrorInterface
+    >,
     method: 'archive' | 'dearchive' | 'delete'
   ) {
-    const { tasks, errors } = taskUpdateInfo;
+    const { success, errors } = taskUpdateInfo;
     const methodVerbs = {
       archive: 'gearchiveerd',
       dearchive: 'gedearchiveerd',
@@ -326,12 +352,12 @@ export class TaskEffects {
 
     const html = [];
 
-    if (!tasks.length) {
+    if (!success.length) {
       html.push(`<p>Er werden geen taken ${verb}.</p>`);
-    } else if (tasks.length === 1) {
+    } else if (success.length === 1) {
       html.push(`<p>De taak werd ${verb}.</p>`);
     } else {
-      html.push(`<p>Er werden ${tasks.length} taken ${verb}.</p>`);
+      html.push(`<p>Er werden ${success.length} taken ${verb}.</p>`);
     }
     html.push('<p>De volgende taken zijn nog in gebruik:</p>');
     html.push('<ul>');

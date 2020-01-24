@@ -12,6 +12,7 @@ import { DataPersistence, NxModule } from '@nrwl/angular';
 import { hot } from '@nrwl/angular/testing';
 import { Observable, of } from 'rxjs';
 import { TaskReducer } from '.';
+import { BulkUpdateResultInfoInterface } from '../../+external-interfaces/bulk-update-result-info';
 import {
   TaskClassGroupFixture,
   TaskFixture,
@@ -20,6 +21,7 @@ import {
 } from '../../+fixtures';
 import { TaskInterface } from '../../+models';
 import {
+  TaskActiveErrorInterface,
   TaskServiceInterface,
   TASK_SERVICE_TOKEN
 } from '../../tasks/task.service.interface';
@@ -469,7 +471,10 @@ describe('TaskEffects', () => {
     });
     it('should call the service, redirect and dispatch feedback, no errors', () => {
       deleteTasksSpy.mockReturnValue(
-        of({ tasks: taskIds.map(id => ({ id })), errors: [] })
+        of({
+          success: taskIds.map(id => ({ id })),
+          errors: []
+        } as BulkUpdateResultInfoInterface<TaskInterface, TaskActiveErrorInterface>)
       );
       const expectedMessage = 'De taken werden verwijderd.';
       const deleteAction = new DeleteTasks({ ids: taskIds });
@@ -511,9 +516,9 @@ describe('TaskEffects', () => {
       ];
       deleteTasksSpy.mockReturnValue(
         of({
-          tasks: [],
+          success: [],
           errors: taskDestroyErrors
-        })
+        } as BulkUpdateResultInfoInterface<TaskInterface, TaskActiveErrorInterface>)
       );
       const expectedMessage = [
         '<p>Er werden geen taken verwijderd.</p>',
@@ -551,9 +556,9 @@ describe('TaskEffects', () => {
       ];
       deleteTasksSpy.mockReturnValue(
         of({
-          tasks: [{ id: 2 }],
+          success: [{ id: 2 }],
           errors: taskDestroyErrors
-        })
+        } as BulkUpdateResultInfoInterface<TaskInterface, TaskActiveErrorInterface>)
       );
       const deleteAction = new DeleteTasks({ ids: [2] });
       const expectedMessage = [
@@ -598,9 +603,9 @@ describe('TaskEffects', () => {
 
       it('should call the service and dispatch feedback, no errors', () => {
         mockServiceMethodReturnValue('updateTasks', {
-          tasks: tasksToUpdate.map(task => task.changes),
+          success: tasksToUpdate.map(task => task.changes),
           errors: []
-        });
+        } as BulkUpdateResultInfoInterface<TaskInterface, TaskActiveErrorInterface>);
 
         const expectedMessage = `De taken werden ${verb}.`;
 
@@ -640,9 +645,9 @@ describe('TaskEffects', () => {
           }
         ];
         mockServiceMethodReturnValue('updateTasks', {
-          tasks: [],
+          success: [],
           errors: taskUpdateErrors
-        });
+        } as BulkUpdateResultInfoInterface<TaskInterface, TaskActiveErrorInterface>);
         const expectedMessage = [
           `<p>Er werden geen taken ${verb}.</p>`,
           '<p>De volgende taken zijn nog in gebruik:</p>',
@@ -678,9 +683,9 @@ describe('TaskEffects', () => {
           }
         ];
         mockServiceMethodReturnValue('updateTasks', {
-          tasks: tasksToUpdate.slice(1).map(task => task.changes),
+          success: tasksToUpdate.slice(1).map(task => task.changes),
           errors: taskUpdateErrors
-        });
+        } as BulkUpdateResultInfoInterface<TaskInterface, TaskActiveErrorInterface>);
         const updateAction = new UpdateTasks({
           userId,
           tasks: tasksToUpdate.slice(1)
