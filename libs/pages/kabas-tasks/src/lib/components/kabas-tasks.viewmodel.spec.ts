@@ -13,6 +13,8 @@ import {
   TaskActions,
   TaskEduContentFixture,
   TaskFixture,
+  TaskServiceInterface,
+  TASK_SERVICE_TOKEN,
   UserQueries
 } from '@campus/dal';
 import { MockDate } from '@campus/testing';
@@ -37,6 +39,7 @@ describe('KabasTaskViewModel', () => {
   let authService: AuthServiceInterface;
   let uuid: Function;
   let dateLocale;
+  let taskService: TaskServiceInterface;
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
@@ -46,7 +49,14 @@ describe('KabasTaskViewModel', () => {
         provideMockStore(),
         { provide: AUTH_SERVICE_TOKEN, useValue: { userId } },
         { provide: 'uuid', useValue: () => 'foo' },
-        { provide: MAT_DATE_LOCALE, useValue: 'en-US' }
+        { provide: MAT_DATE_LOCALE, useValue: 'en-US' },
+        {
+          provide: TASK_SERVICE_TOKEN,
+          useValue: {
+            printTask: jest.fn(),
+            printSolution: jest.fn()
+          }
+        }
       ]
     });
   });
@@ -57,6 +67,7 @@ describe('KabasTaskViewModel', () => {
     uuid = TestBed.get('uuid');
     store = TestBed.get(Store);
     dateLocale = TestBed.get(MAT_DATE_LOCALE);
+    taskService = TestBed.get(TASK_SERVICE_TOKEN);
   });
 
   afterAll(() => {
@@ -668,6 +679,22 @@ describe('KabasTaskViewModel', () => {
         kabasTasksViewModel.startArchivingTasks(tasks, false);
         expect(spy).toHaveBeenCalledWith(updateAction);
       });
+    });
+  });
+
+  describe('printTask', () => {
+    it('should call the service with the right arguments', () => {
+      kabasTasksViewModel.printTask(1, true);
+
+      expect(taskService.printTask).toHaveBeenCalledWith(1, true);
+    });
+  });
+
+  describe('printSolution', () => {
+    it('should call the service with the right arguments', () => {
+      kabasTasksViewModel.printSolution(1);
+
+      expect(taskService.printSolution).toHaveBeenCalledWith(1);
     });
   });
 });
