@@ -1,4 +1,5 @@
 import { InjectionToken } from '@angular/core';
+import { BulkUpdateResultInfoInterface } from '@campus/shared/src/lib/interfaces/bulk-update-result-info';
 import { Observable } from 'rxjs';
 import { TaskEduContentInterface } from '../+models';
 
@@ -13,6 +14,17 @@ export interface TaskEduContentServiceInterface {
   updateTaskEduContents(
     userId: number,
     update: Partial<TaskEduContentInterface>[]
-  ): Observable<TaskEduContentInterface[]>;
+  ): Observable<UpdateTaskEduContentResultInterface>;
   deleteTaskEduContents(taskEduContentIds: number[]);
 }
+
+export interface TaskEduContentErrorInterface {
+  reason: string;
+  id: number;
+}
+
+export interface UpdateTaskEduContentResultInterface
+  extends BulkUpdateResultInfoInterface<
+    TaskEduContentInterface,
+    TaskEduContentErrorInterface
+  > {}

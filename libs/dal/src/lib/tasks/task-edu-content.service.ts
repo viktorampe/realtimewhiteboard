@@ -3,7 +3,10 @@ import { PersonApi, TaskEduContentApi } from '@diekeure/polpo-api-angular-sdk';
 import { forkJoin, Observable } from 'rxjs';
 import { map, mapTo } from 'rxjs/operators';
 import { TaskEduContentInterface } from '../+models';
-import { TaskEduContentServiceInterface } from './task-edu-content.service.interface';
+import {
+  TaskEduContentServiceInterface,
+  UpdateTaskEduContentResultInterface
+} from './task-edu-content.service.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -40,8 +43,10 @@ export class TaskEduContentService implements TaskEduContentServiceInterface {
   updateTaskEduContents(
     userId: number,
     update: Partial<TaskEduContentInterface>[]
-  ): Observable<TaskEduContentInterface[]> {
-    throw new Error('Not implemented yet');
+  ): Observable<UpdateTaskEduContentResultInterface> {
+    return this.taskEduContentApi.updateTaskEduContents(update) as Observable<
+      UpdateTaskEduContentResultInterface
+    >;
   }
   deleteTaskEduContents(taskEduContentIds: number[]) {}
 }
