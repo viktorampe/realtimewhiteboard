@@ -201,6 +201,10 @@
           ></campus-button>
         </div>
 
+        <div class="manage-kabas-tasks-detail__list__primary-action">
+          <mat-icon svgIcon="add"></mat-icon>
+          Lesmateriaal toevoegen aan deze taak
+        </div>
         <mat-selection-list
           #taskContent
           class="manage-kabas-tasks-detail__list"
@@ -209,12 +213,6 @@
           "
           (selectionChange)="onSelectionChange()"
         >
-          <mat-list-item
-            class="manage-kabas-tasks-detail__list__primary-action"
-          >
-            <mat-icon svgIcon="add"></mat-icon>
-            Lesmateriaal toevoegen aan deze taak
-          </mat-list-item>
           <ng-container *ngIf="task.taskEduContents.length; else noResults">
             <mat-list-option
               #option

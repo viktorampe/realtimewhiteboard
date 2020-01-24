@@ -55,6 +55,9 @@
 
         &--add {
           cursor: pointer;
+          display: flex;
+          align-items: center;
+          font-weight: bold;
         }
 
         &:not(:hover) {

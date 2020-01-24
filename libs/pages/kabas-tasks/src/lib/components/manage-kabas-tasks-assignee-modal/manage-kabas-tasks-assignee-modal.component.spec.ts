@@ -213,7 +213,7 @@ describe('ManageKabasTasksAssigneeModalComponent', () => {
         const matListDE = fixture.debugElement.query(By.directive(MatList));
         expect(matListDE).toBeTruthy();
 
-        const [addMatListItem, ...matListItemDEs] = matListDE.queryAll(
+        const [...matListItemDEs] = matListDE.queryAll(
           By.directive(MatListItem)
         );
         expect(matListItemDEs.length).toBe(data.currentTaskAssignees.length);
