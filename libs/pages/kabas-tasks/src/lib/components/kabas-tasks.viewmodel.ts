@@ -23,7 +23,9 @@ import {
   TaskEduContentInterface,
   TaskGroupInterface,
   TaskInterface,
-  TaskStudentInterface
+  TaskServiceInterface,
+  TaskStudentInterface,
+  TASK_SERVICE_TOKEN
 } from '@campus/dal';
 import { Update } from '@ngrx/entity';
 import { RouterReducerState } from '@ngrx/router-store';
@@ -74,7 +76,8 @@ export class KabasTasksViewModel {
     private store: Store<DalState>,
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
     @Inject('uuid') private uuid: Function,
-    @Inject(MAT_DATE_LOCALE) private dateLocale
+    @Inject(MAT_DATE_LOCALE) private dateLocale,
+    @Inject(TASK_SERVICE_TOKEN) private taskService: TaskServiceInterface
   ) {
     this.tasksWithAssignments$ = this.store.pipe(
       select(getTasksWithAssignmentsByType, {
@@ -274,11 +277,11 @@ export class KabasTasksViewModel {
   public deleteTaskEduContents(taskEduContentIds: number[]) {}
 
   public printTask(taskId: number, withNames: boolean) {
-    throw new Error('Not implemented yet');
+    this.taskService.printTask(taskId, withNames);
   }
 
   public printSolution(taskId: number) {
-    throw new Error('Not implemented yet');
+    this.taskService.printSolution(taskId);
   }
 
   private getArchivingAction(updates, errors): Action {
