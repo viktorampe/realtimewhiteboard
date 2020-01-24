@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { PersonApi, TaskApi } from '@diekeure/polpo-api-angular-sdk';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { BulkUpdateResultInfoInterface } from '../+external-interfaces/bulk-update-result-info';
 import {
   TaskClassGroupInterface,
   TaskEduContentInterface,
@@ -11,8 +10,8 @@ import {
 } from '../+models';
 import { TaskInterface } from './../+models/Task.interface';
 import {
-  TaskActiveErrorInterface,
-  TaskServiceInterface
+  TaskServiceInterface,
+  UpdateTaskResultInterface
 } from './task.service.interface';
 @Injectable({
   providedIn: 'root'
@@ -36,11 +35,9 @@ export class TaskService implements TaskServiceInterface {
   updateTasks(
     userId: number,
     update: Partial<TaskInterface>[]
-  ): Observable<
-    BulkUpdateResultInfoInterface<TaskInterface, TaskActiveErrorInterface>
-  > {
+  ): Observable<UpdateTaskResultInterface> {
     return this.taskApi.updateTasks(update) as Observable<
-      BulkUpdateResultInfoInterface<TaskInterface, TaskActiveErrorInterface>
+      UpdateTaskResultInterface
     >;
   }
 
@@ -53,11 +50,9 @@ export class TaskService implements TaskServiceInterface {
   deleteTasks(
     userId: number,
     taskIds: number[]
-  ): Observable<
-    BulkUpdateResultInfoInterface<TaskInterface, TaskActiveErrorInterface>
-  > {
+  ): Observable<UpdateTaskResultInterface> {
     return this.taskApi.destroyTasks(taskIds) as Observable<
-      BulkUpdateResultInfoInterface<TaskInterface, TaskActiveErrorInterface>
+      UpdateTaskResultInterface
     >;
   }
 

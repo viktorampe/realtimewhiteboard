@@ -21,18 +21,14 @@ export interface TaskServiceInterface {
   updateTasks(
     userId: number,
     update: Partial<TaskInterface>[]
-  ): Observable<
-    BulkUpdateResultInfoInterface<TaskInterface, TaskActiveErrorInterface>
-  >;
+  ): Observable<UpdateTaskResultInterface>;
 
   createTask(userId: number, task: TaskInterface): Observable<TaskInterface>;
 
   deleteTasks(
     userId: number,
     taskIds: number[]
-  ): Observable<
-    BulkUpdateResultInfoInterface<TaskInterface, TaskActiveErrorInterface>
-  >;
+  ): Observable<UpdateTaskResultInterface>;
 
   updateAccess(
     userId: number,
@@ -50,3 +46,9 @@ export interface TaskActiveErrorInterface {
   activeUntil: Date;
   user: string;
 }
+
+export interface UpdateTaskResultInterface
+  extends BulkUpdateResultInfoInterface<
+    TaskEduContentInterface,
+    TaskActiveErrorInterface
+  > {}
