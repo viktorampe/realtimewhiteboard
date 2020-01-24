@@ -10,7 +10,9 @@
     campusClickStopPropagation
     >{{ title }}</div
   >
-  <div class="manage-kabas-tasks-task-list-item__container__actions"
+  <div
+    *ngIf="actions.length"
+    class="manage-kabas-tasks-task-list-item__container__actions"
     ><span>{{ actions[0].label }}</span></div
   >
 </div>
@@ -20,7 +22,7 @@
   </div>
 
   <div class="manage-kabas-tasks-task-list-item__required">
-    <span></span> {{ required }}
+    <span></span> {{ required ? 'moetje' : 'magje' }}
     <span></span>
   </div>
 
