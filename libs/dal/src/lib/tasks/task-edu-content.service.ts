@@ -48,5 +48,13 @@ export class TaskEduContentService implements TaskEduContentServiceInterface {
       UpdateTaskEduContentResultInterface
     >;
   }
-  deleteTaskEduContents(taskEduContentIds: number[]) {}
+
+  deleteTaskEduContents(
+    userId: number,
+    taskEduContentIds: number[]
+  ): Observable<UpdateTaskEduContentResultInterface> {
+    return this.taskEduContentApi.destroyTaskEduContents(
+      taskEduContentIds
+    ) as Observable<UpdateTaskEduContentResultInterface>;
+  }
 }
