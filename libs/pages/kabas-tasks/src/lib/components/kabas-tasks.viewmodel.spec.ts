@@ -725,11 +725,11 @@ describe('KabasTaskViewModel', () => {
     it('should dispatch an UpdateTaskEduContents action', () => {
       const spy = jest.spyOn(store, 'dispatch');
       const taskEduContents = [
-        new TaskEduContentFixture({ id: 1, index: 0, required: true }),
-        new TaskEduContentFixture({ id: 2, index: 1, required: true }),
-        new TaskEduContentFixture({ id: 3, index: 2, required: true })
+        new TaskEduContentFixture({ id: 1, required: false }),
+        new TaskEduContentFixture({ id: 2, required: false }),
+        new TaskEduContentFixture({ id: 3, required: false })
       ];
-      kabasTasksViewModel.updateTaskEduContentsOrder(taskEduContents);
+      kabasTasksViewModel.updateTaskEduContentsRequired(taskEduContents, true);
       expect(spy).toHaveBeenCalledWith(
         new TaskEduContentActions.UpdateTaskEduContents({
           userId: authService.userId,
