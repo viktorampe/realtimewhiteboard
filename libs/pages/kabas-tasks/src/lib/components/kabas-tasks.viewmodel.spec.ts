@@ -297,7 +297,7 @@ describe('KabasTaskViewModel', () => {
         new TaskEduContentFixture({ id: 2, index: 1 }),
         new TaskEduContentFixture({ id: 3, index: 2 })
       ];
-
+      kabasTasksViewModel.updateTaskEduContentsOrder(taskEduContents);
       expect(spy).toHaveBeenCalledWith(
         new TaskEduContentActions.UpdateTaskEduContents({
           userId: authService.userId,
