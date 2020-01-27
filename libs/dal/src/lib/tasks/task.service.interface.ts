@@ -49,6 +49,6 @@ export interface TaskActiveErrorInterface {
 
 export interface UpdateTaskResultInterface
   extends BulkUpdateResultInfoInterface<
-    TaskEduContentInterface,
+    TaskInterface,
     TaskActiveErrorInterface
   > {}
