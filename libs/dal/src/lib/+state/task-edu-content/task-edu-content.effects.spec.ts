@@ -408,7 +408,7 @@ describe('TaskEduContentEffects', () => {
 
     const updateAction = new UpdateTaskEduContents({
       userId,
-      taskEduContent: partialTaskEduContents.map(partial => ({
+      taskEduContents: partialTaskEduContents.map(partial => ({
         id: partial.id,
         changes: partial
       }))
