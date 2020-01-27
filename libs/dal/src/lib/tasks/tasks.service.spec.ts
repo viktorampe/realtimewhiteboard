@@ -2,6 +2,7 @@ import { inject, TestBed } from '@angular/core/testing';
 import { PersonApi, TaskApi } from '@diekeure/polpo-api-angular-sdk';
 import { hot } from '@nrwl/angular/testing';
 import { Observable } from 'rxjs';
+import { BulkUpdateResultInfoInterface } from '../+external-interfaces/bulk-update-result-info';
 import {
   TaskClassGroupFixture,
   TaskFixture,
@@ -9,7 +10,10 @@ import {
   TaskStudentFixture
 } from '../+fixtures';
 import { TaskEduContentInterface, TaskInterface } from '../+models';
-import { TaskServiceInterface } from './task.service.interface';
+import {
+  TaskActiveErrorInterface,
+  TaskServiceInterface
+} from './task.service.interface';
 import { TaskService } from './tasks.service';
 
 describe('TaskService', () => {
@@ -20,7 +24,10 @@ describe('TaskService', () => {
   let mockLinkEduContentsResult$: Observable<TaskEduContentInterface>;
   let mockUpdatedAccessResult$: Observable<TaskInterface>;
 
-  const mockUpdateTaskInfo = { tasks: [], errors: [] };
+  const mockUpdateTaskInfo = {
+    success: [],
+    errors: []
+  } as BulkUpdateResultInfoInterface<TaskInterface, TaskActiveErrorInterface>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -66,6 +73,7 @@ describe('TaskService', () => {
       })
     );
   });
+
   describe('linkEduContent', () => {
     it('should return the link result', () => {
       const mockLinkEduContentsResult = {

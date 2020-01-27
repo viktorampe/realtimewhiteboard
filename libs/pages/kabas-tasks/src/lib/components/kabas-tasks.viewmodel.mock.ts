@@ -1,8 +1,14 @@
 import { Injectable } from '@angular/core';
 import {
+  ClassGroupFixture,
+  ClassGroupInterface,
   EduContentFixture,
+  GroupFixture,
+  GroupInterface,
   LearningAreaFixture,
   LearningAreaInterface,
+  PersonFixture,
+  PersonInterface,
   TaskEduContentFixture,
   TaskEduContentInterface,
   TaskFixture,
@@ -29,11 +35,16 @@ import {
 })
 export class MockKabasTasksViewModel
   implements ViewModelInterface<KabasTasksViewModel> {
-  public tasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
-  public paperTasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
+  public tasksWithAssignments$: BehaviorSubject<TaskWithAssigneesInterface[]>;
+  public paperTasksWithAssignments$: BehaviorSubject<
+    TaskWithAssigneesInterface[]
+  >;
   public currentTask$: Observable<TaskWithAssigneesInterface>;
-  public currentTaskParams$: Observable<CurrentTaskParams>;
-  public selectableLearningAreas$: Observable<LearningAreaInterface[]>;
+  public currentTaskParams$: BehaviorSubject<CurrentTaskParams>;
+  public selectableLearningAreas$: BehaviorSubject<LearningAreaInterface[]>;
+  public classGroups$: BehaviorSubject<ClassGroupInterface[]>;
+  public groups$: BehaviorSubject<GroupInterface[]>;
+  public students$: BehaviorSubject<PersonInterface[]>;
 
   constructor() {
     const tasks = this.setupTaskWithAssignments();
@@ -66,6 +77,24 @@ export class MockKabasTasksViewModel
       new LearningAreaFixture({ name: 'Wiskunde' }),
       new LearningAreaFixture({ name: 'Frans' })
     ]);
+
+    this.classGroups$ = new BehaviorSubject<ClassGroupInterface[]>([
+      new ClassGroupFixture({ id: 1, name: 'klas 1' }),
+      new ClassGroupFixture({ id: 2, name: 'klas 2' }),
+      new ClassGroupFixture({ id: 3, name: 'klas 3' })
+    ]);
+
+    this.groups$ = new BehaviorSubject<GroupInterface[]>([
+      new GroupFixture({ id: 1, name: 'groep 1' }),
+      new GroupFixture({ id: 2, name: 'groep 2' }),
+      new GroupFixture({ id: 3, name: 'groep 3' })
+    ]);
+
+    this.students$ = new BehaviorSubject<PersonInterface[]>([
+      new PersonFixture({ id: 1, displayName: 'leerling 1' }),
+      new PersonFixture({ id: 2, displayName: 'leerling 2' }),
+      new PersonFixture({ id: 3, displayName: 'leerling 3' })
+    ]);
   }
 
   public getTaskDates() {
@@ -92,6 +121,7 @@ export class MockKabasTasksViewModel
       {
         ...new TaskFixture({ archivedAt: null, archivedYear: null }),
         name: 'Titel van de eerste oefening',
+        isPaperTask: false,
         eduContentAmount: 3,
         eduContents: [
           new EduContentFixture(
@@ -171,6 +201,7 @@ export class MockKabasTasksViewModel
       {
         ...new TaskFixture({ archivedAt: null, archivedYear: null }),
         name: 'Titel van de tweede oefening',
+        isPaperTask: false,
         eduContentAmount: 5,
         learningArea: new LearningAreaFixture({ id: 2, name: 'frans' }),
         learningAreaId: 2,
@@ -202,6 +233,7 @@ export class MockKabasTasksViewModel
       {
         ...new TaskFixture({ archivedAt: null, archivedYear: null }),
         name: 'Actieve oefening voor één klasgroep',
+        isPaperTask: false,
         eduContentAmount: 3,
         learningArea: new LearningAreaFixture({ id: 3, name: 'nederlands' }),
         learningAreaId: 3,
@@ -219,6 +251,7 @@ export class MockKabasTasksViewModel
       {
         ...new TaskFixture({ archivedAt: null, archivedYear: null }),
         name: 'Pending oefening voor één klasgroep',
+        isPaperTask: false,
         eduContentAmount: 5,
         learningArea: new LearningAreaFixture({ id: 3, name: 'nederlands' }),
         learningAreaId: 3,
@@ -236,6 +269,7 @@ export class MockKabasTasksViewModel
       {
         ...new TaskFixture({ archivedAt: null, archivedYear: null }),
         name: 'Finished oefening',
+        isPaperTask: false,
         eduContentAmount: 5,
         learningArea: new LearningAreaFixture({ id: 3, name: 'nederlands' }),
         learningAreaId: 3,
@@ -256,6 +290,7 @@ export class MockKabasTasksViewModel
           archivedYear: prevWeek.getFullYear()
         }),
         name: 'Gearchiveerde oefening',
+        isPaperTask: false,
         eduContentAmount: 2,
         learningArea: new LearningAreaFixture({ id: 1, name: 'wiskunde' }),
         learningAreaId: 1,

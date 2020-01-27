@@ -11,7 +11,7 @@ import {
 import { TaskInterface } from './../+models/Task.interface';
 import {
   TaskServiceInterface,
-  TaskUpdateInfoInterface
+  UpdateTaskResultInterface
 } from './task.service.interface';
 @Injectable({
   providedIn: 'root'
@@ -35,9 +35,9 @@ export class TaskService implements TaskServiceInterface {
   updateTasks(
     userId: number,
     update: Partial<TaskInterface>[]
-  ): Observable<TaskUpdateInfoInterface> {
+  ): Observable<UpdateTaskResultInterface> {
     return this.taskApi.updateTasks(update) as Observable<
-      TaskUpdateInfoInterface
+      UpdateTaskResultInterface
     >;
   }
 
@@ -50,9 +50,9 @@ export class TaskService implements TaskServiceInterface {
   deleteTasks(
     userId: number,
     taskIds: number[]
-  ): Observable<TaskUpdateInfoInterface> {
+  ): Observable<UpdateTaskResultInterface> {
     return this.taskApi.destroyTasks(taskIds) as Observable<
-      TaskUpdateInfoInterface
+      UpdateTaskResultInterface
     >;
   }
 
@@ -63,14 +63,32 @@ export class TaskService implements TaskServiceInterface {
     taskStudents: TaskStudentInterface[],
     taskClassGroups?: TaskClassGroupInterface[]
   ): Observable<TaskInterface> {
-    return this.taskApi.updateAccess(
-      taskId,
-      taskGroups,
-      taskStudents,
-      taskClassGroups
-    ) as Observable<TaskInterface>;
+    return this.taskApi
+      .updateAccess(taskId, taskGroups, taskStudents, taskClassGroups)
+      .pipe(
+        map(
+          (task: TaskInterface): TaskInterface => ({
+            ...task,
+            taskClassGroups: task.taskClassGroups.map(tCG =>
+              castStartEndToDate(tCG)
+            ),
+            taskGroups: task.taskGroups.map(tG => castStartEndToDate(tG)),
+            taskStudents: task.taskStudents.map(tS => castStartEndToDate(tS))
+          })
+        )
+      );
   }
 
   printTask(taskId: number, withNames: boolean) {}
   printSolution(taskId: number) {}
+}
+
+function castStartEndToDate<
+  T extends TaskClassGroupInterface | TaskGroupInterface | TaskStudentInterface
+>(assignee: T): T {
+  return {
+    ...assignee,
+    start: assignee.start ? new Date(assignee.start) : undefined,
+    end: assignee.end ? new Date(assignee.end) : undefined
+  };
 }
