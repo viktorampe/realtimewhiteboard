@@ -114,7 +114,7 @@ export class LinkTaskEduContent implements FeedbackTriggeringAction {
 }
 
 export class StartDeleteTaskEduContents implements FeedbackTriggeringAction {
-  readonly type = TaskEduContentsActionTypes.LinkTaskEduContent;
+  readonly type = TaskEduContentsActionTypes.StartDeleteTaskEduContents;
   constructor(
     public payload: {
       userId: number;
