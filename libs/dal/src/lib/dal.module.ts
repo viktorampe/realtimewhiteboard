@@ -18,7 +18,7 @@ import {
 } from '@diekeure/polpo-api-angular-sdk';
 import { v4 as uuid } from 'uuid';
 
-interface DalOptions {
+export interface DalOptions {
   apiBaseUrl: string;
 }
 export const DAL_OPTIONS = new InjectionToken('dal-options');

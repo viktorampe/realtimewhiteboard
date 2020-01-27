@@ -1,4 +1,5 @@
 import { inject, TestBed } from '@angular/core/testing';
+import { MockWindow } from '@campus/testing';
 import { PersonApi, TaskApi } from '@diekeure/polpo-api-angular-sdk';
 import { hot } from '@nrwl/angular/testing';
 import { Observable } from 'rxjs';
@@ -10,6 +11,7 @@ import {
   TaskStudentFixture
 } from '../+fixtures';
 import { TaskEduContentInterface, TaskInterface } from '../+models';
+import { DalOptions, DAL_OPTIONS } from '../dal.module';
 import {
   TaskActiveErrorInterface,
   TaskServiceInterface
@@ -23,6 +25,8 @@ describe('TaskService', () => {
   let mockGetData$: Observable<object>;
   let mockLinkEduContentsResult$: Observable<TaskEduContentInterface>;
   let mockUpdatedAccessResult$: Observable<TaskInterface>;
+  let mockWindow: MockWindow;
+  let dalOptions: DalOptions;
 
   const mockUpdateTaskInfo = {
     success: [],
@@ -48,12 +52,17 @@ describe('TaskService', () => {
             destroyTasks: () => {},
             updateAccess: () => mockUpdatedAccessResult$
           }
+        },
+        {
+          provide: DAL_OPTIONS,
+          useValue: { apiBaseUrl: 'https://api.kabas.test' }
         }
       ]
     });
     service = TestBed.get(TaskService);
     taskApi = TestBed.get(TaskApi);
     personApi = TestBed.get(PersonApi);
+    dalOptions = TestBed.get(DAL_OPTIONS);
   });
 
   it('should be created and available via DI', inject(
@@ -180,6 +189,25 @@ describe('TaskService', () => {
         mockTask.taskGroups,
         mockTask.taskStudents,
         mockTask.taskClassGroups
+      );
+    });
+  });
+
+  describe('print', () => {
+    const taskId = 1;
+    const withNames = true;
+    window.open = jest.fn();
+
+    it('should open window with pdf url when printTask ', () => {
+      service.printTask(taskId, withNames);
+      expect(window.open).toHaveBeenCalledWith(
+        `${dalOptions.apiBaseUrl}/api/tasks/paper-task-pdf?taskId=${taskId}&withNames=${withNames}`
+      );
+    });
+    it('should open window with solution pdf url when printSolution ', () => {
+      service.printSolution(taskId);
+      expect(window.open).toHaveBeenCalledWith(
+        `${dalOptions.apiBaseUrl}/api/tasks/paper-task-solution-pdf?taskId=${taskId}`
       );
     });
   });
