@@ -74,11 +74,14 @@ export class UpdateTaskEduContent implements Action {
   ) {}
 }
 
-export class UpdateTaskEduContents implements Action {
+export class UpdateTaskEduContents implements FeedbackTriggeringAction {
   readonly type = TaskEduContentsActionTypes.UpdateTaskEduContents;
 
   constructor(
-    public payload: { taskEduContents: Update<TaskEduContentInterface>[] }
+    public payload: {
+      taskEduContents: Update<TaskEduContentInterface>[];
+      customFeedbackHandlers?: CustomFeedbackHandlersInterface;
+    }
   ) {}
 }
 export class DeleteTaskEduContent implements FeedbackTriggeringAction {
