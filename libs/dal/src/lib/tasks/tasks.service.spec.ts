@@ -1,7 +1,9 @@
 import { inject, TestBed } from '@angular/core/testing';
+import { WINDOW } from '@campus/browser';
 import { MockWindow } from '@campus/testing';
 import { PersonApi, TaskApi } from '@diekeure/polpo-api-angular-sdk';
 import { hot } from '@nrwl/angular/testing';
+import { configureTestSuite } from 'ng-bullet';
 import { Observable } from 'rxjs';
 import { BulkUpdateResultInfoInterface } from '../+external-interfaces/bulk-update-result-info';
 import {
@@ -33,7 +35,7 @@ describe('TaskService', () => {
     errors: []
   } as BulkUpdateResultInfoInterface<TaskInterface, TaskActiveErrorInterface>;
 
-  beforeEach(() => {
+  configureTestSuite(() => {
     TestBed.configureTestingModule({
       providers: [
         TaskService,
@@ -56,13 +58,19 @@ describe('TaskService', () => {
         {
           provide: DAL_OPTIONS,
           useValue: { apiBaseUrl: 'https://api.kabas.test' }
-        }
+        },
+        { provide: WINDOW, useClass: MockWindow }
       ]
     });
+  });
+
+  beforeEach(() => {
     service = TestBed.get(TaskService);
     taskApi = TestBed.get(TaskApi);
     personApi = TestBed.get(PersonApi);
     dalOptions = TestBed.get(DAL_OPTIONS);
+    mockWindow = TestBed.get(WINDOW);
+    mockWindow.open.mockReset();
   });
 
   it('should be created and available via DI', inject(
@@ -196,17 +204,16 @@ describe('TaskService', () => {
   describe('print', () => {
     const taskId = 1;
     const withNames = true;
-    window.open = jest.fn();
 
     it('should open window with pdf url when printTask ', () => {
       service.printTask(taskId, withNames);
-      expect(window.open).toHaveBeenCalledWith(
+      expect(mockWindow.open).toHaveBeenCalledWith(
         `${dalOptions.apiBaseUrl}/api/tasks/paper-task-pdf?taskId=${taskId}&withNames=${withNames}`
       );
     });
     it('should open window with solution pdf url when printSolution ', () => {
       service.printSolution(taskId);
-      expect(window.open).toHaveBeenCalledWith(
+      expect(mockWindow.open).toHaveBeenCalledWith(
         `${dalOptions.apiBaseUrl}/api/tasks/paper-task-solution-pdf?taskId=${taskId}`
       );
     });

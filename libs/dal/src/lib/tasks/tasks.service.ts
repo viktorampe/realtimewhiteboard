@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
+import { WINDOW } from '@campus/browser';
 import { PersonApi, TaskApi } from '@diekeure/polpo-api-angular-sdk';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -22,7 +23,8 @@ export class TaskService implements TaskServiceInterface {
   constructor(
     private personApi: PersonApi,
     private taskApi: TaskApi,
-    @Inject(DAL_OPTIONS) private dalOptions: DalOptions
+    @Inject(DAL_OPTIONS) private dalOptions: DalOptions,
+    @Inject(WINDOW) private window: Window
   ) {}
 
   getAllForUser(userId: number): Observable<TaskInterface[]> {
@@ -87,13 +89,13 @@ export class TaskService implements TaskServiceInterface {
 
   printTask(taskId: number, withNames: boolean) {
     const { apiBaseUrl } = this.dalOptions;
-    window.open(
+    this.window.open(
       `${apiBaseUrl}/api/tasks/paper-task-pdf?taskId=${taskId}&withNames=${withNames}`
     );
   }
   printSolution(taskId: number) {
     const { apiBaseUrl } = this.dalOptions;
-    window.open(
+    this.window.open(
       `${apiBaseUrl}/api/tasks/paper-task-solution-pdf?taskId=${taskId}`
     );
   }
