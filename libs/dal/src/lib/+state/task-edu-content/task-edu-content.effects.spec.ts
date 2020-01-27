@@ -408,7 +408,7 @@ describe('TaskEduContentEffects', () => {
       deleteTaskEduContentsSpy = taskEduContentService.deleteTaskEduContents = jest.fn();
     });
 
-    it('should call the service, redirect and dispatch feedback, no errors', () => {
+    it('should call the service and dispatch feedback, no errors', () => {
       deleteTaskEduContentsSpy.mockReturnValue(
         of({
           success: taskEduContentIds.map(id => ({ id })),
