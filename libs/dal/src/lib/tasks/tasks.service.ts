@@ -11,7 +11,7 @@ import {
 import { TaskInterface } from './../+models/Task.interface';
 import {
   TaskServiceInterface,
-  TaskUpdateInfoInterface
+  UpdateTaskResultInterface
 } from './task.service.interface';
 @Injectable({
   providedIn: 'root'
@@ -35,9 +35,9 @@ export class TaskService implements TaskServiceInterface {
   updateTasks(
     userId: number,
     update: Partial<TaskInterface>[]
-  ): Observable<TaskUpdateInfoInterface> {
+  ): Observable<UpdateTaskResultInterface> {
     return this.taskApi.updateTasks(update) as Observable<
-      TaskUpdateInfoInterface
+      UpdateTaskResultInterface
     >;
   }
 
@@ -50,9 +50,9 @@ export class TaskService implements TaskServiceInterface {
   deleteTasks(
     userId: number,
     taskIds: number[]
-  ): Observable<TaskUpdateInfoInterface> {
+  ): Observable<UpdateTaskResultInterface> {
     return this.taskApi.destroyTasks(taskIds) as Observable<
-      TaskUpdateInfoInterface
+      UpdateTaskResultInterface
     >;
   }
 
