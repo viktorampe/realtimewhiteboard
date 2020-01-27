@@ -24,5 +24,4 @@ export interface EduContentInterface {
   favorites?: FavoriteInterface[];
   previewImage?: string;
   levelId?: number;
-  diaboloPhaseId?: number;
 }

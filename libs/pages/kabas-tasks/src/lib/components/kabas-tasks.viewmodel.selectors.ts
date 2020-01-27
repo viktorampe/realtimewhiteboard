@@ -2,6 +2,7 @@ import {
   ClassGroupQueries,
   DiaboloPhaseInterface,
   DiaboloPhaseQueries,
+  EduContent,
   EduContentInterface,
   EduContentQueries,
   FavoriteInterface,
@@ -216,7 +217,10 @@ export const getTaskWithAssignmentAndEduContents = createSelector(
 
           const publishedEduContentMetadata = {
             ...eduContent.publishedEduContentMetadata,
-            diaboloPhase: diaboloPhases[eduContent.diaboloPhaseId],
+            diaboloPhase:
+              diaboloPhases[
+                eduContent.publishedEduContentMetadata.diaboloPhaseId
+              ],
             methodLevel
           };
 
@@ -225,7 +229,7 @@ export const getTaskWithAssignmentAndEduContents = createSelector(
             eduContent: {
               ...eduContent,
               publishedEduContentMetadata
-            }
+            } as EduContent
           };
         })
       : [];
@@ -245,7 +249,12 @@ function mapToTaskWithAssigneeInterface(
     ...task,
     learningArea: learningArea,
     eduContentAmount: taskEduContents ? taskEduContents.length : 0,
-    taskEduContents: (taskEduContents || []).sort((a, b) => a.index - b.index),
+    taskEduContents: (taskEduContents || [])
+      .sort((a, b) => a.index - b.index)
+      .map(tEdu => ({
+        ...tEdu,
+        eduContent: tEdu.eduContent as EduContent
+      })),
     assignees: assigneesByTask[task.id] || [],
     isFavorite: favoriteTaskIds.includes(task.id)
   });
@@ -282,12 +291,9 @@ function methodLevelForEduContent(
   allowedMethods: MethodInterface[],
   methodLevels: MethodLevelInterface[]
 ) {
-  const allowedMethodIds = allowedMethods.map(
-    allowedMethod => allowedMethod.id
-  );
-
   const allowedEduContentMethodId = eduContent.publishedEduContentMetadata.methodIds.find(
-    methodId => allowedMethodIds.includes(methodId)
+    methodId =>
+      allowedMethods.some(allowedMethod => allowedMethod.id === methodId)
   );
 
   return methodLevels.find(
