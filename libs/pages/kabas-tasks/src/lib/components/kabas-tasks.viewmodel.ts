@@ -303,10 +303,10 @@ export class KabasTasksViewModel {
     throw new Error('Not implemented yet');
   }
 
-  public deleteTaskEduContents(taskEduContentsIds: number[]) {
+  public deleteTaskEduContents(taskEduContentIds: number[]) {
     this.store.dispatch(
       new TaskEduContentActions.StartDeleteTaskEduContents({
-        taskEduContentIds: taskEduContentsIds,
+        taskEduContentIds: taskEduContentIds,
         userId: this.authService.userId
       })
     );
