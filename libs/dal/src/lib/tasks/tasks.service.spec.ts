@@ -70,7 +70,6 @@ describe('TaskService', () => {
     personApi = TestBed.get(PersonApi);
     dalOptions = TestBed.get(DAL_OPTIONS);
     mockWindow = TestBed.get(WINDOW);
-    mockWindow.open.mockReset();
   });
 
   it('should be created and available via DI', inject(
