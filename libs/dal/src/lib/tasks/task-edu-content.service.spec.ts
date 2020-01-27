@@ -24,7 +24,8 @@ describe('TaskEduContentService', () => {
   };
   const mockTaskEduContentApi = {
     deleteById: jest.fn().mockImplementation(() => mockDeleteById$),
-    updateTaskEduContents: jest.fn()
+    updateTaskEduContents: jest.fn(),
+    destroyTaskEduContents: jest.fn()
   };
 
   beforeEach(() => {
@@ -93,6 +94,30 @@ describe('TaskEduContentService', () => {
     expect(mockTaskEduContentApi.deleteById).toHaveBeenCalledWith(3);
     expect(mockTaskEduContentApi.deleteById).toHaveBeenCalledWith(2);
     expect(mockTaskEduContentApi.deleteById).toHaveBeenCalledWith(1);
+  });
+
+  describe('deleteTaskEduContents', () => {
+    const taskEduContentIds = [1, 2];
+    const userId = 123;
+    let destroyTaskEduContentsSpy: jest.SpyInstance;
+    const mockDestroyTaskEduContentResult = {
+      success: [{ id: 1 }, { id: 2 }],
+      errors: []
+    } as UpdateTaskEduContentResultInterface;
+
+    beforeEach(() => {
+      destroyTaskEduContentsSpy = mockTaskEduContentApi.destroyTaskEduContents = jest.fn();
+      destroyTaskEduContentsSpy.mockReturnValue(
+        hot('a', { a: mockDestroyTaskEduContentResult })
+      );
+    });
+
+    it('should call the api and return the result', () => {
+      expect(
+        service.deleteTaskEduContents(userId, taskEduContentIds)
+      ).toBeObservable(hot('a', { a: mockDestroyTaskEduContentResult }));
+      expect(destroyTaskEduContentsSpy).toHaveBeenCalledWith(taskEduContentIds);
+    });
   });
 
   describe('should call api and return results when bulk update', () => {
