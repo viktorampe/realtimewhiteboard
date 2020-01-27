@@ -4,14 +4,20 @@ import { hot } from '@nrwl/angular/testing';
 import { Observable } from 'rxjs';
 import { TaskEduContentFixture } from '../+fixtures';
 import { TaskEduContentService } from './task-edu-content.service';
-import { TaskEduContentServiceInterface } from './task-edu-content.service.interface';
+import {
+  TaskEduContentServiceInterface,
+  UpdateTaskEduContentResultInterface
+} from './task-edu-content.service.interface';
 
 describe('TaskEduContentService', () => {
   let service: TaskEduContentServiceInterface;
   let mockGetData$: Observable<object>;
   let mockDeleteById$: Observable<boolean>;
 
-  const mockUpdateTaskEduContentInfo = { tasks: [], errors: [] };
+  const mockUpdateTaskEduContentInfo = {
+    success: [],
+    errors: []
+  } as UpdateTaskEduContentResultInterface;
 
   const mockPersonApi = {
     getData: jest.fn().mockImplementation(() => mockGetData$)

@@ -1,7 +1,8 @@
 import { InjectionToken } from '@angular/core';
-import { BulkUpdateResultInfoInterface } from '@campus/shared/src/lib/interfaces/bulk-update-result-info';
 import { Observable } from 'rxjs';
+import { BulkUpdateResultInfoInterface } from '../+external-interfaces/bulk-update-result-info';
 import { TaskEduContentInterface } from '../+models';
+
 
 export const TASK_EDU_CONTENT_SERVICE_TOKEN = new InjectionToken(
   'TaskEduContentService'
