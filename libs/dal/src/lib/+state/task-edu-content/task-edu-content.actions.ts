@@ -79,6 +79,7 @@ export class UpdateTaskEduContents implements FeedbackTriggeringAction {
 
   constructor(
     public payload: {
+      userId: number;
       taskEduContents: Update<TaskEduContentInterface>[];
       customFeedbackHandlers?: CustomFeedbackHandlersInterface;
     }

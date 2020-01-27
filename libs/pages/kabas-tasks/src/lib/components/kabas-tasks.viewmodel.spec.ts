@@ -11,6 +11,7 @@ import {
   getRouterState,
   PersonFixture,
   TaskActions,
+  TaskEduContentActions,
   TaskEduContentFixture,
   TaskFixture,
   TaskServiceInterface,
@@ -717,6 +718,27 @@ describe('KabasTaskViewModel', () => {
       kabasTasksViewModel.printSolution(1);
 
       expect(taskService.printSolution).toHaveBeenCalledWith(1);
+    });
+  });
+
+  describe('updateTaskEduContentRequired', () => {
+    it('should dispatch an UpdateTaskEduContents action', () => {
+      const spy = jest.spyOn(store, 'dispatch');
+      const taskEduContents = [
+        new TaskEduContentFixture({ id: 1, index: 0, required: true }),
+        new TaskEduContentFixture({ id: 2, index: 1, required: true }),
+        new TaskEduContentFixture({ id: 3, index: 2, required: true })
+      ];
+      kabasTasksViewModel.updateTaskEduContentsOrder(taskEduContents);
+      expect(spy).toHaveBeenCalledWith(
+        new TaskEduContentActions.UpdateTaskEduContents({
+          userId: authService.userId,
+          taskEduContents: taskEduContents.map(tec => ({
+            id: tec.id,
+            changes: { required: true }
+          }))
+        })
+      );
     });
   });
 });
