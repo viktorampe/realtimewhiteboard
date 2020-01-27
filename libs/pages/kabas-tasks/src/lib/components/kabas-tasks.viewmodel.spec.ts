@@ -1,6 +1,23 @@
 import { TestBed } from '@angular/core/testing';
 import { MAT_DATE_LOCALE } from '@angular/material';
-import { AuthServiceInterface, AUTH_SERVICE_TOKEN, DalState, EffectFeedback, EffectFeedbackActions, FavoriteActions, FavoriteTypesEnum, getRouterState, PersonFixture, TaskActions, TaskEduContentActions, TaskEduContentFixture, TaskFixture, TaskServiceInterface, TASK_SERVICE_TOKEN, UserQueries } from '@campus/dal';
+import {
+  AuthServiceInterface,
+  AUTH_SERVICE_TOKEN,
+  DalState,
+  EffectFeedback,
+  EffectFeedbackActions,
+  FavoriteActions,
+  FavoriteTypesEnum,
+  getRouterState,
+  PersonFixture,
+  TaskActions,
+  TaskEduContentActions,
+  TaskEduContentFixture,
+  TaskFixture,
+  TaskServiceInterface,
+  TASK_SERVICE_TOKEN,
+  UserQueries
+} from '@campus/dal';
 import { MockDate } from '@campus/testing';
 import { Store } from '@ngrx/store';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
@@ -8,7 +25,10 @@ import { hot } from 'jasmine-marbles';
 import { configureTestSuite } from 'ng-bullet';
 import { AssigneeFixture } from '../interfaces/Assignee.fixture';
 import { AssigneeTypesEnum } from '../interfaces/Assignee.interface';
-import { TaskStatusEnum, TaskWithAssigneesInterface } from '../interfaces/TaskWithAssignees.interface';
+import {
+  TaskStatusEnum,
+  TaskWithAssigneesInterface
+} from '../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from './kabas-tasks.viewmodel';
 import { getTaskWithAssignmentAndEduContents } from './kabas-tasks.viewmodel.selectors';
 
@@ -544,7 +564,7 @@ describe('KabasTaskViewModel', () => {
       expect(spy).toHaveBeenCalledWith(destroyAction);
     });
   });
-  
+
   describe('delete TaskEduContents', () => {
     const taskEduContents = [
       new TaskEduContentFixture({ id: 1 }),
@@ -554,13 +574,14 @@ describe('KabasTaskViewModel', () => {
 
     it('should dispatch deleteTaskEduContent', () => {
       const spy = jest.spyOn(store, 'dispatch');
+      const taskEduContentIds = taskEduContents.map(tec => tec.id);
       const destroyAction = new TaskEduContentActions.StartDeleteTaskEduContents(
         {
           userId: authService.userId,
-          taskEduContentIds: taskEduContents.map(tec => tec.id)
+          taskEduContentIds
         }
       );
-      kabasTasksViewModel.deleteTaskEduContents(taskEduContents);
+      kabasTasksViewModel.deleteTaskEduContents(taskEduContentIds);
       expect(spy).toHaveBeenCalledWith(destroyAction);
     });
   });
