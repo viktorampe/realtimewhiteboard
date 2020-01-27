@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { MAT_DATE_LOCALE } from '@angular/material';
 import { MockDate } from '@campus/testing';
 import { EffectsModule } from '@ngrx/effects';
 import { provideMockActions } from '@ngrx/effects/testing';
@@ -9,7 +10,10 @@ import { undo } from 'ngrx-undo';
 import { Observable, of } from 'rxjs';
 import { TaskEduContentReducer } from '.';
 import { EffectFeedbackFixture, TaskEduContentFixture } from '../../+fixtures';
-import { TASK_EDU_CONTENT_SERVICE_TOKEN } from '../../tasks/task-edu-content.service.interface';
+import {
+  TASK_EDU_CONTENT_SERVICE_TOKEN,
+  UpdateTaskEduContentResultInterface
+} from '../../tasks/task-edu-content.service.interface';
 import { TASK_SERVICE_TOKEN } from '../../tasks/task.service.interface';
 import {
   EffectFeedback,
@@ -18,11 +22,14 @@ import {
   Priority
 } from '../effect-feedback';
 import { AddEffectFeedback } from '../effect-feedback/effect-feedback.actions';
+import { TaskEduContentServiceInterface } from './../../tasks/task-edu-content.service.interface';
 import {
   AddTaskEduContent,
   DeleteTaskEduContent,
+  DeleteTaskEduContents,
   LinkTaskEduContent,
   LoadTaskEduContents,
+  StartDeleteTaskEduContents,
   TaskEduContentsLoaded,
   TaskEduContentsLoadError
 } from './task-edu-content.actions';
@@ -34,7 +41,10 @@ describe('TaskEduContentEffects', () => {
   let usedState: any;
   let effectFeedback: EffectFeedbackInterface;
   let uuid: Function;
-  let dateMock: MockDate;
+
+  const dateMock = new MockDate(new Date('2020-1-14'));
+
+  let taskEduContentService: TaskEduContentServiceInterface;
 
   const expectInAndOut = (
     effect: Observable<any>,
@@ -96,8 +106,6 @@ describe('TaskEduContentEffects', () => {
   };
 
   beforeAll(() => {
-    dateMock = new MockDate();
-
     effectFeedback = new EffectFeedbackFixture({
       timeStamp: dateMock.mockDate.getTime()
     });
@@ -136,7 +144,8 @@ describe('TaskEduContentEffects', () => {
           useValue: {
             getAllForUser: () => {},
             linkEduContent: () => {},
-            remove: () => {}
+            remove: () => {},
+            deleteTaskEduContents: () => {}
           }
         },
         {
@@ -152,13 +161,15 @@ describe('TaskEduContentEffects', () => {
         TaskEduContentEffects,
         DataPersistence,
         provideMockActions(() => actions),
-        { provide: 'uuid', useValue: () => 'foo' }
+        { provide: 'uuid', useValue: () => 'foo' },
+        { provide: MAT_DATE_LOCALE, useValue: 'en-US' }
       ]
     });
 
     effects = TestBed.get(TaskEduContentEffects);
     uuid = TestBed.get('uuid');
     effectFeedback.id = uuid();
+    taskEduContentService = TestBed.get(TASK_EDU_CONTENT_SERVICE_TOKEN);
   });
 
   describe('loadTaskEduContent$', () => {
@@ -381,6 +392,142 @@ describe('TaskEduContentEffects', () => {
           })
         );
       });
+    });
+  });
+
+  describe('deleteTaskEduContents$', () => {
+    let deleteTaskEduContentsSpy: jest.SpyInstance;
+    const taskEduContentIds = [1, 2];
+    const userId = 123;
+    const triggerAction = new StartDeleteTaskEduContents({
+      userId,
+      taskEduContentIds
+    });
+
+    beforeEach(() => {
+      deleteTaskEduContentsSpy = taskEduContentService.deleteTaskEduContents = jest.fn();
+    });
+
+    it('should call the service and dispatch feedback, no errors', () => {
+      deleteTaskEduContentsSpy.mockReturnValue(
+        of({
+          success: taskEduContentIds.map(id => ({ id })),
+          errors: []
+        } as UpdateTaskEduContentResultInterface)
+      );
+      const expectedMessage = 'De oefeningen werden verwijderd.';
+      const deleteAction = new DeleteTaskEduContents({
+        ids: taskEduContentIds
+      });
+      const feedbackAction = new AddEffectFeedback({
+        effectFeedback: {
+          id: uuid(),
+          display: true,
+          message: expectedMessage,
+          timeStamp: Date.now(),
+          triggerAction,
+          priority: Priority.NORM,
+          type: 'success',
+          useDefaultCancel: true,
+          userActions: []
+        } as EffectFeedback
+      });
+      actions = hot('a', { a: triggerAction });
+      expect(effects.deleteTaskEduContents$).toBeObservable(
+        hot('(ab)', {
+          a: deleteAction,
+          b: feedbackAction
+        })
+      );
+    });
+
+    it('should call the service and dispatch feedback, only errors', () => {
+      const taskDestroyErrors = [
+        {
+          task: 'Huiswerk',
+          user: 'Hubert Stroganovski',
+          activeUntil: new Date()
+        },
+        {
+          task: 'Huiswerk2',
+          user: 'Hubert Stroganovski',
+          activeUntil: new Date()
+        }
+      ];
+      deleteTaskEduContentsSpy.mockReturnValue(
+        of({
+          success: [],
+          errors: taskDestroyErrors
+        } as UpdateTaskEduContentResultInterface)
+      );
+      const expectedMessage = [
+        '<p>Er werden geen oefeningen verwijderd.</p>',
+        '<p>De volgende taken zijn nog in gebruik:</p>',
+        '<ul>',
+        '<li><strong>Huiswerk</strong> is nog in gebruik door Hubert Stroganovski tot 1/14/2020.</li>',
+        '<li><strong>Huiswerk2</strong> is nog in gebruik door Hubert Stroganovski tot 1/14/2020.</li>',
+        '</ul>'
+      ].join('');
+      const feedbackAction = new AddEffectFeedback({
+        effectFeedback: {
+          id: uuid(),
+          triggerAction,
+          message: expectedMessage,
+          type: 'error',
+          userActions: [],
+          priority: Priority.HIGH,
+          display: true,
+          timeStamp: Date.now(),
+          useDefaultCancel: true
+        }
+      });
+      actions = hot('a', { a: triggerAction });
+      expect(effects.deleteTaskEduContents$).toBeObservable(
+        hot('a', { a: feedbackAction })
+      );
+    });
+
+    it('should call the service and dispatch feedback, mixed', () => {
+      const taskDestroyErrors = [
+        {
+          task: 'Huiswerk',
+          user: 'Hubert Stroganovski',
+          activeUntil: new Date()
+        }
+      ];
+      deleteTaskEduContentsSpy.mockReturnValue(
+        of({
+          success: [{ id: 2 }],
+          errors: taskDestroyErrors
+        } as UpdateTaskEduContentResultInterface)
+      );
+      const deleteAction = new DeleteTaskEduContents({
+        ids: [2]
+      });
+      const expectedMessage = [
+        '<p>De oefening werd verwijderd.</p>',
+        '<p>De volgende taken zijn nog in gebruik:</p>',
+        '<ul>',
+        '<li><strong>Huiswerk</strong> is nog in gebruik door Hubert Stroganovski tot 1/14/2020.</li>',
+        '</ul>'
+      ].join('');
+      const feedbackAction = new AddEffectFeedback({
+        effectFeedback: {
+          id: uuid(),
+          triggerAction,
+          message: expectedMessage,
+          type: 'error',
+          userActions: [],
+          priority: Priority.HIGH,
+          display: true,
+          timeStamp: Date.now(),
+          useDefaultCancel: true
+        }
+      });
+      actions = hot('a', { a: triggerAction });
+      expect(effects.deleteTaskEduContents$).toBeObservable(
+        hot('(ab)', { a: deleteAction, b: feedbackAction })
+      );
     });
   });
 });
