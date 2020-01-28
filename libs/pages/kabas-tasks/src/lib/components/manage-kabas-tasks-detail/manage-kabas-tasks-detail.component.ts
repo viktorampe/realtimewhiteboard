@@ -112,6 +112,10 @@ export class ManageKabasTasksDetailComponent implements OnInit {
         this.openNewTaskDialog();
       }
     });
+
+    this.task$.subscribe(task => {
+      this.reorderableTaskEduContents$.next([...task.taskEduContents]);
+    });
   }
 
   public onSelectionChange() {
@@ -281,26 +285,30 @@ export class ManageKabasTasksDetailComponent implements OnInit {
     this.viewModel.updateTaskAccess(task, remainingAssignees);
   }
 
-  public toggleIsReordering(
-    taskEduContents?: TaskEduContentWithEduContentInterface[]
-  ) {
-    if (this.isReordering) {
-      this.isReordering = false;
-      this.reorderableTaskEduContents$.next([]);
-    } else {
-      this.isReordering = true;
-      this.reorderableTaskEduContents$.next([...taskEduContents]);
+  public toggleIsReordering() {
+    if (!this.isReordering) {
+      this.task$.pipe(take(1)).subscribe(task => {
+        this.reorderableTaskEduContents$.next([...task.taskEduContents]);
+      });
     }
+    this.isReordering = !this.isReordering;
   }
+
   public dropTaskEduContent(
     taskEduContents: TaskEduContentWithEduContentInterface[],
     event: CdkDragDrop<TaskEduContentWithEduContentInterface[]>
   ) {
     moveItemInArray(taskEduContents, event.previousIndex, event.currentIndex);
-    //this.reorderableTaskEduContents$.next(taskEduContents);
-    //moveItemInArray(taskEduContents, event.previousIndex, event.currentIndex);
+    this.reorderableTaskEduContents$.next(taskEduContents);
   }
-  public saveOrder(taskEduContents: TaskEduContentInterface[]) {}
+
+  public saveOrder() {
+    this.viewModel.updateTaskEduContentsOrder(
+      this.reorderableTaskEduContents$.value
+    );
+    this.toggleIsReordering();
+  }
+
   public clickPrintTask() {}
   public printTask(task: TaskInterface, withNames: boolean) {}
   public printSolution(task: TaskInterface) {}

@@ -172,13 +172,16 @@ export class TaskEduContentEffects {
             );
         },
         undoAction: (action: UpdateTaskEduContents, error: any) => {
-          return new AddEffectFeedback({
-            effectFeedback: EffectFeedback.generateErrorFeedback(
-              this.uuid(),
-              action,
-              'Het is niet gelukt om de inhoud van de taak bij te werken.'
-            )
-          });
+          return from([
+            undo(action),
+            new AddEffectFeedback({
+              effectFeedback: EffectFeedback.generateErrorFeedback(
+                this.uuid(),
+                action,
+                'Het is niet gelukt om de inhoud van de taak bij te werken.'
+              )
+            })
+          ]);
         }
       }
     )
