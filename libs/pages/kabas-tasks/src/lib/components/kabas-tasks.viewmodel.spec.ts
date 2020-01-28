@@ -294,17 +294,18 @@ describe('KabasTaskViewModel', () => {
       const spy = jest.spyOn(store, 'dispatch');
       const taskEduContents = [
         new TaskEduContentFixture({ id: 1, index: 1 }),
-        new TaskEduContentFixture({ id: 2, index: 3 }),
-        new TaskEduContentFixture({ id: 3, index: 2 })
+        new TaskEduContentFixture({ id: 3, index: 2 }),
+        new TaskEduContentFixture({ id: 2, index: 3 })
       ];
       kabasTasksViewModel.updateTaskEduContentsOrder(taskEduContents);
       expect(spy).toHaveBeenCalledWith(
         new TaskEduContentActions.UpdateTaskEduContents({
           userId: authService.userId,
-          taskEduContents: taskEduContents.map((tec, index) => ({
-            id: tec.id,
-            changes: { index }
-          }))
+          taskEduContents: [
+            { id: 1, changes: { index: 0 } },
+            { id: 3, changes: { index: 1 } },
+            { id: 2, changes: { index: 2 } }
+          ]
         })
       );
     });
