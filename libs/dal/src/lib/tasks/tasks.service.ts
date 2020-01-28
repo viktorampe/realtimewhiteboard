@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
+import { WINDOW } from '@campus/browser';
 import { PersonApi, TaskApi } from '@diekeure/polpo-api-angular-sdk';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -8,16 +9,23 @@ import {
   TaskGroupInterface,
   TaskStudentInterface
 } from '../+models';
+import { DalOptions, DAL_OPTIONS } from '../../lib/dal.module';
 import { TaskInterface } from './../+models/Task.interface';
 import {
   TaskServiceInterface,
   UpdateTaskResultInterface
 } from './task.service.interface';
+
 @Injectable({
   providedIn: 'root'
 })
 export class TaskService implements TaskServiceInterface {
-  constructor(private personApi: PersonApi, private taskApi: TaskApi) {}
+  constructor(
+    private personApi: PersonApi,
+    private taskApi: TaskApi,
+    @Inject(DAL_OPTIONS) private dalOptions: DalOptions,
+    @Inject(WINDOW) private window: Window
+  ) {}
 
   getAllForUser(userId: number): Observable<TaskInterface[]> {
     return this.personApi
@@ -79,8 +87,18 @@ export class TaskService implements TaskServiceInterface {
       );
   }
 
-  printTask(taskId: number, withNames: boolean) {}
-  printSolution(taskId: number) {}
+  printTask(taskId: number, withNames: boolean) {
+    const { apiBaseUrl } = this.dalOptions;
+    this.window.open(
+      `${apiBaseUrl}/api/tasks/paper-task-pdf?taskId=${taskId}&withNames=${withNames}`
+    );
+  }
+  printSolution(taskId: number) {
+    const { apiBaseUrl } = this.dalOptions;
+    this.window.open(
+      `${apiBaseUrl}/api/tasks/paper-task-solution-pdf?taskId=${taskId}`
+    );
+  }
 }
 
 function castStartEndToDate<

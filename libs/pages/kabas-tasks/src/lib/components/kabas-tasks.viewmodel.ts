@@ -20,6 +20,7 @@ import {
   RouterStateUrl,
   TaskActions,
   TaskClassGroupInterface,
+  TaskEduContentActions,
   TaskEduContentInterface,
   TaskGroupInterface,
   TaskInterface,
@@ -293,16 +294,43 @@ export class KabasTasksViewModel {
     taskEduContents: TaskEduContentInterface[],
     required: boolean
   ) {
-    throw new Error('Not implemented yet');
+    this.store.dispatch(
+      new TaskEduContentActions.UpdateTaskEduContents({
+        userId: this.authService.userId,
+        taskEduContents: taskEduContents.map(tec => {
+          return {
+            id: tec.id,
+            changes: { id: tec.id, required }
+          };
+        })
+      })
+    );
   }
 
   public updateTaskEduContentsOrder(
     taskEduContents: TaskEduContentInterface[]
   ) {
-    throw new Error('Not implemented yet');
+    this.store.dispatch(
+      new TaskEduContentActions.UpdateTaskEduContents({
+        userId: this.authService.userId,
+        taskEduContents: taskEduContents.map((tec, index) => {
+          return {
+            id: tec.id,
+            changes: { id: tec.id, index }
+          };
+        })
+      })
+    );
   }
 
-  public deleteTaskEduContents(taskEduContentIds: number[]) {}
+  public deleteTaskEduContents(taskEduContentIds: number[]) {
+    this.store.dispatch(
+      new TaskEduContentActions.StartDeleteTaskEduContents({
+        taskEduContentIds: taskEduContentIds,
+        userId: this.authService.userId
+      })
+    );
+  }
 
   public printTask(taskId: number, withNames: boolean) {
     this.taskService.printTask(taskId, withNames);
