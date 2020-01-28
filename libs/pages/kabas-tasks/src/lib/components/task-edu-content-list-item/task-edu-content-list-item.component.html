@@ -19,7 +19,7 @@
     ><span
       campusClickStopPropagation
       *ngFor="let action of actions"
-      (click)="action.handler()"
+      (click)="onActionClick(action)"
     >
       {{ action.label }}
     </span></div
