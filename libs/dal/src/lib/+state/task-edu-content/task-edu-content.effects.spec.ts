@@ -450,7 +450,31 @@ describe('TaskEduContentEffects', () => {
         addFeedbackAction
       );
     });
+
+    it('should dispatch feedback on error', () => {
+      updateSpy.mockRejectedValue(new Error('💩'));
+      effectFeedback = new EffectFeedback({
+        id: uuid(),
+        triggerAction: updateAction,
+        message: 'Het is niet gelukt om de inhoud van de taak bij te werken.',
+        type: 'error',
+        userActions: [
+          {
+            title: 'Opnieuw proberen',
+            userAction: updateAction
+          }
+        ],
+        priority: Priority.HIGH
+      });
+      const addFeedbackAction = new AddEffectFeedback({ effectFeedback });
+      expectInAndOut(
+        effects.updateTaskEduContents$,
+        updateAction,
+        addFeedbackAction
+      );
+    });
   });
+
   describe('deleteTaskEduContents$', () => {
     let deleteTaskEduContentsSpy: jest.SpyInstance;
     const taskEduContentIds = [1, 2];
