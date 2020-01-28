@@ -7,7 +7,7 @@ import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/angular';
 import { hot } from '@nrwl/angular/testing';
 import { undo } from 'ngrx-undo';
-import { Observable, of } from 'rxjs';
+import { from, Observable, of } from 'rxjs';
 import { TaskEduContentReducer } from '.';
 import {
   EffectFeedbackFixture,
@@ -451,7 +451,7 @@ describe('TaskEduContentEffects', () => {
       );
     });
 
-    it('should dispatch feedback on error', () => {
+    it('should dispatch feedback and undo on error', () => {
       updateSpy.mockRejectedValue(new Error('💩'));
       effectFeedback = new EffectFeedback({
         id: uuid(),
@@ -470,7 +470,7 @@ describe('TaskEduContentEffects', () => {
       expectInAndOut(
         effects.updateTaskEduContents$,
         updateAction,
-        addFeedbackAction
+        from([undo(updateAction), addFeedbackAction])
       );
     });
   });
