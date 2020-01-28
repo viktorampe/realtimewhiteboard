@@ -158,7 +158,8 @@
                 method.name
               }}</span>
             </div>
-            <campus-button (click)="preview(selectedContent, this.isPaperTask)"
+            <campus-button
+              (click)="preview(selectedContent, !!task.isPaperTask)"
               >preview</campus-button
             >
           </ng-container>
