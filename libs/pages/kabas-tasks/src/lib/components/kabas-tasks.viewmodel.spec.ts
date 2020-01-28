@@ -302,9 +302,9 @@ describe('KabasTaskViewModel', () => {
         new TaskEduContentActions.UpdateTaskEduContents({
           userId: authService.userId,
           taskEduContents: [
-            { id: 1, changes: { index: 0 } },
-            { id: 3, changes: { index: 1 } },
-            { id: 2, changes: { index: 2 } }
+            { id: 1, changes: { id: 1, index: 0 } },
+            { id: 3, changes: { id: 3, index: 1 } },
+            { id: 2, changes: { id: 2, index: 2 } }
           ]
         })
       );
