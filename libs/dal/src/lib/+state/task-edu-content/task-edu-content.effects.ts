@@ -7,6 +7,7 @@ import { undo } from 'ngrx-undo';
 import { from } from 'rxjs';
 import { map, mapTo, switchMap } from 'rxjs/operators';
 import { DalState } from '..';
+import { TaskEduContentInterface } from '../../+models';
 import {
   TaskEduContentServiceInterface,
   TASK_EDU_CONTENT_SERVICE_TOKEN,
@@ -150,7 +151,11 @@ export class TaskEduContentEffects {
       {
         run: (action: UpdateTaskEduContents, state: DalState) => {
           const updates = action.payload.taskEduContents.map(
-            partialTaskEduContent => partialTaskEduContent.changes
+            partialTaskEduContent =>
+              ({
+                id: partialTaskEduContent.id,
+                ...partialTaskEduContent.changes
+              } as TaskEduContentInterface)
           );
           return this.taskEduContentService
             .updateTaskEduContents(null, updates)
