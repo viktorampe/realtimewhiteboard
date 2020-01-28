@@ -17,6 +17,6 @@ import { Component, HostBinding, Input } from '@angular/core';
 export class ButtonComponent {
   @Input() iconClass: string;
 
-  @HostBinding('class.ui-button--disabled') @Input() disabled: Boolean = false;
+  @HostBinding('class.ui-button--disabled') @Input() disabled = false;
   @HostBinding('class.ui-button') uiButtonClass = true;
 }
