@@ -303,10 +303,10 @@ export class KabasTasksViewModel {
     this.store.dispatch(
       new TaskEduContentActions.UpdateTaskEduContents({
         userId: this.authService.userId,
-        taskEduContents: taskEduContents.map(tec => {
+        taskEduContents: taskEduContents.map((tec, index) => {
           return {
             id: tec.id,
-            changes: { index: tec.index }
+            changes: { index }
           };
         })
       })
