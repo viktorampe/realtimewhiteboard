@@ -2,6 +2,7 @@ import { InjectionToken } from '@angular/core';
 import { Observable } from 'rxjs';
 import { BulkUpdateResultInfoInterface } from '../+external-interfaces/bulk-update-result-info';
 import { TaskEduContentInterface } from '../+models';
+import { TaskActiveErrorInterface } from './task.service.interface';
 
 export const TASK_EDU_CONTENT_SERVICE_TOKEN = new InjectionToken(
   'TaskEduContentService'
@@ -18,13 +19,8 @@ export interface TaskEduContentServiceInterface {
   deleteTaskEduContents(userId: number, taskEduContentIds: number[]);
 }
 
-export interface TaskEduContentErrorInterface {
-  reason: string;
-  id: number;
-}
-
 export interface UpdateTaskEduContentResultInterface
   extends BulkUpdateResultInfoInterface<
     TaskEduContentInterface,
-    TaskEduContentErrorInterface
+    TaskActiveErrorInterface
   > {}

@@ -1,6 +1,9 @@
 import { inject, TestBed } from '@angular/core/testing';
+import { WINDOW } from '@campus/browser';
+import { MockWindow } from '@campus/testing';
 import { PersonApi, TaskApi } from '@diekeure/polpo-api-angular-sdk';
 import { hot } from '@nrwl/angular/testing';
+import { configureTestSuite } from 'ng-bullet';
 import { Observable } from 'rxjs';
 import { BulkUpdateResultInfoInterface } from '../+external-interfaces/bulk-update-result-info';
 import {
@@ -10,6 +13,7 @@ import {
   TaskStudentFixture
 } from '../+fixtures';
 import { TaskEduContentInterface, TaskInterface } from '../+models';
+import { DalOptions, DAL_OPTIONS } from '../dal.module';
 import {
   TaskActiveErrorInterface,
   TaskServiceInterface
@@ -23,13 +27,15 @@ describe('TaskService', () => {
   let mockGetData$: Observable<object>;
   let mockLinkEduContentsResult$: Observable<TaskEduContentInterface>;
   let mockUpdatedAccessResult$: Observable<TaskInterface>;
+  let mockWindow: MockWindow;
+  let dalOptions: DalOptions;
 
   const mockUpdateTaskInfo = {
     success: [],
     errors: []
   } as BulkUpdateResultInfoInterface<TaskInterface, TaskActiveErrorInterface>;
 
-  beforeEach(() => {
+  configureTestSuite(() => {
     TestBed.configureTestingModule({
       providers: [
         TaskService,
@@ -48,12 +54,22 @@ describe('TaskService', () => {
             destroyTasks: () => {},
             updateAccess: () => mockUpdatedAccessResult$
           }
-        }
+        },
+        {
+          provide: DAL_OPTIONS,
+          useValue: { apiBaseUrl: 'https://api.kabas.test' }
+        },
+        { provide: WINDOW, useClass: MockWindow }
       ]
     });
+  });
+
+  beforeEach(() => {
     service = TestBed.get(TaskService);
     taskApi = TestBed.get(TaskApi);
     personApi = TestBed.get(PersonApi);
+    dalOptions = TestBed.get(DAL_OPTIONS);
+    mockWindow = TestBed.get(WINDOW);
   });
 
   it('should be created and available via DI', inject(
@@ -180,6 +196,24 @@ describe('TaskService', () => {
         mockTask.taskGroups,
         mockTask.taskStudents,
         mockTask.taskClassGroups
+      );
+    });
+  });
+
+  describe('print', () => {
+    const taskId = 1;
+    const withNames = true;
+
+    it('should open window with pdf url when printTask ', () => {
+      service.printTask(taskId, withNames);
+      expect(mockWindow.open).toHaveBeenCalledWith(
+        `${dalOptions.apiBaseUrl}/api/tasks/paper-task-pdf?taskId=${taskId}&withNames=${withNames}`
+      );
+    });
+    it('should open window with solution pdf url when printSolution ', () => {
+      service.printSolution(taskId);
+      expect(mockWindow.open).toHaveBeenCalledWith(
+        `${dalOptions.apiBaseUrl}/api/tasks/paper-task-solution-pdf?taskId=${taskId}`
       );
     });
   });

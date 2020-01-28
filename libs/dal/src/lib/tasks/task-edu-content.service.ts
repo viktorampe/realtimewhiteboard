@@ -28,12 +28,14 @@ export class TaskEduContentService implements TaskEduContentServiceInterface {
       );
   }
 
+  // don't use this in Kabas
   remove(taskEduContentId: number): Observable<boolean> {
     return this.taskEduContentApi
       .deleteById(taskEduContentId)
       .pipe(mapTo(true));
   }
 
+  // don't use this in Kabas
   removeAll(taskEduContentIds: number[]): Observable<boolean> {
     return forkJoin(taskEduContentIds.map(id => this.remove(id))).pipe(
       mapTo(true)
