@@ -85,15 +85,19 @@ export class ManageKabasTasksDetailComponent implements OnInit {
   ngOnInit() {
     this.task$ = this.viewModel.currentTask$.pipe(
       map(task => {
-        task.taskEduContents.forEach(
-          taskEduContent =>
-            (taskEduContent.actions = this.contentActionService.getActionsForEduContent(
-              taskEduContent.eduContent
-            ))
-        );
-        return task;
+        const taskEduContents = task.taskEduContents.map(tE => {
+          return {
+            ...tE,
+            actions: this.contentActionService.getActionsForEduContent(
+              tE.eduContent
+            )
+          };
+        });
+
+        return { ...task, taskEduContents };
       })
     );
+
     this.diaboloPhaseFilter = {
       name: 'diaboloPhase',
       label: 'Diabolo-fase',
