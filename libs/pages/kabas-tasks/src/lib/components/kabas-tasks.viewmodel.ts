@@ -20,6 +20,7 @@ import {
   RouterStateUrl,
   TaskActions,
   TaskClassGroupInterface,
+  TaskEduContentActions,
   TaskEduContentInterface,
   TaskGroupInterface,
   TaskInterface,
@@ -302,7 +303,14 @@ export class KabasTasksViewModel {
     throw new Error('Not implemented yet');
   }
 
-  public deleteTaskEduContents(taskEduContentIds: number[]) {}
+  public deleteTaskEduContents(taskEduContentIds: number[]) {
+    this.store.dispatch(
+      new TaskEduContentActions.StartDeleteTaskEduContents({
+        taskEduContentIds: taskEduContentIds,
+        userId: this.authService.userId
+      })
+    );
+  }
 
   public printTask(taskId: number, withNames: boolean) {
     this.taskService.printTask(taskId, withNames);
