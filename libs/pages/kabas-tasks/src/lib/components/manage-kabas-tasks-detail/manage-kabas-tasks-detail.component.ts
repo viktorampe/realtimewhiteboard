@@ -288,12 +288,12 @@ export class ManageKabasTasksDetailComponent implements OnInit {
   public printTask(task: TaskInterface, withNames: boolean) {}
   public printSolution(task: TaskInterface) {}
 
-  public preview(eduContent: EduContentInterface) {
+  public preview(eduContent: EduContentInterface, openDialog: boolean = false) {
     const content = Object.assign<EduContent, EduContentInterface>(
       new EduContent(),
       eduContent
     );
-    this.openStaticContentService.open(content, false, true);
+    this.openStaticContentService.open(content, false, !!openDialog);
   }
 
   public clickRemoveTaskEduContents(
