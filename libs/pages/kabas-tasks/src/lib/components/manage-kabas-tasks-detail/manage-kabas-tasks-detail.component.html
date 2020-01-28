@@ -150,7 +150,9 @@
           >
             <h2>{{ metadata.title }}</h2>
             <p>{{ metadata.description }}</p>
-            <div>{{ metadata.learningArea.name }}</div>
+            <div *ngIf="metadata.learningArea">{{
+              metadata.learningArea.name
+            }}</div>
             <div *ngIf="metadata.methods" class="list-split">
               <span *ngFor="let method of metadata.methods">{{
                 method.name
