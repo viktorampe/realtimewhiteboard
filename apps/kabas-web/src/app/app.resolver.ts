@@ -5,6 +5,8 @@ import {
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
   DalState,
+  DiaboloPhaseActions,
+  DiaboloPhaseQueries,
   FavoriteActions,
   FavoriteQueries,
   HistoryActions,
@@ -45,6 +47,9 @@ export class AppResolver extends StateResolver {
       new MethodLevelActions.LoadMethodLevels({
         userId: this.authService.userId
       }),
+      new DiaboloPhaseActions.LoadDiaboloPhases({
+        userId: this.authService.userId
+      }),
       new UiActions.LoadUi(),
       new LinkedPersonActions.LoadLinkedPersons({
         userId: this.authService.userId
@@ -60,6 +65,7 @@ export class AppResolver extends StateResolver {
       FavoriteQueries.getLoaded,
       HistoryQueries.getLoaded,
       MethodLevelQueries.getLoaded,
+      DiaboloPhaseQueries.getLoaded,
       UiQuery.getLoaded,
       LinkedPersonQueries.getLoaded
     ];
