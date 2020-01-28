@@ -12,7 +12,9 @@ import { SearchFilterCriteriaInterface } from '@campus/search';
 import {
   ContentActionInterface,
   ContentActionsServiceInterface,
-  CONTENT_ACTIONS_SERVICE_TOKEN
+  CONTENT_ACTIONS_SERVICE_TOKEN,
+  OpenStaticContentServiceInterface,
+  OPEN_STATIC_CONTENT_SERVICE_TOKEN
 } from '@campus/shared';
 import { ConfirmationModalComponent, SideSheetComponent } from '@campus/ui';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
@@ -69,7 +71,9 @@ export class ManageKabasTasksDetailComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     @Inject(CONTENT_ACTIONS_SERVICE_TOKEN)
-    private contentActionService: ContentActionsServiceInterface
+    private contentActionService: ContentActionsServiceInterface,
+    @Inject(OPEN_STATIC_CONTENT_SERVICE_TOKEN)
+    private openStaticContentService: OpenStaticContentServiceInterface
   ) {
     this.isNewTask$ = this.viewModel.currentTaskParams$.pipe(
       map(currentTaskParams => !currentTaskParams.id)
@@ -298,10 +302,20 @@ export class ManageKabasTasksDetailComponent implements OnInit {
   public clickPrintTask() {}
   public printTask(task: TaskInterface, withNames: boolean) {}
   public printSolution(task: TaskInterface) {}
-  public preview(eduContent: EduContentInterface) {}
+
+  public preview(eduContent: EduContentInterface, openDialog: boolean = false) {
+    const content = Object.assign<EduContent, EduContentInterface>(
+      new EduContent(),
+      eduContent
+    );
+    this.openStaticContentService.open(content, false, !!openDialog);
+  }
+
   public clickRemoveTaskEduContents(
     taskEduContents: TaskEduContentInterface[]
-  ) {}
+  ) {
+    this.viewModel.deleteTaskEduContents(taskEduContents.map(tec => tec.id));
+  }
 
   public handleTaskEduContentAction(
     action: ContentActionInterface,
