@@ -1,13 +1,19 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatSelectionList } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
+  EduContent,
   EduContentInterface,
   LearningAreaInterface,
   TaskEduContentInterface,
   TaskInterface
 } from '@campus/dal';
 import { SearchFilterCriteriaInterface } from '@campus/search';
+import {
+  ContentActionInterface,
+  ContentActionsServiceInterface,
+  CONTENT_ACTIONS_SERVICE_TOKEN
+} from '@campus/shared';
 import { ConfirmationModalComponent, SideSheetComponent } from '@campus/ui';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { filter, map, switchMap, take, withLatestFrom } from 'rxjs/operators';
@@ -61,7 +67,9 @@ export class ManageKabasTasksDetailComponent implements OnInit {
     private viewModel: KabasTasksViewModel,
     private dialog: MatDialog,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    @Inject(CONTENT_ACTIONS_SERVICE_TOKEN)
+    private contentActionService: ContentActionsServiceInterface
   ) {
     this.isNewTask$ = this.viewModel.currentTaskParams$.pipe(
       map(currentTaskParams => !currentTaskParams.id)
@@ -71,7 +79,17 @@ export class ManageKabasTasksDetailComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.task$ = this.viewModel.currentTask$;
+    this.task$ = this.viewModel.currentTask$.pipe(
+      map(task => {
+        task.taskEduContents.forEach(
+          taskEduContent =>
+            (taskEduContent.actions = this.contentActionService.getActionsForEduContent(
+              taskEduContent.eduContent
+            ))
+        );
+        return task;
+      })
+    );
     this.diaboloPhaseFilter = {
       name: 'diaboloPhase',
       label: 'Diabolo-fase',
@@ -284,4 +302,11 @@ export class ManageKabasTasksDetailComponent implements OnInit {
   public clickRemoveTaskEduContents(
     taskEduContents: TaskEduContentInterface[]
   ) {}
+
+  public handleTaskEduContentAction(
+    action: ContentActionInterface,
+    eduContent: EduContent
+  ) {
+    action.handler(eduContent);
+  }
 }

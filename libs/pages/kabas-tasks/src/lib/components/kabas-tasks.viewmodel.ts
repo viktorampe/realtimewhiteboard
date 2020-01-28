@@ -6,6 +6,7 @@ import {
   ClassGroupInterface,
   ClassGroupQueries,
   DalState,
+  EduContent,
   EffectFeedback,
   EffectFeedbackActions,
   FavoriteActions,
@@ -28,6 +29,7 @@ import {
   TaskStudentInterface,
   TASK_SERVICE_TOKEN
 } from '@campus/dal';
+import { ContentOpenerInterface } from '@campus/shared';
 import { Update } from '@ngrx/entity';
 import { RouterReducerState } from '@ngrx/router-store';
 import { Action, select, Store } from '@ngrx/store';
@@ -58,7 +60,7 @@ export interface CurrentTaskParams {
 @Injectable({
   providedIn: 'root'
 })
-export class KabasTasksViewModel {
+export class KabasTasksViewModel implements ContentOpenerInterface {
   public tasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
   public paperTasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
   public currentTask$: Observable<TaskWithAssigneesInterface>;
@@ -109,6 +111,22 @@ export class KabasTasksViewModel {
     this.classGroups$ = this.store.pipe(select(ClassGroupQueries.getAll));
     this.groups$ = this.store.pipe(select(GroupQueries.getAll));
     this.students$ = this.store.pipe(select(LinkedPersonQueries.getStudents));
+  }
+
+  openEduContentAsExercise(eduContent: EduContent): void {
+    throw new Error('Method not implemented.');
+  }
+  openEduContentAsSolution(eduContent: EduContent): void {
+    throw new Error('Method not implemented.');
+  }
+  openEduContentAsStream(eduContent: EduContent): void {
+    throw new Error('Method not implemented.');
+  }
+  openEduContentAsDownload(eduContent: EduContent): void {
+    throw new Error('Method not implemented.');
+  }
+  openBoeke(eduContent: EduContent): void {
+    throw new Error('Method not implemented.');
   }
 
   public startArchivingTasks(
