@@ -300,7 +300,7 @@ export class KabasTasksViewModel {
         taskEduContents: taskEduContents.map(tec => {
           return {
             id: tec.id,
-            changes: { required }
+            changes: { id: tec.id, required }
           };
         })
       })
