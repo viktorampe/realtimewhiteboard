@@ -9,7 +9,13 @@ import { hot } from '@nrwl/angular/testing';
 import { undo } from 'ngrx-undo';
 import { Observable, of } from 'rxjs';
 import { TaskEduContentReducer } from '.';
-import { EffectFeedbackFixture, TaskEduContentFixture } from '../../+fixtures';
+import {
+  EffectFeedbackFixture,
+  TaskEduContentFixture,
+  TaskFixture
+} from '../../+fixtures';
+import { TaskEduContentInterface } from '../../+models';
+import { TaskEduContentService } from '../../tasks';
 import {
   TASK_EDU_CONTENT_SERVICE_TOKEN,
   UpdateTaskEduContentResultInterface
@@ -22,7 +28,6 @@ import {
   Priority
 } from '../effect-feedback';
 import { AddEffectFeedback } from '../effect-feedback/effect-feedback.actions';
-import { TaskEduContentServiceInterface } from './../../tasks/task-edu-content.service.interface';
 import {
   AddTaskEduContent,
   DeleteTaskEduContent,
@@ -31,7 +36,8 @@ import {
   LoadTaskEduContents,
   StartDeleteTaskEduContents,
   TaskEduContentsLoaded,
-  TaskEduContentsLoadError
+  TaskEduContentsLoadError,
+  UpdateTaskEduContents
 } from './task-edu-content.actions';
 import { TaskEduContentEffects } from './task-edu-content.effects';
 
@@ -41,10 +47,8 @@ describe('TaskEduContentEffects', () => {
   let usedState: any;
   let effectFeedback: EffectFeedbackInterface;
   let uuid: Function;
-
+  let taskEduContentService: TaskEduContentService;
   const dateMock = new MockDate(new Date('2020-1-14'));
-
-  let taskEduContentService: TaskEduContentServiceInterface;
 
   const expectInAndOut = (
     effect: Observable<any>,
@@ -167,6 +171,7 @@ describe('TaskEduContentEffects', () => {
     });
 
     effects = TestBed.get(TaskEduContentEffects);
+    taskEduContentService = TestBed.get(TASK_EDU_CONTENT_SERVICE_TOKEN);
     uuid = TestBed.get('uuid');
     effectFeedback.id = uuid();
     taskEduContentService = TestBed.get(TASK_EDU_CONTENT_SERVICE_TOKEN);
@@ -392,6 +397,81 @@ describe('TaskEduContentEffects', () => {
           })
         );
       });
+    });
+  });
+
+  describe('updateTaskEduContent$', () => {
+    const userId = 123;
+
+    const partialTaskEduContents: TaskEduContentInterface[] = [
+      { id: 1, index: 0 },
+      { id: 2, index: 1 }
+    ];
+    const task = new TaskFixture();
+    const taskEduContents = [
+      new TaskEduContentFixture({ id: 1, index: 1, task }),
+      new TaskEduContentFixture({ id: 2, index: 0, task })
+    ];
+
+    const updateAction = new UpdateTaskEduContents({
+      userId,
+      taskEduContents: partialTaskEduContents.map(partial => ({
+        id: partial.id,
+        changes: partial
+      }))
+    });
+    let updateSpy: jest.SpyInstance;
+
+    beforeEach(() => {
+      updateSpy = taskEduContentService.updateTaskEduContents = jest.fn();
+    });
+    it('should call the service and dispatch feedback on success', () => {
+      updateSpy.mockReturnValue(
+        of(
+          taskEduContents.map((tec, index) => ({
+            ...tec,
+            ...partialTaskEduContents[index]
+          }))
+        )
+      );
+
+      effectFeedback = new EffectFeedback({
+        id: uuid(),
+        triggerAction: updateAction,
+        message: 'De inhoud van de taak werd bijgewerkt.',
+        type: 'success',
+        userActions: [],
+        priority: Priority.NORM
+      });
+      const addFeedbackAction = new AddEffectFeedback({ effectFeedback });
+      expectInAndOut(
+        effects.updateTaskEduContents$,
+        updateAction,
+        addFeedbackAction
+      );
+    });
+
+    it('should dispatch feedback on error', () => {
+      updateSpy.mockRejectedValue(new Error('💩'));
+      effectFeedback = new EffectFeedback({
+        id: uuid(),
+        triggerAction: updateAction,
+        message: 'Het is niet gelukt om de inhoud van de taak bij te werken.',
+        type: 'error',
+        userActions: [
+          {
+            title: 'Opnieuw proberen',
+            userAction: updateAction
+          }
+        ],
+        priority: Priority.HIGH
+      });
+      const addFeedbackAction = new AddEffectFeedback({ effectFeedback });
+      expectInAndOut(
+        effects.updateTaskEduContents$,
+        updateAction,
+        addFeedbackAction
+      );
     });
   });
 
