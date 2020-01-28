@@ -35,6 +35,9 @@
   $pages-kabas-tasks__list-option--selected-border-width: 4px !default;
   $pages-kabas-tasks__list-option-padding-left: 16px !default;
 
+  .mat-drawer-container {
+    background: $pages-kabas-tasks-background-color--primary;
+  }
   .manage-kabas-tasks {
     width: $manage-kabas-tasks-width;
   }
@@ -47,7 +50,7 @@
 
     &__list__primary-action {
       .mat-list-item-content {
-        background-color: $secondary-bg-color;
+        background-color: $pages-kabas-tasks__list-option-background-color--accent;
         color: $primary-color-accent;
         font-weight: bold;
         padding-left: 45px !important;
@@ -97,7 +100,7 @@
 
       .mat-list-option {
         &:nth-child(odd) {
-          background-color: $secondary-bg-color;
+          background-color: $pages-kabas-tasks__list-option-background-color--accent;
         }
 
         border-left: $pages-kabas-tasks__list-option--selected-border-width
