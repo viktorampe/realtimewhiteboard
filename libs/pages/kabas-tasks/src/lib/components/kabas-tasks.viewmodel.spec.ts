@@ -11,6 +11,7 @@ import {
   getRouterState,
   PersonFixture,
   TaskActions,
+  TaskEduContentActions,
   TaskEduContentFixture,
   TaskFixture,
   TaskServiceInterface,
@@ -560,6 +561,27 @@ describe('KabasTaskViewModel', () => {
         ids: tasks.map(mapToTaskIds)
       });
       kabasTasksViewModel.removeTasks(tasks);
+      expect(spy).toHaveBeenCalledWith(destroyAction);
+    });
+  });
+
+  describe('delete TaskEduContents', () => {
+    const taskEduContents = [
+      new TaskEduContentFixture({ id: 1 }),
+      new TaskEduContentFixture({ id: 2 }),
+      new TaskEduContentFixture({ id: 3 })
+    ];
+
+    it('should dispatch deleteTaskEduContent', () => {
+      const spy = jest.spyOn(store, 'dispatch');
+      const taskEduContentIds = taskEduContents.map(tec => tec.id);
+      const destroyAction = new TaskEduContentActions.StartDeleteTaskEduContents(
+        {
+          userId: authService.userId,
+          taskEduContentIds
+        }
+      );
+      kabasTasksViewModel.deleteTaskEduContents(taskEduContentIds);
       expect(spy).toHaveBeenCalledWith(destroyAction);
     });
   });
