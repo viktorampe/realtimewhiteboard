@@ -62,20 +62,6 @@
       }
     }
 
-    // &__list__primary-action {
-    //   .mat-list-item-content {
-    //     background-color: $secondary-bg-color;
-    //     color: $primary-color-accent;
-    //     font-weight: bold;
-    //     padding-left: 45px !important;
-    //     cursor: pointer;
-
-    //     .mat-icon {
-    //       margin: 0 20px;
-    //     }
-    //   }
-    // }
-
     &__container {
       .mat-tab-body-content {
         padding: 0;
@@ -207,10 +193,6 @@
         background-color: $secondary-bg-color;
         margin: $manage-kabas-tasks-detail__list__primary-actions-margin;
         padding: $manage-kabas-tasks-detail__list__primary-actions-padding;
-      }
-      &__reorder-actions {
-        display: flex;
-        align-items: center;
       }
       &__primary-action,
       &__reorder-actions {
