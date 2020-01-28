@@ -286,8 +286,9 @@ export class ManageKabasTasksDetailComponent implements OnInit {
   public preview(eduContent: EduContentInterface) {}
   public clickRemoveTaskEduContents(
     taskEduContents: TaskEduContentInterface[]
-  ) {}
-
+  ) {
+    this.viewModel.deleteTaskEduContents(taskEduContents.map(tec => tec.id));
+  }
   public isActiveTask(task: TaskWithAssigneesInterface) {
     return task.status === TaskStatusEnum.ACTIVE;
   }

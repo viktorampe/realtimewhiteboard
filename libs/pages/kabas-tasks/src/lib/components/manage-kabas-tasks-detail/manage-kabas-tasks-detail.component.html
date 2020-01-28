@@ -41,6 +41,7 @@
       <campus-button
         class="shared-header__contextual__button smallIcon"
         iconClass="delete"
+        (click)="clickRemoveTaskEduContents(selectedContents)"
         ><span>Verwijderen</span></campus-button
       >
     </ng-template>
@@ -153,7 +154,9 @@
           >
             <h2>{{ metadata.title }}</h2>
             <p>{{ metadata.description }}</p>
-            <div>{{ metadata.learningArea.name }}</div>
+            <div *ngIf="metadata.learningArea">{{
+              metadata.learningArea.name
+            }}</div>
             <div *ngIf="metadata.methods" class="list-split">
               <span *ngFor="let method of metadata.methods">{{
                 method.name
@@ -173,7 +176,11 @@
           </mat-radio-group>
         </div>
 
-        <campus-button danger>verwijder oefeningen</campus-button>
+        <campus-button
+          danger
+          (click)="clickRemoveTaskEduContents(selectedContents)"
+          >verwijder oefeningen</campus-button
+        >
       </ng-template>
     </div>
   </campus-side-sheet-body>
