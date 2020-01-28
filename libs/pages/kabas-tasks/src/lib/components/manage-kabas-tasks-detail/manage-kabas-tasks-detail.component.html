@@ -209,6 +209,9 @@
           <mat-icon svgIcon="add"></mat-icon>
           Lesmateriaal toevoegen aan deze taak
         </div>
+        <campus-button (click)="toggleIsReordering(task.taskEduContents)"
+          >reorder</campus-button
+        >
         <mat-selection-list
           #taskContent
           class="manage-kabas-tasks-detail__list"
@@ -245,11 +248,22 @@
         <mat-list
           #taskContentReordering
           class="manage-kabas-tasks-detail__list"
-          *ngIf="isReordering"
+          *ngIf="
+            isReordering &&
+            (reorderableTaskEduContents$ | async) as reorderableTaskEduContents
+          "
           cdkDropList
+          (cdkDropListDropped)="
+            dropTaskEduContent(reorderableTaskEduContents, $event)
+          "
         >
-          <ng-container *ngIf="task.taskEduContents.length; else noResults">
-            <mat-list-item cdkDrag *ngFor="let tEC of task.taskEduContents">
+          <ng-container
+            *ngIf="reorderableTaskEduContents.length; else noResults"
+          >
+            <mat-list-item
+              cdkDrag
+              *ngFor="let tEC of reorderableTaskEduContents"
+            >
               <mat-icon
                 class="manage-kabas-tasks-detail__list__drag-handle"
                 svgIcon="drag-handle"

@@ -1,3 +1,4 @@
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatSelectionList } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -15,6 +16,7 @@ import {
   AssigneeInterface,
   AssigneeTypesEnum
 } from '../../interfaces/Assignee.interface';
+import { TaskEduContentWithEduContentInterface } from '../../interfaces/TaskEduContentWithEduContent.interface';
 import { TaskWithAssigneesInterface } from '../../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
 import { ManageKabasTasksAssigneeDataInterface } from '../manage-kabas-tasks-assignee-modal/manage-kabas-tasks-assignee-data.interface';
@@ -45,6 +47,9 @@ export class ManageKabasTasksDetailComponent implements OnInit {
   isPaperTask = true; // replace w/ stream
   public selectedContents$ = new BehaviorSubject<EduContentInterface[]>([]);
   public task$: Observable<TaskWithAssigneesInterface>;
+  public reorderableTaskEduContents$ = new BehaviorSubject<
+    TaskEduContentWithEduContentInterface[]
+  >([]);
 
   public assigneeTypesEnum: typeof AssigneeTypesEnum = AssigneeTypesEnum;
 
@@ -275,7 +280,26 @@ export class ManageKabasTasksDetailComponent implements OnInit {
 
     this.viewModel.updateTaskAccess(task, remainingAssignees);
   }
-  public toggleIsReordering() {}
+
+  public toggleIsReordering(
+    taskEduContents?: TaskEduContentWithEduContentInterface[]
+  ) {
+    if (this.isReordering) {
+      this.isReordering = false;
+      this.reorderableTaskEduContents$.next([]);
+    } else {
+      this.isReordering = true;
+      this.reorderableTaskEduContents$.next([...taskEduContents]);
+    }
+  }
+  public dropTaskEduContent(
+    taskEduContents: TaskEduContentWithEduContentInterface[],
+    event: CdkDragDrop<TaskEduContentWithEduContentInterface[]>
+  ) {
+    moveItemInArray(taskEduContents, event.previousIndex, event.currentIndex);
+    //this.reorderableTaskEduContents$.next(taskEduContents);
+    //moveItemInArray(taskEduContents, event.previousIndex, event.currentIndex);
+  }
   public saveOrder(taskEduContents: TaskEduContentInterface[]) {}
   public clickPrintTask() {}
   public printTask(task: TaskInterface, withNames: boolean) {}
