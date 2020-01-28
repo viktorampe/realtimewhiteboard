@@ -733,10 +733,11 @@ describe('KabasTaskViewModel', () => {
       expect(spy).toHaveBeenCalledWith(
         new TaskEduContentActions.UpdateTaskEduContents({
           userId: authService.userId,
-          taskEduContents: taskEduContents.map(tec => ({
-            id: tec.id,
-            changes: { required: true }
-          }))
+          taskEduContents: [
+            { id: 1, changes: { id: 1, required: true } },
+            { id: 2, changes: { id: 2, required: true } },
+            { id: 3, changes: { id: 3, required: true } }
+          ]
         })
       );
     });
