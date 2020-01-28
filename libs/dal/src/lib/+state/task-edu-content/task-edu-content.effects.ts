@@ -7,6 +7,7 @@ import { undo } from 'ngrx-undo';
 import { from } from 'rxjs';
 import { map, mapTo, switchMap } from 'rxjs/operators';
 import { DalState } from '..';
+import { TaskEduContentInterface } from '../../+models';
 import {
   TaskEduContentServiceInterface,
   TASK_EDU_CONTENT_SERVICE_TOKEN,
@@ -149,10 +150,35 @@ export class TaskEduContentEffects {
       TaskEduContentsActionTypes.UpdateTaskEduContents,
       {
         run: (action: UpdateTaskEduContents, state: DalState) => {
-          throw new Error('not implemented yet');
+          const updates = action.payload.taskEduContents.map(
+            partialTaskEduContent =>
+              ({
+                id: partialTaskEduContent.id,
+                ...partialTaskEduContent.changes
+              } as TaskEduContentInterface)
+          );
+          return this.taskEduContentService
+            .updateTaskEduContents(null, updates)
+            .pipe(
+              map(update => {
+                return new AddEffectFeedback({
+                  effectFeedback: EffectFeedback.generateSuccessFeedback(
+                    this.uuid(),
+                    action,
+                    'De inhoud van de taak werd bijgewerkt.'
+                  )
+                });
+              })
+            );
         },
         undoAction: (action: UpdateTaskEduContents, error: any) => {
-          throw new Error('not implemented yet');
+          return new AddEffectFeedback({
+            effectFeedback: EffectFeedback.generateErrorFeedback(
+              this.uuid(),
+              action,
+              'Het is niet gelukt om de inhoud van de taak bij te werken.'
+            )
+          });
         }
       }
     )
