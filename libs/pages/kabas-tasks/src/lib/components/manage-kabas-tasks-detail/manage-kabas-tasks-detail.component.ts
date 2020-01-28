@@ -20,7 +20,10 @@ import {
   AssigneeInterface,
   AssigneeTypesEnum
 } from '../../interfaces/Assignee.interface';
-import { TaskWithAssigneesInterface } from '../../interfaces/TaskWithAssignees.interface';
+import {
+  TaskStatusEnum,
+  TaskWithAssigneesInterface
+} from '../../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
 import { ManageKabasTasksAssigneeDataInterface } from '../manage-kabas-tasks-assignee-modal/manage-kabas-tasks-assignee-data.interface';
 import { ManageKabasTasksAssigneeModalComponent } from '../manage-kabas-tasks-assignee-modal/manage-kabas-tasks-assignee-modal.component';
@@ -300,5 +303,8 @@ export class ManageKabasTasksDetailComponent implements OnInit {
     taskEduContents: TaskEduContentInterface[]
   ) {
     this.viewModel.deleteTaskEduContents(taskEduContents.map(tec => tec.id));
+  }
+  public isActiveTask(task: TaskWithAssigneesInterface) {
+    return task.status === TaskStatusEnum.ACTIVE;
   }
 }
