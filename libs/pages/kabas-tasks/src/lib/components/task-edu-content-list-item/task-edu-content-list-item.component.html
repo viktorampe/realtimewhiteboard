@@ -1,27 +1,40 @@
 <mat-icon
   class="manage-kabas-tasks-task-edu-content-list-item__file-icon"
-  svgIcon="{{ fileIcon }}"
+  svgIcon="{{ fileIcon != 'ludo.zip' ? 'general-file' : 'exercise' }}"
 ></mat-icon>
 
-<div class="manage-kabas-tasks-task-edu-content-list-item__container">
+<div
+  class="manage-kabas-tasks-task-edu-content-list-item__container"
+  [class.manage-kabas-tasks-task-edu-content-list-item__container--no-actions]="
+    !action
+  "
+>
   <div
     class="manage-kabas-tasks-task-edu-content-list-item__container__title"
-    campusClickStopPropagation
     >{{ title }}</div
   >
   <div
-    *ngIf="actions.length"
+    *ngIf="actions"
     class="manage-kabas-tasks-task-edu-content-list-item__container__actions"
-    ><span>{{ actions[0].label }}</span></div
+    ><span
+      campusClickStopPropagation
+      *ngFor="let action of actions"
+      (click)="action.handler()"
+    >
+      {{ action.label }}
+    </span></div
   >
 </div>
 <div class="manage-kabas-tasks-task-edu-content-list-item__combined-container">
-  <div class="manage-kabas-tasks-task-edu-content-list-item__level">
+  <div
+    *ngIf="level"
+    class="manage-kabas-tasks-task-edu-content-list-item__level"
+  >
     {{ level }}
   </div>
 
   <div class="manage-kabas-tasks-task-edu-content-list-item__required">
-    <span *ngIf="actions.length"></span> {{ required ? 'moetje' : 'magje' }}
+    <span></span> {{ required ? 'moetje' : 'magje' }}
     <span></span>
   </div>
 

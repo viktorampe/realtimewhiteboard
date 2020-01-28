@@ -216,30 +216,60 @@
             !taskContent.selectedOptions.isEmpty()
           "
           (selectionChange)="onSelectionChange()"
+          *ngIf="!isReordering"
         >
           <ng-container *ngIf="task.taskEduContents.length; else noResults">
             <mat-list-option
               #option
-              *ngFor="let taskEduContent of task.taskEduContents"
+              *ngFor="let tEC of task.taskEduContents"
               checkboxPosition="before"
               [class.mat-list-option--selected]="option.selected"
-              [value]="taskEduContent"
+              [value]="tEC"
             >
               <campus-task-edu-content-list-item
-                [title]="
-                  taskEduContent.eduContent.publishedEduContentMetadata.title
+                [title]="tEC.eduContent.publishedEduContentMetadata.title"
+                [level]="
+                  tEC.eduContent.methodLevel && tEC.eduContent.methodLevel.label
                 "
-                [actions]="[
-                  { label: 'testje', icon: 'task:paper', tooltip: 'non' }
-                ]"
-                level="inoefening"
-                [required]="false"
-                fileIcon="educontent-product-type:evaluatie"
-                diaboloPhaseIcon="diabolo-outro"
-              ></campus-task-edu-content-list-item>
+                [required]="tEC.required"
+                [fileIcon]="tEC.eduContent.publishedEduContentMetadata.fileExt"
+                [diaboloPhaseIcon]="
+                  tEC.eduContent.diaboloPhase &&
+                  tEC.eduContent.diaboloPhase.icon
+                "
+              >
+              </campus-task-edu-content-list-item>
             </mat-list-option>
           </ng-container>
         </mat-selection-list>
+        <mat-list
+          #taskContentReordering
+          class="manage-kabas-tasks-detail__list"
+          *ngIf="isReordering"
+          cdkDropList
+        >
+          <ng-container *ngIf="task.taskEduContents.length; else noResults">
+            <mat-list-item cdkDrag *ngFor="let tEC of task.taskEduContents">
+              <mat-icon
+                class="manage-kabas-tasks-detail__list__drag-handle"
+                svgIcon="drag-handle"
+              ></mat-icon>
+              <campus-task-edu-content-list-item
+                [title]="tEC.eduContent.publishedEduContentMetadata.title"
+                [level]="
+                  tEC.eduContent.methodLevel && tEC.eduContent.methodLevel.label
+                "
+                [required]="tEC.required"
+                [fileIcon]="tEC.eduContent.publishedEduContentMetadata.fileExt"
+                [diaboloPhaseIcon]="
+                  tEC.eduContent.diaboloPhase &&
+                  tEC.eduContent.diaboloPhase.icon
+                "
+              >
+              </campus-task-edu-content-list-item>
+            </mat-list-item>
+          </ng-container>
+        </mat-list>
 
         <ng-template #noResults>
           <p>De toegepaste filter bevat geen resultaten.</p>

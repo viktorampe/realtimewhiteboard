@@ -4,6 +4,7 @@ import { EduContentInterface } from './EduContent.interface';
 import { EduContentMetadataInterface } from './EduContentMetadata.interface';
 import { EduContentNoteInterface } from './EduContentNote.interface';
 import { FavoriteInterface } from './Favorite.interface';
+import { MethodLevelInterface } from './MethodLevel.interface';
 import { ProductContentInterface } from './ProductContent.interface';
 import { ResultInterface } from './Result.interface';
 import { TaskInterface } from './Task.interface';
@@ -83,6 +84,12 @@ export class EduContent implements EduContentInterface, ContentInterface {
     return (
       this.publishedEduContentMetadata &&
       this.publishedEduContentMetadata.levelId
+    );
+  }
+  get methodLevel(): MethodLevelInterface {
+    return (
+      this.publishedEduContentMetadata &&
+      this.publishedEduContentMetadata.methodLevel
     );
   }
 }

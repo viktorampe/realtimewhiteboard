@@ -1,6 +1,4 @@
 @mixin pages-manage-kabas-tasks-task-edu-content-list-item-theme() {
-  $pages-manage-kabas-tasks-task-edu-content-list-item__file-icon-height: 35px !default;
-
   $pages-manage-kabas-tasks-task-edu-content-list-item__item-min-width: 50px !default;
 
   $pages-manage-kabas-tasks-task-edu-content-list-item__container-min-width: 100px !default;
@@ -12,11 +10,11 @@
 
   $pages-manage-kabas-tasks-task-edu-content-list-item__actions-color: $primary-font-color-2 !default;
   $pages-manage-kabas-tasks-task-edu-content-list-item__actions-font-size: 0.8rem !default;
+  $pages-manage-kabas-tasks__task-edu-content-list-item-icon-color-start: $pages-manage-kabas-tasks__task-edu-content-list-item-icon-color !default;
 
   .manage-kabas-tasks-task-edu-content-list-item {
     &__file-icon {
-      height: $pages-manage-kabas-tasks-task-edu-content-list-item__file-icon-height !important;
-      min-width: $pages-manage-kabas-tasks-task-edu-content-list-item__item-min-width;
+      color: $pages-manage-kabas-tasks__task-edu-content-list-item-icon-color-start;
     }
     &__container {
       min-width: $pages-manage-kabas-tasks-task-edu-content-list-item__item-min-width;
@@ -38,6 +36,7 @@
         height: $pages-manage-kabas-tasks-task-edu-content-list-item__border-height;
         margin-left: $pages-manage-kabas-tasks-task-edu-content-list-item__border-margin;
         margin-right: $pages-manage-kabas-tasks-task-edu-content-list-item__border-margin;
+        opacity: 8%;
       }
     }
   }

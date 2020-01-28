@@ -1,6 +1,7 @@
 :host {
   display: flex;
   flex-direction: row;
+  align-items: flex-start;
   padding: 5px 0;
 }
 
@@ -13,7 +14,8 @@
   }
 
   &__container {
-    flex: auto;
+    flex: 1 0 30%;
+    min-width: 250px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -40,6 +42,9 @@
         }
       }
     }
+    &--no-actions {
+      align-self: center;
+    }
   }
 
   &__level,
@@ -52,6 +57,7 @@
     text-align: right;
   }
 
+  &__file-icon,
   &__diabolo {
     flex: 0 0 50px;
     align-self: center;

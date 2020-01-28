@@ -4,6 +4,7 @@
   $pages-kabas-tasks__list-option-background-color: $pages-kabas-tasks-background-color--primary !default;
   $pages-kabas-tasks__list-option-background-color--accent: $pages-kabas-tasks-background-color--secondary !default;
   $pages-kabas-tasks__list-option-color--secondary: $pages-kabas-tasks-text-color--secondary !default;
+  $pages-kabas-tasks__list__drag-handle-color: $pages-kabas-tasks-text-color--secondary !default;
   $manage-kabas-tasks-detail__list__primary-action-font-size: 16px !default;
   $manage-kabas-tasks-detail__list__primary-action-height: 65px !default;
   $manage-kabas-tasks-detail__list__primary-action-margin-top: 5px !default;
@@ -43,6 +44,19 @@
     &__list {
       margin-left: $manage-kabas-tasks-detail__list-vertical-margin;
       margin-right: $manage-kabas-tasks-detail__list-vertical-margin;
+
+      &__drag-handle {
+        color: $pages-kabas-tasks__list__drag-handle-color;
+      }
+
+      mat-list-item {
+        display: flex;
+        flex-direction: row;
+
+        campus-task-edu-content-list-item {
+          flex-grow: 1;
+        }
+      }
     }
 
     &__list__primary-action {
@@ -95,7 +109,8 @@
         }
       }
 
-      .mat-list-option {
+      .mat-list-option,
+      .mat-list-item {
         &:nth-child(odd) {
           background-color: $secondary-bg-color;
         }
