@@ -1,32 +1,32 @@
 <mat-icon
-  class="manage-kabas-tasks-task-list-item__file-icon"
+  class="manage-kabas-tasks-task-edu-content-list-item__file-icon"
   svgIcon="{{ fileIcon }}"
 ></mat-icon>
 
-<div class="manage-kabas-tasks-task-list-item__container">
+<div class="manage-kabas-tasks-task-edu-content-list-item__container">
   <div
-    class="manage-kabas-tasks-task-list-item__container__title"
+    class="manage-kabas-tasks-task-edu-content-list-item__container__title"
     campusClickStopPropagation
     >{{ title }}</div
   >
   <div
     *ngIf="actions.length"
-    class="manage-kabas-tasks-task-list-item__container__actions"
+    class="manage-kabas-tasks-task-edu-content-list-item__container__actions"
     ><span>{{ actions[0].label }}</span></div
   >
 </div>
-<div class="manage-kabas-tasks-task-list-item__combined-container">
-  <div class="manage-kabas-tasks-task-list-item__level">
+<div class="manage-kabas-tasks-task-edu-content-list-item__combined-container">
+  <div class="manage-kabas-tasks-task-edu-content-list-item__level">
     {{ level }}
   </div>
 
-  <div class="manage-kabas-tasks-task-list-item__required">
+  <div class="manage-kabas-tasks-task-edu-content-list-item__required">
     <span *ngIf="actions.length"></span> {{ required ? 'moetje' : 'magje' }}
     <span></span>
   </div>
 
   <mat-icon
-    class="manage-kabas-tasks-task-list-item__diabolo"
+    class="manage-kabas-tasks-task-edu-content-list-item__diabolo"
     svgIcon="{{ diaboloPhaseIcon }}"
   ></mat-icon>
 </div>

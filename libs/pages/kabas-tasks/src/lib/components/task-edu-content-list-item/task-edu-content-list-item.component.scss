@@ -4,7 +4,7 @@
   padding: 5px 0;
 }
 
-.manage-kabas-tasks-task-list-item {
+.manage-kabas-tasks-task-edu-content-list-item {
   &__combined {
     &-container {
       display: flex;
@@ -14,40 +14,46 @@
 
   &__container {
     flex: auto;
-    min-width: 100px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     &__title {
       display: inline-block;
     }
+    &__actions {
+      white-space: normal;
+
+      span {
+        cursor: pointer;
+        position: relative;
+        margin-right: 15px;
+
+        &:after {
+          content: '•';
+          pointer-events: none;
+          position: absolute;
+          right: -10px;
+        }
+
+        &:last-child:after {
+          content: '';
+        }
+      }
+    }
   }
+
   &__level,
   &__required {
     display: flex;
     align-items: center;
-    min-width: 50px;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
     text-align: right;
-    span {
-      border-left: 1.5px solid gray;
-      height: 35px;
-      margin-left: 30px;
-      margin-right: 30px;
-      opacity: 8%;
-    }
-  }
-
-  &__file-icon {
-    height: 35px;
-    min-width: 50px;
   }
 
   &__diabolo {
     flex: 0 0 50px;
     align-self: center;
-    min-width: 50px;
   }
 }
