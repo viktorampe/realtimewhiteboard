@@ -20,6 +20,7 @@ import { SearchModule } from '@campus/search';
 import {
   ENVIRONMENT_ICON_MAPPING_TOKEN,
   ENVIRONMENT_TESTING_TOKEN,
+  OPEN_STATIC_CONTENT_SERVICE_TOKEN,
   SharedModule
 } from '@campus/shared';
 import { MockMatIconRegistry } from '@campus/testing';
@@ -93,6 +94,10 @@ describe('ManageKabasTasksDetailComponent', () => {
             queryParams,
             snapshot: { queryParams: queryParams.getValue() }
           }
+        },
+        {
+          provide: OPEN_STATIC_CONTENT_SERVICE_TOKEN,
+          useValue: { open: jest.fn() }
         },
         { provide: MatIconRegistry, useClass: MockMatIconRegistry }
       ]

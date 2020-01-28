@@ -30,6 +30,7 @@
         *ngIf="!task.isPaperTask && selectedContents.length === 1"
         class="shared-header__contextual__button smallIcon"
         iconClass=""
+        (click)="preview(selectedContents[0])"
         ><span>Preview</span></campus-button
       >
       <campus-button
@@ -158,7 +159,10 @@
                 method.name
               }}</span>
             </div>
-            <campus-button>preview</campus-button>
+            <campus-button
+              (click)="preview(selectedContent, !!task.isPaperTask)"
+              >preview</campus-button
+            >
           </ng-container>
         </div>
 
