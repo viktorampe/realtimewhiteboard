@@ -120,7 +120,11 @@
               "
               [class.group]="assignee.type === assigneeTypesEnum.GROUP"
               [class.student]="assignee.type === assigneeTypesEnum.STUDENT"
-              >{{ assignee.label }} <mat-icon svgIcon="close"></mat-icon
+              >{{ assignee.label }}
+              <mat-icon
+                svgIcon="close"
+                (click)="removeAssignee(task, assignee)"
+              ></mat-icon
             ></span>
           </div>
         </div>

@@ -1,5 +1,6 @@
 import { InjectionToken } from '@angular/core';
 import { Observable } from 'rxjs';
+import { BulkUpdateResultInfoInterface } from '../+external-interfaces/bulk-update-result-info';
 import {
   TaskClassGroupInterface,
   TaskEduContentInterface,
@@ -20,14 +21,14 @@ export interface TaskServiceInterface {
   updateTasks(
     userId: number,
     update: Partial<TaskInterface>[]
-  ): Observable<TaskUpdateInfoInterface>;
+  ): Observable<UpdateTaskResultInterface>;
 
   createTask(userId: number, task: TaskInterface): Observable<TaskInterface>;
 
   deleteTasks(
     userId: number,
     taskIds: number[]
-  ): Observable<TaskUpdateInfoInterface>;
+  ): Observable<UpdateTaskResultInterface>;
 
   updateAccess(
     userId: number,
@@ -40,11 +41,14 @@ export interface TaskServiceInterface {
   printSolution(taskId: number);
 }
 
-export interface TaskUpdateInfoInterface {
-  tasks: Partial<TaskInterface>[];
-  errors: {
-    task: string;
-    activeUntil: Date;
-    user: string;
-  }[];
+export interface TaskActiveErrorInterface {
+  task: string;
+  activeUntil: Date;
+  user: string;
 }
+
+export interface UpdateTaskResultInterface
+  extends BulkUpdateResultInfoInterface<
+    TaskInterface,
+    TaskActiveErrorInterface
+  > {}

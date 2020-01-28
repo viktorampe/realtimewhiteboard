@@ -13,6 +13,8 @@ import {
   TaskActions,
   TaskEduContentFixture,
   TaskFixture,
+  TaskServiceInterface,
+  TASK_SERVICE_TOKEN,
   UserQueries
 } from '@campus/dal';
 import { MockDate } from '@campus/testing';
@@ -37,6 +39,7 @@ describe('KabasTaskViewModel', () => {
   let authService: AuthServiceInterface;
   let uuid: Function;
   let dateLocale;
+  let taskService: TaskServiceInterface;
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
@@ -46,7 +49,14 @@ describe('KabasTaskViewModel', () => {
         provideMockStore(),
         { provide: AUTH_SERVICE_TOKEN, useValue: { userId } },
         { provide: 'uuid', useValue: () => 'foo' },
-        { provide: MAT_DATE_LOCALE, useValue: 'en-US' }
+        { provide: MAT_DATE_LOCALE, useValue: 'en-US' },
+        {
+          provide: TASK_SERVICE_TOKEN,
+          useValue: {
+            printTask: jest.fn(),
+            printSolution: jest.fn()
+          }
+        }
       ]
     });
   });
@@ -57,6 +67,7 @@ describe('KabasTaskViewModel', () => {
     uuid = TestBed.get('uuid');
     store = TestBed.get(Store);
     dateLocale = TestBed.get(MAT_DATE_LOCALE);
+    taskService = TestBed.get(TASK_SERVICE_TOKEN);
   });
 
   afterAll(() => {
@@ -295,13 +306,35 @@ describe('KabasTaskViewModel', () => {
         taskClassGroup
       ]);
 
+      const expectedTaskClassGroup = {
+        id: taskClassGroup.id,
+        start: taskClassGroup.start,
+        end: taskClassGroup.end,
+        taskId: task.id,
+        classGroupId: taskClassGroup.relationId
+      };
+      const expectedTaskGroup = {
+        id: taskGroup.id,
+        start: taskGroup.start,
+        end: taskGroup.end,
+        taskId: task.id,
+        groupId: taskGroup.relationId
+      };
+      const expectedTaskStudent = {
+        id: taskStudent.id,
+        start: taskStudent.start,
+        end: taskStudent.end,
+        taskId: task.id,
+        personId: taskStudent.relationId
+      };
+
       expect(spy).toHaveBeenCalledWith(
         new TaskActions.UpdateAccess({
           userId: authService.userId,
           taskId: task.id,
-          taskGroups: [taskGroup],
-          taskStudents: [taskStudent],
-          taskClassGroups: [taskClassGroup]
+          taskGroups: [expectedTaskGroup],
+          taskStudents: [expectedTaskStudent],
+          taskClassGroups: [expectedTaskClassGroup]
         })
       );
     });
@@ -668,6 +701,22 @@ describe('KabasTaskViewModel', () => {
         kabasTasksViewModel.startArchivingTasks(tasks, false);
         expect(spy).toHaveBeenCalledWith(updateAction);
       });
+    });
+  });
+
+  describe('printTask', () => {
+    it('should call the service with the right arguments', () => {
+      kabasTasksViewModel.printTask(1, true);
+
+      expect(taskService.printTask).toHaveBeenCalledWith(1, true);
+    });
+  });
+
+  describe('printSolution', () => {
+    it('should call the service with the right arguments', () => {
+      kabasTasksViewModel.printSolution(1);
+
+      expect(taskService.printSolution).toHaveBeenCalledWith(1);
     });
   });
 });
