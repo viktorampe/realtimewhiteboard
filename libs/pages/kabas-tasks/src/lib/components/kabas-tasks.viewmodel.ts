@@ -294,13 +294,33 @@ export class KabasTasksViewModel {
     taskEduContents: TaskEduContentInterface[],
     required: boolean
   ) {
-    throw new Error('Not implemented yet');
+    this.store.dispatch(
+      new TaskEduContentActions.UpdateTaskEduContents({
+        userId: this.authService.userId,
+        taskEduContents: taskEduContents.map(tec => {
+          return {
+            id: tec.id,
+            changes: { id: tec.id, required }
+          };
+        })
+      })
+    );
   }
 
   public updateTaskEduContentsOrder(
     taskEduContents: TaskEduContentInterface[]
   ) {
-    throw new Error('Not implemented yet');
+    this.store.dispatch(
+      new TaskEduContentActions.UpdateTaskEduContents({
+        userId: this.authService.userId,
+        taskEduContents: taskEduContents.map((tec, index) => {
+          return {
+            id: tec.id,
+            changes: { id: tec.id, index }
+          };
+        })
+      })
+    );
   }
 
   public deleteTaskEduContents(taskEduContentIds: number[]) {

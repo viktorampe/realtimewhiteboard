@@ -289,6 +289,28 @@ describe('KabasTaskViewModel', () => {
     });
   });
 
+  describe('updateTaskEduContentsOrder', () => {
+    it('should dispatch an UpdateTaskEduContents action', () => {
+      const spy = jest.spyOn(store, 'dispatch');
+      const taskEduContents = [
+        new TaskEduContentFixture({ id: 1, index: 1 }),
+        new TaskEduContentFixture({ id: 3, index: 2 }),
+        new TaskEduContentFixture({ id: 2, index: 3 })
+      ];
+      kabasTasksViewModel.updateTaskEduContentsOrder(taskEduContents);
+      expect(spy).toHaveBeenCalledWith(
+        new TaskEduContentActions.UpdateTaskEduContents({
+          userId: authService.userId,
+          taskEduContents: [
+            { id: 1, changes: { id: 1, index: 0 } },
+            { id: 3, changes: { id: 3, index: 1 } },
+            { id: 2, changes: { id: 2, index: 2 } }
+          ]
+        })
+      );
+    });
+  });
+
   describe('updateTaskAccess', () => {
     it('should dispatch an UpdateAction', () => {
       const spy = jest.spyOn(store, 'dispatch');
@@ -739,6 +761,28 @@ describe('KabasTaskViewModel', () => {
       kabasTasksViewModel.printSolution(1);
 
       expect(taskService.printSolution).toHaveBeenCalledWith(1);
+    });
+  });
+
+  describe('updateTaskEduContentRequired', () => {
+    it('should dispatch an UpdateTaskEduContents action', () => {
+      const spy = jest.spyOn(store, 'dispatch');
+      const taskEduContents = [
+        new TaskEduContentFixture({ id: 1, required: false }),
+        new TaskEduContentFixture({ id: 2, required: false }),
+        new TaskEduContentFixture({ id: 3, required: false })
+      ];
+      kabasTasksViewModel.updateTaskEduContentsRequired(taskEduContents, true);
+      expect(spy).toHaveBeenCalledWith(
+        new TaskEduContentActions.UpdateTaskEduContents({
+          userId: authService.userId,
+          taskEduContents: [
+            { id: 1, changes: { id: 1, required: true } },
+            { id: 2, changes: { id: 2, required: true } },
+            { id: 3, changes: { id: 3, required: true } }
+          ]
+        })
+      );
     });
   });
 });
