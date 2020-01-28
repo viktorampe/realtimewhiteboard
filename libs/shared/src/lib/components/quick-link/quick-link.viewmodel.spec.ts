@@ -64,6 +64,7 @@ import {
   QuickLinkInterface
 } from './quick-link.interface';
 import { QuickLinkViewModel } from './quick-link.viewmodel';
+
 describe('QuickLinkViewModel', () => {
   let quickLinkViewModel: QuickLinkViewModel;
   let store: Store<DalState>;
@@ -71,7 +72,7 @@ describe('QuickLinkViewModel', () => {
   let openStaticContentService: OpenStaticContentServiceInterface;
   let scormExerciseService: ScormExerciseServiceInterface;
   let feedBackService: FeedBackServiceInterface;
-  let dateMock: MockDate;
+  const dateMock = new MockDate();
 
   const mockUserId = 186;
   const mockFavorites: FavoriteInterface[] = [
@@ -186,10 +187,6 @@ describe('QuickLinkViewModel', () => {
       useDefaultCancel: false
     })
   };
-
-  beforeAll(() => {
-    dateMock = new MockDate();
-  });
 
   afterAll(() => {
     dateMock.returnRealDate();

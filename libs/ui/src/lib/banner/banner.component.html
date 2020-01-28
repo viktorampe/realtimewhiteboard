@@ -5,7 +5,7 @@
       *ngIf="icon"
       [svgIcon]="icon"
     ></mat-icon>
-    <div class="ui-banner__content__text"> {{ message }} </div>
+    <div class="ui-banner__content__text" [innerHTML]="message"></div>
   </div>
   <div class="ui-banner__buttons">
     <campus-button

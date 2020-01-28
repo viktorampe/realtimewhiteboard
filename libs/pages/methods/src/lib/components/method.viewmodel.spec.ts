@@ -973,10 +973,9 @@ describe('MethodViewModel', () => {
           hot('a', { a: mockIsFavorite })
         );
 
-        expect(FavoriteQueries.getIsFavoriteEduContent).toHaveBeenCalledWith(
-          storeState,
-          { eduContentId: mockBoeke.id }
-        );
+        expect(
+          FavoriteQueries.getIsFavoriteEduContent
+        ).toHaveBeenCalledWith(storeState, { eduContentId: mockBoeke.id });
       });
     });
   });

@@ -20,20 +20,11 @@ export const getLoaded = createSelector(
   (state: State) => state.loaded
 );
 
-export const getAll = createSelector(
-  selectDiaboloPhaseState,
-  selectAll
-);
+export const getAll = createSelector(selectDiaboloPhaseState, selectAll);
 
-export const getCount = createSelector(
-  selectDiaboloPhaseState,
-  selectTotal
-);
+export const getCount = createSelector(selectDiaboloPhaseState, selectTotal);
 
-export const getIds = createSelector(
-  selectDiaboloPhaseState,
-  selectIds
-);
+export const getIds = createSelector(selectDiaboloPhaseState, selectIds);
 
 export const getAllEntities = createSelector(
   selectDiaboloPhaseState,

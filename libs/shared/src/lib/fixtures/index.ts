@@ -1,3 +1,1 @@
-export {
-  EduContentSearchResultFixture
-} from './EduContentSearchResult.fixture';
+export { EduContentSearchResultFixture } from './EduContentSearchResult.fixture';

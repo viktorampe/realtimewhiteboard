@@ -1,21 +1,50 @@
 import { Injectable } from '@angular/core';
-import { LearningAreaFixture, TaskFixture } from '@campus/dal';
+import {
+  ClassGroupFixture,
+  ClassGroupInterface,
+  EduContentFixture,
+  GroupFixture,
+  GroupInterface,
+  LearningAreaFixture,
+  LearningAreaInterface,
+  PersonFixture,
+  PersonInterface,
+  TaskEduContentFixture,
+  TaskEduContentInterface,
+  TaskFixture,
+  TaskInterface
+} from '@campus/dal';
 import { ViewModelInterface } from '@campus/testing';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { AssigneeTypesEnum } from '../interfaces/Assignee.interface';
+import { map } from 'rxjs/operators';
+import {
+  AssigneeInterface,
+  AssigneeTypesEnum
+} from '../interfaces/Assignee.interface';
 import {
   TaskStatusEnum,
   TaskWithAssigneesInterface
 } from '../interfaces/TaskWithAssignees.interface';
-import { KabasTasksViewModel } from './kabas-tasks.viewmodel';
+import {
+  CurrentTaskParams,
+  KabasTasksViewModel
+} from './kabas-tasks.viewmodel';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MockKabasTasksViewModel
   implements ViewModelInterface<KabasTasksViewModel> {
-  public tasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
-  public paperTasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
+  public tasksWithAssignments$: BehaviorSubject<TaskWithAssigneesInterface[]>;
+  public paperTasksWithAssignments$: BehaviorSubject<
+    TaskWithAssigneesInterface[]
+  >;
+  public currentTask$: Observable<TaskWithAssigneesInterface>;
+  public currentTaskParams$: BehaviorSubject<CurrentTaskParams>;
+  public selectableLearningAreas$: BehaviorSubject<LearningAreaInterface[]>;
+  public classGroups$: BehaviorSubject<ClassGroupInterface[]>;
+  public groups$: BehaviorSubject<GroupInterface[]>;
+  public students$: BehaviorSubject<PersonInterface[]>;
 
   constructor() {
     const tasks = this.setupTaskWithAssignments();
@@ -35,6 +64,37 @@ export class MockKabasTasksViewModel
         };
       })
     );
+
+    // this.currentTask$ = this.paperTasksWithAssignments$.pipe(
+    this.currentTask$ = this.getCurrentTask();
+    this.currentTaskParams$ = new BehaviorSubject<CurrentTaskParams>({
+      id: 1
+    });
+
+    this.selectableLearningAreas$ = new BehaviorSubject<
+      LearningAreaInterface[]
+    >([
+      new LearningAreaFixture({ name: 'Wiskunde' }),
+      new LearningAreaFixture({ name: 'Frans' })
+    ]);
+
+    this.classGroups$ = new BehaviorSubject<ClassGroupInterface[]>([
+      new ClassGroupFixture({ id: 1, name: 'klas 1' }),
+      new ClassGroupFixture({ id: 2, name: 'klas 2' }),
+      new ClassGroupFixture({ id: 3, name: 'klas 3' })
+    ]);
+
+    this.groups$ = new BehaviorSubject<GroupInterface[]>([
+      new GroupFixture({ id: 1, name: 'groep 1' }),
+      new GroupFixture({ id: 2, name: 'groep 2' }),
+      new GroupFixture({ id: 3, name: 'groep 3' })
+    ]);
+
+    this.students$ = new BehaviorSubject<PersonInterface[]>([
+      new PersonFixture({ id: 1, displayName: 'leerling 1' }),
+      new PersonFixture({ id: 2, displayName: 'leerling 2' }),
+      new PersonFixture({ id: 3, displayName: 'leerling 3' })
+    ]);
   }
 
   public getTaskDates() {
@@ -61,7 +121,40 @@ export class MockKabasTasksViewModel
       {
         ...new TaskFixture({ archivedAt: null, archivedYear: null }),
         name: 'Titel van de eerste oefening',
+        isPaperTask: false,
         eduContentAmount: 3,
+        eduContents: [
+          new EduContentFixture(
+            { id: 1 },
+            {
+              id: 1,
+              title: 'oefening 1',
+              learningArea: new LearningAreaFixture({ id: 1, name: 'Wiskunde' })
+            }
+          ),
+          new EduContentFixture(
+            { id: 2 },
+            {
+              id: 2,
+              title: 'oefening 2',
+              learningArea: new LearningAreaFixture({
+                id: 2,
+                name: 'Geschiedenis'
+              })
+            }
+          ),
+          new EduContentFixture(
+            { id: 3 },
+            {
+              id: 3,
+              title: 'oefening 3',
+              learningArea: new LearningAreaFixture({
+                id: 3,
+                name: 'Nederlands'
+              })
+            }
+          )
+        ],
         learningArea: new LearningAreaFixture({ id: 1, name: 'wiskunde' }),
         learningAreaId: 1,
         assignees: [
@@ -100,12 +193,15 @@ export class MockKabasTasksViewModel
             end: nextWeek,
             id: 5
           }
-        ]
+        ],
+        startDate: yesterday,
+        endDate: nextWeek
       },
       //Task runs for all assignees in different timespans
       {
         ...new TaskFixture({ archivedAt: null, archivedYear: null }),
         name: 'Titel van de tweede oefening',
+        isPaperTask: false,
         eduContentAmount: 5,
         learningArea: new LearningAreaFixture({ id: 2, name: 'frans' }),
         learningAreaId: 2,
@@ -137,6 +233,7 @@ export class MockKabasTasksViewModel
       {
         ...new TaskFixture({ archivedAt: null, archivedYear: null }),
         name: 'Actieve oefening voor één klasgroep',
+        isPaperTask: false,
         eduContentAmount: 3,
         learningArea: new LearningAreaFixture({ id: 3, name: 'nederlands' }),
         learningAreaId: 3,
@@ -154,6 +251,7 @@ export class MockKabasTasksViewModel
       {
         ...new TaskFixture({ archivedAt: null, archivedYear: null }),
         name: 'Pending oefening voor één klasgroep',
+        isPaperTask: false,
         eduContentAmount: 5,
         learningArea: new LearningAreaFixture({ id: 3, name: 'nederlands' }),
         learningAreaId: 3,
@@ -171,6 +269,7 @@ export class MockKabasTasksViewModel
       {
         ...new TaskFixture({ archivedAt: null, archivedYear: null }),
         name: 'Finished oefening',
+        isPaperTask: false,
         eduContentAmount: 5,
         learningArea: new LearningAreaFixture({ id: 3, name: 'nederlands' }),
         learningAreaId: 3,
@@ -191,6 +290,7 @@ export class MockKabasTasksViewModel
           archivedYear: prevWeek.getFullYear()
         }),
         name: 'Gearchiveerde oefening',
+        isPaperTask: false,
         eduContentAmount: 2,
         learningArea: new LearningAreaFixture({ id: 1, name: 'wiskunde' }),
         learningAreaId: 1,
@@ -206,4 +306,57 @@ export class MockKabasTasksViewModel
       }
     ];
   }
+  public startArchivingTasks(
+    tasks: TaskWithAssigneesInterface[],
+    shouldArchive: boolean
+  ): void {}
+  public removeTasks(tasks: TaskWithAssigneesInterface[]): void {}
+  public toggleFavorite(task: TaskWithAssigneesInterface): void {}
+  public canBeArchivedOrDeleted(task: TaskWithAssigneesInterface): boolean {
+    return true;
+  }
+  public createTask(
+    name: string,
+    learningAreaId: number,
+    type: 'paper' | 'digital'
+  ) {}
+
+  public updateTask(task: TaskInterface) {}
+  public updateTaskAccess(
+    task: TaskInterface,
+    assignees: AssigneeInterface[]
+  ) {}
+
+  private getCurrentTask(): Observable<TaskWithAssigneesInterface> {
+    // return this.paperTasksWithAssignments$.pipe(
+    return this.tasksWithAssignments$.pipe(
+      map(tasks => ({
+        ...tasks[0],
+        taskEduContents: [1, 2, 3].map(
+          id =>
+            new TaskEduContentFixture({
+              eduContentId: id,
+              eduContent: new EduContentFixture(
+                { id },
+                {
+                  id,
+                  title: 'oefening ' + id,
+                  learningArea: new LearningAreaFixture({
+                    id: 1,
+                    name: 'Wiskunde'
+                  })
+                }
+              )
+            })
+        )
+      }))
+    );
+  }
+
+  public updateTaskEduContent(
+    taskEduContents: TaskEduContentInterface[],
+    updatedValues: Partial<TaskEduContentInterface>
+  ): void {}
+
+  public getDeleteInfo(): any {}
 }

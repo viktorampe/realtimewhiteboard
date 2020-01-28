@@ -8,33 +8,27 @@ import {
   TASK_CLASS_GROUP_SERVICE_TOKEN
 } from '../../tasks/task-class-group.service.interface';
 import {
-  LoadTaskClassGroups,
-  TaskClassGroupsActionTypes,
-  TaskClassGroupsLoaded,
-  TaskClassGroupsLoadError
+  loadTaskClassGroups,
+  taskClassGroupsLoaded,
+  taskClassGroupsLoadError
 } from './task-class-group.actions';
 
 @Injectable()
 export class TaskClassGroupEffects {
   @Effect()
-  loadTaskClassGroups$ = this.dataPersistence.fetch(
-    TaskClassGroupsActionTypes.LoadTaskClassGroups,
-    {
-      run: (action: LoadTaskClassGroups, state: DalState) => {
-        if (!action.payload.force && state.taskClassGroups.loaded) return;
-        return this.taskClassGroupService
-          .getAllForUser(action.payload.userId)
-          .pipe(
-            map(
-              taskClassGroups => new TaskClassGroupsLoaded({ taskClassGroups })
-            )
-          );
-      },
-      onError: (action: LoadTaskClassGroups, error) => {
-        return new TaskClassGroupsLoadError(error);
-      }
+  loadTaskClassGroups$ = this.dataPersistence.fetch(loadTaskClassGroups, {
+    run: (action: ReturnType<typeof loadTaskClassGroups>, state: DalState) => {
+      if (!action.force && state.taskClassGroups.loaded) return;
+      return this.taskClassGroupService
+        .getAllForUser(action.userId)
+        .pipe(
+          map(taskClassGroups => taskClassGroupsLoaded({ taskClassGroups }))
+        );
+    },
+    onError: (action: ReturnType<typeof loadTaskClassGroups>, error) => {
+      return taskClassGroupsLoadError({ error });
     }
-  );
+  });
 
   constructor(
     private actions: Actions,

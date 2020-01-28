@@ -112,10 +112,7 @@ export class MethodChapterComponent implements OnInit, AfterViewInit {
 
   public clickOpenToc(tocId: number, depth: number = 1) {
     this.currentTab$
-      .pipe(
-        take(1),
-        withLatestFrom(this.currentMethodParams$)
-      )
+      .pipe(take(1), withLatestFrom(this.currentMethodParams$))
       .subscribe(([tab, currentMethodParams]) => {
         const staticNavParts = ['methods', currentMethodParams.book];
 
