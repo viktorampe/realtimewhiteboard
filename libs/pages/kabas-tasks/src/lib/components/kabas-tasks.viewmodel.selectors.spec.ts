@@ -4,6 +4,9 @@ import {
   ClassGroupFixture,
   ClassGroupReducer,
   DalState,
+  DiaboloPhaseActions,
+  DiaboloPhaseFixture,
+  DiaboloPhaseReducer,
   EduContentActions,
   EduContentFixture,
   EduContentReducer,
@@ -22,6 +25,9 @@ import {
   LinkedPersonReducer,
   MethodActions,
   MethodFixture,
+  MethodLevelActions,
+  MethodLevelFixture,
+  MethodLevelReducer,
   MethodReducer,
   PersonFixture,
   TaskActions,
@@ -80,6 +86,8 @@ describe('Kabas-tasks viewmodel selectors', () => {
           TaskStudentReducer,
           MethodReducer,
           FavoriteReducer,
+          DiaboloPhaseReducer,
+          MethodLevelReducer,
           EduContentReducer
         ])
       ],
@@ -398,21 +406,51 @@ describe('Kabas-tasks viewmodel selectors', () => {
             index: 1,
             taskId: 1,
             eduContentId: 3,
-            eduContent: new EduContentFixture({ id: 3 })
+            eduContent: new EduContentFixture(
+              { id: 3 },
+              {
+                methodIds: [1, 2],
+                methodLevel: new MethodLevelFixture({
+                  label: 'Kikker',
+                  levelId: 1,
+                  methodId: 1
+                })
+              }
+            )
           }),
           new TaskEduContentFixture({
             id: 456,
             index: 2,
             taskId: 1,
             eduContentId: 2,
-            eduContent: new EduContentFixture({ id: 2 })
+            eduContent: new EduContentFixture(
+              { id: 2 },
+              {
+                methodIds: [1, 2],
+                methodLevel: new MethodLevelFixture({
+                  label: 'Kikker',
+                  levelId: 1,
+                  methodId: 1
+                })
+              }
+            )
           }),
           new TaskEduContentFixture({
             id: 123,
             index: 3,
             taskId: 1,
             eduContentId: 1,
-            eduContent: new EduContentFixture({ id: 1 })
+            eduContent: new EduContentFixture(
+              { id: 1 },
+              {
+                methodIds: [1, 2],
+                methodLevel: new MethodLevelFixture({
+                  label: 'Kikker',
+                  levelId: 1,
+                  methodId: 1
+                })
+              }
+            )
           })
         ],
         learningArea: new LearningAreaFixture({ name: 'wiskunde' }),
@@ -480,6 +518,8 @@ function hydrateStore(store, date) {
     getLoadTaskGroupsAction(date),
     getLoadTaskStudentsAction(date),
     getLoadMethodsAction(),
+    getLoadDiaboloPhasesAction(),
+    getLoadMethodLevelsAction(),
     getLoadAllowedMethodsAction(),
     getLoadFavoritesAction()
   ];
@@ -541,6 +581,21 @@ function getLoadAllowedMethodsAction() {
   });
 }
 
+function getLoadDiaboloPhasesAction() {
+  return new DiaboloPhaseActions.DiaboloPhasesLoaded({
+    diaboloPhases: [new DiaboloPhaseFixture()]
+  });
+}
+
+function getLoadMethodLevelsAction() {
+  return new MethodLevelActions.MethodLevelsLoaded({
+    methodLevels: [
+      new MethodLevelFixture({ label: 'Kikker', levelId: 1, methodId: 1 }),
+      new MethodLevelFixture({ label: 'Knei', levelId: 2, methodId: 1 })
+    ]
+  });
+}
+
 function getLoadClassGroupsAction() {
   return new ClassGroupActions.ClassGroupsLoaded({
     classGroups: [
@@ -552,10 +607,10 @@ function getLoadClassGroupsAction() {
 function getLoadEduContentsAction() {
   return new EduContentActions.EduContentsLoaded({
     eduContents: [
-      new EduContentFixture({ id: 1 }),
-      new EduContentFixture({ id: 2 }),
-      new EduContentFixture({ id: 3 }),
-      new EduContentFixture({ id: 4 })
+      new EduContentFixture({ id: 1 }, { methodIds: [1, 2] }),
+      new EduContentFixture({ id: 2 }, { methodIds: [1, 2] }),
+      new EduContentFixture({ id: 3 }, { methodIds: [1, 2] }),
+      new EduContentFixture({ id: 4 }, { methodIds: [1, 2] })
     ]
   });
 }

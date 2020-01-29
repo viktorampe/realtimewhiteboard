@@ -37,6 +37,7 @@ export const icons = {
   'reset-filters': 'assets/icons/material/reset.svg',
   'general-file': 'assets/icons/general-file.svg',
   method: 'assets/icons/methods.svg',
+  'drag-handle': 'assets/icons/drag-handle.svg',
   //TODO: These are TEMPORARY SVGs for Diabolo that I made from the PNGs
   //get the OFFICIAL files from Antoon later
   'diabolo-intro': 'assets/icons/diabolo/intro.svg',

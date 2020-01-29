@@ -30,6 +30,7 @@
         *ngIf="!task.isPaperTask && selectedContents.length === 1"
         class="shared-header__contextual__button smallIcon"
         iconClass=""
+        (click)="preview(selectedContents[0])"
         ><span>Preview</span></campus-button
       >
       <campus-button
@@ -41,6 +42,7 @@
       <campus-button
         class="shared-header__contextual__button smallIcon"
         iconClass="delete"
+        (click)="clickRemoveTaskEduContents(selectedContents)"
         ><span>Verwijderen</span></campus-button
       >
     </ng-template>
@@ -175,7 +177,11 @@
           >
         </ng-container>
         <campus-button primary>+ oefening toevoegen</campus-button>
-        <campus-button danger (click)="clickDeleteTask(task)">
+        <campus-button
+          danger
+          (click)="clickDeleteTask(task)"
+          [disabled]="isActiveTask(task)"
+        >
           verwijder taak
         </campus-button>
       </ng-container>
@@ -191,13 +197,18 @@
           >
             <h2>{{ metadata.title }}</h2>
             <p>{{ metadata.description }}</p>
-            <div>{{ metadata.learningArea.name }}</div>
+            <div *ngIf="metadata.learningArea">{{
+              metadata.learningArea.name
+            }}</div>
             <div *ngIf="metadata.methods" class="list-split">
               <span *ngFor="let method of metadata.methods">{{
                 method.name
               }}</span>
             </div>
-            <campus-button>preview</campus-button>
+            <campus-button
+              (click)="preview(selectedContent, !!task.isPaperTask)"
+              >preview</campus-button
+            >
           </ng-container>
         </div>
 
@@ -211,7 +222,11 @@
           </mat-radio-group>
         </div>
 
-        <campus-button danger>verwijder oefeningen</campus-button>
+        <campus-button
+          danger
+          (click)="clickRemoveTaskEduContents(selectedContents)"
+          >verwijder oefeningen</campus-button
+        >
       </ng-template>
     </div>
   </campus-side-sheet-body>
@@ -258,19 +273,60 @@
             !taskContent.selectedOptions.isEmpty()
           "
           (selectionChange)="onSelectionChange()"
+          *ngIf="!isReordering"
         >
           <ng-container *ngIf="task.taskEduContents.length; else noResults">
             <mat-list-option
               #option
-              *ngFor="let taskEduContent of task.taskEduContents"
+              *ngFor="let tEC of task.taskEduContents"
               checkboxPosition="before"
               [class.mat-list-option--selected]="option.selected"
-              [value]="taskEduContent"
+              [value]="tEC"
             >
-              {{ taskEduContent.eduContent.publishedEduContentMetadata.title }}
+              <campus-task-edu-content-list-item
+                [title]="tEC.eduContent.publishedEduContentMetadata.title"
+                [level]="
+                  tEC.eduContent.methodLevel && tEC.eduContent.methodLevel.label
+                "
+                [required]="tEC.required"
+                [fileIcon]="tEC.eduContent.publishedEduContentMetadata.fileExt"
+                [diaboloPhaseIcon]="
+                  tEC.eduContent.diaboloPhase &&
+                  tEC.eduContent.diaboloPhase.icon
+                "
+              >
+              </campus-task-edu-content-list-item>
             </mat-list-option>
           </ng-container>
         </mat-selection-list>
+        <mat-list
+          #taskContentReordering
+          class="manage-kabas-tasks-detail__list"
+          *ngIf="isReordering"
+          cdkDropList
+        >
+          <ng-container *ngIf="task.taskEduContents.length; else noResults">
+            <mat-list-item cdkDrag *ngFor="let tEC of task.taskEduContents">
+              <mat-icon
+                class="manage-kabas-tasks-detail__list__drag-handle"
+                svgIcon="drag-handle"
+              ></mat-icon>
+              <campus-task-edu-content-list-item
+                [title]="tEC.eduContent.publishedEduContentMetadata.title"
+                [level]="
+                  tEC.eduContent.methodLevel && tEC.eduContent.methodLevel.label
+                "
+                [required]="tEC.required"
+                [fileIcon]="tEC.eduContent.publishedEduContentMetadata.fileExt"
+                [diaboloPhaseIcon]="
+                  tEC.eduContent.diaboloPhase &&
+                  tEC.eduContent.diaboloPhase.icon
+                "
+              >
+              </campus-task-edu-content-list-item>
+            </mat-list-item>
+          </ng-container>
+        </mat-list>
 
         <ng-template #noResults>
           <p>De toegepaste filter bevat geen resultaten.</p>

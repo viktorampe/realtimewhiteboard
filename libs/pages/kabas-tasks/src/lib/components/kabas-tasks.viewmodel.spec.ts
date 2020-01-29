@@ -11,6 +11,7 @@ import {
   getRouterState,
   PersonFixture,
   TaskActions,
+  TaskEduContentActions,
   TaskEduContentFixture,
   TaskFixture,
   TaskServiceInterface,
@@ -283,6 +284,28 @@ describe('KabasTaskViewModel', () => {
         new TaskActions.UpdateTask({
           userId: authService.userId,
           task: { id: task.id, changes: { ...task } }
+        })
+      );
+    });
+  });
+
+  describe('updateTaskEduContentsOrder', () => {
+    it('should dispatch an UpdateTaskEduContents action', () => {
+      const spy = jest.spyOn(store, 'dispatch');
+      const taskEduContents = [
+        new TaskEduContentFixture({ id: 1, index: 1 }),
+        new TaskEduContentFixture({ id: 3, index: 2 }),
+        new TaskEduContentFixture({ id: 2, index: 3 })
+      ];
+      kabasTasksViewModel.updateTaskEduContentsOrder(taskEduContents);
+      expect(spy).toHaveBeenCalledWith(
+        new TaskEduContentActions.UpdateTaskEduContents({
+          userId: authService.userId,
+          taskEduContents: [
+            { id: 1, changes: { id: 1, index: 0 } },
+            { id: 3, changes: { id: 3, index: 1 } },
+            { id: 2, changes: { id: 2, index: 2 } }
+          ]
         })
       );
     });
@@ -564,6 +587,27 @@ describe('KabasTaskViewModel', () => {
     });
   });
 
+  describe('delete TaskEduContents', () => {
+    const taskEduContents = [
+      new TaskEduContentFixture({ id: 1 }),
+      new TaskEduContentFixture({ id: 2 }),
+      new TaskEduContentFixture({ id: 3 })
+    ];
+
+    it('should dispatch deleteTaskEduContent', () => {
+      const spy = jest.spyOn(store, 'dispatch');
+      const taskEduContentIds = taskEduContents.map(tec => tec.id);
+      const destroyAction = new TaskEduContentActions.StartDeleteTaskEduContents(
+        {
+          userId: authService.userId,
+          taskEduContentIds
+        }
+      );
+      kabasTasksViewModel.deleteTaskEduContents(taskEduContentIds);
+      expect(spy).toHaveBeenCalledWith(destroyAction);
+    });
+  });
+
   describe('startArchivingTasks', () => {
     let taskAssignees;
     beforeEach(() => {
@@ -717,6 +761,28 @@ describe('KabasTaskViewModel', () => {
       kabasTasksViewModel.printSolution(1);
 
       expect(taskService.printSolution).toHaveBeenCalledWith(1);
+    });
+  });
+
+  describe('updateTaskEduContentRequired', () => {
+    it('should dispatch an UpdateTaskEduContents action', () => {
+      const spy = jest.spyOn(store, 'dispatch');
+      const taskEduContents = [
+        new TaskEduContentFixture({ id: 1, required: false }),
+        new TaskEduContentFixture({ id: 2, required: false }),
+        new TaskEduContentFixture({ id: 3, required: false })
+      ];
+      kabasTasksViewModel.updateTaskEduContentsRequired(taskEduContents, true);
+      expect(spy).toHaveBeenCalledWith(
+        new TaskEduContentActions.UpdateTaskEduContents({
+          userId: authService.userId,
+          taskEduContents: [
+            { id: 1, changes: { id: 1, required: true } },
+            { id: 2, changes: { id: 2, required: true } },
+            { id: 3, changes: { id: 3, required: true } }
+          ]
+        })
+      );
     });
   });
 });

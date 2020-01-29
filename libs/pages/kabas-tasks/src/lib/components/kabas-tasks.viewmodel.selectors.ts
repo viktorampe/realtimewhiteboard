@@ -1,5 +1,9 @@
 import {
   ClassGroupQueries,
+  DiaboloPhaseInterface,
+  DiaboloPhaseQueries,
+  EduContent,
+  EduContentInterface,
   EduContentQueries,
   FavoriteInterface,
   FavoriteQueries,
@@ -8,6 +12,8 @@ import {
   LearningAreaQueries,
   LinkedPersonQueries,
   MethodInterface,
+  MethodLevelInterface,
+  MethodLevelQueries,
   MethodQueries,
   TaskClassGroupQueries,
   TaskEduContentInterface,
@@ -181,17 +187,49 @@ export const getTasksWithAssignmentsByType = createSelector(
 );
 
 export const getTaskWithAssignmentAndEduContents = createSelector(
-  [getAllTasksWithAssignments, EduContentQueries.getAllEntities],
-  (tasksWithAssignments, eduContents, props: { taskId: number }) => {
+  [
+    getAllTasksWithAssignments,
+    EduContentQueries.getAllEntities,
+    DiaboloPhaseQueries.getAllEntities,
+    MethodLevelQueries.getAll,
+    MethodQueries.getAllowedMethods
+  ],
+  (
+    tasksWithAssignments: TaskWithAssigneesInterface[],
+    eduContents: Dictionary<EduContentInterface>,
+    diaboloPhases: Dictionary<DiaboloPhaseInterface>,
+    methodLevels: MethodLevelInterface[],
+    allowedMethods: MethodInterface[],
+    props: { taskId: number }
+  ) => {
     const foundTask = {
       ...tasksWithAssignments.find(task => task.id === props.taskId)
     };
 
     foundTask.taskEduContents = foundTask.taskEduContents.length
       ? foundTask.taskEduContents.map(tEdu => {
+          const eduContent = eduContents[tEdu.eduContentId];
+          const methodLevel = methodLevelForEduContent(
+            eduContent,
+            allowedMethods,
+            methodLevels
+          );
+
+          const publishedEduContentMetadata = {
+            ...eduContent.publishedEduContentMetadata,
+            diaboloPhase:
+              diaboloPhases[
+                eduContent.publishedEduContentMetadata.diaboloPhaseId
+              ],
+            methodLevel
+          };
+
           return {
             ...tEdu,
-            eduContent: eduContents[tEdu.eduContentId]
+            eduContent: {
+              ...eduContent,
+              publishedEduContentMetadata
+            } as EduContent
           };
         })
       : [];
@@ -211,7 +249,12 @@ function mapToTaskWithAssigneeInterface(
     ...task,
     learningArea: learningArea,
     eduContentAmount: taskEduContents ? taskEduContents.length : 0,
-    taskEduContents: (taskEduContents || []).sort((a, b) => a.index - b.index),
+    taskEduContents: (taskEduContents || [])
+      .sort((a, b) => a.index - b.index)
+      .map(tEdu => ({
+        ...tEdu,
+        eduContent: tEdu.eduContent as EduContent
+      })),
     assignees: assigneesByTask[task.id] || [],
     isFavorite: favoriteTaskIds.includes(task.id)
   });
@@ -241,4 +284,21 @@ function addTaskDates(
   }
 
   return { ...taskWithAssignees, startDate, endDate, status };
+}
+
+function methodLevelForEduContent(
+  eduContent: EduContentInterface,
+  allowedMethods: MethodInterface[],
+  methodLevels: MethodLevelInterface[]
+) {
+  const allowedEduContentMethodId = eduContent.publishedEduContentMetadata.methodIds.find(
+    methodId =>
+      allowedMethods.some(allowedMethod => allowedMethod.id === methodId)
+  );
+
+  return methodLevels.find(
+    mLevel =>
+      mLevel.methodId === allowedEduContentMethodId &&
+      mLevel.levelId === eduContent.publishedEduContentMetadata.levelId
+  );
 }

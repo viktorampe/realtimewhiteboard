@@ -22,6 +22,7 @@ import { SearchModule } from '@campus/search';
 import {
   ENVIRONMENT_ICON_MAPPING_TOKEN,
   ENVIRONMENT_TESTING_TOKEN,
+  OPEN_STATIC_CONTENT_SERVICE_TOKEN,
   SharedModule
 } from '@campus/shared';
 import { MockMatIconRegistry } from '@campus/testing';
@@ -39,6 +40,7 @@ import {
   NewTaskComponent,
   NewTaskFormValues
 } from '../new-task/new-task.component';
+import { TaskEduContentListItemComponent } from '../task-edu-content-list-item/task-edu-content-list-item.component';
 import { AssigneeInterface } from './../../interfaces/Assignee.interface';
 import { TaskWithAssigneesInterface } from './../../interfaces/TaskWithAssignees.interface';
 import { ManageKabasTasksAssigneeModalComponent } from './../manage-kabas-tasks-assignee-modal/manage-kabas-tasks-assignee-modal.component';
@@ -64,7 +66,10 @@ describe('ManageKabasTasksDetailComponent', () => {
         MatRadioModule,
         RouterTestingModule
       ],
-      declarations: [ManageKabasTasksDetailComponent],
+      declarations: [
+        ManageKabasTasksDetailComponent,
+        TaskEduContentListItemComponent
+      ],
       providers: [
         { provide: KabasTasksViewModel, useClass: MockKabasTasksViewModel },
         {
@@ -72,6 +77,10 @@ describe('ManageKabasTasksDetailComponent', () => {
           useValue: {}
         },
         { provide: ENVIRONMENT_TESTING_TOKEN, useValue: {} },
+        {
+          provide: HAMMER_LOADER,
+          useValue: () => new Promise(() => {})
+        },
         {
           provide: MatDialog,
           useValue: {
@@ -88,11 +97,15 @@ describe('ManageKabasTasksDetailComponent', () => {
             snapshot: { queryParams: queryParams.getValue() }
           }
         },
-        { provide: MatIconRegistry, useClass: MockMatIconRegistry },
         {
           provide: HAMMER_LOADER,
           useValue: () => new Promise(() => {})
-        }
+        },
+        {
+          provide: OPEN_STATIC_CONTENT_SERVICE_TOKEN,
+          useValue: { open: jest.fn() }
+        },
+        { provide: MatIconRegistry, useClass: MockMatIconRegistry }
       ]
     });
   });

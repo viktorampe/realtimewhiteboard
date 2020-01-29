@@ -1,13 +1,18 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatSelectionList } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
+  EduContent,
   EduContentInterface,
   LearningAreaInterface,
   TaskEduContentInterface,
   TaskInterface
 } from '@campus/dal';
 import { SearchFilterCriteriaInterface } from '@campus/search';
+import {
+  OpenStaticContentServiceInterface,
+  OPEN_STATIC_CONTENT_SERVICE_TOKEN
+} from '@campus/shared';
 import { ConfirmationModalComponent, SideSheetComponent } from '@campus/ui';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { filter, map, switchMap, take, withLatestFrom } from 'rxjs/operators';
@@ -15,7 +20,10 @@ import {
   AssigneeInterface,
   AssigneeTypesEnum
 } from '../../interfaces/Assignee.interface';
-import { TaskWithAssigneesInterface } from '../../interfaces/TaskWithAssignees.interface';
+import {
+  TaskStatusEnum,
+  TaskWithAssigneesInterface
+} from '../../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
 import { ManageKabasTasksAssigneeDataInterface } from '../manage-kabas-tasks-assignee-modal/manage-kabas-tasks-assignee-data.interface';
 import { ManageKabasTasksAssigneeModalComponent } from '../manage-kabas-tasks-assignee-modal/manage-kabas-tasks-assignee-modal.component';
@@ -61,7 +69,9 @@ export class ManageKabasTasksDetailComponent implements OnInit {
     private viewModel: KabasTasksViewModel,
     private dialog: MatDialog,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    @Inject(OPEN_STATIC_CONTENT_SERVICE_TOKEN)
+    private openStaticContentService: OpenStaticContentServiceInterface
   ) {
     this.isNewTask$ = this.viewModel.currentTaskParams$.pipe(
       map(currentTaskParams => !currentTaskParams.id)
@@ -280,8 +290,21 @@ export class ManageKabasTasksDetailComponent implements OnInit {
   public clickPrintTask() {}
   public printTask(task: TaskInterface, withNames: boolean) {}
   public printSolution(task: TaskInterface) {}
-  public preview(eduContent: EduContentInterface) {}
+
+  public preview(eduContent: EduContentInterface, openDialog: boolean = false) {
+    const content = Object.assign<EduContent, EduContentInterface>(
+      new EduContent(),
+      eduContent
+    );
+    this.openStaticContentService.open(content, false, !!openDialog);
+  }
+
   public clickRemoveTaskEduContents(
     taskEduContents: TaskEduContentInterface[]
-  ) {}
+  ) {
+    this.viewModel.deleteTaskEduContents(taskEduContents.map(tec => tec.id));
+  }
+  public isActiveTask(task: TaskWithAssigneesInterface) {
+    return task.status === TaskStatusEnum.ACTIVE;
+  }
 }
