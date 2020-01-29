@@ -526,15 +526,6 @@ describe('ManageKabasTasksDetailComponent', () => {
       expect(component.isReordering).toBeFalsy();
     });
 
-    it('should initialize reordableTaskEduContent stream when start reordering', () => {
-      component.toggleIsReordering();
-      expect(component.reorderableTaskEduContents$).toBeObservable(
-        hot('a', {
-          a: mockCurrentTask.taskEduContents
-        })
-      );
-    });
-
     it('should update reorderableTaskEduContents$ when dropping element', () => {
       const { taskEduContents } = mockCurrentTask;
 

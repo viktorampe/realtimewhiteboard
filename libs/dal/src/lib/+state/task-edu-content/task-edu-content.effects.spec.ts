@@ -7,7 +7,7 @@ import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/angular';
 import { hot } from '@nrwl/angular/testing';
 import { undo } from 'ngrx-undo';
-import { from, Observable, of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { TaskEduContentReducer } from '.';
 import {
   EffectFeedbackFixture,
@@ -467,10 +467,12 @@ describe('TaskEduContentEffects', () => {
         priority: Priority.HIGH
       });
       const addFeedbackAction = new AddEffectFeedback({ effectFeedback });
-      expectInAndOut(
-        effects.updateTaskEduContents$,
-        updateAction,
-        from([undo(updateAction), addFeedbackAction])
+      actions = hot('a', { a: updateAction });
+      expect(effects.updateTaskEduContents$).toBeObservable(
+        hot('(ab)', {
+          a: undo(updateAction),
+          b: addFeedbackAction
+        })
       );
     });
   });
