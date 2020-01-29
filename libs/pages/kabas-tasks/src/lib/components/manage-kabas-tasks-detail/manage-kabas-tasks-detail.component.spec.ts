@@ -1,3 +1,5 @@
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
+import { DebugElement } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
 import {
   MatDialog,
@@ -5,7 +7,8 @@ import {
   MatIconRegistry,
   MatRadioModule,
   MatSelectModule,
-  MatSlideToggleModule
+  MatSlideToggleModule,
+  MatTooltip
 } from '@angular/material';
 import { By, HAMMER_LOADER } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
@@ -29,6 +32,7 @@ import { hot } from '@nrwl/angular/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { BehaviorSubject, of } from 'rxjs';
 import { AssigneeFixture } from '../../interfaces/Assignee.fixture';
+import { TaskEduContentWithEduContentInterface } from '../../interfaces/TaskEduContentWithEduContent.interface';
 import {
   CurrentTaskParams,
   KabasTasksViewModel
@@ -94,6 +98,10 @@ describe('ManageKabasTasksDetailComponent', () => {
             queryParams,
             snapshot: { queryParams: queryParams.getValue() }
           }
+        },
+        {
+          provide: HAMMER_LOADER,
+          useValue: () => new Promise(() => {})
         },
         {
           provide: OPEN_STATIC_CONTENT_SERVICE_TOKEN,
@@ -442,6 +450,131 @@ describe('ManageKabasTasksDetailComponent', () => {
       expect(taskInfoDE).toBeFalsy();
       expect(eduContentInfoDE.length).toBe(2);
     });
+
+    describe('links', () => {
+      const getSideBarLinks = () =>
+        fixture.debugElement.queryAll(
+          By.css('.manage-kabas-tasks-detail__info__link')
+        );
+
+      fdescribe('paper task', () => {
+        let mockViewmodel: MockKabasTasksViewModel;
+        let currentTask: TaskWithAssigneesInterface;
+        let restOfTasks: TaskWithAssigneesInterface[];
+
+        const updateCurrentTask = newCurrentTask => {
+          mockViewmodel.tasksWithAssignments$.next([
+            newCurrentTask,
+            ...restOfTasks
+          ]);
+          fixture.detectChanges();
+        };
+
+        beforeEach(() => {
+          mockViewmodel = viewModel as MockKabasTasksViewModel;
+
+          [
+            currentTask,
+            ...restOfTasks
+          ] = mockViewmodel.tasksWithAssignments$.value;
+
+          currentTask.isPaperTask = true;
+
+          updateCurrentTask(currentTask);
+        });
+
+        describe('link: Afdrukken met namen', () => {
+          let link: DebugElement;
+
+          beforeEach(() => {
+            link = getSideBarLinks()[0];
+          });
+
+          it('should show the correct text', () => {
+            const linkText = link.nativeElement.textContent.trim();
+            const expected = 'Afdrukken met namen';
+            expect(linkText).toEqual(expected);
+          });
+
+          it('should be disabled when there are no assignees', () => {
+            currentTask.assignees = [];
+            updateCurrentTask(currentTask);
+
+            expect(link.nativeElement.classList).toContain(
+              'manage-kabas-tasks-detail__info__link--disabled'
+            );
+          });
+
+          it('should have a tooltip when there are no assignees', () => {
+            currentTask.assignees = [];
+            updateCurrentTask(currentTask);
+
+            const tooltip: MatTooltip = link.injector.get<MatTooltip>(
+              MatTooltip
+            );
+
+            expect(tooltip.message).toBe('Deze taak is aan niemand toegekend.');
+          });
+
+          it('should call the correct handler', () => {
+            component.printTask = jest.fn();
+            link.triggerEventHandler('click', null);
+
+            expect(component.printTask).toHaveBeenCalledWith(
+              jasmine.objectContaining(currentTask),
+              true
+            );
+          });
+        });
+
+        describe('link: Afdrukken zonder namen', () => {
+          let link: DebugElement;
+
+          beforeEach(() => {
+            link = getSideBarLinks()[1];
+          });
+
+          it('should show the correct text', () => {
+            const linkText = link.nativeElement.textContent.trim();
+            const expected = 'Afdrukken zonder namen';
+            expect(linkText).toEqual(expected);
+          });
+
+          it('should call the correct handler', () => {
+            component.printTask = jest.fn();
+            link.triggerEventHandler('click', null);
+
+            expect(component.printTask).toHaveBeenCalledWith(
+              jasmine.objectContaining(currentTask),
+              false
+            );
+          });
+        });
+
+        describe('link: Correctiesleutel afdrukken', () => {
+          let link: DebugElement;
+
+          beforeEach(() => {
+            link = getSideBarLinks()[2];
+          });
+
+          it('should show the correct text', () => {
+            const linkText = link.nativeElement.textContent.trim();
+            const expected = 'Correctiesleutel afdrukken';
+            expect(linkText).toEqual(expected);
+          });
+
+          it('should call the correct handler', () => {
+            component.printSolution = jest.fn();
+            link.triggerEventHandler('click', null);
+
+            expect(component.printSolution).toHaveBeenCalledWith(
+              jasmine.objectContaining(currentTask)
+            );
+          });
+        });
+      });
+    });
   });
 
   describe('update actions', () => {
@@ -502,6 +635,60 @@ describe('ManageKabasTasksDetailComponent', () => {
         mockCurrentTask,
         remainingAssignees
       );
+    });
+  });
+
+  describe('reordering', () => {
+    let mockViewModel: MockKabasTasksViewModel;
+    let mockCurrentTask: TaskWithAssigneesInterface;
+
+    beforeEach(() => {
+      mockViewModel = viewModel;
+      mockViewModel.currentTask$.subscribe(task => {
+        mockCurrentTask = task;
+      });
+      component.isReordering = false;
+    });
+
+    it('it should toggle isReordering', () => {
+      component.toggleIsReordering();
+      expect(component.isReordering).toBeTruthy();
+      component.toggleIsReordering();
+      expect(component.isReordering).toBeFalsy();
+    });
+
+    it('should update reorderableTaskEduContents$ when dropping element', () => {
+      const { taskEduContents } = mockCurrentTask;
+
+      const event = { previousIndex: 2, currentIndex: 1 } as CdkDragDrop<
+        TaskEduContentWithEduContentInterface[]
+      >;
+      const expected = [
+        taskEduContents[0],
+        taskEduContents[2],
+        taskEduContents[1]
+      ];
+
+      component.dropTaskEduContent(taskEduContents, event);
+
+      expect(component.reorderableTaskEduContents$).toBeObservable(
+        hot('a', {
+          a: expected
+        })
+      );
+    });
+
+    it('should call updateTaskEduContentsOrder and toggle the mode', () => {
+      const { taskEduContents } = mockCurrentTask;
+      component.isReordering = true;
+      spyOn(mockViewModel, 'updateTaskEduContentsOrder');
+
+      component.saveOrder();
+
+      expect(mockViewModel.updateTaskEduContentsOrder).toHaveBeenCalledWith(
+        taskEduContents
+      );
+      expect(component.isReordering).toBeFalsy();
     });
   });
 });

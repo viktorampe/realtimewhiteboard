@@ -451,7 +451,7 @@ describe('TaskEduContentEffects', () => {
       );
     });
 
-    it('should dispatch feedback on error', () => {
+    it('should dispatch feedback and undo on error', () => {
       updateSpy.mockRejectedValue(new Error('💩'));
       effectFeedback = new EffectFeedback({
         id: uuid(),
@@ -467,10 +467,12 @@ describe('TaskEduContentEffects', () => {
         priority: Priority.HIGH
       });
       const addFeedbackAction = new AddEffectFeedback({ effectFeedback });
-      expectInAndOut(
-        effects.updateTaskEduContents$,
-        updateAction,
-        addFeedbackAction
+      actions = hot('a', { a: updateAction });
+      expect(effects.updateTaskEduContents$).toBeObservable(
+        hot('(ab)', {
+          a: undo(updateAction),
+          b: addFeedbackAction
+        })
       );
     });
   });
