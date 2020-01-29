@@ -1,3 +1,4 @@
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { DebugElement } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
 import {
@@ -31,6 +32,7 @@ import { hot } from '@nrwl/angular/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { BehaviorSubject, of } from 'rxjs';
 import { AssigneeFixture } from '../../interfaces/Assignee.fixture';
+import { TaskEduContentWithEduContentInterface } from '../../interfaces/TaskEduContentWithEduContent.interface';
 import {
   CurrentTaskParams,
   KabasTasksViewModel
@@ -729,6 +731,60 @@ describe('ManageKabasTasksDetailComponent', () => {
       expect(component.printSolution).toHaveBeenCalledWith(
         jasmine.objectContaining(currentTask)
       );
+    });
+  });
+
+  describe('reordering', () => {
+    let mockViewModel: MockKabasTasksViewModel;
+    let mockCurrentTask: TaskWithAssigneesInterface;
+
+    beforeEach(() => {
+      mockViewModel = viewModel;
+      mockViewModel.currentTask$.subscribe(task => {
+        mockCurrentTask = task;
+      });
+      component.isReordering = false;
+    });
+
+    it('it should toggle isReordering', () => {
+      component.toggleIsReordering();
+      expect(component.isReordering).toBeTruthy();
+      component.toggleIsReordering();
+      expect(component.isReordering).toBeFalsy();
+    });
+
+    it('should update reorderableTaskEduContents$ when dropping element', () => {
+      const { taskEduContents } = mockCurrentTask;
+
+      const event = { previousIndex: 2, currentIndex: 1 } as CdkDragDrop<
+        TaskEduContentWithEduContentInterface[]
+      >;
+      const expected = [
+        taskEduContents[0],
+        taskEduContents[2],
+        taskEduContents[1]
+      ];
+
+      component.dropTaskEduContent(taskEduContents, event);
+
+      expect(component.reorderableTaskEduContents$).toBeObservable(
+        hot('a', {
+          a: expected
+        })
+      );
+    });
+
+    it('should call updateTaskEduContentsOrder and toggle the mode', () => {
+      const { taskEduContents } = mockCurrentTask;
+      component.isReordering = true;
+      spyOn(mockViewModel, 'updateTaskEduContentsOrder');
+
+      component.saveOrder();
+
+      expect(mockViewModel.updateTaskEduContentsOrder).toHaveBeenCalledWith(
+        taskEduContents
+      );
+      expect(component.isReordering).toBeFalsy();
     });
   });
 });
