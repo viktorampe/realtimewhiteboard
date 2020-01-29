@@ -7,7 +7,6 @@ import {
   ClassGroupQueries,
   DalState,
   EduContent,
-  EduContentInterface,
   EffectFeedback,
   EffectFeedbackActions,
   FavoriteActions,
@@ -170,11 +169,7 @@ export class KabasTasksViewModel implements ContentOpenerInterface {
   }
 
   previewEduContentAsImage(eduContent: EduContent): void {
-    const content = Object.assign<EduContent, EduContentInterface>(
-      new EduContent(),
-      eduContent
-    );
-    this.openStaticContentService.open(content, false, true);
+    this.openStaticContentService.open(eduContent, false, true);
   }
 
   public startArchivingTasks(
