@@ -85,7 +85,7 @@
 
       .mat-list-option {
         &:nth-child(odd) {
-          background-color: $secondary-bg-color;
+          background-color: $pages-kabas-tasks__list-option-background-color--accent;
         }
 
         border-left: $pages-kabas-tasks__list-option--selected-border-width

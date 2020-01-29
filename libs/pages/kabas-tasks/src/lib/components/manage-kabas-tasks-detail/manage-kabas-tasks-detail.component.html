@@ -30,6 +30,7 @@
         *ngIf="!task.isPaperTask && selectedContents.length === 1"
         class="shared-header__contextual__button smallIcon"
         iconClass=""
+        (click)="preview(selectedContents[0])"
         ><span>Preview</span></campus-button
       >
       <campus-button
@@ -41,6 +42,7 @@
       <campus-button
         class="shared-header__contextual__button smallIcon"
         iconClass="delete"
+        (click)="clickRemoveTaskEduContents(selectedContents)"
         ><span>Verwijderen</span></campus-button
       >
     </ng-template>
@@ -130,10 +132,56 @@
         </div>
 
         <ng-container *ngIf="task.isPaperTask; else showDates">
-          <campus-button>Print</campus-button>
+          <div
+            (click)="printTask(task, true)"
+            class="manage-kabas-tasks-detail__info__link manage-kabas-tasks-detail__info__link--print"
+            [class.manage-kabas-tasks-detail__info__link--disabled]="
+              !task.assignees.length
+            "
+            [matTooltip]="
+              !task.assignees.length
+                ? 'Deze taak is aan niemand toegekend.'
+                : ''
+            "
+            matTooltipPosition="before"
+          >
+            <mat-icon
+              svgIcon="print"
+              class="manage-kabas-tasks-detail__info__link__icon"
+            ></mat-icon
+            ><span class="manage-kabas-tasks-detail__info__link__label"
+              >Afdrukken met namen</span
+            ></div
+          >
+          <div
+            (click)="printTask(task, false)"
+            class="manage-kabas-tasks-detail__info__link manage-kabas-tasks-detail__info__link--print"
+            ><mat-icon
+              svgIcon="print"
+              class="manage-kabas-tasks-detail__info__link__icon"
+            ></mat-icon
+            ><span class="manage-kabas-tasks-detail__info__link__label"
+              >Afdrukken zonder namen</span
+            ></div
+          >
+          <div
+            (click)="printSolution(task)"
+            class="manage-kabas-tasks-detail__info__link manage-kabas-tasks-detail__info__link--print"
+            ><mat-icon
+              svgIcon="print"
+              class="manage-kabas-tasks-detail__info__link__icon"
+            ></mat-icon
+            ><span class="manage-kabas-tasks-detail__info__link__label"
+              >Correctiesleutel afdrukken</span
+            ></div
+          >
         </ng-container>
         <campus-button primary>+ oefening toevoegen</campus-button>
-        <campus-button danger (click)="clickDeleteTask(task)">
+        <campus-button
+          danger
+          (click)="clickDeleteTask(task)"
+          [disabled]="isActiveTask(task)"
+        >
           verwijder taak
         </campus-button>
       </ng-container>
@@ -149,13 +197,18 @@
           >
             <h2>{{ metadata.title }}</h2>
             <p>{{ metadata.description }}</p>
-            <div>{{ metadata.learningArea.name }}</div>
+            <div *ngIf="metadata.learningArea">{{
+              metadata.learningArea.name
+            }}</div>
             <div *ngIf="metadata.methods" class="list-split">
               <span *ngFor="let method of metadata.methods">{{
                 method.name
               }}</span>
             </div>
-            <campus-button>preview</campus-button>
+            <campus-button
+              (click)="preview(selectedContent, !!task.isPaperTask)"
+              >preview</campus-button
+            >
           </ng-container>
         </div>
 
@@ -169,7 +222,11 @@
           </mat-radio-group>
         </div>
 
-        <campus-button danger>verwijder oefeningen</campus-button>
+        <campus-button
+          danger
+          (click)="clickRemoveTaskEduContents(selectedContents)"
+          >verwijder oefeningen</campus-button
+        >
       </ng-template>
     </div>
   </campus-side-sheet-body>
@@ -186,7 +243,7 @@
 
           <div
             *ngIf="!task.isPaperTask"
-            class="manage-kabas-tasks-detail__moetje-toggle"
+            class="manage-kabas-tasks-detail__filterbar__required-toggle"
           >
             Moetje
             <mat-slide-toggle color="primary"> </mat-slide-toggle>
@@ -200,7 +257,7 @@
           </campus-button-toggle-filter>
 
           <campus-button
-            class="manage-kabas-tasks-detail__reset-filters"
+            class="manage-kabas-tasks-detail__filterbar__reset-filters"
             iconClass="reset-filters"
           ></campus-button>
         </div>
@@ -294,5 +351,5 @@
         </ng-template>
       </div>
     </div>
-  </campus-side-sheet-page>
-</campus-side-sheet>
+  </campus-side-sheet-page></campus-side-sheet
+>
