@@ -12,6 +12,8 @@
   $manage-kabas-tasks-detail__list__primary-actions-margin: 0 -40px !default;
   $manage-kabas-tasks-detail__list__primary-action-color: $pages-kabas-tasks-action-color--primary !default;
   $manage-kabas-tasks-detail__list__secondary-action-color: $pages-kabas-tasks-action-color--secondary !default;
+  $manage-kabas-tasks-detail__primary-action_icon-horizontal-margin: 20px !default;
+  $manage-kabas-tasks-detail__list__reorder-actions-padding: 10px !default;
 
   $manage-kabas-tasks-width: 100% !default;
 
@@ -219,10 +221,9 @@
       }
       &__primary-action {
         color: $manage-kabas-tasks-detail__list__primary-action-color;
-        flex: 1 1 auto;
       }
       &__reorder-actions .ui-button {
-        padding: 10px;
+        padding: $manage-kabas-tasks-detail__list__reorder-actions-padding;
       }
     }
 
