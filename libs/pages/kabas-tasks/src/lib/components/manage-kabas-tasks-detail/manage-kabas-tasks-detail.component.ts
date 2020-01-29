@@ -31,6 +31,8 @@ import {
   NewTaskComponent,
   NewTaskFormValues
 } from '../new-task/new-task.component';
+import { PrintPaperTaskModalResultEnum } from '../print-paper-task-modal/print-paper-task-modal-result.enum';
+import { PrintPaperTaskModalComponent } from '../print-paper-task-modal/print-paper-task-modal.component';
 
 export enum TaskSortEnum {
   'NAME' = 'NAME',
@@ -287,7 +289,42 @@ export class ManageKabasTasksDetailComponent implements OnInit {
   }
   public toggleIsReordering() {}
   public saveOrder(taskEduContents: TaskEduContentInterface[]) {}
-  public clickPrintTask() {}
+
+  public clickPrintTask() {
+    this.task$
+      .pipe(
+        take(1),
+        switchMap(task => {
+          const disabled = [];
+
+          if (!task.assignees.length) {
+            disabled.push(PrintPaperTaskModalResultEnum.WITH_NAMES);
+          }
+
+          return this.dialog
+            .open(PrintPaperTaskModalComponent, {
+              data: { disabled },
+              panelClass: 'manage-task-detail-print'
+            })
+            .afterClosed() as Observable<PrintPaperTaskModalResultEnum>;
+        }),
+        withLatestFrom(this.task$)
+      )
+      .subscribe(([modalResult, task]) => {
+        switch (modalResult) {
+          case PrintPaperTaskModalResultEnum.WITH_NAMES:
+            this.printTask(task, true);
+            break;
+          case PrintPaperTaskModalResultEnum.WITHOUT_NAMES:
+            this.printTask(task, false);
+            break;
+          case PrintPaperTaskModalResultEnum.SOLUTION:
+            this.printSolution(task);
+            break;
+        }
+      });
+  }
+
   public printTask(task: TaskInterface, withNames: boolean) {}
   public printSolution(task: TaskInterface) {}
 
