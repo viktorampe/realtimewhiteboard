@@ -16,15 +16,15 @@
 
   $manage-kabas-tasks-detail__filterbar-padding-top: 15px !default;
   $manage-kabas-tasks-detail__filterbar-padding-left: 15px !default;
-  $manage-kabas-tasks-detail__filterbar-filter-width: 150px !default;
-  $manage-kabas-tasks-detail__filterbar-filter-heigth: 50px !default;
-  $manage-kabas-tasks-detail__filterbar-filter-padding-width: 8px !default;
-  $manage-kabas-tasks-detail__filterbar-filter-padding-height: 12px !default;
-  $manage-kabas-tasks-detail__filterbar-reset-filters-width: 50px !default;
-  $manage-kabas-tasks-detail__filterbar-reset-filters-height: 50px !default;
-  $manage-kabas-tasks-detail__filterbar-reset-filters-border-width: 1px !default;
-  $manage-kabas-tasks-detail__filterbar-reset-filters-background-color: transparent !default;
-  $manage-kabas-tasks-detail__filterbar__filter-border-color: $color-gray-4 !default;
+  $manage-kabas-tasks-detail__filterbar_filter-width: 150px !default;
+  $manage-kabas-tasks-detail__filterbar_filter-heigth: 50px !default;
+  $manage-kabas-tasks-detail__filterbar_filter-padding-width: 8px !default;
+  $manage-kabas-tasks-detail__filterbar_filter-padding-height: 12px !default;
+  $manage-kabas-tasks-detail__filterbar_reset_filters-width: 50px !default;
+  $manage-kabas-tasks-detail__filterbar_reset_filters-height: 50px !default;
+  $manage-kabas-tasks-detail__filterbar_reset_filters-border-width: 1px !default;
+  $manage-kabas-tasks-detail__filterbar_reset_filters-background-color: transparent !default;
+  $manage-kabas-tasks-detail__filterbar_filter-border-color: $color-gray-4 !default;
 
   $manage-kabas-tasks-detail__reset-margin-right: 20px !default;
   $manage-kabas-tasks-detail__reset-margin-bottom: 10px !default;
@@ -136,17 +136,17 @@
 
       .ui-filter-text-input {
         &__input {
-          width: $manage-kabas-tasks-detail__filterbar-filter-width;
-          height: $manage-kabas-tasks-detail__filterbar-filter-heigth;
+          width: $manage-kabas-tasks-detail__filterbar_filter-width;
+          height: $manage-kabas-tasks-detail__filterbar_filter-heigth;
         }
       }
 
       .select-filter-component {
-        width: $manage-kabas-tasks-detail__filterbar-filter-width;
+        width: $manage-kabas-tasks-detail__filterbar_filter-width;
       }
 
       .search-term {
-        width: $manage-kabas-tasks-detail__filterbar-filter-width;
+        width: $manage-kabas-tasks-detail__filterbar_filter-width;
 
         & campus-button {
           &:hover {
@@ -158,11 +158,11 @@
         }
       }
       &__reset-filters {
-        width: $manage-kabas-tasks-detail__filterbar-reset-filters-width;
-        height: $manage-kabas-tasks-detail__filterbar-reset-filters-height;
-        background-color: $manage-kabas-tasks-detail__filterbar-reset-filters-background-color;
-        border: $manage-kabas-tasks-detail__filterbar-reset-filters-border-width
-          solid $manage-kabas-tasks-detail__filterbar__filter-border-color;
+        width: $manage-kabas-tasks-detail__filterbar_reset_filters-width;
+        height: $manage-kabas-tasks-detail__filterbar_reset_filters-height;
+        background-color: $manage-kabas-tasks-detail__filterbar_reset_filters-background-color;
+        border: $manage-kabas-tasks-detail__filterbar_reset_filters-border-width
+          solid $manage-kabas-tasks-detail__filterbar_filter-border-color;
 
         &:hover {
           background-color: $pages-method-filters-hover-background-color;
@@ -175,11 +175,11 @@
 
       &__required-toggle {
         border: 1px solid
-          $manage-kabas-tasks-detail__filterbar__filter-border-color;
-        padding: $manage-kabas-tasks-detail__filterbar-filter-padding-height
-          $manage-kabas-tasks-detail__filterbar-filter-padding-width
-          $manage-kabas-tasks-detail__filterbar-filter-padding-height
-          $manage-kabas-tasks-detail__filterbar-filter-padding-width;
+          $manage-kabas-tasks-detail__filterbar_filter-border-color;
+        padding: $manage-kabas-tasks-detail__filterbar_filter-padding-height
+          $manage-kabas-tasks-detail__filterbar_filter-padding-width
+          $manage-kabas-tasks-detail__filterbar_filter-padding-height
+          $manage-kabas-tasks-detail__filterbar_filter-padding-width;
       }
     }
 
