@@ -40,6 +40,7 @@ import {
   NewTaskComponent,
   NewTaskFormValues
 } from '../new-task/new-task.component';
+import { PrintPaperTaskModalResultEnum } from '../print-paper-task-modal/print-paper-task-modal-result.enum';
 import { PrintPaperTaskModalComponent } from '../print-paper-task-modal/print-paper-task-modal.component';
 import { TaskEduContentListItemComponent } from '../task-edu-content-list-item/task-edu-content-list-item.component';
 import { AssigneeInterface } from './../../interfaces/Assignee.interface';
@@ -97,10 +98,6 @@ describe('ManageKabasTasksDetailComponent', () => {
             queryParams,
             snapshot: { queryParams: queryParams.getValue() }
           }
-        },
-        {
-          provide: HAMMER_LOADER,
-          useValue: () => new Promise(() => {})
         },
         {
           provide: OPEN_STATIC_CONTENT_SERVICE_TOKEN,
@@ -456,7 +453,7 @@ describe('ManageKabasTasksDetailComponent', () => {
           By.css('.manage-kabas-tasks-detail__info__link')
         );
 
-      fdescribe('paper task', () => {
+      describe('paper task', () => {
         let mockViewmodel: MockKabasTasksViewModel;
         let currentTask: TaskWithAssigneesInterface;
         let restOfTasks: TaskWithAssigneesInterface[];
@@ -638,16 +635,26 @@ describe('ManageKabasTasksDetailComponent', () => {
   });
 
   describe('clickPrintTask', () => {
-    let mockViewModel: MockKabasTasksViewModel;
-    let afterClosed$: BehaviorSubject<AssigneeInterface[]>;
-    let mockCurrentTask: TaskWithAssigneesInterface;
+    let mockViewmodel: MockKabasTasksViewModel;
+    let afterClosed$: BehaviorSubject<PrintPaperTaskModalResultEnum>;
+    let currentTask: TaskWithAssigneesInterface;
+    let restOfTasks: TaskWithAssigneesInterface[];
+
+    const updateCurrentTask = newCurrentTask => {
+      mockViewmodel.tasksWithAssignments$.next([
+        newCurrentTask,
+        ...restOfTasks
+      ]);
+      fixture.detectChanges();
+    };
 
     beforeEach(() => {
-      mockViewModel = viewModel;
-      mockCurrentTask = mockViewModel.tasksWithAssignments$.value[0];
+      mockViewmodel = viewModel as MockKabasTasksViewModel;
+
+      [currentTask, ...restOfTasks] = mockViewmodel.tasksWithAssignments$.value;
 
       const dialog = TestBed.get(MatDialog);
-      afterClosed$ = new BehaviorSubject<AssigneeInterface[]>([]);
+      afterClosed$ = new BehaviorSubject<PrintPaperTaskModalResultEnum>(null);
       dialog.open = jest.fn(() => ({ afterClosed: () => afterClosed$ }));
     });
 
@@ -655,7 +662,7 @@ describe('ManageKabasTasksDetailComponent', () => {
       const expectedData = { disabled: [] };
       const expectedClass = 'manage-task-detail-print';
 
-      component.openAssigneeModal();
+      component.clickPrintTask();
 
       expect(matDialog.open).toHaveBeenCalledWith(
         PrintPaperTaskModalComponent,
@@ -667,10 +674,15 @@ describe('ManageKabasTasksDetailComponent', () => {
     });
 
     it('should open the print task modal, no assignees in currentTask', () => {
-      const expectedData = { disabled: [] };
+      currentTask.assignees = [];
+      updateCurrentTask(currentTask);
+
+      const expectedData = {
+        disabled: [PrintPaperTaskModalResultEnum.WITH_NAMES]
+      };
       const expectedClass = 'manage-task-detail-print';
 
-      component.openAssigneeModal();
+      component.clickPrintTask();
 
       expect(matDialog.open).toHaveBeenCalledWith(
         PrintPaperTaskModalComponent,
@@ -678,6 +690,44 @@ describe('ManageKabasTasksDetailComponent', () => {
           data: expectedData,
           panelClass: expectedClass
         }
+      );
+    });
+
+    it('should print the task with names', () => {
+      const dialogResult = PrintPaperTaskModalResultEnum.WITH_NAMES;
+      component.printTask = jest.fn();
+
+      afterClosed$.next(dialogResult);
+      component.clickPrintTask();
+
+      expect(component.printTask).toHaveBeenCalledWith(
+        jasmine.objectContaining(currentTask),
+        true
+      );
+    });
+
+    it('should print the task without names', () => {
+      const dialogResult = PrintPaperTaskModalResultEnum.WITHOUT_NAMES;
+      component.printTask = jest.fn();
+
+      afterClosed$.next(dialogResult);
+      component.clickPrintTask();
+
+      expect(component.printTask).toHaveBeenCalledWith(
+        jasmine.objectContaining(currentTask),
+        false
+      );
+    });
+
+    it('should print the task solution', () => {
+      const dialogResult = PrintPaperTaskModalResultEnum.SOLUTION;
+      component.printSolution = jest.fn();
+
+      afterClosed$.next(dialogResult);
+      component.clickPrintTask();
+
+      expect(component.printSolution).toHaveBeenCalledWith(
+        jasmine.objectContaining(currentTask)
       );
     });
   });
