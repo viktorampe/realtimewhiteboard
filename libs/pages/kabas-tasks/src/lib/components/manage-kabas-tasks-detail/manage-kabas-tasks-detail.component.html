@@ -20,7 +20,8 @@
       <campus-button
         *ngIf="task.isPaperTask"
         class="shared-header__contextual__button smallIcon"
-        iconClass=""
+        iconClass="print"
+        (click)="clickPrintTask()"
         ><span>Print</span></campus-button
       >
     </ng-container>

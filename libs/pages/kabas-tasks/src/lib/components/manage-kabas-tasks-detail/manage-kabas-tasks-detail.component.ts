@@ -302,15 +302,15 @@ export class ManageKabasTasksDetailComponent implements OnInit {
       .pipe(
         take(1),
         switchMap(task => {
-          const disabled = [];
+          const disable = [];
 
           if (!task.assignees.length) {
-            disabled.push(PrintPaperTaskModalResultEnum.WITH_NAMES);
+            disable.push(PrintPaperTaskModalResultEnum.WITH_NAMES);
           }
 
           return this.dialog
             .open(PrintPaperTaskModalComponent, {
-              data: { disabled },
+              data: { disable },
               panelClass: 'manage-task-detail-print'
             })
             .afterClosed() as Observable<PrintPaperTaskModalResultEnum>;

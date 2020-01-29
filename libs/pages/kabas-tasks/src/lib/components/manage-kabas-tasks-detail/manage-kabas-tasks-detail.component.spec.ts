@@ -680,7 +680,7 @@ describe('ManageKabasTasksDetailComponent', () => {
       updateCurrentTask(currentTask);
 
       const expectedData = {
-        disabled: [PrintPaperTaskModalResultEnum.WITH_NAMES]
+        disable: [PrintPaperTaskModalResultEnum.WITH_NAMES]
       };
       const expectedClass = 'manage-task-detail-print';
 
