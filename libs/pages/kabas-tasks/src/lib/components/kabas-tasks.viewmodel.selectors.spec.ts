@@ -7,6 +7,7 @@ import {
   DiaboloPhaseActions,
   DiaboloPhaseFixture,
   DiaboloPhaseReducer,
+  EduContent,
   EduContentActions,
   EduContentFixture,
   EduContentReducer,
@@ -220,15 +221,13 @@ describe('Kabas-tasks viewmodel selectors', () => {
           }),
           eduContentAmount: 1,
           taskEduContents: [
-            {
-              ...new TaskEduContentFixture({
-                id: 666,
-                index: 6,
-                taskId: 2,
-                eduContentId: 3
-              }),
-              eduContent: {}
-            }
+            new TaskEduContentFixture({
+              id: 666,
+              index: 6,
+              taskId: 2,
+              eduContentId: 3,
+              eduContent: {} as EduContent
+            })
           ],
           learningArea: new LearningAreaFixture({ name: 'wiskunde' }),
           startDate: new Date(date - 33),
@@ -281,33 +280,27 @@ describe('Kabas-tasks viewmodel selectors', () => {
           }),
           eduContentAmount: 3,
           taskEduContents: [
-            {
-              ...new TaskEduContentFixture({
-                id: 789,
-                index: 1,
-                taskId: 1,
-                eduContentId: 3
-              }),
-              eduContent: {}
-            },
-            {
-              ...new TaskEduContentFixture({
-                id: 456,
-                index: 2,
-                taskId: 1,
-                eduContentId: 2
-              }),
-              eduContent: {}
-            },
-            {
-              ...new TaskEduContentFixture({
-                id: 123,
-                index: 3,
-                taskId: 1,
-                eduContentId: 1
-              }),
-              eduContent: {}
-            }
+            new TaskEduContentFixture({
+              id: 789,
+              index: 1,
+              taskId: 1,
+              eduContentId: 3,
+              eduContent: {} as EduContent
+            }),
+            new TaskEduContentFixture({
+              id: 456,
+              index: 2,
+              taskId: 1,
+              eduContentId: 2,
+              eduContent: {} as EduContent
+            }),
+            new TaskEduContentFixture({
+              id: 123,
+              index: 3,
+              taskId: 1,
+              eduContentId: 1,
+              eduContent: {} as EduContent
+            })
           ],
           learningArea: new LearningAreaFixture({ name: 'wiskunde' }),
           startDate: new Date(date - 3),
@@ -349,15 +342,13 @@ describe('Kabas-tasks viewmodel selectors', () => {
           }),
           eduContentAmount: 1,
           taskEduContents: [
-            {
-              ...new TaskEduContentFixture({
-                id: 666,
-                index: 6,
-                taskId: 2,
-                eduContentId: 3
-              }),
-              eduContent: {}
-            }
+            new TaskEduContentFixture({
+              id: 666,
+              index: 6,
+              taskId: 2,
+              eduContentId: 3,
+              eduContent: {} as EduContent
+            })
           ],
           learningArea: new LearningAreaFixture({ name: 'wiskunde' }),
           startDate: new Date(date - 33),
