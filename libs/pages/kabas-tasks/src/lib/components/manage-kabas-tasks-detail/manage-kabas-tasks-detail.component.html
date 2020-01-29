@@ -236,9 +236,7 @@
       ><div class="manage-kabas-tasks-detail__container">
         <div
           class="manage-kabas-tasks-detail__filterbar"
-          [class.manage-kabas-tasks-detail__filterbar--reordering]="
-            isReordering
-          "
+          [class.manage-kabas-tasks-detail__filterbar--disabled]="isReordering"
         >
           <campus-search-term
             placeholder="Filter op titel"
