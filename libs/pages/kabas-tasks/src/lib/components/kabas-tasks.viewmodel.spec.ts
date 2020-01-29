@@ -4,7 +4,6 @@ import {
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
   DalState,
-  EduContent,
   EduContentFixture,
   EffectFeedback,
   EffectFeedbackActions,
@@ -876,10 +875,9 @@ describe('KabasTaskViewModel', () => {
 
     describe('previewEduContentAsImage', () => {
       it('should call openStaticContentService.open()', () => {
-        const content = { ...new EduContent(), ...mockEduContent };
         kabasTasksViewModel.previewEduContentAsImage(mockEduContent);
         expect(openStaticContentService.open).toHaveBeenCalledWith(
-          content,
+          mockEduContent,
           false,
           true
         );
