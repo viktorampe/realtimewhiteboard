@@ -262,17 +262,28 @@
           ></campus-button>
         </div>
 
-        <div class="manage-kabas-tasks-detail__primary-action">
-          <mat-icon svgIcon="add"></mat-icon>
-          Lesmateriaal toevoegen aan deze taak
-        </div>
+        <div class="manage-kabas-tasks-detail__list__actions">
+          <div class="manage-kabas-tasks-detail__list__primary-action">
+            <mat-icon svgIcon="add"></mat-icon>
+            Lesmateriaal toevoegen aan deze taak
+          </div>
 
-        <!-- TODO: remove and replace with https://dev.azure.com/diekeure-webdev/LK2020/_git/campus/pullrequest/192 -->
-        <campus-button (click)="toggleIsReordering(task.taskEduContents)"
-          >reorder</campus-button
-        >
-        <campus-button (click)="saveOrder()">save</campus-button>
-        <!-- END TODO -->
+          <div class="manage-kabas-tasks-detail__list__reorder-actions">
+            <campus-button (click)="isReordering = true" *ngIf="!isReordering"
+              >Volgorde wijzigen</campus-button
+            >
+
+            <campus-button (click)="isReordering = false" *ngIf="isReordering"
+              >Annuleren</campus-button
+            >
+            <campus-button
+              primary
+              (click)="saveOrder(taskContent.options)"
+              *ngIf="isReordering"
+              >Opslaan</campus-button
+            >
+          </div>
+        </div>
 
         <mat-selection-list
           #taskContent
@@ -352,5 +363,5 @@
         </ng-template>
       </div>
     </div>
-  </campus-side-sheet-page>
-</campus-side-sheet>
+  </campus-side-sheet-page></campus-side-sheet
+>
