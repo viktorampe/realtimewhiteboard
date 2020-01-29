@@ -1,3 +1,4 @@
+import { DebugElement } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
 import {
   MatDialog,
@@ -5,9 +6,10 @@ import {
   MatIconRegistry,
   MatRadioModule,
   MatSelectModule,
-  MatSlideToggleModule
+  MatSlideToggleModule,
+  MatTooltip
 } from '@angular/material';
-import { By } from '@angular/platform-browser';
+import { By, HAMMER_LOADER } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -86,7 +88,11 @@ describe('ManageKabasTasksDetailComponent', () => {
             snapshot: { queryParams: queryParams.getValue() }
           }
         },
-        { provide: MatIconRegistry, useClass: MockMatIconRegistry }
+        { provide: MatIconRegistry, useClass: MockMatIconRegistry },
+        {
+          provide: HAMMER_LOADER,
+          useValue: () => new Promise(() => {})
+        }
       ]
     });
   });
@@ -428,6 +434,131 @@ describe('ManageKabasTasksDetailComponent', () => {
 
       expect(taskInfoDE).toBeFalsy();
       expect(eduContentInfoDE.length).toBe(2);
+    });
+
+    describe('links', () => {
+      const getSideBarLinks = () =>
+        fixture.debugElement.queryAll(
+          By.css('.manage-kabas-tasks-detail__info__link')
+        );
+
+      fdescribe('paper task', () => {
+        let mockViewmodel: MockKabasTasksViewModel;
+        let currentTask: TaskWithAssigneesInterface;
+        let restOfTasks: TaskWithAssigneesInterface[];
+
+        const updateCurrentTask = newCurrentTask => {
+          mockViewmodel.tasksWithAssignments$.next([
+            newCurrentTask,
+            ...restOfTasks
+          ]);
+          fixture.detectChanges();
+        };
+
+        beforeEach(() => {
+          mockViewmodel = viewModel as MockKabasTasksViewModel;
+
+          [
+            currentTask,
+            ...restOfTasks
+          ] = mockViewmodel.tasksWithAssignments$.value;
+
+          currentTask.isPaperTask = true;
+
+          updateCurrentTask(currentTask);
+        });
+
+        describe('link: Afdrukken met namen', () => {
+          let link: DebugElement;
+
+          beforeEach(() => {
+            link = getSideBarLinks()[0];
+          });
+
+          it('should show the correct text', () => {
+            const linkText = link.nativeElement.textContent.trim();
+            const expected = 'Afdrukken met namen';
+            expect(linkText).toEqual(expected);
+          });
+
+          it('should be disabled when there are no assignees', () => {
+            currentTask.assignees = [];
+            updateCurrentTask(currentTask);
+
+            expect(link.nativeElement.classList).toContain(
+              'manage-kabas-tasks-detail__info__link--disabled'
+            );
+          });
+
+          it('should have a tooltip when there are no assignees', () => {
+            currentTask.assignees = [];
+            updateCurrentTask(currentTask);
+
+            const tooltip: MatTooltip = link.injector.get<MatTooltip>(
+              MatTooltip
+            );
+
+            expect(tooltip.message).toBe('Deze taak is aan niemand toegekend.');
+          });
+
+          it('should call the correct handler', () => {
+            component.printTask = jest.fn();
+            link.triggerEventHandler('click', null);
+
+            expect(component.printTask).toHaveBeenCalledWith(
+              jasmine.objectContaining(currentTask),
+              true
+            );
+          });
+        });
+
+        describe('link: Afdrukken zonder namen', () => {
+          let link: DebugElement;
+
+          beforeEach(() => {
+            link = getSideBarLinks()[1];
+          });
+
+          it('should show the correct text', () => {
+            const linkText = link.nativeElement.textContent.trim();
+            const expected = 'Afdrukken zonder namen';
+            expect(linkText).toEqual(expected);
+          });
+
+          it('should call the correct handler', () => {
+            component.printTask = jest.fn();
+            link.triggerEventHandler('click', null);
+
+            expect(component.printTask).toHaveBeenCalledWith(
+              jasmine.objectContaining(currentTask),
+              false
+            );
+          });
+        });
+
+        describe('link: Correctiesleutel afdrukken', () => {
+          let link: DebugElement;
+
+          beforeEach(() => {
+            link = getSideBarLinks()[2];
+          });
+
+          it('should show the correct text', () => {
+            const linkText = link.nativeElement.textContent.trim();
+            const expected = 'Correctiesleutel afdrukken';
+            expect(linkText).toEqual(expected);
+          });
+
+          it('should call the correct handler', () => {
+            component.printSolution = jest.fn();
+            link.triggerEventHandler('click', null);
+
+            expect(component.printSolution).toHaveBeenCalledWith(
+              jasmine.objectContaining(currentTask)
+            );
+          });
+        });
+      });
     });
   });
 
