@@ -358,6 +358,10 @@ export class MockKabasTasksViewModel
     updatedValues: Partial<TaskEduContentInterface>
   ): void {}
 
+  public updateTaskEduContentsOrder(
+    taskEduContents: TaskEduContentInterface[]
+  ) {}
+
   public getDeleteInfo(): any {}
 
   public updateTaskEduContentsOrder() {}

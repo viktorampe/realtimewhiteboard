@@ -266,6 +266,14 @@
           <mat-icon svgIcon="add"></mat-icon>
           Lesmateriaal toevoegen aan deze taak
         </div>
+
+        <!-- TODO: remove and replace with https://dev.azure.com/diekeure-webdev/LK2020/_git/campus/pullrequest/192 -->
+        <campus-button (click)="toggleIsReordering(task.taskEduContents)"
+          >reorder</campus-button
+        >
+        <campus-button (click)="saveOrder()">save</campus-button>
+        <!-- END TODO -->
+
         <mat-selection-list
           #taskContent
           class="manage-kabas-tasks-detail__list"
@@ -302,11 +310,22 @@
         <mat-list
           #taskContentReordering
           class="manage-kabas-tasks-detail__list"
-          *ngIf="isReordering"
+          *ngIf="
+            isReordering &&
+            (reorderableTaskEduContents$ | async) as reorderableTaskEduContents
+          "
           cdkDropList
+          (cdkDropListDropped)="
+            dropTaskEduContent(reorderableTaskEduContents, $event)
+          "
         >
-          <ng-container *ngIf="task.taskEduContents.length; else noResults">
-            <mat-list-item cdkDrag *ngFor="let tEC of task.taskEduContents">
+          <ng-container
+            *ngIf="reorderableTaskEduContents.length; else noResults"
+          >
+            <mat-list-item
+              cdkDrag
+              *ngFor="let tEC of reorderableTaskEduContents"
+            >
               <mat-icon
                 class="manage-kabas-tasks-detail__list__drag-handle"
                 svgIcon="drag-handle"
