@@ -193,6 +193,10 @@
           $manage-kabas-tasks-detail__filterbar_filter-padding-height
           $manage-kabas-tasks-detail__filterbar_filter-padding-width;
       }
+      &--disabled {
+        opacity: 30%;
+        pointer-events: none;
+      }
     }
 
     &__list {
