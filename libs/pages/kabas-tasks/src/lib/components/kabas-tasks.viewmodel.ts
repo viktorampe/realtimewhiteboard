@@ -7,6 +7,7 @@ import {
   ClassGroupQueries,
   DalState,
   EduContent,
+  EduContentInterface,
   EffectFeedback,
   EffectFeedbackActions,
   FavoriteActions,
@@ -29,7 +30,13 @@ import {
   TaskStudentInterface,
   TASK_SERVICE_TOKEN
 } from '@campus/dal';
-import { ContentOpenerInterface } from '@campus/shared';
+import {
+  ContentOpenerInterface,
+  OpenStaticContentServiceInterface,
+  OPEN_STATIC_CONTENT_SERVICE_TOKEN,
+  ScormExerciseServiceInterface,
+  SCORM_EXERCISE_SERVICE_TOKEN
+} from '@campus/shared';
 import { Update } from '@ngrx/entity';
 import { RouterReducerState } from '@ngrx/router-store';
 import { Action, select, Store } from '@ngrx/store';
@@ -39,7 +46,8 @@ import {
   filter,
   map,
   shareReplay,
-  switchMap
+  switchMap,
+  take
 } from 'rxjs/operators';
 import { AssigneeTypesEnum } from '../interfaces/Assignee.interface';
 import {
@@ -78,7 +86,11 @@ export class KabasTasksViewModel implements ContentOpenerInterface {
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
     @Inject('uuid') private uuid: Function,
     @Inject(MAT_DATE_LOCALE) private dateLocale,
-    @Inject(TASK_SERVICE_TOKEN) private taskService: TaskServiceInterface
+    @Inject(TASK_SERVICE_TOKEN) private taskService: TaskServiceInterface,
+    @Inject(SCORM_EXERCISE_SERVICE_TOKEN)
+    private scormExerciseService: ScormExerciseServiceInterface,
+    @Inject(OPEN_STATIC_CONTENT_SERVICE_TOKEN)
+    private openStaticContentService: OpenStaticContentServiceInterface
   ) {
     this.tasksWithAssignments$ = this.store.pipe(
       select(getTasksWithAssignmentsByType, {
@@ -114,22 +126,55 @@ export class KabasTasksViewModel implements ContentOpenerInterface {
   }
 
   openEduContentAsExercise(eduContent: EduContent): void {
-    throw new Error('Method not implemented.');
+    this.currentTask$
+      .pipe(
+        take(1),
+        map(task => task.id)
+      )
+      .subscribe(taskId => {
+        this.scormExerciseService.previewExerciseFromTask(
+          this.authService.userId,
+          eduContent.id,
+          taskId,
+          false
+        );
+      });
   }
+
   openEduContentAsSolution(eduContent: EduContent): void {
-    throw new Error('Method not implemented.');
+    this.currentTask$
+      .pipe(
+        take(1),
+        map(task => task.id)
+      )
+      .subscribe(taskId => {
+        this.scormExerciseService.previewExerciseFromTask(
+          this.authService.userId,
+          eduContent.id,
+          taskId,
+          true
+        );
+      });
   }
+
   openEduContentAsStream(eduContent: EduContent): void {
-    throw new Error('Method not implemented.');
+    this.openStaticContentService.open(eduContent, true);
   }
+
   openEduContentAsDownload(eduContent: EduContent): void {
-    throw new Error('Method not implemented.');
+    this.openStaticContentService.open(eduContent, false);
   }
+
   openBoeke(eduContent: EduContent): void {
-    throw new Error('Method not implemented.');
+    this.openStaticContentService.open(eduContent);
   }
+
   previewEduContentAsImage(eduContent: EduContent): void {
-    throw new Error('Method not implemented.');
+    const content = Object.assign<EduContent, EduContentInterface>(
+      new EduContent(),
+      eduContent
+    );
+    this.openStaticContentService.open(content, false, true);
   }
 
   public startArchivingTasks(
