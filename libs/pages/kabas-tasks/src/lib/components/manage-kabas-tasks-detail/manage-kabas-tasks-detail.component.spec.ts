@@ -38,6 +38,7 @@ import {
   NewTaskComponent,
   NewTaskFormValues
 } from '../new-task/new-task.component';
+import { PrintPaperTaskModalComponent } from '../print-paper-task-modal/print-paper-task-modal.component';
 import { TaskEduContentListItemComponent } from '../task-edu-content-list-item/task-edu-content-list-item.component';
 import { AssigneeInterface } from './../../interfaces/Assignee.interface';
 import { TaskWithAssigneesInterface } from './../../interfaces/TaskWithAssignees.interface';
@@ -501,6 +502,51 @@ describe('ManageKabasTasksDetailComponent', () => {
       expect(viewModel.updateTaskAccess).toHaveBeenCalledWith(
         mockCurrentTask,
         remainingAssignees
+      );
+    });
+  });
+
+  describe('clickPrintTask', () => {
+    let mockViewModel: MockKabasTasksViewModel;
+    let afterClosed$: BehaviorSubject<AssigneeInterface[]>;
+    let mockCurrentTask: TaskWithAssigneesInterface;
+
+    beforeEach(() => {
+      mockViewModel = viewModel;
+      mockCurrentTask = mockViewModel.tasksWithAssignments$.value[0];
+
+      const dialog = TestBed.get(MatDialog);
+      afterClosed$ = new BehaviorSubject<AssigneeInterface[]>([]);
+      dialog.open = jest.fn(() => ({ afterClosed: () => afterClosed$ }));
+    });
+
+    it('should open the print task modal', () => {
+      const expectedData = { disabled: [] };
+      const expectedClass = 'manage-task-detail-print';
+
+      component.openAssigneeModal();
+
+      expect(matDialog.open).toHaveBeenCalledWith(
+        PrintPaperTaskModalComponent,
+        {
+          data: expectedData,
+          panelClass: expectedClass
+        }
+      );
+    });
+
+    it('should open the print task modal, no assignees in currentTask', () => {
+      const expectedData = { disabled: [] };
+      const expectedClass = 'manage-task-detail-print';
+
+      component.openAssigneeModal();
+
+      expect(matDialog.open).toHaveBeenCalledWith(
+        PrintPaperTaskModalComponent,
+        {
+          data: expectedData,
+          panelClass: expectedClass
+        }
       );
     });
   });
