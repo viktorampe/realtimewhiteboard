@@ -1,13 +1,28 @@
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
-import { MatDialog, MatDialogRef, MatIconRegistry, MatRadioModule, MatSelectModule, MatSlideToggleModule } from '@angular/material';
+import {
+  MatDialog,
+  MatDialogRef,
+  MatIconRegistry,
+  MatRadioModule,
+  MatSelectModule,
+  MatSlideToggleModule
+} from '@angular/material';
 import { By, HAMMER_LOADER } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { EduContentFixture, LearningAreaFixture, LearningAreaInterface } from '@campus/dal';
+import {
+  EduContentFixture,
+  LearningAreaFixture,
+  LearningAreaInterface
+} from '@campus/dal';
 import { SearchModule } from '@campus/search';
-import { ENVIRONMENT_ICON_MAPPING_TOKEN, ENVIRONMENT_TESTING_TOKEN, SharedModule } from '@campus/shared';
+import {
+  ENVIRONMENT_ICON_MAPPING_TOKEN,
+  ENVIRONMENT_TESTING_TOKEN,
+  SharedModule
+} from '@campus/shared';
 import { MockMatIconRegistry } from '@campus/testing';
 import { ConfirmationModalComponent, UiModule } from '@campus/ui';
 import { hot } from '@nrwl/angular/testing';
@@ -15,9 +30,15 @@ import { configureTestSuite } from 'ng-bullet';
 import { BehaviorSubject, of } from 'rxjs';
 import { AssigneeFixture } from '../../interfaces/Assignee.fixture';
 import { TaskEduContentWithEduContentInterface } from '../../interfaces/TaskEduContentWithEduContent.interface';
-import { CurrentTaskParams, KabasTasksViewModel } from '../kabas-tasks.viewmodel';
+import {
+  CurrentTaskParams,
+  KabasTasksViewModel
+} from '../kabas-tasks.viewmodel';
 import { MockKabasTasksViewModel } from '../kabas-tasks.viewmodel.mock';
-import { NewTaskComponent, NewTaskFormValues } from '../new-task/new-task.component';
+import {
+  NewTaskComponent,
+  NewTaskFormValues
+} from '../new-task/new-task.component';
 import { TaskEduContentListItemComponent } from '../task-edu-content-list-item/task-edu-content-list-item.component';
 import { AssigneeInterface } from './../../interfaces/Assignee.interface';
 import { TaskWithAssigneesInterface } from './../../interfaces/TaskWithAssignees.interface';
@@ -481,7 +502,6 @@ describe('ManageKabasTasksDetailComponent', () => {
     });
   });
 
-  //file.only
   describe('reordering', () => {
     let mockViewModel: MockKabasTasksViewModel;
     let mockCurrentTask: TaskWithAssigneesInterface;
@@ -510,11 +530,17 @@ describe('ManageKabasTasksDetailComponent', () => {
       );
     });
 
-    it('should update reorderableTaskEduContents$ when dropping element', () {
-      const {taskEduContents} = mockCurrentTask;
-      
-      const event = {previousIndex: 2, currentIndex: 1} as CdkDragDrop<TaskEduContentWithEduContentInterface[]>;
-      const expected = [taskEduContents[0], taskEduContents[2], taskEduContents[1]];
+    it('should update reorderableTaskEduContents$ when dropping element', () => {
+      const { taskEduContents } = mockCurrentTask;
+
+      const event = { previousIndex: 2, currentIndex: 1 } as CdkDragDrop<
+        TaskEduContentWithEduContentInterface[]
+      >;
+      const expected = [
+        taskEduContents[0],
+        taskEduContents[2],
+        taskEduContents[1]
+      ];
 
       component.dropTaskEduContent(taskEduContents, event);
 
@@ -523,6 +549,19 @@ describe('ManageKabasTasksDetailComponent', () => {
           a: expected
         })
       );
+    });
+
+    it('should call updateTaskEduContentsOrder and toggle the mode', () => {
+      const { taskEduContents } = mockCurrentTask;
+      component.isReordering = true;
+      spyOn(mockViewModel, 'updateTaskEduContentsOrder');
+
+      component.saveOrder();
+
+      expect(mockViewModel.updateTaskEduContentsOrder).toHaveBeenCalledWith(
+        taskEduContents
+      );
+      expect(component.isReordering).toBeFalsy();
     });
   });
 });
