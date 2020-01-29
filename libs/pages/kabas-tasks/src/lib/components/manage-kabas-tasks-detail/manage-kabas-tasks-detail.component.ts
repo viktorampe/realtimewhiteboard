@@ -319,9 +319,13 @@ export class ManageKabasTasksDetailComponent implements OnInit {
     this.toggleIsReordering();
   }
 
-  public clickPrintTask() {}
-  public printTask(task: TaskInterface, withNames: boolean) {}
-  public printSolution(task: TaskInterface) {}
+  public printTask(task: TaskInterface, withNames: boolean) {
+    this.viewModel.printTask(task.id, withNames);
+  }
+
+  public printSolution(task: TaskInterface) {
+    this.viewModel.printSolution(task.id);
+  }
 
   public preview(eduContent: EduContentInterface, openDialog: boolean = false) {
     const content = Object.assign<EduContent, EduContentInterface>(
