@@ -33,7 +33,13 @@
     {{ level }}
   </div>
 
-  <div class="manage-kabas-tasks-task-edu-content-list-item__required">
+  <div
+    *ngIf="!isPaperTask"
+    class="manage-kabas-tasks-task-edu-content-list-item__required"
+    [class.manage-kabas-tasks-task-edu-content-list-item__required--no-diabolo]="
+      !diaboloPhaseIcon
+    "
+  >
     {{ required ? 'moetje' : 'magje' }}
   </div>
 

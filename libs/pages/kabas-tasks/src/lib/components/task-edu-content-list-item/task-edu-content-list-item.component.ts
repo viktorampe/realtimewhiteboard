@@ -21,6 +21,7 @@ export class TaskEduContentListItemComponent implements OnInit {
   @Input() fileIcon: string;
   @Input() diaboloPhaseIcon: string;
   @Input() actions: ContentActionInterface[];
+  @Input() isPaperTask: boolean;
   @Output() clickAction = new EventEmitter<ContentActionInterface>();
 
   constructor() {}
