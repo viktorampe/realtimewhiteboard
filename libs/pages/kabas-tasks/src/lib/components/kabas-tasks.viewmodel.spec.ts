@@ -825,9 +825,6 @@ describe('KabasTaskViewModel', () => {
       store.overrideSelector(getTaskWithAssignmentAndEduContents, {
         id: taskId
       } as any);
-
-      jest.resetAllMocks();
-      jest.restoreAllMocks();
     });
 
     describe('openEduContentAsExercise', () => {
