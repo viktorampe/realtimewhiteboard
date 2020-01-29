@@ -201,7 +201,7 @@
 
           <div
             *ngIf="!task.isPaperTask"
-            class="manage-kabas-tasks-detail__moetje-toggle"
+            class="manage-kabas-tasks-detail__filterbar__required-toggle"
           >
             Moetje
             <mat-slide-toggle color="primary"> </mat-slide-toggle>
@@ -215,12 +215,12 @@
           </campus-button-toggle-filter>
 
           <campus-button
-            class="manage-kabas-tasks-detail__reset-filters"
+            class="manage-kabas-tasks-detail__filterbar__reset-filters"
             iconClass="reset-filters"
           ></campus-button>
         </div>
 
-        <div class="manage-kabas-tasks-detail__list__primary-action">
+        <div class="manage-kabas-tasks-detail__primary-action">
           <mat-icon svgIcon="add"></mat-icon>
           Lesmateriaal toevoegen aan deze taak
         </div>
