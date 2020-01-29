@@ -36,6 +36,9 @@
   $pages-kabas-tasks__list-option--selected-border-width: 4px !default;
   $pages-kabas-tasks__list-option-padding-left: 16px !default;
 
+  .mat-drawer-container {
+    background: $pages-kabas-tasks-background-color--primary;
+  }
   .manage-kabas-tasks-detail {
     &__list {
       margin-left: $manage-kabas-tasks-detail__list-vertical-margin;
@@ -94,7 +97,7 @@
       .mat-list-option,
       .mat-list-item {
         &:nth-child(odd) {
-          background-color: $secondary-bg-color;
+          background-color: $pages-kabas-tasks__list-option-background-color--accent;
         }
 
         border-left: $pages-kabas-tasks__list-option--selected-border-width
@@ -181,8 +184,8 @@
     &__primary-action {
       display: flex;
       align-items: center;
-      background-color: $secondary-bg-color;
-      color: $manage-kabas-tasks-detail__primary-action-color;
+      background-color: $pages-kabas-tasks__list-option-background-color--accent;
+      color: $primary-color-accent;
       font-weight: bold;
       cursor: pointer;
       height: $manage-kabas-tasks-detail__primary-action-height;
