@@ -6,7 +6,7 @@
 <div
   class="manage-kabas-tasks-task-edu-content-list-item__container"
   [class.manage-kabas-tasks-task-edu-content-list-item__container--no-actions]="
-    !action
+    !actions
   "
 >
   <div
@@ -34,8 +34,7 @@
   </div>
 
   <div class="manage-kabas-tasks-task-edu-content-list-item__required">
-    <span></span> {{ required ? 'moetje' : 'magje' }}
-    <span></span>
+    {{ required ? 'moetje' : 'magje' }}
   </div>
 
   <mat-icon
