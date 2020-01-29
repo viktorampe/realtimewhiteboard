@@ -110,7 +110,8 @@ describe('ManageKabasTasksDetailComponent', () => {
             openEduContentAsSolution: () => {},
             openEduContentAsStream: () => {},
             openEduContentAsDownload: () => {},
-            openBoeke: () => {}
+            openBoeke: () => {},
+            previewEduContentAsImage: () => {}
           }
         },
         {

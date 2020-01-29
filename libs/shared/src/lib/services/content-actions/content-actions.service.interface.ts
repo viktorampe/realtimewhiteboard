@@ -14,6 +14,7 @@ export interface ContentOpenerInterface {
   openEduContentAsStream(eduContent: EduContent): void;
   openEduContentAsDownload(eduContent: EduContent): void;
   openBoeke(eduContent: EduContent): void;
+  openEduContentAsImage?(eduContent: EduContent): void;
 }
 
 export const CONTENT_ACTIONS_SERVICE_TOKEN = new InjectionToken(

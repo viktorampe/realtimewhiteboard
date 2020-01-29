@@ -128,6 +128,9 @@ export class KabasTasksViewModel implements ContentOpenerInterface {
   openBoeke(eduContent: EduContent): void {
     throw new Error('Method not implemented.');
   }
+  previewEduContentAsImage(eduContent: EduContent): void {
+    throw new Error('Method not implemented.');
+  }
 
   public startArchivingTasks(
     tasks: TaskWithAssigneesInterface[],
