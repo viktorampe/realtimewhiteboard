@@ -11,6 +11,7 @@
   $manage-kabas-tasks-detail__primary-action-color: $pages-kabas-tasks-primary-action-color--primary !default;
   $manage-kabas-tasks-detail__primary-action-margin: -40px !default;
   $manage-kabas-tasks-detail__primary-action-padding-left: 45px !default;
+  $manage-kabas-tasks-detail__primary-action_icon-horizontal-margin: 20px !default;
 
   $manage-kabas-tasks-detail__list-vertical-margin: -40px !default;
 
@@ -198,7 +199,8 @@
       padding-left: $manage-kabas-tasks-detail__primary-action-padding-left !important;
 
       .mat-icon {
-        margin: 0 20px;
+        margin: 0
+          $manage-kabas-tasks-detail__primary-action_icon-horizontal-margin;
       }
     }
   }
