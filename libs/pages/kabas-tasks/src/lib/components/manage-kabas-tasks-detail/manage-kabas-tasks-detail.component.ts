@@ -34,7 +34,6 @@ import {
   shareReplay,
   switchMap,
   take,
-  tap,
   withLatestFrom
 } from 'rxjs/operators';
 import {
@@ -54,10 +53,11 @@ import {
   NewTaskFormValues
 } from '../new-task/new-task.component';
 
-export enum TaskSortEnum {
-  'NAME' = 'NAME',
-  'LEARNINGAREA' = 'LEARNINGAREA',
-  'STARTDATE' = 'STARTDATE'
+export interface FilterStateInterface {
+  searchTerm?: string;
+  diaboloPhase?: number[];
+  required?: boolean[];
+  level?: number[];
 }
 
 @Component({
@@ -67,7 +67,6 @@ export enum TaskSortEnum {
   // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ManageKabasTasksDetailComponent implements OnInit {
-  public TaskSortEnum = TaskSortEnum;
   public assigneeTypesEnum: typeof AssigneeTypesEnum = AssigneeTypesEnum;
 
   public diaboloPhaseFilterCriteria: SearchFilterCriteriaInterface;
@@ -135,7 +134,6 @@ export class ManageKabasTasksDetailComponent implements OnInit {
     });
 
     this.filteredTaskEduContents$ = this.getFilteredTaskEduContents$().pipe(
-      tap(x => console.log(x)),
       shareReplay(1)
     );
   }
@@ -195,7 +193,7 @@ export class ManageKabasTasksDetailComponent implements OnInit {
     this.viewModel.toggleFavorite(task);
   }
 
-  public searchTermUpdated(searchTerm: string) {
+  public searchTermFilterValueChanged(searchTerm: string) {
     const currentFilterState = this.filterState$.value;
     const newFilterState = { ...currentFilterState, searchTerm };
 
@@ -212,10 +210,7 @@ export class ManageKabasTasksDetailComponent implements OnInit {
       .filter(value => value.selected)
       .map(selectedValue => selectedValue.data.id);
 
-    const currentFilterState = this.filterState$.value;
-    const newFilterState = { ...currentFilterState, diaboloPhase };
-
-    this.filterState$.next(newFilterState);
+    this.updateFilterState({ diaboloPhase });
   }
 
   public requiredFilterSelectionChanged(
@@ -228,10 +223,7 @@ export class ManageKabasTasksDetailComponent implements OnInit {
       .filter(value => value.selected)
       .map(selectedValue => selectedValue.data.required);
 
-    const currentFilterState = this.filterState$.value;
-    const newFilterState = { ...currentFilterState, required };
-
-    this.filterState$.next(newFilterState);
+    this.updateFilterState({ required });
   }
 
   public levelFilterSelectionChanged(
@@ -244,20 +236,16 @@ export class ManageKabasTasksDetailComponent implements OnInit {
       .filter(value => value.selected)
       .map(selectedValue => selectedValue.data.level);
 
-    const currentFilterState = this.filterState$.value;
-    const newFilterState = { ...currentFilterState, level };
-
-    this.filterState$.next(newFilterState);
+    this.updateFilterState({ level });
   }
 
   public clickResetFilters(): void {
-    this.searchTermFilters.forEach(searchTermFilter =>
-      searchTermFilter.reset(false)
-    );
-
-    this.buttonToggleFilters.forEach(buttonToggleFilter =>
-      buttonToggleFilter.reset(false)
-    );
+    [
+      ...this.searchTermFilters.toArray(),
+      ...this.buttonToggleFilters.toArray()
+    ].forEach(searchFilter => {
+      searchFilter.reset(false);
+    });
 
     this.filterState$.next({});
   }
@@ -424,6 +412,13 @@ export class ManageKabasTasksDetailComponent implements OnInit {
     );
   }
 
+  private updateFilterState(filterStateChanges) {
+    const currentFilterState = this.filterState$.value;
+    const newFilterState = { ...currentFilterState, ...filterStateChanges };
+
+    this.filterState$.next(newFilterState);
+  }
+
   private getFilteredTaskEduContents$(): Observable<TaskEduContentInterface[]> {
     return combineLatest([this.filterState$, this.task$]).pipe(
       map(([filterState, task]) => {
@@ -440,32 +435,33 @@ export class ManageKabasTasksDetailComponent implements OnInit {
 
     let filteredTaskEduContents = [...taskEduContents];
 
-    filteredTaskEduContents = this.filterOnTerm(
-      filterState.searchTerm,
-      filteredTaskEduContents
-    );
-
     filteredTaskEduContents = filteredTaskEduContents.filter(
       tEC =>
         this.filterOnDiaboloPhase(filterState, tEC) &&
         this.filterOnRequired(filterState, tEC) &&
-        this.filterOnLevel(filterState, tEC)
+        this.filterOnLevel(filterState, tEC) &&
+        this.filterOnTitle(filterState, tEC)
     );
 
     return filteredTaskEduContents;
   }
 
-  private filterOnTerm(
-    term: string = '',
-    taskEduContents: TaskEduContentInterface[]
-  ): TaskEduContentInterface[] {
-    return this.filterService.filter(taskEduContents, {
-      eduContent: { publishedEduContentMetadata: { title: term } }
-    });
+  private filterOnTitle(
+    filterState: FilterStateInterface,
+    taskEduContent: TaskEduContentInterface
+  ): boolean {
+    return (
+      !filterState.searchTerm ||
+      this.filterService.matchFilters(taskEduContent, {
+        eduContent: {
+          publishedEduContentMetadata: { title: filterState.searchTerm }
+        }
+      })
+    );
   }
 
   private filterOnDiaboloPhase(
-    filterState: any,
+    filterState: FilterStateInterface,
     taskEduContent: TaskEduContentInterface
   ): boolean {
     return (
@@ -478,7 +474,7 @@ export class ManageKabasTasksDetailComponent implements OnInit {
   }
 
   private filterOnRequired(
-    filterState: any,
+    filterState: FilterStateInterface,
     taskEduContent: TaskEduContentInterface
   ): boolean {
     return (
@@ -489,7 +485,7 @@ export class ManageKabasTasksDetailComponent implements OnInit {
   }
 
   private filterOnLevel(
-    filterState: any,
+    filterState: FilterStateInterface,
     taskEduContent: TaskEduContentInterface
   ): boolean {
     return (

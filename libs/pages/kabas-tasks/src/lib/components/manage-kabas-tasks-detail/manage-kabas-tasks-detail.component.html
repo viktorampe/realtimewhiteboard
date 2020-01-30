@@ -242,7 +242,7 @@
             placeholder="Filter op titel"
             [autoComplete]="false"
             [emitOnTextChange]="true"
-            (valueChange)="searchTermUpdated($event)"
+            (valueChange)="searchTermFilterValueChanged($event)"
           ></campus-search-term>
 
           <campus-button-toggle-filter
