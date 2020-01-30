@@ -53,6 +53,7 @@ import {
   NewTaskFormValues
 } from '../new-task/new-task.component';
 import { TaskEduContentListItemComponent } from '../task-edu-content-list-item/task-edu-content-list-item.component';
+import { ContentActionsServiceInterface } from './../../../../../../shared/src/lib/services/content-actions/content-actions.service.interface';
 import { AssigneeInterface } from './../../interfaces/Assignee.interface';
 import { TaskWithAssigneesInterface } from './../../interfaces/TaskWithAssignees.interface';
 import { ManageKabasTasksAssigneeModalComponent } from './../manage-kabas-tasks-assignee-modal/manage-kabas-tasks-assignee-modal.component';
@@ -736,6 +737,12 @@ describe('ManageKabasTasksDetailComponent', () => {
     beforeEach(() => {
       mockViewmodel = viewModel as MockKabasTasksViewModel;
       [currentTask, ...restOfTasks] = mockViewmodel.tasksWithAssignments$.value;
+      const contentActionService = TestBed.get(
+        CONTENT_ACTIONS_SERVICE_TOKEN
+      ) as ContentActionsServiceInterface;
+      contentActionService.getActionsForEduContent = jest
+        .fn()
+        .mockReturnValue([]);
 
       const createTaskEduContent = (
         id,
@@ -744,14 +751,17 @@ describe('ManageKabasTasksDetailComponent', () => {
         diaboloPhaseId,
         levelId
       ) =>
-        new TaskEduContentFixture({
-          id,
-          required,
-          eduContent: new EduContentFixture(
-            {},
-            { title, diaboloPhaseId, levelId }
-          )
-        });
+        Object.assign(
+          new TaskEduContentFixture({
+            id,
+            required,
+            eduContent: new EduContentFixture(
+              {},
+              { title, diaboloPhaseId, levelId }
+            )
+          }),
+          { actions: [] }
+        );
 
       taskEduContents = [
         createTaskEduContent(1, 'oefening 1', false, 1, 1),
@@ -778,7 +788,7 @@ describe('ManageKabasTasksDetailComponent', () => {
         const listOptions = getListOptions();
         expect(listOptions.length).toBe(taskEduContents.length);
         listOptions.forEach((listOption, index) => {
-          expect(listOption.value).toBe(taskEduContents[index]);
+          expect(listOption.value).toEqual(taskEduContents[index]);
         });
       });
 
@@ -804,7 +814,7 @@ describe('ManageKabasTasksDetailComponent', () => {
         expect(listOptions.length).toBe(3);
 
         listOptions.forEach((listOption, index) => {
-          expect(listOption.value).toBe(expected[index]);
+          expect(listOption.value).toEqual(expected[index]);
         });
       });
     });
@@ -844,7 +854,7 @@ describe('ManageKabasTasksDetailComponent', () => {
           expect(filterSpy).toHaveBeenCalledTimes(taskEduContents.length);
 
           filterSpy.mock.calls.forEach((call, index) => {
-            expect(call[0]).toBe(taskEduContents[index]);
+            expect(call[0]).toEqual(taskEduContents[index]);
             expect(call[1]).toEqual({
               eduContent: {
                 publishedEduContentMetadata: { title: searchTerm }
