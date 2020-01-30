@@ -194,7 +194,9 @@
           data-cy="educontent-detail"
         >
           <ng-container
-            *ngIf="selectedContent.publishedEduContentMetadata as metadata"
+            *ngIf="
+              selectedContent.eduContent.publishedEduContentMetadata as metadata
+            "
           >
             <h2>{{ metadata.title }}</h2>
             <p>{{ metadata.description }}</p>
@@ -225,6 +227,7 @@
 
         <campus-button
           danger
+          [disabled]="isActiveTask(task)"
           (click)="clickRemoveTaskEduContents(selectedContents)"
           >Verwijder lesmateriaal</campus-button
         >
