@@ -316,6 +316,10 @@
                   tEC.eduContent.diaboloPhase &&
                   tEC.eduContent.diaboloPhase.icon
                 "
+                [actions]="tEC.actions"
+                (clickAction)="
+                  handleTaskEduContentAction($event, tEC.eduContent)
+                "
               >
               </campus-task-edu-content-list-item>
             </mat-list-option>
