@@ -313,6 +313,7 @@
                   tEC.eduContent.diaboloPhase &&
                   tEC.eduContent.diaboloPhase.icon
                 "
+                [isPaperTask]="task.isPaperTask"
                 [actions]="tEC.actions"
                 (clickAction)="
                   handleTaskEduContentAction($event, tEC.eduContent)
@@ -351,6 +352,7 @@
                   tEC.eduContent.methodLevel && tEC.eduContent.methodLevel.label
                 "
                 [required]="tEC.required"
+                [isPaperTask]="task.isPaperTask"
                 [fileIcon]="tEC.eduContent.publishedEduContentMetadata.fileExt"
                 [diaboloPhaseIcon]="
                   tEC.eduContent.diaboloPhase &&
