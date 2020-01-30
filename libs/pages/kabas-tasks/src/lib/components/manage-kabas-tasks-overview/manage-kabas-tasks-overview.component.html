@@ -281,7 +281,7 @@
               [startDate]="task.startDate"
               [endDate]="task.endDate"
               [status]="'paper'"
-              [actions]="getActions(task)"
+              [actions]="task.actions"
               [assignees]="task.assignees"
               [isFavorite]="task.isFavorite"
               (clickToggleFavorite)="clickToggleFavorite(task)"
