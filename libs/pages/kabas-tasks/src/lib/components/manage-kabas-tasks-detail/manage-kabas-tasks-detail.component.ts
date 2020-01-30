@@ -1,57 +1,21 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import {
-  Component,
-  Inject,
-  OnInit,
-  QueryList,
-  ViewChild,
-  ViewChildren
-} from '@angular/core';
+import { Component, Inject, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { MatDialog, MatSelectionList } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
-import {
-  EduContent,
-  EduContentInterface,
-  LearningAreaInterface,
-  TaskEduContentInterface,
-  TaskInterface
-} from '@campus/dal';
-import {
-  ButtonToggleFilterComponent,
-  SearchFilterCriteriaInterface,
-  SearchTermComponent
-} from '@campus/search';
-import {
-  OpenStaticContentServiceInterface,
-  OPEN_STATIC_CONTENT_SERVICE_TOKEN
-} from '@campus/shared';
+import { EduContent, EduContentInterface, LearningAreaInterface, TaskEduContentInterface, TaskInterface } from '@campus/dal';
+import { ButtonToggleFilterComponent, SearchFilterCriteriaInterface, SearchTermComponent } from '@campus/search';
+import { ContentActionInterface, ContentActionsServiceInterface, CONTENT_ACTIONS_SERVICE_TOKEN, OpenStaticContentServiceInterface, OPEN_STATIC_CONTENT_SERVICE_TOKEN } from '@campus/shared';
 import { ConfirmationModalComponent, SideSheetComponent } from '@campus/ui';
 import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/utils';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import {
-  filter,
-  map,
-  shareReplay,
-  switchMap,
-  take,
-  withLatestFrom
-} from 'rxjs/operators';
-import {
-  AssigneeInterface,
-  AssigneeTypesEnum
-} from '../../interfaces/Assignee.interface';
+import { filter, map, shareReplay, switchMap, take, withLatestFrom } from 'rxjs/operators';
+import { AssigneeInterface, AssigneeTypesEnum } from '../../interfaces/Assignee.interface';
 import { TaskEduContentWithEduContentInterface } from '../../interfaces/TaskEduContentWithEduContent.interface';
-import {
-  TaskStatusEnum,
-  TaskWithAssigneesInterface
-} from '../../interfaces/TaskWithAssignees.interface';
+import { TaskStatusEnum, TaskWithAssigneesInterface } from '../../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
 import { ManageKabasTasksAssigneeDataInterface } from '../manage-kabas-tasks-assignee-modal/manage-kabas-tasks-assignee-data.interface';
 import { ManageKabasTasksAssigneeModalComponent } from '../manage-kabas-tasks-assignee-modal/manage-kabas-tasks-assignee-modal.component';
-import {
-  NewTaskComponent,
-  NewTaskFormValues
-} from '../new-task/new-task.component';
+import { NewTaskComponent, NewTaskFormValues } from '../new-task/new-task.component';
 
 export interface FilterStateInterface {
   searchTerm?: string;
@@ -76,8 +40,7 @@ export class ManageKabasTasksDetailComponent implements OnInit {
 
   public isNewTask$: Observable<boolean>;
   public selectableLearningAreas$: Observable<LearningAreaInterface[]>;
-
-  public selectedContents$ = new BehaviorSubject<EduContentInterface[]>([]);
+  public selectedContents$ = new BehaviorSubject<TaskEduContentInterface[]>([]);
   public task$: Observable<TaskWithAssigneesInterface>;
   public reorderableTaskEduContents$ = new BehaviorSubject<
     TaskEduContentWithEduContentInterface[]
@@ -107,6 +70,8 @@ export class ManageKabasTasksDetailComponent implements OnInit {
     private dialog: MatDialog,
     private router: Router,
     private route: ActivatedRoute,
+    @Inject(CONTENT_ACTIONS_SERVICE_TOKEN)
+    private contentActionService: ContentActionsServiceInterface,
     @Inject(OPEN_STATIC_CONTENT_SERVICE_TOKEN)
     private openStaticContentService: OpenStaticContentServiceInterface,
     @Inject(FILTER_SERVICE_TOKEN) private filterService: FilterServiceInterface
@@ -122,6 +87,21 @@ export class ManageKabasTasksDetailComponent implements OnInit {
     this.diaboloPhaseFilterCriteria = this.getDiaboloPhaseFilterCriteria();
     this.requiredFilterCriteria = this.getRequiredFilterCriteria();
     this.levelFilterCriteria = this.getLevelFilterCriteria();
+
+    this.task$ = this.viewModel.currentTask$.pipe(
+      map(task => {
+        const taskEduContents = task.taskEduContents.map(tE => {
+          return {
+            ...tE,
+            actions: this.contentActionService.getActionsForEduContent(
+              tE.eduContent
+            )
+          };
+        });
+
+        return { ...task, taskEduContents };
+      })
+    );
 
     this.isNewTask$.pipe(take(1)).subscribe(isNewTask => {
       if (isNewTask) {
@@ -139,11 +119,11 @@ export class ManageKabasTasksDetailComponent implements OnInit {
   }
 
   public onSelectionChange() {
-    const selected: EduContentInterface[] = this.contentSelectionList.selectedOptions.selected
-      .map(option => option.value.eduContent as EduContentInterface)
-      .sort((a, b) =>
-        a.publishedEduContentMetadata.title <
-        b.publishedEduContentMetadata.title
+    const selected: TaskEduContentInterface[] = this.contentSelectionList.selectedOptions.selected
+      .map(option => option.value)
+      .sort((a: TaskEduContentInterface, b: TaskEduContentInterface) =>
+        a.eduContent.publishedEduContentMetadata.title <
+        b.eduContent.publishedEduContentMetadata.title
           ? -1
           : 1
       );
@@ -355,6 +335,13 @@ export class ManageKabasTasksDetailComponent implements OnInit {
     taskEduContents: TaskEduContentInterface[]
   ) {
     this.viewModel.deleteTaskEduContents(taskEduContents.map(tec => tec.id));
+  }
+
+  public handleTaskEduContentAction(
+    action: ContentActionInterface,
+    eduContent: EduContent
+  ) {
+    action.handler(eduContent);
   }
 
   public isActiveTask(task: TaskWithAssigneesInterface) {

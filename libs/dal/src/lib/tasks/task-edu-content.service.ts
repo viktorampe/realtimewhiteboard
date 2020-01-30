@@ -7,6 +7,7 @@ import {
   TaskEduContentServiceInterface,
   UpdateTaskEduContentResultInterface
 } from './task-edu-content.service.interface';
+import { TaskActiveErrorInterface } from './task.service.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -46,17 +47,42 @@ export class TaskEduContentService implements TaskEduContentServiceInterface {
     userId: number,
     update: Partial<TaskEduContentInterface>[]
   ): Observable<UpdateTaskEduContentResultInterface> {
-    return this.taskEduContentApi.updateTaskEduContents(update) as Observable<
-      UpdateTaskEduContentResultInterface
-    >;
+    return this.taskEduContentApi.updateTaskEduContents(update).pipe(
+      map(
+        (updateTaskEduContentResult: UpdateTaskEduContentResultInterface) => ({
+          ...updateTaskEduContentResult,
+          errors: updateTaskEduContentResult.errors.map(castActiveUntil)
+        })
+      )
+    ) as Observable<UpdateTaskEduContentResultInterface>;
   }
 
   deleteTaskEduContents(
     userId: number,
     taskEduContentIds: number[]
   ): Observable<UpdateTaskEduContentResultInterface> {
-    return this.taskEduContentApi.destroyTaskEduContents(
-      taskEduContentIds
-    ) as Observable<UpdateTaskEduContentResultInterface>;
+    return this.taskEduContentApi
+      .destroyTaskEduContents(taskEduContentIds)
+      .pipe(
+        map(
+          (
+            updateTaskEduContentResult: UpdateTaskEduContentResultInterface
+          ) => ({
+            ...updateTaskEduContentResult,
+            errors: updateTaskEduContentResult.errors.map(castActiveUntil)
+          })
+        )
+      ) as Observable<UpdateTaskEduContentResultInterface>;
   }
+}
+
+function castActiveUntil(
+  taskActiveError: TaskActiveErrorInterface
+): TaskActiveErrorInterface {
+  return {
+    ...taskActiveError,
+    activeUntil: taskActiveError.activeUntil
+      ? new Date(taskActiveError.activeUntil)
+      : undefined
+  };
 }

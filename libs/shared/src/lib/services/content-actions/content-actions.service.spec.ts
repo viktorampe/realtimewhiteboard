@@ -24,7 +24,8 @@ describe('ContentActionsServiceInterface', () => {
             openEduContentAsSolution: () => {},
             openEduContentAsStream: () => {},
             openEduContentAsDownload: () => {},
-            openBoeke: () => {}
+            openBoeke: () => {},
+            previewEduContentAsImage: () => {}
           }
         }
       ]
@@ -78,6 +79,16 @@ describe('ContentActionsServiceInterface', () => {
           expected: [
             contentActionsService.contentActionDictionary[
               'openEduContentAsDownload'
+            ]
+          ]
+        },
+        {
+          mockEduContent: new EduContentFixture({
+            type: EduContentTypeEnum.PAPER_EXERCISE
+          }),
+          expected: [
+            contentActionsService.contentActionDictionary[
+              'previewEduContentAsImage'
             ]
           ]
         }

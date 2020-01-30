@@ -12,9 +12,10 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { GuardsModule } from '@campus/guards';
 import { PagesSharedModule } from '@campus/pages/shared';
 import { SearchModule } from '@campus/search';
-import { SharedModule } from '@campus/shared';
+import { CONTENT_OPENER_TOKEN, SharedModule } from '@campus/shared';
 import { UiModule } from '@campus/ui';
 import { UtilsModule } from '@campus/utils';
+import { KabasTasksViewModel } from './components/kabas-tasks.viewmodel';
 import { ManageKabasTasksAddAssigneesComponent } from './components/manage-kabas-tasks-add-assignees/manage-kabas-tasks-add-assignees.component';
 import { ManageKabasTasksAssigneeModalComponent } from './components/manage-kabas-tasks-assignee-modal/manage-kabas-tasks-assignee-modal.component';
 import { ManageKabasTasksDetailComponent } from './components/manage-kabas-tasks-detail/manage-kabas-tasks-detail.component';
@@ -48,6 +49,7 @@ import { PagesKabasTasksRoutingModule } from './pages-kabas-tasks-routing.module
   declarations: [
     ManageKabasTasksOverviewComponent,
     TaskListItemComponent,
+    TaskEduContentListItemComponent,
     ManageKabasTasksDetailComponent,
     ManageKabasTasksAssigneeModalComponent,
     ManageKabasTasksAddAssigneesComponent,
@@ -55,7 +57,12 @@ import { PagesKabasTasksRoutingModule } from './pages-kabas-tasks-routing.module
     TaskEduContentListItemComponent,
     PrintPaperTaskModalComponent
   ],
-  providers: [],
+  providers: [
+    {
+      provide: CONTENT_OPENER_TOKEN,
+      useClass: KabasTasksViewModel
+    }
+  ],
   exports: [ManageKabasTasksAssigneeModalComponent],
   entryComponents: [
     ManageKabasTasksAssigneeModalComponent,

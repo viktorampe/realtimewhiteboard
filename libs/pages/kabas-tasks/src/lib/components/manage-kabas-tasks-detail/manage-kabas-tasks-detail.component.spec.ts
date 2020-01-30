@@ -27,6 +27,9 @@ import {
   SearchModule
 } from '@campus/search';
 import {
+  ContentActionsService,
+  CONTENT_ACTIONS_SERVICE_TOKEN,
+  CONTENT_OPENER_TOKEN,
   ENVIRONMENT_ICON_MAPPING_TOKEN,
   ENVIRONMENT_TESTING_TOKEN,
   OPEN_STATIC_CONTENT_SERVICE_TOKEN,
@@ -104,6 +107,22 @@ describe('ManageKabasTasksDetailComponent', () => {
           useValue: {
             queryParams,
             snapshot: { queryParams: queryParams.getValue() }
+          }
+        },
+        { provide: MatIconRegistry, useClass: MockMatIconRegistry },
+        {
+          provide: CONTENT_ACTIONS_SERVICE_TOKEN,
+          useClass: ContentActionsService
+        },
+        {
+          provide: CONTENT_OPENER_TOKEN,
+          useValue: {
+            openEduContentAsExercise: () => {},
+            openEduContentAsSolution: () => {},
+            openEduContentAsStream: () => {},
+            openEduContentAsDownload: () => {},
+            openBoeke: () => {},
+            previewEduContentAsImage: () => {}
           }
         },
         {
@@ -446,8 +465,8 @@ describe('ManageKabasTasksDetailComponent', () => {
 
     it('should show the educontent info in the sidepanel when there is a selection', () => {
       component.selectedContents$.next([
-        new EduContentFixture(),
-        new EduContentFixture()
+        new TaskEduContentFixture(),
+        new TaskEduContentFixture()
       ]);
       fixture.detectChanges();
 

@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatIconModule, MatIconRegistry } from '@angular/material';
+import { MockMatIconRegistry } from '@campus/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { TaskEduContentListItemComponent } from './task-edu-content-list-item.component';
 
@@ -8,7 +10,9 @@ describe('TaskEduContentListItemComponent', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [TaskEduContentListItemComponent]
+      imports: [MatIconModule],
+      declarations: [TaskEduContentListItemComponent],
+      providers: [{ provide: MatIconRegistry, useClass: MockMatIconRegistry }]
     });
   });
 
