@@ -345,12 +345,7 @@ export class MockKabasTasksViewModel
   ) {}
 
   private getCurrentTask(): Observable<TaskWithAssigneesInterface> {
-    // return this.paperTasksWithAssignments$.pipe(
-    return this.tasksWithAssignments$.pipe(
-      map(tasks => ({
-        ...tasks[0]
-      }))
-    );
+    return this.tasksWithAssignments$.pipe(map(tasks => tasks[0]));
   }
 
   public updateTaskEduContent(
@@ -368,4 +363,10 @@ export class MockKabasTasksViewModel
   public deleteTaskEduContents() {}
   public printTask() {}
   public printSolution() {}
+  public openEduContentAsExercise() {}
+  public openEduContentAsSolution() {}
+  public openEduContentAsStream() {}
+  public openEduContentAsDownload() {}
+  public openBoeke() {}
+  public previewEduContentAsImage() {}
 }
