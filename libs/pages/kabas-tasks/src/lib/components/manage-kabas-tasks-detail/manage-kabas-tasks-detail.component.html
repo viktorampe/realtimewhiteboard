@@ -27,11 +27,13 @@
 
     <ng-template #contentSelected>
       <campus-button
-        *ngIf="!task.isPaperTask && selectedContents.length === 1"
+        *ngIf="selectedContents.length === 1"
         class="shared-header__contextual__button smallIcon"
         iconClass=""
-        (click)="preview(selectedContents[0])"
-        ><span>Preview</span></campus-button
+        (click)="preview(selectedContents[0], !!task.isPaperTask)"
+        ><span>{{
+          task.isPaperTask ? 'Voorbeeld' : 'Openen'
+        }}</span></campus-button
       >
       <campus-button
         *ngIf="task.isPaperTask"
