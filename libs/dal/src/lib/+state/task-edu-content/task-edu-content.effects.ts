@@ -266,9 +266,7 @@ export class TaskEduContentEffects {
       delete: 'verwijderd'
     };
 
-    return `De ${
-      taskEduContentsLength === 1 ? 'oefening werd' : 'oefeningen werden'
-    } ${methodVerbs[method]}.`;
+    return `Het lesmateriaal werd ${methodVerbs[method]}.`;
   }
 
   private getTaskEduContentUpdateErrorMessageHTML(
@@ -284,11 +282,13 @@ export class TaskEduContentEffects {
     const html = [];
 
     if (!success.length) {
-      html.push(`<p>Er werden geen oefeningen ${verb}.</p>`);
+      html.push(`<p>Er werd geen lesmateriaal ${verb}.</p>`);
     } else if (success.length === 1) {
-      html.push(`<p>De oefening werd ${verb}.</p>`);
+      html.push(`<p>Het lesmateriaal werd ${verb}.</p>`);
     } else {
-      html.push(`<p>Er werden ${success.length} oefeningen ${verb}.</p>`);
+      html.push(
+        `<p>Er werden ${success.length} lesmateriaal items ${verb}.</p>`
+      );
     }
     html.push('<p>De volgende taken zijn nog in gebruik:</p>');
     html.push('<ul>');
