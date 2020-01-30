@@ -316,18 +316,18 @@ describe('KabasTaskViewModel', () => {
     it('should dispatch an UpdateTaskEduContents action', () => {
       const spy = jest.spyOn(store, 'dispatch');
       const taskEduContents = [
-        new TaskEduContentFixture({ id: 1, index: 1 }),
-        new TaskEduContentFixture({ id: 3, index: 2 }),
-        new TaskEduContentFixture({ id: 2, index: 3 })
+        new TaskEduContentFixture({ id: 1, index: 1, taskId: 1 }),
+        new TaskEduContentFixture({ id: 3, index: 2, taskId: 3 }),
+        new TaskEduContentFixture({ id: 2, index: 3, taskId: 2 })
       ];
       kabasTasksViewModel.updateTaskEduContentsOrder(taskEduContents);
       expect(spy).toHaveBeenCalledWith(
         new TaskEduContentActions.UpdateTaskEduContents({
           userId: authService.userId,
           taskEduContents: [
-            { id: 1, changes: { id: 1, index: 0 } },
-            { id: 3, changes: { id: 3, index: 1 } },
-            { id: 2, changes: { id: 2, index: 2 } }
+            { id: 1, changes: { id: 1, index: 0, taskId: 1 } },
+            { id: 3, changes: { id: 3, index: 1, taskId: 3 } },
+            { id: 2, changes: { id: 2, index: 2, taskId: 2 } }
           ]
         })
       );
@@ -791,18 +791,18 @@ describe('KabasTaskViewModel', () => {
     it('should dispatch an UpdateTaskEduContents action', () => {
       const spy = jest.spyOn(store, 'dispatch');
       const taskEduContents = [
-        new TaskEduContentFixture({ id: 1, required: false }),
-        new TaskEduContentFixture({ id: 2, required: false }),
-        new TaskEduContentFixture({ id: 3, required: false })
+        new TaskEduContentFixture({ id: 1, required: false, taskId: 1 }),
+        new TaskEduContentFixture({ id: 2, required: false, taskId: 2 }),
+        new TaskEduContentFixture({ id: 3, required: false, taskId: 3 })
       ];
       kabasTasksViewModel.updateTaskEduContentsRequired(taskEduContents, true);
       expect(spy).toHaveBeenCalledWith(
         new TaskEduContentActions.UpdateTaskEduContents({
           userId: authService.userId,
           taskEduContents: [
-            { id: 1, changes: { id: 1, required: true } },
-            { id: 2, changes: { id: 2, required: true } },
-            { id: 3, changes: { id: 3, required: true } }
+            { id: 1, changes: { id: 1, required: true, taskId: 1 } },
+            { id: 2, changes: { id: 2, required: true, taskId: 2 } },
+            { id: 3, changes: { id: 3, required: true, taskId: 3 } }
           ]
         })
       );
