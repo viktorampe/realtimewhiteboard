@@ -15,8 +15,17 @@ import {
   OPEN_STATIC_CONTENT_SERVICE_TOKEN
 } from '@campus/shared';
 import { ConfirmationModalComponent, SideSheetComponent } from '@campus/ui';
+import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/utils';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { filter, map, switchMap, take, withLatestFrom } from 'rxjs/operators';
+import {
+  filter,
+  map,
+  shareReplay,
+  switchMap,
+  take,
+  tap,
+  withLatestFrom
+} from 'rxjs/operators';
 import {
   AssigneeInterface,
   AssigneeTypesEnum
@@ -44,6 +53,7 @@ export enum TaskSortEnum {
   selector: 'campus-manage-kabas-tasks-detail',
   templateUrl: './manage-kabas-tasks-detail.component.html',
   styleUrls: ['./manage-kabas-tasks-detail.component.scss']
+  // changeDetection: ChangeDetectionStrategy.Default
 })
 export class ManageKabasTasksDetailComponent implements OnInit {
   public TaskSortEnum = TaskSortEnum;
@@ -51,15 +61,19 @@ export class ManageKabasTasksDetailComponent implements OnInit {
 
   public isNewTask$: Observable<boolean>;
   public selectableLearningAreas$: Observable<LearningAreaInterface[]>;
-  isReordering = false;
-  isPaperTask = true; // replace w/ stream
+  public isReordering = false;
+
   public selectedContents$ = new BehaviorSubject<EduContentInterface[]>([]);
   public task$: Observable<TaskWithAssigneesInterface>;
   public reorderableTaskEduContents$ = new BehaviorSubject<
     TaskEduContentWithEduContentInterface[]
   >([]);
 
+  public filteredTaskEduContents$: Observable<TaskEduContentInterface[]>;
+
   public assigneeTypesEnum: typeof AssigneeTypesEnum = AssigneeTypesEnum;
+
+  private filterState$ = new BehaviorSubject<any>({});
 
   @ViewChild('taskContent', { static: false })
   private contentSelectionList: MatSelectionList;
@@ -76,7 +90,8 @@ export class ManageKabasTasksDetailComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     @Inject(OPEN_STATIC_CONTENT_SERVICE_TOKEN)
-    private openStaticContentService: OpenStaticContentServiceInterface
+    private openStaticContentService: OpenStaticContentServiceInterface,
+    @Inject(FILTER_SERVICE_TOKEN) private filterService: FilterServiceInterface
   ) {
     this.isNewTask$ = this.viewModel.currentTaskParams$.pipe(
       map(currentTaskParams => !currentTaskParams.id)
@@ -87,35 +102,7 @@ export class ManageKabasTasksDetailComponent implements OnInit {
 
   ngOnInit() {
     this.task$ = this.viewModel.currentTask$;
-    this.diaboloPhaseFilter = {
-      name: 'diaboloPhase',
-      label: 'Diabolo-fase',
-      keyProperty: 'id',
-      displayProperty: 'icon',
-      values: [
-        {
-          data: {
-            id: 1,
-            icon: 'diabolo-intro'
-          },
-          visible: true
-        },
-        {
-          data: {
-            id: 2,
-            icon: 'diabolo-midden'
-          },
-          visible: true
-        },
-        {
-          data: {
-            id: 3,
-            icon: 'diabolo-outro'
-          },
-          visible: true
-        }
-      ]
-    };
+    this.diaboloPhaseFilter = this.getDiaboloPhaseFilter();
 
     this.isNewTask$.pipe(take(1)).subscribe(isNewTask => {
       if (isNewTask) {
@@ -126,6 +113,11 @@ export class ManageKabasTasksDetailComponent implements OnInit {
     this.task$.subscribe(task => {
       this.reorderableTaskEduContents$.next([...task.taskEduContents]);
     });
+
+    this.filteredTaskEduContents$ = this.getFilteredTaskEduContents$().pipe(
+      tap(x => console.log(x)),
+      shareReplay(1)
+    );
   }
 
   public onSelectionChange() {
@@ -148,7 +140,7 @@ export class ManageKabasTasksDetailComponent implements OnInit {
     this.viewModel.startArchivingTasks(tasks, isArchived);
   }
 
-  clickDeleteTask(task: TaskWithAssigneesInterface) {
+  public clickDeleteTask(task: TaskWithAssigneesInterface) {
     const dialogData = {
       title: 'Taak verwijderen',
       message: 'Ben je zeker dat je de geselecteerde taak wil verwijderen?'
@@ -181,6 +173,13 @@ export class ManageKabasTasksDetailComponent implements OnInit {
 
   public toggleFavorite(task: TaskWithAssigneesInterface) {
     this.viewModel.toggleFavorite(task);
+  }
+
+  public searchTermUpdated(searchTerm: string) {
+    const currentFilterState = this.filterState$.value;
+    const newFilterState = { ...currentFilterState, searchTerm };
+
+    this.filterState$.next(newFilterState);
   }
 
   public openAssigneeModal() {
@@ -340,7 +339,76 @@ export class ManageKabasTasksDetailComponent implements OnInit {
   ) {
     this.viewModel.deleteTaskEduContents(taskEduContents.map(tec => tec.id));
   }
+
   public isActiveTask(task: TaskWithAssigneesInterface) {
     return task.status === TaskStatusEnum.ACTIVE;
+  }
+
+  private getFilteredTaskEduContents$(): Observable<TaskEduContentInterface[]> {
+    return combineLatest([this.filterState$, this.task$]).pipe(
+      map(([filterState, task]) => {
+        return this.filterTaskEduContents(filterState, task.taskEduContents);
+      })
+    );
+  }
+
+  private filterTaskEduContents(
+    filterState,
+    taskEduContents
+  ): TaskEduContentInterface[] {
+    if (taskEduContents.length === 0) return [];
+
+    let filteredTaskEduContents = [...taskEduContents];
+
+    // filter on search term
+    if (filterState.searchTerm) {
+      filteredTaskEduContents = this.filterOnTerm(
+        filterState.searchTerm,
+        filteredTaskEduContents
+      );
+    }
+
+    return filteredTaskEduContents;
+  }
+
+  private filterOnTerm(
+    term: string,
+    taskEduContents: TaskEduContentInterface[]
+  ): TaskEduContentInterface[] {
+    return this.filterService.filter(taskEduContents, {
+      eduContent: { publishedEduContentMetadata: { title: term } }
+    });
+  }
+
+  private getDiaboloPhaseFilter(): SearchFilterCriteriaInterface {
+    return {
+      name: 'diaboloPhase',
+      label: 'Diabolo-fase',
+      keyProperty: 'id',
+      displayProperty: 'icon',
+      values: [
+        {
+          data: {
+            id: 1,
+            icon: 'diabolo-intro'
+          },
+          visible: true
+        },
+        {
+          data: {
+            id: 2,
+            icon: 'diabolo-midden'
+          },
+          visible: true
+        },
+        {
+          data: {
+            id: 3,
+            icon: 'diabolo-outro'
+          },
+          visible: true
+        }
+      ]
+    };
   }
 }

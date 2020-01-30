@@ -242,6 +242,7 @@
             placeholder="Filter op titel"
             [autoComplete]="false"
             [emitOnTextChange]="true"
+            (valueChange)="searchTermUpdated($event)"
           ></campus-search-term>
 
           <div
@@ -297,28 +298,35 @@
           (selectionChange)="onSelectionChange()"
           *ngIf="!isReordering"
         >
-          <ng-container *ngIf="task.taskEduContents.length; else noResults">
-            <mat-list-option
-              #option
-              *ngFor="let tEC of task.taskEduContents"
-              checkboxPosition="before"
-              [class.mat-list-option--selected]="option.selected"
-              [value]="tEC"
-            >
-              <campus-task-edu-content-list-item
-                [title]="tEC.eduContent.publishedEduContentMetadata.title"
-                [level]="
-                  tEC.eduContent.methodLevel && tEC.eduContent.methodLevel.label
-                "
-                [required]="tEC.required"
-                [fileIcon]="tEC.eduContent.publishedEduContentMetadata.fileExt"
-                [diaboloPhaseIcon]="
-                  tEC.eduContent.diaboloPhase &&
-                  tEC.eduContent.diaboloPhase.icon
-                "
+          <ng-container
+            *ngIf="filteredTaskEduContents$ | async as taskEduContents"
+          >
+            <ng-container *ngIf="taskEduContents.length; else noResults">
+              <mat-list-option
+                #option
+                *ngFor="let tEC of taskEduContents"
+                checkboxPosition="before"
+                [class.mat-list-option--selected]="option.selected"
+                [value]="tEC"
               >
-              </campus-task-edu-content-list-item>
-            </mat-list-option>
+                <campus-task-edu-content-list-item
+                  [title]="tEC.eduContent.publishedEduContentMetadata.title"
+                  [level]="
+                    tEC.eduContent.methodLevel &&
+                    tEC.eduContent.methodLevel.label
+                  "
+                  [required]="tEC.required"
+                  [fileIcon]="
+                    tEC.eduContent.publishedEduContentMetadata.fileExt
+                  "
+                  [diaboloPhaseIcon]="
+                    tEC.eduContent.diaboloPhase &&
+                    tEC.eduContent.diaboloPhase.icon
+                  "
+                >
+                </campus-task-edu-content-list-item>
+              </mat-list-option>
+            </ng-container>
           </ng-container>
         </mat-selection-list>
         <mat-list
