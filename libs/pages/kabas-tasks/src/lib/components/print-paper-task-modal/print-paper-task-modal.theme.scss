@@ -11,6 +11,7 @@
     padding-bottom: $print-paper-tasks__container__padding-bottom;
     &__link {
       padding: $print-paper-tasks__container__link-horizontal-spacing 0px;
+      color: $print-paper-tasks__container__link--print-color;
       &__icon {
         height: $print-paper-tasks__container__link__icon-dimension !important;
         width: $print-paper-tasks__container__link__icon-dimension !important;
@@ -19,9 +20,6 @@
       &__label {
         line-height: $print-paper-tasks__container__link__label-height;
         height: $print-paper-tasks__container__link__label-height;
-      }
-      &--print {
-        color: $print-paper-tasks__container__link--print-color;
       }
     }
   }
