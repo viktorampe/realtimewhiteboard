@@ -60,8 +60,7 @@
   <campus-side-sheet-header>
     <ng-container [ngSwitch]="(selectedContents$ | async)?.length">
       <ng-container *ngSwitchCase="0">Over deze taak:</ng-container>
-      <ng-container *ngSwitchCase="1">Over deze oefening:</ng-container>
-      <ng-container *ngSwitchDefault>Over deze oefeningen:</ng-container>
+      <ng-container *ngSwitchDefault>Over dit lesmateriaal:</ng-container>
     </ng-container>
   </campus-side-sheet-header>
 
@@ -108,7 +107,7 @@
               (click)="openAssigneeModal()"
               >+</campus-button
             >
-            leerlingen toevoegen voor deze taak:
+            Leerlingen toevoegen voor deze taak:
           </div>
           <div>
             <span
@@ -178,13 +177,13 @@
             ></div
           >
         </ng-container>
-        <campus-button primary>+ oefening toevoegen</campus-button>
+        <campus-button primary>+ Lesmateriaal toevoegen</campus-button>
         <campus-button
           danger
           (click)="clickDeleteTask(task)"
           [disabled]="isActiveTask(task)"
         >
-          verwijder taak
+          Verwijder taak
         </campus-button>
       </ng-container>
 
@@ -209,7 +208,7 @@
             </div>
             <campus-button
               (click)="preview(selectedContent, !!task.isPaperTask)"
-              >{{ task.isPaperTask ? 'Voorbeeld' : 'Openen' }}</campus-button
+              >Preview</campus-button
             >
           </ng-container>
         </div>
@@ -227,7 +226,7 @@
         <campus-button
           danger
           (click)="clickRemoveTaskEduContents(selectedContents)"
-          >verwijder oefeningen</campus-button
+          >Verwijder lesmateriaal</campus-button
         >
       </ng-template>
     </div>

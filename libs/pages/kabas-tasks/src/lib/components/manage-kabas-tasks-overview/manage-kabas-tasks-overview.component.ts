@@ -318,16 +318,16 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
   ): { label: string; handler: Function }[] {
     return [
       {
-        label: 'bekijken',
+        label: 'Bekijken',
         handler: () => this.router.navigate(['tasks', 'manage', task.id])
       },
       {
-        label: task && task.archivedYear ? 'dearchiveren' : 'archiveren',
+        label: task && task.archivedYear ? 'Dearchiveren' : 'Archiveren',
         handler: () =>
           this.viewModel.startArchivingTasks([task], !task.archivedYear)
       },
-      { label: 'resultaten', handler: () => console.log('resultaten') },
-      { label: 'doelenmatrix', handler: () => console.log('doelenmatrix') }
+      { label: 'Resultaten', handler: () => console.log('resultaten') },
+      { label: 'Doelenmatrix', handler: () => console.log('doelenmatrix') }
     ];
   }
 
