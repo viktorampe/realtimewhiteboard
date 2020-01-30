@@ -433,9 +433,7 @@ export class ManageKabasTasksDetailComponent implements OnInit {
   ): TaskEduContentInterface[] {
     if (taskEduContents.length === 0) return [];
 
-    let filteredTaskEduContents = [...taskEduContents];
-
-    filteredTaskEduContents = filteredTaskEduContents.filter(
+    const filteredTaskEduContents = [...taskEduContents].filter(
       tEC =>
         this.filterOnDiaboloPhase(filterState, tEC) &&
         this.filterOnRequired(filterState, tEC) &&

@@ -194,6 +194,23 @@ export class MockKabasTasksViewModel
             id: 5
           }
         ],
+        taskEduContents: [1, 2, 3].map(
+          id =>
+            new TaskEduContentFixture({
+              eduContentId: id,
+              eduContent: new EduContentFixture(
+                { id },
+                {
+                  id,
+                  title: 'oefening ' + id,
+                  learningArea: new LearningAreaFixture({
+                    id: 1,
+                    name: 'Wiskunde'
+                  })
+                }
+              )
+            })
+        ),
         startDate: yesterday,
         endDate: nextWeek
       },
@@ -331,24 +348,7 @@ export class MockKabasTasksViewModel
     // return this.paperTasksWithAssignments$.pipe(
     return this.tasksWithAssignments$.pipe(
       map(tasks => ({
-        ...tasks[0],
-        taskEduContents: [1, 2, 3].map(
-          id =>
-            new TaskEduContentFixture({
-              eduContentId: id,
-              eduContent: new EduContentFixture(
-                { id },
-                {
-                  id,
-                  title: 'oefening ' + id,
-                  learningArea: new LearningAreaFixture({
-                    id: 1,
-                    name: 'Wiskunde'
-                  })
-                }
-              )
-            })
-        )
+        ...tasks[0]
       }))
     );
   }
@@ -364,7 +364,6 @@ export class MockKabasTasksViewModel
 
   public getDeleteInfo(): any {}
 
-  public updateTaskEduContentsOrder() {}
   public updateTaskEduContentsRequired() {}
   public deleteTaskEduContents() {}
   public printTask() {}

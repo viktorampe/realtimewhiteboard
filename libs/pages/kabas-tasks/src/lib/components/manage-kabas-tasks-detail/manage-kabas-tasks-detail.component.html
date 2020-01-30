@@ -243,6 +243,7 @@
             [autoComplete]="false"
             [emitOnTextChange]="true"
             (valueChange)="searchTermFilterValueChanged($event)"
+            class="manage-kabas-tasks-detail__filterbar__filter manage-kabas-tasks-detail__filterbar__filter--title"
           ></campus-search-term>
 
           <campus-button-toggle-filter
@@ -250,6 +251,7 @@
             [multiple]="true"
             [filterCriteria]="requiredFilterCriteria"
             (filterSelectionChange)="requiredFilterSelectionChanged($event)"
+            class="manage-kabas-tasks-detail__filterbar__filter manage-kabas-tasks-detail__filterbar__filter--required"
           >
           </campus-button-toggle-filter>
 
@@ -257,6 +259,7 @@
             [multiple]="true"
             [filterCriteria]="diaboloPhaseFilterCriteria"
             (filterSelectionChange)="diaboloPhaseFilterSelectionChanged($event)"
+            class="manage-kabas-tasks-detail__filterbar__filter manage-kabas-tasks-detail__filterbar__filter--diabolo-phase"
           >
           </campus-button-toggle-filter>
 
@@ -264,6 +267,7 @@
             [multiple]="true"
             [filterCriteria]="levelFilterCriteria"
             (filterSelectionChange)="levelFilterSelectionChanged($event)"
+            class="manage-kabas-tasks-detail__filterbar__filter manage-kabas-tasks-detail__filterbar__filter--level"
           >
           </campus-button-toggle-filter>
 
