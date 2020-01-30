@@ -324,7 +324,7 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
       {
         label: task && task.archivedYear ? 'dearchiveren' : 'archiveren',
         handler: () =>
-          console.log(task.archivedYear ? 'dearchiveren' : 'archiveren')
+          this.viewModel.startArchivingTasks([task], !task.archivedYear)
       },
       { label: 'resultaten', handler: () => console.log('resultaten') },
       { label: 'doelenmatrix', handler: () => console.log('doelenmatrix') }
