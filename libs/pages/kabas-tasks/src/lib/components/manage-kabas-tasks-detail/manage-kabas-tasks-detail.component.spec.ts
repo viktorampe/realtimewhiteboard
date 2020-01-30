@@ -1,3 +1,4 @@
+//file.only
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { DebugElement } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
@@ -27,7 +28,6 @@ import {
   SearchModule
 } from '@campus/search';
 import {
-  ContentActionsService,
   CONTENT_ACTIONS_SERVICE_TOKEN,
   CONTENT_OPENER_TOKEN,
   ENVIRONMENT_ICON_MAPPING_TOKEN,
@@ -42,7 +42,6 @@ import { hot } from '@nrwl/angular/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { BehaviorSubject, of } from 'rxjs';
 import { AssigneeFixture } from '../../interfaces/Assignee.fixture';
-import { TaskEduContentWithEduContentInterface } from '../../interfaces/TaskEduContentWithEduContent.interface';
 import {
   CurrentTaskParams,
   KabasTasksViewModel
@@ -53,8 +52,8 @@ import {
   NewTaskFormValues
 } from '../new-task/new-task.component';
 import { TaskEduContentListItemComponent } from '../task-edu-content-list-item/task-edu-content-list-item.component';
-import { ContentActionsServiceInterface } from './../../../../../../shared/src/lib/services/content-actions/content-actions.service.interface';
 import { AssigneeInterface } from './../../interfaces/Assignee.interface';
+import { TaskEduContentWithEduContentInterface } from './../../interfaces/TaskEduContentWithEduContent.interface';
 import { TaskWithAssigneesInterface } from './../../interfaces/TaskWithAssignees.interface';
 import { ManageKabasTasksAssigneeModalComponent } from './../manage-kabas-tasks-assignee-modal/manage-kabas-tasks-assignee-modal.component';
 import { ManageKabasTasksDetailComponent } from './manage-kabas-tasks-detail.component';
@@ -66,6 +65,47 @@ describe('ManageKabasTasksDetailComponent', () => {
   let matDialog: MatDialog;
   let router: Router;
   const queryParams: BehaviorSubject<Params> = new BehaviorSubject<Params>({});
+
+  let mockViewmodel: MockKabasTasksViewModel;
+  let currentTask: TaskWithAssigneesInterface;
+  let restOfTasks: TaskWithAssigneesInterface[];
+  let taskEduContents: TaskEduContentWithEduContentInterface[];
+
+  // replaces value of the currentTask$  of the mockViewmodel
+  const updateCurrentTask = newCurrentTask => {
+    mockViewmodel.tasksWithAssignments$.next([newCurrentTask, ...restOfTasks]);
+    fixture.detectChanges();
+  };
+
+  // adds actions to each item of TaskEduContentWithEduContentInterface[]
+  const addActions = (
+    tECs: TaskEduContentWithEduContentInterface[],
+    actions = []
+  ) => {
+    tECs = tECs.map(tEC => Object.assign(tEC, { actions }));
+    return tECs;
+  };
+
+  // create a taskEduContentWithEduContent fixture
+  const createTaskEduContent = (
+    id = 1,
+    title = 'oefening 1',
+    required = false,
+    diaboloPhaseId = 1,
+    levelId = 1,
+    actions = []
+  ) =>
+    Object.assign(
+      new TaskEduContentFixture({
+        id,
+        required,
+        eduContent: new EduContentFixture(
+          {},
+          { title, diaboloPhaseId, levelId }
+        )
+      }),
+      { actions }
+    );
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
@@ -113,7 +153,7 @@ describe('ManageKabasTasksDetailComponent', () => {
         { provide: MatIconRegistry, useClass: MockMatIconRegistry },
         {
           provide: CONTENT_ACTIONS_SERVICE_TOKEN,
-          useClass: ContentActionsService
+          useValue: { getActionsForEduContent: () => [] }
         },
         {
           provide: CONTENT_OPENER_TOKEN,
@@ -150,6 +190,10 @@ describe('ManageKabasTasksDetailComponent', () => {
     fixture = TestBed.createComponent(ManageKabasTasksDetailComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+
+    mockViewmodel = viewModel as MockKabasTasksViewModel;
+    [currentTask, ...restOfTasks] = mockViewmodel.tasksWithAssignments$.value;
+    taskEduContents = addActions(currentTask.taskEduContents);
   });
 
   it('should create', () => {
@@ -157,23 +201,18 @@ describe('ManageKabasTasksDetailComponent', () => {
   });
 
   describe('openAssigneeModal', () => {
-    let mockViewModel: MockKabasTasksViewModel;
     let afterClosed$: BehaviorSubject<AssigneeInterface[]>;
-    let mockCurrentTask: TaskWithAssigneesInterface;
 
     beforeEach(() => {
-      mockViewModel = viewModel;
-      mockCurrentTask = mockViewModel.tasksWithAssignments$.value[0];
-
       const dialog = TestBed.get(MatDialog);
       afterClosed$ = new BehaviorSubject<AssigneeInterface[]>([]);
       dialog.open = jest.fn(() => ({ afterClosed: () => afterClosed$ }));
     });
 
     it('should open the task assignees modal', () => {
-      const mockClassGroups = mockViewModel.classGroups$.value;
-      const mockGroups = mockViewModel.groups$.value;
-      const mockStudents = mockViewModel.students$.value;
+      const mockClassGroups = mockViewmodel.classGroups$.value;
+      const mockGroups = mockViewmodel.groups$.value;
+      const mockStudents = mockViewmodel.students$.value;
 
       const expectedTaskClassGroups = [
         {
@@ -229,9 +268,9 @@ describe('ManageKabasTasksDetailComponent', () => {
       ];
 
       const expectedData = {
-        title: mockCurrentTask.name,
-        isPaperTask: mockCurrentTask.isPaperTask,
-        currentTaskAssignees: mockCurrentTask.assignees,
+        title: currentTask.name,
+        isPaperTask: currentTask.isPaperTask,
+        currentTaskAssignees: currentTask.assignees,
         possibleTaskClassGroups: expectedTaskClassGroups,
         possibleTaskGroups: expectedTaskGroups,
         possibleTaskStudents: expectedTaskStudents
@@ -256,7 +295,7 @@ describe('ManageKabasTasksDetailComponent', () => {
       afterClosed$.next(dialogResult);
       component.openAssigneeModal();
       expect(viewModel.updateTaskAccess).toHaveBeenCalledWith(
-        mockCurrentTask,
+        currentTask,
         dialogResult
       );
     });
@@ -466,8 +505,8 @@ describe('ManageKabasTasksDetailComponent', () => {
 
     it('should show the educontent info in the sidepanel when there is a selection', () => {
       component.selectedContents$.next([
-        new TaskEduContentFixture(),
-        new TaskEduContentFixture()
+        createTaskEduContent(1),
+        createTaskEduContent(2)
       ]);
       fixture.detectChanges();
 
@@ -489,28 +528,8 @@ describe('ManageKabasTasksDetailComponent', () => {
         );
 
       describe('paper task', () => {
-        let mockViewmodel: MockKabasTasksViewModel;
-        let currentTask: TaskWithAssigneesInterface;
-        let restOfTasks: TaskWithAssigneesInterface[];
-
-        const updateCurrentTask = newCurrentTask => {
-          mockViewmodel.tasksWithAssignments$.next([
-            newCurrentTask,
-            ...restOfTasks
-          ]);
-          fixture.detectChanges();
-        };
-
         beforeEach(() => {
-          mockViewmodel = viewModel as MockKabasTasksViewModel;
-
-          [
-            currentTask,
-            ...restOfTasks
-          ] = mockViewmodel.tasksWithAssignments$.value;
-
           currentTask.isPaperTask = true;
-
           updateCurrentTask(currentTask);
         });
 
@@ -643,38 +662,20 @@ describe('ManageKabasTasksDetailComponent', () => {
   });
 
   describe('removeAssignee', () => {
-    let mockViewModel: MockKabasTasksViewModel;
-    let mockCurrentTask: TaskWithAssigneesInterface;
-
-    beforeEach(() => {
-      mockViewModel = viewModel;
-      mockCurrentTask = mockViewModel.tasksWithAssignments$.value[0];
-    });
-
     it('should remove the assignee', () => {
       viewModel.updateTaskAccess = jest.fn();
-      const [
-        assigneeToRemove,
-        ...remainingAssignees
-      ] = mockCurrentTask.assignees;
+      const [assigneeToRemove, ...remainingAssignees] = currentTask.assignees;
 
-      component.removeAssignee(mockCurrentTask, assigneeToRemove);
+      component.removeAssignee(currentTask, assigneeToRemove);
       expect(viewModel.updateTaskAccess).toHaveBeenCalledWith(
-        mockCurrentTask,
+        currentTask,
         remainingAssignees
       );
     });
   });
 
   describe('reordering', () => {
-    let mockViewModel: MockKabasTasksViewModel;
-    let mockCurrentTask: TaskWithAssigneesInterface;
-
     beforeEach(() => {
-      mockViewModel = viewModel;
-      mockViewModel.currentTask$.subscribe(task => {
-        mockCurrentTask = task;
-      });
       component.isReordering = false;
     });
 
@@ -686,8 +687,6 @@ describe('ManageKabasTasksDetailComponent', () => {
     });
 
     it('should update reorderableTaskEduContents$ when dropping element', () => {
-      const { taskEduContents } = mockCurrentTask;
-
       const event = { previousIndex: 2, currentIndex: 1 } as CdkDragDrop<
         TaskEduContentWithEduContentInterface[]
       >;
@@ -707,13 +706,12 @@ describe('ManageKabasTasksDetailComponent', () => {
     });
 
     it('should call updateTaskEduContentsOrder and toggle the mode', () => {
-      const { taskEduContents } = mockCurrentTask;
       component.isReordering = true;
-      spyOn(mockViewModel, 'updateTaskEduContentsOrder');
+      spyOn(viewModel, 'updateTaskEduContentsOrder');
 
       component.saveOrder();
 
-      expect(mockViewModel.updateTaskEduContentsOrder).toHaveBeenCalledWith(
+      expect(viewModel.updateTaskEduContentsOrder).toHaveBeenCalledWith(
         taskEduContents
       );
       expect(component.isReordering).toBeFalsy();
@@ -721,48 +719,7 @@ describe('ManageKabasTasksDetailComponent', () => {
   });
 
   describe('filtering', () => {
-    let mockViewmodel: MockKabasTasksViewModel;
-    let currentTask: TaskWithAssigneesInterface;
-    let restOfTasks: TaskWithAssigneesInterface[];
-    let taskEduContents: TaskEduContentWithEduContentInterface[];
-
-    const updateCurrentTask = newCurrentTask => {
-      mockViewmodel.tasksWithAssignments$.next([
-        newCurrentTask,
-        ...restOfTasks
-      ]);
-      fixture.detectChanges();
-    };
-
     beforeEach(() => {
-      mockViewmodel = viewModel as MockKabasTasksViewModel;
-      [currentTask, ...restOfTasks] = mockViewmodel.tasksWithAssignments$.value;
-      const contentActionService = TestBed.get(
-        CONTENT_ACTIONS_SERVICE_TOKEN
-      ) as ContentActionsServiceInterface;
-      contentActionService.getActionsForEduContent = jest
-        .fn()
-        .mockReturnValue([]);
-
-      const createTaskEduContent = (
-        id,
-        title,
-        required,
-        diaboloPhaseId,
-        levelId
-      ) =>
-        Object.assign(
-          new TaskEduContentFixture({
-            id,
-            required,
-            eduContent: new EduContentFixture(
-              {},
-              { title, diaboloPhaseId, levelId }
-            )
-          }),
-          { actions: [] }
-        );
-
       taskEduContents = [
         createTaskEduContent(1, 'oefening 1', false, 1, 1),
         createTaskEduContent(2, 'oefening 2', false, 2, 1),
