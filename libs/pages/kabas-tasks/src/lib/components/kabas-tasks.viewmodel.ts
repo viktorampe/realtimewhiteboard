@@ -361,7 +361,7 @@ export class KabasTasksViewModel implements ContentOpenerInterface {
         taskEduContents: taskEduContents.map(tec => {
           return {
             id: tec.id,
-            changes: { id: tec.id, required }
+            changes: { id: tec.id, required, taskId: tec.taskId }
           };
         })
       })
@@ -377,7 +377,7 @@ export class KabasTasksViewModel implements ContentOpenerInterface {
         taskEduContents: taskEduContents.map((tec, index) => {
           return {
             id: tec.id,
-            changes: { id: tec.id, index }
+            changes: { id: tec.id, index, taskId: tec.taskId }
           };
         })
       })
