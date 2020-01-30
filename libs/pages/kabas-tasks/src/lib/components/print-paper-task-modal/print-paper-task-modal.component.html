@@ -1,13 +1,13 @@
-<div mat-dialog-title class="print-paper-taks__title">
-  <h2 class="print-paper-taks__title__label">Afdrukken</h2>
+<div mat-dialog-title class="print-paper-tasks__title">
+  <div class="print-paper-tasks__title__label">Afdrukken</div>
 </div>
 
 <mat-dialog-content>
-  <div class="print-paper-taks__container">
+  <div class="print-paper-tasks__container">
     <div
       (click)="clickPrintTask(false)"
-      class="print-paper-taks__container__link print-paper-taks__container__link--print"
-      [class.print-paper-taks__container__link--disabled]="
+      class="print-paper-tasks__container__link print-paper-tasks__container__link--print"
+      [class.print-paper-tasks__container__link--disabled]="
         isButtonDisabled(printEnum.WITH_NAMES)
       "
       [matTooltip]="
@@ -18,44 +18,44 @@
     >
       <mat-icon
         svgIcon="print"
-        class="print-paper-taks__container__link__icon"
+        class="print-paper-tasks__container__link__icon"
       ></mat-icon
-      ><span class="print-paper-taks__container__link__label"
+      ><span class="print-paper-tasks__container__link__label"
         >Afdrukken met namen</span
       ></div
     >
     <div
       (click)="clickPrintTask(true)"
-      class="print-paper-taks__container__link print-paper-taks__container__link--print"
-      [class.print-paper-taks__container__link--disabled]="
+      class="print-paper-tasks__container__link print-paper-tasks__container__link--print"
+      [class.print-paper-tasks__container__link--disabled]="
         isButtonDisabled(printEnum.WITHOUT_NAMES)
       "
       ><mat-icon
         svgIcon="print"
-        class="print-paper-taks__container__link__icon"
+        class="print-paper-tasks__container__link__icon"
       ></mat-icon
-      ><span class="print-paper-taks__container__link__label"
+      ><span class="print-paper-tasks__container__link__label"
         >Afdrukken zonder namen</span
       ></div
     >
     <div
       (click)="clickPrintSolution()"
-      class="print-paper-taks__container__link print-paper-taks__container__link--print"
-      [class.print-paper-taks__container__link--disabled]="
+      class="print-paper-tasks__container__link print-paper-tasks__container__link--print"
+      [class.print-paper-tasks__container__link--disabled]="
         isButtonDisabled(printEnum.SOLUTION)
       "
       ><mat-icon
         svgIcon="print"
-        class="print-paper-taks__container__link__icon"
+        class="print-paper-tasks__container__link__icon"
       ></mat-icon
-      ><span class="print-paper-taks__container__link__label"
+      ><span class="print-paper-tasks__container__link__label"
         >Correctiesleutel afdrukken</span
       ></div
     >
   </div>
 </mat-dialog-content>
 
-<mat-dialog-actions class="print-paper-taks__actions">
+<mat-dialog-actions class="print-paper-tasks__actions">
   <campus-button
     primary
     class="print-paper-taks__actions__button"

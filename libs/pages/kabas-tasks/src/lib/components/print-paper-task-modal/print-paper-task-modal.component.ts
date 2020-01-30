@@ -18,7 +18,7 @@ export class PrintPaperTaskModalComponent {
   public printEnum = PrintPaperTaskModalResultEnum;
 
   public isButtonDisabled(type: PrintPaperTaskModalResultEnum) {
-    return this.data.disable.includes(type);
+    return this.data.disable && this.data.disable.includes(type);
   }
   public clickPrintTask(withNames: boolean) {
     this.dialogRef.close(

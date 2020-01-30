@@ -48,7 +48,6 @@ describe('PrintPaperTaskModalComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  // file.only
   describe('print actions', () => {
     beforeEach(() => {
       dialogRef.close = jest.fn();
@@ -103,12 +102,12 @@ describe('PrintPaperTaskModalComponent', () => {
       fixture.detectChanges();
 
       const buttonDEs = fixture.debugElement.queryAll(
-        By.css('.print-paper-taks__container__link')
+        By.css('.print-paper-tasks__container__link')
       );
 
       buttonDEs.forEach(button => {
         expect(button.nativeElement.classList).toContain(
-          'print-paper-taks__container__link--disabled'
+          'print-paper-tasks__container__link--disabled'
         );
       });
     });
@@ -117,7 +116,7 @@ describe('PrintPaperTaskModalComponent', () => {
   describe('components', () => {
     it('should show 3 print buttons', () => {
       const buttonDEs = fixture.debugElement.queryAll(
-        By.css('.print-paper-taks__container__link')
+        By.css('.print-paper-tasks__container__link')
       );
 
       [
@@ -131,7 +130,7 @@ describe('PrintPaperTaskModalComponent', () => {
 
     it('should show a cancel button', () => {
       const buttonDEs = fixture.debugElement.queryAll(
-        By.css('.print-paper-taks__actions__button')
+        By.css('.print-paper-tasks__actions__button')
       );
 
       expect(buttonDEs[0].nativeElement.textContent.trim()).toBe('Annuleren');

@@ -1,4 +1,4 @@
-.print-paper-taks__container {
+.print-paper-tasks__container {
   &__link {
     display: flex;
     &__icon {
@@ -15,10 +15,15 @@
     &:hover {
       text-decoration: underline;
       cursor: pointer;
-      &.manage-kabas-tasks-detail__info__link--disabled {
+      &.print-paper-tasks__container__link--disabled {
         text-decoration: none;
         cursor: not-allowed;
       }
     }
   }
+}
+.print-paper-tasks__actions {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
 }
