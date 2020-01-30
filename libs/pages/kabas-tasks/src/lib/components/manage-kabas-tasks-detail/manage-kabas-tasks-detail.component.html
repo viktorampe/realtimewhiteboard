@@ -58,8 +58,7 @@
   <campus-side-sheet-header>
     <ng-container [ngSwitch]="(selectedContents$ | async)?.length">
       <ng-container *ngSwitchCase="0">Over deze taak:</ng-container>
-      <ng-container *ngSwitchCase="1">Over deze oefening:</ng-container>
-      <ng-container *ngSwitchDefault>Over deze oefeningen:</ng-container>
+      <ng-container *ngSwitchDefault>Over dit lesmateriaal:</ng-container>
     </ng-container>
   </campus-side-sheet-header>
 
@@ -176,7 +175,7 @@
             ></div
           >
         </ng-container>
-        <campus-button primary>+ oefening toevoegen</campus-button>
+        <campus-button primary>+ lesmateriaal toevoegen</campus-button>
         <campus-button
           danger
           (click)="clickDeleteTask(task)"
@@ -225,7 +224,7 @@
         <campus-button
           danger
           (click)="clickRemoveTaskEduContents(selectedContents)"
-          >verwijder oefeningen</campus-button
+          >verwijder lesmateriaal</campus-button
         >
       </ng-template>
     </div>
