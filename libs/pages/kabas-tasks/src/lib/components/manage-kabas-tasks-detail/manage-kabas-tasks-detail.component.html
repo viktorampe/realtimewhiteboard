@@ -105,7 +105,7 @@
               (click)="openAssigneeModal()"
               >+</campus-button
             >
-            leerlingen toevoegen voor deze taak:
+            Leerlingen toevoegen voor deze taak:
           </div>
           <div>
             <span
@@ -175,13 +175,13 @@
             ></div
           >
         </ng-container>
-        <campus-button primary>+ lesmateriaal toevoegen</campus-button>
+        <campus-button primary>+ Lesmateriaal toevoegen</campus-button>
         <campus-button
           danger
           (click)="clickDeleteTask(task)"
           [disabled]="isActiveTask(task)"
         >
-          verwijder taak
+          Verwijder taak
         </campus-button>
       </ng-container>
 
@@ -206,7 +206,7 @@
             </div>
             <campus-button
               (click)="preview(selectedContent, !!task.isPaperTask)"
-              >preview</campus-button
+              >Preview</campus-button
             >
           </ng-container>
         </div>
@@ -224,7 +224,7 @@
         <campus-button
           danger
           (click)="clickRemoveTaskEduContents(selectedContents)"
-          >verwijder lesmateriaal</campus-button
+          >Verwijder lesmateriaal</campus-button
         >
       </ng-template>
     </div>
