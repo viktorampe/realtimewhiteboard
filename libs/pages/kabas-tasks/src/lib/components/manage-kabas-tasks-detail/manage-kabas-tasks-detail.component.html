@@ -274,17 +274,14 @@
           </div>
 
           <div class="manage-kabas-tasks-detail__list__reorder-actions">
-            <campus-button (click)="isReordering = true" *ngIf="!isReordering"
+            <campus-button (click)="toggleIsReordering()" *ngIf="!isReordering"
               >Volgorde wijzigen</campus-button
             >
 
-            <campus-button (click)="isReordering = false" *ngIf="isReordering"
+            <campus-button (click)="toggleIsReordering()" *ngIf="isReordering"
               >Annuleren</campus-button
             >
-            <campus-button
-              primary
-              (click)="saveOrder(taskContent.options)"
-              *ngIf="isReordering"
+            <campus-button primary (click)="saveOrder()" *ngIf="isReordering"
               >Opslaan</campus-button
             >
           </div>
