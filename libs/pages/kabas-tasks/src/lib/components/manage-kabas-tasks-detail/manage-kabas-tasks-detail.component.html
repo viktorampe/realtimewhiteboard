@@ -193,7 +193,9 @@
           data-cy="educontent-detail"
         >
           <ng-container
-            *ngIf="selectedContent.publishedEduContentMetadata as metadata"
+            *ngIf="
+              selectedContent.eduContent.publishedEduContentMetadata as metadata
+            "
           >
             <h2>{{ metadata.title }}</h2>
             <p>{{ metadata.description }}</p>
@@ -217,9 +219,7 @@
           class="manage-kabas-tasks-detail__info__container"
         >
           <mat-radio-group
-            (change)="
-              setTaskEduContentAsRequired($event, selectedContents, task)
-            "
+            (change)="setTaskEduContentsRequiredState($event, selectedContents)"
           >
             <mat-radio-button [value]="true">Moetje</mat-radio-button>
             <br /><mat-radio-button [value]="false">Magje</mat-radio-button>

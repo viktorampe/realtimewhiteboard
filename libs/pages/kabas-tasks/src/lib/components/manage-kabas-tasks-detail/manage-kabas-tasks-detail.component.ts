@@ -56,7 +56,7 @@ export class ManageKabasTasksDetailComponent implements OnInit {
   public selectableLearningAreas$: Observable<LearningAreaInterface[]>;
   isReordering = false;
   isPaperTask = true; // replace w/ stream
-  public selectedContents$ = new BehaviorSubject<EduContentInterface[]>([]);
+  public selectedContents$ = new BehaviorSubject<TaskEduContentInterface[]>([]);
   public task$: Observable<TaskWithAssigneesInterface>;
   public reorderableTaskEduContents$ = new BehaviorSubject<
     TaskEduContentWithEduContentInterface[]
@@ -148,11 +148,11 @@ export class ManageKabasTasksDetailComponent implements OnInit {
   }
 
   public onSelectionChange() {
-    const selected: EduContentInterface[] = this.contentSelectionList.selectedOptions.selected
-      .map(option => option.value.eduContent as EduContentInterface)
+    const selected: TaskEduContentInterface[] = this.contentSelectionList.selectedOptions.selected
+      .map(option => option.value)
       .sort((a, b) =>
-        a.publishedEduContentMetadata.title <
-        b.publishedEduContentMetadata.title
+        a.eduContent.publishedEduContentMetadata.title <
+        b.eduContent.publishedEduContentMetadata.title
           ? -1
           : 1
       );
@@ -371,19 +371,10 @@ export class ManageKabasTasksDetailComponent implements OnInit {
     return task.status === TaskStatusEnum.ACTIVE;
   }
 
-  setTaskEduContentAsRequired(
+  public setTaskEduContentsRequiredState(
     event: MatRadioChange,
-    eduContents: EduContentInterface[],
-    task: TaskWithAssigneesInterface
+    taskEduContents: TaskEduContentInterface[]
   ) {
-    const eduContentIdstoUpdate = eduContents.map(eduContent => eduContent.id);
-    const taskEduContentsToUpdate = task.taskEduContents.filter(tEC =>
-      eduContentIdstoUpdate.includes(tEC.eduContentId)
-    );
-
-    this.viewModel.updateTaskEduContentsRequired(
-      taskEduContentsToUpdate,
-      event.value
-    );
+    this.viewModel.updateTaskEduContentsRequired(taskEduContents, event.value);
   }
 }
