@@ -56,7 +56,7 @@ export class ManageKabasTasksDetailComponent implements OnInit {
   public selectableLearningAreas$: Observable<LearningAreaInterface[]>;
   isReordering = false;
   isPaperTask = true; // replace w/ stream
-  public selectedContents$ = new BehaviorSubject<EduContentInterface[]>([]);
+  public selectedContents$ = new BehaviorSubject<TaskEduContentInterface[]>([]);
   public task$: Observable<TaskWithAssigneesInterface>;
   public reorderableTaskEduContents$ = new BehaviorSubject<
     TaskEduContentWithEduContentInterface[]
@@ -148,11 +148,11 @@ export class ManageKabasTasksDetailComponent implements OnInit {
   }
 
   public onSelectionChange() {
-    const selected: EduContentInterface[] = this.contentSelectionList.selectedOptions.selected
-      .map(option => option.value.eduContent as EduContentInterface)
-      .sort((a, b) =>
-        a.publishedEduContentMetadata.title <
-        b.publishedEduContentMetadata.title
+    const selected: TaskEduContentInterface[] = this.contentSelectionList.selectedOptions.selected
+      .map(option => option.value)
+      .sort((a: TaskEduContentInterface, b: TaskEduContentInterface) =>
+        a.eduContent.publishedEduContentMetadata.title <
+        b.eduContent.publishedEduContentMetadata.title
           ? -1
           : 1
       );

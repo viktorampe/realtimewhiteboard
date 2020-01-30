@@ -340,7 +340,7 @@ export class TaskEduContentEffects {
       effectFeedback: EffectFeedback.generateErrorFeedback(
         this.uuid(),
         action,
-        `Het is niet gelukt om de taken ${methodVerbs[method]}.`
+        `Het is niet gelukt om het lesmateriaal ${methodVerbs[method]}.`
       )
     });
     return feedbackAction;
