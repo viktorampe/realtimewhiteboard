@@ -51,4 +51,8 @@ export class CheckboxListFilterComponent
       this.filterSelectionChange.emit([this.filterCriteria]);
     });
   }
+
+  public reset() {
+    throw new Error('Not implemented yet');
+  }
 }

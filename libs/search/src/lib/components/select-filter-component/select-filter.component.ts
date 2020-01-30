@@ -93,6 +93,10 @@ export class SelectFilterComponent
     this.subscriptions.unsubscribe();
   }
 
+  public reset() {
+    throw new Error('Not implemented yet');
+  }
+
   private criteriaToOptions(
     criteria: SearchFilterCriteriaInterface
   ): SelectOption[] {
