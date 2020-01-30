@@ -245,24 +245,32 @@
             (valueChange)="searchTermUpdated($event)"
           ></campus-search-term>
 
-          <div
+          <campus-button-toggle-filter
             *ngIf="!task.isPaperTask"
-            class="manage-kabas-tasks-detail__filterbar__required-toggle"
+            [multiple]="true"
+            [filterCriteria]="requiredFilterCriteria"
+            (filterSelectionChange)="requiredFilterSelectionChanged($event)"
           >
-            Moetje
-            <mat-slide-toggle color="primary"> </mat-slide-toggle>
-            Magje
-          </div>
+          </campus-button-toggle-filter>
 
           <campus-button-toggle-filter
             [multiple]="true"
-            [filterCriteria]="diaboloPhaseFilter"
+            [filterCriteria]="diaboloPhaseFilterCriteria"
+            (filterSelectionChange)="diaboloPhaseFilterSelectionChanged($event)"
+          >
+          </campus-button-toggle-filter>
+
+          <campus-button-toggle-filter
+            [multiple]="true"
+            [filterCriteria]="levelFilterCriteria"
+            (filterSelectionChange)="levelFilterSelectionChanged($event)"
           >
           </campus-button-toggle-filter>
 
           <campus-button
             class="manage-kabas-tasks-detail__filterbar__reset-filters"
             iconClass="reset-filters"
+            (click)="clickResetFilters()"
           ></campus-button>
         </div>
 

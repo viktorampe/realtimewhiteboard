@@ -1,5 +1,12 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  Inject,
+  OnInit,
+  QueryList,
+  ViewChild,
+  ViewChildren
+} from '@angular/core';
 import { MatDialog, MatSelectionList } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
@@ -9,7 +16,11 @@ import {
   TaskEduContentInterface,
   TaskInterface
 } from '@campus/dal';
-import { SearchFilterCriteriaInterface } from '@campus/search';
+import {
+  ButtonToggleFilterComponent,
+  SearchFilterCriteriaInterface,
+  SearchTermComponent
+} from '@campus/search';
 import {
   OpenStaticContentServiceInterface,
   OPEN_STATIC_CONTENT_SERVICE_TOKEN
@@ -53,15 +64,19 @@ export enum TaskSortEnum {
   selector: 'campus-manage-kabas-tasks-detail',
   templateUrl: './manage-kabas-tasks-detail.component.html',
   styleUrls: ['./manage-kabas-tasks-detail.component.scss']
-  // changeDetection: ChangeDetectionStrategy.Default
+  // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ManageKabasTasksDetailComponent implements OnInit {
   public TaskSortEnum = TaskSortEnum;
-  public diaboloPhaseFilter: SearchFilterCriteriaInterface;
+  public assigneeTypesEnum: typeof AssigneeTypesEnum = AssigneeTypesEnum;
+
+  public diaboloPhaseFilterCriteria: SearchFilterCriteriaInterface;
+  public requiredFilterCriteria: SearchFilterCriteriaInterface;
+  public levelFilterCriteria: SearchFilterCriteriaInterface;
+  public isReordering = false;
 
   public isNewTask$: Observable<boolean>;
   public selectableLearningAreas$: Observable<LearningAreaInterface[]>;
-  public isReordering = false;
 
   public selectedContents$ = new BehaviorSubject<EduContentInterface[]>([]);
   public task$: Observable<TaskWithAssigneesInterface>;
@@ -70,8 +85,6 @@ export class ManageKabasTasksDetailComponent implements OnInit {
   >([]);
 
   public filteredTaskEduContents$: Observable<TaskEduContentInterface[]>;
-
-  public assigneeTypesEnum: typeof AssigneeTypesEnum = AssigneeTypesEnum;
 
   private filterState$ = new BehaviorSubject<any>({});
 
@@ -84,6 +97,12 @@ export class ManageKabasTasksDetailComponent implements OnInit {
     this.sideSheet = sidesheet;
   }
 
+  @ViewChildren(SearchTermComponent)
+  private searchTermFilters: QueryList<SearchTermComponent>;
+
+  @ViewChildren(ButtonToggleFilterComponent)
+  private buttonToggleFilters: QueryList<ButtonToggleFilterComponent>;
+
   constructor(
     private viewModel: KabasTasksViewModel,
     private dialog: MatDialog,
@@ -92,17 +111,18 @@ export class ManageKabasTasksDetailComponent implements OnInit {
     @Inject(OPEN_STATIC_CONTENT_SERVICE_TOKEN)
     private openStaticContentService: OpenStaticContentServiceInterface,
     @Inject(FILTER_SERVICE_TOKEN) private filterService: FilterServiceInterface
-  ) {
+  ) {}
+
+  ngOnInit() {
     this.isNewTask$ = this.viewModel.currentTaskParams$.pipe(
       map(currentTaskParams => !currentTaskParams.id)
     );
 
     this.selectableLearningAreas$ = this.viewModel.selectableLearningAreas$;
-  }
-
-  ngOnInit() {
     this.task$ = this.viewModel.currentTask$;
-    this.diaboloPhaseFilter = this.getDiaboloPhaseFilter();
+    this.diaboloPhaseFilterCriteria = this.getDiaboloPhaseFilterCriteria();
+    this.requiredFilterCriteria = this.getRequiredFilterCriteria();
+    this.levelFilterCriteria = this.getLevelFilterCriteria();
 
     this.isNewTask$.pipe(take(1)).subscribe(isNewTask => {
       if (isNewTask) {
@@ -182,6 +202,66 @@ export class ManageKabasTasksDetailComponent implements OnInit {
     this.filterState$.next(newFilterState);
   }
 
+  public diaboloPhaseFilterSelectionChanged(
+    diaboloPhaseFilterCriteria: SearchFilterCriteriaInterface[]
+  ) {
+    // emit is always an array with 1 value
+    const diaboloPhaseFilterCriterium = diaboloPhaseFilterCriteria[0];
+
+    const diaboloPhase = diaboloPhaseFilterCriterium.values
+      .filter(value => value.selected)
+      .map(selectedValue => selectedValue.data.id);
+
+    const currentFilterState = this.filterState$.value;
+    const newFilterState = { ...currentFilterState, diaboloPhase };
+
+    this.filterState$.next(newFilterState);
+  }
+
+  public requiredFilterSelectionChanged(
+    requiredFilterCriteria: SearchFilterCriteriaInterface[]
+  ) {
+    // emit is always an array with 1 value
+    const requiredFilterCriterium = requiredFilterCriteria[0];
+
+    const required = requiredFilterCriterium.values
+      .filter(value => value.selected)
+      .map(selectedValue => selectedValue.data.required);
+
+    const currentFilterState = this.filterState$.value;
+    const newFilterState = { ...currentFilterState, required };
+
+    this.filterState$.next(newFilterState);
+  }
+
+  public levelFilterSelectionChanged(
+    levelFilterCriteria: SearchFilterCriteriaInterface[]
+  ) {
+    // emit is always an array with 1 value
+    const levelFilterCriterium = levelFilterCriteria[0];
+
+    const level = levelFilterCriterium.values
+      .filter(value => value.selected)
+      .map(selectedValue => selectedValue.data.level);
+
+    const currentFilterState = this.filterState$.value;
+    const newFilterState = { ...currentFilterState, level };
+
+    this.filterState$.next(newFilterState);
+  }
+
+  public clickResetFilters(): void {
+    this.searchTermFilters.forEach(searchTermFilter =>
+      searchTermFilter.reset(false)
+    );
+
+    this.buttonToggleFilters.forEach(buttonToggleFilter =>
+      buttonToggleFilter.reset(false)
+    );
+
+    this.filterState$.next({});
+  }
+
   public openAssigneeModal() {
     this.getAssigneeModalData()
       .pipe(
@@ -198,57 +278,6 @@ export class ManageKabasTasksDetailComponent implements OnInit {
       .subscribe(([assignees, task]) => {
         if (assignees) this.viewModel.updateTaskAccess(task, assignees);
       });
-  }
-
-  private getAssigneeModalData(): Observable<
-    ManageKabasTasksAssigneeDataInterface
-  > {
-    return combineLatest([
-      this.task$,
-      this.viewModel.classGroups$,
-      this.viewModel.groups$,
-      this.viewModel.students$
-    ]).pipe(
-      take(1),
-      map(([currentTask, classGroups, groups, students]) => {
-        const possibleTaskClassGroups: AssigneeInterface[] = classGroups.map(
-          classGroup => ({
-            type: AssigneeTypesEnum.CLASSGROUP,
-            label: classGroup.name,
-            relationId: classGroup.id
-          })
-        );
-
-        const possibleTaskGroups: AssigneeInterface[] = groups.map(group => ({
-          type: AssigneeTypesEnum.GROUP,
-          label: group.name,
-          relationId: group.id
-        }));
-
-        const possibleTaskStudents: AssigneeInterface[] = students.map(
-          student => ({
-            type: AssigneeTypesEnum.STUDENT,
-            label: student.displayName,
-            relationId: student.id
-          })
-        );
-
-        const data: ManageKabasTasksAssigneeDataInterface = {
-          title: currentTask.name,
-          isPaperTask: currentTask.isPaperTask,
-
-          // all available taskAssignees
-          possibleTaskClassGroups,
-          possibleTaskGroups,
-          possibleTaskStudents,
-
-          // current values in page
-          currentTaskAssignees: currentTask.assignees
-        };
-
-        return data;
-      })
-    );
   }
 
   public openNewTaskDialog() {
@@ -344,6 +373,57 @@ export class ManageKabasTasksDetailComponent implements OnInit {
     return task.status === TaskStatusEnum.ACTIVE;
   }
 
+  private getAssigneeModalData(): Observable<
+    ManageKabasTasksAssigneeDataInterface
+  > {
+    return combineLatest([
+      this.task$,
+      this.viewModel.classGroups$,
+      this.viewModel.groups$,
+      this.viewModel.students$
+    ]).pipe(
+      take(1),
+      map(([currentTask, classGroups, groups, students]) => {
+        const possibleTaskClassGroups: AssigneeInterface[] = classGroups.map(
+          classGroup => ({
+            type: AssigneeTypesEnum.CLASSGROUP,
+            label: classGroup.name,
+            relationId: classGroup.id
+          })
+        );
+
+        const possibleTaskGroups: AssigneeInterface[] = groups.map(group => ({
+          type: AssigneeTypesEnum.GROUP,
+          label: group.name,
+          relationId: group.id
+        }));
+
+        const possibleTaskStudents: AssigneeInterface[] = students.map(
+          student => ({
+            type: AssigneeTypesEnum.STUDENT,
+            label: student.displayName,
+            relationId: student.id
+          })
+        );
+
+        const data: ManageKabasTasksAssigneeDataInterface = {
+          title: currentTask.name,
+          isPaperTask: currentTask.isPaperTask,
+
+          // all available taskAssignees
+          possibleTaskClassGroups,
+          possibleTaskGroups,
+          possibleTaskStudents,
+
+          // current values in page
+          currentTaskAssignees: currentTask.assignees
+        };
+
+        return data;
+      })
+    );
+  }
+
   private getFilteredTaskEduContents$(): Observable<TaskEduContentInterface[]> {
     return combineLatest([this.filterState$, this.task$]).pipe(
       map(([filterState, task]) => {
@@ -360,19 +440,23 @@ export class ManageKabasTasksDetailComponent implements OnInit {
 
     let filteredTaskEduContents = [...taskEduContents];
 
-    // filter on search term
-    if (filterState.searchTerm) {
-      filteredTaskEduContents = this.filterOnTerm(
-        filterState.searchTerm,
-        filteredTaskEduContents
-      );
-    }
+    filteredTaskEduContents = this.filterOnTerm(
+      filterState.searchTerm,
+      filteredTaskEduContents
+    );
+
+    filteredTaskEduContents = filteredTaskEduContents.filter(
+      tEC =>
+        this.filterOnDiaboloPhase(filterState, tEC) &&
+        this.filterOnRequired(filterState, tEC) &&
+        this.filterOnLevel(filterState, tEC)
+    );
 
     return filteredTaskEduContents;
   }
 
   private filterOnTerm(
-    term: string,
+    term: string = '',
     taskEduContents: TaskEduContentInterface[]
   ): TaskEduContentInterface[] {
     return this.filterService.filter(taskEduContents, {
@@ -380,7 +464,44 @@ export class ManageKabasTasksDetailComponent implements OnInit {
     });
   }
 
-  private getDiaboloPhaseFilter(): SearchFilterCriteriaInterface {
+  private filterOnDiaboloPhase(
+    filterState: any,
+    taskEduContent: TaskEduContentInterface
+  ): boolean {
+    return (
+      !filterState.diaboloPhase ||
+      !filterState.diaboloPhase.length ||
+      filterState.diaboloPhase.includes(
+        taskEduContent.eduContent.publishedEduContentMetadata.diaboloPhaseId
+      )
+    );
+  }
+
+  private filterOnRequired(
+    filterState: any,
+    taskEduContent: TaskEduContentInterface
+  ): boolean {
+    return (
+      !filterState.required ||
+      !filterState.required.length ||
+      filterState.required.includes(taskEduContent.required)
+    );
+  }
+
+  private filterOnLevel(
+    filterState: any,
+    taskEduContent: TaskEduContentInterface
+  ): boolean {
+    return (
+      !filterState.level ||
+      !filterState.level.length ||
+      filterState.level.includes(
+        taskEduContent.eduContent.publishedEduContentMetadata.levelId
+      )
+    );
+  }
+
+  private getDiaboloPhaseFilterCriteria(): SearchFilterCriteriaInterface {
     return {
       name: 'diaboloPhase',
       label: 'Diabolo-fase',
@@ -405,6 +526,56 @@ export class ManageKabasTasksDetailComponent implements OnInit {
           data: {
             id: 3,
             icon: 'diabolo-outro'
+          },
+          visible: true
+        }
+      ]
+    };
+  }
+
+  private getRequiredFilterCriteria(): SearchFilterCriteriaInterface {
+    return {
+      name: 'required',
+      label: 'Moetje-magje',
+      keyProperty: 'required',
+      displayProperty: 'icon',
+      values: [
+        {
+          data: {
+            required: true,
+            icon: 'edu-content:required'
+          },
+          visible: true
+        },
+        {
+          data: {
+            required: false,
+            icon: 'edu-content:optional'
+          },
+          visible: true
+        }
+      ]
+    };
+  }
+
+  private getLevelFilterCriteria(): SearchFilterCriteriaInterface {
+    return {
+      name: 'level',
+      label: 'Moeilijkheidsgraad',
+      keyProperty: 'level',
+      displayProperty: 'icon',
+      values: [
+        {
+          data: {
+            level: 1,
+            icon: 'edu-content:level-basic'
+          },
+          visible: true
+        },
+        {
+          data: {
+            level: 2,
+            icon: 'edu-content:level-advanced'
           },
           visible: true
         }
