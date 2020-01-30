@@ -236,7 +236,7 @@ describe('ManageKabasTasksDetailComponent', () => {
       afterClosed$.next(dialogResult);
       component.openAssigneeModal();
       expect(viewModel.updateTaskAccess).toHaveBeenCalledWith(
-        { ...mockCurrentTask, taskEduContents: jasmine.anything() },
+        mockCurrentTask,
         dialogResult
       );
     });
@@ -531,10 +531,7 @@ describe('ManageKabasTasksDetailComponent', () => {
             component.printTask = jest.fn();
             link.triggerEventHandler('click', null);
 
-            expect(component.printTask).toHaveBeenCalledWith(
-              jasmine.objectContaining(currentTask),
-              true
-            );
+            expect(component.printTask).toHaveBeenCalledWith(currentTask, true);
           });
         });
 
@@ -556,7 +553,7 @@ describe('ManageKabasTasksDetailComponent', () => {
             link.triggerEventHandler('click', null);
 
             expect(component.printTask).toHaveBeenCalledWith(
-              jasmine.objectContaining(currentTask),
+              currentTask,
               false
             );
           });
@@ -703,8 +700,7 @@ describe('ManageKabasTasksDetailComponent', () => {
     });
   });
 
-  //file.only
-  fdescribe('filtering', () => {
+  describe('filtering', () => {
     let mockViewmodel: MockKabasTasksViewModel;
     let currentTask: TaskWithAssigneesInterface;
     let restOfTasks: TaskWithAssigneesInterface[];
@@ -1093,6 +1089,7 @@ describe('ManageKabasTasksDetailComponent', () => {
           component.requiredFilterSelectionChanged(searchFilterCriteria);
 
           component.clickResetFilters();
+
           expect(component.filteredTaskEduContents$).toBeObservable(
             hot('a', { a: taskEduContents })
           );
