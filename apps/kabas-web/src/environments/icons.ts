@@ -58,6 +58,7 @@ export const icons = {
   'task:pending': 'assets/icons/task-pending.svg',
   'task:finished': 'assets/icons/task-finished.svg',
   'task:paper': 'assets/icons/task-paper.svg',
+  print: 'assets/icons/printer.svg',
 
   // search: sort modes
   'sort-numeric-down': 'assets/icons/sort-numeric-down.svg',

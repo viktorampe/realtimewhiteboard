@@ -7,7 +7,8 @@
   $manage-kabas-tasks-overview__list__primary-action-font-size: 16px !default;
   $manage-kabas-tasks-overview__list__primary-action-height: 65px !default;
   $manage-kabas-tasks-overview__list__primary-action-margin-top: 5px !default;
-  $manage-kabas-tasks-overview__list__primary-action-color: $pages-kabas-tasks-primary-action-color--primary !default;
+  $manage-kabas-tasks-overview__list__primary-action-color: $pages-kabas-tasks-action-color--primary !default;
+
   $manage-kabas-tasks-overview_filterbar-padding-top: 15px !default;
   $manage-kabas-tasks-overview_filterbar-padding-left: 55px !default;
   $manage-kabas-tasks-overview_filterbar-filter-width: 150px !default;
@@ -84,7 +85,7 @@
 
       .mat-list-option {
         &:nth-child(odd) {
-          background-color: $secondary-bg-color;
+          background-color: $pages-kabas-tasks__list-option-background-color--accent;
         }
 
         border-left: $pages-kabas-tasks__list-option--selected-border-width

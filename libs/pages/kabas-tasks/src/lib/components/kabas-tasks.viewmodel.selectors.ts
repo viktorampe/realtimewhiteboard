@@ -226,10 +226,10 @@ export const getTaskWithAssignmentAndEduContents = createSelector(
 
           return {
             ...tEdu,
-            eduContent: {
+            eduContent: toEduContent({
               ...eduContent,
               publishedEduContentMetadata
-            } as EduContent
+            })
           };
         })
       : [];
@@ -253,7 +253,7 @@ function mapToTaskWithAssigneeInterface(
       .sort((a, b) => a.index - b.index)
       .map(tEdu => ({
         ...tEdu,
-        eduContent: tEdu.eduContent as EduContent
+        eduContent: toEduContent(tEdu.eduContent)
       })),
     assignees: assigneesByTask[task.id] || [],
     isFavorite: favoriteTaskIds.includes(task.id)
@@ -300,5 +300,12 @@ function methodLevelForEduContent(
     mLevel =>
       mLevel.methodId === allowedEduContentMethodId &&
       mLevel.levelId === eduContent.publishedEduContentMetadata.levelId
+  );
+}
+
+function toEduContent(eduContent: EduContentInterface) {
+  return Object.assign<EduContent, EduContentInterface>(
+    new EduContent(),
+    eduContent
   );
 }

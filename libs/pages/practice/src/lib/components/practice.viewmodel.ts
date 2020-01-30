@@ -415,6 +415,10 @@ export class PracticeViewModel implements ContentOpenerInterface {
     this.openStaticContentService.open(eduContent);
   }
 
+  public previewEduContentAsImage(eduContent: EduContent): void {
+    // students can't preview as image
+  }
+
   private setupSearchResults(): void {
     this.searchResults$ = this.searchState$.pipe(
       withLatestFrom(this.getInitialSearchState()),

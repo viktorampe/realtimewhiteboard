@@ -78,6 +78,39 @@
       }
     }
   }
+
+  &__list {
+    &__primary-action {
+      flex: 1 1 auto;
+    }
+    &__link {
+      display: flex;
+
+      &__icon {
+        flex-shrink: 0;
+      }
+
+      &__label {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      &--disabled {
+        opacity: 0.3;
+      }
+
+      &:hover {
+        text-decoration: underline;
+        cursor: pointer;
+
+        &.manage-kabas-tasks-detail__info__link--disabled {
+          text-decoration: none;
+          cursor: not-allowed;
+        }
+      }
+    }
+  }
 }
 
 .list-split {

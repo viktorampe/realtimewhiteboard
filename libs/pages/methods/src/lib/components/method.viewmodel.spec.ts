@@ -1041,6 +1041,17 @@ describe('MethodViewModel', () => {
 
       expect(spy).toHaveBeenCalledWith(null, eduContent.id, null, true);
     });
+
+    it('should open eduContent as an image', () => {
+      const eduContent = new EduContentFixture({
+        id: 4
+      });
+      const spy = jest.spyOn(openStaticContentService, 'open');
+
+      methodViewModel.previewEduContentAsImage(eduContent);
+
+      expect(spy).toHaveBeenCalledWith(eduContent, false, true);
+    });
   });
 
   describe('onLearningPlanGoalProgressChanged()', () => {
