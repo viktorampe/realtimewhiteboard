@@ -4,7 +4,8 @@
   $pages-kabas-tasks__list-option-background-color: $pages-kabas-tasks-background-color--primary !default;
   $pages-kabas-tasks__list-option-background-color--accent: $pages-kabas-tasks-background-color--secondary !default;
   $pages-kabas-tasks__list-option-color--secondary: $pages-kabas-tasks-text-color--secondary !default;
-  $manage-kabas-tasks-detail__list__primary-action-font-size: 16px !default;
+  $pages-kabas-tasks__list__item-font-size: 16px !default;
+  $manage-kabas-tasks-detail__list__primary-action-font-size: $pages-kabas-tasks__list__item-font-size !default;
   $manage-kabas-tasks-detail__list__primary-action-height: 65px !default;
   $manage-kabas-tasks-detail__list__primary-action-margin-top: 5px !default;
   $manage-kabas-tasks-detail__list__primary-actions-padding: 0 40px !default;
@@ -13,8 +14,6 @@
   $manage-kabas-tasks-detail__list__secondary-action-color: $pages-kabas-tasks-action-color--secondary !default;
   $manage-kabas-tasks-detail__primary-action_icon-horizontal-margin: 20px !default;
   $manage-kabas-tasks-detail__list__reorder-actions-padding: 10px !default;
-
-  $pages-kabas-tasks__list__item-font-size: 16px !default;
 
   $manage-kabas-tasks-width: 100% !default;
 
@@ -53,15 +52,23 @@
 
   // drag-drop
   $pages-kabas-tasks__list__drag-handle-color: $pages-kabas-tasks-text-color--secondary !default;
-  $pages-kabas-tasks__list-drag__cubic-bezier: cubic-bezier(0, 0, 0.3, 1);
-  $pages-kabas-tasks__list-drag__transition--duration: 250ms;
+  $pages-kabas-tasks__list-drag__cubic-bezier: cubic-bezier(
+    0,
+    0,
+    0.3,
+    1
+  ) !default;
+  $pages-kabas-tasks__list-drag__transition--duration: 250ms !default;
   $pages-kabas-tasks__list-drag--hover-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08),
-    0 1px 4px 1px rgba(0, 0, 0, 0.06);
+    0 1px 4px 1px rgba(0, 0, 0, 0.06) !default;
   $pages-kabas-tasks__list-drag--dragging-box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
-    0 8px 10px 1px rgba(0, 0, 0, 0.08), 0 3px 14px 2px rgba(0, 0, 0, 0.06);
-  $pages-kabas-tasks__list-drag--dragging-padding: 0 15px;
-  $pages-kabas-tasks__list-drag--dragging-background-color: rgba(#fff, 0.84);
-  $pages-kabas-tasks__list-drag--dragging-border-radius: 4px;
+    0 8px 10px 1px rgba(0, 0, 0, 0.08), 0 3px 14px 2px rgba(0, 0, 0, 0.06) !default;
+  $pages-kabas-tasks__list-drag--dragging-padding: 0 15px !default;
+  $pages-kabas-tasks__list-drag--dragging-background-color: rgba(
+    #fff,
+    0.84
+  ) !default;
+  $pages-kabas-tasks__list-drag--dragging-border-radius: 4px !default;
 
   .mat-drawer-container {
     background: $pages-kabas-tasks-background-color--primary;
