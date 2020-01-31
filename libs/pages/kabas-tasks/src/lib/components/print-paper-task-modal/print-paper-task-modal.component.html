@@ -7,7 +7,7 @@
     <div
       *ngFor="let action of actions"
       (click)="action.handler()"
-      class="print-paper-tasks__container__link "
+      class="print-paper-tasks__container__link"
       [class.print-paper-tasks__container__link--disabled]="action.disabled"
       [matTooltip]="action.tooltip"
     >
@@ -25,7 +25,7 @@
 <mat-dialog-actions class="print-paper-tasks__actions">
   <campus-button
     primary
-    class="print-paper-taks__actions__button"
+    class="print-paper-tasks__actions__button"
     (click)="clickCancel()"
     >Annuleren</campus-button
   >

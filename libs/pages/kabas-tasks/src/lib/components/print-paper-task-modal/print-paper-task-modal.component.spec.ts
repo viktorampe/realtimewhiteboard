@@ -99,6 +99,7 @@ describe('PrintPaperTaskModalComponent', () => {
         PrintPaperTaskModalResultEnum.WITH_NAMES,
         PrintPaperTaskModalResultEnum.SOLUTION
       ];
+      component.ngOnInit();
       fixture.detectChanges();
 
       const buttonDEs = fixture.debugElement.queryAll(
