@@ -124,6 +124,10 @@ export class GlobalSearchViewModel implements ContentOpenerInterface {
     this.openStaticContentService.open(eduContent);
   }
 
+  public previewEduContentAsImage(eduContent: EduContent): void {
+    this.openStaticContentService.open(eduContent, false, true);
+  }
+
   private initialize() {
     this.setSourceStreams();
     this.setPresentationStreams();

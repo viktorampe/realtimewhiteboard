@@ -497,7 +497,7 @@ describe('TaskEduContentEffects', () => {
           errors: []
         } as UpdateTaskEduContentResultInterface)
       );
-      const expectedMessage = 'De oefeningen werden verwijderd.';
+      const expectedMessage = 'Het lesmateriaal werd verwijderd.';
       const deleteAction = new DeleteTaskEduContents({
         ids: taskEduContentIds
       });
@@ -543,7 +543,7 @@ describe('TaskEduContentEffects', () => {
         } as UpdateTaskEduContentResultInterface)
       );
       const expectedMessage = [
-        '<p>Er werden geen oefeningen verwijderd.</p>',
+        '<p>Er werd geen lesmateriaal verwijderd.</p>',
         '<p>De volgende taken zijn nog in gebruik:</p>',
         '<ul>',
         '<li><strong>Huiswerk</strong> is nog in gebruik door Hubert Stroganovski tot 1/14/2020.</li>',
@@ -587,7 +587,7 @@ describe('TaskEduContentEffects', () => {
         ids: [2]
       });
       const expectedMessage = [
-        '<p>De oefening werd verwijderd.</p>',
+        '<p>Het lesmateriaal werd verwijderd.</p>',
         '<p>De volgende taken zijn nog in gebruik:</p>',
         '<ul>',
         '<li><strong>Huiswerk</strong> is nog in gebruik door Hubert Stroganovski tot 1/14/2020.</li>',

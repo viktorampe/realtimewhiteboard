@@ -11,6 +11,9 @@ import {
 } from '@campus/dal';
 import { SearchFilterCriteriaInterface } from '@campus/search';
 import {
+  ContentActionInterface,
+  ContentActionsServiceInterface,
+  CONTENT_ACTIONS_SERVICE_TOKEN,
   OpenStaticContentServiceInterface,
   OPEN_STATIC_CONTENT_SERVICE_TOKEN
 } from '@campus/shared';
@@ -53,7 +56,7 @@ export class ManageKabasTasksDetailComponent implements OnInit {
   public selectableLearningAreas$: Observable<LearningAreaInterface[]>;
   isReordering = false;
   isPaperTask = true; // replace w/ stream
-  public selectedContents$ = new BehaviorSubject<EduContentInterface[]>([]);
+  public selectedContents$ = new BehaviorSubject<TaskEduContentInterface[]>([]);
   public task$: Observable<TaskWithAssigneesInterface>;
   public reorderableTaskEduContents$ = new BehaviorSubject<
     TaskEduContentWithEduContentInterface[]
@@ -75,6 +78,8 @@ export class ManageKabasTasksDetailComponent implements OnInit {
     private dialog: MatDialog,
     private router: Router,
     private route: ActivatedRoute,
+    @Inject(CONTENT_ACTIONS_SERVICE_TOKEN)
+    private contentActionService: ContentActionsServiceInterface,
     @Inject(OPEN_STATIC_CONTENT_SERVICE_TOKEN)
     private openStaticContentService: OpenStaticContentServiceInterface
   ) {
@@ -86,7 +91,21 @@ export class ManageKabasTasksDetailComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.task$ = this.viewModel.currentTask$;
+    this.task$ = this.viewModel.currentTask$.pipe(
+      map(task => {
+        const taskEduContents = task.taskEduContents.map(tE => {
+          return {
+            ...tE,
+            actions: this.contentActionService.getActionsForEduContent(
+              tE.eduContent
+            )
+          };
+        });
+
+        return { ...task, taskEduContents };
+      })
+    );
+
     this.diaboloPhaseFilter = {
       name: 'diaboloPhase',
       label: 'Diabolo-fase',
@@ -129,11 +148,11 @@ export class ManageKabasTasksDetailComponent implements OnInit {
   }
 
   public onSelectionChange() {
-    const selected: EduContentInterface[] = this.contentSelectionList.selectedOptions.selected
-      .map(option => option.value.eduContent as EduContentInterface)
-      .sort((a, b) =>
-        a.publishedEduContentMetadata.title <
-        b.publishedEduContentMetadata.title
+    const selected: TaskEduContentInterface[] = this.contentSelectionList.selectedOptions.selected
+      .map(option => option.value)
+      .sort((a: TaskEduContentInterface, b: TaskEduContentInterface) =>
+        a.eduContent.publishedEduContentMetadata.title <
+        b.eduContent.publishedEduContentMetadata.title
           ? -1
           : 1
       );
@@ -340,6 +359,14 @@ export class ManageKabasTasksDetailComponent implements OnInit {
   ) {
     this.viewModel.deleteTaskEduContents(taskEduContents.map(tec => tec.id));
   }
+
+  public handleTaskEduContentAction(
+    action: ContentActionInterface,
+    eduContent: EduContent
+  ) {
+    action.handler(eduContent);
+  }
+
   public isActiveTask(task: TaskWithAssigneesInterface) {
     return task.status === TaskStatusEnum.ACTIVE;
   }

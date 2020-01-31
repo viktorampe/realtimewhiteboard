@@ -263,6 +263,10 @@ export class MethodViewModel implements ContentOpenerInterface {
     this.openStaticContentService.open(eduContent);
   }
 
+  public previewEduContentAsImage(eduContent: EduContent): void {
+    this.openStaticContentService.open(eduContent, false, true);
+  }
+
   public onLearningPlanGoalProgressChanged(
     classGroupId: number,
     learningPlanGoalId: number,

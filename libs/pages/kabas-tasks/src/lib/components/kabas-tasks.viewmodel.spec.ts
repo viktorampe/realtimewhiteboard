@@ -4,6 +4,7 @@ import {
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
   DalState,
+  EduContentFixture,
   EffectFeedback,
   EffectFeedbackActions,
   FavoriteActions,
@@ -18,6 +19,12 @@ import {
   TASK_SERVICE_TOKEN,
   UserQueries
 } from '@campus/dal';
+import {
+  OpenStaticContentServiceInterface,
+  OPEN_STATIC_CONTENT_SERVICE_TOKEN,
+  ScormExerciseServiceInterface,
+  SCORM_EXERCISE_SERVICE_TOKEN
+} from '@campus/shared';
 import { MockDate } from '@campus/testing';
 import { Store } from '@ngrx/store';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
@@ -41,6 +48,8 @@ describe('KabasTaskViewModel', () => {
   let uuid: Function;
   let dateLocale;
   let taskService: TaskServiceInterface;
+  let scormExerciseService: ScormExerciseServiceInterface;
+  let openStaticContentService: OpenStaticContentServiceInterface;
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
@@ -57,6 +66,18 @@ describe('KabasTaskViewModel', () => {
             printTask: jest.fn(),
             printSolution: jest.fn()
           }
+        },
+        {
+          provide: SCORM_EXERCISE_SERVICE_TOKEN,
+          useValue: {
+            previewExerciseFromTask: jest.fn()
+          }
+        },
+        {
+          provide: OPEN_STATIC_CONTENT_SERVICE_TOKEN,
+          useValue: {
+            open: jest.fn()
+          }
         }
       ]
     });
@@ -69,6 +90,8 @@ describe('KabasTaskViewModel', () => {
     store = TestBed.get(Store);
     dateLocale = TestBed.get(MAT_DATE_LOCALE);
     taskService = TestBed.get(TASK_SERVICE_TOKEN);
+    scormExerciseService = TestBed.get(SCORM_EXERCISE_SERVICE_TOKEN);
+    openStaticContentService = TestBed.get(OPEN_STATIC_CONTENT_SERVICE_TOKEN);
   });
 
   afterAll(() => {
@@ -293,18 +316,18 @@ describe('KabasTaskViewModel', () => {
     it('should dispatch an UpdateTaskEduContents action', () => {
       const spy = jest.spyOn(store, 'dispatch');
       const taskEduContents = [
-        new TaskEduContentFixture({ id: 1, index: 1 }),
-        new TaskEduContentFixture({ id: 3, index: 2 }),
-        new TaskEduContentFixture({ id: 2, index: 3 })
+        new TaskEduContentFixture({ id: 1, index: 1, taskId: 1 }),
+        new TaskEduContentFixture({ id: 3, index: 2, taskId: 3 }),
+        new TaskEduContentFixture({ id: 2, index: 3, taskId: 2 })
       ];
       kabasTasksViewModel.updateTaskEduContentsOrder(taskEduContents);
       expect(spy).toHaveBeenCalledWith(
         new TaskEduContentActions.UpdateTaskEduContents({
           userId: authService.userId,
           taskEduContents: [
-            { id: 1, changes: { id: 1, index: 0 } },
-            { id: 3, changes: { id: 3, index: 1 } },
-            { id: 2, changes: { id: 2, index: 2 } }
+            { id: 1, changes: { id: 1, index: 0, taskId: 1 } },
+            { id: 3, changes: { id: 3, index: 1, taskId: 3 } },
+            { id: 2, changes: { id: 2, index: 2, taskId: 2 } }
           ]
         })
       );
@@ -768,21 +791,97 @@ describe('KabasTaskViewModel', () => {
     it('should dispatch an UpdateTaskEduContents action', () => {
       const spy = jest.spyOn(store, 'dispatch');
       const taskEduContents = [
-        new TaskEduContentFixture({ id: 1, required: false }),
-        new TaskEduContentFixture({ id: 2, required: false }),
-        new TaskEduContentFixture({ id: 3, required: false })
+        new TaskEduContentFixture({ id: 1, required: false, taskId: 1 }),
+        new TaskEduContentFixture({ id: 2, required: false, taskId: 2 }),
+        new TaskEduContentFixture({ id: 3, required: false, taskId: 3 })
       ];
       kabasTasksViewModel.updateTaskEduContentsRequired(taskEduContents, true);
       expect(spy).toHaveBeenCalledWith(
         new TaskEduContentActions.UpdateTaskEduContents({
           userId: authService.userId,
           taskEduContents: [
-            { id: 1, changes: { id: 1, required: true } },
-            { id: 2, changes: { id: 2, required: true } },
-            { id: 3, changes: { id: 3, required: true } }
+            { id: 1, changes: { id: 1, required: true, taskId: 1 } },
+            { id: 2, changes: { id: 2, required: true, taskId: 2 } },
+            { id: 3, changes: { id: 3, required: true, taskId: 3 } }
           ]
         })
       );
+    });
+  });
+
+  describe('edu-content action handlers', () => {
+    const mockEduContent = new EduContentFixture();
+    const taskId = 5;
+
+    beforeEach(() => {
+      store.overrideSelector(getRouterState, {
+        navigationId: 1,
+        state: {
+          url: '',
+          params: { id: taskId }
+        }
+      });
+      store.overrideSelector(getTaskWithAssignmentAndEduContents, {
+        id: taskId
+      } as any);
+    });
+
+    describe('openEduContentAsExercise', () => {
+      it('should call scormExerciseService.previewExerciseFromTask()', () => {
+        kabasTasksViewModel.openEduContentAsExercise(mockEduContent);
+        expect(
+          scormExerciseService.previewExerciseFromTask
+        ).toHaveBeenCalledWith(userId, mockEduContent.id, taskId, false);
+      });
+    });
+
+    describe('openEduContentAsSolution', () => {
+      it('should call scormExerciseService.previewExerciseFromTask()', () => {
+        kabasTasksViewModel.openEduContentAsSolution(mockEduContent);
+        expect(
+          scormExerciseService.previewExerciseFromTask
+        ).toHaveBeenCalledWith(userId, mockEduContent.id, taskId, true);
+      });
+    });
+
+    describe('openEduContentAsStream', () => {
+      it('should call openStaticContentService.open()', () => {
+        kabasTasksViewModel.openEduContentAsStream(mockEduContent);
+        expect(openStaticContentService.open).toHaveBeenCalledWith(
+          mockEduContent,
+          true
+        );
+      });
+    });
+
+    describe('openEduContentAsDownload', () => {
+      it('should call openStaticContentService.open()', () => {
+        kabasTasksViewModel.openEduContentAsDownload(mockEduContent);
+        expect(openStaticContentService.open).toHaveBeenCalledWith(
+          mockEduContent,
+          false
+        );
+      });
+    });
+
+    describe('openBoeke', () => {
+      it('should call openStaticContentService.open()', () => {
+        kabasTasksViewModel.openBoeke(mockEduContent);
+        expect(openStaticContentService.open).toHaveBeenCalledWith(
+          mockEduContent
+        );
+      });
+    });
+
+    describe('previewEduContentAsImage', () => {
+      it('should call openStaticContentService.open()', () => {
+        kabasTasksViewModel.previewEduContentAsImage(mockEduContent);
+        expect(openStaticContentService.open).toHaveBeenCalledWith(
+          mockEduContent,
+          false,
+          true
+        );
+      });
     });
   });
 });

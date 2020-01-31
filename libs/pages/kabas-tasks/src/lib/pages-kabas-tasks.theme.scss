@@ -1,5 +1,6 @@
 @import './components/manage-kabas-tasks-overview/manage-kabas-tasks-overview.theme';
 @import './components/task-list-item/task-list-item.component.theme';
+@import './components/task-edu-content-list-item/task-edu-content-list-item.theme.scss';
 @import './components/manage-kabas-tasks-detail/manage-kabas-tasks-detail.theme';
 @import './components/manage-kabas-tasks-assignee-modal/manage-kabas-tasks-assignee-modal.component.theme';
 @import './components/new-task/new-task.component.theme';
@@ -75,6 +76,7 @@ $pages-kabas-tasks_link_label-height: 16px !default;
 @mixin pages-kabas-tasks-theme() {
   @include manage-kabas-tasks-overview-theme();
   @include pages-manage-kabas-tasks-task-list-item-theme();
+  @include pages-manage-kabas-tasks-task-edu-content-list-item-theme();
   @include manage-kabas-tasks-detail-theme();
   @include pages-kabas-tasks-modal-theme();
   @include pages-kabas-tasks-new-task-theme();
