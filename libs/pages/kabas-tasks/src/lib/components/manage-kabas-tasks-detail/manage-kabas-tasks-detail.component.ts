@@ -342,8 +342,8 @@ export class ManageKabasTasksDetailComponent implements OnInit {
     this.viewModel.printTask(task.id, withNames);
   }
 
-  public printSolution(task: TaskInterface) {
-    this.viewModel.printSolution(task.id);
+  public printSolution(task: TaskWithAssigneesInterface) {
+    this.viewModel.printSolution(task);
   }
 
   public preview(eduContent: EduContentInterface, openDialog: boolean = false) {
