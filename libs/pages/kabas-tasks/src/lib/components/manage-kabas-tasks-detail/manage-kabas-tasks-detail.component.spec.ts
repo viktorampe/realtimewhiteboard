@@ -660,31 +660,16 @@ describe('ManageKabasTasksDetailComponent', () => {
   });
 
   describe('clickPrintTask', () => {
-    let mockViewmodel: MockKabasTasksViewModel;
     let afterClosed$: BehaviorSubject<PrintPaperTaskModalResultEnum>;
-    let currentTask: TaskWithAssigneesInterface;
-    let restOfTasks: TaskWithAssigneesInterface[];
-
-    const updateCurrentTask = newCurrentTask => {
-      mockViewmodel.tasksWithAssignments$.next([
-        newCurrentTask,
-        ...restOfTasks
-      ]);
-      fixture.detectChanges();
-    };
 
     beforeEach(() => {
-      mockViewmodel = viewModel as MockKabasTasksViewModel;
-
-      [currentTask, ...restOfTasks] = mockViewmodel.tasksWithAssignments$.value;
-
       const dialog = TestBed.get(MatDialog);
       afterClosed$ = new BehaviorSubject<PrintPaperTaskModalResultEnum>(null);
       dialog.open = jest.fn(() => ({ afterClosed: () => afterClosed$ }));
     });
 
     it('should open the print task modal', () => {
-      const expectedData = { disabled: [] };
+      const expectedData = { disable: [] };
       const expectedClass = 'manage-task-detail-print';
 
       component.clickPrintTask();
@@ -725,10 +710,7 @@ describe('ManageKabasTasksDetailComponent', () => {
       afterClosed$.next(dialogResult);
       component.clickPrintTask();
 
-      expect(component.printTask).toHaveBeenCalledWith(
-        jasmine.objectContaining(currentTask),
-        true
-      );
+      expect(component.printTask).toHaveBeenCalledWith(currentTask, true);
     });
 
     it('should print the task without names', () => {
@@ -738,10 +720,7 @@ describe('ManageKabasTasksDetailComponent', () => {
       afterClosed$.next(dialogResult);
       component.clickPrintTask();
 
-      expect(component.printTask).toHaveBeenCalledWith(
-        jasmine.objectContaining(currentTask),
-        false
-      );
+      expect(component.printTask).toHaveBeenCalledWith(currentTask, false);
     });
 
     it('should print the task solution', () => {
@@ -751,9 +730,7 @@ describe('ManageKabasTasksDetailComponent', () => {
       afterClosed$.next(dialogResult);
       component.clickPrintTask();
 
-      expect(component.printSolution).toHaveBeenCalledWith(
-        jasmine.objectContaining(currentTask)
-      );
+      expect(component.printSolution).toHaveBeenCalledWith(currentTask);
     });
   });
 

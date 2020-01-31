@@ -38,6 +38,7 @@ import {
 } from '../new-task/new-task.component';
 import { PrintPaperTaskModalResultEnum } from '../print-paper-task-modal/print-paper-task-modal-result.enum';
 import { PrintPaperTaskModalComponent } from '../print-paper-task-modal/print-paper-task-modal.component';
+import { PrintPaperTaskModalDataInterface } from './../print-paper-task-modal/print-paper-task-modal-data.interface';
 
 export enum TaskSortEnum {
   'NAME' = 'NAME',
@@ -329,7 +330,7 @@ export class ManageKabasTasksDetailComponent implements OnInit {
 
           return this.dialog
             .open(PrintPaperTaskModalComponent, {
-              data: { disable },
+              data: { disable } as PrintPaperTaskModalDataInterface,
               panelClass: 'manage-task-detail-print'
             })
             .afterClosed() as Observable<PrintPaperTaskModalResultEnum>;
