@@ -373,8 +373,12 @@ export class ManageKabasTasksDetailComponent implements OnInit {
 
   public setTaskEduContentsRequiredState(
     event: MatRadioChange,
-    taskEduContents: TaskEduContentInterface[]
+    taskEduContents: TaskEduContentInterface[],
+    value?: boolean
   ) {
-    this.viewModel.updateTaskEduContentsRequired(taskEduContents, event.value);
+    this.viewModel.updateTaskEduContentsRequired(
+      taskEduContents,
+      (event && event.value) || value
+    );
   }
 }

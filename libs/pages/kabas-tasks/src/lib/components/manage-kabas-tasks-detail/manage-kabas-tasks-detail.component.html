@@ -219,6 +219,7 @@
         >
           <mat-radio-group
             *ngIf="selectedContents.length === 1; else multipleSelected"
+            [value]="selectedContents[0].required"
             (change)="setTaskEduContentsRequiredState($event, selectedContents)"
           >
             <mat-radio-button
@@ -233,14 +234,22 @@
             >
           </mat-radio-group>
           <ng-template #multipleSelected>
-            <mat-radio-group
-              (change)="
-                setTaskEduContentsRequiredState($event, selectedContents)
-              "
+            <div
+              class="manage-kabas-tasks-detail__info__container__change-all-buttons"
             >
-              <mat-radio-button [value]="true">Moetje</mat-radio-button>
-              <br /><mat-radio-button [value]="false">Magje</mat-radio-button>
-            </mat-radio-group>
+              <campus-button
+                (click)="
+                  setTaskEduContentsRequiredState(null, selectedContents, true)
+                "
+                >Alles moetje</campus-button
+              >
+              <campus-button
+                (click)="
+                  setTaskEduContentsRequiredState(null, selectedContents, false)
+                "
+                >Alles magje</campus-button
+              >
+            </div>
           </ng-template>
         </div>
 
