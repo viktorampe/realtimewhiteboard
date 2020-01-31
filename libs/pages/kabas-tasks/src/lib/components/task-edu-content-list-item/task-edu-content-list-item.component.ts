@@ -1,8 +1,10 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  EventEmitter,
   Input,
-  OnInit
+  OnInit,
+  Output
 } from '@angular/core';
 import { ContentActionInterface } from '@campus/shared';
 
@@ -19,8 +21,13 @@ export class TaskEduContentListItemComponent implements OnInit {
   @Input() fileIcon: string;
   @Input() diaboloPhaseIcon: string;
   @Input() actions: ContentActionInterface[];
+  @Input() isPaperTask: boolean;
+  @Output() clickAction = new EventEmitter<ContentActionInterface>();
 
   constructor() {}
 
   ngOnInit() {}
+  onActionClick(action: ContentActionInterface) {
+    this.clickAction.emit(action);
+  }
 }

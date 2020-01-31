@@ -6,6 +6,7 @@ import {
   ClassGroupInterface,
   ClassGroupQueries,
   DalState,
+  EduContent,
   EffectFeedback,
   EffectFeedbackActions,
   FavoriteActions,
@@ -28,6 +29,13 @@ import {
   TaskStudentInterface,
   TASK_SERVICE_TOKEN
 } from '@campus/dal';
+import {
+  ContentOpenerInterface,
+  OpenStaticContentServiceInterface,
+  OPEN_STATIC_CONTENT_SERVICE_TOKEN,
+  ScormExerciseServiceInterface,
+  SCORM_EXERCISE_SERVICE_TOKEN
+} from '@campus/shared';
 import { Update } from '@ngrx/entity';
 import { RouterReducerState } from '@ngrx/router-store';
 import { Action, select, Store } from '@ngrx/store';
@@ -37,7 +45,8 @@ import {
   filter,
   map,
   shareReplay,
-  switchMap
+  switchMap,
+  take
 } from 'rxjs/operators';
 import { AssigneeTypesEnum } from '../interfaces/Assignee.interface';
 import {
@@ -58,7 +67,7 @@ export interface CurrentTaskParams {
 @Injectable({
   providedIn: 'root'
 })
-export class KabasTasksViewModel {
+export class KabasTasksViewModel implements ContentOpenerInterface {
   public tasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
   public paperTasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
   public currentTask$: Observable<TaskWithAssigneesInterface>;
@@ -76,7 +85,11 @@ export class KabasTasksViewModel {
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
     @Inject('uuid') private uuid: Function,
     @Inject(MAT_DATE_LOCALE) private dateLocale,
-    @Inject(TASK_SERVICE_TOKEN) private taskService: TaskServiceInterface
+    @Inject(TASK_SERVICE_TOKEN) private taskService: TaskServiceInterface,
+    @Inject(SCORM_EXERCISE_SERVICE_TOKEN)
+    private scormExerciseService: ScormExerciseServiceInterface,
+    @Inject(OPEN_STATIC_CONTENT_SERVICE_TOKEN)
+    private openStaticContentService: OpenStaticContentServiceInterface
   ) {
     this.tasksWithAssignments$ = this.store.pipe(
       select(getTasksWithAssignmentsByType, {
@@ -109,6 +122,54 @@ export class KabasTasksViewModel {
     this.classGroups$ = this.store.pipe(select(ClassGroupQueries.getAll));
     this.groups$ = this.store.pipe(select(GroupQueries.getAll));
     this.students$ = this.store.pipe(select(LinkedPersonQueries.getStudents));
+  }
+
+  openEduContentAsExercise(eduContent: EduContent): void {
+    this.currentTask$
+      .pipe(
+        take(1),
+        map(task => task.id)
+      )
+      .subscribe(taskId => {
+        this.scormExerciseService.previewExerciseFromTask(
+          this.authService.userId,
+          eduContent.id,
+          taskId,
+          false
+        );
+      });
+  }
+
+  openEduContentAsSolution(eduContent: EduContent): void {
+    this.currentTask$
+      .pipe(
+        take(1),
+        map(task => task.id)
+      )
+      .subscribe(taskId => {
+        this.scormExerciseService.previewExerciseFromTask(
+          this.authService.userId,
+          eduContent.id,
+          taskId,
+          true
+        );
+      });
+  }
+
+  openEduContentAsStream(eduContent: EduContent): void {
+    this.openStaticContentService.open(eduContent, true);
+  }
+
+  openEduContentAsDownload(eduContent: EduContent): void {
+    this.openStaticContentService.open(eduContent, false);
+  }
+
+  openBoeke(eduContent: EduContent): void {
+    this.openStaticContentService.open(eduContent);
+  }
+
+  previewEduContentAsImage(eduContent: EduContent): void {
+    this.openStaticContentService.open(eduContent, false, true);
   }
 
   public startArchivingTasks(
@@ -300,7 +361,7 @@ export class KabasTasksViewModel {
         taskEduContents: taskEduContents.map(tec => {
           return {
             id: tec.id,
-            changes: { id: tec.id, required }
+            changes: { id: tec.id, required, taskId: tec.taskId }
           };
         })
       })
@@ -316,7 +377,7 @@ export class KabasTasksViewModel {
         taskEduContents: taskEduContents.map((tec, index) => {
           return {
             id: tec.id,
-            changes: { id: tec.id, index }
+            changes: { id: tec.id, index, taskId: tec.taskId }
           };
         })
       })

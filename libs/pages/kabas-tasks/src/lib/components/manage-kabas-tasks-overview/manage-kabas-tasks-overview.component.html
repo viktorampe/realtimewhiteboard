@@ -131,7 +131,7 @@
           <div
             class="manage-kabas-tasks-overview__filterbar__result"
             *ngIf="digitalTasks.length; else noResults"
-            >Je hebt {{ digitalTasks.length }}
+            >{{ digitalTasks.length }}
             {{ digitalTasks.length > 1 ? 'resultaten' : 'resultaat' }}.</div
           >
         </ng-container>
@@ -141,7 +141,7 @@
         class="manage-kabas-tasks-overview__list__primary-action"
       >
         <mat-icon svgIcon="add"></mat-icon>
-        nieuwe taak
+        Nieuwe taak
       </div>
       <mat-selection-list
         #digital
@@ -242,7 +242,7 @@
           <div
             class="manage-kabas-tasks-overview__filterbar__result"
             *ngIf="paperTasks.length; else noResults"
-            >Je hebt {{ paperTasks.length }}
+            >{{ paperTasks.length }}
             {{ paperTasks.length > 1 ? 'resultaten' : 'resultaat' }}.</div
           >
         </ng-container>
@@ -256,7 +256,7 @@
         class="manage-kabas-tasks-overview__list__primary-action"
       >
         <mat-icon svgIcon="add"></mat-icon>
-        nieuwe taak
+        Nieuwe taak
       </div>
       <mat-selection-list
         #paper
@@ -281,7 +281,7 @@
               [startDate]="task.startDate"
               [endDate]="task.endDate"
               [status]="'paper'"
-              [actions]="getActions(task)"
+              [actions]="task.actions"
               [assignees]="task.assignees"
               [isFavorite]="task.isFavorite"
               (clickToggleFavorite)="clickToggleFavorite(task)"

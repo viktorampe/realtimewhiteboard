@@ -57,6 +57,14 @@ export class ContentActionsService implements ContentActionsServiceInterface {
       icon: 'book',
       tooltip: 'Open het bordboek',
       handler: this.contentOpener.openBoeke.bind(this.contentOpener)
+    },
+    previewEduContentAsImage: {
+      label: 'Bekijken',
+      icon: 'exercise:open',
+      tooltip: 'Bekijk lesmateriaal',
+      handler: this.contentOpener.previewEduContentAsImage.bind(
+        this.contentOpener
+      )
     }
   };
 
@@ -83,6 +91,9 @@ export class ContentActionsService implements ContentActionsServiceInterface {
           this.contentActionDictionary.openEduContentAsExercise,
           this.contentActionDictionary.openEduContentAsSolution
         ];
+
+      case EduContentTypeEnum.PAPER_EXERCISE:
+        return [this.contentActionDictionary.previewEduContentAsImage];
     }
 
     if (eduContent.streamable) {
