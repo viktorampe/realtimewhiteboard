@@ -1,14 +1,37 @@
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { DebugElement } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
-import { MatDialog, MatDialogRef, MatIconRegistry, MatRadioButton, MatRadioChange, MatRadioModule, MatSelectModule, MatSlideToggleModule, MatTooltip } from '@angular/material';
+import {
+  MatDialog,
+  MatDialogRef,
+  MatIconRegistry,
+  MatRadioButton,
+  MatRadioChange,
+  MatRadioModule,
+  MatSelectModule,
+  MatSlideToggleModule,
+  MatTooltip
+} from '@angular/material';
 import { By, HAMMER_LOADER } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { LearningAreaFixture, LearningAreaInterface, TaskEduContentFixture, TaskEduContentInterface } from '@campus/dal';
+import {
+  LearningAreaFixture,
+  LearningAreaInterface,
+  TaskEduContentFixture,
+  TaskEduContentInterface
+} from '@campus/dal';
 import { SearchModule } from '@campus/search';
-import { ContentActionsService, CONTENT_ACTIONS_SERVICE_TOKEN, CONTENT_OPENER_TOKEN, ENVIRONMENT_ICON_MAPPING_TOKEN, ENVIRONMENT_TESTING_TOKEN, OPEN_STATIC_CONTENT_SERVICE_TOKEN, SharedModule } from '@campus/shared';
+import {
+  ContentActionsService,
+  CONTENT_ACTIONS_SERVICE_TOKEN,
+  CONTENT_OPENER_TOKEN,
+  ENVIRONMENT_ICON_MAPPING_TOKEN,
+  ENVIRONMENT_TESTING_TOKEN,
+  OPEN_STATIC_CONTENT_SERVICE_TOKEN,
+  SharedModule
+} from '@campus/shared';
 import { MockMatIconRegistry } from '@campus/testing';
 import { ConfirmationModalComponent, UiModule } from '@campus/ui';
 import { hot } from '@nrwl/angular/testing';
@@ -16,9 +39,15 @@ import { configureTestSuite } from 'ng-bullet';
 import { BehaviorSubject, of } from 'rxjs';
 import { AssigneeFixture } from '../../interfaces/Assignee.fixture';
 import { TaskEduContentWithEduContentInterface } from '../../interfaces/TaskEduContentWithEduContent.interface';
-import { CurrentTaskParams, KabasTasksViewModel } from '../kabas-tasks.viewmodel';
+import {
+  CurrentTaskParams,
+  KabasTasksViewModel
+} from '../kabas-tasks.viewmodel';
 import { MockKabasTasksViewModel } from '../kabas-tasks.viewmodel.mock';
-import { NewTaskComponent, NewTaskFormValues } from '../new-task/new-task.component';
+import {
+  NewTaskComponent,
+  NewTaskFormValues
+} from '../new-task/new-task.component';
 import { TaskEduContentListItemComponent } from '../task-edu-content-list-item/task-edu-content-list-item.component';
 import { AssigneeInterface } from './../../interfaces/Assignee.interface';
 import { TaskWithAssigneesInterface } from './../../interfaces/TaskWithAssignees.interface';

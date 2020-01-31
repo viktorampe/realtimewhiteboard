@@ -150,12 +150,7 @@ export class ManageKabasTasksDetailComponent implements OnInit {
   public onSelectionChange() {
     const selected: TaskEduContentInterface[] = this.contentSelectionList.selectedOptions.selected
       .map(option => option.value)
-      .sort((a, b) =>
-        a.eduContent.publishedEduContentMetadata.title <
-        b.eduContent.publishedEduContentMetadata.title
-          ? -1
-          : 1
-      );
+      .sort((a, b) => (a.eduContent.name < b.eduContent.name ? -1 : 1));
     this.selectedContents$.next(selected);
     this.sideSheet.toggle(true);
   }
