@@ -61,7 +61,7 @@ export class ContentActionsService implements ContentActionsServiceInterface {
     previewEduContentAsImage: {
       label: 'Bekijken',
       icon: 'exercise:open',
-      tooltip: 'Bekijk de oefening',
+      tooltip: 'Bekijk lesmateriaal',
       handler: this.contentOpener.previewEduContentAsImage.bind(
         this.contentOpener
       )

@@ -3,12 +3,16 @@
   [displayAsRows]="false"
   class="content-preview__info-panel"
 >
-  <mat-dialog-content>
+  <mat-dialog-content
+    class="content-preview__dialog"
+    [class.content-preview__dialog--loading]="loading"
+  >
     <mat-spinner *ngIf="loading"></mat-spinner>
     <div class="content-preview__info-panel__load-error" *ngIf="errored"
       >De afbeelding kon niet worden geladen.</div
     >
     <img
+      class="content-preview__dialog__image"
       [hidden]="loading || errored"
       (error)="imageErrored()"
       (load)="imageLoaded()"
