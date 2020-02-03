@@ -38,6 +38,7 @@ import {
   shareReplay,
   switchMap,
   take,
+  tap,
   withLatestFrom
 } from 'rxjs/operators';
 import {
@@ -125,12 +126,11 @@ export class ManageKabasTasksDetailComponent implements OnInit, OnDestroy {
     this.levelFilterCriteria = this.getLevelFilterCriteria();
 
     this.task$ = this.getCurrentTask$();
-    this.filteredTaskEduContents$ = this.getFilteredTaskEduContents$();
-
-    // makes selection list 'remember' selection on re-render
-    this.subscriptions.add(
-      this.filteredTaskEduContents$.subscribe(taskEduContents =>
-        this.setSelectedItems(taskEduContents)
+    this.filteredTaskEduContents$ = this.getFilteredTaskEduContents$().pipe(
+      // makes selection list 'remember' selection on re-render
+      tap(
+        taskEduContents => this.setSelectedItems(taskEduContents),
+        shareReplay(1)
       )
     );
 
