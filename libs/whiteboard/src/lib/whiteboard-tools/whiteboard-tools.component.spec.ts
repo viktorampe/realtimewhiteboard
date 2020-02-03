@@ -29,6 +29,6 @@ describe('WhiteboardToolsComponent', () => {
     );
     const plusBtn = buttons[0].nativeElement;
     plusBtn.click();
-    expect(component.createCard.emit);
+    expect(component.createCard.emit).toHaveBeenCalled();
   });
 });
