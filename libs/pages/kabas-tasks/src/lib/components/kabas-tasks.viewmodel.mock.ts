@@ -194,6 +194,23 @@ export class MockKabasTasksViewModel
             id: 5
           }
         ],
+        taskEduContents: [1, 2, 3].map(
+          id =>
+            new TaskEduContentFixture({
+              eduContentId: id,
+              eduContent: new EduContentFixture(
+                { id },
+                {
+                  id,
+                  title: 'oefening ' + id,
+                  learningArea: new LearningAreaFixture({
+                    id: 1,
+                    name: 'Wiskunde'
+                  })
+                }
+              )
+            })
+        ),
         startDate: yesterday,
         endDate: nextWeek
       },
@@ -328,29 +345,7 @@ export class MockKabasTasksViewModel
   ) {}
 
   private getCurrentTask(): Observable<TaskWithAssigneesInterface> {
-    // return this.paperTasksWithAssignments$.pipe(
-    return this.tasksWithAssignments$.pipe(
-      map(tasks => ({
-        ...tasks[0],
-        taskEduContents: [1, 2, 3].map(
-          id =>
-            new TaskEduContentFixture({
-              eduContentId: id,
-              eduContent: new EduContentFixture(
-                { id },
-                {
-                  id,
-                  title: 'oefening ' + id,
-                  learningArea: new LearningAreaFixture({
-                    id: 1,
-                    name: 'Wiskunde'
-                  })
-                }
-              )
-            })
-        )
-      }))
-    );
+    return this.tasksWithAssignments$.pipe(map(tasks => tasks[0]));
   }
 
   public updateTaskEduContent(
@@ -368,4 +363,10 @@ export class MockKabasTasksViewModel
   public deleteTaskEduContents() {}
   public printTask() {}
   public printSolution() {}
+  public openEduContentAsExercise() {}
+  public openEduContentAsSolution() {}
+  public openEduContentAsStream() {}
+  public openEduContentAsDownload() {}
+  public openBoeke() {}
+  public previewEduContentAsImage() {}
 }
