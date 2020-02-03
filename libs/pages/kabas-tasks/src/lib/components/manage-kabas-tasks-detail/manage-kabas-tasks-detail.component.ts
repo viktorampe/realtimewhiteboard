@@ -19,7 +19,14 @@ import {
 } from '@campus/shared';
 import { ConfirmationModalComponent, SideSheetComponent } from '@campus/ui';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { filter, map, switchMap, take, withLatestFrom } from 'rxjs/operators';
+import {
+  filter,
+  map,
+  shareReplay,
+  switchMap,
+  take,
+  withLatestFrom
+} from 'rxjs/operators';
 import {
   AssigneeInterface,
   AssigneeTypesEnum
@@ -102,8 +109,13 @@ export class ManageKabasTasksDetailComponent implements OnInit {
           };
         });
 
-        return { ...task, taskEduContents };
-      })
+        return {
+          ...task,
+          taskEduContents,
+          hasSolutionFiles: this.hasSolutionFiles(taskEduContents)
+        };
+      }),
+      shareReplay(1)
     );
 
     this.diaboloPhaseFilter = {
@@ -365,6 +377,14 @@ export class ManageKabasTasksDetailComponent implements OnInit {
     eduContent: EduContent
   ) {
     action.handler(eduContent);
+  }
+
+  private hasSolutionFiles(
+    taskEduContents: TaskEduContentWithEduContentInterface[]
+  ): boolean {
+    return taskEduContents.some(taskEduContent =>
+      this.viewModel.eduContentHasSolution(taskEduContent.eduContent)
+    );
   }
 
   public isActiveTask(task: TaskWithAssigneesInterface) {

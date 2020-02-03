@@ -397,16 +397,18 @@ export class KabasTasksViewModel implements ContentOpenerInterface {
     this.taskService.printTask(taskId, withNames);
   }
 
+  public eduContentHasSolution(eduContent: EduContent): boolean {
+    return eduContent.publishedEduContentMetadata.eduFiles.some(
+      eduFile => eduFile.type === 'solution'
+    );
+  }
+
   public printSolution(task: TaskWithAssigneesInterface) {
     const eduContentWithSolutions = [];
     const eduContentWithoutSolutions = [];
     // add check if all task-edu-contents have solution file
     task.taskEduContents.forEach(taskEduContent => {
-      if (
-        taskEduContent.eduContent.publishedEduContentMetadata.eduFiles.some(
-          eduFile => eduFile.type === 'solution'
-        )
-      ) {
+      if (this.eduContentHasSolution(taskEduContent.eduContent)) {
         eduContentWithSolutions.push(taskEduContent.eduContent);
       } else {
         eduContentWithoutSolutions.push(taskEduContent.eduContent);
