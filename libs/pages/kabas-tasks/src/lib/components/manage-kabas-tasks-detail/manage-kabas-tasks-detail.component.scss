@@ -98,7 +98,6 @@
 
       &--disabled {
         opacity: 0.3;
-        pointer-events: none;
       }
 
       &:hover {
@@ -108,7 +107,6 @@
         &.manage-kabas-tasks-detail__info__link--disabled {
           text-decoration: none;
           cursor: not-allowed;
-          pointer-events: none;
         }
       }
     }

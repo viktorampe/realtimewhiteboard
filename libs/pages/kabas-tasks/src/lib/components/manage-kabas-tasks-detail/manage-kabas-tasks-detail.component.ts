@@ -355,6 +355,7 @@ export class ManageKabasTasksDetailComponent implements OnInit {
   }
 
   public printSolution(task: TaskWithAssigneesInterface) {
+    if (!task.hasSolutionFiles) return;
     this.viewModel.printSolution(task);
   }
 

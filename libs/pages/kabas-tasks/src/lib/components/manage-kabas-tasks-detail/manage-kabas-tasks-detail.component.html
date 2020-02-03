@@ -171,6 +171,11 @@
             [class.manage-kabas-tasks-detail__list__link--disabled]="
               !task.hasSolutionFiles
             "
+            [matTooltip]="
+              !task.hasSolutionFiles
+                ? 'Het lesmateriaal in deze taak bevat geen correctiesleutels.'
+                : ''
+            "
             ><mat-icon
               svgIcon="print"
               class="manage-kabas-tasks-detail__info__link__icon"
