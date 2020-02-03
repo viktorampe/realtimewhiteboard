@@ -25,7 +25,7 @@ import { PagesMethodsRoutingModule } from './pages-methods-routing.module';
   providers: [
     {
       provide: CONTENT_OPENER_TOKEN,
-      useClass: MethodViewModel
+      useExisting: MethodViewModel
     }
   ],
   declarations: [
