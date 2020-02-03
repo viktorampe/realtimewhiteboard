@@ -1,4 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 import { WhiteboardToolsComponent } from './whiteboard-tools.component';
 
 describe('WhiteboardToolsComponent', () => {
@@ -23,16 +24,11 @@ describe('WhiteboardToolsComponent', () => {
 
   it('should emit when plus button is clicked', () => {
     spyOn(component.createCard, 'emit');
+    const buttons = fixture.debugElement.queryAll(
+      By.css('whiteboard-tools__btn')
+    );
+    const plusBtn = buttons[0].nativeElement;
+    plusBtn.clicked();
     expect(component.createCard.emit);
-  });
-
-  it('should emit when the delete button is clicked', () => {
-    spyOn(component.deleteCards, 'emit');
-    expect(component.deleteCards.emit);
-  });
-
-  it('should emit when the edit button is clicked', () => {
-    spyOn(component.editCards, 'emit');
-    expect(component.editCards.emit);
   });
 });

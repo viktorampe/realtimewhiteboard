@@ -17,10 +17,6 @@ export class WhiteboardToolsComponent implements OnInit {
     this.createCard.emit();
   }
 
-  btnDelClicked() {
-    this.deleteCards.emit();
-  }
-
   btnEditClicked() {
     this.editCards.emit();
   }
