@@ -64,8 +64,11 @@ export class CardComponent implements OnInit, OnChanges {
   }
 
   onDblClick(event) {
+    const classArray = event.target.className.split(' ');
     if (
-      event.target.className.includes('cardImage' || 'card__input' || 'card')
+      classArray.some(
+        e => e === 'cardImage' || e === 'card__input' || e === 'card'
+      )
     ) {
       this.toggleEditMode();
     }
