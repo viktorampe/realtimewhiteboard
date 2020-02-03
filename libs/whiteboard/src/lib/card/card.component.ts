@@ -56,7 +56,13 @@ export class CardComponent implements OnInit, OnChanges {
   }
 
   onDeleteCard() {
-    this.deleteCard.emit();
+    let deleteConfirmation = confirm(
+      'Weet u zeker dat u deze kaart wil verwijderen?'
+    );
+
+    if (deleteConfirmation) {
+      this.deleteCard.emit();
+    }
   }
 
   onDblClick(event) {
