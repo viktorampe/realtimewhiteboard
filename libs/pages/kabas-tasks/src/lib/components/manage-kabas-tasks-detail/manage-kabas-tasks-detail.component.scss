@@ -36,6 +36,15 @@
       flex-direction: column;
       flex: 0 0 auto;
       padding-bottom: 15px;
+
+      &__change-all-buttons {
+        display: flex;
+        flex-direction: row;
+
+        campus-button {
+          flex: 1;
+        }
+      }
     }
 
     &__add-assignees {

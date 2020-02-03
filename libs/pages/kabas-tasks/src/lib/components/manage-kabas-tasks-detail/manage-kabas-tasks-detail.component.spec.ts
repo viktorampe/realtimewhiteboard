@@ -5,6 +5,7 @@ import {
   MatDialog,
   MatDialogRef,
   MatIconRegistry,
+  MatListOption,
   MatRadioModule,
   MatSelectModule,
   MatSlideToggleModule,
@@ -17,11 +18,16 @@ import { RouterTestingModule } from '@angular/router/testing';
 import {
   EduContentFixture,
   LearningAreaFixture,
-  LearningAreaInterface
+  LearningAreaInterface,
+  TaskEduContentFixture,
+  TaskEduContentInterface
 } from '@campus/dal';
-import { SearchModule } from '@campus/search';
 import {
-  ContentActionsService,
+  SearchFilterComponentInterface,
+  SearchFilterCriteriaInterface,
+  SearchModule
+} from '@campus/search';
+import {
   CONTENT_ACTIONS_SERVICE_TOKEN,
   CONTENT_OPENER_TOKEN,
   ENVIRONMENT_ICON_MAPPING_TOKEN,
@@ -31,11 +37,11 @@ import {
 } from '@campus/shared';
 import { MockMatIconRegistry } from '@campus/testing';
 import { ConfirmationModalComponent, UiModule } from '@campus/ui';
+import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/utils';
 import { hot } from '@nrwl/angular/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { BehaviorSubject, of } from 'rxjs';
 import { AssigneeFixture } from '../../interfaces/Assignee.fixture';
-import { TaskEduContentWithEduContentInterface } from '../../interfaces/TaskEduContentWithEduContent.interface';
 import {
   CurrentTaskParams,
   KabasTasksViewModel
@@ -45,8 +51,11 @@ import {
   NewTaskComponent,
   NewTaskFormValues
 } from '../new-task/new-task.component';
+import { PrintPaperTaskModalResultEnum } from '../print-paper-task-modal/print-paper-task-modal-result.enum';
+import { PrintPaperTaskModalComponent } from '../print-paper-task-modal/print-paper-task-modal.component';
 import { TaskEduContentListItemComponent } from '../task-edu-content-list-item/task-edu-content-list-item.component';
 import { AssigneeInterface } from './../../interfaces/Assignee.interface';
+import { TaskEduContentWithEduContentInterface } from './../../interfaces/TaskEduContentWithEduContent.interface';
 import { TaskWithAssigneesInterface } from './../../interfaces/TaskWithAssignees.interface';
 import { ManageKabasTasksAssigneeModalComponent } from './../manage-kabas-tasks-assignee-modal/manage-kabas-tasks-assignee-modal.component';
 import { ManageKabasTasksDetailComponent } from './manage-kabas-tasks-detail.component';
@@ -58,6 +67,47 @@ describe('ManageKabasTasksDetailComponent', () => {
   let matDialog: MatDialog;
   let router: Router;
   const queryParams: BehaviorSubject<Params> = new BehaviorSubject<Params>({});
+
+  let mockViewmodel: MockKabasTasksViewModel;
+  let currentTask: TaskWithAssigneesInterface;
+  let restOfTasks: TaskWithAssigneesInterface[];
+  let taskEduContents: TaskEduContentWithEduContentInterface[];
+
+  // replaces value of the currentTask$  of the mockViewmodel
+  const updateCurrentTask = newCurrentTask => {
+    mockViewmodel.tasksWithAssignments$.next([newCurrentTask, ...restOfTasks]);
+    fixture.detectChanges();
+  };
+
+  // adds actions to each item of TaskEduContentWithEduContentInterface[]
+  const addActions = (
+    tECs: TaskEduContentWithEduContentInterface[],
+    actions = []
+  ) => {
+    tECs = tECs.map(tEC => Object.assign(tEC, { actions }));
+    return tECs;
+  };
+
+  // create a taskEduContentWithEduContent fixture
+  const createTaskEduContent = (
+    id = 1,
+    title = 'oefening 1',
+    required = false,
+    diaboloPhaseId = 1,
+    levelId = 1,
+    actions = []
+  ) =>
+    Object.assign(
+      new TaskEduContentFixture({
+        id,
+        required,
+        eduContent: new EduContentFixture(
+          {},
+          { title, diaboloPhaseId, levelId }
+        )
+      }),
+      { actions }
+    );
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
@@ -105,7 +155,7 @@ describe('ManageKabasTasksDetailComponent', () => {
         { provide: MatIconRegistry, useClass: MockMatIconRegistry },
         {
           provide: CONTENT_ACTIONS_SERVICE_TOKEN,
-          useClass: ContentActionsService
+          useValue: { getActionsForEduContent: () => [] }
         },
         {
           provide: CONTENT_OPENER_TOKEN,
@@ -119,14 +169,14 @@ describe('ManageKabasTasksDetailComponent', () => {
           }
         },
         {
-          provide: HAMMER_LOADER,
-          useValue: () => new Promise(() => {})
-        },
-        {
           provide: OPEN_STATIC_CONTENT_SERVICE_TOKEN,
           useValue: { open: jest.fn() }
         },
-        { provide: MatIconRegistry, useClass: MockMatIconRegistry }
+        { provide: MatIconRegistry, useClass: MockMatIconRegistry },
+        {
+          provide: FILTER_SERVICE_TOKEN,
+          useValue: { matchFilters: () => {} }
+        }
       ]
     });
   });
@@ -138,6 +188,10 @@ describe('ManageKabasTasksDetailComponent', () => {
     fixture = TestBed.createComponent(ManageKabasTasksDetailComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+
+    mockViewmodel = viewModel as MockKabasTasksViewModel;
+    [currentTask, ...restOfTasks] = mockViewmodel.tasksWithAssignments$.value;
+    taskEduContents = addActions(currentTask.taskEduContents);
   });
 
   it('should create', () => {
@@ -145,23 +199,18 @@ describe('ManageKabasTasksDetailComponent', () => {
   });
 
   describe('openAssigneeModal', () => {
-    let mockViewModel: MockKabasTasksViewModel;
     let afterClosed$: BehaviorSubject<AssigneeInterface[]>;
-    let mockCurrentTask: TaskWithAssigneesInterface;
 
     beforeEach(() => {
-      mockViewModel = viewModel;
-      mockCurrentTask = mockViewModel.tasksWithAssignments$.value[0];
-
       const dialog = TestBed.get(MatDialog);
       afterClosed$ = new BehaviorSubject<AssigneeInterface[]>([]);
       dialog.open = jest.fn(() => ({ afterClosed: () => afterClosed$ }));
     });
 
     it('should open the task assignees modal', () => {
-      const mockClassGroups = mockViewModel.classGroups$.value;
-      const mockGroups = mockViewModel.groups$.value;
-      const mockStudents = mockViewModel.students$.value;
+      const mockClassGroups = mockViewmodel.classGroups$.value;
+      const mockGroups = mockViewmodel.groups$.value;
+      const mockStudents = mockViewmodel.students$.value;
 
       const expectedTaskClassGroups = [
         {
@@ -217,9 +266,9 @@ describe('ManageKabasTasksDetailComponent', () => {
       ];
 
       const expectedData = {
-        title: mockCurrentTask.name,
-        isPaperTask: mockCurrentTask.isPaperTask,
-        currentTaskAssignees: mockCurrentTask.assignees,
+        title: currentTask.name,
+        isPaperTask: currentTask.isPaperTask,
+        currentTaskAssignees: currentTask.assignees,
         possibleTaskClassGroups: expectedTaskClassGroups,
         possibleTaskGroups: expectedTaskGroups,
         possibleTaskStudents: expectedTaskStudents
@@ -244,7 +293,7 @@ describe('ManageKabasTasksDetailComponent', () => {
       afterClosed$.next(dialogResult);
       component.openAssigneeModal();
       expect(viewModel.updateTaskAccess).toHaveBeenCalledWith(
-        { ...mockCurrentTask, taskEduContents: jasmine.anything() },
+        currentTask,
         dialogResult
       );
     });
@@ -454,8 +503,8 @@ describe('ManageKabasTasksDetailComponent', () => {
 
     it('should show the educontent info in the sidepanel when there is a selection', () => {
       component.selectedContents$.next([
-        new EduContentFixture(),
-        new EduContentFixture()
+        createTaskEduContent(1),
+        createTaskEduContent(2)
       ]);
       fixture.detectChanges();
 
@@ -476,29 +525,9 @@ describe('ManageKabasTasksDetailComponent', () => {
           By.css('.manage-kabas-tasks-detail__info__link')
         );
 
-      fdescribe('paper task', () => {
-        let mockViewmodel: MockKabasTasksViewModel;
-        let currentTask: TaskWithAssigneesInterface;
-        let restOfTasks: TaskWithAssigneesInterface[];
-
-        const updateCurrentTask = newCurrentTask => {
-          mockViewmodel.tasksWithAssignments$.next([
-            newCurrentTask,
-            ...restOfTasks
-          ]);
-          fixture.detectChanges();
-        };
-
+      describe('paper task', () => {
         beforeEach(() => {
-          mockViewmodel = viewModel as MockKabasTasksViewModel;
-
-          [
-            currentTask,
-            ...restOfTasks
-          ] = mockViewmodel.tasksWithAssignments$.value;
-
           currentTask.isPaperTask = true;
-
           updateCurrentTask(currentTask);
         });
 
@@ -539,10 +568,7 @@ describe('ManageKabasTasksDetailComponent', () => {
             component.printTask = jest.fn();
             link.triggerEventHandler('click', null);
 
-            expect(component.printTask).toHaveBeenCalledWith(
-              jasmine.objectContaining(currentTask),
-              true
-            );
+            expect(component.printTask).toHaveBeenCalledWith(currentTask, true);
           });
         });
 
@@ -564,7 +590,7 @@ describe('ManageKabasTasksDetailComponent', () => {
             link.triggerEventHandler('click', null);
 
             expect(component.printTask).toHaveBeenCalledWith(
-              jasmine.objectContaining(currentTask),
+              currentTask,
               false
             );
           });
@@ -587,9 +613,7 @@ describe('ManageKabasTasksDetailComponent', () => {
             component.printSolution = jest.fn();
             link.triggerEventHandler('click', null);
 
-            expect(component.printSolution).toHaveBeenCalledWith(
-              jasmine.objectContaining(currentTask)
-            );
+            expect(component.printSolution).toHaveBeenCalledWith(currentTask);
           });
         });
       });
@@ -634,38 +658,95 @@ describe('ManageKabasTasksDetailComponent', () => {
   });
 
   describe('removeAssignee', () => {
-    let mockViewModel: MockKabasTasksViewModel;
-    let mockCurrentTask: TaskWithAssigneesInterface;
-
-    beforeEach(() => {
-      mockViewModel = viewModel;
-      mockCurrentTask = mockViewModel.tasksWithAssignments$.value[0];
-    });
-
     it('should remove the assignee', () => {
       viewModel.updateTaskAccess = jest.fn();
-      const [
-        assigneeToRemove,
-        ...remainingAssignees
-      ] = mockCurrentTask.assignees;
+      const [assigneeToRemove, ...remainingAssignees] = currentTask.assignees;
 
-      component.removeAssignee(mockCurrentTask, assigneeToRemove);
+      component.removeAssignee(currentTask, assigneeToRemove);
       expect(viewModel.updateTaskAccess).toHaveBeenCalledWith(
-        mockCurrentTask,
+        currentTask,
         remainingAssignees
       );
     });
   });
 
-  describe('reordering', () => {
-    let mockViewModel: MockKabasTasksViewModel;
-    let mockCurrentTask: TaskWithAssigneesInterface;
+  describe('clickPrintTask', () => {
+    let afterClosed$: BehaviorSubject<PrintPaperTaskModalResultEnum>;
 
     beforeEach(() => {
-      mockViewModel = viewModel;
-      mockViewModel.currentTask$.subscribe(task => {
-        mockCurrentTask = task;
-      });
+      const dialog = TestBed.get(MatDialog);
+      afterClosed$ = new BehaviorSubject<PrintPaperTaskModalResultEnum>(null);
+      dialog.open = jest.fn(() => ({ afterClosed: () => afterClosed$ }));
+    });
+
+    it('should open the print task modal', () => {
+      const expectedData = { disable: [] };
+      const expectedClass = 'manage-task-detail-print';
+
+      component.clickPrintTask();
+
+      expect(matDialog.open).toHaveBeenCalledWith(
+        PrintPaperTaskModalComponent,
+        {
+          data: expectedData,
+          panelClass: expectedClass
+        }
+      );
+    });
+
+    it('should open the print task modal, no assignees in currentTask', () => {
+      currentTask.assignees = [];
+      updateCurrentTask(currentTask);
+
+      const expectedData = {
+        disable: [PrintPaperTaskModalResultEnum.WITH_NAMES]
+      };
+      const expectedClass = 'manage-task-detail-print';
+
+      component.clickPrintTask();
+
+      expect(matDialog.open).toHaveBeenCalledWith(
+        PrintPaperTaskModalComponent,
+        {
+          data: expectedData,
+          panelClass: expectedClass
+        }
+      );
+    });
+
+    it('should print the task with names', () => {
+      const dialogResult = PrintPaperTaskModalResultEnum.WITH_NAMES;
+      component.printTask = jest.fn();
+
+      afterClosed$.next(dialogResult);
+      component.clickPrintTask();
+
+      expect(component.printTask).toHaveBeenCalledWith(currentTask, true);
+    });
+
+    it('should print the task without names', () => {
+      const dialogResult = PrintPaperTaskModalResultEnum.WITHOUT_NAMES;
+      component.printTask = jest.fn();
+
+      afterClosed$.next(dialogResult);
+      component.clickPrintTask();
+
+      expect(component.printTask).toHaveBeenCalledWith(currentTask, false);
+    });
+
+    it('should print the task solution', () => {
+      const dialogResult = PrintPaperTaskModalResultEnum.SOLUTION;
+      component.printSolution = jest.fn();
+
+      afterClosed$.next(dialogResult);
+      component.clickPrintTask();
+
+      expect(component.printSolution).toHaveBeenCalledWith(currentTask);
+    });
+  });
+
+  describe('reordering', () => {
+    beforeEach(() => {
       component.isReordering = false;
     });
 
@@ -677,8 +758,6 @@ describe('ManageKabasTasksDetailComponent', () => {
     });
 
     it('should update reorderableTaskEduContents$ when dropping element', () => {
-      const { taskEduContents } = mockCurrentTask;
-
       const event = { previousIndex: 2, currentIndex: 1 } as CdkDragDrop<
         TaskEduContentWithEduContentInterface[]
       >;
@@ -698,16 +777,396 @@ describe('ManageKabasTasksDetailComponent', () => {
     });
 
     it('should call updateTaskEduContentsOrder and toggle the mode', () => {
-      const { taskEduContents } = mockCurrentTask;
       component.isReordering = true;
-      spyOn(mockViewModel, 'updateTaskEduContentsOrder');
+      spyOn(viewModel, 'updateTaskEduContentsOrder');
 
       component.saveOrder();
 
-      expect(mockViewModel.updateTaskEduContentsOrder).toHaveBeenCalledWith(
+      expect(viewModel.updateTaskEduContentsOrder).toHaveBeenCalledWith(
         taskEduContents
       );
       expect(component.isReordering).toBeFalsy();
+    });
+  });
+
+  describe('filtering', () => {
+    beforeEach(() => {
+      taskEduContents = [
+        createTaskEduContent(1, 'oefening 1', false, 1, 1),
+        createTaskEduContent(2, 'oefening 2', false, 2, 1),
+        createTaskEduContent(3, 'huiswerk 1', true, 3, 2),
+        createTaskEduContent(4, 'overhoring 1', true, 1, 1),
+        createTaskEduContent(5, 'overhoring 2', true, 2, 2)
+      ];
+
+      updateCurrentTask({ ...currentTask, taskEduContents });
+    });
+
+    describe('task-edu-content list', () => {
+      const getListOptions = (): MatListOption[] =>
+        fixture.debugElement
+          .queryAll(By.directive(MatListOption))
+          .map(listOptionDE => listOptionDE.componentInstance);
+
+      it('should show all items on init', () => {
+        expect(component.filteredTaskEduContents$).toBeObservable(
+          hot('a', { a: taskEduContents })
+        );
+
+        const listOptions = getListOptions();
+        expect(listOptions.length).toBe(taskEduContents.length);
+        listOptions.forEach((listOption, index) => {
+          expect(listOption.value).toEqual(taskEduContents[index]);
+        });
+      });
+
+      it('should show the filtered items', () => {
+        //filter on required = true
+        const searchFilterCriteria = [
+          { values: [{ selected: true, data: { required: true } }] }
+        ] as SearchFilterCriteriaInterface[];
+        component.requiredFilterSelectionChanged(searchFilterCriteria);
+        fixture.detectChanges();
+
+        const expected = [
+          taskEduContents[2],
+          taskEduContents[3],
+          taskEduContents[4]
+        ];
+
+        expect(component.filteredTaskEduContents$).toBeObservable(
+          hot('a', { a: expected })
+        );
+
+        const listOptions = getListOptions();
+        expect(listOptions.length).toBe(3);
+
+        listOptions.forEach((listOption, index) => {
+          expect(listOption.value).toEqual(expected[index]);
+        });
+      });
+    });
+
+    describe('filters', () => {
+      describe('title filter', () => {
+        it('should show the title filter', () => {
+          const filter = fixture.debugElement.query(
+            By.css('.manage-kabas-tasks-detail__filterbar__filter--title')
+          );
+          const mockEvent = { foo: 'bar' };
+          component.searchTermFilterValueChanged = jest.fn();
+
+          filter.triggerEventHandler('valueChange', mockEvent);
+
+          expect(component.searchTermFilterValueChanged).toHaveBeenCalledWith(
+            mockEvent
+          );
+        });
+
+        it('should filter on title', () => {
+          const filterService = TestBed.get(
+            FILTER_SERVICE_TOKEN
+          ) as FilterServiceInterface;
+          const filterSpy = (filterService.matchFilters = jest
+            .fn()
+            .mockReturnValueOnce(false)
+            .mockReturnValueOnce(true) // only second taskEduContent matches filter
+            .mockReturnValue(false));
+
+          const searchTerm = 'foo';
+
+          component.searchTermFilterValueChanged(searchTerm);
+
+          const expected = [taskEduContents[1]];
+
+          expect(filterSpy).toHaveBeenCalledTimes(taskEduContents.length);
+
+          filterSpy.mock.calls.forEach((call, index) => {
+            expect(call[0]).toEqual(taskEduContents[index]);
+            expect(call[1]).toEqual({
+              eduContent: {
+                publishedEduContentMetadata: { title: searchTerm }
+              }
+            });
+          });
+
+          expect(component.filteredTaskEduContents$).toBeObservable(
+            hot('a', { a: expected })
+          );
+        });
+      });
+
+      describe('required filter', () => {
+        it('should show the required filter', () => {
+          const filter = fixture.debugElement.query(
+            By.css('.manage-kabas-tasks-detail__filterbar__filter--required')
+          );
+          const mockEvent = { foo: 'bar' };
+          component.requiredFilterSelectionChanged = jest.fn();
+
+          filter.triggerEventHandler('filterSelectionChange', mockEvent);
+
+          expect(component.requiredFilterSelectionChanged).toHaveBeenCalledWith(
+            mockEvent
+          );
+        });
+
+        const testCases = [
+          {
+            case: 'only true',
+            values: [
+              { selected: true, data: { required: true } },
+              { selected: false, data: { required: false } }
+            ],
+            expected: [2, 3, 4]
+          },
+          {
+            case: 'only false',
+            values: [
+              { selected: false, data: { required: true } },
+              { selected: true, data: { required: false } }
+            ],
+            expected: [0, 1]
+          },
+          {
+            case: 'both',
+
+            values: [
+              { selected: true, data: { required: true } },
+              { selected: true, data: { required: false } }
+            ],
+            expected: [0, 1, 2, 3, 4]
+          },
+          {
+            case: 'none',
+            values: [
+              { selected: false, data: { required: true } },
+              { selected: false, data: { required: false } }
+            ],
+            expected: [0, 1, 2, 3, 4]
+          }
+        ];
+
+        testCases.forEach(testCase => {
+          it('should filter on required - ' + testCase.case, () => {
+            const values = testCase.values;
+            component.requiredFilterSelectionChanged([
+              { values } as SearchFilterCriteriaInterface
+            ]);
+
+            const expected = testCase.expected.map(
+              index => taskEduContents[index]
+            );
+
+            expect(component.filteredTaskEduContents$).toBeObservable(
+              hot('a', { a: expected })
+            );
+          });
+        });
+      });
+
+      describe('diabolo-phase filter', () => {
+        it('should show the diabolo-phase filter', () => {
+          const filter = fixture.debugElement.query(
+            By.css(
+              '.manage-kabas-tasks-detail__filterbar__filter--diabolo-phase'
+            )
+          );
+          const mockEvent = { foo: 'bar' };
+          component.diaboloPhaseFilterSelectionChanged = jest.fn();
+
+          filter.triggerEventHandler('filterSelectionChange', mockEvent);
+
+          expect(
+            component.diaboloPhaseFilterSelectionChanged
+          ).toHaveBeenCalledWith(mockEvent);
+        });
+
+        const testCases = [
+          {
+            case: 'single value',
+            values: [
+              { selected: true, data: { id: 1 } },
+              { selected: false, data: { id: 2 } },
+              { selected: false, data: { id: 3 } }
+            ],
+            expected: [0, 3]
+          },
+          {
+            case: 'multiple values',
+            values: [
+              { selected: false, data: { id: 1 } },
+              { selected: true, data: { id: 2 } },
+              { selected: true, data: { id: 3 } }
+            ],
+            expected: [1, 2, 4]
+          },
+          {
+            case: 'all values',
+
+            values: [
+              { selected: true, data: { id: 1 } },
+              { selected: true, data: { id: 2 } },
+              { selected: true, data: { id: 3 } }
+            ],
+            expected: [0, 1, 2, 3, 4]
+          },
+          {
+            case: 'none',
+            values: [
+              { selected: false, data: { id: 1 } },
+              { selected: false, data: { id: 2 } },
+              { selected: false, data: { id: 3 } }
+            ],
+            expected: [0, 1, 2, 3, 4]
+          }
+        ];
+
+        testCases.forEach(testCase => {
+          it('should filter on diaboloPhase - ' + testCase.case, () => {
+            const values = testCase.values;
+            component.diaboloPhaseFilterSelectionChanged([
+              { values } as SearchFilterCriteriaInterface
+            ]);
+
+            const expected = testCase.expected.map(
+              index => taskEduContents[index]
+            );
+
+            expect(component.filteredTaskEduContents$).toBeObservable(
+              hot('a', { a: expected })
+            );
+          });
+        });
+      });
+
+      describe('level filter', () => {
+        it('should show the level filter', () => {
+          const filter = fixture.debugElement.query(
+            By.css('.manage-kabas-tasks-detail__filterbar__filter--level')
+          );
+          const mockEvent = { foo: 'bar' };
+          component.levelFilterSelectionChanged = jest.fn();
+
+          filter.triggerEventHandler('filterSelectionChange', mockEvent);
+
+          expect(component.levelFilterSelectionChanged).toHaveBeenCalledWith(
+            mockEvent
+          );
+        });
+
+        const testCases = [
+          {
+            case: 'only 1',
+            values: [
+              { selected: true, data: { level: 1 } },
+              { selected: false, data: { level: 2 } }
+            ],
+            expected: [0, 1, 3]
+          },
+          {
+            case: 'only 2',
+            values: [
+              { selected: false, data: { level: 1 } },
+              { selected: true, data: { level: 2 } }
+            ],
+            expected: [2, 4]
+          },
+          {
+            case: 'both',
+            values: [
+              { selected: true, data: { level: 1 } },
+              { selected: true, data: { level: 2 } }
+            ],
+            expected: [0, 1, 2, 3, 4]
+          },
+          {
+            case: 'none',
+            values: [
+              { selected: false, data: { level: 1 } },
+              { selected: false, data: { level: 2 } }
+            ],
+            expected: [0, 1, 2, 3, 4]
+          }
+        ];
+
+        testCases.forEach(testCase => {
+          it('should filter on level - ' + testCase.case, () => {
+            const values = testCase.values;
+            component.levelFilterSelectionChanged([
+              { values } as SearchFilterCriteriaInterface
+            ]);
+
+            const expected = testCase.expected.map(
+              index => taskEduContents[index]
+            );
+
+            expect(component.filteredTaskEduContents$).toBeObservable(
+              hot('a', { a: expected })
+            );
+          });
+        });
+      });
+
+      describe('reset-filters button', () => {
+        it('should show a reset-filters button', () => {
+          const filter = fixture.debugElement.query(
+            By.css('.manage-kabas-tasks-detail__filterbar__reset-filters')
+          );
+          component.clickResetFilters = jest.fn();
+
+          filter.triggerEventHandler('click', null);
+
+          expect(component.clickResetFilters).toHaveBeenCalled();
+        });
+
+        it('should reset the filters', () => {
+          const filters = fixture.debugElement
+            .queryAll(By.css('.manage-kabas-tasks-detail__filterbar__filter'))
+            .map(
+              filterDE => filterDE.componentInstance
+            ) as SearchFilterComponentInterface[];
+
+          const filterResetSpies = [];
+          filters.forEach(searchFilter => {
+            filterResetSpies.push((searchFilter.reset = jest.fn()));
+          });
+
+          component.clickResetFilters();
+
+          filterResetSpies.forEach(spy =>
+            expect(spy).toHaveBeenCalledWith(false)
+          );
+        });
+
+        it('should clear the filters on the list items', () => {
+          const searchFilterCriteria = [
+            { values: [{ selected: true, data: { required: true } }] }
+          ] as SearchFilterCriteriaInterface[];
+          component.requiredFilterSelectionChanged(searchFilterCriteria);
+
+          component.clickResetFilters();
+
+          expect(component.filteredTaskEduContents$).toBeObservable(
+            hot('a', { a: taskEduContents })
+          );
+        });
+      });
+    });
+  });
+
+  describe('setTaskEduContentsRequiredState', () => {
+    it('should call viewmodel.updateTaskEduContentsRequired', () => {
+      const spy = jest.spyOn(viewModel, 'updateTaskEduContentsRequired');
+
+      const selectedEduContents: TaskEduContentInterface[] = [
+        { id: 1 } as TaskEduContentInterface,
+        { id: 2 } as TaskEduContentInterface
+      ];
+
+      component.setTaskEduContentsRequiredState(selectedEduContents, true);
+
+      expect(spy).toHaveBeenCalledWith(selectedEduContents, true);
     });
   });
 });
