@@ -878,7 +878,7 @@ describe('ManageKabasTasksDetailComponent', () => {
           it('should filter on required - ' + testCase.case, () => {
             const values = testCase.values;
             component.requiredFilterSelectionChanged([
-              ({ values } as any) as SearchFilterCriteriaInterface
+              { values } as SearchFilterCriteriaInterface
             ]);
 
             const expected = testCase.expected.map(
@@ -953,7 +953,7 @@ describe('ManageKabasTasksDetailComponent', () => {
           it('should filter on diaboloPhase - ' + testCase.case, () => {
             const values = testCase.values;
             component.diaboloPhaseFilterSelectionChanged([
-              ({ values } as any) as SearchFilterCriteriaInterface
+              { values } as SearchFilterCriteriaInterface
             ]);
 
             const expected = testCase.expected.map(
@@ -1021,7 +1021,7 @@ describe('ManageKabasTasksDetailComponent', () => {
           it('should filter on level - ' + testCase.case, () => {
             const values = testCase.values;
             component.levelFilterSelectionChanged([
-              ({ values } as any) as SearchFilterCriteriaInterface
+              { values } as SearchFilterCriteriaInterface
             ]);
 
             const expected = testCase.expected.map(

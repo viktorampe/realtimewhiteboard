@@ -67,7 +67,6 @@ export interface FilterStateInterface {
   selector: 'campus-manage-kabas-tasks-detail',
   templateUrl: './manage-kabas-tasks-detail.component.html',
   styleUrls: ['./manage-kabas-tasks-detail.component.scss']
-  // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ManageKabasTasksDetailComponent implements OnInit {
   public assigneeTypesEnum: typeof AssigneeTypesEnum = AssigneeTypesEnum;
@@ -87,7 +86,7 @@ export class ManageKabasTasksDetailComponent implements OnInit {
 
   public filteredTaskEduContents$: Observable<TaskEduContentInterface[]>;
 
-  private filterState$ = new BehaviorSubject<any>({});
+  private filterState$ = new BehaviorSubject<FilterStateInterface>({});
 
   @ViewChild('taskContent', { static: false })
   private contentSelectionList: MatSelectionList;
@@ -457,8 +456,6 @@ export class ManageKabasTasksDetailComponent implements OnInit {
     filterState,
     taskEduContents
   ): TaskEduContentInterface[] {
-    if (taskEduContents.length === 0) return [];
-
     const filteredTaskEduContents = [...taskEduContents].filter(
       tEC =>
         this.filterOnDiaboloPhase(filterState, tEC) &&
