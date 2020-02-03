@@ -489,8 +489,7 @@ export class ManageKabasTasksDetailComponent implements OnInit, OnDestroy {
     return combineLatest([this.filterState$, this.task$]).pipe(
       map(([filterState, task]) => {
         return this.filterTaskEduContents(filterState, task.taskEduContents);
-      }),
-      shareReplay(1)
+      })
     );
   }
 
