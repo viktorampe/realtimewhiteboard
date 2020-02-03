@@ -77,13 +77,6 @@ describe('CardComponent', () => {
     expect(inputContent.nativeElement.value.trim()).toBe('Test content');
   });
 
-  it('should toggle viewModeImage when toggleView is called', () => {
-    component.viewModeImage = false;
-    component.toggleView();
-    fixture.detectChanges();
-    expect(component.viewModeImage).toBe(true);
-  });
-
   it('should create card with cardcontent empty', () => {
     expect(component.card.cardContent).toBe('');
   });
