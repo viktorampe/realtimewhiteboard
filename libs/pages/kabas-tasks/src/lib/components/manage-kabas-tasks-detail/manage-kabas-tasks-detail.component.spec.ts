@@ -19,7 +19,8 @@ import {
   EduContentFixture,
   LearningAreaFixture,
   LearningAreaInterface,
-  TaskEduContentFixture
+  TaskEduContentFixture,
+  TaskEduContentInterface
 } from '@campus/dal';
 import {
   SearchFilterComponentInterface,
@@ -614,9 +615,7 @@ describe('ManageKabasTasksDetailComponent', () => {
             component.printSolution = jest.fn();
             link.triggerEventHandler('click', null);
 
-            expect(component.printSolution).toHaveBeenCalledWith(
-              jasmine.objectContaining(currentTask)
-            );
+            expect(component.printSolution).toHaveBeenCalledWith(currentTask);
           });
         });
       });
@@ -1080,6 +1079,21 @@ describe('ManageKabasTasksDetailComponent', () => {
           );
         });
       });
+    });
+  });
+
+  describe('setTaskEduContentsRequiredState', () => {
+    it('should call viewmodel.updateTaskEduContentsRequired', () => {
+      const spy = jest.spyOn(viewModel, 'updateTaskEduContentsRequired');
+
+      const selectedEduContents: TaskEduContentInterface[] = [
+        { id: 1 } as TaskEduContentInterface,
+        { id: 2 } as TaskEduContentInterface
+      ];
+
+      component.setTaskEduContentsRequiredState(selectedEduContents, true);
+
+      expect(spy).toHaveBeenCalledWith(selectedEduContents, true);
     });
   });
 });
