@@ -1,5 +1,5 @@
 <campus-page-bar *ngIf="task$ | async as task">
-  <ng-container *ngIf="selectedContents$ | async as selectedContents">
+  <ng-container *ngIf="selectedTaskEduContents as selectedContents">
     <ng-container *ngIf="selectedContents.length === 0; else contentSelected">
       <campus-button
         class="shared-header__contextual__button smallIcon"
@@ -58,7 +58,7 @@
   [isOpenOnInit]="true"
 >
   <campus-side-sheet-header>
-    <ng-container [ngSwitch]="(selectedContents$ | async)?.length">
+    <ng-container [ngSwitch]="selectedTaskEduContents.length">
       <ng-container *ngSwitchCase="0">Over deze taak:</ng-container>
       <ng-container *ngSwitchDefault>Over dit lesmateriaal:</ng-container>
     </ng-container>
@@ -66,7 +66,7 @@
 
   <campus-side-sheet-body>
     <div
-      *ngIf="selectedContents$ | async as selectedContents"
+      *ngIf="selectedTaskEduContents as selectedContents"
       class="manage-kabas-tasks-detail__info"
     >
       <ng-container *ngIf="selectedContents.length === 0; else contentDetails">
@@ -335,12 +335,12 @@
         </div>
 
         <mat-selection-list
+          [(ngModel)]="selectedTaskEduContents"
           #taskContent
           class="manage-kabas-tasks-detail__list"
           [class.mat-selection-list--has-selection]="
             !taskContent.selectedOptions.isEmpty()
           "
-          (selectionChange)="onSelectionChange()"
           *ngIf="!isReordering"
         >
           <ng-container

@@ -1,6 +1,7 @@
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { DebugElement } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
+import { FormsModule } from '@angular/forms';
 import {
   MatDialog,
   MatDialogRef,
@@ -119,7 +120,8 @@ describe('ManageKabasTasksDetailComponent', () => {
         UiModule,
         NoopAnimationsModule,
         MatRadioModule,
-        RouterTestingModule
+        RouterTestingModule,
+        FormsModule
       ],
       declarations: [
         ManageKabasTasksDetailComponent,
@@ -487,7 +489,7 @@ describe('ManageKabasTasksDetailComponent', () => {
 
   describe('sidepanel content', () => {
     it('should show the task info in the sidepanel when selection is empty', () => {
-      component.selectedContents$.next([]);
+      component.selectedTaskEduContents = [];
       fixture.detectChanges();
 
       const taskInfoDE = fixture.debugElement.query(
@@ -502,10 +504,10 @@ describe('ManageKabasTasksDetailComponent', () => {
     });
 
     it('should show the educontent info in the sidepanel when there is a selection', () => {
-      component.selectedContents$.next([
+      component.selectedTaskEduContents = [
         createTaskEduContent(1),
         createTaskEduContent(2)
-      ]);
+      ];
       fixture.detectChanges();
 
       const taskInfoDE = fixture.debugElement.query(

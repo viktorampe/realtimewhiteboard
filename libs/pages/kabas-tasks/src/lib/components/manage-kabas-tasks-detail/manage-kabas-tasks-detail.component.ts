@@ -37,6 +37,7 @@ import {
   shareReplay,
   switchMap,
   take,
+  tap,
   withLatestFrom
 } from 'rxjs/operators';
 import {
@@ -81,13 +82,15 @@ export class ManageKabasTasksDetailComponent implements OnInit {
 
   public isNewTask$: Observable<boolean>;
   public selectableLearningAreas$: Observable<LearningAreaInterface[]>;
-  public selectedContents$ = new BehaviorSubject<TaskEduContentInterface[]>([]);
   public task$: Observable<TaskWithAssigneesInterface>;
   public reorderableTaskEduContents$ = new BehaviorSubject<
     TaskEduContentWithEduContentInterface[]
   >([]);
 
-  public filteredTaskEduContents$: Observable<TaskEduContentInterface[]>;
+  public filteredTaskEduContents$: Observable<
+    TaskEduContentWithEduContentInterface[]
+  >;
+  public selectedTaskEduContents: TaskEduContentWithEduContentInterface[] = [];
 
   private filterState$ = new BehaviorSubject<FilterStateInterface>({});
 
@@ -141,7 +144,8 @@ export class ManageKabasTasksDetailComponent implements OnInit {
         });
 
         return { ...task, taskEduContents };
-      })
+      }),
+      shareReplay(1)
     );
 
     this.isNewTask$.pipe(take(1)).subscribe(isNewTask => {
@@ -155,20 +159,20 @@ export class ManageKabasTasksDetailComponent implements OnInit {
     });
 
     this.filteredTaskEduContents$ = this.getFilteredTaskEduContents$().pipe(
+      tap(taskEduContents => {
+        const selectedIds = this.selectedTaskEduContents.map(
+          selectedTEC => selectedTEC.id
+        );
+
+        this.selectedTaskEduContents = taskEduContents.filter(tEC =>
+          selectedIds.includes(tEC.id)
+        );
+      }),
       shareReplay(1)
     );
   }
 
   public onSelectionChange() {
-    const selected: TaskEduContentWithEduContentInterface[] = this.contentSelectionList.selectedOptions.selected
-      .map(option => option.value)
-      .sort(
-        (
-          a: TaskEduContentWithEduContentInterface,
-          b: TaskEduContentWithEduContentInterface
-        ) => (a.eduContent.name < b.eduContent.name ? -1 : 1)
-      );
-    this.selectedContents$.next(selected);
     this.sideSheet.toggle(true);
   }
 
@@ -482,7 +486,9 @@ export class ManageKabasTasksDetailComponent implements OnInit {
     this.filterState$.next(newFilterState);
   }
 
-  private getFilteredTaskEduContents$(): Observable<TaskEduContentInterface[]> {
+  private getFilteredTaskEduContents$(): Observable<
+    TaskEduContentWithEduContentInterface[]
+  > {
     return combineLatest([this.filterState$, this.task$]).pipe(
       map(([filterState, task]) => {
         return this.filterTaskEduContents(filterState, task.taskEduContents);
@@ -493,7 +499,7 @@ export class ManageKabasTasksDetailComponent implements OnInit {
   private filterTaskEduContents(
     filterState,
     taskEduContents
-  ): TaskEduContentInterface[] {
+  ): TaskEduContentWithEduContentInterface[] {
     const filteredTaskEduContents = [...taskEduContents].filter(
       tEC =>
         this.filterOnDiaboloPhase(filterState, tEC) &&
