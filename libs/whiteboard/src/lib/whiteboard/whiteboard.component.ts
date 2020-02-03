@@ -77,4 +77,9 @@ export class WhiteboardComponent implements OnInit {
   addSelectedCard(card: Card) {
     this.selectedCards.push(card);
   }
+
+  removeSelectedCard(card: Card) {
+    const index = this.selectedCards.indexOf(card);
+    this.selectedCards.splice(index, 1);
+  }
 }
