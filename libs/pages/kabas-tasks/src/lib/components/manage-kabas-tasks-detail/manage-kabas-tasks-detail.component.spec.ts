@@ -46,6 +46,8 @@ import {
   NewTaskComponent,
   NewTaskFormValues
 } from '../new-task/new-task.component';
+import { PrintPaperTaskModalResultEnum } from '../print-paper-task-modal/print-paper-task-modal-result.enum';
+import { PrintPaperTaskModalComponent } from '../print-paper-task-modal/print-paper-task-modal.component';
 import { TaskEduContentListItemComponent } from '../task-edu-content-list-item/task-edu-content-list-item.component';
 import { AssigneeInterface } from './../../interfaces/Assignee.interface';
 import { TaskWithAssigneesInterface } from './../../interfaces/TaskWithAssignees.interface';
@@ -159,10 +161,6 @@ describe('ManageKabasTasksDetailComponent', () => {
             openBoeke: () => {},
             previewEduContentAsImage: () => {}
           }
-        },
-        {
-          provide: HAMMER_LOADER,
-          useValue: () => new Promise(() => {})
         },
         {
           provide: OPEN_STATIC_CONTENT_SERVICE_TOKEN,
@@ -659,6 +657,81 @@ describe('ManageKabasTasksDetailComponent', () => {
         currentTask,
         remainingAssignees
       );
+    });
+  });
+
+  describe('clickPrintTask', () => {
+    let afterClosed$: BehaviorSubject<PrintPaperTaskModalResultEnum>;
+
+    beforeEach(() => {
+      const dialog = TestBed.get(MatDialog);
+      afterClosed$ = new BehaviorSubject<PrintPaperTaskModalResultEnum>(null);
+      dialog.open = jest.fn(() => ({ afterClosed: () => afterClosed$ }));
+    });
+
+    it('should open the print task modal', () => {
+      const expectedData = { disable: [] };
+      const expectedClass = 'manage-task-detail-print';
+
+      component.clickPrintTask();
+
+      expect(matDialog.open).toHaveBeenCalledWith(
+        PrintPaperTaskModalComponent,
+        {
+          data: expectedData,
+          panelClass: expectedClass
+        }
+      );
+    });
+
+    it('should open the print task modal, no assignees in currentTask', () => {
+      currentTask.assignees = [];
+      updateCurrentTask(currentTask);
+
+      const expectedData = {
+        disable: [PrintPaperTaskModalResultEnum.WITH_NAMES]
+      };
+      const expectedClass = 'manage-task-detail-print';
+
+      component.clickPrintTask();
+
+      expect(matDialog.open).toHaveBeenCalledWith(
+        PrintPaperTaskModalComponent,
+        {
+          data: expectedData,
+          panelClass: expectedClass
+        }
+      );
+    });
+
+    it('should print the task with names', () => {
+      const dialogResult = PrintPaperTaskModalResultEnum.WITH_NAMES;
+      component.printTask = jest.fn();
+
+      afterClosed$.next(dialogResult);
+      component.clickPrintTask();
+
+      expect(component.printTask).toHaveBeenCalledWith(currentTask, true);
+    });
+
+    it('should print the task without names', () => {
+      const dialogResult = PrintPaperTaskModalResultEnum.WITHOUT_NAMES;
+      component.printTask = jest.fn();
+
+      afterClosed$.next(dialogResult);
+      component.clickPrintTask();
+
+      expect(component.printTask).toHaveBeenCalledWith(currentTask, false);
+    });
+
+    it('should print the task solution', () => {
+      const dialogResult = PrintPaperTaskModalResultEnum.SOLUTION;
+      component.printSolution = jest.fn();
+
+      afterClosed$.next(dialogResult);
+      component.clickPrintTask();
+
+      expect(component.printSolution).toHaveBeenCalledWith(currentTask);
     });
   });
 
