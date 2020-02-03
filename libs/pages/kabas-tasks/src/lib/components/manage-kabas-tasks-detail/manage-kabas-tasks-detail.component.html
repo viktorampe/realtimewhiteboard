@@ -221,7 +221,9 @@
           <mat-radio-group
             *ngIf="selectedContents.length === 1; else multipleSelected"
             [value]="selectedContents[0].required"
-            (change)="setTaskEduContentsRequiredState($event, selectedContents)"
+            (change)="
+              setTaskEduContentsRequiredState(selectedContents, $event.value)
+            "
           >
             <mat-radio-button
               [checked]="selectedContents[0].required"
@@ -240,13 +242,13 @@
             >
               <campus-button
                 (click)="
-                  setTaskEduContentsRequiredState(null, selectedContents, true)
+                  setTaskEduContentsRequiredState(selectedContents, true)
                 "
                 >Alles moetje</campus-button
               >
               <campus-button
                 (click)="
-                  setTaskEduContentsRequiredState(null, selectedContents, false)
+                  setTaskEduContentsRequiredState(selectedContents, false)
                 "
                 >Alles magje</campus-button
               >

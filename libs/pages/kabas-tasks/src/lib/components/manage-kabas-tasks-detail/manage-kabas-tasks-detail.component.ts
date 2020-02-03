@@ -1,6 +1,6 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { MatDialog, MatRadioChange, MatSelectionList } from '@angular/material';
+import { MatDialog, MatSelectionList } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   EduContent,
@@ -372,13 +372,9 @@ export class ManageKabasTasksDetailComponent implements OnInit {
   }
 
   public setTaskEduContentsRequiredState(
-    event: MatRadioChange,
     taskEduContents: TaskEduContentInterface[],
-    value?: boolean
+    value: boolean
   ) {
-    this.viewModel.updateTaskEduContentsRequired(
-      taskEduContents,
-      (event && event.value) || value
-    );
+    this.viewModel.updateTaskEduContentsRequired(taskEduContents, !!value);
   }
 }
