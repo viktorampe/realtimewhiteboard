@@ -24,4 +24,10 @@ describe('ToolbarComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should emit clickToggleEditIcon when toggleModus is called', () => {
+    spyOn(component.clickToggleEditIcon, 'emit');
+    component.toggleModus();
+    expect(component.clickToggleEditIcon.emit).toHaveBeenCalled();
+  });
 });

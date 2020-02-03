@@ -17,17 +17,17 @@
     [hidden]="colorlistHidden"
   ></campus-colorlist>
   <div class="card__content">
-    <campus-cardimage
-      [ngClass]="{
-        'view-mode-image':
-          this.viewModeImage == true && this.card.editMode == false
-      }"
-    ></campus-cardimage>
+    <div
+      class="cardImage"
+      [class.view-mode-image]="
+        this.viewModeImage === true && this.card.editMode === false
+      "
+    ></div>
     <div
       class="card__input"
       [ngClass]="{
         'view-mode-text':
-          this.viewModeImage == false && this.card.editMode == false
+          this.viewModeImage === false && this.card.editMode === false
       }"
     >
       <textarea

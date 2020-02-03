@@ -30,6 +30,23 @@
     &__errorMessage {
       color: #dc3545;
     }
+
+    .cardImage {
+      background-image: url(https://www.cimec.co.za/wp-content/uploads/2018/07/4-Unique-Placeholder-Image-Services-for-Designers.png);
+      height: 100%;
+      width: 100%;
+      background-position: center;
+      background-size: cover;
+      position: absolute;
+      width: 100%;
+      height: 60%;
+
+      &.view-mode-image {
+        height: 100%;
+        background-size: cover;
+        z-index: 1;
+      }
+    }
   }
 
   &__input {
@@ -50,18 +67,6 @@
         height: 100%;
       }
     }
-  }
-}
-
-campus-cardimage {
-  position: absolute;
-  width: 100%;
-  height: 60%;
-
-  &.view-mode-image {
-    height: 100%;
-    background-size: cover;
-    z-index: 1;
   }
 }
 

@@ -4,7 +4,6 @@ import { MatCardModule, MatIconModule } from '@angular/material';
 import { By, HAMMER_LOADER } from '@angular/platform-browser';
 import { configureTestSuite } from 'ng-bullet';
 import { CardComponent } from '../card/card.component';
-import { CardimageComponent } from '../cardimage/cardimage.component';
 import { ColorlistComponent } from '../colorlist/colorlist.component';
 import { ToolbarComponent } from '../toolbar/toolbar.component';
 import { WhiteboardComponent } from './whiteboard.component';
@@ -20,8 +19,7 @@ describe('WhiteboardComponent', () => {
         WhiteboardComponent,
         CardComponent,
         ToolbarComponent,
-        ColorlistComponent,
-        CardimageComponent
+        ColorlistComponent
       ],
       providers: [
         {

@@ -5,7 +5,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { By, HAMMER_LOADER } from '@angular/platform-browser';
 import { MockMatIconRegistry } from '@campus/testing';
 import { configureTestSuite } from 'ng-bullet';
-import { CardimageComponent } from '../cardimage/cardimage.component';
 import { ColorlistComponent } from '../colorlist/colorlist.component';
 import { ToolbarComponent } from '../toolbar/toolbar.component';
 import { CardComponent } from './card.component';
@@ -17,12 +16,7 @@ describe('CardComponent', () => {
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [MatCardModule, FormsModule, MatIconModule],
-      declarations: [
-        CardComponent,
-        ToolbarComponent,
-        ColorlistComponent,
-        CardimageComponent
-      ],
+      declarations: [CardComponent, ToolbarComponent, ColorlistComponent],
       providers: [
         {
           provide: HAMMER_LOADER,
@@ -83,25 +77,11 @@ describe('CardComponent', () => {
     expect(inputContent.nativeElement.value.trim()).toBe('Test content');
   });
 
-  it('should show image when view mode image is true', () => {
+  it('should toggle viewModeImage when toggleView is called', () => {
     component.viewModeImage = false;
     component.toggleView();
     fixture.detectChanges();
-    const cardImageComponent = fixture.debugElement.query(
-      By.css('campus-cardimage')
-    );
-    expect(cardImageComponent.nativeElement.getAttribute('hidden')).toBe(null);
-  });
-
-  it('should hide toggle icon in editmode', () => {
-    component.card.editMode = false;
-    component.toggleEditMode();
-
-    fixture.detectChanges();
-
-    const toggleicon = fixture.debugElement.query(By.css('#toggle_icon'));
-
-    expect(toggleicon).toBe(null);
+    expect(component.viewModeImage).toBe(true);
   });
 
   it('should create card with cardcontent empty', () => {
@@ -124,17 +104,6 @@ describe('CardComponent', () => {
     fixture.detectChanges();
 
     expect(fixture.debugElement.nativeElement.style.left).toBe('500px');
-  });
-
-  it('should show toggle icon when not in editmode', () => {
-    component.card.editMode = true;
-    component.toggleEditMode();
-
-    fixture.detectChanges();
-
-    const toggleicon = fixture.debugElement.query(By.css('#toggle_icon'));
-
-    expect(toggleicon).not.toBe(null);
   });
 
   it('should toggle to edit mode when double click.', () => {

@@ -7,7 +7,6 @@ import { CardComponent } from './card/card.component';
 import { ColorlistComponent } from './colorlist/colorlist.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { WhiteboardComponent } from './whiteboard/whiteboard.component';
-import { CardimageComponent } from './cardimage/cardimage.component';
 
 @NgModule({
   imports: [
@@ -21,8 +20,7 @@ import { CardimageComponent } from './cardimage/cardimage.component';
     WhiteboardComponent,
     CardComponent,
     ToolbarComponent,
-    ColorlistComponent,
-    CardimageComponent
+    ColorlistComponent
   ],
   exports: [WhiteboardComponent]
 })
