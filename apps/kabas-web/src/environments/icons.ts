@@ -59,6 +59,10 @@ export const icons = {
   'task:finished': 'assets/icons/task-finished.svg',
   'task:paper': 'assets/icons/task-paper.svg',
   print: 'assets/icons/printer.svg',
+  'edu-content:required': 'assets/icons/star.svg', //TODO placeholder
+  'edu-content:optional': 'assets/icons/star-border.svg', //TODO placeholder
+  'edu-content:level-basic': 'assets/icons/play_arrow.svg', //TODO placeholder, name needs work
+  'edu-content:level-advanced': 'assets/icons/fast_forward.svg', //TODO placeholder, name needs work
 
   // search: sort modes
   'sort-numeric-down': 'assets/icons/sort-numeric-down.svg',
