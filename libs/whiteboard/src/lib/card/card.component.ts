@@ -56,7 +56,7 @@ export class CardComponent implements OnInit, OnChanges {
   }
 
   onDeleteCard() {
-    let deleteConfirmation = confirm(
+    const deleteConfirmation = confirm(
       'Weet u zeker dat u deze kaart wil verwijderen?'
     );
 
