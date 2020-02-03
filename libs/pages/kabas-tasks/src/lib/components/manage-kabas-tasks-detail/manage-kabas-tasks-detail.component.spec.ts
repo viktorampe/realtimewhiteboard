@@ -18,7 +18,8 @@ import {
   EduContentFixture,
   LearningAreaFixture,
   LearningAreaInterface,
-  TaskEduContentFixture
+  TaskEduContentFixture,
+  TaskEduContentInterface
 } from '@campus/dal';
 import { SearchModule } from '@campus/search';
 import {
@@ -702,6 +703,21 @@ describe('ManageKabasTasksDetailComponent', () => {
         taskEduContents
       );
       expect(component.isReordering).toBeFalsy();
+    });
+  });
+
+  describe('setTaskEduContentsRequiredState', () => {
+    it('should call viewmodel.updateTaskEduContentsRequired', () => {
+      const spy = jest.spyOn(viewModel, 'updateTaskEduContentsRequired');
+
+      const selectedEduContents: TaskEduContentInterface[] = [
+        { id: 1 } as TaskEduContentInterface,
+        { id: 2 } as TaskEduContentInterface
+      ];
+
+      component.setTaskEduContentsRequiredState(selectedEduContents, true);
+
+      expect(spy).toHaveBeenCalledWith(selectedEduContents, true);
     });
   });
 });

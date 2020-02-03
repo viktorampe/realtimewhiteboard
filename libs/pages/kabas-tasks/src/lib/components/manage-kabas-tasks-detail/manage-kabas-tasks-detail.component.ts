@@ -148,13 +148,13 @@ export class ManageKabasTasksDetailComponent implements OnInit {
   }
 
   public onSelectionChange() {
-    const selected: TaskEduContentInterface[] = this.contentSelectionList.selectedOptions.selected
+    const selected: TaskEduContentWithEduContentInterface[] = this.contentSelectionList.selectedOptions.selected
       .map(option => option.value)
-      .sort((a: TaskEduContentInterface, b: TaskEduContentInterface) =>
-        a.eduContent.publishedEduContentMetadata.title <
-        b.eduContent.publishedEduContentMetadata.title
-          ? -1
-          : 1
+      .sort(
+        (
+          a: TaskEduContentWithEduContentInterface,
+          b: TaskEduContentWithEduContentInterface
+        ) => (a.eduContent.name < b.eduContent.name ? -1 : 1)
       );
     this.selectedContents$.next(selected);
     this.sideSheet.toggle(true);
@@ -369,5 +369,12 @@ export class ManageKabasTasksDetailComponent implements OnInit {
 
   public isActiveTask(task: TaskWithAssigneesInterface) {
     return task.status === TaskStatusEnum.ACTIVE;
+  }
+
+  public setTaskEduContentsRequiredState(
+    taskEduContents: TaskEduContentInterface[],
+    value: boolean
+  ) {
+    this.viewModel.updateTaskEduContentsRequired(taskEduContents, !!value);
   }
 }

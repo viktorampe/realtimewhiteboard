@@ -50,7 +50,6 @@
     </ng-template>
   </ng-container>
 </campus-page-bar>
-
 <ng-template #noTask>Deze taak is niet beschikbaar.</ng-template>
 <campus-side-sheet
   #taskSidesheet
@@ -219,10 +218,42 @@
           *ngIf="!task.isPaperTask"
           class="manage-kabas-tasks-detail__info__container"
         >
-          <mat-radio-group>
-            <mat-radio-button [value]="true">Moetje</mat-radio-button>
-            <br /><mat-radio-button [value]="false">Magje</mat-radio-button>
+          <mat-radio-group
+            *ngIf="selectedContents.length === 1; else multipleSelected"
+            [value]="selectedContents[0].required"
+            (change)="
+              setTaskEduContentsRequiredState(selectedContents, $event.value)
+            "
+          >
+            <mat-radio-button
+              [checked]="selectedContents[0].required"
+              [value]="true"
+              >Moetje</mat-radio-button
+            >
+            <br /><mat-radio-button
+              [checked]="!selectedContents[0].required"
+              [value]="false"
+              >Magje</mat-radio-button
+            >
           </mat-radio-group>
+          <ng-template #multipleSelected>
+            <div
+              class="manage-kabas-tasks-detail__info__container__change-all-buttons"
+            >
+              <campus-button
+                (click)="
+                  setTaskEduContentsRequiredState(selectedContents, true)
+                "
+                >Alles moetje</campus-button
+              >
+              <campus-button
+                (click)="
+                  setTaskEduContentsRequiredState(selectedContents, false)
+                "
+                >Alles magje</campus-button
+              >
+            </div>
+          </ng-template>
         </div>
 
         <campus-button
