@@ -28,7 +28,7 @@ describe('WhiteboardToolsComponent', () => {
       By.css('whiteboard-tools__btn')
     );
     const plusBtn = buttons[0].nativeElement;
-    plusBtn.clicked();
+    plusBtn.click();
     expect(component.createCard.emit);
   });
 });
