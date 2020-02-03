@@ -60,7 +60,7 @@ import { PagesKabasTasksRoutingModule } from './pages-kabas-tasks-routing.module
   providers: [
     {
       provide: CONTENT_OPENER_TOKEN,
-      useClass: KabasTasksViewModel
+      useExisting: KabasTasksViewModel
     }
   ],
   exports: [ManageKabasTasksAssigneeModalComponent],
