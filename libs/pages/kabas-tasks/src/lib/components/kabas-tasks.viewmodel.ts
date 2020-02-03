@@ -412,13 +412,38 @@ export class KabasTasksViewModel implements ContentOpenerInterface {
         eduContentWithoutSolutions.push(taskEduContent.eduContent);
       }
     });
-    console.log(eduContentWithoutSolutions);
-    console.log(eduContentWithSolutions);
+
     if (!eduContentWithoutSolutions.length) {
       // no problem
       this.taskService.printSolution(task.id);
     } else {
       // show banner
+      const effectFeedback = new EffectFeedback({
+        id: this.uuid(),
+        triggerAction: new TaskActions.PrintPaperTaskSolution({
+          taskId: task.id
+        }),
+        message: this.getNoSolutionFileFeedbackMessage(
+          eduContentWithoutSolutions
+        ),
+        userActions: eduContentWithSolutions.length
+          ? [
+              {
+                title: 'Overige afdrukken',
+                userAction: new TaskActions.PrintPaperTaskSolution({
+                  taskId: task.id
+                })
+              }
+            ]
+          : [],
+        type: 'error'
+      });
+
+      const feedbackAction = new EffectFeedbackActions.AddEffectFeedback({
+        effectFeedback
+      });
+
+      this.store.dispatch(feedbackAction);
     }
   }
 
@@ -491,6 +516,21 @@ export class KabasTasksViewModel implements ContentOpenerInterface {
     message.push('<ul>');
     message.push(...list);
     message.push('</ul>');
+    return message.join('');
+  }
+
+  private getNoSolutionFileFeedbackMessage(errors: EduContent[]): string {
+    const list = errors.map(error => {
+      return `<li>${error.name}</li>`;
+    });
+
+    const message = [
+      `<p>Volgend lesmateriaal heeft geen correctiesleutel:</p>`
+    ];
+    message.push('<ul>');
+    message.push(...list);
+    message.push('</ul>');
+
     return message.join('');
   }
 

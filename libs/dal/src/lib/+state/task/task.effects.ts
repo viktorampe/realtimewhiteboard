@@ -31,6 +31,7 @@ import {
   LoadTasks,
   NavigateToTaskDetail,
   NavigateToTasksOverview,
+  PrintPaperTaskSolution,
   StartAddTask,
   StartArchiveTasks,
   StartDeleteTasks,
@@ -308,6 +309,17 @@ export class TaskEffects {
         );
       }
     })
+  );
+
+  printPaperTaskSolution$ = createEffect(
+    () =>
+      this.actions.pipe(
+        ofType(TasksActionTypes.PrintPaperTaskSolution),
+        tap((action: PrintPaperTaskSolution) => {
+          this.taskService.printSolution(action.payload.taskId);
+        })
+      ),
+    { dispatch: false }
   );
 
   private getTaskUpdateSuccessMessage(
