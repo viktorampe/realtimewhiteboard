@@ -1163,9 +1163,9 @@ describe('ManageKabasTasksDetailComponent', () => {
       ];
 
       const newTaskEduContents = [
-        createTaskEduContent(1, 'oefening 1'),
-        createTaskEduContent(2, 'oefening 2'),
-        createTaskEduContent(4, 'oefening 2')
+        createTaskEduContent(1, 'oefening 1 updated'),
+        createTaskEduContent(2, 'oefening 2 updated'),
+        createTaskEduContent(4, 'oefening 4 updated')
       ];
 
       updateCurrentTask({
