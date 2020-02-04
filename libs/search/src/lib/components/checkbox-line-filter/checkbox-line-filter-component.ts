@@ -1,7 +1,9 @@
 import {
+  ChangeDetectorRef,
   Component,
   EventEmitter,
   HostBinding,
+  Inject,
   Input,
   Output
 } from '@angular/core';
@@ -39,6 +41,7 @@ export class CheckboxLineFilterComponent
     return true;
   }
 
+  constructor(@Inject(ChangeDetectorRef) private cd: ChangeDetectorRef) {}
   public getDisplayValue(value: SearchFilterCriteriaValuesInterface): string {
     return value.data[this.filterCriteria.displayProperty];
   }
@@ -48,8 +51,13 @@ export class CheckboxLineFilterComponent
     this.filterSelectionChange.emit([this.filterCriteria]);
   }
 
-  public reset() {
-    throw new Error('Not implemented yet');
+  public reset(emit = true) {
+    this._filterCriteria.values.forEach(e => {
+      e.selected = false;
+      e.prediction = undefined;
+    });
+    this.cd.markForCheck();
+    if (emit) this.filterSelectionChange.emit([this.filterCriteria]);
   }
 
   private getFilteredCriterium(
