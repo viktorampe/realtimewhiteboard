@@ -207,4 +207,18 @@ describe('CardComponent', () => {
 
     expect(component.deleteCard.emit).toHaveBeenCalledTimes(1);
   });
+
+  it('should not emit deleteCard when the user confirms', () => {
+    spyOn(component.deleteCard, 'emit');
+
+    const mockDialogRef = {
+      afterClosed: () => of(false), // fake confirmation
+      close: null
+    } as MatDialogRef<ConfirmationModalComponent>;
+    openDialogSpy.mockReturnValue(mockDialogRef);
+
+    component.onDeleteCard();
+
+    expect(component.deleteCard.emit).not.toHaveBeenCalled();
+  });
 });
