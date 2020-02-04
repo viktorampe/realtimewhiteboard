@@ -310,7 +310,7 @@ describe('ManageKabasTasksDetailComponent', () => {
     });
   });
 
-  describe('isNewTask$', () => {
+  describe('Calling openNewTaskDialog()', () => {
     it('should call openNewTaskDialog when there is a new task', () => {
       jest.spyOn(component, 'openNewTaskDialog');
 
@@ -1141,6 +1141,50 @@ describe('ManageKabasTasksDetailComponent', () => {
       component.setTaskEduContentsRequiredState(selectedEduContents, true);
 
       expect(spy).toHaveBeenCalledWith(selectedEduContents, true);
+    });
+  });
+
+  describe('selection', () => {
+    beforeEach(() => {
+      taskEduContents = [
+        createTaskEduContent(1, 'oefening 1'),
+        createTaskEduContent(2, 'oefening 2'),
+        createTaskEduContent(3, 'oefening 3'),
+        createTaskEduContent(4, 'oefening 4')
+      ];
+
+      updateCurrentTask({ ...currentTask, taskEduContents });
+    });
+
+    it('should preserve the selection when receiving TaskEduContents', () => {
+      component.selectedTaskEduContents = [
+        taskEduContents[0],
+        taskEduContents[3]
+      ];
+
+      const newTaskEduContents = [
+        createTaskEduContent(1, 'oefening 1'),
+        createTaskEduContent(2, 'oefening 2'),
+        createTaskEduContent(4, 'oefening 2')
+      ];
+
+      updateCurrentTask({
+        ...currentTask,
+        taskEduContents: newTaskEduContents
+      });
+
+      expect(component.selectedTaskEduContents).toEqual([
+        newTaskEduContents[0],
+        newTaskEduContents[2]
+      ]);
+    });
+
+    it('should show the sidesheet when the selection changes', () => {
+      jest.spyOn(component.sideSheetComponent, 'toggle');
+
+      component.onSelectionChange();
+
+      expect(component.sideSheetComponent.toggle).toHaveBeenCalledWith(true);
     });
   });
 });
