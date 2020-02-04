@@ -62,9 +62,11 @@ describe('WhiteboardComponent', () => {
     const cardsSizeBeforeAdding = component.cards.length;
 
     component.cards.push({
-      cardContent: '',
+      description: '',
+      image: null,
       color: null,
       isInputSelected: false,
+      editMode: true,
       top: 0,
       left: 0
     });
@@ -78,30 +80,34 @@ describe('WhiteboardComponent', () => {
     const cardsSizeBeforeAdding = component.selectedCards.length;
 
     component.cards.push({
-      cardContent: '',
+      description: '',
+      image: null,
       color: null,
       isInputSelected: false,
+      editMode: true,
       top: 0,
       left: 0
     });
 
-    component.addSelectedCard(component.cards[0]);
+    component.selectCard(component.cards[0]);
 
     expect(component.cards.length).toBe(cardsSizeBeforeAdding + 1);
   });
 
   it('should remove a card when checkbox is selected again', () => {
     component.cards.push({
-      cardContent: '',
+      description: '',
+      image: null,
       color: null,
       isInputSelected: false,
+      editMode: true,
       top: 0,
       left: 0
     });
 
-    component.addSelectedCard(component.cards[0]);
+    component.selectCard(component.cards[0]);
     const cardsSizeBeforeRemoving = component.selectedCards.length;
-    component.removeSelectedCard(component.cards[0]);
+    component.deselectCard(component.cards[0]);
 
     expect(component.selectedCards.length).toBe(cardsSizeBeforeRemoving - 1);
   });
