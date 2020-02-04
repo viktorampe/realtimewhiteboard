@@ -55,8 +55,8 @@
     "@ngrx/entity": "8.6.0",
     "@ngrx/router-store": "8.6.0",
     "@ngrx/store": "8.6.0",
-    "@nrwl/angular": "^8.11.2",
-    "@nrwl/schematics": "^8.11.2",
+    "@nrwl/angular": "8.10.1",
+    "@nrwl/schematics": "^8.11.0",
     "@webcomponents/webcomponentsjs": "^2.3.0",
     "classlist.js": "^1.1.20150312",
     "core-js": "^2.5.4",
@@ -72,7 +72,7 @@
     "zone.js": "^0.9.1"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^0.803.23",
+    "@angular-devkit/build-angular": "^0.803.3",
     "@angular-devkit/build-ng-packagr": "~0.803.3",
     "@angular/cli": "8.3.3",
     "@angular/compiler-cli": "^8.0.0",
@@ -80,7 +80,7 @@
     "@diekeure/angular-schematics": "0.1.12",
     "@ngrx/schematics": "8.6.0",
     "@ngrx/store-devtools": "8.6.0",
-    "@nrwl/cypress": "^8.11.2",
+    "@nrwl/cypress": "8.10.1",
     "@nrwl/jest": "8.10.1",
     "@nrwl/workspace": "8.10.1",
     "@types/jest": "24.0.9",
