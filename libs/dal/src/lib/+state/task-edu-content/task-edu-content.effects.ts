@@ -1,29 +1,39 @@
 import { Inject, Injectable } from '@angular/core';
-import { Actions, Effect } from '@ngrx/effects';
+import { MAT_DATE_LOCALE } from '@angular/material';
+import { Actions, createEffect, Effect } from '@ngrx/effects';
 import { Action } from '@ngrx/store';
 import { DataPersistence } from '@nrwl/angular';
 import { undo } from 'ngrx-undo';
 import { from } from 'rxjs';
 import { map, mapTo, switchMap } from 'rxjs/operators';
 import { DalState } from '..';
+import { TaskEduContentInterface } from '../../+models';
 import {
   TaskEduContentServiceInterface,
-  TASK_EDU_CONTENT_SERVICE_TOKEN
+  TASK_EDU_CONTENT_SERVICE_TOKEN,
+  UpdateTaskEduContentResultInterface
 } from '../../tasks/task-edu-content.service.interface';
 import {
   TaskServiceInterface,
   TASK_SERVICE_TOKEN
 } from '../../tasks/task.service.interface';
-import { EffectFeedback, Priority } from '../effect-feedback';
+import {
+  EffectFeedback,
+  FeedbackTriggeringAction,
+  Priority
+} from '../effect-feedback';
 import { AddEffectFeedback } from '../effect-feedback/effect-feedback.actions';
 import {
   AddTaskEduContent,
   DeleteTaskEduContent,
+  DeleteTaskEduContents,
   LinkTaskEduContent,
   LoadTaskEduContents,
+  StartDeleteTaskEduContents,
   TaskEduContentsActionTypes,
   TaskEduContentsLoaded,
-  TaskEduContentsLoadError
+  TaskEduContentsLoadError,
+  UpdateTaskEduContents
 } from './task-edu-content.actions';
 
 @Injectable()
@@ -93,6 +103,7 @@ export class TaskEduContentEffects {
     }
   );
 
+  // not used in Kabas -> use deleteTaskEduContents$ (bulk, pessimistic)
   @Effect()
   deleteTaskEduContent$ = this.dataPersistence.optimisticUpdate(
     TaskEduContentsActionTypes.DeleteTaskEduContent,
@@ -134,12 +145,214 @@ export class TaskEduContentEffects {
     }
   );
 
+  updateTaskEduContents$ = createEffect(() =>
+    this.dataPersistence.optimisticUpdate(
+      TaskEduContentsActionTypes.UpdateTaskEduContents,
+      {
+        run: (action: UpdateTaskEduContents, state: DalState) => {
+          const updates = action.payload.taskEduContents.map(
+            partialTaskEduContent =>
+              ({
+                id: partialTaskEduContent.id,
+                ...partialTaskEduContent.changes
+              } as TaskEduContentInterface)
+          );
+          return this.taskEduContentService
+            .updateTaskEduContents(null, updates)
+            .pipe(
+              map(update => {
+                return new AddEffectFeedback({
+                  effectFeedback: EffectFeedback.generateSuccessFeedback(
+                    this.uuid(),
+                    action,
+                    'De inhoud van de taak werd bijgewerkt.'
+                  )
+                });
+              })
+            );
+        },
+        undoAction: (action: UpdateTaskEduContents, error: any) => {
+          return from([
+            undo(action),
+            new AddEffectFeedback({
+              effectFeedback: EffectFeedback.generateErrorFeedback(
+                this.uuid(),
+                action,
+                'Het is niet gelukt om de inhoud van de taak bij te werken.'
+              )
+            })
+          ]);
+        }
+      }
+    )
+  );
+
+  deleteTaskEduContents$ = createEffect(() =>
+    this.dataPersistence.pessimisticUpdate(
+      TaskEduContentsActionTypes.StartDeleteTaskEduContents,
+      {
+        run: (action: StartDeleteTaskEduContents, state: DalState) => {
+          return this.taskEduContentService
+            .deleteTaskEduContents(
+              action.payload.userId,
+              action.payload.taskEduContentIds
+            )
+            .pipe(
+              switchMap(
+                (taskDestroyResult: UpdateTaskEduContentResultInterface) => {
+                  const actions = [];
+                  const { success, errors } = taskDestroyResult;
+
+                  // remove the destroyed ones from the store
+                  if (this.isFilled(success)) {
+                    actions.push(
+                      new DeleteTaskEduContents({
+                        ids: success.map(taskEduContent => taskEduContent.id)
+                      })
+                    );
+
+                    // show a snackbar if there is no other feedback (i.e. no errors)
+                    if (!this.isFilled(errors)) {
+                      const message = this.getTaskEduContentUpdateSuccessMessage(
+                        success.length,
+                        'delete'
+                      );
+                      actions.push(
+                        this.getTaskEduContentUpdateFeedbackAction(
+                          action,
+                          message,
+                          'success'
+                        )
+                      );
+                    }
+                  }
+
+                  // show feedback for the ones still in use
+                  if (this.isFilled(errors)) {
+                    const errorMessage = this.getTaskEduContentUpdateErrorMessageHTML(
+                      taskDestroyResult,
+                      'delete'
+                    );
+                    actions.push(
+                      this.getTaskEduContentUpdateFeedbackAction(
+                        action,
+                        errorMessage,
+                        'error'
+                      )
+                    );
+                  }
+                  return from(actions);
+                }
+              )
+            );
+        },
+        onError: (action: StartDeleteTaskEduContents, error) => {
+          return this.getTaskEduContentUpdateOnErrorFeedbackAction(
+            action,
+            'delete'
+          );
+        }
+      }
+    )
+  );
+
+  private isFilled = arr => Array.isArray(arr) && arr.length;
+
+  private getTaskEduContentUpdateSuccessMessage(
+    taskEduContentsLength: number,
+    method: 'delete'
+  ): string {
+    const methodVerbs = {
+      delete: 'verwijderd'
+    };
+
+    return `Het lesmateriaal werd ${methodVerbs[method]}.`;
+  }
+
+  private getTaskEduContentUpdateErrorMessageHTML(
+    taskUpdateInfo: UpdateTaskEduContentResultInterface,
+    method: 'delete'
+  ) {
+    const { success, errors } = taskUpdateInfo;
+    const methodVerbs = {
+      delete: 'verwijderd'
+    };
+    const verb = methodVerbs[method];
+
+    const html = [];
+
+    if (!success.length) {
+      html.push(`<p>Er werd geen lesmateriaal ${verb}.</p>`);
+    } else if (success.length === 1) {
+      html.push(`<p>Het lesmateriaal werd ${verb}.</p>`);
+    } else {
+      html.push(
+        `<p>Er werden ${success.length} lesmateriaal items ${verb}.</p>`
+      );
+    }
+    html.push('<p>De volgende taken zijn nog in gebruik:</p>');
+    html.push('<ul>');
+    html.push(
+      ...errors.map(
+        error =>
+          `<li><strong>${error.task}</strong> is nog in gebruik door ${
+            error.user
+          } tot ${error.activeUntil.toLocaleDateString(this.dateLocale)}.</li>`
+      )
+    );
+    html.push('</ul>');
+
+    return html.join('');
+  }
+
+  private getTaskEduContentUpdateFeedbackAction(
+    action: FeedbackTriggeringAction,
+    message: string,
+    type: 'error' | 'success'
+  ): any {
+    const effectFeedback =
+      type === 'success'
+        ? EffectFeedback.generateSuccessFeedback(this.uuid(), action, message)
+        : {
+            ...EffectFeedback.generateErrorFeedback(
+              this.uuid(),
+              action,
+              message
+            ),
+            userActions: [] // don't add a retry button
+          };
+
+    return new AddEffectFeedback({
+      effectFeedback
+    });
+  }
+
+  private getTaskEduContentUpdateOnErrorFeedbackAction(
+    action: FeedbackTriggeringAction,
+    method: 'archive' | 'dearchive' | 'delete'
+  ) {
+    const methodVerbs = {
+      archive: 'te archiveren',
+      dearchive: 'te dearchiveren',
+      delete: 'te verwijderen'
+    };
+    const feedbackAction = new AddEffectFeedback({
+      effectFeedback: EffectFeedback.generateErrorFeedback(
+        this.uuid(),
+        action,
+        `Het is niet gelukt om het lesmateriaal ${methodVerbs[method]}.`
+      )
+    });
+    return feedbackAction;
+  }
+
   constructor(
     private actions: Actions,
     private dataPersistence: DataPersistence<DalState>,
     @Inject(TASK_EDU_CONTENT_SERVICE_TOKEN)
     private taskEduContentService: TaskEduContentServiceInterface,
     @Inject(TASK_SERVICE_TOKEN) private taskService: TaskServiceInterface,
-    @Inject('uuid') private uuid: Function
+    @Inject('uuid') private uuid: Function,
+    @Inject(MAT_DATE_LOCALE) private dateLocale
   ) {}
 }

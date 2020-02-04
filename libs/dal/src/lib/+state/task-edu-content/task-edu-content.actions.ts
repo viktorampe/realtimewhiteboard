@@ -19,7 +19,8 @@ export enum TaskEduContentsActionTypes {
   DeleteTaskEduContent = '[TaskEduContents] Delete TaskEduContent',
   DeleteTaskEduContents = '[TaskEduContents] Delete TaskEduContents',
   ClearTaskEduContents = '[TaskEduContents] Clear TaskEduContents',
-  LinkTaskEduContent = '[TaskEduContents] Link TaskEduContent'
+  LinkTaskEduContent = '[TaskEduContents] Link TaskEduContent',
+  StartDeleteTaskEduContents = '[TaskEduContents] Start Delete TaskEduContents'
 }
 
 export class LoadTaskEduContents implements Action {
@@ -73,14 +74,17 @@ export class UpdateTaskEduContent implements Action {
   ) {}
 }
 
-export class UpdateTaskEduContents implements Action {
+export class UpdateTaskEduContents implements FeedbackTriggeringAction {
   readonly type = TaskEduContentsActionTypes.UpdateTaskEduContents;
 
   constructor(
-    public payload: { taskEduContents: Update<TaskEduContentInterface>[] }
+    public payload: {
+      userId: number;
+      taskEduContents: Update<TaskEduContentInterface>[];
+      customFeedbackHandlers?: CustomFeedbackHandlersInterface;
+    }
   ) {}
 }
-
 export class DeleteTaskEduContent implements FeedbackTriggeringAction {
   readonly type = TaskEduContentsActionTypes.DeleteTaskEduContent;
 
@@ -113,6 +117,17 @@ export class LinkTaskEduContent implements FeedbackTriggeringAction {
   ) {}
 }
 
+export class StartDeleteTaskEduContents implements FeedbackTriggeringAction {
+  readonly type = TaskEduContentsActionTypes.StartDeleteTaskEduContents;
+  constructor(
+    public payload: {
+      userId: number;
+      taskEduContentIds: number[];
+      customFeedbackHandlers?: CustomFeedbackHandlersInterface;
+    }
+  ) {}
+}
+
 export type TaskEduContentsActions =
   | LoadTaskEduContents
   | TaskEduContentsLoaded
@@ -126,4 +141,5 @@ export type TaskEduContentsActions =
   | DeleteTaskEduContent
   | DeleteTaskEduContents
   | ClearTaskEduContents
-  | LinkTaskEduContent;
+  | LinkTaskEduContent
+  | StartDeleteTaskEduContents;

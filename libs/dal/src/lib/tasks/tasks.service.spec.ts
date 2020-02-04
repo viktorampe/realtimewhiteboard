@@ -1,37 +1,75 @@
 import { inject, TestBed } from '@angular/core/testing';
+import { WINDOW } from '@campus/browser';
+import { MockWindow } from '@campus/testing';
 import { PersonApi, TaskApi } from '@diekeure/polpo-api-angular-sdk';
 import { hot } from '@nrwl/angular/testing';
+import { configureTestSuite } from 'ng-bullet';
 import { Observable } from 'rxjs';
-import { TaskEduContentInterface } from '../+models';
-import { TaskServiceInterface } from './task.service.interface';
+import { BulkUpdateResultInfoInterface } from '../+external-interfaces/bulk-update-result-info';
+import {
+  TaskClassGroupFixture,
+  TaskFixture,
+  TaskGroupFixture,
+  TaskStudentFixture
+} from '../+fixtures';
+import { TaskEduContentInterface, TaskInterface } from '../+models';
+import { DalOptions, DAL_OPTIONS } from '../dal.module';
+import {
+  TaskActiveErrorInterface,
+  TaskServiceInterface
+} from './task.service.interface';
 import { TaskService } from './tasks.service';
 
 describe('TaskService', () => {
   let service: TaskServiceInterface;
   let taskApi: TaskApi;
+  let personApi: PersonApi;
   let mockGetData$: Observable<object>;
   let mockLinkEduContentsResult$: Observable<TaskEduContentInterface>;
+  let mockUpdatedAccessResult$: Observable<TaskInterface>;
+  let mockWindow: MockWindow;
+  let dalOptions: DalOptions;
 
-  beforeEach(() => {
+  const mockUpdateTaskInfo = {
+    success: [],
+    errors: []
+  } as BulkUpdateResultInfoInterface<TaskInterface, TaskActiveErrorInterface>;
+
+  configureTestSuite(() => {
     TestBed.configureTestingModule({
       providers: [
         TaskService,
         {
           provide: PersonApi,
           useValue: {
-            getData: () => mockGetData$
+            getData: () => mockGetData$,
+            createTask: () => {}
           }
         },
         {
           provide: TaskApi,
           useValue: {
-            linkEduContents: () => mockLinkEduContentsResult$
+            linkEduContents: () => mockLinkEduContentsResult$,
+            updateTasks: () => {},
+            destroyTasks: () => {},
+            updateAccess: () => mockUpdatedAccessResult$
           }
-        }
+        },
+        {
+          provide: DAL_OPTIONS,
+          useValue: { apiBaseUrl: 'https://api.kabas.test' }
+        },
+        { provide: WINDOW, useClass: MockWindow }
       ]
     });
+  });
+
+  beforeEach(() => {
     service = TestBed.get(TaskService);
     taskApi = TestBed.get(TaskApi);
+    personApi = TestBed.get(PersonApi);
+    dalOptions = TestBed.get(DAL_OPTIONS);
+    mockWindow = TestBed.get(WINDOW);
   });
 
   it('should be created and available via DI', inject(
@@ -51,6 +89,7 @@ describe('TaskService', () => {
       })
     );
   });
+
   describe('linkEduContent', () => {
     it('should return the link result', () => {
       const mockLinkEduContentsResult = {
@@ -70,6 +109,112 @@ describe('TaskService', () => {
         })
       );
       expect(spy).toHaveBeenCalledWith(1, 9);
+    });
+  });
+
+  describe('updateTasks', () => {
+    const tasks = [new TaskFixture({ id: 1 }), new TaskFixture({ id: 2 })];
+    const userId = 123;
+    let updateTasksSpy: jest.SpyInstance;
+
+    beforeEach(() => {
+      updateTasksSpy = taskApi.updateTasks = jest.fn();
+      updateTasksSpy.mockReturnValue(hot('a', { a: mockUpdateTaskInfo }));
+    });
+
+    it('should call the api and return the result', () => {
+      expect(service.updateTasks(userId, tasks)).toBeObservable(
+        hot('a', { a: mockUpdateTaskInfo })
+      );
+
+      expect(updateTasksSpy).toHaveBeenCalledWith(tasks);
+    });
+  });
+
+  describe('deleteTasks', () => {
+    const taskIds = [1, 2];
+    const userId = 123;
+    let destroyTasksSpy: jest.SpyInstance;
+
+    beforeEach(() => {
+      destroyTasksSpy = taskApi.destroyTasks = jest.fn();
+      destroyTasksSpy.mockReturnValue(hot('a', { a: mockUpdateTaskInfo }));
+    });
+
+    it('should call the api and return the result', () => {
+      expect(service.deleteTasks(userId, taskIds)).toBeObservable(
+        hot('a', { a: mockUpdateTaskInfo })
+      );
+      expect(destroyTasksSpy).toHaveBeenCalledWith(taskIds);
+    });
+  });
+
+  describe('createTask', () => {
+    const task = new TaskFixture({ id: undefined });
+    const userId = 123;
+    let createTaskSpy: jest.SpyInstance;
+
+    beforeEach(() => {
+      createTaskSpy = personApi.createTeacherTasks = jest.fn();
+      createTaskSpy.mockReturnValue(hot('a', { a: new TaskFixture() }));
+    });
+
+    it('should call the api and return the result', () => {
+      expect(service.createTask(userId, task)).toBeObservable(
+        hot('a', { a: new TaskFixture() })
+      );
+      expect(createTaskSpy).toHaveBeenCalledWith(userId, task);
+    });
+  });
+
+  describe('updateAccess', () => {
+    it('should return the task with updated relations', () => {
+      const mockTask: TaskInterface = new TaskFixture({
+        taskGroups: [new TaskGroupFixture()],
+        taskStudents: [new TaskStudentFixture()],
+        taskClassGroups: [new TaskClassGroupFixture()]
+      });
+      mockUpdatedAccessResult$ = hot('-a-|', {
+        a: mockTask
+      });
+      const spy = jest.spyOn(taskApi, 'updateAccess');
+      expect(
+        service.updateAccess(
+          1,
+          2,
+          mockTask.taskGroups,
+          mockTask.taskStudents,
+          mockTask.taskClassGroups
+        )
+      ).toBeObservable(
+        hot('-a-|', {
+          a: mockTask
+        })
+      );
+      expect(spy).toHaveBeenCalledWith(
+        2,
+        mockTask.taskGroups,
+        mockTask.taskStudents,
+        mockTask.taskClassGroups
+      );
+    });
+  });
+
+  describe('print', () => {
+    const taskId = 1;
+    const withNames = true;
+
+    it('should open window with pdf url when printTask ', () => {
+      service.printTask(taskId, withNames);
+      expect(mockWindow.open).toHaveBeenCalledWith(
+        `${dalOptions.apiBaseUrl}/api/tasks/paper-task-pdf?taskId=${taskId}&withNames=${withNames}`
+      );
+    });
+    it('should open window with solution pdf url when printSolution ', () => {
+      service.printSolution(taskId);
+      expect(mockWindow.open).toHaveBeenCalledWith(
+        `${dalOptions.apiBaseUrl}/api/tasks/paper-task-solution-pdf?taskId=${taskId}`
+      );
     });
   });
 });

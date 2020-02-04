@@ -92,9 +92,7 @@ describe('ListViewComponent', () => {
   });
 
   it('should show the text placeholder if without content', () => {
-    let emptyTestContainerFixture: ComponentFixture<
-      EmptyTestContainerComponent
-    >;
+    let emptyTestContainerFixture: ComponentFixture<EmptyTestContainerComponent>;
     let emptyTestContainerComponent: EmptyTestContainerComponent;
 
     emptyTestContainerFixture = TestBed.createComponent(

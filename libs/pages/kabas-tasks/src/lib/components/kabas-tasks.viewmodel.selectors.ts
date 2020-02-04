@@ -1,9 +1,20 @@
 import {
   ClassGroupQueries,
+  DiaboloPhaseInterface,
+  DiaboloPhaseQueries,
+  EduContent,
+  EduContentInterface,
+  EduContentQueries,
+  FavoriteInterface,
+  FavoriteQueries,
   GroupQueries,
   LearningAreaInterface,
   LearningAreaQueries,
   LinkedPersonQueries,
+  MethodInterface,
+  MethodLevelInterface,
+  MethodLevelQueries,
+  MethodQueries,
   TaskClassGroupQueries,
   TaskEduContentInterface,
   TaskEduContentQueries,
@@ -18,7 +29,10 @@ import {
   AssigneeInterface,
   AssigneeTypesEnum
 } from '../interfaces/Assignee.interface';
-import { TaskWithAssigneesInterface } from './../interfaces/TaskWithAssignees.interface';
+import {
+  TaskStatusEnum,
+  TaskWithAssigneesInterface
+} from './../interfaces/TaskWithAssignees.interface';
 
 const taskClassGroupAssigneeByTask = createSelector(
   [TaskClassGroupQueries.getAll, ClassGroupQueries.getAllEntities],
@@ -28,8 +42,9 @@ const taskClassGroupAssigneeByTask = createSelector(
         dict[tcg.taskId] = [];
       }
       dict[tcg.taskId].push({
+        id: tcg.id,
         type: AssigneeTypesEnum.CLASSGROUP,
-        id: tcg.classGroupId,
+        relationId: tcg.classGroupId,
         label: classGroupDict[tcg.classGroupId].name,
         start: tcg.start,
         end: tcg.end
@@ -47,8 +62,9 @@ const taskGroupAssigneeByTask = createSelector(
         dict[tg.taskId] = [];
       }
       dict[tg.taskId].push({
+        id: tg.id,
         type: AssigneeTypesEnum.GROUP,
-        id: tg.groupId,
+        relationId: tg.groupId,
         label: groupDict[tg.groupId].name,
         start: tg.start,
         end: tg.end
@@ -66,8 +82,9 @@ const taskStudentAssigneeByTask = createSelector(
         dict[ts.taskId] = [];
       }
       dict[ts.taskId].push({
+        id: ts.id,
         type: AssigneeTypesEnum.STUDENT,
-        id: ts.personId,
+        relationId: ts.personId,
         label: personDict[ts.personId].displayName,
         start: ts.start,
         end: ts.end
@@ -103,30 +120,192 @@ const combinedAssigneesByTask = createSelector(
   }
 );
 
-export const getTasksWithAssignments = createSelector(
+export const allowedLearningAreas = createSelector(
+  [MethodQueries.getAllowedMethods, LearningAreaQueries.getAllEntities],
+  (
+    allowedMethods: MethodInterface[],
+    learningAreas: Dictionary<LearningAreaInterface>
+  ) => {
+    return allowedMethods.reduce(
+      (acc, allowedMethod) => {
+        if (!acc.addedLearningAreasMap[allowedMethod.learningAreaId]) {
+          acc.allowedLearningAreas.push(
+            learningAreas[allowedMethod.learningAreaId]
+          );
+
+          acc.addedLearningAreasMap[allowedMethod.learningAreaId] = true;
+        }
+
+        return acc;
+      },
+      {
+        addedLearningAreasMap: {},
+        allowedLearningAreas: []
+      }
+    ).allowedLearningAreas;
+  }
+);
+
+export const getAllTasksWithAssignments = createSelector(
   [
     TaskQueries.getAll,
     LearningAreaQueries.getAllEntities,
     TaskEduContentQueries.getAllGroupedByTaskId,
-    combinedAssigneesByTask
+    combinedAssigneesByTask,
+    FavoriteQueries.getTaskFavorites
   ],
   (
     tasks: TaskInterface[],
     learningAreaDict: Dictionary<LearningAreaInterface>,
     taskEduContentByTask: Dictionary<TaskEduContentInterface[]>,
     assigneesByTask: Dictionary<AssigneeInterface[]>,
-    props: { isPaper?: boolean }
-  ) =>
-    tasks
-      .filter(task => !!task.isPaperTask === !!props.isPaper)
-      .map(
-        (task): TaskWithAssigneesInterface => ({
-          ...task,
-          learningArea: learningAreaDict[task.learningAreaId],
-          eduContentAmount: taskEduContentByTask[task.id]
-            ? taskEduContentByTask[task.id].length
-            : 0,
-          assignees: assigneesByTask[task.id] || []
-        })
+    favoriteTasks: FavoriteInterface[]
+  ) => {
+    const favoriteTaskIds = favoriteTasks.map(fav => fav.taskId);
+    return tasks.map(task =>
+      mapToTaskWithAssigneeInterface(
+        task,
+        learningAreaDict[task.learningAreaId],
+        taskEduContentByTask[task.id],
+        assigneesByTask,
+        favoriteTaskIds
       )
+    );
+  }
 );
+
+export const getTasksWithAssignmentsByType = createSelector(
+  [getAllTasksWithAssignments],
+  (
+    tasks: TaskWithAssigneesInterface[],
+    props: {
+      isPaper: boolean;
+    }
+  ) => {
+    return tasks.filter(task => !!task.isPaperTask === !!props.isPaper);
+  }
+);
+
+export const getTaskWithAssignmentAndEduContents = createSelector(
+  [
+    getAllTasksWithAssignments,
+    EduContentQueries.getAllEntities,
+    DiaboloPhaseQueries.getAllEntities,
+    MethodLevelQueries.getAll,
+    MethodQueries.getAllowedMethods
+  ],
+  (
+    tasksWithAssignments: TaskWithAssigneesInterface[],
+    eduContents: Dictionary<EduContentInterface>,
+    diaboloPhases: Dictionary<DiaboloPhaseInterface>,
+    methodLevels: MethodLevelInterface[],
+    allowedMethods: MethodInterface[],
+    props: { taskId: number }
+  ) => {
+    const foundTask = {
+      ...tasksWithAssignments.find(task => task.id === props.taskId)
+    };
+
+    foundTask.taskEduContents = foundTask.taskEduContents.length
+      ? foundTask.taskEduContents.map(tEdu => {
+          const eduContent = eduContents[tEdu.eduContentId];
+          const methodLevel = methodLevelForEduContent(
+            eduContent,
+            allowedMethods,
+            methodLevels
+          );
+
+          const publishedEduContentMetadata = {
+            ...eduContent.publishedEduContentMetadata,
+            diaboloPhase:
+              diaboloPhases[
+                eduContent.publishedEduContentMetadata.diaboloPhaseId
+              ],
+            methodLevel
+          };
+
+          return {
+            ...tEdu,
+            eduContent: toEduContent({
+              ...eduContent,
+              publishedEduContentMetadata
+            })
+          };
+        })
+      : [];
+
+    return foundTask;
+  }
+);
+
+function mapToTaskWithAssigneeInterface(
+  task: TaskInterface,
+  learningArea: LearningAreaInterface,
+  taskEduContents: TaskEduContentInterface[],
+  assigneesByTask: Dictionary<AssigneeInterface[]>,
+  favoriteTaskIds: number[]
+): TaskWithAssigneesInterface {
+  return addTaskDates({
+    ...task,
+    learningArea: learningArea,
+    eduContentAmount: taskEduContents ? taskEduContents.length : 0,
+    taskEduContents: (taskEduContents || [])
+      .sort((a, b) => a.index - b.index)
+      .map(tEdu => ({
+        ...tEdu,
+        eduContent: toEduContent(tEdu.eduContent)
+      })),
+    assignees: assigneesByTask[task.id] || [],
+    isFavorite: favoriteTaskIds.includes(task.id)
+  });
+}
+
+function addTaskDates(
+  taskWithAssignees: TaskWithAssigneesInterface
+): TaskWithAssigneesInterface {
+  const now = new Date();
+  const { assignees } = taskWithAssignees;
+  let status = TaskStatusEnum.FINISHED;
+
+  const maxDate = dates =>
+    dates.length ? new Date(Math.max(...dates)) : undefined;
+  const minDate = dates =>
+    dates.length ? new Date(Math.min(...dates)) : undefined;
+
+  const startDate = minDate(assignees.map(a => +a.start));
+  const endDate = maxDate(assignees.map(a => +a.end));
+
+  if (startDate && endDate) {
+    if (startDate > now) {
+      status = TaskStatusEnum.PENDING;
+    } else if (endDate > now) {
+      status = TaskStatusEnum.ACTIVE;
+    }
+  }
+
+  return { ...taskWithAssignees, startDate, endDate, status };
+}
+
+function methodLevelForEduContent(
+  eduContent: EduContentInterface,
+  allowedMethods: MethodInterface[],
+  methodLevels: MethodLevelInterface[]
+) {
+  const allowedEduContentMethodId = eduContent.publishedEduContentMetadata.methodIds.find(
+    methodId =>
+      allowedMethods.some(allowedMethod => allowedMethod.id === methodId)
+  );
+
+  return methodLevels.find(
+    mLevel =>
+      mLevel.methodId === allowedEduContentMethodId &&
+      mLevel.levelId === eduContent.publishedEduContentMetadata.levelId
+  );
+}
+
+function toEduContent(eduContent: EduContentInterface) {
+  return Object.assign<EduContent, EduContentInterface>(
+    new EduContent(),
+    eduContent
+  );
+}

@@ -94,10 +94,7 @@ export class TasksViewModel {
         take(1),
         filter(permission => permission),
         switchMapTo(
-          this.store.pipe(
-            select(TaskQueries.getById, { id: taskId }),
-            take(1)
-          )
+          this.store.pipe(select(TaskQueries.getById, { id: taskId }), take(1))
         )
       )
       .subscribe(task =>

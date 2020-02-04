@@ -120,6 +120,7 @@ $ui-tile-height: 105px !default;
 @import './manage-collection/manage-collection.component.theme.scss';
 @import './multi-check-box-table/multi-check-box-table.component.theme.scss';
 @import './file-icon/file-icon.component.theme.scss';
+@import './date-range-picker/date-range-picker.component.theme.scss';
 
 @mixin ui-forms() {
   form {
@@ -208,6 +209,15 @@ $ui-tile-height: 105px !default;
   }
 }
 
+$ui-form-field-height: 40px !default;
+
+campus-date-range-picker {
+  .mat-form-field,
+  .mat-form-field-outline {
+    height: $ui-form-field-height;
+  }
+}
+
 @mixin ui-icons {
   svg {
     pointer-events: none; //remove native tooltip
@@ -252,4 +262,5 @@ $ui-tile-height: 105px !default;
   @include ui-manage-collection();
   @include ui-multi-check-box-table_theme();
   @include ui-file-icon();
+  @include ui-date-range-picker();
 }

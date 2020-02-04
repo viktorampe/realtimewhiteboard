@@ -137,4 +137,8 @@ export class ColumnFilterComponent implements SearchFilterComponentInterface {
       this.columnFilterService.visibleColumnIndex += 1;
     }
   }
+
+  public reset() {
+    throw new Error('Not implemented yet');
+  }
 }

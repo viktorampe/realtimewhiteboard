@@ -27,16 +27,11 @@ export class CardComponent implements OnInit, OnChanges {
   @HostBinding('style.top') topStyle: string;
   @HostBinding('style.left') leftStyle: string;
   colorlistHidden: boolean;
+  viewModeImage: boolean;
   maxCharacters = 300;
 
   constructor() {
-    this.card = {
-      cardContent: '',
-      color: 'white',
-      isInputSelected: true,
-      top: 0,
-      left: 0
-    };
+    this.viewModeImage = true;
   }
 
   ngOnInit() {
@@ -50,8 +45,8 @@ export class CardComponent implements OnInit, OnChanges {
 
   toggleInput() {
     if (
-      this.card.cardContent !== '' &&
-      this.card.cardContent.length <= this.maxCharacters
+      this.card.description !== '' &&
+      this.card.description.length <= this.maxCharacters
     ) {
       this.card.isInputSelected = !this.card.isInputSelected;
     }
@@ -62,8 +57,13 @@ export class CardComponent implements OnInit, OnChanges {
   }
 
   onDblClick(event) {
-    if (event.target.className === 'card') {
-      this.toggleInput();
+    const classArray = event.target.className.split(' ');
+    if (
+      classArray.some(
+        e => e === 'cardImage' || e === 'card__input' || e === 'card'
+      )
+    ) {
+      this.toggleEditMode();
     }
   }
 
@@ -83,5 +83,14 @@ export class CardComponent implements OnInit, OnChanges {
     } else {
       this.removeSelectedFromList.emit(this.card);
     }
+  }
+
+  toggleEditMode() {
+    this.card.editMode = !this.card.editMode;
+    this.viewModeImage = true;
+  }
+
+  toggleView() {
+    this.viewModeImage = !this.viewModeImage;
   }
 }

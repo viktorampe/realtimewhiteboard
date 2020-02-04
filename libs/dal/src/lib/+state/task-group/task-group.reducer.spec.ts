@@ -1,6 +1,19 @@
 import { Update } from '@ngrx/entity';
-import { TaskGroupActions } from '.';
 import { TaskGroupInterface } from '../../+models';
+import {
+  addTaskGroup,
+  addTaskGroups,
+  clearTaskGroups,
+  deleteTaskGroup,
+  deleteTaskGroups,
+  taskGroupsLoaded,
+  taskGroupsLoadError,
+  updateTaskGroup,
+  updateTaskGroups,
+  updateTaskGroupsAccess,
+  upsertTaskGroup,
+  upsertTaskGroups
+} from './task-group.actions';
 import { initialState, reducer, State } from './task-group.reducer';
 
 /**
@@ -9,8 +22,8 @@ import { initialState, reducer, State } from './task-group.reducer';
  * - set the initial property value via '[__EXTRA__PROPERTY_NAME]InitialValue'.
  * - set the updated property value via '[__EXTRA__PROPERTY_NAME]UpdatedValue'.
  */
-const groupIdInitialValue = 1;
-const groudIdUpdatedValue = 2;
+const taskIdInitialValue = 1;
+const taskIdUpdatedValue = 2;
 
 /**
  * Creates a TaskGroup.
@@ -19,11 +32,11 @@ const groudIdUpdatedValue = 2;
  */
 function createTaskGroup(
   id: number,
-  groupId: any = groupIdInitialValue
+  taskId: any = taskIdInitialValue
 ): TaskGroupInterface | any {
   return {
     id: id,
-    groupId: groupId
+    taskId: taskId
   };
 }
 
@@ -75,14 +88,14 @@ describe('TaskGroups Reducer', () => {
 
   describe('loaded action', () => {
     it('should load all taskGroups', () => {
-      const action = new TaskGroupActions.TaskGroupsLoaded({ taskGroups });
+      const action = taskGroupsLoaded({ taskGroups });
       const result = reducer(initialState, action);
       expect(result).toEqual(createState(taskGroups, true));
     });
 
     it('should error', () => {
       const error = 'Something went wrong';
-      const action = new TaskGroupActions.TaskGroupsLoadError(error);
+      const action = taskGroupsLoadError({ error });
       const result = reducer(initialState, action);
       expect(result).toEqual(createState([], false, error));
     });
@@ -91,7 +104,7 @@ describe('TaskGroups Reducer', () => {
   describe('add actions', () => {
     it('should add one taskGroup', () => {
       const taskGroup = taskGroups[0];
-      const action = new TaskGroupActions.AddTaskGroup({
+      const action = addTaskGroup({
         taskGroup
       });
 
@@ -100,7 +113,7 @@ describe('TaskGroups Reducer', () => {
     });
 
     it('should add multiple taskGroups', () => {
-      const action = new TaskGroupActions.AddTaskGroups({ taskGroups });
+      const action = addTaskGroups({ taskGroups });
       const result = reducer(initialState, action);
 
       expect(result).toEqual(createState(taskGroups, false));
@@ -112,14 +125,14 @@ describe('TaskGroups Reducer', () => {
 
       const startState = reducer(
         initialState,
-        new TaskGroupActions.AddTaskGroup({
+        addTaskGroup({
           taskGroup: originalTaskGroup
         })
       );
 
       const updatedTaskGroup = createTaskGroup(taskGroups[0].id, 'test');
 
-      const action = new TaskGroupActions.UpsertTaskGroup({
+      const action = upsertTaskGroup({
         taskGroup: updatedTaskGroup
       });
 
@@ -137,7 +150,7 @@ describe('TaskGroups Reducer', () => {
         createTaskGroup(3),
         createTaskGroup(4)
       ];
-      const action = new TaskGroupActions.UpsertTaskGroups({
+      const action = upsertTaskGroups({
         taskGroups: taskGroupsToInsert
       });
 
@@ -154,15 +167,15 @@ describe('TaskGroups Reducer', () => {
       const update: Update<TaskGroupInterface> = {
         id: 1,
         changes: {
-          groupId: groudIdUpdatedValue
+          taskId: taskIdUpdatedValue
         }
       };
-      const action = new TaskGroupActions.UpdateTaskGroup({
+      const action = updateTaskGroup({
         taskGroup: update
       });
       const result = reducer(startState, action);
       expect(result).toEqual(
-        createState([createTaskGroup(1, groudIdUpdatedValue)])
+        createState([createTaskGroup(1, taskIdUpdatedValue)])
       );
     });
 
@@ -172,25 +185,25 @@ describe('TaskGroups Reducer', () => {
         {
           id: 1,
           changes: {
-            groupId: groudIdUpdatedValue
+            taskId: taskIdUpdatedValue
           }
         },
         {
           id: 2,
           changes: {
-            groupId: groudIdUpdatedValue
+            taskId: taskIdUpdatedValue
           }
         }
       ];
-      const action = new TaskGroupActions.UpdateTaskGroups({
+      const action = updateTaskGroups({
         taskGroups: updates
       });
       const result = reducer(startState, action);
 
       expect(result).toEqual(
         createState([
-          createTaskGroup(1, groudIdUpdatedValue),
-          createTaskGroup(2, groudIdUpdatedValue),
+          createTaskGroup(1, taskIdUpdatedValue),
+          createTaskGroup(2, taskIdUpdatedValue),
           taskGroups[2]
         ])
       );
@@ -201,7 +214,7 @@ describe('TaskGroups Reducer', () => {
     it('should delete one taskGroup ', () => {
       const taskGroup = taskGroups[0];
       const startState = createState([taskGroup]);
-      const action = new TaskGroupActions.DeleteTaskGroup({
+      const action = deleteTaskGroup({
         id: taskGroup.id
       });
       const result = reducer(startState, action);
@@ -210,7 +223,7 @@ describe('TaskGroups Reducer', () => {
 
     it('should delete multiple taskGroups', () => {
       const startState = createState(taskGroups);
-      const action = new TaskGroupActions.DeleteTaskGroups({
+      const action = deleteTaskGroups({
         ids: [taskGroups[0].id, taskGroups[1].id]
       });
       const result = reducer(startState, action);
@@ -221,9 +234,38 @@ describe('TaskGroups Reducer', () => {
   describe('clear action', () => {
     it('should clear the taskGroups collection', () => {
       const startState = createState(taskGroups, true, 'something went wrong');
-      const action = new TaskGroupActions.ClearTaskGroups();
+      const action = clearTaskGroups();
       const result = reducer(startState, action);
       expect(result).toEqual(createState([], true, 'something went wrong'));
+    });
+  });
+
+  describe('updateTaskGroupsAccess action', () => {
+    it('should clear the taskGroups collection and add the updated records', () => {
+      const startTaskGroups = [
+        createTaskGroup(1, 1),
+        createTaskGroup(2, 1),
+        createTaskGroup(3, 1),
+        createTaskGroup(4, 1),
+        createTaskGroup(5, 2),
+        createTaskGroup(6, 2),
+        createTaskGroup(7, 2)
+      ];
+      const expectedTaskGroups = [
+        createTaskGroup(5, 2),
+        createTaskGroup(6, 2),
+        createTaskGroup(7, 2),
+        createTaskGroup(2, 1),
+        createTaskGroup(8, 1)
+      ];
+
+      const startState = createState(startTaskGroups);
+      const action = updateTaskGroupsAccess({
+        taskId: 1,
+        taskGroups: [createTaskGroup(2, 1), createTaskGroup(8, 1)]
+      });
+      const result = reducer(startState, action);
+      expect(result).toEqual(createState(expectedTaskGroups));
     });
   });
 });

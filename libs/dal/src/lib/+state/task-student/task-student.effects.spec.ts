@@ -8,9 +8,9 @@ import { Observable, of } from 'rxjs';
 import { TaskStudentReducer } from '.';
 import { TASK_STUDENT_SERVICE_TOKEN } from '../../tasks/task-student.service.interface';
 import {
-  LoadTaskStudents,
-  TaskStudentsLoaded,
-  TaskStudentsLoadError
+  loadTaskStudents,
+  taskStudentsLoaded,
+  taskStudentsLoadError
 } from './task-student.actions';
 import { TaskStudentEffects } from './task-student.effects';
 
@@ -95,10 +95,12 @@ describe('TaskStudentEffects', () => {
   });
 
   describe('loadTaskStudent$', () => {
-    const unforcedLoadAction = new LoadTaskStudents({ userId: 1 });
-    const forcedLoadAction = new LoadTaskStudents({ force: true, userId: 1 });
-    const filledLoadedAction = new TaskStudentsLoaded({ taskStudents: [] });
-    const loadErrorAction = new TaskStudentsLoadError(new Error('failed'));
+    const unforcedLoadAction = loadTaskStudents(1);
+    const forcedLoadAction = loadTaskStudents(1, true);
+    const filledLoadedAction = taskStudentsLoaded({ taskStudents: [] });
+    const loadErrorAction = taskStudentsLoadError({
+      error: new Error('failed')
+    });
     describe('with initialState', () => {
       beforeAll(() => {
         usedState = TaskStudentReducer.initialState;

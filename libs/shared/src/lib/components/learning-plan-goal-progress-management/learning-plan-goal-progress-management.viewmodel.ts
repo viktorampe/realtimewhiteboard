@@ -105,10 +105,7 @@ export class LearningPlanGoalProgressManagementViewModel {
     eduContentBookId: number
   ): void {
     this.store
-      .pipe(
-        select(UserQueries.getCurrentUser),
-        take(1)
-      )
+      .pipe(select(UserQueries.getCurrentUser), take(1))
       .subscribe(user => {
         this.store.dispatch(
           new LearningPlanGoalProgressActions.StartAddManyLearningPlanGoalProgresses(

@@ -13,10 +13,12 @@ $shared_image-bg-color: lightskyblue !default;
 @import './components/quick-link/quick-link.component.theme';
 @import './components/method-books-tile/method-books-tile.component.theme';
 @import './components/method-book-tile/method-book-tile.component.theme';
+@import './components/content-preview-dialog/content-preview-dialog.component.theme.scss';
 
 @mixin shared-theme() {
   @include shared-header();
   @include shared-quick-link();
   @include shared-method-books-tile();
   @include shared-method-book-tile();
+  @include shared-content-preview-dialog();
 }

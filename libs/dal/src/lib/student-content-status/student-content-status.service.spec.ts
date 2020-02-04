@@ -63,7 +63,9 @@ describe('StudentContentStatusService', () => {
 
     expect(studentContentStatusApi.patchAttributes).toHaveBeenCalledWith(
       studentContentStatus.id,
-      { contentStatusId: studentContentStatus.contentStatusId }
+      {
+        contentStatusId: studentContentStatus.contentStatusId
+      }
     );
   });
 

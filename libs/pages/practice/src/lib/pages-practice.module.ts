@@ -43,7 +43,7 @@ import { PagesPracticeRoutingModule } from './pages-practice-routing.module';
     },
     {
       provide: CONTENT_OPENER_TOKEN,
-      useClass: PracticeViewModel
+      useExisting: PracticeViewModel
     }
   ],
   exports: []
