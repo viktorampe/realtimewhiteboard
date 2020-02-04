@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   EventEmitter,
@@ -16,7 +17,8 @@ import {
 @Component({
   selector: 'campus-checkbox-line-filter',
   templateUrl: './checkbox-line-filter-component.html',
-  styleUrls: ['./checkbox-line-filter-component.scss']
+  styleUrls: ['./checkbox-line-filter-component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CheckboxLineFilterComponent
   implements SearchFilterComponentInterface {

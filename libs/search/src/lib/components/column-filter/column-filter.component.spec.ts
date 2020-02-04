@@ -1,3 +1,4 @@
+//file.only
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import {
   MatIconModule,
@@ -14,6 +15,7 @@ import {
 import { SearchFilterCriteriaInterface } from '../../interfaces/search-filter-criteria.interface';
 import { ColumnFilterComponent } from './column-filter.component';
 import { ColumnFilterService } from './column-filter.service';
+import { ColumnFilterServiceInterface } from './column-filter.service.interface';
 
 const mockFilterCriteria: SearchFilterCriteriaInterface[] = [
   new SearchFilterCriteriaFixture({}, [
@@ -61,6 +63,7 @@ const mockFilterCriteria: SearchFilterCriteriaInterface[] = [
 describe('ColumnFilterComponent', () => {
   let component: ColumnFilterComponent;
   let fixture: ComponentFixture<ColumnFilterComponent>;
+  let columnFilterService: ColumnFilterServiceInterface;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -71,6 +74,7 @@ describe('ColumnFilterComponent', () => {
         ColumnFilterService
       ]
     });
+    columnFilterService = TestBed.get(ColumnFilterService);
   }));
 
   beforeEach(() => {
@@ -365,5 +369,11 @@ describe('ColumnFilterComponent', () => {
         fixture.debugElement.query(By.css('.column__filter--no-criteria'))
       ).toBeFalsy();
     });
+  });
+
+  it('should call the service', () => {
+    const spy = jest.spyOn(columnFilterService, 'reset');
+    component.reset();
+    expect(spy).toHaveBeenCalled();
   });
 });
