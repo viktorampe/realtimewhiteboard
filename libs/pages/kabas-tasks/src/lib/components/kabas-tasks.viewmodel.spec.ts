@@ -1,7 +1,33 @@
 import { TestBed } from '@angular/core/testing';
 import { MAT_DATE_LOCALE } from '@angular/material';
-import { AuthServiceInterface, AUTH_SERVICE_TOKEN, DalState, EduContentFixture, EduContentMetadataFixture, EduFileFixture, EduFileTypeEnum, EffectFeedback, EffectFeedbackActions, FavoriteActions, FavoriteTypesEnum, getRouterState, PersonFixture, TaskActions, TaskEduContentActions, TaskEduContentFixture, TaskFixture, TaskServiceInterface, TASK_SERVICE_TOKEN, UserQueries } from '@campus/dal';
-import { OpenStaticContentServiceInterface, OPEN_STATIC_CONTENT_SERVICE_TOKEN, ScormExerciseServiceInterface, SCORM_EXERCISE_SERVICE_TOKEN } from '@campus/shared';
+import {
+  AuthServiceInterface,
+  AUTH_SERVICE_TOKEN,
+  DalState,
+  EduContentFixture,
+  EduContentMetadataFixture,
+  EduFileFixture,
+  EduFileTypeEnum,
+  EffectFeedback,
+  EffectFeedbackActions,
+  FavoriteActions,
+  FavoriteTypesEnum,
+  getRouterState,
+  PersonFixture,
+  TaskActions,
+  TaskEduContentActions,
+  TaskEduContentFixture,
+  TaskFixture,
+  TaskServiceInterface,
+  TASK_SERVICE_TOKEN,
+  UserQueries
+} from '@campus/dal';
+import {
+  OpenStaticContentServiceInterface,
+  OPEN_STATIC_CONTENT_SERVICE_TOKEN,
+  ScormExerciseServiceInterface,
+  SCORM_EXERCISE_SERVICE_TOKEN
+} from '@campus/shared';
 import { MockDate } from '@campus/testing';
 import { Store } from '@ngrx/store';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
@@ -9,7 +35,10 @@ import { hot } from 'jasmine-marbles';
 import { configureTestSuite } from 'ng-bullet';
 import { AssigneeFixture } from '../interfaces/Assignee.fixture';
 import { AssigneeTypesEnum } from '../interfaces/Assignee.interface';
-import { TaskStatusEnum, TaskWithAssigneesInterface } from '../interfaces/TaskWithAssignees.interface';
+import {
+  TaskStatusEnum,
+  TaskWithAssigneesInterface
+} from '../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from './kabas-tasks.viewmodel';
 import { getTaskWithAssignmentAndEduContents } from './kabas-tasks.viewmodel.selectors';
 
