@@ -108,6 +108,6 @@ describe('WhiteboardComponent', () => {
     component.selectCard(component.cards[0]);
     component.deselectCard(component.cards[0]);
 
-    expect(component.selectedCards.length).toBe(cardsSizeBeforeRemoving - 1);
+    expect(component.selectedCards.length).toBe(cardsSizeBeforeRemoving);
   });
 });
