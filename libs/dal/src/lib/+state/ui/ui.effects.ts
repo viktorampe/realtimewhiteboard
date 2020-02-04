@@ -72,23 +72,20 @@ export class UiEffects {
       // routerState contains every 'hop' of the routermodule
       // filtering empty hops
       // building url substrings per hop
-      const filteredRoutes = routerState.routeParts.reduce(
-        (acc, routePart) => {
-          // filter
-          if (routePart.url) {
-            acc.push({
-              ...routePart,
-              // build url path
-              urlParts: [
-                ...(acc[acc.length - 1] ? acc[acc.length - 1].urlParts : []),
-                routePart.url
-              ]
-            });
-          }
-          return acc;
-        },
-        [] as RouterStateUrl[]
-      );
+      const filteredRoutes = routerState.routeParts.reduce((acc, routePart) => {
+        // filter
+        if (routePart.url) {
+          acc.push({
+            ...routePart,
+            // build url path
+            urlParts: [
+              ...(acc[acc.length - 1] ? acc[acc.length - 1].urlParts : []),
+              routePart.url
+            ]
+          });
+        }
+        return acc;
+      }, [] as RouterStateUrl[]);
 
       const breadcrumbs = filteredRoutes.map(routePart => {
         const { selector, displayProperty, breadcrumbText } = routePart.data;

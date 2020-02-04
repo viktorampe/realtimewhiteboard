@@ -1,0 +1,50 @@
+<mat-icon
+  class="manage-kabas-tasks-task-edu-content-list-item__file-icon"
+  svgIcon="{{ fileIcon != 'ludo.zip' ? 'general-file' : 'exercise' }}"
+></mat-icon>
+
+<div
+  class="manage-kabas-tasks-task-edu-content-list-item__container"
+  [class.manage-kabas-tasks-task-edu-content-list-item__container--no-actions]="
+    !actions
+  "
+>
+  <div
+    class="manage-kabas-tasks-task-edu-content-list-item__container__title"
+    >{{ title }}</div
+  >
+  <div
+    *ngIf="actions"
+    class="manage-kabas-tasks-task-edu-content-list-item__container__actions"
+    ><span
+      campusClickStopPropagation
+      *ngFor="let action of actions"
+      (click)="onActionClick(action)"
+    >
+      {{ action.label }}
+    </span></div
+  >
+</div>
+<div class="manage-kabas-tasks-task-edu-content-list-item__combined-container">
+  <div
+    *ngIf="level"
+    class="manage-kabas-tasks-task-edu-content-list-item__level"
+  >
+    {{ level }}
+  </div>
+
+  <div
+    *ngIf="!isPaperTask"
+    class="manage-kabas-tasks-task-edu-content-list-item__required"
+    [class.manage-kabas-tasks-task-edu-content-list-item__required--no-diabolo]="
+      !diaboloPhaseIcon
+    "
+  >
+    {{ required ? 'moetje' : 'magje' }}
+  </div>
+
+  <mat-icon
+    class="manage-kabas-tasks-task-edu-content-list-item__diabolo"
+    svgIcon="{{ diaboloPhaseIcon }}"
+  ></mat-icon>
+</div>

@@ -23,10 +23,7 @@ class ActionTwo implements Action {
 }
 
 const mockSelector = createFeatureSelector<any>('learningAreas');
-const mockSelectorWithProp = createSelector(
-  mockSelector,
-  (s1, {}) => !!s1
-);
+const mockSelectorWithProp = createSelector(mockSelector, (s1, {}) => !!s1);
 let resolvedQueries = [];
 
 @Injectable({

@@ -221,7 +221,13 @@ export class MockPracticeViewModel
       count: mockResults.length,
       results: mockResults,
       filterCriteriaPredictions: new Map([
-        ['methods', new Map([[34, 3], [2, 50]])],
+        [
+          'methods',
+          new Map([
+            [34, 3],
+            [2, 50]
+          ])
+        ],
         ['eduContentTOC', new Map()],
         ['methodLevel', new Map()]
       ])

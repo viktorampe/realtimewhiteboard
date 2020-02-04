@@ -1,0 +1,320 @@
+@mixin manage-kabas-tasks-detail-theme() {
+  $pages-kabas-tasks__list-option-color: $pages-kabas-tasks-text-color--primary !default;
+  $pages-kabas-tasks__list-option-color--accent: $pages-kabas-tasks-text-color--primary--accent !default;
+  $pages-kabas-tasks__list-option-background-color: $pages-kabas-tasks-background-color--primary !default;
+  $pages-kabas-tasks__list-option-background-color--accent: $pages-kabas-tasks-background-color--secondary !default;
+  $pages-kabas-tasks__list-option-color--secondary: $pages-kabas-tasks-text-color--secondary !default;
+  $pages-kabas-tasks__list__item-font-size: 16px !default;
+  $manage-kabas-tasks-detail__list__primary-action-font-size: $pages-kabas-tasks__list__item-font-size !default;
+  $manage-kabas-tasks-detail__list__primary-action-height: 65px !default;
+  $manage-kabas-tasks-detail__list__primary-action-margin-top: 5px !default;
+  $manage-kabas-tasks-detail__list__primary-actions-padding: 0 40px !default;
+  $manage-kabas-tasks-detail__list__primary-actions-margin: 0 -40px !default;
+  $manage-kabas-tasks-detail__list__primary-action-color: $pages-kabas-tasks-action-color--primary !default;
+  $manage-kabas-tasks-detail__list__secondary-action-color: $pages-kabas-tasks-action-color--secondary !default;
+  $manage-kabas-tasks-detail__primary-action_icon-horizontal-margin: 20px !default;
+  $manage-kabas-tasks-detail__list__reorder-actions-padding: 10px !default;
+
+  $manage-kabas-tasks-width: 100% !default;
+
+  $manage-kabas-tasks-detail__list-vertical-margin: -40px !default;
+
+  $manage-kabas-tasks-detail__filterbar-padding-top: 15px !default;
+  $manage-kabas-tasks-detail__filterbar-padding-left: 15px !default;
+  $manage-kabas-tasks-detail__filterbar_filter-width: 150px !default;
+  $manage-kabas-tasks-detail__filterbar_filter-heigth: 50px !default;
+  $manage-kabas-tasks-detail__filterbar_filter-padding-width: 8px !default;
+  $manage-kabas-tasks-detail__filterbar_filter-padding-height: 12px !default;
+  $manage-kabas-tasks-detail__filterbar_reset_filters-width: 50px !default;
+  $manage-kabas-tasks-detail__filterbar_reset_filters-height: 50px !default;
+  $manage-kabas-tasks-detail__filterbar_reset_filters-border-width: 1px !default;
+  $manage-kabas-tasks-detail__filterbar_reset_filters-background-color: transparent !default;
+  $manage-kabas-tasks-detail__filterbar_filter-border-color: $color-gray-4 !default;
+
+  $manage-kabas-tasks-detail__reset-margin-right: 20px !default;
+  $manage-kabas-tasks-detail__reset-margin-bottom: 10px !default;
+
+  $pages-kabas-tasks-filters-hover-foreground-color: $color-black-1 !default;
+
+  $filters-hover-background-color: inherit !default;
+  $filters-active-background-color: inherit !default;
+
+  $manage-kabas-tasks-detail__info__link-horizontal-spacing: $pages-kabas-tasks-spacing--horizontal/2 !default;
+  $manage-kabas-tasks-detail__info__link--print-color: $pages-kabas-tasks_link--print-color !default;
+  $manage-kabas-tasks-detail__info__link__icon-horizontal-spacing: $pages-kabas-tasks-spacing--horizontal/2 !default;
+  $manage-kabas-tasks-detail__info__link__icon-vertical-spacing: $pages-kabas-tasks-spacing--vertical !default;
+  $manage-kabas-tasks-detail__info__link__icon-dimension: $pages-kabas-tasks_link_icon-dimension !default;
+  $manage-kabas-tasks-detail__info__link__label-height: $pages-kabas-tasks_link_label-height !default;
+
+  // measurements
+  $pages-kabas-tasks__list-option--selected-border-width: 4px !default;
+  $pages-kabas-tasks__list-option-padding-left: 16px !default;
+
+  // drag-drop
+  $pages-kabas-tasks__list__drag-handle-color: $pages-kabas-tasks-text-color--secondary !default;
+  $pages-kabas-tasks__list-drag__cubic-bezier: cubic-bezier(
+    0,
+    0,
+    0.3,
+    1
+  ) !default;
+  $pages-kabas-tasks__list-drag__transition--duration: 250ms !default;
+  $pages-kabas-tasks__list-drag--hover-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08),
+    0 1px 4px 1px rgba(0, 0, 0, 0.06) !default;
+  $pages-kabas-tasks__list-drag--dragging-box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+    0 8px 10px 1px rgba(0, 0, 0, 0.08), 0 3px 14px 2px rgba(0, 0, 0, 0.06) !default;
+  $pages-kabas-tasks__list-drag--dragging-padding: 0 15px !default;
+  $pages-kabas-tasks__list-drag--dragging-background-color: rgba(
+    #fff,
+    0.84
+  ) !default;
+  $pages-kabas-tasks__list-drag--dragging-border-radius: 4px !default;
+
+  .mat-drawer-container {
+    background: $pages-kabas-tasks-background-color--primary;
+  }
+  .manage-kabas-tasks-detail {
+    &__list {
+      margin-left: $manage-kabas-tasks-detail__list-vertical-margin;
+      margin-right: $manage-kabas-tasks-detail__list-vertical-margin;
+
+      &__drag-handle {
+        color: $pages-kabas-tasks__list__drag-handle-color;
+      }
+
+      &.cdk-drop-list-dragging &__item {
+        transition: transform
+          $pages-kabas-tasks__list-drag__transition--duration
+          $pages-kabas-tasks__list-drag__cubic-bezier;
+      }
+
+      &__item {
+        display: flex;
+        flex-direction: row;
+        font-size: $pages-kabas-tasks__list__item-font-size;
+        transition: box-shadow
+          $pages-kabas-tasks__list-drag__transition--duration
+          $pages-kabas-tasks__list-drag__cubic-bezier;
+
+        &:hover {
+          position: relative;
+          z-index: 99999;
+          box-shadow: $pages-kabas-tasks__list-drag--hover-box-shadow;
+        }
+
+        .mat-list-item-content {
+          width: 100%;
+          display: flex;
+          flex-direction: row;
+          flex-wrap: nowrap;
+          align-items: center;
+        }
+
+        campus-task-edu-content-list-item {
+          flex: 1 1 100%;
+        }
+
+        &.cdk-drag {
+          cursor: move;
+
+          &-preview {
+            background-color: $pages-kabas-tasks__list-drag--dragging-background-color;
+            box-sizing: border-box;
+            border-radius: $pages-kabas-tasks__list-drag--dragging-border-radius;
+            box-shadow: $pages-kabas-tasks__list-drag--dragging-box-shadow;
+            padding: $pages-kabas-tasks__list-drag--dragging-padding;
+          }
+          &-placeholder {
+            opacity: 0;
+          }
+
+          &-animating {
+            transition: transform
+              $pages-kabas-tasks__list-drag__transition--duration
+              $pages-kabas-tasks__list-drag__cubic-bezier;
+          }
+        }
+      }
+    }
+
+    &__container {
+      .mat-tab-body-content {
+        padding: 0;
+      }
+
+      .mat-list-base {
+        .mat-list-item,
+        .mat-list-item.mat-list-option {
+          height: 64px;
+          &:hover {
+            .mat-pseudo-checkbox {
+              opacity: 1;
+            }
+          }
+
+          .mat-pseudo-checkbox {
+            transform: scale(0.8);
+            opacity: 0.3;
+            transition: opacity 150ms ease-out;
+          }
+
+          .mat-list-item-content .mat-list-text {
+            padding-left: 0;
+          }
+        }
+
+        &.mat-selection-list--has-selection {
+          .mat-list-item,
+          .mat-list-item.mat-list-option {
+            .mat-pseudo-checkbox {
+              opacity: 1;
+            }
+          }
+        }
+      }
+
+      .mat-list-option,
+      .mat-list-item {
+        &:nth-child(odd) {
+          background-color: $pages-kabas-tasks__list-option-background-color--accent;
+        }
+
+        border-left: $pages-kabas-tasks__list-option--selected-border-width
+          transparent solid;
+
+        &--selected {
+          .mat-list-option-content {
+            background-color: $pages-kabas-tasks__list-option-background-color--accent;
+            padding-left: $pages-kabas-tasks__list-option-padding-left -
+              $pages-kabas-tasks__list-option--selected-border-width;
+          }
+
+          border-left: $pages-kabas-tasks__list-option--selected-border-width
+            $pages-kabas-tasks__list-option-color--accent solid;
+        }
+      }
+    }
+
+    &__filterbar {
+      padding: $manage-kabas-tasks-detail__filterbar-padding-top 0 0
+        $manage-kabas-tasks-detail__filterbar-padding-left;
+      > * {
+        margin-right: $manage-kabas-tasks-detail__reset-margin-right;
+        margin-bottom: $manage-kabas-tasks-detail__reset-margin-bottom;
+      }
+
+      campus-button-toggle-filter {
+        div.button-toggle-filter {
+          &__title {
+            display: none !important;
+          }
+        }
+      }
+
+      .ui-filter-text-input {
+        &__input {
+          width: $manage-kabas-tasks-detail__filterbar_filter-width;
+          height: $manage-kabas-tasks-detail__filterbar_filter-heigth;
+        }
+      }
+
+      .select-filter-component {
+        width: $manage-kabas-tasks-detail__filterbar_filter-width;
+      }
+
+      .search-term {
+        width: $manage-kabas-tasks-detail__filterbar_filter-width;
+
+        & campus-button {
+          &:hover {
+            background-color: $pages-method-filters-hover-background-color;
+            mat-icon {
+              color: $pages-kabas-tasks-filters-hover-foreground-color;
+            }
+          }
+        }
+      }
+      &__reset-filters {
+        width: $manage-kabas-tasks-detail__filterbar_reset_filters-width;
+        height: $manage-kabas-tasks-detail__filterbar_reset_filters-height;
+        background-color: $manage-kabas-tasks-detail__filterbar_reset_filters-background-color;
+        border: $manage-kabas-tasks-detail__filterbar_reset_filters-border-width
+          solid $manage-kabas-tasks-detail__filterbar_filter-border-color;
+
+        &:hover {
+          background-color: $pages-method-filters-hover-background-color;
+          color: $pages-kabas-tasks-filters-hover-foreground-color;
+        }
+        &:active {
+          background-color: $filters-active-background-color;
+        }
+      }
+
+      &__required-toggle {
+        border: 1px solid
+          $manage-kabas-tasks-detail__filterbar_filter-border-color;
+        padding: $manage-kabas-tasks-detail__filterbar_filter-padding-height
+          $manage-kabas-tasks-detail__filterbar_filter-padding-width
+          $manage-kabas-tasks-detail__filterbar_filter-padding-height
+          $manage-kabas-tasks-detail__filterbar_filter-padding-width;
+      }
+      &--disabled {
+        opacity: 30%;
+        pointer-events: none;
+      }
+    }
+
+    &__list {
+      &__actions {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        background-color: $secondary-bg-color;
+        margin: $manage-kabas-tasks-detail__list__primary-actions-margin;
+        padding: $manage-kabas-tasks-detail__list__primary-actions-padding;
+      }
+      &__primary-action,
+      &__reorder-actions {
+        display: flex;
+        align-items: center;
+        font-weight: bold;
+        height: $manage-kabas-tasks-detail__list__primary-action-height;
+        font-size: $manage-kabas-tasks-detail__list__primary-action-font-size;
+        margin-top: $manage-kabas-tasks-detail__list__primary-action-margin-top;
+        cursor: pointer;
+
+        .mat-icon {
+          margin: 0
+            $manage-kabas-tasks-detail__primary-action_icon-horizontal-margin;
+        }
+      }
+      &__primary-action {
+        color: $manage-kabas-tasks-detail__list__primary-action-color;
+      }
+      &__reorder-actions .ui-button {
+        padding: $manage-kabas-tasks-detail__list__reorder-actions-padding;
+      }
+    }
+
+    &__info {
+      &__link {
+        padding: $manage-kabas-tasks-detail__info__link-horizontal-spacing 0px;
+
+        &__icon {
+          height: $manage-kabas-tasks-detail__info__link__icon-dimension !important;
+          width: $manage-kabas-tasks-detail__info__link__icon-dimension !important;
+          margin-right: $manage-kabas-tasks-detail__info__link__icon-horizontal-spacing;
+        }
+
+        &__label {
+          line-height: $manage-kabas-tasks-detail__info__link__label-height;
+          height: $manage-kabas-tasks-detail__info__link__label-height;
+        }
+
+        &--print {
+          color: $manage-kabas-tasks-detail__info__link--print-color;
+        }
+      }
+    }
+  }
+}

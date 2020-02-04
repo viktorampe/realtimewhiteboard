@@ -30,6 +30,16 @@ describe('CardComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(CardComponent);
     component = fixture.componentInstance;
+    component.card = {
+      color: 'white',
+      description: '',
+      image: null,
+      isInputSelected: true,
+      editMode: true,
+      top: 0,
+      left: 0
+    };
+
     fixture.detectChanges();
   });
 
@@ -38,19 +48,19 @@ describe('CardComponent', () => {
   });
 
   it('should toggle input where input is valid', () => {
-    component.card.cardContent = 'Valid';
+    component.card.description = 'Valid';
     component.toggleInput();
     expect(component.card.isInputSelected).toBe(false);
   });
 
   it('should toggle input where input is empty', () => {
-    component.card.cardContent = '';
+    component.card.description = '';
     component.toggleInput();
     expect(component.card.isInputSelected).toBe(true);
   });
 
   it('should show errormessage when input is maximal', () => {
-    component.card.cardContent = 'a'.repeat(component.maxCharacters);
+    component.card.description = 'a'.repeat(component.maxCharacters);
     fixture.detectChanges();
     const errorMessage = fixture.debugElement.query(
       By.css('.card__content__errorMessage')
@@ -59,7 +69,7 @@ describe('CardComponent', () => {
   });
 
   it('should show the card content when not editing', () => {
-    component.card.cardContent = 'Test content';
+    component.card.description = 'Test content';
     component.card.isInputSelected = false;
     fixture.detectChanges();
     const contentParagraph = fixture.debugElement.query(By.css('p'));
@@ -69,7 +79,7 @@ describe('CardComponent', () => {
   });
 
   it('should display the card content in the input when editing', async () => {
-    component.card.cardContent = 'Test content';
+    component.card.description = 'Test content';
     component.card.isInputSelected = true;
     fixture.detectChanges();
     await fixture.whenStable();
@@ -78,7 +88,7 @@ describe('CardComponent', () => {
   });
 
   it('should create card with cardcontent empty', () => {
-    expect(component.card.cardContent).toBe('');
+    expect(component.card.description).toBe('');
   });
 
   it('should set the correct top style on creation', () => {
@@ -100,14 +110,28 @@ describe('CardComponent', () => {
   });
 
   it('should toggle to edit mode when double click.', () => {
-    component.card.isInputSelected = false;
-    component.card.cardContent = 'something that is not null';
+    component.card.editMode = false;
+    component.card.description = 'something that is not null';
 
     const myCard = fixture.debugElement.query(By.css('.card'));
     myCard.nativeElement.dispatchEvent(new MouseEvent('dblclick')); // use nativeElement so target is set
     fixture.detectChanges();
 
-    expect(component.card.isInputSelected).toBe(true);
+    expect(component.card.editMode).toBe(true);
+  });
+
+  it('should toggle edit mode when the editicon is clicked', () => {
+    component.card.editMode = false;
+    component.toggleEditMode();
+    fixture.detectChanges();
+    expect(component.card.editMode).toBe(true);
+  });
+
+  it('should toggle to view mode image when toggle icon is clicked', () => {
+    component.viewModeImage = false;
+    component.toggleView();
+    fixture.detectChanges();
+    expect(component.viewModeImage).toBe(true);
   });
 
   it('should show the colorlist when the coloricon is clicked', () => {

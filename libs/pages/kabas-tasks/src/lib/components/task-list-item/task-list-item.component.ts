@@ -1,4 +1,12 @@
-import { Component, HostBinding, Input, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  HostBinding,
+  Input,
+  OnInit,
+  Output
+} from '@angular/core';
 import {
   AssigneeInterface,
   AssigneeTypesEnum
@@ -9,7 +17,8 @@ export type Status = 'pending' | 'active' | 'finished' | 'paper';
 @Component({
   selector: 'campus-task-list-item',
   templateUrl: './task-list-item.component.html',
-  styleUrls: ['./task-list-item.component.scss']
+  styleUrls: ['./task-list-item.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TaskListItemComponent implements OnInit {
   public classGroups: AssigneeInterface[] = [];
@@ -26,6 +35,7 @@ export class TaskListItemComponent implements OnInit {
   @Input() startDate: Date;
   @Input() endDate: Date;
   @Input() status: Status;
+  @Input() isFavorite: boolean;
   @Input() actions: {
     label: string;
     handler: () => any; //prevents warning "Member handler is not callable in template"
@@ -47,6 +57,8 @@ export class TaskListItemComponent implements OnInit {
     return this._assignees;
   }
 
+  @Output() clickToggleFavorite = new EventEmitter();
+
   @HostBinding('class.manage-kabas-tasks__task-list-item')
   taskListItemClass = true;
 
@@ -66,5 +78,9 @@ export class TaskListItemComponent implements OnInit {
       return 1;
     }
     return order[a.type] - order[b.type];
+  }
+
+  toggleFavorite() {
+    this.clickToggleFavorite.emit();
   }
 }

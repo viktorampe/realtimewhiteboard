@@ -1,6 +1,9 @@
 import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   EventEmitter,
+  Inject,
   Input,
   OnDestroy,
   OnInit,
@@ -24,7 +27,8 @@ interface ButtonOption {
 @Component({
   selector: 'campus-button-toggle-filter',
   templateUrl: './button-toggle-filter.component.html',
-  styleUrls: ['./button-toggle-filter.component.scss']
+  styleUrls: ['./button-toggle-filter.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ButtonToggleFilterComponent
   implements SearchFilterComponentInterface, OnInit, OnDestroy {
@@ -61,7 +65,7 @@ export class ButtonToggleFilterComponent
     SearchFilterCriteriaInterface[]
   > = new EventEmitter();
 
-  constructor() {}
+  constructor(@Inject(ChangeDetectorRef) private cd: ChangeDetectorRef) {}
 
   ngOnInit() {
     this.subscriptions.add(
@@ -88,6 +92,16 @@ export class ButtonToggleFilterComponent
     this.subscriptions.unsubscribe();
   }
 
+  public reset(emit = true) {
+    this.updateView([], false);
+    this.updateCriteriaWithSelected(this.criteria.values, []);
+    this.cd.markForCheck();
+
+    if (emit) {
+      this.filterSelectionChange.emit([]);
+    }
+  }
+
   private criteriaToOptions(
     criteria: SearchFilterCriteriaInterface
   ): ButtonOption[] {
@@ -102,11 +116,14 @@ export class ButtonToggleFilterComponent
       );
   }
 
-  private updateView(selection: SearchFilterCriteriaValuesInterface[]): void {
+  private updateView(
+    selection: SearchFilterCriteriaValuesInterface[],
+    emitEvent = true
+  ): void {
     if (this.multiple) {
-      this.toggleControl.setValue(selection);
+      this.toggleControl.setValue(selection, { emitEvent });
     } else {
-      this.toggleControl.setValue(selection[0] || null);
+      this.toggleControl.setValue(selection[0] || null, { emitEvent });
     }
   }
 

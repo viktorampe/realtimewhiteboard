@@ -973,10 +973,9 @@ describe('MethodViewModel', () => {
           hot('a', { a: mockIsFavorite })
         );
 
-        expect(FavoriteQueries.getIsFavoriteEduContent).toHaveBeenCalledWith(
-          storeState,
-          { eduContentId: mockBoeke.id }
-        );
+        expect(
+          FavoriteQueries.getIsFavoriteEduContent
+        ).toHaveBeenCalledWith(storeState, { eduContentId: mockBoeke.id });
       });
     });
   });
@@ -1041,6 +1040,17 @@ describe('MethodViewModel', () => {
       methodViewModel.openEduContentAsSolution(eduContent);
 
       expect(spy).toHaveBeenCalledWith(null, eduContent.id, null, true);
+    });
+
+    it('should open eduContent as an image', () => {
+      const eduContent = new EduContentFixture({
+        id: 4
+      });
+      const spy = jest.spyOn(openStaticContentService, 'open');
+
+      methodViewModel.previewEduContentAsImage(eduContent);
+
+      expect(spy).toHaveBeenCalledWith(eduContent, false, true);
     });
   });
 

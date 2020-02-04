@@ -6,6 +6,7 @@ import { configureTestSuite } from 'ng-bullet';
 import { CardComponent } from '../card/card.component';
 import { ColorlistComponent } from '../colorlist/colorlist.component';
 import { ToolbarComponent } from '../toolbar/toolbar.component';
+import { WhiteboardToolsComponent } from '../whiteboard-tools/whiteboard-tools.component';
 import { WhiteboardComponent } from './whiteboard.component';
 
 describe('WhiteboardComponent', () => {
@@ -19,7 +20,8 @@ describe('WhiteboardComponent', () => {
         WhiteboardComponent,
         CardComponent,
         ToolbarComponent,
-        ColorlistComponent
+        ColorlistComponent,
+        WhiteboardToolsComponent
       ],
       providers: [
         {
@@ -43,11 +45,13 @@ describe('WhiteboardComponent', () => {
   it('should create a card on plus button clicked', () => {
     const cardsSizeBeforeClicked = component.cards.length;
 
-    const btnPlus = fixture.debugElement.query(
-      By.css('.whiteboard-page__btnPlus')
+    const btns = fixture.debugElement.queryAll(
+      By.css('.whiteboard-tools__btn')
     );
 
-    btnPlus.nativeElement.click();
+    const btnPlus = btns[0].nativeElement;
+
+    btnPlus.click();
 
     const cardsSizeAfterClicked = component.cards.length;
 

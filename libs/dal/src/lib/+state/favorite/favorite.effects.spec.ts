@@ -8,6 +8,7 @@ import { hot } from '@nrwl/angular/testing';
 import { undo } from 'ngrx-undo';
 import { Observable, of } from 'rxjs';
 import { FavoriteReducer } from '.';
+import { DalActions } from '..';
 import { FavoriteTypesEnum } from '../../+models';
 import { FAVORITE_SERVICE_TOKEN } from '../../favorite/favorite.service.interface';
 import { AUTH_SERVICE_TOKEN } from '../../persons';
@@ -354,20 +355,15 @@ describe('FavoriteEffects', () => {
       favoriteService = TestBed.get(FAVORITE_SERVICE_TOKEN);
     });
 
-    it('should return make the service call and return a feedbackAction', () => {
+    it('should return make the service call and return a success action', () => {
       jest.spyOn(favoriteService, 'deleteFavorite').mockReturnValue(of(true));
 
       const deleteAction = new DeleteFavorite({ id: favoriteId, userId });
-      const effectFeedback = new EffectFeedback({
-        id: uuid(),
-        triggerAction: deleteAction,
-        message: 'Favoriet is verwijderd.',
-        type: 'success',
-        priority: Priority.NORM
+      const successAction = new DalActions.ActionSuccessful({
+        successfulAction: '[Favorite] deleted'
       });
-      const addFeedbackAction = new AddEffectFeedback({ effectFeedback });
 
-      expectInAndOut(effects.deleteFavorite$, deleteAction, addFeedbackAction);
+      expectInAndOut(effects.deleteFavorite$, deleteAction, successAction);
       expect(favoriteService.deleteFavorite).toHaveBeenCalledWith(
         userId,
         favoriteId

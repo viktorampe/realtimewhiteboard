@@ -49,10 +49,12 @@ export class WhiteboardComponent implements OnInit {
   addEmptyCard(top: number = 0, left: number = 0) {
     this.cards.push({
       color: this.lastColor,
-      cardContent: '',
+      description: '',
+      image: '',
       isInputSelected: true,
       top: top,
-      left: left
+      left: left,
+      editMode: true
     });
   }
 
@@ -83,4 +85,7 @@ export class WhiteboardComponent implements OnInit {
     this.selectedCards = this.selectedCards.filter(c => c !== card);
     console.log(this.selectedCards);
   }
+  btnDelClicked() {}
+
+  btnEditClicked() {}
 }

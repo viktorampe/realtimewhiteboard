@@ -1,0 +1,7 @@
+apps/kabas-web-e2e
+apps/polpo-classroom-web-e2e
+apps/timeline-editor-e2e
+
+# TODO: fix project structure. 
+# This file has no project, so nx workspace-lint fails
+libs/pages/settings/pages-settings.theme.scss

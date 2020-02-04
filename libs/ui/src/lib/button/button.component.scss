@@ -12,8 +12,9 @@
 }
 
 :host.ui-button--disabled {
-  pointer-events: visible;
+  pointer-events: none;
   cursor: not-allowed;
+  opacity: 0.32;
 }
 
 :host.ui-button--large {

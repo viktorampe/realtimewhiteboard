@@ -33,9 +33,9 @@ export interface State extends EntityState<UnlockedContentInterface> {
  * a sortComparer option which is set to a compare
  * function if the records are to be sorted.
  */
-export const adapter: EntityAdapter<
+export const adapter: EntityAdapter<UnlockedContentInterface> = createEntityAdapter<
   UnlockedContentInterface
-> = createEntityAdapter<UnlockedContentInterface>({
+>({
   sortComparer: sortByIndex
 });
 

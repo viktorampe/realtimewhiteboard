@@ -373,6 +373,17 @@ describe('GlobalSearchViewModel', () => {
 
       expect(spy).toHaveBeenCalledWith(null, eduContent.id, null, true);
     });
+
+    it('should open eduContent as an image', () => {
+      const eduContent = new EduContentFixture({
+        id: 4
+      });
+      const spy = jest.spyOn(openStaticContentService, 'open');
+
+      globalSearchViewModel.previewEduContentAsImage(eduContent);
+
+      expect(spy).toHaveBeenCalledWith(eduContent, false, true);
+    });
   });
 
   function loadInStore() {}

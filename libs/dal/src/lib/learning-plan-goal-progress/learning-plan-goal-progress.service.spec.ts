@@ -193,7 +193,8 @@ describe('LearningPlanGoalProgressService', () => {
       const id = 16;
       const progresses: (
         | LearningPlanGoalProgressWithEduContentTocInterface
-        | LearningPlanGoalProgressWithUserLessonInterface)[] = [
+        | LearningPlanGoalProgressWithUserLessonInterface
+      )[] = [
         {
           classGroupId: 10,
           learningPlanGoalId: 37,

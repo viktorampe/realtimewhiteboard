@@ -93,7 +93,10 @@ describe('SearchViewModel', () => {
     beforeEach(() => {
       const searchState: SearchStateInterface = {
         from: 10,
-        filterCriteriaSelections: new Map([['foo', [3]], ['bar', [4, 5, 6]]])
+        filterCriteriaSelections: new Map([
+          ['foo', [3]],
+          ['bar', [4, 5, 6]]
+        ])
       } as SearchStateInterface;
       searchViewModel.reset(mockSearchMode, searchState);
     });
@@ -665,7 +668,12 @@ describe('SearchViewModel', () => {
           ];
           const searchResults = getTestSearchResult(
             'updatingFilter',
-            new Map([[122, 30], [140, 40], [3048, 390], [1999, 1]])
+            new Map([
+              [122, 30],
+              [140, 40],
+              [3048, 390],
+              [1999, 1]
+            ])
           );
           const searchState = getTestSearchState('updatingFilter', [
             140,

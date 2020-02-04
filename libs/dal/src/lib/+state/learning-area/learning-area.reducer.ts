@@ -27,9 +27,9 @@ export interface State extends EntityState<LearningAreaInterface> {
  * a sortComparer option which is set to a compare
  * function if the records are to be sorted.
  */
-export const adapter: EntityAdapter<
+export const adapter: EntityAdapter<LearningAreaInterface> = createEntityAdapter<
   LearningAreaInterface
-> = createEntityAdapter<LearningAreaInterface>();
+>();
 
 /**
  * getInitialState returns the default initial state
