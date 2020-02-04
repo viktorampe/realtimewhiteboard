@@ -622,7 +622,7 @@ describe('ManageKabasTasksDetailComponent', () => {
             );
           });
 
-          it('should have a tooltip when there are no assignees', () => {
+          it('should have a tooltip when there are no solution files', () => {
             viewModel.eduContentHasSolution = jest.fn().mockReturnValue(false);
             updateCurrentTask(currentTask);
             fixture.detectChanges();

@@ -9,3 +9,9 @@ export interface EduFileInterface {
   eduContentMetadataId?: number;
   eduContentMetadata?: EduContentMetadataInterface;
 }
+
+export enum EduFileTypeEnum {
+  EXERCISE = 'exercise',
+  SOLUTION = 'solution',
+  TIMELINE = 'timeline'
+}

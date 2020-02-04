@@ -1,30 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { MAT_DATE_LOCALE } from '@angular/material';
-import {
-  AuthServiceInterface,
-  AUTH_SERVICE_TOKEN,
-  DalState,
-  EduContentFixture,
-  EffectFeedback,
-  EffectFeedbackActions,
-  FavoriteActions,
-  FavoriteTypesEnum,
-  getRouterState,
-  PersonFixture,
-  TaskActions,
-  TaskEduContentActions,
-  TaskEduContentFixture,
-  TaskFixture,
-  TaskServiceInterface,
-  TASK_SERVICE_TOKEN,
-  UserQueries
-} from '@campus/dal';
-import {
-  OpenStaticContentServiceInterface,
-  OPEN_STATIC_CONTENT_SERVICE_TOKEN,
-  ScormExerciseServiceInterface,
-  SCORM_EXERCISE_SERVICE_TOKEN
-} from '@campus/shared';
+import { AuthServiceInterface, AUTH_SERVICE_TOKEN, DalState, EduContentFixture, EduContentMetadataFixture, EduFileFixture, EduFileTypeEnum, EffectFeedback, EffectFeedbackActions, FavoriteActions, FavoriteTypesEnum, getRouterState, PersonFixture, TaskActions, TaskEduContentActions, TaskEduContentFixture, TaskFixture, TaskServiceInterface, TASK_SERVICE_TOKEN, UserQueries } from '@campus/dal';
+import { OpenStaticContentServiceInterface, OPEN_STATIC_CONTENT_SERVICE_TOKEN, ScormExerciseServiceInterface, SCORM_EXERCISE_SERVICE_TOKEN } from '@campus/shared';
 import { MockDate } from '@campus/testing';
 import { Store } from '@ngrx/store';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
@@ -32,10 +9,7 @@ import { hot } from 'jasmine-marbles';
 import { configureTestSuite } from 'ng-bullet';
 import { AssigneeFixture } from '../interfaces/Assignee.fixture';
 import { AssigneeTypesEnum } from '../interfaces/Assignee.interface';
-import {
-  TaskStatusEnum,
-  TaskWithAssigneesInterface
-} from '../interfaces/TaskWithAssignees.interface';
+import { TaskStatusEnum, TaskWithAssigneesInterface } from '../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from './kabas-tasks.viewmodel';
 import { getTaskWithAssignmentAndEduContents } from './kabas-tasks.viewmodel.selectors';
 
@@ -780,13 +754,84 @@ describe('KabasTaskViewModel', () => {
   });
 
   describe('printSolution', () => {
-    it('should call the service with the right arguments', () => {
+    it('should call the service when all edu contents have solution files', () => {
       const task = new TaskFixture({
-        taskEduContents: []
+        taskEduContents: [
+          new TaskEduContentFixture({
+            eduContent: new EduContentFixture(
+              {},
+              new EduContentMetadataFixture({
+                eduFiles: [
+                  new EduFileFixture({ type: EduFileTypeEnum.SOLUTION })
+                ]
+              })
+            )
+          })
+        ]
       }) as TaskWithAssigneesInterface;
       kabasTasksViewModel.printSolution(task);
 
       expect(taskService.printSolution).toHaveBeenCalledWith(task.id);
+    });
+
+    it('should give feedback when there are edu-contents without solution files', () => {
+      const spy = jest.spyOn(store, 'dispatch');
+
+      const task = new TaskFixture({
+        id: 666,
+        taskEduContents: [
+          new TaskEduContentFixture({
+            eduContent: new EduContentFixture(
+              {},
+              new EduContentMetadataFixture({
+                title: 'I am an edu-content without a solution file.',
+                eduFiles: [
+                  new EduFileFixture({ type: EduFileTypeEnum.EXERCISE })
+                ]
+              })
+            )
+          }),
+          new TaskEduContentFixture({
+            eduContent: new EduContentFixture(
+              {},
+              new EduContentMetadataFixture({
+                title: 'I am an edu-content with a solution file.',
+                eduFiles: [
+                  new EduFileFixture({ type: EduFileTypeEnum.SOLUTION }),
+                  new EduFileFixture({ type: EduFileTypeEnum.EXERCISE })
+                ]
+              })
+            )
+          })
+        ]
+      }) as TaskWithAssigneesInterface;
+
+      const expectedFeedback = new EffectFeedback({
+        id: uuid(),
+        triggerAction: new TaskActions.PrintPaperTaskSolution({
+          taskId: 666
+        }),
+        message:
+          '<p>Volgend lesmateriaal heeft geen correctiesleutel:</p><ul><li>I am an edu-content without a solution file.</li></ul>',
+        userActions: [
+          {
+            title: 'Overige afdrukken',
+            userAction: new TaskActions.PrintPaperTaskSolution({
+              taskId: 666
+            })
+          }
+        ],
+        type: 'error'
+      });
+
+      const expectedFeedbackAction = new EffectFeedbackActions.AddEffectFeedback(
+        { effectFeedback: expectedFeedback }
+      );
+
+      kabasTasksViewModel.printSolution(task);
+
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy).toHaveBeenCalledWith(expectedFeedbackAction);
     });
   });
 
