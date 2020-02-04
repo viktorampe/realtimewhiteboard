@@ -311,34 +311,6 @@ describe('ManageKabasTasksDetailComponent', () => {
   });
 
   describe('isNewTask$', () => {
-    it('should be true if currentTaskParams does not have a task id', () => {
-      (viewModel.currentTaskParams$ as BehaviorSubject<CurrentTaskParams>).next(
-        {
-          id: undefined
-        }
-      );
-
-      expect(component.isNewTask$).toBeObservable(
-        hot('a', {
-          a: true
-        })
-      );
-    });
-
-    it('should be false if currentTaskParams has a task id', () => {
-      (viewModel.currentTaskParams$ as BehaviorSubject<CurrentTaskParams>).next(
-        {
-          id: 1
-        }
-      );
-
-      expect(component.isNewTask$).toBeObservable(
-        hot('a', {
-          a: false
-        })
-      );
-    });
-
     it('should call openNewTaskDialog when there is a new task', () => {
       jest.spyOn(component, 'openNewTaskDialog');
 

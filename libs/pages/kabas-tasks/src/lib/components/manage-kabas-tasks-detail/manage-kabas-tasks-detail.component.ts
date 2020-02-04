@@ -1,61 +1,21 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import {
-  Component,
-  Inject,
-  OnInit,
-  QueryList,
-  ViewChild,
-  ViewChildren
-} from '@angular/core';
-import { MatDialog, MatSelectionList } from '@angular/material';
+import { Component, Inject, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { MatDialog } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
-import {
-  EduContent,
-  EduContentInterface,
-  LearningAreaInterface,
-  TaskEduContentInterface,
-  TaskInterface
-} from '@campus/dal';
-import {
-  ButtonToggleFilterComponent,
-  SearchFilterCriteriaInterface,
-  SearchTermComponent
-} from '@campus/search';
-import {
-  ContentActionInterface,
-  ContentActionsServiceInterface,
-  CONTENT_ACTIONS_SERVICE_TOKEN,
-  OpenStaticContentServiceInterface,
-  OPEN_STATIC_CONTENT_SERVICE_TOKEN
-} from '@campus/shared';
+import { EduContent, EduContentInterface, LearningAreaInterface, TaskEduContentInterface, TaskInterface } from '@campus/dal';
+import { ButtonToggleFilterComponent, SearchFilterCriteriaInterface, SearchTermComponent } from '@campus/search';
+import { ContentActionInterface, ContentActionsServiceInterface, CONTENT_ACTIONS_SERVICE_TOKEN, OpenStaticContentServiceInterface, OPEN_STATIC_CONTENT_SERVICE_TOKEN } from '@campus/shared';
 import { ConfirmationModalComponent, SideSheetComponent } from '@campus/ui';
 import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/utils';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import {
-  filter,
-  map,
-  shareReplay,
-  switchMap,
-  take,
-  tap,
-  withLatestFrom
-} from 'rxjs/operators';
-import {
-  AssigneeInterface,
-  AssigneeTypesEnum
-} from '../../interfaces/Assignee.interface';
+import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
+import { filter, map, shareReplay, switchMap, take, tap, withLatestFrom } from 'rxjs/operators';
+import { AssigneeInterface, AssigneeTypesEnum } from '../../interfaces/Assignee.interface';
 import { TaskEduContentWithEduContentInterface } from '../../interfaces/TaskEduContentWithEduContent.interface';
-import {
-  TaskStatusEnum,
-  TaskWithAssigneesInterface
-} from '../../interfaces/TaskWithAssignees.interface';
+import { TaskStatusEnum, TaskWithAssigneesInterface } from '../../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
 import { ManageKabasTasksAssigneeDataInterface } from '../manage-kabas-tasks-assignee-modal/manage-kabas-tasks-assignee-data.interface';
 import { ManageKabasTasksAssigneeModalComponent } from '../manage-kabas-tasks-assignee-modal/manage-kabas-tasks-assignee-modal.component';
-import {
-  NewTaskComponent,
-  NewTaskFormValues
-} from '../new-task/new-task.component';
+import { NewTaskComponent, NewTaskFormValues } from '../new-task/new-task.component';
 import { PrintPaperTaskModalResultEnum } from '../print-paper-task-modal/print-paper-task-modal-result.enum';
 import { PrintPaperTaskModalComponent } from '../print-paper-task-modal/print-paper-task-modal.component';
 import { PrintPaperTaskModalDataInterface } from './../print-paper-task-modal/print-paper-task-modal-data.interface';
@@ -72,7 +32,7 @@ export interface FilterStateInterface {
   templateUrl: './manage-kabas-tasks-detail.component.html',
   styleUrls: ['./manage-kabas-tasks-detail.component.scss']
 })
-export class ManageKabasTasksDetailComponent implements OnInit {
+export class ManageKabasTasksDetailComponent implements OnInit, OnDestroy {
   public assigneeTypesEnum: typeof AssigneeTypesEnum = AssigneeTypesEnum;
 
   public diaboloPhaseFilterCriteria: SearchFilterCriteriaInterface;
@@ -80,22 +40,18 @@ export class ManageKabasTasksDetailComponent implements OnInit {
   public levelFilterCriteria: SearchFilterCriteriaInterface;
   public isReordering = false;
 
-  public isNewTask$: Observable<boolean>;
   public selectableLearningAreas$: Observable<LearningAreaInterface[]>;
   public task$: Observable<TaskWithAssigneesInterface>;
   public reorderableTaskEduContents$ = new BehaviorSubject<
     TaskEduContentWithEduContentInterface[]
   >([]);
-
   public filteredTaskEduContents$: Observable<
     TaskEduContentWithEduContentInterface[]
   >;
   public selectedTaskEduContents: TaskEduContentWithEduContentInterface[] = [];
 
   private filterState$ = new BehaviorSubject<FilterStateInterface>({});
-
-  @ViewChild('taskContent', { static: false })
-  private contentSelectionList: MatSelectionList;
+  private subscriptions = new Subscription();
 
   private sideSheet: SideSheetComponent;
   @ViewChild('taskSidesheet', { static: false })
@@ -122,54 +78,47 @@ export class ManageKabasTasksDetailComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.isNewTask$ = this.viewModel.currentTaskParams$.pipe(
-      map(currentTaskParams => !currentTaskParams.id)
-    );
-
+    // set up filter values
     this.selectableLearningAreas$ = this.viewModel.selectableLearningAreas$;
-    this.task$ = this.viewModel.currentTask$;
     this.diaboloPhaseFilterCriteria = this.getDiaboloPhaseFilterCriteria();
     this.requiredFilterCriteria = this.getRequiredFilterCriteria();
     this.levelFilterCriteria = this.getLevelFilterCriteria();
 
-    this.task$ = this.viewModel.currentTask$.pipe(
-      map(task => {
-        const taskEduContents = task.taskEduContents.map(tE => {
-          return {
-            ...tE,
-            actions: this.contentActionService.getActionsForEduContent(
-              tE.eduContent
-            )
-          };
-        });
-
-        return { ...task, taskEduContents };
-      }),
-      shareReplay(1)
-    );
-
-    this.isNewTask$.pipe(take(1)).subscribe(isNewTask => {
-      if (isNewTask) {
-        this.openNewTaskDialog();
-      }
-    });
-
-    this.task$.subscribe(task => {
-      this.reorderableTaskEduContents$.next([...task.taskEduContents]);
-    });
-
+    this.task$ = this.getCurrentTask$();
     this.filteredTaskEduContents$ = this.getFilteredTaskEduContents$().pipe(
-      tap(taskEduContents => {
-        const selectedIds = this.selectedTaskEduContents.map(
-          selectedTEC => selectedTEC.id
-        );
-
-        this.selectedTaskEduContents = taskEduContents.filter(tEC =>
-          selectedIds.includes(tEC.id)
-        );
-      }),
+      // makes selection list 'remember' selection on re-render
+      tap(
+        taskEduContents => this.setSelectedItems(taskEduContents)
+      ),
       shareReplay(1)
     );
+
+    // checks if a taskId is passed in the url
+    // opens modal to create task, if needed
+    this.subscriptions.add(
+      this.viewModel.currentTaskParams$
+        .pipe(
+          take(1),
+          map(currentTaskParams => !currentTaskParams.id)
+        )
+        .subscribe(isNewTask => {
+          if (isNewTask) {
+            this.openNewTaskDialog();
+          }
+        })
+    );
+
+    // clones taskEduContents so they can be reordered without directly affecting the selection list items
+    // this operation can be canceled
+    this.subscriptions.add(
+      this.task$.subscribe(task => {
+        this.reorderableTaskEduContents$.next([...task.taskEduContents]);
+      })
+    );
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
   }
 
   public onSelectionChange() {
@@ -428,6 +377,13 @@ export class ManageKabasTasksDetailComponent implements OnInit {
     return task.status === TaskStatusEnum.ACTIVE;
   }
 
+  public setTaskEduContentsRequiredState(
+    taskEduContents: TaskEduContentInterface[],
+    value: boolean
+  ) {
+    this.viewModel.updateTaskEduContentsRequired(taskEduContents, !!value);
+  }
+
   private getAssigneeModalData(): Observable<
     ManageKabasTasksAssigneeDataInterface
   > {
@@ -644,10 +600,31 @@ export class ManageKabasTasksDetailComponent implements OnInit {
     };
   }
 
-  public setTaskEduContentsRequiredState(
-    taskEduContents: TaskEduContentInterface[],
-    value: boolean
-  ) {
-    this.viewModel.updateTaskEduContentsRequired(taskEduContents, !!value);
+  private getCurrentTask$() {
+    return this.viewModel.currentTask$.pipe(
+      map(task => {
+        const taskEduContents = task.taskEduContents.map(tE => {
+          return {
+            ...tE,
+            actions: this.contentActionService.getActionsForEduContent(
+              tE.eduContent
+            )
+          };
+        });
+
+        return { ...task, taskEduContents };
+      }),
+      shareReplay(1)
+    );
+  }
+
+  private setSelectedItems(taskEduContents) {
+    const selectedIds = this.selectedTaskEduContents.map(
+      selectedTEC => selectedTEC.id
+    );
+
+    this.selectedTaskEduContents = taskEduContents.filter(tEC =>
+      selectedIds.includes(tEC.id)
+    );
   }
 }
