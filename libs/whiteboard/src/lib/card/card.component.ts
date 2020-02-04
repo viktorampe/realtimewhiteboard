@@ -60,7 +60,7 @@ export class CardComponent implements OnInit, OnChanges {
   onDeleteCard() {
     const dialogRef = this.dialog.open(ConfirmationModalComponent, {
       data: {
-        title: 'Delete confirmation',
+        title: 'Verwijderen bevestigen',
         message: 'Weet u zeker dat u deze kaart wil verwijderen?',
         disableConfirm: false
       }

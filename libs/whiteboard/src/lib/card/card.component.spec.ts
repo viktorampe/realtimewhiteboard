@@ -179,7 +179,7 @@ describe('CardComponent', () => {
     expect(openDialogSpy).toHaveBeenCalledTimes(1);
     expect(openDialogSpy).toHaveBeenCalledWith(ConfirmationModalComponent, {
       data: {
-        title: 'Delete confirmation',
+        title: 'Verwijderen bevestigen',
         message: 'Weet u zeker dat u deze kaart wil verwijderen?',
         disableConfirm: false
       }
