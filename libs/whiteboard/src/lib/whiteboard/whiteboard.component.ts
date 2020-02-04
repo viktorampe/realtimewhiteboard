@@ -66,7 +66,7 @@ export class WhiteboardComponent implements OnInit {
     }
   }
 
-  onDeleteCard(index) {
+  onDeleteCard(card: Card) {
     const dialogRef = this.dialog.open(ConfirmationModalComponent, {
       data: {
         title: 'Verwijderen bevestigen',
@@ -77,7 +77,7 @@ export class WhiteboardComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(deleteConfirmation => {
       if (deleteConfirmation) {
-        this.cards.splice(index, 1);
+        this.cards = this.cards.filter(c => c !== card);
       }
     });
   }

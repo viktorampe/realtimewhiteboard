@@ -17,11 +17,11 @@
   </div>
   <div class="whiteboard-page__workspace" (dblclick)="onDblClick($event)">
     <campus-card
-      *ngFor="let card of cards; let i = index"
+      *ngFor="let card of cards"
       cdkDrag
       (lastColor)="saveLastColor($event)"
       [card]="card"
-      (deleteCard)="onDeleteCard(i)"
+      (deleteCard)="onDeleteCard(card)"
       class="whiteboard-page__card"
     ></campus-card>
     <button

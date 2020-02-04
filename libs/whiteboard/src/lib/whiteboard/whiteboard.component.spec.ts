@@ -12,6 +12,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ConfirmationModalComponent } from '@campus/ui';
 import { configureTestSuite } from 'ng-bullet';
 import { of } from 'rxjs';
+import Card from '../../interfaces/card.interface';
 import { CardComponent } from '../card/card.component';
 import { ColorlistComponent } from '../colorlist/colorlist.component';
 import { ToolbarComponent } from '../toolbar/toolbar.component';
@@ -82,7 +83,7 @@ describe('WhiteboardComponent', () => {
     } as MatDialogRef<ConfirmationModalComponent>;
     openDialogSpy.mockReturnValue(mockDialogRef);
 
-    component.onDeleteCard(0);
+    component.onDeleteCard(null);
 
     expect(openDialogSpy).toHaveBeenCalledTimes(1);
     expect(openDialogSpy).toHaveBeenCalledWith(ConfirmationModalComponent, {
@@ -97,13 +98,15 @@ describe('WhiteboardComponent', () => {
   it('should delete a card from the list of cards when the user confirms', () => {
     const cardsSizeBeforeAdding = component.cards.length;
 
-    component.cards.push({
+    const card: Card = {
       cardContent: '',
       color: null,
       isInputSelected: false,
       top: 0,
       left: 0
-    });
+    };
+
+    component.cards.push(card);
 
     const mockDialogRef = {
       afterClosed: () => of(true), // fake confirmation
@@ -111,19 +114,21 @@ describe('WhiteboardComponent', () => {
     } as MatDialogRef<ConfirmationModalComponent>;
     openDialogSpy.mockReturnValue(mockDialogRef);
 
-    component.onDeleteCard(0);
+    component.onDeleteCard(card);
 
     expect(component.cards.length).toBe(cardsSizeBeforeAdding);
   });
 
   it('should not delete a card from the list of cards when the user does not confirm', () => {
-    component.cards.push({
+    const card: Card = {
       cardContent: '',
       color: null,
       isInputSelected: false,
       top: 0,
       left: 0
-    });
+    };
+
+    component.cards.push(card);
 
     const cardsSizeAfterAdding = component.cards.length;
 
@@ -133,7 +138,7 @@ describe('WhiteboardComponent', () => {
     } as MatDialogRef<ConfirmationModalComponent>;
     openDialogSpy.mockReturnValue(mockDialogRef);
 
-    component.onDeleteCard(0);
+    component.onDeleteCard(card);
 
     expect(component.cards.length).toBe(cardsSizeAfterAdding);
   });
