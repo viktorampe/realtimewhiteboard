@@ -24,4 +24,28 @@ describe('ToolbarComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should emit clickToggleEditIcon when toggleModus is called', () => {
+    spyOn(component.delete, 'emit');
+    component.onDeleteClicked();
+    expect(component.delete.emit).toHaveBeenCalled();
+  });
+
+  it('should emit clickToggleEditIcon when toggleModus is called', () => {
+    spyOn(component.clickColorIcon, 'emit');
+    component.showColor();
+    expect(component.clickColorIcon.emit).toHaveBeenCalled();
+  });
+
+  it('should emit clickToggleEditIcon when toggleModus is called', () => {
+    spyOn(component.clickToggleEditIcon, 'emit');
+    component.toggleModus();
+    expect(component.clickToggleEditIcon.emit).toHaveBeenCalled();
+  });
+
+  it('should emit clickToggleEditIcon when toggleModus is called', () => {
+    spyOn(component.clickToggleView, 'emit');
+    component.toggleView();
+    expect(component.clickToggleView.emit).toHaveBeenCalled();
+  });
 });

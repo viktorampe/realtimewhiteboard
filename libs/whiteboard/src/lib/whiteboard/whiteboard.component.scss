@@ -24,11 +24,13 @@
     flex: 1 1 100%;
     display: flex;
     flex-wrap: wrap;
-    position: relative;
+    justify-content: center;
   }
   &__card {
-    height: fit-content;
-    position: absolute;
+    margin: 20px;
+    height: 350px;
+    width: 300px;
+    box-sizing: border-box;
   }
   &__btnPlus {
     position: absolute;
