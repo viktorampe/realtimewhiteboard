@@ -90,7 +90,7 @@ describe('WhiteboardComponent', () => {
     });
     component.selectCard(component.cards[0]);
 
-    expect(component.cards.length).toBe(cardsSizeBeforeAdding + 1);
+    expect(component.selectedCards.length).toBe(cardsSizeBeforeAdding + 1);
   });
 
   it('should remove a card when checkbox is selected again', () => {

@@ -20,8 +20,8 @@ export class WhiteboardComponent implements OnInit {
     this.isTitleInputSelected = this.title === '';
   }
 
-  cards: Card[]; // maak array van Cards
-  selectedCards: Card[]; // maak array van Cards waar de checkbox selected is
+  cards: Card[];
+  selectedCards: Card[];
 
   lastColor: string;
 

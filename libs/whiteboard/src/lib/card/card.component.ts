@@ -78,7 +78,7 @@ export class CardComponent implements OnInit, OnChanges {
   }
 
   onCheckboxChanged(event) {
-    if (event.target.checked === true) {
+    if (event.target.checked) {
       this.select.emit();
     } else {
       this.deselect.emit();
