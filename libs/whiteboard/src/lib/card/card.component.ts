@@ -21,8 +21,8 @@ export class CardComponent implements OnInit, OnChanges {
   @Input() card: Card;
   @Output() deleteCard = new EventEmitter();
   @Output() lastColor = new EventEmitter<string>();
-  @Output() select = new EventEmitter<Card>();
-  @Output() deselect = new EventEmitter<Card>();
+  @Output() select = new EventEmitter<void>();
+  @Output() deselect = new EventEmitter<void>();
 
   @HostBinding('style.top') topStyle: string;
   @HostBinding('style.left') leftStyle: string;

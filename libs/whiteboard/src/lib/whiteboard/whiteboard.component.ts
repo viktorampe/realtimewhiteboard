@@ -78,12 +78,10 @@ export class WhiteboardComponent implements OnInit {
 
   selectCard(card: Card) {
     this.selectedCards.push(card);
-    console.log(this.selectedCards);
   }
 
   deselectCard(card: Card) {
     this.selectedCards = this.selectedCards.filter(c => c !== card);
-    console.log(this.selectedCards);
   }
   btnDelClicked() {}
 
