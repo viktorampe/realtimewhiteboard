@@ -6,9 +6,9 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
   styleUrls: ['./whiteboard-tools.component.scss']
 })
 export class WhiteboardToolsComponent implements OnInit {
-  @Output() createCard = new EventEmitter();
-  @Output() deleteCards = new EventEmitter();
-  @Output() editCards = new EventEmitter();
+  @Output() createCard = new EventEmitter<void>();
+  @Output() deleteCards = new EventEmitter<void>();
+  @Output() editCards = new EventEmitter<void>();
   constructor() {}
 
   ngOnInit() {}
