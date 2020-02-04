@@ -94,14 +94,8 @@ export class ManageKabasTasksDetailComponent implements OnInit, OnDestroy {
   private filterState$ = new BehaviorSubject<FilterStateInterface>({});
   private subscriptions = new Subscription();
 
-  private sideSheet: SideSheetComponent;
   @ViewChild('taskSidesheet', { static: false })
-  set sideSheetComponent(sidesheet: SideSheetComponent) {
-    this.sideSheet = sidesheet;
-  }
-  get sideSheetComponent() {
-    return this.sideSheet;
-  }
+  public sideSheet: SideSheetComponent;
 
   @ViewChildren(SearchTermComponent)
   private searchTermFilters: QueryList<SearchTermComponent>;

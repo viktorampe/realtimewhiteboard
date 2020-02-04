@@ -1180,11 +1180,11 @@ describe('ManageKabasTasksDetailComponent', () => {
     });
 
     it('should show the sidesheet when the selection changes', () => {
-      jest.spyOn(component.sideSheetComponent, 'toggle');
+      jest.spyOn(component.sideSheet, 'toggle');
 
       component.onSelectionChange();
 
-      expect(component.sideSheetComponent.toggle).toHaveBeenCalledWith(true);
+      expect(component.sideSheet.toggle).toHaveBeenCalledWith(true);
     });
   });
 });
