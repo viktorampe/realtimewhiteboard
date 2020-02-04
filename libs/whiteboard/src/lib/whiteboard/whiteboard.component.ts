@@ -48,7 +48,7 @@ export class WhiteboardComponent implements OnInit {
     this.cards.push({
       color: this.lastColor,
       description: '',
-      image: null,
+      image: '',
       isInputSelected: true,
       top: top,
       left: left,
