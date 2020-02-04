@@ -17,19 +17,8 @@
     [hidden]="colorlistHidden"
   ></campus-colorlist>
   <div class="card__content">
-    <div
-      class="cardImage"
-      [class.view-mode-image]="
-        this.viewModeImage === true && this.card.editMode === false
-      "
-    ></div>
-    <div
-      class="card__input"
-      [ngClass]="{
-        'view-mode-text':
-          this.viewModeImage === false && this.card.editMode === false
-      }"
-    >
+    <div *ngIf="viewModeImage || card.editMode" class="card__image"></div>
+    <div *ngIf="!viewModeImage || card.editMode" class="card__input">
       <textarea
         #inputContent
         *ngIf="card.isInputSelected"
