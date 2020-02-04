@@ -1,62 +1,21 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import {
-  Component,
-  Inject,
-  OnDestroy,
-  OnInit,
-  QueryList,
-  ViewChild,
-  ViewChildren
-} from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
-import {
-  EduContent,
-  EduContentInterface,
-  LearningAreaInterface,
-  TaskEduContentInterface,
-  TaskInterface
-} from '@campus/dal';
-import {
-  ButtonToggleFilterComponent,
-  SearchFilterCriteriaInterface,
-  SearchTermComponent
-} from '@campus/search';
-import {
-  ContentActionInterface,
-  ContentActionsServiceInterface,
-  CONTENT_ACTIONS_SERVICE_TOKEN,
-  OpenStaticContentServiceInterface,
-  OPEN_STATIC_CONTENT_SERVICE_TOKEN
-} from '@campus/shared';
+import { EduContent, EduContentInterface, LearningAreaInterface, TaskEduContentInterface, TaskInterface } from '@campus/dal';
+import { ButtonToggleFilterComponent, SearchFilterCriteriaInterface, SearchTermComponent } from '@campus/search';
+import { ContentActionInterface, ContentActionsServiceInterface, CONTENT_ACTIONS_SERVICE_TOKEN, OpenStaticContentServiceInterface, OPEN_STATIC_CONTENT_SERVICE_TOKEN } from '@campus/shared';
 import { ConfirmationModalComponent, SideSheetComponent } from '@campus/ui';
 import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/utils';
 import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
-import {
-  filter,
-  map,
-  shareReplay,
-  switchMap,
-  take,
-  tap,
-  withLatestFrom
-} from 'rxjs/operators';
-import {
-  AssigneeInterface,
-  AssigneeTypesEnum
-} from '../../interfaces/Assignee.interface';
+import { filter, map, shareReplay, switchMap, take, tap, withLatestFrom } from 'rxjs/operators';
+import { AssigneeInterface, AssigneeTypesEnum } from '../../interfaces/Assignee.interface';
 import { TaskEduContentWithEduContentInterface } from '../../interfaces/TaskEduContentWithEduContent.interface';
-import {
-  TaskStatusEnum,
-  TaskWithAssigneesInterface
-} from '../../interfaces/TaskWithAssignees.interface';
+import { TaskStatusEnum, TaskWithAssigneesInterface } from '../../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
 import { ManageKabasTasksAssigneeDataInterface } from '../manage-kabas-tasks-assignee-modal/manage-kabas-tasks-assignee-data.interface';
 import { ManageKabasTasksAssigneeModalComponent } from '../manage-kabas-tasks-assignee-modal/manage-kabas-tasks-assignee-modal.component';
-import {
-  NewTaskComponent,
-  NewTaskFormValues
-} from '../new-task/new-task.component';
+import { NewTaskComponent, NewTaskFormValues } from '../new-task/new-task.component';
 import { PrintPaperTaskModalResultEnum } from '../print-paper-task-modal/print-paper-task-modal-result.enum';
 import { PrintPaperTaskModalComponent } from '../print-paper-task-modal/print-paper-task-modal.component';
 import { PrintPaperTaskModalDataInterface } from './../print-paper-task-modal/print-paper-task-modal-data.interface';
@@ -129,9 +88,9 @@ export class ManageKabasTasksDetailComponent implements OnInit, OnDestroy {
     this.filteredTaskEduContents$ = this.getFilteredTaskEduContents$().pipe(
       // makes selection list 'remember' selection on re-render
       tap(
-        taskEduContents => this.setSelectedItems(taskEduContents),
-        shareReplay(1)
-      )
+        taskEduContents => this.setSelectedItems(taskEduContents)
+      ),
+      shareReplay(1)
     );
 
     // checks if a taskId is passed in the url
