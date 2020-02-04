@@ -369,4 +369,7 @@ export class MockKabasTasksViewModel
   public openEduContentAsDownload() {}
   public openBoeke() {}
   public previewEduContentAsImage() {}
+  public eduContentHasSolution(): boolean {
+    return true;
+  }
 }

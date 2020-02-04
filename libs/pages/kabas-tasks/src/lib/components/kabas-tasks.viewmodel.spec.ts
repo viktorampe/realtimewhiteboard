@@ -781,9 +781,12 @@ describe('KabasTaskViewModel', () => {
 
   describe('printSolution', () => {
     it('should call the service with the right arguments', () => {
-      kabasTasksViewModel.printSolution(1);
+      const task = new TaskFixture({
+        taskEduContents: []
+      }) as TaskWithAssigneesInterface;
+      kabasTasksViewModel.printSolution(task);
 
-      expect(taskService.printSolution).toHaveBeenCalledWith(1);
+      expect(taskService.printSolution).toHaveBeenCalledWith(task.id);
     });
   });
 
