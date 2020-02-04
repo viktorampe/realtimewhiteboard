@@ -54,9 +54,9 @@ export class CheckboxLineFilterComponent
   }
 
   public reset(emit = true) {
-    this._filterCriteria.values.forEach(e => {
-      e.selected = false;
-      e.prediction = undefined;
+    this._filterCriteria.values.forEach(element => {
+      element.selected = false;
+      element.prediction = undefined;
     });
     this.cd.markForCheck();
     if (emit) this.filterSelectionChange.emit([this.filterCriteria]);
