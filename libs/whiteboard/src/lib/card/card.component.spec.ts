@@ -37,14 +37,6 @@ describe('CardComponent', () => {
       declarations: [CardComponent, ToolbarComponent, ColorlistComponent],
       providers: [
         {
-          provide: MatDialog,
-          useValue: {
-            open: () => ({
-              afterClosed: () => of('test')
-            })
-          }
-        },
-        {
           provide: HAMMER_LOADER,
           useValue: () => new Promise(() => {})
         },
