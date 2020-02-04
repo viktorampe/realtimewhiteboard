@@ -29,15 +29,6 @@ export class CardComponent implements OnInit, OnChanges {
   maxCharacters = 300;
 
   constructor() {
-    this.card = {
-      color: 'white',
-      cardContent: '',
-      isInputSelected: true,
-      editMode: true,
-      top: 0,
-      left: 0
-    };
-
     this.viewModeImage = true;
   }
 
