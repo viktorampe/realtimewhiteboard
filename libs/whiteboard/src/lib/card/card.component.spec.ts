@@ -33,6 +33,7 @@ describe('CardComponent', () => {
     component.card = {
       color: 'white',
       description: '',
+      image: null,
       isInputSelected: true,
       editMode: true,
       top: 0,
