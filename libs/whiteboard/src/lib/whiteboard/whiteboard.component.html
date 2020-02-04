@@ -22,8 +22,8 @@
       (lastColor)="saveLastColor($event)"
       [card]="card"
       (deleteCard)="onDeleteCard(i)"
-      (addSelectedToList)="addSelectedCard($event)"
-      (removeSelectedFromList)="removeSelectedCard($event)"
+      (select)="selectCard(card)"
+      (deselect)="deselectCard(card)"
       class="whiteboard-page__card"
     ></campus-card>
     <button

@@ -74,12 +74,13 @@ export class WhiteboardComponent implements OnInit {
     this.lastColor = color;
   }
 
-  addSelectedCard(card: Card) {
+  selectCard(card: Card) {
     this.selectedCards.push(card);
+    console.log(this.selectedCards);
   }
 
-  removeSelectedCard(card: Card) {
-    const index = this.selectedCards.indexOf(card);
-    this.selectedCards.splice(index, 1);
+  deselectCard(card: Card) {
+    this.selectedCards = this.selectedCards.filter(c => c !== card);
+    console.log(this.selectedCards);
   }
 }

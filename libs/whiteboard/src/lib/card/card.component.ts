@@ -21,8 +21,8 @@ export class CardComponent implements OnInit, OnChanges {
   @Input() card: Card;
   @Output() deleteCard = new EventEmitter();
   @Output() lastColor = new EventEmitter<string>();
-  @Output() addSelectedToList = new EventEmitter<Card>();
-  @Output() removeSelectedFromList = new EventEmitter<Card>();
+  @Output() select = new EventEmitter<Card>();
+  @Output() deselect = new EventEmitter<Card>();
 
   @HostBinding('style.top') topStyle: string;
   @HostBinding('style.left') leftStyle: string;
@@ -79,9 +79,9 @@ export class CardComponent implements OnInit, OnChanges {
 
   onCheckboxChanged(event) {
     if (event.target.checked === true) {
-      this.addSelectedToList.emit(this.card);
+      this.select.emit();
     } else {
-      this.removeSelectedFromList.emit(this.card);
+      this.deselect.emit();
     }
   }
 }
