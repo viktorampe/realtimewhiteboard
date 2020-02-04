@@ -47,7 +47,7 @@ export class WhiteboardComponent implements OnInit {
   addEmptyCard(top: number = 0, left: number = 0) {
     this.cards.push({
       color: this.lastColor,
-      cardContent: '',
+      description: '',
       isInputSelected: true,
       top: top,
       left: left,
