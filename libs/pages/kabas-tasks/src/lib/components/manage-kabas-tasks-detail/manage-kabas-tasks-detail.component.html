@@ -94,7 +94,7 @@
 
         <p>{{ task.learningArea.name }}</p>
         <ng-template #showDates>
-          <p *ngIf="task.startDate"
+          <p data-cy="task-info-date" *ngIf="task.startDate"
             >{{ task.startDate | date: 'dd-MM-yy' }} -
             {{ task.endDate | date: 'dd-MM-yy' }}</p
           >
@@ -337,6 +337,7 @@
         <mat-selection-list
           #taskContent
           class="manage-kabas-tasks-detail__list"
+          data-cy="task-edu-contents-list"
           [class.mat-selection-list--has-selection]="
             !taskContent.selectedOptions.isEmpty()
           "
