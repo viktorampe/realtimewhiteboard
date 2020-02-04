@@ -398,8 +398,11 @@ export class KabasTasksViewModel implements ContentOpenerInterface {
   }
 
   public eduContentHasSolution(eduContent: EduContent): boolean {
-    return eduContent.publishedEduContentMetadata.eduFiles.some(
-      eduFile => eduFile.type === 'solution'
+    return (
+      eduContent.publishedEduContentMetadata.eduFiles &&
+      eduContent.publishedEduContentMetadata.eduFiles.some(
+        eduFile => eduFile.type === 'solution'
+      )
     );
   }
 

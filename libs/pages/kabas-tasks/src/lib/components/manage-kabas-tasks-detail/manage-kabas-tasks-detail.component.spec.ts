@@ -191,7 +191,10 @@ describe('ManageKabasTasksDetailComponent', () => {
 
     mockViewmodel = viewModel as MockKabasTasksViewModel;
     [currentTask, ...restOfTasks] = mockViewmodel.tasksWithAssignments$.value;
+
+    // extra properties added in onInit
     taskEduContents = addActions(currentTask.taskEduContents);
+    currentTask.hasSolutionFiles = true;
   });
 
   it('should create', () => {
@@ -607,6 +610,30 @@ describe('ManageKabasTasksDetailComponent', () => {
             const linkText = link.nativeElement.textContent.trim();
             const expected = 'Correctiesleutel afdrukken';
             expect(linkText).toEqual(expected);
+          });
+
+          it('should be disabled when the task does not have solution files', () => {
+            viewModel.eduContentHasSolution = jest.fn().mockReturnValue(false);
+            updateCurrentTask(currentTask);
+            fixture.detectChanges();
+
+            expect(link.nativeElement.classList).toContain(
+              'manage-kabas-tasks-detail__info__link--disabled'
+            );
+          });
+
+          it('should have a tooltip when there are no assignees', () => {
+            viewModel.eduContentHasSolution = jest.fn().mockReturnValue(false);
+            updateCurrentTask(currentTask);
+            fixture.detectChanges();
+
+            const tooltip: MatTooltip = link.injector.get<MatTooltip>(
+              MatTooltip
+            );
+
+            expect(tooltip.message).toBe(
+              'Het lesmateriaal in deze taak bevat geen correctiesleutels.'
+            );
           });
 
           it('should call the correct handler', () => {

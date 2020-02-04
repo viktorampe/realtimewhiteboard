@@ -55,9 +55,9 @@ import {
   NewTaskComponent,
   NewTaskFormValues
 } from '../new-task/new-task.component';
-import { PrintPaperTaskModalResultEnum } from '../print-paper-task-modal/print-paper-task-modal-result.enum';
 import { PrintPaperTaskModalComponent } from '../print-paper-task-modal/print-paper-task-modal.component';
 import { PrintPaperTaskModalDataInterface } from './../print-paper-task-modal/print-paper-task-modal-data.interface';
+import { PrintPaperTaskModalResultEnum } from './../print-paper-task-modal/print-paper-task-modal-result.enum';
 
 export interface FilterStateInterface {
   searchTerm?: string;
@@ -346,6 +346,10 @@ export class ManageKabasTasksDetailComponent implements OnInit {
 
           if (!task.assignees.length) {
             disable.push(PrintPaperTaskModalResultEnum.WITH_NAMES);
+          }
+
+          if (!task.hasSolutionFiles) {
+            disable.push(PrintPaperTaskModalResultEnum.SOLUTION);
           }
 
           return this.dialog
