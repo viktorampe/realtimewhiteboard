@@ -25,7 +25,7 @@ describe('WhiteboardToolsComponent', () => {
   it('should emit when plus button is clicked', () => {
     spyOn(component.createCard, 'emit');
     const buttons = fixture.debugElement.queryAll(
-      By.css('whiteboard-tools__btn')
+      By.css('.whiteboard-tools__btn')
     );
     const plusBtn = buttons[0].nativeElement;
     plusBtn.click();
@@ -35,7 +35,7 @@ describe('WhiteboardToolsComponent', () => {
   it('should emit when the edit button is clicked', () => {
     spyOn(component.editCards, 'emit');
     const buttons = fixture.debugElement.queryAll(
-      By.css('whiteboard-tools__btn')
+      By.css('.whiteboard-tools__btn')
     );
     const editBtn = buttons[2].nativeElement;
     editBtn.click();
