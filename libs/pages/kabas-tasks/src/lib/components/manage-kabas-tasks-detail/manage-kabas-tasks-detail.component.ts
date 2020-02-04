@@ -1,5 +1,12 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  Inject,
+  OnInit,
+  QueryList,
+  ViewChild,
+  ViewChildren
+} from '@angular/core';
 import { MatDialog, MatSelectionList } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
@@ -9,7 +16,11 @@ import {
   TaskEduContentInterface,
   TaskInterface
 } from '@campus/dal';
-import { SearchFilterCriteriaInterface } from '@campus/search';
+import {
+  ButtonToggleFilterComponent,
+  SearchFilterCriteriaInterface,
+  SearchTermComponent
+} from '@campus/search';
 import {
   ContentActionInterface,
   ContentActionsServiceInterface,
@@ -18,8 +29,16 @@ import {
   OPEN_STATIC_CONTENT_SERVICE_TOKEN
 } from '@campus/shared';
 import { ConfirmationModalComponent, SideSheetComponent } from '@campus/ui';
+import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/utils';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { filter, map, switchMap, take, withLatestFrom } from 'rxjs/operators';
+import {
+  filter,
+  map,
+  shareReplay,
+  switchMap,
+  take,
+  withLatestFrom
+} from 'rxjs/operators';
 import {
   AssigneeInterface,
   AssigneeTypesEnum
@@ -36,11 +55,15 @@ import {
   NewTaskComponent,
   NewTaskFormValues
 } from '../new-task/new-task.component';
+import { PrintPaperTaskModalResultEnum } from '../print-paper-task-modal/print-paper-task-modal-result.enum';
+import { PrintPaperTaskModalComponent } from '../print-paper-task-modal/print-paper-task-modal.component';
+import { PrintPaperTaskModalDataInterface } from './../print-paper-task-modal/print-paper-task-modal-data.interface';
 
-export enum TaskSortEnum {
-  'NAME' = 'NAME',
-  'LEARNINGAREA' = 'LEARNINGAREA',
-  'STARTDATE' = 'STARTDATE'
+export interface FilterStateInterface {
+  searchTerm?: string;
+  diaboloPhase?: number[];
+  required?: boolean[];
+  level?: number[];
 }
 
 @Component({
@@ -49,20 +72,24 @@ export enum TaskSortEnum {
   styleUrls: ['./manage-kabas-tasks-detail.component.scss']
 })
 export class ManageKabasTasksDetailComponent implements OnInit {
-  public TaskSortEnum = TaskSortEnum;
-  public diaboloPhaseFilter: SearchFilterCriteriaInterface;
+  public assigneeTypesEnum: typeof AssigneeTypesEnum = AssigneeTypesEnum;
+
+  public diaboloPhaseFilterCriteria: SearchFilterCriteriaInterface;
+  public requiredFilterCriteria: SearchFilterCriteriaInterface;
+  public levelFilterCriteria: SearchFilterCriteriaInterface;
+  public isReordering = false;
 
   public isNewTask$: Observable<boolean>;
   public selectableLearningAreas$: Observable<LearningAreaInterface[]>;
-  isReordering = false;
-  isPaperTask = true; // replace w/ stream
   public selectedContents$ = new BehaviorSubject<TaskEduContentInterface[]>([]);
   public task$: Observable<TaskWithAssigneesInterface>;
   public reorderableTaskEduContents$ = new BehaviorSubject<
     TaskEduContentWithEduContentInterface[]
   >([]);
 
-  public assigneeTypesEnum: typeof AssigneeTypesEnum = AssigneeTypesEnum;
+  public filteredTaskEduContents$: Observable<TaskEduContentInterface[]>;
+
+  private filterState$ = new BehaviorSubject<FilterStateInterface>({});
 
   @ViewChild('taskContent', { static: false })
   private contentSelectionList: MatSelectionList;
@@ -73,6 +100,12 @@ export class ManageKabasTasksDetailComponent implements OnInit {
     this.sideSheet = sidesheet;
   }
 
+  @ViewChildren(SearchTermComponent)
+  private searchTermFilters: QueryList<SearchTermComponent>;
+
+  @ViewChildren(ButtonToggleFilterComponent)
+  private buttonToggleFilters: QueryList<ButtonToggleFilterComponent>;
+
   constructor(
     private viewModel: KabasTasksViewModel,
     private dialog: MatDialog,
@@ -81,16 +114,21 @@ export class ManageKabasTasksDetailComponent implements OnInit {
     @Inject(CONTENT_ACTIONS_SERVICE_TOKEN)
     private contentActionService: ContentActionsServiceInterface,
     @Inject(OPEN_STATIC_CONTENT_SERVICE_TOKEN)
-    private openStaticContentService: OpenStaticContentServiceInterface
-  ) {
+    private openStaticContentService: OpenStaticContentServiceInterface,
+    @Inject(FILTER_SERVICE_TOKEN) private filterService: FilterServiceInterface
+  ) {}
+
+  ngOnInit() {
     this.isNewTask$ = this.viewModel.currentTaskParams$.pipe(
       map(currentTaskParams => !currentTaskParams.id)
     );
 
     this.selectableLearningAreas$ = this.viewModel.selectableLearningAreas$;
-  }
+    this.task$ = this.viewModel.currentTask$;
+    this.diaboloPhaseFilterCriteria = this.getDiaboloPhaseFilterCriteria();
+    this.requiredFilterCriteria = this.getRequiredFilterCriteria();
+    this.levelFilterCriteria = this.getLevelFilterCriteria();
 
-  ngOnInit() {
     this.task$ = this.viewModel.currentTask$.pipe(
       map(task => {
         const taskEduContents = task.taskEduContents.map(tE => {
@@ -106,36 +144,6 @@ export class ManageKabasTasksDetailComponent implements OnInit {
       })
     );
 
-    this.diaboloPhaseFilter = {
-      name: 'diaboloPhase',
-      label: 'Diabolo-fase',
-      keyProperty: 'id',
-      displayProperty: 'icon',
-      values: [
-        {
-          data: {
-            id: 1,
-            icon: 'diabolo-intro'
-          },
-          visible: true
-        },
-        {
-          data: {
-            id: 2,
-            icon: 'diabolo-midden'
-          },
-          visible: true
-        },
-        {
-          data: {
-            id: 3,
-            icon: 'diabolo-outro'
-          },
-          visible: true
-        }
-      ]
-    };
-
     this.isNewTask$.pipe(take(1)).subscribe(isNewTask => {
       if (isNewTask) {
         this.openNewTaskDialog();
@@ -145,6 +153,10 @@ export class ManageKabasTasksDetailComponent implements OnInit {
     this.task$.subscribe(task => {
       this.reorderableTaskEduContents$.next([...task.taskEduContents]);
     });
+
+    this.filteredTaskEduContents$ = this.getFilteredTaskEduContents$().pipe(
+      shareReplay(1)
+    );
   }
 
   public onSelectionChange() {
@@ -167,7 +179,7 @@ export class ManageKabasTasksDetailComponent implements OnInit {
     this.viewModel.startArchivingTasks(tasks, isArchived);
   }
 
-  clickDeleteTask(task: TaskWithAssigneesInterface) {
+  public clickDeleteTask(task: TaskWithAssigneesInterface) {
     const dialogData = {
       title: 'Taak verwijderen',
       message: 'Ben je zeker dat je de geselecteerde taak wil verwijderen?'
@@ -202,6 +214,63 @@ export class ManageKabasTasksDetailComponent implements OnInit {
     this.viewModel.toggleFavorite(task);
   }
 
+  public searchTermFilterValueChanged(searchTerm: string) {
+    const currentFilterState = this.filterState$.value;
+    const newFilterState = { ...currentFilterState, searchTerm };
+
+    this.filterState$.next(newFilterState);
+  }
+
+  public diaboloPhaseFilterSelectionChanged(
+    diaboloPhaseFilterCriteria: SearchFilterCriteriaInterface[]
+  ) {
+    // emit is always an array with 1 value
+    const diaboloPhaseFilterCriterium = diaboloPhaseFilterCriteria[0];
+
+    const diaboloPhase = diaboloPhaseFilterCriterium.values
+      .filter(value => value.selected)
+      .map(selectedValue => selectedValue.data.id);
+
+    this.updateFilterState({ diaboloPhase });
+  }
+
+  public requiredFilterSelectionChanged(
+    requiredFilterCriteria: SearchFilterCriteriaInterface[]
+  ) {
+    // emit is always an array with 1 value
+    const requiredFilterCriterium = requiredFilterCriteria[0];
+
+    const required = requiredFilterCriterium.values
+      .filter(value => value.selected)
+      .map(selectedValue => selectedValue.data.required);
+
+    this.updateFilterState({ required });
+  }
+
+  public levelFilterSelectionChanged(
+    levelFilterCriteria: SearchFilterCriteriaInterface[]
+  ) {
+    // emit is always an array with 1 value
+    const levelFilterCriterium = levelFilterCriteria[0];
+
+    const level = levelFilterCriterium.values
+      .filter(value => value.selected)
+      .map(selectedValue => selectedValue.data.level);
+
+    this.updateFilterState({ level });
+  }
+
+  public clickResetFilters(): void {
+    [
+      ...this.searchTermFilters.toArray(),
+      ...this.buttonToggleFilters.toArray()
+    ].forEach(searchFilter => {
+      searchFilter.reset(false);
+    });
+
+    this.filterState$.next({});
+  }
+
   public openAssigneeModal() {
     this.getAssigneeModalData()
       .pipe(
@@ -218,57 +287,6 @@ export class ManageKabasTasksDetailComponent implements OnInit {
       .subscribe(([assignees, task]) => {
         if (assignees) this.viewModel.updateTaskAccess(task, assignees);
       });
-  }
-
-  private getAssigneeModalData(): Observable<
-    ManageKabasTasksAssigneeDataInterface
-  > {
-    return combineLatest([
-      this.task$,
-      this.viewModel.classGroups$,
-      this.viewModel.groups$,
-      this.viewModel.students$
-    ]).pipe(
-      take(1),
-      map(([currentTask, classGroups, groups, students]) => {
-        const possibleTaskClassGroups: AssigneeInterface[] = classGroups.map(
-          classGroup => ({
-            type: AssigneeTypesEnum.CLASSGROUP,
-            label: classGroup.name,
-            relationId: classGroup.id
-          })
-        );
-
-        const possibleTaskGroups: AssigneeInterface[] = groups.map(group => ({
-          type: AssigneeTypesEnum.GROUP,
-          label: group.name,
-          relationId: group.id
-        }));
-
-        const possibleTaskStudents: AssigneeInterface[] = students.map(
-          student => ({
-            type: AssigneeTypesEnum.STUDENT,
-            label: student.displayName,
-            relationId: student.id
-          })
-        );
-
-        const data: ManageKabasTasksAssigneeDataInterface = {
-          title: currentTask.name,
-          isPaperTask: currentTask.isPaperTask,
-
-          // all available taskAssignees
-          possibleTaskClassGroups,
-          possibleTaskGroups,
-          possibleTaskStudents,
-
-          // current values in page
-          currentTaskAssignees: currentTask.assignees
-        };
-
-        return data;
-      })
-    );
   }
 
   public openNewTaskDialog() {
@@ -312,6 +330,41 @@ export class ManageKabasTasksDetailComponent implements OnInit {
     );
 
     this.viewModel.updateTaskAccess(task, remainingAssignees);
+  }
+
+  public clickPrintTask() {
+    this.task$
+      .pipe(
+        take(1),
+        switchMap(task => {
+          const disable = [];
+
+          if (!task.assignees.length) {
+            disable.push(PrintPaperTaskModalResultEnum.WITH_NAMES);
+          }
+
+          return this.dialog
+            .open(PrintPaperTaskModalComponent, {
+              data: { disable } as PrintPaperTaskModalDataInterface,
+              panelClass: 'manage-task-detail-print'
+            })
+            .afterClosed() as Observable<PrintPaperTaskModalResultEnum>;
+        }),
+        withLatestFrom(this.task$)
+      )
+      .subscribe(([modalResult, task]) => {
+        switch (modalResult) {
+          case PrintPaperTaskModalResultEnum.WITH_NAMES:
+            this.printTask(task, true);
+            break;
+          case PrintPaperTaskModalResultEnum.WITHOUT_NAMES:
+            this.printTask(task, false);
+            break;
+          case PrintPaperTaskModalResultEnum.SOLUTION:
+            this.printSolution(task);
+            break;
+        }
+      });
   }
 
   public toggleIsReordering() {
@@ -369,6 +422,220 @@ export class ManageKabasTasksDetailComponent implements OnInit {
 
   public isActiveTask(task: TaskWithAssigneesInterface) {
     return task.status === TaskStatusEnum.ACTIVE;
+  }
+
+  private getAssigneeModalData(): Observable<
+    ManageKabasTasksAssigneeDataInterface
+  > {
+    return combineLatest([
+      this.task$,
+      this.viewModel.classGroups$,
+      this.viewModel.groups$,
+      this.viewModel.students$
+    ]).pipe(
+      take(1),
+      map(([currentTask, classGroups, groups, students]) => {
+        const possibleTaskClassGroups: AssigneeInterface[] = classGroups.map(
+          classGroup => ({
+            type: AssigneeTypesEnum.CLASSGROUP,
+            label: classGroup.name,
+            relationId: classGroup.id
+          })
+        );
+
+        const possibleTaskGroups: AssigneeInterface[] = groups.map(group => ({
+          type: AssigneeTypesEnum.GROUP,
+          label: group.name,
+          relationId: group.id
+        }));
+
+        const possibleTaskStudents: AssigneeInterface[] = students.map(
+          student => ({
+            type: AssigneeTypesEnum.STUDENT,
+            label: student.displayName,
+            relationId: student.id
+          })
+        );
+
+        const data: ManageKabasTasksAssigneeDataInterface = {
+          title: currentTask.name,
+          isPaperTask: currentTask.isPaperTask,
+
+          // all available taskAssignees
+          possibleTaskClassGroups,
+          possibleTaskGroups,
+          possibleTaskStudents,
+
+          // current values in page
+          currentTaskAssignees: currentTask.assignees
+        };
+
+        return data;
+      })
+    );
+  }
+
+  private updateFilterState(filterStateChanges) {
+    const currentFilterState = this.filterState$.value;
+    const newFilterState = { ...currentFilterState, ...filterStateChanges };
+
+    this.filterState$.next(newFilterState);
+  }
+
+  private getFilteredTaskEduContents$(): Observable<TaskEduContentInterface[]> {
+    return combineLatest([this.filterState$, this.task$]).pipe(
+      map(([filterState, task]) => {
+        return this.filterTaskEduContents(filterState, task.taskEduContents);
+      })
+    );
+  }
+
+  private filterTaskEduContents(
+    filterState,
+    taskEduContents
+  ): TaskEduContentInterface[] {
+    const filteredTaskEduContents = [...taskEduContents].filter(
+      tEC =>
+        this.filterOnDiaboloPhase(filterState, tEC) &&
+        this.filterOnRequired(filterState, tEC) &&
+        this.filterOnLevel(filterState, tEC) &&
+        this.filterOnTitle(filterState, tEC)
+    );
+
+    return filteredTaskEduContents;
+  }
+
+  private filterOnTitle(
+    filterState: FilterStateInterface,
+    taskEduContent: TaskEduContentInterface
+  ): boolean {
+    return (
+      !filterState.searchTerm ||
+      this.filterService.matchFilters(taskEduContent, {
+        eduContent: {
+          publishedEduContentMetadata: { title: filterState.searchTerm }
+        }
+      })
+    );
+  }
+
+  private filterOnDiaboloPhase(
+    filterState: FilterStateInterface,
+    taskEduContent: TaskEduContentInterface
+  ): boolean {
+    return (
+      !filterState.diaboloPhase ||
+      !filterState.diaboloPhase.length ||
+      filterState.diaboloPhase.includes(
+        taskEduContent.eduContent.publishedEduContentMetadata.diaboloPhaseId
+      )
+    );
+  }
+
+  private filterOnRequired(
+    filterState: FilterStateInterface,
+    taskEduContent: TaskEduContentInterface
+  ): boolean {
+    return (
+      !filterState.required ||
+      !filterState.required.length ||
+      filterState.required.includes(taskEduContent.required)
+    );
+  }
+
+  private filterOnLevel(
+    filterState: FilterStateInterface,
+    taskEduContent: TaskEduContentInterface
+  ): boolean {
+    return (
+      !filterState.level ||
+      !filterState.level.length ||
+      filterState.level.includes(
+        taskEduContent.eduContent.publishedEduContentMetadata.levelId
+      )
+    );
+  }
+
+  private getDiaboloPhaseFilterCriteria(): SearchFilterCriteriaInterface {
+    return {
+      name: 'diaboloPhase',
+      label: 'Diabolo-fase',
+      keyProperty: 'id',
+      displayProperty: 'icon',
+      values: [
+        {
+          data: {
+            id: 1,
+            icon: 'diabolo-intro'
+          },
+          visible: true
+        },
+        {
+          data: {
+            id: 2,
+            icon: 'diabolo-midden'
+          },
+          visible: true
+        },
+        {
+          data: {
+            id: 3,
+            icon: 'diabolo-outro'
+          },
+          visible: true
+        }
+      ]
+    };
+  }
+
+  private getRequiredFilterCriteria(): SearchFilterCriteriaInterface {
+    return {
+      name: 'required',
+      label: 'Moetje-magje',
+      keyProperty: 'required',
+      displayProperty: 'icon',
+      values: [
+        {
+          data: {
+            required: true,
+            icon: 'edu-content:required'
+          },
+          visible: true
+        },
+        {
+          data: {
+            required: false,
+            icon: 'edu-content:optional'
+          },
+          visible: true
+        }
+      ]
+    };
+  }
+
+  private getLevelFilterCriteria(): SearchFilterCriteriaInterface {
+    return {
+      name: 'level',
+      label: 'Moeilijkheidsgraad',
+      keyProperty: 'level',
+      displayProperty: 'icon',
+      values: [
+        {
+          data: {
+            level: 1,
+            icon: 'edu-content:level-basic'
+          },
+          visible: true
+        },
+        {
+          data: {
+            level: 2,
+            icon: 'edu-content:level-advanced'
+          },
+          visible: true
+        }
+      ]
+    };
   }
 
   public setTaskEduContentsRequiredState(

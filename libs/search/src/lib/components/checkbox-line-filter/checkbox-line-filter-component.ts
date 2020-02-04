@@ -48,6 +48,10 @@ export class CheckboxLineFilterComponent
     this.filterSelectionChange.emit([this.filterCriteria]);
   }
 
+  public reset() {
+    throw new Error('Not implemented yet');
+  }
+
   private getFilteredCriterium(
     criterium: SearchFilterCriteriaInterface
   ): SearchFilterCriteriaInterface {
