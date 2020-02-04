@@ -2,13 +2,18 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import {
   MatCardModule,
+  MatDialog,
   MatDialogModule,
+  MatDialogRef,
   MatIconRegistry
 } from '@angular/material';
 import { MatIconModule } from '@angular/material/icon';
 import { By, HAMMER_LOADER } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MockMatIconRegistry } from '@campus/testing';
+import { ConfirmationModalComponent } from '@campus/ui';
 import { configureTestSuite } from 'ng-bullet';
+import { of } from 'rxjs';
 import { ColorlistComponent } from '../colorlist/colorlist.component';
 import { ToolbarComponent } from '../toolbar/toolbar.component';
 import { CardComponent } from './card.component';
@@ -17,11 +22,28 @@ describe('CardComponent', () => {
   let component: CardComponent;
   let fixture: ComponentFixture<CardComponent>;
 
+  let openDialogSpy: jest.SpyInstance;
+  let matDialog: MatDialog;
+
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [MatCardModule, FormsModule, MatIconModule, MatDialogModule],
+      imports: [
+        MatCardModule,
+        FormsModule,
+        MatIconModule,
+        MatDialogModule,
+        BrowserAnimationsModule
+      ],
       declarations: [CardComponent, ToolbarComponent, ColorlistComponent],
       providers: [
+        {
+          provide: MatDialog,
+          useValue: {
+            open: () => ({
+              afterClosed: () => of('test')
+            })
+          }
+        },
         {
           provide: HAMMER_LOADER,
           useValue: () => new Promise(() => {})
@@ -35,6 +57,9 @@ describe('CardComponent', () => {
     fixture = TestBed.createComponent(CardComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+
+    matDialog = TestBed.get(MatDialog);
+    openDialogSpy = matDialog.open = jest.fn();
   });
 
   it('should create', () => {
@@ -148,5 +173,38 @@ describe('CardComponent', () => {
     spyOn(component.lastColor, 'emit');
     component.selectColor('black');
     expect(component.lastColor.emit).toHaveBeenCalledWith('black');
+  });
+
+  it('should open a confirmation dialog if the delete button is clicked', () => {
+    const mockDialogRef = {
+      afterClosed: () => of(false),
+      close: null
+    } as MatDialogRef<ConfirmationModalComponent>;
+    openDialogSpy.mockReturnValue(mockDialogRef);
+
+    component.onDeleteCard();
+
+    expect(openDialogSpy).toHaveBeenCalledTimes(1);
+    expect(openDialogSpy).toHaveBeenCalledWith(ConfirmationModalComponent, {
+      data: {
+        title: 'Delete confirmation',
+        message: 'Weet u zeker dat u deze kaart wil verwijderen?',
+        disableConfirm: false
+      }
+    });
+  });
+
+  it('should emit deleteCard when the user confirms', () => {
+    spyOn(component.deleteCard, 'emit');
+
+    const mockDialogRef = {
+      afterClosed: () => of(true), // fake confirmation
+      close: null
+    } as MatDialogRef<ConfirmationModalComponent>;
+    openDialogSpy.mockReturnValue(mockDialogRef);
+
+    component.onDeleteCard();
+
+    expect(component.deleteCard.emit).toHaveBeenCalledTimes(1);
   });
 });
