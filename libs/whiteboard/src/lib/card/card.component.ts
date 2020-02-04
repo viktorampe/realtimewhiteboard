@@ -9,6 +9,8 @@ import {
   Output,
   ViewChild
 } from '@angular/core';
+import { MatDialog } from '@angular/material';
+import { ConfirmationModalComponent } from '@campus/ui';
 import Card from '../../interfaces/card.interface';
 
 @Component({
@@ -27,7 +29,7 @@ export class CardComponent implements OnInit, OnChanges {
   colorlistHidden: boolean;
   maxCharacters = 300;
 
-  constructor() {
+  constructor(public dialog: MatDialog) {
     this.card = {
       cardContent: '',
       color: 'white',
@@ -56,13 +58,19 @@ export class CardComponent implements OnInit, OnChanges {
   }
 
   onDeleteCard() {
-    const deleteConfirmation = confirm(
-      'Weet u zeker dat u deze kaart wil verwijderen?'
-    );
+    const dialogRef = this.dialog.open(ConfirmationModalComponent, {
+      data: {
+        title: 'Delete confirmation',
+        message: 'Weet u zeker dat u deze kaart wil verwijderen?',
+        disableConfirm: false
+      }
+    });
 
-    if (deleteConfirmation) {
-      this.deleteCard.emit();
-    }
+    dialogRef.afterClosed().subscribe(deleteConfirmation => {
+      if (deleteConfirmation) {
+        this.deleteCard.emit();
+      }
+    });
   }
 
   onDblClick(event) {
