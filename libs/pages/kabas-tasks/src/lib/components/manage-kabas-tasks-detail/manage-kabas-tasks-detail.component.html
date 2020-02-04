@@ -1,54 +1,55 @@
 <campus-page-bar *ngIf="task$ | async as task">
-    <ng-container *ngIf="selectedTaskEduContents.length === 0; else contentSelected">
-      <campus-button
-        class="shared-header__contextual__button smallIcon"
-        iconClass=""
-        ><span>Lesmateriaal toevoegen</span></campus-button
-      >
-      <campus-button
-        *ngIf="!task.isPaperTask"
-        class="shared-header__contextual__button smallIcon"
-        iconClass="results"
-        ><span>Resultaten bekijken</span></campus-button
-      >
-      <campus-button
-        class="shared-header__contextual__button smallIcon"
-        iconClass=""
-        ><span>Doelenmatrix</span></campus-button
-      >
-      <campus-button
-        *ngIf="task.isPaperTask"
-        class="shared-header__contextual__button smallIcon"
-        iconClass="print"
-        (click)="clickPrintTask()"
-        ><span>Print</span></campus-button
-      >
-    </ng-container>
+  <ng-container
+    *ngIf="selectedTaskEduContents.length === 0; else contentSelected"
+  >
+    <campus-button
+      class="shared-header__contextual__button smallIcon"
+      iconClass=""
+      ><span>Lesmateriaal toevoegen</span></campus-button
+    >
+    <campus-button
+      *ngIf="!task.isPaperTask"
+      class="shared-header__contextual__button smallIcon"
+      iconClass="results"
+      ><span>Resultaten bekijken</span></campus-button
+    >
+    <campus-button
+      class="shared-header__contextual__button smallIcon"
+      iconClass=""
+      ><span>Doelenmatrix</span></campus-button
+    >
+    <campus-button
+      *ngIf="task.isPaperTask"
+      class="shared-header__contextual__button smallIcon"
+      iconClass="print"
+      (click)="clickPrintTask()"
+      ><span>Print</span></campus-button
+    >
+  </ng-container>
 
-    <ng-template #contentSelected>
-      <campus-button
-        *ngIf="selectedTaskEduContents.length === 1"
-        class="shared-header__contextual__button smallIcon"
-        iconClass=""
-        (click)="preview(selectedTaskEduContents[0], !!task.isPaperTask)"
-        ><span>{{
-          task.isPaperTask ? 'Voorbeeld' : 'Openen'
-        }}</span></campus-button
-      >
-      <campus-button
-        *ngIf="task.isPaperTask"
-        class="shared-header__contextual__button smallIcon"
-        iconClass=""
-        ><span>Print</span></campus-button
-      >
-      <campus-button
-        class="shared-header__contextual__button smallIcon"
-        iconClass="delete"
-        (click)="clickRemoveTaskEduContents(selectedTaskEduContents)"
-        ><span>Verwijderen</span></campus-button
-      >
-    </ng-template>
-
+  <ng-template #contentSelected>
+    <campus-button
+      *ngIf="selectedTaskEduContents.length === 1"
+      class="shared-header__contextual__button smallIcon"
+      iconClass=""
+      (click)="preview(selectedTaskEduContents[0], !!task.isPaperTask)"
+      ><span>{{
+        task.isPaperTask ? 'Voorbeeld' : 'Openen'
+      }}</span></campus-button
+    >
+    <campus-button
+      *ngIf="task.isPaperTask"
+      class="shared-header__contextual__button smallIcon"
+      iconClass=""
+      ><span>Print</span></campus-button
+    >
+    <campus-button
+      class="shared-header__contextual__button smallIcon"
+      iconClass="delete"
+      (click)="clickRemoveTaskEduContents(selectedTaskEduContents)"
+      ><span>Verwijderen</span></campus-button
+    >
+  </ng-template>
 </campus-page-bar>
 <ng-template #noTask>Deze taak is niet beschikbaar.</ng-template>
 
@@ -65,10 +66,10 @@
   </campus-side-sheet-header>
 
   <campus-side-sheet-body>
-    <div
-      class="manage-kabas-tasks-detail__info"
-    >
-      <ng-container *ngIf="selectedTaskEduContents.length === 0; else contentDetails">
+    <div class="manage-kabas-tasks-detail__info">
+      <ng-container
+        *ngIf="selectedTaskEduContents.length === 0; else contentDetails"
+      >
         <campus-content-editable
           [text]="task.name"
           [placeholder]="'Titel'"
@@ -222,7 +223,10 @@
             *ngIf="selectedTaskEduContents.length === 1; else multipleSelected"
             [value]="selectedTaskEduContents[0].required"
             (change)="
-              setTaskEduContentsRequiredState(selectedTaskEduContents, $event.value)
+              setTaskEduContentsRequiredState(
+                selectedTaskEduContents,
+                $event.value
+              )
             "
           >
             <mat-radio-button
@@ -248,7 +252,10 @@
               >
               <campus-button
                 (click)="
-                  setTaskEduContentsRequiredState(selectedTaskEduContents, false)
+                  setTaskEduContentsRequiredState(
+                    selectedTaskEduContents,
+                    false
+                  )
                 "
                 >Alles magje</campus-button
               >
