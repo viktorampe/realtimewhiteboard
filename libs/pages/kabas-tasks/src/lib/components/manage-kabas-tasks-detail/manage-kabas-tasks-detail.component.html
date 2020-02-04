@@ -342,6 +342,7 @@
 
         <mat-selection-list
           [(ngModel)]="selectedTaskEduContents"
+          (ngModelChange)="onSelectionChange()"
           #taskContent
           class="manage-kabas-tasks-detail__list"
           [class.mat-selection-list--has-selection]="

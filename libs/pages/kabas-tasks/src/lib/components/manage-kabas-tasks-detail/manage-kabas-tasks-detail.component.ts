@@ -131,18 +131,16 @@ export class ManageKabasTasksDetailComponent implements OnInit, OnDestroy {
 
     // checks if a taskId is passed in the url
     // opens modal to create task, if needed
-    this.subscriptions.add(
-      this.viewModel.currentTaskParams$
-        .pipe(
-          take(1),
-          map(currentTaskParams => !currentTaskParams.id)
-        )
-        .subscribe(isNewTask => {
-          if (isNewTask) {
-            this.openNewTaskDialog();
-          }
-        })
-    );
+    this.viewModel.currentTaskParams$
+      .pipe(
+        take(1),
+        map(currentTaskParams => !currentTaskParams.id)
+      )
+      .subscribe(isNewTask => {
+        if (isNewTask) {
+          this.openNewTaskDialog();
+        }
+      });
 
     // clones taskEduContents so they can be reordered without directly affecting the selection list items
     // this operation can be canceled
