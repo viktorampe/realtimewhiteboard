@@ -22,6 +22,8 @@
       (lastColor)="saveLastColor($event)"
       [card]="card"
       (deleteCard)="onDeleteCard(i)"
+      (select)="selectCard(card)"
+      (deselect)="deselectCard(card)"
       class="whiteboard-page__card"
     ></campus-card>
   </div>
