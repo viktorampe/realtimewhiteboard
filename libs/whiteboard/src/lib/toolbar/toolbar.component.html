@@ -5,13 +5,11 @@
     [svgIcon]="'edit'"
   ></mat-icon>
   <mat-icon
-    *ngIf="editMode"
     class="toolbar_icon"
     [svgIcon]="'color'"
     (click)="showColor()"
   ></mat-icon>
   <mat-icon
-    *ngIf="editMode"
     class="toolbar_icon"
     (click)="onDeleteClicked()"
     [svgIcon]="'cancel'"
@@ -19,7 +17,6 @@
 
   <ng-template #noEditMode>
     <mat-icon
-      *ngIf="!editMode"
       class="toolbar_icon"
       id="toggle_icon"
       [svgIcon]="'toggle'"
