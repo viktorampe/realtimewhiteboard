@@ -10,7 +10,6 @@ import { Update } from '@ngrx/entity';
 import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/angular';
 import { hot } from '@nrwl/angular/testing';
-import { TaskWithAssigneesInterface } from 'libs/pages/kabas-tasks/src/lib/interfaces/TaskWithAssignees.interface';
 import { Observable, of } from 'rxjs';
 import { TaskReducer } from '.';
 import {
@@ -608,21 +607,25 @@ describe('TaskEffects', () => {
     });
 
     it('should call taskService.printSolution when all task-edu-contents have a solution file', () => {
-      const task = new TaskFixture({
-        id: 666,
-        taskEduContents: [
-          new TaskEduContentFixture({
-            eduContent: new EduContentFixture(
-              {},
-              new EduContentMetadataFixture({
-                eduFiles: [
-                  new EduFileFixture({ type: EduFileTypeEnum.SOLUTION })
-                ]
-              })
-            )
-          })
-        ]
-      }) as TaskWithAssigneesInterface;
+      const task = {
+        ...new TaskFixture({
+          id: 666,
+          taskEduContents: [
+            new TaskEduContentFixture({
+              eduContent: new EduContentFixture(
+                {},
+                new EduContentMetadataFixture({
+                  eduFiles: [
+                    new EduFileFixture({ type: EduFileTypeEnum.SOLUTION })
+                  ]
+                })
+              )
+            })
+          ]
+        }),
+        eduContentAmount: 555,
+        assignees: []
+      };
 
       const triggerAction = new PrintPaperTaskSolution({
         task
@@ -639,21 +642,25 @@ describe('TaskEffects', () => {
     });
 
     it('should call taskService.printSolution when force flag = true', () => {
-      const task = new TaskFixture({
-        id: 666,
-        taskEduContents: [
-          new TaskEduContentFixture({
-            eduContent: new EduContentFixture(
-              {},
-              new EduContentMetadataFixture({
-                eduFiles: [
-                  new EduFileFixture({ type: EduFileTypeEnum.EXERCISE })
-                ]
-              })
-            )
-          })
-        ]
-      }) as TaskWithAssigneesInterface;
+      const task = {
+        ...new TaskFixture({
+          id: 666,
+          taskEduContents: [
+            new TaskEduContentFixture({
+              eduContent: new EduContentFixture(
+                {},
+                new EduContentMetadataFixture({
+                  eduFiles: [
+                    new EduFileFixture({ type: EduFileTypeEnum.EXERCISE })
+                  ]
+                })
+              )
+            })
+          ]
+        }),
+        eduContentAmount: 555,
+        assignees: []
+      };
 
       const triggerAction = new PrintPaperTaskSolution({
         task,
@@ -671,34 +678,38 @@ describe('TaskEffects', () => {
     });
 
     it('should dispatch a feedback action when not all task-edu-contents have a solution file', () => {
-      const task = new TaskFixture({
-        id: 666,
-        taskEduContents: [
-          new TaskEduContentFixture({
-            eduContent: new EduContentFixture(
-              {},
-              new EduContentMetadataFixture({
-                title: 'I am an edu-content without a solution file.',
-                eduFiles: [
-                  new EduFileFixture({ type: EduFileTypeEnum.EXERCISE })
-                ]
-              })
-            )
-          }),
-          new TaskEduContentFixture({
-            eduContent: new EduContentFixture(
-              {},
-              new EduContentMetadataFixture({
-                title: 'I am an edu-content with a solution file.',
-                eduFiles: [
-                  new EduFileFixture({ type: EduFileTypeEnum.SOLUTION }),
-                  new EduFileFixture({ type: EduFileTypeEnum.EXERCISE })
-                ]
-              })
-            )
-          })
-        ]
-      }) as TaskWithAssigneesInterface;
+      const task = {
+        ...new TaskFixture({
+          id: 666,
+          taskEduContents: [
+            new TaskEduContentFixture({
+              eduContent: new EduContentFixture(
+                {},
+                new EduContentMetadataFixture({
+                  title: 'I am an edu-content without a solution file.',
+                  eduFiles: [
+                    new EduFileFixture({ type: EduFileTypeEnum.EXERCISE })
+                  ]
+                })
+              )
+            }),
+            new TaskEduContentFixture({
+              eduContent: new EduContentFixture(
+                {},
+                new EduContentMetadataFixture({
+                  title: 'I am an edu-content with a solution file.',
+                  eduFiles: [
+                    new EduFileFixture({ type: EduFileTypeEnum.SOLUTION }),
+                    new EduFileFixture({ type: EduFileTypeEnum.EXERCISE })
+                  ]
+                })
+              )
+            })
+          ]
+        }),
+        eduContentAmount: 555,
+        assignees: []
+      };
 
       const triggerAction = new PrintPaperTaskSolution({
         task
