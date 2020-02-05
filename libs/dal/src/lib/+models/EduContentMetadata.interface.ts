@@ -5,12 +5,14 @@ import { EduContentProductTypeInterface } from './EduContentProductType.interfac
 import { EduContentSourceInterface } from './EduContentSource.interface';
 import { EduContentTagInterface } from './EduContentTag.interface';
 import { EduContentTOCInterface } from './EduContentTOC.interface';
+import { EduFileInterface } from './EduFile.interface';
 import { EduNetInterface } from './EduNet.interface';
 import { GradeInterface } from './Grade.interface';
 import { LearningAreaInterface } from './LearningArea.interface';
 import { LearningDomainInterface } from './LearningDomain.interface';
 import { LearningPlanInterface } from './LearningPlan.interface';
 import { MethodInterface } from './Method.interface';
+import { MethodLevelInterface } from './MethodLevel.interface';
 import { PersonInterface } from './Person.interface';
 import { PublisherInterface } from './Publisher.interface';
 import { SchoolTypeInterface } from './SchoolType.interface';
@@ -74,4 +76,6 @@ export interface EduContentMetadataInterface {
   streamable?: boolean;
   eduContentBookId?: number;
   levelId?: number;
+  methodLevel?: MethodLevelInterface;
+  eduFiles?: EduFileInterface[];
 }

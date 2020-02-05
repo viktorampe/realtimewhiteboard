@@ -18,9 +18,9 @@ export interface State extends EntityState<TaskEduContentInterface> {
   error?: any;
 }
 
-export const adapter: EntityAdapter<
+export const adapter: EntityAdapter<TaskEduContentInterface> = createEntityAdapter<
   TaskEduContentInterface
-> = createEntityAdapter<TaskEduContentInterface>({
+>({
   sortComparer: sortByIndex
 });
 

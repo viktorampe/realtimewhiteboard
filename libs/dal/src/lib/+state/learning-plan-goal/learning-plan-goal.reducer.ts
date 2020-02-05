@@ -18,9 +18,9 @@ export interface State extends EntityState<LearningPlanGoalInterface> {
   loadedBooks: Dictionary<number[]>;
 }
 
-export const adapter: EntityAdapter<
+export const adapter: EntityAdapter<LearningPlanGoalInterface> = createEntityAdapter<
   LearningPlanGoalInterface
-> = createEntityAdapter<LearningPlanGoalInterface>();
+>();
 
 export const initialState: State = adapter.getInitialState({
   // additional entity state properties

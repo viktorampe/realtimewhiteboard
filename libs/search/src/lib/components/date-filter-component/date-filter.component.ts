@@ -1,5 +1,6 @@
 import { formatDate } from '@angular/common';
 import {
+  ChangeDetectionStrategy,
   Component,
   EventEmitter,
   HostBinding,
@@ -45,7 +46,8 @@ export interface DateFilterComponentFormValues {
 @Component({
   selector: 'campus-date-filter',
   templateUrl: './date-filter.component.html',
-  styleUrls: ['./date-filter.component.css']
+  styleUrls: ['./date-filter.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DateFilterComponent
   implements SearchFilterComponentInterface, OnInit, OnDestroy {

@@ -256,5 +256,50 @@ describe('Favorite Selectors', () => {
         expect(result).toEqual(expected);
       });
     });
+
+    describe('getTaskFavorites', () => {
+      let mockFavorites: FavoriteInterface[];
+
+      beforeEach(() => {
+        mockFavorites = [
+          new FavoriteFixture({
+            id: 1,
+            type: FavoriteTypesEnum.BOEKE,
+            created: new Date(1)
+          }),
+          new FavoriteFixture({
+            id: 2,
+            type: FavoriteTypesEnum.TASK,
+            created: new Date(2)
+          }),
+          new FavoriteFixture({
+            id: 3,
+            type: FavoriteTypesEnum.AREA,
+            created: new Date(229)
+          }),
+          new FavoriteFixture({
+            id: 4,
+            type: FavoriteTypesEnum.TASK,
+            created: new Date(1)
+          }),
+          new FavoriteFixture({
+            id: 5,
+            type: FavoriteTypesEnum.BUNDLE,
+            created: new Date(114)
+          })
+        ];
+
+        favoriteState = createState(mockFavorites, true, 'no error');
+        storeState = { favorites: favoriteState };
+      });
+
+      it('should return all task favorites', () => {
+        const result = FavoriteQueries.getTaskFavorites(storeState);
+
+        const expected = [mockFavorites[1], mockFavorites[3]];
+
+        expect(result).toEqual(expected);
+      });
+    });
   });
 });

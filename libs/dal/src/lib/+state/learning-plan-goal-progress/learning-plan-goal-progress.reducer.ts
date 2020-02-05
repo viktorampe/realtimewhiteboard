@@ -13,9 +13,9 @@ export interface State extends EntityState<LearningPlanGoalProgressInterface> {
   error?: any;
 }
 
-export const adapter: EntityAdapter<
+export const adapter: EntityAdapter<LearningPlanGoalProgressInterface> = createEntityAdapter<
   LearningPlanGoalProgressInterface
-> = createEntityAdapter<LearningPlanGoalProgressInterface>();
+>();
 
 export const initialState: State = adapter.getInitialState({
   // additional entity state properties

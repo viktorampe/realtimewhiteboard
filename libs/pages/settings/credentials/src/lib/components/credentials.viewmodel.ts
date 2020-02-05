@@ -142,22 +142,19 @@ export class CredentialsViewModel {
   private convertToSingleSignOnProviders(
     environment: EnvironmentSsoInterface
   ): SingleSignOnProviderInterface[] {
-    return Object.keys(environment).reduce(
-      (acc, key) => {
-        const provider = environment[key];
-        if (provider.enabled) {
-          acc.push({
-            name: key,
-            ...provider,
-            className: key + '-btn',
-            description: provider.description || 'Single Sign-On',
-            maxNumberAllowed: provider.maxNumberAllowed || 1
-          });
-        }
-        return acc;
-      },
-      [] as SingleSignOnProviderInterface[]
-    );
+    return Object.keys(environment).reduce((acc, key) => {
+      const provider = environment[key];
+      if (provider.enabled) {
+        acc.push({
+          name: key,
+          ...provider,
+          className: key + '-btn',
+          description: provider.description || 'Single Sign-On',
+          maxNumberAllowed: provider.maxNumberAllowed || 1
+        });
+      }
+      return acc;
+    }, [] as SingleSignOnProviderInterface[]);
   }
 }
 

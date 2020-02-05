@@ -5,9 +5,10 @@ import { FormsModule } from '@angular/forms';
 import { MatCardModule, MatIconModule } from '@angular/material';
 import { CardComponent } from './card/card.component';
 import { ColorlistComponent } from './colorlist/colorlist.component';
-import { ToolbarComponent } from './toolbar/toolbar.component';
-import { WhiteboardComponent } from './whiteboard/whiteboard.component';
 import { ImageDragDirective } from './image-drag.directive';
+import { ToolbarComponent } from './toolbar/toolbar.component';
+import { WhiteboardToolsComponent } from './whiteboard-tools/whiteboard-tools.component';
+import { WhiteboardComponent } from './whiteboard/whiteboard.component';
 
 @NgModule({
   imports: [
@@ -22,7 +23,8 @@ import { ImageDragDirective } from './image-drag.directive';
     CardComponent,
     ToolbarComponent,
     ColorlistComponent,
-    ImageDragDirective
+    ImageDragDirective,
+    WhiteboardToolsComponent
   ],
   exports: [WhiteboardComponent]
 })

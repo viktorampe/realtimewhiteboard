@@ -263,6 +263,10 @@ export class MethodViewModel implements ContentOpenerInterface {
     this.openStaticContentService.open(eduContent);
   }
 
+  public previewEduContentAsImage(eduContent: EduContent): void {
+    this.openStaticContentService.open(eduContent, false, true);
+  }
+
   public onLearningPlanGoalProgressChanged(
     classGroupId: number,
     learningPlanGoalId: number,
@@ -728,19 +732,16 @@ export class MethodViewModel implements ContentOpenerInterface {
   private getGeneralFilesByType(): Observable<Dictionary<EduContent[]>> {
     return this.generalFiles$.pipe(
       map(eduContents => {
-        return eduContents.reduce(
-          (acc, eduContent) => {
-            const productType: number =
-              eduContent.publishedEduContentMetadata.eduContentProductTypeId;
-            if (!acc[productType]) {
-              acc[productType] = [];
-            }
-            acc[productType].push(eduContent);
+        return eduContents.reduce((acc, eduContent) => {
+          const productType: number =
+            eduContent.publishedEduContentMetadata.eduContentProductTypeId;
+          if (!acc[productType]) {
+            acc[productType] = [];
+          }
+          acc[productType].push(eduContent);
 
-            return acc;
-          },
-          {} as Dictionary<EduContent[]>
-        );
+          return acc;
+        }, {} as Dictionary<EduContent[]>);
       })
     );
   }

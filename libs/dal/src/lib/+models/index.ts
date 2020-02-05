@@ -29,6 +29,7 @@ export * from './EduContentSource.interface';
 export * from './EduContentTag.interface';
 export * from './EduContentTOC.interface';
 export * from './EduContentTOCEduContent.interface';
+export * from './EduFile.interface';
 export * from './EduNet.interface';
 export * from './ElasticsearchEduContentMetadata.interface';
 export * from './Email.interface';
