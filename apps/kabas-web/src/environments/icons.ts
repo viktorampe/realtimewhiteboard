@@ -50,6 +50,8 @@ export const icons = {
   star: 'assets/icons/star.svg',
   'star-outline': 'assets/icons/star-border.svg',
   color: 'assets/icons/color_lens.svg',
+  toggle: 'assets/icons/toggle.svg',
+  archive: 'assets/icons/archive.svg',
   'filter:active': 'assets/icons/play_circle_outline-24px.svg',
   'filter:pending': 'assets/icons/pause_circle_outline-24px.svg',
   'filter:finished': 'assets/icons/not_interested-24px.svg',
