@@ -56,15 +56,8 @@ export class CardComponent implements OnInit, OnChanges {
     this.deleteCard.emit();
   }
 
-  onDblClick(event) {
-    const classArray = event.target.className.split(' ');
-    if (
-      classArray.some(
-        e => e === 'cardImage' || e === 'card__input' || e === 'card'
-      )
-    ) {
-      this.toggleEditMode();
-    }
+  onDblClick() {
+    this.toggleEditMode();
   }
 
   showColor() {

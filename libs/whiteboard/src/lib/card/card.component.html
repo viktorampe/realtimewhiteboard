@@ -1,8 +1,4 @@
-<div
-  class="card"
-  (dblclick)="onDblClick($event)"
-  [style.background-color]="this.card.color"
->
+<div class="card" [style.background-color]="this.card.color">
   <input
     type="checkbox"
     class="card__checkbox"
@@ -20,7 +16,7 @@
     (selectedColor)="selectColor($event)"
     [hidden]="colorlistHidden"
   ></campus-colorlist>
-  <div class="card__content">
+  <div class="card__content" (dblclick)="onDblClick($event)">
     <div *ngIf="viewModeImage || card.editMode" class="card__image"></div>
     <div *ngIf="!viewModeImage || card.editMode" class="card__input">
       <textarea

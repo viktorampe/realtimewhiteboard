@@ -113,7 +113,7 @@ describe('CardComponent', () => {
     component.card.editMode = false;
     component.card.description = 'something that is not null';
 
-    const myCard = fixture.debugElement.query(By.css('.card'));
+    const myCard = fixture.debugElement.query(By.css('.card__content'));
     myCard.nativeElement.dispatchEvent(new MouseEvent('dblclick')); // use nativeElement so target is set
     fixture.detectChanges();
 
