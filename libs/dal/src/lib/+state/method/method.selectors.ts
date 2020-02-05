@@ -33,25 +33,13 @@ export const getLoaded = createSelector(
   (state: State) => state.loaded
 );
 
-export const getAll = createSelector(
-  selectMethodState,
-  selectAll
-);
+export const getAll = createSelector(selectMethodState, selectAll);
 
-export const getCount = createSelector(
-  selectMethodState,
-  selectTotal
-);
+export const getCount = createSelector(selectMethodState, selectTotal);
 
-export const getIds = createSelector(
-  selectMethodState,
-  selectIds
-);
+export const getIds = createSelector(selectMethodState, selectIds);
 
-export const getAllEntities = createSelector(
-  selectMethodState,
-  selectEntities
-);
+export const getAllEntities = createSelector(selectMethodState, selectEntities);
 
 /**
  * Utility to return all entities for the provided ids
@@ -180,7 +168,9 @@ export const getMethodWithLearningAreaAndYearByBookId = createSelector(
     eduContentBook: EduContentBookInterface
   ) => {
     const method = methodState.entities[eduContentBook.methodId];
-    return `${method.name} ${yearState.entities[eduContentBook.years[0].id].label} (${learningAreaState.entities[method.learningAreaId].name})`;
+    return `${method.name} ${
+      yearState.entities[eduContentBook.years[0].id].label
+    } (${learningAreaState.entities[method.learningAreaId].name})`;
   }
 );
 
@@ -194,30 +184,27 @@ export const getAllowedMethodYears = createSelector(
     eduContentBooks: EduContentBookInterface[]
   ): MethodYearsInterface[] => {
     return Object.values(
-      eduContentBooks.reduce(
-        (agg, book): MethodYearsKeyValueObject => {
-          if (allowedMethodIds.includes(book.methodId)) {
-            if (!agg[book.methodId])
-              agg[book.methodId] = {
-                id: book.methodId,
-                logoUrl:
-                  'assets/methods/' +
-                  methodState.entities[book.methodId].code +
-                  '.jpg',
-                name: methodState.entities[book.methodId].name,
-                years: []
-              };
-            if (book.years.length > 0)
-              agg[book.methodId].years.push({
-                name: book.years[0].name,
-                id: book.years[0].id,
-                bookId: book.id
-              });
-          }
-          return agg;
-        },
-        {} as MethodYearsKeyValueObject
-      )
+      eduContentBooks.reduce((agg, book): MethodYearsKeyValueObject => {
+        if (allowedMethodIds.includes(book.methodId)) {
+          if (!agg[book.methodId])
+            agg[book.methodId] = {
+              id: book.methodId,
+              logoUrl:
+                'assets/methods/' +
+                methodState.entities[book.methodId].code +
+                '.jpg',
+              name: methodState.entities[book.methodId].name,
+              years: []
+            };
+          if (book.years.length > 0)
+            agg[book.methodId].years.push({
+              name: book.years[0].name,
+              id: book.years[0].id,
+              bookId: book.id
+            });
+        }
+        return agg;
+      }, {} as MethodYearsKeyValueObject)
     ).sort((a, b) => a.name.localeCompare(b.name));
   }
 );

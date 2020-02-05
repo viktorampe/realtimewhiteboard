@@ -1,3 +1,4 @@
+export * from './lib/adapters';
 export { FilterService } from './lib/collections/filter.service';
 export {
   FilterServiceInterface,
@@ -11,12 +12,8 @@ export {
   ObjectPathServiceInterface,
   OBJECT_PATH_SERVICE_TOKEN
 } from './lib/collections/object-path.service.interface';
-export {
-  ClickPreventDefaultDirective
-} from './lib/directives/click-prevent-default.directive';
-export {
-  ClickStopPropagationDirective
-} from './lib/directives/click-stop-propagation.directive';
+export { ClickPreventDefaultDirective } from './lib/directives/click-prevent-default.directive';
+export { ClickStopPropagationDirective } from './lib/directives/click-stop-propagation.directive';
 export * from './lib/forms';
 export { DateFunctions } from './lib/functions/date.functions';
 export { PrimitivePropertiesKeys } from './lib/types/generic.types';

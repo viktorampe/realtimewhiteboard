@@ -256,7 +256,10 @@ describe('EduContentsViewModel', () => {
 
       eduContentsViewModel.saveSearchState({
         searchTerm: 'foo',
-        filterCriteriaSelections: new Map([['bar', [1, 2]], ['baz', [5, 6]]])
+        filterCriteriaSelections: new Map([
+          ['bar', [1, 2]],
+          ['baz', [5, 6]]
+        ])
       });
 
       expect(spyFavAction).toHaveBeenCalledTimes(1);
@@ -316,9 +319,9 @@ describe('EduContentsViewModel', () => {
   });
   describe('getInitialSearchState', () => {
     it('should create the initialState with the correct params data', () => {
-      const mockRouterParams$: Observable<
-        RouterReducerState<RouterStateUrl>
-      > = hot('a-b-c-d-e', {
+      const mockRouterParams$: Observable<RouterReducerState<
+        RouterStateUrl
+      >> = hot('a-b-c-d-e', {
         a: { state: { params: {} } },
         b: { state: { params: { area: '3' } } },
         c: { state: { params: { area: '4', task: '894' } } },
@@ -379,10 +382,9 @@ describe('EduContentsViewModel', () => {
       expect(getInitialSearchStateSpy).toHaveBeenCalledTimes(1);
     });
     it('should call the eduContentService.autoComplete with the correct parameters and return a string[] observable', () => {
-      const mockRouter$: Observable<RouterReducerState<RouterStateUrl>> = hot(
-        'a',
-        { a: { state: { params: {} } } }
-      );
+      const mockRouter$: Observable<RouterReducerState<
+        RouterStateUrl
+      >> = hot('a', { a: { state: { params: {} } } });
       eduContentsViewModel['routerState$'] = mockRouter$;
       const getAutoCompleteSpy = jest.spyOn(eduContentService, 'autoComplete');
       expect(

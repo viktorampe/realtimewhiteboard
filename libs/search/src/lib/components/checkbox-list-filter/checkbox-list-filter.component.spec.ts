@@ -79,13 +79,16 @@ describe('CheckboxListFilterComponentComponent', () => {
             { keyProperty: 'id', displayProperty: 'provider' },
             [
               new SearchFilterCriteriaValuesFixture({
-                data: { id: 1, provider: 'smartschool' }
+                data: { id: 1, provider: 'smartschool' },
+                selected: true
               }),
               new SearchFilterCriteriaValuesFixture({
-                data: { id: 2, provider: 'google' }
+                data: { id: 2, provider: 'google' },
+                selected: true
               }),
               new SearchFilterCriteriaValuesFixture({
-                data: { id: 3, provider: 'facebook' }
+                data: { id: 3, provider: 'facebook' },
+                selected: false
               })
             ]
           )
@@ -101,10 +104,12 @@ describe('CheckboxListFilterComponentComponent', () => {
             { keyProperty: 'id', displayProperty: 'provider' },
             [
               new SearchFilterCriteriaValuesFixture({
-                data: { id: 1, provider: 'smartschool' }
+                data: { id: 1, provider: 'smartschool' },
+                selected: true
               }),
               new SearchFilterCriteriaValuesFixture({
-                data: { id: 2, provider: 'google' }
+                data: { id: 2, provider: 'google' },
+                selected: false
               }),
               new SearchFilterCriteriaValuesFixture({
                 data: { id: 3, provider: 'facebook' }
@@ -116,13 +121,15 @@ describe('CheckboxListFilterComponentComponent', () => {
           data: {
             id: 4,
             name: 'Informatica'
-          }
+          },
+          selected: true
         }),
         new SearchFilterCriteriaValuesFixture({
           data: {
             id: 5,
             name: 'Engels'
-          }
+          },
+          selected: true
         })
       ]
     );
@@ -240,5 +247,13 @@ describe('CheckboxListFilterComponentComponent', () => {
         expected
       ]);
     }));
+  });
+
+  it('should deselect all selected', () => {
+    component.filterCriteria = mockFilterCriteria;
+    component.reset();
+    expect(
+      component.filterCriteria.values.filter(e => e.selected).length
+    ).toEqual(0);
   });
 });

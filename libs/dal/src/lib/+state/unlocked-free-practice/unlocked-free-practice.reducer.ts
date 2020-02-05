@@ -13,9 +13,9 @@ export interface State extends EntityState<UnlockedFreePracticeInterface> {
   error?: any;
 }
 
-export const adapter: EntityAdapter<
+export const adapter: EntityAdapter<UnlockedFreePracticeInterface> = createEntityAdapter<
   UnlockedFreePracticeInterface
-> = createEntityAdapter<UnlockedFreePracticeInterface>();
+>();
 
 export const initialState: State = adapter.getInitialState({
   // additional entity state properties

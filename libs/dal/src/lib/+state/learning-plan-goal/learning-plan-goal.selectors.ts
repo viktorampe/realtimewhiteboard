@@ -15,20 +15,14 @@ export const getError = createSelector(
   (state: State) => state.error
 );
 
-export const getAll = createSelector(
-  selectLearningPlanGoalState,
-  selectAll
-);
+export const getAll = createSelector(selectLearningPlanGoalState, selectAll);
 
 export const getCount = createSelector(
   selectLearningPlanGoalState,
   selectTotal
 );
 
-export const getIds = createSelector(
-  selectLearningPlanGoalState,
-  selectIds
-);
+export const getIds = createSelector(selectLearningPlanGoalState, selectIds);
 
 export const getAllEntities = createSelector(
   selectLearningPlanGoalState,

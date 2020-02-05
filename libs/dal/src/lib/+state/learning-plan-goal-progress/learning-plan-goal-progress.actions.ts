@@ -211,7 +211,8 @@ export class StartAddManyLearningPlanGoalProgresses
     public payload: {
       learningPlanGoalProgresses: (
         | LearningPlanGoalProgressWithEduContentTocInterface
-        | LearningPlanGoalProgressWithUserLessonInterface)[];
+        | LearningPlanGoalProgressWithUserLessonInterface
+      )[];
       personId: number;
       customFeedbackHandlers?: CustomFeedbackHandlersInterface;
     }

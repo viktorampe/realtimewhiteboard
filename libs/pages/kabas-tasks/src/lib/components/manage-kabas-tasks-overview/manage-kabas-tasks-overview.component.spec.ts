@@ -1,8 +1,12 @@
 import { CommonModule } from '@angular/common';
+import { QueryList } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import {
+  MatDialog,
+  MatDialogRef,
   MatIconRegistry,
   MatSelect,
+  MatSelectionList,
   MatSelectModule,
   MatSlideToggleModule
 } from '@angular/material';
@@ -10,6 +14,7 @@ import { By, HAMMER_LOADER } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
+import { TaskFixture } from '@campus/dal';
 import { GuardsModule } from '@campus/guards';
 import { PagesSharedModule } from '@campus/pages/shared';
 import { ButtonToggleFilterComponent, SearchModule } from '@campus/search';
@@ -19,10 +24,10 @@ import {
   SharedModule
 } from '@campus/shared';
 import { MockMatIconRegistry } from '@campus/testing';
-import { UiModule } from '@campus/ui';
+import { ConfirmationModalComponent, UiModule } from '@campus/ui';
 import { hot } from '@nrwl/angular/testing';
 import { configureTestSuite } from 'ng-bullet';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AssigneeTypesEnum } from '../../interfaces/Assignee.interface';
 import {
@@ -45,6 +50,7 @@ describe('ManageKabasTasksOverviewComponent', () => {
   const queryParams: BehaviorSubject<Params> = new BehaviorSubject<Params>({});
   let kabasTasksViewModel: KabasTasksViewModel;
   let router: Router;
+  let matDialog: MatDialog;
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
@@ -62,6 +68,12 @@ describe('ManageKabasTasksOverviewComponent', () => {
       ],
       providers: [
         {
+          provide: MatDialog,
+          useValue: {
+            open: jest.fn
+          }
+        },
+        {
           provide: KabasTasksViewModel,
           useClass: MockKabasTasksViewModel
         },
@@ -70,7 +82,13 @@ describe('ManageKabasTasksOverviewComponent', () => {
           provide: Router,
           useValue: { navigate: jest.fn() }
         },
-        { provide: ActivatedRoute, useValue: { queryParams } },
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            queryParams,
+            snapshot: { queryParams: queryParams.value }
+          }
+        },
 
         { provide: ENVIRONMENT_ICON_MAPPING_TOKEN, useValue: {} },
         { provide: ENVIRONMENT_TESTING_TOKEN, useValue: {} },
@@ -88,6 +106,7 @@ describe('ManageKabasTasksOverviewComponent', () => {
     component = fixture.componentInstance;
     kabasTasksViewModel = TestBed.get(KabasTasksViewModel);
     router = TestBed.get(Router);
+    matDialog = TestBed.get(MatDialog);
     fixture.detectChanges();
   });
 
@@ -763,6 +782,24 @@ describe('ManageKabasTasksOverviewComponent', () => {
           )
         ).toBeObservable(hot('a', { a: [1, 5, 4, 2, 3] }));
       });
+
+      it('should order by favorite, then by name', () => {
+        const mockTasks = [
+          { id: 1, name: 'b', isFavorite: true },
+          { id: 2, name: 'd', isFavorite: false },
+          { id: 3, name: 'c', isFavorite: false },
+          { id: 4, name: 'a', isFavorite: true }
+        ] as TaskWithAssigneesInterface[];
+
+        component.setSortMode(TaskSortEnum.FAVORITE);
+        digitalTasks$.next(mockTasks);
+
+        expect(
+          component.tasksWithAssignments$.pipe(
+            map(tasks => tasks.map(task => task.id))
+          )
+        ).toBeObservable(hot('a', { a: [4, 1, 3, 2] }));
+      });
     });
 
     describe('page events', () => {
@@ -819,4 +856,169 @@ describe('ManageKabasTasksOverviewComponent', () => {
       expect(component.currentTab$).toBeObservable(hot('a', { a: tab }));
     });
   });
+
+  describe('getActions()', () => {
+    const mockTask = new TaskFixture({ id: 666 }) as TaskWithAssigneesInterface;
+    let actions: { label: string; handler: Function }[];
+
+    beforeEach(() => {
+      jest.resetAllMocks();
+    });
+
+    beforeAll(() => {
+      actions = component.getActions(mockTask);
+    });
+
+    it('first action should navigate to task-detail', () => {
+      actions[0].handler();
+      expect(router.navigate).toHaveBeenCalledTimes(1);
+      expect(router.navigate).toHaveBeenCalledWith([
+        'tasks',
+        'manage',
+        mockTask.id
+      ]);
+    });
+  });
+
+  describe('click handlers', () => {
+    describe('clickNewTask', () => {
+      it('should navigate to the correct route', () => {
+        queryParams.next({ tab: 0 });
+        component.clickNewTask();
+
+        expect(router.navigate).toHaveBeenCalledWith(
+          ['tasks', 'manage', 'new'],
+          { queryParams: { digital: true } }
+        );
+      });
+    });
+
+    describe('clickAddDigitalTask', () => {
+      it('should navigate to the correct route', () => {
+        component.clickAddDigitalTask();
+
+        expect(router.navigate).toHaveBeenCalledWith(
+          ['tasks', 'manage', 'new'],
+          { queryParams: { digital: true } }
+        );
+      });
+    });
+
+    describe('clickAddPaperTask', () => {
+      it('should navigate to the correct route', () => {
+        component.clickAddPaperTask();
+
+        expect(router.navigate).toHaveBeenCalledWith(
+          ['tasks', 'manage', 'new'],
+          { queryParams: { paper: true } }
+        );
+      });
+    });
+
+    describe('clickDeleteTasks()', () => {
+      const selectedDigitalTasks = [{ id: 1, name: 'foo' }];
+      const selectedPaperTasks = [{ id: 2, name: 'bar' }];
+
+      const digitalSelectionList = getSelectionListWithSelectedValues(
+        selectedDigitalTasks
+      );
+      const paperSelectionList = getSelectionListWithSelectedValues(
+        selectedPaperTasks
+      );
+
+      const deleteInfoMock = {
+        message: 'foo',
+        disableConfirmButton: false,
+        deletableTasks: [selectedPaperTasks[0]]
+      };
+
+      let openDialogSpy: jest.SpyInstance;
+      let getDeleteInfoSpy: jest.SpyInstance;
+
+      beforeEach(() => {
+        openDialogSpy = jest.spyOn(matDialog, 'open');
+        getDeleteInfoSpy = jest
+          .spyOn(kabasTasksViewModel, 'getDeleteInfo')
+          .mockReturnValue(deleteInfoMock);
+      });
+
+      it('should open a confirmation dialog', () => {
+        setSelectionList(digitalSelectionList);
+
+        const mockDialogRef = {
+          afterClosed: () => of(false),
+          close: null
+        } as MatDialogRef<ConfirmationModalComponent>;
+        openDialogSpy.mockReturnValue(mockDialogRef);
+
+        component.clickDeleteTasks();
+
+        expect(getDeleteInfoSpy).toHaveBeenCalledTimes(1);
+        expect(getDeleteInfoSpy).toHaveBeenCalledWith(selectedDigitalTasks);
+
+        expect(openDialogSpy).toHaveBeenCalledTimes(1);
+        expect(openDialogSpy).toHaveBeenCalledWith(ConfirmationModalComponent, {
+          data: {
+            title: 'Taken verwijderen',
+            message: deleteInfoMock.message,
+            disableConfirm: deleteInfoMock.disableConfirmButton
+          }
+        });
+      });
+
+      it('should call vm.removeTasks when the user confirms', () => {
+        const removeTasksSpy = jest.spyOn(kabasTasksViewModel, 'removeTasks');
+
+        setSelectionList(paperSelectionList);
+
+        const mockDialogRef = {
+          afterClosed: () => of(true), // fake confirmation
+          close: null
+        } as MatDialogRef<ConfirmationModalComponent>;
+        openDialogSpy.mockReturnValue(mockDialogRef);
+
+        component.clickDeleteTasks();
+
+        expect(removeTasksSpy).toHaveBeenCalledTimes(1);
+        expect(removeTasksSpy).toHaveBeenCalledWith([selectedPaperTasks[0]]);
+      });
+
+      it('should not call vm.removeTasks when the user cancels', () => {
+        const removeTasksSpy = jest.spyOn(kabasTasksViewModel, 'removeTasks');
+
+        setSelectionList(paperSelectionList);
+
+        const mockDialogRef = {
+          afterClosed: () => of(false), // fake cancel
+          close: null
+        } as MatDialogRef<ConfirmationModalComponent>;
+        openDialogSpy.mockReturnValue(mockDialogRef);
+
+        component.clickDeleteTasks();
+
+        expect(removeTasksSpy).not.toHaveBeenCalled();
+      });
+    });
+  });
+
+  function setSelectionList(selection: MatSelectionList) {
+    const queryList = new QueryList<MatSelectionList>();
+    queryList.reset([selection]);
+    component.taskLists = queryList;
+    fixture.detectChanges();
+  }
+
+  function getSelectionListWithSelectedValues(
+    selectedValues
+  ): MatSelectionList {
+    const mockSelectionList: MatSelectionList = {
+      selectedOptions: {
+        selected: selectedValues.map(task => {
+          return { value: task };
+        })
+      }
+    } as MatSelectionList;
+
+    return mockSelectionList;
+  }
 });

@@ -1,4 +1,12 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Inject,
+  Input,
+  OnInit,
+  Output
+} from '@angular/core';
 import { SearchFilterComponentInterface } from '../../interfaces';
 import { SearchFilterCriteriaInterface } from './../../interfaces/search-filter-criteria.interface';
 
@@ -25,6 +33,8 @@ export class CheckboxListFilterComponent
   @Output()
   filterSelectionChange = new EventEmitter<SearchFilterCriteriaInterface[]>();
 
+  constructor(@Inject(ChangeDetectorRef) private cd: ChangeDetectorRef) {}
+
   ngOnInit() {
     this.calculateHasPredictions();
   }
@@ -50,5 +60,18 @@ export class CheckboxListFilterComponent
     setTimeout(() => {
       this.filterSelectionChange.emit([this.filterCriteria]);
     });
+  }
+
+  public reset(emit = true) {
+    const resetFCV = value => {
+      value.selected = false;
+      value.prediction = undefined;
+      if (value.child) {
+        value.child.values.forEach(resetFCV);
+      }
+    };
+    this.filterCriteria.values.forEach(resetFCV);
+    this.cd.markForCheck();
+    if (emit) this.filterSelectionChange.emit([this.filterCriteria]);
   }
 }

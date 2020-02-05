@@ -1,7 +1,10 @@
 import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   EventEmitter,
   HostBinding,
+  Inject,
   Input,
   Output
 } from '@angular/core';
@@ -14,7 +17,8 @@ import {
 @Component({
   selector: 'campus-checkbox-line-filter',
   templateUrl: './checkbox-line-filter-component.html',
-  styleUrls: ['./checkbox-line-filter-component.scss']
+  styleUrls: ['./checkbox-line-filter-component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CheckboxLineFilterComponent
   implements SearchFilterComponentInterface {
@@ -39,6 +43,7 @@ export class CheckboxLineFilterComponent
     return true;
   }
 
+  constructor(@Inject(ChangeDetectorRef) private cd: ChangeDetectorRef) {}
   public getDisplayValue(value: SearchFilterCriteriaValuesInterface): string {
     return value.data[this.filterCriteria.displayProperty];
   }
@@ -46,6 +51,15 @@ export class CheckboxLineFilterComponent
   public itemChanged(value: SearchFilterCriteriaValuesInterface) {
     value.selected = !value.selected;
     this.filterSelectionChange.emit([this.filterCriteria]);
+  }
+
+  public reset(emit = true) {
+    this._filterCriteria.values.forEach(element => {
+      element.selected = false;
+      element.prediction = undefined;
+    });
+    this.cd.markForCheck();
+    if (emit) this.filterSelectionChange.emit([this.filterCriteria]);
   }
 
   private getFilteredCriterium(

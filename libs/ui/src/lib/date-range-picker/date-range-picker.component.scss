@@ -1,0 +1,13 @@
+.ui-date-range-picker {
+  display: flex;
+  flex-direction: row;
+
+  &--vertical {
+    flex-direction: column;
+  }
+
+  &__section {
+    display: flex;
+    flex-direction: row;
+  }
+}

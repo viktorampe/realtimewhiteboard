@@ -13,9 +13,9 @@ export interface State extends EntityState<EduContentProductTypeInterface> {
   error?: any;
 }
 
-export const adapter: EntityAdapter<
+export const adapter: EntityAdapter<EduContentProductTypeInterface> = createEntityAdapter<
   EduContentProductTypeInterface
-> = createEntityAdapter<EduContentProductTypeInterface>();
+>();
 
 export const initialState: State = adapter.getInitialState({
   // additional entity state properties

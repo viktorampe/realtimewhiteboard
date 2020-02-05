@@ -43,7 +43,7 @@
   <mat-tab-group
     [selectedIndex]="currentTab$ | async"
     (selectedIndexChange)="onSelectedTabIndexChanged($event)"
-    (animationDone)="onTabAnimationDone()"
+    animationDuration="0ms"
   >
     <mat-tab label="Digitale taken">
       <div class="manage-kabas-tasks-overview__filterbar">
@@ -122,37 +122,40 @@
             <mat-option [value]="TaskSortEnum.STARTDATE">
               Start datum
             </mat-option>
+            <mat-option [value]="TaskSortEnum.FAVORITE">
+              Favoriet
+            </mat-option>
           </mat-select>
         </div>
         <ng-container *ngIf="digitalFilteredTasks$ | async as digitalTasks">
           <div
             class="manage-kabas-tasks-overview__filterbar__result"
             *ngIf="digitalTasks.length; else noResults"
-            >Je hebt {{ digitalTasks.length }}
+            >{{ digitalTasks.length }}
             {{ digitalTasks.length > 1 ? 'resultaten' : 'resultaat' }}.</div
           >
         </ng-container>
       </div>
-
+      <div
+        (click)="clickAddDigitalTask()"
+        class="manage-kabas-tasks-overview__list__primary-action"
+      >
+        <mat-icon svgIcon="add"></mat-icon>
+        Nieuwe taak
+      </div>
       <mat-selection-list
         #digital
         [class.mat-selection-list--has-selection]="
           !digital.selectedOptions.isEmpty()
         "
       >
-        <mat-list-item
-          (click)="clickAddDigitalTask()"
-          class="manage-kabas-tasks-overview__list__primary-action"
-        >
-          <mat-icon svgIcon="add"></mat-icon>
-          nieuwe taak
-        </mat-list-item>
         <ng-container *ngIf="tasksWithAssignments$ | async as digitalTasks">
           <mat-list-option
             #option
             *ngFor="let task of digitalTasks"
             checkboxPosition="before"
             [class.mat-list-option--selected]="option.selected"
+            [value]="task"
           >
             <campus-task-list-item
               [title]="task.name"
@@ -163,8 +166,10 @@
               [startDate]="task.startDate"
               [endDate]="task.endDate"
               [status]="task.status"
-              [actions]="getActions(task)"
+              [actions]="task.actions"
               [assignees]="task.assignees"
+              [isFavorite]="task.isFavorite"
+              (clickToggleFavorite)="clickToggleFavorite(task)"
             ></campus-task-list-item>
           </mat-list-option>
         </ng-container>
@@ -228,13 +233,16 @@
             <mat-option [value]="TaskSortEnum.LEARNINGAREA">
               Leergebied
             </mat-option>
+            <mat-option [value]="TaskSortEnum.FAVORITE">
+              Favoriet
+            </mat-option>
           </mat-select>
         </div>
         <ng-container *ngIf="paperFilteredTasks$ | async as paperTasks">
           <div
             class="manage-kabas-tasks-overview__filterbar__result"
             *ngIf="paperTasks.length; else noResults"
-            >Je hebt {{ paperTasks.length }}
+            >{{ paperTasks.length }}
             {{ paperTasks.length > 1 ? 'resultaten' : 'resultaat' }}.</div
           >
         </ng-container>
@@ -243,26 +251,26 @@
           <p>De toegepaste filter bevat geen resultaten.</p>
         </ng-template>
       </div>
-
+      <div
+        (click)="clickAddPaperTask()"
+        class="manage-kabas-tasks-overview__list__primary-action"
+      >
+        <mat-icon svgIcon="add"></mat-icon>
+        Nieuwe taak
+      </div>
       <mat-selection-list
         #paper
         [class.mat-selection-list--has-selection]="
           !digital.selectedOptions.isEmpty()
         "
       >
-        <mat-list-item
-          (click)="clickAddPaperTask()"
-          class="manage-kabas-tasks-overview__list__primary-action"
-        >
-          <mat-icon svgIcon="add"></mat-icon>
-          nieuwe taak
-        </mat-list-item>
         <ng-container *ngIf="paperTasksWithAssignments$ | async as paperTasks">
           <mat-list-option
             #option
             *ngFor="let task of paperTasks"
             checkboxPosition="before"
             [class.mat-list-option--selected]="option.selected"
+            [value]="task"
           >
             <campus-task-list-item
               [title]="task.name"
@@ -273,8 +281,10 @@
               [startDate]="task.startDate"
               [endDate]="task.endDate"
               [status]="'paper'"
-              [actions]="getActions()"
+              [actions]="task.actions"
               [assignees]="task.assignees"
+              [isFavorite]="task.isFavorite"
+              (clickToggleFavorite)="clickToggleFavorite(task)"
             ></campus-task-list-item>
           </mat-list-option>
         </ng-container>

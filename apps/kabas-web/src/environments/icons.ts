@@ -28,7 +28,8 @@ export const icons = {
   edit: 'assets/icons/material/edit.svg',
   filter: 'assets/icons/filter.svg',
   context_menu: 'assets/icons/material/more_vert.svg',
-  favorites: 'assets/icons/assets/icons/favorite.svg',
+  favorites: 'assets/icons/favorite.svg',
+  'favorites-filled': 'assets/icons/material/favorite-filled.svg',
   check: 'assets/icons/check.svg',
   close: 'assets/icons/close.svg',
   history: 'assets/icons/history.svg',
@@ -36,6 +37,7 @@ export const icons = {
   'reset-filters': 'assets/icons/material/reset.svg',
   'general-file': 'assets/icons/general-file.svg',
   method: 'assets/icons/methods.svg',
+  'drag-handle': 'assets/icons/drag-handle.svg',
   //TODO: These are TEMPORARY SVGs for Diabolo that I made from the PNGs
   //get the OFFICIAL files from Antoon later
   'diabolo-intro': 'assets/icons/diabolo/intro.svg',
@@ -48,6 +50,8 @@ export const icons = {
   star: 'assets/icons/star.svg',
   'star-outline': 'assets/icons/star-border.svg',
   color: 'assets/icons/color_lens.svg',
+  toggle: 'assets/icons/toggle.svg',
+  archive: 'assets/icons/archive.svg',
   'filter:active': 'assets/icons/play_circle_outline-24px.svg',
   'filter:pending': 'assets/icons/pause_circle_outline-24px.svg',
   'filter:finished': 'assets/icons/not_interested-24px.svg',
@@ -56,6 +60,12 @@ export const icons = {
   'task:pending': 'assets/icons/task-pending.svg',
   'task:finished': 'assets/icons/task-finished.svg',
   'task:paper': 'assets/icons/task-paper.svg',
+  photolibrary: 'assets/icons/photo_library.svg',
+  print: 'assets/icons/printer.svg',
+  'edu-content:required': 'assets/icons/star.svg', //TODO placeholder
+  'edu-content:optional': 'assets/icons/star-border.svg', //TODO placeholder
+  'edu-content:level-basic': 'assets/icons/play_arrow.svg', //TODO placeholder, name needs work
+  'edu-content:level-advanced': 'assets/icons/fast_forward.svg', //TODO placeholder, name needs work
 
   // search: sort modes
   'sort-numeric-down': 'assets/icons/sort-numeric-down.svg',

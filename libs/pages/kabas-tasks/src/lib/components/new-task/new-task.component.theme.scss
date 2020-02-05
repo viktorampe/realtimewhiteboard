@@ -1,0 +1,72 @@
+@mixin pages-kabas-tasks-new-task-theme {
+  $pages-kabas-tasks-new-task-theme__mat-radio-button-margin-right: 16px !default;
+
+  .pages-kabas-tasks-new-task {
+    &__dialog {
+      .mat-dialog {
+        &-container {
+          padding: 0px;
+          overflow-y: hidden;
+          border-radius: 0px;
+        }
+
+        &-content {
+          padding: 0 !important;
+          margin: 0 !important;
+        }
+
+        &-actions {
+          margin-bottom: 0;
+
+          campus-button {
+            min-width: 95px;
+            font-size: 16px;
+          }
+        }
+      }
+
+      form {
+        padding: 16px;
+      }
+
+      .info-panel {
+        margin: 0px;
+
+        &__body {
+          padding: 0px;
+        }
+
+        mat-radio-button {
+          margin-right: 16px;
+        }
+      }
+    }
+  }
+}
+
+@media #{$ui-breakpoint-xsmall} {
+  .pages-kabas-tasks-new-task {
+    &__dialog {
+      max-width: 100vw !important;
+      max-height: 100vh;
+      width: 100%;
+      height: 100%;
+
+      .info-panel {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+      }
+
+      .pages-kabas-tasks-new-task__info-panel {
+        display: flex;
+        flex-direction: column;
+        flex: 1 1 0;
+      }
+
+      .mat-dialog-content {
+        max-height: 100%;
+      }
+    }
+  }
+}

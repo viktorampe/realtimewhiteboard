@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'campus-toolbar',
@@ -6,8 +6,13 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
   styleUrls: ['./toolbar.component.scss']
 })
 export class ToolbarComponent implements OnInit {
-  @Output() delete = new EventEmitter();
+  @Output() delete = new EventEmitter<void>();
   @Output() clickColorIcon = new EventEmitter<void>();
+  @Output() clickToggleEditIcon = new EventEmitter<void>();
+  @Output() clickToggleView = new EventEmitter<void>();
+  @Output() clickImageSettings = new EventEmitter<void>();
+
+  @Input() editMode: boolean;
 
   constructor() {}
 
@@ -18,5 +23,17 @@ export class ToolbarComponent implements OnInit {
   }
   showColor() {
     this.clickColorIcon.emit();
+  }
+
+  toggleModus() {
+    this.clickToggleEditIcon.emit();
+  }
+
+  toggleView() {
+    this.clickToggleView.emit();
+  }
+
+  imageSettingsClicked() {
+    this.clickImageSettings.emit();
   }
 }
