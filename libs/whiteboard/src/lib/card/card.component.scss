@@ -28,6 +28,10 @@
     display: flex;
     flex-direction: column;
 
+    p {
+      word-break: break-all;
+    }
+
     &__errorMessage {
       color: #dc3545;
     }
@@ -49,6 +53,7 @@
 
       textarea {
         height: 100%;
+        width: 100%;
       }
     }
   }
