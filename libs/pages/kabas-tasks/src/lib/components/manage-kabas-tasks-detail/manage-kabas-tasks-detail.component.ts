@@ -433,8 +433,8 @@ export class ManageKabasTasksDetailComponent implements OnInit {
   private hasSolutionFiles(
     taskEduContents: TaskEduContentWithEduContentInterface[]
   ): boolean {
-    return taskEduContents.some(taskEduContent =>
-      this.viewModel.eduContentHasSolution(taskEduContent.eduContent)
+    return taskEduContents.some(
+      taskEduContent => taskEduContent.eduContent.hasSolutionFile
     );
   }
 

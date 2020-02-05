@@ -397,60 +397,12 @@ export class KabasTasksViewModel implements ContentOpenerInterface {
     this.taskService.printTask(taskId, withNames);
   }
 
-  public eduContentHasSolution(eduContent: EduContent): boolean {
-    return (
-      eduContent.publishedEduContentMetadata.eduFiles &&
-      eduContent.publishedEduContentMetadata.eduFiles.some(
-        eduFile => eduFile.type === 'solution'
-      )
-    );
-  }
-
   public printSolution(task: TaskWithAssigneesInterface) {
-    // check for solution files
-    const eduContentWithSolutions = [];
-    const eduContentWithoutSolutions = [];
-
-    task.taskEduContents.forEach(taskEduContent => {
-      if (this.eduContentHasSolution(taskEduContent.eduContent)) {
-        eduContentWithSolutions.push(taskEduContent.eduContent);
-      } else {
-        eduContentWithoutSolutions.push(taskEduContent.eduContent);
-      }
-    });
-
-    if (!eduContentWithoutSolutions.length) {
-      // no problem
-      this.taskService.printSolution(task.id);
-    } else {
-      // show banner
-      const effectFeedback = new EffectFeedback({
-        id: this.uuid(),
-        triggerAction: new TaskActions.PrintPaperTaskSolution({
-          taskId: task.id
-        }),
-        message: this.getNoSolutionFileFeedbackMessage(
-          eduContentWithoutSolutions
-        ),
-        userActions: eduContentWithSolutions.length
-          ? [
-              {
-                title: 'Overige afdrukken',
-                userAction: new TaskActions.PrintPaperTaskSolution({
-                  taskId: task.id
-                })
-              }
-            ]
-          : [],
-        type: 'error'
-      });
-
-      const feedbackAction = new EffectFeedbackActions.AddEffectFeedback({
-        effectFeedback
-      });
-
-      this.store.dispatch(feedbackAction);
-    }
+    this.store.dispatch(
+      new TaskActions.PrintPaperTaskSolution({
+        task
+      })
+    );
   }
 
   private getArchivingAction(updates, errors): Action {
@@ -522,21 +474,6 @@ export class KabasTasksViewModel implements ContentOpenerInterface {
     message.push('<ul>');
     message.push(...list);
     message.push('</ul>');
-    return message.join('');
-  }
-
-  private getNoSolutionFileFeedbackMessage(errors: EduContent[]): string {
-    const list = errors.map(error => {
-      return `<li>${error.name}</li>`;
-    });
-
-    const message = [
-      `<p>Volgend lesmateriaal heeft geen correctiesleutel:</p>`
-    ];
-    message.push('<ul>');
-    message.push(...list);
-    message.push('</ul>');
-
     return message.join('');
   }
 

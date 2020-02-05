@@ -1,5 +1,6 @@
 import { Update } from '@ngrx/entity';
 import { Action } from '@ngrx/store';
+import { TaskWithAssigneesInterface } from 'libs/pages/kabas-tasks/src/lib/interfaces/TaskWithAssignees.interface';
 import {
   TaskClassGroupInterface,
   TaskGroupInterface,
@@ -184,7 +185,8 @@ export class PrintPaperTaskSolution implements FeedbackTriggeringAction {
 
   constructor(
     public payload: {
-      taskId: number;
+      task: TaskWithAssigneesInterface;
+      force?: boolean;
       customFeedbackHandlers?: CustomFeedbackHandlersInterface;
     }
   ) {}

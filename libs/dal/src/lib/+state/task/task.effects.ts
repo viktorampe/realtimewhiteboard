@@ -5,11 +5,11 @@ import { Actions, createEffect, Effect, ofType } from '@ngrx/effects';
 import { Update } from '@ngrx/entity';
 import { Action } from '@ngrx/store';
 import { DataPersistence } from '@nrwl/angular';
-import { from } from 'rxjs';
+import { from, of } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
-import { DalState } from '..';
+import { DalActions, DalState } from '..';
 import { BulkUpdateResultInfoInterface } from '../../+external-interfaces/bulk-update-result-info';
-import { TaskInterface } from '../../+models';
+import { EduContent, TaskInterface } from '../../+models';
 import {
   TaskActiveErrorInterface,
   TaskServiceInterface,
@@ -311,15 +311,62 @@ export class TaskEffects {
     })
   );
 
-  printPaperTaskSolution$ = createEffect(
-    () =>
-      this.actions.pipe(
-        ofType(TasksActionTypes.PrintPaperTaskSolution),
-        tap((action: PrintPaperTaskSolution) => {
-          this.taskService.printSolution(action.payload.taskId);
-        })
-      ),
-    { dispatch: false }
+  printPaperTaskSolution$ = createEffect(() =>
+    this.actions.pipe(
+      ofType(TasksActionTypes.PrintPaperTaskSolution),
+      map((action: PrintPaperTaskSolution) => {
+        const task = action.payload.task;
+
+        // check for solution files
+        const eduContentWithSolutions = [];
+        const eduContentWithoutSolutions = [];
+
+        task.taskEduContents.forEach(taskEduContent => {
+          if (taskEduContent.eduContent.hasSolutionFile) {
+            eduContentWithSolutions.push(taskEduContent.eduContent);
+          } else {
+            eduContentWithoutSolutions.push(taskEduContent.eduContent);
+          }
+        });
+
+        if (!eduContentWithoutSolutions.length || action.payload.force) {
+          // no problem
+          this.taskService.printSolution(task.id);
+          return new DalActions.ActionSuccessful({
+            successfulAction: TasksActionTypes.PrintPaperTaskSolution
+          });
+        } else {
+          // show banner
+          const effectFeedback = new EffectFeedback({
+            id: this.uuid(),
+            triggerAction: new PrintPaperTaskSolution({
+              task
+            }),
+            message: this.getNoSolutionFileFeedbackMessage(
+              eduContentWithoutSolutions
+            ),
+            userActions: eduContentWithSolutions.length
+              ? [
+                  {
+                    title: 'Overige afdrukken',
+                    userAction: new PrintPaperTaskSolution({
+                      task,
+                      force: true
+                    })
+                  }
+                ]
+              : [],
+            type: 'error'
+          });
+
+          const feedbackAction = new EffectFeedbackActions.AddEffectFeedback({
+            effectFeedback
+          });
+
+          return feedbackAction;
+        }
+      })
+    )
   );
 
   private getTaskUpdateSuccessMessage(
@@ -411,7 +458,19 @@ export class TaskEffects {
         `Het is niet gelukt om de taken ${methodVerbs[method]}.`
       )
     });
-    return feedbackAction;
+    return of(feedbackAction);
+  }
+
+  private getNoSolutionFileFeedbackMessage(errors: EduContent[]): string {
+    const list = errors.map(error => {
+      return `<li>${error.name}</li>`;
+    });
+
+    const message = [
+      `<p>Volgend lesmateriaal heeft geen correctiesleutel:</p>`
+    ];
+    message.push('<ul>', ...list, '</ul>');
+    return message.join('');
   }
 
   /* Small helpers */
