@@ -60,6 +60,7 @@ export const icons = {
   'task:pending': 'assets/icons/task-pending.svg',
   'task:finished': 'assets/icons/task-finished.svg',
   'task:paper': 'assets/icons/task-paper.svg',
+  photolibrary: 'assets/icons/photo_library.svg',
   print: 'assets/icons/printer.svg',
   'edu-content:required': 'assets/icons/star.svg', //TODO placeholder
   'edu-content:optional': 'assets/icons/star-border.svg', //TODO placeholder

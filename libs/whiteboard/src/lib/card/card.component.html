@@ -9,6 +9,7 @@
     (clickColorIcon)="showColor()"
     (clickToggleEditIcon)="toggleEditMode()"
     (clickToggleView)="toggleView()"
+    (clickImageSettings)="showImageSettings()"
     class="card__toolbar"
     (delete)="onDeleteCard()"
   ></campus-toolbar>
@@ -17,7 +18,11 @@
     [hidden]="colorlistHidden"
   ></campus-colorlist>
   <div class="card__content">
-    <div *ngIf="viewModeImage || card.editMode" class="card__image"></div>
+    <div
+      *ngIf="viewModeImage || card.editMode"
+      class="card__image"
+      [ngStyle]="{ 'background-image': 'url(' + card.image + ')' }"
+    ></div>
     <div *ngIf="!viewModeImage || card.editMode" class="card__input">
       <textarea
         #inputContent

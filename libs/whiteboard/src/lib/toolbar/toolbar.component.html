@@ -20,6 +20,12 @@
   <mat-icon
     *ngIf="editMode"
     class="toolbar_icon"
+    (click)="imageSettingsClicked()"
+    [svgIcon]="'photolibrary'"
+  ></mat-icon>
+  <mat-icon
+    *ngIf="editMode"
+    class="toolbar_icon"
     (click)="onDeleteClicked()"
     [svgIcon]="'cancel'"
   ></mat-icon>

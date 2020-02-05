@@ -48,7 +48,8 @@ export class WhiteboardComponent implements OnInit {
     this.cards.push({
       color: this.lastColor,
       description: '',
-      image: '',
+      image:
+        'https://www.cimec.co.za/wp-content/uploads/2018/07/4-Unique-Placeholder-Image-Services-for-Designers.png',
       isInputSelected: true,
       top: top,
       left: left,
