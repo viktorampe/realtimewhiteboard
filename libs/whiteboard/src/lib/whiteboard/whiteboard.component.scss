@@ -25,9 +25,11 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+    position: relative;
   }
+
   &__card {
-    margin: 20px;
+    position: absolute;
     height: 350px;
     width: 300px;
     box-sizing: border-box;
