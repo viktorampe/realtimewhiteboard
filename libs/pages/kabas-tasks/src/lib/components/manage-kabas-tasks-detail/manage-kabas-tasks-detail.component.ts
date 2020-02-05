@@ -87,7 +87,9 @@ export class ManageKabasTasksDetailComponent implements OnInit {
     TaskEduContentWithEduContentInterface[]
   >([]);
 
-  public filteredTaskEduContents$: Observable<TaskEduContentInterface[]>;
+  public filteredTaskEduContents$: Observable<
+    TaskEduContentWithEduContentInterface[]
+  >;
 
   private filterState$ = new BehaviorSubject<FilterStateInterface>({});
 
@@ -124,7 +126,6 @@ export class ManageKabasTasksDetailComponent implements OnInit {
     );
 
     this.selectableLearningAreas$ = this.viewModel.selectableLearningAreas$;
-    this.task$ = this.viewModel.currentTask$;
     this.diaboloPhaseFilterCriteria = this.getDiaboloPhaseFilterCriteria();
     this.requiredFilterCriteria = this.getRequiredFilterCriteria();
     this.levelFilterCriteria = this.getLevelFilterCriteria();
@@ -500,7 +501,9 @@ export class ManageKabasTasksDetailComponent implements OnInit {
     this.filterState$.next(newFilterState);
   }
 
-  private getFilteredTaskEduContents$(): Observable<TaskEduContentInterface[]> {
+  private getFilteredTaskEduContents$(): Observable<
+    TaskEduContentWithEduContentInterface[]
+  > {
     return combineLatest([this.filterState$, this.task$]).pipe(
       map(([filterState, task]) => {
         return this.filterTaskEduContents(filterState, task.taskEduContents);
@@ -510,8 +513,8 @@ export class ManageKabasTasksDetailComponent implements OnInit {
 
   private filterTaskEduContents(
     filterState,
-    taskEduContents
-  ): TaskEduContentInterface[] {
+    taskEduContents: TaskEduContentWithEduContentInterface[]
+  ): TaskEduContentWithEduContentInterface[] {
     const filteredTaskEduContents = [...taskEduContents].filter(
       tEC =>
         this.filterOnDiaboloPhase(filterState, tEC) &&
@@ -525,7 +528,7 @@ export class ManageKabasTasksDetailComponent implements OnInit {
 
   private filterOnTitle(
     filterState: FilterStateInterface,
-    taskEduContent: TaskEduContentInterface
+    taskEduContent: TaskEduContentWithEduContentInterface
   ): boolean {
     return (
       !filterState.searchTerm ||
@@ -539,7 +542,7 @@ export class ManageKabasTasksDetailComponent implements OnInit {
 
   private filterOnDiaboloPhase(
     filterState: FilterStateInterface,
-    taskEduContent: TaskEduContentInterface
+    taskEduContent: TaskEduContentWithEduContentInterface
   ): boolean {
     return (
       !filterState.diaboloPhase ||
@@ -552,7 +555,7 @@ export class ManageKabasTasksDetailComponent implements OnInit {
 
   private filterOnRequired(
     filterState: FilterStateInterface,
-    taskEduContent: TaskEduContentInterface
+    taskEduContent: TaskEduContentWithEduContentInterface
   ): boolean {
     return (
       !filterState.required ||
@@ -563,7 +566,7 @@ export class ManageKabasTasksDetailComponent implements OnInit {
 
   private filterOnLevel(
     filterState: FilterStateInterface,
-    taskEduContent: TaskEduContentInterface
+    taskEduContent: TaskEduContentWithEduContentInterface
   ): boolean {
     return (
       !filterState.level ||
