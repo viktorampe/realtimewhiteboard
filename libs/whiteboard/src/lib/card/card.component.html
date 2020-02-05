@@ -51,7 +51,7 @@
       <p
         *ngIf="card.isInputSelected && !card.description && txtContent.dirty"
         class="card__content__errorMessage"
-        id="errorMissingContent"
+        data-cy="errorMissingContent"
       >
         Er moet tekst ingevuld zijn.
       </p>

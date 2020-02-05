@@ -62,18 +62,20 @@ describe('CardComponent', () => {
   it('should show errormessage when input is maximal', () => {
     component.card.description = 'a'.repeat(component.maxCharacters);
     fixture.detectChanges();
-    const errorMessage = fixture.debugElement.query(By.css('#errorMaximum'));
+    const errorMessage = fixture.debugElement.query(
+      By.css('.card__content__errorMessage')
+    );
     expect(errorMessage).not.toBeNull();
   });
 
-  it('should show errormessage when no image or text is provided', () => {
-    component.card.cardContent = '';
+  it('should show errormessage when no text is provided', () => {
+    component.card.description = '';
     component.txtContent.markAsDirty();
 
     fixture.detectChanges();
 
     const errorMessage = fixture.debugElement.query(
-      By.css('#errorMissingContent')
+      By.css('[data-cy="errorMissingContent"]')
     );
     expect(errorMessage).not.toBeNull();
   });
