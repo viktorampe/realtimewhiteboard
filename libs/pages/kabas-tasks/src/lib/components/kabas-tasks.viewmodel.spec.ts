@@ -783,8 +783,11 @@ describe('KabasTaskViewModel', () => {
   });
 
   describe('printSolution', () => {
-    it('should call the service when all edu contents have solution files', () => {
+    it('should dispatch an print-paper-task-solution action', () => {
+      const spy = jest.spyOn(store, 'dispatch');
+
       const task = new TaskFixture({
+        id: 666,
         taskEduContents: [
           new TaskEduContentFixture({
             eduContent: new EduContentFixture(
@@ -800,67 +803,10 @@ describe('KabasTaskViewModel', () => {
       }) as TaskWithAssigneesInterface;
       kabasTasksViewModel.printSolution(task);
 
-      expect(taskService.printSolution).toHaveBeenCalledWith(task.id);
-    });
-
-    it('should give feedback when there are edu-contents without solution files', () => {
-      const spy = jest.spyOn(store, 'dispatch');
-
-      const task = new TaskFixture({
-        id: 666,
-        taskEduContents: [
-          new TaskEduContentFixture({
-            eduContent: new EduContentFixture(
-              {},
-              new EduContentMetadataFixture({
-                title: 'I am an edu-content without a solution file.',
-                eduFiles: [
-                  new EduFileFixture({ type: EduFileTypeEnum.EXERCISE })
-                ]
-              })
-            )
-          }),
-          new TaskEduContentFixture({
-            eduContent: new EduContentFixture(
-              {},
-              new EduContentMetadataFixture({
-                title: 'I am an edu-content with a solution file.',
-                eduFiles: [
-                  new EduFileFixture({ type: EduFileTypeEnum.SOLUTION }),
-                  new EduFileFixture({ type: EduFileTypeEnum.EXERCISE })
-                ]
-              })
-            )
-          })
-        ]
-      }) as TaskWithAssigneesInterface;
-
-      const expectedFeedback = new EffectFeedback({
-        id: uuid(),
-        triggerAction: new TaskActions.PrintPaperTaskSolution({
-          taskId: 666
-        }),
-        message:
-          '<p>Volgend lesmateriaal heeft geen correctiesleutel:</p><ul><li>I am an edu-content without a solution file.</li></ul>',
-        userActions: [
-          {
-            title: 'Overige afdrukken',
-            userAction: new TaskActions.PrintPaperTaskSolution({
-              taskId: 666
-            })
-          }
-        ],
-        type: 'error'
+      const expectedAction = new TaskActions.PrintPaperTaskSolution({
+        task
       });
-
-      const expectedFeedbackAction = new EffectFeedbackActions.AddEffectFeedback(
-        { effectFeedback: expectedFeedback }
-      );
-
-      kabasTasksViewModel.printSolution(task);
-
-      expect(spy).toHaveBeenCalledTimes(1);
-      expect(spy).toHaveBeenCalledWith(expectedFeedbackAction);
+      expect(spy).toHaveBeenCalledWith(expectedAction);
     });
   });
 

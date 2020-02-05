@@ -10,22 +10,32 @@ import { Update } from '@ngrx/entity';
 import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/angular';
 import { hot } from '@nrwl/angular/testing';
+import { TaskWithAssigneesInterface } from 'libs/pages/kabas-tasks/src/lib/interfaces/TaskWithAssignees.interface';
 import { Observable, of } from 'rxjs';
 import { TaskReducer } from '.';
 import {
+  EduContentFixture,
+  EduContentMetadataFixture,
+  EduFileFixture,
   TaskClassGroupFixture,
+  TaskEduContentFixture,
   TaskFixture,
   TaskGroupFixture,
   TaskStudentFixture
 } from '../../+fixtures';
-import { TaskInterface } from '../../+models';
+import { EduFileTypeEnum, TaskInterface } from '../../+models';
 import {
   TaskServiceInterface,
   TASK_SERVICE_TOKEN,
   UpdateTaskResultInterface
 } from '../../tasks/task.service.interface';
 import { UndoService, UNDO_SERVICE_TOKEN } from '../../undo';
-import { EffectFeedback, Priority } from '../effect-feedback';
+import { ActionSuccessful } from '../dal.actions';
+import {
+  EffectFeedback,
+  EffectFeedbackActions,
+  Priority
+} from '../effect-feedback';
 import { AddEffectFeedback } from '../effect-feedback/effect-feedback.actions';
 import { TaskGroupActions } from '../task-group';
 import {
@@ -34,9 +44,11 @@ import {
   LoadTasks,
   NavigateToTaskDetail,
   NavigateToTasksOverview,
+  PrintPaperTaskSolution,
   StartAddTask,
   StartArchiveTasks,
   StartDeleteTasks,
+  TasksActionTypes,
   TasksLoaded,
   TasksLoadError,
   UpdateAccess,
@@ -123,7 +135,8 @@ describe('TaskEffects', () => {
             updateTasks: () => {},
             deleteTasks: () => {},
             createTask: () => {},
-            updateTask: () => {}
+            updateTask: () => {},
+            printSolution: () => {}
           }
         },
         {
@@ -584,6 +597,137 @@ describe('TaskEffects', () => {
       expect(effects.deleteTasks$).toBeObservable(
         hot('(ab)', { a: deleteAction, b: feedbackAction })
       );
+    });
+  });
+
+  describe('printPaperTaskSolution$', () => {
+    let printSolutionSpy: jest.SpyInstance;
+
+    beforeEach(() => {
+      printSolutionSpy = taskService.printSolution = jest.fn();
+    });
+
+    it('should call taskService.printSolution when all task-edu-contents have a solution file', () => {
+      const task = new TaskFixture({
+        id: 666,
+        taskEduContents: [
+          new TaskEduContentFixture({
+            eduContent: new EduContentFixture(
+              {},
+              new EduContentMetadataFixture({
+                eduFiles: [
+                  new EduFileFixture({ type: EduFileTypeEnum.SOLUTION })
+                ]
+              })
+            )
+          })
+        ]
+      }) as TaskWithAssigneesInterface;
+
+      const triggerAction = new PrintPaperTaskSolution({
+        task
+      });
+
+      const output = new ActionSuccessful({
+        successfulAction: TasksActionTypes.PrintPaperTaskSolution
+      });
+
+      expectInAndOut(effects.printPaperTaskSolution$, triggerAction, output);
+
+      expect(printSolutionSpy).toHaveBeenCalledTimes(1);
+      expect(printSolutionSpy).toHaveBeenCalledWith(666);
+    });
+
+    it('should call taskService.printSolution when force flag = true', () => {
+      const task = new TaskFixture({
+        id: 666,
+        taskEduContents: [
+          new TaskEduContentFixture({
+            eduContent: new EduContentFixture(
+              {},
+              new EduContentMetadataFixture({
+                eduFiles: [
+                  new EduFileFixture({ type: EduFileTypeEnum.EXERCISE })
+                ]
+              })
+            )
+          })
+        ]
+      }) as TaskWithAssigneesInterface;
+
+      const triggerAction = new PrintPaperTaskSolution({
+        task,
+        force: true
+      });
+
+      const output = new ActionSuccessful({
+        successfulAction: TasksActionTypes.PrintPaperTaskSolution
+      });
+
+      expectInAndOut(effects.printPaperTaskSolution$, triggerAction, output);
+
+      expect(printSolutionSpy).toHaveBeenCalledTimes(1);
+      expect(printSolutionSpy).toHaveBeenCalledWith(666);
+    });
+
+    it('should dispatch a feedback action when not all task-edu-contents have a solution file', () => {
+      const task = new TaskFixture({
+        id: 666,
+        taskEduContents: [
+          new TaskEduContentFixture({
+            eduContent: new EduContentFixture(
+              {},
+              new EduContentMetadataFixture({
+                title: 'I am an edu-content without a solution file.',
+                eduFiles: [
+                  new EduFileFixture({ type: EduFileTypeEnum.EXERCISE })
+                ]
+              })
+            )
+          }),
+          new TaskEduContentFixture({
+            eduContent: new EduContentFixture(
+              {},
+              new EduContentMetadataFixture({
+                title: 'I am an edu-content with a solution file.',
+                eduFiles: [
+                  new EduFileFixture({ type: EduFileTypeEnum.SOLUTION }),
+                  new EduFileFixture({ type: EduFileTypeEnum.EXERCISE })
+                ]
+              })
+            )
+          })
+        ]
+      }) as TaskWithAssigneesInterface;
+
+      const triggerAction = new PrintPaperTaskSolution({
+        task
+      });
+
+      const expectedFeedback = new EffectFeedback({
+        id: uuid(),
+        triggerAction: new PrintPaperTaskSolution({
+          task
+        }),
+        message:
+          '<p>Volgend lesmateriaal heeft geen correctiesleutel:</p><ul><li>I am an edu-content without a solution file.</li></ul>',
+        userActions: [
+          {
+            title: 'Overige afdrukken',
+            userAction: new PrintPaperTaskSolution({
+              task,
+              force: true
+            })
+          }
+        ],
+        type: 'error'
+      });
+
+      const output = new EffectFeedbackActions.AddEffectFeedback({
+        effectFeedback: expectedFeedback
+      });
+
+      expectInAndOut(effects.printPaperTaskSolution$, triggerAction, output);
     });
   });
 
