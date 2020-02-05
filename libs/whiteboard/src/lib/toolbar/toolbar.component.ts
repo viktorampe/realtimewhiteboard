@@ -10,6 +10,7 @@ export class ToolbarComponent implements OnInit {
   @Output() clickColorIcon = new EventEmitter<void>();
   @Output() clickToggleEditIcon = new EventEmitter<void>();
   @Output() clickToggleView = new EventEmitter<void>();
+  @Output() clickImageSettings = new EventEmitter<void>();
 
   @Input() editMode: boolean;
 
@@ -30,5 +31,9 @@ export class ToolbarComponent implements OnInit {
 
   toggleView() {
     this.clickToggleView.emit();
+  }
+
+  imageSettingsClicked() {
+    this.clickImageSettings.emit();
   }
 }
