@@ -12,7 +12,7 @@ import {
 export class ImageDragDirective {
   @Output() fileDropped = new EventEmitter<any>();
 
-  @HostBinding('style.opacity') private opacity = '1';
+  @HostBinding('class.image-drag-directive-dragging') private dragClass = false;
 
   constructor() {}
 
@@ -20,21 +20,21 @@ export class ImageDragDirective {
   @HostListener('dragover', ['$event']) public onDragOver(evt) {
     evt.preventDefault();
     evt.stopPropagation();
-    this.opacity = '0.8';
+    this.dragClass = true;
   }
 
   //Dragleave listener
   @HostListener('dragleave', ['$event']) public onDragLeave(evt) {
     evt.preventDefault();
     evt.stopPropagation();
-    this.opacity = '1';
+    this.dragClass = false;
   }
 
   //Drop listener
   @HostListener('drop', ['$event']) public ondrop(evt) {
     evt.preventDefault();
     evt.stopPropagation();
-    this.opacity = '1';
+    this.dragClass = false;
     const files = evt.dataTransfer.files;
     if (files.length > 0) {
       this.fileDropped.emit(files);
