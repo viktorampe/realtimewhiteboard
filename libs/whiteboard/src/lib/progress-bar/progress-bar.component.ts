@@ -1,10 +1,4 @@
-import {
-  Component,
-  Input,
-  OnChanges,
-  SimpleChange,
-  SimpleChanges
-} from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 
 @Component({
   selector: 'campus-progress-bar',
@@ -20,15 +14,9 @@ export class ProgressBarComponent implements OnChanges {
   constructor() {}
 
   ngOnChanges(changes: SimpleChanges) {
-    const amountOfImagesChange: SimpleChange = changes.amountOfImages;
-    const amountCompletedChange: SimpleChange = changes.amountCompleted;
-
-    if (
-      amountOfImagesChange.previousValue !==
-        amountOfImagesChange.currentValue ||
-      amountCompletedChange.previousValue !== amountCompletedChange.currentValue
-    )
+    if (changes.amountOfImages || changes.amountCompleted) {
       this.progressPercentage = this.getProgressPercentage();
+    }
   }
 
   getProgressPercentage() {
