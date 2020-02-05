@@ -62,9 +62,11 @@ describe('WhiteboardComponent', () => {
     const cardsSizeBeforeAdding = component.cards.length;
 
     component.cards.push({
-      cardContent: '',
+      description: '',
+      image: null,
       color: null,
       isInputSelected: false,
+      editMode: true,
       top: 0,
       left: 0
     });
