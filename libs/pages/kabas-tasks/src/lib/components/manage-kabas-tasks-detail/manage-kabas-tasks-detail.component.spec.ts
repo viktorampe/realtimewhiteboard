@@ -1,6 +1,7 @@
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { DebugElement } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
+import { FormsModule } from '@angular/forms';
 import {
   MatDialog,
   MatDialogRef,
@@ -119,7 +120,8 @@ describe('ManageKabasTasksDetailComponent', () => {
         UiModule,
         NoopAnimationsModule,
         MatRadioModule,
-        RouterTestingModule
+        RouterTestingModule,
+        FormsModule
       ],
       declarations: [
         ManageKabasTasksDetailComponent,
@@ -308,35 +310,7 @@ describe('ManageKabasTasksDetailComponent', () => {
     });
   });
 
-  describe('isNewTask$', () => {
-    it('should be true if currentTaskParams does not have a task id', () => {
-      (viewModel.currentTaskParams$ as BehaviorSubject<CurrentTaskParams>).next(
-        {
-          id: undefined
-        }
-      );
-
-      expect(component.isNewTask$).toBeObservable(
-        hot('a', {
-          a: true
-        })
-      );
-    });
-
-    it('should be false if currentTaskParams has a task id', () => {
-      (viewModel.currentTaskParams$ as BehaviorSubject<CurrentTaskParams>).next(
-        {
-          id: 1
-        }
-      );
-
-      expect(component.isNewTask$).toBeObservable(
-        hot('a', {
-          a: false
-        })
-      );
-    });
-
+  describe('Calling openNewTaskDialog()', () => {
     it('should call openNewTaskDialog when there is a new task', () => {
       jest.spyOn(component, 'openNewTaskDialog');
 
@@ -487,7 +461,7 @@ describe('ManageKabasTasksDetailComponent', () => {
 
   describe('sidepanel content', () => {
     it('should show the task info in the sidepanel when selection is empty', () => {
-      component.selectedContents$.next([]);
+      component.selectedTaskEduContents = [];
       fixture.detectChanges();
 
       const taskInfoDE = fixture.debugElement.query(
@@ -502,10 +476,10 @@ describe('ManageKabasTasksDetailComponent', () => {
     });
 
     it('should show the educontent info in the sidepanel when there is a selection', () => {
-      component.selectedContents$.next([
+      component.selectedTaskEduContents = [
         createTaskEduContent(1),
         createTaskEduContent(2)
-      ]);
+      ];
       fixture.detectChanges();
 
       const taskInfoDE = fixture.debugElement.query(
@@ -1167,6 +1141,50 @@ describe('ManageKabasTasksDetailComponent', () => {
       component.setTaskEduContentsRequiredState(selectedEduContents, true);
 
       expect(spy).toHaveBeenCalledWith(selectedEduContents, true);
+    });
+  });
+
+  describe('selection', () => {
+    beforeEach(() => {
+      taskEduContents = [
+        createTaskEduContent(1, 'oefening 1'),
+        createTaskEduContent(2, 'oefening 2'),
+        createTaskEduContent(3, 'oefening 3'),
+        createTaskEduContent(4, 'oefening 4')
+      ];
+
+      updateCurrentTask({ ...currentTask, taskEduContents });
+    });
+
+    it('should preserve the selection when receiving TaskEduContents', () => {
+      component.selectedTaskEduContents = [
+        taskEduContents[0],
+        taskEduContents[3]
+      ];
+
+      const newTaskEduContents = [
+        createTaskEduContent(1, 'oefening 1 updated'),
+        createTaskEduContent(2, 'oefening 2 updated'),
+        createTaskEduContent(4, 'oefening 4 updated')
+      ];
+
+      updateCurrentTask({
+        ...currentTask,
+        taskEduContents: newTaskEduContents
+      });
+
+      expect(component.selectedTaskEduContents).toEqual([
+        newTaskEduContents[0],
+        newTaskEduContents[2]
+      ]);
+    });
+
+    it('should show the sidesheet when the selection changes', () => {
+      jest.spyOn(component.sideSheet, 'toggle');
+
+      component.onSelectionChange();
+
+      expect(component.sideSheet.toggle).toHaveBeenCalledWith(true);
     });
   });
 });

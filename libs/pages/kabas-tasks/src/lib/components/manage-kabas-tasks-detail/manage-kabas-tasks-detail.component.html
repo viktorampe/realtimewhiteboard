@@ -1,75 +1,75 @@
 <campus-page-bar *ngIf="task$ | async as task">
-  <ng-container *ngIf="selectedContents$ | async as selectedContents">
-    <ng-container *ngIf="selectedContents.length === 0; else contentSelected">
-      <campus-button
-        class="shared-header__contextual__button smallIcon"
-        iconClass=""
-        ><span>Lesmateriaal toevoegen</span></campus-button
-      >
-      <campus-button
-        *ngIf="!task.isPaperTask"
-        class="shared-header__contextual__button smallIcon"
-        iconClass="results"
-        ><span>Resultaten bekijken</span></campus-button
-      >
-      <campus-button
-        class="shared-header__contextual__button smallIcon"
-        iconClass=""
-        ><span>Doelenmatrix</span></campus-button
-      >
-      <campus-button
-        *ngIf="task.isPaperTask"
-        class="shared-header__contextual__button smallIcon"
-        iconClass="print"
-        (click)="clickPrintTask()"
-        ><span>Print</span></campus-button
-      >
-    </ng-container>
-
-    <ng-template #contentSelected>
-      <campus-button
-        *ngIf="selectedContents.length === 1"
-        class="shared-header__contextual__button smallIcon"
-        iconClass=""
-        (click)="preview(selectedContents[0], !!task.isPaperTask)"
-        ><span>{{
-          task.isPaperTask ? 'Voorbeeld' : 'Openen'
-        }}</span></campus-button
-      >
-      <campus-button
-        *ngIf="task.isPaperTask"
-        class="shared-header__contextual__button smallIcon"
-        iconClass=""
-        ><span>Print</span></campus-button
-      >
-      <campus-button
-        class="shared-header__contextual__button smallIcon"
-        iconClass="delete"
-        (click)="clickRemoveTaskEduContents(selectedContents)"
-        ><span>Verwijderen</span></campus-button
-      >
-    </ng-template>
+  <ng-container
+    *ngIf="selectedTaskEduContents.length === 0; else contentSelected"
+  >
+    <campus-button
+      class="shared-header__contextual__button smallIcon"
+      iconClass=""
+      ><span>Lesmateriaal toevoegen</span></campus-button
+    >
+    <campus-button
+      *ngIf="!task.isPaperTask"
+      class="shared-header__contextual__button smallIcon"
+      iconClass="results"
+      ><span>Resultaten bekijken</span></campus-button
+    >
+    <campus-button
+      class="shared-header__contextual__button smallIcon"
+      iconClass=""
+      ><span>Doelenmatrix</span></campus-button
+    >
+    <campus-button
+      *ngIf="task.isPaperTask"
+      class="shared-header__contextual__button smallIcon"
+      iconClass="print"
+      (click)="clickPrintTask()"
+      ><span>Print</span></campus-button
+    >
   </ng-container>
+
+  <ng-template #contentSelected>
+    <campus-button
+      *ngIf="selectedTaskEduContents.length === 1"
+      class="shared-header__contextual__button smallIcon"
+      iconClass=""
+      (click)="preview(selectedTaskEduContents[0], !!task.isPaperTask)"
+      ><span>{{
+        task.isPaperTask ? 'Voorbeeld' : 'Openen'
+      }}</span></campus-button
+    >
+    <campus-button
+      *ngIf="task.isPaperTask"
+      class="shared-header__contextual__button smallIcon"
+      iconClass=""
+      ><span>Print</span></campus-button
+    >
+    <campus-button
+      class="shared-header__contextual__button smallIcon"
+      iconClass="delete"
+      (click)="clickRemoveTaskEduContents(selectedTaskEduContents)"
+      ><span>Verwijderen</span></campus-button
+    >
+  </ng-template>
 </campus-page-bar>
 <ng-template #noTask>Deze taak is niet beschikbaar.</ng-template>
+
 <campus-side-sheet
   #taskSidesheet
   *ngIf="task$ | async as task; else noTask"
   [isOpenOnInit]="true"
 >
   <campus-side-sheet-header>
-    <ng-container [ngSwitch]="(selectedContents$ | async)?.length">
+    <ng-container [ngSwitch]="selectedTaskEduContents.length">
       <ng-container *ngSwitchCase="0">Over deze taak:</ng-container>
       <ng-container *ngSwitchDefault>Over dit lesmateriaal:</ng-container>
     </ng-container>
   </campus-side-sheet-header>
 
   <campus-side-sheet-body>
-    <div
-      *ngIf="selectedContents$ | async as selectedContents"
-      class="manage-kabas-tasks-detail__info"
-    >
-      <ng-container *ngIf="selectedContents.length === 0; else contentDetails">
+    <div class="manage-kabas-tasks-detail__info">
+      <ng-container
+        *ngIf="selectedTaskEduContents.length === 0; else contentDetails"
+      >
         <campus-content-editable
           [text]="task.name"
           [placeholder]="'Titel'"
@@ -190,7 +190,7 @@
       <ng-template #contentDetails>
         <div
           class="manage-kabas-tasks-detail__info__container"
-          *ngFor="let selectedContent of selectedContents"
+          *ngFor="let selectedContent of selectedTaskEduContents"
           data-cy="educontent-detail"
         >
           <ng-container
@@ -220,19 +220,22 @@
           class="manage-kabas-tasks-detail__info__container"
         >
           <mat-radio-group
-            *ngIf="selectedContents.length === 1; else multipleSelected"
-            [value]="selectedContents[0].required"
+            *ngIf="selectedTaskEduContents.length === 1; else multipleSelected"
+            [value]="selectedTaskEduContents[0].required"
             (change)="
-              setTaskEduContentsRequiredState(selectedContents, $event.value)
+              setTaskEduContentsRequiredState(
+                selectedTaskEduContents,
+                $event.value
+              )
             "
           >
             <mat-radio-button
-              [checked]="selectedContents[0].required"
+              [checked]="selectedTaskEduContents[0].required"
               [value]="true"
               >Moetje</mat-radio-button
             >
             <br /><mat-radio-button
-              [checked]="!selectedContents[0].required"
+              [checked]="!selectedTaskEduContents[0].required"
               [value]="false"
               >Magje</mat-radio-button
             >
@@ -243,13 +246,16 @@
             >
               <campus-button
                 (click)="
-                  setTaskEduContentsRequiredState(selectedContents, true)
+                  setTaskEduContentsRequiredState(selectedTaskEduContents, true)
                 "
                 >Alles moetje</campus-button
               >
               <campus-button
                 (click)="
-                  setTaskEduContentsRequiredState(selectedContents, false)
+                  setTaskEduContentsRequiredState(
+                    selectedTaskEduContents,
+                    false
+                  )
                 "
                 >Alles magje</campus-button
               >
@@ -260,7 +266,7 @@
         <campus-button
           danger
           [disabled]="isActiveTask(task)"
-          (click)="clickRemoveTaskEduContents(selectedContents)"
+          (click)="clickRemoveTaskEduContents(selectedTaskEduContents)"
           >Verwijder lesmateriaal</campus-button
         >
       </ng-template>
@@ -335,12 +341,13 @@
         </div>
 
         <mat-selection-list
+          [(ngModel)]="selectedTaskEduContents"
+          (ngModelChange)="onSelectionChange()"
           #taskContent
           class="manage-kabas-tasks-detail__list"
           [class.mat-selection-list--has-selection]="
             !taskContent.selectedOptions.isEmpty()
           "
-          (selectionChange)="onSelectionChange()"
           *ngIf="!isReordering"
         >
           <ng-container
