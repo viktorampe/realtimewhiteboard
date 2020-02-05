@@ -171,4 +171,12 @@ describe('CheckboxLineFilterComponent', () => {
       expected
     ]);
   });
+
+  it('should deselect all selected', () => {
+    component.filterCriteria = mockFilterCriteria;
+    component.reset();
+    expect(
+      component.filterCriteria.values.filter(e => e.selected).length
+    ).toEqual(0);
+  });
 });

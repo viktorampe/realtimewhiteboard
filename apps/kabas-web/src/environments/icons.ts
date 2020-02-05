@@ -50,6 +50,8 @@ export const icons = {
   star: 'assets/icons/star.svg',
   'star-outline': 'assets/icons/star-border.svg',
   color: 'assets/icons/color_lens.svg',
+  toggle: 'assets/icons/toggle.svg',
+  archive: 'assets/icons/archive.svg',
   'filter:active': 'assets/icons/play_circle_outline-24px.svg',
   'filter:pending': 'assets/icons/pause_circle_outline-24px.svg',
   'filter:finished': 'assets/icons/not_interested-24px.svg',
@@ -59,6 +61,10 @@ export const icons = {
   'task:finished': 'assets/icons/task-finished.svg',
   'task:paper': 'assets/icons/task-paper.svg',
   print: 'assets/icons/printer.svg',
+  'edu-content:required': 'assets/icons/star.svg', //TODO placeholder
+  'edu-content:optional': 'assets/icons/star-border.svg', //TODO placeholder
+  'edu-content:level-basic': 'assets/icons/play_arrow.svg', //TODO placeholder, name needs work
+  'edu-content:level-advanced': 'assets/icons/fast_forward.svg', //TODO placeholder, name needs work
 
   // search: sort modes
   'sort-numeric-down': 'assets/icons/sort-numeric-down.svg',

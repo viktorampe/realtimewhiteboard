@@ -1,7 +1,9 @@
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   EventEmitter,
+  Inject,
   Input,
   OnInit,
   Output
@@ -29,6 +31,8 @@ export class SearchTermComponent implements OnInit {
   @Output() public valueChange = new EventEmitter<string>();
   @Output() public valueChangeForAutoComplete = new EventEmitter<string>();
 
+  constructor(@Inject(ChangeDetectorRef) private cd: ChangeDetectorRef) {}
+
   ngOnInit() {
     this.currentValue = this.initialValue;
   }
@@ -42,6 +46,7 @@ export class SearchTermComponent implements OnInit {
 
     this.valueChangeForAutoComplete.emit(this.currentValue);
   }
+
   onTextChange() {
     if (this.emitOnTextChange) {
       this.onChange();
@@ -50,5 +55,14 @@ export class SearchTermComponent implements OnInit {
 
   getAutoFocusValue() {
     return this.autofocus ? 'autofocus' : null;
+  }
+
+  reset(emit = true) {
+    this.currentValue = this.initialValue;
+    this.cd.markForCheck();
+
+    if (emit) {
+      this.valueChange.emit(this.currentValue || '');
+    }
   }
 }

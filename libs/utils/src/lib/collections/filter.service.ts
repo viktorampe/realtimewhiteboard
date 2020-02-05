@@ -10,9 +10,10 @@ export class FilterService implements FilterServiceInterface {
     filters: NestedPartial<T>,
     ignoreCase: boolean = true
   ): T[] {
-    return list.filter(item => this.compareObjects(item, filters, ignoreCase));
+    return list.filter(item => this.matchFilters(item, filters, ignoreCase));
   }
-  private compareObjects<T>(
+
+  public matchFilters<T>(
     item: T,
     filters: NestedPartial<T>,
     ignoreCase: boolean = true
@@ -30,9 +31,7 @@ export class FilterService implements FilterServiceInterface {
       // check all properties in filters
       return Object.keys(filters).reduce((match: boolean, key: string) => {
         // whenever a match failed, there's no point in checking other properties
-        return (
-          match && this.compareObjects(item[key], filters[key], ignoreCase)
-        );
+        return match && this.matchFilters(item[key], filters[key], ignoreCase);
       }, true);
     }
     // check for exact matches on number

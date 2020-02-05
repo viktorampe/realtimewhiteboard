@@ -27,7 +27,7 @@ import { GlobalSearchResolver } from './resolvers/pages-global-search.resolver';
   providers: [
     {
       provide: CONTENT_OPENER_TOKEN,
-      useClass: GlobalSearchViewModel
+      useExisting: GlobalSearchViewModel
     }
   ]
 })

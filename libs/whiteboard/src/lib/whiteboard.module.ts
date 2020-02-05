@@ -5,7 +5,9 @@ import { FormsModule } from '@angular/forms';
 import { MatCardModule, MatIconModule } from '@angular/material';
 import { CardComponent } from './card/card.component';
 import { ColorlistComponent } from './colorlist/colorlist.component';
+import { ProgressBarComponent } from './progress-bar/progress-bar.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
+import { WhiteboardToolsComponent } from './whiteboard-tools/whiteboard-tools.component';
 import { WhiteboardComponent } from './whiteboard/whiteboard.component';
 
 @NgModule({
@@ -20,7 +22,9 @@ import { WhiteboardComponent } from './whiteboard/whiteboard.component';
     WhiteboardComponent,
     CardComponent,
     ToolbarComponent,
-    ColorlistComponent
+    ColorlistComponent,
+    ProgressBarComponent,
+    WhiteboardToolsComponent
   ],
   exports: [WhiteboardComponent]
 })

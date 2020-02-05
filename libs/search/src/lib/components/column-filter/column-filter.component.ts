@@ -1,5 +1,12 @@
 import { animate, style, transition, trigger } from '@angular/animations';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Inject,
+  Input,
+  Output
+} from '@angular/core';
 import {
   SearchFilterComponentInterface,
   SearchFilterCriteriaInterface,
@@ -82,7 +89,10 @@ export class ColumnFilterComponent implements SearchFilterComponentInterface {
   @Output()
   filterSelectionChange = new EventEmitter<SearchFilterCriteriaInterface[]>();
 
-  constructor(private columnFilterService: ColumnFilterService) {}
+  constructor(
+    private columnFilterService: ColumnFilterService,
+    @Inject(ChangeDetectorRef) private cd: ChangeDetectorRef
+  ) {}
 
   /**
    * returns the animation state string that is used to provide forward or backward animations
@@ -136,5 +146,11 @@ export class ColumnFilterComponent implements SearchFilterComponentInterface {
       this.columnFilterService.actionSource = null;
       this.columnFilterService.visibleColumnIndex += 1;
     }
+  }
+
+  public reset(emit = true) {
+    this.columnFilterService.reset();
+    if (emit) this.filterSelectionChange.emit(this.filterCriteria);
+    this.cd.markForCheck();
   }
 }

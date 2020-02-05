@@ -1,37 +1,46 @@
-<div
-  class="card"
-  (dblclick)="onDblClick($event)"
-  [style.background-color]="this.card.color"
->
-  <input type="checkbox" class="card__checkbox" />
+<div class="card" [style.background-color]="this.card.color">
+  <input
+    type="checkbox"
+    class="card__checkbox"
+    (change)="onCheckboxChanged($event)"
+  />
   <campus-toolbar
+    [editMode]="this.card.editMode"
+    (clickColorIcon)="showColor()"
+    (clickToggleEditIcon)="toggleEditMode()"
+    (clickToggleView)="toggleView()"
     class="card__toolbar"
     (delete)="onDeleteCard()"
-    (clickColorIcon)="showColor()"
   ></campus-toolbar>
   <campus-colorlist
     (selectedColor)="selectColor($event)"
     [hidden]="colorlistHidden"
   ></campus-colorlist>
-  <div class="card__content">
-    <p *ngIf="!card.isInputSelected" (click)="toggleInput()">
-      {{ card.cardContent }}
-    </p>
-    <textarea
-      #inputContent
-      *ngIf="card.isInputSelected"
-      [(ngModel)]="card.cardContent"
-      (focusout)="toggleInput()"
-      type="text"
-      name="card-content"
-      maxlength="{{ maxCharacters }}"
-    >
-    </textarea>
-    <p
-      *ngIf="card.isInputSelected && card.cardContent.length === maxCharacters"
-      class="card__content__errorMessage"
-    >
-      Je hebt het maximaal aantal karakters gebruikt.
-    </p>
+  <div class="card__content" (dblclick)="onDblClick($event)">
+    <div *ngIf="viewModeImage || card.editMode" class="card__image"></div>
+    <div *ngIf="!viewModeImage || card.editMode" class="card__input">
+      <textarea
+        #inputContent
+        *ngIf="card.isInputSelected"
+        [(ngModel)]="card.description"
+        (focusout)="toggleInput()"
+        type="text"
+        name="card-content"
+        cols="40"
+        rows="5"
+        maxlength="{{ maxCharacters }}"
+      ></textarea>
+      <p *ngIf="!card.isInputSelected" (click)="toggleInput()">
+        {{ card.description }}
+      </p>
+      <p
+        *ngIf="
+          card.isInputSelected && card.description.length === maxCharacters
+        "
+        class="card__content__errorMessage"
+      >
+        Je hebt het maximaal aantal karakters gebruikt.
+      </p>
+    </div>
   </div>
 </div>

@@ -15,7 +15,9 @@ import { of } from 'rxjs';
 import Card from '../../interfaces/card.interface';
 import { CardComponent } from '../card/card.component';
 import { ColorlistComponent } from '../colorlist/colorlist.component';
+import { ProgressBarComponent } from '../progress-bar/progress-bar.component';
 import { ToolbarComponent } from '../toolbar/toolbar.component';
+import { WhiteboardToolsComponent } from '../whiteboard-tools/whiteboard-tools.component';
 import { WhiteboardComponent } from './whiteboard.component';
 
 describe('WhiteboardComponent', () => {
@@ -38,7 +40,9 @@ describe('WhiteboardComponent', () => {
         WhiteboardComponent,
         CardComponent,
         ToolbarComponent,
-        ColorlistComponent
+        ColorlistComponent,
+        ProgressBarComponent,
+        WhiteboardToolsComponent
       ],
       providers: [
         {
@@ -65,11 +69,13 @@ describe('WhiteboardComponent', () => {
   it('should create a card on plus button clicked', () => {
     const cardsSizeBeforeClicked = component.cards.length;
 
-    const btnPlus = fixture.debugElement.query(
-      By.css('.whiteboard-page__btnPlus')
+    const btns = fixture.debugElement.queryAll(
+      By.css('.whiteboard-tools__btn')
     );
 
-    btnPlus.nativeElement.click();
+    const btnPlus = btns[0].nativeElement;
+
+    btnPlus.click();
 
     const cardsSizeAfterClicked = component.cards.length;
 
@@ -98,10 +104,12 @@ describe('WhiteboardComponent', () => {
   it('should delete a card from the list of cards when the user confirms', () => {
     const cardsSizeBeforeAdding = component.cards.length;
 
-    const card: Card = {
-      cardContent: '',
+    const card = {
+      description: '',
+      image: null,
       color: null,
       isInputSelected: false,
+      editMode: true,
       top: 0,
       left: 0
     };
@@ -121,9 +129,11 @@ describe('WhiteboardComponent', () => {
 
   it('should not delete a card from the list of cards when the user does not confirm', () => {
     const card: Card = {
-      cardContent: '',
+      description: '',
+      image: null,
       color: null,
       isInputSelected: false,
+      editMode: true,
       top: 0,
       left: 0
     };
@@ -141,5 +151,39 @@ describe('WhiteboardComponent', () => {
     component.onDeleteCard(card);
 
     expect(component.cards.length).toBe(cardsSizeAfterAdding);
+  });
+
+  it('should add a card when checkbox is selected', () => {
+    const card = {
+      description: '',
+      image: null,
+      color: null,
+      isInputSelected: false,
+      editMode: true,
+      top: 0,
+      left: 0
+    };
+    component.selectedCards = [];
+
+    component.selectCard(card);
+
+    expect(component.selectedCards).toContain(card);
+  });
+
+  it('should remove a card when checkbox is selected again', () => {
+    const card = {
+      description: '',
+      image: null,
+      color: null,
+      isInputSelected: false,
+      editMode: true,
+      top: 0,
+      left: 0
+    };
+    component.selectedCards = [card];
+
+    component.deselectCard(card);
+
+    expect(component.selectedCards).not.toContain(card);
   });
 });

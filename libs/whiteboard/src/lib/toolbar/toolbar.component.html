@@ -1,3 +1,32 @@
-<mat-icon (click)="showColor()" [svgIcon]="'color'"></mat-icon>
-<mat-icon [svgIcon]="'edit'"></mat-icon>
-<mat-icon (click)="onDeleteClicked()" [svgIcon]="'cancel'"></mat-icon>
+<div class="toolbar" *ngIf="editMode; else noEditMode">
+  <mat-icon
+    class="toolbar_icon"
+    (click)="toggleModus()"
+    [svgIcon]="'edit'"
+  ></mat-icon>
+  <mat-icon
+    class="toolbar_icon"
+    [svgIcon]="'color'"
+    (click)="showColor()"
+  ></mat-icon>
+  <mat-icon
+    class="toolbar_icon"
+    (click)="onDeleteClicked()"
+    [svgIcon]="'cancel'"
+  ></mat-icon>
+</div>
+<ng-template #noEditMode>
+  <div class="toolbar">
+    <mat-icon
+      class="toolbar_icon"
+      (click)="toggleModus()"
+      [svgIcon]="'edit'"
+    ></mat-icon>
+    <mat-icon
+      class="toolbar_icon"
+      id="toggle_icon"
+      [svgIcon]="'toggle'"
+      (click)="toggleView()"
+    ></mat-icon>
+  </div>
+</ng-template>
