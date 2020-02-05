@@ -1,4 +1,4 @@
-<div class="toolbar" *ngIf="editMode" else #noEditMode>
+<div class="toolbar" *ngIf="editMode; else noEditMode">
   <mat-icon
     class="toolbar_icon"
     (click)="toggleModus()"
@@ -14,13 +14,19 @@
     (click)="onDeleteClicked()"
     [svgIcon]="'cancel'"
   ></mat-icon>
-
-  <ng-template #noEditMode>
+</div>
+<ng-template #noEditMode>
+  <div class="toolbar">
+    <mat-icon
+      class="toolbar_icon"
+      (click)="toggleModus()"
+      [svgIcon]="'edit'"
+    ></mat-icon>
     <mat-icon
       class="toolbar_icon"
       id="toggle_icon"
       [svgIcon]="'toggle'"
       (click)="toggleView()"
     ></mat-icon>
-  </ng-template>
-</div>
+  </div>
+</ng-template>
