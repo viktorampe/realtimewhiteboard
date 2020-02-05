@@ -3,6 +3,10 @@
   flex-direction: column;
   height: 100%;
 
+  &.image-drag-directive-dragging {
+    opacity: 0.8;
+  }
+
   &__header {
     height: 3rem;
     flex: 0 0 auto;
