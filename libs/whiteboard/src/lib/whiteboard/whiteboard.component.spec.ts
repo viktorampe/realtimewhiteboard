@@ -103,9 +103,8 @@ describe('WhiteboardComponent', () => {
       top: 0,
       left: 0
     };
-    component.selectedCards = [];
+    component.selectedCards = [card];
 
-    component.selectCard(card);
     component.deselectCard(card);
 
     expect(component.selectedCards).not.toContain(card);
