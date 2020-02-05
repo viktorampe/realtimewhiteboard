@@ -17,7 +17,7 @@ export class ImageDragDirective {
   constructor() {}
 
   //Dragover listener
-  @HostListener('dragover', ['$event']) onDragOver(evt) {
+  @HostListener('dragover', ['$event']) public onDragOver(evt) {
     evt.preventDefault();
     evt.stopPropagation();
     this.opacity = '0.8';
