@@ -1,4 +1,4 @@
-<div class="toolbar" *ngIf="editMode; else noEditMode">
+<div class="toolbar" *ngIf="editMode" else #noEditMode>
   <mat-icon
     class="toolbar_icon"
     (click)="toggleModus()"
