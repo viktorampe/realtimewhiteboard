@@ -1,7 +1,7 @@
 import {
   Component,
   Input,
-  OnInit,
+  OnChanges,
   SimpleChange,
   SimpleChanges
 } from '@angular/core';
@@ -11,15 +11,13 @@ import {
   templateUrl: './progress-bar.component.html',
   styleUrls: ['./progress-bar.component.scss']
 })
-export class ProgressBarComponent implements OnInit {
+export class ProgressBarComponent implements OnChanges {
   @Input() amountOfImages: number;
   @Input() amountCompleted: number;
 
   progressPercentage: string;
 
   constructor() {}
-
-  ngOnInit() {}
 
   ngOnChanges(changes: SimpleChanges) {
     const amountOfImagesChange: SimpleChange = changes.amountOfImages;
