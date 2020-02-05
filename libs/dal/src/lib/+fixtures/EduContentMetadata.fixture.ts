@@ -37,6 +37,7 @@ export class EduContentMetadataFixture implements EduContentMetadataInterface {
   publisherId = 1;
   eduContentId = 1;
   editorId = 1;
+  levelId = 1;
   learningAreaId = 1;
   learningArea = new LearningAreaFixture({ id: 1 });
   eduContentProductTypeId = 1;
@@ -45,8 +46,8 @@ export class EduContentMetadataFixture implements EduContentMetadataInterface {
   fileExt = 'oefening';
   fileLabel = 'oefening';
   methods = [
-    new MethodFixture({ icon: 'topos', id: 6 }),
-    new MethodFixture({ icon: 'nando', id: 5 })
+    new MethodFixture({ icon: 'topos', id: 6, name: 'Topos' }),
+    new MethodFixture({ icon: 'nando', id: 5, name: 'Nando' })
   ];
   eduContentProductType = new EduContentProductTypeFixture({ id: 33 });
   years = [new YearFixture({ name: '5' }), new YearFixture({ name: '6' })];
@@ -96,6 +97,7 @@ export class EduContentMetadataFixture implements EduContentMetadataInterface {
       depth: 1
     })
   ];
+  diaboloPhaseId = 1;
   diaboloPhase = new DiaboloPhaseFixture();
   streamable = false;
 

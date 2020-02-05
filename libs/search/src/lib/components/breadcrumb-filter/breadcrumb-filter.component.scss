@@ -1,6 +1,6 @@
 @import 'libs/ui/src/lib/breakpoints.scss';
 
-:host() {
+:host {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

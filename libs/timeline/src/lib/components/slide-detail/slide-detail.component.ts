@@ -308,7 +308,7 @@ export class SlideDetailComponent implements OnInit, OnChanges, OnDestroy {
       ],
       day: [
         this.formData[formGroupKey].day,
-        [Validators.min(1), Validators.max(23)]
+        [Validators.min(1), Validators.max(31)]
       ],
       hour: [
         this.formData[formGroupKey].hour,

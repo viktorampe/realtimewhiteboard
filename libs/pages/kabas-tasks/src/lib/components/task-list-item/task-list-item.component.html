@@ -68,3 +68,13 @@
     }}</span
   >
 </div>
+<div
+  class="manage-kabas-tasks-task-list-item__hover-actions"
+  campusClickStopPropagation
+>
+  <mat-icon
+    [class.favorite]="isFavorite"
+    (click)="toggleFavorite()"
+    [svgIcon]="isFavorite ? 'favorites-filled' : 'favorites'"
+  ></mat-icon>
+</div>

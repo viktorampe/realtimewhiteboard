@@ -111,13 +111,12 @@ describe('SettingsComponent', () => {
   it('should show the tooltips', () => {
     const tooltips: MatTooltip[] = fixture.debugElement
       .queryAll(By.directive(MatTooltip))
-      .map(DE => DE.componentInstance);
+      .map(DE => DE.injector.get<MatTooltip>(MatTooltip));
 
     expect(tooltips.length).toBe(Object.keys(component.tooltips).length);
-    Object.keys(component.tooltips).forEach(key => {
-      expect(
-        tooltips.some(tooltip => tooltip.message === component.tooltips[key])
-      );
+
+    Object.keys(component.tooltips).forEach((key, index) => {
+      expect(tooltips[index].message).toBe(component.tooltips[key]);
     });
   });
 });

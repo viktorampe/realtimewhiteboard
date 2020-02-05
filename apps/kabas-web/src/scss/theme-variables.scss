@@ -42,10 +42,10 @@ $secondary-bg-color-badge: $color-white-1; //  badge
 $secondary-font-color-badge: $color-white-1; // badge
 
 // app > panel headers
-$tertiary-bg-color: $color-white-1;
+$tertiary-bg-color: $color-gray-2;
 $tertiary-font-color: $color-gray-3;
-$tertiary-bg-color-2: $color-gray-1;
-$tertiary-font-color-2: $color-white-1;
+$tertiary-bg-color-2: $color-white-1;
+$tertiary-font-color-2: $color-gray-3;
 
 // ui > main body
 $ui-primary-bg-color: $primary-bg-color;
@@ -72,6 +72,8 @@ $ui-tertiary-bg-color: $tertiary-bg-color;
 $ui-tertiary-font-color: $tertiary-font-color;
 $ui-tertiary-bg-color-2: $tertiary-bg-color-2;
 $ui-tertiary-font-color-2: $tertiary-font-color-2;
+// ui > panel body
+$ui-side-sheet-font-size: 12px;
 
 // ui > page header
 $ui-page-header-font-size: 20px;
@@ -141,6 +143,9 @@ $ui-form-input--focused-font-color: $color-blue-3;
 $ui-form-item-label-color: $color-gray-4;
 $ui-form-item-margin-bottom: 10px;
 
+// ui > info panel
+$ui-info-panel-title-color: $primary-font-color;
+
 // ui > collapsible sheet
 $ui-collapsible-sheet-button-bg-color: $color-gray-2;
 $ui-collapsible-sheet-border-color: $color-gray-2;
@@ -150,6 +155,7 @@ $filters-active-background-color: $color-gray-2 !default;
 $filters-hover-background-color: #f5f5f5 !default; // material button hover default
 
 $search-filter-height: 50px;
+$ui-form-field-height: 50px;
 
 // search filters > search term
 $search-search-term-border-width: 0px;
@@ -179,6 +185,12 @@ $date-filter_mat-form-field_outline-opacity: 1;
 $date-filter_mat-form-field_outline-border-right-width: 1px;
 $date-filter_mat-form-field_outline-border-color: $primary-font-color-2;
 $date-filter_date-range_day--in-range-background-color: $secondary-bg-color-accent;
+
+// ui > date range picker component
+$ui-date-range-picker_mat-form-field_outline-opacity: 1;
+$ui-date-range-picker_mat-form-field_outline-border-right-width: 1px;
+$ui-date-range-picker_mat-form-field_outline-border-color: $primary-font-color-2;
+$ui-date-range-picker_date-range_day--in-range-background-color: $secondary-bg-color-accent;
 
 // search > reset filters button
 $pages-method-chapter__reset-filters-border-color: $primary-font-color-2;
@@ -272,11 +284,13 @@ $pages-methods-background-color--secondary: $secondary-bg-color;
 
 // kabas-tasks
 $pages-kabas-tasks-text-color--primary: $primary-font-color;
-$pages-kabas-tasks-text-color--primary--accent: $secondary-font-color-accent;
+$pages-kabas-tasks-primary-action-color--primary: $primary-color-accent;
+$pages-kabas-tasks-text-color--primary--accent: $primary-color-accent;
 $pages-kabas-tasks-background-color--primary: $primary-bg-color;
 $pages-kabas-tasks-border-color--primary: $color-gray-2;
 $pages-kabas-tasks-text-color--secondary: $primary-font-color-2;
 $pages-kabas-tasks-background-color--secondary: $secondary-bg-color;
+$pages-kabas-tasks_filter--hover-background-color: $color-gray-7;
 
 // practice
 $pages-practice-text-color--primary: $primary-font-color;
@@ -311,3 +325,6 @@ $pages-settings-profile__form-width: 500px;
 // tasks
 $pages-manage-kabas-tasks__task-list-item__status-color: $color-lila-1;
 $pages-manage-kabas-tasks__task-list-item__archived-color: $color-green-1;
+
+$pages-manage-kabas-tasks__task-edu-content-list-item__border-color: $color-gray-2;
+$pages-manage-kabas-tasks__task-edu-content-list-item-icon-color: $primary-color-accent !default;

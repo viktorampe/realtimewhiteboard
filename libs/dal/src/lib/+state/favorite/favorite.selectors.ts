@@ -21,20 +21,11 @@ export const getLoaded = createSelector(
   (state: State) => state.loaded
 );
 
-export const getAll = createSelector(
-  selectFavoriteState,
-  selectAll
-);
+export const getAll = createSelector(selectFavoriteState, selectAll);
 
-export const getCount = createSelector(
-  selectFavoriteState,
-  selectTotal
-);
+export const getCount = createSelector(selectFavoriteState, selectTotal);
 
-export const getIds = createSelector(
-  selectFavoriteState,
-  selectIds
-);
+export const getIds = createSelector(selectFavoriteState, selectIds);
 
 export const getAllEntities = createSelector(
   selectFavoriteState,
@@ -90,6 +81,15 @@ export const getIsFavoriteEduContent = createSelector(
   (state: State, props: { eduContentId: number }) => {
     return (state.ids as number[]).some(
       id => state.entities[id].eduContentId === props.eduContentId
+    );
+  }
+);
+
+export const getTaskFavorites = createSelector(
+  selectFavoriteState,
+  (state: State) => {
+    return Object.values(state.entities).filter(
+      value => value.type === FavoriteTypesEnum.TASK
     );
   }
 );
