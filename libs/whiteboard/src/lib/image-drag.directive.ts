@@ -36,7 +36,7 @@ export class ImageDragDirective {
     evt.stopPropagation();
     this.dragClass = false;
     const files = evt.dataTransfer.files;
-    if (files.length > 0) {
+    if (files.length) {
       this.fileDropped.emit(files);
     }
   }
