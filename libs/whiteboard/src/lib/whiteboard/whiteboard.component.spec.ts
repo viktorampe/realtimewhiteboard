@@ -5,6 +5,7 @@ import { By, HAMMER_LOADER } from '@angular/platform-browser';
 import { configureTestSuite } from 'ng-bullet';
 import { CardComponent } from '../card/card.component';
 import { ColorlistComponent } from '../colorlist/colorlist.component';
+import { ProgressBarComponent } from '../progress-bar/progress-bar.component';
 import { ToolbarComponent } from '../toolbar/toolbar.component';
 import { WhiteboardToolsComponent } from '../whiteboard-tools/whiteboard-tools.component';
 import { WhiteboardComponent } from './whiteboard.component';
@@ -21,6 +22,7 @@ describe('WhiteboardComponent', () => {
         CardComponent,
         ToolbarComponent,
         ColorlistComponent,
+        ProgressBarComponent,
         WhiteboardToolsComponent
       ],
       providers: [
@@ -62,9 +64,11 @@ describe('WhiteboardComponent', () => {
     const cardsSizeBeforeAdding = component.cards.length;
 
     component.cards.push({
-      cardContent: '',
+      description: '',
+      image: null,
       color: null,
       isInputSelected: false,
+      editMode: true,
       top: 0,
       left: 0
     });
@@ -72,5 +76,39 @@ describe('WhiteboardComponent', () => {
     component.onDeleteCard(0);
 
     expect(component.cards.length).toBe(cardsSizeBeforeAdding);
+  });
+
+  it('should add a card when checkbox is selected', () => {
+    const card = {
+      description: '',
+      image: null,
+      color: null,
+      isInputSelected: false,
+      editMode: true,
+      top: 0,
+      left: 0
+    };
+    component.selectedCards = [];
+
+    component.selectCard(card);
+
+    expect(component.selectedCards).toContain(card);
+  });
+
+  it('should remove a card when checkbox is selected again', () => {
+    const card = {
+      description: '',
+      image: null,
+      color: null,
+      isInputSelected: false,
+      editMode: true,
+      top: 0,
+      left: 0
+    };
+    component.selectedCards = [card];
+
+    component.deselectCard(card);
+
+    expect(component.selectedCards).not.toContain(card);
   });
 });

@@ -113,7 +113,7 @@ describe('CardComponent', () => {
     component.card.editMode = false;
     component.card.description = 'something that is not null';
 
-    const myCard = fixture.debugElement.query(By.css('.card'));
+    const myCard = fixture.debugElement.query(By.css('.card__content'));
     myCard.nativeElement.dispatchEvent(new MouseEvent('dblclick')); // use nativeElement so target is set
     fixture.detectChanges();
 
@@ -168,5 +168,25 @@ describe('CardComponent', () => {
     spyOn(component.lastColor, 'emit');
     component.selectColor('black');
     expect(component.lastColor.emit).toHaveBeenCalledWith('black');
+  });
+
+  it('should emit the right card when a card is selected', () => {
+    spyOn(component.select, 'emit');
+    const checkboxes = fixture.debugElement.queryAll(By.css('.card__checkbox'));
+    const checkbox = checkboxes[0].nativeElement;
+    checkbox.click(); // van false naar true
+    fixture.detectChanges();
+    expect(component.select.emit).toHaveBeenCalled();
+  });
+
+  it('should emit the right card when a card is deselected', () => {
+    spyOn(component.deselect, 'emit');
+    const checkboxes = fixture.debugElement.queryAll(By.css('.card__checkbox'));
+    const checkbox = checkboxes[0].nativeElement;
+    checkbox.click(); // van false naar true
+    fixture.detectChanges();
+    checkbox.click(); // van true naar false
+    fixture.detectChanges();
+    expect(component.deselect.emit).toHaveBeenCalled();
   });
 });
