@@ -77,9 +77,7 @@ describe('WhiteboardComponent', () => {
   });
 
   it('should add a card when checkbox is selected', () => {
-    const cardsSizeBeforeAdding = component.selectedCards.length;
-
-    component.cards.push({
+    const card = {
       description: '',
       image: null,
       color: null,
@@ -87,16 +85,16 @@ describe('WhiteboardComponent', () => {
       editMode: true,
       top: 0,
       left: 0
-    });
-    component.selectCard(component.cards[0]);
+    };
+    component.selectedCards = [];
 
-    expect(component.selectedCards.length).toBe(cardsSizeBeforeAdding + 1);
+    component.selectCard(card);
+
+    expect(component.selectedCards).toContain(card);
   });
 
   it('should remove a card when checkbox is selected again', () => {
-    const cardsSizeBeforeRemoving = component.selectedCards.length;
-
-    component.cards.push({
+    const card = {
       description: '',
       image: null,
       color: null,
@@ -104,10 +102,12 @@ describe('WhiteboardComponent', () => {
       editMode: true,
       top: 0,
       left: 0
-    });
-    component.selectCard(component.cards[0]);
-    component.deselectCard(component.cards[0]);
+    };
+    component.selectedCards = [];
 
-    expect(component.selectedCards.length).toBe(cardsSizeBeforeRemoving);
+    component.selectCard(card);
+    component.deselectCard(card);
+
+    expect(component.selectedCards).not.toContain(card);
   });
 });
