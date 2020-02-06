@@ -96,7 +96,7 @@ export class CardComponent implements OnInit, OnChanges {
   }
 
   hideCheckbox() {
-    if (this.card.opacity !== 1 || !this.isChecked) {
+    if (!this.isChecked) {
       this.card.opacity = 0;
     }
   }
