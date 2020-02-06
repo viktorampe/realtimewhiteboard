@@ -1,3 +1,5 @@
+//file.only
+
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { DebugElement } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
@@ -31,6 +33,7 @@ import {
   SearchModule
 } from '@campus/search';
 import {
+  ContentActionsServiceInterface,
   CONTENT_ACTIONS_SERVICE_TOKEN,
   CONTENT_OPENER_TOKEN,
   ENVIRONMENT_ICON_MAPPING_TOKEN,
@@ -38,7 +41,7 @@ import {
   OPEN_STATIC_CONTENT_SERVICE_TOKEN,
   SharedModule
 } from '@campus/shared';
-import { MockMatIconRegistry } from '@campus/testing';
+import { MockDate, MockMatIconRegistry } from '@campus/testing';
 import { ConfirmationModalComponent, UiModule } from '@campus/ui';
 import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/utils';
 import { hot } from '@nrwl/angular/testing';
@@ -70,7 +73,9 @@ describe('ManageKabasTasksDetailComponent', () => {
   let matDialog: MatDialog;
   let router: Router;
   const queryParams: BehaviorSubject<Params> = new BehaviorSubject<Params>({});
+  let mockDate: MockDate;
 
+  let contentActionsService: ContentActionsServiceInterface;
   let mockViewmodel: MockKabasTasksViewModel;
   let currentTask: TaskWithAssigneesInterface;
   let restOfTasks: TaskWithAssigneesInterface[];
@@ -199,9 +204,11 @@ describe('ManageKabasTasksDetailComponent', () => {
   });
 
   beforeEach(() => {
+    mockDate = new MockDate(new Date('4 feb 2020'));
     viewModel = TestBed.get(KabasTasksViewModel);
     matDialog = TestBed.get(MatDialog);
     router = TestBed.get(Router);
+    contentActionsService = TestBed.get(CONTENT_ACTIONS_SERVICE_TOKEN);
     fixture = TestBed.createComponent(ManageKabasTasksDetailComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -217,6 +224,10 @@ describe('ManageKabasTasksDetailComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  afterAll(() => {
+    mockDate.returnRealDate();
   });
 
   describe('openAssigneeModal', () => {
@@ -481,6 +492,52 @@ describe('ManageKabasTasksDetailComponent', () => {
     });
   });
 
+  describe('actions', () => {
+    const mockActions = [
+      {
+        label: 'First action',
+        icon: 'first-action',
+        tooltip: 'First action',
+        handler: () => {}
+      },
+      {
+        label: 'Second action',
+        icon: 'second-action',
+        tooltip: 'Second action',
+        handler: () => {}
+      }
+    ];
+
+    beforeEach(() => {
+      jest
+        .spyOn(contentActionsService, 'getActionsForEduContent')
+        .mockReturnValue(mockActions);
+      taskEduContents = [
+        createTaskEduContent(1, 'oefening 1'),
+        createTaskEduContent(2, 'oefening 2')
+      ];
+
+      updateCurrentTask({ ...currentTask, taskEduContents });
+    });
+
+    it('should put the right actions on the TaskEduContent', fakeAsync(() => {
+      const taskEduContentListItems = fixture.debugElement
+        .queryAll(
+          By.css(
+            '[data-cy="task-edu-contents-list"] campus-task-edu-content-list-item'
+          )
+        )
+        .map(
+          (taskEduContentDE): TaskEduContentListItemComponent =>
+            taskEduContentDE.componentInstance as TaskEduContentListItemComponent
+        );
+
+      taskEduContentListItems.forEach(taskEduContentListItem => {
+        expect(taskEduContentListItem.actions).toBe(mockActions);
+      });
+    }));
+  });
+
   describe('sidepanel content', () => {
     it('should show the task info in the sidepanel when selection is empty', () => {
       component.selectedTaskEduContents = [];
@@ -513,6 +570,71 @@ describe('ManageKabasTasksDetailComponent', () => {
 
       expect(taskInfoDE).toBeFalsy();
       expect(eduContentInfoDE.length).toBe(2);
+    });
+
+    describe('task date', () => {
+      describe('digital task', () => {
+        it('should show the task date', () => {
+          currentTask.isPaperTask = false;
+          updateCurrentTask(currentTask);
+
+          const taskDateDE = fixture.debugElement.query(
+            By.css('[data-cy="task-info-date"]')
+          );
+
+          expect(taskDateDE).toBeTruthy();
+          expect(taskDateDE.nativeElement.textContent.trim()).toBe(
+            '03-02-20 - 11-02-20'
+          );
+        });
+      });
+
+      describe('paper task', () => {
+        it('should not show the task date', () => {
+          currentTask.isPaperTask = true;
+          updateCurrentTask(currentTask);
+
+          const taskDateDE = fixture.debugElement.query(
+            By.css('[data-cy="task-info-date"]')
+          );
+
+          expect(taskDateDE).toBeFalsy();
+        });
+      });
+    });
+
+    describe('assignees', () => {
+      it('should show the task assignees', () => {
+        const assigneeDEs = fixture.debugElement.queryAll(
+          By.css('.manage-kabas-tasks-detail__info__assignee')
+        );
+
+        const assigneeLabels = currentTask.assignees.map(
+          assignee => assignee.label
+        );
+
+        assigneeDEs.forEach((assigneeDE, index) => {
+          expect(assigneeDE.nativeElement.textContent.trim()).toBe(
+            assigneeLabels[index]
+          );
+        });
+      });
+
+      it('should call removeAssignee when clicking the delete icon on an assignee', () => {
+        const assigneeDE = fixture.debugElement.query(
+          By.css('.manage-kabas-tasks-detail__info__assignee mat-icon')
+        );
+
+        jest.spyOn(component, 'removeAssignee');
+
+        assigneeDE.nativeElement.click();
+
+        expect(component.removeAssignee).toHaveBeenCalled();
+        expect(component.removeAssignee).toHaveBeenCalledWith(
+          currentTask,
+          currentTask.assignees[0]
+        );
+      });
     });
 
     describe('links', () => {
