@@ -40,7 +40,9 @@ export class PrintPaperTaskModalComponent implements OnInit {
       {
         label: 'Correctiesleutel afdrukken',
         handler: () => this.clickPrintSolution(),
-        tooltip: '',
+        tooltip: this.isButtonDisabled(PrintPaperTaskModalResultEnum.SOLUTION)
+          ? 'Het lesmateriaal in deze taak bevat geen correctiesleutels.'
+          : '',
         disabled: this.isButtonDisabled(PrintPaperTaskModalResultEnum.SOLUTION)
       }
     ];

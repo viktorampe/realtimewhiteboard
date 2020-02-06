@@ -397,8 +397,12 @@ export class KabasTasksViewModel implements ContentOpenerInterface {
     this.taskService.printTask(taskId, withNames);
   }
 
-  public printSolution(taskId: number) {
-    this.taskService.printSolution(taskId);
+  public printSolution(task: TaskWithAssigneesInterface) {
+    this.store.dispatch(
+      new TaskActions.PrintPaperTaskSolution({
+        task
+      })
+    );
   }
 
   private getArchivingAction(updates, errors): Action {
