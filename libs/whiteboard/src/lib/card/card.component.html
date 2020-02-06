@@ -18,7 +18,7 @@
     [hidden]="colorlistHidden"
   ></campus-colorlist>
 
-  <div class="card__content" (dblclick)="onDblClick($event)">
+  <div class="card__content" (dblclick)="onDblClick()">
     <div
       *ngIf="viewModeImage || card.editMode"
       class="card__image"
