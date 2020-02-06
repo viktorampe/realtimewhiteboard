@@ -20,4 +20,8 @@ export class WhiteboardToolsComponent implements OnInit {
   btnEditClicked() {
     this.editCards.emit();
   }
+
+  btnDeleteClicked() {
+    this.deleteCards.emit();
+  }
 }
