@@ -136,8 +136,6 @@ describe('WhiteboardComponent', () => {
     component.selectedCards = [card, card2];
     component.btnEditClicked();
     component.changeSelectedCardsColor('black');
-    for (let i = 0; i < component.selectedCards.length; i++) {
-      expect(component.selectedCards[i].color).toBe('black');
-    }
+    component.selectedCards.forEach(c => expect(c.color).toBe('black'));
   });
 });
