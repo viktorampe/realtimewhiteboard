@@ -3,6 +3,7 @@ import { DiaboloPhaseInterface } from './DiaboloPhase.interface';
 import { EduContentInterface } from './EduContent.interface';
 import { EduContentMetadataInterface } from './EduContentMetadata.interface';
 import { EduContentNoteInterface } from './EduContentNote.interface';
+import { EduFileTypeEnum } from './EduFile.interface';
 import { FavoriteInterface } from './Favorite.interface';
 import { MethodLevelInterface } from './MethodLevel.interface';
 import { ProductContentInterface } from './ProductContent.interface';
@@ -90,6 +91,16 @@ export class EduContent implements EduContentInterface, ContentInterface {
     return (
       this.publishedEduContentMetadata &&
       this.publishedEduContentMetadata.methodLevel
+    );
+  }
+
+  get hasSolutionFile(): boolean {
+    return (
+      this.publishedEduContentMetadata &&
+      this.publishedEduContentMetadata.eduFiles &&
+      this.publishedEduContentMetadata.eduFiles.some(
+        eduFile => eduFile.type === EduFileTypeEnum.SOLUTION
+      )
     );
   }
 }

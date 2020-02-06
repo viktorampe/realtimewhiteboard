@@ -82,10 +82,29 @@ describe('WhiteboardComponent', () => {
     expect(cardsSizeAfterClicked).toBe(cardsSizeBeforeClicked + 1);
   });
 
-  it('should remove a created card from the array of cards', () => {
+  it('should open a confirmation dialog if the delete button is clicked', () => {
+    const mockDialogRef = {
+      afterClosed: () => of(false),
+      close: null
+    } as MatDialogRef<ConfirmationModalComponent>;
+    openDialogSpy.mockReturnValue(mockDialogRef);
+
+    component.onDeleteCard(null);
+
+    expect(openDialogSpy).toHaveBeenCalledTimes(1);
+    expect(openDialogSpy).toHaveBeenCalledWith(ConfirmationModalComponent, {
+      data: {
+        title: 'Verwijderen bevestigen',
+        message: 'Weet u zeker dat u deze kaart wil verwijderen?',
+        disableConfirm: false
+      }
+    });
+  });
+
+  it('should delete a card from the list of cards when the user confirms', () => {
     const cardsSizeBeforeAdding = component.cards.length;
 
-    component.cards.push({
+    const card = {
       description: '',
       image: null,
       color: null,
@@ -93,11 +112,45 @@ describe('WhiteboardComponent', () => {
       editMode: true,
       top: 0,
       left: 0
-    });
+    };
 
-    component.onDeleteCard(0);
+    component.cards.push(card);
+
+    const mockDialogRef = {
+      afterClosed: () => of(true), // fake confirmation
+      close: null
+    } as MatDialogRef<ConfirmationModalComponent>;
+    openDialogSpy.mockReturnValue(mockDialogRef);
+
+    component.onDeleteCard(card);
 
     expect(component.cards.length).toBe(cardsSizeBeforeAdding);
+  });
+
+  it('should not delete a card from the list of cards when the user does not confirm', () => {
+    const card: Card = {
+      description: '',
+      image: null,
+      color: null,
+      isInputSelected: false,
+      editMode: true,
+      top: 0,
+      left: 0
+    };
+
+    component.cards.push(card);
+
+    const cardsSizeAfterAdding = component.cards.length;
+
+    const mockDialogRef = {
+      afterClosed: () => of(false), // fake confirmation
+      close: null
+    } as MatDialogRef<ConfirmationModalComponent>;
+    openDialogSpy.mockReturnValue(mockDialogRef);
+
+    component.onDeleteCard(card);
+
+    expect(component.cards.length).toBe(cardsSizeAfterAdding);
   });
 
   it('should add a card when checkbox is selected', () => {

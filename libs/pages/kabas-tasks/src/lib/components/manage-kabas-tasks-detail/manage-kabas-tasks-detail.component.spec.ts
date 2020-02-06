@@ -18,6 +18,8 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import {
   EduContentFixture,
+  EduFileFixture,
+  EduFileTypeEnum,
   LearningAreaFixture,
   LearningAreaInterface,
   TaskEduContentFixture,
@@ -29,6 +31,7 @@ import {
   SearchModule
 } from '@campus/search';
 import {
+  ContentActionsServiceInterface,
   CONTENT_ACTIONS_SERVICE_TOKEN,
   CONTENT_OPENER_TOKEN,
   ENVIRONMENT_ICON_MAPPING_TOKEN,
@@ -36,7 +39,7 @@ import {
   OPEN_STATIC_CONTENT_SERVICE_TOKEN,
   SharedModule
 } from '@campus/shared';
-import { MockMatIconRegistry } from '@campus/testing';
+import { MockDate, MockMatIconRegistry } from '@campus/testing';
 import { ConfirmationModalComponent, UiModule } from '@campus/ui';
 import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/utils';
 import { hot } from '@nrwl/angular/testing';
@@ -68,7 +71,9 @@ describe('ManageKabasTasksDetailComponent', () => {
   let matDialog: MatDialog;
   let router: Router;
   const queryParams: BehaviorSubject<Params> = new BehaviorSubject<Params>({});
+  let mockDate: MockDate;
 
+  let contentActionsService: ContentActionsServiceInterface;
   let mockViewmodel: MockKabasTasksViewModel;
   let currentTask: TaskWithAssigneesInterface;
   let restOfTasks: TaskWithAssigneesInterface[];
@@ -87,6 +92,19 @@ describe('ManageKabasTasksDetailComponent', () => {
   ) => {
     tECs = tECs.map(tEC => Object.assign(tEC, { actions }));
     return tECs;
+  };
+
+  const addSolutionFileToTask = (task: TaskWithAssigneesInterface) => {
+    task.taskEduContents[0].eduContent.publishedEduContentMetadata.eduFiles = [
+      new EduFileFixture({ type: EduFileTypeEnum.SOLUTION })
+    ];
+    task.hasSolutionFiles = true;
+  };
+  const addExerciseFileToTask = (task: TaskWithAssigneesInterface) => {
+    task.taskEduContents[0].eduContent.publishedEduContentMetadata.eduFiles = [
+      new EduFileFixture({ type: EduFileTypeEnum.EXERCISE })
+    ];
+    task.hasSolutionFiles = false;
   };
 
   // create a taskEduContentWithEduContent fixture
@@ -184,20 +202,30 @@ describe('ManageKabasTasksDetailComponent', () => {
   });
 
   beforeEach(() => {
+    mockDate = new MockDate(new Date('4 feb 2020'));
     viewModel = TestBed.get(KabasTasksViewModel);
     matDialog = TestBed.get(MatDialog);
     router = TestBed.get(Router);
+    contentActionsService = TestBed.get(CONTENT_ACTIONS_SERVICE_TOKEN);
     fixture = TestBed.createComponent(ManageKabasTasksDetailComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
 
     mockViewmodel = viewModel as MockKabasTasksViewModel;
+
     [currentTask, ...restOfTasks] = mockViewmodel.tasksWithAssignments$.value;
+
+    // extra properties added in onInit
     taskEduContents = addActions(currentTask.taskEduContents);
+    currentTask.hasSolutionFiles = true;
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  afterAll(() => {
+    mockDate.returnRealDate();
   });
 
   describe('openAssigneeModal', () => {
@@ -289,6 +317,9 @@ describe('ManageKabasTasksDetailComponent', () => {
     });
 
     it('should update the task assignee access on dialog close', () => {
+      addSolutionFileToTask(currentTask);
+      updateCurrentTask(currentTask);
+
       const dialogResult = [new AssigneeFixture()];
       viewModel.updateTaskAccess = jest.fn();
 
@@ -459,6 +490,52 @@ describe('ManageKabasTasksDetailComponent', () => {
     });
   });
 
+  describe('actions', () => {
+    const mockActions = [
+      {
+        label: 'First action',
+        icon: 'first-action',
+        tooltip: 'First action',
+        handler: () => {}
+      },
+      {
+        label: 'Second action',
+        icon: 'second-action',
+        tooltip: 'Second action',
+        handler: () => {}
+      }
+    ];
+
+    beforeEach(() => {
+      jest
+        .spyOn(contentActionsService, 'getActionsForEduContent')
+        .mockReturnValue(mockActions);
+      taskEduContents = [
+        createTaskEduContent(1, 'oefening 1'),
+        createTaskEduContent(2, 'oefening 2')
+      ];
+
+      updateCurrentTask({ ...currentTask, taskEduContents });
+    });
+
+    it('should put the right actions on the TaskEduContent', fakeAsync(() => {
+      const taskEduContentListItems = fixture.debugElement
+        .queryAll(
+          By.css(
+            '[data-cy="task-edu-contents-list"] campus-task-edu-content-list-item'
+          )
+        )
+        .map(
+          (taskEduContentDE): TaskEduContentListItemComponent =>
+            taskEduContentDE.componentInstance as TaskEduContentListItemComponent
+        );
+
+      taskEduContentListItems.forEach(taskEduContentListItem => {
+        expect(taskEduContentListItem.actions).toBe(mockActions);
+      });
+    }));
+  });
+
   describe('sidepanel content', () => {
     it('should show the task info in the sidepanel when selection is empty', () => {
       component.selectedTaskEduContents = [];
@@ -491,6 +568,74 @@ describe('ManageKabasTasksDetailComponent', () => {
 
       expect(taskInfoDE).toBeFalsy();
       expect(eduContentInfoDE.length).toBe(2);
+    });
+
+    describe('task date', () => {
+      describe('digital task', () => {
+        it('should show the task date', () => {
+          currentTask.isPaperTask = false;
+          updateCurrentTask(currentTask);
+
+          const taskDateDE = fixture.debugElement.query(
+            By.css('[data-cy="task-info-date"]')
+          );
+
+          expect(taskDateDE).toBeTruthy();
+          expect(taskDateDE.nativeElement.textContent.trim()).toBe(
+            '03-02-20 - 11-02-20'
+          );
+        });
+      });
+
+      describe('paper task', () => {
+        it('should not show the task date', () => {
+          currentTask.isPaperTask = true;
+          updateCurrentTask(currentTask);
+
+          const taskDateDE = fixture.debugElement.query(
+            By.css('[data-cy="task-info-date"]')
+          );
+
+          expect(taskDateDE).toBeFalsy();
+        });
+      });
+    });
+
+    describe('assignees', () => {
+      it('should show the task assignees', () => {
+        const assigneeDEs = fixture.debugElement.queryAll(
+          By.css('.manage-kabas-tasks-detail__info__assignee')
+        );
+
+        const assigneeLabels = currentTask.assignees.map(
+          assignee => assignee.label
+        );
+
+        assigneeDEs.forEach((assigneeDE, index) => {
+          expect(assigneeDE.nativeElement.textContent.trim()).toBe(
+            assigneeLabels[index]
+          );
+        });
+      });
+
+      it('should call removeAssignee when clicking the delete icon on an assignee', () => {
+        addExerciseFileToTask(currentTask);
+        updateCurrentTask(currentTask);
+
+        const assigneeDE = fixture.debugElement.query(
+          By.css('.manage-kabas-tasks-detail__info__assignee mat-icon')
+        );
+
+        jest.spyOn(component, 'removeAssignee');
+
+        assigneeDE.nativeElement.click();
+
+        expect(component.removeAssignee).toHaveBeenCalled();
+        expect(component.removeAssignee).toHaveBeenCalledWith(
+          currentTask,
+          currentTask.assignees[0]
+        );
+      });
     });
 
     describe('links', () => {
@@ -539,6 +684,9 @@ describe('ManageKabasTasksDetailComponent', () => {
           });
 
           it('should call the correct handler', () => {
+            addSolutionFileToTask(currentTask);
+            updateCurrentTask(currentTask);
+
             component.printTask = jest.fn();
             link.triggerEventHandler('click', null);
 
@@ -560,6 +708,9 @@ describe('ManageKabasTasksDetailComponent', () => {
           });
 
           it('should call the correct handler', () => {
+            addSolutionFileToTask(currentTask);
+            updateCurrentTask(currentTask);
+
             component.printTask = jest.fn();
             link.triggerEventHandler('click', null);
 
@@ -583,7 +734,34 @@ describe('ManageKabasTasksDetailComponent', () => {
             expect(linkText).toEqual(expected);
           });
 
+          it('should be disabled when the task does not have solution files', () => {
+            addExerciseFileToTask(currentTask);
+            updateCurrentTask(currentTask);
+
+            fixture.detectChanges();
+
+            expect(link.nativeElement.classList).toContain(
+              'manage-kabas-tasks-detail__info__link--disabled'
+            );
+          });
+
+          it('should have a tooltip when there are no solution files', () => {
+            updateCurrentTask(currentTask);
+            fixture.detectChanges();
+
+            const tooltip: MatTooltip = link.injector.get<MatTooltip>(
+              MatTooltip
+            );
+
+            expect(tooltip.message).toBe(
+              'Het lesmateriaal in deze taak bevat geen correctiesleutels.'
+            );
+          });
+
           it('should call the correct handler', () => {
+            addSolutionFileToTask(currentTask);
+            updateCurrentTask(currentTask);
+
             component.printSolution = jest.fn();
             link.triggerEventHandler('click', null);
 
@@ -654,6 +832,9 @@ describe('ManageKabasTasksDetailComponent', () => {
     });
 
     it('should open the print task modal', () => {
+      addSolutionFileToTask(currentTask);
+      updateCurrentTask(currentTask);
+
       const expectedData = { disable: [] };
       const expectedClass = 'manage-task-detail-print';
 
@@ -669,6 +850,7 @@ describe('ManageKabasTasksDetailComponent', () => {
     });
 
     it('should open the print task modal, no assignees in currentTask', () => {
+      addSolutionFileToTask(currentTask);
       currentTask.assignees = [];
       updateCurrentTask(currentTask);
 
@@ -687,8 +869,30 @@ describe('ManageKabasTasksDetailComponent', () => {
         }
       );
     });
+    it('should open the print task modal, no solution files in currentTask', () => {
+      addExerciseFileToTask(currentTask);
+      updateCurrentTask(currentTask);
+
+      const expectedData = {
+        disable: [PrintPaperTaskModalResultEnum.SOLUTION]
+      };
+      const expectedClass = 'manage-task-detail-print';
+
+      component.clickPrintTask();
+
+      expect(matDialog.open).toHaveBeenCalledWith(
+        PrintPaperTaskModalComponent,
+        {
+          data: expectedData,
+          panelClass: expectedClass
+        }
+      );
+    });
 
     it('should print the task with names', () => {
+      addSolutionFileToTask(currentTask);
+      updateCurrentTask(currentTask);
+
       const dialogResult = PrintPaperTaskModalResultEnum.WITH_NAMES;
       component.printTask = jest.fn();
 
@@ -699,6 +903,9 @@ describe('ManageKabasTasksDetailComponent', () => {
     });
 
     it('should print the task without names', () => {
+      addSolutionFileToTask(currentTask);
+      updateCurrentTask(currentTask);
+
       const dialogResult = PrintPaperTaskModalResultEnum.WITHOUT_NAMES;
       component.printTask = jest.fn();
 
@@ -709,6 +916,9 @@ describe('ManageKabasTasksDetailComponent', () => {
     });
 
     it('should print the task solution', () => {
+      addSolutionFileToTask(currentTask);
+      updateCurrentTask(currentTask);
+
       const dialogResult = PrintPaperTaskModalResultEnum.SOLUTION;
       component.printSolution = jest.fn();
 
