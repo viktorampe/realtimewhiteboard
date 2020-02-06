@@ -64,6 +64,9 @@ steps:
       command: ci
       customEndpoint: diekeure-registry
 
+  - script: ./node_modules/.bin/ng build --aot
+    displayName: 'Build AOT'
+    
   # Runs nx affected for all feature PRs.
   - script: ./node_modules/.bin/nx affected:lint  --base=remotes/origin/develop
     displayName: 'Lint affected'
