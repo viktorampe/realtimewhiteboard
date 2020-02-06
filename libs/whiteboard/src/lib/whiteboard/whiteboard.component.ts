@@ -105,6 +105,8 @@ export class WhiteboardComponent implements OnInit {
   btnEditClicked() {
     if (this.selectedCards.length !== 0) {
       this.isColorlistHidden = !this.isColorlistHidden;
+    } else if (!this.isColorlistHidden) {
+      this.isColorlistHidden = true;
     }
   }
 

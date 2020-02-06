@@ -249,4 +249,22 @@ describe('WhiteboardComponent', () => {
     component.btnEditClicked();
     expect(component.isColorlistHidden).toBe(true);
   });
+
+  it('should hide the colorlist when pressing the button after opening it but no card is selected', () => {
+    const card = {
+      description: '',
+      image: null,
+      color: null,
+      isInputSelected: false,
+      editMode: true,
+      top: 0,
+      left: 0
+    };
+    component.selectedCards = [card];
+    component.btnEditClicked();
+    component.deselectCard(card);
+    component.btnEditClicked();
+    fixture.detectChanges();
+    expect(component.isColorlistHidden).toBe(true);
+  });
 });
