@@ -1,4 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material';
+import { ConfirmationModalComponent } from '@campus/ui';
 import Card from '../../interfaces/card.interface';
 
 @Component({
@@ -15,7 +17,7 @@ export class WhiteboardComponent implements OnInit {
     }
   }
 
-  constructor() {
+  constructor(public dialog: MatDialog) {
     this.title = '';
     this.isTitleInputSelected = this.title === '';
   }
@@ -84,7 +86,25 @@ export class WhiteboardComponent implements OnInit {
   deselectCard(card: Card) {
     this.selectedCards = this.selectedCards.filter(c => c !== card);
   }
-  btnDelClicked() {}
+
+  btnDelClicked() {
+    if (this.selectedCards.length) {
+      const dialogRef = this.dialog.open(ConfirmationModalComponent, {
+        data: {
+          title: 'Verwijderen bevestigen',
+          message: 'Weet u zeker dat u deze kaarten wil verwijderen?',
+          disableConfirm: false
+        }
+      });
+
+      dialogRef.afterClosed().subscribe(deleteConfirmation => {
+        if (deleteConfirmation) {
+          this.cards = this.cards.filter(c => !this.selectedCards.includes(c));
+          this.selectedCards = [];
+        }
+      });
+    }
+  }
 
   btnEditClicked() {}
 }
