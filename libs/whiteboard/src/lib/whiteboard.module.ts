@@ -8,6 +8,7 @@ import { ColorlistComponent } from './colorlist/colorlist.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { WhiteboardComponent } from './whiteboard/whiteboard.component';
 import { WhiteboardToolsComponent } from './whiteboard-tools/whiteboard-tools.component';
+import { WhiteboardColorlistComponent } from './whiteboard-colorlist/whiteboard-colorlist.component';
 
 @NgModule({
   imports: [
@@ -22,7 +23,8 @@ import { WhiteboardToolsComponent } from './whiteboard-tools/whiteboard-tools.co
     CardComponent,
     ToolbarComponent,
     ColorlistComponent,
-    WhiteboardToolsComponent
+    WhiteboardToolsComponent,
+    WhiteboardColorlistComponent
   ],
   exports: [WhiteboardComponent]
 })
