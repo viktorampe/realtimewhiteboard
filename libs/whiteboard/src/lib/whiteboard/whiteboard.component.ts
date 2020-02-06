@@ -82,6 +82,7 @@ export class WhiteboardComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(deleteConfirmation => {
       if (deleteConfirmation) {
+        this.selectedCards = this.selectedCards.filter(c => c !== card);
         this.cards = this.cards.filter(c => c !== card);
       }
     });

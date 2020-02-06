@@ -186,4 +186,19 @@ describe('WhiteboardComponent', () => {
 
     expect(component.selectedCards).not.toContain(card);
   });
+
+  it('should remove a card from selectedCards when the card is selected and deleted', () => {
+    const card = {
+      description: '',
+      image: null,
+      color: null,
+      isInputSelected: false,
+      editMode: true,
+      top: 0,
+      left: 0
+    };
+    component.selectedCards = [card];
+    component.onDeleteCard(card);
+    expect(component.selectedCards.length).toBe(0);
+  });
 });
