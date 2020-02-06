@@ -56,13 +56,18 @@ export class CardComponent implements OnInit, OnChanges {
     this.card.image = '';
   }
 
+  replaceImage(url: string) {
+    this.card.image = url;
+  }
+
   onDeleteCard() {
     this.deleteCard.emit();
   }
 
   showImageSettings() {
     //TODO: show modal with options --> 'select img from this computer', 'remove image'
-    this.removeImage();
+    //this.removeImage();
+    this.replaceImage('hello_world');
   }
 
   onDblClick() {
