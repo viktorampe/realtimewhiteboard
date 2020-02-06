@@ -212,7 +212,11 @@ describe('WhiteboardComponent', () => {
 
     component.btnDelClicked();
 
-    expect(component.cards).toEqual([differentCard]);
+    const expectedList = [differentCard];
+
+    for (let i = 0; i < component.cards.length; i++) {
+      expect(component.cards[i]).toBe(expectedList[i]);
+    }
     expect(component.selectedCards).toEqual([]);
   });
 
