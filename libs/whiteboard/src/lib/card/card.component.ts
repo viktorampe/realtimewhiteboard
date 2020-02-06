@@ -52,8 +52,17 @@ export class CardComponent implements OnInit, OnChanges {
     }
   }
 
+  removeImage() {
+    this.card.image = '';
+  }
+
   onDeleteCard() {
     this.deleteCard.emit();
+  }
+
+  showImageSettings() {
+    //TODO: show modal with options --> 'select img from this computer', 'remove image'
+    this.removeImage();
   }
 
   onDblClick() {
