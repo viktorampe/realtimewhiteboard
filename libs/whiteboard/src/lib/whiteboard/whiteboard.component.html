@@ -37,5 +37,8 @@
     (deleteCards)="btnDelClicked()"
     (editCards)="btnEditClicked()"
   ></campus-whiteboard-tools>
-  <campus-whiteboard-colorlist></campus-whiteboard-colorlist>
+  <campus-whiteboard-colorlist
+    [hidden]="isColorlistHidden"
+    (selectedColor)="changeSelectedCardsColor($event)"
+  ></campus-whiteboard-colorlist>
 </div>

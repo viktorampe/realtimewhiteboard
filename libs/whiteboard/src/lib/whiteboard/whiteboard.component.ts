@@ -27,13 +27,13 @@ export class WhiteboardComponent implements OnInit {
 
   title: string;
   isTitleInputSelected: boolean;
-  isGlobalEditMode: boolean;
+  isColorlistHidden: boolean;
 
   ngOnInit() {
     this.cards = [];
     this.selectedCards = [];
-    this.isGlobalEditMode = false;
     this.lastColor = 'white';
+    this.isColorlistHidden = true;
   }
 
   onDblClick(event) {
@@ -77,15 +77,6 @@ export class WhiteboardComponent implements OnInit {
 
   saveLastColor(color: string) {
     this.lastColor = color;
-    if (this.isGlobalEditMode === true) {
-      this.changeSelectedCardsColor();
-    }
-  }
-
-  changeSelectedCardsColor() {
-    for (let i = 0; i < this.selectedCards.length; i++) {
-      this.selectedCards[i].color = this.lastColor;
-    }
   }
 
   selectCard(card: Card) {
@@ -99,6 +90,15 @@ export class WhiteboardComponent implements OnInit {
 
   btnEditClicked() {
     if (this.selectedCards.length !== 0) {
+      this.isColorlistHidden = !this.isColorlistHidden;
+    }
+  }
+
+  changeSelectedCardsColor(color: string) {
+    this.isColorlistHidden = true;
+    this.lastColor = color;
+    for (let i = 0; i < this.selectedCards.length; i++) {
+      this.selectedCards[i].color = this.lastColor;
     }
   }
 }

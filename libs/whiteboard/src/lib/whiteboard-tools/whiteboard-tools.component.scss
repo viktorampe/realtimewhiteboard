@@ -1,10 +1,11 @@
 .whiteboard-tools {
   background-color: lightgray;
   height: 50px;
-  width: 100%;
+  width: 150px;
   display: flex;
   position: absolute;
   bottom: 0;
+  flex-wrap: wrap;
 
   &__btn {
     width: 50px;

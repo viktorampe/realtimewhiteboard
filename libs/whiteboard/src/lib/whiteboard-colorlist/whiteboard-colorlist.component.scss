@@ -1,2 +1,16 @@
 .whiteboard-colorlist {
+  height: 40px;
+  width: 80%;
+  background-color: rgba(0, 0, 0, 0.4);
+  position: absolute;
+  bottom: 0px;
+  left: 150px;
+
+  &__swatches {
+    display: inline-block;
+    height: 40px;
+    width: 40px;
+    box-sizing: border-box;
+    border-radius: 100%;
+  }
 }
