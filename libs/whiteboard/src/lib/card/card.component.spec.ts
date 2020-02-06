@@ -189,4 +189,34 @@ describe('CardComponent', () => {
     fixture.detectChanges();
     expect(component.deselect.emit).toHaveBeenCalled();
   });
+
+  it('should remove image when removeImage() is called', () => {
+    component.card.image = 'this is not an empty string';
+    component.removeImage();
+    expect(component.card.image).toBe('');
+  });
+
+  it('should remove background-image when removeImage() is called', () => {
+    component.card.image = 'this is not null';
+    component.removeImage();
+    fixture.detectChanges();
+    const card__image = fixture.debugElement.query(By.css('.card__image'))
+      .nativeElement;
+    expect(card__image.style.backgroundImage).toBe('url()');
+  });
+
+  it('should replace image when replaceImage() is called', () => {
+    component.card.image = 'image_1';
+    component.replaceImage('image_2');
+    expect(component.card.image).toBe('image_2');
+  });
+
+  it('should replace background-image when replaceImage() is called', () => {
+    component.card.image = 'image_1';
+    component.replaceImage('image_2');
+    fixture.detectChanges();
+    const card__image = fixture.debugElement.query(By.css('.card__image'))
+      .nativeElement;
+    expect(card__image.style.backgroundImage).toBe('url(image_2)');
+  });
 });
