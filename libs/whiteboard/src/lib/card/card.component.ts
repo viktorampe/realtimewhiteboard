@@ -28,10 +28,12 @@ export class CardComponent implements OnInit, OnChanges {
   @HostBinding('style.left') leftStyle: string;
   colorlistHidden: boolean;
   viewModeImage: boolean;
+  isChecked: boolean;
   maxCharacters = 300;
 
   constructor() {
     this.viewModeImage = true;
+    this.isChecked = false;
   }
 
   ngOnInit() {
@@ -81,9 +83,21 @@ export class CardComponent implements OnInit, OnChanges {
 
   onCheckboxChanged(event) {
     if (event.target.checked) {
+      this.isChecked = true;
       this.select.emit();
     } else {
+      this.isChecked = false;
       this.deselect.emit();
+    }
+  }
+
+  showCheckbox() {
+    this.card.opacity = 1;
+  }
+
+  hideCheckbox() {
+    if (this.card.opacity !== 1 || !this.isChecked) {
+      this.card.opacity = 0;
     }
   }
 

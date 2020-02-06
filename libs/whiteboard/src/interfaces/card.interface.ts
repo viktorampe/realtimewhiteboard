@@ -6,4 +6,5 @@ export default interface Card {
   editMode: boolean;
   top: number;
   left: number;
+  opacity: number;
 }

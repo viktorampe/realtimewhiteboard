@@ -24,7 +24,8 @@ export class WhiteboardComponent implements OnInit {
   selectedCards: Card[];
 
   lastColor: string;
-
+  opacity: number;
+  changedOpacity: number;
   title: string;
   isTitleInputSelected: boolean;
 
@@ -47,6 +48,11 @@ export class WhiteboardComponent implements OnInit {
   }
 
   addEmptyCard(top: number = 0, left: number = 0) {
+    if (this.selectedCards.length !== 0) {
+      this.changedOpacity = 1;
+    } else {
+      this.changedOpacity = 0;
+    }
     this.cards.push({
       color: this.lastColor,
       description: '',
@@ -55,7 +61,8 @@ export class WhiteboardComponent implements OnInit {
       isInputSelected: true,
       top: top,
       left: left,
-      editMode: true
+      editMode: true,
+      opacity: this.changedOpacity
     });
   }
 
@@ -79,10 +86,21 @@ export class WhiteboardComponent implements OnInit {
 
   selectCard(card: Card) {
     this.selectedCards.push(card);
+    this.cards.forEach(c => {
+      c.opacity = 1;
+    });
+    this.selectedCards.forEach(c => {
+      c.opacity = 1;
+    });
   }
 
   deselectCard(card: Card) {
     this.selectedCards = this.selectedCards.filter(c => c !== card);
+    if (this.selectedCards.length === 0) {
+      this.cards.forEach(c => {
+        c.opacity = 0;
+      });
+    }
   }
   btnDelClicked() {}
 
