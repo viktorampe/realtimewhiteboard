@@ -12,6 +12,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ConfirmationModalComponent } from '@campus/ui';
 import { configureTestSuite } from 'ng-bullet';
 import { of } from 'rxjs';
+import Card from '../../interfaces/card.interface';
 import { CardComponent } from '../card/card.component';
 import { ColorlistComponent } from '../colorlist/colorlist.component';
 import { ProgressBarComponent } from '../progress-bar/progress-bar.component';
@@ -166,5 +167,59 @@ describe('WhiteboardComponent', () => {
         disableConfirm: false
       }
     });
+  });
+
+  it('should delete all selected cards from the list of cards when the user confirms', () => {
+    const card: Card = {
+      description: '',
+      image: null,
+      color: null,
+      isInputSelected: true,
+      editMode: true,
+      top: 0,
+      left: 0
+    };
+
+    component.cards = [card];
+
+    component.selectedCards = [card];
+
+    const mockDialogRef = {
+      afterClosed: () => of(true),
+      close: null
+    } as MatDialogRef<ConfirmationModalComponent>;
+    openDialogSpy.mockReturnValue(mockDialogRef);
+
+    component.btnDelClicked();
+
+    expect(component.cards).toEqual([]);
+    expect(component.selectedCards).toEqual([]);
+  });
+
+  it('should delete not all selected cards from the list of cards when the user does not confirm', () => {
+    const card: Card = {
+      description: '',
+      image: null,
+      color: null,
+      isInputSelected: true,
+      editMode: true,
+      top: 0,
+      left: 0
+    };
+
+    component.cards = [card];
+
+    component.selectedCards = [card];
+
+    const mockDialogRef = {
+      afterClosed: () => of(false),
+      close: null
+    } as MatDialogRef<ConfirmationModalComponent>;
+    openDialogSpy.mockReturnValue(mockDialogRef);
+
+    component.btnDelClicked();
+
+    expect(component.cards).toEqual([card]);
+    expect(component.selectedCards).toEqual([card]);
   });
 });
