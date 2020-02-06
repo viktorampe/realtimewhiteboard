@@ -1,21 +1,24 @@
 <div class="card" [style.background-color]="this.card.color">
-  <input
-    type="checkbox"
-    class="card__checkbox"
-    [style.opacity]="card.opacity"
-    (change)="onCheckboxChanged($event)"
-    (mouseover)="showCheckbox()"
-    (mouseleave)="hideCheckbox()"
-  />
-  <campus-toolbar
-    [editMode]="this.card.editMode"
-    (clickColorIcon)="showColor()"
-    (clickToggleEditIcon)="toggleEditMode()"
-    (clickToggleView)="toggleView()"
-    (clickImageSettings)="showImageSettings()"
-    class="card__toolbar"
-    (delete)="onDeleteCard()"
-  ></campus-toolbar>
+  <div class="card__header">
+    <input
+      type="checkbox"
+      class="card__header__checkbox"
+      (change)="onCheckboxChanged($event)"
+      [style.opacity]="card.opacity"
+      (change)="onCheckboxChanged($event)"
+      (mouseover)="showCheckbox()"
+      (mouseleave)="hideCheckbox()"
+    />
+    <campus-toolbar
+      [editMode]="this.card.editMode"
+      (clickColorIcon)="showColor()"
+      (clickToggleEditIcon)="toggleEditMode()"
+      (clickToggleView)="toggleView()"
+      (clickImageSettings)="showImageSettings()"
+      class="card__header__toolbar"
+      (delete)="onDeleteCard()"
+    ></campus-toolbar>
+  </div>
   <campus-colorlist
     (selectedColor)="selectColor($event)"
     [hidden]="colorlistHidden"
