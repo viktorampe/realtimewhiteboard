@@ -21,7 +21,8 @@ export class WhiteboardComponent implements OnInit {
   }
 
   cards: Card[];
-  // maak array van Cards
+  selectedCards: Card[];
+
   lastColor: string;
 
   title: string;
@@ -29,6 +30,7 @@ export class WhiteboardComponent implements OnInit {
 
   ngOnInit() {
     this.cards = [];
+    this.selectedCards = [];
     this.lastColor = 'white';
   }
 
@@ -48,7 +50,8 @@ export class WhiteboardComponent implements OnInit {
     this.cards.push({
       color: this.lastColor,
       description: '',
-      image: '',
+      image:
+        'https://www.cimec.co.za/wp-content/uploads/2018/07/4-Unique-Placeholder-Image-Services-for-Designers.png',
       isInputSelected: true,
       top: top,
       left: left,
@@ -74,6 +77,13 @@ export class WhiteboardComponent implements OnInit {
     this.lastColor = color;
   }
 
+  selectCard(card: Card) {
+    this.selectedCards.push(card);
+  }
+
+  deselectCard(card: Card) {
+    this.selectedCards = this.selectedCards.filter(c => c !== card);
+  }
   btnDelClicked() {}
 
   btnEditClicked() {}

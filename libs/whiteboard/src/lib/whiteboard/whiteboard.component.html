@@ -1,4 +1,9 @@
 <div class="whiteboard-page" campusImageDrag>
+  <campus-progress-bar
+    class="whiteboard-page__progress-bar"
+    [amountCompleted]="0"
+    [amountOfImages]="0"
+  ></campus-progress-bar>
   <div class="whiteboard-page__header">
     <h2
       (click)="showTitleInput()"
@@ -22,6 +27,8 @@
       (lastColor)="saveLastColor($event)"
       [card]="card"
       (deleteCard)="onDeleteCard(i)"
+      (select)="selectCard(card)"
+      (deselect)="deselectCard(card)"
       class="whiteboard-page__card"
     ></campus-card>
   </div>

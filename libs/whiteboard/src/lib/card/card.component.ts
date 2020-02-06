@@ -21,6 +21,8 @@ export class CardComponent implements OnInit, OnChanges {
   @Input() card: Card;
   @Output() deleteCard = new EventEmitter();
   @Output() lastColor = new EventEmitter<string>();
+  @Output() select = new EventEmitter<void>();
+  @Output() deselect = new EventEmitter<void>();
 
   @HostBinding('style.top') topStyle: string;
   @HostBinding('style.left') leftStyle: string;
@@ -50,19 +52,21 @@ export class CardComponent implements OnInit, OnChanges {
     }
   }
 
+  removeImage() {
+    this.card.image = '';
+  }
+
   onDeleteCard() {
     this.deleteCard.emit();
   }
 
-  onDblClick(event) {
-    const classArray = event.target.className.split(' ');
-    if (
-      classArray.some(
-        e => e === 'cardImage' || e === 'card__input' || e === 'card'
-      )
-    ) {
-      this.toggleEditMode();
-    }
+  showImageSettings() {
+    //TODO: show modal with options --> 'select img from this computer', 'remove image'
+    this.removeImage();
+  }
+
+  onDblClick() {
+    this.toggleEditMode();
   }
 
   showColor() {
@@ -73,6 +77,14 @@ export class CardComponent implements OnInit, OnChanges {
     this.colorlistHidden = true;
     this.card.color = color;
     this.lastColor.emit(color);
+  }
+
+  onCheckboxChanged(event) {
+    if (event.target.checked) {
+      this.select.emit();
+    } else {
+      this.deselect.emit();
+    }
   }
 
   toggleEditMode() {

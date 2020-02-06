@@ -7,6 +7,11 @@
     opacity: 0.8;
   }
 
+  &__progress-bar {
+    position: absolute;
+    width: 100%;
+  }
+
   &__header {
     height: 3rem;
     flex: 0 0 auto;
@@ -29,9 +34,11 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+    position: relative;
   }
+
   &__card {
-    margin: 20px;
+    position: absolute;
     height: 350px;
     width: 300px;
     box-sizing: border-box;

@@ -6,6 +6,7 @@ import { MatCardModule, MatIconModule } from '@angular/material';
 import { CardComponent } from './card/card.component';
 import { ColorlistComponent } from './colorlist/colorlist.component';
 import { ImageDragDirective } from './image-drag.directive';
+import { ProgressBarComponent } from './progress-bar/progress-bar.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { WhiteboardToolsComponent } from './whiteboard-tools/whiteboard-tools.component';
 import { WhiteboardComponent } from './whiteboard/whiteboard.component';
@@ -24,6 +25,7 @@ import { WhiteboardComponent } from './whiteboard/whiteboard.component';
     ToolbarComponent,
     ColorlistComponent,
     ImageDragDirective,
+    ProgressBarComponent,
     WhiteboardToolsComponent
   ],
   exports: [WhiteboardComponent]

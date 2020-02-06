@@ -1,21 +1,18 @@
-<div class="toolbar">
+<div class="toolbar" *ngIf="editMode; else noEditMode">
   <mat-icon
     class="toolbar_icon"
     (click)="toggleModus()"
     [svgIcon]="'edit'"
   ></mat-icon>
   <mat-icon
-    *ngIf="editMode"
     class="toolbar_icon"
     [svgIcon]="'color'"
     (click)="showColor()"
   ></mat-icon>
   <mat-icon
-    *ngIf="!editMode"
     class="toolbar_icon"
-    id="toggle_icon"
-    [svgIcon]="'toggle'"
-    (click)="toggleView()"
+    (click)="imageSettingsClicked()"
+    [svgIcon]="'photolibrary'"
   ></mat-icon>
   <mat-icon
     *ngIf="editMode"
@@ -24,3 +21,18 @@
     [svgIcon]="'cancel'"
   ></mat-icon>
 </div>
+<ng-template #noEditMode>
+  <div class="toolbar">
+    <mat-icon
+      class="toolbar_icon"
+      (click)="toggleModus()"
+      [svgIcon]="'edit'"
+    ></mat-icon>
+    <mat-icon
+      class="toolbar_icon"
+      id="toggle_icon"
+      [svgIcon]="'toggle'"
+      (click)="toggleView()"
+    ></mat-icon>
+  </div>
+</ng-template>
