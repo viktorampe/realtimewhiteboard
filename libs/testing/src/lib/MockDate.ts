@@ -28,7 +28,7 @@ export class MockDate {
     // @ts-ignore
     global.Date.now = () => mockDate.getTime();
 
-    // Override Date.instanceof to always be true
+    // Date instanceof
     Object.defineProperty(global.Date, Symbol.hasInstance, {
       get: () => instance => this._Date[Symbol.hasInstance](instance)
     });
