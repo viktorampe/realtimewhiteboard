@@ -113,4 +113,31 @@ describe('WhiteboardComponent', () => {
 
     expect(component.selectedCards).not.toContain(card);
   });
+
+  it('should change the colors of the selected cards when a swatch is clicked', () => {
+    const card = {
+      description: '',
+      image: null,
+      color: null,
+      isInputSelected: false,
+      editMode: true,
+      top: 0,
+      left: 0
+    };
+    const card2 = {
+      description: '',
+      image: null,
+      color: null,
+      isInputSelected: false,
+      editMode: true,
+      top: 0,
+      left: 0
+    };
+    component.selectedCards = [card, card2];
+    component.btnEditClicked();
+    component.changeSelectedCardsColor('black');
+    for (let i = 0; i < component.selectedCards.length; i++) {
+      expect(component.selectedCards[i].color).toBe('black');
+    }
+  });
 });
