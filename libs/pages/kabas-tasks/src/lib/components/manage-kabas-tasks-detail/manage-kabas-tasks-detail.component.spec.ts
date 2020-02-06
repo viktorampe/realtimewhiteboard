@@ -1,5 +1,3 @@
-//file.only
-
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { DebugElement } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
@@ -621,6 +619,9 @@ describe('ManageKabasTasksDetailComponent', () => {
       });
 
       it('should call removeAssignee when clicking the delete icon on an assignee', () => {
+        addExerciseFileToTask(currentTask);
+        updateCurrentTask(currentTask);
+
         const assigneeDE = fixture.debugElement.query(
           By.css('.manage-kabas-tasks-detail__info__assignee mat-icon')
         );
