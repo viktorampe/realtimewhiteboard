@@ -43,6 +43,7 @@ steps:
       echo Build.SourceBranch	= $(Build.SourceBranch)
       echo System.PullRequest.TargetBranch = $(System.PullRequest.TargetBranch)
       echo Build.SourcesDirectory = $(Build.SourcesDirectory)
+      echo Build.ArtifactStagingDirectory = $(Build.ArtifactStagingDirectory)
       echo dkRanTests = $(dkRanTests)
       echo dkBuild = $(dkBuild)
       echo
