@@ -5,6 +5,9 @@ import {
   AUTH_SERVICE_TOKEN,
   DalState,
   EduContentFixture,
+  EduContentMetadataFixture,
+  EduFileFixture,
+  EduFileTypeEnum,
   EffectFeedback,
   EffectFeedbackActions,
   FavoriteActions,
@@ -780,10 +783,30 @@ describe('KabasTaskViewModel', () => {
   });
 
   describe('printSolution', () => {
-    it('should call the service with the right arguments', () => {
-      kabasTasksViewModel.printSolution(1);
+    it('should dispatch an print-paper-task-solution action', () => {
+      const spy = jest.spyOn(store, 'dispatch');
 
-      expect(taskService.printSolution).toHaveBeenCalledWith(1);
+      const task = new TaskFixture({
+        id: 666,
+        taskEduContents: [
+          new TaskEduContentFixture({
+            eduContent: new EduContentFixture(
+              {},
+              new EduContentMetadataFixture({
+                eduFiles: [
+                  new EduFileFixture({ type: EduFileTypeEnum.SOLUTION })
+                ]
+              })
+            )
+          })
+        ]
+      }) as TaskWithAssigneesInterface;
+      kabasTasksViewModel.printSolution(task);
+
+      const expectedAction = new TaskActions.PrintPaperTaskSolution({
+        task
+      });
+      expect(spy).toHaveBeenCalledWith(expectedAction);
     });
   });
 

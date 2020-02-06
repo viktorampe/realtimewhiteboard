@@ -1,6 +1,7 @@
 import { Update } from '@ngrx/entity';
 import { Action } from '@ngrx/store';
 import {
+  EduContent,
   TaskClassGroupInterface,
   TaskGroupInterface,
   TaskInterface,
@@ -29,7 +30,8 @@ export enum TasksActionTypes {
   StartDeleteTasks = '[Tasks] Start Delete Tasks',
   StartAddTask = '[Tasks] Start Add Task',
   NavigateToTaskDetail = '[Tasks] Navigate To Task Detail',
-  NavigateToTasksOverview = '[Tasks] Navigate To Task Overview'
+  NavigateToTasksOverview = '[Tasks] Navigate To Task Overview',
+  PrintPaperTaskSolution = '[Tasks] Print paper task solution'
 }
 
 export class LoadTasks implements Action {
@@ -178,6 +180,23 @@ export class NavigateToTasksOverview implements Action {
 
   constructor() {}
 }
+export class PrintPaperTaskSolution implements FeedbackTriggeringAction {
+  readonly type = TasksActionTypes.PrintPaperTaskSolution;
+
+  constructor(
+    public payload: {
+      task: PrintTaskInterface;
+      force?: boolean;
+      customFeedbackHandlers?: CustomFeedbackHandlersInterface;
+    }
+  ) {}
+}
+
+// interface added here to avoid importing TaskWithAssigneeInterface from the kabas-tasks page
+interface PrintTaskInterface {
+  id?: number;
+  taskEduContents?: { eduContent?: EduContent }[];
+}
 
 export type TasksActions =
   | LoadTasks
@@ -196,4 +215,5 @@ export type TasksActions =
   | StartDeleteTasks
   | StartAddTask
   | NavigateToTaskDetail
-  | NavigateToTasksOverview;
+  | NavigateToTasksOverview
+  | PrintPaperTaskSolution;
