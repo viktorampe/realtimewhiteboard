@@ -198,7 +198,15 @@ describe('WhiteboardComponent', () => {
       left: 0
     };
     component.selectedCards = [card];
+
+    const mockDialogRef = {
+      afterClosed: () => of(true), // fake confirmation
+      close: null
+    } as MatDialogRef<ConfirmationModalComponent>;
+    openDialogSpy.mockReturnValue(mockDialogRef);
+
     component.onDeleteCard(card);
+    fixture.detectChanges();
     expect(component.selectedCards.length).toBe(0);
   });
 });
