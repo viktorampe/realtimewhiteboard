@@ -160,7 +160,7 @@ describe('WhiteboardComponent', () => {
     expect(openDialogSpy).not.toHaveBeenCalled();
   });
 
-  it('should open a confirmation dialog if the bulk delete button is clicked and there are selected items', () => {
+  it('should open a confirmation dialog when the bulk delete button is clicked and there are selected items', () => {
     const mockDialogRef = {
       afterClosed: () => of(false),
       close: null
