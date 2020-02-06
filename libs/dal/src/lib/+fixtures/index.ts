@@ -13,6 +13,7 @@ export * from './EduContentMetadata.fixture';
 export * from './EduContentProductType.fixture';
 export * from './EduContentTOC.fixture';
 export * from './EduContentTOCEduContent.fixture';
+export * from './EduFile.fixture';
 export * from './EduNet.fixture';
 export * from './EffectFeedback.fixture';
 export * from './Favorite.fixture';
