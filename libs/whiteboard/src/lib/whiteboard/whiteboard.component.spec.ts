@@ -148,6 +148,18 @@ describe('WhiteboardComponent', () => {
     expect(openDialogSpy).not.toHaveBeenCalled();
   });
 
+  it('should not open a confirmation dialog when the bulk delete button is clicked if there are no selected items', () => {
+    const mockDialogRef = {
+      afterClosed: () => of(false),
+      close: null
+    } as MatDialogRef<ConfirmationModalComponent>;
+    openDialogSpy.mockReturnValue(mockDialogRef);
+
+    component.selectedCards = [];
+
+    expect(openDialogSpy).not.toHaveBeenCalled();
+  });
+
   it('should open a confirmation dialog if the bulk delete button is clicked and there are selected items', () => {
     const mockDialogRef = {
       afterClosed: () => of(false),
