@@ -1,8 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
-import { MatCardModule, MatIconModule } from '@angular/material';
+import {
+  MatCardModule,
+  MatDialog,
+  MatDialogModule,
+  MatDialogRef,
+  MatIconModule
+} from '@angular/material';
 import { By, HAMMER_LOADER } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ConfirmationModalComponent } from '@campus/ui';
 import { configureTestSuite } from 'ng-bullet';
+import { of } from 'rxjs';
 import { CardComponent } from '../card/card.component';
 import { ColorlistComponent } from '../colorlist/colorlist.component';
 import { ProgressBarComponent } from '../progress-bar/progress-bar.component';
@@ -14,9 +23,18 @@ describe('WhiteboardComponent', () => {
   let component: WhiteboardComponent;
   let fixture: ComponentFixture<WhiteboardComponent>;
 
+  let openDialogSpy: jest.SpyInstance;
+  let matDialog: MatDialog;
+
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [MatCardModule, FormsModule, MatIconModule],
+      imports: [
+        MatCardModule,
+        FormsModule,
+        MatIconModule,
+        MatDialogModule,
+        BrowserAnimationsModule
+      ],
       declarations: [
         WhiteboardComponent,
         CardComponent,
@@ -38,6 +56,9 @@ describe('WhiteboardComponent', () => {
     fixture = TestBed.createComponent(WhiteboardComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+
+    matDialog = TestBed.get(MatDialog);
+    openDialogSpy = matDialog.open = jest.fn();
   });
 
   it('should create', () => {
@@ -110,5 +131,26 @@ describe('WhiteboardComponent', () => {
     component.deselectCard(card);
 
     expect(component.selectedCards).not.toContain(card);
+  });
+
+  it('should open a confirmation dialog if the bulk delete button is clicked and there are selected items', () => {
+    const mockDialogRef = {
+      afterClosed: () => of(false),
+      close: null
+    } as MatDialogRef<ConfirmationModalComponent>;
+    openDialogSpy.mockReturnValue(mockDialogRef);
+
+    component.selectedCards = [null];
+
+    component.btnDelClicked();
+
+    expect(openDialogSpy).toHaveBeenCalledTimes(1);
+    expect(openDialogSpy).toHaveBeenCalledWith(ConfirmationModalComponent, {
+      data: {
+        title: 'Verwijderen bevestigen',
+        message: 'Weet u zeker dat u deze kaarten wil verwijderen?',
+        disableConfirm: false
+      }
+    });
   });
 });
