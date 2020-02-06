@@ -180,7 +180,17 @@ describe('WhiteboardComponent', () => {
       left: 0
     };
 
-    component.cards = [card];
+    const differentCard: Card = {
+      description: '',
+      image: null,
+      color: null,
+      isInputSelected: true,
+      editMode: true,
+      top: 0,
+      left: 0
+    };
+
+    component.cards = [card, differentCard];
 
     component.selectedCards = [card];
 
@@ -192,7 +202,7 @@ describe('WhiteboardComponent', () => {
 
     component.btnDelClicked();
 
-    expect(component.cards).toEqual([]);
+    expect(component.cards).toEqual([differentCard]);
     expect(component.selectedCards).toEqual([]);
   });
 
