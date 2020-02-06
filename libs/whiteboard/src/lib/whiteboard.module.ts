@@ -6,8 +6,8 @@ import { MatCardModule, MatIconModule } from '@angular/material';
 import { CardComponent } from './card/card.component';
 import { ColorlistComponent } from './colorlist/colorlist.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
-import { WhiteboardComponent } from './whiteboard/whiteboard.component';
 import { WhiteboardToolsComponent } from './whiteboard-tools/whiteboard-tools.component';
+import { WhiteboardComponent } from './whiteboard/whiteboard.component';
 import { WhiteboardColorlistComponent } from './whiteboard-colorlist/whiteboard-colorlist.component';
 
 @NgModule({

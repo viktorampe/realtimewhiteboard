@@ -1,1 +1,7 @@
-<p>whiteboard-colorlist works!</p>
+<div class="whiteboard-colorlist">
+  <div
+    *ngFor="let swatch of defaultColors"
+    class="whiteboard-colorlist__swatches"
+    [style.background-color]="swatch"
+  ></div>
+</div>
