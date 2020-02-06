@@ -1,3 +1,5 @@
+//file.only
+
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { DebugElement } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
@@ -36,7 +38,7 @@ import {
   OPEN_STATIC_CONTENT_SERVICE_TOKEN,
   SharedModule
 } from '@campus/shared';
-import { MockMatIconRegistry } from '@campus/testing';
+import { MockDate, MockMatIconRegistry } from '@campus/testing';
 import { ConfirmationModalComponent, UiModule } from '@campus/ui';
 import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/utils';
 import { hot } from '@nrwl/angular/testing';
@@ -68,6 +70,7 @@ describe('ManageKabasTasksDetailComponent', () => {
   let matDialog: MatDialog;
   let router: Router;
   const queryParams: BehaviorSubject<Params> = new BehaviorSubject<Params>({});
+  let mockDate: MockDate;
 
   let contentActionsService: ContentActionsServiceInterface;
   let mockViewmodel: MockKabasTasksViewModel;
@@ -184,6 +187,7 @@ describe('ManageKabasTasksDetailComponent', () => {
   });
 
   beforeEach(() => {
+    mockDate = new MockDate(new Date('4 feb 2020'));
     viewModel = TestBed.get(KabasTasksViewModel);
     matDialog = TestBed.get(MatDialog);
     router = TestBed.get(Router);
@@ -199,6 +203,10 @@ describe('ManageKabasTasksDetailComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  afterAll(() => {
+    mockDate.returnRealDate();
   });
 
   describe('openAssigneeModal', () => {
