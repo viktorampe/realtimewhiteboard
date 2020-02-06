@@ -22,13 +22,26 @@
       width: 100%;
     }
   }
-
-  &__checkbox {
+  &__header {
     position: absolute;
-    top: 13px;
-    left: 13px;
-    margin: 1px;
-    transform: scale(2);
+    width: 100%;
+    top: 0;
+    left: 0;
+    padding: 10px;
+
+    display: flex;
+    align-items: center;
+
+    &__checkbox {
+      flex: 0 1;
+      justify-self: flex-start;
+      transform: scale(2);
+    }
+
+    &__toolbar {
+      flex: 1 0;
+      justify-self: flex-end;
+    }
   }
 
   &__toolbar {
@@ -72,11 +85,4 @@
       }
     }
   }
-}
-
-campus-toolbar {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 100%;
 }

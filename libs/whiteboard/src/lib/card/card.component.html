@@ -1,18 +1,20 @@
 <div class="card" [style.background-color]="this.card.color">
-  <input
-    type="checkbox"
-    class="card__checkbox"
-    (change)="onCheckboxChanged($event)"
-  />
-  <campus-toolbar
-    [editMode]="this.card.editMode"
-    (clickColorIcon)="showColor()"
-    (clickToggleEditIcon)="toggleEditMode()"
-    (clickToggleView)="toggleView()"
-    (clickImageSettings)="showImageSettings()"
-    class="card__toolbar"
-    (delete)="onDeleteCard()"
-  ></campus-toolbar>
+  <div class="card__header">
+    <input
+      type="checkbox"
+      class="card__header__checkbox"
+      (change)="onCheckboxChanged($event)"
+    />
+    <campus-toolbar
+      [editMode]="this.card.editMode"
+      (clickColorIcon)="showColor()"
+      (clickToggleEditIcon)="toggleEditMode()"
+      (clickToggleView)="toggleView()"
+      (clickImageSettings)="showImageSettings()"
+      class="card__header__toolbar"
+      (delete)="onDeleteCard()"
+    ></campus-toolbar>
+  </div>
   <campus-colorlist
     class="card__colorlist"
     (selectedColor)="selectColor($event)"

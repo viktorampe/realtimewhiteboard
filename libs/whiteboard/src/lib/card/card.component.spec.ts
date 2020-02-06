@@ -170,6 +170,12 @@ describe('CardComponent', () => {
     expect(component.lastColor.emit).toHaveBeenCalledWith('black');
   });
 
+  it('should emit deleteCard when the close button is clicked', () => {
+    spyOn(component.deleteCard, 'emit');
+    component.onDeleteCard();
+    expect(component.deleteCard.emit).toHaveBeenCalledTimes(1);
+  });
+
   it('should emit the right card when a card is selected', () => {
     spyOn(component.select, 'emit');
     const checkboxes = fixture.debugElement.queryAll(By.css('.card__checkbox'));

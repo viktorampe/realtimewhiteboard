@@ -16,4 +16,5 @@ export interface TaskWithAssigneesInterface extends TaskInterface {
   endDate?: Date;
   status?: TaskStatusEnum;
   actions?: { label: string; handler: Function }[];
+  hasSolutionFiles?: boolean;
 }
