@@ -7,7 +7,6 @@ import { CardComponent } from './card/card.component';
 import { ColorlistComponent } from './colorlist/colorlist.component';
 import { ProgressBarComponent } from './progress-bar/progress-bar.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
-import { WhiteboardColorlistComponent } from './whiteboard-colorlist/whiteboard-colorlist.component';
 import { WhiteboardToolsComponent } from './whiteboard-tools/whiteboard-tools.component';
 import { WhiteboardComponent } from './whiteboard/whiteboard.component';
 
@@ -25,7 +24,6 @@ import { WhiteboardComponent } from './whiteboard/whiteboard.component';
     ToolbarComponent,
     ColorlistComponent,
     WhiteboardToolsComponent,
-    WhiteboardColorlistComponent,
     ProgressBarComponent
   ],
   exports: [WhiteboardComponent]
