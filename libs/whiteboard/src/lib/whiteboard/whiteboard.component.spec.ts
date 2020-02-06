@@ -155,7 +155,17 @@ describe('WhiteboardComponent', () => {
     } as MatDialogRef<ConfirmationModalComponent>;
     openDialogSpy.mockReturnValue(mockDialogRef);
 
-    component.selectedCards = [null];
+    const card: Card = {
+      description: '',
+      image: null,
+      color: null,
+      isInputSelected: true,
+      editMode: true,
+      top: 0,
+      left: 0
+    };
+
+    component.selectedCards = [card];
 
     component.btnDelClicked();
 
