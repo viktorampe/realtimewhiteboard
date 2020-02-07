@@ -97,6 +97,9 @@ export class CardComponent implements OnInit, OnChanges {
 
   toggleEditMode() {
     this.card.editMode = !this.card.editMode;
+    if (!this.card.editMode && !this.colorlistHidden) {
+      this.colorlistHidden = true;
+    }
     this.viewModeImage = true;
   }
 

@@ -241,4 +241,10 @@ describe('CardComponent', () => {
       .nativeElement;
     expect(card__image.style.backgroundImage).toBe('url(image_2)');
   });
+
+  it('should close the open colorlist when switching out of editmode', () => {
+    component.showColor();
+    component.toggleEditMode();
+    expect(component.colorlistHidden).toBe(true);
+  });
 });
