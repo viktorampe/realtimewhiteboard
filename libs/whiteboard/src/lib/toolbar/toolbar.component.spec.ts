@@ -48,4 +48,10 @@ describe('ToolbarComponent', () => {
     component.toggleView();
     expect(component.clickToggleView.emit).toHaveBeenCalled();
   });
+
+  it('should emit clickImageSettings when imageSettingsClicked is called', () => {
+    spyOn(component.clickImageSettings, 'emit');
+    component.imageSettingsClicked();
+    expect(component.clickImageSettings.emit).toHaveBeenCalled();
+  });
 });
