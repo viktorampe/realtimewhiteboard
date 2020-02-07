@@ -6,22 +6,22 @@ export const environment = {
   production: true,
   iconMapping: icons,
   website: {
-    url: 'https://teacher.staging.lk2020.be//login',
+    url: 'https://teacher.staging.lk2020.be/login',
     title: 'KABAS',
     favicon: 'assets/icons/favicon.ico'
   },
   logout: {
-    url: 'https://teacher.staging.lk2020.be//logout'
+    url: 'https://teacher.staging.lk2020.be/logout'
   },
   login: {
-    url: 'https://teacher.staging.lk2020.be//login',
+    url: 'https://teacher.staging.lk2020.be/login',
     loginPresets: [
       { label: 'Student', username: 'student1', password: 'testje' },
       { label: 'Leerkracht', username: 'teacher1', password: 'testje' }
     ]
   },
   termPrivacy: {
-    url: 'https://teacher.staging.lk2020.be/'
+    url: 'https://teacher.staging.lk2020.be'
   },
   api: {
     APIBase: 'https://api.staging.lk2020.be'
