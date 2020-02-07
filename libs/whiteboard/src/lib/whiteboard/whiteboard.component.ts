@@ -98,7 +98,25 @@ export class WhiteboardComponent implements OnInit {
   deselectCard(card: Card) {
     this.selectedCards = this.selectedCards.filter(c => c !== card);
   }
-  btnDelClicked() {}
+
+  btnDelClicked() {
+    if (this.selectedCards.length) {
+      const dialogRef = this.dialog.open(ConfirmationModalComponent, {
+        data: {
+          title: 'Verwijderen bevestigen',
+          message: 'Weet u zeker dat u deze kaarten wil verwijderen?',
+          disableConfirm: false
+        }
+      });
+
+      dialogRef.afterClosed().subscribe(deleteConfirmation => {
+        if (deleteConfirmation) {
+          this.cards = this.cards.filter(c => !this.selectedCards.includes(c));
+          this.selectedCards = [];
+        }
+      });
+    }
+  }
 
   btnEditClicked() {}
 }
