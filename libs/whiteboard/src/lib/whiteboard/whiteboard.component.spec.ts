@@ -1,12 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import {
-  MatCardModule,
-  MatDialog,
-  MatDialogModule,
-  MatDialogRef,
-  MatIconModule
-} from '@angular/material';
+import { MatCardModule, MatDialog, MatDialogModule, MatDialogRef, MatIconModule } from '@angular/material';
 import { By, HAMMER_LOADER } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ConfirmationModalComponent } from '@campus/ui';
