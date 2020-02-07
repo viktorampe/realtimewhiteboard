@@ -51,4 +51,75 @@ describe('ImageDragDirective', () => {
   it('should create an instance', () => {
     expect(directive).toBeTruthy();
   });
+
+  it('should apply the correct classes on dragging files over', () => {
+    directive.onDragOver(new Event('dragover'));
+
+    testContainerFixture.detectChanges();
+
+    console.log(componentDE.nativeElement.className);
+
+    expect(
+      componentDE.nativeElement.classList.contains(
+        'image-drag-directive-dragging'
+      )
+    ).toBeTruthy();
+  });
+
+  it('should remove the class on dragleave', () => {
+    directive.onDragOver(new Event('dragover'));
+
+    testContainerFixture.detectChanges();
+
+    directive.onDragLeave(new Event('dragleave'));
+
+    testContainerFixture.detectChanges();
+
+    expect(
+      componentDE.nativeElement.classList.contains(
+        'image-drag-directive-dragging'
+      )
+    ).toBeFalsy();
+  });
+
+  it('should remove the class on dropping files', () => {
+    directive.onDragOver(new Event('dragover'));
+
+    testContainerFixture.detectChanges();
+
+    const file = new File([''], 'dummy.jpg');
+    const fileDropEvent = {
+      preventDefault: () => {},
+      stopPropagation: () => {},
+      dataTransfer: { files: [file, file, file] }
+    };
+
+    directive.ondrop(fileDropEvent);
+
+    testContainerFixture.detectChanges();
+
+    expect(
+      componentDE.nativeElement.classList.contains(
+        'image-drag-directive-dragging'
+      )
+    ).toBeFalsy();
+  });
+
+  it('should emit the files on dropping files', () => {
+    spyOn(directive.fileDropped, 'emit');
+
+    const file = new File([''], 'dummy.jpg');
+    const fileDropEvent = {
+      preventDefault: () => {},
+      stopPropagation: () => {},
+      dataTransfer: { files: [file, file, file] }
+    };
+
+    directive.ondrop(fileDropEvent);
+
+    expect(directive.fileDropped.emit).toHaveBeenCalledTimes(1);
+    expect(directive.fileDropped.emit).toHaveBeenCalledWith(
+      fileDropEvent.dataTransfer.files
+    );
+  });
 });
