@@ -30,13 +30,7 @@ describe('ImageDragDirective', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [TestModule],
-      providers: [
-        {
-          provide: ImageDragDirective,
-          useClass: ImageDragDirective
-        }
-      ]
+      imports: [TestModule]
     });
   });
 
@@ -57,13 +51,9 @@ describe('ImageDragDirective', () => {
 
     testContainerFixture.detectChanges();
 
-    console.log(componentDE.nativeElement.className);
-
-    expect(
-      componentDE.nativeElement.classList.contains(
-        'image-drag-directive-dragging'
-      )
-    ).toBeTruthy();
+    expect(componentDE.nativeElement.classList).toContain(
+      'image-drag-directive-dragging'
+    );
   });
 
   it('should remove the class on dragleave', () => {

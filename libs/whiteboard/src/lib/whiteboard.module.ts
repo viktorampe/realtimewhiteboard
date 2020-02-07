@@ -28,6 +28,6 @@ import { WhiteboardComponent } from './whiteboard/whiteboard.component';
     ProgressBarComponent,
     WhiteboardToolsComponent
   ],
-  exports: [WhiteboardComponent]
+  exports: [WhiteboardComponent, ImageDragDirective]
 })
 export class WhiteboardModule {}
