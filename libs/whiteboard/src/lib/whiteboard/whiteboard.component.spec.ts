@@ -206,7 +206,6 @@ describe('WhiteboardComponent', () => {
     openDialogSpy.mockReturnValue(mockDialogRef);
 
     component.onDeleteCard(card);
-    fixture.detectChanges();
     expect(component.selectedCards.length).toBe(0);
   });
 });
