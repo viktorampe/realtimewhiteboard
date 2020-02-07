@@ -9,7 +9,6 @@ import {
   Output,
   ViewChild
 } from '@angular/core';
-import Card from '../../interfaces/card.interface';
 
 @Component({
   selector: 'campus-card',
@@ -18,7 +17,14 @@ import Card from '../../interfaces/card.interface';
 })
 export class CardComponent implements OnInit, OnChanges {
   @ViewChild('inputContent', { static: false }) inputContent: ElementRef;
-  @Input() card: Card;
+  @Input() color: string;
+  @Input() description: string;
+  @Input() image: string;
+  @Input() isInputSelected: boolean;
+  @Input() editMode: boolean;
+  @Input() top: number;
+  @Input() left: number;
+
   @Output() deleteCard = new EventEmitter();
   @Output() lastColor = new EventEmitter<string>();
   @Output() select = new EventEmitter<void>();
@@ -39,25 +45,25 @@ export class CardComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    this.topStyle = this.card.top + 'px';
-    this.leftStyle = this.card.left + 'px';
+    this.topStyle = this.top + 'px';
+    this.leftStyle = this.left + 'px';
   }
 
   toggleInput() {
     if (
-      this.card.description !== '' &&
-      this.card.description.length <= this.maxCharacters
+      this.description !== '' &&
+      this.description.length <= this.maxCharacters
     ) {
-      this.card.isInputSelected = !this.card.isInputSelected;
+      this.isInputSelected = !this.isInputSelected;
     }
   }
 
   removeImage() {
-    this.card.image = '';
+    this.image = '';
   }
 
   replaceImage(url: string) {
-    this.card.image = url;
+    this.image = url;
   }
 
   onDeleteCard() {
@@ -80,7 +86,7 @@ export class CardComponent implements OnInit, OnChanges {
 
   selectColor(color: string) {
     this.colorlistHidden = true;
-    this.card.color = color;
+    this.color = color;
     this.lastColor.emit(color);
   }
 
@@ -93,7 +99,7 @@ export class CardComponent implements OnInit, OnChanges {
   }
 
   toggleEditMode() {
-    this.card.editMode = !this.card.editMode;
+    this.editMode = !this.editMode;
     this.viewModeImage = true;
   }
 
