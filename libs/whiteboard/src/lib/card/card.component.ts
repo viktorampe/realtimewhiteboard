@@ -9,6 +9,7 @@ import {
   Output,
   ViewChild
 } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import Card from '../../interfaces/card.interface';
 
 @Component({
@@ -29,6 +30,8 @@ export class CardComponent implements OnInit, OnChanges {
   colorlistHidden: boolean;
   viewModeImage: boolean;
   maxCharacters = 300;
+
+  txtContent = new FormControl();
 
   constructor() {
     this.viewModeImage = true;
