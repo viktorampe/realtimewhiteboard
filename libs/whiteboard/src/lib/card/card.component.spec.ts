@@ -182,6 +182,12 @@ describe('CardComponent', () => {
     expect(component.lastColor.emit).toHaveBeenCalledWith('black');
   });
 
+  it('should emit deleteCard when the close button is clicked', () => {
+    spyOn(component.deleteCard, 'emit');
+    component.onDeleteCard();
+    expect(component.deleteCard.emit).toHaveBeenCalledTimes(1);
+  });
+
   it('should emit the right card when a card is selected', () => {
     spyOn(component.select, 'emit');
     const checkboxes = fixture.debugElement.queryAll(By.css('.card__checkbox'));
@@ -200,5 +206,35 @@ describe('CardComponent', () => {
     checkbox.click(); // van true naar false
     fixture.detectChanges();
     expect(component.deselect.emit).toHaveBeenCalled();
+  });
+
+  it('should remove image when removeImage() is called', () => {
+    component.card.image = 'this is not an empty string';
+    component.removeImage();
+    expect(component.card.image).toBe('');
+  });
+
+  it('should remove background-image when removeImage() is called', () => {
+    component.card.image = 'this is not null';
+    component.removeImage();
+    fixture.detectChanges();
+    const card__image = fixture.debugElement.query(By.css('.card__image'))
+      .nativeElement;
+    expect(card__image.style.backgroundImage).toBe('url()');
+  });
+
+  it('should replace image when replaceImage() is called', () => {
+    component.card.image = 'image_1';
+    component.replaceImage('image_2');
+    expect(component.card.image).toBe('image_2');
+  });
+
+  it('should replace background-image when replaceImage() is called', () => {
+    component.card.image = 'image_1';
+    component.replaceImage('image_2');
+    fixture.detectChanges();
+    const card__image = fixture.debugElement.query(By.css('.card__image'))
+      .nativeElement;
+    expect(card__image.style.backgroundImage).toBe('url(image_2)');
   });
 });

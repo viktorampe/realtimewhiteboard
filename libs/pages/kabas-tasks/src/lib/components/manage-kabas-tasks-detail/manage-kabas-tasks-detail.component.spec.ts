@@ -1,5 +1,3 @@
-//file.only
-
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { DebugElement } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
@@ -20,6 +18,8 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import {
   EduContentFixture,
+  EduFileFixture,
+  EduFileTypeEnum,
   LearningAreaFixture,
   LearningAreaInterface,
   TaskEduContentFixture,
@@ -92,6 +92,19 @@ describe('ManageKabasTasksDetailComponent', () => {
   ) => {
     tECs = tECs.map(tEC => Object.assign(tEC, { actions }));
     return tECs;
+  };
+
+  const addSolutionFileToTask = (task: TaskWithAssigneesInterface) => {
+    task.taskEduContents[0].eduContent.publishedEduContentMetadata.eduFiles = [
+      new EduFileFixture({ type: EduFileTypeEnum.SOLUTION })
+    ];
+    task.hasSolutionFiles = true;
+  };
+  const addExerciseFileToTask = (task: TaskWithAssigneesInterface) => {
+    task.taskEduContents[0].eduContent.publishedEduContentMetadata.eduFiles = [
+      new EduFileFixture({ type: EduFileTypeEnum.EXERCISE })
+    ];
+    task.hasSolutionFiles = false;
   };
 
   // create a taskEduContentWithEduContent fixture
@@ -199,8 +212,12 @@ describe('ManageKabasTasksDetailComponent', () => {
     fixture.detectChanges();
 
     mockViewmodel = viewModel as MockKabasTasksViewModel;
+
     [currentTask, ...restOfTasks] = mockViewmodel.tasksWithAssignments$.value;
+
+    // extra properties added in onInit
     taskEduContents = addActions(currentTask.taskEduContents);
+    currentTask.hasSolutionFiles = true;
   });
 
   it('should create', () => {
@@ -300,6 +317,9 @@ describe('ManageKabasTasksDetailComponent', () => {
     });
 
     it('should update the task assignee access on dialog close', () => {
+      addSolutionFileToTask(currentTask);
+      updateCurrentTask(currentTask);
+
       const dialogResult = [new AssigneeFixture()];
       viewModel.updateTaskAccess = jest.fn();
 
@@ -599,6 +619,9 @@ describe('ManageKabasTasksDetailComponent', () => {
       });
 
       it('should call removeAssignee when clicking the delete icon on an assignee', () => {
+        addExerciseFileToTask(currentTask);
+        updateCurrentTask(currentTask);
+
         const assigneeDE = fixture.debugElement.query(
           By.css('.manage-kabas-tasks-detail__info__assignee mat-icon')
         );
@@ -661,6 +684,9 @@ describe('ManageKabasTasksDetailComponent', () => {
           });
 
           it('should call the correct handler', () => {
+            addSolutionFileToTask(currentTask);
+            updateCurrentTask(currentTask);
+
             component.printTask = jest.fn();
             link.triggerEventHandler('click', null);
 
@@ -682,6 +708,9 @@ describe('ManageKabasTasksDetailComponent', () => {
           });
 
           it('should call the correct handler', () => {
+            addSolutionFileToTask(currentTask);
+            updateCurrentTask(currentTask);
+
             component.printTask = jest.fn();
             link.triggerEventHandler('click', null);
 
@@ -705,7 +734,34 @@ describe('ManageKabasTasksDetailComponent', () => {
             expect(linkText).toEqual(expected);
           });
 
+          it('should be disabled when the task does not have solution files', () => {
+            addExerciseFileToTask(currentTask);
+            updateCurrentTask(currentTask);
+
+            fixture.detectChanges();
+
+            expect(link.nativeElement.classList).toContain(
+              'manage-kabas-tasks-detail__info__link--disabled'
+            );
+          });
+
+          it('should have a tooltip when there are no solution files', () => {
+            updateCurrentTask(currentTask);
+            fixture.detectChanges();
+
+            const tooltip: MatTooltip = link.injector.get<MatTooltip>(
+              MatTooltip
+            );
+
+            expect(tooltip.message).toBe(
+              'Het lesmateriaal in deze taak bevat geen correctiesleutels.'
+            );
+          });
+
           it('should call the correct handler', () => {
+            addSolutionFileToTask(currentTask);
+            updateCurrentTask(currentTask);
+
             component.printSolution = jest.fn();
             link.triggerEventHandler('click', null);
 
@@ -776,6 +832,9 @@ describe('ManageKabasTasksDetailComponent', () => {
     });
 
     it('should open the print task modal', () => {
+      addSolutionFileToTask(currentTask);
+      updateCurrentTask(currentTask);
+
       const expectedData = { disable: [] };
       const expectedClass = 'manage-task-detail-print';
 
@@ -791,6 +850,7 @@ describe('ManageKabasTasksDetailComponent', () => {
     });
 
     it('should open the print task modal, no assignees in currentTask', () => {
+      addSolutionFileToTask(currentTask);
       currentTask.assignees = [];
       updateCurrentTask(currentTask);
 
@@ -809,8 +869,30 @@ describe('ManageKabasTasksDetailComponent', () => {
         }
       );
     });
+    it('should open the print task modal, no solution files in currentTask', () => {
+      addExerciseFileToTask(currentTask);
+      updateCurrentTask(currentTask);
+
+      const expectedData = {
+        disable: [PrintPaperTaskModalResultEnum.SOLUTION]
+      };
+      const expectedClass = 'manage-task-detail-print';
+
+      component.clickPrintTask();
+
+      expect(matDialog.open).toHaveBeenCalledWith(
+        PrintPaperTaskModalComponent,
+        {
+          data: expectedData,
+          panelClass: expectedClass
+        }
+      );
+    });
 
     it('should print the task with names', () => {
+      addSolutionFileToTask(currentTask);
+      updateCurrentTask(currentTask);
+
       const dialogResult = PrintPaperTaskModalResultEnum.WITH_NAMES;
       component.printTask = jest.fn();
 
@@ -821,6 +903,9 @@ describe('ManageKabasTasksDetailComponent', () => {
     });
 
     it('should print the task without names', () => {
+      addSolutionFileToTask(currentTask);
+      updateCurrentTask(currentTask);
+
       const dialogResult = PrintPaperTaskModalResultEnum.WITHOUT_NAMES;
       component.printTask = jest.fn();
 
@@ -831,6 +916,9 @@ describe('ManageKabasTasksDetailComponent', () => {
     });
 
     it('should print the task solution', () => {
+      addSolutionFileToTask(currentTask);
+      updateCurrentTask(currentTask);
+
       const dialogResult = PrintPaperTaskModalResultEnum.SOLUTION;
       component.printSolution = jest.fn();
 

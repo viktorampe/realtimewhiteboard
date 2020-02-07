@@ -57,9 +57,9 @@ import {
   NewTaskComponent,
   NewTaskFormValues
 } from '../new-task/new-task.component';
-import { PrintPaperTaskModalResultEnum } from '../print-paper-task-modal/print-paper-task-modal-result.enum';
 import { PrintPaperTaskModalComponent } from '../print-paper-task-modal/print-paper-task-modal.component';
 import { PrintPaperTaskModalDataInterface } from './../print-paper-task-modal/print-paper-task-modal-data.interface';
+import { PrintPaperTaskModalResultEnum } from './../print-paper-task-modal/print-paper-task-modal-result.enum';
 
 export interface FilterStateInterface {
   searchTerm?: string;
@@ -330,6 +330,10 @@ export class ManageKabasTasksDetailComponent implements OnInit, OnDestroy {
             disable.push(PrintPaperTaskModalResultEnum.WITH_NAMES);
           }
 
+          if (!task.hasSolutionFiles) {
+            disable.push(PrintPaperTaskModalResultEnum.SOLUTION);
+          }
+
           return this.dialog
             .open(PrintPaperTaskModalComponent, {
               data: { disable } as PrintPaperTaskModalDataInterface,
@@ -382,8 +386,9 @@ export class ManageKabasTasksDetailComponent implements OnInit, OnDestroy {
     this.viewModel.printTask(task.id, withNames);
   }
 
-  public printSolution(task: TaskInterface) {
-    this.viewModel.printSolution(task.id);
+  public printSolution(task: TaskWithAssigneesInterface) {
+    if (!task.hasSolutionFiles) return;
+    this.viewModel.printSolution(task);
   }
 
   public preview(eduContent: EduContentInterface, openDialog: boolean = false) {
@@ -405,6 +410,14 @@ export class ManageKabasTasksDetailComponent implements OnInit, OnDestroy {
     eduContent: EduContent
   ) {
     action.handler(eduContent);
+  }
+
+  private hasSolutionFiles(
+    taskEduContents: TaskEduContentWithEduContentInterface[]
+  ): boolean {
+    return taskEduContents.some(
+      taskEduContent => taskEduContent.eduContent.hasSolutionFile
+    );
   }
 
   public isActiveTask(task: TaskWithAssigneesInterface) {
@@ -488,7 +501,7 @@ export class ManageKabasTasksDetailComponent implements OnInit, OnDestroy {
 
   private filterTaskEduContents(
     filterState,
-    taskEduContents
+    taskEduContents: TaskEduContentWithEduContentInterface[]
   ): TaskEduContentWithEduContentInterface[] {
     const filteredTaskEduContents = [...taskEduContents].filter(
       tEC =>
@@ -503,7 +516,7 @@ export class ManageKabasTasksDetailComponent implements OnInit, OnDestroy {
 
   private filterOnTitle(
     filterState: FilterStateInterface,
-    taskEduContent: TaskEduContentInterface
+    taskEduContent: TaskEduContentWithEduContentInterface
   ): boolean {
     return (
       !filterState.searchTerm ||
@@ -517,7 +530,7 @@ export class ManageKabasTasksDetailComponent implements OnInit, OnDestroy {
 
   private filterOnDiaboloPhase(
     filterState: FilterStateInterface,
-    taskEduContent: TaskEduContentInterface
+    taskEduContent: TaskEduContentWithEduContentInterface
   ): boolean {
     return (
       !filterState.diaboloPhase ||
@@ -530,7 +543,7 @@ export class ManageKabasTasksDetailComponent implements OnInit, OnDestroy {
 
   private filterOnRequired(
     filterState: FilterStateInterface,
-    taskEduContent: TaskEduContentInterface
+    taskEduContent: TaskEduContentWithEduContentInterface
   ): boolean {
     return (
       !filterState.required ||
@@ -541,7 +554,7 @@ export class ManageKabasTasksDetailComponent implements OnInit, OnDestroy {
 
   private filterOnLevel(
     filterState: FilterStateInterface,
-    taskEduContent: TaskEduContentInterface
+    taskEduContent: TaskEduContentWithEduContentInterface
   ): boolean {
     return (
       !filterState.level ||
@@ -646,7 +659,11 @@ export class ManageKabasTasksDetailComponent implements OnInit, OnDestroy {
           };
         });
 
-        return { ...task, taskEduContents };
+        return {
+          ...task,
+          taskEduContents,
+          hasSolutionFiles: this.hasSolutionFiles(taskEduContents)
+        };
       }),
       shareReplay(1)
     );
