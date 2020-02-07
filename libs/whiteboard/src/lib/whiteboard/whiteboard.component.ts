@@ -27,7 +27,7 @@ export class WhiteboardComponent implements OnInit {
 
   lastColor: string;
   opacity: number;
-  changedOpacity: number;
+
   title: string;
   isTitleInputSelected: boolean;
 
@@ -51,9 +51,9 @@ export class WhiteboardComponent implements OnInit {
 
   addEmptyCard(top: number = 0, left: number = 0) {
     if (this.selectedCards.length !== 0) {
-      this.changedOpacity = 1;
+      this.opacity = 1;
     } else {
-      this.changedOpacity = 0;
+      this.opacity = 0;
     }
     this.cards.push({
       color: this.lastColor,
@@ -64,7 +64,7 @@ export class WhiteboardComponent implements OnInit {
       top: top,
       left: left,
       editMode: true,
-      opacity: this.changedOpacity
+      opacity: this.opacity
     });
   }
 
@@ -98,12 +98,9 @@ export class WhiteboardComponent implements OnInit {
     this.lastColor = color;
   }
 
-  selectCard(card: Card) {
+  selectCard(card) {
     this.selectedCards.push(card);
     this.cards.forEach(c => {
-      c.opacity = 1;
-    });
-    this.selectedCards.forEach(c => {
       c.opacity = 1;
     });
   }
@@ -116,6 +113,15 @@ export class WhiteboardComponent implements OnInit {
       });
     }
   }
+
+  getListCheckbox() {
+    if (this.selectedCards.length === 0) {
+      this.cards.forEach(c => {
+        c.opacity = 0;
+      });
+    }
+  }
+
   btnDelClicked() {}
 
   btnEditClicked() {}

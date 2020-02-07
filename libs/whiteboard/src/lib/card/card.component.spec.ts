@@ -37,7 +37,8 @@ describe('CardComponent', () => {
       isInputSelected: true,
       editMode: true,
       top: 0,
-      left: 0
+      left: 0,
+      opacity: 0
     };
 
     fixture.detectChanges();
@@ -178,7 +179,9 @@ describe('CardComponent', () => {
 
   it('should emit the right card when a card is selected', () => {
     spyOn(component.select, 'emit');
-    const checkboxes = fixture.debugElement.queryAll(By.css('.card__checkbox'));
+    const checkboxes = fixture.debugElement.queryAll(
+      By.css('.card__header__checkbox')
+    );
     const checkbox = checkboxes[0].nativeElement;
     checkbox.click(); // van false naar true
     fixture.detectChanges();
@@ -187,12 +190,20 @@ describe('CardComponent', () => {
 
   it('should emit the right card when a card is deselected', () => {
     spyOn(component.deselect, 'emit');
-    const checkboxes = fixture.debugElement.queryAll(By.css('.card__checkbox'));
+    const checkboxes = fixture.debugElement.queryAll(
+      By.css('.card__header__checkbox')
+    );
     const checkbox = checkboxes[0].nativeElement;
     checkbox.click(); // van false naar true
     fixture.detectChanges();
     checkbox.click(); // van true naar false
     fixture.detectChanges();
     expect(component.deselect.emit).toHaveBeenCalled();
+  });
+
+  it('should emit listCheckboxes when the mouse leaves the checkbox', () => {
+    spyOn(component.listCheckboxes, 'emit');
+    component.hideCheckbox();
+    expect(component.listCheckboxes.emit).toHaveBeenCalled();
   });
 });

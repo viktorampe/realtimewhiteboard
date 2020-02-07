@@ -23,6 +23,7 @@ export class CardComponent implements OnInit, OnChanges {
   @Output() lastColor = new EventEmitter<string>();
   @Output() select = new EventEmitter<void>();
   @Output() deselect = new EventEmitter<void>();
+  @Output() listCheckboxes = new EventEmitter();
 
   @HostBinding('style.top') topStyle: string;
   @HostBinding('style.left') leftStyle: string;
@@ -83,7 +84,6 @@ export class CardComponent implements OnInit, OnChanges {
 
   onCheckboxChanged(event) {
     if (event.target.checked) {
-      this.isChecked = true;
       this.select.emit();
     } else {
       this.isChecked = false;
@@ -96,9 +96,7 @@ export class CardComponent implements OnInit, OnChanges {
   }
 
   hideCheckbox() {
-    if (!this.isChecked) {
-      this.card.opacity = 0;
-    }
+    this.listCheckboxes.emit();
   }
 
   toggleEditMode() {

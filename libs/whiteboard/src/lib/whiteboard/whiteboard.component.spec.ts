@@ -111,7 +111,8 @@ describe('WhiteboardComponent', () => {
       isInputSelected: false,
       editMode: true,
       top: 0,
-      left: 0
+      left: 0,
+      opacity: 0
     };
 
     component.cards.push(card);
@@ -135,7 +136,8 @@ describe('WhiteboardComponent', () => {
       isInputSelected: false,
       editMode: true,
       top: 0,
-      left: 0
+      left: 0,
+      opacity: 0
     };
 
     component.cards.push(card);
@@ -161,12 +163,15 @@ describe('WhiteboardComponent', () => {
       isInputSelected: false,
       editMode: true,
       top: 0,
-      left: 0
+      left: 0,
+      opacity: 0
     };
+    component.cards = [card];
     component.selectedCards = [];
 
     component.selectCard(card);
 
+    expect(card.opacity).toBe(1);
     expect(component.selectedCards).toContain(card);
   });
 
@@ -178,12 +183,15 @@ describe('WhiteboardComponent', () => {
       isInputSelected: false,
       editMode: true,
       top: 0,
-      left: 0
+      left: 0,
+      opacity: 1
     };
+    component.cards = [card];
     component.selectedCards = [card];
 
     component.deselectCard(card);
 
+    expect(card.opacity).toBe(0);
     expect(component.selectedCards).not.toContain(card);
   });
 });
