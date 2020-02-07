@@ -178,7 +178,9 @@ describe('CardComponent', () => {
 
   it('should emit the right card when a card is selected', () => {
     spyOn(component.select, 'emit');
-    const checkboxes = fixture.debugElement.queryAll(By.css('.card__checkbox'));
+    const checkboxes = fixture.debugElement.queryAll(
+      By.css('.card__header__checkbox')
+    );
     const checkbox = checkboxes[0].nativeElement;
     checkbox.click(); // van false naar true
     fixture.detectChanges();
@@ -187,7 +189,9 @@ describe('CardComponent', () => {
 
   it('should emit the right card when a card is deselected', () => {
     spyOn(component.deselect, 'emit');
-    const checkboxes = fixture.debugElement.queryAll(By.css('.card__checkbox'));
+    const checkboxes = fixture.debugElement.queryAll(
+      By.css('.card__header__checkbox')
+    );
     const checkbox = checkboxes[0].nativeElement;
     checkbox.click(); // van false naar true
     fixture.detectChanges();
@@ -224,5 +228,12 @@ describe('CardComponent', () => {
     const card__image = fixture.debugElement.query(By.css('.card__image'))
       .nativeElement;
     expect(card__image.style.backgroundImage).toBe('url(image_2)');
+  });
+
+  it('should close the open colorlist when switching out of editmode', () => {
+    component.toggleEditMode();
+    component.showColor();
+    component.toggleEditMode();
+    expect(component.colorlistHidden).toBe(true);
   });
 });
