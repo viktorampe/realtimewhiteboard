@@ -32,7 +32,9 @@
       *ngIf="selectedTaskEduContents.length === 1"
       class="shared-header__contextual__button smallIcon"
       iconClass=""
-      (click)="preview(selectedTaskEduContents[0], !!task.isPaperTask)"
+      (click)="
+        preview(selectedTaskEduContents[0].eduContent, !!task.isPaperTask)
+      "
       ><span>{{
         task.isPaperTask ? 'Voorbeeld' : 'Openen'
       }}</span></campus-button
