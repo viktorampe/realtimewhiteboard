@@ -231,7 +231,6 @@ describe('CardComponent', () => {
   });
 
   it('should close the open colorlist when switching out of editmode', () => {
-    component.toggleEditMode();
     component.showColor();
     component.toggleEditMode();
     expect(component.colorlistHidden).toBe(true);
