@@ -30,7 +30,8 @@ describe('CardComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(CardComponent);
     component = fixture.componentInstance;
-    const card = {
+
+    const mockData = {
       color: 'white',
       description: '',
       image: null,
@@ -40,6 +41,14 @@ describe('CardComponent', () => {
       left: 0
     };
 
+    component.color = mockData.color;
+    component.description = mockData.description;
+    component.image = mockData.image;
+    component.isInputSelected = mockData.isInputSelected;
+    component.editMode = mockData.editMode;
+    component.top = mockData.top;
+    component.left = mockData.left;
+
     fixture.detectChanges();
   });
 
@@ -48,7 +57,7 @@ describe('CardComponent', () => {
   });
 
   it('should toggle input where input is valid', () => {
-    component.description = 'Valid';
+    component.description = 'valid';
     component.toggleInput();
     expect(component.isInputSelected).toBe(false);
   });
@@ -178,7 +187,9 @@ describe('CardComponent', () => {
 
   it('should emit the right card when a card is selected', () => {
     spyOn(component.select, 'emit');
-    const checkboxes = fixture.debugElement.queryAll(By.css('.card__checkbox'));
+    const checkboxes = fixture.debugElement.queryAll(
+      By.css('.card__header__checkbox')
+    );
     const checkbox = checkboxes[0].nativeElement;
     checkbox.click(); // van false naar true
     fixture.detectChanges();
@@ -187,7 +198,9 @@ describe('CardComponent', () => {
 
   it('should emit the right card when a card is deselected', () => {
     spyOn(component.deselect, 'emit');
-    const checkboxes = fixture.debugElement.queryAll(By.css('.card__checkbox'));
+    const checkboxes = fixture.debugElement.queryAll(
+      By.css('.card__header__checkbox')
+    );
     const checkbox = checkboxes[0].nativeElement;
     checkbox.click(); // van false naar true
     fixture.detectChanges();
