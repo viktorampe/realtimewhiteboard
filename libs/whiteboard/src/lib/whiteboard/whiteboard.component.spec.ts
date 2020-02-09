@@ -188,6 +188,28 @@ describe('WhiteboardComponent', () => {
     expect(component.selectedCards).not.toContain(card);
   });
 
+  it('should remove a card from selectedCards when the card is selected and deleted', () => {
+    const card = {
+      description: '',
+      image: null,
+      color: null,
+      isInputSelected: false,
+      editMode: true,
+      top: 0,
+      left: 0
+    };
+    component.selectedCards = [card];
+
+    const mockDialogRef = {
+      afterClosed: () => of(true), // fake confirmation
+      close: null
+    } as MatDialogRef<ConfirmationModalComponent>;
+    openDialogSpy.mockReturnValue(mockDialogRef);
+
+    component.onDeleteCard(card);
+    expect(component.selectedCards.length).toBe(0);
+  });
+
   it('should not open a confirmation dialog if the bulk delete button is clicked and there are no selected items', () => {
     const mockDialogRef = {
       afterClosed: () => of(false),
@@ -253,7 +275,7 @@ describe('WhiteboardComponent', () => {
       top: 0,
       left: 0
     };
-
+    component.selectedCards = [card];
     component.cards = [card, differentCard];
 
     component.selectedCards = [card];
@@ -264,6 +286,8 @@ describe('WhiteboardComponent', () => {
     } as MatDialogRef<ConfirmationModalComponent>;
     openDialogSpy.mockReturnValue(mockDialogRef);
 
+    component.onDeleteCard(card);
+    expect(component.selectedCards.length).toBe(0);
     component.btnDelClicked();
 
     const expectedList = [differentCard];
