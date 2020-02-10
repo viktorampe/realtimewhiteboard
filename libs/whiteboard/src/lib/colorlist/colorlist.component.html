@@ -1,4 +1,7 @@
-<div class="colorlist">
+<div
+  class="colorlist"
+  [ngClass]="{ whiteBoardColorlist: isWhiteboardColorlist }"
+>
   <div
     (click)="clickColor(swatch)"
     *ngFor="let swatch of defaultColors"

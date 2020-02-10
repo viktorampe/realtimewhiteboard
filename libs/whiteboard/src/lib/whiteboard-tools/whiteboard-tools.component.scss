@@ -1,2 +1,8 @@
 .whiteboard-tools {
+  display: flex;
+  justify-content: center;
+
+  .toolbar_icon {
+    margin-left: 10px;
+  }
 }

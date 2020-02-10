@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'campus-colorlist',
@@ -6,6 +6,7 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
   styleUrls: ['./colorlist.component.scss']
 })
 export class ColorlistComponent implements OnInit {
+  @Input() isWhiteboardColorlist: boolean;
   @Output() selectedColor = new EventEmitter<string>();
   colorlist: ColorlistComponent;
   defaultColors: string[] = [
