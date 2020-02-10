@@ -9,6 +9,7 @@ import { ProgressBarComponent } from './progress-bar/progress-bar.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { WhiteboardToolsComponent } from './whiteboard-tools/whiteboard-tools.component';
 import { WhiteboardComponent } from './whiteboard/whiteboard.component';
+import { ShelfComponent } from './shelf/shelf.component';
 
 @NgModule({
   imports: [
@@ -25,7 +26,8 @@ import { WhiteboardComponent } from './whiteboard/whiteboard.component';
     ToolbarComponent,
     ColorlistComponent,
     ProgressBarComponent,
-    WhiteboardToolsComponent
+    WhiteboardToolsComponent,
+    ShelfComponent
   ],
   exports: [WhiteboardComponent]
 })
