@@ -31,14 +31,4 @@ describe('WhiteboardToolsComponent', () => {
     plusBtn.click();
     expect(component.createCard.emit).toHaveBeenCalled();
   });
-
-  it('should emit when the edit button is clicked', () => {
-    spyOn(component.editCards, 'emit');
-    const buttons = fixture.debugElement.queryAll(
-      By.css('.whiteboard-tools__btn')
-    );
-    const editBtn = buttons[2].nativeElement;
-    editBtn.click();
-    expect(component.editCards.emit).toHaveBeenCalled();
-  });
 });
