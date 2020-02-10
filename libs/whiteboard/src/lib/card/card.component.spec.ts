@@ -78,7 +78,7 @@ describe('CardComponent', () => {
   });
 
   it('should show errormessage when no text is provided', () => {
-    component.card.description = '';
+    component.description = '';
     component.txtContent.markAsDirty();
 
     fixture.detectChanges();
@@ -108,7 +108,7 @@ describe('CardComponent', () => {
     expect(inputContent.nativeElement.value.trim()).toBe('Test content');
   });
 
-  it('should create card with cardcontent empty', () => {
+  it('should create card with description empty', () => {
     expect(component.description).toBe('');
   });
 
@@ -219,12 +219,6 @@ describe('CardComponent', () => {
     checkbox.click(); // van true naar false
     fixture.detectChanges();
     expect(component.deselect.emit).toHaveBeenCalled();
-  });
-
-  it('should emit listCheckboxes when the mouse leaves the checkbox', () => {
-    spyOn(component.listCheckboxes, 'emit');
-    component.hideCheckbox();
-    expect(component.listCheckboxes.emit).toHaveBeenCalled();
   });
 
   it('should remove image when removeImage() is called', () => {

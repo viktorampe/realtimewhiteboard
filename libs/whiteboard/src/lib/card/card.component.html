@@ -51,7 +51,7 @@
         Je hebt het maximaal aantal karakters gebruikt.
       </p>
       <p
-        *ngIf="card.isInputSelected && !card.description && txtContent.dirty"
+        *ngIf="isInputSelected && !description && txtContent.dirty"
         class="card__content__errorMessage"
         data-cy="errorMissingContent"
       >
