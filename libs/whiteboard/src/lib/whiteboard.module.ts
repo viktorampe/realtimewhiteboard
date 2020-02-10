@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule, MatIconModule } from '@angular/material';
 import { CardComponent } from './card/card.component';
 import { ColorlistComponent } from './colorlist/colorlist.component';
+import { ImageDragDirective } from './image-drag.directive';
 import { ProgressBarComponent } from './progress-bar/progress-bar.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { WhiteboardToolsComponent } from './whiteboard-tools/whiteboard-tools.component';
@@ -25,10 +26,11 @@ import { ImageToolbarComponent } from './image-toolbar/image-toolbar.component';
     CardComponent,
     ToolbarComponent,
     ColorlistComponent,
+    ImageDragDirective,
     ProgressBarComponent,
     WhiteboardToolsComponent,
     ImageToolbarComponent
   ],
-  exports: [WhiteboardComponent]
+  exports: [WhiteboardComponent, ImageDragDirective]
 })
 export class WhiteboardModule {}
