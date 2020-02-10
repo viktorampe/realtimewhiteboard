@@ -48,10 +48,10 @@ export class CardComponent implements OnInit, OnChanges {
   ngOnChanges() {
     this.topStyle = this.card.top + 'px';
     this.leftStyle = this.card.left + 'px';
-    this.onHoverChange();
+    this.onClickChange();
   }
 
-  onHoverChange() {
+  onClickChange() {
     if (this.checkboxVisible) {
       this.opacity = 1;
     } else {
