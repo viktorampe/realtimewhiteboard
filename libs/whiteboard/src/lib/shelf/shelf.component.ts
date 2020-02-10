@@ -4,7 +4,7 @@ import Card from '../../interfaces/card.interface';
 @Component({
   selector: 'campus-shelf',
   templateUrl: './shelf.component.html',
-  styleUrls: ['./shelf.component.css']
+  styleUrls: ['./shelf.component.scss']
 })
 export class ShelfComponent implements OnInit {
   @Input() cards: Card[];
