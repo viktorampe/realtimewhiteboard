@@ -110,7 +110,7 @@ export class WhiteboardComponent implements OnInit {
   deselectCard(card: Card) {
     this.selectedCards = this.selectedCards.filter(c => c !== card);
     if (!this.selectedCards.length) {
-      this.checkboxVisible = true;
+      this.checkboxVisible = false;
     }
   }
 
