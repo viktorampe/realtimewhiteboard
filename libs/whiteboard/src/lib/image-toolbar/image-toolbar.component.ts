@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'campus-image-toolbar',
@@ -6,6 +6,7 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
   styleUrls: ['./image-toolbar.component.scss']
 })
 export class ImageToolbarComponent implements OnInit {
+  @Input() hasImage: boolean;
   @Output() removeClicked = new EventEmitter<void>();
   @Output() updateClicked = new EventEmitter<void>();
 
