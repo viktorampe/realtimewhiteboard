@@ -2,7 +2,6 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { ConfirmationModalComponent } from '@campus/ui';
 import Card from '../../interfaces/card.interface';
-
 @Component({
   selector: 'campus-whiteboard',
   templateUrl: './whiteboard.component.html',

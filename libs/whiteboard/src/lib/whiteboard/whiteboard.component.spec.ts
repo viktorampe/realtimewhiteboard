@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   MatCardModule,
   MatDialog,
@@ -32,6 +32,7 @@ describe('WhiteboardComponent', () => {
       imports: [
         MatCardModule,
         FormsModule,
+        ReactiveFormsModule,
         MatIconModule,
         MatDialogModule,
         BrowserAnimationsModule
