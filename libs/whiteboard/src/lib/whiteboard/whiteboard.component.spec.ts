@@ -207,46 +207,7 @@ describe('WhiteboardComponent', () => {
       left: 0
     };
     component.selectedCards = [card, card2];
-    component.btnEditClicked();
     component.changeSelectedCardsColor('black');
     component.selectedCards.forEach(c => expect(c.color).toBe('black'));
-  });
-
-  it('should show the colorlist when a card is checked and the button pressed', () => {
-    const card = {
-      description: '',
-      image: null,
-      color: null,
-      isInputSelected: false,
-      editMode: true,
-      top: 0,
-      left: 0
-    };
-    component.selectedCards = [card];
-    component.btnEditClicked();
-    fixture.detectChanges();
-    expect(component.isColorlistHidden).toBe(false);
-  });
-
-  it('should hide the colorlist when a card is checked and the button pressed twice', () => {
-    const card = {
-      description: '',
-      image: null,
-      color: null,
-      isInputSelected: false,
-      editMode: true,
-      top: 0,
-      left: 0
-    };
-    component.selectedCards = [card];
-    component.btnEditClicked();
-    component.btnEditClicked();
-    fixture.detectChanges();
-    expect(component.isColorlistHidden).toBe(true);
-  });
-
-  it('should not show the colorlist when the button is pressed but no card is selected', () => {
-    component.btnEditClicked();
-    expect(component.isColorlistHidden).toBe(true);
   });
 });

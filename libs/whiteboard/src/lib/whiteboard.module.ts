@@ -1,10 +1,11 @@
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule, MatIconModule } from '@angular/material';
 import { CardComponent } from './card/card.component';
 import { ColorlistComponent } from './colorlist/colorlist.component';
+import { ImageDragDirective } from './image-drag.directive';
 import { ProgressBarComponent } from './progress-bar/progress-bar.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { WhiteboardToolsComponent } from './whiteboard-tools/whiteboard-tools.component';
@@ -16,7 +17,8 @@ import { WhiteboardComponent } from './whiteboard/whiteboard.component';
     MatCardModule,
     DragDropModule,
     FormsModule,
-    MatIconModule
+    MatIconModule,
+    ReactiveFormsModule
   ],
   declarations: [
     WhiteboardComponent,
@@ -24,8 +26,11 @@ import { WhiteboardComponent } from './whiteboard/whiteboard.component';
     ToolbarComponent,
     ColorlistComponent,
     WhiteboardToolsComponent,
-    ProgressBarComponent
+    ProgressBarComponent,
+    ImageDragDirective,
+    ProgressBarComponent,
+    WhiteboardToolsComponent
   ],
-  exports: [WhiteboardComponent]
+  exports: [WhiteboardComponent, ImageDragDirective]
 })
 export class WhiteboardModule {}

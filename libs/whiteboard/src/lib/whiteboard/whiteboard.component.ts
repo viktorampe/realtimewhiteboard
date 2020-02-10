@@ -29,13 +29,11 @@ export class WhiteboardComponent implements OnInit {
 
   title: string;
   isTitleInputSelected: boolean;
-  isColorlistHidden: boolean;
 
   ngOnInit() {
     this.cards = [];
     this.selectedCards = [];
     this.lastColor = 'white';
-    this.isColorlistHidden = true;
   }
 
   onDblClick(event) {
@@ -84,6 +82,7 @@ export class WhiteboardComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(deleteConfirmation => {
       if (deleteConfirmation) {
+        this.selectedCards = this.selectedCards.filter(c => c !== card);
         this.cards = this.cards.filter(c => c !== card);
       }
     });
@@ -100,17 +99,29 @@ export class WhiteboardComponent implements OnInit {
   deselectCard(card: Card) {
     this.selectedCards = this.selectedCards.filter(c => c !== card);
   }
-  btnDelClicked() {}
 
-  btnEditClicked() {
-    if (this.selectedCards.length !== 0) {
-      this.isColorlistHidden = !this.isColorlistHidden;
+  btnDelClicked() {
+    if (this.selectedCards.length) {
+      const dialogRef = this.dialog.open(ConfirmationModalComponent, {
+        data: {
+          title: 'Verwijderen bevestigen',
+          message: 'Weet u zeker dat u deze kaarten wil verwijderen?',
+          disableConfirm: false
+        }
+      });
+
+      dialogRef.afterClosed().subscribe(deleteConfirmation => {
+        if (deleteConfirmation) {
+          this.cards = this.cards.filter(c => !this.selectedCards.includes(c));
+          this.selectedCards = [];
+        }
+      });
     }
   }
 
   changeSelectedCardsColor(color: string) {
-    this.isColorlistHidden = true;
     this.lastColor = color;
     this.selectedCards.forEach(c => (c.color = this.lastColor));
+    this.selectedCards = [];
   }
 }

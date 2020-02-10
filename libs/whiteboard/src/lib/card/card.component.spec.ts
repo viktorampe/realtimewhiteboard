@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule, MatIconRegistry } from '@angular/material';
 import { MatIconModule } from '@angular/material/icon';
 import { By, HAMMER_LOADER } from '@angular/platform-browser';
@@ -15,7 +15,7 @@ describe('CardComponent', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [MatCardModule, FormsModule, MatIconModule],
+      imports: [MatCardModule, FormsModule, MatIconModule, ReactiveFormsModule],
       declarations: [CardComponent, ToolbarComponent, ColorlistComponent],
       providers: [
         {
@@ -64,6 +64,18 @@ describe('CardComponent', () => {
     fixture.detectChanges();
     const errorMessage = fixture.debugElement.query(
       By.css('.card__content__errorMessage')
+    );
+    expect(errorMessage).not.toBeNull();
+  });
+
+  it('should show errormessage when no text is provided', () => {
+    component.card.description = '';
+    component.txtContent.markAsDirty();
+
+    fixture.detectChanges();
+
+    const errorMessage = fixture.debugElement.query(
+      By.css('[data-cy="errorMissingContent"]')
     );
     expect(errorMessage).not.toBeNull();
   });
@@ -178,7 +190,9 @@ describe('CardComponent', () => {
 
   it('should emit the right card when a card is selected', () => {
     spyOn(component.select, 'emit');
-    const checkboxes = fixture.debugElement.queryAll(By.css('.card__checkbox'));
+    const checkboxes = fixture.debugElement.queryAll(
+      By.css('.card__header__checkbox')
+    );
     const checkbox = checkboxes[0].nativeElement;
     checkbox.click(); // van false naar true
     fixture.detectChanges();
@@ -187,12 +201,50 @@ describe('CardComponent', () => {
 
   it('should emit the right card when a card is deselected', () => {
     spyOn(component.deselect, 'emit');
-    const checkboxes = fixture.debugElement.queryAll(By.css('.card__checkbox'));
+    const checkboxes = fixture.debugElement.queryAll(
+      By.css('.card__header__checkbox')
+    );
     const checkbox = checkboxes[0].nativeElement;
     checkbox.click(); // van false naar true
     fixture.detectChanges();
     checkbox.click(); // van true naar false
     fixture.detectChanges();
     expect(component.deselect.emit).toHaveBeenCalled();
+  });
+
+  it('should remove image when removeImage() is called', () => {
+    component.card.image = 'this is not an empty string';
+    component.removeImage();
+    expect(component.card.image).toBe('');
+  });
+
+  it('should remove background-image when removeImage() is called', () => {
+    component.card.image = 'this is not null';
+    component.removeImage();
+    fixture.detectChanges();
+    const card__image = fixture.debugElement.query(By.css('.card__image'))
+      .nativeElement;
+    expect(card__image.style.backgroundImage).toBe('url()');
+  });
+
+  it('should replace image when replaceImage() is called', () => {
+    component.card.image = 'image_1';
+    component.replaceImage('image_2');
+    expect(component.card.image).toBe('image_2');
+  });
+
+  it('should replace background-image when replaceImage() is called', () => {
+    component.card.image = 'image_1';
+    component.replaceImage('image_2');
+    fixture.detectChanges();
+    const card__image = fixture.debugElement.query(By.css('.card__image'))
+      .nativeElement;
+    expect(card__image.style.backgroundImage).toBe('url(image_2)');
+  });
+
+  it('should close the open colorlist when switching out of editmode', () => {
+    component.showColor();
+    component.toggleEditMode();
+    expect(component.colorlistHidden).toBe(true);
   });
 });

@@ -9,6 +9,7 @@ import {
   Output,
   ViewChild
 } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import Card from '../../interfaces/card.interface';
 
 @Component({
@@ -29,6 +30,8 @@ export class CardComponent implements OnInit, OnChanges {
   colorlistHidden: boolean;
   viewModeImage: boolean;
   maxCharacters = 300;
+
+  txtContent = new FormControl();
 
   constructor() {
     this.viewModeImage = true;
@@ -56,13 +59,18 @@ export class CardComponent implements OnInit, OnChanges {
     this.card.image = '';
   }
 
+  replaceImage(url: string) {
+    this.card.image = url;
+  }
+
   onDeleteCard() {
     this.deleteCard.emit();
   }
 
   showImageSettings() {
     //TODO: show modal with options --> 'select img from this computer', 'remove image'
-    this.removeImage();
+    //this.removeImage();
+    this.replaceImage('hello_world');
   }
 
   onDblClick() {
@@ -89,6 +97,9 @@ export class CardComponent implements OnInit, OnChanges {
 
   toggleEditMode() {
     this.card.editMode = !this.card.editMode;
+    if (!this.card.editMode && !this.colorlistHidden) {
+      this.colorlistHidden = true;
+    }
     this.viewModeImage = true;
   }
 
