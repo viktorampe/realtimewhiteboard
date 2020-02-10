@@ -59,11 +59,7 @@ export class WhiteboardComponent implements OnInit {
   }
 
   addEmptyCard(top: number = 0, left: number = 0) {
-    if (this.selectedCards.length !== 0) {
-      this.checkboxVisible = true;
-    } else {
-      this.checkboxVisible = false;
-    }
+    this.checkboxVisible = this.selectedCards.length !== 0;
     this.cards.push({
       color: this.lastColor,
       description: '',
@@ -103,27 +99,19 @@ export class WhiteboardComponent implements OnInit {
     });
   }
 
-  onUpdateCheckbox(boolean) {
-    return this.checkboxVisible;
-  }
-
   saveLastColor(color: string) {
     this.lastColor = color;
   }
 
   selectCard(card) {
     this.selectedCards.push(card);
-    this.cards.forEach(c => {
-      this.checkboxVisible = true;
-    });
+    this.checkboxVisible = true;
   }
 
   deselectCard(card: Card) {
     this.selectedCards = this.selectedCards.filter(c => c !== card);
-    if (this.selectedCards.length === 0) {
-      this.cards.forEach(c => {
-        this.checkboxVisible = false;
-      });
+    if (!this.selectedCards.length) {
+      this.checkboxVisible = true;
     }
   }
 
