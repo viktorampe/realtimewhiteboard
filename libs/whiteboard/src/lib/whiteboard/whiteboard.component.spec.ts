@@ -198,6 +198,7 @@ describe('WhiteboardComponent', () => {
       top: 0,
       left: 0
     };
+
     const card2 = {
       description: '',
       image: null,
@@ -207,8 +208,10 @@ describe('WhiteboardComponent', () => {
       top: 0,
       left: 0
     };
+
+    const cards = [card, card2];
     component.selectedCards = [card, card2];
     component.changeSelectedCardsColor('black');
-    component.selectedCards.forEach(c => expect(c.color).toBe('black'));
+    cards.forEach(c => expect(c.color).toBe('black'));
   });
 });
