@@ -214,4 +214,24 @@ describe('WhiteboardComponent', () => {
     component.changeSelectedCardsColor('black');
     cards.forEach(c => expect(c.color).toBe('black'));
   });
+
+  it('should remove a card from selectedCards when the card is selected and deleted', () => {
+    const card = {
+      description: '',
+      image: null,
+      color: null,
+      isInputSelected: false,
+      editMode: true,
+      top: 0,
+      left: 0
+    };
+    component.selectedCards = [card];
+    const mockDialogRef = {
+      afterClosed: () => of(true), // fake confirmation
+      close: null
+    } as MatDialogRef<ConfirmationModalComponent>;
+    openDialogSpy.mockReturnValue(mockDialogRef);
+    component.onDeleteCard(card);
+    expect(component.selectedCards.length).toBe(0);
+  });
 });
