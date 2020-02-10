@@ -38,7 +38,7 @@
   ></campus-whiteboard-tools>
   <campus-colorlist
     class="whiteboard-page__colorlist"
-    *ngIf="this.selectedCards.length > 0"
+    *ngIf="this.selectedCards.length"
     (selectedColor)="changeSelectedCardsColor($event)"
   ></campus-colorlist>
 </div>
