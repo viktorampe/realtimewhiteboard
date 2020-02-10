@@ -48,10 +48,10 @@ export class CardComponent implements OnInit, OnChanges {
   ngOnChanges() {
     this.topStyle = this.card.top + 'px';
     this.leftStyle = this.card.left + 'px';
-    this.onClickChange();
+    this.onCheckChange();
   }
 
-  onClickChange() {
+  onCheckChange() {
     if (this.checkboxVisible) {
       this.opacity = 1;
     } else {
@@ -104,6 +104,7 @@ export class CardComponent implements OnInit, OnChanges {
     if (event.target.checked) {
       this.select.emit();
     } else {
+      this.opacity = 0;
       this.deselect.emit();
     }
   }
