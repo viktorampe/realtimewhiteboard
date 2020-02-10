@@ -30,7 +30,8 @@ describe('CardComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(CardComponent);
     component = fixture.componentInstance;
-    component.card = {
+
+    const mockData = {
       color: 'white',
       description: '',
       image: null,
@@ -40,6 +41,14 @@ describe('CardComponent', () => {
       left: 0
     };
 
+    component.color = mockData.color;
+    component.description = mockData.description;
+    component.image = mockData.image;
+    component.isInputSelected = mockData.isInputSelected;
+    component.editMode = mockData.editMode;
+    component.top = mockData.top;
+    component.left = mockData.left;
+
     fixture.detectChanges();
   });
 
@@ -48,19 +57,19 @@ describe('CardComponent', () => {
   });
 
   it('should toggle input where input is valid', () => {
-    component.card.description = 'Valid';
+    component.description = 'valid';
     component.toggleInput();
-    expect(component.card.isInputSelected).toBe(false);
+    expect(component.isInputSelected).toBe(false);
   });
 
   it('should toggle input where input is empty', () => {
-    component.card.description = '';
+    component.description = '';
     component.toggleInput();
-    expect(component.card.isInputSelected).toBe(true);
+    expect(component.isInputSelected).toBe(true);
   });
 
   it('should show errormessage when input is maximal', () => {
-    component.card.description = 'a'.repeat(component.maxCharacters);
+    component.description = 'a'.repeat(component.maxCharacters);
     fixture.detectChanges();
     const errorMessage = fixture.debugElement.query(
       By.css('.card__content__errorMessage')
@@ -69,7 +78,7 @@ describe('CardComponent', () => {
   });
 
   it('should show errormessage when no text is provided', () => {
-    component.card.description = '';
+    component.description = '';
     component.txtContent.markAsDirty();
 
     fixture.detectChanges();
@@ -81,8 +90,8 @@ describe('CardComponent', () => {
   });
 
   it('should show the card content when not editing', () => {
-    component.card.description = 'Test content';
-    component.card.isInputSelected = false;
+    component.description = 'Test content';
+    component.isInputSelected = false;
     fixture.detectChanges();
     const contentParagraph = fixture.debugElement.query(By.css('p'));
     expect(contentParagraph.nativeElement.textContent.trim()).toBe(
@@ -91,20 +100,20 @@ describe('CardComponent', () => {
   });
 
   it('should display the card content in the input when editing', async () => {
-    component.card.description = 'Test content';
-    component.card.isInputSelected = true;
+    component.description = 'Test content';
+    component.isInputSelected = true;
     fixture.detectChanges();
     await fixture.whenStable();
     const inputContent = fixture.debugElement.query(By.css('textarea'));
     expect(inputContent.nativeElement.value.trim()).toBe('Test content');
   });
 
-  it('should create card with cardcontent empty', () => {
-    expect(component.card.description).toBe('');
+  it('should create card with description empty', () => {
+    expect(component.description).toBe('');
   });
 
   it('should set the correct top style on creation', () => {
-    component.card.top = 500;
+    component.top = 500;
 
     component.ngOnChanges();
     fixture.detectChanges();
@@ -113,7 +122,7 @@ describe('CardComponent', () => {
   });
 
   it('should set the correct left style on creation', () => {
-    component.card.left = 500;
+    component.left = 500;
 
     component.ngOnChanges();
     fixture.detectChanges();
@@ -122,21 +131,21 @@ describe('CardComponent', () => {
   });
 
   it('should toggle to edit mode when double click.', () => {
-    component.card.editMode = false;
-    component.card.description = 'something that is not null';
+    component.editMode = false;
+    component.description = 'something that is not null';
 
     const myCard = fixture.debugElement.query(By.css('.card__content'));
     myCard.nativeElement.dispatchEvent(new MouseEvent('dblclick')); // use nativeElement so target is set
     fixture.detectChanges();
 
-    expect(component.card.editMode).toBe(true);
+    expect(component.editMode).toBe(true);
   });
 
   it('should toggle edit mode when the editicon is clicked', () => {
-    component.card.editMode = false;
+    component.editMode = false;
     component.toggleEditMode();
     fixture.detectChanges();
-    expect(component.card.editMode).toBe(true);
+    expect(component.editMode).toBe(true);
   });
 
   it('should toggle to view mode image when toggle icon is clicked', () => {
@@ -173,7 +182,7 @@ describe('CardComponent', () => {
     fixture.detectChanges();
     component.selectColor('black');
     fixture.detectChanges();
-    expect(component.card.color).toBe('black');
+    expect(component.color).toBe('black');
   });
 
   it('should emit the right color when a cardcolor is picked', () => {
@@ -212,20 +221,14 @@ describe('CardComponent', () => {
     expect(component.deselect.emit).toHaveBeenCalled();
   });
 
-  it('should emit listCheckboxes when the mouse leaves the checkbox', () => {
-    spyOn(component.listCheckboxes, 'emit');
-    component.hideCheckbox();
-    expect(component.listCheckboxes.emit).toHaveBeenCalled();
-  });
-
   it('should remove image when removeImage() is called', () => {
-    component.card.image = 'this is not an empty string';
+    component.image = 'this is not an empty string';
     component.removeImage();
-    expect(component.card.image).toBe('');
+    expect(component.image).toBe('');
   });
 
   it('should remove background-image when removeImage() is called', () => {
-    component.card.image = 'this is not null';
+    component.image = 'this is not null';
     component.removeImage();
     fixture.detectChanges();
     const card__image = fixture.debugElement.query(By.css('.card__image'))
@@ -234,13 +237,13 @@ describe('CardComponent', () => {
   });
 
   it('should replace image when replaceImage() is called', () => {
-    component.card.image = 'image_1';
+    component.image = 'image_1';
     component.replaceImage('image_2');
-    expect(component.card.image).toBe('image_2');
+    expect(component.image).toBe('image_2');
   });
 
   it('should replace background-image when replaceImage() is called', () => {
-    component.card.image = 'image_1';
+    component.image = 'image_1';
     component.replaceImage('image_2');
     fixture.detectChanges();
     const card__image = fixture.debugElement.query(By.css('.card__image'))

@@ -1,5 +1,4 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { CardImageComponent } from './card-image.component';
 
 describe('CardImageComponent', () => {
