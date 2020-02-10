@@ -6,11 +6,12 @@ import { MatCardModule, MatIconModule } from '@angular/material';
 import { CardComponent } from './card/card.component';
 import { ColorlistComponent } from './colorlist/colorlist.component';
 import { ImageDragDirective } from './image-drag.directive';
+import { ImageToolbarComponent } from './image-toolbar/image-toolbar.component';
 import { ProgressBarComponent } from './progress-bar/progress-bar.component';
+import { ShelfComponent } from './shelf/shelf.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { WhiteboardToolsComponent } from './whiteboard-tools/whiteboard-tools.component';
 import { WhiteboardComponent } from './whiteboard/whiteboard.component';
-import { ShelfComponent } from './shelf/shelf.component';
 
 @NgModule({
   imports: [
@@ -29,6 +30,7 @@ import { ShelfComponent } from './shelf/shelf.component';
     ImageDragDirective,
     ProgressBarComponent,
     WhiteboardToolsComponent,
+    ImageToolbarComponent,
     ShelfComponent
   ],
   exports: [WhiteboardComponent, ImageDragDirective]
