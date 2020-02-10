@@ -2,7 +2,6 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { ConfirmationModalComponent } from '@campus/ui';
 import Card from '../../interfaces/card.interface';
-
 @Component({
   selector: 'campus-whiteboard',
   templateUrl: './whiteboard.component.html',
@@ -119,5 +118,9 @@ export class WhiteboardComponent implements OnInit {
     }
   }
 
-  btnEditClicked() {}
+  changeSelectedCardsColor(color: string) {
+    this.lastColor = color;
+    this.selectedCards.forEach(c => (c.color = this.lastColor));
+    this.selectedCards = [];
+  }
 }

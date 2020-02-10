@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule, MatIconModule } from '@angular/material';
+import { CardImageComponent } from './card-image/card-image.component';
+import { CardTextComponent } from './card-text/card-text.component';
 import { CardComponent } from './card/card.component';
 import { ColorlistComponent } from './colorlist/colorlist.component';
 import { ImageDragDirective } from './image-drag.directive';
@@ -27,10 +29,14 @@ import { WhiteboardComponent } from './whiteboard/whiteboard.component';
     CardComponent,
     ToolbarComponent,
     ColorlistComponent,
+    WhiteboardToolsComponent,
+    ProgressBarComponent,
+    CardImageComponent,
     ImageDragDirective,
     ProgressBarComponent,
     WhiteboardToolsComponent,
     ImageToolbarComponent,
+    CardTextComponent,
     ShelfComponent
   ],
   exports: [WhiteboardComponent, ImageDragDirective]
