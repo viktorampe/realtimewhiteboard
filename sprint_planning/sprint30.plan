@@ -1,0 +1,224 @@
+IT#f691aff3-aa09-46ec-8a8c-120c2cff37dd - 30. Leerkracht taken 3 - oefengenerator, content beheren in een taak - (LK2020\30. Leerkracht taken 3 - oefengenerator, content beheren in een taak)
+US#2836 - Frontend
+Development:
+- [Scaffold]: TaskEduContentListItem component [#2848]
+	Inputs klaarzetten:
+	* Title
+	* Icon
+	* Actions?[] (cfr. ContentActionInterface[]) // Optioneel om geen actions te tonen in draggable-state
+	* Level
+	* Required
+	* DiaboloPhaseIcon?
+	en toevoegen aan module/creates test
+	Klaarzetten voor gebruik van buiten af
+- [Scaffold]: ManageKabasTasksDetailComponent [#2852]
+	property isReordering. Default false.
+	function toggleIsReordering() 
+	function saveOrder(taskEduContents: TaskEduContentInterface[])
+	function clickPrintTask()
+	function printTask(task, withNames: boolean)
+	function printSolution(task)
+	function preview(eduContent: EduContentInterface)
+	function clickRemoveTaskEduContents(taskEduContents: TaskEduContentInterface[])
+- [Scaffold]: TaskEduContentService [#2849]
+	function deleteTaskEduContents(taskEduContentIds)
+- [Scaffold]: PrintPaperTaskModalComponent [#2850]
+- [Scaffold]: ViewModel [#2853]
+	function updateTaskEduContentsRequired(taskEduContents: TaskEduContentInterface[], required: boolean);
+	function updateTaskEduContentsOrder(taskEduContents: TaskEduContentInterface[]);
+	function printTask(taskId, withNames: boolean)
+	function printSolution(taskId)
+	function deleteTaskEduContents(taskEduContentIds: number[])
+- [Scaffold]: TaskService [#2851]
+	function printTask(taskId, withNames: boolean)
+	function printSolution(taskId)
+- [Scaffold]: BulkUpdateResultInfoInterface<T, Y> [#2861]
+	Generic interface with T as type for success updates
+	errors is array van type <Y as unknown>
+- [Scaffold]: PrintPaperTaskModalResultEnum [#2875]
+	* Cancel
+	* PrintWithNames
+	* PrintWithoutNames
+	* PrintSolutions
+	- [Scaffold] PrintPaperTaskModalDataInterface
+	{
+		label: string;
+		value: PrintPaperTaskModalResultEnum;
+		isDisabled: boolean;
+	}[]
+- [VM]: print methods [#2856]
+	doortunnelen naar taskService.printTask(taskId, withNames) / taskService.printSolution(taskId);
+- [Services]: print methods [#2869]
+	* printTask(taskId, withNames: boolean)
+		taskApi.getTaskPDF(taskId, withNames, download?);
+	* printSolution(taskId)
+		taskApi.getSolutionPDF(taskId, download?)
+- [Services]: TaskEduContent Service [#2868]
+	implementeer UpdateTaskEduContents 
+	taskEduContentApi.updateTaskEduContents
+- [VM]: updateTaskEduContentsOrder [#2877]
+	updateTaskEduContentsOrder
+	dispatches UpdateTaskEduContents // array van paritals: [{id: .., changes: {order: //index van array// }}]
+- [VM]: updateTaskEduContentsRequired [#2871]
+	 updateTaskEduContentsRequired(taskEduContents: TaskEduContentInterface[], required: boolean);
+	 dispatches UpdateTaskEduContents // array van paritals: [{id: .., changes: {required}}]
+- [VM]: deleteTaskEduContents [#2870]
+	function deleteTaskEduContents(taskEduContentIds: number[])
+	dispatch startDeleteTaskEduContents(taskEduContentIds)
+- [State]: Lijst sorteren volgens order [#2867]
+	That's it
+	Er is al een eduContent selector in de viewmodel selector (getTaskWithAssignmentsAndEduContents)
+- [State]: Action: Refactor UpdateTaskEduContents action [#2863]
+	moet FeedbackTriggeringAction implementeren
+- [State]: Effect: updateTaskEduContents$ Effect [#2873]
+	implementz tze effect. Error bag handling!
+	cfr. updateTask$ effect
+	optimisticUpdate
+- [State]: startDeleteTaskEduContents Action [#2874]
+	StartDeleteTaskEduContents(taskEduContentIds)
+	payload: {userId, ids: []}
+	implementeert FeedbackTriggeringAction
+- [State]: deleteTaskEduContents$ Effect [#2865]
+	voor StartDeleteTaskEduContents Action
+	pessimistic update
+	taskService
+	handelt af via BulkUpdateResultInfoInterface
+	cfr deleteTasks effect
+- [Services]: TaskEduContentService: deleteTaskEduContents [#2878]
+	taskEduContentApi.destroyTaskEduContents(taskEduContentIds)
+- [UI/UX]: New MatList with cdkDropList directive [#2862]
+	ng-container met mat-selection-list en mat-list (met cdkDropList)
+	mat-list gebruikt TaskEduContentListItem
+	isReordering toggles tussen mat-selection-list en mat-list
+- [UI/UX]: TaskEduContentListItem component [#2860]
+	HTML opmaken + styling
+- [UI/UX]: ManageTaskDetail Sidebar Rechts: Print links [#2866]
+	3 links toevoegen zie modal en XD
+- [UI/UX] preview handler [#2854]
+	function preview(eduContent: EduContentInterface)
+	roept openStaticContentService aan => .open(eduContent,false,true);
+- [UI/UX] click remove task educontents handler [#2857]
+	handler zetten op remove button
+- [UI/UX] disable remove button when activeTask [#2858]
+	button disablen als task.status !== Active
+	in header en sidebar
+- [UI/UX]: Extract primary action from mat-selection-list [#2847]
+	Button 'Toevoegen' buiten de mat-list zetten
+	Ook primary action verplaatsen in overview en modal uit vorige sprint.
+- [UI/UX]: Initiate Reorder Mode [#2872]
+	Toevoegen van extra button 'volgorde wijzigen' (!isReordering)
+	Toevoegen van buttons 'klaar' en annuleren (isReordering)
+	+ Implement handler toggleReordering (switch true/false)
+- [UI/UX]: SaveOrder handler [#2864]
+- [UI/UX]: PrintPaperTaskModal [#2879]
+	* 4 knoppen: 
+		* afdrukken met namen
+		* afdrukken zonder namen
+		* afdrukken correctiesleutel 
+		* cancel	
+	* after click: close and emit an enum value (PrintPaperTaskModalResultEnum) based on the clicked button
+- [UI/UX]: ManageKabasTasksDetailComponent: disable filters + lesmateriaal toevoegen [#2876]
+	disable filter when isReordering === true
+	add a disabled class (play with the opacity)
+	make sure that the filters can't be clicked (pointer-events: none ?)
+- [UI/UX]: ManageKabasTasksDetailComponent: open PrintPaperTaskModal [#2859]
+	click handler vanuit header => clickPrintTask()
+	deze opent modal via MatDialogService
+	data (PrintPaperTaskModalDataInterface) doorgeven 
+	bij afterClosed() => withLatestFrom(currentTask$)
+	result gebruiken om page methods printTask(task, withNames) of printSolution(task)
+- [UI/UX]: ManageKabasTasksDetailComponent: tunnelen print methods naar VM [#2855]
+	doortunnelen naar viewmodel printTask(task.id, withNames: boolean) en  printSolution(task.id)
+Deployment:
+Design:
+Documentation:
+Requirements:
+Testing:
+US#2892 - PDF
+- [Scaffold]: PDF Helper [#2895]
+	* generatePaperTaskPDF(fileName, imagePaths: string[], displayNames?: string[])
+- [Scaffold]: Task Helper [#2898]
+	taskApi.getPaperTaskPDF(taskId: number, withNames: boolean, download? :boolean); + acl instellen (enkel toegang voor teacher)
+	taskApi.getPaperTaskSolutionPDF(taskId: number, download?: boolean) + acl instellen (enkel toegang voor teacher)
+- [Helper]: Task Helper [#2894]
+	* getAssignedStudentsForTask(taskId): Person[]
+	=> get Students for classgroups, groups, ... 
+	* hier zijn nog helpers nodig voor 
+		* getStudentsInClassGroup
+		* getStudentsInGroup
+	=> per klasgroep alfabetisch
+	=> dan per groep alfabetisch
+	=> daarna per leerling alfabetisch
+- [Helper]: EduFiles Helper [#2900]
+	* getEduFilesForTask(taskId): EduFiles[]
+- [Helper]: PDF Helper [#2896]
+	* generatePaperTaskPDF(fileName, imagePaths: string[], displayNames?: string[])
+- [Remote]: Task Helper: getPaperTaskPdf [#2899]
+	* check if is paper 
+	* filename PDF
+	* hasAccess
+	* (H) getEduFilesForTask
+	* (H) getAssigneesForTask(taskId)
+	* (H) generatePaperTaskPDF(fileName, imagePaths: string[], displayNames?: string[])
+- [Remote]: Task: getPaperTaskSolutionPdf [#2897]
+	* check if is paper 
+	* hasAccess
+	* bestaan de eduFiles?
+	* (H) getEduFilesForTask
+	pastop! imagePaths zijn solutionPaths
+	* (H) generatePaperTaskPDF(fileName, imagePaths: string[], displayNames?: string[])
+US#2840 - API
+Development:
+- [Scaffold]: TaskEduContent [#2910]
+	* updateTaskEduContents + acl instellen (enkel toegang voor teacher)
+	* destroyTaskEduContents + acl instellen (enkel toegang voor teacher)
+	cfr. TaskApi.updateTasks (success and errors)
+- [Scaffold]: Task Helper [#2903]
+	* function getTasksByInstances(taskIntances: TaskInstance[])
+	* function getAssignedStudentsForTask(taskId): Person[]
+- [Scaffold]: TaskIntance Helper [#2901]
+	* function getActiveTaskInstances(userId: numer)
+- [Scaffold]: TaskEduContent Helper [#2914]
+	* function getTaskEduContents(taskIds: number[])
+- [Scaffold]: EduFiles Helper [#2912]
+	* getEduFilesForTask(taskId): EduFiles[]
+- [Interface]: BulkUpdateResultInfoInterface [#2904]
+- [Helper]: Task Helper [#2905]
+	implementatie getTasksByInstances(taskIntances: TaskInstance[]): Task[]
+- [Helper]: TaskIntance Helper [#2911]
+	implementatie getActiveTaskInstances(userId: numer): TaskInstance[]
+- [Helper]: TaskEduContent Helper [#2915]
+	implementatie getTaskEduContents(taskIds: number[]): TaskEduContent[]
+- [Helper]: getTasksAssignedToUser [#2908]
+	via taskInstances die nu actief zijn voor user  
+	cfr: models/person/task.js getSharedTasks
+	{success: [], errors: []}
+- [Remote]: TaskEduContent: destroyTaskEduContents [#2902]
+	1. extract all taskIds from eduContents array
+	2. check access to all tasks (hasAccessToTask in the person adapter)
+	3. check for each task => not active (getActiveTaskAssignments in the task helper)
+	4. destroy
+	Error bag vullen met mislukte checks uit 2 en 3 of gefaalde destroys
+	return BulkUpdatResultInfoInterface
+- [Remote]: TaskEduContent: updateTaskEduContents [#2906]
+	1. extract all taskIds from eduContents array
+	2. check access to all tasks
+	3. update
+	Error bag vullen met mislukte checks uit 2 of gefaalde updates
+	return BulkUpdatResultInfoInterface
+- [Remote]: Refactor Data: Tasks [#2913]
+	* getTasksForTeacher (adapter)
+	* (H) getTasksByInstances(taskInstances)
+	=> concat 2 results hierboven als taskIds 
+	* (H) getTaskEduContents(taskIds)
+	* (H) getActiveTaskInstances(userId)
+- [Remote]: Refactor destroyTasks en archiveTasks [#2909]
+	moet BulkUpdateResultInfoInterface returnen
+Deployment:
+Design:
+Documentation:
+- [Research]: Kan huidige implementatie van getTasksData weg? [#2907]
+	in data.js => user.getTasksData() => models/person/tasks.js => getTasksData()
+	mag dit verwijderd worden?
+Requirements:
+Testing:
