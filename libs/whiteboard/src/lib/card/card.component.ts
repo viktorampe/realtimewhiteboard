@@ -31,7 +31,6 @@ export class CardComponent implements OnInit, OnChanges {
   @HostBinding('style.left') leftStyle: string;
   colorlistHidden: boolean;
   viewModeImage: boolean;
-  opacity: number;
   maxCharacters = 300;
 
   txtContent = new FormControl();
