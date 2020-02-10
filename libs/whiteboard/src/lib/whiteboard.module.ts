@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule, MatIconModule } from '@angular/material';
+import { MatButtonModule } from '@angular/material/button';
 import { CardTextComponent } from './card-text/card-text.component';
 import { CardComponent } from './card/card.component';
 import { ColorlistComponent } from './colorlist/colorlist.component';
@@ -21,7 +22,8 @@ import { WhiteboardComponent } from './whiteboard/whiteboard.component';
     DragDropModule,
     FormsModule,
     MatIconModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatButtonModule
   ],
   declarations: [
     WhiteboardComponent,

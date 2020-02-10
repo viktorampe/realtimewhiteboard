@@ -1,12 +1,5 @@
 .whiteboard-tools {
-  background-color: lightgray;
-  height: 50px;
-  width: auto;
   display: flex;
   position: absolute;
   bottom: 0;
-
-  &__btn {
-    width: 50px;
-  }
 }
