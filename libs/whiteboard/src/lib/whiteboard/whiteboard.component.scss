@@ -43,4 +43,17 @@
     width: 300px;
     box-sizing: border-box;
   }
+
+  campus-shelf {
+    position: absolute;
+    bottom: 0;
+    height: 136px;
+    width: 100%;
+    background-color: white;
+    box-shadow: 0px -3px 15px #00000024;
+    overflow: scroll;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  }
 }
