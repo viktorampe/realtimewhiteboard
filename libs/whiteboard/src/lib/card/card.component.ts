@@ -26,7 +26,6 @@ export class CardComponent implements OnInit, OnChanges {
   @Output() lastColor = new EventEmitter<string>();
   @Output() select = new EventEmitter<void>();
   @Output() deselect = new EventEmitter<void>();
-  @Output() listCheckboxes = new EventEmitter();
 
   @HostBinding('style.top') topStyle: string;
   @HostBinding('style.left') leftStyle: string;
@@ -48,15 +47,6 @@ export class CardComponent implements OnInit, OnChanges {
   ngOnChanges() {
     this.topStyle = this.card.top + 'px';
     this.leftStyle = this.card.left + 'px';
-    this.onCheckChange();
-  }
-
-  onCheckChange() {
-    if (this.checkboxVisible) {
-      this.opacity = 1;
-    } else {
-      this.opacity = 0;
-    }
   }
 
   toggleInput() {
@@ -104,7 +94,6 @@ export class CardComponent implements OnInit, OnChanges {
     if (event.target.checked) {
       this.select.emit();
     } else {
-      this.opacity = 0;
       this.deselect.emit();
     }
   }
