@@ -4,6 +4,7 @@
       type="checkbox"
       class="card__header__checkbox"
       (change)="onCheckboxChanged($event)"
+      [style.opacity]="checkboxVisible ? 1 : 0"
     />
     <campus-toolbar
       [editMode]="this.card.editMode"

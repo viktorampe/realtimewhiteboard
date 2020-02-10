@@ -20,6 +20,8 @@ import Card from '../../interfaces/card.interface';
 export class CardComponent implements OnInit, OnChanges {
   @ViewChild('inputContent', { static: false }) inputContent: ElementRef;
   @Input() card: Card;
+  @Input() checkboxVisible: boolean;
+
   @Output() deleteCard = new EventEmitter();
   @Output() lastColor = new EventEmitter<string>();
   @Output() select = new EventEmitter<void>();

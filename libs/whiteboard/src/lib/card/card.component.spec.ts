@@ -212,6 +212,12 @@ describe('CardComponent', () => {
     expect(component.deselect.emit).toHaveBeenCalled();
   });
 
+  it('should emit listCheckboxes when the mouse leaves the checkbox', () => {
+    spyOn(component.listCheckboxes, 'emit');
+    component.hideCheckbox();
+    expect(component.listCheckboxes.emit).toHaveBeenCalled();
+  });
+
   it('should remove image when removeImage() is called', () => {
     component.card.image = 'this is not an empty string';
     component.removeImage();

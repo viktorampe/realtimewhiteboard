@@ -155,7 +155,7 @@ describe('WhiteboardComponent', () => {
   });
 
   it('should add a card when checkbox is selected', () => {
-    const card = {
+    const card: Card = {
       description: '',
       image: null,
       color: null,
@@ -164,6 +164,7 @@ describe('WhiteboardComponent', () => {
       top: 0,
       left: 0
     };
+    component.cards = [card];
     component.selectedCards = [];
 
     component.selectCard(card);
@@ -172,7 +173,7 @@ describe('WhiteboardComponent', () => {
   });
 
   it('should remove a card when checkbox is selected again', () => {
-    const card = {
+    const card: Card = {
       description: '',
       image: null,
       color: null,
@@ -181,6 +182,7 @@ describe('WhiteboardComponent', () => {
       top: 0,
       left: 0
     };
+    component.cards = [card];
     component.selectedCards = [card];
 
     component.deselectCard(card);
