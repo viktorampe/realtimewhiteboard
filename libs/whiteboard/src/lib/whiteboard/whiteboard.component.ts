@@ -1,8 +1,14 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  OnInit,
+  Output,
+  ViewChild
+} from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { ConfirmationModalComponent } from '@campus/ui';
 import Card from '../../interfaces/card.interface';
-
 @Component({
   selector: 'campus-whiteboard',
   templateUrl: './whiteboard.component.html',
@@ -17,6 +23,8 @@ export class WhiteboardComponent implements OnInit {
     }
   }
 
+  @Output() updateCheckbox = new EventEmitter<boolean>();
+
   constructor(public dialog: MatDialog) {
     this.title = '';
     this.isTitleInputSelected = this.title === '';
@@ -26,6 +34,7 @@ export class WhiteboardComponent implements OnInit {
   selectedCards: Card[];
 
   lastColor: string;
+  checkboxVisible: boolean;
 
   title: string;
   isTitleInputSelected: boolean;
@@ -49,6 +58,7 @@ export class WhiteboardComponent implements OnInit {
   }
 
   addEmptyCard(top: number = 0, left: number = 0) {
+    this.checkboxVisible = this.selectedCards.length !== 0;
     this.cards.push({
       color: this.lastColor,
       description: '',
@@ -82,6 +92,7 @@ export class WhiteboardComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(deleteConfirmation => {
       if (deleteConfirmation) {
+        this.selectedCards = this.selectedCards.filter(c => c !== card);
         this.cards = this.cards.filter(c => c !== card);
       }
     });
@@ -91,14 +102,40 @@ export class WhiteboardComponent implements OnInit {
     this.lastColor = color;
   }
 
-  selectCard(card: Card) {
+  selectCard(card) {
     this.selectedCards.push(card);
+    this.checkboxVisible = true;
   }
 
   deselectCard(card: Card) {
     this.selectedCards = this.selectedCards.filter(c => c !== card);
+    if (!this.selectedCards.length) {
+      this.checkboxVisible = false;
+    }
   }
-  btnDelClicked() {}
 
-  btnEditClicked() {}
+  btnDelClicked() {
+    if (this.selectedCards.length) {
+      const dialogRef = this.dialog.open(ConfirmationModalComponent, {
+        data: {
+          title: 'Verwijderen bevestigen',
+          message: 'Weet u zeker dat u deze kaarten wil verwijderen?',
+          disableConfirm: false
+        }
+      });
+
+      dialogRef.afterClosed().subscribe(deleteConfirmation => {
+        if (deleteConfirmation) {
+          this.cards = this.cards.filter(c => !this.selectedCards.includes(c));
+          this.selectedCards = [];
+        }
+      });
+    }
+  }
+
+  changeSelectedCardsColor(color: string) {
+    this.lastColor = color;
+    this.selectedCards.forEach(c => (c.color = this.lastColor));
+    this.selectedCards = [];
+  }
 }

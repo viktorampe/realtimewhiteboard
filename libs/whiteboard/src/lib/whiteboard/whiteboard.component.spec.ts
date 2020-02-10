@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   MatCardModule,
   MatDialog,
@@ -32,6 +32,7 @@ describe('WhiteboardComponent', () => {
       imports: [
         MatCardModule,
         FormsModule,
+        ReactiveFormsModule,
         MatIconModule,
         MatDialogModule,
         BrowserAnimationsModule
@@ -41,8 +42,8 @@ describe('WhiteboardComponent', () => {
         CardComponent,
         ToolbarComponent,
         ColorlistComponent,
-        ProgressBarComponent,
-        WhiteboardToolsComponent
+        WhiteboardToolsComponent,
+        ProgressBarComponent
       ],
       providers: [
         {
@@ -154,7 +155,7 @@ describe('WhiteboardComponent', () => {
   });
 
   it('should add a card when checkbox is selected', () => {
-    const card = {
+    const card: Card = {
       description: '',
       image: null,
       color: null,
@@ -163,6 +164,7 @@ describe('WhiteboardComponent', () => {
       top: 0,
       left: 0
     };
+    component.cards = [card];
     component.selectedCards = [];
 
     component.selectCard(card);
@@ -171,6 +173,24 @@ describe('WhiteboardComponent', () => {
   });
 
   it('should remove a card when checkbox is selected again', () => {
+    const card: Card = {
+      description: '',
+      image: null,
+      color: null,
+      isInputSelected: false,
+      editMode: true,
+      top: 0,
+      left: 0
+    };
+    component.cards = [card];
+    component.selectedCards = [card];
+
+    component.deselectCard(card);
+
+    expect(component.selectedCards).not.toContain(card);
+  });
+
+  it('should change the colors of the selected cards when a swatch is clicked', () => {
     const card = {
       description: '',
       image: null,
@@ -180,10 +200,20 @@ describe('WhiteboardComponent', () => {
       top: 0,
       left: 0
     };
-    component.selectedCards = [card];
 
-    component.deselectCard(card);
+    const card2 = {
+      description: '',
+      image: null,
+      color: null,
+      isInputSelected: false,
+      editMode: true,
+      top: 0,
+      left: 0
+    };
 
-    expect(component.selectedCards).not.toContain(card);
+    const cards = [card, card2];
+    component.selectedCards = [card, card2];
+    component.changeSelectedCardsColor('black');
+    cards.forEach(c => expect(c.color).toBe('black'));
   });
 });

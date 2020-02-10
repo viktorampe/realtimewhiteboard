@@ -9,6 +9,7 @@ import {
   Output,
   ViewChild
 } from '@angular/core';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'campus-card',
@@ -24,6 +25,7 @@ export class CardComponent implements OnInit, OnChanges {
   @Input() editMode: boolean;
   @Input() top: number;
   @Input() left: number;
+  @Input() checkboxVisible: boolean;
 
   @Output() deleteCard = new EventEmitter();
   @Output() lastColor = new EventEmitter<string>();
@@ -35,6 +37,8 @@ export class CardComponent implements OnInit, OnChanges {
   colorlistHidden: boolean;
   viewModeImage: boolean;
   maxCharacters = 300;
+
+  txtContent = new FormControl();
 
   constructor() {
     this.viewModeImage = true;
@@ -100,6 +104,9 @@ export class CardComponent implements OnInit, OnChanges {
 
   toggleEditMode() {
     this.editMode = !this.editMode;
+    if (!this.editMode && !this.colorlistHidden) {
+      this.colorlistHidden = true;
+    }
     this.viewModeImage = true;
   }
 

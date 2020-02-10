@@ -4,6 +4,7 @@
       type="checkbox"
       class="card__header__checkbox"
       (change)="onCheckboxChanged($event)"
+      [style.opacity]="checkboxVisible ? 1 : 0"
     />
     <campus-toolbar
       [editMode]="this.editMode"
@@ -16,10 +17,10 @@
     ></campus-toolbar>
   </div>
   <campus-colorlist
+    class="card__colorlist"
     (selectedColor)="selectColor($event)"
     [hidden]="colorlistHidden"
   ></campus-colorlist>
-
   <div class="card__content" (dblclick)="onDblClick()">
     <div
       *ngIf="viewModeImage || editMode"
@@ -28,6 +29,7 @@
     ></div>
     <div *ngIf="!viewModeImage || editMode" class="card__input">
       <textarea
+        [formControl]="txtContent"
         #inputContent
         *ngIf="isInputSelected"
         [(ngModel)]="description"
@@ -41,11 +43,19 @@
       <p *ngIf="!isInputSelected" (click)="toggleInput()">
         {{ description }}
       </p>
+
       <p
         *ngIf="isInputSelected && description.length === maxCharacters"
         class="card__content__errorMessage"
       >
         Je hebt het maximaal aantal karakters gebruikt.
+      </p>
+      <p
+        *ngIf="card.isInputSelected && !card.description && txtContent.dirty"
+        class="card__content__errorMessage"
+        data-cy="errorMissingContent"
+      >
+        Er moet tekst ingevuld zijn.
       </p>
     </div>
   </div>
