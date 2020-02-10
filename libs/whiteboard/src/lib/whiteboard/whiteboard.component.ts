@@ -1,4 +1,11 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  OnInit,
+  Output,
+  ViewChild
+} from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { ConfirmationModalComponent } from '@campus/ui';
 import Card from '../../interfaces/card.interface';
@@ -17,6 +24,8 @@ export class WhiteboardComponent implements OnInit {
     }
   }
 
+  @Output() updateCheckbox = new EventEmitter<string>();
+
   constructor(public dialog: MatDialog) {
     this.title = '';
     this.isTitleInputSelected = this.title === '';
@@ -26,7 +35,7 @@ export class WhiteboardComponent implements OnInit {
   selectedCards: Card[];
 
   lastColor: string;
-  opacity: number;
+  checkboxVisible: number;
 
   title: string;
   isTitleInputSelected: boolean;
@@ -51,9 +60,9 @@ export class WhiteboardComponent implements OnInit {
 
   addEmptyCard(top: number = 0, left: number = 0) {
     if (this.selectedCards.length !== 0) {
-      this.opacity = 1;
+      this.checkboxVisible = 1;
     } else {
-      this.opacity = 0;
+      this.checkboxVisible = 0;
     }
     this.cards.push({
       color: this.lastColor,
@@ -63,8 +72,7 @@ export class WhiteboardComponent implements OnInit {
       isInputSelected: true,
       top: top,
       left: left,
-      editMode: true,
-      opacity: this.opacity
+      editMode: true
     });
   }
 
@@ -95,6 +103,10 @@ export class WhiteboardComponent implements OnInit {
     });
   }
 
+  onUpdateCheckbox(event) {
+    //  this.checkboxVisible.emit();
+  }
+
   saveLastColor(color: string) {
     this.lastColor = color;
   }
@@ -102,7 +114,7 @@ export class WhiteboardComponent implements OnInit {
   selectCard(card) {
     this.selectedCards.push(card);
     this.cards.forEach(c => {
-      c.opacity = 1;
+      this.checkboxVisible = 1;
     });
   }
 
@@ -110,7 +122,7 @@ export class WhiteboardComponent implements OnInit {
     this.selectedCards = this.selectedCards.filter(c => c !== card);
     if (this.selectedCards.length === 0) {
       this.cards.forEach(c => {
-        c.opacity = 0;
+        this.checkboxVisible = 0;
       });
     }
   }
@@ -118,7 +130,7 @@ export class WhiteboardComponent implements OnInit {
   getListCheckbox() {
     if (this.selectedCards.length === 0) {
       this.cards.forEach(c => {
-        c.opacity = 0;
+        this.checkboxVisible = 0;
       });
     }
   }

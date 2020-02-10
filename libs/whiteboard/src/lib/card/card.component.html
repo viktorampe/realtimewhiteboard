@@ -4,7 +4,7 @@
       type="checkbox"
       class="card__header__checkbox"
       (change)="onCheckboxChanged($event)"
-      [style.opacity]="card.opacity"
+      [style.opacity]="this.opacity"
       (mouseover)="showCheckbox()"
       (mouseleave)="hideCheckbox()"
     />

@@ -30,14 +30,13 @@ export class CardComponent implements OnInit, OnChanges {
   @HostBinding('style.left') leftStyle: string;
   colorlistHidden: boolean;
   viewModeImage: boolean;
-  isChecked: boolean;
+  opacity: number;
   maxCharacters = 300;
 
   txtContent = new FormControl();
 
   constructor() {
     this.viewModeImage = true;
-    this.isChecked = false;
   }
 
   ngOnInit() {
@@ -94,13 +93,13 @@ export class CardComponent implements OnInit, OnChanges {
     if (event.target.checked) {
       this.select.emit();
     } else {
-      this.isChecked = false;
+      this.opacity = 0;
       this.deselect.emit();
     }
   }
 
   showCheckbox() {
-    this.card.opacity = 1;
+    this.opacity = 1;
   }
 
   hideCheckbox() {
