@@ -27,6 +27,8 @@ import { WhiteboardComponent } from './whiteboard/whiteboard.component';
     CardComponent,
     ToolbarComponent,
     ColorlistComponent,
+    WhiteboardToolsComponent,
+    ProgressBarComponent,
     ImageDragDirective,
     ProgressBarComponent,
     WhiteboardToolsComponent,

@@ -43,4 +43,9 @@
     width: 300px;
     box-sizing: border-box;
   }
+  &__colorlist {
+    background-color: rgba(0, 0, 0, 0.4);
+    position: absolute;
+    bottom: 50px;
+  }
 }
