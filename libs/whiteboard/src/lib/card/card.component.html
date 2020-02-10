@@ -1,4 +1,4 @@
-<div class="card" [style.background-color]="this.card.color">
+<div class="card" [style.background-color]="this.color">
   <div class="card__header">
     <input
       type="checkbox"
@@ -7,7 +7,7 @@
       [style.opacity]="checkboxVisible ? 1 : 0"
     />
     <campus-toolbar
-      [editMode]="this.card.editMode"
+      [editMode]="this.editMode"
       (clickColorIcon)="showColor()"
       (clickToggleEditIcon)="toggleEditMode()"
       (clickToggleView)="toggleView()"
@@ -23,16 +23,16 @@
   ></campus-colorlist>
   <div class="card__content" (dblclick)="onDblClick()">
     <div
-      *ngIf="viewModeImage || card.editMode"
+      *ngIf="viewModeImage || editMode"
       class="card__image"
-      [ngStyle]="{ 'background-image': 'url(' + card.image + ')' }"
+      [ngStyle]="{ 'background-image': 'url(' + image + ')' }"
     ></div>
-    <div *ngIf="!viewModeImage || card.editMode" class="card__input">
+    <div *ngIf="!viewModeImage || editMode" class="card__input">
       <textarea
         [formControl]="txtContent"
         #inputContent
-        *ngIf="card.isInputSelected"
-        [(ngModel)]="card.description"
+        *ngIf="isInputSelected"
+        [(ngModel)]="description"
         (focusout)="toggleInput()"
         type="text"
         name="card-content"
@@ -40,20 +40,18 @@
         rows="5"
         maxlength="{{ maxCharacters }}"
       ></textarea>
-      <p *ngIf="!card.isInputSelected" (click)="toggleInput()">
-        {{ card.description }}
+      <p *ngIf="!isInputSelected" (click)="toggleInput()">
+        {{ description }}
       </p>
 
       <p
-        *ngIf="
-          card.isInputSelected && card.description.length === maxCharacters
-        "
+        *ngIf="isInputSelected && description.length === maxCharacters"
         class="card__content__errorMessage"
       >
         Je hebt het maximaal aantal karakters gebruikt.
       </p>
       <p
-        *ngIf="card.isInputSelected && !card.description && txtContent.dirty"
+        *ngIf="isInputSelected && !description && txtContent.dirty"
         class="card__content__errorMessage"
         data-cy="errorMissingContent"
       >
