@@ -11,6 +11,7 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
 import { WhiteboardToolsComponent } from './whiteboard-tools/whiteboard-tools.component';
 import { WhiteboardComponent } from './whiteboard/whiteboard.component';
 import { ImageToolbarComponent } from './image-toolbar/image-toolbar.component';
+import { CardTextComponent } from './card-text/card-text.component';
 
 @NgModule({
   imports: [
@@ -29,7 +30,8 @@ import { ImageToolbarComponent } from './image-toolbar/image-toolbar.component';
     ImageDragDirective,
     ProgressBarComponent,
     WhiteboardToolsComponent,
-    ImageToolbarComponent
+    ImageToolbarComponent,
+    CardTextComponent
   ],
   exports: [WhiteboardComponent, ImageDragDirective]
 })
