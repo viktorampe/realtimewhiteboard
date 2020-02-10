@@ -20,6 +20,8 @@ import Card from '../../interfaces/card.interface';
 export class CardComponent implements OnInit, OnChanges {
   @ViewChild('inputContent', { static: false }) inputContent: ElementRef;
   @Input() card: Card;
+  @Input() checkboxVisible: boolean;
+
   @Output() deleteCard = new EventEmitter();
   @Output() lastColor = new EventEmitter<string>();
   @Output() select = new EventEmitter<void>();
@@ -46,6 +48,15 @@ export class CardComponent implements OnInit, OnChanges {
   ngOnChanges() {
     this.topStyle = this.card.top + 'px';
     this.leftStyle = this.card.left + 'px';
+    this.onHoverChange();
+  }
+
+  onHoverChange() {
+    if (this.checkboxVisible) {
+      this.opacity = 1;
+    } else {
+      this.opacity = 0;
+    }
   }
 
   toggleInput() {
@@ -93,7 +104,6 @@ export class CardComponent implements OnInit, OnChanges {
     if (event.target.checked) {
       this.select.emit();
     } else {
-      this.opacity = 0;
       this.deselect.emit();
     }
   }
@@ -103,7 +113,7 @@ export class CardComponent implements OnInit, OnChanges {
   }
 
   hideCheckbox() {
-    this.listCheckboxes.emit();
+    this.onHoverChange();
   }
 
   toggleEditMode() {

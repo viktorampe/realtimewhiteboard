@@ -24,7 +24,7 @@ export class WhiteboardComponent implements OnInit {
     }
   }
 
-  @Output() updateCheckbox = new EventEmitter<string>();
+  @Output() updateCheckbox = new EventEmitter<boolean>();
 
   constructor(public dialog: MatDialog) {
     this.title = '';
@@ -35,7 +35,7 @@ export class WhiteboardComponent implements OnInit {
   selectedCards: Card[];
 
   lastColor: string;
-  checkboxVisible: number;
+  checkboxVisible: boolean;
 
   title: string;
   isTitleInputSelected: boolean;
@@ -60,9 +60,9 @@ export class WhiteboardComponent implements OnInit {
 
   addEmptyCard(top: number = 0, left: number = 0) {
     if (this.selectedCards.length !== 0) {
-      this.checkboxVisible = 1;
+      this.checkboxVisible = true;
     } else {
-      this.checkboxVisible = 0;
+      this.checkboxVisible = false;
     }
     this.cards.push({
       color: this.lastColor,
@@ -103,8 +103,8 @@ export class WhiteboardComponent implements OnInit {
     });
   }
 
-  onUpdateCheckbox(event) {
-    //  this.checkboxVisible.emit();
+  onUpdateCheckbox(boolean) {
+    return this.checkboxVisible;
   }
 
   saveLastColor(color: string) {
@@ -114,7 +114,7 @@ export class WhiteboardComponent implements OnInit {
   selectCard(card) {
     this.selectedCards.push(card);
     this.cards.forEach(c => {
-      this.checkboxVisible = 1;
+      this.checkboxVisible = true;
     });
   }
 
@@ -122,7 +122,8 @@ export class WhiteboardComponent implements OnInit {
     this.selectedCards = this.selectedCards.filter(c => c !== card);
     if (this.selectedCards.length === 0) {
       this.cards.forEach(c => {
-        this.checkboxVisible = 0;
+        this.checkboxVisible = false;
+        console.log('desC');
       });
     }
   }
@@ -130,7 +131,7 @@ export class WhiteboardComponent implements OnInit {
   getListCheckbox() {
     if (this.selectedCards.length === 0) {
       this.cards.forEach(c => {
-        this.checkboxVisible = 0;
+        this.deselectCard(c);
       });
     }
   }

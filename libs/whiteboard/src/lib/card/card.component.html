@@ -4,8 +4,8 @@
       type="checkbox"
       class="card__header__checkbox"
       (change)="onCheckboxChanged($event)"
-      [style.opacity]="this.opacity"
-      (mouseover)="showCheckbox()"
+      [style.opacity]="opacity"
+      (mouseenter)="showCheckbox()"
       (mouseleave)="hideCheckbox()"
     />
     <campus-toolbar
