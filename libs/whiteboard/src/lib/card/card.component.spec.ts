@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule, MatIconRegistry } from '@angular/material';
 import { MatIconModule } from '@angular/material/icon';
 import { By, HAMMER_LOADER } from '@angular/platform-browser';
@@ -15,7 +15,7 @@ describe('CardComponent', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [MatCardModule, FormsModule, MatIconModule],
+      imports: [MatCardModule, FormsModule, MatIconModule, ReactiveFormsModule],
       declarations: [CardComponent, ToolbarComponent, ColorlistComponent],
       providers: [
         {
@@ -65,6 +65,18 @@ describe('CardComponent', () => {
     fixture.detectChanges();
     const errorMessage = fixture.debugElement.query(
       By.css('.card__content__errorMessage')
+    );
+    expect(errorMessage).not.toBeNull();
+  });
+
+  it('should show errormessage when no text is provided', () => {
+    component.card.description = '';
+    component.txtContent.markAsDirty();
+
+    fixture.detectChanges();
+
+    const errorMessage = fixture.debugElement.query(
+      By.css('[data-cy="errorMissingContent"]')
     );
     expect(errorMessage).not.toBeNull();
   });
@@ -235,5 +247,11 @@ describe('CardComponent', () => {
     const card__image = fixture.debugElement.query(By.css('.card__image'))
       .nativeElement;
     expect(card__image.style.backgroundImage).toBe('url(image_2)');
+  });
+
+  it('should close the open colorlist when switching out of editmode', () => {
+    component.showColor();
+    component.toggleEditMode();
+    expect(component.colorlistHidden).toBe(true);
   });
 });

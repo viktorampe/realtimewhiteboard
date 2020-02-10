@@ -9,6 +9,7 @@ import {
   Output,
   ViewChild
 } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import Card from '../../interfaces/card.interface';
 
 @Component({
@@ -31,6 +32,8 @@ export class CardComponent implements OnInit, OnChanges {
   viewModeImage: boolean;
   isChecked: boolean;
   maxCharacters = 300;
+
+  txtContent = new FormControl();
 
   constructor() {
     this.viewModeImage = true;
@@ -106,6 +109,9 @@ export class CardComponent implements OnInit, OnChanges {
 
   toggleEditMode() {
     this.card.editMode = !this.card.editMode;
+    if (!this.card.editMode && !this.colorlistHidden) {
+      this.colorlistHidden = true;
+    }
     this.viewModeImage = true;
   }
 
