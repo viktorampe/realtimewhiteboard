@@ -1,13 +1,8 @@
 .colorlist {
-  width: 100%;
-  background-color: rgba(0, 0, 0, 0.4);
-  height: 75%;
-  position: absolute;
-  bottom: 0;
-  left: 0;
   display: flex;
   flex-wrap: wrap;
-  overflow-y: scroll;
+  justify-content: space-around;
+
   &__swatches {
     height: 40px;
     width: 40px;

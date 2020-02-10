@@ -1,4 +1,4 @@
-<div class="whiteboard-page">
+<div class="whiteboard-page" campusImageDrag>
   <campus-progress-bar
     class="whiteboard-page__progress-bar"
     [amountCompleted]="0"
@@ -36,6 +36,10 @@
   <campus-whiteboard-tools
     (createCard)="btnPlusClicked()"
     (deleteCards)="btnDelClicked()"
-    (editCards)="btnEditClicked()"
   ></campus-whiteboard-tools>
+  <campus-colorlist
+    class="whiteboard-page__colorlist"
+    *ngIf="this.selectedCards.length"
+    (selectedColor)="changeSelectedCardsColor($event)"
+  ></campus-colorlist>
 </div>

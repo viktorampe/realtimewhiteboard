@@ -32,18 +32,18 @@ describe('WhiteboardComponent', () => {
       imports: [
         MatCardModule,
         FormsModule,
+        ReactiveFormsModule,
         MatIconModule,
         MatDialogModule,
-        BrowserAnimationsModule,
-        ReactiveFormsModule
+        BrowserAnimationsModule
       ],
       declarations: [
         WhiteboardComponent,
         CardComponent,
         ToolbarComponent,
         ColorlistComponent,
-        ProgressBarComponent,
-        WhiteboardToolsComponent
+        WhiteboardToolsComponent,
+        ProgressBarComponent
       ],
       providers: [
         {
@@ -190,8 +190,8 @@ describe('WhiteboardComponent', () => {
     expect(component.selectedCards).not.toContain(card);
   });
 
-  it('should remove a card from selectedCards when the card is selected and deleted', () => {
-    const card: Card = {
+  it('should change the colors of the selected cards when a swatch is clicked', () => {
+    const card = {
       description: '',
       image: null,
       color: null,
@@ -200,130 +200,20 @@ describe('WhiteboardComponent', () => {
       top: 0,
       left: 0
     };
-    component.selectedCards = [card];
 
-    const mockDialogRef = {
-      afterClosed: () => of(true), // fake confirmation
-      close: null
-    } as MatDialogRef<ConfirmationModalComponent>;
-    openDialogSpy.mockReturnValue(mockDialogRef);
-
-    component.onDeleteCard(card);
-    expect(component.selectedCards.length).toBe(0);
-  });
-
-  it('should not open a confirmation dialog if the bulk delete button is clicked and there are no selected items', () => {
-    const mockDialogRef = {
-      afterClosed: () => of(false),
-      close: null
-    } as MatDialogRef<ConfirmationModalComponent>;
-    openDialogSpy.mockReturnValue(mockDialogRef);
-
-    component.selectedCards = [];
-
-    component.btnDelClicked();
-
-    expect(openDialogSpy).not.toHaveBeenCalled();
-  });
-
-  it('should open a confirmation dialog when the bulk delete button is clicked and there are selected items', () => {
-    const mockDialogRef = {
-      afterClosed: () => of(false),
-      close: null
-    } as MatDialogRef<ConfirmationModalComponent>;
-    openDialogSpy.mockReturnValue(mockDialogRef);
-
-    const card: Card = {
+    const card2 = {
       description: '',
       image: null,
       color: null,
-      isInputSelected: true,
+      isInputSelected: false,
       editMode: true,
       top: 0,
       left: 0
     };
 
-    component.selectedCards = [card];
-
-    component.btnDelClicked();
-
-    expect(openDialogSpy).toHaveBeenCalledTimes(1);
-    expect(openDialogSpy).toHaveBeenCalledWith(ConfirmationModalComponent, {
-      data: {
-        title: 'Verwijderen bevestigen',
-        message: 'Weet u zeker dat u deze kaarten wil verwijderen?',
-        disableConfirm: false
-      }
-    });
-  });
-
-  it('should delete all selected cards from the list of cards when the user confirms', () => {
-    const card: Card = {
-      description: '',
-      image: null,
-      color: null,
-      isInputSelected: true,
-      editMode: true,
-      top: 0,
-      left: 0
-    };
-
-    const differentCard: Card = {
-      description: '',
-      image: null,
-      color: null,
-      isInputSelected: true,
-      editMode: true,
-      top: 0,
-      left: 0
-    };
-    component.selectedCards = [card];
-    component.cards = [card, differentCard];
-
-    component.selectedCards = [card];
-
-    const mockDialogRef = {
-      afterClosed: () => of(true),
-      close: null
-    } as MatDialogRef<ConfirmationModalComponent>;
-    openDialogSpy.mockReturnValue(mockDialogRef);
-
-    component.onDeleteCard(card);
-    expect(component.selectedCards.length).toBe(0);
-    component.btnDelClicked();
-
-    const expectedList = [differentCard];
-
-    for (let i = 0; i < component.cards.length; i++) {
-      expect(component.cards[i]).toBe(expectedList[i]);
-    }
-    expect(component.selectedCards).toEqual([]);
-  });
-
-  it('should delete not all selected cards from the list of cards when the user does not confirm', () => {
-    const card: Card = {
-      description: '',
-      image: null,
-      color: null,
-      isInputSelected: true,
-      editMode: true,
-      top: 0,
-      left: 0
-    };
-
-    component.cards = [card];
-
-    component.selectedCards = [card];
-
-    const mockDialogRef = {
-      afterClosed: () => of(false),
-      close: null
-    } as MatDialogRef<ConfirmationModalComponent>;
-    openDialogSpy.mockReturnValue(mockDialogRef);
-
-    component.btnDelClicked();
-
-    expect(component.cards).toEqual([card]);
-    expect(component.selectedCards).toEqual([card]);
+    const cards = [card, card2];
+    component.selectedCards = [card, card2];
+    component.changeSelectedCardsColor('black');
+    cards.forEach(c => expect(c.color).toBe('black'));
   });
 });
