@@ -123,15 +123,6 @@ export class WhiteboardComponent implements OnInit {
     if (this.selectedCards.length === 0) {
       this.cards.forEach(c => {
         this.checkboxVisible = false;
-        console.log('desC');
-      });
-    }
-  }
-
-  getListCheckbox() {
-    if (this.selectedCards.length === 0) {
-      this.cards.forEach(c => {
-        this.deselectCard(c);
       });
     }
   }

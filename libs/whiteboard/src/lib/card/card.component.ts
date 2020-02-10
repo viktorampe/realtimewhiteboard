@@ -108,14 +108,6 @@ export class CardComponent implements OnInit, OnChanges {
     }
   }
 
-  showCheckbox() {
-    this.opacity = 1;
-  }
-
-  hideCheckbox() {
-    this.onHoverChange();
-  }
-
   toggleEditMode() {
     this.card.editMode = !this.card.editMode;
     if (!this.card.editMode && !this.colorlistHidden) {
