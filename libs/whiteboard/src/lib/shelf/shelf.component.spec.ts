@@ -1,19 +1,19 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CardTextComponent } from './card-text.component';
+import { ShelfComponent } from './shelf.component';
 
-describe('CardTextComponent', () => {
-  let component: CardTextComponent;
-  let fixture: ComponentFixture<CardTextComponent>;
+describe('ShelfComponent', () => {
+  let component: ShelfComponent;
+  let fixture: ComponentFixture<ShelfComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [CardTextComponent]
+      declarations: [ShelfComponent]
     }).compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CardTextComponent);
+    fixture = TestBed.createComponent(ShelfComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
