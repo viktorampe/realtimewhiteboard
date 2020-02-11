@@ -9,5 +9,10 @@ import { SearchStateInterface } from '@campus/dal';
 export class ManageTaskContentComponent {
   constructor() {}
 
-  searchEduContents(searchState: SearchStateInterface): void {}
+  searchEduContents(searchState: SearchStateInterface): void {
+    throw new Error('not implemented');
+  }
+  removeEduContentFromTask(taskEduContentId: number) {
+    throw new Error('not implemented');
+  }
 }
