@@ -7,4 +7,9 @@ import { Component } from '@angular/core';
 })
 export class ManageTaskContentComponent {
   constructor() {}
+
+  public selectTOC(tocId: number, depth: number) {
+    // TODO: implement
+    throw new Error('Not yet implemented');
+  }
 }
