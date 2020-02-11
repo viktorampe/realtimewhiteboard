@@ -89,3 +89,24 @@
     }
   }
 }
+
+:host.whiteboard-page__shelf__card .card {
+  height: 77px;
+  width: 116px;
+  border-radius: 10px;
+  border: 1px solid;
+  opacity: 0.54;
+
+  &__content {
+    width: 105px;
+    height: 100%;
+  }
+
+  p {
+    word-break: break-all;
+  }
+}
+
+:host.whiteboard-page__shelf__card:hover .card {
+  opacity: 1;
+}
