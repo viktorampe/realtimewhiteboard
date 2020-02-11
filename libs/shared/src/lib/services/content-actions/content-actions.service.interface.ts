@@ -28,4 +28,8 @@ export const CONTENT_OPENER_TOKEN = new InjectionToken<ContentOpenerInterface>(
 export interface ContentActionsServiceInterface {
   contentActionDictionary: { [key: string]: ContentActionInterface };
   getActionsForEduContent(eduContent: EduContent): ContentActionInterface[];
+  getTaskActionsForEduContent(
+    eduContent: EduContent,
+    inTask: boolean
+  ): ContentActionInterface[];
 }
