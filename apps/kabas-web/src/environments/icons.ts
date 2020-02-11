@@ -67,6 +67,8 @@ export const icons = {
   'edu-content:level-basic': 'assets/icons/play_arrow.svg', //TODO placeholder, name needs work
   'edu-content:level-advanced': 'assets/icons/fast_forward.svg', //TODO placeholder, name needs work
   plus: 'assets/icons/add-24px.svg',
+  delete_forever: 'assets/icons/material/delete_forever.svg',
+  add_photo_alternate: 'assets/icons/material/add_photo_alternate.svg',
   // search: sort modes
   'sort-numeric-down': 'assets/icons/sort-numeric-down.svg',
   'sort-alpha-down': 'assets/icons/sort-alpha-down.svg',
