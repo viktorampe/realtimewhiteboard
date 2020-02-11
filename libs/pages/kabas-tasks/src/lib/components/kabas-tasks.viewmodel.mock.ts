@@ -359,7 +359,7 @@ export class MockKabasTasksViewModel
 
   public getDeleteInfo(): any {}
 
-  public addTaskEduContent() {}
+  public addTaskEduContents() {}
   public updateTaskEduContentsRequired() {}
   public deleteTaskEduContents() {}
   public printTask() {}
