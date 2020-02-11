@@ -351,6 +351,8 @@ export class KabasTasksViewModel implements ContentOpenerInterface {
     );
   }
 
+  public addTaskEduContent(taskEduContent: TaskEduContentInterface) {}
+
   public updateTaskEduContentsRequired(
     taskEduContents: TaskEduContentInterface[],
     required: boolean
