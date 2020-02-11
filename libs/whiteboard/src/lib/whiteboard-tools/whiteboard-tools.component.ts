@@ -7,12 +7,15 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 })
 export class WhiteboardToolsComponent implements OnInit {
   @Output() deleteCards = new EventEmitter();
+  @Output() changeSelectedColor = new EventEmitter<string>();
   @Input() cardsSelected: boolean;
   constructor() {}
 
   ngOnInit() {}
 
-  changeSelectedCardsColor($event) {}
+  changeSelectedCardsColor(color: string) {
+    this.changeSelectedColor.emit(color);
+  }
 
   btnDeleteClicked() {
     this.deleteCards.emit();

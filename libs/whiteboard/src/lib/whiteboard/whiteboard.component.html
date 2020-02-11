@@ -1,6 +1,7 @@
 <div class="whiteboard-page" campusImageDrag>
   <campus-whiteboard-tools
     (deleteCards)="btnDelClicked()"
+    (changeSelectedColor)="changeSelectedCardsColor($event)"
     *ngIf="this.selectedCards.length > 0"
   ></campus-whiteboard-tools>
   <campus-progress-bar
