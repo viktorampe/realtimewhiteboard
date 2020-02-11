@@ -87,6 +87,7 @@ import { HumanDateTimePipe } from './utils/pipes/human-date-time/human-date-time
 import { JoinPipe } from './utils/pipes/join/join.pipe';
 import { RemovePrefixStringPipe } from './utils/pipes/remove-prefix-string/remove-prefix-string.pipe';
 import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-string.pipe';
+import { EmptyStateComponent } from './empty-state/empty-state.component';
 @NgModule({
   imports: [
     OverlayModule,
@@ -173,7 +174,8 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     ShellBottomDirective,
     FileIconComponent,
     DateRangePickerComponent,
-    ConfirmationModalComponent
+    ConfirmationModalComponent,
+    EmptyStateComponent
   ],
   exports: [
     FilterTextInputComponent,
@@ -237,7 +239,8 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     MatCheckboxModule,
     FileIconComponent,
     DateRangePickerComponent,
-    ConfirmationModalComponent
+    ConfirmationModalComponent,
+    EmptyStateComponent
   ],
   providers: [
     {
