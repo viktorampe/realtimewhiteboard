@@ -1,6 +1,5 @@
-import { SimpleChange } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
+import { MatProgressBarModule } from '@angular/material';
 import { ProgressBarComponent } from './progress-bar.component';
 
 describe('ProgressBarComponent', () => {
@@ -9,6 +8,7 @@ describe('ProgressBarComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [MatProgressBarModule],
       declarations: [ProgressBarComponent]
     }).compileComponents();
   }));
@@ -21,25 +21,5 @@ describe('ProgressBarComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
-  });
-
-  it('should show the correct progress of images uploaded', () => {
-    component.amountOfImages = 3;
-    component.amountCompleted = 1;
-
-    component.ngOnChanges({
-      amountOfImages: new SimpleChange(null, component.amountOfImages, false),
-      amountCompleted: new SimpleChange(null, component.amountCompleted, false)
-    });
-
-    fixture.detectChanges();
-
-    const contentParagraph = fixture.debugElement.query(
-      By.css('.progress-bar__progress')
-    );
-
-    expect(contentParagraph.nativeElement.style.width).toBe(
-      (1 / 3) * 100 + '%'
-    );
   });
 });
