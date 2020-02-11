@@ -26,8 +26,8 @@ describe('ContentActionsServiceInterface', () => {
             openEduContentAsDownload: () => {},
             openBoeke: () => {},
             previewEduContentAsImage: () => {},
-            addToTask: () => {},
-            removeFromTask: () => {}
+            addEduContentToTask: () => {},
+            removeEduContentFromTask: () => {}
           }
         }
       ]
@@ -53,35 +53,30 @@ describe('ContentActionsServiceInterface', () => {
           mockEduContent: new EduContentFixture({
             type: EduContentTypeEnum.BOEKE
           }),
-          expected: [contentActionsService.contentActionDictionary['openBoeke']]
+          expected: [contentActionsService.contentActionDictionary.openBoeke]
         },
         {
           mockEduContent: new EduContentFixture({
             type: EduContentTypeEnum.EXERCISE
           }),
           expected: [
-            contentActionsService.contentActionDictionary[
-              'openEduContentAsExercise'
-            ],
-            contentActionsService.contentActionDictionary[
-              'openEduContentAsSolution'
-            ]
+            contentActionsService.contentActionDictionary
+              .openEduContentAsExercise,
+            contentActionsService.contentActionDictionary
+              .openEduContentAsSolution
           ]
         },
         {
           mockEduContent: new EduContentFixture({}, { streamable: true }),
           expected: [
-            contentActionsService.contentActionDictionary[
-              'openEduContentAsStream'
-            ]
+            contentActionsService.contentActionDictionary.openEduContentAsStream
           ]
         },
         {
           mockEduContent: new EduContentFixture({}, { streamable: false }),
           expected: [
-            contentActionsService.contentActionDictionary[
-              'openEduContentAsDownload'
-            ]
+            contentActionsService.contentActionDictionary
+              .openEduContentAsDownload
           ]
         },
         {
@@ -89,9 +84,8 @@ describe('ContentActionsServiceInterface', () => {
             type: EduContentTypeEnum.PAPER_EXERCISE
           }),
           expected: [
-            contentActionsService.contentActionDictionary[
-              'previewEduContentAsImage'
-            ]
+            contentActionsService.contentActionDictionary
+              .previewEduContentAsImage
           ]
         }
       ];
@@ -102,6 +96,7 @@ describe('ContentActionsServiceInterface', () => {
       );
     });
   });
+
   describe('getTaskActionsForEduContent()', () => {
     it('should return addToTask action when inTask false', () => {
       expect(
@@ -109,7 +104,7 @@ describe('ContentActionsServiceInterface', () => {
           new EduContentFixture(),
           false
         )
-      ).toEqual([contentActionsService.contentActionDictionary['addToTask']]);
+      ).toEqual([contentActionsService.contentActionDictionary.addToTask]);
     });
 
     it('should return removeFromTask action when inTask true', () => {
@@ -118,9 +113,7 @@ describe('ContentActionsServiceInterface', () => {
           new EduContentFixture(),
           true
         )
-      ).toEqual([
-        contentActionsService.contentActionDictionary['removeFromTask']
-      ]);
+      ).toEqual([contentActionsService.contentActionDictionary.removeFromTask]);
     });
   });
 });

@@ -15,8 +15,8 @@ export interface ContentOpenerInterface {
   openEduContentAsDownload(eduContent: EduContent): void;
   openBoeke(eduContent: EduContent): void;
   previewEduContentAsImage(eduContent: EduContent): void;
-  addToTask?(eduContent: EduContent): void;
-  removeFromTask?(eduContent: EduContent): void;
+  addEduContentToTask?(eduContent: EduContent): void;
+  removeEduContentFromTask?(eduContent: EduContent): void;
 }
 
 export const CONTENT_ACTIONS_SERVICE_TOKEN = new InjectionToken(
