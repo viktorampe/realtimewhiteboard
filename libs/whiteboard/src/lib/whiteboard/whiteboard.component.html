@@ -1,4 +1,10 @@
 <div class="whiteboard-page" campusImageDrag>
+  <campus-whiteboard-tools
+    (deleteCards)="btnDelClicked()"
+    (changeSelectedColor)="changeSelectedCardsColor($event)"
+    (createCard)="btnPlusClicked()"
+    *ngIf="this.selectedCards.length"
+  ></campus-whiteboard-tools>
   <campus-progress-bar
     class="whiteboard-page__progress-bar"
     [amountCompleted]="0"
@@ -40,14 +46,5 @@
       class="whiteboard-page__card"
     ></campus-card>
   </div>
-  <campus-whiteboard-tools
-    (createCard)="btnPlusClicked()"
-    (deleteCards)="btnDelClicked()"
-  ></campus-whiteboard-tools>
   <campus-shelf class="whiteboard-page__shelf__card"> </campus-shelf>
-  <campus-colorlist
-    class="whiteboard-page__colorlist"
-    *ngIf="this.selectedCards.length"
-    (selectedColor)="changeSelectedCardsColor($event)"
-  ></campus-colorlist>
 </div>
