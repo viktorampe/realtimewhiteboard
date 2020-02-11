@@ -20,4 +20,15 @@
   </campus-method-favorite-tile>
 </div> -->
 
-<campus-editor-timeline></campus-editor-timeline>
+<!-- <campus-editor-timeline></campus-editor-timeline> -->
+<campus-section
+  (triggerAction)="handleAction()"
+  title="demo title"
+  [mode]="sectionMode"
+>
+  <div section-actions>I'm am a header action.</div>
+  <div section-body>
+    <p>Section body paragraph 1.</p>
+    <p>Section body paragraph 2.</p>
+  </div>
+</campus-section>

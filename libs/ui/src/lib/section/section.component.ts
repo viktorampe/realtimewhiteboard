@@ -18,5 +18,17 @@ export class SectionComponent {
 
   @Output() triggerAction = new EventEmitter<void>();
 
+  modes = SectionModeEnum;
+
   constructor() {}
+
+  clickIcon(event: MouseEvent) {
+    event.stopPropagation();
+    this.triggerAction.emit();
+  }
+
+  clickSection() {
+    if (this.mode !== SectionModeEnum.EDITABLE) return;
+    this.triggerAction.emit();
+  }
 }

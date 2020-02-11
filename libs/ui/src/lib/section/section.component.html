@@ -1,1 +1,20 @@
-<p>section works!</p>
+<div (click)="clickSection()" class="section">
+  <div class="section__header">
+    <p>{{ title }}</p>
+    <div class="section__header__actions">
+      <mat-icon
+        (click)="clickIcon($event)"
+        class="section__header_actions__action"
+        *ngIf="icon; else actions"
+        [svgIcon]="icon"
+      ></mat-icon>
+    </div>
+  </div>
+  <div class="section__body">
+    <ng-content select="[section-body]"></ng-content>
+  </div>
+</div>
+
+<ng-template #actions>
+  <ng-content select="[section-actions]"></ng-content>
+</ng-template>

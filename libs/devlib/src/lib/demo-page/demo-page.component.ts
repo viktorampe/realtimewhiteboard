@@ -12,6 +12,8 @@ import {
   MultiCheckBoxTableItemInterface,
   MultiCheckBoxTableRowHeaderColumnInterface
 } from '@campus/ui';
+// tslint:disable-next-line: nx-enforce-module-boundaries
+import { SectionModeEnum } from 'libs/ui/src/lib/section/section.component';
 
 @Component({
   selector: 'campus-demo-page',
@@ -24,6 +26,8 @@ export class DemoPageComponent implements OnInit {
   >[]; // chapters
   items: MultiCheckBoxTableItemInterface<EduContentTOCInterface>[];
   itemColumns: MultiCheckBoxTableItemColumnInterface<ClassGroupInterface>[];
+
+  sectionMode = SectionModeEnum.EDITABLE;
 
   constructor() {}
 
@@ -78,5 +82,9 @@ export class DemoPageComponent implements OnInit {
     >
   ) {
     console.log(data);
+  }
+
+  handleAction() {
+    console.log('action clicked');
   }
 }
