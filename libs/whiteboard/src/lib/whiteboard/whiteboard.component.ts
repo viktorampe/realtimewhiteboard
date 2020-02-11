@@ -136,6 +136,6 @@ export class WhiteboardComponent implements OnInit {
   changeSelectedCardsColor(color: string) {
     this.lastColor = color;
     this.selectedCards.forEach(c => (c.color = this.lastColor));
-    this.selectedCards = [];
+    this.selectedCards.forEach(c => this.deselectCard(c));
   }
 }
