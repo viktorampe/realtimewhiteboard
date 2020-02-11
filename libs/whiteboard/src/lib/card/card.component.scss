@@ -1,7 +1,7 @@
 .card {
   position: relative;
-  height: 167px;
-  width: 250px;
+  height: 77px;
+  width: 116px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -93,17 +93,10 @@
 :host.whiteboard-page__shelf__card .card {
   height: 77px;
   width: 116px;
-  border-radius: 10px;
-  border: 1px solid;
   opacity: 0.54;
 
   &__content {
     width: 105px;
-    height: 100%;
-  }
-
-  p {
-    word-break: break-all;
   }
 }
 
