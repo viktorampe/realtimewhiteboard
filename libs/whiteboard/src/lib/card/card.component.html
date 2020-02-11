@@ -7,6 +7,7 @@
     <input
       type="checkbox"
       class="card__header__checkbox"
+      [(ngModel)]="isSelected"
       (change)="onCheckboxChanged($event)"
       [style.opacity]="checkboxVisible ? 1 : 0"
     />

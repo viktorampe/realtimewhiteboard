@@ -36,6 +36,7 @@
       (select)="selectCard(card)"
       (deselect)="deselectCard(card)"
       [checkboxVisible]="checkboxVisible"
+      [isSelected]="selectedCards.includes(card)"
       class="whiteboard-page__card"
     ></campus-card>
   </div>
