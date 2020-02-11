@@ -1,4 +1,4 @@
-.innercard {
+.card__innercard {
   position: relative;
   height: 167px;
   width: 250px;
@@ -60,7 +60,7 @@
       color: #dc3545;
     }
 
-    .innercard__image {
+    .card__innercard__image {
       background-position: center;
       background-size: cover;
       height: 100%;
@@ -69,7 +69,7 @@
       border-radius: 0 10px 10px 0;
     }
 
-    .innercard__input {
+    .card__innercard__input {
       width: 100%;
       height: 100%;
       padding: 20px;
