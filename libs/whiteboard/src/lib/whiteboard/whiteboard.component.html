@@ -2,6 +2,7 @@
   <campus-whiteboard-tools
     (deleteCards)="btnDelClicked()"
     (changeSelectedColor)="changeSelectedCardsColor($event)"
+    (createCard)="btnPlusClicked()"
     *ngIf="this.selectedCards.length > 0"
   ></campus-whiteboard-tools>
   <campus-progress-bar
