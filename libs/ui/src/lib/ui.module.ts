@@ -47,6 +47,7 @@ import { DropAreaComponent } from './drop-area/drop-area.component';
 import { DropdownMenuItemComponent } from './dropdown-menu-item/dropdown-menu-item.component';
 import { DropdownMenuComponent } from './dropdown-menu/dropdown-menu.component';
 import { EditableInlineTagListComponent } from './editable-inline-tag-list/editable-inline-tag-list.component';
+import { EmptyStateComponent } from './empty-state/empty-state.component';
 import { FileExtensionComponent } from './file-extension/file-extension.component';
 import { FileIconComponent } from './file-icon/file-icon.component';
 import { FilterTextInputComponent } from './filter-text-input/filter-text-input.component';
@@ -67,6 +68,7 @@ import { PageHeaderComponent } from './page-header/page-header.component';
 import { PersonBadgeComponent } from './person-badge/person-badge.component';
 import { PersonInitialsPipe } from './person-badge/pipes/person-initials.pipe';
 import { PersonSummaryComponent } from './person-summary-component/person-summary.component';
+import { SectionComponent } from './section/section.component';
 import { ShellBodyDirective } from './shell/directives/shell-body.directive';
 import { ShellBottomDirective } from './shell/directives/shell-bottom.directive';
 import { ShellLeftDirective } from './shell/directives/shell-left.directive';
@@ -87,7 +89,6 @@ import { HumanDateTimePipe } from './utils/pipes/human-date-time/human-date-time
 import { JoinPipe } from './utils/pipes/join/join.pipe';
 import { RemovePrefixStringPipe } from './utils/pipes/remove-prefix-string/remove-prefix-string.pipe';
 import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-string.pipe';
-import { SectionComponent } from './section/section.component';
 @NgModule({
   imports: [
     OverlayModule,
@@ -175,6 +176,7 @@ import { SectionComponent } from './section/section.component';
     FileIconComponent,
     DateRangePickerComponent,
     ConfirmationModalComponent,
+    EmptyStateComponent,
     SectionComponent
   ],
   exports: [
@@ -240,6 +242,7 @@ import { SectionComponent } from './section/section.component';
     FileIconComponent,
     DateRangePickerComponent,
     ConfirmationModalComponent,
+    EmptyStateComponent,
     SectionComponent
   ],
   providers: [
