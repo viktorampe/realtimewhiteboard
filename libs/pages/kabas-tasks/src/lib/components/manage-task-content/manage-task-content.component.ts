@@ -8,5 +8,7 @@ import { Component } from '@angular/core';
 export class ManageTaskContentComponent {
   constructor() {}
 
-  addEduContentToTask(eduContentId: number, taskId: number) {}
+  addEduContentToTask(eduContentId: number, taskId: number, index: number) {
+    throw new Error('not implemented');
+  }
 }
