@@ -9,9 +9,15 @@ import { SearchStateInterface } from '@campus/dal';
 export class ManageTaskContentComponent {
   constructor() {}
 
+  public selectTOC(tocId: number, depth: number) {
+    // TODO: implement
+    throw new Error('Not yet implemented');
+  }
+
   searchEduContents(searchState: SearchStateInterface): void {
     throw new Error('not implemented');
   }
+
   removeEduContentFromTask(taskEduContentId: number) {
     throw new Error('not implemented');
   }
