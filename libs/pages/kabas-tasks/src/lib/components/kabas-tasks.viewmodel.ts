@@ -501,6 +501,8 @@ export class KabasTasksViewModel implements ContentOpenerInterface {
     return `${body}${confirmQuestion}`;
   }
 
+  private setupSearchResults(): void {}
+
   private combineChaptersLessons(
     bookId: number,
     chapterId: number
