@@ -74,6 +74,12 @@ export class TaskEduContentService implements TaskEduContentServiceInterface {
         )
       ) as Observable<UpdateTaskEduContentResultInterface>;
   }
+  createTaskEduContent(
+    userId: number,
+    taskEduContents: Partial<TaskEduContentInterface>[]
+  ): Observable<UpdateTaskEduContentResultInterface> {
+    return null;
+  }
 }
 
 function castActiveUntil(
