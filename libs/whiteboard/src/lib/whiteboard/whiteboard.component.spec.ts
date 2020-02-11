@@ -7,7 +7,7 @@ import {
   MatDialogRef,
   MatIconModule
 } from '@angular/material';
-import { By, HAMMER_LOADER } from '@angular/platform-browser';
+import { HAMMER_LOADER } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ConfirmationModalComponent } from '@campus/ui';
 import { configureTestSuite } from 'ng-bullet';
@@ -71,17 +71,8 @@ describe('WhiteboardComponent', () => {
 
   it('should create a card on plus button clicked', () => {
     const cardsSizeBeforeClicked = component.cards.length;
-
-    const btns = fixture.debugElement.queryAll(
-      By.css('.whiteboard-tools__btn')
-    );
-
-    const btnPlus = btns[0].nativeElement;
-
-    btnPlus.click();
-
+    component.btnPlusClicked();
     const cardsSizeAfterClicked = component.cards.length;
-
     expect(cardsSizeAfterClicked).toBe(cardsSizeBeforeClicked + 1);
   });
 

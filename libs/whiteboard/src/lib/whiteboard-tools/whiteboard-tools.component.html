@@ -1,18 +1,23 @@
-<div class="whiteboard-tools">
-  <button
-    mat-fab
-    color="primary"
-    class="whiteboard-tools__btn"
-    (click)="btnPlusClicked()"
-  >
-    <mat-icon style="color:white" [svgIcon]="'plus'"></mat-icon>
-  </button>
-  <button
-    mat-fab
-    color="primary"
-    class="whiteboard-tools__btn"
-    (click)="btnDeleteClicked()"
-  >
-    x
-  </button>
+<div class="whiteboard__tools">
+  <campus-colorlist
+    class="whiteboard__tools__tool"
+    (selectedColor)="changeSelectedCardsColor($event)"
+  ></campus-colorlist>
+  <div class="whiteboard__tools__tool" id="delete">
+    <mat-icon
+      class="toolbar_icon"
+      (click)="btnDeleteClicked()"
+      [svgIcon]="'delete'"
+    ></mat-icon>
+  </div>
+  <div class="whiteboard__tools__tool">
+    <button
+      mat-fab
+      color="primary"
+      class="whiteboard-tools__btn"
+      (click)="btnPlusClicked()"
+    >
+      +
+    </button>
+  </div>
 </div>
