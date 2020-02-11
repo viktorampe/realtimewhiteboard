@@ -3,6 +3,10 @@
   flex-direction: column;
   height: 100%;
 
+  campus-whiteboard-tools {
+    z-index: 1;
+  }
+
   &.image-drag-directive-dragging {
     opacity: 0.8;
   }
@@ -39,6 +43,13 @@
 
   &__card {
     position: absolute;
+  }
+
+  &__addbutton {
+    position: absolute;
+    right: 20px;
+    bottom: 107px;
+    z-index: 1;
   }
 
   campus-shelf {
