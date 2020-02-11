@@ -7,6 +7,7 @@ import {
   ClassGroupQueries,
   DalState,
   EduContent,
+  EduContentTOCInterface,
   EffectFeedback,
   EffectFeedbackActions,
   FavoriteActions,
@@ -494,5 +495,13 @@ export class KabasTasksViewModel implements ContentOpenerInterface {
     }
 
     return `${body}${confirmQuestion}`;
+  }
+
+  private combineChaptersLessons(
+    bookId: number,
+    chapterId: number
+  ): Observable<EduContentTOCInterface[]> {
+    // TODO: implement
+    throw new Error('Not yet implemented');
   }
 }
