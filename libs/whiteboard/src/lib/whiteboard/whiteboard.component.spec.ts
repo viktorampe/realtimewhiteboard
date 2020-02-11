@@ -16,6 +16,7 @@ import Card from '../../interfaces/card.interface';
 import { CardComponent } from '../card/card.component';
 import { ColorlistComponent } from '../colorlist/colorlist.component';
 import { ProgressBarComponent } from '../progress-bar/progress-bar.component';
+import { ShelfComponent } from '../shelf/shelf.component';
 import { ToolbarComponent } from '../toolbar/toolbar.component';
 import { WhiteboardToolsComponent } from '../whiteboard-tools/whiteboard-tools.component';
 import { WhiteboardComponent } from './whiteboard.component';
@@ -43,7 +44,8 @@ describe('WhiteboardComponent', () => {
         ToolbarComponent,
         ColorlistComponent,
         WhiteboardToolsComponent,
-        ProgressBarComponent
+        ProgressBarComponent,
+        ShelfComponent
       ],
       providers: [
         {
