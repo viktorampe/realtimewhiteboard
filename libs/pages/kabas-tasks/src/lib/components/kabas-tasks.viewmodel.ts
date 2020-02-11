@@ -504,4 +504,9 @@ export class KabasTasksViewModel implements ContentOpenerInterface {
     // TODO: implement
     throw new Error('Not yet implemented');
   }
+
+  private getTocLessonsStream(): Observable<EduContentTOCInterface[]> {
+    // TODO: implement
+    throw new Error('Not yet implemented');
+  }
 }
