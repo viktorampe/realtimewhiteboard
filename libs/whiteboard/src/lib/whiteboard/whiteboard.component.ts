@@ -136,6 +136,9 @@ export class WhiteboardComponent implements OnInit {
   changeSelectedCardsColor(color: string) {
     this.lastColor = color;
     this.selectedCards.forEach(c => (c.color = this.lastColor));
-    this.selectedCards.forEach(c => this.deselectCard(c));
+    this.selectedCards = [];
+    const checkboxes = document.getElementsByClassName(
+      'card__header__checkbox'
+    );
   }
 }
