@@ -11,7 +11,7 @@ export class ManageTaskContentComponent {
   addEduContentToTask(eduContentId: number, taskId: number, index: number) {
     throw new Error('not implemented');
   }
-  
+
   removeEduContentFromTask(taskEduContentId: number) {
     throw new Error('not implemented');
   }
