@@ -10,12 +10,11 @@ export class ColorlistComponent implements OnInit {
   @Output() selectedColor = new EventEmitter<string>();
   colorlist: ColorlistComponent;
   defaultColors: string[] = [
-    '#ffff80',
-    '#ff80ff',
-    '#80ffff',
-    '#80ff80',
-    '#ff8080',
-    '#8080ff'
+    '#00A7E2',
+    '#2EA03D',
+    '#E22940',
+    '#5D3284',
+    '#FADB48'
   ];
   constructor() {}
 

@@ -1,8 +1,24 @@
-.whiteboard-tools {
+.whiteboard__tools {
   display: flex;
   justify-content: center;
 
-  .toolbar_icon {
-    margin-left: 10px;
+  &__tool {
+    box-shadow: 0px 3px 4px #00000024;
+    border-radius: 0px 0px 10px 10px;
+    margin-right: 20px;
+  }
+
+  #delete {
+    width: 90px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 0px;
+
+    .toolbar_icon {
+      color: #e12c66;
+      width: 43px;
+      height: 43px;
+    }
   }
 }
