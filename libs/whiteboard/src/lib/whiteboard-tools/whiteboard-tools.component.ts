@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'campus-whiteboard-tools',
@@ -9,7 +9,6 @@ export class WhiteboardToolsComponent implements OnInit {
   @Output() deleteCards = new EventEmitter();
   @Output() createCard = new EventEmitter();
   @Output() changeSelectedColor = new EventEmitter<string>();
-  @Input() cardsSelected: boolean;
   constructor() {}
 
   ngOnInit() {}

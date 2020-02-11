@@ -1,7 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatIconModule, MatIconRegistry } from '@angular/material';
+import { MatIconModule } from '@angular/material';
 import { By } from '@angular/platform-browser';
-import { MockMatIconRegistry } from '@campus/testing';
 import { ColorlistComponent } from '../colorlist/colorlist.component';
 import { WhiteboardToolsComponent } from './whiteboard-tools.component';
 
@@ -12,8 +11,7 @@ describe('WhiteboardToolsComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [MatIconModule],
-      declarations: [WhiteboardToolsComponent, ColorlistComponent],
-      providers: [{ provide: MatIconRegistry, useClass: MockMatIconRegistry }]
+      declarations: [WhiteboardToolsComponent, ColorlistComponent]
     }).compileComponents();
   }));
 
