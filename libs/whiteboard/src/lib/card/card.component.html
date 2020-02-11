@@ -1,18 +1,18 @@
-<div class="outercard">
+<div class="card">
   <campus-colorlist
     class="card__colorlist"
     (selectedColor)="selectColor($event)"
     [hidden]="colorlistHidden"
   ></campus-colorlist>
   <div
-    class="innercard"
+    class="card__innercard"
     [style.background-color]="this.color"
     [style.border-color]="this.color"
   >
-    <div class="innercard__header">
+    <div class="card__innercard__header">
       <input
         type="checkbox"
-        class="innercard__header__checkbox"
+        class="card__innercard__header__checkbox"
         [(ngModel)]="isSelected"
         (change)="onCheckboxChanged($event)"
         [style.opacity]="checkboxVisible ? 1 : 0"
@@ -23,18 +23,18 @@
         (clickToggleEditIcon)="toggleEditMode()"
         (clickToggleView)="toggleView()"
         (clickImageSettings)="showImageSettings()"
-        class="innercard__header__toolbar"
+        class="card__innercard__header__toolbar"
         (delete)="onDeleteCard()"
       ></campus-toolbar>
     </div>
-    <div class="innercard__border"></div>
-    <div class="innercard__content" (dblclick)="onDblClick()">
+    <div class="card__innercard__border"></div>
+    <div class="card__innercard__content" (dblclick)="onDblClick()">
       <div
         *ngIf="viewModeImage || editMode"
-        class="innercard__image"
+        class="card__innercard__image"
         [ngStyle]="{ 'background-image': 'url(' + image + ')' }"
       ></div>
-      <div *ngIf="!viewModeImage || editMode" class="innercard__input">
+      <div *ngIf="!viewModeImage || editMode" class="card__innercard__input">
         <textarea
           [formControl]="txtContent"
           #inputContent
@@ -53,13 +53,13 @@
 
         <p
           *ngIf="isInputSelected && description.length === maxCharacters"
-          class="innercard__content__errorMessage"
+          class="card__innercard__content__errorMessage"
         >
           Je hebt het maximaal aantal karakters gebruikt.
         </p>
         <p
           *ngIf="isInputSelected && !description && txtContent.dirty"
-          class="innercard__content__errorMessage"
+          class="card__innercard__content__errorMessage"
           data-cy="errorMissingContent"
         >
           Er moet tekst ingevuld zijn.

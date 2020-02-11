@@ -16,10 +16,12 @@
 :host.card__colorlist .colorlist {
   flex-direction: column;
   position: absolute;
-
   margin-left: -48px;
   &__swatches {
     margin-bottom: 4px;
+    &:last-child {
+      margin-bottom: 0px;
+    }
   }
 }
 
