@@ -2,9 +2,10 @@
   <campus-colorlist
     (selectedColor)="changeSelectedCardsColor($event)"
     [isWhiteboardColorlist]="true"
+    class="whiteboard_tools_tool"
   ></campus-colorlist>
   <mat-icon
-    class="toolbar_icon"
+    class="toolbar_icon whiteboard_tools_tool"
     (click)="btnDeleteClicked()"
     [svgIcon]="'cancel'"
   ></mat-icon>

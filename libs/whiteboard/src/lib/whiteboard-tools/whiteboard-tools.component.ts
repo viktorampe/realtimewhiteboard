@@ -12,6 +12,8 @@ export class WhiteboardToolsComponent implements OnInit {
 
   ngOnInit() {}
 
+  changeSelectedCardsColor($event) {}
+
   btnDeleteClicked() {
     this.deleteCards.emit();
   }

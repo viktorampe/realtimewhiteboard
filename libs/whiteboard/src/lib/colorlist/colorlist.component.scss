@@ -8,12 +8,13 @@
     width: 40px;
     box-sizing: border-box;
     border-radius: 100%;
+    margin-left: 2px;
+    margin-right: 2px;
   }
 }
 
 .whiteBoardColorlist {
-  width: 272px;
-  height: 90px;
   justify-content: space-between;
   align-items: center;
+  padding: 25px;
 }
