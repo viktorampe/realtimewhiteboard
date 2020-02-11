@@ -103,36 +103,24 @@ describe('ContentActionsServiceInterface', () => {
     });
   });
   describe('getTaskActionsForEduContent()', () => {
-    it('should return all task actions for the provided educontent', () => {
-      const tests = [
-        {
-          mockEduContent: new EduContentFixture({
-            type: EduContentTypeEnum.PAPER_EXERCISE
-          }),
-          expected: [contentActionsService.contentActionDictionary['addToTask']]
-        },
-        {
-          mockEduContent: new EduContentFixture({
-            type: EduContentTypeEnum.PAPER_EXERCISE
-          }),
-          expected: [
-            contentActionsService.contentActionDictionary['removeFromTask']
-          ]
-        }
-      ];
-
+    it('should return addToTask action when inTask false', () => {
       expect(
         contentActionsService.getTaskActionsForEduContent(
-          tests[0].mockEduContent,
+          new EduContentFixture(),
           false
         )
-      ).toEqual(tests[0].expected);
+      ).toEqual([contentActionsService.contentActionDictionary['addToTask']]);
+    });
+
+    it('should return removeFromTask action when inTask true', () => {
       expect(
         contentActionsService.getTaskActionsForEduContent(
-          tests[1].mockEduContent,
+          new EduContentFixture(),
           true
         )
-      ).toEqual(tests[1].expected);
+      ).toEqual([
+        contentActionsService.contentActionDictionary['removeFromTask']
+      ]);
     });
   });
 });
