@@ -1,5 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { ColorlistComponent } from '../colorlist/colorlist.component';
 import { WhiteboardToolsComponent } from './whiteboard-tools.component';
 
 describe('WhiteboardToolsComponent', () => {
@@ -8,7 +9,7 @@ describe('WhiteboardToolsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [WhiteboardToolsComponent]
+      declarations: [WhiteboardToolsComponent, ColorlistComponent]
     }).compileComponents();
   }));
 
