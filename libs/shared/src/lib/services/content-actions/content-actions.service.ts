@@ -68,14 +68,14 @@ export class ContentActionsService implements ContentActionsServiceInterface {
     },
     addToTask: {
       label: 'Toevoegen aan taak',
-      icon: 'exercise:open',
+      icon: 'add',
       tooltip: 'Toevoegen aan taak',
       handler: this.contentOpener.addToTask.bind(this.contentOpener)
     },
     removeFromTask: {
       label: 'Verwijderen uit taak',
-      icon: 'exercise:open',
-      tooltip: 'Verwijderen uittaak',
+      icon: 'delete',
+      tooltip: 'Verwijderen uit taak',
       handler: this.contentOpener.removeFromTask.bind(this.contentOpener)
     }
   };
