@@ -495,4 +495,6 @@ export class KabasTasksViewModel implements ContentOpenerInterface {
 
     return `${body}${confirmQuestion}`;
   }
+
+  private setupSearchResults(): void {}
 }
