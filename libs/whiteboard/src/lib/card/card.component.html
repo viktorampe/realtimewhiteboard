@@ -1,4 +1,8 @@
-<div class="card" [style.background-color]="this.color">
+<div
+  class="card"
+  [style.background-color]="this.color"
+  [style.border-color]="this.color"
+>
   <div class="card__header">
     <input
       type="checkbox"
@@ -21,6 +25,7 @@
     (selectedColor)="selectColor($event)"
     [hidden]="colorlistHidden"
   ></campus-colorlist>
+  <div class="card__border"></div>
   <div class="card__content" (dblclick)="onDblClick()">
     <div
       *ngIf="viewModeImage || editMode"
