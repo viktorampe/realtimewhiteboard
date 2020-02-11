@@ -1,7 +1,7 @@
 .card {
   position: relative;
   height: 167px;
-  width: 250;
+  width: 250px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -90,16 +90,20 @@
   }
 }
 
-:host.whiteboard-page__shelf__card .card {
+:host.shelf__card .card {
   height: 77px;
   width: 116px;
   opacity: 0.54;
 
+  &:hover {
+    opacity: 1;
+  }
+
   &__content {
     width: 105px;
   }
-}
 
-:host.whiteboard-page__shelf__card:hover .card {
-  opacity: 1;
+  &__border {
+    width: 10px;
+  }
 }
