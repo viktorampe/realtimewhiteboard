@@ -82,3 +82,21 @@
     }
   }
 }
+
+:host.shelf__card .card {
+  height: 77px;
+  width: 116px;
+  opacity: 0.54;
+
+  &:hover {
+    opacity: 1;
+  }
+
+  &__content {
+    width: 104px;
+  }
+
+  &__border {
+    width: 12px;
+  }
+}
