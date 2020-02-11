@@ -12,4 +12,8 @@ export class CardImageComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {}
+
+  onImageClicked() {
+    this.imageClicked.emit();
+  }
 }

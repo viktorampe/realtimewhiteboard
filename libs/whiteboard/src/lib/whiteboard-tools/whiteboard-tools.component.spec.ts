@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconModule } from '@angular/material';
 import { By } from '@angular/platform-browser';
+import { ColorlistComponent } from '../colorlist/colorlist.component';
 import { WhiteboardToolsComponent } from './whiteboard-tools.component';
 
 describe('WhiteboardToolsComponent', () => {
@@ -10,7 +11,7 @@ describe('WhiteboardToolsComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [MatIconModule],
-      declarations: [WhiteboardToolsComponent]
+      declarations: [WhiteboardToolsComponent, ColorlistComponent]
     }).compileComponents();
   }));
 
@@ -22,6 +23,12 @@ describe('WhiteboardToolsComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should emit when color is clicked', () => {
+    spyOn(component.changeSelectedColor, 'emit');
+    component.changeSelectedCardsColor('#000000');
+    expect(component.changeSelectedColor.emit).toHaveBeenCalledWith('#000000');
   });
 
   it('should emit when plus button is clicked', () => {
