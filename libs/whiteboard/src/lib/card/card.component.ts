@@ -26,6 +26,7 @@ export class CardComponent implements OnInit, OnChanges {
   @Input() top: number;
   @Input() left: number;
   @Input() checkboxVisible: boolean;
+  @Input() isSelected: boolean;
 
   @Output() deleteCard = new EventEmitter();
   @Output() lastColor = new EventEmitter<string>();

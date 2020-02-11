@@ -1,11 +1,4 @@
-import {
-  Component,
-  ElementRef,
-  EventEmitter,
-  OnInit,
-  Output,
-  ViewChild
-} from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { ConfirmationModalComponent } from '@campus/ui';
 import Card from '../../interfaces/card.interface';
@@ -22,8 +15,6 @@ export class WhiteboardComponent implements OnInit {
       titleInput.nativeElement.focus();
     }
   }
-
-  @Output() updateCheckbox = new EventEmitter<boolean>();
 
   constructor(public dialog: MatDialog) {
     this.title = '';
@@ -137,5 +128,6 @@ export class WhiteboardComponent implements OnInit {
     this.lastColor = color;
     this.selectedCards.forEach(c => (c.color = this.lastColor));
     this.selectedCards = [];
+    this.checkboxVisible = false;
   }
 }
