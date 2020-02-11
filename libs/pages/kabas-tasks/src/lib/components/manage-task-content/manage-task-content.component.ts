@@ -7,4 +7,8 @@ import { Component } from '@angular/core';
 })
 export class ManageTaskContentComponent {
   constructor() {}
+
+  removeEduContentFromTask(eduContentId: number) {
+    throw new Error('not implemented');
+  }
 }
