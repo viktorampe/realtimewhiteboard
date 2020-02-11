@@ -15,7 +15,7 @@
   &__header {
     height: 3rem;
     flex: 0 0 auto;
-    background: #b1b1b1;
+    background: #f8f8f8;
 
     display: flex;
     justify-content: center;
@@ -28,7 +28,7 @@
   }
 
   &__workspace {
-    background: lightgray;
+    background: white;
     width: 100%;
     flex: 1 1 100%;
     display: flex;
