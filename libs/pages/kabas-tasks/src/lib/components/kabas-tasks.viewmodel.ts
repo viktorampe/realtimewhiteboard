@@ -501,6 +501,14 @@ export class KabasTasksViewModel implements ContentOpenerInterface {
     return `${body}${confirmQuestion}`;
   }
 
+  private combineChaptersLessons(
+    bookId: number,
+    chapterId: number
+  ): Observable<EduContentTOCInterface[]> {
+    // TODO: implement
+    throw new Error('Not yet implemented');
+  }
+
   private getTocLessonsStream(): Observable<EduContentTOCInterface[]> {
     // TODO: implement
     throw new Error('Not yet implemented');
