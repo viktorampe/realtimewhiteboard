@@ -370,4 +370,6 @@ export class MockKabasTasksViewModel
   public openEduContentAsDownload() {}
   public openBoeke() {}
   public previewEduContentAsImage() {}
+  public addEduContentToTask() {}
+  public removeEduContentFromTask() {}
 }
