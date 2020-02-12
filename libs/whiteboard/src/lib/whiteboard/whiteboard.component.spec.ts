@@ -13,8 +13,11 @@ import { ConfirmationModalComponent } from '@campus/ui';
 import { configureTestSuite } from 'ng-bullet';
 import { of } from 'rxjs';
 import Card from '../../interfaces/card.interface';
+import { CardImageComponent } from '../card-image/card-image.component';
+import { CardTextComponent } from '../card-text/card-text.component';
 import { CardComponent } from '../card/card.component';
 import { ColorlistComponent } from '../colorlist/colorlist.component';
+import { ImageToolbarComponent } from '../image-toolbar/image-toolbar.component';
 import { ProgressBarComponent } from '../progress-bar/progress-bar.component';
 import { ShelfComponent } from '../shelf/shelf.component';
 import { ToolbarComponent } from '../toolbar/toolbar.component';
@@ -45,7 +48,10 @@ describe('WhiteboardComponent', () => {
         ColorlistComponent,
         WhiteboardToolsComponent,
         ProgressBarComponent,
-        ShelfComponent
+        ShelfComponent,
+        CardImageComponent,
+        CardTextComponent,
+        ImageToolbarComponent
       ],
       providers: [
         {

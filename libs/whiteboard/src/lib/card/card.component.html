@@ -35,7 +35,9 @@
     <campus-card-image class="card__content__image"></campus-card-image>
     <div *ngIf="!viewModeImage || editMode" class="card__content__input">
       <campus-card-text
+        class="card__content__input__text"
         [formControl]="txtContent"
+        ngDefaultControl
         #inputContent
         *ngIf="isInputSelected"
         [(ngModel)]="description"
