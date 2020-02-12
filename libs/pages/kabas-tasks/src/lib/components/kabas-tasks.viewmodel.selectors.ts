@@ -265,7 +265,7 @@ function addTaskDates(
 ): TaskWithAssigneesInterface {
   const now = new Date();
   const { assignees } = taskWithAssignees;
-  let status = TaskStatusEnum.FINISHED;
+  let status = TaskStatusEnum.PENDING;
 
   const maxDate = dates =>
     dates.length ? new Date(Math.max(...dates)) : undefined;
@@ -280,6 +280,8 @@ function addTaskDates(
       status = TaskStatusEnum.PENDING;
     } else if (endDate > now) {
       status = TaskStatusEnum.ACTIVE;
+    } else {
+      status = TaskStatusEnum.FINISHED;
     }
   }
 
