@@ -25,7 +25,6 @@ import {
 import { AddEffectFeedback } from '../effect-feedback/effect-feedback.actions';
 import {
   AddTaskEduContent,
-  AddTaskEduContents,
   DeleteTaskEduContent,
   DeleteTaskEduContents,
   LinkTaskEduContent,
@@ -269,7 +268,7 @@ export class TaskEduContentEffects {
           );
         },
 
-        onError: (action: AddTaskEduContents, error) => {
+        onError: (action: StartAddTaskEduContents, error) => {
           return this.getTaskEduContentUpdateOnErrorFeedbackAction(
             action,
             'create'
@@ -352,12 +351,13 @@ export class TaskEduContentEffects {
 
   private getTaskEduContentUpdateOnErrorFeedbackAction(
     action: FeedbackTriggeringAction,
-    method: 'archive' | 'dearchive' | 'delete'
+    method: 'archive' | 'dearchive' | 'delete' | 'create'
   ) {
     const methodVerbs = {
       archive: 'te archiveren',
       dearchive: 'te dearchiveren',
-      delete: 'te verwijderen'
+      delete: 'te verwijderen',
+      create: 'toe te voegen'
     };
     const feedbackAction = new AddEffectFeedback({
       effectFeedback: EffectFeedback.generateErrorFeedback(
