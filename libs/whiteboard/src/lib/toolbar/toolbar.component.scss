@@ -1,29 +1,27 @@
 .toolbar {
-  width: 250px;
-  padding: 8px;
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  padding: 8px;
 
-  &_icon {
-    padding: 8px;
-    width: 40px;
-    height: 40px;
+  &__tool {
     margin-left: 10px;
-    color: white;
-    background-color: black;
-    border-radius: 20px;
+    background-color: #242424;
+    border-radius: 50%;
+    padding: 8px;
+    display: flex;
+
+    &__icon {
+      color: #ffffff;
+    }
   }
-}
 
-:host.card__toolbar .toolbar {
-  position: absolute;
-  align-content: right;
-  transform: translateY(-95%);
+  &__delete {
+    background-color: #ffffff;
+    box-shadow: inset 0 0 0 1px #e22940;
 
-  #deleteButton {
-    background-color: transparent;
-    color: #e22940;
-    border: 1px solid #e22940;
+    &__icon {
+      color: #e22940;
+    }
   }
 }
