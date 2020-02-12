@@ -74,11 +74,19 @@ export class TaskEduContentService implements TaskEduContentServiceInterface {
         )
       ) as Observable<UpdateTaskEduContentResultInterface>;
   }
+
   createTaskEduContent(
     userId: number,
     taskEduContents: Partial<TaskEduContentInterface>[]
   ): Observable<UpdateTaskEduContentResultInterface> {
-    return null;
+    return this.taskEduContentApi.createTaskEduContents(taskEduContents).pipe(
+      map(
+        (updateTaskEduContentResult: UpdateTaskEduContentResultInterface) => ({
+          ...updateTaskEduContentResult,
+          errors: updateTaskEduContentResult.errors.map(castActiveUntil)
+        })
+      )
+    ) as Observable<UpdateTaskEduContentResultInterface>;
   }
 }
 
