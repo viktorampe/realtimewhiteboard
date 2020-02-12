@@ -128,6 +128,14 @@ export class GlobalSearchViewModel implements ContentOpenerInterface {
     this.openStaticContentService.open(eduContent, false, true);
   }
 
+  public addEduContentToTask(eduContent: EduContent): void {
+    // TODO: open dialog with tasks
+  }
+
+  public removeEduContentFromTask(eduContent: EduContent): void {
+    // unused in global search (no active task)
+  }
+
   private initialize() {
     this.setSourceStreams();
     this.setPresentationStreams();

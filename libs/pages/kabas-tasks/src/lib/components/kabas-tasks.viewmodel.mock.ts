@@ -359,6 +359,7 @@ export class MockKabasTasksViewModel
 
   public getDeleteInfo(): any {}
 
+  public addTaskEduContents() {}
   public updateTaskEduContentsRequired() {}
   public deleteTaskEduContents() {}
   public printTask() {}
@@ -369,4 +370,6 @@ export class MockKabasTasksViewModel
   public openEduContentAsDownload() {}
   public openBoeke() {}
   public previewEduContentAsImage() {}
+  public addEduContentToTask() {}
+  public removeEduContentFromTask() {}
 }
