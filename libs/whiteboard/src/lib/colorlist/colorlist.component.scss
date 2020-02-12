@@ -8,8 +8,6 @@
     width: 40px;
     box-sizing: border-box;
     border-radius: 100%;
-    margin-left: 2px;
-    margin-right: 2px;
   }
 }
 
@@ -31,4 +29,8 @@
   justify-content: space-between;
   align-items: center;
   padding: 25px;
+  &__swatches {
+    margin-left: 2px;
+    margin-right: 2px;
+  }
 }
