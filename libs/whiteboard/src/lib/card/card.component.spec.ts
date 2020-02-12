@@ -72,7 +72,7 @@ describe('CardComponent', () => {
     component.description = 'a'.repeat(component.maxCharacters);
     fixture.detectChanges();
     const errorMessage = fixture.debugElement.query(
-      By.css('.card__innercard__content__errorMessage')
+      By.css('.card__content__errorMessage')
     );
     expect(errorMessage).not.toBeNull();
   });
@@ -134,9 +134,7 @@ describe('CardComponent', () => {
     component.editMode = false;
     component.description = 'something that is not null';
 
-    const myCard = fixture.debugElement.query(
-      By.css('.card__innercard__content')
-    );
+    const myCard = fixture.debugElement.query(By.css('.card__content'));
     myCard.nativeElement.dispatchEvent(new MouseEvent('dblclick')); // use nativeElement so target is set
     fixture.detectChanges();
 
@@ -202,7 +200,7 @@ describe('CardComponent', () => {
   it('should emit the right card when a card is selected', () => {
     spyOn(component.select, 'emit');
     const checkboxes = fixture.debugElement.queryAll(
-      By.css('.card__innercard__header__checkbox')
+      By.css('.card__header__checkbox')
     );
     const checkbox = checkboxes[0].nativeElement;
     checkbox.click(); // van false naar true
@@ -213,7 +211,7 @@ describe('CardComponent', () => {
   it('should emit the right card when a card is deselected', () => {
     spyOn(component.deselect, 'emit');
     const checkboxes = fixture.debugElement.queryAll(
-      By.css('.card__innercard__header__checkbox')
+      By.css('.card__header__checkbox')
     );
     const checkbox = checkboxes[0].nativeElement;
     checkbox.click(); // van false naar true
@@ -233,10 +231,10 @@ describe('CardComponent', () => {
     component.image = 'this is not null';
     component.removeImage();
     fixture.detectChanges();
-    const innercard__image = fixture.debugElement.query(
-      By.css('.card__innercard__content__image')
+    const card__content__image = fixture.debugElement.query(
+      By.css('.card__content__image')
     ).nativeElement;
-    expect(innercard__image.style.backgroundImage).toBe('url()');
+    expect(card__content__image.style.backgroundImage).toBe('url()');
   });
 
   it('should replace image when replaceImage() is called', () => {
@@ -249,10 +247,10 @@ describe('CardComponent', () => {
     component.image = 'image_1';
     component.replaceImage('image_2');
     fixture.detectChanges();
-    const innercard__image = fixture.debugElement.query(
-      By.css('.card__innercard__content__image')
+    const card__content__image = fixture.debugElement.query(
+      By.css('.card__content__image')
     ).nativeElement;
-    expect(innercard__image.style.backgroundImage).toBe('url(image_2)');
+    expect(card__content__image.style.backgroundImage).toBe('url(image_2)');
   });
 
   it('should close the open colorlist when switching out of editmode', () => {
