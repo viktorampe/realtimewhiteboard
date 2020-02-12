@@ -4,6 +4,15 @@
     (selectedColor)="selectColor($event)"
     [hidden]="colorlistHidden"
   ></campus-colorlist>
+  <campus-toolbar
+    [editMode]="this.editMode"
+    (clickColorIcon)="showColor()"
+    (clickToggleEditIcon)="toggleEditMode()"
+    (clickToggleView)="toggleView()"
+    (clickImageSettings)="showImageSettings()"
+    class="card__toolbar"
+    (delete)="onDeleteCard()"
+  ></campus-toolbar>
   <div
     class="card__innercard"
     [style.background-color]="this.color"
@@ -14,18 +23,9 @@
         type="checkbox"
         class="card__innercard__header__checkbox"
         [(ngModel)]="isSelected"
-        (change)="onCheckboxChanged($event)"
+        (clickCheckboxIcon)="onCheckboxChanged($event)"
         [style.opacity]="checkboxVisible ? 1 : 0"
       />
-      <campus-toolbar
-        [editMode]="this.editMode"
-        (clickColorIcon)="showColor()"
-        (clickToggleEditIcon)="toggleEditMode()"
-        (clickToggleView)="toggleView()"
-        (clickImageSettings)="showImageSettings()"
-        class="card__innercard__header__toolbar"
-        (delete)="onDeleteCard()"
-      ></campus-toolbar>
     </div>
     <div class="card__innercard__border"></div>
     <div class="card__innercard__content" (dblclick)="onDblClick()">

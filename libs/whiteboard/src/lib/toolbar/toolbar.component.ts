@@ -11,6 +11,7 @@ export class ToolbarComponent implements OnInit {
   @Output() clickToggleEditIcon = new EventEmitter<void>();
   @Output() clickToggleView = new EventEmitter<void>();
   @Output() clickImageSettings = new EventEmitter<void>();
+  @Output() clickCheckboxIcon = new EventEmitter<void>();
 
   @Input() editMode: boolean;
 
@@ -35,5 +36,9 @@ export class ToolbarComponent implements OnInit {
 
   imageSettingsClicked() {
     this.clickImageSettings.emit();
+  }
+
+  onMultiselectClicked() {
+    this.clickCheckboxIcon.emit();
   }
 }

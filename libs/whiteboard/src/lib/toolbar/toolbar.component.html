@@ -1,9 +1,18 @@
 <div class="toolbar" *ngIf="editMode; else noEditMode">
   <mat-icon
+    *ngIf="editMode"
     class="toolbar_icon"
-    (click)="toggleModus()"
-    [svgIcon]="'edit'"
+    id="deleteButton"
+    (click)="onDeleteClicked()"
+    [svgIcon]="'delete'"
   ></mat-icon>
+  <mat-icon
+    *ngIf="editMode"
+    class="toolbar_icon"
+    (click)="onMultiselectClicked()"
+    [svgIcon]="'multiselect'"
+  >
+  </mat-icon>
   <mat-icon
     class="toolbar_icon"
     [svgIcon]="'color'"
@@ -11,14 +20,8 @@
   ></mat-icon>
   <mat-icon
     class="toolbar_icon"
-    (click)="imageSettingsClicked()"
-    [svgIcon]="'photolibrary'"
-  ></mat-icon>
-  <mat-icon
-    *ngIf="editMode"
-    class="toolbar_icon"
-    (click)="onDeleteClicked()"
-    [svgIcon]="'cancel'"
+    (click)="toggleModus()"
+    [svgIcon]="'edit'"
   ></mat-icon>
 </div>
 <ng-template #noEditMode>

@@ -69,6 +69,9 @@ export const icons = {
   plus: 'assets/icons/add-24px.svg',
   delete_forever: 'assets/icons/material/delete_forever.svg',
   add_photo_alternate: 'assets/icons/material/add_photo_alternate.svg',
+  multiselect: 'assets/icons/multiselect.svg',
+  'toolbar:selected': 'assets/icons/multiselect selected.svg',
+
   // search: sort modes
   'sort-numeric-down': 'assets/icons/sort-numeric-down.svg',
   'sort-alpha-down': 'assets/icons/sort-alpha-down.svg',
