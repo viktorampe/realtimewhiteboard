@@ -12,7 +12,7 @@
     display: flex;
 
     &__icon {
-      color: #ffffff;
+      color: #ffffffde;
     }
   }
 
@@ -23,5 +23,9 @@
     &__icon {
       color: #e22940;
     }
+  }
+
+  &__confirm {
+    background-color: #47aa3d;
   }
 }
