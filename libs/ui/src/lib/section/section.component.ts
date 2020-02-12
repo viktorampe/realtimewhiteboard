@@ -51,7 +51,7 @@ export class SectionComponent {
   @Input() mode: SectionModeEnum;
   @Output() sectionClick = new EventEmitter<void>();
 
-  protected modes = SectionModeEnum; // needed for usage in the template
+  modes = SectionModeEnum; // needed for usage in the template
 
   constructor() {}
 
