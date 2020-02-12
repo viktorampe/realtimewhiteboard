@@ -67,7 +67,7 @@ describe('PendingTaskGuard', () => {
   });
 
   function setCurrentTaskStatus(status: TaskStatusEnum) {
-    store.overrideSelector(
+    return store.overrideSelector(
       getTaskWithAssignmentAndEduContents,
       new TaskWithAssigneesFixture({
         status
@@ -93,20 +93,6 @@ describe('PendingTaskGuard', () => {
 
     expect(store.select).not.toHaveBeenCalled();
   }));
-
-  it('should select the right taskWithAssignees from the store', done => {
-    setCurrentTaskStatus(TaskStatusEnum.ACTIVE);
-
-    jest.spyOn(store, 'select');
-
-    canActivate().subscribe(() => {
-      expect(
-        store.select
-      ).toHaveBeenCalledWith(getTaskWithAssignmentAndEduContents, { taskId });
-
-      done();
-    });
-  });
 
   it('should return false when the task is active', () => {
     setCurrentTaskStatus(TaskStatusEnum.ACTIVE);

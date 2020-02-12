@@ -10,7 +10,7 @@ import {
   EffectFeedbackActions,
   Priority
 } from '@campus/dal';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { filter, map, switchMap, take } from 'rxjs/operators';
 import { KabasTasksResolver } from '../components/kabas-tasks.resolver';
@@ -32,9 +32,11 @@ export class PendingTaskGuard implements CanActivate {
     return this.kabasTaskResolver.resolve(route).pipe(
       filter(isResolved => isResolved),
       switchMap(() => {
-        return this.store.select(getTaskWithAssignmentAndEduContents, {
-          taskId: +route.params.id
-        });
+        return this.store.pipe(
+          select(getTaskWithAssignmentAndEduContents, {
+            taskId: +route.params.id
+          })
+        );
       }),
       take(1),
       map(task => {
