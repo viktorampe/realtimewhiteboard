@@ -28,6 +28,8 @@ export class DemoPageComponent implements OnInit {
   itemColumns: MultiCheckBoxTableItemColumnInterface<ClassGroupInterface>[];
 
   sectionMode = SectionModeEnum.EDITABLE;
+  sectionModes = SectionModeEnum;
+  editableText = 'I am editable';
 
   constructor() {}
 
@@ -84,7 +86,30 @@ export class DemoPageComponent implements OnInit {
     console.log(data);
   }
 
-  handleAction(action: string) {
+  handleIconAction(event: MouseEvent, action: string) {
+    event.stopPropagation();
+    console.log(
+      action + ' clicked: this event should not trigger a section click'
+    );
+    if (this.sectionMode === SectionModeEnum.EDITING) {
+      this.sectionMode = SectionModeEnum.EDITABLE;
+    } else {
+      this.sectionMode = SectionModeEnum.EDITING;
+    }
+  }
+
+  handleSectionAction(action: string) {
     console.log(action + ' clicked');
+    this.sectionMode = SectionModeEnum.EDITING;
+  }
+
+  save(event: MouseEvent, input: HTMLInputElement) {
+    event.stopPropagation();
+    console.log(
+      'projected button clicked: this event should not trigger a section click'
+    );
+
+    this.editableText = input.value;
+    this.sectionMode = SectionModeEnum.EDITABLE;
   }
 }

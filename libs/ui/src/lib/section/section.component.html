@@ -1,4 +1,10 @@
-<div (click)="clickSection($event)" class="ui-section">
+<div
+  (click)="clickSection()"
+  class="ui-section"
+  [class.ui-section--editable]="mode === modes.EDITABLE"
+  [class.ui-section--editing]="mode === modes.EDITING"
+  [class.ui-section--static]="mode === modes.STATIC"
+>
   <div class="ui-section__header">
     <ng-content select="section-title"></ng-content>
     <div class="ui-section__header__actions">

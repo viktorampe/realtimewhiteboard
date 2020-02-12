@@ -21,13 +21,23 @@
 </div> -->
 
 <!-- <campus-editor-timeline></campus-editor-timeline> -->
-<campus-section (triggerAction)="handleAction('section')" [mode]="sectionMode">
+<campus-section
+  [mode]="sectionMode"
+  (sectionClick)="handleSectionAction('section')"
+>
   <section-title>I'm a the title of this section</section-title>
   <section-actions
-    ><mat-icon (click)="handleAction('edit')" svgIcon="edit"></mat-icon
+    ><mat-icon
+      (click)="handleIconAction($event, 'edit')"
+      svgIcon="edit"
+    ></mat-icon
   ></section-actions>
   <section-content>
-    <p>Section body paragraph 1.</p>
-    <p>Section body paragraph 2.</p>
+    <p *ngIf="sectionMode === sectionModes.EDITABLE">{{ editableText }}</p>
+
+    <div *ngIf="sectionMode === sectionModes.EDITING">
+      <input #input type="text" placeholder="edit me" [value]="editableText" />
+      <p> <button (click)="save($event, input)">Save</button></p>
+    </div>
   </section-content>
 </campus-section>

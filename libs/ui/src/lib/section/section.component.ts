@@ -49,23 +49,15 @@ export class SectionActions {}
 })
 export class SectionComponent {
   @Input() mode: SectionModeEnum;
+  @Output() sectionClick = new EventEmitter<void>();
 
-  @Output() triggerAction = new EventEmitter<void>();
-
-  modes = SectionModeEnum;
+  modes = SectionModeEnum; // needed for usage in the template
 
   constructor() {}
 
-  // clickIcon(event: MouseEvent) {
-  //   // clicking the icon is always allowed
-  //   event.stopPropagation();
-  //   this.triggerAction.emit();
-  // }
-
-  clickSection(event: MouseEvent) {
-    event.stopPropagation();
-    // only works in editable mode
-    if (this.mode !== SectionModeEnum.EDITABLE) return;
-    this.triggerAction.emit();
+  clickSection() {
+    if (this.mode === SectionModeEnum.EDITABLE) {
+      this.sectionClick.emit();
+    }
   }
 }
