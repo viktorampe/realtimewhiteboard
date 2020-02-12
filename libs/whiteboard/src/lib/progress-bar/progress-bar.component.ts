@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnChanges, SimpleChanges } from '@angular/core';
 
 @Component({
   selector: 'campus-progress-bar',
@@ -6,20 +6,15 @@ import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
   styleUrls: ['./progress-bar.component.scss']
 })
 export class ProgressBarComponent implements OnChanges {
-  @Input() amountOfImages: number;
-  @Input() amountCompleted: number;
-
-  progressPercentage: string;
+  progressPercentage: number;
 
   constructor() {}
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.amountOfImages || changes.amountCompleted) {
-      this.progressPercentage = this.getProgressPercentage();
-    }
+    return this.getProgressPercentage();
   }
 
   getProgressPercentage() {
-    return (this.amountCompleted / this.amountOfImages) * 100 + '%';
+    return 48; //TODO: calculate corrext percentage
   }
 }
