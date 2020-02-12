@@ -16,9 +16,12 @@
 :host.card__colorlist .colorlist {
   flex-direction: column;
   position: absolute;
-  left: -73px; // 44 (colorlist width) + 4 (distance from card) + 25 (card border-left)
+  left: calc(
+    -40px - 25px - 8px
+  ); // 40 (colorlist width) + 8 (distance from card) + 25 (card border-left)
   top: 50%;
   transform: translateY(-50%);
+
   &__swatches {
     margin-bottom: 4px;
     &:last-child {
