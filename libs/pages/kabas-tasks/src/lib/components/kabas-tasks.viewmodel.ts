@@ -173,6 +173,10 @@ export class KabasTasksViewModel implements ContentOpenerInterface {
     this.openStaticContentService.open(eduContent, false, true);
   }
 
+  addEduContentToTask(eduContent: EduContent): void {}
+
+  removeEduContentFromTask(eduContent: EduContent): void {}
+
   public startArchivingTasks(
     tasks: TaskWithAssigneesInterface[],
     shouldArchive: boolean

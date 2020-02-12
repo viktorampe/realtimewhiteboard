@@ -9,6 +9,8 @@ import { SearchStateInterface } from '@campus/dal';
 export class ManageTaskContentComponent {
   constructor() {}
 
+  public clickDone() {}
+
   addEduContentToTask(eduContentId: number, taskId: number, index: number) {
     throw new Error('not implemented');
   }
