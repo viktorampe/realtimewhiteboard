@@ -34,7 +34,7 @@
   <div class="card__content" (dblclick)="onDblClick()">
     <campus-card-image class="card__content__image"></campus-card-image>
     <div *ngIf="!viewModeImage || editMode" class="card__content__input">
-      <textarea
+      <campus-card-text
         [formControl]="txtContent"
         #inputContent
         *ngIf="isInputSelected"
@@ -45,7 +45,7 @@
         cols="40"
         rows="5"
         maxlength="{{ maxCharacters }}"
-      ></textarea>
+      ></campus-card-text>
       <p *ngIf="!isInputSelected" (click)="toggleInput()">
         {{ description }}
       </p>
