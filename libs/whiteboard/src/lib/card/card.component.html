@@ -31,10 +31,13 @@
     <div class="card__innercard__content" (dblclick)="onDblClick()">
       <div
         *ngIf="viewModeImage || editMode"
-        class="card__innercard__image"
+        class="card__innercard__content__image"
         [ngStyle]="{ 'background-image': 'url(' + image + ')' }"
       ></div>
-      <div *ngIf="!viewModeImage || editMode" class="card__innercard__input">
+      <div
+        *ngIf="!viewModeImage || editMode"
+        class="card__innercard__content__input"
+      >
         <textarea
           [formControl]="txtContent"
           #inputContent

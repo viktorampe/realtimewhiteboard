@@ -234,7 +234,7 @@ describe('CardComponent', () => {
     component.removeImage();
     fixture.detectChanges();
     const innercard__image = fixture.debugElement.query(
-      By.css('.card__innercard__image')
+      By.css('.card__innercard__content__image')
     ).nativeElement;
     expect(innercard__image.style.backgroundImage).toBe('url()');
   });
@@ -250,7 +250,7 @@ describe('CardComponent', () => {
     component.replaceImage('image_2');
     fixture.detectChanges();
     const innercard__image = fixture.debugElement.query(
-      By.css('.card__innercard__image')
+      By.css('.card__innercard__content__image')
     ).nativeElement;
     expect(innercard__image.style.backgroundImage).toBe('url(image_2)');
   });
