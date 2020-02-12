@@ -4,6 +4,15 @@
     (selectedColor)="selectColor($event)"
     [hidden]="colorlistHidden"
   ></campus-colorlist>
+  <campus-toolbar
+    [editMode]="this.editMode"
+    (clickColorIcon)="showColor()"
+    (clickToggleEditIcon)="toggleEditMode()"
+    (clickToggleView)="toggleView()"
+    (clickImageSettings)="showImageSettings()"
+    class="card__toolbar"
+    (delete)="onDeleteCard()"
+  ></campus-toolbar>
   <div class="card__header">
     <input
       type="checkbox"

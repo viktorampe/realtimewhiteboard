@@ -1,38 +1,33 @@
 <div class="toolbar" *ngIf="editMode; else noEditMode">
-  <mat-icon
-    class="toolbar_icon"
-    (click)="toggleModus()"
-    [svgIcon]="'edit'"
-  ></mat-icon>
-  <mat-icon
-    class="toolbar_icon"
-    [svgIcon]="'color'"
-    (click)="showColor()"
-  ></mat-icon>
-  <mat-icon
-    class="toolbar_icon"
-    (click)="imageSettingsClicked()"
-    [svgIcon]="'photolibrary'"
-  ></mat-icon>
-  <mat-icon
-    *ngIf="editMode"
-    class="toolbar_icon"
-    (click)="onDeleteClicked()"
-    [svgIcon]="'cancel'"
-  ></mat-icon>
+  <div class="toolbar__tool toolbar__delete" (click)="onDeleteClicked()">
+    <mat-icon
+      class="toolbar__tool__icon toolbar__delete__icon"
+      [svgIcon]="'delete'"
+    ></mat-icon>
+  </div>
+  <div class="toolbar__tool" (click)="onMultiselectClicked()">
+    <mat-icon class="toolbar__tool__icon" [svgIcon]="'multiselect'"> </mat-icon>
+  </div>
+  <div class="toolbar__tool" (click)="toggleView()">
+    <mat-icon class="toolbar__tool__icon" [svgIcon]="'flip_camera'"></mat-icon>
+  </div>
+  <div class="toolbar__tool" (click)="toggleModus()">
+    <mat-icon class="toolbar__tool__icon" [svgIcon]="'edit'"></mat-icon>
+  </div>
 </div>
 <ng-template #noEditMode>
   <div class="toolbar">
-    <mat-icon
-      class="toolbar_icon"
-      (click)="toggleModus()"
-      [svgIcon]="'edit'"
-    ></mat-icon>
-    <mat-icon
-      class="toolbar_icon"
-      id="toggle_icon"
-      [svgIcon]="'toggle'"
-      (click)="toggleView()"
-    ></mat-icon>
+    <div class="toolbar__tool" (click)="toggleView()">
+      <mat-icon
+        class="toolbar__tool__icon"
+        [svgIcon]="'flip_camera'"
+      ></mat-icon>
+    </div>
+    <div class="toolbar__tool toolbar__confirm" (click)="toggleModus()">
+      <mat-icon
+        class="toolbar__tool__icon toolbar__confirm__icon"
+        [svgIcon]="'check'"
+      ></mat-icon>
+    </div>
   </div>
 </ng-template>
