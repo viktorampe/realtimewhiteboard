@@ -1,73 +1,63 @@
-<div class="card">
+<div class="card" [style.border-color]="color">
   <campus-colorlist
     class="card__colorlist"
     (selectedColor)="selectColor($event)"
     [hidden]="colorlistHidden"
   ></campus-colorlist>
-  <div
-    class="card__innercard"
-    [style.background-color]="this.color"
-    [style.border-color]="this.color"
-  >
-    <div class="card__innercard__header">
-      <input
-        type="checkbox"
-        class="card__innercard__header__checkbox"
-        [(ngModel)]="isSelected"
-        (change)="onCheckboxChanged($event)"
-        [style.opacity]="checkboxVisible ? 1 : 0"
-      />
-      <campus-toolbar
-        [editMode]="this.editMode"
-        (clickColorIcon)="showColor()"
-        (clickToggleEditIcon)="toggleEditMode()"
-        (clickToggleView)="toggleView()"
-        (clickImageSettings)="showImageSettings()"
-        class="card__innercard__header__toolbar"
-        (delete)="onDeleteCard()"
-      ></campus-toolbar>
-    </div>
-    <div class="card__innercard__border"></div>
-    <div class="card__innercard__content" (dblclick)="onDblClick()">
-      <div
-        *ngIf="viewModeImage || editMode"
-        class="card__innercard__content__image"
-        [ngStyle]="{ 'background-image': 'url(' + image + ')' }"
-      ></div>
-      <div
-        *ngIf="!viewModeImage || editMode"
-        class="card__innercard__content__input"
-      >
-        <textarea
-          [formControl]="txtContent"
-          #inputContent
-          *ngIf="isInputSelected"
-          [(ngModel)]="description"
-          (focusout)="toggleInput()"
-          type="text"
-          name="card-content"
-          cols="40"
-          rows="5"
-          maxlength="{{ maxCharacters }}"
-        ></textarea>
-        <p *ngIf="!isInputSelected" (click)="toggleInput()">
-          {{ description }}
-        </p>
+  <div class="card__header">
+    <input
+      type="checkbox"
+      class="card__header__checkbox"
+      [(ngModel)]="isSelected"
+      (change)="onCheckboxChanged($event)"
+      [style.opacity]="checkboxVisible ? 1 : 0"
+    />
+    <campus-toolbar
+      [editMode]="this.editMode"
+      (clickColorIcon)="showColor()"
+      (clickToggleEditIcon)="toggleEditMode()"
+      (clickToggleView)="toggleView()"
+      (clickImageSettings)="showImageSettings()"
+      class="card__header__toolbar"
+      (delete)="onDeleteCard()"
+    ></campus-toolbar>
+  </div>
+  <div class="card__content" (dblclick)="onDblClick()">
+    <div
+      *ngIf="viewModeImage || editMode"
+      class="card__content__image"
+      [ngStyle]="{ 'background-image': 'url(' + image + ')' }"
+    ></div>
+    <div *ngIf="!viewModeImage || editMode" class="card__content__input">
+      <textarea
+        [formControl]="txtContent"
+        #inputContent
+        *ngIf="isInputSelected"
+        [(ngModel)]="description"
+        (focusout)="toggleInput()"
+        type="text"
+        name="card-content"
+        cols="40"
+        rows="5"
+        maxlength="{{ maxCharacters }}"
+      ></textarea>
+      <p *ngIf="!isInputSelected" (click)="toggleInput()">
+        {{ description }}
+      </p>
 
-        <p
-          *ngIf="isInputSelected && description.length === maxCharacters"
-          class="card__innercard__content__errorMessage"
-        >
-          Je hebt het maximaal aantal karakters gebruikt.
-        </p>
-        <p
-          *ngIf="isInputSelected && !description && txtContent.dirty"
-          class="card__innercard__content__errorMessage"
-          data-cy="errorMissingContent"
-        >
-          Er moet tekst ingevuld zijn.
-        </p>
-      </div>
+      <p
+        *ngIf="isInputSelected && description.length === maxCharacters"
+        class="card__content__errorMessage"
+      >
+        Je hebt het maximaal aantal karakters gebruikt.
+      </p>
+      <p
+        *ngIf="isInputSelected && !description && txtContent.dirty"
+        class="card__content__errorMessage"
+        data-cy="errorMissingContent"
+      >
+        Er moet tekst ingevuld zijn.
+      </p>
     </div>
   </div>
 </div>
