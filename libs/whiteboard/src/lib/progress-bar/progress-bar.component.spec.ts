@@ -1,5 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatProgressBarModule } from '@angular/material';
+import { MatIconModule, MatProgressBarModule } from '@angular/material';
 import { ProgressBarComponent } from './progress-bar.component';
 
 describe('ProgressBarComponent', () => {
@@ -8,7 +8,7 @@ describe('ProgressBarComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [MatProgressBarModule],
+      imports: [MatIconModule, MatProgressBarModule],
       declarations: [ProgressBarComponent]
     }).compileComponents();
   }));
