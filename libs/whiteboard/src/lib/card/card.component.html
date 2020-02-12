@@ -32,11 +32,7 @@
     ></campus-toolbar>
   </div>
   <div class="card__content" (dblclick)="onDblClick()">
-    <div
-      *ngIf="viewModeImage || editMode"
-      class="card__content__image"
-      [ngStyle]="{ 'background-image': 'url(' + image + ')' }"
-    ></div>
+    <campus-card-image class="card__content__image"></campus-card-image>
     <div *ngIf="!viewModeImage || editMode" class="card__content__input">
       <textarea
         [formControl]="txtContent"
