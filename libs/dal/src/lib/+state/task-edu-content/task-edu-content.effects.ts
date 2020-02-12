@@ -25,10 +25,12 @@ import {
 import { AddEffectFeedback } from '../effect-feedback/effect-feedback.actions';
 import {
   AddTaskEduContent,
+  AddTaskEduContents,
   DeleteTaskEduContent,
   DeleteTaskEduContents,
   LinkTaskEduContent,
   LoadTaskEduContents,
+  StartAddTaskEduContents,
   StartDeleteTaskEduContents,
   TaskEduContentsActionTypes,
   TaskEduContentsLoaded,
@@ -250,6 +252,27 @@ export class TaskEduContentEffects {
           return this.getTaskEduContentUpdateOnErrorFeedbackAction(
             action,
             'delete'
+          );
+        }
+      }
+    )
+  );
+
+  createTaskEduContents$ = createEffect(() =>
+    this.dataPersistence.pessimisticUpdate(
+      TaskEduContentsActionTypes.AddTaskEduContents,
+      {
+        run: (action: StartAddTaskEduContents, state: DalState) => {
+          return this.taskEduContentService.createTaskEduContents(
+            action.payload.userId,
+            action.payload.taskEduContents
+          );
+        },
+
+        onError: (action: AddTaskEduContents, error) => {
+          return this.getTaskEduContentUpdateOnErrorFeedbackAction(
+            action,
+            'create'
           );
         }
       }
