@@ -272,8 +272,4 @@ describe('CardComponent', () => {
     component.toggleEditMode();
     expect(component.colorlistHidden).toBe(true);
   });
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
 });
