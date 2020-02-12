@@ -6,4 +6,6 @@ export interface ManageCollectionsDataInterface {
   linkableItems: ManageCollectionItemInterface[];
   linkedItemIds: Set<number>;
   recentItemIds: Set<number>;
+  useFilter?: boolean;
+  asModalSideSheet?: boolean;
 }

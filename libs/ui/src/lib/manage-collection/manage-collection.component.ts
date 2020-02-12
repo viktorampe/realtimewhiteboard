@@ -37,18 +37,33 @@ export class ManageCollectionComponent
   private selectedIds: Set<number>;
   private subscriptions = new Subscription();
 
+  protected useFilter: boolean;
+  protected asModalSideSheet: boolean;
+
+  protected _filterTextInput: FilterTextInputComponent<
+    ManageCollectionItemInterface[],
+    ManageCollectionItemInterface
+  >;
+
   @Output() selectionChanged = new EventEmitter<
     ItemToggledInCollectionInterface
   >();
 
-  @ViewChild(MatSelectionList, { static: true })
+  @ViewChild(MatSelectionList, { static: false })
   private selectionList: MatSelectionList;
 
-  @ViewChild(FilterTextInputComponent, { static: true })
-  filterTextInput: FilterTextInputComponent<
-    ManageCollectionItemInterface[],
-    ManageCollectionItemInterface
-  >;
+  @ViewChild(FilterTextInputComponent, { static: false })
+  set filterTextInput(
+    filter: FilterTextInputComponent<
+      ManageCollectionItemInterface[],
+      ManageCollectionItemInterface
+    >
+  ) {
+    if (filter) {
+      this._filterTextInput = filter;
+      this._filterTextInput.setFilterableItem(this);
+    }
+  }
 
   @HostBinding('class.ui-manage-collection')
   get isManageCollectionClass() {
@@ -66,11 +81,13 @@ export class ManageCollectionComponent
     );
 
     this.selectedIds = data.linkedItemIds;
+    this.useFilter = data.useFilter ? data.useFilter : false; // default true for backward compatibility
+    this.asModalSideSheet = data.asModalSideSheet
+      ? data.asModalSideSheet
+      : false; // default false for backward compatibility
   }
 
-  ngOnInit() {
-    this.filterTextInput.setFilterableItem(this);
-  }
+  ngOnInit() {}
 
   ngAfterViewInit() {
     this.subscriptions.add(
