@@ -17,6 +17,8 @@
   flex-direction: column;
   position: absolute;
   margin-left: -48px;
+  top: 50%;
+  transform: translateY(-50%);
   &__swatches {
     margin-bottom: 4px;
     &:last-child {
