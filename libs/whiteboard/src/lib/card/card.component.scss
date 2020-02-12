@@ -19,24 +19,6 @@
 
     display: flex;
     align-items: center;
-
-    &__checkbox {
-      flex: 0 1;
-      justify-self: flex-start;
-      transform: scale(2);
-    }
-
-    &__toolbar {
-      flex: 1 0;
-      justify-self: flex-end;
-    }
-  }
-
-  &__toolbar {
-    position: absolute;
-    top: 0;
-    right: 0;
-    margin: 8px;
   }
 
   &__border {
