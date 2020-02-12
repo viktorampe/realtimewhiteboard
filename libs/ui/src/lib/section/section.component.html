@@ -1,20 +1,11 @@
-<div (click)="clickSection()" class="section">
-  <div class="section__header">
-    <p>{{ title }}</p>
-    <div class="section__header__actions">
-      <mat-icon
-        (click)="clickIcon($event)"
-        class="section__header_actions__action"
-        *ngIf="icon; else actions"
-        [svgIcon]="icon"
-      ></mat-icon>
+<div (click)="clickSection($event)" class="ui-section">
+  <div class="ui-section__header">
+    <ng-content select="section-title"></ng-content>
+    <div class="ui-section__header__actions">
+      <ng-content select="section-actions"></ng-content>
     </div>
   </div>
-  <div class="section__body">
-    <ng-content select="[section-body]"></ng-content>
+  <div class="ui-section__content">
+    <ng-content select="section-content"></ng-content>
   </div>
 </div>
-
-<ng-template #actions>
-  <ng-content select="[section-actions]"></ng-content>
-</ng-template>

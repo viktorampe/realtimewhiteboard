@@ -21,14 +21,13 @@
 </div> -->
 
 <!-- <campus-editor-timeline></campus-editor-timeline> -->
-<campus-section
-  (triggerAction)="handleAction()"
-  title="demo title"
-  [mode]="sectionMode"
->
-  <div section-actions>I'm am a header action.</div>
-  <div section-body>
+<campus-section (triggerAction)="handleAction('section')" [mode]="sectionMode">
+  <section-title>I'm a the title of this section</section-title>
+  <section-actions
+    ><mat-icon (click)="handleAction('edit')" svgIcon="edit"></mat-icon
+  ></section-actions>
+  <section-content>
     <p>Section body paragraph 1.</p>
     <p>Section body paragraph 2.</p>
-  </div>
+  </section-content>
 </campus-section>

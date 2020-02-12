@@ -68,7 +68,12 @@ import { PageHeaderComponent } from './page-header/page-header.component';
 import { PersonBadgeComponent } from './person-badge/person-badge.component';
 import { PersonInitialsPipe } from './person-badge/pipes/person-initials.pipe';
 import { PersonSummaryComponent } from './person-summary-component/person-summary.component';
-import { SectionComponent } from './section/section.component';
+import {
+  SectionActions,
+  SectionComponent,
+  SectionContent,
+  SectionTitle
+} from './section/section.component';
 import { ShellBodyDirective } from './shell/directives/shell-body.directive';
 import { ShellBottomDirective } from './shell/directives/shell-bottom.directive';
 import { ShellLeftDirective } from './shell/directives/shell-left.directive';
@@ -177,7 +182,10 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     DateRangePickerComponent,
     ConfirmationModalComponent,
     EmptyStateComponent,
-    SectionComponent
+    SectionComponent,
+    SectionContent,
+    SectionActions,
+    SectionTitle
   ],
   exports: [
     FilterTextInputComponent,
@@ -243,7 +251,10 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     DateRangePickerComponent,
     ConfirmationModalComponent,
     EmptyStateComponent,
-    SectionComponent
+    SectionComponent,
+    SectionContent,
+    SectionActions,
+    SectionTitle
   ],
   providers: [
     {

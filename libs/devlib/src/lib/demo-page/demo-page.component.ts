@@ -84,7 +84,7 @@ export class DemoPageComponent implements OnInit {
     console.log(data);
   }
 
-  handleAction() {
-    console.log('action clicked');
+  handleAction(action: string) {
+    console.log(action + ' clicked');
   }
 }

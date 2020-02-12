@@ -1,4 +1,10 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  Component,
+  Directive,
+  EventEmitter,
+  Input,
+  Output
+} from '@angular/core';
 
 export enum SectionModeEnum {
   STATIC,
@@ -6,15 +12,43 @@ export enum SectionModeEnum {
   EDITING
 }
 
+/**
+ * Title of a section, needed as it's used as a selector in the API.
+ * @docs-private
+ */
+@Directive({
+  selector: 'section-title'
+})
+// tslint:disable-next-line: directive-class-suffix
+export class SectionTitle {}
+
+/**
+ * Content of a section, needed as it's used as a selector in the API.
+ * @docs-private
+ */
+@Directive({
+  selector: 'section-content'
+})
+// tslint:disable-next-line: directive-class-suffix
+export class SectionContent {}
+
+/**
+ * Actions of a section, needed as it's used as a selector in the API.
+ * @docs-private
+ */
+@Directive({
+  selector: 'section-actions'
+})
+// tslint:disable-next-line: directive-class-suffix
+export class SectionActions {}
+
 @Component({
   selector: 'campus-section',
   templateUrl: './section.component.html',
   styleUrls: ['./section.component.scss']
 })
 export class SectionComponent {
-  @Input() title: string;
   @Input() mode: SectionModeEnum;
-  @Input() icon = 'edit';
 
   @Output() triggerAction = new EventEmitter<void>();
 
@@ -22,12 +56,15 @@ export class SectionComponent {
 
   constructor() {}
 
-  clickIcon(event: MouseEvent) {
-    event.stopPropagation();
-    this.triggerAction.emit();
-  }
+  // clickIcon(event: MouseEvent) {
+  //   // clicking the icon is always allowed
+  //   event.stopPropagation();
+  //   this.triggerAction.emit();
+  // }
 
-  clickSection() {
+  clickSection(event: MouseEvent) {
+    event.stopPropagation();
+    // only works in editable mode
     if (this.mode !== SectionModeEnum.EDITABLE) return;
     this.triggerAction.emit();
   }
