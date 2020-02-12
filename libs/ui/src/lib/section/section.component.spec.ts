@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { SectionComponent, SectionModeEnum } from './section.component';
-// file.only
+
 describe('SectionComponent', () => {
   let component: SectionComponent;
   let fixture: ComponentFixture<SectionComponent>;
