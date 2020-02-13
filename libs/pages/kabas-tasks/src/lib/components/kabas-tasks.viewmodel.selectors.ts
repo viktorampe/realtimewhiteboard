@@ -3,9 +3,10 @@ import {
   DiaboloPhaseInterface,
   DiaboloPhaseQueries,
   EduContent,
+  EduContentBookInterface,
+  EduContentBookQueries,
   EduContentInterface,
   EduContentQueries,
-  FavoriteInterface,
   FavoriteQueries,
   GroupQueries,
   LearningAreaInterface,
@@ -29,6 +30,10 @@ import {
   AssigneeInterface,
   AssigneeTypesEnum
 } from '../interfaces/Assignee.interface';
+import {
+  FavoriteInterface,
+  FavoriteTypesEnum
+} from './../../../../../dal/src/lib/+models/Favorite.interface';
 import {
   TaskStatusEnum,
   TaskWithAssigneesInterface
@@ -235,6 +240,42 @@ export const getTaskWithAssignmentAndEduContents = createSelector(
       : [];
 
     return foundTask;
+  }
+);
+
+export const getTaskFavoriteBooks = createSelector(
+  [
+    TaskQueries.getAllEntities,
+    FavoriteQueries.favoritesByType,
+    EduContentQueries.getAllEntities,
+    EduContentBookQueries.getAllEntities
+  ],
+  (
+    taskDict: Dictionary<TaskInterface>,
+    favoritesByType: { [key: string]: FavoriteInterface[] },
+    eduContentDict: Dictionary<EduContent>,
+    bookDict: Dictionary<EduContentBookInterface>,
+    props: {
+      taskId: number;
+    }
+  ) => {
+    const task = taskDict[props.taskId];
+    const boekeFavorites = favoritesByType[FavoriteTypesEnum.BOEKE] || [];
+    const taskFavoriteBooks = boekeFavorites.reduce((acc, fav) => {
+      const boeke = eduContentDict[fav.eduContentId];
+      if (!boeke) return acc;
+
+      const {
+        learningAreaId,
+        eduContentBookId
+      } = boeke.publishedEduContentMetadata;
+
+      return learningAreaId === task.learningAreaId
+        ? [...acc, bookDict[eduContentBookId]]
+        : acc;
+    }, []);
+
+    return taskFavoriteBooks;
   }
 );
 
