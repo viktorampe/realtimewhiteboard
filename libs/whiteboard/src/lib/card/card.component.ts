@@ -23,7 +23,7 @@ export class CardComponent implements OnInit, OnChanges {
   @Input() image: string;
   @Input() isInputSelected: boolean;
   @Input() editMode: boolean;
-  @Input() showToolbar: boolean;
+  @Input() toolbarsVisible: boolean;
   @Input() top: number;
   @Input() left: number;
   @Input() checkboxVisible: boolean;
@@ -88,7 +88,7 @@ export class CardComponent implements OnInit, OnChanges {
   }
 
   selectColor(color: string) {
-    this.showToolbar = false;
+    this.toolbarsVisible = false;
     this.color = color;
     this.lastColor.emit(color);
   }
@@ -102,7 +102,7 @@ export class CardComponent implements OnInit, OnChanges {
   }
 
   toggleToolbar() {
-    this.showToolbar = !this.showToolbar;
+    this.toolbarsVisible = !this.toolbarsVisible;
   }
 
   toggleEditMode() {

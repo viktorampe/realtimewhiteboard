@@ -160,14 +160,14 @@ describe('CardComponent', () => {
   });
 
   it('should toggle to edit mode when double click.', () => {
-    component.showToolbar = false;
+    component.toolbarsVisible = false;
     component.description = 'something that is not null';
 
     const myCard = fixture.debugElement.query(By.css('.card__content'));
     myCard.nativeElement.dispatchEvent(new MouseEvent('dblclick')); // use nativeElement so target is set
     fixture.detectChanges();
 
-    expect(component.showToolbar).toBe(true);
+    expect(component.toolbarsVisible).toBe(true);
   });
 
   it('should toggle edit mode when the editicon is clicked', () => {
@@ -227,7 +227,7 @@ describe('CardComponent', () => {
   });
 
   it('should show tools when showToolbar is toggled to true', () => {
-    component.showToolbar = false;
+    component.toolbarsVisible = false;
     component.toggleToolbar();
     const tools = fixture.debugElement.queryAll(By.css('.toolbar'));
     expect(tools).not.toBeNull();
