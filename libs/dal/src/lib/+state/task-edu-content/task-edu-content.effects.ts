@@ -25,6 +25,7 @@ import {
 import { AddEffectFeedback } from '../effect-feedback/effect-feedback.actions';
 import {
   AddTaskEduContent,
+  AddTaskEduContents,
   DeleteTaskEduContent,
   DeleteTaskEduContents,
   LinkTaskEduContent,
@@ -262,10 +263,59 @@ export class TaskEduContentEffects {
       TaskEduContentsActionTypes.AddTaskEduContents,
       {
         run: (action: StartAddTaskEduContents, state: DalState) => {
-          return this.taskEduContentService.createTaskEduContent(
-            action.payload.userId,
-            action.payload.taskEduContents
-          );
+          return this.taskEduContentService
+            .createTaskEduContent(
+              action.payload.userId,
+              action.payload.taskEduContents
+            )
+            .pipe(
+              switchMap(
+                (
+                  taskEduContentCreateResults: UpdateTaskEduContentResultInterface
+                ) => {
+                  const actions = [];
+                  const { success, errors } = taskEduContentCreateResults;
+
+                  // remove the destroyed ones from the store
+                  if (this.isFilled(success)) {
+                    actions.push(
+                      new AddTaskEduContents({ taskEduContents: success })
+                    );
+
+                    // show a snackbar if there is no other feedback (i.e. no errors)
+                    if (!this.isFilled(errors)) {
+                      const message = this.getTaskEduContentUpdateSuccessMessage(
+                        success.length,
+                        'create'
+                      );
+                      actions.push(
+                        this.getTaskEduContentUpdateFeedbackAction(
+                          action,
+                          message,
+                          'success'
+                        )
+                      );
+                    }
+                  }
+
+                  // show feedback for the ones still in use
+                  if (this.isFilled(errors)) {
+                    const errorMessage = this.getTaskEduContentUpdateErrorMessageHTML(
+                      taskEduContentCreateResults,
+                      'create'
+                    );
+                    actions.push(
+                      this.getTaskEduContentUpdateFeedbackAction(
+                        action,
+                        errorMessage,
+                        'error'
+                      )
+                    );
+                  }
+                  return from(actions);
+                }
+              )
+            );
         },
 
         onError: (action: StartAddTaskEduContents, error) => {
@@ -282,10 +332,11 @@ export class TaskEduContentEffects {
 
   private getTaskEduContentUpdateSuccessMessage(
     taskEduContentsLength: number,
-    method: 'delete'
+    method: 'delete' | 'create'
   ): string {
     const methodVerbs = {
-      delete: 'verwijderd'
+      delete: 'verwijderd',
+      create: 'toegevoegd'
     };
 
     return `Het lesmateriaal werd ${methodVerbs[method]}.`;
@@ -293,11 +344,12 @@ export class TaskEduContentEffects {
 
   private getTaskEduContentUpdateErrorMessageHTML(
     taskUpdateInfo: UpdateTaskEduContentResultInterface,
-    method: 'delete'
+    method: 'delete' | 'create'
   ) {
     const { success, errors } = taskUpdateInfo;
     const methodVerbs = {
-      delete: 'verwijderd'
+      delete: 'verwijderd',
+      create: 'toegevoegd'
     };
     const verb = methodVerbs[method];
 
