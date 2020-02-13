@@ -86,7 +86,8 @@ describe('WhiteboardComponent', () => {
       isInputSelected: false,
       editMode: true,
       top: 0,
-      left: 0
+      left: 0,
+      toolbarsVisible: false
     };
 
     component.cards.push(card);
@@ -104,7 +105,8 @@ describe('WhiteboardComponent', () => {
       isInputSelected: false,
       editMode: true,
       top: 0,
-      left: 0
+      left: 0,
+      toolbarsVisible: false
     };
     component.cards = [card];
     component.selectedCards = [];
@@ -122,7 +124,8 @@ describe('WhiteboardComponent', () => {
       isInputSelected: false,
       editMode: true,
       top: 0,
-      left: 0
+      left: 0,
+      toolbarsVisible: false
     };
     component.cards = [card];
     component.selectedCards = [card];
@@ -140,7 +143,8 @@ describe('WhiteboardComponent', () => {
       isInputSelected: false,
       editMode: true,
       top: 0,
-      left: 0
+      left: 0,
+      toolbarsVisible: false
     };
 
     const card2 = {
@@ -150,7 +154,8 @@ describe('WhiteboardComponent', () => {
       isInputSelected: false,
       editMode: true,
       top: 0,
-      left: 0
+      left: 0,
+      toolbarsVisible: false
     };
 
     const cards = [card, card2];
@@ -167,7 +172,8 @@ describe('WhiteboardComponent', () => {
       isInputSelected: false,
       editMode: true,
       top: 0,
-      left: 0
+      left: 0,
+      toolbarsVisible: false
     };
 
     component.selectedCards = [card];
