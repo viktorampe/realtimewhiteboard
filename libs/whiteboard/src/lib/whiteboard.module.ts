@@ -2,7 +2,11 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatCardModule, MatIconModule } from '@angular/material';
+import {
+  MatCardModule,
+  MatIconModule,
+  MatInputModule
+} from '@angular/material';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { CardImageComponent } from './card-image/card-image.component';
@@ -26,7 +30,8 @@ import { WhiteboardComponent } from './whiteboard/whiteboard.component';
     MatIconModule,
     ReactiveFormsModule,
     MatButtonModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    MatInputModule
   ],
   declarations: [
     WhiteboardComponent,
