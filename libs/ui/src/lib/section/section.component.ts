@@ -63,7 +63,7 @@ export class SectionComponent {
     }
   }
 
-  clickTriggerAction(event: MouseEvent) {
+  clickAction(event: MouseEvent) {
     event.stopPropagation(); // this should not trigger the click section event
 
     if (this.mode === SectionModeEnum.EDITABLE) {
@@ -74,7 +74,7 @@ export class SectionComponent {
     }
   }
 
-  updateMode() {
+  private updateMode() {
     this.modeChange.emit(this.mode);
   }
 }

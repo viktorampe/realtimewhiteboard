@@ -7,10 +7,7 @@
 >
   <div class="ui-section__header">
     <ng-content select="section-title"></ng-content>
-    <div
-      class="ui-section__header__actions"
-      (click)="clickTriggerAction($event)"
-    >
+    <div class="ui-section__header__actions" (click)="clickAction($event)">
       <ng-content select="section-actions"></ng-content>
     </div>
   </div>
