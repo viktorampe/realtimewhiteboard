@@ -32,7 +32,11 @@
     ></campus-toolbar>
   </div>
   <div class="card__content" (dblclick)="onDblClick()">
-    <campus-card-image class="card__content__image"></campus-card-image>
+    <campus-card-image
+      class="card__content__image"
+      (imageClicked)="onImageClicked($event)"
+      imageUrl="{{ image }}"
+    ></campus-card-image>
     <div *ngIf="!viewModeImage || editMode" class="card__content__input">
       <campus-card-text
         class="card__content__input__text"
@@ -47,6 +51,8 @@
         cols="40"
         rows="5"
         maxlength="{{ maxCharacters }}"
+        text="{{ description }}"
+        editMode="{{ editMode }}"
       ></campus-card-text>
       <p *ngIf="!isInputSelected" (click)="toggleInput()">
         {{ description }}
