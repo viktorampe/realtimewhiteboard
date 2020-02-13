@@ -45,9 +45,7 @@ export class CardComponent implements OnInit, OnChanges {
     this.viewModeImage = true;
   }
 
-  ngOnInit() {
-    console.log('card OnInit --> editmode:' + this.editMode);
-  }
+  ngOnInit() {}
 
   ngOnChanges() {
     this.topStyle = this.top + 'px';
