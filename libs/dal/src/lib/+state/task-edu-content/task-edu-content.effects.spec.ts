@@ -30,10 +30,12 @@ import {
 import { AddEffectFeedback } from '../effect-feedback/effect-feedback.actions';
 import {
   AddTaskEduContent,
+  AddTaskEduContents,
   DeleteTaskEduContent,
   DeleteTaskEduContents,
   LinkTaskEduContent,
   LoadTaskEduContents,
+  StartAddTaskEduContents,
   StartDeleteTaskEduContents,
   TaskEduContentsLoaded,
   TaskEduContentsLoadError,
@@ -609,6 +611,97 @@ describe('TaskEduContentEffects', () => {
       actions = hot('a', { a: triggerAction });
       expect(effects.deleteTaskEduContents$).toBeObservable(
         hot('(ab)', { a: deleteAction, b: feedbackAction })
+      );
+    });
+  });
+  describe('createTaskEduContents$', () => {
+    let createTaskEduContentsSpy: jest.SpyInstance;
+    const taskEduContents = [
+      new TaskEduContentFixture({ id: 1 }),
+      new TaskEduContentFixture({ id: 2 })
+    ];
+    const userId = 123;
+    const triggerAction = new StartAddTaskEduContents({
+      userId,
+      taskEduContents
+    });
+
+    beforeEach(() => {
+      createTaskEduContentsSpy = taskEduContentService.createTaskEduContent = jest.fn();
+    });
+
+    it('should call the service and dispatch feedback, no errors', () => {
+      createTaskEduContentsSpy.mockReturnValue(
+        of({
+          success: taskEduContents,
+          errors: []
+        } as UpdateTaskEduContentResultInterface)
+      );
+      const expectedMessage = 'Het lesmateriaal werd toegevoegd.';
+      const createAction = new AddTaskEduContents({
+        taskEduContents: taskEduContents
+      });
+      const feedbackAction = new AddEffectFeedback({
+        effectFeedback: {
+          id: uuid(),
+          display: true,
+          message: expectedMessage,
+          timeStamp: Date.now(),
+          triggerAction,
+          priority: Priority.NORM,
+          type: 'success',
+          useDefaultCancel: true,
+          userActions: []
+        } as EffectFeedback
+      });
+      actions = hot('a', { a: triggerAction });
+      expect(effects.createTaskEduContents$).toBeObservable(
+        hot('(ab)', {
+          a: createAction,
+          b: feedbackAction
+        })
+      );
+    });
+
+    it('should call the service and dispatch feedback, only errors', () => {
+      const taskAddErrors = [
+        {
+          task: 'Huiswerk',
+          user: 'Hubert Stroganovski',
+          activeUntil: new Date()
+        },
+        {
+          task: 'Huiswerk2',
+          user: 'Hubert Stroganovski',
+          activeUntil: new Date()
+        }
+      ];
+      createTaskEduContentsSpy.mockReturnValue(
+        of({
+          success: [],
+          errors: taskAddErrors
+        } as UpdateTaskEduContentResultInterface)
+      );
+      const expectedMessage = [
+        '<p>Er werd geen lesmateriaal toevegoegd.</p>'
+      ].join('');
+
+      const feedbackAction = new AddEffectFeedback({
+        effectFeedback: {
+          id: uuid(),
+          triggerAction,
+          message: expectedMessage,
+          type: 'error',
+          userActions: [],
+          priority: Priority.HIGH,
+          display: true,
+          timeStamp: Date.now(),
+          useDefaultCancel: true
+        }
+      });
+      actions = hot('a', { a: triggerAction });
+      expect(effects.createTaskEduContents$).toBeObservable(
+        hot('a', { a: feedbackAction })
       );
     });
   });
