@@ -1,3 +1,4 @@
+import { EmptyFilterFactory } from '@campus/search';
 import { EnvironmentSearchModesInterface } from '@campus/shared';
 import { EduContentSearchResultComponent } from '../app/components/searchresults/edu-content-search-result/edu-content-search-result.component';
 import { PracticeSearchResultComponent } from '../app/components/searchresults/practice-search-result/practice-search-result.component';
@@ -89,6 +90,26 @@ export const searchModes: EnvironmentSearchModesInterface = {
           description: 'laatst gewijzigd',
           name: 'published',
           icon: 'calendar-plus'
+        }
+      ],
+      pageSize: 20
+    }
+  },
+  'task-add-content': {
+    name: 'task-add-content',
+    label: 'Zoeken naar inhoud voor een taak',
+    dynamicFilters: false,
+    searchTerm: {
+      domHost: 'searchTerm'
+    },
+    searchFilterFactory: EmptyFilterFactory,
+    results: {
+      component: EduContentSearchResultComponent,
+      sortModes: [
+        {
+          description: 'relevantie',
+          name: '_score',
+          icon: 'sort-numeric-down'
         }
       ],
       pageSize: 20
