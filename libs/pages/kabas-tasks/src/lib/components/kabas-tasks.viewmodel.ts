@@ -39,7 +39,6 @@ import {
 } from '@campus/search';
 import {
   ContentOpenerInterface,
-  EduContentTypeEnum,
   OpenStaticContentServiceInterface,
   OPEN_STATIC_CONTENT_SERVICE_TOKEN,
   ScormExerciseServiceInterface,
@@ -450,13 +449,6 @@ export class KabasTasksViewModel
 
           initialSearchState.filterCriteriaSelections.set('methods', [
             searchBook.methodId
-          ]);
-        }
-
-        // TODO: make it work
-        if (currentTask.isPaperTask) {
-          initialSearchState.filterCriteriaSelections.set('eduContent.type', [
-            EduContentTypeEnum.PAPER_EXERCISE
           ]);
         }
 
