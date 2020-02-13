@@ -11,10 +11,6 @@
   height: 100%;
   width: 100%;
 
-  &::ng-deep .mat-form-field-underline {
-    opacity: 1;
-  }
-
   &__input {
     text-align: center;
     font-family: 'Open Sans', sans-serif;
@@ -22,6 +18,10 @@
     line-height: 41px;
     color: #242424;
     word-break: break-word;
+  }
+
+  &::ng-deep .mat-form-field-underline {
+    opacity: 1;
   }
 
   &::ng-deep &__hint {
