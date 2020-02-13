@@ -14,7 +14,7 @@ import {
 } from '@campus/dal';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { filter, map, switchMap, take } from 'rxjs/operators';
+import { map, switchMap, take } from 'rxjs/operators';
 import { KabasTasksResolver } from '../components/kabas-tasks.resolver';
 import { getTaskWithAssignmentAndEduContents } from '../components/kabas-tasks.viewmodel.selectors';
 import { TaskStatusEnum } from '../interfaces/TaskWithAssignees.interface';
@@ -37,7 +37,6 @@ export class PendingTaskGuard implements CanActivate {
     | boolean
     | UrlTree {
     return this.kabasTaskResolver.resolve(route).pipe(
-      filter(isResolved => isResolved),
       switchMap(() => {
         return this.store.pipe(
           select(getTaskWithAssignmentAndEduContents, {

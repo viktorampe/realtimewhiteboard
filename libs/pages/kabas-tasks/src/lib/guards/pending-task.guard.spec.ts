@@ -1,4 +1,4 @@
-import { fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import {
   ActivatedRouteSnapshot,
   Router,
@@ -93,18 +93,6 @@ describe('PendingTaskGuard', () => {
       <RouterStateSnapshot>{}
     ) as Observable<boolean>;
   }
-
-  it('should not run when the resolver is not ready', fakeAsync(() => {
-    shouldResolve$.next(false);
-
-    jest.spyOn(store, 'select');
-
-    canActivate().subscribe(() => {});
-
-    tick(100);
-
-    expect(store.select).not.toHaveBeenCalled();
-  }));
 
   it('should return the UrlTree to redirect to when the task is active', () => {
     setCurrentTaskStatus(TaskStatusEnum.ACTIVE);
