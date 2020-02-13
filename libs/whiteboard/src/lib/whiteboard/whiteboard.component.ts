@@ -59,7 +59,7 @@ export class WhiteboardComponent implements OnInit {
       top: top,
       left: left,
       editMode: false,
-      showToolbar: false
+      toolbarsVisible: false
     });
   }
 

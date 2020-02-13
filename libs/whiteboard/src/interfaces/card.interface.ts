@@ -4,7 +4,7 @@ export default interface Card {
   image: string;
   isInputSelected: boolean;
   editMode: boolean;
-  showToolbar: boolean;
+  toolbarsVisible: boolean;
   top: number;
   left: number;
 }
