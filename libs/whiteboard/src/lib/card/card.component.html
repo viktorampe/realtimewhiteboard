@@ -7,7 +7,7 @@
   <campus-colorlist
     class="card__colorlist"
     (selectedColor)="selectColor($event)"
-    *ngIf="optionsVisible"
+    *ngIf="toolbarsVisible"
   ></campus-colorlist>
   <div class="card__header">
     <input
@@ -18,7 +18,7 @@
       [style.opacity]="checkboxVisible ? 1 : 0"
     />
     <campus-toolbar
-      *ngIf="optionsVisible"
+      *ngIf="toolbarsVisible"
       [editMode]="this.editMode"
       (clickToggleEditIcon)="toggleEditMode()"
       (clickToggleView)="toggleView()"
