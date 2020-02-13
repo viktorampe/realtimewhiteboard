@@ -8,6 +8,7 @@
       type="text"
       name="text"
       [(ngModel)]="text"
+      (ngModelChange)="onChangeText($event)"
       class="card-input__input"
       matInput
       matNativeControl

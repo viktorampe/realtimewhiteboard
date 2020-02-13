@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'campus-card-text',
@@ -9,7 +9,13 @@ export class CardTextComponent implements OnInit {
   @Input() text: string;
   @Input() editMode: boolean;
 
+  @Output() textChange = new EventEmitter<string>();
+
   constructor() {}
 
   ngOnInit() {}
+
+  onChangeText(text: string) {
+    this.textChange.emit(text);
+  }
 }
