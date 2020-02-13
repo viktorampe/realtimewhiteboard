@@ -89,6 +89,7 @@ export class CardComponent implements OnInit, OnChanges {
 
   selectColor(color: string) {
     this.toolbarsVisible = false;
+    this.editMode = false;
     this.color = color;
     this.lastColor.emit(color);
   }
