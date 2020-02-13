@@ -63,6 +63,8 @@ export class CardComponent implements OnInit, OnChanges {
     }
   }
 
+  onImageClicked($event) {}
+
   removeImage() {
     this.image = '';
   }

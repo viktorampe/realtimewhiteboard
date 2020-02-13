@@ -9,7 +9,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { By, HAMMER_LOADER } from '@angular/platform-browser';
 import { MockMatIconRegistry } from '@campus/testing';
 import { configureTestSuite } from 'ng-bullet';
+import { CardImageComponent } from '../card-image/card-image.component';
+import { CardTextComponent } from '../card-text/card-text.component';
 import { ColorlistComponent } from '../colorlist/colorlist.component';
+import { ImageToolbarComponent } from '../image-toolbar/image-toolbar.component';
 import { ProgressBarComponent } from '../progress-bar/progress-bar.component';
 import { ToolbarComponent } from '../toolbar/toolbar.component';
 import { CardComponent } from './card.component';
@@ -31,6 +34,9 @@ describe('CardComponent', () => {
         CardComponent,
         ToolbarComponent,
         ColorlistComponent,
+        CardTextComponent,
+        CardImageComponent,
+        ImageToolbarComponent,
         ProgressBarComponent
       ],
       providers: [
@@ -120,7 +126,9 @@ describe('CardComponent', () => {
     component.isInputSelected = true;
     fixture.detectChanges();
     await fixture.whenStable();
-    const inputContent = fixture.debugElement.query(By.css('textarea'));
+    const inputContent = fixture.debugElement.query(
+      By.css('.card__content__input__text')
+    );
     expect(inputContent.nativeElement.value.trim()).toBe('Test content');
   });
 
@@ -235,38 +243,6 @@ describe('CardComponent', () => {
     checkbox.click(); // van true naar false
     fixture.detectChanges();
     expect(component.deselect.emit).toHaveBeenCalled();
-  });
-
-  it('should remove image when removeImage() is called', () => {
-    component.image = 'this is not an empty string';
-    component.removeImage();
-    expect(component.image).toBe('');
-  });
-
-  it('should remove background-image when removeImage() is called', () => {
-    component.image = 'this is not null';
-    component.removeImage();
-    fixture.detectChanges();
-    const card__content__image = fixture.debugElement.query(
-      By.css('.card__content__image')
-    ).nativeElement;
-    expect(card__content__image.style.backgroundImage).toBe('url()');
-  });
-
-  it('should replace image when replaceImage() is called', () => {
-    component.image = 'image_1';
-    component.replaceImage('image_2');
-    expect(component.image).toBe('image_2');
-  });
-
-  it('should replace background-image when replaceImage() is called', () => {
-    component.image = 'image_1';
-    component.replaceImage('image_2');
-    fixture.detectChanges();
-    const card__content__image = fixture.debugElement.query(
-      By.css('.card__content__image')
-    ).nativeElement;
-    expect(card__content__image.style.backgroundImage).toBe('url(image_2)');
   });
 
   it('should close the open colorlist when switching out of editmode', () => {

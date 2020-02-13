@@ -32,14 +32,16 @@
     ></campus-toolbar>
   </div>
   <div class="card__content" (dblclick)="onDblClick()">
-    <div
-      *ngIf="viewModeImage || editMode"
+    <campus-card-image
       class="card__content__image"
-      [ngStyle]="{ 'background-image': 'url(' + image + ')' }"
-    ></div>
+      (imageClicked)="onImageClicked($event)"
+      [imageUrl]="image"
+    ></campus-card-image>
     <div *ngIf="!viewModeImage || editMode" class="card__content__input">
-      <textarea
+      <campus-card-text
+        class="card__content__input__text"
         [formControl]="txtContent"
+        ngDefaultControl
         #inputContent
         *ngIf="isInputSelected"
         [(ngModel)]="description"
@@ -49,7 +51,9 @@
         cols="40"
         rows="5"
         maxlength="{{ maxCharacters }}"
-      ></textarea>
+        [text]="description"
+        [editMode]="editMode"
+      ></campus-card-text>
       <p *ngIf="!isInputSelected" (click)="toggleInput()">
         {{ description }}
       </p>
