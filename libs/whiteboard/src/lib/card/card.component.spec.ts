@@ -127,7 +127,18 @@ describe('CardComponent', () => {
     expect(component.viewModeImage).toBe(true);
   });
 
+  it('should close the colorlist when a color is clicked', () => {
+    component.toolbarsVisible = true;
+    fixture.detectChanges();
+    component.selectColor('white');
+    fixture.detectChanges();
+    expect(component.toolbarsVisible).toBe(false);
+  });
+
   it('should change the cardcolor when a color is picked', () => {
+    component.toolbarsVisible = true;
+    fixture.detectChanges();
+
     component.selectColor('black');
     fixture.detectChanges();
     expect(component.color).toBe('black');

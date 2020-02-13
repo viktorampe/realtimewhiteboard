@@ -33,6 +33,7 @@ export class CardComponent implements OnInit, OnChanges {
   @HostBinding('style.left') leftStyle: string;
   viewModeImage: boolean;
   maxCharacters = 300;
+  pressTime: number;
 
   constructor() {
     this.viewModeImage = true;
@@ -90,9 +91,17 @@ export class CardComponent implements OnInit, OnChanges {
 
   toggleEditMode() {
     this.editMode = !this.editMode;
+    if (!this.editMode && this.toolbarsVisible) {
+      this.toolbarsVisible = false;
+    }
+    this.viewModeImage = true;
   }
 
   toggleView() {
     this.viewModeImage = !this.viewModeImage;
+  }
+
+  toggleToolbars() {
+    this.toolbarsVisible = !this.toolbarsVisible;
   }
 }
