@@ -1,4 +1,4 @@
-<p *ngIf="editMode; else input" class="card-text">{{ text }}</p>
+<p *ngIf="!editMode; else input" class="card-text">{{ text }}</p>
 
 <ng-template #input>
   <mat-form-field appearance="standard" color="primary" class="card-input">

@@ -6,6 +6,7 @@ import {
   MatDialogModule,
   MatDialogRef,
   MatIconModule,
+  MatInputModule,
   MatProgressBarModule
 } from '@angular/material';
 import { HAMMER_LOADER } from '@angular/platform-browser';
@@ -41,7 +42,8 @@ describe('WhiteboardComponent', () => {
         MatIconModule,
         MatDialogModule,
         BrowserAnimationsModule,
-        MatProgressBarModule
+        MatProgressBarModule,
+        MatInputModule
       ],
       declarations: [
         WhiteboardComponent,
@@ -110,7 +112,6 @@ describe('WhiteboardComponent', () => {
       description: '',
       image: null,
       color: null,
-      isInputSelected: false,
       editMode: true,
       top: 0,
       left: 0
@@ -134,7 +135,6 @@ describe('WhiteboardComponent', () => {
       description: '',
       image: null,
       color: null,
-      isInputSelected: false,
       editMode: true,
       top: 0,
       left: 0
@@ -160,7 +160,6 @@ describe('WhiteboardComponent', () => {
       description: '',
       image: null,
       color: null,
-      isInputSelected: false,
       editMode: true,
       top: 0,
       left: 0
@@ -178,7 +177,6 @@ describe('WhiteboardComponent', () => {
       description: '',
       image: null,
       color: null,
-      isInputSelected: false,
       editMode: true,
       top: 0,
       left: 0
@@ -196,7 +194,6 @@ describe('WhiteboardComponent', () => {
       description: '',
       image: null,
       color: null,
-      isInputSelected: false,
       editMode: true,
       top: 0,
       left: 0
@@ -206,7 +203,6 @@ describe('WhiteboardComponent', () => {
       description: '',
       image: null,
       color: null,
-      isInputSelected: false,
       editMode: true,
       top: 0,
       left: 0
@@ -223,7 +219,6 @@ describe('WhiteboardComponent', () => {
       description: '',
       image: null,
       color: null,
-      isInputSelected: false,
       editMode: true,
       top: 0,
       left: 0

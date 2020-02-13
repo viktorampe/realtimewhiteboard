@@ -17,7 +17,6 @@ export class CardComponent implements OnInit, OnChanges {
   @Input() color: string;
   @Input() description: string;
   @Input() image: string;
-  @Input() isInputSelected: boolean;
   @Input() editMode: boolean;
   @Input() top: number;
   @Input() left: number;
@@ -100,6 +99,5 @@ export class CardComponent implements OnInit, OnChanges {
 
   toggleView() {
     this.viewModeImage = !this.viewModeImage;
-    console.log(this.description);
   }
 }
