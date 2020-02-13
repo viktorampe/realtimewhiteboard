@@ -262,7 +262,7 @@ export class TaskEduContentEffects {
       TaskEduContentsActionTypes.AddTaskEduContents,
       {
         run: (action: StartAddTaskEduContents, state: DalState) => {
-          return this.taskEduContentService.createTaskEduContents(
+          return this.taskEduContentService.createTaskEduContent(
             action.payload.userId,
             action.payload.taskEduContents
           );
