@@ -1,12 +1,12 @@
 import { forwardRef, Inject, Injectable } from '@angular/core';
 import { EduContent } from '@campus/dal';
+import { EduContentTypeEnum } from '../../../enums';
+import { ContentActionInterface } from '../content-action.interface';
 import {
-  ContentActionInterface,
   ContentOpenActionsServiceInterface,
   ContentOpenerInterface,
   CONTENT_OPENER_TOKEN
-} from '..';
-import { EduContentTypeEnum } from '../../../enums';
+} from './content-open-actions.service.interface';
 
 @Injectable({
   providedIn: 'root'
