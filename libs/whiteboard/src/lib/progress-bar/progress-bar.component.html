@@ -1,3 +1,8 @@
-<div class="progress-bar">
-  <div [style.width]="progressPercentage" class="progress-bar__progress"> </div>
+<div class="progress">
+  <p>Foto aan het uploaden</p>
+  <mat-progress-bar
+    mode="determinate"
+    [value]="progressPercentage"
+  ></mat-progress-bar>
+  <p>{{ progressPercentage }} %</p>
 </div>

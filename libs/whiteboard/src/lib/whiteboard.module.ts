@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule, MatIconModule } from '@angular/material';
 import { MatButtonModule } from '@angular/material/button';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { CardImageComponent } from './card-image/card-image.component';
 import { CardTextComponent } from './card-text/card-text.component';
 import { CardComponent } from './card/card.component';
@@ -24,7 +25,8 @@ import { WhiteboardComponent } from './whiteboard/whiteboard.component';
     FormsModule,
     MatIconModule,
     ReactiveFormsModule,
-    MatButtonModule
+    MatButtonModule,
+    MatProgressBarModule
   ],
   declarations: [
     WhiteboardComponent,

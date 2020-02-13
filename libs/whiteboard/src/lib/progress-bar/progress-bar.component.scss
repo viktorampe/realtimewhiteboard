@@ -1,12 +1,17 @@
-.progress-bar {
-  height: 5px;
-  width: 100%;
+.progress {
+  width: 121px;
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  text-align: center;
 
-  &__progress {
-    height: 100%;
-    background-color: #e7295c;
-    width: 0;
+  p {
+    font-size: 12px;
+    margin: 0px;
+  }
 
-    transition: width 0.25s ease-in-out;
+  mat-progress-bar {
+    margin-bottom: 8.5px;
+    margin-top: 8.5px;
   }
 }
