@@ -1,5 +1,10 @@
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import {
+  ActivatedRouteSnapshot,
+  Router,
+  RouterStateSnapshot,
+  UrlTree
+} from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import {
   DalState,
@@ -27,6 +32,7 @@ describe('PendingTaskGuard', () => {
       id: taskId
     } as unknown
   };
+  const urlTree: UrlTree = new UrlTree();
 
   let shouldResolve$: BehaviorSubject<boolean>;
 
@@ -49,6 +55,12 @@ describe('PendingTaskGuard', () => {
         {
           provide: 'uuid',
           useValue: () => uuid
+        },
+        {
+          provide: Router,
+          useValue: {
+            createUrlTree: () => urlTree
+          }
         }
       ]
     });
@@ -94,22 +106,22 @@ describe('PendingTaskGuard', () => {
     expect(store.select).not.toHaveBeenCalled();
   }));
 
-  it('should return false when the task is active', () => {
+  it('should return the UrlTree to redirect to when the task is active', () => {
     setCurrentTaskStatus(TaskStatusEnum.ACTIVE);
 
     expect(canActivate()).toBeObservable(
       hot('(a|)', {
-        a: false
+        a: urlTree
       })
     );
   });
 
-  it('should return false when the task is finished', () => {
+  it('should return the UrlTree to redirect to when the task is finished', () => {
     setCurrentTaskStatus(TaskStatusEnum.FINISHED);
 
     expect(canActivate()).toBeObservable(
       hot('(a|)', {
-        a: false
+        a: urlTree
       })
     );
   });

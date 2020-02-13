@@ -2,7 +2,9 @@ import { Inject, Injectable } from '@angular/core';
 import {
   ActivatedRouteSnapshot,
   CanActivate,
-  RouterStateSnapshot
+  Router,
+  RouterStateSnapshot,
+  UrlTree
 } from '@angular/router';
 import {
   DalState,
@@ -21,6 +23,7 @@ import { TaskStatusEnum } from '../interfaces/TaskWithAssignees.interface';
 export class PendingTaskGuard implements CanActivate {
   constructor(
     private store: Store<DalState>,
+    private router: Router,
     private kabasTaskResolver: KabasTasksResolver,
     @Inject('uuid') private uuid: Function
   ) {}
@@ -28,7 +31,11 @@ export class PendingTaskGuard implements CanActivate {
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
-  ): Observable<boolean> | Promise<boolean> | boolean {
+  ):
+    | Observable<boolean | UrlTree>
+    | Promise<boolean | UrlTree>
+    | boolean
+    | UrlTree {
     return this.kabasTaskResolver.resolve(route).pipe(
       filter(isResolved => isResolved),
       switchMap(() => {
@@ -57,6 +64,7 @@ export class PendingTaskGuard implements CanActivate {
               })
             })
           );
+          return this.router.createUrlTree(['/tasks', 'manage', task.id]);
         }
 
         return isPending;
