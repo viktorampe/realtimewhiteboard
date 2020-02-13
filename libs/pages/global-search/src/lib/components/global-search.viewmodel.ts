@@ -15,6 +15,7 @@ import {
 } from '@campus/search';
 import {
   ContentOpenerInterface,
+  ContentTaskManagerInterface,
   EnvironmentSearchModesInterface,
   ENVIRONMENT_SEARCHMODES_TOKEN,
   OpenStaticContentServiceInterface,
@@ -30,7 +31,8 @@ import { filter, map, switchMap, withLatestFrom } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root'
 })
-export class GlobalSearchViewModel implements ContentOpenerInterface {
+export class GlobalSearchViewModel
+  implements ContentOpenerInterface, ContentTaskManagerInterface {
   public searchResults$: Observable<SearchResultInterface>;
   public searchState$: Observable<SearchStateInterface>;
 
