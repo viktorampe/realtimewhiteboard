@@ -1,10 +1,7 @@
 <div
   class="card"
   [style.border-color]="color"
-  (mousedown)="registerPress($event)"
-  (mouseup)="showCardToolbars($event)"
-  (touchstart)="registerPress($event)"
-  (touchdown)="showCardToolbars($event)"
+  (press)="showCardToolbars($event)"
 >
   <campus-colorlist
     class="card__colorlist"

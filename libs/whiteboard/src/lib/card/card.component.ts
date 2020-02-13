@@ -52,7 +52,9 @@ export class CardComponent implements OnInit, OnChanges {
     this.topStyle = this.top + 'px';
     this.leftStyle = this.left + 'px';
   }
-
+  press() {
+    console.log('press');
+  }
   toggleInput() {
     if (
       this.description !== '' &&
@@ -112,16 +114,7 @@ export class CardComponent implements OnInit, OnChanges {
     this.viewModeImage = !this.viewModeImage;
   }
 
-  registerPress($event) {
-    this.pressTime = event.timeStamp;
-  }
-
   showCardToolbars($event) {
-    const releaseTime = event.timeStamp;
-    const holdTime = releaseTime - this.pressTime;
-    if (holdTime >= 1000) {
-      this.toolbarsVisible = !this.toolbarsVisible;
-      console.log('long press registered!');
-    }
+    this.toolbarsVisible = !this.toolbarsVisible;
   }
 }
