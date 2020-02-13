@@ -8,6 +8,7 @@ import {
 } from '@angular/material';
 import { MatIconModule } from '@angular/material/icon';
 import { By, HAMMER_LOADER } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MockMatIconRegistry } from '@campus/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { CardImageComponent } from '../card-image/card-image.component';
@@ -30,7 +31,8 @@ describe('CardComponent', () => {
         MatIconModule,
         ReactiveFormsModule,
         MatProgressBarModule,
-        MatInputModule
+        MatInputModule,
+        BrowserAnimationsModule
       ],
       declarations: [
         CardComponent,
