@@ -58,7 +58,8 @@ export class WhiteboardComponent implements OnInit {
       isInputSelected: true,
       top: top,
       left: left,
-      editMode: true
+      editMode: false,
+      toolbarsVisible: false
     });
   }
 

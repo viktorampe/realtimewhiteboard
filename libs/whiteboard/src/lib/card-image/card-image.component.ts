@@ -6,6 +6,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
   styleUrls: ['./card-image.component.scss']
 })
 export class CardImageComponent implements OnInit {
+  @Input() editMode: boolean;
   @Input() imageUrl: string;
   @Output() imageClicked = new EventEmitter<void>();
 

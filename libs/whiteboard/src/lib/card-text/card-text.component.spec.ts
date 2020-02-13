@@ -10,7 +10,7 @@ describe('CardTextComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [MatInputModule, FormsModule, BrowserAnimationsModule],
+      imports: [FormsModule, BrowserAnimationsModule, MatInputModule],
       declarations: [CardTextComponent]
     }).compileComponents();
   }));

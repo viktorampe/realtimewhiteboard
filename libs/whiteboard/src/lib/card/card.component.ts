@@ -23,6 +23,7 @@ export class CardComponent implements OnInit, OnChanges {
   @Input() image: string;
   @Input() isInputSelected: boolean;
   @Input() editMode: boolean;
+  @Input() toolbarsVisible: boolean;
   @Input() top: number;
   @Input() left: number;
   @Input() checkboxVisible: boolean;
@@ -38,7 +39,6 @@ export class CardComponent implements OnInit, OnChanges {
   viewModeImage: boolean;
   maxCharacters = 300;
   pressTime: number;
-  toolbarsVisible = false;
 
   txtContent = new FormControl();
 
@@ -83,11 +83,12 @@ export class CardComponent implements OnInit, OnChanges {
   }
 
   onDblClick() {
-    this.toggleEditMode();
+    this.toggleToolbar();
   }
 
   selectColor(color: string) {
     this.toolbarsVisible = false;
+    this.editMode = false;
     this.color = color;
     this.lastColor.emit(color);
   }
@@ -98,6 +99,10 @@ export class CardComponent implements OnInit, OnChanges {
     } else {
       this.deselect.emit();
     }
+  }
+
+  toggleToolbar() {
+    this.toolbarsVisible = !this.toolbarsVisible;
   }
 
   toggleEditMode() {
