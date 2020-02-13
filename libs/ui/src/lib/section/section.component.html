@@ -7,7 +7,10 @@
 >
   <div class="ui-section__header">
     <ng-content select="section-title"></ng-content>
-    <div class="ui-section__header__actions">
+    <div
+      class="ui-section__header__actions"
+      (click)="clickTriggerAction($event)"
+    >
       <ng-content select="section-actions"></ng-content>
     </div>
   </div>
@@ -15,4 +18,3 @@
     <ng-content select="section-content"></ng-content>
   </div>
 </div>
-<p>component: {{ mode }}</p>

@@ -30,6 +30,7 @@ export class DemoPageComponent implements OnInit {
   sectionMode = SectionModeEnum.EDITABLE;
   sectionModes = SectionModeEnum;
   editableText = 'I am editable';
+  staticText = 'I am static content';
 
   constructor() {}
 
@@ -88,6 +89,10 @@ export class DemoPageComponent implements OnInit {
 
   changeMode(mode: SectionModeEnum) {
     this.sectionMode = mode;
+  }
+
+  handleTriggerActionClick(event: MouseEvent) {
+    console.log('icon clicked');
   }
 
   handleIconAction(event: MouseEvent, action: string) {

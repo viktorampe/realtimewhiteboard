@@ -50,6 +50,7 @@ export class SectionActions {}
 export class SectionComponent {
   @Input() mode: SectionModeEnum;
   @Output() modeChange = new EventEmitter<SectionModeEnum>();
+  @Output() actionClick = new EventEmitter<void>();
 
   modes = SectionModeEnum; // needed for usage in the template
 
@@ -59,6 +60,17 @@ export class SectionComponent {
     if (this.mode === SectionModeEnum.EDITABLE) {
       this.mode = SectionModeEnum.EDITING;
       this.updateMode();
+    }
+  }
+
+  clickTriggerAction(event: MouseEvent) {
+    event.stopPropagation(); // this should not trigger the click section event
+
+    if (this.mode === SectionModeEnum.EDITABLE) {
+      this.mode = SectionModeEnum.EDITING;
+      this.updateMode();
+    } else if (this.mode === SectionModeEnum.STATIC) {
+      this.actionClick.emit();
     }
   }
 

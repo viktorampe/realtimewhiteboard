@@ -27,16 +27,14 @@
 >
 <button (click)="changeMode(sectionModes.EDITING)">make section editing</button>
 
-<p>demo page: {{ sectionMode }}</p>
-<campus-section [(mode)]="sectionMode">
+<campus-section
+  [(mode)]="sectionMode"
+  (actionClick)="handleTriggerActionClick()"
+>
   <section-title>I'm a the title of this section</section-title>
-  <section-actions
-    ><mat-icon
-      (click)="handleIconAction($event, 'edit')"
-      svgIcon="edit"
-    ></mat-icon
-  ></section-actions>
+  <section-actions><mat-icon svgIcon="edit"></mat-icon></section-actions>
   <section-content>
+    <p *ngIf="sectionMode === sectionModes.STATIC">{{ staticText }}</p>
     <p *ngIf="sectionMode === sectionModes.EDITABLE">{{ editableText }}</p>
 
     <div *ngIf="sectionMode === sectionModes.EDITING">
