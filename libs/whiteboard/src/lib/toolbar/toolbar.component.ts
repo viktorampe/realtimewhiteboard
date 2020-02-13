@@ -17,7 +17,9 @@ export class ToolbarComponent implements OnInit {
 
   constructor() {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    console.log('toolbar OnInit --> editmode:' + this.editMode);
+  }
 
   onDeleteClicked() {
     this.delete.emit();

@@ -2,7 +2,7 @@
   <campus-colorlist
     class="card__colorlist"
     (selectedColor)="selectColor($event)"
-    [hidden]="colorlistHidden"
+    *ngIf="showToolbar"
   ></campus-colorlist>
   <div class="card__header">
     <input
@@ -13,8 +13,9 @@
       [style.opacity]="checkboxVisible ? 1 : 0"
     />
     <campus-toolbar
+      *ngIf="showToolbar"
       [editMode]="this.editMode"
-      (clickColorIcon)="showColor()"
+      (clickColorIcon)="selectColor($event)"
       (clickToggleEditIcon)="toggleEditMode()"
       (clickToggleView)="toggleView()"
       (clickImageSettings)="showImageSettings()"
@@ -27,6 +28,7 @@
       class="card__content__image"
       (imageClicked)="onImageClicked($event)"
       [imageUrl]="image"
+      [editMode]="editMode"
     ></campus-card-image>
     <div *ngIf="!viewModeImage || editMode" class="card__content__input">
       <campus-card-text
