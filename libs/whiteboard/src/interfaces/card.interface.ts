@@ -3,6 +3,7 @@ export default interface Card {
   description: string;
   image: string;
   editMode: boolean;
+  toolbarsVisible: boolean;
   top: number;
   left: number;
 }

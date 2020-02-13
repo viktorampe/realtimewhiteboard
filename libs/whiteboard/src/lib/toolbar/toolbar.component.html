@@ -1,4 +1,4 @@
-<div class="toolbar" *ngIf="editMode; else noEditMode">
+<div class="toolbar" *ngIf="!editMode; else editMode">
   <div class="toolbar__tool toolbar__delete" (click)="onDeleteClicked()">
     <mat-icon
       class="toolbar__tool__icon toolbar__delete__icon"
@@ -15,7 +15,7 @@
     <mat-icon class="toolbar__tool__icon" [svgIcon]="'edit'"></mat-icon>
   </div>
 </div>
-<ng-template #noEditMode>
+<ng-template #editMode>
   <div class="toolbar">
     <div class="toolbar__tool" (click)="toggleView()">
       <mat-icon

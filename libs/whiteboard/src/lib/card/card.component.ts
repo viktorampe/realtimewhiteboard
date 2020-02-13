@@ -18,6 +18,7 @@ export class CardComponent implements OnInit, OnChanges {
   @Input() description: string;
   @Input() image: string;
   @Input() editMode: boolean;
+  @Input() toolbarsVisible: boolean;
   @Input() top: number;
   @Input() left: number;
   @Input() checkboxVisible: boolean;
@@ -30,7 +31,6 @@ export class CardComponent implements OnInit, OnChanges {
 
   @HostBinding('style.top') topStyle: string;
   @HostBinding('style.left') leftStyle: string;
-  colorlistHidden: boolean;
   viewModeImage: boolean;
   maxCharacters = 300;
 
@@ -38,9 +38,7 @@ export class CardComponent implements OnInit, OnChanges {
     this.viewModeImage = true;
   }
 
-  ngOnInit() {
-    this.colorlistHidden = true;
-  }
+  ngOnInit() {}
 
   ngOnChanges() {
     this.topStyle = this.top + 'px';
@@ -68,15 +66,12 @@ export class CardComponent implements OnInit, OnChanges {
   }
 
   onDblClick() {
-    this.toggleEditMode();
-  }
-
-  showColor() {
-    this.colorlistHidden = !this.colorlistHidden;
+    this.toggleToolbar();
   }
 
   selectColor(color: string) {
-    this.colorlistHidden = true;
+    this.toolbarsVisible = false;
+    this.editMode = false;
     this.color = color;
     this.lastColor.emit(color);
   }
@@ -89,12 +84,12 @@ export class CardComponent implements OnInit, OnChanges {
     }
   }
 
+  toggleToolbar() {
+    this.toolbarsVisible = !this.toolbarsVisible;
+  }
+
   toggleEditMode() {
     this.editMode = !this.editMode;
-    if (!this.editMode && !this.colorlistHidden) {
-      this.colorlistHidden = true;
-    }
-    this.viewModeImage = true;
   }
 
   toggleView() {
