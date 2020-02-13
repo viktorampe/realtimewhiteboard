@@ -1,8 +1,4 @@
-<div
-  class="card"
-  [style.border-color]="color"
-  (press)="showCardToolbars($event)"
->
+<div class="card" [style.border-color]="color" (press)="toggleToolbars()">
   <campus-colorlist
     class="card__colorlist"
     (selectedColor)="selectColor($event)"

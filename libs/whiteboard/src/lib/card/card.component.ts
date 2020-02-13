@@ -52,9 +52,7 @@ export class CardComponent implements OnInit, OnChanges {
     this.topStyle = this.top + 'px';
     this.leftStyle = this.left + 'px';
   }
-  press() {
-    console.log('press');
-  }
+
   toggleInput() {
     if (
       this.description !== '' &&
@@ -114,7 +112,7 @@ export class CardComponent implements OnInit, OnChanges {
     this.viewModeImage = !this.viewModeImage;
   }
 
-  showCardToolbars($event) {
+  toggleToolbars() {
     this.toolbarsVisible = !this.toolbarsVisible;
   }
 }
