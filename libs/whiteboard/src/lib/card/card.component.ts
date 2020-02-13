@@ -97,10 +97,6 @@ export class CardComponent implements OnInit, OnChanges {
     }
   }
 
-  toggleToolbar() {
-    this.toolbarsVisible = !this.toolbarsVisible;
-  }
-
   toggleEditMode() {
     this.editMode = !this.editMode;
     if (!this.editMode && this.toolbarsVisible) {
