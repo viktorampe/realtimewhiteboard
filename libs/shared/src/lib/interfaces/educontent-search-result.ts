@@ -8,6 +8,7 @@ import {
 
 export interface EduContentSearchResultInterface {
   eduContent: EduContent;
+  addTaskActions?: boolean;
   inTask?: boolean;
   currentTask?: TaskInterface;
   inBundle?: boolean;

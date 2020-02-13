@@ -274,7 +274,8 @@ describe('GlobalSearchViewModel', () => {
       const expected = {
         ...mockSearchResult,
         results: mockSearchResult.results.map(result => ({
-          eduContent: result
+          eduContent: result,
+          addTaskActions: true
         }))
       };
 
