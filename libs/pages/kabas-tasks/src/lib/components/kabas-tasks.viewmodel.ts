@@ -31,6 +31,12 @@ import {
   TASK_SERVICE_TOKEN
 } from '@campus/dal';
 import {
+  SearchingViewmodelInterface,
+  SearchModeInterface,
+  SearchResultInterface,
+  SearchStateInterface
+} from '@campus/search';
+import {
   ContentOpenerInterface,
   OpenStaticContentServiceInterface,
   OPEN_STATIC_CONTENT_SERVICE_TOKEN,
@@ -68,7 +74,11 @@ export interface CurrentTaskParams {
 @Injectable({
   providedIn: 'root'
 })
-export class KabasTasksViewModel implements ContentOpenerInterface {
+export class KabasTasksViewModel
+  implements ContentOpenerInterface, SearchingViewmodelInterface {
+  public searchResults$: Observable<SearchResultInterface>;
+  public searchState$: Observable<SearchStateInterface>;
+
   public tasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
   public paperTasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
   public currentTask$: Observable<TaskWithAssigneesInterface>;
@@ -412,6 +422,22 @@ export class KabasTasksViewModel implements ContentOpenerInterface {
         task
       })
     );
+  }
+
+  public requestAutoComplete(searchTerm: string): Observable<string[]> {
+    throw new Error('Method not implemented.');
+  }
+
+  public getInitialSearchState(): Observable<SearchStateInterface> {
+    throw new Error('Method not implemented.');
+  }
+
+  public getSearchMode(mode: string): Observable<SearchModeInterface> {
+    throw new Error('Method not implemented.');
+  }
+
+  public updateSearchState(state: SearchStateInterface) {
+    throw new Error('Method not implemented.');
   }
 
   private getArchivingAction(updates, errors): Action {

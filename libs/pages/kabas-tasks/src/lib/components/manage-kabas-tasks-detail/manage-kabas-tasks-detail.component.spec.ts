@@ -35,6 +35,7 @@ import {
   CONTENT_ACTIONS_SERVICE_TOKEN,
   CONTENT_OPENER_TOKEN,
   ENVIRONMENT_ICON_MAPPING_TOKEN,
+  ENVIRONMENT_SEARCHMODES_TOKEN,
   ENVIRONMENT_TESTING_TOKEN,
   OPEN_STATIC_CONTENT_SERVICE_TOKEN,
   SharedModule
@@ -193,6 +194,7 @@ describe('ManageKabasTasksDetailComponent', () => {
           useValue: { open: jest.fn() }
         },
         { provide: MatIconRegistry, useClass: MockMatIconRegistry },
+        { provide: ENVIRONMENT_SEARCHMODES_TOKEN, useValue: {} },
         {
           provide: FILTER_SERVICE_TOKEN,
           useValue: { matchFilters: () => {} }
