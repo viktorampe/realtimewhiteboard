@@ -26,7 +26,7 @@ import { EduContentSearchResultComponent } from './edu-content-search-result.com
 describe('EduContentSearchResultComponent', () => {
   let component: EduContentSearchResultComponent;
   let fixture: ComponentFixture<EduContentSearchResultComponent>;
-  let contentActionsServiceInterface: ContentOpenActionsServiceInterface;
+  let contentOpenActionsService: ContentOpenActionsServiceInterface;
   const mockIsFavorite = new BehaviorSubject(false);
   let dateMock: MockDate;
 
@@ -89,9 +89,7 @@ describe('EduContentSearchResultComponent', () => {
       ]
     });
 
-    contentActionsServiceInterface = TestBed.get(
-      CONTENT_OPEN_ACTIONS_SERVICE_TOKEN
-    );
+    contentOpenActionsService = TestBed.get(CONTENT_OPEN_ACTIONS_SERVICE_TOKEN);
   });
 
   beforeEach(() => {

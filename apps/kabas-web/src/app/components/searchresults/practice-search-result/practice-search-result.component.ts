@@ -24,7 +24,7 @@ export class PracticeSearchResultComponent extends ResultItemBase
 
   constructor(
     @Inject(CONTENT_OPEN_ACTIONS_SERVICE_TOKEN)
-    private contentActionsService: ContentOpenActionsServiceInterface
+    private contentOpenActionsService: ContentOpenActionsServiceInterface
   ) {
     super();
   }
@@ -35,7 +35,7 @@ export class PracticeSearchResultComponent extends ResultItemBase
   }
 
   private setupActions(): void {
-    this.actions = this.contentActionsService.getActionsForEduContent(
+    this.actions = this.contentOpenActionsService.getActionsForEduContent(
       this.data.eduContent
     );
   }

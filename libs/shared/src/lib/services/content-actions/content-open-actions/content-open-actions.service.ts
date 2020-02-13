@@ -74,7 +74,7 @@ export class ContentOpenActionsService
    *
    * @param {EduContent} eduContent
    * @returns {ContentActionInterface[]}
-   * @memberof ContentActionsService
+   * @memberof ContentOpenActionsService
    */
   getActionsForEduContent(eduContent: EduContent): ContentActionInterface[] {
     return this.getEduContentActions(eduContent);

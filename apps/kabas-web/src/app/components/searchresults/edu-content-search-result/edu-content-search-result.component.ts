@@ -24,7 +24,7 @@ export class EduContentSearchResultComponent extends ResultItemBase
 
   constructor(
     @Inject(CONTENT_OPEN_ACTIONS_SERVICE_TOKEN)
-    private contentActionsServiceInterface: ContentOpenActionsServiceInterface
+    private contentOpenActionsService: ContentOpenActionsServiceInterface
   ) {
     super();
   }
@@ -35,7 +35,7 @@ export class EduContentSearchResultComponent extends ResultItemBase
   }
 
   private setupActions(): void {
-    this.actions = this.contentActionsServiceInterface.getActionsForEduContent(
+    this.actions = this.contentOpenActionsService.getActionsForEduContent(
       this.data.eduContent
     );
   }

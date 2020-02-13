@@ -73,7 +73,7 @@ describe('ManageKabasTasksDetailComponent', () => {
   const queryParams: BehaviorSubject<Params> = new BehaviorSubject<Params>({});
   let mockDate: MockDate;
 
-  let contentActionsService: ContentOpenActionsServiceInterface;
+  let contentOpenActionsService: ContentOpenActionsServiceInterface;
   let mockViewmodel: MockKabasTasksViewModel;
   let currentTask: TaskWithAssigneesInterface;
   let restOfTasks: TaskWithAssigneesInterface[];
@@ -206,7 +206,7 @@ describe('ManageKabasTasksDetailComponent', () => {
     viewModel = TestBed.get(KabasTasksViewModel);
     matDialog = TestBed.get(MatDialog);
     router = TestBed.get(Router);
-    contentActionsService = TestBed.get(CONTENT_OPEN_ACTIONS_SERVICE_TOKEN);
+    contentOpenActionsService = TestBed.get(CONTENT_OPEN_ACTIONS_SERVICE_TOKEN);
     fixture = TestBed.createComponent(ManageKabasTasksDetailComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -508,7 +508,7 @@ describe('ManageKabasTasksDetailComponent', () => {
 
     beforeEach(() => {
       jest
-        .spyOn(contentActionsService, 'getActionsForEduContent')
+        .spyOn(contentOpenActionsService, 'getActionsForEduContent')
         .mockReturnValue(mockActions);
       taskEduContents = [
         createTaskEduContent(1, 'oefening 1'),

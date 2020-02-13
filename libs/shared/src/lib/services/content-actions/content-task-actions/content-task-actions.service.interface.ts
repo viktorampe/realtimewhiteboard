@@ -3,8 +3,8 @@ import { EduContent } from '@campus/dal';
 import { ContentActionInterface } from '../..';
 
 export interface ContentTaskManagerInterface {
-  addEduContentToTask?(eduContent: EduContent): void;
-  removeEduContentFromTask?(eduContent: EduContent): void;
+  addEduContentToTask(eduContent: EduContent): void;
+  removeEduContentFromTask(eduContent: EduContent): void;
 }
 
 export const CONTENT_TASK_ACTIONS_SERVICE_TOKEN = new InjectionToken(

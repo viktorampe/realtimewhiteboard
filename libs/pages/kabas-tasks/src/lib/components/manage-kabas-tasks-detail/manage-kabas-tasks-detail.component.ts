@@ -109,7 +109,7 @@ export class ManageKabasTasksDetailComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     @Inject(CONTENT_OPEN_ACTIONS_SERVICE_TOKEN)
-    private contentActionService: ContentOpenActionsServiceInterface,
+    private contentOpenActionsService: ContentOpenActionsServiceInterface,
     @Inject(OPEN_STATIC_CONTENT_SERVICE_TOKEN)
     private openStaticContentService: OpenStaticContentServiceInterface,
     @Inject(FILTER_SERVICE_TOKEN) private filterService: FilterServiceInterface
@@ -653,7 +653,7 @@ export class ManageKabasTasksDetailComponent implements OnInit, OnDestroy {
         const taskEduContents = task.taskEduContents.map(tE => {
           return {
             ...tE,
-            actions: this.contentActionService.getActionsForEduContent(
+            actions: this.contentOpenActionsService.getActionsForEduContent(
               tE.eduContent
             )
           };
