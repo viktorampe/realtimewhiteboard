@@ -92,6 +92,7 @@ describe('CardComponent', () => {
 
   it('should show errormessage when input is maximal', () => {
     component.description = 'a'.repeat(component.maxCharacters);
+    component.viewModeImage = false;
     fixture.detectChanges();
     const errorMessage = fixture.debugElement.query(
       By.css('.card__content__errorMessage')
@@ -102,6 +103,7 @@ describe('CardComponent', () => {
   it('should show errormessage when no text is provided', () => {
     component.description = '';
     component.txtContent.markAsDirty();
+    component.viewModeImage = false;
 
     fixture.detectChanges();
 
@@ -114,6 +116,7 @@ describe('CardComponent', () => {
   it('should show the card content when not editing', () => {
     component.description = 'Test content';
     component.isInputSelected = false;
+    component.viewModeImage = false;
     fixture.detectChanges();
     const contentParagraph = fixture.debugElement.query(By.css('p'));
     expect(contentParagraph.nativeElement.textContent.trim()).toBe(
@@ -124,6 +127,8 @@ describe('CardComponent', () => {
   it('should display the card content in the input when editing', async () => {
     component.description = 'Test content';
     component.isInputSelected = true;
+    component.viewModeImage = false;
+
     fixture.detectChanges();
     await fixture.whenStable();
     const inputContent = fixture.debugElement.query(
@@ -155,14 +160,14 @@ describe('CardComponent', () => {
   });
 
   it('should toggle to edit mode when double click.', () => {
-    component.editMode = false;
+    component.showToolbar = false;
     component.description = 'something that is not null';
 
     const myCard = fixture.debugElement.query(By.css('.card__content'));
     myCard.nativeElement.dispatchEvent(new MouseEvent('dblclick')); // use nativeElement so target is set
     fixture.detectChanges();
 
-    expect(component.editMode).toBe(true);
+    expect(component.showToolbar).toBe(true);
   });
 
   it('should toggle edit mode when the editicon is clicked', () => {
@@ -179,31 +184,7 @@ describe('CardComponent', () => {
     expect(component.viewModeImage).toBe(true);
   });
 
-  it('should show the colorlist when the coloricon is clicked', () => {
-    component.showColor();
-    fixture.detectChanges();
-    expect(component.colorlistHidden).toBe(false);
-  });
-
-  it('should hide the colorlist when the coloricon is clicked twice', () => {
-    component.showColor();
-    fixture.detectChanges();
-    component.showColor();
-    fixture.detectChanges();
-    expect(component.colorlistHidden).toBe(true);
-  });
-
-  it('should close the colorlist when a color is clicked', () => {
-    component.showColor();
-    fixture.detectChanges();
-    component.selectColor('white');
-    fixture.detectChanges();
-    expect(component.colorlistHidden).toBe(true);
-  });
-
   it('should change the cardcolor when a color is picked', () => {
-    component.showColor();
-    fixture.detectChanges();
     component.selectColor('black');
     fixture.detectChanges();
     expect(component.color).toBe('black');
@@ -245,9 +226,10 @@ describe('CardComponent', () => {
     expect(component.deselect.emit).toHaveBeenCalled();
   });
 
-  it('should close the open colorlist when switching out of editmode', () => {
-    component.showColor();
-    component.toggleEditMode();
-    expect(component.colorlistHidden).toBe(true);
+  it('should show tools when showToolbar is toggled to true', () => {
+    component.showToolbar = false;
+    component.toggleToolbar();
+    const tools = fixture.debugElement.queryAll(By.css('.toolbar'));
+    expect(tools).not.toBeNull();
   });
 });

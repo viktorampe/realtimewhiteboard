@@ -25,12 +25,13 @@
   </div>
   <div class="card__content" (dblclick)="onDblClick()">
     <campus-card-image
+      *ngIf="viewModeImage; else viewModeText"
       class="card__content__image"
       (imageClicked)="onImageClicked($event)"
       [imageUrl]="image"
       [editMode]="editMode"
     ></campus-card-image>
-    <div *ngIf="!viewModeImage || editMode" class="card__content__input">
+    <ng-template #viewModeText class="card__content__input">
       <campus-card-text
         class="card__content__input__text"
         [formControl]="txtContent"
@@ -64,6 +65,6 @@
       >
         Er moet tekst ingevuld zijn.
       </p>
-    </div>
+    </ng-template>
   </div>
 </div>
