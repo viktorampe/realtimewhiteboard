@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostBinding } from '@angular/core';
 import { SearchStateInterface } from '@campus/dal';
 
 @Component({
@@ -7,6 +7,9 @@ import { SearchStateInterface } from '@campus/dal';
   styleUrls: ['./manage-task-content.component.scss']
 })
 export class ManageTaskContentComponent {
+  @HostBinding('class.manage-task-content')
+  manageTaskContentClass = true;
+
   constructor() {}
 
   public clickDone() {}
