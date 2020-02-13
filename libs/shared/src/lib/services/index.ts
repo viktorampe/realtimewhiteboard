@@ -3,6 +3,8 @@ export * from './content';
 export * from './content-actions/content-actions-student.service';
 export * from './content-actions/content-actions.service';
 export * from './content-actions/content-actions.service.interface';
+export * from './content-task-actions/content-task-actions.service';
+export * from './content-task-actions/content-task-actions.service.interface';
 export * from './feedback';
 export * from './navigation-item';
 export * from './scorm';
