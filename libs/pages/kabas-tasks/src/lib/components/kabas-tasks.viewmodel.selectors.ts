@@ -272,8 +272,8 @@ function addTaskDates(
   const minDate = dates =>
     dates.length ? new Date(Math.min(...dates)) : undefined;
 
-  const startDate = minDate(assignees.map(a => +a.start));
-  const endDate = maxDate(assignees.map(a => +a.end));
+  const startDate = minDate(assignees.filter(a => a.start).map(a => +a.start));
+  const endDate = maxDate(assignees.filter(a => a.end).map(a => +a.end));
 
   if (startDate && endDate) {
     if (startDate > now) {

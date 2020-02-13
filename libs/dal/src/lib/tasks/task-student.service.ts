@@ -16,8 +16,8 @@ export class TaskStudentService implements TaskStudentServiceInterface {
       map((res: { taskStudents: TaskStudentInterface[] }) =>
         res.taskStudents.map(taskStudent => ({
           ...taskStudent,
-          end: new Date(taskStudent.end),
-          start: new Date(taskStudent.start)
+          end: taskStudent.end && new Date(taskStudent.end),
+          start: taskStudent.start && new Date(taskStudent.start)
         }))
       )
     );
