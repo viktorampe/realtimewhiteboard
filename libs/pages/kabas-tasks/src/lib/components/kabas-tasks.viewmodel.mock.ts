@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@angular/core';
 import {
   ClassGroupFixture,
   ClassGroupInterface,
+  EduContentBookInterface,
   EduContentFixture,
   GroupFixture,
   GroupInterface,
@@ -60,7 +61,7 @@ export class MockKabasTasksViewModel
   public classGroups$: BehaviorSubject<ClassGroupInterface[]>;
   public groups$: BehaviorSubject<GroupInterface[]>;
   public students$: BehaviorSubject<PersonInterface[]>;
-
+  public searchBook$: BehaviorSubject<EduContentBookInterface>;
   constructor(
     @Inject(ENVIRONMENT_SEARCHMODES_TOKEN)
     private searchModes: EnvironmentSearchModesInterface

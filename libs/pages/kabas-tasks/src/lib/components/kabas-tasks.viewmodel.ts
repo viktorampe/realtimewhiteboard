@@ -7,6 +7,7 @@ import {
   ClassGroupQueries,
   DalState,
   EduContent,
+  EduContentBookInterface,
   EduContentTOCInterface,
   EffectFeedback,
   EffectFeedbackActions,
@@ -38,6 +39,7 @@ import {
 } from '@campus/search';
 import {
   ContentOpenerInterface,
+  EduContentTypeEnum,
   OpenStaticContentServiceInterface,
   OPEN_STATIC_CONTENT_SERVICE_TOKEN,
   ScormExerciseServiceInterface,
@@ -46,7 +48,7 @@ import {
 import { Update } from '@ngrx/entity';
 import { RouterReducerState } from '@ngrx/router-store';
 import { Action, select, Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import {
   distinctUntilChanged,
   filter,
@@ -88,6 +90,7 @@ export class KabasTasksViewModel
   public classGroups$: Observable<ClassGroupInterface[]>;
   public groups$: Observable<GroupInterface[]>;
   public students$: Observable<PersonInterface[]>;
+  public searchBook$: Observable<EduContentBookInterface>;
 
   private routerState$: Observable<RouterReducerState<RouterStateUrl>>;
 
@@ -429,7 +432,41 @@ export class KabasTasksViewModel
   }
 
   public getInitialSearchState(): Observable<SearchStateInterface> {
-    throw new Error('Method not implemented.');
+    return combineLatest([this.currentTask$, this.searchBook$]).pipe(
+      map(([currentTask, searchBook]) => {
+        const initialSearchState: SearchStateInterface = {
+          searchTerm: '',
+          filterCriteriaSelections: new Map<string, (number | string)[]>()
+        };
+
+        // Only allow EduContent that's allowed to be put in a task
+        initialSearchState.filterCriteriaOptions.set('taskAllowed', true);
+
+        if (searchBook) {
+          initialSearchState.filterCriteriaSelections.set(
+            'years',
+            searchBook.years.map(year => year.id)
+          );
+
+          initialSearchState.filterCriteriaSelections.set('methods', [
+            searchBook.methodId
+          ]);
+        }
+
+        // TODO: make it work
+        if (currentTask.isPaperTask) {
+          initialSearchState.filterCriteriaSelections.set('eduContent.type', [
+            EduContentTypeEnum.PAPER_EXERCISE
+          ]);
+        }
+
+        initialSearchState.filterCriteriaSelections.set('learningArea', [
+          currentTask.learningAreaId
+        ]);
+
+        return initialSearchState;
+      })
+    );
   }
 
   public getSearchMode(mode: string): Observable<SearchModeInterface> {
