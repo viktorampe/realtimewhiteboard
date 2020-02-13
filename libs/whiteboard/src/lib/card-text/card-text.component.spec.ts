@@ -1,5 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { FormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material';
 import { CardTextComponent } from './card-text.component';
 
 describe('CardTextComponent', () => {
@@ -8,6 +9,7 @@ describe('CardTextComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [FormsModule, MatInputModule],
       declarations: [CardTextComponent]
     }).compileComponents();
   }));
