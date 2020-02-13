@@ -95,8 +95,8 @@ export const searchModes: EnvironmentSearchModesInterface = {
       pageSize: 20
     }
   },
-  'task-add-content': {
-    name: 'task-add-content',
+  'task-manage-content': {
+    name: 'task-manage-content',
     label: 'Zoeken naar inhoud voor een taak',
     dynamicFilters: false,
     searchTerm: {
