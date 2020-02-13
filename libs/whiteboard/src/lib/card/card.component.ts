@@ -35,9 +35,10 @@ export class CardComponent implements OnInit, OnChanges {
 
   @HostBinding('style.top') topStyle: string;
   @HostBinding('style.left') leftStyle: string;
-  colorlistHidden: boolean;
   viewModeImage: boolean;
   maxCharacters = 300;
+  pressTime: number;
+  optionsVisible: boolean;
 
   txtContent = new FormControl();
 
@@ -46,7 +47,7 @@ export class CardComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-    this.colorlistHidden = true;
+    this.optionsVisible = false;
   }
 
   ngOnChanges() {
@@ -87,12 +88,8 @@ export class CardComponent implements OnInit, OnChanges {
     this.toggleEditMode();
   }
 
-  showColor() {
-    this.colorlistHidden = !this.colorlistHidden;
-  }
-
   selectColor(color: string) {
-    this.colorlistHidden = true;
+    this.optionsVisible = false;
     this.color = color;
     this.lastColor.emit(color);
   }
@@ -107,13 +104,26 @@ export class CardComponent implements OnInit, OnChanges {
 
   toggleEditMode() {
     this.editMode = !this.editMode;
-    if (!this.editMode && !this.colorlistHidden) {
-      this.colorlistHidden = true;
+    if (!this.editMode && !this.optionsVisible) {
+      this.optionsVisible = true;
     }
     this.viewModeImage = true;
   }
 
   toggleView() {
     this.viewModeImage = !this.viewModeImage;
+  }
+
+  registerPress($event) {
+    this.pressTime = event.timeStamp;
+  }
+
+  showCardOptions($event) {
+    const releaseTime = event.timeStamp;
+    const holdTime = releaseTime - this.pressTime;
+    if (holdTime >= 1000) {
+      this.optionsVisible = !this.optionsVisible;
+      console.log('long press registered!');
+    }
   }
 }

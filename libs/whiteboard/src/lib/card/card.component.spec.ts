@@ -179,30 +179,16 @@ describe('CardComponent', () => {
     expect(component.viewModeImage).toBe(true);
   });
 
-  it('should show the colorlist when the coloricon is clicked', () => {
-    component.showColor();
-    fixture.detectChanges();
-    expect(component.colorlistHidden).toBe(false);
-  });
-
-  it('should hide the colorlist when the coloricon is clicked twice', () => {
-    component.showColor();
-    fixture.detectChanges();
-    component.showColor();
-    fixture.detectChanges();
-    expect(component.colorlistHidden).toBe(true);
-  });
-
   it('should close the colorlist when a color is clicked', () => {
-    component.showColor();
+    component.optionsVisible = true;
     fixture.detectChanges();
     component.selectColor('white');
     fixture.detectChanges();
-    expect(component.colorlistHidden).toBe(true);
+    expect(component.optionsVisible).toBe(false);
   });
 
   it('should change the cardcolor when a color is picked', () => {
-    component.showColor();
+    component.optionsVisible = true;
     fixture.detectChanges();
     component.selectColor('black');
     fixture.detectChanges();
@@ -243,11 +229,5 @@ describe('CardComponent', () => {
     checkbox.click(); // van true naar false
     fixture.detectChanges();
     expect(component.deselect.emit).toHaveBeenCalled();
-  });
-
-  it('should close the open colorlist when switching out of editmode', () => {
-    component.showColor();
-    component.toggleEditMode();
-    expect(component.colorlistHidden).toBe(true);
   });
 });

@@ -1,8 +1,13 @@
-<div class="card" [style.border-color]="color">
+<div
+  class="card"
+  [style.border-color]="color"
+  (mousedown)="registerPress($event)"
+  (mouseup)="showCardOptions($event)"
+>
   <campus-colorlist
     class="card__colorlist"
     (selectedColor)="selectColor($event)"
-    [hidden]="colorlistHidden"
+    *ngIf="optionsVisible"
   ></campus-colorlist>
   <div class="card__header">
     <input
@@ -13,8 +18,8 @@
       [style.opacity]="checkboxVisible ? 1 : 0"
     />
     <campus-toolbar
+      *ngIf="optionsVisible"
       [editMode]="this.editMode"
-      (clickColorIcon)="showColor()"
       (clickToggleEditIcon)="toggleEditMode()"
       (clickToggleView)="toggleView()"
       (clickImageSettings)="showImageSettings()"
