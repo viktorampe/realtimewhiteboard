@@ -22,7 +22,7 @@
       (delete)="onDeleteCard()"
     ></campus-toolbar>
   </div>
-  <div class="card__content" (dblclick)="onDblClick()">
+  <div class="card__content">
     <campus-card-image
       *ngIf="viewModeImage; else viewModeText"
       class="card__content__image"
