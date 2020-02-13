@@ -1,15 +1,12 @@
 import {
   Component,
-  ElementRef,
   EventEmitter,
   HostBinding,
   Input,
   OnChanges,
   OnInit,
-  Output,
-  ViewChild
+  Output
 } from '@angular/core';
-import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'campus-card',
@@ -17,7 +14,6 @@ import { FormControl } from '@angular/forms';
   styleUrls: ['./card.component.scss']
 })
 export class CardComponent implements OnInit, OnChanges {
-  @ViewChild('inputContent', { static: false }) inputContent: ElementRef;
   @Input() color: string;
   @Input() description: string;
   @Input() image: string;
@@ -39,8 +35,6 @@ export class CardComponent implements OnInit, OnChanges {
   viewModeImage: boolean;
   maxCharacters = 300;
 
-  txtContent = new FormControl();
-
   constructor() {
     this.viewModeImage = true;
   }
@@ -52,15 +46,6 @@ export class CardComponent implements OnInit, OnChanges {
   ngOnChanges() {
     this.topStyle = this.top + 'px';
     this.leftStyle = this.left + 'px';
-  }
-
-  toggleInput() {
-    if (
-      this.description !== '' &&
-      this.description.length <= this.maxCharacters
-    ) {
-      this.isInputSelected = !this.isInputSelected;
-    }
   }
 
   onImageClicked($event) {}
@@ -115,5 +100,6 @@ export class CardComponent implements OnInit, OnChanges {
 
   toggleView() {
     this.viewModeImage = !this.viewModeImage;
+    console.log(this.description);
   }
 }
