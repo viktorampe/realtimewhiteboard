@@ -72,14 +72,6 @@ export class ContentActionsStudentService
     return this.getEduContentActions(eduContent);
   }
 
-  getTaskActionsForEduContent(
-    eduContent: EduContent,
-    inTask: boolean
-  ): ContentActionInterface[] {
-    // TODO: implement
-    throw new Error('Not yet implemented');
-  }
-
   private getEduContentActions(
     eduContent: EduContent
   ): ContentActionInterface[] {

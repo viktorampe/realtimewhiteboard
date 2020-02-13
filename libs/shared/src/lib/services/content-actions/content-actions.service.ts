@@ -65,20 +65,6 @@ export class ContentActionsService implements ContentActionsServiceInterface {
       handler: this.contentOpener.previewEduContentAsImage.bind(
         this.contentOpener
       )
-    },
-    addToTask: {
-      label: 'Toevoegen aan taak',
-      icon: 'add',
-      tooltip: 'Toevoegen aan taak',
-      handler: this.contentOpener.addEduContentToTask.bind(this.contentOpener)
-    },
-    removeFromTask: {
-      label: 'Verwijderen uit taak',
-      icon: 'delete',
-      tooltip: 'Verwijderen uit taak',
-      handler: this.contentOpener.removeEduContentFromTask.bind(
-        this.contentOpener
-      )
     }
   };
 
@@ -91,17 +77,6 @@ export class ContentActionsService implements ContentActionsServiceInterface {
    */
   getActionsForEduContent(eduContent: EduContent): ContentActionInterface[] {
     return this.getEduContentActions(eduContent);
-  }
-
-  getTaskActionsForEduContent(
-    eduContent: EduContent,
-    inTask: boolean
-  ): ContentActionInterface[] {
-    if (inTask) {
-      return [this.contentActionDictionary.removeFromTask];
-    } else {
-      return [this.contentActionDictionary.addToTask];
-    }
   }
 
   private getEduContentActions(

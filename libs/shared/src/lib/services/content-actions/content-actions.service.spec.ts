@@ -25,9 +25,7 @@ describe('ContentActionsServiceInterface', () => {
             openEduContentAsStream: () => {},
             openEduContentAsDownload: () => {},
             openBoeke: () => {},
-            previewEduContentAsImage: () => {},
-            addEduContentToTask: () => {},
-            removeEduContentFromTask: () => {}
+            previewEduContentAsImage: () => {}
           }
         }
       ]
@@ -94,26 +92,6 @@ describe('ContentActionsServiceInterface', () => {
           contentActionsService.getActionsForEduContent(test.mockEduContent)
         ).toEqual(test.expected)
       );
-    });
-  });
-
-  describe('getTaskActionsForEduContent()', () => {
-    it('should return addToTask action when inTask false', () => {
-      expect(
-        contentActionsService.getTaskActionsForEduContent(
-          new EduContentFixture(),
-          false
-        )
-      ).toEqual([contentActionsService.contentActionDictionary.addToTask]);
-    });
-
-    it('should return removeFromTask action when inTask true', () => {
-      expect(
-        contentActionsService.getTaskActionsForEduContent(
-          new EduContentFixture(),
-          true
-        )
-      ).toEqual([contentActionsService.contentActionDictionary.removeFromTask]);
     });
   });
 });
