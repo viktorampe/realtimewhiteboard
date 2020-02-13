@@ -7,7 +7,9 @@ import {
   EduContentBookQueries,
   EduContentInterface,
   EduContentQueries,
+  FavoriteInterface,
   FavoriteQueries,
+  FavoriteTypesEnum,
   GroupQueries,
   LearningAreaInterface,
   LearningAreaQueries,
@@ -30,10 +32,6 @@ import {
   AssigneeInterface,
   AssigneeTypesEnum
 } from '../interfaces/Assignee.interface';
-import {
-  FavoriteInterface,
-  FavoriteTypesEnum
-} from './../../../../../dal/src/lib/+models/Favorite.interface';
 import {
   TaskStatusEnum,
   TaskWithAssigneesInterface
