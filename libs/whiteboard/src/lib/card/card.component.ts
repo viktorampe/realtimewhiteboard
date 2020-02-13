@@ -82,10 +82,6 @@ export class CardComponent implements OnInit, OnChanges {
     this.replaceImage('hello_world');
   }
 
-  onDblClick() {
-    this.toggleToolbar();
-  }
-
   selectColor(color: string) {
     this.toolbarsVisible = false;
     this.editMode = false;
@@ -110,7 +106,6 @@ export class CardComponent implements OnInit, OnChanges {
     if (!this.editMode && this.toolbarsVisible) {
       this.toolbarsVisible = false;
     }
-    this.viewModeImage = true;
   }
 
   toggleView() {
