@@ -4,6 +4,7 @@ import {
   MatCardModule,
   MatDialogModule,
   MatIconModule,
+  MatInputModule,
   MatProgressBarModule
 } from '@angular/material';
 import { HAMMER_LOADER } from '@angular/platform-browser';
@@ -34,7 +35,8 @@ describe('WhiteboardComponent', () => {
         MatIconModule,
         MatDialogModule,
         BrowserAnimationsModule,
-        MatProgressBarModule
+        MatProgressBarModule,
+        MatInputModule
       ],
       declarations: [
         WhiteboardComponent,
