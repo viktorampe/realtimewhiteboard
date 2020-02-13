@@ -21,10 +21,14 @@
 </div> -->
 
 <!-- <campus-editor-timeline></campus-editor-timeline> -->
-<campus-section
-  [mode]="sectionMode"
-  (sectionClick)="handleSectionAction('section')"
+<button (click)="changeMode(sectionModes.STATIC)">make section static</button>
+<button (click)="changeMode(sectionModes.EDITABLE)"
+  >make section editable</button
 >
+<button (click)="changeMode(sectionModes.EDITING)">make section editing</button>
+
+<p>demo page: {{ sectionMode }}</p>
+<campus-section [(mode)]="sectionMode">
   <section-title>I'm a the title of this section</section-title>
   <section-actions
     ><mat-icon

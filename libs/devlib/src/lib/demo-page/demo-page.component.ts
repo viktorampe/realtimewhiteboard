@@ -86,6 +86,10 @@ export class DemoPageComponent implements OnInit {
     console.log(data);
   }
 
+  changeMode(mode: SectionModeEnum) {
+    this.sectionMode = mode;
+  }
+
   handleIconAction(event: MouseEvent, action: string) {
     event.stopPropagation();
     console.log(
@@ -100,7 +104,7 @@ export class DemoPageComponent implements OnInit {
 
   handleSectionAction(action: string) {
     console.log(action + ' clicked');
-    this.sectionMode = SectionModeEnum.EDITING;
+    // this.sectionMode = SectionModeEnum.EDITING;
   }
 
   save(event: MouseEvent, input: HTMLInputElement) {

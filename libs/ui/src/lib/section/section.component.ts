@@ -49,7 +49,7 @@ export class SectionActions {}
 })
 export class SectionComponent {
   @Input() mode: SectionModeEnum;
-  @Output() sectionClick = new EventEmitter<void>();
+  @Output() modeChange = new EventEmitter<SectionModeEnum>();
 
   modes = SectionModeEnum; // needed for usage in the template
 
@@ -57,7 +57,12 @@ export class SectionComponent {
 
   clickSection() {
     if (this.mode === SectionModeEnum.EDITABLE) {
-      this.sectionClick.emit();
+      this.mode = SectionModeEnum.EDITING;
+      this.updateMode();
     }
+  }
+
+  updateMode() {
+    this.modeChange.emit(this.mode);
   }
 }
