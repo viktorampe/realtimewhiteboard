@@ -1,16 +1,20 @@
-<p class="card-text">{{ text }}</p>
-<mat-form-field appearance="standard" color="primary" class="card-input">
-  <textarea
-    #message
-    maxlength="100"
-    type="text"
-    name="text"
-    [(ngModel)]="text"
-    class="card-input__input"
-    matInput
-    matNativeControl
-  ></textarea>
-  <mat-hint class="card-input__hint" align="end"
-    >{{ message.value.length }} / 100</mat-hint
-  >
-</mat-form-field>
+<p *ngIf="!editMode; else input" class="card-text">{{ text }}</p>
+
+<ng-template #input>
+  <mat-form-field appearance="standard" color="primary" class="card-input">
+    <textarea
+      #message
+      maxlength="100"
+      type="text"
+      name="text"
+      [(ngModel)]="text"
+      (ngModelChange)="onChangeText($event)"
+      class="card-input__input"
+      matInput
+      matNativeControl
+    ></textarea>
+    <mat-hint class="card-input__hint" align="end"
+      >{{ message.value.length }} / 100</mat-hint
+    >
+  </mat-form-field>
+</ng-template>

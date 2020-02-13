@@ -2,7 +2,6 @@ export default interface Card {
   color: string;
   description: string;
   image: string;
-  isInputSelected: boolean;
   editMode: boolean;
   toolbarsVisible: boolean;
   top: number;

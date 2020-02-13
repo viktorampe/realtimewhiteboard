@@ -61,7 +61,6 @@ describe('CardComponent', () => {
       color: 'white',
       description: '',
       image: null,
-      isInputSelected: true,
       editMode: true,
       top: 0,
       left: 0
@@ -70,7 +69,6 @@ describe('CardComponent', () => {
     component.color = mockData.color;
     component.description = mockData.description;
     component.image = mockData.image;
-    component.isInputSelected = mockData.isInputSelected;
     component.editMode = mockData.editMode;
     component.top = mockData.top;
     component.left = mockData.left;
@@ -80,65 +78,6 @@ describe('CardComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
-  });
-
-  it('should toggle input where input is valid', () => {
-    component.description = 'valid';
-    component.toggleInput();
-    expect(component.isInputSelected).toBe(false);
-  });
-
-  it('should toggle input where input is empty', () => {
-    component.description = '';
-    component.toggleInput();
-    expect(component.isInputSelected).toBe(true);
-  });
-
-  it('should show errormessage when input is maximal', () => {
-    component.description = 'a'.repeat(component.maxCharacters);
-    component.viewModeImage = false;
-    fixture.detectChanges();
-    const errorMessage = fixture.debugElement.query(
-      By.css('.card__content__errorMessage')
-    );
-    expect(errorMessage).not.toBeNull();
-  });
-
-  it('should show errormessage when no text is provided', () => {
-    component.description = '';
-    component.txtContent.markAsDirty();
-    component.viewModeImage = false;
-
-    fixture.detectChanges();
-
-    const errorMessage = fixture.debugElement.query(
-      By.css('[data-cy="errorMissingContent"]')
-    );
-    expect(errorMessage).not.toBeNull();
-  });
-
-  it('should show the card content when not editing', () => {
-    component.description = 'Test content';
-    component.isInputSelected = false;
-    component.viewModeImage = false;
-    fixture.detectChanges();
-    const contentParagraph = fixture.debugElement.query(By.css('p'));
-    expect(contentParagraph.nativeElement.textContent.trim()).toBe(
-      'Test content'
-    );
-  });
-
-  it('should display the card content in the input when editing', async () => {
-    component.description = 'Test content';
-    component.isInputSelected = true;
-    component.viewModeImage = false;
-
-    fixture.detectChanges();
-    await fixture.whenStable();
-    const inputContent = fixture.debugElement.query(
-      By.css('.card__content__input__text')
-    );
-    expect(inputContent.nativeElement.value.trim()).toBe('Test content');
   });
 
   it('should create card with description empty', () => {
