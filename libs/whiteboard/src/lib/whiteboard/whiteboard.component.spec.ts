@@ -2,17 +2,13 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   MatCardModule,
-  MatDialog,
   MatDialogModule,
-  MatDialogRef,
   MatIconModule,
   MatProgressBarModule
 } from '@angular/material';
 import { HAMMER_LOADER } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ConfirmationModalComponent } from '@campus/ui';
 import { configureTestSuite } from 'ng-bullet';
-import { of } from 'rxjs';
 import Card from '../../interfaces/card.interface';
 import { CardImageComponent } from '../card-image/card-image.component';
 import { CardTextComponent } from '../card-text/card-text.component';
@@ -28,9 +24,6 @@ import { WhiteboardComponent } from './whiteboard.component';
 describe('WhiteboardComponent', () => {
   let component: WhiteboardComponent;
   let fixture: ComponentFixture<WhiteboardComponent>;
-
-  let openDialogSpy: jest.SpyInstance;
-  let matDialog: MatDialog;
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
@@ -68,9 +61,6 @@ describe('WhiteboardComponent', () => {
     fixture = TestBed.createComponent(WhiteboardComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-
-    matDialog = TestBed.get(MatDialog);
-    openDialogSpy = matDialog.open = jest.fn();
   });
 
   it('should create', () => {
@@ -84,26 +74,7 @@ describe('WhiteboardComponent', () => {
     expect(cardsSizeAfterClicked).toBe(cardsSizeBeforeClicked + 1);
   });
 
-  it('should open a confirmation dialog if the delete button is clicked', () => {
-    const mockDialogRef = {
-      afterClosed: () => of(false),
-      close: null
-    } as MatDialogRef<ConfirmationModalComponent>;
-    openDialogSpy.mockReturnValue(mockDialogRef);
-
-    component.onDeleteCard(null);
-
-    expect(openDialogSpy).toHaveBeenCalledTimes(1);
-    expect(openDialogSpy).toHaveBeenCalledWith(ConfirmationModalComponent, {
-      data: {
-        title: 'Verwijderen bevestigen',
-        message: 'Weet u zeker dat u deze kaart wil verwijderen?',
-        disableConfirm: false
-      }
-    });
-  });
-
-  it('should delete a card from the list of cards when the user confirms', () => {
+  it('should delete a card from the list of cards when the user clicks delete', () => {
     const cardsSizeBeforeAdding = component.cards.length;
 
     const card = {
@@ -118,41 +89,9 @@ describe('WhiteboardComponent', () => {
 
     component.cards.push(card);
 
-    const mockDialogRef = {
-      afterClosed: () => of(true), // fake confirmation
-      close: null
-    } as MatDialogRef<ConfirmationModalComponent>;
-    openDialogSpy.mockReturnValue(mockDialogRef);
-
     component.onDeleteCard(card);
 
     expect(component.cards.length).toBe(cardsSizeBeforeAdding);
-  });
-
-  it('should not delete a card from the list of cards when the user does not confirm', () => {
-    const card: Card = {
-      description: '',
-      image: null,
-      color: null,
-      isInputSelected: false,
-      editMode: true,
-      top: 0,
-      left: 0
-    };
-
-    component.cards.push(card);
-
-    const cardsSizeAfterAdding = component.cards.length;
-
-    const mockDialogRef = {
-      afterClosed: () => of(false), // fake confirmation
-      close: null
-    } as MatDialogRef<ConfirmationModalComponent>;
-    openDialogSpy.mockReturnValue(mockDialogRef);
-
-    component.onDeleteCard(card);
-
-    expect(component.cards.length).toBe(cardsSizeAfterAdding);
   });
 
   it('should add a card when checkbox is selected', () => {
@@ -228,13 +167,11 @@ describe('WhiteboardComponent', () => {
       top: 0,
       left: 0
     };
+
     component.selectedCards = [card];
-    const mockDialogRef = {
-      afterClosed: () => of(true), // fake confirmation
-      close: null
-    } as MatDialogRef<ConfirmationModalComponent>;
-    openDialogSpy.mockReturnValue(mockDialogRef);
+
     component.onDeleteCard(card);
+
     expect(component.selectedCards.length).toBe(0);
   });
 });

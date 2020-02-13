@@ -73,20 +73,8 @@ export class WhiteboardComponent implements OnInit {
   }
 
   onDeleteCard(card: Card) {
-    const dialogRef = this.dialog.open(ConfirmationModalComponent, {
-      data: {
-        title: 'Verwijderen bevestigen',
-        message: 'Weet u zeker dat u deze kaart wil verwijderen?',
-        disableConfirm: false
-      }
-    });
-
-    dialogRef.afterClosed().subscribe(deleteConfirmation => {
-      if (deleteConfirmation) {
-        this.selectedCards = this.selectedCards.filter(c => c !== card);
-        this.cards = this.cards.filter(c => c !== card);
-      }
-    });
+    this.selectedCards = this.selectedCards.filter(c => c !== card);
+    this.cards = this.cards.filter(c => c !== card);
   }
 
   saveLastColor(color: string) {
