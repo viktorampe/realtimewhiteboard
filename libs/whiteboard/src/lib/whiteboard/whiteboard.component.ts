@@ -1,7 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { MatDialog } from '@angular/material';
-import { ConfirmationModalComponent } from '@campus/ui';
-import Card from '../../interfaces/card.interface';
+import Card from '../../model/card.interface';
+import { Mode } from '../../util/enums/mode.enum';
 @Component({
   selector: 'campus-whiteboard',
   templateUrl: './whiteboard.component.html',
@@ -16,27 +15,23 @@ export class WhiteboardComponent implements OnInit {
     }
   }
 
-  constructor(public dialog: MatDialog) {
+  constructor() {
     this.title = '';
-    this.isTitleInputSelected = this.title === '';
+    this.isTitleInputSelected = true;
   }
 
-  cards: Card[];
-  selectedCards: Card[];
+  cards: Card[] = [];
+  selectedCards: Card[] = [];
+  shelvedCards: Card[] = [];
 
-  lastColor: string;
-  checkboxVisible: boolean;
+  lastColor = 'white';
 
   title: string;
   isTitleInputSelected: boolean;
 
-  ngOnInit() {
-    this.cards = [];
-    this.selectedCards = [];
-    this.lastColor = 'white';
-  }
+  ngOnInit() {}
 
-  onDblClick(event) {
+  onDblClick(event: MouseEvent) {
     if (event.target.className === 'whiteboard-page__workspace') {
       const top = event.offsetY;
       const left = event.offsetX;
@@ -49,16 +44,13 @@ export class WhiteboardComponent implements OnInit {
   }
 
   addEmptyCard(top: number = 0, left: number = 0) {
-    this.checkboxVisible = this.selectedCards.length !== 0;
     this.cards.push({
+      mode: Mode.IdleMode,
       color: this.lastColor,
       description: '',
-      image:
-        'https://www.cimec.co.za/wp-content/uploads/2018/07/4-Unique-Placeholder-Image-Services-for-Designers.png',
+      image: '',
       top: top,
-      left: left,
-      editMode: false,
-      toolbarsVisible: false
+      left: left
     });
   }
 
@@ -83,25 +75,18 @@ export class WhiteboardComponent implements OnInit {
 
   selectCard(card) {
     this.selectedCards.push(card);
-    this.checkboxVisible = true;
   }
 
   deselectCard(card: Card) {
     this.selectedCards = this.selectedCards.filter(c => c !== card);
-    if (!this.selectedCards.length) {
-      this.checkboxVisible = false;
-    }
   }
 
   btnDelClicked() {
     this.cards = this.cards.filter(c => !this.selectedCards.includes(c));
-    this.selectedCards = [];
   }
 
   changeSelectedCardsColor(color: string) {
     this.lastColor = color;
     this.selectedCards.forEach(c => (c.color = this.lastColor));
-    this.selectedCards = [];
-    this.checkboxVisible = false;
   }
 }

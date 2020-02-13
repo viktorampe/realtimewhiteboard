@@ -1,15 +1,15 @@
-<div class="whiteboard-page" campusImageDrag>
+<div class="whiteboard" campusImageDrag>
   <campus-whiteboard-tools
     (deleteCards)="btnDelClicked()"
     (changeSelectedColor)="changeSelectedCardsColor($event)"
     (createCard)="btnPlusClicked()"
-    *ngIf="this.selectedCards.length"
+    *ngIf="this.selectedCards.length > 1"
   ></campus-whiteboard-tools>
-  <div class="whiteboard-page__header">
+  <div class="whiteboard__header">
     <h2
       (click)="showTitleInput()"
       *ngIf="!isTitleInputSelected"
-      class="whiteboard-page__header__title"
+      class="whiteboard__header__title"
       >{{ title }}</h2
     >
     <input
@@ -21,29 +21,27 @@
       [(ngModel)]="title"
     />
   </div>
-  <div class="whiteboard-page__workspace" (dblclick)="onDblClick($event)">
+  <div class="whiteboard__workspace" (dblclick)="onDblClick($event)">
     <campus-card
       *ngFor="let card of cards"
       cdkDrag
-      (lastColor)="saveLastColor($event)"
-      [color]="card.color"
+      class="whiteboard__card"
+      [mode]="card.mode"
       [description]="card.description"
-      [editMode]="card.editMode"
+      [color]="card.color"
       [image]="card.image"
       [left]="card.left"
       [top]="card.top"
+      (lastColor)="saveLastColor($event)"
       (deleteCard)="onDeleteCard(card)"
       (select)="selectCard(card)"
       (deselect)="deselectCard(card)"
-      [checkboxVisible]="checkboxVisible"
-      [isSelected]="selectedCards.includes(card)"
-      class="whiteboard-page__card"
     ></campus-card>
   </div>
   <button
     mat-fab
     color="primary"
-    class="whiteboard-page__addbutton"
+    class="whiteboard__addbutton"
     (click)="btnPlusClicked()"
   >
     <mat-icon style="color: #FFFFFF;" [svgIcon]="'plus'"></mat-icon>

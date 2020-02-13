@@ -7,6 +7,7 @@ import {
   OnInit,
   Output
 } from '@angular/core';
+import { Mode } from '../../util/enums/mode.enum';
 
 @Component({
   selector: 'campus-card',
@@ -14,6 +15,7 @@ import {
   styleUrls: ['./card.component.scss']
 })
 export class CardComponent implements OnInit, OnChanges {
+  @Input() mode: Mode;
   @Input() color: string;
   @Input() description: string;
   @Input() image: string;
