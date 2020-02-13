@@ -1,6 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatCardModule, MatIconRegistry } from '@angular/material';
+import {
+  MatCardModule,
+  MatIconRegistry,
+  MatProgressBarModule
+} from '@angular/material';
 import { MatIconModule } from '@angular/material/icon';
 import { By, HAMMER_LOADER } from '@angular/platform-browser';
 import { MockMatIconRegistry } from '@campus/testing';
@@ -9,6 +13,7 @@ import { CardImageComponent } from '../card-image/card-image.component';
 import { CardTextComponent } from '../card-text/card-text.component';
 import { ColorlistComponent } from '../colorlist/colorlist.component';
 import { ImageToolbarComponent } from '../image-toolbar/image-toolbar.component';
+import { ProgressBarComponent } from '../progress-bar/progress-bar.component';
 import { ToolbarComponent } from '../toolbar/toolbar.component';
 import { CardComponent } from './card.component';
 
@@ -18,14 +23,21 @@ describe('CardComponent', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [MatCardModule, FormsModule, MatIconModule, ReactiveFormsModule],
+      imports: [
+        MatCardModule,
+        FormsModule,
+        MatIconModule,
+        ReactiveFormsModule,
+        MatProgressBarModule
+      ],
       declarations: [
         CardComponent,
         ToolbarComponent,
         ColorlistComponent,
         CardTextComponent,
         CardImageComponent,
-        ImageToolbarComponent
+        ImageToolbarComponent,
+        ProgressBarComponent
       ],
       providers: [
         {
