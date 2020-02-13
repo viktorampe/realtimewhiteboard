@@ -116,7 +116,7 @@ export class CardComponent implements OnInit, OnChanges {
     this.pressTime = event.timeStamp;
   }
 
-  showCardOptions($event) {
+  showCardToolbars($event) {
     const releaseTime = event.timeStamp;
     const holdTime = releaseTime - this.pressTime;
     if (holdTime >= 1000) {

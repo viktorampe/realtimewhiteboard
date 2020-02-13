@@ -2,7 +2,9 @@
   class="card"
   [style.border-color]="color"
   (mousedown)="registerPress($event)"
-  (mouseup)="showCardOptions($event)"
+  (mouseup)="showCardToolbars($event)"
+  (touchstart)="registerPress($event)"
+  (touchdown)="showCardToolbars($event)"
 >
   <campus-colorlist
     class="card__colorlist"
