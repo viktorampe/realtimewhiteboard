@@ -35,7 +35,7 @@
     <campus-card-image
       class="card__content__image"
       (imageClicked)="onImageClicked($event)"
-      imageUrl="{{ image }}"
+      [imageUrl]="image"
     ></campus-card-image>
     <div *ngIf="!viewModeImage || editMode" class="card__content__input">
       <campus-card-text
@@ -51,8 +51,8 @@
         cols="40"
         rows="5"
         maxlength="{{ maxCharacters }}"
-        text="{{ description }}"
-        editMode="{{ editMode }}"
+        [text]="description"
+        [editMode]="editMode"
       ></campus-card-text>
       <p *ngIf="!isInputSelected" (click)="toggleInput()">
         {{ description }}
