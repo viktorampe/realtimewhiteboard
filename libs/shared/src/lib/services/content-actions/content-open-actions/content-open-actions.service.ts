@@ -1,17 +1,18 @@
 import { forwardRef, Inject, Injectable } from '@angular/core';
 import { EduContent } from '@campus/dal';
-import { EduContentTypeEnum } from '../../enums';
 import {
   ContentActionInterface,
-  ContentActionsServiceInterface,
+  ContentOpenActionsServiceInterface,
   ContentOpenerInterface,
   CONTENT_OPENER_TOKEN
-} from './content-actions.service.interface';
+} from '..';
+import { EduContentTypeEnum } from '../../../enums';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ContentActionsService implements ContentActionsServiceInterface {
+export class ContentOpenActionsService
+  implements ContentOpenActionsServiceInterface {
   constructor(
     @Inject(forwardRef(() => CONTENT_OPENER_TOKEN))
     private contentOpener: ContentOpenerInterface

@@ -1,6 +1,6 @@
 import { InjectionToken } from '@angular/core';
 import { EduContent } from '@campus/dal';
-import { ContentActionInterface } from '..';
+import { ContentActionInterface } from '../..';
 
 export interface ContentTaskManagerInterface {
   addEduContentToTask?(eduContent: EduContent): void;

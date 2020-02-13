@@ -1,6 +1,6 @@
 import { forwardRef, Inject, Injectable } from '@angular/core';
 import { EduContent } from '@campus/dal';
-import { ContentActionInterface } from '..';
+import { ContentActionInterface } from '../..';
 import {
   ContentTaskActionsServiceInterface,
   ContentTaskManagerInterface,
