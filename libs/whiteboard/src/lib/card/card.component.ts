@@ -59,7 +59,7 @@ export class CardComponent implements OnInit, OnChanges {
     this.image = '';
   }
 
-  replaceImage(url: string) {
+  updateImage(url: string) {
     this.image = url;
 
     this.setUploadMode();

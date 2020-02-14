@@ -12,5 +12,13 @@ export class ImageToolbarComponent implements OnInit {
 
   constructor() {}
 
+  emitRemoveClicked() {
+    this.removeClicked.emit();
+  }
+
+  emitUpdateClicked() {
+    this.updateClicked.emit();
+  }
+
   ngOnInit() {}
 }
