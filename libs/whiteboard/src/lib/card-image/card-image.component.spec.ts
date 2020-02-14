@@ -45,4 +45,16 @@ describe('CardImageComponent', () => {
     );
     expect(toolbar.length).toBe(0);
   });
+
+  it('should emit removeClicked when emitRemoveClicked gets called', () => {
+    spyOn(component.removeClicked, 'emit');
+    component.emitRemoveClicked();
+    expect(component.removeClicked.emit).toHaveBeenCalled();
+  });
+
+  it('should emit updateClicked when emitUpdateClicked gets called', () => {
+    spyOn(component.updateClicked, 'emit');
+    component.emitUpdateClicked();
+    expect(component.updateClicked.emit).toHaveBeenCalled();
+  });
 });

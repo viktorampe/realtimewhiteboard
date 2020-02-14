@@ -20,6 +20,8 @@
       class="card__content__image"
       [imageUrl]="image"
       [mode]="mode"
+      (removeClicked)="removeImage()"
+      (updateClicked)="updateImage()"
     ></campus-card-image>
     <ng-template #viewModeText class="card__content__input">
       <campus-card-text

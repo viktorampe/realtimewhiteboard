@@ -1,9 +1,18 @@
 <div class="image-toolbar">
   <div class="image-toolbar__button">
-    <mat-icon style="color: #E22940" [svgIcon]="'delete-forever'"> </mat-icon>
+    <mat-icon
+      style="color: #E22940"
+      [svgIcon]="'delete-forever'"
+      (click)="emitRemoveClicked()"
+    >
+    </mat-icon>
   </div>
   <div class="image-toolbar__button">
-    <mat-icon style="color: #000000de" [svgIcon]="'add-photo-alternate'">
+    <mat-icon
+      style="color: #000000de"
+      [svgIcon]="'add-photo-alternate'"
+      (click)="emitUpdateClicked()"
+    >
     </mat-icon>
   </div>
 </div>
