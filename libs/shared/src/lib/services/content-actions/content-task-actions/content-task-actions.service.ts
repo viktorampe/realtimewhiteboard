@@ -42,6 +42,10 @@ export class ContentTaskActionsService
     eduContent: EduContent,
     inTask: boolean
   ): ContentActionInterface[] {
+    if (!eduContent.publishedEduContentMetadata.taskAllowed) {
+      return [];
+    }
+
     if (inTask) {
       return [this.contentTaskActionDictionary.removeFromTask];
     } else {

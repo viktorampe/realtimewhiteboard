@@ -40,6 +40,15 @@ describe('ContentTaskActionsService', () => {
   ));
 
   describe('getTaskActionsForEduContent()', () => {
+    it('should not return task actions', () => {
+      expect(
+        contentTaskActionService.getTaskActionsForEduContent(
+          new EduContentFixture({}, { taskAllowed: false }),
+          false
+        )
+      ).toEqual([]);
+    });
+
     it('should return addToTask action when inTask false', () => {
       expect(
         contentTaskActionService.getTaskActionsForEduContent(
