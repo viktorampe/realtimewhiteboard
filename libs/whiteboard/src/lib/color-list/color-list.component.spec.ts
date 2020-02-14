@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ColorListComponent } from './color-list.component';
 
-describe('ColorlistComponent', () => {
+describe('ColorListComponent', () => {
   let component: ColorListComponent;
   let fixture: ComponentFixture<ColorListComponent>;
 
