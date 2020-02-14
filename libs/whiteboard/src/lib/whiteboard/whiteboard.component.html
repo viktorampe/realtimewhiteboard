@@ -6,18 +6,18 @@
   ></campus-whiteboard-toolbar>
   <div class="whiteboard__header">
     <h2
-      (click)="showTitleInput()"
       *ngIf="!isTitleInputSelected"
       class="whiteboard__header__title"
+      (click)="showTitleInput()"
       >{{ title }}</h2
     >
     <input
+      type="text"
       #titleInput
+      [(ngModel)]="title"
       (keyup.enter)="hideTitleInput()"
       (focusout)="hideTitleInput()"
       *ngIf="isTitleInputSelected"
-      type="text"
-      [(ngModel)]="title"
     />
   </div>
   <div class="whiteboard__workspace" (dblclick)="onDblClick($event)">

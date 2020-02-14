@@ -11,11 +11,6 @@
     opacity: 0.8;
   }
 
-  &__progress-bar {
-    position: absolute;
-    width: 100%;
-  }
-
   &__header {
     height: 3rem;
     flex: 0 0 auto;
@@ -64,11 +59,5 @@
     justify-content: flex-start;
     align-items: center;
     padding: 30px 160px;
-  }
-
-  &__colorlist {
-    background-color: rgba(0, 0, 0, 0.4);
-    position: absolute;
-    bottom: 50px;
   }
 }
