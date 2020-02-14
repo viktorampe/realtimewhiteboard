@@ -6,13 +6,13 @@
   ></campus-color-list>
   <campus-card-toolbar
     *ngIf="mode === Mode.EditMode || mode === Mode.SelectedMode"
+    class="card__header__toolbar"
     [mode]="mode"
     (clickDeleteIcon)="emitDeleteCard()"
     (clickEditIcon)="setEditMode()"
     (clickFlipIcon)="toggleViewModeImage()"
     (clickConfirmIcon)="setIdleMode()"
-    (clickMultiSelectIcon)="setMultiselectMode()"
-    class="card__header__toolbar"
+    (clickMultiSelectIcon)="setMultiSelectSelectedMode()"
   ></campus-card-toolbar>
   <div class="card__content">
     <campus-card-image
