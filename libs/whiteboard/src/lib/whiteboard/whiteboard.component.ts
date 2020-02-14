@@ -16,7 +16,7 @@ export class WhiteboardComponent implements OnInit {
   }
   cards: CardInterface[] = [];
   shelvedCards: CardInterface[] = [];
-  lastColor = 'white';
+  lastColor = '#00A7E2';
   title = '';
   isTitleInputSelected = true;
   isToolbarVisible = false;
