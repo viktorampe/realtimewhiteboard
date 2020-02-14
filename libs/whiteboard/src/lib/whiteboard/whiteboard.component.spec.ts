@@ -176,14 +176,13 @@ describe('WhiteboardComponent', () => {
 
   it('should set all cards back to idleMode if one is selected and the whiteboard is clicked', () => {
     const card: CardInterface = {
-      mode: Mode.SelectedMode,
+      mode: Mode.IdleMode,
       description: '',
       image: null,
       color: null,
       top: 0,
       left: 0
     };
-
     const card2: CardInterface = {
       mode: Mode.IdleMode,
       description: '',
@@ -192,14 +191,13 @@ describe('WhiteboardComponent', () => {
       top: 0,
       left: 0
     };
-
     component.cards = [card, card2];
+    component.cards[0].mode = Mode.MultiSelectMode;
+
     const whiteboard = fixture.debugElement.query(
       By.css('.whiteboard__workspace')
     );
     whiteboard.triggerEventHandler('click', {});
-    fixture.detectChanges();
-
     component.cards.forEach(c => expect(c.mode).toBe(Mode.IdleMode));
   });
 });
