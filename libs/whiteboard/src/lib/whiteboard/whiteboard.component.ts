@@ -70,16 +70,6 @@ export class WhiteboardComponent implements OnInit {
     this.lastColor = color;
   }
 
-  selectCard(card) {
-    card.mode = Mode.MultiSelectSelectedMode;
-    this.checkToolbarVisible();
-  }
-
-  deselectCard(card: CardInterface) {
-    card.mode = Mode.MultiSelectSelectedMode;
-    this.checkToolbarVisible();
-  }
-
   bulkDeleteClicked() {
     this.cards = this.cards.filter(
       c => c.mode !== Mode.MultiSelectSelectedMode

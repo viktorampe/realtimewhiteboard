@@ -35,8 +35,8 @@
       (modeChange)="cardModeChanged(card, $event)"
       (lastColor)="saveLastColor($event)"
       (deleteCard)="onDeleteCard(card)"
-      (select)="selectCard(card)"
-      (deselect)="deselectCard(card)"
+      (select)="checkToolbarVisible()"
+      (deselect)="checkToolbarsVisible()"
     ></campus-card>
   </div>
   <button

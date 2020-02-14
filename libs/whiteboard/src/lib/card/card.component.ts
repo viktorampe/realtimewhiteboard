@@ -80,6 +80,7 @@ export class CardComponent implements OnInit, OnChanges {
   }
 
   setMultiSelectSelectedMode() {
+    this.mode = Mode.MultiSelectSelectedMode;
     this.select.emit();
   }
 
