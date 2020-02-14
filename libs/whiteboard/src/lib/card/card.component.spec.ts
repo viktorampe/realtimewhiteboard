@@ -100,6 +100,11 @@ describe('CardComponent', () => {
     expect(fixture.debugElement.nativeElement.style.left).toBe('500px');
   });
 
+  it("should replace card's image when replaceImage gets called", () => {
+    component.replaceImage('test-image');
+    expect(component.image).toBe('test-image');
+  });
+
   it('should set mode to EditMode when setEditMode gets called', () => {
     component.mode = <Mode>Mode.SelectedMode;
     component.setEditMode();
@@ -107,6 +112,24 @@ describe('CardComponent', () => {
     fixture.detectChanges();
 
     expect(component.mode).toBe(Mode.EditMode);
+  });
+
+  it('should emit modeChange emitter when setEditMode gets called', () => {
+    spyOn(component.modeChange, 'emit');
+    component.setEditMode();
+    expect(component.modeChange.emit).toHaveBeenCalled();
+  });
+
+  it('should emit modeChange emitter when setSelectedMode gets called', () => {
+    spyOn(component.modeChange, 'emit');
+    component.setSelectedMode();
+    expect(component.modeChange.emit).toHaveBeenCalled();
+  });
+
+  it('should emit modeChange emitter when setIdleMode gets called', () => {
+    spyOn(component.modeChange, 'emit');
+    component.setIdleMode();
+    expect(component.modeChange.emit).toHaveBeenCalled();
   });
 
   it('should set mode to IdleMode when pressCard gets called and starting from SelectedMode', () => {
