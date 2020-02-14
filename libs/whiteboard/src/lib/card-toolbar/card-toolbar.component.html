@@ -41,26 +41,28 @@
 </ng-container>
 
 <ng-template #multiSelectView>
-  <div class="toolbar toolbar--select">
+  <div class="toolbar toolbar_multiSelect">
     <div
-      *ngIf="mode === Mode.MultiSelectMode"
+      *ngIf="mode === Mode.MultiSelectMode; else notSelectView"
       class="toolbar__tool "
       (click)="multiSelectClicked()"
     >
       <mat-icon class="toolbar__tool__icon " [svgIcon]="'multiselect'">
       </mat-icon>
     </div>
-    <div
-      *ngIf="mode === Mode.MultiSelectSelectedMode"
-      class="toolbar__tool toolbar__select"
-      (click)="multiSelectClicked()"
-    >
-      <mat-icon
-        class="toolbar__tool__icon toolbar__select__icon"
-        [svgIcon]="'multiselect-selected'"
-        style="color: #FFFFFF;"
-        (click)="multiSelectSelectedClicked()"
-      ></mat-icon>
-    </div>
+    <ng-template #notSelectView>
+      <div
+        *ngIf="mode === Mode.MultiSelectSelectedMode"
+        class="toolbar__tool toolbar__multiSelect"
+        (click)="multiSelectClicked()"
+      >
+        <mat-icon
+          class="toolbar__tool__icon toolbar__select__icon"
+          [svgIcon]="'multiselect-selected'"
+          style="color: #FFFFFF;"
+          (click)="multiSelectSelectedClicked()"
+        ></mat-icon>
+      </div>
+    </ng-template>
   </div>
 </ng-template>
