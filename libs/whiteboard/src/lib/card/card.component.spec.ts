@@ -109,50 +109,51 @@ describe('CardComponent', () => {
     expect(component.mode).toBe(Mode.EditMode);
   });
 
+  it('should set mode to IdleMode when pressCard gets called and starting from SelectedMode', () => {
+    component.mode = <Mode>Mode.SelectedMode;
+    component.pressCard();
+    expect(component.mode).toBe(Mode.IdleMode);
+  });
+
+  it('should set mode to IdleMode when pressCard gets called and starting from EditMode', () => {
+    component.mode = <Mode>Mode.EditMode;
+    component.pressCard();
+    expect(component.mode).toBe(Mode.IdleMode);
+  });
+
   it('should set mode to SelectedMode when setSelectedMode gets called', () => {
     component.mode = <Mode>Mode.IdleMode;
     component.setSelectedMode();
-
-    fixture.detectChanges();
-
     expect(component.mode).toBe(Mode.SelectedMode);
   });
 
   it('should toggle to viewModeImage when toggle icon is clicked and starting from viewModeText', () => {
     component.viewModeImage = false;
     component.toggleViewModeImage();
-    fixture.detectChanges();
     expect(component.viewModeImage).toBe(true);
   });
 
   it('should toggle to viewModeText when toggle icon is clicked and starting from viewModeImage', () => {
     component.viewModeImage = true;
     component.toggleViewModeImage();
-    fixture.detectChanges();
     expect(component.viewModeImage).toBe(false);
   });
 
   it('should set mode to IdleMode when a color is clicked from the colorlist from SelectedMode', () => {
     component.mode = <Mode>Mode.SelectedMode;
-    fixture.detectChanges();
     component.selectColor('white');
-    fixture.detectChanges();
     expect(component.mode).toBe(Mode.IdleMode);
   });
 
   it('should set mode to IdleMode when a color is clicked from the colorlist from EditMode', () => {
     component.mode = <Mode>Mode.EditMode;
-    fixture.detectChanges();
     component.selectColor('white');
-    fixture.detectChanges();
     expect(component.mode).toBe(Mode.IdleMode);
   });
 
   it('should change the cardcolor when a color is picked', () => {
     component.mode = Mode.SelectedMode;
-    fixture.detectChanges();
     component.selectColor('black');
-    fixture.detectChanges();
     expect(component.color).toBe('black');
   });
 
@@ -171,7 +172,6 @@ describe('CardComponent', () => {
   it('should set mode to MultiSelectSelectedMode when setMultiSelectSelectedMode is called', () => {
     component.mode = <Mode>Mode.SelectedMode;
     component.setMultiSelectSelectedMode();
-    component.ngOnChanges();
     expect(component.mode).toBe(Mode.MultiSelectSelectedMode);
   });
 
