@@ -39,6 +39,7 @@ import {
 } from '@campus/search';
 import {
   ContentOpenerInterface,
+  EduContentTypeEnum,
   OpenStaticContentServiceInterface,
   OPEN_STATIC_CONTENT_SERVICE_TOKEN,
   ScormExerciseServiceInterface,
@@ -47,7 +48,7 @@ import {
 import { Update } from '@ngrx/entity';
 import { RouterReducerState } from '@ngrx/router-store';
 import { Action, select, Store } from '@ngrx/store';
-import { combineLatest, Observable } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import {
   distinctUntilChanged,
   filter,
@@ -89,7 +90,7 @@ export class KabasTasksViewModel
   public classGroups$: Observable<ClassGroupInterface[]>;
   public groups$: Observable<GroupInterface[]>;
   public students$: Observable<PersonInterface[]>;
-  public searchBook$: Observable<EduContentBookInterface>;
+  public searchBook$ = new BehaviorSubject<EduContentBookInterface>(null);
 
   private routerState$: Observable<RouterReducerState<RouterStateUrl>>;
 
@@ -435,7 +436,8 @@ export class KabasTasksViewModel
       map(([currentTask, searchBook]) => {
         const initialSearchState: SearchStateInterface = {
           searchTerm: '',
-          filterCriteriaSelections: new Map<string, (number | string)[]>()
+          filterCriteriaSelections: new Map<string, (number | string)[]>(),
+          filterCriteriaOptions: new Map<string, number | string | boolean>()
         };
 
         // Only allow EduContent that's allowed to be put in a task
@@ -449,6 +451,20 @@ export class KabasTasksViewModel
 
           initialSearchState.filterCriteriaSelections.set('methods', [
             searchBook.methodId
+          ]);
+        }
+
+        if (currentTask.isPaperTask) {
+          initialSearchState.filterCriteriaSelections.set('eduContent.type', [
+            EduContentTypeEnum.PAPER_EXERCISE
+          ]);
+        } else {
+          initialSearchState.filterCriteriaSelections.set('eduContent.type', [
+            EduContentTypeEnum.EXERCISE,
+            EduContentTypeEnum.FILE,
+            EduContentTypeEnum.LINK,
+            EduContentTypeEnum.TIMELINE,
+            EduContentTypeEnum.WEB_APP
           ]);
         }
 
