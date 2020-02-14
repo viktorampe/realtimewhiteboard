@@ -225,14 +225,14 @@ describe('CardComponent', () => {
   it('should show colorlist when mode is set to SelectedMode', () => {
     component.mode = Mode.SelectedMode;
     fixture.detectChanges();
-    const toolbar = fixture.debugElement.queryAll(By.css('card__colorlist'));
+    const toolbar = fixture.debugElement.queryAll(By.css('.card__color-list'));
     expect(toolbar).not.toBeNull();
   });
 
   it('should show colorlist when mode is set to EditMode', () => {
     component.mode = Mode.EditMode;
     fixture.detectChanges();
-    const toolbar = fixture.debugElement.queryAll(By.css('.colorlist'));
+    const toolbar = fixture.debugElement.queryAll(By.css('.card__color-list'));
     expect(toolbar).not.toBeNull();
   });
 });
