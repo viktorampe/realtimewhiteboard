@@ -88,6 +88,7 @@ export class WhiteboardComponent implements OnInit {
 
   changeSelectedCardsColor(color: string) {
     this.lastColor = color;
+
     this.cards
       .filter(c => c.mode === Mode.MultiSelectSelectedMode)
       .forEach(c => (c.color = this.lastColor));
