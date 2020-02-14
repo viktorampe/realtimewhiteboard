@@ -276,7 +276,6 @@ export class TaskEduContentEffects {
                   const actions = [];
                   const { success, errors } = taskEduContentCreateResults;
 
-                  // remove the destroyed ones from the store
                   if (this.isFilled(success)) {
                     actions.push(
                       new AddTaskEduContents({ taskEduContents: success })
