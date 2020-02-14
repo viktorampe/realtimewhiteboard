@@ -30,7 +30,7 @@ export class WhiteboardComponent implements OnInit {
   }
 
   onDblClick(event: MouseEvent) {
-    if (event.target.className === 'whiteboard__workspace') {
+    if ((event.target as HTMLElement).className === 'whiteboard__workspace') {
       const top = event.offsetY;
       const left = event.offsetX;
       this.addEmptyCard(top, left);
