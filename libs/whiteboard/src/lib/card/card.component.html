@@ -1,6 +1,6 @@
 <div class="card" [style.border-color]="color" (press)="pressCard()">
   <campus-color-list
-    class="card__colorlist"
+    class="card__color-list"
     (selectedColor)="selectColor($event)"
     *ngIf="mode === Mode.EditMode || mode === Mode.SelectedMode"
   ></campus-color-list>
