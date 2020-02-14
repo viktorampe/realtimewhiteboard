@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { Mode } from '../../shared/enums/mode.enum';
 import { CardTextComponent } from './card-text.component';
 
 describe('CardTextComponent', () => {
@@ -40,8 +41,10 @@ describe('CardTextComponent', () => {
 
   it('should show the card content when not editing', () => {
     component.text = 'Test content';
-    component.editMode = false;
+    component.mode = Mode.IdleMode;
+
     fixture.detectChanges();
+
     const contentParagraph = fixture.debugElement.query(By.css('.card-text'));
     expect(contentParagraph.nativeElement.textContent.trim()).toBe(
       'Test content'
@@ -50,9 +53,11 @@ describe('CardTextComponent', () => {
 
   it('should display the card content in the input when editing', async () => {
     component.text = 'Test content';
-    component.editMode = true;
+    component.mode = Mode.EditMode;
+
     fixture.detectChanges();
     await fixture.whenStable();
+
     const inputContent = fixture.debugElement.query(
       By.css('.card-input__input')
     );

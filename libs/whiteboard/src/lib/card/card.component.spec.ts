@@ -11,6 +11,8 @@ import { By, HAMMER_LOADER } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MockMatIconRegistry } from '@campus/testing';
 import { configureTestSuite } from 'ng-bullet';
+import { Mode } from '../../shared/enums/mode.enum';
+import CardInterface from '../../shared/models/card.interface';
 import { CardImageComponent } from '../card-image/card-image.component';
 import { CardTextComponent } from '../card-text/card-text.component';
 import { CardToolbarComponent } from '../card-toolbar/card-toolbar.component';
@@ -57,11 +59,11 @@ describe('CardComponent', () => {
     fixture = TestBed.createComponent(CardComponent);
     component = fixture.componentInstance;
 
-    const mockData = {
+    const mockData: CardInterface = {
       color: 'white',
       description: '',
       image: null,
-      editMode: true,
+      mode: Mode.IdleMode,
       top: 0,
       left: 0
     };
@@ -69,7 +71,7 @@ describe('CardComponent', () => {
     component.color = mockData.color;
     component.description = mockData.description;
     component.image = mockData.image;
-    component.editMode = mockData.editMode;
+    component.mode = mockData.mode;
     component.top = mockData.top;
     component.left = mockData.left;
 
@@ -78,10 +80,6 @@ describe('CardComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
-  });
-
-  it('should create card with description empty', () => {
-    expect(component.description).toBe('');
   });
 
   it('should set the correct top style on creation', () => {
@@ -102,32 +100,57 @@ describe('CardComponent', () => {
     expect(fixture.debugElement.nativeElement.style.left).toBe('500px');
   });
 
-  it('should toggle edit mode when the editicon is clicked', () => {
-    component.editMode = false;
-    component.toggleEditMode();
+  it('should set mode to EditMode when setEditMode gets called', () => {
+    component.mode = <Mode>Mode.SelectedMode;
+    component.setEditMode();
+
     fixture.detectChanges();
-    expect(component.editMode).toBe(true);
+
+    expect(component.mode).toBe(Mode.EditMode);
   });
 
-  it('should toggle to view mode image when toggle icon is clicked', () => {
+  it('should set mode to SelectedMode when setSelectedMode gets called', () => {
+    component.mode = <Mode>Mode.IdleMode;
+    component.setSelectedMode();
+
+    fixture.detectChanges();
+
+    expect(component.mode).toBe(Mode.SelectedMode);
+  });
+
+  it('should toggle to viewModeImage when toggle icon is clicked and starting from viewModeText', () => {
     component.viewModeImage = false;
-    component.toggleView();
+    component.toggleViewModeImage();
     fixture.detectChanges();
     expect(component.viewModeImage).toBe(true);
   });
 
-  it('should close the colorlist when a color is clicked', () => {
-    component.toolbarsVisible = true;
+  it('should toggle to viewModeText when toggle icon is clicked and starting from viewModeImage', () => {
+    component.viewModeImage = true;
+    component.toggleViewModeImage();
+    fixture.detectChanges();
+    expect(component.viewModeImage).toBe(false);
+  });
+
+  it('should set mode to IdleMode when a color is clicked from the colorlist from SelectedMode', () => {
+    component.mode = <Mode>Mode.SelectedMode;
     fixture.detectChanges();
     component.selectColor('white');
     fixture.detectChanges();
-    expect(component.toolbarsVisible).toBe(false);
+    expect(component.mode).toBe(Mode.IdleMode);
+  });
+
+  it('should set mode to IdleMode when a color is clicked from the colorlist from EditMode', () => {
+    component.mode = <Mode>Mode.EditMode;
+    fixture.detectChanges();
+    component.selectColor('white');
+    fixture.detectChanges();
+    expect(component.mode).toBe(Mode.IdleMode);
   });
 
   it('should change the cardcolor when a color is picked', () => {
-    component.toolbarsVisible = true;
+    component.mode = Mode.SelectedMode;
     fixture.detectChanges();
-
     component.selectColor('black');
     fixture.detectChanges();
     expect(component.color).toBe('black');
@@ -139,40 +162,54 @@ describe('CardComponent', () => {
     expect(component.lastColor.emit).toHaveBeenCalledWith('black');
   });
 
-  it('should emit deleteCard when the close button is clicked', () => {
+  it('should emit deleteCard when emitDeleteCard is called', () => {
     spyOn(component.deleteCard, 'emit');
-    component.onDeleteCard();
+    component.emitDeleteCard();
     expect(component.deleteCard.emit).toHaveBeenCalledTimes(1);
   });
 
-  it('should emit the right card when a card is selected', () => {
+  it('should set mode to MultiSelectSelectedMode when setMultiSelectSelectedMode is called', () => {
+    component.mode = <Mode>Mode.SelectedMode;
+    component.setMultiSelectSelectedMode();
+    component.ngOnChanges();
+    expect(component.mode).toBe(Mode.MultiSelectSelectedMode);
+  });
+
+  it('should emit the select emitter when setMultiSelectSelectedMode is called ', () => {
     spyOn(component.select, 'emit');
-    const checkboxes = fixture.debugElement.queryAll(
-      By.css('.card__header__checkbox')
-    );
-    const checkbox = checkboxes[0].nativeElement;
-    checkbox.click(); // van false naar true
-    fixture.detectChanges();
+    component.setMultiSelectSelectedMode();
     expect(component.select.emit).toHaveBeenCalled();
   });
 
-  it('should emit the right card when a card is deselected', () => {
-    spyOn(component.deselect, 'emit');
-    const checkboxes = fixture.debugElement.queryAll(
-      By.css('.card__header__checkbox')
+  it('should show toolbar when mode is set to SelectedMode', () => {
+    component.mode = Mode.SelectedMode;
+    fixture.detectChanges();
+    const toolbar = fixture.debugElement.queryAll(
+      By.css('card__header__toolbar')
     );
-    const checkbox = checkboxes[0].nativeElement;
-    checkbox.click(); // van false naar true
-    fixture.detectChanges();
-    checkbox.click(); // van true naar false
-    fixture.detectChanges();
-    expect(component.deselect.emit).toHaveBeenCalled();
+    expect(toolbar).not.toBeNull();
   });
 
-  it('should show tools when showToolbar is toggled to true', () => {
-    component.toolbarsVisible = false;
-    component.toggleToolbars();
-    const tools = fixture.debugElement.queryAll(By.css('.toolbar'));
-    expect(tools).not.toBeNull();
+  it('should show toolbar when mode is set to EditMode', () => {
+    component.mode = Mode.EditMode;
+    fixture.detectChanges();
+    const toolbar = fixture.debugElement.queryAll(
+      By.css('card__header__toolbar')
+    );
+    expect(toolbar).not.toBeNull();
+  });
+
+  it('should show colorlist when mode is set to SelectedMode', () => {
+    component.mode = Mode.SelectedMode;
+    fixture.detectChanges();
+    const toolbar = fixture.debugElement.queryAll(By.css('card__colorlist'));
+    expect(toolbar).not.toBeNull();
+  });
+
+  it('should show colorlist when mode is set to EditMode', () => {
+    component.mode = Mode.EditMode;
+    fixture.detectChanges();
+    const toolbar = fixture.debugElement.queryAll(By.css('.colorlist'));
+    expect(toolbar).not.toBeNull();
   });
 });

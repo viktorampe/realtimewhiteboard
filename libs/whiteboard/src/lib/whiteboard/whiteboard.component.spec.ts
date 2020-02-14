@@ -167,10 +167,10 @@ describe('WhiteboardComponent', () => {
       left: 0
     };
 
-    const cards = [card, card2];
+    component.cards = [card, card2];
 
     component.changeSelectedCardsColor('black');
 
-    cards.forEach(c => expect(c.color).toBe('black'));
+    component.cards.forEach(c => expect(c.color).toBe('black'));
   });
 });
