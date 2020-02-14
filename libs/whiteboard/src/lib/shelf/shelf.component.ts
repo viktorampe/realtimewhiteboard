@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import Card from '../../interfaces/card.interface';
+import Card from '../../shared/models/card.interface';
 
 @Component({
   selector: 'campus-shelf',

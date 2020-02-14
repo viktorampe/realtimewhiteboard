@@ -1,5 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconModule } from '@angular/material';
+import { By } from '@angular/platform-browser';
+import { Mode } from '../../shared/enums/mode.enum';
 import { ImageToolbarComponent } from '../image-toolbar/image-toolbar.component';
 import { CardImageComponent } from './card-image.component';
 
@@ -24,9 +26,23 @@ describe('CardImageComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should emit imageClicked event when image is clicked', () => {
-    spyOn(component.imageClicked, 'emit');
-    component.onImageClicked();
-    expect(component.imageClicked.emit).toHaveBeenCalledTimes(1);
+  it('should show image toolbar if mode is EditMode', () => {
+    component.mode = Mode.EditMode;
+    fixture.detectChanges();
+
+    const toolbar = fixture.debugElement.queryAll(
+      By.css('campus-image-toolbar')
+    );
+    expect(toolbar.length).not.toBe(0);
+  });
+
+  it('should not show image toolbar if mode is SelectedMode', () => {
+    component.mode = Mode.SelectedMode;
+    fixture.detectChanges();
+
+    const toolbar = fixture.debugElement.queryAll(
+      By.css('campus-image-toolbar')
+    );
+    expect(toolbar.length).toBe(0);
   });
 });

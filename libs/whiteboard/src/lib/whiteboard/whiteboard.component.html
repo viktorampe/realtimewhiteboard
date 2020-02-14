@@ -1,49 +1,47 @@
-<div class="whiteboard-page" campusImageDrag>
-  <campus-whiteboard-tools
-    (deleteCards)="btnDelClicked()"
+<div class="whiteboard" campusImageDrag>
+  <campus-whiteboard-toolbar
+    *ngIf="isToolbarVisible"
+    (deleteCards)="bulkDeleteClicked()"
     (changeSelectedColor)="changeSelectedCardsColor($event)"
-    (createCard)="btnPlusClicked()"
-    *ngIf="this.selectedCards.length"
-  ></campus-whiteboard-tools>
-  <div class="whiteboard-page__header">
+  ></campus-whiteboard-toolbar>
+  <div class="whiteboard__header">
     <h2
-      (click)="showTitleInput()"
       *ngIf="!isTitleInputSelected"
-      class="whiteboard-page__header__title"
+      class="whiteboard__header__title"
+      (click)="showTitleInput()"
       >{{ title }}</h2
     >
     <input
+      type="text"
       #titleInput
+      [(ngModel)]="title"
       (keyup.enter)="hideTitleInput()"
       (focusout)="hideTitleInput()"
       *ngIf="isTitleInputSelected"
-      type="text"
-      [(ngModel)]="title"
     />
   </div>
-  <div class="whiteboard-page__workspace" (dblclick)="onDblClick($event)">
+  <div class="whiteboard__workspace" (dblclick)="onDblClick($event)">
     <campus-card
       *ngFor="let card of cards"
       cdkDrag
-      (lastColor)="saveLastColor($event)"
-      [color]="card.color"
+      class="whiteboard__card"
       [description]="card.description"
-      [editMode]="card.editMode"
+      [color]="card.color"
       [image]="card.image"
       [left]="card.left"
       [top]="card.top"
+      [(mode)]="card.mode"
+      (modeChange)="cardModeChanged(card, $event)"
+      (lastColor)="saveLastColor($event)"
       (deleteCard)="onDeleteCard(card)"
-      (select)="selectCard(card)"
-      (deselect)="deselectCard(card)"
-      [checkboxVisible]="checkboxVisible"
-      [isSelected]="selectedCards.includes(card)"
-      class="whiteboard-page__card"
+      (select)="onSelectCard(card)"
+      (deselect)="onDeselectCard(card)"
     ></campus-card>
   </div>
   <button
     mat-fab
     color="primary"
-    class="whiteboard-page__addbutton"
+    class="whiteboard__addbutton"
     (click)="btnPlusClicked()"
   >
     <mat-icon style="color: #FFFFFF;" [svgIcon]="'plus'"></mat-icon>

@@ -1,4 +1,4 @@
-.whiteboard-page {
+.whiteboard {
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -9,11 +9,6 @@
 
   &.image-drag-directive-dragging {
     opacity: 0.8;
-  }
-
-  &__progress-bar {
-    position: absolute;
-    width: 100%;
   }
 
   &__header {
@@ -64,11 +59,5 @@
     justify-content: flex-start;
     align-items: center;
     padding: 30px 160px;
-  }
-
-  &__colorlist {
-    background-color: rgba(0, 0, 0, 0.4);
-    position: absolute;
-    bottom: 50px;
   }
 }

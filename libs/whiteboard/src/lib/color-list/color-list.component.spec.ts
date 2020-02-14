@@ -1,18 +1,18 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { ColorlistComponent } from './colorlist.component';
+import { ColorListComponent } from './color-list.component';
 
-describe('ColorlistComponent', () => {
-  let component: ColorlistComponent;
-  let fixture: ComponentFixture<ColorlistComponent>;
+describe('ColorListComponent', () => {
+  let component: ColorListComponent;
+  let fixture: ComponentFixture<ColorListComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ColorlistComponent]
+      declarations: [ColorListComponent]
     }).compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ColorlistComponent);
+    fixture = TestBed.createComponent(ColorListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

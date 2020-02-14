@@ -10,16 +10,17 @@ import {
 import { HAMMER_LOADER } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { configureTestSuite } from 'ng-bullet';
-import Card from '../../interfaces/card.interface';
+import { Mode } from '../../shared/enums/mode.enum';
+import CardInterface from '../../shared/models/card.interface';
 import { CardImageComponent } from '../card-image/card-image.component';
 import { CardTextComponent } from '../card-text/card-text.component';
+import { CardToolbarComponent } from '../card-toolbar/card-toolbar.component';
 import { CardComponent } from '../card/card.component';
-import { ColorlistComponent } from '../colorlist/colorlist.component';
+import { ColorListComponent } from '../color-list/color-list.component';
 import { ImageToolbarComponent } from '../image-toolbar/image-toolbar.component';
 import { ProgressBarComponent } from '../progress-bar/progress-bar.component';
 import { ShelfComponent } from '../shelf/shelf.component';
-import { ToolbarComponent } from '../toolbar/toolbar.component';
-import { WhiteboardToolsComponent } from '../whiteboard-tools/whiteboard-tools.component';
+import { WhiteboardToolbarComponent } from '../whiteboard-toolbar/whiteboard-toolbar.component';
 import { WhiteboardComponent } from './whiteboard.component';
 
 describe('WhiteboardComponent', () => {
@@ -41,9 +42,9 @@ describe('WhiteboardComponent', () => {
       declarations: [
         WhiteboardComponent,
         CardComponent,
-        ToolbarComponent,
-        ColorlistComponent,
-        WhiteboardToolsComponent,
+        CardToolbarComponent,
+        ColorListComponent,
+        WhiteboardToolbarComponent,
         ProgressBarComponent,
         ShelfComponent,
         CardImageComponent,
@@ -79,14 +80,13 @@ describe('WhiteboardComponent', () => {
   it('should delete a card from the list of cards when the user clicks delete', () => {
     const cardsSizeBeforeAdding = component.cards.length;
 
-    const card = {
+    const card: CardInterface = {
+      mode: Mode.IdleMode,
       description: '',
       image: null,
       color: null,
-      editMode: true,
       top: 0,
-      left: 0,
-      toolbarsVisible: false
+      left: 0
     };
 
     component.cards.push(card);
@@ -96,84 +96,81 @@ describe('WhiteboardComponent', () => {
     expect(component.cards.length).toBe(cardsSizeBeforeAdding);
   });
 
-  it('should add a card when checkbox is selected', () => {
-    const card: Card = {
+  it('should set other cards to IdleMode when a card mode changes to SelectedMode', () => {
+    const card1: CardInterface = {
+      mode: Mode.MultiSelectSelectedMode,
       description: '',
       image: null,
       color: null,
-      editMode: true,
       top: 0,
-      left: 0,
-      toolbarsVisible: false
+      left: 0
     };
-    component.cards = [card];
-    component.selectedCards = [];
 
-    component.selectCard(card);
+    const card2: CardInterface = {
+      mode: Mode.MultiSelectSelectedMode,
+      description: '',
+      image: null,
+      color: null,
+      top: 0,
+      left: 0
+    };
 
-    expect(component.selectedCards).toContain(card);
+    component.cards = [card1, card2];
+
+    component.bulkDeleteClicked();
+
+    expect(component.cards.length).toBe(0);
   });
 
-  it('should remove a card when checkbox is selected again', () => {
-    const card: Card = {
+  it('should set other cards to IdleMode when a card mode changes to SelectedMode', () => {
+    const idleCard: CardInterface = {
+      mode: Mode.IdleMode,
       description: '',
       image: null,
       color: null,
-      editMode: true,
       top: 0,
-      left: 0,
-      toolbarsVisible: false
+      left: 0
     };
-    component.cards = [card];
-    component.selectedCards = [card];
 
-    component.deselectCard(card);
+    const selectedCard: CardInterface = {
+      mode: Mode.SelectedMode,
+      description: '',
+      image: null,
+      color: null,
+      top: 0,
+      left: 0
+    };
 
-    expect(component.selectedCards).not.toContain(card);
+    component.cards = [idleCard, selectedCard];
+
+    component.cardModeChanged(idleCard, Mode.SelectedMode);
+
+    expect(selectedCard.mode).toEqual(Mode.IdleMode);
   });
 
   it('should change the colors of the selected cards when a swatch is clicked', () => {
-    const card = {
+    const card: CardInterface = {
+      mode: Mode.MultiSelectSelectedMode,
       description: '',
       image: null,
       color: null,
-      editMode: true,
       top: 0,
-      left: 0,
-      toolbarsVisible: false
+      left: 0
     };
 
-    const card2 = {
+    const card2: CardInterface = {
+      mode: Mode.MultiSelectSelectedMode,
       description: '',
       image: null,
       color: null,
-      editMode: true,
       top: 0,
-      left: 0,
-      toolbarsVisible: false
+      left: 0
     };
 
-    const cards = [card, card2];
-    component.selectedCards = [card, card2];
+    component.cards = [card, card2];
+
     component.changeSelectedCardsColor('black');
-    cards.forEach(c => expect(c.color).toBe('black'));
-  });
 
-  it('should remove a card from selectedCards when the card is selected and deleted', () => {
-    const card = {
-      description: '',
-      image: null,
-      color: null,
-      editMode: true,
-      top: 0,
-      left: 0,
-      toolbarsVisible: false
-    };
-
-    component.selectedCards = [card];
-
-    component.onDeleteCard(card);
-
-    expect(component.selectedCards.length).toBe(0);
+    component.cards.forEach(c => expect(c.color).toBe('black'));
   });
 });

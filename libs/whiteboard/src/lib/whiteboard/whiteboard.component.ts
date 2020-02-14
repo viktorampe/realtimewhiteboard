@@ -1,7 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { MatDialog } from '@angular/material';
-import { ConfirmationModalComponent } from '@campus/ui';
-import Card from '../../interfaces/card.interface';
+import { Mode } from '../../shared/enums/mode.enum';
+import CardInterface from '../../shared/models/card.interface';
 @Component({
   selector: 'campus-whiteboard',
   templateUrl: './whiteboard.component.html',
@@ -15,29 +14,23 @@ export class WhiteboardComponent implements OnInit {
       titleInput.nativeElement.focus();
     }
   }
+  cards: CardInterface[] = [];
+  shelvedCards: CardInterface[] = [];
+  lastColor = '#00A7E2';
+  title = '';
+  isTitleInputSelected = true;
+  isToolbarVisible = false;
 
-  constructor(public dialog: MatDialog) {
-    this.title = '';
-    this.isTitleInputSelected = this.title === '';
+  constructor() {}
+
+  ngOnInit() {}
+
+  get Mode() {
+    return Mode;
   }
 
-  cards: Card[];
-  selectedCards: Card[];
-
-  lastColor: string;
-  checkboxVisible: boolean;
-
-  title: string;
-  isTitleInputSelected: boolean;
-
-  ngOnInit() {
-    this.cards = [];
-    this.selectedCards = [];
-    this.lastColor = 'white';
-  }
-
-  onDblClick(event) {
-    if (event.target.className === 'whiteboard-page__workspace') {
+  onDblClick(event: MouseEvent) {
+    if ((event.target as HTMLElement).className === 'whiteboard__workspace') {
       const top = event.offsetY;
       const left = event.offsetX;
       this.addEmptyCard(top, left);
@@ -49,16 +42,13 @@ export class WhiteboardComponent implements OnInit {
   }
 
   addEmptyCard(top: number = 0, left: number = 0) {
-    this.checkboxVisible = this.selectedCards.length !== 0;
     this.cards.push({
+      mode: Mode.IdleMode,
       color: this.lastColor,
       description: '',
-      image:
-        'https://www.cimec.co.za/wp-content/uploads/2018/07/4-Unique-Placeholder-Image-Services-for-Designers.png',
+      image: '',
       top: top,
-      left: left,
-      editMode: false,
-      toolbarsVisible: false
+      left: left
     });
   }
 
@@ -72,8 +62,7 @@ export class WhiteboardComponent implements OnInit {
     }
   }
 
-  onDeleteCard(card: Card) {
-    this.selectedCards = this.selectedCards.filter(c => c !== card);
+  onDeleteCard(card: CardInterface) {
     this.cards = this.cards.filter(c => c !== card);
   }
 
@@ -81,27 +70,48 @@ export class WhiteboardComponent implements OnInit {
     this.lastColor = color;
   }
 
-  selectCard(card) {
-    this.selectedCards.push(card);
-    this.checkboxVisible = true;
-  }
-
-  deselectCard(card: Card) {
-    this.selectedCards = this.selectedCards.filter(c => c !== card);
-    if (!this.selectedCards.length) {
-      this.checkboxVisible = false;
-    }
-  }
-
-  btnDelClicked() {
-    this.cards = this.cards.filter(c => !this.selectedCards.includes(c));
-    this.selectedCards = [];
+  bulkDeleteClicked() {
+    this.cards = this.cards.filter(
+      c => c.mode !== Mode.MultiSelectSelectedMode
+    );
   }
 
   changeSelectedCardsColor(color: string) {
     this.lastColor = color;
-    this.selectedCards.forEach(c => (c.color = this.lastColor));
-    this.selectedCards = [];
-    this.checkboxVisible = false;
+
+    this.cards
+      .filter(c => c.mode === Mode.MultiSelectSelectedMode)
+      .forEach(c => (c.color = this.lastColor));
+  }
+
+  cardModeChanged(card: CardInterface, mode: Mode) {
+    if (mode === Mode.SelectedMode) {
+      this.setCardsModeIdleExceptCard(card);
+    }
+  }
+
+  private setCardsModeIdleExceptCard(card: CardInterface) {
+    this.cards.filter(c => c !== card).forEach(c => (c.mode = Mode.IdleMode));
+  }
+
+  onSelectCard(card: CardInterface) {
+    this.cards.forEach(c => (c.mode = Mode.MultiSelectMode));
+    this.checkToolbarVisible();
+  }
+
+  onDeselectCard(card: CardInterface) {
+    if (
+      !this.cards.filter(c => c.mode === Mode.MultiSelectSelectedMode).length
+    ) {
+      this.cards.forEach(c => (c.mode = Mode.IdleMode));
+    }
+
+    this.checkToolbarVisible();
+  }
+
+  checkToolbarVisible() {
+    this.isToolbarVisible =
+      this.cards.filter(c => c.mode === Mode.MultiSelectSelectedMode).length >
+      1;
   }
 }

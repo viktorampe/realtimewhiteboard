@@ -1,40 +1,31 @@
-<div class="card" [style.border-color]="color" (press)="toggleToolbars()">
-  <campus-colorlist
-    class="card__colorlist"
+<div class="card" [style.border-color]="color" (press)="pressCard()">
+  <campus-color-list
+    class="card__color-list"
     (selectedColor)="selectColor($event)"
-    *ngIf="toolbarsVisible"
-  ></campus-colorlist>
-  <div class="card__header">
-    <input
-      type="checkbox"
-      class="card__header__checkbox"
-      [(ngModel)]="isSelected"
-      (change)="onCheckboxChanged($event)"
-      [style.opacity]="checkboxVisible ? 1 : 0"
-    />
-    <campus-toolbar
-      *ngIf="toolbarsVisible"
-      [editMode]="this.editMode"
-      (clickToggleEditIcon)="toggleEditMode()"
-      (clickToggleView)="toggleView()"
-      (clickImageSettings)="showImageSettings()"
-      class="card__header__toolbar"
-      (delete)="onDeleteCard()"
-    ></campus-toolbar>
-  </div>
+    *ngIf="mode === Mode.EditMode || mode === Mode.SelectedMode"
+  ></campus-color-list>
+  <campus-card-toolbar
+    *ngIf="mode === Mode.EditMode || mode === Mode.SelectedMode"
+    class="card__toolbar"
+    [mode]="mode"
+    (clickDeleteIcon)="emitDeleteCard()"
+    (clickEditIcon)="setEditMode()"
+    (clickFlipIcon)="flipIconClicked()"
+    (clickConfirmIcon)="setIdleMode()"
+    (clickMultiSelectIcon)="setMultiSelectSelectedMode()"
+  ></campus-card-toolbar>
   <div class="card__content">
     <campus-card-image
       *ngIf="viewModeImage; else viewModeText"
       class="card__content__image"
-      (imageClicked)="onImageClicked($event)"
       [imageUrl]="image"
-      [editMode]="editMode"
+      [mode]="mode"
     ></campus-card-image>
     <ng-template #viewModeText class="card__content__input">
       <campus-card-text
-        class="card__content__input__text"
+        class="card__content__text"
         [(text)]="description"
-        [editMode]="editMode"
+        [mode]="mode"
       ></campus-card-text>
     </ng-template>
   </div>
