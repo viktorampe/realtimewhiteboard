@@ -90,6 +90,21 @@ export class WhiteboardComponent implements OnInit {
     }
   }
 
+  onSelectCard(card: CardInterface) {
+    this.cards.forEach(c => (c.mode = Mode.MultiSelectMode));
+    this.checkToolbarVisible();
+  }
+
+  onDeselectCard(card: CardInterface) {
+    if (
+      !this.cards.filter(c => c.mode === Mode.MultiSelectSelectedMode).length
+    ) {
+      this.cards.forEach(c => (c.mode = Mode.IdleMode));
+    }
+
+    this.checkToolbarVisible();
+  }
+
   checkToolbarVisible() {
     this.isToolbarVisible =
       this.cards.filter(c => c.mode === Mode.MultiSelectSelectedMode).length >
