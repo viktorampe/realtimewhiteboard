@@ -6,7 +6,7 @@
   ></campus-color-list>
   <campus-card-toolbar
     *ngIf="mode === Mode.EditMode || mode === Mode.SelectedMode"
-    class="card__header__toolbar"
+    class="card__toolbar"
     [mode]="mode"
     (clickDeleteIcon)="emitDeleteCard()"
     (clickEditIcon)="setEditMode()"
@@ -23,7 +23,7 @@
     ></campus-card-image>
     <ng-template #viewModeText class="card__content__input">
       <campus-card-text
-        class="card__content__input__text"
+        class="card__content__text"
         [(text)]="description"
         [mode]="mode"
       ></campus-card-text>
