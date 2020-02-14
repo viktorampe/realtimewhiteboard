@@ -101,7 +101,7 @@ describe('CardComponent', () => {
   });
 
   it("should replace card's image when replaceImage gets called", () => {
-    component.replaceImage('test-image');
+    component.updateImage('test-image');
     expect(component.image).toBe('test-image');
   });
 
