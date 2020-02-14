@@ -1,11 +1,12 @@
 @mixin ui-section {
-  $ui-section-padding: 24px !default;
-  $ui-section-border-radius: 8px !default;
+  $ui-section-padding: $ui-inner-padding !default;
+  $ui-section-border-radius: $ui-border-radius !default;
   $ui-section-border-color: $ui-tertiary-border-color !default;
   $ui-section-elevation: 8 !default;
   $ui-section-color: inherit !default;
 
   $ui-section_header-height: 48px !default;
+  $ui-section_header_action-margin: -8px !default;
   $ui-section_header-color: $ui-tertiary-font-color !default;
   $ui-section_actions-color: $ui-tertiary-icon-color !default;
 
@@ -38,7 +39,7 @@
 
       &__actions {
         color: $ui-section_actions-color;
-        margin-right: -8px;
+        margin-right: $ui-section_header_action-margin;
       }
     }
 
