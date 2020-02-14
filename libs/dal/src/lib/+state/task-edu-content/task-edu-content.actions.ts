@@ -154,4 +154,5 @@ export type TaskEduContentsActions =
   | DeleteTaskEduContents
   | ClearTaskEduContents
   | LinkTaskEduContent
-  | StartDeleteTaskEduContents;
+  | StartDeleteTaskEduContents
+  | StartAddTaskEduContents;
