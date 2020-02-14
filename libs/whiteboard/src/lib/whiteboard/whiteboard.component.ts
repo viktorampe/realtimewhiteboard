@@ -86,8 +86,12 @@ export class WhiteboardComponent implements OnInit {
 
   cardModeChanged(card: CardInterface, mode: Mode) {
     if (mode === Mode.SelectedMode) {
-      this.cards.filter(c => c !== card).forEach(c => (c.mode = Mode.IdleMode));
+      this.setCardsModeIdleExceptCard(card);
     }
+  }
+
+  private setCardsModeIdleExceptCard(card: CardInterface) {
+    this.cards.filter(c => c !== card).forEach(c => (c.mode = Mode.IdleMode));
   }
 
   onSelectCard(card: CardInterface) {
