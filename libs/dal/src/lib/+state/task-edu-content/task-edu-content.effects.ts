@@ -260,7 +260,7 @@ export class TaskEduContentEffects {
 
   createTaskEduContents$ = createEffect(() =>
     this.dataPersistence.pessimisticUpdate(
-      TaskEduContentsActionTypes.AddTaskEduContents,
+      TaskEduContentsActionTypes.StartAddTaskEduContents,
       {
         run: (action: StartAddTaskEduContents, state: DalState) => {
           return this.taskEduContentService

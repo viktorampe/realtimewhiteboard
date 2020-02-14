@@ -669,11 +669,6 @@ describe('TaskEduContentEffects', () => {
           task: 'Huiswerk',
           user: 'Hubert Stroganovski',
           activeUntil: new Date()
-        },
-        {
-          task: 'Huiswerk2',
-          user: 'Hubert Stroganovski',
-          activeUntil: new Date()
         }
       ];
       createTaskEduContentsSpy.mockReturnValue(
@@ -683,7 +678,11 @@ describe('TaskEduContentEffects', () => {
         } as UpdateTaskEduContentResultInterface)
       );
       const expectedMessage = [
-        '<p>Er werd geen lesmateriaal toevegoegd.</p>'
+        '<p>Er werd geen lesmateriaal toegevoegd.</p>',
+        '<p>De volgende taken zijn nog in gebruik:</p>',
+        '<ul>',
+        '<li><strong>Huiswerk</strong> is nog in gebruik door Hubert Stroganovski tot 1/14/2020.</li>',
+        '</ul>'
       ].join('');
 
       const feedbackAction = new AddEffectFeedback({
