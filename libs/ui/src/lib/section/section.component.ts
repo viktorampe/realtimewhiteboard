@@ -17,7 +17,7 @@ export enum SectionModeEnum {
  * @docs-private
  */
 @Directive({
-  selector: 'section-title'
+  selector: '[campusSectionTitle], [sectionTitle], section-title'
 })
 // tslint:disable-next-line: directive-class-suffix
 export class SectionTitle {}
@@ -27,7 +27,7 @@ export class SectionTitle {}
  * @docs-private
  */
 @Directive({
-  selector: 'section-content'
+  selector: '[campusSectionContent], [sectionContent], section-content'
 })
 // tslint:disable-next-line: directive-class-suffix
 export class SectionContent {}
@@ -37,7 +37,7 @@ export class SectionContent {}
  * @docs-private
  */
 @Directive({
-  selector: 'section-actions'
+  selector: '[campusSectionAction], [sectionActions], section-actions'
 })
 // tslint:disable-next-line: directive-class-suffix
 export class SectionActions {}
