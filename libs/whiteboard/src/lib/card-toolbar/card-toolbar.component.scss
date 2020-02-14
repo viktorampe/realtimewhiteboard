@@ -38,6 +38,8 @@
   &__select {
     right: 50%;
     transform: translateX(50%);
+    top: -24px;
+    z-index: 1;
 
     &__icon {
       color: #47aa3d;

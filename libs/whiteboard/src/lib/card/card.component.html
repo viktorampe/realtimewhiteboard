@@ -5,7 +5,12 @@
     *ngIf="mode === Mode.EditMode || mode === Mode.SelectedMode"
   ></campus-color-list>
   <campus-card-toolbar
-    *ngIf="mode === Mode.EditMode || mode === Mode.SelectedMode"
+    *ngIf="
+      mode === Mode.EditMode ||
+      mode === Mode.SelectedMode ||
+      mode === Mode.MultiSelectSelectedMode ||
+      mode === Mode.MultiSelectMode
+    "
     class="card__toolbar"
     [mode]="mode"
     (clickDeleteIcon)="emitDeleteCard()"
