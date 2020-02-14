@@ -34,4 +34,13 @@
   &__confirm {
     background-color: #47aa3d;
   }
+
+  &__select {
+    right: 50%;
+    transform: translateX(50%);
+
+    &__icon {
+      color: #47aa3d;
+    }
+  }
 }
