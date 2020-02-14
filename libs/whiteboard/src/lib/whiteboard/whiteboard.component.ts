@@ -86,11 +86,11 @@ export class WhiteboardComponent implements OnInit {
 
   cardModeChanged(card: CardInterface, mode: Mode) {
     if (mode === Mode.SelectedMode) {
-      this.setCardsModeIdleExceptUploadStateAndCard(card);
+      this.setCardsModeIdleExceptUploadModeAndCard(card);
     }
   }
 
-  private setCardsModeIdleExceptUploadStateAndCard(card: CardInterface) {
+  private setCardsModeIdleExceptUploadModeAndCard(card: CardInterface) {
     this.cards
       .filter(c => c !== card && c.mode !== Mode.UploadMode)
       .forEach(c => (c.mode = Mode.IdleMode));
