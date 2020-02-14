@@ -58,8 +58,7 @@ export class SectionComponent {
 
   clickSection() {
     if (this.mode === SectionModeEnum.EDITABLE) {
-      this.mode = SectionModeEnum.EDITING;
-      this.updateMode();
+      this.updateMode(SectionModeEnum.EDITING);
     }
   }
 
@@ -67,14 +66,14 @@ export class SectionComponent {
     event.stopPropagation(); // this should not trigger the click section event
 
     if (this.mode === SectionModeEnum.EDITABLE) {
-      this.mode = SectionModeEnum.EDITING;
-      this.updateMode();
+      this.updateMode(SectionModeEnum.EDITING);
     } else if (this.mode === SectionModeEnum.STATIC) {
       this.actionClick.emit();
     }
   }
 
-  private updateMode() {
+  private updateMode(mode: SectionModeEnum) {
+    this.mode = mode;
     this.modeChange.emit(this.mode);
   }
 }
