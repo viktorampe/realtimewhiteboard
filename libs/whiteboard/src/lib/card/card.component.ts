@@ -31,7 +31,6 @@ export class CardComponent implements OnInit, OnChanges {
   @HostBinding('style.top') topStyle: string;
   @HostBinding('style.left') leftStyle: string;
   viewModeImage: boolean;
-  pressTime: number;
 
   constructor() {
     this.viewModeImage = true;
