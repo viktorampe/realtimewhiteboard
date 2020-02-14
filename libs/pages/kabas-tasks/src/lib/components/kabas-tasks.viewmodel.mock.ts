@@ -79,7 +79,16 @@ export class MockKabasTasksViewModel
           ...task,
           isPaperTask: true,
           name: `papier: ${task.name}`,
-          description: `papieren taak: ${task.description}`
+          description: `papieren taak: ${task.description}`,
+          startDate: null,
+          endDate: null,
+          assignees: task.assignees.map(assignee => {
+            return {
+              ...assignee,
+              start: null,
+              end: null
+            };
+          })
         };
       })
     );
