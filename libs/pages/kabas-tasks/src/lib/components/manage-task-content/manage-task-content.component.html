@@ -36,7 +36,50 @@
     </div>
 
     <div class="manage-task-content__main__sidesheet"
-      >Insert sidesheet here...</div
-    >
+      >Insert sidesheet here...
+
+      <mat-list
+        #currentContentList
+        *ngIf="currentContent$ | async as currentContent"
+        class="manage-task-content__list"
+      >
+        <mat-list-item
+          *ngFor="let taskEduContent of currentContent"
+          class="manage-task-content__list__item"
+        >
+          <mat-icon
+            class="manage-task-content__list__item__icon"
+            svgIcon="drag-handle"
+          ></mat-icon>
+
+          <div
+            *ngTemplateOutlet="
+              contentItem;
+              context: {
+                fileExt:
+                  taskEduContent.eduContent.publishedEduContentMetadata.fileExt,
+                title: taskEduContent.eduContent.name
+              }
+            "
+          ></div>
+          <mat-icon
+            class="manage-task-content__list__item__icon manage-task-content__list__item__icon--on-hover"
+            svgIcon="delete"
+          ></mat-icon>
+        </mat-list-item>
+      </mat-list>
+    </div>
   </div>
 </campus-collapsible-sheet>
+
+<ng-template #contentItem let-fileExt="fileExt" let-title="title">
+  <div class="manage-task-content__list__item__content">
+    <mat-icon
+      svgIcon="{{ fileExt != 'ludo.zip' ? 'general-file' : 'exercise' }}"
+      class="manage-task-content__list__item__content__icon"
+    ></mat-icon>
+    <div class="manage-task-content__list__item__content__title">{{
+      title
+    }}</div>
+  </div>
+</ng-template>

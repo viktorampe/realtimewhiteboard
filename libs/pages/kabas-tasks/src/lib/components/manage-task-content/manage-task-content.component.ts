@@ -1,16 +1,28 @@
-import { Component, HostBinding } from '@angular/core';
+import { Component, HostBinding, OnInit } from '@angular/core';
 import { SearchStateInterface } from '@campus/dal';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { TaskEduContentWithEduContentInterface } from '../../interfaces/TaskEduContentWithEduContent.interface';
+import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
 
 @Component({
   selector: 'campus-manage-task-content',
   templateUrl: './manage-task-content.component.html',
   styleUrls: ['./manage-task-content.component.scss']
 })
-export class ManageTaskContentComponent {
+export class ManageTaskContentComponent implements OnInit {
+  public currentContent$: Observable<TaskEduContentWithEduContentInterface[]>;
+
   @HostBinding('class.manage-task-content')
   manageTaskContentClass = true;
 
-  constructor() {}
+  constructor(private viewModel: KabasTasksViewModel) {}
+
+  ngOnInit() {
+    this.currentContent$ = this.viewModel.currentTask$.pipe(
+      map(task => task.taskEduContents)
+    );
+  }
 
   public clickDone() {}
 
