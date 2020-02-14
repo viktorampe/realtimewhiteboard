@@ -29,7 +29,7 @@
 
 <campus-section
   [(mode)]="sectionMode"
-  (actionClick)="handleTriggerActionClick()"
+  (actionClick)="handleTriggerActionClick($event)"
 >
   <section-title>I'm a the title of this section</section-title>
   <section-actions><mat-icon svgIcon="edit"></mat-icon></section-actions>
