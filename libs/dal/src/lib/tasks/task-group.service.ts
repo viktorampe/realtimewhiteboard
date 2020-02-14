@@ -16,8 +16,8 @@ export class TaskGroupService implements TaskGroupServiceInterface {
       map((res: { taskGroups: TaskGroupInterface[] }) =>
         res.taskGroups.map(taskGroup => ({
           ...taskGroup,
-          end: new Date(taskGroup.end),
-          start: new Date(taskGroup.start)
+          end: taskGroup.end && new Date(taskGroup.end),
+          start: taskGroup.start && new Date(taskGroup.start)
         }))
       )
     );

@@ -170,8 +170,9 @@ export class GlobalSearchViewModel
               );
 
               return {
-                eduContent: eduContent
+                eduContent: eduContent,
                 // add additional props for the resultItemComponent here
+                addTaskActions: true
               };
             }
           )
