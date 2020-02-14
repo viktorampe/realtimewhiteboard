@@ -51,7 +51,7 @@ export const icons = {
   'star-outline': 'assets/icons/star-border.svg',
   color: 'assets/icons/color_lens.svg',
   toggle: 'assets/icons/toggle.svg',
-  'flip-camera': 'assets/icons/material/flip_camera.svg',
+  flip: 'assets/icons/material/flip_camera.svg',
   archive: 'assets/icons/archive.svg',
   'filter:active': 'assets/icons/play_circle_outline-24px.svg',
   'filter:pending': 'assets/icons/pause_circle_outline-24px.svg',

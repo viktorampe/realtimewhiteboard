@@ -9,7 +9,7 @@
     <mat-icon class="toolbar__tool__icon" [svgIcon]="'multiselect'"> </mat-icon>
   </div>
   <div class="toolbar__tool" (click)="flipIconClicked()">
-    <mat-icon class="toolbar__tool__icon" [svgIcon]="'flip-camera'"></mat-icon>
+    <mat-icon class="toolbar__tool__icon" [svgIcon]="'flip'"></mat-icon>
   </div>
   <div class="toolbar__tool" (click)="editIconClicked()">
     <mat-icon class="toolbar__tool__icon" [svgIcon]="'edit'"></mat-icon>
@@ -18,10 +18,7 @@
 <ng-template #editModeView>
   <div class="toolbar">
     <div class="toolbar__tool" (click)="flipIconClicked()">
-      <mat-icon
-        class="toolbar__tool__icon"
-        [svgIcon]="'flip-camera'"
-      ></mat-icon>
+      <mat-icon class="toolbar__tool__icon" [svgIcon]="'flip'"></mat-icon>
     </div>
     <div class="toolbar__tool toolbar__confirm" (click)="confirmIconClicked()">
       <mat-icon
