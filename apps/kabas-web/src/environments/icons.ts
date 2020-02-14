@@ -71,7 +71,7 @@ export const icons = {
   'delete-forever': 'assets/icons/material/delete_forever.svg',
   'add-photo-alternate': 'assets/icons/material/add_photo_alternate.svg',
   multiselect: 'assets/icons/multiselect.svg',
-  'mulitselect-selected': 'assets/icons/multiselect selected.svg',
+  'multiselect-selected': 'assets/icons/multiselect selected.svg',
 
   // search: sort modes
   'sort-numeric-down': 'assets/icons/sort-numeric-down.svg',
