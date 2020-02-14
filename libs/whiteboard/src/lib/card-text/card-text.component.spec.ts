@@ -27,18 +27,6 @@ describe('CardTextComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  // it('should show errormessage when no text is provided', () => {
-  //   component.text = '';
-  //   component.txtContent.markAsDirty();
-
-  //   fixture.detectChanges();
-
-  //   const errorMessage = fixture.debugElement.query(
-  //     By.css('[data-cy="errorMissingContent"]')
-  //   );
-  //   expect(errorMessage).not.toBeNull();
-  // });
-
   it('should show the card content when not editing', () => {
     component.text = 'Test content';
     component.mode = Mode.IdleMode;
