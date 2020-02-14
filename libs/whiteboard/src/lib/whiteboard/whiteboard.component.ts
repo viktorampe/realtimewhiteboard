@@ -116,4 +116,10 @@ export class WhiteboardComponent implements OnInit {
       this.cards.filter(c => c.mode === Mode.MultiSelectSelectedMode).length >
       1;
   }
+
+  onClickEvent(event: Event) {
+    if (event.currentTarget === event.target) {
+      this.cards.forEach(c => (c.mode = Mode.IdleMode));
+    }
+  }
 }

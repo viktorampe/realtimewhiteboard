@@ -20,7 +20,11 @@
       *ngIf="isTitleInputSelected"
     />
   </div>
-  <div class="whiteboard__workspace" (dblclick)="onDblClick($event)">
+  <div
+    class="whiteboard__workspace"
+    (click)="onClickEvent($event)"
+    (dblclick)="onDblClick($event)"
+  >
     <campus-card
       *ngFor="let card of cards"
       cdkDrag
