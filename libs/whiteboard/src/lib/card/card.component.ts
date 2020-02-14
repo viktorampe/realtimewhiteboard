@@ -93,8 +93,15 @@ export class CardComponent implements OnInit, OnChanges {
     this.setIdleMode();
   }
 
+  flipIconClicked() {
+    this.toggleViewModeImage();
+
+    if (this.mode !== Mode.SelectedMode) {
+      this.setIdleMode();
+    }
+  }
+
   toggleViewModeImage() {
     this.viewModeImage = !this.viewModeImage;
-    this.setIdleMode();
   }
 }
