@@ -27,17 +27,20 @@ describe('SectionComponent', () => {
   });
 
   describe('clickSection()', () => {
-    it('should trigger an emit when in editable mode', () => {
+    it('should trigger the modeChange output when in editable mode', () => {
       component.mode = SectionModeEnum.EDITABLE;
       component.clickSection();
 
       expect(modeChangeSpy).toHaveBeenCalledWith(SectionModeEnum.EDITING);
     });
 
-    it('should not trigger an emit when not in editable mode', () => {
-      component.mode = SectionModeEnum.EDITING;
-      component.clickSection();
-      expect(modeChangeSpy).not.toHaveBeenCalled();
+    it('should not trigger the modeChange output when not in editable mode', () => {
+      const nonTriggerModes = [SectionModeEnum.EDITING, SectionModeEnum.STATIC];
+      nonTriggerModes.forEach(mode => {
+        component.mode = mode;
+        component.clickSection();
+        expect(modeChangeSpy).not.toHaveBeenCalled();
+      });
     });
   });
 
@@ -56,6 +59,14 @@ describe('SectionComponent', () => {
       component.clickAction(mockMouseEvent);
 
       expect(actionClickSpy).toHaveBeenCalled();
+      expect(modeChangeSpy).not.toHaveBeenCalled();
+    });
+
+    it('should not trigger anything when  in editing mode', () => {
+      component.mode = SectionModeEnum.EDITING;
+      component.clickAction(mockMouseEvent);
+
+      expect(actionClickSpy).not.toHaveBeenCalled();
       expect(modeChangeSpy).not.toHaveBeenCalled();
     });
   });
