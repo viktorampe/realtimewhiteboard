@@ -1,22 +1,22 @@
 import { inject, TestBed } from '@angular/core/testing';
 import { EduContentFixture } from '@campus/dal';
 import { configureTestSuite } from 'ng-bullet';
-import { EduContentTypeEnum } from '../../enums';
-import { ContentActionsStudentService } from './content-actions-student.service';
+import { EduContentTypeEnum } from '../../../enums';
+import { ContentOpenActionsStudentService } from './content-open-actions-student.service';
 import {
-  ContentActionsServiceInterface,
+  ContentOpenActionsServiceInterface,
   ContentOpenerInterface,
   CONTENT_OPENER_TOKEN
-} from './content-actions.service.interface';
+} from './content-open-actions.service.interface';
 
-describe('ContentActionsStudentServiceInterface', () => {
-  let contentActionsStudentService: ContentActionsServiceInterface;
+describe('ContentOpenActionsStudentServiceInterface', () => {
+  let contentOpenActionsStudentService: ContentOpenActionsServiceInterface;
   let contentOpener: ContentOpenerInterface;
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [],
       providers: [
-        ContentActionsStudentService,
+        ContentOpenActionsStudentService,
         {
           provide: CONTENT_OPENER_TOKEN,
           useValue: {
@@ -32,13 +32,15 @@ describe('ContentActionsStudentServiceInterface', () => {
   });
 
   beforeEach(() => {
-    contentActionsStudentService = TestBed.get(ContentActionsStudentService);
+    contentOpenActionsStudentService = TestBed.get(
+      ContentOpenActionsStudentService
+    );
     contentOpener = TestBed.get(CONTENT_OPENER_TOKEN);
   });
 
   it('should be created', inject(
-    [ContentActionsStudentService],
-    (service: ContentActionsStudentService) => {
+    [ContentOpenActionsStudentService],
+    (service: ContentOpenActionsStudentService) => {
       expect(service).toBeTruthy();
     }
   ));
@@ -51,7 +53,9 @@ describe('ContentActionsStudentServiceInterface', () => {
             type: EduContentTypeEnum.BOEKE
           }),
           expected: [
-            contentActionsStudentService.contentActionDictionary['openBoeke']
+            contentOpenActionsStudentService.contentActionDictionary[
+              'openBoeke'
+            ]
           ]
         },
         {
@@ -59,7 +63,7 @@ describe('ContentActionsStudentServiceInterface', () => {
             type: EduContentTypeEnum.EXERCISE
           }),
           expected: [
-            contentActionsStudentService.contentActionDictionary[
+            contentOpenActionsStudentService.contentActionDictionary[
               'openEduContentAsExercise'
             ]
           ]
@@ -67,7 +71,7 @@ describe('ContentActionsStudentServiceInterface', () => {
         {
           mockEduContent: new EduContentFixture({}, { streamable: true }),
           expected: [
-            contentActionsStudentService.contentActionDictionary[
+            contentOpenActionsStudentService.contentActionDictionary[
               'openEduContentAsStream'
             ]
           ]
@@ -75,7 +79,7 @@ describe('ContentActionsStudentServiceInterface', () => {
         {
           mockEduContent: new EduContentFixture({}, { streamable: false }),
           expected: [
-            contentActionsStudentService.contentActionDictionary[
+            contentOpenActionsStudentService.contentActionDictionary[
               'openEduContentAsDownload'
             ]
           ]
@@ -83,7 +87,7 @@ describe('ContentActionsStudentServiceInterface', () => {
       ];
       tests.forEach(test =>
         expect(
-          contentActionsStudentService.getActionsForEduContent(
+          contentOpenActionsStudentService.getActionsForEduContent(
             test.mockEduContent
           )
         ).toEqual(test.expected)

@@ -32,6 +32,7 @@ import {
 } from '@campus/dal';
 import {
   ContentOpenerInterface,
+  ContentTaskManagerInterface,
   OpenStaticContentServiceInterface,
   OPEN_STATIC_CONTENT_SERVICE_TOKEN,
   ScormExerciseServiceInterface,
@@ -68,7 +69,8 @@ export interface CurrentTaskParams {
 @Injectable({
   providedIn: 'root'
 })
-export class KabasTasksViewModel implements ContentOpenerInterface {
+export class KabasTasksViewModel
+  implements ContentOpenerInterface, ContentTaskManagerInterface {
   public tasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
   public paperTasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
   public currentTask$: Observable<TaskWithAssigneesInterface>;
