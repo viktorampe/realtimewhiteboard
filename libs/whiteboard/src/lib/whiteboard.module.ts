@@ -9,16 +9,16 @@ import {
 } from '@angular/material';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { ImageDragDirective } from '../shared/directives/image-drag.directive';
 import { CardImageComponent } from './card-image/card-image.component';
 import { CardTextComponent } from './card-text/card-text.component';
+import { CardToolbarComponent } from './card-toolbar/card-toolbar.component';
 import { CardComponent } from './card/card.component';
-import { ColorlistComponent } from './colorlist/colorlist.component';
-import { ImageDragDirective } from './image-drag.directive';
+import { ColorListComponent } from './color-list/color-list.component';
 import { ImageToolbarComponent } from './image-toolbar/image-toolbar.component';
 import { ProgressBarComponent } from './progress-bar/progress-bar.component';
 import { ShelfComponent } from './shelf/shelf.component';
-import { ToolbarComponent } from './toolbar/toolbar.component';
-import { WhiteboardToolsComponent } from './whiteboard-tools/whiteboard-tools.component';
+import { WhiteboardToolbarComponent } from './whiteboard-toolbar/whiteboard-toolbar.component';
 import { WhiteboardComponent } from './whiteboard/whiteboard.component';
 
 @NgModule({
@@ -36,14 +36,13 @@ import { WhiteboardComponent } from './whiteboard/whiteboard.component';
   declarations: [
     WhiteboardComponent,
     CardComponent,
-    ToolbarComponent,
-    ColorlistComponent,
-    WhiteboardToolsComponent,
+    CardToolbarComponent,
+    ColorListComponent,
+    WhiteboardToolbarComponent,
     ProgressBarComponent,
     CardImageComponent,
     ImageDragDirective,
     ProgressBarComponent,
-    WhiteboardToolsComponent,
     ImageToolbarComponent,
     CardTextComponent,
     ShelfComponent

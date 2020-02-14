@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import Card from '../../model/card.interface';
-import { Mode } from '../../util/enums/mode.enum';
+import { Mode } from '../../shared/enums/mode.enum';
+import CardInterface from '../../shared/models/card.interface';
 @Component({
   selector: 'campus-whiteboard',
   templateUrl: './whiteboard.component.html',
@@ -14,25 +14,23 @@ export class WhiteboardComponent implements OnInit {
       titleInput.nativeElement.focus();
     }
   }
-
-  constructor() {
-    this.title = '';
-    this.isTitleInputSelected = true;
-  }
-
-  cards: Card[] = [];
-  selectedCards: Card[] = [];
-  shelvedCards: Card[] = [];
-
+  cards: CardInterface[] = [];
+  shelvedCards: CardInterface[] = [];
   lastColor = 'white';
+  title = '';
+  isTitleInputSelected = true;
+  isToolbarVisible = false;
 
-  title: string;
-  isTitleInputSelected: boolean;
+  constructor() {}
 
   ngOnInit() {}
 
+  get Mode() {
+    return Mode;
+  }
+
   onDblClick(event: MouseEvent) {
-    if (event.target.className === 'whiteboard-page__workspace') {
+    if (event.target.className === 'whiteboard__workspace') {
       const top = event.offsetY;
       const left = event.offsetX;
       this.addEmptyCard(top, left);
@@ -64,8 +62,7 @@ export class WhiteboardComponent implements OnInit {
     }
   }
 
-  onDeleteCard(card: Card) {
-    this.selectedCards = this.selectedCards.filter(c => c !== card);
+  onDeleteCard(card: CardInterface) {
     this.cards = this.cards.filter(c => c !== card);
   }
 
@@ -74,19 +71,37 @@ export class WhiteboardComponent implements OnInit {
   }
 
   selectCard(card) {
-    this.selectedCards.push(card);
+    card.mode = Mode.MultiSelectSelectedMode;
+    this.checkToolbarVisible();
   }
 
-  deselectCard(card: Card) {
-    this.selectedCards = this.selectedCards.filter(c => c !== card);
+  deselectCard(card: CardInterface) {
+    card.mode = Mode.MultiSelectSelectedMode;
+    this.checkToolbarVisible();
   }
 
-  btnDelClicked() {
-    this.cards = this.cards.filter(c => !this.selectedCards.includes(c));
+  bulkDeleteClicked() {
+    this.cards = this.cards.filter(
+      c => c.mode !== Mode.MultiSelectSelectedMode
+    );
   }
 
   changeSelectedCardsColor(color: string) {
     this.lastColor = color;
-    this.selectedCards.forEach(c => (c.color = this.lastColor));
+    this.cards
+      .filter(c => c.mode === Mode.MultiSelectSelectedMode)
+      .forEach(c => (c.color = this.lastColor));
+  }
+
+  cardModeChanged(card: CardInterface, mode: Mode) {
+    if (mode === Mode.SelectedMode) {
+      this.cards.filter(c => c !== card).forEach(c => (c.mode = Mode.IdleMode));
+    }
+  }
+
+  checkToolbarVisible() {
+    this.isToolbarVisible =
+      this.cards.filter(c => c.mode === Mode.MultiSelectSelectedMode).length >
+      1;
   }
 }

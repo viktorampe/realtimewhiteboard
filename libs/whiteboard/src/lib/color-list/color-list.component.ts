@@ -1,13 +1,12 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 
 @Component({
-  selector: 'campus-colorlist',
-  templateUrl: './colorlist.component.html',
-  styleUrls: ['./colorlist.component.scss']
+  selector: 'campus-color-list',
+  templateUrl: './color-list.component.html',
+  styleUrls: ['./color-list.component.scss']
 })
-export class ColorlistComponent implements OnInit {
+export class ColorListComponent implements OnInit {
   @Output() selectedColor = new EventEmitter<string>();
-  colorlist: ColorlistComponent;
   defaultColors: string[] = [
     '#00A7E2',
     '#2EA03D',

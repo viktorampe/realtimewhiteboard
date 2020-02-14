@@ -1,24 +1,20 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 
 @Component({
-  selector: 'campus-whiteboard-tools',
-  templateUrl: './whiteboard-tools.component.html',
-  styleUrls: ['./whiteboard-tools.component.scss']
+  selector: 'campus-whiteboard-toolbar',
+  templateUrl: './whiteboard-toolbar.component.html',
+  styleUrls: ['./whiteboard-toolbar.component.scss']
 })
-export class WhiteboardToolsComponent implements OnInit {
+export class WhiteboardToolbarComponent implements OnInit {
   @Output() deleteCards = new EventEmitter();
-  @Output() createCard = new EventEmitter();
   @Output() changeSelectedColor = new EventEmitter<string>();
+
   constructor() {}
 
   ngOnInit() {}
 
   changeSelectedCardsColor(color: string) {
     this.changeSelectedColor.emit(color);
-  }
-
-  btnPlusClicked() {
-    this.createCard.emit();
   }
 
   btnDeleteClicked() {

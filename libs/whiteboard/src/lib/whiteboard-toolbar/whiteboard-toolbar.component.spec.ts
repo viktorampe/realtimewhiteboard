@@ -1,21 +1,21 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconModule } from '@angular/material';
-import { ColorlistComponent } from '../colorlist/colorlist.component';
-import { WhiteboardToolsComponent } from './whiteboard-tools.component';
+import { ColorListComponent } from '../color-list/color-list.component';
+import { WhiteboardToolbarComponent } from './whiteboard-toolbar.component';
 
-describe('WhiteboardToolsComponent', () => {
-  let component: WhiteboardToolsComponent;
-  let fixture: ComponentFixture<WhiteboardToolsComponent>;
+describe('WhiteboardToolbarComponent', () => {
+  let component: WhiteboardToolbarComponent;
+  let fixture: ComponentFixture<WhiteboardToolbarComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [MatIconModule],
-      declarations: [WhiteboardToolsComponent, ColorlistComponent]
+      declarations: [WhiteboardToolbarComponent, ColorListComponent]
     }).compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(WhiteboardToolsComponent);
+    fixture = TestBed.createComponent(WhiteboardToolbarComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

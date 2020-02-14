@@ -1,20 +1,22 @@
-<p *ngIf="!editMode; else input" class="card-text">{{ text }}</p>
+<p *ngIf="mode !== Mode.EditMode; else editView" class="card-text">{{
+  text
+}}</p>
 
-<ng-template #input>
+<ng-template #editView>
   <mat-form-field appearance="standard" color="primary" class="card-input">
     <textarea
       #message
-      maxlength="100"
-      type="text"
-      name="text"
-      [(ngModel)]="text"
-      (ngModelChange)="onChangeText($event)"
-      class="card-input__input"
       matInput
       matNativeControl
+      class="card-input__input"
+      type="text"
+      name="text"
+      (ngModelChange)="onChangeText($event)"
+      [maxlength]="MAX_CHARACTERS"
+      [(ngModel)]="text"
     ></textarea>
     <mat-hint class="card-input__hint" align="end"
-      >{{ message.value.length }} / 100</mat-hint
+      >{{ message.value.length }} / {{ MAX_CHARACTERS }}</mat-hint
     >
   </mat-form-field>
 </ng-template>

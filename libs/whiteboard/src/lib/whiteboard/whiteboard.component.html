@@ -1,10 +1,10 @@
 <div class="whiteboard" campusImageDrag>
-  <campus-whiteboard-tools
-    (deleteCards)="btnDelClicked()"
+  <campus-whiteboard-toolbar
+    *ngIf="isToolbarVisible"
+    (deleteCards)="bulkDeleteClicked()"
     (changeSelectedColor)="changeSelectedCardsColor($event)"
     (createCard)="btnPlusClicked()"
-    *ngIf="this.selectedCards.length > 1"
-  ></campus-whiteboard-tools>
+  ></campus-whiteboard-toolbar>
   <div class="whiteboard__header">
     <h2
       (click)="showTitleInput()"
@@ -26,12 +26,13 @@
       *ngFor="let card of cards"
       cdkDrag
       class="whiteboard__card"
-      [mode]="card.mode"
       [description]="card.description"
       [color]="card.color"
       [image]="card.image"
       [left]="card.left"
       [top]="card.top"
+      [(mode)]="card.mode"
+      (modeChange)="cardModeChanged(card, $event)"
       (lastColor)="saveLastColor($event)"
       (deleteCard)="onDeleteCard(card)"
       (select)="selectCard(card)"

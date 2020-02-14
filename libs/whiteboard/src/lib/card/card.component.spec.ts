@@ -13,10 +13,10 @@ import { MockMatIconRegistry } from '@campus/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { CardImageComponent } from '../card-image/card-image.component';
 import { CardTextComponent } from '../card-text/card-text.component';
-import { ColorlistComponent } from '../colorlist/colorlist.component';
+import { CardToolbarComponent } from '../card-toolbar/card-toolbar.component';
+import { ColorListComponent } from '../color-list/color-list.component';
 import { ImageToolbarComponent } from '../image-toolbar/image-toolbar.component';
 import { ProgressBarComponent } from '../progress-bar/progress-bar.component';
-import { ToolbarComponent } from '../toolbar/toolbar.component';
 import { CardComponent } from './card.component';
 
 describe('CardComponent', () => {
@@ -36,8 +36,8 @@ describe('CardComponent', () => {
       ],
       declarations: [
         CardComponent,
-        ToolbarComponent,
-        ColorlistComponent,
+        CardToolbarComponent,
+        ColorListComponent,
         CardTextComponent,
         CardImageComponent,
         ImageToolbarComponent,

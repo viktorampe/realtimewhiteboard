@@ -1,6 +1,6 @@
-import { Mode } from '../util/enums/mode.enum';
+import { Mode } from '../enums/mode.enum';
 
-export default interface Card {
+export default interface CardInterface {
   mode: Mode;
   color: string;
   description: string;

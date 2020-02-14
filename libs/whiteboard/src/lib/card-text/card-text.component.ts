@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Mode } from '../../shared/enums/mode.enum';
 
 @Component({
   selector: 'campus-card-text',
@@ -6,8 +7,10 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
   styleUrls: ['./card-text.component.scss']
 })
 export class CardTextComponent implements OnInit {
+  readonly MAX_CHARACTERS = 100;
+
+  @Input() mode: Mode;
   @Input() text: string;
-  @Input() editMode: boolean;
 
   @Output() textChange = new EventEmitter<string>();
 
@@ -17,5 +20,9 @@ export class CardTextComponent implements OnInit {
 
   onChangeText(text: string) {
     this.textChange.emit(text);
+  }
+
+  get Mode() {
+    return Mode;
   }
 }

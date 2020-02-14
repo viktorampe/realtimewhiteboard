@@ -7,7 +7,7 @@ import {
   OnInit,
   Output
 } from '@angular/core';
-import { Mode } from '../../util/enums/mode.enum';
+import { Mode } from '../../shared/enums/mode.enum';
 
 @Component({
   selector: 'campus-card',
@@ -19,22 +19,18 @@ export class CardComponent implements OnInit, OnChanges {
   @Input() color: string;
   @Input() description: string;
   @Input() image: string;
-  @Input() editMode: boolean;
-  @Input() toolbarsVisible: boolean;
   @Input() top: number;
   @Input() left: number;
-  @Input() checkboxVisible: boolean;
-  @Input() isSelected: boolean;
 
   @Output() deleteCard = new EventEmitter();
   @Output() lastColor = new EventEmitter<string>();
   @Output() select = new EventEmitter<void>();
   @Output() deselect = new EventEmitter<void>();
+  @Output() modeChange = new EventEmitter<Mode>();
 
   @HostBinding('style.top') topStyle: string;
   @HostBinding('style.left') leftStyle: string;
   viewModeImage: boolean;
-  maxCharacters = 300;
   pressTime: number;
 
   constructor() {
@@ -48,7 +44,17 @@ export class CardComponent implements OnInit, OnChanges {
     this.leftStyle = this.left + 'px';
   }
 
-  onImageClicked($event) {}
+  get Mode() {
+    return Mode;
+  }
+
+  pressCard() {
+    if (this.mode === Mode.SelectedMode || this.mode === Mode.EditMode) {
+      this.setIdleMode();
+    } else {
+      this.setSelectedMode();
+    }
+  }
 
   removeImage() {
     this.image = '';
@@ -58,43 +64,37 @@ export class CardComponent implements OnInit, OnChanges {
     this.image = url;
   }
 
-  onDeleteCard() {
+  setEditMode() {
+    this.mode = Mode.EditMode;
+    this.modeChange.emit(this.mode);
+  }
+
+  setSelectedMode() {
+    this.mode = Mode.SelectedMode;
+    this.modeChange.emit(this.mode);
+  }
+
+  setIdleMode() {
+    this.mode = Mode.IdleMode;
+    this.modeChange.emit(this.mode);
+  }
+
+  setMultiselectMode() {
+    this.select.emit();
+  }
+
+  emitDeleteCard() {
     this.deleteCard.emit();
   }
 
-  showImageSettings() {
-    //TODO: show modal with options --> 'select img from this computer', 'remove image'
-    //this.removeImage();
-    this.replaceImage('hello_world');
-  }
-
   selectColor(color: string) {
-    this.toolbarsVisible = false;
-    this.editMode = false;
     this.color = color;
     this.lastColor.emit(color);
+    this.setIdleMode();
   }
 
-  onCheckboxChanged(event) {
-    if (event.target.checked) {
-      this.select.emit();
-    } else {
-      this.deselect.emit();
-    }
-  }
-
-  toggleEditMode() {
-    this.editMode = !this.editMode;
-    if (!this.editMode && this.toolbarsVisible) {
-      this.toolbarsVisible = false;
-    }
-  }
-
-  toggleView() {
+  toggleViewModeImage() {
     this.viewModeImage = !this.viewModeImage;
-  }
-
-  toggleToolbars() {
-    this.toolbarsVisible = !this.toolbarsVisible;
+    this.setIdleMode();
   }
 }

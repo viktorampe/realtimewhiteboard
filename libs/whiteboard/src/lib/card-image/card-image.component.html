@@ -1,4 +1,4 @@
 <div class="card-image">
-  <campus-image-toolbar *ngIf="editMode"></campus-image-toolbar>
-  <img class="card-image__image" [src]="imageUrl" (click)="onImageClicked()" />
+  <campus-image-toolbar *ngIf="mode === Mode.EditMode"></campus-image-toolbar>
+  <img class="card-image__image" [src]="imageUrl" />
 </div>
