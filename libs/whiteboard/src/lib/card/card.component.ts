@@ -96,7 +96,7 @@ export class CardComponent implements OnInit, OnChanges {
   flipIconClicked() {
     this.toggleViewModeImage();
 
-    if (this.mode !== Mode.SelectedMode) {
+    if (this.mode !== Mode.EditMode) {
       this.setIdleMode();
     }
   }
