@@ -61,6 +61,13 @@ export class CardComponent implements OnInit, OnChanges {
 
   replaceImage(url: string) {
     this.image = url;
+
+    this.setUploadMode();
+
+    // TODO: remove this settimeout and wait for actual image upload
+    setTimeout(() => {
+      this.setIdleMode();
+    }, 500);
   }
 
   setEditMode() {
@@ -75,6 +82,11 @@ export class CardComponent implements OnInit, OnChanges {
 
   setIdleMode() {
     this.mode = Mode.IdleMode;
+    this.modeChange.emit(this.mode);
+  }
+
+  setUploadMode() {
+    this.mode = Mode.UploadMode;
     this.modeChange.emit(this.mode);
   }
 
