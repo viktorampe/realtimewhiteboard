@@ -1,11 +1,4 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnChanges,
-  OnInit,
-  Output
-} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Mode } from '../../shared/enums/mode.enum';
 
 @Component({
@@ -13,7 +6,7 @@ import { Mode } from '../../shared/enums/mode.enum';
   templateUrl: './card.component.html',
   styleUrls: ['./card.component.scss']
 })
-export class CardComponent implements OnInit, OnChanges {
+export class CardComponent implements OnInit {
   @Input() mode: Mode;
   @Input() color: string;
   @Input() description: string;
@@ -36,8 +29,6 @@ export class CardComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {}
-
-  ngOnChanges() {}
 
   get Mode() {
     return Mode;
