@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconRegistry } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { ENVIRONMENT_SEARCHMODES_TOKEN } from '@campus/shared';
 import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
 import { configureTestSuite } from 'ng-bullet';
@@ -18,6 +19,7 @@ describe('ManageTaskContentComponent', () => {
       declarations: [ManageTaskContentComponent],
       providers: [
         { provide: KabasTasksViewModel, useClass: MockKabasTasksViewModel },
+        { provide: ENVIRONMENT_SEARCHMODES_TOKEN, useValue: {} },
         {
           provide: MatIconRegistry,
           useClass: MockMatIconRegistry
