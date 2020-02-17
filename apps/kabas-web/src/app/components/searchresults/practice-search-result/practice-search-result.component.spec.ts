@@ -15,7 +15,7 @@ import {
 } from '@campus/dal';
 import {
   ContentActionInterface,
-  CONTENT_ACTIONS_SERVICE_TOKEN,
+  CONTENT_OPEN_ACTIONS_SERVICE_TOKEN,
   EduContentSearchResultInterface
 } from '@campus/shared';
 import { MockDate, MockMatIconRegistry } from '@campus/testing';
@@ -80,7 +80,7 @@ describe('PracticeSearchResultComponent', () => {
           useValue: () => new Promise(() => {})
         },
         {
-          provide: CONTENT_ACTIONS_SERVICE_TOKEN,
+          provide: CONTENT_OPEN_ACTIONS_SERVICE_TOKEN,
           useValue: {
             getActionsForEduContent: () => mockActions
           }

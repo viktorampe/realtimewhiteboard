@@ -60,7 +60,16 @@ export class MockKabasTasksViewModel
           ...task,
           isPaperTask: true,
           name: `papier: ${task.name}`,
-          description: `papieren taak: ${task.description}`
+          description: `papieren taak: ${task.description}`,
+          startDate: null,
+          endDate: null,
+          assignees: task.assignees.map(assignee => {
+            return {
+              ...assignee,
+              start: null,
+              end: null
+            };
+          })
         };
       })
     );
@@ -359,6 +368,7 @@ export class MockKabasTasksViewModel
 
   public getDeleteInfo(): any {}
 
+  public addTaskEduContents() {}
   public updateTaskEduContentsRequired() {}
   public deleteTaskEduContents() {}
   public printTask() {}
@@ -369,4 +379,6 @@ export class MockKabasTasksViewModel
   public openEduContentAsDownload() {}
   public openBoeke() {}
   public previewEduContentAsImage() {}
+  public addEduContentToTask() {}
+  public removeEduContentFromTask() {}
 }
