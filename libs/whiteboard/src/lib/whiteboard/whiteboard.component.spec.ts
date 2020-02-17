@@ -1,3 +1,4 @@
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
@@ -37,7 +38,8 @@ describe('WhiteboardComponent', () => {
         MatDialogModule,
         BrowserAnimationsModule,
         MatProgressBarModule,
-        MatInputModule
+        MatInputModule,
+        DragDropModule
       ],
       declarations: [
         WhiteboardComponent,
