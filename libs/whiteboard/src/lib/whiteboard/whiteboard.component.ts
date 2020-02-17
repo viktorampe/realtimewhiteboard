@@ -52,6 +52,11 @@ export class WhiteboardComponent implements OnInit {
     });
   }
 
+  addCardToShelve(card: CardInterface) {
+    card.mode = Mode.ShelfMode;
+    this.shelvedCards.push(card);
+  }
+
   showTitleInput() {
     this.isTitleInputSelected = true;
   }
@@ -63,6 +68,9 @@ export class WhiteboardComponent implements OnInit {
   }
 
   onDeleteCard(card: CardInterface) {
+    //TODO: if(kaartje werd door redactie gemaakt)
+    this.addCardToShelve(card);
+    //TODO: else
     this.cards = this.cards.filter(c => c !== card);
   }
 

@@ -1,0 +1,10 @@
+<div class="shelf">
+  <campus-card
+    class="shelf__card"
+    *ngFor="let card of cards"
+    [description]="card.description"
+    [color]="card.color"
+    [image]="card.image"
+    [(mode)]="card.mode"
+  ></campus-card>
+</div>
