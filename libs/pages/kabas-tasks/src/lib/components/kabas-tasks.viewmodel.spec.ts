@@ -918,11 +918,12 @@ describe('KabasTaskViewModel', () => {
       const taskId = 1;
 
       const digitalEduContentTypes = [
+        EduContentTypeEnum.BOEKE,
+        EduContentTypeEnum.LINK,
         EduContentTypeEnum.EXERCISE,
         EduContentTypeEnum.FILE,
-        EduContentTypeEnum.LINK,
-        EduContentTypeEnum.TIMELINE,
-        EduContentTypeEnum.WEB_APP
+        EduContentTypeEnum.WEB_APP,
+        EduContentTypeEnum.TIMELINE
       ];
 
       const testcases = [
