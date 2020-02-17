@@ -27,7 +27,7 @@ describe('ManageTaskContentComponent', () => {
 
   let searchComponent;
   let viewModel: KabasTasksViewModel;
-  //file.only
+
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [UiModule, NoopAnimationsModule, SearchTestModule, SharedModule],
