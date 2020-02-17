@@ -7,7 +7,9 @@ import {
   ClassGroupQueries,
   DalState,
   EduContent,
+  EduContentServiceInterface,
   EduContentTOCInterface,
+  EDU_CONTENT_SERVICE_TOKEN,
   EffectFeedback,
   EffectFeedbackActions,
   FavoriteActions,
@@ -106,7 +108,9 @@ export class KabasTasksViewModel
     @Inject(OPEN_STATIC_CONTENT_SERVICE_TOKEN)
     private openStaticContentService: OpenStaticContentServiceInterface,
     @Inject(ENVIRONMENT_SEARCHMODES_TOKEN)
-    private searchModes: EnvironmentSearchModesInterface
+    private searchModes: EnvironmentSearchModesInterface,
+    @Inject(EDU_CONTENT_SERVICE_TOKEN)
+    private eduContentService: EduContentServiceInterface
   ) {
     this.tasksWithAssignments$ = this.store.pipe(
       select(getTasksWithAssignmentsByType, {
@@ -538,6 +542,17 @@ export class KabasTasksViewModel
 
   public updateSearchState(state: SearchStateInterface) {
     this._searchState$.next(state);
+  }
+
+  public requestAutoComplete(searchTerm: string): Observable<string[]> {
+    return this.getInitialSearchState().pipe(
+      map(initialSearchState => {
+        return { ...initialSearchState, searchTerm };
+      }),
+      switchMap(enrichedSearchState => {
+        return this.eduContentService.autoComplete(enrichedSearchState);
+      })
+    );
   }
 
   private setupSearchResults(): void {}

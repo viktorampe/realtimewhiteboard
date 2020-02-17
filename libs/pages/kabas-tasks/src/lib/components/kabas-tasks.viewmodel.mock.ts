@@ -14,6 +14,11 @@ import {
   TaskFixture,
   TaskInterface
 } from '@campus/dal';
+import {
+  SearchModeInterface,
+  SearchResultInterface,
+  SearchStateInterface
+} from '@campus/search';
 import { ViewModelInterface } from '@campus/testing';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -45,6 +50,9 @@ export class MockKabasTasksViewModel
   public classGroups$: BehaviorSubject<ClassGroupInterface[]>;
   public groups$: BehaviorSubject<GroupInterface[]>;
   public students$: BehaviorSubject<PersonInterface[]>;
+
+  public searchResults$: BehaviorSubject<SearchResultInterface>;
+  public searchState$: BehaviorSubject<SearchStateInterface>;
 
   constructor() {
     const tasks = this.setupTaskWithAssignments();
@@ -381,4 +389,18 @@ export class MockKabasTasksViewModel
   public previewEduContentAsImage() {}
   public addEduContentToTask() {}
   public removeEduContentFromTask() {}
+
+  public getInitialSearchState(): Observable<SearchStateInterface> {
+    return;
+  }
+
+  public getSearchMode(): Observable<SearchModeInterface> {
+    return;
+  }
+
+  public updateSearchState() {}
+
+  public requestAutoComplete(): Observable<string[]> {
+    return;
+  }
 }

@@ -69,8 +69,8 @@ export class ManageTaskContentComponent implements OnInit, AfterViewInit {
     }
   }
 
-  onAutoCompleteRequest(event) {
-    throw new Error('not implemented');
+  public onAutoCompleteRequest(term: string) {
+    this.autoCompleteValues$ = this.viewModel.requestAutoComplete(term);
   }
 
   onSearchStateChange(searchState: SearchStateInterface) {
