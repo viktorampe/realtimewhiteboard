@@ -40,17 +40,23 @@ export class ManageCollectionComponent
   protected useFilter: boolean;
   protected asModalSideSheet: boolean;
 
-  protected _filterTextInput: FilterTextInputComponent<
+  _filterTextInput: FilterTextInputComponent<
     ManageCollectionItemInterface[],
     ManageCollectionItemInterface
   >;
+
+  _selectionList: MatSelectionList;
 
   @Output() selectionChanged = new EventEmitter<
     ItemToggledInCollectionInterface
   >();
 
   @ViewChild(MatSelectionList, { static: false })
-  private selectionList: MatSelectionList;
+  set selectionList(list: MatSelectionList) {
+    if (list) {
+      this._selectionList = list;
+    }
+  }
 
   @ViewChild(FilterTextInputComponent, { static: false })
   set filterTextInput(
@@ -81,10 +87,9 @@ export class ManageCollectionComponent
     );
 
     this.selectedIds = data.linkedItemIds;
-    this.useFilter = data.useFilter ? data.useFilter : false; // default true for backward compatibility
-    this.asModalSideSheet = data.asModalSideSheet
-      ? data.asModalSideSheet
-      : false; // default false for backward compatibility
+    this.useFilter = data.useFilter === undefined ? true : data.useFilter; // default true for backward compatibility
+    this.asModalSideSheet =
+      data.asModalSideSheet === undefined ? false : data.asModalSideSheet; // default false for backward compatibility
   }
 
   ngOnInit() {}
@@ -93,7 +98,7 @@ export class ManageCollectionComponent
     this.subscriptions.add(
       // when options change i.e. after filtering
       // re-set selection
-      this.selectionList.options.changes
+      this._selectionList.options.changes
         .pipe(startWith(null as any)) // emit once on init
         .subscribe(() => {
           this.selectListItems(this.selectedIds);
@@ -147,7 +152,7 @@ export class ManageCollectionComponent
   }
 
   private selectListItems(ids: Set<number>) {
-    this.selectionList.options
+    this._selectionList.options
       .filter(listItem => ids.has(listItem.value))
       .forEach(listItem => (listItem.selected = true));
 

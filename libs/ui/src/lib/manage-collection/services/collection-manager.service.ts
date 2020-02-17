@@ -35,7 +35,9 @@ export class CollectionManagerService
       item: item,
       linkableItems: linkableItems,
       linkedItemIds: new Set(linkedItemIds),
-      recentItemIds: new Set(recentItemIds)
+      recentItemIds: new Set(recentItemIds),
+      asModalSideSheet: true,
+      useFilter: true
     };
 
     const dialogRef = this.openDialog(dialogData);
