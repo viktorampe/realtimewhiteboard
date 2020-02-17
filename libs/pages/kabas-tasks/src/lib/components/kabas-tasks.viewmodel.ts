@@ -147,6 +147,8 @@ export class KabasTasksViewModel
     this.classGroups$ = this.store.pipe(select(ClassGroupQueries.getAll));
     this.groups$ = this.store.pipe(select(GroupQueries.getAll));
     this.students$ = this.store.pipe(select(LinkedPersonQueries.getStudents));
+
+    this.setupSearchResults();
   }
 
   openEduContentAsExercise(eduContent: EduContent): void {
@@ -633,7 +635,8 @@ export class KabasTasksViewModel
 
               return {
                 eduContent: eduContent,
-                inTask: !!eduContentIdsInTask[eduContent.id]
+                inTask: !!eduContentIdsInTask[eduContent.id],
+                addTaskActions: true
               };
             }
           )
