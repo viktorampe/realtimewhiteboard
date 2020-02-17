@@ -123,7 +123,7 @@ export class WhiteboardComponent implements OnInit {
 
   checkToolbarVisible() {
     this.isToolbarVisible =
-      this.cards.filter(c => c.mode === Mode.MultiSelectSelectedMode).length >
+      this.cards.filter(c => c.mode === Mode.MultiSelectSelectedMode).length >=
       1;
   }
 
