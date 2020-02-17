@@ -2,6 +2,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { UiModule } from '@campus/ui';
 import { configureTestSuite } from 'ng-bullet';
+import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
+import { MockKabasTasksViewModel } from '../kabas-tasks.viewmodel.mock';
 import { ManageTaskContentComponent } from './manage-task-content.component';
 
 describe('ManageTaskContentComponent', () => {
@@ -11,7 +13,10 @@ describe('ManageTaskContentComponent', () => {
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [UiModule, NoopAnimationsModule],
-      declarations: [ManageTaskContentComponent]
+      declarations: [ManageTaskContentComponent],
+      providers: [
+        { provide: KabasTasksViewModel, useClass: MockKabasTasksViewModel }
+      ]
     });
   });
 
