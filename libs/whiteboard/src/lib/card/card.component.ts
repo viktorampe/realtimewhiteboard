@@ -51,7 +51,12 @@ export class CardComponent {
     if (this.mode === Mode.ZoomMode) {
       this.setIdleMode();
     } else {
-      this.cardTapped.emit();
+      const isZoomAllowed =
+        this.viewModeImage && this.image && this.mode !== Mode.EditMode;
+
+      if (isZoomAllowed) {
+        this.cardTapped.emit();
+      }
     }
   }
 
