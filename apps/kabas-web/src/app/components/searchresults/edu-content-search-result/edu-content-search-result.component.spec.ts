@@ -1,3 +1,4 @@
+// file.only
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import {
   MatIconModule,
@@ -15,6 +16,7 @@ import {
   ContentActionInterface,
   ContentOpenActionsServiceInterface,
   CONTENT_OPEN_ACTIONS_SERVICE_TOKEN,
+  CONTENT_TASK_ACTIONS_SERVICE_TOKEN,
   EduContentSearchResultInterface
 } from '@campus/shared';
 import { MockDate, MockMatIconRegistry } from '@campus/testing';
@@ -58,6 +60,15 @@ describe('EduContentSearchResultComponent', () => {
     }
   ];
 
+  const mockTaskActions: ContentActionInterface[] = [
+    {
+      label: 'Toevoegen aan taak',
+      icon: 'add',
+      tooltip: 'Inhoud toevoagen aan deze taak',
+      handler: jest.fn()
+    }
+  ];
+
   beforeAll(() => {
     dateMock = new MockDate();
   });
@@ -84,6 +95,12 @@ describe('EduContentSearchResultComponent', () => {
           provide: CONTENT_OPEN_ACTIONS_SERVICE_TOKEN,
           useValue: {
             getActionsForEduContent: () => mockActions
+          }
+        },
+        {
+          provide: CONTENT_TASK_ACTIONS_SERVICE_TOKEN,
+          useValue: {
+            getTaskActionsForEduContent: () => mockTaskActions
           }
         }
       ]
@@ -186,6 +203,23 @@ describe('EduContentSearchResultComponent', () => {
 
         clickAction.mockReset();
       });
+    });
+  });
+
+  describe('getActions', () => {
+    it('should return the default educontent actions', () => {
+      expect(component.actions).toEqual(mockActions);
+    });
+
+    it('should include task actions when addTaskActions is true', () => {
+      component.data = {
+        eduContent: new EduContentFixture(),
+        addTaskActions: true
+      } as EduContentSearchResultInterface;
+
+      component.ngOnInit();
+
+      expect(component.actions).toEqual([...mockTaskActions, ...mockActions]);
     });
   });
 });
