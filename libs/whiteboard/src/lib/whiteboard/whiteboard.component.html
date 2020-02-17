@@ -1,4 +1,4 @@
-<div class="whiteboard" campusImageDrag>
+<div class="whiteboard" campusImageDrag (click)="onClickWhiteboard()">
   <campus-whiteboard-toolbar
     *ngIf="isToolbarVisible"
     (deleteCards)="bulkDeleteClicked()"
@@ -20,11 +20,7 @@
       *ngIf="isTitleInputSelected"
     />
   </div>
-  <div
-    class="whiteboard__workspace"
-    (click)="onClickWhiteboard($event)"
-    (dblclick)="onDblClick($event)"
-  >
+  <div class="whiteboard__workspace" (dblclick)="onDblClick($event)">
     <campus-card
       *ngFor="let card of cards"
       cdkDrag
