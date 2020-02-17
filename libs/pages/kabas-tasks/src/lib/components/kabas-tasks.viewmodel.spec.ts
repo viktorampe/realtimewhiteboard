@@ -463,7 +463,8 @@ describe('KabasTaskViewModel', () => {
           url: '',
           params: {
             id: '1'
-          }
+          },
+          queryParams: {}
         }
       });
 
@@ -479,13 +480,37 @@ describe('KabasTaskViewModel', () => {
         navigationId: 1,
         state: {
           url: '',
-          params: {}
+          params: {},
+          queryParams: {}
         }
       });
 
       expect(kabasTasksViewModel.currentTaskParams$).toBeObservable(
         hot('a', {
           a: { id: undefined }
+        })
+      );
+    });
+
+    it('should contain the queryparam ids', () => {
+      store.overrideSelector(getRouterState, {
+        navigationId: 1,
+        state: {
+          url: '',
+          params: {
+            id: '1'
+          },
+          queryParams: {
+            book: 2,
+            lesson: 3,
+            chapter: 4
+          }
+        }
+      });
+
+      expect(kabasTasksViewModel.currentTaskParams$).toBeObservable(
+        hot('a', {
+          a: { id: 1, book: 2, lesson: 3, chapter: 4 }
         })
       );
     });
@@ -507,7 +532,8 @@ describe('KabasTaskViewModel', () => {
         navigationId: 1,
         state: {
           url: '',
-          params: currentTaskParams
+          params: currentTaskParams,
+          queryParams: {}
         }
       });
       store.overrideSelector(getTaskWithAssignmentAndEduContents, expectedTask);
@@ -879,7 +905,8 @@ describe('KabasTaskViewModel', () => {
         navigationId: 1,
         state: {
           url: '',
-          params: { id: taskId }
+          params: { id: taskId },
+          queryParams: {}
         }
       });
       store.overrideSelector(getTaskWithAssignmentAndEduContents, {
@@ -1018,7 +1045,8 @@ describe('KabasTaskViewModel', () => {
             navigationId: 1,
             state: {
               url: '',
-              params: { id: taskId }
+              params: { id: taskId },
+              queryParams: {}
             }
           });
           store.overrideSelector(

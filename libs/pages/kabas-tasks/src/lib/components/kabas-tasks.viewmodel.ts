@@ -78,6 +78,9 @@ import {
 
 export interface CurrentTaskParams {
   id?: number;
+  book?: number;
+  lesson?: number;
+  chapter?: number;
 }
 
 @Injectable({
@@ -137,9 +140,18 @@ export class KabasTasksViewModel
     this.currentTaskParams$ = this.routerState$.pipe(
       filter(routerState => !!routerState),
       map((routerState: RouterReducerState<RouterStateUrl>) => ({
-        id: +routerState.state.params.id || undefined
+        id: +routerState.state.params.id || undefined,
+        book: +routerState.state.queryParams.book || undefined,
+        lesson: +routerState.state.queryParams.lesson || undefined,
+        chapter: +routerState.state.queryParams.chapter || undefined
       })),
-      distinctUntilChanged((a, b) => a.id === b.id),
+      distinctUntilChanged(
+        (a, b) =>
+          a.id === b.id &&
+          a.book === b.book &&
+          a.lesson === b.lesson &&
+          a.chapter === b.chapter
+      ),
       shareReplay(1)
     );
 
@@ -647,7 +659,19 @@ export class KabasTasksViewModel
   }
 
   private getTocLessonsStream(): Observable<EduContentTOCInterface[]> {
-    // TODO: implement
-    throw new Error('Not yet implemented');
+    return this.currentTaskParams$.pipe(
+      filter(params => !!params.chapter),
+      switchMap(params => {
+        if (params.lesson) {
+          return this.store.pipe(
+            select(EduContentTocQueries.getById, { id: params.lesson }),
+            map(toc => [toc])
+          );
+        }
+        return this.store.pipe(
+          select(EduContentTocQueries.getTocsForToc, { tocId: params.chapter })
+        );
+      })
+    );
   }
 }
