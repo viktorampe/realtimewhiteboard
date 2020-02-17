@@ -130,15 +130,9 @@ export class KabasTasksViewModel
       filter(routerState => !!routerState),
       map((routerState: RouterReducerState<RouterStateUrl>) => ({
         id: +routerState.state.params.id || undefined,
-        book: routerState.state.queryParams
-          ? +routerState.state.queryParams.book
-          : undefined,
-        lesson: routerState.state.queryParams
-          ? +routerState.state.queryParams.lesson
-          : undefined,
-        chapter: routerState.state.queryParams
-          ? +routerState.state.queryParams.chapter
-          : undefined
+        book: +routerState.state.queryParams.book || undefined,
+        lesson: +routerState.state.queryParams.lesson || undefined,
+        chapter: +routerState.state.queryParams.chapter || undefined
       })),
       distinctUntilChanged(
         (a, b) =>
