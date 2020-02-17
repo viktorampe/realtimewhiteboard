@@ -32,7 +32,7 @@ import {
   TASK_SERVICE_TOKEN
 } from '@campus/dal';
 import {
-  SearchingViewmodelInterface,
+  SearcherInterface,
   SearchModeInterface,
   SearchResultInterface,
   SearchStateInterface
@@ -77,7 +77,7 @@ export interface CurrentTaskParams {
   providedIn: 'root'
 })
 export class KabasTasksViewModel
-  implements ContentOpenerInterface, SearchingViewmodelInterface {
+  implements ContentOpenerInterface, SearcherInterface {
   public searchResults$: Observable<SearchResultInterface>;
   public searchState$: Observable<SearchStateInterface>;
 
@@ -454,18 +454,16 @@ export class KabasTasksViewModel
           ]);
         }
 
+        const { PAPER_EXERCISE, ...DIGITAL_EXERCISE } = EduContentTypeEnum;
         if (currentTask.isPaperTask) {
           initialSearchState.filterCriteriaSelections.set('eduContent.type', [
-            EduContentTypeEnum.PAPER_EXERCISE
+            PAPER_EXERCISE
           ]);
         } else {
-          initialSearchState.filterCriteriaSelections.set('eduContent.type', [
-            EduContentTypeEnum.EXERCISE,
-            EduContentTypeEnum.FILE,
-            EduContentTypeEnum.LINK,
-            EduContentTypeEnum.TIMELINE,
-            EduContentTypeEnum.WEB_APP
-          ]);
+          initialSearchState.filterCriteriaSelections.set(
+            'eduContent.type',
+            Object.values(DIGITAL_EXERCISE)
+          );
         }
 
         initialSearchState.filterCriteriaSelections.set('learningArea', [

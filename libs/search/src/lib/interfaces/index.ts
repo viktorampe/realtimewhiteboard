@@ -4,4 +4,4 @@ export * from './search-filter-interface';
 export * from './search-mode-interface';
 export * from './search-result-interface';
 export * from './search-state.interface';
-export * from './searching-viewmodel.interface';
+export * from './searcher.interface';
