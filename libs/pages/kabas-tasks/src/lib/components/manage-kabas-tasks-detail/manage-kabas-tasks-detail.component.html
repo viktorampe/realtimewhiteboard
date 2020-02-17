@@ -5,6 +5,7 @@
     <campus-button
       class="shared-header__contextual__button smallIcon"
       iconClass=""
+      routerLink="content"
       ><span>Lesmateriaal toevoegen</span></campus-button
     >
     <campus-button
@@ -32,7 +33,9 @@
       *ngIf="selectedTaskEduContents.length === 1"
       class="shared-header__contextual__button smallIcon"
       iconClass=""
-      (click)="preview(selectedTaskEduContents[0], !!task.isPaperTask)"
+      (click)="
+        preview(selectedTaskEduContents[0].eduContent, !!task.isPaperTask)
+      "
       ><span>{{
         task.isPaperTask ? 'Voorbeeld' : 'Openen'
       }}</span></campus-button
@@ -185,7 +188,9 @@
             ></div
           >
         </ng-container>
-        <campus-button primary>+ Lesmateriaal toevoegen</campus-button>
+        <campus-button primary routerLink="content"
+          >+ Lesmateriaal toevoegen</campus-button
+        >
         <campus-button
           danger
           (click)="clickDeleteTask(task)"
@@ -217,7 +222,7 @@
               }}</span>
             </div>
             <campus-button
-              (click)="preview(selectedContent, !!task.isPaperTask)"
+              (click)="preview(selectedContent.eduContent, !!task.isPaperTask)"
               >Preview</campus-button
             >
           </ng-container>
@@ -329,7 +334,10 @@
         </div>
 
         <div class="manage-kabas-tasks-detail__list__actions">
-          <div class="manage-kabas-tasks-detail__list__primary-action">
+          <div
+            routerLink="content"
+            class="manage-kabas-tasks-detail__list__primary-action"
+          >
             <mat-icon svgIcon="add"></mat-icon>
             Lesmateriaal toevoegen aan deze taak
           </div>

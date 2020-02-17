@@ -12,6 +12,8 @@ import {
   MultiCheckBoxTableItemInterface,
   MultiCheckBoxTableRowHeaderColumnInterface
 } from '@campus/ui';
+// tslint:disable-next-line: nx-enforce-module-boundaries
+import { SectionModeEnum } from 'libs/ui/src/lib/section/section.component';
 
 @Component({
   selector: 'campus-demo-page',
@@ -24,6 +26,11 @@ export class DemoPageComponent implements OnInit {
   >[]; // chapters
   items: MultiCheckBoxTableItemInterface<EduContentTOCInterface>[];
   itemColumns: MultiCheckBoxTableItemColumnInterface<ClassGroupInterface>[];
+
+  sectionMode = SectionModeEnum.EDITABLE;
+  sectionModes = SectionModeEnum;
+  editableText = 'I am editable';
+  staticText = 'I am static content';
 
   constructor() {}
 
@@ -78,5 +85,40 @@ export class DemoPageComponent implements OnInit {
     >
   ) {
     console.log(data);
+  }
+
+  changeMode(mode: SectionModeEnum) {
+    this.sectionMode = mode;
+  }
+
+  handleTriggerActionClick(event: MouseEvent) {
+    console.log('icon clicked');
+  }
+
+  handleIconAction(event: MouseEvent, action: string) {
+    event.stopPropagation();
+    console.log(
+      action + ' clicked: this event should not trigger a section click'
+    );
+    if (this.sectionMode === SectionModeEnum.EDITING) {
+      this.sectionMode = SectionModeEnum.EDITABLE;
+    } else {
+      this.sectionMode = SectionModeEnum.EDITING;
+    }
+  }
+
+  handleSectionAction(action: string) {
+    console.log(action + ' clicked');
+    // this.sectionMode = SectionModeEnum.EDITING;
+  }
+
+  save(event: MouseEvent, input: HTMLInputElement) {
+    event.stopPropagation();
+    console.log(
+      'projected button clicked: this event should not trigger a section click'
+    );
+
+    this.editableText = input.value;
+    this.sectionMode = SectionModeEnum.EDITABLE;
   }
 }

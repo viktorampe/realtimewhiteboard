@@ -102,8 +102,8 @@ export class UiEffects {
 
       return new SetBreadcrumbs({ breadcrumbs });
     },
-    onError: () => {
-      console.error('loading breadcrumbs failed');
+    onError: (action, error) => {
+      console.error('Loading breadcrumbs failed -', error);
       return new ActionSuccessful({
         successfulAction: 'breadcrumbs failed successfully'
       });

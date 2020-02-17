@@ -15,6 +15,7 @@ import {
 } from '@campus/search';
 import {
   ContentOpenerInterface,
+  ContentTaskManagerInterface,
   EnvironmentSearchModesInterface,
   ENVIRONMENT_SEARCHMODES_TOKEN,
   OpenStaticContentServiceInterface,
@@ -30,7 +31,8 @@ import { filter, map, switchMap, withLatestFrom } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root'
 })
-export class GlobalSearchViewModel implements ContentOpenerInterface {
+export class GlobalSearchViewModel
+  implements ContentOpenerInterface, ContentTaskManagerInterface {
   public searchResults$: Observable<SearchResultInterface>;
   public searchState$: Observable<SearchStateInterface>;
 
@@ -128,6 +130,14 @@ export class GlobalSearchViewModel implements ContentOpenerInterface {
     this.openStaticContentService.open(eduContent, false, true);
   }
 
+  public addEduContentToTask(eduContent: EduContent): void {
+    // TODO: open dialog with tasks
+  }
+
+  public removeEduContentFromTask(eduContent: EduContent): void {
+    // unused in global search (no active task)
+  }
+
   private initialize() {
     this.setSourceStreams();
     this.setPresentationStreams();
@@ -160,8 +170,9 @@ export class GlobalSearchViewModel implements ContentOpenerInterface {
               );
 
               return {
-                eduContent: eduContent
+                eduContent: eduContent,
                 // add additional props for the resultItemComponent here
+                addTaskActions: true
               };
             }
           )

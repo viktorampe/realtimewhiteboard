@@ -21,18 +21,25 @@
     (clickMultiSelectSelectedIcon)="setMultiSelectMode()"
   ></campus-card-toolbar>
   <div class="card__content">
-    <campus-card-image
-      *ngIf="viewModeImage; else viewModeText"
-      class="card__content__image"
-      [imageUrl]="image"
-      [mode]="mode"
-    ></campus-card-image>
-    <ng-template #viewModeText class="card__content__input">
-      <campus-card-text
-        class="card__content__text"
-        [(text)]="description"
+    <ng-container *ngIf="mode !== Mode.UploadMode; else uploadMode">
+      <campus-card-image
+        *ngIf="viewModeImage; else viewModeText"
+        class="card__content__image"
+        [imageUrl]="image"
         [mode]="mode"
-      ></campus-card-text>
+        (removeClicked)="removeImage()"
+        (updateClicked)="updateImage()"
+      ></campus-card-image>
+      <ng-template #viewModeText class="card__content__input">
+        <campus-card-text
+          class="card__content__text"
+          [(text)]="description"
+          [mode]="mode"
+        ></campus-card-text>
+      </ng-template>
+    </ng-container>
+    <ng-template #uploadMode>
+      <campus-progress-bar [progressPercentage]="67"></campus-progress-bar>
     </ng-template>
   </div>
 </div>

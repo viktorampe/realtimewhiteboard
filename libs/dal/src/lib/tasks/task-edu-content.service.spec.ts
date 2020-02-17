@@ -25,7 +25,8 @@ describe('TaskEduContentService', () => {
   const mockTaskEduContentApi = {
     deleteById: jest.fn().mockImplementation(() => mockDeleteById$),
     updateTaskEduContents: jest.fn(),
-    destroyTaskEduContents: jest.fn()
+    destroyTaskEduContents: jest.fn(),
+    createTaskEduContents: jest.fn()
   };
 
   beforeEach(() => {
@@ -117,6 +118,33 @@ describe('TaskEduContentService', () => {
         service.deleteTaskEduContents(userId, taskEduContentIds)
       ).toBeObservable(hot('a', { a: mockDestroyTaskEduContentResult }));
       expect(destroyTaskEduContentsSpy).toHaveBeenCalledWith(taskEduContentIds);
+    });
+  });
+
+  describe('createTaskEduContents', () => {
+    const taskEduContents = [
+      new TaskEduContentFixture({ id: 1 }),
+      new TaskEduContentFixture({ id: 2 })
+    ];
+    const userId = 123;
+    let createTaskEduContentsSpy: jest.SpyInstance;
+    const mockCreateTaskEduContentResult = {
+      success: [{ id: 1 }, { id: 2 }],
+      errors: []
+    };
+
+    beforeEach(() => {
+      createTaskEduContentsSpy = mockTaskEduContentApi.createTaskEduContents = jest.fn();
+      createTaskEduContentsSpy.mockReturnValue(
+        hot('a', { a: mockCreateTaskEduContentResult })
+      );
+    });
+
+    it('should call the api and return the result', () => {
+      expect(
+        service.createTaskEduContent(userId, taskEduContents)
+      ).toBeObservable(hot('a', { a: mockCreateTaskEduContentResult }));
+      expect(createTaskEduContentsSpy).toHaveBeenCalledWith(taskEduContents);
     });
   });
 
