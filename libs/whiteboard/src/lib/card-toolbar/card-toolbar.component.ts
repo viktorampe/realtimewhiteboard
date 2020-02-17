@@ -14,6 +14,7 @@ export class CardToolbarComponent implements OnInit {
   @Output() clickConfirmIcon = new EventEmitter<void>();
   @Output() clickFlipIcon = new EventEmitter<void>();
   @Output() clickMultiSelectIcon = new EventEmitter<void>();
+  @Output() clickMultiSelectSelectedIcon = new EventEmitter<void>();
 
   constructor() {}
 
@@ -41,5 +42,9 @@ export class CardToolbarComponent implements OnInit {
 
   multiSelectClicked() {
     this.clickMultiSelectIcon.emit();
+  }
+
+  multiSelectSelectedClicked() {
+    this.clickMultiSelectSelectedIcon.emit();
   }
 }

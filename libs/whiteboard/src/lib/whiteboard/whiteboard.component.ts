@@ -1,3 +1,4 @@
+import { CdkDragEnd } from '@angular/cdk/drag-drop';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Mode } from '../../shared/enums/mode.enum';
 import CardInterface from '../../shared/models/card.interface';
@@ -82,6 +83,7 @@ export class WhiteboardComponent implements OnInit {
     this.cards = this.cards.filter(
       c => c.mode !== Mode.MultiSelectSelectedMode
     );
+    this.checkToolbarVisible();
   }
 
   changeSelectedCardsColor(color: string) {
@@ -105,7 +107,9 @@ export class WhiteboardComponent implements OnInit {
   }
 
   onSelectCard(card: CardInterface) {
-    this.cards.forEach(c => (c.mode = Mode.MultiSelectMode));
+    this.cards
+      .filter(c => c.mode !== Mode.MultiSelectSelectedMode)
+      .forEach(c => (c.mode = Mode.MultiSelectMode));
     this.checkToolbarVisible();
   }
 
@@ -119,9 +123,21 @@ export class WhiteboardComponent implements OnInit {
     this.checkToolbarVisible();
   }
 
+  onDragEnded(event: CdkDragEnd, card) {
+    const cardPosition = event.source.getFreeDragPosition();
+    card.top = cardPosition.y;
+    card.left = cardPosition.x;
+  }
+
   checkToolbarVisible() {
     this.isToolbarVisible =
       this.cards.filter(c => c.mode === Mode.MultiSelectSelectedMode).length >
       1;
+  }
+
+  onClickWhiteboard() {
+    this.cards
+      .filter(c => c.mode === Mode.SelectedMode)
+      .forEach(c => (c.mode = Mode.IdleMode));
   }
 }
