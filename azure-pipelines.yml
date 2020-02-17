@@ -69,7 +69,7 @@ steps:
 
   # Checks for file.only (Wallaby) and fdescribe (jest), which can screw up build or local tests
   - script:
-      if grep -ERl 'fdescribe|file.only' ./libs --include=*.spec.ts; then exit 1; fi;
+      if grep -ERl 'fit\(|fdescribe\(|file.only' ./apps ./libs --include=*.spec.ts; then exit 1; fi;
     displayName: 'Check for fdescribe or file.only'
     condition: and(succeeded(), eq(variables['dkFeaturePR'], 'true'))
 
