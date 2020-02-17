@@ -53,7 +53,7 @@ export class WhiteboardComponent implements OnInit {
     });
   }
 
-  addCardToShelve(card: CardInterface) {
+  addCardToShelf(card: CardInterface) {
     card.mode = Mode.ShelfMode;
     this.shelvedCards.push(card);
   }
@@ -70,7 +70,7 @@ export class WhiteboardComponent implements OnInit {
 
   onDeleteCard(card: CardInterface) {
     //TODO: if(kaartje werd door redactie gemaakt)
-    this.addCardToShelve(card);
+    this.addCardToShelf(card);
     //TODO: else
     this.cards = this.cards.filter(c => c !== card);
   }
@@ -80,9 +80,12 @@ export class WhiteboardComponent implements OnInit {
   }
 
   bulkDeleteClicked() {
-    this.cards = this.cards.filter(
-      c => c.mode !== Mode.MultiSelectSelectedMode
-    );
+    this.cards.forEach(card => {
+      if (card.mode === Mode.MultiSelectSelectedMode) {
+        this.addCardToShelf(card);
+        this.cards = this.cards.filter(c => c !== card);
+      }
+    });
     this.checkToolbarVisible();
   }
 
