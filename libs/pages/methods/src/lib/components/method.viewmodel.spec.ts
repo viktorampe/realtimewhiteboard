@@ -538,7 +538,7 @@ describe('MethodViewModel', () => {
     });
   });
 
-  describe('searchResult$', () => {
+  describe('searchResults$', () => {
     const mockSearchResult: SearchResultInterface = {
       count: 2,
       results: [
