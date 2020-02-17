@@ -55,6 +55,12 @@ export class CardComponent implements OnInit, OnChanges {
     }
   }
 
+  onClickCard(event: MouseEvent) {
+    if (this.mode !== Mode.IdleMode) {
+      event.stopPropagation();
+    }
+  }
+
   removeImage() {
     this.image = '';
   }

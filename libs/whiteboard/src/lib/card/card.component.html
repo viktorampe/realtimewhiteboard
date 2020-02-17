@@ -1,4 +1,9 @@
-<div class="card" [style.border-color]="color" (press)="pressCard()">
+<div
+  class="card"
+  [style.border-color]="color"
+  (click)="onClickCard($event)"
+  (press)="pressCard()"
+>
   <campus-color-list
     class="card__color-list"
     (selectedColor)="selectColor($event)"

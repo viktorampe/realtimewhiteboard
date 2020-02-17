@@ -118,8 +118,6 @@ export class WhiteboardComponent implements OnInit {
   }
 
   onClickWhiteboard(event: Event) {
-    if (event.currentTarget === event.target) {
-      this.cards.forEach(c => (c.mode = Mode.IdleMode));
-    }
+    this.cards.forEach(c => (c.mode = Mode.IdleMode));
   }
 }
