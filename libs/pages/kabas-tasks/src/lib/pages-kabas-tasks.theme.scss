@@ -1,11 +1,12 @@
 @import './components/manage-kabas-tasks-overview/manage-kabas-tasks-overview.theme';
 @import './components/task-list-item/task-list-item.component.theme';
-@import './components/task-edu-content-list-item/task-edu-content-list-item.theme.scss';
+@import './components/task-edu-content-list-item/task-edu-content-list-item.theme';
 @import './components/manage-kabas-tasks-detail/manage-kabas-tasks-detail.theme';
 @import './components/manage-kabas-tasks-assignee-modal/manage-kabas-tasks-assignee-modal.component.theme';
 @import './components/new-task/new-task.component.theme';
 @import './components/manage-kabas-tasks-add-assignees/manage-kabas-tasks-add-assignees.theme';
 @import './components/print-paper-task-modal/print-paper-task-modal.theme';
+@import './components/manage-task-content/manage-task-content.theme';
 
 // color palette
 $pages-kabas-tasks-text-color--primary: black !default;
@@ -82,4 +83,5 @@ $pages-kabas-tasks_link_label-height: 16px !default;
   @include pages-kabas-tasks-new-task-theme();
   @include manage-kabas-tasks-add-assignee-theme();
   @include print-paper-task-modal-theme();
+  @include manage-task-content-theme();
 }
