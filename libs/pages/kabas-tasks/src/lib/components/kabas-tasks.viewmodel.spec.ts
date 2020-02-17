@@ -1017,6 +1017,8 @@ describe('KabasTaskViewModel', () => {
       new TaskEduContentFixture()
     ];
 
+    const eduContent = new EduContentFixture();
+
     it('should dispatch an action', () => {
       store.dispatch = jest.fn();
 
@@ -1028,6 +1030,34 @@ describe('KabasTaskViewModel', () => {
           taskEduContents
         })
       );
+    });
+
+    const currentTaskParams = { id: 1 };
+    const expectedTask = {
+      ...new TaskFixture({ id: 1, isPaperTask: true }), // this is the current task!!
+      eduContentAmount: 1,
+      assignees: [],
+      taskEduContents: [
+        new TaskEduContentFixture({ id: 1, eduContentId: 1 }) // this eduContent should be included
+      ]
+    };
+    beforeEach(() => {
+      store.overrideSelector(getRouterState, {
+        navigationId: 1,
+        state: {
+          url: '',
+          params: currentTaskParams
+        }
+      });
+      store.overrideSelector(getTaskWithAssignmentAndEduContents, expectedTask);
+    });
+
+    it('should add eduContent to task', () => {
+      const spy = jest.spyOn(kabasTasksViewModel, 'addTaskEduContents');
+      kabasTasksViewModel.addEduContentToTask(eduContent);
+      expect(spy).toHaveBeenCalledWith([
+        { taskId: 1, eduContentId: eduContent.id }
+      ]);
     });
   });
 });
