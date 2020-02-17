@@ -3,6 +3,7 @@
   [class.zoom]="mode === Mode.ZoomMode"
   [style.border-color]="color"
   (click)="onClickCard($event)"
+  (tap)="onTapCard()"
   (press)="pressCard()"
 >
   <campus-color-list

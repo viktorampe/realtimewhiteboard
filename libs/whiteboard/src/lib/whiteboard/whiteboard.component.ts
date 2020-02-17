@@ -67,6 +67,16 @@ export class WhiteboardComponent implements OnInit {
     this.cards = this.cards.filter(c => c !== card);
   }
 
+  onCardTapped(card: CardInterface) {
+    const isCardSelected = !!this.cards.filter(
+      c => c.mode === Mode.SelectedMode
+    ).length;
+
+    if (!isCardSelected) {
+      card.mode = Mode.ZoomMode;
+    }
+  }
+
   saveLastColor(color: string) {
     this.lastColor = color;
   }
