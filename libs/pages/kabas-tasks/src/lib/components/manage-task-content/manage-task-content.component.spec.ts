@@ -1,7 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconRegistry } from '@angular/material';
+import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { ENVIRONMENT_SEARCHMODES_TOKEN } from '@campus/shared';
+import {
+  ResultItemMockComponent,
+  SearchComponent,
+  SearchStateInterface,
+  SearchTestModule
+} from '@campus/search';
+import {
+  ENVIRONMENT_ICON_MAPPING_TOKEN,
+  ENVIRONMENT_SEARCHMODES_TOKEN,
+  ENVIRONMENT_TESTING_TOKEN,
+  SharedModule
+} from '@campus/shared';
 import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
 import { configureTestSuite } from 'ng-bullet';
@@ -13,28 +25,75 @@ describe('ManageTaskContentComponent', () => {
   let component: ManageTaskContentComponent;
   let fixture: ComponentFixture<ManageTaskContentComponent>;
 
+  let searchComponent;
+  let viewModel: KabasTasksViewModel;
+
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [UiModule, NoopAnimationsModule],
+      imports: [UiModule, NoopAnimationsModule, SearchTestModule, SharedModule],
       declarations: [ManageTaskContentComponent],
       providers: [
-        { provide: KabasTasksViewModel, useClass: MockKabasTasksViewModel },
-        { provide: ENVIRONMENT_SEARCHMODES_TOKEN, useValue: {} },
+        { provide: MatIconRegistry, useClass: MockMatIconRegistry },
         {
-          provide: MatIconRegistry,
-          useClass: MockMatIconRegistry
-        }
+          provide: ENVIRONMENT_SEARCHMODES_TOKEN,
+          useValue: {}
+        },
+        { provide: KabasTasksViewModel, useClass: MockKabasTasksViewModel },
+        { provide: ENVIRONMENT_ICON_MAPPING_TOKEN, useValue: {} },
+        { provide: ENVIRONMENT_TESTING_TOKEN, useValue: {} }
       ]
+    }).overrideModule(BrowserDynamicTestingModule, {
+      set: { entryComponents: [ResultItemMockComponent] }
     });
   });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ManageTaskContentComponent);
     component = fixture.componentInstance;
+    viewModel = TestBed.get(KabasTasksViewModel);
+
+    searchComponent = TestBed.get(SearchComponent);
+    component.searchComponent = searchComponent;
+
     fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  describe('search', () => {
+    let mockSearchState;
+
+    beforeEach(() => {
+      mockSearchState = {
+        searchTerm: 'breuken'
+      } as SearchStateInterface;
+    });
+
+    it('should reset search filters when clearSearchFilters is called', () => {
+      component.searchComponent.reset = jest.fn();
+      component.clearSearchFilters();
+
+      expect(component.searchComponent.reset).toHaveBeenCalledTimes(1);
+    });
+
+    it('should send searchText to viewmodel subject', () => {
+      jest.spyOn(viewModel, 'requestAutoComplete');
+
+      component.onAutoCompleteRequest('foo');
+
+      expect(viewModel.requestAutoComplete).toHaveBeenCalledTimes(1);
+      expect(viewModel.requestAutoComplete).toHaveBeenCalledWith('foo');
+    });
+
+    it('should send searchstate to viewmodel on change', () => {
+      jest.spyOn(viewModel, 'updateSearchState');
+
+      component.onSearchStateChange(mockSearchState);
+
+      expect(viewModel.updateSearchState).toHaveBeenCalledTimes(1);
+      expect(viewModel.updateSearchState).toHaveBeenCalledWith(mockSearchState);
+    });
   });
 });

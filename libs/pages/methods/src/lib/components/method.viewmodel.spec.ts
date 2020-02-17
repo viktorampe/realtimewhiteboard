@@ -50,8 +50,7 @@ import {
   YearReducer
 } from '@campus/dal';
 import {
-  FilterFactoryFixture,
-  SearchModeInterface,
+  SearchModeFixture,
   SearchResultInterface,
   SearchStateInterface
 } from '@campus/search';
@@ -235,27 +234,6 @@ describe('MethodViewModel', () => {
     })
   ];
 
-  function createMockSearchMode(overrides: Partial<SearchModeInterface>) {
-    return Object.assign(
-      {
-        name: 'demo',
-        label: 'demo',
-        dynamicFilters: false,
-        searchFilterFactory: FilterFactoryFixture,
-        searchTerm: {
-          // autocompleteEl: string; //reference to material autocomplete component
-          domHost: 'hostSearchTerm'
-        },
-        results: {
-          component: null,
-          sortModes: [],
-          pageSize: 3
-        }
-      },
-      overrides
-    ) as SearchModeInterface;
-  }
-
   const generalFiles: EduContent[] = [
     new EduContentFixture({ id: 1 }, { eduContentProductTypeId: 1 }),
     new EduContentFixture({ id: 2 }, { eduContentProductTypeId: 2 }),
@@ -320,9 +298,9 @@ describe('MethodViewModel', () => {
         {
           provide: ENVIRONMENT_SEARCHMODES_TOKEN,
           useValue: {
-            demo: createMockSearchMode({ name: 'demo' }),
-            'chapter-lesson': createMockSearchMode({ name: 'chapter-lesson' }),
-            'diabolo-chapter-lesson': createMockSearchMode({
+            demo: new SearchModeFixture(),
+            'chapter-lesson': new SearchModeFixture({ name: 'chapter-lesson' }),
+            'diabolo-chapter-lesson': new SearchModeFixture({
               name: 'diabolo-chapter-lesson'
             })
           }

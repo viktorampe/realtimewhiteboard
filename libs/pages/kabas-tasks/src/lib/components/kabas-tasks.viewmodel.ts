@@ -8,8 +8,10 @@ import {
   DalState,
   EduContent,
   EduContentBookInterface,
+  EduContentServiceInterface,
   EduContentTOCInterface,
   EduContentTocQueries,
+  EDU_CONTENT_SERVICE_TOKEN,
   EffectFeedback,
   EffectFeedbackActions,
   FavoriteActions,
@@ -42,6 +44,8 @@ import {
   ContentOpenerInterface,
   ContentTaskManagerInterface,
   EduContentTypeEnum,
+  EnvironmentSearchModesInterface,
+  ENVIRONMENT_SEARCHMODES_TOKEN,
   OpenStaticContentServiceInterface,
   OPEN_STATIC_CONTENT_SERVICE_TOKEN,
   ScormExerciseServiceInterface,
@@ -50,7 +54,7 @@ import {
 import { Update } from '@ngrx/entity';
 import { RouterReducerState } from '@ngrx/router-store';
 import { Action, select, Store } from '@ngrx/store';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
 import {
   distinctUntilChanged,
   filter,
@@ -84,9 +88,6 @@ export class KabasTasksViewModel
     ContentOpenerInterface,
     ContentTaskManagerInterface,
     SearcherInterface {
-  public searchResults$: Observable<SearchResultInterface>;
-  public searchState$: Observable<SearchStateInterface>;
-
   public tasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
   public paperTasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
   public currentTask$: Observable<TaskWithAssigneesInterface>;
@@ -97,6 +98,11 @@ export class KabasTasksViewModel
   public groups$: Observable<GroupInterface[]>;
   public students$: Observable<PersonInterface[]>;
   public searchBook$ = new BehaviorSubject<EduContentBookInterface>(null);
+
+  public searchResults$: Observable<SearchResultInterface>;
+  public searchState$: Observable<SearchStateInterface>;
+
+  private _searchState$: BehaviorSubject<SearchStateInterface>;
 
   private routerState$: Observable<RouterReducerState<RouterStateUrl>>;
 
@@ -109,7 +115,11 @@ export class KabasTasksViewModel
     @Inject(SCORM_EXERCISE_SERVICE_TOKEN)
     private scormExerciseService: ScormExerciseServiceInterface,
     @Inject(OPEN_STATIC_CONTENT_SERVICE_TOKEN)
-    private openStaticContentService: OpenStaticContentServiceInterface
+    private openStaticContentService: OpenStaticContentServiceInterface,
+    @Inject(ENVIRONMENT_SEARCHMODES_TOKEN)
+    private searchModes: EnvironmentSearchModesInterface,
+    @Inject(EDU_CONTENT_SERVICE_TOKEN)
+    private eduContentService: EduContentServiceInterface
   ) {
     this.tasksWithAssignments$ = this.store.pipe(
       select(getTasksWithAssignmentsByType, {
@@ -142,6 +152,9 @@ export class KabasTasksViewModel
     this.classGroups$ = this.store.pipe(select(ClassGroupQueries.getAll));
     this.groups$ = this.store.pipe(select(GroupQueries.getAll));
     this.students$ = this.store.pipe(select(LinkedPersonQueries.getStudents));
+
+    this._searchState$ = new BehaviorSubject<SearchStateInterface>(null);
+    this.searchState$ = this._searchState$;
   }
 
   openEduContentAsExercise(eduContent: EduContent): void {
@@ -440,10 +453,6 @@ export class KabasTasksViewModel
     );
   }
 
-  public requestAutoComplete(searchTerm: string): Observable<string[]> {
-    throw new Error('Method not implemented.');
-  }
-
   public getInitialSearchState(): Observable<SearchStateInterface> {
     return combineLatest([this.currentTask$, this.searchBook$]).pipe(
       map(([currentTask, searchBook]) => {
@@ -489,11 +498,22 @@ export class KabasTasksViewModel
   }
 
   public getSearchMode(mode: string): Observable<SearchModeInterface> {
-    throw new Error('Method not implemented.');
+    return of(this.searchModes[mode]);
   }
 
   public updateSearchState(state: SearchStateInterface) {
-    throw new Error('Method not implemented.');
+    this._searchState$.next(state);
+  }
+
+  public requestAutoComplete(searchTerm: string): Observable<string[]> {
+    return this.getInitialSearchState().pipe(
+      map(initialSearchState => {
+        return { ...initialSearchState, searchTerm };
+      }),
+      switchMap(enrichedSearchState => {
+        return this.eduContentService.autoComplete(enrichedSearchState);
+      })
+    );
   }
 
   private getArchivingAction(updates, errors): Action {
