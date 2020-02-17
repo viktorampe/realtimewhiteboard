@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import CardInterface from '../../shared/models/card.interface';
 
 @Component({
@@ -8,8 +8,16 @@ import CardInterface from '../../shared/models/card.interface';
 })
 export class ShelfComponent implements OnInit {
   @Input() cards: CardInterface[];
+  @Output() minimizeShelf = new EventEmitter<boolean>();
+
+  isMinimized: boolean = false;
 
   constructor() {}
 
   ngOnInit() {}
+
+  toggleShelf() {
+    this.isMinimized = !this.isMinimized;
+    this.minimizeShelf.emit(this.isMinimized);
+  }
 }

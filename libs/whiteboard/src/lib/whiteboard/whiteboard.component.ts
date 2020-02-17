@@ -21,6 +21,7 @@ export class WhiteboardComponent implements OnInit {
   title = '';
   isTitleInputSelected = true;
   isToolbarVisible = false;
+  isShelfMinimized = false;
 
   constructor() {}
 
@@ -142,5 +143,9 @@ export class WhiteboardComponent implements OnInit {
     this.cards
       .filter(c => c.mode === Mode.SelectedMode)
       .forEach(c => (c.mode = Mode.IdleMode));
+  }
+
+  toggleMinimizeShelf(event) {
+    this.isShelfMinimized = event;
   }
 }

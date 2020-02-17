@@ -1,10 +1,17 @@
-<div class="shelf">
-  <campus-card
-    class="shelf__card"
-    *ngFor="let card of cards"
-    [description]="card.description"
-    [color]="card.color"
-    [image]="card.image"
-    [(mode)]="card.mode"
-  ></campus-card>
+<div class="shelf" [ngStyle]="{ minimized: isMinimized }">
+  <div class="shelf__button">
+    <button (click)="toggleShelf()">{{
+      isMinimized ? 'expand' : 'minimize'
+    }}</button>
+  </div>
+  <div class="shelf__container" *ngIf="!isMinimized">
+    <campus-card
+      class="shelf__container__card"
+      *ngFor="let card of cards"
+      [description]="card.description"
+      [color]="card.color"
+      [image]="card.image"
+      [(mode)]="card.mode"
+    ></campus-card>
+  </div>
 </div>

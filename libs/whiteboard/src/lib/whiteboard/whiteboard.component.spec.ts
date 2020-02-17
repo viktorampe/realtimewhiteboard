@@ -229,4 +229,10 @@ describe('WhiteboardComponent', () => {
     component.onDeleteCard(card);
     expect(card.mode).toBe(Mode.ShelfMode);
   });
+
+  it('should toggle isShelfMinimized when toggleMinimizeShelf is called', () => {
+    component.isShelfMinimized = false;
+    component.toggleMinimizeShelf(true);
+    expect(component.isShelfMinimized).toBe(true);
+  });
 });
