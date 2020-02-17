@@ -130,7 +130,7 @@ export class KabasTasksViewModel
       filter(routerState => !!routerState),
       map((routerState: RouterReducerState<RouterStateUrl>) => ({
         id: +routerState.state.params.id || undefined,
-        bookId: routerState.state.queryParams
+        book: routerState.state.queryParams
           ? +routerState.state.queryParams.book
           : undefined,
         lesson: routerState.state.queryParams
@@ -140,7 +140,13 @@ export class KabasTasksViewModel
           ? +routerState.state.queryParams.chapter
           : undefined
       })),
-      distinctUntilChanged((a, b) => a.id === b.id),
+      distinctUntilChanged(
+        (a, b) =>
+          a.id === b.id &&
+          a.book === b.book &&
+          a.lesson === b.lesson &&
+          a.chapter === b.chapter
+      ),
       shareReplay(1)
     );
 
