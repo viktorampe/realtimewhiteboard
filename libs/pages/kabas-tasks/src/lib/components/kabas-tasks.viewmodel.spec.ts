@@ -7,6 +7,7 @@ import {
   EduContentBookFixture,
   EduContentFixture,
   EduContentMetadataFixture,
+  EduContentServiceInterface,
   EduFileFixture,
   EduFileTypeEnum,
   EDU_CONTENT_SERVICE_TOKEN,
@@ -25,7 +26,11 @@ import {
   UserQueries,
   YearFixture
 } from '@campus/dal';
-import { SearchModeFixture, SearchStateInterface } from '@campus/search';
+import {
+  SearchModeFixture,
+  SearchStateFixture,
+  SearchStateInterface
+} from '@campus/search';
 import {
   EduContentTypeEnum,
   ENVIRONMENT_API_TOKEN,
@@ -40,6 +45,7 @@ import { Store } from '@ngrx/store';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { hot } from 'jasmine-marbles';
 import { configureTestSuite } from 'ng-bullet';
+import { of } from 'rxjs';
 import { AssigneeFixture } from '../interfaces/Assignee.fixture';
 import { AssigneeTypesEnum } from '../interfaces/Assignee.interface';
 import { TaskWithAssigneesFixture } from '../interfaces/TaskWithAssignees.fixture';
@@ -61,7 +67,10 @@ describe('KabasTaskViewModel', () => {
   let taskService: TaskServiceInterface;
   let scormExerciseService: ScormExerciseServiceInterface;
   let openStaticContentService: OpenStaticContentServiceInterface;
+  let eduContentService: EduContentServiceInterface;
+
   const apiBase = 'api.foo.be';
+  const mockAutoCompleteReturnValue = ['strings', 'for', 'autocomplete'];
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
@@ -123,6 +132,7 @@ describe('KabasTaskViewModel', () => {
     taskService = TestBed.get(TASK_SERVICE_TOKEN);
     scormExerciseService = TestBed.get(SCORM_EXERCISE_SERVICE_TOKEN);
     openStaticContentService = TestBed.get(OPEN_STATIC_CONTENT_SERVICE_TOKEN);
+    eduContentService = TestBed.get(EDU_CONTENT_SERVICE_TOKEN);
   });
 
   afterAll(() => {
@@ -1031,6 +1041,49 @@ describe('KabasTaskViewModel', () => {
           expect(initialSearchState$).toBeObservable(hot('a', { a: expected }));
         })
       );
+    });
+
+    describe('updateSearchState', () => {
+      it('should emit the value in the searchState$', () => {
+        const mockSearchState = {} as SearchStateInterface;
+
+        kabasTasksViewModel.updateSearchState(mockSearchState);
+        expect(kabasTasksViewModel.searchState$).toBeObservable(
+          hot('a', { a: mockSearchState })
+        );
+      });
+    });
+
+    describe('requestAutoComplete', () => {
+      it('should call getInitialSearchState', () => {
+        const getInitialSearchStateSpy = jest.spyOn(
+          kabasTasksViewModel,
+          'getInitialSearchState'
+        );
+        kabasTasksViewModel.requestAutoComplete('some string');
+        expect(getInitialSearchStateSpy).toHaveBeenCalledTimes(1);
+      });
+
+      it('should call the eduContentService.autoComplete with the correct parameters and return a string[] observable', () => {
+        const getInitialSearchStateSpy = jest
+          .spyOn(kabasTasksViewModel, 'getInitialSearchState')
+          .mockReturnValue(of(new SearchStateFixture()));
+
+        const getAutoCompleteSpy = jest
+          .spyOn(eduContentService, 'autoComplete')
+          .mockReturnValue(of(mockAutoCompleteReturnValue));
+
+        expect(
+          kabasTasksViewModel.requestAutoComplete('some string')
+        ).toBeObservable(hot('(a|)', { a: mockAutoCompleteReturnValue }));
+
+        expect(getAutoCompleteSpy).toHaveBeenCalledTimes(1);
+        expect(getAutoCompleteSpy).toHaveBeenCalledWith({
+          searchTerm: 'some string',
+          filterCriteriaSelections: new Map<string, (number | string)[]>([]),
+          filterCriteriaOptions: new Map<string, number | string | boolean>()
+        });
+      });
     });
   });
 
