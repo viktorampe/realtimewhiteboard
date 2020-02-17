@@ -5,7 +5,12 @@
     *ngIf="mode === Mode.EditMode || mode === Mode.SelectedMode"
   ></campus-color-list>
   <campus-card-toolbar
-    *ngIf="mode === Mode.EditMode || mode === Mode.SelectedMode"
+    *ngIf="
+      mode === Mode.EditMode ||
+      mode === Mode.SelectedMode ||
+      mode === Mode.MultiSelectSelectedMode ||
+      mode === Mode.MultiSelectMode
+    "
     class="card__toolbar"
     [mode]="mode"
     (clickDeleteIcon)="emitDeleteCard()"
@@ -13,6 +18,7 @@
     (clickFlipIcon)="flipIconClicked()"
     (clickConfirmIcon)="setIdleMode()"
     (clickMultiSelectIcon)="setMultiSelectSelectedMode()"
+    (clickMultiSelectSelectedIcon)="setMultiSelectMode()"
   ></campus-card-toolbar>
   <div class="card__content">
     <ng-container *ngIf="mode !== Mode.UploadMode; else uploadMode">

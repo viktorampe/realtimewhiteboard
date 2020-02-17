@@ -1,30 +1,67 @@
-<div class="toolbar" *ngIf="mode !== Mode.EditMode; else editModeView">
-  <div class="toolbar__tool toolbar__delete" (click)="deleteIconClicked()">
-    <mat-icon
-      class="toolbar__tool__icon toolbar__delete__icon"
-      [svgIcon]="'delete'"
-    ></mat-icon>
-  </div>
-  <div class="toolbar__tool" (click)="multiSelectClicked()">
-    <mat-icon class="toolbar__tool__icon" [svgIcon]="'multiselect'"> </mat-icon>
-  </div>
-  <div class="toolbar__tool" (click)="flipIconClicked()">
-    <mat-icon class="toolbar__tool__icon" [svgIcon]="'flip'"></mat-icon>
-  </div>
-  <div class="toolbar__tool" (click)="editIconClicked()">
-    <mat-icon class="toolbar__tool__icon" [svgIcon]="'edit'"></mat-icon>
-  </div>
-</div>
-<ng-template #editModeView>
-  <div class="toolbar">
+<ng-container
+  *ngIf="
+    mode !== Mode.MultiSelectMode && mode !== Mode.MultiSelectSelectedMode;
+    else multiSelectView
+  "
+>
+  <div class="toolbar" *ngIf="mode !== Mode.EditMode; else editModeView">
+    <div class="toolbar__tool toolbar__delete" (click)="deleteIconClicked()">
+      <mat-icon
+        class="toolbar__tool__icon toolbar__delete__icon"
+        [svgIcon]="'delete'"
+      ></mat-icon>
+    </div>
+    <div class="toolbar__tool" (click)="multiSelectClicked()">
+      <mat-icon class="toolbar__tool__icon" [svgIcon]="'multiselect'">
+      </mat-icon>
+    </div>
     <div class="toolbar__tool" (click)="flipIconClicked()">
       <mat-icon class="toolbar__tool__icon" [svgIcon]="'flip'"></mat-icon>
     </div>
-    <div class="toolbar__tool toolbar__confirm" (click)="confirmIconClicked()">
-      <mat-icon
-        class="toolbar__tool__icon toolbar__confirm__icon"
-        [svgIcon]="'check'"
-      ></mat-icon>
+    <div class="toolbar__tool" (click)="editIconClicked()">
+      <mat-icon class="toolbar__tool__icon" [svgIcon]="'edit'"></mat-icon>
     </div>
+  </div>
+  <ng-template #editModeView>
+    <div class="toolbar">
+      <div class="toolbar__tool" (click)="flipIconClicked()">
+        <mat-icon class="toolbar__tool__icon" [svgIcon]="'flip'"></mat-icon>
+      </div>
+      <div
+        class="toolbar__tool toolbar__confirm"
+        (click)="confirmIconClicked()"
+      >
+        <mat-icon
+          class="toolbar__tool__icon toolbar__confirm__icon"
+          [svgIcon]="'check'"
+        ></mat-icon>
+      </div>
+    </div>
+  </ng-template>
+</ng-container>
+
+<ng-template #multiSelectView>
+  <div class="toolbar toolbar_multiSelect">
+    <div
+      *ngIf="mode === Mode.MultiSelectMode; else notSelectView"
+      class="toolbar__tool "
+      (click)="multiSelectClicked()"
+    >
+      <mat-icon class="toolbar__tool__icon " [svgIcon]="'multiselect'">
+      </mat-icon>
+    </div>
+    <ng-template #notSelectView>
+      <div
+        *ngIf="mode === Mode.MultiSelectSelectedMode"
+        class="toolbar__tool toolbar__multiSelect"
+        (click)="multiSelectClicked()"
+      >
+        <mat-icon
+          class="toolbar__tool__icon toolbar__select__icon"
+          [svgIcon]="'multiselect-selected'"
+          (click)="multiSelectSelectedClicked()"
+        ></mat-icon>
+      </div>
+    </ng-template>
   </div>
 </ng-template>
