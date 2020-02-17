@@ -11,6 +11,7 @@ import {
   EduContentInterface,
   EduContentServiceInterface,
   EduContentTOCInterface,
+  EduContentTocQueries,
   EDU_CONTENT_SERVICE_TOKEN,
   EffectFeedback,
   EffectFeedbackActions,
@@ -649,8 +650,26 @@ export class KabasTasksViewModel
     bookId: number,
     chapterId: number
   ): Observable<EduContentTOCInterface[]> {
-    // TODO: implement
-    throw new Error('Not yet implemented');
+    return this.store.pipe(
+      select(EduContentTocQueries.getChaptersForBook, {
+        bookId
+      }),
+      withLatestFrom(
+        this.store.pipe(
+          select(EduContentTocQueries.getTocsForToc, {
+            tocId: chapterId
+          })
+        )
+      ),
+      map(([chapters, lessons]) => {
+        const foundIndex = chapters.findIndex(
+          chapter => chapter.id === chapterId
+        );
+
+        chapters.splice(foundIndex + 1, 0, ...lessons);
+        return chapters;
+      })
+    );
   }
 
   private getTocLessonsStream(): Observable<EduContentTOCInterface[]> {
