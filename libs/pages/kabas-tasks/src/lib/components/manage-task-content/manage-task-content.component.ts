@@ -48,7 +48,7 @@ export class ManageTaskContentComponent implements OnInit, AfterViewInit {
     // redirect to favorite
     this.viewModel.currentTaskParams$
       .pipe(
-        filter(params => !!params.book),
+        filter(params => !params.book),
         switchMapTo(this.viewModel.favoriteBooksForTask$),
         take(1)
       )

@@ -2,6 +2,9 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconRegistry } from '@angular/material';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { Params, Router } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
+import { EduContentBookFixture, EduContentBookInterface } from '@campus/dal';
 import {
   ResultItemMockComponent,
   SearchComponent,
@@ -17,6 +20,7 @@ import {
 import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
 import { configureTestSuite } from 'ng-bullet';
+import { BehaviorSubject } from 'rxjs';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
 import { MockKabasTasksViewModel } from '../kabas-tasks.viewmodel.mock';
 import { ManageTaskContentComponent } from './manage-task-content.component';
@@ -24,13 +28,20 @@ import { ManageTaskContentComponent } from './manage-task-content.component';
 describe('ManageTaskContentComponent', () => {
   let component: ManageTaskContentComponent;
   let fixture: ComponentFixture<ManageTaskContentComponent>;
+  let router: Router;
 
   let searchComponent;
   let viewModel: KabasTasksViewModel;
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [UiModule, NoopAnimationsModule, SearchTestModule, SharedModule],
+      imports: [
+        UiModule,
+        NoopAnimationsModule,
+        SearchTestModule,
+        SharedModule,
+        RouterTestingModule
+      ],
       declarations: [ManageTaskContentComponent],
       providers: [
         { provide: MatIconRegistry, useClass: MockMatIconRegistry },
@@ -40,7 +51,11 @@ describe('ManageTaskContentComponent', () => {
         },
         { provide: KabasTasksViewModel, useClass: MockKabasTasksViewModel },
         { provide: ENVIRONMENT_ICON_MAPPING_TOKEN, useValue: {} },
-        { provide: ENVIRONMENT_TESTING_TOKEN, useValue: {} }
+        { provide: ENVIRONMENT_TESTING_TOKEN, useValue: {} },
+        {
+          provide: Router,
+          useValue: { navigate: () => {} }
+        }
       ]
     }).overrideModule(BrowserDynamicTestingModule, {
       set: { entryComponents: [ResultItemMockComponent] }
@@ -51,6 +66,7 @@ describe('ManageTaskContentComponent', () => {
     fixture = TestBed.createComponent(ManageTaskContentComponent);
     component = fixture.componentInstance;
     viewModel = TestBed.get(KabasTasksViewModel);
+    router = TestBed.get(Router);
 
     searchComponent = TestBed.get(SearchComponent);
     component.searchComponent = searchComponent;
@@ -94,6 +110,50 @@ describe('ManageTaskContentComponent', () => {
 
       expect(viewModel.updateSearchState).toHaveBeenCalledTimes(1);
       expect(viewModel.updateSearchState).toHaveBeenCalledWith(mockSearchState);
+    });
+  });
+
+  describe('favorite book redirect', () => {
+    it('should navigate to favorite book when one favorite is found', async () => {
+      jest.spyOn(router, 'navigate');
+      component.ngOnInit();
+
+      expect(router.navigate).toHaveBeenCalledWith(['.'], {
+        queryParams: { book: 1 }
+      });
+    });
+
+    it('should not navigate when no favorite is found', async () => {
+      jest.spyOn(router, 'navigate');
+      (viewModel.favoriteBooksForTask$ as BehaviorSubject<
+        EduContentBookInterface[]
+      >).next([]);
+      component.ngOnInit();
+
+      expect(router.navigate).not.toHaveBeenCalled();
+    });
+
+    it('should not navigate when multiple favorites are found', () => {
+      jest.spyOn(router, 'navigate');
+      (viewModel.favoriteBooksForTask$ as BehaviorSubject<
+        EduContentBookInterface[]
+      >).next([
+        new EduContentBookFixture({ id: 1 }),
+        new EduContentBookFixture({ id: 2 })
+      ]);
+      component.ngOnInit();
+
+      expect(router.navigate).not.toHaveBeenCalled();
+    });
+
+    it('should not navigate when already in a book', () => {
+      jest.spyOn(router, 'navigate');
+      (viewModel.currentTaskParams$ as BehaviorSubject<Params>).next({
+        book: 5
+      });
+      component.ngOnInit();
+
+      expect(router.navigate).not.toHaveBeenCalled();
     });
   });
 });

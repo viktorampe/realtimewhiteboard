@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@angular/core';
 import {
   ClassGroupFixture,
   ClassGroupInterface,
+  EduContentBookFixture,
   EduContentBookInterface,
   EduContentFixture,
   GroupFixture,
@@ -63,6 +64,7 @@ export class MockKabasTasksViewModel
   public students$: BehaviorSubject<PersonInterface[]>;
 
   public searchBook$: BehaviorSubject<EduContentBookInterface>;
+  public favoriteBooksForTask$: Observable<EduContentBookInterface[]>;
 
   constructor(
     @Inject(ENVIRONMENT_SEARCHMODES_TOKEN)
@@ -124,6 +126,10 @@ export class MockKabasTasksViewModel
       new PersonFixture({ id: 1, displayName: 'leerling 1' }),
       new PersonFixture({ id: 2, displayName: 'leerling 2' }),
       new PersonFixture({ id: 3, displayName: 'leerling 3' })
+    ]);
+
+    this.favoriteBooksForTask$ = new BehaviorSubject([
+      new EduContentBookFixture({ id: 1 })
     ]);
   }
 
