@@ -7,8 +7,10 @@ import {
   EduContentBookFixture,
   EduContentFixture,
   EduContentMetadataFixture,
+  EduContentServiceInterface,
   EduFileFixture,
   EduFileTypeEnum,
+  EDU_CONTENT_SERVICE_TOKEN,
   EffectFeedback,
   EffectFeedbackActions,
   FavoriteActions,
@@ -24,9 +26,15 @@ import {
   UserQueries,
   YearFixture
 } from '@campus/dal';
-import { SearchStateInterface } from '@campus/search';
+import {
+  SearchModeFixture,
+  SearchStateFixture,
+  SearchStateInterface
+} from '@campus/search';
 import {
   EduContentTypeEnum,
+  ENVIRONMENT_API_TOKEN,
+  ENVIRONMENT_SEARCHMODES_TOKEN,
   OpenStaticContentServiceInterface,
   OPEN_STATIC_CONTENT_SERVICE_TOKEN,
   ScormExerciseServiceInterface,
@@ -37,6 +45,7 @@ import { Store } from '@ngrx/store';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { hot } from 'jasmine-marbles';
 import { configureTestSuite } from 'ng-bullet';
+import { of } from 'rxjs';
 import { AssigneeFixture } from '../interfaces/Assignee.fixture';
 import { AssigneeTypesEnum } from '../interfaces/Assignee.interface';
 import { TaskWithAssigneesFixture } from '../interfaces/TaskWithAssignees.fixture';
@@ -58,6 +67,10 @@ describe('KabasTaskViewModel', () => {
   let taskService: TaskServiceInterface;
   let scormExerciseService: ScormExerciseServiceInterface;
   let openStaticContentService: OpenStaticContentServiceInterface;
+  let eduContentService: EduContentServiceInterface;
+
+  const apiBase = 'api.foo.be';
+  const mockAutoCompleteReturnValue = ['strings', 'for', 'autocomplete'];
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
@@ -86,6 +99,25 @@ describe('KabasTaskViewModel', () => {
           useValue: {
             open: jest.fn()
           }
+        },
+        {
+          provide: EDU_CONTENT_SERVICE_TOKEN,
+          useValue: {
+            search: () => {},
+            autoComplete: () => {}
+          }
+        },
+        {
+          provide: ENVIRONMENT_SEARCHMODES_TOKEN,
+          useValue: {
+            demo: new SearchModeFixture()
+          }
+        },
+        {
+          provide: ENVIRONMENT_API_TOKEN,
+          useValue: {
+            APIBase: apiBase
+          }
         }
       ]
     });
@@ -100,6 +132,7 @@ describe('KabasTaskViewModel', () => {
     taskService = TestBed.get(TASK_SERVICE_TOKEN);
     scormExerciseService = TestBed.get(SCORM_EXERCISE_SERVICE_TOKEN);
     openStaticContentService = TestBed.get(OPEN_STATIC_CONTENT_SERVICE_TOKEN);
+    eduContentService = TestBed.get(EDU_CONTENT_SERVICE_TOKEN);
   });
 
   afterAll(() => {
@@ -430,7 +463,8 @@ describe('KabasTaskViewModel', () => {
           url: '',
           params: {
             id: '1'
-          }
+          },
+          queryParams: {}
         }
       });
 
@@ -446,13 +480,37 @@ describe('KabasTaskViewModel', () => {
         navigationId: 1,
         state: {
           url: '',
-          params: {}
+          params: {},
+          queryParams: {}
         }
       });
 
       expect(kabasTasksViewModel.currentTaskParams$).toBeObservable(
         hot('a', {
           a: { id: undefined }
+        })
+      );
+    });
+
+    it('should contain the queryparam ids', () => {
+      store.overrideSelector(getRouterState, {
+        navigationId: 1,
+        state: {
+          url: '',
+          params: {
+            id: '1'
+          },
+          queryParams: {
+            book: 2,
+            lesson: 3,
+            chapter: 4
+          }
+        }
+      });
+
+      expect(kabasTasksViewModel.currentTaskParams$).toBeObservable(
+        hot('a', {
+          a: { id: 1, book: 2, lesson: 3, chapter: 4 }
         })
       );
     });
@@ -474,7 +532,8 @@ describe('KabasTaskViewModel', () => {
         navigationId: 1,
         state: {
           url: '',
-          params: currentTaskParams
+          params: currentTaskParams,
+          queryParams: {}
         }
       });
       store.overrideSelector(getTaskWithAssignmentAndEduContents, expectedTask);
@@ -846,7 +905,8 @@ describe('KabasTaskViewModel', () => {
         navigationId: 1,
         state: {
           url: '',
-          params: { id: taskId }
+          params: { id: taskId },
+          queryParams: {}
         }
       });
       store.overrideSelector(getTaskWithAssignmentAndEduContents, {
@@ -985,7 +1045,8 @@ describe('KabasTaskViewModel', () => {
             navigationId: 1,
             state: {
               url: '',
-              params: { id: taskId }
+              params: { id: taskId },
+              queryParams: {}
             }
           });
           store.overrideSelector(
@@ -1009,6 +1070,49 @@ describe('KabasTaskViewModel', () => {
         })
       );
     });
+
+    describe('updateSearchState', () => {
+      it('should emit the value in the searchState$', () => {
+        const mockSearchState = {} as SearchStateInterface;
+
+        kabasTasksViewModel.updateSearchState(mockSearchState);
+        expect(kabasTasksViewModel.searchState$).toBeObservable(
+          hot('a', { a: mockSearchState })
+        );
+      });
+    });
+
+    describe('requestAutoComplete', () => {
+      it('should call getInitialSearchState', () => {
+        const getInitialSearchStateSpy = jest.spyOn(
+          kabasTasksViewModel,
+          'getInitialSearchState'
+        );
+        kabasTasksViewModel.requestAutoComplete('some string');
+        expect(getInitialSearchStateSpy).toHaveBeenCalledTimes(1);
+      });
+
+      it('should call the eduContentService.autoComplete with the correct parameters and return a string[] observable', () => {
+        const getInitialSearchStateSpy = jest
+          .spyOn(kabasTasksViewModel, 'getInitialSearchState')
+          .mockReturnValue(of(new SearchStateFixture()));
+
+        const getAutoCompleteSpy = jest
+          .spyOn(eduContentService, 'autoComplete')
+          .mockReturnValue(of(mockAutoCompleteReturnValue));
+
+        expect(
+          kabasTasksViewModel.requestAutoComplete('some string')
+        ).toBeObservable(hot('(a|)', { a: mockAutoCompleteReturnValue }));
+
+        expect(getAutoCompleteSpy).toHaveBeenCalledTimes(1);
+        expect(getAutoCompleteSpy).toHaveBeenCalledWith({
+          searchTerm: 'some string',
+          filterCriteriaSelections: new Map<string, (number | string)[]>([]),
+          filterCriteriaOptions: new Map<string, number | string | boolean>()
+        });
+      });
+    });
   });
 
   describe('addTaskEduContents', () => {
@@ -1016,6 +1120,8 @@ describe('KabasTaskViewModel', () => {
       new TaskEduContentFixture(),
       new TaskEduContentFixture()
     ];
+
+    const eduContent = new EduContentFixture();
 
     it('should dispatch an action', () => {
       store.dispatch = jest.fn();
@@ -1028,6 +1134,34 @@ describe('KabasTaskViewModel', () => {
           taskEduContents
         })
       );
+    });
+
+    const currentTaskParams = { id: 1 };
+    const expectedTask = {
+      ...new TaskFixture({ id: 1, isPaperTask: true }), // this is the current task!!
+      eduContentAmount: 1,
+      assignees: [],
+      taskEduContents: [
+        new TaskEduContentFixture({ id: 1, eduContentId: 1 }) // this eduContent should be included
+      ]
+    };
+    beforeEach(() => {
+      store.overrideSelector(getRouterState, {
+        navigationId: 1,
+        state: {
+          url: '',
+          params: currentTaskParams
+        }
+      });
+      store.overrideSelector(getTaskWithAssignmentAndEduContents, expectedTask);
+    });
+
+    it('should add eduContent to task', () => {
+      const spy = jest.spyOn(kabasTasksViewModel, 'addTaskEduContents');
+      kabasTasksViewModel.addEduContentToTask(eduContent);
+      expect(spy).toHaveBeenCalledWith([
+        { taskId: 1, eduContentId: eduContent.id }
+      ]);
     });
   });
 });
