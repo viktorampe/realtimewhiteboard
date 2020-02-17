@@ -1,7 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import {
   ClassGroupFixture,
   ClassGroupInterface,
+  EduContentBookInterface,
   EduContentFixture,
   GroupFixture,
   GroupInterface,
@@ -14,8 +15,17 @@ import {
   TaskFixture,
   TaskInterface
 } from '@campus/dal';
+import {
+  SearchModeInterface,
+  SearchResultInterface,
+  SearchStateInterface
+} from '@campus/search';
+import {
+  EnvironmentSearchModesInterface,
+  ENVIRONMENT_SEARCHMODES_TOKEN
+} from '@campus/shared';
 import { ViewModelInterface } from '@campus/testing';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import {
   AssigneeInterface,
@@ -35,6 +45,12 @@ import {
 })
 export class MockKabasTasksViewModel
   implements ViewModelInterface<KabasTasksViewModel> {
+  public searchResults$: Observable<SearchResultInterface>;
+  public searchState$ = new BehaviorSubject<SearchStateInterface>({
+    searchTerm: '',
+    filterCriteriaSelections: new Map<string, (string | number)[]>()
+  });
+
   public tasksWithAssignments$: BehaviorSubject<TaskWithAssigneesInterface[]>;
   public paperTasksWithAssignments$: BehaviorSubject<
     TaskWithAssigneesInterface[]
@@ -45,8 +61,11 @@ export class MockKabasTasksViewModel
   public classGroups$: BehaviorSubject<ClassGroupInterface[]>;
   public groups$: BehaviorSubject<GroupInterface[]>;
   public students$: BehaviorSubject<PersonInterface[]>;
-
-  constructor() {
+  public searchBook$: BehaviorSubject<EduContentBookInterface>;
+  constructor(
+    @Inject(ENVIRONMENT_SEARCHMODES_TOKEN)
+    private searchModes: EnvironmentSearchModesInterface
+  ) {
     const tasks = this.setupTaskWithAssignments();
     this.tasksWithAssignments$ = new BehaviorSubject<
       TaskWithAssigneesInterface[]
@@ -381,4 +400,18 @@ export class MockKabasTasksViewModel
   public previewEduContentAsImage() {}
   public addEduContentToTask() {}
   public removeEduContentFromTask() {}
+
+  public getSearchMode(mode: string): Observable<SearchModeInterface> {
+    return of(this.searchModes[mode]);
+  }
+
+  public getInitialSearchState(): Observable<SearchStateInterface> {
+    return this.searchState$;
+  }
+
+  public requestAutoComplete(searchTerm: string): Observable<string[]> {
+    return;
+  }
+
+  public updateSearchState(state: SearchStateInterface) {}
 }

@@ -4,6 +4,7 @@ import {
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
   DalState,
+  EduContentBookFixture,
   EduContentFixture,
   EduContentMetadataFixture,
   EduFileFixture,
@@ -20,9 +21,12 @@ import {
   TaskFixture,
   TaskServiceInterface,
   TASK_SERVICE_TOKEN,
-  UserQueries
+  UserQueries,
+  YearFixture
 } from '@campus/dal';
+import { SearchStateInterface } from '@campus/search';
 import {
+  EduContentTypeEnum,
   OpenStaticContentServiceInterface,
   OPEN_STATIC_CONTENT_SERVICE_TOKEN,
   ScormExerciseServiceInterface,
@@ -35,6 +39,7 @@ import { hot } from 'jasmine-marbles';
 import { configureTestSuite } from 'ng-bullet';
 import { AssigneeFixture } from '../interfaces/Assignee.fixture';
 import { AssigneeTypesEnum } from '../interfaces/Assignee.interface';
+import { TaskWithAssigneesFixture } from '../interfaces/TaskWithAssignees.fixture';
 import {
   TaskStatusEnum,
   TaskWithAssigneesInterface
@@ -905,6 +910,104 @@ describe('KabasTaskViewModel', () => {
           true
         );
       });
+    });
+  });
+
+  describe('search', () => {
+    describe('getInitialSearchState', () => {
+      const taskId = 1;
+
+      const digitalEduContentTypes = [
+        EduContentTypeEnum.BOEKE,
+        EduContentTypeEnum.LINK,
+        EduContentTypeEnum.EXERCISE,
+        EduContentTypeEnum.FILE,
+        EduContentTypeEnum.WEB_APP,
+        EduContentTypeEnum.TIMELINE
+      ];
+
+      const testcases = [
+        {
+          description: 'should return the correct searchState',
+          setup: {
+            task: new TaskWithAssigneesFixture(),
+            searchBook: null
+          },
+          expected: {
+            selections: [
+              ['learningArea', [4]],
+              ['eduContent.type', digitalEduContentTypes]
+            ] as any[],
+            options: [['taskAllowed', true]] as any[]
+          }
+        },
+        {
+          description: 'should return the correct searchState - paper task',
+          setup: {
+            task: new TaskWithAssigneesFixture({
+              isPaperTask: true
+            }),
+            searchBook: null
+          },
+          expected: {
+            selections: [
+              ['learningArea', [4]],
+              ['eduContent.type', [EduContentTypeEnum.PAPER_EXERCISE]]
+            ] as any[],
+            options: [['taskAllowed', true]] as any[]
+          }
+        },
+        {
+          description:
+            'should return the correct searchState - when book is set',
+          setup: {
+            task: new TaskWithAssigneesFixture(),
+            searchBook: new EduContentBookFixture({
+              years: [new YearFixture({ id: 2 }), new YearFixture({ id: 3 })],
+              methodId: 7
+            })
+          },
+          expected: {
+            selections: [
+              ['learningArea', [4]],
+              ['eduContent.type', digitalEduContentTypes],
+              ['years', [2, 3]],
+              ['methods', [7]]
+            ] as any[],
+            options: [['taskAllowed', true]] as any[]
+          }
+        }
+      ];
+
+      testcases.forEach(testcase =>
+        it(testcase.description, () => {
+          store.overrideSelector(getRouterState, {
+            navigationId: 1,
+            state: {
+              url: '',
+              params: { id: taskId }
+            }
+          });
+          store.overrideSelector(
+            getTaskWithAssignmentAndEduContents,
+            testcase.setup.task
+          );
+          kabasTasksViewModel.searchBook$.next(testcase.setup.searchBook);
+
+          const initialSearchState$ = kabasTasksViewModel.getInitialSearchState();
+          const expected: SearchStateInterface = {
+            searchTerm: '',
+            filterCriteriaSelections: new Map<string, number[]>(
+              testcase.expected.selections
+            ),
+            filterCriteriaOptions: new Map<string, string | number | boolean>(
+              testcase.expected.options
+            )
+          };
+
+          expect(initialSearchState$).toBeObservable(hot('a', { a: expected }));
+        })
+      );
     });
   });
 
