@@ -81,12 +81,19 @@ export class WhiteboardComponent implements OnInit {
   }
 
   bulkDeleteClicked() {
+    /*
     this.cards.forEach(card => {
       if (card.mode === Mode.MultiSelectSelectedMode) {
         this.addCardToShelf(card);
         this.cards = this.cards.filter(c => c !== card);
       }
     });
+    */
+    const multiSelectedCards = this.cards.filter(
+      c => c.mode === Mode.MultiSelectSelectedMode
+    );
+    multiSelectedCards.forEach(c => this.addCardToShelf(c));
+    this.cards = this.cards.filter(c => !multiSelectedCards.includes(c));
     this.checkToolbarVisible();
   }
 

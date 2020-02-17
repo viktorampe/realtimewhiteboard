@@ -10,7 +10,7 @@ export class ShelfComponent implements OnInit {
   @Input() cards: CardInterface[];
   @Output() minimizeShelf = new EventEmitter<boolean>();
 
-  isMinimized: boolean = false;
+  isMinimized = false;
 
   constructor() {}
 

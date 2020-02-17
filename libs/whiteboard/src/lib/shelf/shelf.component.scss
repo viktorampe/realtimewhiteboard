@@ -1,4 +1,6 @@
 .shelf {
+  display: flex;
+
   &__button {
     position: absolute;
     top: 0;
@@ -6,11 +8,7 @@
     text-align: center;
   }
 
-  &__container {
-    display: flex;
-
-    &__card {
-      margin-right: 20px;
-    }
+  &__card {
+    margin-right: 20px;
   }
 }

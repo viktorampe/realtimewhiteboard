@@ -48,7 +48,7 @@
   </button>
 
   <campus-shelf
-    [ngClass]="{ minimizedShelf: isShelfMinimized }"
+    [class.minimizedShelf]="isShelfMinimized"
     [cards]="this.shelvedCards"
     (minimizeShelf)="toggleMinimizeShelf($event)"
   ></campus-shelf>
