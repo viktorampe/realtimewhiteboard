@@ -40,6 +40,12 @@ export class CardComponent {
     }
   }
 
+  onClickCard(event: MouseEvent) {
+    if (this.mode !== Mode.IdleMode) {
+      event.stopPropagation();
+    }
+  }
+
   removeImage() {
     this.image = '';
     this.imageChange.emit(this.image);

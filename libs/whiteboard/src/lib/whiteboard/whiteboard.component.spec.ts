@@ -8,7 +8,7 @@ import {
   MatInputModule,
   MatProgressBarModule
 } from '@angular/material';
-import { HAMMER_LOADER } from '@angular/platform-browser';
+import { By, HAMMER_LOADER } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { configureTestSuite } from 'ng-bullet';
 import { Mode } from '../../shared/enums/mode.enum';
@@ -174,5 +174,30 @@ describe('WhiteboardComponent', () => {
     component.changeSelectedCardsColor('black');
 
     component.cards.forEach(c => expect(c.color).toBe('black'));
+  });
+
+  it('should set selected card to IdleMode when whiteboard is clicked', () => {
+    const card: CardInterface = {
+      mode: Mode.IdleMode,
+      description: '',
+      image: null,
+      color: null,
+      top: 0,
+      left: 0
+    };
+    const card2: CardInterface = {
+      mode: Mode.SelectedMode,
+      description: '',
+      image: null,
+      color: null,
+      top: 0,
+      left: 0
+    };
+
+    component.cards = [card, card2];
+
+    const whiteboard = fixture.debugElement.query(By.css('.whiteboard'));
+    whiteboard.triggerEventHandler('click', new MouseEvent('click'));
+    component.cards.forEach(c => expect(c.mode).toBe(Mode.IdleMode));
   });
 });
