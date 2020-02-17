@@ -31,8 +31,15 @@ import {
   TASK_SERVICE_TOKEN
 } from '@campus/dal';
 import {
+  SearchModeInterface,
+  SearchResultInterface,
+  SearchStateInterface
+} from '@campus/search';
+import {
   ContentOpenerInterface,
   ContentTaskManagerInterface,
+  EnvironmentSearchModesInterface,
+  ENVIRONMENT_SEARCHMODES_TOKEN,
   OpenStaticContentServiceInterface,
   OPEN_STATIC_CONTENT_SERVICE_TOKEN,
   ScormExerciseServiceInterface,
@@ -41,7 +48,7 @@ import {
 import { Update } from '@ngrx/entity';
 import { RouterReducerState } from '@ngrx/router-store';
 import { Action, select, Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import {
   distinctUntilChanged,
   filter,
@@ -81,6 +88,11 @@ export class KabasTasksViewModel
   public groups$: Observable<GroupInterface[]>;
   public students$: Observable<PersonInterface[]>;
 
+  public searchResults$: Observable<SearchResultInterface>;
+  public searchState$: Observable<SearchStateInterface>;
+
+  private _searchState$: BehaviorSubject<SearchStateInterface>;
+
   private routerState$: Observable<RouterReducerState<RouterStateUrl>>;
 
   constructor(
@@ -92,7 +104,9 @@ export class KabasTasksViewModel
     @Inject(SCORM_EXERCISE_SERVICE_TOKEN)
     private scormExerciseService: ScormExerciseServiceInterface,
     @Inject(OPEN_STATIC_CONTENT_SERVICE_TOKEN)
-    private openStaticContentService: OpenStaticContentServiceInterface
+    private openStaticContentService: OpenStaticContentServiceInterface,
+    @Inject(ENVIRONMENT_SEARCHMODES_TOKEN)
+    private searchModes: EnvironmentSearchModesInterface
   ) {
     this.tasksWithAssignments$ = this.store.pipe(
       select(getTasksWithAssignmentsByType, {
@@ -125,6 +139,9 @@ export class KabasTasksViewModel
     this.classGroups$ = this.store.pipe(select(ClassGroupQueries.getAll));
     this.groups$ = this.store.pipe(select(GroupQueries.getAll));
     this.students$ = this.store.pipe(select(LinkedPersonQueries.getStudents));
+
+    this._searchState$ = new BehaviorSubject<SearchStateInterface>(null);
+    this.searchState$ = this._searchState$;
   }
 
   openEduContentAsExercise(eduContent: EduContent): void {
@@ -505,6 +522,22 @@ export class KabasTasksViewModel
     }
 
     return `${body}${confirmQuestion}`;
+  }
+
+  public getInitialSearchState(): Observable<SearchStateInterface> {
+    // TODO use real implementation
+    return new BehaviorSubject<SearchStateInterface>({
+      searchTerm: '',
+      filterCriteriaSelections: new Map<string, (string | number)[]>()
+    });
+  }
+
+  public getSearchMode(mode: string): Observable<SearchModeInterface> {
+    return of(this.searchModes[mode]);
+  }
+
+  public updateSearchState(state: SearchStateInterface) {
+    this._searchState$.next(state);
   }
 
   private setupSearchResults(): void {}
