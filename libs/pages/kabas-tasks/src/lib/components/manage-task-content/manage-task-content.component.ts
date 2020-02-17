@@ -15,6 +15,8 @@ import {
   SearchStateInterface
 } from '@campus/search';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { TaskEduContentWithEduContentInterface } from '../../interfaces/TaskEduContentWithEduContent.interface';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
 
 @Component({
@@ -23,6 +25,8 @@ import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
   styleUrls: ['./manage-task-content.component.scss']
 })
 export class ManageTaskContentComponent implements OnInit, AfterViewInit {
+  public currentContent$: Observable<TaskEduContentWithEduContentInterface[]>;
+
   public searchMode$: Observable<SearchModeInterface>;
   public initialSearchState$: Observable<SearchStateInterface>;
   public searchResults$: Observable<SearchResultInterface>;
@@ -39,6 +43,10 @@ export class ManageTaskContentComponent implements OnInit, AfterViewInit {
   manageTaskContentClass = true;
 
   ngOnInit() {
+    this.currentContent$ = this.viewModel.currentTask$.pipe(
+      map(task => task.taskEduContents)
+    );
+
     this.searchMode$ = this.viewModel.getSearchMode('task-manage-content');
     this.initialSearchState$ = this.viewModel.getInitialSearchState();
     this.searchResults$ = this.viewModel.searchResults$;
