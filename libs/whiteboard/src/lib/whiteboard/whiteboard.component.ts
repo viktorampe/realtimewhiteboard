@@ -76,6 +76,16 @@ export class WhiteboardComponent implements OnInit {
     this.cards = this.cards.filter(c => c !== card);
   }
 
+  onCardTapped(card: CardInterface) {
+    const isCardSelected = !!this.cards.filter(
+      c => c.mode === Mode.SelectedMode
+    ).length;
+
+    if (!isCardSelected) {
+      card.mode = Mode.ZoomMode;
+    }
+  }
+
   saveLastColor(color: string) {
     this.lastColor = color;
   }
@@ -142,7 +152,7 @@ export class WhiteboardComponent implements OnInit {
 
   checkToolbarVisible() {
     this.isToolbarVisible =
-      this.cards.filter(c => c.mode === Mode.MultiSelectSelectedMode).length >
+      this.cards.filter(c => c.mode === Mode.MultiSelectSelectedMode).length >=
       1;
   }
 
