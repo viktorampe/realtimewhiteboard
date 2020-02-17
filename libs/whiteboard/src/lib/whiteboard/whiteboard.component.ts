@@ -75,6 +75,7 @@ export class WhiteboardComponent implements OnInit {
     this.cards = this.cards.filter(
       c => c.mode !== Mode.MultiSelectSelectedMode
     );
+    this.checkToolbarVisible();
   }
 
   changeSelectedCardsColor(color: string) {
