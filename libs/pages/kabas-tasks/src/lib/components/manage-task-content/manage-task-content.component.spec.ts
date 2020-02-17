@@ -71,7 +71,7 @@ describe('ManageTaskContentComponent', () => {
       } as SearchStateInterface;
     });
 
-    fit('should reset search filters when clearSearchFilters is called', () => {
+    it('should reset search filters when clearSearchFilters is called', () => {
       component.searchComponent.reset = jest.fn();
       component.clearSearchFilters();
 

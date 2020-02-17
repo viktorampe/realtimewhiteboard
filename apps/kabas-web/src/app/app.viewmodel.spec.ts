@@ -164,7 +164,7 @@ describe('AppViewModel', () => {
     });
   });
 
-  fdescribe('feedback', () => {
+  describe('feedback', () => {
     describe('success feedback', () => {
       beforeAll(() => {
         mockFeedBack.type = 'success';

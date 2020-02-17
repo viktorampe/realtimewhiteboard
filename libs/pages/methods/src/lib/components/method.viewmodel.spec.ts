@@ -1,5 +1,3 @@
-// file.only
-
 import { Component, NgZone } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { MatDialog } from '@angular/material';
