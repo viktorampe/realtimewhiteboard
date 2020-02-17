@@ -1150,7 +1150,8 @@ describe('KabasTaskViewModel', () => {
         navigationId: 1,
         state: {
           url: '',
-          params: currentTaskParams
+          params: currentTaskParams,
+          queryParams: {}
         }
       });
       store.overrideSelector(getTaskWithAssignmentAndEduContents, expectedTask);
