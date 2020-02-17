@@ -1,4 +1,3 @@
-// file.only
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import {
   MatIconModule,
