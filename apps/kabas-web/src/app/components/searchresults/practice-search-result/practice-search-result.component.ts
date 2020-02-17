@@ -2,8 +2,8 @@ import { Component, HostBinding, Inject, Input, OnInit } from '@angular/core';
 import { ResultItemBase } from '@campus/search';
 import {
   ContentActionInterface,
-  ContentActionsServiceInterface,
-  CONTENT_ACTIONS_SERVICE_TOKEN,
+  ContentOpenActionsServiceInterface,
+  CONTENT_OPEN_ACTIONS_SERVICE_TOKEN,
   EduContentSearchResultInterface
 } from '@campus/shared';
 
@@ -23,8 +23,8 @@ export class PracticeSearchResultComponent extends ResultItemBase
   appPracticeSearchResultClass = true;
 
   constructor(
-    @Inject(CONTENT_ACTIONS_SERVICE_TOKEN)
-    private contentActionsService: ContentActionsServiceInterface
+    @Inject(CONTENT_OPEN_ACTIONS_SERVICE_TOKEN)
+    private contentOpenActionsService: ContentOpenActionsServiceInterface
   ) {
     super();
   }
@@ -35,7 +35,7 @@ export class PracticeSearchResultComponent extends ResultItemBase
   }
 
   private setupActions(): void {
-    this.actions = this.contentActionsService.getActionsForEduContent(
+    this.actions = this.contentOpenActionsService.getActionsForEduContent(
       this.data.eduContent
     );
   }

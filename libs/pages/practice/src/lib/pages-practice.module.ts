@@ -4,9 +4,9 @@ import { GuardsModule } from '@campus/guards';
 import { PagesSharedModule } from '@campus/pages/shared';
 import { SearchModule } from '@campus/search';
 import {
-  ContentActionsStudentService,
-  CONTENT_ACTIONS_SERVICE_TOKEN,
+  ContentOpenActionsStudentService,
   CONTENT_OPENER_TOKEN,
+  CONTENT_OPEN_ACTIONS_SERVICE_TOKEN,
   SharedModule
 } from '@campus/shared';
 import { UiModule } from '@campus/ui';
@@ -38,8 +38,8 @@ import { PagesPracticeRoutingModule } from './pages-practice-routing.module';
   providers: [
     PracticeViewModel,
     {
-      provide: CONTENT_ACTIONS_SERVICE_TOKEN,
-      useClass: ContentActionsStudentService
+      provide: CONTENT_OPEN_ACTIONS_SERVICE_TOKEN,
+      useClass: ContentOpenActionsStudentService
     },
     {
       provide: CONTENT_OPENER_TOKEN,

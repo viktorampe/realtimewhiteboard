@@ -51,11 +51,14 @@ export class MockGlobalSearchViewModel
 
   public updateState(state: SearchStateInterface): void {}
 
-  openEduContentAsExercise(eduContent: any): void {}
-  openEduContentAsSolution(eduContent: EduContent): void {}
-  openEduContentAsStream(eduContent: EduContent): void {}
-  openEduContentAsDownload(eduContent: EduContent): void {}
-  openBoeke(eduContent: EduContent): void {}
+  public openEduContentAsExercise(eduContent: any): void {}
+  public openEduContentAsSolution(eduContent: EduContent): void {}
+  public openEduContentAsStream(eduContent: EduContent): void {}
+  public openEduContentAsDownload(eduContent: EduContent): void {}
+  public openBoeke(eduContent: EduContent): void {}
+  public previewEduContentAsImage(eduContent: EduContent): void {}
+  public addEduContentToTask() {}
+  public removeEduContentFromTask() {}
 
   private setupSearchResults(): void {
     this.searchResults$ = this.getMockResults().pipe(
@@ -70,8 +73,9 @@ export class MockGlobalSearchViewModel
               );
 
               return {
-                eduContent: eduContent
+                eduContent: eduContent,
                 // add additional props for the resultItemComponent here
+                addTaskActions: true
               };
             }
           )

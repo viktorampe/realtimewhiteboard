@@ -1,0 +1,210 @@
+IT#4327c8fd-43a1-4271-9495-41dd3366b3e8 - 31. Leerkracht taken 4 - content toevoegen aan een taak, E2E testen - (LK2020\31. Leerkracht taken 4 - content toevoegen aan een taak, E2E testen)
+US#3013 - Frontend: ManageTaskContentComponent
+Development:
+- [Scaffold] VM: addTaskEduContent [#3040]
+- [Scaffold] VM: setupSearchResults [#3033]
+- [Scaffold] VM: combineChaptersLessons(bookId, chapterId) [#3039]
+- [Scaffold] VM: getTocLessonsStream() [#3020]
+- [Scaffold] Page: addEduContentToTask [#3038]
+- [Scaffold] Page: removeEduContentFromTask [#3047]
+- [Scaffold] Page: searchEduContents [#3015]
+- [Scaffold] Page: selectTOC [#3021]
+- [Scaffold] Page: clickDone() [#3046]
+- [Scaffold]: getTaskActionsForEduContent [#3044]
+- [Module/Routing] Nieuwe route [#3023]
+	tasks/manage/:taskId/content
+- [Module/Routing] Guards [#3026]
+	Als taak niet pending is, redirect naar taskDetail
+- [Services]: ContentActionService [#3022]
+	implement getTaskActionsForEduContent(eduContent, inTask)
+	Wat is er hier speciaal aan?
+		Returnt 'toevoegen aan taak' of 'verwijderen uit taak'
+- [Services] taskService: linkEduContent [#3031]
+- [State] addTaskEducontents Effect [#3024]
+	Nieuw effect
+	pessimisticUpdate => feedback van API verwerken (je krijgt BulkUpdateResultInfoInterface terug)
+- [State] StartAddTaskEduContents Action
+	nieuwe action voor pessimisticUpdate
+- [State] TOCforToc Selector [#3051]
+- [State] Favorite selector for learningArea [#3042]
+- [VM] getFavoritesForLearningArea$ [#3052]
+- [VM] addTaskEduContent [#3032]
+	Dispatcht een action
+- [VM] setupSearchResults [#3034]
+	TaskService getEduContents(searchState)
+	Iets mee doen, vraag *David*, zie ook superhandige flowchart, in de wiki, zekerst$
+	Denk ook aan: data { eduContent , addTaskActions: boolean,  inTask: boolean }
+- [VM] combineChaptersLessons(bookId, chapterId) [#3017]
+	cfr methods viewmodel
+- [VM] getTocLessonsStream() [#3025]
+	cfr methods viewmodel
+- [UX]: EduContentSearchResultComponent refactor [#3018]
+	in setupActions: als !!data.addTaskActions  
+		=> this.contentActionsServiceInterface.getTaskActionsForEduContent(eduContent, isInTask) toevoegen
+	this.actions = is concat van bovenstaande met bestaande
+- [UX] Lijst huidige content [#3037]
+	Inline item template
+- [UX] TaskContentSearchMode [#3050]
+	Dit ding bevat eigenlijk hoofdzakelijk de naam van het component dat gebruikt wordt om resultaten te renderen.
+	+ SearchTerm
+	+ Result
+- [UX] onInit [#3016]
+	* current task
+	* queryparams nodig voor bookid
+	* title via selector (cfr breadcrumbs)
+- [UX] aanpassen queryParams bij 1 favorite [#3045]
+	* onInit
+		* vm getFavoritesForLearningArea$
+		* als 1 favoriet => queryparams aanpassen
+- [UX] Initial State [#3019]
+	Met BBQ-saus; is het niet heel het jaar bbq-seizoen? Wanneer worden we verwacht . . . David?
+	* current task + queryparams nodig voor
+		* bookId 
+		* type (isPaperTask) (type educontent die mag getoond worden) moet altijd isTaskAllowed zijn (als het vanuit een task komt) 
+- [UX] Drag/Drop: Sorteren in sidepanel [#3014]
+- [UX] Drag/Drop: GhostItem [#3029]
+- [UX] Drag/Drop: tussen searchResult en taskContent  [#3056]
+	referenties zetten op de twee lists: SearchResultList en TaskEduContentList
+	setupSearchResults aanvullen met referentie 'SearchResultList' en naar 'TaskEduContentList'
+- [UX] Hoofdstukken Treeview [#3057]
+	cfr method chapters
+- [UX] Titel [#3027]
+	Title plaatsen in template
+- [UX] method: addEduContentToTask [#3041]
+	tunnelen naar VM addTaskEduContent
+- [UX] method: removeEduContentFromTask [#3048]
+	tunnelen naar VM removeTaskEduContent 
+- [UX] method: searchEduContents [#3028]
+	handler voor searchStateChanged van search compenent
+	tunnelen naar VM setupSearchResults
+- [UX] Page: ContentActionsServiceInterface implementeren [#3036]
+- [UX] method: selectTOC(tocId, tocDepth) [#3035]
+	cfr method-chapter component
+	queryparams zetten => chapterId en lessonId?
+- [UX] Hint State [#3049]
+	cfr methods/classgroup 
+	afhankelijk van queryparams (geen boek of te veel favorieten)
+	Gebruikt method book tiles (shared)
+- [UX] clickDone [#3030]
+	redirect naar task page
+- [UI] SearchResultItem [#3043]
+	isInTask state
+- [UI] Side panel (SideSheet) [#3053]
+	Refactor huidige css / code 
+	Extra input: close (optioneel, default true)
+	Content projection slots voor actions
+- [UI] Nice to have: Drop state voor delete educontent [#3055]
+Deployment:
+Design:
+Documentation:
+Requirements:
+Testing:
+US#3058 - Frontend: Manage(Kabas)TaskDetailComponent
+Development:
+- [UX] Refactor inputs van sidepanel [#3059]
+	Niet meer contenteditable	
+	wel gewone mat-inputs (niet outline)
+US#3060 - Frontend: UI lib
+Development:
+- [Scaffold]: SectionComponent [#3062]
+	Inputs:
+		* title 
+		* mode => enum : STATIC/EDITABLE/EDITING (default STATIC)
+		* Icon? (default edit)
+	Output:
+		* EventEmitter 'click'	
+	+ template it works
+- [Scaffold]: EmptyStateComponent [#3063]
+	Inputs:
+		* image
+		* title?
+		* description
+		* ctaLabel?
+	Output
+		* EventEmitter 'ctaClick' (wie het vast heeft, mag kiezen)
+- [UX]: SectionComponent [#3061]
+	Logica en template maken
+- [UX]: Refactor Manage Collection Component [#3064]
+	Filter: moet aan of uit kunnen
+	voorlopig geen quick add
+	! op tijd lam leggen indien teveel tijd nodig zou zijn (if fts)
+- [UX]: ManageCollectionComponent uitbreiden met actions [#3065]
+	Input:	actions: ContentActionInterface[]
+- [UI]: styling SectionComponent [#3111]
+	zie xd component sheet
+	HR styling als divider (zie boven 'verwijder taak')
+- [POC]: (Stackable) ModalSlideOut service component ding [#3112]
+	Met als entrycomponent: ManageCollectionComponent
+- [POC]: quick add in ManageCollection / ModalSlideOut [#3113]
+US#3066 - Frontend: GlobalSearchComponent
+Development:
+- [VM]: setupSearchResults uitbreiden [#3067]
+		data: {[...], eduContent , addTaskActions: true}
+US#3068 - Frontend: Shared lib
+Development:
+US#3008 - API
+Development:
+- [Remote] TEC api-> createTaskEduContents [#3074]
+	TEC api-> createTaskEduContents
+	 * userId
+	 * [] {taskId, educontentId} defaults
+	authenticatie (cfr. destroy) private function?
+- [Adapter] Adapter maken,  [#3071]
+	Adapter maken, bij polpo moet het blijven zoals het is, bij kabas altijd op true staan. 
+	Flag zetten via setTaskAllowed 
+	(nice to have/essentieel David) refactoren waar je IDs used, async/await gebruiken.
+	return EduContentMetadataAdapter.updateTaskAllowed(this.id); (thanks Thomas <3)
+- [Helper] [#3069]
+- [Scaffold] 	Scaffold endpoint + ACL [#3075]
+	Scaffold endpoint + ACL
+- [Seed] meer taskEducontent, werkende preview [#3072]
+	seeds uitbreiden -> meer taskEducontent, werkende preview
+- [Model/ACL] [#3073]
+- Publish SDK, 1h [#3070]
+- Release S#<current sprint name>, 2h [#3010]
+	Create a release branch starting at current develop HEAD
+Deployment:
+Design:
+Documentation:
+Requirements:
+Testing:
+US#3083 - Design
+Design:
+- [Ill] Hint Inhoudstafel [#3086]
+- [Ill] Hint Zoektermen [#3101]
+- [Ill] Empty State Lesmateriaal [#3102]
+- [Ill] Empty State Gebruikers [#3097]
+- [XD] Component sheet: Section afwerken [#3095]
+	Static state
+	Divider
+	Custom Icon/Action
+- [XD] Component sheet: Empty State [#3085]
+- [XD] Component sheet: EduContent-alike List Item [#3100]
+- [XD] Component sheet: EduContent-alike Drag State / Ghost item [#3089]
+- [XD] Component sheet: Inputs [#3084]
+- [XD] Component sheet: Hints [#3093]
+- [XD] Component sheet: Bottom sheet [#3087]
+- [XD] Component sheet: Methodyear picker [#3090]
+- [XD] Component sheet: Chapter/Lesson treeview [#3091]
+- [XD] Component sheet: Lists / Selection / Active [#3098]
+- [XD] Component sheet: Snackbar [#3094]
+- [XD] Component sheet: Quick Add [#3099]
+- [XD] Component sheet: Base [#3092]
+	voor nu alle componenten (menu, breadcrumbs, quicklink icons, ...) snel snel samen schieten in een base
+	waarvan elk component klaar is voor export, maar nog niet correct gestyled
+	niet belangrijk voor deze sprint 
+- [XD] Component sheet: filter [#3096]
+	Filters styling licht aanpassen voor consistentie met rest theme
+	+ Uitzoeken minimized version
+- [NTH/Ill] Drop State [#3088]
+
+US#3103 - UX Flow
+Design:
+- [XD] Add TEC: Initial state - no favorites [#3105]
+- [XD] Add TEC: Initial state - too many favorites [#3107]
+- [XD] Add TEC: List view [#3110]
+- [XD] Add TEC: Bottom sheet collapsed view [#3108]
+- [XD] GlobalSearch: List View [#3106]
+	Snel snel
+- [XD] GlobalSearch: Add To Task [#3109]
+- [XD] TaskDetail: SideSheet [#3104]

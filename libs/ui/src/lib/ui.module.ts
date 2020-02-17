@@ -47,6 +47,7 @@ import { DropAreaComponent } from './drop-area/drop-area.component';
 import { DropdownMenuItemComponent } from './dropdown-menu-item/dropdown-menu-item.component';
 import { DropdownMenuComponent } from './dropdown-menu/dropdown-menu.component';
 import { EditableInlineTagListComponent } from './editable-inline-tag-list/editable-inline-tag-list.component';
+import { EmptyStateComponent } from './empty-state/empty-state.component';
 import { FileExtensionComponent } from './file-extension/file-extension.component';
 import { FileIconComponent } from './file-icon/file-icon.component';
 import { FilterTextInputComponent } from './filter-text-input/filter-text-input.component';
@@ -67,6 +68,12 @@ import { PageHeaderComponent } from './page-header/page-header.component';
 import { PersonBadgeComponent } from './person-badge/person-badge.component';
 import { PersonInitialsPipe } from './person-badge/pipes/person-initials.pipe';
 import { PersonSummaryComponent } from './person-summary-component/person-summary.component';
+import {
+  SectionActions,
+  SectionComponent,
+  SectionContent,
+  SectionTitle
+} from './section/section.component';
 import { ShellBodyDirective } from './shell/directives/shell-body.directive';
 import { ShellBottomDirective } from './shell/directives/shell-bottom.directive';
 import { ShellLeftDirective } from './shell/directives/shell-left.directive';
@@ -173,7 +180,12 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     ShellBottomDirective,
     FileIconComponent,
     DateRangePickerComponent,
-    ConfirmationModalComponent
+    ConfirmationModalComponent,
+    EmptyStateComponent,
+    SectionComponent,
+    SectionContent,
+    SectionActions,
+    SectionTitle
   ],
   exports: [
     FilterTextInputComponent,
@@ -237,7 +249,12 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     MatCheckboxModule,
     FileIconComponent,
     DateRangePickerComponent,
-    ConfirmationModalComponent
+    ConfirmationModalComponent,
+    EmptyStateComponent,
+    SectionComponent,
+    SectionContent,
+    SectionActions,
+    SectionTitle
   ],
   providers: [
     {

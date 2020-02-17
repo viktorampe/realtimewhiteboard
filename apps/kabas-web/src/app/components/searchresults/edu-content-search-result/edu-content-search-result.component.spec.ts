@@ -13,8 +13,8 @@ import {
 } from '@campus/dal';
 import {
   ContentActionInterface,
-  ContentActionsServiceInterface,
-  CONTENT_ACTIONS_SERVICE_TOKEN,
+  ContentOpenActionsServiceInterface,
+  CONTENT_OPEN_ACTIONS_SERVICE_TOKEN,
   EduContentSearchResultInterface
 } from '@campus/shared';
 import { MockDate, MockMatIconRegistry } from '@campus/testing';
@@ -26,7 +26,7 @@ import { EduContentSearchResultComponent } from './edu-content-search-result.com
 describe('EduContentSearchResultComponent', () => {
   let component: EduContentSearchResultComponent;
   let fixture: ComponentFixture<EduContentSearchResultComponent>;
-  let contentActionsServiceInterface: ContentActionsServiceInterface;
+  let contentOpenActionsService: ContentOpenActionsServiceInterface;
   const mockIsFavorite = new BehaviorSubject(false);
   let dateMock: MockDate;
 
@@ -81,7 +81,7 @@ describe('EduContentSearchResultComponent', () => {
           useValue: () => new Promise(() => {})
         },
         {
-          provide: CONTENT_ACTIONS_SERVICE_TOKEN,
+          provide: CONTENT_OPEN_ACTIONS_SERVICE_TOKEN,
           useValue: {
             getActionsForEduContent: () => mockActions
           }
@@ -89,7 +89,7 @@ describe('EduContentSearchResultComponent', () => {
       ]
     });
 
-    contentActionsServiceInterface = TestBed.get(CONTENT_ACTIONS_SERVICE_TOKEN);
+    contentOpenActionsService = TestBed.get(CONTENT_OPEN_ACTIONS_SERVICE_TOKEN);
   });
 
   beforeEach(() => {

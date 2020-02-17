@@ -1,0 +1,22 @@
+:host {
+  campus-collapsible-sheet {
+    height: 100%;
+  }
+}
+
+.manage-task-content {
+  &__main {
+    flex: 1 1 auto;
+
+    &__container {
+      display: flex;
+      flex-direction: row !important;
+      height: 100%;
+    }
+
+    &__sidesheet {
+      flex: 0 0 300px;
+      border: 1px solid black;
+    }
+  }
+}

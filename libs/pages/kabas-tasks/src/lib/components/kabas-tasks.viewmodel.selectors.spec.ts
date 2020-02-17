@@ -9,10 +9,13 @@ import {
   DiaboloPhaseReducer,
   EduContent,
   EduContentActions,
+  EduContentBookFixture,
+  EduContentBookInterface,
   EduContentFixture,
   EduContentReducer,
   FavoriteActions,
   FavoriteFixture,
+  FavoriteInterface,
   FavoriteReducer,
   FavoriteTypesEnum,
   getStoreModuleForFeatures,
@@ -42,12 +45,14 @@ import {
   TaskGroupActions,
   TaskGroupFixture,
   TaskGroupReducer,
+  TaskInterface,
   TaskReducer,
   TaskStudentActions,
   TaskStudentFixture,
   TaskStudentReducer
 } from '@campus/dal';
 import { MockDate } from '@campus/testing';
+import { Dictionary } from '@ngrx/entity';
 import { routerReducer } from '@ngrx/router-store';
 import { Action, select, Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/angular/testing';
@@ -56,6 +61,7 @@ import { AssigneeTypesEnum } from '../interfaces/Assignee.interface';
 import {
   allowedLearningAreas,
   getAllTasksWithAssignments,
+  getTaskFavoriteBooks,
   getTasksWithAssignmentsByType,
   getTaskWithAssignmentAndEduContents
 } from './kabas-tasks.viewmodel.selectors';
@@ -196,7 +202,7 @@ describe('Kabas-tasks viewmodel selectors', () => {
           learningArea: new LearningAreaFixture({ name: 'wiskunde' }),
           startDate: undefined,
           endDate: undefined,
-          status: 'finished',
+          status: 'pending',
           assignees: []
         }
       ];
@@ -392,7 +398,7 @@ describe('Kabas-tasks viewmodel selectors', () => {
           learningArea: new LearningAreaFixture({ name: 'wiskunde' }),
           startDate: undefined,
           endDate: undefined,
-          status: 'finished',
+          status: 'pending',
           assignees: []
         }
       ];
@@ -516,6 +522,126 @@ describe('Kabas-tasks viewmodel selectors', () => {
           a: expected
         })
       );
+    });
+  });
+
+  describe('getTaskFavoriteBooks', () => {
+    const taskDict: Dictionary<TaskInterface> = {
+      1: new TaskFixture({ id: 1, learningAreaId: 11 }),
+      2: new TaskFixture({ id: 2, learningAreaId: 12 }),
+      3: new TaskFixture({ id: 3, learningAreaId: 13 })
+    };
+
+    // boekes
+    const eduContentDict: Dictionary<EduContent> = {
+      1: new EduContentFixture(
+        { id: 1 },
+        { learningAreaId: 11, eduContentBookId: 123 }
+      ),
+      2: new EduContentFixture(
+        { id: 2 },
+        { learningAreaId: 12, eduContentBookId: 456 }
+      ),
+      3: new EduContentFixture( // not a favorite
+        { id: 3 },
+        { learningAreaId: 13, eduContentBookId: 789 }
+      ),
+      4: new EduContentFixture(
+        { id: 4 },
+        { learningAreaId: 11, eduContentBookId: 124 }
+      )
+    };
+
+    const bookDict: Dictionary<EduContentBookInterface> = {
+      123: new EduContentBookFixture({ id: 123 }),
+      124: new EduContentBookFixture({ id: 124 }),
+      456: new EduContentBookFixture({ id: 456 }),
+      789: new EduContentBookFixture({ id: 789 }) // not a favorite
+    };
+
+    const favoritesByType: { [key: string]: FavoriteInterface[] } = {
+      [FavoriteTypesEnum.BOEKE]: [
+        new FavoriteFixture({ eduContentId: 1 }), // boeke learningArea 11
+        new FavoriteFixture({ eduContentId: 2 }), // boeke learningArea 12
+        new FavoriteFixture({ eduContentId: 4 }) // boeke learningArea 11
+      ]
+    };
+
+    const { projector } = getTaskFavoriteBooks;
+
+    it('should return multiple books', () => {
+      const taskId = 1;
+      const result = projector(
+        taskDict,
+        favoritesByType,
+        eduContentDict,
+        bookDict,
+        { taskId }
+      );
+
+      const expected = [bookDict[123], bookDict[124]];
+
+      expect(result).toEqual(expected);
+    });
+
+    it('should return 1 book', () => {
+      const taskId = 2;
+      const result = projector(
+        taskDict,
+        favoritesByType,
+        eduContentDict,
+        bookDict,
+        { taskId }
+      );
+
+      const expected = [bookDict[456]];
+
+      expect(result).toEqual(expected);
+    });
+
+    it('should return an empty array', () => {
+      const taskId = 3;
+      const result = projector(
+        taskDict,
+        favoritesByType,
+        eduContentDict,
+        bookDict,
+        { taskId }
+      );
+
+      const expected = [];
+
+      expect(result).toEqual(expected);
+    });
+
+    it('should return an empty array - no favorites', () => {
+      const taskId = 1;
+      const result = projector(
+        taskDict,
+        {}, // no favorites in store
+        eduContentDict,
+        bookDict,
+        { taskId }
+      );
+
+      const expected = [];
+
+      expect(result).toEqual(expected);
+    });
+
+    it('should return an empty array - boeke not in store', () => {
+      const taskId = 1;
+      const result = projector(
+        taskDict,
+        favoritesByType,
+        {}, // no eduContent in store
+        bookDict,
+        { taskId }
+      );
+
+      const expected = [];
+
+      expect(result).toEqual(expected);
     });
   });
 });
