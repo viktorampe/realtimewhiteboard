@@ -54,11 +54,12 @@ import {
 import { Update } from '@ngrx/entity';
 import { RouterReducerState } from '@ngrx/router-store';
 import { Action, select, Store } from '@ngrx/store';
-import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
+import { BehaviorSubject, combineLatest, merge, Observable, of } from 'rxjs';
 import {
   distinctUntilChanged,
   filter,
   map,
+  mapTo,
   shareReplay,
   switchMap,
   take,
@@ -78,6 +79,9 @@ import {
 
 export interface CurrentTaskParams {
   id?: number;
+  book?: number;
+  lesson?: number;
+  chapter?: number;
 }
 
 @Injectable({
@@ -98,6 +102,7 @@ export class KabasTasksViewModel
   public groups$: Observable<GroupInterface[]>;
   public students$: Observable<PersonInterface[]>;
   public searchBook$ = new BehaviorSubject<EduContentBookInterface>(null);
+  public currentToc$: Observable<EduContentTOCInterface[]>;
 
   public searchResults$: Observable<SearchResultInterface>;
   public searchState$: Observable<SearchStateInterface>;
@@ -155,6 +160,7 @@ export class KabasTasksViewModel
 
     this._searchState$ = new BehaviorSubject<SearchStateInterface>(null);
     this.searchState$ = this._searchState$;
+    this.currentToc$ = this.getTocsStream();
   }
 
   openEduContentAsExercise(eduContent: EduContent): void {
@@ -608,6 +614,37 @@ export class KabasTasksViewModel
   }
 
   private setupSearchResults(): void {}
+
+  private getTocsStream(): Observable<EduContentTOCInterface[]> {
+    const tocStreamWhenLessonChapter$ = this.currentTaskParams$.pipe(
+      filter(params => !!params.chapter),
+      switchMap(params =>
+        this.combineChaptersLessons(params.book, params.chapter)
+      )
+    );
+
+    const tocStreamWhenBook$ = this.currentTaskParams$.pipe(
+      filter(params => !!params.book && !params.chapter),
+      switchMap(params => {
+        return this.store.pipe(
+          select(EduContentTocQueries.getChaptersForBook, {
+            bookId: params.book
+          })
+        );
+      })
+    );
+
+    const tocStreamWhenNoBook$ = this.currentTaskParams$.pipe(
+      filter(params => !params.book),
+      mapTo([])
+    );
+
+    return merge(
+      tocStreamWhenLessonChapter$,
+      tocStreamWhenBook$,
+      tocStreamWhenNoBook$
+    );
+  }
 
   private combineChaptersLessons(
     bookId: number,
