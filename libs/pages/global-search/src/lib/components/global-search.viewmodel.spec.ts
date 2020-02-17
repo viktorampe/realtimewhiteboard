@@ -15,7 +15,11 @@ import {
   MethodReducer,
   UserReducer
 } from '@campus/dal';
-import { SearchResultInterface, SearchStateInterface } from '@campus/search';
+import {
+  SearchModeFixture,
+  SearchResultInterface,
+  SearchStateInterface
+} from '@campus/search';
 import {
   EduContentSearchResultFixture,
   EnvironmentSearchModesInterface,
@@ -39,7 +43,6 @@ import { hot } from '@nrwl/angular/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { of } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { SearchModeFixture } from './../../../../../search/src/lib/+fixtures/search-mode.fixture';
 import { GlobalSearchViewModel } from './global-search.viewmodel';
 
 describe('GlobalSearchViewModel', () => {
