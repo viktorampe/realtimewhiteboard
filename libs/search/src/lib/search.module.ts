@@ -38,6 +38,7 @@ import { SearchTermComponent } from './components/search-term/search-term.compon
 import { SearchComponent } from './components/search/search.component';
 import { SelectFilterComponent } from './components/select-filter-component/select-filter.component';
 import { SearchPortalDirective } from './directives/search-portal.directive';
+import { EmptyFilterFactory } from './factories/empty-filter.factory';
 
 @NgModule({
   imports: [
@@ -98,7 +99,8 @@ import { SearchPortalDirective } from './directives/search-portal.directive';
   ],
   providers: [
     ColumnFilterService,
-    { provide: DateAdapter, useClass: BeDateAdapter }
+    { provide: DateAdapter, useClass: BeDateAdapter },
+    EmptyFilterFactory
   ],
   entryComponents: [
     CheckboxFilterComponent,
