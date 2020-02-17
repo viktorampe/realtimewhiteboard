@@ -67,10 +67,10 @@ steps:
   - script: ./node_modules/.bin/ng build --aot
     displayName: 'Build AOT'
 
-  # Checks for file.only (Wallaby) and fdescribe (jest), which can screw up build or local tests
+  # Checks for file.only (Wallaby) and fdescribe/fit (jest), which can screw up build or local tests
   - script:
-      if grep -ERl 'fit\(|fdescribe\(|file.only' ./apps ./libs --include=*.spec.ts; then exit 1; fi;
-    displayName: 'Check for fdescribe or file.only'
+      if grep -ERl 'fdescribe\(|fit\(|file.only' ./apps ./libs --include=*.spec.ts; then exit 1; fi;
+    displayName: 'Check for fdescribe/fit or file.only'
     condition: and(succeeded(), eq(variables['dkFeaturePR'], 'true'))
 
   # Runs nx affected for all feature PRs.
