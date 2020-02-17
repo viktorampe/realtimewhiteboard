@@ -1,7 +1,9 @@
 <div
   class="card"
+  [class.zoom]="mode === Mode.ZoomMode"
   [style.border-color]="color"
   (click)="onClickCard($event)"
+  (tap)="onTapCard()"
   (press)="pressCard()"
 >
   <campus-color-list
@@ -25,7 +27,7 @@
     (clickMultiSelectIcon)="setMultiSelectSelectedMode()"
     (clickMultiSelectSelectedIcon)="setMultiSelectMode()"
   ></campus-card-toolbar>
-  <div class="card__content">
+  <div class="card__content" [class.zoom]="mode === Mode.ZoomMode">
     <ng-container *ngIf="mode !== Mode.UploadMode; else uploadMode">
       <campus-card-image
         *ngIf="viewModeImage; else viewModeText"

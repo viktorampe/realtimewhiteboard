@@ -40,6 +40,19 @@
     position: absolute;
     top: 0;
     left: 0;
+
+    &.zoom {
+      position: fixed;
+
+      z-index: 1;
+
+      transform: translate3d(0, 0, 0) !important;
+
+      height: 100%;
+      width: 100%;
+
+      background: #0000008a;
+    }
   }
 
   &__addbutton {

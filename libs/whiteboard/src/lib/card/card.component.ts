@@ -16,6 +16,7 @@ export class CardComponent {
   @Output() lastColor = new EventEmitter<string>();
   @Output() select = new EventEmitter<void>();
   @Output() deselect = new EventEmitter<void>();
+  @Output() cardTapped = new EventEmitter<void>();
 
   @Output() modeChange = new EventEmitter<Mode>();
   @Output() colorChange = new EventEmitter<string>();
@@ -43,6 +44,19 @@ export class CardComponent {
   onClickCard(event: MouseEvent) {
     if (this.mode !== Mode.IdleMode) {
       event.stopPropagation();
+    }
+  }
+
+  onTapCard() {
+    if (this.mode === Mode.ZoomMode) {
+      this.setIdleMode();
+    } else {
+      const isZoomAllowed =
+        this.viewModeImage && this.image && this.mode !== Mode.EditMode;
+
+      if (isZoomAllowed) {
+        this.cardTapped.emit();
+      }
     }
   }
 
