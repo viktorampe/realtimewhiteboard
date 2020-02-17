@@ -381,7 +381,14 @@ export class KabasTasksViewModel
 
   public addTaskEduContents(
     taskEduContents: Partial<TaskEduContentInterface>[]
-  ) {}
+  ) {
+    this.store.dispatch(
+      new TaskEduContentActions.StartAddTaskEduContents({
+        userId: this.authService.userId,
+        taskEduContents
+      })
+    );
+  }
 
   public updateTaskEduContentsRequired(
     taskEduContents: TaskEduContentInterface[],
