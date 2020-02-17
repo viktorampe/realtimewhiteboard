@@ -28,8 +28,6 @@ export class CardComponent implements OnInit, OnChanges {
   @Output() colorChange = new EventEmitter<string>();
   @Output() descriptionChange = new EventEmitter<string>();
   @Output() imageChange = new EventEmitter<string>();
-  @Output() topChange = new EventEmitter<number>();
-  @Output() leftChange = new EventEmitter<number>();
 
   viewModeImage: boolean;
 
