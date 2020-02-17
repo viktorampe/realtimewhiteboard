@@ -7,6 +7,7 @@ import {
   ClassGroupQueries,
   DalState,
   EduContent,
+  EduContentBookInterface,
   EduContentServiceInterface,
   EduContentTOCInterface,
   EDU_CONTENT_SERVICE_TOKEN,
@@ -33,6 +34,7 @@ import {
   TASK_SERVICE_TOKEN
 } from '@campus/dal';
 import {
+  SearcherInterface,
   SearchModeInterface,
   SearchResultInterface,
   SearchStateInterface
@@ -40,6 +42,7 @@ import {
 import {
   ContentOpenerInterface,
   ContentTaskManagerInterface,
+  EduContentTypeEnum,
   EnvironmentSearchModesInterface,
   ENVIRONMENT_SEARCHMODES_TOKEN,
   OpenStaticContentServiceInterface,
@@ -50,7 +53,7 @@ import {
 import { Update } from '@ngrx/entity';
 import { RouterReducerState } from '@ngrx/router-store';
 import { Action, select, Store } from '@ngrx/store';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
 import {
   distinctUntilChanged,
   filter,
@@ -79,7 +82,10 @@ export interface CurrentTaskParams {
   providedIn: 'root'
 })
 export class KabasTasksViewModel
-  implements ContentOpenerInterface, ContentTaskManagerInterface {
+  implements
+    ContentOpenerInterface,
+    ContentTaskManagerInterface,
+    SearcherInterface {
   public tasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
   public paperTasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
   public currentTask$: Observable<TaskWithAssigneesInterface>;
@@ -89,6 +95,7 @@ export class KabasTasksViewModel
   public classGroups$: Observable<ClassGroupInterface[]>;
   public groups$: Observable<GroupInterface[]>;
   public students$: Observable<PersonInterface[]>;
+  public searchBook$ = new BehaviorSubject<EduContentBookInterface>(null);
 
   public searchResults$: Observable<SearchResultInterface>;
   public searchState$: Observable<SearchStateInterface>;
@@ -444,6 +451,69 @@ export class KabasTasksViewModel
     );
   }
 
+  public getInitialSearchState(): Observable<SearchStateInterface> {
+    return combineLatest([this.currentTask$, this.searchBook$]).pipe(
+      map(([currentTask, searchBook]) => {
+        const initialSearchState: SearchStateInterface = {
+          searchTerm: '',
+          filterCriteriaSelections: new Map<string, (number | string)[]>(),
+          filterCriteriaOptions: new Map<string, number | string | boolean>()
+        };
+
+        // Only allow EduContent that's allowed to be put in a task
+        initialSearchState.filterCriteriaOptions.set('taskAllowed', true);
+
+        if (searchBook) {
+          initialSearchState.filterCriteriaSelections.set(
+            'years',
+            searchBook.years.map(year => year.id)
+          );
+
+          initialSearchState.filterCriteriaSelections.set('methods', [
+            searchBook.methodId
+          ]);
+        }
+
+        const { PAPER_EXERCISE, ...DIGITAL_EXERCISE } = EduContentTypeEnum;
+        if (currentTask.isPaperTask) {
+          initialSearchState.filterCriteriaSelections.set('eduContent.type', [
+            PAPER_EXERCISE
+          ]);
+        } else {
+          initialSearchState.filterCriteriaSelections.set(
+            'eduContent.type',
+            Object.values(DIGITAL_EXERCISE)
+          );
+        }
+
+        initialSearchState.filterCriteriaSelections.set('learningArea', [
+          currentTask.learningAreaId
+        ]);
+
+        return initialSearchState;
+      })
+    );
+  }
+
+  public getSearchMode(mode: string): Observable<SearchModeInterface> {
+    return of(this.searchModes[mode]);
+  }
+
+  public updateSearchState(state: SearchStateInterface) {
+    this._searchState$.next(state);
+  }
+
+  public requestAutoComplete(searchTerm: string): Observable<string[]> {
+    return this.getInitialSearchState().pipe(
+      map(initialSearchState => {
+        return { ...initialSearchState, searchTerm };
+      }),
+      switchMap(enrichedSearchState => {
+        return this.eduContentService.autoComplete(enrichedSearchState);
+      })
+    );
+  }
+
   private getArchivingAction(updates, errors): Action {
     const updateAction = new TaskActions.StartArchiveTasks({
       userId: this.authService.userId,
@@ -533,33 +603,6 @@ export class KabasTasksViewModel
     }
 
     return `${body}${confirmQuestion}`;
-  }
-
-  public getInitialSearchState(): Observable<SearchStateInterface> {
-    // TODO use real implementation
-    return new BehaviorSubject<SearchStateInterface>({
-      searchTerm: '',
-      filterCriteriaSelections: new Map<string, (string | number)[]>()
-    });
-  }
-
-  public getSearchMode(mode: string): Observable<SearchModeInterface> {
-    return of(this.searchModes[mode]);
-  }
-
-  public updateSearchState(state: SearchStateInterface) {
-    this._searchState$.next(state);
-  }
-
-  public requestAutoComplete(searchTerm: string): Observable<string[]> {
-    return this.getInitialSearchState().pipe(
-      map(initialSearchState => {
-        return { ...initialSearchState, searchTerm };
-      }),
-      switchMap(enrichedSearchState => {
-        return this.eduContentService.autoComplete(enrichedSearchState);
-      })
-    );
   }
 
   private setupSearchResults(): void {}

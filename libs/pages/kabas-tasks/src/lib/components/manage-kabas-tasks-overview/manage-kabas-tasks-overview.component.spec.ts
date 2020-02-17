@@ -20,6 +20,7 @@ import { PagesSharedModule } from '@campus/pages/shared';
 import { ButtonToggleFilterComponent, SearchModule } from '@campus/search';
 import {
   ENVIRONMENT_ICON_MAPPING_TOKEN,
+  ENVIRONMENT_SEARCHMODES_TOKEN,
   ENVIRONMENT_TESTING_TOKEN,
   SharedModule
 } from '@campus/shared';
@@ -92,6 +93,7 @@ describe('ManageKabasTasksOverviewComponent', () => {
 
         { provide: ENVIRONMENT_ICON_MAPPING_TOKEN, useValue: {} },
         { provide: ENVIRONMENT_TESTING_TOKEN, useValue: {} },
+        { provide: ENVIRONMENT_SEARCHMODES_TOKEN, useValue: {} },
         {
           provide: HAMMER_LOADER,
           useValue: () => new Promise(() => {})
