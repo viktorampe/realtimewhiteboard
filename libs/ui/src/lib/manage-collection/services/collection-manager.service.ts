@@ -35,9 +35,7 @@ export class CollectionManagerService
       item: item,
       linkableItems: linkableItems,
       linkedItemIds: new Set(linkedItemIds),
-      recentItemIds: new Set(recentItemIds),
-      asModalSideSheet: true,
-      useFilter: true
+      recentItemIds: new Set(recentItemIds)
     };
 
     const dialogRef = this.openDialog(dialogData);
@@ -67,9 +65,13 @@ export class CollectionManagerService
   ): MatDialogRef<ManageCollectionComponent> {
     // use the ManageCollectionComponent
     // inject the right data
-    return this.dialog.open(ManageCollectionComponent, {
-      data: data,
-      panelClass: 'ui-manage-collection__dialog'
-    });
+    const config = {
+      data,
+      panelClass: data.asModalSideSheet
+        ? 'ui-modal-side-sheet'
+        : 'ui-manage-collection__dialog',
+      position: data.asModalSideSheet ? { top: '0', right: '0' } : {}
+    };
+    return this.dialog.open(ManageCollectionComponent, config);
   }
 }

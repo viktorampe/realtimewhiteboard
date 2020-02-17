@@ -4,6 +4,14 @@
   $ui-manage-collection-list_filter-font-size: $ui-primary-font-size !default;
   $ui-manage-collection-list_recent-item-color: $ui-form-button-primary-bg-color !default;
   $ui-manage-collection-list__no-results-padding: 24px !default;
+  $light-gray: #d2d2d2;
+  $dark-gray: #808080;
+  $black: #242424;
+  $title-color: $black;
+  $title-font-size: 21pt;
+  $title-font-weight: 600;
+  $body-2-font-size: 14pt;
+  $body-2-font-weight: 600;
 
   .ui-manage-collection {
     &__no-results {
@@ -62,6 +70,36 @@
       p {
         color: $ui-manage-collection-list_recent-item-color;
       }
+    }
+  }
+
+  .ui-modal-side-sheet {
+    height: 100%;
+
+    &__header {
+      display: flex;
+      flex-direction: column;
+
+      &__row {
+        .title {
+          color: $black;
+          font-size: $title-font-size;
+          font-weight: $title-font-weight;
+        }
+        .subtitle {
+          // body 2
+          color: $dark-gray;
+          font-size: $body-2-font-size;
+          font-weight: $body-2-font-weight;
+        }
+
+        mat-icon {
+          color: $dark-gray;
+        }
+      }
+    }
+    &__divider {
+      color: $light-gray;
     }
   }
 }

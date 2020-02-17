@@ -2,6 +2,7 @@ import { ManageCollectionItemInterface } from './manage-collection-item.interfac
 
 export interface ManageCollectionsDataInterface {
   title: string;
+  subtitle?: string;
   item: ManageCollectionItemInterface;
   linkableItems: ManageCollectionItemInterface[];
   linkedItemIds: Set<number>;
