@@ -5,6 +5,7 @@ import {
   AUTH_SERVICE_TOKEN,
   DalState,
   EduContentBookFixture,
+  EduContentBookInterface,
   EduContentFixture,
   EduContentMetadataFixture,
   EduContentServiceInterface,
@@ -54,7 +55,10 @@ import {
   TaskWithAssigneesInterface
 } from '../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from './kabas-tasks.viewmodel';
-import { getTaskWithAssignmentAndEduContents } from './kabas-tasks.viewmodel.selectors';
+import {
+  getTaskFavoriteBooks,
+  getTaskWithAssignmentAndEduContents
+} from './kabas-tasks.viewmodel.selectors';
 
 describe('KabasTaskViewModel', () => {
   const dateMock = new MockDate();
@@ -1102,6 +1106,25 @@ describe('KabasTaskViewModel', () => {
         new TaskEduContentActions.StartAddTaskEduContents({
           userId,
           taskEduContents
+        })
+      );
+    });
+  });
+
+  describe('favoriteBooksForTask$', () => {
+    const expectedBooks: EduContentBookInterface[] = [
+      new EduContentBookFixture({ id: 1 }),
+      new EduContentBookFixture({ id: 2 })
+    ];
+
+    beforeEach(() => {
+      store.overrideSelector(getTaskFavoriteBooks, expectedBooks);
+    });
+
+    it('should return the favorite books for the task', () => {
+      expect(kabasTasksViewModel.favoriteBooksForTask$).toBeObservable(
+        hot('a', {
+          a: expectedBooks
         })
       );
     });

@@ -72,6 +72,7 @@ import {
 import { AssigneeInterface } from './../interfaces/Assignee.interface';
 import {
   allowedLearningAreas,
+  getTaskFavoriteBooks,
   getTasksWithAssignmentsByType,
   getTaskWithAssignmentAndEduContents
 } from './kabas-tasks.viewmodel.selectors';
@@ -98,6 +99,7 @@ export class KabasTasksViewModel
   public groups$: Observable<GroupInterface[]>;
   public students$: Observable<PersonInterface[]>;
   public searchBook$ = new BehaviorSubject<EduContentBookInterface>(null);
+  public favoriteBooksForTask$: Observable<EduContentBookInterface[]>;
 
   public searchResults$: Observable<SearchResultInterface>;
   public searchState$: Observable<SearchStateInterface>;
@@ -155,6 +157,7 @@ export class KabasTasksViewModel
 
     this._searchState$ = new BehaviorSubject<SearchStateInterface>(null);
     this.searchState$ = this._searchState$;
+    this.favoriteBooksForTask$ = this.store.pipe(select(getTaskFavoriteBooks));
   }
 
   openEduContentAsExercise(eduContent: EduContent): void {

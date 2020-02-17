@@ -7,6 +7,8 @@ import {
   ViewChild,
   ViewChildren
 } from '@angular/core';
+import { Router } from '@angular/router';
+import { EduContentBookInterface } from '@campus/dal';
 import {
   SearchComponent,
   SearchModeInterface,
@@ -15,7 +17,7 @@ import {
   SearchStateInterface
 } from '@campus/search';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { filter, map, switchMapTo, take } from 'rxjs/operators';
 import { TaskEduContentWithEduContentInterface } from '../../interfaces/TaskEduContentWithEduContent.interface';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
 
@@ -37,12 +39,27 @@ export class ManageTaskContentComponent implements OnInit, AfterViewInit {
   @ViewChild(SearchComponent, { static: true })
   public searchComponent: SearchComponent;
 
-  constructor(private viewModel: KabasTasksViewModel) {}
+  constructor(private viewModel: KabasTasksViewModel, private router: Router) {}
 
   @HostBinding('class.manage-task-content')
   manageTaskContentClass = true;
 
   ngOnInit() {
+    // redirect to favorite
+    this.viewModel.currentTaskParams$
+      .pipe(
+        filter(params => !!params.book),
+        switchMapTo(this.viewModel.favoriteBooksForTask$),
+        take(1)
+      )
+      .subscribe((favoriteBooks: EduContentBookInterface[]) => {
+        if (favoriteBooks.length === 1) {
+          this.router.navigate(['.'], {
+            queryParams: { book: favoriteBooks[0].id }
+          });
+        }
+      });
+
     this.currentContent$ = this.viewModel.currentTask$.pipe(
       map(task => task.taskEduContents)
     );
