@@ -595,7 +595,7 @@ export class KabasTasksViewModel
   private setupSearchResults(): void {
     this.searchResults$ = this.searchState$.pipe(
       withLatestFrom(this.getInitialSearchState()),
-      filter(([searchState, initialSearchState]) => searchState !== null),
+      filter(([searchState]) => searchState !== null),
       map(([searchState, initialSearchState]) => ({
         ...initialSearchState,
         ...searchState,
