@@ -8,7 +8,10 @@ import {
   DalState,
   EduContent,
   EduContentBookInterface,
+  EduContentInterface,
+  EduContentServiceInterface,
   EduContentTOCInterface,
+  EDU_CONTENT_SERVICE_TOKEN,
   EffectFeedback,
   EffectFeedbackActions,
   FavoriteActions,
@@ -40,6 +43,7 @@ import {
 import {
   ContentOpenerInterface,
   ContentTaskManagerInterface,
+  EduContentSearchResultInterface,
   EduContentTypeEnum,
   OpenStaticContentServiceInterface,
   OPEN_STATIC_CONTENT_SERVICE_TOKEN,
@@ -56,7 +60,8 @@ import {
   map,
   shareReplay,
   switchMap,
-  take
+  take,
+  withLatestFrom
 } from 'rxjs/operators';
 import { AssigneeTypesEnum } from '../interfaces/Assignee.interface';
 import {
@@ -107,7 +112,9 @@ export class KabasTasksViewModel
     @Inject(SCORM_EXERCISE_SERVICE_TOKEN)
     private scormExerciseService: ScormExerciseServiceInterface,
     @Inject(OPEN_STATIC_CONTENT_SERVICE_TOKEN)
-    private openStaticContentService: OpenStaticContentServiceInterface
+    private openStaticContentService: OpenStaticContentServiceInterface,
+    @Inject(EDU_CONTENT_SERVICE_TOKEN)
+    private eduContentService: EduContentServiceInterface
   ) {
     this.tasksWithAssignments$ = this.store.pipe(
       select(getTasksWithAssignmentsByType, {
@@ -585,7 +592,55 @@ export class KabasTasksViewModel
     return `${body}${confirmQuestion}`;
   }
 
-  private setupSearchResults(): void {}
+  private setupSearchResults(): void {
+    this.searchResults$ = this.searchState$.pipe(
+      withLatestFrom(this.getInitialSearchState()),
+      filter(([searchState, initialSearchState]) => searchState !== null),
+      map(([searchState, initialSearchState]) => ({
+        ...initialSearchState,
+        ...searchState,
+        filterCriteriaSelections: new Map([
+          ...Array.from(searchState.filterCriteriaSelections.entries()),
+          ...Array.from(initialSearchState.filterCriteriaSelections.entries())
+        ]),
+        filterCriteriaOptions: new Map([
+          ...Array.from(initialSearchState.filterCriteriaOptions.entries())
+        ])
+      })),
+      switchMap(searchState => this.eduContentService.search(searchState)),
+      withLatestFrom(this.currentTask$),
+      map(([searchResult, currentTask]) => {
+        const eduContentIdsInTask = currentTask.taskEduContents.reduce(
+          (acc, taskEduContent) => {
+            return {
+              ...acc,
+              [taskEduContent.eduContentId]: true
+            };
+          },
+          {}
+        );
+
+        return {
+          ...searchResult,
+          results: searchResult.results.map(
+            (
+              searchResultItem: EduContentInterface
+            ): EduContentSearchResultInterface => {
+              const eduContent = Object.assign<EduContent, EduContentInterface>(
+                new EduContent(),
+                searchResultItem
+              );
+
+              return {
+                eduContent: eduContent,
+                inTask: !!eduContentIdsInTask[eduContent.id]
+              };
+            }
+          )
+        };
+      })
+    );
+  }
 
   private combineChaptersLessons(
     bookId: number,
