@@ -21,6 +21,7 @@ export class CardComponent {
   @Output() colorChange = new EventEmitter<string>();
   @Output() descriptionChange = new EventEmitter<string>();
   @Output() imageChange = new EventEmitter<string>();
+  @Output() cardPressed = new EventEmitter<void>();
 
   viewModeImage: boolean;
 
@@ -33,6 +34,7 @@ export class CardComponent {
   }
 
   pressCard() {
+    this.cardPressed.emit();
     if (this.mode === Mode.SelectedMode || this.mode === Mode.EditMode) {
       this.setIdleMode();
     } else {
