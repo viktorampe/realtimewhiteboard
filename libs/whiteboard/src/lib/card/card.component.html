@@ -28,6 +28,7 @@
         <campus-card-text
           class="card__content__text"
           [(text)]="description"
+          (textChange)="onDescriptionChange($event)"
           [mode]="mode"
         ></campus-card-text>
       </ng-template>

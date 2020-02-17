@@ -1,3 +1,4 @@
+import { CdkDragEnd } from '@angular/cdk/drag-drop';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Mode } from '../../shared/enums/mode.enum';
 import CardInterface from '../../shared/models/card.interface';
@@ -109,6 +110,12 @@ export class WhiteboardComponent implements OnInit {
     }
 
     this.checkToolbarVisible();
+  }
+
+  onDragEnded(event: CdkDragEnd, card) {
+    const cardPosition = event.source.getFreeDragPosition();
+    card.top = cardPosition.y;
+    card.left = cardPosition.x;
   }
 
   checkToolbarVisible() {

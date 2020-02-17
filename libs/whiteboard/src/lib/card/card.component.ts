@@ -1,7 +1,6 @@
 import {
   Component,
   EventEmitter,
-  HostBinding,
   Input,
   OnChanges,
   OnInit,
@@ -19,17 +18,19 @@ export class CardComponent implements OnInit, OnChanges {
   @Input() color: string;
   @Input() description: string;
   @Input() image: string;
-  @Input() top: number;
-  @Input() left: number;
 
   @Output() deleteCard = new EventEmitter();
   @Output() lastColor = new EventEmitter<string>();
   @Output() select = new EventEmitter<void>();
   @Output() deselect = new EventEmitter<void>();
-  @Output() modeChange = new EventEmitter<Mode>();
 
-  @HostBinding('style.top') topStyle: string;
-  @HostBinding('style.left') leftStyle: string;
+  @Output() modeChange = new EventEmitter<Mode>();
+  @Output() colorChange = new EventEmitter<string>();
+  @Output() descriptionChange = new EventEmitter<string>();
+  @Output() imageChange = new EventEmitter<string>();
+  @Output() topChange = new EventEmitter<number>();
+  @Output() leftChange = new EventEmitter<number>();
+
   viewModeImage: boolean;
 
   constructor() {
@@ -38,10 +39,7 @@ export class CardComponent implements OnInit, OnChanges {
 
   ngOnInit() {}
 
-  ngOnChanges() {
-    this.topStyle = this.top + 'px';
-    this.leftStyle = this.left + 'px';
-  }
+  ngOnChanges() {}
 
   get Mode() {
     return Mode;
@@ -57,10 +55,13 @@ export class CardComponent implements OnInit, OnChanges {
 
   removeImage() {
     this.image = '';
+    this.imageChange.emit(this.image);
   }
 
   updateImage(url: string) {
     this.image = url;
+
+    this.imageChange.emit(this.image);
 
     this.setUploadMode();
 
@@ -101,8 +102,14 @@ export class CardComponent implements OnInit, OnChanges {
 
   selectColor(color: string) {
     this.color = color;
+    this.colorChange.emit(this.color);
+
     this.lastColor.emit(color);
     this.setIdleMode();
+  }
+
+  onDescriptionChange(description: string) {
+    this.descriptionChange.emit(description);
   }
 
   flipIconClicked() {
