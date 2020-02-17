@@ -72,32 +72,12 @@ describe('CardComponent', () => {
     component.description = mockData.description;
     component.image = mockData.image;
     component.mode = mockData.mode;
-    component.top = mockData.top;
-    component.left = mockData.left;
 
     fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
-  });
-
-  it('should set the correct top style on creation', () => {
-    component.top = 500;
-
-    component.ngOnChanges();
-    fixture.detectChanges();
-
-    expect(fixture.debugElement.nativeElement.style.top).toBe('500px');
-  });
-
-  it('should set the correct left style on creation', () => {
-    component.left = 500;
-
-    component.ngOnChanges();
-    fixture.detectChanges();
-
-    expect(fixture.debugElement.nativeElement.style.left).toBe('500px');
   });
 
   it("should replace card's image when replaceImage gets called", () => {
