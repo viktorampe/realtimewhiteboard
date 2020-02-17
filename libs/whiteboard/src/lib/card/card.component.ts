@@ -1,12 +1,4 @@
-import {
-  Component,
-  EventEmitter,
-  HostBinding,
-  Input,
-  OnChanges,
-  OnInit,
-  Output
-} from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Mode } from '../../shared/enums/mode.enum';
 
 @Component({
@@ -14,33 +6,26 @@ import { Mode } from '../../shared/enums/mode.enum';
   templateUrl: './card.component.html',
   styleUrls: ['./card.component.scss']
 })
-export class CardComponent implements OnInit, OnChanges {
+export class CardComponent {
   @Input() mode: Mode;
   @Input() color: string;
   @Input() description: string;
   @Input() image: string;
-  @Input() top: number;
-  @Input() left: number;
 
   @Output() deleteCard = new EventEmitter();
   @Output() lastColor = new EventEmitter<string>();
   @Output() select = new EventEmitter<void>();
   @Output() deselect = new EventEmitter<void>();
-  @Output() modeChange = new EventEmitter<Mode>();
 
-  @HostBinding('style.top') topStyle: string;
-  @HostBinding('style.left') leftStyle: string;
+  @Output() modeChange = new EventEmitter<Mode>();
+  @Output() colorChange = new EventEmitter<string>();
+  @Output() descriptionChange = new EventEmitter<string>();
+  @Output() imageChange = new EventEmitter<string>();
+
   viewModeImage: boolean;
 
   constructor() {
     this.viewModeImage = true;
-  }
-
-  ngOnInit() {}
-
-  ngOnChanges() {
-    this.topStyle = this.top + 'px';
-    this.leftStyle = this.left + 'px';
   }
 
   get Mode() {
@@ -57,10 +42,13 @@ export class CardComponent implements OnInit, OnChanges {
 
   removeImage() {
     this.image = '';
+    this.imageChange.emit(this.image);
   }
 
   updateImage(url: string) {
     this.image = url;
+
+    this.imageChange.emit(this.image);
 
     this.setUploadMode();
 
@@ -101,8 +89,14 @@ export class CardComponent implements OnInit, OnChanges {
 
   selectColor(color: string) {
     this.color = color;
+    this.colorChange.emit(this.color);
+
     this.lastColor.emit(color);
     this.setIdleMode();
+  }
+
+  onDescriptionChange(description: string) {
+    this.descriptionChange.emit(description);
   }
 
   flipIconClicked() {
