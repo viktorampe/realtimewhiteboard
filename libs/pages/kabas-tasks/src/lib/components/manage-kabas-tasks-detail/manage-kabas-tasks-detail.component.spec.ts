@@ -31,9 +31,9 @@ import {
   SearchModule
 } from '@campus/search';
 import {
-  ContentActionsServiceInterface,
-  CONTENT_ACTIONS_SERVICE_TOKEN,
+  ContentOpenActionsServiceInterface,
   CONTENT_OPENER_TOKEN,
+  CONTENT_OPEN_ACTIONS_SERVICE_TOKEN,
   ENVIRONMENT_ICON_MAPPING_TOKEN,
   ENVIRONMENT_SEARCHMODES_TOKEN,
   ENVIRONMENT_TESTING_TOKEN,
@@ -74,7 +74,7 @@ describe('ManageKabasTasksDetailComponent', () => {
   const queryParams: BehaviorSubject<Params> = new BehaviorSubject<Params>({});
   let mockDate: MockDate;
 
-  let contentActionsService: ContentActionsServiceInterface;
+  let contentOpenActionsService: ContentOpenActionsServiceInterface;
   let mockViewmodel: MockKabasTasksViewModel;
   let currentTask: TaskWithAssigneesInterface;
   let restOfTasks: TaskWithAssigneesInterface[];
@@ -175,7 +175,7 @@ describe('ManageKabasTasksDetailComponent', () => {
         },
         { provide: MatIconRegistry, useClass: MockMatIconRegistry },
         {
-          provide: CONTENT_ACTIONS_SERVICE_TOKEN,
+          provide: CONTENT_OPEN_ACTIONS_SERVICE_TOKEN,
           useValue: { getActionsForEduContent: () => [] }
         },
         {
@@ -208,7 +208,7 @@ describe('ManageKabasTasksDetailComponent', () => {
     viewModel = TestBed.get(KabasTasksViewModel);
     matDialog = TestBed.get(MatDialog);
     router = TestBed.get(Router);
-    contentActionsService = TestBed.get(CONTENT_ACTIONS_SERVICE_TOKEN);
+    contentOpenActionsService = TestBed.get(CONTENT_OPEN_ACTIONS_SERVICE_TOKEN);
     fixture = TestBed.createComponent(ManageKabasTasksDetailComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -510,7 +510,7 @@ describe('ManageKabasTasksDetailComponent', () => {
 
     beforeEach(() => {
       jest
-        .spyOn(contentActionsService, 'getActionsForEduContent')
+        .spyOn(contentOpenActionsService, 'getActionsForEduContent')
         .mockReturnValue(mockActions);
       taskEduContents = [
         createTaskEduContent(1, 'oefening 1'),

@@ -1,22 +1,22 @@
 import { inject, TestBed } from '@angular/core/testing';
 import { EduContentFixture } from '@campus/dal';
 import { configureTestSuite } from 'ng-bullet';
-import { EduContentTypeEnum } from '../../enums';
-import { ContentActionsService } from './content-actions.service';
+import { EduContentTypeEnum } from '../../../enums';
+import { ContentOpenActionsService } from './content-open-actions.service';
 import {
-  ContentActionsServiceInterface,
+  ContentOpenActionsServiceInterface,
   ContentOpenerInterface,
   CONTENT_OPENER_TOKEN
-} from './content-actions.service.interface';
+} from './content-open-actions.service.interface';
 
-describe('ContentActionsServiceInterface', () => {
-  let contentActionsService: ContentActionsServiceInterface;
+describe('ContentOpenActionsServiceInterface', () => {
+  let contentOpenActionsService: ContentOpenActionsServiceInterface;
   let contentOpener: ContentOpenerInterface;
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [],
       providers: [
-        ContentActionsService,
+        ContentOpenActionsService,
         {
           provide: CONTENT_OPENER_TOKEN,
           useValue: {
@@ -25,9 +25,7 @@ describe('ContentActionsServiceInterface', () => {
             openEduContentAsStream: () => {},
             openEduContentAsDownload: () => {},
             openBoeke: () => {},
-            previewEduContentAsImage: () => {},
-            addEduContentToTask: () => {},
-            removeEduContentFromTask: () => {}
+            previewEduContentAsImage: () => {}
           }
         }
       ]
@@ -35,13 +33,13 @@ describe('ContentActionsServiceInterface', () => {
   });
 
   beforeEach(() => {
-    contentActionsService = TestBed.get(ContentActionsService);
+    contentOpenActionsService = TestBed.get(ContentOpenActionsService);
     contentOpener = TestBed.get(CONTENT_OPENER_TOKEN);
   });
 
   it('should be created', inject(
-    [ContentActionsService],
-    (service: ContentActionsService) => {
+    [ContentOpenActionsService],
+    (service: ContentOpenActionsService) => {
       expect(service).toBeTruthy();
     }
   ));
@@ -53,29 +51,32 @@ describe('ContentActionsServiceInterface', () => {
           mockEduContent: new EduContentFixture({
             type: EduContentTypeEnum.BOEKE
           }),
-          expected: [contentActionsService.contentActionDictionary.openBoeke]
+          expected: [
+            contentOpenActionsService.contentActionDictionary.openBoeke
+          ]
         },
         {
           mockEduContent: new EduContentFixture({
             type: EduContentTypeEnum.EXERCISE
           }),
           expected: [
-            contentActionsService.contentActionDictionary
+            contentOpenActionsService.contentActionDictionary
               .openEduContentAsExercise,
-            contentActionsService.contentActionDictionary
+            contentOpenActionsService.contentActionDictionary
               .openEduContentAsSolution
           ]
         },
         {
           mockEduContent: new EduContentFixture({}, { streamable: true }),
           expected: [
-            contentActionsService.contentActionDictionary.openEduContentAsStream
+            contentOpenActionsService.contentActionDictionary
+              .openEduContentAsStream
           ]
         },
         {
           mockEduContent: new EduContentFixture({}, { streamable: false }),
           expected: [
-            contentActionsService.contentActionDictionary
+            contentOpenActionsService.contentActionDictionary
               .openEduContentAsDownload
           ]
         },
@@ -84,36 +85,16 @@ describe('ContentActionsServiceInterface', () => {
             type: EduContentTypeEnum.PAPER_EXERCISE
           }),
           expected: [
-            contentActionsService.contentActionDictionary
+            contentOpenActionsService.contentActionDictionary
               .previewEduContentAsImage
           ]
         }
       ];
       tests.forEach(test =>
         expect(
-          contentActionsService.getActionsForEduContent(test.mockEduContent)
+          contentOpenActionsService.getActionsForEduContent(test.mockEduContent)
         ).toEqual(test.expected)
       );
-    });
-  });
-
-  describe('getTaskActionsForEduContent()', () => {
-    it('should return addToTask action when inTask false', () => {
-      expect(
-        contentActionsService.getTaskActionsForEduContent(
-          new EduContentFixture(),
-          false
-        )
-      ).toEqual([contentActionsService.contentActionDictionary.addToTask]);
-    });
-
-    it('should return removeFromTask action when inTask true', () => {
-      expect(
-        contentActionsService.getTaskActionsForEduContent(
-          new EduContentFixture(),
-          true
-        )
-      ).toEqual([contentActionsService.contentActionDictionary.removeFromTask]);
     });
   });
 });

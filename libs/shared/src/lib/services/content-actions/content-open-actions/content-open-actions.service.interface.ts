@@ -1,12 +1,6 @@
 import { InjectionToken } from '@angular/core';
 import { EduContent } from '@campus/dal';
-
-export interface ContentActionInterface {
-  label: string;
-  icon: string;
-  tooltip: string;
-  handler(eduContent: EduContent): void;
-}
+import { ContentActionInterface } from '@campus/shared';
 
 export interface ContentOpenerInterface {
   openEduContentAsExercise(eduContent: EduContent): void;
@@ -15,23 +9,17 @@ export interface ContentOpenerInterface {
   openEduContentAsDownload(eduContent: EduContent): void;
   openBoeke(eduContent: EduContent): void;
   previewEduContentAsImage(eduContent: EduContent): void;
-  addEduContentToTask?(eduContent: EduContent): void;
-  removeEduContentFromTask?(eduContent: EduContent): void;
 }
 
-export const CONTENT_ACTIONS_SERVICE_TOKEN = new InjectionToken(
-  'ContentActionsService'
+export const CONTENT_OPEN_ACTIONS_SERVICE_TOKEN = new InjectionToken(
+  'ContentOpenActionsService'
 );
 
 export const CONTENT_OPENER_TOKEN = new InjectionToken<ContentOpenerInterface>(
   'ContentOpener'
 );
 
-export interface ContentActionsServiceInterface {
+export interface ContentOpenActionsServiceInterface {
   contentActionDictionary: { [key: string]: ContentActionInterface };
   getActionsForEduContent(eduContent: EduContent): ContentActionInterface[];
-  getTaskActionsForEduContent(
-    eduContent: EduContent,
-    inTask: boolean
-  ): ContentActionInterface[];
 }

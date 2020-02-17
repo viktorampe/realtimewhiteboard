@@ -39,6 +39,7 @@ import {
 } from '@campus/search';
 import {
   ContentOpenerInterface,
+  ContentTaskManagerInterface,
   EduContentTypeEnum,
   OpenStaticContentServiceInterface,
   OPEN_STATIC_CONTENT_SERVICE_TOKEN,
@@ -77,7 +78,10 @@ export interface CurrentTaskParams {
   providedIn: 'root'
 })
 export class KabasTasksViewModel
-  implements ContentOpenerInterface, SearcherInterface {
+  implements
+    ContentOpenerInterface,
+    ContentTaskManagerInterface,
+    SearcherInterface {
   public searchResults$: Observable<SearchResultInterface>;
   public searchState$: Observable<SearchStateInterface>;
 

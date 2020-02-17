@@ -25,10 +25,12 @@ import {
 import { AddEffectFeedback } from '../effect-feedback/effect-feedback.actions';
 import {
   AddTaskEduContent,
+  AddTaskEduContents,
   DeleteTaskEduContent,
   DeleteTaskEduContents,
   LinkTaskEduContent,
   LoadTaskEduContents,
+  StartAddTaskEduContents,
   StartDeleteTaskEduContents,
   TaskEduContentsActionTypes,
   TaskEduContentsLoaded,
@@ -256,14 +258,84 @@ export class TaskEduContentEffects {
     )
   );
 
+  createTaskEduContents$ = createEffect(() =>
+    this.dataPersistence.pessimisticUpdate(
+      TaskEduContentsActionTypes.StartAddTaskEduContents,
+      {
+        run: (action: StartAddTaskEduContents, state: DalState) => {
+          return this.taskEduContentService
+            .createTaskEduContent(
+              action.payload.userId,
+              action.payload.taskEduContents
+            )
+            .pipe(
+              switchMap(
+                (
+                  taskEduContentCreateResults: UpdateTaskEduContentResultInterface
+                ) => {
+                  const actions = [];
+                  const { success, errors } = taskEduContentCreateResults;
+
+                  if (this.isFilled(success)) {
+                    actions.push(
+                      new AddTaskEduContents({ taskEduContents: success })
+                    );
+
+                    // show a snackbar if there is no other feedback (i.e. no errors)
+                    if (!this.isFilled(errors)) {
+                      const message = this.getTaskEduContentUpdateSuccessMessage(
+                        success.length,
+                        'create'
+                      );
+                      actions.push(
+                        this.getTaskEduContentUpdateFeedbackAction(
+                          action,
+                          message,
+                          'success'
+                        )
+                      );
+                    }
+                  }
+
+                  // show feedback for the ones still in use
+                  if (this.isFilled(errors)) {
+                    const errorMessage = this.getTaskEduContentUpdateErrorMessageHTML(
+                      taskEduContentCreateResults,
+                      'create'
+                    );
+                    actions.push(
+                      this.getTaskEduContentUpdateFeedbackAction(
+                        action,
+                        errorMessage,
+                        'error'
+                      )
+                    );
+                  }
+                  return from(actions);
+                }
+              )
+            );
+        },
+
+        onError: (action: StartAddTaskEduContents, error) => {
+          return this.getTaskEduContentUpdateOnErrorFeedbackAction(
+            action,
+            'create'
+          );
+        }
+      }
+    )
+  );
+
   private isFilled = arr => Array.isArray(arr) && arr.length;
 
   private getTaskEduContentUpdateSuccessMessage(
     taskEduContentsLength: number,
-    method: 'delete'
+    method: 'delete' | 'create'
   ): string {
     const methodVerbs = {
-      delete: 'verwijderd'
+      delete: 'verwijderd',
+      create: 'toegevoegd'
     };
 
     return `Het lesmateriaal werd ${methodVerbs[method]}.`;
@@ -271,11 +343,12 @@ export class TaskEduContentEffects {
 
   private getTaskEduContentUpdateErrorMessageHTML(
     taskUpdateInfo: UpdateTaskEduContentResultInterface,
-    method: 'delete'
+    method: 'delete' | 'create'
   ) {
     const { success, errors } = taskUpdateInfo;
     const methodVerbs = {
-      delete: 'verwijderd'
+      delete: 'verwijderd',
+      create: 'toegevoegd'
     };
     const verb = methodVerbs[method];
 
@@ -329,12 +402,13 @@ export class TaskEduContentEffects {
 
   private getTaskEduContentUpdateOnErrorFeedbackAction(
     action: FeedbackTriggeringAction,
-    method: 'archive' | 'dearchive' | 'delete'
+    method: 'archive' | 'dearchive' | 'delete' | 'create'
   ) {
     const methodVerbs = {
       archive: 'te archiveren',
       dearchive: 'te dearchiveren',
-      delete: 'te verwijderen'
+      delete: 'te verwijderen',
+      create: 'toe te voegen'
     };
     const feedbackAction = new AddEffectFeedback({
       effectFeedback: EffectFeedback.generateErrorFeedback(
