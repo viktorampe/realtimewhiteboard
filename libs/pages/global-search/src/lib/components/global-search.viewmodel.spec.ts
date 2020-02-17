@@ -15,12 +15,7 @@ import {
   MethodReducer,
   UserReducer
 } from '@campus/dal';
-import {
-  FilterFactoryFixture,
-  SearchModeInterface,
-  SearchResultInterface,
-  SearchStateInterface
-} from '@campus/search';
+import { SearchResultInterface, SearchStateInterface } from '@campus/search';
 import {
   EduContentSearchResultFixture,
   EnvironmentSearchModesInterface,
@@ -44,6 +39,7 @@ import { hot } from '@nrwl/angular/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { of } from 'rxjs';
 import { take } from 'rxjs/operators';
+import { SearchModeFixture } from './../../../../../search/src/lib/+fixtures/search-mode.fixture';
 import { GlobalSearchViewModel } from './global-search.viewmodel';
 
 describe('GlobalSearchViewModel', () => {
@@ -55,27 +51,6 @@ describe('GlobalSearchViewModel', () => {
   let scormExerciseService: ScormExerciseServiceInterface;
   let searchModes: EnvironmentSearchModesInterface;
   let eduContentService: EduContentServiceInterface;
-
-  function createMockSearchMode(overrides: Partial<SearchModeInterface>) {
-    return Object.assign(
-      {
-        name: 'demo',
-        label: 'demo',
-        dynamicFilters: false,
-        searchFilterFactory: FilterFactoryFixture,
-        searchTerm: {
-          // autocompleteEl: string; //reference to material autocomplete component
-          domHost: 'hostSearchTerm'
-        },
-        results: {
-          component: null,
-          sortModes: [],
-          pageSize: 3
-        }
-      },
-      overrides
-    ) as SearchModeInterface;
-  }
 
   const mockAutoCompleteReturnValue = ['strings', 'for', 'autocomplete'];
 
@@ -127,8 +102,8 @@ describe('GlobalSearchViewModel', () => {
         {
           provide: ENVIRONMENT_SEARCHMODES_TOKEN,
           useValue: {
-            demo: createMockSearchMode({ name: 'demo' }),
-            global: createMockSearchMode({ name: 'global' })
+            demo: new SearchModeFixture(),
+            global: new SearchModeFixture({ name: 'global' })
           }
         },
         {

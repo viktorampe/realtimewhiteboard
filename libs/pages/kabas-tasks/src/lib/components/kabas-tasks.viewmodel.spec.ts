@@ -8,6 +8,7 @@ import {
   EduContentMetadataFixture,
   EduFileFixture,
   EduFileTypeEnum,
+  EDU_CONTENT_SERVICE_TOKEN,
   EffectFeedback,
   EffectFeedbackActions,
   FavoriteActions,
@@ -22,7 +23,10 @@ import {
   TASK_SERVICE_TOKEN,
   UserQueries
 } from '@campus/dal';
+import { SearchModeFixture } from '@campus/search';
 import {
+  ENVIRONMENT_API_TOKEN,
+  ENVIRONMENT_SEARCHMODES_TOKEN,
   OpenStaticContentServiceInterface,
   OPEN_STATIC_CONTENT_SERVICE_TOKEN,
   ScormExerciseServiceInterface,
@@ -53,6 +57,7 @@ describe('KabasTaskViewModel', () => {
   let taskService: TaskServiceInterface;
   let scormExerciseService: ScormExerciseServiceInterface;
   let openStaticContentService: OpenStaticContentServiceInterface;
+  const apiBase = 'api.foo.be';
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
@@ -80,6 +85,25 @@ describe('KabasTaskViewModel', () => {
           provide: OPEN_STATIC_CONTENT_SERVICE_TOKEN,
           useValue: {
             open: jest.fn()
+          }
+        },
+        {
+          provide: EDU_CONTENT_SERVICE_TOKEN,
+          useValue: {
+            search: () => {},
+            autoComplete: () => {}
+          }
+        },
+        {
+          provide: ENVIRONMENT_SEARCHMODES_TOKEN,
+          useValue: {
+            demo: new SearchModeFixture()
+          }
+        },
+        {
+          provide: ENVIRONMENT_API_TOKEN,
+          useValue: {
+            APIBase: apiBase
           }
         }
       ]
