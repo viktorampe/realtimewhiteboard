@@ -205,7 +205,18 @@ export class KabasTasksViewModel
     this.openStaticContentService.open(eduContent, false, true);
   }
 
-  addEduContentToTask(eduContent: EduContent): void {}
+  addEduContentToTask(eduContent: EduContent): void {
+    this.currentTask$
+      .pipe(
+        take(1),
+        map(task => task.id)
+      )
+      .subscribe(taskId => {
+        this.addTaskEduContents([
+          { taskId: taskId, eduContentId: eduContent.id }
+        ]);
+      });
+  }
 
   removeEduContentFromTask(eduContent: EduContent): void {}
 
