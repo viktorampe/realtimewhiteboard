@@ -1010,4 +1010,24 @@ describe('KabasTaskViewModel', () => {
       );
     });
   });
+
+  describe('addTaskEduContents', () => {
+    const taskEduContents = [
+      new TaskEduContentFixture(),
+      new TaskEduContentFixture()
+    ];
+
+    it('should dispatch an action', () => {
+      store.dispatch = jest.fn();
+
+      kabasTasksViewModel.addTaskEduContents(taskEduContents);
+
+      expect(store.dispatch).toHaveBeenCalledWith(
+        new TaskEduContentActions.StartAddTaskEduContents({
+          userId,
+          taskEduContents
+        })
+      );
+    });
+  });
 });
