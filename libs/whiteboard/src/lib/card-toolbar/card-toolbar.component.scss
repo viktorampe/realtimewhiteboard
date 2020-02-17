@@ -34,4 +34,14 @@
   &__confirm {
     background-color: #47aa3d;
   }
+
+  &__multiSelect {
+    background-color: #47aa3d;
+  }
+
+  &_multiSelect {
+    right: 50%;
+    transform: translateX(50%);
+    top: -24px;
+  }
 }
