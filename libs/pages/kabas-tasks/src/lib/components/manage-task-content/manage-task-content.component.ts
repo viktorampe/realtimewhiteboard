@@ -7,7 +7,7 @@ import {
   ViewChild,
   ViewChildren
 } from '@angular/core';
-import { EduContentTOCInterface } from '@campus/dal';
+import { EduContent, EduContentTOCInterface } from '@campus/dal';
 import {
   SearchComponent,
   SearchModeInterface,
@@ -16,8 +16,7 @@ import {
   SearchStateInterface
 } from '@campus/search';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { TaskEduContentWithEduContentInterface } from '../../interfaces/TaskEduContentWithEduContent.interface';
+import { TaskWithAssigneesInterface } from '../../interfaces/TaskWithAssignees.interface';
 import {
   CurrentTaskParams,
   KabasTasksViewModel
@@ -29,7 +28,7 @@ import {
   styleUrls: ['./manage-task-content.component.scss']
 })
 export class ManageTaskContentComponent implements OnInit, AfterViewInit {
-  public currentContent$: Observable<TaskEduContentWithEduContentInterface[]>;
+  public task$: Observable<TaskWithAssigneesInterface>;
 
   public searchMode$: Observable<SearchModeInterface>;
   public initialSearchState$: Observable<SearchStateInterface>;
@@ -37,6 +36,7 @@ export class ManageTaskContentComponent implements OnInit, AfterViewInit {
   public autoCompleteValues$: Observable<string[]>;
   public currentToc$: Observable<EduContentTOCInterface[]>;
   public currentTaskParams$: Observable<CurrentTaskParams>;
+  public selectedBookTitle$: Observable<string>;
 
   @ViewChildren(SearchPortalDirective)
   private portalHosts: QueryList<SearchPortalDirective>;
@@ -49,9 +49,8 @@ export class ManageTaskContentComponent implements OnInit, AfterViewInit {
   manageTaskContentClass = true;
 
   ngOnInit() {
-    this.currentContent$ = this.viewModel.currentTask$.pipe(
-      map(task => task.taskEduContents)
-    );
+    this.task$ = this.viewModel.currentTask$;
+    this.selectedBookTitle$ = this.viewModel.selectedBookTitle$;
 
     this.searchMode$ = this.viewModel.getSearchMode('task-manage-content');
     this.initialSearchState$ = this.viewModel.getInitialSearchState();
@@ -67,8 +66,8 @@ export class ManageTaskContentComponent implements OnInit, AfterViewInit {
 
   public clickDone() {}
 
-  addEduContentToTask(eduContentId: number, taskId: number, index: number) {
-    throw new Error('not implemented');
+  addEduContentToTask(eduContent: EduContent, index?: number) {
+    this.viewModel.addEduContentToTask(eduContent, index);
   }
 
   selectTOC(tocId: number, depth: number) {
@@ -76,8 +75,8 @@ export class ManageTaskContentComponent implements OnInit, AfterViewInit {
     throw new Error('Not yet implemented');
   }
 
-  removeEduContentFromTask(taskEduContentId: number) {
-    throw new Error('not implemented');
+  removeEduContentFromTask(eduContent: EduContent) {
+    this.viewModel.removeEduContentFromTask(eduContent);
   }
 
   clearSearchFilters() {

@@ -23,6 +23,7 @@ import {
   GroupQueries,
   LearningAreaInterface,
   LinkedPersonQueries,
+  MethodQueries,
   PersonInterface,
   RouterStateUrl,
   TaskActions,
@@ -104,6 +105,7 @@ export class KabasTasksViewModel
   public groups$: Observable<GroupInterface[]>;
   public students$: Observable<PersonInterface[]>;
   public searchBook$ = new BehaviorSubject<EduContentBookInterface>(null);
+  public selectedBookTitle$: Observable<string>;
   public currentToc$: Observable<EduContentTOCInterface[]>;
 
   public searchResults$: Observable<SearchResultInterface>;
@@ -160,6 +162,7 @@ export class KabasTasksViewModel
     );
 
     this.currentTask$ = this.getCurrentTask();
+    this.selectedBookTitle$ = this.getSelectedBookTitle();
 
     this.selectableLearningAreas$ = this.store.pipe(
       select(allowedLearningAreas)
@@ -224,7 +227,7 @@ export class KabasTasksViewModel
     this.openStaticContentService.open(eduContent, false, true);
   }
 
-  addEduContentToTask(eduContent: EduContent): void {
+  addEduContentToTask(eduContent: EduContent, index?: number): void {
     this.currentTask$
       .pipe(
         take(1),
@@ -232,12 +235,24 @@ export class KabasTasksViewModel
       )
       .subscribe(taskId => {
         this.addTaskEduContents([
-          { taskId: taskId, eduContentId: eduContent.id }
+          { taskId: taskId, eduContentId: eduContent.id, index: index }
         ]);
       });
   }
 
-  removeEduContentFromTask(eduContent: EduContent): void {}
+  removeEduContentFromTask(eduContent: EduContent): void {
+    this.currentTask$
+      .pipe(
+        take(1),
+        map(task => task.taskEduContents)
+      )
+      .subscribe(taskEduContents => {
+        const taskEduContentIds = taskEduContents
+          .filter(tec => tec.eduContentId === eduContent.id)
+          .map(tec => tec.id);
+        this.deleteTaskEduContents(taskEduContentIds);
+      });
+  }
 
   public startArchivingTasks(
     tasks: TaskWithAssigneesInterface[],
@@ -743,6 +758,17 @@ export class KabasTasksViewModel
         chapters.splice(foundIndex + 1, 0, ...lessons);
         return chapters;
       })
+    );
+  }
+
+  private getSelectedBookTitle() {
+    return this.currentTaskParams$.pipe(
+      filter(params => !!params.book),
+      switchMap(params =>
+        this.store.pipe(
+          select(MethodQueries.getMethodWithYearByBookId, { id: params.book })
+        )
+      )
     );
   }
 }
