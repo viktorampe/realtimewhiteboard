@@ -65,6 +65,13 @@
     z-index: 1;
   }
 
+  &__savebutton {
+    position: absolute;
+    bottom: 107px;
+    z-index: 1;
+    right: 120px;
+  }
+
   campus-shelf {
     position: absolute;
     bottom: 0;
