@@ -227,7 +227,7 @@ export class KabasTasksViewModel
     this.openStaticContentService.open(eduContent, false, true);
   }
 
-  addEduContentToTask(eduContent: EduContent): void {
+  addEduContentToTask(eduContent: EduContent, index?: number): void {
     this.currentTask$
       .pipe(
         take(1),
@@ -235,7 +235,7 @@ export class KabasTasksViewModel
       )
       .subscribe(taskId => {
         this.addTaskEduContents([
-          { taskId: taskId, eduContentId: eduContent.id }
+          { taskId: taskId, eduContentId: eduContent.id, index: index }
         ]);
       });
   }
