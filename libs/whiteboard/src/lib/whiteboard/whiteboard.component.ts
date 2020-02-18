@@ -99,8 +99,8 @@ export class WhiteboardComponent implements OnInit {
   cardModeChanged(card: CardInterface, mode: Mode) {
     if (mode === Mode.SelectedMode) {
       this.setCardsModeIdleExceptUploadModeAndCard(card);
+      this.checkWhiteboardToolbarVisible();
     }
-    this.checkWhiteboardToolbarVisible();
   }
 
   private setCardsModeIdleExceptUploadModeAndCard(card: CardInterface) {
