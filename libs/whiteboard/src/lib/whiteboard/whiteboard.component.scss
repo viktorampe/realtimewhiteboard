@@ -3,8 +3,11 @@
   flex-direction: column;
   height: 100%;
 
-  campus-whiteboard-tools {
+  campus-whiteboard-toolbar {
+    position: absolute;
     z-index: 1;
+    left: 0;
+    right: 0;
   }
 
   &.image-drag-directive-dragging {
