@@ -43,12 +43,12 @@ export class WhiteboardComponent implements OnInit {
     this.addEmptyCard();
   }
 
-  addEmptyCard(top: number = 0, left: number = 0) {
+  addEmptyCard(top: number = 0, left: number = 0, image: string = '') {
     const card = {
       mode: Mode.IdleMode,
       color: this.lastColor,
       description: '',
-      image: '',
+      image: image,
       top: top,
       left: left
     };
