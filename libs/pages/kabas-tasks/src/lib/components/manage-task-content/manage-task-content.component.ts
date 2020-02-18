@@ -15,8 +15,7 @@ import {
   SearchStateInterface
 } from '@campus/search';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { TaskEduContentWithEduContentInterface } from '../../interfaces/TaskEduContentWithEduContent.interface';
+import { TaskWithAssigneesInterface } from '../../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
 
 @Component({
@@ -25,12 +24,13 @@ import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
   styleUrls: ['./manage-task-content.component.scss']
 })
 export class ManageTaskContentComponent implements OnInit, AfterViewInit {
-  public currentContent$: Observable<TaskEduContentWithEduContentInterface[]>;
+  public task$: Observable<TaskWithAssigneesInterface>;
 
   public searchMode$: Observable<SearchModeInterface>;
   public initialSearchState$: Observable<SearchStateInterface>;
   public searchResults$: Observable<SearchResultInterface>;
   public autoCompleteValues$: Observable<string[]>;
+  public selectedBookTitle$: Observable<string>;
 
   @ViewChildren(SearchPortalDirective)
   private portalHosts: QueryList<SearchPortalDirective>;
@@ -43,9 +43,8 @@ export class ManageTaskContentComponent implements OnInit, AfterViewInit {
   manageTaskContentClass = true;
 
   ngOnInit() {
-    this.currentContent$ = this.viewModel.currentTask$.pipe(
-      map(task => task.taskEduContents)
-    );
+    this.task$ = this.viewModel.currentTask$;
+    this.selectedBookTitle$ = this.viewModel.selectedBookTitle$;
 
     this.searchMode$ = this.viewModel.getSearchMode('task-manage-content');
     this.initialSearchState$ = this.viewModel.getInitialSearchState();

@@ -23,6 +23,7 @@ import {
   GroupQueries,
   LearningAreaInterface,
   LinkedPersonQueries,
+  MethodQueries,
   PersonInterface,
   RouterStateUrl,
   TaskActions,
@@ -104,6 +105,7 @@ export class KabasTasksViewModel
   public groups$: Observable<GroupInterface[]>;
   public students$: Observable<PersonInterface[]>;
   public searchBook$ = new BehaviorSubject<EduContentBookInterface>(null);
+  public selectedBookTitle$: Observable<string>;
   public currentToc$: Observable<EduContentTOCInterface[]>;
 
   public searchResults$: Observable<SearchResultInterface>;
@@ -160,6 +162,7 @@ export class KabasTasksViewModel
     );
 
     this.currentTask$ = this.getCurrentTask();
+    this.selectedBookTitle$ = this.getSelectedBookTitle();
 
     this.selectableLearningAreas$ = this.store.pipe(
       select(allowedLearningAreas)
@@ -743,6 +746,17 @@ export class KabasTasksViewModel
         chapters.splice(foundIndex + 1, 0, ...lessons);
         return chapters;
       })
+    );
+  }
+
+  private getSelectedBookTitle() {
+    return this.currentTaskParams$.pipe(
+      filter(params => !!params.book),
+      switchMap(params =>
+        this.store.pipe(
+          select(MethodQueries.getMethodWithYearByBookId, { id: params.book })
+        )
+      )
     );
   }
 }
