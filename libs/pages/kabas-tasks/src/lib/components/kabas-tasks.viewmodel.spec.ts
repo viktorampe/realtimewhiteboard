@@ -1,9 +1,12 @@
+// file.only
+
 import { TestBed } from '@angular/core/testing';
 import { MAT_DATE_LOCALE } from '@angular/material';
 import {
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
   DalState,
+  EduContentActions,
   EduContentBookFixture,
   EduContentFixture,
   EduContentMetadataFixture,
@@ -1223,7 +1226,11 @@ describe('KabasTaskViewModel', () => {
       new TaskEduContentFixture()
     ];
 
-    const eduContent = new EduContentFixture();
+    const eduContent = new EduContentFixture({
+      minimal: {
+        type: 'exercise'
+      }
+    });
 
     it('should dispatch an action', () => {
       store.dispatch = jest.fn();
@@ -1260,9 +1267,17 @@ describe('KabasTaskViewModel', () => {
     });
 
     it('should add eduContent to task', () => {
-      const spy = jest.spyOn(kabasTasksViewModel, 'addTaskEduContents');
+      jest.spyOn(kabasTasksViewModel, 'addTaskEduContents');
+      jest.spyOn(store, 'dispatch');
+
       kabasTasksViewModel.addEduContentToTask(eduContent);
-      expect(spy).toHaveBeenCalledWith([
+
+      expect(store.dispatch).toHaveBeenCalledWith(
+        new EduContentActions.UpsertEduContent({
+          eduContent: eduContent.minimal
+        })
+      );
+      expect(kabasTasksViewModel.addTaskEduContents).toHaveBeenCalledWith([
         { taskId: 1, eduContentId: eduContent.id }
       ]);
     });
