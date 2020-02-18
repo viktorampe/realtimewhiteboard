@@ -144,6 +144,9 @@ export const getMethodWithYearByBookId = createSelector(
     yearState: YearState,
     eduContentBook: EduContentBookInterface
   ) => {
+    if (!eduContentBook) {
+      return '';
+    }
     return (
       methodState.entities[eduContentBook.methodId].name +
       ' ' +
