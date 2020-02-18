@@ -169,7 +169,7 @@ export class KabasTasksViewModel
 
     this._searchState$ = new BehaviorSubject<SearchStateInterface>(null);
     this.searchState$ = this._searchState$;
-    this.favoriteBooksForTask$ = this.store.pipe(select(getTaskFavoriteBooks));
+    this.favoriteBooksForTask$ = this.getFavoriteBooksForCurrentTask();
   }
 
   openEduContentAsExercise(eduContent: EduContent): void {
@@ -675,6 +675,17 @@ export class KabasTasksViewModel
           select(EduContentTocQueries.getTocsForToc, { tocId: params.chapter })
         );
       })
+    );
+  }
+
+  private getFavoriteBooksForCurrentTask(): Observable<
+    EduContentBookInterface[]
+  > {
+    return this.currentTaskParams$.pipe(
+      filter(params => !!params.id),
+      switchMap(params =>
+        this.store.pipe(select(getTaskFavoriteBooks, { taskId: params.id }))
+      )
     );
   }
 }

@@ -259,19 +259,22 @@ export const getTaskFavoriteBooks = createSelector(
   ) => {
     const task = taskDict[props.taskId];
     const boekeFavorites = favoritesByType[FavoriteTypesEnum.BOEKE] || [];
-    const taskFavoriteBooks = boekeFavorites.reduce((acc, fav) => {
-      const boeke = eduContentDict[fav.eduContentId];
-      if (!boeke) return acc;
+    const taskFavoriteBooks: EduContentBookInterface[] = boekeFavorites.reduce(
+      (acc, fav) => {
+        const boeke = eduContentDict[fav.eduContentId];
+        if (!boeke) return acc;
 
-      const {
-        learningAreaId,
-        eduContentBookId
-      } = boeke.publishedEduContentMetadata;
+        const {
+          learningAreaId,
+          eduContentBookId
+        } = boeke.publishedEduContentMetadata;
 
-      return learningAreaId === task.learningAreaId
-        ? [...acc, bookDict[eduContentBookId]]
-        : acc;
-    }, []);
+        return learningAreaId === task.learningAreaId
+          ? [...acc, bookDict[eduContentBookId]]
+          : acc;
+      },
+      []
+    );
 
     return taskFavoriteBooks;
   }

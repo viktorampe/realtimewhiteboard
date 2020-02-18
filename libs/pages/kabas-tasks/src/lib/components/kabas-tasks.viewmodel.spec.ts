@@ -55,6 +55,7 @@ import {
   TaskWithAssigneesInterface
 } from '../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from './kabas-tasks.viewmodel';
+import * as vmSelectors from './kabas-tasks.viewmodel.selectors';
 import {
   getTaskFavoriteBooks,
   getTaskWithAssignmentAndEduContents
@@ -1177,7 +1178,16 @@ describe('KabasTaskViewModel', () => {
     ];
 
     beforeEach(() => {
+      store.overrideSelector(getRouterState, {
+        navigationId: 1,
+        state: {
+          url: '',
+          params: { id: 123 },
+          queryParams: {}
+        }
+      });
       store.overrideSelector(getTaskFavoriteBooks, expectedBooks);
+      jest.spyOn(vmSelectors, 'getTaskFavoriteBooks');
     });
 
     it('should return the favorite books for the task', () => {
@@ -1185,6 +1195,10 @@ describe('KabasTaskViewModel', () => {
         hot('a', {
           a: expectedBooks
         })
+      );
+      expect(vmSelectors.getTaskFavoriteBooks).toHaveBeenCalledWith(
+        {},
+        { taskId: 123 }
       );
     });
   });
