@@ -51,9 +51,12 @@ export class WhiteboardComponent implements OnInit {
       top: top,
       left: left
     };
-
     this.cards.push(card);
-    if (this.cards.filter(c => c.mode === Mode.MultiSelectSelectedMode)) {
+
+    if (
+      this.cards.filter(c => c.mode === Mode.MultiSelectSelectedMode).length >=
+      1
+    ) {
       card.mode = Mode.MultiSelectMode;
     }
   }
