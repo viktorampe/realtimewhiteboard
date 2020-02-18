@@ -749,23 +749,6 @@ export class KabasTasksViewModel
     );
   }
 
-  private getTocLessonsStream(): Observable<EduContentTOCInterface[]> {
-    return this.currentTaskParams$.pipe(
-      filter(params => !!params.chapter),
-      switchMap(params => {
-        if (params.lesson) {
-          return this.store.pipe(
-            select(EduContentTocQueries.getById, { id: params.lesson }),
-            map(toc => [toc])
-          );
-        }
-        return this.store.pipe(
-          select(EduContentTocQueries.getTocsForToc, { tocId: params.chapter })
-        );
-      })
-    );
-  }
-
   private getFavoriteBookIdsForCurrentTask(): Observable<number[]> {
     return this.currentTaskParams$.pipe(
       filter(params => !!params.id),
