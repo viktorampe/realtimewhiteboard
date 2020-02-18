@@ -28,6 +28,7 @@ import {
 } from '@campus/dal';
 import {
   SearchModeFixture,
+  SearchResultInterface,
   SearchStateFixture,
   SearchStateInterface
 } from '@campus/search';
@@ -46,6 +47,7 @@ import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { hot } from 'jasmine-marbles';
 import { configureTestSuite } from 'ng-bullet';
 import { of } from 'rxjs';
+import { take } from 'rxjs/operators';
 import { AssigneeFixture } from '../interfaces/Assignee.fixture';
 import { AssigneeTypesEnum } from '../interfaces/Assignee.interface';
 import { TaskWithAssigneesFixture } from '../interfaces/TaskWithAssignees.fixture';
@@ -1111,6 +1113,104 @@ describe('KabasTaskViewModel', () => {
           filterCriteriaSelections: new Map<string, (number | string)[]>([]),
           filterCriteriaOptions: new Map<string, number | string | boolean>()
         });
+      });
+    });
+
+    describe('searchResults$', () => {
+      const mockTask: TaskWithAssigneesInterface = new TaskWithAssigneesFixture(
+        {
+          taskEduContents: [
+            {
+              index: 0,
+              eduContentId: 1 // for inTask
+            }
+          ]
+        }
+      );
+
+      const mockSearchResult: SearchResultInterface = {
+        count: 2,
+        results: [
+          new EduContentFixture({ id: 1 }),
+          new EduContentFixture({ id: 2 })
+        ],
+        filterCriteriaPredictions: new Map()
+      };
+
+      let initialSearchState: SearchStateInterface;
+
+      beforeEach(() => {
+        jest
+          .spyOn(eduContentService, 'search')
+          .mockReturnValue(of(mockSearchResult));
+
+        store.overrideSelector(getRouterState, {
+          navigationId: 1,
+          state: {
+            url: '',
+            params: { id: 1 },
+            queryParams: {}
+          }
+        });
+        store.overrideSelector(getTaskWithAssignmentAndEduContents, mockTask);
+
+        kabasTasksViewModel.getInitialSearchState().subscribe(searchState => {
+          initialSearchState = searchState;
+        });
+      });
+
+      it('should call the eduContentService with the correct searchState', () => {
+        const searchState = {
+          searchTerm: 'de hoeken',
+          filterCriteriaSelections: new Map([['foo', ['bar']]])
+        } as SearchStateInterface;
+
+        kabasTasksViewModel.searchResults$.pipe(take(1)).subscribe();
+
+        kabasTasksViewModel.updateSearchState(searchState);
+
+        const expectedSearchState = {
+          searchTerm: 'de hoeken',
+          filterCriteriaSelections: new Map([
+            ...Array.from(initialSearchState.filterCriteriaSelections),
+            ['foo', ['bar']]
+          ]),
+          filterCriteriaOptions: initialSearchState.filterCriteriaOptions
+        };
+
+        expect(eduContentService.search).toHaveBeenCalled();
+        expect(eduContentService.search).toHaveBeenCalledTimes(1);
+        expect(eduContentService.search).toHaveBeenCalledWith(
+          expectedSearchState
+        );
+      });
+
+      it('should return the found results', () => {
+        const searchState = {
+          searchTerm: '',
+          filterCriteriaSelections: new Map([])
+        } as SearchStateInterface;
+
+        const searchResults$ = kabasTasksViewModel.searchResults$;
+        const expected = {
+          ...mockSearchResult,
+          results: [
+            {
+              eduContent: mockSearchResult.results[0],
+              inTask: true,
+              addTaskActions: true
+            },
+            {
+              eduContent: mockSearchResult.results[1],
+              inTask: false,
+              addTaskActions: true
+            }
+          ]
+        };
+
+        kabasTasksViewModel.updateSearchState(searchState);
+
+        expect(searchResults$).toBeObservable(hot('a', { a: expected }));
       });
     });
   });
