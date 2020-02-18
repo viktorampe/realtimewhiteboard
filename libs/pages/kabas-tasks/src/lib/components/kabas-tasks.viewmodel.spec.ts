@@ -369,7 +369,11 @@ describe('KabasTaskViewModel', () => {
             { id: 1, changes: { id: 1, index: 0, taskId: 1 } },
             { id: 3, changes: { id: 3, index: 1, taskId: 3 } },
             { id: 2, changes: { id: 2, index: 2, taskId: 2 } }
-          ]
+          ],
+          customFeedbackHandlers: {
+            useCustomSuccessHandler: 'useNoHandler',
+            useCustomErrorHandler: 'useNoHandler'
+          }
         })
       );
     });
