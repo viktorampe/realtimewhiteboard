@@ -240,7 +240,19 @@ export class KabasTasksViewModel
       });
   }
 
-  removeEduContentFromTask(eduContent: EduContent): void {}
+  removeEduContentFromTask(eduContent: EduContent): void {
+    this.currentTask$
+      .pipe(
+        take(1),
+        map(task => task.taskEduContents)
+      )
+      .subscribe(taskEduContents => {
+        const taskEduContentIds = taskEduContents
+          .filter(tec => tec.eduContentId === eduContent.id)
+          .map(tec => tec.id);
+        this.deleteTaskEduContents(taskEduContentIds);
+      });
+  }
 
   public startArchivingTasks(
     tasks: TaskWithAssigneesInterface[],
