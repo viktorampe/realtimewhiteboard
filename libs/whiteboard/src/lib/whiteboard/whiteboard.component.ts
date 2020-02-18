@@ -43,14 +43,19 @@ export class WhiteboardComponent implements OnInit {
   }
 
   addEmptyCard(top: number = 0, left: number = 0) {
-    this.cards.push({
+    const card = {
       mode: Mode.IdleMode,
       color: this.lastColor,
       description: '',
       image: '',
       top: top,
       left: left
-    });
+    };
+
+    this.cards.push(card);
+    if (this.cards.filter(c => c.mode === Mode.MultiSelectSelectedMode)) {
+      card.mode = Mode.MultiSelectMode;
+    }
   }
 
   showTitleInput() {
