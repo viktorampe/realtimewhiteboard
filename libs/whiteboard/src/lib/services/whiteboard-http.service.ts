@@ -18,8 +18,7 @@ export class WhiteboardHttpService {
   }
 
   public setJson(whiteboard: WhiteboardInterface) {
-    const response$ = this.http.post(this.url, JSON.stringify(whiteboard));
-    console.log(response$);
+    const response = this.http.post(this.url, JSON.stringify(whiteboard));
   }
 
   private getWhiteboardMock(): WhiteboardInterface {

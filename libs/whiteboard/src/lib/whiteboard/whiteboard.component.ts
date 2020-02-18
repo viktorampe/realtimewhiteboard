@@ -34,13 +34,6 @@ export class WhiteboardComponent implements OnInit {
       this.cards = whiteboard.cards;
       this.shelvedCards = whiteboard.shelfCards;
     });
-    const whiteboard: WhiteboardInterface = {
-      title: this.title,
-      defaultColor: 'white',
-      cards: this.cards,
-      shelfCards: this.shelvedCards
-    };
-    this._http.setJson(whiteboard);
   }
 
   get Mode() {
@@ -65,8 +58,7 @@ export class WhiteboardComponent implements OnInit {
       cards: this.cards,
       shelfCards: this.shelvedCards
     };
-    //TODO: http-post whiteboard
-    console.log(whiteboard);
+    this._http.setJson(whiteboard);
     return whiteboard;
   }
 
