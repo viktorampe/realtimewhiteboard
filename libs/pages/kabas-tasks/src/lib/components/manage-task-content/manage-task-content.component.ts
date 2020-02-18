@@ -7,6 +7,7 @@ import {
   ViewChild,
   ViewChildren
 } from '@angular/core';
+import { EduContent } from '@campus/dal';
 import {
   SearchComponent,
   SearchModeInterface,
@@ -58,8 +59,8 @@ export class ManageTaskContentComponent implements OnInit, AfterViewInit {
 
   public clickDone() {}
 
-  addEduContentToTask(eduContentId: number, taskId: number, index: number) {
-    throw new Error('not implemented');
+  addEduContentToTask(eduContent: EduContent) {
+    this.viewModel.addEduContentToTask(eduContent);
   }
 
   selectTOC(tocId: number, depth: number) {
