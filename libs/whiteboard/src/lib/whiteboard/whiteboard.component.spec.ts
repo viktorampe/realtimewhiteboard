@@ -240,10 +240,9 @@ describe('WhiteboardComponent', () => {
     const fileDropEvent = {
       preventDefault: () => {},
       stopPropagation: () => {},
-      target: { getBoundingClientRect: () => ({ left: 0, top: 0 }) },
       dataTransfer: { files: [file] },
-      clientX: 400,
-      clientY: 400
+      offsetX: 400,
+      offsetY: 400
     };
 
     component.onFilesDropped(fileDropEvent);
@@ -273,10 +272,9 @@ describe('WhiteboardComponent', () => {
     const fileDropEvent = {
       preventDefault: () => {},
       stopPropagation: () => {},
-      target: { getBoundingClientRect: () => ({ left: 0, top: 0 }) },
       dataTransfer: { files: [file] },
-      clientX: 400,
-      clientY: 400
+      offsetX: 400,
+      offsetY: 400
     };
 
     component.onFilesDropped(fileDropEvent);
@@ -304,10 +302,9 @@ describe('WhiteboardComponent', () => {
     const fileDropEvent = {
       preventDefault: () => {},
       stopPropagation: () => {},
-      target: { getBoundingClientRect: () => ({ left: 0, top: 0 }) },
       dataTransfer: { files: [file] },
-      clientX: 400,
-      clientY: 400
+      offsetX: 400,
+      offsetY: 400
     };
 
     component.onFilesDropped(fileDropEvent);
@@ -337,10 +334,9 @@ describe('WhiteboardComponent', () => {
     const fileDropEvent = {
       preventDefault: () => {},
       stopPropagation: () => {},
-      target: { getBoundingClientRect: () => ({ left: 0, top: 0 }) },
       dataTransfer: { files: [file] },
-      clientX: 400,
-      clientY: 400
+      offsetX: 400,
+      offsetY: 400
     };
 
     component.onFilesDropped(fileDropEvent);
@@ -370,10 +366,9 @@ describe('WhiteboardComponent', () => {
     const fileDropEvent = {
       preventDefault: () => {},
       stopPropagation: () => {},
-      target: { getBoundingClientRect: () => ({ left: 0, top: 0 }) },
-      dataTransfer: { files: [file, file] },
-      clientX: 400,
-      clientY: 400
+      dataTransfer: { files: [file] },
+      offsetX: 400,
+      offsetY: 400
     };
 
     component.onFilesDropped(fileDropEvent);

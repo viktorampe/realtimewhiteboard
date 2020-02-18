@@ -169,7 +169,7 @@ export class WhiteboardComponent implements OnInit {
 
   onFilesDropped(event) {
     const images = event.dataTransfer.files;
-    const { x, y } = this.getRelativeEventPosition(event);
+    const { offsetX: x, offsetY: y } = event;
 
     for (let i = 0; i < images.length; i++) {
       if (!this.allowedFileTypes.includes(images[i].type)) {
@@ -205,17 +205,6 @@ export class WhiteboardComponent implements OnInit {
     setTimeout(() => {
       card.mode = Mode.IdleMode;
     }, 500);
-  }
-
-  private getRelativeEventPosition(event: any) {
-    const parentBounds = event.target.getBoundingClientRect();
-
-    const { clientX, clientY } = event;
-
-    const x = clientX - parentBounds.left;
-    const y = clientY - parentBounds.top;
-
-    return { x, y };
   }
 
   onClickWhiteboard() {
