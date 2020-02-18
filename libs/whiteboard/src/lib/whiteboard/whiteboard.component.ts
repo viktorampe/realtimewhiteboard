@@ -158,8 +158,9 @@ export class WhiteboardComponent implements OnInit {
   }
 
   onClickWhiteboard() {
-    this.selectedCards = [];
-    this.cards.forEach(c => (c.mode = Mode.IdleMode));
+    this.cards
+      .filter(c => c.mode === Mode.SelectedMode)
+      .forEach(c => (c.mode = Mode.IdleMode));
 
     this.checkWhiteboardToolbarVisible();
   }
