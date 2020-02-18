@@ -7,6 +7,7 @@ import {
   ViewChild,
   ViewChildren
 } from '@angular/core';
+import { EduContent } from '@campus/dal';
 import {
   SearchComponent,
   SearchModeInterface,
@@ -67,8 +68,8 @@ export class ManageTaskContentComponent implements OnInit, AfterViewInit {
     throw new Error('Not yet implemented');
   }
 
-  removeEduContentFromTask(taskEduContentId: number) {
-    throw new Error('not implemented');
+  removeEduContentFromTask(eduContent: EduContent) {
+    this.viewModel.removeEduContentFromTask(eduContent);
   }
 
   clearSearchFilters() {
