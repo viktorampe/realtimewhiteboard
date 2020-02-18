@@ -33,16 +33,14 @@
       ></campus-search>
     </div>
 
-    <div class="manage-task-content__main__sidesheet"
+    <div
+      class="manage-task-content__main__sidesheet"
+      *ngIf="task$ | async as task"
       >Insert sidesheet here...
 
-      <mat-list
-        #currentContentList
-        *ngIf="currentContent$ | async as currentContent"
-        class="manage-task-content__list"
-      >
+      <mat-list #currentContentList class="manage-task-content__list">
         <mat-list-item
-          *ngFor="let taskEduContent of currentContent"
+          *ngFor="let taskEduContent of task.taskEduContents"
           class="manage-task-content__list__item"
         >
           <mat-icon

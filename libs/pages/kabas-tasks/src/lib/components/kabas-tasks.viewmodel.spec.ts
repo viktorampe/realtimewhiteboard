@@ -16,6 +16,7 @@ import {
   FavoriteActions,
   FavoriteTypesEnum,
   getRouterState,
+  MethodQueries,
   PersonFixture,
   TaskActions,
   TaskEduContentActions,
@@ -1163,6 +1164,36 @@ describe('KabasTaskViewModel', () => {
       expect(spy).toHaveBeenCalledWith([
         { taskId: 1, eduContentId: eduContent.id }
       ]);
+    });
+  });
+
+  describe('selectedBookTitle$', () => {
+    const expectedBookTitle = 'foo 1';
+    beforeEach(() => {
+      store.overrideSelector(getRouterState, {
+        navigationId: 1,
+        state: {
+          url: '',
+          params: {},
+          queryParams: { book: 123 }
+        }
+      });
+      store.overrideSelector(
+        MethodQueries.getMethodWithYearByBookId,
+        expectedBookTitle
+      );
+
+      jest.spyOn(MethodQueries, 'getMethodWithYearByBookId');
+    });
+
+    it('should return the current book title from query params', () => {
+      expect(kabasTasksViewModel.selectedBookTitle$).toBeObservable(
+        hot('a', { a: expectedBookTitle })
+      );
+      expect(MethodQueries.getMethodWithYearByBookId).toHaveBeenCalledWith(
+        {},
+        { id: 123 }
+      );
     });
   });
 });
