@@ -85,7 +85,7 @@ export class WhiteboardComponent implements OnInit {
     this.cards = this.cards.filter(
       c => c.mode !== Mode.MultiSelectSelectedMode
     );
-    this.checkToolbarVisible();
+    this.checkWhiteboardToolbarVisible();
   }
 
   changeSelectedCardsColor(color: string) {
@@ -100,7 +100,7 @@ export class WhiteboardComponent implements OnInit {
     if (mode === Mode.SelectedMode) {
       this.setCardsModeIdleExceptUploadModeAndCard(card);
     }
-    this.checkToolbarVisible();
+    this.checkWhiteboardToolbarVisible();
   }
 
   private setCardsModeIdleExceptUploadModeAndCard(card: CardInterface) {
@@ -113,7 +113,7 @@ export class WhiteboardComponent implements OnInit {
     this.cards
       .filter(c => c.mode !== Mode.MultiSelectSelectedMode)
       .forEach(c => (c.mode = Mode.MultiSelectMode));
-    this.checkToolbarVisible();
+    this.checkWhiteboardToolbarVisible();
   }
 
   onDeselectCard(card: CardInterface) {
@@ -123,7 +123,7 @@ export class WhiteboardComponent implements OnInit {
       this.cards.forEach(c => (c.mode = Mode.IdleMode));
     }
 
-    this.checkToolbarVisible();
+    this.checkWhiteboardToolbarVisible();
   }
 
   onDragEnded(event: CdkDragEnd, card) {
@@ -132,7 +132,7 @@ export class WhiteboardComponent implements OnInit {
     card.left = cardPosition.x;
   }
 
-  checkToolbarVisible() {
+  checkWhiteboardToolbarVisible() {
     this.isToolbarVisible =
       this.cards.filter(c => c.mode === Mode.MultiSelectSelectedMode).length >=
       1;
