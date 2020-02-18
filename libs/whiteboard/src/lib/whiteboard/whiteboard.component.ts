@@ -96,6 +96,7 @@ export class WhiteboardComponent implements OnInit {
     );
     multiSelectedCards.forEach(c => this.addCardToShelf(c));
     this.cards = this.cards.filter(c => !multiSelectedCards.includes(c));
+    this.cards.forEach(c => (c.mode = Mode.IdleMode));
     this.checkToolbarVisible();
   }
 
