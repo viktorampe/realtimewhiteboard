@@ -1,5 +1,3 @@
-// file.only
-
 import { TestBed } from '@angular/core/testing';
 import { MAT_DATE_LOCALE } from '@angular/material';
 import {
@@ -21,6 +19,7 @@ import {
   FavoriteActions,
   FavoriteTypesEnum,
   getRouterState,
+  MethodQueries,
   PersonFixture,
   TaskActions,
   TaskEduContentActions,
@@ -1220,31 +1219,7 @@ describe('KabasTaskViewModel', () => {
     });
   });
 
-  describe('addTaskEduContents', () => {
-    const taskEduContents = [
-      new TaskEduContentFixture(),
-      new TaskEduContentFixture()
-    ];
-
-    const eduContent = new EduContentFixture({
-      minimal: {
-        type: 'exercise'
-      }
-    });
-
-    it('should dispatch an action', () => {
-      store.dispatch = jest.fn();
-
-      kabasTasksViewModel.addTaskEduContents(taskEduContents);
-
-      expect(store.dispatch).toHaveBeenCalledWith(
-        new TaskEduContentActions.StartAddTaskEduContents({
-          userId,
-          taskEduContents
-        })
-      );
-    });
-
+  describe('eduContentToTask', () => {
     const currentTaskParams = { id: 1 };
     const expectedTask = {
       ...new TaskFixture({ id: 1, isPaperTask: true }), // this is the current task!!
@@ -1254,6 +1229,7 @@ describe('KabasTaskViewModel', () => {
         new TaskEduContentFixture({ id: 1, eduContentId: 1 }) // this eduContent should be included
       ]
     };
+
     beforeEach(() => {
       store.overrideSelector(getRouterState, {
         navigationId: 1,
@@ -1266,20 +1242,81 @@ describe('KabasTaskViewModel', () => {
       store.overrideSelector(getTaskWithAssignmentAndEduContents, expectedTask);
     });
 
-    it('should add eduContent to task', () => {
-      jest.spyOn(kabasTasksViewModel, 'addTaskEduContents');
-      jest.spyOn(store, 'dispatch');
+    describe('addTaskEduContents', () => {
+      const taskEduContents = [
+        new TaskEduContentFixture(),
+        new TaskEduContentFixture()
+      ];
 
-      kabasTasksViewModel.addEduContentToTask(eduContent);
+      it('should dispatch an action', () => {
+        store.dispatch = jest.fn();
 
-      expect(store.dispatch).toHaveBeenCalledWith(
-        new EduContentActions.UpsertEduContent({
-          eduContent: eduContent.minimal
-        })
-      );
-      expect(kabasTasksViewModel.addTaskEduContents).toHaveBeenCalledWith([
-        { taskId: 1, eduContentId: eduContent.id }
-      ]);
+        kabasTasksViewModel.addTaskEduContents(taskEduContents);
+
+        expect(store.dispatch).toHaveBeenCalledWith(
+          new TaskEduContentActions.StartAddTaskEduContents({
+            userId,
+            taskEduContents
+          })
+        );
+      });
+    });
+
+    describe('addEduContentToTask', () => {
+      const eduContent = new EduContentFixture({
+        minimal: {
+          type: EduContentTypeEnum.EXERCISE
+        }
+      });
+
+      it('should add eduContent to task', () => {
+        jest.spyOn(kabasTasksViewModel, 'addTaskEduContents');
+        jest.spyOn(store, 'dispatch');
+
+        kabasTasksViewModel.addEduContentToTask(eduContent);
+
+        expect(store.dispatch).toHaveBeenCalledWith(
+          new EduContentActions.UpsertEduContent({
+            eduContent: eduContent.minimal
+          })
+        );
+        expect(kabasTasksViewModel.addTaskEduContents).toHaveBeenCalledWith([
+          { taskId: 1, eduContentId: eduContent.id }
+        ]);
+      });
+    });
+
+    describe('removeTaskEduContents', () => {
+      const taskEduContents = [
+        new TaskEduContentFixture({ id: 1, required: false, taskId: 1 }),
+        new TaskEduContentFixture({ id: 2, required: false, taskId: 2 }),
+        new TaskEduContentFixture({ id: 3, required: false, taskId: 3 })
+      ];
+      const taskEduContentIds = taskEduContents.map(tec => tec.id);
+
+      it('should dispatch an action', () => {
+        store.dispatch = jest.fn();
+
+        kabasTasksViewModel.deleteTaskEduContents(taskEduContentIds);
+
+        expect(store.dispatch).toHaveBeenCalledWith(
+          new TaskEduContentActions.StartDeleteTaskEduContents({
+            userId,
+            taskEduContentIds
+          })
+        );
+      });
+    });
+
+    describe('removeEduContentFromTask', () => {
+      const eduContent = new EduContentFixture();
+
+      it('should remove eduContent from task', () => {
+        const spy = jest.spyOn(kabasTasksViewModel, 'deleteTaskEduContents');
+        kabasTasksViewModel.removeEduContentFromTask(eduContent);
+
+        expect(spy).toHaveBeenCalledWith([eduContent.id]);
+      });
     });
   });
 
@@ -1403,6 +1440,36 @@ describe('KabasTaskViewModel', () => {
         hot('a', {
           a: [chapterTocs[0], ...lessonTocs, chapterTocs[1]]
         })
+      );
+    });
+  });
+
+  describe('selectedBookTitle$', () => {
+    const expectedBookTitle = 'foo 1';
+    beforeEach(() => {
+      store.overrideSelector(getRouterState, {
+        navigationId: 1,
+        state: {
+          url: '',
+          params: {},
+          queryParams: { book: 123 }
+        }
+      });
+      store.overrideSelector(
+        MethodQueries.getMethodWithYearByBookId,
+        expectedBookTitle
+      );
+
+      jest.spyOn(MethodQueries, 'getMethodWithYearByBookId');
+    });
+
+    it('should return the current book title from query params', () => {
+      expect(kabasTasksViewModel.selectedBookTitle$).toBeObservable(
+        hot('a', { a: expectedBookTitle })
+      );
+      expect(MethodQueries.getMethodWithYearByBookId).toHaveBeenCalledWith(
+        {},
+        { id: 123 }
       );
     });
   });
