@@ -78,8 +78,8 @@ export class ManageTaskContentComponent implements OnInit, AfterViewInit {
     });
   }
 
-  removeEduContentFromTask(taskEduContentId: number) {
-    throw new Error('not implemented');
+  removeEduContentFromTask(eduContent: EduContent) {
+    this.viewModel.removeEduContentFromTask(eduContent);
   }
 
   clearSearchFilters() {
