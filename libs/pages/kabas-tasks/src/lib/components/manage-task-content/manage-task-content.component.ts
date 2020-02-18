@@ -9,6 +9,7 @@ import {
   ViewChild,
   ViewChildren
 } from '@angular/core';
+import { EduContent } from '@campus/dal';
 import {
   SearchComponent,
   SearchModeInterface,
@@ -17,8 +18,8 @@ import {
   SearchStateInterface
 } from '@campus/search';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { TaskEduContentWithEduContentInterface } from '../../interfaces/TaskEduContentWithEduContent.interface';
+import { TaskWithAssigneesInterface } from '../../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
 
 @Component({
@@ -32,11 +33,13 @@ export class ManageTaskContentComponent
   public reorderableTaskEduContents$ = new BehaviorSubject<
     TaskEduContentWithEduContentInterface[]
   >([]);
+  public task$: Observable<TaskWithAssigneesInterface>;
 
   public searchMode$: Observable<SearchModeInterface>;
   public initialSearchState$: Observable<SearchStateInterface>;
   public searchResults$: Observable<SearchResultInterface>;
   public autoCompleteValues$: Observable<string[]>;
+  public selectedBookTitle$: Observable<string>;
 
   @ViewChildren(SearchPortalDirective)
   private portalHosts: QueryList<SearchPortalDirective>;
@@ -50,9 +53,8 @@ export class ManageTaskContentComponent
   manageTaskContentClass = true;
 
   ngOnInit() {
-    this.currentContent$ = this.viewModel.currentTask$.pipe(
-      map(task => task.taskEduContents)
-    );
+    this.task$ = this.viewModel.currentTask$;
+    this.selectedBookTitle$ = this.viewModel.selectedBookTitle$;
 
     this.searchMode$ = this.viewModel.getSearchMode('task-manage-content');
     this.initialSearchState$ = this.viewModel.getInitialSearchState();
@@ -88,8 +90,8 @@ export class ManageTaskContentComponent
 
   public clickDone() {}
 
-  addEduContentToTask(eduContentId: number, taskId: number, index: number) {
-    throw new Error('not implemented');
+  addEduContentToTask(eduContent: EduContent, index?: number) {
+    this.viewModel.addEduContentToTask(eduContent, index);
   }
 
   selectTOC(tocId: number, depth: number) {
@@ -97,8 +99,8 @@ export class ManageTaskContentComponent
     throw new Error('Not yet implemented');
   }
 
-  removeEduContentFromTask(taskEduContentId: number) {
-    throw new Error('not implemented');
+  removeEduContentFromTask(eduContent: EduContent) {
+    this.viewModel.removeEduContentFromTask(eduContent);
   }
 
   clearSearchFilters() {
