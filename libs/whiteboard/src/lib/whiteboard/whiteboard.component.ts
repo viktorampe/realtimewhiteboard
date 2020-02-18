@@ -131,11 +131,12 @@ export class WhiteboardComponent implements OnInit {
 
   onDeselectCard(card: CardInterface) {
     this.selectedCards = this.selectedCards.filter(c => c !== card);
-    card.mode = Mode.MultiSelectMode;
 
     if (!this.selectedCards.length) {
       this.cards.forEach(c => (c.mode = Mode.IdleMode));
     }
+
+    card.mode = Mode.MultiSelectMode;
   }
 
   onDragEnded(event: CdkDragEnd, card) {
