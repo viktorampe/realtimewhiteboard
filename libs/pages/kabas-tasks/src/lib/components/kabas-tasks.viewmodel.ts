@@ -450,7 +450,11 @@ export class KabasTasksViewModel
             id: tec.id,
             changes: { id: tec.id, index, taskId: tec.taskId }
           };
-        })
+        }),
+        customFeedbackHandlers: {
+          useCustomErrorHandler: 'useNoHandler',
+          useCustomSuccessHandler: 'useNoHandler'
+        }
       })
     );
   }

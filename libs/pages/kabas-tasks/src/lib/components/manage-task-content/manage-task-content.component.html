@@ -38,16 +38,24 @@
 
       <mat-list
         #currentContentList
-        *ngIf="currentContent$ | async as currentContent"
+        *ngIf="
+          reorderableTaskEduContents$ | async as reorderableTaskEduContents
+        "
         class="manage-task-content__list"
+        cdkDropList
+        (cdkDropListDropped)="
+          dropTaskEduContent(reorderableTaskEduContents, $event)
+        "
       >
         <mat-list-item
-          *ngFor="let taskEduContent of currentContent"
+          *ngFor="let taskEduContent of reorderableTaskEduContents"
           class="manage-task-content__list__item"
+          cdkDrag
         >
           <mat-icon
-            class="manage-task-content__list__item__icon"
+            class="manage-task-content__list__item__icon manage-task-content__list__item__icon--handle"
             svgIcon="drag-handle"
+            cdkDragHandle
           ></mat-icon>
 
           <div

@@ -1,7 +1,9 @@
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import {
   AfterViewInit,
   Component,
   HostBinding,
+  OnDestroy,
   OnInit,
   QueryList,
   ViewChild,
@@ -14,7 +16,7 @@ import {
   SearchResultInterface,
   SearchStateInterface
 } from '@campus/search';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { TaskEduContentWithEduContentInterface } from '../../interfaces/TaskEduContentWithEduContent.interface';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
@@ -24,8 +26,12 @@ import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
   templateUrl: './manage-task-content.component.html',
   styleUrls: ['./manage-task-content.component.scss']
 })
-export class ManageTaskContentComponent implements OnInit, AfterViewInit {
+export class ManageTaskContentComponent
+  implements OnInit, AfterViewInit, OnDestroy {
   public currentContent$: Observable<TaskEduContentWithEduContentInterface[]>;
+  public reorderableTaskEduContents$ = new BehaviorSubject<
+    TaskEduContentWithEduContentInterface[]
+  >([]);
 
   public searchMode$: Observable<SearchModeInterface>;
   public initialSearchState$: Observable<SearchStateInterface>;
@@ -36,6 +42,7 @@ export class ManageTaskContentComponent implements OnInit, AfterViewInit {
   private portalHosts: QueryList<SearchPortalDirective>;
   @ViewChild(SearchComponent, { static: true })
   public searchComponent: SearchComponent;
+  private subscriptions = new Subscription();
 
   constructor(private viewModel: KabasTasksViewModel) {}
 
@@ -50,10 +57,29 @@ export class ManageTaskContentComponent implements OnInit, AfterViewInit {
     this.searchMode$ = this.viewModel.getSearchMode('task-manage-content');
     this.initialSearchState$ = this.viewModel.getInitialSearchState();
     this.searchResults$ = this.viewModel.searchResults$;
+
+    // TODO: change with local task$ stream when Thomas merges his thing
+    this.subscriptions.add(
+      this.viewModel.currentTask$.subscribe(task => {
+        this.reorderableTaskEduContents$.next([...task.taskEduContents]);
+      })
+    );
   }
 
   ngAfterViewInit() {
     this.searchComponent.searchPortals = this.portalHosts;
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
+  }
+
+  public dropTaskEduContent(
+    taskEduContents: TaskEduContentWithEduContentInterface[],
+    event: CdkDragDrop<TaskEduContentWithEduContentInterface[]>
+  ) {
+    moveItemInArray(taskEduContents, event.previousIndex, event.currentIndex);
+    this.viewModel.updateTaskEduContentsOrder(taskEduContents);
   }
 
   public clickDone() {}
