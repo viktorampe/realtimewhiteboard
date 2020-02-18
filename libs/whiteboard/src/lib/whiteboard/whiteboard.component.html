@@ -52,6 +52,6 @@
   <campus-shelf
     [class.minimizedShelf]="isShelfMinimized"
     [cards]="this.shelvedCards"
-    (minimizeShelf)="toggleMinimizeShelf($event)"
+    [(isMinimized)]="isShelfMinimized"
   ></campus-shelf>
 </div>

@@ -153,8 +153,4 @@ export class WhiteboardComponent implements OnInit {
       .filter(c => c.mode === Mode.SelectedMode)
       .forEach(c => (c.mode = Mode.IdleMode));
   }
-
-  toggleMinimizeShelf(event) {
-    this.isShelfMinimized = event;
-  }
 }

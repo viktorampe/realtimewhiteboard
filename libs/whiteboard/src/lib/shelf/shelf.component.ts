@@ -8,9 +8,8 @@ import CardInterface from '../../shared/models/card.interface';
 })
 export class ShelfComponent implements OnInit {
   @Input() cards: CardInterface[];
-  @Output() minimizeShelf = new EventEmitter<boolean>();
-
-  isMinimized = false;
+  @Output() isMinimizedChange = new EventEmitter<boolean>();
+  @Input() isMinimized = false;
 
   constructor() {}
 
@@ -18,6 +17,6 @@ export class ShelfComponent implements OnInit {
 
   toggleShelf() {
     this.isMinimized = !this.isMinimized;
-    this.minimizeShelf.emit(this.isMinimized);
+    this.isMinimizedChange.emit(this.isMinimized);
   }
 }

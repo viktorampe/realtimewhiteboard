@@ -59,8 +59,8 @@ describe('ShelfComponent', () => {
   });
 
   it('should emit minimizeShelf when toggleShelf is called', () => {
-    spyOn(component.minimizeShelf, 'emit');
+    spyOn(component.isMinimizedChange, 'emit');
     component.toggleShelf();
-    expect(component.minimizeShelf.emit).toHaveBeenCalled();
+    expect(component.isMinimizedChange.emit).toHaveBeenCalled();
   });
 });
