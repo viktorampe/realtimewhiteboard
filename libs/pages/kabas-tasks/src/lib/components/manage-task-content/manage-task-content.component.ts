@@ -68,6 +68,7 @@ export class ManageTaskContentComponent implements OnInit, AfterViewInit {
     switch (depth) {
       case 0:
         queryParams.chapter = tocId;
+        queryParams.lesson = undefined;
         break;
       case 1:
         queryParams.lesson = tocId;
