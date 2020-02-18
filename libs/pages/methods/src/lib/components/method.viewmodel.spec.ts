@@ -1,3 +1,5 @@
+// file.only
+
 import { Component, NgZone } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { MatDialog } from '@angular/material';
@@ -55,7 +57,6 @@ import {
   SearchStateInterface
 } from '@campus/search';
 import {
-  EduContentSearchResultFixture,
   EnvironmentSearchModesInterface,
   ENVIRONMENT_API_TOKEN,
   ENVIRONMENT_SEARCHMODES_TOKEN,
@@ -542,12 +543,8 @@ describe('MethodViewModel', () => {
     const mockSearchResult: SearchResultInterface = {
       count: 2,
       results: [
-        new EduContentSearchResultFixture({
-          eduContent: new EduContentFixture({ id: 1 })
-        }),
-        new EduContentSearchResultFixture({
-          eduContent: new EduContentFixture({ id: 2 })
-        })
+        new EduContentFixture({ id: 1 }),
+        new EduContentFixture({ id: 2 })
       ],
       filterCriteriaPredictions: new Map()
     };
