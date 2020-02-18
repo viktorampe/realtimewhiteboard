@@ -7,6 +7,7 @@ import {
   ViewChild,
   ViewChildren
 } from '@angular/core';
+import { EduContentTOCFixture, EduContentTOCInterface } from '@campus/dal';
 import {
   SearchComponent,
   SearchModeInterface,
@@ -14,10 +15,13 @@ import {
   SearchResultInterface,
   SearchStateInterface
 } from '@campus/search';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
 import { TaskEduContentWithEduContentInterface } from '../../interfaces/TaskEduContentWithEduContent.interface';
-import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
+import {
+  CurrentTaskParams,
+  KabasTasksViewModel
+} from '../kabas-tasks.viewmodel';
 
 @Component({
   selector: 'campus-manage-task-content',
@@ -25,12 +29,87 @@ import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
   styleUrls: ['./manage-task-content.component.scss']
 })
 export class ManageTaskContentComponent implements OnInit, AfterViewInit {
+  // ----TODO REMOVE MOCKS ----
+  bookId = 1;
+  chapterTocs = [
+    new EduContentTOCFixture({
+      id: 1,
+      treeId: this.bookId,
+      title: 'Chapter 1',
+      depth: 0,
+      lft: 1,
+      rgt: 6,
+      learningPlanGoalIds: [1, 2, 3]
+    }),
+    new EduContentTOCFixture({
+      id: 2,
+      treeId: this.bookId,
+      title: 'Chapter 2',
+      depth: 0,
+      lft: 7,
+      rgt: 12,
+      learningPlanGoalIds: [1, 2, 3, 4]
+    })
+  ];
+
+  lessonTocs = [
+    new EduContentTOCFixture({
+      id: 3,
+      treeId: this.bookId,
+      title: 'Lesson 1',
+      depth: 1,
+      lft: 2,
+      rgt: 3,
+      learningPlanGoalIds: [1, 2]
+    }),
+    new EduContentTOCFixture({
+      id: 4,
+      treeId: this.bookId,
+      title: 'Lesson 2',
+      depth: 1,
+      lft: 4,
+      rgt: 5,
+      learningPlanGoalIds: [2, 3, 4]
+    }),
+    new EduContentTOCFixture({
+      id: 4,
+      treeId: this.bookId,
+      title: 'Lesson 3',
+      depth: 1,
+      lft: 8,
+      rgt: 9,
+      learningPlanGoalIds: [1, 2]
+    }),
+    new EduContentTOCFixture({
+      id: 5,
+      treeId: this.bookId,
+      title: 'Lesson 4',
+      depth: 1,
+      lft: 10,
+      rgt: 11,
+      learningPlanGoalIds: [2, 3, 4]
+    })
+  ];
+
+  mockVmCurrentToc$ = new BehaviorSubject<EduContentTOCInterface[]>([
+    this.chapterTocs[0],
+    this.lessonTocs[0],
+    this.lessonTocs[1],
+    this.chapterTocs[1],
+    this.lessonTocs[2],
+    this.lessonTocs[3]
+  ]);
+
+  // ----END REMOVE MOCKS ----
+
   public currentContent$: Observable<TaskEduContentWithEduContentInterface[]>;
 
   public searchMode$: Observable<SearchModeInterface>;
   public initialSearchState$: Observable<SearchStateInterface>;
   public searchResults$: Observable<SearchResultInterface>;
   public autoCompleteValues$: Observable<string[]>;
+  public currentToc$: Observable<EduContentTOCInterface[]>;
+  public currentTaskParams$: Observable<CurrentTaskParams>;
 
   @ViewChildren(SearchPortalDirective)
   private portalHosts: QueryList<SearchPortalDirective>;
@@ -50,6 +129,12 @@ export class ManageTaskContentComponent implements OnInit, AfterViewInit {
     this.searchMode$ = this.viewModel.getSearchMode('task-manage-content');
     this.initialSearchState$ = this.viewModel.getInitialSearchState();
     this.searchResults$ = this.viewModel.searchResults$;
+
+    // TODO: replace with this.viewModel.currentToc$
+    this.currentToc$ = this.mockVmCurrentToc$;
+    this.currentTaskParams$ = this.viewModel.currentTaskParams$.pipe(
+      tap(params => console.log(params))
+    );
   }
 
   ngAfterViewInit() {
