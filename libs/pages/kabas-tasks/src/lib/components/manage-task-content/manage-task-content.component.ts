@@ -71,6 +71,7 @@ export class ManageTaskContentComponent implements OnInit, AfterViewInit {
         break;
       case 1:
         queryParams.lessonId = tocId;
+        break;
     }
     this.router.navigate([], {
       queryParams: queryParams
