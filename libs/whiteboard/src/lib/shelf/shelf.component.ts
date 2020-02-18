@@ -1,5 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
-import Card from '../../shared/models/card.interface';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import CardInterface from '../../shared/models/card.interface';
 
 @Component({
   selector: 'campus-shelf',
@@ -7,9 +7,16 @@ import Card from '../../shared/models/card.interface';
   styleUrls: ['./shelf.component.scss']
 })
 export class ShelfComponent implements OnInit {
-  @Input() cards: Card[];
+  @Input() cards: CardInterface[];
+  @Input() isMinimized = false;
+  @Output() isMinimizedChange = new EventEmitter<boolean>();
 
   constructor() {}
 
   ngOnInit() {}
+
+  toggleShelf() {
+    this.isMinimized = !this.isMinimized;
+    this.isMinimizedChange.emit(this.isMinimized);
+  }
 }
