@@ -100,6 +100,7 @@ export class WhiteboardComponent implements OnInit {
     if (mode === Mode.SelectedMode) {
       this.setCardsModeIdleExceptUploadModeAndCard(card);
     }
+    this.checkToolbarVisible();
   }
 
   private setCardsModeIdleExceptUploadModeAndCard(card: CardInterface) {
@@ -135,11 +136,6 @@ export class WhiteboardComponent implements OnInit {
     this.isToolbarVisible =
       this.cards.filter(c => c.mode === Mode.MultiSelectSelectedMode).length >=
       1;
-  }
-
-  onCardLongPressed() {
-    this.cards.forEach(c => (c.mode = Mode.IdleMode));
-    this.checkToolbarVisible();
   }
 
   onClickWhiteboard() {
