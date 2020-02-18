@@ -10,7 +10,7 @@ import {
   selector: '[campusImageDrag]'
 })
 export class ImageDragDirective {
-  @Output() fileDropped = new EventEmitter<any>();
+  @Output() filesDropped = new EventEmitter<any>();
 
   @HostBinding('class.image-drag-directive-dragging') private dragClass = false;
 
@@ -37,7 +37,7 @@ export class ImageDragDirective {
     this.dragClass = false;
     const files = evt.dataTransfer.files;
     if (files.length) {
-      this.fileDropped.emit(files);
+      this.filesDropped.emit(files);
     }
   }
 }
