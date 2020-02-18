@@ -48,5 +48,10 @@
   >
     <mat-icon style="color: #FFFFFF;" [svgIcon]="'plus'"></mat-icon>
   </button>
-  <campus-shelf> </campus-shelf>
+
+  <campus-shelf
+    [class.minimizedShelf]="isShelfMinimized"
+    [cards]="this.shelvedCards"
+    [(isMinimized)]="isShelfMinimized"
+  ></campus-shelf>
 </div>

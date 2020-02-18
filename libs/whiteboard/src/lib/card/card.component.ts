@@ -34,10 +34,12 @@ export class CardComponent {
   }
 
   pressCard() {
-    if (this.mode === Mode.SelectedMode || this.mode === Mode.EditMode) {
-      this.setIdleMode();
-    } else {
-      this.setSelectedMode();
+    if (this.mode !== Mode.ShelfMode) {
+      if (this.mode === Mode.SelectedMode || this.mode === Mode.EditMode) {
+        this.setIdleMode();
+      } else {
+        this.setSelectedMode();
+      }
     }
   }
 

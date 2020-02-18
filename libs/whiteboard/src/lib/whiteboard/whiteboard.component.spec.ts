@@ -200,4 +200,33 @@ describe('WhiteboardComponent', () => {
     whiteboard.triggerEventHandler('click', new MouseEvent('click'));
     component.cards.forEach(c => expect(c.mode).toBe(Mode.IdleMode));
   });
+
+  it('should add card to shelf on delete when card was made by editorial office', () => {
+    const card: CardInterface = {
+      mode: Mode.IdleMode,
+      description: '',
+      image: null,
+      color: null,
+      top: 0,
+      left: 0
+    };
+    component.cards = [card];
+    component.shelvedCards = [];
+    component.onDeleteCard(card);
+    expect(component.shelvedCards.length).toBe(1);
+    expect(component.cards.length).toBe(0);
+  });
+
+  it('should update mode to ShelfMode on delete when card was made by editorial office', () => {
+    const card: CardInterface = {
+      mode: Mode.IdleMode,
+      description: '',
+      image: null,
+      color: null,
+      top: 0,
+      left: 0
+    };
+    component.onDeleteCard(card);
+    expect(card.mode).toBe(Mode.ShelfMode);
+  });
 });

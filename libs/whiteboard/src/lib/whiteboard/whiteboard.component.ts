@@ -21,6 +21,7 @@ export class WhiteboardComponent implements OnInit {
   title = '';
   isTitleInputSelected = true;
   isToolbarVisible = false;
+  isShelfMinimized = false;
 
   constructor() {}
 
@@ -60,6 +61,11 @@ export class WhiteboardComponent implements OnInit {
     }
   }
 
+  addCardToShelf(card: CardInterface) {
+    card.mode = Mode.ShelfMode;
+    this.shelvedCards.push(card);
+  }
+
   showTitleInput() {
     this.isTitleInputSelected = true;
   }
@@ -71,6 +77,9 @@ export class WhiteboardComponent implements OnInit {
   }
 
   onDeleteCard(card: CardInterface) {
+    //TODO: if(kaartje werd door redactie gemaakt)
+    this.addCardToShelf(card);
+    //TODO: else
     this.cards = this.cards.filter(c => c !== card);
   }
 
@@ -89,9 +98,12 @@ export class WhiteboardComponent implements OnInit {
   }
 
   bulkDeleteClicked() {
-    this.cards = this.cards.filter(
-      c => c.mode !== Mode.MultiSelectSelectedMode
+    const multiSelectedCards = this.cards.filter(
+      c => c.mode === Mode.MultiSelectSelectedMode
     );
+    multiSelectedCards.forEach(c => this.addCardToShelf(c));
+    this.cards = this.cards.filter(c => !multiSelectedCards.includes(c));
+    this.cards.forEach(c => (c.mode = Mode.IdleMode));
     this.checkWhiteboardToolbarVisible();
   }
 
