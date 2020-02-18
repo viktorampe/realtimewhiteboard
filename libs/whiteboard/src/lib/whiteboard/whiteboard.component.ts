@@ -22,7 +22,6 @@ export class WhiteboardComponent implements OnInit {
   lastColor = '#00A7E2';
   title = '';
   isTitleInputSelected = true;
-  isToolbarVisible = false;
   isShelfMinimized = false;
 
   constructor() {}
@@ -101,7 +100,6 @@ export class WhiteboardComponent implements OnInit {
     this.cards = this.cards.filter(c => !this.selectedCards.includes(c));
     this.selectedCards.forEach(c => this.addCardToShelf(c));
     this.selectedCards = [];
-    this.checkWhiteboardToolbarVisible();
   }
 
   changeSelectedCardsColor(color: string) {
@@ -112,7 +110,6 @@ export class WhiteboardComponent implements OnInit {
   cardModeChanged(card: CardInterface, mode: Mode) {
     if (mode === Mode.SelectedMode) {
       this.setCardsModeIdleExceptUploadModeAndCard(card);
-      this.checkWhiteboardToolbarVisible();
     }
   }
 
@@ -127,7 +124,6 @@ export class WhiteboardComponent implements OnInit {
 
     if (this.selectedCards.length === 1) {
       this.cards.forEach(c => (c.mode = Mode.MultiSelectMode));
-      this.checkWhiteboardToolbarVisible();
     }
 
     card.mode = Mode.MultiSelectSelectedMode;
@@ -139,7 +135,6 @@ export class WhiteboardComponent implements OnInit {
 
     if (!this.selectedCards.length) {
       this.cards.forEach(c => (c.mode = Mode.IdleMode));
-      this.checkWhiteboardToolbarVisible();
     }
   }
 
@@ -149,17 +144,8 @@ export class WhiteboardComponent implements OnInit {
     card.left = cardPosition.x;
   }
 
-  checkWhiteboardToolbarVisible() {
-    if (this.selectedCards.length) {
-      this.isToolbarVisible = true;
-    } else {
-      this.isToolbarVisible = false;
-    }
-  }
-
   onClickWhiteboard() {
     this.selectedCards = [];
     this.cards.forEach(c => (c.mode = Mode.IdleMode));
-    this.checkWhiteboardToolbarVisible();
   }
 }
