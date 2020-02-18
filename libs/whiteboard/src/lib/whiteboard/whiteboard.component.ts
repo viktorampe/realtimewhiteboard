@@ -167,7 +167,7 @@ export class WhiteboardComponent implements OnInit {
       1;
   }
 
-  onFilesDropped(event: DragEvent) {
+  onFilesDropped(event) {
     const images = event.dataTransfer.files;
     const { x, y } = this.getRelativeEventPosition(event);
 
