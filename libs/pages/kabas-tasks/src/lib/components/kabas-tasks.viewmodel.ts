@@ -63,7 +63,6 @@ import {
   shareReplay,
   switchMap,
   take,
-  tap,
   withLatestFrom
 } from 'rxjs/operators';
 import { AssigneeTypesEnum } from '../interfaces/Assignee.interface';
@@ -141,7 +140,6 @@ export class KabasTasksViewModel
 
     this.routerState$ = this.store.pipe(select(getRouterState));
     this.currentTaskParams$ = this.routerState$.pipe(
-      tap(x => console.log('routerstate', x)),
       filter(routerState => !!routerState),
       map((routerState: RouterReducerState<RouterStateUrl>) => ({
         id: +routerState.state.params.id || undefined,
@@ -149,7 +147,6 @@ export class KabasTasksViewModel
         lesson: +routerState.state.queryParams.lesson || undefined,
         chapter: +routerState.state.queryParams.chapter || undefined
       })),
-      tap(x => console.log('voor distinct', x)),
       distinctUntilChanged(
         (a, b) =>
           a.id === b.id &&
@@ -157,7 +154,6 @@ export class KabasTasksViewModel
           a.lesson === b.lesson &&
           a.chapter === b.chapter
       ),
-      tap(x => console.log('na distinct', x)),
       shareReplay(1)
     );
 
@@ -690,26 +686,10 @@ export class KabasTasksViewModel
           chapter => chapter.id === chapterId
         );
 
+        chapters = [...chapters];
         chapters.splice(foundIndex + 1, 0, ...lessons);
         return chapters;
       })
     );
   }
-
-  // private getTocLessonsStream(): Observable<EduContentTOCInterface[]> {
-  //   return this.currentTaskParams$.pipe(
-  //     filter(params => !!params.chapter),
-  //     switchMap(params => {
-  //       if (params.lesson) {
-  //         return this.store.pipe(
-  //           select(EduContentTocQueries.getById, { id: params.lesson }),
-  //           map(toc => [toc])
-  //         );
-  //       }
-  //       return this.store.pipe(
-  //         select(EduContentTocQueries.getTocsForToc, { tocId: params.chapter })
-  //       );
-  //     })
-  //   );
-  // }
 }

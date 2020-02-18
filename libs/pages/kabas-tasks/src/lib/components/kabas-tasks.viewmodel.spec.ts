@@ -1,4 +1,3 @@
-import { NgZone } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { MAT_DATE_LOCALE } from '@angular/material';
 import {
@@ -6,7 +5,6 @@ import {
   AUTH_SERVICE_TOKEN,
   DalState,
   EduContentBookFixture,
-  EduContentBookInterface,
   EduContentFixture,
   EduContentMetadataFixture,
   EduContentServiceInterface,
@@ -45,11 +43,6 @@ import {
   SCORM_EXERCISE_SERVICE_TOKEN
 } from '@campus/shared';
 import { MockDate } from '@campus/testing';
-import {
-  RouterNavigationAction,
-  RouterNavigationPayload,
-  ROUTER_NAVIGATION
-} from '@ngrx/router-store';
 import { Store } from '@ngrx/store';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { hot } from 'jasmine-marbles';
@@ -77,32 +70,9 @@ describe('KabasTaskViewModel', () => {
   let scormExerciseService: ScormExerciseServiceInterface;
   let openStaticContentService: OpenStaticContentServiceInterface;
   let eduContentService: EduContentServiceInterface;
-  let zone: NgZone;
 
   const apiBase = 'api.foo.be';
   const mockAutoCompleteReturnValue = ['strings', 'for', 'autocomplete'];
-
-  function navigateWithParams(
-    params: {
-      id: number;
-    },
-    queryParams?: {
-      book?: number;
-      chapter?: number;
-      lesson?: number;
-    }
-  ) {
-    zone.run(() => {
-      const navigationAction = {
-        type: ROUTER_NAVIGATION,
-        payload: {
-          routerState: { params, queryParams },
-          event: {}
-        } as RouterNavigationPayload<any>
-      } as RouterNavigationAction;
-      store.dispatch(navigationAction);
-    });
-  }
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
@@ -165,7 +135,6 @@ describe('KabasTaskViewModel', () => {
     scormExerciseService = TestBed.get(SCORM_EXERCISE_SERVICE_TOKEN);
     openStaticContentService = TestBed.get(OPEN_STATIC_CONTENT_SERVICE_TOKEN);
     eduContentService = TestBed.get(EDU_CONTENT_SERVICE_TOKEN);
-    zone = TestBed.get(NgZone);
   });
 
   afterAll(() => {
@@ -1202,10 +1171,7 @@ describe('KabasTaskViewModel', () => {
   describe('currentToc$', () => {
     const taskId = 123;
     const bookId = 5;
-    const bookMethodId = 1;
-    const methodLearningAreaId = 42;
 
-    //First two lessons are in chapter 1, last lesson is in chapter 2
     const chapterTocs = [
       new EduContentTOCFixture({
         id: 1,
@@ -1245,26 +1211,8 @@ describe('KabasTaskViewModel', () => {
         lft: 4,
         rgt: 5,
         learningPlanGoalIds: [2, 3, 4]
-      }),
-      new EduContentTOCFixture({
-        id: 5,
-        treeId: bookId,
-        title: 'Lesson 3',
-        depth: 1,
-        lft: 8,
-        rgt: 9,
-        learningPlanGoalIds: [1, 2, 3]
       })
     ];
-
-    const bookYears = [new YearFixture({ label: '1e leerjaar' })];
-
-    const book: EduContentBookInterface = new EduContentBookFixture({
-      id: bookId,
-      methodId: bookMethodId,
-      eduContentTOC: [...chapterTocs, ...lessonTocs],
-      years: bookYears
-    });
 
     beforeEach(() => {
       store.overrideSelector(
@@ -1291,14 +1239,14 @@ describe('KabasTaskViewModel', () => {
         })
       );
     });
-    //file.only
+
     it('should return chapter tocs when book is selected', () => {
       store.overrideSelector(getRouterState, {
         navigationId: 1,
         state: {
           url: '',
           params: { id: taskId },
-          queryParams: { book: book.id }
+          queryParams: { book: bookId }
         }
       });
 
@@ -1315,19 +1263,13 @@ describe('KabasTaskViewModel', () => {
         state: {
           url: '',
           params: { id: taskId },
-          queryParams: { book: book.id, chapter: 1 }
+          queryParams: { book: bookId, chapter: 1 }
         }
       });
 
       expect(kabasTasksViewModel.currentToc$).toBeObservable(
         hot('a', {
-          a: [
-            chapterTocs[0],
-            lessonTocs[0],
-            lessonTocs[1],
-            lessonTocs[2],
-            chapterTocs[1]
-          ]
+          a: [chapterTocs[0], ...lessonTocs, chapterTocs[1]]
         })
       );
     });
@@ -1338,19 +1280,13 @@ describe('KabasTaskViewModel', () => {
         state: {
           url: '',
           params: { id: taskId },
-          queryParams: { book: book.id, chapter: 1, lesson: 1 }
+          queryParams: { book: bookId, chapter: 1, lesson: 1 }
         }
       });
 
       expect(kabasTasksViewModel.currentToc$).toBeObservable(
         hot('a', {
-          a: [
-            chapterTocs[0],
-            lessonTocs[0],
-            lessonTocs[1],
-            lessonTocs[2],
-            chapterTocs[1]
-          ]
+          a: [chapterTocs[0], ...lessonTocs, chapterTocs[1]]
         })
       );
     });
