@@ -234,7 +234,7 @@ describe('WhiteboardComponent', () => {
     const cardsLengthBeforeAdd = component.cards.length;
 
     const file = new File([''], 'dummy.jpg', {
-      type: component.allowedFileTypes[0]
+      type: ''
     });
 
     const fileDropEvent = {
