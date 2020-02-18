@@ -229,7 +229,7 @@ export class KabasTasksViewModel
       )
       .subscribe(taskId => {
         this.addTaskEduContents([
-          { taskId: taskId, eduContentId: eduContent.id }
+          { taskId: taskId, eduContentId: eduContent.id, index: index }
         ]);
       });
   }
