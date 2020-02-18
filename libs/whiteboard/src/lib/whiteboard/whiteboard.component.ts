@@ -146,6 +146,8 @@ export class WhiteboardComponent implements OnInit {
 
   onClickWhiteboard() {
     this.selectedCards = [];
-    this.cards.forEach(c => (c.mode = Mode.IdleMode));
+    this.cards
+      .filter(c => c.mode !== Mode.UploadMode)
+      .forEach(c => (c.mode = Mode.IdleMode));
   }
 }
