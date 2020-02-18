@@ -8,11 +8,18 @@ import WhiteboardInterface from '../../shared/models/whiteboard.interface';
   providedIn: 'root'
 })
 export class WhiteboardHttpService {
+  private url = 'www.apicallmock.be';
+
   constructor(private http: HttpClient) {}
 
   public getJson(): Observable<WhiteboardInterface> {
     //TODO: API CALL ==> return this.http.get('https://api.openbrewerydb.org/breweries');
     return of(this.getWhiteboardMock());
+  }
+
+  public setJson(whiteboard: WhiteboardInterface) {
+    const response$ = this.http.post(this.url, JSON.stringify(whiteboard));
+    console.log(response$);
   }
 
   private getWhiteboardMock(): WhiteboardInterface {

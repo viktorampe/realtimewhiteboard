@@ -2,6 +2,7 @@ import { CdkDragEnd } from '@angular/cdk/drag-drop';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Mode } from '../../shared/enums/mode.enum';
 import CardInterface from '../../shared/models/card.interface';
+import WhiteboardInterface from '../../shared/models/whiteboard.interface';
 import { WhiteboardHttpService } from '../services/whiteboard-http.service';
 @Component({
   selector: 'campus-whiteboard',
@@ -28,11 +29,17 @@ export class WhiteboardComponent implements OnInit {
 
   ngOnInit() {
     this._http.getJson().subscribe(whiteboard => {
-      console.log(whiteboard);
       this.title = whiteboard.title;
       this.cards = whiteboard.cards;
       this.shelvedCards = whiteboard.shelfCards;
     });
+    const whiteboard: WhiteboardInterface = {
+      title: this.title,
+      defaultColor: 'white',
+      cards: this.cards,
+      shelfCards: this.shelvedCards
+    };
+    this._http.setJson(whiteboard);
   }
 
   get Mode() {
