@@ -60,15 +60,13 @@
   width: 116px;
   opacity: 0.54;
 
+  border-left: 12px solid;
+
   &:hover {
     opacity: 1;
   }
 
   &__content {
     width: 104px;
-  }
-
-  &__border {
-    width: 12px;
   }
 }
