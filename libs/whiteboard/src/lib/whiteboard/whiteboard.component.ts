@@ -45,7 +45,7 @@ export class WhiteboardComponent implements OnInit {
     this.addEmptyCard();
   }
 
-  btnSaveClicked() {
+  saveWhiteboard() {
     const whiteboard: WhiteboardInterface = {
       title: this.title,
       cards: this.cards,

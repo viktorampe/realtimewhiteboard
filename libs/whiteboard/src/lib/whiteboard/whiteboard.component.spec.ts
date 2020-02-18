@@ -231,7 +231,7 @@ describe('WhiteboardComponent', () => {
     component.cards = [workspace_card, workspace_card_2];
     component.shelvedCards = [shelved_card];
 
-    const savedBoard = component.btnSaveClicked();
+    const savedBoard = component.saveWhiteboard();
 
     expect(savedBoard.title).toBe(component.title);
     expect(savedBoard.cards).toBe(component.cards);
