@@ -1,4 +1,5 @@
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
@@ -39,7 +40,8 @@ describe('WhiteboardComponent', () => {
         BrowserAnimationsModule,
         MatProgressBarModule,
         MatInputModule,
-        DragDropModule
+        DragDropModule,
+        HttpClientModule
       ],
       declarations: [
         WhiteboardComponent,
@@ -54,6 +56,7 @@ describe('WhiteboardComponent', () => {
         ImageToolbarComponent
       ],
       providers: [
+        HttpClient,
         {
           provide: HAMMER_LOADER,
           useValue: () => new Promise(() => {})
