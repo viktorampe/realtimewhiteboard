@@ -7,6 +7,7 @@ import {
   ViewChild,
   ViewChildren
 } from '@angular/core';
+import { Params, Router } from '@angular/router';
 import { EduContent } from '@campus/dal';
 import {
   SearchComponent,
@@ -38,7 +39,7 @@ export class ManageTaskContentComponent implements OnInit, AfterViewInit {
   @ViewChild(SearchComponent, { static: true })
   public searchComponent: SearchComponent;
 
-  constructor(private viewModel: KabasTasksViewModel) {}
+  constructor(private viewModel: KabasTasksViewModel, private router: Router) {}
 
   @HostBinding('class.manage-task-content')
   manageTaskContentClass = true;
@@ -63,8 +64,17 @@ export class ManageTaskContentComponent implements OnInit, AfterViewInit {
   }
 
   selectTOC(tocId: number, depth: number) {
-    // TODO: implement
-    throw new Error('Not yet implemented');
+    const queryParams: Params = {};
+    switch (depth) {
+      case 0:
+        queryParams.chapter = tocId;
+        queryParams.lesson = undefined;
+        break;
+      case 1:
+        queryParams.lesson = tocId;
+        break;
+    }
+    this.router.navigate([], { queryParams, queryParamsHandling: 'merge' });
   }
 
   removeEduContentFromTask(eduContent: EduContent) {

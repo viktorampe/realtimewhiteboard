@@ -2,6 +2,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconRegistry } from '@angular/material';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { Router } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 import {
   ResultItemMockComponent,
   SearchComponent,
@@ -27,10 +29,17 @@ describe('ManageTaskContentComponent', () => {
 
   let searchComponent;
   let viewModel: KabasTasksViewModel;
+  let router: Router;
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [UiModule, NoopAnimationsModule, SearchTestModule, SharedModule],
+      imports: [
+        UiModule,
+        NoopAnimationsModule,
+        SearchTestModule,
+        SharedModule,
+        RouterTestingModule
+      ],
       declarations: [ManageTaskContentComponent],
       providers: [
         { provide: MatIconRegistry, useClass: MockMatIconRegistry },
@@ -40,11 +49,16 @@ describe('ManageTaskContentComponent', () => {
         },
         { provide: KabasTasksViewModel, useClass: MockKabasTasksViewModel },
         { provide: ENVIRONMENT_ICON_MAPPING_TOKEN, useValue: {} },
-        { provide: ENVIRONMENT_TESTING_TOKEN, useValue: {} }
+        { provide: ENVIRONMENT_TESTING_TOKEN, useValue: {} },
+        {
+          provide: Router,
+          useValue: { navigate: jest.fn() }
+        }
       ]
     }).overrideModule(BrowserDynamicTestingModule, {
       set: { entryComponents: [ResultItemMockComponent] }
     });
+    router = TestBed.get(Router);
   });
 
   beforeEach(() => {
@@ -94,6 +108,23 @@ describe('ManageTaskContentComponent', () => {
 
       expect(viewModel.updateSearchState).toHaveBeenCalledTimes(1);
       expect(viewModel.updateSearchState).toHaveBeenCalledWith(mockSearchState);
+    });
+  });
+  describe('clickOpenToc', () => {
+    it('should navigate to the lesson when clickOpenToc is called', () => {
+      component.selectTOC(1, 0);
+      expect(router.navigate).toHaveBeenCalledWith([], {
+        queryParams: { chapter: 1 },
+        queryParamsHandling: 'merge'
+      });
+    });
+
+    it('should navigate to the chapter when clickOpenToc is called', () => {
+      component.selectTOC(2, 1);
+      expect(router.navigate).toHaveBeenCalledWith([], {
+        queryParams: { lesson: 2 },
+        queryParamsHandling: 'merge'
+      });
     });
   });
 });
