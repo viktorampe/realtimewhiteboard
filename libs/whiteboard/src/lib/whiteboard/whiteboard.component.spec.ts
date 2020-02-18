@@ -366,7 +366,7 @@ describe('WhiteboardComponent', () => {
     const fileDropEvent = {
       preventDefault: () => {},
       stopPropagation: () => {},
-      dataTransfer: { files: [file] },
+      dataTransfer: { files: [file, file] },
       offsetX: 400,
       offsetY: 400
     };
