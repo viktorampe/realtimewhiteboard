@@ -59,8 +59,8 @@ export class ManageTaskContentComponent implements OnInit, AfterViewInit {
 
   public clickDone() {}
 
-  addEduContentToTask(eduContent: EduContent) {
-    this.viewModel.addEduContentToTask(eduContent);
+  addEduContentToTask(eduContent: EduContent, index?: number) {
+    this.viewModel.addEduContentToTask(eduContent, index);
   }
 
   selectTOC(tocId: number, depth: number) {

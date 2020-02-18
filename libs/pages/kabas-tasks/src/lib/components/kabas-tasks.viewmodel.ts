@@ -221,7 +221,7 @@ export class KabasTasksViewModel
     this.openStaticContentService.open(eduContent, false, true);
   }
 
-  addEduContentToTask(eduContent: EduContent): void {
+  addEduContentToTask(eduContent: EduContent, index?: number): void {
     this.currentTask$
       .pipe(
         take(1),
