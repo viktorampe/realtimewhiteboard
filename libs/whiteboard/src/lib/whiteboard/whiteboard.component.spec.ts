@@ -60,6 +60,14 @@ describe('WhiteboardComponent', () => {
         {
           provide: HAMMER_LOADER,
           useValue: () => new Promise(() => {})
+        },
+        {
+          provide: HttpClient,
+          useValue: {
+            get: () => {},
+            patch: () => {},
+            post: () => {}
+          }
         }
       ]
     });
