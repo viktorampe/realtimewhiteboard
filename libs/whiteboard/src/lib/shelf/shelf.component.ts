@@ -8,8 +8,8 @@ import CardInterface from '../../shared/models/card.interface';
 })
 export class ShelfComponent implements OnInit {
   @Input() cards: CardInterface[];
-  @Output() isMinimizedChange = new EventEmitter<boolean>();
   @Input() isMinimized = false;
+  @Output() isMinimizedChange = new EventEmitter<boolean>();
 
   constructor() {}
 
