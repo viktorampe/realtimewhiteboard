@@ -38,7 +38,12 @@ export class CollectionManagerService
       recentItemIds: new Set(recentItemIds)
     };
 
-    const dialogRef = this.openDialog(dialogData);
+    // const dialogRef = this.openDialog(dialogData);
+    const dialogRef = this.openDialog({
+      ...dialogData,
+      useFilter: true,
+      asModalSideSheet: true
+    });
 
     // listen to component and bubble itemToggledInCollectionEvent
     subscription = dialogRef.componentInstance.selectionChanged.subscribe(
