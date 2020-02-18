@@ -1,5 +1,3 @@
-// file.only
-
 import { TestBed } from '@angular/core/testing';
 import { MAT_DATE_LOCALE } from '@angular/material';
 import {
