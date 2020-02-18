@@ -2,7 +2,6 @@ import { Inject, Injectable } from '@angular/core';
 import {
   ClassGroupFixture,
   ClassGroupInterface,
-  EduContentBookFixture,
   EduContentBookInterface,
   EduContentFixture,
   GroupFixture,
@@ -27,7 +26,7 @@ import {
 } from '@campus/shared';
 import { ViewModelInterface } from '@campus/testing';
 import { BehaviorSubject, Observable, of } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 import {
   AssigneeInterface,
   AssigneeTypesEnum
@@ -64,7 +63,7 @@ export class MockKabasTasksViewModel
   public students$: BehaviorSubject<PersonInterface[]>;
 
   public searchBook$: BehaviorSubject<EduContentBookInterface>;
-  public favoriteBooksForTask$: Observable<EduContentBookInterface[]>;
+  public favoriteBookIdsForTask$: Observable<number[]>;
 
   constructor(
     @Inject(ENVIRONMENT_SEARCHMODES_TOKEN)
@@ -128,9 +127,7 @@ export class MockKabasTasksViewModel
       new PersonFixture({ id: 3, displayName: 'leerling 3' })
     ]);
 
-    this.favoriteBooksForTask$ = new BehaviorSubject([
-      new EduContentBookFixture({ id: 1 })
-    ]);
+    this.favoriteBookIdsForTask$ = new BehaviorSubject([1]);
   }
 
   public getTaskDates() {
@@ -381,7 +378,10 @@ export class MockKabasTasksViewModel
   ) {}
 
   private getCurrentTask(): Observable<TaskWithAssigneesInterface> {
-    return this.tasksWithAssignments$.pipe(map(tasks => tasks[0]));
+    return this.tasksWithAssignments$.pipe(
+      filter(tasks => tasks.length > 0),
+      map(tasks => tasks[0])
+    );
   }
 
   public updateTaskEduContent(

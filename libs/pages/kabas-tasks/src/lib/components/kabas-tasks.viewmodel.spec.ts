@@ -5,7 +5,6 @@ import {
   AUTH_SERVICE_TOKEN,
   DalState,
   EduContentBookFixture,
-  EduContentBookInterface,
   EduContentFixture,
   EduContentMetadataFixture,
   EduContentServiceInterface,
@@ -57,7 +56,7 @@ import {
 import { KabasTasksViewModel } from './kabas-tasks.viewmodel';
 import * as vmSelectors from './kabas-tasks.viewmodel.selectors';
 import {
-  getTaskFavoriteBooks,
+  getTaskFavoriteBookIds,
   getTaskWithAssignmentAndEduContents
 } from './kabas-tasks.viewmodel.selectors';
 
@@ -1171,11 +1170,8 @@ describe('KabasTaskViewModel', () => {
     });
   });
 
-  describe('favoriteBooksForTask$', () => {
-    const expectedBooks: EduContentBookInterface[] = [
-      new EduContentBookFixture({ id: 1 }),
-      new EduContentBookFixture({ id: 2 })
-    ];
+  describe('favoriteBookIdsForTask$', () => {
+    const expectedBookIds: number[] = [1, 2];
 
     beforeEach(() => {
       store.overrideSelector(getRouterState, {
@@ -1186,17 +1182,17 @@ describe('KabasTaskViewModel', () => {
           queryParams: {}
         }
       });
-      store.overrideSelector(getTaskFavoriteBooks, expectedBooks);
-      jest.spyOn(vmSelectors, 'getTaskFavoriteBooks');
+      store.overrideSelector(getTaskFavoriteBookIds, expectedBookIds);
+      jest.spyOn(vmSelectors, 'getTaskFavoriteBookIds');
     });
 
     it('should return the favorite books for the task', () => {
-      expect(kabasTasksViewModel.favoriteBooksForTask$).toBeObservable(
+      expect(kabasTasksViewModel.favoriteBookIdsForTask$).toBeObservable(
         hot('a', {
-          a: expectedBooks
+          a: expectedBookIds
         })
       );
-      expect(vmSelectors.getTaskFavoriteBooks).toHaveBeenCalledWith(
+      expect(vmSelectors.getTaskFavoriteBookIds).toHaveBeenCalledWith(
         {},
         { taskId: 123 }
       );

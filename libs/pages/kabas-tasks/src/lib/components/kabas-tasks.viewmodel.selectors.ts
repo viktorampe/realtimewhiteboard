@@ -3,8 +3,6 @@ import {
   DiaboloPhaseInterface,
   DiaboloPhaseQueries,
   EduContent,
-  EduContentBookInterface,
-  EduContentBookQueries,
   EduContentInterface,
   EduContentQueries,
   FavoriteInterface,
@@ -241,40 +239,35 @@ export const getTaskWithAssignmentAndEduContents = createSelector(
   }
 );
 
-export const getTaskFavoriteBooks = createSelector(
+export const getTaskFavoriteBookIds = createSelector(
   [
     TaskQueries.getAllEntities,
     FavoriteQueries.favoritesByType,
-    EduContentQueries.getAllEntities,
-    EduContentBookQueries.getAllEntities
+    EduContentQueries.getAllEntities
   ],
   (
     taskDict: Dictionary<TaskInterface>,
     favoritesByType: { [key: string]: FavoriteInterface[] },
     eduContentDict: Dictionary<EduContent>,
-    bookDict: Dictionary<EduContentBookInterface>,
     props: {
       taskId: number;
     }
   ) => {
     const task = taskDict[props.taskId];
     const boekeFavorites = favoritesByType[FavoriteTypesEnum.BOEKE] || [];
-    const taskFavoriteBooks: EduContentBookInterface[] = boekeFavorites.reduce(
-      (acc, fav) => {
-        const boeke = eduContentDict[fav.eduContentId];
-        if (!boeke) return acc;
+    const taskFavoriteBooks: number[] = boekeFavorites.reduce((acc, fav) => {
+      const boeke = eduContentDict[fav.eduContentId];
+      if (!boeke) return acc;
 
-        const {
-          learningAreaId,
-          eduContentBookId
-        } = boeke.publishedEduContentMetadata;
+      const {
+        learningAreaId,
+        eduContentBookId
+      } = boeke.publishedEduContentMetadata;
 
-        return learningAreaId === task.learningAreaId
-          ? [...acc, bookDict[eduContentBookId]]
-          : acc;
-      },
-      []
-    );
+      return learningAreaId === task.learningAreaId
+        ? [...acc, eduContentBookId]
+        : acc;
+    }, []);
 
     return taskFavoriteBooks;
   }

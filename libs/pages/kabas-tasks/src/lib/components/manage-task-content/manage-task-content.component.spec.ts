@@ -4,7 +4,6 @@ import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/t
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Params, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { EduContentBookFixture, EduContentBookInterface } from '@campus/dal';
 import {
   ResultItemMockComponent,
   SearchComponent,
@@ -54,7 +53,10 @@ describe('ManageTaskContentComponent', () => {
         { provide: ENVIRONMENT_TESTING_TOKEN, useValue: {} },
         {
           provide: Router,
-          useValue: { navigate: () => {} }
+          useValue: {
+            navigate: () => {},
+            url: '/foo'
+          }
         }
       ]
     }).overrideModule(BrowserDynamicTestingModule, {
@@ -118,16 +120,14 @@ describe('ManageTaskContentComponent', () => {
       jest.spyOn(router, 'navigate');
       component.ngOnInit();
 
-      expect(router.navigate).toHaveBeenCalledWith(['.'], {
+      expect(router.navigate).toHaveBeenCalledWith(['/foo'], {
         queryParams: { book: 1 }
       });
     });
 
     it('should not navigate when no favorite is found', async () => {
       jest.spyOn(router, 'navigate');
-      (viewModel.favoriteBooksForTask$ as BehaviorSubject<
-        EduContentBookInterface[]
-      >).next([]);
+      (viewModel.favoriteBookIdsForTask$ as BehaviorSubject<number[]>).next([]);
       component.ngOnInit();
 
       expect(router.navigate).not.toHaveBeenCalled();
@@ -135,11 +135,9 @@ describe('ManageTaskContentComponent', () => {
 
     it('should not navigate when multiple favorites are found', () => {
       jest.spyOn(router, 'navigate');
-      (viewModel.favoriteBooksForTask$ as BehaviorSubject<
-        EduContentBookInterface[]
-      >).next([
-        new EduContentBookFixture({ id: 1 }),
-        new EduContentBookFixture({ id: 2 })
+      (viewModel.favoriteBookIdsForTask$ as BehaviorSubject<number[]>).next([
+        1,
+        2
       ]);
       component.ngOnInit();
 

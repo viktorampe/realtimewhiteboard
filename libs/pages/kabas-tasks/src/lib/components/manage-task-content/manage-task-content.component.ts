@@ -8,7 +8,6 @@ import {
   ViewChildren
 } from '@angular/core';
 import { Router } from '@angular/router';
-import { EduContentBookInterface } from '@campus/dal';
 import {
   SearchComponent,
   SearchModeInterface,
@@ -49,13 +48,13 @@ export class ManageTaskContentComponent implements OnInit, AfterViewInit {
     this.viewModel.currentTaskParams$
       .pipe(
         filter(params => !params.book),
-        switchMapTo(this.viewModel.favoriteBooksForTask$),
+        switchMapTo(this.viewModel.favoriteBookIdsForTask$),
         take(1)
       )
-      .subscribe((favoriteBooks: EduContentBookInterface[]) => {
-        if (favoriteBooks.length === 1) {
-          this.router.navigate(['.'], {
-            queryParams: { book: favoriteBooks[0].id }
+      .subscribe((favoriteBookIds: number[]) => {
+        if (favoriteBookIds.length === 1) {
+          this.router.navigate([this.router.url], {
+            queryParams: { book: favoriteBookIds[0] }
           });
         }
       });

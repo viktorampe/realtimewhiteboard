@@ -72,7 +72,7 @@ import {
 import { AssigneeInterface } from './../interfaces/Assignee.interface';
 import {
   allowedLearningAreas,
-  getTaskFavoriteBooks,
+  getTaskFavoriteBookIds,
   getTasksWithAssignmentsByType,
   getTaskWithAssignmentAndEduContents
 } from './kabas-tasks.viewmodel.selectors';
@@ -102,7 +102,7 @@ export class KabasTasksViewModel
   public groups$: Observable<GroupInterface[]>;
   public students$: Observable<PersonInterface[]>;
   public searchBook$ = new BehaviorSubject<EduContentBookInterface>(null);
-  public favoriteBooksForTask$: Observable<EduContentBookInterface[]>;
+  public favoriteBookIdsForTask$: Observable<number[]>;
 
   public searchResults$: Observable<SearchResultInterface>;
   public searchState$: Observable<SearchStateInterface>;
@@ -169,7 +169,7 @@ export class KabasTasksViewModel
 
     this._searchState$ = new BehaviorSubject<SearchStateInterface>(null);
     this.searchState$ = this._searchState$;
-    this.favoriteBooksForTask$ = this.getFavoriteBooksForCurrentTask();
+    this.favoriteBookIdsForTask$ = this.getFavoriteBookIdsForCurrentTask();
   }
 
   openEduContentAsExercise(eduContent: EduContent): void {
@@ -678,13 +678,11 @@ export class KabasTasksViewModel
     );
   }
 
-  private getFavoriteBooksForCurrentTask(): Observable<
-    EduContentBookInterface[]
-  > {
+  private getFavoriteBookIdsForCurrentTask(): Observable<number[]> {
     return this.currentTaskParams$.pipe(
       filter(params => !!params.id),
       switchMap(params =>
-        this.store.pipe(select(getTaskFavoriteBooks, { taskId: params.id }))
+        this.store.pipe(select(getTaskFavoriteBookIds, { taskId: params.id }))
       )
     );
   }
