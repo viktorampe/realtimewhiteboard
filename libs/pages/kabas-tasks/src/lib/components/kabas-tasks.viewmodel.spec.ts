@@ -8,6 +8,8 @@ import {
   EduContentFixture,
   EduContentMetadataFixture,
   EduContentServiceInterface,
+  EduContentTOCFixture,
+  EduContentTocQueries,
   EduFileFixture,
   EduFileTypeEnum,
   EDU_CONTENT_SERVICE_TOKEN,
@@ -29,6 +31,7 @@ import {
 } from '@campus/dal';
 import {
   SearchModeFixture,
+  SearchResultInterface,
   SearchStateFixture,
   SearchStateInterface
 } from '@campus/search';
@@ -47,6 +50,7 @@ import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { hot } from 'jasmine-marbles';
 import { configureTestSuite } from 'ng-bullet';
 import { of } from 'rxjs';
+import { take } from 'rxjs/operators';
 import { AssigneeFixture } from '../interfaces/Assignee.fixture';
 import { AssigneeTypesEnum } from '../interfaces/Assignee.interface';
 import { TaskWithAssigneesFixture } from '../interfaces/TaskWithAssignees.fixture';
@@ -1114,6 +1118,104 @@ describe('KabasTaskViewModel', () => {
         });
       });
     });
+
+    describe('searchResults$', () => {
+      const mockTask: TaskWithAssigneesInterface = new TaskWithAssigneesFixture(
+        {
+          taskEduContents: [
+            {
+              index: 0,
+              eduContentId: 1 // for inTask
+            }
+          ]
+        }
+      );
+
+      const mockSearchResult: SearchResultInterface = {
+        count: 2,
+        results: [
+          new EduContentFixture({ id: 1 }),
+          new EduContentFixture({ id: 2 })
+        ],
+        filterCriteriaPredictions: new Map()
+      };
+
+      let initialSearchState: SearchStateInterface;
+
+      beforeEach(() => {
+        jest
+          .spyOn(eduContentService, 'search')
+          .mockReturnValue(of(mockSearchResult));
+
+        store.overrideSelector(getRouterState, {
+          navigationId: 1,
+          state: {
+            url: '',
+            params: { id: 1 },
+            queryParams: {}
+          }
+        });
+        store.overrideSelector(getTaskWithAssignmentAndEduContents, mockTask);
+
+        kabasTasksViewModel.getInitialSearchState().subscribe(searchState => {
+          initialSearchState = searchState;
+        });
+      });
+
+      it('should call the eduContentService with the correct searchState', () => {
+        const searchState = {
+          searchTerm: 'de hoeken',
+          filterCriteriaSelections: new Map([['foo', ['bar']]])
+        } as SearchStateInterface;
+
+        kabasTasksViewModel.searchResults$.pipe(take(1)).subscribe();
+
+        kabasTasksViewModel.updateSearchState(searchState);
+
+        const expectedSearchState = {
+          searchTerm: 'de hoeken',
+          filterCriteriaSelections: new Map([
+            ...Array.from(initialSearchState.filterCriteriaSelections),
+            ['foo', ['bar']]
+          ]),
+          filterCriteriaOptions: initialSearchState.filterCriteriaOptions
+        };
+
+        expect(eduContentService.search).toHaveBeenCalled();
+        expect(eduContentService.search).toHaveBeenCalledTimes(1);
+        expect(eduContentService.search).toHaveBeenCalledWith(
+          expectedSearchState
+        );
+      });
+
+      it('should return the found results', () => {
+        const searchState = {
+          searchTerm: '',
+          filterCriteriaSelections: new Map([])
+        } as SearchStateInterface;
+
+        const searchResults$ = kabasTasksViewModel.searchResults$;
+        const expected = {
+          ...mockSearchResult,
+          results: [
+            {
+              eduContent: mockSearchResult.results[0],
+              inTask: true,
+              addTaskActions: true
+            },
+            {
+              eduContent: mockSearchResult.results[1],
+              inTask: false,
+              addTaskActions: true
+            }
+          ]
+        };
+
+        kabasTasksViewModel.updateSearchState(searchState);
+
+        expect(searchResults$).toBeObservable(hot('a', { a: expected }));
+      });
+    });
   });
 
   describe('addTaskEduContents', () => {
@@ -1164,6 +1266,130 @@ describe('KabasTaskViewModel', () => {
       expect(spy).toHaveBeenCalledWith([
         { taskId: 1, eduContentId: eduContent.id }
       ]);
+    });
+  });
+
+  describe('currentToc$', () => {
+    const taskId = 123;
+    const bookId = 5;
+
+    const chapterTocs = [
+      new EduContentTOCFixture({
+        id: 1,
+        treeId: bookId,
+        title: 'Chapter 1',
+        depth: 0,
+        lft: 1,
+        rgt: 6,
+        learningPlanGoalIds: [1, 2, 3]
+      }),
+      new EduContentTOCFixture({
+        id: 2,
+        treeId: bookId,
+        title: 'Chapter 2',
+        depth: 0,
+        lft: 7,
+        rgt: 10,
+        learningPlanGoalIds: [1, 2, 3, 4]
+      })
+    ];
+
+    const lessonTocs = [
+      new EduContentTOCFixture({
+        id: 3,
+        treeId: bookId,
+        title: 'Lesson 1',
+        depth: 1,
+        lft: 2,
+        rgt: 3,
+        learningPlanGoalIds: [1, 2]
+      }),
+      new EduContentTOCFixture({
+        id: 4,
+        treeId: bookId,
+        title: 'Lesson 2',
+        depth: 1,
+        lft: 4,
+        rgt: 5,
+        learningPlanGoalIds: [2, 3, 4]
+      })
+    ];
+
+    beforeEach(() => {
+      store.overrideSelector(
+        EduContentTocQueries.getChaptersForBook,
+        chapterTocs
+      );
+
+      store.overrideSelector(EduContentTocQueries.getTocsForToc, lessonTocs);
+    });
+
+    it('should be an empty array when no book, chapter or lesson is selected', () => {
+      store.overrideSelector(getRouterState, {
+        navigationId: 1,
+        state: {
+          url: '',
+          params: { id: taskId },
+          queryParams: {}
+        }
+      });
+
+      expect(kabasTasksViewModel.currentToc$).toBeObservable(
+        hot('a', {
+          a: []
+        })
+      );
+    });
+
+    it('should return chapter tocs when book is selected', () => {
+      store.overrideSelector(getRouterState, {
+        navigationId: 1,
+        state: {
+          url: '',
+          params: { id: taskId },
+          queryParams: { book: bookId }
+        }
+      });
+
+      expect(kabasTasksViewModel.currentToc$).toBeObservable(
+        hot('a', {
+          a: chapterTocs
+        })
+      );
+    });
+
+    it('should return lesson tocs when chapter is selected', () => {
+      store.overrideSelector(getRouterState, {
+        navigationId: 1,
+        state: {
+          url: '',
+          params: { id: taskId },
+          queryParams: { book: bookId, chapter: 1 }
+        }
+      });
+
+      expect(kabasTasksViewModel.currentToc$).toBeObservable(
+        hot('a', {
+          a: [chapterTocs[0], ...lessonTocs, chapterTocs[1]]
+        })
+      );
+    });
+
+    it('should return lesson tocs when lesson is selected', () => {
+      store.overrideSelector(getRouterState, {
+        navigationId: 1,
+        state: {
+          url: '',
+          params: { id: taskId },
+          queryParams: { book: bookId, chapter: 1, lesson: 1 }
+        }
+      });
+
+      expect(kabasTasksViewModel.currentToc$).toBeObservable(
+        hot('a', {
+          a: [chapterTocs[0], ...lessonTocs, chapterTocs[1]]
+        })
+      );
     });
   });
 

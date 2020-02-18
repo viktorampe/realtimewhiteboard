@@ -8,6 +8,7 @@ import {
   DalState,
   EduContent,
   EduContentBookInterface,
+  EduContentInterface,
   EduContentServiceInterface,
   EduContentTOCInterface,
   EduContentTocQueries,
@@ -44,6 +45,7 @@ import {
 import {
   ContentOpenerInterface,
   ContentTaskManagerInterface,
+  EduContentSearchResultInterface,
   EduContentTypeEnum,
   EnvironmentSearchModesInterface,
   ENVIRONMENT_SEARCHMODES_TOKEN,
@@ -55,11 +57,12 @@ import {
 import { Update } from '@ngrx/entity';
 import { RouterReducerState } from '@ngrx/router-store';
 import { Action, select, Store } from '@ngrx/store';
-import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
+import { BehaviorSubject, combineLatest, merge, Observable, of } from 'rxjs';
 import {
   distinctUntilChanged,
   filter,
   map,
+  mapTo,
   shareReplay,
   switchMap,
   take,
@@ -103,6 +106,7 @@ export class KabasTasksViewModel
   public students$: Observable<PersonInterface[]>;
   public searchBook$ = new BehaviorSubject<EduContentBookInterface>(null);
   public selectedBookTitle$: Observable<string>;
+  public currentToc$: Observable<EduContentTOCInterface[]>;
 
   public searchResults$: Observable<SearchResultInterface>;
   public searchState$: Observable<SearchStateInterface>;
@@ -170,6 +174,9 @@ export class KabasTasksViewModel
 
     this._searchState$ = new BehaviorSubject<SearchStateInterface>(null);
     this.searchState$ = this._searchState$;
+    this.currentToc$ = this.getTocsStream();
+
+    this.setupSearchResults();
   }
 
   openEduContentAsExercise(eduContent: EduContent): void {
@@ -633,7 +640,87 @@ export class KabasTasksViewModel
     return `${body}${confirmQuestion}`;
   }
 
-  private setupSearchResults(): void {}
+  private setupSearchResults(): void {
+    this.searchResults$ = this.searchState$.pipe(
+      withLatestFrom(this.getInitialSearchState()),
+      filter(([searchState]) => searchState !== null),
+      map(([searchState, initialSearchState]) => ({
+        ...initialSearchState,
+        ...searchState,
+        filterCriteriaSelections: new Map([
+          ...Array.from(searchState.filterCriteriaSelections.entries()),
+          ...Array.from(initialSearchState.filterCriteriaSelections.entries())
+        ]),
+        filterCriteriaOptions: new Map([
+          ...Array.from(initialSearchState.filterCriteriaOptions.entries())
+        ])
+      })),
+      switchMap(searchState => this.eduContentService.search(searchState)),
+      withLatestFrom(this.currentTask$),
+      map(([searchResult, currentTask]) => {
+        const eduContentIdsInTask = currentTask.taskEduContents.reduce(
+          (acc, taskEduContent) => {
+            return {
+              ...acc,
+              [taskEduContent.eduContentId]: true
+            };
+          },
+          {}
+        );
+
+        return {
+          ...searchResult,
+          results: searchResult.results.map(
+            (
+              searchResultItem: EduContentInterface
+            ): EduContentSearchResultInterface => {
+              const eduContent = Object.assign<EduContent, EduContentInterface>(
+                new EduContent(),
+                searchResultItem
+              );
+
+              return {
+                eduContent: eduContent,
+                inTask: !!eduContentIdsInTask[eduContent.id],
+                addTaskActions: true
+              };
+            }
+          )
+        };
+      })
+    );
+  }
+
+  private getTocsStream(): Observable<EduContentTOCInterface[]> {
+    const tocStreamWhenLessonChapter$ = this.currentTaskParams$.pipe(
+      filter(params => !!params.chapter),
+      switchMap(params =>
+        this.combineChaptersLessons(params.book, params.chapter)
+      )
+    );
+
+    const tocStreamWhenBook$ = this.currentTaskParams$.pipe(
+      filter(params => !!params.book && !params.chapter),
+      switchMap(params => {
+        return this.store.pipe(
+          select(EduContentTocQueries.getChaptersForBook, {
+            bookId: params.book
+          })
+        );
+      })
+    );
+
+    const tocStreamWhenNoBook$ = this.currentTaskParams$.pipe(
+      filter(params => !params.book),
+      mapTo([])
+    );
+
+    return merge(
+      tocStreamWhenLessonChapter$,
+      tocStreamWhenBook$,
+      tocStreamWhenNoBook$
+    );
+  }
 
   private combineChaptersLessons(
     bookId: number,
@@ -655,25 +742,9 @@ export class KabasTasksViewModel
           chapter => chapter.id === chapterId
         );
 
+        chapters = [...chapters];
         chapters.splice(foundIndex + 1, 0, ...lessons);
         return chapters;
-      })
-    );
-  }
-
-  private getTocLessonsStream(): Observable<EduContentTOCInterface[]> {
-    return this.currentTaskParams$.pipe(
-      filter(params => !!params.chapter),
-      switchMap(params => {
-        if (params.lesson) {
-          return this.store.pipe(
-            select(EduContentTocQueries.getById, { id: params.lesson }),
-            map(toc => [toc])
-          );
-        }
-        return this.store.pipe(
-          select(EduContentTocQueries.getTocsForToc, { tocId: params.chapter })
-        );
       })
     );
   }
