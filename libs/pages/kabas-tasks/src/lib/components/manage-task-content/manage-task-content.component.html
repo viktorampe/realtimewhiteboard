@@ -14,6 +14,10 @@
 
   <div main class="manage-task-content__main__container">
     <div class="manage-task-content__main">
+      <campus-page-header
+        *ngIf="selectedBookTitle$ | async as selectedBookTitle"
+        [title]="selectedBookTitle"
+      ></campus-page-header>
       <div data-cy="search-filters" class="manage-task-content__filters">
         <ng-container searchPortal="searchTerm"></ng-container>
         <campus-button

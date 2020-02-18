@@ -15,7 +15,6 @@ import {
   SearchStateInterface
 } from '@campus/search';
 import { Observable } from 'rxjs';
-import { TaskEduContentWithEduContentInterface } from '../../interfaces/TaskEduContentWithEduContent.interface';
 import { TaskWithAssigneesInterface } from '../../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
 
@@ -26,7 +25,6 @@ import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
 })
 export class ManageTaskContentComponent implements OnInit, AfterViewInit {
   public task$: Observable<TaskWithAssigneesInterface>;
-  public currentContent$: Observable<TaskEduContentWithEduContentInterface[]>;
 
   public searchMode$: Observable<SearchModeInterface>;
   public initialSearchState$: Observable<SearchStateInterface>;
