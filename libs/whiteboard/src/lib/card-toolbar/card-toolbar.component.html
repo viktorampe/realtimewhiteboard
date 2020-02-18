@@ -54,12 +54,11 @@
       <div
         *ngIf="mode === Mode.MultiSelectSelectedMode"
         class="toolbar__tool toolbar__multiSelect"
-        (click)="multiSelectClicked()"
+        (click)="multiSelectSelectedClicked()"
       >
         <mat-icon
           class="toolbar__tool__icon toolbar__select__icon"
           [svgIcon]="'multiselect-selected'"
-          (click)="multiSelectSelectedClicked()"
         ></mat-icon>
       </div>
     </ng-template>

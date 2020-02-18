@@ -25,6 +25,7 @@
       *ngFor="let card of cards"
       cdkDrag
       class="whiteboard__card"
+      [class.zoom]="card.mode === Mode.ZoomMode"
       [cdkDragFreeDragPosition]="{ x: card.left, y: card.top }"
       [(description)]="card.description"
       [(color)]="card.color"
@@ -35,6 +36,7 @@
       (deleteCard)="onDeleteCard(card)"
       (select)="onSelectCard(card)"
       (deselect)="onDeselectCard(card)"
+      (cardTapped)="onCardTapped(card)"
       (cdkDragEnded)="onDragEnded($event, card)"
     ></campus-card>
   </div>
@@ -54,5 +56,10 @@
   >
     <mat-icon style="color: #FFFFFF;" [svgIcon]="'check'"></mat-icon>
   </button>
-  <campus-shelf> </campus-shelf>
+
+  <campus-shelf
+    [class.minimizedShelf]="isShelfMinimized"
+    [cards]="this.shelvedCards"
+    [(isMinimized)]="isShelfMinimized"
+  ></campus-shelf>
 </div>

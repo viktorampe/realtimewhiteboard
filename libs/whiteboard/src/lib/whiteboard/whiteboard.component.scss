@@ -3,8 +3,11 @@
   flex-direction: column;
   height: 100%;
 
-  campus-whiteboard-tools {
+  campus-whiteboard-toolbar {
+    position: absolute;
     z-index: 1;
+    left: 0;
+    right: 0;
   }
 
   &.image-drag-directive-dragging {
@@ -40,6 +43,19 @@
     position: absolute;
     top: 0;
     left: 0;
+
+    &.zoom {
+      position: fixed;
+
+      z-index: 1;
+
+      transform: translate3d(0, 0, 0) !important;
+
+      height: 100%;
+      width: 100%;
+
+      background: #0000008a;
+    }
   }
 
   &__addbutton {
@@ -67,6 +83,10 @@
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    padding: 30px 160px;
+    padding: 0px 160px;
+  }
+
+  .minimizedShelf {
+    min-height: 20px;
   }
 }

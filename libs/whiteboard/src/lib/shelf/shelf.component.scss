@@ -1,0 +1,14 @@
+.shelf {
+  display: flex;
+
+  &__button {
+    position: absolute;
+    top: 0;
+    left: 20px;
+    text-align: center;
+  }
+
+  &__card {
+    margin-right: 20px;
+  }
+}
