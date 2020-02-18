@@ -1,3 +1,5 @@
+// file.only
+
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconRegistry } from '@angular/material';
@@ -139,6 +141,18 @@ describe('ManageTaskContentComponent', () => {
         expect(viewModel.updateTaskEduContentsOrder).toHaveBeenCalledWith(
           expected
         );
+      });
+
+      it('should not call updateTaskEduContentsOrder when the order did not actually change', () => {
+        jest.spyOn(viewModel, 'updateTaskEduContentsOrder');
+
+        const event = { previousIndex: 1, currentIndex: 1 } as CdkDragDrop<
+          TaskEduContentWithEduContentInterface[]
+        >;
+
+        component.dropTaskEduContent(taskEduContents, event);
+
+        expect(viewModel.updateTaskEduContentsOrder).not.toHaveBeenCalled();
       });
 
       it('should update reorderableTaskEduContents$ with the updated taskEduContents when task updates', () => {

@@ -78,6 +78,10 @@ export class ManageTaskContentComponent
     taskEduContents: TaskEduContentWithEduContentInterface[],
     event: CdkDragDrop<TaskEduContentWithEduContentInterface[]>
   ) {
+    if (event.previousIndex === event.currentIndex) {
+      return;
+    }
+
     moveItemInArray(taskEduContents, event.previousIndex, event.currentIndex);
     this.viewModel.updateTaskEduContentsOrder(taskEduContents);
   }
