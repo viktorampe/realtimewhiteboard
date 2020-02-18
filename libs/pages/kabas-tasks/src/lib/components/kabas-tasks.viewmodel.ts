@@ -452,7 +452,6 @@ export class KabasTasksViewModel
           };
         }),
         customFeedbackHandlers: {
-          useCustomErrorHandler: 'useNoHandler',
           useCustomSuccessHandler: 'useNoHandler'
         }
       })

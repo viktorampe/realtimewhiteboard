@@ -371,8 +371,7 @@ describe('KabasTaskViewModel', () => {
             { id: 2, changes: { id: 2, index: 2, taskId: 2 } }
           ],
           customFeedbackHandlers: {
-            useCustomSuccessHandler: 'useNoHandler',
-            useCustomErrorHandler: 'useNoHandler'
+            useCustomSuccessHandler: 'useNoHandler'
           }
         })
       );
