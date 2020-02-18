@@ -61,9 +61,8 @@ export class ManageTaskContentComponent
     this.initialSearchState$ = this.viewModel.getInitialSearchState();
     this.searchResults$ = this.viewModel.searchResults$;
 
-    // TODO: change with local task$ stream when Thomas merges his thing
     this.subscriptions.add(
-      this.viewModel.currentTask$.subscribe(task => {
+      this.task$.subscribe(task => {
         this.reorderableTaskEduContents$.next([...task.taskEduContents]);
       })
     );
