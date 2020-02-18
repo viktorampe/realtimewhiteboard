@@ -7,7 +7,7 @@ import {
   ViewChild,
   ViewChildren
 } from '@angular/core';
-import { Router } from '@angular/router';
+import { Params, Router } from '@angular/router';
 import { EduContent } from '@campus/dal';
 import {
   SearchComponent,
@@ -64,18 +64,16 @@ export class ManageTaskContentComponent implements OnInit, AfterViewInit {
   }
 
   selectTOC(tocId: number, depth: number) {
-    const queryParams: { [tocId: string]: number } = {};
+    const queryParams: Params = {};
     switch (depth) {
       case 0:
-        queryParams.chapterId = tocId;
+        queryParams.chapter = tocId;
         break;
       case 1:
-        queryParams.lessonId = tocId;
+        queryParams.lesson = tocId;
         break;
     }
-    this.router.navigate([], {
-      queryParams: queryParams
-    });
+    this.router.navigate([], { queryParams, queryParamsHandling: 'merge' });
   }
 
   removeEduContentFromTask(eduContent: EduContent) {

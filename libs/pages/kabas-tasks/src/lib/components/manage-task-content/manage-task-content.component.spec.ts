@@ -114,14 +114,16 @@ describe('ManageTaskContentComponent', () => {
     it('should navigate to the lesson when clickOpenToc is called', () => {
       component.selectTOC(1, 0);
       expect(router.navigate).toHaveBeenCalledWith([], {
-        queryParams: { chapterId: 1 }
+        queryParams: { chapter: 1 },
+        queryParamsHandling: 'merge'
       });
     });
 
     it('should navigate to the chapter when clickOpenToc is called', () => {
       component.selectTOC(2, 1);
       expect(router.navigate).toHaveBeenCalledWith([], {
-        queryParams: { lessonId: 2 }
+        queryParams: { lesson: 2 },
+        queryParamsHandling: 'merge'
       });
     });
   });
