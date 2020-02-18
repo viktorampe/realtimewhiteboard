@@ -52,6 +52,7 @@ export class WhiteboardComponent implements OnInit {
     };
     //TODO: http-post whiteboard
     console.log(whiteboard);
+    return whiteboard;
   }
 
   addEmptyCard(top: number = 0, left: number = 0) {
