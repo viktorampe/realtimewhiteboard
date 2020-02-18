@@ -8,6 +8,8 @@ import {
   EduContentFixture,
   EduContentMetadataFixture,
   EduContentServiceInterface,
+  EduContentTOCFixture,
+  EduContentTocQueries,
   EduFileFixture,
   EduFileTypeEnum,
   EDU_CONTENT_SERVICE_TOKEN,
@@ -1263,6 +1265,130 @@ describe('KabasTaskViewModel', () => {
       expect(spy).toHaveBeenCalledWith([
         { taskId: 1, eduContentId: eduContent.id }
       ]);
+    });
+  });
+
+  describe('currentToc$', () => {
+    const taskId = 123;
+    const bookId = 5;
+
+    const chapterTocs = [
+      new EduContentTOCFixture({
+        id: 1,
+        treeId: bookId,
+        title: 'Chapter 1',
+        depth: 0,
+        lft: 1,
+        rgt: 6,
+        learningPlanGoalIds: [1, 2, 3]
+      }),
+      new EduContentTOCFixture({
+        id: 2,
+        treeId: bookId,
+        title: 'Chapter 2',
+        depth: 0,
+        lft: 7,
+        rgt: 10,
+        learningPlanGoalIds: [1, 2, 3, 4]
+      })
+    ];
+
+    const lessonTocs = [
+      new EduContentTOCFixture({
+        id: 3,
+        treeId: bookId,
+        title: 'Lesson 1',
+        depth: 1,
+        lft: 2,
+        rgt: 3,
+        learningPlanGoalIds: [1, 2]
+      }),
+      new EduContentTOCFixture({
+        id: 4,
+        treeId: bookId,
+        title: 'Lesson 2',
+        depth: 1,
+        lft: 4,
+        rgt: 5,
+        learningPlanGoalIds: [2, 3, 4]
+      })
+    ];
+
+    beforeEach(() => {
+      store.overrideSelector(
+        EduContentTocQueries.getChaptersForBook,
+        chapterTocs
+      );
+
+      store.overrideSelector(EduContentTocQueries.getTocsForToc, lessonTocs);
+    });
+
+    it('should be an empty array when no book, chapter or lesson is selected', () => {
+      store.overrideSelector(getRouterState, {
+        navigationId: 1,
+        state: {
+          url: '',
+          params: { id: taskId },
+          queryParams: {}
+        }
+      });
+
+      expect(kabasTasksViewModel.currentToc$).toBeObservable(
+        hot('a', {
+          a: []
+        })
+      );
+    });
+
+    it('should return chapter tocs when book is selected', () => {
+      store.overrideSelector(getRouterState, {
+        navigationId: 1,
+        state: {
+          url: '',
+          params: { id: taskId },
+          queryParams: { book: bookId }
+        }
+      });
+
+      expect(kabasTasksViewModel.currentToc$).toBeObservable(
+        hot('a', {
+          a: chapterTocs
+        })
+      );
+    });
+
+    it('should return lesson tocs when chapter is selected', () => {
+      store.overrideSelector(getRouterState, {
+        navigationId: 1,
+        state: {
+          url: '',
+          params: { id: taskId },
+          queryParams: { book: bookId, chapter: 1 }
+        }
+      });
+
+      expect(kabasTasksViewModel.currentToc$).toBeObservable(
+        hot('a', {
+          a: [chapterTocs[0], ...lessonTocs, chapterTocs[1]]
+        })
+      );
+    });
+
+    it('should return lesson tocs when lesson is selected', () => {
+      store.overrideSelector(getRouterState, {
+        navigationId: 1,
+        state: {
+          url: '',
+          params: { id: taskId },
+          queryParams: { book: bookId, chapter: 1, lesson: 1 }
+        }
+      });
+
+      expect(kabasTasksViewModel.currentToc$).toBeObservable(
+        hot('a', {
+          a: [chapterTocs[0], ...lessonTocs, chapterTocs[1]]
+        })
+      );
     });
   });
 });
