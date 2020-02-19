@@ -117,11 +117,11 @@ describe('WhiteboardComponent', () => {
       left: 0
     };
 
-    component.cards = [card1, card2];
+    component.selectedCards = [card1, card2];
 
     component.bulkDeleteClicked();
 
-    expect(component.cards.length).toBe(0);
+    expect(component.selectedCards.length).toBe(0);
   });
 
   it('should set other cards to IdleMode when a card mode changes to SelectedMode', () => {
@@ -169,11 +169,11 @@ describe('WhiteboardComponent', () => {
       left: 0
     };
 
-    component.cards = [card, card2];
+    component.selectedCards = [card, card2];
 
     component.changeSelectedCardsColor('black');
 
-    component.cards.forEach(c => expect(c.color).toBe('black'));
+    component.selectedCards.forEach(c => expect(c.color).toBe('black'));
   });
 
   it('should set selected card to IdleMode when whiteboard is clicked', () => {

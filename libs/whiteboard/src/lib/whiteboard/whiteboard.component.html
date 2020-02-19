@@ -5,7 +5,7 @@
   (click)="onClickWhiteboard()"
 >
   <campus-whiteboard-toolbar
-    *ngIf="isToolbarVisible"
+    *ngIf="selectedCards.length"
     (deleteCards)="bulkDeleteClicked()"
     (changeSelectedColor)="changeSelectedCardsColor($event)"
   ></campus-whiteboard-toolbar>
