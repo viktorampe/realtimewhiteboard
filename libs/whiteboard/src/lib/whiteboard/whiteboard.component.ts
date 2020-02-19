@@ -152,6 +152,7 @@ export class WhiteboardComponent implements OnInit {
         card.mode = Mode.IdleMode;
       } else {
         card.mode = Mode.SelectedMode;
+        this.setCardsModeIdleExceptUploadModeAndCard(card);
       }
     }
   }
@@ -186,12 +187,6 @@ export class WhiteboardComponent implements OnInit {
   changeSelectedCardsColor(color: string) {
     this.lastColor = color;
     this.selectedCards.forEach(c => (c.color = this.lastColor));
-  }
-
-  cardModeChanged(card: CardInterface, mode: Mode) {
-    if (mode === Mode.SelectedMode) {
-      this.setCardsModeIdleExceptUploadModeAndCard(card);
-    }
   }
 
   private setCardsModeIdleExceptUploadModeAndCard(card: CardInterface) {

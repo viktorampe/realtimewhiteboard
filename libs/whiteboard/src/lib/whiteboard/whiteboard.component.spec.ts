@@ -79,6 +79,38 @@ describe('WhiteboardComponent', () => {
     expect(cardsSizeAfterClicked).toBe(cardsSizeBeforeClicked + 1);
   });
 
+  it('should set card mode to ShelfMode when card is added to the shelf', () => {
+    const card: CardInterface = {
+      mode: Mode.IdleMode,
+      description: '',
+      image: null,
+      color: null,
+      top: 0,
+      left: 0,
+      viewModeImage: true
+    };
+
+    component.addCardToShelf(card);
+
+    expect(card.mode).toBe(<Mode>Mode.ShelfMode);
+  });
+
+  it('should add card to the shelvedCards when card is added to the shelf', () => {
+    const card: CardInterface = {
+      mode: Mode.IdleMode,
+      description: '',
+      image: null,
+      color: null,
+      top: 0,
+      left: 0,
+      viewModeImage: true
+    };
+
+    component.addCardToShelf(card);
+
+    expect(component.shelvedCards).toContain(card);
+  });
+
   it('should delete a card from the list of cards when the user clicks delete', () => {
     const cardsSizeBeforeAdding = component.cards.length;
 
@@ -97,6 +129,286 @@ describe('WhiteboardComponent', () => {
     component.onDeleteCard(card);
 
     expect(component.cards.length).toBe(cardsSizeBeforeAdding);
+  });
+
+  it('should set isTitleInputSelected to true on showTitleInput', () => {
+    component.isTitleInputSelected = false;
+    component.showTitleInput();
+    expect(component.isTitleInputSelected).toBe(true);
+  });
+
+  it('should set isTitleInputSelected to false on showTitleInput if title is not empty', () => {
+    component.isTitleInputSelected = true;
+    component.title = 'test';
+    component.hideTitleInput();
+    expect(component.isTitleInputSelected).toBe(false);
+  });
+
+  it('should not set isTitleInputSelected to false on showTitleInput if title is empty', () => {
+    component.isTitleInputSelected = true;
+    component.title = '';
+    component.hideTitleInput();
+    expect(component.isTitleInputSelected).toBe(true);
+  });
+
+  it('should set card mode to IdleMode on cardTapped if previous mode was ZoomMode', () => {
+    const card: CardInterface = {
+      mode: Mode.ZoomMode,
+      description: '',
+      image: null,
+      color: null,
+      top: 0,
+      left: 0,
+      viewModeImage: true
+    };
+
+    component.onCardTapped(card);
+    expect(card.mode).toBe(<Mode>Mode.IdleMode);
+  });
+
+  it('should set card mode to ZoomMode on cardTapped starting from IdleMode if zoom mode is allowed', () => {
+    const card: CardInterface = {
+      mode: Mode.IdleMode,
+      description: '',
+      image: null,
+      color: null,
+      top: 0,
+      left: 0,
+      viewModeImage: true
+    };
+
+    spyOn<any>(component, 'isZoomAllowedForCard').and.returnValue(true);
+
+    component.onCardTapped(card);
+    expect(card.mode).toBe(<Mode>Mode.ZoomMode);
+  });
+
+  it('should not set card mode to ZoomMode on cardTapped starting from IdleMode if zoom mode is not allowed', () => {
+    const card: CardInterface = {
+      mode: Mode.ZoomMode,
+      description: '',
+      image: null,
+      color: null,
+      top: 0,
+      left: 0,
+      viewModeImage: true
+    };
+
+    spyOn<any>(component, 'isZoomAllowedForCard').and.returnValue(false);
+
+    component.onCardTapped(card);
+    expect(card.mode).toBe(<Mode>Mode.IdleMode);
+  });
+
+  it('should set card mode to EditMode when cardEditIconClicked is called', () => {
+    const card: CardInterface = {
+      mode: Mode.IdleMode,
+      description: '',
+      image: null,
+      color: null,
+      top: 0,
+      left: 0,
+      viewModeImage: true
+    };
+
+    component.cardEditIconClicked(card);
+    expect(card.mode).toBe(<Mode>Mode.EditMode);
+  });
+
+  it('should set card mode to IdleMode when cardConfirmIconClicked is called', () => {
+    const card: CardInterface = {
+      mode: Mode.IdleMode,
+      description: '',
+      image: null,
+      color: null,
+      top: 0,
+      left: 0,
+      viewModeImage: true
+    };
+
+    component.cardConfirmIconClicked(card);
+    expect(card.mode).toBe(<Mode>Mode.IdleMode);
+  });
+
+  it('should toggle card viewModeImage when cardFlipIconClicked is called', () => {
+    const card: CardInterface = {
+      mode: Mode.IdleMode,
+      description: '',
+      image: null,
+      color: null,
+      top: 0,
+      left: 0,
+      viewModeImage: false
+    };
+
+    component.cardFlipIconClicked(card);
+    expect(card.viewModeImage).toBe(true);
+  });
+
+  it('should set card mode to IdleMode when cardFlipIconClicked is called and card was not in EditMode', () => {
+    const card: CardInterface = {
+      mode: Mode.SelectedMode,
+      description: '',
+      image: null,
+      color: null,
+      top: 0,
+      left: 0,
+      viewModeImage: false
+    };
+
+    component.cardFlipIconClicked(card);
+    expect(card.mode).toBe(<Mode>Mode.IdleMode);
+  });
+
+  it('should not set card mode to IdleMode when cardFlipIconClicked is called and card was in EditMode', () => {
+    const card: CardInterface = {
+      mode: Mode.EditMode,
+      description: '',
+      image: null,
+      color: null,
+      top: 0,
+      left: 0,
+      viewModeImage: false
+    };
+
+    component.cardFlipIconClicked(card);
+    expect(card.mode).toBe(<Mode>Mode.EditMode);
+  });
+
+  it('should not change mode when onCardPressed is called and card was in ShelfMode', () => {
+    const card: CardInterface = {
+      mode: Mode.ShelfMode,
+      description: '',
+      image: null,
+      color: null,
+      top: 0,
+      left: 0,
+      viewModeImage: false
+    };
+
+    component.onCardPressed(card);
+    expect(card.mode).toBe(<Mode>Mode.ShelfMode);
+  });
+
+  it('should change mode to IdleMode when onCardPressed is called and card was in SelectedMode', () => {
+    const card: CardInterface = {
+      mode: Mode.SelectedMode,
+      description: '',
+      image: null,
+      color: null,
+      top: 0,
+      left: 0,
+      viewModeImage: false
+    };
+
+    component.onCardPressed(card);
+    expect(card.mode).toBe(<Mode>Mode.IdleMode);
+  });
+
+  it('should change mode to IdleMode when onCardPressed is called and card was in EditMode', () => {
+    const card: CardInterface = {
+      mode: Mode.EditMode,
+      description: '',
+      image: null,
+      color: null,
+      top: 0,
+      left: 0,
+      viewModeImage: false
+    };
+
+    component.onCardPressed(card);
+    expect(card.mode).toBe(<Mode>Mode.IdleMode);
+  });
+
+  it('should change mode to SelectedMode when onCardPressed is called and card was not in ShelfMode, SelectedMode or EditMode', () => {
+    const card: CardInterface = {
+      mode: Mode.IdleMode,
+      description: '',
+      image: null,
+      color: null,
+      top: 0,
+      left: 0,
+      viewModeImage: false
+    };
+
+    component.onCardPressed(card);
+    expect(card.mode).toBe(<Mode>Mode.SelectedMode);
+  });
+
+  it('should remove image from a card when removeImageFromCard is called', () => {
+    const card: CardInterface = {
+      mode: Mode.IdleMode,
+      description: 'test',
+      image: null,
+      color: null,
+      top: 0,
+      left: 0,
+      viewModeImage: false
+    };
+
+    component.removeImageFromCard(card);
+
+    expect(card.image).toBeFalsy();
+  });
+
+  it('should set card mode to UploadMode when updateImageFromCard is called', () => {
+    const card: CardInterface = {
+      mode: Mode.IdleMode,
+      description: '',
+      image: null,
+      color: null,
+      top: 0,
+      left: 0,
+      viewModeImage: false
+    };
+
+    component.updateImageFromCard(card);
+    expect(card.mode).toBe(<Mode>Mode.UploadMode);
+  });
+
+  it('should set color of card when changeColorForCard is called', () => {
+    const card: CardInterface = {
+      mode: Mode.IdleMode,
+      description: '',
+      image: null,
+      color: null,
+      top: 0,
+      left: 0,
+      viewModeImage: false
+    };
+
+    component.changeColorForCard(card, 'black');
+    expect(card.color).toBe('black');
+  });
+
+  it('should set lastColor of whiteboard when changeColorForCard is called', () => {
+    const card: CardInterface = {
+      mode: Mode.IdleMode,
+      description: '',
+      image: null,
+      color: null,
+      top: 0,
+      left: 0,
+      viewModeImage: false
+    };
+
+    component.changeColorForCard(card, 'black');
+    expect(component.lastColor).toBe('black');
+  });
+
+  it('should set mode of card to IdleMode when changeColorForCard is called', () => {
+    const card: CardInterface = {
+      mode: Mode.SelectedMode,
+      description: '',
+      image: null,
+      color: null,
+      top: 0,
+      left: 0,
+      viewModeImage: false
+    };
+
+    component.changeColorForCard(card, 'black');
+    expect(card.mode).toBe(<Mode>Mode.IdleMode);
   });
 
   it('should set other cards to IdleMode when a card mode changes to SelectedMode', () => {
@@ -150,7 +462,7 @@ describe('WhiteboardComponent', () => {
 
     component.cards = [idleCard, selectedCard];
 
-    component.cardModeChanged(idleCard, Mode.SelectedMode);
+    component.onCardPressed(idleCard);
 
     expect(selectedCard.mode).toEqual(Mode.IdleMode);
   });
@@ -181,6 +493,149 @@ describe('WhiteboardComponent', () => {
     component.changeSelectedCardsColor('black');
 
     component.selectedCards.forEach(c => expect(c.color).toBe('black'));
+  });
+
+  it('should add card to selectedCards when onSelectCard is called', () => {
+    const card: CardInterface = {
+      mode: Mode.SelectedMode,
+      description: '',
+      image: null,
+      color: null,
+      top: 0,
+      left: 0,
+      viewModeImage: false
+    };
+
+    component.onSelectCard(card);
+
+    expect(component.selectedCards).toContain(card);
+  });
+
+  it('should set card mode to MultiSelectSelectedMode when onSelectCard is called', () => {
+    const card: CardInterface = {
+      mode: Mode.SelectedMode,
+      description: '',
+      image: null,
+      color: null,
+      top: 0,
+      left: 0,
+      viewModeImage: false
+    };
+
+    component.onSelectCard(card);
+
+    expect(card.mode).toBe(<Mode>Mode.MultiSelectSelectedMode);
+  });
+
+  it("should set all cards' mode to MultiSelectMode when onSelectCard is called", () => {
+    const card1: CardInterface = {
+      mode: Mode.SelectedMode,
+      description: '',
+      image: null,
+      color: null,
+      top: 0,
+      left: 0,
+      viewModeImage: false
+    };
+
+    const card2: CardInterface = {
+      mode: Mode.SelectedMode,
+      description: '',
+      image: null,
+      color: null,
+      top: 0,
+      left: 0,
+      viewModeImage: false
+    };
+
+    component.cards = [card1, card2];
+
+    component.onSelectCard(card1);
+
+    expect(card2.mode).toBe(<Mode>Mode.MultiSelectMode);
+  });
+
+  it('should add card to selectedCards when onSelectCard is called', () => {
+    const card: CardInterface = {
+      mode: Mode.SelectedMode,
+      description: '',
+      image: null,
+      color: null,
+      top: 0,
+      left: 0,
+      viewModeImage: false
+    };
+
+    component.onSelectCard(card);
+
+    expect(component.selectedCards).toContain(card);
+  });
+
+  it('should remove card from selectedCards when onDeselectCard is called', () => {
+    const card: CardInterface = {
+      mode: Mode.MultiSelectSelectedMode,
+      description: '',
+      image: null,
+      color: null,
+      top: 0,
+      left: 0,
+      viewModeImage: false
+    };
+
+    component.cards = [card];
+    component.selectedCards = [card];
+
+    component.onDeselectCard(card);
+
+    expect(component.selectedCards).not.toContain(card);
+  });
+
+  it('should set card mode to MultiSelectMode when onDeselectCard is called and another card is still selected', () => {
+    const card1: CardInterface = {
+      mode: Mode.MultiSelectSelectedMode,
+      description: '',
+      image: null,
+      color: null,
+      top: 0,
+      left: 0,
+      viewModeImage: false
+    };
+
+    const card2: CardInterface = {
+      mode: Mode.MultiSelectSelectedMode,
+      description: '',
+      image: null,
+      color: null,
+      top: 0,
+      left: 0,
+      viewModeImage: false
+    };
+
+    component.cards = [card1, card2];
+    component.selectedCards = [card1, card2];
+
+    component.onDeselectCard(card1);
+
+    expect(card1.mode).toBe(<Mode>Mode.MultiSelectMode);
+  });
+
+  it('should set card mode to Idle when onSelectCard is called and no other card is selected', () => {
+    const card: CardInterface = {
+      mode: Mode.MultiSelectSelectedMode,
+      description: '',
+      image: null,
+      color: null,
+      top: 0,
+      left: 0,
+      viewModeImage: false
+    };
+
+    component.cards = [card];
+    component.selectedCards = [card];
+
+    component.onDeselectCard(card);
+
+    expect(card.mode).toBe(<Mode>Mode.IdleMode);
   });
 
   it('should set selected card to IdleMode when whiteboard is clicked', () => {
