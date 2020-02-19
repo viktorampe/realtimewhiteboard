@@ -22,6 +22,7 @@ import {
 } from '@campus/search';
 import {
   EduContentSearchResultFixture,
+  EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN,
   EnvironmentSearchModesInterface,
   ENVIRONMENT_SEARCHMODES_TOKEN,
   OpenStaticContentServiceInterface,
@@ -116,6 +117,10 @@ describe('GlobalSearchViewModel', () => {
         {
           provide: SCORM_EXERCISE_SERVICE_TOKEN,
           useValue: { previewExerciseFromUnlockedContent: jest.fn() }
+        },
+        {
+          provide: EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN,
+          useValue: { manageTasksForContent: jest.fn() }
         }
       ]
     });
