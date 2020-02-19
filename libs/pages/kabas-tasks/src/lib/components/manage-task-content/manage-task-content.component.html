@@ -47,7 +47,7 @@
       class="manage-task-content__main__sidesheet"
       *ngIf="task$ | async as task"
       >Insert sidesheet here...
-
+      <campus-button (click)="clickDone()" primary>Klaar</campus-button>
       <mat-list
         #currentContentList
         *ngIf="
