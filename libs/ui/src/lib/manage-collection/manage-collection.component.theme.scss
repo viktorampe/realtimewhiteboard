@@ -4,14 +4,16 @@
   $ui-manage-collection-list_filter-font-size: $ui-primary-font-size !default;
   $ui-manage-collection-list_recent-item-color: $ui-form-button-primary-bg-color !default;
   $ui-manage-collection-list__no-results-padding: 24px !default;
-  $light-gray: #d2d2d2;
-  $dark-gray: #808080;
-  $black: #242424;
-  $title-color: $black;
-  $title-font-size: 21pt;
-  $title-font-weight: 600;
-  $body-2-font-size: 14pt;
-  $body-2-font-weight: 600;
+
+  $ui-manage-collection__header-font-family: $ui-primary-font-family-4 !default;
+  $ui-manage-collection__header-title-color: $ui-black !default;
+  $ui-manage-collection__header-title-font-size: $ui-title-font-size !default;
+  $ui-manage-collection__header-title-font-weight: $ui-title-font-weight !default;
+  $ui-manage-collection__header-subtitle-color: $ui-dark-gray !default;
+  $ui-manage-collection__header-subtitle-font-size: $ui-body-2-font-size !default;
+  $ui-manage-collection__header-subtitle-font-weight: $ui-body-2-font-weight !default;
+  $ui-manage-collection__header-icon-color: $ui-dark-gray !default;
+  $ui-manage-collection__header-divider-color: $ui-light-gray !default;
 
   .ui-manage-collection {
     &__no-results {
@@ -79,27 +81,27 @@
     &__header {
       display: flex;
       flex-direction: column;
-
+      font-family: $ui-manage-collection__header-font-family;
       &__row {
         .title {
-          color: $black;
-          font-size: $title-font-size;
-          font-weight: $title-font-weight;
+          color: $ui-manage-collection__header-title-color;
+          font-size: $ui-manage-collection__header-title-font-size;
+          font-weight: $ui-manage-collection__header-title-font-weight;
         }
         .subtitle {
           // body 2
-          color: $dark-gray;
-          font-size: $body-2-font-size;
-          font-weight: $body-2-font-weight;
+          color: $ui-manage-collection__header-subtitle-color;
+          font-size: $ui-manage-collection__header-subtitle-font-size;
+          font-weight: $ui-manage-collection__header-subtitle-font-weight;
         }
 
         mat-icon {
-          color: $dark-gray;
+          color: $ui-manage-collection__header-icon-color;
         }
       }
     }
     &__divider {
-      color: $light-gray;
+      color: $ui-manage-collection__header-divider-color;
     }
   }
 }
