@@ -89,7 +89,8 @@ describe('CollectionManagerService', () => {
           linkedItemIds: mockData.linkedItemIds,
           recentItemIds: mockData.recentItemIds
         },
-        panelClass: 'ui-manage-collection__dialog'
+        panelClass: 'ui-manage-collection__dialog',
+        position: {}
       });
     });
 
