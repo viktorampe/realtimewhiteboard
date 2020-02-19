@@ -15,7 +15,6 @@ import {
   LearningAreaQueries,
   LinkedPersonActions,
   LinkedPersonQueries,
-  MethodQueries,
   StateResolver,
   TaskActions,
   TaskClassGroupActions,
@@ -30,16 +29,12 @@ import {
   YearActions,
   YearQueries
 } from '@campus/dal';
-import { Action, select, Selector, Store } from '@ngrx/store';
-import { take } from 'rxjs/operators';
+import { Action, Selector, Store } from '@ngrx/store';
 
 @Injectable({
   providedIn: 'root'
 })
 export class KabasTasksResolver extends StateResolver {
-  private booksLoaded = false;
-  private methodsLoaded = false;
-
   constructor(
     private store: Store<DalState>,
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface
@@ -49,51 +44,23 @@ export class KabasTasksResolver extends StateResolver {
   protected getLoadableActions(): Action[] {
     const userId = this.authService.userId;
 
-    let methodIds: number[];
-    this.store
-      .pipe(select(MethodQueries.getAllowedMethodIds), take(1))
-      .subscribe(ids => {
-        methodIds = ids;
-        this.methodsLoaded = !!methodIds.length;
-      }); // methodsIds resolved in app resolver
-
     return [
       new LearningAreaActions.LoadLearningAreas(),
       new TaskActions.LoadTasks({ userId }),
-      new GroupActions.LoadGroups({
-        userId
-      }),
-      new ClassGroupActions.LoadClassGroups({
-        userId
-      }),
-      new LinkedPersonActions.LoadLinkedPersons({
-        userId
-      }),
-      TaskClassGroupActions.loadTaskClassGroups(this.authService.userId),
-      TaskGroupActions.loadTaskGroups(this.authService.userId),
-      TaskStudentActions.loadTaskStudents(this.authService.userId),
-      new TaskEduContentActions.LoadTaskEduContents({
-        userId
-      }),
-      new EduContentActions.LoadEduContents({
-        userId
-      }),
-      new YearActions.LoadYears({
-        userId
-      }),
-      // TODO: remove `force: true`
-      // It was added to make sure methods get loaded, even though they are already resolved through the PendingTaskGuard
-      // The problem is that PendingTaskGuard does not wait for the appResolver to complete, so it loads for an empty array of methodIds
-      new EduContentBookActions.LoadEduContentBooks({
-        userId,
-        force: this.methodsLoaded && !this.booksLoaded
-      })
+      new GroupActions.LoadGroups({ userId }),
+      new ClassGroupActions.LoadClassGroups({ userId }),
+      new LinkedPersonActions.LoadLinkedPersons({ userId }),
+      TaskClassGroupActions.loadTaskClassGroups(userId),
+      TaskGroupActions.loadTaskGroups(userId),
+      TaskStudentActions.loadTaskStudents(userId),
+      new TaskEduContentActions.LoadTaskEduContents({ userId }),
+      new EduContentActions.LoadEduContents({ userId }),
+      new YearActions.LoadYears({ userId }),
+      new EduContentBookActions.LoadEduContentBooks({ userId })
     ];
   }
 
   protected getResolvedQueries(): Selector<object, boolean>[] {
-    this.booksLoaded = this.methodsLoaded;
-
     return [
       LearningAreaQueries.getLoaded,
       TaskQueries.getLoaded,
