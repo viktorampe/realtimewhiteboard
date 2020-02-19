@@ -19,6 +19,7 @@ import {
   SearchStateInterface
 } from '@campus/search';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { map, take } from 'rxjs/operators';
 import { TaskEduContentWithEduContentInterface } from '../../interfaces/TaskEduContentWithEduContent.interface';
 import { TaskWithAssigneesInterface } from '../../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
@@ -88,7 +89,16 @@ export class ManageTaskContentComponent
     this.viewModel.updateTaskEduContentsOrder(taskEduContents);
   }
 
-  public clickDone() {}
+  public clickDone() {
+    this.task$
+      .pipe(
+        take(1),
+        map(task => task.id)
+      )
+      .subscribe(taskId => {
+        this.router.navigate(['tasks', 'manage', taskId]);
+      });
+  }
 
   addEduContentToTask(eduContent: EduContent, index?: number) {
     this.viewModel.addEduContentToTask(eduContent, index);

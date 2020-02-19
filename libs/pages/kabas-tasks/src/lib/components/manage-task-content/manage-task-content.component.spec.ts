@@ -201,4 +201,15 @@ describe('ManageTaskContentComponent', () => {
       });
     });
   });
+
+  describe('clickDone', () => {
+    it('should navigate to the task detail when clickDone is called', () => {
+      component.clickDone();
+      expect(router.navigate).toHaveBeenCalledWith([
+        'tasks',
+        'manage',
+        currentTask.id
+      ]);
+    });
+  });
 });
