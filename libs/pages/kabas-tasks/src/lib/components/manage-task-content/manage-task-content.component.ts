@@ -19,6 +19,7 @@ import {
   SearchStateInterface
 } from '@campus/search';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { filter, map, switchMapTo, take } from 'rxjs/operators';
 import { TaskEduContentWithEduContentInterface } from '../../interfaces/TaskEduContentWithEduContent.interface';
 import { TaskWithAssigneesInterface } from '../../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
@@ -55,6 +56,24 @@ export class ManageTaskContentComponent
   manageTaskContentClass = true;
 
   ngOnInit() {
+    // redirect to favorite
+    this.viewModel.currentTaskParams$
+      .pipe(
+        filter(params => !params.book),
+        switchMapTo(this.viewModel.favoriteBookIdsForTask$),
+        take(1)
+      )
+      .subscribe((favoriteBookIds: number[]) => {
+        if (favoriteBookIds.length === 1) {
+          this.router.navigate([this.router.url], {
+            queryParams: { book: favoriteBookIds[0] }
+          });
+        }
+      });
+
+    this.currentContent$ = this.viewModel.currentTask$.pipe(
+      map(task => task.taskEduContents)
+    );
     this.task$ = this.viewModel.currentTask$;
     this.selectedBookTitle$ = this.viewModel.selectedBookTitle$;
 

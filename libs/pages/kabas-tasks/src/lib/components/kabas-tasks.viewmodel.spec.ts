@@ -4,6 +4,7 @@ import {
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
   DalState,
+  EduContentActions,
   EduContentBookFixture,
   EduContentFixture,
   EduContentMetadataFixture,
@@ -59,7 +60,11 @@ import {
   TaskWithAssigneesInterface
 } from '../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from './kabas-tasks.viewmodel';
-import { getTaskWithAssignmentAndEduContents } from './kabas-tasks.viewmodel.selectors';
+import * as vmSelectors from './kabas-tasks.viewmodel.selectors';
+import {
+  getTaskFavoriteBookIds,
+  getTaskWithAssignmentAndEduContents
+} from './kabas-tasks.viewmodel.selectors';
 
 describe('KabasTaskViewModel', () => {
   const dateMock = new MockDate();
@@ -1220,6 +1225,7 @@ describe('KabasTaskViewModel', () => {
       });
     });
   });
+
   describe('eduContentToTask', () => {
     const currentTaskParams = { id: 1 };
     const expectedTask = {
@@ -1230,6 +1236,7 @@ describe('KabasTaskViewModel', () => {
         new TaskEduContentFixture({ id: 1, eduContentId: 1 }) // this eduContent should be included
       ]
     };
+
     beforeEach(() => {
       store.overrideSelector(getRouterState, {
         navigationId: 1,
@@ -1261,12 +1268,26 @@ describe('KabasTaskViewModel', () => {
         );
       });
     });
+
     describe('addEduContentToTask', () => {
-      const eduContent = new EduContentFixture();
+      const eduContent = new EduContentFixture({
+        minimal: {
+          type: EduContentTypeEnum.EXERCISE
+        }
+      });
+
       it('should add eduContent to task', () => {
-        const spy = jest.spyOn(kabasTasksViewModel, 'addTaskEduContents');
+        jest.spyOn(kabasTasksViewModel, 'addTaskEduContents');
+        jest.spyOn(store, 'dispatch');
+
         kabasTasksViewModel.addEduContentToTask(eduContent);
-        expect(spy).toHaveBeenCalledWith([
+
+        expect(store.dispatch).toHaveBeenCalledWith(
+          new EduContentActions.UpsertEduContent({
+            eduContent: eduContent.minimal
+          })
+        );
+        expect(kabasTasksViewModel.addTaskEduContents).toHaveBeenCalledWith([
           { taskId: 1, eduContentId: eduContent.id }
         ]);
       });
@@ -1300,6 +1321,7 @@ describe('KabasTaskViewModel', () => {
       it('should remove eduContent from task', () => {
         const spy = jest.spyOn(kabasTasksViewModel, 'deleteTaskEduContents');
         kabasTasksViewModel.removeEduContentFromTask(eduContent);
+
         expect(spy).toHaveBeenCalledWith([eduContent.id]);
       });
     });
@@ -1425,6 +1447,32 @@ describe('KabasTaskViewModel', () => {
         hot('a', {
           a: [chapterTocs[0], ...lessonTocs, chapterTocs[1]]
         })
+      );
+    });
+  });
+  describe('favoriteBookIdsForTask$', () => {
+    const expectedBookIds: number[] = [1, 2];
+    beforeEach(() => {
+      store.overrideSelector(getRouterState, {
+        navigationId: 1,
+        state: {
+          url: '',
+          params: { id: 123 },
+          queryParams: {}
+        }
+      });
+      store.overrideSelector(getTaskFavoriteBookIds, expectedBookIds);
+      jest.spyOn(vmSelectors, 'getTaskFavoriteBookIds');
+    });
+    it('should return the favorite books for the task', () => {
+      expect(kabasTasksViewModel.favoriteBookIdsForTask$).toBeObservable(
+        hot('a', {
+          a: expectedBookIds
+        })
+      );
+      expect(vmSelectors.getTaskFavoriteBookIds).toHaveBeenCalledWith(
+        {},
+        { taskId: 123 }
       );
     });
   });
