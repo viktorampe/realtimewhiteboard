@@ -17,6 +17,10 @@ export class WhiteboardComponent implements OnInit {
       titleInput.nativeElement.focus();
     }
   }
+
+  readonly multipleCardCreationOffset = 50;
+  readonly allowedFileTypes = ['image/jpeg', 'image/pjpeg', 'image/png'];
+
   cards: CardInterface[] = [];
   shelvedCards: CardInterface[] = [];
   selectedCards: CardInterface[] = [];
@@ -57,12 +61,16 @@ export class WhiteboardComponent implements OnInit {
     return whiteboard;
   }
 
-  addEmptyCard(top: number = 0, left: number = 0) {
+  addEmptyCard(
+    top: number = 0,
+    left: number = 0,
+    image: string = ''
+  ): CardInterface {
     const card = {
       mode: Mode.IdleMode,
       color: this.lastColor,
       description: '',
-      image: '',
+      image: image,
       top: top,
       left: left
     };
@@ -71,6 +79,8 @@ export class WhiteboardComponent implements OnInit {
     if (this.selectedCards.length) {
       card.mode = Mode.MultiSelectMode;
     }
+
+    return card;
   }
 
   addCardToShelf(card: CardInterface) {
@@ -156,6 +166,46 @@ export class WhiteboardComponent implements OnInit {
     const cardPosition = event.source.getFreeDragPosition();
     card.top = cardPosition.y;
     card.left = cardPosition.x;
+  }
+
+  onFilesDropped(event) {
+    const images = event.dataTransfer.files;
+    const { offsetX: x, offsetY: y } = event;
+
+    for (let i = 0; i < images.length; i++) {
+      if (!this.allowedFileTypes.includes(images[i].type)) {
+        continue;
+      }
+
+      const offsetX = x + i * this.multipleCardCreationOffset;
+      const offsetY = y + i * this.multipleCardCreationOffset;
+
+      this.readImageAndCreateCard(offsetX, offsetY, images[i]);
+    }
+  }
+
+  private readImageAndCreateCard(x: number, y: number, image: File) {
+    const reader = new FileReader();
+
+    reader.onloadend = e => {
+      this.addNewCardAfterImageUpload(x, y, reader.result.toString());
+    };
+
+    reader.readAsDataURL(image);
+  }
+
+  private addNewCardAfterImageUpload(
+    offsetX: number,
+    offsetY: number,
+    image: string
+  ) {
+    const card = this.addEmptyCard(offsetY, offsetX, image);
+
+    card.mode = Mode.UploadMode;
+
+    setTimeout(() => {
+      card.mode = Mode.IdleMode;
+    }, 500);
   }
 
   onClickWhiteboard() {
