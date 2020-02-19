@@ -40,9 +40,7 @@ export class CollectionManagerService
 
     // const dialogRef = this.openDialog(dialogData);
     const dialogRef = this.openDialog({
-      ...dialogData,
-      useFilter: true,
-      asModalSideSheet: true
+      ...dialogData
     });
 
     // listen to component and bubble itemToggledInCollectionEvent
