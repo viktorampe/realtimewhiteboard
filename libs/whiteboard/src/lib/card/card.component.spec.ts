@@ -65,13 +65,15 @@ describe('CardComponent', () => {
       image: null,
       mode: Mode.IdleMode,
       top: 0,
-      left: 0
+      left: 0,
+      viewModeImage: true
     };
 
     component.color = mockData.color;
     component.description = mockData.description;
     component.image = mockData.image;
     component.mode = mockData.mode;
+    component.viewModeImage = mockData.viewModeImage;
 
     fixture.detectChanges();
   });
@@ -81,35 +83,8 @@ describe('CardComponent', () => {
   });
 
   it("should replace card's image when replaceImage gets called", () => {
-    component.updateImage('test-image');
+    component.emitUpdateImage('test-image');
     expect(component.image).toBe('test-image');
-  });
-
-  it('should set mode to EditMode when setEditMode gets called', () => {
-    component.mode = <Mode>Mode.SelectedMode;
-    component.setEditMode();
-
-    fixture.detectChanges();
-
-    expect(component.mode).toBe(Mode.EditMode);
-  });
-
-  it('should emit modeChange emitter when setEditMode gets called', () => {
-    spyOn(component.modeChange, 'emit');
-    component.setEditMode();
-    expect(component.modeChange.emit).toHaveBeenCalled();
-  });
-
-  it('should emit modeChange emitter when setSelectedMode gets called', () => {
-    spyOn(component.modeChange, 'emit');
-    component.setSelectedMode();
-    expect(component.modeChange.emit).toHaveBeenCalled();
-  });
-
-  it('should emit modeChange emitter when setIdleMode gets called', () => {
-    spyOn(component.modeChange, 'emit');
-    component.setIdleMode();
-    expect(component.modeChange.emit).toHaveBeenCalled();
   });
 
   it('should set mode to IdleMode when pressCard gets called and starting from SelectedMode', () => {
@@ -122,12 +97,6 @@ describe('CardComponent', () => {
     component.mode = <Mode>Mode.EditMode;
     component.pressCard();
     expect(component.mode).toBe(Mode.IdleMode);
-  });
-
-  it('should set mode to SelectedMode when setSelectedMode gets called', () => {
-    component.mode = <Mode>Mode.IdleMode;
-    component.setSelectedMode();
-    expect(component.mode).toBe(Mode.SelectedMode);
   });
 
   it('should toggle to viewModeImage when toggle icon is clicked and starting from viewModeText', () => {
