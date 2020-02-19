@@ -89,49 +89,37 @@ describe('CardComponent', () => {
 
   it('should set mode to IdleMode when pressCard gets called and starting from SelectedMode', () => {
     component.mode = <Mode>Mode.SelectedMode;
-    component.pressCard();
+    component.onPressCard();
     expect(component.mode).toBe(Mode.IdleMode);
   });
 
   it('should set mode to IdleMode when pressCard gets called and starting from EditMode', () => {
     component.mode = <Mode>Mode.EditMode;
-    component.pressCard();
+    component.onPressCard();
     expect(component.mode).toBe(Mode.IdleMode);
-  });
-
-  it('should toggle to viewModeImage when toggle icon is clicked and starting from viewModeText', () => {
-    component.viewModeImage = false;
-    component.toggleViewModeImage();
-    expect(component.viewModeImage).toBe(true);
-  });
-
-  it('should toggle to viewModeText when toggle icon is clicked and starting from viewModeImage', () => {
-    component.viewModeImage = true;
-    component.toggleViewModeImage();
-    expect(component.viewModeImage).toBe(false);
   });
 
   it('should set mode to IdleMode when a color is clicked from the colorlist from SelectedMode', () => {
     component.mode = <Mode>Mode.SelectedMode;
-    component.emitSelectColor('white');
+    component.selectColor('white');
     expect(component.mode).toBe(Mode.IdleMode);
   });
 
   it('should set mode to IdleMode when a color is clicked from the colorlist from EditMode', () => {
     component.mode = <Mode>Mode.EditMode;
-    component.emitSelectColor('white');
+    component.selectColor('white');
     expect(component.mode).toBe(Mode.IdleMode);
   });
 
   it('should change the cardcolor when a color is picked', () => {
     component.mode = Mode.SelectedMode;
-    component.emitSelectColor('black');
+    component.selectColor('black');
     expect(component.color).toBe('black');
   });
 
   it('should emit the right color when a cardcolor is picked', () => {
     spyOn(component.colorChange, 'emit');
-    component.emitSelectColor('black');
+    component.selectColor('black');
     expect(component.colorChange.emit).toHaveBeenCalledWith('black');
   });
 

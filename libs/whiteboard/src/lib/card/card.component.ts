@@ -20,9 +20,9 @@ export class CardComponent {
   @Output() cardPressed = new EventEmitter<void>();
   @Output() removeImage = new EventEmitter<void>();
   @Output() updateImage = new EventEmitter<string>();
-  @Output() editIconClicked = new EventEmitter<void>();
-  @Output() confirmIconClicked = new EventEmitter<void>();
-  @Output() flipIconClicked = new EventEmitter<void>();
+  @Output() edit = new EventEmitter<void>();
+  @Output() confirm = new EventEmitter<void>();
+  @Output() flip = new EventEmitter<void>();
 
   @Output() modeChange = new EventEmitter<Mode>();
   @Output() colorChange = new EventEmitter<string>();
@@ -36,14 +36,14 @@ export class CardComponent {
     return Mode;
   }
 
-  pressCard() {
-    this.cardPressed.emit();
-  }
-
   onClickCard(event: MouseEvent) {
     if (this.mode !== Mode.IdleMode) {
       event.stopPropagation();
     }
+  }
+
+  onPressCard() {
+    this.cardPressed.emit();
   }
 
   onTapCard() {
@@ -56,11 +56,6 @@ export class CardComponent {
 
   emitUpdateImage(url: string) {
     this.updateImage.emit(url);
-  }
-
-  setIdleMode() {
-    this.mode = Mode.IdleMode;
-    this.modeChange.emit(this.mode);
   }
 
   setMultiSelectSelectedMode() {
@@ -76,26 +71,22 @@ export class CardComponent {
   }
 
   emitEditIcon() {
-    this.editIconClicked.emit();
+    this.edit.emit();
   }
 
   emitConfirmIcon() {
-    this.confirmIconClicked.emit();
+    this.confirm.emit();
   }
 
   emitFlipIcon() {
-    this.flipIconClicked.emit();
+    this.flip.emit();
   }
 
-  emitSelectColor(color: string) {
+  selectColor(color: string) {
     this.colorChange.emit(color);
   }
 
   onDescriptionChange(description: string) {
     this.descriptionChange.emit(description);
-  }
-
-  toggleViewModeImage() {
-    this.viewModeImage = !this.viewModeImage;
   }
 }

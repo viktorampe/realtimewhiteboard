@@ -3,12 +3,12 @@
   [class.zoom]="mode === Mode.ZoomMode"
   [style.border-color]="color"
   (click)="onClickCard($event)"
+  (press)="onPressCard()"
   (tap)="onTapCard()"
-  (press)="pressCard()"
 >
   <campus-color-list
     class="card__color-list"
-    (selectedColor)="emitSelectColor($event)"
+    (selectedColor)="selectColor($event)"
     *ngIf="mode === Mode.EditMode || mode === Mode.SelectedMode"
   ></campus-color-list>
   <campus-card-toolbar
