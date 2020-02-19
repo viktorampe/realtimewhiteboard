@@ -7,9 +7,11 @@ import {
   ClassGroupQueries,
   DalState,
   EduContent,
+  EduContentActions,
   EduContentBookInterface,
   EduContentInterface,
   EduContentServiceInterface,
+  EduContentTocActions,
   EduContentTOCInterface,
   EduContentTocQueries,
   EDU_CONTENT_SERVICE_TOKEN,
@@ -65,7 +67,9 @@ import {
   mapTo,
   shareReplay,
   switchMap,
+  switchMapTo,
   take,
+  tap,
   withLatestFrom
 } from 'rxjs/operators';
 import { AssigneeTypesEnum } from '../interfaces/Assignee.interface';
@@ -76,6 +80,7 @@ import {
 import { AssigneeInterface } from './../interfaces/Assignee.interface';
 import {
   allowedLearningAreas,
+  getTaskFavoriteBookIds,
   getTasksWithAssignmentsByType,
   getTaskWithAssignmentAndEduContents
 } from './kabas-tasks.viewmodel.selectors';
@@ -105,6 +110,7 @@ export class KabasTasksViewModel
   public groups$: Observable<GroupInterface[]>;
   public students$: Observable<PersonInterface[]>;
   public searchBook$ = new BehaviorSubject<EduContentBookInterface>(null);
+  public favoriteBookIdsForTask$: Observable<number[]>;
   public selectedBookTitle$: Observable<string>;
   public currentToc$: Observable<EduContentTOCInterface[]>;
 
@@ -174,6 +180,7 @@ export class KabasTasksViewModel
 
     this._searchState$ = new BehaviorSubject<SearchStateInterface>(null);
     this.searchState$ = this._searchState$;
+    this.favoriteBookIdsForTask$ = this.getFavoriteBookIdsForCurrentTask();
     this.currentToc$ = this.getTocsStream();
 
     this.setupSearchResults();
@@ -228,6 +235,12 @@ export class KabasTasksViewModel
   }
 
   addEduContentToTask(eduContent: EduContent, index?: number): void {
+    this.store.dispatch(
+      new EduContentActions.UpsertEduContent({
+        eduContent: eduContent.minimal
+      })
+    );
+
     this.currentTask$
       .pipe(
         take(1),
@@ -707,15 +720,33 @@ export class KabasTasksViewModel
   }
 
   private getTocsStream(): Observable<EduContentTOCInterface[]> {
-    const tocStreamWhenLessonChapter$ = this.currentTaskParams$.pipe(
+    const loadTocsForBook$ = this.currentTaskParams$.pipe(
+      filter(params => !!params.book),
+      tap(params => {
+        this.store.dispatch(
+          new EduContentTocActions.LoadEduContentTocsForBook({
+            bookId: params.book
+          })
+        );
+      }),
+      switchMap(params =>
+        this.store.select(EduContentTocQueries.isBookLoaded, {
+          bookId: params.book
+        })
+      ),
+      filter(bookLoaded => bookLoaded),
+      switchMapTo(this.currentTaskParams$)
+    );
+
+    const tocStreamWhenLessonChapter$ = loadTocsForBook$.pipe(
       filter(params => !!params.chapter),
       switchMap(params =>
         this.combineChaptersLessons(params.book, params.chapter)
       )
     );
 
-    const tocStreamWhenBook$ = this.currentTaskParams$.pipe(
-      filter(params => !!params.book && !params.chapter),
+    const tocStreamWhenBook$ = loadTocsForBook$.pipe(
+      filter(params => !params.chapter),
       switchMap(params => {
         return this.store.pipe(
           select(EduContentTocQueries.getChaptersForBook, {
@@ -761,6 +792,15 @@ export class KabasTasksViewModel
         chapters.splice(foundIndex + 1, 0, ...lessons);
         return chapters;
       })
+    );
+  }
+
+  private getFavoriteBookIdsForCurrentTask(): Observable<number[]> {
+    return this.currentTaskParams$.pipe(
+      filter(params => !!params.id),
+      switchMap(params =>
+        this.store.pipe(select(getTaskFavoriteBookIds, { taskId: params.id }))
+      )
     );
   }
 

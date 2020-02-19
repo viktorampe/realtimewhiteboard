@@ -4,6 +4,8 @@ import {
   ClassGroupInterface,
   EduContentBookInterface,
   EduContentFixture,
+  EduContentTOCFixture,
+  EduContentTOCInterface,
   GroupFixture,
   GroupInterface,
   LearningAreaFixture,
@@ -26,7 +28,7 @@ import {
 } from '@campus/shared';
 import { ViewModelInterface } from '@campus/testing';
 import { BehaviorSubject, Observable, of } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 import {
   AssigneeInterface,
   AssigneeTypesEnum
@@ -56,6 +58,7 @@ export class MockKabasTasksViewModel
     TaskWithAssigneesInterface[]
   >;
   public currentTask$: Observable<TaskWithAssigneesInterface>;
+  public currentToc$: Observable<EduContentTOCInterface[]>;
   public currentTaskParams$: BehaviorSubject<CurrentTaskParams>;
   public selectableLearningAreas$: BehaviorSubject<LearningAreaInterface[]>;
   public classGroups$: BehaviorSubject<ClassGroupInterface[]>;
@@ -63,6 +66,8 @@ export class MockKabasTasksViewModel
   public students$: BehaviorSubject<PersonInterface[]>;
 
   public searchBook$: BehaviorSubject<EduContentBookInterface>;
+  public favoriteBookIdsForTask$: Observable<number[]>;
+  public selectedBookTitle$: Observable<string>;
 
   constructor(
     @Inject(ENVIRONMENT_SEARCHMODES_TOKEN)
@@ -124,6 +129,82 @@ export class MockKabasTasksViewModel
       new PersonFixture({ id: 1, displayName: 'leerling 1' }),
       new PersonFixture({ id: 2, displayName: 'leerling 2' }),
       new PersonFixture({ id: 3, displayName: 'leerling 3' })
+    ]);
+
+    this.currentToc$ = this.getCurrentToc();
+    this.favoriteBookIdsForTask$ = new BehaviorSubject([1]);
+    this.selectedBookTitle$ = new BehaviorSubject('foo 1');
+  }
+
+  public getCurrentToc() {
+    const bookId = 1;
+    const chapterTocs = [
+      new EduContentTOCFixture({
+        id: 1,
+        treeId: bookId,
+        title: 'Chapter 1',
+        depth: 0,
+        lft: 1,
+        rgt: 6,
+        learningPlanGoalIds: [1, 2, 3]
+      }),
+      new EduContentTOCFixture({
+        id: 2,
+        treeId: bookId,
+        title: 'Chapter 2',
+        depth: 0,
+        lft: 7,
+        rgt: 12,
+        learningPlanGoalIds: [1, 2, 3, 4]
+      })
+    ];
+
+    const lessonTocs = [
+      new EduContentTOCFixture({
+        id: 3,
+        treeId: bookId,
+        title: 'Lesson 1',
+        depth: 1,
+        lft: 2,
+        rgt: 3,
+        learningPlanGoalIds: [1, 2]
+      }),
+      new EduContentTOCFixture({
+        id: 4,
+        treeId: bookId,
+        title: 'Lesson 2',
+        depth: 1,
+        lft: 4,
+        rgt: 5,
+        learningPlanGoalIds: [2, 3, 4]
+      }),
+      new EduContentTOCFixture({
+        id: 4,
+        treeId: bookId,
+        title: 'Lesson 3',
+        depth: 1,
+        lft: 8,
+        rgt: 9,
+        learningPlanGoalIds: [1, 2]
+      }),
+      new EduContentTOCFixture({
+        id: 5,
+        treeId: bookId,
+        title: 'Lesson 4',
+        depth: 1,
+        lft: 10,
+        rgt: 11,
+        learningPlanGoalIds: [2, 3, 4]
+      })
+    ];
+
+    return new BehaviorSubject<EduContentTOCInterface[]>([
+      chapterTocs[0],
+      lessonTocs[0],
+      lessonTocs[1],
+      chapterTocs[1],
+      lessonTocs[2],
+      lessonTocs[3]
     ]);
   }
 
@@ -375,7 +456,10 @@ export class MockKabasTasksViewModel
   ) {}
 
   private getCurrentTask(): Observable<TaskWithAssigneesInterface> {
-    return this.tasksWithAssignments$.pipe(map(tasks => tasks[0]));
+    return this.tasksWithAssignments$.pipe(
+      filter(tasks => tasks.length > 0),
+      map(tasks => tasks[0])
+    );
   }
 
   public updateTaskEduContent(
