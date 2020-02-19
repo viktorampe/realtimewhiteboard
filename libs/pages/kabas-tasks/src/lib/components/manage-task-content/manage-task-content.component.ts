@@ -1,12 +1,15 @@
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import {
   AfterViewInit,
   Component,
   HostBinding,
+  OnDestroy,
   OnInit,
   QueryList,
   ViewChild,
   ViewChildren
 } from '@angular/core';
+import { Params, Router } from '@angular/router';
 import { EduContent, EduContentTOCInterface } from '@campus/dal';
 import {
   SearchComponent,
@@ -15,7 +18,8 @@ import {
   SearchResultInterface,
   SearchStateInterface
 } from '@campus/search';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { TaskEduContentWithEduContentInterface } from '../../interfaces/TaskEduContentWithEduContent.interface';
 import { TaskWithAssigneesInterface } from '../../interfaces/TaskWithAssignees.interface';
 import {
   CurrentTaskParams,
@@ -27,7 +31,12 @@ import {
   templateUrl: './manage-task-content.component.html',
   styleUrls: ['./manage-task-content.component.scss']
 })
-export class ManageTaskContentComponent implements OnInit, AfterViewInit {
+export class ManageTaskContentComponent
+  implements OnInit, AfterViewInit, OnDestroy {
+  public currentContent$: Observable<TaskEduContentWithEduContentInterface[]>;
+  public reorderableTaskEduContents$ = new BehaviorSubject<
+    TaskEduContentWithEduContentInterface[]
+  >([]);
   public task$: Observable<TaskWithAssigneesInterface>;
 
   public searchMode$: Observable<SearchModeInterface>;
@@ -42,8 +51,9 @@ export class ManageTaskContentComponent implements OnInit, AfterViewInit {
   private portalHosts: QueryList<SearchPortalDirective>;
   @ViewChild(SearchComponent, { static: true })
   public searchComponent: SearchComponent;
+  private subscriptions = new Subscription();
 
-  constructor(private viewModel: KabasTasksViewModel) {}
+  constructor(private viewModel: KabasTasksViewModel, private router: Router) {}
 
   @HostBinding('class.manage-task-content')
   manageTaskContentClass = true;
@@ -58,10 +68,31 @@ export class ManageTaskContentComponent implements OnInit, AfterViewInit {
 
     this.currentToc$ = this.viewModel.currentToc$;
     this.currentTaskParams$ = this.viewModel.currentTaskParams$;
+    this.subscriptions.add(
+      this.task$.subscribe(task => {
+        this.reorderableTaskEduContents$.next([...task.taskEduContents]);
+      })
+    );
   }
 
   ngAfterViewInit() {
     this.searchComponent.searchPortals = this.portalHosts;
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
+  }
+
+  public dropTaskEduContent(
+    taskEduContents: TaskEduContentWithEduContentInterface[],
+    event: CdkDragDrop<TaskEduContentWithEduContentInterface[]>
+  ) {
+    if (event.previousIndex === event.currentIndex) {
+      return;
+    }
+
+    moveItemInArray(taskEduContents, event.previousIndex, event.currentIndex);
+    this.viewModel.updateTaskEduContentsOrder(taskEduContents);
   }
 
   public clickDone() {}
@@ -71,8 +102,17 @@ export class ManageTaskContentComponent implements OnInit, AfterViewInit {
   }
 
   selectTOC(tocId: number, depth: number) {
-    // TODO: implement
-    throw new Error('Not yet implemented');
+    const queryParams: Params = {};
+    switch (depth) {
+      case 0:
+        queryParams.chapter = tocId;
+        queryParams.lesson = undefined;
+        break;
+      case 1:
+        queryParams.lesson = tocId;
+        break;
+    }
+    this.router.navigate([], { queryParams, queryParamsHandling: 'merge' });
   }
 
   removeEduContentFromTask(eduContent: EduContent) {

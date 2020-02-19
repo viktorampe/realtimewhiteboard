@@ -97,6 +97,10 @@
           &--on-hover {
             opacity: 0;
           }
+
+          &--handle {
+            cursor: move;
+          }
         }
 
         &__content {
@@ -125,8 +129,6 @@
         }
 
         &.cdk-drag {
-          cursor: move;
-
           &-preview {
             background-color: $manage-task-content__list__drag--dragging-background-color;
             box-sizing: border-box;
