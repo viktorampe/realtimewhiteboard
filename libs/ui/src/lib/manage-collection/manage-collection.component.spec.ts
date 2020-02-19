@@ -262,6 +262,37 @@ describe('ManageCollectionComponent', () => {
         });
       });
 
+      describe('when useFilter === false', () => {
+        beforeEach(() => {
+          component.useFilter = false;
+          fixture.detectChanges();
+        });
+
+        it('should not use a filter', () => {
+          const filterTextInputDE = fixture.debugElement.query(
+            By.directive(FilterTextInputComponent)
+          );
+          expect(filterTextInputDE).toBeFalsy();
+        });
+      });
+
+      describe('no items in collection', () => {
+        beforeEach(() => {
+          component.linkableItems = [];
+          component.data.collectionType = 'foo collection';
+          fixture.detectChanges();
+        });
+
+        it('should show empty collection message', () => {
+          const message = fixture.debugElement
+            .query(By.css('[data-cy="empty-collection-message"]'))
+            .nativeElement.textContent.trim();
+
+          const expected = 'Je hebt nog geen foo collection.';
+          expect(message).toBe(expected);
+        });
+      });
+
       describe('no results', () => {
         beforeEach(() => {
           // filter all items away

@@ -32,13 +32,14 @@ import { ManageCollectionItemInterface } from './interfaces/manage-collection-it
 export class ManageCollectionComponent
   implements OnInit, AfterViewInit, OnDestroy {
   public recentLinkableItems: ManageCollectionItemInterface[];
+  public linkableItems: ManageCollectionItemInterface[];
 
   // needed to selected items after filtering
   private selectedIds: Set<number>;
   private subscriptions = new Subscription();
 
-  protected useFilter: boolean;
-  protected asModalSideSheet: boolean;
+  public useFilter: boolean;
+  public asModalSideSheet: boolean;
 
   _filterTextInput: FilterTextInputComponent<
     ManageCollectionItemInterface[],
@@ -82,6 +83,7 @@ export class ManageCollectionComponent
     private cd: ChangeDetectorRef,
     private dialogRef: MatDialogRef<ManageCollectionComponent>
   ) {
+    this.linkableItems = data.linkableItems;
     this.recentLinkableItems = data.linkableItems.filter(item =>
       data.recentItemIds.has(item.id)
     );
