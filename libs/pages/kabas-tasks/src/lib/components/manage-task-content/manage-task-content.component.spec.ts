@@ -1,6 +1,7 @@
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconRegistry } from '@angular/material';
+import { By } from '@angular/platform-browser';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Params, Router } from '@angular/router';
@@ -138,6 +139,33 @@ describe('ManageTaskContentComponent', () => {
     });
   });
 
+  describe('navigation', () => {
+    it('should show the toc navigation links', done => {
+      const lessonLinkDEs = fixture.debugElement.queryAll(
+        By.css('.manage-task-content__lesson-link')
+      );
+
+      viewModel.currentToc$.subscribe(tocs => {
+        lessonLinkDEs.forEach((lessonLinkDE, index) => {
+          const toc = tocs[index];
+
+          expect(lessonLinkDE.nativeElement.textContent).toBe(toc.title);
+
+          const clickSelectToc = jest
+            .spyOn(component, 'selectTOC')
+            .mockImplementation();
+
+          lessonLinkDE.nativeElement.click();
+
+          expect(clickSelectToc).toHaveBeenCalled();
+          expect(clickSelectToc).toHaveBeenCalledWith(toc.id, toc.depth);
+        });
+
+        done();
+      });
+    });
+  });
+
   describe('favorite book redirect', () => {
     it('should navigate to favorite book when one favorite is found', async () => {
       jest.spyOn(router, 'navigate');
@@ -177,6 +205,7 @@ describe('ManageTaskContentComponent', () => {
       expect(router.navigate).not.toHaveBeenCalled();
     });
   });
+
   describe('sidepanel', () => {
     describe('reordering', () => {
       it('should call updateTaskEduContentsOrder with the newly ordered items when dropping', () => {
@@ -244,6 +273,18 @@ describe('ManageTaskContentComponent', () => {
         queryParams: { lesson: 2 },
         queryParamsHandling: 'merge'
       });
+    });
+  });
+
+  describe('clickDone', () => {
+    it('should navigate to the task detail when clickDone is called', () => {
+      jest.spyOn(router, 'navigate');
+      component.clickDone();
+      expect(router.navigate).toHaveBeenCalledWith([
+        'tasks',
+        'manage',
+        currentTask.id
+      ]);
     });
   });
 });

@@ -10,7 +10,11 @@ import {
   ViewChildren
 } from '@angular/core';
 import { Params, Router } from '@angular/router';
-import { EduContent, MethodYearsInterface } from '@campus/dal';
+import {
+  EduContent,
+  EduContentTOCInterface,
+  MethodYearsInterface
+} from '@campus/dal';
 import {
   SearchComponent,
   SearchModeInterface,
@@ -22,7 +26,10 @@ import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { filter, map, switchMapTo, take } from 'rxjs/operators';
 import { TaskEduContentWithEduContentInterface } from '../../interfaces/TaskEduContentWithEduContent.interface';
 import { TaskWithAssigneesInterface } from '../../interfaces/TaskWithAssignees.interface';
-import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
+import {
+  CurrentTaskParams,
+  KabasTasksViewModel
+} from '../kabas-tasks.viewmodel';
 
 @Component({
   selector: 'campus-manage-task-content',
@@ -41,6 +48,8 @@ export class ManageTaskContentComponent
   public initialSearchState$: Observable<SearchStateInterface>;
   public searchResults$: Observable<SearchResultInterface>;
   public autoCompleteValues$: Observable<string[]>;
+  public currentToc$: Observable<EduContentTOCInterface[]>;
+  public currentTaskParams$: Observable<CurrentTaskParams>;
   public selectedBookTitle$: Observable<string>;
   public methodYearsInArea$: Observable<MethodYearsInterface[]>;
 
@@ -90,6 +99,8 @@ export class ManageTaskContentComponent
 
     this.methodYearsInArea$ = this.viewModel.methodYearsInArea$;
 
+    this.currentToc$ = this.viewModel.currentToc$;
+    this.currentTaskParams$ = this.viewModel.currentTaskParams$;
     this.subscriptions.add(
       this.task$.subscribe(task => {
         this.reorderableTaskEduContents$.next([...task.taskEduContents]);
@@ -117,7 +128,16 @@ export class ManageTaskContentComponent
     this.viewModel.updateTaskEduContentsOrder(taskEduContents);
   }
 
-  public clickDone() {}
+  public clickDone() {
+    this.task$
+      .pipe(
+        take(1),
+        map(task => task.id)
+      )
+      .subscribe(taskId => {
+        this.router.navigate(['tasks', 'manage', taskId]);
+      });
+  }
 
   addEduContentToTask(eduContent: EduContent, index?: number) {
     this.viewModel.addEduContentToTask(eduContent, index);
