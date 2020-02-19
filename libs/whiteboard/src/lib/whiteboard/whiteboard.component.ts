@@ -2,6 +2,8 @@ import { CdkDragEnd } from '@angular/cdk/drag-drop';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Mode } from '../../shared/enums/mode.enum';
 import CardInterface from '../../shared/models/card.interface';
+import WhiteboardInterface from '../../shared/models/whiteboard.interface';
+
 @Component({
   selector: 'campus-whiteboard',
   templateUrl: './whiteboard.component.html',
@@ -45,6 +47,17 @@ export class WhiteboardComponent implements OnInit {
 
   btnPlusClicked() {
     this.addEmptyCard();
+  }
+
+  saveWhiteboard() {
+    const whiteboard: WhiteboardInterface = {
+      title: this.title,
+      cards: this.cards,
+      shelfCards: this.shelvedCards
+    };
+    //TODO: http-post whiteboard
+    console.log(whiteboard);
+    return whiteboard;
   }
 
   addEmptyCard(

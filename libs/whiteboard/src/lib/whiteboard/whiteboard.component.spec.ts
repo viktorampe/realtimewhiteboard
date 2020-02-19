@@ -201,6 +201,43 @@ describe('WhiteboardComponent', () => {
     component.cards.forEach(c => expect(c.mode).toBe(Mode.IdleMode));
   });
 
+  it('should save whiteboard when save button is clicked', () => {
+    const workspace_card: CardInterface = {
+      mode: Mode.IdleMode,
+      description: 'First card',
+      image: null,
+      color: 'blue',
+      top: 0,
+      left: 0
+    };
+    const workspace_card_2: CardInterface = {
+      mode: Mode.SelectedMode,
+      description: 'Grieken en Romeinen',
+      image: null,
+      color: 'yellow',
+      top: 0,
+      left: 0
+    };
+    const shelved_card: CardInterface = {
+      mode: Mode.ShelfMode,
+      description: 'Second card',
+      image: null,
+      color: 'red',
+      top: 0,
+      left: 0
+    };
+
+    component.title = 'test board';
+    component.cards = [workspace_card, workspace_card_2];
+    component.shelvedCards = [shelved_card];
+
+    const savedBoard = component.saveWhiteboard();
+
+    expect(savedBoard.title).toBe(component.title);
+    expect(savedBoard.cards).toBe(component.cards);
+    expect(savedBoard.shelfCards).toBe(component.shelvedCards);
+  });
+
   it('should add card to shelf on delete when card was made by editorial office', () => {
     const card: CardInterface = {
       mode: Mode.IdleMode,
