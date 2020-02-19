@@ -60,7 +60,11 @@ import {
   TaskWithAssigneesInterface
 } from '../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from './kabas-tasks.viewmodel';
-import { getTaskWithAssignmentAndEduContents } from './kabas-tasks.viewmodel.selectors';
+import * as vmSelectors from './kabas-tasks.viewmodel.selectors';
+import {
+  getTaskFavoriteBookIds,
+  getTaskWithAssignmentAndEduContents
+} from './kabas-tasks.viewmodel.selectors';
 
 describe('KabasTaskViewModel', () => {
   const dateMock = new MockDate();
@@ -1443,6 +1447,32 @@ describe('KabasTaskViewModel', () => {
         hot('a', {
           a: [chapterTocs[0], ...lessonTocs, chapterTocs[1]]
         })
+      );
+    });
+  });
+  describe('favoriteBookIdsForTask$', () => {
+    const expectedBookIds: number[] = [1, 2];
+    beforeEach(() => {
+      store.overrideSelector(getRouterState, {
+        navigationId: 1,
+        state: {
+          url: '',
+          params: { id: 123 },
+          queryParams: {}
+        }
+      });
+      store.overrideSelector(getTaskFavoriteBookIds, expectedBookIds);
+      jest.spyOn(vmSelectors, 'getTaskFavoriteBookIds');
+    });
+    it('should return the favorite books for the task', () => {
+      expect(kabasTasksViewModel.favoriteBookIdsForTask$).toBeObservable(
+        hot('a', {
+          a: expectedBookIds
+        })
+      );
+      expect(vmSelectors.getTaskFavoriteBookIds).toHaveBeenCalledWith(
+        {},
+        { taskId: 123 }
       );
     });
   });

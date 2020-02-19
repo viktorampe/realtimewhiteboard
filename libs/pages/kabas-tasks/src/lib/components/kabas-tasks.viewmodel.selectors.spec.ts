@@ -9,8 +9,6 @@ import {
   DiaboloPhaseReducer,
   EduContent,
   EduContentActions,
-  EduContentBookFixture,
-  EduContentBookInterface,
   EduContentFixture,
   EduContentReducer,
   FavoriteActions,
@@ -61,7 +59,7 @@ import { AssigneeTypesEnum } from '../interfaces/Assignee.interface';
 import {
   allowedLearningAreas,
   getAllTasksWithAssignments,
-  getTaskFavoriteBooks,
+  getTaskFavoriteBookIds,
   getTasksWithAssignmentsByType,
   getTaskWithAssignmentAndEduContents
 } from './kabas-tasks.viewmodel.selectors';
@@ -525,7 +523,7 @@ describe('Kabas-tasks viewmodel selectors', () => {
     });
   });
 
-  describe('getTaskFavoriteBooks', () => {
+  describe('getTaskFavoriteBookIds', () => {
     const taskDict: Dictionary<TaskInterface> = {
       1: new TaskFixture({ id: 1, learningAreaId: 11 }),
       2: new TaskFixture({ id: 2, learningAreaId: 12 }),
@@ -552,13 +550,6 @@ describe('Kabas-tasks viewmodel selectors', () => {
       )
     };
 
-    const bookDict: Dictionary<EduContentBookInterface> = {
-      123: new EduContentBookFixture({ id: 123 }),
-      124: new EduContentBookFixture({ id: 124 }),
-      456: new EduContentBookFixture({ id: 456 }),
-      789: new EduContentBookFixture({ id: 789 }) // not a favorite
-    };
-
     const favoritesByType: { [key: string]: FavoriteInterface[] } = {
       [FavoriteTypesEnum.BOEKE]: [
         new FavoriteFixture({ eduContentId: 1 }), // boeke learningArea 11
@@ -567,47 +558,35 @@ describe('Kabas-tasks viewmodel selectors', () => {
       ]
     };
 
-    const { projector } = getTaskFavoriteBooks;
+    const { projector } = getTaskFavoriteBookIds;
 
     it('should return multiple books', () => {
       const taskId = 1;
-      const result = projector(
-        taskDict,
-        favoritesByType,
-        eduContentDict,
-        bookDict,
-        { taskId }
-      );
+      const result = projector(taskDict, favoritesByType, eduContentDict, {
+        taskId
+      });
 
-      const expected = [bookDict[123], bookDict[124]];
+      const expected = [123, 124];
 
       expect(result).toEqual(expected);
     });
 
     it('should return 1 book', () => {
       const taskId = 2;
-      const result = projector(
-        taskDict,
-        favoritesByType,
-        eduContentDict,
-        bookDict,
-        { taskId }
-      );
+      const result = projector(taskDict, favoritesByType, eduContentDict, {
+        taskId
+      });
 
-      const expected = [bookDict[456]];
+      const expected = [456];
 
       expect(result).toEqual(expected);
     });
 
     it('should return an empty array', () => {
       const taskId = 3;
-      const result = projector(
-        taskDict,
-        favoritesByType,
-        eduContentDict,
-        bookDict,
-        { taskId }
-      );
+      const result = projector(taskDict, favoritesByType, eduContentDict, {
+        taskId
+      });
 
       const expected = [];
 
@@ -620,7 +599,6 @@ describe('Kabas-tasks viewmodel selectors', () => {
         taskDict,
         {}, // no favorites in store
         eduContentDict,
-        bookDict,
         { taskId }
       );
 
@@ -635,7 +613,6 @@ describe('Kabas-tasks viewmodel selectors', () => {
         taskDict,
         favoritesByType,
         {}, // no eduContent in store
-        bookDict,
         { taskId }
       );
 

@@ -77,6 +77,7 @@ import {
 import { AssigneeInterface } from './../interfaces/Assignee.interface';
 import {
   allowedLearningAreas,
+  getTaskFavoriteBookIds,
   getTasksWithAssignmentsByType,
   getTaskWithAssignmentAndEduContents
 } from './kabas-tasks.viewmodel.selectors';
@@ -106,6 +107,7 @@ export class KabasTasksViewModel
   public groups$: Observable<GroupInterface[]>;
   public students$: Observable<PersonInterface[]>;
   public searchBook$ = new BehaviorSubject<EduContentBookInterface>(null);
+  public favoriteBookIdsForTask$: Observable<number[]>;
   public selectedBookTitle$: Observable<string>;
   public currentToc$: Observable<EduContentTOCInterface[]>;
 
@@ -175,6 +177,7 @@ export class KabasTasksViewModel
 
     this._searchState$ = new BehaviorSubject<SearchStateInterface>(null);
     this.searchState$ = this._searchState$;
+    this.favoriteBookIdsForTask$ = this.getFavoriteBookIdsForCurrentTask();
     this.currentToc$ = this.getTocsStream();
 
     this.setupSearchResults();
@@ -768,6 +771,15 @@ export class KabasTasksViewModel
         chapters.splice(foundIndex + 1, 0, ...lessons);
         return chapters;
       })
+    );
+  }
+
+  private getFavoriteBookIdsForCurrentTask(): Observable<number[]> {
+    return this.currentTaskParams$.pipe(
+      filter(params => !!params.id),
+      switchMap(params =>
+        this.store.pipe(select(getTaskFavoriteBookIds, { taskId: params.id }))
+      )
     );
   }
 
