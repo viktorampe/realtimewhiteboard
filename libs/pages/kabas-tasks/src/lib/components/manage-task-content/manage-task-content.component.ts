@@ -10,7 +10,7 @@ import {
   ViewChildren
 } from '@angular/core';
 import { Params, Router } from '@angular/router';
-import { EduContent } from '@campus/dal';
+import { EduContent, MethodYearsInterface } from '@campus/dal';
 import {
   SearchComponent,
   SearchModeInterface,
@@ -41,6 +41,7 @@ export class ManageTaskContentComponent
   public searchResults$: Observable<SearchResultInterface>;
   public autoCompleteValues$: Observable<string[]>;
   public selectedBookTitle$: Observable<string>;
+  public methodYearsInArea$: Observable<MethodYearsInterface[]>;
 
   @ViewChildren(SearchPortalDirective)
   private portalHosts: QueryList<SearchPortalDirective>;
@@ -60,6 +61,8 @@ export class ManageTaskContentComponent
     this.searchMode$ = this.viewModel.getSearchMode('task-manage-content');
     this.initialSearchState$ = this.viewModel.getInitialSearchState();
     this.searchResults$ = this.viewModel.searchResults$;
+
+    this.methodYearsInArea$ = this.viewModel.methodYearsInArea$;
 
     this.subscriptions.add(
       this.task$.subscribe(task => {

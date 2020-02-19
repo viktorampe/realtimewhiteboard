@@ -1,3 +1,15 @@
+<campus-page-bar>
+  <div>Expecto Patronum</div>
+  <campus-method-books-tile
+    *ngFor="let methodYear of methodYearsInArea$ | async"
+    [logoUrl]="methodYear.logoUrl"
+    [name]="methodYear.name"
+    [years]="methodYear.years"
+    [useQueryParams]="true"
+  >
+  </campus-method-books-tile>
+</campus-page-bar>
+
 <campus-collapsible-sheet>
   <div aside>
     <mat-nav-list>
