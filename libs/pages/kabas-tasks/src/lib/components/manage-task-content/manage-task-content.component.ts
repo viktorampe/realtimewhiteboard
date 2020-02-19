@@ -44,6 +44,9 @@ export class ManageTaskContentComponent
   public selectedBookTitle$: Observable<string>;
   public methodYearsInArea$: Observable<MethodYearsInterface[]>;
 
+  // Temporary variable for showing/hiding the books, replaced later when the backdrop comes in
+  public showBooks: boolean;
+
   @ViewChildren(SearchPortalDirective)
   private portalHosts: QueryList<SearchPortalDirective>;
   @ViewChild(SearchComponent, { static: true })
@@ -68,6 +71,10 @@ export class ManageTaskContentComponent
           this.router.navigate([this.router.url], {
             queryParams: { book: favoriteBookIds[0] }
           });
+
+          this.showBooks = false;
+        } else {
+          this.showBooks = true;
         }
       });
 

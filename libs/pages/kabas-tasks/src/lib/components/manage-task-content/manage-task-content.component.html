@@ -1,5 +1,4 @@
-<campus-page-bar>
-  <div>Expecto Patronum</div>
+<div *ngIf="showBooks" class="manage-task-content__books">
   <campus-method-books-tile
     *ngFor="let methodYear of methodYearsInArea$ | async"
     [logoUrl]="methodYear.logoUrl"
@@ -8,12 +7,17 @@
     [useQueryParams]="true"
   >
   </campus-method-books-tile>
-</campus-page-bar>
+</div>
 
 <campus-collapsible-sheet>
   <div aside>
     <mat-nav-list>
-      <div matSubheader>Zoek in ander boek</div>
+      <div matSubheader>
+        <!-- Temporary-ish -->
+        <campus-button (click)="showBooks = !showBooks">
+          {{ showBooks ? 'Boeken verbergen' : 'Zoek in ander boek' }}
+        </campus-button>
+      </div>
       <mat-list-item (click)="selectTOC(5, 0)">Hoofdstuk</mat-list-item>
       <mat-list-item (click)="selectTOC(6, 0)">Hoofdstuk</mat-list-item>
       <mat-list-item (click)="selectTOC(7, 1)">Hoofdstuk</mat-list-item>
