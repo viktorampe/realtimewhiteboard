@@ -192,19 +192,21 @@ export class WhiteboardComponent implements OnInit {
 
   onSelectCard(card: CardInterface) {
     this.selectedCards.push(card);
-    card.mode = Mode.MultiSelectSelectedMode;
 
     if (this.selectedCards.length === 1) {
       this.cards.forEach(c => (c.mode = Mode.MultiSelectMode));
     }
+
+    card.mode = Mode.MultiSelectSelectedMode;
   }
 
   onDeselectCard(card: CardInterface) {
     this.selectedCards = this.selectedCards.filter(c => c !== card);
-    card.mode = Mode.MultiSelectMode;
 
     if (!this.selectedCards.length) {
       this.cards.forEach(c => (c.mode = Mode.IdleMode));
+    } else {
+      card.mode = Mode.MultiSelectMode;
     }
   }
 
