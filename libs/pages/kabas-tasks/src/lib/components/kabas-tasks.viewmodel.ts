@@ -8,7 +8,6 @@ import {
   DalState,
   EduContent,
   EduContentActions,
-  EduContentBookInterface,
   EduContentInterface,
   EduContentServiceInterface,
   EduContentTocActions,
@@ -109,7 +108,6 @@ export class KabasTasksViewModel
   public classGroups$: Observable<ClassGroupInterface[]>;
   public groups$: Observable<GroupInterface[]>;
   public students$: Observable<PersonInterface[]>;
-  public searchBook$ = new BehaviorSubject<EduContentBookInterface>(null);
   public favoriteBookIdsForTask$: Observable<number[]>;
   public selectedBookTitle$: Observable<string>;
   public currentToc$: Observable<EduContentTOCInterface[]>;
@@ -515,8 +513,8 @@ export class KabasTasksViewModel
   }
 
   public getInitialSearchState(): Observable<SearchStateInterface> {
-    return combineLatest([this.currentTask$, this.searchBook$]).pipe(
-      map(([currentTask, searchBook]) => {
+    return combineLatest([this.currentTask$, this.currentTaskParams$]).pipe(
+      map(([currentTask, taskParams]) => {
         const initialSearchState: SearchStateInterface = {
           searchTerm: '',
           filterCriteriaSelections: new Map<string, (number | string)[]>(),
@@ -526,14 +524,15 @@ export class KabasTasksViewModel
         // Only allow EduContent that's allowed to be put in a task
         initialSearchState.filterCriteriaOptions.set('taskAllowed', true);
 
-        if (searchBook) {
+        if (taskParams.book) {
           initialSearchState.filterCriteriaSelections.set(
-            'years',
-            searchBook.years.map(year => year.id)
+            'eduContentTOC.tree',
+            [taskParams.book]
           );
-
-          initialSearchState.filterCriteriaSelections.set('methods', [
-            searchBook.methodId
+        }
+        if (taskParams.lesson || taskParams.chapter) {
+          initialSearchState.filterCriteriaSelections.set('eduContentTOC', [
+            taskParams.lesson || taskParams.chapter
           ]);
         }
 

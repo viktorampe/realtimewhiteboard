@@ -1004,8 +1004,7 @@ describe('KabasTaskViewModel', () => {
         {
           description: 'should return the correct searchState',
           setup: {
-            task: new TaskWithAssigneesFixture(),
-            searchBook: null
+            task: new TaskWithAssigneesFixture()
           },
           expected: {
             selections: [
@@ -1020,8 +1019,7 @@ describe('KabasTaskViewModel', () => {
           setup: {
             task: new TaskWithAssigneesFixture({
               isPaperTask: true
-            }),
-            searchBook: null
+            })
           },
           expected: {
             selections: [
@@ -1036,17 +1034,64 @@ describe('KabasTaskViewModel', () => {
             'should return the correct searchState - when book is set',
           setup: {
             task: new TaskWithAssigneesFixture(),
-            searchBook: new EduContentBookFixture({
-              years: [new YearFixture({ id: 2 }), new YearFixture({ id: 3 })],
-              methodId: 7
-            })
+            queryParams: {
+              book: 34
+            }
           },
           expected: {
             selections: [
+              ['eduContentTOC.tree', [34]],
               ['learningArea', [4]],
-              ['eduContent.type', digitalEduContentTypes],
-              ['years', [2, 3]],
-              ['methods', [7]]
+              ['eduContent.type', digitalEduContentTypes]
+            ] as any[],
+            options: [['taskAllowed', true]] as any[]
+          }
+        },
+        {
+          description:
+            'should return the correct searchState - when chapter is set',
+          setup: {
+            task: new TaskWithAssigneesFixture(),
+            searchBook: new EduContentBookFixture({
+              years: [new YearFixture({ id: 2 }), new YearFixture({ id: 3 })],
+              methodId: 7
+            }),
+            queryParams: {
+              book: 34,
+              chapter: 7
+            }
+          },
+          expected: {
+            selections: [
+              ['eduContentTOC.tree', [34]],
+              ['eduContentTOC', [7]],
+              ['learningArea', [4]],
+              ['eduContent.type', digitalEduContentTypes]
+            ] as any[],
+            options: [['taskAllowed', true]] as any[]
+          }
+        },
+        {
+          description:
+            'should return the correct searchState - when lesson is set',
+          setup: {
+            task: new TaskWithAssigneesFixture(),
+            searchBook: new EduContentBookFixture({
+              years: [new YearFixture({ id: 2 }), new YearFixture({ id: 3 })],
+              methodId: 7
+            }),
+            queryParams: {
+              book: 34,
+              chapter: 7,
+              lesson: 8
+            }
+          },
+          expected: {
+            selections: [
+              ['eduContentTOC.tree', [34]],
+              ['eduContentTOC', [8]],
+              ['learningArea', [4]],
+              ['eduContent.type', digitalEduContentTypes]
             ] as any[],
             options: [['taskAllowed', true]] as any[]
           }
@@ -1060,14 +1105,13 @@ describe('KabasTaskViewModel', () => {
             state: {
               url: '',
               params: { id: taskId },
-              queryParams: {}
+              queryParams: testcase.setup.queryParams || {}
             }
           });
           store.overrideSelector(
             getTaskWithAssignmentAndEduContents,
             testcase.setup.task
           );
-          kabasTasksViewModel.searchBook$.next(testcase.setup.searchBook);
 
           const initialSearchState$ = kabasTasksViewModel.getInitialSearchState();
           const expected: SearchStateInterface = {
