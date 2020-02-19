@@ -9,7 +9,6 @@ import {
 } from '@angular/material';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { ImageDragDirective } from '../shared/directives/image-drag.directive';
 import { CardImageComponent } from './components/card-image/card-image.component';
 import { CardTextComponent } from './components/card-text/card-text.component';
 import { CardToolbarComponent } from './components/card-toolbar/card-toolbar.component';
@@ -20,6 +19,7 @@ import { ProgressBarComponent } from './components/progress-bar/progress-bar.com
 import { ShelfComponent } from './components/shelf/shelf.component';
 import { WhiteboardToolbarComponent } from './components/whiteboard-toolbar/whiteboard-toolbar.component';
 import { WhiteboardComponent } from './components/whiteboard/whiteboard.component';
+import { ImageDragDirective } from './directives/image-drag.directive';
 
 @NgModule({
   imports: [

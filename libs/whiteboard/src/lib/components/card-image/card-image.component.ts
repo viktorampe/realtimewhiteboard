@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Mode } from '../../../shared/enums/mode.enum';
+import { Mode } from '../../enums/mode.enum';
 
 @Component({
   selector: 'campus-card-image',
