@@ -432,6 +432,73 @@ describe('ManageKabasTasksDetailComponent', () => {
     });
   });
 
+  describe('clickRemoveTaskEduContents()', () => {
+    let openDialogSpy: jest.SpyInstance;
+    const eduContentToDelete = [
+      { taskId: 1, id: 1, index: 1 },
+      { taskId: 1, id: 2, index: 2 },
+      { taskId: 1, id: 3, index: 3 }
+    ];
+
+    beforeEach(() => {
+      openDialogSpy = matDialog.open = jest.fn();
+    });
+
+    it('should open a confirmation dialog', () => {
+      const mockDialogRef = {
+        afterClosed: () => of(false),
+        close: null
+      } as MatDialogRef<ConfirmationModalComponent>;
+      openDialogSpy.mockReturnValue(mockDialogRef);
+
+      component.clickRemoveTaskEduContents(eduContentToDelete);
+
+      expect(openDialogSpy).toHaveBeenCalledTimes(1);
+      expect(openDialogSpy).toHaveBeenCalledWith(ConfirmationModalComponent, {
+        data: {
+          title: 'Lesmateriaal verwijderen',
+          message:
+            'Ben je zeker dat je de geselecteerde lesmaterialen wil verwijderen?'
+        }
+      });
+    });
+
+    it('should call vm.removeEduContentFromTask when the user confirms', () => {
+      const removeTaskEduContentSpy = jest.spyOn(
+        viewModel,
+        'deleteTaskEduContents'
+      );
+
+      const mockDialogRef = {
+        afterClosed: () => of(true), // fake confirmation
+        close: null
+      } as MatDialogRef<ConfirmationModalComponent>;
+      openDialogSpy.mockReturnValue(mockDialogRef);
+
+      component.clickRemoveTaskEduContents(eduContentToDelete);
+
+      expect(removeTaskEduContentSpy).toHaveBeenCalledTimes(1);
+      expect(removeTaskEduContentSpy).toHaveBeenCalledWith([1, 2, 3]);
+    });
+
+    it('should not call vm.removeEduContentFromTask when the user cancels', () => {
+      const removeTaskEduContentSpy = jest.spyOn(
+        viewModel,
+        'deleteTaskEduContents'
+      );
+
+      const mockDialogRef = {
+        afterClosed: () => of(false), // fake cancel
+        close: null
+      } as MatDialogRef<ConfirmationModalComponent>;
+      openDialogSpy.mockReturnValue(mockDialogRef);
+
+      component.clickRemoveTaskEduContents(eduContentToDelete);
+
+      expect(removeTaskEduContentSpy).not.toHaveBeenCalled();
+    });
+  });
+
   describe('openNewTaskDialog()', () => {
     const afterClosed: BehaviorSubject<any> = new BehaviorSubject(null);
     const mockFormData: NewTaskFormValues = {
