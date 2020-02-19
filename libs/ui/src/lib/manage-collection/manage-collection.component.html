@@ -1,24 +1,22 @@
 <ng-container *ngIf="asModalSideSheet; else centeredModal">
-  <div class="ui-modal-side-sheet">
-    <div class="ui-modal-side-sheet__header">
-      <div
-        class="ui-modal-side-sheet__header__row ui-modal-side-sheet__header__row--top"
-      >
-        <mat-icon (click)="onCloseButtonClick()" svgIcon="close"></mat-icon>
-        <div class="title">{{ data.title }}</div>
-        <ng-container *ngTemplateOutlet="actions"></ng-container>
-      </div>
-      <div
-        class="ui-modal-side-sheet__header__row ui-modal-side-sheet__header__row--bottom"
-      >
-        <div class="subtitle">{{ data.subtitle }}</div>
-      </div>
+  <div class="ui-modal-side-sheet__header">
+    <div
+      class="ui-modal-side-sheet__header__row ui-modal-side-sheet__header__row--top"
+    >
+      <mat-icon (click)="onCloseButtonClick()" svgIcon="close"></mat-icon>
+      <div class="title">{{ data.title }}</div>
+      <ng-container *ngTemplateOutlet="actions"></ng-container>
     </div>
-    <hr class="ui-modal-side-sheet__divider" />
-    <div class="ui-modal-side-sheet__body">
-      <ng-container *ngTemplateOutlet="filter"></ng-container>
-      <ng-container *ngTemplateOutlet="collection"></ng-container>
+    <div
+      class="ui-modal-side-sheet__header__row ui-modal-side-sheet__header__row--bottom"
+    >
+      <div class="subtitle">{{ data.subtitle }}</div>
     </div>
+  </div>
+  <hr class="ui-modal-side-sheet__divider" />
+  <div class="ui-modal-side-sheet__body">
+    <ng-container *ngTemplateOutlet="filter"></ng-container>
+    <ng-container *ngTemplateOutlet="collection"></ng-container>
   </div>
 </ng-container>
 
