@@ -266,4 +266,153 @@ describe('WhiteboardComponent', () => {
     component.onDeleteCard(card);
     expect(card.mode).toBe(Mode.ShelfMode);
   });
+
+  it('should not add a card if file type of dropped file is unsupported', () => {
+    const cardsLengthBeforeAdd = component.cards.length;
+
+    const file = new File([''], 'dummy.jpg', {
+      type: ''
+    });
+
+    const fileDropEvent = {
+      preventDefault: () => {},
+      stopPropagation: () => {},
+      dataTransfer: { files: [file] },
+      offsetX: 400,
+      offsetY: 400
+    };
+
+    component.onFilesDropped(fileDropEvent);
+
+    expect(component.cards.length).toBe(cardsLengthBeforeAdd);
+  });
+
+  it('should add a card to the whiteboard on image drag', () => {
+    const cardsLengthBeforeAdd = component.cards.length;
+
+    const mockFileReader = {
+      result: '',
+      readAsDataURL: blobInput => {},
+      onloadend: () => {}
+    };
+
+    spyOn<any>(window, 'FileReader').and.returnValue(mockFileReader);
+    spyOn<any>(mockFileReader, 'readAsDataURL').and.callFake(blobInput => {
+      mockFileReader.result = 'dummy.jpg';
+      mockFileReader.onloadend();
+    });
+
+    const file = new File([''], 'dummy.jpg', {
+      type: component.allowedFileTypes[0]
+    });
+
+    const fileDropEvent = {
+      preventDefault: () => {},
+      stopPropagation: () => {},
+      dataTransfer: { files: [file] },
+      offsetX: 400,
+      offsetY: 400
+    };
+
+    component.onFilesDropped(fileDropEvent);
+
+    expect(component.cards.length).toBe(cardsLengthBeforeAdd + 1);
+  });
+
+  it('should add card to whiteboard on image drag with correct top value', () => {
+    const mockFileReader = {
+      result: '',
+      readAsDataURL: blobInput => {},
+      onloadend: () => {}
+    };
+
+    spyOn<any>(window, 'FileReader').and.returnValue(mockFileReader);
+    spyOn<any>(mockFileReader, 'readAsDataURL').and.callFake(blobInput => {
+      mockFileReader.result = 'dummy.jpg';
+      mockFileReader.onloadend();
+    });
+
+    const file = new File([''], 'dummy.jpg', {
+      type: component.allowedFileTypes[0]
+    });
+
+    const fileDropEvent = {
+      preventDefault: () => {},
+      stopPropagation: () => {},
+      dataTransfer: { files: [file] },
+      offsetX: 400,
+      offsetY: 400
+    };
+
+    component.onFilesDropped(fileDropEvent);
+
+    const addedCard = component.cards[component.cards.length - 1];
+
+    expect(addedCard.top).toBe(400);
+  });
+
+  it('should add card to whiteboard on image drag with correct left value', () => {
+    const mockFileReader = {
+      result: '',
+      readAsDataURL: blobInput => {},
+      onloadend: () => {}
+    };
+
+    spyOn<any>(window, 'FileReader').and.returnValue(mockFileReader);
+    spyOn<any>(mockFileReader, 'readAsDataURL').and.callFake(blobInput => {
+      mockFileReader.result = 'dummy.jpg';
+      mockFileReader.onloadend();
+    });
+
+    const file = new File([''], 'dummy.jpg', {
+      type: component.allowedFileTypes[0]
+    });
+
+    const fileDropEvent = {
+      preventDefault: () => {},
+      stopPropagation: () => {},
+      dataTransfer: { files: [file] },
+      offsetX: 400,
+      offsetY: 400
+    };
+
+    component.onFilesDropped(fileDropEvent);
+
+    const addedCard = component.cards[component.cards.length - 1];
+
+    expect(addedCard.left).toBe(400);
+  });
+
+  it('should add cards with correct offset on image drag', () => {
+    const mockFileReader = {
+      result: '',
+      readAsDataURL: blobInput => {},
+      onloadend: () => {}
+    };
+
+    spyOn<any>(window, 'FileReader').and.returnValue(mockFileReader);
+    spyOn<any>(mockFileReader, 'readAsDataURL').and.callFake(blobInput => {
+      mockFileReader.result = 'dummy.jpg';
+      mockFileReader.onloadend();
+    });
+
+    const file = new File([''], 'dummy.jpg', {
+      type: component.allowedFileTypes[0]
+    });
+
+    const fileDropEvent = {
+      preventDefault: () => {},
+      stopPropagation: () => {},
+      dataTransfer: { files: [file, file] },
+      offsetX: 400,
+      offsetY: 400
+    };
+
+    component.onFilesDropped(fileDropEvent);
+
+    const addedCard = component.cards[component.cards.length - 1];
+
+    expect(addedCard.top).toBe(400 + component.multipleCardCreationOffset);
+    expect(addedCard.left).toBe(400 + component.multipleCardCreationOffset);
+  });
 });

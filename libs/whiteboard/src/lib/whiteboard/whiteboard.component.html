@@ -1,4 +1,9 @@
-<div class="whiteboard" campusImageDrag (click)="onClickWhiteboard()">
+<div
+  class="whiteboard"
+  (filesDroppedEvent)="onFilesDropped($event)"
+  campusImageDrag
+  (click)="onClickWhiteboard()"
+>
   <campus-whiteboard-toolbar
     *ngIf="selectedCards.length"
     (deleteCards)="bulkDeleteClicked()"
