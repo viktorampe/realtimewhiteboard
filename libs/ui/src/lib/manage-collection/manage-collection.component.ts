@@ -95,15 +95,17 @@ export class ManageCollectionComponent
   ngOnInit() {}
 
   ngAfterViewInit() {
-    this.subscriptions.add(
-      // when options change i.e. after filtering
-      // re-set selection
-      this._selectionList.options.changes
-        .pipe(startWith(null as any)) // emit once on init
-        .subscribe(() => {
-          this.selectListItems(this.selectedIds);
-        })
-    );
+    if (this._selectionList) {
+      this.subscriptions.add(
+        // when options change i.e. after filtering
+        // re-set selection
+        this._selectionList.options.changes
+          .pipe(startWith(null as any)) // emit once on init
+          .subscribe(() => {
+            this.selectListItems(this.selectedIds);
+          })
+      );
+    }
   }
 
   ngOnDestroy() {

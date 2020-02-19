@@ -9,4 +9,5 @@ export interface ManageCollectionsDataInterface {
   recentItemIds: Set<number>;
   useFilter?: boolean;
   asModalSideSheet?: boolean;
+  collectionType?: string; // e.g. taken, bundels
 }

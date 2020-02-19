@@ -38,7 +38,7 @@
 </ng-template>
 
 <!-- UI blocks -->
-<ng-template #noResultsTemplate>
+<ng-template #noFilterResultsTemplate>
   <div class="ui-manage-collection__no-results">
     <span>Het filteren leverde geen resultaten op.</span>
     <a (click)="_filterTextInput && _filterTextInput.clear()"
@@ -47,9 +47,15 @@
   </div>
 </ng-template>
 
+<ng-template #emptyCollectionTemplate>
+  <div class="ui-manage-collection__no-results">
+    <span>Je hebt nog geen {{ data.collectionType }}.</span>
+  </div>
+</ng-template>
+
 <ng-template #filter>
   <campus-filter-text-input
-    *ngIf="useFilter"
+    *ngIf="useFilter && data.linkableItems.length > 0"
     theme="dark"
     [source]="data.linkableItems"
     class="ui-manage-collection__filter"
@@ -67,44 +73,52 @@
 </ng-template>
 
 <ng-template #collection>
-  <ng-container *ngIf="useFilter; else collectionWithoutFilter">
-    <mat-selection-list (selectionChange)="onSelectionChanged($event)">
-      <div
-        class="ui-manage-collection__recent-items"
-        *ngIf="
-          _filterTextInput &&
-          !_filterTextInput.input.value &&
-          recentLinkableItems.length > 0
-        "
-      >
-        <h3 mat-subheader>Recent gebruikt</h3>
-        <mat-list-option
-          *ngFor="let item of recentLinkableItems"
-          [value]="item.id"
-          class="ui-manage-collection__recent-item"
-        >
-          <mat-icon mat-list-icon [svgIcon]="item.icon"></mat-icon>
-          <p mat-line>{{ item.label }}</p>
-        </mat-list-option>
-        <mat-divider></mat-divider>
-      </div>
-      <ng-container
-        *ngIf="
-          _filterTextInput && _filterTextInput.result$ | async as filteredItems
-        "
-      >
+  <ng-container
+    *ngIf="data.linkableItems.length > 0; else emptyCollectionTemplate"
+  >
+    <ng-container *ngIf="useFilter; else collectionWithoutFilter">
+      <mat-selection-list (selectionChange)="onSelectionChanged($event)">
         <div
-          class="ui-manage-collection__all-items"
-          *ngIf="filteredItems.length; else noResultsTemplate"
+          class="ui-manage-collection__recent-items"
+          *ngIf="
+            _filterTextInput &&
+            !_filterTextInput.input.value &&
+            recentLinkableItems.length > 0
+          "
         >
-          <h3 mat-subheader>Alle</h3>
-          <mat-list-option *ngFor="let item of filteredItems" [value]="item.id">
+          <h3 mat-subheader>Recent gebruikt</h3>
+          <mat-list-option
+            *ngFor="let item of recentLinkableItems"
+            [value]="item.id"
+            class="ui-manage-collection__recent-item"
+          >
             <mat-icon mat-list-icon [svgIcon]="item.icon"></mat-icon>
             <p mat-line>{{ item.label }}</p>
           </mat-list-option>
+          <mat-divider></mat-divider>
         </div>
-      </ng-container>
-    </mat-selection-list>
+        <ng-container
+          *ngIf="
+            _filterTextInput && _filterTextInput.result$
+              | async as filteredItems
+          "
+        >
+          <div
+            class="ui-manage-collection__all-items"
+            *ngIf="filteredItems.length; else noFilterResultsTemplate"
+          >
+            <h3 mat-subheader>Alle</h3>
+            <mat-list-option
+              *ngFor="let item of filteredItems"
+              [value]="item.id"
+            >
+              <mat-icon mat-list-icon [svgIcon]="item.icon"></mat-icon>
+              <p mat-line>{{ item.label }}</p>
+            </mat-list-option>
+          </div>
+        </ng-container>
+      </mat-selection-list>
+    </ng-container>
   </ng-container>
 </ng-template>
 
@@ -125,11 +139,8 @@
       </mat-list-option>
       <mat-divider></mat-divider>
     </div>
-    <ng-container *ngIf="data.linkableItems">
-      <div
-        class="ui-manage-collection__all-items"
-        *ngIf="data.linkableItems.length; else noResultsTemplate"
-      >
+    <ng-container>
+      <div class="ui-manage-collection__all-items">
         <h3 mat-subheader>Alle</h3>
         <mat-list-option
           *ngFor="let item of data.linkableItems"
