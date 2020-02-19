@@ -1,0 +1,57 @@
+@mixin ui-section {
+  $ui-section-padding: $ui-inner-padding !default;
+  $ui-section-border-radius: $ui-border-radius !default;
+  $ui-section-border-color: $ui-tertiary-border-color !default;
+  $ui-section-elevation: 8 !default;
+  $ui-section-color: inherit !default;
+
+  $ui-section_header-height: 48px !default;
+  $ui-section_header_action-margin: -8px !default;
+  $ui-section_header-color: $ui-tertiary-font-color !default;
+  $ui-section_actions-color: $ui-tertiary-icon-color !default;
+
+  .ui-section {
+    color: $ui-section-color;
+    border-radius: $ui-section-border-radius;
+    border: 1px solid $ui-section-border-color;
+
+    hr {
+      margin: $ui-section-padding (-$ui-section-padding);
+      border-color: $ui-section-border-color;
+    }
+
+    section-title {
+      flex: 1 1 auto;
+    }
+
+    section-content {
+      *:last-child {
+        padding-bottom: 0;
+        margin-bottom: 0;
+      }
+    }
+
+    &__header {
+      height: $ui-section_header-height;
+      padding: 0 $ui-section-padding;
+      color: $ui-section_header-color;
+      border-bottom: 1px solid $ui-section-border-color;
+
+      &__actions {
+        color: $ui-section_actions-color;
+        margin-right: $ui-section_header_action-margin;
+      }
+    }
+
+    &__content {
+      padding: $ui-section-padding;
+    }
+
+    &--editable {
+      // apply style for editable mode
+      &:hover {
+        @include elevation($ui-section-elevation);
+      }
+    }
+  }
+}

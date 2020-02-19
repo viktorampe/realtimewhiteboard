@@ -34,6 +34,9 @@
   <section-title>I'm a the title of this section</section-title>
   <section-actions><mat-icon svgIcon="edit"></mat-icon></section-actions>
   <section-content>
+    Cool text
+    <hr />
+
     <p *ngIf="sectionMode === sectionModes.STATIC">{{ staticText }}</p>
     <p *ngIf="sectionMode === sectionModes.EDITABLE">{{ editableText }}</p>
 
