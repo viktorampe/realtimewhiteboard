@@ -8,8 +8,10 @@ import {
   CLASS_GROUP_SERVICE_TOKEN,
   DiaboloPhaseService,
   DIABOLO_PHASE_SERVICE_TOKEN,
+  EduContentBookService,
   EduContentProductTypeService,
   EduContentService,
+  EDU_CONTENT_BOOK_SERVICE_TOKEN,
   EDU_CONTENT_PRODUCT_TYPE_SERVICE_TOKEN,
   EDU_CONTENT_SERVICE_TOKEN,
   ExerciseService,
@@ -137,7 +139,8 @@ import { kabasConfig } from './app.config';
       provide: TASK_EDU_CONTENT_SERVICE_TOKEN,
       useClass: TaskEduContentService
     },
-    { provide: TASK_SERVICE_TOKEN, useClass: TaskService }
+    { provide: TASK_SERVICE_TOKEN, useClass: TaskService },
+    { provide: EDU_CONTENT_BOOK_SERVICE_TOKEN, useClass: EduContentBookService }
   ]
 })
 export class AppTokenModule {}
