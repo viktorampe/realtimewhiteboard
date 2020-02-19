@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { Mode } from '../../shared/enums/mode.enum';
+import { Mode } from '../../../shared/enums/mode.enum';
 import { CardTextComponent } from './card-text.component';
 
 describe('CardTextComponent', () => {

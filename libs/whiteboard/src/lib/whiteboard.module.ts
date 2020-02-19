@@ -10,16 +10,16 @@ import {
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { ImageDragDirective } from '../shared/directives/image-drag.directive';
-import { CardImageComponent } from './card-image/card-image.component';
-import { CardTextComponent } from './card-text/card-text.component';
-import { CardToolbarComponent } from './card-toolbar/card-toolbar.component';
-import { CardComponent } from './card/card.component';
-import { ColorListComponent } from './color-list/color-list.component';
-import { ImageToolbarComponent } from './image-toolbar/image-toolbar.component';
-import { ProgressBarComponent } from './progress-bar/progress-bar.component';
-import { ShelfComponent } from './shelf/shelf.component';
-import { WhiteboardToolbarComponent } from './whiteboard-toolbar/whiteboard-toolbar.component';
-import { WhiteboardComponent } from './whiteboard/whiteboard.component';
+import { CardImageComponent } from './components/card-image/card-image.component';
+import { CardTextComponent } from './components/card-text/card-text.component';
+import { CardToolbarComponent } from './components/card-toolbar/card-toolbar.component';
+import { CardComponent } from './components/card/card.component';
+import { ColorListComponent } from './components/color-list/color-list.component';
+import { ImageToolbarComponent } from './components/image-toolbar/image-toolbar.component';
+import { ProgressBarComponent } from './components/progress-bar/progress-bar.component';
+import { ShelfComponent } from './components/shelf/shelf.component';
+import { WhiteboardToolbarComponent } from './components/whiteboard-toolbar/whiteboard-toolbar.component';
+import { WhiteboardComponent } from './components/whiteboard/whiteboard.component';
 
 @NgModule({
   imports: [

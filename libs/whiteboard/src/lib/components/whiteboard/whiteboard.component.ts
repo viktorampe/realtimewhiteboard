@@ -1,8 +1,8 @@
 import { CdkDragEnd } from '@angular/cdk/drag-drop';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { Mode } from '../../shared/enums/mode.enum';
-import CardInterface from '../../shared/models/card.interface';
-import WhiteboardInterface from '../../shared/models/whiteboard.interface';
+import { Mode } from '../../../shared/enums/mode.enum';
+import CardInterface from '../../../shared/models/card.interface';
+import WhiteboardInterface from '../../../shared/models/whiteboard.interface';
 
 @Component({
   selector: 'campus-whiteboard',
