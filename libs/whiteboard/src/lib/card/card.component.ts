@@ -58,11 +58,11 @@ export class CardComponent {
     this.updateImage.emit(url);
   }
 
-  setMultiSelectSelectedMode() {
+  emitSelect() {
     this.select.emit();
   }
 
-  setMultiSelectMode() {
+  emitDeselect() {
     this.deselect.emit();
   }
 

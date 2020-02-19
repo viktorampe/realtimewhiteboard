@@ -24,8 +24,8 @@
     (clickEditIcon)="emitEditIcon()"
     (clickFlipIcon)="emitFlipIcon()"
     (clickConfirmIcon)="emitConfirmIcon()"
-    (clickMultiSelectIcon)="setMultiSelectSelectedMode()"
-    (clickMultiSelectSelectedIcon)="setMultiSelectMode()"
+    (clickMultiSelectIcon)="emitSelect()"
+    (clickMultiSelectSelectedIcon)="emitDeselect()"
   ></campus-card-toolbar>
   <div class="card__content" [class.zoom]="mode === Mode.ZoomMode">
     <ng-container *ngIf="mode !== Mode.UploadMode; else uploadMode">

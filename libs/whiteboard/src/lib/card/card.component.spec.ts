@@ -112,15 +112,15 @@ describe('CardComponent', () => {
     expect(component.colorChange.emit).toHaveBeenCalled();
   });
 
-  it('should emit select when setMultiSelectSelectedMode is called', () => {
+  it('should emit select when emitSelect is called', () => {
     spyOn(component.select, 'emit');
-    component.setMultiSelectSelectedMode();
+    component.emitSelect();
     expect(component.select.emit).toHaveBeenCalled();
   });
 
-  it('should emit deselect when setMultiSelectMode is called', () => {
+  it('should emit deselect when emitDeselect is called', () => {
     spyOn(component.deselect, 'emit');
-    component.setMultiSelectMode();
+    component.emitDeselect();
     expect(component.deselect.emit).toHaveBeenCalled();
   });
 
