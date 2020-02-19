@@ -3,8 +3,6 @@ import {
   DiaboloPhaseInterface,
   DiaboloPhaseQueries,
   EduContent,
-  EduContentBookInterface,
-  EduContentBookQueries,
   EduContentInterface,
   EduContentQueries,
   FavoriteInterface,
@@ -241,25 +239,23 @@ export const getTaskWithAssignmentAndEduContents = createSelector(
   }
 );
 
-export const getTaskFavoriteBooks = createSelector(
+export const getTaskFavoriteBookIds = createSelector(
   [
     TaskQueries.getAllEntities,
     FavoriteQueries.favoritesByType,
-    EduContentQueries.getAllEntities,
-    EduContentBookQueries.getAllEntities
+    EduContentQueries.getAllEntities
   ],
   (
     taskDict: Dictionary<TaskInterface>,
     favoritesByType: { [key: string]: FavoriteInterface[] },
     eduContentDict: Dictionary<EduContent>,
-    bookDict: Dictionary<EduContentBookInterface>,
     props: {
       taskId: number;
     }
   ) => {
     const task = taskDict[props.taskId];
     const boekeFavorites = favoritesByType[FavoriteTypesEnum.BOEKE] || [];
-    const taskFavoriteBooks = boekeFavorites.reduce((acc, fav) => {
+    const taskFavoriteBooks: number[] = boekeFavorites.reduce((acc, fav) => {
       const boeke = eduContentDict[fav.eduContentId];
       if (!boeke) return acc;
 
@@ -269,7 +265,7 @@ export const getTaskFavoriteBooks = createSelector(
       } = boeke.publishedEduContentMetadata;
 
       return learningAreaId === task.learningAreaId
-        ? [...acc, bookDict[eduContentBookId]]
+        ? [...acc, eduContentBookId]
         : acc;
     }, []);
 

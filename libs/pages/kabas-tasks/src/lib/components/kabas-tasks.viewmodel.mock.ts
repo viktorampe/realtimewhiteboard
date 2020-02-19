@@ -28,7 +28,7 @@ import {
 } from '@campus/shared';
 import { ViewModelInterface } from '@campus/testing';
 import { BehaviorSubject, Observable, of } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 import {
   AssigneeInterface,
   AssigneeTypesEnum
@@ -66,6 +66,8 @@ export class MockKabasTasksViewModel
   public students$: BehaviorSubject<PersonInterface[]>;
 
   public searchBook$: BehaviorSubject<EduContentBookInterface>;
+  public favoriteBookIdsForTask$: Observable<number[]>;
+  public selectedBookTitle$: Observable<string>;
 
   constructor(
     @Inject(ENVIRONMENT_SEARCHMODES_TOKEN)
@@ -130,6 +132,8 @@ export class MockKabasTasksViewModel
     ]);
 
     this.currentToc$ = this.getCurrentToc();
+    this.favoriteBookIdsForTask$ = new BehaviorSubject([1]);
+    this.selectedBookTitle$ = new BehaviorSubject('foo 1');
   }
 
   public getCurrentToc() {
@@ -452,7 +456,10 @@ export class MockKabasTasksViewModel
   ) {}
 
   private getCurrentTask(): Observable<TaskWithAssigneesInterface> {
-    return this.tasksWithAssignments$.pipe(map(tasks => tasks[0]));
+    return this.tasksWithAssignments$.pipe(
+      filter(tasks => tasks.length > 0),
+      map(tasks => tasks[0])
+    );
   }
 
   public updateTaskEduContent(
