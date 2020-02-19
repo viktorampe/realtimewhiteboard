@@ -20,4 +20,29 @@
   </campus-method-favorite-tile>
 </div> -->
 
-<campus-editor-timeline></campus-editor-timeline>
+<!-- <campus-editor-timeline></campus-editor-timeline> -->
+<button (click)="changeMode(sectionModes.STATIC)">make section static</button>
+<button (click)="changeMode(sectionModes.EDITABLE)"
+  >make section editable</button
+>
+<button (click)="changeMode(sectionModes.EDITING)">make section editing</button>
+
+<campus-section
+  [(mode)]="sectionMode"
+  (actionClick)="handleTriggerActionClick($event)"
+>
+  <section-title>I'm a the title of this section</section-title>
+  <section-actions><mat-icon svgIcon="edit"></mat-icon></section-actions>
+  <section-content>
+    Cool text
+    <hr />
+
+    <p *ngIf="sectionMode === sectionModes.STATIC">{{ staticText }}</p>
+    <p *ngIf="sectionMode === sectionModes.EDITABLE">{{ editableText }}</p>
+
+    <div *ngIf="sectionMode === sectionModes.EDITING">
+      <input #input type="text" placeholder="edit me" [value]="editableText" />
+      <p> <button (click)="save($event, input)">Save</button></p>
+    </div>
+  </section-content>
+</campus-section>

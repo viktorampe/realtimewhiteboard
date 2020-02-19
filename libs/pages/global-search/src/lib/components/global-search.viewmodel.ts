@@ -15,6 +15,9 @@ import {
 } from '@campus/search';
 import {
   ContentOpenerInterface,
+  ContentTaskManagerInterface,
+  EduContentCollectionManagerService,
+  EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN,
   EnvironmentSearchModesInterface,
   ENVIRONMENT_SEARCHMODES_TOKEN,
   OpenStaticContentServiceInterface,
@@ -30,7 +33,8 @@ import { filter, map, switchMap, withLatestFrom } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root'
 })
-export class GlobalSearchViewModel implements ContentOpenerInterface {
+export class GlobalSearchViewModel
+  implements ContentOpenerInterface, ContentTaskManagerInterface {
   public searchResults$: Observable<SearchResultInterface>;
   public searchState$: Observable<SearchStateInterface>;
 
@@ -48,7 +52,9 @@ export class GlobalSearchViewModel implements ContentOpenerInterface {
     @Inject(OPEN_STATIC_CONTENT_SERVICE_TOKEN)
     private openStaticContentService: OpenStaticContentServiceInterface,
     @Inject(SCORM_EXERCISE_SERVICE_TOKEN)
-    private scormExerciseService: ScormExerciseServiceInterface
+    private scormExerciseService: ScormExerciseServiceInterface,
+    @Inject(EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN)
+    private eduContentCollectionManagerService: EduContentCollectionManagerService
   ) {
     this.initialize();
   }
@@ -129,7 +135,7 @@ export class GlobalSearchViewModel implements ContentOpenerInterface {
   }
 
   public addEduContentToTask(eduContent: EduContent): void {
-    // TODO: open dialog with tasks
+    this.eduContentCollectionManagerService.manageTasksForContent(eduContent);
   }
 
   public removeEduContentFromTask(eduContent: EduContent): void {
@@ -168,8 +174,9 @@ export class GlobalSearchViewModel implements ContentOpenerInterface {
               );
 
               return {
-                eduContent: eduContent
+                eduContent: eduContent,
                 // add additional props for the resultItemComponent here
+                addTaskActions: true
               };
             }
           )

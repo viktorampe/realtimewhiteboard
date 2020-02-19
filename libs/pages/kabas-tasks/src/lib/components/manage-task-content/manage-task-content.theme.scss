@@ -1,0 +1,190 @@
+@mixin manage-task-content-theme() {
+  //list
+  $manage-task-content__list-vertical-margin: -40px !default;
+
+  $manage-task-content__list__item-font-size: 16px !default;
+  $manage-task-content__list__item-padding-left: 16px !default;
+  $manage-task-content__list__item--selected-border-width: 4px !default;
+
+  $manage-task-content__list__item__icon-color: $pages-kabas-tasks-text-color--secondary !default;
+
+  $manage-task-content__list__item__content__icon-color: $pages-manage-kabas-tasks__task-edu-content-list-item-icon-color !default;
+  $manage-task-content__list__item__content__title-color: $primary-font-color !default;
+
+  // drag-drop
+
+  $manage-task-content__list__drag__cubic-bezier: cubic-bezier(
+    0,
+    0,
+    0.3,
+    1
+  ) !default;
+  $manage-task-content__list__drag__transition--duration: 250ms !default;
+  $manage-task-content__list__drag--hover-box-shadow: 0 1px 2px
+      rgba(0, 0, 0, 0.08),
+    0 1px 4px 1px rgba(0, 0, 0, 0.06) !default;
+  $manage-task-content__list__drag--dragging-box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+    0 8px 10px 1px rgba(0, 0, 0, 0.08), 0 3px 14px 2px rgba(0, 0, 0, 0.06) !default;
+  $manage-task-content__list__drag--dragging-padding: 0 15px !default;
+  $manage-task-content__list__drag--dragging-background-color: rgba(
+    #fff,
+    0.84
+  ) !default;
+  $manage-task-content__list__drag--dragging-border-radius: 4px !default;
+
+  // filters
+  $manage-task-content__filterbar-padding-top: 15px !default;
+  $manage-task-content__filterbar-padding-left: 15px !default;
+
+  $manage-task-content__filterbar__filter-width: 150px !default;
+  $manage-task-content__filterbar__filter-heigth: 50px !default;
+  $manage-task-content__filterbar__filter-padding-width: 8px !default;
+  $manage-task-content__filterbar__filter-padding-height: 12px !default;
+  $manage-task-content__filterbar__filter-border-color: $color-gray-4 !default;
+  $manage-task-content__filterbar__filter-foreground-color: $color-black-1 !default;
+  $manage-task-content__filterbar__filter-hover-background-color: inherit !default;
+  $manage-task-content__filterbar__filter-active-background-color: inherit !default;
+
+  $manage-task-content__filterbar__reset-width: 50px !default;
+  $manage-task-content__filterbar__reset-height: 50px !default;
+  $manage-task-content__filterbar__reset-border-width: 1px !default;
+  $manage-task-content__filterbar__reset-background-color: transparent !default;
+  $manage-task-content__filterbar__reset-margin-right: 20px !default;
+  $manage-task-content__filterbar__reset-margin-bottom: 10px !default;
+
+  $manage-task-content__mat-list-padding-left--override: $pages-method__chapter-padding-left !default;
+  $manage-task-content__mat-list-content-margin-left--override: 16px !default; // = used for list indentation -> depth
+  $manage-task-content__mat-list-item--selected-border-width: 4px !default;
+  $manage-task-content__mat-list__chapter-font-weight: $pages-method__chapter-font-weight !default;
+
+  .mat-drawer-container {
+    background: $pages-kabas-tasks-background-color--primary;
+  }
+  .manage-task-content {
+    &__list {
+      // margin-left: $manage-task-content__list-vertical-margin;
+      // margin-right: $manage-task-content__list-vertical-margin;
+
+      &.cdk-drop-list-dragging &__item {
+        transition: transform
+          $manage-task-content__list__drag__transition--duration
+          $manage-task-content__list__drag__cubic-bezier;
+      }
+
+      &__item {
+        display: flex;
+        flex-direction: row;
+        font-size: $manage-task-content__list__item-font-size;
+        transition: box-shadow
+          $manage-task-content__list__drag__transition--duration
+          $manage-task-content__list__drag__cubic-bezier;
+
+        &:hover {
+          position: relative;
+          z-index: 99999;
+          box-shadow: $manage-task-content__list__drag--hover-box-shadow;
+
+          .manage-task-content__list__item__icon {
+            &--on-hover {
+              opacity: 1;
+            }
+          }
+        }
+
+        &__icon {
+          color: $manage-task-content__list__item__icon-color;
+
+          &--on-hover {
+            opacity: 0;
+          }
+
+          &--handle {
+            cursor: move;
+          }
+        }
+
+        &__content {
+          flex: 1 0 auto;
+          display: flex;
+          flex-direction: row;
+
+          &__icon {
+            color: $manage-task-content__list__item__content__icon-color;
+            margin: 0 12px;
+          }
+
+          &__title {
+            display: flex;
+            align-items: center;
+            color: $manage-task-content__list__item__content__title-color;
+          }
+        }
+
+        .mat-list-item-content {
+          width: 100%;
+          display: flex;
+          flex-direction: row;
+          flex-wrap: nowrap;
+          align-items: center;
+        }
+
+        &.cdk-drag {
+          &-preview {
+            background-color: $manage-task-content__list__drag--dragging-background-color;
+            box-sizing: border-box;
+            border-radius: $manage-task-content__list__drag--dragging-border-radius;
+            box-shadow: $manage-task-content__list__drag--dragging-box-shadow;
+            padding: $manage-task-content__list__drag--dragging-padding;
+          }
+          &-placeholder {
+            opacity: 0;
+          }
+
+          &-animating {
+            transition: transform
+              $manage-task-content__list__drag__transition--duration
+              $manage-task-content__list__drag__cubic-bezier;
+          }
+        }
+      }
+    }
+
+    &__lesson-link {
+      &.mat-list-item .mat-list-item-content {
+        padding-left: $manage-task-content__mat-list-padding-left--override;
+        // color: $pages-method-chapter-color;
+        // background-color: $pages-method-chapter-background-color;
+      }
+
+      &:hover {
+        &.mat-list-item .mat-list-item-content {
+          // background-color: $pages-method-chapter-background-color--accent;
+        }
+      }
+
+      &--selected {
+        &.mat-list-item .mat-list-item-content {
+          background-color: red;
+          padding-left: $manage-task-content__mat-list-padding-left--override -
+            $manage-task-content__mat-list-item--selected-border-width;
+        }
+
+        border-left: $manage-task-content__mat-list-item--selected-border-width
+          red;
+      }
+
+      &--depth-0 {
+        .manage-task-content__lesson-link__title {
+          margin-left: 0px;
+          font-weight: $manage-task-content__mat-list__chapter-font-weight;
+        }
+      }
+
+      &--depth-1 {
+        .manage-task-content__lesson-link__title {
+          margin-left: $manage-task-content__mat-list-content-margin-left--override;
+        }
+      }
+    }
+  }
+}

@@ -13,8 +13,9 @@ import {
 } from '@campus/dal';
 import {
   ContentActionInterface,
-  ContentActionsServiceInterface,
-  CONTENT_ACTIONS_SERVICE_TOKEN,
+  ContentOpenActionsServiceInterface,
+  CONTENT_OPEN_ACTIONS_SERVICE_TOKEN,
+  CONTENT_TASK_ACTIONS_SERVICE_TOKEN,
   EduContentSearchResultInterface
 } from '@campus/shared';
 import { MockDate, MockMatIconRegistry } from '@campus/testing';
@@ -26,7 +27,7 @@ import { EduContentSearchResultComponent } from './edu-content-search-result.com
 describe('EduContentSearchResultComponent', () => {
   let component: EduContentSearchResultComponent;
   let fixture: ComponentFixture<EduContentSearchResultComponent>;
-  let contentActionsServiceInterface: ContentActionsServiceInterface;
+  let contentOpenActionsService: ContentOpenActionsServiceInterface;
   const mockIsFavorite = new BehaviorSubject(false);
   let dateMock: MockDate;
 
@@ -58,6 +59,15 @@ describe('EduContentSearchResultComponent', () => {
     }
   ];
 
+  const mockTaskActions: ContentActionInterface[] = [
+    {
+      label: 'Toevoegen aan taak',
+      icon: 'add',
+      tooltip: 'Inhoud toevoagen aan deze taak',
+      handler: jest.fn()
+    }
+  ];
+
   beforeAll(() => {
     dateMock = new MockDate();
   });
@@ -81,15 +91,21 @@ describe('EduContentSearchResultComponent', () => {
           useValue: () => new Promise(() => {})
         },
         {
-          provide: CONTENT_ACTIONS_SERVICE_TOKEN,
+          provide: CONTENT_OPEN_ACTIONS_SERVICE_TOKEN,
           useValue: {
             getActionsForEduContent: () => mockActions
+          }
+        },
+        {
+          provide: CONTENT_TASK_ACTIONS_SERVICE_TOKEN,
+          useValue: {
+            getTaskActionsForEduContent: () => mockTaskActions
           }
         }
       ]
     });
 
-    contentActionsServiceInterface = TestBed.get(CONTENT_ACTIONS_SERVICE_TOKEN);
+    contentOpenActionsService = TestBed.get(CONTENT_OPEN_ACTIONS_SERVICE_TOKEN);
   });
 
   beforeEach(() => {
@@ -186,6 +202,23 @@ describe('EduContentSearchResultComponent', () => {
 
         clickAction.mockReset();
       });
+    });
+  });
+
+  describe('getActions', () => {
+    it('should return the default educontent actions', () => {
+      expect(component.actions).toEqual(mockActions);
+    });
+
+    it('should include task actions when addTaskActions is true', () => {
+      component.data = {
+        eduContent: new EduContentFixture(),
+        addTaskActions: true
+      } as EduContentSearchResultInterface;
+
+      component.ngOnInit();
+
+      expect(component.actions).toEqual([...mockTaskActions, ...mockActions]);
     });
   });
 });

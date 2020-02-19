@@ -14,6 +14,7 @@ export class EffectFeedbackEffects {
     ofType(EffectFeedbackActionTypes.AddEffectFeedback),
     filter((action: AddEffectFeedback) => {
       const customHandlers =
+        action.payload.effectFeedback.triggerAction &&
         action.payload.effectFeedback.triggerAction.payload
           .customFeedbackHandlers;
       return (
@@ -33,6 +34,7 @@ export class EffectFeedbackEffects {
     ofType(EffectFeedbackActionTypes.AddEffectFeedback),
     filter((action: AddEffectFeedback) => {
       const customHandlers =
+        action.payload.effectFeedback.triggerAction &&
         action.payload.effectFeedback.triggerAction.payload
           .customFeedbackHandlers;
       return (

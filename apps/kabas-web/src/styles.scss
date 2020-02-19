@@ -85,6 +85,11 @@ p {
   margin: 0 0 1em 0;
 }
 
+hr {
+  border: none;
+  border-bottom: 1px solid $tertiary-bg-color;
+}
+
 .mat-drawer-side {
   border-right: none;
 }

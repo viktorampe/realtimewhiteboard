@@ -1,0 +1,27 @@
+.ui-section {
+  display: flex;
+  flex-direction: column;
+
+  &__header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    &__actions {
+      cursor: pointer;
+    }
+  }
+
+  &--editable {
+    cursor: pointer;
+
+    .ui-section__header__actions {
+      display: none;
+    }
+    &:hover {
+      .ui-section__header__actions {
+        display: block;
+      }
+    }
+  }
+}

@@ -78,10 +78,14 @@ import { EnvironmentUIInterface } from './interfaces/environment.interfaces';
 import { AlertToNotificationItemPipe } from './pipes/alert-to-notification/alert-to-notification-pipe';
 import { MailToByCredentialPipe } from './pipes/mail-to/mail-to-credential-pipe';
 import { PersonBadgeFromCredentialPipe } from './pipes/person-badge-from-credential/person-badge-from-credential-pipe';
+import {
+  ContentTaskActionsService,
+  CONTENT_TASK_ACTIONS_SERVICE_TOKEN
+} from './services';
 import { EduContentCollectionManagerService } from './services/collection-manager/edu-content-collection-manager.service';
 import { EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN } from './services/collection-manager/edu-content-collection-manager.service.interface';
-import { ContentActionsService } from './services/content-actions/content-actions.service';
-import { CONTENT_ACTIONS_SERVICE_TOKEN } from './services/content-actions/content-actions.service.interface';
+import { ContentOpenActionsService } from './services/content-actions/content-open-actions/content-open-actions.service';
+import { CONTENT_OPEN_ACTIONS_SERVICE_TOKEN } from './services/content-actions/content-open-actions/content-open-actions.service.interface';
 import { OPEN_STATIC_CONTENT_SERVICE_TOKEN } from './services/content/open-static-content.interface';
 import { OpenStaticContentService } from './services/content/open-static-content.service';
 import { FeedBackService, FEEDBACK_SERVICE_TOKEN } from './services/feedback';
@@ -169,7 +173,14 @@ import { SCORM_EXERCISE_SERVICE_TOKEN } from './services/scorm/scorm-exercise.se
       provide: EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN,
       useClass: EduContentCollectionManagerService
     },
-    { provide: CONTENT_ACTIONS_SERVICE_TOKEN, useClass: ContentActionsService },
+    {
+      provide: CONTENT_OPEN_ACTIONS_SERVICE_TOKEN,
+      useClass: ContentOpenActionsService
+    },
+    {
+      provide: CONTENT_TASK_ACTIONS_SERVICE_TOKEN,
+      useClass: ContentTaskActionsService
+    },
     AlertToNotificationItemPipe
   ],
   entryComponents: [

@@ -24,8 +24,8 @@ import {
 } from '@campus/search';
 import {
   ContentActionInterface,
-  ContentActionsServiceInterface,
-  CONTENT_ACTIONS_SERVICE_TOKEN,
+  ContentOpenActionsServiceInterface,
+  CONTENT_OPEN_ACTIONS_SERVICE_TOKEN,
   OpenStaticContentServiceInterface,
   OPEN_STATIC_CONTENT_SERVICE_TOKEN
 } from '@campus/shared';
@@ -108,8 +108,8 @@ export class ManageKabasTasksDetailComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private router: Router,
     private route: ActivatedRoute,
-    @Inject(CONTENT_ACTIONS_SERVICE_TOKEN)
-    private contentActionService: ContentActionsServiceInterface,
+    @Inject(CONTENT_OPEN_ACTIONS_SERVICE_TOKEN)
+    private contentOpenActionsService: ContentOpenActionsServiceInterface,
     @Inject(OPEN_STATIC_CONTENT_SERVICE_TOKEN)
     private openStaticContentService: OpenStaticContentServiceInterface,
     @Inject(FILTER_SERVICE_TOKEN) private filterService: FilterServiceInterface
@@ -402,6 +402,27 @@ export class ManageKabasTasksDetailComponent implements OnInit, OnDestroy {
   public clickRemoveTaskEduContents(
     taskEduContents: TaskEduContentInterface[]
   ) {
+    const length = taskEduContents.length;
+    const dialogData = {
+      title: 'Lesmateriaal verwijderen',
+      message: `Ben je zeker dat je ${
+        length > 1 ? 'de' : 'het'
+      } geselecteerde ${
+        length > 1 ? 'lesmaterialen' : 'lesmateriaal'
+      } wil verwijderen?`
+    };
+
+    const dialogRef = this.dialog.open(ConfirmationModalComponent, {
+      data: dialogData
+    });
+
+    dialogRef
+      .afterClosed()
+      .pipe(filter(confirmed => confirmed))
+      .subscribe(() => this.removeTaskEduContents(taskEduContents));
+  }
+
+  public removeTaskEduContents(taskEduContents: TaskEduContentInterface[]) {
     this.viewModel.deleteTaskEduContents(taskEduContents.map(tec => tec.id));
   }
 
@@ -653,7 +674,7 @@ export class ManageKabasTasksDetailComponent implements OnInit, OnDestroy {
         const taskEduContents = task.taskEduContents.map(tE => {
           return {
             ...tE,
-            actions: this.contentActionService.getActionsForEduContent(
+            actions: this.contentOpenActionsService.getActionsForEduContent(
               tE.eduContent
             )
           };
