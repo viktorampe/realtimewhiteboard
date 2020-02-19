@@ -82,11 +82,6 @@ describe('CardComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it("should replace card's image when replaceImage gets called", () => {
-    component.emitUpdateImage('test-image');
-    expect(component.image).toBe('test-image');
-  });
-
   it('should emit cardPressed when onPressCard gets called', () => {
     spyOn(component.cardPressed, 'emit');
     component.onPressCard();
