@@ -26,7 +26,9 @@ import {
   TaskGroupQueries,
   TaskQueries,
   TaskStudentActions,
-  TaskStudentQueries
+  TaskStudentQueries,
+  YearActions,
+  YearQueries
 } from '@campus/dal';
 import { Action, select, Selector, Store } from '@ngrx/store';
 import { take } from 'rxjs/operators';
@@ -74,6 +76,9 @@ export class KabasTasksResolver extends StateResolver {
       new EduContentActions.LoadEduContents({
         userId: this.authService.userId
       }),
+      new YearActions.LoadYears({
+        userId: this.authService.userId
+      }),
       // TODO: remove `force: true`
       // It was added to make sure methods get loaded, even though they are already resolved through the PendingTaskGuard
       // The problem is that PendingTaskGuard does not wait for the appResolver to complete, so it loads for an empty array of methodIds
@@ -98,6 +103,7 @@ export class KabasTasksResolver extends StateResolver {
       TaskStudentQueries.getLoaded,
       TaskEduContentQueries.getLoaded,
       EduContentQueries.getLoaded,
+      YearQueries.getLoaded,
       EduContentBookQueries.getLoaded
     ];
   }

@@ -16,6 +16,8 @@ import {
 import {
   ContentOpenerInterface,
   ContentTaskManagerInterface,
+  EduContentCollectionManagerService,
+  EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN,
   EnvironmentSearchModesInterface,
   ENVIRONMENT_SEARCHMODES_TOKEN,
   OpenStaticContentServiceInterface,
@@ -50,7 +52,9 @@ export class GlobalSearchViewModel
     @Inject(OPEN_STATIC_CONTENT_SERVICE_TOKEN)
     private openStaticContentService: OpenStaticContentServiceInterface,
     @Inject(SCORM_EXERCISE_SERVICE_TOKEN)
-    private scormExerciseService: ScormExerciseServiceInterface
+    private scormExerciseService: ScormExerciseServiceInterface,
+    @Inject(EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN)
+    private eduContentCollectionManagerService: EduContentCollectionManagerService
   ) {
     this.initialize();
   }
@@ -131,7 +135,7 @@ export class GlobalSearchViewModel
   }
 
   public addEduContentToTask(eduContent: EduContent): void {
-    // TODO: open dialog with tasks
+    this.eduContentCollectionManagerService.manageTasksForContent(eduContent);
   }
 
   public removeEduContentFromTask(eduContent: EduContent): void {
