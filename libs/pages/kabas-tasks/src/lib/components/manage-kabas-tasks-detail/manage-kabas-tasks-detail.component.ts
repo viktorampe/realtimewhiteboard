@@ -402,6 +402,27 @@ export class ManageKabasTasksDetailComponent implements OnInit, OnDestroy {
   public clickRemoveTaskEduContents(
     taskEduContents: TaskEduContentInterface[]
   ) {
+    const length = taskEduContents.length;
+    const dialogData = {
+      title: 'Lesmateriaal verwijderen',
+      message: `Ben je zeker dat je ${
+        length > 1 ? 'de' : 'het'
+      } geselecteerde ${
+        length > 1 ? 'lesmaterialen' : 'lesmateriaal'
+      } wil verwijderen?`
+    };
+
+    const dialogRef = this.dialog.open(ConfirmationModalComponent, {
+      data: dialogData
+    });
+
+    dialogRef
+      .afterClosed()
+      .pipe(filter(confirmed => confirmed))
+      .subscribe(() => this.removeTaskEduContents(taskEduContents));
+  }
+
+  public removeTaskEduContents(taskEduContents: TaskEduContentInterface[]) {
     this.viewModel.deleteTaskEduContents(taskEduContents.map(tec => tec.id));
   }
 
