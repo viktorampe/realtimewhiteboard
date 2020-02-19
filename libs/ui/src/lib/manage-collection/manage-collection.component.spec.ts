@@ -22,7 +22,7 @@ import { InfoPanelComponent } from '../info-panel/info-panel.component';
 import { ManageCollectionsDataInterface } from './interfaces/manage-collection-data.interface';
 import { ManageCollectionItemInterface } from './interfaces/manage-collection-item.interface';
 import { ManageCollectionComponent } from './manage-collection.component';
-
+// file.only
 describe('ManageCollectionComponent', () => {
   let component: ManageCollectionComponent;
   let fixture: ComponentFixture<ManageCollectionComponent>;
@@ -63,7 +63,8 @@ describe('ManageCollectionComponent', () => {
       },
       linkableItems: mockLinkableItems,
       linkedItemIds: new Set([3]), //selected item ids
-      recentItemIds: new Set([1])
+      recentItemIds: new Set([1]),
+      useFilter: true
     };
 
     TestBed.configureTestingModule({
@@ -176,73 +177,89 @@ describe('ManageCollectionComponent', () => {
         filterService = TestBed.get(FILTER_SERVICE_TOKEN);
       });
 
-      it('should filter the items', () => {
-        const mockFilteredItems = [mockLinkableItems[0], mockLinkableItems[1]];
-        const mockFilteredItemsIds = mockFilteredItems.map(item => item.id);
+      describe('when useFilter === true', () => {
+        it('should filter the items', () => {
+          const mockFilteredItems = [
+            mockLinkableItems[0],
+            mockLinkableItems[1]
+          ];
+          const mockFilteredItemsIds = mockFilteredItems.map(item => item.id);
 
-        const spy = jest
-          .spyOn(filterService, 'filter')
-          .mockReturnValue(mockFilteredItems);
-        component.filterTextInput.setValue('some value that does not matter');
+          const spy = jest
+            .spyOn(filterService, 'filter')
+            .mockReturnValue(mockFilteredItems);
+          component._filterTextInput.setValue(
+            'some value that does not matter'
+          );
 
-        fixture.detectChanges();
+          fixture.detectChanges();
 
-        const itemsInListIds = generalListDE
-          .queryAll(By.directive(MatListOption))
-          .map(dE => dE.componentInstance.value);
+          const itemsInListIds = generalListDE
+            .queryAll(By.directive(MatListOption))
+            .map(dE => dE.componentInstance.value);
 
-        expect(itemsInListIds).toEqual(mockFilteredItemsIds);
-        spy.mockRestore();
-      });
-      it('should hide the recent items when a filter is active', () => {
-        component.filterTextInput.setValue('some value that does not matter');
-        fixture.detectChanges();
-        expect(
-          fixture.debugElement.query(
-            By.css('.ui-manage-collection__recent-items')
-          )
-        ).toBeFalsy();
-      });
-      it('should init without a filter applied', () => {
-        expect(component.filterTextInput.input.value).toBe('');
-      });
-      it('should keep selection info of a filtered item', () => {
-        // doublecheck initial selection
-        let itemsInGeneralList = generalListDE.queryAll(
-          By.directive(MatListOption)
-        );
-        expect(itemsInGeneralList[1].componentInstance.selected).toBe(false);
-        expect(itemsInGeneralList[2].componentInstance.selected).toBe(true);
+          expect(itemsInListIds).toEqual(mockFilteredItemsIds);
+          spy.mockRestore();
+        });
+        it('should hide the recent items when a filter is active', () => {
+          component._filterTextInput.setValue(
+            'some value that does not matter'
+          );
+          fixture.detectChanges();
+          expect(
+            fixture.debugElement.query(
+              By.css('.ui-manage-collection__recent-items')
+            )
+          ).toBeFalsy();
+        });
+        it('should init without a filter applied', () => {
+          expect(component._filterTextInput.input.value).toBe('');
+        });
+        it('should keep selection info of a filtered item', () => {
+          component.ngAfterViewInit();
 
-        // for completeness, let's select an extra item
-        itemsInGeneralList[0].nativeElement.click();
-        expect(itemsInGeneralList[0].componentInstance.selected).toBe(true);
+          // doublecheck initial selection
+          let itemsInGeneralList = generalListDE.queryAll(
+            By.directive(MatListOption)
+          );
 
-        // filter all items away
-        const mockFilteredItems = [];
-        const spy = jest
-          .spyOn(filterService, 'filter')
-          .mockReturnValue(mockFilteredItems);
-        component.filterTextInput.setValue('some value that does not matter');
-        fixture.detectChanges();
+          console.log(itemsInGeneralList[1].componentInstance.selected);
 
-        // clear filter
-        spy.mockReturnValue(mockLinkableItems);
-        component.filterTextInput.clear();
-        fixture.detectChanges();
+          expect(itemsInGeneralList[1].componentInstance.selected).toBe(false);
+          expect(itemsInGeneralList[2].componentInstance.selected).toBe(true);
 
-        itemsInGeneralList = generalListDE.queryAll(
-          By.directive(MatListOption)
-        );
-        expect(itemsInGeneralList[0].componentInstance.selected).toBe(true);
-        expect(itemsInGeneralList[1].componentInstance.selected).toBe(false);
-        expect(itemsInGeneralList[2].componentInstance.selected).toBe(true);
+          // for completeness, let's select an extra item
+          itemsInGeneralList[0].nativeElement.click();
+          expect(itemsInGeneralList[0].componentInstance.selected).toBe(true);
 
-        // item[0] is also a recent item
-        const recentItem = recentListDE.query(By.directive(MatListOption))
-          .componentInstance;
-        expect(recentItem.selected).toBe(true);
-        spy.mockRestore();
+          // filter all items away
+          const mockFilteredItems = [];
+          const spy = jest
+            .spyOn(filterService, 'filter')
+            .mockReturnValue(mockFilteredItems);
+          component._filterTextInput.setValue(
+            'some value that does not matter'
+          );
+          fixture.detectChanges();
+
+          // clear filter
+          spy.mockReturnValue(mockLinkableItems);
+          component._filterTextInput.clear();
+          fixture.detectChanges();
+
+          itemsInGeneralList = generalListDE.queryAll(
+            By.directive(MatListOption)
+          );
+          expect(itemsInGeneralList[0].componentInstance.selected).toBe(true);
+          expect(itemsInGeneralList[1].componentInstance.selected).toBe(false);
+          expect(itemsInGeneralList[2].componentInstance.selected).toBe(true);
+
+          // item[0] is also a recent item
+          const recentItem = recentListDE.query(By.directive(MatListOption))
+            .componentInstance;
+          expect(recentItem.selected).toBe(true);
+          spy.mockRestore();
+        });
       });
 
       describe('no results', () => {
@@ -252,7 +269,9 @@ describe('ManageCollectionComponent', () => {
           jest
             .spyOn(filterService, 'filter')
             .mockReturnValue(mockFilteredItems);
-          component.filterTextInput.setValue('some value that does not matter');
+          component._filterTextInput.setValue(
+            'some value that does not matter'
+          );
           fixture.detectChanges();
         });
 
@@ -281,9 +300,9 @@ describe('ManageCollectionComponent', () => {
           expect(linkText).toBe(expectedText);
 
           // link click event
-          component.filterTextInput.clear = jest.fn();
+          component._filterTextInput.clear = jest.fn();
           link.click();
-          expect(component.filterTextInput.clear).toHaveBeenCalled();
+          expect(component._filterTextInput.clear).toHaveBeenCalled();
         });
       });
     });
