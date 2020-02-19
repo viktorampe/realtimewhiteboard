@@ -8,6 +8,7 @@ import {
   EduContentFixture,
   EduContentMetadataFixture,
   EduContentServiceInterface,
+  EduContentTocActions,
   EduContentTOCFixture,
   EduContentTocQueries,
   EduFileFixture,
@@ -1358,6 +1359,7 @@ describe('KabasTaskViewModel', () => {
       );
 
       store.overrideSelector(EduContentTocQueries.getTocsForToc, lessonTocs);
+      store.overrideSelector(EduContentTocQueries.isBookLoaded, true);
     });
 
     it('should be an empty array when no book, chapter or lesson is selected', () => {
@@ -1386,10 +1388,21 @@ describe('KabasTaskViewModel', () => {
           queryParams: { book: bookId }
         }
       });
+      jest.spyOn(EduContentTocQueries, 'isBookLoaded');
+      jest.spyOn(store, 'dispatch');
 
       expect(kabasTasksViewModel.currentToc$).toBeObservable(
         hot('a', {
           a: chapterTocs
+        })
+      );
+      expect(EduContentTocQueries.isBookLoaded).toHaveBeenCalledWith(
+        {},
+        { bookId }
+      );
+      expect(store.dispatch).toHaveBeenCalledWith(
+        new EduContentTocActions.LoadEduContentTocsForBook({
+          bookId
         })
       );
     });
