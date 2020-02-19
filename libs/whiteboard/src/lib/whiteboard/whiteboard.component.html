@@ -24,6 +24,7 @@
     <campus-card
       *ngFor="let card of cards"
       cdkDrag
+      cdkDragBoundary=".whiteboard__workspace"
       class="whiteboard__card"
       [class.zoom]="card.mode === Mode.ZoomMode"
       [cdkDragFreeDragPosition]="{ x: card.left, y: card.top }"
@@ -58,6 +59,7 @@
   </button>
 
   <campus-shelf
+    (cardDragged)="onCardDragged($event)"
     [class.minimizedShelf]="isShelfMinimized"
     [cards]="this.shelvedCards"
     [(isMinimized)]="isShelfMinimized"

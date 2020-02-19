@@ -175,4 +175,10 @@ export class WhiteboardComponent implements OnInit {
       .filter(c => c.mode === Mode.SelectedMode)
       .forEach(c => (c.mode = Mode.IdleMode));
   }
+
+  onCardDragged(card: CardInterface) {
+    card.mode = Mode.IdleMode;
+    this.cards.push(card);
+    this.shelvedCards = this.shelvedCards.filter(c => c !== card);
+  }
 }
