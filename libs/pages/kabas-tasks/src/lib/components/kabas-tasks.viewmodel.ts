@@ -7,6 +7,7 @@ import {
   ClassGroupQueries,
   DalState,
   EduContent,
+  EduContentActions,
   EduContentBookInterface,
   EduContentInterface,
   EduContentServiceInterface,
@@ -228,6 +229,12 @@ export class KabasTasksViewModel
   }
 
   addEduContentToTask(eduContent: EduContent, index?: number): void {
+    this.store.dispatch(
+      new EduContentActions.UpsertEduContent({
+        eduContent: eduContent.minimal
+      })
+    );
+
     this.currentTask$
       .pipe(
         take(1),
