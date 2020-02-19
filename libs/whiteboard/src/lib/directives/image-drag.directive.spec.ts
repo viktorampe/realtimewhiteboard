@@ -3,7 +3,7 @@ import { Component, DebugElement, NgModule } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { configureTestSuite } from 'ng-bullet';
-import { WhiteboardModule } from '../../lib/whiteboard.module';
+import { WhiteboardModule } from '../whiteboard.module';
 import { ImageDragDirective } from './image-drag.directive';
 
 @Component({
