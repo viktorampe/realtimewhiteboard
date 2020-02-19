@@ -11,6 +11,7 @@ import {
   EduContentBookInterface,
   EduContentInterface,
   EduContentServiceInterface,
+  EduContentTocActions,
   EduContentTOCInterface,
   EduContentTocQueries,
   EDU_CONTENT_SERVICE_TOKEN,
@@ -66,7 +67,9 @@ import {
   mapTo,
   shareReplay,
   switchMap,
+  switchMapTo,
   take,
+  tap,
   withLatestFrom
 } from 'rxjs/operators';
 import { AssigneeTypesEnum } from '../interfaces/Assignee.interface';
@@ -717,15 +720,33 @@ export class KabasTasksViewModel
   }
 
   private getTocsStream(): Observable<EduContentTOCInterface[]> {
-    const tocStreamWhenLessonChapter$ = this.currentTaskParams$.pipe(
+    const loadTocsForBook$ = this.currentTaskParams$.pipe(
+      filter(params => !!params.book),
+      tap(params => {
+        this.store.dispatch(
+          new EduContentTocActions.LoadEduContentTocsForBook({
+            bookId: params.book
+          })
+        );
+      }),
+      switchMap(params =>
+        this.store.select(EduContentTocQueries.isBookLoaded, {
+          bookId: params.book
+        })
+      ),
+      filter(bookLoaded => bookLoaded),
+      switchMapTo(this.currentTaskParams$)
+    );
+
+    const tocStreamWhenLessonChapter$ = loadTocsForBook$.pipe(
       filter(params => !!params.chapter),
       switchMap(params =>
         this.combineChaptersLessons(params.book, params.chapter)
       )
     );
 
-    const tocStreamWhenBook$ = this.currentTaskParams$.pipe(
-      filter(params => !!params.book && !params.chapter),
+    const tocStreamWhenBook$ = loadTocsForBook$.pipe(
+      filter(params => !params.chapter),
       switchMap(params => {
         return this.store.pipe(
           select(EduContentTocQueries.getChaptersForBook, {

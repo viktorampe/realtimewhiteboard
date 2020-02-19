@@ -1,15 +1,21 @@
 <campus-collapsible-sheet>
   <div aside>
-    <mat-nav-list>
-      <div matSubheader>Zoek in ander boek</div>
-      <mat-list-item (click)="selectTOC(5, 0)">Hoofdstuk</mat-list-item>
-      <mat-list-item (click)="selectTOC(6, 0)">Hoofdstuk</mat-list-item>
-      <mat-list-item (click)="selectTOC(7, 1)">Hoofdstuk</mat-list-item>
-      <mat-list-item>Hoofdstuk</mat-list-item>
-      <mat-list-item>Hoofdstuk</mat-list-item>
-      <mat-list-item>Hoofdstuk</mat-list-item>
-      <mat-list-item>Hoofdstuk</mat-list-item>
-    </mat-nav-list>
+    <mat-nav-list *ngIf="currentTaskParams$ | async as params">
+      <mat-list-item
+        data-cy="lesson-link"
+        *ngFor="let toc of currentToc$ | async"
+        (click)="selectTOC(toc.id, toc.depth)"
+        class="manage-task-content__lesson-link"
+        [class.manage-task-content__lesson-link--selected]="
+          toc.id === (params.lesson ? params.lesson : params.chapter)
+        "
+        [ngClass]="'manage-task-content__lesson-link--depth-' + toc.depth"
+      >
+        <span class="manage-task-content__lesson-link__title">{{
+          toc.title
+        }}</span></mat-list-item
+      ></mat-nav-list
+    >
   </div>
 
   <div main class="manage-task-content__main__container">
