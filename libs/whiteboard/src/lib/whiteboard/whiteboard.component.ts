@@ -194,8 +194,8 @@ export class WhiteboardComponent implements OnInit {
   }
 
   private addNewCardAfterImageUpload(
-    offsetY: number,
     offsetX: number,
+    offsetY: number,
     image: string
   ) {
     const card = this.addEmptyCard(offsetY, offsetX, image);
