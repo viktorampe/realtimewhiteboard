@@ -57,13 +57,14 @@ export class WhiteboardComponent implements OnInit {
   }
 
   addEmptyCard(top: number = 0, left: number = 0) {
-    const card = {
+    const card: CardInterface = {
       mode: Mode.IdleMode,
       color: this.lastColor,
       description: '',
       image: '',
       top: top,
-      left: left
+      left: left,
+      viewModeImage: true
     };
     this.cards.push(card);
 
@@ -97,17 +98,74 @@ export class WhiteboardComponent implements OnInit {
   }
 
   onCardTapped(card: CardInterface) {
-    const isCardSelected = !!this.cards.filter(
-      c => c.mode === Mode.SelectedMode
-    ).length;
-
-    if (!isCardSelected) {
+    if (card.mode === Mode.ZoomMode) {
+      card.mode = Mode.IdleMode;
+    } else if (this.isZoomAllowedForCard(card)) {
       card.mode = Mode.ZoomMode;
     }
   }
 
-  saveLastColor(color: string) {
+  private isZoomAllowedForCard(card: CardInterface): Boolean {
+    const isACardSelected = this.isACardSelected();
+
+    const isZoomAllowed =
+      !isACardSelected &&
+      card.viewModeImage &&
+      card.image &&
+      card.mode !== Mode.EditMode;
+
+    return isZoomAllowed;
+  }
+
+  private isACardSelected() {
+    return !!this.cards.filter(c => c.mode === Mode.SelectedMode).length;
+  }
+
+  cardEditIconClicked(card: CardInterface) {
+    card.mode = Mode.EditMode;
+  }
+
+  cardConfirmIconClicked(card: CardInterface) {
+    card.mode = Mode.IdleMode;
+  }
+
+  cardFlipIconClicked(card: CardInterface) {
+    card.viewModeImage = !card.viewModeImage;
+
+    if (card.mode !== Mode.EditMode) {
+      card.mode = Mode.IdleMode;
+    }
+  }
+
+  onCardPressed(card: CardInterface) {
+    if (card.mode !== Mode.ShelfMode) {
+      if (card.mode === Mode.SelectedMode || card.mode === Mode.EditMode) {
+        card.mode = Mode.IdleMode;
+      } else {
+        card.mode = Mode.SelectedMode;
+      }
+    }
+  }
+
+  removeImageFromCard(card: CardInterface) {
+    card.image = '';
+  }
+
+  updateImageFromCard(card: CardInterface) {
+    card.image = '';
+
+    card.mode = Mode.UploadMode;
+
+    // TODO: remove this settimeout and wait for actual image upload
+    setTimeout(() => {
+      card.mode = Mode.IdleMode;
+    }, 500);
+  }
+
+  changeColorForCard(card: CardInterface, color: string) {
     this.lastColor = color;
+    card.color = color;
+    card.mode = Mode.IdleMode;
   }
 
   bulkDeleteClicked() {

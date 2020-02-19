@@ -8,7 +8,7 @@
 >
   <campus-color-list
     class="card__color-list"
-    (selectedColor)="selectColor($event)"
+    (selectedColor)="emitSelectColor($event)"
     *ngIf="mode === Mode.EditMode || mode === Mode.SelectedMode"
   ></campus-color-list>
   <campus-card-toolbar
@@ -21,9 +21,9 @@
     class="card__toolbar"
     [mode]="mode"
     (clickDeleteIcon)="emitDeleteCard()"
-    (clickEditIcon)="setEditMode()"
-    (clickFlipIcon)="flipIconClicked()"
-    (clickConfirmIcon)="setIdleMode()"
+    (clickEditIcon)="emitEditIcon()"
+    (clickFlipIcon)="emitFlipIcon()"
+    (clickConfirmIcon)="emitConfirmIcon()"
     (clickMultiSelectIcon)="setMultiSelectSelectedMode()"
     (clickMultiSelectSelectedIcon)="setMultiSelectMode()"
   ></campus-card-toolbar>
@@ -34,8 +34,8 @@
         class="card__content__image"
         [imageUrl]="image"
         [mode]="mode"
-        (removeClicked)="removeImage()"
-        (updateClicked)="updateImage()"
+        (removeClicked)="emitRemoveImage()"
+        (updateClicked)="emitUpdateImage()"
       ></campus-card-image>
       <ng-template #viewModeText class="card__content__input">
         <campus-card-text

@@ -113,26 +113,26 @@ describe('CardComponent', () => {
 
   it('should set mode to IdleMode when a color is clicked from the colorlist from SelectedMode', () => {
     component.mode = <Mode>Mode.SelectedMode;
-    component.selectColor('white');
+    component.emitSelectColor('white');
     expect(component.mode).toBe(Mode.IdleMode);
   });
 
   it('should set mode to IdleMode when a color is clicked from the colorlist from EditMode', () => {
     component.mode = <Mode>Mode.EditMode;
-    component.selectColor('white');
+    component.emitSelectColor('white');
     expect(component.mode).toBe(Mode.IdleMode);
   });
 
   it('should change the cardcolor when a color is picked', () => {
     component.mode = Mode.SelectedMode;
-    component.selectColor('black');
+    component.emitSelectColor('black');
     expect(component.color).toBe('black');
   });
 
   it('should emit the right color when a cardcolor is picked', () => {
-    spyOn(component.lastColor, 'emit');
-    component.selectColor('black');
-    expect(component.lastColor.emit).toHaveBeenCalledWith('black');
+    spyOn(component.colorChange, 'emit');
+    component.emitSelectColor('black');
+    expect(component.colorChange.emit).toHaveBeenCalledWith('black');
   });
 
   it('should emit deleteCard when emitDeleteCard is called', () => {
