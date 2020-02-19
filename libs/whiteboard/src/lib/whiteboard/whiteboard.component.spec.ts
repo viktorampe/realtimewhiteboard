@@ -88,7 +88,8 @@ describe('WhiteboardComponent', () => {
       image: null,
       color: null,
       top: 0,
-      left: 0
+      left: 0,
+      viewModeImage: true
     };
 
     component.cards.push(card);
@@ -105,7 +106,8 @@ describe('WhiteboardComponent', () => {
       image: null,
       color: null,
       top: 0,
-      left: 0
+      left: 0,
+      viewModeImage: true
     };
 
     const card2: CardInterface = {
@@ -114,7 +116,8 @@ describe('WhiteboardComponent', () => {
       image: null,
       color: null,
       top: 0,
-      left: 0
+      left: 0,
+      viewModeImage: true
     };
 
     component.selectedCards = [card1, card2];
@@ -131,7 +134,8 @@ describe('WhiteboardComponent', () => {
       image: null,
       color: null,
       top: 0,
-      left: 0
+      left: 0,
+      viewModeImage: true
     };
 
     const selectedCard: CardInterface = {
@@ -140,7 +144,8 @@ describe('WhiteboardComponent', () => {
       image: null,
       color: null,
       top: 0,
-      left: 0
+      left: 0,
+      viewModeImage: true
     };
 
     component.cards = [idleCard, selectedCard];
@@ -157,7 +162,8 @@ describe('WhiteboardComponent', () => {
       image: null,
       color: null,
       top: 0,
-      left: 0
+      left: 0,
+      viewModeImage: true
     };
 
     const card2: CardInterface = {
@@ -166,7 +172,8 @@ describe('WhiteboardComponent', () => {
       image: null,
       color: null,
       top: 0,
-      left: 0
+      left: 0,
+      viewModeImage: true
     };
 
     component.selectedCards = [card, card2];
@@ -183,15 +190,18 @@ describe('WhiteboardComponent', () => {
       image: null,
       color: null,
       top: 0,
-      left: 0
+      left: 0,
+      viewModeImage: true
     };
+
     const card2: CardInterface = {
       mode: Mode.SelectedMode,
       description: '',
       image: null,
       color: null,
       top: 0,
-      left: 0
+      left: 0,
+      viewModeImage: true
     };
 
     component.cards = [card, card2];
@@ -208,23 +218,28 @@ describe('WhiteboardComponent', () => {
       image: null,
       color: 'blue',
       top: 0,
-      left: 0
+      left: 0,
+      viewModeImage: true
     };
+
     const workspace_card_2: CardInterface = {
       mode: Mode.SelectedMode,
       description: 'Grieken en Romeinen',
       image: null,
       color: 'yellow',
       top: 0,
-      left: 0
+      left: 0,
+      viewModeImage: true
     };
+
     const shelved_card: CardInterface = {
       mode: Mode.ShelfMode,
       description: 'Second card',
       image: null,
       color: 'red',
       top: 0,
-      left: 0
+      left: 0,
+      viewModeImage: true
     };
 
     component.title = 'test board';
@@ -245,11 +260,14 @@ describe('WhiteboardComponent', () => {
       image: null,
       color: null,
       top: 0,
-      left: 0
+      left: 0,
+      viewModeImage: true
     };
+
     component.cards = [card];
     component.shelvedCards = [];
     component.onDeleteCard(card);
+
     expect(component.shelvedCards.length).toBe(1);
     expect(component.cards.length).toBe(0);
   });
@@ -261,8 +279,10 @@ describe('WhiteboardComponent', () => {
       image: null,
       color: null,
       top: 0,
-      left: 0
+      left: 0,
+      viewModeImage: true
     };
+
     component.onDeleteCard(card);
     expect(card.mode).toBe(Mode.ShelfMode);
   });
