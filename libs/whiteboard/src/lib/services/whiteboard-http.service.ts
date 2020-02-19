@@ -17,8 +17,9 @@ export class WhiteboardHttpService {
     return of(this.getWhiteboardMock());
   }
 
-  public setJson(whiteboard: WhiteboardInterface) {
-    const response = this.http.post(this.url, JSON.stringify(whiteboard));
+  public setJson(whiteboard: WhiteboardInterface): Observable<boolean> {
+    this.http.post(this.url, JSON.stringify(whiteboard));
+    return of(true);
   }
 
   private getWhiteboardMock(): WhiteboardInterface {

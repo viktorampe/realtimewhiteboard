@@ -56,7 +56,6 @@ describe('WhiteboardComponent', () => {
         ImageToolbarComponent
       ],
       providers: [
-        HttpClient,
         {
           provide: HAMMER_LOADER,
           useValue: () => new Promise(() => {})

@@ -26,10 +26,10 @@ export class WhiteboardComponent implements OnInit {
   isToolbarVisible = false;
   isShelfMinimized = false;
 
-  constructor(private _http: WhiteboardHttpService) {}
+  constructor(private whiteboardHttpService: WhiteboardHttpService) {}
 
   ngOnInit() {
-    this._http.getJson().subscribe(whiteboard => {
+    this.whiteboardHttpService.getJson().subscribe(whiteboard => {
       this.title = whiteboard.title;
       this.cards = whiteboard.cards;
       this.shelvedCards = whiteboard.shelfCards;
@@ -58,7 +58,7 @@ export class WhiteboardComponent implements OnInit {
       cards: this.cards,
       shelfCards: this.shelvedCards
     };
-    this._http.setJson(whiteboard);
+    this.whiteboardHttpService.setJson(whiteboard);
     return whiteboard;
   }
 
