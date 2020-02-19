@@ -1,13 +1,16 @@
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import {
   AfterViewInit,
   Component,
   HostBinding,
+  OnDestroy,
   OnInit,
   QueryList,
   ViewChild,
   ViewChildren
 } from '@angular/core';
-import { Router } from '@angular/router';
+import { Params, Router } from '@angular/router';
+import { EduContent } from '@campus/dal';
 import {
   SearchComponent,
   SearchModeInterface,
@@ -15,9 +18,10 @@ import {
   SearchResultInterface,
   SearchStateInterface
 } from '@campus/search';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { filter, map, switchMapTo, take } from 'rxjs/operators';
 import { TaskEduContentWithEduContentInterface } from '../../interfaces/TaskEduContentWithEduContent.interface';
+import { TaskWithAssigneesInterface } from '../../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
 
 @Component({
@@ -25,18 +29,25 @@ import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
   templateUrl: './manage-task-content.component.html',
   styleUrls: ['./manage-task-content.component.scss']
 })
-export class ManageTaskContentComponent implements OnInit, AfterViewInit {
+export class ManageTaskContentComponent
+  implements OnInit, AfterViewInit, OnDestroy {
   public currentContent$: Observable<TaskEduContentWithEduContentInterface[]>;
+  public reorderableTaskEduContents$ = new BehaviorSubject<
+    TaskEduContentWithEduContentInterface[]
+  >([]);
+  public task$: Observable<TaskWithAssigneesInterface>;
 
   public searchMode$: Observable<SearchModeInterface>;
   public initialSearchState$: Observable<SearchStateInterface>;
   public searchResults$: Observable<SearchResultInterface>;
   public autoCompleteValues$: Observable<string[]>;
+  public selectedBookTitle$: Observable<string>;
 
   @ViewChildren(SearchPortalDirective)
   private portalHosts: QueryList<SearchPortalDirective>;
   @ViewChild(SearchComponent, { static: true })
   public searchComponent: SearchComponent;
+  private subscriptions = new Subscription();
 
   constructor(private viewModel: KabasTasksViewModel, private router: Router) {}
 
@@ -62,29 +73,62 @@ export class ManageTaskContentComponent implements OnInit, AfterViewInit {
     this.currentContent$ = this.viewModel.currentTask$.pipe(
       map(task => task.taskEduContents)
     );
+    this.task$ = this.viewModel.currentTask$;
+    this.selectedBookTitle$ = this.viewModel.selectedBookTitle$;
 
     this.searchMode$ = this.viewModel.getSearchMode('task-manage-content');
     this.initialSearchState$ = this.viewModel.getInitialSearchState();
     this.searchResults$ = this.viewModel.searchResults$;
+
+    this.subscriptions.add(
+      this.task$.subscribe(task => {
+        this.reorderableTaskEduContents$.next([...task.taskEduContents]);
+      })
+    );
   }
 
   ngAfterViewInit() {
     this.searchComponent.searchPortals = this.portalHosts;
   }
 
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
+  }
+
+  public dropTaskEduContent(
+    taskEduContents: TaskEduContentWithEduContentInterface[],
+    event: CdkDragDrop<TaskEduContentWithEduContentInterface[]>
+  ) {
+    if (event.previousIndex === event.currentIndex) {
+      return;
+    }
+
+    moveItemInArray(taskEduContents, event.previousIndex, event.currentIndex);
+    this.viewModel.updateTaskEduContentsOrder(taskEduContents);
+  }
+
   public clickDone() {}
 
-  addEduContentToTask(eduContentId: number, taskId: number, index: number) {
-    throw new Error('not implemented');
+  addEduContentToTask(eduContent: EduContent, index?: number) {
+    this.viewModel.addEduContentToTask(eduContent, index);
   }
 
   selectTOC(tocId: number, depth: number) {
-    // TODO: implement
-    throw new Error('Not yet implemented');
+    const queryParams: Params = {};
+    switch (depth) {
+      case 0:
+        queryParams.chapter = tocId;
+        queryParams.lesson = undefined;
+        break;
+      case 1:
+        queryParams.lesson = tocId;
+        break;
+    }
+    this.router.navigate([], { queryParams, queryParamsHandling: 'merge' });
   }
 
-  removeEduContentFromTask(taskEduContentId: number) {
-    throw new Error('not implemented');
+  removeEduContentFromTask(eduContent: EduContent) {
+    this.viewModel.removeEduContentFromTask(eduContent);
   }
 
   clearSearchFilters() {
