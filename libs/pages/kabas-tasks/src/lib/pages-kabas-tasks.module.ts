@@ -17,7 +17,7 @@ import {
   CONTENT_TASK_MANAGER_TOKEN,
   SharedModule
 } from '@campus/shared';
-import { UiModule } from '@campus/ui';
+import { ManageCollectionComponent, UiModule } from '@campus/ui';
 import { UtilsModule } from '@campus/utils';
 import { KabasTasksViewModel } from './components/kabas-tasks.viewmodel';
 import { ManageKabasTasksAddAssigneesComponent } from './components/manage-kabas-tasks-add-assignees/manage-kabas-tasks-add-assignees.component';
@@ -79,7 +79,8 @@ import { PagesKabasTasksRoutingModule } from './pages-kabas-tasks-routing.module
   entryComponents: [
     ManageKabasTasksAssigneeModalComponent,
     NewTaskComponent,
-    PrintPaperTaskModalComponent
+    PrintPaperTaskModalComponent,
+    ManageCollectionComponent
   ]
 })
 export class PagesKabasTasksModule {}
