@@ -47,6 +47,8 @@ export class KabasTasksResolver extends StateResolver {
     super(store);
   }
   protected getLoadableActions(): Action[] {
+    const userId = this.authService.userId;
+
     let methodIds: number[];
     this.store
       .pipe(select(MethodQueries.getAllowedMethodIds), take(1))
@@ -57,33 +59,33 @@ export class KabasTasksResolver extends StateResolver {
 
     return [
       new LearningAreaActions.LoadLearningAreas(),
-      new TaskActions.LoadTasks({ userId: this.authService.userId }),
+      new TaskActions.LoadTasks({ userId }),
       new GroupActions.LoadGroups({
-        userId: this.authService.userId
+        userId
       }),
       new ClassGroupActions.LoadClassGroups({
-        userId: this.authService.userId
+        userId
       }),
       new LinkedPersonActions.LoadLinkedPersons({
-        userId: this.authService.userId
+        userId
       }),
       TaskClassGroupActions.loadTaskClassGroups(this.authService.userId),
       TaskGroupActions.loadTaskGroups(this.authService.userId),
       TaskStudentActions.loadTaskStudents(this.authService.userId),
       new TaskEduContentActions.LoadTaskEduContents({
-        userId: this.authService.userId
+        userId
       }),
       new EduContentActions.LoadEduContents({
-        userId: this.authService.userId
+        userId
       }),
       new YearActions.LoadYears({
-        userId: this.authService.userId
+        userId
       }),
       // TODO: remove `force: true`
       // It was added to make sure methods get loaded, even though they are already resolved through the PendingTaskGuard
       // The problem is that PendingTaskGuard does not wait for the appResolver to complete, so it loads for an empty array of methodIds
       new EduContentBookActions.LoadEduContentBooks({
-        methodIds,
+        userId,
         force: this.methodsLoaded && !this.booksLoaded
       })
     ];
