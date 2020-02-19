@@ -20,4 +20,8 @@ export class WhiteboardToolbarComponent implements OnInit {
   btnDeleteClicked() {
     this.deleteCards.emit();
   }
+
+  stopEventPropagation(event: Event) {
+    event.stopPropagation();
+  }
 }
