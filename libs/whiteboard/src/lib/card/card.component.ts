@@ -64,14 +64,10 @@ export class CardComponent {
   }
 
   setMultiSelectSelectedMode() {
-    this.mode = Mode.MultiSelectSelectedMode;
-    this.modeChange.emit(this.mode);
     this.select.emit();
   }
 
   setMultiSelectMode() {
-    this.mode = Mode.MultiSelectMode;
-    this.modeChange.emit(this.mode);
     this.deselect.emit();
   }
 

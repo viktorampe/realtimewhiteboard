@@ -19,10 +19,11 @@ export class WhiteboardComponent implements OnInit {
   }
   cards: CardInterface[] = [];
   shelvedCards: CardInterface[] = [];
+  selectedCards: CardInterface[] = [];
+
   lastColor = '#00A7E2';
   title = '';
   isTitleInputSelected = true;
-  isToolbarVisible = false;
   isShelfMinimized = false;
 
   constructor() {}
@@ -68,9 +69,7 @@ export class WhiteboardComponent implements OnInit {
     };
     this.cards.push(card);
 
-    if (
-      this.cards.filter(c => c.mode === Mode.MultiSelectSelectedMode).length
-    ) {
+    if (this.selectedCards.length) {
       card.mode = Mode.MultiSelectMode;
     }
   }
@@ -169,27 +168,19 @@ export class WhiteboardComponent implements OnInit {
   }
 
   bulkDeleteClicked() {
-    const multiSelectedCards = this.cards.filter(
-      c => c.mode === Mode.MultiSelectSelectedMode
-    );
-    multiSelectedCards.forEach(c => this.addCardToShelf(c));
-    this.cards = this.cards.filter(c => !multiSelectedCards.includes(c));
-    this.cards.forEach(c => (c.mode = Mode.IdleMode));
-    this.checkWhiteboardToolbarVisible();
+    this.cards = this.cards.filter(c => !this.selectedCards.includes(c));
+    this.selectedCards.forEach(c => this.addCardToShelf(c));
+    this.selectedCards = [];
   }
 
   changeSelectedCardsColor(color: string) {
     this.lastColor = color;
-
-    this.cards
-      .filter(c => c.mode === Mode.MultiSelectSelectedMode)
-      .forEach(c => (c.color = this.lastColor));
+    this.selectedCards.forEach(c => (c.color = this.lastColor));
   }
 
   cardModeChanged(card: CardInterface, mode: Mode) {
     if (mode === Mode.SelectedMode) {
       this.setCardsModeIdleExceptUploadModeAndCard(card);
-      this.checkWhiteboardToolbarVisible();
     }
   }
 
@@ -200,20 +191,23 @@ export class WhiteboardComponent implements OnInit {
   }
 
   onSelectCard(card: CardInterface) {
-    this.cards
-      .filter(c => c.mode !== Mode.MultiSelectSelectedMode)
-      .forEach(c => (c.mode = Mode.MultiSelectMode));
-    this.checkWhiteboardToolbarVisible();
+    this.selectedCards.push(card);
+
+    if (this.selectedCards.length === 1) {
+      this.cards.forEach(c => (c.mode = Mode.MultiSelectMode));
+    }
+
+    card.mode = Mode.MultiSelectSelectedMode;
   }
 
   onDeselectCard(card: CardInterface) {
-    if (
-      !this.cards.filter(c => c.mode === Mode.MultiSelectSelectedMode).length
-    ) {
+    this.selectedCards = this.selectedCards.filter(c => c !== card);
+
+    if (!this.selectedCards.length) {
       this.cards.forEach(c => (c.mode = Mode.IdleMode));
     }
 
-    this.checkWhiteboardToolbarVisible();
+    card.mode = Mode.MultiSelectMode;
   }
 
   onDragEnded(event: CdkDragEnd, card) {
@@ -222,15 +216,10 @@ export class WhiteboardComponent implements OnInit {
     card.left = cardPosition.x;
   }
 
-  checkWhiteboardToolbarVisible() {
-    this.isToolbarVisible =
-      this.cards.filter(c => c.mode === Mode.MultiSelectSelectedMode).length >=
-      1;
-  }
-
   onClickWhiteboard() {
+    this.selectedCards = [];
     this.cards
-      .filter(c => c.mode === Mode.SelectedMode)
+      .filter(c => c.mode !== Mode.UploadMode)
       .forEach(c => (c.mode = Mode.IdleMode));
   }
 }
