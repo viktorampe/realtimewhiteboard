@@ -1,6 +1,11 @@
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { HttpClient } from '@angular/common/http';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {
+  async,
+  ComponentFixture,
+  inject,
+  TestBed
+} from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   MatCardModule,
@@ -13,8 +18,10 @@ import { By, HAMMER_LOADER } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { configureTestSuite } from 'ng-bullet';
 import { of } from 'rxjs';
+import { delay } from 'rxjs/operators';
 import { Mode } from '../../enums/mode.enum';
 import CardInterface from '../../models/card.interface';
+import { WhiteboardHttpService } from '../../services/whiteboard-http.service';
 import { CardImageComponent } from '../card-image/card-image.component';
 import { CardTextComponent } from '../card-text/card-text.component';
 import { CardToolbarComponent } from '../card-toolbar/card-toolbar.component';
@@ -65,6 +72,14 @@ describe('WhiteboardComponent', () => {
           useValue: {
             get: () => of(),
             post: () => of()
+          }
+        },
+        {
+          provide: WhiteboardHttpService,
+          useValue: {
+            uploadFile: () => of('imageUrl').pipe(delay(500)),
+            getJson: () => of(),
+            setJson: () => of()
           }
         }
       ]
@@ -289,10 +304,31 @@ describe('WhiteboardComponent', () => {
     const [card] = component.cards;
     card.mode = <Mode>Mode.IdleMode;
 
-    component.updateImageFromCard(card);
+    const file = new File([''], 'dummy.jpg', {
+      type: ''
+    });
+
+    component.uploadImageForCard(card, file);
 
     expect(card.mode).toBe(Mode.UploadMode);
   });
+
+  it('should set card image to url after upload', async(
+    inject([WhiteboardHttpService], whiteboardHttpService => {
+      whiteboardHttpService.uploadFile().subscribe(result => {
+        const [card] = component.cards;
+        card.mode = <Mode>Mode.IdleMode;
+
+        const file = new File([''], 'dummy.jpg', {
+          type: ''
+        });
+
+        component.uploadImageForCard(card, file);
+
+        expect(card.image).toBe('imageUrl');
+      });
+    })
+  ));
 
   it('should set color of card when changeColorForCard is called', () => {
     const [card] = component.cards;
@@ -499,18 +535,6 @@ describe('WhiteboardComponent', () => {
   it('should add a card to the whiteboard on image drag', () => {
     const cardsLengthBeforeAdd = component.cards.length;
 
-    const mockFileReader = {
-      result: '',
-      readAsDataURL: blobInput => {},
-      onloadend: () => {}
-    };
-
-    spyOn<any>(window, 'FileReader').and.returnValue(mockFileReader);
-    spyOn<any>(mockFileReader, 'readAsDataURL').and.callFake(blobInput => {
-      mockFileReader.result = 'dummy.jpg';
-      mockFileReader.onloadend();
-    });
-
     const file = new File([''], 'dummy.jpg', {
       type: component.allowedFileTypes[0]
     });
@@ -528,19 +552,31 @@ describe('WhiteboardComponent', () => {
     expect(component.cards.length).toBe(cardsLengthBeforeAdd + 1);
   });
 
-  it('should add card to whiteboard on image drag with correct top value', () => {
-    const mockFileReader = {
-      result: '',
-      readAsDataURL: blobInput => {},
-      onloadend: () => {}
-    };
+  it('should call uploadImageForCard on image drag', () => {
+    spyOn(component, 'uploadImageForCard');
 
-    spyOn<any>(window, 'FileReader').and.returnValue(mockFileReader);
-    spyOn<any>(mockFileReader, 'readAsDataURL').and.callFake(blobInput => {
-      mockFileReader.result = 'dummy.jpg';
-      mockFileReader.onloadend();
+    const cardsLengthBeforeAdd = component.cards.length;
+
+    const file = new File([''], 'dummy.jpg', {
+      type: component.allowedFileTypes[0]
     });
 
+    const fileDropEvent = {
+      preventDefault: () => {},
+      stopPropagation: () => {},
+      dataTransfer: { files: [file] },
+      offsetX: 400,
+      offsetY: 400
+    };
+
+    component.onFilesDropped(fileDropEvent);
+
+    const addedCard = component.cards[component.cards.length - 1];
+
+    expect(component.uploadImageForCard).toHaveBeenCalledWith(addedCard, file);
+  });
+
+  it('should add card to whiteboard on image drag with correct top value', () => {
     const file = new File([''], 'dummy.jpg', {
       type: component.allowedFileTypes[0]
     });
@@ -561,18 +597,6 @@ describe('WhiteboardComponent', () => {
   });
 
   it('should add card to whiteboard on image drag with correct left value', () => {
-    const mockFileReader = {
-      result: '',
-      readAsDataURL: blobInput => {},
-      onloadend: () => {}
-    };
-
-    spyOn<any>(window, 'FileReader').and.returnValue(mockFileReader);
-    spyOn<any>(mockFileReader, 'readAsDataURL').and.callFake(blobInput => {
-      mockFileReader.result = 'dummy.jpg';
-      mockFileReader.onloadend();
-    });
-
     const file = new File([''], 'dummy.jpg', {
       type: component.allowedFileTypes[0]
     });
@@ -593,18 +617,6 @@ describe('WhiteboardComponent', () => {
   });
 
   it('should add cards with correct offset on image drag', () => {
-    const mockFileReader = {
-      result: '',
-      readAsDataURL: blobInput => {},
-      onloadend: () => {}
-    };
-
-    spyOn<any>(window, 'FileReader').and.returnValue(mockFileReader);
-    spyOn<any>(mockFileReader, 'readAsDataURL').and.callFake(blobInput => {
-      mockFileReader.result = 'dummy.jpg';
-      mockFileReader.onloadend();
-    });
-
     const file = new File([''], 'dummy.jpg', {
       type: component.allowedFileTypes[0]
     });
