@@ -11,7 +11,10 @@ export class ShelfComponent implements OnInit {
   @Input() cards: CardInterface[];
   @Input() isMinimized = false;
   @Output() isMinimizedChange = new EventEmitter<boolean>();
-  @Output() cardDragged = new EventEmitter<CardInterface>();
+  @Output() cardDragged = new EventEmitter<any>();
+
+  cardDraggedTop: number;
+  cardDraggedLeft: number;
 
   constructor() {}
 
@@ -24,7 +27,7 @@ export class ShelfComponent implements OnInit {
 
   onCardDragged(event: CdkDragDrop<any>, card: CardInterface) {
     if (!event.isPointerOverContainer) {
-      this.cardDragged.emit(card);
+      this.cardDragged.emit({ event: event, card: card });
     }
   }
 }

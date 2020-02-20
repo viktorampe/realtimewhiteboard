@@ -18,6 +18,8 @@ export class WhiteboardComponent implements OnInit {
     }
   }
 
+  @ViewChild('workspace', { static: true }) workspaceElementRef: ElementRef;
+
   readonly multipleCardCreationOffset = 50;
   readonly allowedFileTypes = ['image/jpeg', 'image/pjpeg', 'image/png'];
 
@@ -30,9 +32,13 @@ export class WhiteboardComponent implements OnInit {
   isTitleInputSelected = true;
   isShelfMinimized = false;
 
+  workspaceElement: HTMLElement;
+
   constructor() {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.workspaceElement = this.workspaceElementRef.nativeElement;
+  }
 
   get Mode() {
     return Mode;
@@ -215,7 +221,13 @@ export class WhiteboardComponent implements OnInit {
       .forEach(c => (c.mode = Mode.IdleMode));
   }
 
-  onCardDragged(card: CardInterface) {
+  onCardDragged(event) {
+    const card = event.card;
+    card.left = event.event.distance.x + 124;
+    card.top =
+      this.workspaceElement.getBoundingClientRect().height -
+      Math.abs(event.event.distance.y) -
+      167;
     card.mode = Mode.IdleMode;
     this.cards.push(card);
     this.shelvedCards = this.shelvedCards.filter(c => c !== card);
