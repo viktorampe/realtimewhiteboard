@@ -70,7 +70,7 @@
   </button>
 
   <campus-shelf
-    (cardDragged)="onCardDragged($event)"
+    (cardDraggedOutsideContainer)="cardDraggedPosition($event)"
     [class.minimizedShelf]="isShelfMinimized"
     [cards]="this.shelvedCards"
     [(isMinimized)]="isShelfMinimized"

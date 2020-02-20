@@ -1,4 +1,4 @@
-import { CdkDragEnd } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, CdkDragEnd } from '@angular/cdk/drag-drop';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Mode } from '../../enums/mode.enum';
 import CardInterface from '../../models/card.interface';
@@ -32,13 +32,9 @@ export class WhiteboardComponent implements OnInit {
   isTitleInputSelected = true;
   isShelfMinimized = false;
 
-  workspaceElement: HTMLElement;
-
   constructor() {}
 
-  ngOnInit() {
-    this.workspaceElement = this.workspaceElementRef.nativeElement;
-  }
+  ngOnInit() {}
 
   get Mode() {
     return Mode;
@@ -277,12 +273,15 @@ export class WhiteboardComponent implements OnInit {
       .forEach(c => (c.mode = Mode.IdleMode));
   }
 
-  onCardDragged(event) {
-    const card = event.card;
-    card.left = event.event.distance.x + 124;
+  cardDraggedPosition($event: {
+    event: CdkDragDrop<any>;
+    card: CardInterface;
+  }) {
+    const { card, event } = $event;
+    card.left = event.distance.x + 124;
     card.top =
-      this.workspaceElement.getBoundingClientRect().height -
-      Math.abs(event.event.distance.y) -
+      this.workspaceElementRef.nativeElement.getBoundingClientRect().height -
+      Math.abs(event.distance.y) -
       167;
     card.mode = Mode.IdleMode;
     this.cards.push(card);

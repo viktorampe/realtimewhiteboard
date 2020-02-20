@@ -1,4 +1,4 @@
-<div #shelf class="shelf" cdkDropList>
+<div class="shelf" cdkDropList>
   <div class="shelf__button">
     <button (click)="toggleShelf()">{{
       isMinimized ? 'expand' : 'minimize'
@@ -10,6 +10,7 @@
       (cdkDragDropped)="onCardDragged($event, card)"
       class="shelf__card"
       *ngFor="let card of cards"
+      [viewModeImage]="card.viewModeImage"
       [description]="card.description"
       [color]="card.color"
       [image]="card.image"
