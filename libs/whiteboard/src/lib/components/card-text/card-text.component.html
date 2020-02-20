@@ -1,6 +1,9 @@
-<p *ngIf="mode !== Mode.EditMode; else editView" class="card-text">{{
-  text
-}}</p>
+<p
+  [class.shelf]="mode === Mode.ShelfMode"
+  *ngIf="mode !== Mode.EditMode; else editView"
+  class="card-text"
+  >{{ text }}</p
+>
 
 <ng-template #editView>
   <mat-form-field appearance="standard" color="primary" class="card-input">
