@@ -8,7 +8,6 @@ import {
   FavoriteInterface,
   FavoriteQueries,
   FavoriteTypesEnum,
-  GroupQueries,
   LearningAreaInterface,
   LearningAreaQueries,
   LinkedPersonQueries,
@@ -31,26 +30,6 @@ import {
   TaskStatusEnum,
   TaskWithAssigneesInterface
 } from './../interfaces/TaskWithAssignees.interface';
-
-const taskGroupAssigneeByTask = createSelector(
-  [TaskGroupQueries.getAll, GroupQueries.getAllEntities],
-  (taskGroups, groupDict, props) =>
-    taskGroups.reduce((dict, tg) => {
-      if (!dict[tg.taskId]) {
-        dict[tg.taskId] = [];
-      }
-      dict[tg.taskId].push({
-        id: tg.id,
-        type: AssigneeTypesEnum.GROUP,
-        relationId: tg.groupId,
-        label: groupDict[tg.groupId].name,
-        start: tg.start,
-        end: tg.end
-      });
-
-      return dict;
-    }, {})
-);
 
 const taskStudentAssigneeByTask = createSelector(
   [TaskStudentQueries.getAll, LinkedPersonQueries.getAllEntities],
@@ -75,7 +54,7 @@ const taskStudentAssigneeByTask = createSelector(
 const combinedAssigneesByTask = createSelector(
   [
     TaskClassGroupQueries.getTaskClassGroupAssigneeByTask,
-    taskGroupAssigneeByTask,
+    TaskGroupQueries.getTaskGroupAssigneeByTask,
     taskStudentAssigneeByTask
   ],
   (tCGA, tGA, tSA, props) => {

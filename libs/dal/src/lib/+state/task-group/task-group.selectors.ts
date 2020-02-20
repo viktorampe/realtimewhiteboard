@@ -1,4 +1,6 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
+import { selectGroupState } from '../group/group.selectors';
+import { AssigneeTypesEnum } from '../task/AssigneeTypes.enum';
 import {
   NAME,
   selectAll,
@@ -55,4 +57,24 @@ export const getByIds = createSelector(
 export const getById = createSelector(
   selectTaskGroupState,
   (state: State, props: { id: number }) => state.entities[props.id]
+);
+
+export const getTaskGroupAssigneeByTask = createSelector(
+  [getAll, selectGroupState],
+  (taskGroups, groupState, props) =>
+    taskGroups.reduce((dict, tg) => {
+      if (!dict[tg.taskId]) {
+        dict[tg.taskId] = [];
+      }
+      dict[tg.taskId].push({
+        id: tg.id,
+        type: AssigneeTypesEnum.GROUP,
+        relationId: tg.groupId,
+        label: groupState.entities[tg.groupId].name,
+        start: tg.start,
+        end: tg.end
+      });
+
+      return dict;
+    }, {})
 );
