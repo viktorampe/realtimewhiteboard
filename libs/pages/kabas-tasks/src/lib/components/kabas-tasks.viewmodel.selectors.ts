@@ -13,18 +13,12 @@ import {
   MethodLevelInterface,
   MethodLevelQueries,
   MethodQueries,
-  TaskEduContentInterface,
-  TaskEduContentQueries,
   TaskInterface,
   TaskQueries
 } from '@campus/dal';
 import { Dictionary } from '@ngrx/entity';
 import { createSelector } from '@ngrx/store';
-import { AssigneeInterface } from '../interfaces/Assignee.interface';
-import {
-  TaskStatusEnum,
-  TaskWithAssigneesInterface
-} from './../interfaces/TaskWithAssignees.interface';
+import { TaskWithAssigneesInterface } from './../interfaces/TaskWithAssignees.interface';
 
 export const allowedLearningAreas = createSelector(
   [MethodQueries.getAllowedMethods, LearningAreaQueries.getAllEntities],
@@ -52,36 +46,8 @@ export const allowedLearningAreas = createSelector(
   }
 );
 
-export const getAllTasksWithAssignments = createSelector(
-  [
-    TaskQueries.getAll,
-    LearningAreaQueries.getAllEntities,
-    TaskEduContentQueries.getAllGroupedByTaskId,
-    TaskQueries.combinedAssigneesByTask,
-    FavoriteQueries.getTaskFavorites
-  ],
-  (
-    tasks: TaskInterface[],
-    learningAreaDict: Dictionary<LearningAreaInterface>,
-    taskEduContentByTask: Dictionary<TaskEduContentInterface[]>,
-    assigneesByTask: Dictionary<AssigneeInterface[]>,
-    favoriteTasks: FavoriteInterface[]
-  ) => {
-    const favoriteTaskIds = favoriteTasks.map(fav => fav.taskId);
-    return tasks.map(task =>
-      mapToTaskWithAssigneeInterface(
-        task,
-        learningAreaDict[task.learningAreaId],
-        taskEduContentByTask[task.id],
-        assigneesByTask,
-        favoriteTaskIds
-      )
-    );
-  }
-);
-
 export const getTasksWithAssignmentsByType = createSelector(
-  [getAllTasksWithAssignments],
+  [TaskQueries.getAllTasksWithAssignments],
   (
     tasks: TaskWithAssigneesInterface[],
     props: {
@@ -94,7 +60,7 @@ export const getTasksWithAssignmentsByType = createSelector(
 
 export const getTaskWithAssignmentAndEduContents = createSelector(
   [
-    getAllTasksWithAssignments,
+    TaskQueries.getAllTasksWithAssignments,
     EduContentQueries.getAllEntities,
     DiaboloPhaseQueries.getAllEntities,
     MethodLevelQueries.getAll,
@@ -177,56 +143,6 @@ export const getTaskFavoriteBookIds = createSelector(
     return taskFavoriteBooks;
   }
 );
-
-function mapToTaskWithAssigneeInterface(
-  task: TaskInterface,
-  learningArea: LearningAreaInterface,
-  taskEduContents: TaskEduContentInterface[],
-  assigneesByTask: Dictionary<AssigneeInterface[]>,
-  favoriteTaskIds: number[]
-): TaskWithAssigneesInterface {
-  return addTaskDates({
-    ...task,
-    learningArea: learningArea,
-    eduContentAmount: taskEduContents ? taskEduContents.length : 0,
-    taskEduContents: (taskEduContents || [])
-      .sort((a, b) => a.index - b.index)
-      .map(tEdu => ({
-        ...tEdu,
-        eduContent: toEduContent(tEdu.eduContent)
-      })),
-    assignees: assigneesByTask[task.id] || [],
-    isFavorite: favoriteTaskIds.includes(task.id)
-  });
-}
-
-function addTaskDates(
-  taskWithAssignees: TaskWithAssigneesInterface
-): TaskWithAssigneesInterface {
-  const now = new Date();
-  const { assignees } = taskWithAssignees;
-  let status = TaskStatusEnum.PENDING;
-
-  const maxDate = dates =>
-    dates.length ? new Date(Math.max(...dates)) : undefined;
-  const minDate = dates =>
-    dates.length ? new Date(Math.min(...dates)) : undefined;
-
-  const startDate = minDate(assignees.filter(a => a.start).map(a => +a.start));
-  const endDate = maxDate(assignees.filter(a => a.end).map(a => +a.end));
-
-  if (startDate && endDate) {
-    if (startDate > now) {
-      status = TaskStatusEnum.PENDING;
-    } else if (endDate > now) {
-      status = TaskStatusEnum.ACTIVE;
-    } else {
-      status = TaskStatusEnum.FINISHED;
-    }
-  }
-
-  return { ...taskWithAssignees, startDate, endDate, status };
-}
 
 function methodLevelForEduContent(
   eduContent: EduContentInterface,
