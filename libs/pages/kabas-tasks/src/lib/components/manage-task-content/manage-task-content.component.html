@@ -95,8 +95,9 @@
             "
           ></div>
           <mat-icon
-            class="manage-task-content__list__item__icon manage-task-content__list__item__icon--on-hover"
+            class="manage-task-content__list__item__icon manage-task-content__list__item__icon--delete manage-task-content__list__item__icon--on-hover"
             svgIcon="delete"
+            (click)="removeEduContentFromTask(taskEduContent.eduContent)"
           ></mat-icon>
         </mat-list-item>
       </mat-list>
