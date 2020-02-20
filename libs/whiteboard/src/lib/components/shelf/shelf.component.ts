@@ -1,6 +1,6 @@
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import CardInterface from '../../shared/models/card.interface';
+import CardInterface from '../../models/card.interface';
 
 @Component({
   selector: 'campus-shelf',
