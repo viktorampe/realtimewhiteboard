@@ -36,6 +36,22 @@
         (selectedColor)="changeColorForCard(card, $event)"
         *ngIf="card.mode === Mode.EditMode || card.mode === Mode.SelectedMode"
       ></campus-color-list>
+      <campus-card-toolbar
+        *ngIf="
+          card.mode === Mode.EditMode ||
+          card.mode === Mode.SelectedMode ||
+          card.mode === Mode.MultiSelectSelectedMode ||
+          card.mode === Mode.MultiSelectMode
+        "
+        class="card__toolbar"
+        [mode]="card.mode"
+        (clickDeleteIcon)="onDeleteCard(card)"
+        (clickEditIcon)="cardEditIconClicked(card)"
+        (clickFlipIcon)="cardFlipIconClicked(card)"
+        (clickConfirmIcon)="cardConfirmIconClicked(card)"
+        (clickMultiSelectIcon)="onSelectCard(card)"
+        (clickMultiSelectSelectedIcon)="onDeselectCard(card)"
+      ></campus-card-toolbar>
       <campus-card
         cdkDragBoundary=".whiteboard__workspace"
         class="whiteboard__card"
@@ -45,12 +61,6 @@
         [(image)]="card.image"
         [(mode)]="card.mode"
         [(viewModeImage)]="card.viewModeImage"
-        (edit)="cardEditIconClicked(card)"
-        (confirm)="cardConfirmIconClicked(card)"
-        (flip)="cardFlipIconClicked(card)"
-        (deleteCard)="onDeleteCard(card)"
-        (select)="onSelectCard(card)"
-        (deselect)="onDeselectCard(card)"
         (cardTapped)="onCardTapped(card)"
         (cardPressed)="onCardPressed(card)"
         (removeImage)="removeImageFromCard(card)"

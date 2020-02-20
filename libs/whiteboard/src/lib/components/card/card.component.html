@@ -6,22 +6,6 @@
   (press)="onPressCard()"
   (tap)="onTapCard()"
 >
-  <campus-card-toolbar
-    *ngIf="
-      mode === Mode.EditMode ||
-      mode === Mode.SelectedMode ||
-      mode === Mode.MultiSelectSelectedMode ||
-      mode === Mode.MultiSelectMode
-    "
-    class="card__toolbar"
-    [mode]="mode"
-    (clickDeleteIcon)="emitDeleteCard()"
-    (clickEditIcon)="emitEditIcon()"
-    (clickFlipIcon)="emitFlipIcon()"
-    (clickConfirmIcon)="emitConfirmIcon()"
-    (clickMultiSelectIcon)="emitSelect()"
-    (clickMultiSelectSelectedIcon)="emitDeselect()"
-  ></campus-card-toolbar>
   <div class="card__content" [class.zoom]="mode === Mode.ZoomMode">
     <ng-container *ngIf="mode !== Mode.UploadMode; else uploadMode">
       <campus-card-image
