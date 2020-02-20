@@ -172,10 +172,10 @@ describe('CardComponent', () => {
     expect(component.deleteCard.emit).toHaveBeenCalledTimes(1);
   });
 
-  it('should set mode to MultiSelectSelectedMode when setMultiSelectSelectedMode is called', () => {
-    component.mode = <Mode>Mode.SelectedMode;
+  it('should emit select when setMultiSelectSelectedMode is called', () => {
+    spyOn(component.select, 'emit');
     component.setMultiSelectSelectedMode();
-    expect(component.mode).toBe(Mode.MultiSelectSelectedMode);
+    expect(component.select.emit).toHaveBeenCalled();
   });
 
   it('should emit the select emitter when setMultiSelectSelectedMode is called ', () => {
