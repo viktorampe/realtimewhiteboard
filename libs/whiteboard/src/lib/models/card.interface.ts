@@ -7,4 +7,5 @@ export default interface CardInterface {
   image: string;
   top: number;
   left: number;
+  viewModeImage: boolean;
 }

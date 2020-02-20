@@ -1,6 +1,11 @@
-<div class="whiteboard" campusImageDrag (click)="onClickWhiteboard()">
+<div
+  class="whiteboard"
+  (filesDroppedEvent)="onFilesDropped($event)"
+  campusImageDrag
+  (click)="onClickWhiteboard()"
+>
   <campus-whiteboard-toolbar
-    *ngIf="isToolbarVisible"
+    *ngIf="selectedCards.length"
     (deleteCards)="bulkDeleteClicked()"
     (changeSelectedColor)="changeSelectedCardsColor($event)"
   ></campus-whiteboard-toolbar>
@@ -31,12 +36,18 @@
       [(color)]="card.color"
       [(image)]="card.image"
       [(mode)]="card.mode"
-      (modeChange)="cardModeChanged(card, $event)"
-      (lastColor)="saveLastColor($event)"
+      [(viewModeImage)]="card.viewModeImage"
+      (colorChange)="changeColorForCard(card, $event)"
+      (edit)="cardEditIconClicked(card)"
+      (confirm)="cardConfirmIconClicked(card)"
+      (flip)="cardFlipIconClicked(card)"
       (deleteCard)="onDeleteCard(card)"
       (select)="onSelectCard(card)"
       (deselect)="onDeselectCard(card)"
       (cardTapped)="onCardTapped(card)"
+      (cardPressed)="onCardPressed(card)"
+      (removeImage)="removeImageFromCard(card)"
+      (updateImage)="updateImageFromCard(card)"
       (cdkDragEnded)="onDragEnded($event, card)"
     ></campus-card>
   </div>

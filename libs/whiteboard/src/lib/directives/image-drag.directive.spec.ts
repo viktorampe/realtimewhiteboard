@@ -3,7 +3,7 @@ import { Component, DebugElement, NgModule } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { configureTestSuite } from 'ng-bullet';
-import { WhiteboardModule } from '../../lib/whiteboard.module';
+import { WhiteboardModule } from '../whiteboard.module';
 import { ImageDragDirective } from './image-drag.directive';
 
 @Component({
@@ -95,8 +95,8 @@ describe('ImageDragDirective', () => {
     ).toBeFalsy();
   });
 
-  it('should emit the files on dropping files', () => {
-    spyOn(directive.fileDropped, 'emit');
+  it('should emit the event on dropping files', () => {
+    spyOn(directive.filesDroppedEvent, 'emit');
 
     const file = new File([''], 'dummy.jpg');
     const fileDropEvent = {
@@ -107,9 +107,9 @@ describe('ImageDragDirective', () => {
 
     directive.ondrop(fileDropEvent);
 
-    expect(directive.fileDropped.emit).toHaveBeenCalledTimes(1);
-    expect(directive.fileDropped.emit).toHaveBeenCalledWith(
-      fileDropEvent.dataTransfer.files
+    expect(directive.filesDroppedEvent.emit).toHaveBeenCalledTimes(1);
+    expect(directive.filesDroppedEvent.emit).toHaveBeenCalledWith(
+      fileDropEvent
     );
   });
 });
