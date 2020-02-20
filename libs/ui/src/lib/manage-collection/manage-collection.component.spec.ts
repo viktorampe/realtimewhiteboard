@@ -19,10 +19,11 @@ import { configureTestSuite } from 'ng-bullet';
 import { ButtonComponent } from '../button/button.component';
 import { FilterTextInputComponent } from '../filter-text-input/filter-text-input.component';
 import { InfoPanelComponent } from '../info-panel/info-panel.component';
+import { ENVIRONMENT_UI_TOKEN } from '../tokens';
 import { ManageCollectionsDataInterface } from './interfaces/manage-collection-data.interface';
 import { ManageCollectionItemInterface } from './interfaces/manage-collection-item.interface';
 import { ManageCollectionComponent } from './manage-collection.component';
-
+// file.only
 describe('ManageCollectionComponent', () => {
   let component: ManageCollectionComponent;
   let fixture: ComponentFixture<ManageCollectionComponent>;
@@ -89,7 +90,11 @@ describe('ManageCollectionComponent', () => {
           provide: FILTER_SERVICE_TOKEN,
           useValue: { filter: () => mockInjectedData.linkableItems } // all injected items
         },
-        { provide: MatIconRegistry, useClass: MockMatIconRegistry }
+        { provide: MatIconRegistry, useClass: MockMatIconRegistry },
+        {
+          provide: ENVIRONMENT_UI_TOKEN,
+          useValue: { useModalSideSheetStyle: false }
+        }
       ]
     });
   });
@@ -222,9 +227,6 @@ describe('ManageCollectionComponent', () => {
           let itemsInGeneralList = generalListDE.queryAll(
             By.directive(MatListOption)
           );
-
-          console.log(itemsInGeneralList[1].componentInstance.selected);
-
           expect(itemsInGeneralList[1].componentInstance.selected).toBe(false);
           expect(itemsInGeneralList[2].componentInstance.selected).toBe(true);
 

@@ -69,6 +69,7 @@ export const environment = {
   },
   ui: {
     useNavItemStyle: true,
-    useInfoPanelStyle: false
+    useInfoPanelStyle: false,
+    useModalSideSheetStyle: true
   }
 };

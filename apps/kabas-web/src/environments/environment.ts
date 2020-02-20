@@ -74,7 +74,8 @@ export const environment: EnvironmentInterface = {
   },
   ui: {
     useNavItemStyle: true,
-    useInfoPanelStyle: false
+    useInfoPanelStyle: false,
+    useModalSideSheetStyle: true
   }
 };
 

@@ -21,7 +21,11 @@ import {
 } from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
-import { UiModule } from '@campus/ui';
+import {
+  EnvironmentUIInterface,
+  ENVIRONMENT_UI_TOKEN,
+  UiModule
+} from '@campus/ui';
 import {
   FilterService,
   FILTER_SERVICE_TOKEN,
@@ -71,10 +75,8 @@ import {
   ENVIRONMENT_SSO_TOKEN,
   ENVIRONMENT_TERM_PRIVACY_TOKEN,
   ENVIRONMENT_TESTING_TOKEN,
-  ENVIRONMENT_UI_TOKEN,
   ENVIRONMENT_WEBSITE_TOKEN
 } from './interfaces';
-import { EnvironmentUIInterface } from './interfaces/environment.interfaces';
 import { AlertToNotificationItemPipe } from './pipes/alert-to-notification/alert-to-notification-pipe';
 import { MailToByCredentialPipe } from './pipes/mail-to/mail-to-credential-pipe';
 import { PersonBadgeFromCredentialPipe } from './pipes/person-badge-from-credential/person-badge-from-credential-pipe';
