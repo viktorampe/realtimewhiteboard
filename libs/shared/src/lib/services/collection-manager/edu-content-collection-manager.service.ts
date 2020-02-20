@@ -30,6 +30,7 @@ import {
 import { select, Store } from '@ngrx/store';
 import { combineLatest, Observable } from 'rxjs';
 import { filter, map, shareReplay, switchMap, take } from 'rxjs/operators';
+import { EduContentTypeEnum } from '../../enums';
 import { EduContentCollectionManagerServiceInterface } from './edu-content-collection-manager.service.interface';
 
 @Injectable({
@@ -148,6 +149,15 @@ export class EduContentCollectionManagerService
       content.publishedEduContentMetadata.learningAreaId;
     const tasksCollection$: Observable<ManageCollectionItemInterface[]> = this.store.pipe(
       select(TaskQueries.getForLearningAreaId, { learningAreaId }),
+      map(tasks =>
+        tasks.filter(task => {
+          if (content.type === EduContentTypeEnum.PAPER_EXERCISE) {
+            return task.isPaperTask;
+          } else {
+            return !task.isPaperTask;
+          }
+        })
+      ),
       map((tasks: TaskInterface[]): ManageCollectionItemInterface[] => {
         return tasks.map(
           (task): ManageCollectionItemInterface => ({
