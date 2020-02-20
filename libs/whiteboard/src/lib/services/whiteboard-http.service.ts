@@ -1,25 +1,64 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { StorageInfoInterface } from 'libs/timeline/src/lib/services/editor-http.service.interface';
+import { Observable, of, Subject, throwError } from 'rxjs';
+import { catchError, map, mapTo, retry } from 'rxjs/operators';
 import { Mode } from '../../shared/enums/mode.enum';
 import WhiteboardInterface from '../../shared/models/whiteboard.interface';
+
+const RETRY_AMOUNT = 2;
 
 @Injectable({
   providedIn: 'root'
 })
 export class WhiteboardHttpService {
   private url = 'www.apicallmock.be';
+  private _errors$ = new Subject<Error>();
 
   constructor(private http: HttpClient) {}
 
   public getJson(): Observable<WhiteboardInterface> {
-    //TODO: API CALL ==> return this.http.get('https://api.openbrewerydb.org/breweries');
+    const response$ = this.http.get(this.url).pipe(
+      retry(RETRY_AMOUNT),
+      catchError(this.handleError.bind(this)),
+      map(
+        (response): WhiteboardInterface =>
+          response
+            ? JSON.parse(response)
+            : { title: '', cards: [], shelfCards: {} }
+      )
+    );
+    //TODO: return response$;
     return of(this.getWhiteboardMock());
   }
 
   public setJson(whiteboard: WhiteboardInterface): Observable<boolean> {
-    this.http.post(this.url, JSON.stringify(whiteboard));
-    return of(true);
+    const response$ = this.http
+      .post(this.url, JSON.stringify(whiteboard))
+      .pipe(
+        retry(RETRY_AMOUNT),
+        catchError(this.handleError.bind(this)),
+        mapTo(true)
+      );
+    return response$;
+  }
+
+  public uploadFile(file: File): Observable<StorageInfoInterface> {
+    const formData: FormData = new FormData();
+    formData.append('file', file, file.name);
+
+    const response$ = this.http
+      .post(this.url, formData, { withCredentials: true })
+      .pipe(
+        retry(RETRY_AMOUNT),
+        catchError(this.handleError.bind(this)),
+        map(
+          (response: { storageInfo: StorageInfoInterface }) =>
+            response.storageInfo
+        )
+      );
+
+    return response$;
   }
 
   private getWhiteboardMock(): WhiteboardInterface {
@@ -103,5 +142,11 @@ export class WhiteboardHttpService {
       ]
     };
     return whiteboard;
+  }
+
+  private handleError(error: Error) {
+    this._errors$.next(error);
+
+    return throwError(error);
   }
 }
