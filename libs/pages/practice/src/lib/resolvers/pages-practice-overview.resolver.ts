@@ -1,28 +1,33 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import {
+  AuthServiceInterface,
+  AUTH_SERVICE_TOKEN,
   DalState,
   EduContentBookActions,
   EduContentBookQueries,
   StateResolver,
+  UnlockedFreePracticeActions,
   UnlockedFreePracticeQueries
 } from '@campus/dal';
-import { Action, select, Selector, Store } from '@ngrx/store';
-import { take } from 'rxjs/operators';
+import { Action, Selector, Store } from '@ngrx/store';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PracticeOverviewResolver extends StateResolver {
-  constructor(private store: Store<DalState>) {
+  constructor(
+    private store: Store<DalState>,
+    @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface
+  ) {
     super(store);
   }
   protected getLoadableActions(): Action[] {
-    let bookIds: number[];
-    this.store
-      .pipe(select(UnlockedFreePracticeQueries.getAll), take(1))
-      .subscribe(ufps => (bookIds = ufps.map(ufp => ufp.eduContentBookId)));
+    const userId = this.authService.userId;
 
-    return [new EduContentBookActions.LoadEduContentBooksFromIds({ bookIds })];
+    return [
+      new UnlockedFreePracticeActions.LoadUnlockedFreePractices({ userId }),
+      new EduContentBookActions.LoadEduContentBooks({ userId })
+    ];
   }
 
   protected getResolvedQueries(): Selector<object, boolean>[] {
