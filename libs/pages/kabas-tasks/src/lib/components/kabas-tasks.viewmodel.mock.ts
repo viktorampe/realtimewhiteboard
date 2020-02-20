@@ -2,7 +2,6 @@ import { Inject, Injectable } from '@angular/core';
 import {
   ClassGroupFixture,
   ClassGroupInterface,
-  EduContentBookInterface,
   EduContentFixture,
   EduContentTOCFixture,
   EduContentTOCInterface,
@@ -65,7 +64,6 @@ export class MockKabasTasksViewModel
   public groups$: BehaviorSubject<GroupInterface[]>;
   public students$: BehaviorSubject<PersonInterface[]>;
 
-  public searchBook$: BehaviorSubject<EduContentBookInterface>;
   public favoriteBookIdsForTask$: Observable<number[]>;
   public selectedBookTitle$: Observable<string>;
 
