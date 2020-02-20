@@ -6,11 +6,6 @@
   (press)="onPressCard()"
   (tap)="onTapCard()"
 >
-  <campus-color-list
-    class="card__color-list"
-    (selectedColor)="selectColor($event)"
-    *ngIf="mode === Mode.EditMode || mode === Mode.SelectedMode"
-  ></campus-color-list>
   <campus-card-toolbar
     *ngIf="
       mode === Mode.EditMode ||

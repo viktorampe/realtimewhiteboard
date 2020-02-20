@@ -26,19 +26,25 @@
     />
   </div>
   <div class="whiteboard__workspace" (dblclick)="onDblClick($event)" #workspace>
-    <ng-container *ngFor="let card of cards">
+    <div
+      *ngFor="let card of cards"
+      cdkDrag
+      [cdkDragFreeDragPosition]="{ x: card.left, y: card.top }"
+    >
+      <campus-color-list
+        class="card__color-list"
+        (selectedColor)="changeColorForCard(card, $event)"
+        *ngIf="card.mode === Mode.EditMode || card.mode === Mode.SelectedMode"
+      ></campus-color-list>
       <campus-card
-        cdkDrag
         cdkDragBoundary=".whiteboard__workspace"
         class="whiteboard__card"
         [class.zoom]="card.mode === Mode.ZoomMode"
-        [cdkDragFreeDragPosition]="{ x: card.left, y: card.top }"
         [(description)]="card.description"
         [(color)]="card.color"
         [(image)]="card.image"
         [(mode)]="card.mode"
         [(viewModeImage)]="card.viewModeImage"
-        (colorChange)="changeColorForCard(card, $event)"
         (edit)="cardEditIconClicked(card)"
         (confirm)="cardConfirmIconClicked(card)"
         (flip)="cardFlipIconClicked(card)"
@@ -58,7 +64,7 @@
         multiple="false"
         style="display: none;"
       />
-    </ng-container>
+    </div>
   </div>
   <button
     mat-fab
