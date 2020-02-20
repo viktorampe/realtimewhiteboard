@@ -3,7 +3,7 @@
     <div
       class="ui-modal-side-sheet__header__row ui-modal-side-sheet__header__row--top"
     >
-      <mat-icon (click)="onCloseButtonClick()" svgIcon="close"></mat-icon>
+      <ng-container *ngTemplateOutlet="close"></ng-container>
       <div class="title">{{ data.title }}</div>
       <ng-container *ngTemplateOutlet="actions"></ng-container>
     </div>
@@ -33,7 +33,7 @@
     </mat-dialog-content>
   </campus-info-panel>
   <mat-dialog-actions class="ui-manage-collection__dialog__actions">
-    <ng-container *ngTemplateOutlet="actions"></ng-container>
+    <ng-container *ngTemplateOutlet="close"></ng-container>
   </mat-dialog-actions>
 </ng-template>
 
@@ -66,7 +66,20 @@
 </ng-template>
 
 <ng-template #actions>
+  <!-- add extra actions if needed -->
+</ng-template>
+
+<ng-template #close>
+  <mat-icon
+    *ngIf="asModalSideSheet; else buttonClose"
+    (click)="onCloseButtonClick()"
+    svgIcon="close"
+  ></mat-icon>
+</ng-template>
+
+<ng-template #buttonClose>
   <campus-button
+    *ngIf="!asModalSideSheet"
     primary
     class="ui-manage-collection__dialog__actions__button"
     (click)="onCloseButtonClick()"
