@@ -8,6 +8,7 @@
     <campus-card
       cdkDrag
       (cdkDragDropped)="onCardDragged($event, card)"
+      (cdkDragStarted)="onCardDragStart($event)"
       class="shelf__card"
       *ngFor="let card of cards"
       [viewModeImage]="card.viewModeImage"
