@@ -1,5 +1,4 @@
 import {
-  AssigneeTypesEnum,
   DiaboloPhaseInterface,
   DiaboloPhaseQueries,
   EduContent,
@@ -10,7 +9,6 @@ import {
   FavoriteTypesEnum,
   LearningAreaInterface,
   LearningAreaQueries,
-  LinkedPersonQueries,
   MethodInterface,
   MethodLevelInterface,
   MethodLevelQueries,
@@ -31,31 +29,11 @@ import {
   TaskWithAssigneesInterface
 } from './../interfaces/TaskWithAssignees.interface';
 
-const taskStudentAssigneeByTask = createSelector(
-  [TaskStudentQueries.getAll, LinkedPersonQueries.getAllEntities],
-  (taskStudents, personDict, props) =>
-    taskStudents.reduce((dict, ts) => {
-      if (!dict[ts.taskId]) {
-        dict[ts.taskId] = [];
-      }
-      dict[ts.taskId].push({
-        id: ts.id,
-        type: AssigneeTypesEnum.STUDENT,
-        relationId: ts.personId,
-        label: personDict[ts.personId].displayName,
-        start: ts.start,
-        end: ts.end
-      });
-
-      return dict;
-    }, {})
-);
-
 const combinedAssigneesByTask = createSelector(
   [
     TaskClassGroupQueries.getTaskClassGroupAssigneeByTask,
     TaskGroupQueries.getTaskGroupAssigneeByTask,
-    taskStudentAssigneeByTask
+    TaskStudentQueries.getTaskStudentAssigneeByTask
   ],
   (tCGA, tGA, tSA, props) => {
     const taskClassGroupAssigneesKeys = Object.keys(tCGA);
