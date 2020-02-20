@@ -51,6 +51,9 @@ export const environment = {
         FavoriteTypesEnum.TASK,
         FavoriteTypesEnum.EDUCONTENT
       ]
+    },
+    collectionManagement: {
+      useFilter: false
     }
   },
   sso: {},

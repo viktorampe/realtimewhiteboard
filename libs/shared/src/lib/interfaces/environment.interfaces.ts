@@ -1,6 +1,9 @@
 import { FavoriteTypesEnum } from '@campus/dal';
 import { SearchModeInterface } from '@campus/search';
-import { EnvironmentUIInterface } from '@campus/ui';
+import {
+  EnvironmentCollectionManagementFeatureInterface,
+  EnvironmentUIInterface
+} from '@campus/ui';
 
 export interface EnvironmentInterface {
   production: boolean;
@@ -16,6 +19,7 @@ export interface EnvironmentInterface {
     errorManagement: EnvironmentErrorManagementFeatureInterface;
     favorites: EnvironmentFavoritesFeatureInterface;
     globalSearch: EnvironmentGlobalSearchFeatureInterface;
+    collectionManagement: EnvironmentCollectionManagementFeatureInterface;
   };
   sso: EnvironmentSsoInterface;
   searchModes: EnvironmentSearchModesInterface;

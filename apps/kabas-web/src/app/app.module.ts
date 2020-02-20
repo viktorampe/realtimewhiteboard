@@ -36,7 +36,7 @@ registerLocaleData(localeBe, 'nl-BE');
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
-    UiModule,
+    UiModule.forRoot(environment.features.collectionManagement),
     SharedModule.forRoot(
       environment.features.alerts,
       environment.features.messages,

@@ -20,7 +20,12 @@ import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/utils';
 import { Subscription } from 'rxjs';
 import { startWith } from 'rxjs/operators';
 import { FilterTextInputComponent } from '../filter-text-input/filter-text-input.component';
-import { EnvironmentUIInterface, ENVIRONMENT_UI_TOKEN } from '../tokens';
+import {
+  EnvironmentCollectionManagementFeatureInterface,
+  EnvironmentUIInterface,
+  ENVIRONMENT_COLLECTION_MANAGEMENT_FEATURE_TOKEN,
+  ENVIRONMENT_UI_TOKEN
+} from '../tokens';
 import { ItemToggledInCollectionInterface } from './interfaces/item-toggled-in-collection.interface';
 import { ManageCollectionsDataInterface } from './interfaces/manage-collection-data.interface';
 import { ManageCollectionItemInterface } from './interfaces/manage-collection-item.interface';
@@ -83,7 +88,9 @@ export class ManageCollectionComponent
     @Inject(FILTER_SERVICE_TOKEN) private filterService: FilterServiceInterface,
     private cd: ChangeDetectorRef,
     private dialogRef: MatDialogRef<ManageCollectionComponent>,
-    @Inject(ENVIRONMENT_UI_TOKEN) environmentUiToken: EnvironmentUIInterface
+    @Inject(ENVIRONMENT_UI_TOKEN) environmentUiToken: EnvironmentUIInterface,
+    @Inject(ENVIRONMENT_COLLECTION_MANAGEMENT_FEATURE_TOKEN)
+    environmentCollectionManagementFeatureToken: EnvironmentCollectionManagementFeatureInterface
   ) {
     this.linkableItems = data.linkableItems;
     this.recentLinkableItems = data.linkableItems.filter(item =>
@@ -91,7 +98,7 @@ export class ManageCollectionComponent
     );
 
     this.selectedIds = data.linkedItemIds;
-    this.useFilter = data.useFilter === undefined ? true : data.useFilter; // default true for backward compatibility
+    this.useFilter = environmentCollectionManagementFeatureToken.useFilter;
     this.asModalSideSheet = !!environmentUiToken.useModalSideSheetStyle; // default false for backward compatibility
   }
 
