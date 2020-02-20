@@ -74,11 +74,12 @@
 
   campus-shelf {
     position: absolute;
+    overflow: visible !important;
     bottom: 0;
-    min-height: 136px;
+    height: 68px;
     width: 100%;
-    background-color: white;
-    box-shadow: 0px -3px 15px #00000024;
+    background: linear-gradient(#f8f4ff 0%, #e0d1ff 100%);
+    box-shadow: 0px -1px 1px #23033e52;
     overflow-x: scroll;
     display: flex;
     justify-content: flex-start;
@@ -87,6 +88,6 @@
   }
 
   .minimizedShelf {
-    min-height: 20px;
+    height: 20px;
   }
 }
