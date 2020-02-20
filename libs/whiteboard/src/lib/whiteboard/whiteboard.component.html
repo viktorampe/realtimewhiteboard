@@ -64,7 +64,6 @@
   </button>
 
   <campus-shelf
-    cdkDragBoundary=".whiteboard__workspace"
     (cardDragged)="onCardDragged($event)"
     [class.minimizedShelf]="isShelfMinimized"
     [cards]="this.shelvedCards"
