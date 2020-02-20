@@ -12,6 +12,7 @@ import {
 import { By, HAMMER_LOADER } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { configureTestSuite } from 'ng-bullet';
+import { of } from 'rxjs';
 import { Mode } from '../../shared/enums/mode.enum';
 import CardInterface from '../../shared/models/card.interface';
 import { CardImageComponent } from '../card-image/card-image.component';
@@ -63,9 +64,8 @@ describe('WhiteboardComponent', () => {
         {
           provide: HttpClient,
           useValue: {
-            get: () => {},
-            patch: () => {},
-            post: () => {}
+            get: () => of(),
+            post: () => of()
           }
         }
       ]
