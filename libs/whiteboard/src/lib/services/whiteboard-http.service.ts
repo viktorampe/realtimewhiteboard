@@ -1,8 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { StorageInfoInterface } from 'libs/timeline/src/lib/services/editor-http.service.interface';
 import { Observable, of, Subject, throwError } from 'rxjs';
-import { catchError, map, mapTo, retry } from 'rxjs/operators';
+import { catchError, delay, map, mapTo, retry } from 'rxjs/operators';
 import { Mode } from '../../lib/enums/mode.enum';
 import WhiteboardInterface from '../../lib/models/whiteboard.interface';
 
@@ -43,7 +42,7 @@ export class WhiteboardHttpService {
     return response$;
   }
 
-  public uploadFile(file: File): Observable<StorageInfoInterface> {
+  public uploadFile(file: File): Observable<string> {
     const formData: FormData = new FormData();
     formData.append('file', file, file.name);
 
@@ -53,11 +52,11 @@ export class WhiteboardHttpService {
         retry(RETRY_AMOUNT),
         catchError(this.handleError.bind(this)),
         map(
-          (response: { storageInfo: StorageInfoInterface }) =>
-            response.storageInfo
-        )
+          (response: { imageUrl: string }) =>
+            'https://cdn.babymarkt.com/babymarkt/img/708424/443/steiff-pacco-shiba-inu-29-cm-a270440.jpg'
+        ),
+        delay(1000)
       );
-
     return response$;
   }
 
