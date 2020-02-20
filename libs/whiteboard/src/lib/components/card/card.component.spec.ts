@@ -109,7 +109,7 @@ describe('CardComponent', () => {
   it('should emit colorChange when selectColor gets called', () => {
     spyOn(component.colorChange, 'emit');
     component.selectColor('white');
-    expect(component.colorChange.emit).toHaveBeenCalled();
+    expect(component.colorChange.emit).toHaveBeenCalledWith('white');
   });
 
   it('should emit select when emitSelect is called', () => {
