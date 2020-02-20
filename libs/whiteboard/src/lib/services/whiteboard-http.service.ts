@@ -66,6 +66,7 @@ export class WhiteboardHttpService {
       cards: [
         {
           mode: Mode.IdleMode,
+          viewModeImage: true,
           description: 'Windows 95',
           image:
             'https://cdn01.pijpermedia.nl/RDLrupoRZtt-R7W4iqxYQTyZ9bY=/1290x726/center/middle/https://cdn.pijper.io/source/upcoming/9/950f46fae4_1412162307_13-Redenen-waarom-Windows-95-best-wel-vet-was.jpg',
@@ -75,6 +76,7 @@ export class WhiteboardHttpService {
         },
         {
           mode: Mode.IdleMode,
+          viewModeImage: true,
           description: 'Get Ready',
           image:
             'https://vivavlaanderen.radio2.be/images/2665/1100x0/mvp15qbt7vcmjeko_get_ready_1996.jpg',
@@ -84,6 +86,7 @@ export class WhiteboardHttpService {
         },
         {
           mode: Mode.IdleMode,
+          viewModeImage: true,
           description: 'Candy',
           image:
             'https://cdn.shopify.com/s/files/1/0736/7879/files/top-10-retro-candies-from-the-1990s-efrutti-gummy-candies-candy-district-sweetest-online-candy-store-canada.png?v=1545772588',
@@ -93,6 +96,7 @@ export class WhiteboardHttpService {
         },
         {
           mode: Mode.IdleMode,
+          viewModeImage: true,
           description: 'VRC',
           image:
             'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/stack-of-video-tapes-royalty-free-image-93422307-1563903351.jpg?crop=0.668xw:1.00xh;0.206xw,0&resize=768:*',
@@ -102,6 +106,7 @@ export class WhiteboardHttpService {
         },
         {
           mode: Mode.IdleMode,
+          viewModeImage: true,
           description: 'Gameboy',
           image:
             'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/nintendo-game-boy-handheld-video-game-console-taken-on-july-news-photo-1065385418-1563905496.jpg?crop=0.79806xw:1xh;center,top&resize=768:*',
@@ -113,6 +118,7 @@ export class WhiteboardHttpService {
       shelfCards: [
         {
           mode: Mode.ShelfMode,
+          viewModeImage: true,
           description: 'Home Alone',
           image:
             'https://vroegert.nl/wp-content/uploads/2016/10/Homealonefeau1.jpg',
@@ -122,6 +128,7 @@ export class WhiteboardHttpService {
         },
         {
           mode: Mode.ShelfMode,
+          viewModeImage: true,
           description: 'NSYNC',
           image:
             'https://www.muzjig.com/wp-content/uploads/2015/08/14383945783922-forgotten-90s-boy-bands-where-are-they-now-1-16708-1364312072-2_big.jpg',
@@ -131,6 +138,7 @@ export class WhiteboardHttpService {
         },
         {
           mode: Mode.ShelfMode,
+          viewModeImage: true,
           description: 'Capri Sun',
           image:
             'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/boxes-of-capri-sun-juice-sit-on-shelves-at-a-grocery-store-news-photo-526195522-1563903441.jpg?crop=0.668xw:1.00xh;0.0204xw,0&resize=768:*',
