@@ -1,4 +1,5 @@
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { HttpClient } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
@@ -11,6 +12,7 @@ import {
 import { By, HAMMER_LOADER } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { configureTestSuite } from 'ng-bullet';
+import { of } from 'rxjs';
 import { Mode } from '../../enums/mode.enum';
 import CardInterface from '../../models/card.interface';
 import { CardImageComponent } from '../card-image/card-image.component';
@@ -57,6 +59,13 @@ describe('WhiteboardComponent', () => {
         {
           provide: HAMMER_LOADER,
           useValue: () => new Promise(() => {})
+        },
+        {
+          provide: HttpClient,
+          useValue: {
+            get: () => of(),
+            post: () => of()
+          }
         }
       ]
     });
@@ -448,9 +457,7 @@ describe('WhiteboardComponent', () => {
     const shelvedCardsLengthBeforeDelete = component.shelvedCards.length;
 
     const [card] = component.cards;
-    card.mode = <Mode>Mode.IdleMode;
-
-    component.shelvedCards = [];
+    card.mode = Mode.IdleMode;
 
     component.onDeleteCard(card);
 

@@ -3,8 +3,8 @@ import { Injectable } from '@angular/core';
 import { StorageInfoInterface } from 'libs/timeline/src/lib/services/editor-http.service.interface';
 import { Observable, of, Subject, throwError } from 'rxjs';
 import { catchError, map, mapTo, retry } from 'rxjs/operators';
-import { Mode } from '../../shared/enums/mode.enum';
-import WhiteboardInterface from '../../shared/models/whiteboard.interface';
+import { Mode } from '../../lib/enums/mode.enum';
+import WhiteboardInterface from '../../lib/models/whiteboard.interface';
 
 const RETRY_AMOUNT = 2;
 
