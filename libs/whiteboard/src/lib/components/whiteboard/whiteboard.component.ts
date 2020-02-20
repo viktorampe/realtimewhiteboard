@@ -3,6 +3,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Mode } from '../../enums/mode.enum';
 import CardInterface from '../../models/card.interface';
 import WhiteboardInterface from '../../models/whiteboard.interface';
+import { WhiteboardHttpService } from '../../services/whiteboard-http.service';
 
 @Component({
   selector: 'campus-whiteboard',
@@ -32,9 +33,15 @@ export class WhiteboardComponent implements OnInit {
   isTitleInputSelected = true;
   isShelfMinimized = false;
 
-  constructor() {}
+  constructor(private whiteboardHttpService: WhiteboardHttpService) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.whiteboardHttpService.getJson().subscribe(whiteboard => {
+      this.title = whiteboard.title;
+      this.cards = whiteboard.cards;
+      this.shelvedCards = whiteboard.shelfCards;
+    });
+  }
 
   get Mode() {
     return Mode;
@@ -58,8 +65,7 @@ export class WhiteboardComponent implements OnInit {
       cards: this.cards,
       shelfCards: this.shelvedCards
     };
-    //TODO: http-post whiteboard
-    console.log(whiteboard);
+    this.whiteboardHttpService.setJson(whiteboard);
     return whiteboard;
   }
 
