@@ -134,22 +134,30 @@ export interface ChapterWithStatusInterface {
 
 export const getUnlockedBooks = createSelector(
   [
-    EduContentBookQueries.getAll,
+    EduContentBookQueries.getAllEntities,
     LearningAreaQueries.getAllEntities,
-    MethodQueries.getAllEntities
+    MethodQueries.getAllEntities,
+    UnlockedFreePracticeQueries.getAll
   ],
   (
-    books: EduContentBookInterface[],
-    learningAreas: { [id: number]: LearningAreaInterface },
-    methods: { [id: number]: MethodInterface }
+    bookDict: Dictionary<EduContentBookInterface>,
+    learningAreaDict: Dictionary<LearningAreaInterface>,
+    methodDict: Dictionary<MethodInterface>,
+    uFPs: UnlockedFreePracticeInterface[]
   ) => {
+    const booksInUFP = Array.from(
+      new Set(uFPs.map(uFP => uFP.eduContentBookId))
+    );
+
+    const books = booksInUFP.map(id => bookDict[id]);
+
     return books.map(book => {
-      const bookMethod = methods[book.methodId];
+      const bookMethod = methodDict[book.methodId];
 
       const logoUrl =
         bookMethod.code && 'assets/methods/' + bookMethod.code + '.jpg';
 
-      const learningAreaName = learningAreas[bookMethod.learningAreaId].name;
+      const learningAreaName = learningAreaDict[bookMethod.learningAreaId].name;
 
       const name = `${book.title} ${book.years
         .map(year => year.label)

@@ -2,8 +2,10 @@ import { Component, HostBinding, Inject, Input, OnInit } from '@angular/core';
 import { ResultItemBase } from '@campus/search';
 import {
   ContentActionInterface,
-  ContentActionsServiceInterface,
-  CONTENT_ACTIONS_SERVICE_TOKEN,
+  ContentOpenActionsServiceInterface,
+  ContentTaskActionsServiceInterface,
+  CONTENT_OPEN_ACTIONS_SERVICE_TOKEN,
+  CONTENT_TASK_ACTIONS_SERVICE_TOKEN,
   EduContentSearchResultInterface
 } from '@campus/shared';
 
@@ -23,8 +25,10 @@ export class EduContentSearchResultComponent extends ResultItemBase
   appEduContentSearchResultClass = true;
 
   constructor(
-    @Inject(CONTENT_ACTIONS_SERVICE_TOKEN)
-    private contentActionsServiceInterface: ContentActionsServiceInterface
+    @Inject(CONTENT_OPEN_ACTIONS_SERVICE_TOKEN)
+    private contentOpenActionsService: ContentOpenActionsServiceInterface,
+    @Inject(CONTENT_TASK_ACTIONS_SERVICE_TOKEN)
+    private contentTaskActionsService: ContentTaskActionsServiceInterface
   ) {
     super();
   }
@@ -35,9 +39,19 @@ export class EduContentSearchResultComponent extends ResultItemBase
   }
 
   private setupActions(): void {
-    this.actions = this.contentActionsServiceInterface.getActionsForEduContent(
+    this.actions = this.contentOpenActionsService.getActionsForEduContent(
       this.data.eduContent
     );
+
+    if (this.data.addTaskActions) {
+      this.actions = [
+        ...this.contentTaskActionsService.getTaskActionsForEduContent(
+          this.data.eduContent,
+          this.data.inTask
+        ),
+        ...this.actions
+      ];
+    }
   }
 
   onActionClick(action: ContentActionInterface) {

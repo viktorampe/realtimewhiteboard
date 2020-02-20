@@ -162,6 +162,7 @@ export class MockMethodViewModel
     learningPlanGoal: LearningPlanGoalInterface,
     classGroup: ClassGroupInterface
   ): void {}
+  previewEduContentAsImage(eduContent: EduContent): void {}
 
   public onLearningPlanGoalProgressChanged(
     classGroupId: number,

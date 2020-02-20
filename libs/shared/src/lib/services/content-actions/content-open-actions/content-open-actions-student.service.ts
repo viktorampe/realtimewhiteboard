@@ -1,18 +1,18 @@
 import { forwardRef, Inject, Injectable } from '@angular/core';
 import { EduContent } from '@campus/dal';
-import { EduContentTypeEnum } from '../../enums';
+import { EduContentTypeEnum } from '../../../enums';
+import { ContentActionInterface } from '../content-action.interface';
 import {
-  ContentActionInterface,
-  ContentActionsServiceInterface,
+  ContentOpenActionsServiceInterface,
   ContentOpenerInterface,
   CONTENT_OPENER_TOKEN
-} from './content-actions.service.interface';
+} from './content-open-actions.service.interface';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ContentActionsStudentService
-  implements ContentActionsServiceInterface {
+export class ContentOpenActionsStudentService
+  implements ContentOpenActionsServiceInterface {
   constructor(
     @Inject(forwardRef(() => CONTENT_OPENER_TOKEN))
     private contentOpener: ContentOpenerInterface
@@ -66,18 +66,10 @@ export class ContentActionsStudentService
    *
    * @param {EduContent} eduContent
    * @returns {ContentActionInterface[]}
-   * @memberof ContentActionsService
+   * @memberof ContentOpenActionsStudentService
    */
   getActionsForEduContent(eduContent: EduContent): ContentActionInterface[] {
     return this.getEduContentActions(eduContent);
-  }
-
-  getTaskActionsForEduContent(
-    eduContent: EduContent,
-    inTask: boolean
-  ): ContentActionInterface[] {
-    // TODO: implement
-    throw new Error('Not yet implemented');
   }
 
   private getEduContentActions(

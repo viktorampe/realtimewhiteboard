@@ -6,6 +6,8 @@ import {
   ClassGroupQueries,
   DalState,
   EduContentActions,
+  EduContentBookActions,
+  EduContentBookQueries,
   EduContentQueries,
   GroupActions,
   GroupQueries,
@@ -23,7 +25,9 @@ import {
   TaskGroupQueries,
   TaskQueries,
   TaskStudentActions,
-  TaskStudentQueries
+  TaskStudentQueries,
+  YearActions,
+  YearQueries
 } from '@campus/dal';
 import { Action, Selector, Store } from '@ngrx/store';
 
@@ -38,25 +42,21 @@ export class KabasTasksResolver extends StateResolver {
     super(store);
   }
   protected getLoadableActions(): Action[] {
+    const userId = this.authService.userId;
+
     return [
       new LearningAreaActions.LoadLearningAreas(),
-      new TaskActions.LoadTasks({ userId: this.authService.userId }),
-      new GroupActions.LoadGroups({
-        userId: this.authService.userId
-      }),
-      new ClassGroupActions.LoadClassGroups({
-        userId: this.authService.userId
-      }),
-      new LinkedPersonActions.LoadLinkedPersons({
-        userId: this.authService.userId
-      }),
-      TaskClassGroupActions.loadTaskClassGroups(this.authService.userId),
-      TaskGroupActions.loadTaskGroups(this.authService.userId),
-      TaskStudentActions.loadTaskStudents(this.authService.userId),
-      new TaskEduContentActions.LoadTaskEduContents({
-        userId: this.authService.userId
-      }),
-      new EduContentActions.LoadEduContents({ userId: this.authService.userId })
+      new TaskActions.LoadTasks({ userId }),
+      new GroupActions.LoadGroups({ userId }),
+      new ClassGroupActions.LoadClassGroups({ userId }),
+      new LinkedPersonActions.LoadLinkedPersons({ userId }),
+      TaskClassGroupActions.loadTaskClassGroups(userId),
+      TaskGroupActions.loadTaskGroups(userId),
+      TaskStudentActions.loadTaskStudents(userId),
+      new TaskEduContentActions.LoadTaskEduContents({ userId }),
+      new EduContentActions.LoadEduContents({ userId }),
+      new YearActions.LoadYears({ userId }),
+      new EduContentBookActions.LoadEduContentBooks({ userId })
     ];
   }
 
@@ -71,7 +71,9 @@ export class KabasTasksResolver extends StateResolver {
       TaskGroupQueries.getLoaded,
       TaskStudentQueries.getLoaded,
       TaskEduContentQueries.getLoaded,
-      EduContentQueries.getLoaded
+      EduContentQueries.getLoaded,
+      YearQueries.getLoaded,
+      EduContentBookQueries.getLoaded
     ];
   }
 }

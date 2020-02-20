@@ -15,8 +15,8 @@ export class TaskClassGroupService {
       map((res: { taskClassGroups: TaskClassGroupInterface[] }) =>
         res.taskClassGroups.map(taskClassGroup => ({
           ...taskClassGroup,
-          end: new Date(taskClassGroup.end),
-          start: new Date(taskClassGroup.start)
+          end: taskClassGroup.end && new Date(taskClassGroup.end),
+          start: taskClassGroup.start && new Date(taskClassGroup.start)
         }))
       )
     );

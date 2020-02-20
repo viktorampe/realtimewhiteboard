@@ -10,7 +10,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DalModule } from '@campus/dal';
 import { AuthenticationGuard, TermPrivacyGuard } from '@campus/guards';
 import { SharedModule } from '@campus/shared';
-import { UiModule } from '@campus/ui';
+import { ManageCollectionComponent, UiModule } from '@campus/ui';
 import { NxModule } from '@nrwl/angular';
 import { configureBufferSize } from 'ngrx-undo';
 import { environment } from '../environments/environment';
@@ -72,7 +72,8 @@ registerLocaleData(localeBe, 'nl-BE');
   bootstrap: [AppComponent],
   entryComponents: [
     EduContentSearchResultComponent,
-    PracticeSearchResultComponent
+    PracticeSearchResultComponent,
+    ManageCollectionComponent
   ]
 })
 export class AppModule {}

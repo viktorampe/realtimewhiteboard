@@ -1,17 +1,18 @@
 import { forwardRef, Inject, Injectable } from '@angular/core';
 import { EduContent } from '@campus/dal';
-import { EduContentTypeEnum } from '../../enums';
+import { EduContentTypeEnum } from '../../../enums';
+import { ContentActionInterface } from '../content-action.interface';
 import {
-  ContentActionInterface,
-  ContentActionsServiceInterface,
+  ContentOpenActionsServiceInterface,
   ContentOpenerInterface,
   CONTENT_OPENER_TOKEN
-} from './content-actions.service.interface';
+} from './content-open-actions.service.interface';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ContentActionsService implements ContentActionsServiceInterface {
+export class ContentOpenActionsService
+  implements ContentOpenActionsServiceInterface {
   constructor(
     @Inject(forwardRef(() => CONTENT_OPENER_TOKEN))
     private contentOpener: ContentOpenerInterface
@@ -65,20 +66,6 @@ export class ContentActionsService implements ContentActionsServiceInterface {
       handler: this.contentOpener.previewEduContentAsImage.bind(
         this.contentOpener
       )
-    },
-    addToTask: {
-      label: 'Toevoegen aan taak',
-      icon: 'add',
-      tooltip: 'Toevoegen aan taak',
-      handler: this.contentOpener.addEduContentToTask.bind(this.contentOpener)
-    },
-    removeFromTask: {
-      label: 'Verwijderen uit taak',
-      icon: 'delete',
-      tooltip: 'Verwijderen uit taak',
-      handler: this.contentOpener.removeEduContentFromTask.bind(
-        this.contentOpener
-      )
     }
   };
 
@@ -87,21 +74,11 @@ export class ContentActionsService implements ContentActionsServiceInterface {
    *
    * @param {EduContent} eduContent
    * @returns {ContentActionInterface[]}
-   * @memberof ContentActionsService
+   * @memberof ContentOpenActionsService
    */
+
   getActionsForEduContent(eduContent: EduContent): ContentActionInterface[] {
     return this.getEduContentActions(eduContent);
-  }
-
-  getTaskActionsForEduContent(
-    eduContent: EduContent,
-    inTask: boolean
-  ): ContentActionInterface[] {
-    if (inTask) {
-      return [this.contentActionDictionary.removeFromTask];
-    } else {
-      return [this.contentActionDictionary.addToTask];
-    }
   }
 
   private getEduContentActions(

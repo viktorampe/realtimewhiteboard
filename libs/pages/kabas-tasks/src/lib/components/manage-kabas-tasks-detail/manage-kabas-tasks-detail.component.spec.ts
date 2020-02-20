@@ -31,10 +31,11 @@ import {
   SearchModule
 } from '@campus/search';
 import {
-  ContentActionsServiceInterface,
-  CONTENT_ACTIONS_SERVICE_TOKEN,
+  ContentOpenActionsServiceInterface,
   CONTENT_OPENER_TOKEN,
+  CONTENT_OPEN_ACTIONS_SERVICE_TOKEN,
   ENVIRONMENT_ICON_MAPPING_TOKEN,
+  ENVIRONMENT_SEARCHMODES_TOKEN,
   ENVIRONMENT_TESTING_TOKEN,
   OPEN_STATIC_CONTENT_SERVICE_TOKEN,
   SharedModule
@@ -73,7 +74,7 @@ describe('ManageKabasTasksDetailComponent', () => {
   const queryParams: BehaviorSubject<Params> = new BehaviorSubject<Params>({});
   let mockDate: MockDate;
 
-  let contentActionsService: ContentActionsServiceInterface;
+  let contentOpenActionsService: ContentOpenActionsServiceInterface;
   let mockViewmodel: MockKabasTasksViewModel;
   let currentTask: TaskWithAssigneesInterface;
   let restOfTasks: TaskWithAssigneesInterface[];
@@ -174,7 +175,7 @@ describe('ManageKabasTasksDetailComponent', () => {
         },
         { provide: MatIconRegistry, useClass: MockMatIconRegistry },
         {
-          provide: CONTENT_ACTIONS_SERVICE_TOKEN,
+          provide: CONTENT_OPEN_ACTIONS_SERVICE_TOKEN,
           useValue: { getActionsForEduContent: () => [] }
         },
         {
@@ -193,6 +194,7 @@ describe('ManageKabasTasksDetailComponent', () => {
           useValue: { open: jest.fn() }
         },
         { provide: MatIconRegistry, useClass: MockMatIconRegistry },
+        { provide: ENVIRONMENT_SEARCHMODES_TOKEN, useValue: {} },
         {
           provide: FILTER_SERVICE_TOKEN,
           useValue: { matchFilters: () => {} }
@@ -206,7 +208,7 @@ describe('ManageKabasTasksDetailComponent', () => {
     viewModel = TestBed.get(KabasTasksViewModel);
     matDialog = TestBed.get(MatDialog);
     router = TestBed.get(Router);
-    contentActionsService = TestBed.get(CONTENT_ACTIONS_SERVICE_TOKEN);
+    contentOpenActionsService = TestBed.get(CONTENT_OPEN_ACTIONS_SERVICE_TOKEN);
     fixture = TestBed.createComponent(ManageKabasTasksDetailComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -430,6 +432,73 @@ describe('ManageKabasTasksDetailComponent', () => {
     });
   });
 
+  describe('clickRemoveTaskEduContents()', () => {
+    let openDialogSpy: jest.SpyInstance;
+    const eduContentToDelete = [
+      { taskId: 1, id: 1, index: 1 },
+      { taskId: 1, id: 2, index: 2 },
+      { taskId: 1, id: 3, index: 3 }
+    ];
+
+    beforeEach(() => {
+      openDialogSpy = matDialog.open = jest.fn();
+    });
+
+    it('should open a confirmation dialog', () => {
+      const mockDialogRef = {
+        afterClosed: () => of(false),
+        close: null
+      } as MatDialogRef<ConfirmationModalComponent>;
+      openDialogSpy.mockReturnValue(mockDialogRef);
+
+      component.clickRemoveTaskEduContents(eduContentToDelete);
+
+      expect(openDialogSpy).toHaveBeenCalledTimes(1);
+      expect(openDialogSpy).toHaveBeenCalledWith(ConfirmationModalComponent, {
+        data: {
+          title: 'Lesmateriaal verwijderen',
+          message:
+            'Ben je zeker dat je de geselecteerde lesmaterialen wil verwijderen?'
+        }
+      });
+    });
+
+    it('should call vm.removeEduContentFromTask when the user confirms', () => {
+      const removeTaskEduContentSpy = jest.spyOn(
+        viewModel,
+        'deleteTaskEduContents'
+      );
+
+      const mockDialogRef = {
+        afterClosed: () => of(true), // fake confirmation
+        close: null
+      } as MatDialogRef<ConfirmationModalComponent>;
+      openDialogSpy.mockReturnValue(mockDialogRef);
+
+      component.clickRemoveTaskEduContents(eduContentToDelete);
+
+      expect(removeTaskEduContentSpy).toHaveBeenCalledTimes(1);
+      expect(removeTaskEduContentSpy).toHaveBeenCalledWith([1, 2, 3]);
+    });
+
+    it('should not call vm.removeEduContentFromTask when the user cancels', () => {
+      const removeTaskEduContentSpy = jest.spyOn(
+        viewModel,
+        'deleteTaskEduContents'
+      );
+
+      const mockDialogRef = {
+        afterClosed: () => of(false), // fake cancel
+        close: null
+      } as MatDialogRef<ConfirmationModalComponent>;
+      openDialogSpy.mockReturnValue(mockDialogRef);
+
+      component.clickRemoveTaskEduContents(eduContentToDelete);
+
+      expect(removeTaskEduContentSpy).not.toHaveBeenCalled();
+    });
+  });
+
   describe('openNewTaskDialog()', () => {
     const afterClosed: BehaviorSubject<any> = new BehaviorSubject(null);
     const mockFormData: NewTaskFormValues = {
@@ -508,7 +577,7 @@ describe('ManageKabasTasksDetailComponent', () => {
 
     beforeEach(() => {
       jest
-        .spyOn(contentActionsService, 'getActionsForEduContent')
+        .spyOn(contentOpenActionsService, 'getActionsForEduContent')
         .mockReturnValue(mockActions);
       taskEduContents = [
         createTaskEduContent(1, 'oefening 1'),

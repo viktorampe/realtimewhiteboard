@@ -16,13 +16,13 @@ import {
   UserReducer
 } from '@campus/dal';
 import {
-  FilterFactoryFixture,
-  SearchModeInterface,
+  SearchModeFixture,
   SearchResultInterface,
   SearchStateInterface
 } from '@campus/search';
 import {
   EduContentSearchResultFixture,
+  EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN,
   EnvironmentSearchModesInterface,
   ENVIRONMENT_SEARCHMODES_TOKEN,
   OpenStaticContentServiceInterface,
@@ -55,27 +55,6 @@ describe('GlobalSearchViewModel', () => {
   let scormExerciseService: ScormExerciseServiceInterface;
   let searchModes: EnvironmentSearchModesInterface;
   let eduContentService: EduContentServiceInterface;
-
-  function createMockSearchMode(overrides: Partial<SearchModeInterface>) {
-    return Object.assign(
-      {
-        name: 'demo',
-        label: 'demo',
-        dynamicFilters: false,
-        searchFilterFactory: FilterFactoryFixture,
-        searchTerm: {
-          // autocompleteEl: string; //reference to material autocomplete component
-          domHost: 'hostSearchTerm'
-        },
-        results: {
-          component: null,
-          sortModes: [],
-          pageSize: 3
-        }
-      },
-      overrides
-    ) as SearchModeInterface;
-  }
 
   const mockAutoCompleteReturnValue = ['strings', 'for', 'autocomplete'];
 
@@ -127,8 +106,8 @@ describe('GlobalSearchViewModel', () => {
         {
           provide: ENVIRONMENT_SEARCHMODES_TOKEN,
           useValue: {
-            demo: createMockSearchMode({ name: 'demo' }),
-            global: createMockSearchMode({ name: 'global' })
+            demo: new SearchModeFixture(),
+            global: new SearchModeFixture({ name: 'global' })
           }
         },
         {
@@ -138,6 +117,10 @@ describe('GlobalSearchViewModel', () => {
         {
           provide: SCORM_EXERCISE_SERVICE_TOKEN,
           useValue: { previewExerciseFromUnlockedContent: jest.fn() }
+        },
+        {
+          provide: EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN,
+          useValue: { manageTasksForContent: jest.fn() }
         }
       ]
     });
@@ -274,7 +257,8 @@ describe('GlobalSearchViewModel', () => {
       const expected = {
         ...mockSearchResult,
         results: mockSearchResult.results.map(result => ({
-          eduContent: result
+          eduContent: result,
+          addTaskActions: true
         }))
       };
 

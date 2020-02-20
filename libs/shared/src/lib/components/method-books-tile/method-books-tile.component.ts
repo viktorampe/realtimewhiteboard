@@ -13,6 +13,7 @@ export class MethodBooksTileComponent implements OnInit {
     name: string;
     bookId: number;
   }[] = [];
+  @Input() useQueryParams = false;
 
   @HostBinding('class.shared-method-books-tile')
   pagesMethodsMethodBooksTileClass = true;
