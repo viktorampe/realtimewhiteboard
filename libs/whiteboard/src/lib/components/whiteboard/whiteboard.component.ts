@@ -171,8 +171,12 @@ export class WhiteboardComponent implements OnInit {
 
     // TODO: remove this settimeout and wait for actual image upload
     setTimeout(() => {
-      card.mode = Mode.IdleMode;
-    }, 500);
+      if (this.selectedCards.length) {
+        card.mode = Mode.MultiSelectMode;
+      } else {
+        card.mode = Mode.IdleMode;
+      }
+    }, 5000);
   }
 
   changeColorForCard(card: CardInterface, color: string) {
@@ -202,7 +206,9 @@ export class WhiteboardComponent implements OnInit {
     this.selectedCards.push(card);
 
     if (this.selectedCards.length === 1) {
-      this.cards.forEach(c => (c.mode = Mode.MultiSelectMode));
+      this.cards
+        .filter(c => c.mode !== Mode.UploadMode)
+        .forEach(c => (c.mode = Mode.MultiSelectMode));
     }
 
     card.mode = Mode.MultiSelectSelectedMode;
