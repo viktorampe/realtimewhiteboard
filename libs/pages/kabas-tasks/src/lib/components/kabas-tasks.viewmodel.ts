@@ -39,9 +39,11 @@ import {
   TASK_SERVICE_TOKEN
 } from '@campus/dal';
 import {
+  ResultItemBase,
   SearcherInterface,
   SearchModeInterface,
   SearchResultInterface,
+  SearchResultUpdaterInterface,
   SearchStateInterface
 } from '@campus/search';
 import {
@@ -59,7 +61,14 @@ import {
 import { Update } from '@ngrx/entity';
 import { RouterReducerState } from '@ngrx/router-store';
 import { Action, select, Store } from '@ngrx/store';
-import { BehaviorSubject, combineLatest, merge, Observable, of } from 'rxjs';
+import {
+  BehaviorSubject,
+  combineLatest,
+  merge,
+  Observable,
+  of,
+  timer
+} from 'rxjs';
 import {
   distinctUntilChanged,
   filter,
@@ -99,7 +108,8 @@ export class KabasTasksViewModel
   implements
     ContentOpenerInterface,
     ContentTaskManagerInterface,
-    SearcherInterface {
+    SearcherInterface,
+    SearchResultUpdaterInterface {
   public tasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
   public paperTasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
   public currentTask$: Observable<TaskWithAssigneesInterface>;
@@ -120,6 +130,14 @@ export class KabasTasksViewModel
   private _searchState$: BehaviorSubject<SearchStateInterface>;
 
   private routerState$: Observable<RouterReducerState<RouterStateUrl>>;
+
+  // TODO Do properly
+  // http://www.kabas.localhost:3020/tasks/manage/4/content -> 1st result has eduContentId 92
+  eduContentIds$ = timer(1, 5000).pipe(mapTo([92]));
+  updateSearchResultItem = (searchResultItem: ResultItemBase) => {
+    searchResultItem.data.inTask = !searchResultItem.data.inTask;
+    searchResultItem.update();
+  };
 
   constructor(
     private store: Store<DalState>,

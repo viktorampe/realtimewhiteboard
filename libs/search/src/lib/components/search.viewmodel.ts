@@ -1,5 +1,11 @@
-import { Injectable, Injector } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import {
+  Inject,
+  Injectable,
+  InjectionToken,
+  Injector,
+  Optional
+} from '@angular/core';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { filter, map, share, startWith, take } from 'rxjs/operators';
 import {
   SearchFilterCriteriaInterface,
@@ -12,12 +18,24 @@ import {
   SortModeInterface
 } from '../interfaces';
 
+//TODO remove and use actual token
+export const SEARCH_RESULT_UPDATER_TOKEN = new InjectionToken(
+  'searchResultUpdater'
+);
+
+//TODO remove and use actual interface
+export interface SearchResultUpdaterInterface {
+  eduContentIds$: Observable<number[]>;
+  updateSearchResultItem(searchResult): void;
+}
+
 @Injectable()
 export class SearchViewModel {
   public searchState$ = new BehaviorSubject<SearchStateInterface>(null);
   public searchFilters$: Observable<SearchFilterInterface[]>;
 
-  private results$ = new BehaviorSubject<SearchResultInterface>(null);
+  // signals the searchComponent that some of its results need updating
+  public searchResultItemsToUpdate$: Observable<number[]>;
 
   // observable that emits when all data is available to construct new SearchFilters
   private searchFilterData$: BehaviorSubject<{
@@ -33,7 +51,19 @@ export class SearchViewModel {
   private searchMode: SearchModeInterface;
   private filterFactory: SearchFilterFactory;
 
-  constructor(private injector: Injector) {
+  constructor(
+    private injector: Injector,
+    @Optional()
+    @Inject(SEARCH_RESULT_UPDATER_TOKEN)
+    private searchResultUpdater: SearchResultUpdaterInterface
+  ) {
+    if (!searchResultUpdater) {
+      this.searchResultUpdater = {
+        eduContentIds$: of([]),
+        updateSearchResultItem: () => {}
+      };
+    }
+
     this.initiateStreams();
   }
 
@@ -79,6 +109,7 @@ export class SearchViewModel {
     };
     this.searchState$.next(newValue);
   }
+
   public getNextPage(): void {
     const newValue = { ...this.searchState$.value };
     newValue.from =
@@ -105,6 +136,7 @@ export class SearchViewModel {
       }
     }
   }
+
   public changeSearchTerm(searchTerm: string): void {
     const newValue = { ...this.searchState$.value };
     newValue.from = 0;
@@ -116,8 +148,11 @@ export class SearchViewModel {
   public updateResult(result: SearchResultInterface): void {
     if (!result) return;
 
-    this.results$.next(result);
     this.setPredictionsCache(result);
+  }
+
+  public updateSearchResult(searchResultItem) {
+    this.searchResultUpdater.updateSearchResultItem(searchResultItem);
   }
 
   private setFactoryFilterCache(factoryFilters: SearchFilterInterface[]) {
@@ -166,6 +201,8 @@ export class SearchViewModel {
       startWith([]), // intial value -> empty array of filters
       share()
     );
+
+    this.searchResultItemsToUpdate$ = this.searchResultUpdater.eduContentIds$;
   }
 
   /**
