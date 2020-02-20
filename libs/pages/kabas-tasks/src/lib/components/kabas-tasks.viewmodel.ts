@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
 import { MAT_DATE_LOCALE } from '@angular/material';
 import {
+  AssigneeTypesEnum,
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
   ClassGroupInterface,
@@ -72,7 +73,6 @@ import {
   tap,
   withLatestFrom
 } from 'rxjs/operators';
-import { AssigneeTypesEnum } from '../interfaces/Assignee.interface';
 import {
   TaskStatusEnum,
   TaskWithAssigneesInterface

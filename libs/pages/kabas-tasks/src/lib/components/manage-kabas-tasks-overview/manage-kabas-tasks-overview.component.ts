@@ -15,7 +15,7 @@ import {
   MatSlideToggleChange
 } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
-import { LearningAreaInterface } from '@campus/dal';
+import { AssigneeTypesEnum, LearningAreaInterface } from '@campus/dal';
 import {
   ButtonToggleFilterComponent,
   DateFilterComponent,
@@ -34,7 +34,6 @@ import {
 } from '@campus/utils';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { filter, map, shareReplay, take } from 'rxjs/operators';
-import { AssigneeTypesEnum } from '../../interfaces/Assignee.interface';
 import { Source } from '../../interfaces/Source.type';
 import { TaskWithAssigneesInterface } from '../../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';

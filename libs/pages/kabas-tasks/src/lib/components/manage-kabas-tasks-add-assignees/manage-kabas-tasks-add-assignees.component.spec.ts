@@ -6,14 +6,12 @@ import {
 } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { AssigneeTypesEnum } from '@campus/dal';
 import { SearchModule } from '@campus/search';
 import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
 import { configureTestSuite } from 'ng-bullet';
-import {
-  AssigneeInterface,
-  AssigneeTypesEnum
-} from '../../interfaces/Assignee.interface';
+import { AssigneeInterface } from '../../interfaces/Assignee.interface';
 import { ManageKabasTasksAddAssigneesComponent } from './manage-kabas-tasks-add-assignees.component';
 
 describe('AddAssigneeComponent', () => {

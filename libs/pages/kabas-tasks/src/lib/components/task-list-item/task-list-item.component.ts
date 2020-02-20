@@ -7,10 +7,8 @@ import {
   OnInit,
   Output
 } from '@angular/core';
-import {
-  AssigneeInterface,
-  AssigneeTypesEnum
-} from '../../interfaces/Assignee.interface';
+import { AssigneeTypesEnum } from '@campus/dal';
+import { AssigneeInterface } from '../../interfaces/Assignee.interface';
 
 export type Status = 'pending' | 'active' | 'finished' | 'paper';
 

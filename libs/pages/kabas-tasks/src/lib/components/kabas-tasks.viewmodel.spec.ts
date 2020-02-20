@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { MAT_DATE_LOCALE } from '@angular/material';
 import {
+  AssigneeTypesEnum,
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
   DalState,
@@ -54,7 +55,6 @@ import { configureTestSuite } from 'ng-bullet';
 import { of } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { AssigneeFixture } from '../interfaces/Assignee.fixture';
-import { AssigneeTypesEnum } from '../interfaces/Assignee.interface';
 import { TaskWithAssigneesFixture } from '../interfaces/TaskWithAssignees.fixture';
 import {
   TaskStatusEnum,

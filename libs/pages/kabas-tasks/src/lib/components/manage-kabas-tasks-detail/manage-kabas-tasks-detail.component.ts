@@ -11,6 +11,7 @@ import {
 import { MatDialog } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
+  AssigneeTypesEnum,
   EduContent,
   EduContentInterface,
   LearningAreaInterface,
@@ -41,10 +42,7 @@ import {
   tap,
   withLatestFrom
 } from 'rxjs/operators';
-import {
-  AssigneeInterface,
-  AssigneeTypesEnum
-} from '../../interfaces/Assignee.interface';
+import { AssigneeInterface } from '../../interfaces/Assignee.interface';
 import { TaskEduContentWithEduContentInterface } from '../../interfaces/TaskEduContentWithEduContent.interface';
 import {
   TaskStatusEnum,

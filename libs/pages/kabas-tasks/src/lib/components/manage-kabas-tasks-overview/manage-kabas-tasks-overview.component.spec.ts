@@ -14,7 +14,7 @@ import { By, HAMMER_LOADER } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { TaskFixture } from '@campus/dal';
+import { AssigneeTypesEnum, TaskFixture } from '@campus/dal';
 import { GuardsModule } from '@campus/guards';
 import { PagesSharedModule } from '@campus/pages/shared';
 import { ButtonToggleFilterComponent, SearchModule } from '@campus/search';
@@ -30,7 +30,6 @@ import { hot } from '@nrwl/angular/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { BehaviorSubject, of } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { AssigneeTypesEnum } from '../../interfaces/Assignee.interface';
 import {
   TaskStatusEnum,
   TaskWithAssigneesInterface

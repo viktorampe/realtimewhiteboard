@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
 import {
+  AssigneeTypesEnum,
   ClassGroupFixture,
   ClassGroupInterface,
   EduContentBookInterface,
@@ -29,10 +30,7 @@ import {
 import { ViewModelInterface } from '@campus/testing';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-import {
-  AssigneeInterface,
-  AssigneeTypesEnum
-} from '../interfaces/Assignee.interface';
+import { AssigneeInterface } from '../interfaces/Assignee.interface';
 import {
   TaskStatusEnum,
   TaskWithAssigneesInterface

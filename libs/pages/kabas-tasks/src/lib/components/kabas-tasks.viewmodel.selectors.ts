@@ -1,4 +1,5 @@
 import {
+  AssigneeTypesEnum,
   ClassGroupQueries,
   DiaboloPhaseInterface,
   DiaboloPhaseQueries,
@@ -26,10 +27,7 @@ import {
 } from '@campus/dal';
 import { Dictionary } from '@ngrx/entity';
 import { createSelector } from '@ngrx/store';
-import {
-  AssigneeInterface,
-  AssigneeTypesEnum
-} from '../interfaces/Assignee.interface';
+import { AssigneeInterface } from '../interfaces/Assignee.interface';
 import {
   TaskStatusEnum,
   TaskWithAssigneesInterface
