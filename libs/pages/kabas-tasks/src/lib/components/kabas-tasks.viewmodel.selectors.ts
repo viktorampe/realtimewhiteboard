@@ -1,6 +1,5 @@
 import {
   AssigneeTypesEnum,
-  ClassGroupQueries,
   DiaboloPhaseInterface,
   DiaboloPhaseQueries,
   EduContent,
@@ -32,26 +31,6 @@ import {
   TaskStatusEnum,
   TaskWithAssigneesInterface
 } from './../interfaces/TaskWithAssignees.interface';
-
-const taskClassGroupAssigneeByTask = createSelector(
-  [TaskClassGroupQueries.getAll, ClassGroupQueries.getAllEntities],
-  (taskClassGroups, classGroupDict, props) =>
-    taskClassGroups.reduce((dict, tcg) => {
-      if (!dict[tcg.taskId]) {
-        dict[tcg.taskId] = [];
-      }
-      dict[tcg.taskId].push({
-        id: tcg.id,
-        type: AssigneeTypesEnum.CLASSGROUP,
-        relationId: tcg.classGroupId,
-        label: classGroupDict[tcg.classGroupId].name,
-        start: tcg.start,
-        end: tcg.end
-      });
-
-      return dict;
-    }, {})
-);
 
 const taskGroupAssigneeByTask = createSelector(
   [TaskGroupQueries.getAll, GroupQueries.getAllEntities],
@@ -95,7 +74,7 @@ const taskStudentAssigneeByTask = createSelector(
 
 const combinedAssigneesByTask = createSelector(
   [
-    taskClassGroupAssigneeByTask,
+    TaskClassGroupQueries.getTaskClassGroupAssigneeByTask,
     taskGroupAssigneeByTask,
     taskStudentAssigneeByTask
   ],
