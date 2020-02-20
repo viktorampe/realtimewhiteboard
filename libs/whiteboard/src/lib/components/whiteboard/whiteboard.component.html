@@ -25,10 +25,11 @@
       *ngIf="isTitleInputSelected"
     />
   </div>
-  <div class="whiteboard__workspace" (dblclick)="onDblClick($event)">
+  <div class="whiteboard__workspace" (dblclick)="onDblClick($event)" #workspace>
     <campus-card
       *ngFor="let card of cards"
       cdkDrag
+      cdkDragBoundary=".whiteboard__workspace"
       class="whiteboard__card"
       [class.zoom]="card.mode === Mode.ZoomMode"
       [cdkDragFreeDragPosition]="{ x: card.left, y: card.top }"
@@ -69,6 +70,7 @@
   </button>
 
   <campus-shelf
+    (cardDraggedOutsideContainer)="cardDraggedPosition($event)"
     [class.minimizedShelf]="isShelfMinimized"
     [cards]="this.shelvedCards"
     [(isMinimized)]="isShelfMinimized"

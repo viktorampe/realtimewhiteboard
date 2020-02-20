@@ -1,4 +1,4 @@
-import { CdkDragEnd } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, CdkDragEnd } from '@angular/cdk/drag-drop';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Mode } from '../../enums/mode.enum';
 import CardInterface from '../../models/card.interface';
@@ -17,6 +17,8 @@ export class WhiteboardComponent implements OnInit {
       titleInput.nativeElement.focus();
     }
   }
+
+  @ViewChild('workspace', { static: true }) workspaceElementRef: ElementRef;
 
   readonly multipleCardCreationOffset = 50;
   readonly allowedFileTypes = ['image/jpeg', 'image/pjpeg', 'image/png'];
@@ -275,5 +277,20 @@ export class WhiteboardComponent implements OnInit {
     this.cards
       .filter(c => c.mode !== Mode.UploadMode)
       .forEach(c => (c.mode = Mode.IdleMode));
+  }
+
+  cardDraggedPosition($event: {
+    event: CdkDragDrop<any>;
+    card: CardInterface;
+  }) {
+    const { card, event } = $event;
+    card.left = event.distance.x + 124;
+    card.top =
+      this.workspaceElementRef.nativeElement.getBoundingClientRect().height -
+      Math.abs(event.distance.y) -
+      167;
+    card.mode = Mode.IdleMode;
+    this.cards.push(card);
+    this.shelvedCards = this.shelvedCards.filter(c => c !== card);
   }
 }
