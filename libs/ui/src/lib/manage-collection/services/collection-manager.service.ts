@@ -45,10 +45,7 @@ export class CollectionManagerService
       collectionType: collectionType
     };
 
-    // const dialogRef = this.openDialog(dialogData);
-    const dialogRef = this.openDialog({
-      ...dialogData
-    });
+    const dialogRef = this.openDialog(dialogData);
 
     // listen to component and bubble itemToggledInCollectionEvent
     subscription = dialogRef.componentInstance.selectionChanged.subscribe(
