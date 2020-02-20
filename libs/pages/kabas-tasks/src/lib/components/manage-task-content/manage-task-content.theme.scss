@@ -101,6 +101,10 @@
           &--handle {
             cursor: move;
           }
+
+          &--delete {
+            cursor: pointer;
+          }
         }
 
         &__content {
