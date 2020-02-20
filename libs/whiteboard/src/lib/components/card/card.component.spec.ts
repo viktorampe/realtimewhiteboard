@@ -65,13 +65,15 @@ describe('CardComponent', () => {
       image: null,
       mode: Mode.IdleMode,
       top: 0,
-      left: 0
+      left: 0,
+      viewModeImage: true
     };
 
     component.color = mockData.color;
     component.description = mockData.description;
     component.image = mockData.image;
     component.mode = mockData.mode;
+    component.viewModeImage = mockData.viewModeImage;
 
     fixture.detectChanges();
   });
@@ -80,90 +82,46 @@ describe('CardComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it("should replace card's image when replaceImage gets called", () => {
-    component.updateImage('test-image');
-    expect(component.image).toBe('test-image');
+  it('should emit cardPressed when onPressCard gets called', () => {
+    spyOn(component.cardPressed, 'emit');
+    component.onPressCard();
+    expect(component.cardPressed.emit).toHaveBeenCalled();
   });
 
-  it('should set mode to EditMode when setEditMode gets called', () => {
-    component.mode = <Mode>Mode.SelectedMode;
-    component.setEditMode();
-
-    fixture.detectChanges();
-
-    expect(component.mode).toBe(Mode.EditMode);
+  it('should emit cardTapped when onTapCard gets called', () => {
+    spyOn(component.cardTapped, 'emit');
+    component.onTapCard();
+    expect(component.cardTapped.emit).toHaveBeenCalled();
   });
 
-  it('should emit modeChange emitter when setEditMode gets called', () => {
-    spyOn(component.modeChange, 'emit');
-    component.setEditMode();
-    expect(component.modeChange.emit).toHaveBeenCalled();
+  it('should emit removeImage when emitRemoveImage gets called', () => {
+    spyOn(component.removeImage, 'emit');
+    component.emitRemoveImage();
+    expect(component.removeImage.emit).toHaveBeenCalled();
   });
 
-  it('should emit modeChange emitter when setSelectedMode gets called', () => {
-    spyOn(component.modeChange, 'emit');
-    component.setSelectedMode();
-    expect(component.modeChange.emit).toHaveBeenCalled();
+  it('should emit updateImage with the right image when emitUpdateImage gets called', () => {
+    spyOn(component.updateImage, 'emit');
+    component.emitUpdateImage('test');
+    expect(component.updateImage.emit).toHaveBeenCalledWith('test');
   });
 
-  it('should emit modeChange emitter when setIdleMode gets called', () => {
-    spyOn(component.modeChange, 'emit');
-    component.setIdleMode();
-    expect(component.modeChange.emit).toHaveBeenCalled();
-  });
-
-  it('should set mode to IdleMode when pressCard gets called and starting from SelectedMode', () => {
-    component.mode = <Mode>Mode.SelectedMode;
-    component.pressCard();
-    expect(component.mode).toBe(Mode.IdleMode);
-  });
-
-  it('should set mode to IdleMode when pressCard gets called and starting from EditMode', () => {
-    component.mode = <Mode>Mode.EditMode;
-    component.pressCard();
-    expect(component.mode).toBe(Mode.IdleMode);
-  });
-
-  it('should set mode to SelectedMode when setSelectedMode gets called', () => {
-    component.mode = <Mode>Mode.IdleMode;
-    component.setSelectedMode();
-    expect(component.mode).toBe(Mode.SelectedMode);
-  });
-
-  it('should toggle to viewModeImage when toggle icon is clicked and starting from viewModeText', () => {
-    component.viewModeImage = false;
-    component.toggleViewModeImage();
-    expect(component.viewModeImage).toBe(true);
-  });
-
-  it('should toggle to viewModeText when toggle icon is clicked and starting from viewModeImage', () => {
-    component.viewModeImage = true;
-    component.toggleViewModeImage();
-    expect(component.viewModeImage).toBe(false);
-  });
-
-  it('should set mode to IdleMode when a color is clicked from the colorlist from SelectedMode', () => {
-    component.mode = <Mode>Mode.SelectedMode;
+  it('should emit colorChange when selectColor gets called', () => {
+    spyOn(component.colorChange, 'emit');
     component.selectColor('white');
-    expect(component.mode).toBe(Mode.IdleMode);
+    expect(component.colorChange.emit).toHaveBeenCalledWith('white');
   });
 
-  it('should set mode to IdleMode when a color is clicked from the colorlist from EditMode', () => {
-    component.mode = <Mode>Mode.EditMode;
-    component.selectColor('white');
-    expect(component.mode).toBe(Mode.IdleMode);
+  it('should emit select when emitSelect is called', () => {
+    spyOn(component.select, 'emit');
+    component.emitSelect();
+    expect(component.select.emit).toHaveBeenCalled();
   });
 
-  it('should change the cardcolor when a color is picked', () => {
-    component.mode = Mode.SelectedMode;
-    component.selectColor('black');
-    expect(component.color).toBe('black');
-  });
-
-  it('should emit the right color when a cardcolor is picked', () => {
-    spyOn(component.lastColor, 'emit');
-    component.selectColor('black');
-    expect(component.lastColor.emit).toHaveBeenCalledWith('black');
+  it('should emit deselect when emitDeselect is called', () => {
+    spyOn(component.deselect, 'emit');
+    component.emitDeselect();
+    expect(component.deselect.emit).toHaveBeenCalled();
   });
 
   it('should emit deleteCard when emitDeleteCard is called', () => {
@@ -172,16 +130,34 @@ describe('CardComponent', () => {
     expect(component.deleteCard.emit).toHaveBeenCalledTimes(1);
   });
 
-  it('should emit select when setMultiSelectSelectedMode is called', () => {
-    spyOn(component.select, 'emit');
-    component.setMultiSelectSelectedMode();
-    expect(component.select.emit).toHaveBeenCalled();
+  it('should emit edit when emitEditIcon is called', () => {
+    spyOn(component.edit, 'emit');
+    component.emitEditIcon();
+    expect(component.edit.emit).toHaveBeenCalledTimes(1);
   });
 
-  it('should emit the select emitter when setMultiSelectSelectedMode is called ', () => {
-    spyOn(component.select, 'emit');
-    component.setMultiSelectSelectedMode();
-    expect(component.select.emit).toHaveBeenCalled();
+  it('should emit confirm when emitConfirmIcon is called', () => {
+    spyOn(component.confirm, 'emit');
+    component.emitConfirmIcon();
+    expect(component.confirm.emit).toHaveBeenCalledTimes(1);
+  });
+
+  it('should emit flip when emitFlipIcon is called', () => {
+    spyOn(component.flip, 'emit');
+    component.emitFlipIcon();
+    expect(component.flip.emit).toHaveBeenCalledTimes(1);
+  });
+
+  it('should emit flip when emitFlipIcon is called', () => {
+    spyOn(component.descriptionChange, 'emit');
+    component.onDescriptionChange('test');
+    expect(component.descriptionChange.emit).toHaveBeenCalledWith('test');
+  });
+
+  it('should emit the right color when a cardcolor is picked', () => {
+    spyOn(component.colorChange, 'emit');
+    component.selectColor('black');
+    expect(component.colorChange.emit).toHaveBeenCalledWith('black');
   });
 
   it('should show toolbar when mode is set to SelectedMode', () => {
