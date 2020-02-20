@@ -1,25 +1,47 @@
+<div *ngIf="showBooks" class="manage-task-content__books">
+  <campus-method-books-tile
+    *ngFor="let methodYear of methodYearsInArea$ | async"
+    [logoUrl]="methodYear.logoUrl"
+    [name]="methodYear.name"
+    [years]="methodYear.years"
+    [useQueryParams]="true"
+  >
+  </campus-method-books-tile>
+</div>
+
 <campus-collapsible-sheet>
   <div aside>
-    <mat-nav-list>
-      <div matSubheader>Zoek in ander boek</div>
-      <mat-list-item>Hoofdstuk</mat-list-item>
-      <mat-list-item>Hoofdstuk</mat-list-item>
-      <mat-list-item>Hoofdstuk</mat-list-item>
-      <mat-list-item>Hoofdstuk</mat-list-item>
-      <mat-list-item>Hoofdstuk</mat-list-item>
-      <mat-list-item>Hoofdstuk</mat-list-item>
-      <mat-list-item>Hoofdstuk</mat-list-item>
-    </mat-nav-list>
+    <mat-nav-list *ngIf="currentTaskParams$ | async as params">
+      <mat-list-item (click)="showBooks = !showBooks">
+        {{ showBooks ? 'Boeken verbergen' : 'Zoek in ander boek' }}
+      </mat-list-item>
+      <mat-list-item
+        data-cy="lesson-link"
+        *ngFor="let toc of currentToc$ | async"
+        (click)="selectTOC(toc.id, toc.depth)"
+        class="manage-task-content__lesson-link"
+        [class.manage-task-content__lesson-link--selected]="
+          toc.id === (params.lesson ? params.lesson : params.chapter)
+        "
+        [ngClass]="'manage-task-content__lesson-link--depth-' + toc.depth"
+      >
+        <span class="manage-task-content__lesson-link__title">{{
+          toc.title
+        }}</span></mat-list-item
+      ></mat-nav-list
+    >
   </div>
 
   <div main class="manage-task-content__main__container">
     <div class="manage-task-content__main">
-      Insert search here...
-      <!-- <div data-cy="search-filters" class="method-chapter--filters">
+      <campus-page-header
+        *ngIf="selectedBookTitle$ | async as selectedBookTitle"
+        [title]="selectedBookTitle"
+      ></campus-page-header>
+      <div data-cy="search-filters" class="manage-task-content__filters">
         <ng-container searchPortal="searchTerm"></ng-container>
-        <ng-container searchPortal="hostTop"></ng-container>
         <campus-button
-          class="method-chapter--reset-filters"
+          class="manage-task-content__filters__reset"
           iconClass="reset-filters"
           (click)="clearSearchFilters()"
         ></campus-button>
@@ -32,11 +54,65 @@
         [initialState]="initialSearchState$ | async"
         [searchResults]="searchResults$ | async"
         (searchState$)="onSearchStateChange($event)"
-      ></campus-search> -->
+      ></campus-search>
     </div>
 
-    <div class="manage-task-content__main__sidesheet"
-      >Insert sidesheet here...</div
-    >
+    <div
+      class="manage-task-content__main__sidesheet"
+      *ngIf="task$ | async as task"
+      >Insert sidesheet here...
+      <campus-button (click)="clickDone()" primary>Klaar</campus-button>
+      <mat-list
+        #currentContentList
+        *ngIf="
+          reorderableTaskEduContents$ | async as reorderableTaskEduContents
+        "
+        class="manage-task-content__list"
+        cdkDropList
+        (cdkDropListDropped)="
+          dropTaskEduContent(reorderableTaskEduContents, $event)
+        "
+      >
+        <mat-list-item
+          *ngFor="let taskEduContent of reorderableTaskEduContents"
+          class="manage-task-content__list__item"
+          cdkDrag
+        >
+          <mat-icon
+            class="manage-task-content__list__item__icon manage-task-content__list__item__icon--handle"
+            svgIcon="drag-handle"
+            cdkDragHandle
+          ></mat-icon>
+
+          <div
+            *ngTemplateOutlet="
+              contentItem;
+              context: {
+                fileExt:
+                  taskEduContent.eduContent.publishedEduContentMetadata.fileExt,
+                title: taskEduContent.eduContent.name
+              }
+            "
+          ></div>
+          <mat-icon
+            class="manage-task-content__list__item__icon manage-task-content__list__item__icon--delete manage-task-content__list__item__icon--on-hover"
+            svgIcon="delete"
+            (click)="removeEduContentFromTask(taskEduContent.eduContent)"
+          ></mat-icon>
+        </mat-list-item>
+      </mat-list>
+    </div>
   </div>
 </campus-collapsible-sheet>
+
+<ng-template #contentItem let-fileExt="fileExt" let-title="title">
+  <div class="manage-task-content__list__item__content">
+    <mat-icon
+      svgIcon="{{ fileExt != 'ludo.zip' ? 'general-file' : 'exercise' }}"
+      class="manage-task-content__list__item__content__icon"
+    ></mat-icon>
+    <div class="manage-task-content__list__item__content__title">{{
+      title
+    }}</div>
+  </div>
+</ng-template>

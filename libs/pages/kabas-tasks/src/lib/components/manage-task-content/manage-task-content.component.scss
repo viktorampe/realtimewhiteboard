@@ -18,5 +18,14 @@
       flex: 0 0 300px;
       border: 1px solid black;
     }
+
+    campus-search {
+      flex: 1 1 auto;
+    }
+  }
+
+  &__filters {
+    display: flex;
+    align-items: center;
   }
 }

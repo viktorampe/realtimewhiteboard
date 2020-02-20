@@ -12,9 +12,11 @@ import {
   CREDENTIAL_SERVICE_TOKEN,
   DiaboloPhaseService,
   DIABOLO_PHASE_SERVICE_TOKEN,
+  EduContentBookService,
   EduContentProductTypeService,
   EduContentService,
   EduNetService,
+  EDU_CONTENT_BOOK_SERVICE_TOKEN,
   EDU_CONTENT_PRODUCT_TYPE_SERVICE_TOKEN,
   EDU_CONTENT_SERVICE_TOKEN,
   EDU_NET_SERVICE_TOKEN,
@@ -152,7 +154,8 @@ import { FavIconService, FAVICON_SERVICE_TOKEN } from './services/favicons';
     { provide: TOC_SERVICE_TOKEN, useClass: TocService },
     { provide: LEARNING_DOMAIN_SERVICE_TOKEN, useClass: LearningDomainService },
     { provide: HISTORY_SERVICE_TOKEN, useClass: HistoryService },
-    { provide: DIABOLO_PHASE_SERVICE_TOKEN, useClass: DiaboloPhaseService }
+    { provide: DIABOLO_PHASE_SERVICE_TOKEN, useClass: DiaboloPhaseService },
+    { provide: EDU_CONTENT_BOOK_SERVICE_TOKEN, useClass: EduContentBookService }
   ]
 })
 export class AppTokenModule {}
