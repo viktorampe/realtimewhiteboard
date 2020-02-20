@@ -17,12 +17,17 @@ export class WhiteboardComponent implements OnInit {
       titleInput.nativeElement.focus();
     }
   }
+
+  readonly multipleCardCreationOffset = 50;
+  readonly allowedFileTypes = ['image/jpeg', 'image/pjpeg', 'image/png'];
+
   cards: CardInterface[] = [];
   shelvedCards: CardInterface[] = [];
+  selectedCards: CardInterface[] = [];
+
   lastColor = '#00A7E2';
   title = '';
   isTitleInputSelected = true;
-  isToolbarVisible = false;
   isShelfMinimized = false;
 
   constructor() {}
@@ -56,22 +61,26 @@ export class WhiteboardComponent implements OnInit {
     return whiteboard;
   }
 
-  addEmptyCard(top: number = 0, left: number = 0) {
+  addEmptyCard(
+    top: number = 0,
+    left: number = 0,
+    image: string = ''
+  ): CardInterface {
     const card = {
       mode: Mode.IdleMode,
       color: this.lastColor,
       description: '',
-      image: '',
+      image: image,
       top: top,
       left: left
     };
     this.cards.push(card);
 
-    if (
-      this.cards.filter(c => c.mode === Mode.MultiSelectSelectedMode).length
-    ) {
+    if (this.selectedCards.length) {
       card.mode = Mode.MultiSelectMode;
     }
+
+    return card;
   }
 
   addCardToShelf(card: CardInterface) {
@@ -111,27 +120,19 @@ export class WhiteboardComponent implements OnInit {
   }
 
   bulkDeleteClicked() {
-    const multiSelectedCards = this.cards.filter(
-      c => c.mode === Mode.MultiSelectSelectedMode
-    );
-    multiSelectedCards.forEach(c => this.addCardToShelf(c));
-    this.cards = this.cards.filter(c => !multiSelectedCards.includes(c));
-    this.cards.forEach(c => (c.mode = Mode.IdleMode));
-    this.checkWhiteboardToolbarVisible();
+    this.cards = this.cards.filter(c => !this.selectedCards.includes(c));
+    this.selectedCards.forEach(c => this.addCardToShelf(c));
+    this.selectedCards = [];
   }
 
   changeSelectedCardsColor(color: string) {
     this.lastColor = color;
-
-    this.cards
-      .filter(c => c.mode === Mode.MultiSelectSelectedMode)
-      .forEach(c => (c.color = this.lastColor));
+    this.selectedCards.forEach(c => (c.color = this.lastColor));
   }
 
   cardModeChanged(card: CardInterface, mode: Mode) {
     if (mode === Mode.SelectedMode) {
       this.setCardsModeIdleExceptUploadModeAndCard(card);
-      this.checkWhiteboardToolbarVisible();
     }
   }
 
@@ -142,20 +143,23 @@ export class WhiteboardComponent implements OnInit {
   }
 
   onSelectCard(card: CardInterface) {
-    this.cards
-      .filter(c => c.mode !== Mode.MultiSelectSelectedMode)
-      .forEach(c => (c.mode = Mode.MultiSelectMode));
-    this.checkWhiteboardToolbarVisible();
+    this.selectedCards.push(card);
+
+    if (this.selectedCards.length === 1) {
+      this.cards.forEach(c => (c.mode = Mode.MultiSelectMode));
+    }
+
+    card.mode = Mode.MultiSelectSelectedMode;
   }
 
   onDeselectCard(card: CardInterface) {
-    if (
-      !this.cards.filter(c => c.mode === Mode.MultiSelectSelectedMode).length
-    ) {
+    this.selectedCards = this.selectedCards.filter(c => c !== card);
+
+    if (!this.selectedCards.length) {
       this.cards.forEach(c => (c.mode = Mode.IdleMode));
     }
 
-    this.checkWhiteboardToolbarVisible();
+    card.mode = Mode.MultiSelectMode;
   }
 
   onDragEnded(event: CdkDragEnd, card) {
@@ -164,15 +168,50 @@ export class WhiteboardComponent implements OnInit {
     card.left = cardPosition.x;
   }
 
-  checkWhiteboardToolbarVisible() {
-    this.isToolbarVisible =
-      this.cards.filter(c => c.mode === Mode.MultiSelectSelectedMode).length >=
-      1;
+  onFilesDropped(event) {
+    const images = event.dataTransfer.files;
+    const { offsetX: x, offsetY: y } = event;
+
+    for (let i = 0; i < images.length; i++) {
+      if (!this.allowedFileTypes.includes(images[i].type)) {
+        continue;
+      }
+
+      const offsetX = x + i * this.multipleCardCreationOffset;
+      const offsetY = y + i * this.multipleCardCreationOffset;
+
+      this.readImageAndCreateCard(offsetX, offsetY, images[i]);
+    }
+  }
+
+  private readImageAndCreateCard(x: number, y: number, image: File) {
+    const reader = new FileReader();
+
+    reader.onloadend = e => {
+      this.addNewCardAfterImageUpload(x, y, reader.result.toString());
+    };
+
+    reader.readAsDataURL(image);
+  }
+
+  private addNewCardAfterImageUpload(
+    offsetX: number,
+    offsetY: number,
+    image: string
+  ) {
+    const card = this.addEmptyCard(offsetY, offsetX, image);
+
+    card.mode = Mode.UploadMode;
+
+    setTimeout(() => {
+      card.mode = Mode.IdleMode;
+    }, 500);
   }
 
   onClickWhiteboard() {
+    this.selectedCards = [];
     this.cards
-      .filter(c => c.mode === Mode.SelectedMode)
+      .filter(c => c.mode !== Mode.UploadMode)
       .forEach(c => (c.mode = Mode.IdleMode));
   }
 
