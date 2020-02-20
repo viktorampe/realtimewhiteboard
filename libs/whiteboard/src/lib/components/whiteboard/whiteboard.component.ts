@@ -121,7 +121,9 @@ export class WhiteboardComponent implements OnInit {
       !isACardSelected &&
       card.viewModeImage &&
       card.image &&
-      card.mode !== Mode.EditMode;
+      card.mode !== Mode.EditMode &&
+      card.mode !== Mode.MultiSelectMode &&
+      card.mode !== Mode.MultiSelectSelectedMode;
 
     return isZoomAllowed;
   }
@@ -153,6 +155,7 @@ export class WhiteboardComponent implements OnInit {
       } else {
         card.mode = Mode.SelectedMode;
         this.setCardsModeIdleExceptUploadModeAndCard(card);
+        this.selectedCards = [];
       }
     }
   }
