@@ -210,7 +210,8 @@ describe('EduContentCollectionManagerService', () => {
         { id: 4, label: 'foo', icon: 'bundle' },
         bundlesCollection, // bundles[0] has different learningAreaId
         [7],
-        jasmine.arrayContaining([5, 6]) // order doesn't matter
+        jasmine.arrayContaining([5, 6]), // order doesn't matter
+        'bundels'
       );
     });
 
@@ -320,7 +321,8 @@ describe('EduContentCollectionManagerService', () => {
         { id: 4, label: 'foo', icon: 'task' },
         tasksCollection,
         [7],
-        jasmine.arrayContaining([6, 7]) // order doesn't matter
+        jasmine.arrayContaining([6, 7]), // order doesn't matter
+        'taken'
       );
     });
 
