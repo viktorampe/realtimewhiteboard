@@ -174,7 +174,6 @@ export class WhiteboardComponent implements OnInit {
 
   updateImageFromCard(card: CardInterface) {
     card.image = '';
-
     card.mode = Mode.UploadMode;
 
     // TODO: remove this settimeout and wait for actual image upload
