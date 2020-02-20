@@ -1,6 +1,7 @@
 .shelf {
+  position: absolute;
   display: flex;
-  width: 100%;
+  bottom: 29px;
 
   &__button {
     position: absolute;
