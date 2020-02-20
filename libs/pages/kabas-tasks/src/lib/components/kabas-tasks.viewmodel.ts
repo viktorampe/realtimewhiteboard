@@ -68,6 +68,7 @@ import {
   map,
   mapTo,
   pairwise,
+  share,
   shareReplay,
   switchMap,
   switchMapTo,
@@ -266,10 +267,9 @@ export class KabasTasksViewModel
 
     this.currentTask$.pipe(take(1)).subscribe(task => {
       itemData.inTask = task.taskEduContents.some(
-        tEC => (tEC.eduContentId = itemData.eduContent.id)
+        tEC => tEC.eduContentId === itemData.eduContent.id
       );
       //searchResultItem.update();
-      console.log('update', itemData.eduContent.id);
     });
   }
 
@@ -406,13 +406,13 @@ export class KabasTasksViewModel
   private getCurrentTask(): Observable<TaskWithAssigneesInterface> {
     return this.currentTaskParams$.pipe(
       filter(taskParams => !!taskParams.id),
-      switchMap(currentTaskParams => {
-        return this.store.pipe(
+      switchMap(currentTaskParams =>
+        this.store.pipe(
           select(getTaskWithAssignmentAndEduContents, {
             taskId: currentTaskParams.id
           })
-        );
-      }),
+        )
+      ),
       shareReplay(1)
     );
   }
@@ -882,7 +882,8 @@ export class KabasTasksViewModel
         return difference;
       }),
       // only emit when there are changes to report
-      filter(difference => !!difference.length)
+      filter(difference => !!difference.length),
+      share()
     );
   }
 }
