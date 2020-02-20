@@ -9,7 +9,8 @@
     data-cy="method-books-link"
     *ngFor="let year of years"
     class="shared-method-books-tile__button__container__button"
-    [routerLink]="year.bookId"
+    [routerLink]="useQueryParams ? [] : year.bookId"
+    [queryParams]="useQueryParams ? { book: year.bookId } : {}"
   >
     {{ year.name }}
   </campus-button>

@@ -26,6 +26,7 @@ import {
   LearningAreaInterface,
   LinkedPersonQueries,
   MethodQueries,
+  MethodYearsInterface,
   PersonInterface,
   RouterStateUrl,
   TaskActions,
@@ -113,6 +114,7 @@ export class KabasTasksViewModel
   public favoriteBookIdsForTask$: Observable<number[]>;
   public selectedBookTitle$: Observable<string>;
   public currentToc$: Observable<EduContentTOCInterface[]>;
+  public methodYearsInArea$: Observable<MethodYearsInterface[]>;
 
   public searchResults$: Observable<SearchResultInterface>;
   public searchState$: Observable<SearchStateInterface>;
@@ -182,6 +184,8 @@ export class KabasTasksViewModel
     this.searchState$ = this._searchState$;
     this.favoriteBookIdsForTask$ = this.getFavoriteBookIdsForCurrentTask();
     this.currentToc$ = this.getTocsStream();
+
+    this.methodYearsInArea$ = this.getMethodYearsInAreaStream();
 
     this.setupSearchResults();
   }
@@ -768,6 +772,19 @@ export class KabasTasksViewModel
     );
   }
 
+  private getMethodYearsInAreaStream() {
+    return combineLatest([
+      this.store.pipe(select(MethodQueries.getAllowedMethodYears)),
+      this.currentTask$
+    ]).pipe(
+      map(([methodYears, currentTask]) => {
+        return methodYears.filter(
+          methodYear => methodYear.learningAreaId === currentTask.learningAreaId
+        );
+      })
+    );
+  }
+
   private combineChaptersLessons(
     bookId: number,
     chapterId: number
@@ -806,12 +823,15 @@ export class KabasTasksViewModel
 
   private getSelectedBookTitle() {
     return this.currentTaskParams$.pipe(
-      filter(params => !!params.book),
-      switchMap(params =>
-        this.store.pipe(
-          select(MethodQueries.getMethodWithYearByBookId, { id: params.book })
-        )
-      )
+      switchMap(params => {
+        if (params.book) {
+          return this.store.pipe(
+            select(MethodQueries.getMethodWithYearByBookId, { id: params.book })
+          );
+        }
+
+        return of('');
+      })
     );
   }
 }

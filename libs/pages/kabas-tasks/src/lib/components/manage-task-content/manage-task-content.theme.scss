@@ -1,4 +1,7 @@
 @mixin manage-task-content-theme() {
+  $manage-task-content__books-padding: 16px !default;
+  $manage-task-content__books-margin-right: 8px !default;
+
   //list
   $manage-task-content__list-vertical-margin: -40px !default;
 
@@ -61,6 +64,15 @@
     background: $pages-kabas-tasks-background-color--primary;
   }
   .manage-task-content {
+    &__books {
+      background: $pages-kabas-tasks-background-color--secondary;
+      padding: $manage-task-content__books-padding;
+
+      campus-method-books-tile {
+        margin-right: $manage-task-content__books-margin-right;
+      }
+    }
+
     &__list {
       // margin-left: $manage-task-content__list-vertical-margin;
       // margin-right: $manage-task-content__list-vertical-margin;
