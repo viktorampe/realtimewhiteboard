@@ -13,13 +13,10 @@ import {
   MethodLevelInterface,
   MethodLevelQueries,
   MethodQueries,
-  TaskClassGroupQueries,
   TaskEduContentInterface,
   TaskEduContentQueries,
-  TaskGroupQueries,
   TaskInterface,
-  TaskQueries,
-  TaskStudentQueries
+  TaskQueries
 } from '@campus/dal';
 import { Dictionary } from '@ngrx/entity';
 import { createSelector } from '@ngrx/store';
@@ -28,32 +25,6 @@ import {
   TaskStatusEnum,
   TaskWithAssigneesInterface
 } from './../interfaces/TaskWithAssignees.interface';
-
-const combinedAssigneesByTask = createSelector(
-  [
-    TaskClassGroupQueries.getTaskClassGroupAssigneeByTask,
-    TaskGroupQueries.getTaskGroupAssigneeByTask,
-    TaskStudentQueries.getTaskStudentAssigneeByTask
-  ],
-  (tCGA, tGA, tSA, props) => {
-    const taskClassGroupAssigneesKeys = Object.keys(tCGA);
-    const taskGroupAssigneesKeys = Object.keys(tGA);
-    const taskStudentAssigneesKeys = Object.keys(tSA);
-
-    const dict = [
-      ...taskClassGroupAssigneesKeys,
-      ...taskGroupAssigneesKeys,
-      ...taskStudentAssigneesKeys
-    ].reduce((acc, key) => {
-      if (!acc[key]) {
-        acc[key] = [].concat(tCGA[key] || [], tGA[key] || [], tSA[key] || []);
-      }
-      return acc;
-    }, {});
-
-    return dict;
-  }
-);
 
 export const allowedLearningAreas = createSelector(
   [MethodQueries.getAllowedMethods, LearningAreaQueries.getAllEntities],
@@ -86,7 +57,7 @@ export const getAllTasksWithAssignments = createSelector(
     TaskQueries.getAll,
     LearningAreaQueries.getAllEntities,
     TaskEduContentQueries.getAllGroupedByTaskId,
-    combinedAssigneesByTask,
+    TaskQueries.combinedAssigneesByTask,
     FavoriteQueries.getTaskFavorites
   ],
   (

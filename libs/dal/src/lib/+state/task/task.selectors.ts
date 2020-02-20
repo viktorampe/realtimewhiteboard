@@ -1,6 +1,9 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { TaskInterface } from '../../+models';
 import { Task } from '../../+models/Task';
+import { getTaskClassGroupAssigneeByTask } from '../task-class-group/task-class-group.selectors';
+import { getTaskGroupAssigneeByTask } from '../task-group/task-group.selectors';
+import { getTaskStudentAssigneeByTask } from '../task-student/task-student.selectors';
 import {
   NAME,
   selectAll,
@@ -131,3 +134,29 @@ function asTask(item: TaskInterface): Task {
     return Object.assign<Task, TaskInterface>(new Task(), item);
   }
 }
+
+export const combinedAssigneesByTask = createSelector(
+  [
+    getTaskClassGroupAssigneeByTask,
+    getTaskGroupAssigneeByTask,
+    getTaskStudentAssigneeByTask
+  ],
+  (tCGA, tGA, tSA, props) => {
+    const taskClassGroupAssigneesKeys = Object.keys(tCGA);
+    const taskGroupAssigneesKeys = Object.keys(tGA);
+    const taskStudentAssigneesKeys = Object.keys(tSA);
+
+    const dict = [
+      ...taskClassGroupAssigneesKeys,
+      ...taskGroupAssigneesKeys,
+      ...taskStudentAssigneesKeys
+    ].reduce((acc, key) => {
+      if (!acc[key]) {
+        acc[key] = [].concat(tCGA[key] || [], tGA[key] || [], tSA[key] || []);
+      }
+      return acc;
+    }, {});
+
+    return dict;
+  }
+);
