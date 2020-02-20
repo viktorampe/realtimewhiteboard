@@ -180,7 +180,7 @@ export class WhiteboardComponent implements OnInit {
     const input = event.target as HTMLInputElement;
     const files: FileList = input.files;
 
-    if (files.length) {
+    if (files.length && this.allowedFileTypes.includes(files[0].type)) {
       this.uploadImageForCard(card, files[0]);
     }
 
