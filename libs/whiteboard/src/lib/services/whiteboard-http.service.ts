@@ -51,13 +51,14 @@ export class WhiteboardHttpService {
       .pipe(
         retry(RETRY_AMOUNT),
         catchError(this.handleError.bind(this)),
-        map(
-          (response: { imageUrl: string }) =>
-            'https://cdn.babymarkt.com/babymarkt/img/708424/443/steiff-pacco-shiba-inu-29-cm-a270440.jpg'
-        ),
+        map((response: { imageUrl: string }) => response.imageUrl),
         delay(1000)
       );
-    return response$;
+
+    return of(
+      'https://cdn.babymarkt.com/babymarkt/img/708424/443/steiff-pacco-shiba-inu-29-cm-a270440.jpg'
+    ).pipe(delay(1000));
+    //TODO: return response$;
   }
 
   private getWhiteboardMock(): WhiteboardInterface {
