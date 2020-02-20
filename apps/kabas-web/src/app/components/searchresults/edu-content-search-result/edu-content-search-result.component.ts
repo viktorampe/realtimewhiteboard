@@ -3,7 +3,9 @@ import { ResultItemBase } from '@campus/search';
 import {
   ContentActionInterface,
   ContentOpenActionsServiceInterface,
+  ContentTaskActionsServiceInterface,
   CONTENT_OPEN_ACTIONS_SERVICE_TOKEN,
+  CONTENT_TASK_ACTIONS_SERVICE_TOKEN,
   EduContentSearchResultInterface
 } from '@campus/shared';
 
@@ -24,7 +26,9 @@ export class EduContentSearchResultComponent extends ResultItemBase
 
   constructor(
     @Inject(CONTENT_OPEN_ACTIONS_SERVICE_TOKEN)
-    private contentOpenActionsService: ContentOpenActionsServiceInterface
+    private contentOpenActionsService: ContentOpenActionsServiceInterface,
+    @Inject(CONTENT_TASK_ACTIONS_SERVICE_TOKEN)
+    private contentTaskActionsService: ContentTaskActionsServiceInterface
   ) {
     super();
   }
@@ -38,6 +42,16 @@ export class EduContentSearchResultComponent extends ResultItemBase
     this.actions = this.contentOpenActionsService.getActionsForEduContent(
       this.data.eduContent
     );
+
+    if (this.data.addTaskActions) {
+      this.actions = [
+        ...this.contentTaskActionsService.getTaskActionsForEduContent(
+          this.data.eduContent,
+          this.data.inTask
+        ),
+        ...this.actions
+      ];
+    }
   }
 
   onActionClick(action: ContentActionInterface) {

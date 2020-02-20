@@ -35,7 +35,7 @@ export class HomeResolver extends StateResolver {
     return [
       new FavoriteActions.LoadFavorites({ userId }),
       new EduContentActions.LoadEduContents({ userId }),
-      new EduContentBookActions.LoadEduContentBooks({ methodIds })
+      new EduContentBookActions.LoadEduContentBooks({ userId })
     ];
   }
 

@@ -144,6 +144,9 @@ export const getMethodWithYearByBookId = createSelector(
     yearState: YearState,
     eduContentBook: EduContentBookInterface
   ) => {
+    if (!eduContentBook) {
+      return '';
+    }
     return (
       methodState.entities[eduContentBook.methodId].name +
       ' ' +
@@ -194,6 +197,8 @@ export const getAllowedMethodYears = createSelector(
                 methodState.entities[book.methodId].code +
                 '.jpg',
               name: methodState.entities[book.methodId].name,
+              learningAreaId:
+                methodState.entities[book.methodId].learningAreaId,
               years: []
             };
           if (book.years.length > 0)

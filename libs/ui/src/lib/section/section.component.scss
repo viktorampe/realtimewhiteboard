@@ -5,10 +5,16 @@
   &__header {
     display: flex;
     flex-direction: row;
+    align-items: center;
+
+    &__actions {
+      cursor: pointer;
+    }
   }
 
   &--editable {
-    // apply style for editable mode
+    cursor: pointer;
+
     .ui-section__header__actions {
       display: none;
     }
@@ -16,15 +22,6 @@
       .ui-section__header__actions {
         display: block;
       }
-      // dummy styles for testing
-      border: 1px solid black;
     }
-  }
-
-  &--static {
-    // apply styles for static mode
-  }
-  &--editing {
-    // apply styles for editing mode
   }
 }

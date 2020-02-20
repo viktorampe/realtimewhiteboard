@@ -281,13 +281,17 @@ export class WhiteboardComponent implements OnInit {
   cardDraggedPosition($event: {
     event: CdkDragDrop<any>;
     card: CardInterface;
+    cardElement: HTMLElement;
   }) {
-    const { card, event } = $event;
-    card.left = event.distance.x + 124;
+    const { card, event, cardElement } = $event;
+
+    card.left = cardElement.offsetLeft + event.distance.x;
+
     card.top =
       this.workspaceElementRef.nativeElement.getBoundingClientRect().height -
-      Math.abs(event.distance.y) -
-      167;
+      (167 + cardElement.offsetTop) -
+      Math.abs(event.distance.y);
+
     card.mode = Mode.IdleMode;
     this.cards.push(card);
     this.shelvedCards = this.shelvedCards.filter(c => c !== card);

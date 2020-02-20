@@ -40,8 +40,7 @@ import {
   YearReducer
 } from '@campus/dal';
 import {
-  FilterFactoryFixture,
-  SearchModeInterface,
+  SearchModeFixture,
   SearchResultInterface,
   SearchStateInterface
 } from '@campus/search';
@@ -170,24 +169,6 @@ describe('PracticeViewModel', () => {
     learningAreaId: methodLearningAreaId
   });
 
-  function createMockSearchMode(overrides: Partial<SearchModeInterface>) {
-    return Object.assign(
-      {
-        name: 'demo',
-        label: 'demo',
-        dynamicFilters: false,
-        searchFilterFactory: FilterFactoryFixture,
-        searchTerm: null,
-        results: {
-          component: null,
-          sortModes: [],
-          pageSize: 3
-        }
-      },
-      overrides
-    ) as SearchModeInterface;
-  }
-
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [
@@ -230,8 +211,8 @@ describe('PracticeViewModel', () => {
         {
           provide: ENVIRONMENT_SEARCHMODES_TOKEN,
           useValue: {
-            demo: createMockSearchMode({ name: 'demo' }),
-            'practice-chapter-lesson': createMockSearchMode({
+            demo: new SearchModeFixture(),
+            'practice-chapter-lesson': new SearchModeFixture({
               name: 'practice-chapter-lesson'
             })
           }

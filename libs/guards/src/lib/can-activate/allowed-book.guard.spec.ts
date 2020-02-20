@@ -11,16 +11,14 @@ import {
   EduContentBookActions,
   EduContentBookInterface,
   EduContentBookReducer,
-  MethodActions,
-  MethodReducer,
   StateFeatureBuilder
 } from '@campus/dal';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from 'jasmine-marbles';
-import { AllowedMethodGuard } from './allowed-method.guard';
+import { AllowedBookGuard } from './allowed-book.guard';
 
-describe('AllowedMethodGuard', () => {
-  let allowedMethodGuard: AllowedMethodGuard;
+describe('AllowedBookGuard', () => {
+  let allowedBookGuard: AllowedBookGuard;
   let store: Store<DalState>;
   class MockRouter {
     navigate = () => {};
@@ -36,12 +34,9 @@ describe('AllowedMethodGuard', () => {
         eduContentBooks: [<EduContentBookInterface>book]
       })
     );
-    store.dispatch(
-      new MethodActions.AllowedMethodsLoaded({ methodIds: allowedMethods })
-    );
 
     expect(
-      allowedMethodGuard.canActivate(
+      allowedBookGuard.canActivate(
         { params: { book: routeBookParam } as any } as ActivatedRouteSnapshot,
         <RouterStateSnapshot>{}
       )
@@ -61,13 +56,12 @@ describe('AllowedMethodGuard', () => {
           }
         ),
         ...StateFeatureBuilder.getStoreModuleForFeatures([
-          EduContentBookReducer,
-          MethodReducer
+          EduContentBookReducer
         ]),
         RouterTestingModule
       ],
       providers: [
-        AllowedMethodGuard,
+        AllowedBookGuard,
         Store,
         { provide: Router, useClass: MockRouter },
         {
@@ -78,11 +72,11 @@ describe('AllowedMethodGuard', () => {
         }
       ]
     });
-    allowedMethodGuard = TestBed.get(AllowedMethodGuard);
+    allowedBookGuard = TestBed.get(AllowedBookGuard);
     store = TestBed.get(Store);
   });
 
-  it('should return true if book method is allowed', () => {
+  it('should return true if book is present', () => {
     expectAllowedMethod(
       1,
       <EduContentBookInterface>{ id: 1, methodId: 2 },
@@ -90,15 +84,8 @@ describe('AllowedMethodGuard', () => {
       true
     );
   });
-  it('should return false if book method is not allowed', () => {
-    expectAllowedMethod(
-      1,
-      <EduContentBookInterface>{ id: 1, methodId: 2 },
-      [3],
-      false
-    );
-  });
-  it('should return false if book book is not present', () => {
+
+  it('should return false if book is not present', () => {
     expectAllowedMethod(
       1,
       <EduContentBookInterface>{ id: 2, methodId: 2 },

@@ -5,7 +5,7 @@ import {
   MatIconRegistry,
   MAT_DIALOG_DATA
 } from '@angular/material';
-import { By } from '@angular/platform-browser';
+import { By, HAMMER_LOADER } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
@@ -32,6 +32,10 @@ describe('PrintPaperTaskModalComponent', () => {
         {
           provide: MatIconRegistry,
           useClass: MockMatIconRegistry
+        },
+        {
+          provide: HAMMER_LOADER,
+          useValue: () => new Promise(() => {})
         }
       ]
     });
