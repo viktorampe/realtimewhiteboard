@@ -5,5 +5,10 @@
     (removeClicked)="emitRemoveClicked()"
     (updateClicked)="emitUpdateClicked()"
   ></campus-image-toolbar>
-  <img *ngIf="imageUrl" class="card-image__image" [src]="imageUrl" />
+  <img
+    *ngIf="imageUrl"
+    [class.isZoom]="mode === Mode.ZoomMode"
+    class="card-image__image"
+    [src]="imageUrl"
+  />
 </div>
