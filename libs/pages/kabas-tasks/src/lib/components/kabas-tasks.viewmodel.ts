@@ -8,7 +8,6 @@ import {
   DalState,
   EduContent,
   EduContentActions,
-  EduContentBookInterface,
   EduContentInterface,
   EduContentServiceInterface,
   EduContentTocActions,
@@ -26,6 +25,7 @@ import {
   LearningAreaInterface,
   LinkedPersonQueries,
   MethodQueries,
+  MethodYearsInterface,
   PersonInterface,
   RouterStateUrl,
   TaskActions,
@@ -43,7 +43,6 @@ import {
   SearcherInterface,
   SearchModeInterface,
   SearchResultInterface,
-  SearchResultUpdaterInterface,
   SearchStateInterface
 } from '@campus/search';
 import {
@@ -74,6 +73,8 @@ import {
   filter,
   map,
   mapTo,
+  pairwise,
+  share,
   shareReplay,
   switchMap,
   switchMapTo,
@@ -109,7 +110,7 @@ export class KabasTasksViewModel
     ContentOpenerInterface,
     ContentTaskManagerInterface,
     SearcherInterface,
-    SearchResultUpdaterInterface {
+    SearchResultItemUpdaterInterface {
   public tasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
   public paperTasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
   public currentTask$: Observable<TaskWithAssigneesInterface>;
@@ -119,13 +120,14 @@ export class KabasTasksViewModel
   public classGroups$: Observable<ClassGroupInterface[]>;
   public groups$: Observable<GroupInterface[]>;
   public students$: Observable<PersonInterface[]>;
-  public searchBook$ = new BehaviorSubject<EduContentBookInterface>(null);
   public favoriteBookIdsForTask$: Observable<number[]>;
   public selectedBookTitle$: Observable<string>;
   public currentToc$: Observable<EduContentTOCInterface[]>;
+  public methodYearsInArea$: Observable<MethodYearsInterface[]>;
 
   public searchResults$: Observable<SearchResultInterface>;
   public searchState$: Observable<SearchStateInterface>;
+  public updatedEduContentIds$: Observable<number[]>;
 
   private _searchState$: BehaviorSubject<SearchStateInterface>;
 
@@ -154,54 +156,7 @@ export class KabasTasksViewModel
     @Inject(EDU_CONTENT_SERVICE_TOKEN)
     private eduContentService: EduContentServiceInterface
   ) {
-    this.tasksWithAssignments$ = this.store.pipe(
-      select(getTasksWithAssignmentsByType, {
-        isPaper: false
-      })
-    );
-
-    this.paperTasksWithAssignments$ = this.store.pipe(
-      select(getTasksWithAssignmentsByType, {
-        isPaper: true
-      })
-    );
-
-    this.routerState$ = this.store.pipe(select(getRouterState));
-    this.currentTaskParams$ = this.routerState$.pipe(
-      filter(routerState => !!routerState),
-      map((routerState: RouterReducerState<RouterStateUrl>) => ({
-        id: +routerState.state.params.id || undefined,
-        book: +routerState.state.queryParams.book || undefined,
-        lesson: +routerState.state.queryParams.lesson || undefined,
-        chapter: +routerState.state.queryParams.chapter || undefined
-      })),
-      distinctUntilChanged(
-        (a, b) =>
-          a.id === b.id &&
-          a.book === b.book &&
-          a.lesson === b.lesson &&
-          a.chapter === b.chapter
-      ),
-      shareReplay(1)
-    );
-
-    this.currentTask$ = this.getCurrentTask();
-    this.selectedBookTitle$ = this.getSelectedBookTitle();
-
-    this.selectableLearningAreas$ = this.store.pipe(
-      select(allowedLearningAreas)
-    );
-
-    this.classGroups$ = this.store.pipe(select(ClassGroupQueries.getAll));
-    this.groups$ = this.store.pipe(select(GroupQueries.getAll));
-    this.students$ = this.store.pipe(select(LinkedPersonQueries.getStudents));
-
-    this._searchState$ = new BehaviorSubject<SearchStateInterface>(null);
-    this.searchState$ = this._searchState$;
-    this.favoriteBookIdsForTask$ = this.getFavoriteBookIdsForCurrentTask();
-    this.currentToc$ = this.getTocsStream();
-
-    this.setupSearchResults();
+    this.setupStreams();
   }
 
   openEduContentAsExercise(eduContent: EduContent): void {
@@ -319,6 +274,17 @@ export class KabasTasksViewModel
         userId: this.authService.userId
       })
     );
+  }
+
+  public updateSearchResultItem(searchResultItem: ResultItemBase) {
+    const itemData = searchResultItem.data as EduContentSearchResultInterface;
+
+    this.currentTask$.pipe(take(1)).subscribe(task => {
+      itemData.inTask = task.taskEduContents.some(
+        tEC => tEC.eduContentId === itemData.eduContent.id
+      );
+      //searchResultItem.update();
+    });
   }
 
   private getAssigneeTypeToKeyMap() {
@@ -454,13 +420,14 @@ export class KabasTasksViewModel
   private getCurrentTask(): Observable<TaskWithAssigneesInterface> {
     return this.currentTaskParams$.pipe(
       filter(taskParams => !!taskParams.id),
-      switchMap(currentTaskParams => {
-        return this.store.pipe(
+      switchMap(currentTaskParams =>
+        this.store.pipe(
           select(getTaskWithAssignmentAndEduContents, {
             taskId: currentTaskParams.id
           })
-        );
-      })
+        )
+      ),
+      shareReplay(1)
     );
   }
 
@@ -533,8 +500,8 @@ export class KabasTasksViewModel
   }
 
   public getInitialSearchState(): Observable<SearchStateInterface> {
-    return combineLatest([this.currentTask$, this.searchBook$]).pipe(
-      map(([currentTask, searchBook]) => {
+    return combineLatest([this.currentTask$, this.currentTaskParams$]).pipe(
+      map(([currentTask, taskParams]) => {
         const initialSearchState: SearchStateInterface = {
           searchTerm: '',
           filterCriteriaSelections: new Map<string, (number | string)[]>(),
@@ -544,14 +511,15 @@ export class KabasTasksViewModel
         // Only allow EduContent that's allowed to be put in a task
         initialSearchState.filterCriteriaOptions.set('taskAllowed', true);
 
-        if (searchBook) {
+        if (taskParams.book) {
           initialSearchState.filterCriteriaSelections.set(
-            'years',
-            searchBook.years.map(year => year.id)
+            'eduContentTOC.tree',
+            [taskParams.book]
           );
-
-          initialSearchState.filterCriteriaSelections.set('methods', [
-            searchBook.methodId
+        }
+        if (taskParams.lesson || taskParams.chapter) {
+          initialSearchState.filterCriteriaSelections.set('eduContentTOC', [
+            taskParams.lesson || taskParams.chapter
           ]);
         }
 
@@ -786,6 +754,19 @@ export class KabasTasksViewModel
     );
   }
 
+  private getMethodYearsInAreaStream() {
+    return combineLatest([
+      this.store.pipe(select(MethodQueries.getAllowedMethodYears)),
+      this.currentTask$
+    ]).pipe(
+      map(([methodYears, currentTask]) => {
+        return methodYears.filter(
+          methodYear => methodYear.learningAreaId === currentTask.learningAreaId
+        );
+      })
+    );
+  }
+
   private combineChaptersLessons(
     bookId: number,
     chapterId: number
@@ -824,12 +805,99 @@ export class KabasTasksViewModel
 
   private getSelectedBookTitle() {
     return this.currentTaskParams$.pipe(
-      filter(params => !!params.book),
-      switchMap(params =>
-        this.store.pipe(
-          select(MethodQueries.getMethodWithYearByBookId, { id: params.book })
-        )
-      )
+      switchMap(params => {
+        if (params.book) {
+          return this.store.pipe(
+            select(MethodQueries.getMethodWithYearByBookId, { id: params.book })
+          );
+        }
+
+        return of('');
+      })
+    );
+  }
+
+  private setupStreams() {
+    this.tasksWithAssignments$ = this.store.pipe(
+      select(getTasksWithAssignmentsByType, {
+        isPaper: false
+      })
+    );
+
+    this.paperTasksWithAssignments$ = this.store.pipe(
+      select(getTasksWithAssignmentsByType, {
+        isPaper: true
+      })
+    );
+
+    this.routerState$ = this.store.pipe(select(getRouterState));
+    this.currentTaskParams$ = this.routerState$.pipe(
+      filter(routerState => !!routerState),
+      map((routerState: RouterReducerState<RouterStateUrl>) => ({
+        id: +routerState.state.params.id || undefined,
+        book: +routerState.state.queryParams.book || undefined,
+        lesson: +routerState.state.queryParams.lesson || undefined,
+        chapter: +routerState.state.queryParams.chapter || undefined
+      })),
+      distinctUntilChanged(
+        (a, b) =>
+          a.id === b.id &&
+          a.book === b.book &&
+          a.lesson === b.lesson &&
+          a.chapter === b.chapter
+      ),
+      shareReplay(1)
+    );
+
+    this.currentTask$ = this.getCurrentTask();
+    this.selectedBookTitle$ = this.getSelectedBookTitle();
+
+    this.selectableLearningAreas$ = this.store.pipe(
+      select(allowedLearningAreas)
+    );
+
+    this.classGroups$ = this.store.pipe(select(ClassGroupQueries.getAll));
+    this.groups$ = this.store.pipe(select(GroupQueries.getAll));
+    this.students$ = this.store.pipe(select(LinkedPersonQueries.getStudents));
+
+    this._searchState$ = new BehaviorSubject<SearchStateInterface>(null);
+    this.searchState$ = this._searchState$;
+    this.favoriteBookIdsForTask$ = this.getFavoriteBookIdsForCurrentTask();
+    this.currentToc$ = this.getTocsStream();
+
+    this.methodYearsInArea$ = this.getMethodYearsInAreaStream();
+
+    this.updatedEduContentIds$ = this.getUpdatedEduContentIds();
+
+    this.setupSearchResults();
+  }
+
+  private getUpdatedEduContentIds() {
+    return this.currentTask$.pipe(
+      pairwise(),
+      map(([oldValue, newValue]) => {
+        // Don't check for changed eduContent when the task id has changed
+        // search results will refresh in that case
+        if (oldValue.id !== newValue.id) return [];
+
+        const oldEduContentIds = oldValue.taskEduContents.map(
+          tEC => tEC.eduContentId
+        );
+
+        const newEduContentIds = newValue.taskEduContents.map(
+          tEC => tEC.eduContentId
+        );
+
+        const difference = [
+          ...oldEduContentIds.filter(x => !newEduContentIds.includes(x)),
+          ...newEduContentIds.filter(x => !oldEduContentIds.includes(x))
+        ];
+
+        return difference;
+      }),
+      // only emit when there are changes to report
+      filter(difference => !!difference.length),
+      share()
     );
   }
 }

@@ -3,7 +3,9 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { SearchModule } from '@campus/search';
 import {
+  ContentTaskActionsService,
   CONTENT_OPENER_TOKEN,
+  CONTENT_TASK_ACTIONS_SERVICE_TOKEN,
   CONTENT_TASK_MANAGER_TOKEN,
   SharedModule
 } from '@campus/shared';
@@ -36,6 +38,10 @@ import { GlobalSearchResolver } from './resolvers/pages-global-search.resolver';
     {
       provide: CONTENT_TASK_MANAGER_TOKEN,
       useExisting: GlobalSearchViewModel
+    },
+    {
+      provide: CONTENT_TASK_ACTIONS_SERVICE_TOKEN,
+      useClass: ContentTaskActionsService
     }
   ]
 })

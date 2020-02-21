@@ -1,6 +1,20 @@
+<div *ngIf="showBooks" class="manage-task-content__books">
+  <campus-method-books-tile
+    *ngFor="let methodYear of methodYearsInArea$ | async"
+    [logoUrl]="methodYear.logoUrl"
+    [name]="methodYear.name"
+    [years]="methodYear.years"
+    [useQueryParams]="true"
+  >
+  </campus-method-books-tile>
+</div>
+
 <campus-collapsible-sheet>
   <div aside>
     <mat-nav-list *ngIf="currentTaskParams$ | async as params">
+      <mat-list-item (click)="showBooks = !showBooks">
+        {{ showBooks ? 'Boeken verbergen' : 'Zoek in ander boek' }}
+      </mat-list-item>
       <mat-list-item
         data-cy="lesson-link"
         *ngFor="let toc of currentToc$ | async"
@@ -81,8 +95,9 @@
             "
           ></div>
           <mat-icon
-            class="manage-task-content__list__item__icon manage-task-content__list__item__icon--on-hover"
+            class="manage-task-content__list__item__icon manage-task-content__list__item__icon--delete manage-task-content__list__item__icon--on-hover"
             svgIcon="delete"
+            (click)="removeEduContentFromTask(taskEduContent.eduContent)"
           ></mat-icon>
         </mat-list-item>
       </mat-list>

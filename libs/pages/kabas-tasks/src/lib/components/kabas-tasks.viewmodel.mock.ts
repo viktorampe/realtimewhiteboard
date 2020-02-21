@@ -2,7 +2,6 @@ import { Inject, Injectable } from '@angular/core';
 import {
   ClassGroupFixture,
   ClassGroupInterface,
-  EduContentBookInterface,
   EduContentFixture,
   EduContentTOCFixture,
   EduContentTOCInterface,
@@ -65,9 +64,10 @@ export class MockKabasTasksViewModel
   public groups$: BehaviorSubject<GroupInterface[]>;
   public students$: BehaviorSubject<PersonInterface[]>;
 
-  public searchBook$: BehaviorSubject<EduContentBookInterface>;
   public favoriteBookIdsForTask$: Observable<number[]>;
   public selectedBookTitle$: Observable<string>;
+
+  public updatedEduContentIds$: BehaviorSubject<number[]>;
 
   constructor(
     @Inject(ENVIRONMENT_SEARCHMODES_TOKEN)
@@ -134,6 +134,8 @@ export class MockKabasTasksViewModel
     this.currentToc$ = this.getCurrentToc();
     this.favoriteBookIdsForTask$ = new BehaviorSubject([1]);
     this.selectedBookTitle$ = new BehaviorSubject('foo 1');
+
+    this.updatedEduContentIds$ = new BehaviorSubject([]);
   }
 
   public getCurrentToc() {
@@ -500,4 +502,6 @@ export class MockKabasTasksViewModel
   }
 
   public updateSearchState(state: SearchStateInterface) {}
+
+  public updateSearchResultItem() {}
 }
