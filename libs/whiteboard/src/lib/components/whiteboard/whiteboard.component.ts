@@ -236,7 +236,6 @@ export class WhiteboardComponent implements OnInit {
     }
 
     card.mode = Mode.MultiSelectSelectedMode;
-    event.stopPropagation();
   }
 
   onDeselectCard(card: CardInterface) {
@@ -247,7 +246,6 @@ export class WhiteboardComponent implements OnInit {
     } else {
       card.mode = Mode.MultiSelectMode;
     }
-    event.stopPropagation();
   }
 
   onDragEnded(event: CdkDragEnd, card) {

@@ -40,11 +40,13 @@ export class CardToolbarComponent implements OnInit {
     this.clickFlipIcon.emit();
   }
 
-  multiSelectClicked() {
+  multiSelectClicked(event: MouseEvent) {
     this.clickMultiSelectIcon.emit();
+    event.stopPropagation();
   }
 
-  multiSelectSelectedClicked() {
+  multiSelectSelectedClicked(event: MouseEvent) {
     this.clickMultiSelectSelectedIcon.emit();
+    event.stopPropagation();
   }
 }
