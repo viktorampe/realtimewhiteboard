@@ -84,8 +84,8 @@ describe('EduContentCollectionManagerService', () => {
     new TaskFixture({ id: 7, learningAreaId: 2 })
   ];
   const tasksCollection: ManageCollectionItemInterface[] = [
-    { id: 6, label: 'foo', icon: 'task' },
-    { id: 7, label: 'foo', icon: 'task' }
+    { id: 6, label: 'foo', icon: 'task', linkToItem: 'tasks/manage/6' },
+    { id: 7, label: 'foo', icon: 'task', linkToItem: 'tasks/manage/7' }
   ];
   const selectedTask = tasks[2];
   const taskEduContents: TaskEduContentInterface[] = [

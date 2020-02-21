@@ -28,7 +28,6 @@ import { ManageCollectionsDataInterface } from './interfaces/manage-collection-d
 import { ManageCollectionItemInterface } from './interfaces/manage-collection-item.interface';
 import { ManageCollectionComponent } from './manage-collection.component';
 
-// file.only
 describe('ManageCollectionComponent', () => {
   let component: ManageCollectionComponent;
   let fixture: ComponentFixture<ManageCollectionComponent>;
