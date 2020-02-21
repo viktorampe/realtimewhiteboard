@@ -16,6 +16,7 @@ import {
   MatSelectionListChange,
   MAT_DIALOG_DATA
 } from '@angular/material';
+import { Router } from '@angular/router';
 import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/utils';
 import { Subscription } from 'rxjs';
 import { startWith } from 'rxjs/operators';
@@ -90,7 +91,8 @@ export class ManageCollectionComponent
     private dialogRef: MatDialogRef<ManageCollectionComponent>,
     @Inject(ENVIRONMENT_UI_TOKEN) environmentUiToken: EnvironmentUIInterface,
     @Inject(ENVIRONMENT_COLLECTION_MANAGEMENT_FEATURE_TOKEN)
-    environmentCollectionManagementFeatureToken: EnvironmentCollectionManagementFeatureInterface
+    environmentCollectionManagementFeatureToken: EnvironmentCollectionManagementFeatureInterface,
+    private router: Router
   ) {
     this.linkableItems = data.linkableItems;
     this.recentLinkableItems = data.linkableItems.filter(item =>
@@ -169,5 +171,11 @@ export class ManageCollectionComponent
       .forEach(listItem => (listItem.selected = true));
 
     this.cd.detectChanges();
+  }
+
+  navigateTo(event: MouseEvent, link: string) {
+    event.stopPropagation();
+    this.router.navigateByUrl(link);
+    this.dialogRef.close();
   }
 }

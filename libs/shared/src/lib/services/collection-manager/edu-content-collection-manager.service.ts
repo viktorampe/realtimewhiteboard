@@ -154,7 +154,8 @@ export class EduContentCollectionManagerService
           (task): ManageCollectionItemInterface => ({
             id: task.id,
             label: task.name,
-            icon: 'task'
+            icon: 'task',
+            linkToItem: 'tasks/manage/' + task.id
           })
         );
       }),
