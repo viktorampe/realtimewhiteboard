@@ -12,6 +12,7 @@ import {
   MAT_DIALOG_DATA
 } from '@angular/material';
 import { By } from '@angular/platform-browser';
+import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MockMatIconRegistry } from '@campus/testing';
 import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/utils';
@@ -19,10 +20,15 @@ import { configureTestSuite } from 'ng-bullet';
 import { ButtonComponent } from '../button/button.component';
 import { FilterTextInputComponent } from '../filter-text-input/filter-text-input.component';
 import { InfoPanelComponent } from '../info-panel/info-panel.component';
-import { ENVIRONMENT_UI_TOKEN } from '../tokens';
+import {
+  ENVIRONMENT_COLLECTION_MANAGEMENT_FEATURE_TOKEN,
+  ENVIRONMENT_UI_TOKEN
+} from '../tokens';
 import { ManageCollectionsDataInterface } from './interfaces/manage-collection-data.interface';
 import { ManageCollectionItemInterface } from './interfaces/manage-collection-item.interface';
 import { ManageCollectionComponent } from './manage-collection.component';
+
+// file.only
 describe('ManageCollectionComponent', () => {
   let component: ManageCollectionComponent;
   let fixture: ComponentFixture<ManageCollectionComponent>;
@@ -30,6 +36,7 @@ describe('ManageCollectionComponent', () => {
   let mockLinkableItems: ManageCollectionItemInterface[];
   let generalListDE;
   let recentListDE;
+  let router: Router;
 
   configureTestSuite(() => {
     mockLinkableItems = [
@@ -93,6 +100,10 @@ describe('ManageCollectionComponent', () => {
         {
           provide: ENVIRONMENT_UI_TOKEN,
           useValue: { useModalSideSheetStyle: false }
+        },
+        {
+          provide: ENVIRONMENT_COLLECTION_MANAGEMENT_FEATURE_TOKEN,
+          useValue: { useFilter: true }
         }
       ]
     });
@@ -111,13 +122,16 @@ describe('ManageCollectionComponent', () => {
     recentListDE = fixture.debugElement.query(
       By.css('.ui-manage-collection__recent-items')
     );
+    router = TestBed.get(Router);
   });
 
   describe('creation', () => {
     it('should create', () => {
+      console.log(component);
       expect(component).toBeTruthy();
     });
     it('should inject the MAT_DIALOG_DATA', () => {
+      console.log(component.data);
       expect(component.data).toEqual(mockInjectedData);
     });
   });
@@ -418,6 +432,22 @@ describe('ManageCollectionComponent', () => {
       button.triggerEventHandler('click', null);
 
       expect(dialogRef.close).toHaveBeenCalled();
+    });
+  });
+
+  describe('navigateTo', () => {
+    it('should navigate to the item detail page', () => {
+      const selectionChangedSpy = jest.spyOn(component, 'onSelectionChanged');
+      const routerSpy = jest.spyOn(router, 'navigateByUrl');
+      const dialogRef = TestBed.get(MatDialogRef);
+      dialogRef.close = jest.fn();
+
+      const mockEvent = { stopPropagation: () => {} } as MouseEvent;
+      component.navigateTo(mockEvent, 'linkToDetail');
+
+      expect(routerSpy).toHaveBeenCalledWith('linkToDetail');
+      expect(dialogRef.close).toHaveBeenCalledTimes(1);
+      expect(selectionChangedSpy).not.toHaveBeenCalled();
     });
   });
 });

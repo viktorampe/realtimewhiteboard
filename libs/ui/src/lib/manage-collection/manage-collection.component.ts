@@ -174,7 +174,7 @@ export class ManageCollectionComponent
   }
 
   navigateTo(event: MouseEvent, link: string) {
-    event.stopPropagation();
+    event.stopPropagation(); // do not trigger a selection
     this.router.navigateByUrl(link);
     this.dialogRef.close();
   }
