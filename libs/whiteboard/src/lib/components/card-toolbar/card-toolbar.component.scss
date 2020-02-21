@@ -40,8 +40,8 @@
   }
 
   &_multiSelect {
-    right: 50%;
-    transform: translateX(50%);
+    position: absolute;
+    left: 110px;
     top: -24px;
     z-index: 1;
   }

@@ -13,16 +13,10 @@ export class CardComponent {
   @Input() image: string;
   @Input() viewModeImage: boolean;
 
-  @Output() deleteCard = new EventEmitter();
-  @Output() select = new EventEmitter<void>();
-  @Output() deselect = new EventEmitter<void>();
   @Output() cardTapped = new EventEmitter<void>();
   @Output() cardPressed = new EventEmitter<void>();
   @Output() removeImage = new EventEmitter<void>();
   @Output() updateImage = new EventEmitter<string>();
-  @Output() edit = new EventEmitter<void>();
-  @Output() confirm = new EventEmitter<void>();
-  @Output() flip = new EventEmitter<void>();
 
   @Output() modeChange = new EventEmitter<Mode>();
   @Output() colorChange = new EventEmitter<string>();
@@ -56,30 +50,6 @@ export class CardComponent {
 
   emitUpdateImage(url: string) {
     this.updateImage.emit(url);
-  }
-
-  emitSelect() {
-    this.select.emit();
-  }
-
-  emitDeselect() {
-    this.deselect.emit();
-  }
-
-  emitDeleteCard() {
-    this.deleteCard.emit();
-  }
-
-  emitEditIcon() {
-    this.edit.emit();
-  }
-
-  emitConfirmIcon() {
-    this.confirm.emit();
-  }
-
-  emitFlipIcon() {
-    this.flip.emit();
   }
 
   selectColor(color: string) {
