@@ -150,13 +150,11 @@ export class EduContentCollectionManagerService
     const tasksCollection$: Observable<ManageCollectionItemInterface[]> = this.store.pipe(
       select(TaskQueries.getForLearningAreaId, { learningAreaId }),
       map(tasks =>
-        tasks.filter(task => {
-          if (content.type === EduContentTypeEnum.PAPER_EXERCISE) {
-            return task.isPaperTask;
-          } else {
-            return !task.isPaperTask;
-          }
-        })
+        tasks.filter(
+          task =>
+            task.isPaperTask ===
+            (content.type === EduContentTypeEnum.PAPER_EXERCISE)
+        )
       ),
       map((tasks: TaskInterface[]): ManageCollectionItemInterface[] => {
         return tasks.map(
