@@ -14,11 +14,11 @@ import {
   MethodLevelQueries,
   MethodQueries,
   TaskInterface,
-  TaskQueries
+  TaskQueries,
+  TaskWithAssigneesInterface
 } from '@campus/dal';
 import { Dictionary } from '@ngrx/entity';
 import { createSelector } from '@ngrx/store';
-import { TaskWithAssigneesInterface } from './../interfaces/TaskWithAssignees.interface';
 
 export const allowedLearningAreas = createSelector(
   [MethodQueries.getAllowedMethods, LearningAreaQueries.getAllEntities],

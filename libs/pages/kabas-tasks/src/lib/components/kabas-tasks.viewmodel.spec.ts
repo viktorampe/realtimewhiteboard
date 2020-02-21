@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { MAT_DATE_LOCALE } from '@angular/material';
 import {
+  AssigneeFixture,
   AssigneeTypesEnum,
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
@@ -28,6 +29,9 @@ import {
   TaskEduContentFixture,
   TaskFixture,
   TaskServiceInterface,
+  TaskStatusEnum,
+  TaskWithAssigneesFixture,
+  TaskWithAssigneesInterface,
   TASK_SERVICE_TOKEN,
   UserQueries,
   YearFixture
@@ -54,12 +58,6 @@ import { hot } from 'jasmine-marbles';
 import { configureTestSuite } from 'ng-bullet';
 import { of } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { AssigneeFixture } from '../interfaces/Assignee.fixture';
-import { TaskWithAssigneesFixture } from '../interfaces/TaskWithAssignees.fixture';
-import {
-  TaskStatusEnum,
-  TaskWithAssigneesInterface
-} from '../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from './kabas-tasks.viewmodel';
 import * as vmSelectors from './kabas-tasks.viewmodel.selectors';
 import {

@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
 import {
+  AssigneeInterface,
   AssigneeTypesEnum,
   ClassGroupFixture,
   ClassGroupInterface,
@@ -16,7 +17,9 @@ import {
   TaskEduContentFixture,
   TaskEduContentInterface,
   TaskFixture,
-  TaskInterface
+  TaskInterface,
+  TaskStatusEnum,
+  TaskWithAssigneesInterface
 } from '@campus/dal';
 import {
   SearchModeInterface,
@@ -30,11 +33,6 @@ import {
 import { ViewModelInterface } from '@campus/testing';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-import { AssigneeInterface } from '../interfaces/Assignee.interface';
-import {
-  TaskStatusEnum,
-  TaskWithAssigneesInterface
-} from '../interfaces/TaskWithAssignees.interface';
 import {
   CurrentTaskParams,
   KabasTasksViewModel

@@ -10,7 +10,9 @@ import {
   DalState,
   EffectFeedback,
   EffectFeedbackActions,
-  Priority
+  Priority,
+  TaskStatusEnum,
+  TaskWithAssigneesFixture
 } from '@campus/dal';
 import { MockDate } from '@campus/testing';
 import { Store } from '@ngrx/store';
@@ -20,8 +22,6 @@ import { configureTestSuite } from 'ng-bullet';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { KabasTasksResolver } from '../components/kabas-tasks.resolver';
 import { getTaskWithAssignmentAndEduContents } from '../components/kabas-tasks.viewmodel.selectors';
-import { TaskWithAssigneesFixture } from '../interfaces/TaskWithAssignees.fixture';
-import { TaskStatusEnum } from '../interfaces/TaskWithAssignees.interface';
 import { PendingTaskGuard } from './pending-task.guard';
 
 describe('PendingTaskGuard', () => {

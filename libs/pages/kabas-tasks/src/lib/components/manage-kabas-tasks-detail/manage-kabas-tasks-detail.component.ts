@@ -11,12 +11,15 @@ import {
 import { MatDialog } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
+  AssigneeInterface,
   AssigneeTypesEnum,
   EduContent,
   EduContentInterface,
   LearningAreaInterface,
   TaskEduContentInterface,
-  TaskInterface
+  TaskInterface,
+  TaskStatusEnum,
+  TaskWithAssigneesInterface
 } from '@campus/dal';
 import {
   ButtonToggleFilterComponent,
@@ -42,12 +45,7 @@ import {
   tap,
   withLatestFrom
 } from 'rxjs/operators';
-import { AssigneeInterface } from '../../interfaces/Assignee.interface';
 import { TaskEduContentWithEduContentInterface } from '../../interfaces/TaskEduContentWithEduContent.interface';
-import {
-  TaskStatusEnum,
-  TaskWithAssigneesInterface
-} from '../../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
 import { ManageKabasTasksAssigneeDataInterface } from '../manage-kabas-tasks-assignee-modal/manage-kabas-tasks-assignee-data.interface';
 import { ManageKabasTasksAssigneeModalComponent } from '../manage-kabas-tasks-assignee-modal/manage-kabas-tasks-assignee-modal.component';

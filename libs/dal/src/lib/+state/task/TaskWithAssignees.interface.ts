@@ -1,4 +1,4 @@
-import { TaskInterface } from '@campus/dal';
+import { TaskInterface } from '../../+models';
 import { AssigneeInterface } from './Assignee.interface';
 import { TaskEduContentWithEduContentInterface } from './TaskEduContentWithEduContent.interface';
 

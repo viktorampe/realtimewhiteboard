@@ -6,7 +6,7 @@ import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/t
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Params, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { TaskEduContentFixture } from '@campus/dal';
+import { TaskEduContentFixture, TaskWithAssigneesInterface } from '@campus/dal';
 import {
   ResultItemMockComponent,
   SearchComponent,
@@ -25,7 +25,6 @@ import { hot } from '@nrwl/angular/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { BehaviorSubject } from 'rxjs';
 import { TaskEduContentWithEduContentInterface } from '../../interfaces/TaskEduContentWithEduContent.interface';
-import { TaskWithAssigneesInterface } from '../../interfaces/TaskWithAssignees.interface';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
 import { MockKabasTasksViewModel } from '../kabas-tasks.viewmodel.mock';
 import { ManageTaskContentComponent } from './manage-task-content.component';

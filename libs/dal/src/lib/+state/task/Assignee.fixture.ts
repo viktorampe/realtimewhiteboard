@@ -1,5 +1,5 @@
-import { AssigneeTypesEnum } from '@campus/dal';
 import { AssigneeInterface } from './Assignee.interface';
+import { AssigneeTypesEnum } from './AssigneeTypes.enum';
 
 export class AssigneeFixture implements AssigneeInterface {
   type = AssigneeTypesEnum.CLASSGROUP;

@@ -14,7 +14,13 @@ import { By, HAMMER_LOADER } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { AssigneeTypesEnum, TaskFixture } from '@campus/dal';
+import {
+  AssigneeTypesEnum,
+  TaskFixture,
+  TaskStatusEnum,
+  TaskWithAssigneesFixture,
+  TaskWithAssigneesInterface
+} from '@campus/dal';
 import { GuardsModule } from '@campus/guards';
 import { PagesSharedModule } from '@campus/pages/shared';
 import { ButtonToggleFilterComponent, SearchModule } from '@campus/search';
@@ -30,16 +36,12 @@ import { hot } from '@nrwl/angular/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { BehaviorSubject, of } from 'rxjs';
 import { map } from 'rxjs/operators';
-import {
-  TaskStatusEnum,
-  TaskWithAssigneesInterface
-} from '../../interfaces/TaskWithAssignees.interface';
+import { Source } from '../../interfaces/Source.type';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
 import { MockKabasTasksViewModel } from '../kabas-tasks.viewmodel.mock';
 import { TaskListItemComponent } from '../task-list-item/task-list-item.component';
 import {
   ManageKabasTasksOverviewComponent,
-  Source,
   TaskSortEnum
 } from './manage-kabas-tasks-overview.component';
 
@@ -917,8 +919,12 @@ describe('ManageKabasTasksOverviewComponent', () => {
     });
 
     describe('clickDeleteTasks()', () => {
-      const selectedDigitalTasks = [{ id: 1, name: 'foo' }];
-      const selectedPaperTasks = [{ id: 2, name: 'bar' }];
+      const selectedDigitalTasks: TaskWithAssigneesInterface[] = [
+        new TaskWithAssigneesFixture({ id: 1, name: 'foo' })
+      ];
+      const selectedPaperTasks: TaskWithAssigneesInterface[] = [
+        new TaskWithAssigneesFixture({ id: 2, name: 'bar' })
+      ];
 
       const digitalSelectionList = getSelectionListWithSelectedValues(
         selectedDigitalTasks

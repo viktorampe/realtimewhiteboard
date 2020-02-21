@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
 import { MAT_DATE_LOCALE } from '@angular/material';
 import {
+  AssigneeInterface,
   AssigneeTypesEnum,
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
@@ -36,7 +37,9 @@ import {
   TaskGroupInterface,
   TaskInterface,
   TaskServiceInterface,
+  TaskStatusEnum,
   TaskStudentInterface,
+  TaskWithAssigneesInterface,
   TASK_SERVICE_TOKEN
 } from '@campus/dal';
 import {
@@ -73,11 +76,6 @@ import {
   tap,
   withLatestFrom
 } from 'rxjs/operators';
-import {
-  TaskStatusEnum,
-  TaskWithAssigneesInterface
-} from '../interfaces/TaskWithAssignees.interface';
-import { AssigneeInterface } from './../interfaces/Assignee.interface';
 import {
   allowedLearningAreas,
   getTaskFavoriteBookIds,
