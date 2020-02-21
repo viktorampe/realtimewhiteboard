@@ -1,36 +1,10 @@
 import { Inject, Injectable } from '@angular/core';
-import {
-  BundleActions,
-  BundleInterface,
-  BundleQueries,
-  ContentInterface,
-  DalState,
-  EduContentInterface,
-  FavoriteInterface,
-  FavoriteQueries,
-  FavoriteTypesEnum,
-  HistoryInterface,
-  HistoryQueries,
-  HistoryTypesEnum,
-  TaskEduContentActions,
-  TaskEduContentInterface,
-  TaskEduContentQueries,
-  TaskInterface,
-  TaskQueries,
-  UnlockedContent,
-  UnlockedContentActions,
-  UnlockedContentQueries
-} from '@campus/dal';
-import {
-  CollectionManagerServiceInterface,
-  COLLECTION_MANAGER_SERVICE_TOKEN,
-  ItemToggledInCollectionInterface,
-  ManageCollectionItemInterface
-} from '@campus/ui';
+import { BundleActions, BundleInterface, BundleQueries, ContentInterface, DalState, EduContentInterface, FavoriteInterface, FavoriteQueries, FavoriteTypesEnum, HistoryInterface, HistoryQueries, HistoryTypesEnum, TaskEduContentActions, TaskEduContentInterface, TaskEduContentQueries, UnlockedContent, UnlockedContentActions, UnlockedContentQueries } from '@campus/dal';
+import { CollectionManagerServiceInterface, COLLECTION_MANAGER_SERVICE_TOKEN, ItemToggledInCollectionInterface, ManageCollectionItemInterface } from '@campus/ui';
 import { select, Store } from '@ngrx/store';
 import { combineLatest, Observable } from 'rxjs';
 import { filter, map, shareReplay, switchMap, take } from 'rxjs/operators';
-import { EduContentTypeEnum } from '../../enums';
+import { taskCollection } from './edu-content-collection-manager-selectors';
 import { EduContentCollectionManagerServiceInterface } from './edu-content-collection-manager.service.interface';
 
 @Injectable({
@@ -148,23 +122,8 @@ export class EduContentCollectionManagerService
     const learningAreaId: number =
       content.publishedEduContentMetadata.learningAreaId;
     const tasksCollection$: Observable<ManageCollectionItemInterface[]> = this.store.pipe(
-      select(TaskQueries.getForLearningAreaId, { learningAreaId }),
-      map(tasks =>
-        tasks.filter(
-          task =>
-            task.isPaperTask ===
-            (content.type === EduContentTypeEnum.PAPER_EXERCISE)
-        )
+      select(taskCollection, { learningAreaId }),
       ),
-      map((tasks: TaskInterface[]): ManageCollectionItemInterface[] => {
-        return tasks.map(
-          (task): ManageCollectionItemInterface => ({
-            id: task.id,
-            label: task.name,
-            icon: 'task'
-          })
-        );
-      }),
       shareReplay(1)
     );
     const linkedTaskIds$: Observable<number[]> = this.store.pipe(
