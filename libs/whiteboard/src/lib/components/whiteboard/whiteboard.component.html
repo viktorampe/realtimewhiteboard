@@ -28,6 +28,7 @@
   <div class="whiteboard__workspace" (dblclick)="onDblClick($event)" #workspace>
     <ng-container *ngFor="let card of cards">
       <campus-card
+        [class.onTop]="card.mode === Mode.SelectedMode"
         cdkDrag
         cdkDragBoundary=".whiteboard__workspace"
         class="whiteboard__card"
