@@ -21,6 +21,8 @@ import {
   FavoriteTypesEnum,
   getRouterState,
   MethodQueries,
+  MethodYearsFixture,
+  MethodYearsInterface,
   PersonFixture,
   TaskActions,
   TaskEduContentActions,
@@ -1004,8 +1006,7 @@ describe('KabasTaskViewModel', () => {
         {
           description: 'should return the correct searchState',
           setup: {
-            task: new TaskWithAssigneesFixture(),
-            searchBook: null
+            task: new TaskWithAssigneesFixture()
           },
           expected: {
             selections: [
@@ -1020,8 +1021,7 @@ describe('KabasTaskViewModel', () => {
           setup: {
             task: new TaskWithAssigneesFixture({
               isPaperTask: true
-            }),
-            searchBook: null
+            })
           },
           expected: {
             selections: [
@@ -1036,17 +1036,64 @@ describe('KabasTaskViewModel', () => {
             'should return the correct searchState - when book is set',
           setup: {
             task: new TaskWithAssigneesFixture(),
-            searchBook: new EduContentBookFixture({
-              years: [new YearFixture({ id: 2 }), new YearFixture({ id: 3 })],
-              methodId: 7
-            })
+            queryParams: {
+              book: 34
+            }
           },
           expected: {
             selections: [
+              ['eduContentTOC.tree', [34]],
               ['learningArea', [4]],
-              ['eduContent.type', digitalEduContentTypes],
-              ['years', [2, 3]],
-              ['methods', [7]]
+              ['eduContent.type', digitalEduContentTypes]
+            ] as any[],
+            options: [['taskAllowed', true]] as any[]
+          }
+        },
+        {
+          description:
+            'should return the correct searchState - when chapter is set',
+          setup: {
+            task: new TaskWithAssigneesFixture(),
+            searchBook: new EduContentBookFixture({
+              years: [new YearFixture({ id: 2 }), new YearFixture({ id: 3 })],
+              methodId: 7
+            }),
+            queryParams: {
+              book: 34,
+              chapter: 7
+            }
+          },
+          expected: {
+            selections: [
+              ['eduContentTOC.tree', [34]],
+              ['eduContentTOC', [7]],
+              ['learningArea', [4]],
+              ['eduContent.type', digitalEduContentTypes]
+            ] as any[],
+            options: [['taskAllowed', true]] as any[]
+          }
+        },
+        {
+          description:
+            'should return the correct searchState - when lesson is set',
+          setup: {
+            task: new TaskWithAssigneesFixture(),
+            searchBook: new EduContentBookFixture({
+              years: [new YearFixture({ id: 2 }), new YearFixture({ id: 3 })],
+              methodId: 7
+            }),
+            queryParams: {
+              book: 34,
+              chapter: 7,
+              lesson: 8
+            }
+          },
+          expected: {
+            selections: [
+              ['eduContentTOC.tree', [34]],
+              ['eduContentTOC', [8]],
+              ['learningArea', [4]],
+              ['eduContent.type', digitalEduContentTypes]
             ] as any[],
             options: [['taskAllowed', true]] as any[]
           }
@@ -1060,14 +1107,13 @@ describe('KabasTaskViewModel', () => {
             state: {
               url: '',
               params: { id: taskId },
-              queryParams: {}
+              queryParams: testcase.setup.queryParams || {}
             }
           });
           store.overrideSelector(
             getTaskWithAssignmentAndEduContents,
             testcase.setup.task
           );
-          kabasTasksViewModel.searchBook$.next(testcase.setup.searchBook);
 
           const initialSearchState$ = kabasTasksViewModel.getInitialSearchState();
           const expected: SearchStateInterface = {
@@ -1490,17 +1536,54 @@ describe('KabasTaskViewModel', () => {
     });
   });
 
-  describe('selectedBookTitle$', () => {
-    const expectedBookTitle = 'foo 1';
+  describe('methodYearsInArea$', () => {
+    const currentTask = new TaskWithAssigneesFixture({
+      id: 1,
+      learningAreaId: 3
+    });
+
+    const methodYears: MethodYearsInterface[] = [
+      new MethodYearsFixture({
+        id: 1,
+        learningAreaId: 1
+      }),
+      new MethodYearsFixture({
+        id: 2,
+        learningAreaId: 3
+      }),
+      new MethodYearsFixture({
+        id: 3,
+        learningAreaId: 3
+      }),
+      new MethodYearsFixture({
+        id: 4,
+        learningAreaId: 7
+      })
+    ];
+
     beforeEach(() => {
       store.overrideSelector(getRouterState, {
         navigationId: 1,
         state: {
           url: '',
-          params: {},
-          queryParams: { book: 123 }
+          params: { id: 1 },
+          queryParams: {}
         }
       });
+      store.overrideSelector(getTaskWithAssignmentAndEduContents, currentTask);
+      store.overrideSelector(MethodQueries.getAllowedMethodYears, methodYears);
+    });
+
+    it('should only return methodYears that have the learningArea of the currentTask', () => {
+      expect(kabasTasksViewModel.methodYearsInArea$).toBeObservable(
+        hot('a', { a: [methodYears[1], methodYears[2]] })
+      );
+    });
+  });
+
+  describe('selectedBookTitle$', () => {
+    const expectedBookTitle = 'foo 1';
+    beforeEach(() => {
       store.overrideSelector(
         MethodQueries.getMethodWithYearByBookId,
         expectedBookTitle
@@ -1509,7 +1592,31 @@ describe('KabasTaskViewModel', () => {
       jest.spyOn(MethodQueries, 'getMethodWithYearByBookId');
     });
 
+    it('should return an empty string if no book is in query params', () => {
+      store.overrideSelector(getRouterState, {
+        navigationId: 1,
+        state: {
+          url: '',
+          params: {},
+          queryParams: {}
+        }
+      });
+
+      expect(kabasTasksViewModel.selectedBookTitle$).toBeObservable(
+        hot('a', { a: '' })
+      );
+    });
+
     it('should return the current book title from query params', () => {
+      store.overrideSelector(getRouterState, {
+        navigationId: 1,
+        state: {
+          url: '',
+          params: {},
+          queryParams: { book: 123 }
+        }
+      });
+
       expect(kabasTasksViewModel.selectedBookTitle$).toBeObservable(
         hot('a', { a: expectedBookTitle })
       );

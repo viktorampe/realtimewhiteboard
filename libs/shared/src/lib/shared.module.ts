@@ -80,10 +80,6 @@ import {
 import { AlertToNotificationItemPipe } from './pipes/alert-to-notification/alert-to-notification-pipe';
 import { MailToByCredentialPipe } from './pipes/mail-to/mail-to-credential-pipe';
 import { PersonBadgeFromCredentialPipe } from './pipes/person-badge-from-credential/person-badge-from-credential-pipe';
-import {
-  ContentTaskActionsService,
-  CONTENT_TASK_ACTIONS_SERVICE_TOKEN
-} from './services';
 import { EduContentCollectionManagerService } from './services/collection-manager/edu-content-collection-manager.service';
 import { EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN } from './services/collection-manager/edu-content-collection-manager.service.interface';
 import { ContentOpenActionsService } from './services/content-actions/content-open-actions/content-open-actions.service';
@@ -178,10 +174,6 @@ import { SCORM_EXERCISE_SERVICE_TOKEN } from './services/scorm/scorm-exercise.se
     {
       provide: CONTENT_OPEN_ACTIONS_SERVICE_TOKEN,
       useClass: ContentOpenActionsService
-    },
-    {
-      provide: CONTENT_TASK_ACTIONS_SERVICE_TOKEN,
-      useClass: ContentTaskActionsService
     },
     AlertToNotificationItemPipe
   ],

@@ -1,4 +1,11 @@
-import { Component, HostBinding, Inject, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  HostBinding,
+  Inject,
+  Input,
+  OnInit,
+  Optional
+} from '@angular/core';
 import { ResultItemBase } from '@campus/search';
 import {
   ContentActionInterface,
@@ -27,6 +34,7 @@ export class EduContentSearchResultComponent extends ResultItemBase
   constructor(
     @Inject(CONTENT_OPEN_ACTIONS_SERVICE_TOKEN)
     private contentOpenActionsService: ContentOpenActionsServiceInterface,
+    @Optional()
     @Inject(CONTENT_TASK_ACTIONS_SERVICE_TOKEN)
     private contentTaskActionsService: ContentTaskActionsServiceInterface
   ) {
@@ -44,6 +52,11 @@ export class EduContentSearchResultComponent extends ResultItemBase
     );
 
     if (this.data.addTaskActions) {
+      if (!this.contentTaskActionsService) {
+        throw new Error(
+          'CONTENT_TASK_ACTIONS_SERVICE_TOKEN not provided in module'
+        );
+      }
       this.actions = [
         ...this.contentTaskActionsService.getTaskActionsForEduContent(
           this.data.eduContent,
