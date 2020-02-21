@@ -49,7 +49,7 @@ describe('CardToolbarComponent', () => {
     expect(component.clickConfirmIcon.emit).toHaveBeenCalled();
   });
 
-  it('should emit clickMultiselectIcon when multiSelectClicked is called', () => {
+  it('should emit clickMultiS electIcon when multiSelectClicked is called', () => {
     spyOn(component.clickMultiSelectIcon, 'emit');
 
     const clickEvent = new MouseEvent('click');
@@ -58,7 +58,7 @@ describe('CardToolbarComponent', () => {
     expect(component.clickMultiSelectIcon.emit).toHaveBeenCalled();
   });
 
-  it('should emit clickMultiselectIcon when multiSelectSelectedClicked is called', () => {
+  it('should emit clickMultiSelectSelectedIcon when multiSelectSelectedClicked is called', () => {
     spyOn(component.clickMultiSelectSelectedIcon, 'emit');
 
     const clickEvent = new MouseEvent('click');

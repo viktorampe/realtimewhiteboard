@@ -36,7 +36,7 @@
       [class.zoom]="card.mode === Mode.ZoomMode"
     >
       <campus-color-list
-        class="card__color-list"
+        class="whiteboard__color-list"
         (selectedColor)="changeColorForCard(card, $event)"
         *ngIf="card.mode === Mode.EditMode || card.mode === Mode.SelectedMode"
       ></campus-color-list>
@@ -47,7 +47,7 @@
           card.mode === Mode.MultiSelectSelectedMode ||
           card.mode === Mode.MultiSelectMode
         "
-        class="card__toolbar"
+        class="whiteboard__card_toolbar"
         [mode]="card.mode"
         (clickDeleteIcon)="onDeleteCard(card)"
         (clickEditIcon)="cardEditIconClicked(card)"
