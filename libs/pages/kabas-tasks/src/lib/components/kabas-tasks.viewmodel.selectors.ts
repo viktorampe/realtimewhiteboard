@@ -19,6 +19,7 @@ import {
 } from '@campus/dal';
 import { Dictionary } from '@ngrx/entity';
 import { createSelector } from '@ngrx/store';
+import { TaskWithTaskEduContentInterface } from '../interfaces/TaskEduContentWithEduContent.interface';
 
 export const allowedLearningAreas = createSelector(
   [MethodQueries.getAllowedMethods, LearningAreaQueries.getAllEntities],
@@ -74,39 +75,41 @@ export const getTaskWithAssignmentAndEduContents = createSelector(
     allowedMethods: MethodInterface[],
     props: { taskId: number }
   ) => {
-    const foundTask = {
-      ...tasksWithAssignments.find(task => task.id === props.taskId)
+    const currentTask = tasksWithAssignments.find(
+      task => task.id === props.taskId
+    );
+    const currentTaskWithTaskEduContent: TaskWithTaskEduContentInterface = {
+      ...currentTask,
+      taskEduContents: currentTask.taskEduContents.length
+        ? currentTask.taskEduContents.map(tEdu => {
+            const eduContent = eduContents[tEdu.eduContentId];
+            const methodLevel = methodLevelForEduContent(
+              eduContent,
+              allowedMethods,
+              methodLevels
+            );
+
+            const publishedEduContentMetadata = {
+              ...eduContent.publishedEduContentMetadata,
+              diaboloPhase:
+                diaboloPhases[
+                  eduContent.publishedEduContentMetadata.diaboloPhaseId
+                ],
+              methodLevel
+            };
+
+            return {
+              ...tEdu,
+              eduContent: toEduContent({
+                ...eduContent,
+                publishedEduContentMetadata
+              })
+            };
+          })
+        : []
     };
 
-    foundTask.taskEduContents = foundTask.taskEduContents.length
-      ? foundTask.taskEduContents.map(tEdu => {
-          const eduContent = eduContents[tEdu.eduContentId];
-          const methodLevel = methodLevelForEduContent(
-            eduContent,
-            allowedMethods,
-            methodLevels
-          );
-
-          const publishedEduContentMetadata = {
-            ...eduContent.publishedEduContentMetadata,
-            diaboloPhase:
-              diaboloPhases[
-                eduContent.publishedEduContentMetadata.diaboloPhaseId
-              ],
-            methodLevel
-          };
-
-          return {
-            ...tEdu,
-            eduContent: toEduContent({
-              ...eduContent,
-              publishedEduContentMetadata
-            })
-          };
-        })
-      : [];
-
-    return foundTask;
+    return currentTaskWithTaskEduContent;
   }
 );
 

@@ -10,11 +10,7 @@ import {
   ViewChildren
 } from '@angular/core';
 import { Params, Router } from '@angular/router';
-import {
-  EduContent,
-  EduContentTOCInterface,
-  TaskWithAssigneesInterface
-} from '@campus/dal';
+import { EduContent, EduContentTOCInterface } from '@campus/dal';
 import {
   SearchComponent,
   SearchModeInterface,
@@ -24,7 +20,10 @@ import {
 } from '@campus/search';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { filter, map, switchMapTo, take } from 'rxjs/operators';
-import { TaskEduContentWithEduContentInterface } from '../../interfaces/TaskEduContentWithEduContent.interface';
+import {
+  TaskEduContentWithEduContentInterface,
+  TaskWithTaskEduContentInterface
+} from '../../interfaces/TaskEduContentWithEduContent.interface';
 import {
   CurrentTaskParams,
   KabasTasksViewModel
@@ -41,7 +40,7 @@ export class ManageTaskContentComponent
   public reorderableTaskEduContents$ = new BehaviorSubject<
     TaskEduContentWithEduContentInterface[]
   >([]);
-  public task$: Observable<TaskWithAssigneesInterface>;
+  public task$: Observable<TaskWithTaskEduContentInterface>;
 
   public searchMode$: Observable<SearchModeInterface>;
   public initialSearchState$: Observable<SearchStateInterface>;

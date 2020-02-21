@@ -61,7 +61,10 @@ import {
 import { PrintPaperTaskModalResultEnum } from '../print-paper-task-modal/print-paper-task-modal-result.enum';
 import { PrintPaperTaskModalComponent } from '../print-paper-task-modal/print-paper-task-modal.component';
 import { TaskEduContentListItemComponent } from '../task-edu-content-list-item/task-edu-content-list-item.component';
-import { TaskEduContentWithEduContentInterface } from './../../interfaces/TaskEduContentWithEduContent.interface';
+import {
+  TaskEduContentWithEduContentInterface,
+  TaskWithTaskEduContentInterface
+} from './../../interfaces/TaskEduContentWithEduContent.interface';
 import { ManageKabasTasksAssigneeModalComponent } from './../manage-kabas-tasks-assignee-modal/manage-kabas-tasks-assignee-modal.component';
 import { ManageKabasTasksDetailComponent } from './manage-kabas-tasks-detail.component';
 
@@ -76,7 +79,7 @@ describe('ManageKabasTasksDetailComponent', () => {
 
   let contentOpenActionsService: ContentOpenActionsServiceInterface;
   let mockViewmodel: MockKabasTasksViewModel;
-  let currentTask: TaskWithAssigneesInterface;
+  let currentTask: TaskWithTaskEduContentInterface;
   let restOfTasks: TaskWithAssigneesInterface[];
   let taskEduContents: TaskEduContentWithEduContentInterface[];
 
@@ -95,13 +98,13 @@ describe('ManageKabasTasksDetailComponent', () => {
     return tECs;
   };
 
-  const addSolutionFileToTask = (task: TaskWithAssigneesInterface) => {
+  const addSolutionFileToTask = (task: TaskWithTaskEduContentInterface) => {
     task.taskEduContents[0].eduContent.publishedEduContentMetadata.eduFiles = [
       new EduFileFixture({ type: EduFileTypeEnum.SOLUTION })
     ];
     task.hasSolutionFiles = true;
   };
-  const addExerciseFileToTask = (task: TaskWithAssigneesInterface) => {
+  const addExerciseFileToTask = (task: TaskWithTaskEduContentInterface) => {
     task.taskEduContents[0].eduContent.publishedEduContentMetadata.eduFiles = [
       new EduFileFixture({ type: EduFileTypeEnum.EXERCISE })
     ];
@@ -215,11 +218,16 @@ describe('ManageKabasTasksDetailComponent', () => {
 
     mockViewmodel = viewModel as MockKabasTasksViewModel;
 
-    [currentTask, ...restOfTasks] = mockViewmodel.tasksWithAssignments$.value;
+    let firstTask: TaskWithAssigneesInterface;
+    [firstTask, ...restOfTasks] = mockViewmodel.tasksWithAssignments$.value;
 
     // extra properties added in onInit
     taskEduContents = addActions(currentTask.taskEduContents);
-    currentTask.hasSolutionFiles = true;
+    currentTask = {
+      ...firstTask,
+      hasSolutionFiles: true,
+      taskEduContents
+    };
   });
 
   it('should create', () => {

@@ -33,6 +33,7 @@ import {
 import { ViewModelInterface } from '@campus/testing';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
+import { TaskWithTaskEduContentInterface } from '../interfaces/TaskEduContentWithEduContent.interface';
 import {
   CurrentTaskParams,
   KabasTasksViewModel
@@ -53,7 +54,7 @@ export class MockKabasTasksViewModel
   public paperTasksWithAssignments$: BehaviorSubject<
     TaskWithAssigneesInterface[]
   >;
-  public currentTask$: Observable<TaskWithAssigneesInterface>;
+  public currentTask$: Observable<TaskWithTaskEduContentInterface>;
   public currentToc$: Observable<EduContentTOCInterface[]>;
   public currentTaskParams$: BehaviorSubject<CurrentTaskParams>;
   public selectableLearningAreas$: BehaviorSubject<LearningAreaInterface[]>;
@@ -451,10 +452,10 @@ export class MockKabasTasksViewModel
     assignees: AssigneeInterface[]
   ) {}
 
-  private getCurrentTask(): Observable<TaskWithAssigneesInterface> {
+  private getCurrentTask(): Observable<TaskWithTaskEduContentInterface> {
     return this.tasksWithAssignments$.pipe(
       filter(tasks => tasks.length > 0),
-      map(tasks => tasks[0])
+      map(tasks => tasks[0] as TaskWithTaskEduContentInterface)
     );
   }
 

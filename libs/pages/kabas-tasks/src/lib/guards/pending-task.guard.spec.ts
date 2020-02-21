@@ -22,6 +22,7 @@ import { configureTestSuite } from 'ng-bullet';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { KabasTasksResolver } from '../components/kabas-tasks.resolver';
 import { getTaskWithAssignmentAndEduContents } from '../components/kabas-tasks.viewmodel.selectors';
+import { TaskWithTaskEduContentInterface } from '../interfaces/TaskEduContentWithEduContent.interface';
 import { PendingTaskGuard } from './pending-task.guard';
 
 describe('PendingTaskGuard', () => {
@@ -83,7 +84,7 @@ describe('PendingTaskGuard', () => {
       getTaskWithAssignmentAndEduContents,
       new TaskWithAssigneesFixture({
         status
-      })
+      }) as TaskWithTaskEduContentInterface
     );
   }
 

@@ -1,6 +1,5 @@
-import { TaskInterface } from '../../+models';
+import { TaskEduContentInterface, TaskInterface } from '../../+models';
 import { AssigneeInterface } from './Assignee.interface';
-import { TaskEduContentWithEduContentInterface } from './TaskEduContentWithEduContent.interface';
 
 export enum TaskStatusEnum {
   'PENDING' = 'pending',
@@ -10,11 +9,9 @@ export enum TaskStatusEnum {
 
 export interface TaskWithAssigneesInterface extends TaskInterface {
   eduContentAmount: number;
-  taskEduContents?: TaskEduContentWithEduContentInterface[];
+  taskEduContents?: TaskEduContentInterface[];
   assignees: AssigneeInterface[];
   startDate?: Date;
   endDate?: Date;
   status?: TaskStatusEnum;
-  actions?: { label: string; handler: Function }[];
-  hasSolutionFiles?: boolean;
 }

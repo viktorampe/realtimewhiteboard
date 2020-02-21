@@ -1,4 +1,4 @@
-import { AssigneeTypesEnum } from '@campus/dal';
+import { AssigneeTypesEnum } from './AssigneeTypes.enum';
 import { TaskStatusEnum } from './TaskWithAssignees.interface';
 
 // This interface is only to be used for UI purposes

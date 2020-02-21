@@ -45,7 +45,10 @@ import {
   tap,
   withLatestFrom
 } from 'rxjs/operators';
-import { TaskEduContentWithEduContentInterface } from '../../interfaces/TaskEduContentWithEduContent.interface';
+import {
+  TaskEduContentWithEduContentInterface,
+  TaskWithTaskEduContentInterface
+} from '../../interfaces/TaskEduContentWithEduContent.interface';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
 import { ManageKabasTasksAssigneeDataInterface } from '../manage-kabas-tasks-assignee-modal/manage-kabas-tasks-assignee-data.interface';
 import { ManageKabasTasksAssigneeModalComponent } from '../manage-kabas-tasks-assignee-modal/manage-kabas-tasks-assignee-modal.component';
@@ -78,7 +81,7 @@ export class ManageKabasTasksDetailComponent implements OnInit, OnDestroy {
   public isReordering = false;
 
   public selectableLearningAreas$: Observable<LearningAreaInterface[]>;
-  public task$: Observable<TaskWithAssigneesInterface>;
+  public task$: Observable<TaskWithTaskEduContentInterface>;
   public reorderableTaskEduContents$ = new BehaviorSubject<
     TaskEduContentWithEduContentInterface[]
   >([]);
@@ -382,7 +385,7 @@ export class ManageKabasTasksDetailComponent implements OnInit, OnDestroy {
     this.viewModel.printTask(task.id, withNames);
   }
 
-  public printSolution(task: TaskWithAssigneesInterface) {
+  public printSolution(task: TaskWithTaskEduContentInterface) {
     if (!task.hasSolutionFiles) return;
     this.viewModel.printSolution(task);
   }

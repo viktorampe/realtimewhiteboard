@@ -58,6 +58,7 @@ import { hot } from 'jasmine-marbles';
 import { configureTestSuite } from 'ng-bullet';
 import { of } from 'rxjs';
 import { take } from 'rxjs/operators';
+import { TaskWithTaskEduContentInterface } from '../interfaces/TaskEduContentWithEduContent.interface';
 import { KabasTasksViewModel } from './kabas-tasks.viewmodel';
 import * as vmSelectors from './kabas-tasks.viewmodel.selectors';
 import {
@@ -876,7 +877,7 @@ describe('KabasTaskViewModel', () => {
             )
           })
         ]
-      }) as TaskWithAssigneesInterface;
+      }) as TaskWithTaskEduContentInterface;
       kabasTasksViewModel.printSolution(task);
 
       const expectedAction = new TaskActions.PrintPaperTaskSolution({
@@ -1033,7 +1034,7 @@ describe('KabasTaskViewModel', () => {
           description:
             'should return the correct searchState - when book is set',
           setup: {
-            task: new TaskWithAssigneesFixture(),
+            task: new TaskWithAssigneesFixture() as TaskWithTaskEduContentInterface,
             searchBook: new EduContentBookFixture({
               years: [new YearFixture({ id: 2 }), new YearFixture({ id: 3 })],
               methodId: 7

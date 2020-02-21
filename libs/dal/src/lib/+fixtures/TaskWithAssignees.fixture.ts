@@ -1,8 +1,8 @@
-import { AssigneeFixture } from './Assignee.fixture';
 import {
   TaskStatusEnum,
   TaskWithAssigneesInterface
-} from './TaskWithAssignees.interface';
+} from '../+state/task/TaskWithAssignees.interface';
+import { AssigneeFixture } from './Assignee.fixture';
 
 export class TaskWithAssigneesFixture implements TaskWithAssigneesInterface {
   name = 'FixtureOverhoring 1';

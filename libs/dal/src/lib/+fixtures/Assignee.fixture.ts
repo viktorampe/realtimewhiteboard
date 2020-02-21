@@ -1,5 +1,5 @@
-import { AssigneeInterface } from './Assignee.interface';
-import { AssigneeTypesEnum } from './AssigneeTypes.enum';
+import { AssigneeInterface } from '../+state/task/Assignee.interface';
+import { AssigneeTypesEnum } from '../+state/task/AssigneeTypes.enum';
 
 export class AssigneeFixture implements AssigneeInterface {
   type = AssigneeTypesEnum.CLASSGROUP;

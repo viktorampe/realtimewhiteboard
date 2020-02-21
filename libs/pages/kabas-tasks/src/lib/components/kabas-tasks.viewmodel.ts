@@ -76,6 +76,7 @@ import {
   tap,
   withLatestFrom
 } from 'rxjs/operators';
+import { TaskWithTaskEduContentInterface } from '../interfaces/TaskEduContentWithEduContent.interface';
 import {
   allowedLearningAreas,
   getTaskFavoriteBookIds,
@@ -100,7 +101,7 @@ export class KabasTasksViewModel
     SearcherInterface {
   public tasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
   public paperTasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
-  public currentTask$: Observable<TaskWithAssigneesInterface>;
+  public currentTask$: Observable<TaskWithTaskEduContentInterface>;
   public currentTaskParams$: Observable<CurrentTaskParams>;
   public selectableLearningAreas$: Observable<LearningAreaInterface[]>;
 
@@ -431,7 +432,7 @@ export class KabasTasksViewModel
     );
   }
 
-  private getCurrentTask(): Observable<TaskWithAssigneesInterface> {
+  private getCurrentTask(): Observable<TaskWithTaskEduContentInterface> {
     return this.currentTaskParams$.pipe(
       filter(taskParams => !!taskParams.id),
       switchMap(currentTaskParams => {
@@ -504,7 +505,7 @@ export class KabasTasksViewModel
     this.taskService.printTask(taskId, withNames);
   }
 
-  public printSolution(task: TaskWithAssigneesInterface) {
+  public printSolution(task: TaskWithTaskEduContentInterface) {
     this.store.dispatch(
       new TaskActions.PrintPaperTaskSolution({
         task
