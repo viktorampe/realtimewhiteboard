@@ -27,10 +27,7 @@ describe('CardToolbarComponent', () => {
 
   it('should emit clickDeleteIcon when deleteIconClicked is called', () => {
     spyOn(component.clickDeleteIcon, 'emit');
-
-    const clickEvent = new MouseEvent('click');
-
-    component.deleteIconClicked(clickEvent);
+    component.deleteIconClicked();
     expect(component.clickDeleteIcon.emit).toHaveBeenCalled();
   });
 

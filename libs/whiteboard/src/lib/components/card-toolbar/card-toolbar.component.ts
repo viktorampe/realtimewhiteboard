@@ -24,9 +24,8 @@ export class CardToolbarComponent implements OnInit {
 
   ngOnInit() {}
 
-  deleteIconClicked(event: MouseEvent) {
+  deleteIconClicked() {
     this.clickDeleteIcon.emit();
-    event.stopPropagation();
   }
 
   editIconClicked(event: MouseEvent) {
