@@ -45,6 +45,7 @@ import {
   TaskGroupFixture,
   TaskGroupReducer,
   TaskInterface,
+  TaskQueries,
   TaskReducer,
   TaskStudentActions,
   TaskStudentFixture,
@@ -58,7 +59,6 @@ import { hot } from '@nrwl/angular/testing';
 import { configureTestSuite } from 'ng-bullet';
 import {
   allowedLearningAreas,
-  getAllTasksWithAssignments,
   getTaskFavoriteBookIds,
   getTasksWithAssignmentsByType,
   getTaskWithAssignmentAndEduContents
@@ -270,7 +270,7 @@ describe('Kabas-tasks viewmodel selectors', () => {
 
     it('should return all tasksWithAssignments', () => {
       const stream = store.pipe(
-        select(getAllTasksWithAssignments, {
+        select(TaskQueries.getAllTasksWithAssignments, {
           type: FavoriteTypesEnum.TASK
         })
       );
