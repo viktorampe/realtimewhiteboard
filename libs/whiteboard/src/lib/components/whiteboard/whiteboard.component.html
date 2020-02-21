@@ -32,6 +32,8 @@
       cdkDrag
       [cdkDragFreeDragPosition]="{ x: card.left, y: card.top }"
       [cdkDragDisabled]="card.mode === Mode.ZoomMode"
+      cdkDragBoundary=".whiteboard__workspace"
+      [class.zoom]="card.mode === Mode.ZoomMode"
     >
       <campus-color-list
         class="card__color-list"
@@ -55,9 +57,7 @@
         (clickMultiSelectSelectedIcon)="onDeselectCard(card)"
       ></campus-card-toolbar>
       <campus-card
-        cdkDragBoundary=".whiteboard__workspace"
         class="whiteboard__card"
-        [class.zoom]="card.mode === Mode.ZoomMode"
         [(description)]="card.description"
         [(color)]="card.color"
         [(image)]="card.image"
