@@ -10,6 +10,8 @@ import {
   LearningDomainActions,
   LearningDomainQueries,
   StateResolver,
+  TaskActions,
+  TaskQueries,
   YearActions,
   YearQueries
 } from '@campus/dal';
@@ -31,7 +33,8 @@ export class GlobalSearchResolver extends StateResolver {
       new YearActions.LoadYears({ userId }),
       new LearningDomainActions.LoadLearningDomains(),
       new DiaboloPhaseActions.LoadDiaboloPhases({ userId }),
-      new EduContentProductTypeActions.LoadEduContentProductTypes({ userId })
+      new EduContentProductTypeActions.LoadEduContentProductTypes({ userId }),
+      new TaskActions.LoadTasks({ userId })
     ];
   }
 
@@ -40,7 +43,8 @@ export class GlobalSearchResolver extends StateResolver {
       YearQueries.getLoaded,
       LearningDomainQueries.getLoaded,
       DiaboloPhaseQueries.getLoaded,
-      EduContentProductTypeQueries.getLoaded
+      EduContentProductTypeQueries.getLoaded,
+      TaskQueries.getLoaded
     ];
   }
 }
