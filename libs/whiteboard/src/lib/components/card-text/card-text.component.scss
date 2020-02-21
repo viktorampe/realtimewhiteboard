@@ -5,6 +5,10 @@
   line-height: 41px;
   color: #242424;
   word-break: break-word;
+
+  &.inShelf {
+    font-size: 10px;
+  }
 }
 
 .card-input {
