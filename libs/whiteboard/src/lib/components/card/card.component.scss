@@ -14,14 +14,11 @@
     border: 5px solid;
     overflow: hidden;
 
-    position: absolute;
+    max-height: 90vh;
+    max-width: 90vw;
 
-    left: 50%;
-    top: 50%;
-    transform: translate3d(-50%, -50%, 0) !important;
-
-    width: 1161px;
-    height: 860px;
+    height: auto;
+    width: auto;
 
     box-shadow: 2px 4px 20px #0000008a;
   }
