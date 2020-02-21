@@ -112,42 +112,6 @@ describe('CardComponent', () => {
     expect(component.colorChange.emit).toHaveBeenCalledWith('white');
   });
 
-  it('should emit select when emitSelect is called', () => {
-    spyOn(component.select, 'emit');
-    component.emitSelect();
-    expect(component.select.emit).toHaveBeenCalled();
-  });
-
-  it('should emit deselect when emitDeselect is called', () => {
-    spyOn(component.deselect, 'emit');
-    component.emitDeselect();
-    expect(component.deselect.emit).toHaveBeenCalled();
-  });
-
-  it('should emit deleteCard when emitDeleteCard is called', () => {
-    spyOn(component.deleteCard, 'emit');
-    component.emitDeleteCard();
-    expect(component.deleteCard.emit).toHaveBeenCalledTimes(1);
-  });
-
-  it('should emit edit when emitEditIcon is called', () => {
-    spyOn(component.edit, 'emit');
-    component.emitEditIcon();
-    expect(component.edit.emit).toHaveBeenCalledTimes(1);
-  });
-
-  it('should emit confirm when emitConfirmIcon is called', () => {
-    spyOn(component.confirm, 'emit');
-    component.emitConfirmIcon();
-    expect(component.confirm.emit).toHaveBeenCalledTimes(1);
-  });
-
-  it('should emit flip when emitFlipIcon is called', () => {
-    spyOn(component.flip, 'emit');
-    component.emitFlipIcon();
-    expect(component.flip.emit).toHaveBeenCalledTimes(1);
-  });
-
   it('should emit flip when emitFlipIcon is called', () => {
     spyOn(component.descriptionChange, 'emit');
     component.onDescriptionChange('test');

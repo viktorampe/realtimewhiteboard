@@ -1,11 +1,13 @@
+$swatch-size: 40px;
+
 .color-list {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
 
   &__swatches {
-    height: 40px;
-    width: 40px;
+    height: $swatch-size;
+    width: $swatch-size;
     box-sizing: border-box;
     border-radius: 100%;
 
@@ -13,12 +15,11 @@
   }
 }
 
-:host.card__color-list .color-list {
+:host.whiteboard__color-list .color-list {
   flex-direction: column;
   position: absolute;
-  left: calc(
-    -40px - 25px - 8px
-  ); // 40 (colorlist width) + 8 (distance from card) + 25 (card border-left)
+  left: -$swatch-size - 8px;
+  // 40 (colorlist width) + 8 (distance from card)
   top: 50%;
   transform: translateY(-50%);
 

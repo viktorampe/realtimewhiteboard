@@ -26,27 +26,44 @@
     />
   </div>
   <div class="whiteboard__workspace" (dblclick)="onDblClick($event)" #workspace>
-    <ng-container *ngFor="let card of cards">
+    <div
+      class="whiteboard__workspace__container"
+      *ngFor="let card of cards"
+      cdkDrag
+      [cdkDragFreeDragPosition]="{ x: card.left, y: card.top }"
+      [cdkDragDisabled]="card.mode === Mode.ZoomMode"
+      cdkDragBoundary=".whiteboard__workspace"
+      [class.zoom]="card.mode === Mode.ZoomMode"
+      [class.onTop]="card.mode === Mode.SelectedMode"
+    >
+      <campus-color-list
+        class="whiteboard__color-list"
+        (selectedColor)="changeColorForCard(card, $event)"
+        *ngIf="card.mode === Mode.EditMode || card.mode === Mode.SelectedMode"
+      ></campus-color-list>
+      <campus-card-toolbar
+        *ngIf="
+          card.mode === Mode.EditMode ||
+          card.mode === Mode.SelectedMode ||
+          card.mode === Mode.MultiSelectSelectedMode ||
+          card.mode === Mode.MultiSelectMode
+        "
+        class="whiteboard__card_toolbar"
+        [mode]="card.mode"
+        (clickDeleteIcon)="onDeleteCard(card)"
+        (clickEditIcon)="cardEditIconClicked(card)"
+        (clickFlipIcon)="cardFlipIconClicked(card)"
+        (clickConfirmIcon)="cardConfirmIconClicked(card)"
+        (clickMultiSelectIcon)="onSelectCard(card)"
+        (clickMultiSelectSelectedIcon)="onDeselectCard(card)"
+      ></campus-card-toolbar>
       <campus-card
-        [class.onTop]="card.mode === Mode.SelectedMode"
-        cdkDrag
-        cdkDragBoundary=".whiteboard__workspace"
         class="whiteboard__card"
-        [class.zoom]="card.mode === Mode.ZoomMode"
-        [cdkDragFreeDragPosition]="{ x: card.left, y: card.top }"
-        [cdkDragDisabled]="card.mode === Mode.ZoomMode"
         [(description)]="card.description"
         [(color)]="card.color"
         [(image)]="card.image"
         [(mode)]="card.mode"
         [(viewModeImage)]="card.viewModeImage"
-        (colorChange)="changeColorForCard(card, $event)"
-        (edit)="cardEditIconClicked(card)"
-        (confirm)="cardConfirmIconClicked(card)"
-        (flip)="cardFlipIconClicked(card)"
-        (deleteCard)="onDeleteCard(card)"
-        (select)="onSelectCard(card)"
-        (deselect)="onDeselectCard(card)"
         (cardTapped)="onCardTapped(card)"
         (cardPressed)="onCardPressed(card)"
         (removeImage)="removeImageFromCard(card)"
@@ -60,7 +77,7 @@
         multiple="false"
         style="display: none;"
       />
-    </ng-container>
+    </div>
   </div>
   <button
     mat-fab

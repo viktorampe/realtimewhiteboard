@@ -28,23 +28,28 @@ export class CardToolbarComponent implements OnInit {
     this.clickDeleteIcon.emit();
   }
 
-  editIconClicked() {
+  editIconClicked(event: MouseEvent) {
     this.clickEditIcon.emit();
+    event.stopPropagation();
   }
 
-  confirmIconClicked() {
+  confirmIconClicked(event: MouseEvent) {
     this.clickConfirmIcon.emit();
+    event.stopPropagation();
   }
 
-  flipIconClicked() {
+  flipIconClicked(event: MouseEvent) {
     this.clickFlipIcon.emit();
+    event.stopPropagation();
   }
 
-  multiSelectClicked() {
+  multiSelectClicked(event: MouseEvent) {
     this.clickMultiSelectIcon.emit();
+    event.stopPropagation();
   }
 
-  multiSelectSelectedClicked() {
+  multiSelectSelectedClicked(event: MouseEvent) {
     this.clickMultiSelectSelectedIcon.emit();
+    event.stopPropagation();
   }
 }
