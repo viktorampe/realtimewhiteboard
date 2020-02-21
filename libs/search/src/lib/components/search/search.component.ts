@@ -100,11 +100,13 @@ export class SearchComponent implements AfterViewInit, OnDestroy, OnChanges {
   ngAfterViewInit() {
     this.warnMissingSearchPortals();
 
-    this.searchViewmodel.searchResultItemsToUpdate$.subscribe(ids => {
-      this.resultList.items
-        .filter(item => ids.some(id => id === item.dataObject.eduContent.id))
-        .forEach(item => this.searchViewmodel.updateSearchResult(item));
-    });
+    this.subscriptions.add(
+      this.searchViewmodel.searchResultItemsToUpdate$.subscribe(ids => {
+        this.resultList.items
+          .filter(item => ids.some(id => id === item.dataObject.eduContent.id))
+          .forEach(item => this.searchViewmodel.updateSearchResult(item));
+      })
+    );
   }
 
   ngOnDestroy() {

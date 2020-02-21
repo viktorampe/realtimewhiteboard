@@ -43,6 +43,7 @@ import {
   SearcherInterface,
   SearchModeInterface,
   SearchResultInterface,
+  SearchResultItemUpdaterInterface,
   SearchStateInterface
 } from '@campus/search';
 import {
@@ -60,14 +61,7 @@ import {
 import { Update } from '@ngrx/entity';
 import { RouterReducerState } from '@ngrx/router-store';
 import { Action, select, Store } from '@ngrx/store';
-import {
-  BehaviorSubject,
-  combineLatest,
-  merge,
-  Observable,
-  of,
-  timer
-} from 'rxjs';
+import { BehaviorSubject, combineLatest, merge, Observable, of } from 'rxjs';
 import {
   distinctUntilChanged,
   filter,
@@ -132,14 +126,6 @@ export class KabasTasksViewModel
   private _searchState$: BehaviorSubject<SearchStateInterface>;
 
   private routerState$: Observable<RouterReducerState<RouterStateUrl>>;
-
-  // TODO Do properly
-  // http://www.kabas.localhost:3020/tasks/manage/4/content -> 1st result has eduContentId 92
-  eduContentIds$ = timer(1, 5000).pipe(mapTo([92]));
-  updateSearchResultItem = (searchResultItem: ResultItemBase) => {
-    searchResultItem.data.inTask = !searchResultItem.data.inTask;
-    searchResultItem.update();
-  };
 
   constructor(
     private store: Store<DalState>,

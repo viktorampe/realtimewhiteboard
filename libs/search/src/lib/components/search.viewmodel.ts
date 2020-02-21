@@ -1,10 +1,4 @@
-import {
-  Inject,
-  Injectable,
-  InjectionToken,
-  Injector,
-  Optional
-} from '@angular/core';
+import { Inject, Injectable, Injector, Optional } from '@angular/core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { filter, map, share, startWith, take } from 'rxjs/operators';
 import {
@@ -14,20 +8,11 @@ import {
   SearchFilterInterface,
   SearchModeInterface,
   SearchResultInterface,
+  SearchResultItemUpdaterInterface,
   SearchStateInterface,
+  SEARCH_RESULT_ITEM_UPDATER_TOKEN,
   SortModeInterface
 } from '../interfaces';
-
-//TODO remove and use actual token
-export const SEARCH_RESULT_UPDATER_TOKEN = new InjectionToken(
-  'searchResultUpdater'
-);
-
-//TODO remove and use actual interface
-export interface SearchResultUpdaterInterface {
-  eduContentIds$: Observable<number[]>;
-  updateSearchResultItem(searchResult): void;
-}
 
 @Injectable()
 export class SearchViewModel {
@@ -54,12 +39,12 @@ export class SearchViewModel {
   constructor(
     private injector: Injector,
     @Optional()
-    @Inject(SEARCH_RESULT_UPDATER_TOKEN)
-    private searchResultUpdater: SearchResultUpdaterInterface
+    @Inject(SEARCH_RESULT_ITEM_UPDATER_TOKEN)
+    private searchResultUpdater: SearchResultItemUpdaterInterface
   ) {
     if (!searchResultUpdater) {
       this.searchResultUpdater = {
-        eduContentIds$: of([]),
+        updatedEduContentIds$: of([]),
         updateSearchResultItem: () => {}
       };
     }
@@ -145,12 +130,14 @@ export class SearchViewModel {
     this.clearSearchFilterDataCache();
   }
 
+  // updates search results data object
   public updateResult(result: SearchResultInterface): void {
     if (!result) return;
 
     this.setPredictionsCache(result);
   }
 
+  // updates searchResultListItem
   public updateSearchResult(searchResultItem) {
     this.searchResultUpdater.updateSearchResultItem(searchResultItem);
   }
@@ -202,7 +189,7 @@ export class SearchViewModel {
       share()
     );
 
-    this.searchResultItemsToUpdate$ = this.searchResultUpdater.eduContentIds$;
+    this.searchResultItemsToUpdate$ = this.searchResultUpdater.updatedEduContentIds$;
   }
 
   /**
