@@ -15,21 +15,21 @@
       <mat-icon class="toolbar__tool__icon" [svgIcon]="'multiselect'">
       </mat-icon>
     </div>
-    <div class="toolbar__tool" (click)="flipIconClicked()">
+    <div class="toolbar__tool" (click)="flipIconClicked($event)">
       <mat-icon class="toolbar__tool__icon" [svgIcon]="'flip'"></mat-icon>
     </div>
-    <div class="toolbar__tool" (click)="editIconClicked()">
+    <div class="toolbar__tool" (click)="editIconClicked($event)">
       <mat-icon class="toolbar__tool__icon" [svgIcon]="'edit'"></mat-icon>
     </div>
   </div>
   <ng-template #editModeView>
     <div class="toolbar">
-      <div class="toolbar__tool" (click)="flipIconClicked()">
+      <div class="toolbar__tool" (click)="flipIconClicked($event)">
         <mat-icon class="toolbar__tool__icon" [svgIcon]="'flip'"></mat-icon>
       </div>
       <div
         class="toolbar__tool toolbar__confirm"
-        (click)="confirmIconClicked()"
+        (click)="confirmIconClicked($event)"
       >
         <mat-icon
           class="toolbar__tool__icon toolbar__confirm__icon"

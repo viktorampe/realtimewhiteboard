@@ -27,29 +27,41 @@ describe('CardToolbarComponent', () => {
 
   it('should emit clickDeleteIcon when deleteIconClicked is called', () => {
     spyOn(component.clickDeleteIcon, 'emit');
-    component.deleteIconClicked();
+
+    const clickEvent = new MouseEvent('click');
+
+    component.deleteIconClicked(clickEvent);
     expect(component.clickDeleteIcon.emit).toHaveBeenCalled();
   });
 
   it('should emit clickEditIcon when editIconClicked is called', () => {
     spyOn(component.clickEditIcon, 'emit');
-    component.editIconClicked();
+
+    const clickEvent = new MouseEvent('click');
+
+    component.editIconClicked(clickEvent);
     expect(component.clickEditIcon.emit).toHaveBeenCalled();
   });
 
   it('should emit clickFlipIcon when flipIconClicked is called', () => {
     spyOn(component.clickFlipIcon, 'emit');
-    component.flipIconClicked();
+
+    const clickEvent = new MouseEvent('click');
+
+    component.flipIconClicked(clickEvent);
     expect(component.clickFlipIcon.emit).toHaveBeenCalled();
   });
 
   it('should emit clickConfirmIcon when confirmIconClicked is called', () => {
     spyOn(component.clickConfirmIcon, 'emit');
-    component.confirmIconClicked();
+
+    const clickEvent = new MouseEvent('click');
+
+    component.confirmIconClicked(clickEvent);
     expect(component.clickConfirmIcon.emit).toHaveBeenCalled();
   });
 
-  it('should emit clickMultiS electIcon when multiSelectClicked is called', () => {
+  it('should emit clickMultiSelectIcon when multiSelectClicked is called', () => {
     spyOn(component.clickMultiSelectIcon, 'emit');
 
     const clickEvent = new MouseEvent('click');

@@ -24,20 +24,24 @@ export class CardToolbarComponent implements OnInit {
 
   ngOnInit() {}
 
-  deleteIconClicked() {
+  deleteIconClicked(event: MouseEvent) {
     this.clickDeleteIcon.emit();
+    event.stopPropagation();
   }
 
-  editIconClicked() {
+  editIconClicked(event: MouseEvent) {
     this.clickEditIcon.emit();
+    event.stopPropagation();
   }
 
-  confirmIconClicked() {
+  confirmIconClicked(event: MouseEvent) {
     this.clickConfirmIcon.emit();
+    event.stopPropagation();
   }
 
-  flipIconClicked() {
+  flipIconClicked(event: MouseEvent) {
     this.clickFlipIcon.emit();
+    event.stopPropagation();
   }
 
   multiSelectClicked(event: MouseEvent) {
