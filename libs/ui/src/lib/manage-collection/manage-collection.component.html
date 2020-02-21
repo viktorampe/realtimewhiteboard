@@ -49,6 +49,7 @@
 
 <ng-template #emptyCollectionTemplate>
   <div class="ui-manage-collection__no-results">
+    <!-- This should be an empty state template depending on the collection type -->
     <span data-cy="empty-collection-message"
       >Je hebt nog geen {{ data.collectionType }}.</span
     >
@@ -101,6 +102,7 @@
         >
           <h3 mat-subheader>Recent gebruikt</h3>
           <mat-list-option
+            [checkboxPosition]="asModalSideSheet ? 'before' : 'after'"
             *ngFor="let item of recentLinkableItems"
             [value]="item.id"
             class="ui-manage-collection__recent-item"
@@ -123,6 +125,7 @@
             <h3 mat-subheader>Alle</h3>
             <mat-list-option
               *ngFor="let item of filteredItems"
+              [checkboxPosition]="asModalSideSheet ? 'before' : 'after'"
               [value]="item.id"
             >
               <mat-icon mat-list-icon [svgIcon]="item.icon"></mat-icon>
@@ -144,6 +147,7 @@
       <h3 mat-subheader>Recent gebruikt</h3>
       <mat-list-option
         *ngFor="let item of recentLinkableItems"
+        [checkboxPosition]="asModalSideSheet ? 'before' : 'after'"
         [value]="item.id"
         class="ui-manage-collection__recent-item"
       >
@@ -155,7 +159,11 @@
     <ng-container>
       <div class="ui-manage-collection__all-items">
         <h3 mat-subheader>Alle</h3>
-        <mat-list-option *ngFor="let item of linkableItems" [value]="item.id">
+        <mat-list-option
+          *ngFor="let item of linkableItems"
+          [value]="item.id"
+          [checkboxPosition]="asModalSideSheet ? 'before' : 'after'"
+        >
           <mat-icon mat-list-icon [svgIcon]="item.icon"></mat-icon>
           <p mat-line>{{ item.label }}</p>
         </mat-list-option>
