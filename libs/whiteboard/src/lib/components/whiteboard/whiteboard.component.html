@@ -34,6 +34,7 @@
       [cdkDragDisabled]="card.mode === Mode.ZoomMode"
       cdkDragBoundary=".whiteboard__workspace"
       [class.zoom]="card.mode === Mode.ZoomMode"
+      [class.onTop]="card.mode === Mode.SelectedMode"
     >
       <campus-color-list
         class="whiteboard__color-list"
