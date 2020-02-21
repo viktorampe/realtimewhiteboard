@@ -391,15 +391,6 @@ describe('WhiteboardComponent', () => {
     component.selectedCards.forEach(c => expect(c.color).toBe('black'));
   });
 
-  it('should add card to selectedCards when onSelectCard is called', () => {
-    const [card] = component.cards;
-    card.mode = <Mode>Mode.SelectedMode;
-
-    component.onSelectCard(card);
-
-    expect(component.selectedCards).toContain(card);
-  });
-
   it('should set card mode to MultiSelectSelectedMode when onSelectCard is called', () => {
     const [card] = component.cards;
     card.mode = <Mode>Mode.SelectedMode;

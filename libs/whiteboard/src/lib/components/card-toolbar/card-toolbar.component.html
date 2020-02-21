@@ -1,4 +1,4 @@
-<ng-container
+<div
   *ngIf="
     mode !== Mode.MultiSelectMode && mode !== Mode.MultiSelectSelectedMode;
     else multiSelectView
@@ -38,7 +38,7 @@
       </div>
     </div>
   </ng-template>
-</ng-container>
+</div>
 
 <ng-template #multiSelectView>
   <div class="toolbar toolbar_multiSelect">

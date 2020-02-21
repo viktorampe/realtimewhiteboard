@@ -1,7 +1,7 @@
 .toolbar {
   position: absolute;
-  top: -50px;
-  left: 50px;
+  top: -48px;
+  right: 8px;
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -40,8 +40,8 @@
   }
 
   &_multiSelect {
-    position: absolute;
-    left: 110px;
+    right: 50%;
+    transform: translateX(50%);
     top: -24px;
     z-index: 1;
   }

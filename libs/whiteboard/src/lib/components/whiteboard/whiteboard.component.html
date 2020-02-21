@@ -27,6 +27,7 @@
   </div>
   <div class="whiteboard__workspace" (dblclick)="onDblClick($event)" #workspace>
     <div
+      class="whiteboard__workspace__container"
       *ngFor="let card of cards"
       cdkDrag
       [cdkDragFreeDragPosition]="{ x: card.left, y: card.top }"
