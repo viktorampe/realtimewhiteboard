@@ -1,7 +1,14 @@
 .shelf {
-  position: absolute;
+  // NEW DESIGN
+  // position: absolute;
+
   display: flex;
-  bottom: 29px;
+
+  // OLD DESIGN
+  width: 100%;
+
+  // NEW DESIGN
+  // bottom: 29px;
 
   &__button {
     position: absolute;
