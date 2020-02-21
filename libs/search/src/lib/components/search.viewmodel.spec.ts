@@ -1,7 +1,8 @@
 import { Type } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { hot } from '@nrwl/angular/testing';
-import { Observable, of } from 'rxjs';
+import { configureTestSuite } from 'ng-bullet';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import {
   SearchFilterCriteriaFixture,
   SearchFilterCriteriaValuesFixture
@@ -13,7 +14,8 @@ import {
   SearchFilterInterface,
   SearchModeInterface,
   SearchResultInterface,
-  SearchStateInterface
+  SearchStateInterface,
+  SEARCH_RESULT_ITEM_UPDATER_TOKEN
 } from '../interfaces';
 import { CheckboxLineFilterComponent } from './checkbox-line-filter/checkbox-line-filter-component';
 import { SearchViewModel } from './search.viewmodel';
@@ -56,11 +58,26 @@ describe('SearchViewModel', () => {
     }
   };
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers: [SearchViewModel, MockFilterFactory]
-    });
+  const updatedEduContentIds$ = new BehaviorSubject([]);
+  const updateSearchResultItem = jest.fn();
 
+  configureTestSuite(() =>
+    TestBed.configureTestingModule({
+      providers: [
+        SearchViewModel,
+        MockFilterFactory,
+        {
+          provide: SEARCH_RESULT_ITEM_UPDATER_TOKEN,
+          useValue: {
+            updatedEduContentIds$,
+            updateSearchResultItem
+          }
+        }
+      ]
+    })
+  );
+
+  beforeEach(() => {
     searchViewModel = TestBed.get(SearchViewModel);
   });
 
@@ -694,6 +711,27 @@ describe('SearchViewModel', () => {
     });
   });
 
+  describe('searchResultItemUpdater', () => {
+    describe('searchResultItemsToUpdate$', () => {
+      it('should use the provided stream', () => {
+        expect(searchViewModel.searchResultItemsToUpdate$).toBe(
+          updatedEduContentIds$
+        );
+      });
+
+      describe('updateSearchResult', () => {
+        it('should call the provided function', () => {
+          const mockSearchResultItem = { foo: 'bar' };
+          searchViewModel.updateSearchResult(mockSearchResultItem);
+
+          expect(updateSearchResultItem).toHaveBeenCalledWith(
+            mockSearchResultItem
+          );
+        });
+      });
+    });
+  });
+
   function getTestSearchResult(
     name: string,
     predictions: Map<string | number, number>
@@ -755,4 +793,34 @@ describe('SearchViewModel', () => {
       new SearchFilterCriteriaValuesFixture({ prediction: 0 })
     ]);
   }
+});
+
+describe('SearchViewModel without provided SEARCH_RESULT_ITEM_UPDATER_TOKEN', () => {
+  let searchViewModel: SearchViewModel;
+
+  configureTestSuite(() =>
+    TestBed.configureTestingModule({
+      providers: [SearchViewModel, MockFilterFactory]
+    })
+  );
+
+  beforeEach(() => {
+    searchViewModel = TestBed.get(SearchViewModel);
+  });
+
+  describe('searchResultUpdater', () => {
+    describe('updateSearchResult', () => {
+      it('should not throw', () => {
+        expect(() => searchViewModel.updateSearchResult({})).not.toThrow();
+      });
+    });
+
+    describe('searchResultItemsToUpdate$', () => {
+      it('should not contain values', () => {
+        expect(searchViewModel.searchResultItemsToUpdate$).toBeObservable(
+          hot('(a|)', { a: [] })
+        );
+      });
+    });
+  });
 });

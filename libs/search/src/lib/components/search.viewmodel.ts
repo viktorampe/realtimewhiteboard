@@ -40,10 +40,10 @@ export class SearchViewModel {
     private injector: Injector,
     @Optional()
     @Inject(SEARCH_RESULT_ITEM_UPDATER_TOKEN)
-    private searchResultUpdater: SearchResultItemUpdaterInterface
+    private searchResultItemUpdater: SearchResultItemUpdaterInterface
   ) {
-    if (!searchResultUpdater) {
-      this.searchResultUpdater = {
+    if (!searchResultItemUpdater) {
+      this.searchResultItemUpdater = {
         updatedEduContentIds$: of([]),
         updateSearchResultItem: () => {}
       };
@@ -139,7 +139,7 @@ export class SearchViewModel {
 
   // updates searchResultListItem
   public updateSearchResult(searchResultItem) {
-    this.searchResultUpdater.updateSearchResultItem(searchResultItem);
+    this.searchResultItemUpdater.updateSearchResultItem(searchResultItem);
   }
 
   private setFactoryFilterCache(factoryFilters: SearchFilterInterface[]) {
@@ -189,7 +189,7 @@ export class SearchViewModel {
       share()
     );
 
-    this.searchResultItemsToUpdate$ = this.searchResultUpdater.updatedEduContentIds$;
+    this.searchResultItemsToUpdate$ = this.searchResultItemUpdater.updatedEduContentIds$;
   }
 
   /**
@@ -231,7 +231,7 @@ export class SearchViewModel {
   }
 
   /**
-   * updates the complete criteruym that is passed using the given selection and prediction data
+   * updates the complete criterium that is passed using the given selection and prediction data
    *
    * @private
    * @param {SearchFilterCriteriaInterface} criterium

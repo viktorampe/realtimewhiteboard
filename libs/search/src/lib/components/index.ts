@@ -7,11 +7,6 @@ export * from './column-filter/column-filter.component';
 export * from './date-filter-component/date-filter.component';
 export * from './results-list/result.component.base';
 export * from './search-term/search-term.component';
-//TODO remove and export from interfaces
-export {
-  SearchResultUpdaterInterface,
-  SEARCH_RESULT_UPDATER_TOKEN
-} from './search.viewmodel';
 export * from './search.viewmodel.mock';
 export * from './search/search.component';
 export * from './select-filter-component/select-filter.component';
