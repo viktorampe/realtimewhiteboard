@@ -50,8 +50,6 @@ export class ManageCollectionComponent
   public useFilter: boolean;
   public asModalSideSheet: boolean;
 
-  _selectionList: MatSelectionList;
-
   @Output() selectionChanged = new EventEmitter<
     ItemToggledInCollectionInterface
   >();
