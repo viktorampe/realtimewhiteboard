@@ -1359,7 +1359,8 @@ describe('KabasTaskViewModel', () => {
             taskEduContents: newTaskEduContents
           });
 
-          // need a subscription here, or the first emit is missed
+          // create a new stream with a shareReplay so that the subscription created from `toBeObservable` also receives the last emitted value
+          // subscribe so the stream is triggered when we send updated values through `store.refreshState();`
           const stream = kabasTasksViewModel.updatedEduContentIds$.pipe(
             shareReplay(1)
           );
