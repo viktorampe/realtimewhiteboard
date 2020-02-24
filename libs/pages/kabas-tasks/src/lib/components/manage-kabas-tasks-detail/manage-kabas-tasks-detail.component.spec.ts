@@ -222,7 +222,9 @@ describe('ManageKabasTasksDetailComponent', () => {
     [firstTask, ...restOfTasks] = mockViewmodel.tasksWithAssignments$.value;
 
     // extra properties added in onInit
-    taskEduContents = addActions(currentTask.taskEduContents);
+    taskEduContents = addActions(
+      firstTask.taskEduContents as TaskEduContentWithEduContentInterface[]
+    );
     currentTask = {
       ...firstTask,
       hasSolutionFiles: true,

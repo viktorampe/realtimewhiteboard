@@ -5,11 +5,13 @@ import {
   MatTooltipModule
 } from '@angular/material';
 import { By, HAMMER_LOADER } from '@angular/platform-browser';
-import { AssigneeTypesEnum } from '@campus/dal';
+import {
+  AssigneeFixture,
+  AssigneeInterface,
+  AssigneeTypesEnum
+} from '@campus/dal';
 import { ENVIRONMENT_ICON_MAPPING_TOKEN } from '@campus/shared';
 import { MockMatIconRegistry } from '@campus/testing';
-import { AssigneeFixture } from '../../interfaces/Assignee.fixture';
-import { AssigneeInterface } from '../../interfaces/Assignee.interface';
 import { TaskListItemComponent } from './task-list-item.component';
 
 const mockAssignees: AssigneeInterface[] = [

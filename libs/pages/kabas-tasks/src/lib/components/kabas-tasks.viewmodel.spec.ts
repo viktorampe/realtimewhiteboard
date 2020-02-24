@@ -1,8 +1,58 @@
 import { TestBed } from '@angular/core/testing';
 import { MAT_DATE_LOCALE } from '@angular/material';
-import { AssigneeFixture, AssigneeTypesEnum, AuthServiceInterface, AUTH_SERVICE_TOKEN, DalState, EduContentActions, EduContentBookFixture, EduContentFixture, EduContentMetadataFixture, EduContentServiceInterface, EduContentTocActions, EduContentTOCFixture, EduContentTocQueries, EduFileFixture, EduFileTypeEnum, EDU_CONTENT_SERVICE_TOKEN, EffectFeedback, EffectFeedbackActions, FavoriteActions, FavoriteTypesEnum, getRouterState, MethodQueries, MethodYearsFixture, MethodYearsInterface, PersonFixture, TaskActions, TaskEduContentActions, TaskEduContentFixture, TaskFixture, TaskServiceInterface, TaskStatusEnum, TaskWithAssigneesFixture, TaskWithAssigneesInterface, TASK_SERVICE_TOKEN, UserQueries, YearFixture } from '@campus/dal';
-import { SearchModeFixture, SearchResultInterface, SearchStateFixture, SearchStateInterface } from '@campus/search';
-import { EduContentTypeEnum, ENVIRONMENT_API_TOKEN, ENVIRONMENT_SEARCHMODES_TOKEN, OpenStaticContentServiceInterface, OPEN_STATIC_CONTENT_SERVICE_TOKEN, ScormExerciseServiceInterface, SCORM_EXERCISE_SERVICE_TOKEN } from '@campus/shared';
+import {
+  AssigneeFixture,
+  AssigneeTypesEnum,
+  AuthServiceInterface,
+  AUTH_SERVICE_TOKEN,
+  DalState,
+  EduContentActions,
+  EduContentBookFixture,
+  EduContentFixture,
+  EduContentMetadataFixture,
+  EduContentServiceInterface,
+  EduContentTocActions,
+  EduContentTOCFixture,
+  EduContentTocQueries,
+  EduFileFixture,
+  EduFileTypeEnum,
+  EDU_CONTENT_SERVICE_TOKEN,
+  EffectFeedback,
+  EffectFeedbackActions,
+  FavoriteActions,
+  FavoriteTypesEnum,
+  getRouterState,
+  MethodQueries,
+  MethodYearsFixture,
+  MethodYearsInterface,
+  PersonFixture,
+  TaskActions,
+  TaskEduContentActions,
+  TaskEduContentFixture,
+  TaskFixture,
+  TaskServiceInterface,
+  TaskStatusEnum,
+  TaskWithAssigneesFixture,
+  TaskWithAssigneesInterface,
+  TASK_SERVICE_TOKEN,
+  UserQueries,
+  YearFixture
+} from '@campus/dal';
+import {
+  SearchModeFixture,
+  SearchResultInterface,
+  SearchStateFixture,
+  SearchStateInterface
+} from '@campus/search';
+import {
+  EduContentTypeEnum,
+  ENVIRONMENT_API_TOKEN,
+  ENVIRONMENT_SEARCHMODES_TOKEN,
+  OpenStaticContentServiceInterface,
+  OPEN_STATIC_CONTENT_SERVICE_TOKEN,
+  ScormExerciseServiceInterface,
+  SCORM_EXERCISE_SERVICE_TOKEN
+} from '@campus/shared';
 import { MockDate } from '@campus/testing';
 import { Store } from '@ngrx/store';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
@@ -13,7 +63,10 @@ import { take } from 'rxjs/operators';
 import { TaskWithTaskEduContentInterface } from '../interfaces/TaskEduContentWithEduContent.interface';
 import { KabasTasksViewModel } from './kabas-tasks.viewmodel';
 import * as vmSelectors from './kabas-tasks.viewmodel.selectors';
-import { getTaskFavoriteBookIds, getTaskWithAssignmentAndEduContents } from './kabas-tasks.viewmodel.selectors';
+import {
+  getTaskFavoriteBookIds,
+  getTaskWithAssignmentAndEduContents
+} from './kabas-tasks.viewmodel.selectors';
 
 describe('KabasTaskViewModel', () => {
   const dateMock = new MockDate();
@@ -1486,7 +1539,7 @@ describe('KabasTaskViewModel', () => {
     const currentTask = new TaskWithAssigneesFixture({
       id: 1,
       learningAreaId: 3
-    });
+    }) as TaskWithTaskEduContentInterface;
 
     const methodYears: MethodYearsInterface[] = [
       new MethodYearsFixture({

@@ -11,6 +11,8 @@ import {
   GroupInterface,
   LearningAreaFixture,
   LearningAreaInterface,
+  MethodYearsFixture,
+  MethodYearsInterface,
   PersonFixture,
   PersonInterface,
   TaskEduContentFixture,
@@ -60,6 +62,7 @@ export class MockKabasTasksViewModel
   public classGroups$: BehaviorSubject<ClassGroupInterface[]>;
   public groups$: BehaviorSubject<GroupInterface[]>;
   public students$: BehaviorSubject<PersonInterface[]>;
+  public methodYearsInArea$: BehaviorSubject<MethodYearsInterface[]>;
 
   public favoriteBookIdsForTask$: Observable<number[]>;
   public selectedBookTitle$: Observable<string>;
@@ -129,6 +132,10 @@ export class MockKabasTasksViewModel
     this.currentToc$ = this.getCurrentToc();
     this.favoriteBookIdsForTask$ = new BehaviorSubject([1]);
     this.selectedBookTitle$ = new BehaviorSubject('foo 1');
+
+    this.methodYearsInArea$ = new BehaviorSubject<MethodYearsInterface[]>([
+      new MethodYearsFixture()
+    ]);
   }
 
   public getCurrentToc() {
