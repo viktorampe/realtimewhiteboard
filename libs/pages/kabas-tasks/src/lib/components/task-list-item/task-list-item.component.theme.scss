@@ -1,18 +1,11 @@
 @mixin pages-manage-kabas-tasks-task-list-item-theme() {
-  $pages-manage-kabas-tasks__task-list-item__dates-font-size: 0.9rem !default;
-
-  $pages-manage-kabas-tasks__task-list-item__learning-area-font-size: 0.9rem !default;
-  $pages-manage-kabas-tasks__task-list-item__learning-area-color: $primary-font-color !default;
-
   $pages-manage-kabas-tasks__task-list-item__status-color: $primary-font-color !default;
   $pages-manage-kabas-tasks__task-list-item__archived-color: $primary-font-color !default;
 
-  $pages-manage-kabas-tasks__task-list-item__assignees-color: $primary-font-color !default;
   $pages-manage-kabas-tasks__task-list-item__assignees-secondary-color: $primary-font-color-2;
-  $pages-manage-kabas-tasks__task-list-item__assignees-font-size: 0.9rem !default;
   $pages-manage-kabas-tasks__task-list-item__assignees-secondary-font-size: 0.8rem !default;
 
-  $pages-manage-kabas-tasks__task-list-item__second-line-spacer: 3px !default;
+  $pages-manage-kabas-tasks__task-list-item__second-line-spacer: 4px !default;
 
   .manage-kabas-tasks-task-list-item {
     &__icon {
@@ -24,17 +17,8 @@
         color: $pages-manage-kabas-tasks__task-list-item__archived-color;
       }
     }
-    &__learning-area {
-      color: $pages-manage-kabas-tasks__task-list-item__learning-area-color;
-      font-size: $pages-manage-kabas-tasks__task-list-item__learning-area-font-size;
-    }
-    &__dates {
-      font-size: $pages-manage-kabas-tasks__task-list-item__dates-font-size;
-    }
     &__assignees {
       &-class-groups {
-        color: $pages-manage-kabas-tasks__task-list-item__assignees-color;
-        font-size: $pages-manage-kabas-tasks__task-list-item__assignees-font-size;
         margin: 0 0
           $pages-manage-kabas-tasks__task-list-item__second-line-spacer 0;
       }

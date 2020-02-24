@@ -3,16 +3,7 @@
 }
 
 .app-practice-searchresult {
-  &__method-level {
-    display: flex;
-
-    &__icon {
-      width: 50px !important;
-    }
-  }
-
   &__stars {
-    display: flex;
     width: 60px;
     flex-wrap: wrap-reverse;
     justify-content: center;

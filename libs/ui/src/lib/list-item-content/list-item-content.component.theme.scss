@@ -1,47 +1,64 @@
+$ui-list-item-content-spacing--horizontal: 16px !default;
+$ui-list-item-content-spacing--vertical: 4px !default;
+
+$ui-list-item-content-color--primary: $ui-primary-font-color !default;
+$ui-list-item-content-color--secondary: $ui-primary-font-color-2 !default;
+
+$ui-list-item-content_icon-color: $ui-primary-color-accent !default;
+$ui-list-item-content_icon-width: 50px !default;
+
 @mixin ui-list-item-content() {
   .ui-list-item {
     &__icon {
       align-self: center;
-      margin-right: 16px;
-      width: 50px !important;
+      margin-right: $ui-list-item-content-spacing--horizontal;
+      width: $ui-list-item-content_icon-width !important;
+      color: $ui-list-item-content_icon-color;
     }
 
     &__title {
       display: inline-block;
-      color: #484748;
+      color: $ui-list-item-content-color--primary;
       font-weight: bold;
-      margin-bottom: 3px;
+      margin-bottom: $ui-list-item-content-spacing--vertical;
     }
 
     &__actions {
-      color: #808080;
+      color: $ui-list-item-content-color--secondary;
       font-size: 0.8rem;
       white-space: normal;
 
       span {
         cursor: pointer;
         position: relative;
-        margin-right: 15px;
 
         &:not(:last-child):after {
-          content: '•';
+          content: '';
           pointer-events: none;
-          position: absolute;
-          right: -10px;
+          border-left: 1px solid $ui-list-item-content-color--secondary;
+          height: $ui-list-item-content-spacing--horizontal;
+          margin-left: $ui-list-item-content-spacing--horizontal / 2;
+          margin-right: $ui-list-item-content-spacing--horizontal / 2;
         }
       }
     }
 
     &__content-right {
+      display: flex;
       align-items: center;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      text-align: right;
+      font-size: 0.9rem;
 
       &--separated > *:not(:last-child):after {
-        display: inline-block;
         content: '';
-        border-left: 1px solid #808080;
+        pointer-events: none;
+        border-left: 1px solid $ui-list-item-content-color--secondary;
         height: 36px;
-        margin-left: 16px;
-        margin-right: 16px;
+        margin-left: $ui-list-item-content-spacing--horizontal;
+        margin-right: $ui-list-item-content-spacing--horizontal;
       }
     }
   }

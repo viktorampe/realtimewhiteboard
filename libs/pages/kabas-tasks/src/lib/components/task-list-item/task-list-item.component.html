@@ -50,27 +50,28 @@
     >
       <li *ngFor="let classGroup of classGroups">{{ classGroup.label }}</li>
     </ul>
-
-    <span
-      *ngIf="groups.length"
-      [matTooltip]="groups.join('\n')"
-      class="manage-kabas-tasks-task-list-item__assignees-groups"
-    >
-      <span *ngIf="classGroups.length">+ </span>
-      {{ groups.length }} groep{{ groups.length === 1 ? '' : 'en' }}</span
-    >
-    <span
-      *ngIf="students.length"
-      [matTooltip]="students.join('\n')"
-      class="manage-kabas-tasks-task-list-item__assignees-students"
-    >
-      <span *ngIf="classGroups.length && !groups.length">+ </span>
-      <span *ngIf="groups.length"> | </span>
-      <span *ngIf="!classGroups.length && groups.length"> en </span>
-      {{ students.length }} individuele leerling{{
-        students.length === 1 ? '' : 'en'
-      }}</span
-    >
+    <div>
+      <span
+        *ngIf="groups.length"
+        [matTooltip]="groups.join('\n')"
+        class="manage-kabas-tasks-task-list-item__assignees-groups"
+      >
+        <span *ngIf="classGroups.length">+ </span>
+        {{ groups.length }} groep{{ groups.length === 1 ? '' : 'en' }}</span
+      >
+      <span
+        *ngIf="students.length"
+        [matTooltip]="students.join('\n')"
+        class="manage-kabas-tasks-task-list-item__assignees-students"
+      >
+        <span *ngIf="classGroups.length && !groups.length">+ </span>
+        <span *ngIf="groups.length"> | </span>
+        <span *ngIf="!classGroups.length && groups.length"> en </span>
+        {{ students.length }} individuele leerling{{
+          students.length === 1 ? '' : 'en'
+        }}</span
+      >
+    </div>
   </div>
   <div
     class="manage-kabas-tasks-task-list-item__hover-actions  ui-list-item__content-right"

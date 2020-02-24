@@ -12,10 +12,6 @@
   &__learning-area {
     flex: 0 0 10%;
     min-width: 100px;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    text-align: right;
   }
 
   &__dates {
@@ -40,13 +36,12 @@
 
   &__assignees {
     flex: 1 0 30%;
+    flex-direction: column;
+    align-items: flex-start;
 
     &-class-groups {
       list-style: none;
       padding: 0;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      overflow: hidden;
 
       li {
         display: inline;
