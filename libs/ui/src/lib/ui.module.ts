@@ -94,6 +94,7 @@ import { HumanDateTimePipe } from './utils/pipes/human-date-time/human-date-time
 import { JoinPipe } from './utils/pipes/join/join.pipe';
 import { RemovePrefixStringPipe } from './utils/pipes/remove-prefix-string/remove-prefix-string.pipe';
 import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-string.pipe';
+import { ListItemContentComponent } from './list-item-content/list-item-content.component';
 @NgModule({
   imports: [
     OverlayModule,
@@ -185,7 +186,8 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     SectionComponent,
     SectionContent,
     SectionActions,
-    SectionTitle
+    SectionTitle,
+    ListItemContentComponent
   ],
   exports: [
     FilterTextInputComponent,
@@ -254,7 +256,8 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     SectionComponent,
     SectionContent,
     SectionActions,
-    SectionTitle
+    SectionTitle,
+    ListItemContentComponent
   ],
   providers: [
     {
