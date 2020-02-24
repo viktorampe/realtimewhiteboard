@@ -1,6 +1,6 @@
 import { taskCollection } from './edu-content-collection-manager-selectors';
 
-describe('Kabas-tasks viewmodel selectors', () => {
+describe('taskCollection', () => {
   describe('taskCollection', () => {
     it('should return digital and paper seperated', () => {
       const tasks = [
