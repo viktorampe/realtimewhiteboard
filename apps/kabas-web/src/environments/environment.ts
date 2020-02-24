@@ -67,7 +67,7 @@ export const environment: EnvironmentInterface = {
       ]
     },
     collectionManagement: {
-      useFilter: false
+      useFilter: true
     }
   },
   sso: {},
