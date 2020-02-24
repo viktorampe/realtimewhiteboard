@@ -13,7 +13,9 @@ import { GuardsModule } from '@campus/guards';
 import { PagesSharedModule } from '@campus/pages/shared';
 import { SearchModule } from '@campus/search';
 import {
+  ContentTaskActionsService,
   CONTENT_OPENER_TOKEN,
+  CONTENT_TASK_ACTIONS_SERVICE_TOKEN,
   CONTENT_TASK_MANAGER_TOKEN,
   SharedModule
 } from '@campus/shared';
@@ -72,6 +74,10 @@ import { PagesKabasTasksRoutingModule } from './pages-kabas-tasks-routing.module
     {
       provide: CONTENT_TASK_MANAGER_TOKEN,
       useExisting: KabasTasksViewModel
+    },
+    {
+      provide: CONTENT_TASK_ACTIONS_SERVICE_TOKEN,
+      useClass: ContentTaskActionsService
     },
     PendingTaskGuard
   ],

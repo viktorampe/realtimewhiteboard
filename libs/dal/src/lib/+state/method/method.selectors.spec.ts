@@ -376,6 +376,7 @@ describe('Method Selectors', () => {
             id: 10,
             logoUrl: 'assets/methods/code-for-method-10.jpg',
             name: 'method 10',
+            learningAreaId: 19,
             years: [
               { name: 'Y2', id: 2, bookId: 2 },
               { name: 'Y1', id: 1, bookId: 3 }
@@ -385,6 +386,7 @@ describe('Method Selectors', () => {
             id: 20,
             logoUrl: 'assets/methods/code-for-method-20.jpg',
             name: 'method 20',
+            learningAreaId: 19,
             years: [{ id: 1, name: 'Y1', bookId: 1 }]
           }
         ]);

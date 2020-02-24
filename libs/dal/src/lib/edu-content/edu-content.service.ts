@@ -40,6 +40,9 @@ export class EduContentService implements EduContentServiceInterface {
         ...state,
         filterCriteriaSelections: this.mapObjectConversionService.mapToObject(
           state.filterCriteriaSelections
+        ),
+        filterCriteriaOptions: this.mapObjectConversionService.mapToObject(
+          state.filterCriteriaOptions
         )
       })
       .pipe(
@@ -71,6 +74,9 @@ export class EduContentService implements EduContentServiceInterface {
       ...state,
       filterCriteriaSelections: this.mapObjectConversionService.mapToObject(
         state.filterCriteriaSelections
+      ),
+      filterCriteriaOptions: this.mapObjectConversionService.mapToObject(
+        state.filterCriteriaOptions
       )
     });
   }

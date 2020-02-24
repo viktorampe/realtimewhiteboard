@@ -10,7 +10,6 @@ import {
   DalState,
   EduContent,
   EduContentActions,
-  EduContentBookInterface,
   EduContentInterface,
   EduContentServiceInterface,
   EduContentTocActions,
@@ -28,6 +27,7 @@ import {
   LearningAreaInterface,
   LinkedPersonQueries,
   MethodQueries,
+  MethodYearsInterface,
   PersonInterface,
   RouterStateUrl,
   TaskActions,
@@ -108,10 +108,10 @@ export class KabasTasksViewModel
   public classGroups$: Observable<ClassGroupInterface[]>;
   public groups$: Observable<GroupInterface[]>;
   public students$: Observable<PersonInterface[]>;
-  public searchBook$ = new BehaviorSubject<EduContentBookInterface>(null);
   public favoriteBookIdsForTask$: Observable<number[]>;
   public selectedBookTitle$: Observable<string>;
   public currentToc$: Observable<EduContentTOCInterface[]>;
+  public methodYearsInArea$: Observable<MethodYearsInterface[]>;
 
   public searchResults$: Observable<SearchResultInterface>;
   public searchState$: Observable<SearchStateInterface>;
@@ -181,6 +181,8 @@ export class KabasTasksViewModel
     this.searchState$ = this._searchState$;
     this.favoriteBookIdsForTask$ = this.getFavoriteBookIdsForCurrentTask();
     this.currentToc$ = this.getTocsStream();
+
+    this.methodYearsInArea$ = this.getMethodYearsInAreaStream();
 
     this.setupSearchResults();
   }
@@ -514,8 +516,8 @@ export class KabasTasksViewModel
   }
 
   public getInitialSearchState(): Observable<SearchStateInterface> {
-    return combineLatest([this.currentTask$, this.searchBook$]).pipe(
-      map(([currentTask, searchBook]) => {
+    return combineLatest([this.currentTask$, this.currentTaskParams$]).pipe(
+      map(([currentTask, taskParams]) => {
         const initialSearchState: SearchStateInterface = {
           searchTerm: '',
           filterCriteriaSelections: new Map<string, (number | string)[]>(),
@@ -525,14 +527,15 @@ export class KabasTasksViewModel
         // Only allow EduContent that's allowed to be put in a task
         initialSearchState.filterCriteriaOptions.set('taskAllowed', true);
 
-        if (searchBook) {
+        if (taskParams.book) {
           initialSearchState.filterCriteriaSelections.set(
-            'years',
-            searchBook.years.map(year => year.id)
+            'eduContentTOC.tree',
+            [taskParams.book]
           );
-
-          initialSearchState.filterCriteriaSelections.set('methods', [
-            searchBook.methodId
+        }
+        if (taskParams.lesson || taskParams.chapter) {
+          initialSearchState.filterCriteriaSelections.set('eduContentTOC', [
+            taskParams.lesson || taskParams.chapter
           ]);
         }
 
@@ -767,6 +770,19 @@ export class KabasTasksViewModel
     );
   }
 
+  private getMethodYearsInAreaStream() {
+    return combineLatest([
+      this.store.pipe(select(MethodQueries.getAllowedMethodYears)),
+      this.currentTask$
+    ]).pipe(
+      map(([methodYears, currentTask]) => {
+        return methodYears.filter(
+          methodYear => methodYear.learningAreaId === currentTask.learningAreaId
+        );
+      })
+    );
+  }
+
   private combineChaptersLessons(
     bookId: number,
     chapterId: number
@@ -805,12 +821,15 @@ export class KabasTasksViewModel
 
   private getSelectedBookTitle() {
     return this.currentTaskParams$.pipe(
-      filter(params => !!params.book),
-      switchMap(params =>
-        this.store.pipe(
-          select(MethodQueries.getMethodWithYearByBookId, { id: params.book })
-        )
-      )
+      switchMap(params => {
+        if (params.book) {
+          return this.store.pipe(
+            select(MethodQueries.getMethodWithYearByBookId, { id: params.book })
+          );
+        }
+
+        return of('');
+      })
     );
   }
 }
