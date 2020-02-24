@@ -64,6 +64,7 @@ import { Action, select, Store } from '@ngrx/store';
 import { BehaviorSubject, combineLatest, merge, Observable, of } from 'rxjs';
 import {
   distinctUntilChanged,
+  distinctUntilKeyChanged,
   filter,
   map,
   mapTo,
@@ -269,7 +270,7 @@ export class KabasTasksViewModel
       itemData.inTask = task.taskEduContents.some(
         tEC => tEC.eduContentId === itemData.eduContent.id
       );
-      //searchResultItem.update();
+      searchResultItem.update();
     });
   }
 
@@ -423,7 +424,10 @@ export class KabasTasksViewModel
     this.store.dispatch(
       new TaskEduContentActions.StartAddTaskEduContents({
         userId: this.authService.userId,
-        taskEduContents
+        taskEduContents,
+        customFeedbackHandlers: {
+          useCustomSuccessHandler: 'useNoHandler'
+        }
       })
     );
   }
@@ -468,7 +472,10 @@ export class KabasTasksViewModel
     this.store.dispatch(
       new TaskEduContentActions.StartDeleteTaskEduContents({
         taskEduContentIds: taskEduContentIds,
-        userId: this.authService.userId
+        userId: this.authService.userId,
+        customFeedbackHandlers: {
+          useCustomSuccessHandler: 'useNoHandler'
+        }
       })
     );
   }
@@ -486,7 +493,10 @@ export class KabasTasksViewModel
   }
 
   public getInitialSearchState(): Observable<SearchStateInterface> {
-    return combineLatest([this.currentTask$, this.currentTaskParams$]).pipe(
+    return combineLatest([
+      this.currentTask$.pipe(distinctUntilKeyChanged('id')),
+      this.currentTaskParams$
+    ]).pipe(
       map(([currentTask, taskParams]) => {
         const initialSearchState: SearchStateInterface = {
           searchTerm: '',
