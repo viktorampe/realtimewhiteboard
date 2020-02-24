@@ -21,21 +21,26 @@
         position: relative;
         margin-right: 15px;
 
-        &:after {
+        &:not(:last-child):after {
           content: '•';
           pointer-events: none;
           position: absolute;
           right: -10px;
-        }
-
-        &:last-child:after {
-          content: '';
         }
       }
     }
 
     &__content-right {
       align-items: center;
+
+      &--separated > *:not(:last-child):after {
+        display: inline-block;
+        content: '';
+        border-left: 1px solid #808080;
+        height: 36px;
+        margin-left: 16px;
+        margin-right: 16px;
+      }
     }
 
     mat-icon {

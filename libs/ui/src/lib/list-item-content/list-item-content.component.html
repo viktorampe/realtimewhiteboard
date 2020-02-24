@@ -5,6 +5,9 @@
   <ng-content select=".ui-list-item__actions"> </ng-content>
 </div>
 
-<div class="ui-list-item__container ui-list-item__container--right">
+<div
+  class="ui-list-item__container ui-list-item__container--right"
+  [class.ui-list-item__content-right--separated]="contentRightSeparated"
+>
   <ng-content select=".ui-list-item__content-right"></ng-content>
 </div>

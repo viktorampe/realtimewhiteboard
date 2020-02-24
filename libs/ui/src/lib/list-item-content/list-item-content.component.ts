@@ -1,4 +1,4 @@
-import { Component, HostBinding } from '@angular/core';
+import { Component, HostBinding, Input } from '@angular/core';
 
 @Component({
   selector: 'campus-list-item-content',
@@ -7,4 +7,6 @@ import { Component, HostBinding } from '@angular/core';
 })
 export class ListItemContentComponent {
   @HostBinding('class.ui-list-item') private isListItemContent = true;
+
+  @Input() contentRightSeparated = false;
 }
