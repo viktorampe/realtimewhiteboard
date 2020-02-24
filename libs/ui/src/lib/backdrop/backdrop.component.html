@@ -1,0 +1,53 @@
+<div class="ui-backdrop" [class.ui-backdrop--dropped]="dropped">
+  <div class="ui-backdrop__back-layer" #backLayer>
+    <div #backHeader class="ui-backdrop__header">
+      <div
+        *ngIf="!dropped"
+        (click)="updateDropped(true)"
+        class="ui-backdrop__header-reveal-action"
+      >
+        <ng-content select="backdrop-reveal-action"></ng-content>
+      </div>
+      <div
+        *ngIf="dropped"
+        (click)="updateDropped(false)"
+        class="ui-backdrop__header-reveal-action"
+      >
+        <ng-content select="backdrop-collapse-action"></ng-content>
+      </div>
+
+      <h1 *ngFor="let title of _titles" [@simpleFadeAnimation]="'in'">{{
+        title
+      }}</h1>
+
+      <ng-content select="backdrop-header-actions"></ng-content>
+    </div>
+
+    <div
+      class="ui-backdrop__back-layer__content"
+      [style.max-height.px]="backLayerContentMaxHeight"
+    >
+      <ng-content select="back-layer-content"></ng-content>
+    </div>
+  </div>
+
+  <div
+    #frontLayer
+    class="ui-backdrop__front-layer"
+    [@translateDrop]="dropTranslation"
+    (click)="updateDropped(false)"
+    [style.height.px]="frontLayerHeight"
+  >
+    <div
+      [class.ui-backdrop__front-layer__header]="subtitle.childNodes.length > 0"
+    >
+      <div #subtitle>
+        <ng-content select="front-layer-header"></ng-content>
+      </div>
+    </div>
+
+    <div class="ui-backdrop__front-layer__content">
+      <ng-content select="front-layer-content"></ng-content>
+    </div>
+  </div>
+</div>

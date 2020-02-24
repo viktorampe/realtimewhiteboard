@@ -25,6 +25,15 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { RouterModule } from '@angular/router';
 import { BeDateAdapter, UtilsModule } from '@campus/utils';
 import { AppBarComponent } from './app-bar/app-bar.component';
+import {
+  BackdropCollapseAction,
+  BackdropComponent,
+  BackdropHeaderActions,
+  BackdropRevealAction,
+  BackLayerContent,
+  FrontLayerContent,
+  FrontLayerHeader
+} from './backdrop/backdrop.component';
 import { BannerComponent } from './banner/banner.component';
 import { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.component';
 import { ButtonComponent } from './button/button.component';
@@ -185,7 +194,14 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     SectionComponent,
     SectionContent,
     SectionActions,
-    SectionTitle
+    SectionTitle,
+    BackdropComponent,
+    BackdropRevealAction,
+    BackdropCollapseAction,
+    BackdropHeaderActions,
+    BackLayerContent,
+    FrontLayerContent,
+    FrontLayerHeader
   ],
   exports: [
     FilterTextInputComponent,
@@ -254,7 +270,14 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     SectionComponent,
     SectionContent,
     SectionActions,
-    SectionTitle
+    SectionTitle,
+    BackdropComponent,
+    BackdropRevealAction,
+    BackdropCollapseAction,
+    BackdropHeaderActions,
+    BackLayerContent,
+    FrontLayerContent,
+    FrontLayerHeader
   ],
   providers: [
     {
