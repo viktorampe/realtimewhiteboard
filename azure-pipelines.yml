@@ -110,7 +110,7 @@ steps:
   - script: |
       npm run e2e:kabas:staging
     displayName: 'End-to-end all kabas'
-    condition: and(succeeded())
+    condition: and(succeeded(), eq(variables['dkE2E'], 'true'))
   - bash: |
       if [ -d "coverage" ]; then
         echo "##vso[task.setVariable variable=dkRanTests]true"
