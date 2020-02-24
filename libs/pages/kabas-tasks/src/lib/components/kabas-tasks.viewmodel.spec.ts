@@ -54,7 +54,7 @@ import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { hot } from 'jasmine-marbles';
 import { configureTestSuite } from 'ng-bullet';
 import { of } from 'rxjs';
-import { take } from 'rxjs/operators';
+import { shareReplay, take } from 'rxjs/operators';
 import { AssigneeFixture } from '../interfaces/Assignee.fixture';
 import { AssigneeTypesEnum } from '../interfaces/Assignee.interface';
 import { TaskWithAssigneesFixture } from '../interfaces/TaskWithAssignees.fixture';
@@ -1269,6 +1269,189 @@ describe('KabasTaskViewModel', () => {
         kabasTasksViewModel.updateSearchState(searchState);
 
         expect(searchResults$).toBeObservable(hot('a', { a: expected }));
+      });
+    });
+
+    describe('SearchResultItemUpdaterInterface', () => {
+      const currentTaskParams = { id: 1 };
+
+      beforeEach(() => {
+        store.overrideSelector(getRouterState, {
+          navigationId: 1,
+          state: {
+            url: '',
+            params: currentTaskParams,
+            queryParams: {}
+          }
+        });
+      });
+
+      describe('updateSearchResultItem', () => {
+        const taskEduContents = [
+          new TaskEduContentFixture({ eduContentId: 123 })
+        ];
+        const currentTask = new TaskWithAssigneesFixture({ taskEduContents });
+
+        beforeEach(() => {
+          store.overrideSelector(
+            getTaskWithAssignmentAndEduContents,
+            currentTask
+          );
+        });
+
+        it('should update the inTask property, in the current task', () => {
+          const resultListItem = {
+            data: { eduContent: { id: 123 }, inTask: false }
+          };
+
+          kabasTasksViewModel.updateSearchResultItem(resultListItem as any);
+
+          expect(resultListItem.data.inTask).toBe(true);
+        });
+
+        it('should update the inTask property, not in the current task', () => {
+          const resultListItem = {
+            data: { eduContent: { id: 456 }, inTask: true }
+          };
+
+          kabasTasksViewModel.updateSearchResultItem(resultListItem as any);
+
+          expect(resultListItem.data.inTask).toBe(false);
+        });
+
+        // TODO activate test after merge with other search PR
+        xit('should update the searchResultItem', () => {
+          const resultListItem = {
+            data: { eduContent: { id: 456 }, inTask: true },
+            update: jest.fn()
+          };
+
+          kabasTasksViewModel.updateSearchResultItem(resultListItem as any);
+
+          expect(resultListItem.update).toHaveBeenCalled();
+        });
+      });
+
+      describe('updatedEduContentIds$', () => {
+        const taskEduContents = [
+          new TaskEduContentFixture({ eduContentId: 123 }),
+          new TaskEduContentFixture({ eduContentId: 456 })
+        ];
+        const oldCurrentTask = new TaskWithAssigneesFixture({
+          taskEduContents
+        });
+
+        beforeEach(() => {
+          store.overrideSelector(
+            getTaskWithAssignmentAndEduContents,
+            oldCurrentTask
+          );
+          store.refreshState();
+        });
+
+        it('should emit changes to the eduContentIds in the task, extra value', () => {
+          const newTaskEduContents = [
+            new TaskEduContentFixture({ eduContentId: 123 }),
+            new TaskEduContentFixture({ eduContentId: 456 }),
+            new TaskEduContentFixture({ eduContentId: 789 })
+          ];
+          const newCurrentTask = new TaskWithAssigneesFixture({
+            taskEduContents: newTaskEduContents
+          });
+
+          // create a new stream with a shareReplay so that the subscription created from `toBeObservable` also receives the last emitted value
+          // subscribe so the stream is triggered when we send updated values through `store.refreshState();`
+          const stream = kabasTasksViewModel.updatedEduContentIds$.pipe(
+            shareReplay(1)
+          );
+          stream.subscribe();
+
+          getTaskWithAssignmentAndEduContents.setResult(newCurrentTask);
+          store.refreshState();
+
+          expect(stream).toBeObservable(hot('a', { a: [789] }));
+        });
+
+        it('should emit changes to the eduContentIds in the task, removed value', () => {
+          const newTaskEduContents = [
+            new TaskEduContentFixture({ eduContentId: 123 })
+          ];
+          const newCurrentTask = new TaskWithAssigneesFixture({
+            taskEduContents: newTaskEduContents
+          });
+
+          // need a subscription here, or the first emit is missed
+          const stream = kabasTasksViewModel.updatedEduContentIds$.pipe(
+            shareReplay(1)
+          );
+          stream.subscribe();
+
+          getTaskWithAssignmentAndEduContents.setResult(newCurrentTask);
+          store.refreshState();
+
+          expect(stream).toBeObservable(hot('a', { a: [456] }));
+        });
+
+        it('should emit changes to the eduContentIds in the task, added and removed ', () => {
+          const newTaskEduContents = [
+            new TaskEduContentFixture({ eduContentId: 456 }),
+            new TaskEduContentFixture({ eduContentId: 789 })
+          ];
+          const newCurrentTask = new TaskWithAssigneesFixture({
+            taskEduContents: newTaskEduContents
+          });
+
+          // need a subscription here, or the first emit is missed
+          const stream = kabasTasksViewModel.updatedEduContentIds$.pipe(
+            shareReplay(1)
+          );
+          stream.subscribe();
+
+          getTaskWithAssignmentAndEduContents.setResult(newCurrentTask);
+          store.refreshState();
+
+          expect(stream).toBeObservable(hot('a', { a: [123, 789] }));
+        });
+
+        it('should not emit, no changes to the eduContentIds', () => {
+          const newTaskEduContents = [
+            new TaskEduContentFixture({ eduContentId: 123, index: 1 }),
+            new TaskEduContentFixture({ eduContentId: 456, index: 2 })
+          ];
+          const newCurrentTask = new TaskWithAssigneesFixture({
+            taskEduContents: newTaskEduContents
+          });
+
+          // need a subscription here, or the first emit is missed
+          const stream = kabasTasksViewModel.updatedEduContentIds$.pipe(
+            shareReplay(1)
+          );
+          stream.subscribe();
+
+          getTaskWithAssignmentAndEduContents.setResult(newCurrentTask);
+          store.refreshState();
+
+          expect(stream).toBeObservable(hot('', {}));
+        });
+
+        it('should not emit, different task', () => {
+          const newTaskEduContents = [];
+          const newCurrentTask = new TaskWithAssigneesFixture({
+            id: 2,
+            taskEduContents: newTaskEduContents
+          });
+
+          // need a subscription here, or the first emit is missed
+          const stream = kabasTasksViewModel.updatedEduContentIds$.pipe(
+            shareReplay(1)
+          );
+          stream.subscribe();
+
+          getTaskWithAssignmentAndEduContents.setResult(newCurrentTask);
+          store.refreshState();
+
+          expect(stream).toBeObservable(hot('', {}));
+        });
       });
     });
   });
