@@ -1,6 +1,31 @@
 import { Inject, Injectable } from '@angular/core';
-import { BundleActions, BundleInterface, BundleQueries, ContentInterface, DalState, EduContentInterface, FavoriteInterface, FavoriteQueries, FavoriteTypesEnum, HistoryInterface, HistoryQueries, HistoryTypesEnum, TaskEduContentActions, TaskEduContentInterface, TaskEduContentQueries, UnlockedContent, UnlockedContentActions, UnlockedContentQueries } from '@campus/dal';
-import { CollectionManagerServiceInterface, COLLECTION_MANAGER_SERVICE_TOKEN, ItemToggledInCollectionInterface, ManageCollectionItemInterface } from '@campus/ui';
+import {
+  BundleActions,
+  BundleInterface,
+  BundleQueries,
+  ContentInterface,
+  DalState,
+  EduContentInterface,
+  FavoriteInterface,
+  FavoriteQueries,
+  FavoriteTypesEnum,
+  HistoryInterface,
+  HistoryQueries,
+  HistoryTypesEnum,
+  TaskEduContentActions,
+  TaskEduContentInterface,
+  TaskEduContentQueries,
+  UnlockedContent,
+  UnlockedContentActions,
+  UnlockedContentQueries
+} from '@campus/dal';
+import { EduContentTypeEnum } from '@campus/shared';
+import {
+  CollectionManagerServiceInterface,
+  COLLECTION_MANAGER_SERVICE_TOKEN,
+  ItemToggledInCollectionInterface,
+  ManageCollectionItemInterface
+} from '@campus/ui';
 import { select, Store } from '@ngrx/store';
 import { combineLatest, Observable } from 'rxjs';
 import { filter, map, shareReplay, switchMap, take } from 'rxjs/operators';
@@ -123,7 +148,13 @@ export class EduContentCollectionManagerService
       content.publishedEduContentMetadata.learningAreaId;
     const tasksCollection$: Observable<ManageCollectionItemInterface[]> = this.store.pipe(
       select(taskCollection, { learningAreaId }),
-      ),
+      map(tc => {
+        if (content.type === EduContentTypeEnum.PAPER_EXERCISE) {
+          return tc.paper;
+        } else {
+          return tc.digital;
+        }
+      }),
       shareReplay(1)
     );
     const linkedTaskIds$: Observable<number[]> = this.store.pipe(
