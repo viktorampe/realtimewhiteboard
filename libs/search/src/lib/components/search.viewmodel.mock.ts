@@ -25,6 +25,7 @@ export class MockSearchViewModel
   implements ViewModelInterface<SearchViewModel> {
   public searchState$ = new BehaviorSubject<SearchStateInterface>(undefined);
   public searchFilters$ = new BehaviorSubject<SearchFilterInterface[]>([]);
+  public searchResultItemsToUpdate$ = new BehaviorSubject([]);
 
   constructor() {
     this.searchState$.next(this.getMockSearchState());
@@ -40,6 +41,7 @@ export class MockSearchViewModel
   public updateFilterCriteria(criteria: SearchFilterCriteriaInterface): void {}
   public changeSearchTerm(searchTerm: string): void {}
   public updateResult(result: SearchResultInterface): void {}
+  public updateSearchResult(): void {}
 
   private getMockSearchState(): SearchStateInterface {
     const mockSearchState = {

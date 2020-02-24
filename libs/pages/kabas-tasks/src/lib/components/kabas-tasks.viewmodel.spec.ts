@@ -706,7 +706,10 @@ describe('KabasTaskViewModel', () => {
       const destroyAction = new TaskEduContentActions.StartDeleteTaskEduContents(
         {
           userId: authService.userId,
-          taskEduContentIds
+          taskEduContentIds,
+          customFeedbackHandlers: {
+            useCustomSuccessHandler: 'useNoHandler'
+          }
         }
       );
       kabasTasksViewModel.deleteTaskEduContents(taskEduContentIds);
@@ -1320,7 +1323,7 @@ describe('KabasTaskViewModel', () => {
         });
 
         // TODO activate test after merge with other search PR
-        xit('should update the searchResultItem', () => {
+        it('should update the searchResultItem', () => {
           const resultListItem = {
             data: { eduContent: { id: 456 }, inTask: true },
             update: jest.fn()
@@ -1493,7 +1496,10 @@ describe('KabasTaskViewModel', () => {
         expect(store.dispatch).toHaveBeenCalledWith(
           new TaskEduContentActions.StartAddTaskEduContents({
             userId,
-            taskEduContents
+            taskEduContents,
+            customFeedbackHandlers: {
+              useCustomSuccessHandler: 'useNoHandler'
+            }
           })
         );
       });
@@ -1539,7 +1545,10 @@ describe('KabasTaskViewModel', () => {
         expect(store.dispatch).toHaveBeenCalledWith(
           new TaskEduContentActions.StartDeleteTaskEduContents({
             userId,
-            taskEduContentIds
+            taskEduContentIds,
+            customFeedbackHandlers: {
+              useCustomSuccessHandler: 'useNoHandler'
+            }
           })
         );
       });
