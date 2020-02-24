@@ -920,7 +920,8 @@
           },
           "configurations": {
             "staging": {
-              "devServerTarget": "kabas-web:serve:staging"
+              "devServerTarget": "kabas-web:serve:staging",
+              "spec": "**/!(practice).spec.ts"
             },
             "production": {
               "devServerTarget": "kabas-web:serve:production"
