@@ -22,9 +22,5 @@
     &:nth-child(odd) {
       background-color: $app-edu-content-search-result-even-background-color;
     }
-
-    &__extension {
-      color: $app-edu-content-search-result-icon-color;
-    }
   }
 }
