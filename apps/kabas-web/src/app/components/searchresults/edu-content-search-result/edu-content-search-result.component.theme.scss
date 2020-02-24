@@ -22,5 +22,10 @@
     &:nth-child(odd) {
       background-color: $app-edu-content-search-result-even-background-color;
     }
+
+    .ui-file-icon {
+      height: unset !important;
+      width: unset !important;
+    }
   }
 }
