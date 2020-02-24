@@ -1,24 +1,24 @@
-<mat-icon
-  *ngIf="archived"
-  class="manage-kabas-tasks-task-list-item__archived"
-  svgIcon="task:archived"
-></mat-icon>
-<mat-icon
-  *ngIf="!archived"
-  class="manage-kabas-tasks-task-list-item__status"
-  [svgIcon]="'task:' + status"
-></mat-icon>
+<campus-list-item-content>
+  <mat-icon
+    *ngIf="archived"
+    class="manage-kabas-tasks-task-list-item__icon--archived ui-list-item__icon"
+    svgIcon="task:archived"
+  ></mat-icon>
+  <mat-icon
+    *ngIf="!archived"
+    class="manage-kabas-tasks-task-list-item__icon--status ui-list-item__icon"
+    [svgIcon]="'task:' + status"
+  ></mat-icon>
 
-<div class="manage-kabas-tasks-task-list-item__container">
   <div
-    class="manage-kabas-tasks-task-list-item__container__title"
+    class="manage-kabas-tasks-task-list-item__container__title ui-list-item__title"
     (click)="actions[0].handler()"
     campusClickStopPropagation
     >{{ title }}</div
   >
   <div
     *ngIf="actions.length"
-    class="manage-kabas-tasks-task-list-item__container__actions"
+    class="manage-kabas-tasks-task-list-item__container__actions ui-list-item__actions"
     ><span
       campusClickStopPropagation
       *ngFor="let action of actions"
@@ -26,55 +26,60 @@
       >{{ action.label }}</span
     ></div
   >
-</div>
-
-<div class="manage-kabas-tasks-task-list-item__learning-area">
-  {{ learningArea }}
-</div>
-
-<div class="manage-kabas-tasks-task-list-item__dates">
-  <div matLine>
-    <span *ngIf="startDate">{{ startDate | date: 'd/MM/yy' }}</span>
-    <span *ngIf="endDate"> - {{ endDate | date: 'd/MM/yy' }}</span>
+  <div
+    class="manage-kabas-tasks-task-list-item__learning-area ui-list-item__content-right"
+  >
+    {{ learningArea }}
   </div>
-  <div matLine></div>
-</div>
-<div class="manage-kabas-tasks-task-list-item__assignees">
-  <ul
-    class="manage-kabas-tasks-task-list-item__assignees-class-groups"
-    *ngIf="classGroups.length"
-  >
-    <li *ngFor="let classGroup of classGroups">{{ classGroup.label }}</li>
-  </ul>
 
-  <span
-    *ngIf="groups.length"
-    [matTooltip]="groups.join('\n')"
-    class="manage-kabas-tasks-task-list-item__assignees-groups"
+  <div
+    class="manage-kabas-tasks-task-list-item__dates ui-list-item__content-right"
   >
-    <span *ngIf="classGroups.length">+ </span>
-    {{ groups.length }} groep{{ groups.length === 1 ? '' : 'en' }}</span
+    <div matLine>
+      <span *ngIf="startDate">{{ startDate | date: 'd/MM/yy' }}</span>
+      <span *ngIf="endDate"> - {{ endDate | date: 'd/MM/yy' }}</span>
+    </div>
+    <div matLine></div>
+  </div>
+  <div
+    class="manage-kabas-tasks-task-list-item__assignees ui-list-item__content-right"
   >
-  <span
-    *ngIf="students.length"
-    [matTooltip]="students.join('\n')"
-    class="manage-kabas-tasks-task-list-item__assignees-students"
+    <ul
+      class="manage-kabas-tasks-task-list-item__assignees-class-groups"
+      *ngIf="classGroups.length"
+    >
+      <li *ngFor="let classGroup of classGroups">{{ classGroup.label }}</li>
+    </ul>
+
+    <span
+      *ngIf="groups.length"
+      [matTooltip]="groups.join('\n')"
+      class="manage-kabas-tasks-task-list-item__assignees-groups"
+    >
+      <span *ngIf="classGroups.length">+ </span>
+      {{ groups.length }} groep{{ groups.length === 1 ? '' : 'en' }}</span
+    >
+    <span
+      *ngIf="students.length"
+      [matTooltip]="students.join('\n')"
+      class="manage-kabas-tasks-task-list-item__assignees-students"
+    >
+      <span *ngIf="classGroups.length && !groups.length">+ </span>
+      <span *ngIf="groups.length"> | </span>
+      <span *ngIf="!classGroups.length && groups.length"> en </span>
+      {{ students.length }} individuele leerling{{
+        students.length === 1 ? '' : 'en'
+      }}</span
+    >
+  </div>
+  <div
+    class="manage-kabas-tasks-task-list-item__hover-actions  ui-list-item__content-right"
+    campusClickStopPropagation
   >
-    <span *ngIf="classGroups.length && !groups.length">+ </span>
-    <span *ngIf="groups.length"> | </span>
-    <span *ngIf="!classGroups.length && groups.length"> en </span>
-    {{ students.length }} individuele leerling{{
-      students.length === 1 ? '' : 'en'
-    }}</span
-  >
-</div>
-<div
-  class="manage-kabas-tasks-task-list-item__hover-actions"
-  campusClickStopPropagation
->
-  <mat-icon
-    [class.favorite]="isFavorite"
-    (click)="toggleFavorite()"
-    [svgIcon]="isFavorite ? 'favorites-filled' : 'favorites'"
-  ></mat-icon>
-</div>
+    <mat-icon
+      [class.favorite]="isFavorite"
+      (click)="toggleFavorite()"
+      [svgIcon]="isFavorite ? 'favorites-filled' : 'favorites'"
+    ></mat-icon>
+  </div>
+</campus-list-item-content>

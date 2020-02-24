@@ -36,13 +36,14 @@
         font-size: $pages-manage-kabas-tasks__task-list-item__actions-font-size;
       }
     }
-
-    &__status {
-      color: $pages-manage-kabas-tasks__task-list-item__status-color;
-      height: 36px !important; // task:*** icons are 36px by 24px
-    }
-    &__archived {
-      color: $pages-manage-kabas-tasks__task-list-item__archived-color;
+    &__icon {
+      &--status {
+        color: $pages-manage-kabas-tasks__task-list-item__status-color;
+        height: 36px !important; // task:*** icons are 36px by 24px
+      }
+      &--archived {
+        color: $pages-manage-kabas-tasks__task-list-item__archived-color;
+      }
     }
     &__learning-area {
       color: $pages-manage-kabas-tasks__task-list-item__learning-area-color;

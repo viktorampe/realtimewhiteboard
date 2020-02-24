@@ -1,8 +1,4 @@
 :host {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  padding: 5px 0;
   &:hover {
     .manage-kabas-tasks-task-list-item__hover-actions {
       mat-icon {
@@ -13,44 +9,6 @@
 }
 
 .manage-kabas-tasks-task-list-item {
-  &__icon,
-  &__archived,
-  &__status {
-    flex: 0 0 50px;
-    align-self: center;
-  }
-
-  &__container {
-    flex: 1 0 30%;
-    min-width: 250px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    &__title {
-      display: inline-block;
-    }
-    &__actions {
-      white-space: normal;
-
-      span {
-        cursor: pointer;
-        position: relative;
-        margin-right: 15px;
-
-        &:after {
-          content: '•';
-          pointer-events: none;
-          position: absolute;
-          right: -10px;
-        }
-
-        &:last-child:after {
-          content: '';
-        }
-      }
-    }
-  }
-
   &__learning-area {
     flex: 0 0 10%;
     min-width: 100px;
