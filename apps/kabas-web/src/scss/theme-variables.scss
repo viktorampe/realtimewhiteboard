@@ -82,8 +82,8 @@ $ui-tertiary-font-weight-2: $tertiary-font-weight-2;
 // ui > panel
 $ui-side-sheet-border: 0;
 $ui-side-sheet-font-size: 12px;
-$ui-side-sheet-sheet-background-color: transparent;
-$ui-side-sheet-header-background-color: transparent;
+$ui-side-sheet-sheet-background-color: $ui-primary-bg-color;
+$ui-side-sheet-header-background-color: $ui-primary-bg-color;
 
 // ui > page header
 $ui-page-header-font-size: 20px;
