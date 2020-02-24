@@ -1,2 +1,45 @@
 @mixin ui-list-item-content() {
+  .ui-list-item {
+    &__icon {
+      align-self: center;
+    }
+
+    &__title {
+      display: inline-block;
+      color: #484748;
+      font-weight: bold;
+      margin-bottom: 3px;
+    }
+
+    &__actions {
+      color: #808080;
+      font-size: 0.8rem;
+      white-space: normal;
+
+      span {
+        cursor: pointer;
+        position: relative;
+        margin-right: 15px;
+
+        &:after {
+          content: '•';
+          pointer-events: none;
+          position: absolute;
+          right: -10px;
+        }
+
+        &:last-child:after {
+          content: '';
+        }
+      }
+    }
+
+    &__content-right {
+      align-items: center;
+    }
+
+    mat-icon {
+      flex: 0 0 50px;
+    }
+  }
 }

@@ -1,1 +1,10 @@
-<p>list-item-content works!</p>
+<ng-content select=".ui-list-item__icon"></ng-content>
+<div class="ui-list-item__container ui-list-item__container--center">
+  <ng-content select=".ui-list-item__title"></ng-content>
+  <ng-content select=".ui-list-item__caption"></ng-content>
+  <ng-content select=".ui-list-item__actions"> </ng-content>
+</div>
+
+<div class="ui-list-item__container ui-list-item__container--right">
+  <ng-content select=".ui-list-item__content-right"></ng-content>
+</div>

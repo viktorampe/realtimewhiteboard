@@ -1,15 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostBinding } from '@angular/core';
 
 @Component({
   selector: 'campus-list-item-content',
   templateUrl: './list-item-content.component.html',
   styleUrls: ['./list-item-content.component.scss']
 })
-export class ListItemContentComponent implements OnInit {
-
-  constructor() { }
-
-  ngOnInit() {
-  }
-
+export class ListItemContentComponent {
+  @HostBinding('class.ui-list-item') private isListItemContent = true;
 }
