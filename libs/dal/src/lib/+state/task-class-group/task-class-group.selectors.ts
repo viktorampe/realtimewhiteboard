@@ -61,7 +61,7 @@ export const getById = createSelector(
 
 export const getTaskClassGroupAssigneeByTask = createSelector(
   [getAll, selectClassGroupState],
-  (taskClassGroups, classGroupState, props) =>
+  (taskClassGroups, classGroupState) =>
     taskClassGroups.reduce((dict, tcg) => {
       if (!dict[tcg.taskId]) {
         dict[tcg.taskId] = [];

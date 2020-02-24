@@ -61,7 +61,7 @@ export const getById = createSelector(
 
 export const getTaskStudentAssigneeByTask = createSelector(
   [getAll, selectLinkedPersonState],
-  (taskStudents, linkedPersonState, props) =>
+  (taskStudents, linkedPersonState) =>
     taskStudents.reduce((dict, ts) => {
       if (!dict[ts.taskId]) {
         dict[ts.taskId] = [];
