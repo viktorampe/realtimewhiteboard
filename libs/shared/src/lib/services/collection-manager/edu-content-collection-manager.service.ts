@@ -19,7 +19,6 @@ import {
   UnlockedContentActions,
   UnlockedContentQueries
 } from '@campus/dal';
-import { EduContentTypeEnum } from '@campus/shared';
 import {
   CollectionManagerServiceInterface,
   COLLECTION_MANAGER_SERVICE_TOKEN,
@@ -29,6 +28,7 @@ import {
 import { select, Store } from '@ngrx/store';
 import { combineLatest, Observable } from 'rxjs';
 import { filter, map, shareReplay, switchMap, take } from 'rxjs/operators';
+import { EduContentTypeEnum } from '../../enums';
 import { taskCollection } from './edu-content-collection-manager-selectors';
 import { EduContentCollectionManagerServiceInterface } from './edu-content-collection-manager.service.interface';
 
