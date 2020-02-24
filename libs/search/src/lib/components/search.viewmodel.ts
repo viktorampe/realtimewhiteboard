@@ -1,5 +1,5 @@
-import { Injectable, Injector } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Inject, Injectable, Injector, Optional } from '@angular/core';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { filter, map, share, startWith, take } from 'rxjs/operators';
 import {
   SearchFilterCriteriaInterface,
@@ -8,7 +8,9 @@ import {
   SearchFilterInterface,
   SearchModeInterface,
   SearchResultInterface,
+  SearchResultItemUpdaterInterface,
   SearchStateInterface,
+  SEARCH_RESULT_ITEM_UPDATER_TOKEN,
   SortModeInterface
 } from '../interfaces';
 
@@ -17,7 +19,8 @@ export class SearchViewModel {
   public searchState$ = new BehaviorSubject<SearchStateInterface>(null);
   public searchFilters$: Observable<SearchFilterInterface[]>;
 
-  private results$ = new BehaviorSubject<SearchResultInterface>(null);
+  // signals the searchComponent that some of its results need updating
+  public searchResultItemsToUpdate$: Observable<number[]>;
 
   // observable that emits when all data is available to construct new SearchFilters
   private searchFilterData$: BehaviorSubject<{
@@ -33,7 +36,19 @@ export class SearchViewModel {
   private searchMode: SearchModeInterface;
   private filterFactory: SearchFilterFactory;
 
-  constructor(private injector: Injector) {
+  constructor(
+    private injector: Injector,
+    @Optional()
+    @Inject(SEARCH_RESULT_ITEM_UPDATER_TOKEN)
+    private searchResultItemUpdater: SearchResultItemUpdaterInterface
+  ) {
+    if (!searchResultItemUpdater) {
+      this.searchResultItemUpdater = {
+        updatedEduContentIds$: of([]),
+        updateSearchResultItem: () => {}
+      };
+    }
+
     this.initiateStreams();
   }
 
@@ -79,6 +94,7 @@ export class SearchViewModel {
     };
     this.searchState$.next(newValue);
   }
+
   public getNextPage(): void {
     const newValue = { ...this.searchState$.value };
     newValue.from =
@@ -105,6 +121,7 @@ export class SearchViewModel {
       }
     }
   }
+
   public changeSearchTerm(searchTerm: string): void {
     const newValue = { ...this.searchState$.value };
     newValue.from = 0;
@@ -113,11 +130,16 @@ export class SearchViewModel {
     this.clearSearchFilterDataCache();
   }
 
+  // updates search results data object
   public updateResult(result: SearchResultInterface): void {
     if (!result) return;
 
-    this.results$.next(result);
     this.setPredictionsCache(result);
+  }
+
+  // updates searchResultListItem
+  public updateSearchResult(searchResultItem) {
+    this.searchResultItemUpdater.updateSearchResultItem(searchResultItem);
   }
 
   private setFactoryFilterCache(factoryFilters: SearchFilterInterface[]) {
@@ -166,6 +188,8 @@ export class SearchViewModel {
       startWith([]), // intial value -> empty array of filters
       share()
     );
+
+    this.searchResultItemsToUpdate$ = this.searchResultItemUpdater.updatedEduContentIds$;
   }
 
   /**
@@ -207,7 +231,7 @@ export class SearchViewModel {
   }
 
   /**
-   * updates the complete criteruym that is passed using the given selection and prediction data
+   * updates the complete criterium that is passed using the given selection and prediction data
    *
    * @private
    * @param {SearchFilterCriteriaInterface} criterium
