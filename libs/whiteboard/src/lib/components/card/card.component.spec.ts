@@ -11,7 +11,7 @@ import { By, HAMMER_LOADER } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MockMatIconRegistry } from '@campus/testing';
 import { configureTestSuite } from 'ng-bullet';
-import { Mode } from '../../enums/mode.enum';
+import { ModeEnum } from '../../enums/mode.enum';
 import CardInterface from '../../models/card.interface';
 import { CardImageComponent } from '../card-image/card-image.component';
 import { CardTextComponent } from '../card-text/card-text.component';
@@ -63,7 +63,7 @@ describe('CardComponent', () => {
       color: 'white',
       description: '',
       image: null,
-      mode: Mode.IdleMode,
+      mode: ModeEnum.IDLE,
       top: 0,
       left: 0,
       viewModeImage: true
@@ -125,7 +125,7 @@ describe('CardComponent', () => {
   });
 
   it('should show toolbar when mode is set to SelectedMode', () => {
-    component.mode = Mode.SelectedMode;
+    component.mode = ModeEnum.SELECTED;
     fixture.detectChanges();
     const toolbar = fixture.debugElement.queryAll(
       By.css('card__header__toolbar')
@@ -134,7 +134,7 @@ describe('CardComponent', () => {
   });
 
   it('should show toolbar when mode is set to EditMode', () => {
-    component.mode = Mode.EditMode;
+    component.mode = ModeEnum.EDIT;
     fixture.detectChanges();
     const toolbar = fixture.debugElement.queryAll(
       By.css('card__header__toolbar')
@@ -143,14 +143,14 @@ describe('CardComponent', () => {
   });
 
   it('should show colorlist when mode is set to SelectedMode', () => {
-    component.mode = Mode.SelectedMode;
+    component.mode = ModeEnum.SELECTED;
     fixture.detectChanges();
     const toolbar = fixture.debugElement.queryAll(By.css('.card__color-list'));
     expect(toolbar).not.toBeNull();
   });
 
   it('should show colorlist when mode is set to EditMode', () => {
-    component.mode = Mode.EditMode;
+    component.mode = ModeEnum.EDIT;
     fixture.detectChanges();
     const toolbar = fixture.debugElement.queryAll(By.css('.card__color-list'));
     expect(toolbar).not.toBeNull();

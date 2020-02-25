@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Mode } from '../../enums/mode.enum';
+import { ModeEnum } from '../../enums/mode.enum';
 
 @Component({
   selector: 'campus-card-image',
@@ -8,7 +8,7 @@ import { Mode } from '../../enums/mode.enum';
 })
 export class CardImageComponent implements OnInit {
   @Input() imageUrl: string;
-  @Input() mode: Mode;
+  @Input() mode: ModeEnum;
   @Output() removeClicked = new EventEmitter<void>();
   @Output() updateClicked = new EventEmitter<void>();
 
@@ -17,7 +17,7 @@ export class CardImageComponent implements OnInit {
   ngOnInit() {}
 
   get Mode() {
-    return Mode;
+    return ModeEnum;
   }
 
   emitRemoveClicked() {

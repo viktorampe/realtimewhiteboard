@@ -31,22 +31,22 @@
       *ngFor="let card of cards"
       cdkDrag
       [cdkDragFreeDragPosition]="{ x: card.left, y: card.top }"
-      [cdkDragDisabled]="card.mode === Mode.ZoomMode"
+      [cdkDragDisabled]="card.mode === Mode.ZOOM"
       cdkDragBoundary=".whiteboard__workspace"
-      [class.zoom]="card.mode === Mode.ZoomMode"
-      [class.onTop]="card.mode === Mode.SelectedMode"
+      [class.zoom]="card.mode === Mode.ZOOM"
+      [class.onTop]="card.mode === Mode.SELECTED"
     >
       <campus-color-list
         class="whiteboard__color-list"
         (selectedColor)="changeColorForCard(card, $event)"
-        *ngIf="card.mode === Mode.EditMode || card.mode === Mode.SelectedMode"
+        *ngIf="card.mode === Mode.EDIT || card.mode === Mode.SELECTED"
       ></campus-color-list>
       <campus-card-toolbar
         *ngIf="
-          card.mode === Mode.EditMode ||
-          card.mode === Mode.SelectedMode ||
-          card.mode === Mode.MultiSelectSelectedMode ||
-          card.mode === Mode.MultiSelectMode
+          card.mode === Mode.EDIT ||
+          card.mode === Mode.SELECTED ||
+          card.mode === Mode.MULTISELECTSELECTED ||
+          card.mode === Mode.MULTISELECT
         "
         class="whiteboard__card_toolbar"
         [mode]="card.mode"

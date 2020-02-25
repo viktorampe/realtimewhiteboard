@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Mode } from '../../enums/mode.enum';
+import { ModeEnum } from '../../enums/mode.enum';
 
 @Component({
   selector: 'campus-card',
@@ -7,7 +7,7 @@ import { Mode } from '../../enums/mode.enum';
   styleUrls: ['./card.component.scss']
 })
 export class CardComponent {
-  @Input() mode: Mode;
+  @Input() mode: ModeEnum;
   @Input() color: string;
   @Input() description: string;
   @Input() image: string;
@@ -18,7 +18,7 @@ export class CardComponent {
   @Output() removeImage = new EventEmitter<void>();
   @Output() updateImage = new EventEmitter<string>();
 
-  @Output() modeChange = new EventEmitter<Mode>();
+  @Output() modeChange = new EventEmitter<ModeEnum>();
   @Output() colorChange = new EventEmitter<string>();
   @Output() descriptionChange = new EventEmitter<string>();
   @Output() imageChange = new EventEmitter<string>();
@@ -27,11 +27,11 @@ export class CardComponent {
   constructor() {}
 
   get Mode() {
-    return Mode;
+    return ModeEnum;
   }
 
   onClickCard(event: MouseEvent) {
-    if (this.mode !== Mode.IdleMode) {
+    if (this.mode !== ModeEnum.IDLE) {
       event.stopPropagation();
     }
   }

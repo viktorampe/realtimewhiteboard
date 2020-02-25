@@ -1,6 +1,6 @@
 import { CdkDragDrop, CdkDragEnd } from '@angular/cdk/drag-drop';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { Mode } from '../../enums/mode.enum';
+import { ModeEnum } from '../../enums/mode.enum';
 import CardInterface from '../../models/card.interface';
 import WhiteboardInterface from '../../models/whiteboard.interface';
 import { WhiteboardHttpService } from '../../services/whiteboard-http.service';
@@ -44,7 +44,7 @@ export class WhiteboardComponent implements OnInit {
   }
 
   get Mode() {
-    return Mode;
+    return ModeEnum;
   }
 
   onDblClick(event: MouseEvent) {
@@ -66,7 +66,6 @@ export class WhiteboardComponent implements OnInit {
       shelfCards: this.shelvedCards
     };
     this.whiteboardHttpService.setJson(whiteboard);
-    return whiteboard;
   }
 
   addEmptyCard(
@@ -75,7 +74,7 @@ export class WhiteboardComponent implements OnInit {
     image: string = ''
   ): CardInterface {
     const card = {
-      mode: Mode.IdleMode,
+      mode: ModeEnum.IDLE,
       color: this.lastColor,
       description: '',
       image: image,
@@ -86,14 +85,14 @@ export class WhiteboardComponent implements OnInit {
     this.cards.push(card);
 
     if (this.selectedCards.length) {
-      card.mode = Mode.MultiSelectMode;
+      card.mode = ModeEnum.MULTISELECT;
     }
 
     return card;
   }
 
   addCardToShelf(card: CardInterface) {
-    card.mode = Mode.ShelfMode;
+    card.mode = ModeEnum.SHELF;
     this.shelvedCards.push(card);
   }
 
@@ -115,10 +114,10 @@ export class WhiteboardComponent implements OnInit {
   }
 
   onCardTapped(card: CardInterface) {
-    if (card.mode === Mode.ZoomMode) {
-      card.mode = Mode.IdleMode;
+    if (card.mode === ModeEnum.ZOOM) {
+      card.mode = ModeEnum.IDLE;
     } else if (this.isZoomAllowedForCard(card)) {
-      card.mode = Mode.ZoomMode;
+      card.mode = ModeEnum.ZOOM;
     }
   }
 
@@ -129,39 +128,39 @@ export class WhiteboardComponent implements OnInit {
       !isACardSelected &&
       card.viewModeImage &&
       card.image &&
-      card.mode !== Mode.EditMode &&
-      card.mode !== Mode.MultiSelectMode &&
-      card.mode !== Mode.MultiSelectSelectedMode;
+      card.mode !== ModeEnum.EDIT &&
+      card.mode !== ModeEnum.MULTISELECT &&
+      card.mode !== ModeEnum.MULTISELECTSELECTED;
 
     return isZoomAllowed;
   }
 
   private isACardSelected() {
-    return !!this.cards.filter(c => c.mode === Mode.SelectedMode).length;
+    return !!this.cards.filter(c => c.mode === ModeEnum.SELECTED).length;
   }
 
   cardEditIconClicked(card: CardInterface) {
-    card.mode = Mode.EditMode;
+    card.mode = ModeEnum.EDIT;
   }
 
   cardConfirmIconClicked(card: CardInterface) {
-    card.mode = Mode.IdleMode;
+    card.mode = ModeEnum.IDLE;
   }
 
   cardFlipIconClicked(card: CardInterface) {
     card.viewModeImage = !card.viewModeImage;
 
-    if (card.mode !== Mode.EditMode) {
-      card.mode = Mode.IdleMode;
+    if (card.mode !== ModeEnum.EDIT) {
+      card.mode = ModeEnum.IDLE;
     }
   }
 
   onCardPressed(card: CardInterface) {
-    if (card.mode !== Mode.ShelfMode) {
-      if (card.mode === Mode.SelectedMode || card.mode === Mode.EditMode) {
-        card.mode = Mode.IdleMode;
+    if (card.mode !== ModeEnum.SHELF) {
+      if (card.mode === ModeEnum.SELECTED || card.mode === ModeEnum.EDIT) {
+        card.mode = ModeEnum.IDLE;
       } else {
-        card.mode = Mode.SelectedMode;
+        card.mode = ModeEnum.SELECTED;
         this.setCardsModeIdleExceptUploadModeAndCard(card);
         this.selectedCards = [];
       }
@@ -187,18 +186,18 @@ export class WhiteboardComponent implements OnInit {
     input.value = '';
   }
 
+  // TODO: check upload flow
   uploadImageForCard(card: CardInterface, image: File) {
-    card.mode = Mode.UploadMode;
+    card.mode = ModeEnum.UPLOAD;
 
     this.whiteboardHttpService
       .uploadFile(image)
       .subscribe((imageUrl: string) => {
         card.image = imageUrl;
-
         if (this.selectedCards.length) {
-          card.mode = Mode.MultiSelectMode;
+          card.mode = ModeEnum.MULTISELECT;
         } else {
-          card.mode = Mode.IdleMode;
+          card.mode = ModeEnum.EDIT;
         }
       });
   }
@@ -206,7 +205,7 @@ export class WhiteboardComponent implements OnInit {
   changeColorForCard(card: CardInterface, color: string) {
     this.lastColor = color;
     card.color = color;
-    card.mode = Mode.IdleMode;
+    card.mode = ModeEnum.IDLE;
   }
 
   bulkDeleteClicked() {
@@ -222,8 +221,8 @@ export class WhiteboardComponent implements OnInit {
 
   private setCardsModeIdleExceptUploadModeAndCard(card: CardInterface) {
     this.cards
-      .filter(c => c !== card && c.mode !== Mode.UploadMode)
-      .forEach(c => (c.mode = Mode.IdleMode));
+      .filter(c => c !== card && c.mode !== ModeEnum.UPLOAD)
+      .forEach(c => (c.mode = ModeEnum.IDLE));
   }
 
   onSelectCard(card: CardInterface) {
@@ -231,20 +230,20 @@ export class WhiteboardComponent implements OnInit {
 
     if (this.selectedCards.length === 1) {
       this.cards
-        .filter(c => c.mode !== Mode.UploadMode)
-        .forEach(c => (c.mode = Mode.MultiSelectMode));
+        .filter(c => c.mode !== ModeEnum.UPLOAD)
+        .forEach(c => (c.mode = ModeEnum.MULTISELECT));
     }
 
-    card.mode = Mode.MultiSelectSelectedMode;
+    card.mode = ModeEnum.MULTISELECTSELECTED;
   }
 
   onDeselectCard(card: CardInterface) {
     this.selectedCards = this.selectedCards.filter(c => c !== card);
 
     if (!this.selectedCards.length) {
-      this.cards.forEach(c => (c.mode = Mode.IdleMode));
+      this.cards.forEach(c => (c.mode = ModeEnum.IDLE));
     } else {
-      card.mode = Mode.MultiSelectMode;
+      card.mode = ModeEnum.MULTISELECT;
     }
   }
 
@@ -274,8 +273,8 @@ export class WhiteboardComponent implements OnInit {
   onClickWhiteboard() {
     this.selectedCards = [];
     this.cards
-      .filter(c => c.mode !== Mode.UploadMode)
-      .forEach(c => (c.mode = Mode.IdleMode));
+      .filter(c => c.mode !== ModeEnum.UPLOAD)
+      .forEach(c => (c.mode = ModeEnum.IDLE));
   }
 
   cardDraggedPosition($event: {
@@ -292,7 +291,7 @@ export class WhiteboardComponent implements OnInit {
       (167 + cardElement.offsetTop) -
       Math.abs(event.distance.y);
 
-    card.mode = Mode.IdleMode;
+    card.mode = ModeEnum.IDLE;
     this.cards.push(card);
     this.shelvedCards = this.shelvedCards.filter(c => c !== card);
   }

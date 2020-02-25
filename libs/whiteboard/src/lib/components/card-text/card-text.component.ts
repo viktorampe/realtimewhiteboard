@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Mode } from '../../enums/mode.enum';
+import { ModeEnum } from '../../enums/mode.enum';
 
 @Component({
   selector: 'campus-card-text',
@@ -9,7 +9,7 @@ import { Mode } from '../../enums/mode.enum';
 export class CardTextComponent implements OnInit {
   readonly MAX_CHARACTERS = 100;
 
-  @Input() mode: Mode;
+  @Input() mode: ModeEnum;
   @Input() text: string;
 
   @Output() textChange = new EventEmitter<string>();
@@ -23,6 +23,6 @@ export class CardTextComponent implements OnInit {
   }
 
   get Mode() {
-    return Mode;
+    return ModeEnum;
   }
 }

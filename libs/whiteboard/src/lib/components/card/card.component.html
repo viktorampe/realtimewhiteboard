@@ -6,8 +6,8 @@
   (press)="onPressCard()"
   (tap)="onTapCard()"
 >
-  <div class="card__content" [class.zoom]="mode === Mode.ZoomMode">
-    <ng-container *ngIf="mode !== Mode.UploadMode; else uploadMode">
+  <div class="card__content" [class.zoom]="mode === Mode.ZOOM">
+    <ng-container *ngIf="mode !== Mode.UPLOAD; else uploadMode">
       <campus-card-image
         *ngIf="viewModeImage; else viewModeText"
         class="card__content__image"

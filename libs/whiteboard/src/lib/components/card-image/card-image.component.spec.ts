@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconModule } from '@angular/material';
 import { By } from '@angular/platform-browser';
-import { Mode } from '../../enums/mode.enum';
+import { ModeEnum } from '../../enums/mode.enum';
 import { ImageToolbarComponent } from '../image-toolbar/image-toolbar.component';
 import { CardImageComponent } from './card-image.component';
 
@@ -27,7 +27,7 @@ describe('CardImageComponent', () => {
   });
 
   it('should show image toolbar if mode is EditMode', () => {
-    component.mode = Mode.EditMode;
+    component.mode = ModeEnum.EDIT;
     fixture.detectChanges();
 
     const toolbar = fixture.debugElement.queryAll(
@@ -37,7 +37,7 @@ describe('CardImageComponent', () => {
   });
 
   it('should not show image toolbar if mode is SelectedMode', () => {
-    component.mode = Mode.SelectedMode;
+    component.mode = ModeEnum.SELECTED;
     fixture.detectChanges();
 
     const toolbar = fixture.debugElement.queryAll(
