@@ -36,24 +36,7 @@
   $manage-task-content__list__drag--dragging-border-radius: 4px !default;
 
   // filters
-  $manage-task-content__filterbar-padding-top: 15px !default;
-  $manage-task-content__filterbar-padding-left: 15px !default;
-
-  $manage-task-content__filterbar__filter-width: 150px !default;
-  $manage-task-content__filterbar__filter-heigth: 50px !default;
-  $manage-task-content__filterbar__filter-padding-width: 8px !default;
-  $manage-task-content__filterbar__filter-padding-height: 12px !default;
-  $manage-task-content__filterbar__filter-border-color: $color-gray-4 !default;
-  $manage-task-content__filterbar__filter-foreground-color: $color-black-1 !default;
-  $manage-task-content__filterbar__filter-hover-background-color: inherit !default;
-  $manage-task-content__filterbar__filter-active-background-color: inherit !default;
-
-  $manage-task-content__filterbar__reset-width: 50px !default;
-  $manage-task-content__filterbar__reset-height: 50px !default;
-  $manage-task-content__filterbar__reset-border-width: 1px !default;
-  $manage-task-content__filterbar__reset-background-color: transparent !default;
-  $manage-task-content__filterbar__reset-margin-right: 20px !default;
-  $manage-task-content__filterbar__reset-margin-bottom: 10px !default;
+  $manage-task-content__filters-padding-left: $pages-method__chapter-padding-left !default;
 
   $manage-task-content__mat-list-padding-left--override: $pages-method__chapter-padding-left !default;
   $manage-task-content__mat-list-content-margin-left--override: 16px !default; // = used for list indentation -> depth
@@ -64,6 +47,10 @@
     background: $pages-kabas-tasks-background-color--primary;
   }
   .manage-task-content {
+    &__filters {
+      padding-left: $manage-task-content__filters-padding-left;
+    }
+
     &__books {
       background: $pages-kabas-tasks-background-color--secondary;
       padding: $manage-task-content__books-padding;

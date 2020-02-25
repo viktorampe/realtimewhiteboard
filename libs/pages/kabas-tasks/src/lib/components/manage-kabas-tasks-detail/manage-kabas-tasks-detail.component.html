@@ -59,7 +59,7 @@
 <campus-side-sheet
   #taskSidesheet
   *ngIf="task$ | async as task; else noTask"
-  [isOpenOnInit]="true"
+  [canClose]="false"
 >
   <campus-side-sheet-header>
     <ng-container [ngSwitch]="selectedTaskEduContents.length">

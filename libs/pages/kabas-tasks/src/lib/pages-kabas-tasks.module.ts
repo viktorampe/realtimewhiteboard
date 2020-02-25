@@ -11,7 +11,7 @@ import {
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { GuardsModule } from '@campus/guards';
 import { PagesSharedModule } from '@campus/pages/shared';
-import { SearchModule } from '@campus/search';
+import { SearchModule, SEARCH_RESULT_ITEM_UPDATER_TOKEN } from '@campus/search';
 import {
   ContentTaskActionsService,
   CONTENT_OPENER_TOKEN,
@@ -73,6 +73,10 @@ import { PagesKabasTasksRoutingModule } from './pages-kabas-tasks-routing.module
     },
     {
       provide: CONTENT_TASK_MANAGER_TOKEN,
+      useExisting: KabasTasksViewModel
+    },
+    {
+      provide: SEARCH_RESULT_ITEM_UPDATER_TOKEN,
       useExisting: KabasTasksViewModel
     },
     {

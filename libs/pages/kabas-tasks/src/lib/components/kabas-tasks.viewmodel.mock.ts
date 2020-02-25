@@ -67,6 +67,8 @@ export class MockKabasTasksViewModel
   public favoriteBookIdsForTask$: Observable<number[]>;
   public selectedBookTitle$: Observable<string>;
 
+  public updatedEduContentIds$: BehaviorSubject<number[]>;
+
   constructor(
     @Inject(ENVIRONMENT_SEARCHMODES_TOKEN)
     private searchModes: EnvironmentSearchModesInterface
@@ -136,6 +138,7 @@ export class MockKabasTasksViewModel
     this.methodYearsInArea$ = new BehaviorSubject<MethodYearsInterface[]>([
       new MethodYearsFixture()
     ]);
+    this.updatedEduContentIds$ = new BehaviorSubject([]);
   }
 
   public getCurrentToc() {
@@ -502,4 +505,6 @@ export class MockKabasTasksViewModel
   }
 
   public updateSearchState(state: SearchStateInterface) {}
+
+  public updateSearchResultItem() {}
 }

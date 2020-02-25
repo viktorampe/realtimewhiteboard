@@ -43,6 +43,11 @@ export class EduContentSearchResultComponent extends ResultItemBase
 
   ngOnInit() {
     super.ngOnInit();
+    this.update();
+  }
+
+  public update() {
+    super.update();
     this.setupActions();
   }
 
