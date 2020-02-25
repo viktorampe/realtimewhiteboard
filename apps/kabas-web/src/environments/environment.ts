@@ -74,7 +74,11 @@ export const environment: EnvironmentInterface = {
   },
   ui: {
     useNavItemStyle: true,
-    useInfoPanelStyle: false
+    useInfoPanelStyle: false,
+    footerHeight: 10,
+    backdrop: {
+      safeMargin: 48
+    }
   }
 };
 

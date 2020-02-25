@@ -36,7 +36,7 @@ registerLocaleData(localeBe, 'nl-BE');
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
-    UiModule.forRoot({ footerHeight: 10 }),
+    UiModule,
     SharedModule.forRoot(
       environment.features.alerts,
       environment.features.messages,

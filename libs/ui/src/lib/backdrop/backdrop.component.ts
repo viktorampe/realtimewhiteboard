@@ -19,7 +19,7 @@ import {
   ViewChild
 } from '@angular/core';
 import { WINDOW } from '@campus/browser';
-import { UiOptions, UI_OPTIONS } from '../ui-options';
+import { UiOptionsInterface, UI_OPTIONS } from '../ui-options';
 
 /**
  * Backdrop Reveal Action, needed as it's used as a selector in the API.
@@ -186,7 +186,7 @@ export class BackdropComponent implements AfterViewInit {
   constructor(
     @Inject(WINDOW) private window: Window,
     private cdRef: ChangeDetectorRef,
-    @Inject(UI_OPTIONS) private uiOptions: UiOptions
+    @Inject(UI_OPTIONS) private uiOptions: UiOptionsInterface
   ) {}
 
   ngAfterViewInit() {
@@ -225,7 +225,9 @@ export class BackdropComponent implements AfterViewInit {
     return this.uiOptions.footerHeight || 0;
   }
   private getSafeMargin(): number {
-    return 48;
+    return (
+      (this.uiOptions.backdrop && this.uiOptions.backdrop.safeMargin) || 48
+    );
   }
   private calculateDelta(): number {
     const frontLayerTop = this.frontLayerElement.nativeElement.offsetTop;

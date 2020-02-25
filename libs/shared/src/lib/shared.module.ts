@@ -21,7 +21,7 @@ import {
 } from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
-import { UiModule } from '@campus/ui';
+import { UiModule, UI_OPTIONS } from '@campus/ui';
 import {
   FilterService,
   FILTER_SERVICE_TOKEN,
@@ -268,6 +268,10 @@ export class SharedModule {
         },
         {
           provide: ENVIRONMENT_UI_TOKEN,
+          useValue: environmentUi
+        },
+        {
+          provide: UI_OPTIONS,
           useValue: environmentUi
         }
       ]

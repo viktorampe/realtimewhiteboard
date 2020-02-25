@@ -2,7 +2,7 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { CdkTreeModule } from '@angular/cdk/tree';
 import { CommonModule } from '@angular/common';
-import { ModuleWithProviders, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   DateAdapter,
@@ -96,7 +96,6 @@ import { SideSheetPageDirective } from './side-sheet/directives/side-sheet-page.
 import { SideSheetComponent } from './side-sheet/side-sheet.component';
 import { TileComponent } from './tile/tile.component';
 import { TreeNavComponent } from './tree-nav/tree-nav.component';
-import { UiOptions, UI_OPTIONS } from './ui-options';
 import { HideDesktopDirective } from './utils/directives/hide-desktop.directive';
 import { HideMobileDirective } from './utils/directives/hide-mobile.directive';
 import { IsMobileDirective } from './utils/directives/is-mobile.directive';
@@ -294,16 +293,4 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
   ],
   entryComponents: [ConfirmationModalComponent]
 })
-export class UiModule {
-  static forRoot(options: UiOptions): ModuleWithProviders {
-    return {
-      ngModule: UiModule,
-      providers: [
-        {
-          provide: UI_OPTIONS,
-          useValue: options
-        }
-      ]
-    };
-  }
-}
+export class UiModule {}
