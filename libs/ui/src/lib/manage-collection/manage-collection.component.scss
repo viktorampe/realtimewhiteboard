@@ -1,7 +1,5 @@
 @import 'libs/ui/src/lib/breakpoints.scss';
-$light-gray: #d2d2d2;
-$dark-gray: #808080;
-$black: #242424;
+
 :host {
   display: flex;
   flex-direction: column;
@@ -22,20 +20,8 @@ $black: #242424;
       flex-direction: row;
       align-items: center;
 
-      &--top {
-        margin-bottom: 8px;
-      }
-      &--bottom {
-        padding-left: 32px;
-      }
-
-      .title {
-        margin-right: 16px;
-      }
-
       mat-icon {
         cursor: pointer;
-        margin-right: 8px;
       }
     }
   }
@@ -43,7 +29,6 @@ $black: #242424;
     border: none;
     border-top-width: 1px;
     border-top-style: solid;
-    margin: 24px -24px;
   }
 }
 
