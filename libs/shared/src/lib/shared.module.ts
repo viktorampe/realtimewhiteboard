@@ -22,7 +22,9 @@ import {
 import { DomSanitizer } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import {
+  EnvironmentCollectionManagementFeatureInterface,
   EnvironmentUIInterface,
+  ENVIRONMENT_COLLECTION_MANAGEMENT_FEATURE_TOKEN,
   ENVIRONMENT_UI_TOKEN,
   UiModule
 } from '@campus/ui';
@@ -198,6 +200,7 @@ export class SharedModule {
     environmentErrorManagementFeature: EnvironmentErrorManagementFeatureInterface,
     environmentGlobalSearch: EnvironmentGlobalSearchFeatureInterface,
     environmentFavoritesFeature: EnvironmentFavoritesFeatureInterface,
+    environmentCollectionManagementFeature: EnvironmentCollectionManagementFeatureInterface,
     environmentIconMapping: EnvironmentIconMappingInterface,
     environmentWebsite: EnvironmentWebsiteInterface,
     environmentLogout: EnvironmentLogoutInterface,
@@ -231,6 +234,10 @@ export class SharedModule {
         {
           provide: ENVIRONMENT_FAVORITES_FEATURE_TOKEN,
           useValue: environmentFavoritesFeature
+        },
+        {
+          provide: ENVIRONMENT_COLLECTION_MANAGEMENT_FEATURE_TOKEN,
+          useValue: environmentCollectionManagementFeature
         },
         {
           provide: ENVIRONMENT_WEBSITE_TOKEN,
