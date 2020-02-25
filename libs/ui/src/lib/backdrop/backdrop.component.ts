@@ -19,6 +19,7 @@ import {
   ViewChild
 } from '@angular/core';
 import { WINDOW } from '@campus/browser';
+import { UiOptions, UI_OPTIONS } from '../ui-options';
 
 /**
  * Backdrop Reveal Action, needed as it's used as a selector in the API.
@@ -184,7 +185,8 @@ export class BackdropComponent implements AfterViewInit {
 
   constructor(
     @Inject(WINDOW) private window: Window,
-    private cdRef: ChangeDetectorRef
+    private cdRef: ChangeDetectorRef,
+    @Inject(UI_OPTIONS) private uiOptions: UiOptions
   ) {}
 
   ngAfterViewInit() {
@@ -192,14 +194,16 @@ export class BackdropComponent implements AfterViewInit {
     this.maxDelta = this.calculateMaxDelta();
 
     if (this.delta > this.maxDelta) {
-      this.delta = this.maxDelta;
-      this.frontLayerHeight = this.delta + 14;
+      this.delta = this.maxDelta - this.getFooterHeight();
+      this.frontLayerHeight = this.delta + this.getSafeMargin();
     } else {
       this.frontLayerHeight =
-        this.window.innerHeight - this.getHeaderBottomOffset();
+        this.window.innerHeight -
+        this.getHeaderBottomOffset() -
+        this.getFooterHeight();
     }
 
-    this.backLayerContentMaxHeight = this.maxDelta;
+    this.backLayerContentMaxHeight = this.maxDelta - this.getFooterHeight();
     this.dropTranslation = this.getDropTranslation(); //Initial state
     this.cdRef.detectChanges();
   }
@@ -216,6 +220,9 @@ export class BackdropComponent implements AfterViewInit {
     const backdropHeaderHeight = this.backHeaderElement.nativeElement
       .offsetHeight;
     return backdropLayerTop + backdropHeaderHeight;
+  }
+  private getFooterHeight(): number {
+    return this.uiOptions.footerHeight || 0;
   }
   private getSafeMargin(): number {
     return 48;
