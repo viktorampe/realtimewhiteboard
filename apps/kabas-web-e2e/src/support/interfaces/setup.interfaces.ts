@@ -86,3 +86,11 @@ export interface KabasPracticePagesInterface {
     };
   };
 }
+
+export interface KabasTasksPagesInterface {
+  kabasTasksPages: {
+    loginTeacher: { username: string; password: string };
+    book: number;
+    expected: {};
+  };
+}
