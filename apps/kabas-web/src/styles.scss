@@ -186,11 +186,6 @@ hr {
 
 .mat-checkbox {
   &-disabled {
-    .mat-checkbox-frame,
-    .mat-checkbox-background {
-      border: 2px solid $primary-font-color-2 !important;
-    }
-
     .mat-checkbox-checkmark-path {
       stroke: $primary-font-color-2 !important;
     }
