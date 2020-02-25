@@ -49,12 +49,14 @@
       <div class="manage-kabas-tasks-overview__filterbar">
         <div class="manage-kabas-tasks-overview__filterbar__filters">
           <campus-search-term
+            data-cy="name-filter"
             placeholder="Filter op naam"
             [autoComplete]="false"
             (valueChange)="searchTermUpdated($event, 'digital')"
             [emitOnTextChange]="true"
           ></campus-search-term>
           <campus-select-filter
+            data-cy="area-filter"
             multiple="true"
             *ngIf="learningAreaFilter$ | async as learningAreaFilter"
             [filterCriteria]="learningAreaFilter"
@@ -65,6 +67,7 @@
           ></campus-select-filter>
 
           <campus-date-filter
+            data-cy="date-filter"
             class="manage-kabas-tasks-overview__date-filter"
             [options]="fixedDateFilterOptions"
             [filterCriteria]="dateFilterCriteria"
@@ -73,6 +76,7 @@
             "
           ></campus-date-filter>
           <campus-select-filter
+            data-cy="assignee-filter"
             multiple="true"
             *ngIf="assigneeFilter$ | async as assigneeFilter"
             [filterCriteria]="assigneeFilter"
@@ -83,6 +87,7 @@
           ></campus-select-filter>
 
           <campus-button-toggle-filter
+            data-cy="status-filter"
             [disabled]="isArchivedFilterActive"
             [multiple]="true"
             (filterSelectionChange)="
@@ -94,6 +99,7 @@
 
           <div class="manage-kabas-tasks-overview__archive-toggle">
             <mat-slide-toggle
+              data-cy="archived-filter"
               color="primary"
               (change)="archivedFilterToggled($event, 'digital')"
             >
@@ -101,6 +107,7 @@
             </mat-slide-toggle>
           </div>
           <campus-button
+            data-cy="reset-filters"
             (click)="clickResetFilters('digital')"
             class="manage-kabas-tasks-overview__reset-filters"
             iconClass="reset-filters"
@@ -108,6 +115,7 @@
           <div style="flex-grow: 1;"></div>
 
           <mat-select
+            data-cy="sort-dropdown"
             class="manage-kabas-tasks-overview__sorting"
             (selectionChange)="setSortMode($event.value)"
             #digitalSorting
@@ -137,6 +145,7 @@
         </ng-container>
       </div>
       <div
+        data-cy="new-task-digital"
         (click)="clickAddDigitalTask()"
         class="manage-kabas-tasks-overview__list__primary-action"
       >
@@ -252,6 +261,7 @@
         </ng-template>
       </div>
       <div
+        data-cy="new-task-paper"
         (click)="clickAddPaperTask()"
         class="manage-kabas-tasks-overview__list__primary-action"
       >

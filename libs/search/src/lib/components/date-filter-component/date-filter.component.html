@@ -11,6 +11,7 @@
       aria-label="Select an option"
     >
       <mat-radio-button
+        data-cy="date-option"
         *ngFor="let option of radioOptions"
         [value]="option.value"
         >{{ option.viewValue }}</mat-radio-button
@@ -49,7 +50,9 @@
         </div>
       </mat-radio-button>
     </mat-radio-group>
-    <campus-button primary (click)="applyFilter()">Filteren</campus-button>
+    <campus-button data-cy="date-confirm" primary (click)="applyFilter()"
+      >Filteren</campus-button
+    >
     <campus-button (click)="applyFilter(true)">Annuleren</campus-button>
   </div>
 </mat-menu>

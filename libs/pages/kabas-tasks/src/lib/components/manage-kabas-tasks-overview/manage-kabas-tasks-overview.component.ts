@@ -64,6 +64,12 @@ export enum TaskSortEnum {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ManageKabasTasksOverviewComponent implements OnInit {
+  // Todo: move to date utils because this is ugly
+  private schoolYear =
+    new Date().getMonth() + 1 < 8
+      ? new Date().getFullYear() - 1
+      : new Date().getFullYear();
+
   public TaskSortEnum = TaskSortEnum;
   public tasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
   public paperTasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
@@ -83,8 +89,8 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
         type: RadioOptionValueType.FilterCriteriaValue,
         contents: {
           data: {
-            gte: new Date(new Date().getFullYear(), 8, 1),
-            lte: new Date(new Date().getFullYear() + 1, 5, 30)
+            gte: new Date(this.schoolYear, 8, 1),
+            lte: new Date(this.schoolYear + 1, 5, 30)
           }
         }
       }

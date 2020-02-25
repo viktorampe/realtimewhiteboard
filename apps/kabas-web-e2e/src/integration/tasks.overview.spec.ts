@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-import { cyEnv, login, performSetup } from '../support/commands';
+import { cyEnv, dataCy, login, performSetup } from '../support/commands';
 import {
   ApiPathsInterface,
   AppPathsInterface,
@@ -35,7 +35,66 @@ describe('Tasks Overview', () => {
       cy.visit(`${appPaths.tasks}/manage`);
     });
 
-    it('doesnt do anything', () => {});
+    describe('digital', () => {
+      xit('should show all the elements', () => {
+        // tabs, can't use dataCy because they disappear
+        cy.get('.mat-tab-label-content')
+          .eq(0)
+          .should('have.text', 'Digitale taken');
+        cy.get('.mat-tab-label-content')
+          .eq(1)
+          .should('have.text', 'Papieren taken');
+
+        // filters
+        dataCy('name-filter').should('exist');
+        dataCy('area-filter').should('exist');
+        dataCy('date-filter').should('exist');
+        dataCy('assignee-filter').should('exist');
+        dataCy('status-filter').should('exist');
+        dataCy('archived-filter').should('exist');
+        dataCy('reset-filters').should('exist');
+
+        // sorting
+        dataCy('sort-dropdown').should('exist');
+
+        // new task
+        dataCy('new-task-digital').should('exist');
+        dataCy('nav-new-task').should('exist');
+      });
+
+      it('should filter tasks', () => {
+        dataCy('name-filter')
+          .find('input')
+          .focus()
+          .type('active');
+
+        dataCy('area-filter').click();
+        dataCy('select-option')
+          .eq(0)
+          .click();
+        cy.get('body').type('{esc}');
+
+        dataCy('date-filter').click();
+        dataCy('date-option')
+          .eq(1)
+          .click();
+        dataCy('date-confirm').click();
+
+        dataCy('assignee-filter').click();
+        dataCy('select-option')
+          .eq(0)
+          .click();
+        cy.get('body').type('{esc}');
+
+        dataCy('status-filter')
+          .get('[data-cy=button-toggle-button')
+          .eq(1)
+          .click();
+
+        dataCy('archived-filter').click();
+        dataCy('reset-filters').click();
+      });
+    });
 
     // it('practice manage page - in book', () => {
     //   dataCy('check-box-table-item-column-header')
