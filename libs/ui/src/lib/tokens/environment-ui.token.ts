@@ -1,9 +1,12 @@
 import { InjectionToken } from '@angular/core';
-import { UiOptionsInterface } from '../ui-options';
 
-export interface EnvironmentUIInterface extends UiOptionsInterface {
+export interface EnvironmentUIInterface {
   useNavItemStyle?: boolean;
   useInfoPanelStyle?: boolean;
+  footerHeight?: number;
+  backdrop?: {
+    safeMargin?: number;
+  };
   useModalSideSheetStyle?: boolean;
 }
 

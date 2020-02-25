@@ -26,8 +26,7 @@ import {
   EnvironmentUIInterface,
   ENVIRONMENT_COLLECTION_MANAGEMENT_FEATURE_TOKEN,
   ENVIRONMENT_UI_TOKEN,
-  UiModule,
-  UI_OPTIONS
+  UiModule
 } from '@campus/ui';
 import {
   FilterService,
@@ -278,10 +277,6 @@ export class SharedModule {
         },
         {
           provide: ENVIRONMENT_UI_TOKEN,
-          useValue: environmentUi
-        },
-        {
-          provide: UI_OPTIONS,
           useValue: environmentUi
         }
       ]
