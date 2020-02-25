@@ -1,13 +1,24 @@
-<ng-content select=".ui-list-item__icon"></ng-content>
+<ng-content
+  select="[campusListItemIcon], [ListItemIcon], list-item-icon, [list-item-icon]"
+></ng-content>
 <div class="ui-list-item__container ui-list-item__container--center">
-  <ng-content select=".ui-list-item__title"></ng-content>
-  <ng-content select=".ui-list-item__caption"></ng-content>
-  <ng-content select=".ui-list-item__actions"> </ng-content>
+  <ng-content
+    select="[campusListItemTitle], [ListItemTitle], list-item-title, [list-item-title]"
+  ></ng-content>
+  <ng-content
+    select="[campusListItemCaption], [ListItemCaption], list-item-caption, [list-item-caption]"
+  ></ng-content>
+  <ng-content
+    select="[campusListItemActions], [ListItemActions], list-item-actions, [list-item-actions]"
+  >
+  </ng-content>
 </div>
 
 <div
   class="ui-list-item__container ui-list-item__container--right"
   [class.ui-list-item__content-right--separated]="contentRightSeparated"
 >
-  <ng-content select=".ui-list-item__content-right"></ng-content>
+  <ng-content
+    select="list-item-content, [campusListItemContent], [ListItemContent], [list-item-content]"
+  ></ng-content>
 </div>

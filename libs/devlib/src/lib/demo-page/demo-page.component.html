@@ -1,25 +1,48 @@
+<div>tags</div>
 <mat-selection-list>
   <mat-list-option [checkboxPosition]="'before'">
     <campus-list-item-content>
-      <mat-icon class="ui-list-item__icon" [svgIcon]="'exercise'"></mat-icon>
-      <div class="ui-list-item__title">Dit is een titel</div>
-      <div class="ui-list-item__caption">Dit is een beschrijving</div>
-      <div class="ui-list-item__actions">
+      <list-item-icon
+        ><mat-icon ist-item-icon [svgIcon]="'exercise'"></mat-icon
+      ></list-item-icon>
+      <list-item-title>Dit is een titel</list-item-title>
+      <list-item-caption>Dit is een beschrijving</list-item-caption>
+      <list-item-actions>
+        <span>1</span>
+        <span>2</span>
+        <span>3</span>
+        <span>4</span></list-item-actions
+      >
+      <list-item-content
+        ><mat-icon svgIcon="diabolo-intro" list-item-content></mat-icon
+      ></list-item-content>
+      <list-item-content list-item-content>
+        de rest die rechts moet
+      </list-item-content>
+    </campus-list-item-content>
+  </mat-list-option>
+</mat-selection-list>
+<div>attributes</div>
+<mat-selection-list>
+  <mat-list-option [checkboxPosition]="'before'">
+    <campus-list-item-content>
+      <mat-icon list-item-icon [svgIcon]="'exercise'"></mat-icon>
+      <div list-item-title>Dit is een titel</div>
+      <div list-item-caption>Dit is een beschrijving</div>
+      <div list-item-actions>
         <span>1</span>
         <span>2</span>
         <span>3</span>
         <span>4</span></div
       >
-      <mat-icon
-        svgIcon="diabolo-intro"
-        class="ui-list-item__content-right"
-      ></mat-icon>
-      <div class="ui-list-item__content-right">
+      <mat-icon svgIcon="diabolo-intro" list-item-content></mat-icon>
+      <div list-item-content>
         de rest die rechts moet
       </div>
     </campus-list-item-content>
   </mat-list-option>
 </mat-selection-list>
+
 <div class="container">
   <campus-empty-state
     svgIcon="empty-state-all-done"

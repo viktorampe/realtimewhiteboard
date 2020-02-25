@@ -12,8 +12,12 @@ $ui-list-item-content_icon-width: 50px !default;
     &__icon {
       align-self: center;
       margin-right: $ui-list-item-content-spacing--horizontal;
-      width: $ui-list-item-content_icon-width !important;
       color: $ui-list-item-content_icon-color;
+      width: $ui-list-item-content_icon-width !important;
+
+      & > mat-icon {
+        width: inherit !important;
+      }
     }
 
     &__title {

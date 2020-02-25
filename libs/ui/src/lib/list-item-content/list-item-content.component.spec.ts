@@ -1,5 +1,4 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { ListItemContentComponent } from './list-item-content.component';
 
 describe('ListItemContentComponent', () => {

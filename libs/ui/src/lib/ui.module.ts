@@ -55,6 +55,14 @@ import { FolderDetailsDirective } from './folder/directives/folder-details.direc
 import { FolderComponent } from './folder/folder.component';
 import { InfoPanelComponent } from './info-panel/info-panel.component';
 import {
+  ListItemActions,
+  ListItemCaption,
+  ListItemContent,
+  ListItemContentComponent,
+  ListItemIcon,
+  ListItemTitle
+} from './list-item-content/list-item-content.component';
+import {
   ListViewComponent,
   ListViewItemDirective
 } from './list-view/list-view.component';
@@ -95,7 +103,6 @@ import { HumanDateTimePipe } from './utils/pipes/human-date-time/human-date-time
 import { JoinPipe } from './utils/pipes/join/join.pipe';
 import { RemovePrefixStringPipe } from './utils/pipes/remove-prefix-string/remove-prefix-string.pipe';
 import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-string.pipe';
-import { ListItemContentComponent } from './list-item-content/list-item-content.component';
 @NgModule({
   imports: [
     OverlayModule,
@@ -189,7 +196,12 @@ import { ListItemContentComponent } from './list-item-content/list-item-content.
     SectionContent,
     SectionActions,
     SectionTitle,
-    ListItemContentComponent
+    ListItemContentComponent,
+    ListItemIcon,
+    ListItemTitle,
+    ListItemCaption,
+    ListItemActions,
+    ListItemContent
   ],
   exports: [
     FilterTextInputComponent,
@@ -260,7 +272,12 @@ import { ListItemContentComponent } from './list-item-content/list-item-content.
     SectionContent,
     SectionActions,
     SectionTitle,
-    ListItemContentComponent
+    ListItemContentComponent,
+    ListItemIcon,
+    ListItemTitle,
+    ListItemCaption,
+    ListItemActions,
+    ListItemContent
   ],
   providers: [
     {
