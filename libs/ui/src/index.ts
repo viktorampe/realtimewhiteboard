@@ -34,11 +34,13 @@ export {
   BadgePersonInterface,
   PersonBadgeComponent
 } from './lib/person-badge/person-badge.component';
+export { SectionModeEnum } from './lib/section/section.component';
 export { SideSheetComponent } from './lib/side-sheet/side-sheet.component';
 export {
   TileComponent,
   TileSecondaryActionInterface
 } from './lib/tile/tile.component';
+export * from './lib/tokens';
 export { NavItem } from './lib/tree-nav/tree-nav.component';
 export * from './lib/ui-options';
 export * from './lib/ui.module';

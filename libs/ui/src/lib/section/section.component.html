@@ -5,7 +5,7 @@
   [class.ui-section--editing]="mode === modes.EDITING"
   [class.ui-section--static]="mode === modes.STATIC"
 >
-  <div class="ui-section__header">
+  <div class="ui-section__header" *ngIf="sectionTitle">
     <ng-content select="section-title"></ng-content>
     <div class="ui-section__header__actions" (click)="clickAction($event)">
       <ng-content select="section-actions"></ng-content>

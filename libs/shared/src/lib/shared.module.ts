@@ -21,7 +21,14 @@ import {
 } from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
-import { UiModule, UI_OPTIONS } from '@campus/ui';
+import {
+  EnvironmentCollectionManagementFeatureInterface,
+  EnvironmentUIInterface,
+  ENVIRONMENT_COLLECTION_MANAGEMENT_FEATURE_TOKEN,
+  ENVIRONMENT_UI_TOKEN,
+  UiModule,
+  UI_OPTIONS
+} from '@campus/ui';
 import {
   FilterService,
   FILTER_SERVICE_TOKEN,
@@ -71,10 +78,8 @@ import {
   ENVIRONMENT_SSO_TOKEN,
   ENVIRONMENT_TERM_PRIVACY_TOKEN,
   ENVIRONMENT_TESTING_TOKEN,
-  ENVIRONMENT_UI_TOKEN,
   ENVIRONMENT_WEBSITE_TOKEN
 } from './interfaces';
-import { EnvironmentUIInterface } from './interfaces/environment.interfaces';
 import { AlertToNotificationItemPipe } from './pipes/alert-to-notification/alert-to-notification-pipe';
 import { MailToByCredentialPipe } from './pipes/mail-to/mail-to-credential-pipe';
 import { PersonBadgeFromCredentialPipe } from './pipes/person-badge-from-credential/person-badge-from-credential-pipe';
@@ -196,6 +201,7 @@ export class SharedModule {
     environmentErrorManagementFeature: EnvironmentErrorManagementFeatureInterface,
     environmentGlobalSearch: EnvironmentGlobalSearchFeatureInterface,
     environmentFavoritesFeature: EnvironmentFavoritesFeatureInterface,
+    environmentCollectionManagementFeature: EnvironmentCollectionManagementFeatureInterface,
     environmentIconMapping: EnvironmentIconMappingInterface,
     environmentWebsite: EnvironmentWebsiteInterface,
     environmentLogout: EnvironmentLogoutInterface,
@@ -229,6 +235,10 @@ export class SharedModule {
         {
           provide: ENVIRONMENT_FAVORITES_FEATURE_TOKEN,
           useValue: environmentFavoritesFeature
+        },
+        {
+          provide: ENVIRONMENT_COLLECTION_MANAGEMENT_FEATURE_TOKEN,
+          useValue: environmentCollectionManagementFeature
         },
         {
           provide: ENVIRONMENT_WEBSITE_TOKEN,

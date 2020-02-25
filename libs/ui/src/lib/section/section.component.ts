@@ -1,6 +1,8 @@
 import {
   Component,
+  ContentChild,
   Directive,
+  ElementRef,
   EventEmitter,
   Input,
   Output
@@ -48,11 +50,13 @@ export class SectionActions {}
   styleUrls: ['./section.component.scss']
 })
 export class SectionComponent {
-  @Input() mode: SectionModeEnum;
+  @Input() mode: SectionModeEnum = SectionModeEnum.STATIC;
   @Output() modeChange = new EventEmitter<SectionModeEnum>();
   @Output() actionClick = new EventEmitter<void>();
 
   modes = SectionModeEnum; // needed for usage in the template
+
+  @ContentChild(SectionTitle, { static: true }) sectionTitle: ElementRef;
 
   constructor() {}
 

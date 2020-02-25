@@ -51,6 +51,9 @@ export const environment = {
         FavoriteTypesEnum.TASK,
         FavoriteTypesEnum.EDUCONTENT
       ]
+    },
+    collectionManagement: {
+      useFilter: false
     }
   },
   sso: {},
@@ -64,6 +67,7 @@ export const environment = {
     footerHeight: 10,
     backdrop: {
       safeMargin: 48
-    }
+    },
+    useModalSideSheetStyle: true
   }
 };
