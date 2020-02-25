@@ -9,4 +9,8 @@ export class DemoPageComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {}
+
+  clickEmptyCta() {
+    console.log('Empty State CTA Clicked!');
+  }
 }

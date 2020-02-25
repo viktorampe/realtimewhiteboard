@@ -4,6 +4,12 @@
   &__drawer {
     overflow-x: hidden;
     width: 290px;
+
+    &__container {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
   }
 
   &__header {
@@ -13,8 +19,7 @@
     white-space: nowrap;
     line-height: 25px;
     margin: 0;
-    font-size: 14px;
-    font-weight: 300;
+
     a {
       cursor: pointer;
     }
@@ -22,5 +27,6 @@
 
   &__body {
     padding: 25px;
+    flex: 1 1 auto;
   }
 }

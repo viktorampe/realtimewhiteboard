@@ -80,6 +80,7 @@ import { ShellLeftDirective } from './shell/directives/shell-left.directive';
 import { ShellLogoDirective } from './shell/directives/shell-logo.directive';
 import { ShellTopDirective } from './shell/directives/shell-top.directive';
 import { ShellComponent } from './shell/shell.component';
+import { SideSheetActionsDirective } from './side-sheet/directives/side-sheet-actions.directive';
 import { SideSheetBodyDirective } from './side-sheet/directives/side-sheet-body.directive';
 import { SideSheetHeaderDirective } from './side-sheet/directives/side-sheet-header.directive';
 import { SideSheetPageDirective } from './side-sheet/directives/side-sheet-page.directive';
@@ -125,6 +126,7 @@ import { ListItemContentComponent } from './list-item-content/list-item-content.
     FilterTextInputComponent,
     SideSheetComponent,
     SideSheetHeaderDirective,
+    SideSheetActionsDirective,
     SideSheetBodyDirective,
     SideSheetPageDirective,
     ShellComponent,
@@ -193,6 +195,7 @@ import { ListItemContentComponent } from './list-item-content/list-item-content.
     FilterTextInputComponent,
     SideSheetComponent,
     SideSheetHeaderDirective,
+    SideSheetActionsDirective,
     SideSheetBodyDirective,
     SideSheetPageDirective,
     ShellComponent,

@@ -1,6 +1,21 @@
+import { Dictionary } from '@ngrx/entity';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { TaskInterface } from '../../+models';
+import {
+  EduContent,
+  EduContentInterface,
+  FavoriteInterface,
+  LearningAreaInterface,
+  TaskEduContentInterface,
+  TaskInterface
+} from '../../+models';
 import { Task } from '../../+models/Task';
+import { FavoriteQueries } from '../favorite';
+import { LearningAreaQueries } from '../learning-area';
+import { getTaskClassGroupAssigneeByTask } from '../task-class-group/task-class-group.selectors';
+import { TaskEduContentQueries } from '../task-edu-content';
+import { getTaskGroupAssigneeByTask } from '../task-group/task-group.selectors';
+import { getTaskStudentAssigneeByTask } from '../task-student/task-student.selectors';
+import { AssigneeInterface } from './Assignee.interface';
 import {
   NAME,
   selectAll,
@@ -9,6 +24,10 @@ import {
   selectTotal,
   State
 } from './task.reducer';
+import {
+  TaskStatusEnum,
+  TaskWithAssigneesInterface
+} from './TaskWithAssignees.interface';
 
 export const selectTaskState = createFeatureSelector<State>(NAME);
 
@@ -131,3 +150,114 @@ function asTask(item: TaskInterface): Task {
     return Object.assign<Task, TaskInterface>(new Task(), item);
   }
 }
+
+function toEduContent(eduContent: EduContentInterface) {
+  return Object.assign<EduContent, EduContentInterface>(
+    new EduContent(),
+    eduContent
+  );
+}
+
+function addTaskDates(
+  taskWithAssignees: TaskWithAssigneesInterface
+): TaskWithAssigneesInterface {
+  const now = new Date();
+  const { assignees } = taskWithAssignees;
+  let status = TaskStatusEnum.PENDING;
+
+  const maxDate = dates =>
+    dates.length ? new Date(Math.max(...dates)) : undefined;
+  const minDate = dates =>
+    dates.length ? new Date(Math.min(...dates)) : undefined;
+
+  const startDate = minDate(assignees.filter(a => a.start).map(a => +a.start));
+  const endDate = maxDate(assignees.filter(a => a.end).map(a => +a.end));
+
+  if (startDate && endDate) {
+    if (startDate > now) {
+      status = TaskStatusEnum.PENDING;
+    } else if (endDate > now) {
+      status = TaskStatusEnum.ACTIVE;
+    } else {
+      status = TaskStatusEnum.FINISHED;
+    }
+  }
+
+  return { ...taskWithAssignees, startDate, endDate, status };
+}
+
+function mapToTaskWithAssigneeInterface(
+  task: TaskInterface,
+  learningArea: LearningAreaInterface,
+  taskEduContents: TaskEduContentInterface[],
+  assigneesByTask: Dictionary<AssigneeInterface[]>,
+  favoriteTaskIds: number[]
+): TaskWithAssigneesInterface {
+  return addTaskDates({
+    ...task,
+    learningArea: learningArea,
+    eduContentAmount: taskEduContents ? taskEduContents.length : 0,
+    taskEduContents: (taskEduContents || [])
+      .sort((a, b) => a.index - b.index)
+      .map(tEdu => ({
+        ...tEdu,
+        eduContent: toEduContent(tEdu.eduContent)
+      })),
+    assignees: assigneesByTask[task.id] || [],
+    isFavorite: favoriteTaskIds.includes(task.id)
+  });
+}
+
+export const combinedAssigneesByTask = createSelector(
+  [
+    getTaskClassGroupAssigneeByTask,
+    getTaskGroupAssigneeByTask,
+    getTaskStudentAssigneeByTask
+  ],
+  (tCGA, tGA, tSA, props) => {
+    const taskClassGroupAssigneesKeys = Object.keys(tCGA);
+    const taskGroupAssigneesKeys = Object.keys(tGA);
+    const taskStudentAssigneesKeys = Object.keys(tSA);
+
+    const dict = [
+      ...taskClassGroupAssigneesKeys,
+      ...taskGroupAssigneesKeys,
+      ...taskStudentAssigneesKeys
+    ].reduce((acc, key) => {
+      if (!acc[key]) {
+        acc[key] = [].concat(tCGA[key] || [], tGA[key] || [], tSA[key] || []);
+      }
+      return acc;
+    }, {});
+
+    return dict;
+  }
+);
+
+export const getAllTasksWithAssignments = createSelector(
+  [
+    getAll,
+    LearningAreaQueries.getAllEntities,
+    TaskEduContentQueries.getAllGroupedByTaskId,
+    combinedAssigneesByTask,
+    FavoriteQueries.getTaskFavorites
+  ],
+  (
+    tasks: TaskInterface[],
+    learningAreaDict: Dictionary<LearningAreaInterface>,
+    taskEduContentByTask: Dictionary<TaskEduContentInterface[]>,
+    assigneesByTask: Dictionary<AssigneeInterface[]>,
+    favoriteTasks: FavoriteInterface[]
+  ) => {
+    const favoriteTaskIds = favoriteTasks.map(fav => fav.taskId);
+    return tasks.map(task =>
+      mapToTaskWithAssigneeInterface(
+        task,
+        learningAreaDict[task.learningAreaId],
+        taskEduContentByTask[task.id],
+        assigneesByTask,
+        favoriteTaskIds
+      )
+    );
+  }
+);

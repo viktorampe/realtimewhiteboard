@@ -6,7 +6,7 @@ import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/t
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Params, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { TaskEduContentFixture } from '@campus/dal';
+import { TaskEduContentFixture, TaskWithAssigneesInterface } from '@campus/dal';
 import {
   ResultItemMockComponent,
   SearchComponent,
@@ -24,8 +24,10 @@ import { UiModule } from '@campus/ui';
 import { hot } from '@nrwl/angular/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { BehaviorSubject } from 'rxjs';
-import { TaskEduContentWithEduContentInterface } from '../../interfaces/TaskEduContentWithEduContent.interface';
-import { TaskWithAssigneesInterface } from '../../interfaces/TaskWithAssignees.interface';
+import {
+  TaskEduContentWithEduContentInterface,
+  TaskWithTaskEduContentInterface
+} from '../../interfaces/TaskEduContentWithEduContent.interface';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
 import { MockKabasTasksViewModel } from '../kabas-tasks.viewmodel.mock';
 import { ManageTaskContentComponent } from './manage-task-content.component';
@@ -38,7 +40,7 @@ describe('ManageTaskContentComponent', () => {
   let searchComponent;
   let viewModel: MockKabasTasksViewModel;
 
-  let currentTask: TaskWithAssigneesInterface;
+  let currentTask: TaskWithTaskEduContentInterface;
   let restOfTasks: TaskWithAssigneesInterface[];
   let taskEduContents: TaskEduContentWithEduContentInterface[];
 
@@ -84,7 +86,12 @@ describe('ManageTaskContentComponent', () => {
     searchComponent = TestBed.get(SearchComponent);
     component.searchComponent = searchComponent;
 
-    [currentTask, ...restOfTasks] = viewModel.tasksWithAssignments$.value;
+    let firstTask: TaskWithAssigneesInterface;
+    [firstTask, ...restOfTasks] = viewModel.tasksWithAssignments$.value;
+    currentTask = {
+      ...firstTask,
+      taskEduContents: firstTask.taskEduContents as TaskEduContentWithEduContentInterface[]
+    };
     taskEduContents = currentTask.taskEduContents;
 
     fixture.detectChanges();

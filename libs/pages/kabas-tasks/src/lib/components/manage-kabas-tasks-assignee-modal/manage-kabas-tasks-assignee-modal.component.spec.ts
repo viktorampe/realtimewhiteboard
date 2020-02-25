@@ -11,12 +11,12 @@ import {
 } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { AssigneeTypesEnum } from '@campus/dal';
 import { SearchModule } from '@campus/search';
 import { MockDate, MockMatIconRegistry } from '@campus/testing';
 import { DateRangePickerComponent, UiModule } from '@campus/ui';
 import { hot } from '@nrwl/angular/testing';
 import { configureTestSuite } from 'ng-bullet';
-import { AssigneeTypesEnum } from '../../interfaces/Assignee.interface';
 import { ManageKabasTasksAddAssigneesComponent } from './../manage-kabas-tasks-add-assignees/manage-kabas-tasks-add-assignees.component';
 import { ManageKabasTasksAssigneeDataInterface } from './manage-kabas-tasks-assignee-data.interface';
 import { ManageKabasTasksAssigneeModalComponent } from './manage-kabas-tasks-assignee-modal.component';

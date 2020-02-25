@@ -1,8 +1,8 @@
-import { AssigneeFixture } from './Assignee.fixture';
 import {
   TaskStatusEnum,
   TaskWithAssigneesInterface
-} from './TaskWithAssignees.interface';
+} from '../+state/task/TaskWithAssignees.interface';
+import { AssigneeFixture } from './Assignee.fixture';
 
 export class TaskWithAssigneesFixture implements TaskWithAssigneesInterface {
   name = 'FixtureOverhoring 1';
@@ -10,6 +10,7 @@ export class TaskWithAssigneesFixture implements TaskWithAssigneesInterface {
   eduContentAmount = 0;
   assignees = [new AssigneeFixture()];
   learningAreaId = 4;
+  taskEduContents = [];
 
   constructor(props: Partial<TaskWithAssigneesInterface> = {}) {
     Object.assign(this, props);

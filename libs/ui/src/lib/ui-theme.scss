@@ -1,10 +1,22 @@
+@import './mixins';
+
+// typography
+$ui-text-primary-color: #242424 !default;
+$ui-text-secondary-color: #808080 !default;
+$ui-text-disabled-color: #d2d2d2 !default;
+
+$ui-font-weight-light: 300 !default;
+$ui-font-weight-regular: 400 !default;
+$ui-font-weight-semibold: 600 !default;
+$ui-font-weight-bold: 700 !default;
+
 // main body
 $ui-primary-bg-color: #fff !default;
 $ui-primary-font-color: #000 !default;
 $ui-primary-font-size: 16px !default;
 $ui-primary-color-accent: #fff !default; // link, button (borders)
 $ui-primary-font-color-2: #aaa !default; // subtitle
-$ui-primary-font-family: 'Helvetica', 'Arial', 'Open Sans', sans-serif !default;
+$ui-primary-font-family: 'Open Sans', 'Helvetica', 'Arial', sans-serif !default;
 $ui-primary-font-family-2: 'Lato', sans-serif !default; // title
 $ui-primary-font-family-3: 'Oswald', 'Arial Narrow', Sans-Serif !default; // list item label
 $ui-danger-bg-color: #f00 !default;
@@ -28,6 +40,8 @@ $ui-tertiary-bg-color: $ui-primary-bg-color !default;
 $ui-tertiary-font-color: $ui-primary-font-color !default;
 $ui-tertiary-bg-color-2: #999 !default; // header
 $ui-tertiary-font-color-2: #fff !default; // header
+$ui-tertiary-font-size-2: 14px !default;
+$ui-tertiary-font-weight-2: 300 !default;
 $ui-tertiary-color-accent: $ui-primary-color-accent !default;
 $ui-tertiary-border-color: #999 !default;
 $ui-tertiary-icon-color: #999 !default;
@@ -93,6 +107,49 @@ $ui-tile-height: 105px !default;
   cursor: inherit;
 }
 
+// TYPOGRAPHY CLASSES
+@mixin setFont(
+  $size,
+  $weight: $ui-font-weight-regular,
+  $color: $ui-text-primary-color,
+  $family: $ui-primary-font-family
+) {
+  font-family: $family;
+  font-size: $size * 1px;
+  font-weight: $weight;
+  color: $color;
+}
+.ui-headline {
+  @include setFont(24);
+}
+.ui-title {
+  @include setFont(21, $ui-font-weight-semibold);
+}
+.ui-subheader {
+  @include setFont(16);
+}
+.ui-body-2,
+.ui-menu {
+  @include setFont(14, $ui-font-weight-semibold);
+}
+.ui-body-1 {
+  @include setFont(14);
+}
+.ui-caption {
+  @include setFont($size: 12, $color: $ui-text-secondary-color);
+}
+.ui-button-text {
+  @include setFont(15, $ui-font-weight-semibold);
+  text-transform: uppercase;
+}
+.ui-action-text {
+  @include setFont(12);
+  text-transform: uppercase;
+}
+.ui-tooltip-text {
+  @include setFont(10);
+}
+
 // import all required sass files from our libs
 @import './folder/folder.component.theme.scss';
 @import './tree-nav/tree-nav.component.theme';
@@ -128,6 +185,7 @@ $ui-tile-height: 105px !default;
 @import './date-range-picker/date-range-picker.component.theme.scss';
 @import './section/section.component.theme.scss';
 @import './list-item-content/list-item-content.component.theme.scss';
+@import './empty-state/empty-state.theme.scss';
 
 @mixin elevation($dp) {
   @if $dp==0 {
@@ -308,4 +366,5 @@ campus-date-range-picker {
   @include ui-date-range-picker();
   @include ui-section();
   @include ui-list-item-content();
+  @include ui-empty-state();
 }

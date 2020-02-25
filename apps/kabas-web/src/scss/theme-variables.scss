@@ -7,7 +7,18 @@ $color-blue-1: #65c1ea;
 $color-red-2: #ec727c;
 $color-green-1: #70c5a3;
 $color-orange-1: #f2a248;
-$color-black-1: #000000;
+$color-black-1: #242424;
+
+// Global Typography
+$color-black: #242424;
+$color-dark-gray: #808080;
+$color-light-gray: #d2d2d2;
+$color-lightest-gray: #f5f5f5;
+
+$font-weight-light: 300;
+$font-weight-regular: 400;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
 
 // > sidebar
 $color-gray-1: #f8f8f8; // bg       / table rows
@@ -29,7 +40,7 @@ $primary-bg-color: $color-white-1;
 $primary-font-color: $color-gray-3;
 $primary-color-accent: $color-blue-3; // link, button (borders)
 $primary-font-color-2: $color-gray-4; // subtitle
-$primary-font-family: 'Arial', 'Open Sans', sans-serif;
+$primary-font-family: 'Open Sans', 'Arial', sans-serif;
 $primary-font-family-2: 'Lato', sans-serif; // title
 $primary-font-size: 14px;
 
@@ -46,6 +57,18 @@ $tertiary-bg-color: $color-gray-2;
 $tertiary-font-color: $color-black-1;
 $tertiary-bg-color-2: $color-white-1;
 $tertiary-font-color-2: $color-gray-3;
+$tertiary-font-size-2: 21px;
+$tertiary-font-weight-2: 600;
+
+// ui > typography
+$ui-text-primary-color: $color-black;
+$ui-text-secondary-color: $color-dark-gray;
+$ui-text-disabled-color: $color-light-gray;
+
+$ui-font-weight-light: $font-weight-light;
+$ui-font-weight-regular: $font-weight-regular;
+$ui-font-weight-semibold: $font-weight-semibold;
+$ui-font-weight-bold: $font-weight-bold;
 
 // ui > main body
 $ui-primary-bg-color: $primary-bg-color;
@@ -74,9 +97,14 @@ $ui-tertiary-bg-color-2: $tertiary-bg-color-2;
 $ui-tertiary-font-color-2: $tertiary-font-color-2;
 $ui-tertiary-border-color: $tertiary-bg-color;
 $ui-tertiary-icon-color: $color-gray-4;
+$ui-tertiary-font-size-2: $tertiary-font-size-2;
+$ui-tertiary-font-weight-2: $tertiary-font-weight-2;
 
-// ui > panel body
+// ui > panel
+$ui-side-sheet-border: 0;
 $ui-side-sheet-font-size: 12px;
+$ui-side-sheet-sheet-background-color: $ui-primary-bg-color;
+$ui-side-sheet-header-background-color: $ui-primary-bg-color;
 
 // ui > page header
 $ui-page-header-font-size: 20px;

@@ -205,7 +205,7 @@ describe('EduContentSearchResultComponent', () => {
     });
   });
 
-  describe('getActions', () => {
+  describe('actions', () => {
     it('should return the default educontent actions', () => {
       expect(component.actions).toEqual(mockActions);
     });
@@ -217,6 +217,21 @@ describe('EduContentSearchResultComponent', () => {
       } as EduContentSearchResultInterface;
 
       component.ngOnInit();
+
+      expect(component.actions).toEqual([...mockTaskActions, ...mockActions]);
+    });
+  });
+
+  describe('update', () => {
+    it('should get the actions', () => {
+      expect(component.actions).toEqual(mockActions);
+
+      component.data = {
+        eduContent: new EduContentFixture(),
+        addTaskActions: true
+      } as EduContentSearchResultInterface;
+
+      component.update();
 
       expect(component.actions).toEqual([...mockTaskActions, ...mockActions]);
     });
