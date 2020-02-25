@@ -1,87 +1,31 @@
-@import './../ui-theme';
-
-$ui-backdrop-background: linear-gradient(90deg, #9fdae4, #15adb9);
-
-$ui-backdrop-color: #242424;
-
-$ui-backdrop__header-font-size: 21px;
-$ui-backdrop__header-font-weight: semibold;
-
-$ui-backdrop__horizontal-padding: 16px;
-$ui-backdrop__header-height: 56px;
-$ui-backdrop__header__title-margin-horizontal: 32px;
-$ui-backdrop__front-layer__title-font-size: 16px;
-$ui-backdrop__front-layer__title-font-weight: regular;
-
-$ui-backdrop__front-layer-background-color: #fff;
-$ui-backdrop__front-layer-border-radius: 16px 16px 0 0;
-
-$ui-backdrop__front-layer__scrim-color: rgba(#fff, 0.85);
-$ui-backdrop__front-layer__header-height: 48px;
-$ui-backdrop__front-layer__content-vertical-padding: 24px;
-
-$ui-backdrop__header__reveal-action-width: 24px;
-$ui-backdrop__header__reveal-action-height: 24px;
-
 .ui-backdrop {
-  background-image: $ui-backdrop-background;
-  color: $ui-backdrop-color;
-
   &__back-layer {
-    display: block;
-    height: 100%;
-
     &__content {
-      padding: 0 $ui-backdrop__horizontal-padding;
       overflow-y: auto;
     }
   }
 
   &__header {
-    padding: 0 $ui-backdrop__horizontal-padding;
-    height: $ui-backdrop__header-height;
     display: flex;
     align-items: center;
 
     h1 {
       flex: 1 1 100%;
-      margin: 0 $ui-backdrop__header__title-margin-horizontal;
-      font-size: $ui-backdrop__header-font-size;
-      font-weight: $ui-backdrop__header-font-weight;
-    }
-
-    &__reveal-action {
-      width: $ui-backdrop__header__reveal-action-width;
-      height: $ui-backdrop__header__reveal-action-height;
     }
   }
 
   &__front-layer {
-    @include elevation(1);
     position: relative;
-    display: block;
-    background: $ui-backdrop__front-layer-background-color;
-    padding: 0 $ui-backdrop__horizontal-padding;
     z-index: 2;
-    border-radius: $ui-backdrop__front-layer-border-radius;
-
-    box-sizing: content-box;
     overflow-y: auto;
 
     &__header {
-      height: $ui-backdrop__front-layer__header-height;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      border-bottom: solid 1px #ccc;
-      font-size: $ui-backdrop__front-layer__title-font-size;
-      font-weight: $ui-backdrop__front-layer__title-font-weight;
-    }
-
-    &__content {
-      padding: $ui-backdrop__front-layer__content-vertical-padding 0;
     }
   }
+
   &--dropped {
     .ui-backdrop__front-layer__content:before {
       position: absolute;
@@ -91,15 +35,7 @@ $ui-backdrop__header__reveal-action-height: 24px;
       bottom: 0;
       left: 0;
       right: 0;
-      background: $ui-backdrop__front-layer__scrim-color;
-      border-radius: $ui-backdrop__front-layer-border-radius;
       z-index: 3;
-    }
-
-    .ui-backdrop__front-layer__header
-      + .ui-backdrop__front-layer__content:before {
-      top: $ui-backdrop__front-layer__header-height;
-      border-radius: 0;
     }
   }
 }

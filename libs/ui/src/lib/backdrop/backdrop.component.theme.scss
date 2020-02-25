@@ -1,2 +1,70 @@
 @mixin ui-backdrop {
+  $ui-backdrop-background: $ui-secondary-bg-color !default;
+
+  $ui-backdrop__horizontal-padding: 16px !default;
+  $ui-backdrop__header-height: 56px !default;
+  $ui-backdrop__header__title-margin-horizontal: 32px !default;
+
+  $ui-backdrop__front-layer-background-color: $ui-primary-bg-color !default;
+  $ui-backdrop__front-layer-border-radius: 16px 16px 0 0 !default;
+
+  $ui-backdrop__front-layer__scrim-color: rgba(
+    $ui-backdrop__front-layer-background-color,
+    0.85
+  ) !default;
+  $ui-backdrop__front-layer__header-height: 48px !default;
+  $ui-backdrop__front-layer__header-border: 1px solid $ui-tertiary-border-color !default;
+  $ui-backdrop__front-layer__content-vertical-padding: 24px !default;
+
+  .ui-backdrop {
+    background-image: $ui-backdrop-background;
+
+    &__back-layer {
+      &__content {
+        padding: 0 $ui-backdrop__horizontal-padding;
+      }
+    }
+
+    &__header {
+      padding: 0 $ui-backdrop__horizontal-padding;
+      height: $ui-backdrop__header-height;
+
+      h1 {
+        margin: 0 $ui-backdrop__header__title-margin-horizontal;
+      }
+
+      backdrop-reveal-action,
+      backdrop-collapse-action {
+        display: flex;
+      }
+    }
+
+    &__front-layer {
+      @include elevation(1);
+      background: $ui-backdrop__front-layer-background-color;
+      padding: 0 $ui-backdrop__horizontal-padding;
+      border-radius: $ui-backdrop__front-layer-border-radius;
+
+      &__header {
+        height: $ui-backdrop__front-layer__header-height;
+        border-bottom: $ui-backdrop__front-layer__header-border;
+      }
+
+      &__content {
+        padding: $ui-backdrop__front-layer__content-vertical-padding 0;
+      }
+    }
+    &--dropped {
+      .ui-backdrop__front-layer__content:before {
+        background: $ui-backdrop__front-layer__scrim-color;
+        border-radius: $ui-backdrop__front-layer-border-radius;
+      }
+
+      .ui-backdrop__front-layer__header
+        + .ui-backdrop__front-layer__content:before {
+        top: $ui-backdrop__front-layer__header-height;
+        border-radius: 0;
+      }
+    }
+  }
 }

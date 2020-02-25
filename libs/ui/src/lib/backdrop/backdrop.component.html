@@ -4,21 +4,24 @@
       <div
         *ngIf="!dropped"
         (click)="updateDropped(true)"
-        class="ui-backdrop__header-reveal-action"
+        class="ui-backdrop__header__reveal-action"
       >
         <ng-content select="backdrop-reveal-action"></ng-content>
       </div>
       <div
         *ngIf="dropped"
         (click)="updateDropped(false)"
-        class="ui-backdrop__header-reveal-action"
+        class="ui-backdrop__header__reveal-action"
       >
         <ng-content select="backdrop-collapse-action"></ng-content>
       </div>
 
-      <h1 *ngFor="let title of _titles" [@simpleFadeAnimation]="'in'">{{
-        title
-      }}</h1>
+      <h1
+        class="ui-title"
+        *ngFor="let title of _titles"
+        [@simpleFadeAnimation]="'in'"
+        >{{ title }}</h1
+      >
 
       <ng-content select="backdrop-header-actions"></ng-content>
     </div>
@@ -39,11 +42,11 @@
     [style.height.px]="frontLayerHeight"
   >
     <div
-      [class.ui-backdrop__front-layer__header]="subtitle.childNodes.length > 0"
+      #subtitle
+      class="ui-backdrop__front-layer__header ui-subheader"
+      [style.display]="subtitle.childNodes.length ? '' : 'none'"
     >
-      <div #subtitle>
-        <ng-content select="front-layer-header"></ng-content>
-      </div>
+      <ng-content select="front-layer-header"></ng-content>
     </div>
 
     <div class="ui-backdrop__front-layer__content">
