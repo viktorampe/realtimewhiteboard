@@ -189,7 +189,6 @@ export class WhiteboardComponent implements OnInit {
   // TODO: check upload flow
   uploadImageForCard(card: CardInterface, image: File) {
     card.mode = ModeEnum.UPLOAD;
-
     this.whiteboardHttpService
       .uploadFile(image)
       .subscribe((imageUrl: string) => {

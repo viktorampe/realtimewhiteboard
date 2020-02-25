@@ -511,6 +511,23 @@ describe('WhiteboardComponent', () => {
     expect(setJsonSpy).toHaveBeenCalledWith(expected);
   });
 
+  describe('addEmptyCard()', () => {
+    it('should add an empty card', () => {
+      component.lastColor = 'red';
+      component.cards = [];
+      component.addEmptyCard(0, 0, 'www.si.be');
+      expect(component.cards[0]).toEqual({
+        mode: ModeEnum.IDLE,
+        color: 'red',
+        description: '',
+        image: 'www.si.be',
+        top: 0,
+        left: 0,
+        viewModeImage: true
+      });
+    });
+  });
+
   describe('onDeleteCard()', () => {
     it('should add card to shelf  when card was made by editorial office', () => {
       component.shelvedCards = [];
@@ -553,110 +570,43 @@ describe('WhiteboardComponent', () => {
 
       expect(component.cards.length).toBe(cardsLengthBeforeAdd);
     });
-  });
 
-  it('should add a card to the whiteboard on image drag', () => {
-    const cardsLengthBeforeAdd = component.cards.length;
+    it('should add a card to the whiteboard on image drag', () => {
+      const addEmptySpy = jest
+        .spyOn(component, 'addEmptyCard')
+        .mockReturnValue(new CardFixture());
+      const uploadImageForCardSpy = jest
+        .spyOn(component, 'uploadImageForCard')
+        .mockImplementation(() => {});
 
-    const file = new File([''], 'dummy.jpg', {
-      type: component.allowedFileTypes[0]
+      const file = new File([''], 'dummy.jpg', {
+        type: component.allowedFileTypes[0]
+      });
+      const file2 = new File([''], 'dummy.jpg', {
+        type: component.allowedFileTypes[0]
+      });
+
+      const fileDropEvent = {
+        preventDefault: () => {},
+        stopPropagation: () => {},
+        dataTransfer: { files: [file, file2] },
+        offsetX: 400,
+        offsetY: 400
+      };
+
+      component.onFilesDropped(fileDropEvent);
+
+      expect(addEmptySpy).toHaveBeenCalledTimes(2);
+      expect(uploadImageForCardSpy).toHaveBeenCalledTimes(2);
+      expect(addEmptySpy.mock.calls).toEqual([
+        [400, 400],
+        [450, 450]
+      ]);
+      expect(uploadImageForCardSpy.mock.calls[0][0]).toEqual(new CardFixture());
+      expect(uploadImageForCardSpy.mock.calls).toEqual([
+        [new CardFixture(), file],
+        [new CardFixture(), file2]
+      ]);
     });
-
-    const fileDropEvent = {
-      preventDefault: () => {},
-      stopPropagation: () => {},
-      dataTransfer: { files: [file] },
-      offsetX: 400,
-      offsetY: 400
-    };
-
-    component.onFilesDropped(fileDropEvent);
-
-    expect(component.cards.length).toBe(cardsLengthBeforeAdd + 1);
-  });
-
-  it('should call uploadImageForCard on image drag', () => {
-    spyOn(component, 'uploadImageForCard');
-
-    const cardsLengthBeforeAdd = component.cards.length;
-
-    const file = new File([''], 'dummy.jpg', {
-      type: component.allowedFileTypes[0]
-    });
-
-    const fileDropEvent = {
-      preventDefault: () => {},
-      stopPropagation: () => {},
-      dataTransfer: { files: [file] },
-      offsetX: 400,
-      offsetY: 400
-    };
-
-    component.onFilesDropped(fileDropEvent);
-
-    const addedCard = component.cards[component.cards.length - 1];
-
-    expect(component.uploadImageForCard).toHaveBeenCalledWith(addedCard, file);
-  });
-
-  it('should add card to whiteboard on image drag with correct top value', () => {
-    const file = new File([''], 'dummy.jpg', {
-      type: component.allowedFileTypes[0]
-    });
-
-    const fileDropEvent = {
-      preventDefault: () => {},
-      stopPropagation: () => {},
-      dataTransfer: { files: [file] },
-      offsetX: 400,
-      offsetY: 400
-    };
-
-    component.onFilesDropped(fileDropEvent);
-
-    const addedCard = component.cards[component.cards.length - 1];
-
-    expect(addedCard.top).toBe(400);
-  });
-
-  it('should add card to whiteboard on image drag with correct left value', () => {
-    const file = new File([''], 'dummy.jpg', {
-      type: component.allowedFileTypes[0]
-    });
-
-    const fileDropEvent = {
-      preventDefault: () => {},
-      stopPropagation: () => {},
-      dataTransfer: { files: [file] },
-      offsetX: 400,
-      offsetY: 400
-    };
-
-    component.onFilesDropped(fileDropEvent);
-
-    const addedCard = component.cards[component.cards.length - 1];
-
-    expect(addedCard.left).toBe(400);
-  });
-
-  it('should add cards with correct offset on image drag', () => {
-    const file = new File([''], 'dummy.jpg', {
-      type: component.allowedFileTypes[0]
-    });
-
-    const fileDropEvent = {
-      preventDefault: () => {},
-      stopPropagation: () => {},
-      dataTransfer: { files: [file, file] },
-      offsetX: 400,
-      offsetY: 400
-    };
-
-    component.onFilesDropped(fileDropEvent);
-
-    const addedCard = component.cards[component.cards.length - 1];
-
-    expect(addedCard.top).toBe(400 + component.multipleCardCreationOffset);
-    expect(addedCard.left).toBe(400 + component.multipleCardCreationOffset);
   });
 });
