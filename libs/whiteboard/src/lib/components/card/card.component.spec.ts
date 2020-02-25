@@ -82,18 +82,6 @@ describe('CardComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should emit cardPressed when onPressCard gets called', () => {
-    spyOn(component.cardPressed, 'emit');
-    component.onPressCard();
-    expect(component.cardPressed.emit).toHaveBeenCalled();
-  });
-
-  it('should emit cardTapped when onTapCard gets called', () => {
-    spyOn(component.cardTapped, 'emit');
-    component.onTapCard();
-    expect(component.cardTapped.emit).toHaveBeenCalled();
-  });
-
   it('should emit removeImage when emitRemoveImage gets called', () => {
     spyOn(component.removeImage, 'emit');
     component.emitRemoveImage();
