@@ -105,7 +105,8 @@ export class EduContentCollectionManagerService
       item,
       bundlesCollection$,
       linkedBundleIds$,
-      recentBundleIds$
+      recentBundleIds$,
+      'bundels'
     );
     itemToggle$.subscribe((bundleToggled: ItemToggledInCollectionInterface) => {
       if (learningAreaId) {
@@ -177,7 +178,8 @@ export class EduContentCollectionManagerService
       item,
       tasksCollection$,
       linkedTaskIds$,
-      recentTaskIds$
+      recentTaskIds$,
+      'taken'
     );
     itemToggle$.subscribe((taskToggled: ItemToggledInCollectionInterface) => {
       if (taskToggled.selected) {
@@ -320,7 +322,8 @@ export class EduContentCollectionManagerService
     item: ManageCollectionItemInterface,
     linkableItems$: Observable<ManageCollectionItemInterface[]>,
     linkedItemIds$: Observable<number[]>,
-    recentItemIds$: Observable<number[]>
+    recentItemIds$: Observable<number[]>,
+    collectionType: string
   ) {
     return combineLatest([linkableItems$, linkedItemIds$, recentItemIds$]).pipe(
       take(1),
@@ -333,7 +336,8 @@ export class EduContentCollectionManagerService
             item,
             linkableItems,
             linkedIds,
-            recentIds
+            recentIds,
+            collectionType
           );
         }
       )

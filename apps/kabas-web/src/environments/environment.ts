@@ -65,6 +65,9 @@ export const environment: EnvironmentInterface = {
         FavoriteTypesEnum.TASK,
         FavoriteTypesEnum.EDUCONTENT
       ]
+    },
+    collectionManagement: {
+      useFilter: false
     }
   },
   sso: {},
@@ -74,7 +77,8 @@ export const environment: EnvironmentInterface = {
   },
   ui: {
     useNavItemStyle: true,
-    useInfoPanelStyle: false
+    useInfoPanelStyle: false,
+    useModalSideSheetStyle: true
   }
 };
 

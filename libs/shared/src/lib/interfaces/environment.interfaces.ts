@@ -1,5 +1,9 @@
 import { FavoriteTypesEnum } from '@campus/dal';
 import { SearchModeInterface } from '@campus/search';
+import {
+  EnvironmentCollectionManagementFeatureInterface,
+  EnvironmentUIInterface
+} from '@campus/ui';
 
 export interface EnvironmentInterface {
   production: boolean;
@@ -15,6 +19,7 @@ export interface EnvironmentInterface {
     errorManagement: EnvironmentErrorManagementFeatureInterface;
     favorites: EnvironmentFavoritesFeatureInterface;
     globalSearch: EnvironmentGlobalSearchFeatureInterface;
+    collectionManagement: EnvironmentCollectionManagementFeatureInterface;
   };
   sso: EnvironmentSsoInterface;
   searchModes: EnvironmentSearchModesInterface;
@@ -104,9 +109,4 @@ export interface EnvironmentApiInterface {
 
 export interface EnvironmentTestingInterface {
   removeDataCyAttributes: boolean;
-}
-
-export interface EnvironmentUIInterface {
-  useNavItemStyle?: boolean;
-  useInfoPanelStyle?: boolean;
 }

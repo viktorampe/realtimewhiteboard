@@ -5,6 +5,22 @@
   $ui-manage-collection-list_recent-item-color: $ui-form-button-primary-bg-color !default;
   $ui-manage-collection-list__no-results-padding: 24px !default;
 
+  $ui-manage-collection__header__row--top-margin-bottom: $ui-modal-side-sheet-header-top-row-margin-bottom !default;
+  $ui-manage-collection__header__row--bottom-padding-left: $ui-modal-side-sheet-header-bottom-row-padding-left !default;
+  $ui-manage-collection__header__row-title-margin-right: $ui-modal-side-sheet-header-row-title-margin-right !default;
+  $ui-manage-collection__header-icon-margin-right: $ui-modal-side-sheet-header-icon-margin-right !default;
+
+  $ui-manage-collection__header-font-family: $ui-primary-font-family-4 !default;
+  $ui-manage-collection__header-title-color: $ui-black !default;
+  $ui-manage-collection__header-title-font-size: $ui-title-font-size !default;
+  $ui-manage-collection__header-title-font-weight: $ui-title-font-weight !default;
+  $ui-manage-collection__header-subtitle-color: $ui-dark-gray !default;
+  $ui-manage-collection__header-subtitle-font-size: $ui-body-2-font-size !default;
+  $ui-manage-collection__header-subtitle-font-weight: $ui-body-2-font-weight !default;
+  $ui-manage-collection__header-icon-color: $ui-dark-gray !default;
+  $ui-manage-collection__header-divider-color: $ui-light-gray !default;
+  $ui-manage-collection__header-divider-margin: $ui-modal-side-sheet-header-divider-margin !default;
+
   .ui-manage-collection {
     &__no-results {
       padding: $ui-manage-collection-list__no-results-padding;
@@ -44,7 +60,7 @@
 
     &__filter {
       .ui-filter-text-input {
-        font-size: ui-manage-collection-list_filter-font-size;
+        font-size: $ui-manage-collection-list_filter-font-size;
       }
 
       input {
@@ -62,6 +78,44 @@
       p {
         color: $ui-manage-collection-list_recent-item-color;
       }
+    }
+  }
+
+  .ui-modal-side-sheet {
+    height: 100%;
+
+    &__header {
+      font-family: $ui-manage-collection__header-font-family;
+      &__row {
+        &--top {
+          margin-bottom: $ui-manage-collection__header__row--top-margin-bottom;
+        }
+        &--bottom {
+          padding-left: $ui-manage-collection__header__row--bottom-padding-left;
+        }
+        .title {
+          color: $ui-manage-collection__header-title-color;
+          font-size: $ui-manage-collection__header-title-font-size;
+          font-weight: $ui-manage-collection__header-title-font-weight;
+          margin-right: $ui-manage-collection__header__row-title-margin-right;
+        }
+        .subtitle {
+          // body 2
+          color: $ui-manage-collection__header-subtitle-color;
+          font-size: $ui-manage-collection__header-subtitle-font-size;
+          font-weight: $ui-manage-collection__header-subtitle-font-weight;
+        }
+
+        mat-icon {
+          color: $ui-manage-collection__header-icon-color;
+          margin-right: $ui-manage-collection__header-icon-margin-right;
+        }
+      }
+    }
+    &__divider {
+      color: $ui-manage-collection__header-divider-color;
+      margin: $ui-manage-collection__header-divider-margin
+        (-$ui-manage-collection__header-divider-margin);
     }
   }
 }
