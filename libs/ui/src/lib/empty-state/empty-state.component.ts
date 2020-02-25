@@ -6,7 +6,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   styleUrls: ['./empty-state.component.scss']
 })
 export class EmptyStateComponent {
-  @Input() image: string;
+  @Input() svgIcon: string;
   @Input() title?: string;
   @Input() description: string;
   @Input() ctaLabel?: string;
@@ -14,4 +14,8 @@ export class EmptyStateComponent {
   @Output() clickCta = new EventEmitter<void>();
 
   constructor() {}
+
+  public ctaClick() {
+    this.clickCta.emit();
+  }
 }
