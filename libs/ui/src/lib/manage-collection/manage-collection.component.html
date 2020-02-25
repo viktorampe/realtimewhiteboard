@@ -41,7 +41,7 @@
 <ng-template #noFilterResultsTemplate>
   <div class="ui-manage-collection__no-results">
     <span>Het filteren leverde geen resultaten op.</span>
-    <a (click)="_filterTextInput && _filterTextInput.clear()"
+    <a (click)="filterTextInput && filterTextInput.clear()"
       >Filter verwijderen</a
     >
   </div>
@@ -90,91 +90,51 @@
 
 <ng-template #collection>
   <ng-container *ngIf="linkableItems.length > 0; else emptyCollectionTemplate">
-    <ng-container *ngIf="useFilter; else collectionWithoutFilter">
-      <mat-selection-list (selectionChange)="onSelectionChanged($event)">
-        <div
-          class="ui-manage-collection__recent-items"
-          *ngIf="
-            _filterTextInput &&
-            !_filterTextInput.input.value &&
-            recentLinkableItems.length > 0
-          "
+    <mat-selection-list (selectionChange)="onSelectionChanged($event)">
+      <div
+        class="ui-manage-collection__recent-items"
+        *ngIf="
+          filterTextInput &&
+          !filterTextInput.input.value &&
+          recentLinkableItems.length > 0
+        "
+      >
+        <h3 mat-subheader>Recent gebruikt</h3>
+        <mat-list-option
+          [checkboxPosition]="asModalSideSheet ? 'before' : 'after'"
+          *ngFor="let item of recentLinkableItems"
+          [value]="item.id"
+          class="ui-manage-collection__recent-item"
         >
-          <h3 mat-subheader>Recent gebruikt</h3>
+          <mat-icon mat-list-icon [svgIcon]="item.icon"></mat-icon>
+          <p mat-line>{{ item.label }}</p>
+        </mat-list-option>
+        <mat-divider></mat-divider>
+      </div>
+      <ng-container *ngIf="listItems$ | async as filteredItems">
+        <div
+          class="ui-manage-collection__all-items"
+          *ngIf="filteredItems.length; else noFilterResultsTemplate"
+        >
+          <h3 mat-subheader>Alle</h3>
           <mat-list-option
+            *ngFor="let item of filteredItems"
             [checkboxPosition]="asModalSideSheet ? 'before' : 'after'"
-            *ngFor="let item of recentLinkableItems"
             [value]="item.id"
-            class="ui-manage-collection__recent-item"
           >
-            <mat-icon mat-list-icon [svgIcon]="item.icon"></mat-icon>
+            <mat-icon
+              *ngIf="asModalSideSheet; else itemIcon"
+              mat-list-icon
+              svgIcon="open-in-new"
+              (click)="navigateTo($event, item.linkToItem)"
+            ></mat-icon>
+            <ng-template #itemIcon>
+              <mat-icon mat-list-icon [svgIcon]="item.icon"></mat-icon>
+            </ng-template>
             <p mat-line>{{ item.label }}</p>
           </mat-list-option>
-          <mat-divider></mat-divider>
         </div>
-        <ng-container
-          *ngIf="
-            _filterTextInput && _filterTextInput.result$
-              | async as filteredItems
-          "
-        >
-          <div
-            class="ui-manage-collection__all-items"
-            *ngIf="filteredItems.length; else noFilterResultsTemplate"
-          >
-            <h3 mat-subheader>Alle</h3>
-            <mat-list-option
-              *ngFor="let item of filteredItems"
-              [checkboxPosition]="asModalSideSheet ? 'before' : 'after'"
-              [value]="item.id"
-            >
-              <mat-icon mat-list-icon [svgIcon]="item.icon"></mat-icon>
-              <p mat-line>{{ item.label }}</p>
-            </mat-list-option>
-          </div>
-        </ng-container>
-      </mat-selection-list>
-    </ng-container>
+      </ng-container>
+    </mat-selection-list>
   </ng-container>
-</ng-template>
-
-<ng-template #collectionWithoutFilter>
-  <mat-selection-list (selectionChange)="onSelectionChanged($event)">
-    <div
-      class="ui-manage-collection__recent-items"
-      *ngIf="recentLinkableItems.length > 0"
-    >
-      <h3 mat-subheader>Recent gebruikt</h3>
-      <mat-list-option
-        *ngFor="let item of recentLinkableItems"
-        [checkboxPosition]="asModalSideSheet ? 'before' : 'after'"
-        [value]="item.id"
-        class="ui-manage-collection__recent-item"
-      >
-        <mat-icon mat-list-icon [svgIcon]="item.icon"></mat-icon>
-        <p mat-line>{{ item.label }}</p>
-      </mat-list-option>
-      <mat-divider></mat-divider>
-    </div>
-
-    <div class="ui-manage-collection__all-items">
-      <h3 mat-subheader>Alle</h3>
-      <mat-list-option
-        *ngFor="let item of linkableItems"
-        [value]="item.id"
-        [checkboxPosition]="asModalSideSheet ? 'before' : 'after'"
-      >
-        <mat-icon
-          *ngIf="asModalSideSheet; else itemIcon"
-          mat-list-icon
-          svgIcon="open-in-new"
-          (click)="navigateTo($event, item.linkToItem)"
-        ></mat-icon>
-        <ng-template #itemIcon>
-          <mat-icon mat-list-icon [svgIcon]="item.icon"></mat-icon>
-        </ng-template>
-        <p mat-line>{{ item.label }}</p>
-      </mat-list-option>
-    </div>
-  </mat-selection-list>
 </ng-template>

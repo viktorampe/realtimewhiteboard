@@ -18,7 +18,7 @@ import {
 } from '@angular/material';
 import { Router } from '@angular/router';
 import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/utils';
-import { Subscription } from 'rxjs';
+import { Observable, of, Subscription } from 'rxjs';
 import { startWith } from 'rxjs/operators';
 import { FilterTextInputComponent } from '../filter-text-input/filter-text-input.component';
 import {
@@ -41,6 +41,8 @@ export class ManageCollectionComponent
   public recentLinkableItems: ManageCollectionItemInterface[];
   public linkableItems: ManageCollectionItemInterface[];
 
+  public listItems$: Observable<ManageCollectionItemInterface[]>;
+
   // needed to selected items after filtering
   private selectedIds: Set<number>;
   private subscriptions = new Subscription();
@@ -48,36 +50,18 @@ export class ManageCollectionComponent
   public useFilter: boolean;
   public asModalSideSheet: boolean;
 
-  _filterTextInput: FilterTextInputComponent<
-    ManageCollectionItemInterface[],
-    ManageCollectionItemInterface
-  >;
-
-  _selectionList: MatSelectionList;
-
   @Output() selectionChanged = new EventEmitter<
     ItemToggledInCollectionInterface
   >();
 
   @ViewChild(MatSelectionList, { static: false })
-  set selectionList(list: MatSelectionList) {
-    if (list) {
-      this._selectionList = list;
-    }
-  }
+  public selectionList: MatSelectionList;
 
   @ViewChild(FilterTextInputComponent, { static: false })
-  set filterTextInput(
-    filter: FilterTextInputComponent<
-      ManageCollectionItemInterface[],
-      ManageCollectionItemInterface
-    >
-  ) {
-    if (filter) {
-      this._filterTextInput = filter;
-      this._filterTextInput.setFilterableItem(this);
-    }
-  }
+  public filterTextInput: FilterTextInputComponent<
+    ManageCollectionItemInterface[],
+    ManageCollectionItemInterface
+  >;
 
   @HostBinding('class.ui-manage-collection')
   get isManageCollectionClass() {
@@ -104,19 +88,26 @@ export class ManageCollectionComponent
     this.asModalSideSheet = !!environmentUiToken.useModalSideSheetStyle; // default false for backward compatibility
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.listItems$ = of(this.linkableItems);
+  }
 
   ngAfterViewInit() {
-    if (this._selectionList) {
+    if (this.selectionList) {
       this.subscriptions.add(
         // when options change i.e. after filtering
         // re-set selection
-        this._selectionList.options.changes
+        this.selectionList.options.changes
           .pipe(startWith(null as any)) // emit once on init
           .subscribe(() => {
             this.selectListItems(this.selectedIds);
           })
       );
+    }
+
+    if (this.filterTextInput) {
+      this.filterTextInput.setFilterableItem(this);
+      this.listItems$ = this.filterTextInput.result$;
     }
   }
 
@@ -166,7 +157,7 @@ export class ManageCollectionComponent
   }
 
   private selectListItems(ids: Set<number>) {
-    this._selectionList.options
+    this.selectionList.options
       .filter(listItem => ids.has(listItem.value))
       .forEach(listItem => (listItem.selected = true));
 
