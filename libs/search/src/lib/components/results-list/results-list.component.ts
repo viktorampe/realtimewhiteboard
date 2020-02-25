@@ -11,6 +11,7 @@ import {
   NgZone,
   OnDestroy,
   Output,
+  QueryList,
   ViewChild,
   ViewContainerRef
 } from '@angular/core';
@@ -25,6 +26,7 @@ import {
   SearchStateInterface,
   SortModeInterface
 } from '../../interfaces';
+import { ResultItemBase } from './result.component.base';
 
 // https://angular.io/guide/dynamic-component-loader
 
@@ -67,6 +69,9 @@ export class ResultsListComponent implements OnDestroy, AfterViewInit {
   public sortModes: SortModeInterface[];
   public activeSortMode: string;
   public loading = false;
+
+  // items contained by the resultlist view
+  public items: QueryList<ResultItemBase>;
 
   private subscriptions: Subscription = new Subscription();
   private clearResultsTimer: number;
@@ -135,6 +140,8 @@ export class ResultsListComponent implements OnDestroy, AfterViewInit {
           this.ngZone.run(() => this.checkForMoreResults());
         })
     );
+
+    this.items = this.listview.items as any;
   }
 
   sortModeClicked(sortMode: SortModeInterface): void {
