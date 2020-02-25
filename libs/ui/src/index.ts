@@ -34,6 +34,7 @@ export {
   BadgePersonInterface,
   PersonBadgeComponent
 } from './lib/person-badge/person-badge.component';
+export { SectionModeEnum } from './lib/section/section.component';
 export { SideSheetComponent } from './lib/side-sheet/side-sheet.component';
 export {
   TileComponent,

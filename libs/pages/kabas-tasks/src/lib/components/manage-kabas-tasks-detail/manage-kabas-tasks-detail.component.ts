@@ -33,7 +33,11 @@ import {
   OpenStaticContentServiceInterface,
   OPEN_STATIC_CONTENT_SERVICE_TOKEN
 } from '@campus/shared';
-import { ConfirmationModalComponent, SideSheetComponent } from '@campus/ui';
+import {
+  ConfirmationModalComponent,
+  SectionModeEnum,
+  SideSheetComponent
+} from '@campus/ui';
 import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/utils';
 import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
 import {
@@ -74,6 +78,9 @@ export interface FilterStateInterface {
 })
 export class ManageKabasTasksDetailComponent implements OnInit, OnDestroy {
   public assigneeTypesEnum: typeof AssigneeTypesEnum = AssigneeTypesEnum;
+  public sectionModes: typeof SectionModeEnum = SectionModeEnum;
+  public sectionMode: SectionModeEnum;
+  public taskCache: TaskWithAssigneesInterface;
 
   public diaboloPhaseFilterCriteria: SearchFilterCriteriaInterface;
   public requiredFilterCriteria: SearchFilterCriteriaInterface;
@@ -115,6 +122,7 @@ export class ManageKabasTasksDetailComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    this.sectionMode = this.sectionModes.EDITABLE;
     // set up filter values
     this.selectableLearningAreas$ = this.viewModel.selectableLearningAreas$;
     this.diaboloPhaseFilterCriteria = this.getDiaboloPhaseFilterCriteria();
@@ -185,15 +193,26 @@ export class ManageKabasTasksDetailComponent implements OnInit, OnDestroy {
     this.viewModel.removeTasks([tasks], true);
   }
 
-  public updateTitle(task: TaskWithAssigneesInterface, title: string) {
-    this.viewModel.updateTask({ id: task.id, name: title });
+  public updateCachedTask(task: TaskWithAssigneesInterface) {
+    this.taskCache = { ...task };
   }
 
-  public updateDescription(
-    task: TaskWithAssigneesInterface,
-    description: string
-  ) {
-    this.viewModel.updateTask({ id: task.id, name: task.name, description });
+  public cancelEdit(event: MouseEvent) {
+    event.stopPropagation();
+    this.sectionMode = this.sectionModes.EDITABLE;
+  }
+
+  public editTask(event: MouseEvent) {
+    event.stopPropagation();
+    if (!this.taskCache.name) {
+      return;
+    }
+    this.sectionMode = this.sectionModes.EDITABLE;
+    this.viewModel.updateTask({
+      id: this.taskCache.id,
+      name: this.taskCache.name,
+      description: this.taskCache.description
+    });
   }
 
   public toggleFavorite(task: TaskWithAssigneesInterface) {
