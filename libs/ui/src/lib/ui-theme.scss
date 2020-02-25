@@ -10,6 +10,22 @@ $ui-font-weight-regular: 400 !default;
 $ui-font-weight-semibold: 600 !default;
 $ui-font-weight-bold: 700 !default;
 
+$ui-font-sizes: () !default;
+$ui-font-size-map: map-merge(
+  (
+    'headline': 24,
+    'title': 21,
+    'subheader': 16,
+    'body': 14,
+    'menu': 14,
+    'caption': 12,
+    'button': 15,
+    'action': 12,
+    'tooltip': 10
+  ),
+  $ui-font-sizes
+);
+
 // main body
 $ui-primary-bg-color: #fff !default;
 $ui-primary-font-color: #000 !default;
@@ -115,39 +131,51 @@ $ui-tile-height: 105px !default;
   $family: $ui-primary-font-family
 ) {
   font-family: $family;
-  font-size: $size * 1px;
+  font-size: #{$size}px;
   font-weight: $weight;
   color: $color;
 }
 .ui-headline {
-  @include setFont(24);
+  @include setFont(map-get($ui-font-size-map, 'headline'));
 }
 .ui-title {
-  @include setFont(21, $ui-font-weight-semibold);
+  @include setFont(
+    map-get($ui-font-size-map, 'title'),
+    $ui-font-weight-semibold
+  );
 }
 .ui-subheader {
-  @include setFont(16);
+  @include setFont(map-get($ui-font-size-map, 'subheader'));
 }
 .ui-body-2,
 .ui-menu {
-  @include setFont(14, $ui-font-weight-semibold);
+  @include setFont(
+    map-get($ui-font-size-map, 'menu'),
+    $ui-font-weight-semibold
+  );
 }
 .ui-body-1 {
-  @include setFont(14);
+  @include setFont(map-get($ui-font-size-map, 'body'));
 }
 .ui-caption {
-  @include setFont($size: 12, $color: $ui-text-secondary-color);
+  @include setFont(
+    $size: map-get($ui-font-size-map, 'caption'),
+    $color: $ui-text-secondary-color
+  );
 }
 .ui-button-text {
-  @include setFont(15, $ui-font-weight-semibold);
+  @include setFont(
+    map-get($ui-font-size-map, 'button'),
+    $ui-font-weight-semibold
+  );
   text-transform: uppercase;
 }
 .ui-action-text {
-  @include setFont(12);
+  @include setFont(map-get($ui-font-size-map, 'action'));
   text-transform: uppercase;
 }
 .ui-tooltip-text {
-  @include setFont(10);
+  @include setFont(map-get($ui-font-size-map, 'tooltip'));
 }
 
 // import all required sass files from our libs
