@@ -1,6 +1,6 @@
 <campus-list-item-content [contentRightSeparated]="true">
   <campus-file-icon
-    class="ui-list-item__icon"
+    list-item-icon
     classModifier="product-type-zoekresultaat-algemeen-bestand"
     [icon]="
       data.eduContent.fileExtension != 'ludo.zip' ? 'general-file' : 'exercise'
@@ -13,21 +13,21 @@
   >
   </campus-file-icon>
 
-  <div class="ui-list-item__title">{{ data.eduContent.name }}</div>
+  <list-item-title>{{ data.eduContent.name }}</list-item-title>
 
-  <div class="ui-list-item__caption">{{ data.eduContent.description }}</div>
+  <list-item-caption>{{ data.eduContent.description }}</list-item-caption>
 
-  <div class="ui-list-item__actions">
+  <list-item-actions>
     <span
       *ngFor="let action of actions"
       campusClickStopPropagation
       (click)="onActionClick(action)"
       >{{ data.result ? 'maak opnieuw' : action.label }}</span
     >
-  </div>
-  <div
+  </list-item-actions>
+  <list-item-content
     *ngIf="data.methodLevel"
-    class=" app-practice-searchresult__method-level ui-list-item__content-right"
+    class=" app-practice-searchresult__method-level"
   >
     <mat-icon
       *ngIf="data.methodLevel.icon; else methodLevel"
@@ -37,10 +37,10 @@
     <ng-template #methodLevel>
       <div>{{ data.methodLevel.label }}</div>
     </ng-template>
-  </div>
+  </list-item-content>
 
-  <div
-    class="app-practice-searchresult__stars ui-list-item__content-right"
+  <list-item-content
+    class="app-practice-searchresult__stars"
     *ngIf="data.eduContent.type === 'exercise'"
     ><mat-icon
       *ngFor="let i of [1, 2, 3]"
@@ -53,5 +53,5 @@
           : 'star-outline'
       "
     ></mat-icon
-  ></div>
+  ></list-item-content>
 </campus-list-item-content>

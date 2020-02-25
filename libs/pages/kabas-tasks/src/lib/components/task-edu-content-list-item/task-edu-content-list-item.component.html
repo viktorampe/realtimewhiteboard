@@ -1,38 +1,40 @@
 <campus-list-item-content [contentRightSeparated]="true">
   <mat-icon
-    class="ui-list-item__icon"
+    list-item-icon
     svgIcon="{{ fileIcon != 'ludo.zip' ? 'general-file' : 'exercise' }}"
   ></mat-icon>
 
-  <div class="ui-list-item__title">{{ title }}</div>
-  <div *ngIf="actions" class="ui-list-item__actions"
+  <list-item-title>{{ title }}</list-item-title>
+  <list-item-actions *ngIf="actions"
     ><span
       campusClickStopPropagation
       *ngFor="let action of actions"
       (click)="onActionClick(action)"
     >
       {{ action.label }}
-    </span></div
+    </span></list-item-actions
   >
-  <div
+  >
+  <list-item-content
     *ngIf="level"
-    class="manage-kabas-tasks-task-edu-content-list-item__level ui-list-item__content-right"
+    class="manage-kabas-tasks-task-edu-content-list-item__level"
   >
-    {{ level }}
-  </div>
+    {{ level }} </list-item-content
+  >>
 
-  <div
+  <list-item-content
     *ngIf="!isPaperTask"
-    class="manage-kabas-tasks-task-edu-content-list-item__required ui-list-item__content-right"
+    class="manage-kabas-tasks-task-edu-content-list-item__required"
     [class.manage-kabas-tasks-task-edu-content-list-item__required--no-diabolo]="
       !diaboloPhaseIcon
     "
   >
-    {{ required ? 'moetje' : 'magje' }}
-  </div>
+    {{ required ? 'moetje' : 'magje' }} </list-item-content
+  >>
 
   <mat-icon
-    class="manage-kabas-tasks-task-edu-content-list-item__diabolo ui-list-item__content-right"
+    list-item-content
+    class="manage-kabas-tasks-task-edu-content-list-item__diabolo"
     svgIcon="{{ diaboloPhaseIcon }}"
   ></mat-icon>
 </campus-list-item-content>

@@ -1,49 +1,47 @@
 <campus-list-item-content>
   <mat-icon
+    list-item-icon
     *ngIf="archived"
-    class="manage-kabas-tasks-task-list-item__icon--archived ui-list-item__icon"
+    class="manage-kabas-tasks-task-list-item__icon--archived"
     svgIcon="task:archived"
   ></mat-icon>
   <mat-icon
+    list-item-icon
     *ngIf="!archived"
-    class="manage-kabas-tasks-task-list-item__icon--status ui-list-item__icon"
+    class="manage-kabas-tasks-task-list-item__icon--status"
     [svgIcon]="'task:' + status"
   ></mat-icon>
 
-  <div
-    class="manage-kabas-tasks-task-list-item__container__title ui-list-item__title"
+  <list-item-title
+    class="manage-kabas-tasks-task-list-item__container__title"
     (click)="actions[0].handler()"
     campusClickStopPropagation
-    >{{ title }}</div
+    >{{ title }}</list-item-title
   >
-  <div
+  >
+  <list-item-actions
     *ngIf="actions.length"
-    class="manage-kabas-tasks-task-list-item__container__actions ui-list-item__actions"
+    class="manage-kabas-tasks-task-list-item__container__actions"
     ><span
       campusClickStopPropagation
       *ngFor="let action of actions"
       (click)="action.handler()"
       >{{ action.label }}</span
-    ></div
+    ></list-item-actions
   >
-  <div
-    class="manage-kabas-tasks-task-list-item__learning-area ui-list-item__content-right"
   >
-    {{ learningArea }}
-  </div>
+  <list-item-content class="manage-kabas-tasks-task-list-item__learning-area">
+    {{ learningArea }} </list-item-content
+  >>
 
-  <div
-    class="manage-kabas-tasks-task-list-item__dates ui-list-item__content-right"
-  >
+  <list-item-content class="manage-kabas-tasks-task-list-item__dates">
     <div matLine>
       <span *ngIf="startDate">{{ startDate | date: 'd/MM/yy' }}</span>
       <span *ngIf="endDate"> - {{ endDate | date: 'd/MM/yy' }}</span>
     </div>
-    <div matLine></div>
-  </div>
-  <div
-    class="manage-kabas-tasks-task-list-item__assignees ui-list-item__content-right"
-  >
+    <div matLine></div> </list-item-content
+  >>
+  <list-item-content class="manage-kabas-tasks-task-list-item__assignees">
     <ul
       class="manage-kabas-tasks-task-list-item__assignees-class-groups"
       *ngIf="classGroups.length"
@@ -72,15 +70,15 @@
         }}</span
       >
     </div>
-  </div>
-  <div
-    class="manage-kabas-tasks-task-list-item__hover-actions  ui-list-item__content-right"
+  </list-item-content>
+  <list-item-content
+    class="manage-kabas-tasks-task-list-item__hover-actions"
     campusClickStopPropagation
   >
     <mat-icon
       [class.favorite]="isFavorite"
       (click)="toggleFavorite()"
       [svgIcon]="isFavorite ? 'favorites-filled' : 'favorites'"
-    ></mat-icon>
-  </div>
+    ></mat-icon> </list-item-content
+  >>
 </campus-list-item-content>
