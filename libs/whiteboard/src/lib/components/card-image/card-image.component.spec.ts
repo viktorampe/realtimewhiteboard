@@ -51,10 +51,4 @@ describe('CardImageComponent', () => {
     component.emitRemoveClicked();
     expect(component.removeClicked.emit).toHaveBeenCalled();
   });
-
-  it('should emit updateClicked when emitUpdateClicked gets called', () => {
-    spyOn(component.updateClicked, 'emit');
-    component.emitUpdateClicked();
-    expect(component.updateClicked.emit).toHaveBeenCalled();
-  });
 });

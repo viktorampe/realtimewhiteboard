@@ -10,7 +10,7 @@ export class CardImageComponent implements OnInit {
   @Input() imageUrl: string;
   @Input() mode: ModeEnum;
   @Output() removeClicked = new EventEmitter<void>();
-  @Output() updateClicked = new EventEmitter<void>();
+  @Output() openFilePicker = new EventEmitter<void>();
 
   constructor() {}
 
@@ -24,7 +24,7 @@ export class CardImageComponent implements OnInit {
     this.removeClicked.emit();
   }
 
-  emitUpdateClicked() {
-    this.updateClicked.emit();
+  emitOpenFilePicker() {
+    this.openFilePicker.emit();
   }
 }

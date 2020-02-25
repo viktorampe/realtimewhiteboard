@@ -8,7 +8,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 export class ImageToolbarComponent implements OnInit {
   @Input() hasImage: boolean;
   @Output() removeClicked = new EventEmitter<void>();
-  @Output() updateClicked = new EventEmitter<void>();
+  @Output() openFilePicker = new EventEmitter<void>();
 
   constructor() {}
 
@@ -16,8 +16,8 @@ export class ImageToolbarComponent implements OnInit {
     this.removeClicked.emit();
   }
 
-  emitUpdateClicked() {
-    this.updateClicked.emit();
+  emitOpenFilePicker() {
+    this.openFilePicker.emit();
   }
 
   ngOnInit() {}

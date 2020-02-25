@@ -33,7 +33,7 @@ import { ProgressBarComponent } from '../progress-bar/progress-bar.component';
 import { ShelfComponent } from '../shelf/shelf.component';
 import { WhiteboardToolbarComponent } from '../whiteboard-toolbar/whiteboard-toolbar.component';
 import { WhiteboardComponent } from './whiteboard.component';
-// file.only
+
 describe('WhiteboardComponent', () => {
   let component: WhiteboardComponent;
   let fixture: ComponentFixture<WhiteboardComponent>;
@@ -333,14 +333,6 @@ describe('WhiteboardComponent', () => {
         expect(card.mode).toBe(ModeEnum.SELECTED);
       });
     });
-  });
-
-  it('should remove image from a card when removeImageFromCard is called', () => {
-    const card = new CardFixture();
-
-    component.removeImageFromCard(card);
-
-    expect(card.image).toBe('');
   });
 
   xdescribe('updateImageForCard()', () => {

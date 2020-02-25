@@ -1,5 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconModule } from '@angular/material';
+import { WhiteboardComponent } from '../whiteboard/whiteboard.component';
 import { ImageToolbarComponent } from './image-toolbar.component';
 
 describe('ImageToolbarComponent', () => {
@@ -9,6 +10,12 @@ describe('ImageToolbarComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [MatIconModule],
+      providers: [
+        {
+          provide: WhiteboardComponent,
+          useValue: { openFilePicker: jest.fn() }
+        }
+      ],
       declarations: [ImageToolbarComponent]
     }).compileComponents();
   }));
@@ -27,11 +34,5 @@ describe('ImageToolbarComponent', () => {
     spyOn(component.removeClicked, 'emit');
     component.emitRemoveClicked();
     expect(component.removeClicked.emit).toHaveBeenCalled();
-  });
-
-  it('should emit updateClicked when emitUpdateClicked gets called', () => {
-    spyOn(component.updateClicked, 'emit');
-    component.emitUpdateClicked();
-    expect(component.updateClicked.emit).toHaveBeenCalled();
   });
 });
