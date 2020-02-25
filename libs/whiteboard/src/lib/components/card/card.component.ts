@@ -13,8 +13,6 @@ export class CardComponent {
   @Input() image: string;
   @Input() viewModeImage: boolean;
 
-  @Output() cardTapped = new EventEmitter<void>();
-  @Output() cardPressed = new EventEmitter<void>();
   @Output() removeImage = new EventEmitter<void>();
   @Output() updateImage = new EventEmitter<string>();
 
@@ -28,20 +26,6 @@ export class CardComponent {
 
   get Mode() {
     return ModeEnum;
-  }
-
-  onClickCard(event: MouseEvent) {
-    if (this.mode !== ModeEnum.IDLE) {
-      event.stopPropagation();
-    }
-  }
-
-  onPressCard() {
-    this.cardPressed.emit();
-  }
-
-  onTapCard() {
-    this.cardTapped.emit();
   }
 
   emitRemoveImage() {

@@ -118,6 +118,12 @@ export class WhiteboardComponent implements OnInit {
     }
   }
 
+  onCardClicked(event: MouseEvent, card: CardInterface) {
+    if (card.mode !== ModeEnum.IDLE) {
+      event.stopPropagation();
+    }
+  }
+
   removeImageFromCard(card: CardInterface) {
     card.image = '';
   }

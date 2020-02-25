@@ -64,11 +64,12 @@
         [(image)]="card.image"
         [(mode)]="card.mode"
         [(viewModeImage)]="card.viewModeImage"
-        (cardTapped)="onCardTapped(card)"
-        (cardPressed)="onCardPressed(card)"
         (removeImage)="removeImageFromCard(card)"
         (updateImage)="openFilePicker(filePicker)"
         (cdkDragEnded)="onDragEnded($event, card)"
+        (click)="onCardClicked($event, card)"
+        (press)="onCardPressed(card)"
+        (tap)="onCardTapped(card)"
       ></campus-card>
       <input
         (change)="onFilePickerImageSelected($event, card)"

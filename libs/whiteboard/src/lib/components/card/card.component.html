@@ -2,9 +2,6 @@
   class="card"
   [class.zoom]="mode === Mode.ZOOM"
   [style.border-color]="color"
-  (click)="onClickCard($event)"
-  (press)="onPressCard()"
-  (tap)="onTapCard()"
 >
   <div class="card__content" [class.zoom]="mode === Mode.ZOOM">
     <ng-container *ngIf="mode !== Mode.UPLOAD; else uploadMode">

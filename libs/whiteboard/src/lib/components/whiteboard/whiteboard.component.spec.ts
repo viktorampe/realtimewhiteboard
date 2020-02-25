@@ -260,6 +260,38 @@ describe('WhiteboardComponent', () => {
     });
   });
 
+  describe('onCardClicked()', () => {
+    const mockMouseEvent = {
+      stopPropagation: jest.fn()
+    };
+
+    const nonIdleModes = Object.keys(ModeEnum).filter(
+      key => !isNaN(Number(ModeEnum[key])) && ModeEnum[key] !== ModeEnum.IDLE
+    );
+
+    beforeEach(() => {
+      mockMouseEvent.stopPropagation.mockReset();
+    });
+
+    it('should not propagate click when mode != idle', () => {
+      nonIdleModes.forEach(mode => {
+        component.onCardClicked(
+          mockMouseEvent as any,
+          new CardFixture({ mode: ModeEnum[mode] })
+        );
+        expect(mockMouseEvent.stopPropagation).toHaveBeenCalled();
+      });
+    });
+    it('should propagate click when mode === idle', () => {
+      component.onCardClicked(
+        mockMouseEvent as any,
+        new CardFixture({ mode: ModeEnum.IDLE })
+      );
+
+      expect(mockMouseEvent.stopPropagation).not.toHaveBeenCalled();
+    });
+  });
+
   describe('onCardPressed()', () => {
     it('should not change mode if card.mode = shelf', () => {
       const card = new CardFixture({ mode: ModeEnum.SHELF });
