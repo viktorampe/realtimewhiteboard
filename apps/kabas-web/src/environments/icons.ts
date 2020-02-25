@@ -85,5 +85,6 @@ export const icons = {
   'educontent-product-type:correctiesleutel': 'assets/icons/general-file.svg',
 
   //empty-states
-  'empty-state-all-done': 'assets/empty-states/all-done.svg'
+  'empty-state-all-done': 'assets/empty-states/all-done.svg',
+  'empty-state-no-educontent': 'assets/empty-states/no-educontent.svg'
 };
