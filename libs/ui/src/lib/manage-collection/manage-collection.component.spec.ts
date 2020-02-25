@@ -108,8 +108,6 @@ describe('ManageCollectionComponent', () => {
     });
   });
 
-  beforeAll(() => {});
-
   beforeEach(() => {
     fixture = TestBed.createComponent(ManageCollectionComponent);
     component = fixture.componentInstance;
@@ -126,11 +124,9 @@ describe('ManageCollectionComponent', () => {
 
   describe('creation', () => {
     it('should create', () => {
-      console.log(component);
       expect(component).toBeTruthy();
     });
     it('should inject the MAT_DIALOG_DATA', () => {
-      console.log(component.data);
       expect(component.data).toEqual(mockInjectedData);
     });
   });
@@ -205,9 +201,7 @@ describe('ManageCollectionComponent', () => {
           const spy = jest
             .spyOn(filterService, 'filter')
             .mockReturnValue(mockFilteredItems);
-          component._filterTextInput.setValue(
-            'some value that does not matter'
-          );
+          component.filterTextInput.setValue('some value that does not matter');
 
           fixture.detectChanges();
 
@@ -219,9 +213,7 @@ describe('ManageCollectionComponent', () => {
           spy.mockRestore();
         });
         it('should hide the recent items when a filter is active', () => {
-          component._filterTextInput.setValue(
-            'some value that does not matter'
-          );
+          component.filterTextInput.setValue('some value that does not matter');
           fixture.detectChanges();
           expect(
             fixture.debugElement.query(
@@ -230,7 +222,7 @@ describe('ManageCollectionComponent', () => {
           ).toBeFalsy();
         });
         it('should init without a filter applied', () => {
-          expect(component._filterTextInput.input.value).toBe('');
+          expect(component.filterTextInput.input.value).toBe('');
         });
         it('should keep selection info of a filtered item', () => {
           component.ngAfterViewInit();
@@ -251,14 +243,12 @@ describe('ManageCollectionComponent', () => {
           const spy = jest
             .spyOn(filterService, 'filter')
             .mockReturnValue(mockFilteredItems);
-          component._filterTextInput.setValue(
-            'some value that does not matter'
-          );
+          component.filterTextInput.setValue('some value that does not matter');
           fixture.detectChanges();
 
           // clear filter
           spy.mockReturnValue(mockLinkableItems);
-          component._filterTextInput.clear();
+          component.filterTextInput.clear();
           fixture.detectChanges();
 
           itemsInGeneralList = generalListDE.queryAll(
@@ -279,7 +269,7 @@ describe('ManageCollectionComponent', () => {
       describe('when useFilter === false', () => {
         beforeEach(() => {
           component.useFilter = false;
-          fixture.detectChanges();
+          fixture.changeDetectorRef.detectChanges();
         });
 
         it('should not use a filter', () => {
@@ -314,9 +304,7 @@ describe('ManageCollectionComponent', () => {
           jest
             .spyOn(filterService, 'filter')
             .mockReturnValue(mockFilteredItems);
-          component._filterTextInput.setValue(
-            'some value that does not matter'
-          );
+          component.filterTextInput.setValue('some value that does not matter');
           fixture.detectChanges();
         });
 
@@ -345,9 +333,9 @@ describe('ManageCollectionComponent', () => {
           expect(linkText).toBe(expectedText);
 
           // link click event
-          component._filterTextInput.clear = jest.fn();
+          component.filterTextInput.clear = jest.fn();
           link.click();
-          expect(component._filterTextInput.clear).toHaveBeenCalled();
+          expect(component.filterTextInput.clear).toHaveBeenCalled();
         });
       });
     });
