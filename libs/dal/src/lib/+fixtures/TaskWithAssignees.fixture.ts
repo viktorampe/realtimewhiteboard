@@ -10,6 +10,7 @@ export class TaskWithAssigneesFixture implements TaskWithAssigneesInterface {
   eduContentAmount = 0;
   assignees = [new AssigneeFixture()];
   learningAreaId = 4;
+  taskEduContents = [];
 
   constructor(props: Partial<TaskWithAssigneesInterface> = {}) {
     Object.assign(this, props);
