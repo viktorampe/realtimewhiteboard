@@ -55,7 +55,7 @@ export class ManageCollectionComponent
   >();
 
   @ViewChild(MatSelectionList, { static: false })
-  public selectionList: MatSelectionList;
+  private selectionList: MatSelectionList;
 
   @ViewChild(FilterTextInputComponent, { static: false })
   public filterTextInput: FilterTextInputComponent<
