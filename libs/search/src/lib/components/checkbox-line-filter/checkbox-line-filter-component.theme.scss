@@ -3,6 +3,8 @@
   $checkbox-line-background-color: $ui-tertiary-bg-color !default;
   $checkbox-line-title-border-color: $ui-tertiary-bg-color-2 !default;
   $checkbox-line--disabled-color: $ui-tertiary-bg-color-2 !default;
+  $checkbox-line--disabled-background-color: $ui-tertiary-bg-color-2 !default;
+  $checkbox-line--disabled-stroke-color: inherit !default;
 
   $checkbox-line-filter-font-size: $ui-primary-font-size * 1.2 !default;
 
@@ -49,12 +51,17 @@
 
     &__checkbox--disabled {
       .mat-checkbox {
+        &-background,
         &-frame {
-          border-color: $checkbox-line--disabled-color;
+          border-color: $checkbox-line--disabled-color !important;
         }
 
         &-background {
-          background-color: $checkbox-line--disabled-color !important;
+          background-color: $checkbox-line--disabled-background-color !important;
+        }
+
+        &-checkmark-path {
+          stroke: $checkbox-line--disabled-stroke-color !important;
         }
 
         &-label {

@@ -207,6 +207,11 @@ $date-filter_mat-form-field_outline-border-right-width: 1px;
 $date-filter_mat-form-field_outline-border-color: $primary-font-color-2;
 $date-filter_date-range_day--in-range-background-color: $secondary-bg-color-accent;
 
+// search filters > checkbox-line
+$checkbox-line--disabled-color: $ui-text-disabled-color;
+$checkbox-line--disabled-background-color: unset;
+$checkbox-line--disabled-stroke-color: $ui-text-disabled-color;
+
 // ui > date range picker component
 $ui-date-range-picker_mat-form-field_outline-opacity: 1;
 $ui-date-range-picker_mat-form-field_outline-border-right-width: 1px;
