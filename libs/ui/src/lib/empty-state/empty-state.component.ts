@@ -1,4 +1,10 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  HostBinding,
+  Input,
+  Output
+} from '@angular/core';
 
 @Component({
   selector: 'campus-empty-state',
@@ -12,6 +18,9 @@ export class EmptyStateComponent {
   @Input() ctaLabel?: string;
 
   @Output() clickCta = new EventEmitter<void>();
+
+  @HostBinding('class.ui-empty-state')
+  uiEmptyStateClass = true;
 
   constructor() {}
 
