@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ModeEnum } from '../../enums/mode.enum';
+import CardInterface from '../../models/card.interface';
 
 @Component({
   selector: 'campus-card',
@@ -13,14 +14,8 @@ export class CardComponent {
   @Input() image: string;
   @Input() viewModeImage: boolean;
 
-  @Output() removeImage = new EventEmitter<void>();
-  @Output() updateImage = new EventEmitter<string>();
-
-  @Output() modeChange = new EventEmitter<ModeEnum>();
-  @Output() colorChange = new EventEmitter<string>();
-  @Output() descriptionChange = new EventEmitter<string>();
-  @Output() imageChange = new EventEmitter<string>();
-  @Output() viewModeImageChange = new EventEmitter<boolean>();
+  @Output() openFilePicker = new EventEmitter<string>();
+  @Output() update = new EventEmitter<Partial<CardInterface>>();
 
   constructor() {}
 
@@ -28,19 +23,24 @@ export class CardComponent {
     return ModeEnum;
   }
 
-  emitRemoveImage() {
-    this.removeImage.emit();
+  updateImage(url: string) {
+    this.update.emit({
+      image: url
+    });
   }
-
-  emitUpdateImage(url: string) {
-    this.updateImage.emit(url);
+  selectImage() {
+    this.openFilePicker.emit();
   }
 
   selectColor(color: string) {
-    this.colorChange.emit(color);
+    this.update.emit({
+      color: color
+    });
   }
 
-  onDescriptionChange(description: string) {
-    this.descriptionChange.emit(description);
+  updateDescription(description: string) {
+    this.update.emit({
+      description: description
+    });
   }
 }

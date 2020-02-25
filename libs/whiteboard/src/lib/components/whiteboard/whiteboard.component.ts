@@ -20,7 +20,6 @@ export class WhiteboardComponent implements OnInit {
   }
 
   @ViewChild('workspace', { static: true }) workspaceElementRef: ElementRef;
-
   readonly multipleCardCreationOffset = 50;
   readonly allowedFileTypes = ['image/jpeg', 'image/pjpeg', 'image/png'];
 
@@ -63,6 +62,10 @@ export class WhiteboardComponent implements OnInit {
   //#endregion
 
   //#region CARD ACTIONS
+  updateCard(updates: Partial<CardInterface>, card: CardInterface) {
+    Object.assign(card, updates);
+  }
+
   addEmptyCard(
     top: number = 0,
     left: number = 0,
@@ -122,10 +125,6 @@ export class WhiteboardComponent implements OnInit {
     if (card.mode !== ModeEnum.IDLE) {
       event.stopPropagation();
     }
-  }
-
-  removeImageFromCard(card: CardInterface) {
-    card.image = '';
   }
 
   openFilePicker(filePicker: HTMLElement) {
