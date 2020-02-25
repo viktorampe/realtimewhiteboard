@@ -1,6 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 import { MAT_DATE_LOCALE } from '@angular/material';
 import {
+  AssigneeFixture,
+  AssigneeTypesEnum,
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
   DalState,
@@ -29,6 +31,9 @@ import {
   TaskEduContentFixture,
   TaskFixture,
   TaskServiceInterface,
+  TaskStatusEnum,
+  TaskWithAssigneesFixture,
+  TaskWithAssigneesInterface,
   TASK_SERVICE_TOKEN,
   UserQueries,
   YearFixture
@@ -55,13 +60,7 @@ import { hot } from 'jasmine-marbles';
 import { configureTestSuite } from 'ng-bullet';
 import { of } from 'rxjs';
 import { shareReplay, take } from 'rxjs/operators';
-import { AssigneeFixture } from '../interfaces/Assignee.fixture';
-import { AssigneeTypesEnum } from '../interfaces/Assignee.interface';
-import { TaskWithAssigneesFixture } from '../interfaces/TaskWithAssignees.fixture';
-import {
-  TaskStatusEnum,
-  TaskWithAssigneesInterface
-} from '../interfaces/TaskWithAssignees.interface';
+import { TaskWithTaskEduContentInterface } from '../interfaces/TaskEduContentWithEduContent.interface';
 import { KabasTasksViewModel } from './kabas-tasks.viewmodel';
 import * as vmSelectors from './kabas-tasks.viewmodel.selectors';
 import {
@@ -883,7 +882,7 @@ describe('KabasTaskViewModel', () => {
             )
           })
         ]
-      }) as TaskWithAssigneesInterface;
+      }) as TaskWithTaskEduContentInterface;
       kabasTasksViewModel.printSolution(task);
 
       const expectedAction = new TaskActions.PrintPaperTaskSolution({
@@ -1038,7 +1037,7 @@ describe('KabasTaskViewModel', () => {
           description:
             'should return the correct searchState - when book is set',
           setup: {
-            task: new TaskWithAssigneesFixture(),
+            task: new TaskWithAssigneesFixture() as TaskWithTaskEduContentInterface,
             queryParams: {
               book: 34
             }
@@ -1056,7 +1055,7 @@ describe('KabasTaskViewModel', () => {
           description:
             'should return the correct searchState - when chapter is set',
           setup: {
-            task: new TaskWithAssigneesFixture(),
+            task: new TaskWithAssigneesFixture() as TaskWithTaskEduContentInterface,
             searchBook: new EduContentBookFixture({
               years: [new YearFixture({ id: 2 }), new YearFixture({ id: 3 })],
               methodId: 7
@@ -1732,7 +1731,7 @@ describe('KabasTaskViewModel', () => {
     const currentTask = new TaskWithAssigneesFixture({
       id: 1,
       learningAreaId: 3
-    });
+    }) as TaskWithTaskEduContentInterface;
 
     const methodYears: MethodYearsInterface[] = [
       new MethodYearsFixture({

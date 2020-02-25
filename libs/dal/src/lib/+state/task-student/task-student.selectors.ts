@@ -1,4 +1,6 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
+import { selectLinkedPersonState } from '../linked-person/linked-person.selectors';
+import { AssigneeTypesEnum } from '../task/AssigneeTypes.enum';
 import {
   NAME,
   selectAll,
@@ -55,4 +57,24 @@ export const getByIds = createSelector(
 export const getById = createSelector(
   selectTaskStudentState,
   (state: State, props: { id: number }) => state.entities[props.id]
+);
+
+export const getTaskStudentAssigneeByTask = createSelector(
+  [getAll, selectLinkedPersonState],
+  (taskStudents, linkedPersonState) =>
+    taskStudents.reduce((dict, ts) => {
+      if (!dict[ts.taskId]) {
+        dict[ts.taskId] = [];
+      }
+      dict[ts.taskId].push({
+        id: ts.id,
+        type: AssigneeTypesEnum.STUDENT,
+        relationId: ts.personId,
+        label: linkedPersonState.entities[ts.personId].displayName,
+        start: ts.start,
+        end: ts.end
+      });
+
+      return dict;
+    }, {})
 );
