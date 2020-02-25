@@ -66,6 +66,10 @@ export class DemoPageComponent implements OnInit {
     ];
   }
 
+  clickEmptyCta() {
+    console.log('Empty State CTA Clicked!');
+  }
+
   log(data: MultiCheckBoxTableColumnChangeEventInterface<ClassGroupInterface>) {
     console.log(data);
 

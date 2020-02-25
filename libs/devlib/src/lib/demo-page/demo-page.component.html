@@ -1,48 +1,20 @@
-<!-- <h1 class="mat-h1">Typography test</h1>
 <div class="container">
-  <campus-multi-check-box-table
-    selectAllForColumnEnabled="true"
-    [rowHeaderColumns]="rowHeaderColumns"
-    [itemColumns]="itemColumns"
-    [items]="items"
-    (selectAllForColumnChanged)="log($event)"
-    (checkBoxChanged)="clickCheckBox($event)"
-  ></campus-multi-check-box-table>
-</div>
-
-<div class="container">
-  <campus-method-favorite-tile
-    [name]="'Mol en beer'"
-    [logoUrl]="'molenbeer.svg'"
-    [eduContent]="null"
-    [bookId]="34"
+  <campus-empty-state
+    svgIcon="empty-state-all-done"
+    title="Nothing to see here"
+    description="This tagline conveys the purpose of the screen, without appearing actionable."
+    ctaLabel="Call to action"
+    (clickCta)="clickEmptyCta()"
   >
-  </campus-method-favorite-tile>
-</div> -->
+  </campus-empty-state>
 
-<!-- <campus-editor-timeline></campus-editor-timeline> -->
-<button (click)="changeMode(sectionModes.STATIC)">make section static</button>
-<button (click)="changeMode(sectionModes.EDITABLE)"
-  >make section editable</button
->
-<button (click)="changeMode(sectionModes.EDITING)">make section editing</button>
-
-<campus-section
-  [(mode)]="sectionMode"
-  (actionClick)="handleTriggerActionClick($event)"
->
-  <section-title>I'm a the title of this section</section-title>
-  <section-actions><mat-icon svgIcon="edit"></mat-icon></section-actions>
-  <section-content>
-    Cool text
-    <hr />
-
-    <p *ngIf="sectionMode === sectionModes.STATIC">{{ staticText }}</p>
-    <p *ngIf="sectionMode === sectionModes.EDITABLE">{{ editableText }}</p>
-
-    <div *ngIf="sectionMode === sectionModes.EDITING">
-      <input #input type="text" placeholder="edit me" [value]="editableText" />
-      <p> <button (click)="save($event, input)">Save</button></p>
-    </div>
-  </section-content>
-</campus-section>
+  <div class="ui-headline">Headline (Regular 24px)</div>
+  <div class="ui-title">Title (Semibold 21px)</div>
+  <div class="ui-subheading">Subheading (Regular 16px)</div>
+  <div class="ui-body-2">Body 2 / Menu (Semibold 14px)</div>
+  <div class="ui-body-1">Body 1 (Regular 14px)</div>
+  <div class="ui-caption">Caption (Regular 12px)</div>
+  <div class="ui-button-text">Button Text (Semibold 15px Uppercase)</div>
+  <div class="ui-action-text">Action Text (Regular 12px Uppercase)</div>
+  <div class="ui-tooltip-text">Tooltip Text (Regular 10px)</div>
+</div>
