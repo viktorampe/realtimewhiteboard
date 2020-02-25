@@ -1,0 +1,50 @@
+@import './../mixins';
+
+@mixin ui-empty-state {
+  // Color map for SVGs
+  $baseColors: (
+    primary: #e72b5d,
+    secondary: #5a6eb3,
+    tertiary: #ffce39
+  );
+  $ui-skin-color: #f5a894 !default;
+  $ui-white-color: #fff !default;
+  $ui-black-color: #000 !default;
+
+  $ui-empty-state-width: 400px;
+  $ui-empty-state-margin-horizontal: 64px;
+  $ui-empty-state-row-gap: 24px;
+
+  .ui-empty-state {
+    width: $ui-empty-state-width;
+    margin: $ui-empty-state-margin-horizontal auto;
+
+    &__image,
+    &__title,
+    &__description {
+      margin-bottom: $ui-empty-state-row-gap;
+    }
+
+    &__image.mat-icon {
+      width: 100%;
+      height: auto;
+    }
+  }
+
+  svg {
+    @each $color, $value in colorMap($baseColors, 10) {
+      .fill-#{$color} {
+        fill: $value;
+      }
+    }
+    .fill-skin {
+      fill: $ui-skin-color;
+    }
+    .fill-white {
+      fill: $ui-white-color;
+    }
+    .fill-black {
+      fill: $ui-black-color;
+    }
+  }
+}

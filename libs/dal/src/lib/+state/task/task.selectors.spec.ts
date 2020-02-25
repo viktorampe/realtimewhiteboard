@@ -1,7 +1,23 @@
+import { Dictionary } from '@ngrx/entity';
 import { TaskQueries } from '.';
+import {
+  AssigneeFixture,
+  EduContentFixture,
+  LearningAreaFixture,
+  TaskEduContentFixture,
+  TaskWithAssigneesFixture
+} from '../../+fixtures';
 import { TaskFixture } from '../../+fixtures/Task.fixture';
-import { TaskInterface } from '../../+models';
+import {
+  FavoriteInterface,
+  LearningAreaInterface,
+  TaskEduContentInterface,
+  TaskInterface
+} from '../../+models';
+import { AssigneeInterface } from './Assignee.interface';
+import { AssigneeTypesEnum } from './AssigneeTypes.enum';
 import { State } from './task.reducer';
+import { TaskStatusEnum } from './TaskWithAssignees.interface';
 
 describe('Task Selectors', () => {
   function createTask(id: number, teacherId: number): TaskInterface | any {
@@ -132,6 +148,134 @@ describe('Task Selectors', () => {
         { learningAreaId: 1, userId: 3 }
       );
       expect(results).toEqual([3]);
+    });
+
+    it('combinedAssigneesByTask', () => {
+      const projector = TaskQueries.combinedAssigneesByTask.projector;
+      const tCGA = {
+        1: [
+          new AssigneeFixture({
+            id: 1, // taskClassGroupId
+            type: AssigneeTypesEnum.CLASSGROUP
+          }),
+          new AssigneeFixture({
+            id: 3,
+            type: AssigneeTypesEnum.CLASSGROUP
+          })
+        ],
+        2: [
+          new AssigneeFixture({
+            id: 2,
+            type: AssigneeTypesEnum.CLASSGROUP
+          })
+        ]
+      };
+      const tGA = {
+        1: [
+          new AssigneeFixture({
+            id: 1, // taskGroupId
+            type: AssigneeTypesEnum.GROUP
+          })
+        ],
+        2: [
+          new AssigneeFixture({
+            id: 2,
+            type: AssigneeTypesEnum.GROUP
+          })
+        ]
+      };
+      const tSA = {
+        1: [
+          new AssigneeFixture({
+            id: 1, // taskStudentId
+            type: AssigneeTypesEnum.STUDENT
+          })
+        ],
+        3: [
+          new AssigneeFixture({
+            id: 2,
+            type: AssigneeTypesEnum.STUDENT
+          })
+        ]
+      };
+
+      expect(projector(tCGA, tGA, tSA, {})).toEqual({
+        1: [...tCGA[1], ...tGA[1], ...tSA[1]],
+        2: [...tCGA[2], ...tGA[2]],
+        3: [...tSA[3]]
+      });
+    });
+
+    it('getAllTasksWithAssignments', () => {
+      const projector = TaskQueries.getAllTasksWithAssignments.projector;
+      const tasks: TaskInterface[] = [
+        new TaskFixture({ id: 1, learningAreaId: 1 }),
+        new TaskFixture({ id: 2, learningAreaId: 1 }),
+        new TaskFixture({ id: 3, learningAreaId: 1 })
+      ];
+      const learningAreaDict: Dictionary<LearningAreaInterface> = {
+        1: new LearningAreaFixture({ id: 1 })
+      };
+      const taskEduContentByTask: Dictionary<TaskEduContentInterface[]> = {
+        1: [
+          new TaskEduContentFixture({
+            id: 1,
+            eduContent: new EduContentFixture()
+          })
+        ],
+        2: [
+          new TaskEduContentFixture({
+            id: 2,
+            eduContent: new EduContentFixture()
+          })
+        ],
+        3: [
+          new TaskEduContentFixture({
+            id: 3,
+            eduContent: new EduContentFixture()
+          })
+        ]
+      };
+      const assigneesByTask: Dictionary<AssigneeInterface[]> = {
+        1: [new AssigneeFixture({ id: 1 })],
+        2: [new AssigneeFixture({ id: 2 })],
+        3: [new AssigneeFixture({ id: 3 })]
+      };
+      const favoriteTasks: FavoriteInterface[] = [];
+
+      expect(
+        projector(
+          tasks,
+          learningAreaDict,
+          taskEduContentByTask,
+          assigneesByTask,
+          favoriteTasks
+        )
+      ).toEqual([
+        resultForTask(tasks[0]),
+        resultForTask(tasks[1]),
+        resultForTask(tasks[2])
+      ]);
+
+      function resultForTask(task: TaskInterface): TaskWithAssigneesFixture {
+        const assignees = assigneesByTask[task.id];
+        const taskEduContents = taskEduContentByTask[task.id] || [];
+        return new TaskWithAssigneesFixture({
+          ...task,
+          eduContentAmount: taskEduContents.length,
+          taskEduContents: taskEduContents.map(taskEduContent => ({
+            id: taskEduContent.id,
+            index: taskEduContent.index,
+            eduContent: taskEduContent.eduContent
+          })),
+          assignees,
+          startDate: assignees[0].start,
+          endDate: assignees[0].end,
+          status: TaskStatusEnum.FINISHED,
+          isFavorite: false,
+          learningArea: learningAreaDict[task.learningAreaId]
+        });
+      }
     });
   });
 });

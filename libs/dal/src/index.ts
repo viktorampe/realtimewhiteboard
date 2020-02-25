@@ -61,6 +61,7 @@ export * from './lib/class-group';
 export * from './lib/content-request';
 export * from './lib/dal.module';
 export * from './lib/edu-content';
+export * from './lib/edu-content-book';
 export * from './lib/exercise';
 export * from './lib/favorite';
 export * from './lib/group';

@@ -1,0 +1,23 @@
+@import 'libs/ui/src/lib/mixins.scss';
+
+// Color map for SVGs
+$baseColors: (
+  primary: #e72b5d,
+  secondary: #5a6eb3,
+  tertiary: #ffce39
+);
+
+svg {
+  @each $color, $value in colorMap($baseColors, 10) {
+    .fill-#{$color} {
+      fill: $value;
+    }
+  }
+  .fill-skin {
+    fill: #f5a894;
+  }
+
+  .fill-white {
+    fill: #fff;
+  }
+}

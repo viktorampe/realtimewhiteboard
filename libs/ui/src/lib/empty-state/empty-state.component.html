@@ -1,1 +1,14 @@
-<p>empty-state works!</p>
+<mat-icon
+  class="ui-empty-state__image"
+  [svgIcon]="svgIcon"
+  *ngIf="svgIcon"
+></mat-icon>
+<div class="ui-empty-state__title ui-title">
+  {{ title }}
+</div>
+<div class="ui-empty-state__description ui-caption">
+  {{ description }}
+</div>
+<div class="ui-empty-state__cta">
+  <campus-button primary (click)="ctaClick()">{{ ctaLabel }}</campus-button>
+</div>

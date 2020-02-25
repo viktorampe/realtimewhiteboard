@@ -197,6 +197,8 @@ export const getAllowedMethodYears = createSelector(
                 methodState.entities[book.methodId].code +
                 '.jpg',
               name: methodState.entities[book.methodId].name,
+              learningAreaId:
+                methodState.entities[book.methodId].learningAreaId,
               years: []
             };
           if (book.years.length > 0)

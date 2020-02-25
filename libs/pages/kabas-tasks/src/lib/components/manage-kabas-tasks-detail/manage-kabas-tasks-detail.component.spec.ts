@@ -17,13 +17,16 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import {
+  AssigneeFixture,
+  AssigneeInterface,
   EduContentFixture,
   EduFileFixture,
   EduFileTypeEnum,
   LearningAreaFixture,
   LearningAreaInterface,
   TaskEduContentFixture,
-  TaskEduContentInterface
+  TaskEduContentInterface,
+  TaskWithAssigneesInterface
 } from '@campus/dal';
 import {
   SearchFilterComponentInterface,
@@ -46,7 +49,6 @@ import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/utils';
 import { hot } from '@nrwl/angular/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { BehaviorSubject, of } from 'rxjs';
-import { AssigneeFixture } from '../../interfaces/Assignee.fixture';
 import {
   CurrentTaskParams,
   KabasTasksViewModel
@@ -59,9 +61,10 @@ import {
 import { PrintPaperTaskModalResultEnum } from '../print-paper-task-modal/print-paper-task-modal-result.enum';
 import { PrintPaperTaskModalComponent } from '../print-paper-task-modal/print-paper-task-modal.component';
 import { TaskEduContentListItemComponent } from '../task-edu-content-list-item/task-edu-content-list-item.component';
-import { AssigneeInterface } from './../../interfaces/Assignee.interface';
-import { TaskEduContentWithEduContentInterface } from './../../interfaces/TaskEduContentWithEduContent.interface';
-import { TaskWithAssigneesInterface } from './../../interfaces/TaskWithAssignees.interface';
+import {
+  TaskEduContentWithEduContentInterface,
+  TaskWithTaskEduContentInterface
+} from './../../interfaces/TaskEduContentWithEduContent.interface';
 import { ManageKabasTasksAssigneeModalComponent } from './../manage-kabas-tasks-assignee-modal/manage-kabas-tasks-assignee-modal.component';
 import { ManageKabasTasksDetailComponent } from './manage-kabas-tasks-detail.component';
 
@@ -76,7 +79,7 @@ describe('ManageKabasTasksDetailComponent', () => {
 
   let contentOpenActionsService: ContentOpenActionsServiceInterface;
   let mockViewmodel: MockKabasTasksViewModel;
-  let currentTask: TaskWithAssigneesInterface;
+  let currentTask: TaskWithTaskEduContentInterface;
   let restOfTasks: TaskWithAssigneesInterface[];
   let taskEduContents: TaskEduContentWithEduContentInterface[];
 
@@ -95,13 +98,13 @@ describe('ManageKabasTasksDetailComponent', () => {
     return tECs;
   };
 
-  const addSolutionFileToTask = (task: TaskWithAssigneesInterface) => {
+  const addSolutionFileToTask = (task: TaskWithTaskEduContentInterface) => {
     task.taskEduContents[0].eduContent.publishedEduContentMetadata.eduFiles = [
       new EduFileFixture({ type: EduFileTypeEnum.SOLUTION })
     ];
     task.hasSolutionFiles = true;
   };
-  const addExerciseFileToTask = (task: TaskWithAssigneesInterface) => {
+  const addExerciseFileToTask = (task: TaskWithTaskEduContentInterface) => {
     task.taskEduContents[0].eduContent.publishedEduContentMetadata.eduFiles = [
       new EduFileFixture({ type: EduFileTypeEnum.EXERCISE })
     ];
@@ -215,11 +218,18 @@ describe('ManageKabasTasksDetailComponent', () => {
 
     mockViewmodel = viewModel as MockKabasTasksViewModel;
 
-    [currentTask, ...restOfTasks] = mockViewmodel.tasksWithAssignments$.value;
+    let firstTask: TaskWithAssigneesInterface;
+    [firstTask, ...restOfTasks] = mockViewmodel.tasksWithAssignments$.value;
 
     // extra properties added in onInit
-    taskEduContents = addActions(currentTask.taskEduContents);
-    currentTask.hasSolutionFiles = true;
+    taskEduContents = addActions(
+      firstTask.taskEduContents as TaskEduContentWithEduContentInterface[]
+    );
+    currentTask = {
+      ...firstTask,
+      hasSolutionFiles: true,
+      taskEduContents
+    };
   });
 
   it('should create', () => {
@@ -429,6 +439,73 @@ describe('ManageKabasTasksDetailComponent', () => {
       component.clickDeleteTask(taskToDelete);
 
       expect(removeTaskSpy).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('clickRemoveTaskEduContents()', () => {
+    let openDialogSpy: jest.SpyInstance;
+    const eduContentToDelete = [
+      { taskId: 1, id: 1, index: 1 },
+      { taskId: 1, id: 2, index: 2 },
+      { taskId: 1, id: 3, index: 3 }
+    ];
+
+    beforeEach(() => {
+      openDialogSpy = matDialog.open = jest.fn();
+    });
+
+    it('should open a confirmation dialog', () => {
+      const mockDialogRef = {
+        afterClosed: () => of(false),
+        close: null
+      } as MatDialogRef<ConfirmationModalComponent>;
+      openDialogSpy.mockReturnValue(mockDialogRef);
+
+      component.clickRemoveTaskEduContents(eduContentToDelete);
+
+      expect(openDialogSpy).toHaveBeenCalledTimes(1);
+      expect(openDialogSpy).toHaveBeenCalledWith(ConfirmationModalComponent, {
+        data: {
+          title: 'Lesmateriaal verwijderen',
+          message:
+            'Ben je zeker dat je de geselecteerde lesmaterialen wil verwijderen?'
+        }
+      });
+    });
+
+    it('should call vm.removeEduContentFromTask when the user confirms', () => {
+      const removeTaskEduContentSpy = jest.spyOn(
+        viewModel,
+        'deleteTaskEduContents'
+      );
+
+      const mockDialogRef = {
+        afterClosed: () => of(true), // fake confirmation
+        close: null
+      } as MatDialogRef<ConfirmationModalComponent>;
+      openDialogSpy.mockReturnValue(mockDialogRef);
+
+      component.clickRemoveTaskEduContents(eduContentToDelete);
+
+      expect(removeTaskEduContentSpy).toHaveBeenCalledTimes(1);
+      expect(removeTaskEduContentSpy).toHaveBeenCalledWith([1, 2, 3]);
+    });
+
+    it('should not call vm.removeEduContentFromTask when the user cancels', () => {
+      const removeTaskEduContentSpy = jest.spyOn(
+        viewModel,
+        'deleteTaskEduContents'
+      );
+
+      const mockDialogRef = {
+        afterClosed: () => of(false), // fake cancel
+        close: null
+      } as MatDialogRef<ConfirmationModalComponent>;
+      openDialogSpy.mockReturnValue(mockDialogRef);
+
+      component.clickRemoveTaskEduContents(eduContentToDelete);
+
+      expect(removeTaskEduContentSpy).not.toHaveBeenCalled();
     });
   });
 

@@ -11,11 +11,15 @@ import {
 import { MatDialog } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
+  AssigneeInterface,
+  AssigneeTypesEnum,
   EduContent,
   EduContentInterface,
   LearningAreaInterface,
   TaskEduContentInterface,
-  TaskInterface
+  TaskInterface,
+  TaskStatusEnum,
+  TaskWithAssigneesInterface
 } from '@campus/dal';
 import {
   ButtonToggleFilterComponent,
@@ -42,14 +46,9 @@ import {
   withLatestFrom
 } from 'rxjs/operators';
 import {
-  AssigneeInterface,
-  AssigneeTypesEnum
-} from '../../interfaces/Assignee.interface';
-import { TaskEduContentWithEduContentInterface } from '../../interfaces/TaskEduContentWithEduContent.interface';
-import {
-  TaskStatusEnum,
-  TaskWithAssigneesInterface
-} from '../../interfaces/TaskWithAssignees.interface';
+  TaskEduContentWithEduContentInterface,
+  TaskWithTaskEduContentInterface
+} from '../../interfaces/TaskEduContentWithEduContent.interface';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
 import { ManageKabasTasksAssigneeDataInterface } from '../manage-kabas-tasks-assignee-modal/manage-kabas-tasks-assignee-data.interface';
 import { ManageKabasTasksAssigneeModalComponent } from '../manage-kabas-tasks-assignee-modal/manage-kabas-tasks-assignee-modal.component';
@@ -82,7 +81,7 @@ export class ManageKabasTasksDetailComponent implements OnInit, OnDestroy {
   public isReordering = false;
 
   public selectableLearningAreas$: Observable<LearningAreaInterface[]>;
-  public task$: Observable<TaskWithAssigneesInterface>;
+  public task$: Observable<TaskWithTaskEduContentInterface>;
   public reorderableTaskEduContents$ = new BehaviorSubject<
     TaskEduContentWithEduContentInterface[]
   >([]);
@@ -386,7 +385,7 @@ export class ManageKabasTasksDetailComponent implements OnInit, OnDestroy {
     this.viewModel.printTask(task.id, withNames);
   }
 
-  public printSolution(task: TaskWithAssigneesInterface) {
+  public printSolution(task: TaskWithTaskEduContentInterface) {
     if (!task.hasSolutionFiles) return;
     this.viewModel.printSolution(task);
   }
@@ -402,6 +401,27 @@ export class ManageKabasTasksDetailComponent implements OnInit, OnDestroy {
   public clickRemoveTaskEduContents(
     taskEduContents: TaskEduContentInterface[]
   ) {
+    const length = taskEduContents.length;
+    const dialogData = {
+      title: 'Lesmateriaal verwijderen',
+      message: `Ben je zeker dat je ${
+        length > 1 ? 'de' : 'het'
+      } geselecteerde ${
+        length > 1 ? 'lesmaterialen' : 'lesmateriaal'
+      } wil verwijderen?`
+    };
+
+    const dialogRef = this.dialog.open(ConfirmationModalComponent, {
+      data: dialogData
+    });
+
+    dialogRef
+      .afterClosed()
+      .pipe(filter(confirmed => confirmed))
+      .subscribe(() => this.removeTaskEduContents(taskEduContents));
+  }
+
+  public removeTaskEduContents(taskEduContents: TaskEduContentInterface[]) {
     this.viewModel.deleteTaskEduContents(taskEduContents.map(tec => tec.id));
   }
 

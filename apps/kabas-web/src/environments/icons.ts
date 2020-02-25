@@ -82,5 +82,8 @@ export const icons = {
   'educontent-product-type:video': 'assets/icons/general-file.svg',
   'educontent-product-type:presentatie': 'assets/icons/general-file.svg',
   'educontent-product-type:applicatie': 'assets/icons/general-file.svg',
-  'educontent-product-type:correctiesleutel': 'assets/icons/general-file.svg'
+  'educontent-product-type:correctiesleutel': 'assets/icons/general-file.svg',
+
+  //empty-states
+  'empty-state-all-done': 'assets/empty-states/all-done.svg'
 };

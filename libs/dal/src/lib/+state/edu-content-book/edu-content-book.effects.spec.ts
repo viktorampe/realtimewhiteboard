@@ -6,7 +6,9 @@ import { DataPersistence, NxModule } from '@nrwl/angular';
 import { hot } from '@nrwl/angular/testing';
 import { Observable, of } from 'rxjs';
 import { EduContentBookReducer } from '.';
+import { EduContentBookServiceInterface } from '../../edu-content-book';
 import { TOC_SERVICE_TOKEN } from '../../toc/toc.service.interface';
+import { EDU_CONTENT_BOOK_SERVICE_TOKEN } from './../../edu-content-book/edu-content-book.service.interface';
 import {
   EduContentBooksLoaded,
   EduContentBooksLoadError,
@@ -19,6 +21,8 @@ describe('EduContentBookEffects', () => {
   let actions: Observable<any>;
   let effects: EduContentBookEffects;
   let usedState: any;
+
+  let eduContentBookService: EduContentBookServiceInterface;
 
   const expectInAndOut = (
     effect: Observable<any>,
@@ -87,6 +91,12 @@ describe('EduContentBookEffects', () => {
             getBooksByIds: () => {}
           }
         },
+        {
+          provide: EDU_CONTENT_BOOK_SERVICE_TOKEN,
+          useValue: {
+            getAllForUser: () => {}
+          }
+        },
         EduContentBookEffects,
         DataPersistence,
         provideMockActions(() => actions)
@@ -94,26 +104,32 @@ describe('EduContentBookEffects', () => {
     });
 
     effects = TestBed.get(EduContentBookEffects);
+    eduContentBookService = TestBed.get(EDU_CONTENT_BOOK_SERVICE_TOKEN);
   });
 
   describe('loadEduContentBook$', () => {
     const unforcedLoadAction = new LoadEduContentBooks({
-      methodIds: [1, 2, 3]
+      userId: 123
     });
     const forcedLoadAction = new LoadEduContentBooks({
       force: true,
-      methodIds: [1, 2, 3]
+      userId: 123
     });
     const filledLoadedAction = new EduContentBooksLoaded({
       eduContentBooks: []
     });
     const loadErrorAction = new EduContentBooksLoadError(new Error('failed'));
+
     describe('with initialState', () => {
       beforeAll(() => {
         usedState = EduContentBookReducer.initialState;
       });
       beforeEach(() => {
-        mockServiceMethodReturnValue('getBooksByMethodIds', []);
+        mockServiceMethodReturnValue(
+          'getAllForUser',
+          [],
+          EDU_CONTENT_BOOK_SERVICE_TOKEN
+        );
       });
       it('should trigger an api call with the initialState if force is not true', () => {
         expectInAndOut(
@@ -135,7 +151,11 @@ describe('EduContentBookEffects', () => {
         usedState = { ...EduContentBookReducer.initialState, loaded: true };
       });
       beforeEach(() => {
-        mockServiceMethodReturnValue('getBooksByMethodIds', []);
+        mockServiceMethodReturnValue(
+          'getAllForUser',
+          [],
+          EDU_CONTENT_BOOK_SERVICE_TOKEN
+        );
       });
       it('should not trigger an api call with the loaded state if force is not true', () => {
         expectInNoOut(effects.loadEduContentBooks$, unforcedLoadAction);
@@ -153,7 +173,11 @@ describe('EduContentBookEffects', () => {
         usedState = EduContentBookReducer.initialState;
       });
       beforeEach(() => {
-        mockServiceMethodError('getBooksByMethodIds', 'failed');
+        mockServiceMethodError(
+          'getAllForUser',
+          'failed',
+          EDU_CONTENT_BOOK_SERVICE_TOKEN
+        );
       });
       it('should return a error action if force is not true', () => {
         expectInAndOut(
@@ -179,7 +203,11 @@ describe('EduContentBookEffects', () => {
         };
       });
       beforeEach(() => {
-        mockServiceMethodError('getBooksByMethodIds', 'failed');
+        mockServiceMethodError(
+          'getAllForUser',
+          'failed',
+          EDU_CONTENT_BOOK_SERVICE_TOKEN
+        );
       });
       it('should return nothing action if force is not true', () => {
         expectInNoOut(effects.loadEduContentBooks$, unforcedLoadAction);

@@ -1,11 +1,19 @@
 import { TaskStudentQueries } from '.';
+import { PersonFixture } from '../../+fixtures';
 import { TaskStudentInterface } from '../../+models';
+import { AssigneeInterface } from '../task/Assignee.interface';
+import { AssigneeTypesEnum } from '../task/AssigneeTypes.enum';
 import { State } from './task-student.reducer';
 
 describe('TaskStudent Selectors', () => {
-  function createTaskStudent(id: number): TaskStudentInterface | any {
+  function createTaskStudent(
+    id: number,
+    taskId: number = 1
+  ): TaskStudentInterface | any {
     return {
-      id: id
+      id: id,
+      personId: 1,
+      taskId
     };
   }
 
@@ -37,15 +45,23 @@ describe('TaskStudent Selectors', () => {
     beforeEach(() => {
       taskStudentState = createState(
         [
-          createTaskStudent(4),
-          createTaskStudent(1),
-          createTaskStudent(2),
-          createTaskStudent(3)
+          createTaskStudent(4, 1),
+          createTaskStudent(1, 1),
+          createTaskStudent(2, 2),
+          createTaskStudent(3, 3)
         ],
         true,
         'no error'
       );
-      storeState = { taskStudents: taskStudentState };
+      storeState = {
+        taskStudents: taskStudentState,
+        linkedPersons: {
+          ids: [1],
+          entities: {
+            1: new PersonFixture()
+          }
+        }
+      };
     });
     it('getError() should return the error', () => {
       const results = TaskStudentQueries.getError(storeState);
@@ -58,10 +74,10 @@ describe('TaskStudent Selectors', () => {
     it('getAll() should return an array of the entities in the order from the ids', () => {
       const results = TaskStudentQueries.getAll(storeState);
       expect(results).toEqual([
-        createTaskStudent(4),
-        createTaskStudent(1),
-        createTaskStudent(2),
-        createTaskStudent(3)
+        createTaskStudent(4, 1),
+        createTaskStudent(1, 1),
+        createTaskStudent(2, 2),
+        createTaskStudent(3, 3)
       ]);
     });
     it('getCount() should return number of entities', () => {
@@ -81,19 +97,43 @@ describe('TaskStudent Selectors', () => {
         ids: [3, 1, 90, 2]
       });
       expect(results).toEqual([
-        createTaskStudent(3),
-        createTaskStudent(1),
+        createTaskStudent(3, 3),
+        createTaskStudent(1, 1),
         undefined,
-        createTaskStudent(2)
+        createTaskStudent(2, 2)
       ]);
     });
     it('getById() should return the desired entity', () => {
       const results = TaskStudentQueries.getById(storeState, { id: 2 });
-      expect(results).toEqual(createTaskStudent(2));
+      expect(results).toEqual(createTaskStudent(2, 2));
     });
     it('getById() should return undefined if the entity is not present', () => {
       const results = TaskStudentQueries.getById(storeState, { id: 9 });
       expect(results).toBe(undefined);
+    });
+    it('getTaskStudentAssigneeByTask()', () => {
+      const results = TaskStudentQueries.getTaskStudentAssigneeByTask(
+        storeState
+      );
+      expect(results).toEqual({
+        1: [
+          createAssignee(createTaskStudent(4, 1)),
+          createAssignee(createTaskStudent(1, 1))
+        ],
+        2: [createAssignee(createTaskStudent(2, 2))],
+        3: [createAssignee(createTaskStudent(3, 3))]
+      });
+
+      function createAssignee(taskStudent): AssigneeInterface {
+        return {
+          id: taskStudent.id,
+          type: AssigneeTypesEnum.STUDENT,
+          relationId: taskStudent.personId,
+          label: 'foo bar',
+          start: taskStudent.start,
+          end: taskStudent.end
+        };
+      }
     });
   });
 });

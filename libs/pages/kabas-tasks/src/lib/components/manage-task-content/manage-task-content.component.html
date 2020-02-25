@@ -1,53 +1,28 @@
-<campus-collapsible-sheet>
-  <div aside>
-    <mat-nav-list *ngIf="currentTaskParams$ | async as params">
-      <mat-list-item
-        data-cy="lesson-link"
-        *ngFor="let toc of currentToc$ | async"
-        (click)="selectTOC(toc.id, toc.depth)"
-        class="manage-task-content__lesson-link"
-        [class.manage-task-content__lesson-link--selected]="
-          toc.id === (params.lesson ? params.lesson : params.chapter)
-        "
-        [ngClass]="'manage-task-content__lesson-link--depth-' + toc.depth"
-      >
-        <span class="manage-task-content__lesson-link__title">{{
-          toc.title
-        }}</span></mat-list-item
-      ></mat-nav-list
-    >
-  </div>
+<div *ngIf="showBooks" class="manage-task-content__books">
+  <campus-method-books-tile
+    *ngFor="let methodYear of methodYearsInArea$ | async"
+    [logoUrl]="methodYear.logoUrl"
+    [name]="methodYear.name"
+    [years]="methodYear.years"
+    [useQueryParams]="true"
+  >
+  </campus-method-books-tile>
+</div>
 
-  <div main class="manage-task-content__main__container">
-    <div class="manage-task-content__main">
-      <campus-page-header
-        *ngIf="selectedBookTitle$ | async as selectedBookTitle"
-        [title]="selectedBookTitle"
-      ></campus-page-header>
-      <div data-cy="search-filters" class="manage-task-content__filters">
-        <ng-container searchPortal="searchTerm"></ng-container>
-        <campus-button
-          class="manage-task-content__filters__reset"
-          iconClass="reset-filters"
-          (click)="clearSearchFilters()"
-        ></campus-button>
-      </div>
-      <campus-search
-        [autoCompleteValues]="autoCompleteValues$ | async"
-        (searchTermChangeForAutoComplete)="onAutoCompleteRequest($event)"
-        [autoFocusSearchTerm]="true"
-        [searchMode]="searchMode$ | async"
-        [initialState]="initialSearchState$ | async"
-        [searchResults]="searchResults$ | async"
-        (searchState$)="onSearchStateChange($event)"
-      ></campus-search>
-    </div>
+<campus-side-sheet [canClose]="false">
+  <campus-side-sheet-header
+    >Lesmateriaal in {{ (task$ | async)?.name }}</campus-side-sheet-header
+  >
 
+  <campus-side-sheet-actions>
+    <campus-button (click)="clickDone()" primary>Klaar</campus-button>
+  </campus-side-sheet-actions>
+
+  <campus-side-sheet-body>
     <div
       class="manage-task-content__main__sidesheet"
       *ngIf="task$ | async as task"
-      >Insert sidesheet here...
-      <campus-button (click)="clickDone()" primary>Klaar</campus-button>
+    >
       <mat-list
         #currentContentList
         *ngIf="
@@ -81,14 +56,71 @@
             "
           ></div>
           <mat-icon
-            class="manage-task-content__list__item__icon manage-task-content__list__item__icon--on-hover"
+            class="manage-task-content__list__item__icon manage-task-content__list__item__icon--delete manage-task-content__list__item__icon--on-hover"
             svgIcon="delete"
+            (click)="removeEduContentFromTask(taskEduContent.eduContent)"
           ></mat-icon>
         </mat-list-item>
       </mat-list>
     </div>
-  </div>
-</campus-collapsible-sheet>
+  </campus-side-sheet-body>
+
+  <campus-side-sheet-page>
+    <campus-collapsible-sheet>
+      <div aside class="manage-task-content__aside">
+        <div>
+          <campus-button (click)="showBooks = !showBooks">{{
+            showBooks ? 'Boeken verbergen' : 'Zoek in ander boek'
+          }}</campus-button>
+        </div>
+        <div class="manage-task-content__aside__nav">
+          <mat-nav-list *ngIf="currentTaskParams$ | async as params">
+            <mat-list-item
+              data-cy="lesson-link"
+              *ngFor="let toc of currentToc$ | async"
+              (click)="selectTOC(toc.id, toc.depth)"
+              class="manage-task-content__lesson-link"
+              [class.manage-task-content__lesson-link--selected]="
+                toc.id === (params.lesson ? params.lesson : params.chapter)
+              "
+              [ngClass]="'manage-task-content__lesson-link--depth-' + toc.depth"
+            >
+              <span class="manage-task-content__lesson-link__title">{{
+                toc.title
+              }}</span></mat-list-item
+            ></mat-nav-list
+          ></div
+        >
+      </div>
+
+      <div main class="manage-task-content__main__container">
+        <div class="manage-task-content__main">
+          <campus-page-header
+            *ngIf="selectedBookTitle$ | async as selectedBookTitle"
+            [title]="selectedBookTitle"
+          ></campus-page-header>
+          <div data-cy="search-filters" class="manage-task-content__filters">
+            <ng-container searchPortal="searchTerm"></ng-container>
+            <campus-button
+              class="manage-task-content__filters__reset"
+              iconClass="reset-filters"
+              (click)="clearSearchFilters()"
+            ></campus-button>
+          </div>
+          <campus-search
+            [autoCompleteValues]="autoCompleteValues$ | async"
+            (searchTermChangeForAutoComplete)="onAutoCompleteRequest($event)"
+            [autoFocusSearchTerm]="true"
+            [searchMode]="searchMode$ | async"
+            [initialState]="initialSearchState$ | async"
+            [searchResults]="searchResults$ | async"
+            (searchState$)="onSearchStateChange($event)"
+          ></campus-search>
+        </div>
+      </div>
+    </campus-collapsible-sheet>
+  </campus-side-sheet-page>
+</campus-side-sheet>
 
 <ng-template #contentItem let-fileExt="fileExt" let-title="title">
   <div class="manage-task-content__list__item__content">

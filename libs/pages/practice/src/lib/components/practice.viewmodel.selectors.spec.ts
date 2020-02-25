@@ -354,33 +354,39 @@ describe('PracticeViewModel selectors', () => {
       new YearFixture({ id: 2, label: '2' })
     ];
 
-    const books: EduContentBookInterface[] = [
-      new EduContentBookFixture({
+    const bookDict: Dictionary<EduContentBookInterface> = {
+      3: new EduContentBookFixture({
         id: 3,
         title: 'Katapult',
         methodId: 100,
         years: [years[0]]
       }),
-      new EduContentBookFixture({
+      4: new EduContentBookFixture({
         id: 4,
         title: 'Kameleon',
         methodId: 200,
         years: [years[1]]
       }),
-      new EduContentBookFixture({
+      5: new EduContentBookFixture({
         id: 5,
         title: 'Katapult',
         methodId: 100,
         years
+      }),
+      6: new EduContentBookFixture({
+        id: 6,
+        title: 'Not in unlockedFreePractices',
+        methodId: 100,
+        years
       })
-    ];
+    };
 
-    const learningAreaDict: { [id: number]: LearningAreaInterface } = {
+    const learningAreaDict: Dictionary<LearningAreaInterface> = {
       10: new LearningAreaFixture({ id: 10, name: 'Rekenen' }),
       20: new LearningAreaFixture({ id: 20, name: 'Spelling' })
     };
 
-    const methodDict: { [id: number]: MethodInterface } = {
+    const methodDict: Dictionary<MethodInterface> = {
       100: new MethodFixture({
         id: 100,
         learningAreaId: 10,
@@ -393,8 +399,14 @@ describe('PracticeViewModel selectors', () => {
       })
     };
 
+    const ufps = [
+      { eduContentBookId: 3 },
+      { eduContentBookId: 4 },
+      { eduContentBookId: 5 }
+    ];
+
     it('should return unlockedBooks', () => {
-      const result = projector(books, learningAreaDict, methodDict);
+      const result = projector(bookDict, learningAreaDict, methodDict, ufps);
 
       expect(result).toEqual([
         {

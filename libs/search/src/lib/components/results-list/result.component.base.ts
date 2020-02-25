@@ -31,4 +31,6 @@ export class ResultItemBase extends ListViewItemDirective<any>
     this.dataObject = this.data;
     if (this.listRef) this.listRef.addItem(this);
   }
+
+  public update() {}
 }

@@ -10,7 +10,11 @@ import {
   ViewChildren
 } from '@angular/core';
 import { Params, Router } from '@angular/router';
-import { EduContent, EduContentTOCInterface } from '@campus/dal';
+import {
+  EduContent,
+  EduContentTOCInterface,
+  MethodYearsInterface
+} from '@campus/dal';
 import {
   SearchComponent,
   SearchModeInterface,
@@ -20,8 +24,10 @@ import {
 } from '@campus/search';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { filter, map, switchMapTo, take } from 'rxjs/operators';
-import { TaskEduContentWithEduContentInterface } from '../../interfaces/TaskEduContentWithEduContent.interface';
-import { TaskWithAssigneesInterface } from '../../interfaces/TaskWithAssignees.interface';
+import {
+  TaskEduContentWithEduContentInterface,
+  TaskWithTaskEduContentInterface
+} from '../../interfaces/TaskEduContentWithEduContent.interface';
 import {
   CurrentTaskParams,
   KabasTasksViewModel
@@ -38,7 +44,7 @@ export class ManageTaskContentComponent
   public reorderableTaskEduContents$ = new BehaviorSubject<
     TaskEduContentWithEduContentInterface[]
   >([]);
-  public task$: Observable<TaskWithAssigneesInterface>;
+  public task$: Observable<TaskWithTaskEduContentInterface>;
 
   public searchMode$: Observable<SearchModeInterface>;
   public initialSearchState$: Observable<SearchStateInterface>;
@@ -47,6 +53,10 @@ export class ManageTaskContentComponent
   public currentToc$: Observable<EduContentTOCInterface[]>;
   public currentTaskParams$: Observable<CurrentTaskParams>;
   public selectedBookTitle$: Observable<string>;
+  public methodYearsInArea$: Observable<MethodYearsInterface[]>;
+
+  // Temporary variable for showing/hiding the books, replaced later when the backdrop comes in
+  public showBooks: boolean;
 
   @ViewChildren(SearchPortalDirective)
   private portalHosts: QueryList<SearchPortalDirective>;
@@ -72,6 +82,10 @@ export class ManageTaskContentComponent
           this.router.navigate([this.router.url], {
             queryParams: { book: favoriteBookIds[0] }
           });
+
+          this.showBooks = false;
+        } else {
+          this.showBooks = true;
         }
       });
 
@@ -84,6 +98,8 @@ export class ManageTaskContentComponent
     this.searchMode$ = this.viewModel.getSearchMode('task-manage-content');
     this.initialSearchState$ = this.viewModel.getInitialSearchState();
     this.searchResults$ = this.viewModel.searchResults$;
+
+    this.methodYearsInArea$ = this.viewModel.methodYearsInArea$;
 
     this.currentToc$ = this.viewModel.currentToc$;
     this.currentTaskParams$ = this.viewModel.currentTaskParams$;

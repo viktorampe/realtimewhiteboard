@@ -1,11 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { AssigneeInterface, AssigneeTypesEnum } from '@campus/dal';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import {
-  AssigneeInterface,
-  AssigneeTypesEnum
-} from './../../interfaces/Assignee.interface';
 import { ManageKabasTasksAssigneeDataInterface } from './manage-kabas-tasks-assignee-data.interface';
 
 @Component({
