@@ -203,7 +203,7 @@ export class ManageKabasTasksDetailComponent implements OnInit, OnDestroy {
     this.sectionMode = this.sectionModes.EDITABLE;
   }
 
-  public editTask(event: MouseEvent, task: TaskWithAssigneesInterface) {
+  public editTask(event: MouseEvent) {
     event.stopPropagation();
     if (!this.taskCache.name) {
       return;
@@ -214,17 +214,6 @@ export class ManageKabasTasksDetailComponent implements OnInit, OnDestroy {
       name: this.taskCache.name,
       description: this.taskCache.description
     });
-  }
-
-  public updateTitle(task: TaskWithAssigneesInterface, title: string) {
-    this.viewModel.updateTask({ id: task.id, name: title });
-  }
-
-  public updateDescription(
-    task: TaskWithAssigneesInterface,
-    description: string
-  ) {
-    this.viewModel.updateTask({ id: task.id, name: task.name, description });
   }
 
   public toggleFavorite(task: TaskWithAssigneesInterface) {

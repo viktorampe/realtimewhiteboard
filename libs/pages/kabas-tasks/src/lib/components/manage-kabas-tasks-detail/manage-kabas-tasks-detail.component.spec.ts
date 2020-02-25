@@ -6,6 +6,7 @@ import {
   MatDialog,
   MatDialogRef,
   MatIconRegistry,
+  MatInputModule,
   MatListOption,
   MatRadioModule,
   MatSelectModule,
@@ -41,7 +42,11 @@ import {
   SharedModule
 } from '@campus/shared';
 import { MockDate, MockMatIconRegistry } from '@campus/testing';
-import { ConfirmationModalComponent, UiModule } from '@campus/ui';
+import {
+  ConfirmationModalComponent,
+  SectionModeEnum,
+  UiModule
+} from '@campus/ui';
 import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/utils';
 import { hot } from '@nrwl/angular/testing';
 import { configureTestSuite } from 'ng-bullet';
@@ -138,6 +143,7 @@ describe('ManageKabasTasksDetailComponent', () => {
         SearchModule,
         UiModule,
         NoopAnimationsModule,
+        MatInputModule,
         MatRadioModule,
         RouterTestingModule,
         FormsModule
@@ -644,6 +650,7 @@ describe('ManageKabasTasksDetailComponent', () => {
         it('should show the task date', () => {
           currentTask.isPaperTask = false;
           updateCurrentTask(currentTask);
+          console.log(currentTask);
 
           const taskDateDE = fixture.debugElement.query(
             By.css('[data-cy="task-info-date"]')
@@ -842,39 +849,48 @@ describe('ManageKabasTasksDetailComponent', () => {
   });
 
   describe('update actions', () => {
-    it('should update title when text changed', () => {
-      const titleComponent = fixture.debugElement.query(
-        By.css('.manage-kabas-tasks-detail__info__title')
-      );
-
-      const newText = 'You are more than who you were';
-
-      spyOn(component, 'updateTitle');
-      titleComponent.componentInstance.textChanged.emit(newText);
-
-      expect(component.updateTitle).toHaveBeenCalled();
-      expect(component.updateTitle).toHaveBeenCalledWith(
-        titleComponent.componentInstance.relatedItem,
-        newText
-      );
+    beforeEach(() => {
+      [currentTask, ...restOfTasks] = mockViewmodel.tasksWithAssignments$.value;
+      component.sectionMode = SectionModeEnum.EDITING;
+      component.taskCache = currentTask;
+      fixture.detectChanges();
     });
 
-    it('should update description when text changed', () => {
-      const descriptionComponent = fixture.debugElement.query(
-        By.css('.manage-kabas-tasks-detail__info__description')
-      );
+    it('should copy the task in the taskCache when updateCachedTask is called (the sectionMode changes)', () => {
+      const otherTask: TaskWithAssigneesInterface = restOfTasks[0];
+      component.updateCachedTask(otherTask);
+      expect(component.taskCache).toEqual(otherTask);
+    });
 
-      const newText = "Time isn't the main thing. It's the only thing.";
+    it('should update title and description', () => {
+      const expected = {
+        id: currentTask.id,
+        name: 'You are more than who you were',
+        description: `Time isn't the main thing. It's the only thing.`
+      };
+      spyOn(viewModel, 'updateTask');
+      component.taskCache.name = expected.name;
+      component.taskCache.description = expected.description;
+      component.editTask(new MouseEvent('click'));
 
-      spyOn(component, 'updateDescription');
+      expect(viewModel.updateTask).toHaveBeenCalledWith(expected);
+    });
 
-      descriptionComponent.componentInstance.textChanged.emit(newText);
+    it('should not update task when title is empty', () => {
+      spyOn(viewModel, 'updateTask');
+      component.taskCache.name = '';
+      component.editTask(new MouseEvent('click'));
 
-      expect(component.updateDescription).toHaveBeenCalled();
-      expect(component.updateDescription).toHaveBeenCalledWith(
-        descriptionComponent.componentInstance.relatedItem,
-        newText
-      );
+      expect(viewModel.updateTask).not.toHaveBeenCalled();
+    });
+
+    it('should reset editMode and not update when canceled', () => {
+      spyOn(viewModel, 'updateTask');
+      component.taskCache.name = '';
+      component.cancelEdit(new MouseEvent('click'));
+
+      expect(viewModel.updateTask).not.toHaveBeenCalled();
+      expect(component.sectionMode).toBe(SectionModeEnum.EDITABLE);
     });
   });
 

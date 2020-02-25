@@ -84,7 +84,7 @@
 
           <section-content>
             <div *ngIf="sectionMode === sectionModes.EDITABLE">
-              <h2>{{ task.name }}</h2>
+              <h2 data-cy="task-title">{{ task.name }}</h2>
               {{ task.description }}
             </div>
 
@@ -117,7 +117,7 @@
                 <campus-button
                   primary
                   [disabled]="!taskCache.name"
-                  (click)="editTask($event, task)"
+                  (click)="editTask($event)"
                   >Opslaan</campus-button
                 >
               </div>
@@ -155,14 +155,16 @@
                 ></span>
               </div>
             </div>
-          </section-content>
 
-          <ng-container *ngIf="!task.isPaperTask">
-            <p data-cy="task-info-date" *ngIf="task.startDate"
-              >{{ task.startDate | date: 'dd-MM-yy' }} -
-              {{ task.endDate | date: 'dd-MM-yy' }}</p
+            <div
+              *ngIf="!task.isPaperTask && task.startDate"
+              data-cy="task-info-date"
             >
-          </ng-container>
+              <hr />
+              {{ task.startDate | date: 'dd-MM-yy' }} -
+              {{ task.endDate | date: 'dd-MM-yy' }}</div
+            >
+          </section-content>
         </campus-section>
 
         <campus-section>
