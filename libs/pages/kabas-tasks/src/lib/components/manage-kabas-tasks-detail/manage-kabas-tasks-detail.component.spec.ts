@@ -650,7 +650,6 @@ describe('ManageKabasTasksDetailComponent', () => {
         it('should show the task date', () => {
           currentTask.isPaperTask = false;
           updateCurrentTask(currentTask);
-          console.log(currentTask);
 
           const taskDateDE = fixture.debugElement.query(
             By.css('[data-cy="task-info-date"]')
