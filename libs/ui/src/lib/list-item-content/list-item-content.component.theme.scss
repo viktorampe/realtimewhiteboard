@@ -34,8 +34,7 @@ $ui-list-item-content_icon-height: 50px !default;
       margin-bottom: $ui-list-item-content-spacing--vertical;
     }
 
-    &__title,
-    &__caption {
+    &__title {
       text-overflow: ellipsis;
       white-space: nowrap;
       overflow: hidden;
