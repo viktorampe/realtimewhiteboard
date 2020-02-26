@@ -26,13 +26,13 @@ import { RouterModule } from '@angular/router';
 import { BeDateAdapter, UtilsModule } from '@campus/utils';
 import { AppBarComponent } from './app-bar/app-bar.component';
 import {
-  BackdropCollapseAction,
+  BackdropCollapseActionDirective,
   BackdropComponent,
-  BackdropHeaderActions,
-  BackdropRevealAction,
-  BackLayerContent,
-  FrontLayerContent,
-  FrontLayerHeader
+  BackdropHeaderActionsDirective,
+  BackdropRevealActionDirective,
+  BackLayerContentDirective,
+  FrontLayerContentDirective,
+  FrontLayerHeaderDirective
 } from './backdrop/backdrop.component';
 import { BannerComponent } from './banner/banner.component';
 import { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.component';
@@ -199,12 +199,12 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     SectionActions,
     SectionTitle,
     BackdropComponent,
-    BackdropRevealAction,
-    BackdropCollapseAction,
-    BackdropHeaderActions,
-    BackLayerContent,
-    FrontLayerContent,
-    FrontLayerHeader
+    BackdropRevealActionDirective,
+    BackdropCollapseActionDirective,
+    BackdropHeaderActionsDirective,
+    BackLayerContentDirective,
+    FrontLayerContentDirective,
+    FrontLayerHeaderDirective
   ],
   exports: [
     FilterTextInputComponent,
@@ -276,12 +276,12 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     SectionActions,
     SectionTitle,
     BackdropComponent,
-    BackdropRevealAction,
-    BackdropCollapseAction,
-    BackdropHeaderActions,
-    BackLayerContent,
-    FrontLayerContent,
-    FrontLayerHeader
+    BackdropRevealActionDirective,
+    BackdropCollapseActionDirective,
+    BackdropHeaderActionsDirective,
+    BackLayerContentDirective,
+    FrontLayerContentDirective,
+    FrontLayerHeaderDirective
   ],
   providers: [
     {

@@ -15,7 +15,9 @@ import {
   EventEmitter,
   Inject,
   Input,
+  OnChanges,
   Output,
+  SimpleChanges,
   ViewChild
 } from '@angular/core';
 import { WINDOW } from '@campus/browser';
@@ -27,20 +29,18 @@ import { EnvironmentUIInterface, ENVIRONMENT_UI_TOKEN } from '../tokens';
  */
 @Directive({
   selector:
-    '[campusBackDropRevealAction], [backdropRevealAction], backdrop-reveal-action'
+    '[campusBackDropRevealAction], [backdropRevealAction], [backdrop-reveal-action], backdrop-reveal-action'
 })
-// tslint:disable-next-line: directive-class-suffix
-export class BackdropRevealAction {}
+export class BackdropRevealActionDirective {}
 /**
  * Backdrop Collapse Action, needed as it's used as a selector in the API.
  * @docs-private
  */
 @Directive({
   selector:
-    '[campusBackDropCollapseAction], [backdropCollapseAction], backdrop-collapse-action'
+    '[campusBackDropCollapseAction], [backdropCollapseAction], [backdrop-collapse-action], backdrop-collapse-action'
 })
-// tslint:disable-next-line: directive-class-suffix
-export class BackdropCollapseAction {}
+export class BackdropCollapseActionDirective {}
 
 /**
  * Backdrop Header Actions, needed as it's used as a selector in the API.
@@ -48,20 +48,19 @@ export class BackdropCollapseAction {}
  */
 @Directive({
   selector:
-    '[campusBackdropHeaderActions], [backdropHeaderActions], backdrop-header-actions'
+    '[campusBackdropHeaderActions], [backdropHeaderActions], [backdrop-header-actions], backdrop-header-actions'
 })
-// tslint:disable-next-line: directive-class-suffix
-export class BackdropHeaderActions {}
+export class BackdropHeaderActionsDirective {}
 
 /**
  * Content of a backLayer, needed as it's used as a selector in the API.
  * @docs-private
  */
 @Directive({
-  selector: '[campusBackLayerContent], [backLayerContent], back-layer-content'
+  selector:
+    '[campusBackLayerContent], [backLayerContent], [back-layer-content], back-layer-content'
 })
-// tslint:disable-next-line: directive-class-suffix
-export class BackLayerContent {}
+export class BackLayerContentDirective {}
 
 /**
  * Content of a Front layer, needed as it's used as a selector in the API.
@@ -69,20 +68,19 @@ export class BackLayerContent {}
  */
 @Directive({
   selector:
-    '[campusFrontLayerContent], [frontLayerContent], front-layer-content'
+    '[campusFrontLayerContent], [frontLayerContent], [front-layer-content], front-layer-content'
 })
-// tslint:disable-next-line: directive-class-suffix
-export class FrontLayerContent {}
+export class FrontLayerContentDirective {}
 
 /**
  * Header of a Front layer, needed as it's used as a selector in the API.
  * @docs-private
  */
 @Directive({
-  selector: '[campusFrontLayerHeader], [frontLayerHeader], front-layer-header'
+  selector:
+    '[campusFrontLayerHeader], [frontLayerHeader], [front-layer-header], front-layer-header'
 })
-// tslint:disable-next-line: directive-class-suffix
-export class FrontLayerHeader {}
+export class FrontLayerHeaderDirective {}
 
 interface BackDropTranslationInterface {
   value: 'dropped' | 'covered';
@@ -147,33 +145,18 @@ interface BackDropTranslationInterface {
     ])
   ]
 })
-export class BackdropComponent implements AfterViewInit {
+export class BackdropComponent implements OnChanges, AfterViewInit {
   frontLayerHeight: number;
   backLayerContentMaxHeight: number;
   dropTranslation: BackDropTranslationInterface;
   delta: number;
   maxDelta: number;
-  _titles = [];
-  _dropped = false;
+  titles: string[] = [];
 
-  @Input() static = false;
+  @Input() private static = false;
+  @Input() private title: string;
+  @Input() dropped = false;
 
-  @Input('title')
-  set title(value: string) {
-    this._titles.pop();
-    this._titles.push(value);
-  }
-
-  @Input('dropped')
-  set dropped(value: boolean) {
-    if (!this.static) {
-      this._dropped = value;
-      this.dropTranslation = this.getDropTranslation();
-    }
-  }
-  get dropped() {
-    return this._dropped;
-  }
   @Output() droppedChange = new EventEmitter<boolean>();
 
   @ViewChild('backLayer', { read: ElementRef, static: false })
@@ -189,7 +172,23 @@ export class BackdropComponent implements AfterViewInit {
     @Inject(ENVIRONMENT_UI_TOKEN) private environmentUI: EnvironmentUIInterface
   ) {}
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.title) {
+      this.titles.pop();
+      this.titles.push(this.title);
+    }
+    if (changes.dropped) {
+      if (!this.static) {
+        this.dropTranslation = this.getDropTranslation();
+      }
+    }
+  }
+
   ngAfterViewInit() {
+    this.setupHeights();
+  }
+
+  private setupHeights() {
     this.delta = this.calculateDelta();
     this.maxDelta = this.calculateMaxDelta();
 
@@ -243,7 +242,7 @@ export class BackdropComponent implements AfterViewInit {
   }
   private getDropTranslation(): BackDropTranslationInterface {
     return {
-      value: this._dropped ? 'dropped' : 'covered',
+      value: this.dropped ? 'dropped' : 'covered',
       params: {
         translateY: `-${this.delta}px`
       }
