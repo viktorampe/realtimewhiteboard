@@ -1,8 +1,10 @@
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   EventEmitter,
   HostBinding,
+  Inject,
   Input,
   OnDestroy,
   OnInit,
@@ -59,7 +61,7 @@ export class SelectFilterComponent
   @HostBinding('class.select-filter-component')
   selectFilterComponentClass = true;
 
-  constructor() {}
+  constructor(@Inject(ChangeDetectorRef) private cd: ChangeDetectorRef) {}
 
   ngOnInit() {
     this.subscriptions.add(
@@ -93,8 +95,9 @@ export class SelectFilterComponent
     this.subscriptions.unsubscribe();
   }
 
-  public reset() {
-    throw new Error('Not implemented yet');
+  public reset(emit = true) {
+    this.selectControl.reset(undefined, { emitEvent: emit });
+    if (!emit) this.updateView(); // emit -> updateView called in valueChanges
   }
 
   private criteriaToOptions(
@@ -113,13 +116,17 @@ export class SelectFilterComponent
       );
   }
 
-  private updateView(selection: SearchFilterCriteriaValuesInterface[]): void {
-    this.count = selection.length;
-    if (this.multiple) {
-      this.selectControl.setValue(selection);
-    } else {
-      this.selectControl.setValue(selection[0] || null);
+  private updateView(selection?: SearchFilterCriteriaValuesInterface[]): void {
+    this.count = Array.isArray(selection) ? selection.length : 0;
+
+    if (selection) {
+      if (this.multiple) {
+        this.selectControl.setValue(selection);
+      } else {
+        this.selectControl.setValue(selection[0] || null);
+      }
     }
+    this.cd.markForCheck();
   }
 
   private updateCriteriaWithSelected(

@@ -389,9 +389,9 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
     });
   }
 
-  clickResetFilters(mode?: string) {
+  clickResetFilters(mode?: Source) {
     // visually clear selections
-    this.clearFilters();
+    this.clearFilters(mode);
   }
 
   clickToggleFavorite(task: TaskWithAssigneesInterface) {
@@ -420,7 +420,7 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
     const filterValues: FilterStateInterface = { isArchived: data.checked };
 
     // when archived is active, the status filter should be reset and disabled
-    this.clearButtonToggleFilters();
+    this.buttonToggleFilters.forEach(bTF => bTF.reset(false));
     this.isArchivedFilterActive = data.checked;
 
     if (type === 'digital') this.updateDigitalFilterState(filterValues);
@@ -707,34 +707,23 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
    * @private
    * @memberof ManageKabasTasksOverviewComponent
    */
-  private clearFilters(): void {
-    if (this.searchTermFilters)
-      this.searchTermFilters.forEach(searchTermFilter => {
-        searchTermFilter.currentValue = '';
-        searchTermFilter.valueChange.next('');
-      });
-    if (this.selectFilters)
-      this.selectFilters.forEach(selectFilter =>
-        selectFilter.selectControl.reset()
-      );
-    this.clearButtonToggleFilters();
+  private clearFilters(mode?: Source): void {
+    [
+      ...this.searchTermFilters.toArray(),
+      ...this.buttonToggleFilters.toArray(),
+      ...this.selectFilters.toArray(),
+      ...this.dateFilters.toArray()
+    ].forEach(searchFilter => {
+      searchFilter.reset(false);
+    });
+
     if (this.slideToggleFilters)
       this.slideToggleFilters.forEach(slideToggleFilter => {
-        slideToggleFilter.checked = false;
-        slideToggleFilter.change.emit({
-          checked: false,
-          source: slideToggleFilter
-        });
+        slideToggleFilter.checked = false; //this will emit TODO: fix
       });
-    if (this.dateFilters)
-      this.dateFilters.forEach(dateFilter => dateFilter.reset());
-  }
 
-  private clearButtonToggleFilters(): void {
-    if (this.buttonToggleFilters)
-      this.buttonToggleFilters.forEach(buttonToggleFilter =>
-        buttonToggleFilter.toggleControl.reset()
-      );
+    if (!mode || mode === 'digital') this.digitalFilterState$.next({});
+    if (!mode || mode === 'paper') this.paperFilterState$.next({});
   }
 
   /**
