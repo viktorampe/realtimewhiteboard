@@ -25,6 +25,7 @@ describe('Tasks Overview', () => {
   let filterValues: typeof setup.kabasTasksPages.filterValues.overview;
   let filterResults: typeof setup.kabasTasksPages.expected.filterResults.overview;
   let sortResults: typeof setup.kabasTasksPages.expected.sortResults;
+  let smokeResults: typeof setup.kabasTasksPages.expected.smokeResults;
 
   before(() => {
     performSetup('kabasTasksPages').then(res => {
@@ -33,6 +34,7 @@ describe('Tasks Overview', () => {
       filterValues = setup.kabasTasksPages.filterValues.overview;
       filterResults = setup.kabasTasksPages.expected.filterResults.overview;
       sortResults = setup.kabasTasksPages.expected.sortResults;
+      smokeResults = setup.kabasTasksPages.expected.smokeResults;
     });
   });
 
@@ -65,6 +67,16 @@ describe('Tasks Overview', () => {
         // new task
         dataCy('new-task-digital').should('exist');
         dataCy('nav-new-task').should('exist');
+      });
+
+      it('should show the right task info', () => {
+        checkResults(
+          smokeResults.digital.map(listItem => {
+            return Object.assign({}, listItem, {
+              actions: ['Bekijken', 'Archiveren', 'Resultaten', 'Doelenmatrix']
+            });
+          })
+        );
       });
 
       it('should filter tasks', () => {
@@ -113,32 +125,19 @@ describe('Tasks Overview', () => {
           checkResults(sortResults.digital[sortValue]);
         });
       });
+
+      /*
+        e2e todo:
+        - Archive action with failure (Active digital task, correct error message)
+        - Archive action with success (Finished digital task)
+        - Archive action with success from header (French digital task)
+        - Delete action with success (Unassigned digital task)
+        - Delete action with failure (Active + pending, should be listed in modal)
+        - Favorite/unfavorite (favorite button not visible!)
+        - New action should redirect (header & button)
+        - Tooltips (mat-tooltip)
+        - View action should redirect
+      */
     });
-
-    // it('practice manage page - in book', () => {
-    //   dataCy('check-box-table-item-column-header')
-    //     .should(
-    //       'have.length',
-    //       setup.kabasUnlockedFreePracticePages.expected.classGroups.length
-    //     )
-    //     .each(($item, index) => {
-    //       expect($item).to.have.text(
-    //         setup.kabasUnlockedFreePracticePages.expected.classGroups[index]
-    //       );
-    //     });
-
-    //   dataCy('check-box-table-row-header').should(
-    //     'have.length',
-    //     setup.kabasUnlockedFreePracticePages.expected.chaptersTeacher.count
-    //   );
-
-    //   cy.route(`${apiUrl}/api/People/*/data?fields=unlockedFreePractices`).as(
-    //     'api'
-    //   );
-    //   cy.route(
-    //     'delete',
-    //     `${apiUrl}/api/People/*/deleteManyUnlockedFreePracticeRemote*`
-    //   ).as('api');
-    // });
   });
 });

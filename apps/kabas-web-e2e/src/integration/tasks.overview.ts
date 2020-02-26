@@ -91,10 +91,44 @@ export function checkResults(results: ExpectedTaskListItemResult[]) {
     .each((taskListItem, index) => {
       const expects = results[index];
 
-      if (expects.name) {
-        cy.wrap(taskListItem)
-          .find('[data-cy=tli-title]')
-          .should('have.text', expects.name);
-      }
+      cy.wrap(taskListItem).within(() => listItemExpects(expects));
     });
+}
+
+function listItemExpects(expects) {
+  if (expects.name) {
+    dataCy('tli-title').should('contain.text', expects.name);
+  }
+
+  if (expects.area) {
+    dataCy('tli-learning-area').should('contain.text', expects.area);
+  }
+
+  if (expects.startDate) {
+    dataCy('tli-start-date').should('contain.text', expects.startDate);
+  }
+
+  if (expects.endDate) {
+    dataCy('tli-end-date').should('contain.text', expects.endDate);
+  }
+
+  if (expects.classGroups) {
+    dataCy('tli-classgroup').each((element, cgIndex) => {
+      cy.wrap(element).should('contain.text', expects.classGroups[cgIndex]);
+    });
+  }
+
+  if (expects.groupCount) {
+    dataCy('tli-group-count').should('contain.text', expects.groupCount);
+  }
+
+  if (expects.individualCount) {
+    dataCy('tli-student-count').should('contain.text', expects.individualCount);
+  }
+
+  if (expects.actions) {
+    dataCy('tli-action').each((element, actionIndex) => {
+      cy.wrap(element).should('contain.text', expects.actions[actionIndex]);
+    });
+  }
 }

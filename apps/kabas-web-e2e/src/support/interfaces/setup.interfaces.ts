@@ -89,6 +89,13 @@ export interface KabasPracticePagesInterface {
 
 export interface ExpectedTaskListItemResult {
   name?: string;
+  area?: string;
+  startDate?: string;
+  endDate?: string;
+  classGroups?: string[];
+  groupCount?: number;
+  individualCount?: number;
+  actions: string[];
 }
 
 export interface AdvancedDateOptions {
@@ -135,6 +142,9 @@ export interface KabasTasksPagesInterface {
         digital: {
           [sortModeName: string]: ExpectedTaskListItemResult[];
         };
+      };
+      smokeResults: {
+        digital: ExpectedTaskListItemResult[];
       };
     };
   };
