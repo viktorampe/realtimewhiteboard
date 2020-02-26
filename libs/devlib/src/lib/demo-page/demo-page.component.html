@@ -1,12 +1,53 @@
 <div class="container">
-  <campus-empty-state
-    svgIcon="empty-state-no-educontent"
-    title="Geen lesmateriaal"
-    description="This tagline conveys the purpose of the screen, without appearing actionable."
-    ctaLabel="Call to action"
-    (clickCta)="clickEmptyCta()"
+  <campus-button primary style="margin: 10px;" (click)="clickEmptyCta()"
+    >Primary Button</campus-button
   >
-  </campus-empty-state>
+  <campus-button bordered style="margin: 10px;" (click)="clickEmptyCta()"
+    >Default Button</campus-button
+  >
+  <campus-button secondary style="margin: 10px;" (click)="clickEmptyCta()"
+    >Secondary Button</campus-button
+  >
+  <campus-button bordered dense style="margin: 10px;" (click)="clickEmptyCta()"
+    >Default Dense Button</campus-button
+  >
+  <campus-button secondary dense style="margin: 10px;" (click)="clickEmptyCta()"
+    >Secondary Dense Button</campus-button
+  >
+  <campus-button bordered flat style="margin: 10px;" (click)="clickEmptyCta()"
+    >Default Dense Button</campus-button
+  >
+  <campus-button secondary flat style="margin: 10px;" (click)="clickEmptyCta()"
+    >Secondary Dense Button</campus-button
+  >
+  <campus-button
+    primary
+    [disabled]="true"
+    style="margin: 10px;"
+    (click)="clickEmptyCta()"
+    >Primary Disabled Button</campus-button
+  >
+  <campus-button
+    bordered
+    [disabled]="false"
+    style="margin: 10px;"
+    (click)="clickEmptyCta()"
+    >Default Disabled=False Button</campus-button
+  >
+  <campus-button
+    secondary
+    disabled
+    style="margin: 10px;"
+    (click)="clickEmptyCta()"
+    >Secondary Disabled Button</campus-button
+  >
+
+  <campus-button inline style="margin: 10px;" (click)="clickEmptyCta()"
+    >Inline action Button</campus-button
+  >
+  <campus-button inline style="margin: 10px;" (click)="clickEmptyCta()"
+    ><mat-icon svgIcon="home"></mat-icon> Inline action Button</campus-button
+  >
 
   <div class="ui-headline">Headline (Regular 24px)</div>
   <div class="ui-title">Title (Semibold 21px)</div>

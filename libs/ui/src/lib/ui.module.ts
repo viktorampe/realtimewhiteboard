@@ -31,7 +31,10 @@ import { ButtonComponent } from './button/button.component';
 import { BorderDirective } from './button/directives/button-border.directive';
 import { CircleDirective } from './button/directives/button-circle.directive';
 import { DangerDirective } from './button/directives/button-danger.directive';
+import { DenseDirective } from './button/directives/button-dense.directive';
 import { DisabledDirective } from './button/directives/button-disabled.directive';
+import { FlatDirective } from './button/directives/button-flat.directive';
+import { InlineDirective } from './button/directives/button-inline.directive';
 import { LargeDirective } from './button/directives/button-large.directive';
 import { PrimaryDirective } from './button/directives/button-primary.directive';
 import { RoundedCornersDirective } from './button/directives/button-rounded-corners.directive';
@@ -187,7 +190,10 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     SectionComponent,
     SectionContent,
     SectionActions,
-    SectionTitle
+    SectionTitle,
+    InlineDirective,
+    DenseDirective,
+    FlatDirective
   ],
   exports: [
     FilterTextInputComponent,
@@ -257,7 +263,10 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     SectionComponent,
     SectionContent,
     SectionActions,
-    SectionTitle
+    SectionTitle,
+    InlineDirective,
+    DenseDirective,
+    FlatDirective
   ],
   providers: [
     {
