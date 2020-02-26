@@ -53,7 +53,8 @@ export class SectionComponent {
 
   modes = SectionModeEnum; // needed for usage in the template
 
-  @ContentChild(SectionTitle, { static: true }) sectionTitle: ElementRef;
+  @ContentChild(SectionTitleDirective, { static: true })
+  sectionTitle: ElementRef;
 
   constructor() {}
 
