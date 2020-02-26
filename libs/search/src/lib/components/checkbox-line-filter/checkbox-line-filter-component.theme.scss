@@ -1,10 +1,15 @@
 @mixin search-checkbox-line-filter--deep() {
+  // extract material colors from theme
+  $checkbox-line--disabled-stroke-color: map-get(
+    map-get($app-theme, background),
+    background
+  ) !default;
+
   // color pallette
   $checkbox-line-background-color: $ui-tertiary-bg-color !default;
   $checkbox-line-title-border-color: $ui-tertiary-bg-color-2 !default;
   $checkbox-line--disabled-color: $ui-tertiary-bg-color-2 !default;
   $checkbox-line--disabled-background-color: $ui-tertiary-bg-color-2 !default;
-  $checkbox-line--disabled-stroke-color: unset !default;
 
   $checkbox-line-filter-font-size: $ui-primary-font-size * 1.2 !default;
 
