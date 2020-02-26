@@ -8,7 +8,6 @@ import { Component, Directive, HostBinding, Input } from '@angular/core';
   selector:
     '[campusListItemIcon], [ListItemIcon], list-item-icon, [list-item-icon]'
 })
-// tslint:disable-next-line: directive-class-suffix
 export class ListItemIconDirective {
   @HostBinding('class.ui-list-item__icon') private isListItemIcon = true;
 }
@@ -21,7 +20,6 @@ export class ListItemIconDirective {
   selector:
     '[campusListItemTitle], [ListItemTitle], list-item-title, [list-item-title]'
 })
-// tslint:disable-next-line: directive-class-suffix
 export class ListItemTitleDirective {
   @HostBinding('class.ui-list-item__title') private isListItemTitle = true;
 }
@@ -34,7 +32,6 @@ export class ListItemTitleDirective {
   selector:
     '[campusListItemCaption], [ListItemCaption], list-item-caption, [list-item-caption]'
 })
-// tslint:disable-next-line: directive-class-suffix
 export class ListItemCaptionDirective {
   @HostBinding('class.ui-list-item__caption') private isListItemCaption = true;
 }
@@ -47,7 +44,6 @@ export class ListItemCaptionDirective {
   selector:
     '[campusListItemActions], [ListItemActions], list-item-actions, [list-item-actions]'
 })
-// tslint:disable-next-line: directive-class-suffix
 export class ListItemActionsDirective {
   @HostBinding('class.ui-list-item__actions') private isListItemActions = true;
 }
@@ -60,7 +56,6 @@ export class ListItemActionsDirective {
   selector:
     '[campusListItemContent], [ListItemContent], list-item-content, [list-item-content]'
 })
-// tslint:disable-next-line: directive-class-suffix
 export class ListItemContentDirective {
   @HostBinding('class.ui-list-item__content-right')
   private isListItemContent = true;
