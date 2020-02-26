@@ -4,13 +4,13 @@
       class="ui-modal-side-sheet__header__row ui-modal-side-sheet__header__row--top"
     >
       <ng-container *ngTemplateOutlet="close"></ng-container>
-      <div class="title">{{ data.title }}</div>
+      <div class="ui-title">{{ data.title }}</div>
       <ng-container *ngTemplateOutlet="actions"></ng-container>
     </div>
     <div
       class="ui-modal-side-sheet__header__row ui-modal-side-sheet__header__row--bottom"
     >
-      <div class="subtitle">{{ data.subtitle }}</div>
+      <div class="ui-body-2">{{ data.subtitle }}</div>
     </div>
   </div>
   <hr class="ui-modal-side-sheet__divider" />
@@ -90,7 +90,7 @@
 
 <ng-template #collection>
   <ng-container *ngIf="linkableItems.length > 0; else emptyCollectionTemplate">
-    <mat-selection-list (selectionChange)="onSelectionChanged($event)">
+    <mat-selection-list dense (selectionChange)="onSelectionChanged($event)">
       <div
         class="ui-manage-collection__recent-items"
         *ngIf="

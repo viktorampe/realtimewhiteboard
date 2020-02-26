@@ -10,15 +10,9 @@
   $ui-manage-collection__header__row-title-margin-right: $ui-modal-side-sheet-header-row-title-margin-right !default;
   $ui-manage-collection__header-icon-margin-right: $ui-modal-side-sheet-header-icon-margin-right !default;
 
-  $ui-manage-collection__header-font-family: $ui-primary-font-family-4 !default;
-  $ui-manage-collection__header-title-color: $ui-black !default;
-  $ui-manage-collection__header-title-font-size: $ui-title-font-size !default;
-  $ui-manage-collection__header-title-font-weight: $ui-title-font-weight !default;
-  $ui-manage-collection__header-subtitle-color: $ui-dark-gray !default;
-  $ui-manage-collection__header-subtitle-font-size: $ui-body-2-font-size !default;
-  $ui-manage-collection__header-subtitle-font-weight: $ui-body-2-font-weight !default;
-  $ui-manage-collection__header-icon-color: $ui-dark-gray !default;
-  $ui-manage-collection__header-divider-color: $ui-light-gray !default;
+  $ui-manage-collection-width: $ui-modal-side-sheet-width !default;
+  $ui-manage-collection__header-icon-color: $ui-modal-side-sheet-header-icon-color !default;
+  $ui-manage-collection__header-divider-color: $ui-modal-side-sheet-header-divider-color !default;
   $ui-manage-collection__header-divider-margin: $ui-modal-side-sheet-header-divider-margin !default;
 
   .ui-manage-collection {
@@ -83,27 +77,19 @@
 
   .ui-modal-side-sheet {
     height: 100%;
+    width: $ui-manage-collection-width;
+
+    .mat-dialog-container {
+      border-radius: 0px;
+    }
 
     &__header {
-      font-family: $ui-manage-collection__header-font-family;
       &__row {
         &--top {
           margin-bottom: $ui-manage-collection__header__row--top-margin-bottom;
         }
         &--bottom {
           padding-left: $ui-manage-collection__header__row--bottom-padding-left;
-        }
-        .title {
-          color: $ui-manage-collection__header-title-color;
-          font-size: $ui-manage-collection__header-title-font-size;
-          font-weight: $ui-manage-collection__header-title-font-weight;
-          margin-right: $ui-manage-collection__header__row-title-margin-right;
-        }
-        .subtitle {
-          // body 2
-          color: $ui-manage-collection__header-subtitle-color;
-          font-size: $ui-manage-collection__header-subtitle-font-size;
-          font-weight: $ui-manage-collection__header-subtitle-font-weight;
         }
 
         mat-icon {
@@ -112,6 +98,7 @@
         }
       }
     }
+
     &__divider {
       color: $ui-manage-collection__header-divider-color;
       margin: $ui-manage-collection__header-divider-margin
@@ -144,5 +131,10 @@
         max-height: 100%;
       }
     }
+  }
+
+  .ui-modal-side-sheet {
+    max-width: 100vw !important;
+    width: 100% !important;
   }
 }
