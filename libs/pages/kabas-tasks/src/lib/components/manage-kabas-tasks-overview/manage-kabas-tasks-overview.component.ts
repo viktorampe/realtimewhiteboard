@@ -83,8 +83,8 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
         type: RadioOptionValueType.FilterCriteriaValue,
         contents: {
           data: {
-            gte: new Date(new Date().getFullYear(), 8, 1),
-            lte: new Date(new Date().getFullYear() + 1, 5, 30)
+            gte: DateFunctions.getSchoolYearBoundaries(new Date()).start,
+            lte: DateFunctions.getSchoolYearBoundaries(new Date()).end
           }
         }
       }
