@@ -556,8 +556,6 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
     filterState: FilterStateInterface,
     tasks: TaskWithAssigneesInterface[]
   ): TaskWithAssigneesInterface[] {
-    if (tasks.length === 0) return [];
-
     const filteredTasks = [...tasks].filter(
       task =>
         this.filterOnArchived(filterState, task) &&
