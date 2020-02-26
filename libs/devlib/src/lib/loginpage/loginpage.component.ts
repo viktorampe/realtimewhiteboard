@@ -1,5 +1,4 @@
-// tslint:disable: member-ordering
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, Injector, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import {
   AlertReducer,
@@ -9,24 +8,25 @@ import {
   ClassGroupActions,
   DiaboloPhaseActions,
   EduContentActions,
+  EduContentFixture,
   EduContentInterface,
   FavoriteActions,
+  HistoryActions,
   LearningAreaActions,
   LearningPlanGoalProgressActions,
   TaskActions,
   TaskEduContentActions,
-  TaskInterface,
-  TaskServiceInterface,
-  TASK_SERVICE_TOKEN,
+  TaskQueries,
   UnlockedContentActions,
   UnlockedFreePracticeActions,
   UserActions
 } from '@campus/dal';
-import { RadioOption, RadioOptionValueType } from '@campus/search';
-import { DateRangeValue } from '@campus/ui';
-import { DateFunctions } from '@campus/utils';
-import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import {
+  EduContentCollectionManagerServiceInterface,
+  EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN
+} from '@campus/shared';
+import { select, Selector, Store } from '@ngrx/store';
+import { combineLatest, Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { LoginPageViewModel } from './loginpage.viewmodel';
 
@@ -36,46 +36,17 @@ import { LoginPageViewModel } from './loginpage.viewmodel';
   styleUrls: ['./loginpage.component.css']
 })
 export class LoginpageComponent implements OnInit {
-  protected startDate: Date = new Date('2 sept 2012');
-  protected endDate: Date = new Date('3 sept 2012');
-
   educontents: Observable<EduContentInterface[]>;
   currentUser: Observable<any>;
   route$: Observable<string[]>;
   response: Observable<any>;
-  fixedOptions: RadioOption[] = [
-    {
-      viewValue: 'Deze week',
-      value: {
-        type: RadioOptionValueType.FilterCriteriaValue,
-        contents: {
-          data: {
-            gte: DateFunctions.startOfWeek(new Date()),
-            lte: DateFunctions.endOfWeek(new Date())
-          }
-        }
-      }
-    },
-    {
-      viewValue: 'Vorige week',
-      value: {
-        type: RadioOptionValueType.FilterCriteriaValue,
-        contents: {
-          data: {
-            gte: DateFunctions.lastWeek(new Date()),
-            lte: DateFunctions.endOfWeek(DateFunctions.lastWeek(new Date()))
-          }
-        }
-      }
-    }
-  ];
 
   constructor(
     public loginPageviewModel: LoginPageViewModel,
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
     private store: Store<AlertReducer.State>,
     private router: Router,
-    @Inject(TASK_SERVICE_TOKEN) private taskService: TaskServiceInterface
+    private injector: Injector //leave this -> easier to inject test bits, without mucking up the constructor
   ) {}
 
   ngOnInit() {
@@ -93,10 +64,8 @@ export class LoginpageComponent implements OnInit {
     if (this.currentUser) {
       this.loadStore();
     }
-  }
 
-  dateChanged(dateRange: DateRangeValue) {
-    console.log(dateRange);
+    this.openModal();
   }
 
   getCurrentUser() {
@@ -111,71 +80,44 @@ export class LoginpageComponent implements OnInit {
   loadStore() {
     const userId = this.authService.userId;
 
-    this.store.dispatch(new BundleActions.LoadBundles({ userId }));
-    this.store.dispatch(
-      new UnlockedContentActions.LoadUnlockedContents({
-        userId: this.authService.userId
-      })
-    );
-    this.store.dispatch(new TaskActions.LoadTasks({ userId }));
-    this.store.dispatch(
-      new TaskEduContentActions.LoadTaskEduContents({
-        userId: this.authService.userId
-      })
-    );
-    this.store.dispatch(new EduContentActions.LoadEduContents({ userId }));
-    this.store.dispatch(new FavoriteActions.LoadFavorites({ userId }));
-    this.store.dispatch(new LearningAreaActions.LoadLearningAreas());
-    this.store.dispatch(new DiaboloPhaseActions.LoadDiaboloPhases({ userId }));
-    this.store.dispatch(new ClassGroupActions.LoadClassGroups({ userId }));
-    this.store.dispatch(
-      new UnlockedFreePracticeActions.LoadUnlockedFreePractices({ userId })
-    );
-    this.store.dispatch(
-      new LearningPlanGoalProgressActions.LoadLearningPlanGoalProgresses({
-        userId
-      })
+    const loadActions = [
+      BundleActions.LoadBundles,
+      UnlockedContentActions.LoadUnlockedContents,
+      TaskActions.LoadTasks,
+      TaskEduContentActions.LoadTaskEduContents,
+      EduContentActions.LoadEduContents,
+      FavoriteActions.LoadFavorites,
+      LearningAreaActions.LoadLearningAreas,
+      DiaboloPhaseActions.LoadDiaboloPhases,
+      ClassGroupActions.LoadClassGroups,
+      UnlockedFreePracticeActions.LoadUnlockedFreePractices,
+      LearningPlanGoalProgressActions.LoadLearningPlanGoalProgresses,
+      HistoryActions.LoadHistory
+    ];
+
+    loadActions.forEach(action => this.store.dispatch(new action({ userId })));
+  }
+
+  private resolve(loadedSelectors: Selector<any, any>[]): Observable<boolean> {
+    return combineLatest(
+      loadedSelectors.map(selector => this.store.pipe(select(selector)))
+    ).pipe(
+      map(values => values.length === 0 || values.every(value => !!value)),
+      filter(value => !!value)
     );
   }
 
-  private newTaskId: number;
+  private openModal() {
+    const eduContentcollectionManagerService = this.injector.get(
+      EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN
+    ) as EduContentCollectionManagerServiceInterface;
 
-  createTask() {
-    const userId = this.authService.userId;
-    const task = {
-      name: 'Web developement for dummies',
-      learningAreaId: 7
-    } as TaskInterface;
-    this.taskService.createTask(userId, task).subscribe(newTask => {
-      console.log(newTask);
-      this.newTaskId = newTask.id;
-    });
-  }
+    const eduContent = new EduContentFixture({}, { learningAreaId: 7 });
 
-  updateTask() {
-    const userId = this.authService.userId;
-    const task = {
-      name: 'Web developement for dummies part 2',
-      id: this.newTaskId || 1
-    } as TaskInterface;
-    console.log(
-      'log: LoginpageComponent -> updateTask -> this.newTaskId ',
-      this.newTaskId
-    );
+    this.loadStore();
 
-    this.taskService.updateTasks(userId, [task]).subscribe(res => {
-      console.log(res);
-    });
-  }
-
-  deleteTask() {
-    const userId = this.authService.userId;
-    const task = {
-      name: 'Web developement for dummies part 2',
-      id: this.newTaskId || 1
-    } as TaskInterface;
-    this.taskService.deleteTasks(userId, [task.id]).subscribe(res => {
-      console.log(res);
+    this.resolve([TaskQueries.getLoaded]).subscribe(() => {
+      eduContentcollectionManagerService.manageTasksForContent(eduContent);
     });
   }
 }

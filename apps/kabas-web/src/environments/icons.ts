@@ -66,7 +66,7 @@ export const icons = {
   'edu-content:optional': 'assets/icons/star-border.svg', //TODO placeholder
   'edu-content:level-basic': 'assets/icons/play_arrow.svg', //TODO placeholder, name needs work
   'edu-content:level-advanced': 'assets/icons/fast_forward.svg', //TODO placeholder, name needs work
-
+  'open-in-new': 'assets/icons/material/open_in_new.svg',
   // search: sort modes
   'sort-numeric-down': 'assets/icons/sort-numeric-down.svg',
   'sort-alpha-down': 'assets/icons/sort-alpha-down.svg',
@@ -85,5 +85,6 @@ export const icons = {
   'educontent-product-type:correctiesleutel': 'assets/icons/general-file.svg',
 
   //empty-states
-  'empty-state-all-done': 'assets/empty-states/all-done.svg'
+  'empty-state-all-done': 'assets/empty-states/all-done.svg',
+  'empty-state-no-educontent': 'assets/empty-states/no-educontent.svg'
 };

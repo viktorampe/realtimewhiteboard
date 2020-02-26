@@ -9,7 +9,8 @@ export const taskCollection = createSelector(
         const collectionItem = {
           id: task.id,
           label: task.name,
-          icon: 'task'
+          icon: 'task',
+          linkToItem: 'tasks/manage/' + task.id
         };
         if (task.isPaperTask) {
           acc.paper.push(collectionItem);

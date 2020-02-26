@@ -16,10 +16,17 @@ import {
   MatSelectionListChange,
   MAT_DIALOG_DATA
 } from '@angular/material';
+import { Router } from '@angular/router';
 import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/utils';
-import { Subscription } from 'rxjs';
+import { Observable, of, Subscription } from 'rxjs';
 import { startWith } from 'rxjs/operators';
 import { FilterTextInputComponent } from '../filter-text-input/filter-text-input.component';
+import {
+  EnvironmentCollectionManagementFeatureInterface,
+  EnvironmentUIInterface,
+  ENVIRONMENT_COLLECTION_MANAGEMENT_FEATURE_TOKEN,
+  ENVIRONMENT_UI_TOKEN
+} from '../tokens';
 import { ItemToggledInCollectionInterface } from './interfaces/item-toggled-in-collection.interface';
 import { ManageCollectionsDataInterface } from './interfaces/manage-collection-data.interface';
 import { ManageCollectionItemInterface } from './interfaces/manage-collection-item.interface';
@@ -32,20 +39,26 @@ import { ManageCollectionItemInterface } from './interfaces/manage-collection-it
 export class ManageCollectionComponent
   implements OnInit, AfterViewInit, OnDestroy {
   public recentLinkableItems: ManageCollectionItemInterface[];
+  public linkableItems: ManageCollectionItemInterface[];
+
+  public listItems$: Observable<ManageCollectionItemInterface[]>;
 
   // needed to selected items after filtering
   private selectedIds: Set<number>;
   private subscriptions = new Subscription();
 
+  public useFilter: boolean;
+  public asModalSideSheet: boolean;
+
   @Output() selectionChanged = new EventEmitter<
     ItemToggledInCollectionInterface
   >();
 
-  @ViewChild(MatSelectionList, { static: true })
+  @ViewChild(MatSelectionList, { static: false })
   private selectionList: MatSelectionList;
 
-  @ViewChild(FilterTextInputComponent, { static: true })
-  filterTextInput: FilterTextInputComponent<
+  @ViewChild(FilterTextInputComponent, { static: false })
+  public filterTextInput: FilterTextInputComponent<
     ManageCollectionItemInterface[],
     ManageCollectionItemInterface
   >;
@@ -59,29 +72,43 @@ export class ManageCollectionComponent
     public data: ManageCollectionsDataInterface,
     @Inject(FILTER_SERVICE_TOKEN) private filterService: FilterServiceInterface,
     private cd: ChangeDetectorRef,
-    private dialogRef: MatDialogRef<ManageCollectionComponent>
+    private dialogRef: MatDialogRef<ManageCollectionComponent>,
+    @Inject(ENVIRONMENT_UI_TOKEN) environmentUiToken: EnvironmentUIInterface,
+    @Inject(ENVIRONMENT_COLLECTION_MANAGEMENT_FEATURE_TOKEN)
+    environmentCollectionManagementFeatureToken: EnvironmentCollectionManagementFeatureInterface,
+    private router: Router
   ) {
+    this.linkableItems = data.linkableItems;
     this.recentLinkableItems = data.linkableItems.filter(item =>
       data.recentItemIds.has(item.id)
     );
 
     this.selectedIds = data.linkedItemIds;
+    this.useFilter = environmentCollectionManagementFeatureToken.useFilter;
+    this.asModalSideSheet = !!environmentUiToken.useModalSideSheetStyle; // default false for backward compatibility
   }
 
   ngOnInit() {
-    this.filterTextInput.setFilterableItem(this);
+    this.listItems$ = of(this.linkableItems);
   }
 
   ngAfterViewInit() {
-    this.subscriptions.add(
-      // when options change i.e. after filtering
-      // re-set selection
-      this.selectionList.options.changes
-        .pipe(startWith(null as any)) // emit once on init
-        .subscribe(() => {
-          this.selectListItems(this.selectedIds);
-        })
-    );
+    if (this.selectionList) {
+      this.subscriptions.add(
+        // when options change i.e. after filtering
+        // re-set selection
+        this.selectionList.options.changes
+          .pipe(startWith(null as any)) // emit once on init
+          .subscribe(() => {
+            this.selectListItems(this.selectedIds);
+          })
+      );
+    }
+
+    if (this.filterTextInput) {
+      this.filterTextInput.setFilterableItem(this);
+      this.listItems$ = this.filterTextInput.result$;
+    }
   }
 
   ngOnDestroy() {
@@ -135,5 +162,11 @@ export class ManageCollectionComponent
       .forEach(listItem => (listItem.selected = true));
 
     this.cd.detectChanges();
+  }
+
+  navigateTo(event: MouseEvent, link: string) {
+    event.stopPropagation(); // do not trigger a selection
+    this.router.navigateByUrl(link);
+    this.dialogRef.close();
   }
 }
