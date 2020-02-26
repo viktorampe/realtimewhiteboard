@@ -31,16 +31,13 @@ $ui-list-item-content_icon-height: 50px !default;
       display: inline-block;
       color: $ui-list-item-content-color--primary;
       font-weight: bold;
-      margin-bottom: $ui-list-item-content-spacing--vertical;
-    }
-
-    &__title {
       text-overflow: ellipsis;
       white-space: nowrap;
       overflow: hidden;
     }
 
     &__actions {
+      margin-top: $ui-list-item-content-spacing--vertical;
       color: $ui-list-item-content-color--secondary;
       font-size: 0.8rem;
       white-space: normal;
@@ -73,7 +70,7 @@ $ui-list-item-content_icon-height: 50px !default;
         content: '';
         pointer-events: none;
         border-left: 1px solid $ui-list-item-content-color--secondary;
-        height: 36px;
+        height: 2rem;
         margin-left: $ui-list-item-content-spacing--horizontal;
         margin-right: $ui-list-item-content-spacing--horizontal;
       }
