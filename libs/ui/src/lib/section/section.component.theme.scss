@@ -1,14 +1,19 @@
 @mixin ui-section {
+  $ui-section-spacing: 16px !default;
   $ui-section-padding: $ui-inner-padding !default;
   $ui-section-border-radius: $ui-border-radius !default;
   $ui-section-border-color: $ui-tertiary-border-color !default;
-  $ui-section-elevation: 8 !default;
+  $ui-section-elevation: 6 !default;
   $ui-section-color: inherit !default;
 
   $ui-section_header-height: 48px !default;
   $ui-section_header_action-margin: -8px !default;
   $ui-section_header-color: $ui-tertiary-font-color !default;
   $ui-section_actions-color: $ui-tertiary-icon-color !default;
+
+  campus-section + campus-section {
+    margin-top: $ui-section-spacing;
+  }
 
   .ui-section {
     color: $ui-section-color;
@@ -22,13 +27,6 @@
 
     section-title {
       flex: 1 1 auto;
-    }
-
-    section-content {
-      *:last-child {
-        padding-bottom: 0;
-        margin-bottom: 0;
-      }
     }
 
     &__header {
@@ -52,6 +50,10 @@
       &:hover {
         @include elevation($ui-section-elevation);
       }
+    }
+
+    &--editing {
+      @include elevation($ui-section-elevation);
     }
   }
 }

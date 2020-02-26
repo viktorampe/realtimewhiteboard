@@ -86,8 +86,8 @@ describe('EduContentCollectionManagerService', () => {
     new TaskFixture({ id: 8, learningAreaId: 2, isPaperTask: true })
   ];
   const tasksCollection: ManageCollectionItemInterface[] = [
-    { id: 6, label: 'foo', icon: 'task' },
-    { id: 7, label: 'foo', icon: 'task' }
+    { id: 6, label: 'foo', icon: 'task', linkToItem: 'tasks/manage/6' },
+    { id: 7, label: 'foo', icon: 'task', linkToItem: 'tasks/manage/7' }
   ];
   const selectedTask = tasks[2];
   const taskEduContents: TaskEduContentInterface[] = [
@@ -212,7 +212,8 @@ describe('EduContentCollectionManagerService', () => {
         { id: 4, label: 'foo', icon: 'bundle' },
         bundlesCollection, // bundles[0] has different learningAreaId
         [7],
-        jasmine.arrayContaining([5, 6]) // order doesn't matter
+        jasmine.arrayContaining([5, 6]), // order doesn't matter
+        'bundels'
       );
     });
 
@@ -322,13 +323,14 @@ describe('EduContentCollectionManagerService', () => {
         { id: 4, label: 'foo', icon: 'task' },
         tasksCollection,
         [7],
-        jasmine.arrayContaining([6, 7]) // order doesn't matter
+        jasmine.arrayContaining([6, 7]), // order doesn't matter
+        'taken'
       );
     });
 
     it('should subscribe to collectionManager and only give paper task', () => {
       const paperTaskcollection: ManageCollectionItemInterface[] = [
-        { id: 8, label: 'foo', icon: 'task' }
+        { id: 8, label: 'foo', icon: 'task', linkToItem: 'tasks/manage/8' }
       ];
 
       const eduContents = new EduContentFixture(
@@ -350,7 +352,8 @@ describe('EduContentCollectionManagerService', () => {
         { id: 4, label: 'foo', icon: 'task' },
         paperTaskcollection,
         [7],
-        jasmine.arrayContaining([6, 7]) // order doesn't matter
+        jasmine.arrayContaining([6, 7]), // order doesn't matter
+        'taken'
       );
     });
 

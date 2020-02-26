@@ -85,15 +85,18 @@
 
           .manage-task-content__list__item__icon {
             &--on-hover {
+              display: flex !important;
               opacity: 1;
             }
           }
         }
 
         &__icon {
+          flex: 0 0 auto;
           color: $manage-task-content__list__item__icon-color;
 
           &--on-hover {
+            display: none !important;
             opacity: 0;
           }
 
@@ -107,19 +110,22 @@
         }
 
         &__content {
-          flex: 1 0 auto;
+          overflow: hidden;
           display: flex;
           flex-direction: row;
 
+          &__title {
+            align-self: center;
+            color: $manage-task-content__list__item__content__title-color;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
           &__icon {
             color: $manage-task-content__list__item__content__icon-color;
             margin: 0 12px;
-          }
-
-          &__title {
-            display: flex;
-            align-items: center;
-            color: $manage-task-content__list__item__content__title-color;
+            align-self: center;
+            flex: 0 0 auto;
           }
         }
 

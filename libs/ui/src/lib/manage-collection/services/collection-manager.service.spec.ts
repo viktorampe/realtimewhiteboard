@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { MatDialog } from '@angular/material';
 import { hot } from '@nrwl/angular/testing';
+import { ENVIRONMENT_UI_TOKEN } from '../../tokens';
 import { ManageCollectionItemFixture } from '../fixtures/manage-collection-item.fixture';
 import { ItemToggledInCollectionInterface } from '../interfaces/item-toggled-in-collection.interface';
 import { ManageCollectionsDataInterface } from '../interfaces/manage-collection-data.interface';
@@ -19,7 +20,8 @@ const mockData: ManageCollectionsDataInterface = {
     new ManageCollectionItemFixture({ id: 9 })
   ],
   linkedItemIds: new Set([2, 3, 4]),
-  recentItemIds: new Set([2, 7, 9])
+  recentItemIds: new Set([2, 7, 9]),
+  collectionType: 'foo collection type'
 };
 
 const mockSelectionChangedData: ItemToggledInCollectionInterface = {
@@ -50,6 +52,12 @@ describe('CollectionManagerService', () => {
               };
             }
           }
+        },
+        {
+          provide: ENVIRONMENT_UI_TOKEN,
+          useValue: {
+            useModalSideSheetStyle: false
+          }
         }
       ]
     });
@@ -77,7 +85,8 @@ describe('CollectionManagerService', () => {
         mockData.item,
         mockData.linkableItems,
         Array.from(mockData.linkedItemIds),
-        Array.from(mockData.recentItemIds)
+        Array.from(mockData.recentItemIds),
+        mockData.collectionType
       );
 
       expect(openSpy).toHaveBeenCalledTimes(1);
@@ -87,9 +96,11 @@ describe('CollectionManagerService', () => {
           item: mockData.item,
           linkableItems: mockData.linkableItems,
           linkedItemIds: mockData.linkedItemIds,
-          recentItemIds: mockData.recentItemIds
+          recentItemIds: mockData.recentItemIds,
+          collectionType: mockData.collectionType
         },
-        panelClass: 'ui-manage-collection__dialog'
+        panelClass: 'ui-manage-collection__dialog',
+        position: {}
       });
     });
 
@@ -104,7 +115,8 @@ describe('CollectionManagerService', () => {
         mockData.item,
         mockData.linkableItems,
         Array.from(mockData.linkedItemIds),
-        Array.from(mockData.recentItemIds)
+        Array.from(mockData.recentItemIds),
+        mockData.collectionType
       );
 
       expect(resultStream$).toBeObservable(mockDataSelectionChanged$);
@@ -128,7 +140,8 @@ describe('CollectionManagerService', () => {
         mockData.item,
         mockData.linkableItems,
         Array.from(mockData.linkedItemIds),
-        Array.from(mockData.recentItemIds)
+        Array.from(mockData.recentItemIds),
+        mockData.collectionType
       );
 
       expect(outputStream$).toBeObservable(expectedStream$);

@@ -12,6 +12,7 @@ import {
   MAT_DIALOG_DATA
 } from '@angular/material';
 import { By } from '@angular/platform-browser';
+import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MockMatIconRegistry } from '@campus/testing';
 import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/utils';
@@ -19,6 +20,10 @@ import { configureTestSuite } from 'ng-bullet';
 import { ButtonComponent } from '../button/button.component';
 import { FilterTextInputComponent } from '../filter-text-input/filter-text-input.component';
 import { InfoPanelComponent } from '../info-panel/info-panel.component';
+import {
+  ENVIRONMENT_COLLECTION_MANAGEMENT_FEATURE_TOKEN,
+  ENVIRONMENT_UI_TOKEN
+} from '../tokens';
 import { ManageCollectionsDataInterface } from './interfaces/manage-collection-data.interface';
 import { ManageCollectionItemInterface } from './interfaces/manage-collection-item.interface';
 import { ManageCollectionComponent } from './manage-collection.component';
@@ -30,6 +35,7 @@ describe('ManageCollectionComponent', () => {
   let mockLinkableItems: ManageCollectionItemInterface[];
   let generalListDE;
   let recentListDE;
+  let router: Router;
 
   configureTestSuite(() => {
     mockLinkableItems = [
@@ -63,7 +69,8 @@ describe('ManageCollectionComponent', () => {
       },
       linkableItems: mockLinkableItems,
       linkedItemIds: new Set([3]), //selected item ids
-      recentItemIds: new Set([1])
+      recentItemIds: new Set([1]),
+      useFilter: true
     };
 
     TestBed.configureTestingModule({
@@ -88,12 +95,18 @@ describe('ManageCollectionComponent', () => {
           provide: FILTER_SERVICE_TOKEN,
           useValue: { filter: () => mockInjectedData.linkableItems } // all injected items
         },
-        { provide: MatIconRegistry, useClass: MockMatIconRegistry }
+        { provide: MatIconRegistry, useClass: MockMatIconRegistry },
+        {
+          provide: ENVIRONMENT_UI_TOKEN,
+          useValue: { useModalSideSheetStyle: false }
+        },
+        {
+          provide: ENVIRONMENT_COLLECTION_MANAGEMENT_FEATURE_TOKEN,
+          useValue: { useFilter: true }
+        }
       ]
     });
   });
-
-  beforeAll(() => {});
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ManageCollectionComponent);
@@ -106,6 +119,7 @@ describe('ManageCollectionComponent', () => {
     recentListDE = fixture.debugElement.query(
       By.css('.ui-manage-collection__recent-items')
     );
+    router = TestBed.get(Router);
   });
 
   describe('creation', () => {
@@ -176,73 +190,111 @@ describe('ManageCollectionComponent', () => {
         filterService = TestBed.get(FILTER_SERVICE_TOKEN);
       });
 
-      it('should filter the items', () => {
-        const mockFilteredItems = [mockLinkableItems[0], mockLinkableItems[1]];
-        const mockFilteredItemsIds = mockFilteredItems.map(item => item.id);
+      describe('when useFilter === true', () => {
+        it('should filter the items', () => {
+          const mockFilteredItems = [
+            mockLinkableItems[0],
+            mockLinkableItems[1]
+          ];
+          const mockFilteredItemsIds = mockFilteredItems.map(item => item.id);
 
-        const spy = jest
-          .spyOn(filterService, 'filter')
-          .mockReturnValue(mockFilteredItems);
-        component.filterTextInput.setValue('some value that does not matter');
+          const spy = jest
+            .spyOn(filterService, 'filter')
+            .mockReturnValue(mockFilteredItems);
+          component.filterTextInput.setValue('some value that does not matter');
 
-        fixture.detectChanges();
+          fixture.detectChanges();
 
-        const itemsInListIds = generalListDE
-          .queryAll(By.directive(MatListOption))
-          .map(dE => dE.componentInstance.value);
+          const itemsInListIds = generalListDE
+            .queryAll(By.directive(MatListOption))
+            .map(dE => dE.componentInstance.value);
 
-        expect(itemsInListIds).toEqual(mockFilteredItemsIds);
-        spy.mockRestore();
+          expect(itemsInListIds).toEqual(mockFilteredItemsIds);
+          spy.mockRestore();
+        });
+        it('should hide the recent items when a filter is active', () => {
+          component.filterTextInput.setValue('some value that does not matter');
+          fixture.detectChanges();
+          expect(
+            fixture.debugElement.query(
+              By.css('.ui-manage-collection__recent-items')
+            )
+          ).toBeFalsy();
+        });
+        it('should init without a filter applied', () => {
+          expect(component.filterTextInput.input.value).toBe('');
+        });
+        it('should keep selection info of a filtered item', () => {
+          component.ngAfterViewInit();
+
+          // doublecheck initial selection
+          let itemsInGeneralList = generalListDE.queryAll(
+            By.directive(MatListOption)
+          );
+          expect(itemsInGeneralList[1].componentInstance.selected).toBe(false);
+          expect(itemsInGeneralList[2].componentInstance.selected).toBe(true);
+
+          // for completeness, let's select an extra item
+          itemsInGeneralList[0].nativeElement.click();
+          expect(itemsInGeneralList[0].componentInstance.selected).toBe(true);
+
+          // filter all items away
+          const mockFilteredItems = [];
+          const spy = jest
+            .spyOn(filterService, 'filter')
+            .mockReturnValue(mockFilteredItems);
+          component.filterTextInput.setValue('some value that does not matter');
+          fixture.detectChanges();
+
+          // clear filter
+          spy.mockReturnValue(mockLinkableItems);
+          component.filterTextInput.clear();
+          fixture.detectChanges();
+
+          itemsInGeneralList = generalListDE.queryAll(
+            By.directive(MatListOption)
+          );
+          expect(itemsInGeneralList[0].componentInstance.selected).toBe(true);
+          expect(itemsInGeneralList[1].componentInstance.selected).toBe(false);
+          expect(itemsInGeneralList[2].componentInstance.selected).toBe(true);
+
+          // item[0] is also a recent item
+          const recentItem = recentListDE.query(By.directive(MatListOption))
+            .componentInstance;
+          expect(recentItem.selected).toBe(true);
+          spy.mockRestore();
+        });
       });
-      it('should hide the recent items when a filter is active', () => {
-        component.filterTextInput.setValue('some value that does not matter');
-        fixture.detectChanges();
-        expect(
-          fixture.debugElement.query(
-            By.css('.ui-manage-collection__recent-items')
-          )
-        ).toBeFalsy();
+
+      describe('when useFilter === false', () => {
+        beforeEach(() => {
+          component.useFilter = false;
+          fixture.changeDetectorRef.detectChanges();
+        });
+
+        it('should not use a filter', () => {
+          const filterTextInputDE = fixture.debugElement.query(
+            By.directive(FilterTextInputComponent)
+          );
+          expect(filterTextInputDE).toBeFalsy();
+        });
       });
-      it('should init without a filter applied', () => {
-        expect(component.filterTextInput.input.value).toBe('');
-      });
-      it('should keep selection info of a filtered item', () => {
-        // doublecheck initial selection
-        let itemsInGeneralList = generalListDE.queryAll(
-          By.directive(MatListOption)
-        );
-        expect(itemsInGeneralList[1].componentInstance.selected).toBe(false);
-        expect(itemsInGeneralList[2].componentInstance.selected).toBe(true);
 
-        // for completeness, let's select an extra item
-        itemsInGeneralList[0].nativeElement.click();
-        expect(itemsInGeneralList[0].componentInstance.selected).toBe(true);
+      describe('no items in collection', () => {
+        beforeEach(() => {
+          component.linkableItems = [];
+          component.data.collectionType = 'foo collection';
+          fixture.detectChanges();
+        });
 
-        // filter all items away
-        const mockFilteredItems = [];
-        const spy = jest
-          .spyOn(filterService, 'filter')
-          .mockReturnValue(mockFilteredItems);
-        component.filterTextInput.setValue('some value that does not matter');
-        fixture.detectChanges();
+        it('should show empty collection message', () => {
+          const message = fixture.debugElement
+            .query(By.css('[data-cy="empty-collection-message"]'))
+            .nativeElement.textContent.trim();
 
-        // clear filter
-        spy.mockReturnValue(mockLinkableItems);
-        component.filterTextInput.clear();
-        fixture.detectChanges();
-
-        itemsInGeneralList = generalListDE.queryAll(
-          By.directive(MatListOption)
-        );
-        expect(itemsInGeneralList[0].componentInstance.selected).toBe(true);
-        expect(itemsInGeneralList[1].componentInstance.selected).toBe(false);
-        expect(itemsInGeneralList[2].componentInstance.selected).toBe(true);
-
-        // item[0] is also a recent item
-        const recentItem = recentListDE.query(By.directive(MatListOption))
-          .componentInstance;
-        expect(recentItem.selected).toBe(true);
-        spy.mockRestore();
+          const expected = 'Je hebt nog geen foo collection.';
+          expect(message).toBe(expected);
+        });
       });
 
       describe('no results', () => {
@@ -367,6 +419,22 @@ describe('ManageCollectionComponent', () => {
       button.triggerEventHandler('click', null);
 
       expect(dialogRef.close).toHaveBeenCalled();
+    });
+  });
+
+  describe('navigateTo', () => {
+    it('should navigate to the item detail page', () => {
+      const selectionChangedSpy = jest.spyOn(component, 'onSelectionChanged');
+      const routerSpy = jest.spyOn(router, 'navigateByUrl');
+      const dialogRef = TestBed.get(MatDialogRef);
+      dialogRef.close = jest.fn();
+
+      const mockEvent = { stopPropagation: () => {} } as MouseEvent;
+      component.navigateTo(mockEvent, 'linkToDetail');
+
+      expect(routerSpy).toHaveBeenCalledWith('linkToDetail');
+      expect(dialogRef.close).toHaveBeenCalledTimes(1);
+      expect(selectionChangedSpy).not.toHaveBeenCalled();
     });
   });
 });

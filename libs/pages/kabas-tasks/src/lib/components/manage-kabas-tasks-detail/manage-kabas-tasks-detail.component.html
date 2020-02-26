@@ -73,131 +73,168 @@
       <ng-container
         *ngIf="selectedTaskEduContents.length === 0; else contentDetails"
       >
-        <campus-content-editable
-          [text]="task.name"
-          [placeholder]="'Titel'"
-          [required]="true"
-          [icon]="'edit'"
-          (textChanged)="updateTitle(task, $event)"
-          data-cy="task-title"
-          [relatedItem]="task"
-          class="manage-kabas-tasks-detail__info__title"
-        ></campus-content-editable>
+        <campus-section
+          [(mode)]="sectionMode"
+          (modeChange)="updateCachedTask(task)"
+        >
+          <section-title>Algemeen</section-title>
+          <section-actions
+            ><mat-icon svgIcon="edit"></mat-icon
+          ></section-actions>
 
-        <campus-content-editable
-          [text]="task.description"
-          [placeholder]="'Omschrijving'"
-          [multiline]="true"
-          [required]="false"
-          [icon]="'edit'"
-          (textChanged)="updateDescription(task, $event)"
-          [relatedItem]="task"
-          class="manage-kabas-tasks-detail__info__description"
-        ></campus-content-editable>
+          <section-content>
+            <div *ngIf="sectionMode === sectionModes.EDITABLE">
+              <h2 data-cy="task-title">{{ task.name }}</h2>
+              {{ task.description }}
+            </div>
 
-        <p>{{ task.learningArea.name }}</p>
-        <ng-template #showDates>
-          <p data-cy="task-info-date" *ngIf="task.startDate"
-            >{{ task.startDate | date: 'dd-MM-yy' }} -
-            {{ task.endDate | date: 'dd-MM-yy' }}</p
-          >
-        </ng-template>
+            <div *ngIf="sectionMode === sectionModes.EDITING">
+              <mat-form-field>
+                <mat-label>Taak titel</mat-label>
+                <input
+                  matInput
+                  type="text"
+                  maxlength="500"
+                  placeholder="Taak titel"
+                  required
+                  [(ngModel)]="taskCache.name"
+                />
+              </mat-form-field>
+              <mat-form-field>
+                <mat-label>Taak omschrijving</mat-label>
+                <textarea
+                  matInput
+                  placeholder="Taak omschrijving"
+                  maxlength="500"
+                  cdkTextareaAutosize
+                  [(ngModel)]="taskCache.description"
+                ></textarea>
+              </mat-form-field>
+              <div>
+                <campus-button (click)="cancelEdit($event)"
+                  >Annuleren</campus-button
+                >
+                <campus-button
+                  primary
+                  [disabled]="!taskCache.name"
+                  (click)="editTask($event)"
+                  >Opslaan</campus-button
+                >
+              </div>
+            </div>
 
-        <div class="manage-kabas-tasks-detail__info__container">
-          <div>
-            <campus-button
-              class="manage-kabas-tasks-detail__info__add-assignees"
-              (click)="openAssigneeModal()"
-              >+</campus-button
+            <p>{{ task.learningArea.name }}</p>
+          </section-content>
+        </campus-section>
+
+        <campus-section (actionClick)="openAssigneeModal()">
+          <section-title>Toegewezen aan</section-title>
+          <section-actions><mat-icon svgIcon="add"></mat-icon></section-actions>
+
+          <section-content>
+            <div class="manage-kabas-tasks-detail__info__container">
+              <div>
+                <span
+                  *ngFor="let assignee of task.assignees"
+                  class="manage-kabas-tasks-detail__info__assignee"
+                  [matTooltip]="
+                    (assignee.start | date: 'dd-MM-yy') +
+                    ' - ' +
+                    (assignee.end | date: 'dd-MM-yy')
+                  "
+                  [class.classgroup]="
+                    assignee.type === assigneeTypesEnum.CLASSGROUP
+                  "
+                  [class.group]="assignee.type === assigneeTypesEnum.GROUP"
+                  [class.student]="assignee.type === assigneeTypesEnum.STUDENT"
+                  >{{ assignee.label }}
+                  <mat-icon
+                    svgIcon="close"
+                    (click)="removeAssignee(task, assignee)"
+                  ></mat-icon
+                ></span>
+              </div>
+            </div>
+
+            <div
+              *ngIf="!task.isPaperTask && task.startDate"
+              data-cy="task-info-date"
             >
-            Leerlingen toevoegen voor deze taak:
-          </div>
-          <div>
-            <span
-              *ngFor="let assignee of task.assignees"
-              class="manage-kabas-tasks-detail__info__assignee"
-              [matTooltip]="
-                (assignee.start | date: 'dd-MM-yy') +
-                ' - ' +
-                (assignee.end | date: 'dd-MM-yy')
-              "
-              [class.classgroup]="
-                assignee.type === assigneeTypesEnum.CLASSGROUP
-              "
-              [class.group]="assignee.type === assigneeTypesEnum.GROUP"
-              [class.student]="assignee.type === assigneeTypesEnum.STUDENT"
-              >{{ assignee.label }}
-              <mat-icon
-                svgIcon="close"
-                (click)="removeAssignee(task, assignee)"
-              ></mat-icon
-            ></span>
-          </div>
-        </div>
+              <hr />
+              {{ task.startDate | date: 'dd-MM-yy' }} -
+              {{ task.endDate | date: 'dd-MM-yy' }}</div
+            >
+          </section-content>
+        </campus-section>
 
-        <ng-container *ngIf="task.isPaperTask; else showDates">
-          <div
-            (click)="printTask(task, true)"
-            class="manage-kabas-tasks-detail__info__link manage-kabas-tasks-detail__info__link--print"
-            [class.manage-kabas-tasks-detail__info__link--disabled]="
-              !task.assignees.length
-            "
-            [matTooltip]="
-              !task.assignees.length
-                ? 'Deze taak is aan niemand toegekend.'
-                : ''
-            "
-            matTooltipPosition="before"
-          >
-            <mat-icon
-              svgIcon="print"
-              class="manage-kabas-tasks-detail__info__link__icon"
-            ></mat-icon
-            ><span class="manage-kabas-tasks-detail__info__link__label"
-              >Afdrukken met namen</span
-            ></div
-          >
-          <div
-            (click)="printTask(task, false)"
-            class="manage-kabas-tasks-detail__info__link manage-kabas-tasks-detail__info__link--print"
-            ><mat-icon
-              svgIcon="print"
-              class="manage-kabas-tasks-detail__info__link__icon"
-            ></mat-icon
-            ><span class="manage-kabas-tasks-detail__info__link__label"
-              >Afdrukken zonder namen</span
-            ></div
-          >
-          <div
-            (click)="printSolution(task)"
-            class="manage-kabas-tasks-detail__info__link manage-kabas-tasks-detail__info__link--print"
-            [class.manage-kabas-tasks-detail__info__link--disabled]="
-              !task.hasSolutionFiles
-            "
-            [matTooltip]="
-              !task.hasSolutionFiles
-                ? 'Het lesmateriaal in deze taak bevat geen correctiesleutels.'
-                : ''
-            "
-            ><mat-icon
-              svgIcon="print"
-              class="manage-kabas-tasks-detail__info__link__icon"
-            ></mat-icon
-            ><span class="manage-kabas-tasks-detail__info__link__label"
-              >Correctiesleutel afdrukken</span
-            ></div
-          >
-        </ng-container>
-        <campus-button primary routerLink="content"
-          >+ Lesmateriaal toevoegen</campus-button
-        >
-        <campus-button
-          danger
-          (click)="clickDeleteTask(task)"
-          [disabled]="isActiveTask(task)"
-        >
-          Verwijder taak
-        </campus-button>
+        <campus-section>
+          <section-content>
+            <ng-container *ngIf="task.isPaperTask">
+              <div
+                (click)="printTask(task, true)"
+                class="manage-kabas-tasks-detail__info__link manage-kabas-tasks-detail__info__link--print"
+                [class.manage-kabas-tasks-detail__info__link--disabled]="
+                  !task.assignees.length
+                "
+                [matTooltip]="
+                  !task.assignees.length
+                    ? 'Deze taak is aan niemand toegekend.'
+                    : ''
+                "
+                matTooltipPosition="before"
+              >
+                <mat-icon
+                  svgIcon="print"
+                  class="manage-kabas-tasks-detail__info__link__icon"
+                ></mat-icon
+                ><span class="manage-kabas-tasks-detail__info__link__label"
+                  >Afdrukken met namen</span
+                ></div
+              >
+              <div
+                (click)="printTask(task, false)"
+                class="manage-kabas-tasks-detail__info__link manage-kabas-tasks-detail__info__link--print"
+                ><mat-icon
+                  svgIcon="print"
+                  class="manage-kabas-tasks-detail__info__link__icon"
+                ></mat-icon
+                ><span class="manage-kabas-tasks-detail__info__link__label"
+                  >Afdrukken zonder namen</span
+                ></div
+              >
+              <div
+                (click)="printSolution(task)"
+                class="manage-kabas-tasks-detail__info__link manage-kabas-tasks-detail__info__link--print"
+                [class.manage-kabas-tasks-detail__info__link--disabled]="
+                  !task.hasSolutionFiles
+                "
+                [matTooltip]="
+                  !task.hasSolutionFiles
+                    ? 'Het lesmateriaal in deze taak bevat geen correctiesleutels.'
+                    : ''
+                "
+                ><mat-icon
+                  svgIcon="print"
+                  class="manage-kabas-tasks-detail__info__link__icon"
+                ></mat-icon
+                ><span class="manage-kabas-tasks-detail__info__link__label"
+                  >Correctiesleutel afdrukken</span
+                ></div
+              >
+            </ng-container>
+            <campus-button primary routerLink="content"
+              >+ Lesmateriaal toevoegen</campus-button
+            >
+            <hr />
+            <campus-button
+              danger
+              (click)="clickDeleteTask(task)"
+              [disabled]="isActiveTask(task)"
+            >
+              Verwijder taak
+            </campus-button>
+          </section-content>
+        </campus-section>
       </ng-container>
 
       <ng-template #contentDetails>
