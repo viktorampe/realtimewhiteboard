@@ -6,16 +6,33 @@ import {
   AppPathsInterface,
   KabasTasksPagesInterface
 } from '../support/interfaces';
+import {
+  checkResults,
+  filterArchived,
+  filterArea,
+  filterDate,
+  filterName,
+  filterStatus,
+  resetFilters,
+  sortBy
+} from './tasks.overview';
 
 describe('Tasks Overview', () => {
   const apiUrl = cyEnv('apiUrl');
   const appPaths = cyEnv('appPaths') as AppPathsInterface;
   const apiPaths = cyEnv('apiPaths') as ApiPathsInterface;
   let setup: KabasTasksPagesInterface;
+  let filterValues: typeof setup.kabasTasksPages.filterValues.overview;
+  let filterResults: typeof setup.kabasTasksPages.expected.filterResults.overview;
+  let sortResults: typeof setup.kabasTasksPages.expected.sortResults;
 
   before(() => {
     performSetup('kabasTasksPages').then(res => {
       setup = res.body;
+
+      filterValues = setup.kabasTasksPages.filterValues.overview;
+      filterResults = setup.kabasTasksPages.expected.filterResults.overview;
+      sortResults = setup.kabasTasksPages.expected.sortResults;
     });
   });
 
@@ -45,54 +62,56 @@ describe('Tasks Overview', () => {
           .eq(1)
           .should('have.text', 'Papieren taken');
 
-        // filters
-        dataCy('name-filter').should('exist');
-        dataCy('area-filter').should('exist');
-        dataCy('date-filter').should('exist');
-        dataCy('assignee-filter').should('exist');
-        dataCy('status-filter').should('exist');
-        dataCy('archived-filter').should('exist');
-        dataCy('reset-filters').should('exist');
-
-        // sorting
-        dataCy('sort-dropdown').should('exist');
-
         // new task
         dataCy('new-task-digital').should('exist');
         dataCy('nav-new-task').should('exist');
       });
 
       it('should filter tasks', () => {
-        dataCy('name-filter')
-          .find('input')
-          .focus()
-          .type('active');
+        // individual filters
+        filterName(filterValues.digital.name);
+        checkResults(filterResults.digital.name);
+        resetFilters();
 
-        dataCy('area-filter').click();
-        dataCy('select-option')
-          .eq(0)
-          .click();
-        cy.get('body').type('{esc}');
+        filterArea(filterValues.digital.area);
+        checkResults(filterResults.digital.area);
+        resetFilters();
 
-        dataCy('date-filter').click();
-        dataCy('date-option')
-          .eq(1)
-          .click();
-        dataCy('date-confirm').click();
+        filterDate(filterValues.digital.date);
+        checkResults(filterResults.digital.date);
+        resetFilters();
 
-        dataCy('assignee-filter').click();
-        dataCy('select-option')
-          .eq(0)
-          .click();
-        cy.get('body').type('{esc}');
+        // TODO: assignee filter here! it's currently bugged on the front-end so can't test it
 
-        dataCy('status-filter')
-          .get('[data-cy=button-toggle-button')
-          .eq(1)
-          .click();
+        filterValues.digital.status.forEach(statusFilter => {
+          filterStatus(statusFilter);
+        });
+        checkResults(filterResults.digital.status);
+        resetFilters();
 
-        dataCy('archived-filter').click();
-        dataCy('reset-filters').click();
+        filterArchived();
+        checkResults(filterResults.digital.archived);
+        resetFilters();
+
+        // combined filters:
+        filterName(filterValues.digital.combined.name);
+        filterArea(filterValues.digital.combined.area);
+        filterDate(filterValues.digital.combined.date);
+        filterValues.digital.combined.status.forEach(statusFilter => {
+          filterStatus(statusFilter);
+        });
+        if (filterValues.digital.combined.archived) {
+          filterArchived();
+        }
+        checkResults(filterResults.digital.combined);
+        resetFilters();
+      });
+
+      it('should sort tasks', () => {
+        setup.kabasTasksPages.sortValues.forEach(sortValue => {
+          sortBy(sortValue);
+          checkResults(sortResults.digital[sortValue]);
+        });
       });
     });
 

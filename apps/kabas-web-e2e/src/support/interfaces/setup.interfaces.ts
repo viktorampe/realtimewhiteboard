@@ -87,10 +87,55 @@ export interface KabasPracticePagesInterface {
   };
 }
 
+export interface ExpectedTaskListItemResult {
+  name?: string;
+}
+
+export interface AdvancedDateOptions {
+  option?: string;
+  today?: boolean;
+}
+
 export interface KabasTasksPagesInterface {
   kabasTasksPages: {
     loginTeacher: { username: string; password: string };
     book: number;
-    expected: {};
+    filterValues: {
+      overview: {
+        digital: {
+          name: string;
+          area: string;
+          date: AdvancedDateOptions;
+          status: number[];
+          combined: {
+            name: string;
+            area: string;
+            date: AdvancedDateOptions;
+            archived: boolean;
+            status: number[];
+          };
+        };
+      };
+    };
+    sortValues: string[];
+    expected: {
+      filterResults: {
+        overview: {
+          digital: {
+            name: ExpectedTaskListItemResult[];
+            area: ExpectedTaskListItemResult[];
+            date: ExpectedTaskListItemResult[];
+            status: ExpectedTaskListItemResult[];
+            archived: ExpectedTaskListItemResult[];
+            combined: ExpectedTaskListItemResult[];
+          };
+        };
+      };
+      sortResults: {
+        digital: {
+          [sortModeName: string]: ExpectedTaskListItemResult[];
+        };
+      };
+    };
   };
 }

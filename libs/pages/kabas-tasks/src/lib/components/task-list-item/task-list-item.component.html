@@ -1,9 +1,11 @@
 <mat-icon
+  data-cy="tli-archived-icon"
   *ngIf="archived"
   class="manage-kabas-tasks-task-list-item__archived"
   svgIcon="task:archived"
 ></mat-icon>
 <mat-icon
+  data-cy="tli-status-icon"
   *ngIf="!archived"
   class="manage-kabas-tasks-task-list-item__status"
   [svgIcon]="'task:' + status"
@@ -11,6 +13,7 @@
 
 <div class="manage-kabas-tasks-task-list-item__container">
   <div
+    data-cy="tli-title"
     class="manage-kabas-tasks-task-list-item__container__title"
     (click)="actions[0].handler()"
     campusClickStopPropagation
@@ -20,6 +23,7 @@
     *ngIf="actions.length"
     class="manage-kabas-tasks-task-list-item__container__actions"
     ><span
+      data-cy="tli-action"
       campusClickStopPropagation
       *ngFor="let action of actions"
       (click)="action.handler()"
@@ -28,14 +32,21 @@
   >
 </div>
 
-<div class="manage-kabas-tasks-task-list-item__learning-area">
+<div
+  class="manage-kabas-tasks-task-list-item__learning-area"
+  data-cy="tli-learning-area"
+>
   {{ learningArea }}
 </div>
 
 <div class="manage-kabas-tasks-task-list-item__dates">
   <div matLine>
-    <span *ngIf="startDate">{{ startDate | date: 'd/MM/yy' }}</span>
-    <span *ngIf="endDate"> - {{ endDate | date: 'd/MM/yy' }}</span>
+    <span data-cy="tli-start-date" *ngIf="startDate">{{
+      startDate | date: 'd/MM/yy'
+    }}</span>
+    <span data-cy="tli-end-date" *ngIf="endDate">
+      - {{ endDate | date: 'd/MM/yy' }}</span
+    >
   </div>
   <div matLine></div>
 </div>
@@ -44,10 +55,13 @@
     class="manage-kabas-tasks-task-list-item__assignees-class-groups"
     *ngIf="classGroups.length"
   >
-    <li *ngFor="let classGroup of classGroups">{{ classGroup.label }}</li>
+    <li data-cy="tli-classgroup" *ngFor="let classGroup of classGroups">{{
+      classGroup.label
+    }}</li>
   </ul>
 
   <span
+    data-cy="tli-group-count"
     *ngIf="groups.length"
     [matTooltip]="groups.join('\n')"
     class="manage-kabas-tasks-task-list-item__assignees-groups"
@@ -56,6 +70,7 @@
     {{ groups.length }} groep{{ groups.length === 1 ? '' : 'en' }}</span
   >
   <span
+    data-cy="tli-student-count"
     *ngIf="students.length"
     [matTooltip]="students.join('\n')"
     class="manage-kabas-tasks-task-list-item__assignees-students"
@@ -73,6 +88,7 @@
   campusClickStopPropagation
 >
   <mat-icon
+    data-cy="tli-favorite-action"
     [class.favorite]="isFavorite"
     (click)="toggleFavorite()"
     [svgIcon]="isFavorite ? 'favorites-filled' : 'favorites'"

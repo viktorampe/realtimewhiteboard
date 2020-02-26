@@ -121,22 +121,26 @@
             #digitalSorting
             [placeholder]="'Sorteren'"
           >
-            <mat-option [value]="TaskSortEnum.NAME">
+            <mat-option data-cy="sort-option" [value]="TaskSortEnum.NAME">
               Alfabetisch
             </mat-option>
-            <mat-option [value]="TaskSortEnum.LEARNINGAREA">
+            <mat-option
+              data-cy="sort-option"
+              [value]="TaskSortEnum.LEARNINGAREA"
+            >
               Leergebied
             </mat-option>
-            <mat-option [value]="TaskSortEnum.STARTDATE">
+            <mat-option data-cy="sort-option" [value]="TaskSortEnum.STARTDATE">
               Start datum
             </mat-option>
-            <mat-option [value]="TaskSortEnum.FAVORITE">
+            <mat-option data-cy="sort-option" [value]="TaskSortEnum.FAVORITE">
               Favoriet
             </mat-option>
           </mat-select>
         </div>
         <ng-container *ngIf="digitalFilteredTasks$ | async as digitalTasks">
           <div
+            data-cy="results-text"
             class="manage-kabas-tasks-overview__filterbar__result"
             *ngIf="digitalTasks.length; else noResults"
             >{{ digitalTasks.length }}
@@ -167,6 +171,7 @@
             [value]="task"
           >
             <campus-task-list-item
+              data-cy="task-list-item"
               [title]="task.name"
               [learningArea]="task.learningArea.name"
               [archived]="task.archivedYear"
@@ -236,13 +241,16 @@
             #paperSorting
             [placeholder]="'Sorteren'"
           >
-            <mat-option [value]="TaskSortEnum.NAME">
+            <mat-option data-cy="sort-option" [value]="TaskSortEnum.NAME">
               Alfabetisch
             </mat-option>
-            <mat-option [value]="TaskSortEnum.LEARNINGAREA">
+            <mat-option
+              data-cy="sort-option"
+              [value]="TaskSortEnum.LEARNINGAREA"
+            >
               Leergebied
             </mat-option>
-            <mat-option [value]="TaskSortEnum.FAVORITE">
+            <mat-option data-cy="sort-option" [value]="TaskSortEnum.FAVORITE">
               Favoriet
             </mat-option>
           </mat-select>
