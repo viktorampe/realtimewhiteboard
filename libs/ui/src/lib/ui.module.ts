@@ -55,12 +55,12 @@ import { FolderDetailsDirective } from './folder/directives/folder-details.direc
 import { FolderComponent } from './folder/folder.component';
 import { InfoPanelComponent } from './info-panel/info-panel.component';
 import {
-  ListItemActions,
-  ListItemCaption,
-  ListItemContent,
+  ListItemActionsDirective,
+  ListItemCaptionDirective,
   ListItemContentComponent,
-  ListItemIcon,
-  ListItemTitle
+  ListItemContentDirective,
+  ListItemIconDirective,
+  ListItemTitleDirective
 } from './list-item-content/list-item-content.component';
 import {
   ListViewComponent,
@@ -77,10 +77,10 @@ import { PersonBadgeComponent } from './person-badge/person-badge.component';
 import { PersonInitialsPipe } from './person-badge/pipes/person-initials.pipe';
 import { PersonSummaryComponent } from './person-summary-component/person-summary.component';
 import {
-  SectionActions,
+  SectionActionsDirective,
   SectionComponent,
-  SectionContent,
-  SectionTitle
+  SectionContentDirective,
+  SectionTitleDirective
 } from './section/section.component';
 import { ShellBodyDirective } from './shell/directives/shell-body.directive';
 import { ShellBottomDirective } from './shell/directives/shell-bottom.directive';
@@ -193,15 +193,15 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     ConfirmationModalComponent,
     EmptyStateComponent,
     SectionComponent,
-    SectionContent,
-    SectionActions,
-    SectionTitle,
+    SectionContentDirective,
+    SectionActionsDirective,
+    SectionTitleDirective,
     ListItemContentComponent,
-    ListItemIcon,
-    ListItemTitle,
-    ListItemCaption,
-    ListItemActions,
-    ListItemContent
+    ListItemIconDirective,
+    ListItemTitleDirective,
+    ListItemCaptionDirective,
+    ListItemActionsDirective,
+    ListItemContentDirective
   ],
   exports: [
     FilterTextInputComponent,
@@ -269,15 +269,15 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     ConfirmationModalComponent,
     EmptyStateComponent,
     SectionComponent,
-    SectionContent,
-    SectionActions,
-    SectionTitle,
+    SectionContentDirective,
+    SectionActionsDirective,
+    SectionTitleDirective,
     ListItemContentComponent,
-    ListItemIcon,
-    ListItemTitle,
-    ListItemCaption,
-    ListItemActions,
-    ListItemContent
+    ListItemIconDirective,
+    ListItemTitleDirective,
+    ListItemCaptionDirective,
+    ListItemActionsDirective,
+    ListItemContentDirective
   ],
   providers: [
     {

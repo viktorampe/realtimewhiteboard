@@ -21,9 +21,9 @@ import {
 import { MockDate, MockMatIconRegistry } from '@campus/testing';
 import {
   FileIconComponent,
-  ListItemActions,
-  ListItemCaption,
-  ListItemTitle,
+  ListItemActionsDirective,
+  ListItemCaptionDirective,
+  ListItemTitleDirective,
   UiModule
 } from '@campus/ui';
 import { configureTestSuite } from 'ng-bullet';
@@ -166,10 +166,12 @@ describe('EduContentSearchResultComponent', () => {
     });
 
     it('should show the title and description of the eduContent', () => {
-      const titleDE = fixture.debugElement.query(By.directive(ListItemTitle));
+      const titleDE = fixture.debugElement.query(
+        By.directive(ListItemTitleDirective)
+      );
 
       const descriptionDE = fixture.debugElement.query(
-        By.directive(ListItemCaption)
+        By.directive(ListItemCaptionDirective)
       );
 
       expect(titleDE.nativeElement.textContent.trim()).toBe(
@@ -193,7 +195,7 @@ describe('EduContentSearchResultComponent', () => {
 
     it('should show the possible actions for the eduContent', () => {
       const actionDEs = fixture.debugElement
-        .query(By.directive(ListItemActions))
+        .query(By.directive(ListItemActionsDirective))
         .queryAll(By.css('span'));
 
       expect(actionDEs.length).toBe(mockActions.length);
