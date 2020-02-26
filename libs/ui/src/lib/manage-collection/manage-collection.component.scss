@@ -54,6 +54,15 @@
     justify-content: flex-end;
     align-content: center;
   }
+
+  &__list-item {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    .spacer {
+      flex: 1;
+    }
+  }
 }
 
 @media #{$ui-breakpoint-xsmall} {

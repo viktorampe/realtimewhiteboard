@@ -5,15 +5,17 @@
   $ui-manage-collection-list_recent-item-color: $ui-form-button-primary-bg-color !default;
   $ui-manage-collection-list__no-results-padding: 24px !default;
 
-  $ui-manage-collection__header__row--top-margin-bottom: $ui-modal-side-sheet-header-top-row-margin-bottom !default;
-  $ui-manage-collection__header__row--bottom-padding-left: $ui-modal-side-sheet-header-bottom-row-padding-left !default;
-  $ui-manage-collection__header__row-title-margin-right: $ui-modal-side-sheet-header-row-title-margin-right !default;
-  $ui-manage-collection__header-icon-margin-right: $ui-modal-side-sheet-header-icon-margin-right !default;
+  $ui-manage-collection__header__row--top-margin-bottom: 8px !default;
+  $ui-manage-collection__header__row--bottom-padding-left: 32px !default;
+  $ui-manage-collection__header__row-title-margin-right: 16px !default;
+  $ui-manage-collection__header-icon-margin-right: 8px !default;
 
-  $ui-manage-collection-width: $ui-modal-side-sheet-width !default;
-  $ui-manage-collection__header-icon-color: $ui-modal-side-sheet-header-icon-color !default;
-  $ui-manage-collection__header-divider-color: $ui-modal-side-sheet-header-divider-color !default;
-  $ui-manage-collection__header-divider-margin: $ui-modal-side-sheet-header-divider-margin !default;
+  $ui-manage-collection-width: 500px !default;
+  $ui-manage-collection__header-icon-color: #808080 !default;
+  $ui-manage-collection__header-divider-color: #d2d2d2 !default;
+  $ui-manage-collection__header-divider-margin: 24px !default;
+  $ui-manage-collection__list-item-icon-color: #15adb9 !default;
+  $ui-manage-collection__list-item-icon-height: 20px !default;
 
   .ui-manage-collection {
     &__no-results {
@@ -103,6 +105,14 @@
       color: $ui-manage-collection__header-divider-color;
       margin: $ui-manage-collection__header-divider-margin
         (-$ui-manage-collection__header-divider-margin);
+    }
+
+    // material overrides
+    .mat-list-option {
+      mat-icon {
+        color: $ui-manage-collection__list-item-icon-color;
+        height: $ui-manage-collection__list-item-icon-height;
+      }
     }
   }
 }
