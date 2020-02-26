@@ -5,10 +5,15 @@
       *ngIf="icon"
       [svgIcon]="icon"
     ></mat-icon>
-    <div class="ui-banner__content__text" [innerHTML]="message"></div>
+    <div
+      class="ui-banner__content__text"
+      data-cy="banner-content"
+      [innerHTML]="message"
+    ></div>
   </div>
   <div class="ui-banner__buttons">
     <campus-button
+      data-cy="banner-action"
       *ngFor="let action of actions"
       (click)="onAction(action.userAction)"
       >{{ action.title }}</campus-button

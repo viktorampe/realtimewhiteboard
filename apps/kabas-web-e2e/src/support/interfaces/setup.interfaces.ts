@@ -103,6 +103,14 @@ export interface AdvancedDateOptions {
   today?: boolean;
 }
 
+export interface TaskAction {
+  action: string;
+  target: string;
+  shouldError?: boolean;
+  removesTarget?: boolean;
+  fromHeader?: boolean;
+}
+
 export interface KabasTasksPagesInterface {
   kabasTasksPages: {
     loginTeacher: { username: string; password: string };
@@ -125,6 +133,7 @@ export interface KabasTasksPagesInterface {
       };
     };
     sortValues: string[];
+    taskActions: TaskAction[];
     expected: {
       filterResults: {
         overview: {

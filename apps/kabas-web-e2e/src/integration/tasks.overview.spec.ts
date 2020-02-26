@@ -7,13 +7,18 @@ import {
   KabasTasksPagesInterface
 } from '../support/interfaces';
 import {
+  checkAbsent,
+  checkError,
   checkResults,
+  clickTaskAction,
+  dismissError,
   filterArchived,
   filterArea,
   filterDate,
   filterName,
   filterStatus,
   resetFilters,
+  selectTask,
   sortBy
 } from './tasks.overview';
 
@@ -26,6 +31,7 @@ describe('Tasks Overview', () => {
   let filterResults: typeof setup.kabasTasksPages.expected.filterResults.overview;
   let sortResults: typeof setup.kabasTasksPages.expected.sortResults;
   let smokeResults: typeof setup.kabasTasksPages.expected.smokeResults;
+  let taskActions: typeof setup.kabasTasksPages.taskActions;
 
   before(() => {
     performSetup('kabasTasksPages').then(res => {
@@ -35,6 +41,7 @@ describe('Tasks Overview', () => {
       filterResults = setup.kabasTasksPages.expected.filterResults.overview;
       sortResults = setup.kabasTasksPages.expected.sortResults;
       smokeResults = setup.kabasTasksPages.expected.smokeResults;
+      taskActions = setup.kabasTasksPages.taskActions;
     });
   });
 
@@ -126,17 +133,44 @@ describe('Tasks Overview', () => {
         });
       });
 
+      it('should execute task actions', () => {
+        taskActions.forEach(taskAction => {
+          if (taskAction.fromHeader) {
+            selectTask(taskAction.target);
+            //clickHeaderAction(taskAction.action);
+          } else {
+            if (!taskAction.shouldError) {
+              cy.route('patch', `${apiUrl}/api/Tasks/update-tasks*`).as('api');
+            }
+
+            clickTaskAction(taskAction.target, taskAction.action);
+
+            if (!taskAction.shouldError) {
+              cy.wait('@api');
+              //cy.wait(3000);
+            }
+          }
+
+          if (taskAction.removesTarget) {
+            checkAbsent(taskAction.target);
+          }
+
+          if (taskAction.shouldError) {
+            checkError(taskAction.target);
+            dismissError();
+          }
+        });
+      });
+
       /*
         e2e todo:
-        - Archive action with failure (Active digital task, correct error message)
-        - Archive action with success (Finished digital task)
-        - Archive action with success from header (French digital task)
         - Delete action with success (Unassigned digital task)
         - Delete action with failure (Active + pending, should be listed in modal)
-        - Favorite/unfavorite (favorite button not visible!)
+        - Unarchive action
+        - View action should redirect
         - New action should redirect (header & button)
         - Tooltips (mat-tooltip)
-        - View action should redirect
+        - Favorite/unfavorite (favorite button not visible!)
       */
     });
   });

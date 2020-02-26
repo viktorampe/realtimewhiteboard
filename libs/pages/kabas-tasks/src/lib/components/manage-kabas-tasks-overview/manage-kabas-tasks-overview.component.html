@@ -5,6 +5,7 @@
     "
   >
     <campus-button
+      data-cy="header-action"
       *ngIf="isArchivedFilterActive; else archiveAction"
       class="shared-header__contextual__button smallIcon"
       data-cy="nav-archive-task"
@@ -14,6 +15,7 @@
     >
     <ng-template #archiveAction>
       <campus-button
+        data-cy="header-action"
         class="shared-header__contextual__button smallIcon"
         data-cy="nav-archive-task"
         iconClass="archive"
@@ -23,6 +25,7 @@
     </ng-template>
 
     <campus-button
+      data-cy="header-action"
       class="shared-header__contextual__button smallIcon"
       data-cy="nav-delete-task"
       iconClass="delete"
@@ -31,6 +34,7 @@
     >
   </ng-container>
   <campus-button
+    data-cy="header-action"
     class="shared-header__contextual__button smallIcon"
     data-cy="nav-new-task"
     iconClass="tasks"

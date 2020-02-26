@@ -80,6 +80,53 @@ export function sortBy(mode: string) {
     .click();
 }
 
+export function clickTaskAction(taskName: string, action: string) {
+  dataCy('task-list-item')
+    .contains('[data-cy=task-list-item]', taskName)
+    .within(() => {
+      dataCy('tli-action')
+        .contains(translateAction(action) || action)
+        .click();
+    });
+}
+
+function translateAction(action: string) {
+  return {
+    archive: 'Archiveren',
+    delete: 'Verwijder'
+  }[action];
+}
+
+export function selectTask(taskName: string) {
+  dataCy('task-list-item')
+    .contains('[data-cy=task-list-item]', taskName)
+    .within(() => {
+      dataCy('tli-status-icon').click();
+    });
+}
+
+export function clickHeaderAction(action: string) {
+  dataCy('header-action')
+    .contains('[data-cy=header-action]', translateAction(action))
+    .click();
+}
+
+export function checkAbsent(taskName: string) {
+  dataCy('task-list-item')
+    .contains('[data-cy=task-list-item]', taskName)
+    .should('not.exist');
+}
+
+export function checkError(containing: string) {
+  dataCy('banner-content')
+    .contains(containing)
+    .should('exist');
+}
+
+export function dismissError() {
+  dataCy('banner-action').click();
+}
+
 export function checkResults(results: ExpectedTaskListItemResult[]) {
   dataCy('results-text').should(
     'contain.text',
