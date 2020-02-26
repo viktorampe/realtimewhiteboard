@@ -123,21 +123,19 @@
                       'producttype-' + getProductTypeClass(productType)
                     "
                   >
-                    <div class="method-file__content">
+                    <campus-list-item-content class="method-file__content">
                       <campus-file-icon
+                        list-item-icon
                         [classModifier]="getProductTypeClass(productType)"
                         [label]="generalFile.fileExtension"
                         [icon]="getProductTypeIcon(productType)"
                       ></campus-file-icon>
-                      <div class="method-file__copy">
-                        <div class="method-file__title"
-                          >{{ generalFile.name }}
-                        </div>
-                        <div class="method-file__description">{{
-                          generalFile.description
-                        }}</div>
-                      </div>
-                    </div>
+
+                      <list-item-title>{{ generalFile.name }} </list-item-title>
+                      <list-item-caption>{{
+                        generalFile.description
+                      }}</list-item-caption>
+                    </campus-list-item-content>
                   </mat-list-item>
                 </mat-nav-list>
               </ng-container>
