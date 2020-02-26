@@ -42,6 +42,9 @@
     &-class-groups {
       list-style: none;
       padding: 0;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
 
       li {
         display: inline;

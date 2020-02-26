@@ -162,7 +162,7 @@ describe('PracticeSearchResultComponent', () => {
 
     it('should not show the methodLevel icon', () => {
       const methodLevelDE = fixture.debugElement.query(
-        By.css('.app-practice-searchresult__method-levell__icon')
+        By.css('.app-practice-searchresult__method-level__icon')
       );
 
       expect(methodLevelDE).toBeNull();

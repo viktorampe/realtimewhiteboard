@@ -18,7 +18,7 @@
     campusClickStopPropagation
     >{{ title }}</list-item-title
   >
-  >
+
   <list-item-actions
     *ngIf="actions.length"
     class="manage-kabas-tasks-task-list-item__container__actions"
@@ -29,18 +29,18 @@
       >{{ action.label }}</span
     ></list-item-actions
   >
-  >
+
   <list-item-content class="manage-kabas-tasks-task-list-item__learning-area">
-    {{ learningArea }} </list-item-content
-  >>
+    {{ learningArea }}
+  </list-item-content>
 
   <list-item-content class="manage-kabas-tasks-task-list-item__dates">
     <div matLine>
       <span *ngIf="startDate">{{ startDate | date: 'd/MM/yy' }}</span>
       <span *ngIf="endDate"> - {{ endDate | date: 'd/MM/yy' }}</span>
     </div>
-    <div matLine></div> </list-item-content
-  >>
+    <div matLine></div>
+  </list-item-content>
   <list-item-content class="manage-kabas-tasks-task-list-item__assignees">
     <ul
       class="manage-kabas-tasks-task-list-item__assignees-class-groups"
@@ -79,6 +79,6 @@
       [class.favorite]="isFavorite"
       (click)="toggleFavorite()"
       [svgIcon]="isFavorite ? 'favorites-filled' : 'favorites'"
-    ></mat-icon> </list-item-content
-  >>
+    ></mat-icon>
+  </list-item-content>
 </campus-list-item-content>
