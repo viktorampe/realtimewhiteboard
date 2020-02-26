@@ -6,6 +6,7 @@ $ui-list-item-content-color--secondary: $ui-primary-font-color-2 !default;
 
 $ui-list-item-content_icon-color: $ui-primary-color-accent !default;
 $ui-list-item-content_icon-width: 50px !default;
+$ui-list-item-content_icon-height: 50px !default;
 
 @mixin ui-list-item-content() {
   .ui-list-item {
@@ -14,6 +15,12 @@ $ui-list-item-content_icon-width: 50px !default;
       margin-right: $ui-list-item-content-spacing--horizontal;
       color: $ui-list-item-content_icon-color;
       width: $ui-list-item-content_icon-width !important;
+      max-height: $ui-list-item-content_icon-height;
+
+      & > .ui-file-icon {
+        height: $ui-list-item-content_icon-height;
+        width: $ui-list-item-content_icon-width;
+      }
 
       & > mat-icon {
         width: inherit !important;
@@ -25,6 +32,13 @@ $ui-list-item-content_icon-width: 50px !default;
       color: $ui-list-item-content-color--primary;
       font-weight: bold;
       margin-bottom: $ui-list-item-content-spacing--vertical;
+    }
+
+    &__title,
+    &__caption {
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
     }
 
     &__actions {
