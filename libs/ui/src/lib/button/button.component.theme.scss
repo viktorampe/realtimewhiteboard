@@ -22,6 +22,12 @@
   $ui-button--disabled-elevation: 0 !default;
   $ui-button--disabled-opacity: 1 !default;
 
+  // --primary
+  $ui-button--primary-background-color: $ui-button-background-color-1 !default;
+  $ui-button--primary-border-color: darken(
+    $ui-button--primary-background-color,
+    10%
+  ) !default;
   // --dense
   $ui-button--dense-padding: $ui-button-padding !default;
   // --flat
@@ -113,12 +119,7 @@
   // --warning--active
   $ui-button--warning--active-color: $ui-button--warning-background-color !default;
   $ui-button--warning--active-background-color: $ui-button--warning-color !default;
-  // --primary
-  $ui-button--primary-background-color: $ui-button-background-color-1 !default;
-  $ui-button--primary-border-color: darken(
-    $ui-button--primary-background-color,
-    10%
-  ) !default;
+
   // --primary--disabled
   $ui-button--primary--disabled-border-color: darken(
     $ui-button-background-color,
