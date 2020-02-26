@@ -4,13 +4,14 @@ $ui-color-secondary: #fff;
 $ui-color-warning: #f80;
 $ui-color-danger: #f00;
 
-$ui-border-color: #d2d2d2 !default;
-$ui-icon-color: #808080;
+$ui-stroke-color: #d2d2d2 !default;
+$ui-icon-color: rgba(#000, 0.54) !default;
+$ui-icon-color--active: rgba(#000, 0.87) !default;
 
 // typography
-$ui-text-primary-color: #242424 !default;
-$ui-text-secondary-color: #808080 !default;
-$ui-text-disabled-color: #d2d2d2 !default;
+$ui-text-primary-color: rgba(#000, 0.87) !default;
+$ui-text-secondary-color: rgba(#000, 0.54) !default;
+$ui-text-disabled-color: rgba(#000, 0.38) !default;
 
 $ui-font-weight-light: 300 !default;
 $ui-font-weight-regular: 400 !default;
