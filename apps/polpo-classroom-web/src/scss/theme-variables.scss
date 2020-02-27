@@ -16,6 +16,12 @@ $color-orange-1: #ffa500;
 $color-red-1: #ff0000;
 $color-white-1: #fff;
 
+//transitions
+$ui-background-color-transition: none;
+$ui-text-color-transition: none;
+$ui-icon-color-transition: none;
+$ui-elevation-transition: none;
+
 // app > main body
 $primary-bg-color: $color-gray-3;
 $primary-font-color: $color-black-1;
@@ -85,6 +91,8 @@ $ui-form-button-default-bg-color: $color-gray-3;
 $ui-form-button-primary-bg-color: $color-blue-2;
 $ui-button--large-font-size: 18px;
 $ui-button-background-color-2: $color-blue-2;
+$ui-button--bordered-font-color: $primary-font-color;
+$ui-button-color: $primary-font-color;
 
 // ui > tiles
 $ui-tile-background-color: $color-blue-1;

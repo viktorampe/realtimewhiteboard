@@ -21,12 +21,16 @@
   $ui-button--disabled-elevation: 0 !default;
   $ui-button--disabled-opacity: 1 !default;
 
+  $ui-icon-text-gap: 12px !default;
+  $ui-button-icon-position: left !default;
+
   // --primary
   $ui-button--primary-background-color: $ui-button-background-color-1 !default;
   $ui-button--primary-border-color: darken(
     $ui-button--primary-background-color,
     10%
   ) !default;
+  $ui-button--primary-font-color: $ui-button-font-color !default;
   // --dense
   $ui-button--dense-padding: $ui-button-padding !default;
   // --flat
@@ -45,6 +49,7 @@
   // --bordered
   $ui-button--bordered-font-color: $ui-button-font-color !default;
   $ui-button--bordered-bg-color: $ui-button-bg-color !default;
+
   // --disabled
   $ui-button--disabled-background-color: lighten(
     $ui-button-background-color,
@@ -137,6 +142,10 @@
   $ui-button--icon-size: 40px !default;
   $ui-button--icon--dense-size: 32px !default;
 
+  // transitions
+  $ui-button-elevation-transition: $ui-elevation-transition !default;
+  $ui-button-background-color-transition: $ui-background-color-transition !default;
+
   .ui-button {
     @include elevation($ui-button-elevation);
     font-size: $ui-button-font-size;
@@ -147,9 +156,13 @@
     margin-right: $ui-form-spacing;
     text-transform: $ui-button-text-transform;
     border-radius: $ui-button-border-radius;
-    transition: background-color 300ms $ui-button-transition-easing,
-      color 300ms $ui-button-transition-easing,
-      box-shadow 100ms $ui-button-transition-easing;
+    transition: $ui-background-color-transition, $ui-text-color-transition,
+      $ui-elevation-transition;
+
+    > .mat-icon {
+      @include icon-size($ui-icon-size);
+      transition: $ui-icon-color-transition;
+    }
 
     &:last-child {
       margin-right: 0;
@@ -266,6 +279,10 @@
       background-color: $ui-button--inline-background-color;
       padding: $ui-button--inline-padding;
 
+      > .mat-icon {
+        @include iconPosition($ui-button-icon-position);
+        color: $ui-icon-color;
+      }
       &:after {
         display: block;
         content: '';
@@ -273,57 +290,34 @@
         border-style: $ui-button--inline-border-style;
         border-width: 1px;
         transform: scaleX(0);
-        transition: transform 250ms $ui-button-transition-easing;
+        transition: transform $ui-transition-normal $ui-transition-easing;
         width: 100%;
         position: absolute;
         bottom: 0;
       }
-      &:hover {
+      &:hover,
+      &:active,
+      &.ui-button--active {
         color: $ui-button--inline--hover-color;
         &:after {
           transform: scaleX(1);
         }
-      }
 
-      &.ui-button--danger {
-        color: $ui-button--inline--danger-color;
-        &:hover,
-        &:active,
-        &.ui-button--active {
-          color: darken(
-            $ui-button--inline--danger-color,
-            $ui-button--hover-shade-amount
-          );
-          &:after {
-            border-color: darken(
-              $ui-button--inline--danger-color,
-              $ui-button--hover-shade-amount
-            );
-          }
+        > .mat-icon {
+          color: $ui-button--inline--hover-color;
         }
+      }
+      &.ui-button--danger {
+        @include colorButton(
+          $ui-button--inline--danger-color,
+          $ui-button--hover-shade-amount
+        );
       }
       &.ui-button--warning {
-        color: $ui-button--inline--warning-color;
-        &:hover,
-        &:active,
-        &.ui-button--active {
-          color: darken(
-            $ui-button--inline--warning-color,
-            $ui-button--hover-shade-amount
-          );
-          &:after {
-            border-color: darken(
-              $ui-button--inline--warning-color,
-              $ui-button--hover-shade-amount
-            );
-          }
-        }
-      }
-
-      > .mat-icon {
-        @include icon-size($ui-icon-dense-size);
-        float: left;
-        margin-right: 8px;
+        @include colorButton(
+          $ui-button--inline--warning-color,
+          $ui-button--hover-shade-amount
+        );
       }
     }
     // --dense
@@ -348,9 +342,13 @@
     }
     // --primary
     &.ui-button--primary {
+      color: $ui-button--primary-font-color;
       background-color: $ui-button--primary-background-color;
       &:hover {
-        color: darken($ui-button-color, $ui-button--hover-shade-amount);
+        color: darken(
+          $ui-button--primary-font-color,
+          $ui-button--hover-shade-amount
+        );
         background-color: darken(
           $ui-button--primary-background-color,
           $ui-button--hover-shade-amount
@@ -359,7 +357,7 @@
       // --primary--disabled
       &.ui-button--disabled {
         background-color: $ui-button--primary--disabled-background-color;
-        color: $ui-button-color;
+        color: $ui-button--primary-font-color;
       }
       // --primary--bordered
       &.ui-button--bordered {
@@ -381,7 +379,7 @@
 
       > .mat-icon {
         @include icon-size($ui-icon-size);
-        margin-right: 12px;
+        @include iconPosition($ui-button-icon-position);
       }
 
       &.ui-button--dense {
@@ -408,7 +406,8 @@
 
       > .mat-icon {
         @include icon-size($ui-icon-size);
-        margin-right: 0; //ensure fab with only icon renders circle
+        transition: $ui-icon-color-transition;
+        margin: 0; //ensure fab with only icon renders circle
       }
 
       &.ui-button--dense {
@@ -420,6 +419,38 @@
           @include icon-size($ui-icon-dense-size);
         }
       }
+
+      &:hover,
+      &:active,
+      &.ui-button--active {
+        &:not(.ui-button--fab) > .mat-icon {
+          color: $ui-icon-color--active;
+        }
+      }
     }
+  }
+}
+
+@mixin colorButton($color, $shade) {
+  color: $color;
+  &:hover,
+  &:active,
+  &.ui-button--active {
+    color: darken($color, $shade);
+    &:after {
+      border-color: darken($color, $shade);
+    }
+    > .mat-icon {
+      color: darken($color, $shade);
+    }
+  }
+}
+@mixin iconPosition($icon-position) {
+  @if (unquote($icon-position) == left) {
+    order: 0;
+    margin-right: $ui-icon-text-gap;
+  } @else if(unquote($icon-position) == right) {
+    order: 1;
+    margin-left: $ui-icon-text-gap;
   }
 }

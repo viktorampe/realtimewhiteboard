@@ -19,6 +19,8 @@ $ui-font-weight-regular: 400 !default;
 $ui-font-weight-semibold: 600 !default;
 $ui-font-weight-bold: 700 !default;
 
+$ui-icon-text-gap: 12px !default;
+
 $ui-font-sizes: () !default;
 $ui-font-size-map: map-merge(
   (
@@ -34,6 +36,20 @@ $ui-font-size-map: map-merge(
   ),
   $ui-font-sizes
 );
+
+// transitions
+$ui-transition-easing: ease-out !default;
+
+$ui-transition-at-ease: 1000ms !default;
+$ui-transition-slow: 500ms !default;
+$ui-transition-normal: 250ms !default;
+$ui-transition-fast: 100ms !default;
+
+$ui-background-color-transition: background-color $ui-transition-normal
+  $ui-transition-easing !default;
+$ui-text-color-transition: color $ui-transition-normal $ui-transition-easing !default;
+$ui-icon-color-transition: color $ui-transition-normal $ui-transition-easing !default;
+$ui-elevation-transition: box-shadow $ui-transition-fast $ui-transition-easing !default;
 
 // main body
 $ui-primary-bg-color: #fff !default;
