@@ -32,6 +32,9 @@ export class DemoPageComponent implements OnInit {
   editableText = 'I am editable';
   staticText = 'I am static content';
 
+  backHeaderTitle = 'Lesmateriaal toevoegen';
+  showBack = false;
+
   constructor() {}
 
   ngOnInit() {
@@ -89,6 +92,17 @@ export class DemoPageComponent implements OnInit {
     >
   ) {
     console.log(data);
+  }
+
+  clickOtherBook() {
+    this.showBack = true;
+    this.backHeaderTitle = 'Selecteer een ander boek';
+  }
+  onDroppedChanged(dropped: boolean) {
+    this.showBack = dropped;
+    if (!dropped) {
+      this.backHeaderTitle = 'Lesmateriaal toevoegen';
+    }
   }
 
   changeMode(mode: SectionModeEnum) {

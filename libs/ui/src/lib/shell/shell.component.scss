@@ -20,7 +20,7 @@ mat-drawer-container {
   }
 
   .ui-shell__body {
-    overflow-y: auto;
+    overflow: hidden;
     flex: 0 1 auto;
   }
 
