@@ -14,6 +14,10 @@ $ui-color-primary: #f2a248;
 $ui-color-secondary: #15adb9;
 $ui-color-danger: #e22940;
 $ui-color-logo: #e7215d;
+//typography
+$ui-text-primary-color: rgba(#000, 0.87) !default;
+$ui-text-secondary-color: rgba(#000, 0.54) !default;
+$ui-text-disabled-color: rgba(#000, 0.38) !default;
 
 // > sidebar
 $color-gray-1: #f8f8f8; // bg       / table rows
@@ -54,11 +58,6 @@ $tertiary-bg-color-2: $color-white-1;
 $tertiary-font-color-2: $color-gray-3;
 $tertiary-font-size-2: 21px;
 $tertiary-font-weight-2: 600;
-
-// ui > typography
-$ui-text-primary-color: $color-black;
-$ui-text-secondary-color: $color-dark-gray;
-$ui-text-disabled-color: $color-light-gray;
 
 // ui > main body
 $ui-primary-bg-color: $primary-bg-color;
