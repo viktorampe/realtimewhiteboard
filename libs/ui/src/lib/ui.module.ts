@@ -64,6 +64,14 @@ import { FolderDetailsDirective } from './folder/directives/folder-details.direc
 import { FolderComponent } from './folder/folder.component';
 import { InfoPanelComponent } from './info-panel/info-panel.component';
 import {
+  ListItemActionsDirective,
+  ListItemCaptionDirective,
+  ListItemContentComponent,
+  ListItemContentDirective,
+  ListItemIconDirective,
+  ListItemTitleDirective
+} from './list-item-content/list-item-content.component';
+import {
   ListViewComponent,
   ListViewItemDirective
 } from './list-view/list-view.component';
@@ -78,10 +86,10 @@ import { PersonBadgeComponent } from './person-badge/person-badge.component';
 import { PersonInitialsPipe } from './person-badge/pipes/person-initials.pipe';
 import { PersonSummaryComponent } from './person-summary-component/person-summary.component';
 import {
-  SectionActions,
+  SectionActionsDirective,
   SectionComponent,
-  SectionContent,
-  SectionTitle
+  SectionContentDirective,
+  SectionTitleDirective
 } from './section/section.component';
 import { ShellBodyDirective } from './shell/directives/shell-body.directive';
 import { ShellBottomDirective } from './shell/directives/shell-bottom.directive';
@@ -195,9 +203,15 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     ConfirmationModalComponent,
     EmptyStateComponent,
     SectionComponent,
-    SectionContent,
-    SectionActions,
-    SectionTitle,
+    SectionContentDirective,
+    SectionActionsDirective,
+    SectionTitleDirective,
+    ListItemContentComponent,
+    ListItemIconDirective,
+    ListItemTitleDirective,
+    ListItemCaptionDirective,
+    ListItemActionsDirective,
+    ListItemContentDirective,
     BackdropComponent,
     BackdropRevealActionDirective,
     BackdropCollapseActionDirective,
@@ -272,9 +286,15 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     ConfirmationModalComponent,
     EmptyStateComponent,
     SectionComponent,
-    SectionContent,
-    SectionActions,
-    SectionTitle,
+    SectionContentDirective,
+    SectionActionsDirective,
+    SectionTitleDirective,
+    ListItemContentComponent,
+    ListItemIconDirective,
+    ListItemTitleDirective,
+    ListItemCaptionDirective,
+    ListItemActionsDirective,
+    ListItemContentDirective,
     BackdropComponent,
     BackdropRevealActionDirective,
     BackdropCollapseActionDirective,

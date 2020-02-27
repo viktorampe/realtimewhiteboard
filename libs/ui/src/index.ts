@@ -10,11 +10,13 @@ export {
   DateRangeValue
 } from './lib/date-range-picker/date-range-picker.component';
 export { DropdownMenuItemInterface } from './lib/dropdown-menu-item/dropdown-menu-item.component';
+export { FileIconComponent } from './lib/file-icon/file-icon.component';
 export {
   FilterableItem,
   FilterTextInputComponent
 } from './lib/filter-text-input/filter-text-input.component';
 export { InfoPanelComponent } from './lib/info-panel/info-panel.component';
+export * from './lib/list-item-content/list-item-content.component';
 export { ListFormat } from './lib/list-view/enums/list-format.enum';
 export { ListViewItemInterface } from './lib/list-view/interfaces/list-view-item';
 export {
