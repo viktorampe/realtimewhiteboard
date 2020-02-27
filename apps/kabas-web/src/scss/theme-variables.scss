@@ -55,6 +55,11 @@ $tertiary-font-color-2: $color-gray-3;
 $tertiary-font-size-2: 21px;
 $tertiary-font-weight-2: 600;
 
+// ui > typography
+$ui-text-primary-color: $color-black;
+$ui-text-secondary-color: $color-dark-gray;
+$ui-text-disabled-color: $color-light-gray;
+
 // ui > main body
 $ui-primary-bg-color: $primary-bg-color;
 $ui-primary-font-color: $primary-font-color;
@@ -197,6 +202,8 @@ $ui-button--bordered-bg-color: $color-white-1;
 $ui-button--bordered-font-color: $ui-color-secondary;
 
 $ui-button--dense-padding: 2px $ui-button-horizontal-padding;
+// ui > backdrop
+$ui-backdrop-background: linear-gradient(90deg, $color-blue-2, $color-blue-3);
 
 // ui > info panel
 $ui-info-panel-title-color: $primary-font-color;
@@ -240,6 +247,11 @@ $date-filter_mat-form-field_outline-opacity: 1;
 $date-filter_mat-form-field_outline-border-right-width: 1px;
 $date-filter_mat-form-field_outline-border-color: $primary-font-color-2;
 $date-filter_date-range_day--in-range-background-color: $secondary-bg-color-accent;
+
+// search filters > checkbox-line
+$checkbox-line--disabled-color: $ui-text-disabled-color;
+$checkbox-line--disabled-background-color: unset;
+$checkbox-line--disabled-stroke-color: $ui-text-disabled-color;
 
 // ui > date range picker component
 $ui-date-range-picker_mat-form-field_outline-opacity: 1;

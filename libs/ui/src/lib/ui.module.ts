@@ -25,6 +25,15 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { RouterModule } from '@angular/router';
 import { BeDateAdapter, UtilsModule } from '@campus/utils';
 import { AppBarComponent } from './app-bar/app-bar.component';
+import {
+  BackdropCollapseActionDirective,
+  BackdropComponent,
+  BackdropHeaderActionsDirective,
+  BackdropRevealActionDirective,
+  BackLayerContentDirective,
+  FrontLayerContentDirective,
+  FrontLayerHeaderDirective
+} from './backdrop/backdrop.component';
 import { BannerComponent } from './banner/banner.component';
 import { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.component';
 import { ButtonComponent } from './button/button.component';
@@ -100,6 +109,7 @@ import { HumanDateTimePipe } from './utils/pipes/human-date-time/human-date-time
 import { JoinPipe } from './utils/pipes/join/join.pipe';
 import { RemovePrefixStringPipe } from './utils/pipes/remove-prefix-string/remove-prefix-string.pipe';
 import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-string.pipe';
+
 @NgModule({
   imports: [
     OverlayModule,
@@ -197,7 +207,14 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     DenseDirective,
     FlatDirective,
     FabDirective,
-    IconDirective
+    IconDirective,
+    BackdropComponent,
+    BackdropRevealActionDirective,
+    BackdropCollapseActionDirective,
+    BackdropHeaderActionsDirective,
+    BackLayerContentDirective,
+    FrontLayerContentDirective,
+    FrontLayerHeaderDirective
   ],
   exports: [
     FilterTextInputComponent,
@@ -272,7 +289,14 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     DenseDirective,
     FlatDirective,
     FabDirective,
-    IconDirective
+    IconDirective,
+    BackdropComponent,
+    BackdropRevealActionDirective,
+    BackdropCollapseActionDirective,
+    BackdropHeaderActionsDirective,
+    BackLayerContentDirective,
+    FrontLayerContentDirective,
+    FrontLayerHeaderDirective
   ],
   providers: [
     {
