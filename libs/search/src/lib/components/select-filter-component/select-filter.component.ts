@@ -73,16 +73,17 @@ export class SelectFilterComponent
               | SearchFilterCriteriaValuesInterface
               | SearchFilterCriteriaValuesInterface[]
           ): void => {
-            if (Array.isArray(selection)) {
-              // multiple === true
-              if (selection.includes(null)) {
-                // resetLabel was clicked
-                this.selectControl.setValue([]);
-                return;
-              }
-            } else {
-              selection = selection === null ? [] : [selection];
+            if (!selection) selection = [];
+
+            if (!Array.isArray(selection)) selection = [selection];
+
+            // multiple === true
+            if (selection.includes(null)) {
+              // resetLabel was clicked
+              this.selectControl.setValue([]);
+              return;
             }
+
             this.updateView(selection);
             this.updateCriteriaWithSelected(this.criteria.values, selection);
             this.filterSelectionChange.emit([this.criteria]);
@@ -116,16 +117,18 @@ export class SelectFilterComponent
       );
   }
 
-  private updateView(selection?: SearchFilterCriteriaValuesInterface[]): void {
-    this.count = Array.isArray(selection) ? selection.length : 0;
+  // only updates view -> does not trigger valueChange
+  private updateView(
+    selection: SearchFilterCriteriaValuesInterface[] = []
+  ): void {
+    this.count = selection.length;
 
-    if (selection) {
-      if (this.multiple) {
-        this.selectControl.setValue(selection);
-      } else {
-        this.selectControl.setValue(selection[0] || null);
-      }
+    if (this.multiple) {
+      this.selectControl.setValue(selection, { emitEvent: false });
+    } else {
+      this.selectControl.setValue(selection[0] || null, { emitEvent: false });
     }
+
     this.cd.markForCheck();
   }
 
