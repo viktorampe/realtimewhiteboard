@@ -82,7 +82,7 @@ export function sortBy(mode: string) {
 }
 
 export function clickTaskAction(taskName: string, action: string) {
-  dataCy('task-list-item')
+  return dataCy('task-list-item')
     .contains('[data-cy=task-list-item]', taskName)
     .within(() => {
       dataCy('tli-action')
@@ -94,14 +94,16 @@ export function clickTaskAction(taskName: string, action: string) {
 function translateAction(action: string) {
   return {
     archive: 'Archiveren',
-    unarchive: 'Dearchiveren'
+    unarchive: 'Dearchiveren',
+    view: 'Bekijken'
   }[action];
 }
 
 function translateActionHeader(action: string) {
   return {
     archive: 'archiveer',
-    delete: 'verwijder'
+    delete: 'verwijder',
+    new: 'nieuw'
   }[action];
 }
 
@@ -117,6 +119,7 @@ export function taskActionExecute(taskAction: TaskAction) {
   } else {
     if (taskAction.action === 'unarchive') {
       filterArchived();
+      cy.wait(500);
     }
 
     // Regular inline task actions
@@ -145,7 +148,7 @@ export function selectTask(taskName: string) {
 }
 
 export function clickHeaderAction(action: string) {
-  dataCy('header-action')
+  return dataCy('header-action')
     .contains('[data-cy=header-action]', translateActionHeader(action))
     .click();
 }

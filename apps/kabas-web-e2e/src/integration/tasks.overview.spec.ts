@@ -10,6 +10,8 @@ import {
 import {
   checkAbsent,
   checkResults,
+  clickHeaderAction,
+  clickTaskAction,
   filterArchived,
   filterArea,
   filterDate,
@@ -31,6 +33,7 @@ describe('Tasks Overview', () => {
   let sortResults: typeof setup.kabasTasksPages.expected.sortResults;
   let smokeResults: typeof setup.kabasTasksPages.expected.smokeResults;
   let taskActions: typeof setup.kabasTasksPages.taskActions;
+  let paperTaskActions: typeof setup.kabasTasksPages.paperTaskActions;
 
   before(() => {
     performSetup('kabasTasksPages').then(res => {
@@ -41,6 +44,7 @@ describe('Tasks Overview', () => {
       sortResults = setup.kabasTasksPages.expected.sortResults;
       smokeResults = setup.kabasTasksPages.expected.smokeResults;
       taskActions = setup.kabasTasksPages.taskActions;
+      paperTaskActions = setup.kabasTasksPages.paperTaskActions;
     });
   });
 
@@ -61,21 +65,7 @@ describe('Tasks Overview', () => {
         cy.visit(`${appPaths.tasks}/manage`);
       });
 
-      xit('should show all the elements', () => {
-        // tabs, can't use dataCy because they disappear
-        cy.get('.mat-tab-label-content')
-          .eq(0)
-          .should('have.text', 'Digitale taken');
-        cy.get('.mat-tab-label-content')
-          .eq(1)
-          .should('have.text', 'Papieren taken');
-
-        // new task
-        dataCy('new-task-digital').should('exist');
-        dataCy('nav-new-task').should('exist');
-      });
-
-      xit('should show the right task info', () => {
+      it('should show the right task info', () => {
         checkResults(
           smokeResults.digital.map(listItem => {
             return Object.assign({}, listItem, {
@@ -85,7 +75,7 @@ describe('Tasks Overview', () => {
         );
       });
 
-      xit('should filter tasks', () => {
+      it('should filter tasks', () => {
         // individual filters
         filterName(filterValues.digital.name);
         checkResults(filterResults.digital.name);
@@ -125,7 +115,7 @@ describe('Tasks Overview', () => {
         resetFilters();
       });
 
-      xit('should sort tasks', () => {
+      it('should sort tasks', () => {
         setup.kabasTasksPages.sortValues.forEach(sortValue => {
           sortBy(sortValue);
           checkResults(sortResults.digital[sortValue]);
@@ -144,7 +134,8 @@ describe('Tasks Overview', () => {
             resetFilters();
           }
 
-          // When test appears flaky, add a cy.wait(1000) on this line
+          // Wait for the store to settle, normally not needed but this test was flaky otherwise
+          cy.wait(500);
 
           // This action will do an API call, so we set up a guard to wait for it
           if (!taskAction.shouldError) {
@@ -174,13 +165,141 @@ describe('Tasks Overview', () => {
         });
       });
 
-      /*
-        e2e todo:
-        - View action should redirect
-        - New action should redirect (header & button)
-        - Tooltips (mat-tooltip) -> do later
-        - Favorite/unfavorite (favorite button not visible!) -> can't do yet
-      */
+      it('should navigate to the right pages', () => {
+        dataCy('new-task-digital')
+          .click()
+          .location('pathname')
+          .should('be', `${appPaths.tasks}/manage/new?digital=true`)
+          .go('back');
+
+        clickHeaderAction('new')
+          .location('pathname')
+          .should('be', `${appPaths.tasks}/manage/new?digital=true`)
+          .go('back');
+
+        clickTaskAction(setup.kabasTasksPages.viewTask, 'view')
+          .location('pathname')
+          .should(
+            'be',
+            `${appPaths.tasks}/manage/${setup.kabasTasksPages.expected.viewTaskId}`
+          );
+
+        // TODO: tabs?
+      });
+    });
+
+    describe('paper', () => {
+      beforeEach(() => {
+        cy.visit(`${appPaths.tasks}/manage?tab=1`);
+      });
+
+      it('should show the right task info', () => {
+        checkResults(
+          smokeResults.paper.map(listItem => {
+            return Object.assign({}, listItem, {
+              actions: ['Bekijken', 'Archiveren', 'Resultaten', 'Doelenmatrix']
+            });
+          })
+        );
+      });
+
+      it('should filter tasks', () => {
+        // individual filters
+        filterName(filterValues.paper.name);
+        checkResults(filterResults.paper.name);
+        resetFilters();
+
+        filterArea(filterValues.paper.area);
+        checkResults(filterResults.paper.area);
+        resetFilters();
+
+        // TODO: assignee filter here! it's currently bugged on the front-end so can't test it
+
+        filterArchived();
+        checkResults(filterResults.paper.archived);
+        resetFilters();
+
+        // combined filters:
+        filterName(filterValues.paper.combined.name);
+        filterArea(filterValues.paper.combined.area);
+        if (filterValues.paper.combined.archived) {
+          filterArchived();
+        }
+        checkResults(filterResults.paper.combined);
+        resetFilters();
+      });
+
+      it('should sort tasks', () => {
+        setup.kabasTasksPages.paperSortValues.forEach(sortValue => {
+          sortBy(sortValue);
+          checkResults(sortResults.paper[sortValue]);
+        });
+      });
+
+      it('should execute task actions', () => {
+        let lastAction: TaskAction = null;
+
+        paperTaskActions.forEach(taskAction => {
+          if (
+            lastAction &&
+            !lastAction.fromHeader &&
+            lastAction.action === 'unarchive'
+          ) {
+            resetFilters();
+          }
+
+          // Wait for the store to settle, normally not needed but this test was flaky otherwise
+          cy.wait(500);
+
+          // This action will do an API call, so we set up a guard to wait for it
+          if (!taskAction.shouldError) {
+            taskAction.action === 'delete'
+              ? cy.route('post', `${apiUrl}/api/Tasks/destroy-tasks`).as('api')
+              : cy
+                  .route('patch', `${apiUrl}/api/Tasks/update-tasks*`)
+                  .as('api');
+          }
+
+          // Do the action
+          taskActionExecute(taskAction);
+
+          // Now we wait for our action to be processed by the API first
+          if (!taskAction.shouldError) {
+            cy.wait('@api');
+          }
+
+          if (taskAction.removesTarget) {
+            checkAbsent(taskAction.target);
+          }
+
+          // Error message checking
+          taskActionCheckError(taskAction);
+
+          lastAction = taskAction;
+        });
+      });
+
+      it('should navigate to the right pages', () => {
+        dataCy('new-task-paper')
+          .click()
+          .location('pathname')
+          .should('be', `${appPaths.tasks}/manage/new?paper=true`)
+          .go('back');
+
+        clickHeaderAction('new')
+          .location('pathname')
+          .should('be', `${appPaths.tasks}/manage/new?paper=true`)
+          .go('back');
+
+        clickTaskAction(setup.kabasTasksPages.paperViewTask, 'view')
+          .location('pathname')
+          .should(
+            'be',
+            `${appPaths.tasks}/manage/${setup.kabasTasksPages.expected.paperViewTaskId}`
+          );
+
+        // TODO: tabs?
+      });
     });
   });
 });

@@ -130,10 +130,23 @@ export interface KabasTasksPagesInterface {
             status: number[];
           };
         };
+        paper: {
+          name: string;
+          area: string;
+          combined: {
+            name: string;
+            area: string;
+            archived: boolean;
+          };
+        };
       };
     };
     sortValues: string[];
+    paperSortValues: string[];
     taskActions: TaskAction[];
+    paperTaskActions: TaskAction[];
+    viewTask: string;
+    paperViewTask: string;
     expected: {
       filterResults: {
         overview: {
@@ -145,16 +158,28 @@ export interface KabasTasksPagesInterface {
             archived: ExpectedTaskListItemResult[];
             combined: ExpectedTaskListItemResult[];
           };
+          paper: {
+            name: ExpectedTaskListItemResult[];
+            area: ExpectedTaskListItemResult[];
+            archived: ExpectedTaskListItemResult[];
+            combined: ExpectedTaskListItemResult[];
+          };
         };
       };
       sortResults: {
         digital: {
           [sortModeName: string]: ExpectedTaskListItemResult[];
         };
+        paper: {
+          [sortModeName: string]: ExpectedTaskListItemResult[];
+        };
       };
       smokeResults: {
         digital: ExpectedTaskListItemResult[];
+        paper: ExpectedTaskListItemResult[];
       };
+      viewTaskId: number;
+      paperViewTaskId: number;
     };
   };
 }

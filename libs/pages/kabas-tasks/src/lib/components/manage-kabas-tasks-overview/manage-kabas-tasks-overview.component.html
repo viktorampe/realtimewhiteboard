@@ -194,6 +194,7 @@
       <div class="manage-kabas-tasks-overview__filterbar">
         <div class="manage-kabas-tasks-overview__filterbar__filters">
           <campus-search-term
+            data-cy="name-filter"
             placeholder="Zoeken op titel"
             [autoComplete]="false"
             (valueChange)="searchTermUpdated($event, 'paper')"
@@ -201,6 +202,7 @@
           ></campus-search-term>
 
           <campus-select-filter
+            data-cy="area-filter"
             multiple="true"
             [resetLabel]="'Selectie wissen'"
             *ngIf="learningAreaFilterPaper$ | async as learningAreaFilterPaper"
@@ -211,6 +213,7 @@
           ></campus-select-filter>
 
           <campus-select-filter
+            data-cy="assignee-filter"
             multiple="true"
             *ngIf="assigneeFilterPaper$ | async as assigneeFilterPaper"
             [filterCriteria]="assigneeFilterPaper"
@@ -222,6 +225,7 @@
 
           <div class="manage-kabas-tasks-overview__archive-toggle">
             <mat-slide-toggle
+              data-cy="archived-filter"
               color="primary"
               (change)="archivedFilterToggled($event, 'paper')"
             >
@@ -229,6 +233,7 @@
             </mat-slide-toggle>
           </div>
           <campus-button
+            data-cy="reset-filters"
             (click)="clickResetFilters()"
             class="manage-kabas-tasks-overview__reset-filters"
             iconClass="reset-filters"
@@ -236,6 +241,7 @@
           <div style="flex-grow: 1;"></div>
 
           <mat-select
+            data-cy="sort-dropdown"
             class="manage-kabas-tasks-overview__sorting"
             (selectionChange)="setSortMode($event.value)"
             #paperSorting
@@ -257,6 +263,7 @@
         </div>
         <ng-container *ngIf="paperFilteredTasks$ | async as paperTasks">
           <div
+            data-cy="results-text"
             class="manage-kabas-tasks-overview__filterbar__result"
             *ngIf="paperTasks.length; else noResults"
             >{{ paperTasks.length }}
@@ -291,6 +298,7 @@
             [value]="task"
           >
             <campus-task-list-item
+              data-cy="task-list-item"
               [title]="task.name"
               [learningArea]="task.learningArea.name"
               [archived]="task.archivedYear"
