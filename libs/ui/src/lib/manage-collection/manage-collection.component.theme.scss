@@ -11,10 +11,10 @@
   $ui-manage-collection__header-icon-margin-right: 8px !default;
 
   $ui-manage-collection-width: 500px !default;
-  $ui-manage-collection__header-icon-color: #808080 !default;
-  $ui-manage-collection__header-divider-color: #d2d2d2 !default;
+  $ui-manage-collection__header-icon-color: $ui-text-secondary-color !default;
+  $ui-manage-collection__header-divider-color: $ui-stroke-color !default;
   $ui-manage-collection__header-divider-margin: 24px !default;
-  $ui-manage-collection__list-item-icon-color: #15adb9 !default;
+  $ui-manage-collection__list-item-icon-color: $ui-primary-color-accent !default;
   $ui-manage-collection__list-item-icon-height: 20px !default;
 
   .ui-manage-collection {
