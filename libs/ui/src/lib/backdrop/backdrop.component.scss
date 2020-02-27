@@ -1,0 +1,49 @@
+.ui-backdrop {
+  &__back-layer {
+    &__content {
+      overflow-y: auto;
+    }
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+
+    h1 {
+      flex: 1 1 100%;
+    }
+  }
+
+  &__front-layer {
+    position: relative;
+    z-index: 2;
+    overflow-y: auto;
+
+    &__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      &:empty {
+        display: none;
+      }
+    }
+  }
+
+  &--dropped {
+    .ui-backdrop__front-layer {
+      overflow: hidden;
+
+      &__content:before {
+        position: absolute;
+        display: block;
+        content: '';
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 3;
+      }
+    }
+  }
+}

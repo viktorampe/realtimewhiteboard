@@ -78,6 +78,10 @@ export const environment: EnvironmentInterface = {
   ui: {
     useNavItemStyle: true,
     useInfoPanelStyle: false,
+    footerHeight: 10,
+    backdrop: {
+      safeMargin: 48
+    },
     useModalSideSheetStyle: true
   }
 };

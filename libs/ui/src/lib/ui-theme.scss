@@ -221,6 +221,7 @@ $ui-tile-height: 105px !default;
 @import './date-range-picker/date-range-picker.component.theme.scss';
 @import './section/section.component.theme.scss';
 @import './empty-state/empty-state.theme.scss';
+@import './backdrop/backdrop.component.theme.scss';
 
 @mixin elevation($dp) {
   @if $dp==0 {
@@ -401,4 +402,5 @@ campus-date-range-picker {
   @include ui-date-range-picker();
   @include ui-section();
   @include ui-empty-state();
+  @include ui-backdrop();
 }
