@@ -10,6 +10,10 @@
   }
 }
 
+.spacer {
+  flex: 1;
+}
+
 .ui-modal-side-sheet {
   &__header {
     display: flex;
@@ -19,7 +23,8 @@
       display: flex;
       flex-direction: row;
       align-items: center;
-      div.ui-title {
+      div.ui-title,
+      div.ui-body-2 {
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -63,9 +68,6 @@
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
-    .spacer {
-      flex: 1;
-    }
   }
 }
 
