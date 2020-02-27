@@ -22,8 +22,9 @@
   }
 
   &__hover-actions {
-    flex: 1 0 5%;
-    flex-direction: row nowrap;
+    flex: 0 0 auto;
+    min-width: 24px;
+    flex-flow: row nowrap;
     align-self: center;
     mat-icon {
       display: none;
@@ -35,7 +36,7 @@
   }
 
   &__assignees {
-    flex: 1 0 30%;
+    flex: 0 0 30%;
     flex-direction: column;
     align-items: flex-start;
 

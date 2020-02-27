@@ -16,6 +16,7 @@ $ui-list-item-content_icon-height: 50px !default;
       color: $ui-list-item-content_icon-color;
       width: $ui-list-item-content_icon-width !important;
       max-height: $ui-list-item-content_icon-height;
+      flex: 0 0 auto;
 
       & > .ui-file-icon {
         height: $ui-list-item-content_icon-height;
@@ -34,6 +35,8 @@ $ui-list-item-content_icon-height: 50px !default;
       text-overflow: ellipsis;
       white-space: nowrap;
       overflow: hidden;
+      width: fit-content;
+      max-width: 100%;
     }
 
     &__actions {
