@@ -6,4 +6,5 @@ export interface ApiPathsInterface {
 export interface AppPathsInterface {
   methods: string;
   practice: string;
+  tasks: string;
 }
