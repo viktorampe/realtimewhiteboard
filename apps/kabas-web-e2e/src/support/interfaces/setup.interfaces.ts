@@ -91,7 +91,17 @@ export interface KabasTasksPagesInterface {
   kabasTasksPages: {
     loginTeacher: { username: string; password: string };
     book: number;
-    taskId: number;
     expected: {};
+    manageTaskContent: {
+      taskId: number;
+      expected: {
+        filter: {
+          book: number;
+          chapter: number;
+          lesson: number;
+          searchTermResultCount: number;
+        };
+      };
+    };
   };
 }
