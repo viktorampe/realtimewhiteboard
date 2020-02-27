@@ -32,4 +32,18 @@ export class DateFunctions {
 
     return copy;
   }
+
+  // return start- and endDate of schoolyear
+  public static getSchoolYearBoundaries(
+    date: Date
+  ): { start: Date; end: Date } {
+    // months are 0-based
+    const startYear =
+      date.getMonth() >= 8 ? date.getFullYear() : date.getFullYear() - 1;
+
+    return {
+      start: new Date(startYear, 8, 1),
+      end: new Date(startYear + 1, 5, 30)
+    };
+  }
 }

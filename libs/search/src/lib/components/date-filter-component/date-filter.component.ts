@@ -46,7 +46,7 @@ export interface DateFilterComponentFormValues {
 @Component({
   selector: 'campus-date-filter',
   templateUrl: './date-filter.component.html',
-  styleUrls: ['./date-filter.component.css'],
+  styleUrls: ['./date-filter.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DateFilterComponent
