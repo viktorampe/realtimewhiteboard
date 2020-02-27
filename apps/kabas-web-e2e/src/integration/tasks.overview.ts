@@ -4,7 +4,8 @@ import { cyEnv, dataCy } from '../support/commands';
 import {
   AdvancedDateOptions,
   ApiPathsInterface,
-  ExpectedTaskListItemResult
+  ExpectedTaskListItemResult,
+  TaskAction
 } from '../support/interfaces';
 
 const apiUrl = cyEnv('apiUrl');
@@ -93,8 +94,46 @@ export function clickTaskAction(taskName: string, action: string) {
 function translateAction(action: string) {
   return {
     archive: 'Archiveren',
-    delete: 'Verwijder'
+    unarchive: 'Dearchiveren'
   }[action];
+}
+
+function translateActionHeader(action: string) {
+  return {
+    archive: 'archiveer',
+    delete: 'verwijder'
+  }[action];
+}
+
+export function taskActionExecute(taskAction: TaskAction) {
+  // Task actions from the header work by selecting tasks first
+  if (taskAction.fromHeader) {
+    selectTask(taskAction.target);
+    clickHeaderAction(taskAction.action);
+
+    if (taskAction.action === 'delete' && !taskAction.shouldError) {
+      confirmModal();
+    }
+  } else {
+    if (taskAction.action === 'unarchive') {
+      filterArchived();
+    }
+
+    // Regular inline task actions
+    clickTaskAction(taskAction.target, taskAction.action);
+  }
+}
+
+export function taskActionCheckError(taskAction: TaskAction) {
+  if (taskAction.shouldError) {
+    if (taskAction.action === 'delete' && taskAction.fromHeader) {
+      checkModalContent(taskAction.target);
+      cancelModal();
+    } else {
+      checkError(taskAction.target);
+      dismissError();
+    }
+  }
 }
 
 export function selectTask(taskName: string) {
@@ -107,8 +146,20 @@ export function selectTask(taskName: string) {
 
 export function clickHeaderAction(action: string) {
   dataCy('header-action')
-    .contains('[data-cy=header-action]', translateAction(action))
+    .contains('[data-cy=header-action]', translateActionHeader(action))
     .click();
+}
+
+export function confirmModal() {
+  dataCy('cm-confirm').click();
+}
+
+export function cancelModal() {
+  dataCy('cm-cancel').click();
+}
+
+export function waitForSnackBar() {
+  cy.get('.mat-snack-bar-container').should('not.exist');
 }
 
 export function checkAbsent(taskName: string) {
@@ -121,6 +172,10 @@ export function checkError(containing: string) {
   dataCy('banner-content')
     .contains(containing)
     .should('exist');
+}
+
+export function checkModalContent(contents: string) {
+  dataCy('cm-content').should('contain.text', contents);
 }
 
 export function dismissError() {

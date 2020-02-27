@@ -4,21 +4,21 @@ import { cyEnv, dataCy, login, performSetup } from '../support/commands';
 import {
   ApiPathsInterface,
   AppPathsInterface,
-  KabasTasksPagesInterface
+  KabasTasksPagesInterface,
+  TaskAction
 } from '../support/interfaces';
 import {
   checkAbsent,
-  checkError,
   checkResults,
-  clickTaskAction,
-  dismissError,
   filterArchived,
   filterArea,
   filterDate,
   filterName,
   filterStatus,
   resetFilters,
-  sortBy
+  sortBy,
+  taskActionCheckError,
+  taskActionExecute
 } from './tasks.overview';
 
 describe('Tasks Overview', () => {
@@ -56,11 +56,11 @@ describe('Tasks Overview', () => {
       );
     });
 
-    beforeEach(() => {
-      cy.visit(`${appPaths.tasks}/manage`);
-    });
-
     describe('digital', () => {
+      beforeEach(() => {
+        cy.visit(`${appPaths.tasks}/manage`);
+      });
+
       xit('should show all the elements', () => {
         // tabs, can't use dataCy because they disappear
         cy.get('.mat-tab-label-content')
@@ -75,7 +75,7 @@ describe('Tasks Overview', () => {
         dataCy('nav-new-task').should('exist');
       });
 
-      it('should show the right task info', () => {
+      xit('should show the right task info', () => {
         checkResults(
           smokeResults.digital.map(listItem => {
             return Object.assign({}, listItem, {
@@ -85,7 +85,7 @@ describe('Tasks Overview', () => {
         );
       });
 
-      it('should filter tasks', () => {
+      xit('should filter tasks', () => {
         // individual filters
         filterName(filterValues.digital.name);
         checkResults(filterResults.digital.name);
@@ -125,7 +125,7 @@ describe('Tasks Overview', () => {
         resetFilters();
       });
 
-      it('should sort tasks', () => {
+      xit('should sort tasks', () => {
         setup.kabasTasksPages.sortValues.forEach(sortValue => {
           sortBy(sortValue);
           checkResults(sortResults.digital[sortValue]);
@@ -133,44 +133,53 @@ describe('Tasks Overview', () => {
       });
 
       it('should execute task actions', () => {
+        let lastAction: TaskAction = null;
+
         taskActions.forEach(taskAction => {
-          if (taskAction.fromHeader) {
-            // TODO: skipped, for now -> banner/timing issues
-            return;
-            //selectTask(taskAction.target);
-            //clickHeaderAction(taskAction.action);
-          } else {
-            if (!taskAction.shouldError) {
-              cy.route('patch', `${apiUrl}/api/Tasks/update-tasks*`).as('api');
-            }
+          if (
+            lastAction &&
+            !lastAction.fromHeader &&
+            lastAction.action === 'unarchive'
+          ) {
+            resetFilters();
+          }
 
-            clickTaskAction(taskAction.target, taskAction.action);
+          // When test appears flaky, add a cy.wait(1000) on this line
 
-            if (!taskAction.shouldError) {
-              cy.wait('@api');
-            }
+          // This action will do an API call, so we set up a guard to wait for it
+          if (!taskAction.shouldError) {
+            taskAction.action === 'delete'
+              ? cy.route('post', `${apiUrl}/api/Tasks/destroy-tasks`).as('api')
+              : cy
+                  .route('patch', `${apiUrl}/api/Tasks/update-tasks*`)
+                  .as('api');
+          }
+
+          // Do the action
+          taskActionExecute(taskAction);
+
+          // Now we wait for our action to be processed by the API first
+          if (!taskAction.shouldError) {
+            cy.wait('@api');
           }
 
           if (taskAction.removesTarget) {
             checkAbsent(taskAction.target);
           }
 
-          if (taskAction.shouldError) {
-            checkError(taskAction.target);
-            dismissError();
-          }
+          // Error message checking
+          taskActionCheckError(taskAction);
+
+          lastAction = taskAction;
         });
       });
 
       /*
         e2e todo:
-        - Delete action with success (Unassigned digital task)
-        - Delete action with failure (Active + pending, should be listed in modal)
-        - Unarchive action
         - View action should redirect
         - New action should redirect (header & button)
-        - Tooltips (mat-tooltip)
-        - Favorite/unfavorite (favorite button not visible!)
+        - Tooltips (mat-tooltip) -> do later
+        - Favorite/unfavorite (favorite button not visible!) -> can't do yet
       */
     });
   });
