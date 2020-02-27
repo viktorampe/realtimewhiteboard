@@ -1,10 +1,11 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { Observable, Subject, Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { ManageCollectionsDataInterface } from '../../manage-collection/interfaces/manage-collection-data.interface';
 import { ManageCollectionItemInterface } from '../../manage-collection/interfaces/manage-collection-item.interface';
 import { ManageCollectionComponent } from '../../manage-collection/manage-collection.component';
+import { EnvironmentUIInterface, ENVIRONMENT_UI_TOKEN } from '../../tokens';
 import { ItemToggledInCollectionInterface } from '../interfaces/item-toggled-in-collection.interface';
 import { CollectionManagerServiceInterface } from './collection-manager.service.interface';
 
@@ -13,14 +14,19 @@ import { CollectionManagerServiceInterface } from './collection-manager.service.
 })
 export class CollectionManagerService
   implements CollectionManagerServiceInterface {
-  constructor(private dialog: MatDialog) {}
+  constructor(
+    private dialog: MatDialog,
+    @Inject(ENVIRONMENT_UI_TOKEN)
+    private environmentUiToken: EnvironmentUIInterface
+  ) {}
 
   manageCollections(
     title: string,
     item: ManageCollectionItemInterface,
     linkableItems: ManageCollectionItemInterface[],
     linkedItemIds: number[],
-    recentItemIds: number[]
+    recentItemIds: number[],
+    collectionType: string
   ): Observable<ItemToggledInCollectionInterface> {
     // setup observable
     const itemToggledInCollection$ = new Subject<
@@ -35,7 +41,8 @@ export class CollectionManagerService
       item: item,
       linkableItems: linkableItems,
       linkedItemIds: new Set(linkedItemIds),
-      recentItemIds: new Set(recentItemIds)
+      recentItemIds: new Set(recentItemIds),
+      collectionType: collectionType
     };
 
     const dialogRef = this.openDialog(dialogData);
@@ -65,9 +72,15 @@ export class CollectionManagerService
   ): MatDialogRef<ManageCollectionComponent> {
     // use the ManageCollectionComponent
     // inject the right data
-    return this.dialog.open(ManageCollectionComponent, {
-      data: data,
-      panelClass: 'ui-manage-collection__dialog'
-    });
+    const config = {
+      data,
+      panelClass: this.environmentUiToken.useModalSideSheetStyle
+        ? 'ui-modal-side-sheet'
+        : 'ui-manage-collection__dialog',
+      position: this.environmentUiToken.useModalSideSheetStyle
+        ? { top: '0', right: '0' }
+        : {}
+    };
+    return this.dialog.open(ManageCollectionComponent, config);
   }
 }

@@ -45,7 +45,7 @@ export interface FilterStateInterface {
   searchTerm?: string;
   learningArea?: number[];
   dateInterval?: { gte?: Date; lte?: Date };
-  assignee?: { id: number; type: AssigneeTypesEnum }[];
+  assignee?: { id: number; type: AssigneeTypesEnum; relationId: number }[];
   status?: string[];
   isArchived?: boolean;
 }
@@ -83,8 +83,8 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
         type: RadioOptionValueType.FilterCriteriaValue,
         contents: {
           data: {
-            gte: new Date(new Date().getFullYear(), 8, 1),
-            lte: new Date(new Date().getFullYear() + 1, 5, 30)
+            gte: DateFunctions.getSchoolYearBoundaries(new Date()).start,
+            lte: DateFunctions.getSchoolYearBoundaries(new Date()).end
           }
         }
       }
@@ -245,13 +245,14 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
         assigns.push({
           type: ass.type,
           id: ass.id,
+          relationId: ass.relationId,
           label: ass.label
         });
       });
     });
     const identifiers = [];
     const values = assigns.reduce((acc, assignee) => {
-      const identifier = `${assignee.type}-${assignee.id}`;
+      const identifier = `${assignee.type}-${assignee.relationId}`;
       if (identifiers.includes(identifier)) {
         return acc;
       }
@@ -261,7 +262,11 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
         {
           data: {
             label: assignee.label,
-            identifier: { type: assignee.type, id: assignee.id }
+            identifier: {
+              type: assignee.type,
+              id: assignee.id,
+              relationId: assignee.relationId
+            }
           },
           visible: true
         } as SearchFilterCriteriaValuesInterface
@@ -472,10 +477,7 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
     } else if (filterName === 'assignee') {
       updatedFilter[filterName] = criterium.values
         .filter(value => value.selected)
-        .map(selectedValue => ({
-          id: selectedValue.data.identifier.id,
-          type: selectedValue.data.identifier.type
-        }));
+        .map(selectedValue => selectedValue.data.identifier);
     } else if (filterName === 'status') {
       updatedFilter[filterName] = criterium.values
         .filter(value => value.selected)
@@ -554,128 +556,109 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
     filterState: FilterStateInterface,
     tasks: TaskWithAssigneesInterface[]
   ): TaskWithAssigneesInterface[] {
-    if (tasks.length === 0) return [];
-
-    let filteredTasks = [...tasks];
-
-    // apply filters ...
-
-    // filter on learning areas
-    if (filterState.learningArea && filterState.learningArea.length) {
-      filteredTasks = this.filterOnLearningAreas(
-        filterState.learningArea,
-        filteredTasks
-      );
-    }
-
-    // filter on search term
-    if (filterState.searchTerm) {
-      filteredTasks = this.filterOnTerm(filterState.searchTerm, filteredTasks);
-    }
-
-    // filter on status
-    if (filterState.status && filterState.status.length) {
-      filteredTasks = this.filterOnStatus(filterState.status, filteredTasks);
-    }
-
-    // filter on assignees
-    if (filterState.assignee && filterState.assignee.length) {
-      filteredTasks = this.filterOnAssignees(
-        filterState.assignee,
-        filteredTasks
-      );
-    }
-
-    // filter on date interval
-    if (filterState.dateInterval) {
-      filteredTasks = this.filterOnDateInterval(
-        filterState.dateInterval.gte,
-        filterState.dateInterval.lte,
-        filteredTasks
-      );
-    }
-
-    // filter on archived
-    filteredTasks = this.filterOnArchived(
-      filteredTasks,
-      !!filterState.isArchived
+    const filteredTasks = [...tasks].filter(
+      task =>
+        this.filterOnArchived(filterState, task) &&
+        this.filterOnStatus(filterState, task) &&
+        this.filterOnLearningArea(filterState, task) &&
+        this.filterOnDateInterval(filterState, task) &&
+        this.filterOnAssignees(filterState, task) &&
+        this.filterOnTerm(filterState, task)
     );
 
     return filteredTasks;
   }
 
-  private filterOnLearningAreas(
-    learningAreas: number[],
-    tasks: TaskWithAssigneesInterface[]
-  ): TaskWithAssigneesInterface[] {
-    return tasks.filter(task => {
-      return learningAreas.includes(task.learningAreaId);
-    });
+  private filterOnLearningArea(
+    filterState: FilterStateInterface,
+    task: TaskWithAssigneesInterface
+  ): boolean {
+    return (
+      !filterState.learningArea ||
+      !filterState.learningArea.length ||
+      filterState.learningArea.includes(task.learningAreaId)
+    );
   }
 
   private filterOnTerm(
-    term: string,
-    tasks: TaskWithAssigneesInterface[]
-  ): TaskWithAssigneesInterface[] {
-    return this.filterService.filter(tasks, {
-      name: term
-    });
+    filterState: FilterStateInterface,
+    task: TaskWithAssigneesInterface
+  ): boolean {
+    return (
+      !filterState.searchTerm ||
+      this.filterService.matchFilters(task, {
+        name: filterState.searchTerm
+      })
+    );
   }
 
   private filterOnStatus(
-    status: string[],
-    tasks: TaskWithAssigneesInterface[]
-  ): TaskWithAssigneesInterface[] {
-    return tasks.filter(task => status.includes(task.status));
+    filterState: FilterStateInterface,
+    task: TaskWithAssigneesInterface
+  ): boolean {
+    return (
+      !filterState.status ||
+      !filterState.status.length ||
+      filterState.status.includes(task.status)
+    );
   }
 
   private filterOnAssignees(
-    assignees: { id: number; type: AssigneeTypesEnum }[],
-    tasks: TaskWithAssigneesInterface[]
-  ): TaskWithAssigneesInterface[] {
-    const assigneeIdsByTypeMap = assignees.reduce((acc, cur) => {
+    filterState: FilterStateInterface,
+    task: TaskWithAssigneesInterface
+  ): boolean {
+    if (!filterState.assignee || !filterState.assignee.length) {
+      return true;
+    }
+
+    if (!task.assignees || !task.assignees.length) {
+      return false;
+    }
+
+    const assigneeIdsByTypeMap = task.assignees.reduce((acc, cur) => {
       if (!acc[cur.type]) acc[cur.type] = [];
-      acc[cur.type].push(cur.id);
+      acc[cur.type].push(cur.relationId);
 
       return acc;
     }, {});
 
-    return tasks.filter(task =>
-      task.assignees.some(
-        taskAssignee =>
-          assigneeIdsByTypeMap[taskAssignee.type] &&
-          assigneeIdsByTypeMap[taskAssignee.type].includes(taskAssignee.id)
-      )
+    return filterState.assignee.some(
+      assignee =>
+        assigneeIdsByTypeMap[assignee.type] &&
+        assigneeIdsByTypeMap[assignee.type].includes(assignee.relationId)
     );
   }
 
   private filterOnDateInterval(
-    gte: Date,
-    lte: Date,
-    tasks: TaskWithAssigneesInterface[]
-  ): TaskWithAssigneesInterface[] {
-    return tasks.filter(task => {
-      if (gte && lte) {
-        return task.startDate <= lte && task.endDate >= gte;
-      }
+    filterState: FilterStateInterface,
+    task: TaskWithAssigneesInterface
+  ): boolean {
+    if (!filterState.dateInterval) {
+      return true;
+    }
 
-      if (gte) {
-        return task.endDate >= gte;
-      }
+    const { lte, gte } = filterState.dateInterval;
 
-      if (lte) {
-        return task.startDate <= lte;
-      }
-    });
+    if (gte && lte) {
+      return task.startDate <= lte && task.endDate >= gte;
+    }
+
+    if (gte) {
+      return task.endDate >= gte;
+    }
+
+    if (lte) {
+      return task.startDate <= lte;
+    }
+
+    return true;
   }
 
   private filterOnArchived(
-    tasks: TaskWithAssigneesInterface[],
-    archived?: boolean
-  ): TaskWithAssigneesInterface[] {
-    return archived
-      ? tasks.filter(task => !!task.archivedYear)
-      : tasks.filter(task => !task.archivedYear);
+    filterState: FilterStateInterface,
+    task: TaskWithAssigneesInterface
+  ): boolean {
+    return !!task.archivedYear === !!filterState.isArchived;
   }
 
   private getCurrentTab(): Observable<number> {

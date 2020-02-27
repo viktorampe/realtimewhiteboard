@@ -19,12 +19,14 @@ describe('taskCollection', () => {
         {
           id: 1,
           label: 'testje',
-          icon: 'task'
+          icon: 'task',
+          linkToItem: 'tasks/manage/1'
         },
         {
           id: 2,
           label: 'testje2',
-          icon: 'task'
+          icon: 'task',
+          linkToItem: 'tasks/manage/2'
         }
       ];
       expect(taskCollection.projector(tasks, {})).toEqual({

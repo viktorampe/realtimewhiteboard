@@ -1,9 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { DalState } from '@campus/dal';
-import {
-  ENVIRONMENT_UI_TOKEN,
-  NAVIGATION_ITEM_SERVICE_TOKEN
-} from '@campus/shared';
+import { NAVIGATION_ITEM_SERVICE_TOKEN } from '@campus/shared';
+import { ENVIRONMENT_UI_TOKEN } from '@campus/ui';
 import { Store, StoreModule } from '@ngrx/store';
 import { configureTestSuite } from 'ng-bullet';
 import { SettingsDashboardViewModel } from './settings-dashboard.viewmodel';
