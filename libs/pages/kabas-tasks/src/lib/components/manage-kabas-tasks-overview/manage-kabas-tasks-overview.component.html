@@ -101,9 +101,12 @@
             </mat-slide-toggle>
           </div>
           <campus-button
+            flat
+            bordered
+            icon
             (click)="clickResetFilters('digital')"
             class="manage-kabas-tasks-overview__reset-filters"
-            iconClass="reset-filters"
+            ><mat-icon svgIcon="reset-filters"></mat-icon
           ></campus-button>
           <div style="flex-grow: 1;"></div>
 
@@ -215,8 +218,10 @@
             </mat-slide-toggle>
           </div>
           <campus-button
+            flat
+            bordered
+            icon
             (click)="clickResetFilters()"
-            class="manage-kabas-tasks-overview__reset-filters"
             iconClass="reset-filters"
           ></campus-button>
           <div style="flex-grow: 1;"></div>

@@ -23,14 +23,10 @@
   $manage-kabas-tasks-detail__filterbar_filter-heigth: 50px !default;
   $manage-kabas-tasks-detail__filterbar_filter-padding-width: 8px !default;
   $manage-kabas-tasks-detail__filterbar_filter-padding-height: 12px !default;
-  $manage-kabas-tasks-detail__filterbar_reset_filters-width: 50px !default;
-  $manage-kabas-tasks-detail__filterbar_reset_filters-height: 50px !default;
-  $manage-kabas-tasks-detail__filterbar_reset_filters-border-width: 1px !default;
-  $manage-kabas-tasks-detail__filterbar_reset_filters-background-color: transparent !default;
   $manage-kabas-tasks-detail__filterbar_filter-border-color: $color-gray-4 !default;
 
-  $manage-kabas-tasks-detail__reset-margin-right: 20px !default;
-  $manage-kabas-tasks-detail__reset-margin-bottom: 10px !default;
+  $manage-kabas-tasks-detail__filters-margin-right: 20px !default;
+  $manage-kabas-tasks-detail__filters-margin-bottom: 10px !default;
 
   $pages-kabas-tasks-filters-hover-foreground-color: $color-black-1 !default;
 
@@ -197,8 +193,8 @@
       padding: $manage-kabas-tasks-detail__filterbar-padding-top 0 0
         $manage-kabas-tasks-detail__filterbar-padding-left;
       > * {
-        margin-right: $manage-kabas-tasks-detail__reset-margin-right;
-        margin-bottom: $manage-kabas-tasks-detail__reset-margin-bottom;
+        margin-right: $manage-kabas-tasks-detail__filters-margin-right;
+        margin-bottom: $manage-kabas-tasks-detail__filters-margin-bottom;
       }
 
       campus-button-toggle-filter {
@@ -230,21 +226,6 @@
               color: $pages-kabas-tasks-filters-hover-foreground-color;
             }
           }
-        }
-      }
-      &__reset-filters {
-        width: $manage-kabas-tasks-detail__filterbar_reset_filters-width;
-        height: $manage-kabas-tasks-detail__filterbar_reset_filters-height;
-        background-color: $manage-kabas-tasks-detail__filterbar_reset_filters-background-color;
-        border: $manage-kabas-tasks-detail__filterbar_reset_filters-border-width
-          solid $manage-kabas-tasks-detail__filterbar_filter-border-color;
-
-        &:hover {
-          background-color: $pages-method-filters-hover-background-color;
-          color: $pages-kabas-tasks-filters-hover-foreground-color;
-        }
-        &:active {
-          background-color: $filters-active-background-color;
         }
       }
 

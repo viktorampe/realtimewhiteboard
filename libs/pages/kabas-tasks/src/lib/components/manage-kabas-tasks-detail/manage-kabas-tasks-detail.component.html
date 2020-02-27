@@ -110,12 +110,13 @@
                   [(ngModel)]="taskCache.description"
                 ></textarea>
               </mat-form-field>
-              <div>
-                <campus-button (click)="cancelEdit($event)"
+              <div class="manage-kabas-tasks-detail__info__actions">
+                <campus-button bordered flat (click)="cancelEdit($event)"
                   >Annuleren</campus-button
                 >
                 <campus-button
-                  primary
+                  secondary
+                  flat
                   [disabled]="!taskCache.name"
                   (click)="editTask($event)"
                   >Opslaan</campus-button
@@ -230,14 +231,14 @@
                 ></div
               >
             </ng-container>
-            <campus-button button-inline routerLink="content"
+            <campus-button inline routerLink="content"
               ><mat-icon svgIcon="add"></mat-icon> Lesmateriaal
               toevoegen</campus-button
             >
             <hr />
             <campus-button
-              danger
               inline
+              danger
               (click)="clickDeleteTask(task)"
               [disabled]="isActiveTask(task)"
             >
@@ -375,7 +376,9 @@
           </campus-button-toggle-filter>
 
           <campus-button
-            class="manage-kabas-tasks-detail__filterbar__reset-filters"
+            flat
+            bordered
+            icon
             iconClass="reset-filters"
             (click)="clickResetFilters()"
           ></campus-button>

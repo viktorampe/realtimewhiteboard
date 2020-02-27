@@ -6,23 +6,23 @@
   $ui-button--active-elevation: 0 !default;
   $ui-button--hover-elevation: 0 !default;
   $ui-button--hover-shade-amount: 5% !default;
-  $ui-button-transition-easing: ease-out !default;
 
   $ui-button-padding: $ui-button-font-size/2 !default;
   $ui-button-color: $ui-button-font-color !default;
 
   $ui-button-background-color: $ui-button-bg-color !default;
-  $ui-button__icon-margin: 0 $ui-button-font-size/2 0 0 !default;
   $ui-button-border-color: darken($ui-button-background-color, 10%) !default;
   $ui-button-border-width: 1px !default;
   $ui-button-background-color-1: $ui-button-bg-color-1 !default;
   $ui-button-background-color-2: $ui-button-bg-color-2 !default;
 
-  $ui-button--disabled-elevation: 0 !default;
-  $ui-button--disabled-opacity: 1 !default;
-
   $ui-icon-text-gap: 12px !default;
   $ui-button-icon-position: left !default;
+
+  // --disabled
+  $ui-button--disabled-elevation: 0 !default;
+  $ui-button--disabled-opacity: $ui-opacity-low-emphasis !default;
+  $ui-button--disabled-gray-scale: 0 !default;
 
   // --primary
   $ui-button--primary-background-color: $ui-button-background-color-1 !default;
@@ -50,20 +50,6 @@
   $ui-button--bordered-font-color: $ui-button-font-color !default;
   $ui-button--bordered-bg-color: $ui-button-bg-color !default;
 
-  // --disabled
-  $ui-button--disabled-background-color: lighten(
-    $ui-button-background-color,
-    20%
-  ) !default;
-  $ui-button--disabled-border-color: lighten(
-    $ui-button-border-color,
-    20%
-  ) !default;
-  $ui-button--primary--disabled-background-color: lighten(
-    $ui-button--primary-background-color,
-    30%
-  ) !default;
-
   // --hover
   $ui-button--hover-background-color: $ui-button-color !default;
   $ui-button--hover-color: $ui-button-background-color !default;
@@ -89,15 +75,7 @@
     $ui-button--danger-background-color,
     10%
   ) !default;
-  // --danger--disabled
-  $ui-button--danger--disabled-background-color: lighten(
-    $ui-button--danger-background-color,
-    20%
-  ) !default;
-  $ui-button--danger--disabled-border-color: lighten(
-    $ui-button--danger-border-color,
-    20%
-  ) !default;
+
   // --danger--hover
   $ui-button--danger--hover-color: $ui-button--danger-background-color !default;
   $ui-button--danger--hover-background-color: $ui-button--danger-color !default;
@@ -111,27 +89,13 @@
     $ui-button--warning-background-color,
     10%
   ) !default;
-  // --warning--disabled
-  $ui-button--warning--disabled-background-color: lighten(
-    $ui-button--warning-background-color,
-    20%
-  ) !default;
-  $ui-button--warning--disabled-border-color: lighten(
-    $ui-button--warning-border-color,
-    20%
-  ) !default;
+
   // --warning--hover
   $ui-button--warning--hover-color: $ui-button--warning-background-color !default;
   $ui-button--warning--hover-background-color: $ui-button--warning-color !default;
   // --warning--active
   $ui-button--warning--active-color: $ui-button--warning-background-color !default;
   $ui-button--warning--active-background-color: $ui-button--warning-color !default;
-
-  // --primary--disabled
-  $ui-button--primary--disabled-border-color: darken(
-    $ui-button-background-color,
-    10%
-  ) !default;
 
   // --fab
   $ui-button--fab-size: 40px !default;
@@ -201,10 +165,8 @@
     &.ui-button--disabled {
       @include elevation($ui-button--disabled-elevation);
       opacity: $ui-button--disabled-opacity;
-      background-color: $ui-button--disabled-background-color;
-      &::before {
-        opacity: 0.5;
-      }
+      -webkit-filter: grayscale($ui-button--disabled-gray-scale);
+      filter: grayscale($ui-button--disabled-gray-scale);
     }
     // --large
     &.ui-button--large {
@@ -237,15 +199,10 @@
         background-color: $ui-button--danger--hover-background-color;
         color: $ui-button--danger--hover-color;
       }
-      &.ui-button--disabled {
-        background-color: $ui-button--danger--disabled-background-color;
-      }
+
       // --danger--bordered
       &.ui-button--bordered {
-        border-color: $ui-button--danger-border-color; // --danger--bordered--disabled
-        &.ui-button--disabled {
-          border-color: $ui-button--danger--disabled-border-color;
-        }
+        border-color: $ui-button--danger-border-color;
       }
     }
     // --warning
@@ -260,16 +217,9 @@
         background-color: $ui-button--warning--hover-background-color;
         color: $ui-button--warning--hover-color;
       }
-      // --warning--disabled
-      &.ui-button--disabled {
-        background-color: $ui-button--warning--disabled-background-color;
-      }
       // --warning--bordered
       &.ui-button--bordered {
-        border-color: $ui-button--warning-border-color; // --warning--bordered--disabled
-        &.ui-button--disabled {
-          border-color: $ui-button--warning--disabled-border-color;
-        }
+        border-color: $ui-button--warning-border-color;
       }
     }
     // --inline
@@ -326,11 +276,6 @@
       border-width: $ui-button-border-width; // --bordered--disabled
       color: $ui-button--bordered-font-color;
       background-color: $ui-button--bordered-bg-color;
-      &.ui-button--disabled {
-        .ui-button {
-          border-color: $ui-button--disabled-border-color;
-        }
-      }
       > .mat-icon {
         color: $ui-icon-color;
       }
@@ -349,18 +294,9 @@
           $ui-button--hover-shade-amount
         );
       }
-      // --primary--disabled
-      &.ui-button--disabled {
-        background-color: $ui-button--primary--disabled-background-color;
-        color: $ui-button--primary-font-color;
-      }
       // --primary--bordered
       &.ui-button--bordered {
         border-color: $ui-button--primary-border-color;
-        // --primary--bordered--disabled
-        &.ui-button--disabled {
-          border-color: $ui-button--primary--disabled-border-color;
-        }
       }
     }
     // --fab

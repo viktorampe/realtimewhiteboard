@@ -5,14 +5,18 @@ $ui-color-accent: #fff;
 $ui-color-warning: #f80;
 $ui-color-danger: #f00;
 
-$ui-stroke-color: #d2d2d2 !default;
-$ui-icon-color: rgba(#000, 0.54) !default;
-$ui-icon-color--active: rgba(#000, 0.87) !default;
+$ui-opacity-high-emphasis: 0.87 !default;
+$ui-opacity-medium-emphasis: 0.54 !default;
+$ui-opacity-low-emphasis: 0.38 !default;
+
+$ui-stroke-color: rgba(#000, $ui-opacity-low-emphasis) !default;
+$ui-icon-color: rgba(#000, $ui-opacity-medium-emphasis) !default;
+$ui-icon-color--active: rgba(#000, $ui-opacity-high-emphasis) !default;
 
 // typography
-$ui-text-primary-color: rgba(#000, 0.87) !default;
-$ui-text-secondary-color: rgba(#000, 0.54) !default;
-$ui-text-disabled-color: rgba(#000, 0.38) !default;
+$ui-text-primary-color: rgba(#000, $ui-opacity-high-emphasis) !default;
+$ui-text-secondary-color: rgba(#000, $ui-opacity-medium-emphasis) !default;
+$ui-text-disabled-color: rgba(#000, $ui-opacity-low-emphasis) !default;
 
 $ui-font-weight-light: 300 !default;
 $ui-font-weight-regular: 400 !default;
@@ -67,7 +71,10 @@ $ui-form-button-default-bg-color: #e1e5e7 !default;
 $ui-form-button-primary-bg-color: $ui-color-primary !default;
 
 $ui-inner-padding: 24px !default;
-$ui-border-radius: 8px !default;
+
+$ui-border-radius-small: 4px !default;
+$ui-border-radius-medium: 10px !default;
+$ui-border-radius-large: 24px !default;
 
 // new design variables --> probably needs renaming when they become 'official'
 $ui-primary-font-family-4: 'Open Sans', 'Arial', sans-serif !default;
