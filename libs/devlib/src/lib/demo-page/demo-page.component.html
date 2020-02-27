@@ -1,65 +1,174 @@
-<div>tags</div>
-<mat-selection-list>
-  <mat-list-option [checkboxPosition]="'before'">
-    <campus-list-item-content>
-      <list-item-icon
-        ><mat-icon ist-item-icon [svgIcon]="'exercise'"></mat-icon
-      ></list-item-icon>
-      <list-item-title>Dit is een titel</list-item-title>
-      <list-item-caption>Dit is een beschrijving</list-item-caption>
-      <list-item-actions>
-        <span>1</span>
-        <span>2</span>
-        <span>3</span>
-        <span>4</span></list-item-actions
-      >
-      <list-item-content
-        ><mat-icon svgIcon="diabolo-intro" list-item-content></mat-icon
-      ></list-item-content>
-      <list-item-content>
-        de rest die rechts moet
-      </list-item-content>
-    </campus-list-item-content>
-  </mat-list-option>
-</mat-selection-list>
-<div>attributes</div>
-<mat-selection-list>
-  <mat-list-option [checkboxPosition]="'before'">
-    <campus-list-item-content>
-      <mat-icon list-item-icon [svgIcon]="'exercise'"></mat-icon>
-      <div list-item-title>Dit is een titel</div>
-      <div list-item-caption>Dit is een beschrijving</div>
-      <div list-item-actions>
-        <span>1</span>
-        <span>2</span>
-        <span>3</span>
-        <span>4</span></div
-      >
-      <mat-icon svgIcon="diabolo-intro" list-item-content></mat-icon>
-      <div list-item-content>
-        de rest die rechts moet
-      </div>
-    </campus-list-item-content>
-  </mat-list-option>
-</mat-selection-list>
+<campus-backdrop
+  [title]="backHeaderTitle"
+  [dropped]="showBack"
+  (droppedChange)="onDroppedChanged($event)"
+>
+  <backdrop-reveal-action>
+    <mat-icon svgIcon="menu"></mat-icon>
+  </backdrop-reveal-action>
+  <backdrop-collapse-action>
+    <mat-icon svgIcon="close"></mat-icon>
+  </backdrop-collapse-action>
 
-<div class="container">
-  <campus-empty-state
-    svgIcon="empty-state-no-educontent"
-    title="Geen lesmateriaal"
-    description="This tagline conveys the purpose of the screen, without appearing actionable."
-    ctaLabel="Call to action"
-    (clickCta)="clickEmptyCta()"
-  >
-  </campus-empty-state>
+  <backdrop-header-actions>
+    <button (click)="clickOtherBook()">ander boek</button>
+  </backdrop-header-actions>
 
-  <div class="ui-headline">Headline (Regular 24px)</div>
-  <div class="ui-title">Title (Semibold 21px)</div>
-  <div class="ui-subheading">Subheading (Regular 16px)</div>
-  <div class="ui-body-2">Body 2 / Menu (Semibold 14px)</div>
-  <div class="ui-body-1">Body 1 (Regular 14px)</div>
-  <div class="ui-caption">Caption (Regular 12px)</div>
-  <div class="ui-button-text">Button Text (Semibold 15px Uppercase)</div>
-  <div class="ui-action-text">Action Text (Regular 12px Uppercase)</div>
-  <div class="ui-tooltip-text">Tooltip Text (Regular 10px)</div>
-</div>
+  <back-layer-content style="margin: 20px;">
+    <div>mlksqdf mlksqjd f</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlksqdf mlksqjd f</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlksqdf mlksqjd f</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlksqdf mlksqjd f</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlksqdf mlksqjd f</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+    <div>mlsqkdfj mlsqkdf</div>
+  </back-layer-content>
+
+  <front-layer-header>Subtitle</front-layer-header>
+  <front-layer-content>
+    <!-- <campus-editor-timeline></campus-editor-timeline> -->
+    <button (click)="changeMode(sectionModes.STATIC)"
+      >make section static</button
+    >
+    <button (click)="changeMode(sectionModes.EDITABLE)"
+      >make section editable</button
+    >
+    <button (click)="changeMode(sectionModes.EDITING)"
+      >make section editing</button
+    >
+
+    <campus-section
+      [(mode)]="sectionMode"
+      (actionClick)="handleTriggerActionClick($event)"
+    >
+      <section-title>I'm a the title of this section</section-title>
+      <section-actions><mat-icon svgIcon="edit"></mat-icon></section-actions>
+      <section-content>
+        Cool text
+        <hr />
+
+        <p *ngIf="sectionMode === sectionModes.STATIC">{{ staticText }}</p>
+        <p *ngIf="sectionMode === sectionModes.EDITABLE">{{ editableText }}</p>
+
+        <div *ngIf="sectionMode === sectionModes.EDITING">
+          <input
+            #input
+            type="text"
+            placeholder="edit me"
+            [value]="editableText"
+          />
+          <p> <button (click)="save($event, input)">Save</button></p>
+        </div>
+      </section-content>
+    </campus-section>
+
+    <div class="container">
+      <campus-empty-state
+        svgIcon="empty-state-all-done"
+        title="Nothing to see here"
+        description="This tagline conveys the purpose of the screen, without appearing actionable."
+        ctaLabel="Call to action"
+        (clickCta)="clickEmptyCta()"
+      >
+      </campus-empty-state>
+
+      <div class="ui-headline">Headline (Regular 24px)</div>
+      <div class="ui-title">Title (Semibold 21px)</div>
+      <div class="ui-subheading">Subheading (Regular 16px)</div>
+      <div class="ui-body-2">Body 2 / Menu (Semibold 14px)</div>
+      <div class="ui-body-1">Body 1 (Regular 14px)</div>
+      <div class="ui-caption">Caption (Regular 12px)</div>
+      <div class="ui-button-text">Button Text (Semibold 15px Uppercase)</div>
+      <div class="ui-action-text">Action Text (Regular 12px Uppercase)</div>
+      <div class="ui-tooltip-text">Tooltip Text (Regular 10px)</div>
+    </div>
+  </front-layer-content>
+</campus-backdrop>

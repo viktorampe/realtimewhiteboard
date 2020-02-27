@@ -114,4 +114,51 @@ describe('DateFunctions', () => {
       });
     });
   });
+
+  describe('getSchoolYearBoundaries', () => {
+    const testCases = [
+      {
+        date: new Date(2019, 11, 31),
+        expected: {
+          start: new Date(2019, 8, 1),
+          end: new Date(2020, 5, 30)
+        }
+      },
+      {
+        date: new Date(2020, 0, 1),
+        expected: {
+          start: new Date(2019, 8, 1),
+          end: new Date(2020, 5, 30)
+        }
+      },
+      {
+        date: new Date(2019, 7, 31),
+        expected: {
+          start: new Date(2018, 8, 1),
+          end: new Date(2019, 5, 30)
+        }
+      },
+      {
+        date: new Date(2021, 8, 1),
+        expected: {
+          start: new Date(2021, 8, 1),
+          end: new Date(2022, 5, 30)
+        }
+      },
+      {
+        date: new Date(2019, 5, 30),
+        expected: {
+          start: new Date(2018, 8, 1),
+          end: new Date(2019, 5, 30)
+        }
+      }
+    ];
+
+    testCases.forEach((testCase, index) =>
+      it('should return the correct boundaries - ' + index + 1, () => {
+        const result = DateFunctions.getSchoolYearBoundaries(testCase.date);
+        expect(result).toEqual(testCase.expected);
+      })
+    );
+  });
 });
