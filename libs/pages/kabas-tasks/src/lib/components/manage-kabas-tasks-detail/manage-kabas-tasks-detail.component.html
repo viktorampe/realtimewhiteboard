@@ -231,7 +231,8 @@
               >
             </ng-container>
             <campus-button button-inline routerLink="content"
-              >+ Lesmateriaal toevoegen</campus-button
+              ><mat-icon svgIcon="add"></mat-icon> Lesmateriaal
+              toevoegen</campus-button
             >
             <hr />
             <campus-button
@@ -240,6 +241,7 @@
               (click)="clickDeleteTask(task)"
               [disabled]="isActiveTask(task)"
             >
+              <mat-icon svgIcon="delete"></mat-icon>
               Verwijder taak
             </campus-button>
           </section-content>

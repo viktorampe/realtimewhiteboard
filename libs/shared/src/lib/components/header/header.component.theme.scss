@@ -119,6 +119,7 @@
       flex-direction: column;
       height: $shared-header__page-bar-height;
       width: $shared-header__contextual-button-width;
+      white-space: initial;
 
       &:hover {
         @include elevation($shared-header__contextual-button-elevation);

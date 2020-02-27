@@ -156,12 +156,12 @@
     margin-right: $ui-form-spacing;
     text-transform: $ui-button-text-transform;
     border-radius: $ui-button-border-radius;
+    white-space: nowrap;
     transition: $ui-background-color-transition, $ui-text-color-transition,
       $ui-elevation-transition;
 
     > .mat-icon {
       @include icon-size($ui-icon-size);
-      transition: $ui-icon-color-transition;
     }
 
     &:last-child {
@@ -281,7 +281,6 @@
 
       > .mat-icon {
         @include iconPosition($ui-button-icon-position);
-        color: $ui-icon-color;
       }
       &:after {
         display: block;
@@ -290,7 +289,7 @@
         border-style: $ui-button--inline-border-style;
         border-width: 1px;
         transform: scaleX(0);
-        transition: transform $ui-transition-normal $ui-transition-easing;
+        transition: transform $ui-transition-fast $ui-transition-easing;
         width: 100%;
         position: absolute;
         bottom: 0;
@@ -301,10 +300,6 @@
         color: $ui-button--inline--hover-color;
         &:after {
           transform: scaleX(1);
-        }
-
-        > .mat-icon {
-          color: $ui-button--inline--hover-color;
         }
       }
       &.ui-button--danger {
@@ -401,19 +396,20 @@
       width: $ui-button--icon-size;
       height: $ui-button--icon-size;
       border-radius: 50%;
-      border-radius: $ui-button--icon-size/2;
       padding: ($ui-button--icon-size - $ui-icon-size)/2;
 
       > .mat-icon {
         @include icon-size($ui-icon-size);
-        transition: $ui-icon-color-transition;
         margin: 0; //ensure fab with only icon renders circle
       }
 
       &.ui-button--dense {
+        $icon-diff: $ui-icon-size - $ui-icon-dense-size;
         width: $ui-button--icon--dense-size;
         height: $ui-button--icon--dense-size;
-        padding: ($ui-button--icon--dense-size - $ui-icon-dense-size)/2;
+        padding: (
+            $ui-button--icon--dense-size - $ui-icon-dense-size - ($icon-diff)
+          )/2;
 
         > .mat-icon {
           @include icon-size($ui-icon-dense-size);
