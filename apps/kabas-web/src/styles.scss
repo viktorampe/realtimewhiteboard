@@ -230,7 +230,7 @@ hr {
   border: 2px solid $primary-color-accent !important;
 
   &-checked:after {
-    color: #15adb9 !important;
+    color: $primary-color-accent !important;
     width: 11px !important;
     height: 3px !important;
     top: 5px !important;

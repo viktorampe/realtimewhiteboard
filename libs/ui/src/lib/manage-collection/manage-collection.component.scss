@@ -10,10 +10,6 @@
   }
 }
 
-.spacer {
-  flex: 1;
-}
-
 .ui-modal-side-sheet {
   &__header {
     display: flex;
@@ -31,6 +27,12 @@
       }
       mat-icon {
         cursor: pointer;
+      }
+
+      &--top {
+        .ui-title {
+          flex: 1 1 100%;
+        }
       }
     }
   }
@@ -68,6 +70,11 @@
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
+    align-items: center;
+
+    .ui-body-1 {
+      flex: 1 1 100%;
+    }
   }
 }
 

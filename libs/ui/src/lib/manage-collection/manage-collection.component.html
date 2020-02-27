@@ -5,7 +5,6 @@
     >
       <ng-container *ngTemplateOutlet="close"></ng-container>
       <div class="ui-title">{{ data.title }}</div>
-      <div class="spacer"></div>
       <ng-container *ngTemplateOutlet="actions"></ng-container>
     </div>
     <div
@@ -137,15 +136,15 @@
 
 <ng-template #listItem let-item="listItem">
   <div class="ui-manage-collection__list-item">
-    <div class="ui-body-1">{{ item.label }}</div>
-    <div class="spacer"></div>
     <mat-icon
-      *ngIf="asModalSideSheet; else itemIcon"
+      *ngIf="item.icon && !asModalSideSheet"
+      [svgIcon]="item.icon"
+    ></mat-icon>
+    <div class="ui-body-1">{{ item.label }}</div>
+    <mat-icon
+      *ngIf="asModalSideSheet"
       svgIcon="open-in-new"
       (click)="navigateTo($event, item.linkToItem)"
     ></mat-icon>
-    <ng-template #itemIcon>
-      <mat-icon [svgIcon]="item.icon"></mat-icon>
-    </ng-template>
   </div>
 </ng-template>

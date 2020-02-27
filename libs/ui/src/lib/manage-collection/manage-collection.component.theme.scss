@@ -75,6 +75,12 @@
         color: $ui-manage-collection-list_recent-item-color;
       }
     }
+
+    &__list-item {
+      .mat-icon + .ui-body-1 {
+        margin-left: 10px;
+      }
+    }
   }
 
   .ui-modal-side-sheet {
@@ -82,7 +88,7 @@
     width: $ui-manage-collection-width;
 
     .mat-dialog-container {
-      border-radius: 0px;
+      border-radius: 0;
     }
 
     &__header {
