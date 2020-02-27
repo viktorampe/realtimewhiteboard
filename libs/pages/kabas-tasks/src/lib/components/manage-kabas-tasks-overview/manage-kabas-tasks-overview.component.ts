@@ -719,7 +719,7 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
 
     if (this.slideToggleFilters)
       this.slideToggleFilters.forEach(slideToggleFilter => {
-        slideToggleFilter.checked = false; //this will emit TODO: fix
+        slideToggleFilter.checked = false;
       });
 
     if (!mode || mode === 'digital') this.digitalFilterState$.next({});
