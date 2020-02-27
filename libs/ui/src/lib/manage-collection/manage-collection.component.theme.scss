@@ -75,12 +75,6 @@
         color: $ui-manage-collection-list_recent-item-color;
       }
     }
-
-    &__list-item {
-      .mat-icon + .ui-body-1 {
-        margin-left: 10px;
-      }
-    }
   }
 
   .ui-modal-side-sheet {

@@ -137,7 +137,8 @@
 <ng-template #listItem let-item="listItem">
   <div class="ui-manage-collection__list-item">
     <mat-icon
-      *ngIf="item.icon && !asModalSideSheet"
+      *ngIf="!asModalSideSheet"
+      mat-list-icon
       [svgIcon]="item.icon"
     ></mat-icon>
     <div class="ui-body-1">{{ item.label }}</div>
