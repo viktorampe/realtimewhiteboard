@@ -290,10 +290,10 @@ export class DateFilterComponent
 
   public reset(emit = true): void {
     this.dateSelection.setValue({}, { emitEvent: false });
-    this.filterCriteria.values = [{ data: {} }];
+    this.filterCriteria.values = [];
     this.resetDates();
     this.updateView();
-    if (emit) this.filterSelectionChange.next([this.filterCriteria]);
+    if (emit) this.filterSelectionChange.emit([this.filterCriteria]);
   }
 
   private storeFormValues(): void {
@@ -333,7 +333,7 @@ export class DateFilterComponent
   }
 
   private resetDates() {
-    this.startDate.reset();
-    this.endDate.reset();
+    this.startDate.reset(null, { emitEvent: false });
+    this.endDate.reset(null, { emitEvent: false });
   }
 }
