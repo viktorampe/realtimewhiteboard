@@ -42,12 +42,49 @@
     >Secondary Disabled Button</campus-button
   >
 
+  <!-- Inline actions -->
   <campus-button inline style="margin: 10px;" (click)="clickEmptyCta()"
     >Inline action Button</campus-button
   >
   <campus-button inline style="margin: 10px;" (click)="clickEmptyCta()"
-    ><mat-icon svgIcon="home"></mat-icon> Inline action Button</campus-button
-  >
+    ><mat-icon svgIcon="home"></mat-icon> Inline action Button
+  </campus-button>
+
+  <campus-button inline icon style="margin: 10px;" (click)="clickEmptyCta()"
+    ><mat-icon svgIcon="home"></mat-icon>
+  </campus-button>
+
+  <!-- Fabs -->
+  <campus-button fab icon style="margin: 10px;" (click)="clickEmptyCta()"
+    ><mat-icon svgIcon="home"></mat-icon
+  ></campus-button>
+
+  <campus-button fab style="margin: 10px;" (click)="clickEmptyCta()"
+    ><mat-icon svgIcon="home"></mat-icon> Toevoegen aan iets
+  </campus-button>
+
+  <campus-button fab icon dense style="margin: 10px;" (click)="clickEmptyCta()"
+    ><mat-icon svgIcon="home"></mat-icon
+  ></campus-button>
+
+  <!-- Icon Buttons -->
+  <campus-button
+    icon
+    flat
+    bordered
+    style="margin: 10px;"
+    (click)="clickEmptyCta()"
+    ><mat-icon svgIcon="home"></mat-icon
+  ></campus-button>
+  <campus-button
+    icon
+    dense
+    bordered
+    flat
+    style="margin: 10px;"
+    (click)="clickEmptyCta()"
+    ><mat-icon svgIcon="home"></mat-icon
+  ></campus-button>
 
   <div class="ui-headline">Headline (Regular 24px)</div>
   <div class="ui-title">Title (Semibold 21px)</div>

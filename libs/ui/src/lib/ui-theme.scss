@@ -131,6 +131,9 @@ $ui-icon-size-large: 96px !default;
 $ui-icon-size-medium: 48px !default;
 $ui-icon-size-small: 36px !default;
 $ui-icon-size-tiny: 12px !default;
+// Material specs
+$ui-icon-size: 24px !default;
+$ui-icon-dense-size: 20px !default;
 
 // buttons
 $ui-button-padding-left: $ui-primary-font-size !default;
@@ -335,7 +338,6 @@ campus-date-range-picker {
   }
 }
 
-$ui-icon-dense-size: 20px;
 @mixin ui-icons {
   svg {
     pointer-events: none; //remove native tooltip

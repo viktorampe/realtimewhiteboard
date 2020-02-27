@@ -39,6 +39,9 @@
   $ui-button--inline-border-style: none !default;
   $ui-button--inline-border-color: $ui-button-border-color !default;
 
+  $ui-button--inline--danger-color: $ui-color-danger !default;
+  $ui-button--inline--warning-color: $ui-color-warning !default;
+
   // --bordered
   $ui-button--bordered-font-color: $ui-button-font-color !default;
   $ui-button--bordered-bg-color: $ui-button-bg-color !default;
@@ -125,6 +128,15 @@
     10%
   ) !default;
 
+  // --fab
+  $ui-button--fab-size: 40px !default;
+  $ui-button--fab--dense-size: 32px !default;
+  $ui-button--fab-elevation: 6 !default;
+  $ui-button--fab-padding: 8px 20px 8px 12px !default; //if contains text, mix with icon to have icon-only perfect circle
+  // --icon
+  $ui-button--icon-size: 40px !default;
+  $ui-button--icon--dense-size: 32px !default;
+
   .ui-button {
     @include elevation($ui-button-elevation);
     font-size: $ui-button-font-size;
@@ -163,58 +175,12 @@
         $ui-button--active-background-color,
         $ui-button--hover-shade-amount
       );
-    } // --flat
+    }
+    // --flat
     &.ui-button--flat {
       @include elevation($ui-button--flat-elevation);
-    } // --inline
-    &.ui-button--inline {
-      @extend .ui-action-text;
-      @include elevation($ui-button--inline-elevation);
-      background-color: $ui-button--inline-background-color;
-      padding: $ui-button--inline-padding;
-
-      &:after {
-        display: block;
-        content: '';
-        border-color: $ui-button--inline-border-color;
-        border-style: $ui-button--inline-border-style;
-        border-width: 1px;
-        transform: scaleX(0);
-        transition: transform 250ms $ui-button-transition-easing;
-        width: 100%;
-        position: absolute;
-        bottom: 0;
-      }
-      &:hover {
-        color: $ui-button--inline--hover-color;
-        &:after {
-          transform: scaleX(1);
-        }
-      }
-
-      > .mat-icon {
-        font-size: $ui-icon-dense-size;
-        height: $ui-icon-dense-size;
-        width: $ui-icon-dense-size;
-        float: left;
-        margin-right: 8px;
-      }
-    } // --dense
-    &.ui-button--dense {
-      padding: $ui-button--dense-padding;
-    } // --bordered
-    &.ui-button--bordered {
-      border-color: $ui-button-border-color;
-      border-style: solid;
-      border-width: $ui-button-border-width; // --bordered--disabled
-      color: $ui-button--bordered-font-color;
-      background-color: $ui-button--bordered-bg-color;
-      &.ui-button--disabled {
-        .ui-button {
-          border-color: $ui-button--disabled-border-color;
-        }
-      }
-    } // --rounded-corners
+    }
+    // --rounded-corners
     &.ui-button--rounded-corners {
       border-radius: $ui-button--rounded-corner-border-radius;
     }
@@ -293,6 +259,93 @@
         }
       }
     }
+    // --inline
+    &.ui-button--inline {
+      @extend .ui-action-text;
+      @include elevation($ui-button--inline-elevation);
+      background-color: $ui-button--inline-background-color;
+      padding: $ui-button--inline-padding;
+
+      &:after {
+        display: block;
+        content: '';
+        border-color: $ui-button--inline-border-color;
+        border-style: $ui-button--inline-border-style;
+        border-width: 1px;
+        transform: scaleX(0);
+        transition: transform 250ms $ui-button-transition-easing;
+        width: 100%;
+        position: absolute;
+        bottom: 0;
+      }
+      &:hover {
+        color: $ui-button--inline--hover-color;
+        &:after {
+          transform: scaleX(1);
+        }
+      }
+
+      &.ui-button--danger {
+        color: $ui-button--inline--danger-color;
+        &:hover,
+        &:active,
+        &.ui-button--active {
+          color: darken(
+            $ui-button--inline--danger-color,
+            $ui-button--hover-shade-amount
+          );
+          &:after {
+            border-color: darken(
+              $ui-button--inline--danger-color,
+              $ui-button--hover-shade-amount
+            );
+          }
+        }
+      }
+      &.ui-button--warning {
+        color: $ui-button--inline--warning-color;
+        &:hover,
+        &:active,
+        &.ui-button--active {
+          color: darken(
+            $ui-button--inline--warning-color,
+            $ui-button--hover-shade-amount
+          );
+          &:after {
+            border-color: darken(
+              $ui-button--inline--warning-color,
+              $ui-button--hover-shade-amount
+            );
+          }
+        }
+      }
+
+      > .mat-icon {
+        @include icon-size($ui-icon-dense-size);
+        float: left;
+        margin-right: 8px;
+      }
+    }
+    // --dense
+    &.ui-button--dense {
+      padding: $ui-button--dense-padding;
+    }
+    // --bordered
+    &.ui-button--bordered {
+      border-color: $ui-button-border-color;
+      border-style: solid;
+      border-width: $ui-button-border-width; // --bordered--disabled
+      color: $ui-button--bordered-font-color;
+      background-color: $ui-button--bordered-bg-color;
+      &.ui-button--disabled {
+        .ui-button {
+          border-color: $ui-button--disabled-border-color;
+        }
+      }
+      > .mat-icon {
+        color: $ui-icon-color;
+      }
+    }
     // --primary
     &.ui-button--primary {
       background-color: $ui-button--primary-background-color;
@@ -314,6 +367,57 @@
         // --primary--bordered--disabled
         &.ui-button--disabled {
           border-color: $ui-button--primary--disabled-border-color;
+        }
+      }
+    }
+    // --fab
+    &.ui-button--fab {
+      @include elevation($ui-button--fab-elevation);
+      background-color: $ui-button--primary-background-color;
+      min-width: $ui-button--fab-size;
+      height: $ui-button--fab-size;
+      border-radius: $ui-button--fab-size/2;
+      padding: $ui-button--fab-padding;
+
+      > .mat-icon {
+        @include icon-size($ui-icon-size);
+        margin-right: 12px;
+      }
+
+      &.ui-button--dense {
+        min-width: $ui-button--fab--dense-size;
+        height: $ui-button--fab--dense-size;
+        padding: ($ui-button--fab--dense-size - $ui-icon-dense-size)/2;
+
+        > .mat-icon {
+          @include icon-size($ui-icon-dense-size);
+        }
+      }
+      &:active,
+      &.ui-button--active {
+        @include elevation($ui-button--active-elevation);
+      }
+    }
+    // --icon
+    &.ui-button--icon {
+      width: $ui-button--icon-size;
+      height: $ui-button--icon-size;
+      border-radius: 50%;
+      border-radius: $ui-button--icon-size/2;
+      padding: ($ui-button--icon-size - $ui-icon-size)/2;
+
+      > .mat-icon {
+        @include icon-size($ui-icon-size);
+        margin-right: 0; //ensure fab with only icon renders circle
+      }
+
+      &.ui-button--dense {
+        width: $ui-button--icon--dense-size;
+        height: $ui-button--icon--dense-size;
+        padding: ($ui-button--icon--dense-size - $ui-icon-dense-size)/2;
+
+        > .mat-icon {
+          @include icon-size($ui-icon-dense-size);
         }
       }
     }

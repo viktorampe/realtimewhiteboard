@@ -8,8 +8,6 @@
   $manage-kabas-tasks-detail__list__primary-action-font-size: $pages-kabas-tasks__list__item-font-size !default;
   $manage-kabas-tasks-detail__list__primary-action-height: 65px !default;
   $manage-kabas-tasks-detail__list__primary-action-margin-top: 5px !default;
-  $manage-kabas-tasks-detail__list__primary-actions-padding: 0 40px !default;
-  $manage-kabas-tasks-detail__list__primary-actions-margin: 0 -40px !default;
   $manage-kabas-tasks-detail__list__primary-action-color: $pages-kabas-tasks-action-color--primary !default;
   $manage-kabas-tasks-detail__list__secondary-action-color: $pages-kabas-tasks-action-color--secondary !default;
   $manage-kabas-tasks-detail__primary-action_icon-horizontal-margin: 20px !default;
@@ -269,30 +267,15 @@
         display: flex;
         flex-direction: row;
         flex-wrap: nowrap;
-        background-color: $secondary-bg-color;
-        margin: $manage-kabas-tasks-detail__list__primary-actions-margin;
-        padding: $manage-kabas-tasks-detail__list__primary-actions-padding;
+        justify-content: space-between;
       }
       &__primary-action,
       &__reorder-actions {
         display: flex;
         align-items: center;
-        font-weight: bold;
         height: $manage-kabas-tasks-detail__list__primary-action-height;
-        font-size: $manage-kabas-tasks-detail__list__primary-action-font-size;
         margin-top: $manage-kabas-tasks-detail__list__primary-action-margin-top;
         cursor: pointer;
-
-        .mat-icon {
-          margin: 0
-            $manage-kabas-tasks-detail__primary-action_icon-horizontal-margin;
-        }
-      }
-      &__primary-action {
-        color: $manage-kabas-tasks-detail__list__primary-action-color;
-      }
-      &__reorder-actions .ui-button {
-        padding: $manage-kabas-tasks-detail__list__reorder-actions-padding;
       }
     }
 

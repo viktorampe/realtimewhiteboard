@@ -64,3 +64,15 @@
       0 9px 46px 8px rgba(0, 0, 0, 0.12), 0 11px 15px -7px rgba(0, 0, 0, 0.2);
   }
 }
+
+@mixin icon-size($size) {
+  @if ($size==null) {
+    $size: 24;
+  }
+  @if (unitless($size)) {
+    $size: $size * 1px;
+  }
+  font-size: $size;
+  width: $size;
+  height: $size;
+}
