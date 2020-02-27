@@ -14,6 +14,7 @@ import {
   clickTaskAction,
   filterArchived,
   filterArea,
+  filterAssignee,
   filterDate,
   filterName,
   filterStatus,
@@ -89,7 +90,9 @@ describe('Tasks Overview', () => {
         checkResults(filterResults.digital.date);
         resetFilters();
 
-        // TODO: assignee filter here! it's currently bugged on the front-end so can't test it
+        filterAssignee(filterValues.digital.assignee);
+        checkResults(filterResults.digital.assignee);
+        resetFilters();
 
         filterValues.digital.status.forEach(statusFilter => {
           filterStatus(statusFilter);
@@ -183,8 +186,6 @@ describe('Tasks Overview', () => {
             'be',
             `${appPaths.tasks}/manage/${setup.kabasTasksPages.expected.viewTaskId}`
           );
-
-        // TODO: tabs?
       });
     });
 
@@ -213,7 +214,9 @@ describe('Tasks Overview', () => {
         checkResults(filterResults.paper.area);
         resetFilters();
 
-        // TODO: assignee filter here! it's currently bugged on the front-end so can't test it
+        filterAssignee(filterValues.paper.assignee);
+        checkResults(filterResults.paper.assignee);
+        resetFilters();
 
         filterArchived();
         checkResults(filterResults.paper.archived);
@@ -297,8 +300,6 @@ describe('Tasks Overview', () => {
             'be',
             `${appPaths.tasks}/manage/${setup.kabasTasksPages.expected.paperViewTaskId}`
           );
-
-        // TODO: tabs?
       });
     });
   });

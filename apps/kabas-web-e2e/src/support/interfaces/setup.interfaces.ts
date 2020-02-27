@@ -122,21 +122,25 @@ export interface KabasTasksPagesInterface {
           area: string;
           date: AdvancedDateOptions;
           status: number[];
+          assignee: string;
           combined: {
             name: string;
             area: string;
             date: AdvancedDateOptions;
             archived: boolean;
             status: number[];
+            assignee: string;
           };
         };
         paper: {
           name: string;
           area: string;
+          assignee: string;
           combined: {
             name: string;
             area: string;
             archived: boolean;
+            assignee: string;
           };
         };
       };
@@ -156,12 +160,14 @@ export interface KabasTasksPagesInterface {
             date: ExpectedTaskListItemResult[];
             status: ExpectedTaskListItemResult[];
             archived: ExpectedTaskListItemResult[];
+            assignee: ExpectedTaskListItemResult[];
             combined: ExpectedTaskListItemResult[];
           };
           paper: {
             name: ExpectedTaskListItemResult[];
             area: ExpectedTaskListItemResult[];
             archived: ExpectedTaskListItemResult[];
+            assignee: ExpectedTaskListItemResult[];
             combined: ExpectedTaskListItemResult[];
           };
         };

@@ -51,7 +51,7 @@ function filterDateToday() {
   dataCy('date-confirm').click();
 }
 
-export function filterAssignee(assigneeName: number) {
+export function filterAssignee(assigneeName: string) {
   dataCy('assignee-filter').click();
   dataCy('select-option')
     .contains(assigneeName)
