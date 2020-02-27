@@ -1,19 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  ClassGroupFixture,
-  ClassGroupInterface,
-  EduContentTOCFixture,
-  EduContentTOCInterface
-} from '@campus/dal';
+import { ClassGroupInterface, EduContentTOCInterface } from '@campus/dal';
 import {
   MultiCheckBoxTableColumnChangeEventInterface,
   MultiCheckBoxTableItemChangeEventInterface,
   MultiCheckBoxTableItemColumnInterface,
   MultiCheckBoxTableItemInterface,
-  MultiCheckBoxTableRowHeaderColumnInterface
+  MultiCheckBoxTableRowHeaderColumnInterface,
+  SectionModeEnum
 } from '@campus/ui';
-// tslint:disable-next-line: nx-enforce-module-boundaries
-import { SectionModeEnum } from 'libs/ui/src/lib/section/section.component';
 
 @Component({
   selector: 'campus-demo-page',
@@ -37,37 +31,7 @@ export class DemoPageComponent implements OnInit {
 
   constructor() {}
 
-  ngOnInit() {
-    this.rowHeaderColumns = [{ caption: 'Hoofdstuk', key: 'title' }];
-    this.items = [
-      {
-        header: new EduContentTOCFixture({ id: 1, title: 'Hoofdstuk 1' }),
-        content: { 1: false, 2: true }
-      },
-      {
-        header: new EduContentTOCFixture({ id: 2, title: 'Hoofdstuk 2' }),
-        content: { 1: false, 2: false }
-      },
-      {
-        header: new EduContentTOCFixture({ id: 3, title: 'Hoofdstuk 3' }),
-        content: { 1: false, 2: false }
-      }
-    ];
-
-    this.itemColumns = [
-      {
-        item: new ClassGroupFixture({ id: 1, name: 'Klas 1A' }),
-        key: 'id',
-        label: 'name',
-        isAllSelected: true
-      },
-      {
-        item: new ClassGroupFixture({ id: 2, name: 'Klas 1B' }),
-        key: 'id',
-        label: 'name'
-      }
-    ];
-  }
+  ngOnInit() {}
 
   clickEmptyCta() {
     console.log('Empty State CTA Clicked!');
