@@ -3,23 +3,27 @@
     *ngIf="selectedTaskEduContents.length === 0; else contentSelected"
   >
     <campus-button
+      data-cy="header-btn-add-educontent"
       class="shared-header__contextual__button smallIcon"
       iconClass=""
       routerLink="content"
       ><span>Lesmateriaal toevoegen</span></campus-button
     >
     <campus-button
+      data-cy="header-btn-open-results"
       *ngIf="!task.isPaperTask"
       class="shared-header__contextual__button smallIcon"
       iconClass="results"
       ><span>Resultaten bekijken</span></campus-button
     >
     <campus-button
+      data-cy="header-btn-open-matrix"
       class="shared-header__contextual__button smallIcon"
       iconClass=""
       ><span>Doelenmatrix</span></campus-button
     >
     <campus-button
+      data-cy="header-btn-print"
       *ngIf="task.isPaperTask"
       class="shared-header__contextual__button smallIcon"
       iconClass="print"
