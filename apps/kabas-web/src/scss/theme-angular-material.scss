@@ -77,5 +77,5 @@ $app-warn: mat-palette($mat-deep-orange);
 $app-theme: mat-light-theme($app-primary, $app-accent, $app-warn);
 
 $app-typography: mat-typography-config(
-  $font-family: 'Arial, Open Sans, sans-serif'
+  $font-family: 'Open Sans, sans-serif'
 );

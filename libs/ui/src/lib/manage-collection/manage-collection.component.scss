@@ -19,9 +19,20 @@
       display: flex;
       flex-direction: row;
       align-items: center;
-
+      div.ui-title,
+      div.ui-body-2 {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
       mat-icon {
         cursor: pointer;
+      }
+
+      &--top {
+        .ui-title {
+          flex: 1 1 100%;
+        }
       }
     }
   }
@@ -53,6 +64,17 @@
     display: flex;
     justify-content: flex-end;
     align-content: center;
+  }
+
+  &__list-item {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+
+    .ui-body-1 {
+      flex: 1 1 100%;
+    }
   }
 }
 
