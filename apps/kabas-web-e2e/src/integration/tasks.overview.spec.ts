@@ -172,19 +172,23 @@ describe('Tasks Overview', () => {
         dataCy('new-task-digital')
           .click()
           .location('pathname')
-          .should('eq', `${appPaths.tasks}/manage/new?digital=true`)
+          .should('eq', `/${appPaths.tasks}/manage/new`)
+          .location('search')
+          .should('eq', '?digital=true')
           .go('back');
 
         clickHeaderAction('new')
           .location('pathname')
-          .should('eq', `${appPaths.tasks}/manage/new?digital=true`)
+          .should('eq', `/${appPaths.tasks}/manage/new`)
+          .location('search')
+          .should('eq', '?digital=true')
           .go('back');
 
         clickTaskAction(setup.kabasTasksPages.viewTask, 'view')
           .location('pathname')
           .should(
             'eq',
-            `${appPaths.tasks}/manage/${setup.kabasTasksPages.expected.viewTaskId}`
+            `/${appPaths.tasks}/manage/${setup.kabasTasksPages.expected.viewTaskId}`
           );
       });
     });
@@ -286,19 +290,23 @@ describe('Tasks Overview', () => {
         dataCy('new-task-paper')
           .click()
           .location('pathname')
-          .should('eq', `${appPaths.tasks}/manage/new?paper=true`)
+          .should('eq', `/${appPaths.tasks}/manage/new`)
+          .location('search')
+          .should('eq', '?paper=true')
           .go('back');
 
         clickHeaderAction('new')
           .location('pathname')
-          .should('eq', `${appPaths.tasks}/manage/new?paper=true`)
+          .should('eq', `/${appPaths.tasks}/manage/new`)
+          .location('search')
+          .should('eq', '?paper=true')
           .go('back');
 
         clickTaskAction(setup.kabasTasksPages.paperViewTask, 'view')
           .location('pathname')
           .should(
             'eq',
-            `${appPaths.tasks}/manage/${setup.kabasTasksPages.expected.paperViewTaskId}`
+            `/${appPaths.tasks}/manage/${setup.kabasTasksPages.expected.paperViewTaskId}`
           );
       });
     });
