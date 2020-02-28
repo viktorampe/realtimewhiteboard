@@ -66,7 +66,7 @@ describe('Tasks Overview', () => {
         cy.visit(`${appPaths.tasks}/manage`);
       });
 
-      xit('should show the right task info', () => {
+      it('should show the right task info', () => {
         checkResults(
           smokeResults.digital.map(listItem => {
             return Object.assign({}, listItem, {
@@ -76,7 +76,7 @@ describe('Tasks Overview', () => {
         );
       });
 
-      xit('should filter tasks', () => {
+      it('should filter tasks', () => {
         // individual filters
         filterName(filterValues.digital.name);
         checkResults(filterResults.digital.name);
@@ -118,14 +118,14 @@ describe('Tasks Overview', () => {
         resetFilters();
       });
 
-      xit('should sort tasks', () => {
+      it('should sort tasks', () => {
         setup.kabasTasksPages.sortValues.forEach(sortValue => {
           sortBy(sortValue);
           checkResults(sortResults.digital[sortValue]);
         });
       });
 
-      xit('should execute task actions', () => {
+      it('should execute task actions', () => {
         let lastAction: TaskAction = null;
 
         taskActions.forEach(taskAction => {
@@ -189,7 +189,7 @@ describe('Tasks Overview', () => {
       });
     });
 
-    xdescribe('paper', () => {
+    describe('paper', () => {
       beforeEach(() => {
         cy.visit(`${appPaths.tasks}/manage?tab=1`);
       });
