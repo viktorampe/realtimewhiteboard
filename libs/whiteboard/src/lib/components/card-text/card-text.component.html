@@ -1,6 +1,6 @@
 <p
-  [class.inShelf]="mode === Mode.ShelfMode"
-  *ngIf="mode !== Mode.EditMode; else editView"
+  [class.inShelf]="mode === Mode.SHELF"
+  *ngIf="mode !== Mode.EDIT; else editView"
   class="card-text"
   >{{ text }}</p
 >
@@ -10,7 +10,6 @@
     <textarea
       #message
       matInput
-      matNativeControl
       class="card-input__input"
       type="text"
       name="text"

@@ -1,24 +1,22 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'campus-image-toolbar',
   templateUrl: './image-toolbar.component.html',
   styleUrls: ['./image-toolbar.component.scss']
 })
-export class ImageToolbarComponent implements OnInit {
+export class ImageToolbarComponent {
   @Input() hasImage: boolean;
-  @Output() removeClicked = new EventEmitter<void>();
-  @Output() updateClicked = new EventEmitter<void>();
+  @Output() remove = new EventEmitter<void>();
+  @Output() openFilePicker = new EventEmitter<void>();
 
   constructor() {}
 
-  emitRemoveClicked() {
-    this.removeClicked.emit();
+  clickRemove() {
+    this.remove.emit();
   }
 
-  emitUpdateClicked() {
-    this.updateClicked.emit();
+  clickChoose() {
+    this.openFilePicker.emit();
   }
-
-  ngOnInit() {}
 }

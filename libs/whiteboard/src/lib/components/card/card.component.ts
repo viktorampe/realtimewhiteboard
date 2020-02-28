@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Mode } from '../../enums/mode.enum';
+import { ModeEnum } from '../../enums/mode.enum';
+import CardInterface from '../../models/card.interface';
 
 @Component({
   selector: 'campus-card',
@@ -7,56 +8,40 @@ import { Mode } from '../../enums/mode.enum';
   styleUrls: ['./card.component.scss']
 })
 export class CardComponent {
-  @Input() mode: Mode;
+  @Input() mode: ModeEnum;
   @Input() color: string;
   @Input() description: string;
   @Input() image: string;
   @Input() viewModeImage: boolean;
 
-  @Output() cardTapped = new EventEmitter<void>();
-  @Output() cardPressed = new EventEmitter<void>();
-  @Output() removeImage = new EventEmitter<void>();
-  @Output() updateImage = new EventEmitter<string>();
-
-  @Output() modeChange = new EventEmitter<Mode>();
-  @Output() colorChange = new EventEmitter<string>();
-  @Output() descriptionChange = new EventEmitter<string>();
-  @Output() imageChange = new EventEmitter<string>();
-  @Output() viewModeImageChange = new EventEmitter<boolean>();
+  @Output() openFilePicker = new EventEmitter<string>();
+  @Output() update = new EventEmitter<Partial<CardInterface>>();
 
   constructor() {}
 
   get Mode() {
-    return Mode;
+    return ModeEnum;
   }
 
-  onClickCard(event: MouseEvent) {
-    if (this.mode !== Mode.IdleMode) {
-      event.stopPropagation();
-    }
+  updateImage(url: string) {
+    this.update.emit({
+      image: url
+    });
   }
 
-  onPressCard() {
-    this.cardPressed.emit();
-  }
-
-  onTapCard() {
-    this.cardTapped.emit();
-  }
-
-  emitRemoveImage() {
-    this.removeImage.emit();
-  }
-
-  emitUpdateImage(url: string) {
-    this.updateImage.emit(url);
+  selectImage() {
+    this.openFilePicker.emit();
   }
 
   selectColor(color: string) {
-    this.colorChange.emit(color);
+    this.update.emit({
+      color: color
+    });
   }
 
-  onDescriptionChange(description: string) {
-    this.descriptionChange.emit(description);
+  updateDescription(description: string) {
+    this.update.emit({
+      description: description
+    });
   }
 }

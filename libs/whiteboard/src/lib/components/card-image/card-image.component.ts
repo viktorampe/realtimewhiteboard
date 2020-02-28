@@ -1,30 +1,28 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Mode } from '../../enums/mode.enum';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { ModeEnum } from '../../enums/mode.enum';
 
 @Component({
   selector: 'campus-card-image',
   templateUrl: './card-image.component.html',
   styleUrls: ['./card-image.component.scss']
 })
-export class CardImageComponent implements OnInit {
+export class CardImageComponent {
   @Input() imageUrl: string;
-  @Input() mode: Mode;
-  @Output() removeClicked = new EventEmitter<void>();
-  @Output() updateClicked = new EventEmitter<void>();
+  @Input() mode: ModeEnum;
+  @Output() remove = new EventEmitter<void>();
+  @Output() openFilePicker = new EventEmitter<void>();
 
   constructor() {}
 
-  ngOnInit() {}
-
   get Mode() {
-    return Mode;
+    return ModeEnum;
   }
 
-  emitRemoveClicked() {
-    this.removeClicked.emit();
+  removeImage() {
+    this.remove.emit();
   }
 
-  emitUpdateClicked() {
-    this.updateClicked.emit();
+  chooseImage() {
+    this.openFilePicker.emit();
   }
 }

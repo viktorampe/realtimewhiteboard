@@ -1,5 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatIconModule } from '@angular/material';
+import { MatIconModule, MatIconRegistry } from '@angular/material';
+import { By } from '@angular/platform-browser';
+import { MockMatIconRegistry } from '@campus/testing';
 import { ImageToolbarComponent } from './image-toolbar.component';
 
 describe('ImageToolbarComponent', () => {
@@ -9,6 +11,7 @@ describe('ImageToolbarComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [MatIconModule],
+      providers: [{ provide: MatIconRegistry, useClass: MockMatIconRegistry }],
       declarations: [ImageToolbarComponent]
     }).compileComponents();
   }));
@@ -23,15 +26,37 @@ describe('ImageToolbarComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should emit removeClicked when emitRemoveClicked gets called', () => {
-    spyOn(component.removeClicked, 'emit');
-    component.emitRemoveClicked();
-    expect(component.removeClicked.emit).toHaveBeenCalled();
+  describe('event handlers', () => {
+    it('clickRemove() should trigger remove event', () => {
+      spyOn(component.remove, 'emit');
+      component.clickRemove();
+      expect(component.remove.emit).toHaveBeenCalled();
+    });
+
+    it('clickChoose() should trigger openFilePicker event', () => {
+      spyOn(component.openFilePicker, 'emit');
+      component.clickChoose();
+      expect(component.openFilePicker.emit).toHaveBeenCalled();
+    });
   });
 
-  it('should emit updateClicked when emitUpdateClicked gets called', () => {
-    spyOn(component.updateClicked, 'emit');
-    component.emitUpdateClicked();
-    expect(component.updateClicked.emit).toHaveBeenCalled();
+  describe('toolbar options', () => {
+    function getDeleteOption() {
+      return fixture.debugElement.query(By.css('[data-cy="delete-image"]'));
+    }
+
+    it('should show a remove option when there is an image', () => {
+      component.hasImage = true;
+      fixture.detectChanges();
+
+      expect(getDeleteOption).toBeTruthy();
+    });
+
+    it('should show not show a remove option when there is no image', () => {
+      component.hasImage = false;
+      fixture.detectChanges();
+
+      expect(getDeleteOption()).toBeFalsy();
+    });
   });
 });

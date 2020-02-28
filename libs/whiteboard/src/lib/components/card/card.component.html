@@ -1,26 +1,23 @@
 <div
   class="card"
-  [class.zoom]="mode === Mode.ZoomMode"
+  [class.zoom]="mode === Mode.ZOOM"
   [style.border-color]="color"
-  (click)="onClickCard($event)"
-  (press)="onPressCard()"
-  (tap)="onTapCard()"
 >
-  <div class="card__content" [class.zoom]="mode === Mode.ZoomMode">
-    <ng-container *ngIf="mode !== Mode.UploadMode; else uploadMode">
+  <div class="card__content" [class.zoom]="mode === Mode.ZOOM">
+    <ng-container *ngIf="mode !== Mode.UPLOAD; else uploadMode">
       <campus-card-image
         *ngIf="viewModeImage; else viewModeText"
         class="card__content__image"
         [imageUrl]="image"
         [mode]="mode"
-        (removeClicked)="emitRemoveImage()"
-        (updateClicked)="emitUpdateImage()"
+        (removeClicked)="updateImage('')"
+        (openFilePicker)="selectImage()"
       ></campus-card-image>
       <ng-template #viewModeText class="card__content__input">
         <campus-card-text
           class="card__content__text"
           [(text)]="description"
-          (textChange)="onDescriptionChange($event)"
+          (textChange)="updateDescription($event)"
           [mode]="mode"
         ></campus-card-text>
       </ng-template>

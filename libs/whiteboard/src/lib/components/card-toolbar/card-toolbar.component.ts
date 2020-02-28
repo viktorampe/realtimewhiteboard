@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Mode } from '../../enums/mode.enum';
+import { ModeEnum } from '../../enums/mode.enum';
 
 @Component({
   selector: 'campus-card-toolbar',
@@ -7,7 +7,7 @@ import { Mode } from '../../enums/mode.enum';
   styleUrls: ['./card-toolbar.component.scss']
 })
 export class CardToolbarComponent implements OnInit {
-  @Input() mode: Mode;
+  @Input() mode: ModeEnum;
 
   @Output() clickDeleteIcon = new EventEmitter<void>();
   @Output() clickEditIcon = new EventEmitter<void>();
@@ -19,7 +19,7 @@ export class CardToolbarComponent implements OnInit {
   constructor() {}
 
   get Mode() {
-    return Mode;
+    return ModeEnum;
   }
 
   ngOnInit() {}

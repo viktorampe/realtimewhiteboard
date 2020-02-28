@@ -1,28 +1,26 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Mode } from '../../enums/mode.enum';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { ModeEnum } from '../../enums/mode.enum';
 
 @Component({
   selector: 'campus-card-text',
   templateUrl: './card-text.component.html',
   styleUrls: ['./card-text.component.scss']
 })
-export class CardTextComponent implements OnInit {
+export class CardTextComponent {
   readonly MAX_CHARACTERS = 100;
 
-  @Input() mode: Mode;
+  @Input() mode: ModeEnum;
   @Input() text: string;
 
   @Output() textChange = new EventEmitter<string>();
 
   constructor() {}
 
-  ngOnInit() {}
-
   onChangeText(text: string) {
     this.textChange.emit(text);
   }
 
   get Mode() {
-    return Mode;
+    return ModeEnum;
   }
 }

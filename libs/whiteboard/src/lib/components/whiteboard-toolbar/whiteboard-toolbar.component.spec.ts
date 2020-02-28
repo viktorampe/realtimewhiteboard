@@ -1,5 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatIconModule } from '@angular/material';
+import { MatIconModule, MatIconRegistry } from '@angular/material';
+import { MockMatIconRegistry } from '@campus/testing';
 import { ColorListComponent } from '../color-list/color-list.component';
 import { WhiteboardToolbarComponent } from './whiteboard-toolbar.component';
 
@@ -10,6 +11,7 @@ describe('WhiteboardToolbarComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [MatIconModule],
+      providers: [{ provide: MatIconRegistry, useClass: MockMatIconRegistry }],
       declarations: [WhiteboardToolbarComponent, ColorListComponent]
     }).compileComponents();
   }));

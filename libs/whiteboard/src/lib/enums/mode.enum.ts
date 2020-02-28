@@ -1,10 +1,10 @@
-export enum Mode {
-  EditMode,
-  IdleMode,
-  ShelfMode,
-  UploadMode,
-  MultiSelectMode,
-  MultiSelectSelectedMode,
-  SelectedMode,
-  ZoomMode
+export enum ModeEnum {
+  EDIT,
+  IDLE,
+  SHELF,
+  UPLOAD,
+  MULTISELECT,
+  MULTISELECTSELECTED,
+  SELECTED,
+  ZOOM
 }

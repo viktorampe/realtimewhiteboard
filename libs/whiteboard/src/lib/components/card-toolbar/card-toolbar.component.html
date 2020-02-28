@@ -1,10 +1,10 @@
 <ng-container
   *ngIf="
-    mode !== Mode.MultiSelectMode && mode !== Mode.MultiSelectSelectedMode;
+    mode !== Mode.MULTISELECT && mode !== Mode.MULTISELECTSELECTED;
     else multiSelectView
   "
 >
-  <div class="toolbar" *ngIf="mode !== Mode.EditMode; else editModeView">
+  <div class="toolbar" *ngIf="mode !== Mode.EDIT; else editModeView">
     <div class="toolbar__tool toolbar__delete" (click)="deleteIconClicked()">
       <mat-icon
         class="toolbar__tool__icon toolbar__delete__icon"
@@ -43,7 +43,7 @@
 <ng-template #multiSelectView>
   <div class="toolbar toolbar_multiSelect">
     <div
-      *ngIf="mode === Mode.MultiSelectMode; else notSelectView"
+      *ngIf="mode === Mode.MULTISELECT; else notSelectView"
       class="toolbar__tool "
       (click)="multiSelectClicked($event)"
     >
@@ -52,7 +52,7 @@
     </div>
     <ng-template #notSelectView>
       <div
-        *ngIf="mode === Mode.MultiSelectSelectedMode"
+        *ngIf="mode === Mode.MULTISELECTSELECTED"
         class="toolbar__tool toolbar__multiSelect"
         (click)="multiSelectSelectedClicked($event)"
       >

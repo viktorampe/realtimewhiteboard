@@ -11,7 +11,7 @@ import { By, HAMMER_LOADER } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MockMatIconRegistry } from '@campus/testing';
 import { configureTestSuite } from 'ng-bullet';
-import { Mode } from '../../enums/mode.enum';
+import { ModeEnum } from '../../enums/mode.enum';
 import CardInterface from '../../models/card.interface';
 import { CardImageComponent } from '../card-image/card-image.component';
 import { CardTextComponent } from '../card-text/card-text.component';
@@ -24,7 +24,7 @@ import { CardComponent } from './card.component';
 describe('CardComponent', () => {
   let component: CardComponent;
   let fixture: ComponentFixture<CardComponent>;
-
+  let updateSpy;
   configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [
@@ -58,12 +58,13 @@ describe('CardComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(CardComponent);
     component = fixture.componentInstance;
+    updateSpy = spyOn(component.update, 'emit');
 
     const mockData: CardInterface = {
       color: 'white',
       description: '',
       image: null,
-      mode: Mode.IdleMode,
+      mode: ModeEnum.IDLE,
       top: 0,
       left: 0,
       viewModeImage: true
@@ -82,50 +83,32 @@ describe('CardComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should emit cardPressed when onPressCard gets called', () => {
-    spyOn(component.cardPressed, 'emit');
-    component.onPressCard();
-    expect(component.cardPressed.emit).toHaveBeenCalled();
+  it('updateImage should trigger update', () => {
+    const url = 'www.si.be';
+    component.updateImage(url);
+    expect(updateSpy).toHaveBeenCalledWith({ image: url });
   });
 
-  it('should emit cardTapped when onTapCard gets called', () => {
-    spyOn(component.cardTapped, 'emit');
-    component.onTapCard();
-    expect(component.cardTapped.emit).toHaveBeenCalled();
+  it('selectColor should trigger update', () => {
+    const color = 'red';
+    component.selectColor(color);
+    expect(updateSpy).toHaveBeenCalledWith({ color: color });
   });
 
-  it('should emit removeImage when emitRemoveImage gets called', () => {
-    spyOn(component.removeImage, 'emit');
-    component.emitRemoveImage();
-    expect(component.removeImage.emit).toHaveBeenCalled();
+  it('updateDescription should trigger update', () => {
+    const text = 'shiba inu';
+    component.updateDescription(text);
+    expect(updateSpy).toHaveBeenCalledWith({ description: text });
   });
 
-  it('should emit updateImage with the right image when emitUpdateImage gets called', () => {
-    spyOn(component.updateImage, 'emit');
-    component.emitUpdateImage('test');
-    expect(component.updateImage.emit).toHaveBeenCalledWith('test');
-  });
-
-  it('should emit colorChange when selectColor gets called', () => {
-    spyOn(component.colorChange, 'emit');
-    component.selectColor('white');
-    expect(component.colorChange.emit).toHaveBeenCalledWith('white');
-  });
-
-  it('should emit flip when emitFlipIcon is called', () => {
-    spyOn(component.descriptionChange, 'emit');
-    component.onDescriptionChange('test');
-    expect(component.descriptionChange.emit).toHaveBeenCalledWith('test');
-  });
-
-  it('should emit the right color when a cardcolor is picked', () => {
-    spyOn(component.colorChange, 'emit');
-    component.selectColor('black');
-    expect(component.colorChange.emit).toHaveBeenCalledWith('black');
+  it('selectImage should trigger update', () => {
+    const openFilePickerSpy = spyOn(component.openFilePicker, 'emit');
+    component.selectImage();
+    expect(openFilePickerSpy).toHaveBeenCalled();
   });
 
   it('should show toolbar when mode is set to SelectedMode', () => {
-    component.mode = Mode.SelectedMode;
+    component.mode = ModeEnum.SELECTED;
     fixture.detectChanges();
     const toolbar = fixture.debugElement.queryAll(
       By.css('card__header__toolbar')
@@ -134,7 +117,7 @@ describe('CardComponent', () => {
   });
 
   it('should show toolbar when mode is set to EditMode', () => {
-    component.mode = Mode.EditMode;
+    component.mode = ModeEnum.EDIT;
     fixture.detectChanges();
     const toolbar = fixture.debugElement.queryAll(
       By.css('card__header__toolbar')
@@ -143,14 +126,14 @@ describe('CardComponent', () => {
   });
 
   it('should show colorlist when mode is set to SelectedMode', () => {
-    component.mode = Mode.SelectedMode;
+    component.mode = ModeEnum.SELECTED;
     fixture.detectChanges();
     const toolbar = fixture.debugElement.queryAll(By.css('.card__color-list'));
     expect(toolbar).not.toBeNull();
   });
 
   it('should show colorlist when mode is set to EditMode', () => {
-    component.mode = Mode.EditMode;
+    component.mode = ModeEnum.EDIT;
     fixture.detectChanges();
     const toolbar = fixture.debugElement.queryAll(By.css('.card__color-list'));
     expect(toolbar).not.toBeNull();

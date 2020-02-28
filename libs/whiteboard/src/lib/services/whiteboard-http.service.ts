@@ -2,15 +2,21 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of, Subject, throwError } from 'rxjs';
 import { catchError, delay, map, mapTo, retry } from 'rxjs/operators';
-import { Mode } from '../../lib/enums/mode.enum';
+import { ModeEnum } from '../../lib/enums/mode.enum';
 import WhiteboardInterface from '../../lib/models/whiteboard.interface';
 
 const RETRY_AMOUNT = 2;
 
+export interface WhiteboardHttpServiceInterface {
+  getJson(): Observable<WhiteboardInterface>;
+  setJson(whiteboard: WhiteboardInterface): Observable<Boolean>;
+  uploadFile(file: File): Observable<string>;
+}
+
 @Injectable({
   providedIn: 'root'
 })
-export class WhiteboardHttpService {
+export class WhiteboardHttpService implements WhiteboardHttpServiceInterface {
   private url = 'www.apicallmock.be';
   private _errors$ = new Subject<Error>();
 
@@ -66,7 +72,7 @@ export class WhiteboardHttpService {
       title: 'Welcome to the 90s',
       cards: [
         {
-          mode: Mode.IdleMode,
+          mode: ModeEnum.IDLE,
           viewModeImage: true,
           description: 'Windows 95',
           image:
@@ -76,7 +82,7 @@ export class WhiteboardHttpService {
           left: 82
         },
         {
-          mode: Mode.IdleMode,
+          mode: ModeEnum.IDLE,
           viewModeImage: true,
           description: 'Get Ready',
           image:
@@ -86,7 +92,7 @@ export class WhiteboardHttpService {
           left: 334
         },
         {
-          mode: Mode.IdleMode,
+          mode: ModeEnum.IDLE,
           viewModeImage: true,
           description: 'Candy',
           image:
@@ -96,7 +102,7 @@ export class WhiteboardHttpService {
           left: 515
         },
         {
-          mode: Mode.IdleMode,
+          mode: ModeEnum.IDLE,
           viewModeImage: true,
           description: 'VRC',
           image:
@@ -106,7 +112,7 @@ export class WhiteboardHttpService {
           left: 708
         },
         {
-          mode: Mode.IdleMode,
+          mode: ModeEnum.IDLE,
           viewModeImage: true,
           description: 'Gameboy',
           image:
@@ -118,7 +124,7 @@ export class WhiteboardHttpService {
       ],
       shelfCards: [
         {
-          mode: Mode.ShelfMode,
+          mode: ModeEnum.SHELF,
           viewModeImage: true,
           description: 'Home Alone',
           image:
@@ -128,7 +134,7 @@ export class WhiteboardHttpService {
           left: 0
         },
         {
-          mode: Mode.ShelfMode,
+          mode: ModeEnum.SHELF,
           viewModeImage: true,
           description: 'NSYNC',
           image:
@@ -138,7 +144,7 @@ export class WhiteboardHttpService {
           left: 0
         },
         {
-          mode: Mode.ShelfMode,
+          mode: ModeEnum.SHELF,
           viewModeImage: true,
           description: 'Capri Sun',
           image:

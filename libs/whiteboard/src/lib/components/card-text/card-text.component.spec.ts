@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { Mode } from '../../enums/mode.enum';
+import { ModeEnum } from '../../enums/mode.enum';
 import { CardTextComponent } from './card-text.component';
 
 describe('CardTextComponent', () => {
@@ -29,7 +29,7 @@ describe('CardTextComponent', () => {
 
   it('should show the card content when not editing', () => {
     component.text = 'Test content';
-    component.mode = Mode.IdleMode;
+    component.mode = ModeEnum.IDLE;
 
     fixture.detectChanges();
 
@@ -39,16 +39,29 @@ describe('CardTextComponent', () => {
     );
   });
 
-  it('should display the card content in the input when editing', async () => {
-    component.text = 'Test content';
-    component.mode = Mode.EditMode;
+  describe('edit mode', () => {
+    const description = 'Test content';
+    function getInput() {
+      return fixture.debugElement.query(By.css('.card-input__input'));
+    }
 
-    fixture.detectChanges();
-    await fixture.whenStable();
+    beforeEach(() => {
+      component.text = description;
+      component.mode = ModeEnum.EDIT;
 
-    const inputContent = fixture.debugElement.query(
-      By.css('.card-input__input')
-    );
-    expect(inputContent.nativeElement.value.trim()).toBe('Test content');
+      fixture.detectChanges();
+    });
+
+    it('should display the card content in the input when editing', () => {
+      expect(getInput().nativeElement.value.trim()).toBe('Test content');
+    });
+  });
+
+  describe('event handlers', () => {
+    it('onChangeText() should emit textChange event', () => {
+      spyOn(component.textChange, 'emit');
+      component.onChangeText('foo');
+      expect(component.textChange.emit).toHaveBeenCalledWith('foo');
+    });
   });
 });
