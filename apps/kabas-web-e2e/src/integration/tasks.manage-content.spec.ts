@@ -15,11 +15,13 @@ describe('Manage task content', () => {
   const appPaths = cyEnv('appPaths') as AppPathsInterface;
   const apiPaths = cyEnv('apiPaths') as ApiPathsInterface;
   let setup: KabasTasksPagesInterface;
-  let manageTaskContentSetup;
+  let manageTaskContentSetup: typeof setup.kabasTasksPages.manageTaskContent;
+  let filterSetup: typeof manageTaskContentSetup.expected.filter;
   before(() => {
     performSetup('kabasTasksPages').then(res => {
       setup = res.body;
       manageTaskContentSetup = setup.kabasTasksPages.manageTaskContent;
+      filterSetup = manageTaskContentSetup.expected.filter;
     });
   });
   beforeEach(() => {
@@ -48,7 +50,7 @@ describe('Manage task content', () => {
         .location('pathname')
         .should(
           'be',
-          `${appPaths.tasks}/manage/content?book=${manageTaskContentSetup.expected.filter.book}`
+          `${appPaths.tasks}/manage/content?book=${filterSetup.book.id}`
         );
     });
 
@@ -57,7 +59,7 @@ describe('Manage task content', () => {
         .location('pathname')
         .should(
           'be',
-          `${appPaths.tasks}/manage/content?book=${manageTaskContentSetup.expected.filter.book}&chapter=${manageTaskContentSetup.expected.filter.chapter}`
+          `${appPaths.tasks}/manage/content?book=${filterSetup.book.id}&chapter=${filterSetup.chapter.id}`
         );
     });
 
@@ -66,7 +68,7 @@ describe('Manage task content', () => {
         .location('pathname')
         .should(
           'be',
-          `${appPaths.tasks}/manage/content?book=${manageTaskContentSetup.expected.filter.book}&chapter=${manageTaskContentSetup.expected.filter.chapter}&lesson=lalalaal`
+          `${appPaths.tasks}/manage/content?book=${filterSetup.book.id}&chapter=${filterSetup.chapter.id}&lesson=lalalaal`
         );
     });
 
@@ -74,10 +76,10 @@ describe('Manage task content', () => {
       dataCy('search-term-filter')
         .find('input')
         .focus()
-        .type('Dagelijkse kost{enter}');
+        .type(`${filterSetup.term.value}{enter}`);
 
       dataCy('search-results-count').contains(
-        `${manageTaskContentSetup.expected.filter.searchTermResultCount} resultaten`
+        `${filterSetup.term.resultCount} resultaten`
       );
     });
   });

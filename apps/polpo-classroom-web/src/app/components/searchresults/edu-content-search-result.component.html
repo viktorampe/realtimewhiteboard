@@ -1,4 +1,8 @@
-<div class="app-educontentsearchresult" [ngClass]="{ selected: isSelected }">
+<div
+  data-cy="search-result-item"
+  class="app-educontentsearchresult"
+  [ngClass]="{ selected: isSelected }"
+>
   <div class="app-educontentsearchresult__top">
     <campus-file-extension
       *ngIf="data.eduContent.previewImage === ''"

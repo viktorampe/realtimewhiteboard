@@ -96,10 +96,22 @@ export interface KabasTasksPagesInterface {
       taskId: number;
       expected: {
         filter: {
-          book: number;
-          chapter: number;
-          lesson: number;
-          searchTermResultCount: number;
+          book: {
+            id: number;
+            resultCount: number;
+          };
+          chapter: {
+            id: number;
+            resultCount: number;
+          };
+          lesson: {
+            id: number;
+            resultCount: number;
+          };
+          term: {
+            value: string;
+            resultCount: number;
+          };
         };
       };
     };
