@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatIconModule } from '@angular/material';
+import { MatIconModule, MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
+import { MockMatIconRegistry } from '@campus/testing';
 import { ModeEnum } from '../../enums/mode.enum';
 import { ImageToolbarComponent } from '../image-toolbar/image-toolbar.component';
 import { CardImageComponent } from './card-image.component';
@@ -12,6 +13,7 @@ describe('CardImageComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [MatIconModule],
+      providers: [{ provide: MatIconRegistry, useClass: MockMatIconRegistry }],
       declarations: [CardImageComponent, ImageToolbarComponent]
     }).compileComponents();
   }));
@@ -26,29 +28,57 @@ describe('CardImageComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should show image toolbar if mode is EditMode', () => {
-    component.mode = ModeEnum.EDIT;
-    fixture.detectChanges();
+  describe('image', () => {
+    function getImage() {
+      return fixture.debugElement.query(By.css('.card-image__image'));
+    }
 
-    const toolbar = fixture.debugElement.queryAll(
-      By.css('campus-image-toolbar')
-    );
-    expect(toolbar.length).not.toBe(0);
+    it('should show an image', () => {
+      component.imageUrl = 'foo.jpg';
+      fixture.detectChanges();
+
+      expect(getImage()).toBeTruthy();
+    });
+
+    it('should show not show an image', () => {
+      component.imageUrl = null;
+      fixture.detectChanges();
+
+      expect(getImage()).toBeFalsy();
+    });
   });
 
-  it('should not show image toolbar if mode is SelectedMode', () => {
-    component.mode = ModeEnum.SELECTED;
-    fixture.detectChanges();
+  describe('Image toolbar', () => {
+    function getImageToolbar() {
+      return fixture.debugElement.query(By.directive(ImageToolbarComponent));
+    }
 
-    const toolbar = fixture.debugElement.queryAll(
-      By.css('campus-image-toolbar')
-    );
-    expect(toolbar.length).toBe(0);
+    it('should show image toolbar if mode is EditMode', () => {
+      component.mode = ModeEnum.EDIT;
+      fixture.detectChanges();
+
+      expect(getImageToolbar()).toBeTruthy();
+    });
+
+    it('should not show image toolbar if mode is SelectedMode', () => {
+      component.mode = ModeEnum.SELECTED;
+      fixture.detectChanges();
+
+      expect(getImageToolbar()).toBeFalsy();
+    });
   });
 
-  it('should emit removeClicked when emitRemoveClicked gets called', () => {
-    spyOn(component.removeClicked, 'emit');
-    component.emitRemoveClicked();
-    expect(component.removeClicked.emit).toHaveBeenCalled();
+  describe('event handlers', () => {
+    it('removeImage() should trigger remove event', () => {
+      spyOn(component.remove, 'emit');
+      component.removeImage();
+      expect(component.remove.emit).toHaveBeenCalled();
+    });
+
+    it('chooseImage() should trigger openFilePicker event', () => {
+      spyOn(component.openFilePicker, 'emit');
+      component.chooseImage();
+      expect(component.openFilePicker.emit).toHaveBeenCalled();
+    });
   });
 });

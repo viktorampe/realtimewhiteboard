@@ -1,12 +1,13 @@
 <div class="image-toolbar">
   <div
+    data-cy="delete-image"
     *ngIf="hasImage"
     class="image-toolbar__button"
-    (click)="emitRemoveClicked()"
+    (click)="clickRemove()"
   >
     <mat-icon style="color: #E22940" [svgIcon]="'delete-forever'"> </mat-icon>
   </div>
-  <div class="image-toolbar__button" (click)="emitOpenFilePicker()">
+  <div class="image-toolbar__button" (click)="clickChoose()">
     <mat-icon style="color: #000000de" [svgIcon]="'add-photo-alternate'">
     </mat-icon>
   </div>

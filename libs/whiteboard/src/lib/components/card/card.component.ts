@@ -28,6 +28,7 @@ export class CardComponent {
       image: url
     });
   }
+
   selectImage() {
     this.openFilePicker.emit();
   }
