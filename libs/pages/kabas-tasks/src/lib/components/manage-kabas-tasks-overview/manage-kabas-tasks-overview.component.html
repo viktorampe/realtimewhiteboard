@@ -50,6 +50,7 @@
         <div class="manage-kabas-tasks-overview__filterbar__filters">
           <campus-search-term
             data-cy="name-filter"
+            class="manage-kabas-tasks-overview__filter"
             placeholder="Filter op naam"
             [autoComplete]="false"
             (valueChange)="searchTermUpdated($event, 'digital')"
@@ -57,6 +58,7 @@
           ></campus-search-term>
           <campus-select-filter
             data-cy="area-filter"
+            class="manage-kabas-tasks-overview__filter"
             multiple="true"
             *ngIf="learningAreaFilter$ | async as learningAreaFilter"
             [filterCriteria]="learningAreaFilter"
@@ -68,7 +70,7 @@
 
           <campus-date-filter
             data-cy="date-filter"
-            class="manage-kabas-tasks-overview__date-filter"
+            class="manage-kabas-tasks-overview__filter manage-kabas-tasks-overview__date-filter"
             [options]="fixedDateFilterOptions"
             [filterCriteria]="dateFilterCriteria"
             (filterSelectionChange)="
@@ -77,6 +79,7 @@
           ></campus-date-filter>
           <campus-select-filter
             data-cy="assignee-filter"
+            class="manage-kabas-tasks-overview__filter"
             multiple="true"
             *ngIf="assigneeFilter$ | async as assigneeFilter"
             [filterCriteria]="assigneeFilter"
@@ -88,6 +91,7 @@
 
           <campus-button-toggle-filter
             data-cy="status-filter"
+            class="manage-kabas-tasks-overview__filter"
             [disabled]="isArchivedFilterActive"
             [multiple]="true"
             (filterSelectionChange)="
@@ -234,7 +238,7 @@
           </div>
           <campus-button
             data-cy="reset-filters"
-            (click)="clickResetFilters()"
+            (click)="clickResetFilters('paper')"
             class="manage-kabas-tasks-overview__reset-filters"
             iconClass="reset-filters"
           ></campus-button>
