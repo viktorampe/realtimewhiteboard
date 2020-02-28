@@ -41,7 +41,7 @@
     }
 
     &__front-layer {
-      @include elevation(1);
+      @include elevation(2);
       background: $ui-backdrop__front-layer-background-color;
       padding: $ui-backdrop__vertical-padding $ui-backdrop__horizontal-padding;
       border-radius: $ui-backdrop__front-layer-border-radius;
