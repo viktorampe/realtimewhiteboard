@@ -12,7 +12,7 @@
     $ui-backdrop__front-layer-background-color,
     0.85
   ) !default;
-  $ui-backdrop__front-layer__header-height: 48px !default;
+  $ui-backdrop__front-layer__header-height: 64px !default;
   $ui-backdrop__front-layer__header-border: 1px solid $ui-tertiary-border-color !default;
   $ui-backdrop__front-layer__content-vertical-padding: 24px !default;
 
@@ -48,10 +48,11 @@
       &__header {
         height: $ui-backdrop__front-layer__header-height;
         border-bottom: $ui-backdrop__front-layer__header-border;
+        margin-bottom: $ui-backdrop__front-layer__content-vertical-padding;
       }
 
-      &__content {
-        padding: $ui-backdrop__front-layer__content-vertical-padding 0;
+      &__header + &__content {
+        //padding: $ui-backdrop__front-layer__content-vertical-padding 0;
       }
     }
     &--dropped {

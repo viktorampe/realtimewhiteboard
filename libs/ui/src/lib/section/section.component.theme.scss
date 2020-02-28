@@ -7,6 +7,7 @@
   $ui-section-color: inherit !default;
 
   $ui-section_header-height: 48px !default;
+  $ui-section__container-header-height: 64px !default;
   $ui-section_header_action-margin: -8px !default;
   $ui-section_header-color: $ui-text-primary-color !default;
   $ui-section_actions-color: $ui-icon-color !default;
@@ -37,6 +38,10 @@
         color: $ui-section_actions-color;
         margin-right: $ui-section_header_action-margin;
       }
+    }
+
+    &--container > .ui-section__header {
+      height: $ui-section__container-header-height;
     }
 
     &__content {
