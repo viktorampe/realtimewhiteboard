@@ -9,6 +9,7 @@ import {
 } from '../support/interfaces';
 import {
   checkAbsent,
+  checkFavorite,
   checkResults,
   clickHeaderAction,
   clickTaskAction,
@@ -19,6 +20,7 @@ import {
   filterName,
   filterStatus,
   resetFilters,
+  setupRouteGuards,
   sortBy,
   taskActionCheckError,
   taskActionExecute
@@ -138,15 +140,11 @@ describe('Tasks Overview', () => {
           }
 
           // Wait for the store to settle, normally not needed but this test was flaky otherwise
-          cy.wait(500);
+          cy.wait(2000);
 
           // This action will do an API call, so we set up a guard to wait for it
           if (!taskAction.shouldError) {
-            taskAction.action === 'delete'
-              ? cy.route('post', `${apiUrl}/api/Tasks/destroy-tasks`).as('api')
-              : cy
-                  .route('patch', `${apiUrl}/api/Tasks/update-tasks*`)
-                  .as('api');
+            setupRouteGuards(taskAction.action);
           }
 
           // Do the action
@@ -159,6 +157,10 @@ describe('Tasks Overview', () => {
 
           if (taskAction.removesTarget) {
             checkAbsent(taskAction.target);
+          }
+
+          if (taskAction.shouldFavorite) {
+            checkFavorite(taskAction.target);
           }
 
           // Error message checking
@@ -256,15 +258,11 @@ describe('Tasks Overview', () => {
           }
 
           // Wait for the store to settle, normally not needed but this test was flaky otherwise
-          cy.wait(500);
+          cy.wait(2000);
 
           // This action will do an API call, so we set up a guard to wait for it
           if (!taskAction.shouldError) {
-            taskAction.action === 'delete'
-              ? cy.route('post', `${apiUrl}/api/Tasks/destroy-tasks`).as('api')
-              : cy
-                  .route('patch', `${apiUrl}/api/Tasks/update-tasks*`)
-                  .as('api');
+            setupRouteGuards(taskAction.action);
           }
 
           // Do the action

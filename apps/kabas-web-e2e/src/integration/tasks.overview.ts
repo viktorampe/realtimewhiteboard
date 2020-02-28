@@ -91,6 +91,14 @@ export function clickTaskAction(taskName: string, action: string) {
     });
 }
 
+export function favoriteTask(taskName: string) {
+  return dataCy('task-list-item')
+    .contains('[data-cy=task-list-item]', taskName)
+    .within(() => {
+      dataCy('tli-favorite-action').click({ force: true });
+    });
+}
+
 function translateAction(action: string) {
   return {
     archive: 'Archiveren',
@@ -122,8 +130,12 @@ export function taskActionExecute(taskAction: TaskAction) {
       cy.wait(500);
     }
 
-    // Regular inline task actions
-    clickTaskAction(taskAction.target, taskAction.action);
+    if (taskAction.action === 'favorite') {
+      favoriteTask(taskAction.target);
+    } else {
+      // Regular inline task actions
+      clickTaskAction(taskAction.target, taskAction.action);
+    }
   }
 }
 
@@ -136,6 +148,20 @@ export function taskActionCheckError(taskAction: TaskAction) {
       checkError(taskAction.target);
       dismissError();
     }
+  }
+}
+
+export function setupRouteGuards(action: string) {
+  switch (action) {
+    case 'delete':
+      cy.route('post', `${apiUrl}/api/Tasks/destroy-tasks`).as('api');
+      break;
+    case 'favorite':
+      cy.route('post', `${apiUrl}/api/People/*/favorites`).as('api');
+      break;
+    default:
+      cy.route('patch', `${apiUrl}/api/Tasks/update-tasks*`).as('api');
+      break;
   }
 }
 
@@ -171,6 +197,14 @@ export function checkAbsent(taskName: string) {
     .should('not.exist');
 }
 
+export function checkFavorite(taskName: string) {
+  dataCy('task-list-item')
+    .contains('[data-cy=task-list-item]', taskName)
+    .within(() => {
+      dataCy('tli-favorite-action').should('have.class', 'favorite');
+    });
+}
+
 export function checkError(containing: string) {
   dataCy('banner-content')
     .contains(containing)
@@ -200,7 +234,7 @@ export function checkResults(results: ExpectedTaskListItemResult[]) {
     });
 }
 
-function listItemExpects(expects) {
+function listItemExpects(expects: ExpectedTaskListItemResult) {
   if (expects.name) {
     dataCy('tli-title').should('contain.text', expects.name);
   }
@@ -235,5 +269,9 @@ function listItemExpects(expects) {
     dataCy('tli-action').each((element, actionIndex) => {
       cy.wrap(element).should('contain.text', expects.actions[actionIndex]);
     });
+  }
+
+  if (expects.favorite) {
+    dataCy('tli-favorite-action').should('have.class', 'favorite');
   }
 }
