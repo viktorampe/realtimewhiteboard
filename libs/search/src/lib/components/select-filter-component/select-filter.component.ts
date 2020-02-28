@@ -78,8 +78,9 @@ export class SelectFilterComponent
             if (!Array.isArray(selection)) selection = [selection];
 
             // multiple === true
+            // click reset -> adds null to array
             if (selection.includes(null)) {
-              // resetLabel was clicked
+              // this will emit a valuechange
               this.selectControl.setValue([]);
               return;
             }
