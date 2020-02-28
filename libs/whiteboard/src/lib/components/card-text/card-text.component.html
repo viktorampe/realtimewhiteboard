@@ -1,0 +1,24 @@
+<p
+  [class.inShelf]="mode === Mode.SHELF"
+  *ngIf="mode !== Mode.EDIT; else editView"
+  class="card-text"
+  >{{ text }}</p
+>
+
+<ng-template #editView>
+  <mat-form-field appearance="standard" color="primary" class="card-input">
+    <textarea
+      #message
+      matInput
+      class="card-input__input"
+      type="text"
+      name="text"
+      (ngModelChange)="onChangeText($event)"
+      [maxlength]="MAX_CHARACTERS"
+      [(ngModel)]="text"
+    ></textarea>
+    <mat-hint class="card-input__hint" align="end"
+      >{{ message.value.length }} / {{ MAX_CHARACTERS }}</mat-hint
+    >
+  </mat-form-field>
+</ng-template>

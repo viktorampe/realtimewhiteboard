@@ -1,14 +1,25 @@
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { MatCardModule, MatIconModule } from '@angular/material';
-import { CardComponent } from './card/card.component';
-import { ColorlistComponent } from './colorlist/colorlist.component';
-import { ProgressBarComponent } from './progress-bar/progress-bar.component';
-import { ToolbarComponent } from './toolbar/toolbar.component';
-import { WhiteboardToolsComponent } from './whiteboard-tools/whiteboard-tools.component';
-import { WhiteboardComponent } from './whiteboard/whiteboard.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {
+  MatCardModule,
+  MatIconModule,
+  MatInputModule
+} from '@angular/material';
+import { MatButtonModule } from '@angular/material/button';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { CardImageComponent } from './components/card-image/card-image.component';
+import { CardTextComponent } from './components/card-text/card-text.component';
+import { CardToolbarComponent } from './components/card-toolbar/card-toolbar.component';
+import { CardComponent } from './components/card/card.component';
+import { ColorListComponent } from './components/color-list/color-list.component';
+import { ImageToolbarComponent } from './components/image-toolbar/image-toolbar.component';
+import { ProgressBarComponent } from './components/progress-bar/progress-bar.component';
+import { ShelfComponent } from './components/shelf/shelf.component';
+import { WhiteboardToolbarComponent } from './components/whiteboard-toolbar/whiteboard-toolbar.component';
+import { WhiteboardComponent } from './components/whiteboard/whiteboard.component';
+import { ImageDragDirective } from './directives/image-drag.directive';
 
 @NgModule({
   imports: [
@@ -16,16 +27,26 @@ import { WhiteboardComponent } from './whiteboard/whiteboard.component';
     MatCardModule,
     DragDropModule,
     FormsModule,
-    MatIconModule
+    MatIconModule,
+    ReactiveFormsModule,
+    MatButtonModule,
+    MatProgressBarModule,
+    MatInputModule
   ],
   declarations: [
     WhiteboardComponent,
     CardComponent,
-    ToolbarComponent,
-    ColorlistComponent,
+    CardToolbarComponent,
+    ColorListComponent,
+    WhiteboardToolbarComponent,
     ProgressBarComponent,
-    WhiteboardToolsComponent
+    CardImageComponent,
+    ImageDragDirective,
+    ProgressBarComponent,
+    ImageToolbarComponent,
+    CardTextComponent,
+    ShelfComponent
   ],
-  exports: [WhiteboardComponent]
+  exports: [WhiteboardComponent, ImageDragDirective]
 })
 export class WhiteboardModule {}

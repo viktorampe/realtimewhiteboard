@@ -1,0 +1,8 @@
+<div class="color-list">
+  <div
+    *ngFor="let swatch of defaultColors"
+    class="color-list__swatches"
+    (click)="clickColor(swatch)"
+    [style.background-color]="swatch"
+  ></div>
+</div>

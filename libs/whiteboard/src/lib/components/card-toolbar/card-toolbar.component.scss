@@ -1,0 +1,48 @@
+.toolbar {
+  position: absolute;
+  top: -48px;
+  right: 8px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+
+  &__tool {
+    margin-left: 10px;
+    background-color: #242424;
+    border-radius: 50%;
+    padding: 8px;
+    display: flex;
+
+    &:first-child {
+      margin-left: 0;
+    }
+
+    &__icon {
+      color: #ffffffde;
+    }
+  }
+
+  &__delete {
+    background-color: #ffffff;
+    box-shadow: inset 0 0 0 1px #e22940;
+
+    &__icon {
+      color: #e22940;
+    }
+  }
+
+  &__confirm {
+    background-color: #47aa3d;
+  }
+
+  &__multiSelect {
+    background-color: #47aa3d;
+  }
+
+  &_multiSelect {
+    right: 50%;
+    transform: translateX(50%);
+    top: -24px;
+    z-index: 1;
+  }
+}

@@ -1,0 +1,18 @@
+<div class="whiteboard__tools">
+  <campus-color-list
+    (click)="stopEventPropagation($event)"
+    class="whiteboard__tools__tool"
+    (selectedColor)="changeSelectedCardsColor($event)"
+  ></campus-color-list>
+  <div
+    class="whiteboard__tools__tool"
+    id="delete"
+    (click)="stopEventPropagation($event)"
+  >
+    <mat-icon
+      class="toolbar_icon"
+      (click)="btnDeleteClicked()"
+      [svgIcon]="'delete'"
+    ></mat-icon>
+  </div>
+</div>

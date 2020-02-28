@@ -1,0 +1,23 @@
+.shelf {
+  // NEW DESIGN
+  // position: absolute;
+
+  display: flex;
+
+  // OLD DESIGN
+  width: 100%;
+
+  // NEW DESIGN
+  // bottom: 29px;
+
+  &__button {
+    position: absolute;
+    top: 0;
+    left: 20px;
+    text-align: center;
+  }
+
+  &__card {
+    margin-right: 20px;
+  }
+}

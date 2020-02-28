@@ -1,0 +1,105 @@
+.whiteboard {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  campus-whiteboard-toolbar {
+    position: absolute;
+    z-index: 1;
+    left: 0;
+    right: 0;
+  }
+
+  &.image-drag-directive-dragging {
+    opacity: 0.8;
+  }
+
+  &__header {
+    height: 3rem;
+    flex: 0 0 auto;
+    background: #f8f8f8;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &__title {
+      margin: 0;
+      padding: 0;
+    }
+  }
+
+  &__workspace {
+    background: white;
+    width: 100%;
+    position: relative;
+    flex: 1 1 100%;
+
+    &__container {
+      position: absolute;
+      top: 0;
+      left: 0;
+
+      &.zoom {
+        position: fixed;
+
+        z-index: 2;
+
+        transform: translate3d(0, 0, 0) !important;
+
+        height: 100%;
+        width: 100%;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        background: #0000008a;
+      }
+
+      &.onTop {
+        z-index: 1;
+      }
+    }
+  }
+
+  &__addbutton {
+    position: absolute;
+    right: 40px;
+    bottom: 107px;
+    z-index: 1;
+  }
+
+  &__savebutton {
+    position: absolute;
+    bottom: 107px;
+    z-index: 1;
+    right: 120px;
+  }
+
+  campus-shelf {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    overflow-x: scroll;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0px 160px;
+
+    // OLD DESIGN
+    min-height: 136px;
+    background-color: white;
+    box-shadow: 0px -3px 15px #00000024;
+
+    // NEW DESIGN
+    // overflow: visible !important;
+    // height: 68px;
+    // background: linear-gradient(#f8f4ff 0%, #e0d1ff 100%);
+    // box-shadow: 0px -1px 1px #23033e52;
+  }
+
+  .minimizedShelf {
+    height: 20px;
+  }
+}

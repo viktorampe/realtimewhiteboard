@@ -1,0 +1,66 @@
+<ng-container
+  *ngIf="
+    mode !== Mode.MULTISELECT && mode !== Mode.MULTISELECTSELECTED;
+    else multiSelectView
+  "
+>
+  <div class="toolbar" *ngIf="mode !== Mode.EDIT; else editModeView">
+    <div class="toolbar__tool toolbar__delete" (click)="deleteIconClicked()">
+      <mat-icon
+        class="toolbar__tool__icon toolbar__delete__icon"
+        [svgIcon]="'delete'"
+      ></mat-icon>
+    </div>
+    <div class="toolbar__tool" (click)="multiSelectClicked($event)">
+      <mat-icon class="toolbar__tool__icon" [svgIcon]="'multiselect'">
+      </mat-icon>
+    </div>
+    <div class="toolbar__tool" (click)="flipIconClicked($event)">
+      <mat-icon class="toolbar__tool__icon" [svgIcon]="'flip'"></mat-icon>
+    </div>
+    <div class="toolbar__tool" (click)="editIconClicked($event)">
+      <mat-icon class="toolbar__tool__icon" [svgIcon]="'edit'"></mat-icon>
+    </div>
+  </div>
+  <ng-template #editModeView>
+    <div class="toolbar">
+      <div class="toolbar__tool" (click)="flipIconClicked($event)">
+        <mat-icon class="toolbar__tool__icon" [svgIcon]="'flip'"></mat-icon>
+      </div>
+      <div
+        class="toolbar__tool toolbar__confirm"
+        (click)="confirmIconClicked($event)"
+      >
+        <mat-icon
+          class="toolbar__tool__icon toolbar__confirm__icon"
+          [svgIcon]="'check'"
+        ></mat-icon>
+      </div>
+    </div>
+  </ng-template>
+</ng-container>
+
+<ng-template #multiSelectView>
+  <div class="toolbar toolbar_multiSelect">
+    <div
+      *ngIf="mode === Mode.MULTISELECT; else notSelectView"
+      class="toolbar__tool "
+      (click)="multiSelectClicked($event)"
+    >
+      <mat-icon class="toolbar__tool__icon " [svgIcon]="'multiselect'">
+      </mat-icon>
+    </div>
+    <ng-template #notSelectView>
+      <div
+        *ngIf="mode === Mode.MULTISELECTSELECTED"
+        class="toolbar__tool toolbar__multiSelect"
+        (click)="multiSelectSelectedClicked($event)"
+      >
+        <mat-icon
+          class="toolbar__tool__icon toolbar__select__icon"
+          [svgIcon]="'multiselect-selected'"
+        ></mat-icon>
+      </div>
+    </ng-template>
+  </div>
+</ng-template>

@@ -1,0 +1,42 @@
+$swatch-size: 40px;
+
+.color-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+
+  &__swatches {
+    height: $swatch-size;
+    width: $swatch-size;
+    box-sizing: border-box;
+    border-radius: 100%;
+
+    box-shadow: 0px 1px 1px #00000024;
+  }
+}
+
+:host.whiteboard__color-list .color-list {
+  flex-direction: column;
+  position: absolute;
+  left: -$swatch-size - 8px;
+  // 40 (colorlist width) + 8 (distance from card)
+  top: 50%;
+  transform: translateY(-50%);
+
+  &__swatches {
+    margin-bottom: 4px;
+    &:last-child {
+      margin-bottom: 0px;
+    }
+  }
+}
+
+:host.whiteboard__tools__tool .color-list {
+  justify-content: space-between;
+  align-items: center;
+  padding: 25px;
+  &__swatches {
+    margin-left: 2px;
+    margin-right: 2px;
+  }
+}

@@ -51,6 +51,7 @@ export const icons = {
   'star-outline': 'assets/icons/star-border.svg',
   color: 'assets/icons/color_lens.svg',
   toggle: 'assets/icons/toggle.svg',
+  flip: 'assets/icons/material/flip_camera.svg',
   archive: 'assets/icons/archive.svg',
   'filter:active': 'assets/icons/play_circle_outline-24px.svg',
   'filter:pending': 'assets/icons/pause_circle_outline-24px.svg',
@@ -66,6 +67,11 @@ export const icons = {
   'edu-content:optional': 'assets/icons/star-border.svg', //TODO placeholder
   'edu-content:level-basic': 'assets/icons/play_arrow.svg', //TODO placeholder, name needs work
   'edu-content:level-advanced': 'assets/icons/fast_forward.svg', //TODO placeholder, name needs work
+  plus: 'assets/icons/add.svg',
+  'delete-forever': 'assets/icons/material/delete_forever.svg',
+  'add-photo-alternate': 'assets/icons/material/add_photo_alternate.svg',
+  multiselect: 'assets/icons/multiselect.svg',
+  'multiselect-selected': 'assets/icons/multiselect-selected.svg',
 
   // search: sort modes
   'sort-numeric-down': 'assets/icons/sort-numeric-down.svg',

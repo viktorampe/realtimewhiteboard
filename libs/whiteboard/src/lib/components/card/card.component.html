@@ -1,0 +1,29 @@
+<div
+  class="card"
+  [class.zoom]="mode === Mode.ZOOM"
+  [style.border-color]="color"
+>
+  <div class="card__content" [class.zoom]="mode === Mode.ZOOM">
+    <ng-container *ngIf="mode !== Mode.UPLOAD; else uploadMode">
+      <campus-card-image
+        *ngIf="viewModeImage; else viewModeText"
+        class="card__content__image"
+        [imageUrl]="image"
+        [mode]="mode"
+        (remove)="updateImage('')"
+        (openFilePicker)="selectImage()"
+      ></campus-card-image>
+      <ng-template #viewModeText class="card__content__input">
+        <campus-card-text
+          class="card__content__text"
+          [(text)]="description"
+          (textChange)="updateDescription($event)"
+          [mode]="mode"
+        ></campus-card-text>
+      </ng-template>
+    </ng-container>
+    <ng-template #uploadMode>
+      <campus-progress-bar [progressPercentage]="67"></campus-progress-bar>
+    </ng-template>
+  </div>
+</div>

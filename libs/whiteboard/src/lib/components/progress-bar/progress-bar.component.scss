@@ -1,0 +1,17 @@
+.progress {
+  width: 121px;
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  text-align: center;
+
+  p {
+    font-size: 12px;
+    margin: 0px;
+  }
+
+  mat-progress-bar {
+    margin-bottom: 8.5px;
+    margin-top: 8.5px;
+  }
+}

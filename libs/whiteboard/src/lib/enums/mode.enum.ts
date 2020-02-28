@@ -1,0 +1,10 @@
+export enum ModeEnum {
+  EDIT,
+  IDLE,
+  SHELF,
+  UPLOAD,
+  MULTISELECT,
+  MULTISELECTSELECTED,
+  SELECTED,
+  ZOOM
+}
