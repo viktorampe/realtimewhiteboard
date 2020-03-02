@@ -40,7 +40,12 @@ import { ButtonComponent } from './button/button.component';
 import { BorderDirective } from './button/directives/button-border.directive';
 import { CircleDirective } from './button/directives/button-circle.directive';
 import { DangerDirective } from './button/directives/button-danger.directive';
+import { DenseDirective } from './button/directives/button-dense.directive';
 import { DisabledDirective } from './button/directives/button-disabled.directive';
+import { FabDirective } from './button/directives/button-fab.directive';
+import { FlatDirective } from './button/directives/button-flat.directive';
+import { IconDirective } from './button/directives/button-icon.directive';
+import { InlineDirective } from './button/directives/button-inline.directive';
 import { LargeDirective } from './button/directives/button-large.directive';
 import { PrimaryDirective } from './button/directives/button-primary.directive';
 import { RoundedCornersDirective } from './button/directives/button-rounded-corners.directive';
@@ -203,6 +208,11 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     ConfirmationModalComponent,
     EmptyStateComponent,
     SectionComponent,
+    InlineDirective,
+    DenseDirective,
+    FlatDirective,
+    FabDirective,
+    IconDirective,
     SectionContentDirective,
     SectionActionsDirective,
     SectionTitleDirective,
@@ -286,6 +296,11 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     ConfirmationModalComponent,
     EmptyStateComponent,
     SectionComponent,
+    InlineDirective,
+    DenseDirective,
+    FlatDirective,
+    FabDirective,
+    IconDirective,
     SectionContentDirective,
     SectionActionsDirective,
     SectionTitleDirective,

@@ -5,6 +5,8 @@
   cursor: pointer;
   align-items: center;
   justify-content: center;
+  position: relative;
+  outline: none;
 }
 
 :host.ui-button--circle {
@@ -14,7 +16,6 @@
 :host.ui-button--disabled {
   pointer-events: none;
   cursor: not-allowed;
-  opacity: 0.32;
 }
 
 :host.ui-button--large {

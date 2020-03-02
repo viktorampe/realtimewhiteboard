@@ -110,12 +110,13 @@
                   [(ngModel)]="taskCache.description"
                 ></textarea>
               </mat-form-field>
-              <div>
-                <campus-button (click)="cancelEdit($event)"
+              <div class="manage-kabas-tasks-detail__info__actions">
+                <campus-button bordered flat (click)="cancelEdit($event)"
                   >Annuleren</campus-button
                 >
                 <campus-button
-                  primary
+                  secondary
+                  flat
                   [disabled]="!taskCache.name"
                   (click)="editTask($event)"
                   >Opslaan</campus-button
@@ -127,9 +128,17 @@
           </section-content>
         </campus-section>
 
-        <campus-section (actionClick)="openAssigneeModal()">
+        <campus-section>
           <section-title>Toegewezen aan</section-title>
-          <section-actions><mat-icon svgIcon="add"></mat-icon></section-actions>
+          <section-actions
+            ><campus-button
+              (click)="openAssigneeModal()"
+              icon
+              dense
+              bordered
+              flat
+              ><mat-icon svgIcon="add"></mat-icon></campus-button
+          ></section-actions>
 
           <section-content>
             <div class="manage-kabas-tasks-detail__info__container">
@@ -222,15 +231,18 @@
                 ></div
               >
             </ng-container>
-            <campus-button primary routerLink="content"
-              >+ Lesmateriaal toevoegen</campus-button
+            <campus-button inline routerLink="content"
+              ><mat-icon svgIcon="add"></mat-icon> Lesmateriaal
+              toevoegen</campus-button
             >
             <hr />
             <campus-button
+              inline
               danger
               (click)="clickDeleteTask(task)"
               [disabled]="isActiveTask(task)"
             >
+              <mat-icon svgIcon="delete"></mat-icon>
               Verwijder taak
             </campus-button>
           </section-content>
@@ -364,30 +376,44 @@
           </campus-button-toggle-filter>
 
           <campus-button
-            class="manage-kabas-tasks-detail__filterbar__reset-filters"
+            flat
+            bordered
+            icon
             iconClass="reset-filters"
+            class="manage-kabas-tasks-detail__filterbar__reset-filters"
             (click)="clickResetFilters()"
           ></campus-button>
         </div>
 
         <div class="manage-kabas-tasks-detail__list__actions">
-          <div
-            routerLink="content"
-            class="manage-kabas-tasks-detail__list__primary-action"
-          >
+          <campus-button routerLink="content" fab icon>
             <mat-icon svgIcon="add"></mat-icon>
-            Lesmateriaal toevoegen aan deze taak
-          </div>
+          </campus-button>
 
           <div class="manage-kabas-tasks-detail__list__reorder-actions">
-            <campus-button (click)="toggleIsReordering()" *ngIf="!isReordering"
+            <campus-button
+              bordered
+              dense
+              flat
+              (click)="toggleIsReordering()"
+              *ngIf="!isReordering"
               >Volgorde wijzigen</campus-button
             >
 
-            <campus-button (click)="toggleIsReordering()" *ngIf="isReordering"
+            <campus-button
+              bordered
+              dense
+              flat
+              (click)="toggleIsReordering()"
+              *ngIf="isReordering"
               >Annuleren</campus-button
             >
-            <campus-button primary (click)="saveOrder()" *ngIf="isReordering"
+            <campus-button
+              secondary
+              dense
+              flat
+              (click)="saveOrder()"
+              *ngIf="isReordering"
               >Opslaan</campus-button
             >
           </div>
