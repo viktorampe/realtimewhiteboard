@@ -17,6 +17,7 @@ import {
   HistoryInterface,
   HistoryReducer,
   HistoryTypesEnum,
+  LearningAreaFixture,
   TaskActions,
   TaskEduContentActions,
   TaskEduContentFixture,
@@ -213,7 +214,8 @@ describe('EduContentCollectionManagerService', () => {
         bundlesCollection, // bundles[0] has different learningAreaId
         [7],
         jasmine.arrayContaining([5, 6]), // order doesn't matter
-        'bundels'
+        'bundels',
+        undefined
       );
     });
 
@@ -324,7 +326,8 @@ describe('EduContentCollectionManagerService', () => {
         tasksCollection,
         [7],
         jasmine.arrayContaining([6, 7]), // order doesn't matter
-        'taken'
+        'taken',
+        'Digitale taken voor foo'
       );
     });
 
@@ -335,7 +338,13 @@ describe('EduContentCollectionManagerService', () => {
 
       const eduContents = new EduContentFixture(
         { id: 4, type: 'paper-exercise' },
-        { learningAreaId: 2 }
+        {
+          learningAreaId: 2,
+          learningArea: new LearningAreaFixture({
+            id: 2,
+            name: 'foo learning area name'
+          })
+        }
       );
 
       // create spies and mocks
@@ -353,7 +362,8 @@ describe('EduContentCollectionManagerService', () => {
         paperTaskcollection,
         [7],
         jasmine.arrayContaining([6, 7]), // order doesn't matter
-        'taken'
+        'taken',
+        'Papieren taken voor foo learning area name'
       );
     });
 

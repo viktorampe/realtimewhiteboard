@@ -158,15 +158,6 @@ $ui-warning-font-color: #fff !default;
 $ui-form-button-default-bg-color: #e1e5e7 !default;
 $ui-form-button-primary-bg-color: $ui-color-primary !default;
 
-// new design variables --> probably needs renaming when they become 'official'
-$ui-primary-font-family-4: 'Open Sans', 'Arial', sans-serif !default;
-$ui-light-gray: #d2d2d2 !default;
-$ui-dark-gray: #808080 !default;
-$ui-black: #242424 !default;
-$ui-title-font-size: 21pt !default;
-$ui-title-font-weight: 600 !default;
-$ui-body-2-font-size: 14pt !default;
-$ui-body-2-font-weight: 600 !default;
 // nav + site header (shell)
 $ui-secondary-bg-color: #fff !default;
 $ui-secondary-font-color: #000 !default;
@@ -210,13 +201,6 @@ $ui-form-item-label-color: inherit !default;
 $ui-form-item-bg-color: #fff !default;
 $ui-form-actions-padding: 20px 0 0 0 !default;
 $ui-form-spacing: 5px !default;
-
-// modal side sheet
-$ui-modal-side-sheet-header-top-row-margin-bottom: 8px !default;
-$ui-modal-side-sheet-header-bottom-row-padding-left: 32px !default;
-$ui-modal-side-sheet-header-row-title-margin-right: 16px !default;
-$ui-modal-side-sheet-header-icon-margin-right: 8px !default;
-$ui-modal-side-sheet-header-divider-margin: 24px !default;
 
 // sizes
 $ui-person-badge-size-large: 200px !default;
