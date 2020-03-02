@@ -1,5 +1,6 @@
 import { CdkDragDrop, CdkDragEnd } from '@angular/cdk/drag-drop';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Observable } from 'rxjs';
 import { ModeEnum } from '../../enums/mode.enum';
 import CardInterface from '../../models/card.interface';
 import WhiteboardInterface from '../../models/whiteboard.interface';
@@ -23,6 +24,8 @@ export class WhiteboardComponent implements OnInit {
   readonly multipleCardCreationOffset = 50;
   readonly allowedFileTypes = ['image/jpeg', 'image/pjpeg', 'image/png'];
 
+  public whiteboard$: Observable<WhiteboardInterface>;
+
   cards: CardInterface[] = [];
   shelvedCards: CardInterface[] = [];
   selectedCards: CardInterface[] = [];
@@ -32,18 +35,24 @@ export class WhiteboardComponent implements OnInit {
   isTitleInputSelected = true;
   isShelfMinimized = false;
 
-  constructor(private whiteboardHttpService: WhiteboardHttpService) {}
+  constructor(private whiteboardHttpService: WhiteboardHttpService) {
+    this.initialiseObservable();
+  }
 
   ngOnInit() {
-    this.whiteboardHttpService.getJson().subscribe(whiteboard => {
-      this.title = whiteboard.title;
-      this.cards = whiteboard.cards;
-      this.shelvedCards = whiteboard.shelfCards;
-    });
+    // this.whiteboardHttpService.getJson().subscribe(whiteboard => {
+    //   this.title = whiteboard.title;
+    //   this.cards = whiteboard.cards;
+    //   this.shelvedCards = whiteboard.shelfCards;
+    // });
   }
 
   get Mode() {
     return ModeEnum;
+  }
+
+  private initialiseObservable(): void {
+    this.whiteboard$ = this.whiteboardHttpService.getJson();
   }
 
   //#region WORKSPACE INTERACTIONS
