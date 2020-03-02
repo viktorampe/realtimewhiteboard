@@ -1,5 +1,5 @@
 import { CdkDragDrop, CdkDragEnd } from '@angular/cdk/drag-drop';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ModeEnum } from '../../enums/mode.enum';
 import CardInterface from '../../models/card.interface';
@@ -11,7 +11,7 @@ import { WhiteboardHttpService } from '../../services/whiteboard-http.service';
   templateUrl: './whiteboard.component.html',
   styleUrls: ['./whiteboard.component.scss']
 })
-export class WhiteboardComponent implements OnInit {
+export class WhiteboardComponent {
   @ViewChild('titleInput', { static: false }) set titleInput(
     titleInput: ElementRef
   ) {
@@ -37,14 +37,6 @@ export class WhiteboardComponent implements OnInit {
 
   constructor(private whiteboardHttpService: WhiteboardHttpService) {
     this.initialiseObservable();
-  }
-
-  ngOnInit() {
-    // this.whiteboardHttpService.getJson().subscribe(whiteboard => {
-    //   this.title = whiteboard.title;
-    //   this.cards = whiteboard.cards;
-    //   this.shelvedCards = whiteboard.shelfCards;
-    // });
   }
 
   get Mode() {
