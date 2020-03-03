@@ -37,8 +37,8 @@ export class WhiteboardComponent implements OnInit {
   ngOnInit() {
     this.whiteboardHttpService.getJson().subscribe(whiteboard => {
       this.title = whiteboard.title;
-      this.cards = whiteboard.cards;
-      this.shelvedCards = whiteboard.shelfCards;
+      this.cards = [];
+      this.shelvedCards = [...whiteboard.cards, ...whiteboard.shelfCards];
     });
   }
 

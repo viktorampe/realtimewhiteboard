@@ -70,58 +70,59 @@ export class WhiteboardHttpService implements WhiteboardHttpServiceInterface {
   private getWhiteboardMock(): WhiteboardInterface {
     const whiteboard: WhiteboardInterface = {
       title: 'Welcome to the 90s',
-      cards: [],
-      shelfCards: [
+      cards: [
         {
-          mode: ModeEnum.SHELF,
+          mode: ModeEnum.IDLE,
           viewModeImage: true,
           description: 'Windows 95',
           image:
             'https://cdn01.pijpermedia.nl/RDLrupoRZtt-R7W4iqxYQTyZ9bY=/1290x726/center/middle/https://cdn.pijper.io/source/upcoming/9/950f46fae4_1412162307_13-Redenen-waarom-Windows-95-best-wel-vet-was.jpg',
           color: '#2EA03D',
-          top: 0,
-          left: 0
+          top: 56,
+          left: 82
         },
         {
-          mode: ModeEnum.SHELF,
+          mode: ModeEnum.IDLE,
           viewModeImage: true,
           description: 'Get Ready',
           image:
             'https://vivavlaanderen.radio2.be/images/2665/1100x0/mvp15qbt7vcmjeko_get_ready_1996.jpg',
           color: '#00A7E2',
-          top: 0,
-          left: 0
+          top: 296,
+          left: 334
         },
         {
-          mode: ModeEnum.SHELF,
+          mode: ModeEnum.IDLE,
           viewModeImage: true,
           description: 'Candy',
           image:
             'https://cdn.shopify.com/s/files/1/0736/7879/files/top-10-retro-candies-from-the-1990s-efrutti-gummy-candies-candy-district-sweetest-online-candy-store-canada.png?v=1545772588',
           color: '#00A7E2',
-          top: 0,
-          left: 0
+          top: 57,
+          left: 515
         },
         {
-          mode: ModeEnum.SHELF,
+          mode: ModeEnum.IDLE,
           viewModeImage: true,
           description: 'VRC',
           image:
             'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/stack-of-video-tapes-royalty-free-image-93422307-1563903351.jpg?crop=0.668xw:1.00xh;0.206xw,0&resize=768:*',
           color: '#00A7E2',
-          top: 0,
-          left: 0
+          top: 295,
+          left: 708
         },
         {
-          mode: ModeEnum.SHELF,
+          mode: ModeEnum.IDLE,
           viewModeImage: true,
           description: 'Gameboy',
           image:
             'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/nintendo-game-boy-handheld-video-game-console-taken-on-july-news-photo-1065385418-1563905496.jpg?crop=0.79806xw:1xh;center,top&resize=768:*',
           color: '#00A7E2',
-          top: 0,
-          left: 0
-        },
+          top: 63,
+          left: 918
+        }
+      ],
+      shelfCards: [
         {
           mode: ModeEnum.SHELF,
           viewModeImage: true,
