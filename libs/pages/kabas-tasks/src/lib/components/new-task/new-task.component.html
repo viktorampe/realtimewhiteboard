@@ -32,7 +32,7 @@
   <campus-button
     secondary
     class="pages-kabas-tasks-new-task__dialog__actions__button__submit"
-    [disabled]="newTaskForm.valid"
+    [disabled]="!newTaskForm.valid"
     (click)="submit()"
     >Aanmaken</campus-button
   >
