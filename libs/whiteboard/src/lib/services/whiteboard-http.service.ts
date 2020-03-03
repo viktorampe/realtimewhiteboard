@@ -79,8 +79,8 @@ export class WhiteboardHttpService implements WhiteboardHttpServiceInterface {
           image:
             'https://cdn01.pijpermedia.nl/RDLrupoRZtt-R7W4iqxYQTyZ9bY=/1290x726/center/middle/https://cdn.pijper.io/source/upcoming/9/950f46fae4_1412162307_13-Redenen-waarom-Windows-95-best-wel-vet-was.jpg',
           color: '#2EA03D',
-          top: 56,
-          left: 82
+          top: 0,
+          left: 0
         },
         {
           mode: ModeEnum.SHELF,
@@ -89,8 +89,8 @@ export class WhiteboardHttpService implements WhiteboardHttpServiceInterface {
           image:
             'https://vivavlaanderen.radio2.be/images/2665/1100x0/mvp15qbt7vcmjeko_get_ready_1996.jpg',
           color: '#00A7E2',
-          top: 296,
-          left: 334
+          top: 0,
+          left: 0
         },
         {
           mode: ModeEnum.SHELF,
@@ -99,8 +99,8 @@ export class WhiteboardHttpService implements WhiteboardHttpServiceInterface {
           image:
             'https://cdn.shopify.com/s/files/1/0736/7879/files/top-10-retro-candies-from-the-1990s-efrutti-gummy-candies-candy-district-sweetest-online-candy-store-canada.png?v=1545772588',
           color: '#00A7E2',
-          top: 57,
-          left: 515
+          top: 0,
+          left: 0
         },
         {
           mode: ModeEnum.SHELF,
@@ -109,8 +109,8 @@ export class WhiteboardHttpService implements WhiteboardHttpServiceInterface {
           image:
             'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/stack-of-video-tapes-royalty-free-image-93422307-1563903351.jpg?crop=0.668xw:1.00xh;0.206xw,0&resize=768:*',
           color: '#00A7E2',
-          top: 295,
-          left: 708
+          top: 0,
+          left: 0
         },
         {
           mode: ModeEnum.SHELF,
