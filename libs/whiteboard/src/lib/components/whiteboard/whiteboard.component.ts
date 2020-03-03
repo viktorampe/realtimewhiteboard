@@ -92,7 +92,7 @@ export class WhiteboardComponent implements OnChanges {
   //#region CARD ACTIONS
   updateCard(updates: Partial<CardInterface>, card: CardInterface) {
     Object.assign(card, updates);
-    this.updateWhiteboardSubject({ ...this.whiteboard$.value });
+    this.updateWhiteboardSubject({});
   }
 
   addEmptyCard(
@@ -208,12 +208,14 @@ export class WhiteboardComponent implements OnChanges {
     this.lastColor = color;
     card.color = color;
     card.mode = ModeEnum.IDLE;
+    this.updateWhiteboardSubject({});
   }
 
   onDragEnded(event: CdkDragEnd, card) {
     const cardPosition = event.source.getFreeDragPosition();
     card.top = cardPosition.y;
     card.left = cardPosition.x;
+    this.updateWhiteboardSubject({});
   }
 
   private setCardsModeIdleExceptUploadModeAndCard(card: CardInterface) {
@@ -364,9 +366,7 @@ export class WhiteboardComponent implements OnChanges {
         .forEach(c => (c.mode = ModeEnum.MULTISELECT));
     }
 
-    this.updateWhiteboardSubject({
-      ...this.whiteboard$.value
-    });
+    this.updateWhiteboardSubject({});
 
     card.mode = ModeEnum.MULTISELECTSELECTED;
   }
