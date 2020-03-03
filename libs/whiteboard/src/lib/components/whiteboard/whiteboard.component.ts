@@ -36,7 +36,6 @@ export class WhiteboardComponent implements OnChanges {
 
   public whiteboard$ = new BehaviorSubject<WhiteboardInterface>(null);
 
-  shelvedCards: CardInterface[] = [];
   selectedCards: CardInterface[] = [];
 
   lastColor = '#00A7E2';
@@ -73,8 +72,6 @@ export class WhiteboardComponent implements OnChanges {
       .getJson()
       .pipe(take(1))
       .subscribe(whiteboardData => this.whiteboard$.next(whiteboardData));
-
-    this.whiteboard$.asObservable().subscribe(res => console.log(res));
   }
 
   //#region WORKSPACE INTERACTIONS
@@ -125,7 +122,9 @@ export class WhiteboardComponent implements OnChanges {
 
   addCardToShelf(card: CardInterface) {
     card.mode = ModeEnum.SHELF;
-    this.shelvedCards.push(card);
+    this.updateWhiteboardSubject({
+      cards: [...this.whiteboard$.value.shelfCards, card]
+    });
   }
 
   onDeleteCard(card: CardInterface) {
