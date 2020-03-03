@@ -26,7 +26,8 @@ export class CollectionManagerService
     linkableItems: ManageCollectionItemInterface[],
     linkedItemIds: number[],
     recentItemIds: number[],
-    collectionType: string
+    collectionType: string,
+    subtitle: string
   ): Observable<ItemToggledInCollectionInterface> {
     // setup observable
     const itemToggledInCollection$ = new Subject<
@@ -38,6 +39,7 @@ export class CollectionManagerService
     // open dialog
     const dialogData: ManageCollectionsDataInterface = {
       title: title,
+      subtitle: subtitle,
       item: item,
       linkableItems: linkableItems,
       linkedItemIds: new Set(linkedItemIds),

@@ -24,14 +24,6 @@
   $pages-practice-book-lessons__filters-box-shadow-spread: 0 !default;
   $pages-practice-book-lessons__filters-border-width: 1px !default;
 
-  $pages-practice-book-lessons__reset-filters-width: 32px !default;
-  $pages-practice-book-lessons__reset-filters-height: 32px !default;
-  $pages-practice-book-lessons__reset-filters-border-width: 1px !default;
-  $pages-practice-book-lessons__reset-filters-border-color: $pages-practice-text-color--secondary !default;
-  $pages-practice-book-lessons__reset-filters-background-color: $pages-practice-background-color--secondary !default;
-  $pages-practice-book-lessons__reset-filters-hover-background-color: $pages-practice-text-color--primary--accent !default;
-  $pages-practice-book-lessons__reset-filters-hover-color: $pages-practice-text-color--secondary !default;
-
   $pages-practice-book-lessons__back-link__icon-width: 16px !default;
   $pages-practice-book-lessons__back-link__icon-height: 16px !default;
   $pages-practice-book-lessons__back-link__icon-margin-right: 5px !default;
@@ -43,19 +35,6 @@
   .practice-book-lessons {
     .button-toggle-filter__title {
       display: none;
-    }
-
-    &--reset-filters {
-      width: $pages-practice-book-lessons__reset-filters-width;
-      height: $pages-practice-book-lessons__reset-filters-height;
-      background-color: $pages-practice-book-lessons__reset-filters-background-color;
-      border: $pages-practice-book-lessons__reset-filters-border-width solid
-        $pages-practice-book-lessons__reset-filters-border-color;
-
-      &:hover {
-        color: $pages-practice-book-lessons__reset-filters-hover-color;
-        background-color: $pages-practice-book-lessons__reset-filters-hover-background-color;
-      }
     }
 
     &--filters {

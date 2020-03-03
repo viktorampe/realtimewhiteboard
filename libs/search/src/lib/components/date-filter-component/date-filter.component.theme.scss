@@ -73,6 +73,9 @@
 
       mat-form-field {
         margin-right: $date-filter_menu-panel_mat-form-field-margin-right;
+        &:last-child {
+          margin-right: 0;
+        }
 
         .mat-form-field-appearance-outline,
         .mat-form-field-infix {

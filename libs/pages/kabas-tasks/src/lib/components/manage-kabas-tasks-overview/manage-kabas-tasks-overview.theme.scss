@@ -15,16 +15,13 @@
   $manage-kabas-tasks-overview_filterbar-filter-heigth: 50px !default;
   $manage-kabas-tasks-overview_filterbar-filter-padding-width: 8px !default;
   $manage-kabas-tasks-overview_filterbar-filter-padding-height: 12px;
-  $manage-kabas-tasks-overview__reset-margin-right: 20px;
-  $manage-kabas-tasks-overview__reset-margin-bottom: 10px;
+  $manage-kabas-tasks-overview__filters-gap: 20px;
+  $manage-kabas-tasks-overview__filters-margin-bottom: 10px;
 
   $pages-kabas-tasks-filters-hover-foreground-color: $color-black-1;
   $manage-kabas-tasks-overview_filterbar-archive-toggle: $color-gray-4;
-  $manage-kabas-tasks-overview__reset-filters-width: 50px !default;
-  $manage-kabas-tasks-overview__reset-filters-height: 50px !default;
-  $manage-kabas-tasks-overview__reset-filters-border-width: 1px !default;
-  $manage-kabas-tasks-overview__reset-filters-border-color: $primary-font-color-2 !default;
-  $manage-kabas-tasks-overview__reset-filters-background-color: transparent !default;
+  $manage-kabas-tasks-overview__filters-border-width: 1px !default;
+  $manage-kabas-tasks-overview__filters-border-color: $primary-font-color-2 !default;
   $filters-hover-background-color: inherit !default;
   $filters-active-background-color: inherit !default;
 
@@ -109,8 +106,8 @@
 
       &__filters {
         > * {
-          margin-right: $manage-kabas-tasks-overview__reset-margin-right;
-          margin-bottom: $manage-kabas-tasks-overview__reset-margin-bottom;
+          margin-right: $manage-kabas-tasks-overview__filters-gap;
+          margin-bottom: $manage-kabas-tasks-overview__filters-margin-bottom;
         }
       }
 
@@ -144,29 +141,14 @@
         }
       }
     }
-    &__reset-filters {
-      width: $manage-kabas-tasks-overview__reset-filters-width;
-      height: $manage-kabas-tasks-overview__reset-filters-height;
-      background-color: $manage-kabas-tasks-overview__reset-filters-background-color;
-      border: $manage-kabas-tasks-overview__reset-filters-border-width solid
-        $manage-kabas-tasks-overview__reset-filters-border-color;
-
-      &:hover {
-        background-color: $pages-method-filters-hover-background-color;
-        color: $pages-kabas-tasks-filters-hover-foreground-color;
-      }
-      &:active {
-        background-color: $filters-active-background-color;
-      }
-    }
 
     &__date-filter {
       .date-filter-component__open-datepicker-button {
-        background-color: $manage-kabas-tasks-overview__reset-filters-background-color;
-        border: $manage-kabas-tasks-overview__reset-filters-border-width solid
-          $manage-kabas-tasks-overview__reset-filters-border-color;
+        border: $manage-kabas-tasks-overview__filters-border-width solid
+          $manage-kabas-tasks-overview__filters-border-color;
         font-weight: normal;
         color: rgba(0, 0, 0, 0.42);
+        text-transform: none;
       }
       .date-filter-component__date--selected {
         color: $pages-kabas-tasks-text-color--primary;
