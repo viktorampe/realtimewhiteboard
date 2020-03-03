@@ -70,9 +70,10 @@ export class WhiteboardHttpService implements WhiteboardHttpServiceInterface {
   private getWhiteboardMock(): WhiteboardInterface {
     const whiteboard: WhiteboardInterface = {
       title: 'Welcome to the 90s',
-      cards: [
+      cards: [],
+      shelfCards: [
         {
-          mode: ModeEnum.IDLE,
+          mode: ModeEnum.SHELF,
           viewModeImage: true,
           description: 'Windows 95',
           image:
@@ -82,7 +83,7 @@ export class WhiteboardHttpService implements WhiteboardHttpServiceInterface {
           left: 82
         },
         {
-          mode: ModeEnum.IDLE,
+          mode: ModeEnum.SHELF,
           viewModeImage: true,
           description: 'Get Ready',
           image:
@@ -92,7 +93,7 @@ export class WhiteboardHttpService implements WhiteboardHttpServiceInterface {
           left: 334
         },
         {
-          mode: ModeEnum.IDLE,
+          mode: ModeEnum.SHELF,
           viewModeImage: true,
           description: 'Candy',
           image:
@@ -102,7 +103,7 @@ export class WhiteboardHttpService implements WhiteboardHttpServiceInterface {
           left: 515
         },
         {
-          mode: ModeEnum.IDLE,
+          mode: ModeEnum.SHELF,
           viewModeImage: true,
           description: 'VRC',
           image:
@@ -112,17 +113,15 @@ export class WhiteboardHttpService implements WhiteboardHttpServiceInterface {
           left: 708
         },
         {
-          mode: ModeEnum.IDLE,
+          mode: ModeEnum.SHELF,
           viewModeImage: true,
           description: 'Gameboy',
           image:
             'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/nintendo-game-boy-handheld-video-game-console-taken-on-july-news-photo-1065385418-1563905496.jpg?crop=0.79806xw:1xh;center,top&resize=768:*',
           color: '#00A7E2',
-          top: 63,
-          left: 918
-        }
-      ],
-      shelfCards: [
+          top: 0,
+          left: 0
+        },
         {
           mode: ModeEnum.SHELF,
           viewModeImage: true,
