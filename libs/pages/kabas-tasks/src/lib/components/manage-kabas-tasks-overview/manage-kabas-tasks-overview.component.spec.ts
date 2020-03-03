@@ -1,42 +1,18 @@
 import { CommonModule } from '@angular/common';
 import { QueryList } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import {
-  MatDialog,
-  MatDialogRef,
-  MatIconRegistry,
-  MatSelect,
-  MatSelectionList,
-  MatSelectModule,
-  MatSlideToggle,
-  MatSlideToggleModule
-} from '@angular/material';
+import { MatDialog, MatDialogRef, MatIconRegistry, MatSelect, MatSelectionList, MatSelectModule, MatSlideToggle, MatSlideToggleModule } from '@angular/material';
 import { By, HAMMER_LOADER } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import {
-  AssigneeTypesEnum,
-  TaskFixture,
-  TaskStatusEnum,
-  TaskWithAssigneesFixture,
-  TaskWithAssigneesInterface
-} from '@campus/dal';
+import { AssigneeTypesEnum, TaskFixture, TaskStatusEnum, TaskWithAssigneesFixture, TaskWithAssigneesInterface } from '@campus/dal';
 import { GuardsModule } from '@campus/guards';
 import { PagesSharedModule } from '@campus/pages/shared';
-import {
-  ButtonToggleFilterComponent,
-  SearchFilterComponentInterface,
-  SearchModule
-} from '@campus/search';
-import {
-  ENVIRONMENT_ICON_MAPPING_TOKEN,
-  ENVIRONMENT_SEARCHMODES_TOKEN,
-  ENVIRONMENT_TESTING_TOKEN,
-  SharedModule
-} from '@campus/shared';
+import { ButtonToggleFilterComponent, SearchFilterComponentInterface, SearchModule } from '@campus/search';
+import { ENVIRONMENT_ICON_MAPPING_TOKEN, ENVIRONMENT_SEARCHMODES_TOKEN, ENVIRONMENT_TESTING_TOKEN, SharedModule } from '@campus/shared';
 import { MockMatIconRegistry } from '@campus/testing';
-import { ConfirmationModalComponent, UiModule } from '@campus/ui';
+import { ConfirmationModalComponent, ENVIRONMENT_UI_TOKEN, UiModule } from '@campus/ui';
 import { hot } from '@nrwl/angular/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { BehaviorSubject, of } from 'rxjs';
@@ -45,10 +21,7 @@ import { Source } from '../../interfaces/Source.type';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
 import { MockKabasTasksViewModel } from '../kabas-tasks.viewmodel.mock';
 import { TaskListItemComponent } from '../task-list-item/task-list-item.component';
-import {
-  ManageKabasTasksOverviewComponent,
-  TaskSortEnum
-} from './manage-kabas-tasks-overview.component';
+import { ManageKabasTasksOverviewComponent, TaskSortEnum } from './manage-kabas-tasks-overview.component';
 
 describe('ManageKabasTasksOverviewComponent', () => {
   let component: ManageKabasTasksOverviewComponent;
@@ -100,6 +73,7 @@ describe('ManageKabasTasksOverviewComponent', () => {
         { provide: ENVIRONMENT_ICON_MAPPING_TOKEN, useValue: {} },
         { provide: ENVIRONMENT_TESTING_TOKEN, useValue: {} },
         { provide: ENVIRONMENT_SEARCHMODES_TOKEN, useValue: {} },
+        { provide: ENVIRONMENT_UI_TOKEN, useValue: {}}
         {
           provide: HAMMER_LOADER,
           useValue: () => new Promise(() => {})

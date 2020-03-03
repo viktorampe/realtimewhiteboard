@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   Inject,
+  OnDestroy,
   OnInit,
   QueryList,
   ViewChild,
