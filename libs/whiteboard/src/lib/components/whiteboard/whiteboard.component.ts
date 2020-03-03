@@ -4,7 +4,6 @@ import {
   ElementRef,
   Input,
   OnChanges,
-  OnInit,
   ViewChild
 } from '@angular/core';
 import { ModeEnum } from '../../enums/mode.enum';
@@ -17,7 +16,7 @@ import { WhiteboardHttpService } from '../../services/whiteboard-http.service';
   templateUrl: './whiteboard.component.html',
   styleUrls: ['./whiteboard.component.scss']
 })
-export class WhiteboardComponent implements OnInit, OnChanges {
+export class WhiteboardComponent implements OnChanges {
   @ViewChild('titleInput', { static: false }) set titleInput(
     titleInput: ElementRef
   ) {
@@ -44,19 +43,12 @@ export class WhiteboardComponent implements OnInit, OnChanges {
 
   constructor(private whiteboardHttpService: WhiteboardHttpService) {}
 
-  ngOnInit() {
-    this.whiteboardHttpService.getJson().subscribe(whiteboard => {
-      this.title = whiteboard.title;
-      this.cards = whiteboard.cards;
-      this.shelvedCards = whiteboard.shelfCards;
-    });
-  }
-
   ngOnChanges() {
     if (this.apiBase && this.metadataId) {
-      this.whiteboardHttpService.setSettings({
-        apiBase: this.apiBase,
-        metadataId: this.metadataId
+      this.whiteboardHttpService.getJson().subscribe(whiteboard => {
+        this.title = whiteboard.title;
+        this.cards = whiteboard.cards;
+        this.shelvedCards = whiteboard.shelfCards;
       });
     }
   }
