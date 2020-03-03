@@ -50,10 +50,9 @@ export class WhiteboardComponent implements OnChanges {
 
   ngOnChanges() {
     if (this.apiBase && this.metadataId) {
-      this.whiteboardHttpService.getJson().subscribe(whiteboard => {
-        this.title = whiteboard.title;
-        this.cards = whiteboard.cards;
-        this.shelvedCards = whiteboard.shelfCards;
+      this.whiteboardHttpService.setSettings({
+        apiBase: this.apiBase,
+        metadataId: this.metadataId
       });
     }
   }
