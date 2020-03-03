@@ -1,5 +1,11 @@
 import { CdkDragDrop, CdkDragEnd } from '@angular/cdk/drag-drop';
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Input,
+  OnChanges,
+  ViewChild
+} from '@angular/core';
 import { Observable } from 'rxjs';
 import { ModeEnum } from '../../enums/mode.enum';
 import CardInterface from '../../models/card.interface';
@@ -11,7 +17,7 @@ import { WhiteboardHttpService } from '../../services/whiteboard-http.service';
   templateUrl: './whiteboard.component.html',
   styleUrls: ['./whiteboard.component.scss']
 })
-export class WhiteboardComponent {
+export class WhiteboardComponent implements OnChanges {
   @ViewChild('titleInput', { static: false }) set titleInput(
     titleInput: ElementRef
   ) {
@@ -21,6 +27,9 @@ export class WhiteboardComponent {
   }
 
   @ViewChild('workspace', { static: true }) workspaceElementRef: ElementRef;
+  @Input() metadataId: number;
+  @Input() apiBase: string;
+
   readonly multipleCardCreationOffset = 50;
   readonly allowedFileTypes = ['image/jpeg', 'image/pjpeg', 'image/png'];
 
@@ -37,6 +46,16 @@ export class WhiteboardComponent {
 
   constructor(private whiteboardHttpService: WhiteboardHttpService) {
     this.initialiseObservable();
+  }
+
+  ngOnChanges() {
+    if (this.apiBase && this.metadataId) {
+      this.whiteboardHttpService.getJson().subscribe(whiteboard => {
+        this.title = whiteboard.title;
+        this.cards = whiteboard.cards;
+        this.shelvedCards = whiteboard.shelfCards;
+      });
+    }
   }
 
   get Mode() {
