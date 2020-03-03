@@ -6,6 +6,7 @@ import {
   OnChanges,
   ViewChild
 } from '@angular/core';
+import { FormControl, Validators } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { ModeEnum } from '../../enums/mode.enum';
@@ -36,15 +37,17 @@ export class WhiteboardComponent implements OnChanges {
 
   public whiteboard$ = new BehaviorSubject<WhiteboardInterface>(null);
 
+  public titleFC: FormControl;
+
   selectedCards: CardInterface[] = [];
 
   lastColor = '#00A7E2';
-  title = '';
   isTitleInputSelected = true;
   isShelfMinimized = false;
 
   constructor(private whiteboardHttpService: WhiteboardHttpService) {
     this.initialiseObservable();
+    this.initialiseForm();
   }
 
   ngOnChanges() {
@@ -71,7 +74,14 @@ export class WhiteboardComponent implements OnChanges {
     this.whiteboardHttpService
       .getJson()
       .pipe(take(1))
-      .subscribe(whiteboardData => this.whiteboard$.next(whiteboardData));
+      .subscribe(whiteboardData => {
+        this.titleFC.patchValue(whiteboardData.title);
+        this.whiteboard$.next(whiteboardData);
+      });
+  }
+
+  private initialiseForm(): void {
+    this.titleFC = new FormControl('', Validators.required);
   }
 
   //#region WORKSPACE INTERACTIONS
@@ -255,8 +265,9 @@ export class WhiteboardComponent implements OnChanges {
   }
 
   hideTitleInput() {
-    if (this.title !== '') {
+    if (!!this.titleFC.value) {
       this.isTitleInputSelected = false;
+      this.updateWhiteboardSubject({ title: this.titleFC.value });
     }
   }
 
