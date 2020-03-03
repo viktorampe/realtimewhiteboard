@@ -163,7 +163,7 @@ describe('WhiteboardComponent', () => {
 
     it('should set isTitleInputSelected to false if title is not empty', () => {
       component.isTitleInputSelected = true;
-      component.title = 'test';
+      component.titleFC.patchValue('test');
 
       component.hideTitleInput();
 
@@ -172,7 +172,7 @@ describe('WhiteboardComponent', () => {
 
     it('should set isTitleInputSelected to true if title is empty', () => {
       component.isTitleInputSelected = true;
-      component.title = '';
+      component.titleFC.patchValue('');
 
       component.hideTitleInput();
 
