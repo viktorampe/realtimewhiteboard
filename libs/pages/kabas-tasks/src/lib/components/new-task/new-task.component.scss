@@ -2,19 +2,15 @@
 
 :host {
   .mat-dialog-content {
-    min-height: 33vh;
     width: 50vw;
     max-width: 400px;
   }
 }
 
 .pages-kabas-tasks-new-task {
-  &__info-panel {
-    max-height: 100%;
-  }
-
   &__dialog__actions {
-    padding: 15px;
+    margin-top: 24px;
+    padding: 16px 0;
     display: flex;
     justify-content: flex-end;
     align-content: center;
