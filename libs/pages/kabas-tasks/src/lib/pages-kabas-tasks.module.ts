@@ -29,6 +29,7 @@ import { ManageKabasTasksOverviewComponent } from './components/manage-kabas-tas
 import { ManageTaskContentComponent } from './components/manage-task-content/manage-task-content.component';
 import { NewTaskComponent } from './components/new-task/new-task.component';
 import { PrintPaperTaskModalComponent } from './components/print-paper-task-modal/print-paper-task-modal.component';
+import { StudentTaskDetailComponent } from './components/student-task-detail/student-task-detail.component';
 import { TaskEduContentListItemComponent } from './components/task-edu-content-list-item/task-edu-content-list-item.component';
 import { TaskListItemComponent } from './components/task-list-item/task-list-item.component';
 import { PendingTaskGuard } from './guards/pending-task.guard';
@@ -64,7 +65,8 @@ import { PagesKabasTasksRoutingModule } from './pages-kabas-tasks-routing.module
     NewTaskComponent,
     TaskEduContentListItemComponent,
     PrintPaperTaskModalComponent,
-    ManageTaskContentComponent
+    ManageTaskContentComponent,
+    StudentTaskDetailComponent
   ],
   providers: [
     {
@@ -85,7 +87,7 @@ import { PagesKabasTasksRoutingModule } from './pages-kabas-tasks-routing.module
     },
     PendingTaskGuard
   ],
-  exports: [ManageKabasTasksAssigneeModalComponent],
+  exports: [ManageKabasTasksAssigneeModalComponent, StudentTaskDetailComponent],
   entryComponents: [
     ManageKabasTasksAssigneeModalComponent,
     NewTaskComponent,
