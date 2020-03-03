@@ -382,12 +382,14 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
   }
 
   clickNewTask() {
-    const { tab: currentTab } = this.route.snapshot.queryParams;
-    if (!currentTab || +currentTab === 0) {
-      this.navigateToNew('digital');
-    } else {
-      this.navigateToNew('paper');
-    }
+    this.currentTab$.pipe(take(1)).subscribe(currentTab => {
+      console.log(currentTab);
+      if (!currentTab || +currentTab === 0) {
+        this.navigateToNew('digital');
+      } else {
+        this.navigateToNew('paper');
+      }
+    });
   }
 
   private navigateToNew(type: Source = 'digital') {
@@ -458,11 +460,20 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
     this.currentSortMode$.next(sortMode);
   }
 
-  public toggleDigitalFilters() {
+  public toggleFilters() {
+    this.currentTab$.pipe(take(1)).subscribe(currentTab => {
+      if (!currentTab || +currentTab === 0) {
+        this.toggleDigitalFilters();
+      } else {
+        this.togglePaperFilters();
+      }
+    });
+  }
+  private toggleDigitalFilters() {
     this.showPaperFilters = false;
     this.showDigitalFilters = !this.showDigitalFilters;
   }
-  public togglePaperFilters() {
+  private togglePaperFilters() {
     this.showDigitalFilters = false;
     this.showPaperFilters = !this.showPaperFilters;
   }
@@ -692,6 +703,7 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
     this.clearListSelections();
     this.clearFilters();
     this.resetSorting();
+    this.showPaperFilters = this.showDigitalFilters = false;
   }
 
   /**

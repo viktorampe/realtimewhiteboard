@@ -22,11 +22,6 @@
         margin: 0 0
           $pages-manage-kabas-tasks__task-list-item__second-line-spacer 0;
       }
-      &-groups,
-      &-students {
-        font-size: $pages-manage-kabas-tasks__task-list-item__assignees-secondary-font-size;
-        color: $pages-manage-kabas-tasks__task-list-item__assignees-secondary-color;
-      }
     }
   }
 }

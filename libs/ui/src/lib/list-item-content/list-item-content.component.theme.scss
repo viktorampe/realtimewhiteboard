@@ -74,7 +74,6 @@ $ui-list-item-content-default-height: $ui-list-item-default-height !default;
       white-space: nowrap;
       text-overflow: ellipsis;
       text-align: right;
-      font-size: 0.9rem;
 
       &--separated > *:not(:last-child):after {
         content: '';

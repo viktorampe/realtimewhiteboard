@@ -42,6 +42,26 @@
 <campus-backdrop title="Taken beheren" svgIcon="task">
   <front-layer-content>
     <div class="manage-kabas-tasks-overview__container">
+      <campus-button
+        primary
+        fab
+        icon
+        (click)="clickNewTask()"
+        class="manage-kabas-tasks-overview__list__primary-action"
+      >
+        <mat-icon svgIcon="add"></mat-icon>
+      </campus-button>
+
+      <campus-button
+        bordered
+        icon
+        flat
+        dense
+        (click)="toggleFilters()"
+        class="manage-kabas-tasks-overview__list__filter-action"
+        ><mat-icon svgIcon="filter"></mat-icon
+      ></campus-button>
+
       <mat-tab-group
         [selectedIndex]="currentTab$ | async"
         (selectedIndexChange)="onSelectedTabIndexChanged($event)"
@@ -50,7 +70,7 @@
         <mat-tab label="Digitale taken">
           <div
             class="manage-kabas-tasks-overview__filterbar"
-            *ngIf="showDigitalFilters"
+            [hidden]="!showDigitalFilters"
           >
             <div class="manage-kabas-tasks-overview__filterbar__filters">
               <campus-search-term
@@ -148,13 +168,7 @@
               >
             </ng-container>
           </div>
-          <div
-            (click)="clickAddDigitalTask()"
-            class="manage-kabas-tasks-overview__list__primary-action"
-          >
-            <mat-icon svgIcon="add"></mat-icon>
-            Nieuwe taak
-          </div>
+
           <mat-selection-list
             #digital
             [class.mat-selection-list--has-selection]="
@@ -191,7 +205,10 @@
         </mat-tab>
 
         <mat-tab label="Papieren taken">
-          <div class="manage-kabas-tasks-overview__filterbar">
+          <div
+            class="manage-kabas-tasks-overview__filterbar"
+            [hidden]="!showPaperFilters"
+          >
             <div class="manage-kabas-tasks-overview__filterbar__filters">
               <campus-search-term
                 placeholder="Zoeken op titel"
@@ -270,13 +287,7 @@
               <p>De toegepaste filter bevat geen resultaten.</p>
             </ng-template>
           </div>
-          <div
-            (click)="clickAddPaperTask()"
-            class="manage-kabas-tasks-overview__list__primary-action"
-          >
-            <mat-icon svgIcon="add"></mat-icon>
-            Nieuwe taak
-          </div>
+
           <mat-selection-list
             #paper
             [class.mat-selection-list--has-selection]="
