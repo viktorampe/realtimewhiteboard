@@ -60,7 +60,10 @@ export class WhiteboardHttpService implements WhiteboardHttpServiceInterface {
     );
 
     //TODO: return response$;
-    return this.apiSettings$.pipe(map(() => this.getWhiteboardMock()));
+    return this.apiSettings$.pipe(
+      filter(settings => !!settings),
+      map(() => this.getWhiteboardMock())
+    );
   }
 
   public setJson(whiteboard: WhiteboardInterface): Observable<boolean> {
