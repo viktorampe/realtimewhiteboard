@@ -86,5 +86,8 @@ export const icons = {
 
   //empty-states
   'empty-state-all-done': 'assets/empty-states/all-done.svg',
-  'empty-state-no-educontent': 'assets/empty-states/no-educontent.svg'
+  'empty-state-no-educontent': 'assets/empty-states/no-educontent.svg',
+
+  'rating-star': 'assets/icons/rating-star.svg',
+  'rating-star-empty': 'assets/icons/rating-star-empty.svg'
 };
