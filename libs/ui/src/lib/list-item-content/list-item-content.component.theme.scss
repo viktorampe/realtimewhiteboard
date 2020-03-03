@@ -2,7 +2,7 @@ $ui-list-item-content-spacing--horizontal: 16px !default;
 $ui-list-item-content-spacing--vertical: 4px !default;
 
 $ui-list-item-content-color--primary: $ui-primary-font-color !default;
-$ui-list-item-content-color--secondary: $ui-primary-font-color-2 !default;
+$ui-list-item-content-stroke-color: $ui-stroke-color !default;
 
 $ui-list-item-content_icon-color: $ui-primary-color-accent !default;
 $ui-list-item-content_icon-width: 50px !default;
@@ -13,13 +13,6 @@ $ui-list-item-content-2-line-height: $ui-list-item-2-line-height !default;
 $ui-list-item-content-default-height: $ui-list-item-default-height !default;
 @mixin ui-list-item-content() {
   .ui-list-item {
-    height: $ui-list-item-content-default-height;
-    &-3-line {
-      height: $ui-list-item-content-3-line-height;
-    }
-    &-2-line {
-      height: $ui-list-item-content-2-line-height;
-    }
     &__icon {
       align-self: center;
       margin-right: $ui-list-item-content-spacing--horizontal;
@@ -51,21 +44,25 @@ $ui-list-item-content-default-height: $ui-list-item-default-height !default;
 
     &__actions {
       margin-top: $ui-list-item-content-spacing--vertical;
-      color: $ui-list-item-content-color--secondary;
+      color: $ui-list-item-content-stroke-color;
       font-size: 0.8rem;
       white-space: normal;
 
-      span {
-        cursor: pointer;
-        position: relative;
-
-        &:not(:last-child):after {
-          content: '';
-          pointer-events: none;
-          border-left: 1px solid $ui-list-item-content-color--secondary;
-          height: $ui-list-item-content-spacing--horizontal;
+      > .ui-button {
+        &:not(:first-child) {
+          &:before {
+            content: '';
+            display: block;
+            pointer-events: none;
+            border-left: 1px solid $ui-list-item-content-stroke-color;
+            height: $ui-list-item-content-spacing--horizontal;
+            margin-left: $ui-list-item-content-spacing--horizontal / 2;
+            margin-right: $ui-list-item-content-spacing--horizontal / 2;
+          }
+        }
+        &--inline:not(:first-child):after {
           margin-left: $ui-list-item-content-spacing--horizontal / 2;
-          margin-right: $ui-list-item-content-spacing--horizontal / 2;
+          width: calc(100% - #{$ui-list-item-content-spacing--horizontal});
         }
       }
     }
@@ -82,8 +79,8 @@ $ui-list-item-content-default-height: $ui-list-item-default-height !default;
       &--separated > *:not(:last-child):after {
         content: '';
         pointer-events: none;
-        border-left: 1px solid $ui-list-item-content-color--secondary;
-        height: 2rem;
+        border-left: 1px solid $ui-list-item-content-stroke-color;
+        height: 100%;
         margin-left: $ui-list-item-content-spacing--horizontal;
         margin-right: $ui-list-item-content-spacing--horizontal;
       }
