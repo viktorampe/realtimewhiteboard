@@ -64,6 +64,8 @@ export enum TaskSortEnum {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ManageKabasTasksOverviewComponent implements OnInit {
+  public showDigitalFilters = false;
+  public showPaperFilters = false;
   public TaskSortEnum = TaskSortEnum;
   public tasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
   public paperTasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
@@ -454,6 +456,15 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
 
   public setSortMode(sortMode: TaskSortEnum) {
     this.currentSortMode$.next(sortMode);
+  }
+
+  public toggleDigitalFilters() {
+    this.showPaperFilters = false;
+    this.showDigitalFilters = !this.showDigitalFilters;
+  }
+  public togglePaperFilters() {
+    this.showDigitalFilters = false;
+    this.showPaperFilters = !this.showPaperFilters;
   }
 
   private mapSearchFilterCriteriaToFilterState(

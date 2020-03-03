@@ -1,4 +1,4 @@
-<campus-list-item-content>
+<campus-list-item-content three-line>
   <mat-icon
     list-item-icon
     *ngIf="archived"
@@ -16,17 +16,22 @@
     class="manage-kabas-tasks-task-list-item__container__title"
     (click)="actions[0].handler()"
     campusClickStopPropagation
+    mat-line
     >{{ title }}</list-item-title
   >
 
+  <list-item-caption mat-line>{{ description }}</list-item-caption>
+
   <list-item-actions
+    mat-line
     *ngIf="actions.length"
     class="manage-kabas-tasks-task-list-item__container__actions"
-    ><span
+    ><campus-button
+      inline
       campusClickStopPropagation
       *ngFor="let action of actions"
       (click)="action.handler()"
-      >{{ action.label }}</span
+      >{{ action.label }}</campus-button
     ></list-item-actions
   >
 
