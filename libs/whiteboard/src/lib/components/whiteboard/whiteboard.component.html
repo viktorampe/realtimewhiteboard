@@ -14,12 +14,12 @@
       *ngIf="!isTitleInputSelected"
       class="whiteboard__header__title"
       (click)="showTitleInput()"
-      [innerText]="(whiteboard$ | async)?.title"
-    ></h2>
+      >{{ title }}</h2
+    >
     <input
       type="text"
       #titleInput
-      [ngModel]="(whiteboard$ | async)?.title"
+      [(ngModel)]="title"
       (keyup.enter)="hideTitleInput()"
       (focusout)="hideTitleInput()"
       *ngIf="isTitleInputSelected"
