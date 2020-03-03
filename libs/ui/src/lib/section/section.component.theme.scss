@@ -12,16 +12,18 @@
   $ui-section_header-color: $ui-tertiary-font-color !default;
   $ui-section_actions-color: $ui-tertiary-icon-color !default;
   $ui-section-elevation-transition: $ui-elevation-transition !default;
-
-  campus-section + campus-section {
-    margin-top: $ui-section-spacing;
-  }
+  $ui-section-action-transition: transform $ui-transition-normal
+      $ui-transition-easing,
+    opacity $ui-transition-normal $ui-transition-easing !default;
 
   .ui-section {
     color: $ui-section-color;
-    border-radius: $ui-section-border-radius;
-    border: 1px solid $ui-section-border-color;
-    transition: $ui-section-elevation-transition;
+
+    &:not(&--container) {
+      border-radius: $ui-section-border-radius;
+      border: 1px solid $ui-section-border-color;
+      transition: $ui-section-elevation-transition;
+    }
 
     hr {
       margin: $ui-section-padding (-$ui-section-padding);
@@ -54,9 +56,17 @@
 
     &--editable {
       // apply style for editable mode
-
+      .ui-section__header__actions {
+        transform: translateX(20px);
+        opacity: 0;
+        transition: $ui-section-action-transition;
+      }
       &:hover {
         @include elevation($ui-section-elevation);
+        .ui-section__header__actions {
+          transform: translateX(0);
+          opacity: 1;
+        }
       }
     }
 
