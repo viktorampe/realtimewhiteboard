@@ -47,6 +47,7 @@ import {
 import { MockDate, MockMatIconRegistry } from '@campus/testing';
 import {
   ConfirmationModalComponent,
+  ENVIRONMENT_UI_TOKEN,
   SectionModeEnum,
   UiModule
 } from '@campus/ui';
@@ -204,6 +205,7 @@ describe('ManageKabasTasksDetailComponent', () => {
         },
         { provide: MatIconRegistry, useClass: MockMatIconRegistry },
         { provide: ENVIRONMENT_SEARCHMODES_TOKEN, useValue: {} },
+        { provide: ENVIRONMENT_UI_TOKEN, useValue: {} },
         {
           provide: FILTER_SERVICE_TOKEN,
           useValue: { matchFilters: () => {} }
@@ -1481,14 +1483,6 @@ describe('ManageKabasTasksDetailComponent', () => {
         newTaskEduContents[0],
         newTaskEduContents[2]
       ]);
-    });
-
-    it('should show the sidesheet when the selection changes', () => {
-      jest.spyOn(component.sideSheet, 'toggle');
-
-      component.onSelectionChange();
-
-      expect(component.sideSheet.toggle).toHaveBeenCalledWith(true);
     });
   });
 });
