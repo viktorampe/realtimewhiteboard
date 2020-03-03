@@ -1,6 +1,4 @@
 .manage-kabas-tasks-detail {
-  display: flex;
-
   &__main {
     flex: 1 1 auto;
   }
@@ -11,6 +9,9 @@
   }
 
   &__container {
+    display: flex;
+    flex-direction: row;
+    flex: 1 0 auto;
     flex-grow: 1;
   }
 
@@ -42,21 +43,6 @@
 
     campus-button {
       margin: 5px 0;
-    }
-
-    &__container {
-      display: flex;
-      flex-direction: column;
-      flex: 0 0 auto;
-
-      &__change-all-buttons {
-        display: flex;
-        flex-direction: row;
-
-        campus-button {
-          flex: 1;
-        }
-      }
     }
 
     &__add-assignees {
