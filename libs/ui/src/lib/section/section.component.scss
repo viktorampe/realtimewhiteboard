@@ -14,14 +14,5 @@
 
   &--editable {
     cursor: pointer;
-
-    .ui-section__header__actions {
-      display: none;
-    }
-    &:hover {
-      .ui-section__header__actions {
-        display: block;
-      }
-    }
   }
 }

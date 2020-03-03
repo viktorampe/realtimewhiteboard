@@ -75,7 +75,7 @@ export const environment = {
     useInfoPanelStyle: false,
     footerHeight: 10,
     backdrop: {
-      safeMargin: 48
+      safeMargin: 64
     },
     useModalSideSheetStyle: true
   }
