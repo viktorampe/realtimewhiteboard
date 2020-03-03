@@ -350,10 +350,14 @@ export class WhiteboardComponent implements OnChanges {
 
   //#region MULTI SELECT ACTIONS
   bulkDeleteClicked() {
+    const cards = this.whiteboard$.value.cards.filter(
+      c => !this.selectedCards.includes(c)
+    );
+
+    cards.forEach(c => (c.mode = ModeEnum.IDLE));
+
     this.updateWhiteboardSubject({
-      cards: this.whiteboard$.value.cards.filter(
-        c => !this.selectedCards.includes(c)
-      )
+      cards: cards
     });
 
     this.addCardsToShelf(this.selectedCards);
