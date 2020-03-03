@@ -1,7 +1,7 @@
 @mixin ui-section {
   $ui-section-spacing: 16px !default;
   $ui-section-padding: $ui-inner-padding !default;
-  $ui-section-border-radius: $ui-border-radius !default;
+  $ui-section-border-radius: $ui-border-radius-medium !default;
   $ui-section-border-color: $ui-tertiary-border-color !default;
   $ui-section-elevation: 6 !default;
   $ui-section-color: inherit !default;
@@ -10,6 +10,7 @@
   $ui-section_header_action-margin: -8px !default;
   $ui-section_header-color: $ui-tertiary-font-color !default;
   $ui-section_actions-color: $ui-tertiary-icon-color !default;
+  $ui-section-elevation-transition: $ui-elevation-transition !default;
 
   campus-section + campus-section {
     margin-top: $ui-section-spacing;
@@ -19,6 +20,7 @@
     color: $ui-section-color;
     border-radius: $ui-section-border-radius;
     border: 1px solid $ui-section-border-color;
+    transition: $ui-section-elevation-transition;
 
     hr {
       margin: $ui-section-padding (-$ui-section-padding);
@@ -47,6 +49,7 @@
 
     &--editable {
       // apply style for editable mode
+
       &:hover {
         @include elevation($ui-section-elevation);
       }

@@ -105,7 +105,8 @@ export class EduContentCollectionManagerService
       item,
       bundlesCollection$,
       linkedBundleIds$,
-      recentBundleIds$
+      recentBundleIds$,
+      'bundels'
     );
     itemToggle$.subscribe((bundleToggled: ItemToggledInCollectionInterface) => {
       if (learningAreaId) {
@@ -171,13 +172,23 @@ export class EduContentCollectionManagerService
       'taskId'
     );
 
+    const taskType =
+      content.type === EduContentTypeEnum.PAPER_EXERCISE
+        ? 'Papieren'
+        : 'Digitale';
+    const contentLearningArea =
+      content.publishedEduContentMetadata.learningArea.name;
+    const subtitle = `${taskType} taken voor ${contentLearningArea}`;
+
     // subscribe to changeEvent
     const itemToggle$: Observable<ItemToggledInCollectionInterface> = this.getItemToggleStream(
       '"' + item.label + '" toevoegen aan je taken',
       item,
       tasksCollection$,
       linkedTaskIds$,
-      recentTaskIds$
+      recentTaskIds$,
+      'taken',
+      subtitle
     );
     itemToggle$.subscribe((taskToggled: ItemToggledInCollectionInterface) => {
       if (taskToggled.selected) {
@@ -320,7 +331,9 @@ export class EduContentCollectionManagerService
     item: ManageCollectionItemInterface,
     linkableItems$: Observable<ManageCollectionItemInterface[]>,
     linkedItemIds$: Observable<number[]>,
-    recentItemIds$: Observable<number[]>
+    recentItemIds$: Observable<number[]>,
+    collectionType: string,
+    subtitle?: string
   ) {
     return combineLatest([linkableItems$, linkedItemIds$, recentItemIds$]).pipe(
       take(1),
@@ -333,7 +346,9 @@ export class EduContentCollectionManagerService
             item,
             linkableItems,
             linkedIds,
-            recentIds
+            recentIds,
+            collectionType,
+            subtitle
           );
         }
       )

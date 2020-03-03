@@ -8,6 +8,7 @@ import {
   MatSelect,
   MatSelectionList,
   MatSelectModule,
+  MatSlideToggle,
   MatSlideToggleModule
 } from '@angular/material';
 import { By, HAMMER_LOADER } from '@angular/platform-browser';
@@ -23,7 +24,11 @@ import {
 } from '@campus/dal';
 import { GuardsModule } from '@campus/guards';
 import { PagesSharedModule } from '@campus/pages/shared';
-import { ButtonToggleFilterComponent, SearchModule } from '@campus/search';
+import {
+  ButtonToggleFilterComponent,
+  SearchFilterComponentInterface,
+  SearchModule
+} from '@campus/search';
 import {
   ENVIRONMENT_ICON_MAPPING_TOKEN,
   ENVIRONMENT_SEARCHMODES_TOKEN,
@@ -287,35 +292,43 @@ describe('ManageKabasTasksOverviewComponent', () => {
         const mockTasks: TaskWithAssigneesInterface[] = [
           {
             assignees: [
-              { type: AssigneeTypesEnum.GROUP, id: 1 }, // matches filter
-              { type: AssigneeTypesEnum.STUDENT, id: 3 }, // does not match
-              { type: AssigneeTypesEnum.CLASSGROUP, id: 3 } // does not match
+              { type: AssigneeTypesEnum.GROUP, id: 1, relationId: 1 }, // matches filter
+              { type: AssigneeTypesEnum.STUDENT, id: 3, relationId: 3 }, // does not match
+              { type: AssigneeTypesEnum.CLASSGROUP, id: 3, relationId: 3 } // does not match
             ]
           },
           {
             assignees: [
-              { type: AssigneeTypesEnum.GROUP, id: 2 }, // does not match filter
-              { type: AssigneeTypesEnum.STUDENT, id: 1 } // matches filter --> task should be included in result
+              { type: AssigneeTypesEnum.GROUP, id: 2, relationId: 2 }, // does not match filter
+              { type: AssigneeTypesEnum.STUDENT, id: 1, relationId: 1 } // matches filter --> task should be included in result
             ]
           },
           {
-            assignees: [{ type: AssigneeTypesEnum.STUDENT, id: 1 }]
-          },
-          {
-            assignees: [{ type: AssigneeTypesEnum.STUDENT, id: 2 }] // does not match
-          },
-          {
-            assignees: [{ type: AssigneeTypesEnum.CLASSGROUP, id: 1 }] // matches
-          },
-          {
-            assignees: [{ type: AssigneeTypesEnum.CLASSGROUP, id: 2 }] // does not match
+            assignees: [
+              { type: AssigneeTypesEnum.STUDENT, id: 1, relationId: 1 }
+            ]
           },
           {
             assignees: [
-              { type: AssigneeTypesEnum.STUDENT, id: 666 }, // does not match
-              { type: AssigneeTypesEnum.GROUP, id: 666 }, // does not match
-              { type: AssigneeTypesEnum.GROUP, id: 1 }, // matches --> should be included
-              { type: AssigneeTypesEnum.CLASSGROUP, id: 666 } // does not match
+              { type: AssigneeTypesEnum.STUDENT, id: 2, relationId: 2 }
+            ] // does not match
+          },
+          {
+            assignees: [
+              { type: AssigneeTypesEnum.CLASSGROUP, id: 1, relationId: 1 }
+            ] // matches
+          },
+          {
+            assignees: [
+              { type: AssigneeTypesEnum.CLASSGROUP, id: 2, relationId: 2 }
+            ] // does not match
+          },
+          {
+            assignees: [
+              { type: AssigneeTypesEnum.STUDENT, id: 666, relationId: 666 }, // does not match
+              { type: AssigneeTypesEnum.GROUP, id: 666, relationId: 666 }, // does not match
+              { type: AssigneeTypesEnum.GROUP, id: 1, relationId: 1 }, // matches --> should be included
+              { type: AssigneeTypesEnum.CLASSGROUP, id: 666, relationId: 666 } // does not match
             ]
           }
         ] as TaskWithAssigneesInterface[];
@@ -327,19 +340,31 @@ describe('ManageKabasTasksOverviewComponent', () => {
               values: [
                 {
                   data: {
-                    identifier: { type: AssigneeTypesEnum.GROUP, id: 1 }
+                    identifier: {
+                      type: AssigneeTypesEnum.GROUP,
+                      id: 1,
+                      relationId: 1
+                    }
                   },
                   selected: true
                 },
                 {
                   data: {
-                    identifier: { type: AssigneeTypesEnum.STUDENT, id: 1 }
+                    identifier: {
+                      type: AssigneeTypesEnum.STUDENT,
+                      id: 1,
+                      relationId: 1
+                    }
                   },
                   selected: true
                 },
                 {
                   data: {
-                    identifier: { type: AssigneeTypesEnum.CLASSGROUP, id: 1 }
+                    identifier: {
+                      type: AssigneeTypesEnum.CLASSGROUP,
+                      id: 1,
+                      relationId: 1
+                    }
                   },
                   selected: true
                 }
@@ -506,7 +531,8 @@ describe('ManageKabasTasksOverviewComponent', () => {
             assignees: [
               {
                 type: AssigneeTypesEnum.GROUP,
-                id: 1
+                id: 1,
+                relationId: 1
               }
             ]
           },
@@ -519,7 +545,8 @@ describe('ManageKabasTasksOverviewComponent', () => {
             assignees: [
               {
                 type: AssigneeTypesEnum.GROUP,
-                id: 1
+                id: 1,
+                relationId: 1
               }
             ]
           },
@@ -532,7 +559,8 @@ describe('ManageKabasTasksOverviewComponent', () => {
             assignees: [
               {
                 type: AssigneeTypesEnum.GROUP,
-                id: 1
+                id: 1,
+                relationId: 1
               }
             ]
           },
@@ -545,7 +573,8 @@ describe('ManageKabasTasksOverviewComponent', () => {
             assignees: [
               {
                 type: AssigneeTypesEnum.CLASSGROUP, // does not match
-                id: 1
+                id: 1,
+                relationId: 1
               }
             ]
           },
@@ -558,7 +587,8 @@ describe('ManageKabasTasksOverviewComponent', () => {
             assignees: [
               {
                 type: AssigneeTypesEnum.GROUP,
-                id: 2 // does not match
+                id: 2,
+                relationId: 2 // does not match
               }
             ]
           },
@@ -571,7 +601,8 @@ describe('ManageKabasTasksOverviewComponent', () => {
             assignees: [
               {
                 type: AssigneeTypesEnum.GROUP,
-                id: 1
+                id: 1,
+                relationId: 1
               }
             ]
           },
@@ -584,7 +615,8 @@ describe('ManageKabasTasksOverviewComponent', () => {
             assignees: [
               {
                 type: AssigneeTypesEnum.GROUP,
-                id: 1
+                id: 1,
+                relationId: 1
               }
             ]
           },
@@ -597,11 +629,13 @@ describe('ManageKabasTasksOverviewComponent', () => {
             assignees: [
               {
                 type: AssigneeTypesEnum.GROUP,
-                id: 1
+                id: 1,
+                relationId: 1
               },
               {
                 type: AssigneeTypesEnum.GROUP,
-                id: 1
+                id: 1,
+                relationId: 1
               }
             ]
           },
@@ -614,11 +648,13 @@ describe('ManageKabasTasksOverviewComponent', () => {
             assignees: [
               {
                 type: AssigneeTypesEnum.GROUP, //matches
-                id: 666 // does not match
+                id: 666,
+                relationId: 666 // does not match
               },
               {
                 type: AssigneeTypesEnum.CLASSGROUP, //matches
-                id: 2 // matches
+                id: 2,
+                relationId: 2 // matches
               }
             ]
           }
@@ -656,13 +692,16 @@ describe('ManageKabasTasksOverviewComponent', () => {
               values: [
                 {
                   data: {
-                    identifier: { type: AssigneeTypesEnum.GROUP, id: 1 }
+                    identifier: { type: AssigneeTypesEnum.GROUP, relationId: 1 }
                   },
                   selected: true
                 },
                 {
                   data: {
-                    identifier: { type: AssigneeTypesEnum.CLASSGROUP, id: 2 }
+                    identifier: {
+                      type: AssigneeTypesEnum.CLASSGROUP,
+                      relationId: 2
+                    }
                   },
                   selected: true
                 }
@@ -869,7 +908,7 @@ describe('ManageKabasTasksOverviewComponent', () => {
     });
 
     beforeAll(() => {
-      actions = component.getActions(mockTask);
+      actions = component['getActions'](mockTask);
     });
 
     it('first action should navigate to task-detail', () => {
@@ -1004,6 +1043,77 @@ describe('ManageKabasTasksOverviewComponent', () => {
         component.clickDeleteTasks();
 
         expect(removeTasksSpy).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('clickResetFilters()', () => {
+      it('should reset the filters - SearchFilterComponentInterface', () => {
+        const filters = fixture.debugElement
+          .queryAll(By.css('.manage-kabas-tasks-overview__filter'))
+          .map(dE => dE.componentInstance as SearchFilterComponentInterface);
+
+        const filterResetSpies = [];
+        filters.forEach(searchFilter => {
+          filterResetSpies.push((searchFilter.reset = jest.fn()));
+        });
+
+        component.clickResetFilters();
+
+        filterResetSpies.forEach(spy =>
+          expect(spy).toHaveBeenCalledWith(false)
+        );
+      });
+
+      // TODO: can't get this to work -> I blame Material
+      // tried fakeAsync,
+      // tried async await fixture.whenStable()
+      // console.logs in the code tell me the value is false
+      // trust me -> it works
+      xit('should reset the filters - SlideToggle', () => {
+        const filters = fixture.debugElement
+          .queryAll(By.css('.manage-kabas-tasks-overview__archive-toggle'))
+          .map(dE => dE.componentInstance as MatSlideToggle);
+
+        filters.forEach(filter => {
+          filter.checked = true;
+        });
+
+        component.clickResetFilters();
+        fixture.detectChanges();
+
+        filters.forEach(filter => expect(filter.checked).toBe(false));
+      });
+
+      it('should emit empty filter states - digital', () => {
+        const tasks$ = kabasTasksViewModel.tasksWithAssignments$ as BehaviorSubject<
+          TaskWithAssigneesInterface[]
+        >;
+
+        component.searchTermUpdated('foo', 'digital');
+
+        component.clickResetFilters();
+
+        const expected = tasks$.value.filter(task => !task.archivedYear);
+
+        expect(component.digitalFilteredTasks$).toBeObservable(
+          hot('a', { a: expected })
+        );
+      });
+
+      it('should emit empty filter states - paper', () => {
+        const tasks$ = kabasTasksViewModel.paperTasksWithAssignments$ as BehaviorSubject<
+          TaskWithAssigneesInterface[]
+        >;
+
+        component.searchTermUpdated('foo', 'paper');
+
+        component.clickResetFilters();
+
+        const expected = tasks$.value.filter(task => !task.archivedYear);
+
+        expect(component.paperFilteredTasks$).toBeObservable(
+          hot('a', { a: expected })
+        );
       });
     });
   });

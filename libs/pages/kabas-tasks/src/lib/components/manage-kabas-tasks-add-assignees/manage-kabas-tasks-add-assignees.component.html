@@ -7,6 +7,9 @@
       [emitOnTextChange]="true"
     ></campus-search-term>
     <campus-button
+      bordered
+      flat
+      icon
       (click)="resetFilter()"
       class="manage-kabas-tasks-add-assignees__content__filterbar__reset-filters"
       iconClass="reset-filters"
@@ -51,13 +54,14 @@
 
 <div mat-dialog-actions class="manage-kabas-tasks-add-assignees__actions">
   <campus-button
-    primary
+    bordered
+    flat
     class="manage-kabas-tasks-add-assignees__actions__button"
     (click)="close([])"
     >Annuleren</campus-button
   >
   <campus-button
-    primary
+    secondary
     class="manage-kabas-tasks-add-assignees__actions__button"
     (click)="addAssignees()"
     >Toevoegen</campus-button

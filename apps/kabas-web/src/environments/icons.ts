@@ -24,7 +24,7 @@ export const icons = {
   account: 'assets/icons/account-circle.svg',
   cancel: 'assets/icons/cancel.svg',
   delete: 'assets/icons/material/delete.svg',
-  add: 'assets/icons/material/add-circle-outline.svg',
+  add: 'assets/icons/material/add.svg',
   edit: 'assets/icons/material/edit.svg',
   filter: 'assets/icons/filter.svg',
   context_menu: 'assets/icons/material/more_vert.svg',
@@ -66,7 +66,7 @@ export const icons = {
   'edu-content:optional': 'assets/icons/star-border.svg', //TODO placeholder
   'edu-content:level-basic': 'assets/icons/play_arrow.svg', //TODO placeholder, name needs work
   'edu-content:level-advanced': 'assets/icons/fast_forward.svg', //TODO placeholder, name needs work
-
+  'open-in-new': 'assets/icons/material/open_in_new.svg',
   // search: sort modes
   'sort-numeric-down': 'assets/icons/sort-numeric-down.svg',
   'sort-alpha-down': 'assets/icons/sort-alpha-down.svg',
@@ -86,5 +86,6 @@ export const icons = {
 
   //empty-states
   'empty-state-all-done': 'assets/empty-states/all-done.svg',
-  'empty-state-no-users': 'assets/empty-states/no-users.svg'
+  'empty-state-no-users': 'assets/empty-states/no-users.svg',
+  'empty-state-no-educontent': 'assets/empty-states/no-educontent.svg'
 };

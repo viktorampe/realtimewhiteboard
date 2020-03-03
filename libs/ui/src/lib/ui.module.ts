@@ -25,13 +25,27 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { RouterModule } from '@angular/router';
 import { BeDateAdapter, UtilsModule } from '@campus/utils';
 import { AppBarComponent } from './app-bar/app-bar.component';
+import {
+  BackdropCollapseActionDirective,
+  BackdropComponent,
+  BackdropHeaderActionsDirective,
+  BackdropRevealActionDirective,
+  BackLayerContentDirective,
+  FrontLayerContentDirective,
+  FrontLayerHeaderDirective
+} from './backdrop/backdrop.component';
 import { BannerComponent } from './banner/banner.component';
 import { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.component';
 import { ButtonComponent } from './button/button.component';
 import { BorderDirective } from './button/directives/button-border.directive';
 import { CircleDirective } from './button/directives/button-circle.directive';
 import { DangerDirective } from './button/directives/button-danger.directive';
+import { DenseDirective } from './button/directives/button-dense.directive';
 import { DisabledDirective } from './button/directives/button-disabled.directive';
+import { FabDirective } from './button/directives/button-fab.directive';
+import { FlatDirective } from './button/directives/button-flat.directive';
+import { IconDirective } from './button/directives/button-icon.directive';
+import { InlineDirective } from './button/directives/button-inline.directive';
 import { LargeDirective } from './button/directives/button-large.directive';
 import { PrimaryDirective } from './button/directives/button-primary.directive';
 import { RoundedCornersDirective } from './button/directives/button-rounded-corners.directive';
@@ -55,6 +69,14 @@ import { FolderDetailsDirective } from './folder/directives/folder-details.direc
 import { FolderComponent } from './folder/folder.component';
 import { InfoPanelComponent } from './info-panel/info-panel.component';
 import {
+  ListItemActionsDirective,
+  ListItemCaptionDirective,
+  ListItemContentComponent,
+  ListItemContentDirective,
+  ListItemIconDirective,
+  ListItemTitleDirective
+} from './list-item-content/list-item-content.component';
+import {
   ListViewComponent,
   ListViewItemDirective
 } from './list-view/list-view.component';
@@ -69,10 +91,10 @@ import { PersonBadgeComponent } from './person-badge/person-badge.component';
 import { PersonInitialsPipe } from './person-badge/pipes/person-initials.pipe';
 import { PersonSummaryComponent } from './person-summary-component/person-summary.component';
 import {
-  SectionActions,
+  SectionActionsDirective,
   SectionComponent,
-  SectionContent,
-  SectionTitle
+  SectionContentDirective,
+  SectionTitleDirective
 } from './section/section.component';
 import { ShellBodyDirective } from './shell/directives/shell-body.directive';
 import { ShellBottomDirective } from './shell/directives/shell-bottom.directive';
@@ -95,6 +117,7 @@ import { HumanDateTimePipe } from './utils/pipes/human-date-time/human-date-time
 import { JoinPipe } from './utils/pipes/join/join.pipe';
 import { RemovePrefixStringPipe } from './utils/pipes/remove-prefix-string/remove-prefix-string.pipe';
 import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-string.pipe';
+
 @NgModule({
   imports: [
     OverlayModule,
@@ -185,9 +208,27 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     ConfirmationModalComponent,
     EmptyStateComponent,
     SectionComponent,
-    SectionContent,
-    SectionActions,
-    SectionTitle
+    InlineDirective,
+    DenseDirective,
+    FlatDirective,
+    FabDirective,
+    IconDirective,
+    SectionContentDirective,
+    SectionActionsDirective,
+    SectionTitleDirective,
+    ListItemContentComponent,
+    ListItemIconDirective,
+    ListItemTitleDirective,
+    ListItemCaptionDirective,
+    ListItemActionsDirective,
+    ListItemContentDirective,
+    BackdropComponent,
+    BackdropRevealActionDirective,
+    BackdropCollapseActionDirective,
+    BackdropHeaderActionsDirective,
+    BackLayerContentDirective,
+    FrontLayerContentDirective,
+    FrontLayerHeaderDirective
   ],
   exports: [
     FilterTextInputComponent,
@@ -255,9 +296,27 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     ConfirmationModalComponent,
     EmptyStateComponent,
     SectionComponent,
-    SectionContent,
-    SectionActions,
-    SectionTitle
+    InlineDirective,
+    DenseDirective,
+    FlatDirective,
+    FabDirective,
+    IconDirective,
+    SectionContentDirective,
+    SectionActionsDirective,
+    SectionTitleDirective,
+    ListItemContentComponent,
+    ListItemIconDirective,
+    ListItemTitleDirective,
+    ListItemCaptionDirective,
+    ListItemActionsDirective,
+    ListItemContentDirective,
+    BackdropComponent,
+    BackdropRevealActionDirective,
+    BackdropCollapseActionDirective,
+    BackdropHeaderActionsDirective,
+    BackLayerContentDirective,
+    FrontLayerContentDirective,
+    FrontLayerHeaderDirective
   ],
   providers: [
     {

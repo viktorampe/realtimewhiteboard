@@ -21,8 +21,7 @@ export enum SectionModeEnum {
 @Directive({
   selector: '[campusSectionTitle], [sectionTitle], section-title'
 })
-// tslint:disable-next-line: directive-class-suffix
-export class SectionTitle {}
+export class SectionTitleDirective {}
 
 /**
  * Content of a section, needed as it's used as a selector in the API.
@@ -31,8 +30,7 @@ export class SectionTitle {}
 @Directive({
   selector: '[campusSectionContent], [sectionContent], section-content'
 })
-// tslint:disable-next-line: directive-class-suffix
-export class SectionContent {}
+export class SectionContentDirective {}
 
 /**
  * Actions of a section, needed as it's used as a selector in the API.
@@ -41,8 +39,7 @@ export class SectionContent {}
 @Directive({
   selector: '[campusSectionAction], [sectionActions], section-actions'
 })
-// tslint:disable-next-line: directive-class-suffix
-export class SectionActions {}
+export class SectionActionsDirective {}
 
 @Component({
   selector: 'campus-section',
@@ -56,7 +53,8 @@ export class SectionComponent {
 
   modes = SectionModeEnum; // needed for usage in the template
 
-  @ContentChild(SectionTitle, { static: true }) sectionTitle: ElementRef;
+  @ContentChild(SectionTitleDirective, { static: true })
+  sectionTitle: ElementRef;
 
   constructor() {}
 

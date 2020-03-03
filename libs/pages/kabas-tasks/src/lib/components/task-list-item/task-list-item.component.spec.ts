@@ -12,6 +12,7 @@ import {
 } from '@campus/dal';
 import { ENVIRONMENT_ICON_MAPPING_TOKEN } from '@campus/shared';
 import { MockMatIconRegistry } from '@campus/testing';
+import { UiModule } from '@campus/ui';
 import { TaskListItemComponent } from './task-list-item.component';
 
 const mockAssignees: AssigneeInterface[] = [
@@ -51,7 +52,7 @@ describe('TaskListItemComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [MatIconModule, MatTooltipModule],
+      imports: [MatIconModule, MatTooltipModule, UiModule],
       declarations: [TaskListItemComponent],
       providers: [
         { provide: MatIconRegistry, useClass: MockMatIconRegistry },
