@@ -29,27 +29,35 @@
   $pages-kabas-tasks__list-option--selected-border-width: 4px !default;
   $pages-kabas-tasks__list-option-padding-left: 16px !default;
 
+  $pages-kabas-tasks__list-primary-action-top: 24px !default;
+  $pages-kabas-tasks__list-primary-action-left: 12px !default;
+  $pages-kabas-tasks__list-filter-action-right: 24px !default;
+  $pages-kabas-tasks__list-filter-action-top: 12px !default;
+
+  $pages-kabas-tasks__tab-labels-left-offset: 64px;
+  $pages-kabas-tasks__tab-body-margin-top: 24px;
+
   .manage-kabas-tasks-overview {
     &__list__primary-action.ui-button--fab {
       position: absolute;
-      top: 24px;
-      left: 12px;
+      top: $pages-kabas-tasks__list-primary-action-top;
+      left: $pages-kabas-tasks__list-primary-action-left;
       z-index: 5;
     }
     &__list__filter-action.ui-button {
       position: absolute;
-      right: 24px;
-      top: 8px;
+      right: $pages-kabas-tasks__list-filter-action-right;
+      top: $pages-kabas-tasks__list-filter-action-top;
       z-index: 5;
     }
 
     &__container {
       .mat-tab-label-container {
-        margin-left: 64px;
+        margin-left: $pages-kabas-tasks__tab-labels-left-offset;
       }
 
       .mat-tab-body {
-        margin-top: 24px;
+        margin-top: $pages-kabas-tasks__tab-body-margin-top;
       }
       .mat-tab-body-content {
         padding: 0;
