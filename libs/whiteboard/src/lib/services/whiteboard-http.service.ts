@@ -122,11 +122,6 @@ export class WhiteboardHttpService implements WhiteboardHttpServiceInterface {
         return { progress: progress };
       })
     );
-
-    // return of(
-    //   'https://cdn.iconscout.com/icon/free/png-512/css-118-569410.png'
-    // ).pipe(delay(1000));
-    //TODO: return response$;
   }
 
   private getWhiteboardMock(): WhiteboardInterface {
