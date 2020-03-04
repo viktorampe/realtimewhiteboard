@@ -104,6 +104,12 @@ export class WhiteboardComponent implements OnChanges {
   //#region CARD ACTIONS
   updateCard(updates: Partial<CardInterface>, card: CardInterface) {
     Object.assign(card, updates);
+    const shelfCard: CardInterface = this.whiteboard$.value.shelfCards.filter(
+      shelfcard => shelfcard.id === card.id
+    )[0];
+    Object.assign(shelfCard, updates);
+    console.log(card, shelfCard);
+
     this.updateWhiteboardSubject({});
   }
 
@@ -130,7 +136,6 @@ export class WhiteboardComponent implements OnChanges {
     if (this.selectedCards.length) {
       card.mode = ModeEnum.MULTISELECT;
     }
-    console.log(card);
 
     this.updateWhiteboardSubject({
       cards: [...this.whiteboard$.value.cards, card]
@@ -149,7 +154,6 @@ export class WhiteboardComponent implements OnChanges {
       this.updateWhiteboardSubject({
         shelfCards: [...this.whiteboard$.value.shelfCards, card]
       });
-      console.log(card);
     }
   }
 
@@ -220,7 +224,7 @@ export class WhiteboardComponent implements OnChanges {
     this.whiteboardHttpService
       .uploadFile(image)
       .subscribe((imageUrl: string) => {
-        card.image = imageUrl;
+        this.updateCard({ image: imageUrl }, card);
         if (this.selectedCards.length) {
           card.mode = ModeEnum.MULTISELECT;
         } else {
@@ -328,23 +332,27 @@ export class WhiteboardComponent implements OnChanges {
   }) {
     const { card, event, cardElement } = $event;
 
-    card.left = cardElement.offsetLeft + event.distance.x;
-
-    card.top =
-      this.workspaceElementRef.nativeElement.getBoundingClientRect().height -
-      (167 + cardElement.offsetTop) -
-      Math.abs(event.distance.y);
-
-    card.mode = ModeEnum.IDLE;
+    const workspaceCard: CardInterface = {
+      id: card.id,
+      mode: ModeEnum.IDLE,
+      color: card.color,
+      description: card.description,
+      image: card.image,
+      viewModeImage: card.viewModeImage,
+      left: cardElement.offsetLeft + event.distance.x,
+      top:
+        this.workspaceElementRef.nativeElement.getBoundingClientRect().height -
+        (167 + cardElement.offsetTop) -
+        Math.abs(event.distance.y)
+    };
 
     if (
       !this.whiteboard$.value.cards
         .map(workspacecard => workspacecard.id)
-        .includes(card.id)
+        .includes(workspaceCard.id)
     ) {
       this.updateWhiteboardSubject({
-        cards: [...this.whiteboard$.value.cards, card],
-        shelfCards: this.whiteboard$.value.shelfCards.filter(c => c !== card)
+        cards: [...this.whiteboard$.value.cards, workspaceCard]
       });
     }
   }
@@ -361,11 +369,10 @@ export class WhiteboardComponent implements OnChanges {
   }
 
   cardFlipIconClicked(card: CardInterface) {
-    card.viewModeImage = !card.viewModeImage;
-
     if (card.mode !== ModeEnum.EDIT) {
       card.mode = ModeEnum.IDLE;
     }
+    this.updateCard({ viewModeImage: !card.viewModeImage }, card);
   }
 
   //#endregion

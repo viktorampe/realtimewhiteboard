@@ -109,10 +109,11 @@ export class WhiteboardHttpService implements WhiteboardHttpServiceInterface {
   private getWhiteboardMock(): WhiteboardInterface {
     const whiteboard: WhiteboardInterface = {
       title: 'Welcome to the 90s',
-      cards: [
+      cards: [],
+      shelfCards: [
         {
           id: uuidv4(),
-          mode: ModeEnum.IDLE,
+          mode: ModeEnum.SHELF,
           viewModeImage: true,
           description: 'Windows 95',
           image:
@@ -123,7 +124,7 @@ export class WhiteboardHttpService implements WhiteboardHttpServiceInterface {
         },
         {
           id: uuidv4(),
-          mode: ModeEnum.IDLE,
+          mode: ModeEnum.SHELF,
           viewModeImage: true,
           description: 'Get Ready',
           image:
@@ -134,7 +135,7 @@ export class WhiteboardHttpService implements WhiteboardHttpServiceInterface {
         },
         {
           id: uuidv4(),
-          mode: ModeEnum.IDLE,
+          mode: ModeEnum.SHELF,
           viewModeImage: true,
           description: 'Candy',
           image:
@@ -145,7 +146,7 @@ export class WhiteboardHttpService implements WhiteboardHttpServiceInterface {
         },
         {
           id: uuidv4(),
-          mode: ModeEnum.IDLE,
+          mode: ModeEnum.SHELF,
           viewModeImage: true,
           description: 'VRC',
           image:
@@ -156,7 +157,7 @@ export class WhiteboardHttpService implements WhiteboardHttpServiceInterface {
         },
         {
           id: uuidv4(),
-          mode: ModeEnum.IDLE,
+          mode: ModeEnum.SHELF,
           viewModeImage: true,
           description: 'Gameboy',
           image:
@@ -164,9 +165,7 @@ export class WhiteboardHttpService implements WhiteboardHttpServiceInterface {
           color: '#00A7E2',
           top: 63,
           left: 918
-        }
-      ],
-      shelfCards: [
+        },
         {
           id: uuidv4(),
           mode: ModeEnum.SHELF,
