@@ -25,6 +25,7 @@ export class TaskListItemComponent implements OnInit {
   private _assignees: AssigneeInterface[];
 
   @Input() title: string;
+  @Input() description: string;
   @Input() learningArea: string;
   @Input() archived: boolean;
   @Input() icon: string;
