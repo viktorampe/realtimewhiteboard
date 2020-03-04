@@ -64,15 +64,16 @@ describe('NewTaskComponent', () => {
   });
 
   describe('template', () => {
-    it('should hide submit when the form is invalid', () => {
+    it('should disable submit when the form is invalid', () => {
       const submitButton = fixture.debugElement.query(
         By.css('.pages-kabas-tasks-new-task__dialog__actions__button__submit')
       );
-
-      expect(submitButton).toBeFalsy();
+      expect(
+        submitButton.nativeElement.classList.contains('ui-button--disabled')
+      ).toBeTruthy();
     });
 
-    it('should show submit when the form is valid', () => {
+    it('should enable submit when the form is valid', () => {
       component.newTaskForm.setValue({
         title: 'Abc',
         learningArea: new LearningAreaFixture(),
@@ -84,7 +85,9 @@ describe('NewTaskComponent', () => {
         By.css('.pages-kabas-tasks-new-task__dialog__actions__button__submit')
       );
 
-      expect(submitButton).toBeTruthy();
+      expect(
+        submitButton.nativeElement.classList.contains('ui-button--disabled')
+      ).toBeFalsy();
     });
 
     it('should call submit() when clicking the submit button', () => {
