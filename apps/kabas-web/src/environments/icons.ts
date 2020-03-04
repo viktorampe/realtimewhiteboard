@@ -70,6 +70,9 @@ export const icons = {
   'edu-content:level-basic': 'assets/icons/play_arrow.svg', //TODO placeholder, name needs work
   'edu-content:level-advanced': 'assets/icons/fast_forward.svg', //TODO placeholder, name needs work
   'open-in-new': 'assets/icons/material/open_in_new.svg',
+  'rating-star': 'assets/icons/rating-star.svg',
+  'rating-star-empty': 'assets/icons/rating-star-empty.svg',
+
   // search: sort modes
   'sort-numeric-down': 'assets/icons/sort-numeric-down.svg',
   'sort-alpha-down': 'assets/icons/sort-alpha-down.svg',
