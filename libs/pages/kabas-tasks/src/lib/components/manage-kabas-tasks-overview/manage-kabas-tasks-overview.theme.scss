@@ -1,3 +1,5 @@
+@import 'libs/ui/src/lib/breakpoints.scss';
+
 @mixin manage-kabas-tasks-overview-theme() {
   $pages-kabas-tasks__list-option-color: $pages-kabas-tasks-text-color--primary !default;
   $pages-kabas-tasks__list-option-color--accent: $pages-kabas-tasks-text-color--primary--accent !default;
@@ -43,6 +45,10 @@
       top: $pages-kabas-tasks__list-primary-action-top;
       left: $pages-kabas-tasks__list-primary-action-left;
       z-index: 5;
+
+      &.mobile {
+        display: none;
+      }
     }
     &__list__filter-action.ui-button {
       position: absolute;
@@ -191,6 +197,33 @@
 
       .mat-select-trigger {
         width: 100%;
+      }
+    }
+  }
+
+  @media #{$ui-breakpoint-xsmall} {
+    .manage-kabas-tasks-overview {
+      &__list__primary-action.ui-button--fab {
+        display: none;
+        &.mobile {
+          display: block;
+          position: fixed;
+          right: 12px;
+          bottom: 22px;
+          top: auto;
+          left: auto;
+        }
+      }
+
+      &__list__filter-action.ui-button {
+        position: absolute;
+        right: 12px;
+      }
+
+      &__container {
+        .mat-tab-label-container {
+          margin-left: 0;
+        }
       }
     }
   }

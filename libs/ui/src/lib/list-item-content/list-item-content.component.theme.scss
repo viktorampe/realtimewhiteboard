@@ -1,3 +1,5 @@
+@import 'libs/ui/src/lib/breakpoints.scss';
+
 $ui-list-item-content-spacing--horizontal: 16px !default;
 $ui-list-item-content-spacing--vertical: 4px !default;
 
@@ -11,6 +13,7 @@ $ui-list-item-content_icon-height: 50px !default;
 $ui-list-item-content-3-line-height: $ui-list-item-3-line-height !default;
 $ui-list-item-content-2-line-height: $ui-list-item-2-line-height !default;
 $ui-list-item-content-default-height: $ui-list-item-default-height !default;
+
 @mixin ui-list-item-content() {
   .ui-list-item {
     &__icon {
@@ -77,7 +80,7 @@ $ui-list-item-content-default-height: $ui-list-item-default-height !default;
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
-      text-align: right;
+      justify-content: flex-end;
 
       &--separated > *:not(:last-child):after {
         content: '';
@@ -99,6 +102,29 @@ $ui-list-item-content-default-height: $ui-list-item-default-height !default;
       }
       &-2-line {
         height: $ui-list-item-content-2-line-height;
+      }
+    }
+  }
+
+  @media #{$ui-breakpoint-xsmall} {
+    .mat-list-base .mat-list-item,
+    .mat-list-base .mat-list-option {
+      &.ui-list-item,
+      &.ui-list-item-3-line,
+      &.ui-list-item-2-line {
+        @include elevation(2);
+        padding: 12px;
+        height: auto;
+        margin-bottom: 24px;
+
+        & .mat-list-item-content {
+          align-items: flex-start;
+          padding: 0;
+
+          & .mat-pseudo-checkbox {
+            margin-right: 4px;
+          }
+        }
       }
     }
   }

@@ -45,6 +45,9 @@
     <div>
       <span *ngIf="startDate">{{ startDate | date: 'd/MM/yy' }}</span>
       <span *ngIf="endDate"> - {{ endDate | date: 'd/MM/yy' }}</span>
+      <span *ngIf="!startDate && !endDate" class="ui-caption"
+        >geen datum ingesteld</span
+      >
     </div>
   </list-item-content>
   <list-item-content class="manage-kabas-tasks-task-list-item__assignees">
@@ -74,6 +77,12 @@
         {{ students.length }} individuele leerling{{
           students.length === 1 ? '' : 'en'
         }}</span
+      >
+
+      <span
+        *ngIf="!classGroups.length && !groups.length && !students.length"
+        class="ui-caption"
+        >aan niemand toegewezen</span
       >
     </div>
   </list-item-content>

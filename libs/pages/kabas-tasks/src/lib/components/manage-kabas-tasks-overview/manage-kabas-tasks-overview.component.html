@@ -39,6 +39,17 @@
   >
 </campus-page-bar>
 
+<!-- needed to fix on screen outside scrollable content -->
+<campus-button
+  primary
+  fab
+  icon
+  (click)="clickNewTask()"
+  class="manage-kabas-tasks-overview__list__primary-action mobile"
+>
+  <mat-icon svgIcon="add"></mat-icon>
+</campus-button>
+
 <campus-backdrop [title]="title" svgIcon="task">
   <front-layer-content>
     <div class="manage-kabas-tasks-overview__container">
