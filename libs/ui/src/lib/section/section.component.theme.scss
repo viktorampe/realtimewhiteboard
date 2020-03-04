@@ -46,6 +46,15 @@
       }
     }
 
+    &__footer__actions {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 12px;
+      > .ui-button {
+        margin-left: 4px;
+      }
+    }
+
     &--container > .ui-section__header {
       height: $ui-section__container-header-height;
     }

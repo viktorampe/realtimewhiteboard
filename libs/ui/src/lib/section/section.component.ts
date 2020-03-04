@@ -4,6 +4,7 @@ import {
   Directive,
   ElementRef,
   EventEmitter,
+  HostBinding,
   Input,
   Output
 } from '@angular/core';
@@ -38,9 +39,22 @@ export class SectionContentDirective {}
  * @docs-private
  */
 @Directive({
-  selector: '[campusSectionAction], [sectionActions], section-actions'
+  selector: '[campusSectionActions], [sectionActions], section-actions'
 })
 export class SectionActionsDirective {}
+
+/**
+ * Footer Actions of a section, needed as it's used as a selector in the API.
+ * @docs-private
+ */
+@Directive({
+  selector:
+    '[campusFooterSectionActions], [sectionFooterActions], section-footer-actions'
+})
+export class SectionFooterActionsDirective {
+  @HostBinding('class.ui-section__footer__actions')
+  footerActionsClass = true;
+}
 
 @Component({
   selector: 'campus-section',

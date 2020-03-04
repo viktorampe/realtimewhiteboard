@@ -30,15 +30,14 @@
 
   <ng-template #contentSelected>
     <campus-button
+      inline
       *ngIf="selectedTaskEduContents.length === 1"
-      class="shared-header__contextual__button smallIcon"
-      iconClass=""
+      class="shared-header__contextual__button"
       (click)="
         preview(selectedTaskEduContents[0].eduContent, !!task.isPaperTask)
       "
-      ><span>{{
-        task.isPaperTask ? 'Voorbeeld' : 'Openen'
-      }}</span></campus-button
+      ><mat-icon svgIcon="eye"></mat-icon
+      >{{ task.isPaperTask ? 'Voorbeeld' : 'Openen' }}</campus-button
     >
     <campus-button
       *ngIf="task.isPaperTask"
@@ -56,6 +55,9 @@
 </campus-page-bar>
 
 <campus-backdrop [title]="(task$ | async).name" static>
+  <backdrop-reveal-action>
+    <mat-icon svgIcon="arrow-back" (click)="clickBack()"></mat-icon>
+  </backdrop-reveal-action>
   <front-layer-content>
     <div
       class="manage-kabas-tasks-detail__container"
@@ -73,6 +75,7 @@
             flat
             icon
             dense
+            [disabled]="isReordering"
             (click)="showFilters = !showFilters"
             ><mat-icon svgIcon="filter"></mat-icon
           ></campus-button>
@@ -141,10 +144,13 @@
               >
                 <mat-icon svgIcon="add"></mat-icon>
               </campus-button>
-
-              <div class="manage-kabas-tasks-detail__list__reorder-actions">
+              <div
+                class="manage-kabas-tasks-detail__list__reorder-actions"
+                *ngIf="!showFilters"
+              >
                 <campus-button
                   bordered
+                  flat
                   (click)="toggleIsReordering()"
                   *ngIf="!isReordering"
                   >Volgorde wijzigen</campus-button
@@ -185,11 +191,15 @@
                     #option
                     *ngFor="let tEC of taskEduContents"
                     checkboxPosition="before"
+                    class="ui-list-item-3-line"
                     [class.mat-list-option--selected]="option.selected"
                     [value]="tEC"
                   >
                     <campus-task-edu-content-list-item
                       [title]="tEC.eduContent.publishedEduContentMetadata.title"
+                      [description]="
+                        tEC.eduContent.publishedEduContentMetadata.description
+                      "
                       [level]="
                         tEC.eduContent.methodLevel &&
                         tEC.eduContent.methodLevel.label
@@ -215,7 +225,7 @@
             </mat-selection-list>
             <mat-list
               #taskContentReordering
-              class="manage-kabas-tasks-detail__list"
+              class="manage-kabas-tasks-detail__list manage-kabas-tasks-detail__list--reorderable"
               *ngIf="
                 isReordering &&
                 (reorderableTaskEduContents$
@@ -230,7 +240,7 @@
                 *ngIf="reorderableTaskEduContents.length; else noResults"
               >
                 <mat-list-item
-                  class="manage-kabas-tasks-detail__list__item"
+                  class="manage-kabas-tasks-detail__list__item ui-list-item-3-line"
                   cdkDrag
                   *ngFor="let tEC of reorderableTaskEduContents"
                 >
@@ -260,7 +270,10 @@
             </mat-list>
 
             <ng-template #noResults>
-              <p>De toegepaste filter bevat geen resultaten.</p>
+              <campus-empty-state
+                title="Geen lesmateriaal"
+                svgIcon="empty-state-no-educontent"
+              ></campus-empty-state>
             </ng-template>
           </div>
         </section-content>
@@ -282,6 +295,7 @@
             <ng-container
               *ngIf="selectedTaskEduContents.length === 0; else contentDetails"
             >
+              <!-- GENERAL SECTION -->
               <campus-section
                 [(mode)]="sectionMode"
                 (modeChange)="updateCachedTask(task)"
@@ -293,8 +307,11 @@
 
                 <section-content>
                   <div *ngIf="sectionMode === sectionModes.EDITABLE">
-                    <h2 data-cy="task-title">{{ task.name }}</h2>
-                    {{ task.description }}
+                    <p data-cy="task-title" class="ui-body-2">{{
+                      task.name
+                    }}</p>
+                    <p class="ui-body-1">{{ task.description }}</p>
+                    <p class="ui-body-1">{{ task.learningArea.name }} </p>
                   </div>
 
                   <div *ngIf="sectionMode === sectionModes.EDITING">
@@ -304,7 +321,6 @@
                         matInput
                         type="text"
                         maxlength="500"
-                        placeholder="Taak titel"
                         required
                         [(ngModel)]="taskCache.name"
                       />
@@ -313,39 +329,49 @@
                       <mat-label>Taak omschrijving</mat-label>
                       <textarea
                         matInput
-                        placeholder="Taak omschrijving"
                         maxlength="500"
                         cdkTextareaAutosize
                         [(ngModel)]="taskCache.description"
                       ></textarea>
                     </mat-form-field>
-                    <div>
-                      <campus-button (click)="cancelEdit($event)"
+
+                    <campus-button inline disabled>
+                      <mat-icon
+                        svgIcon="lock"
+                        *ngIf="sectionMode === sectionModes.EDITING"
+                      ></mat-icon
+                      >{{ task.learningArea.name }}
+                    </campus-button>
+
+                    <section-footer-actions>
+                      <campus-button bordered flat (click)="cancelEdit($event)"
                         >Annuleren</campus-button
                       >
                       <campus-button
-                        primary
+                        secondary
                         [disabled]="!taskCache.name"
                         (click)="editTask($event)"
                         >Opslaan</campus-button
                       >
-                    </div>
+                    </section-footer-actions>
                   </div>
-
-                  <p>{{ task.learningArea.name }}</p>
                 </section-content>
               </campus-section>
 
+              <!-- ASSIGNEE SECTION -->
               <campus-section (actionClick)="openAssigneeModal()">
                 <section-title>Toegewezen aan</section-title>
-                <section-actions
-                  ><mat-icon svgIcon="add"></mat-icon
-                ></section-actions>
+
+                <section-actions>
+                  <campus-button icon bordered dense flat>
+                    <mat-icon svgIcon="add"></mat-icon>
+                  </campus-button>
+                </section-actions>
 
                 <section-content>
                   <div class="manage-kabas-tasks-detail__info__container">
-                    <div>
-                      <span
+                    <mat-chip-list>
+                      <mat-chip
                         *ngFor="let assignee of task.assignees"
                         class="manage-kabas-tasks-detail__info__assignee"
                         [matTooltip]="
@@ -362,26 +388,27 @@
                         [class.student]="
                           assignee.type === assigneeTypesEnum.STUDENT
                         "
+                        [removable]="true"
+                        (removed)="removeAssignee(task, assignee)"
                         >{{ assignee.label }}
-                        <mat-icon
-                          svgIcon="close"
-                          (click)="removeAssignee(task, assignee)"
-                        ></mat-icon
-                      ></span>
-                    </div>
+                        <mat-icon matChipRemove svgIcon="cancel"></mat-icon>
+                      </mat-chip>
+                    </mat-chip-list>
                   </div>
 
                   <div
                     *ngIf="!task.isPaperTask && task.startDate"
                     data-cy="task-info-date"
+                    class="ui-body-2"
                   >
                     <hr />
-                    {{ task.startDate | date: 'dd-MM-yy' }} -
-                    {{ task.endDate | date: 'dd-MM-yy' }}</div
+                    {{ task.startDate | date: 'dd-MM-yyyy' }} -
+                    {{ task.endDate | date: 'dd-MM-yyyy' }}</div
                   >
                 </section-content>
               </campus-section>
 
+              <!-- ACTIONS SECTION -->
               <campus-section>
                 <section-content>
                   <ng-container *ngIf="task.isPaperTask">
@@ -458,96 +485,116 @@
             </ng-container>
 
             <ng-template #contentDetails>
-              <div
-                class="manage-kabas-tasks-detail__info__container"
-                *ngFor="let selectedContent of selectedTaskEduContents"
-                data-cy="educontent-detail"
-              >
-                <ng-container
-                  *ngIf="
-                    selectedContent.eduContent
-                      .publishedEduContentMetadata as metadata
-                  "
-                >
-                  <h2>{{ metadata.title }}</h2>
-                  <p>{{ metadata.description }}</p>
-                  <div *ngIf="metadata.learningArea">{{
-                    metadata.learningArea.name
-                  }}</div>
-                  <div *ngIf="metadata.methods" class="list-split">
-                    <span *ngFor="let method of metadata.methods">{{
-                      method.name
-                    }}</span>
-                  </div>
-                  <campus-button
-                    (click)="
-                      preview(selectedContent.eduContent, !!task.isPaperTask)
-                    "
-                    >Preview</campus-button
-                  >
-                </ng-container>
-              </div>
-
-              <div
-                *ngIf="!task.isPaperTask"
-                class="manage-kabas-tasks-detail__info__container"
-              >
-                <mat-radio-group
-                  *ngIf="
-                    selectedTaskEduContents.length === 1;
-                    else multipleSelected
-                  "
-                  [value]="selectedTaskEduContents[0].required"
-                  (change)="
-                    setTaskEduContentsRequiredState(
-                      selectedTaskEduContents,
-                      $event.value
-                    )
-                  "
-                >
-                  <mat-radio-button
-                    [checked]="selectedTaskEduContents[0].required"
-                    [value]="true"
-                    >Moetje</mat-radio-button
-                  >
-                  <br /><mat-radio-button
-                    [checked]="!selectedTaskEduContents[0].required"
-                    [value]="false"
-                    >Magje</mat-radio-button
-                  >
-                </mat-radio-group>
-                <ng-template #multipleSelected>
+              <campus-section static>
+                <section-content>
                   <div
-                    class="manage-kabas-tasks-detail__info__container__change-all-buttons"
+                    class="manage-kabas-tasks-detail__info__container"
+                    *ngFor="let selectedContent of selectedTaskEduContents"
+                    data-cy="educontent-detail"
                   >
-                    <campus-button
-                      (click)="
-                        setTaskEduContentsRequiredState(
-                          selectedTaskEduContents,
-                          true
-                        )
+                    <ng-container
+                      *ngIf="
+                        selectedContent.eduContent
+                          .publishedEduContentMetadata as metadata
                       "
-                      >Alles moetje</campus-button
                     >
-                    <campus-button
-                      (click)="
-                        setTaskEduContentsRequiredState(
-                          selectedTaskEduContents,
-                          false
-                        )
-                      "
-                      >Alles magje</campus-button
-                    >
+                      <p class="ui-body-2">{{ metadata.title }}</p>
+                      <p class="ui-body-1">{{ metadata.description }}</p>
+                      <p class="ui-body-1" *ngIf="metadata.learningArea">{{
+                        metadata.learningArea.name
+                      }}</p>
+                      <div *ngIf="metadata.methods" class="list-split">
+                        <span
+                          class="ui-caption"
+                          *ngFor="let method of metadata.methods"
+                          >{{ method.name }}</span
+                        >
+                      </div>
+                      <campus-button
+                        inline
+                        (click)="
+                          preview(
+                            selectedContent.eduContent,
+                            !!task.isPaperTask
+                          )
+                        "
+                        ><mat-icon svgIcon="preview"></mat-icon>
+                        Preview</campus-button
+                      >
+                      <hr />
+                    </ng-container>
                   </div>
-                </ng-template>
-              </div>
 
-              <campus-button
-                danger
-                [disabled]="isActiveTask(task)"
-                (click)="clickRemoveTaskEduContents(selectedTaskEduContents)"
-                >Verwijder lesmateriaal</campus-button
-              >
+                  <div
+                    *ngIf="!task.isPaperTask"
+                    class="manage-kabas-tasks-detail__info__container"
+                  >
+                    <mat-radio-group
+                      class="manage-kabas-tasks-detail__info__required"
+                      *ngIf="
+                        selectedTaskEduContents.length === 1;
+                        else multipleSelected
+                      "
+                      [value]="selectedTaskEduContents[0].required"
+                      (change)="
+                        setTaskEduContentsRequiredState(
+                          selectedTaskEduContents,
+                          $event.value
+                        )
+                      "
+                    >
+                      <mat-radio-button
+                        [checked]="selectedTaskEduContents[0].required"
+                        [value]="true"
+                        >Moetje</mat-radio-button
+                      >
+                      <br /><mat-radio-button
+                        [checked]="!selectedTaskEduContents[0].required"
+                        [value]="false"
+                        >Magje</mat-radio-button
+                      >
+                    </mat-radio-group>
+                    <ng-template #multipleSelected>
+                      <campus-button
+                        bordered
+                        dense
+                        flat
+                        (click)="
+                          setTaskEduContentsRequiredState(
+                            selectedTaskEduContents,
+                            true
+                          )
+                        "
+                        >Alles moetje</campus-button
+                      >
+                      <campus-button
+                        bordered
+                        dense
+                        flat
+                        (click)="
+                          setTaskEduContentsRequiredState(
+                            selectedTaskEduContents,
+                            false
+                          )
+                        "
+                        >Alles magje</campus-button
+                      >
+                    </ng-template>
+                  </div>
+
+                  <hr />
+                  <campus-button
+                    danger
+                    inline
+                    [disabled]="isActiveTask(task)"
+                    (click)="
+                      clickRemoveTaskEduContents(selectedTaskEduContents)
+                    "
+                    ><mat-icon svgIcon="delete"></mat-icon> Verwijder
+                    lesmateriaal</campus-button
+                  >
+                </section-content>
+              </campus-section>
             </ng-template>
           </div>
         </section-content>

@@ -22,7 +22,7 @@ export const icons = {
   notifications: 'assets/icons/alerts.svg',
   settings: 'assets/icons/settings.svg',
   account: 'assets/icons/account-circle.svg',
-  cancel: 'assets/icons/cancel.svg',
+  cancel: 'assets/icons/material/cancel.svg',
   delete: 'assets/icons/material/delete.svg',
   add: 'assets/icons/material/add.svg',
   edit: 'assets/icons/material/edit.svg',
@@ -46,6 +46,7 @@ export const icons = {
   'arrow-back': 'assets/icons/material/arrow-back.svg',
   'breadcrumb-separator': 'assets/icons/material/chevron-right.svg',
   'collapsible-sheet-back': 'assets/icons/material/arrow-back.svg',
+  lock: 'assets/icons/material/lock.svg',
   file: 'assets/icons/general-file.svg',
   star: 'assets/icons/star.svg',
   'star-outline': 'assets/icons/star-border.svg',
@@ -62,6 +63,7 @@ export const icons = {
   'task:paper': 'assets/icons/task-paper.svg',
   photolibrary: 'assets/icons/photo_library.svg',
   print: 'assets/icons/printer.svg',
+  preview: 'assets/icons/material/monitor_eye.svg',
   'edu-content:required': 'assets/icons/star.svg', //TODO placeholder
   'edu-content:optional': 'assets/icons/star-border.svg', //TODO placeholder
   'edu-content:level-basic': 'assets/icons/play_arrow.svg', //TODO placeholder, name needs work

@@ -12,6 +12,14 @@
     }
   }
 
+  &__footer__actions {
+    display: flex;
+    justify-content: flex-end;
+    > .campus-button:not(:last-child) {
+      margin-right: 4px;
+    }
+  }
+
   &--editable {
     cursor: pointer;
   }

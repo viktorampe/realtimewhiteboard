@@ -15,7 +15,7 @@
 
   $manage-kabas-tasks-width: 100% !default;
 
-  $manage-kabas-tasks-detail__list-vertical-margin: -40px !default;
+  $manage-kabas-tasks-detail__list-vertical-margin: 0 !default;
 
   $manage-kabas-tasks-detail__filterbar-padding-top: 15px !default;
   $manage-kabas-tasks-detail__filterbar-padding-left: 15px !default;
@@ -64,10 +64,31 @@
   ) !default;
   $pages-kabas-tasks__list-drag--dragging-border-radius: 4px !default;
 
+  $pages-kabas-tasks__detail-primary-action-top: 44px !default;
+  $pages-kabas-tasks__detail-primary-action-left: 24px !default;
+  $pages-kabas-tasks__detail__main-title-offset: 64px !default;
+
   .mat-drawer-container {
     background: $pages-kabas-tasks-background-color--primary;
   }
   .manage-kabas-tasks-detail {
+    &__list__primary-action.ui-button--fab {
+      position: absolute;
+      top: $pages-kabas-tasks__detail-primary-action-top;
+      left: $pages-kabas-tasks__detail-primary-action-left;
+      z-index: 5;
+
+      &.mobile {
+        display: none;
+      }
+    }
+
+    &__main {
+      .ui-section__header > section-title {
+        margin-left: $pages-kabas-tasks__detail__main-title-offset;
+      }
+    }
+
     &__list {
       margin-left: $manage-kabas-tasks-detail__list-vertical-margin;
       margin-right: $manage-kabas-tasks-detail__list-vertical-margin;
@@ -89,7 +110,6 @@
         transition: box-shadow
           $pages-kabas-tasks__list-drag__transition--duration
           $pages-kabas-tasks__list-drag__cubic-bezier;
-
         &:hover {
           position: relative;
           z-index: 99999;
@@ -129,6 +149,12 @@
           }
         }
       }
+
+      &--reorderable {
+        & .manage-kabas-tasks-detail__list__item {
+          border-radius: $pages-kabas-tasks__list-drag--dragging-border-radius;
+        }
+      }
     }
 
     &__container {
@@ -139,7 +165,6 @@
       .mat-list-base {
         .mat-list-item,
         .mat-list-item.mat-list-option {
-          height: 64px;
           &:hover {
             .mat-pseudo-checkbox {
               opacity: 1;
@@ -238,7 +263,7 @@
           $manage-kabas-tasks-detail__filterbar_filter-padding-width;
       }
       &--disabled {
-        opacity: 30%;
+        opacity: 0.38;
         pointer-events: none;
       }
     }
@@ -248,13 +273,12 @@
         display: flex;
         flex-direction: row;
         flex-wrap: nowrap;
-        justify-content: space-between;
+        justify-content: flex-end;
       }
       &__primary-action,
       &__reorder-actions {
         display: flex;
         align-items: center;
-        height: $manage-kabas-tasks-detail__list__primary-action-height;
         margin-top: $manage-kabas-tasks-detail__list__primary-action-margin-top;
         cursor: pointer;
       }
