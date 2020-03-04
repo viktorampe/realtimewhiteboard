@@ -2,6 +2,7 @@ import { CdkDragDrop, CdkDragEnd } from '@angular/cdk/drag-drop';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ModeEnum } from '../../enums/mode.enum';
 import CardInterface from '../../models/card.interface';
+import ImageInterface from '../../models/image.interface';
 import WhiteboardInterface from '../../models/whiteboard.interface';
 import { WhiteboardHttpService } from '../../services/whiteboard-http.service';
 
@@ -75,7 +76,7 @@ export class WhiteboardComponent implements OnInit {
       mode: ModeEnum.IDLE,
       color: this.lastColor,
       description: '',
-      image: image,
+      image: { imageUrl: image },
       top: top,
       left: left,
       viewModeImage: true
@@ -147,12 +148,14 @@ export class WhiteboardComponent implements OnInit {
     card.mode = ModeEnum.UPLOAD;
     this.whiteboardHttpService
       .uploadFile(image)
-      .subscribe((imageUrl: string) => {
-        card.image = imageUrl;
-        if (this.selectedCards.length) {
-          card.mode = ModeEnum.MULTISELECT;
-        } else {
-          card.mode = ModeEnum.EDIT;
+      .subscribe((response: ImageInterface) => {
+        card.image = response;
+        if (response.imageUrl) {
+          if (this.selectedCards.length) {
+            card.mode = ModeEnum.MULTISELECT;
+          } else {
+            card.mode = ModeEnum.EDIT;
+          }
         }
       });
   }

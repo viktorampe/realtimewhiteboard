@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ModeEnum } from '../../enums/mode.enum';
 import CardInterface from '../../models/card.interface';
+import ImageInterface from '../../models/image.interface';
 
 @Component({
   selector: 'campus-card',
@@ -11,7 +12,7 @@ export class CardComponent {
   @Input() mode: ModeEnum;
   @Input() color: string;
   @Input() description: string;
-  @Input() image: string;
+  @Input() image: ImageInterface;
   @Input() viewModeImage: boolean;
 
   @Output() openFilePicker = new EventEmitter<string>();
@@ -25,7 +26,7 @@ export class CardComponent {
 
   updateImage(url: string) {
     this.update.emit({
-      image: url
+      image: { imageUrl: url }
     });
   }
 

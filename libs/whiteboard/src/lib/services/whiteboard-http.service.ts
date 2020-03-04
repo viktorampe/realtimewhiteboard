@@ -1,16 +1,17 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpEventType, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of, Subject, throwError } from 'rxjs';
-import { catchError, delay, map, mapTo, retry } from 'rxjs/operators';
-import { ModeEnum } from '../../lib/enums/mode.enum';
+import { Observable, of, Subject, throwError, timer } from 'rxjs';
+import { catchError, map, mapTo, retry, take } from 'rxjs/operators';
 import WhiteboardInterface from '../../lib/models/whiteboard.interface';
+import { ModeEnum } from '../enums/mode.enum';
+import ImageInterface from '../models/image.interface';
 
 const RETRY_AMOUNT = 2;
 
 export interface WhiteboardHttpServiceInterface {
   getJson(): Observable<WhiteboardInterface>;
   setJson(whiteboard: WhiteboardInterface): Observable<Boolean>;
-  uploadFile(file: File): Observable<string>;
+  uploadFile(file: File): Observable<ImageInterface>;
 }
 
 @Injectable({
@@ -48,22 +49,50 @@ export class WhiteboardHttpService implements WhiteboardHttpServiceInterface {
     return response$;
   }
 
-  public uploadFile(file: File): Observable<string> {
+  private getEventMessage(event) {
+    switch (event.type) {
+      case HttpEventType.Sent:
+        return { progress: 0 };
+
+      case HttpEventType.UploadProgress:
+        return { progress: Math.round((100 * event.loaded) / event.total) };
+
+      case HttpEventType.Response:
+        return { imageUrl: event.imageUrl };
+    }
+  }
+
+  public uploadFile(file: File): Observable<ImageInterface> {
     const formData: FormData = new FormData();
     formData.append('file', file, file.name);
 
-    const response$ = this.http
-      .post(this.url, formData, { withCredentials: true })
-      .pipe(
-        retry(RETRY_AMOUNT),
-        catchError(this.handleError.bind(this)),
-        map((response: { imageUrl: string }) => response.imageUrl),
-        delay(1000)
-      );
+    const request = new HttpRequest('POST', '/upload/file', file, {
+      reportProgress: true
+    });
 
-    return of(
-      'https://cdn.babymarkt.com/babymarkt/img/708424/443/steiff-pacco-shiba-inu-29-cm-a270440.jpg'
-    ).pipe(delay(1000));
+    const request$ = this.http.request(request);
+    request$.pipe(
+      retry(RETRY_AMOUNT),
+      catchError(this.handleError.bind(this)),
+      map(event => this.getEventMessage(event))
+    );
+
+    return timer(0, 10).pipe(
+      take(101),
+      map(progress => {
+        if (progress === 100) {
+          return {
+            imageUrl:
+              'https://cdn.iconscout.com/icon/free/png-512/css-118-569410.png'
+          };
+        }
+        return { progress: progress };
+      })
+    );
+
+    // return of(
+    //   'https://cdn.iconscout.com/icon/free/png-512/css-118-569410.png'
+    // ).pipe(delay(1000));
     //TODO: return response$;
   }
 
@@ -75,8 +104,10 @@ export class WhiteboardHttpService implements WhiteboardHttpServiceInterface {
           mode: ModeEnum.IDLE,
           viewModeImage: true,
           description: 'Windows 95',
-          image:
-            'https://cdn01.pijpermedia.nl/RDLrupoRZtt-R7W4iqxYQTyZ9bY=/1290x726/center/middle/https://cdn.pijper.io/source/upcoming/9/950f46fae4_1412162307_13-Redenen-waarom-Windows-95-best-wel-vet-was.jpg',
+          image: {
+            imageUrl:
+              'https://cdn01.pijpermedia.nl/RDLrupoRZtt-R7W4iqxYQTyZ9bY=/1290x726/center/middle/https://cdn.pijper.io/source/upcoming/9/950f46fae4_1412162307_13-Redenen-waarom-Windows-95-best-wel-vet-was.jpg'
+          },
           color: '#2EA03D',
           top: 56,
           left: 82
@@ -85,8 +116,10 @@ export class WhiteboardHttpService implements WhiteboardHttpServiceInterface {
           mode: ModeEnum.IDLE,
           viewModeImage: true,
           description: 'Get Ready',
-          image:
-            'https://vivavlaanderen.radio2.be/images/2665/1100x0/mvp15qbt7vcmjeko_get_ready_1996.jpg',
+          image: {
+            imageUrl:
+              'https://vivavlaanderen.radio2.be/images/2665/1100x0/mvp15qbt7vcmjeko_get_ready_1996.jpg'
+          },
           color: '#00A7E2',
           top: 296,
           left: 334
@@ -95,8 +128,10 @@ export class WhiteboardHttpService implements WhiteboardHttpServiceInterface {
           mode: ModeEnum.IDLE,
           viewModeImage: true,
           description: 'Candy',
-          image:
-            'https://cdn.shopify.com/s/files/1/0736/7879/files/top-10-retro-candies-from-the-1990s-efrutti-gummy-candies-candy-district-sweetest-online-candy-store-canada.png?v=1545772588',
+          image: {
+            imageUrl:
+              'https://cdn.shopify.com/s/files/1/0736/7879/files/top-10-retro-candies-from-the-1990s-efrutti-gummy-candies-candy-district-sweetest-online-candy-store-canada.png?v=1545772588'
+          },
           color: '#00A7E2',
           top: 57,
           left: 515
@@ -105,8 +140,10 @@ export class WhiteboardHttpService implements WhiteboardHttpServiceInterface {
           mode: ModeEnum.IDLE,
           viewModeImage: true,
           description: 'VRC',
-          image:
-            'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/stack-of-video-tapes-royalty-free-image-93422307-1563903351.jpg?crop=0.668xw:1.00xh;0.206xw,0&resize=768:*',
+          image: {
+            imageUrl:
+              'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/stack-of-video-tapes-royalty-free-image-93422307-1563903351.jpg?crop=0.668xw:1.00xh;0.206xw,0&resize=768:*'
+          },
           color: '#00A7E2',
           top: 295,
           left: 708
@@ -115,8 +152,10 @@ export class WhiteboardHttpService implements WhiteboardHttpServiceInterface {
           mode: ModeEnum.IDLE,
           viewModeImage: true,
           description: 'Gameboy',
-          image:
-            'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/nintendo-game-boy-handheld-video-game-console-taken-on-july-news-photo-1065385418-1563905496.jpg?crop=0.79806xw:1xh;center,top&resize=768:*',
+          image: {
+            imageUrl:
+              'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/nintendo-game-boy-handheld-video-game-console-taken-on-july-news-photo-1065385418-1563905496.jpg?crop=0.79806xw:1xh;center,top&resize=768:*'
+          },
           color: '#00A7E2',
           top: 63,
           left: 918
@@ -127,8 +166,10 @@ export class WhiteboardHttpService implements WhiteboardHttpServiceInterface {
           mode: ModeEnum.SHELF,
           viewModeImage: true,
           description: 'Home Alone',
-          image:
-            'https://vroegert.nl/wp-content/uploads/2016/10/Homealonefeau1.jpg',
+          image: {
+            imageUrl:
+              'https://vroegert.nl/wp-content/uploads/2016/10/Homealonefeau1.jpg'
+          },
           color: '#2EA03D',
           top: 0,
           left: 0
@@ -137,8 +178,10 @@ export class WhiteboardHttpService implements WhiteboardHttpServiceInterface {
           mode: ModeEnum.SHELF,
           viewModeImage: true,
           description: 'NSYNC',
-          image:
-            'https://www.muzjig.com/wp-content/uploads/2015/08/14383945783922-forgotten-90s-boy-bands-where-are-they-now-1-16708-1364312072-2_big.jpg',
+          image: {
+            imageUrl:
+              'https://www.muzjig.com/wp-content/uploads/2015/08/14383945783922-forgotten-90s-boy-bands-where-are-they-now-1-16708-1364312072-2_big.jpg'
+          },
           color: '#2EA03D',
           top: 0,
           left: 0
@@ -147,8 +190,10 @@ export class WhiteboardHttpService implements WhiteboardHttpServiceInterface {
           mode: ModeEnum.SHELF,
           viewModeImage: true,
           description: 'Capri Sun',
-          image:
-            'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/boxes-of-capri-sun-juice-sit-on-shelves-at-a-grocery-store-news-photo-526195522-1563903441.jpg?crop=0.668xw:1.00xh;0.0204xw,0&resize=768:*',
+          image: {
+            imageUrl:
+              'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/boxes-of-capri-sun-juice-sit-on-shelves-at-a-grocery-store-news-photo-526195522-1563903441.jpg?crop=0.668xw:1.00xh;0.0204xw,0&resize=768:*'
+          },
           color: '#2EA03D',
           top: 0,
           left: 0
