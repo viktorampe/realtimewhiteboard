@@ -15,7 +15,9 @@
   >
 
   <campus-side-sheet-actions>
-    <campus-button (click)="clickDone()" primary>Klaar</campus-button>
+    <campus-button (click)="clickDone()" primary data-cy="side-panel-done"
+      >Klaar</campus-button
+    >
   </campus-side-sheet-actions>
 
   <campus-side-sheet-body>
@@ -38,11 +40,13 @@
           *ngFor="let taskEduContent of reorderableTaskEduContents"
           class="manage-task-content__list__item"
           cdkDrag
+          data-cy="task-content"
         >
           <mat-icon
             class="manage-task-content__list__item__icon manage-task-content__list__item__icon--handle"
             svgIcon="drag-handle"
             cdkDragHandle
+            data-cy="task-content-drag"
           ></mat-icon>
 
           <div
@@ -59,6 +63,7 @@
             class="manage-task-content__list__item__icon manage-task-content__list__item__icon--delete manage-task-content__list__item__icon--on-hover"
             svgIcon="delete"
             (click)="removeEduContentFromTask(taskEduContent.eduContent)"
+            data-cy="task-content-remove"
           ></mat-icon>
         </mat-list-item>
       </mat-list>
@@ -69,9 +74,13 @@
     <campus-collapsible-sheet>
       <div aside class="manage-task-content__aside">
         <div>
-          <campus-button (click)="showBooks = !showBooks">{{
-            showBooks ? 'Boeken verbergen' : 'Zoek in ander boek'
-          }}</campus-button>
+          <campus-button
+            (click)="showBooks = !showBooks"
+            data-cy="change-book"
+            >{{
+              showBooks ? 'Boeken verbergen' : 'Zoek in ander boek'
+            }}</campus-button
+          >
         </div>
         <div class="manage-task-content__aside__nav">
           <mat-nav-list *ngIf="currentTaskParams$ | async as params">
@@ -98,6 +107,7 @@
           <campus-page-header
             *ngIf="selectedBookTitle$ | async as selectedBookTitle"
             [title]="selectedBookTitle"
+            data-cy="book-title"
           ></campus-page-header>
           <div data-cy="search-filters" class="manage-task-content__filters">
             <ng-container searchPortal="searchTerm"></ng-container>
@@ -105,6 +115,7 @@
               class="manage-task-content__filters__reset"
               iconClass="reset-filters"
               (click)="clearSearchFilters()"
+              data-cy="search-filter-reset"
             ></campus-button>
           </div>
           <campus-search

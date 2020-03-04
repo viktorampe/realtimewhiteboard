@@ -98,7 +98,11 @@ export interface KabasTasksPagesInterface {
         filter: {
           book: {
             id: number;
+            bookTitle: string;
             resultCount: number;
+            favoriteBookId: number;
+            methodName: string;
+            favoriteBookTitle:string;
           };
           chapter: {
             id: number;
@@ -111,6 +115,15 @@ export interface KabasTasksPagesInterface {
           term: {
             value: string;
             resultCount: number;
+          };
+        };
+        search: {
+          results: {
+            [key: number]: {
+              id?: number;
+              name: string;
+              ludoUrl?: string;
+            };
           };
         };
       };

@@ -31,6 +31,9 @@ export class EduContentSearchResultComponent extends ResultItemBase
   @HostBinding('class.app-educontentsearchresult')
   appEduContentSearchResultClass = true;
 
+  @HostBinding('attr.data-cy')
+  dataCy = 'search-result';
+
   constructor(
     @Inject(CONTENT_OPEN_ACTIONS_SERVICE_TOKEN)
     private contentOpenActionsService: ContentOpenActionsServiceInterface,

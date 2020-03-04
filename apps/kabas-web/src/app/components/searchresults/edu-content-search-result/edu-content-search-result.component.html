@@ -14,9 +14,11 @@
 
 <div class="app-educontentsearchresult__content">
   <div class="app-educontentsearchresult__content__header">
-    <span class="app-educontentsearchresult__content__header__title">{{
-      data.eduContent.name
-    }}</span>
+    <span
+      class="app-educontentsearchresult__content__header__title"
+      data-cy="search-result-title"
+      >{{ data.eduContent.name }}</span
+    >
   </div>
   <div class="app-educontentsearchresult__content__body">
     <span class="app-educontentsearchresult__content__body__description">{{
@@ -29,6 +31,7 @@
       [matTooltip]="action.tooltip"
       campusClickStopPropagation
       (click)="onActionClick(action)"
+      data-cy="search-result-action"
       >{{ action.label }}</a
     >
     <span class="after" *ngIf="!last"></span>
