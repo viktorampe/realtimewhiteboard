@@ -66,12 +66,23 @@
         [mode]="sectionModes.CONTAINER"
         class="manage-kabas-tasks-detail__main"
       >
-        <section-title>Lesmateriaal in {{ task.name }}</section-title>
+        <section-title> Lesmateriaal in {{ task.name }} </section-title>
+        <section-actions>
+          <campus-button
+            bordered
+            flat
+            icon
+            dense
+            (click)="showFilters = !showFilters"
+            ><mat-icon svgIcon="filter"></mat-icon
+          ></campus-button>
+        </section-actions>
 
         <section-content>
           <div class="manage-kabas-tasks-detail">
             <div
               class="manage-kabas-tasks-detail__filterbar"
+              [hidden]="!showFilters"
               [class.manage-kabas-tasks-detail__filterbar--disabled]="
                 isReordering
               "
@@ -112,6 +123,9 @@
               </campus-button-toggle-filter>
 
               <campus-button
+                bordered
+                flat
+                icon
                 class="manage-kabas-tasks-detail__filterbar__reset-filters"
                 iconClass="reset-filters"
                 (click)="clickResetFilters()"
@@ -119,28 +133,32 @@
             </div>
 
             <div class="manage-kabas-tasks-detail__list__actions">
-              <div
+              <campus-button
+                fab
+                icon
                 routerLink="content"
                 class="manage-kabas-tasks-detail__list__primary-action"
               >
                 <mat-icon svgIcon="add"></mat-icon>
-                Lesmateriaal toevoegen aan deze taak
-              </div>
+              </campus-button>
 
               <div class="manage-kabas-tasks-detail__list__reorder-actions">
                 <campus-button
+                  bordered
                   (click)="toggleIsReordering()"
                   *ngIf="!isReordering"
                   >Volgorde wijzigen</campus-button
                 >
 
                 <campus-button
+                  bordered
+                  flat
                   (click)="toggleIsReordering()"
                   *ngIf="isReordering"
                   >Annuleren</campus-button
                 >
                 <campus-button
-                  primary
+                  secondary
                   (click)="saveOrder()"
                   *ngIf="isReordering"
                   >Opslaan</campus-button
@@ -422,16 +440,18 @@
                       ></div
                     >
                   </ng-container>
-                  <campus-button primary routerLink="content"
-                    >+ Lesmateriaal toevoegen</campus-button
+                  <campus-button inline routerLink="content"
+                    ><mat-icon svgIcon="add"></mat-icon> Lesmateriaal
+                    toevoegen</campus-button
                   >
                   <hr />
                   <campus-button
                     danger
+                    inline
                     (click)="clickDeleteTask(task)"
                     [disabled]="isActiveTask(task)"
                   >
-                    Verwijder taak
+                    <mat-icon svgIcon="delete"></mat-icon> Verwijder taak
                   </campus-button>
                 </section-content>
               </campus-section>

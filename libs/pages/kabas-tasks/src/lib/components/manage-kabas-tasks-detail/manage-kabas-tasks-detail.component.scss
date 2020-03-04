@@ -19,6 +19,13 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
+
+    &__filter--title {
+      flex: 1;
+    }
+  }
+  &.hidden {
+    display: none;
   }
 
   &__info {

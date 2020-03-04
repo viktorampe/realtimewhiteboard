@@ -96,6 +96,7 @@ export class ManageKabasTasksDetailComponent implements OnInit, OnDestroy {
     TaskEduContentWithEduContentInterface[]
   >;
   public selectedTaskEduContents: TaskEduContentWithEduContentInterface[] = [];
+  public showFilters = false;
 
   private filterState$ = new BehaviorSubject<FilterStateInterface>({});
   private subscriptions = new Subscription();
