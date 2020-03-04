@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostBinding, OnInit } from '@angular/core';
 
 @Component({
   selector: 'campus-student-task-overview',
@@ -6,10 +6,10 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./student-task-overview.component.scss']
 })
 export class StudentTaskOverviewComponent implements OnInit {
+  @HostBinding('class.student-task-overview')
+  studentTaskOverviewClass = true;
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 }
