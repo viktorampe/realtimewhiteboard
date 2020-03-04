@@ -1,4 +1,4 @@
-import { Component, HostBinding } from '@angular/core';
+import { Component, HostBinding, Input } from '@angular/core';
 
 @Component({
   selector: 'campus-rating',
@@ -6,6 +6,10 @@ import { Component, HostBinding } from '@angular/core';
   styleUrls: ['./rating.component.scss']
 })
 export class RatingComponent {
+  @Input() count: number;
+  @Input() total: number;
+  @Input() icon: string;
+
   @HostBinding('class.ui-rating')
   private uiRatingClass = true;
 
