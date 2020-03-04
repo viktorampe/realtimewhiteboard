@@ -87,7 +87,7 @@ import { PagesKabasTasksRoutingModule } from './pages-kabas-tasks-routing.module
     },
     PendingTaskGuard
   ],
-  exports: [ManageKabasTasksAssigneeModalComponent, StudentTaskDetailComponent],
+  exports: [],
   entryComponents: [
     ManageKabasTasksAssigneeModalComponent,
     NewTaskComponent,
