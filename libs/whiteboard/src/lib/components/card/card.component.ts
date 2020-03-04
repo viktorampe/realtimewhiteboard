@@ -24,10 +24,8 @@ export class CardComponent {
     return ModeEnum;
   }
 
-  updateImage(url: string) {
-    this.update.emit({
-      image: { imageUrl: url }
-    });
+  updateImage() {
+    this.update.emit();
   }
 
   selectImage() {
