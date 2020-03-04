@@ -2,16 +2,22 @@
   select="[campusListItemIcon], [ListItemIcon], list-item-icon, [list-item-icon]"
 ></ng-content>
 <div class="ui-list-item__container ui-list-item__container--center">
-  <ng-content
-    select="[campusListItemTitle], [ListItemTitle], list-item-title, [list-item-title]"
-  ></ng-content>
-  <ng-content
-    select="[campusListItemCaption], [ListItemCaption], list-item-caption, [list-item-caption]"
-  ></ng-content>
-  <ng-content
-    select="[campusListItemActions], [ListItemActions], list-item-actions, [list-item-actions]"
-  >
-  </ng-content>
+  <div class="ui-body-2">
+    <ng-content
+      select="[campusListItemTitle], [ListItemTitle], list-item-title, [list-item-title]"
+    ></ng-content>
+  </div>
+  <div class="ui-caption">
+    <ng-content
+      select="[campusListItemCaption], [ListItemCaption], list-item-caption, [list-item-caption]"
+    ></ng-content>
+  </div>
+  <div>
+    <ng-content
+      select="[campusListItemActions], [ListItemActions], list-item-actions, [list-item-actions]"
+    >
+    </ng-content>
+  </div>
 </div>
 
 <div

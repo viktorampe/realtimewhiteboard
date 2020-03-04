@@ -1,3 +1,5 @@
+@import 'libs/ui/src/lib/breakpoints.scss';
+
 @mixin ui-backdrop {
   $ui-backdrop-background: $ui-secondary-bg-color !default;
 
@@ -63,6 +65,14 @@
         top: $ui-backdrop__front-layer__header-height +
           $ui-backdrop__vertical-padding !important;
         border-radius: 0;
+      }
+    }
+  }
+
+  @media #{$ui-breakpoint-xsmall} {
+    .ui-backdrop {
+      &__front-layer {
+        padding: 0;
       }
     }
   }

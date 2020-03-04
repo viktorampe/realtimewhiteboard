@@ -36,7 +36,11 @@ import {
   SharedModule
 } from '@campus/shared';
 import { MockMatIconRegistry } from '@campus/testing';
-import { ConfirmationModalComponent, UiModule } from '@campus/ui';
+import {
+  ConfirmationModalComponent,
+  ENVIRONMENT_UI_TOKEN,
+  UiModule
+} from '@campus/ui';
 import { hot } from '@nrwl/angular/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { BehaviorSubject, of } from 'rxjs';
@@ -100,6 +104,7 @@ describe('ManageKabasTasksOverviewComponent', () => {
         { provide: ENVIRONMENT_ICON_MAPPING_TOKEN, useValue: {} },
         { provide: ENVIRONMENT_TESTING_TOKEN, useValue: {} },
         { provide: ENVIRONMENT_SEARCHMODES_TOKEN, useValue: {} },
+        { provide: ENVIRONMENT_UI_TOKEN, useValue: {} },
         {
           provide: HAMMER_LOADER,
           useValue: () => new Promise(() => {})
