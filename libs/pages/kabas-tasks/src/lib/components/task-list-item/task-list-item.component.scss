@@ -1,87 +1,50 @@
+@import 'libs/ui/src/lib/breakpoints.scss';
+
 :host {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  padding: 5px 0;
   &:hover {
     .manage-kabas-tasks-task-list-item__hover-actions {
-      mat-icon {
-        display: inline-block;
+      .mat-icon {
+        opacity: 1;
+        transform: translateX(0);
       }
     }
   }
 }
 
 .manage-kabas-tasks-task-list-item {
-  &__icon,
-  &__archived,
-  &__status {
-    flex: 0 0 50px;
-    align-self: center;
-  }
-
-  &__container {
-    flex: 1 0 30%;
-    min-width: 250px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    &__title {
-      display: inline-block;
-    }
-    &__actions {
-      white-space: normal;
-
-      span {
-        cursor: pointer;
-        position: relative;
-        margin-right: 15px;
-
-        &:after {
-          content: '•';
-          pointer-events: none;
-          position: absolute;
-          right: -10px;
-        }
-
-        &:last-child:after {
-          content: '';
-        }
-      }
-    }
-  }
-
   &__learning-area {
-    flex: 0 0 10%;
-    min-width: 100px;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    text-align: right;
+    width: 160px;
   }
-
   &__dates {
-    flex: 0 0 10%;
-    margin: 0 10px;
-    min-width: 140px;
-    text-align: center;
+    &,
+    & > div {
+      width: 150px;
+      text-align: center;
+    }
+    justify-content: flex-start;
   }
 
   &__hover-actions {
-    flex: 1 0 5%;
-    flex-direction: row nowrap;
+    width: 32px;
+    flex-flow: row nowrap;
     align-self: center;
-    mat-icon {
-      display: none;
+    text-align: center;
+    .mat-icon {
+      opacity: 0;
+      transform: translateX(20px);
+      transition: all 250ms ease-out;
       &.favorite {
-        display: inline-block;
+        opacity: 1;
+        transform: translateX(0);
         fill: red; // TODO: what color?
       }
     }
   }
 
   &__assignees {
-    flex: 1 0 30%;
+    width: 220px;
+    flex-direction: column;
+    align-items: flex-start;
 
     &-class-groups {
       list-style: none;
@@ -100,6 +63,17 @@
           content: '';
         }
       }
+    }
+  }
+}
+
+@media #{$ui-breakpoint-xsmall} {
+  .manage-kabas-tasks-task-list-item {
+    &__learning-area,
+    &__dates,
+    &__assignees {
+      flex: 1 1 50%;
+      margin: 2px 0;
     }
   }
 }

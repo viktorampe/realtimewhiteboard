@@ -114,61 +114,142 @@
 
   <front-layer-header>Subtitle</front-layer-header>
   <front-layer-content>
-    <!-- <campus-editor-timeline></campus-editor-timeline> -->
-    <button (click)="changeMode(sectionModes.STATIC)"
-      >make section static</button
+    <campus-button primary style="margin: 10px;" (click)="clickEmptyCta()"
+      >Primary Button</campus-button
     >
-    <button (click)="changeMode(sectionModes.EDITABLE)"
-      >make section editable</button
+    <campus-button bordered style="margin: 10px;" (click)="clickEmptyCta()"
+      >Default Button</campus-button
     >
-    <button (click)="changeMode(sectionModes.EDITING)"
-      >make section editing</button
+    <campus-button secondary style="margin: 10px;" (click)="clickEmptyCta()"
+      >Secondary Button</campus-button
+    >
+    <campus-button
+      bordered
+      dense
+      style="margin: 10px;"
+      (click)="clickEmptyCta()"
+      >Default Dense Button</campus-button
+    >
+    <campus-button
+      secondary
+      dense
+      style="margin: 10px;"
+      (click)="clickEmptyCta()"
+      >Secondary Dense Button</campus-button
+    >
+    <campus-button bordered flat style="margin: 10px;" (click)="clickEmptyCta()"
+      >Default Dense Button</campus-button
+    >
+    <campus-button
+      secondary
+      flat
+      style="margin: 10px;"
+      (click)="clickEmptyCta()"
+      >Secondary Flat Button</campus-button
+    >
+    <campus-button
+      primary
+      [disabled]="true"
+      style="margin: 10px;"
+      (click)="clickEmptyCta()"
+      >Primary Disabled Button</campus-button
+    >
+    <campus-button
+      bordered
+      [disabled]="false"
+      style="margin: 10px;"
+      (click)="clickEmptyCta()"
+      >Default Disabled=False Button</campus-button
+    >
+    <campus-button
+      secondary
+      disabled
+      style="margin: 10px;"
+      (click)="clickEmptyCta()"
+      >Secondary Disabled Button</campus-button
     >
 
-    <campus-section
-      [(mode)]="sectionMode"
-      (actionClick)="handleTriggerActionClick($event)"
+    <!-- Inline actions -->
+    <campus-button inline style="margin: 10px;" (click)="clickEmptyCta()"
+      >Inline action Button</campus-button
     >
-      <section-title>I'm a the title of this section</section-title>
-      <section-actions><mat-icon svgIcon="edit"></mat-icon></section-actions>
-      <section-content>
-        Cool text
-        <hr />
+    <campus-button inline style="margin: 10px;" (click)="clickEmptyCta()"
+      ><mat-icon svgIcon="home"></mat-icon> Inline action Button
+    </campus-button>
 
-        <p *ngIf="sectionMode === sectionModes.STATIC">{{ staticText }}</p>
-        <p *ngIf="sectionMode === sectionModes.EDITABLE">{{ editableText }}</p>
+    <campus-button inline icon style="margin: 10px;" (click)="clickEmptyCta()"
+      ><mat-icon svgIcon="home"></mat-icon>
+    </campus-button>
 
-        <div *ngIf="sectionMode === sectionModes.EDITING">
-          <input
-            #input
-            type="text"
-            placeholder="edit me"
-            [value]="editableText"
-          />
-          <p> <button (click)="save($event, input)">Save</button></p>
-        </div>
-      </section-content>
-    </campus-section>
+    <!-- Fabs -->
+    <campus-button fab icon style="margin: 10px;" (click)="clickEmptyCta()"
+      ><mat-icon svgIcon="home"></mat-icon
+    ></campus-button>
 
-    <div class="container">
-      <campus-empty-state
-        svgIcon="empty-state-all-done"
-        title="Nothing to see here"
-        description="This tagline conveys the purpose of the screen, without appearing actionable."
-        ctaLabel="Call to action"
-        (clickCta)="clickEmptyCta()"
-      >
-      </campus-empty-state>
+    <campus-button fab style="margin: 10px;" (click)="clickEmptyCta()"
+      ><mat-icon svgIcon="home"></mat-icon> Toevoegen aan iets
+    </campus-button>
 
-      <div class="ui-headline">Headline (Regular 24px)</div>
-      <div class="ui-title">Title (Semibold 21px)</div>
-      <div class="ui-subheading">Subheading (Regular 16px)</div>
-      <div class="ui-body-2">Body 2 / Menu (Semibold 14px)</div>
-      <div class="ui-body-1">Body 1 (Regular 14px)</div>
-      <div class="ui-caption">Caption (Regular 12px)</div>
-      <div class="ui-button-text">Button Text (Semibold 15px Uppercase)</div>
-      <div class="ui-action-text">Action Text (Regular 12px Uppercase)</div>
-      <div class="ui-tooltip-text">Tooltip Text (Regular 10px)</div>
+    <campus-button
+      fab
+      icon
+      dense
+      style="margin: 10px;"
+      (click)="clickEmptyCta()"
+      ><mat-icon svgIcon="home"></mat-icon
+    ></campus-button>
+
+    <!-- Icon Buttons -->
+    <campus-button
+      icon
+      flat
+      bordered
+      style="margin: 10px;"
+      (click)="clickEmptyCta()"
+      ><mat-icon svgIcon="home"></mat-icon
+    ></campus-button>
+    <campus-button
+      icon
+      dense
+      bordered
+      flat
+      style="margin: 10px;"
+      (click)="clickEmptyCta()"
+      ><mat-icon svgIcon="home"></mat-icon
+    ></campus-button>
+
+    <div>
+      <campus-collapsible-container></campus-collapsible-container>
+      <campus-rating></campus-rating>
     </div>
+
+    <campus-empty-state
+      svgIcon="empty-state-no-users"
+      title="Geen groepen of gebruikers geselecteerd"
+      description="This tagline conveys the purpose of the screen, without appearing actionable."
+      ctaLabel="Call to action"
+      (clickCta)="clickEmptyCta()"
+    >
+    </campus-empty-state>
+
+    >>>>>>> 67c909e7edf9c99469f91104c28e81c8cfb570bb
+    <campus-empty-state
+      svgIcon="empty-state-all-done"
+      title="Nothing to see here"
+      description="This tagline conveys the purpose of the screen, without appearing actionable."
+      ctaLabel="Call to action"
+      (clickCta)="clickEmptyCta()"
+    >
+    </campus-empty-state>
+
+    <div class="ui-headline">Headline (Regular 24px)</div>
+    <div class="ui-title">Title (Semibold 21px)</div>
+    <div class="ui-subheading">Subheading (Regular 16px)</div>
+    <div class="ui-body-2">Body 2 / Menu (Semibold 14px)</div>
+    <div class="ui-body-1">Body 1 (Regular 14px)</div>
+    <div class="ui-caption">Caption (Regular 12px)</div>
+    <div class="ui-button-text">Button Text (Semibold 15px Uppercase)</div>
+    <div class="ui-action-text">Action Text (Regular 12px Uppercase)</div>
+    <div class="ui-tooltip-text">Tooltip Text (Regular 10px)</div>
   </front-layer-content>
 </campus-backdrop>

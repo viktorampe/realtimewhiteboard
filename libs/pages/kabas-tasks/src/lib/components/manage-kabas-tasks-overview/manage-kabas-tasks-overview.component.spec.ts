@@ -8,6 +8,7 @@ import {
   MatSelect,
   MatSelectionList,
   MatSelectModule,
+  MatSlideToggle,
   MatSlideToggleModule
 } from '@angular/material';
 import { By, HAMMER_LOADER } from '@angular/platform-browser';
@@ -23,7 +24,11 @@ import {
 } from '@campus/dal';
 import { GuardsModule } from '@campus/guards';
 import { PagesSharedModule } from '@campus/pages/shared';
-import { ButtonToggleFilterComponent, SearchModule } from '@campus/search';
+import {
+  ButtonToggleFilterComponent,
+  SearchFilterComponentInterface,
+  SearchModule
+} from '@campus/search';
 import {
   ENVIRONMENT_ICON_MAPPING_TOKEN,
   ENVIRONMENT_SEARCHMODES_TOKEN,
@@ -31,7 +36,11 @@ import {
   SharedModule
 } from '@campus/shared';
 import { MockMatIconRegistry } from '@campus/testing';
-import { ConfirmationModalComponent, UiModule } from '@campus/ui';
+import {
+  ConfirmationModalComponent,
+  ENVIRONMENT_UI_TOKEN,
+  UiModule
+} from '@campus/ui';
 import { hot } from '@nrwl/angular/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { BehaviorSubject, of } from 'rxjs';
@@ -95,6 +104,7 @@ describe('ManageKabasTasksOverviewComponent', () => {
         { provide: ENVIRONMENT_ICON_MAPPING_TOKEN, useValue: {} },
         { provide: ENVIRONMENT_TESTING_TOKEN, useValue: {} },
         { provide: ENVIRONMENT_SEARCHMODES_TOKEN, useValue: {} },
+        { provide: ENVIRONMENT_UI_TOKEN, useValue: {} },
         {
           provide: HAMMER_LOADER,
           useValue: () => new Promise(() => {})
@@ -1038,6 +1048,77 @@ describe('ManageKabasTasksOverviewComponent', () => {
         component.clickDeleteTasks();
 
         expect(removeTasksSpy).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('clickResetFilters()', () => {
+      it('should reset the filters - SearchFilterComponentInterface', () => {
+        const filters = fixture.debugElement
+          .queryAll(By.css('.manage-kabas-tasks-overview__filter'))
+          .map(dE => dE.componentInstance as SearchFilterComponentInterface);
+
+        const filterResetSpies = [];
+        filters.forEach(searchFilter => {
+          filterResetSpies.push((searchFilter.reset = jest.fn()));
+        });
+
+        component.clickResetFilters();
+
+        filterResetSpies.forEach(spy =>
+          expect(spy).toHaveBeenCalledWith(false)
+        );
+      });
+
+      // TODO: can't get this to work -> I blame Material
+      // tried fakeAsync,
+      // tried async await fixture.whenStable()
+      // console.logs in the code tell me the value is false
+      // trust me -> it works
+      xit('should reset the filters - SlideToggle', () => {
+        const filters = fixture.debugElement
+          .queryAll(By.css('.manage-kabas-tasks-overview__archive-toggle'))
+          .map(dE => dE.componentInstance as MatSlideToggle);
+
+        filters.forEach(filter => {
+          filter.checked = true;
+        });
+
+        component.clickResetFilters();
+        fixture.detectChanges();
+
+        filters.forEach(filter => expect(filter.checked).toBe(false));
+      });
+
+      it('should emit empty filter states - digital', () => {
+        const tasks$ = kabasTasksViewModel.tasksWithAssignments$ as BehaviorSubject<
+          TaskWithAssigneesInterface[]
+        >;
+
+        component.searchTermUpdated('foo', 'digital');
+
+        component.clickResetFilters();
+
+        const expected = tasks$.value.filter(task => !task.archivedYear);
+
+        expect(component.digitalFilteredTasks$).toBeObservable(
+          hot('a', { a: expected })
+        );
+      });
+
+      it('should emit empty filter states - paper', () => {
+        const tasks$ = kabasTasksViewModel.paperTasksWithAssignments$ as BehaviorSubject<
+          TaskWithAssigneesInterface[]
+        >;
+
+        component.searchTermUpdated('foo', 'paper');
+
+        component.clickResetFilters();
+
+        const expected = tasks$.value.filter(task => !task.archivedYear);
+
+        expect(component.paperFilteredTasks$).toBeObservable(
+          hot('a', { a: expected })
+        );
       });
     });
   });

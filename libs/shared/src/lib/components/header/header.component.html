@@ -93,7 +93,7 @@
     <campus-button
       id="global-alert-btn"
       (click)="dropDownAlerts.toggle()"
-      class="shared-header__alerts__button"
+      class="shared-header__alerts__button shared-header__contextual__button"
     >
       <mat-icon
         [svgIcon]="'notifications'"
@@ -152,6 +152,7 @@
   <campus-button
     id="global-search-btn"
     *hasPermission="Permissions.GLOBAL_SEARCH"
+    class="shared-header__contextual__button"
     [iconClass]="'magnifier'"
     [routerLink]="['search']"
     ><span>Zoeken</span></campus-button
@@ -162,6 +163,7 @@
   <campus-button
     *ngIf="currentUser$ | async"
     id="global-profile-btn"
+    class="shared-header__contextual__button"
     [iconClass]="'profile'"
     [routerLink]="['settings']"
     ><span>Profiel</span></campus-button

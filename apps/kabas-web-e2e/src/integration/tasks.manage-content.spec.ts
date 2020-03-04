@@ -6,10 +6,10 @@ import {
   KabasTasksPagesInterface
 } from '../support/interfaces';
 import {
+  dragDrop,
   filterByBook,
   filterByChapter,
-  filterByLesson,
-  dragDrop
+  filterByLesson
 } from './tasks.manage-content';
 describe('Manage task content', () => {
   const apiUrl = cyEnv('apiUrl');
@@ -62,7 +62,7 @@ describe('Manage task content', () => {
 
         it('should show the right method', () => {
           dataCy('change-book')
-            .click()
+            .click({force:true})
             .should('contain', 'Boeken verbergen');
           dataCy('method-books-title').should(
             'contain',
@@ -122,7 +122,7 @@ describe('Manage task content', () => {
         });
       });
 
-      describe.only('paper task', () => {
+      describe('paper task', () => {
         before(() => {
           login(
             setup.kabasTasksPages.loginTeacher.username,

@@ -49,11 +49,18 @@
         </div>
       </mat-radio-button>
     </mat-radio-group>
-    <campus-button primary (click)="applyFilter()">Filteren</campus-button>
-    <campus-button (click)="applyFilter(true)">Annuleren</campus-button>
+
+    <div class="date-filter-component__menu-panel__actions">
+      <campus-button flat bordered (click)="applyFilter(true)"
+        >Annuleren</campus-button
+      >
+      <campus-button secondary (click)="applyFilter()">Filteren</campus-button>
+    </div>
   </div>
 </mat-menu>
 <campus-button
+  flat
+  bordered
   [matBadge]="count"
   [matBadgeHidden]="count === 0"
   matBadgePosition="above after"
