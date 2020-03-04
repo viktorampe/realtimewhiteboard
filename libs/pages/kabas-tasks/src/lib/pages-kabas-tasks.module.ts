@@ -33,6 +33,7 @@ import { TaskEduContentListItemComponent } from './components/task-edu-content-l
 import { TaskListItemComponent } from './components/task-list-item/task-list-item.component';
 import { PendingTaskGuard } from './guards/pending-task.guard';
 import { PagesKabasTasksRoutingModule } from './pages-kabas-tasks-routing.module';
+import { StudentTaskOverviewComponent } from './components/student-task-overview/student-task-overview.component';
 
 @NgModule({
   imports: [
@@ -64,7 +65,8 @@ import { PagesKabasTasksRoutingModule } from './pages-kabas-tasks-routing.module
     NewTaskComponent,
     TaskEduContentListItemComponent,
     PrintPaperTaskModalComponent,
-    ManageTaskContentComponent
+    ManageTaskContentComponent,
+    StudentTaskOverviewComponent
   ],
   providers: [
     {
