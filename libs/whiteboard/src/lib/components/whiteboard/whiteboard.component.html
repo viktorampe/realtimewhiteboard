@@ -14,12 +14,12 @@
       *ngIf="!isTitleInputSelected"
       class="whiteboard__header__title"
       (click)="showTitleInput()"
-      >{{ title }}</h2
+      >{{ (this.whiteboard$ | async).title }}</h2
     >
     <input
       type="text"
       #titleInput
-      [(ngModel)]="title"
+      [formControl]="titleFC"
       (keyup.enter)="hideTitleInput()"
       (focusout)="hideTitleInput()"
       *ngIf="isTitleInputSelected"
@@ -28,7 +28,7 @@
   <div class="whiteboard__workspace" (dblclick)="onDblClick($event)" #workspace>
     <div
       class="whiteboard__workspace__container"
-      *ngFor="let card of cards"
+      *ngFor="let card of (whiteboard$ | async).cards"
       cdkDrag
       [cdkDragFreeDragPosition]="{ x: card.left, y: card.top }"
       [cdkDragDisabled]="card.mode === Mode.ZOOM"
@@ -100,7 +100,7 @@
   <campus-shelf
     (cardDraggedOutsideContainer)="cardDraggedPosition($event)"
     [class.minimizedShelf]="isShelfMinimized"
-    [cards]="this.shelvedCards"
+    [cards]="(whiteboard$ | async).shelfCards"
     [(isMinimized)]="isShelfMinimized"
   ></campus-shelf>
 </div>

@@ -1,9 +1,17 @@
 import { HttpClient, HttpEventType, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of, Subject, throwError, timer } from 'rxjs';
-import { catchError, map, mapTo, retry, take } from 'rxjs/operators';
+import { BehaviorSubject, Observable, Subject, throwError, timer } from 'rxjs';
+import {
+  catchError,
+  filter,
+  map,
+  mapTo,
+  retry,
+  switchMap,
+  take
+} from 'rxjs/operators';
+import { ModeEnum } from '../../lib/enums/mode.enum';
 import WhiteboardInterface from '../../lib/models/whiteboard.interface';
-import { ModeEnum } from '../enums/mode.enum';
 import ImageInterface from '../models/image.interface';
 
 const RETRY_AMOUNT = 2;
@@ -14,33 +22,58 @@ export interface WhiteboardHttpServiceInterface {
   uploadFile(file: File): Observable<ImageInterface>;
 }
 
+export interface WhiteboardHttpSettingsInterface {
+  apiBase: string;
+  metadataId: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class WhiteboardHttpService implements WhiteboardHttpServiceInterface {
-  private url = 'www.apicallmock.be';
+  private apiSettings$ = new BehaviorSubject<WhiteboardHttpSettingsInterface>(
+    null
+  );
   private _errors$ = new Subject<Error>();
 
   constructor(private http: HttpClient) {}
 
+  public setSettings(settings: WhiteboardHttpSettingsInterface): void {
+    this.apiSettings$.next(settings);
+  }
+
   public getJson(): Observable<WhiteboardInterface> {
-    const response$ = this.http.get(this.url).pipe(
+    const response$ = this.apiSettings$.pipe(
+      filter(settings => !!settings),
+      take(1),
+      switchMap(settings =>
+        this.http.get(settings.apiBase + settings.metadataId)
+      ),
       retry(RETRY_AMOUNT),
-      catchError(this.handleError.bind(this)),
+      // catchError(this.handleError.bind(this)),
       map(
-        (response): WhiteboardInterface =>
+        (response: any): WhiteboardInterface =>
           response
             ? JSON.parse(response)
             : { title: '', cards: [], shelfCards: {} }
       )
     );
+
     //TODO: return response$;
-    return of(this.getWhiteboardMock());
+    return this.apiSettings$.pipe(
+      filter(settings => !!settings),
+      map(() => this.getWhiteboardMock())
+    );
   }
 
   public setJson(whiteboard: WhiteboardInterface): Observable<boolean> {
+    const apiSettings: WhiteboardHttpSettingsInterface = this.getSettings();
+
     const response$ = this.http
-      .post(this.url, JSON.stringify(whiteboard))
+      .post(
+        apiSettings.apiBase + apiSettings.metadataId,
+        JSON.stringify(whiteboard)
+      )
       .pipe(
         retry(RETRY_AMOUNT),
         catchError(this.handleError.bind(this)),
@@ -207,5 +240,14 @@ export class WhiteboardHttpService implements WhiteboardHttpServiceInterface {
     this._errors$.next(error);
 
     return throwError(error);
+  }
+
+  private getSettings(): WhiteboardHttpSettingsInterface {
+    const apiSettings: WhiteboardHttpSettingsInterface = this.apiSettings$
+      .value;
+    if (!apiSettings) {
+      throw new Error('no_http_settings_loaded');
+    }
+    return apiSettings;
   }
 }
