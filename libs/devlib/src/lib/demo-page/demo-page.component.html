@@ -221,6 +221,21 @@
     <div>
       <campus-progress></campus-progress>
     </div>
+    <div>
+      <campus-collapsible-container></campus-collapsible-container>
+    </div>
+    <div>
+      <campus-rating></campus-rating>
+    </div>
+
+    <campus-empty-state
+      svgIcon="empty-state-no-users"
+      title="Geen groepen of gebruikers geselecteerd"
+      description="This tagline conveys the purpose of the screen, without appearing actionable."
+      ctaLabel="Call to action"
+      (clickCta)="clickEmptyCta()"
+    >
+    </campus-empty-state>
 
     <campus-empty-state
       svgIcon="empty-state-all-done"

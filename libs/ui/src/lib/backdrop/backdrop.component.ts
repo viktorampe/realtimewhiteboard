@@ -226,7 +226,7 @@ export class BackdropComponent implements OnChanges, AfterViewInit {
   private getSafeMargin(): number {
     return (
       (this.environmentUI.backdrop && this.environmentUI.backdrop.safeMargin) ||
-      48
+      64
     );
   }
   private calculateDelta(): number {

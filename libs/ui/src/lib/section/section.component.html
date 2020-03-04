@@ -4,8 +4,14 @@
   [class.ui-section--editable]="mode === modes.EDITABLE"
   [class.ui-section--editing]="mode === modes.EDITING"
   [class.ui-section--static]="mode === modes.STATIC"
+  [class.ui-section--container]="mode === modes.CONTAINER"
 >
-  <div class="ui-section__header" *ngIf="sectionTitle">
+  <div
+    class="ui-section__header"
+    *ngIf="sectionTitle"
+    [class.ui-title]="mode === modes.CONTAINER"
+    [class.ui-body-2]="mode !== modes.CONTAINER"
+  >
     <ng-content select="section-title"></ng-content>
     <div class="ui-section__header__actions" (click)="clickAction($event)">
       <ng-content select="section-actions"></ng-content>

@@ -1,3 +1,5 @@
+@import 'libs/ui/src/lib/breakpoints.scss';
+
 @mixin pages-manage-kabas-tasks-task-list-item-theme() {
   $pages-manage-kabas-tasks__task-list-item__status-color: $primary-font-color !default;
   $pages-manage-kabas-tasks__task-list-item__archived-color: $primary-font-color !default;
@@ -6,12 +8,31 @@
   $pages-manage-kabas-tasks__task-list-item__assignees-secondary-font-size: 0.8rem !default;
 
   $pages-manage-kabas-tasks__task-list-item__second-line-spacer: 4px !default;
+  $pages-manage-kabas-tasks__task-list-item__stroke-color: $ui-stroke-color !default;
+  $pages-magage-kabas-tasks__task-list-item-meta-padding: 8px !default;
+
+  .manage-kabas-tasks__task-list-item {
+    .manage-kabas-tasks-task-list-item {
+      &__learning-area,
+      &__dates {
+        padding: 0;
+        &:after {
+          margin: auto $pages-magage-kabas-tasks__task-list-item-meta-padding;
+          border-right: solid 1px
+            $pages-manage-kabas-tasks__task-list-item__stroke-color;
+          content: '';
+          display: block;
+          height: 24px;
+        }
+      }
+    }
+  }
 
   .manage-kabas-tasks-task-list-item {
     &__icon {
-      &--status {
+      &--status.mat-icon {
         color: $pages-manage-kabas-tasks__task-list-item__status-color;
-        height: 36px !important; // task:*** icons are 36px by 24px
+        height: 36px; // task:*** icons are 36px by 24px
       }
       &--archived {
         color: $pages-manage-kabas-tasks__task-list-item__archived-color;
@@ -22,10 +43,15 @@
         margin: 0 0
           $pages-manage-kabas-tasks__task-list-item__second-line-spacer 0;
       }
-      &-groups,
-      &-students {
-        font-size: $pages-manage-kabas-tasks__task-list-item__assignees-secondary-font-size;
-        color: $pages-manage-kabas-tasks__task-list-item__assignees-secondary-color;
+    }
+  }
+
+  @media #{$ui-breakpoint-xsmall} {
+    .manage-kabas-tasks-task-list-item {
+      &__icon {
+        &--status.mat-icon {
+          display: none;
+        }
       }
     }
   }

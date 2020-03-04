@@ -16,34 +16,43 @@
     class="manage-kabas-tasks-task-list-item__container__title"
     (click)="actions[0].handler()"
     campusClickStopPropagation
+    mat-line
     >{{ title }}</list-item-title
   >
 
+  <list-item-caption mat-line>{{ description }}</list-item-caption>
+
   <list-item-actions
+    mat-line
     *ngIf="actions.length"
     class="manage-kabas-tasks-task-list-item__container__actions"
-    ><span
+    ><campus-button
+      inline
       campusClickStopPropagation
       *ngFor="let action of actions"
       (click)="action.handler()"
-      >{{ action.label }}</span
+      >{{ action.label }}</campus-button
     ></list-item-actions
   >
 
-  <list-item-content class="manage-kabas-tasks-task-list-item__learning-area">
+  <list-item-content
+    class="manage-kabas-tasks-task-list-item__learning-area ui-body-1"
+  >
     {{ learningArea }}
   </list-item-content>
 
-  <list-item-content class="manage-kabas-tasks-task-list-item__dates">
-    <div matLine>
+  <list-item-content class="manage-kabas-tasks-task-list-item__dates ui-body-1">
+    <div>
       <span *ngIf="startDate">{{ startDate | date: 'd/MM/yy' }}</span>
       <span *ngIf="endDate"> - {{ endDate | date: 'd/MM/yy' }}</span>
+      <span *ngIf="!startDate && !endDate" class="ui-caption"
+        >geen datum ingesteld</span
+      >
     </div>
-    <div matLine></div>
   </list-item-content>
   <list-item-content class="manage-kabas-tasks-task-list-item__assignees">
     <ul
-      class="manage-kabas-tasks-task-list-item__assignees-class-groups"
+      class="manage-kabas-tasks-task-list-item__assignees-class-groups ui-body-1"
       *ngIf="classGroups.length"
     >
       <li *ngFor="let classGroup of classGroups">{{ classGroup.label }}</li>
@@ -52,7 +61,7 @@
       <span
         *ngIf="groups.length"
         [matTooltip]="groups.join('\n')"
-        class="manage-kabas-tasks-task-list-item__assignees-groups"
+        class="manage-kabas-tasks-task-list-item__assignees-groups ui-caption"
       >
         <span *ngIf="classGroups.length">+ </span>
         {{ groups.length }} groep{{ groups.length === 1 ? '' : 'en' }}</span
@@ -60,7 +69,7 @@
       <span
         *ngIf="students.length"
         [matTooltip]="students.join('\n')"
-        class="manage-kabas-tasks-task-list-item__assignees-students"
+        class="manage-kabas-tasks-task-list-item__assignees-students ui-caption"
       >
         <span *ngIf="classGroups.length && !groups.length">+ </span>
         <span *ngIf="groups.length"> | </span>
@@ -68,6 +77,12 @@
         {{ students.length }} individuele leerling{{
           students.length === 1 ? '' : 'en'
         }}</span
+      >
+
+      <span
+        *ngIf="!classGroups.length && !groups.length && !students.length"
+        class="ui-caption"
+        >aan niemand toegewezen</span
       >
     </div>
   </list-item-content>

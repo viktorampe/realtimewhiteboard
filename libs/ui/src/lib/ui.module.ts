@@ -50,6 +50,7 @@ import { LargeDirective } from './button/directives/button-large.directive';
 import { PrimaryDirective } from './button/directives/button-primary.directive';
 import { RoundedCornersDirective } from './button/directives/button-rounded-corners.directive';
 import { WarningDirective } from './button/directives/button-warning.directive';
+import { CollapsibleContainerComponent } from './collapsible-container/collapsible-container.component';
 import { CollapsibleSheetComponent } from './collapsible-sheet/collapsible-sheet.component';
 import { ConfirmableSelectComponent } from './confirmable-select/confirmable-select.component';
 import { ConfirmationModalComponent } from './confirmation-modal/confirmation-modal.component';
@@ -90,6 +91,8 @@ import { PageHeaderComponent } from './page-header/page-header.component';
 import { PersonBadgeComponent } from './person-badge/person-badge.component';
 import { PersonInitialsPipe } from './person-badge/pipes/person-initials.pipe';
 import { PersonSummaryComponent } from './person-summary-component/person-summary.component';
+import { ProgressComponent } from './progress/progress.component';
+import { RatingComponent } from './rating/rating.component';
 import {
   SectionActionsDirective,
   SectionComponent,
@@ -117,7 +120,6 @@ import { HumanDateTimePipe } from './utils/pipes/human-date-time/human-date-time
 import { JoinPipe } from './utils/pipes/join/join.pipe';
 import { RemovePrefixStringPipe } from './utils/pipes/remove-prefix-string/remove-prefix-string.pipe';
 import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-string.pipe';
-import { ProgressComponent } from './progress/progress.component';
 
 @NgModule({
   imports: [
@@ -230,7 +232,9 @@ import { ProgressComponent } from './progress/progress.component';
     BackLayerContentDirective,
     FrontLayerContentDirective,
     FrontLayerHeaderDirective,
-    ProgressComponent
+    ProgressComponent,
+    CollapsibleContainerComponent,
+    RatingComponent
   ],
   exports: [
     FilterTextInputComponent,
@@ -319,7 +323,9 @@ import { ProgressComponent } from './progress/progress.component';
     BackLayerContentDirective,
     FrontLayerContentDirective,
     FrontLayerHeaderDirective,
-    ProgressComponent
+    ProgressComponent,
+    CollapsibleContainerComponent,
+    RatingComponent
   ],
   providers: [
     {
