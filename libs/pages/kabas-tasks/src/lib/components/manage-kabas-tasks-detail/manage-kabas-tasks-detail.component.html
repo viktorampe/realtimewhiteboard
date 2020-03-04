@@ -82,56 +82,56 @@
           <div class="manage-kabas-tasks-detail">
             <div
               class="manage-kabas-tasks-detail__filterbar"
-              [hidden]="!showFilters"
-              [class.manage-kabas-tasks-detail__filterbar--disabled]="
-                isReordering
-              "
+              [hidden]="!showFilters || isReordering"
             >
-              <campus-search-term
-                placeholder="Filter op titel"
-                [autoComplete]="false"
-                [emitOnTextChange]="true"
-                (valueChange)="searchTermFilterValueChanged($event)"
-                class="manage-kabas-tasks-detail__filterbar__filter manage-kabas-tasks-detail__filterbar__filter--title"
-              ></campus-search-term>
+              <div class="manage-kabas-tasks-detail__filterbar__filters">
+                <campus-search-term
+                  placeholder="Filter op titel"
+                  [autoComplete]="false"
+                  [emitOnTextChange]="true"
+                  (valueChange)="searchTermFilterValueChanged($event)"
+                  class="manage-kabas-tasks-detail__filterbar__filter manage-kabas-tasks-detail__filterbar__filter--title"
+                ></campus-search-term>
 
-              <campus-button-toggle-filter
-                *ngIf="!task.isPaperTask"
-                [multiple]="true"
-                [filterCriteria]="requiredFilterCriteria"
-                (filterSelectionChange)="requiredFilterSelectionChanged($event)"
-                class="manage-kabas-tasks-detail__filterbar__filter manage-kabas-tasks-detail__filterbar__filter--required"
-              >
-              </campus-button-toggle-filter>
+                <campus-button-toggle-filter
+                  *ngIf="!task.isPaperTask"
+                  [multiple]="true"
+                  [filterCriteria]="requiredFilterCriteria"
+                  (filterSelectionChange)="
+                    requiredFilterSelectionChanged($event)
+                  "
+                  class="manage-kabas-tasks-detail__filterbar__filter manage-kabas-tasks-detail__filterbar__filter--required"
+                >
+                </campus-button-toggle-filter>
 
-              <campus-button-toggle-filter
-                [multiple]="true"
-                [filterCriteria]="diaboloPhaseFilterCriteria"
-                (filterSelectionChange)="
-                  diaboloPhaseFilterSelectionChanged($event)
-                "
-                class="manage-kabas-tasks-detail__filterbar__filter manage-kabas-tasks-detail__filterbar__filter--diabolo-phase"
-              >
-              </campus-button-toggle-filter>
+                <campus-button-toggle-filter
+                  [multiple]="true"
+                  [filterCriteria]="diaboloPhaseFilterCriteria"
+                  (filterSelectionChange)="
+                    diaboloPhaseFilterSelectionChanged($event)
+                  "
+                  class="manage-kabas-tasks-detail__filterbar__filter manage-kabas-tasks-detail__filterbar__filter--diabolo-phase"
+                >
+                </campus-button-toggle-filter>
 
-              <campus-button-toggle-filter
-                [multiple]="true"
-                [filterCriteria]="levelFilterCriteria"
-                (filterSelectionChange)="levelFilterSelectionChanged($event)"
-                class="manage-kabas-tasks-detail__filterbar__filter manage-kabas-tasks-detail__filterbar__filter--level"
-              >
-              </campus-button-toggle-filter>
+                <campus-button-toggle-filter
+                  [multiple]="true"
+                  [filterCriteria]="levelFilterCriteria"
+                  (filterSelectionChange)="levelFilterSelectionChanged($event)"
+                  class="manage-kabas-tasks-detail__filterbar__filter manage-kabas-tasks-detail__filterbar__filter--level"
+                >
+                </campus-button-toggle-filter>
 
-              <campus-button
-                bordered
-                flat
-                icon
-                class="manage-kabas-tasks-detail__filterbar__reset-filters"
-                iconClass="reset-filters"
-                (click)="clickResetFilters()"
-              ></campus-button>
+                <campus-button
+                  bordered
+                  flat
+                  icon
+                  class="manage-kabas-tasks-detail__filterbar__reset-filters"
+                  iconClass="reset-filters"
+                  (click)="clickResetFilters()"
+                ></campus-button>
+              </div>
             </div>
-
             <div class="manage-kabas-tasks-detail__list__actions">
               <campus-button
                 fab

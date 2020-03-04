@@ -16,9 +16,11 @@
   }
 
   &__filterbar {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
+    &__filters {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+    }
 
     &__filter--title {
       flex: 1;
