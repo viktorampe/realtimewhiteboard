@@ -1,5 +1,6 @@
 export const icons = {
   book: 'assets/icons/book.svg',
+  bookshelf: 'assets/icons/material/bookshelf.svg',
   warning: 'assets/icons/material/baseline-warning-24px.svg',
   menu: 'assets/icons/material/menu.svg',
   favorite: 'assets/icons/material/favorite.svg',

@@ -36,7 +36,7 @@
   $manage-task-content__list__drag--dragging-border-radius: 4px !default;
 
   // filters
-  $manage-task-content__filters-padding-left: $pages-method__chapter-padding-left !default;
+  $manage-task-content__filters-padding-left: 0 !default;
 
   $manage-task-content__mat-list-padding-left--override: $pages-method__chapter-padding-left !default;
   $manage-task-content__mat-list-content-margin-left--override: 16px !default; // = used for list indentation -> depth
@@ -49,6 +49,16 @@
   .manage-task-content {
     &__filters {
       padding-left: $manage-task-content__filters-padding-left;
+
+      > *:not(:last-child) {
+        margin-right: 4px;
+      }
+      campus-search-term {
+        flex: 1 1 auto;
+      }
+    }
+    .search-results-list__info {
+      padding: 0;
     }
 
     &__books {
@@ -60,9 +70,34 @@
       }
     }
 
+    &__aside {
+      .ui-section__content {
+        padding: 0;
+      }
+    }
+    &__main .ui-section__content {
+      height: 100%;
+    }
+
+    &__main__sidesheet {
+      width: 500px;
+      .ui-section--container {
+        height: 100%;
+        .ui-section__content {
+          height: 100%;
+          & > section-content > div {
+            height: 100%;
+          }
+        }
+      }
+    }
+
     &__list {
       // margin-left: $manage-task-content__list-vertical-margin;
       // margin-right: $manage-task-content__list-vertical-margin;
+      @include elevation(4);
+      border-radius: 10px;
+      height: 100%;
 
       &.cdk-drop-list-dragging &__item {
         transition: transform
@@ -159,30 +194,33 @@
     }
 
     &__lesson-link {
-      &.mat-list-item .mat-list-item-content {
-        padding-left: $manage-task-content__mat-list-padding-left--override;
-        // color: $pages-method-chapter-color;
-        // background-color: $pages-method-chapter-background-color;
+      .mat-list-base &.mat-list-item {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        border-left: solid
+          $manage-task-content__mat-list-item--selected-border-width transparent;
+        transition: background-color 300ms ease-out;
       }
 
       &:hover {
-        &.mat-list-item .mat-list-item-content {
-          // background-color: $pages-method-chapter-background-color--accent;
+        &.mat-list-item {
+          background-color: rgba($ui-color-secondary, 0.04);
         }
       }
 
       &--selected {
-        &.mat-list-item .mat-list-item-content {
-          background-color: red;
-          padding-left: $manage-task-content__mat-list-padding-left--override -
-            $manage-task-content__mat-list-item--selected-border-width;
-        }
+        .mat-list-base &.mat-list-item {
+          background-color: rgba($ui-color-secondary, 0.08);
 
-        border-left: $manage-task-content__mat-list-item--selected-border-width
-          red;
+          border-left: solid
+            $manage-task-content__mat-list-item--selected-border-width
+            $ui-color-primary;
+        }
       }
 
       &--depth-0 {
+        @extend .ui-body-2;
         .manage-task-content__lesson-link__title {
           margin-left: 0px;
           font-weight: $manage-task-content__mat-list__chapter-font-weight;
@@ -190,8 +228,9 @@
       }
 
       &--depth-1 {
-        .manage-task-content__lesson-link__title {
-          margin-left: $manage-task-content__mat-list-content-margin-left--override;
+        @extend .ui-body-1;
+        .mat-list-base & {
+          padding-left: $manage-task-content__mat-list-content-margin-left--override !important;
         }
       }
     }

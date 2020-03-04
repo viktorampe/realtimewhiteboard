@@ -1,6 +1,7 @@
 .ui-section {
   display: flex;
   flex-direction: column;
+  flex: 1 1 auto;
 
   &__header {
     display: flex;

@@ -33,6 +33,10 @@
         display: none;
       }
     }
+
+    &__content {
+      height: 100%;
+    }
   }
 
   &--dropped {

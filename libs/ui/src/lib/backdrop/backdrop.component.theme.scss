@@ -40,6 +40,18 @@
       backdrop-collapse-action {
         display: flex;
       }
+
+      backdrop-header-actions {
+        .ui-button--inline {
+          color: white;
+          &:after {
+            border-color: white;
+          }
+          &:hover {
+            color: white;
+          }
+        }
+      }
     }
 
     &__front-layer {

@@ -57,6 +57,7 @@
 
     &--container > .ui-section__header {
       height: $ui-section__container-header-height;
+      min-height: $ui-section__container-header-height;
     }
 
     &__content {

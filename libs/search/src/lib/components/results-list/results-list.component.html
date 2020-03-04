@@ -8,8 +8,11 @@
       class="search-results-list__sorting"
       >Sorteer op
       <campus-button
-        *ngFor="let sortMode of sortModes"
+        icon
         bordered
+        flat
+        dense
+        *ngFor="let sortMode of sortModes"
         [iconClass]="sortMode.icon"
         [matTooltip]="sortMode.description"
         matTooltipPosition="above"
