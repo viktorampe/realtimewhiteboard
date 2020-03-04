@@ -84,7 +84,9 @@ describe('TaskListItemComponent', () => {
   describe('inputs', () => {
     it('should pass action handlers', () => {
       const actionDEs = fixture.debugElement.queryAll(
-        By.css('.manage-kabas-tasks-task-list-item__container__actions > span')
+        By.css(
+          '.manage-kabas-tasks-task-list-item__container__actions > .ui-button'
+        )
       );
 
       expect(actionDEs.length).toBe(component.actions.length);

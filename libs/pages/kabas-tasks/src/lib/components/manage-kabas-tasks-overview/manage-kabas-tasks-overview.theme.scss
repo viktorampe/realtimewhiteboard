@@ -1,3 +1,5 @@
+@import 'libs/ui/src/lib/breakpoints.scss';
+
 @mixin manage-kabas-tasks-overview-theme() {
   $pages-kabas-tasks__list-option-color: $pages-kabas-tasks-text-color--primary !default;
   $pages-kabas-tasks__list-option-color--accent: $pages-kabas-tasks-text-color--primary--accent !default;
@@ -29,22 +31,40 @@
   $pages-kabas-tasks__list-option--selected-border-width: 4px !default;
   $pages-kabas-tasks__list-option-padding-left: 16px !default;
 
-  .manage-kabas-tasks-overview {
-    &__list__primary-action {
-      .mat-list-item-content {
-        background-color: $secondary-bg-color;
-        color: $primary-color-accent;
-        font-weight: bold;
-        padding-left: 45px !important;
-        cursor: pointer;
+  $pages-kabas-tasks__list-primary-action-top: 24px !default;
+  $pages-kabas-tasks__list-primary-action-left: 12px !default;
+  $pages-kabas-tasks__list-filter-action-right: 24px !default;
+  $pages-kabas-tasks__list-filter-action-top: 12px !default;
 
-        .mat-icon {
-          margin: 0 20px;
-        }
+  $pages-kabas-tasks__tab-labels-left-offset: 64px;
+  $pages-kabas-tasks__tab-body-margin-top: 24px;
+
+  .manage-kabas-tasks-overview {
+    &__list__primary-action.ui-button--fab {
+      position: absolute;
+      top: $pages-kabas-tasks__list-primary-action-top;
+      left: $pages-kabas-tasks__list-primary-action-left;
+      z-index: 5;
+
+      &.mobile {
+        display: none;
       }
+    }
+    &__list__filter-action.ui-button {
+      position: absolute;
+      right: $pages-kabas-tasks__list-filter-action-right;
+      top: $pages-kabas-tasks__list-filter-action-top;
+      z-index: 5;
     }
 
     &__container {
+      .mat-tab-label-container {
+        margin-left: $pages-kabas-tasks__tab-labels-left-offset;
+      }
+
+      .mat-tab-body {
+        margin-top: $pages-kabas-tasks__tab-body-margin-top;
+      }
       .mat-tab-body-content {
         padding: 0;
       }
@@ -52,7 +72,6 @@
       .mat-list-base {
         .mat-list-item,
         .mat-list-item.mat-list-option {
-          height: 64px;
           &:hover {
             .mat-pseudo-checkbox {
               opacity: 1;
@@ -161,22 +180,6 @@
         $manage-kabas-tasks-overview_filterbar-filter-padding-width;
     }
 
-    &__list__primary-action {
-      display: flex;
-      align-items: center;
-      background-color: $secondary-bg-color;
-      color: $manage-kabas-tasks-overview__list__primary-action-color;
-      font-weight: bold;
-      cursor: pointer;
-      padding-left: 35px !important;
-      height: $manage-kabas-tasks-overview__list__primary-action-height;
-      font-size: $manage-kabas-tasks-overview__list__primary-action-font-size;
-      margin-top: $manage-kabas-tasks-overview__list__primary-action-margin-top;
-      .mat-icon {
-        margin: 0 20px;
-      }
-    }
-
     &__sorting.mat-select {
       border: 1px solid $manage-kabas-tasks-overview_filterbar-archive-toggle;
       padding: $manage-kabas-tasks-overview_filterbar-filter-padding-height
@@ -192,6 +195,33 @@
 
       .mat-select-trigger {
         width: 100%;
+      }
+    }
+  }
+
+  @media #{$ui-breakpoint-xsmall} {
+    .manage-kabas-tasks-overview {
+      &__list__primary-action.ui-button--fab {
+        display: none;
+        &.mobile {
+          display: block;
+          position: fixed;
+          right: 12px;
+          bottom: 22px;
+          top: auto;
+          left: auto;
+        }
+      }
+
+      &__list__filter-action.ui-button {
+        position: absolute;
+        right: 12px;
+      }
+
+      &__container {
+        .mat-tab-label-container {
+          margin-left: 0;
+        }
       }
     }
   }
