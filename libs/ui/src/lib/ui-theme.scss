@@ -1,7 +1,7 @@
 @import './mixins';
 
 /* #region New Style Variables */
-/** 
+/**
   @TODO
   We should shrink down all variables to a mix of these root variables
 **/
@@ -277,6 +277,7 @@ $ui-tile-height: 105px !default;
 @import './list-item-content/list-item-content.component.theme.scss';
 @import './empty-state/empty-state.theme.scss';
 @import './backdrop/backdrop.component.theme.scss';
+@import './progress/progress.component.theme.scss';
 @import './collapsible-container/collapsible-container.component.theme.scss';
 @import './rating/rating.component.theme.scss';
 
@@ -425,6 +426,7 @@ campus-date-range-picker {
   @include ui-list-item-content();
   @include ui-empty-state();
   @include ui-backdrop();
+  @include ui-progress();
   @include ui-collapsible-container();
   @include ui-rating();
 }

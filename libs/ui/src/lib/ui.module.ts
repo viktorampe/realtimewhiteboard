@@ -91,6 +91,7 @@ import { PageHeaderComponent } from './page-header/page-header.component';
 import { PersonBadgeComponent } from './person-badge/person-badge.component';
 import { PersonInitialsPipe } from './person-badge/pipes/person-initials.pipe';
 import { PersonSummaryComponent } from './person-summary-component/person-summary.component';
+import { ProgressComponent } from './progress/progress.component';
 import { RatingComponent } from './rating/rating.component';
 import {
   SectionActionsDirective,
@@ -231,6 +232,7 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     BackLayerContentDirective,
     FrontLayerContentDirective,
     FrontLayerHeaderDirective,
+    ProgressComponent,
     CollapsibleContainerComponent,
     RatingComponent
   ],
@@ -321,6 +323,7 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     BackLayerContentDirective,
     FrontLayerContentDirective,
     FrontLayerHeaderDirective,
+    ProgressComponent,
     CollapsibleContainerComponent,
     RatingComponent
   ],
