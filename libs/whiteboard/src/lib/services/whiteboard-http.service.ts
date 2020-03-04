@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of, Subject, throwError } from 'rxjs';
 import { catchError, delay, map, mapTo, retry } from 'rxjs/operators';
+import { v4 as uuidv4 } from 'uuid';
 import { ModeEnum } from '../../lib/enums/mode.enum';
 import WhiteboardInterface from '../../lib/models/whiteboard.interface';
 
@@ -72,6 +73,7 @@ export class WhiteboardHttpService implements WhiteboardHttpServiceInterface {
       title: 'Welcome to the 90s',
       cards: [
         {
+          id: uuidv4(),
           mode: ModeEnum.IDLE,
           viewModeImage: true,
           description: 'Windows 95',
@@ -82,6 +84,7 @@ export class WhiteboardHttpService implements WhiteboardHttpServiceInterface {
           left: 82
         },
         {
+          id: uuidv4(),
           mode: ModeEnum.IDLE,
           viewModeImage: true,
           description: 'Get Ready',
@@ -92,6 +95,7 @@ export class WhiteboardHttpService implements WhiteboardHttpServiceInterface {
           left: 334
         },
         {
+          id: uuidv4(),
           mode: ModeEnum.IDLE,
           viewModeImage: true,
           description: 'Candy',
@@ -102,6 +106,7 @@ export class WhiteboardHttpService implements WhiteboardHttpServiceInterface {
           left: 515
         },
         {
+          id: uuidv4(),
           mode: ModeEnum.IDLE,
           viewModeImage: true,
           description: 'VRC',
@@ -112,6 +117,7 @@ export class WhiteboardHttpService implements WhiteboardHttpServiceInterface {
           left: 708
         },
         {
+          id: uuidv4(),
           mode: ModeEnum.IDLE,
           viewModeImage: true,
           description: 'Gameboy',
@@ -124,6 +130,7 @@ export class WhiteboardHttpService implements WhiteboardHttpServiceInterface {
       ],
       shelfCards: [
         {
+          id: uuidv4(),
           mode: ModeEnum.SHELF,
           viewModeImage: true,
           description: 'Home Alone',
@@ -134,6 +141,7 @@ export class WhiteboardHttpService implements WhiteboardHttpServiceInterface {
           left: 0
         },
         {
+          id: uuidv4(),
           mode: ModeEnum.SHELF,
           viewModeImage: true,
           description: 'NSYNC',
@@ -144,6 +152,7 @@ export class WhiteboardHttpService implements WhiteboardHttpServiceInterface {
           left: 0
         },
         {
+          id: uuidv4(),
           mode: ModeEnum.SHELF,
           viewModeImage: true,
           description: 'Capri Sun',

@@ -1,5 +1,6 @@
 import { CdkDragDrop, CdkDragStart } from '@angular/cdk/drag-drop';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ModeEnum } from '../../enums/mode.enum';
 import CardInterface from '../../models/card.interface';
 
 @Component({
@@ -18,6 +19,10 @@ export class ShelfComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {}
+
+  get Mode() {
+    return ModeEnum;
+  }
 
   toggleShelf() {
     this.isMinimized = !this.isMinimized;

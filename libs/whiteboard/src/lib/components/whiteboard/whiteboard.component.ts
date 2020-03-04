@@ -1,5 +1,6 @@
 import { CdkDragDrop, CdkDragEnd } from '@angular/cdk/drag-drop';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { v4 as uuidv4 } from 'uuid';
 import { ModeEnum } from '../../enums/mode.enum';
 import CardInterface from '../../models/card.interface';
 import WhiteboardInterface from '../../models/whiteboard.interface';
@@ -56,7 +57,8 @@ export class WhiteboardComponent implements OnInit {
     }
   }
 
-  btnPlusClicked() {
+  btnPlusClicked(event) {
+    event.stopPropagation();
     this.addEmptyCard();
   }
   //#endregion
@@ -71,27 +73,35 @@ export class WhiteboardComponent implements OnInit {
     left: number = 0,
     image: string = ''
   ): CardInterface {
+    // add card to the workspace
     const card = {
-      mode: ModeEnum.IDLE,
+      id: uuidv4(),
+      mode: ModeEnum.EDIT,
       color: this.lastColor,
       description: '',
       image: image,
       top: top,
       left: left,
-      viewModeImage: true
+      viewModeImage: false
     };
     this.cards.push(card);
+
+    // add a 'copy' ( card with a different reference ) to the shelf
+    this.addCardToShelf({ ...card });
 
     if (this.selectedCards.length) {
       card.mode = ModeEnum.MULTISELECT;
     }
-
+    console.log(card);
     return card;
   }
 
   addCardToShelf(card: CardInterface) {
-    card.mode = ModeEnum.SHELF;
-    this.shelvedCards.push(card);
+    if (!this.shelvedCards.map(shelfcard => shelfcard.id).includes(card.id)) {
+      card.mode = ModeEnum.SHELF;
+      this.shelvedCards.push(card);
+      console.log(card);
+    }
   }
 
   onDeleteCard(card: CardInterface) {
@@ -253,7 +263,10 @@ export class WhiteboardComponent implements OnInit {
       Math.abs(event.distance.y);
 
     card.mode = ModeEnum.IDLE;
-    this.cards.push(card);
+
+    if (!this.cards.map(workspacecard => workspacecard.id).includes(card.id)) {
+      this.cards.push(card);
+    }
     this.shelvedCards = this.shelvedCards.filter(c => c !== card);
   }
   //#endregion
