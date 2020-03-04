@@ -34,89 +34,111 @@ describe('Manage task content', () => {
 
   describe('teacher', () => {
     describe('filters', () => {
-      before(() => {
-        login(
-          setup.kabasTasksPages.loginTeacher.username,
-          setup.kabasTasksPages.loginTeacher.password
-        );
-        cy.visit(
-          `${appPaths.tasks}/manage/${manageTaskContentSetup.taskId}/content`
-        );
-      });
-
-      it('should select a favorite book', () => {
-        dataCy('book-title').should(
-          'contain',
-          filterSetup.book.favoriteBookTitle
-        );
-        dataCy('change-book').should('contain', 'Zoek in ander boek');
-        dataCy('method-books-title')
-          .should('not.be.undefined')
-          .location('pathname')
-          .should(
-            'be',
-            `${appPaths.tasks}/manage/content?book=${filterSetup.book.favoriteBookId}`
+      describe('digital task', () => {
+        before(() => {
+          login(
+            setup.kabasTasksPages.loginTeacher.username,
+            setup.kabasTasksPages.loginTeacher.password
           );
-      });
-
-      it('should show the right method', () => {
-        dataCy('change-book')
-          .click()
-          .should('contain', 'Boeken verbergen');
-        dataCy('method-books-title').should(
-          'contain',
-          filterSetup.book.methodName
-        );
-      });
-
-      it('should filter by choosing a book', () => {
-        filterByBook()
-          .location('pathname')
-          .should(
-            'be',
-            `${appPaths.tasks}/manage/content?book=${filterSetup.book.id}`
+          cy.visit(
+            `${appPaths.tasks}/manage/${manageTaskContentSetup.taskId}/content`
           );
-        dataCy('book-title').should('contain', filterSetup.book.bookTitle);
-      });
+        });
 
-      it('should filter by choosing a book chapter', () => {
-        filterByChapter()
-          .location('pathname')
-          .should(
-            'be',
-            `${appPaths.tasks}/manage/content?book=${filterSetup.book.id}&chapter=${filterSetup.chapter.id}`
+        it('should select a favorite book', () => {
+          dataCy('book-title').should(
+            'contain',
+            filterSetup.book.favoriteBookTitle
           );
-      });
+          dataCy('change-book').should('contain', 'Zoek in ander boek');
+          dataCy('method-books-title')
+            .should('not.be.undefined')
+            .location('pathname')
+            .should(
+              'be',
+              `${appPaths.tasks}/manage/content?book=${filterSetup.book.favoriteBookId}`
+            );
+        });
 
-      it('should filter by choosing a book lesson', () => {
-        filterByLesson()
-          .location('pathname')
-          .should(
-            'be',
-            `${appPaths.tasks}/manage/content?book=${filterSetup.book.id}&chapter=${filterSetup.chapter.id}&lesson=lalalaal`
+        it('should show the right method', () => {
+          dataCy('change-book')
+            .click()
+            .should('contain', 'Boeken verbergen');
+          dataCy('method-books-title').should(
+            'contain',
+            filterSetup.book.methodName
           );
+        });
+
+        it('should filter by choosing a book', () => {
+          filterByBook()
+            .location('pathname')
+            .should(
+              'be',
+              `${appPaths.tasks}/manage/content?book=${filterSetup.book.id}`
+            );
+          dataCy('book-title').should('contain', filterSetup.book.bookTitle);
+        });
+
+        it('should filter by choosing a book chapter', () => {
+          filterByChapter()
+            .location('pathname')
+            .should(
+              'be',
+              `${appPaths.tasks}/manage/content?book=${filterSetup.book.id}&chapter=${filterSetup.chapter.id}`
+            );
+        });
+
+        it('should filter by choosing a book lesson', () => {
+          filterByLesson()
+            .location('pathname')
+            .should(
+              'be',
+              `${appPaths.tasks}/manage/content?book=${filterSetup.book.id}&chapter=${filterSetup.chapter.id}&lesson=lalalaal`
+            );
+        });
+
+        it('should filter by searching by term', () => {
+          filterByBook();
+
+          dataCy('search-term-filter')
+            .find('input')
+            .focus()
+            .type(`${filterSetup.term.value}{enter}`);
+
+          dataCy('search-results-count').should(
+            'contain',
+            `${filterSetup.term.resultCount} resultaten`
+          );
+        });
+
+        it('should reset the search term filter', () => {
+          dataCy('search-filter-reset').click();
+
+          dataCy('search-results-count').should(
+            'contain',
+            `${filterSetup.book.resultCount} resultaten`
+          );
+        });
       });
 
-      it('should filter by searching by term', () => {
-        filterByBook();
+      describe.only('paper task', () => {
+        before(() => {
+          login(
+            setup.kabasTasksPages.loginTeacher.username,
+            setup.kabasTasksPages.loginTeacher.password
+          );
+          cy.visit(
+            `${appPaths.tasks}/manage/${manageTaskContentSetup.paperTaskId}/content?book=34`
+          );
+        });
 
-        dataCy('search-term-filter')
-          .find('input')
-          .focus()
-          .type(`${filterSetup.term.value}{enter}`);
-
-        dataCy('search-results-count').should(
-          'contain',
-          `${filterSetup.term.resultCount} resultaten`
-        );
-
-        // and also reset
-        dataCy('search-filter-reset').click();
-
-        dataCy('search-results-count').should(
-          'contain',
-          `${filterSetup.book.resultCount} resultaten`
-        );
+        it('should return paper exercises', () => {
+          dataCy('search-results-count').should(
+            'contain',
+            `${manageTaskContentSetup.paperExpected.resultCount} resultaten`
+          );
+        });
       });
     });
 

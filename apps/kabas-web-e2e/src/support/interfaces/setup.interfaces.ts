@@ -94,6 +94,7 @@ export interface KabasTasksPagesInterface {
     expected: {};
     manageTaskContent: {
       taskId: number;
+      // this expected covers the digital task
       expected: {
         filter: {
           book: {
@@ -102,7 +103,7 @@ export interface KabasTasksPagesInterface {
             resultCount: number;
             favoriteBookId: number;
             methodName: string;
-            favoriteBookTitle:string;
+            favoriteBookTitle: string;
           };
           chapter: {
             id: number;
@@ -127,6 +128,8 @@ export interface KabasTasksPagesInterface {
           };
         };
       };
+      paperTaskId: number;
+      paperExpected: { resultCount: number };
     };
   };
 }
