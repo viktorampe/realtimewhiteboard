@@ -31,4 +31,10 @@ describe('WhiteboardToolbarComponent', () => {
     component.changeSelectedCardsColor('#000000');
     expect(component.changeSelectedColor.emit).toHaveBeenCalledWith('#000000');
   });
+
+  it('should emit when delete is clicked', () => {
+    spyOn(component.deleteCards, 'emit');
+    component.btnDeleteClicked(new MouseEvent(''));
+    expect(component.deleteCards.emit).toHaveBeenCalledTimes(1);
+  });
 });
