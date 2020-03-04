@@ -220,8 +220,19 @@
 
     <div>
       <campus-collapsible-container></campus-collapsible-container>
+      <campus-rating></campus-rating>
     </div>
 
+    <campus-empty-state
+      svgIcon="empty-state-no-users"
+      title="Geen groepen of gebruikers geselecteerd"
+      description="This tagline conveys the purpose of the screen, without appearing actionable."
+      ctaLabel="Call to action"
+      (clickCta)="clickEmptyCta()"
+    >
+    </campus-empty-state>
+
+    >>>>>>> 67c909e7edf9c99469f91104c28e81c8cfb570bb
     <campus-empty-state
       svgIcon="empty-state-all-done"
       title="Nothing to see here"

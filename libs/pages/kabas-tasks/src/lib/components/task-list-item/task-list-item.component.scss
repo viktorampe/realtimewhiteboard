@@ -1,8 +1,11 @@
+@import 'libs/ui/src/lib/breakpoints.scss';
+
 :host {
   &:hover {
     .manage-kabas-tasks-task-list-item__hover-actions {
-      mat-icon {
-        display: inline-block;
+      .mat-icon {
+        opacity: 1;
+        transform: translateX(0);
       }
     }
   }
@@ -10,33 +13,36 @@
 
 .manage-kabas-tasks-task-list-item {
   &__learning-area {
-    flex: 0 0 10%;
-    min-width: 100px;
+    width: 160px;
   }
-
   &__dates {
-    flex: 0 0 10%;
-    margin: 0 10px;
-    min-width: 140px;
-    text-align: center;
+    &,
+    & > div {
+      width: 150px;
+      text-align: center;
+    }
+    justify-content: flex-start;
   }
 
   &__hover-actions {
-    flex: 0 0 auto;
-    min-width: 24px;
+    width: 32px;
     flex-flow: row nowrap;
     align-self: center;
-    mat-icon {
-      display: none;
+    text-align: center;
+    .mat-icon {
+      opacity: 0;
+      transform: translateX(20px);
+      transition: all 250ms ease-out;
       &.favorite {
-        display: inline-block;
+        opacity: 1;
+        transform: translateX(0);
         fill: red; // TODO: what color?
       }
     }
   }
 
   &__assignees {
-    flex: 0 0 30%;
+    width: 220px;
     flex-direction: column;
     align-items: flex-start;
 
@@ -57,6 +63,17 @@
           content: '';
         }
       }
+    }
+  }
+}
+
+@media #{$ui-breakpoint-xsmall} {
+  .manage-kabas-tasks-task-list-item {
+    &__learning-area,
+    &__dates,
+    &__assignees {
+      flex: 1 1 50%;
+      margin: 2px 0;
     }
   }
 }

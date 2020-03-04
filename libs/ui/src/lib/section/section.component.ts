@@ -11,7 +11,8 @@ import {
 export enum SectionModeEnum {
   STATIC,
   EDITABLE,
-  EDITING
+  EDITING,
+  CONTAINER
 }
 
 /**
