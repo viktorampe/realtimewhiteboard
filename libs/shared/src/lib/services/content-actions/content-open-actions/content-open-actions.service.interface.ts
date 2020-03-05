@@ -1,5 +1,9 @@
 import { InjectionToken } from '@angular/core';
-import { EduContent } from '@campus/dal';
+import {
+  EduContent,
+  ResultInterface,
+  TaskInstanceInterface
+} from '@campus/dal';
 import { ContentActionInterface } from '@campus/shared';
 
 export interface ContentOpenerInterface {
@@ -22,4 +26,9 @@ export const CONTENT_OPENER_TOKEN = new InjectionToken<ContentOpenerInterface>(
 export interface ContentOpenActionsServiceInterface {
   contentActionDictionary: { [key: string]: ContentActionInterface };
   getActionsForEduContent(eduContent: EduContent): ContentActionInterface[];
+  getActionsForTaskInstanceEduContent(
+    eduContent: EduContent,
+    result: ResultInterface,
+    taskInstance: TaskInstanceInterface
+  ): ContentActionInterface[];
 }
