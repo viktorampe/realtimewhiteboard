@@ -253,7 +253,6 @@ export class ManageKabasTasksOverviewComponent implements OnInit, OnDestroy {
         }
       ]
     };
-    this.setSortMode(TaskSortEnum.STARTDATE);
   }
 
   public sortAndCreateForAssigneeFilter(tasksWithAssignments) {
