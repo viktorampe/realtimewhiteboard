@@ -6,66 +6,571 @@ import {
   AppPathsInterface,
   KabasTasksPagesInterface
 } from '../support/interfaces';
+import {
+  addAssigneesToTask,
+  checkAndCancelError,
+  removeAssigneesFromTask,
+  removeAssigneesFromTask2,
+  selectTaskEduContent,
+  updateTaskInfo,
+  verifyTaskAssignees,
+  verifyTaskContent,
+  verifyTaskInfo
+} from './tasks.detail';
 
 describe('Tasks Detail', () => {
   const apiUrl = cyEnv('apiUrl');
   const appPaths = cyEnv('appPaths') as AppPathsInterface;
   const apiPaths = cyEnv('apiPaths') as ApiPathsInterface;
   let setup: KabasTasksPagesInterface;
-  let taskPath;
+  let tasksPath;
+  let taskId: {
+    active: number;
+    pending: number;
+    finished: number;
+    paper: number;
+  };
+  let activeTask: {
+    id: number;
+    name: string;
+    description: string;
+    assignees: string[];
+  };
+  let assignees: string[];
 
   before(() => {
-    performSetup('kabasTasksPages').then(res => {
+    return performSetup('kabasTasksPages').then(res => {
       setup = res.body;
 
-      taskPath = `${appPaths.tasks}/manage/${setup.kabasTasksPages.manageTaskDetail.taskId}`;
-
-      // filterValues = setup.kabasTasksPages.filterValues.overview;
-      // filterResults = setup.kabasTasksPages.expected.filterResults.overview;
-      // sortResults = setup.kabasTasksPages.expected.sortResults;
-      // smokeResults = setup.kabasTasksPages.expected.smokeResults;
-      // taskActions = setup.kabasTasksPages.taskActions;
-      // paperTaskActions = setup.kabasTasksPages.paperTaskActions;
+      tasksPath = `/${appPaths.tasks}/manage/`;
+      ({
+        activeTask,
+        assignees,
+        taskId
+      } = setup.kabasTasksPages.manageTaskDetail);
     });
   });
 
-  beforeEach(() => {
+  before(() => {
     cy.server();
   });
 
-  describe('teacher', () => {
-    beforeEach(() => {
-      login(
-        setup.kabasTasksPages.loginTeacher.username,
-        setup.kabasTasksPages.loginTeacher.password
-      );
-    });
+  beforeEach(() => {
+    login(
+      setup.kabasTasksPages.loginTeacher.username,
+      setup.kabasTasksPages.loginTeacher.password
+    );
+  });
 
-    describe('Digital task - active', () => {
-      beforeEach(() => {
-        cy.visit(taskPath);
+  describe('Teacher', () => {
+    describe('Digital task', () => {
+      describe('pagebar buttons', () => {
+        let taskPath;
+        beforeEach(() => {
+          taskPath = tasksPath + activeTask.id;
+          cy.visit(taskPath);
+        });
+
+        describe('without selected content', () => {
+          it('should only show expected buttons', () => {
+            dataCy('header-btn-add-educontent').should('exist');
+            dataCy('header-btn-open-results').should('exist');
+            dataCy('header-btn-open-matrix').should('exist');
+            dataCy('header-btn-print').should('not.exist');
+            dataCy('header-btn-print-selection').should('not.exist');
+            dataCy('header-btn-preview-selection').should('not.exist');
+            dataCy('header-btn-remove-selection').should('not.exist');
+          });
+        });
+
+        describe('with 1 selected content', () => {
+          beforeEach(() => {
+            selectTaskEduContent(['gemiddelde']);
+          });
+
+          it('should only show expected buttons', () => {
+            dataCy('header-btn-add-educontent').should('not.exist');
+            dataCy('header-btn-open-results').should('not.exist');
+            dataCy('header-btn-open-matrix').should('not.exist');
+            dataCy('header-btn-print').should('not.exist');
+            dataCy('header-btn-print-selection').should('not.exist');
+            dataCy('header-btn-preview-selection').should('exist');
+            dataCy('header-btn-remove-selection').should('exist');
+          });
+        });
+
+        describe('with multiple selected content', () => {
+          beforeEach(() => {
+            selectTaskEduContent(['gemiddelde', 'breuken']);
+          });
+
+          it('should only show expected buttons', () => {
+            dataCy('header-btn-add-educontent').should('not.exist');
+            dataCy('header-btn-open-results').should('not.exist');
+            dataCy('header-btn-open-matrix').should('not.exist');
+            dataCy('header-btn-print').should('not.exist');
+            dataCy('header-btn-print-selection').should('not.exist');
+            dataCy('header-btn-preview-selection').should('not.exist');
+            dataCy('header-btn-remove-selection').should('exist');
+          });
+        });
       });
 
-      describe('pagebar', () => {
-        describe('primary action buttons with correct links', () => {
-          it('should allow to `add eduContent`', () => {
+      describe('sidebar', () => {
+        let taskPath;
+        beforeEach(() => {
+          taskPath = tasksPath + activeTask.id;
+          cy.visit(taskPath);
+        });
+
+        describe('without selected content', () => {
+          describe('task info', () => {
+            it('should show the task info', () => {
+              verifyTaskInfo({
+                title: activeTask.name,
+                description: activeTask.description
+              });
+            });
+
+            it('should allow task title and description to be updated', () => {
+              updateTaskInfo({
+                title: 'new title',
+                description: 'new description'
+              });
+              verifyTaskInfo({
+                title: 'new title',
+                description: 'new description'
+              });
+            });
+          });
+
+          describe('assignees', () => {
+            it('should open task assignees modal and add assignees', () => {
+              addAssigneesToTask(
+                setup.kabasTasksPages.manageTaskDetail.assignees
+              );
+              verifyTaskAssignees([
+                ...activeTask.assignees,
+                ...setup.kabasTasksPages.manageTaskDetail.assignees
+              ]);
+            });
+
+            it('should open task assignees modal and remove assignees', () => {
+              removeAssigneesFromTask(
+                setup.kabasTasksPages.manageTaskDetail.assignees
+              );
+              verifyTaskAssignees(
+                activeTask.assignees,
+                setup.kabasTasksPages.manageTaskDetail.assignees
+              );
+            });
+
+            it('should remove assignees without modal', () => {
+              addAssigneesToTask([
+                setup.kabasTasksPages.manageTaskDetail.assignees[0]
+              ]);
+              verifyTaskAssignees([
+                ...activeTask.assignees,
+                setup.kabasTasksPages.manageTaskDetail.assignees[0]
+              ]);
+              removeAssigneesFromTask2([
+                setup.kabasTasksPages.manageTaskDetail.assignees[0]
+              ]);
+              verifyTaskAssignees(activeTask.assignees, [
+                setup.kabasTasksPages.manageTaskDetail.assignees[0]
+              ]);
+            });
+          });
+        });
+
+        describe('with selected content', () => {
+          const selectedContent = ['gemiddelde', 'breuken'];
+          beforeEach(() => {
+            selectTaskEduContent(selectedContent);
+          });
+
+          it('should show task details', () => {
+            selectedContent.forEach((content, i) => {
+              dataCy('educontent-detail')
+                .eq(i)
+                .contains(content);
+            });
+          });
+
+          it('should show task detail preview button', () => {
+            selectedContent.forEach((content, i) => {
+              dataCy('educontent-detail')
+                .eq(i)
+                .find('[data-cy=btn-preview-educontent]')
+                .should('exist');
+            });
+          });
+
+          it('should toggle all required', () => {
+            dataCy('btn-all-required').click();
+            selectedContent.forEach(title => {
+              cy.contains('[data-cy=task-edu-content]', title).contains(
+                'moetje'
+              );
+            });
+          });
+
+          it('should toggle all optional', () => {
+            dataCy('btn-all-optional').click();
+            selectedContent.forEach(title => {
+              cy.contains('[data-cy=task-edu-content]', title).contains(
+                'magje'
+              );
+            });
+          });
+        });
+      });
+
+      describe('sort content', () => {
+        it('should toggle between regular and sort mode', () => {
+          dataCy('btn-start-sort').click();
+          dataCy('btn-cancel-sort').should('exist');
+          dataCy('btn-save-sort').should('exist');
+
+          dataCy('task-edu-content-drag').should('have.length', 5);
+        });
+
+        // drag-drop currently not possible
+        it.skip('should sort items');
+      });
+
+      describe('Active task', () => {
+        let taskPath;
+        beforeEach(() => {
+          taskPath = tasksPath + taskId.active;
+          cy.visit(taskPath);
+        });
+
+        describe('pagebar buttons', () => {
+          it('should show error when `add eduContent` is clicked', () => {
             dataCy('header-btn-add-educontent')
               .click()
               .location('pathname')
-              .should('eq', `${taskPath}/content`);
-            // .go('back');
+              .should('eq', taskPath);
+
+            checkAndCancelError();
           });
 
-          it('should allow to `open results`', () => {
-            dataCy('header-btn-open-results').should('exist');
+          it('should open confirmation dialog when clicking `delete selection` button and show error after confirmation', () => {
+            // select first taskEduContent
+            const selectedContent = ['gemiddelde', 'breuken'];
+            selectTaskEduContent(selectedContent);
+            dataCy('header-btn-remove-selection').click({ force: true });
+            // check for confirm dialog
+            dataCy('cm-confirm')
+              .should('exist')
+              .click();
+
+            checkAndCancelError('in gebruik');
+            verifyTaskContent(selectedContent, [], 5);
+          });
+        });
+
+        describe('sidebar', () => {
+          it('should open confirmation dialog when clicking `delete selection` button and show error after confirmation', () => {
+            const selectedContent = ['gemiddelde', 'breuken'];
+            selectTaskEduContent(selectedContent);
+            dataCy('btn-remove-selected-content').click({ force: true });
+            dataCy('cm-confirm')
+              .should('exist')
+              .click();
+
+            checkAndCancelError('in gebruik');
+            verifyTaskContent(selectedContent, [], 5);
           });
 
-          it('should allow to `open matrix`', () => {
+          it('should fail adding content', () => {
+            dataCy('sidebar-btn-add-educontent').click();
+            checkAndCancelError('actief of voltooid');
+          });
+        });
+      });
+
+      describe('Pending task', () => {
+        let taskPath;
+        beforeEach(() => {
+          taskPath = tasksPath + taskId.pending;
+          cy.visit(taskPath);
+        });
+
+        describe('pagebar buttons', () => {
+          it('should redirect when `add eduContent` is clicked', () => {
+            dataCy('header-btn-add-educontent')
+              .click()
+              .location('pathname')
+              .should('eq', taskPath + '/content')
+              .go('back');
+          });
+
+          it('should open confirmation dialog when clicking `delete selection` button and remove content after confirmation', () => {
+            // select taskEduContent
+            const selectedContent = ['gemiddelde'];
+            const remainingContentLength = 4;
+            selectTaskEduContent(selectedContent);
+
+            dataCy('header-btn-remove-selection').click({ force: true });
+            // check for confirm dialog
+            dataCy('cm-confirm')
+              .should('exist')
+              .click();
+
+            verifyTaskContent([], selectedContent, remainingContentLength);
+          });
+        });
+
+        describe('sidebar', () => {
+          it('should open confirmation dialog when clicking `delete selection` button and remove content after confirmation', () => {
+            const selectedContent = ['breuken'];
+            selectTaskEduContent(selectedContent);
+            const remainingContentLength = 3;
+            dataCy('btn-remove-selected-content').click({ force: true });
+            dataCy('cm-confirm')
+              .should('exist')
+              .click();
+
+            verifyTaskContent([], selectedContent, remainingContentLength);
+          });
+
+          it('should allow adding content', () => {
+            dataCy('sidebar-btn-add-educontent')
+              .click()
+              .location('pathname')
+              .should('eq', taskPath + '/content')
+              .go('back');
+          });
+        });
+      });
+
+      describe('Finished task', () => {
+        let taskPath;
+        beforeEach(() => {
+          taskPath = tasksPath + activeTask.id;
+          cy.visit(taskPath);
+        });
+
+        describe('pagebar buttons', () => {
+          it('should show error when `add eduContent` is clicked', () => {
+            dataCy('header-btn-add-educontent')
+              .click()
+              .location('pathname')
+              .should('eq', taskPath);
+
+            checkAndCancelError();
+          });
+
+          it('should open confirmation dialog when clicking `delete selection` button and show error after confirmation', () => {
+            const selectedContent = ['gemiddelde', 'breuken'];
+            selectTaskEduContent(selectedContent);
+            dataCy('header-btn-remove-selection').click({ force: true });
+            // check for confirm dialog
+            dataCy('cm-confirm')
+              .should('exist')
+              .click();
+
+            checkAndCancelError('in gebruik');
+            verifyTaskContent(selectedContent, [], 5);
+          });
+        });
+
+        describe('sidebar', () => {
+          it('should open confirmation dialog when clicking `delete selection` button and show error after confirmation', () => {
+            const selectedContent = ['gemiddelde', 'breuken'];
+            selectTaskEduContent(selectedContent);
+            dataCy('btn-remove-selected-content').click({ force: true });
+            dataCy('cm-confirm')
+              .should('exist')
+              .click();
+
+            checkAndCancelError('in gebruik');
+            verifyTaskContent(selectedContent, [], 5);
+          });
+
+          it('should fail adding content', () => {
+            dataCy('sidebar-btn-add-educontent').click();
+            checkAndCancelError('actief of voltooid');
+          });
+        });
+      });
+    });
+
+    describe('Paper task', () => {
+      describe('pagebar buttons', () => {
+        let taskPath;
+        beforeEach(() => {
+          taskPath = tasksPath + taskId.paper;
+          cy.visit(taskPath);
+        });
+
+        describe('without selected content', () => {
+          it('should only show expected buttons', () => {
+            dataCy('header-btn-add-educontent').should('exist');
+            dataCy('header-btn-open-results').should('not.exist');
             dataCy('header-btn-open-matrix').should('exist');
+            dataCy('header-btn-print').should('exist');
+            dataCy('header-btn-print-selection').should('not.exist');
+            dataCy('header-btn-preview-selection').should('not.exist');
+            dataCy('header-btn-remove-selection').should('not.exist');
           });
 
-          it('should not allow to `print`', () => {
+          it('should open dialog with print links', () => {
+            dataCy('header-btn-print').click();
+            dataCy('modal-btn-print-paper').should('have.length', 3);
+          });
+        });
+
+        describe('with 1 selected content', () => {
+          beforeEach(() => {
+            selectTaskEduContent(['Hoeken']);
+          });
+
+          it('should only show expected buttons', () => {
+            dataCy('header-btn-add-educontent').should('not.exist');
+            dataCy('header-btn-open-results').should('not.exist');
+            dataCy('header-btn-open-matrix').should('not.exist');
             dataCy('header-btn-print').should('not.exist');
+            dataCy('header-btn-print-selection').should('not.exist');
+            dataCy('header-btn-preview-selection').should('exist');
+            dataCy('header-btn-remove-selection').should('exist');
+          });
+        });
+
+        describe('with multiple selected content', () => {
+          beforeEach(() => {
+            selectTaskEduContent(['Hoeken', 'Spiegelingen']);
+          });
+
+          it('should only show expected buttons', () => {
+            dataCy('header-btn-add-educontent').should('not.exist');
+            dataCy('header-btn-open-results').should('not.exist');
+            dataCy('header-btn-open-matrix').should('not.exist');
+            dataCy('header-btn-print').should('not.exist');
+            dataCy('header-btn-print-selection').should('not.exist');
+            dataCy('header-btn-preview-selection').should('not.exist');
+            dataCy('header-btn-remove-selection').should('exist');
+          });
+        });
+      });
+
+      describe('sidebar', () => {
+        let taskPath;
+        beforeEach(() => {
+          taskPath = tasksPath + taskId.paper;
+          cy.visit(taskPath);
+        });
+
+        describe('without selected content', () => {
+          describe('buttons', () => {
+            it('should allow task title and description to be updated', () => {
+              updateTaskInfo({
+                title: 'new title',
+                description: 'new description'
+              });
+              verifyTaskInfo({
+                title: 'new title',
+                description: 'new description'
+              });
+            });
+
+            it('should show print buttons', () => {
+              dataCy('btn-print-paper-with-assignees').should('exist');
+              dataCy('btn-print-paper-without-assignees').should('exist');
+              dataCy('btn-print-paper-with-solution').should('exist');
+            });
+
+            it('should allow adding content', () => {
+              dataCy('sidebar-btn-add-educontent')
+                .click()
+                .location('pathname')
+                .should('eq', taskPath + '/content')
+                .go('back');
+            });
+          });
+
+          describe('assignees', () => {
+            it('should open task assignees modal without date inputs and add assignees', () => {
+              dataCy('btn-add-task-assignees').click();
+              dataCy('manage-task-date-range-picker').should('not.exist');
+              addAssigneesToTask(
+                setup.kabasTasksPages.manageTaskDetail.assignees,
+                true
+              );
+              verifyTaskAssignees([
+                ...activeTask.assignees,
+                ...setup.kabasTasksPages.manageTaskDetail.assignees
+              ]);
+            });
+
+            it('should open task assignees modal without date inputs and remove assignees', () => {
+              dataCy('btn-add-task-assignees').click();
+              dataCy('manage-task-date-range-picker').should('not.exist');
+              removeAssigneesFromTask(
+                setup.kabasTasksPages.manageTaskDetail.assignees,
+                true
+              );
+              verifyTaskAssignees(
+                activeTask.assignees,
+                setup.kabasTasksPages.manageTaskDetail.assignees
+              );
+            });
+
+            it('should remove assignees without modal', () => {
+              addAssigneesToTask([
+                setup.kabasTasksPages.manageTaskDetail.assignees[0]
+              ]);
+              verifyTaskAssignees([
+                ...activeTask.assignees,
+                setup.kabasTasksPages.manageTaskDetail.assignees[0]
+              ]);
+              removeAssigneesFromTask2([
+                setup.kabasTasksPages.manageTaskDetail.assignees[0]
+              ]);
+              verifyTaskAssignees(activeTask.assignees, [
+                setup.kabasTasksPages.manageTaskDetail.assignees[0]
+              ]);
+            });
+          });
+        });
+
+        describe('with selected content', () => {
+          const selectedContent = ['Hoeken', 'Spiegelingen'];
+          beforeEach(() => {
+            selectTaskEduContent(selectedContent);
+          });
+
+          it('should show task details', () => {
+            selectedContent.forEach((content, i) => {
+              dataCy('educontent-detail')
+                .eq(i)
+                .contains(content);
+            });
+          });
+
+          it('should show task detail preview button', () => {
+            selectedContent.forEach((content, i) => {
+              dataCy('educontent-detail')
+                .eq(i)
+                .find('[data-cy=btn-preview-educontent]')
+                .should('exist');
+            });
+          });
+
+          it('should not show toggle for required / optional', () => {
+            dataCy('btn-all-required').should('not.exist');
+          });
+
+          it('should open confirmation dialog when clicking `delete selection` button and remove content after confirmation', () => {
+            const remainingContentLength = 1;
+            dataCy('btn-remove-selected-content').click({ force: true });
+            dataCy('cm-confirm')
+              .should('exist')
+              .click();
+
+            verifyTaskContent([], selectedContent, remainingContentLength);
           });
         });
       });

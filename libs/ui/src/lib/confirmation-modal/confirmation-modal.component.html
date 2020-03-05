@@ -3,7 +3,9 @@
   <p [innerHTML]="message"></p>
 </div>
 <div mat-dialog-actions>
-  <campus-button (click)="cancel()">Annuleren</campus-button>
+  <campus-button data-cy="cm-cancel" (click)="cancel()"
+    >Annuleren</campus-button
+  >
   <campus-button
     *ngIf="disableConfirm; else enabledConfirm"
     primary
@@ -13,7 +15,11 @@
   >
 </div>
 <ng-template #enabledConfirm>
-  <campus-button campusClickStopPropagation primary (click)="confirm()"
+  <campus-button
+    data-cy="cm-confirm"
+    campusClickStopPropagation
+    primary
+    (click)="confirm()"
     >Ja</campus-button
   >
 </ng-template>

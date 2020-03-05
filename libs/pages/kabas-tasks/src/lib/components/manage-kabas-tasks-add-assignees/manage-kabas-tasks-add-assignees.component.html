@@ -28,6 +28,7 @@
         >
         <mat-list-option
           #option
+          [attr.data-cy]="'selectable-assignee-' + assignee.label"
           [value]="assignee"
           [class.manage-kabas-tasks-add-assignees__content__list__item--hidden]="
             !filteredAssignees.map[assignee.type + '-' + assignee.relationId]
@@ -57,6 +58,7 @@
     >Annuleren</campus-button
   >
   <campus-button
+    data-cy="btn-select-task-assignees-confirm"
     primary
     class="manage-kabas-tasks-add-assignees__actions__button"
     (click)="addAssignees()"

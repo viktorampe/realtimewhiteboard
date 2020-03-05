@@ -40,20 +40,16 @@
       (click)="
         preview(selectedTaskEduContents[0].eduContent, !!task.isPaperTask)
       "
+      data-cy="header-btn-preview-selection"
       ><span>{{
         task.isPaperTask ? 'Voorbeeld' : 'Openen'
       }}</span></campus-button
     >
     <campus-button
-      *ngIf="task.isPaperTask"
-      class="shared-header__contextual__button smallIcon"
-      iconClass=""
-      ><span>Print</span></campus-button
-    >
-    <campus-button
       class="shared-header__contextual__button smallIcon"
       iconClass="delete"
       (click)="clickRemoveTaskEduContents(selectedTaskEduContents)"
+      data-cy="header-btn-remove-selection"
       ><span>Verwijderen</span></campus-button
     >
   </ng-template>
@@ -83,19 +79,23 @@
         >
           <section-title>Algemeen</section-title>
           <section-actions
-            ><mat-icon svgIcon="edit"></mat-icon
+            ><mat-icon data-cy="edit-task" svgIcon="edit"></mat-icon
           ></section-actions>
 
           <section-content>
-            <div *ngIf="sectionMode === sectionModes.EDITABLE">
+            <div
+              *ngIf="sectionMode === sectionModes.EDITABLE"
+              data-cy="task-info"
+            >
               <h2 data-cy="task-title">{{ task.name }}</h2>
-              {{ task.description }}
+              <div data-cy="task-description">{{ task.description }}</div>
             </div>
 
             <div *ngIf="sectionMode === sectionModes.EDITING">
               <mat-form-field>
                 <mat-label>Taak titel</mat-label>
                 <input
+                  data-cy="task-title-input"
                   matInput
                   type="text"
                   maxlength="500"
@@ -107,6 +107,7 @@
               <mat-form-field>
                 <mat-label>Taak omschrijving</mat-label>
                 <textarea
+                  data-cy="task-description-input"
                   matInput
                   placeholder="Taak omschrijving"
                   maxlength="500"
@@ -119,6 +120,7 @@
                   >Annuleren</campus-button
                 >
                 <campus-button
+                  data-cy="edit-task-confirm"
                   primary
                   [disabled]="!taskCache.name"
                   (click)="editTask($event)"
@@ -133,13 +135,16 @@
 
         <campus-section (actionClick)="openAssigneeModal()">
           <section-title>Toegewezen aan</section-title>
-          <section-actions><mat-icon svgIcon="add"></mat-icon></section-actions>
+          <section-actions
+            ><mat-icon svgIcon="add" data-cy="btn-add-task-assignees"></mat-icon
+          ></section-actions>
 
           <section-content>
             <div class="manage-kabas-tasks-detail__info__container">
               <div>
                 <span
                   *ngFor="let assignee of task.assignees"
+                  [attr.data-cy]="'task-assignee-' + assignee.label"
                   class="manage-kabas-tasks-detail__info__assignee"
                   [matTooltip]="
                     (assignee.start | date: 'dd-MM-yy') +
@@ -175,6 +180,7 @@
           <section-content>
             <ng-container *ngIf="task.isPaperTask">
               <div
+                data-cy="btn-print-paper-with-assignees"
                 (click)="printTask(task, true)"
                 class="manage-kabas-tasks-detail__info__link manage-kabas-tasks-detail__info__link--print"
                 [class.manage-kabas-tasks-detail__info__link--disabled]="
@@ -196,6 +202,7 @@
                 ></div
               >
               <div
+                data-cy="btn-print-paper-without-assignees"
                 (click)="printTask(task, false)"
                 class="manage-kabas-tasks-detail__info__link manage-kabas-tasks-detail__info__link--print"
                 ><mat-icon
@@ -207,6 +214,7 @@
                 ></div
               >
               <div
+                data-cy="btn-print-paper-with-solution"
                 (click)="printSolution(task)"
                 class="manage-kabas-tasks-detail__info__link manage-kabas-tasks-detail__info__link--print"
                 [class.manage-kabas-tasks-detail__info__link--disabled]="
@@ -226,7 +234,10 @@
                 ></div
               >
             </ng-container>
-            <campus-button primary routerLink="content"
+            <campus-button
+              data-cy="sidebar-btn-add-educontent"
+              primary
+              routerLink="content"
               >+ Lesmateriaal toevoegen</campus-button
             >
             <hr />
@@ -252,7 +263,7 @@
               selectedContent.eduContent.publishedEduContentMetadata as metadata
             "
           >
-            <h2>{{ metadata.title }}</h2>
+            <h2 data-cy="titel-educontent-detail">{{ metadata.title }}</h2>
             <p>{{ metadata.description }}</p>
             <div *ngIf="metadata.learningArea">{{
               metadata.learningArea.name
@@ -263,6 +274,7 @@
               }}</span>
             </div>
             <campus-button
+              data-cy="btn-preview-educontent"
               (click)="preview(selectedContent.eduContent, !!task.isPaperTask)"
               >Preview</campus-button
             >
@@ -299,12 +311,14 @@
               class="manage-kabas-tasks-detail__info__container__change-all-buttons"
             >
               <campus-button
+                data-cy="btn-all-required"
                 (click)="
                   setTaskEduContentsRequiredState(selectedTaskEduContents, true)
                 "
                 >Alles moetje</campus-button
               >
               <campus-button
+                data-cy="btn-all-optional"
                 (click)="
                   setTaskEduContentsRequiredState(
                     selectedTaskEduContents,
@@ -318,6 +332,7 @@
         </div>
 
         <campus-button
+          data-cy="btn-remove-selected-content"
           danger
           [disabled]="isActiveTask(task)"
           (click)="clickRemoveTaskEduContents(selectedTaskEduContents)"
@@ -376,6 +391,7 @@
 
         <div class="manage-kabas-tasks-detail__list__actions">
           <div
+            data-cy="main-btn-add-educontent"
             routerLink="content"
             class="manage-kabas-tasks-detail__list__primary-action"
           >
@@ -384,14 +400,24 @@
           </div>
 
           <div class="manage-kabas-tasks-detail__list__reorder-actions">
-            <campus-button (click)="toggleIsReordering()" *ngIf="!isReordering"
+            <campus-button
+              data-cy="btn-start-sort"
+              (click)="toggleIsReordering()"
+              *ngIf="!isReordering"
               >Volgorde wijzigen</campus-button
             >
 
-            <campus-button (click)="toggleIsReordering()" *ngIf="isReordering"
+            <campus-button
+              data-cy="btn-cancel-sort"
+              (click)="toggleIsReordering()"
+              *ngIf="isReordering"
               >Annuleren</campus-button
             >
-            <campus-button primary (click)="saveOrder()" *ngIf="isReordering"
+            <campus-button
+              data-cy="btn-save-sort"
+              primary
+              (click)="saveOrder()"
+              *ngIf="isReordering"
               >Opslaan</campus-button
             >
           </div>
@@ -418,6 +444,7 @@
                 checkboxPosition="before"
                 [class.mat-list-option--selected]="option.selected"
                 [value]="tEC"
+                data-cy="task-edu-content"
               >
                 <campus-task-edu-content-list-item
                   [title]="tEC.eduContent.publishedEduContentMetadata.title"
@@ -460,6 +487,7 @@
             *ngIf="reorderableTaskEduContents.length; else noResults"
           >
             <mat-list-item
+              data-cy="task-edu-content-drag"
               class="manage-kabas-tasks-detail__list__item"
               cdkDrag
               *ngFor="let tEC of reorderableTaskEduContents"

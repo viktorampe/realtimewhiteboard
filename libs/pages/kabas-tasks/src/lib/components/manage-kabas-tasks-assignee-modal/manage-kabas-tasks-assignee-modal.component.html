@@ -31,6 +31,7 @@
       class="manage-task-assignees__content__date-picker__container"
     >
       <campus-date-range-picker
+        data-cy="manage-task-date-range-picker"
         class="manage-task-assignees__content__date-picker"
         [useTime]="false"
         [initialStartDate]="default.start"
@@ -59,6 +60,7 @@
         </ng-container>
       </div>
       <div
+        data-cy="btn-assign-task-to"
         class="manage-task-assignees__content__list__item manage-task-assignees__content__list__item--add"
         (click)="toggleAddAssignees()"
       >
@@ -71,6 +73,7 @@
       <mat-list class="manage-task-assignees__content__list">
         <mat-list-item
           *ngFor="let assignee of currentTaskAssignees"
+          [attr.data-cy]="'removable-assignee-' + assignee.label"
           class="manage-task-assignees__content__list__item"
           [ngClass]="
             'manage-task-assignees__content__list__item--' + assignee.type
@@ -105,6 +108,7 @@
   <mat-dialog-actions class="manage-task-assignees__actions">
     <campus-button
       primary
+      data-cy="btn-manage-task-assignees-cancel"
       class="manage-task-assignees__actions__button"
       (click)="onCancelButtonClick()"
       >Annuleren</campus-button
@@ -113,6 +117,7 @@
     <campus-button
       *ngIf="areCurrentTaskAssigneesValid$ | async; else disabledButton"
       primary
+      data-cy="btn-manage-task-assignees-confirm"
       class="manage-task-assignees__actions__button"
       (click)="onOKButtonClick()"
       >OK</campus-button
