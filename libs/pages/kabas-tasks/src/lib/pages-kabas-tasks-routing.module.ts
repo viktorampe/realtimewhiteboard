@@ -7,6 +7,7 @@ import { ManageKabasTasksDetailComponent } from './components/manage-kabas-tasks
 import { ManageKabasTasksOverviewComponent } from './components/manage-kabas-tasks-overview/manage-kabas-tasks-overview.component';
 import { ManageTaskContentComponent } from './components/manage-task-content/manage-task-content.component';
 import { StudentTaskDetailComponent } from './components/student-task-detail/student-task-detail.component';
+import { StudentTaskOverviewComponent } from './components/student-task-overview/student-task-overview.component';
 import { PendingTaskGuard } from './guards/pending-task.guard';
 
 const routes: Routes = [
@@ -62,8 +63,13 @@ const routes: Routes = [
   },
   {
     path: '',
-    component: StudentTaskDetailComponent,
-    pathMatch: 'full'
+    children: [
+      { path: '', component: StudentTaskOverviewComponent },
+      {
+        path: ':id',
+        children: [{ path: '', component: StudentTaskDetailComponent }]
+      }
+    ]
   }
 ];
 
