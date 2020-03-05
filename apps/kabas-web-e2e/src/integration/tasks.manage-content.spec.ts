@@ -62,7 +62,7 @@ describe('Manage task content', () => {
 
         it('should show the right method', () => {
           dataCy('change-book')
-            .click({force:true})
+            .click({ force: true })
             .should('contain', 'Boeken verbergen');
           dataCy('method-books-title').should(
             'contain',

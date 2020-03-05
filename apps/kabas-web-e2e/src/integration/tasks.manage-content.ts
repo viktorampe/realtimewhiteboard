@@ -31,7 +31,7 @@ export function dragDrop(
   draggable
     .trigger('mousedown', { button: 0 })
     .wait(500)
-    .trigger('mousemove', { clientX: 10, clientY: 0 ,force: true})
+    .trigger('mousemove', { clientX: 10, clientY: 0, force: true })
     .wait(500)
     .trigger('mousemove', {
       clientX: 1000,
