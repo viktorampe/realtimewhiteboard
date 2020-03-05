@@ -147,7 +147,7 @@ describe('ManageTaskContentComponent', () => {
       expect(viewModel.updateSearchState).toHaveBeenCalledTimes(1);
       expect(viewModel.updateSearchState).toHaveBeenCalledWith(mockSearchState);
 
-      expect(component.hasSearchResults$).toBeObservable(hot('a', { a: true }));
+      expect(component.hasSearchResults).toEqual(true);
     });
 
     it('should not send searchstate to viewmodel, no chapter selected', () => {
@@ -157,9 +157,7 @@ describe('ManageTaskContentComponent', () => {
 
       expect(viewModel.updateSearchState).toHaveBeenCalledTimes(0);
 
-      expect(component.hasSearchResults$).toBeObservable(
-        hot('a', { a: false })
-      );
+      expect(component.hasSearchResults).toEqual(false);
     });
 
     it('should hide the search component', () => {
@@ -169,7 +167,7 @@ describe('ManageTaskContentComponent', () => {
       let searchDE = getSearchDE();
       expect(searchDE).toBeNull();
 
-      component.hasSearchResults$.next(true);
+      component.hasSearchResults = true;
       fixture.detectChanges();
 
       searchDE = getSearchDE();

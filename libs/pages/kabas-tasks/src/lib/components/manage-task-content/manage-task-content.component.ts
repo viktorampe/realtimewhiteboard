@@ -59,7 +59,7 @@ export class ManageTaskContentComponent
   public showBooks: boolean;
 
   // is there a search to show results for
-  public hasSearchResults$ = new BehaviorSubject<boolean>(false);
+  public hasSearchResults = false;
 
   @ViewChildren(SearchPortalDirective)
   private portalHosts: QueryList<SearchPortalDirective>;
@@ -183,9 +183,9 @@ export class ManageTaskContentComponent
       searchState.filterCriteriaSelections.has('eduContentTOC')
     ) {
       this.viewModel.updateSearchState(searchState);
-      this.hasSearchResults$.next(true);
+      this.hasSearchResults = true;
     } else {
-      this.hasSearchResults$.next(false);
+      this.hasSearchResults = false;
     }
   }
 }
