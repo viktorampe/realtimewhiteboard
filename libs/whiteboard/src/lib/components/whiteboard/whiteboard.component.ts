@@ -105,10 +105,11 @@ export class WhiteboardComponent implements OnChanges {
   updateCard(updates: Partial<CardInterface>, card: CardInterface) {
     Object.assign(card, updates);
 
-    if (this.whiteboard$.value.shelfCards.length) {
-      const shelfCard: CardInterface = this.whiteboard$.value.shelfCards.filter(
-        shelfcard => shelfcard.id === card.id
-      )[0];
+    const shelfCard: CardInterface = this.whiteboard$.value.shelfCards.filter(
+      shelfcard => shelfcard.id === card.id
+    )[0];
+
+    if (shelfCard) {
       Object.assign(shelfCard, updates);
     }
 
@@ -133,7 +134,7 @@ export class WhiteboardComponent implements OnChanges {
     };
 
     // add a 'copy' ( card with a different reference ) to the shelf
-    this.addCardToShelf({ ...card });
+    this.addCardToShelf({ ...card, mode: ModeEnum.SHELF });
 
     if (this.selectedCards.length) {
       card.mode = ModeEnum.MULTISELECT;
