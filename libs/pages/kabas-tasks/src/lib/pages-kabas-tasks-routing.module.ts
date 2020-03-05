@@ -63,6 +63,9 @@ const routes: Routes = [
   },
   {
     path: '',
+    data: {
+      requiredPermissions: 'openTasks'
+    },
     children: [
       { path: '', component: StudentTaskOverviewComponent },
       {
