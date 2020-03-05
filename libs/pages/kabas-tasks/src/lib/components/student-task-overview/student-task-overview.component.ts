@@ -1,5 +1,6 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { StudentTaskWithContentInterface } from '../../interfaces/StudentTaskWithContent.interface';
 
 interface TaskByLearningAreaInfoInterface {
   learningAreaName: string;
@@ -16,7 +17,7 @@ export class StudentTaskOverviewComponent implements OnInit {
   @HostBinding('class.student-task-overview')
   studentTaskOverviewClass = true;
 
-  tasks$: Observable<any>; // TODO: any should be StudentTaskWithContentInterface[]
+  tasks$: Observable<StudentTaskWithContentInterface[]>;
   tasksByLearningAreaInfo$: Observable<TaskByLearningAreaInfoInterface[]>;
   showFinishedTasks$ = new BehaviorSubject<boolean>(false);
   isGroupedByDate$ = new BehaviorSubject<boolean>(false);
