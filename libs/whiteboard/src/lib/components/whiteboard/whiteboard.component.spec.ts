@@ -97,7 +97,7 @@ describe('WhiteboardComponent', () => {
       color: null,
       top: 0,
       left: 0,
-      viewModeImage: true
+      viewModeImage: false
     };
 
     const card2: CardInterface = {
@@ -108,7 +108,7 @@ describe('WhiteboardComponent', () => {
       color: null,
       top: 0,
       left: 0,
-      viewModeImage: true
+      viewModeImage: false
     };
 
     component.whiteboard$.next({
@@ -374,6 +374,23 @@ describe('WhiteboardComponent', () => {
         expect(card.image).toBe('imageUrl');
       });
     });
+
+    it('should update shelfcard copy', () => {
+      component.lastColor = 'red';
+      component.whiteboard$.value.cards = [];
+      component.whiteboard$.value.shelfCards = [];
+      component.addEmptyCard(0, 0, 'www.si.be');
+
+      const file = new File([''], 'dummy.jpg', {
+        type: ''
+      });
+
+      component.uploadImageForCard(component.whiteboard$.value.cards[0], file);
+
+      expect(component.whiteboard$.value.cards[0].image).toEqual(
+        component.whiteboard$.value.shelfCards[0].image
+      );
+    });
   });
 
   describe('changeColorForCard', () => {
@@ -399,6 +416,22 @@ describe('WhiteboardComponent', () => {
       component.changeColorForCard(card, 'black');
 
       expect(card.mode).toBe(ModeEnum.IDLE);
+    });
+
+    it('should should update color of shelfcard copy', () => {
+      component.lastColor = 'red';
+      component.whiteboard$.value.cards = [];
+      component.whiteboard$.value.shelfCards = [];
+      component.addEmptyCard(0, 0, 'www.si.be');
+
+      component.changeColorForCard(
+        component.whiteboard$.value.cards[0],
+        'black'
+      );
+
+      expect(component.whiteboard$.value.cards[0].color).toEqual(
+        component.whiteboard$.value.shelfCards[0].color
+      );
     });
   });
 

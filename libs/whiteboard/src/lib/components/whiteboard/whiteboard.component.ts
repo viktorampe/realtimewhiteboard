@@ -240,6 +240,7 @@ export class WhiteboardComponent implements OnChanges {
     card.color = color;
     card.mode = ModeEnum.IDLE;
     this.updateWhiteboardSubject({});
+    this.updateCard({ color: color }, card);
   }
 
   onDragEnded(event: CdkDragEnd, card) {
