@@ -41,7 +41,10 @@
     {{ learningArea }}
   </list-item-content>
 
-  <list-item-content class="manage-kabas-tasks-task-list-item__dates ui-body-1">
+  <list-item-content
+    *ngIf="status !== 'paper'"
+    class="manage-kabas-tasks-task-list-item__dates ui-body-1"
+  >
     <div>
       <span *ngIf="startDate">{{ startDate | date: 'd/MM/yy' }}</span>
       <span *ngIf="endDate"> - {{ endDate | date: 'd/MM/yy' }}</span>
