@@ -54,7 +54,7 @@
   </ng-template>
 </campus-page-bar>
 
-<campus-backdrop [title]="(task$ | async).name" static>
+<campus-backdrop [title]="(task$ | async)?.name" static>
   <backdrop-reveal-action>
     <mat-icon svgIcon="arrow-back" (click)="clickBack()"></mat-icon>
   </backdrop-reveal-action>
@@ -135,56 +135,57 @@
                 ></campus-button>
               </div>
             </div>
-            <div class="manage-kabas-tasks-detail__list__actions">
-              <campus-button
-                fab
-                icon
-                routerLink="content"
-                class="manage-kabas-tasks-detail__list__primary-action"
-              >
-                <mat-icon svgIcon="add"></mat-icon>
-              </campus-button>
-              <div
-                class="manage-kabas-tasks-detail__list__reorder-actions"
-                *ngIf="!showFilters"
-              >
-                <campus-button
-                  bordered
-                  flat
-                  (click)="toggleIsReordering()"
-                  *ngIf="!isReordering"
-                  >Volgorde wijzigen</campus-button
-                >
-
-                <campus-button
-                  bordered
-                  flat
-                  (click)="toggleIsReordering()"
-                  *ngIf="isReordering"
-                  >Annuleren</campus-button
-                >
-                <campus-button
-                  secondary
-                  (click)="saveOrder()"
-                  *ngIf="isReordering"
-                  >Opslaan</campus-button
-                >
-              </div>
-            </div>
-
-            <mat-selection-list
-              [(ngModel)]="selectedTaskEduContents"
-              (ngModelChange)="onSelectionChange()"
-              #taskContent
-              class="manage-kabas-tasks-detail__list"
-              data-cy="task-edu-contents-list"
-              [class.mat-selection-list--has-selection]="
-                !taskContent.selectedOptions.isEmpty()
-              "
-              *ngIf="!isReordering"
+            <ng-container
+              *ngIf="filteredTaskEduContents$ | async as taskEduContents"
             >
-              <ng-container
-                *ngIf="filteredTaskEduContents$ | async as taskEduContents"
+              <div class="manage-kabas-tasks-detail__list__actions">
+                <campus-button
+                  fab
+                  icon
+                  routerLink="content"
+                  class="manage-kabas-tasks-detail__list__primary-action"
+                  *ngIf="taskEduContents.length"
+                >
+                  <mat-icon svgIcon="add"></mat-icon>
+                </campus-button>
+                <div
+                  class="manage-kabas-tasks-detail__list__reorder-actions"
+                  *ngIf="!showFilters && taskEduContents.length"
+                >
+                  <campus-button
+                    bordered
+                    flat
+                    (click)="toggleIsReordering()"
+                    *ngIf="!isReordering"
+                    >Volgorde wijzigen</campus-button
+                  >
+
+                  <campus-button
+                    bordered
+                    flat
+                    (click)="toggleIsReordering()"
+                    *ngIf="isReordering"
+                    >Annuleren</campus-button
+                  >
+                  <campus-button
+                    secondary
+                    (click)="saveOrder()"
+                    *ngIf="isReordering"
+                    >Opslaan</campus-button
+                  >
+                </div>
+              </div>
+
+              <mat-selection-list
+                [(ngModel)]="selectedTaskEduContents"
+                (ngModelChange)="onSelectionChange()"
+                #taskContent
+                class="manage-kabas-tasks-detail__list"
+                data-cy="task-edu-contents-list"
+                [class.mat-selection-list--has-selection]="
+                  !taskContent.selectedOptions.isEmpty()
+                "
+                *ngIf="!isReordering"
               >
                 <ng-container *ngIf="taskEduContents.length; else noResults">
                   <mat-list-option
@@ -221,8 +222,8 @@
                     </campus-task-edu-content-list-item>
                   </mat-list-option>
                 </ng-container>
-              </ng-container>
-            </mat-selection-list>
+              </mat-selection-list>
+            </ng-container>
             <mat-list
               #taskContentReordering
               class="manage-kabas-tasks-detail__list manage-kabas-tasks-detail__list--reorderable"
@@ -272,6 +273,13 @@
             <ng-template #noResults>
               <campus-empty-state
                 title="Geen lesmateriaal"
+                [description]="
+                  'Er werd nog geen lesmateriaal toegevoegd aan ' +
+                  task.name +
+                  '.'
+                "
+                ctaLabel="Lesmateriaal toevoegen"
+                routerLink="content"
                 svgIcon="empty-state-no-educontent"
               ></campus-empty-state>
             </ng-template>
@@ -395,6 +403,7 @@
                       </mat-chip>
                     </mat-chip-list>
                     <campus-empty-state
+                      *ngIf="task.assignees.length === 0"
                       [dense]="true"
                       svgIcon="empty-state-no-users"
                       description="Deze taak is nog aan niemand toegewezen"
@@ -605,6 +614,11 @@
         </section-content>
       </campus-section>
     </div>
-    <ng-template #noTask>Deze taak is niet beschikbaar.</ng-template>
+    <ng-template #noTask>
+      <!-- TODO: change to new task empty state -->
+      <campus-empty-state
+        svgIcon="empty-state-no-educontent"
+      ></campus-empty-state>
+    </ng-template>
   </front-layer-content>
 </campus-backdrop>

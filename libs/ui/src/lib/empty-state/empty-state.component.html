@@ -10,5 +10,7 @@
   {{ description }}
 </div>
 <div class="ui-empty-state__cta" *ngIf="ctaLabel">
-  <campus-button primary (click)="ctaClick()">{{ ctaLabel }}</campus-button>
+  <campus-button primary (click)="ctaClick()" [routerLink]="routerLink">{{
+    ctaLabel
+  }}</campus-button>
 </div>
