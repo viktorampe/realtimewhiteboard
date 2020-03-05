@@ -2,75 +2,27 @@ import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { DebugElement } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
-import {
-  MatDialog,
-  MatDialogRef,
-  MatIconRegistry,
-  MatInputModule,
-  MatListOption,
-  MatRadioModule,
-  MatSelectModule,
-  MatSlideToggleModule,
-  MatTooltip
-} from '@angular/material';
+import { MatChipsModule, MatDialog, MatDialogRef, MatIconRegistry, MatInputModule, MatListOption, MatRadioModule, MatSelectModule, MatSlideToggleModule, MatTooltip } from '@angular/material';
 import { By, HAMMER_LOADER } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import {
-  AssigneeFixture,
-  AssigneeInterface,
-  EduContentFixture,
-  EduFileFixture,
-  EduFileTypeEnum,
-  LearningAreaFixture,
-  LearningAreaInterface,
-  TaskEduContentFixture,
-  TaskEduContentInterface,
-  TaskWithAssigneesInterface
-} from '@campus/dal';
-import {
-  SearchFilterComponentInterface,
-  SearchFilterCriteriaInterface,
-  SearchModule
-} from '@campus/search';
-import {
-  ContentOpenActionsServiceInterface,
-  CONTENT_OPENER_TOKEN,
-  CONTENT_OPEN_ACTIONS_SERVICE_TOKEN,
-  ENVIRONMENT_ICON_MAPPING_TOKEN,
-  ENVIRONMENT_SEARCHMODES_TOKEN,
-  ENVIRONMENT_TESTING_TOKEN,
-  OPEN_STATIC_CONTENT_SERVICE_TOKEN,
-  SharedModule
-} from '@campus/shared';
+import { AssigneeFixture, AssigneeInterface, EduContentFixture, EduFileFixture, EduFileTypeEnum, LearningAreaFixture, LearningAreaInterface, TaskEduContentFixture, TaskEduContentInterface, TaskWithAssigneesInterface } from '@campus/dal';
+import { SearchFilterComponentInterface, SearchFilterCriteriaInterface, SearchModule } from '@campus/search';
+import { ContentOpenActionsServiceInterface, CONTENT_OPENER_TOKEN, CONTENT_OPEN_ACTIONS_SERVICE_TOKEN, ENVIRONMENT_ICON_MAPPING_TOKEN, ENVIRONMENT_SEARCHMODES_TOKEN, ENVIRONMENT_TESTING_TOKEN, OPEN_STATIC_CONTENT_SERVICE_TOKEN, SharedModule } from '@campus/shared';
 import { MockDate, MockMatIconRegistry } from '@campus/testing';
-import {
-  ConfirmationModalComponent,
-  ENVIRONMENT_UI_TOKEN,
-  SectionModeEnum,
-  UiModule
-} from '@campus/ui';
+import { ConfirmationModalComponent, ENVIRONMENT_UI_TOKEN, SectionModeEnum, UiModule } from '@campus/ui';
 import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/utils';
 import { hot } from '@nrwl/angular/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { BehaviorSubject, of } from 'rxjs';
-import {
-  CurrentTaskParams,
-  KabasTasksViewModel
-} from '../kabas-tasks.viewmodel';
+import { CurrentTaskParams, KabasTasksViewModel } from '../kabas-tasks.viewmodel';
 import { MockKabasTasksViewModel } from '../kabas-tasks.viewmodel.mock';
-import {
-  NewTaskComponent,
-  NewTaskFormValues
-} from '../new-task/new-task.component';
+import { NewTaskComponent, NewTaskFormValues } from '../new-task/new-task.component';
 import { PrintPaperTaskModalResultEnum } from '../print-paper-task-modal/print-paper-task-modal-result.enum';
 import { PrintPaperTaskModalComponent } from '../print-paper-task-modal/print-paper-task-modal.component';
 import { TaskEduContentListItemComponent } from '../task-edu-content-list-item/task-edu-content-list-item.component';
-import {
-  TaskEduContentWithEduContentInterface,
-  TaskWithTaskEduContentInterface
-} from './../../interfaces/TaskEduContentWithEduContent.interface';
+import { TaskEduContentWithEduContentInterface, TaskWithTaskEduContentInterface } from './../../interfaces/TaskEduContentWithEduContent.interface';
 import { ManageKabasTasksAssigneeModalComponent } from './../manage-kabas-tasks-assignee-modal/manage-kabas-tasks-assignee-modal.component';
 import { ManageKabasTasksDetailComponent } from './manage-kabas-tasks-detail.component';
 
@@ -150,7 +102,8 @@ describe('ManageKabasTasksDetailComponent', () => {
         MatInputModule,
         MatRadioModule,
         RouterTestingModule,
-        FormsModule
+        FormsModule,
+        MatChipsModule
       ],
       declarations: [
         ManageKabasTasksDetailComponent,
@@ -162,6 +115,7 @@ describe('ManageKabasTasksDetailComponent', () => {
           provide: ENVIRONMENT_ICON_MAPPING_TOKEN,
           useValue: {}
         },
+        { provide: ENVIRONMENT_UI_TOKEN, useValue: {} },
         { provide: ENVIRONMENT_TESTING_TOKEN, useValue: {} },
         {
           provide: HAMMER_LOADER,
@@ -1485,4 +1439,17 @@ describe('ManageKabasTasksDetailComponent', () => {
       ]);
     });
   });
+
+  describe('clickAddContent()', () => {
+    it('should navigate to content of current task', () => {
+      spyOn(router, 'navigate');
+      (viewModel.currentTaskParams$ as BehaviorSubject<CurrentTaskParams>).next(
+        {
+          id: 1
+        }
+      );
+      component.clickAddContent();
+      expect(router.navigate).toHaveBeenCalledWith(['tasks', 'manage', 1, 'content']);
+    })
+  })
 });

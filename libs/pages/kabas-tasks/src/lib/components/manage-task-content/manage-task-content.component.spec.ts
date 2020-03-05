@@ -1,7 +1,8 @@
-import { CdkDragDrop } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, DragDropModule } from '@angular/cdk/drag-drop';
+import { CommonModule } from '@angular/common';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconRegistry } from '@angular/material';
-import { By } from '@angular/platform-browser';
+import { By, HAMMER_LOADER } from '@angular/platform-browser';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Params, Router } from '@angular/router';
@@ -20,7 +21,7 @@ import {
   SharedModule
 } from '@campus/shared';
 import { MockMatIconRegistry } from '@campus/testing';
-import { UiModule } from '@campus/ui';
+import { ENVIRONMENT_UI_TOKEN, UiModule } from '@campus/ui';
 import { hot } from '@nrwl/angular/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { BehaviorSubject } from 'rxjs';
@@ -51,7 +52,9 @@ describe('ManageTaskContentComponent', () => {
         NoopAnimationsModule,
         SearchTestModule,
         SharedModule,
-        RouterTestingModule
+        RouterTestingModule,
+        DragDropModule,
+        CommonModule
       ],
       declarations: [ManageTaskContentComponent],
       providers: [
@@ -63,12 +66,11 @@ describe('ManageTaskContentComponent', () => {
         { provide: KabasTasksViewModel, useClass: MockKabasTasksViewModel },
         { provide: ENVIRONMENT_ICON_MAPPING_TOKEN, useValue: {} },
         { provide: ENVIRONMENT_TESTING_TOKEN, useValue: {} },
+        { provide: ENVIRONMENT_UI_TOKEN, useValue: {} },
+
         {
-          provide: Router,
-          useValue: {
-            navigate: () => {},
-            url: '/foo'
-          }
+          provide: HAMMER_LOADER,
+          useValue: () => new Promise(() => {})
         }
       ]
     }).overrideModule(BrowserDynamicTestingModule, {
@@ -178,7 +180,7 @@ describe('ManageTaskContentComponent', () => {
       jest.spyOn(router, 'navigate');
       component.ngOnInit();
 
-      expect(router.navigate).toHaveBeenCalledWith(['/foo'], {
+      expect(router.navigate).toHaveBeenCalledWith(['/?book=1'], {
         queryParams: { book: 1 }
       });
     });

@@ -327,6 +327,13 @@ export class ManageKabasTasksDetailComponent implements OnInit, OnDestroy {
       });
   }
 
+  public clickAddContent() {
+    this.getCurrentTask$()
+      .pipe(take(1))
+      .subscribe(currentTask => {
+        this.router.navigate(['tasks', 'manage', currentTask.id, 'content']);
+      });
+  }
   public clickBack() {
     const queryParams = { tab: 0 };
     if (this.route.snapshot.queryParams.paper) {

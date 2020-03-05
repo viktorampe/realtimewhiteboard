@@ -16,7 +16,6 @@ export class EmptyStateComponent {
   @Input() title?: string;
   @Input() description: string;
   @Input() ctaLabel?: string;
-  @Input() routerLink?: string;
 
   @HostBinding('class.ui-empty-state--dense')
   @Input()

@@ -279,7 +279,7 @@
                   '.'
                 "
                 ctaLabel="Lesmateriaal toevoegen"
-                routerLink="content"
+                (clickCta)="clickAddContent()"
                 svgIcon="empty-state-no-educontent"
               ></campus-empty-state>
             </ng-template>
@@ -416,8 +416,8 @@
                     class="ui-body-2"
                   >
                     <hr />
-                    {{ task.startDate | date: 'dd-MM-yyyy' }} -
-                    {{ task.endDate | date: 'dd-MM-yyyy' }}</div
+                    {{ task.startDate | date: 'dd-MM-yy' }} -
+                    {{ task.endDate | date: 'dd-MM-yy' }}</div
                   >
                 </section-content>
               </campus-section>
