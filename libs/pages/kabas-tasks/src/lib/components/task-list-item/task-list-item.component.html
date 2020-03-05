@@ -9,6 +9,7 @@
     list-item-icon
     *ngIf="!archived"
     class="manage-kabas-tasks-task-list-item__icon--status"
+    [ngClass]="status"
     [svgIcon]="'task:' + status"
   ></mat-icon>
 

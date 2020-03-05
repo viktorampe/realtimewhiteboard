@@ -31,8 +31,18 @@
   .manage-kabas-tasks-task-list-item {
     &__icon {
       &--status.mat-icon {
-        color: $pages-manage-kabas-tasks__task-list-item__status-color;
-        height: 36px; // task:*** icons are 36px by 24px
+        height: 32px;
+        width: 32px;
+
+        &.pending {
+          color: $ui-icon-color--disabled;
+        }
+        &.active {
+          color: $ui-color-primary;
+        }
+        &.finished {
+          color: $ui-color-secondary;
+        }
       }
       &--archived {
         color: $pages-manage-kabas-tasks__task-list-item__archived-color;
