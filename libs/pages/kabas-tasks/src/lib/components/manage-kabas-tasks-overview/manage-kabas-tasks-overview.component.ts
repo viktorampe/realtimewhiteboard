@@ -142,7 +142,7 @@ export class ManageKabasTasksOverviewComponent implements OnInit, OnDestroy {
     DateFilterComponent
   >;
 
-  private currentSortMode$ = new BehaviorSubject(TaskSortEnum.NAME);
+  private currentSortMode$ = new BehaviorSubject(TaskSortEnum.STARTDATE);
   private subscriptions = new Subscription();
 
   @ViewChild('digitalSorting', { static: true })
@@ -761,7 +761,7 @@ export class ManageKabasTasksOverviewComponent implements OnInit, OnDestroy {
   }
 
   private resetSorting() {
-    this.setSortMode(TaskSortEnum.NAME);
+    this.setSortMode(TaskSortEnum.STARTDATE);
     this.digitalSorting.value = undefined;
     this.paperSorting.value = undefined;
   }
@@ -778,7 +778,9 @@ export class ManageKabasTasksOverviewComponent implements OnInit, OnDestroy {
       case TaskSortEnum.STARTDATE:
         return this.sortByStartDate([...tasks]);
       case TaskSortEnum.FAVORITE:
-        return tasks.sort(this.nameComparer).sort(this.favoriteComparer);
+        return tasks.sort(
+          (a, b) => this.favoriteComparer(a, b) || this.nameComparer(a, b)
+        );
     }
     // no sortMode -> no sorting
     return tasks;
@@ -789,34 +791,17 @@ export class ManageKabasTasksOverviewComponent implements OnInit, OnDestroy {
   }
 
   private sortByLearningArea(tasks: TaskWithAssigneesInterface[]) {
-    return tasks.sort((a, b) => {
-      const lA = a.learningArea.name.localeCompare(
-        b.learningArea.name,
-        'be-nl',
-        {
-          sensitivity: 'base'
-        }
-      );
-      return (
-        lA ||
-        a.name.localeCompare(b.name, 'be-nl', {
-          sensitivity: 'base'
-        })
-      );
-    });
+    return tasks.sort(
+      (a, b) =>
+        this.nameComparer(a.learningArea, b.learningArea) ||
+        this.nameComparer(a, b)
+    );
   }
 
   private sortByStartDate(tasks: TaskWithAssigneesInterface[]) {
-    return tasks.sort((a, b) => {
-      const taskA = a.startDate;
-      const taskB = b.startDate;
-
-      // undefined dates at the front of the list
-      if (!taskA) return -1;
-      if (!taskB) return 1;
-
-      return taskA.getTime() - taskB.getTime();
-    });
+    return tasks.sort(
+      (a, b) => this.startDateComparer(a, b) || this.nameComparer(a, b)
+    );
   }
 
   private favoriteComparer(a, b): number {
@@ -827,5 +812,13 @@ export class ManageKabasTasksOverviewComponent implements OnInit, OnDestroy {
     return a.name.localeCompare(b.name, 'nl-BE', {
       sensitivity: 'base'
     });
+  }
+
+  private startDateComparer(a, b): number {
+    // undefined dates at the front of the list
+    const timeA = (a.startDate && a.startDate.getTime()) || 0;
+    const timeB = (b.startDate && b.startDate.getTime()) || 0;
+
+    return timeA - timeB;
   }
 }
