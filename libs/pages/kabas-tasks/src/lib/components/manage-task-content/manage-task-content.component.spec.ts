@@ -112,12 +112,13 @@ describe('ManageTaskContentComponent', () => {
   });
 
   describe('search', () => {
-    let mockSearchState;
+    let mockSearchState: SearchStateInterface;
 
     beforeEach(() => {
       mockSearchState = {
-        searchTerm: 'breuken'
-      } as SearchStateInterface;
+        searchTerm: 'breuken',
+        filterCriteriaSelections: new Map<string, (number | string)[]>()
+      };
     });
 
     it('should reset search filters when clearSearchFilters is called', () => {
@@ -139,10 +140,40 @@ describe('ManageTaskContentComponent', () => {
     it('should send searchstate to viewmodel on change', () => {
       jest.spyOn(viewModel, 'updateSearchState');
 
+      mockSearchState.filterCriteriaSelections.set('eduContentTOC', [1]);
+
       component.onSearchStateChange(mockSearchState);
 
       expect(viewModel.updateSearchState).toHaveBeenCalledTimes(1);
       expect(viewModel.updateSearchState).toHaveBeenCalledWith(mockSearchState);
+
+      expect(component.hasSearchResults$).toBeObservable(hot('a', { a: true }));
+    });
+
+    it('should not send searchstate to viewmodel, no chapter selected', () => {
+      jest.spyOn(viewModel, 'updateSearchState');
+
+      component.onSearchStateChange(mockSearchState);
+
+      expect(viewModel.updateSearchState).toHaveBeenCalledTimes(0);
+
+      expect(component.hasSearchResults$).toBeObservable(
+        hot('a', { a: false })
+      );
+    });
+
+    it('should hide the search component', () => {
+      const getSearchDE = () =>
+        fixture.debugElement.query(By.directive(SearchComponent));
+
+      let searchDE = getSearchDE();
+      expect(searchDE).toBeNull();
+
+      component.hasSearchResults$.next(true);
+      fixture.detectChanges();
+
+      searchDE = getSearchDE();
+      expect(searchDE).toBeNull();
     });
   });
 

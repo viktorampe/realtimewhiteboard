@@ -58,6 +58,9 @@ export class ManageTaskContentComponent
   // Temporary variable for showing/hiding the books, replaced later when the backdrop comes in
   public showBooks: boolean;
 
+  // is there a search to show results for
+  public hasSearchResults$ = new BehaviorSubject<boolean>(false);
+
   @ViewChildren(SearchPortalDirective)
   private portalHosts: QueryList<SearchPortalDirective>;
   @ViewChild(SearchComponent, { static: true })
@@ -174,6 +177,15 @@ export class ManageTaskContentComponent
   }
 
   onSearchStateChange(searchState: SearchStateInterface) {
-    this.viewModel.updateSearchState(searchState);
+    // Only search if the user has selected a chapter or lesson
+    if (
+      searchState.filterCriteriaSelections &&
+      searchState.filterCriteriaSelections.has('eduContentTOC')
+    ) {
+      this.viewModel.updateSearchState(searchState);
+      this.hasSearchResults$.next(true);
+    } else {
+      this.hasSearchResults$.next(false);
+    }
   }
 }

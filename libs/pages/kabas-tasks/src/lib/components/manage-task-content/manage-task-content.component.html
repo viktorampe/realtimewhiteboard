@@ -118,6 +118,9 @@
             [initialState]="initialSearchState$ | async"
             [searchResults]="searchResults$ | async"
             (searchState$)="onSearchStateChange($event)"
+            [class.manage-task-content__search--hidden]="
+              !(hasSearchResults$ | async)
+            "
           ></campus-search>
         </div>
       </div>
