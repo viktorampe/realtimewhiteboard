@@ -808,16 +808,7 @@ export class ManageKabasTasksOverviewComponent implements OnInit, OnDestroy {
   }
 
   private sortByStartDate(tasks: TaskWithAssigneesInterface[]) {
-    return tasks.sort((a, b) => {
-      const taskA = a.startDate;
-      const taskB = b.startDate;
-
-      // undefined dates at the front of the list
-      if (!taskA) return -1;
-      if (!taskB) return 1;
-
-      return taskA.getTime() - taskB.getTime();
-    });
+    return tasks.sort(this.startDateComparer.bind(this));
   }
 
   private favoriteComparer(a, b): number {
@@ -828,5 +819,13 @@ export class ManageKabasTasksOverviewComponent implements OnInit, OnDestroy {
     return a.name.localeCompare(b.name, 'nl-BE', {
       sensitivity: 'base'
     });
+  }
+
+  private startDateComparer(a, b): number {
+    // undefined dates at the front of the list
+    const timeA = (a.startDate && a.startDate.getTime()) || 0;
+    const timeB = (b.startDate && b.startDate.getTime()) || 0;
+
+    return timeA === timeB ? this.nameComparer(a, b) : timeA - timeB;
   }
 }
