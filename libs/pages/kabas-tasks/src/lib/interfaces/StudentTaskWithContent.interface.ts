@@ -1,4 +1,4 @@
-import { PersonInterface } from '../../+models';
+import { PersonInterface } from '@campus/dal';
 import { StudentTaskContentInterface } from './StudentTaskContent.interface';
 
 export interface StudentTaskWithContentInterface {
