@@ -15,6 +15,7 @@ import { MockMatIconRegistry } from '@campus/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { of } from 'rxjs';
 import { delay } from 'rxjs/operators';
+import { v4 as uuidv4 } from 'uuid';
 import { ModeEnum } from '../../enums/mode.enum';
 import { CardFixture } from '../../models/card.fixture';
 import CardInterface from '../../models/card.interface';
@@ -89,6 +90,7 @@ describe('WhiteboardComponent', () => {
     httpService = TestBed.get(WhiteboardHttpService);
 
     const card1: CardInterface = {
+      id: uuidv4(),
       mode: ModeEnum.IDLE,
       description: '',
       image: null,
@@ -99,6 +101,7 @@ describe('WhiteboardComponent', () => {
     };
 
     const card2: CardInterface = {
+      id: uuidv4(),
       mode: ModeEnum.IDLE,
       description: '',
       image: null,
@@ -124,7 +127,8 @@ describe('WhiteboardComponent', () => {
   it('should create a card on plus button clicked', () => {
     const cardsSizeBeforeClicked = component.whiteboard$.value.cards.length;
 
-    component.btnPlusClicked();
+    const clickEvent = new MouseEvent('click');
+    component.btnPlusClicked(clickEvent);
 
     expect(component.whiteboard$.value.cards.length).toBe(
       cardsSizeBeforeClicked + 1
@@ -556,14 +560,25 @@ describe('WhiteboardComponent', () => {
       component.whiteboard$.value.cards = [];
       component.addEmptyCard(0, 0, 'www.si.be');
       expect(component.whiteboard$.value.cards[0]).toEqual({
-        mode: ModeEnum.IDLE,
+        id: component.whiteboard$.value.cards[0].id,
+        mode: ModeEnum.EDIT,
         color: 'red',
         description: '',
         image: 'www.si.be',
         top: 0,
         left: 0,
-        viewModeImage: true
+        viewModeImage: false
       });
+    });
+
+    it('should add card to shelf and to workspace', () => {
+      component.whiteboard$.value.cards = [];
+      component.whiteboard$.value.shelfCards = [];
+      component.addEmptyCard(0, 0, 'www.si.be');
+      expect(component.whiteboard$.value.shelfCards.length).toEqual(1);
+      expect(component.whiteboard$.value.cards[0].id).toEqual(
+        component.whiteboard$.value.shelfCards[0].id
+      );
     });
   });
 

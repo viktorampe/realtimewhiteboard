@@ -104,11 +104,13 @@ export class WhiteboardComponent implements OnChanges {
   //#region CARD ACTIONS
   updateCard(updates: Partial<CardInterface>, card: CardInterface) {
     Object.assign(card, updates);
-    const shelfCard: CardInterface = this.whiteboard$.value.shelfCards.filter(
-      shelfcard => shelfcard.id === card.id
-    )[0];
-    Object.assign(shelfCard, updates);
-    console.log(card, shelfCard);
+
+    if (this.whiteboard$.value.shelfCards.length) {
+      const shelfCard: CardInterface = this.whiteboard$.value.shelfCards.filter(
+        shelfcard => shelfcard.id === card.id
+      )[0];
+      Object.assign(shelfCard, updates);
+    }
 
     this.updateWhiteboardSubject({});
   }
