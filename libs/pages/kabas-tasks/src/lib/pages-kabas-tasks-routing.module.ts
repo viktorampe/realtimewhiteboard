@@ -66,6 +66,7 @@ const routes: Routes = [
     data: {
       requiredPermissions: 'openTasks'
     },
+    canActivate: [PermissionGuard],
     children: [
       { path: '', component: StudentTaskOverviewComponent },
       {
