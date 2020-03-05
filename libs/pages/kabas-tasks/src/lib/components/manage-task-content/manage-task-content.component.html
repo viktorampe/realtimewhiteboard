@@ -31,7 +31,7 @@
           <section-title>{{ selectedBookTitle$ | async }}</section-title>
           <section-actions>
             <campus-button
-              tooltip="Kies een ander boek"
+              matTooltip="Kies een ander boek"
               icon
               bordered
               flat
@@ -51,6 +51,8 @@
                   [class.manage-task-content__lesson-link--selected]="
                     toc.id === (params.lesson ? params.lesson : params.chapter)
                   "
+                  [class.ui-body-2]="toc.depth === 0"
+                  [class.ui-body-1]="toc.depth > 0"
                   [ngClass]="
                     'manage-task-content__lesson-link--depth-' + toc.depth
                   "
@@ -181,7 +183,7 @@
       svgIcon="{{ fileExt != 'ludo.zip' ? 'general-file' : 'exercise' }}"
       class="manage-task-content__list__item__content__icon"
     ></mat-icon>
-    <div class="manage-task-content__list__item__content__title">{{
+    <div class="manage-task-content__list__item__content__title ui-body-1">{{
       title
     }}</div>
   </div>

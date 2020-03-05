@@ -116,13 +116,19 @@ $ui-list-item-default-height: 48px !default;
 }
 .ui-body-2,
 .ui-menu {
-  @include setFont(
-    map-get($ui-font-size-map, 'menu'),
-    $ui-font-weight-semibold
-  );
+  &,
+  & .mat-list-item-content {
+    @include setFont(
+      map-get($ui-font-size-map, 'menu'),
+      $ui-font-weight-semibold
+    );
+  }
 }
 .ui-body-1 {
-  @include setFont(map-get($ui-font-size-map, 'body'));
+  &,
+  & .mat-list-item-content {
+    @include setFont(map-get($ui-font-size-map, 'body'));
+  }
 }
 .ui-caption {
   @include setFont(

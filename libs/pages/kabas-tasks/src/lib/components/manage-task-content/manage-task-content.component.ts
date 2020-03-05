@@ -96,15 +96,19 @@ export class ManageTaskContentComponent
     );
     this.task$ = this.viewModel.currentTask$;
     this.selectedBookTitle$ = this.viewModel.selectedBookTitle$;
-
-    this.searchMode$ = this.viewModel.getSearchMode('task-manage-content');
-    this.initialSearchState$ = this.viewModel.getInitialSearchState();
-    this.searchResults$ = this.viewModel.searchResults$;
-
     this.methodYearsInArea$ = this.viewModel.methodYearsInArea$;
 
     this.currentToc$ = this.viewModel.currentToc$;
+
+    // @TODO: Start without search results when no chapters are selected!
+    this.initialSearchState$ = this.viewModel.getInitialSearchState();
+    // this.viewModel.currentTaskParams$.pipe(
+    //   filter(params => !!params.chapter),
+    //   switchMapTo(this.viewModel.getInitialSearchState()),
+    // );
     this.currentTaskParams$ = this.viewModel.currentTaskParams$;
+    this.searchMode$ = this.viewModel.getSearchMode('task-manage-content');
+    this.searchResults$ = this.viewModel.searchResults$;
     this.subscriptions.add(
       this.task$.subscribe(task => {
         this.reorderableTaskEduContents$.next([...task.taskEduContents]);
@@ -133,7 +137,6 @@ export class ManageTaskContentComponent
   }
 
   public changedBook(bookId: number) {
-    console.log('mlqskdfj');
     this.showBooks = false;
   }
   public onBackDroppedChanged(value: boolean) {
