@@ -253,6 +253,7 @@ export class ManageKabasTasksOverviewComponent implements OnInit, OnDestroy {
         }
       ]
     };
+    this.setSortMode(TaskSortEnum.STARTDATE);
   }
 
   public sortAndCreateForAssigneeFilter(tasksWithAssignments) {
@@ -761,7 +762,7 @@ export class ManageKabasTasksOverviewComponent implements OnInit, OnDestroy {
   }
 
   private resetSorting() {
-    this.setSortMode(TaskSortEnum.NAME);
+    this.setSortMode(TaskSortEnum.STARTDATE);
     this.digitalSorting.value = undefined;
     this.paperSorting.value = undefined;
   }
