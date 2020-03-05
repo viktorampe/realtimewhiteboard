@@ -142,7 +142,7 @@ export class ManageKabasTasksOverviewComponent implements OnInit, OnDestroy {
     DateFilterComponent
   >;
 
-  private currentSortMode$ = new BehaviorSubject(TaskSortEnum.NAME);
+  private currentSortMode$ = new BehaviorSubject(TaskSortEnum.STARTDATE);
   private subscriptions = new Subscription();
 
   @ViewChild('digitalSorting', { static: true })
@@ -253,7 +253,6 @@ export class ManageKabasTasksOverviewComponent implements OnInit, OnDestroy {
         }
       ]
     };
-    this.setSortMode(TaskSortEnum.STARTDATE);
   }
 
   public sortAndCreateForAssigneeFilter(tasksWithAssignments) {
@@ -779,7 +778,7 @@ export class ManageKabasTasksOverviewComponent implements OnInit, OnDestroy {
       case TaskSortEnum.STARTDATE:
         return this.sortByStartDate([...tasks]);
       case TaskSortEnum.FAVORITE:
-        return tasks.sort(this.nameComparer).sort(this.favoriteComparer);
+        return tasks.sort(this.favoriteComparer);
     }
     // no sortMode -> no sorting
     return tasks;
@@ -791,18 +790,9 @@ export class ManageKabasTasksOverviewComponent implements OnInit, OnDestroy {
 
   private sortByLearningArea(tasks: TaskWithAssigneesInterface[]) {
     return tasks.sort((a, b) => {
-      const lA = a.learningArea.name.localeCompare(
-        b.learningArea.name,
-        'be-nl',
-        {
-          sensitivity: 'base'
-        }
-      );
       return (
-        lA ||
-        a.name.localeCompare(b.name, 'be-nl', {
-          sensitivity: 'base'
-        })
+        this.nameComparer(a.learningArea, b.learningArea) ||
+        this.nameComparer(a, b)
       );
     });
   }
@@ -816,12 +806,12 @@ export class ManageKabasTasksOverviewComponent implements OnInit, OnDestroy {
       if (!taskA) return -1;
       if (!taskB) return 1;
 
-      return taskA.getTime() - taskB.getTime();
+      return taskA.getTime() - taskB.getTime() || this.nameComparer(a, b);
     });
   }
 
   private favoriteComparer(a, b): number {
-    return b.isFavorite - a.isFavorite;
+    return b.isFavorite - a.isFavorite || this.nameComparer(a, b);
   }
 
   private nameComparer(a, b): number {
