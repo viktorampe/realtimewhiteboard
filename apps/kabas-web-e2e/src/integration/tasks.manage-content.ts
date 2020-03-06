@@ -3,14 +3,14 @@ import { dataCy } from '../support';
 export function filterByBook() {
   return dataCy('method-books-link')
     .contains(1)
-    .click();
+    .click({ force: true });
 }
 
 export function filterByChapter() {
   filterByBook();
   return dataCy('lesson-link')
     .contains('Target 1')
-    .click();
+    .click({ force: true });
 }
 export function filterByLesson() {
   filterByBook();
@@ -18,7 +18,7 @@ export function filterByLesson() {
   dataCy('toggle-collabsible-sheet').click(); // open side sheet otherwise the lesson-link won't be clickable
   return dataCy('lesson-link')
     .contains('Les 3 - rekenhandelingen tot 5')
-    .click();
+    .click({ force: true });
 }
 
 // This does not work

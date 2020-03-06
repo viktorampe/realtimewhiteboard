@@ -50,7 +50,6 @@ describe('Manage task content', () => {
             'contain',
             filterSetup.book.favoriteBookTitle
           );
-          dataCy('change-book').should('contain', 'Zoek in ander boek');
           dataCy('method-books-title')
             .should('not.be.undefined')
             .location('pathname')
@@ -61,9 +60,7 @@ describe('Manage task content', () => {
         });
 
         it('should show the right method', () => {
-          dataCy('change-book')
-            .click({ force: true })
-            .should('contain', 'Boeken verbergen');
+          dataCy('change-book').click({ force: true });
           dataCy('method-books-title').should(
             'contain',
             filterSetup.book.methodName
@@ -99,8 +96,8 @@ describe('Manage task content', () => {
         });
 
         it('should filter by searching by term', () => {
-          filterByBook();
-
+          filterByChapter();
+          dataCy('show-search-filters').click();
           dataCy('search-term-filter')
             .find('input')
             .focus()
@@ -117,7 +114,7 @@ describe('Manage task content', () => {
 
           dataCy('search-results-count').should(
             'contain',
-            `${filterSetup.book.resultCount} resultaten`
+            `${filterSetup.term.originalCount} resultaten`
           );
         });
       });
@@ -131,12 +128,13 @@ describe('Manage task content', () => {
           cy.visit(
             `${appPaths.tasks}/manage/${manageTaskContentSetup.paperTaskId}/content?book=34`
           );
+          filterByChapter();
         });
 
         it('should return paper exercises', () => {
           dataCy('search-results-count').should(
             'contain',
-            `${manageTaskContentSetup.paperExpected.resultCount} resultaten`
+            `${manageTaskContentSetup.paperExpected.resultCount} resultaat`
           );
         });
       });
@@ -151,6 +149,7 @@ describe('Manage task content', () => {
         cy.visit(
           `${appPaths.tasks}/manage/${manageTaskContentSetup.taskId}/content?book=${filterSetup.book.id}`
         );
+        filterByChapter();
       });
 
       it('should add content to a task', () => {
@@ -244,6 +243,7 @@ describe('Manage task content', () => {
           `${appPaths.tasks}/manage/${manageTaskContentSetup.taskId}/content?book=${filterSetup.book.id}`
         );
         cy.route('GET', `${apiUrl}api/EduContents/*/requestURL*`).as('api');
+        filterByChapter();
       });
 
       it('should open content', () => {

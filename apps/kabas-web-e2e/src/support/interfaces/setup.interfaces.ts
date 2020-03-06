@@ -116,6 +116,7 @@ export interface KabasTasksPagesInterface {
           term: {
             value: string;
             resultCount: number;
+            originalCount: number;
           };
         };
         search: {
