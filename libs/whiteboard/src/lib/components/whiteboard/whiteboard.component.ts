@@ -308,6 +308,7 @@ export class WhiteboardComponent implements OnChanges {
       const offsetY = y + i * this.multipleCardCreationOffset;
 
       const card = this.addEmptyCard(offsetY, offsetX);
+      card.viewModeImage = true;
       this.uploadImageForCard(card, images[i]);
     }
     this.saveWhiteboard();
