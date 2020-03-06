@@ -330,11 +330,9 @@ export class WhiteboardComponent implements OnChanges {
     cardElement: HTMLElement;
   }) {
     const { card, event, cardElement } = $event;
-    let currentMode = this.Mode.IDLE;
-
-    if (this.selectedCards.length) {
-      currentMode = this.Mode.MULTISELECT;
-    }
+    const currentMode = this.selectedCards.length
+      ? ModeEnum.MULTISELECT
+      : ModeEnum.IDLE;
 
     const workspaceCard: CardInterface = {
       ...card,
