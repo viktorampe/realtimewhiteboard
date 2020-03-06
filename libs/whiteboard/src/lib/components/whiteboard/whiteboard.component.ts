@@ -145,6 +145,8 @@ export class WhiteboardComponent implements OnChanges {
       cards: [...this.whiteboard$.value.cards, card]
     });
 
+    this.saveWhiteboard();
+
     return card;
   }
 
@@ -158,11 +160,13 @@ export class WhiteboardComponent implements OnChanges {
       this.updateWhiteboardSubject({
         shelfCards: [...this.whiteboard$.value.shelfCards, card]
       });
+      this.saveWhiteboard();
     }
   }
 
   onDeleteCard(card: CardInterface) {
     //TODO: if(kaartje werd door redactie gemaakt)
+    //TODO: if(redactie een kaartje permanent delete ->saveWhiteboard())
     this.addCardToShelf(card);
     //TODO: else
     this.updateWhiteboardSubject({
@@ -227,6 +231,7 @@ export class WhiteboardComponent implements OnChanges {
           } else {
             card.mode = ModeEnum.IDLE;
           }
+          this.saveWhiteboard();
         }
       });
   }
@@ -237,6 +242,7 @@ export class WhiteboardComponent implements OnChanges {
     card.mode = ModeEnum.IDLE;
     this.updateWhiteboardSubject({});
     this.updateCard({ color: color }, card);
+    this.saveWhiteboard();
   }
 
   onDragEnded(event: CdkDragEnd, card) {
@@ -310,6 +316,7 @@ export class WhiteboardComponent implements OnChanges {
       card.viewModeImage = true;
       this.uploadImageForCard(card, images[i]);
     }
+    this.saveWhiteboard();
   }
 
   saveWhiteboard() {
@@ -398,6 +405,7 @@ export class WhiteboardComponent implements OnChanges {
       this.updateCard({ color: this.lastColor }, c)
     );
     this.updateWhiteboardSubject({});
+    this.saveWhiteboard();
   }
 
   onSelectCard(card: CardInterface) {
