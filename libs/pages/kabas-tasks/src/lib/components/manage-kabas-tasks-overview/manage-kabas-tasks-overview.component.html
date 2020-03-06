@@ -50,7 +50,11 @@
   <mat-icon svgIcon="add"></mat-icon>
 </campus-button>
 
-<campus-backdrop [title]="title" svgIcon="task">
+<campus-backdrop [title]="title" [static]="true">
+  <backdrop-reveal-action>
+    <mat-icon svgIcon="tasks"></mat-icon>
+  </backdrop-reveal-action>
+
   <front-layer-content>
     <div class="manage-kabas-tasks-overview__container">
       <campus-button
