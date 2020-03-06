@@ -39,6 +39,8 @@
   $pages-kabas-tasks__tab-labels-left-offset: 64px;
   $pages-kabas-tasks__tab-body-margin-top: 24px;
 
+  $pages-kabas-tasks__list__checkbox-color: $ui-color-secondary;
+
   .manage-kabas-tasks-overview {
     &__list__primary-action.ui-button--fab {
       position: absolute;
@@ -79,7 +81,6 @@
           }
 
           .mat-pseudo-checkbox {
-            transform: scale(0.8);
             opacity: 0.3;
             transition: opacity 150ms ease-out;
           }
