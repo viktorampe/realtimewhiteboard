@@ -97,6 +97,7 @@ import {
   SectionActionsDirective,
   SectionComponent,
   SectionContentDirective,
+  SectionFooterActionsDirective,
   SectionTitleDirective
 } from './section/section.component';
 import { ShellBodyDirective } from './shell/directives/shell-body.directive';
@@ -218,6 +219,7 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     IconDirective,
     SectionContentDirective,
     SectionActionsDirective,
+    SectionFooterActionsDirective,
     SectionTitleDirective,
     ListItemContentComponent,
     ListItemIconDirective,
@@ -309,6 +311,7 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     IconDirective,
     SectionContentDirective,
     SectionActionsDirective,
+    SectionFooterActionsDirective,
     SectionTitleDirective,
     ListItemContentComponent,
     ListItemIconDirective,

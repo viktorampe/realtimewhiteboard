@@ -3,6 +3,7 @@ import { DebugElement } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import {
+  MatChipsModule,
   MatDialog,
   MatDialogRef,
   MatIconRegistry,
@@ -150,7 +151,8 @@ describe('ManageKabasTasksDetailComponent', () => {
         MatInputModule,
         MatRadioModule,
         RouterTestingModule,
-        FormsModule
+        FormsModule,
+        MatChipsModule
       ],
       declarations: [
         ManageKabasTasksDetailComponent,
@@ -162,6 +164,7 @@ describe('ManageKabasTasksDetailComponent', () => {
           provide: ENVIRONMENT_ICON_MAPPING_TOKEN,
           useValue: {}
         },
+        { provide: ENVIRONMENT_UI_TOKEN, useValue: {} },
         { provide: ENVIRONMENT_TESTING_TOKEN, useValue: {} },
         {
           provide: HAMMER_LOADER,
@@ -728,7 +731,7 @@ describe('ManageKabasTasksDetailComponent', () => {
     describe('links', () => {
       const getSideBarLinks = () =>
         fixture.debugElement.queryAll(
-          By.css('.manage-kabas-tasks-detail__info__link')
+          By.css('.manage-kabas-tasks-detail__info__link-print')
         );
 
       describe('paper task', () => {
@@ -755,7 +758,7 @@ describe('ManageKabasTasksDetailComponent', () => {
             updateCurrentTask(currentTask);
 
             expect(link.nativeElement.classList).toContain(
-              'manage-kabas-tasks-detail__info__link--disabled'
+              'ui-button--disabled'
             );
           });
 
@@ -828,7 +831,7 @@ describe('ManageKabasTasksDetailComponent', () => {
             fixture.detectChanges();
 
             expect(link.nativeElement.classList).toContain(
-              'manage-kabas-tasks-detail__info__link--disabled'
+              'ui-button--disabled'
             );
           });
 
@@ -1482,6 +1485,24 @@ describe('ManageKabasTasksDetailComponent', () => {
       expect(component.selectedTaskEduContents).toEqual([
         newTaskEduContents[0],
         newTaskEduContents[2]
+      ]);
+    });
+  });
+
+  describe('clickAddContent()', () => {
+    it('should navigate to content of current task', () => {
+      spyOn(router, 'navigate');
+      (viewModel.currentTaskParams$ as BehaviorSubject<CurrentTaskParams>).next(
+        {
+          id: 1
+        }
+      );
+      component.clickAddContent();
+      expect(router.navigate).toHaveBeenCalledWith([
+        'tasks',
+        'manage',
+        1,
+        'content'
       ]);
     });
   });

@@ -96,6 +96,7 @@ export class ManageKabasTasksDetailComponent implements OnInit, OnDestroy {
     TaskEduContentWithEduContentInterface[]
   >;
   public selectedTaskEduContents: TaskEduContentWithEduContentInterface[] = [];
+  public showFilters = false;
 
   private filterState$ = new BehaviorSubject<FilterStateInterface>({});
   private subscriptions = new Subscription();
@@ -324,6 +325,21 @@ export class ManageKabasTasksDetailComponent implements OnInit, OnDestroy {
           this.router.navigate(['tasks', 'manage'], { queryParams });
         }
       });
+  }
+
+  public clickAddContent() {
+    this.getCurrentTask$()
+      .pipe(take(1))
+      .subscribe(currentTask => {
+        this.router.navigate(['tasks', 'manage', currentTask.id, 'content']);
+      });
+  }
+  public clickBack() {
+    const queryParams = { tab: 0 };
+    if (this.route.snapshot.queryParams.paper) {
+      queryParams.tab = 1;
+    }
+    this.router.navigate(['tasks', 'manage'], { queryParams });
   }
 
   public removeAssignee(

@@ -5,10 +5,14 @@
 }
 
 .manage-task-content {
+  &__book-tiles {
+    padding: 24px;
+  }
   &__aside {
     display: flex;
     flex-direction: column;
     height: 100%;
+    overflow: auto;
 
     &__nav {
       overflow: auto;
@@ -17,16 +21,12 @@
 
   &__main {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     flex: 1 1 auto;
 
     &__container {
       display: flex;
       height: 100%;
-    }
-
-    campus-search {
-      flex: 1 1 auto;
     }
   }
 
