@@ -61,7 +61,7 @@ export function updateTaskInfo(
   dataCy('edit-task-confirm').click();
 }
 
-export function selectTaskEduContent(eduContentTitles: string[]) {
+export function toggleTaskEduContentSelection(eduContentTitles: string[]) {
   eduContentTitles.forEach(title => {
     cy.contains('[data-cy=task-edu-content]', title).click();
   });

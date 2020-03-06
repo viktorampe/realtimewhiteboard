@@ -11,7 +11,7 @@ import {
   checkAndCancelError,
   removeAssigneesFromTask,
   removeAssigneesFromTask2,
-  selectTaskEduContent,
+  toggleTaskEduContentSelection,
   updateTaskInfo,
   verifyTaskAssignees,
   verifyTaskContent,
@@ -55,22 +55,20 @@ describe('Tasks Detail', () => {
     cy.server();
   });
 
-  beforeEach(() => {
-    login(
-      setup.kabasTasksPages.loginTeacher.username,
-      setup.kabasTasksPages.loginTeacher.password
-    );
-  });
-
   describe('Teacher', () => {
     describe('Digital task', () => {
-      describe('pagebar buttons', () => {
-        let taskPath;
-        beforeEach(() => {
-          taskPath = tasksPath + activeTask.id;
-          cy.visit(taskPath);
-        });
+      let taskPath;
+      before(() => {
+        login(
+          setup.kabasTasksPages.loginTeacher.username,
+          setup.kabasTasksPages.loginTeacher.password
+        );
 
+        taskPath = tasksPath + activeTask.id;
+        cy.visit(taskPath);
+      });
+
+      describe('pagebar buttons', () => {
         describe('without selected content', () => {
           it('should only show expected buttons', () => {
             dataCy('header-btn-add-educontent').should('exist');
@@ -84,11 +82,9 @@ describe('Tasks Detail', () => {
         });
 
         describe('with 1 selected content', () => {
-          beforeEach(() => {
-            selectTaskEduContent(['gemiddelde']);
-          });
-
           it('should only show expected buttons', () => {
+            toggleTaskEduContentSelection(['gemiddelde']);
+
             dataCy('header-btn-add-educontent').should('not.exist');
             dataCy('header-btn-open-results').should('not.exist');
             dataCy('header-btn-open-matrix').should('not.exist');
@@ -100,11 +96,9 @@ describe('Tasks Detail', () => {
         });
 
         describe('with multiple selected content', () => {
-          beforeEach(() => {
-            selectTaskEduContent(['gemiddelde', 'breuken']);
-          });
-
           it('should only show expected buttons', () => {
+            toggleTaskEduContentSelection(['breuken']);
+
             dataCy('header-btn-add-educontent').should('not.exist');
             dataCy('header-btn-open-results').should('not.exist');
             dataCy('header-btn-open-matrix').should('not.exist');
@@ -117,10 +111,9 @@ describe('Tasks Detail', () => {
       });
 
       describe('sidebar', () => {
-        let taskPath;
-        beforeEach(() => {
-          taskPath = tasksPath + activeTask.id;
-          cy.visit(taskPath);
+        before(() => {
+          // deselect values of previous describe block
+          toggleTaskEduContentSelection(['gemiddelde', 'breuken']);
         });
 
         describe('without selected content', () => {
@@ -185,8 +178,8 @@ describe('Tasks Detail', () => {
 
         describe('with selected content', () => {
           const selectedContent = ['gemiddelde', 'breuken'];
-          beforeEach(() => {
-            selectTaskEduContent(selectedContent);
+          before(() => {
+            toggleTaskEduContentSelection(selectedContent);
           });
 
           it('should show task details', () => {
@@ -240,8 +233,14 @@ describe('Tasks Detail', () => {
       });
 
       describe('Active task', () => {
-        let taskPath;
-        beforeEach(() => {
+        const selectedContent = ['gemiddelde', 'breuken'];
+
+        before(() => {
+          login(
+            setup.kabasTasksPages.loginTeacher.username,
+            setup.kabasTasksPages.loginTeacher.password
+          );
+
           taskPath = tasksPath + taskId.active;
           cy.visit(taskPath);
         });
@@ -257,9 +256,7 @@ describe('Tasks Detail', () => {
           });
 
           it('should open confirmation dialog when clicking `delete selection` button and show error after confirmation', () => {
-            // select first taskEduContent
-            const selectedContent = ['gemiddelde', 'breuken'];
-            selectTaskEduContent(selectedContent);
+            toggleTaskEduContentSelection(selectedContent);
             dataCy('header-btn-remove-selection').click({ force: true });
             // check for confirm dialog
             dataCy('cm-confirm')
@@ -273,8 +270,6 @@ describe('Tasks Detail', () => {
 
         describe('sidebar', () => {
           it('should open confirmation dialog when clicking `delete selection` button and show error after confirmation', () => {
-            const selectedContent = ['gemiddelde', 'breuken'];
-            selectTaskEduContent(selectedContent);
             dataCy('btn-remove-selected-content').click({ force: true });
             dataCy('cm-confirm')
               .should('exist')
@@ -285,6 +280,9 @@ describe('Tasks Detail', () => {
           });
 
           it('should fail adding content', () => {
+            // de-select
+            toggleTaskEduContentSelection(selectedContent);
+
             dataCy('sidebar-btn-add-educontent').click();
             checkAndCancelError('actief of voltooid');
           });
@@ -292,8 +290,12 @@ describe('Tasks Detail', () => {
       });
 
       describe('Pending task', () => {
-        let taskPath;
-        beforeEach(() => {
+        before(() => {
+          login(
+            setup.kabasTasksPages.loginTeacher.username,
+            setup.kabasTasksPages.loginTeacher.password
+          );
+
           taskPath = tasksPath + taskId.pending;
           cy.visit(taskPath);
         });
@@ -311,7 +313,7 @@ describe('Tasks Detail', () => {
             // select taskEduContent
             const selectedContent = ['gemiddelde'];
             const remainingContentLength = 4;
-            selectTaskEduContent(selectedContent);
+            toggleTaskEduContentSelection(selectedContent);
 
             dataCy('header-btn-remove-selection').click({ force: true });
             // check for confirm dialog
@@ -326,7 +328,8 @@ describe('Tasks Detail', () => {
         describe('sidebar', () => {
           it('should open confirmation dialog when clicking `delete selection` button and remove content after confirmation', () => {
             const selectedContent = ['breuken'];
-            selectTaskEduContent(selectedContent);
+            toggleTaskEduContentSelection(selectedContent);
+
             const remainingContentLength = 3;
             dataCy('btn-remove-selected-content').click({ force: true });
             dataCy('cm-confirm')
@@ -347,9 +350,15 @@ describe('Tasks Detail', () => {
       });
 
       describe('Finished task', () => {
-        let taskPath;
-        beforeEach(() => {
-          taskPath = tasksPath + activeTask.id;
+        const selectedContent = ['gemiddelde', 'breuken'];
+
+        before(() => {
+          login(
+            setup.kabasTasksPages.loginTeacher.username,
+            setup.kabasTasksPages.loginTeacher.password
+          );
+
+          taskPath = tasksPath + taskId.finished;
           cy.visit(taskPath);
         });
 
@@ -364,8 +373,7 @@ describe('Tasks Detail', () => {
           });
 
           it('should open confirmation dialog when clicking `delete selection` button and show error after confirmation', () => {
-            const selectedContent = ['gemiddelde', 'breuken'];
-            selectTaskEduContent(selectedContent);
+            toggleTaskEduContentSelection(selectedContent);
             dataCy('header-btn-remove-selection').click({ force: true });
             // check for confirm dialog
             dataCy('cm-confirm')
@@ -379,8 +387,6 @@ describe('Tasks Detail', () => {
 
         describe('sidebar', () => {
           it('should open confirmation dialog when clicking `delete selection` button and show error after confirmation', () => {
-            const selectedContent = ['gemiddelde', 'breuken'];
-            selectTaskEduContent(selectedContent);
             dataCy('btn-remove-selected-content').click({ force: true });
             dataCy('cm-confirm')
               .should('exist')
@@ -391,6 +397,7 @@ describe('Tasks Detail', () => {
           });
 
           it('should fail adding content', () => {
+            toggleTaskEduContentSelection(selectedContent);
             dataCy('sidebar-btn-add-educontent').click();
             checkAndCancelError('actief of voltooid');
           });
@@ -399,13 +406,18 @@ describe('Tasks Detail', () => {
     });
 
     describe('Paper task', () => {
-      describe('pagebar buttons', () => {
-        let taskPath;
-        beforeEach(() => {
-          taskPath = tasksPath + taskId.paper;
-          cy.visit(taskPath);
-        });
+      let taskPath;
+      before(() => {
+        login(
+          setup.kabasTasksPages.loginTeacher.username,
+          setup.kabasTasksPages.loginTeacher.password
+        );
 
+        taskPath = tasksPath + taskId.paper;
+        cy.visit(taskPath);
+      });
+
+      describe('pagebar buttons', () => {
         describe('without selected content', () => {
           it('should only show expected buttons', () => {
             dataCy('header-btn-add-educontent').should('exist');
@@ -420,15 +432,14 @@ describe('Tasks Detail', () => {
           it('should open dialog with print links', () => {
             dataCy('header-btn-print').click();
             dataCy('modal-btn-print-paper').should('have.length', 3);
+            dataCy('modal-btn-print-cancel').click();
           });
         });
 
         describe('with 1 selected content', () => {
-          beforeEach(() => {
-            selectTaskEduContent(['Hoeken']);
-          });
-
           it('should only show expected buttons', () => {
+            toggleTaskEduContentSelection(['Hoeken']);
+
             dataCy('header-btn-add-educontent').should('not.exist');
             dataCy('header-btn-open-results').should('not.exist');
             dataCy('header-btn-open-matrix').should('not.exist');
@@ -440,11 +451,9 @@ describe('Tasks Detail', () => {
         });
 
         describe('with multiple selected content', () => {
-          beforeEach(() => {
-            selectTaskEduContent(['Hoeken', 'Spiegelingen']);
-          });
-
           it('should only show expected buttons', () => {
+            toggleTaskEduContentSelection(['Spiegelingen']);
+
             dataCy('header-btn-add-educontent').should('not.exist');
             dataCy('header-btn-open-results').should('not.exist');
             dataCy('header-btn-open-matrix').should('not.exist');
@@ -457,13 +466,11 @@ describe('Tasks Detail', () => {
       });
 
       describe('sidebar', () => {
-        let taskPath;
-        beforeEach(() => {
-          taskPath = tasksPath + taskId.paper;
-          cy.visit(taskPath);
-        });
-
         describe('without selected content', () => {
+          before(() => {
+            toggleTaskEduContentSelection(['Hoeken', 'Spiegelingen']);
+          });
+
           describe('buttons', () => {
             it('should allow task title and description to be updated', () => {
               updateTaskInfo({
@@ -538,8 +545,8 @@ describe('Tasks Detail', () => {
 
         describe('with selected content', () => {
           const selectedContent = ['Hoeken', 'Spiegelingen'];
-          beforeEach(() => {
-            selectTaskEduContent(selectedContent);
+          before(() => {
+            toggleTaskEduContentSelection(selectedContent);
           });
 
           it('should show task details', () => {
