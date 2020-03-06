@@ -30,19 +30,18 @@
 
   <ng-template #contentSelected>
     <campus-button
-      inline
       *ngIf="selectedTaskEduContents.length === 1"
       class="shared-header__contextual__button"
       (click)="
         preview(selectedTaskEduContents[0].eduContent, !!task.isPaperTask)
       "
-      ><mat-icon svgIcon="eye"></mat-icon
+      ><mat-icon svgIcon="preview"></mat-icon
       >{{ task.isPaperTask ? 'Voorbeeld' : 'Openen' }}</campus-button
     >
     <campus-button
       *ngIf="task.isPaperTask"
       class="shared-header__contextual__button smallIcon"
-      iconClass=""
+      iconClass="print"
       ><span>Print</span></campus-button
     >
     <campus-button
@@ -542,7 +541,7 @@
                         "
                       >
                         <mat-icon svgIcon="preview"></mat-icon>
-                        Voorbeeld
+                        {{ task.isPaperTask ? 'Voorbeeld' : 'Openen' }}
                       </campus-button>
                       <hr />
                     </ng-container>
