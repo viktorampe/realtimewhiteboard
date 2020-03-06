@@ -62,6 +62,7 @@
       <campus-button
         bordered
         flat
+        class="manage-task-assignees__content__list__item--add"
         (click)="toggleAddAssignees()"
         *ngIf="currentTaskAssignees.length"
       >
@@ -106,6 +107,7 @@
           svgIcon="empty-state-no-users"
           title="Er is niemand hier"
           ctaLabel="Deze taak toewijzen..."
+          [dense]="true"
           (clickCta)="toggleAddAssignees()"
         ></campus-empty-state>
       </ng-template>
