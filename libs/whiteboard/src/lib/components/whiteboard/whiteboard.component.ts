@@ -160,14 +160,6 @@ export class WhiteboardComponent implements OnChanges {
     }
   }
 
-  addCardsToShelf(cards: CardInterface[]) {
-    cards.forEach(c => (c.mode = ModeEnum.SHELF));
-
-    this.updateWhiteboardSubject({
-      shelfCards: [...this.whiteboard$.value.shelfCards, ...cards]
-    });
-  }
-
   onDeleteCard(card: CardInterface) {
     //TODO: if(kaartje werd door redactie gemaakt)
     this.addCardToShelf(card);
@@ -336,6 +328,7 @@ export class WhiteboardComponent implements OnChanges {
   }) {
     const { card, event, cardElement } = $event;
 
+    console.log(event);
     const workspaceCard: CardInterface = {
       id: card.id,
       mode: ModeEnum.IDLE,
@@ -387,19 +380,19 @@ export class WhiteboardComponent implements OnChanges {
       c => !this.selectedCards.includes(c)
     );
 
-    cards.forEach(c => (c.mode = ModeEnum.IDLE));
+    cards.forEach(c => this.onDeleteCard(c));
 
     this.updateWhiteboardSubject({
       cards: cards
     });
-
-    this.addCardsToShelf(this.selectedCards);
     this.selectedCards = [];
   }
 
   changeSelectedCardsColor(color: string) {
     this.lastColor = color;
-    this.selectedCards.forEach(c => (c.color = this.lastColor));
+    this.selectedCards.forEach(c =>
+      this.updateCard({ color: this.lastColor }, c)
+    );
     this.updateWhiteboardSubject({});
   }
 
