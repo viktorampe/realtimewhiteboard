@@ -33,13 +33,6 @@
   $filters-hover-background-color: inherit !default;
   $filters-active-background-color: inherit !default;
 
-  $manage-kabas-tasks-detail__info__link-horizontal-spacing: $pages-kabas-tasks-spacing--horizontal/2 !default;
-  $manage-kabas-tasks-detail__info__link--print-color: $pages-kabas-tasks_link--print-color !default;
-  $manage-kabas-tasks-detail__info__link__icon-horizontal-spacing: $pages-kabas-tasks-spacing--horizontal/2 !default;
-  $manage-kabas-tasks-detail__info__link__icon-vertical-spacing: $pages-kabas-tasks-spacing--vertical !default;
-  $manage-kabas-tasks-detail__info__link__icon-dimension: $pages-kabas-tasks_link_icon-dimension !default;
-  $manage-kabas-tasks-detail__info__link__label-height: $pages-kabas-tasks_link_label-height !default;
-
   // measurements
   $pages-kabas-tasks__list-option--selected-border-width: 4px !default;
   $pages-kabas-tasks__list-option-padding-left: 16px !default;
@@ -86,6 +79,12 @@
     &__main {
       .ui-section__header > section-title {
         margin-left: $pages-kabas-tasks__detail__main-title-offset;
+      }
+    }
+
+    &__actions {
+      .ui-button--inline {
+        margin: 4px 0;
       }
     }
 
@@ -281,27 +280,6 @@
         align-items: center;
         margin-top: $manage-kabas-tasks-detail__list__primary-action-margin-top;
         cursor: pointer;
-      }
-    }
-
-    &__info {
-      &__link {
-        padding: $manage-kabas-tasks-detail__info__link-horizontal-spacing 0px;
-
-        &__icon {
-          height: $manage-kabas-tasks-detail__info__link__icon-dimension !important;
-          width: $manage-kabas-tasks-detail__info__link__icon-dimension !important;
-          margin-right: $manage-kabas-tasks-detail__info__link__icon-horizontal-spacing;
-        }
-
-        &__label {
-          line-height: $manage-kabas-tasks-detail__info__link__label-height;
-          height: $manage-kabas-tasks-detail__info__link__label-height;
-        }
-
-        &--print {
-          color: $manage-kabas-tasks-detail__info__link--print-color;
-        }
       }
     }
   }

@@ -436,14 +436,15 @@
 
               <!-- ACTIONS SECTION -->
               <campus-section>
-                <section-content>
+                <section-content class="manage-kabas-tasks-detail__actions">
+                  <div>
+                    <campus-button inline routerLink="content">
+                      <mat-icon svgIcon="add"></mat-icon>
+                      Lesmateriaal toevoegen
+                    </campus-button>
+                  </div>
                   <ng-container *ngIf="task.isPaperTask">
                     <div
-                      (click)="printTask(task, true)"
-                      class="manage-kabas-tasks-detail__info__link manage-kabas-tasks-detail__info__link--print"
-                      [class.manage-kabas-tasks-detail__info__link--disabled]="
-                        !task.assignees.length
-                      "
                       [matTooltip]="
                         !task.assignees.length
                           ? 'Deze taak is aan niemand toegekend.'
@@ -451,52 +452,40 @@
                       "
                       matTooltipPosition="before"
                     >
-                      <mat-icon
-                        svgIcon="print"
-                        class="manage-kabas-tasks-detail__info__link__icon"
-                      ></mat-icon
-                      ><span
-                        class="manage-kabas-tasks-detail__info__link__label"
-                        >Afdrukken met namen</span
-                      ></div
-                    >
+                      <campus-button
+                        inline
+                        (click)="printTask(task, true)"
+                        [disabled]="!task.assignees.length"
+                      >
+                        <mat-icon svgIcon="print"></mat-icon>
+                        Afdrukken met namen
+                      </campus-button>
+                    </div>
+                    <div>
+                      <campus-button inline (click)="printTask(task, false)">
+                        <mat-icon svgIcon="print"></mat-icon>
+                        Afdrukken zonder namen
+                      </campus-button>
+                    </div>
                     <div
-                      (click)="printTask(task, false)"
-                      class="manage-kabas-tasks-detail__info__link manage-kabas-tasks-detail__info__link--print"
-                      ><mat-icon
-                        svgIcon="print"
-                        class="manage-kabas-tasks-detail__info__link__icon"
-                      ></mat-icon
-                      ><span
-                        class="manage-kabas-tasks-detail__info__link__label"
-                        >Afdrukken zonder namen</span
-                      ></div
-                    >
-                    <div
-                      (click)="printSolution(task)"
-                      class="manage-kabas-tasks-detail__info__link manage-kabas-tasks-detail__info__link--print"
-                      [class.manage-kabas-tasks-detail__info__link--disabled]="
-                        !task.hasSolutionFiles
-                      "
                       [matTooltip]="
                         !task.hasSolutionFiles
                           ? 'Het lesmateriaal in deze taak bevat geen correctiesleutels.'
                           : ''
                       "
-                      ><mat-icon
-                        svgIcon="print"
-                        class="manage-kabas-tasks-detail__info__link__icon"
-                      ></mat-icon
-                      ><span
-                        class="manage-kabas-tasks-detail__info__link__label"
-                        >Correctiesleutel afdrukken</span
-                      ></div
+                      matTooltipPosition="before"
                     >
+                      <campus-button
+                        inline
+                        (click)="printSolution(task)"
+                        [disabled]="!task.hasSolutionFiles"
+                      >
+                        <mat-icon svgIcon="print"></mat-icon>
+                        Correctiesleutel afdrukken
+                      </campus-button>
+                    </div>
                   </ng-container>
-                  <campus-button inline routerLink="content"
-                    ><mat-icon svgIcon="add"></mat-icon> Lesmateriaal
-                    toevoegen</campus-button
-                  >
+
                   <hr />
                   <campus-button
                     danger
@@ -504,7 +493,8 @@
                     (click)="clickDeleteTask(task)"
                     [disabled]="isActiveTask(task)"
                   >
-                    <mat-icon svgIcon="delete"></mat-icon> Verwijder taak
+                    <mat-icon svgIcon="delete"></mat-icon>
+                    Verwijder taak
                   </campus-button>
                 </section-content>
               </campus-section>
@@ -544,9 +534,10 @@
                             !!task.isPaperTask
                           )
                         "
-                        ><mat-icon svgIcon="preview"></mat-icon>
-                        Preview</campus-button
                       >
+                        <mat-icon svgIcon="preview"></mat-icon>
+                        Voorbeeld
+                      </campus-button>
                       <hr />
                     </ng-container>
                   </div>
@@ -606,9 +597,10 @@
                         >Alles magje</campus-button
                       >
                     </ng-template>
+
+                    <hr />
                   </div>
 
-                  <hr />
                   <campus-button
                     danger
                     inline

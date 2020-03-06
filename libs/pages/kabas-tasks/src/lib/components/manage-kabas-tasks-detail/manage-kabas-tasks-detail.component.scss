@@ -49,12 +49,6 @@
     .mat-form-field {
       width: 100%;
     }
-    input,
-    textarea {
-      padding: 0;
-      font-size: inherit;
-      font-family: inherit;
-    }
 
     &__add-assignees {
       float: right;
@@ -73,36 +67,6 @@
       }
       &.student {
         border-color: blue;
-      }
-    }
-  }
-
-  &__list {
-    &__link {
-      display: flex;
-
-      &__icon {
-        flex-shrink: 0;
-      }
-
-      &__label {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
-
-      &--disabled {
-        opacity: 0.3;
-      }
-
-      &:hover {
-        text-decoration: underline;
-        cursor: pointer;
-
-        &.manage-kabas-tasks-detail__info__link--disabled {
-          text-decoration: none;
-          cursor: not-allowed;
-        }
       }
     }
   }
