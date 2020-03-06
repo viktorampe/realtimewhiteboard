@@ -166,12 +166,12 @@ export class WhiteboardComponent implements OnChanges {
 
   onDeleteCard(card: CardInterface) {
     //TODO: if(kaartje werd door redactie gemaakt)
+    //TODO: if(redactie een kaartje permanent delete ->saveWhiteboard())
     this.addCardToShelf(card);
     //TODO: else
     this.updateWhiteboardSubject({
       cards: this.whiteboard$.value.cards.filter(c => c !== card)
     });
-    this.saveWhiteboard();
   }
 
   onCardTapped(card: CardInterface) {
