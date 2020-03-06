@@ -75,7 +75,7 @@
             flat
             icon
             dense
-            [disabled]="isReordering"
+            [disabled]="isReordering || !task.taskEduContents.length"
             (click)="showFilters = !showFilters"
             ><mat-icon svgIcon="filter"></mat-icon
           ></campus-button>
@@ -135,77 +135,132 @@
                 ></campus-button>
               </div>
             </div>
-            <ng-container
-              *ngIf="filteredTaskEduContents$ | async as taskEduContents"
-            >
-              <div class="manage-kabas-tasks-detail__list__actions">
-                <campus-button
-                  fab
-                  icon
-                  routerLink="content"
-                  class="manage-kabas-tasks-detail__list__primary-action"
-                  *ngIf="taskEduContents.length"
-                >
-                  <mat-icon svgIcon="add"></mat-icon>
-                </campus-button>
-                <div
-                  class="manage-kabas-tasks-detail__list__reorder-actions"
-                  *ngIf="!showFilters && taskEduContents.length"
-                >
-                  <campus-button
-                    bordered
-                    flat
-                    (click)="toggleIsReordering()"
-                    *ngIf="!isReordering"
-                    >Volgorde wijzigen</campus-button
-                  >
-
-                  <campus-button
-                    bordered
-                    flat
-                    (click)="toggleIsReordering()"
-                    *ngIf="isReordering"
-                    >Annuleren</campus-button
-                  >
-                  <campus-button
-                    secondary
-                    (click)="saveOrder()"
-                    *ngIf="isReordering"
-                    >Opslaan</campus-button
-                  >
-                </div>
-              </div>
-
-              <mat-selection-list
-                [(ngModel)]="selectedTaskEduContents"
-                (ngModelChange)="onSelectionChange()"
-                #taskContent
-                class="manage-kabas-tasks-detail__list"
-                data-cy="task-edu-contents-list"
-                [class.mat-selection-list--has-selection]="
-                  !taskContent.selectedOptions.isEmpty()
-                "
-                *ngIf="!isReordering"
+            <ng-container *ngIf="task.taskEduContents.length; else noContent">
+              <ng-container
+                *ngIf="filteredTaskEduContents$ | async as taskEduContents"
               >
-                <ng-container *ngIf="taskEduContents.length; else noResults">
-                  <mat-list-option
-                    #option
-                    *ngFor="let tEC of taskEduContents"
-                    checkboxPosition="before"
-                    class="ui-list-item-3-line"
-                    [class.mat-list-option--selected]="option.selected"
-                    [value]="tEC"
+                <div class="manage-kabas-tasks-detail__list__actions">
+                  <campus-button
+                    fab
+                    icon
+                    routerLink="content"
+                    class="manage-kabas-tasks-detail__list__primary-action"
+                    *ngIf="taskEduContents.length"
                   >
+                    <mat-icon svgIcon="add"></mat-icon>
+                  </campus-button>
+                  <div
+                    class="manage-kabas-tasks-detail__list__reorder-actions"
+                    *ngIf="!showFilters && taskEduContents.length"
+                  >
+                    <campus-button
+                      bordered
+                      flat
+                      (click)="toggleIsReordering()"
+                      *ngIf="!isReordering"
+                      >Volgorde wijzigen</campus-button
+                    >
+
+                    <campus-button
+                      bordered
+                      flat
+                      (click)="toggleIsReordering()"
+                      *ngIf="isReordering"
+                      >Annuleren</campus-button
+                    >
+                    <campus-button
+                      secondary
+                      (click)="saveOrder()"
+                      *ngIf="isReordering"
+                      >Opslaan</campus-button
+                    >
+                  </div>
+                </div>
+
+                <mat-selection-list
+                  [(ngModel)]="selectedTaskEduContents"
+                  (ngModelChange)="onSelectionChange()"
+                  #taskContent
+                  class="manage-kabas-tasks-detail__list"
+                  data-cy="task-edu-contents-list"
+                  [class.mat-selection-list--has-selection]="
+                    !taskContent.selectedOptions.isEmpty()
+                  "
+                  *ngIf="!isReordering"
+                >
+                  <ng-container *ngIf="taskEduContents.length; else noResults">
+                    <mat-list-option
+                      #option
+                      *ngFor="let tEC of taskEduContents"
+                      checkboxPosition="before"
+                      class="ui-list-item-3-line"
+                      [class.mat-list-option--selected]="option.selected"
+                      [value]="tEC"
+                    >
+                      <campus-task-edu-content-list-item
+                        [title]="
+                          tEC.eduContent.publishedEduContentMetadata.title
+                        "
+                        [description]="
+                          tEC.eduContent.publishedEduContentMetadata.description
+                        "
+                        [level]="
+                          tEC.eduContent.methodLevel &&
+                          tEC.eduContent.methodLevel.label
+                        "
+                        [required]="tEC.required"
+                        [fileIcon]="
+                          tEC.eduContent.publishedEduContentMetadata.fileExt
+                        "
+                        [diaboloPhaseIcon]="
+                          tEC.eduContent.diaboloPhase &&
+                          tEC.eduContent.diaboloPhase.icon
+                        "
+                        [isPaperTask]="task.isPaperTask"
+                        [actions]="tEC.actions"
+                        (clickAction)="
+                          handleTaskEduContentAction($event, tEC.eduContent)
+                        "
+                      >
+                      </campus-task-edu-content-list-item>
+                    </mat-list-option>
+                  </ng-container>
+                </mat-selection-list>
+              </ng-container>
+
+              <mat-list
+                #taskContentReordering
+                class="manage-kabas-tasks-detail__list manage-kabas-tasks-detail__list--reorderable"
+                *ngIf="
+                  isReordering &&
+                  (reorderableTaskEduContents$
+                    | async) as reorderableTaskEduContents
+                "
+                cdkDropList
+                (cdkDropListDropped)="
+                  dropTaskEduContent(reorderableTaskEduContents, $event)
+                "
+              >
+                <ng-container
+                  *ngIf="reorderableTaskEduContents.length; else noResults"
+                >
+                  <mat-list-item
+                    class="manage-kabas-tasks-detail__list__item ui-list-item-3-line"
+                    cdkDrag
+                    *ngFor="let tEC of reorderableTaskEduContents"
+                  >
+                    <mat-icon
+                      class="manage-kabas-tasks-detail__list__drag-handle"
+                      svgIcon="drag-handle"
+                    ></mat-icon>
                     <campus-task-edu-content-list-item
                       [title]="tEC.eduContent.publishedEduContentMetadata.title"
-                      [description]="
-                        tEC.eduContent.publishedEduContentMetadata.description
-                      "
                       [level]="
                         tEC.eduContent.methodLevel &&
                         tEC.eduContent.methodLevel.label
                       "
                       [required]="tEC.required"
+                      [isPaperTask]="task.isPaperTask"
                       [fileIcon]="
                         tEC.eduContent.publishedEduContentMetadata.fileExt
                       "
@@ -213,64 +268,20 @@
                         tEC.eduContent.diaboloPhase &&
                         tEC.eduContent.diaboloPhase.icon
                       "
-                      [isPaperTask]="task.isPaperTask"
-                      [actions]="tEC.actions"
-                      (clickAction)="
-                        handleTaskEduContentAction($event, tEC.eduContent)
-                      "
                     >
                     </campus-task-edu-content-list-item>
-                  </mat-list-option>
+                  </mat-list-item>
                 </ng-container>
-              </mat-selection-list>
-            </ng-container>
-            <mat-list
-              #taskContentReordering
-              class="manage-kabas-tasks-detail__list manage-kabas-tasks-detail__list--reorderable"
-              *ngIf="
-                isReordering &&
-                (reorderableTaskEduContents$
-                  | async) as reorderableTaskEduContents
-              "
-              cdkDropList
-              (cdkDropListDropped)="
-                dropTaskEduContent(reorderableTaskEduContents, $event)
-              "
-            >
-              <ng-container
-                *ngIf="reorderableTaskEduContents.length; else noResults"
-              >
-                <mat-list-item
-                  class="manage-kabas-tasks-detail__list__item ui-list-item-3-line"
-                  cdkDrag
-                  *ngFor="let tEC of reorderableTaskEduContents"
-                >
-                  <mat-icon
-                    class="manage-kabas-tasks-detail__list__drag-handle"
-                    svgIcon="drag-handle"
-                  ></mat-icon>
-                  <campus-task-edu-content-list-item
-                    [title]="tEC.eduContent.publishedEduContentMetadata.title"
-                    [level]="
-                      tEC.eduContent.methodLevel &&
-                      tEC.eduContent.methodLevel.label
-                    "
-                    [required]="tEC.required"
-                    [isPaperTask]="task.isPaperTask"
-                    [fileIcon]="
-                      tEC.eduContent.publishedEduContentMetadata.fileExt
-                    "
-                    [diaboloPhaseIcon]="
-                      tEC.eduContent.diaboloPhase &&
-                      tEC.eduContent.diaboloPhase.icon
-                    "
-                  >
-                  </campus-task-edu-content-list-item>
-                </mat-list-item>
-              </ng-container>
-            </mat-list>
+              </mat-list>
 
-            <ng-template #noResults>
+              <ng-template #noResults>
+                <campus-empty-state
+                  title="Geen resultaten gevonden"
+                  svgIcon="empty-state-no-educontent"
+                ></campus-empty-state>
+              </ng-template>
+            </ng-container>
+            <ng-template #noContent>
               <campus-empty-state
                 title="Geen lesmateriaal"
                 [description]="
@@ -405,6 +416,7 @@
                     <campus-empty-state
                       *ngIf="task.assignees.length === 0"
                       [dense]="true"
+                      [horizontal]="true"
                       svgIcon="empty-state-no-users"
                       description="Deze taak is nog aan niemand toegewezen"
                     ></campus-empty-state>

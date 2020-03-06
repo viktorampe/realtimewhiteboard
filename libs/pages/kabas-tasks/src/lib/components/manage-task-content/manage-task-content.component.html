@@ -76,6 +76,7 @@
               bordered
               dense
               flat
+              [disabled]="showBooks"
               (click)="showFilters = !showFilters"
               ><mat-icon svgIcon="filter"></mat-icon
             ></campus-button>
@@ -121,7 +122,9 @@
           >
 
           <section-actions>
-            <campus-button (click)="clickDone()" primary>Klaar</campus-button>
+            <campus-button (click)="clickDone()" primary [disabled]="showBooks"
+              >Klaar</campus-button
+            >
           </section-actions>
 
           <section-content>

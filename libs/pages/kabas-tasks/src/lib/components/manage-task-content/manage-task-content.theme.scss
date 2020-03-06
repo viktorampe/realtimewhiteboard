@@ -74,6 +74,9 @@
       .ui-section__content {
         padding: 0;
       }
+      .ui-backdrop--dropped & {
+        overflow: hidden !important;
+      }
     }
     &__main .ui-section__content {
       height: 100%;

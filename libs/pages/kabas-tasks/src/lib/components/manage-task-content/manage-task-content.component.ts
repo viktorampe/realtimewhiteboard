@@ -100,12 +100,7 @@ export class ManageTaskContentComponent
 
     this.currentToc$ = this.viewModel.currentToc$;
 
-    // @TODO: Start without search results when no chapters are selected!
     this.initialSearchState$ = this.viewModel.getInitialSearchState();
-    // this.viewModel.currentTaskParams$.pipe(
-    //   filter(params => !!params.chapter),
-    //   switchMapTo(this.viewModel.getInitialSearchState()),
-    // );
     this.currentTaskParams$ = this.viewModel.currentTaskParams$;
     this.searchMode$ = this.viewModel.getSearchMode('task-manage-content');
     this.searchResults$ = this.viewModel.searchResults$;
