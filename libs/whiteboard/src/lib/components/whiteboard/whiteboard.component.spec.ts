@@ -91,7 +91,7 @@ describe('WhiteboardComponent', () => {
     const card1: CardInterface = {
       mode: ModeEnum.IDLE,
       description: '',
-      image: null,
+      image: {},
       color: null,
       top: 0,
       left: 0,
@@ -101,7 +101,7 @@ describe('WhiteboardComponent', () => {
     const card2: CardInterface = {
       mode: ModeEnum.IDLE,
       description: '',
-      image: null,
+      image: {},
       color: null,
       top: 0,
       left: 0,
@@ -367,7 +367,7 @@ describe('WhiteboardComponent', () => {
 
         component.uploadImageForCard(card, file);
 
-        expect(card.image).toBe('imageUrl');
+        expect(card.image).toBe({ imageUrl: 'test' });
       });
     });
   });
@@ -559,7 +559,7 @@ describe('WhiteboardComponent', () => {
         mode: ModeEnum.IDLE,
         color: 'red',
         description: '',
-        image: 'www.si.be',
+        image: { imageUrl: 'www.si.be' },
         top: 0,
         left: 0,
         viewModeImage: true

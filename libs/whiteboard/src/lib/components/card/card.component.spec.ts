@@ -63,7 +63,7 @@ describe('CardComponent', () => {
     const mockData: CardInterface = {
       color: 'white',
       description: '',
-      image: null,
+      image: {},
       mode: ModeEnum.IDLE,
       top: 0,
       left: 0,
@@ -84,9 +84,8 @@ describe('CardComponent', () => {
   });
 
   it('updateImage should trigger update', () => {
-    const url = 'www.si.be';
-    component.updateImage(url);
-    expect(updateSpy).toHaveBeenCalledWith({ image: url });
+    component.updateImage();
+    expect(updateSpy).toHaveBeenCalled();
   });
 
   it('selectColor should trigger update', () => {
