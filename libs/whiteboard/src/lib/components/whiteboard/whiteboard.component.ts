@@ -243,7 +243,12 @@ export class WhiteboardComponent implements OnChanges {
     const cardPosition = event.source.getFreeDragPosition();
     card.top = cardPosition.y;
     card.left = cardPosition.x;
-    this.updateWhiteboardSubject({});
+    this.updateWhiteboardSubject({
+      cards: [
+        ...this.whiteboard$.value.cards.filter(c => c.id !== card.id),
+        card
+      ]
+    });
   }
 
   private setCardsModeIdleExceptUploadModeAndCard(card: CardInterface) {
