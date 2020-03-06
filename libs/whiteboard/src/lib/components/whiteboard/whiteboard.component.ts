@@ -145,6 +145,8 @@ export class WhiteboardComponent implements OnChanges {
       cards: [...this.whiteboard$.value.cards, card]
     });
 
+    this.saveWhiteboard();
+
     return card;
   }
 
@@ -158,6 +160,7 @@ export class WhiteboardComponent implements OnChanges {
       this.updateWhiteboardSubject({
         shelfCards: [...this.whiteboard$.value.shelfCards, card]
       });
+      this.saveWhiteboard();
     }
   }
 
@@ -168,6 +171,7 @@ export class WhiteboardComponent implements OnChanges {
     this.updateWhiteboardSubject({
       cards: this.whiteboard$.value.cards.filter(c => c !== card)
     });
+    this.saveWhiteboard();
   }
 
   onCardTapped(card: CardInterface) {
@@ -229,6 +233,7 @@ export class WhiteboardComponent implements OnChanges {
           }
         }
       });
+    this.saveWhiteboard();
   }
 
   changeColorForCard(card: CardInterface, color: string) {
@@ -237,6 +242,7 @@ export class WhiteboardComponent implements OnChanges {
     card.mode = ModeEnum.IDLE;
     this.updateWhiteboardSubject({});
     this.updateCard({ color: color }, card);
+    this.saveWhiteboard();
   }
 
   onDragEnded(event: CdkDragEnd, card) {
@@ -304,6 +310,7 @@ export class WhiteboardComponent implements OnChanges {
       const card = this.addEmptyCard(offsetY, offsetX);
       this.uploadImageForCard(card, images[i]);
     }
+    this.saveWhiteboard();
   }
 
   saveWhiteboard() {
@@ -392,6 +399,7 @@ export class WhiteboardComponent implements OnChanges {
       this.updateCard({ color: this.lastColor }, c)
     );
     this.updateWhiteboardSubject({});
+    this.saveWhiteboard();
   }
 
   onSelectCard(card: CardInterface) {
