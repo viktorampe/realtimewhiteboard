@@ -12,6 +12,11 @@
     h1 {
       flex: 1 1 100%;
     }
+
+    &__reveal-action {
+      min-width: 24px;
+      cursor: pointer;
+    }
   }
 
   &__front-layer {
@@ -27,6 +32,10 @@
       &:empty {
         display: none;
       }
+    }
+
+    &__content {
+      height: 100%;
     }
   }
 

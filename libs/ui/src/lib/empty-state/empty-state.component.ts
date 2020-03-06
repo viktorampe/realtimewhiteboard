@@ -17,6 +17,14 @@ export class EmptyStateComponent {
   @Input() description: string;
   @Input() ctaLabel?: string;
 
+  @HostBinding('class.ui-empty-state--dense')
+  @Input()
+  dense = false;
+
+  @HostBinding('class.ui-empty-state--horizontal')
+  @Input()
+  horizontal = false;
+
   @Output() clickCta = new EventEmitter<void>();
 
   @HostBinding('class.ui-empty-state')

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
+  MatChipsModule,
   MatDialogModule,
   MatInputModule,
   MatRadioModule,
@@ -54,7 +55,8 @@ import { PagesKabasTasksRoutingModule } from './pages-kabas-tasks-routing.module
     MatRadioModule,
     FormsModule,
     ReactiveFormsModule,
-    DragDropModule
+    DragDropModule,
+    MatChipsModule
   ],
   declarations: [
     ManageKabasTasksOverviewComponent,

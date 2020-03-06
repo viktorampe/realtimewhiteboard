@@ -13,6 +13,10 @@
 
     &--presets {
       height: fit-content;
+
+      &__preset {
+        margin-bottom: 8px;
+      }
     }
   }
 }

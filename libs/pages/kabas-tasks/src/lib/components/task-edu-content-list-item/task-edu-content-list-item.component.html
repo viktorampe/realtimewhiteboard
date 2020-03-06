@@ -5,26 +5,28 @@
   ></mat-icon>
 
   <list-item-title>{{ title }}</list-item-title>
+  <list-item-caption>{{ description }}</list-item-caption>
   <list-item-actions *ngIf="actions"
-    ><span
+    ><campus-button
+      inline
       campusClickStopPropagation
       *ngFor="let action of actions"
       (click)="onActionClick(action)"
     >
       {{ action.label }}
-    </span></list-item-actions
+    </campus-button></list-item-actions
   >
   >
   <list-item-content
     *ngIf="level"
-    class="manage-kabas-tasks-task-edu-content-list-item__level"
+    class="manage-kabas-tasks-task-edu-content-list-item__level ui-caption"
   >
     {{ level }}
   </list-item-content>
 
   <list-item-content
     *ngIf="!isPaperTask"
-    class="manage-kabas-tasks-task-edu-content-list-item__required"
+    class="manage-kabas-tasks-task-edu-content-list-item__required ui-caption"
     [class.manage-kabas-tasks-task-edu-content-list-item__required--no-diabolo]="
       !diaboloPhaseIcon
     "

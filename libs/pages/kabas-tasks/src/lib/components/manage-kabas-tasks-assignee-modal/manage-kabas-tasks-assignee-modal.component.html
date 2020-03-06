@@ -124,7 +124,7 @@
     <campus-button
       secondary
       class="manage-task-assignees__actions__button"
-      [disabled]="areCurrentTaskAssigneesValid$ | async"
+      [disabled]="!(areCurrentTaskAssigneesValid$ | async)"
       (click)="onOKButtonClick()"
       >OK</campus-button
     >
