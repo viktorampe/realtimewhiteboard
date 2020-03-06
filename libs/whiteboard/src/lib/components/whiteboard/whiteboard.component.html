@@ -35,6 +35,7 @@
       cdkDragBoundary=".whiteboard__workspace"
       [class.zoom]="card.mode === Mode.ZOOM"
       [class.onTop]="card.mode === Mode.SELECTED"
+      (cdkDragEnded)="onDragEnded($event, card)"
     >
       <campus-color-list
         class="whiteboard__color-list"
@@ -66,7 +67,6 @@
         [viewModeImage]="card.viewModeImage"
         (update)="updateCard($event, card)"
         (openFilePicker)="openFilePicker(filePicker)"
-        (cdkDragEnded)="onDragEnded($event, card)"
         (click)="onCardClicked($event, card)"
         (press)="onCardPressed(card)"
         (tap)="onCardTapped(card)"
