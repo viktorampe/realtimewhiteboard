@@ -12,7 +12,7 @@ import {
 export class ImageDragDirective {
   @Output() filesDroppedEvent = new EventEmitter<any>();
 
-  @HostBinding('class.image-drag-directive-dragging') private dragClass = false;
+  @HostBinding('class.image-drag-directive-dragging') public dragClass = false;
 
   constructor() {}
 
