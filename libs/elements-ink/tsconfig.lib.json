@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "outDir": "../../dist/out-tsc",
-    "target": "es6",
+    "target": "es5",
     "module": "commonjs",
     "moduleResolution": "node",
     "declaration": true,
@@ -10,7 +10,7 @@
     "experimentalDecorators": true,
     "importHelpers": true,
     "types": ["node"],
-    "lib": ["dom", "es6"],
+    "lib": ["dom", "es5"],
     "baseUrl": ".",
     "typeRoots": ["node_modules/@types"],
     "paths": {
