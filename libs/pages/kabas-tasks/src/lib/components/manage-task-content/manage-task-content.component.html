@@ -109,7 +109,14 @@
               [initialState]="initialSearchState$ | async"
               [searchResults]="searchResults$ | async"
               (searchState$)="onSearchStateChange($event)"
+              [class.manage-task-content__search--hidden]="!hasSearchResults"
             ></campus-search>
+            <ng-container *ngIf="!hasSearchResults">
+              <!-- TODO HINTS -->
+              <div class="ui-caption">(placeholder)</div>
+              <div class="ui-title">Kies een hoofdstuk of een les.</div>
+              <div class="ui-body-1">Of zoek op de titel van een les.</div>
+            </ng-container>
           </section-content>
         </campus-section>
 

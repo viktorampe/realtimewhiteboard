@@ -60,6 +60,9 @@ export class ManageTaskContentComponent
   public showFilters = false;
   public sectionModes: typeof SectionModeEnum = SectionModeEnum;
 
+  // is there a search to show results for
+  public hasSearchResults = false;
+
   @ViewChildren(SearchPortalDirective)
   private portalHosts: QueryList<SearchPortalDirective>;
   @ViewChild(SearchComponent, { static: true })
@@ -181,6 +184,15 @@ export class ManageTaskContentComponent
   }
 
   onSearchStateChange(searchState: SearchStateInterface) {
-    this.viewModel.updateSearchState(searchState);
+    // Only search if the user has selected a chapter or lesson
+    if (
+      searchState.filterCriteriaSelections &&
+      searchState.filterCriteriaSelections.has('eduContentTOC')
+    ) {
+      this.viewModel.updateSearchState(searchState);
+      this.hasSearchResults = true;
+    } else {
+      this.hasSearchResults = false;
+    }
   }
 }

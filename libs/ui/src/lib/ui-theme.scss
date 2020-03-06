@@ -23,6 +23,10 @@ $ui-icon-color--active: rgba(
   $ui-color-base,
   $ui-opacity-high-emphasis
 ) !default;
+$ui-icon-color--disabled: rgba(
+  $ui-color-base,
+  $ui-opacity-low-emphasis
+) !default;
 
 // typography
 $ui-text-primary-color: rgba(
