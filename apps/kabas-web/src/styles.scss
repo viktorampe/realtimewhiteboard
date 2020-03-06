@@ -115,11 +115,13 @@ hr {
 }
 
 #global-search-btn {
+  @include elevation(0);
   color: $color-lila-1;
   fill: $color-lila-1;
   background-color: transparent;
   flex-direction: column;
   order: 1;
+  text-transform: none;
 
   &:hover {
     filter: brightness(85%);
@@ -127,10 +129,12 @@ hr {
 }
 
 #global-favorites-btn {
+  @include elevation(0);
   color: $color-red-2;
   background-color: transparent;
   flex-direction: column;
   order: 3;
+  text-transform: none;
 
   &:hover {
     filter: brightness(85%);
@@ -138,11 +142,13 @@ hr {
 }
 
 #global-history-btn {
+  @include elevation(0);
   color: $color-blue-1;
   fill: $color-blue-1;
   background-color: transparent;
   flex-direction: column;
   order: 2;
+  text-transform: none;
 
   &:hover {
     filter: brightness(85%);
@@ -150,11 +156,13 @@ hr {
 }
 
 #global-profile-btn {
+  @include elevation(0);
   color: $color-orange-1;
   fill: $color-orange-1;
   background-color: transparent;
   flex-direction: column;
   order: 5;
+  text-transform: none;
 
   &:hover {
     filter: brightness(85%);
@@ -166,10 +174,12 @@ hr {
 }
 
 #global-alert-btn {
+  @include elevation(0);
   color: $color-green-1;
   fill: $color-green-1;
   background-color: transparent;
   flex-direction: column;
+  text-transform: none;
 
   &:hover {
     filter: brightness(85%);
@@ -238,9 +248,19 @@ hr {
   }
 }
 
+/* Material Badge */
+.mat-badge-content {
+  color: $color-white-1;
+}
+
 /* ng material tabs */
 .mat-tab-body-content {
   padding: $kabas-page-vertical-padding $kabas-page-horizontal-padding;
+}
+
+/* ng form fields */
+.mat-form-field > * {
+  line-height: 1.3; // Fix for baseline of Open Sans (differs from Materials default Roboto)
 }
 
 /* page specifics */

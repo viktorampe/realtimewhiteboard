@@ -4,4 +4,17 @@
   justify-content: center;
   align-items: center;
   text-align: center;
+  &.ui-empty-state {
+    &--horizontal {
+      flex-direction: row;
+
+      &.ui-empty-state--dense {
+        &,
+        & > .ui-empty-state__image.mat-icon {
+          width: auto;
+          height: 100%;
+        }
+      }
+    }
+  }
 }

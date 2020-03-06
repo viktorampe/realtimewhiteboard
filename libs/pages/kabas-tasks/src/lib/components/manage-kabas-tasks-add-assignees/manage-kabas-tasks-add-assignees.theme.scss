@@ -9,12 +9,6 @@
   $manage-kabas-tasks-add-assignees_filter--hover-background-color: $pages-kabas-tasks_filter--hover-background-color !default;
   $manage-kabas-tasks-add-assignees_filter--active-background-color: $pages-kabas-tasks_filter--active-background-color !default;
 
-  $manage-kabas-tasks-add-assignees_reset-filters-width: $pages-kabas-tasks_filter_reset-width !default;
-  $manage-kabas-tasks-add-assignees_reset-filters-height: $pages-kabas-tasks_filter_reset-height !default;
-  $manage-kabas-tasks-add-assignees_reset-filters-border-width: $pages-kabas-tasks_filter_reset-border-width !default;
-  $manage-kabas-tasks-add-assignees_reset-filters-border-color: $pages-kabas-tasks_filter_reset-border-color !default;
-  $manage-kabas-tasks-add-assignees_reset-filters-background-color: $pages-kabas-tasks_filter_reset-background-color !default;
-
   $manage-kabas-tasks-add-assignees_dialog-content-height: $pages-kabas-tasks_dialog-content-height !default;
   $manage-kabas-tasks-add-assignees_list-margin: $pages-kabas-tasks_list-margin-horizontal
     0 !default;
@@ -35,27 +29,6 @@
 
         > *:not(:last-child) {
           margin-right: $manage-kabas-tasks-add-assignees_filter-margin-right;
-        }
-
-        &__reset-filters {
-          width: $manage-kabas-tasks-add-assignees_reset-filters-width;
-          height: $manage-kabas-tasks-add-assignees_reset-filters-height;
-          background-color: $manage-kabas-tasks-add-assignees_reset-filters-background-color;
-          border: $manage-kabas-tasks-add-assignees_reset-filters-border-width
-            solid $manage-kabas-tasks-add-assignees_reset-filters-border-color;
-
-          &:hover {
-            background-color: $manage-kabas-tasks-add-assignees_filter--hover-background-color;
-            color: $manage-kabas-tasks-add-assignees_filter--hover-foreground-color;
-          }
-          &:active {
-            background-color: $manage-kabas-tasks-add-assignees_filter--active-background-color;
-          }
-        }
-
-        .search-term {
-          width: $manage-kabas-tasks-add-assignees_filterbar-filter-width;
-          background-color: $manage-kabas-tasks-add-assignees_reset-filters-background-color;
         }
 
         .ui-filter-text-input {

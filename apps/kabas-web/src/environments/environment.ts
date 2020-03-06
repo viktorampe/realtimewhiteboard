@@ -22,7 +22,8 @@ export const environment: EnvironmentInterface = {
     url: 'http://www.kabas.localhost:3020/login',
     loginPresets: [
       { label: 'Student', username: 'student1', password: 'testje' },
-      { label: 'Leerkracht', username: 'teacher1', password: 'testje' }
+      { label: 'Leerkracht (Tom)', username: 'teacher1', password: 'testje' },
+      { label: 'Leerkracht (Lowie)', username: 'teacher2', password: 'testje' }
     ]
   },
   termPrivacy: {
@@ -80,7 +81,7 @@ export const environment: EnvironmentInterface = {
     useInfoPanelStyle: false,
     footerHeight: 10,
     backdrop: {
-      safeMargin: 48
+      safeMargin: 64
     },
     useModalSideSheetStyle: true
   }

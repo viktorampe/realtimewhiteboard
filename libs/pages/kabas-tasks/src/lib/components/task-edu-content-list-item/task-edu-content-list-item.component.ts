@@ -16,6 +16,7 @@ import { ContentActionInterface } from '@campus/shared';
 })
 export class TaskEduContentListItemComponent implements OnInit {
   @Input() title: string;
+  @Input() description: string;
   @Input() level: string;
   @Input() required: boolean;
   @Input() fileIcon: string;

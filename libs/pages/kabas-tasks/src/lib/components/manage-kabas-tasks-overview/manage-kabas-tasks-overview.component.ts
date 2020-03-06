@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   Inject,
+  OnDestroy,
   OnInit,
   QueryList,
   ViewChild,
@@ -36,7 +37,7 @@ import {
   FilterServiceInterface,
   FILTER_SERVICE_TOKEN
 } from '@campus/utils';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
 import { filter, map, shareReplay, take } from 'rxjs/operators';
 import { Source } from '../../interfaces/Source.type';
 import { KabasTasksViewModel } from '../kabas-tasks.viewmodel';
@@ -63,7 +64,10 @@ export enum TaskSortEnum {
   styleUrls: ['./manage-kabas-tasks-overview.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ManageKabasTasksOverviewComponent implements OnInit {
+export class ManageKabasTasksOverviewComponent implements OnInit, OnDestroy {
+  public showDigitalFilters = false;
+  public showPaperFilters = false;
+  public title = 'Digitale taken beheren';
   public TaskSortEnum = TaskSortEnum;
   public tasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
   public paperTasksWithAssignments$: Observable<TaskWithAssigneesInterface[]>;
@@ -138,7 +142,8 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
     DateFilterComponent
   >;
 
-  private currentSortMode$ = new BehaviorSubject(TaskSortEnum.NAME);
+  private currentSortMode$ = new BehaviorSubject(TaskSortEnum.STARTDATE);
+  private subscriptions = new Subscription();
 
   @ViewChild('digitalSorting', { static: true })
   private digitalSorting: MatSelect;
@@ -152,6 +157,10 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
     private matDialog: MatDialog
   ) {}
 
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
+  }
+
   ngOnInit() {
     this.currentTab$ = this.getCurrentTab();
     this.digitalFilteredTasks$ = this.getFilteredDigitalTasks().pipe(
@@ -159,6 +168,14 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
     );
     this.paperFilteredTasks$ = this.getFilteredPaperTasks().pipe(
       shareReplay(1)
+    );
+
+    this.subscriptions.add(
+      this.currentTab$.subscribe(currentTab => {
+        this.title = `${
+          currentTab === 0 ? 'Digitale' : 'Papieren'
+        } taken beheren`;
+      })
     );
 
     this.tasksWithAssignments$ = combineLatest([
@@ -216,21 +233,21 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
         {
           data: {
             status: 'pending',
-            icon: 'filter:pending'
+            icon: 'task:pending'
           },
           visible: true
         },
         {
           data: {
             status: 'active',
-            icon: 'filter:active'
+            icon: 'task:active'
           },
           visible: true
         },
         {
           data: {
             status: 'finished',
-            icon: 'filter:finished'
+            icon: 'task:finished'
           },
           visible: true
         }
@@ -380,12 +397,13 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
   }
 
   clickNewTask() {
-    const { tab: currentTab } = this.route.snapshot.queryParams;
-    if (!currentTab || +currentTab === 0) {
-      this.navigateToNew('digital');
-    } else {
-      this.navigateToNew('paper');
-    }
+    this.currentTab$.pipe(take(1)).subscribe(currentTab => {
+      if (!currentTab || +currentTab === 0) {
+        this.navigateToNew('digital');
+      } else {
+        this.navigateToNew('paper');
+      }
+    });
   }
 
   private navigateToNew(type: Source = 'digital') {
@@ -454,6 +472,24 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
 
   public setSortMode(sortMode: TaskSortEnum) {
     this.currentSortMode$.next(sortMode);
+  }
+
+  public toggleFilters() {
+    this.currentTab$.pipe(take(1)).subscribe(currentTab => {
+      if (!currentTab || +currentTab === 0) {
+        this.toggleDigitalFilters();
+      } else {
+        this.togglePaperFilters();
+      }
+    });
+  }
+  private toggleDigitalFilters() {
+    this.showPaperFilters = false;
+    this.showDigitalFilters = !this.showDigitalFilters;
+  }
+  private togglePaperFilters() {
+    this.showDigitalFilters = false;
+    this.showPaperFilters = !this.showPaperFilters;
   }
 
   private mapSearchFilterCriteriaToFilterState(
@@ -681,6 +717,7 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
     this.clearListSelections();
     this.clearFilters();
     this.resetSorting();
+    this.showPaperFilters = this.showDigitalFilters = false;
   }
 
   /**
@@ -724,7 +761,7 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
   }
 
   private resetSorting() {
-    this.setSortMode(TaskSortEnum.NAME);
+    this.setSortMode(TaskSortEnum.STARTDATE);
     this.digitalSorting.value = undefined;
     this.paperSorting.value = undefined;
   }
@@ -741,7 +778,9 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
       case TaskSortEnum.STARTDATE:
         return this.sortByStartDate([...tasks]);
       case TaskSortEnum.FAVORITE:
-        return tasks.sort(this.nameComparer).sort(this.favoriteComparer);
+        return tasks.sort(
+          (a, b) => this.favoriteComparer(a, b) || this.nameComparer(a, b)
+        );
     }
     // no sortMode -> no sorting
     return tasks;
@@ -752,34 +791,17 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
   }
 
   private sortByLearningArea(tasks: TaskWithAssigneesInterface[]) {
-    return tasks.sort((a, b) => {
-      const lA = a.learningArea.name.localeCompare(
-        b.learningArea.name,
-        'be-nl',
-        {
-          sensitivity: 'base'
-        }
-      );
-      return (
-        lA ||
-        a.name.localeCompare(b.name, 'be-nl', {
-          sensitivity: 'base'
-        })
-      );
-    });
+    return tasks.sort(
+      (a, b) =>
+        this.nameComparer(a.learningArea, b.learningArea) ||
+        this.nameComparer(a, b)
+    );
   }
 
   private sortByStartDate(tasks: TaskWithAssigneesInterface[]) {
-    return tasks.sort((a, b) => {
-      const taskA = a.startDate;
-      const taskB = b.startDate;
-
-      // undefined dates at the front of the list
-      if (!taskA) return -1;
-      if (!taskB) return 1;
-
-      return taskA.getTime() - taskB.getTime();
-    });
+    return tasks.sort(
+      (a, b) => this.startDateComparer(a, b) || this.nameComparer(a, b)
+    );
   }
 
   private favoriteComparer(a, b): number {
@@ -790,5 +812,13 @@ export class ManageKabasTasksOverviewComponent implements OnInit {
     return a.name.localeCompare(b.name, 'nl-BE', {
       sensitivity: 'base'
     });
+  }
+
+  private startDateComparer(a, b): number {
+    // undefined dates at the front of the list
+    const timeA = (a.startDate && a.startDate.getTime()) || 0;
+    const timeB = (b.startDate && b.startDate.getTime()) || 0;
+
+    return timeA - timeB;
   }
 }

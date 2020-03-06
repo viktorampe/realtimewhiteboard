@@ -16,7 +16,7 @@
       </div>
 
       <h1
-        class="ui-title"
+        class="ui-headline"
         *ngFor="let title of titles"
         [@simpleFadeAnimation]="'in'"
         >{{ title }}</h1
@@ -44,7 +44,7 @@
     (click)="updateDropped(false)"
     [style.height.px]="frontLayerHeight"
   >
-    <div class="ui-backdrop__front-layer__header ui-subheader"
+    <div class="ui-backdrop__front-layer__header ui-title"
       ><ng-content
         select="[campusFrontLayerHeader], [frontLayerHeader], [front-layer-header], front-layer-header"
       ></ng-content

@@ -1,5 +1,9 @@
 import { forwardRef, Inject, Injectable } from '@angular/core';
-import { EduContent } from '@campus/dal';
+import {
+  EduContent,
+  ResultInterface,
+  TaskInstanceInterface
+} from '@campus/dal';
 import { EduContentTypeEnum } from '../../../enums';
 import { ContentActionInterface } from '../content-action.interface';
 import {
@@ -70,6 +74,14 @@ export class ContentOpenActionsStudentService
    */
   getActionsForEduContent(eduContent: EduContent): ContentActionInterface[] {
     return this.getEduContentActions(eduContent);
+  }
+
+  getActionsForTaskInstanceEduContent(
+    eduContent: EduContent,
+    result: ResultInterface,
+    taskInstance: TaskInstanceInterface
+  ): ContentActionInterface[] {
+    throw new Error('Method not implemented.');
   }
 
   private getEduContentActions(

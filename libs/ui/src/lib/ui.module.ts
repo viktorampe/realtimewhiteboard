@@ -40,11 +40,17 @@ import { ButtonComponent } from './button/button.component';
 import { BorderDirective } from './button/directives/button-border.directive';
 import { CircleDirective } from './button/directives/button-circle.directive';
 import { DangerDirective } from './button/directives/button-danger.directive';
+import { DenseDirective } from './button/directives/button-dense.directive';
 import { DisabledDirective } from './button/directives/button-disabled.directive';
+import { FabDirective } from './button/directives/button-fab.directive';
+import { FlatDirective } from './button/directives/button-flat.directive';
+import { IconDirective } from './button/directives/button-icon.directive';
+import { InlineDirective } from './button/directives/button-inline.directive';
 import { LargeDirective } from './button/directives/button-large.directive';
 import { PrimaryDirective } from './button/directives/button-primary.directive';
 import { RoundedCornersDirective } from './button/directives/button-rounded-corners.directive';
 import { WarningDirective } from './button/directives/button-warning.directive';
+import { CollapsibleContainerComponent } from './collapsible-container/collapsible-container.component';
 import { CollapsibleSheetComponent } from './collapsible-sheet/collapsible-sheet.component';
 import { ConfirmableSelectComponent } from './confirmable-select/confirmable-select.component';
 import { ConfirmationModalComponent } from './confirmation-modal/confirmation-modal.component';
@@ -85,10 +91,13 @@ import { PageHeaderComponent } from './page-header/page-header.component';
 import { PersonBadgeComponent } from './person-badge/person-badge.component';
 import { PersonInitialsPipe } from './person-badge/pipes/person-initials.pipe';
 import { PersonSummaryComponent } from './person-summary-component/person-summary.component';
+import { ProgressComponent } from './progress/progress.component';
+import { RatingComponent } from './rating/rating.component';
 import {
   SectionActionsDirective,
   SectionComponent,
   SectionContentDirective,
+  SectionFooterActionsDirective,
   SectionTitleDirective
 } from './section/section.component';
 import { ShellBodyDirective } from './shell/directives/shell-body.directive';
@@ -203,8 +212,14 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     ConfirmationModalComponent,
     EmptyStateComponent,
     SectionComponent,
+    InlineDirective,
+    DenseDirective,
+    FlatDirective,
+    FabDirective,
+    IconDirective,
     SectionContentDirective,
     SectionActionsDirective,
+    SectionFooterActionsDirective,
     SectionTitleDirective,
     ListItemContentComponent,
     ListItemIconDirective,
@@ -218,7 +233,10 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     BackdropHeaderActionsDirective,
     BackLayerContentDirective,
     FrontLayerContentDirective,
-    FrontLayerHeaderDirective
+    FrontLayerHeaderDirective,
+    ProgressComponent,
+    CollapsibleContainerComponent,
+    RatingComponent
   ],
   exports: [
     FilterTextInputComponent,
@@ -286,8 +304,14 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     ConfirmationModalComponent,
     EmptyStateComponent,
     SectionComponent,
+    InlineDirective,
+    DenseDirective,
+    FlatDirective,
+    FabDirective,
+    IconDirective,
     SectionContentDirective,
     SectionActionsDirective,
+    SectionFooterActionsDirective,
     SectionTitleDirective,
     ListItemContentComponent,
     ListItemIconDirective,
@@ -301,7 +325,10 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     BackdropHeaderActionsDirective,
     BackLayerContentDirective,
     FrontLayerContentDirective,
-    FrontLayerHeaderDirective
+    FrontLayerHeaderDirective,
+    ProgressComponent,
+    CollapsibleContainerComponent,
+    RatingComponent
   ],
   providers: [
     {
