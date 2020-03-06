@@ -104,15 +104,18 @@ export class WhiteboardComponent implements OnChanges {
 
   //#region CARD ACTIONS
   updateCard(updates: Partial<CardInterface>, card: CardInterface) {
+    // update card
     Object.assign(card, updates);
-
+    // check if card became empty
+    this.deleteCardWhenEmpty(card);
+    // sync shelfcard
     const shelfCard: CardInterface = this.whiteboard$.value.shelfCards.filter(
       shelfcard => shelfcard.id === card.id
     )[0];
-
     if (shelfCard) {
       Object.assign(shelfCard, updates);
     }
+    //
 
     this.updateWhiteboardSubject({});
   }
@@ -137,10 +140,17 @@ export class WhiteboardComponent implements OnChanges {
     // add a 'copy' ( card with a different reference ) to the shelf
     this.addCardToShelf({ ...card, mode: ModeEnum.SHELF });
 
+    // set multiselect mode
     if (this.selectedCards.length) {
       card.mode = ModeEnum.MULTISELECT;
     }
 
+    // set idle mode
+    this.whiteboard$.value.cards.forEach(c =>
+      this.updateCard({ mode: ModeEnum.IDLE }, c)
+    );
+
+    // Update whiteboardsubject
     this.updateWhiteboardSubject({
       cards: [...this.whiteboard$.value.cards, card]
     });
@@ -275,6 +285,13 @@ export class WhiteboardComponent implements OnChanges {
       c => c.mode === ModeEnum.SELECTED
     ).length;
   }
+
+  private deleteCardWhenEmpty(card: CardInterface) {
+    console.log(card);
+    if (card.image.imageUrl === '' && card.description === '') {
+      this.onDeleteCard(card);
+    }
+  }
   //#endregion
 
   //#region WHITEBOARD ACTIONS
@@ -320,8 +337,12 @@ export class WhiteboardComponent implements OnChanges {
     );
 
     if (nonIdleUploadCards.length) {
-      nonIdleUploadCards.forEach(c => (c.mode = ModeEnum.IDLE));
-      this.updateWhiteboardSubject({ cards: cards });
+      nonIdleUploadCards.forEach(c =>
+        this.updateCard({ mode: ModeEnum.IDLE }, c)
+      );
+      cards.forEach(c => {
+        this.deleteCardWhenEmpty(c);
+      });
     }
   }
 
@@ -357,11 +378,11 @@ export class WhiteboardComponent implements OnChanges {
   //#region CARD TOOLBAR
 
   cardEditIconClicked(card: CardInterface) {
-    card.mode = ModeEnum.EDIT;
+    this.updateCard({ mode: ModeEnum.EDIT }, card);
   }
 
   cardConfirmIconClicked(card: CardInterface) {
-    card.mode = ModeEnum.IDLE;
+    this.updateCard({ mode: ModeEnum.IDLE }, card);
   }
 
   cardFlipIconClicked(card: CardInterface) {
