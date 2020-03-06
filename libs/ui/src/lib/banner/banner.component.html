@@ -14,6 +14,8 @@
   <div class="ui-banner__buttons">
     <campus-button
       data-cy="banner-action"
+      bordered
+      flat
       *ngFor="let action of actions"
       (click)="onAction(action.userAction)"
       >{{ action.title }}</campus-button

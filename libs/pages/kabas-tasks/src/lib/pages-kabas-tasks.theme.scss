@@ -7,6 +7,8 @@
 @import './components/manage-kabas-tasks-add-assignees/manage-kabas-tasks-add-assignees.theme';
 @import './components/print-paper-task-modal/print-paper-task-modal.theme';
 @import './components/manage-task-content/manage-task-content.theme';
+@import './components/student-task-overview/student-task-overview.component.theme.scss';
+@import './components/student-task-detail/student-task-detail.component.theme.scss';
 
 // color palette
 $pages-kabas-tasks-text-color--primary: black !default;
@@ -84,4 +86,6 @@ $pages-kabas-tasks_link_label-height: 16px !default;
   @include manage-kabas-tasks-add-assignee-theme();
   @include print-paper-task-modal-theme();
   @include manage-task-content-theme();
+  @include student-task-overview-theme();
+  @include student-task-detail-theme();
 }

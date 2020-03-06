@@ -1,22 +1,53 @@
 @import './mixins';
-$ui-color-primary: #44b0aa;
-$ui-color-secondary: #fff;
-$ui-color-warning: #f80;
-$ui-color-danger: #f00;
 
-$ui-stroke-color: #d2d2d2 !default;
-$ui-icon-color: rgba(#000, 0.54) !default;
-$ui-icon-color--active: rgba(#000, 0.87) !default;
+/* #region New Style Variables */
+/**
+  @TODO
+  We should shrink down all variables to a mix of these root variables
+**/
+$ui-color-primary: #44b0aa !default;
+$ui-color-secondary: #fff !default;
+$ui-color-accent: #fff !default;
+$ui-color-warning: #f80 !default;
+$ui-color-danger: #f00 !default;
+
+$ui-color-base: #000 !default;
+
+$ui-opacity-high-emphasis: 0.87 !default;
+$ui-opacity-medium-emphasis: 0.54 !default;
+$ui-opacity-low-emphasis: 0.38 !default;
+
+$ui-stroke-color: rgba($ui-color-base, $ui-opacity-low-emphasis) !default;
+$ui-icon-color: rgba($ui-color-base, $ui-opacity-medium-emphasis) !default;
+$ui-icon-color--active: rgba(
+  $ui-color-base,
+  $ui-opacity-high-emphasis
+) !default;
+$ui-icon-color--disabled: rgba(
+  $ui-color-base,
+  $ui-opacity-low-emphasis
+) !default;
 
 // typography
-$ui-text-primary-color: rgba(#000, 0.87) !default;
-$ui-text-secondary-color: rgba(#000, 0.54) !default;
-$ui-text-disabled-color: rgba(#000, 0.38) !default;
+$ui-text-primary-color: rgba(
+  $ui-color-base,
+  $ui-opacity-high-emphasis
+) !default;
+$ui-text-secondary-color: rgba(
+  $ui-color-base,
+  $ui-opacity-medium-emphasis
+) !default;
+$ui-text-disabled-color: rgba(
+  $ui-color-base,
+  $ui-opacity-low-emphasis
+) !default;
 
 $ui-font-weight-light: 300 !default;
 $ui-font-weight-regular: 400 !default;
 $ui-font-weight-semibold: 600 !default;
 $ui-font-weight-bold: 700 !default;
+
+$ui-icon-text-gap: 12px !default;
 
 $ui-font-sizes: () !default;
 $ui-font-size-map: map-merge(
@@ -34,6 +65,91 @@ $ui-font-size-map: map-merge(
   $ui-font-sizes
 );
 
+$ui-inner-padding: 24px !default;
+
+// Borders
+$ui-border-radius-small: 4px !default;
+$ui-border-radius-medium: 10px !default;
+$ui-border-radius-large: 24px !default;
+
+// transitions
+$ui-transition-easing: ease-out !default;
+
+$ui-transition-at-ease: 1000ms !default;
+$ui-transition-slow: 500ms !default;
+$ui-transition-normal: 250ms !default;
+$ui-transition-fast: 100ms !default;
+
+$ui-background-color-transition: background-color $ui-transition-normal
+  $ui-transition-easing !default;
+$ui-text-color-transition: color $ui-transition-normal $ui-transition-easing !default;
+$ui-elevation-transition: box-shadow $ui-transition-fast $ui-transition-easing !default;
+
+// Icons
+$ui-icon-size: 24px !default;
+$ui-icon-dense-size: 20px !default;
+/* #endregion */
+
+$ui-list-item-3-line-height: 88px !default;
+$ui-list-item-2-line-height: 56px !default;
+$ui-list-item-default-height: 48px !default;
+
+/* #region Typograpy Classes */
+@mixin setFont(
+  $size,
+  $weight: $ui-font-weight-regular,
+  $color: $ui-text-primary-color,
+  $family: $ui-primary-font-family
+) {
+  font-family: $family;
+  font-size: #{$size}px;
+  font-weight: $weight;
+  color: $color;
+}
+.ui-headline {
+  @include setFont(map-get($ui-font-size-map, 'headline'));
+}
+.ui-title {
+  @include setFont(
+    map-get($ui-font-size-map, 'title'),
+    $ui-font-weight-semibold
+  );
+}
+.ui-subheader {
+  @include setFont(map-get($ui-font-size-map, 'subheader'));
+}
+.ui-body-2,
+.ui-menu {
+  @include setFont(
+    map-get($ui-font-size-map, 'menu'),
+    $ui-font-weight-semibold
+  );
+}
+.ui-body-1 {
+  @include setFont(map-get($ui-font-size-map, 'body'));
+}
+.ui-caption {
+  @include setFont(
+    $size: map-get($ui-font-size-map, 'caption'),
+    $color: $ui-text-secondary-color
+  );
+}
+.ui-button-text {
+  @include setFont(
+    map-get($ui-font-size-map, 'button'),
+    $ui-font-weight-semibold
+  );
+  text-transform: uppercase;
+}
+.ui-action-text {
+  @include setFont(map-get($ui-font-size-map, 'action'));
+  text-transform: uppercase;
+}
+.ui-tooltip-text {
+  @include setFont(map-get($ui-font-size-map, 'tooltip'));
+}
+/* #endregion*/
+
 // main body
 $ui-primary-bg-color: #fff !default;
 $ui-primary-font-color: #000 !default;
@@ -49,9 +165,6 @@ $ui-warning-bg-color: $ui-color-warning !default;
 $ui-warning-font-color: #fff !default;
 $ui-form-button-default-bg-color: #e1e5e7 !default;
 $ui-form-button-primary-bg-color: $ui-color-primary !default;
-
-$ui-inner-padding: 24px !default;
-$ui-border-radius: 8px !default;
 
 // nav + site header (shell)
 $ui-secondary-bg-color: #fff !default;
@@ -131,61 +244,6 @@ $ui-tile-height: 105px !default;
   cursor: inherit;
 }
 
-// TYPOGRAPHY CLASSES
-@mixin setFont(
-  $size,
-  $weight: $ui-font-weight-regular,
-  $color: $ui-text-primary-color,
-  $family: $ui-primary-font-family
-) {
-  font-family: $family;
-  font-size: #{$size}px;
-  font-weight: $weight;
-  color: $color;
-}
-.ui-headline {
-  @include setFont(map-get($ui-font-size-map, 'headline'));
-}
-.ui-title {
-  @include setFont(
-    map-get($ui-font-size-map, 'title'),
-    $ui-font-weight-semibold
-  );
-}
-.ui-subheader {
-  @include setFont(map-get($ui-font-size-map, 'subheader'));
-}
-.ui-body-2,
-.ui-menu {
-  @include setFont(
-    map-get($ui-font-size-map, 'menu'),
-    $ui-font-weight-semibold
-  );
-}
-.ui-body-1 {
-  @include setFont(map-get($ui-font-size-map, 'body'));
-}
-.ui-caption {
-  @include setFont(
-    $size: map-get($ui-font-size-map, 'caption'),
-    $color: $ui-text-secondary-color
-  );
-}
-.ui-button-text {
-  @include setFont(
-    map-get($ui-font-size-map, 'button'),
-    $ui-font-weight-semibold
-  );
-  text-transform: uppercase;
-}
-.ui-action-text {
-  @include setFont(map-get($ui-font-size-map, 'action'));
-  text-transform: uppercase;
-}
-.ui-tooltip-text {
-  @include setFont(map-get($ui-font-size-map, 'tooltip'));
-}
-
 // import all required sass files from our libs
 @import './folder/folder.component.theme.scss';
 @import './tree-nav/tree-nav.component.theme';
@@ -223,42 +281,9 @@ $ui-tile-height: 105px !default;
 @import './list-item-content/list-item-content.component.theme.scss';
 @import './empty-state/empty-state.theme.scss';
 @import './backdrop/backdrop.component.theme.scss';
-
-@mixin elevation($dp) {
-  @if $dp==0 {
-    box-shadow: none;
-  } @else if $dp==1 {
-    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.14),
-      0 2px 1px -1px rgba(0, 0, 0, 0.12), 0 1px 3px 0 rgba(0, 0, 0, 0.2);
-  } @else if $dp==2 {
-    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
-      0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
-  } @else if $dp==3 {
-    box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.14),
-      0 3px 3px -2px rgba(0, 0, 0, 0.12), 0 1px 8px 0 rgba(0, 0, 0, 0.2);
-  } @else if $dp==4 {
-    box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14),
-      0 1px 10px 0 rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
-  } @else if $dp==6 {
-    box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.14),
-      0 1px 18px 0 rgba(0, 0, 0, 0.12), 0 3px 5px -1px rgba(0, 0, 0, 0.2);
-  } @else if $dp==8 {
-    box-shadow: 0 8px 10px 1px rgba(0, 0, 0, 0.14),
-      0 3px 14px 2px rgba(0, 0, 0, 0.12), 0 5px 5px -3px rgba(0, 0, 0, 0.2);
-  } @else if $dp==9 {
-    box-shadow: 0 9px 12px 1px rgba(0, 0, 0, 0.14),
-      0 3px 16px 2px rgba(0, 0, 0, 0.12), 0 5px 6px -3px rgba(0, 0, 0, 0.2);
-  } @else if $dp==12 {
-    box-shadow: 0 12px 17px 2px rgba(0, 0, 0, 0.14),
-      0 5px 22px 4px rgba(0, 0, 0, 0.12), 0 7px 8px -4px rgba(0, 0, 0, 0.2);
-  } @else if $dp==16 {
-    box-shadow: 0 16px 24px 2px rgba(0, 0, 0, 0.14),
-      0 6px 30px 5px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 0, 0, 0.2);
-  } @else if $dp==24 {
-    box-shadow: 0 24px 38px 3px rgba(0, 0, 0, 0.14),
-      0 9px 46px 8px rgba(0, 0, 0, 0.12), 0 11px 15px -7px rgba(0, 0, 0, 0.2);
-  }
-}
+@import './progress/progress.component.theme.scss';
+@import './collapsible-container/collapsible-container.component.theme.scss';
+@import './rating/rating.component.theme.scss';
 
 @mixin ui-forms() {
   form {
@@ -405,4 +430,7 @@ campus-date-range-picker {
   @include ui-list-item-content();
   @include ui-empty-state();
   @include ui-backdrop();
+  @include ui-progress();
+  @include ui-collapsible-container();
+  @include ui-rating();
 }

@@ -104,26 +104,19 @@
 
   <mat-dialog-actions class="manage-task-assignees__actions">
     <campus-button
-      primary
+      bordered
+      flat
       class="manage-task-assignees__actions__button"
       (click)="onCancelButtonClick()"
       >Annuleren</campus-button
     >
 
     <campus-button
-      *ngIf="areCurrentTaskAssigneesValid$ | async; else disabledButton"
-      primary
+      secondary
       class="manage-task-assignees__actions__button"
+      [disabled]="!(areCurrentTaskAssigneesValid$ | async)"
       (click)="onOKButtonClick()"
       >OK</campus-button
     >
   </mat-dialog-actions>
-</ng-template>
-
-<ng-template #disabledButton>
-  <campus-button
-    primary
-    class="manage-task-assignees__actions__button ui-button--disabled"
-    >OK</campus-button
-  >
 </ng-template>

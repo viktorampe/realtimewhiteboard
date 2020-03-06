@@ -24,7 +24,7 @@ export const icons = {
   account: 'assets/icons/account-circle.svg',
   cancel: 'assets/icons/cancel.svg',
   delete: 'assets/icons/material/delete.svg',
-  add: 'assets/icons/material/add-circle-outline.svg',
+  add: 'assets/icons/material/add.svg',
   edit: 'assets/icons/material/edit.svg',
   filter: 'assets/icons/filter.svg',
   context_menu: 'assets/icons/material/more_vert.svg',
@@ -34,7 +34,7 @@ export const icons = {
   close: 'assets/icons/close.svg',
   history: 'assets/icons/history.svg',
   boardbook: 'assets/icons/boardbook.svg',
-  'reset-filters': 'assets/icons/material/reset.svg',
+  'reset-filters': 'assets/icons/material/filter-remove.svg',
   'general-file': 'assets/icons/general-file.svg',
   method: 'assets/icons/methods.svg',
   'drag-handle': 'assets/icons/drag-handle.svg',
@@ -52,14 +52,11 @@ export const icons = {
   color: 'assets/icons/color_lens.svg',
   toggle: 'assets/icons/toggle.svg',
   archive: 'assets/icons/archive.svg',
-  'filter:active': 'assets/icons/play_circle_outline-24px.svg',
-  'filter:pending': 'assets/icons/pause_circle_outline-24px.svg',
-  'filter:finished': 'assets/icons/not_interested-24px.svg',
   'task:archived': 'assets/icons/archive.svg',
-  'task:active': 'assets/icons/task-active.svg',
-  'task:pending': 'assets/icons/task-pending.svg',
-  'task:finished': 'assets/icons/task-finished.svg',
-  'task:paper': 'assets/icons/task-paper.svg',
+  'task:active': 'assets/icons/tasks/assignment_started.svg',
+  'task:pending': 'assets/icons/tasks/assignment.svg',
+  'task:finished': 'assets/icons/tasks/assignment_done.svg',
+  'task:paper': 'assets/icons/tasks/assignment_paper.svg',
   photolibrary: 'assets/icons/photo_library.svg',
   print: 'assets/icons/printer.svg',
   'edu-content:required': 'assets/icons/star.svg', //TODO placeholder
@@ -67,6 +64,9 @@ export const icons = {
   'edu-content:level-basic': 'assets/icons/play_arrow.svg', //TODO placeholder, name needs work
   'edu-content:level-advanced': 'assets/icons/fast_forward.svg', //TODO placeholder, name needs work
   'open-in-new': 'assets/icons/material/open_in_new.svg',
+  'rating-star': 'assets/icons/rating-star.svg',
+  'rating-star-empty': 'assets/icons/rating-star-empty.svg',
+
   // search: sort modes
   'sort-numeric-down': 'assets/icons/sort-numeric-down.svg',
   'sort-alpha-down': 'assets/icons/sort-alpha-down.svg',

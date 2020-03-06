@@ -102,6 +102,9 @@
           <div data-cy="search-filters" class="manage-task-content__filters">
             <ng-container searchPortal="searchTerm"></ng-container>
             <campus-button
+              bordered
+              icon
+              flat
               class="manage-task-content__filters__reset"
               iconClass="reset-filters"
               (click)="clearSearchFilters()"
@@ -115,6 +118,7 @@
             [initialState]="initialSearchState$ | async"
             [searchResults]="searchResults$ | async"
             (searchState$)="onSearchStateChange($event)"
+            [class.manage-task-content__search--hidden]="!hasSearchResults"
           ></campus-search>
         </div>
       </div>
