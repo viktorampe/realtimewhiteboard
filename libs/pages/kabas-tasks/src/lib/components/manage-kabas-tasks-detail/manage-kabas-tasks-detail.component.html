@@ -456,13 +456,14 @@
                         inline
                         (click)="printTask(task, true)"
                         [disabled]="!task.assignees.length"
+                        class="manage-kabas-tasks-detail__info__link-print"f
                       >
                         <mat-icon svgIcon="print"></mat-icon>
                         Afdrukken met namen
                       </campus-button>
                     </div>
                     <div>
-                      <campus-button inline (click)="printTask(task, false)">
+                      <campus-button inline (click)="printTask(task, false)" class="manage-kabas-tasks-detail__info__link-print">
                         <mat-icon svgIcon="print"></mat-icon>
                         Afdrukken zonder namen
                       </campus-button>
@@ -479,6 +480,7 @@
                         inline
                         (click)="printSolution(task)"
                         [disabled]="!task.hasSolutionFiles"
+                        class="manage-kabas-tasks-detail__info__link-print"
                       >
                         <mat-icon svgIcon="print"></mat-icon>
                         Correctiesleutel afdrukken

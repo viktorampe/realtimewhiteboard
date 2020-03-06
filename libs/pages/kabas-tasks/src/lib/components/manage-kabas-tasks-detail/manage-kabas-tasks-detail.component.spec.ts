@@ -731,7 +731,7 @@ describe('ManageKabasTasksDetailComponent', () => {
     describe('links', () => {
       const getSideBarLinks = () =>
         fixture.debugElement.queryAll(
-          By.css('.manage-kabas-tasks-detail__info__link')
+          By.css('.manage-kabas-tasks-detail__info__link-print')
         );
 
       describe('paper task', () => {
@@ -758,7 +758,7 @@ describe('ManageKabasTasksDetailComponent', () => {
             updateCurrentTask(currentTask);
 
             expect(link.nativeElement.classList).toContain(
-              'manage-kabas-tasks-detail__info__link--disabled'
+              'ui-button--disabled'
             );
           });
 
@@ -831,7 +831,7 @@ describe('ManageKabasTasksDetailComponent', () => {
             fixture.detectChanges();
 
             expect(link.nativeElement.classList).toContain(
-              'manage-kabas-tasks-detail__info__link--disabled'
+              'ui-button--disabled'
             );
           });
 
