@@ -461,6 +461,12 @@ describe('WhiteboardComponent', () => {
 
       expect(component.selectedCards.length).toBe(0);
       expect(component.whiteboard$.value.cards).toEqual(nonSelectedCards);
+      component.whiteboard$.value.shelfCards.forEach((shelfcard, index) => {
+        expect({ ...shelfcard, mode: null }).toEqual({
+          ...selectedCards[index],
+          mode: null
+        });
+      });
     });
 
     it('changeSelectedCardsColor() should change the colors of the selected cards when a swatch is clicked', () => {
