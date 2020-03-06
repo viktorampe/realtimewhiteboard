@@ -483,18 +483,45 @@ describe('Tasks Detail', () => {
               });
             });
 
-            it('should show print buttons', () => {
-              dataCy('btn-print-paper-with-assignees').should('exist');
-              dataCy('btn-print-paper-without-assignees').should('exist');
-              dataCy('btn-print-paper-with-solution').should('exist');
-            });
-
             it('should allow adding content', () => {
               dataCy('sidebar-btn-add-educontent')
                 .click()
                 .location('pathname')
                 .should('eq', taskPath + '/content')
                 .go('back');
+            });
+
+            it('should download a pdf', () => {
+              cy.window().then(window => cy.stub(window, 'open'));
+
+              login(
+                setup.kabasTasksPages.loginTeacher.username,
+                setup.kabasTasksPages.loginTeacher.password
+              );
+
+              dataCy('btn-print-paper-with-assignees').click();
+              cy.window()
+                .its('open')
+                .should(
+                  'be.calledWithExactly',
+                  `${apiUrl}api/tasks/paper-task-pdf?taskId=${taskId.paper}&withNames=true`
+                );
+
+              dataCy('btn-print-paper-without-assignees').click();
+              cy.window()
+                .its('open')
+                .should(
+                  'be.calledWithExactly',
+                  `${apiUrl}api/tasks/paper-task-pdf?taskId=${taskId.paper}&withNames=false`
+                );
+
+              dataCy('btn-print-paper-with-solution').click();
+              cy.window()
+                .its('open')
+                .should(
+                  'be.calledWithExactly',
+                  `${apiUrl}api/tasks/paper-task-solution-pdf?taskId=${taskId.paper}`
+                );
             });
           });
 
