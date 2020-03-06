@@ -9,6 +9,7 @@
   $shared-header__app-bar-padding-left: 0px !default;
   $shared-header__page-bar-padding-left: 10px !default;
   $shared-header__page-bar-padding-right: 10px !default;
+  $shared-header__page-bar-padding-top: 0 !default;
   $shared-header__page-bar-height: 60px !default;
   $shared-header__page-bar-background-color: $shared-bg-color-1 !default;
   $shared-header__page-bar__divider-background-color: $shared-element-border-color-1 !default;
@@ -57,6 +58,7 @@
       background-color: $shared-header__page-bar-background-color;
       padding-left: $shared-header__page-bar-padding-left;
       padding-right: $shared-header__page-bar-padding-right;
+      padding-top: $shared-header__page-bar-padding-top;
 
       &__nav-button {
         background-color: $shared-header__page-bar-background-color;
