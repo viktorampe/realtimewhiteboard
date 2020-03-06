@@ -331,14 +331,9 @@ export class WhiteboardComponent implements OnChanges {
   }) {
     const { card, event, cardElement } = $event;
 
-    console.log(event);
     const workspaceCard: CardInterface = {
-      id: card.id,
+      ...card,
       mode: ModeEnum.IDLE,
-      color: card.color,
-      description: card.description,
-      image: card.image,
-      viewModeImage: card.viewModeImage,
       left: cardElement.offsetLeft + event.distance.x,
       top:
         this.workspaceElementRef.nativeElement.getBoundingClientRect().height -
