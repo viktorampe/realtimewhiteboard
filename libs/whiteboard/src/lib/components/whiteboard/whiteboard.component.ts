@@ -225,7 +225,7 @@ export class WhiteboardComponent implements OnChanges {
           if (this.selectedCards.length) {
             card.mode = ModeEnum.MULTISELECT;
           } else {
-            card.mode = ModeEnum.EDIT;
+            card.mode = ModeEnum.IDLE;
           }
         }
       });
