@@ -7,7 +7,6 @@
   $ui-section-color: inherit !default;
 
   $ui-section_header-height: 48px !default;
-  $ui-section__container-header-height: 64px !default;
   $ui-section_header_action-margin: -8px !default;
   $ui-section_header-color: $ui-tertiary-font-color !default;
   $ui-section_actions-color: $ui-tertiary-icon-color !default;
@@ -15,6 +14,9 @@
   $ui-section-action-transition: transform $ui-transition-normal
       $ui-transition-easing,
     opacity $ui-transition-normal $ui-transition-easing !default;
+
+  $ui-section__container-header-height: 64px !default;
+  $ui-section__container-padding: 12px 0 !default;
 
   .ui-section {
     color: $ui-section-color;
@@ -46,12 +48,27 @@
       }
     }
 
-    &--container > .ui-section__header {
-      height: $ui-section__container-header-height;
+    &__footer__actions {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 12px;
+      > .ui-button {
+        margin-left: 4px;
+      }
     }
 
     &__content {
       padding: $ui-section-padding;
+    }
+
+    &--container {
+      & > .ui-section__header {
+        height: $ui-section__container-header-height;
+        min-height: $ui-section__container-header-height;
+      }
+      & > .ui-section__content {
+        padding: $ui-section__container-padding;
+      }
     }
 
     &--editable {

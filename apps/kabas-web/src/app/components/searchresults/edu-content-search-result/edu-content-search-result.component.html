@@ -20,19 +20,22 @@
   <list-item-caption>{{ data.eduContent.description }}</list-item-caption>
 
   <list-item-actions>
-    <span
+    <campus-button
+      inline
       *ngFor="let action of actions"
       [matTooltip]="action.tooltip"
       campusClickStopPropagation
       (click)="onActionClick(action)"
       data-cy="search-result-action"
-      >{{ action.label }}</span
+      >{{ action.label }}</campus-button
     >
   </list-item-actions>
-  <mat-icon
-    *ngIf="data.eduContent.diaboloPhase"
-    list-item-content
-    class="app-educontentsearchresult__icon"
-    [svgIcon]="data.eduContent.diaboloPhase.icon"
-  ></mat-icon>
+
+  <list-item-content>
+    <mat-icon
+      *ngIf="data.eduContent.diaboloPhase"
+      class="app-educontentsearchresult__icon"
+      [svgIcon]="data.eduContent.diaboloPhase.icon"
+    ></mat-icon>
+  </list-item-content>
 </campus-list-item-content>

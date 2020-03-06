@@ -1,7 +1,7 @@
 @import './mixins';
 
 /* #region New Style Variables */
-/** 
+/**
   @TODO
   We should shrink down all variables to a mix of these root variables
 **/
@@ -22,6 +22,10 @@ $ui-icon-color: rgba($ui-color-base, $ui-opacity-medium-emphasis) !default;
 $ui-icon-color--active: rgba(
   $ui-color-base,
   $ui-opacity-high-emphasis
+) !default;
+$ui-icon-color--disabled: rgba(
+  $ui-color-base,
+  $ui-opacity-low-emphasis
 ) !default;
 
 // typography
@@ -116,13 +120,19 @@ $ui-list-item-default-height: 48px !default;
 }
 .ui-body-2,
 .ui-menu {
-  @include setFont(
-    map-get($ui-font-size-map, 'menu'),
-    $ui-font-weight-semibold
-  );
+  &,
+  & .mat-list-item-content {
+    @include setFont(
+      map-get($ui-font-size-map, 'menu'),
+      $ui-font-weight-semibold
+    );
+  }
 }
 .ui-body-1 {
-  @include setFont(map-get($ui-font-size-map, 'body'));
+  &,
+  & .mat-list-item-content {
+    @include setFont(map-get($ui-font-size-map, 'body'));
+  }
 }
 .ui-caption {
   @include setFont(
@@ -277,6 +287,7 @@ $ui-tile-height: 105px !default;
 @import './list-item-content/list-item-content.component.theme.scss';
 @import './empty-state/empty-state.theme.scss';
 @import './backdrop/backdrop.component.theme.scss';
+@import './progress/progress.component.theme.scss';
 @import './collapsible-container/collapsible-container.component.theme.scss';
 @import './rating/rating.component.theme.scss';
 
@@ -425,6 +436,7 @@ campus-date-range-picker {
   @include ui-list-item-content();
   @include ui-empty-state();
   @include ui-backdrop();
+  @include ui-progress();
   @include ui-collapsible-container();
   @include ui-rating();
 }

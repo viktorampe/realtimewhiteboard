@@ -11,6 +11,10 @@
   $pages-manage-kabas-tasks__task-list-item__stroke-color: $ui-stroke-color !default;
   $pages-magage-kabas-tasks__task-list-item-meta-padding: 8px !default;
 
+  $pages-magage-kabas-tasks__icon-color--pending: $ui-icon-color--disabled;
+  $pages-magage-kabas-tasks__icon-color--active: $ui-color-primary;
+  $pages-magage-kabas-tasks__icon-color--finished: $ui-color-secondary;
+
   .manage-kabas-tasks__task-list-item {
     .manage-kabas-tasks-task-list-item {
       &__learning-area,
@@ -31,8 +35,18 @@
   .manage-kabas-tasks-task-list-item {
     &__icon {
       &--status.mat-icon {
-        color: $pages-manage-kabas-tasks__task-list-item__status-color;
-        height: 36px; // task:*** icons are 36px by 24px
+        height: 32px;
+        width: 32px;
+
+        &.pending {
+          color: $pages-magage-kabas-tasks__icon-color--pending;
+        }
+        &.active {
+          color: $pages-magage-kabas-tasks__icon-color--active;
+        }
+        &.finished {
+          color: $pages-magage-kabas-tasks__icon-color--finished;
+        }
       }
       &--archived {
         color: $pages-manage-kabas-tasks__task-list-item__archived-color;

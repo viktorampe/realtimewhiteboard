@@ -9,7 +9,8 @@ import {
   MatSelectionList,
   MatSelectModule,
   MatSlideToggle,
-  MatSlideToggleModule
+  MatSlideToggleModule,
+  MatTooltipModule
 } from '@angular/material';
 import { By, HAMMER_LOADER } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
@@ -75,7 +76,8 @@ describe('ManageKabasTasksOverviewComponent', () => {
         GuardsModule,
         RouterTestingModule,
         MatSlideToggleModule,
-        MatSelectModule
+        MatSelectModule,
+        MatTooltipModule
       ],
       providers: [
         {
@@ -144,7 +146,7 @@ describe('ManageKabasTasksOverviewComponent', () => {
                   {
                     data: {
                       status: 'pending',
-                      icon: 'filter:pending'
+                      icon: 'task:pending'
                     },
                     visible: true,
                     selected: true // select value
@@ -152,7 +154,7 @@ describe('ManageKabasTasksOverviewComponent', () => {
                   {
                     data: {
                       status: 'active',
-                      icon: 'filter:active'
+                      icon: 'task:active'
                     },
                     visible: true,
                     selected: true // select value
@@ -160,7 +162,7 @@ describe('ManageKabasTasksOverviewComponent', () => {
                   {
                     data: {
                       status: 'finished',
-                      icon: 'filter:finished'
+                      icon: 'task:finished'
                     },
                     visible: true,
                     selected: true // select value
@@ -813,11 +815,11 @@ describe('ManageKabasTasksOverviewComponent', () => {
 
       it('should order by startDate', () => {
         const mockTasks = [
-          { id: 1, startDate: undefined },
-          { id: 2, startDate: new Date('1-1-2018') },
-          { id: 3, startDate: new Date('1-1-2018') },
-          { id: 4, startDate: new Date('1-1-2017') },
-          { id: 5, startDate: undefined }
+          { id: 1, startDate: undefined, name: 'bbb' },
+          { id: 2, startDate: new Date('1-1-2018'), name: 'bbb' },
+          { id: 3, startDate: new Date('1-1-2018'), name: 'aaa' },
+          { id: 4, startDate: new Date('1-1-2017'), name: 'bbb' },
+          { id: 5, startDate: undefined, name: 'aaa' }
         ] as TaskWithAssigneesInterface[];
 
         component.setSortMode(TaskSortEnum.STARTDATE);
@@ -827,7 +829,7 @@ describe('ManageKabasTasksOverviewComponent', () => {
           component.tasksWithAssignments$.pipe(
             map(tasks => tasks.map(task => task.id))
           )
-        ).toBeObservable(hot('a', { a: [1, 5, 4, 2, 3] }));
+        ).toBeObservable(hot('a', { a: [5, 1, 4, 3, 2] }));
       });
 
       it('should order by favorite, then by name', () => {
@@ -876,7 +878,9 @@ describe('ManageKabasTasksOverviewComponent', () => {
 
         component.onSelectedTabIndexChanged(1); // change tab
 
-        expect(component.setSortMode).toHaveBeenCalledWith(TaskSortEnum.NAME);
+        expect(component.setSortMode).toHaveBeenCalledWith(
+          TaskSortEnum.STARTDATE
+        );
         expect(matSelect.value).toBeUndefined();
       });
     });

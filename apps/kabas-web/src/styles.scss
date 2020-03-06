@@ -248,9 +248,19 @@ hr {
   }
 }
 
+/* Material Badge */
+.mat-badge-content {
+  color: $color-white-1;
+}
+
 /* ng material tabs */
 .mat-tab-body-content {
   padding: $kabas-page-vertical-padding $kabas-page-horizontal-padding;
+}
+
+/* ng form fields */
+.mat-form-field > * {
+  line-height: 1.3; // Fix for baseline of Open Sans (differs from Materials default Roboto)
 }
 
 /* page specifics */
