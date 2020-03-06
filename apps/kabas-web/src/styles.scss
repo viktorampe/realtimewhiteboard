@@ -232,19 +232,21 @@ hr {
 
 // mat-pseudo-checkbox
 /* Material checkboxes */
-.mat-pseudo-checkbox {
-  width: 20px !important;
-  height: 20px !important;
-  background-color: transparent !important;
-  border-radius: 50% !important;
-  border: 2px solid $primary-color-accent !important;
+.mat-list-base .mat-list-item .mat-pseudo-checkbox,
+.mat-list-base .mat-list-item.mat-list-option .mat-pseudo-checkbox {
+  width: 24px;
+  height: 24px;
+  background-color: $ui-color-secondary;
+  border: none;
+  -webkit-mask-image: url(assets/icons/checkbox.svg); //use mask to support colorizing svg
+  mask-image: url(assets/icons/checkbox.svg);
 
-  &-checked:after {
-    color: $primary-color-accent !important;
-    width: 11px !important;
-    height: 3px !important;
-    top: 5px !important;
-    left: 2px !important;
+  &-checked {
+    -webkit-mask-image: url(assets/icons/checkbox-selected.svg);
+    mask-image: url(assets/icons/checkbox-selected.svg);
+    &:after {
+      display: none;
+    }
   }
 }
 
