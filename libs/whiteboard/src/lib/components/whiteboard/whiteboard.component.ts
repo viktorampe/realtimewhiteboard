@@ -231,9 +231,9 @@ export class WhiteboardComponent implements OnChanges {
           } else {
             card.mode = ModeEnum.EDIT;
           }
+          this.saveWhiteboard();
         }
       });
-    this.saveWhiteboard();
   }
 
   changeColorForCard(card: CardInterface, color: string) {
