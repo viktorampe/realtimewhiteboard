@@ -230,6 +230,7 @@
       padding: $ui-button--inline-padding;
 
       > .mat-icon {
+        @include icon-size($ui-icon-dense-size);
         @include iconPosition($ui-button-icon-position);
       }
       &:after {

@@ -1,6 +1,7 @@
 .ui-section {
   display: flex;
   flex-direction: column;
+  flex: 1 1 auto;
 
   &__header {
     display: flex;
@@ -9,6 +10,14 @@
 
     &__actions {
       cursor: pointer;
+    }
+  }
+
+  &__footer__actions {
+    display: flex;
+    justify-content: flex-end;
+    > .campus-button:not(:last-child) {
+      margin-right: 4px;
     }
   }
 

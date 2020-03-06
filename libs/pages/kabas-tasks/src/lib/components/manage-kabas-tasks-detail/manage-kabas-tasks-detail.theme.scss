@@ -15,7 +15,7 @@
 
   $manage-kabas-tasks-width: 100% !default;
 
-  $manage-kabas-tasks-detail__list-vertical-margin: -40px !default;
+  $manage-kabas-tasks-detail__list-vertical-margin: 0 !default;
 
   $manage-kabas-tasks-detail__filterbar-padding-top: 15px !default;
   $manage-kabas-tasks-detail__filterbar-padding-left: 15px !default;
@@ -32,13 +32,6 @@
 
   $filters-hover-background-color: inherit !default;
   $filters-active-background-color: inherit !default;
-
-  $manage-kabas-tasks-detail__info__link-horizontal-spacing: $pages-kabas-tasks-spacing--horizontal/2 !default;
-  $manage-kabas-tasks-detail__info__link--print-color: $pages-kabas-tasks_link--print-color !default;
-  $manage-kabas-tasks-detail__info__link__icon-horizontal-spacing: $pages-kabas-tasks-spacing--horizontal/2 !default;
-  $manage-kabas-tasks-detail__info__link__icon-vertical-spacing: $pages-kabas-tasks-spacing--vertical !default;
-  $manage-kabas-tasks-detail__info__link__icon-dimension: $pages-kabas-tasks_link_icon-dimension !default;
-  $manage-kabas-tasks-detail__info__link__label-height: $pages-kabas-tasks_link_label-height !default;
 
   // measurements
   $pages-kabas-tasks__list-option--selected-border-width: 4px !default;
@@ -64,10 +57,37 @@
   ) !default;
   $pages-kabas-tasks__list-drag--dragging-border-radius: 4px !default;
 
+  $pages-kabas-tasks__detail-primary-action-top: 44px !default;
+  $pages-kabas-tasks__detail-primary-action-left: 24px !default;
+  $pages-kabas-tasks__detail__main-title-offset: 44px !default;
+
   .mat-drawer-container {
     background: $pages-kabas-tasks-background-color--primary;
   }
   .manage-kabas-tasks-detail {
+    &__list__primary-action.ui-button--fab {
+      position: absolute;
+      top: $pages-kabas-tasks__detail-primary-action-top;
+      left: $pages-kabas-tasks__detail-primary-action-left;
+      z-index: 5;
+
+      &.mobile {
+        display: none;
+      }
+    }
+
+    &__main {
+      .ui-section__header > section-title {
+        margin-left: $pages-kabas-tasks__detail__main-title-offset;
+      }
+    }
+
+    &__actions {
+      .ui-button--inline {
+        margin: 4px 0;
+      }
+    }
+
     &__list {
       margin-left: $manage-kabas-tasks-detail__list-vertical-margin;
       margin-right: $manage-kabas-tasks-detail__list-vertical-margin;
@@ -89,7 +109,6 @@
         transition: box-shadow
           $pages-kabas-tasks__list-drag__transition--duration
           $pages-kabas-tasks__list-drag__cubic-bezier;
-
         &:hover {
           position: relative;
           z-index: 99999;
@@ -129,6 +148,12 @@
           }
         }
       }
+
+      &--reorderable {
+        & .manage-kabas-tasks-detail__list__item {
+          border-radius: $pages-kabas-tasks__list-drag--dragging-border-radius;
+        }
+      }
     }
 
     &__container {
@@ -139,7 +164,6 @@
       .mat-list-base {
         .mat-list-item,
         .mat-list-item.mat-list-option {
-          height: 64px;
           &:hover {
             .mat-pseudo-checkbox {
               opacity: 1;
@@ -192,9 +216,11 @@
     &__filterbar {
       padding: $manage-kabas-tasks-detail__filterbar-padding-top 0 0
         $manage-kabas-tasks-detail__filterbar-padding-left;
-      > * {
-        margin-right: $manage-kabas-tasks-detail__filters-margin-right;
-        margin-bottom: $manage-kabas-tasks-detail__filters-margin-bottom;
+      &__filters {
+        > * {
+          margin-right: $manage-kabas-tasks-detail__filters-margin-right;
+          margin-bottom: $manage-kabas-tasks-detail__filters-margin-bottom;
+        }
       }
 
       campus-button-toggle-filter {
@@ -217,8 +243,6 @@
       }
 
       .search-term {
-        width: $manage-kabas-tasks-detail__filterbar_filter-width;
-
         & campus-button {
           &:hover {
             background-color: $pages-method-filters-hover-background-color;
@@ -238,7 +262,7 @@
           $manage-kabas-tasks-detail__filterbar_filter-padding-width;
       }
       &--disabled {
-        opacity: 30%;
+        opacity: 0.38;
         pointer-events: none;
       }
     }
@@ -248,36 +272,14 @@
         display: flex;
         flex-direction: row;
         flex-wrap: nowrap;
-        justify-content: space-between;
+        justify-content: flex-end;
       }
       &__primary-action,
       &__reorder-actions {
         display: flex;
         align-items: center;
-        height: $manage-kabas-tasks-detail__list__primary-action-height;
         margin-top: $manage-kabas-tasks-detail__list__primary-action-margin-top;
         cursor: pointer;
-      }
-    }
-
-    &__info {
-      &__link {
-        padding: $manage-kabas-tasks-detail__info__link-horizontal-spacing 0px;
-
-        &__icon {
-          height: $manage-kabas-tasks-detail__info__link__icon-dimension !important;
-          width: $manage-kabas-tasks-detail__info__link__icon-dimension !important;
-          margin-right: $manage-kabas-tasks-detail__info__link__icon-horizontal-spacing;
-        }
-
-        &__label {
-          line-height: $manage-kabas-tasks-detail__info__link__label-height;
-          height: $manage-kabas-tasks-detail__info__link__label-height;
-        }
-
-        &--print {
-          color: $manage-kabas-tasks-detail__info__link--print-color;
-        }
       }
     }
   }

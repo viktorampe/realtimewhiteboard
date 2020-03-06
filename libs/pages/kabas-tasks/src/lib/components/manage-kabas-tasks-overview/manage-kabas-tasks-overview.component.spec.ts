@@ -9,7 +9,8 @@ import {
   MatSelectionList,
   MatSelectModule,
   MatSlideToggle,
-  MatSlideToggleModule
+  MatSlideToggleModule,
+  MatTooltipModule
 } from '@angular/material';
 import { By, HAMMER_LOADER } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
@@ -75,7 +76,8 @@ describe('ManageKabasTasksOverviewComponent', () => {
         GuardsModule,
         RouterTestingModule,
         MatSlideToggleModule,
-        MatSelectModule
+        MatSelectModule,
+        MatTooltipModule
       ],
       providers: [
         {

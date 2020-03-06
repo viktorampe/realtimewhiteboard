@@ -2,24 +2,17 @@
 <div mat-dialog-content>
   <p data-cy="cm-content" [innerHTML]="message"></p>
 </div>
-<div mat-dialog-actions>
-  <campus-button data-cy="cm-cancel" (click)="cancel()"
-    >Annuleren</campus-button
+<div mat-dialog-actions class="confirmation-dialog__actions">
+  <campus-button data-cy="cm-cancel" bordered flat (click)="cancel()"
+    >Nee</campus-button
   >
   <campus-button
-    *ngIf="disableConfirm; else enabledConfirm"
+    data-cy="cm-confirm"
     primary
-    button-disabled
+    campusClickStopPropagation
+    primary
+    [disabled]="disableConfirm"
     (click)="confirm()"
     >Ja</campus-button
   >
 </div>
-<ng-template #enabledConfirm>
-  <campus-button
-    data-cy="cm-confirm"
-    campusClickStopPropagation
-    primary
-    (click)="confirm()"
-    >Ja</campus-button
-  >
-</ng-template>
