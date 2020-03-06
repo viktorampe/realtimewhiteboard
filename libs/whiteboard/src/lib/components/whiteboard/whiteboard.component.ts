@@ -12,6 +12,7 @@ import { take } from 'rxjs/operators';
 import { v4 as uuidv4 } from 'uuid';
 import { ModeEnum } from '../../enums/mode.enum';
 import CardInterface from '../../models/card.interface';
+import ImageInterface from '../../models/image.interface';
 import WhiteboardInterface from '../../models/whiteboard.interface';
 import { WhiteboardHttpService } from '../../services/whiteboard-http.service';
 
@@ -127,7 +128,7 @@ export class WhiteboardComponent implements OnChanges {
       mode: ModeEnum.EDIT,
       color: this.lastColor,
       description: '',
-      image: image,
+      image: { imageUrl: image },
       top: top,
       left: left,
       viewModeImage: false
@@ -218,12 +219,14 @@ export class WhiteboardComponent implements OnChanges {
     card.mode = ModeEnum.UPLOAD;
     this.whiteboardHttpService
       .uploadFile(image)
-      .subscribe((imageUrl: string) => {
-        this.updateCard({ image: imageUrl }, card);
-        if (this.selectedCards.length) {
-          card.mode = ModeEnum.MULTISELECT;
-        } else {
-          card.mode = ModeEnum.EDIT;
+      .subscribe((response: ImageInterface) => {
+        this.updateCard({ image: response }, card);
+        if (response.imageUrl) {
+          if (this.selectedCards.length) {
+            card.mode = ModeEnum.MULTISELECT;
+          } else {
+            card.mode = ModeEnum.EDIT;
+          }
         }
       });
   }

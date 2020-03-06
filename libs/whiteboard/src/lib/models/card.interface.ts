@@ -1,11 +1,12 @@
 import { ModeEnum } from '../enums/mode.enum';
+import ImageInterface from './image.interface';
 
 export default interface CardInterface {
   id: string;
   mode: ModeEnum;
   color: string;
   description: string;
-  image: string;
+  image: ImageInterface;
   top: number;
   left: number;
   viewModeImage: boolean;

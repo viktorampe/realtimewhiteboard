@@ -6,7 +6,7 @@ export class CardFixture implements CardInterface {
   mode = ModeEnum.IDLE;
   color = 'foo color';
   description = 'foo description';
-  image = 'foo image';
+  image = { imageUrl: 'foo image' };
   top = 0;
   left = 0;
   viewModeImage = true;
