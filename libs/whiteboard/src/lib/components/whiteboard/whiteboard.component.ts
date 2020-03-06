@@ -48,8 +48,8 @@ export class WhiteboardComponent implements OnChanges {
   isShelfMinimized = false;
 
   constructor(private whiteboardHttpService: WhiteboardHttpService) {
-    this.initialiseForm();
     this.initialiseObservable();
+    this.initialiseForm();
   }
 
   ngOnChanges() {
