@@ -10,6 +10,7 @@ import {
   switchMap,
   take
 } from 'rxjs/operators';
+import { v4 as uuidv4 } from 'uuid';
 import { ModeEnum } from '../../lib/enums/mode.enum';
 import WhiteboardInterface from '../../lib/models/whiteboard.interface';
 import ImageInterface from '../models/image.interface';
@@ -127,9 +128,11 @@ export class WhiteboardHttpService implements WhiteboardHttpServiceInterface {
   private getWhiteboardMock(): WhiteboardInterface {
     const whiteboard: WhiteboardInterface = {
       title: 'Welcome to the 90s',
-      cards: [
+      cards: [],
+      shelfCards: [
         {
-          mode: ModeEnum.IDLE,
+          id: uuidv4(),
+          mode: ModeEnum.SHELF,
           viewModeImage: true,
           description: 'Windows 95',
           image: {
@@ -141,7 +144,8 @@ export class WhiteboardHttpService implements WhiteboardHttpServiceInterface {
           left: 82
         },
         {
-          mode: ModeEnum.IDLE,
+          id: uuidv4(),
+          mode: ModeEnum.SHELF,
           viewModeImage: true,
           description: 'Get Ready',
           image: {
@@ -153,7 +157,8 @@ export class WhiteboardHttpService implements WhiteboardHttpServiceInterface {
           left: 334
         },
         {
-          mode: ModeEnum.IDLE,
+          id: uuidv4(),
+          mode: ModeEnum.SHELF,
           viewModeImage: true,
           description: 'Candy',
           image: {
@@ -165,7 +170,8 @@ export class WhiteboardHttpService implements WhiteboardHttpServiceInterface {
           left: 515
         },
         {
-          mode: ModeEnum.IDLE,
+          id: uuidv4(),
+          mode: ModeEnum.SHELF,
           viewModeImage: true,
           description: 'VRC',
           image: {
@@ -177,7 +183,8 @@ export class WhiteboardHttpService implements WhiteboardHttpServiceInterface {
           left: 708
         },
         {
-          mode: ModeEnum.IDLE,
+          id: uuidv4(),
+          mode: ModeEnum.SHELF,
           viewModeImage: true,
           description: 'Gameboy',
           image: {
@@ -187,10 +194,9 @@ export class WhiteboardHttpService implements WhiteboardHttpServiceInterface {
           color: '#00A7E2',
           top: 63,
           left: 918
-        }
-      ],
-      shelfCards: [
+        },
         {
+          id: uuidv4(),
           mode: ModeEnum.SHELF,
           viewModeImage: true,
           description: 'Home Alone',
@@ -203,6 +209,7 @@ export class WhiteboardHttpService implements WhiteboardHttpServiceInterface {
           left: 0
         },
         {
+          id: uuidv4(),
           mode: ModeEnum.SHELF,
           viewModeImage: true,
           description: 'NSYNC',
@@ -215,6 +222,7 @@ export class WhiteboardHttpService implements WhiteboardHttpServiceInterface {
           left: 0
         },
         {
+          id: uuidv4(),
           mode: ModeEnum.SHELF,
           viewModeImage: true,
           description: 'Capri Sun',

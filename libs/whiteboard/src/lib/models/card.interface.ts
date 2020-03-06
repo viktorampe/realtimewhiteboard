@@ -2,6 +2,7 @@ import { ModeEnum } from '../enums/mode.enum';
 import ImageInterface from './image.interface';
 
 export default interface CardInterface {
+  id: string;
   mode: ModeEnum;
   color: string;
   description: string;

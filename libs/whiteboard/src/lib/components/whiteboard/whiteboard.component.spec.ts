@@ -15,6 +15,7 @@ import { MockMatIconRegistry } from '@campus/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { of } from 'rxjs';
 import { delay } from 'rxjs/operators';
+import { v4 as uuidv4 } from 'uuid';
 import { ModeEnum } from '../../enums/mode.enum';
 import { CardFixture } from '../../models/card.fixture';
 import CardInterface from '../../models/card.interface';
@@ -89,23 +90,25 @@ describe('WhiteboardComponent', () => {
     httpService = TestBed.get(WhiteboardHttpService);
 
     const card1: CardInterface = {
+      id: uuidv4(),
       mode: ModeEnum.IDLE,
       description: '',
       image: {},
       color: null,
       top: 0,
       left: 0,
-      viewModeImage: true
+      viewModeImage: false
     };
 
     const card2: CardInterface = {
+      id: uuidv4(),
       mode: ModeEnum.IDLE,
       description: '',
       image: {},
       color: null,
       top: 0,
       left: 0,
-      viewModeImage: true
+      viewModeImage: false
     };
 
     component.whiteboard$.next({
@@ -124,7 +127,8 @@ describe('WhiteboardComponent', () => {
   it('should create a card on plus button clicked', () => {
     const cardsSizeBeforeClicked = component.whiteboard$.value.cards.length;
 
-    component.btnPlusClicked();
+    const clickEvent = new MouseEvent('click');
+    component.btnPlusClicked(clickEvent);
 
     expect(component.whiteboard$.value.cards.length).toBe(
       cardsSizeBeforeClicked + 1
@@ -370,6 +374,23 @@ describe('WhiteboardComponent', () => {
         expect(card.image).toBe({ imageUrl: 'test' });
       });
     });
+
+    it('should update shelfcard copy', () => {
+      component.lastColor = 'red';
+      component.whiteboard$.value.cards = [];
+      component.whiteboard$.value.shelfCards = [];
+      component.addEmptyCard(0, 0, 'www.si.be');
+
+      const file = new File([''], 'dummy.jpg', {
+        type: ''
+      });
+
+      component.uploadImageForCard(component.whiteboard$.value.cards[0], file);
+
+      expect(component.whiteboard$.value.cards[0].image).toEqual(
+        component.whiteboard$.value.shelfCards[0].image
+      );
+    });
   });
 
   describe('changeColorForCard', () => {
@@ -396,6 +417,22 @@ describe('WhiteboardComponent', () => {
 
       expect(card.mode).toBe(ModeEnum.IDLE);
     });
+
+    it('should should update color of shelfcard copy', () => {
+      component.lastColor = 'red';
+      component.whiteboard$.value.cards = [];
+      component.whiteboard$.value.shelfCards = [];
+      component.addEmptyCard(0, 0, 'www.si.be');
+
+      component.changeColorForCard(
+        component.whiteboard$.value.cards[0],
+        'black'
+      );
+
+      expect(component.whiteboard$.value.cards[0].color).toEqual(
+        component.whiteboard$.value.shelfCards[0].color
+      );
+    });
   });
 
   describe('bulkActions', () => {
@@ -420,10 +457,13 @@ describe('WhiteboardComponent', () => {
       component.whiteboard$.value.shelfCards = [];
 
       component.bulkDeleteClicked();
+      selectedCards.forEach(sc => (sc.mode = ModeEnum.SHELF));
 
       expect(component.selectedCards.length).toBe(0);
       expect(component.whiteboard$.value.cards).toEqual(nonSelectedCards);
-      expect(component.whiteboard$.value.shelfCards).toEqual(selectedCards);
+      component.whiteboard$.value.shelfCards.forEach((shelfcard, index) => {
+        expect(shelfcard).toEqual(selectedCards[index]);
+      });
     });
 
     it('changeSelectedCardsColor() should change the colors of the selected cards when a swatch is clicked', () => {
@@ -556,14 +596,25 @@ describe('WhiteboardComponent', () => {
       component.whiteboard$.value.cards = [];
       component.addEmptyCard(0, 0, 'www.si.be');
       expect(component.whiteboard$.value.cards[0]).toEqual({
-        mode: ModeEnum.IDLE,
+        id: component.whiteboard$.value.cards[0].id,
+        mode: ModeEnum.EDIT,
         color: 'red',
         description: '',
         image: { imageUrl: 'www.si.be' },
         top: 0,
         left: 0,
-        viewModeImage: true
+        viewModeImage: false
       });
+    });
+
+    it('should add card to shelf and to workspace', () => {
+      component.whiteboard$.value.cards = [];
+      component.whiteboard$.value.shelfCards = [];
+      component.addEmptyCard(0, 0, 'www.si.be');
+      expect(component.whiteboard$.value.shelfCards.length).toEqual(1);
+      expect(component.whiteboard$.value.cards[0].id).toEqual(
+        component.whiteboard$.value.shelfCards[0].id
+      );
     });
   });
 
