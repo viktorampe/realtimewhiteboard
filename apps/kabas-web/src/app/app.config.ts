@@ -13,7 +13,13 @@ const standardSideNavItems: NavItem[] = [
   },
   {
     title: 'Taken',
-    link: '/tasks'
+    link: '/tasks/manage',
+    requiredPermissions: ['manageTasks']
+  },
+  {
+    title: 'Taken',
+    link: '/tasks',
+    requiredPermissions: ['openTasks']
   },
   {
     title: 'Resultaten',
