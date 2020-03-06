@@ -233,21 +233,21 @@ export class ManageKabasTasksOverviewComponent implements OnInit, OnDestroy {
         {
           data: {
             status: 'pending',
-            icon: 'filter:pending'
+            icon: 'task:pending'
           },
           visible: true
         },
         {
           data: {
             status: 'active',
-            icon: 'filter:active'
+            icon: 'task:active'
           },
           visible: true
         },
         {
           data: {
             status: 'finished',
-            icon: 'filter:finished'
+            icon: 'task:finished'
           },
           visible: true
         }

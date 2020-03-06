@@ -144,7 +144,7 @@ describe('ManageKabasTasksOverviewComponent', () => {
                   {
                     data: {
                       status: 'pending',
-                      icon: 'filter:pending'
+                      icon: 'task:pending'
                     },
                     visible: true,
                     selected: true // select value
@@ -152,7 +152,7 @@ describe('ManageKabasTasksOverviewComponent', () => {
                   {
                     data: {
                       status: 'active',
-                      icon: 'filter:active'
+                      icon: 'task:active'
                     },
                     visible: true,
                     selected: true // select value
@@ -160,7 +160,7 @@ describe('ManageKabasTasksOverviewComponent', () => {
                   {
                     data: {
                       status: 'finished',
-                      icon: 'filter:finished'
+                      icon: 'task:finished'
                     },
                     visible: true,
                     selected: true // select value
