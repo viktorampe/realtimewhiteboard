@@ -456,14 +456,18 @@
                         inline
                         (click)="printTask(task, true)"
                         [disabled]="!task.assignees.length"
-                        class="manage-kabas-tasks-detail__info__link-print"f
+                        class="manage-kabas-tasks-detail__info__link-print"
                       >
                         <mat-icon svgIcon="print"></mat-icon>
                         Afdrukken met namen
                       </campus-button>
                     </div>
                     <div>
-                      <campus-button inline (click)="printTask(task, false)" class="manage-kabas-tasks-detail__info__link-print">
+                      <campus-button
+                        inline
+                        (click)="printTask(task, false)"
+                        class="manage-kabas-tasks-detail__info__link-print"
+                      >
                         <mat-icon svgIcon="print"></mat-icon>
                         Afdrukken zonder namen
                       </campus-button>
