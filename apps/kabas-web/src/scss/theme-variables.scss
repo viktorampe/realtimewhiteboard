@@ -108,9 +108,8 @@ $ui-app-bar__section__align-right-padding-right: 25px;
 $ui-app-bar__button-font-size: 12px;
 $ui-app-bar__button-font-weight: bold;
 $ui-app-bar__button__icon-size: 32px;
-$ui-breadcrumbs-crumb-text-size: 15px;
-$ui-breadcrumbs-crumb-text-weight: bold;
-$ui-breadcrumbs-crumb-icon-size: 20px;
+$ui-breadcrumbs-crumb-text-size: 12px;
+$ui-breadcrumbs-padding: 0;
 
 // shared header (app & page bar)
 $shared-header-font-size: 12px;
@@ -122,6 +121,7 @@ $shared-header__page-bar-padding-top: 8px;
 $shared-header__page-bar-height: auto;
 $shared-header__page-bar__divider-margin-left-right: 0;
 $shared-header__page-bar-container__justify-content: flex-end;
+$shared-header__page-bar-container-margin-bottom: -60px;
 $shared_header__page-bar_background: linear-gradient(
   90deg,
   $color-blue-2,
