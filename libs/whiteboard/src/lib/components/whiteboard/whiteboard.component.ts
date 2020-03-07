@@ -30,7 +30,7 @@ export class WhiteboardComponent implements OnChanges {
     }
   }
 
-  @ViewChild('workspace', { static: true }) workspaceElementRef: ElementRef;
+  @ViewChild('workspace', { static: false }) workspaceElementRef: ElementRef;
   @Input() metadataId: number;
   @Input() apiBase: string;
 
