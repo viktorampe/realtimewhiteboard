@@ -113,7 +113,7 @@ export class WhiteboardComponent implements OnChanges {
       shelfcard => shelfcard.id === card.id
     )[0];
     if (shelfCard) {
-      Object.assign(shelfCard, updates);
+      Object.assign(shelfCard, updates, { mode: ModeEnum.SHELF });
     }
 
     this.updateWhiteboardSubject({});
