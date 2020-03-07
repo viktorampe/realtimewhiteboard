@@ -115,7 +115,6 @@ export class WhiteboardComponent implements OnChanges {
     if (shelfCard) {
       Object.assign(shelfCard, updates);
     }
-    //
 
     this.updateWhiteboardSubject({});
   }
@@ -298,7 +297,6 @@ export class WhiteboardComponent implements OnChanges {
   }
 
   private deleteCardWhenEmpty(card: CardInterface) {
-    console.log(card);
     if (card.image.imageUrl === '' && card.description === '') {
       this.onDeleteCard(card);
     }
