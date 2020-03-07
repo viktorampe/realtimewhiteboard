@@ -30,7 +30,7 @@ export class WhiteboardComponent implements OnChanges {
     }
   }
 
-  @ViewChild('workspace', { static: true }) workspaceElementRef: ElementRef;
+  @ViewChild('workspace', { static: false }) workspaceElementRef: ElementRef;
   @Input() metadataId: number;
   @Input() apiBase: string;
 
@@ -362,10 +362,13 @@ export class WhiteboardComponent implements OnChanges {
     cardElement: HTMLElement;
   }) {
     const { card, event, cardElement } = $event;
+    const currentMode = this.selectedCards.length
+      ? ModeEnum.MULTISELECT
+      : ModeEnum.IDLE;
 
     const workspaceCard: CardInterface = {
       ...card,
-      mode: ModeEnum.IDLE,
+      mode: currentMode,
       left: cardElement.offsetLeft + event.distance.x,
       top:
         this.workspaceElementRef.nativeElement.getBoundingClientRect().height -
@@ -409,9 +412,8 @@ export class WhiteboardComponent implements OnChanges {
     const cards = this.whiteboard$.value.cards.filter(
       c => !this.selectedCards.includes(c)
     );
-
     cards.forEach(c => this.onDeleteCard(c));
-
+    cards.forEach(c => (c.mode = this.Mode.IDLE));
     this.updateWhiteboardSubject({
       cards: cards
     });
