@@ -37,6 +37,7 @@
       [class.zoom]="card.mode === Mode.ZOOM"
       [class.onTop]="card.mode === Mode.SELECTED"
       (cdkDragEnded)="onDragEnded($event, card)"
+      (cdkDragStarted)="onDragStarted($event)"
     >
       <campus-color-list
         class="whiteboard__color-list"

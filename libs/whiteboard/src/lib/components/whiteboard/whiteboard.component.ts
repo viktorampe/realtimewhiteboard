@@ -1,4 +1,4 @@
-import { CdkDragDrop, CdkDragEnd } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, CdkDragEnd, CdkDragStart } from '@angular/cdk/drag-drop';
 import {
   Component,
   ElementRef,
@@ -269,6 +269,12 @@ export class WhiteboardComponent implements OnChanges {
     this.updateWhiteboardSubject({});
     this.updateCard({ color: color }, card);
     this.saveWhiteboard();
+  }
+
+  onDragStarted(event: CdkDragStart) {
+    if (!this.selectedCards.length) {
+      this.whiteboard$.value.cards.forEach(c => (c.mode = this.Mode.IDLE));
+    }
   }
 
   onDragEnded(event: CdkDragEnd, card) {
