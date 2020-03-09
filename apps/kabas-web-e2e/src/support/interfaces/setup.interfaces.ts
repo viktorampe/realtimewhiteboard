@@ -86,3 +86,121 @@ export interface KabasPracticePagesInterface {
     };
   };
 }
+
+export interface ExpectedTaskListItemResult {
+  name?: string;
+  area?: string;
+  startDate?: string;
+  endDate?: string;
+  classGroups?: string[];
+  groupCount?: number;
+  individualCount?: number;
+  actions: string[];
+}
+
+export interface AdvancedDateOptions {
+  option?: string;
+  today?: boolean;
+}
+
+export interface TaskAction {
+  action: string;
+  target: string;
+  shouldError?: boolean;
+  removesTarget?: boolean;
+  fromHeader?: boolean;
+}
+
+export interface KabasTasksPagesInterface {
+  kabasTasksPages: {
+    loginTeacher: { username: string; password: string };
+    book: number;
+    filterValues: {
+      overview: {
+        digital: {
+          name: string;
+          area: string;
+          date: AdvancedDateOptions;
+          status: number[];
+          assignee: string;
+          combined: {
+            name: string;
+            area: string;
+            date: AdvancedDateOptions;
+            archived: boolean;
+            status: number[];
+            assignee: string;
+          };
+        };
+        paper: {
+          name: string;
+          area: string;
+          assignee: string;
+          combined: {
+            name: string;
+            area: string;
+            archived: boolean;
+            assignee: string;
+          };
+        };
+      };
+    };
+    sortValues: string[];
+    paperSortValues: string[];
+    taskActions: TaskAction[];
+    paperTaskActions: TaskAction[];
+    viewTask: string;
+    paperViewTask: string;
+    expected: {
+      filterResults: {
+        overview: {
+          digital: {
+            name: ExpectedTaskListItemResult[];
+            area: ExpectedTaskListItemResult[];
+            date: ExpectedTaskListItemResult[];
+            status: ExpectedTaskListItemResult[];
+            archived: ExpectedTaskListItemResult[];
+            assignee: ExpectedTaskListItemResult[];
+            combined: ExpectedTaskListItemResult[];
+          };
+          paper: {
+            name: ExpectedTaskListItemResult[];
+            area: ExpectedTaskListItemResult[];
+            archived: ExpectedTaskListItemResult[];
+            assignee: ExpectedTaskListItemResult[];
+            combined: ExpectedTaskListItemResult[];
+          };
+        };
+      };
+      sortResults: {
+        digital: {
+          [sortModeName: string]: ExpectedTaskListItemResult[];
+        };
+        paper: {
+          [sortModeName: string]: ExpectedTaskListItemResult[];
+        };
+      };
+      smokeResults: {
+        digital: ExpectedTaskListItemResult[];
+        paper: ExpectedTaskListItemResult[];
+      };
+      viewTaskId: number;
+      paperViewTaskId: number;
+    };
+    manageTaskDetail: {
+      taskId: {
+        active: number;
+        pending: number;
+        finished: number;
+        paper: number;
+      };
+      activeTask: {
+        id: number;
+        name: string;
+        description: string;
+        assignees: string[];
+      };
+      assignees: string[];
+    };
+  };
+}
