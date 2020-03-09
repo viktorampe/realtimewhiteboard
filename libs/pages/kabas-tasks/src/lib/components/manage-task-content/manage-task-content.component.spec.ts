@@ -151,7 +151,7 @@ describe('ManageTaskContentComponent', () => {
 
       expect(component.hasSearchResults).toEqual(true);
     });
-
+    '';
     it('should not send searchstate to viewmodel, no chapter selected', () => {
       jest.spyOn(viewModel, 'updateSearchState');
 

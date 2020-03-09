@@ -3,41 +3,97 @@
     <mat-icon svgIcon="tasks"></mat-icon>
   </backdrop-reveal-action>
   <front-layer-content class="student-task-overview">
-    <campus-section
-      [mode]="sectionModes.CONTAINER"
-      class="student-task-overview__main"
-    >
-      <section-title>{{
-        (showFinishedTasks$ | async) ? 'Mijn afgewerkte taken' : 'Mijn taken'
-      }}</section-title>
-    </campus-section>
-    <campus-section
-      [mode]="sectionModes.CONTAINER"
-      class="student-task-overview__aside"
-    >
-      <section-content>
-        <campus-section [mode]="sectionModes.STATIC">
-          <section-content>
-            <div>
-              <campus-button
-                inline
-                *ngIf="showFinishedTasks$ | async; else actionForActiveTasks"
-                (click)="setShowFinishedTasks(false)"
-                >Toon actieve taken</campus-button
+    <ng-container *ngIf="tasks$ | async as tasks; else noTasks">
+      <!-- MAIN-->
+      <campus-section
+        [mode]="sectionModes.CONTAINER"
+        class="student-task-overview__main"
+        *ngIf="tasks.length; else noTasks"
+      >
+        <section-title>{{
+          (showFinishedTasks$ | async) ? 'Mijn afgewerkte taken' : 'Mijn taken'
+        }}</section-title>
+      </campus-section>
+
+      <!-- END MAIN-->
+      <campus-section
+        [mode]="sectionModes.CONTAINER"
+        class="student-task-overview__aside"
+      >
+        <section-content>
+          <campus-section [mode]="sectionModes.STATIC">
+            <section-content>
+              <div>
+                <campus-button
+                  inline
+                  *ngIf="showFinishedTasks$ | async; else actionForActiveTasks"
+                  (click)="setShowFinishedTasks(false)"
+                  >Toon actieve taken</campus-button
+                >
+              </div>
+              <ng-template #actionForActiveTasks>
+                <campus-button inline (click)="setShowFinishedTasks(true)"
+                  >Toon afgewerkte taken</campus-button
+                >
+              </ng-template>
+              <div><campus-button inline>Groepeer per vak</campus-button></div>
+              <hr />
+              <div
+                ><campus-button inline>Wiskunde (2 taken)</campus-button></div
               >
-            </div>
-            <ng-template #actionForActiveTasks>
-              <campus-button inline (click)="setShowFinishedTasks(true)"
-                >Toon afgewerkte taken</campus-button
-              >
-            </ng-template>
-            <div><campus-button inline>Groepeer per vak</campus-button></div>
-            <hr />
-            <div><campus-button inline>Wiskunde (2 taken)</campus-button></div>
-            <div><campus-button inline>Taal (5 taken)</campus-button></div>
-          </section-content>
-        </campus-section>
-      </section-content>
-    </campus-section>
+              <div><campus-button inline>Taal (5 taken)</campus-button></div>
+            </section-content>
+          </campus-section>
+        </section-content>
+      </campus-section>
+    </ng-container>
+    <ng-template #noTasks>
+      <campus-section
+        [mode]="sectionModes.CONTAINER"
+        class="student-task-overview__main"
+      >
+        <section-title>{{
+          (showFinishedTasks$ | async)
+            ? 'Je hebt geen afgewerkte taken'
+            : 'Er staan geen taken voor je klaar'
+        }}</section-title>
+        <section-actions>
+          <campus-button
+            *ngIf="showFinishedTasks$ | async; else emptyActionForActiveTasks"
+            bordered
+            flat
+            (click)="setShowFinishedTasks(false)"
+          >
+            Actieve taken
+          </campus-button>
+          <ng-template #emptyActionForActiveTasks>
+            <campus-button bordered flat (click)="setShowFinishedTasks(true)">
+              Afgewerkte taken
+            </campus-button>
+          </ng-template>
+        </section-actions>
+        <section-content>
+          <campus-empty-state
+            *ngIf="showFinishedTasks$ | async; else emptyActiveTasks"
+            svgIcon="empty-state-all-done"
+            title="Hier is niets te zien"
+            description="Je hebt nog geen afgewerkte taken."
+          ></campus-empty-state>
+          <ng-template #emptyActiveTasks>
+            <campus-empty-state
+              svgIcon="empty-state-all-done"
+              title="Je bent helemaal mee"
+              description="Er staan geen taken voor je klaar. Je kan altijd vrij oefenen."
+              ctaLabel="Naar vrij oefenen"
+              (clickCta)="emptyStateClick()"
+            ></campus-empty-state>
+          </ng-template>
+        </section-content>
+      </campus-section>
+      <campus-section
+        [mode]="sectionModes.CONTAINER"
+        class="student-task-overview__aside"
+      ></campus-section>
+    </ng-template>
   </front-layer-content>
 </campus-backdrop>
