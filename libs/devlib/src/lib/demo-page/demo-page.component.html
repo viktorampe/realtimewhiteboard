@@ -114,6 +114,29 @@
 
   <front-layer-header>Subtitle</front-layer-header>
   <front-layer-content>
+    <campus-button inline (click)="isOpen = !isOpen"
+      >toggle container</campus-button
+    >
+    <campus-collapsible-container [(open)]="isOpen" class="border">
+      <campus-empty-state
+        svgIcon="empty-state-no-users"
+        title="Geen groepen of gebruikers geselecteerd"
+        description="This tagline conveys the purpose of the screen, without appearing actionable."
+        ctaLabel="Call to action"
+        (clickCta)="clickEmptyCta()"
+      >
+      </campus-empty-state>
+
+      <campus-empty-state
+        svgIcon="empty-state-all-done"
+        title="Nothing to see here"
+        description="This tagline conveys the purpose of the screen, without appearing actionable."
+        ctaLabel="Call to action"
+        (clickCta)="clickEmptyCta()"
+      >
+      </campus-empty-state>
+    </campus-collapsible-container>
+
     <campus-button primary style="margin: 10px;" (click)="clickEmptyCta()"
       >Primary Button</campus-button
     >
@@ -227,24 +250,6 @@
     <div>
       <campus-rating></campus-rating>
     </div>
-
-    <campus-empty-state
-      svgIcon="empty-state-no-users"
-      title="Geen groepen of gebruikers geselecteerd"
-      description="This tagline conveys the purpose of the screen, without appearing actionable."
-      ctaLabel="Call to action"
-      (clickCta)="clickEmptyCta()"
-    >
-    </campus-empty-state>
-
-    <campus-empty-state
-      svgIcon="empty-state-all-done"
-      title="Nothing to see here"
-      description="This tagline conveys the purpose of the screen, without appearing actionable."
-      ctaLabel="Call to action"
-      (clickCta)="clickEmptyCta()"
-    >
-    </campus-empty-state>
 
     <div class="ui-headline">Headline (Regular 24px)</div>
     <div class="ui-title">Title (Semibold 21px)</div>
