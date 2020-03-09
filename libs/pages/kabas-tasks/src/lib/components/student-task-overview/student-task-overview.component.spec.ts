@@ -40,7 +40,6 @@ describe('StudentTaskOverviewComponent', () => {
       expect(router.navigate).toHaveBeenCalledWith(['practice']);
     });
   });
-  //file.only
   describe('Empty State', () => {
     it('should show emtpy state for active tasks', () => {
       component.tasks$ = of([]);
