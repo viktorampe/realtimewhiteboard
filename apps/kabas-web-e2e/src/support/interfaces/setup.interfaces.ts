@@ -189,5 +189,20 @@ export interface KabasTasksPagesInterface {
       viewTaskId: number;
       paperViewTaskId: number;
     };
+    manageTaskDetail: {
+      taskId: {
+        active: number;
+        pending: number;
+        finished: number;
+        paper: number;
+      };
+      activeTask: {
+        id: number;
+        name: string;
+        description: string;
+        assignees: string[];
+      };
+      assignees: string[];
+    };
   };
 }

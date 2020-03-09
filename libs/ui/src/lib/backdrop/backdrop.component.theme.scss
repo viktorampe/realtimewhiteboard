@@ -7,6 +7,8 @@
   $ui-backdrop__horizontal-padding: 16px !default;
   $ui-backdrop__header-height: 56px !default;
   $ui-backdrop__header__title-margin-horizontal: 32px !default;
+  $ui-backdrop__header-horizontal-padding: 40px !default;
+  $ui-backdrop__header-icon-color: $ui-icon-color !default;
 
   $ui-backdrop__front-layer-background-color: $ui-primary-bg-color !default;
   $ui-backdrop__front-layer-border-radius: 16px 16px 0 0 !default;
@@ -29,7 +31,7 @@
     }
 
     &__header {
-      padding: 0 $ui-backdrop__horizontal-padding;
+      padding: 0 $ui-backdrop__header-horizontal-padding;
       height: $ui-backdrop__header-height;
 
       h1 {
@@ -39,6 +41,9 @@
       backdrop-reveal-action,
       backdrop-collapse-action {
         display: flex;
+        .mat-icon {
+          color: $ui-backdrop__header-icon-color;
+        }
       }
 
       backdrop-header-actions {
