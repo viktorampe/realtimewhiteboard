@@ -397,10 +397,12 @@ export class WhiteboardComponent implements OnChanges {
   }
 
   cardFlipIconClicked(card: CardInterface) {
+    this.updateCard({ viewModeImage: !card.viewModeImage }, card);
+
     if (card.mode !== ModeEnum.EDIT) {
       card.mode = ModeEnum.IDLE;
+      this.updateViewMode(this.whiteboard$.value.cards);
     }
-    this.updateCard({ viewModeImage: !card.viewModeImage }, card);
   }
 
   //#endregion
