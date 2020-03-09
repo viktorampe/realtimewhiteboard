@@ -98,11 +98,18 @@ export class WhiteboardComponent implements OnChanges {
   }
   //#region WORKSPACE INTERACTIONS
 
-  createCard(event) {
+  createCard(event: any) {
     if ((event.target as HTMLElement).className === 'whiteboard__workspace') {
-      const top = event.offsetY;
-      const left = event.offsetX;
-      this.addEmptyCard({ top, left });
+      if (event.type === 'longpress') {
+        const top = event.center.y - 165; // card height = 165
+        const left = event.center.x;
+        this.addEmptyCard({ top, left });
+      }
+      if (event.type === 'dblclick') {
+        const top = event.offsetY;
+        const left = event.offsetX;
+        this.addEmptyCard({ top, left });
+      }
     }
   }
 
