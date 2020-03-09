@@ -91,14 +91,11 @@ export class WhiteboardComponent implements OnChanges {
       if (!c.image.imageUrl) {
         c.viewModeImage = false;
       }
-    });
-    cards.forEach(c => {
       if (!c.description) {
         c.viewModeImage = true;
       }
     });
   }
-
   //#region WORKSPACE INTERACTIONS
 
   onDblClick(event: MouseEvent) {
