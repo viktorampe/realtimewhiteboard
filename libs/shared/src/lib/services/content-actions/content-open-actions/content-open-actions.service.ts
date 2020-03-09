@@ -64,7 +64,7 @@ export class ContentOpenActionsService
       handler: this.contentOpener.openBoeke.bind(this.contentOpener)
     },
     previewEduContentAsImage: {
-      label: 'Bekijken',
+      label: 'Voorbeeld',
       icon: 'exercise:open',
       tooltip: 'Bekijk lesmateriaal',
       handler: this.contentOpener.previewEduContentAsImage.bind(
