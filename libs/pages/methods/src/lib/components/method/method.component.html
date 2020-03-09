@@ -38,127 +38,139 @@
   >
 </campus-page-bar>
 
-<div class="method-method__container">
-  <campus-collapsible-sheet>
-    <div aside>
-      <mat-nav-list>
-        <div class="method-chapter__list-header" matSubheader
-          >Kies een hoofdstuk</div
-        >
-        <a
-          data-cy="chapter-link"
-          mat-list-item
-          class="method-chapter-link"
-          *ngFor="let chapter of chapters$ | async"
-          (click)="clickOpenChapter(chapter.id)"
-          >{{ chapter.title }}</a
-        >
-      </mat-nav-list>
-    </div>
+<campus-backdrop [title]="bookTitle$ | async" [static]="true">
+  <backdrop-reveal-action>
+    <mat-icon svgIcon="arrow-back" (click)="clickBack()"></mat-icon>
+  </backdrop-reveal-action>
+  <front-layer-content>
+    <div class="method-method__container">
+      <campus-collapsible-sheet>
+        <div aside>
+          <mat-nav-list>
+            <div class="method-chapter__list-header" matSubheader
+              >Kies een hoofdstuk</div
+            >
+            <a
+              data-cy="chapter-link"
+              mat-list-item
+              class="method-chapter-link"
+              *ngFor="let chapter of chapters$ | async"
+              (click)="clickOpenChapter(chapter.id)"
+              >{{ chapter.title }}</a
+            >
+          </mat-nav-list>
+        </div>
 
-    <div main>
-      <mat-tab-group
-        [selectedIndex]="currentTab$ | async"
-        (selectedIndexChange)="onSelectedTabIndexChanged($event)"
-      >
-        <mat-tab label="Lesmateriaal">
-          <mat-card
-            class="method-method__container__boeke"
-            *ngIf="boeke$ | async as boeke"
+        <div main>
+          <mat-tab-group
+            [selectedIndex]="currentTab$ | async"
+            (selectedIndexChange)="onSelectedTabIndexChanged($event)"
           >
-            <div class="banner-container">
-              <div class="banner-text">Bordboek</div>
-              <img class="banner-image" src="assets/icons/book-label.svg" />
-            </div>
+            <mat-tab label="Lesmateriaal">
+              <mat-card
+                class="method-method__container__boeke"
+                *ngIf="boeke$ | async as boeke"
+              >
+                <div class="banner-container">
+                  <div class="banner-text">Bordboek</div>
+                  <img class="banner-image" src="assets/icons/book-label.svg" />
+                </div>
 
-            <mat-card-content *ngIf="method$ | async as method">
-              <img
-                class="method-method__container__boeke__image"
-                [src]="'assets/icons/method/' + method.logoUrl"
-              />
+                <mat-card-content *ngIf="method$ | async as method">
+                  <img
+                    class="method-method__container__boeke__image"
+                    [src]="'assets/icons/method/' + method.logoUrl"
+                  />
 
-              <div class="method-method__container__boeke__actions">
-                <campus-button
-                  primary
-                  data-cy="open-boeke"
-                  (click)="clickOpenBoeke(boeke)"
-                  >OPEN</campus-button
-                >
-              </div>
+                  <div class="method-method__container__boeke__actions">
+                    <campus-button
+                      primary
+                      data-cy="open-boeke"
+                      (click)="clickOpenBoeke(boeke)"
+                      >OPEN</campus-button
+                    >
+                  </div>
+
+                  <div
+                    *ngIf="(book$ | async)?.diabolo"
+                    class="method-method__container__boeke__diabolo"
+                  >
+                    <span data-cy="diabolo-info"
+                      >{{ method.name }} is een diabolo methode.</span
+                    ><br />
+                    <a
+                      href="https://www.diekeure.be/nl-be/educatief/lager-onderwijs/diabolo"
+                      target="_blank"
+                      >Lees meer...</a
+                    >
+                  </div>
+                </mat-card-content>
+              </mat-card>
 
               <div
-                *ngIf="(book$ | async)?.diabolo"
-                class="method-method__container__boeke__diabolo"
+                *ngIf="generalFilesByType$ | async as generalFilesByType"
+                class="method-method__container__files"
               >
-                <span data-cy="diabolo-info"
-                  >{{ method.name }} is een diabolo methode.</span
-                ><br />
-                <a
-                  href="https://www.diekeure.be/nl-be/educatief/lager-onderwijs/diabolo"
-                  target="_blank"
-                  >Lees meer...</a
-                >
-              </div>
-            </mat-card-content>
-          </mat-card>
-
-          <div
-            *ngIf="generalFilesByType$ | async as generalFilesByType"
-            class="method-method__container__files"
-          >
-            <ng-container *ngFor="let productType of productTypes$ | async">
-              <ng-container
-                *ngIf="generalFilesByType[productType.id] as generalFiles"
-              >
-                <div class="method-method__container__files-header">{{
-                  productType.name
-                }}</div>
-                <mat-nav-list class="method-method__container__files__items">
-                  <mat-list-item
-                    data-cy="general-file"
-                    *ngFor="let generalFile of generalFiles"
-                    (click)="clickOpenGeneralFile(generalFile)"
-                    class="method-file"
-                    [ngClass]="
-                      'producttype-' + getProductTypeClass(productType)
-                    "
+                <ng-container *ngFor="let productType of productTypes$ | async">
+                  <ng-container
+                    *ngIf="generalFilesByType[productType.id] as generalFiles"
                   >
-                    <campus-list-item-content class="method-file__content">
-                      <campus-file-icon
-                        list-item-icon
-                        [classModifier]="getProductTypeClass(productType)"
-                        [label]="generalFile.fileExtension"
-                        [icon]="getProductTypeIcon(productType)"
-                      ></campus-file-icon>
-
-                      <list-item-title>{{ generalFile.name }} </list-item-title>
-                      <list-item-caption
-                        class="method-file__content__description"
-                        >{{ generalFile.description }}</list-item-caption
+                    <div class="method-method__container__files-header">{{
+                      productType.name
+                    }}</div>
+                    <mat-nav-list
+                      class="method-method__container__files__items"
+                    >
+                      <mat-list-item
+                        data-cy="general-file"
+                        *ngFor="let generalFile of generalFiles"
+                        (click)="clickOpenGeneralFile(generalFile)"
+                        class="method-file"
+                        [ngClass]="
+                          'producttype-' + getProductTypeClass(productType)
+                        "
                       >
-                    </campus-list-item-content>
-                  </mat-list-item>
-                </mat-nav-list>
-              </ng-container>
-            </ng-container>
-          </div>
-        </mat-tab>
+                        <campus-list-item-content class="method-file__content">
+                          <campus-file-icon
+                            list-item-icon
+                            [classModifier]="getProductTypeClass(productType)"
+                            [label]="generalFile.fileExtension"
+                            [icon]="getProductTypeIcon(productType)"
+                          ></campus-file-icon>
 
-        <mat-tab label="Leerplandoelen">
-          <p>
-            Hieronder vind je een overzicht van de leerplandoelen die horen bij
-            {{ breadcrumbTitles$ | async }}.
-          </p>
+                          <list-item-title
+                            >{{ generalFile.name }}
+                          </list-item-title>
+                          <list-item-caption
+                            class="method-file__content__description"
+                            >{{ generalFile.description }}</list-item-caption
+                          >
+                        </campus-list-item-content>
+                      </mat-list-item>
+                    </mat-nav-list>
+                  </ng-container>
+                </ng-container>
+              </div>
+            </mat-tab>
 
-          <campus-multi-check-box-table
-            [rowHeaderColumns]="learningPlanGoalTableHeaders"
-            [itemColumns]="classGroupColumns$ | async"
-            [items]="learningPlanGoalsWithSelectionForClassGroups$ | async"
-            (checkBoxChanged)="clickProgress($event)"
-          >
-          </campus-multi-check-box-table>
-        </mat-tab>
-      </mat-tab-group>
+            <mat-tab label="Leerplandoelen">
+              <p>
+                Hieronder vind je een overzicht van de leerplandoelen die horen
+                bij
+                {{ breadcrumbTitles$ | async }}.
+              </p>
+
+              <campus-multi-check-box-table
+                [rowHeaderColumns]="learningPlanGoalTableHeaders"
+                [itemColumns]="classGroupColumns$ | async"
+                [items]="learningPlanGoalsWithSelectionForClassGroups$ | async"
+                (checkBoxChanged)="clickProgress($event)"
+              >
+              </campus-multi-check-box-table>
+            </mat-tab>
+          </mat-tab-group>
+        </div>
+      </campus-collapsible-sheet>
     </div>
-  </campus-collapsible-sheet>
-</div>
+  </front-layer-content>
+</campus-backdrop>

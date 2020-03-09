@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 import {
   ClassGroupInterface,
   EduContent,
+  EduContentBookInterface,
   EduContentTOCInterface,
   LearningPlanGoalInterface
 } from '@campus/dal';
@@ -46,6 +47,7 @@ export class MethodChapterComponent implements OnInit, AfterViewInit {
   public lessonsForChapter$: Observable<EduContentTOCInterface[]>;
   public currentTab$: Observable<number>;
   public currentMethodParams$: Observable<CurrentMethodParams>;
+  public book$: Observable<EduContentBookInterface>;
   public breadCrumbTitles$: Observable<string>;
   public learningPlanGoalTableHeaders: MultiCheckBoxTableRowHeaderColumnInterface<
     LearningPlanGoalInterface
@@ -59,6 +61,7 @@ export class MethodChapterComponent implements OnInit, AfterViewInit {
       LearningPlanGoalInterface
     >[]
   >;
+  public bookTitle$: Observable<string>;
 
   @ViewChildren(SearchPortalDirective)
   private portalHosts: QueryList<SearchPortalDirective>;
@@ -79,7 +82,9 @@ export class MethodChapterComponent implements OnInit, AfterViewInit {
     this.lessonsForChapter$ = this.methodViewModel.currentToc$;
     this.currentTab$ = this.methodViewModel.currentTab$;
     this.currentMethodParams$ = this.methodViewModel.currentMethodParams$;
+    this.book$ = this.methodViewModel.currentBook$;
     this.breadCrumbTitles$ = this.methodViewModel.breadCrumbTitles$;
+    this.bookTitle$ = this.methodViewModel.methodWithYear$;
 
     this.learningPlanGoalTableHeaders = this.methodViewModel.learningPlanGoalTableHeaders;
     this.classGroupColumns$ = this.getTableColumnsFromClassGroupsStream();
@@ -141,6 +146,10 @@ export class MethodChapterComponent implements OnInit, AfterViewInit {
 
   public toggleBoekeFavorite(boeke: EduContent) {
     this.methodViewModel.toggleBoekeFavorite(boeke);
+  }
+
+  public clickBack() {
+    this.router.navigate(['methods']);
   }
 
   public checkBoxChanged(
