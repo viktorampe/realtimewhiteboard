@@ -25,7 +25,9 @@ export class CardComponent {
   }
 
   updateImage() {
-    this.update.emit();
+    this.update.emit({
+      image: {}
+    });
   }
 
   selectImage() {
