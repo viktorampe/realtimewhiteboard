@@ -41,6 +41,7 @@
       cdkDragBoundary=".whiteboard__workspace"
       [class.zoom]="card.mode === Mode.ZOOM"
       [class.onTop]="card.mode === Mode.SELECTED"
+      (cdkDragEnded)="onDragEnded($event, card)"
     >
       <campus-color-list
         class="whiteboard__color-list"
@@ -72,7 +73,6 @@
         [viewModeImage]="card.viewModeImage"
         (update)="updateCard($event, card)"
         (openFilePicker)="openFilePicker(filePicker)"
-        (cdkDragEnded)="onDragEnded($event, card)"
         (click)="onCardClicked($event, card)"
         (press)="onCardPressed(card)"
         (tap)="onCardTapped(card)"
@@ -94,19 +94,11 @@
   >
     <mat-icon style="color: #FFFFFF;" [svgIcon]="'plus'"></mat-icon>
   </button>
-  <button
-    mat-fab
-    color="primary"
-    class="whiteboard__savebutton"
-    (click)="saveWhiteboard()"
-  >
-    <mat-icon style="color: #FFFFFF;" [svgIcon]="'check'"></mat-icon>
-  </button>
 
   <campus-shelf
     (cardDraggedOutsideContainer)="cardDraggedPosition($event)"
     [class.minimizedShelf]="isShelfMinimized"
-    [cards]="whiteboard.cards"
+    [cards]="whiteboard.shelfCards"
     [(isMinimized)]="isShelfMinimized"
   ></campus-shelf>
 </div>

@@ -232,17 +232,35 @@ describe('WhiteboardComponent', () => {
     });
 
     describe('cardFlipIconClicked()', () => {
-      it('should toggle card viewModeImage', () => {
+      it('should toggle viewModeImage', () => {
         const [card] = component.whiteboard$.value.cards;
-        card.mode = <ModeEnum>ModeEnum.IDLE;
+        card.description = 'tekst';
+        card.image.imageUrl = 'imageUrl';
         card.viewModeImage = false;
 
         component.cardFlipIconClicked(card);
-
         expect(card.viewModeImage).toBe(true);
 
         component.cardFlipIconClicked(card);
         expect(card.viewModeImage).toBe(false);
+      });
+
+      it('should not change viewMode when there is no image', () => {
+        const [card] = component.whiteboard$.value.cards;
+        card.description = 'tekst';
+        card.viewModeImage = false;
+
+        component.cardFlipIconClicked(card);
+        expect(card.viewModeImage).toBe(false);
+      });
+
+      it('should not change viewMode when there is no text', () => {
+        const [card] = component.whiteboard$.value.cards;
+        card.image.imageUrl = 'imageUrl';
+        card.viewModeImage = true;
+
+        component.cardFlipIconClicked(card);
+        expect(card.viewModeImage).toBe(true);
       });
 
       it('should set card mode to IdleMode if card.mode != edit', () => {
@@ -379,7 +397,7 @@ describe('WhiteboardComponent', () => {
       component.lastColor = 'red';
       component.whiteboard$.value.cards = [];
       component.whiteboard$.value.shelfCards = [];
-      component.addEmptyCard(0, 0, 'www.si.be');
+      component.addEmptyCard();
 
       const file = new File([''], 'dummy.jpg', {
         type: ''
@@ -422,7 +440,7 @@ describe('WhiteboardComponent', () => {
       component.lastColor = 'red';
       component.whiteboard$.value.cards = [];
       component.whiteboard$.value.shelfCards = [];
-      component.addEmptyCard(0, 0, 'www.si.be');
+      component.addEmptyCard();
 
       component.changeColorForCard(
         component.whiteboard$.value.cards[0],
@@ -462,7 +480,10 @@ describe('WhiteboardComponent', () => {
       expect(component.selectedCards.length).toBe(0);
       expect(component.whiteboard$.value.cards).toEqual(nonSelectedCards);
       component.whiteboard$.value.shelfCards.forEach((shelfcard, index) => {
-        expect(shelfcard).toEqual(selectedCards[index]);
+        expect({ ...shelfcard, mode: null }).toEqual({
+          ...selectedCards[index],
+          mode: null
+        });
       });
     });
 
@@ -594,13 +615,13 @@ describe('WhiteboardComponent', () => {
     it('should add an empty card', () => {
       component.lastColor = 'red';
       component.whiteboard$.value.cards = [];
-      component.addEmptyCard(0, 0, 'www.si.be');
+      component.addEmptyCard();
       expect(component.whiteboard$.value.cards[0]).toEqual({
         id: component.whiteboard$.value.cards[0].id,
         mode: ModeEnum.EDIT,
         color: 'red',
         description: '',
-        image: { imageUrl: 'www.si.be' },
+        image: {},
         top: 0,
         left: 0,
         viewModeImage: false
@@ -610,7 +631,7 @@ describe('WhiteboardComponent', () => {
     it('should add card to shelf and to workspace', () => {
       component.whiteboard$.value.cards = [];
       component.whiteboard$.value.shelfCards = [];
-      component.addEmptyCard(0, 0, 'www.si.be');
+      component.addEmptyCard();
       expect(component.whiteboard$.value.shelfCards.length).toEqual(1);
       expect(component.whiteboard$.value.cards[0].id).toEqual(
         component.whiteboard$.value.shelfCards[0].id
@@ -691,8 +712,8 @@ describe('WhiteboardComponent', () => {
       expect(addEmptySpy).toHaveBeenCalledTimes(2);
       expect(uploadImageForCardSpy).toHaveBeenCalledTimes(2);
       expect(addEmptySpy.mock.calls).toEqual([
-        [400, 400],
-        [450, 450]
+        [{ top: 400, left: 400 }],
+        [{ top: 450, left: 450 }]
       ]);
       expect(uploadImageForCardSpy.mock.calls[0][0]).toEqual(new CardFixture());
       expect(uploadImageForCardSpy.mock.calls).toEqual([
