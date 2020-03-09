@@ -117,24 +117,9 @@
     <campus-button inline (click)="isOpen = !isOpen"
       >toggle container</campus-button
     >
-    <campus-collapsible-container [(open)]="isOpen" class="border">
-      <campus-empty-state
-        svgIcon="empty-state-no-users"
-        title="Geen groepen of gebruikers geselecteerd"
-        description="This tagline conveys the purpose of the screen, without appearing actionable."
-        ctaLabel="Call to action"
-        (clickCta)="clickEmptyCta()"
-      >
-      </campus-empty-state>
-
-      <campus-empty-state
-        svgIcon="empty-state-all-done"
-        title="Nothing to see here"
-        description="This tagline conveys the purpose of the screen, without appearing actionable."
-        ctaLabel="Call to action"
-        (clickCta)="clickEmptyCta()"
-      >
-      </campus-empty-state>
+    <campus-collapsible-container [(open)]="isOpen">
+      <div>Some container content</div>
+      <div>Some other content</div>
     </campus-collapsible-container>
 
     <campus-button primary style="margin: 10px;" (click)="clickEmptyCta()"
@@ -241,12 +226,27 @@
       ><mat-icon svgIcon="home"></mat-icon
     ></campus-button>
 
+    <campus-empty-state
+      svgIcon="empty-state-no-users"
+      title="Geen groepen of gebruikers geselecteerd"
+      description="This tagline conveys the purpose of the screen, without appearing actionable."
+      ctaLabel="Call to action"
+      (clickCta)="clickEmptyCta()"
+    >
+    </campus-empty-state>
+
+    <campus-empty-state
+      svgIcon="empty-state-all-done"
+      title="Nothing to see here"
+      description="This tagline conveys the purpose of the screen, without appearing actionable."
+      ctaLabel="Call to action"
+      (clickCta)="clickEmptyCta()"
+    >
+    </campus-empty-state>
     <div>
       <campus-progress></campus-progress>
     </div>
-    <div>
-      <campus-collapsible-container></campus-collapsible-container>
-    </div>
+
     <div>
       <campus-rating></campus-rating>
     </div>
