@@ -5,4 +5,7 @@ export class TaskActionsService implements TaskActionsServiceInterface {
   getActions(taskInstance: TaskInstanceInterface) {
     throw new Error('Method not implemented.');
   }
+  openTask(taskId: number) {
+    throw new Error('Method not implemented.');
+  }
 }
