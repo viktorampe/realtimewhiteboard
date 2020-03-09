@@ -88,7 +88,7 @@ export class WhiteboardComponent implements OnChanges {
 
   //#region WORKSPACE INTERACTIONS
 
-  onDblClick(event: MouseEvent) {
+  createCard(event) {
     if ((event.target as HTMLElement).className === 'whiteboard__workspace') {
       const top = event.offsetY;
       const left = event.offsetX;

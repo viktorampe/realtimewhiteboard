@@ -26,7 +26,12 @@
       *ngIf="isTitleInputSelected"
     />
   </div>
-  <div class="whiteboard__workspace" (dblclick)="onDblClick($event)" #workspace>
+  <div
+    class="whiteboard__workspace"
+    (longpress)="createCard($event)"
+    (dblclick)="createCard($event)"
+    #workspace
+  >
     <div
       class="whiteboard__workspace__container"
       *ngFor="let card of whiteboard.cards"
