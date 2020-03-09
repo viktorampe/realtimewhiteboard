@@ -30,6 +30,9 @@
       *ngIf="!showAdvanced && !currentTaskIsPaperTask"
       class="manage-task-assignees__content__date-picker__container"
     >
+      <h4 class="ui-body-2 manage-task-assignees__content__date-picker__label"
+        >Periode
+      </h4>
       <campus-date-range-picker
         data-cy="manage-task-date-range-picker"
         class="manage-task-assignees__content__date-picker"
@@ -41,10 +44,8 @@
     </div>
     <ng-container *ngIf="currentTaskAssignees$ | async as currentTaskAssignees">
       <div class="manage-task-assignees__content__header">
-        <h4 class="manage-task-assignees__content__header__label"
-          >Toegewezen aan
-        </h4>
         <ng-container *ngIf="!currentTaskIsPaperTask">
+          <h4 class="ui-body-2">Toegewezen aan </h4>
           <a
             *ngIf="!showAdvanced && currentTaskAssignees.length > 1"
             (click)="setShowAdvanced(true)"
@@ -59,18 +60,20 @@
           >
         </ng-container>
       </div>
-      <div
+      <campus-button
         data-cy="btn-assign-task-to"
-        class="manage-task-assignees__content__list__item manage-task-assignees__content__list__item--add"
+        bordered
+        flat
+        class="manage-task-assignees__content__list__item--add"
         (click)="toggleAddAssignees()"
+        *ngIf="currentTaskAssignees.length"
       >
-        <mat-icon
-          svgIcon="add"
-          class="manage-task-assignees__content__list__item--add__icon"
-        ></mat-icon>
         Deze taak toewijzen...
-      </div>
-      <mat-list class="manage-task-assignees__content__list">
+      </campus-button>
+      <mat-list
+        class="manage-task-assignees__content__list"
+        *ngIf="currentTaskAssignees.length; else noCurrentTaskAssignees"
+      >
         <mat-list-item
           *ngFor="let assignee of currentTaskAssignees"
           [attr.data-cy]="'removable-assignee-' + assignee.label"
@@ -102,6 +105,15 @@
           ></div>
         </mat-list-item>
       </mat-list>
+      <ng-template #noCurrentTaskAssignees>
+        <campus-empty-state
+          svgIcon="empty-state-no-users"
+          title="Er is niemand hier"
+          ctaLabel="Deze taak toewijzen..."
+          [dense]="true"
+          (clickCta)="toggleAddAssignees()"
+        ></campus-empty-state>
+      </ng-template>
     </ng-container>
   </mat-dialog-content>
 
