@@ -36,6 +36,7 @@ export class MethodComponent implements OnInit {
   public currentTab$: Observable<number>;
   public breadcrumbTitles$: Observable<string>;
   public isBoekeFavorite$: Observable<boolean>;
+  public bookTitle$: Observable<string>;
 
   public learningPlanGoalTableHeaders: MultiCheckBoxTableRowHeaderColumnInterface<
     LearningPlanGoalInterface
@@ -62,6 +63,7 @@ export class MethodComponent implements OnInit {
     this.currentTab$ = this.viewModel.currentTab$;
     this.currentMethodParams$ = this.viewModel.currentMethodParams$;
     this.breadcrumbTitles$ = this.viewModel.breadCrumbTitles$;
+    this.bookTitle$ = this.viewModel.methodWithYear$;
 
     this.learningPlanGoalTableHeaders = this.viewModel.learningPlanGoalTableHeaders;
     this.classGroupColumns$ = this.getTableColumnsFromClassGroupsStream();

@@ -61,6 +61,7 @@ export class MethodChapterComponent implements OnInit, AfterViewInit {
       LearningPlanGoalInterface
     >[]
   >;
+  public bookTitle$: Observable<string>;
 
   @ViewChildren(SearchPortalDirective)
   private portalHosts: QueryList<SearchPortalDirective>;
@@ -83,6 +84,7 @@ export class MethodChapterComponent implements OnInit, AfterViewInit {
     this.currentMethodParams$ = this.methodViewModel.currentMethodParams$;
     this.book$ = this.methodViewModel.currentBook$;
     this.breadCrumbTitles$ = this.methodViewModel.breadCrumbTitles$;
+    this.bookTitle$ = this.methodViewModel.methodWithYear$;
 
     this.learningPlanGoalTableHeaders = this.methodViewModel.learningPlanGoalTableHeaders;
     this.classGroupColumns$ = this.getTableColumnsFromClassGroupsStream();

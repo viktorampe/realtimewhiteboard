@@ -30,7 +30,7 @@
   </ng-container>
 </campus-page-bar>
 
-<campus-backdrop [title]="(book$ | async)?.title" [static]="true">
+<campus-backdrop [title]="bookTitle$ | async" [static]="true">
   <backdrop-reveal-action>
     <mat-icon svgIcon="arrow-back" (click)="clickBack()"></mat-icon>
   </backdrop-reveal-action>
