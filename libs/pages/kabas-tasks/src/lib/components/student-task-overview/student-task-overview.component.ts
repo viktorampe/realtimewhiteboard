@@ -1,4 +1,5 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
+import { SectionModeEnum } from '@campus/ui';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { StudentTaskWithContentInterface } from '../../interfaces/StudentTaskWithContent.interface';
 
@@ -22,9 +23,15 @@ export class StudentTaskOverviewComponent implements OnInit {
   showFinishedTasks$ = new BehaviorSubject<boolean>(false);
   isGroupedByDate$ = new BehaviorSubject<boolean>(false);
 
+  public sectionModes: typeof SectionModeEnum = SectionModeEnum;
+
   constructor() {}
 
   ngOnInit() {}
 
   emptyStateClick() {}
+
+  public setShowFinishedTasks(value: boolean) {
+    this.showFinishedTasks$.next(value);
+  }
 }
