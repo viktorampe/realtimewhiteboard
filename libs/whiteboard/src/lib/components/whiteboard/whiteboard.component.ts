@@ -86,6 +86,16 @@ export class WhiteboardComponent implements OnChanges {
     this.titleFC = new FormControl('', Validators.required);
   }
 
+  private updateViewMode(cards) {
+    cards.forEach(c => {
+      if (!c.image.imageUrl) {
+        c.viewModeImage = false;
+      }
+      if (!c.description) {
+        c.viewModeImage = true;
+      }
+    });
+  }
   //#region WORKSPACE INTERACTIONS
 
   onDblClick(event: MouseEvent) {
@@ -289,7 +299,7 @@ export class WhiteboardComponent implements OnChanges {
     const isZoomAllowed =
       !isACardSelected &&
       card.viewModeImage &&
-      card.image &&
+      card.image.imageUrl &&
       card.mode !== ModeEnum.EDIT &&
       card.mode !== ModeEnum.MULTISELECT &&
       card.mode !== ModeEnum.MULTISELECTSELECTED;
@@ -353,6 +363,8 @@ export class WhiteboardComponent implements OnChanges {
       c => c.mode !== ModeEnum.UPLOAD && c.mode !== ModeEnum.IDLE
     );
 
+    this.updateViewMode(cards);
+
     if (nonIdleUploadCards.length) {
       nonIdleUploadCards.forEach(c =>
         this.updateCard({ mode: ModeEnum.IDLE }, c)
@@ -403,13 +415,16 @@ export class WhiteboardComponent implements OnChanges {
 
   cardConfirmIconClicked(card: CardInterface) {
     this.updateCard({ mode: ModeEnum.IDLE }, card);
+    this.updateViewMode(this.whiteboard$.value.cards);
   }
 
   cardFlipIconClicked(card: CardInterface) {
+    this.updateCard({ viewModeImage: !card.viewModeImage }, card);
+
     if (card.mode !== ModeEnum.EDIT) {
       card.mode = ModeEnum.IDLE;
+      this.updateViewMode(this.whiteboard$.value.cards);
     }
-    this.updateCard({ viewModeImage: !card.viewModeImage }, card);
   }
 
   //#endregion
