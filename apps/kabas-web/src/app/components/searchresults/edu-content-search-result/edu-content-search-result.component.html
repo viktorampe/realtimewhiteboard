@@ -13,7 +13,7 @@
   >
   </campus-file-icon>
 
-  <list-item-title>
+  <list-item-title data-cy="search-result-title">
     {{ data.eduContent.name }}
   </list-item-title>
 
@@ -26,6 +26,7 @@
       [matTooltip]="action.tooltip"
       campusClickStopPropagation
       (click)="onActionClick(action)"
+      data-cy="search-result-action"
       >{{ action.label }}</campus-button
     >
   </list-item-actions>

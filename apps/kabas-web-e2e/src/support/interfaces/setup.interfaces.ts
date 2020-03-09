@@ -204,5 +204,45 @@ export interface KabasTasksPagesInterface {
       };
       assignees: string[];
     };
+    manageTaskContent: {
+      taskId: number;
+      // this expected covers the digital task
+      expected: {
+        filter: {
+          book: {
+            id: number;
+            bookTitle: string;
+            resultCount: number;
+            favoriteBookId: number;
+            methodName: string;
+            favoriteBookTitle: string;
+          };
+          chapter: {
+            id: number;
+            resultCount: number;
+          };
+          lesson: {
+            id: number;
+            resultCount: number;
+          };
+          term: {
+            value: string;
+            resultCount: number;
+            originalCount: number;
+          };
+        };
+        search: {
+          results: {
+            [key: number]: {
+              id?: number;
+              name: string;
+              ludoUrl?: string;
+            };
+          };
+        };
+      };
+      paperTaskId: number;
+      paperExpected: { resultCount: number };
+    };
   };
 }

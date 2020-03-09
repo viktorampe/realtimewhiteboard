@@ -19,7 +19,7 @@
         [name]="methodYear.name"
         [years]="methodYear.years"
         [useQueryParams]="true"
-        (linkClick)="changedBook(bookId)"
+        (linkClick)="changedBook(methodYear.id)"
       >
       </campus-method-books-tile>
     </div>
@@ -28,7 +28,9 @@
     <campus-collapsible-sheet>
       <div aside class="manage-task-content__aside">
         <campus-section [mode]="sectionModes.CONTAINER">
-          <section-title>{{ selectedBookTitle$ | async }}</section-title>
+          <section-title data-cy="book-title">{{
+            selectedBookTitle$ | async
+          }}</section-title>
           <section-actions>
             <campus-button
               matTooltip="Kies een ander boek"
@@ -37,6 +39,7 @@
               flat
               dense
               (click)="showBooks = !showBooks"
+              data-cy="change-book"
               ><mat-icon svgIcon="bookshelf"></mat-icon
             ></campus-button>
           </section-actions>
@@ -78,6 +81,7 @@
               flat
               [disabled]="showBooks"
               (click)="showFilters = !showFilters"
+              data-cy="show-search-filters"
               ><mat-icon svgIcon="filter"></mat-icon
             ></campus-button>
           </section-actions>
@@ -98,6 +102,7 @@
                   class="manage-task-content__filters__reset"
                   iconClass="reset-filters"
                   (click)="clearSearchFilters()"
+                  data-cy="search-filter-reset"
                 ></campus-button>
               </div>
             </div>
@@ -129,7 +134,11 @@
           >
 
           <section-actions>
-            <campus-button (click)="clickDone()" primary [disabled]="showBooks"
+            <campus-button
+              (click)="clickDone()"
+              primary
+              [disabled]="showBooks"
+              data-cy="side-panel-done"
               >Klaar</campus-button
             >
           </section-actions>
@@ -152,11 +161,13 @@
                   *ngFor="let taskEduContent of reorderableTaskEduContents"
                   class="manage-task-content__list__item"
                   cdkDrag
+                  data-cy="task-content"
                 >
                   <mat-icon
                     class="manage-task-content__list__item__icon manage-task-content__list__item__icon--handle"
                     svgIcon="drag-handle"
                     cdkDragHandle
+                    data-cy="task-content-drag"
                   ></mat-icon>
 
                   <div
@@ -176,6 +187,7 @@
                     (click)="
                       removeEduContentFromTask(taskEduContent.eduContent)
                     "
+                    data-cy="task-content-remove"
                   ></mat-icon>
                 </mat-list-item>
               </mat-list>
