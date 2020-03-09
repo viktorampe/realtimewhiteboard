@@ -52,7 +52,7 @@ describe('Methods', () => {
         .contains(setup.kabasMethodsPages.expected.method.year)
         .click()
         .location('pathname')
-        .should('be', `${appPaths.methods}/${setup.kabasMethodsPages.book}`);
+        .should('eq', `${appPaths.methods}/${setup.kabasMethodsPages.book}`);
     });
   });
 
@@ -92,7 +92,7 @@ describe('Methods', () => {
         .click()
         .location('pathname')
         .should(
-          'be',
+          'eq',
           `${appPaths.methods}/${setup.kabasMethodsPages.book}/${setup.kabasMethodsPages.chapter}`
         );
     });
@@ -123,7 +123,7 @@ describe('Methods', () => {
         .click()
         .location('pathname')
         .should(
-          'be',
+          'eq',
           `${appPaths.methods}/${setup.kabasMethodsPages.book}/${setup.kabasMethodsPages.chapter}/${setup.kabasMethodsPages.lesson}`
         );
     });
@@ -172,7 +172,7 @@ describe('Methods', () => {
         .click()
         .location('pathname')
         .should(
-          'be',
+          'eq',
           `${appPaths.methods}/${setup.kabasMethodsPages.book}/${setup.kabasMethodsPages.chapter}/${setup.kabasMethodsPages.lessonLast}`
         );
     });
@@ -282,7 +282,7 @@ describe('Methods', () => {
         .click()
         .location('pathname')
         .should(
-          'be',
+          'eq',
           `${appPaths.methods}/${setup.kabasMethodsPages.book}/${setup.kabasMethodsPages.chapter}?tab=1`
         );
     });
@@ -301,7 +301,7 @@ describe('Methods', () => {
         .click()
         .location('pathname')
         .should(
-          'be',
+          'eq',
           `${appPaths.methods}/${setup.kabasMethodsPages.book}/${setup.kabasMethodsPages.chapter}/${setup.kabasMethodsPages.lesson}?tab=1`
         );
     });

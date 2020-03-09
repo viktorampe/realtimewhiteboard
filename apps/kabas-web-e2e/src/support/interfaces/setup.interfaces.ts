@@ -96,6 +96,7 @@ export interface ExpectedTaskListItemResult {
   groupCount?: number;
   individualCount?: number;
   actions: string[];
+  favorite?: boolean;
 }
 
 export interface AdvancedDateOptions {
@@ -109,6 +110,7 @@ export interface TaskAction {
   shouldError?: boolean;
   removesTarget?: boolean;
   fromHeader?: boolean;
+  shouldFavorite?: boolean;
 }
 
 export interface KabasTasksPagesInterface {
