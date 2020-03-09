@@ -28,7 +28,7 @@ describe('HumanDateTimePipe', () => {
   it('create an instance', () => {
     expect(pipe).toBeTruthy();
   });
-  //file.only
+
   describe('transform', () => {
     beforeEach(() => {
       // just to make sure the passed date is not the referenceDate
