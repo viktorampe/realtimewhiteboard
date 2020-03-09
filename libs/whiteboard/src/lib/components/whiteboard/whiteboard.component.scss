@@ -6,8 +6,7 @@
   campus-whiteboard-toolbar {
     position: absolute;
     z-index: 1;
-    left: 0;
-    right: 0;
+    align-self: center;
   }
 
   &.image-drag-directive-dragging {
