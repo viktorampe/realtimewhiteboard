@@ -273,7 +273,7 @@ export class WhiteboardComponent implements OnChanges {
     const isZoomAllowed =
       !isACardSelected &&
       card.viewModeImage &&
-      card.image &&
+      card.image.imageUrl &&
       card.mode !== ModeEnum.EDIT &&
       card.mode !== ModeEnum.MULTISELECT &&
       card.mode !== ModeEnum.MULTISELECTSELECTED;
