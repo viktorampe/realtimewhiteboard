@@ -1,1 +1,43 @@
-<p>student-task-overview works!</p>
+<campus-backdrop title="Mijn taken" [static]="true">
+  <backdrop-reveal-action>
+    <mat-icon svgIcon="tasks"></mat-icon>
+  </backdrop-reveal-action>
+  <front-layer-content class="student-task-overview">
+    <campus-section
+      [mode]="sectionModes.CONTAINER"
+      class="student-task-overview__main"
+    >
+      <section-title>{{
+        (showFinishedTasks$ | async) ? 'Mijn afgewerkte taken' : 'Mijn taken'
+      }}</section-title>
+    </campus-section>
+    <campus-section
+      [mode]="sectionModes.CONTAINER"
+      class="student-task-overview__aside"
+    >
+      <section-content>
+        <campus-section [mode]="sectionModes.STATIC">
+          <section-content>
+            <div>
+              <campus-button
+                inline
+                *ngIf="showFinishedTasks$ | async; else actionForActiveTasks"
+                (click)="setShowFinishedTasks(false)"
+                >Toon actieve taken</campus-button
+              >
+            </div>
+            <ng-template #actionForActiveTasks>
+              <campus-button inline (click)="setShowFinishedTasks(true)"
+                >Toon afgewerkte taken</campus-button
+              >
+            </ng-template>
+            <div><campus-button inline>Groepeer per vak</campus-button></div>
+            <hr />
+            <div><campus-button inline>Wiskunde (2 taken)</campus-button></div>
+            <div><campus-button inline>Taal (5 taken)</campus-button></div>
+          </section-content>
+        </campus-section>
+      </section-content>
+    </campus-section>
+  </front-layer-content>
+</campus-backdrop>

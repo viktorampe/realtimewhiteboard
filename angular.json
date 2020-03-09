@@ -921,7 +921,7 @@
           "configurations": {
             "staging": {
               "devServerTarget": "kabas-web:serve:staging",
-              "spec": "**/!(tasks.manage-content).spec.ts"
+              "spec": "**/!(tasks.overview|tasks.manage-content|tasks.detail).spec.ts"
             },
             "production": {
               "devServerTarget": "kabas-web:serve:production"

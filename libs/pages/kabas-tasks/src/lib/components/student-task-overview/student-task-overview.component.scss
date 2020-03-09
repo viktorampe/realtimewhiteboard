@@ -1,2 +1,13 @@
 .student-task-overview {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+
+  &__main {
+    flex: 1 1 auto;
+  }
+  &__aside {
+    width: 500px;
+    margin-left: 24px;
+  }
 }
