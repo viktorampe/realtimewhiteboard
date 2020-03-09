@@ -102,7 +102,7 @@ export class WhiteboardComponent implements OnChanges {
     if ((event.target as HTMLElement).className === 'whiteboard__workspace') {
       const top = event.offsetY;
       const left = event.offsetX;
-      this.addEmptyCard(top, left);
+      this.addEmptyCard({ top, left });
     }
   }
 
@@ -129,21 +129,18 @@ export class WhiteboardComponent implements OnChanges {
     this.updateWhiteboardSubject({});
   }
 
-  addEmptyCard(
-    top: number = 0,
-    left: number = 0,
-    image: string = ''
-  ): CardInterface {
+  addEmptyCard(values: Partial<CardInterface> = {}): CardInterface {
     // add card to the workspace
     const card = {
       id: uuidv4(),
       mode: ModeEnum.EDIT,
       color: this.lastColor,
       description: '',
-      image: { imageUrl: image },
-      top: top,
-      left: left,
-      viewModeImage: false
+      image: {},
+      top: 0,
+      left: 0,
+      viewModeImage: false,
+      ...values
     };
 
     // add a 'copy' ( card with a different reference ) to the shelf
@@ -344,7 +341,7 @@ export class WhiteboardComponent implements OnChanges {
       const offsetX = x + i * this.multipleCardCreationOffset;
       const offsetY = y + i * this.multipleCardCreationOffset;
 
-      const card = this.addEmptyCard(offsetY, offsetX);
+      const card = this.addEmptyCard({ top: offsetY, left: offsetX });
       card.viewModeImage = true;
       this.uploadImageForCard(card, images[i]);
     }
