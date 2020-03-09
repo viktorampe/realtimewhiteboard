@@ -12,11 +12,12 @@
   $ui-white-color: #fff !default;
   $ui-black-color: #000 !default;
 
-  $ui-empty-state-width: 300px;
-  $ui-empty-state--dense-width: 200px;
-  $ui-empty-state-margin-horizontal: 48px;
-  $ui-empty-state--densemargin-horizontal: 12px;
-  $ui-empty-state-row-gap: 24px;
+  $ui-empty-state-width: 300px !default;
+  $ui-empty-state--dense-width: 200px !default;
+  $ui-empty-state-row-gap: 24px !default;
+  $ui-empty-state--dense-row-gap: 12px !default;
+  $ui-empty-state-margin-horizontal: 48px !default;
+  $ui-empty-state--densemargin-horizontal: 12px !default;
 
   .ui-empty-state {
     width: $ui-empty-state-width;
@@ -37,6 +38,9 @@
     &--dense {
       width: $ui-empty-state--dense-width;
       margin: $ui-empty-state--densemargin-horizontal auto;
+      & .ui-empty-state__image {
+        margin-bottom: $ui-empty-state--dense-row-gap;
+      }
     }
   }
 
