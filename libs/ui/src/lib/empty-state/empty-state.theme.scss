@@ -15,7 +15,7 @@
   $ui-empty-state-width: 300px !default;
   $ui-empty-state--dense-width: 200px !default;
   $ui-empty-state-row-gap: 24px !default;
-
+  $ui-empty-state--dense-row-gap: 12px !default;
   $ui-empty-state-margin-horizontal: 48px !default;
   $ui-empty-state--densemargin-horizontal: 12px !default;
 
@@ -38,6 +38,9 @@
     &--dense {
       width: $ui-empty-state--dense-width;
       margin: $ui-empty-state--densemargin-horizontal auto;
+      & .ui-empty-state__image {
+        margin-bottom: $ui-empty-state--dense-row-gap;
+      }
     }
   }
 
