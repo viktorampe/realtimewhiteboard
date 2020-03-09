@@ -158,7 +158,7 @@ describe('MethodComponent', () => {
       component.clickBack();
       tick();
 
-      expect(router.navigate).toHaveBeenCalledWith(['overview']);
+      expect(router.navigate).toHaveBeenCalledWith(['methods']);
     }));
   });
   describe('clickOpenChapter', () => {

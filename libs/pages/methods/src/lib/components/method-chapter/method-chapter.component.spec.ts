@@ -150,7 +150,7 @@ describe('MethodChapterComponent', () => {
         component.clickBack();
         tick();
 
-        expect(router.navigate).toHaveBeenCalledWith(['overview']);
+        expect(router.navigate).toHaveBeenCalledWith(['methods']);
       }));
     });
     describe('clickOpenToc', () => {
