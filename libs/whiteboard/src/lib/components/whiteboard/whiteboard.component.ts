@@ -173,14 +173,21 @@ export class WhiteboardComponent implements OnChanges {
     }
   }
 
-  onDeleteCard(card: CardInterface) {
-    //TODO: if(kaartje werd door redactie gemaakt)
-    //TODO: if(redactie een kaartje permanent delete ->saveWhiteboard())
-    this.addCardToShelf(card);
-    //TODO: else
-    this.updateWhiteboardSubject({
-      cards: this.whiteboard$.value.cards.filter(c => c !== card)
-    });
+  onDeleteCard(card: CardInterface, permanent: boolean = false) {
+    if (permanent) {
+      this.updateWhiteboardSubject({
+        cards: this.whiteboard$.value.cards.filter(c => c.id !== card.id),
+        shelfCards: this.whiteboard$.value.shelfCards.filter(
+          sc => sc.id !== card.id
+        )
+      });
+      this.saveWhiteboard();
+    } else {
+      this.addCardToShelf(card);
+      this.updateWhiteboardSubject({
+        cards: this.whiteboard$.value.cards.filter(c => c !== card)
+      });
+    }
   }
 
   onCardTapped(card: CardInterface) {
@@ -298,7 +305,7 @@ export class WhiteboardComponent implements OnChanges {
 
   private deleteCardWhenEmpty(card: CardInterface) {
     if (card.image.imageUrl === '' && card.description === '') {
-      this.onDeleteCard(card);
+      this.onDeleteCard(card, true); // permanent delete
     }
   }
   //#endregion
