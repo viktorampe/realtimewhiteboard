@@ -23,7 +23,8 @@ import {
   setupRouteGuards,
   sortBy,
   taskActionCheckError,
-  taskActionExecute
+  taskActionExecute,
+  toggleFilters
 } from './tasks.overview';
 
 describe('Tasks Overview', () => {
@@ -79,6 +80,8 @@ describe('Tasks Overview', () => {
       });
 
       it('should filter tasks', () => {
+        toggleFilters();
+
         // individual filters
         filterName(filterValues.digital.name);
         checkResults(filterResults.digital.name);
@@ -121,6 +124,8 @@ describe('Tasks Overview', () => {
       });
 
       it('should sort tasks', () => {
+        toggleFilters();
+
         setup.kabasTasksPages.sortValues.forEach(sortValue => {
           sortBy(sortValue);
           checkResults(sortResults.digital[sortValue]);
@@ -128,6 +133,9 @@ describe('Tasks Overview', () => {
       });
 
       it('should execute task actions', () => {
+        // used for dearchive action
+        toggleFilters();
+
         let lastAction: TaskAction = null;
 
         taskActions.forEach(taskAction => {
@@ -171,7 +179,7 @@ describe('Tasks Overview', () => {
       });
 
       it('should navigate to the right pages', () => {
-        dataCy('new-task-digital')
+        dataCy('new-task-button')
           .click()
           .location('pathname')
           .should('eq', `/${appPaths.tasks}/manage/new`)
@@ -211,6 +219,8 @@ describe('Tasks Overview', () => {
       });
 
       it('should filter tasks', () => {
+        toggleFilters();
+
         // individual filters
         filterName(filterValues.paper.name);
         checkResults(filterResults.paper.name);
@@ -239,6 +249,8 @@ describe('Tasks Overview', () => {
       });
 
       it('should sort tasks', () => {
+        toggleFilters();
+
         setup.kabasTasksPages.paperSortValues.forEach(sortValue => {
           sortBy(sortValue);
           checkResults(sortResults.paper[sortValue]);
@@ -246,6 +258,9 @@ describe('Tasks Overview', () => {
       });
 
       it('should execute task actions', () => {
+        // used for dearchive action
+        toggleFilters();
+
         let lastAction: TaskAction = null;
 
         paperTaskActions.forEach(taskAction => {
@@ -285,7 +300,7 @@ describe('Tasks Overview', () => {
       });
 
       it('should navigate to the right pages', () => {
-        dataCy('new-task-paper')
+        dataCy('new-task-button')
           .click()
           .location('pathname')
           .should('eq', `/${appPaths.tasks}/manage/new`)

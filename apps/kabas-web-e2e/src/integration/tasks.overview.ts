@@ -11,6 +11,10 @@ import {
 const apiUrl = cyEnv('apiUrl');
 const apiPaths = cyEnv('apiPaths') as ApiPathsInterface;
 
+export function toggleFilters() {
+  dataCy('toggle-filters-button').click();
+}
+
 export function filterName(name: string) {
   dataCy('name-filter')
     .find('input')
@@ -87,7 +91,9 @@ export function clickTaskAction(taskName: string, action: string) {
     .within(() => {
       dataCy('tli-action')
         .contains(translateAction(action) || action)
-        .click();
+        .click({
+          force: true
+        });
     });
 }
 
