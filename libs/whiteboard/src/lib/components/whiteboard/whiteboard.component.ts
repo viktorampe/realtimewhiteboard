@@ -86,6 +86,16 @@ export class WhiteboardComponent implements OnChanges {
     this.titleFC = new FormControl('', Validators.required);
   }
 
+  private updateViewMode(cards) {
+    cards.forEach(c => {
+      if (!c.image.imageUrl) {
+        c.viewModeImage = false;
+      }
+      if (!c.description) {
+        c.viewModeImage = true;
+      }
+    });
+  }
   //#region WORKSPACE INTERACTIONS
 
   onDblClick(event: MouseEvent) {
@@ -331,6 +341,8 @@ export class WhiteboardComponent implements OnChanges {
       c => c.mode !== ModeEnum.UPLOAD && c.mode !== ModeEnum.IDLE
     );
 
+    this.updateViewMode(cards);
+
     if (nonIdleUploadCards.length) {
       nonIdleUploadCards.forEach(c => (c.mode = ModeEnum.IDLE));
       this.updateWhiteboardSubject({ cards: cards });
@@ -377,13 +389,17 @@ export class WhiteboardComponent implements OnChanges {
 
   cardConfirmIconClicked(card: CardInterface) {
     card.mode = ModeEnum.IDLE;
+
+    this.updateViewMode(this.whiteboard$.value.cards);
   }
 
   cardFlipIconClicked(card: CardInterface) {
+    this.updateCard({ viewModeImage: !card.viewModeImage }, card);
+
     if (card.mode !== ModeEnum.EDIT) {
       card.mode = ModeEnum.IDLE;
+      this.updateViewMode(this.whiteboard$.value.cards);
     }
-    this.updateCard({ viewModeImage: !card.viewModeImage }, card);
   }
 
   //#endregion
