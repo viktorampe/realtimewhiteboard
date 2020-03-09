@@ -86,7 +86,7 @@ export class WhiteboardComponent implements OnChanges {
     this.titleFC = new FormControl('', Validators.required);
   }
 
-  private checkViewMode(cards) {
+  private updateViewMode(cards) {
     cards.forEach(c => {
       if (!c.image.imageUrl) {
         c.viewModeImage = false;
@@ -344,7 +344,7 @@ export class WhiteboardComponent implements OnChanges {
       c => c.mode !== ModeEnum.UPLOAD && c.mode !== ModeEnum.IDLE
     );
 
-    this.checkViewMode(cards);
+    this.updateViewMode(cards);
 
     if (nonIdleUploadCards.length) {
       nonIdleUploadCards.forEach(c => (c.mode = ModeEnum.IDLE));
@@ -393,7 +393,7 @@ export class WhiteboardComponent implements OnChanges {
   cardConfirmIconClicked(card: CardInterface) {
     card.mode = ModeEnum.IDLE;
 
-    this.checkViewMode(this.whiteboard$.value.cards);
+    this.updateViewMode(this.whiteboard$.value.cards);
   }
 
   cardFlipIconClicked(card: CardInterface) {
