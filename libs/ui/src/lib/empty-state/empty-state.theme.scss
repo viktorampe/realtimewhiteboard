@@ -14,13 +14,10 @@
 
   $ui-empty-state-width: 300px;
   $ui-empty-state--dense-width: 200px;
-  $ui-empty-state-margin-horizontal: 48px;
-  $ui-empty-state--densemargin-horizontal: 12px;
   $ui-empty-state-row-gap: 24px;
 
   .ui-empty-state {
     width: $ui-empty-state-width;
-    margin: $ui-empty-state-margin-horizontal auto;
     max-width: 100%;
 
     &__image,
@@ -36,7 +33,6 @@
 
     &--dense {
       width: $ui-empty-state--dense-width;
-      margin: $ui-empty-state--densemargin-horizontal auto;
     }
   }
 
