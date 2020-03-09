@@ -11,7 +11,7 @@ const cookieDomain = cyEnv('cookieDomain');
 const defaultUsername = cyEnv('username');
 const defaultPassword = cyEnv('password');
 
-export const dataCy = (name: string) => cy.get('[data-cy=' + name + ']');
+export const dataCy = (name: string) => cy.get('[data-cy="' + name + '"]');
 
 export const login = (username?: string, password?: string) => {
   if (!username) username = defaultUsername;

@@ -108,9 +108,8 @@ $ui-app-bar__section__align-right-padding-right: 25px;
 $ui-app-bar__button-font-size: 12px;
 $ui-app-bar__button-font-weight: bold;
 $ui-app-bar__button__icon-size: 32px;
-$ui-breadcrumbs-crumb-text-size: 15px;
-$ui-breadcrumbs-crumb-text-weight: bold;
-$ui-breadcrumbs-crumb-icon-size: 20px;
+$ui-breadcrumbs-crumb-text-size: 12px;
+$ui-breadcrumbs-padding: 0;
 
 // shared header (app & page bar)
 $shared-header-font-size: 12px;
@@ -118,9 +117,11 @@ $shared-header-font-weight: bold;
 $shared-header__app-bar-height: 120px;
 $shared-header__app-bar-padding-top: 40px;
 $shared-header__page-bar-padding-left: $kabas-page-horizontal-padding;
-$shared-header__page-bar-height: 80px;
+$shared-header__page-bar-padding-top: 8px;
+$shared-header__page-bar-height: auto;
 $shared-header__page-bar__divider-margin-left-right: 0;
 $shared-header__page-bar-container__justify-content: flex-end;
+$shared-header__page-bar-container-margin-bottom: -60px;
 $shared_header__page-bar_background: linear-gradient(
   90deg,
   $color-blue-2,
@@ -141,7 +142,7 @@ $pages-padding: $kabas-page-vertical-padding $kabas-page-horizontal-padding;
 
 // ui > app shell variables
 $ui-shell__left-width: 210px;
-$ui-shell__top-height: 200px;
+$ui-shell__top-height: 80px; //min height
 $ui-shell__top-height--mobile: 80px;
 $ui-shell__top-background-color: $color-white-1;
 $ui-shell__logo-height: 120px;
@@ -203,8 +204,7 @@ $ui-button--bordered-font-color: $ui-color-secondary;
 
 $ui-button--dense-padding: 2px $ui-button-horizontal-padding;
 // ui > backdrop
-$ui-backdrop-background: linear-gradient(90deg, $color-blue-2, $color-blue-3);
-
+$ui-backdrop-background: $shared_header__page-bar_background;
 // ui > info panel
 $ui-info-panel-title-color: $primary-font-color;
 
