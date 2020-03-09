@@ -232,17 +232,24 @@ describe('WhiteboardComponent', () => {
     });
 
     describe('cardFlipIconClicked()', () => {
-      it('should toggle card viewModeImage', () => {
+      it('should not change viewMode when there is no image', () => {
         const [card] = component.whiteboard$.value.cards;
         card.mode = <ModeEnum>ModeEnum.IDLE;
+        card.description = 'tekst';
         card.viewModeImage = false;
 
         component.cardFlipIconClicked(card);
+        expect(card.viewModeImage).toBe(false);
+      });
 
-        expect(card.viewModeImage).toBe(true);
+      it('should not change viewMode when there is no text', () => {
+        const [card] = component.whiteboard$.value.cards;
+        card.mode = <ModeEnum>ModeEnum.IDLE;
+        card.image.imageUrl = 'imageUrl';
+        card.viewModeImage = true;
 
         component.cardFlipIconClicked(card);
-        expect(card.viewModeImage).toBe(false);
+        expect(card.viewModeImage).toBe(true);
       });
 
       it('should set card mode to IdleMode if card.mode != edit', () => {
