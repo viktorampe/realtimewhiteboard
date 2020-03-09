@@ -306,7 +306,7 @@ describe('Tasks Detail', () => {
               .click()
               .location('pathname')
               .should('eq', taskPath + '/content')
-              .go('back');
+              .go(-2);
           });
 
           it('should open confirmation dialog when clicking `delete selection` button and remove content after confirmation', () => {
@@ -344,7 +344,7 @@ describe('Tasks Detail', () => {
               .click()
               .location('pathname')
               .should('eq', taskPath + '/content')
-              .go('back');
+              .go(-2);
           });
         });
       });
@@ -488,7 +488,7 @@ describe('Tasks Detail', () => {
                 .click()
                 .location('pathname')
                 .should('eq', taskPath + '/content')
-                .go('back');
+                .go(-2);
             });
 
             it('should download a pdf', () => {
