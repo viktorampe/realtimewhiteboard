@@ -133,6 +133,10 @@ export class MethodComponent implements OnInit {
     return 'educontent-product-type:' + productType.name.toLowerCase();
   }
 
+  public clickBack() {
+    this.router.navigate(['methods']);
+  }
+
   private getTableColumnsFromClassGroupsStream(): Observable<
     MultiCheckBoxTableItemColumnInterface<ClassGroupInterface>[]
   > {

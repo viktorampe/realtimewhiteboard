@@ -143,6 +143,14 @@ describe('MethodChapterComponent', () => {
       });
     });
 
+    describe('clickBack', () => {
+      it('should navigate back to the methods overview when clickBack is called', fakeAsync(() => {
+        component.clickBack();
+        tick();
+
+        expect(router.navigate).toHaveBeenCalledWith(['overview']);
+      }));
+    });
     describe('clickOpenToc', () => {
       it('should navigate to the lesson when clickOpenToc is called', fakeAsync(() => {
         component.clickOpenToc(3);
