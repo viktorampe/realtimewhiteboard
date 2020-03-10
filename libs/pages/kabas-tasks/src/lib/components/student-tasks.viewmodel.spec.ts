@@ -3,7 +3,8 @@ import {
   AUTH_SERVICE_TOKEN,
   DalState,
   EduContentFixture,
-  getRouterStateParams
+  getRouterStateParams,
+  ResultFixture
 } from '@campus/dal';
 import {
   OpenStaticContentServiceInterface,
@@ -33,7 +34,8 @@ describe('KabasTaskViewModel', () => {
         {
           provide: SCORM_EXERCISE_SERVICE_TOKEN,
           useValue: {
-            startExerciseFromTask: jest.fn()
+            startExerciseFromTask: jest.fn(),
+            reviewExerciseFromResult: jest.fn()
           }
         },
         {
@@ -61,6 +63,7 @@ describe('KabasTaskViewModel', () => {
 
   describe('edu-content action handlers', () => {
     const mockEduContent = new EduContentFixture();
+    const mockResult = new ResultFixture();
     const taskId = 5;
 
     beforeEach(() => {
@@ -85,6 +88,15 @@ describe('KabasTaskViewModel', () => {
         expect(() =>
           studentTasksViewModel.openEduContentAsSolution(mockEduContent)
         ).toThrowError(`students can't open with solution in task`);
+      });
+    });
+
+    describe('openEduContentFromResult', () => {
+      it('should call scormExerciseService.reviewExerciseFromResult()', () => {
+        studentTasksViewModel.openEduContentFromResult(mockResult);
+        expect(
+          scormExerciseService.reviewExerciseFromResult
+        ).toHaveBeenCalledWith(mockResult);
       });
     });
 

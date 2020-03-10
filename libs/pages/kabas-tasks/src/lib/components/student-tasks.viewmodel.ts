@@ -5,12 +5,14 @@ import {
   AUTH_SERVICE_TOKEN,
   DalState,
   EduContent,
-  getRouterStateParams
+  getRouterStateParams,
+  ResultInterface
 } from '@campus/dal';
 import {
   ContentOpenerInterface,
   OpenStaticContentServiceInterface,
   OPEN_STATIC_CONTENT_SERVICE_TOKEN,
+  ResultOpenerInterface,
   ScormExerciseServiceInterface,
   SCORM_EXERCISE_SERVICE_TOKEN
 } from '@campus/shared';
@@ -23,7 +25,8 @@ import { StudentTaskWithContentInterface } from '../interfaces/StudentTaskWithCo
 @Injectable({
   providedIn: 'root'
 })
-export class StudentTasksViewModel implements ContentOpenerInterface {
+export class StudentTasksViewModel
+  implements ContentOpenerInterface, ResultOpenerInterface {
   public studentTasks$: Observable<StudentTaskInterface[]>;
   public currentTask$: Observable<StudentTaskWithContentInterface>;
   public routeParams$: Observable<Params>;
@@ -59,6 +62,9 @@ export class StudentTasksViewModel implements ContentOpenerInterface {
   }
   openEduContentAsSolution(eduContent: EduContent): void {
     throw new Error(`students can't open with solution in task`);
+  }
+  openEduContentFromResult(result: ResultInterface): void {
+    this.scormExerciseService.reviewExerciseFromResult(result);
   }
   openEduContentAsStream(eduContent: EduContent): void {
     this.openStaticContentService.open(eduContent, true);
