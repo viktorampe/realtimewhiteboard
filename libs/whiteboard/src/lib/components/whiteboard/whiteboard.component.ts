@@ -271,9 +271,11 @@ export class WhiteboardComponent implements OnChanges {
     this.saveWhiteboard();
   }
 
-  onDragStarted(event: CdkDragStart) {
+  onDragStarted(event: CdkDragStart, card: CardInterface) {
     if (!this.selectedCards.length) {
-      this.whiteboard$.value.cards.forEach(c => (c.mode = this.Mode.IDLE));
+      this.whiteboard$.value.cards
+        .filter(c => c.id !== card.id)
+        .forEach(c => (c.mode = this.Mode.IDLE));
     }
   }
 
