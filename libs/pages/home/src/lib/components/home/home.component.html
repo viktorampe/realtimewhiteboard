@@ -34,7 +34,10 @@
   <div class="pages-home__container__shortcuts__list">
     <div
       *ngFor="let navItem of dashboardNavItems$ | async"
-      class="pages-home__container__shortcuts__list__shortcut pages-home__container__shortcuts__list__shortcut--methods"
+      class="pages-home__container__shortcuts__list__shortcut"
+      [ngClass]="
+        'pages-home__container__shortcuts__list__shortcut--' + navItem.icon
+      "
     >
       <mat-icon [svgIcon]="navItem.icon"> </mat-icon>
       <h2>{{ navItem.title }}</h2>

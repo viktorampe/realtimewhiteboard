@@ -19,7 +19,7 @@ export interface NavigationItemServiceInterface {
 }
 
 export interface AppNavTreeInterface {
-  dashboardNav: NavItem[];
+  dashboardNav?: NavItem[];
   sideNav: NavItem[];
   settingsNav: NavItem[];
   profileMenuNav: NavItem[];

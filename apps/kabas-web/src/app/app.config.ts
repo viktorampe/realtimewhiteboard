@@ -93,7 +93,7 @@ const standardDashboardNavItems: NavItem[] = [
   {
     title: 'Resultaten',
     description:
-      ' Resultaten van oefeningen per taak of per leerling, met de mogelijkheid om dit te exporteren',
+      'Resultaten van oefeningen per taak of per leerling, met de mogelijkheid om dit te exporteren',
     icon: 'results',
     link: '/results',
     requiredPermissions: [] // TODO: add permissions

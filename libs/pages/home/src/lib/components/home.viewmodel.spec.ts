@@ -36,7 +36,7 @@ describe('HomeViewModel', () => {
         provideMockStore(),
         {
           provide: OPEN_STATIC_CONTENT_SERVICE_TOKEN,
-          useValue: { open: jest.fn().mockReturnValue(mockNavItems) }
+          useValue: { open: jest.fn() }
         },
         {
           provide: NAVIGATION_ITEM_SERVICE_TOKEN,
