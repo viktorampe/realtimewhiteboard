@@ -1,11 +1,19 @@
 import { TaskClassGroupQueries } from '.';
+import { ClassGroupFixture } from '../../+fixtures';
 import { TaskClassGroupInterface } from '../../+models';
+import { AssigneeInterface } from '../task/Assignee.interface';
+import { AssigneeTypesEnum } from '../task/AssigneeTypes.enum';
 import { State } from './task-class-group.reducer';
 
 describe('TaskClassGroup Selectors', () => {
-  function createTaskClassGroup(id: number): TaskClassGroupInterface | any {
+  function createTaskClassGroup(
+    id: number,
+    taskId: number = 1
+  ): TaskClassGroupInterface | any {
     return {
-      id: id
+      id: id,
+      classGroupId: 1,
+      taskId
     };
   }
 
@@ -39,15 +47,21 @@ describe('TaskClassGroup Selectors', () => {
     beforeEach(() => {
       taskClassGroupState = createState(
         [
-          createTaskClassGroup(4),
-          createTaskClassGroup(1),
-          createTaskClassGroup(2),
-          createTaskClassGroup(3)
+          createTaskClassGroup(4, 1),
+          createTaskClassGroup(1, 1),
+          createTaskClassGroup(2, 2),
+          createTaskClassGroup(3, 3)
         ],
         true,
         'no error'
       );
-      storeState = { taskClassGroups: taskClassGroupState };
+      storeState = {
+        taskClassGroups: taskClassGroupState,
+        classGroups: {
+          ids: [1],
+          entities: { 1: new ClassGroupFixture({ name: 'foo' }) }
+        }
+      };
     });
     it('getError() should return the error', () => {
       const results = TaskClassGroupQueries.getError(storeState);
@@ -60,10 +74,10 @@ describe('TaskClassGroup Selectors', () => {
     it('getAll() should return an array of the entities in the order from the ids', () => {
       const results = TaskClassGroupQueries.getAll(storeState);
       expect(results).toEqual([
-        createTaskClassGroup(4),
-        createTaskClassGroup(1),
-        createTaskClassGroup(2),
-        createTaskClassGroup(3)
+        createTaskClassGroup(4, 1),
+        createTaskClassGroup(1, 1),
+        createTaskClassGroup(2, 2),
+        createTaskClassGroup(3, 3)
       ]);
     });
     it('getCount() should return number of entities', () => {
@@ -83,19 +97,44 @@ describe('TaskClassGroup Selectors', () => {
         ids: [3, 1, 90, 2]
       });
       expect(results).toEqual([
-        createTaskClassGroup(3),
-        createTaskClassGroup(1),
+        createTaskClassGroup(3, 3),
+        createTaskClassGroup(1, 1),
         undefined,
-        createTaskClassGroup(2)
+        createTaskClassGroup(2, 2)
       ]);
     });
     it('getById() should return the desired entity', () => {
       const results = TaskClassGroupQueries.getById(storeState, { id: 2 });
-      expect(results).toEqual(createTaskClassGroup(2));
+      expect(results).toEqual(createTaskClassGroup(2, 2));
     });
     it('getById() should return undefined if the entity is not present', () => {
       const results = TaskClassGroupQueries.getById(storeState, { id: 9 });
       expect(results).toBe(undefined);
     });
+  });
+
+  it('getTaskClassGroupAssigneeByTask()', () => {
+    const results = TaskClassGroupQueries.getTaskClassGroupAssigneeByTask(
+      storeState
+    );
+    expect(results).toEqual({
+      1: [
+        createAssignee(createTaskClassGroup(4, 1)),
+        createAssignee(createTaskClassGroup(1, 1))
+      ],
+      2: [createAssignee(createTaskClassGroup(2, 2))],
+      3: [createAssignee(createTaskClassGroup(3, 3))]
+    });
+
+    function createAssignee(taskClassGroup): AssigneeInterface {
+      return {
+        id: taskClassGroup.id,
+        type: AssigneeTypesEnum.CLASSGROUP,
+        relationId: taskClassGroup.classGroupId,
+        label: 'foo',
+        start: taskClassGroup.start,
+        end: taskClassGroup.end
+      };
+    }
   });
 });

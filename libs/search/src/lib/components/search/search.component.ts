@@ -11,6 +11,7 @@ import {
   QueryList,
   SimpleChanges,
   Type,
+  ViewChild,
   ViewContainerRef
 } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
@@ -22,6 +23,7 @@ import {
   SearchFilterInterface
 } from '../../interfaces';
 import { ColumnFilterService } from '../column-filter/column-filter.service';
+import { ResultsListComponent } from '../results-list/results-list.component';
 import { SearchTermComponent } from '../search-term/search-term.component';
 import { SearchViewModel } from '../search.viewmodel';
 import {
@@ -42,12 +44,7 @@ export class SearchComponent implements AfterViewInit, OnDestroy, OnChanges {
   private searchTermComponent: SearchTermComponent;
   private subscriptions = new Subscription();
   private _searchPortals: QueryList<SearchPortalDirective> = new QueryList();
-  private portalsMap: {
-    [key: string]: {
-      host: ViewContainerRef;
-      subscriptions: Subscription;
-    };
-  } = {};
+  private portalsMap: HostCollectionInterface = {};
 
   @Input() public searchMode: SearchModeInterface;
   @Input() public autoCompleteValues: string[];
@@ -87,6 +84,9 @@ export class SearchComponent implements AfterViewInit, OnDestroy, OnChanges {
   @Output() public searchState$: Observable<SearchStateInterface>;
   @Output() public searchTermChangeForAutoComplete = new EventEmitter<string>();
 
+  @ViewChild(ResultsListComponent, { static: true })
+  resultList: ResultsListComponent;
+
   constructor(
     private searchViewmodel: SearchViewModel,
     private componentFactoryResolver: ComponentFactoryResolver,
@@ -99,6 +99,14 @@ export class SearchComponent implements AfterViewInit, OnDestroy, OnChanges {
 
   ngAfterViewInit() {
     this.warnMissingSearchPortals();
+
+    this.subscriptions.add(
+      this.searchViewmodel.searchResultItemsToUpdate$.subscribe(ids => {
+        this.resultList.items
+          .filter(item => ids.some(id => id === item.dataObject.eduContent.id))
+          .forEach(item => this.searchViewmodel.updateSearchResult(item));
+      })
+    );
   }
 
   ngOnDestroy() {
@@ -282,6 +290,7 @@ export class SearchComponent implements AfterViewInit, OnDestroy, OnChanges {
       });
   }
 }
+
 interface HostCollectionInterface {
   [key: string]: {
     host: ViewContainerRef;

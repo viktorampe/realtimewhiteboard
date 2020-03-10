@@ -1,7 +1,10 @@
 import {
   Component,
+  ContentChild,
   Directive,
+  ElementRef,
   EventEmitter,
+  HostBinding,
   Input,
   Output
 } from '@angular/core';
@@ -9,7 +12,8 @@ import {
 export enum SectionModeEnum {
   STATIC,
   EDITABLE,
-  EDITING
+  EDITING,
+  CONTAINER
 }
 
 /**
@@ -19,8 +23,7 @@ export enum SectionModeEnum {
 @Directive({
   selector: '[campusSectionTitle], [sectionTitle], section-title'
 })
-// tslint:disable-next-line: directive-class-suffix
-export class SectionTitle {}
+export class SectionTitleDirective {}
 
 /**
  * Content of a section, needed as it's used as a selector in the API.
@@ -29,18 +32,29 @@ export class SectionTitle {}
 @Directive({
   selector: '[campusSectionContent], [sectionContent], section-content'
 })
-// tslint:disable-next-line: directive-class-suffix
-export class SectionContent {}
+export class SectionContentDirective {}
 
 /**
  * Actions of a section, needed as it's used as a selector in the API.
  * @docs-private
  */
 @Directive({
-  selector: '[campusSectionAction], [sectionActions], section-actions'
+  selector: '[campusSectionActions], [sectionActions], section-actions'
 })
-// tslint:disable-next-line: directive-class-suffix
-export class SectionActions {}
+export class SectionActionsDirective {}
+
+/**
+ * Footer Actions of a section, needed as it's used as a selector in the API.
+ * @docs-private
+ */
+@Directive({
+  selector:
+    '[campusFooterSectionActions], [sectionFooterActions], section-footer-actions'
+})
+export class SectionFooterActionsDirective {
+  @HostBinding('class.ui-section__footer__actions')
+  footerActionsClass = true;
+}
 
 @Component({
   selector: 'campus-section',
@@ -48,11 +62,14 @@ export class SectionActions {}
   styleUrls: ['./section.component.scss']
 })
 export class SectionComponent {
-  @Input() mode: SectionModeEnum;
+  @Input() mode: SectionModeEnum = SectionModeEnum.STATIC;
   @Output() modeChange = new EventEmitter<SectionModeEnum>();
   @Output() actionClick = new EventEmitter<void>();
 
   modes = SectionModeEnum; // needed for usage in the template
+
+  @ContentChild(SectionTitleDirective, { static: true })
+  sectionTitle: ElementRef;
 
   constructor() {}
 

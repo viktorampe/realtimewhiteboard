@@ -7,8 +7,8 @@ import {
   ViewChild
 } from '@angular/core';
 import { MatSelectionList } from '@angular/material';
+import { AssigneeInterface } from '@campus/dal';
 import { SearchTermComponent } from '@campus/search';
-import { AssigneeInterface } from './../../interfaces/Assignee.interface';
 
 interface AssigneesByType {
   label: string;

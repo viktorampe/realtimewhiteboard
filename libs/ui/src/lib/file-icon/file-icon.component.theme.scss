@@ -1,9 +1,6 @@
 @mixin ui-file-icon() {
-  $ui-file-icon-width: 60px !default;
-  $ui-file-icon-height: 80px !default;
   $ui-file-icon-border: 2px solid gray !default;
   $ui-file-icon-padding: 0 0 20px 0 !default;
-  $ui-file-icon_icon-color: inherit !default;
 
   $ui-file-icon__label-top: 60% !default;
   $ui-file-icon__label-left: 15% !default;
@@ -12,15 +9,12 @@
   $ui-file-icon__label-line-height: 21px !default;
   $ui-file-icon__label-text-color: gray !default;
   $ui-file-icon__label-border: $ui-file-icon-border !default;
-  $ui-file-icon__font-size: inherit !default;
+  $ui-file-icon__font-size: 12px !default;
   $ui-file-icon__font-weight: inherit !default;
   $ui-file-icon__label-text-transform: uppercase !default;
-  $ui-file-icon__label-text-weight: normal !default;
   $ui-file-icon__label-font-size: 10px !default;
 
   .ui-file-icon {
-    width: $ui-file-icon-width;
-    height: $ui-file-icon-height;
     border: $ui-file-icon-border;
     padding: $ui-file-icon-padding;
 
@@ -39,7 +33,6 @@
       line-height: $ui-file-icon__label-line-height;
       color: $ui-file-icon__label-text-color;
       border: $ui-file-icon__label-border;
-      max-width: $ui-file-icon-width;
       font-size: $ui-file-icon__label-font-size;
       overflow: hidden;
       font-size: $ui-file-icon__font-size;

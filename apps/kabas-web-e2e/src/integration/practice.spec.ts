@@ -54,8 +54,8 @@ describe('Practice', () => {
           .click()
           .location('pathname')
           .should(
-            'be',
-            `${appPaths.practice}/manage/${setup.kabasUnlockedFreePracticePages.book}`
+            'eq',
+            `/${appPaths.practice}/manage/${setup.kabasUnlockedFreePracticePages.book}`
           );
       });
     });
@@ -124,7 +124,7 @@ describe('Practice', () => {
       });
 
       it('should error', () => {
-        cy.location().should('be', `error/401`);
+        cy.location('pathname').should('eq', `/error/401`);
       });
     });
   });
@@ -203,8 +203,8 @@ describe('Practice', () => {
           .click()
           .location('pathname')
           .should(
-            'be',
-            `${appPaths.practice}/${setup.kabasUnlockedFreePracticePages.book}/${setup.kabasUnlockedFreePracticePages.chapter}`
+            'eq',
+            `/${appPaths.practice}/${setup.kabasUnlockedFreePracticePages.book}/${setup.kabasUnlockedFreePracticePages.chapter}`
           );
       });
 
@@ -212,7 +212,7 @@ describe('Practice', () => {
         dataCy('back-link')
           .click()
           .location('pathname')
-          .should('be', `${appPaths.practice}`);
+          .should('eq', `/${appPaths.practice}`);
       });
     });
 
@@ -245,8 +245,8 @@ describe('Practice', () => {
           .click()
           .location('pathname')
           .should(
-            'be',
-            `${appPaths.practice}/${setup.kabasUnlockedFreePracticePages.book}/${setup.kabasUnlockedFreePracticePages.chapter}/${setup.kabasUnlockedFreePracticePages.lesson}`
+            'eq',
+            `/${appPaths.practice}/${setup.kabasUnlockedFreePracticePages.book}/${setup.kabasUnlockedFreePracticePages.chapter}/${setup.kabasUnlockedFreePracticePages.lesson}`
           );
       });
 
@@ -254,7 +254,10 @@ describe('Practice', () => {
         dataCy('back-link')
           .click()
           .location('pathname')
-          .should('be', `${appPaths.practice}`);
+          .should(
+            'eq',
+            `/${appPaths.practice}/${setup.kabasUnlockedFreePracticePages.book}`
+          );
       });
     });
 
@@ -287,8 +290,8 @@ describe('Practice', () => {
           .click()
           .location('pathname')
           .should(
-            'be',
-            `${appPaths.practice}/${setup.kabasUnlockedFreePracticePages.book}/${setup.kabasUnlockedFreePracticePages.chapter}`
+            'eq',
+            `/${appPaths.practice}/${setup.kabasUnlockedFreePracticePages.book}/${setup.kabasUnlockedFreePracticePages.chapter}`
           );
       });
 
@@ -296,7 +299,10 @@ describe('Practice', () => {
         dataCy('back-link')
           .click()
           .location('pathname')
-          .should('be', `${appPaths.practice}`);
+          .should(
+            'eq',
+            `/${appPaths.practice}/${setup.kabasUnlockedFreePracticePages.book}`
+          );
       });
     });
 
@@ -306,7 +312,7 @@ describe('Practice', () => {
       });
 
       it('should error', () => {
-        cy.location().should('be', `error/401`);
+        cy.location('pathname').should('eq', `/error/401`);
       });
     });
   });

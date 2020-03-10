@@ -249,9 +249,12 @@ export class WhiteboardComponent implements OnChanges {
         this.updateCard({ image: response }, card);
         if (response.imageUrl) {
           if (this.selectedCards.length) {
-            this.updateCard({ mode: ModeEnum.MULTISELECT }, card);
+            this.updateCard(
+              { mode: ModeEnum.MULTISELECT, viewModeImage: true },
+              card
+            );
           } else {
-            this.updateCard({ mode: ModeEnum.IDLE }, card);
+            this.updateCard({ mode: ModeEnum.IDLE, viewModeImage: true }, card);
           }
           this.saveWhiteboard();
         }
@@ -265,7 +268,17 @@ export class WhiteboardComponent implements OnChanges {
     this.saveWhiteboard();
   }
 
-  onDragEnded(event: CdkDragEnd, card) {
+  onDragStarted(card: CardInterface) {
+    if (!this.selectedCards.length) {
+      const cards = this.whiteboard$.value.cards;
+      cards
+        .filter(c => c.id !== card.id && c.mode !== ModeEnum.UPLOAD)
+        .forEach(c => (c.mode = this.Mode.IDLE));
+      this.updateWhiteboardSubject({ cards: cards });
+    }
+  }
+
+  onDragEnded(event: CdkDragEnd, card: CardInterface) {
     const cardPosition = event.source.getFreeDragPosition();
     this.updateCard({ top: cardPosition.y, left: cardPosition.x }, card);
     this.updateWhiteboardSubject({
