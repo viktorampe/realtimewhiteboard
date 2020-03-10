@@ -9,6 +9,7 @@ import {
 } from '@angular/material';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { UiModule } from '@campus/ui';
 import { CardImageComponent } from './components/card-image/card-image.component';
 import { CardTextComponent } from './components/card-text/card-text.component';
 import { CardToolbarComponent } from './components/card-toolbar/card-toolbar.component';
@@ -31,7 +32,8 @@ import { ImageDragDirective } from './directives/image-drag.directive';
     ReactiveFormsModule,
     MatButtonModule,
     MatProgressBarModule,
-    MatInputModule
+    MatInputModule,
+    UiModule
   ],
   declarations: [
     WhiteboardComponent,

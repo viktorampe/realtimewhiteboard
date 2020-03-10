@@ -89,20 +89,22 @@ export class WhiteboardComponent implements OnChanges {
   private updateViewMode(cards) {
     cards.forEach(c => {
       if (!c.image.imageUrl) {
-        c.viewModeImage = false;
+        this.updateCard({ viewModeImage: false }, c);
       }
       if (!c.description) {
-        c.viewModeImage = true;
+        this.updateCard({ viewModeImage: true }, c);
       }
     });
   }
   //#region WORKSPACE INTERACTIONS
 
   onDblClick(event: MouseEvent) {
-    if ((event.target as HTMLElement).className === 'whiteboard__workspace') {
+    if (
+      (event.target as HTMLElement).className.includes('whiteboard__workspace')
+    ) {
       const top = event.offsetY;
       const left = event.offsetX;
-      this.addEmptyCard(top, left);
+      this.addEmptyCard({ top, left });
     }
   }
 
@@ -116,8 +118,6 @@ export class WhiteboardComponent implements OnChanges {
   updateCard(updates: Partial<CardInterface>, card: CardInterface) {
     // update card
     Object.assign(card, updates);
-    // check if card became empty
-    this.deleteCardWhenEmpty(card);
     // sync shelfcard
     const shelfCard: CardInterface = this.whiteboard$.value.shelfCards.filter(
       shelfcard => shelfcard.id === card.id
@@ -129,21 +129,18 @@ export class WhiteboardComponent implements OnChanges {
     this.updateWhiteboardSubject({});
   }
 
-  addEmptyCard(
-    top: number = 0,
-    left: number = 0,
-    image: string = ''
-  ): CardInterface {
+  addEmptyCard(values: Partial<CardInterface> = {}): CardInterface {
     // add card to the workspace
     const card = {
       id: uuidv4(),
       mode: ModeEnum.EDIT,
       color: this.lastColor,
       description: '',
-      image: { imageUrl: image },
-      top: top,
-      left: left,
-      viewModeImage: false
+      image: {},
+      top: 0,
+      left: 0,
+      viewModeImage: false,
+      ...values
     };
 
     // add a 'copy' ( card with a different reference ) to the shelf
@@ -322,12 +319,6 @@ export class WhiteboardComponent implements OnChanges {
       c => c.mode === ModeEnum.SELECTED
     ).length;
   }
-
-  private deleteCardWhenEmpty(card: CardInterface) {
-    if (card.image.imageUrl === '' && card.description === '') {
-      this.onDeleteCard(card, true); // permanent delete
-    }
-  }
   //#endregion
 
   //#region WHITEBOARD ACTIONS
@@ -354,7 +345,7 @@ export class WhiteboardComponent implements OnChanges {
       const offsetX = x + i * this.multipleCardCreationOffset;
       const offsetY = y + i * this.multipleCardCreationOffset;
 
-      const card = this.addEmptyCard(offsetY, offsetX);
+      const card = this.addEmptyCard({ top: offsetY, left: offsetX });
       card.viewModeImage = true;
       this.uploadImageForCard(card, images[i]);
     }
@@ -379,9 +370,6 @@ export class WhiteboardComponent implements OnChanges {
       nonIdleUploadCards.forEach(c =>
         this.updateCard({ mode: ModeEnum.IDLE }, c)
       );
-      cards.forEach(c => {
-        this.deleteCardWhenEmpty(c);
-      });
     }
   }
 
@@ -429,11 +417,16 @@ export class WhiteboardComponent implements OnChanges {
   }
 
   cardFlipIconClicked(card: CardInterface) {
-    this.updateCard({ viewModeImage: !card.viewModeImage }, card);
+    if (
+      (card.description && card.image.imageUrl) ||
+      card.mode === this.Mode.EDIT
+    ) {
+      this.updateCard({ viewModeImage: !card.viewModeImage }, card);
 
-    if (card.mode !== ModeEnum.EDIT) {
-      card.mode = ModeEnum.IDLE;
-      this.updateViewMode(this.whiteboard$.value.cards);
+      if (card.mode !== ModeEnum.EDIT) {
+        card.mode = ModeEnum.IDLE;
+        this.updateViewMode(this.whiteboard$.value.cards);
+      }
     }
   }
 

@@ -12,6 +12,7 @@ import {
 import { By, HAMMER_LOADER } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MockMatIconRegistry } from '@campus/testing';
+import { UiModule } from '@campus/ui';
 import { configureTestSuite } from 'ng-bullet';
 import { of } from 'rxjs';
 import { delay } from 'rxjs/operators';
@@ -51,7 +52,8 @@ describe('WhiteboardComponent', () => {
         BrowserAnimationsModule,
         MatProgressBarModule,
         MatInputModule,
-        DragDropModule
+        DragDropModule,
+        UiModule
       ],
       declarations: [
         WhiteboardComponent,
@@ -263,9 +265,11 @@ describe('WhiteboardComponent', () => {
         expect(card.viewModeImage).toBe(true);
       });
 
-      it('should set card mode to IdleMode if card.mode != edit', () => {
+      it('should set card mode to IdleMode if card.mode !== edit', () => {
         const [card] = component.whiteboard$.value.cards;
         card.mode = <ModeEnum>ModeEnum.SELECTED;
+        card.description = 'tekst';
+        card.image.imageUrl = 'imageUrl';
 
         const nonEditModes = Object.keys(ModeEnum).filter(
           key =>
@@ -397,7 +401,7 @@ describe('WhiteboardComponent', () => {
       component.lastColor = 'red';
       component.whiteboard$.value.cards = [];
       component.whiteboard$.value.shelfCards = [];
-      component.addEmptyCard(0, 0, 'www.si.be');
+      component.addEmptyCard();
 
       const file = new File([''], 'dummy.jpg', {
         type: ''
@@ -440,7 +444,7 @@ describe('WhiteboardComponent', () => {
       component.lastColor = 'red';
       component.whiteboard$.value.cards = [];
       component.whiteboard$.value.shelfCards = [];
-      component.addEmptyCard(0, 0, 'www.si.be');
+      component.addEmptyCard();
 
       component.changeColorForCard(
         component.whiteboard$.value.cards[0],
@@ -615,13 +619,13 @@ describe('WhiteboardComponent', () => {
     it('should add an empty card', () => {
       component.lastColor = 'red';
       component.whiteboard$.value.cards = [];
-      component.addEmptyCard(0, 0, 'www.si.be');
+      component.addEmptyCard();
       expect(component.whiteboard$.value.cards[0]).toEqual({
         id: component.whiteboard$.value.cards[0].id,
         mode: ModeEnum.EDIT,
         color: 'red',
         description: '',
-        image: { imageUrl: 'www.si.be' },
+        image: {},
         top: 0,
         left: 0,
         viewModeImage: false
@@ -631,7 +635,7 @@ describe('WhiteboardComponent', () => {
     it('should add card to shelf and to workspace', () => {
       component.whiteboard$.value.cards = [];
       component.whiteboard$.value.shelfCards = [];
-      component.addEmptyCard(0, 0, 'www.si.be');
+      component.addEmptyCard();
       expect(component.whiteboard$.value.shelfCards.length).toEqual(1);
       expect(component.whiteboard$.value.cards[0].id).toEqual(
         component.whiteboard$.value.shelfCards[0].id
@@ -712,8 +716,8 @@ describe('WhiteboardComponent', () => {
       expect(addEmptySpy).toHaveBeenCalledTimes(2);
       expect(uploadImageForCardSpy).toHaveBeenCalledTimes(2);
       expect(addEmptySpy.mock.calls).toEqual([
-        [400, 400],
-        [450, 450]
+        [{ top: 400, left: 400 }],
+        [{ top: 450, left: 450 }]
       ]);
       expect(uploadImageForCardSpy.mock.calls[0][0]).toEqual(new CardFixture());
       expect(uploadImageForCardSpy.mock.calls).toEqual([
