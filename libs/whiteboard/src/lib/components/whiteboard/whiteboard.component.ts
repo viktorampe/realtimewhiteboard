@@ -206,13 +206,11 @@ export class WhiteboardComponent implements OnChanges {
   }
 
   onCardPressed(card: CardInterface) {
-    if (card.mode !== ModeEnum.SHELF) {
+    if (card.mode !== ModeEnum.SHELF && card.mode !== ModeEnum.UPLOAD) {
       if (card.mode === ModeEnum.SELECTED || card.mode === ModeEnum.EDIT) {
         this.updateCard({ mode: ModeEnum.IDLE }, card);
-        this.updateWhiteboardSubject({});
       } else {
         this.updateCard({ mode: ModeEnum.SELECTED }, card);
-        this.setCardsModeIdleExceptUploadModeAndCard(card);
         this.selectedCards = [];
       }
     }
@@ -273,16 +271,6 @@ export class WhiteboardComponent implements OnChanges {
         card
       ]
     });
-  }
-
-  private setCardsModeIdleExceptUploadModeAndCard(card: CardInterface) {
-    const cards = this.whiteboard$.value.cards;
-
-    cards
-      .filter(c => c !== card && c.mode !== ModeEnum.UPLOAD)
-      .forEach(c => this.updateCard({ mode: ModeEnum.IDLE }, card));
-
-    this.updateWhiteboardSubject({ cards: cards });
   }
 
   private isZoomAllowedForCard(card: CardInterface): Boolean {
@@ -463,7 +451,7 @@ export class WhiteboardComponent implements OnChanges {
       cards.forEach(c => this.updateCard({ mode: ModeEnum.IDLE }, card));
       this.updateWhiteboardSubject({ cards: cards });
     } else {
-      this.updateCard({ mode: ModeEnum.MULTISELECTSELECTED }, card);
+      this.updateCard({ mode: ModeEnum.MULTISELECT }, card);
       this.updateWhiteboardSubject({});
     }
   }
