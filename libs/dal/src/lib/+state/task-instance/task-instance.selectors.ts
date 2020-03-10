@@ -1,7 +1,16 @@
 import { groupArrayByKey } from '@campus/utils';
+import { Dictionary } from '@ngrx/entity';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
+import {
+  ResultInterface,
+  TaskEduContentInterface,
+  TaskInterface
+} from '../../+models';
 import { TaskInstance } from '../../+models/TaskInstance';
 import { TaskInstanceInterface } from '../../+models/TaskInstance.interface';
+import { ResultQueries } from '../result';
+import { TaskQueries } from '../task';
+import { TaskEduContentQueries } from '../task-edu-content';
 import {
   NAME,
   selectAll,
@@ -99,6 +108,24 @@ export const getActiveTaskIds = createSelector(
         []
       )
     );
+  }
+);
+
+export const getTaskInstanceWithTaskById = createSelector(
+  [
+    getById,
+    TaskQueries.getAllEntities,
+    ResultQueries.resultsByTask,
+    TaskEduContentQueries.getAllGroupedByTaskId
+  ],
+  (
+    taskInstance: TaskInstanceInterface,
+    taskDict: Dictionary<TaskInterface>,
+    resultDict: Dictionary<ResultInterface[]>,
+    taskEduContentByTask: Dictionary<TaskEduContentInterface[]>,
+    props: { id: number }
+  ) => {
+    return taskInstance;
   }
 );
 
