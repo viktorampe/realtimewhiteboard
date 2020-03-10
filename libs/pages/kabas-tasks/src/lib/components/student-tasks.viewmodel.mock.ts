@@ -1,12 +1,14 @@
+import { ViewModelInterface } from '@campus/testing';
 import { BehaviorSubject } from 'rxjs';
 import { StudentTaskFixture } from '../interfaces/StudentTask.fixture';
 import { StudentTaskInterface } from '../interfaces/StudentTask.interface';
+import { StudentTasksViewModel } from './student-tasks.viewmodel';
 
-export class MockStudentTasksViewModel {
+export class MockStudentTasksViewModel
+  implements ViewModelInterface<StudentTasksViewModel> {
   public studentTasks$: BehaviorSubject<StudentTaskInterface[]>;
-  public activeTasks$: BehaviorSubject<StudentTaskInterface[]>;
-  public finishedTasks$: BehaviorSubject<StudentTaskInterface[]>;
-  public studentTasks = [
+
+  private studentTasks = [
     new StudentTaskFixture({
       isFinished: true,
       endDate: new Date(2019, 8, 31)
