@@ -52,6 +52,7 @@
         (cdkDragStarted)="onDragStarted(card)"
       >
         <campus-color-list
+          @showHideColorList
           class="whiteboard__color-list"
           (selectedColor)="changeColorForCard(card, $event)"
           *ngIf="card.mode === Mode.EDIT || card.mode === Mode.SELECTED"

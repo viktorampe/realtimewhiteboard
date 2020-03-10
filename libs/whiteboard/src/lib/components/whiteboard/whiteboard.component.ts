@@ -1,3 +1,10 @@
+import {
+  animateChild,
+  query,
+  stagger,
+  transition,
+  trigger
+} from '@angular/animations';
 import { CdkDragDrop, CdkDragEnd } from '@angular/cdk/drag-drop';
 import {
   Component,
@@ -19,7 +26,17 @@ import { WhiteboardHttpService } from '../../services/whiteboard-http.service';
 @Component({
   selector: 'campus-whiteboard',
   templateUrl: './whiteboard.component.html',
-  styleUrls: ['./whiteboard.component.scss']
+  styleUrls: ['./whiteboard.component.scss'],
+  animations: [
+    trigger('showHideColorList', [
+      transition(':enter', [
+        query('@showHideColorSwatchOne', stagger(100, [animateChild()]))
+      ]),
+      transition(':leave', [
+        query('@showHideColorSwatchOne', stagger(100, [animateChild()]))
+      ])
+    ])
+  ]
 })
 export class WhiteboardComponent implements OnChanges {
   @ViewChild('titleInput', { static: false }) set titleInput(
