@@ -381,7 +381,9 @@ export class WhiteboardComponent implements OnChanges {
     card: CardInterface;
     cardElement: HTMLElement;
   }) {
-    this.whiteboard$.value.cards.forEach(c => (c.mode = ModeEnum.IDLE));
+    this.whiteboard$.value.cards
+      .filter(c => c.mode !== ModeEnum.UPLOAD)
+      .forEach(c => (c.mode = ModeEnum.IDLE));
     const { card, event, cardElement } = $event;
     const currentMode = this.selectedCards.length
       ? ModeEnum.MULTISELECT
