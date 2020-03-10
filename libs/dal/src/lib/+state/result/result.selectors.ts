@@ -140,18 +140,6 @@ export const getBestResultByEduContentId = createSelector(
   }
 );
 
-export const resultsByTask = createSelector(
-  getAll,
-  (results: ResultInterface[]) =>
-    results.reduce((acc, result) => {
-      if (!result.taskId) return acc;
-
-      if (!acc[result.taskId]) {
-        acc[result.taskId] = [];
-      }
-
-      acc[result.taskId].push(result);
-
-      return acc;
-    }, {})
+export const resultsByTask = createSelector(getAll, results =>
+  groupArrayByKey(results, 'taskId')
 );
