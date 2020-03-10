@@ -364,6 +364,7 @@ export class WhiteboardComponent implements OnChanges {
     card: CardInterface;
     cardElement: HTMLElement;
   }) {
+    this.whiteboard$.value.cards.forEach(c => (c.mode = ModeEnum.IDLE));
     const { card, event, cardElement } = $event;
     const currentMode = this.selectedCards.length
       ? ModeEnum.MULTISELECT
@@ -378,8 +379,6 @@ export class WhiteboardComponent implements OnChanges {
         (167 + cardElement.offsetTop) -
         Math.abs(event.distance.y)
     };
-
-    this.whiteboard$.value.cards.forEach(c => (c.mode = ModeEnum.IDLE));
 
     if (
       !this.whiteboard$.value.cards
