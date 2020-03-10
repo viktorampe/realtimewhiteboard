@@ -362,6 +362,12 @@ export class WhiteboardComponent implements OnChanges {
   }
 
   onClickWhiteboard(event) {
+    if (
+      !(event.target as HTMLElement).classList.contains('whiteboard__workspace')
+    ) {
+      return;
+    }
+
     console.log(event);
     this.selectedCards = [];
     const cards = this.whiteboard$.value.cards;

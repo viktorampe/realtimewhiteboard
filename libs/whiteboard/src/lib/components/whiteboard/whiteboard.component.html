@@ -3,7 +3,7 @@
   class="whiteboard"
   (filesDroppedEvent)="onFilesDropped($event)"
   campusImageDrag
-  (click)="onClickWhiteboard($event)"
+  (tap)="onClickWhiteboard($event)"
 >
   <campus-whiteboard-toolbar
     *ngIf="selectedCards.length"
