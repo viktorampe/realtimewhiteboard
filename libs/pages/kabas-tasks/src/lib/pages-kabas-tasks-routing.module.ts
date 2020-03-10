@@ -8,6 +8,7 @@ import { ManageKabasTasksOverviewComponent } from './components/manage-kabas-tas
 import { ManageTaskContentComponent } from './components/manage-task-content/manage-task-content.component';
 import { StudentTaskDetailComponent } from './components/student-task-detail/student-task-detail.component';
 import { StudentTaskOverviewComponent } from './components/student-task-overview/student-task-overview.component';
+import { StudentTaskOverviewResolver } from './components/student-task-overview/student-task-overview.resolver';
 import { PendingTaskGuard } from './guards/pending-task.guard';
 
 const routes: Routes = [
@@ -63,6 +64,7 @@ const routes: Routes = [
   },
   {
     path: '',
+    resolve: { isResolved: StudentTaskOverviewResolver },
     data: {
       //requiredPermissions: 'openTasks'
     },
