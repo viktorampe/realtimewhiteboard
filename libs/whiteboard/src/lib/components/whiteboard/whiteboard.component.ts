@@ -268,7 +268,17 @@ export class WhiteboardComponent implements OnChanges {
     this.saveWhiteboard();
   }
 
-  onDragEnded(event: CdkDragEnd, card) {
+  onDragStarted(card: CardInterface) {
+    if (!this.selectedCards.length) {
+      const cards = this.whiteboard$.value.cards;
+      cards
+        .filter(c => c.id !== card.id && c.mode !== ModeEnum.UPLOAD)
+        .forEach(c => (c.mode = this.Mode.IDLE));
+      this.updateWhiteboardSubject({ cards: cards });
+    }
+  }
+
+  onDragEnded(event: CdkDragEnd, card: CardInterface) {
     const cardPosition = event.source.getFreeDragPosition();
     card.top = cardPosition.y;
     card.left = cardPosition.x;
