@@ -2,12 +2,14 @@ import { groupArrayByKey } from '@campus/utils';
 import { Dictionary } from '@ngrx/entity';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import {
+  EduContent,
   ResultInterface,
   TaskEduContentInterface,
   TaskInterface
 } from '../../+models';
 import { TaskInstance } from '../../+models/TaskInstance';
 import { TaskInstanceInterface } from '../../+models/TaskInstance.interface';
+import { EduContentQueries } from '../edu-content';
 import { ResultQueries } from '../result';
 import { TaskQueries } from '../task';
 import { TaskEduContentQueries } from '../task-edu-content';
@@ -115,17 +117,29 @@ export const getTaskInstanceWithTaskById = createSelector(
   [
     getById,
     TaskQueries.getAllEntities,
-    ResultQueries.resultsByTask,
-    TaskEduContentQueries.getAllGroupedByTaskId
+    ResultQueries.getResultsByTask,
+    TaskEduContentQueries.getAllGroupedByTaskId,
+    EduContentQueries.getAllEntities
   ],
   (
-    taskInstance: TaskInstanceInterface,
+    taskInstance: TaskInstance,
     taskDict: Dictionary<TaskInterface>,
-    resultDict: Dictionary<ResultInterface[]>,
+    resultsByTask: Dictionary<ResultInterface[]>,
     taskEduContentByTask: Dictionary<TaskEduContentInterface[]>,
+    eduContentDict: Dictionary<EduContent>,
     props: { id: number }
   ) => {
-    return taskInstance;
+    return {
+      ...taskInstance,
+      task: {
+        ...taskDict[taskInstance.taskId],
+        results: resultsByTask[taskInstance.taskId],
+        taskEduContents: taskEduContentByTask[taskInstance.taskId].map(tE => ({
+          ...tE,
+          eduContent: eduContentDict[tE.eduContentId]
+        }))
+      }
+    };
   }
 );
 
