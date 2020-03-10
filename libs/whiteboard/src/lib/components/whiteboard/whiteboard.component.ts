@@ -379,6 +379,8 @@ export class WhiteboardComponent implements OnChanges {
         Math.abs(event.distance.y)
     };
 
+    this.whiteboard$.value.cards.forEach(c => (c.mode = ModeEnum.IDLE));
+
     if (
       !this.whiteboard$.value.cards
         .map(workspacecard => workspacecard.id)
