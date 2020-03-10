@@ -37,10 +37,10 @@ describe('HumanDateTimePipe', () => {
 
     const rules = [0, 1, 2].map(index => ({
       condition: jest.fn(),
-      value: jest.fn().mockReturnValue(index)
+      value: jest.fn()
     }));
 
-    const args = { rules };
+    const args = { rules, locale: 'en-US' };
 
     it('should test the conditions', () => {
       pipe.transform(date, args);

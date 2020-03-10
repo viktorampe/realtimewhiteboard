@@ -37,9 +37,7 @@ const humanDateTimeRules: {
   },
   [humanDateTimeRulesEnum.PAST_MINUTES]: {
     condition: (date, referenceDate) =>
-      referenceDate > date &&
-      referenceDate - date >= minute &&
-      referenceDate - date < hour,
+      referenceDate > date && referenceDate - date < hour,
     value: (date, referenceDate) => {
       const timeInMinutes = Math.floor((referenceDate - date) / minute);
       return `${timeInMinutes} ${
@@ -49,9 +47,7 @@ const humanDateTimeRules: {
   },
   [humanDateTimeRulesEnum.PAST_HOURS]: {
     condition: (date, referenceDate) =>
-      referenceDate > date &&
-      referenceDate - date >= hour &&
-      referenceDate - date < day,
+      referenceDate > date && referenceDate - date < day,
     value: (date, referenceDate) => {
       const timeInHours = Math.floor((referenceDate - date) / hour);
       return `${timeInHours} ${timeInHours === 1 ? 'uur' : 'uren'} geleden`;
@@ -59,9 +55,7 @@ const humanDateTimeRules: {
   },
   [humanDateTimeRulesEnum.PAST_DAYS]: {
     condition: (date, referenceDate) =>
-      referenceDate > date &&
-      referenceDate - date >= day &&
-      referenceDate - date < week,
+      referenceDate > date && referenceDate - date < week,
     value: (date, referenceDate) => {
       const timeInDays = Math.floor((referenceDate - date) / day);
       return `${timeInDays} ${timeInDays === 1 ? 'dag' : 'dagen'} geleden`;
@@ -69,9 +63,7 @@ const humanDateTimeRules: {
   },
   [humanDateTimeRulesEnum.PAST_WEEKDAY]: {
     condition: (date, referenceDate) =>
-      referenceDate > date &&
-      referenceDate - date >= day &&
-      referenceDate - date < week,
+      referenceDate > date && referenceDate - date < week,
     value: (date, referenceDate) => {
       const dayOfWeek = new Date(date).getDay();
       return weekdays[dayOfWeek];
