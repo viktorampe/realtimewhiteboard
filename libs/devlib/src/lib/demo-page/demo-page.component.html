@@ -114,6 +114,14 @@
 
   <front-layer-header>Subtitle</front-layer-header>
   <front-layer-content>
+    <campus-button inline (click)="isOpen = !isOpen"
+      >toggle container</campus-button
+    >
+    <campus-collapsible-container [(open)]="isOpen">
+      <div>Some container content</div>
+      <div>Some other content</div>
+    </campus-collapsible-container>
+
     <campus-button primary style="margin: 10px;" (click)="clickEmptyCta()"
       >Primary Button</campus-button
     >
@@ -218,16 +226,6 @@
       ><mat-icon svgIcon="home"></mat-icon
     ></campus-button>
 
-    <div>
-      <campus-progress></campus-progress>
-    </div>
-    <div>
-      <campus-collapsible-container></campus-collapsible-container>
-    </div>
-    <div>
-      <campus-rating></campus-rating>
-    </div>
-
     <campus-empty-state
       svgIcon="empty-state-no-users"
       title="Geen groepen of gebruikers geselecteerd"
@@ -245,6 +243,13 @@
       (clickCta)="clickEmptyCta()"
     >
     </campus-empty-state>
+    <div>
+      <campus-progress></campus-progress>
+    </div>
+
+    <div>
+      <campus-rating></campus-rating>
+    </div>
 
     <div class="ui-headline">Headline (Regular 24px)</div>
     <div class="ui-title">Title (Semibold 21px)</div>
