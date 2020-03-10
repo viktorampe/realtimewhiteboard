@@ -1,4 +1,4 @@
-import { CdkDragDrop, CdkDragEnd, CdkDragStart } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, CdkDragEnd } from '@angular/cdk/drag-drop';
 import {
   Component,
   ElementRef,
@@ -271,7 +271,7 @@ export class WhiteboardComponent implements OnChanges {
     this.saveWhiteboard();
   }
 
-  onDragStarted(event: CdkDragStart, card: CardInterface) {
+  onDragStarted(card: CardInterface) {
     if (!this.selectedCards.length) {
       this.whiteboard$.value.cards
         .filter(c => c.id !== card.id)
