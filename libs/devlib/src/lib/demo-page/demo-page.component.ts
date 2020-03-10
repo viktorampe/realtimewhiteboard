@@ -28,6 +28,7 @@ export class DemoPageComponent implements OnInit {
 
   backHeaderTitle = 'Lesmateriaal toevoegen';
   showBack = false;
+  isOpen = false;
 
   constructor() {}
 

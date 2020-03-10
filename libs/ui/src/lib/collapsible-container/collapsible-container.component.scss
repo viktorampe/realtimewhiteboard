@@ -1,2 +1,4 @@
-.ui-collapsible-container {
+:host {
+  display: block;
+  overflow: hidden;
 }
