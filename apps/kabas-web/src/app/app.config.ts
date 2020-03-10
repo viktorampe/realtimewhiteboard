@@ -95,13 +95,15 @@ const standardDashboardNavItems: NavItem[] = [
     description:
       ' Resultaten van oefeningen per taak of per leerling, met de mogelijkheid om dit te exporteren',
     icon: 'results',
-    link: '/results'
+    link: '/results',
+    requiredPermissions: [] // TODO: add permissions
   },
   {
     title: 'Differentiëren',
     description: 'Suggesties per leerling op basis van behaalde doelen',
     icon: 'differentiate',
-    link: '/differentiate'
+    link: '/differentiate',
+    requiredPermissions: [] // TODO: add permissions
   }
 ];
 export interface AppConfigInterface {
