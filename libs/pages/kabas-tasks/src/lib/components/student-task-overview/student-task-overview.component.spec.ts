@@ -32,7 +32,7 @@ describe('StudentTaskOverviewComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  describe('favorite book redirect', () => {
+  describe('practice page redirect', () => {
     it('should navigate to free practice when empty-state cta is clicked', async () => {
       jest.spyOn(router, 'navigate');
       component.emptyStateClick();
@@ -40,6 +40,7 @@ describe('StudentTaskOverviewComponent', () => {
       expect(router.navigate).toHaveBeenCalledWith(['practice']);
     });
   });
+
   describe('Empty State', () => {
     it('should show emtpy state for active tasks', () => {
       component.tasks$ = of([]);
