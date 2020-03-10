@@ -99,7 +99,6 @@ export class WhiteboardComponent implements OnChanges {
   //#region WORKSPACE INTERACTIONS
 
   onDblClick(event: MouseEvent) {
-    console.log(event);
     if (
       (event.target as HTMLElement).className.includes('whiteboard__workspace')
     ) {
