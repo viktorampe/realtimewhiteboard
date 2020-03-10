@@ -10,6 +10,13 @@ trigger:
   - test/mock-master
   - release/*
 
+schedules:
+  - cron: "30 23 * * 1-5"
+    displayName: Midnight build every workday
+    branches:
+      include:
+      - develop
+
 pool:
   name: 'Campus'
 
@@ -19,8 +26,6 @@ variables:
   dkPublish: false
   dkE2E: false
   dkFeaturePR: false
-  dkA: false
-  dkB: false
 
 steps:
   - script: |
@@ -28,8 +33,13 @@ steps:
     displayName: 'Export environment variables'
   - script: |
       echo '##vso[task.setvariable variable=dkBuild]true'
+      echo '##vso[task.setvariable variable=dkPublish]true'
     condition: and(startsWith(variables['Build.SourceBranch'], 'refs/heads/release'), in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI'))
-    displayName: '(Check) Enable dkBuild (artifacts) if pushing to release branch'
+    displayName: '(Check) Enable dkBuild and dkPublish (artifacts) if pushing to release branch'
+  - script: |
+      echo '##vso[task.setvariable variable=dkBuild]true'
+    condition: eq(variables['Build.Reason'], 'Schedule')
+    displayName: '(Check) Enable dkBuild if scheduled build'
   - script: |
       echo '##vso[task.setvariable variable=dkE2E]true'
     condition: or(startsWith(variables['System.PullRequest.TargetBranch'], 'refs/heads/release'), eq(variables['dkBuild'], 'true'), and(in(variables['Build.SourceBranch'], 'refs/heads/develop'), in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI')))
@@ -52,8 +62,7 @@ steps:
       echo Build.ArtifactStagingDirectory = $(Build.ArtifactStagingDirectory)
       echo dkRanTests = $(dkRanTests)
       echo dkBuild = $(dkBuild)
-      echo dkA = $(dkA)
-      echo dkB = $(dkB)
+      echo dkPublish = $(dkPublish)
       echo
       echo Environment
       echo -----------
@@ -170,9 +179,9 @@ steps:
     displayName: 'Remove e2e screenshots and videos from dist before copying'
   - task: CopyFiles@2
     displayName: 'Copy builds to artifacts'
-    condition: and(succeeded(), eq(variables['dkBuild'], 'true'))
+    condition: and(succeeded(), eq(variables['dkBuild'], 'true'), eq(variables['dkPublish'], 'true'))
     inputs:
       contents: 'dist/**'
       targetFolder: $(Build.ArtifactStagingDirectory)
   - task: PublishBuildArtifacts@1
-    condition: and(succeeded(), eq(variables['dkBuild'], 'true'))
+    condition: and(succeeded(), eq(variables['dkBuild'], 'true'), eq(variables['dkPublish'], 'true'))
