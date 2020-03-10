@@ -89,10 +89,10 @@ export class WhiteboardComponent implements OnChanges {
   private updateViewMode(cards) {
     cards.forEach(c => {
       if (!c.image.imageUrl) {
-        c.viewModeImage = false;
+        this.updateCard({ viewModeImage: false }, c);
       }
       if (!c.description) {
-        c.viewModeImage = true;
+        this.updateCard({ viewModeImage: true }, c);
       }
     });
   }
