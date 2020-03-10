@@ -12,7 +12,7 @@ trigger:
 
 schedules:
   - cron: "30 23 * * 1-5"
-    displayName: Midnight build every workday
+    displayName: Late night build every workday
     branches:
       include:
       - develop
