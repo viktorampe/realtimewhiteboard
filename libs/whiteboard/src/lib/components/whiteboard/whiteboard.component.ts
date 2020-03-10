@@ -97,11 +97,13 @@ export class WhiteboardComponent implements OnChanges {
     });
   }
   //#region WORKSPACE INTERACTIONS
-
   createCard(event: any) {
     if ((event.target as HTMLElement).className === 'whiteboard__workspace') {
       if (event.type === 'longpress') {
-        const top = event.center.y - 165; // card height = 165
+        event.srcEvent.stopPropagation();
+        const top =
+          event.center.y -
+          this.workspaceElementRef.nativeElement.getBoundingClientRect().top;
         const left = event.center.x;
         this.addEmptyCard({ top, left });
       }
@@ -359,7 +361,8 @@ export class WhiteboardComponent implements OnChanges {
     this.whiteboardHttpService.setJson(this.whiteboard$.value);
   }
 
-  onClickWhiteboard() {
+  onClickWhiteboard(event) {
+    console.log(event);
     this.selectedCards = [];
     const cards = this.whiteboard$.value.cards;
 

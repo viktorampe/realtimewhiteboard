@@ -3,7 +3,7 @@
   class="whiteboard"
   (filesDroppedEvent)="onFilesDropped($event)"
   campusImageDrag
-  (click)="onClickWhiteboard()"
+  (click)="onClickWhiteboard($event)"
 >
   <campus-whiteboard-toolbar
     *ngIf="selectedCards.length"
@@ -14,7 +14,7 @@
     <h2
       *ngIf="!isTitleInputSelected"
       class="whiteboard__header__title"
-      (click)="showTitleInput()"
+      (tap)="showTitleInput()"
       >{{ whiteboard.title }}</h2
     >
     <input
@@ -73,7 +73,7 @@
         [viewModeImage]="card.viewModeImage"
         (update)="updateCard($event, card)"
         (openFilePicker)="openFilePicker(filePicker)"
-        (click)="onCardClicked($event, card)"
+        (tap)="onCardClicked($event, card)"
         (press)="onCardPressed(card)"
         (tap)="onCardTapped(card)"
       ></campus-card>
@@ -90,7 +90,7 @@
     mat-fab
     color="primary"
     class="whiteboard__addbutton"
-    (click)="btnPlusClicked($event)"
+    (tap)="btnPlusClicked($event)"
   >
     <mat-icon style="color: #FFFFFF;" [svgIcon]="'plus'"></mat-icon>
   </button>

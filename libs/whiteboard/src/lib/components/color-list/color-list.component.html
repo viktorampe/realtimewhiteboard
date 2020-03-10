@@ -2,7 +2,7 @@
   <div
     *ngFor="let swatch of defaultColors"
     class="color-list__swatches"
-    (click)="clickColor(swatch)"
+    (tap)="clickColor(swatch)"
     [style.background-color]="swatch"
   ></div>
 </div>
