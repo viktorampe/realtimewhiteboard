@@ -206,10 +206,13 @@ export class WhiteboardComponent implements OnChanges {
   }
 
   onCardPressed(card: CardInterface) {
-    if (card.mode !== ModeEnum.SHELF && card.mode !== ModeEnum.UPLOAD) {
+    if (card.mode !== ModeEnum.SHELF) {
       if (card.mode === ModeEnum.SELECTED || card.mode === ModeEnum.EDIT) {
         this.updateCard({ mode: ModeEnum.IDLE }, card);
       } else {
+        this.whiteboard$.value.cards
+          .filter(c => c.id !== card.id)
+          .forEach(c => (c.mode = ModeEnum.IDLE));
         this.updateCard({ mode: ModeEnum.SELECTED }, card);
         this.selectedCards = [];
       }
