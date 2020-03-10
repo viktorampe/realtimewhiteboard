@@ -250,9 +250,12 @@ export class WhiteboardComponent implements OnChanges {
         this.updateCard({ image: response }, card);
         if (response.imageUrl) {
           if (this.selectedCards.length) {
-            card.mode = ModeEnum.MULTISELECT;
+            this.updateCard(
+              { mode: ModeEnum.MULTISELECT, viewModeImage: true },
+              card
+            );
           } else {
-            card.mode = ModeEnum.IDLE;
+            this.updateCard({ mode: ModeEnum.IDLE, viewModeImage: true }, card);
           }
           this.saveWhiteboard();
         }
