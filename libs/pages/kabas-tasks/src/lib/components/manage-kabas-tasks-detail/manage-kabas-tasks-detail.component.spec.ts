@@ -3,9 +3,11 @@ import { DebugElement } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import {
+  MatChipsModule,
   MatDialog,
   MatDialogRef,
   MatIconRegistry,
+  MatInputModule,
   MatListOption,
   MatRadioModule,
   MatSelectModule,
@@ -17,13 +19,16 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import {
+  AssigneeFixture,
+  AssigneeInterface,
   EduContentFixture,
   EduFileFixture,
   EduFileTypeEnum,
   LearningAreaFixture,
   LearningAreaInterface,
   TaskEduContentFixture,
-  TaskEduContentInterface
+  TaskEduContentInterface,
+  TaskWithAssigneesInterface
 } from '@campus/dal';
 import {
   SearchFilterComponentInterface,
@@ -41,12 +46,16 @@ import {
   SharedModule
 } from '@campus/shared';
 import { MockDate, MockMatIconRegistry } from '@campus/testing';
-import { ConfirmationModalComponent, UiModule } from '@campus/ui';
+import {
+  ConfirmationModalComponent,
+  ENVIRONMENT_UI_TOKEN,
+  SectionModeEnum,
+  UiModule
+} from '@campus/ui';
 import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/utils';
 import { hot } from '@nrwl/angular/testing';
 import { configureTestSuite } from 'ng-bullet';
 import { BehaviorSubject, of } from 'rxjs';
-import { AssigneeFixture } from '../../interfaces/Assignee.fixture';
 import {
   CurrentTaskParams,
   KabasTasksViewModel
@@ -59,9 +68,10 @@ import {
 import { PrintPaperTaskModalResultEnum } from '../print-paper-task-modal/print-paper-task-modal-result.enum';
 import { PrintPaperTaskModalComponent } from '../print-paper-task-modal/print-paper-task-modal.component';
 import { TaskEduContentListItemComponent } from '../task-edu-content-list-item/task-edu-content-list-item.component';
-import { AssigneeInterface } from './../../interfaces/Assignee.interface';
-import { TaskEduContentWithEduContentInterface } from './../../interfaces/TaskEduContentWithEduContent.interface';
-import { TaskWithAssigneesInterface } from './../../interfaces/TaskWithAssignees.interface';
+import {
+  TaskEduContentWithEduContentInterface,
+  TaskWithTaskEduContentInterface
+} from './../../interfaces/TaskEduContentWithEduContent.interface';
 import { ManageKabasTasksAssigneeModalComponent } from './../manage-kabas-tasks-assignee-modal/manage-kabas-tasks-assignee-modal.component';
 import { ManageKabasTasksDetailComponent } from './manage-kabas-tasks-detail.component';
 
@@ -76,7 +86,7 @@ describe('ManageKabasTasksDetailComponent', () => {
 
   let contentOpenActionsService: ContentOpenActionsServiceInterface;
   let mockViewmodel: MockKabasTasksViewModel;
-  let currentTask: TaskWithAssigneesInterface;
+  let currentTask: TaskWithTaskEduContentInterface;
   let restOfTasks: TaskWithAssigneesInterface[];
   let taskEduContents: TaskEduContentWithEduContentInterface[];
 
@@ -95,13 +105,13 @@ describe('ManageKabasTasksDetailComponent', () => {
     return tECs;
   };
 
-  const addSolutionFileToTask = (task: TaskWithAssigneesInterface) => {
+  const addSolutionFileToTask = (task: TaskWithTaskEduContentInterface) => {
     task.taskEduContents[0].eduContent.publishedEduContentMetadata.eduFiles = [
       new EduFileFixture({ type: EduFileTypeEnum.SOLUTION })
     ];
     task.hasSolutionFiles = true;
   };
-  const addExerciseFileToTask = (task: TaskWithAssigneesInterface) => {
+  const addExerciseFileToTask = (task: TaskWithTaskEduContentInterface) => {
     task.taskEduContents[0].eduContent.publishedEduContentMetadata.eduFiles = [
       new EduFileFixture({ type: EduFileTypeEnum.EXERCISE })
     ];
@@ -138,9 +148,11 @@ describe('ManageKabasTasksDetailComponent', () => {
         SearchModule,
         UiModule,
         NoopAnimationsModule,
+        MatInputModule,
         MatRadioModule,
         RouterTestingModule,
-        FormsModule
+        FormsModule,
+        MatChipsModule
       ],
       declarations: [
         ManageKabasTasksDetailComponent,
@@ -152,6 +164,7 @@ describe('ManageKabasTasksDetailComponent', () => {
           provide: ENVIRONMENT_ICON_MAPPING_TOKEN,
           useValue: {}
         },
+        { provide: ENVIRONMENT_UI_TOKEN, useValue: {} },
         { provide: ENVIRONMENT_TESTING_TOKEN, useValue: {} },
         {
           provide: HAMMER_LOADER,
@@ -195,6 +208,7 @@ describe('ManageKabasTasksDetailComponent', () => {
         },
         { provide: MatIconRegistry, useClass: MockMatIconRegistry },
         { provide: ENVIRONMENT_SEARCHMODES_TOKEN, useValue: {} },
+        { provide: ENVIRONMENT_UI_TOKEN, useValue: {} },
         {
           provide: FILTER_SERVICE_TOKEN,
           useValue: { matchFilters: () => {} }
@@ -215,11 +229,18 @@ describe('ManageKabasTasksDetailComponent', () => {
 
     mockViewmodel = viewModel as MockKabasTasksViewModel;
 
-    [currentTask, ...restOfTasks] = mockViewmodel.tasksWithAssignments$.value;
+    let firstTask: TaskWithAssigneesInterface;
+    [firstTask, ...restOfTasks] = mockViewmodel.tasksWithAssignments$.value;
 
     // extra properties added in onInit
-    taskEduContents = addActions(currentTask.taskEduContents);
-    currentTask.hasSolutionFiles = true;
+    taskEduContents = addActions(
+      firstTask.taskEduContents as TaskEduContentWithEduContentInterface[]
+    );
+    currentTask = {
+      ...firstTask,
+      hasSolutionFiles: true,
+      taskEduContents
+    };
   });
 
   it('should create', () => {
@@ -710,7 +731,7 @@ describe('ManageKabasTasksDetailComponent', () => {
     describe('links', () => {
       const getSideBarLinks = () =>
         fixture.debugElement.queryAll(
-          By.css('.manage-kabas-tasks-detail__info__link')
+          By.css('.manage-kabas-tasks-detail__info__link-print')
         );
 
       describe('paper task', () => {
@@ -737,7 +758,7 @@ describe('ManageKabasTasksDetailComponent', () => {
             updateCurrentTask(currentTask);
 
             expect(link.nativeElement.classList).toContain(
-              'manage-kabas-tasks-detail__info__link--disabled'
+              'ui-button--disabled'
             );
           });
 
@@ -810,7 +831,7 @@ describe('ManageKabasTasksDetailComponent', () => {
             fixture.detectChanges();
 
             expect(link.nativeElement.classList).toContain(
-              'manage-kabas-tasks-detail__info__link--disabled'
+              'ui-button--disabled'
             );
           });
 
@@ -842,39 +863,48 @@ describe('ManageKabasTasksDetailComponent', () => {
   });
 
   describe('update actions', () => {
-    it('should update title when text changed', () => {
-      const titleComponent = fixture.debugElement.query(
-        By.css('.manage-kabas-tasks-detail__info__title')
-      );
-
-      const newText = 'You are more than who you were';
-
-      spyOn(component, 'updateTitle');
-      titleComponent.componentInstance.textChanged.emit(newText);
-
-      expect(component.updateTitle).toHaveBeenCalled();
-      expect(component.updateTitle).toHaveBeenCalledWith(
-        titleComponent.componentInstance.relatedItem,
-        newText
-      );
+    beforeEach(() => {
+      [currentTask, ...restOfTasks] = mockViewmodel.tasksWithAssignments$.value;
+      component.sectionMode = SectionModeEnum.EDITING;
+      component.taskCache = currentTask;
+      fixture.detectChanges();
     });
 
-    it('should update description when text changed', () => {
-      const descriptionComponent = fixture.debugElement.query(
-        By.css('.manage-kabas-tasks-detail__info__description')
-      );
+    it('should copy the task in the taskCache when updateCachedTask is called (the sectionMode changes)', () => {
+      const otherTask: TaskWithAssigneesInterface = restOfTasks[0];
+      component.updateCachedTask(otherTask);
+      expect(component.taskCache).toEqual(otherTask);
+    });
 
-      const newText = "Time isn't the main thing. It's the only thing.";
+    it('should update title and description', () => {
+      const expected = {
+        id: currentTask.id,
+        name: 'You are more than who you were',
+        description: `Time isn't the main thing. It's the only thing.`
+      };
+      spyOn(viewModel, 'updateTask');
+      component.taskCache.name = expected.name;
+      component.taskCache.description = expected.description;
+      component.editTask(new MouseEvent('click'));
 
-      spyOn(component, 'updateDescription');
+      expect(viewModel.updateTask).toHaveBeenCalledWith(expected);
+    });
 
-      descriptionComponent.componentInstance.textChanged.emit(newText);
+    it('should not update task when title is empty', () => {
+      spyOn(viewModel, 'updateTask');
+      component.taskCache.name = '';
+      component.editTask(new MouseEvent('click'));
 
-      expect(component.updateDescription).toHaveBeenCalled();
-      expect(component.updateDescription).toHaveBeenCalledWith(
-        descriptionComponent.componentInstance.relatedItem,
-        newText
-      );
+      expect(viewModel.updateTask).not.toHaveBeenCalled();
+    });
+
+    it('should reset editMode and not update when canceled', () => {
+      spyOn(viewModel, 'updateTask');
+      component.taskCache.name = '';
+      component.cancelEdit(new MouseEvent('click'));
+
+      expect(viewModel.updateTask).not.toHaveBeenCalled();
+      expect(component.sectionMode).toBe(SectionModeEnum.EDITABLE);
     });
   });
 
@@ -1457,13 +1487,23 @@ describe('ManageKabasTasksDetailComponent', () => {
         newTaskEduContents[2]
       ]);
     });
+  });
 
-    it('should show the sidesheet when the selection changes', () => {
-      jest.spyOn(component.sideSheet, 'toggle');
-
-      component.onSelectionChange();
-
-      expect(component.sideSheet.toggle).toHaveBeenCalledWith(true);
+  describe('clickAddContent()', () => {
+    it('should navigate to content of current task', () => {
+      spyOn(router, 'navigate');
+      (viewModel.currentTaskParams$ as BehaviorSubject<CurrentTaskParams>).next(
+        {
+          id: 1
+        }
+      );
+      component.clickAddContent();
+      expect(router.navigate).toHaveBeenCalledWith([
+        'tasks',
+        'manage',
+        1,
+        'content'
+      ]);
     });
   });
 });

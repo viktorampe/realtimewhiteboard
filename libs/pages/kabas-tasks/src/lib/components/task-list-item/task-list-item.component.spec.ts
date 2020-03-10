@@ -5,13 +5,14 @@ import {
   MatTooltipModule
 } from '@angular/material';
 import { By, HAMMER_LOADER } from '@angular/platform-browser';
-import { ENVIRONMENT_ICON_MAPPING_TOKEN } from '@campus/shared';
-import { MockMatIconRegistry } from '@campus/testing';
-import { AssigneeFixture } from '../../interfaces/Assignee.fixture';
 import {
+  AssigneeFixture,
   AssigneeInterface,
   AssigneeTypesEnum
-} from '../../interfaces/Assignee.interface';
+} from '@campus/dal';
+import { ENVIRONMENT_ICON_MAPPING_TOKEN } from '@campus/shared';
+import { MockMatIconRegistry } from '@campus/testing';
+import { UiModule } from '@campus/ui';
 import { TaskListItemComponent } from './task-list-item.component';
 
 const mockAssignees: AssigneeInterface[] = [
@@ -51,7 +52,7 @@ describe('TaskListItemComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [MatIconModule, MatTooltipModule],
+      imports: [MatIconModule, MatTooltipModule, UiModule],
       declarations: [TaskListItemComponent],
       providers: [
         { provide: MatIconRegistry, useClass: MockMatIconRegistry },
@@ -83,7 +84,9 @@ describe('TaskListItemComponent', () => {
   describe('inputs', () => {
     it('should pass action handlers', () => {
       const actionDEs = fixture.debugElement.queryAll(
-        By.css('.manage-kabas-tasks-task-list-item__container__actions > span')
+        By.css(
+          '.manage-kabas-tasks-task-list-item__container__actions > .ui-button'
+        )
       );
 
       expect(actionDEs.length).toBe(component.actions.length);

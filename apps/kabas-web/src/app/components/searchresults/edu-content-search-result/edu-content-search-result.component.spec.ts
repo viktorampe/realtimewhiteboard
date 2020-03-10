@@ -19,7 +19,13 @@ import {
   EduContentSearchResultInterface
 } from '@campus/shared';
 import { MockDate, MockMatIconRegistry } from '@campus/testing';
-import { UiModule } from '@campus/ui';
+import {
+  FileIconComponent,
+  ListItemActionsDirective,
+  ListItemCaptionDirective,
+  ListItemTitleDirective,
+  UiModule
+} from '@campus/ui';
 import { configureTestSuite } from 'ng-bullet';
 import { BehaviorSubject } from 'rxjs';
 import { EduContentSearchResultComponent } from './edu-content-search-result.component';
@@ -126,7 +132,7 @@ describe('EduContentSearchResultComponent', () => {
   describe('template', () => {
     it('should set file icon label to the eduContent fileExtension', () => {
       const extensionDE = fixture.debugElement.query(
-        By.css('.app-educontentsearchresult__extension')
+        By.directive(FileIconComponent)
       );
 
       expect(extensionDE.componentInstance.label).toBe(
@@ -136,7 +142,7 @@ describe('EduContentSearchResultComponent', () => {
 
     it('should clear the file icon label if the eduContent is an exercise', () => {
       const extensionDE = fixture.debugElement.query(
-        By.css('.app-educontentsearchresult__extension')
+        By.directive(FileIconComponent)
       );
 
       component.data = {
@@ -161,14 +167,16 @@ describe('EduContentSearchResultComponent', () => {
 
     it('should show the title and description of the eduContent', () => {
       const titleDE = fixture.debugElement.query(
-        By.css('.app-educontentsearchresult__content__header__title')
+        By.directive(ListItemTitleDirective)
       );
 
       const descriptionDE = fixture.debugElement.query(
-        By.css('.app-educontentsearchresult__content__body__description')
+        By.directive(ListItemCaptionDirective)
       );
 
-      expect(titleDE.nativeElement.textContent).toBe(mockEduContent.name);
+      expect(titleDE.nativeElement.textContent.trim()).toBe(
+        mockEduContent.name
+      );
 
       expect(descriptionDE.nativeElement.textContent).toBe(
         mockEduContent.description
@@ -177,7 +185,7 @@ describe('EduContentSearchResultComponent', () => {
 
     it('should show the diabolo phase icon of the eduContent', () => {
       const diaboloIconDE = fixture.debugElement.query(
-        By.css('.app-educontentsearchresult__content__header__diabolo-phase')
+        By.css('.app-educontentsearchresult__icon')
       );
 
       expect(diaboloIconDE.componentInstance.svgIcon).toBe(
@@ -186,9 +194,9 @@ describe('EduContentSearchResultComponent', () => {
     });
 
     it('should show the possible actions for the eduContent', () => {
-      const actionDEs = fixture.debugElement.queryAll(
-        By.css('.app-educontentsearchresult__content__header__action')
-      );
+      const actionDEs = fixture.debugElement
+        .query(By.directive(ListItemActionsDirective))
+        .queryAll(By.css('.ui-button--inline'));
 
       expect(actionDEs.length).toBe(mockActions.length);
       actionDEs.forEach((actionDE, index) => {
@@ -205,7 +213,7 @@ describe('EduContentSearchResultComponent', () => {
     });
   });
 
-  describe('getActions', () => {
+  describe('actions', () => {
     it('should return the default educontent actions', () => {
       expect(component.actions).toEqual(mockActions);
     });
@@ -217,6 +225,21 @@ describe('EduContentSearchResultComponent', () => {
       } as EduContentSearchResultInterface;
 
       component.ngOnInit();
+
+      expect(component.actions).toEqual([...mockTaskActions, ...mockActions]);
+    });
+  });
+
+  describe('update', () => {
+    it('should get the actions', () => {
+      expect(component.actions).toEqual(mockActions);
+
+      component.data = {
+        eduContent: new EduContentFixture(),
+        addTaskActions: true
+      } as EduContentSearchResultInterface;
+
+      component.update();
 
       expect(component.actions).toEqual([...mockTaskActions, ...mockActions]);
     });

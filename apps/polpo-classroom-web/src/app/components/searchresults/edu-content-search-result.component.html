@@ -1,4 +1,8 @@
-<div class="app-educontentsearchresult" [ngClass]="{ selected: isSelected }">
+<div
+  data-cy="search-result-item"
+  class="app-educontentsearchresult"
+  [ngClass]="{ selected: isSelected }"
+>
   <div class="app-educontentsearchresult__top">
     <campus-file-extension
       *ngIf="data.eduContent.previewImage === ''"
@@ -150,7 +154,7 @@
         (click)="
           openStatic(data.eduContent.publishedEduContentMetadata.streamable)
         "
-        iconClass="eye"
+        iconClass="monitor_preview"
         >Bekijken
       </campus-button>
       <campus-button
@@ -166,7 +170,7 @@
         "
         class="app-educontentsearchresult__bottom__buttonbar__openexercise"
         (click)="openExercise(false)"
-        iconClass="eye"
+        iconClass="monitor_preview"
         >Bekijken
       </campus-button>
       <campus-button
@@ -175,7 +179,7 @@
         "
         class="app-educontentsearchresult__bottom__buttonbar__openexercise__solutions"
         (click)="openExercise(true)"
-        iconClass="eye"
+        iconClass="monitor_preview"
         >Bekijken met oplossingen
       </campus-button>
       <campus-button

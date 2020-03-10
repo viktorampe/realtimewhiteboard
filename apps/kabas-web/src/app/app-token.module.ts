@@ -43,11 +43,13 @@ import {
   TaskClassGroupService,
   TaskEduContentService,
   TaskGroupService,
+  TaskInstanceService,
   TaskService,
   TaskStudentService,
   TASK_CLASS_GROUP_SERVICE_TOKEN,
   TASK_EDU_CONTENT_SERVICE_TOKEN,
   TASK_GROUP_SERVICE_TOKEN,
+  TASK_INSTANCE_SERVICE_TOKEN,
   TASK_SERVICE_TOKEN,
   TASK_STUDENT_SERVICE_TOKEN,
   TocService,
@@ -140,7 +142,11 @@ import { kabasConfig } from './app.config';
       useClass: TaskEduContentService
     },
     { provide: TASK_SERVICE_TOKEN, useClass: TaskService },
-    { provide: EDU_CONTENT_BOOK_SERVICE_TOKEN, useClass: EduContentBookService }
+    {
+      provide: EDU_CONTENT_BOOK_SERVICE_TOKEN,
+      useClass: EduContentBookService
+    },
+    { provide: TASK_INSTANCE_SERVICE_TOKEN, useClass: TaskInstanceService }
   ]
 })
 export class AppTokenModule {}

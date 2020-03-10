@@ -41,11 +41,14 @@
     &__date-picker {
       &__label {
         align-self: center;
+        flex: 0 0 100%;
       }
 
       &__container {
         display: flex;
         align-items: center;
+
+        flex-wrap: wrap;
       }
     }
 
