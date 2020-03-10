@@ -2,6 +2,9 @@ import { groupArrayByKey } from '@campus/utils';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { TaskInstance } from '../../+models/TaskInstance';
 import { TaskInstanceInterface } from '../../+models/TaskInstance.interface';
+import { ResultQueries } from '../result';
+import { TaskQueries } from '../task';
+import { TaskEduContentQueries } from '../task-edu-content';
 import {
   NAME,
   selectAll,
@@ -99,6 +102,27 @@ export const getActiveTaskIds = createSelector(
         []
       )
     );
+  }
+);
+
+export const getTaskStudentTaskInstances = createSelector(
+  [
+    getAll,
+    TaskQueries.getAllEntities,
+    ResultQueries.getAll,
+    TaskEduContentQueries.getAllByTaskId
+  ],
+  (taskInstances, tasksById, results, taskEduContentById) => {
+    // results group by taskId, filter out results without taksid
+    results.reduce((acc, prop) => {
+      return null;
+    }, []);
+
+    // loop taskInstances
+    // const task = tasks£yId[taskInstance.taskid];
+    // task.results = resultsByTaskId[task.id]
+    // task.taskEduContents = taskEduContentById[task.id]
+    // taskInstance.task = task;
   }
 );
 
