@@ -37,8 +37,6 @@ export class CollapsibleContainerComponent {
   @Input()
   open = false;
 
-  @Input() isDisabled = false;
-
   @Output() openChange = new EventEmitter<boolean>();
 
   @HostBinding('@toggleOpened')
