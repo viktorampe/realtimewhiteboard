@@ -156,7 +156,7 @@ describe('HumanDateTimePipe', () => {
     it('should show the text for dateformat', () => {
       date.setDate(date.getDate() - 7);
 
-      const expected = '2018-10-17'; // note us-EN -> so devops agents have the formatting loaded
+      const expected = '10/17/2018'; // note us-EN -> so devops agents have the formatting loaded
       expect(pipe.transform(date)).toBe(expected);
     });
 
