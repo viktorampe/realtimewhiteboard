@@ -10,9 +10,9 @@ import {
   switchMap,
   take
 } from 'rxjs/operators';
-import uuidv4 from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
+import { ModeEnum } from '../../lib/enums/mode.enum';
 import WhiteboardInterface from '../../lib/models/whiteboard.interface';
-import { ModeEnum } from '../enums/mode.enum';
 import ImageInterface from '../models/image.interface';
 
 const RETRY_AMOUNT = 2;
