@@ -12,6 +12,7 @@ import {
 import { By, HAMMER_LOADER } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MockMatIconRegistry } from '@campus/testing';
+import { UiModule } from '@campus/ui';
 import { configureTestSuite } from 'ng-bullet';
 import { of } from 'rxjs';
 import { delay } from 'rxjs/operators';
@@ -51,7 +52,8 @@ describe('WhiteboardComponent', () => {
         BrowserAnimationsModule,
         MatProgressBarModule,
         MatInputModule,
-        DragDropModule
+        DragDropModule,
+        UiModule
       ],
       declarations: [
         WhiteboardComponent,
