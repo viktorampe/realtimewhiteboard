@@ -8,13 +8,13 @@ export class StudentTaskFixture implements StudentTaskInterface {
   learningAreaId = 1;
   count = {
     finishedRequired: 2,
-    totalRequired: 1
+    totalRequired: 3
   };
   isFinished = false;
   isUrgent = true;
   dateGroupLabel = 'fooDateGroupLabel';
   dateLabel = 'fooDateLabel';
-  endDate = new Date();
+  endDate = new Date(2020, 8, 31);
   actions = [];
 
   constructor(props: Partial<StudentTaskInterface> = {}) {

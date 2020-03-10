@@ -8,11 +8,10 @@ export class MockStudentTasksViewModel {
   public finishedTasks$: BehaviorSubject<StudentTaskInterface[]>;
   public studentTasks = [
     new StudentTaskFixture({
-      isFinished: false
+      isFinished: true,
+      endDate: new Date(2019, 8, 31)
     }),
-    new StudentTaskFixture({
-      isFinished: false
-    }),
+    new StudentTaskFixture(),
     new StudentTaskFixture()
   ];
 
