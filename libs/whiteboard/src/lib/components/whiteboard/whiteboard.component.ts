@@ -116,8 +116,6 @@ export class WhiteboardComponent implements OnChanges {
   updateCard(updates: Partial<CardInterface>, card: CardInterface) {
     // update card
     Object.assign(card, updates);
-    // check if card became empty
-    this.deleteCardWhenEmpty(card);
     // sync shelfcard
     const shelfCard: CardInterface = this.whiteboard$.value.shelfCards.filter(
       shelfcard => shelfcard.id === card.id
@@ -309,12 +307,6 @@ export class WhiteboardComponent implements OnChanges {
       c => c.mode === ModeEnum.SELECTED
     ).length;
   }
-
-  private deleteCardWhenEmpty(card: CardInterface) {
-    if (card.image.imageUrl === '' && card.description === '') {
-      this.onDeleteCard(card, true); // permanent delete
-    }
-  }
   //#endregion
 
   //#region WHITEBOARD ACTIONS
@@ -366,9 +358,6 @@ export class WhiteboardComponent implements OnChanges {
       nonIdleUploadCards.forEach(c =>
         this.updateCard({ mode: ModeEnum.IDLE }, c)
       );
-      cards.forEach(c => {
-        this.deleteCardWhenEmpty(c);
-      });
     }
   }
 
