@@ -263,9 +263,11 @@ describe('WhiteboardComponent', () => {
         expect(card.viewModeImage).toBe(true);
       });
 
-      it('should set card mode to IdleMode if card.mode != edit', () => {
+      it('should set card mode to IdleMode if card.mode !== edit', () => {
         const [card] = component.whiteboard$.value.cards;
         card.mode = <ModeEnum>ModeEnum.SELECTED;
+        card.description = 'tekst';
+        card.image.imageUrl = 'imageUrl';
 
         const nonEditModes = Object.keys(ModeEnum).filter(
           key =>
