@@ -7,11 +7,43 @@
       [mode]="sectionModes.CONTAINER"
       class="student-task-overview__main"
     >
-      <section-title>{{
-        (showFinishedTasks$ | async) ? 'Mijn afgewerkte taken' : 'Mijn taken'
-      }}</section-title>
+      <section-title>
+        {{ sectionTitle$ | async }}
+        <ng-container *ngIf="inEmptyState$ | async">
+          <campus-button
+            bordered
+            *ngIf="showFinishedTasks$ | async; else showActiveTasks"
+            (click)="showFinishedTasks$.next(false)"
+            >Actieve taken</campus-button
+          >
+        </ng-container>
+        <ng-template #showActiveTasks>
+          <campus-button bordered (click)="showFinishedTasks$.next(true)"
+            >Afgewerkte taken</campus-button
+          >
+        </ng-template>
+      </section-title>
+      <section-content>
+        <ng-container *ngIf="inEmptyState$ | async; else filledState">
+          <campus-empty-state
+            *ngIf="emptyStateData$ | async as emptyStateData"
+            [title]="emptyStateData.title"
+            [description]="emptyStateData.description"
+            [ctaLabel]="emptyStateData.ctaLabel"
+            [svgIcon]="emptyStateData.svgIcon"
+            (clickCta)="emptyStateClick()"
+          ></campus-empty-state>
+        </ng-container>
+
+        <ng-template #filledState>
+          <mat-list *ngFor="let task of tasks$">
+            <mat-list-item></mat-list-item>
+          </mat-list>
+        </ng-template>
+      </section-content>
     </campus-section>
     <campus-section
+      *ngIf="!(inEmptyState$ | async)"
       [mode]="sectionModes.CONTAINER"
       class="student-task-overview__aside"
     >
@@ -31,7 +63,23 @@
                 >Toon afgewerkte taken</campus-button
               >
             </ng-template>
-            <div><campus-button inline>Groepeer per vak</campus-button></div>
+
+            <div>
+              <campus-button
+                inline
+                *ngIf="
+                  isGroupedByDate$ | async;
+                  else actionForGroupedByLearningArea
+                "
+                (click)="isGroupedByDate$.next(false)"
+                >Groepeer per vak</campus-button
+              >
+            </div>
+            <ng-template #actionForGroupedByLearningArea>
+              <campus-button inline (click)="isGroupedByDate$.next(true)"
+                >Sorteer op datum</campus-button
+              >
+            </ng-template>
             <hr />
             <div><campus-button inline>Wiskunde (2 taken)</campus-button></div>
             <div><campus-button inline>Taal (5 taken)</campus-button></div>

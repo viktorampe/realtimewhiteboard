@@ -1,6 +1,7 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
 import { SectionModeEnum } from '@campus/ui';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { StudentTaskWithContentInterface } from '../../interfaces/StudentTaskWithContent.interface';
 
 interface TaskByLearningAreaInfoInterface {
@@ -18,7 +19,16 @@ export class StudentTaskOverviewComponent implements OnInit {
   @HostBinding('class.student-task-overview')
   studentTaskOverviewClass = true;
 
-  tasks$: Observable<StudentTaskWithContentInterface[]>;
+  tasks$: Observable<StudentTaskWithContentInterface[]>; // this is the presentation stream
+  inEmptyState$: Observable<boolean>;
+  sectionTitle$: Observable<string>;
+  emptyStateData$: Observable<{
+    svgIcon: string;
+    title?: string;
+    description: string;
+    ctaLabel?: string;
+  }>;
+
   tasksByLearningAreaInfo$: Observable<TaskByLearningAreaInfoInterface[]>;
   showFinishedTasks$ = new BehaviorSubject<boolean>(false);
   isGroupedByDate$ = new BehaviorSubject<boolean>(false);
@@ -27,7 +37,50 @@ export class StudentTaskOverviewComponent implements OnInit {
 
   constructor() {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.setPresentationStreams();
+  }
+
+  setPresentationStreams(): void {
+    this.tasks$ = new BehaviorSubject<StudentTaskWithContentInterface[]>([]);
+
+    this.inEmptyState$ = this.tasks$.pipe(map(tasks => tasks.length === 0));
+
+    this.sectionTitle$ = combineLatest([
+      this.tasks$,
+      this.showFinishedTasks$
+    ]).pipe(
+      map(([tasks, showFinishedTasks]) => {
+        return tasks.length === 0
+          ? showFinishedTasks
+            ? 'Je hebt geen afgewerkte taken'
+            : 'Er staan geen taken voor je klaar'
+          : showFinishedTasks
+          ? 'Deze taken heb je gemaakt'
+          : `${tasks.length} ${
+              tasks.length === 1 ? 'taak staat' : 'taken staan'
+            } voor je klaar`;
+      })
+    );
+
+    this.emptyStateData$ = this.showFinishedTasks$.pipe(
+      map(showFinishedTasks => {
+        return showFinishedTasks
+          ? {
+              title: 'Hier is niets te zien',
+              description: 'Je hebt nog geen taken afgewerkt.',
+              svgIcon: 'empty-state-all-done' // TODO: use correct icon
+            }
+          : {
+              title: 'Je bent helemaal mee',
+              description:
+                'Er staan geen taken voor je klaar. Je kan altijd vrij oefenen.',
+              ctaLabel: 'naar vrij oefenen',
+              svgIcon: 'empty-state-all-done' // TODO: use correct icon
+            };
+      })
+    );
+  }
 
   emptyStateClick() {}
 
