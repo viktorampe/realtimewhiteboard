@@ -7,8 +7,8 @@
 >
   <ng-container
     *ngIf="
-      whiteboard.title &&
-        whiteboard.cards.length &&
+      whiteboard.title ||
+        whiteboard.cards.length ||
         whiteboard.shelfCards.length;
       else emptyStateView
     "
