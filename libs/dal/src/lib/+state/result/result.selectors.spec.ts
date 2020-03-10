@@ -213,8 +213,8 @@ describe('Result Selectors', () => {
     });
   });
 
-  describe('resultsByTask', () => {
-    const projector = ResultQueries.resultsByTask.projector;
+  describe('getResultsByTask', () => {
+    const projector = ResultQueries.getResultsByTask.projector;
 
     it('should group the results by taskId', () => {
       // note: the mockdata includes results without taskId

@@ -140,6 +140,6 @@ export const getBestResultByEduContentId = createSelector(
   }
 );
 
-export const resultsByTask = createSelector(getAll, results =>
+export const getResultsByTask = createSelector(getAll, results =>
   groupArrayByKey(results, 'taskId')
 );
