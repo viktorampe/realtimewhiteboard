@@ -8,12 +8,14 @@ import {
 import { TaskInstanceFixture } from '../../+fixtures/TaskInstance.fixture';
 import {
   EduContent,
+  LearningAreaInterface,
   ResultInterface,
   TaskEduContentInterface,
   TaskInstanceInterface,
   TaskInterface
 } from '../../+models';
 import { TaskInstance } from '../../+models/TaskInstance';
+import { LearningAreaFixture } from './../../+fixtures/LearningArea.fixture';
 import { ResultFixture } from './../../+fixtures/Result.fixture';
 import { State } from './task-instance.reducer';
 import { getTaskInstanceWithTaskById } from './task-instance.selectors';
@@ -166,6 +168,7 @@ describe('TaskInstance Selectors', () => {
     let resultsByTask: Dictionary<ResultInterface[]>;
     let taskEduContentByTask: Dictionary<TaskEduContentInterface[]>;
     let eduContentDict: Dictionary<EduContent>;
+    let learningAreaDict: Dictionary<LearningAreaInterface>;
 
     beforeEach(() => {
       taskInstance = new TaskInstanceFixture({ taskId: 1 });
@@ -203,6 +206,11 @@ describe('TaskInstance Selectors', () => {
         3: new EduContentFixture({ id: 3 }),
         4: new EduContentFixture({ id: 4 })
       };
+
+      learningAreaDict = {
+        1: new LearningAreaFixture({ id: 1 }),
+        2: new LearningAreaFixture({ id: 2 })
+      };
     });
 
     it('should combine all related data', () => {
@@ -212,6 +220,7 @@ describe('TaskInstance Selectors', () => {
         resultsByTask,
         taskEduContentByTask,
         eduContentDict,
+        learningAreaDict,
         {} // props -> not used in this selector
       );
 
@@ -223,7 +232,8 @@ describe('TaskInstance Selectors', () => {
             { ...taskEduContentByTask[1][0], eduContent: eduContentDict[1] },
             { ...taskEduContentByTask[1][1], eduContent: eduContentDict[2] }
           ],
-          results: resultsByTask[1]
+          results: resultsByTask[1],
+          learningArea: learningAreaDict[1]
         })
       });
 
