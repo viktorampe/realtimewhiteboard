@@ -1,9 +1,13 @@
+import { Injectable } from '@angular/core';
 import { ViewModelInterface } from '@campus/testing';
 import { BehaviorSubject } from 'rxjs';
 import { StudentTaskFixture } from '../interfaces/StudentTask.fixture';
 import { StudentTaskInterface } from '../interfaces/StudentTask.interface';
 import { StudentTasksViewModel } from './student-tasks.viewmodel';
 
+@Injectable({
+  providedIn: 'root'
+})
 export class MockStudentTasksViewModel
   implements ViewModelInterface<StudentTasksViewModel> {
   public studentTasks$: BehaviorSubject<StudentTaskInterface[]>;

@@ -2,7 +2,8 @@ import { Component, HostBinding, OnInit } from '@angular/core';
 import { SectionModeEnum } from '@campus/ui';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { filter, map, switchMap } from 'rxjs/operators';
-import { StudentTaskWithContentInterface } from '../../interfaces/StudentTaskWithContent.interface';
+import { StudentTaskInterface } from '../../interfaces/StudentTask.interface';
+import { MockStudentTasksViewModel } from '../student-tasks.viewmodel.mock';
 
 interface TaskByLearningAreaInfoInterface {
   learningAreaName: string;
@@ -19,7 +20,7 @@ export class StudentTaskOverviewComponent implements OnInit {
   @HostBinding('class.student-task-overview')
   studentTaskOverviewClass = true;
 
-  tasks$: Observable<StudentTaskWithContentInterface[]>; // this is the presentation stream
+  tasks$: Observable<StudentTaskInterface[]>; // this is the presentation stream
 
   sectionTitle$: Observable<string>;
   inEmptyState$: Observable<boolean>;
@@ -36,14 +37,15 @@ export class StudentTaskOverviewComponent implements OnInit {
 
   public sectionModes: typeof SectionModeEnum = SectionModeEnum;
 
-  constructor() {}
+  // TODO: use the real viewmodel
+  constructor(private viewmodel: MockStudentTasksViewModel) {}
 
   ngOnInit() {
     this.setPresentationStreams();
   }
 
   setPresentationStreams(): void {
-    this.tasks$ = new BehaviorSubject<StudentTaskWithContentInterface[]>([{}]);
+    this.tasks$ = this.viewmodel.studentTasks$;
 
     this.inEmptyState$ = this.tasks$.pipe(map(tasks => tasks.length === 0));
 
