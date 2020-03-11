@@ -68,6 +68,16 @@ describe('SideSheetComponent', () => {
     ).toContain('Test header');
   });
 
+  it('should remove the close button and show the sidesheet', () => {
+    sideSheetComp.canClose = false;
+    fixture.detectChanges();
+
+    expect(sideSheetComp.isOpenOnInit).toBe(true);
+    expect(
+      fixture.debugElement.query(By.css('.ui-side-sheet__header a'))
+    ).toBeFalsy();
+  });
+
   it('should display the default header text', () => {
     hostComponent.showHeader = false;
     fixture.detectChanges();

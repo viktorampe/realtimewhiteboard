@@ -329,6 +329,31 @@ describe('SearchComponent', () => {
       expect(setterSpy).toHaveBeenCalled();
       expect(setterSpy).toHaveBeenCalledWith(newSearchResults);
     });
+
+    it('should update on searchResultItemsToUpdate$ emit', () => {
+      const searchResultItemsToUpdate$ = searchViewmodel.searchResultItemsToUpdate$ as BehaviorSubject<
+        number[]
+      >;
+      const updateSearchResult = (searchViewmodel.updateSearchResult = jest.fn());
+
+      const resultListItems = [
+        { dataObject: { eduContent: { id: 123 } } },
+        { dataObject: { eduContent: { id: 456 } } },
+        { dataObject: { eduContent: { id: 789 } } }
+      ] as any[];
+
+      const resultListItemQueryList = new QueryList<ResultItemBase>();
+      resultListItemQueryList.reset(resultListItems);
+
+      component.resultList.items = resultListItemQueryList;
+
+      searchResultItemsToUpdate$.next([123, 456]);
+
+      expect(updateSearchResult).toHaveBeenCalledTimes(2);
+      expect(updateSearchResult).toHaveBeenCalledWith(resultListItems[0]);
+      expect(updateSearchResult).toHaveBeenCalledWith(resultListItems[1]);
+      expect(updateSearchResult).not.toHaveBeenCalledWith(resultListItems[2]);
+    });
   });
 
   describe('searchTermComponent in portal', () => {

@@ -22,10 +22,13 @@ import {
   SearchResultInterface,
   SearchStateInterface
 } from '@campus/search';
+import { SectionModeEnum } from '@campus/ui';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { filter, map, switchMapTo, take } from 'rxjs/operators';
-import { TaskEduContentWithEduContentInterface } from '../../interfaces/TaskEduContentWithEduContent.interface';
-import { TaskWithAssigneesInterface } from '../../interfaces/TaskWithAssignees.interface';
+import {
+  TaskEduContentWithEduContentInterface,
+  TaskWithTaskEduContentInterface
+} from '../../interfaces/TaskEduContentWithEduContent.interface';
 import {
   CurrentTaskParams,
   KabasTasksViewModel
@@ -42,8 +45,7 @@ export class ManageTaskContentComponent
   public reorderableTaskEduContents$ = new BehaviorSubject<
     TaskEduContentWithEduContentInterface[]
   >([]);
-  public task$: Observable<TaskWithAssigneesInterface>;
-
+  public task$: Observable<TaskWithTaskEduContentInterface>;
   public searchMode$: Observable<SearchModeInterface>;
   public initialSearchState$: Observable<SearchStateInterface>;
   public searchResults$: Observable<SearchResultInterface>;
@@ -54,7 +56,12 @@ export class ManageTaskContentComponent
   public methodYearsInArea$: Observable<MethodYearsInterface[]>;
 
   // Temporary variable for showing/hiding the books, replaced later when the backdrop comes in
-  public showBooks: boolean;
+  public showBooks = false;
+  public showFilters = false;
+  public sectionModes: typeof SectionModeEnum = SectionModeEnum;
+
+  // is there a search to show results for
+  public hasSearchResults = false;
 
   @ViewChildren(SearchPortalDirective)
   private portalHosts: QueryList<SearchPortalDirective>;
@@ -92,15 +99,14 @@ export class ManageTaskContentComponent
     );
     this.task$ = this.viewModel.currentTask$;
     this.selectedBookTitle$ = this.viewModel.selectedBookTitle$;
-
-    this.searchMode$ = this.viewModel.getSearchMode('task-manage-content');
-    this.initialSearchState$ = this.viewModel.getInitialSearchState();
-    this.searchResults$ = this.viewModel.searchResults$;
-
     this.methodYearsInArea$ = this.viewModel.methodYearsInArea$;
 
     this.currentToc$ = this.viewModel.currentToc$;
+
+    this.initialSearchState$ = this.viewModel.getInitialSearchState();
     this.currentTaskParams$ = this.viewModel.currentTaskParams$;
+    this.searchMode$ = this.viewModel.getSearchMode('task-manage-content');
+    this.searchResults$ = this.viewModel.searchResults$;
     this.subscriptions.add(
       this.task$.subscribe(task => {
         this.reorderableTaskEduContents$.next([...task.taskEduContents]);
@@ -128,6 +134,12 @@ export class ManageTaskContentComponent
     this.viewModel.updateTaskEduContentsOrder(taskEduContents);
   }
 
+  public changedBook(bookId: number) {
+    this.showBooks = false;
+  }
+  public onBackDroppedChanged(value: boolean) {
+    this.showBooks = value;
+  }
   public clickDone() {
     this.task$
       .pipe(
@@ -172,6 +184,15 @@ export class ManageTaskContentComponent
   }
 
   onSearchStateChange(searchState: SearchStateInterface) {
-    this.viewModel.updateSearchState(searchState);
+    // Only search if the user has selected a chapter or lesson
+    if (
+      searchState.filterCriteriaSelections &&
+      searchState.filterCriteriaSelections.has('eduContentTOC')
+    ) {
+      this.viewModel.updateSearchState(searchState);
+      this.hasSearchResults = true;
+    } else {
+      this.hasSearchResults = false;
+    }
   }
 }

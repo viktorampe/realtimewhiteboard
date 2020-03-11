@@ -1,4 +1,5 @@
 export * from './Alert.fixture';
+export * from './Assignee.fixture';
 export * from './Bundle.fixture';
 export * from './ClassGroup.fixture';
 export * from './ClassGroupType.fixture';
@@ -43,6 +44,7 @@ export * from './TaskEduContent.fixture';
 export * from './TaskGroup.fixture';
 export * from './TaskInstance.fixture';
 export * from './TaskStudent.fixture';
+export * from './TaskWithAssignees.fixture';
 export * from './TeacherStudent.fixture';
 export * from './UnlockedBoekeGroup.fixture';
 export * from './UnlockedBoekeStudent.fixture';

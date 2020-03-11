@@ -9,6 +9,7 @@
   $shared-header__app-bar-padding-left: 0px !default;
   $shared-header__page-bar-padding-left: 10px !default;
   $shared-header__page-bar-padding-right: 10px !default;
+  $shared-header__page-bar-padding-top: 0 !default;
   $shared-header__page-bar-height: 60px !default;
   $shared-header__page-bar-background-color: $shared-bg-color-1 !default;
   $shared-header__page-bar__divider-background-color: $shared-element-border-color-1 !default;
@@ -31,6 +32,7 @@
   $shared-header__page-bar__mat-badge__content-background-color: $secondary-bg-color-badge !default;
   $shared-header__page-bar__right-color-hover: $shared-button-color-accent !default;
   $shared_header__page-bar_background: none !default;
+  $shared-header__page-bar-container-margin-bottom: 0 !default;
   $shared-header__contextual-button-color: $shared-header__app-bar-color !default;
   $shared-header__contextual-button-color-hover: $shared-header__page-bar__right-color-hover !default;
   $shared-header__contextual-button-bg-color: $shared-header__page-bar-background-color !default;
@@ -40,6 +42,7 @@
   $shared-header__contextual-button-font-size: $shared-header-font-size !default;
   $shared-header__contextual-button-font-weight: $shared-header-font-weight !default;
   $shared-header__contextual-button__label-margin-top: 10px !default;
+  $shared-header__contextual-button-elevation: 0 !default;
 
   .shared-header {
     &__app-bar {
@@ -56,6 +59,7 @@
       background-color: $shared-header__page-bar-background-color;
       padding-left: $shared-header__page-bar-padding-left;
       padding-right: $shared-header__page-bar-padding-right;
+      padding-top: $shared-header__page-bar-padding-top;
 
       &__nav-button {
         background-color: $shared-header__page-bar-background-color;
@@ -77,6 +81,7 @@
 
       #page-bar-container {
         justify-content: $shared-header__page-bar-container__justify-content;
+        margin-bottom: $shared-header__page-bar-container-margin-bottom;
         .page-bar-style {
           &--searchmode-button {
             border: $shared-header__page-bar__element-border-width solid
@@ -109,6 +114,7 @@
     }
 
     &__contextual__button {
+      @include elevation($shared-header__contextual-button-elevation);
       font-size: $shared-header__contextual-button-font-size;
       font-weight: $shared-header__contextual-button-font-weight;
       text-align: center;
@@ -117,8 +123,10 @@
       flex-direction: column;
       height: $shared-header__page-bar-height;
       width: $shared-header__contextual-button-width;
+      white-space: initial;
 
       &:hover {
+        @include elevation($shared-header__contextual-button-elevation);
         color: $shared-header__contextual-button-color-hover;
         background-color: $shared-header__contextual-button-bg-color;
       }

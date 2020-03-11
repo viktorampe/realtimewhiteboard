@@ -1,11 +1,9 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { AssigneeInterface, AssigneeTypesEnum } from '@campus/dal';
+import { DateFunctions } from '@campus/utils';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import {
-  AssigneeInterface,
-  AssigneeTypesEnum
-} from './../../interfaces/Assignee.interface';
 import { ManageKabasTasksAssigneeDataInterface } from './manage-kabas-tasks-assignee-data.interface';
 
 @Component({
@@ -151,7 +149,7 @@ export class ManageKabasTasksAssigneeModalComponent implements OnInit {
       // no assignees -> rest of schoolyear
       if (currentTaskAssignees.length === 0) {
         const today = new Date();
-        const schoolYear = this.getSchoolYearBoundaries(today);
+        const schoolYear = DateFunctions.getSchoolYearBoundaries(today);
 
         start = today;
         end = schoolYear.end;
@@ -168,18 +166,6 @@ export class ManageKabasTasksAssigneeModalComponent implements OnInit {
     }
 
     this.default = { start, end };
-  }
-
-  // return start- and endDate of schoolyear
-  private getSchoolYearBoundaries(date: Date): { start: Date; end: Date } {
-    // months are 0-based
-    const startYear =
-      date.getMonth() >= 8 ? date.getFullYear() : date.getFullYear() - 1;
-
-    return {
-      start: new Date(startYear, 8, 1),
-      end: new Date(startYear + 1, 5, 30)
-    };
   }
 
   // reduce taskAssignees to object containing

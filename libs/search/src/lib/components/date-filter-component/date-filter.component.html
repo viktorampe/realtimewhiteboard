@@ -11,6 +11,7 @@
       aria-label="Select an option"
     >
       <mat-radio-button
+        data-cy="date-option"
         *ngFor="let option of radioOptions"
         [value]="option.value"
         >{{ option.viewValue }}</mat-radio-button
@@ -20,6 +21,7 @@
           <mat-form-field [appearance]="'outline'">
             <mat-label>Vanaf</mat-label>
             <input
+              data-cy="date-start-input"
               autocomplete="off"
               matInput
               [matDatepicker]="startDatePicker"
@@ -34,6 +36,7 @@
           <mat-form-field [appearance]="'outline'">
             <mat-label>t.e.m.</mat-label>
             <input
+              data-cy="date-end-input"
               autocomplete="off"
               [value]="null"
               matInput
@@ -49,11 +52,20 @@
         </div>
       </mat-radio-button>
     </mat-radio-group>
-    <campus-button primary (click)="applyFilter()">Filteren</campus-button>
-    <campus-button (click)="applyFilter(true)">Annuleren</campus-button>
+
+    <div class="date-filter-component__menu-panel__actions">
+      <campus-button flat bordered (click)="applyFilter(true)"
+        >Annuleren</campus-button
+      >
+      <campus-button data-cy="date-confirm" secondary (click)="applyFilter()"
+        >Filteren</campus-button
+      >
+    </div>
   </div>
 </mat-menu>
 <campus-button
+  flat
+  bordered
   [matBadge]="count"
   [matBadgeHidden]="count === 0"
   matBadgePosition="above after"

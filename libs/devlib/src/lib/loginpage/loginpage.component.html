@@ -69,26 +69,3 @@
     >go to whiteboard demo page</a
   ></div
 >
-<div class="methodBook">
-  <campus-method-book-tile
-    logoUrl="assets/methods/mol-en-beer.jpg"
-    areaName="Aanvankelijk lezen"
-    bookId="7"
-    name="Mol en Beer 1"
-  >
-  </campus-method-book-tile>
-</div>
-
-<div style="width: 600px; margin-top: 16px">
-  <campus-date-range-picker
-    (valueChanged)="dateChanged($event)"
-    [vertical]="true"
-    [requireStart]="false"
-    [requireEnd]="false"
-  >
-  </campus-date-range-picker>
-</div>
-
-<div><campus-button (click)="createTask()">create task</campus-button></div>
-<div><campus-button (click)="updateTask()">update task</campus-button></div>
-<div><campus-button (click)="deleteTask()">delete task</campus-button></div>
