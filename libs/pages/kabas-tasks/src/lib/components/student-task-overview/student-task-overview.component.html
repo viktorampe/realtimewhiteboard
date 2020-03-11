@@ -88,11 +88,11 @@
             </ng-template>
             <hr />
             <div *ngFor="let taskInfo of tasksByLearningAreaInfo$ | async"
-              ><campus-button inline (click)="scrollTo(taskInfo.learningAreaId)"
-                >{{ taskInfo.learningAreaName }} ({{
-                  taskInfo.taskCount
-                }}
-                taken, {{ taskInfo.urgentCount }} dringend)</campus-button
+              ><campus-button
+                inline
+                (click)="scrollTo(taskInfo.learningAreaId)"
+              >
+                {{ taskInfo | taskInfoByLearningArea }}</campus-button
               ></div
             >
           </section-content>

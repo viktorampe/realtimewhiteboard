@@ -6,7 +6,7 @@ import { StudentTaskFixture } from '../../interfaces/StudentTask.fixture';
 import { StudentTaskInterface } from '../../interfaces/StudentTask.interface';
 import { MockStudentTasksViewModel } from '../student-tasks.viewmodel.mock';
 
-interface TaskByLearningAreaInfoInterface {
+export interface TaskByLearningAreaInfoInterface {
   learningAreaId: number;
   learningAreaName: string;
   taskCount: number;
@@ -62,7 +62,7 @@ export class StudentTaskOverviewComponent implements OnInit {
   }
 
   private setIntermediateStreams(): void {
-    // TODO: map from tasks$
+    // TODO: map from tasks$, also filter for active or finished (depends on showFinishedTasks$)
     this.groupedByLearningArea$ = of([
       {
         learningAreaId: 1,
@@ -102,7 +102,7 @@ export class StudentTaskOverviewComponent implements OnInit {
       }
     ]);
 
-    // TODO: map from tasks$
+    // TODO: map from tasks$, also filter for active or finished (depends on showFinishedTasks$)
     this.groupedByDate$ = of([
       {
         learningAreaId: 5,
@@ -112,6 +112,16 @@ export class StudentTaskOverviewComponent implements OnInit {
           new StudentTaskFixture(),
           new StudentTaskFixture()
         ]
+      }
+    ]);
+
+    // TODO: map from groupedByLearningArea$
+    this.tasksByLearningAreaInfo$ = of([
+      {
+        learningAreaId: 4,
+        learningAreaName: 'foo learning area',
+        taskCount: 3,
+        urgentCount: 1
       }
     ]);
   }
@@ -165,25 +175,14 @@ export class StudentTaskOverviewComponent implements OnInit {
           : this.groupedByLearningArea$;
       })
     );
-
-    this.tasksByLearningAreaInfo$ = of([
-      {
-        learningAreaId: 4,
-        learningAreaName: 'foo learning area',
-        taskCount: 5,
-        urgentCount: 3
-      }
-    ]);
   }
 
   scrollTo(target: number) {
-    document
-      .getElementById('' + target)
-      .scrollIntoView({
-        block: 'start',
-        inline: 'nearest',
-        behavior: 'smooth'
-      });
+    document.getElementById('' + target).scrollIntoView({
+      block: 'start',
+      inline: 'nearest',
+      behavior: 'smooth'
+    });
   }
 
   emptyStateClick() {}
