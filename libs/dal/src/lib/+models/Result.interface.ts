@@ -3,10 +3,21 @@ import { PersonInterface } from './Person.interface';
 import { TaskInterface } from './Task.interface';
 import { UnlockedContentInterface } from './UnlockedContent.interface';
 
+// equal to all cmi statuses + own extensions
+export enum ResultStatus {
+  STATUS_INCOMPLETE = 'incomplete',
+  STATUS_COMPLETED = 'completed',
+  STATUS_PASSED = 'passed',
+  STATUS_FAILED = 'failed',
+  STATUS_BROWSED = 'browsed',
+  STATUS_NOT_ATTEMPTED = 'not attempted',
+  STATUS_OPENED = 'opened'
+}
+
 export interface ResultInterface {
   score?: number;
   time?: number;
-  status: any;
+  status: ResultStatus;
   cmi?: string;
   created?: Date;
   id?: number;
