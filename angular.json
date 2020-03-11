@@ -1334,7 +1334,7 @@
               "apps/whiteboard-standalone/src/assets"
             ],
             "styles": ["apps/whiteboard-standalone/src/styles.scss"],
-            "scripts": []
+            "scripts": ["node_modules/hammerjs/hammer.min.js"]
           },
           "configurations": {
             "production": {
