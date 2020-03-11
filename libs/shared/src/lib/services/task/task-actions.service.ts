@@ -1,5 +1,6 @@
 import { forwardRef, Inject } from '@angular/core';
 import { TaskInstanceInterface } from '@campus/dal';
+import { TaskActionInterface } from './task-action.interface';
 import {
   TaskActionsServiceInterface,
   TaskOpenerInterface,
@@ -13,9 +14,14 @@ export class TaskActionsService implements TaskActionsServiceInterface {
   ) {}
 
   public TaskActionDictionary: {
-    [key: string]: TaskOpenerInterface;
+    [key: string]: TaskActionInterface;
   } = {
-    openTask: this.taskOpener.openTask.bind(this.taskOpener)
+    openTask: {
+      label: 'Open taak',
+      icon: 'exercise:open',
+      tooltip: 'Open de taak',
+      handler: this.taskOpener.openTask.bind(this.taskOpener)
+    }
   };
 
   getActions(taskInstance: TaskInstanceInterface) {
@@ -24,7 +30,7 @@ export class TaskActionsService implements TaskActionsServiceInterface {
 
   private getTaskActions(
     taskInstance: TaskInstanceInterface
-  ): TaskOpenerInterface[] {
+  ): TaskActionInterface[] {
     return [this.TaskActionDictionary.openTask];
   }
 }
