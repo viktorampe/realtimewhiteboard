@@ -7,6 +7,7 @@ import { StudentTaskInterface } from '../../interfaces/StudentTask.interface';
 import { MockStudentTasksViewModel } from '../student-tasks.viewmodel.mock';
 
 interface TaskByLearningAreaInfoInterface {
+  learningAreaId: number;
   learningAreaName: string;
   taskCount: number;
   urgentCount: number;
@@ -56,6 +57,12 @@ export class StudentTaskOverviewComponent implements OnInit {
   constructor(private viewmodel: MockStudentTasksViewModel) {}
 
   ngOnInit() {
+    this.setIntermediateStreams();
+    this.setPresentationStreams();
+  }
+
+  private setIntermediateStreams(): void {
+    // TODO: map from tasks$
     this.groupedByLearningArea$ = of([
       {
         learningAreaId: 1,
@@ -74,11 +81,31 @@ export class StudentTaskOverviewComponent implements OnInit {
           new StudentTaskFixture(),
           new StudentTaskFixture()
         ]
-      }
-    ]);
-    this.groupedByDate$ = of([
+      },
       {
         learningAreaId: 3,
+        label: 'bar learning area',
+        items: [
+          new StudentTaskFixture(),
+          new StudentTaskFixture(),
+          new StudentTaskFixture()
+        ]
+      },
+      {
+        learningAreaId: 4,
+        label: 'bar learning area',
+        items: [
+          new StudentTaskFixture(),
+          new StudentTaskFixture(),
+          new StudentTaskFixture()
+        ]
+      }
+    ]);
+
+    // TODO: map from tasks$
+    this.groupedByDate$ = of([
+      {
+        learningAreaId: 5,
         label: 'baz learning area',
         items: [
           new StudentTaskFixture(),
@@ -87,11 +114,7 @@ export class StudentTaskOverviewComponent implements OnInit {
         ]
       }
     ]);
-    this.setIntermediateStreams();
-    this.setPresentationStreams();
   }
-
-  private setIntermediateStreams(): void {}
 
   private setPresentationStreams(): void {
     this.tasks$ = this.viewmodel.studentTasks$;
@@ -142,6 +165,25 @@ export class StudentTaskOverviewComponent implements OnInit {
           : this.groupedByLearningArea$;
       })
     );
+
+    this.tasksByLearningAreaInfo$ = of([
+      {
+        learningAreaId: 4,
+        learningAreaName: 'foo learning area',
+        taskCount: 5,
+        urgentCount: 3
+      }
+    ]);
+  }
+
+  scrollTo(target: number) {
+    document
+      .getElementById('' + target)
+      .scrollIntoView({
+        block: 'start',
+        inline: 'nearest',
+        behavior: 'smooth'
+      });
   }
 
   emptyStateClick() {}
