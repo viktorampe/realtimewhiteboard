@@ -1,8 +1,4 @@
-import { Component, HostBinding, Inject } from '@angular/core';
-import {
-  ContentOpenActionsServiceInterface,
-  CONTENT_OPEN_ACTIONS_SERVICE_TOKEN
-} from '@campus/shared';
+import { Component, HostBinding } from '@angular/core';
 import { SectionModeEnum } from '@campus/ui';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -25,50 +21,13 @@ export class StudentTaskDetailComponent {
   public requiredTaskContents$: Observable<StudentTaskContentInterface[]>;
   public optionalTaskContents$: Observable<StudentTaskContentInterface[]>;
 
-  constructor(
-    private viewModel: StudentTasksViewModel,
-    @Inject(CONTENT_OPEN_ACTIONS_SERVICE_TOKEN)
-    private openerService: ContentOpenActionsServiceInterface
-  ) {
+  constructor(private viewModel: StudentTasksViewModel) {
     this.task$ = this.viewModel.currentTask$;
     this.requiredTaskContents$ = this.task$.pipe(
-      map(task => {
-        return task.contents.reduce(
-          (requiredContents, content) =>
-            this.toFilteredContent(true, requiredContents, content),
-          []
-        );
-      })
+      map(task => task.contents.filter(content => content.required))
     );
-
     this.optionalTaskContents$ = this.task$.pipe(
-      map(task => {
-        return task.contents.reduce(
-          (requiredContents, content) =>
-            this.toFilteredContent(false, requiredContents, content),
-          []
-        );
-      })
+      map(task => task.contents.filter(content => !content.required))
     );
-  }
-
-  private toFilteredContent(
-    required: boolean,
-    requiredContents: StudentTaskContentInterface[],
-    content: StudentTaskContentInterface
-  ) {
-    if (!required) {
-      // TODO: add actions through service
-      requiredContents.push({
-        ...content,
-        actions: this.openerService.getActionsForTaskInstanceEduContent(
-          null,
-          null,
-          null
-        )
-      });
-    }
-
-    return requiredContents;
   }
 }
