@@ -1,4 +1,5 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { SectionModeEnum } from '@campus/ui';
 import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
 import { filter, map, switchMap } from 'rxjs/operators';
@@ -54,7 +55,10 @@ export class StudentTaskOverviewComponent implements OnInit {
   public sectionModes: typeof SectionModeEnum = SectionModeEnum;
 
   // TODO: use the real viewmodel
-  constructor(private viewmodel: MockStudentTasksViewModel) {}
+  constructor(
+    private viewmodel: MockStudentTasksViewModel,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.setIntermediateStreams();
@@ -185,8 +189,9 @@ export class StudentTaskOverviewComponent implements OnInit {
     });
   }
 
-  emptyStateClick() {}
-
+  emptyStateClick() {
+    this.router.navigate(['practice']);
+  }
   public setShowFinishedTasks(value: boolean) {
     this.showFinishedTasks$.next(value);
   }
