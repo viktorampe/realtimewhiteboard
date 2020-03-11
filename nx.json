@@ -115,6 +115,12 @@
     },
     "pages-login": {
       "tags": []
+    },
+    "whiteboard-editor-e2e": {
+      "tags": []
+    },
+    "whiteboard-editor": {
+      "tags": []
     }
   }
 }
