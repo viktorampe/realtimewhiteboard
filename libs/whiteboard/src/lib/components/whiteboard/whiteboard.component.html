@@ -58,6 +58,7 @@
           *ngIf="card.mode === Mode.EDIT || card.mode === Mode.SELECTED"
         ></campus-color-list>
         <campus-card-toolbar
+          @showHideToolbar
           *ngIf="
             card.mode === Mode.EDIT ||
             card.mode === Mode.SELECTED ||

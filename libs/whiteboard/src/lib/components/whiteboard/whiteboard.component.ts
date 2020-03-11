@@ -30,10 +30,26 @@ import { WhiteboardHttpService } from '../../services/whiteboard-http.service';
   animations: [
     trigger('showHideColorList', [
       transition(':enter', [
-        query('@showHideColorSwatchOne', stagger(100, [animateChild()]))
+        query('@showHideColorSwatchOne', stagger(100, [animateChild()]), {
+          optional: true
+        })
       ]),
       transition(':leave', [
-        query('@showHideColorSwatchOne', stagger(100, [animateChild()]))
+        query('@showHideColorSwatchOne', stagger(100, [animateChild()]), {
+          optional: true
+        })
+      ])
+    ]),
+    trigger('showHideToolbar', [
+      transition(':enter', [
+        query('@showHideToolbarTool', stagger(100, [animateChild()]), {
+          optional: true
+        })
+      ]),
+      transition(':leave', [
+        query('@showHideToolbarTool', stagger(100, [animateChild()]), {
+          optional: true
+        })
       ])
     ])
   ]

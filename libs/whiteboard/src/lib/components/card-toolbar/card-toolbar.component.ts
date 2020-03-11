@@ -1,10 +1,33 @@
+import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ModeEnum } from '../../enums/mode.enum';
 
 @Component({
   selector: 'campus-card-toolbar',
   templateUrl: './card-toolbar.component.html',
-  styleUrls: ['./card-toolbar.component.scss']
+  styleUrls: ['./card-toolbar.component.scss'],
+  animations: [
+    trigger('showHideToolbarTool', [
+      transition(':enter', [
+        style({ transform: 'scale(0) translateY(0px)' }),
+        animate(
+          '150ms ease-in-out',
+          style({
+            transform: 'scale(1) translateY(-48px)'
+          })
+        )
+      ]),
+      transition(':leave', [
+        style({
+          transform: 'scale(1) translateY(-48px)'
+        }),
+        animate(
+          '150ms ease-in-out',
+          style({ transform: 'scale(0) translateY(0px)' })
+        )
+      ])
+    ])
+  ]
 })
 export class CardToolbarComponent implements OnInit {
   @Input() mode: ModeEnum;
