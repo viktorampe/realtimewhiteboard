@@ -50,7 +50,7 @@ export class WhiteboardHttpService implements WhiteboardHttpServiceInterface {
       take(1),
       switchMap(settings =>
         this.http.get(
-          settings.apiBase + '/api/eduContentMetadata/' + settings.metadataId,
+          settings.apiBase + '/eduContentMetadata/' + settings.metadataId,
           { withCredentials: true }
         )
       ),
@@ -83,9 +83,7 @@ export class WhiteboardHttpService implements WhiteboardHttpServiceInterface {
 
     const response$ = this.http
       .patch(
-        apiSettings.apiBase +
-          '/api/eduContentMetadata/' +
-          apiSettings.metadataId,
+        apiSettings.apiBase + '/eduContentMetadata/' + apiSettings.metadataId,
         { data: JSON.stringify(whiteboard) },
         { withCredentials: true }
       )
@@ -111,7 +109,7 @@ export class WhiteboardHttpService implements WhiteboardHttpServiceInterface {
         return {
           imageUrl:
             apiSettings.apiBase +
-            '/api/EduFiles/' +
+            '/EduFiles/' +
             event.body.storageInfo.eduFileId +
             '/redirectUrl'
         };
@@ -129,10 +127,7 @@ export class WhiteboardHttpService implements WhiteboardHttpServiceInterface {
 
     const request = new HttpRequest(
       'POST',
-      apiSettings.apiBase +
-        '/api/EduContentFiles/' +
-        this.eduContentId +
-        '/store',
+      apiSettings.apiBase + '/EduContentFiles/' + this.eduContentId + '/store',
       formData,
       {
         reportProgress: true,
