@@ -116,7 +116,7 @@ export class WhiteboardComponent implements OnChanges {
   }
 
   btnPlusClicked(event) {
-    event.stopPropagation();
+    event.srcEvent.stopPropagation();
     this.addEmptyCard();
   }
   //#endregion
@@ -226,9 +226,9 @@ export class WhiteboardComponent implements OnChanges {
     }
   }
 
-  onCardClicked(event: MouseEvent, card: CardInterface) {
+  onCardClicked(event, card: CardInterface) {
     if (card.mode !== ModeEnum.IDLE) {
-      event.stopPropagation();
+      event.srcEvent.stopPropagation();
     }
   }
 
